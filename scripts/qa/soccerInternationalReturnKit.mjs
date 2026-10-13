@@ -6,6 +6,11 @@ import { createHash } from 'node:crypto';
 import { execFileSync } from 'node:child_process';
 import { createRequire } from 'node:module';
 import { build } from 'esbuild';
+/* Release BB: Rounds 1280 to 1282 and 1318 keep the made up Ballon d'Or rivals in a saved pool on purpose, which this
+   base pinned comparison cannot know about. Every copy compared with the base takes them out, as the history
+   harnesses do: scripts/lib/careerAwardGenerations1318.mjs. The browser oracle of the native walk is
+   compared with the built page, which keeps the pool, so the oracle keeps it too. */
+import { inverseAwardGenerations, AWARD_GENERATIONS_ADDITIONS } from '../lib/careerAwardGenerations1318.mjs';
 
 export const ROOT = process.cwd();
 export const BASE = '9d73ce5f261d93b73bf0993469c4fb330afa202b';
@@ -62,6 +67,11 @@ export async function bundleInternationalReturn({ original = false, patches = []
           if (!relative.startsWith('src/')) return;
           const raw = original ? execFileSync('git', ['show', BASE + ':' + relative], { maxBuffer: 30 * 1024 * 1024 }) : fs.readFileSync(args.path);
           let contents = raw.toString('utf8').replaceAll('\r\n', '\n');
+          if (!original && !browser && relative === 'src/lib/soccerCareerEngine.ts') {
+            const rows = [];
+            contents = inverseAwardGenerations(relative, contents, rows);
+            assert.deepEqual(rows.map(row => row.addition), AWARD_GENERATIONS_ADDITIONS, 'Release BB: the award generations of Rounds 1280 to 1282 and 1318 are taken out of every copy compared with the base, once each in order');
+          }
           for (const patch of patches.filter(value => value.file === relative)) {
             assert.equal(contents.split(patch.from).length, 2, 'Unique actual copied anchor: ' + patch.id);
             const before = sha(contents);

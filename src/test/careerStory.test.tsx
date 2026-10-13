@@ -306,6 +306,8 @@ describe('Soccer Career: the story keeps the save small', () => {
     expect(p.openingRows, 'seasons with an opening cup tie to measure').toBeGreaterThanOrEqual(PART_SEASONS_FLOOR);
     expect(p.opening / p.openingRows).toBeLessThan(OPENING_BYTES_PER_SEASON);
     expect(p.wheel).toBeLessThan(WHEEL_BYTES);
+    console.log(`[save parts] seed ${seed}: generated rivals' pool ${p.pool} bytes`);
+    expect(p.pool).toBeLessThan(POOL_BYTES);
   });
 });
 
@@ -352,6 +354,21 @@ describe('Soccer Career: the story keeps the save small', () => {
      chance wheel: the one receipt a save holds (chanceWheel), one object.
        Half again over the largest measured, the whole save's rule.
    MEASURED by this test on release-au-int (CI runner): seed 9748: rest 61,936 B, opening ties 1,978 over 18 seasons (110 a season), wheel 149; seed 9749: rest 74,528, opening ties 1,967 over 18 (109), wheel 164; seed 9750: rest 79,485, opening ties 2,276 over 21 (108), wheel 136. Budgets: opening ties 220 a season (mean 109), chance wheel 250 (largest 164). */
+/* Round 1318 (the other lane's Rounds 1280 to 1282 joined). The saved pool of
+   generated Ballon d'Or rivals (generatedBallonPool) is one more part, and it
+   too landed in "the rest", which then read 80,064 B on seed 9749 and 85,021 B
+   on seed 9750 against its 80,000. It is a part like the wheel, one object,
+   so it is measured as a part and the rest is again what the save held before:
+     generated rivals' pool: the career's pool, one object. Half again over the
+       largest measured, the whole save's rule.
+   MEASURED by this test on r1318-award-generations dfe1721e (CI runner,
+   remote check r1318-story): seed 9748 pool 4,700 B over 23 rivals, rest
+   61,936; seed 9749 pool 5,513 B over 27, rest 74,528; seed 9750 pool 5,513 B
+   over 27, rest 79,485. The rest is exactly main's (48cb9d4b measured the same
+   61,936, 74,528 and 79,485). Budget: 8,300 (largest 5,513). A pool only grows
+   while the player plays (one entry a replaced rival), about 200 B an entry;
+   the longest careers of the round's fleet held 35. */
+const POOL_BYTES = 8_300;
 const OPENING_BYTES_PER_SEASON = 220;
 const WHEEL_BYTES = 250;
 const REST_BOUND = 80_000;
@@ -371,7 +388,9 @@ function saveParts(s: CareerState) {
     /* Release AU fix pass: the two parts Rounds 1197 to 1208 add (THE PARTS below). */
     opening: openingRows.reduce((n, r) => n + bytesOf(r.cupRun?.opening), 0), openingRows: openingRows.length,
     wheel: bytesOf(s.chanceWheel),
-    rest: bytesOf({ ...s, leagueWorld: undefined, chanceWheel: undefined, seasons: s.seasons.map(r => ({ ...r, clubCupRun: undefined, leagueWorld: undefined, cupRun: r.cupRun?.opening ? { ...r.cupRun, opening: undefined } : r.cupRun })) }),
+    /* Round 1318: the generated rivals' pool (THE PARTS below). */
+    pool: bytesOf(s.generatedBallonPool),
+    rest: bytesOf({ ...s, leagueWorld: undefined, chanceWheel: undefined, generatedBallonPool: undefined, seasons: s.seasons.map(r => ({ ...r, clubCupRun: undefined, leagueWorld: undefined, cupRun: r.cupRun?.opening ? { ...r.cupRun, opening: undefined } : r.cupRun })) }),
   };
 }
 

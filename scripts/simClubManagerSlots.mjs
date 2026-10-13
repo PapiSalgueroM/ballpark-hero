@@ -92,6 +92,14 @@
  *   six times, so the park cuts nothing and the section says the stream
  *   reads nothing rather than passing on it. The default stream and
  *   SIM_SEED 1, 2 and 5 exercise the cut (188, 185, 180 and 190 rows).
+ *   Round 1311 moved BUDGET to 532,500 (a GitHub runner, remote check r1311-slots, 2026-10-12). The round
+ *   keeps the league's awards on every season's record (the top scorer, most assists, most clean sheets)
+ *   and a team of the season on the newest five, about 4,900 characters a career at season 15. Default
+ *   stream and SIM_SEED 1 to 5 on the round's head 8676802b: 507,107 / 505,205 / 504,692 / 504,795 /
+ *   506,197 / 505,887; on its base, origin/main 21941630, in the same check: 492,384 / 490,503 / 489,815 /
+ *   490,066 / 491,502 / 490,885 (already within 2,616 of the old 495,000). The dupe control leaves 570,310
+ *   on the head (551,383 on the base) and fired through the budget check on both. 532,500 sits 25,393 over
+ *   the largest healthy total and 37,810 under the control's, the margins the old number was set with.
  *   section 4 (2026-10-03, default, SIM_SEED 1, 2): the lived in save stands
  *     at season 5, week 19 with 190 / 196 / 191 h2h rows (115,179 / 116,726 /
  *     115,876 characters); the park cuts 1 / 2 / 2 of them, so the lean cut
@@ -121,7 +129,7 @@ const BUNDLE = `${TMP}/bundle.mjs`;
 
 const SWITCHES = Number(process.env.SLOTS_SWITCHES || 20);
 const BUDGET_SEASON = Number(process.env.SLOTS_BUDGET_SEASON || 15);
-const BUDGET = 495_000; // Round 1052, 27 leagues: measured healthy 466,396 to 470,019; actual duplicated career control 528,801 (was 470,000: healthy 442,058 to 444,992, control 501,773)
+const BUDGET = 532_500; // Round 1311, the league's awards on the records: measured healthy 504,692 to 507,107; duplicated career control 570,310 (was 495,000 from Round 1052: healthy 466,396 to 470,019, control 528,801)
 const SAVE_KEY = 'dukb-club-manager-save';
 /* SIM_SEED re-roots every career's stream, to measure the fences on fresh
    samples on purpose. The default is the stream the fences are judged on. */

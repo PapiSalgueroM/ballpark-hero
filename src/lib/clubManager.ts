@@ -53,6 +53,8 @@ import {
   bookFits, bookSalt, creditAssist, creditCleanSheet, creditDeal, creditGoal, creditMine, creditOwnGoal, dealAssist, dealGoals,
   liveBook, openBook, openLateBook, partialEleven, readBook, type BookMan, type BookRules, type LeagueBook,
 } from '@/lib/clubManagerLeagueBook';
+/* Round 1311: the league book's pure reader (the boards). It imports the book module and one type, never this file. */
+import { TEAMS_KEPT, bookDecides, bookShare, keepersOnRecord, leaders, seasonAwards, type BoardClub, type BoardInput, type SeasonAwards } from '@/lib/clubManagerLeagueBoards';
 import { players as RAW_POOL } from '@/data/players';
 // Round 70: real 2026 rosters for every club in the big five leagues, baked
 // from the Transfermarkt style market value data in Supabase. The bake file
@@ -400,6 +402,85 @@ export function leagueBookOf(state: CareerState): LeagueBook | null {
   return readBook(state.leagueBook, bookStampOf(state, careerLeagueOf(state).id));
 }
 
+/** What the league leaders card and the awards read: the reader's input, how much of the league is on
+ *  record, the round a late book counts from (null for a whole book) and the keepers on record. */
+export interface LeagueBoards {
+  input: BoardInput;
+  share: number;
+  from: number | null;
+  keepers: { have: number; of: number };
+}
+
+/**
+ * Round 1311. THE ONE DOOR every screen (and, from the awards on, every award) reads the league book
+ * through. It builds the reader's input (src/lib/clubManagerLeagueBoards.ts) from the active save: the
+ * book through the careful reader, the rival clubs with their goals for, their place in the table and
+ * whether their roster holds a keeper, my squad's league lines, a rival's rating off his roster, and the
+ * engine's own grouping of positions. Each rival's roster is asked for ONCE. Null when there is no book,
+ * when the careful reader refuses it, or when it does not add up to the table (the next match week
+ * replaces such a book: ensureLeagueBook). A read: it draws nothing and changes nothing in the save.
+ */
+export function leagueBoardsOf(state: CareerState): LeagueBoards | null {
+  if (!state.leagueClubs?.length) return null;
+  const book = leagueBookOf(state);
+  if (!book) return null;
+  const table = sortedLeagueTable(state).map(r => r.club);
+  const place = (club: string): number => { const i = table.indexOf(club); return i < 0 ? table.length + 1 : i + 1; };
+  const mine = mySquadNames(state);
+  const rosters = new Map<string, ProjectedPlayer[]>();
+  const rosterOf = (club: string): ProjectedPlayer[] => {
+    let have = rosters.get(club);
+    if (!have) { have = oppRosterFor(state, club, mine); rosters.set(club, have); }
+    return have;
+  };
+  const goalsFor = new Map(state.table.map(r => [r.club, r.gf]));
+  const clubs: BoardClub[] = state.leagueClubs.filter(c => c !== state.clubName).map(club => ({
+    club, gf: goalsFor.get(club) ?? 0, place: place(club), keeperOnRecord: rosterOf(club).some(p => p.p === 'GK'),
+  }));
+  if (!bookFits(book, clubs)) return null;
+  const input: BoardInput = {
+    book,
+    clubs,
+    mine: state.squad.map(p => ({
+      id: p.id, name: p.name, pos: p.position, rating: p.rating, apps: p.comp?.league?.apps ?? 0,
+      goals: p.comp?.league?.goals ?? 0, assists: p.comp?.league?.assists ?? 0, ...(p.generated ? { gen: true } : {}),
+    })),
+    myClub: state.clubName,
+    myPlace: place(state.clubName),
+    ratingOf: (club, name, pos) => rosterOf(club).find(p => p.n === name && p.p === pos)?.r ?? 0,
+    lineOf: groupOf,
+  };
+  return { input, share: bookShare(book, clubs).share, from: book.r0 ?? null, keepers: keepersOnRecord(clubs) };
+}
+
+/** Round 1311: the team of the season is kept on the newest TEAMS_KEPT records that hold awards and let go
+ *  from every older one (the three winners stay on every record). A record with no team is left as it is,
+ *  so a history that never held a team comes back the very same objects. */
+export function keepTeams(history: SeasonRecord[]): SeasonRecord[] {
+  const keep = new Set(history.filter(h => h.awards).map(h => h.season).sort((a, b) => b - a).slice(0, TEAMS_KEPT));
+  return history.map(h => {
+    if (!h.awards?.xi || keep.has(h.season)) return h;
+    const { xi, ...rest } = h.awards;
+    void xi;
+    return { ...h, awards: rest };
+  });
+}
+
+/** Round 1311: who settles this season's golden boot and awards. 'book' on a season the league book
+ *  decides; otherwise why not: no readable book that adds up, a book that started late, or one with too
+ *  little of the league on record (the share comes with it). The screens print the reason in plain words. */
+export function bookAwardsState(state: CareerState, boards: LeagueBoards | null = leagueBoardsOf(state)): { by: 'book' | 'none' | 'late' | 'thin'; share: number | null } {
+  if (!boards) return { by: 'none', share: null };
+  if (boards.from !== null) return { by: 'late', share: boards.share };
+  return { by: bookDecides(boards.input) ? 'book' : 'thin', share: boards.share };
+}
+
+/** Round 1311: the rule a rival's goals are dealt by, for the league leaders card's worked example (the
+ *  card computes it from this object with dealShares, never from typed numbers). */
+export function leagueBookRules(): BookRules {
+  return bookRules();
+}
+
 /** The eleven a rival that can field one is dealt over this week: the one the Match Centre and the viewer
  *  already show, minus any man now in my squad. Null for a club that cannot field a named eleven (the
  *  book deals that club over its partial eleven, thinBookEleven below). Since Round 1306 nothing in src
@@ -527,8 +608,20 @@ function noteBookMine(
  * The live golden boot board: AI entries plus every one of MY players with a
  * league goal, read straight from his per-competition line so the race and
  * the stats centre are one bookkeeping.
+ *
+ * Round 1311: on a season the league book decides (a WHOLE book with at least
+ * AWARD_FLOOR in 100 rival goals on record, bookDecides) the board IS the
+ * book's Goals board, so the golden boot, the player of the season and the
+ * world award read it. Any other season (a late book, no book, or a league
+ * whose data is too thin) keeps the old race below, to the letter. `boards`
+ * lets a caller that already asked the door hand its answer in.
  */
-export function goldenBootTable(state: CareerState, limit = 12): RaceScorer[] {
+export function goldenBootTable(state: CareerState, limit = 12, boards: LeagueBoards | null = leagueBoardsOf(state)): RaceScorer[] {
+  if (boards && bookDecides(boards.input)) {
+    return leaders(boards.input, 'goals', limit).map(m => ({
+      name: m.name, club: m.club, goals: m.n, ...(m.mine ? { mine: true } : {}), ...(m.gen ? { gen: true } : {}),
+    }));
+  }
   /* Round 742: a rival entry carrying the name of a man now in my squad is
      his old club's, seeded before he moved (or a namesake), so it is dropped
      at read time rather than rewritten into the save. He is on the board
@@ -558,13 +651,13 @@ export interface PotyLine {
  * in the table carries weight. One formula for everyone, mine included, so
  * the ranking cannot quietly favour my own squad.
  */
-export function playerOfSeasonRace(state: CareerState, limit = 5): PotyLine[] {
+export function playerOfSeasonRace(state: CareerState, limit = 5, boards: LeagueBoards | null = leagueBoardsOf(state)): PotyLine[] {
   const table = sortedLeagueTable(state);
   const posOf = (club: string): number => {
     const i = table.findIndex(r => r.club === club);
     return i >= 0 ? i + 1 : table.length;
   };
-  return goldenBootTable(state, 40)
+  return goldenBootTable(state, 40, boards)
     .map(e => ({
       name: e.name,
       club: e.club,
@@ -1688,6 +1781,10 @@ export interface SeasonRecord {
    *  neither on its old seasons. */
   leagueId?: string;
   leagueSize?: number;
+  /** Round 1311: the league's top scorer, most assists and most clean sheets, read from the book, on a
+   *  season the book decided. Kept on the record, so a manager who moves club takes his past winners
+   *  with him (joinClubNow copies the history). An older record has none. */
+  awards?: SeasonAwards;
 }
 
 export interface CareerStats {
@@ -2314,6 +2411,8 @@ export interface SeasonSummary {
   goldenBoot?: { name: string; club: string; goals: number } | null;
   playerOfSeason?: { name: string; club: string } | null;
   ballonDor?: { name: string; club: string } | null;
+  /** Round 1311: the same awards the season's record keeps, on a season the league book decided. */
+  awards?: SeasonAwards;
 }
 
 export interface CareerState {
@@ -19311,11 +19410,13 @@ export function finishSeason(career: CareerState): { state: CareerState; summary
   }
 
   /* ----- Round 165: the individual honours settle with the season ----- */
-  const bootTop = goldenBootTable(state, 1)[0] ?? null;
+  /* Round 1311: the league book's door, asked once for every honour below. Pure reads: nothing is drawn. */
+  const bookBoards = leagueBoardsOf(state);
+  const bootTop = goldenBootTable(state, 1, bookBoards)[0] ?? null;
   const goldenBoot = bootTop && bootTop.goals > 0
     ? { name: bootTop.name, club: bootTop.club, goals: bootTop.goals }
     : null;
-  const potyTop = playerOfSeasonRace(state, 1)[0] ?? null;
+  const potyTop = playerOfSeasonRace(state, 1, bookBoards)[0] ?? null;
   const playerOfSeason = potyTop && potyTop.goals > 0
     ? { name: potyTop.name, club: potyTop.club }
     : null;
@@ -19354,6 +19455,10 @@ export function finishSeason(career: CareerState): { state: CareerState; summary
     const best = cands.sort((a, b) => b.score - a.score)[0];
     return { name: best.name, club: best.club };
   })();
+  /* Round 1311: the top scorer, most assists and most clean sheets of the league, from the book. Only on
+     a season the book decides; any other season writes nothing new, so its summary and its record are
+     exactly what they were before the book was read. */
+  const awards = bookBoards ? seasonAwards(bookBoards.input) : null;
 
   const summary: SeasonSummary = {
     season: state.season,
@@ -19384,12 +19489,14 @@ export function finishSeason(career: CareerState): { state: CareerState; summary
     goldenBoot,
     playerOfSeason,
     ballonDor,
+    ...(awards ? { awards } : {}),
   };
 
   state.history = [
     ...state.history.filter(h => h.season !== state.season),
-    { season: state.season, club: state.clubName, position, points: myRow.pts, trophies: seasonTrophies, leagueId: careerLeagueOf(state).id, leagueSize: table.length },
+    { season: state.season, club: state.clubName, position, points: myRow.pts, trophies: seasonTrophies, leagueId: careerLeagueOf(state).id, leagueSize: table.length, ...(awards ? { awards } : {}) },
   ];
+  state.history = keepTeams(state.history);
   state.pendingSummary = summary;
   return { state, summary };
 }

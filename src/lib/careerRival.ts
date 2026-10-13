@@ -55,12 +55,13 @@ export interface CareerRival {
  *  line scored the way the caller scores the player's, because the two are compared and nothing else is. */
 export interface RivalSeasonResult { line: string; score: number; year?: number; allStar?: boolean }
 /**
- * Round 1112: the one per sport hook. A sport whose rival plays on the player's OWN stat line hands this to
- * judgeRivalSeason, and the built in line for that sport below is not used. It gets the rival, his form for
- * the season (rating plus the season's swing, drawn here exactly as it always was) and the season's stream.
- * THE RULE FOR A SPORT THAT MOVES OVER: take from `rng` exactly the draws that sport's built in line took (the
+ * Round 1112: the one per sport hook. Every sport's rival plays on the player's OWN stat line and hands this to
+ * judgeRivalSeason (since Round 1313 there is no built in line left). It gets the rival, his form for the
+ * season (rating plus the season's swing, drawn here exactly as it always was) and the season's stream.
+ * THE RULE EACH SPORT MOVED OVER BY: take from `rng` exactly the draws that sport's built in line took (the
  * NBA's took one), and key everything else off the rival (keyedRng), so the player's own stream does not move
- * by one draw. The NBA binding is nbaRivalSeason in nbaMyCareer.ts, the NFL's nflRivalSeason in nflMyCareer.ts.
+ * by one draw. The bindings: nbaRivalSeason in nbaMyCareer.ts, nflRivalSeason in nflMyCareer.ts,
+ * mlbRivalSeason in mlbMyCareer.ts and nhlRivalSeason in nhlMyCareer.ts.
  */
 export type RivalSeasonPlay = (r: CareerRival, form: number, rng: () => number) => RivalSeasonResult;
 
@@ -73,8 +74,8 @@ export type RivalSeasonPlay = (r: CareerRival, form: number, rng: () => number) 
 
 /**
  * THE DRAW COUNT LAW. How many draws of the season's stream a sport's rival season takes after the swing: what
- * that sport's built in line took (read off simRivalSeason below: the NHL's goals and assists, MLB's home runs
- * and average; the NFL's line, gone since Round 1227, took three parts or a kicker's one, and the NBA's took
+ * that sport's built in line took (the NHL's goals and assists and MLB's home runs and average, gone since
+ * Round 1313; the NFL's line, gone since Round 1227, took three parts or a kicker's one, and the NBA's took
  * one before Round 1112). A binding takes exactly this many and pays for everything else from a stream keyed
  * on the rival, so the player's own stream is where it always was. It outlives the built in lines: the count
  * is the law, not the lines.
@@ -141,36 +142,13 @@ export function draftRival(
   };
 }
 
-/** The sports whose rival line is still built in below. The NBA's is not: Round 1112 moved it onto the
- *  player's own line (nbaRivalSeason in nbaMyCareer.ts), so an NBA call has to hand in its play. Round 1227
- *  did the same for the NFL (nflRivalSeason in nflMyCareer.ts) and took the NFL's built in lines out, since
- *  no career could reach them any more. MLB's and the NHL's go in the round that moves those two over. */
-export type BuiltInRivalSport = Exclude<RivalSport, 'nba' | 'nfl'>;
-
-/** Round 1226: carries a COUNT of a built in NHL or MLB line (goals, assists, home runs) to a season that was
- *  not the engine's own length, such as the 48 games of 2012-13 or the 60 of 2020. It reaches the PRINTED line
- *  only. The score stays on the full season, the scale the caller's own score is on, so who had the better
- *  year never depends on how long the season was. */
-export type RivalLineCut = (count: number) => number;
-
-/** Roll the rival's season and return a printable line plus a score. */
-export function simRivalSeason(r: CareerRival, sport: RivalSport, rng: () => number, play?: RivalSeasonPlay, cut?: RivalLineCut): RivalSeasonResult {
+/** Roll the rival's season: his form (his rating plus the season's swing, drawn here exactly as it always was),
+ *  then the sport's own play, which hands back the printable line and its score. Every sport plays its rival on
+ *  the player's own line: the NBA since Round 1112, the NFL since Round 1227, MLB and the NHL since Round 1313,
+ *  which took out the last built in lines (and the cut that carried their counts to a short season). */
+export function simRivalSeason(r: CareerRival, sport: RivalSport, rng: () => number, play: RivalSeasonPlay): RivalSeasonResult {
   const form = r.ovr + seasonSwing(rng, r.age);
-  if (play) return play(r, form, rng);
-  let line = '', score = 0;
-  if (sport === 'nhl') {
-    const g = Math.max(1, Math.round((6 + (form - 62) * 0.9) + rng() * 4));
-    const a = Math.max(1, Math.round((9 + (form - 62) * 1.1) + rng() * 5));
-    const pg = cut ? cut(g) : g, pa = cut ? cut(a) : a;
-    line = `${pg}G ${pa}A ${pg + pa}P`;
-    score = g + a;
-  } else {
-    const hr = Math.max(0, Math.round((4 + (form - 62) * 0.85) + rng() * 5));
-    const avg = Math.min(0.36, Math.max(0.2, Math.round((0.226 + (form - 62) * 0.0026 + rng() * 0.02) * 1000) / 1000));
-    line = `${avg.toFixed(3)}, ${cut ? cut(hr) : hr} HR`;
-    score = hr * 1.6 + (avg - 0.24) * 300;
-  }
-  return { line, score: Math.round(score * 10) / 10 };
+  return play(r, form, rng);
 }
 
 /**
@@ -205,23 +183,14 @@ export function rivalLeadLine(r: Pick<CareerRival, 'myYears' | 'hisYears'>): str
  * `myScore` is the player's own season on the same scale as the rival's.
  */
 export function judgeRivalSeason(
-  r: CareerRival, myScore: number, myName: string, sport: BuiltInRivalSport, rng: () => number,
-): string[];
-export function judgeRivalSeason(
   r: CareerRival, myScore: number, myName: string, sport: RivalSport, rng: () => number, play: RivalSeasonPlay,
-): string[];
-export function judgeRivalSeason(
-  r: CareerRival, myScore: number, myName: string, sport: 'mlb' | 'nhl', rng: () => number, play: undefined, cut: RivalLineCut,
-): string[];
-export function judgeRivalSeason(
-  r: CareerRival, myScore: number, myName: string, sport: RivalSport, rng: () => number, play?: RivalSeasonPlay, cut?: RivalLineCut,
 ): string[] {
   const notes: string[] = [];
   if (r.retired) return notes;
-  const { line, score, year, allStar } = simRivalSeason(r, sport, rng, play, cut);
+  const { line, score, year, allStar } = simRivalSeason(r, sport, rng, play);
   r.lastLine = line;
   r.lastScore = score;
-  if (play) { r.lastYear = year; r.lastAllStar = allStar === true; }
+  r.lastYear = year; r.lastAllStar = allStar === true;
   // A ring of his own, roughly as often as anyone good gets one.
   if (rng() < 0.08 + Math.max(0, (r.ovr - 80)) * 0.004) r.rings += 1;
 

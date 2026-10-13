@@ -1,8 +1,15 @@
 /* Round 1211: holds the two season ledgers (src/data/usSeasonLedgerMlb.ts and
    src/data/usSeasonLedgerNhl.ts) to themselves, to their receipts
-   (scripts/data/usSeasonSources1211.json), to this file's own typed table and
+   (scripts/data/usSeasonSources1211.json, and since Round 1312
+   scripts/data/usSeasonSources1312.json), to this file's own typed table and
    to the game's own team lists. It is a pure data harness: no career is
    played, no clock is read, no network is touched, and no engine is edited.
+
+   TWO RECEIPTS FILES (Round 1312). Each file was read on its own day (its
+   `readOn`), every receipt in it carries that day, and a key lives in exactly
+   one file: a page read again on a later day is a new key in the later file
+   (R3, R6). A ledger names the days it was read on, and every receipt it
+   cites must be of one of them.
 
    WHAT A RED MEANS. A check below fails only on the LEDGER (a season missing,
    club games that do not add up, an id the game does not hold under that
@@ -116,9 +123,12 @@ const ENGINE_CONTROLS = {
   /* One award gate of games read off the saved line: nobody plays 78 games of 48, or 130 of 60. */
   nhlgates: { expect: ['E8a'], from: 'fullGames >= 78 && c.health >= 80', to: 'line.games >= 78 && c.health >= 80' },
   mlbgates: { expect: ['E8a'], from: 'c.pos !== "DH" && fullGames >= 130', to: 'c.pos !== "DH" && line.games >= 130' },
-  /* The head to head scored off the saved line against the rival's full season: the review's major. */
-  nhlhead: { expect: ['E8a'], from: '((full.svpct ?? 0.9) - 0.9) * 900)) : full.points ?? 0;', to: '((full.svpct ?? 0.9) - 0.9) * 900)) : line.points ?? 0;' },
-  mlbhead: { expect: ['E8a'], from: 'Math.round((full.hr ?? 0) * 1.6 + ((full.avg ?? 0.24) - 0.24) * 300);', to: 'Math.round((line.hr ?? 0) * 1.6 + ((line.avg ?? 0.24) - 0.24) * 300);' },
+  /* Round 1313: mlbhead and nhlhead are retired with the inline scores they were anchored on (the head to
+     head reads the two saved lines now). Their successors: the player's side scored on the season on the
+     engine's own length while the rival's is his printed season, red wherever the year is of another length
+     (every cell of E8). */
+  fullslatenhl: { expect: ['E8a'], from: 'nhlHeadToHeadScore(c.pos, line), c.name, "nhl"', to: 'nhlHeadToHeadScore(c.pos, full), c.name, "nhl"' },
+  fullslatemlb: { expect: ['E8a'], from: 'mlbHeadToHeadScore(c.pos, line), c.name, "mlb"', to: 'mlbHeadToHeadScore(c.pos, full), c.name, "mlb"' },
   /* One count left on the full season in the saved line. */
   nhlcarry: { expect: ['E8b'], from: 'line.goals = cut(full.goals);', to: 'line.goals = full.goals;' },
   mlbcarry: { expect: ['E8b'], from: 'if (v !== void 0) line[k] = cut(v);', to: 'if (v !== void 0) line[k] = k === "hr" ? v : cut(v);' },
@@ -138,8 +148,13 @@ try { unlinkSync(OUT); } catch { /* a temp file left behind is harmless */ }
 const clone = x => JSON.parse(JSON.stringify(x));
 const mlb = clone({ ...game.mlb });
 const nhl = clone({ ...game.nhl });
-const receipts = JSON.parse(readFileSync(path.join(ROOT, 'scripts/data/usSeasonSources1211.json'), 'utf8'));
-const SRC = receipts.sources;
+/* Round 1312: two receipts files, merged by key. A key in both is red at R6 and the first file's copy is
+   the one cited, so a later reading can never quietly stand in for an earlier one. */
+const RECEIPT_FILES = ['scripts/data/usSeasonSources1211.json', 'scripts/data/usSeasonSources1312.json'];
+const receiptFiles = RECEIPT_FILES.map(f => ({ file: f, ...JSON.parse(readFileSync(path.join(ROOT, f), 'utf8')) }));
+const SRC = {};
+const fileOf = {};
+for (const rf of receiptFiles) for (const [k, s] of Object.entries(rf.sources)) if (!(k in SRC)) { SRC[k] = s; fileOf[k] = rf; }
 
 const label = t => `${t.city} ${t.name}`;
 /* The game's own lists, and the first year a career on each can play. */
@@ -201,7 +216,9 @@ const OWN = {
   /* The rules after sixty minutes. */
   nhlRules: { minutes: 5, skatersFrom2015: 3, shootoutRounds: 3, loserGetsAPoint: true, playoffPeriodMinutes: 20, playoffShootout: false },
   /* How many entries each THIN list holds: one cannot quietly lose a line. */
-  thin: { mlb: 10, nhl: 9 },
+  thin: { mlb: 10, nhl: 6 },
+  /* Round 1312: each receipts file and the day it was read on. */
+  receiptDays: { 'scripts/data/usSeasonSources1211.json': '2026-10-10', 'scripts/data/usSeasonSources1312.json': '2026-10-12' },
   /* The first rounds whose length is thin (played, and only one source gave its length), by their
      place in the list, so a moved year cannot hide one. None since Round 1226's fix pass filled the
      best of three of 2020 on two sources (ESPN and CBS Sports). */
@@ -210,6 +227,22 @@ const OWN = {
   mlbPlayed: 'DET 2023|TEX 2024|DET 2025|DET 2026|TOR 2026|TEX 2026|HOU 2026',
   /* The NHL playoff block: its first season, the two modified tournaments, its round names. */
   nhlPlayoff: { from: 2013, modified: [2019, 2020], rounds: ['First Round', 'Second Round', 'Conference Finals', 'Stanley Cup Final'] },
+  /* Round 1312, NHL_ROUND_NAMES window by window: [from, to, its names joined by | or null, clubs, conferences,
+     and how the names are held: 'season' (two sources name every round alike in every season, N9) or 'format'
+     (the names of NHL_PLAYOFF_FORMAT, which Round 1211 read for today's format), finalOnlyAcross, and
+     whether a stage came before the four rounds]. */
+  /* Round 1312: the first season (a start year) of the regular season shootout. */
+  nhlShootoutFrom: 2005,
+  /* Round 1312 (Part B3): every season's games past sixty minutes and shootouts, "year:past/shootouts". */
+  nhlOvertimeBySeason: '2006:281/164 2007:272/156 2008:282/159 2009:301/184 2010:297/149 2011:300/181 2012:162/97 2013:307/178 2014:306/170 2015:275/107 '
+    + '2016:289/99 2017:296/103 2018:271/87 2019:250/86 2020:195/65 2021:288/102 2022:302/95 2023:271/82 2024:271/77 2025:326/119',
+  nhlRoundWindows: [
+    [2006, 2012, 'Conference Quarterfinals|Conference Semifinals|Conference Finals|Stanley Cup Final', 16, true, 'season', true, false],
+    [2013, 2018, 'First Round|Second Round|Conference Finals|Stanley Cup Final', 16, true, 'format', true, false],
+    [2019, 2019, 'First Round|Second Round|Conference Finals|Stanley Cup Final', 16, true, 'season', true, true],
+    [2020, 2020, 'First Round|Second Round|Stanley Cup Semifinals|Stanley Cup Final', 16, false, 'season', false, false],
+    [2021, null, 'First Round|Second Round|Conference Finals|Stanley Cup Final', 16, true, 'format', true, false],
+  ],
 };
 
 /* EVERY NHL ALIGNMENT, typed here division by division: key: [from, to, { division: [conference, its clubs] }]. */
@@ -294,6 +327,35 @@ const CONTROLS = {
   nhlformula: { expect: ['N5'], run() { must(nhl.NHL_FORMULA_84.division.games === 4, 'the four division games'); nhl.NHL_FORMULA_84.division.games = 3; } },
   nhlplayoff: { expect: ['N6'], run() { must(nhl.NHL_PLAYOFF_FORMAT.series[0][1] === 7, 'the best of seven'); nhl.NHL_PLAYOFF_FORMAT.series[0] = [3, 5]; } },
   nhlscore: { expect: ['N7'], run() { must(nhl.NHL_OVERTIME.now.shootouts === 119, 'the 119 shootouts'); nhl.NHL_OVERTIME.now.shootouts = 0; } },
+  /* Round 1312: a receipt of the first file copied into the second under the same key, dated the second
+     file's day so that only the one key rule can see it. */
+  keytwice: { expect: ['R6'], run() { const a = receiptFiles[0].sources['hr-playoffs']; const b = receiptFiles[1]; must(a && b && !b.sources['hr-playoffs'], 'the playoffs receipt in the first file alone'); b.sources['hr-playoffs'] = { ...clone(a), read: b.readOn }; } },
+  /* Round 1312: a receipt of the second file dated the first file's day. */
+  /* Round 1312: one name of the 2006 window changed; the window still has four names. */
+  roundname: { expect: ['N9'], run() { const w = nhl.NHL_ROUND_NAMES.find(x => x.from === 2006); must(w && w.names && w.names[1] === 'Conference Semifinals', 'the Conference Semifinals of the 2006 window'); w.names[1] = 'Division Finals'; } },
+  /* Round 1312: the league's receipt taken from the 2006 window, shape and names: one source is left. */
+  /* Round 1312: the 2020 window (no conferences) said to have kept its rounds inside a conference to the Final. */
+  finalacross: { expect: ['N10'], run() { const w = nhl.NHL_ROUND_NAMES.find(x => x.from === 2020); must(w && w.finalOnlyAcross === false && w.conferences === false, 'the 2020 window with no conferences'); w.finalOnlyAcross = true; } },
+  /* Round 1312: NBC's page of the 2021 semifinals taken from the 2020 window's names: the league alone
+     names the round "Stanley Cup Semifinals" (the typed table still agrees, so only the season check sees it). */
+  semisone: { expect: ['N9'], run() { const w = nhl.NHL_ROUND_NAMES.find(x => x.from === 2020); must(w && w.namesSrc.includes('nbc-2021-semis'), 'NBC\'s semifinal page behind the 2020 window'); w.namesSrc = w.namesSrc.filter(k => k !== 'nbc-2021-semis'); } },
+  /* Round 1312 (Part B3): one shootout of 2015-16 moved into regulation in the ledger; still fewer than the games past sixty. */
+  otseason: { expect: ['N12'], run() { const o = nhl.NHL_OVERTIME_BY_SEASON?.[2015]; must(o && o.shootouts === 107, 'the 107 shootouts of 2015-16'); o.shootouts = 106; } },
+  /* Round 1312: the shootout era moved a season later; it still begins before every era of the game. */
+  shootoutfrom: { expect: ['N11'], run() { must(nhl.NHL_SHOOTOUT_FROM === 2005, 'the shootout from 2005'); nhl.NHL_SHOOTOUT_FROM = 2006; } },
+  /* Round 1312: the qualifying stage of 2019-20 forgotten. */
+  beforegone: { expect: ['N9'], run() { const w = nhl.NHL_ROUND_NAMES.find(x => x.from === 2019); must(w && typeof w.before === 'string', 'the stage before the 2019 window'); delete w.before; } },
+  /* Round 1312: the 2006 window said NOT to keep its first three rounds inside a conference. */
+  acrossflag: { expect: ['N10'], run() { const w = nhl.NHL_ROUND_NAMES.find(x => x.from === 2006); must(w && w.finalOnlyAcross === true, 'the 2006 window\'s finalOnlyAcross'); w.finalOnlyAcross = false; } },
+  /* Round 1312: one series of 2022-23 moved across the conferences in BOTH receipts (Vegas meeting Florida
+     in the first round): the receipts still agree, and only the conferences can see it. */
+  acrossdata: { expect: ['N10'], run() {
+    const both = ['nhl-records-playoffs', 'hr-playoffs-1312'].map(k => SRC[k]?.values?.series?.[2022]);
+    must(both.every(s => s && s[0].some(x => x.startsWith('VGK WPG')) && s[0].some(x => x.startsWith('FLA BOS'))), 'Vegas over Winnipeg and Florida over Boston in the 2022 first round of both receipts');
+    for (const s of both) for (const r of s) r.forEach((x, i) => { r[i] = x.replace(/^VGK WPG/, 'VGK BOS').replace(/^FLA BOS/, 'FLA WPG'); });
+  } },
+  onegroup: { expect: ['N10', 'N9', 'R2'], run() { const w = nhl.NHL_ROUND_NAMES.find(x => x.from === 2006); must(w && w.src.includes('nhl-records-playoffs') && w.namesSrc.includes('nhl-records-playoffs'), 'the league\'s records receipt behind the 2006 window'); w.src = w.src.filter(k => k !== 'nhl-records-playoffs'); w.namesSrc = w.namesSrc.filter(k => k !== 'nhl-records-playoffs'); } },
+  readday: { expect: ['R3'], run() { const b = receiptFiles[1]; const k = Object.keys(b.sources)[0]; must(k && b.sources[k].read === b.readOn && b.readOn !== receiptFiles[0].readOn, 'a receipt of the second file on its own day'); b.sources[k].read = receiptFiles[0].readOn; } },
 };
 for (const [name, k] of Object.entries(ENGINE_CONTROLS)) CONTROLS[name] = { expect: k.expect, run() {} };
 if (CONTROL === 'list') { console.log(Object.keys(CONTROLS).join(' ')); process.exit(0); }
@@ -579,6 +641,115 @@ const OWN_MLB_DIVISIONS = {
   const records = Object.entries(SRC['nhl-points']?.values?.records ?? {});
   check('N8', records.length >= 3 && nhl.NHL_OVERTIME_RULES.loserGetsAPoint === records.every(([, [w, , o, p]]) => o > 0 && p === 2 * w + o),
     `NHL_OVERTIME_RULES.loserGetsAPoint is ${nhl.NHL_OVERTIME_RULES.loserGetsAPoint}; the standings receipt holds ${records.map(([id, r]) => `${id} ${r.join('-')}`).join(', ') || 'no record'}`);
+
+  /* ===== Round 1312: the playoffs season by season (NHL_ROUND_NAMES). =====
+     N9  each window is this harness's own row (years, names, clubs, conferences), every round a best of
+         seven; where the names are held season by season, every round of every finished season of the
+         window is named alike by two groups of its name receipts (hyphen and case aside), and where the
+         league is one of them the ledger holds the league's own spelling.
+     N10 every finished season of a window, from the series its shape receipts print: two groups print it,
+         series for series alike; four rounds of 8, 4, 2 and 1 series; the window's clubs in the first;
+         every winner on the wins the window names and no series past its most games; the winners of
+         each round, and only they, in the next; every club in this harness's own alignment of that year
+         (OWN_NHL_ALIGN, never the ledger's); and the window's `conferences` is what that alignment says. And `finalOnlyAcross`, this harness's own
+         flag for the window, is what the series say: true when, in every season, the first three rounds
+         pair two clubs of one conference and the last the two conferences; false when a season has no
+         conferences or a round before the last crossed; null only where it was not read. */
+  const norm = s => (typeof s === 'string' ? s.toLowerCase().replace(/-/g, '').replace(/\s+/g, ' ').trim() : null);
+  const wins = nhl.NHL_ROUND_NAMES ?? [];
+  check('N9', wins.length === OWN.nhlRoundWindows.length, `NHL_ROUND_NAMES holds ${wins.length} windows, this harness's own table ${OWN.nhlRoundWindows.length}`);
+  /* The windows run from the ledger's first season on, in order, with no gap and no overlap. */
+  check('N9', wins.length > 0 && wins[0].from === OWN.nhlYears[0] && wins[wins.length - 1].to === null && wins.every((w, i) => i === 0 || w.from === wins[i - 1].to + 1),
+    `the NHL_ROUND_NAMES windows leave a gap or overlap: ${wins.map(w => `${w.from} to ${w.to}`).join(', ')}`);
+  for (const [from, to, names, clubs, confs, how, across, before] of OWN.nhlRoundWindows) {
+    const w = wins.find(x => x.from === from);
+    const tag = `NHL_ROUND_NAMES ${from}`;
+    if (!w) { check('N9', false, `${tag}: no such window`); continue; }
+    const theirs = w.names === null ? null : w.names.join('|');
+    check('N9', w.to === to && theirs === names && w.clubs === clubs && w.conferences === confs, `${tag}: ${w.from} to ${w.to}, names ${theirs}, ${w.clubs} clubs, conferences ${w.conferences}; this harness's own table says ${from} to ${to}, ${names}, ${clubs}, ${confs}`);
+    check('N9', Array.isArray(w.series) && w.series.length === 4 && w.series.every(([n, m]) => n === 4 && m === 7) && (w.names === null || w.names.length === 4), `${tag}: not four best of sevens with four names`);
+    const last = Math.min(to ?? lastDone, lastDone);
+    const years = rangeOf(from, last);
+    if (how === 'season' && w.names) {
+      for (const y of years) w.names.forEach((name, i) => {
+        const agree = w.namesSrc.map(k => SRC[k]).filter(s => s && !s.thin && norm(s.values?.rounds?.[y]?.[i]) === norm(name));
+        check('N9', new Set(agree.map(s => s.group)).size >= 2, `${tag}, ${y}: round ${i + 1} "${name}" is named so by ${agree.length ? agree.map(s => s.group).join(', ') : 'no receipt'} alone`);
+        /* The league's spelling (its hyphens; capitals aside, for a name in running text). */
+        const league = agree.find(s => s.group === 'nhl');
+        if (league) check('N9', league.values.rounds[y][i].toLowerCase() === name.toLowerCase(), `${tag}, ${y}: the ledger spells round ${i + 1} "${name}", the league "${league.values.rounds[y][i]}"`);
+      });
+    }
+    /* A stage before the four rounds: said in words exactly where this harness's own table says so, and
+       printed by two groups of the window's receipts in every such season; and no receipt of a window
+       without one prints one. */
+    check('N9', (typeof w.before === 'string' && w.before.length > 20) === before, `${tag}: the stage before the four rounds is ${w.before ? `said ("${w.before}")` : 'not said'}, this harness's own table says ${before ? 'one came first' : 'none came first'}`);
+    for (const y of years) {
+      const firsts = w.src.map(k => SRC[k]).filter(s => s && !s.thin && Array.isArray(s.values?.before?.[y]) && s.values.before[y].length > 0);
+      if (before) check('N9', new Set(firsts.map(s => s.group)).size >= 2, `${tag}, ${y}: the stage before is printed by ${firsts.map(s => s.group).join(', ') || 'no receipt'} alone`);
+      else check('N9', firsts.length === 0, `${tag}, ${y}: ${firsts.map(s => s.group).join(', ')} print a stage before the four rounds, the window says none`);
+    }
+    /* What the series say of the window, season by season: true while every season keeps the first three
+       rounds inside a conference and the last across; false on a season without conferences or a crossing. */
+    let seen = true;
+    check('N10', w.finalOnlyAcross === across, `${tag}: finalOnlyAcross is ${w.finalOnlyAcross}, this harness's own table says ${across}`);
+    for (const y of years) {
+      const prints = w.src.map(k => SRC[k]).filter(s => s && !s.thin && Array.isArray(s.values?.series?.[y]));
+      check('N10', new Set(prints.map(s => s.group)).size >= 2, `${tag}, ${y}: the series are printed by ${prints.map(s => s.group).join(', ') || 'no receipt'} alone`);
+      if (!prints.length) { seen = false; continue; }
+      const sorted = s => JSON.stringify(s.values.series[y].map(r => [...r].sort()));
+      check('N10', prints.every(s => sorted(s) === sorted(prints[0])), `${tag}, ${y}: the receipts print different series`);
+      const R = prints[0].values.series[y].map(r => r.map(x => { const [a, b, res] = x.split(' '); const [p, q] = res.split('-').map(Number); return { a, b, p, q }; }));
+      check('N10', R.length === 4 && R.map(r => r.length).join() === '8,4,2,1', `${tag}, ${y}: the rounds hold ${R.map(r => r.length).join(', ')} series`);
+      const first = new Set(R[0]?.flatMap(s => [s.a, s.b]) ?? []);
+      check('N10', first.size === w.clubs, `${tag}, ${y}: ${first.size} clubs in the first round, the window says ${w.clubs}`);
+      R.forEach((round, i) => round.forEach(s => check('N10', s.p === w.series[i][0] && s.q < s.p && s.p + s.q <= w.series[i][1], `${tag}, ${y}: ${s.a} over ${s.b} ${s.p}-${s.q} is not a series won with ${w.series[i][0]} of at most ${w.series[i][1]}`)));
+      for (let i = 1; i < R.length; i++) {
+        const here = R[i].flatMap(s => [s.a, s.b]).sort().join(' '); const won = R[i - 1].map(s => s.a).sort().join(' ');
+        check('N10', here === won, `${tag}, ${y}: round ${i + 1} holds ${here}, the winners of round ${i} are ${won}`);
+      }
+      /* Clubs are placed by this harness's OWN alignment table (OWN_NHL_ALIGN), never the ledger's: N3 holds
+         the ledger's alignments to it, so a control that moves a ledger club stays red at N3 alone. */
+      const own = Object.values(OWN_NHL_ALIGN).find(([f, t]) => y >= f && (t === null || y <= t));
+      const divs = own ? Object.values(own[2]).map(([conf, teams]) => ({ conf, teams: teams.split(' ') })) : [];
+      const confOf = id => divs.find(d => d.teams.includes(id));
+      check('N10', [...first].every(id => !!confOf(id)), `${tag}, ${y}: a club of the first round is not in this harness's own alignment of ${y}`);
+      check('N10', divs.length > 0 && divs.every(d => (d.conf !== null) === w.conferences), `${tag}, ${y}: the window says conferences ${w.conferences}, this harness's own alignment of ${y} says otherwise`);
+      const inside = s => { const p = confOf(s.a)?.conf; const q = confOf(s.b)?.conf; return p != null && p === q; };
+      const across = s => { const p = confOf(s.a)?.conf; const q = confOf(s.b)?.conf; return p != null && q != null && p !== q; };
+      if (!(R.length === 4 && R.slice(0, 3).every(r => r.every(inside)) && R[3].every(across))) seen = false;
+    }
+    if (w.finalOnlyAcross !== null) check('N10', w.finalOnlyAcross === seen, `${tag}: finalOnlyAcross is ${w.finalOnlyAcross}, the series of its seasons say ${seen}`);
+  }
+
+  /* N11 (Round 1312): the shootout era is this harness's own year, it began before every season the ledger
+     and the game's eras hold, and the overtime receipts count shootouts in the first season of the ledger. */
+  const so = nhl.NHL_SHOOTOUT_FROM;
+  check('N11', so === OWN.nhlShootoutFrom, `NHL_SHOOTOUT_FROM is ${so}, this harness's own table says ${OWN.nhlShootoutFrom}`);
+  check('N11', typeof so === 'number' && so <= rows[0].year && game.NHL_ERAS.every(e => e.startYear >= so), `NHL_SHOOTOUT_FROM ${so} is after a season the ledger or the game holds (${rows[0].year}; eras from ${game.NHL_ERAS.map(e => e.startYear).join(', ')})`);
+  check('N11', (nhl.NHL_OVERTIME.y2006?.shootouts ?? 0) > 0 && (SRC['hr-shootout']?.values?.shootoutWins?.[rows[0].year] ?? 0) > 0, `no shootout is counted in ${rows[0].year}, the first season of the ledger`);
+
+  /* N12 (Round 1312, Part B3): past sixty minutes season by season. Every finished season once, as this
+     harness's own table has it (the ledger's first season to the one before its last); its games the
+     league's games of Round 1211's league table receipt and half the feed's team games; its numbers both
+     receipts' sums (the league feed's overtime losses and shootout wins, Hockey Reference's), every
+     shootout with one winner and one loser; no more shootouts than games past sixty. It reads no ledger
+     row, so a control that drops a season row stays red at N1 alone. */
+  const obs = nhl.NHL_OVERTIME_BY_SEASON ?? {};
+  const ownOt = Object.fromEntries(OWN.nhlOvertimeBySeason.split(' ').map(x => { const [y, v] = x.split(':'); const [p, s] = v.split('/').map(Number); return [y, [p, s]]; }));
+  const done = rangeOf(OWN.nhlYears[0], OWN.nhlYears[1] - 1).map(String);
+  check('N12', sameSet(Object.keys(obs), done) && sameSet(Object.keys(ownOt), done), `NHL_OVERTIME_BY_SEASON holds ${Object.keys(obs).join(' ')}, this harness's own table ${Object.keys(ownOt).join(' ')}, the finished seasons are ${done.join(' ')}`);
+  const feedOt = SRC['nhl-feed-1312']?.values; const hrOt = SRC['hr-standings-1312']?.values;
+  for (const [y, o] of Object.entries(obs)) {
+    const league = SRC['hr-league']?.values?.leagueGames?.[y];
+    check('N12', o.games === league && feedOt?.teamGames?.[y] === 2 * o.games, `${y}: past sixty over ${o.games} games, the league table receipt says ${league} and the feed ${feedOt?.teamGames?.[y]} team games`);
+    check('N12', JSON.stringify([o.pastSixty, o.shootouts]) === JSON.stringify(ownOt[y]), `${y}: ${o.pastSixty} past sixty and ${o.shootouts} shootouts, this harness's own table says ${ownOt[y]?.join(' and ')}`);
+    check('N12', o.pastSixty === feedOt?.overtimeLosses?.[y] && o.pastSixty === hrOt?.overtimeLosses?.[y], `${y}: ${o.pastSixty} past sixty, the receipts say ${feedOt?.overtimeLosses?.[y]} and ${hrOt?.overtimeLosses?.[y]}`);
+    check('N12', o.shootouts === feedOt?.shootoutWins?.[y] && o.shootouts === hrOt?.shootoutWins?.[y] && o.shootouts === feedOt?.shootoutLosses?.[y] && o.shootouts === hrOt?.shootoutLosses?.[y], `${y}: ${o.shootouts} shootouts, the receipts' wins and losses say otherwise`);
+    check('N12', o.shootouts > 0 && o.shootouts <= o.pastSixty && o.pastSixty < o.games, `${y}: ${o.shootouts} shootouts of ${o.pastSixty} games past sixty of ${o.games}`);
+  }
+  /* NHL_OVERTIME's two seasons are not compared here: N7 holds them to the 1211 receipts, and a check
+     across the two blocks would turn the old control nhlscore red at a second check. They agree today
+     (281 and 164 of 1,230; 326 and 119 of 1,312), read twice on two days. */
 }
 
 /* ===== THE RECEIPTS ===== */
@@ -596,6 +767,15 @@ const OWN_MLB_DIVISIONS = {
   for (const s of nhl.NHL_NAME_SPANS) cited.push([`NHL span ${s.id}`, null, s.src]);
   cited.push(['NHL_FORMULA_84', null, nhl.NHL_FORMULA_84.src], ['NHL_PLAYOFF_FORMAT', null, nhl.NHL_PLAYOFF_FORMAT.src]);
   for (const [name, keys] of Object.entries(nhl)) if (name.endsWith('_SRC')) cited.push([name, null, keys]);
+  /* Round 1312: a window speaks of its finished seasons; names held season by season do too, and names
+     that are NHL_PLAYOFF_FORMAT's speak of today's format, as that block does. */
+  const nhlDone = nhl.NHL_LENGTHS_VERIFIED_TO;
+  if (nhl.NHL_OVERTIME_BY_SEASON) cited.push(['NHL_OVERTIME_BY_SEASON', [nhl.NHL_SEASONS[0].year, nhlDone], nhl.NHL_OVERTIME_BY_SEASON_SRC ?? []]);
+  for (const w of nhl.NHL_ROUND_NAMES ?? []) {
+    const span = [w.from, Math.min(w.to ?? nhlDone, nhlDone)];
+    const own = OWN.nhlRoundWindows.find(x => x[0] === w.from);
+    cited.push([`NHL_ROUND_NAMES ${w.from}`, span, w.src], [`NHL_ROUND_NAMES ${w.from}, names`, own && own[5] === 'format' ? null : span, w.namesSrc]);
+  }
 
   /* Which seasons a receipt speaks of: its season by season lines, or its `seasons` (an article about
      one schedule or one format). A receipt with neither speaks of no season in particular. */
@@ -621,15 +801,33 @@ const OWN_MLB_DIVISIONS = {
     /* R4: nothing leans on a receipt marked thin. */
     check('R4', got.every(s => !s || !s.thin), `${where} leans on a receipt marked thin`);
   }
-  /* R3: every receipt is whole, was read on the ledger's day, and none is a wiki. */
-  for (const [k, s] of Object.entries(SRC)) {
-    const text = `${s.publisher} ${s.url} ${s.title}`.toLowerCase();
-    check('R3', !/wiki|fandom/.test(text), `the receipt "${k}" is a wiki: ${s.url}`);
-    check('R3', /^https:\/\//.test(s.url ?? '') && s.read === receipts.readOn && !!s.publisher && !!s.title && !!s.group && (s.sport === 'mlb' || s.sport === 'nhl'), `the receipt "${k}" is not whole`);
-    check('R3', Array.isArray(s.says) ? s.says.length > 0 : !!s.years && Object.keys(s.years).length > 0, `the receipt "${k}" says nothing`);
+  /* R3: every receipt is whole, was read on its own file's day, and none is a wiki. Round 1312: every
+     file of every receipts file, each held to its own `readOn`, and each file's day to this harness's own table. */
+  for (const rf of receiptFiles) {
+    check('R3', rf.readOn === OWN.receiptDays[rf.file], `${rf.file} says it was read on ${rf.readOn}, this harness's own table says ${OWN.receiptDays[rf.file]}`);
+    for (const [k, s] of Object.entries(rf.sources)) {
+      const text = `${s.publisher} ${s.url} ${s.title}`.toLowerCase();
+      check('R3', !/wiki|fandom/.test(text), `the receipt "${k}" is a wiki: ${s.url}`);
+      check('R3', /^https:\/\//.test(s.url ?? '') && s.read === rf.readOn && !!s.publisher && !!s.title && !!s.group && (s.sport === 'mlb' || s.sport === 'nhl'), `the receipt "${k}" of ${rf.file} is not whole, or was not read on the file's day ${rf.readOn}`);
+      check('R3', Array.isArray(s.says) ? s.says.length > 0 : !!s.years && Object.keys(s.years).length > 0, `the receipt "${k}" says nothing`);
+    }
   }
-  check('R3', receipts.readOn === mlb.MLB_LEDGER_READ_ON && receipts.readOn === nhl.NHL_LEDGER_READ_ON, 'the ledgers and the receipts were not read on the same day');
-  console.log(`receipts: ${Object.keys(SRC).length}, cited from ${cited.length} places, ${Object.values(SRC).filter(s => s.thin).length} marked thin and cited by nothing`);
+  check('R3', sameSet(receiptFiles.map(rf => rf.file), Object.keys(OWN.receiptDays)), `the receipts files are ${receiptFiles.map(rf => rf.file).join(', ')}, this harness's own table holds ${Object.keys(OWN.receiptDays).join(', ')}`);
+  /* The ledgers and the receipts were read on the same day, file by file: the first file on the first day
+     each ledger names, and every receipt a ledger cites on a day that ledger names. The NHL ledger names
+     two days (NHL_LEDGER_READ_ON, and NHL_LEDGER_READ_AGAIN_ON once it cites the second file). */
+  check('R3', receiptFiles[0].readOn === mlb.MLB_LEDGER_READ_ON && receiptFiles[0].readOn === nhl.NHL_LEDGER_READ_ON, 'the ledgers and the first receipts file were not read on the same day');
+  const ledgerDays = { MLB: [mlb.MLB_LEDGER_READ_ON], NHL: [nhl.NHL_LEDGER_READ_ON, nhl.NHL_LEDGER_READ_AGAIN_ON].filter(d => typeof d === 'string') };
+  for (const [where, , keys] of cited) {
+    const days = ledgerDays[where.slice(0, 3)];
+    check('R3', !!days, `${where} is in neither ledger`);
+    for (const k of keys) if (days && fileOf[k]) check('R3', days.includes(fileOf[k].readOn), `${where} cites "${k}", read on ${fileOf[k].readOn}, a day its ledger does not name (${days.join(', ')})`);
+  }
+  /* R6 (Round 1312): a key lives in exactly one receipts file. */
+  const homes = {};
+  for (const rf of receiptFiles) for (const k of Object.keys(rf.sources)) (homes[k] ??= []).push(rf.file);
+  for (const [k, files] of Object.entries(homes)) check('R6', files.length === 1, `the receipt "${k}" is in ${files.join(' and ')}`);
+  console.log(`receipts: ${Object.keys(SRC).length} in ${receiptFiles.length} files (${receiptFiles.map(rf => `${Object.keys(rf.sources).length} read on ${rf.readOn}`).join(', ')}), cited from ${cited.length} places, ${Object.values(SRC).filter(s => s.thin).length} marked thin and cited by nothing`);
 
   /* R5: a number only one source gave stays empty, and is named. */
   const empty = [
@@ -647,7 +845,7 @@ const OWN_MLB_DIVISIONS = {
 
   /* D1: no en dash and no em dash in the ledgers, the receipts, this file or the round's notes. */
   const dashes = [String.fromCharCode(0x2013), String.fromCharCode(0x2014)];
-  for (const f of ['src/data/usSeasonLedgerMlb.ts', 'src/data/usSeasonLedgerNhl.ts', 'scripts/data/usSeasonSources1211.json', 'scripts/simUsSeasonLedger.mjs', 'docs/audits/ROUND-1211-NOTES.md']) {
+  for (const f of ['src/data/usSeasonLedgerMlb.ts', 'src/data/usSeasonLedgerNhl.ts', ...RECEIPT_FILES, 'scripts/simUsSeasonLedger.mjs', 'docs/audits/ROUND-1211-NOTES.md', 'docs/audits/ROUND-1312-NOTES.md']) {
     const text = readFileSync(path.join(ROOT, f), 'utf8') + EXTRA.text;
     check('D1', !dashes.some(d => text.includes(d)), `${f} holds an en dash or an em dash`);
   }
@@ -911,13 +1109,24 @@ const MLB_OWN = 162;
 
 /* ===== Round 1226 (the fix pass), E8: a short season is the full season, carried. =====
    Both engines draw every season on their own length and judge the awards
-   and the rival on that draw; the saved line is that draw carried to the
+   on that draw (and, before Round 1313, the rival); the saved line is that draw carried to the
    season the club really played. So, for ONE saved state and ONE stream:
    E8a  the awards of a season of another length are the awards of the same
-        season played on the engine's own length, award for award, and so is
-        the head to head with the rival (the same score for him, the same
-        tally); his printed counts are his full counts carried. Exact:
+        season played on the engine's own length, award for award. Exact:
         nothing here is a rate, so there is no band.
+        THE HEAD TO HEAD, since Round 1313: both rivals play on the player's
+        own line (MLB from that round's step 5a, the NHL from 5b), so the
+        verdict reads the two SAVED lines and is no longer the full season's.
+        On arm a alone (arm b is another year, and the year keys the rival's
+        stream, so it is another rival season): the tally the season wrote is
+        what the two printed lines score when read back off their text, no
+        line unread. The call site's facts (the slate, his position, the
+        bullpen job) are held in ONE place, scripts/simUsRivalSense.mjs
+        sections M.U6 and H.U6, on the real season sims in these same cells
+        and in 1990. Controls fullslatemlb and fullslatenhl: the player's side
+        scored on the engine's own length (red in every cell). Before Round
+        1313 this half held the head to head to the full season's (the same
+        score for him, the same tally), with controls mlbhead and nhlhead.
    E8b  every count on the saved line is the full season's count carried to
         the length his position worked through, the points are the goals plus
         the assists, the rates did not move, and a first choice starter never
@@ -931,32 +1140,57 @@ const MLB_OWN = 162;
    only prove the fleet reaches what is being compared. MEASURED on the tree
    this was written on (2026-10-10), 6,000 paired seasons a sport over four
    year and club cells: 5,418 NHL and 6,269 MLB awards in the full seasons
-   (floor 400); the year went to the player 4,119 times and to the rival
-   1,881 in the NHL, 1,900 and 4,100 in MLB (floors 800); every comparison
-   equal. After the short year, 6,000 seasons a sport: no comeback award off
+   (floor 400); every comparison equal. The year counts, MEASURED AGAIN on
+   arm a, the saved lines (2026-10-12, runner r1313-s7g on 00e42677,
+   US_LEDGER_MEASURE=1): the year went to the player 2,908 times and to the
+   rival 3,092 in the NHL, 2,990 and 3,010 in MLB (floors 800, so 3.6 to 3.9
+   times the floor). Before Round 1313 they were counted on arm b: 4,119 and
+   1,881 in the NHL, 1,900 and 4,100 in MLB. After the short year, 6,000 seasons a sport: no comeback award off
    a season that was no lost year; 104 hitters whose 2020 was a lost one, 79
    of them the comeback player of 2021 (floors 50 and 30). What each control
    turned red: nhlawards 1,745 seasons with other awards, mlbawards 1,340,
-   nhlgates 725, mlbgates 718, nhlhead 1,705 other verdicts, mlbhead 915,
+   nhlgates 725, mlbgates 718, nhlhead 1,705 other verdicts, mlbhead 915
+   (both retired), fullslatenhl 1,528 of 6,000 judged seasons that disagree
+   with the two printed lines (2012 BOS 612, 2019 CAR 355, 2020 BOS 516,
+   2026 BOS 45: every cell), fullslatemlb 1,389 (2005 CIN 5, 2020 BOS 689,
+   2020 DET 687, 2026 NYY 8: every cell; both at r1313-s7g),
    nhlcarry 4,401 counts, mlbcarry 2,000, nhlcomeback 381 comebacks off a
    whole 48 game season, mlbcomeback 2,979 off a whole 60 game one.
-   Controls: nhlawards, mlbawards, nhlgates, mlbgates, nhlhead, mlbhead
-   (E8a), nhlcarry, mlbcarry (E8b), nhlcomeback, mlbcomeback (E8c). */
+   Controls: nhlawards, mlbawards, nhlgates, mlbgates, fullslatemlb,
+   fullslatenhl (E8a; mlbhead and nhlhead retired in Round 1313 with the
+   inline scores they changed), nhlcarry, mlbcarry (E8b), nhlcomeback,
+   mlbcomeback (E8c). nhltyped and mlbtyped (a
+   typed length) still need E8a: since Round 1313 it holds that every judged
+   season on arm a is saved at its cell's own length, or the verdict check
+   would read two full lines and compare nothing. */
 {
   const S = game.shape; const FULL_YEAR = 1990;
+  /* Round 1313: a printed season line read back off its text, by position (the printers' shapes, typed here). */
+  const num = s => Number(String(s).replace(/,/g, ''));
+  const readMlb = (pos, text) => {
+    let m;
+    if (pos === 'SP') return (m = /^(\d+)-(\d+), (\d+\.\d\d) ERA, ([\d,]+) K$/.exec(text)) ? { wins: num(m[1]), lossesP: num(m[2]), era: num(m[3]), so: num(m[4]) } : null;
+    if (pos === 'RP') return (m = /^(\d+) saves?, (\d+) holds?, (\d+\.\d\d) ERA, ([\d,]+) K$/.exec(text)) ? { saves: num(m[1]), holds: num(m[2]), era: num(m[3]), so: num(m[4]) } : null;
+    return (m = /^\.(\d{3}), (\d+) HR, (\d+) RBI$/.exec(text)) ? { avg: num(`0.${m[1]}`), hr: num(m[2]), rbi: num(m[3]) } : null;
+  };
+  const readNhl = (pos, text) => {
+    let m;
+    if (pos === 'G') return (m = /^(\d+) W, \.(\d{3}) SV%$/.exec(text)) ? { wins: num(m[1]), svpct: num(`0.${m[2]}`) } : null;
+    return (m = /^(\d+) G, (\d+) A, (\d+) P$/.exec(text)) ? { goals: num(m[1]), assists: num(m[2]), points: num(m[3]) } : null;
+  };
   const SPORTS = [
-    { key: 'nhl', E: game.nhlEngine, own: ENGINE_OWN, start: 'startNhlCareer', sim: 'simNhlSeason', progress: 'nhlProgress', assign: 'nhlAssignRole', arch: game.nhlEngine.NHL_ARCHETYPES,
+    { key: 'nhl', E: game.nhlEngine, own: ENGINE_OWN, desc: game.NHL_CAREER_SPORT, h2h: 'nhlHeadToHeadScore', readBack: readNhl, start: 'startNhlCareer', sim: 'simNhlSeason', progress: 'nhlProgress', assign: 'nhlAssignRole', arch: game.nhlEngine.NHL_ARCHETYPES,
       positions: ['C', 'LW', 'RW', 'D', 'G'], canWin: pos => pos !== 'G', era: y => (y < 2026 ? 'y2006' : undefined), work: (pos, slate) => (pos === 'G' ? Math.min(slate, ENGINE_OWN) : slate),
       counts: ['games', 'wins', 'goals', 'assists'], rates: ['svpct'], cells: [[2012, 'BOS'], [2019, 'CAR'], [2020, 'BOS'], [2026, 'BOS']],
-      rivalCounts: text => (text.match(/^(\d+)G (\d+)A \d+P$/) ?? []).slice(1, 3).map(Number), floors: { awards: 400, mine: 800, his: 800 }, comeback: { year: 2012, lost: 35, lostYears: 0, lostWon: 0 } },
-    { key: 'mlb', E: game.mlbEngine, own: MLB_OWN, start: 'startMlbCareer', sim: 'simMlbSeason', progress: 'mlbProgress', assign: 'mlbAssignRole', arch: game.mlbEngine.MLB_ARCHETYPES,
+      floors: { awards: 400, mine: 800, his: 800 }, comeback: { year: 2012, lost: 35, lostYears: 0, lostWon: 0 } },
+    { key: 'mlb', E: game.mlbEngine, own: MLB_OWN, desc: game.MLB_CAREER_SPORT, h2h: 'mlbHeadToHeadScore', readBack: readMlb, start: 'startMlbCareer', sim: 'simMlbSeason', progress: 'mlbProgress', assign: 'mlbAssignRole', arch: game.mlbEngine.MLB_ARCHETYPES,
       positions: ['CF', 'SS', '1B', 'C', 'SP', 'RP'], canWin: pos => pos !== 'SP' && pos !== 'RP', era: y => (y < 2026 ? 'y2004' : undefined), work: (pos, slate) => (pos === 'SP' || pos === 'RP' ? Math.min(slate, MLB_OWN) : slate),
       counts: ['games', 'wins', 'lossesP', 'so', 'saves', 'holds', 'hr', 'rbi', 'sb', 'doubles'], rates: ['avg', 'obp', 'era'], cells: [[2005, 'CIN'], [2020, 'BOS'], [2020, 'DET'], [2026, 'NYY']],
-      rivalCounts: text => (text.match(/, (\d+) HR$/) ?? []).slice(1, 2).map(Number), floors: { awards: 400, mine: 800, his: 800 }, comeback: { year: 2020, lost: 70, lostYears: 50, lostWon: 30 } },
+      floors: { awards: 400, mine: 800, his: 800 }, comeback: { year: 2020, lost: 70, lostYears: 50, lostWon: 30 } },
   ];
   for (const sp of SPORTS) {
     const carry = (n, to) => (to === sp.own ? n : Math.round(n * to / sp.own));
-    let seasons = 0; let awardsFull = 0; let awardBad = 0; let headBad = 0; let carryBad = 0; let rateBad = 0; let rivalBad = 0; let recordBad = 0; let mine = 0; let his = 0; let first = '';
+    let seasons = 0; let awardsFull = 0; let awardBad = 0; let carryBad = 0; let rateBad = 0; let recordBad = 0; let mine = 0; let his = 0; let first = ''; let verdictBad = 0; let unread = 0; let firstVerdict = ''; const byCell = {}; let judgedShort = 0;
     for (const [year, team] of sp.cells) {
       const slate = S.seasonLength(sp.key, year, team);
       check('E8a', slate !== sp.own, `the ${sp.key.toUpperCase()} ${year} season of ${team} is the engine's own ${sp.own} games, so it compares nothing`);
@@ -976,10 +1210,17 @@ const MLB_OWN = 162;
         seasons++; awardsFull += B.awards.length;
         if (JSON.stringify(A.awards) !== JSON.stringify(B.awards)) { awardBad++; if (!first) first = `${year} ${team} ${pos}: [${A.awards.join(', ')}] against [${B.awards.join(', ')}] in full`; }
         if (before && !before.retired) {
-          if (b.rival.myYears > before.myYears) mine++; else his++;
-          if (a.rival.myYears !== b.rival.myYears || a.rival.hisYears !== b.rival.hisYears || a.rival.lastScore !== b.rival.lastScore) headBad++;
-          const shown = sp.rivalCounts(a.rival.lastLine); const full = sp.rivalCounts(b.rival.lastLine);
-          if (!full.length || shown.length !== full.length || shown.some((n, k) => n !== carry(full[k], slate))) rivalBad++;
+          /* Round 1313: the head to head reads the two SAVED lines. On arm a alone (arm b is another year, and
+             the year is in the rival's stream key, so it is another rival season): the tally the season wrote is
+             what the two printed lines score when read back off their text, and no line is unread. */
+          if (a.rival.myYears > before.myYears) mine++; else his++;
+          if (A.slate === slate) judgedShort++;
+          const meP = sp.readBack(pos, sp.desc.statLine(A, pos)); const himP = sp.readBack(pos, a.rival.lastLine);
+          if (!meP || !himP) { unread++; if (!firstVerdict) firstVerdict = `${year} ${team} ${pos}: unread "${sp.desc.statLine(A, pos)}" or "${a.rival.lastLine}"`; }
+          else if ((sp.E[sp.h2h](pos, meP) > sp.E[sp.h2h](pos, himP)) !== (a.rival.myYears > before.myYears)) {
+            verdictBad++; byCell[`${year} ${team}`] = (byCell[`${year} ${team}`] ?? 0) + 1;
+            if (!firstVerdict) firstVerdict = `${year} ${team} ${pos}: mine "${sp.desc.statLine(A, pos)}", his "${a.rival.lastLine}", the save gave the year to ${a.rival.myYears > before.myYears ? 'me' : 'him'}`;
+          }
         }
         const w = sp.work(pos, slate);
         for (const k of sp.counts) if (B[k] !== undefined && A[k] !== carry(B[k], w)) carryBad++;
@@ -990,12 +1231,15 @@ const MLB_OWN = 162;
       }
     }
     const U = sp.key.toUpperCase();
-    if (process.env.US_LEDGER_MEASURE) console.log(`MEASURE E8 ${sp.key}: ${seasons} paired seasons, ${awardsFull} awards in the full ones, the year mine ${mine} and his ${his}`);
+    if (process.env.US_LEDGER_MEASURE) console.log(`MEASURE E8 ${sp.key}: ${seasons} paired seasons, ${awardsFull} awards in the full ones, the year mine ${mine} and his ${his} (on arm a, the saved lines)`);
+    check('E8a', verdictBad === 0 && unread === 0, `the ${U} head to head the season wrote is what the two saved lines score when read back off their printed text: ${verdictBad} of ${mine + his} judged seasons disagree (by cell: ${Object.entries(byCell).map(([k, n]) => `${k} ${n}`).join(', ') || 'none'}), ${unread} unread${firstVerdict ? ` (the first: ${firstVerdict})` : ''}`);
     check('E8a', awardsFull >= sp.floors.awards && mine >= sp.floors.mine && his >= sp.floors.his, `the ${U} fleet is too thin to compare: ${awardsFull} awards, ${mine} years won and ${his} lost against the rival over ${seasons} seasons (floors ${sp.floors.awards}, ${sp.floors.mine}, ${sp.floors.his})`);
     check('E8a', awardBad === 0, `${awardBad} of ${seasons} ${U} seasons of another length hold other awards than the same season played in full (the first: ${first})`);
-    check('E8a', headBad === 0, `${headBad} of ${seasons} ${U} seasons of another length score the head to head with the rival differently from the same season played in full`);
+    /* Round 1313: the verdict check above has power only where the season sim really played the cell's length:
+       every judged season on arm a must be saved at the ledger's length, or the cells compare nothing (controls
+       nhltyped and mlbtyped, the length typed back into the engine). */
+    check('E8a', mine + his > 0 && judgedShort === mine + his, `every ${U} judged season on arm a is saved at its cell's own length, so the head to head reads two lines of another length (${judgedShort} of ${mine + his})`);
     check('E8b', carryBad === 0 && rateBad === 0, `${carryBad} counts on a saved ${U} line are not the full season's count carried to the season's length, and ${rateBad} rates moved`);
-    check('E8a', rivalBad === 0, `${rivalBad} printed ${U} rival lines are not his full season's counts carried to the season's length`);
     check('E8b', recordBad === 0, `${recordBad} first choice ${U} starters have more wins than starts`);
 
     /* E8c: the season after a short one. */
@@ -1101,7 +1345,7 @@ const MLB_OWN = 162;
   else notes.push(`MLB playoff games (careerVariance.playoffGames against MLB_PLAYOFF_FORMAT): ${say('mlb', mlbWords, fits('mlb', mlb.MLB_PLAYOFF_FORMAT.series))}. Stages are the engine results in order: ${mlbWords}.`);
   notes.push(`NHL playoff games (the same law against four best of sevens): ${say('nhl', nhlWords, fits('nhl', nhl.NHL_PLAYOFF_FORMAT.series))}. Stages: ${nhlWords}.`);
   const npf = nhl.NHL_PLAYOFF_FORMAT;
-  notes.push(`NHL engine: it writes the same four results in every year. The ledger: NHL_PLAYOFF_FORMAT is two sourced from ${npf.from}-${String(npf.from + 1).slice(2)} only; what the playoffs of ${nhl.NHL_SEASONS[0].year} to ${npf.from - 1} were has one source (NHL_THIN: the same sixteen clubs and four rounds, under other round names), and the tournaments of the seasons that started in ${npf.modified.join(' and ')} were modified. A binding round that draws a path before ${npf.from} must source it first or draw none.`);
+  notes.push(`NHL engine: it writes the same four results in every year. The ledger: NHL_PLAYOFF_FORMAT is two sourced from ${npf.from}-${String(npf.from + 1).slice(2)} only; the playoffs of ${nhl.NHL_SEASONS[0].year} to ${npf.from - 1} are in NHL_ROUND_NAMES (Round 1312, read season by season on two sources: the same sixteen clubs and four best of sevens, under other round names), which no engine reads yet, and the tournaments of the seasons that started in ${npf.modified.join(' and ')} were modified. A binding round that draws a path before ${npf.from} reads NHL_ROUND_NAMES or draws none.`);
   if (mlbWords.includes('Wild Card')) notes.push(`MLB engine: it writes a Wild Card result in every year. The ledger: no wild card round in ${yearsOf(null)}, one game in ${yearsOf('Wild Card Game')}, a series only in ${yearsOf('Wild Card Series')}; and the engine models no first round bye.`);
 
   /* The club outside the league. */

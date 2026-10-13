@@ -19,6 +19,13 @@
  *     game. One hard bar (the repaired share); the rest is the table the lead sets bars from
  *  K  coverage, a FAIL when short
  *  X  determinism: twice, from a JSON round trip, and not one call to Math.random
+ *  G  (Round 1308) THE FRONT OFFICE BRACKETS ARE THE LEDGER'S: for every season a front office can play (2026 to
+ *     2060) the NFL front office's bracket data (src/data/gmBrackets/nfl.ts) has a bracket exactly when this ledger
+ *     has a format, the row's clubs, twice the row's byes (the row counts them a conference), as many weeks as the
+ *     row has rounds with each week's wins the round's series, and the title tie the only one whose two sides
+ *     come from both halves of the seed list (traced through the ties, not assumed) when the row says the last
+ *     round is the only cross one; and as many weeks as usPostseasonRounds('nfl') has names, so the bracket
+ *     card has a name for every week. src/test/gmBracketLedger.test.ts holds the same as a unit test.
  *
  * ACCEPTANCE, WRITTEN BEFORE ANYTHING WAS MEASURED (the critic's correction 7 of this round's brief). A repair
  * of the core turns a result by making it a one point game, so a layout rule that repairs a lot fills the
@@ -48,6 +55,9 @@
  *   thin     only the first two careers of a seed set are observed
  *            (patches nothing)                                               -> section K
  *   stream   one Math.random inside the deriver                              -> section X
+ *   gmclubs  the NFL front office's bracket seeds 12 clubs, not 14            -> section G
+ *   dangling the Super Bowl's first side names a tie the bracket does not     -> section G (none dangles)
+ *            hold
  * NOT HERE, on purpose: `level` (no NBA game can be level, so removing the deriver's own "no level game" item
  * changes nothing on an NBA fleet; it is an NFL control and waits for the NFL's numbers) and `lay` (the lay's
  * own control lives with the digest mode of scripts/simUsSeasonCentre.mjs: US_SEASON_DIGEST_RECEIPT=lay).
@@ -92,6 +102,8 @@ const CONTROLS = {
   open: { section: 'C', patches: [{ file: PO, from: '  return any ? out : null;', to: '  return out;' }] },
   tries: { section: 'F', patches: [{ file: PO, from: 'export const PO_TRIES = 12;', to: 'export const PO_TRIES = 1;' }] },
   thin: { section: 'K', patches: [] },
+  gmclubs: { section: 'G', patches: [{ file: 'src/data/gmBrackets/nfl.ts', from: '  qualifiers: 14,', to: '  qualifiers: 12,' }] },
+  dangling: { section: 'G', patches: [{ file: 'src/data/gmBrackets/nfl.ts', from: "home: { winnerOf: 'AFC-CC' }, away: { winnerOf: 'NFC-CC' }", to: "home: { winnerOf: 'AFC-CCX' }, away: { winnerOf: 'NFC-CC' }" }] },
   stream: { section: 'X', patches: [{ file: PO, from: "  if (!lay) return 'lay';", to: "  Math.random();\n  if (!lay) return 'lay';" }] },
 };
 const FORM = 'const PO_MEAN_FORM = 0;';
@@ -148,6 +160,10 @@ const entry = [
   "export { US_POSTSEASON, US_POSTSEASON_SOURCES, US_POSTSEASON_THIN, usPostseasonFormat, usPostseasonRounds } from './src/data/usPostseasonFormat.ts';",
   "export { US_PLAYOFF_FORMAT } from './src/data/usLeagueShape.ts';",
   "export { applyFaSigning } from './src/lib/usCareerFreeAgency.ts';",
+  /* Round 1308, section G: the front office's bracket data and the two bracket helpers it is read with */
+  "export { NFL_BRACKET, nflBracketFor } from './src/data/gmBrackets/nfl.ts';",
+  "export { bracketByes } from './src/lib/gmBracket.ts';",
+  "export { finalTie, finalsWeeks } from './src/lib/finalsBracket.ts';",
 ].join('\n');
 const t0 = Date.now();
 await build({
@@ -441,6 +457,51 @@ const quant = (xs, q) => { const a = [...xs].sort((x, y) => x - y); return a.len
   tally('D', 'every fact of every format row stands on two publishers, the rounds are the one typed copy, the accessor refuses what no row holds', bad, M.US_POSTSEASON.length);
 }
 
+/* ─── G (Round 1308): the front office brackets are the ledger's ─── */
+{
+  /* which halves of the seed list (0 the first, 1 the second) can reach a slot, traced back through the ties. A tie id
+     the format does not hold is written into `dangling` (a check of its own below; the unit test's copy throws): never
+     skipped, because a side that loses its halves could hide a tie across them (the review of 2026-10-12) */
+  const halvesOf = (format, slot, dangling) => {
+    if ('seed' in slot) return new Set([slot.seed <= format.qualifiers / 2 ? 0 : 1]);
+    const ids = 'rankedWinnerOf' in slot ? slot.rankedWinnerOf : ['winnerOf' in slot ? slot.winnerOf : slot.loserOf];
+    const out = new Set();
+    for (const id of ids) {
+      const t = format.ties.find(x => x.id === id);
+      if (!t) { dangling.add(id); continue; }
+      for (const h of [...halvesOf(format, t.home, dangling), ...halvesOf(format, t.away, dangling)]) out.add(h);
+    }
+    return out;
+  };
+  const both = { exist: [], clubs: [], byes: [], weeks: [], cross: [], dangling: [] };
+  let looked = 0;
+  for (let season = 2026; season <= 2060; season += 1) {
+    const format = M.nflBracketFor(season);
+    const row = M.usPostseasonFormat('nfl', season);
+    looked += 1;
+    if ((format === null) !== (row === null)) both.exist.push(`${season}: bracket ${format ? 'yes' : 'no'}, ledger ${row ? 'yes' : 'no'}`);
+    if (!format || !row) continue;
+    if (format.qualifiers !== row.clubs) both.clubs.push(`${season}: qualifiers ${format.qualifiers}, the row's clubs ${row.clubs}`);
+    if (M.bracketByes(format).length !== 2 * row.byes) both.byes.push(`${season}: ${M.bracketByes(format).length} byes, the row ${row.byes} a conference`);
+    const weeks = M.finalsWeeks(format.ties);
+    if (weeks.length !== row.rounds.length || weeks.some((w, k) => Math.max(1, format.winsNeeded[w] ?? 1) !== row.rounds[k].series[0])) both.weeks.push(`${season}: ${weeks.length} weeks, the row ${row.rounds.length} rounds`);
+    const dangling = new Set();
+    for (const t of format.ties) for (const s of [t.home, t.away]) halvesOf(format, s, dangling);
+    if (dangling.size > 0) both.dangling.push(`${season}: a slot names ${[...dangling].join(', ')}, which the bracket does not hold`);
+    if (row.lastRoundOnlyCross) {
+      const cross = format.ties.filter(t => new Set([...halvesOf(format, t.home, dangling), ...halvesOf(format, t.away, dangling)]).size === 2).map(t => t.id);
+      if (cross.length !== 1 || cross[0] !== M.finalTie(format.ties)?.id) both.cross.push(`${season}: the ties across the halves are ${cross.join(', ') || 'none'}`);
+    }
+  }
+  tally('G', 'nfl: the front office has a bracket exactly when the ledger has a format, 2026 to 2060', both.exist, looked);
+  tally('G', "nfl: the bracket's qualifiers are the row's clubs", both.clubs, looked);
+  tally('G', "nfl: the bracket's byes are twice the row's (a conference)", both.byes, looked);
+  tally('G', "nfl: as many weeks as the row has rounds, each week's wins its round's series", both.weeks, looked);
+  tally('G', 'nfl: every tie a slot names is a tie of the bracket (none dangles)', both.dangling, looked);
+  tally('G', 'nfl: the title tie is the only one whose sides come from both halves of the seed list', both.cross, looked);
+  check('G', M.finalsWeeks(M.NFL_BRACKET.ties).length === M.usPostseasonRounds('nfl').length, `nfl: the bracket has as many weeks (${M.finalsWeeks(M.NFL_BRACKET.ties).length}) as the ledger has round names (${M.usPostseasonRounds('nfl').length}), so the card names every week`);
+}
+
 /* ─── S: the sum rule ─── */
 tally('S', 'nba: the games laid out are the playoff line the save holds, game for game and series for series (independent checker)', laid.filter(r => r.pS.length).map(r => `${idOf(r)}: ${r.pS[0]}`), laid.length);
 tally('S', 'nba: his side is first in every other playoff game, so no run is scored as all home games', laid.filter(r => !r.sides).map(idOf), laid.length);
@@ -591,6 +652,8 @@ if (CONTROL) {
   }
   if (CONTROL === 'tries') ok = ok && labels.some(l => l.includes('had to repair'));
   if (CONTROL === 'stream') ok = ok && labels.some(l => l.includes('Math.random'));
+  if (CONTROL === 'gmclubs') ok = ok && labels.some(l => l.includes("qualifiers are the row's clubs"));
+  if (CONTROL === 'dangling') ok = ok && labels.some(l => l.includes('none dangles'));
   console.log(ok
     ? `control ${CONTROL}: RED AT THE NAMED CHECK (section ${c.section}); sections red: ${red.join(', ')}${note}`
     : `control ${CONTROL}: DID NOT FIRE AT ITS NAMED CHECK (section ${c.section}); sections red: ${red.join(', ') || 'none'}${note}`);

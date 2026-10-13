@@ -263,6 +263,25 @@
  * steps, 2,296,639 bytes. Section A now asks every sport for a wheel step, a
  * step saved in each talk phase and the four saves, and two controls joined.
  *
+ * Round 1313 (2026-10-12) put the MLB and NHL rival on the player's own line
+ * (his season made by the player's functions at his position, the head to head
+ * read off the two saved lines, beat 206 and 306 naming both seasons). That
+ * moves the rival on every MLB and NHL save after the first season ON PURPOSE,
+ * so the fixture was taken again, once, on a GitHub runner (r1313-s5c1), from
+ * 560a3f85. The chain: the recorder run on 8fde50f0 (the tree before the
+ * switch) gave the committed recording back byte for byte, 2,296,639 bytes,
+ * the header aside (r1313-s5pre); after the MLB switch this harness was red in
+ * MLB alone (64 steps, r1313-s5ac), after the NHL switch in MLB and the NHL
+ * alone (128 steps, r1313-s5bc). New against old, by the --rival mode of
+ * scripts/qa/compareUsBoardFixture.mjs: the NFL and NBA sections byte equal;
+ * in MLB and the NHL the first step whose saved career differs is the first
+ * season played (step 10 and step 12, "Play the 2026 season") and it differs
+ * in c.rival alone; neither click path parts; 455 and 421 clicks, 24 seasons,
+ * 886 and 900 screen steps, 10 and 12 rival beats, 4 and 4 rival choices, all
+ * as before; 18 of 19 fixed saves a sport moved (rookie, saved before any
+ * season, did not) and 19 of 19 screen walks; 2,298,730 bytes. Section A's
+ * counts are the ones above, the four named saves and MLB's raised push kept.
+ *
  * Controls, one per run (each is a full replay, about three minutes):
  *   US_BOARD_PARITY_CONTROL=label    one label changed in a copy of the shared
  *                                    board: all four sports go red on the words

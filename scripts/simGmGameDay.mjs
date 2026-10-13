@@ -57,6 +57,14 @@
  *    card and the NFL's bound card join the modules. They are what a drawn
  *    card reads, so no board may import one statically, and the NFL board
  *    reaches the bound card through a lazy import and nothing else of them.
+ *    Round 1308, the postseason's libraries: src/lib/gmPostseason.ts (the
+ *    press and load half, sport free) and src/lib/frontOfficePostseason.ts
+ *    (the NFL's bind) join the modules with their tests. Nothing else
+ *    imports them yet: Round 1309 puts them on the board. And the bracket
+ *    card: src/lib/gmBracketView.ts (every word it prints), the shared
+ *    card and the NFL's bound card join the modules AND the story files:
+ *    only a drawn card reads them, so no board may import one statically
+ *    (Round 1309 reaches the bound card through a lazy part).
  *
  * ROUND 1305, THE PRESS (src/lib/frontOfficeGameDay.ts, the NFL board's bind
  * to the quick path, and src/lib/gmGameLog.ts, the save field of the
@@ -94,6 +102,44 @@
  *    own checker, which calls neither the story's own sums nor the law.
  *    Control: offbyone, which must turn this red beside section 2.
  *
+ * ROUND 1308, THE POSTSEASON A ROUND AT A TIME (src/lib/gmPostseason.ts, the
+ * press and load half every board shares, and src/lib/frontOfficePostseason.ts,
+ * the NFL's bind: nflPlayTie and its sink, nflRoundsOf). Each season of the
+ * fleet from the end of Week 17, the generator installed AS Math.random.
+ * 11 THE BRACKET PATH IS THE ONE PRESS PATH. Four presses of playBracketWeek
+ *    (the save through JSON between them) and playBracketAll, each with
+ *    nflPlayTie, give the recorded fixture's thirteen games (round, home,
+ *    away, winner, in order), champion, next 64 draws and the engine's draw
+ *    count; the 32 records after are the regular season's; every told score
+ *    is nflTell's on the fixture's own engine game under the same key; and
+ *    nflRoundsOf is runPlayoffs' rounds told the one press way, as JSON text.
+ *    WITH THE GM DESK ON (added after the review of 2026-10-12, which found
+ *    that a playoff game played without the desk's edges left every check
+ *    green): every new franchise opens with the desk, so for each of section
+ *    9's four GM clubs a season his club is given the desk's strongest edge
+ *    (DESK_EDGE, +3) and the same postseason is played the one press way
+ *    (runPlayoffs and nflTell with the edges, as the board does) and the
+ *    bracket way (nflPlayTie with the edges): the same games, champion, next
+ *    draws, draw count, records and told rounds. A count printed beside it,
+ *    and held above zero, says in how many club seasons the edge moved the
+ *    postseason at all, so the desk on checks cannot hold nothing.
+ * 12 THE LOAD (the library half; the validator's is Round 1309's). The first
+ *    season of each league kind a set, at five stops (opened, then after
+ *    each week): a sound block through JSON comes back as it is; outside the
+ *    postseason the load is null whatever the block; a doctored winner, a
+ *    doctored pairing and a tie out of turn are rebuilt from the block's own
+ *    seeds, and seeds that mix the conferences, another season and an
+ *    unknown version from fresh ones, each with the feed line, and every
+ *    rebuilt bracket plays to a champion.
+ * 13 THE LOG THROUGH A POSTSEASON, through the sink. The whole sink deep
+ *    equals the one press path's thirteen log entries, keys included; for
+ *    section 9's four GM clubs a season the log built a press at a time deep
+ *    equals the one press path's log, with no entry in a week he has the bye
+ *    and none after he is out, his playoff record is his record in
+ *    nflRoundsOf, and after the last game the 32 records are the regular
+ *    season's. With the desk on (as in section 11): the sink, and his log
+ *    built a press at a time, deep equal the one press path's with the edges.
+ *
  * Negative controls (GM_GAMEDAY_CONTROL=...). Each patches a string that must
  * be in its file exactly once (or the run refuses, exit 2), always exits 1
  * when its NAMED checks are among the reds, and exits 2 when they are not:
@@ -128,6 +174,22 @@
  *   bindrefuse  nflTell refuses a game in five by its key            section 8 (the bind never refuses)
  *   logdrop     addToGmGameLog drops every road win                  section 9 (the record a week, one entry a week)
  *   logholes    readGmGameLog skips an entry it cannot read          section 9 (a damaged entry: the log is absent)
+ *   undo        nflPlayTie takes neither the win nor the loss back    section 11 (the records; the games stay green)
+ *   keydrift    nflPlayTie tells under the tie's id, not its round    section 11 (the told scores and the rounds)
+ *   trust       loadGmPostseason hands any block back unrepaired      section 12 (the damages; a sound block stays green)
+ *   week18      (Round 1309) the validator's week 18 condition gone   section 12 (a hub save in the bracket passes with its key; without it still fails)
+ *   keyrebuilt  the sink's key built from the told score              section 13 (the deep equal and the sink; the record stays green)
+ *   logplayoff  the sink takes no entry                               section 13 (the deep equal and the record)
+ *   noedges     nflPlayTie plays its game without the desk's edges    section 11 with the desk on (and its sink in
+ *               (still told with them)                                section 13); the desk off checks stay green
+ *   deskless    runPlayoffs plays its games without the desk's edges  section 11 (the count of club seasons the
+ *               (the engine forgets the desk in the playoffs)         edge moved: none)
+ *   storyleak   an import of the bracket's view lib planted in memory section 6 (the boards' static chain: the press
+ *               in frontOfficePostseason.ts                           half reaches a story file; the mount list allows it)
+ *   inseason    loadGmPostseason loses its "not in the postseason"    section 12 (outside the postseason the load
+ *               line                                                  is null); a sound block stays green
+ *   byeplays    the NFL data's first Wild Card tie made seed 1        section 13 (no entry in a week he has the
+ *               against seed 7 (a top seed plays the bye week)        bye)
  * NOT HELD HERE: the save guard and the repair with every field damaged
  * (isGmBracketSave, repairGmBracket, readGmLastGame). They are held by the
  * unit files src/lib/gmBracket.test.ts, src/lib/gmGameDay.test.ts and
@@ -176,6 +238,10 @@
  *   because the bind's key and chance are the quick path's.
  *   Section 9 has no band: every check is an equality over 320 club seasons
  *   a set (four clubs in each of 80 seasons).
+ * MEASURED FOR ROUND 1308 (2026-10-12, runner result r1308-c1): sections 11
+ *   to 13 hold no band, every check is an equality. Per seed set: 80
+ *   seasons; of section 13's 320 club seasons 72 to 82 had a bye and 124 to
+ *   138 went out; section 12 loaded 10 stops and rebuilt 52 damaged blocks.
  *
  * Nothing here reads the network. The clock is read only to time the run
  * for its own log lines: no check and nothing that is played depends on it.
@@ -203,14 +269,28 @@ const VIEW = 'src/lib/gmGameDayView.ts';
 /* the shared tile and the NFL's bound card: one lazy chunk a week box asks for */
 const CARD = 'src/components/front-office-shared/GmGameDayCard.tsx';
 const NFL_CARD = 'src/components/front-office/NflGameDay.tsx';
-const NEW_FILES = [SCORE, DAY, BRACKET, NFL_DAY, NFL_DATA, NFL_HELP, LOG, BIND, VIEW, CARD, NFL_CARD];
+/* Round 1308: the postseason a board plays a round at a time, the press and load half (sport free) and the NFL's bind */
+const POST = 'src/lib/gmPostseason.ts';
+const NFL_POST = 'src/lib/frontOfficePostseason.ts';
+/* Round 1309: the save validator's NFL week line (a hub save at week 18 is in the bracket only with its block) */
+const SAVE_CHECK = 'src/lib/frontOfficeSave.ts';
+/* the bracket card: every word it prints (sport free), the shared card and the NFL's bound card; they ride with a card */
+const BRACKET_VIEW = 'src/lib/gmBracketView.ts';
+const BRACKET_CARD = 'src/components/front-office-shared/GmBracketCard.tsx';
+const NFL_BRACKET_CARD = 'src/components/front-office/NflBracket.tsx';
+const NEW_FILES = [SCORE, DAY, BRACKET, NFL_DAY, NFL_DATA, NFL_HELP, LOG, BIND, VIEW, CARD, NFL_CARD, POST, NFL_POST, BRACKET_VIEW, BRACKET_CARD, NFL_BRACKET_CARD];
 /* the round whose header a new file opens with: section 5 proves the comment stripper took it out */
-const ROUND_OF = { [LOG]: 'Round 1305', [BIND]: 'Round 1305', [VIEW]: 'Round 1307', [CARD]: 'Round 1307', [NFL_CARD]: 'Round 1307' };
+const ROUND_OF = { [LOG]: 'Round 1305', [BIND]: 'Round 1305', [VIEW]: 'Round 1307', [CARD]: 'Round 1307', [NFL_CARD]: 'Round 1307', [POST]: 'Round 1308', [NFL_POST]: 'Round 1308', [BRACKET_VIEW]: 'Round 1308', [BRACKET_CARD]: 'Round 1308', [NFL_BRACKET_CARD]: 'Round 1308' };
 const ROUTE_FILE = 'src/pages/FrontOffice.tsx';
 const NFL_BOARD = 'src/components/front-office/FrontOfficeBoard.tsx';
 const BOARDS = [NFL_BOARD, 'src/components/nba-front-office/NbaFrontOfficeBoard.tsx', 'src/components/mlb-front-office/MlbFrontOfficeBoard.tsx', 'src/components/nhl-front-office/NhlFrontOfficeBoard.tsx'];
 /* what only a drawn card reads: the told path, the NFL's story law, its game day law and the words of the two "?" */
-const STORY_FILES = [DAY, 'src/lib/gameLaws/nfl.ts', NFL_DAY, NFL_HELP, VIEW, CARD, NFL_CARD];
+const STORY_FILES = [DAY, 'src/lib/gameLaws/nfl.ts', NFL_DAY, NFL_HELP, VIEW, CARD, NFL_CARD, BRACKET_VIEW, BRACKET_CARD, NFL_BRACKET_CARD];
+/* Round 1308's review (2026-10-12): the strength points a GM desk's staff hands his club in a playoff game
+   (nflDeskEdges). 3 is the most the NFL staff pack gives: the head coach's 0.75 and a coordinator's 2.25 at each end
+   (src/data/gmStaff/packs.ts), weighted 0.72 and 0.28 (src/lib/nflGmDesk.ts, nflStaffEdge). The strongest edge a desk
+   plays, so the strongest signal for sections 11 and 13 with the desk on. */
+const DESK_EDGE = 3;
 
 /* `labels`: pieces of the check labels that must ALL be among the reds of the control's section for it to count
    as fired. `elsewhere`: pieces that must ALSO be among the reds, in whatever section they sit. `clean`: pieces that
@@ -244,6 +324,24 @@ const CONTROLS = {
   bindrefuse: { section: 8, labels: ['the bind never refuses a game of the fleet'], patches: [{ file: BIND, from: 'if (told && toldWinner(told) !== g.winner) told = null;', to: 'if (told && (toldWinner(told) !== g.winner || key.length % 5 === 0)) told = null;' }] },
   bindchance: { section: 8, labels: ["tells the quick path's final for the chance"], patches: [{ file: BIND, from: 'const home = teams[g.home], away = teams[g.away];', to: 'const home = teams[g.away], away = teams[g.home];' }] },
   logdrop: { section: 9, labels: ["after every week the log's record is the club's", 'one entry a week, in week order'], patches: [{ file: LOG, from: 'return { v: 1, season, games: [...kept, ...games] };', to: 'return { v: 1, season, games: [...kept, ...games.filter(g => g.winner === g.home)] };' }] },
+  /* Round 1308 */
+  undo: { section: 11, labels: ['the bracket path leaves the 32 records'], clean: ["give the fixture's thirteen games", 'playBracketAll with nflPlayTie gives the same'], patches: [
+    { file: NFL_POST, from: '    teams[g.winner].wins -= 1;', to: '' },
+    { file: NFL_POST, from: '    teams[g.winner === g.home ? g.away : g.home].losses -= 1;', to: '' },
+  ] },
+  keydrift: { section: 11, labels: ["each told score is nflTell's on the fixture's own engine game", "nflRoundsOf is runPlayoffs' rounds told"], clean: ["give the fixture's thirteen games"], patches: [{ file: NFL_POST, from: 'const t = nflTell(g, teams, season, tie.round, edges);', to: 'const t = nflTell(g, teams, season, tie.id, edges);' }] },
+  trust: { section: 12, labels: ['rebuilt unplayed with the feed line'], clean: ['comes back as it is'], patches: [{ file: POST, from: 'const repair = repairGmBracket(format, known, season, () => sport.seeds(league), isClub, seeds => sport.seedsOk(seeds, league));', to: 'const repair = { save: known ?? block, rebuilt: null, line: null, problems: [] };' }] },
+  keyrebuilt: { section: 13, labels: ["deep equal the one press path's", 'the sink holds every game'], clean: ['his playoff record in the log'], patches: [{ file: NFL_POST, from: 'if (t.last) told.push(t.last);', to: 'if (t.last) told.push({ ...t.last, key: `${season}|${tie.round}|${t.game.home}|${t.game.away}|${t.game.homeScore}-${t.game.awayScore}` });' }] },
+  /* Round 1309 */
+  week18: { section: 12, labels: ['a hub save at week 18 passes the validator with its playoffs block'], clean: ['fails without it'], patches: [{ file: SAVE_CHECK, from: "const lastPeriod = s.phase === 'hub' && s.playoffs == null ? regularPeriods : regularPeriods + 1;", to: "const lastPeriod = s.phase === 'hub' ? regularPeriods : regularPeriods + 1;" }] },
+  logplayoff: { section: 13, labels: ["deep equal the one press path's", 'his playoff record in the log is his record in nflRoundsOf'], patches: [{ file: NFL_POST, from: 'if (t.last) told.push(t.last);', to: '' }] },
+  /* Round 1308's review: a control for each check that had none (s12.outside, s13.when and the desk's count) */
+  storyleak: { section: 6, labels: ['import no story law'], patches: [], plant: { file: NFL_POST, text: "\nimport { gmBracketPlace } from '@/lib/gmBracketView';\n" } },
+  inseason: { section: 12, labels: ['outside the postseason the load is null'], clean: ['comes back as it is'], patches: [{ file: POST, from: 'if (!inPostseason) return null;', to: '' }] },
+  byeplays: { section: 13, labels: ['no log entry in a week he has the bye'], patches: [{ file: NFL_DATA, from: 'home: { seed: top + 1 }, away: { seed: top + 6 }', to: 'home: { seed: top }, away: { seed: top + 6 }' }] },
+  deskless: { section: 11, labels: ['so the desk on checks hold something'], patches: [{ file: 'src/lib/frontOffice.ts', from: "const games = pairs.map(([h, a]) => simGame({ week: 0, home: h, away: a, homeScore: 0, awayScore: 0, winner: '' }, teams, rng, edges));", to: "const games = pairs.map(([h, a]) => simGame({ week: 0, home: h, away: a, homeScore: 0, awayScore: 0, winner: '' }, teams, rng));" }] },
+  /* Round 1308's review: the desk's edges dropped from the playoff game (still told with them) */
+  noedges: { section: 11, labels: ['with the desk on (his club', 'with the desk on, nflRoundsOf'], elsewhere: ['with the desk on, the sink holds every game'], clean: ["give the fixture's thirteen games", 'playBracketAll with nflPlayTie gives the same', 'so the desk on checks hold something'], patches: [{ file: NFL_POST, from: "const g = simGame({ week: 0, home, away, homeScore: 0, awayScore: 0, winner: '' }, teams, rng, edges);", to: "const g = simGame({ week: 0, home, away, homeScore: 0, awayScore: 0, winner: '' }, teams, rng);" }] },
   logholes: { section: 9, labels: ['with any one field of an entry damaged the log reads as absent'], patches: [{ file: LOG, from: 'if (!g || (g.home !== club && g.away !== club) || keys.has(g.key)) return null;', to: 'if (!g) continue; if ((g.home !== club && g.away !== club) || keys.has(g.key)) return null;' }] },
 };
 if (CONTROL && !CONTROLS[CONTROL]) { console.error(`unknown GM_GAMEDAY_CONTROL ${CONTROL} (${Object.keys(CONTROLS).join(', ')})`); process.exit(2); }
@@ -278,13 +376,16 @@ try {
     "export { finalTie } from './src/lib/finalsBracket.ts';",
     "export * as log from './src/lib/gmGameLog.ts';",
     "export * as bind from './src/lib/frontOfficeGameDay.ts';",
+    "export * as post from './src/lib/gmPostseason.ts';",
+    "export * as nflPost from './src/lib/frontOfficePostseason.ts';",
+    "export { isFrontOfficeSave } from './src/lib/frontOfficeSave.ts';",
   ], PATCHES, CONTROL || 'base'));
 } catch (e) {
   console.error(`simGmGameDay: the bundle refused${CONTROL ? ` (control ${CONTROL})` : ''}: ${e && e.message ? e.message.split('\n')[0] : e}`);
   process.exit(2);
 }
 if (fired.size !== PATCHES.length) { console.error(`control ${CONTROL}: ${fired.size} of ${PATCHES.length} patches reached their file, refusing to report`); process.exit(2); }
-const { engine: E, score: S, day: D, bracket: B, nflDay, nflData, NFL_SCORE_LAW: LAW, NFL_SCORING, NFL_CLOCK, log: L, bind: N } = M;
+const { engine: E, score: S, day: D, bracket: B, nflDay, nflData, NFL_SCORE_LAW: LAW, NFL_SCORING, NFL_CLOCK, log: L, bind: N, post: P, nflPost: NP } = M;
 const GAME_DAY = nflDay.NFL_GAME_DAY;
 const FORMAT = nflData.NFL_BRACKET;
 console.log(`bundled in ${Date.now() - t0} ms; seed sets ${SEEDSETS.join(', ')}; ${FLEET.perKind} seasons a league kind a set${CONTROL ? `; CONTROL ${CONTROL}` : ''}`);
@@ -451,6 +552,16 @@ for (const set of SEEDSETS) {
   const s9 = { weekly: tally(), order: tally(), playoff: tally(), json: tally(), other: tally(), damage: tally(), late: tally() };
   /* Round 1307, section 10: the stories of the games a log holds */
   const s10 = { story: tally(), adds: tally() };
+  /* Round 1308, sections 11 to 13: the postseason a round at a time through the NFL's bind */
+  const s11 = { weeks: tally(), all: tally(), records: tally(), told: tally(), rounds: tally() };
+  const s12 = { sound: tally(), outside: tally(), rebuilt: tally(), plays: tally(), withKey: tally(), withoutKey: tally() };
+  const s12kinds = new Set();
+  const s13 = { sink: tally(), when: tally(), entries: tally(), record: tally(), records: tally() };
+  const s13seen = { bye: 0, out: 0 };
+  /* the same two sections with the GM desk on (his club DESK_EDGE), against the one press path played with the edges */
+  const s11d = { games: tally(), rounds: tally() };
+  const s13d = { sink: tally(), entries: tally() };
+  const deskSeen = { runs: 0, qualified: 0, moved: 0 };
   const bound = { games: 0, points: 0, losers15: 0, shutouts: 0, forty: 0, differ: 0 };
   let lateSeen = '';
   const addScore = (o, home, away) => {
@@ -624,6 +735,7 @@ for (const set of SEEDSETS) {
       const pick = M.keyedRng(`log clubs|${id}`);
       const four = [table[0], table[table.length - 1]];
       while (four.length < 4) { const c = table[Math.floor(pick() * table.length)]; if (!four.includes(c)) four.push(c); }
+      const logsOf = new Map();
       for (const club of four) {
         let log = null;
         let won = 0;
@@ -642,6 +754,7 @@ for (const set of SEEDSETS) {
         /* the one press finish adds exactly his playoff games, in the order they were played, under their rounds' names */
         const mineP = post.filter(x => x.g.home === club || x.g.away === club);
         const full = L.addToGmGameLog(log, season, mineP.map(x => x.t.last));
+        logsOf.set(club, { log, full });
         const reg = L.gmLogRecord(full, club, N.nflIsRegular);
         const all = L.gmLogRecord(full, club);
         const wonP = mineP.filter(x => x.g.winner === club).length;
@@ -692,6 +805,165 @@ for (const set of SEEDSETS) {
         count(s9.late, late !== null && late.games.length === E.REGULAR_WEEKS - k + 1 && late.games.every((g, j) => g.where === `w${k + j}`) && lr.won + lr.lost === late.games.length && lr.won + lr.lost < won + lost
           && same(L.readGmGameLog(JSON.parse(JSON.stringify(late)), isClub, season, club), late), () => `${id} ${club}: begun at week ${k}`);
         if (!lateSeen && late) lateSeen = `${id} ${club}: a log begun at week ${k} holds ${late.games.length} games and reads ${lr.won}-${lr.lost}, where the league's record is ${won}-${lost}`;
+      }
+      /* Round 1308, sections 11 to 13: the postseason played a round at a time through the NFL's bind (nflPlayTie and its
+         sink), against the one press path the board takes today: the engine's own run, each game told under its round's
+         name. Both from the end of Week 17 with the same generator, installed AS Math.random. */
+      {
+        A.gen.state = regular.state;
+        const teamsE = JSON.parse(regular.teams);
+        const { value: eng, calls: engCalls } = withMathRandom(A.gen, () => {
+          const r = E.runPlayoffs(teamsE, Math.random);
+          return { ...r, next: sha1(Array.from({ length: NEXT_DRAWS }, () => Math.random()).join(',')) };
+        });
+        const onePress = eng.rounds.map(r => ({ name: r.name, told: r.games.map(g => N.nflTell(g, teamsE, A.lg.season, r.name)) }));
+        const toldRounds = onePress.map(r => ({ name: r.name, games: r.told.map(t => t.game) }));
+        const oneLasts = onePress.flatMap(r => r.told.map(t => t.last));
+        /* the recorded fixture's games: the bracket path tells other scores, never other games */
+        const fixGames = rowA.games.map(s => s.split('|'));
+        const bare = fixGames.map(([round, home, away, , , winner]) => `${round}|${home}|${away}|${winner}`);
+        /* each fixture game told by the bind under its round's name: what the bracket path must have saved */
+        const wantTold = fixGames.map(([round, home, away, hs, as, winner]) => N.nflTell({ week: 0, home, away, homeScore: Number(hs), awayScore: Number(as), winner }, teamsE, A.lg.season, round).game);
+        const paths = {};
+        for (const mode of ['weeks', 'all']) {
+          A.gen.state = regular.state;
+          const teams = JSON.parse(regular.teams);
+          const sink = [];
+          const added = [];
+          const { value: run, calls } = withMathRandom(A.gen, () => {
+            const play = NP.nflPlayTie(teams, Math.random, A.lg.season, undefined, sink);
+            let save = B.openBracket(FORMAT, A.lg.season, NP.NFL_POSTSEASON.seeds({ ...A.lg, teams }));
+            if (mode === 'all') save = B.playBracketAll(FORMAT, save, play);
+            else for (let press = 0; press < 4; press += 1) { const from = sink.length; save = JSON.parse(JSON.stringify(B.playBracketWeek(FORMAT, save, play))); added.push({ save, games: sink.slice(from) }); }
+            return { save, next: sha1(Array.from({ length: NEXT_DRAWS }, () => Math.random()).join(',')) };
+          });
+          paths[mode] = { save: run.save, sink, added, teams };
+          const rounds = B.bracketRounds(FORMAT, run.save);
+          const games = rounds.flatMap(r => r.games.map(g => `${r.name}|${g.home}|${g.away}|${g.winner}`));
+          const champ = B.bracketChampion(FORMAT, run.save);
+          count(s11[mode], same(games, bare) && champ === rowA.champion && run.next === rowA.next && calls === engCalls,
+            () => `${id} (${mode}): ${games.find((g, k) => g !== bare[k]) ?? `champion ${champ} against ${rowA.champion}, or the next draws, or ${calls} draws against the engine's ${engCalls}`}`);
+          count(s11.records, sha1(recordsOf(teams)) === rowA.records && recordsOf(teams) === regular.records, () => `${id} (${mode}): the records after the bracket are not the regular season's`);
+          const toldNow = rounds.flatMap(r => r.games);
+          const bad = toldNow.findIndex((g, k) => !wantTold[k] || g.homeScore !== wantTold[k].homeScore || g.awayScore !== wantTold[k].awayScore || g.winner !== wantTold[k].winner);
+          count(s11.told, toldNow.length === 13 && bad === -1, () => `${id} (${mode}): game ${bad + 1} saved ${toldNow[bad] ? `${toldNow[bad].homeScore}-${toldNow[bad].awayScore}` : 'nothing'}, nflTell ${wantTold[bad] ? `${wantTold[bad].homeScore}-${wantTold[bad].awayScore}` : 'nothing'}`);
+          count(s11.rounds, same(NP.nflRoundsOf(FORMAT, run.save), toldRounds), () => `${id} (${mode})`);
+          /* section 13, the whole sink: every game in play order as the one press path's log entry, keys included */
+          count(s13.sink, sink.length === 13 && same(sink, oneLasts), () => `${id} (${mode}): ${sink.length} entries; the first that differs: ${JSON.stringify(sink.find((x, k) => !same(x, oneLasts[k])) ?? null)}`);
+        }
+
+        /* section 12: the load, for the first season of each league kind, at every stop of the bracket */
+        if (i === 0) {
+          const league = { ...A.lg, teams: paths.weeks.teams, week: E.REGULAR_WEEKS + 1 };
+          const fresh = NP.NFL_POSTSEASON.seeds(league);
+          const load = (block, inPost = true) => P.loadGmPostseason(NP.NFL_POSTSEASON, league, A.lg.season, inPost, block);
+          const coin = (home, away, tie) => (M.keyedRng(`rebuilt|${id}|${tie.id}`)() < 0.5 ? { homeScore: 24, awayScore: 17, winner: home } : { homeScore: 17, awayScore: 24, winner: away });
+          const stops = [B.openBracket(FORMAT, A.lg.season, seeds), ...paths.weeks.added.map(a => a.save)];
+          stops.forEach((stop, k) => {
+            const text = JSON.stringify(stop);
+            const back = JSON.parse(text);
+            const r = load(back);
+            count(s12.sound, !!r && r.kind === 'bracket' && r.format === FORMAT && r.repair.save === back && r.repair.rebuilt === null && r.repair.line === null, () => `${id} stop ${k}: ${r ? (r.kind === 'refused' ? r.refused : r.repair.rebuilt) : 'null'}`);
+            count(s12.outside, [JSON.parse(text), undefined, null, { v: 2 }, 'x'].every(b => load(b, false) === null), () => `${id} stop ${k}`);
+            /* Round 1309, the validator's half: the save the board writes in the bracket, through JSON */
+            const saveAt = (week, extra) => JSON.parse(JSON.stringify({ league: { ...A.lg, teams: paths.weeks.teams, week }, myTeam: seeds[0], phase: 'hub', titles: 0, seasonsPlayed: 0, draftClass: null, picksLeft: 0, ...extra }));
+            count(s12.withKey, M.isFrontOfficeSave(saveAt(E.REGULAR_WEEKS + 1, { playoffs: JSON.parse(text) }), 'NFL', E.REGULAR_WEEKS) === true, () => `${id} stop ${k}: refused with its block`);
+            count(s12.withoutKey, M.isFrontOfficeSave(saveAt(E.REGULAR_WEEKS + 1, {}), 'NFL', E.REGULAR_WEEKS) === false && M.isFrontOfficeSave(saveAt(E.REGULAR_WEEKS + 1, { playoffs: null }), 'NFL', E.REGULAR_WEEKS) === false && M.isFrontOfficeSave(saveAt(E.REGULAR_WEEKS, {}), 'NFL', E.REGULAR_WEEKS) === true, () => `${id} stop ${k}: week 18 with no block passed, or week 17 with none failed`);
+            const damaged = [];
+            const doc = () => JSON.parse(text);
+            if (stop.played.length >= 1) { const d = doc(); const g0 = d.played[0]; g0.games[0].winner = g0.games[0].winner === g0.home ? g0.away : g0.home; damaged.push(['a doctored winner', d, 'seeds']); }
+            if (stop.played.length >= 2) { const d = doc(); [d.played[0].away, d.played[1].away] = [d.played[1].away, d.played[0].away]; damaged.push(['a doctored pairing', d, 'seeds']); }
+            if (stop.played.some(p => FORMAT.ties.find(t => t.id === p.id).week >= 2)) { const d = doc(); d.played = d.played.filter(p => p.id !== 'NFC-WC-3'); damaged.push(['a tie out of turn', d, 'seeds']); }
+            { const d = doc(); [d.seeds[0], d.seeds[7]] = [d.seeds[7], d.seeds[0]]; damaged.push(['seeds that mix the conferences', d, 'fresh']); }
+            { const d = doc(); d.season += 1; damaged.push(['a block of another season', d, 'fresh']); }
+            { const d = doc(); d.v = 2; damaged.push(['a block of an unknown version', d, 'fresh']); }
+            for (const [what, d, kind] of damaged) {
+              s12kinds.add(what);
+              const rr = load(JSON.parse(JSON.stringify(d)));
+              const want = B.openBracket(FORMAT, A.lg.season, kind === 'seeds' ? d.seeds : fresh);
+              const ok = !!rr && rr.kind === 'bracket' && rr.repair.rebuilt === kind && rr.repair.line === B.BRACKET_REBUILT_LINES[kind] && same(rr.repair.save, want);
+              count(s12.rebuilt, ok, () => `${id} stop ${k}, ${what}: ${rr ? (rr.kind === 'refused' ? rr.refused : `rebuilt ${rr.repair.rebuilt}`) : 'null'}`);
+              if (!ok) continue;
+              const done = B.playBracketAll(FORMAT, rr.repair.save, coin);
+              count(s12.plays, B.bracketChampion(FORMAT, done) !== null && B.bracketProblems(FORMAT, done, isClub).length === 0, () => `${id} stop ${k}, ${what}`);
+            }
+          });
+        }
+
+        /* section 13: his log through the bracket, a round a press, for the four clubs of section 9 */
+        const w = paths.weeks;
+        const roundsW = NP.nflRoundsOf(FORMAT, w.save);
+        for (const [club, { log, full }] of logsOf) {
+          let blog = log;
+          let wrong = '';
+          let out = -1;
+          const bye = seeds[0] === club || seeds[7] === club;
+          if (bye) s13seen.bye += 1;
+          w.added.forEach((a, k) => {
+            const mine = a.games.filter(g => g.home === club || g.away === club);
+            if (k === 0 && bye && mine.length > 0) wrong = wrong || `an entry in the week he has the bye`;
+            if (out >= 0 && mine.length > 0) wrong = wrong || `an entry in press ${k + 1}, after he went out in press ${out + 1}`;
+            if (out < 0 && mine.some(g => g.winner !== club)) { out = k; s13seen.out += 1; }
+            blog = L.addToGmGameLog(blog, season, mine);
+          });
+          count(s13.when, !wrong, () => `${id} ${club}: ${wrong}`);
+          count(s13.entries, blog !== null && full !== null && same(blog, full), () => `${id} ${club}: the bracket path's log holds ${blog ? blog.games.length : 0} games, the one press path's ${full ? full.games.length : 0}`);
+          const inRounds = roundsW.flatMap(r => r.games).filter(g => g.home === club || g.away === club);
+          const wonR = inRounds.filter(g => g.winner === club).length;
+          const all = L.gmLogRecord(blog, club);
+          const reg = L.gmLogRecord(blog, club, N.nflIsRegular);
+          count(s13.record, all.won - reg.won === wonR && all.lost - reg.lost === inRounds.length - wonR, () => `${id} ${club}: the log's playoff record ${all.won - reg.won}-${all.lost - reg.lost}, nflRoundsOf's ${wonR}-${inRounds.length - wonR}`);
+        }
+        count(s13.records, recordsOf(w.teams) === regular.records, () => `${id}: the records after the last playoff game are not the regular season's`);
+
+        /* sections 11 and 13 WITH THE GM DESK ON (the review of 2026-10-12, its finding F1). Every new franchise opens with
+           the desk, and its staff hands his club strength points in the playoffs too: the board's one press path hands
+           nflDeskEdges to runPlayoffs and to nflTell, and the bracket path hands the same to nflPlayTie. Desk off, the
+           recorded fixture is the reference; desk on, the one press path played right here is. For each of section 9's
+           four GM clubs, his club given DESK_EDGE: the postseason from the end of Week 17, the same generator, played the
+           one press way and the bracket way (four presses with the save through JSON, and playBracketAll), gives the same
+           games, champion, next draws, draw count and records, the same told rounds, the same sink and the same log. */
+        for (const [club, { log }] of logsOf) {
+          const edges = { [club]: DESK_EDGE };
+          A.gen.state = regular.state;
+          const teamsD = JSON.parse(regular.teams);
+          const { value: one, calls: oneCalls } = withMathRandom(A.gen, () => {
+            const r = E.runPlayoffs(teamsD, Math.random, edges);
+            return { ...r, next: sha1(Array.from({ length: NEXT_DRAWS }, () => Math.random()).join(',')) };
+          });
+          const toldD = one.rounds.map(r => ({ name: r.name, told: r.games.map(g => N.nflTell(g, teamsD, A.lg.season, r.name, edges)) }));
+          const roundsD = toldD.map(r => ({ name: r.name, games: r.told.map(t => t.game) }));
+          const lastsD = toldD.flatMap(r => r.told.map(t => t.last));
+          const bareD = one.rounds.flatMap(r => r.games.map(g => `${r.name}|${g.home}|${g.away}|${g.winner}`));
+          deskSeen.runs += 1;
+          if (seeds.includes(club)) deskSeen.qualified += 1;
+          if (bareD.join() !== bare.join()) deskSeen.moved += 1;
+          for (const mode of ['weeks', 'all']) {
+            A.gen.state = regular.state;
+            const teams = JSON.parse(regular.teams);
+            const sink = [];
+            const presses = [];
+            const { value: run, calls } = withMathRandom(A.gen, () => {
+              const play = NP.nflPlayTie(teams, Math.random, A.lg.season, edges, sink);
+              let save = B.openBracket(FORMAT, A.lg.season, NP.NFL_POSTSEASON.seeds({ ...A.lg, teams }));
+              if (mode === 'all') save = B.playBracketAll(FORMAT, save, play);
+              else for (let press = 0; press < 4; press += 1) { const from = sink.length; save = JSON.parse(JSON.stringify(B.playBracketWeek(FORMAT, save, play))); presses.push(sink.slice(from)); }
+              return { save, next: sha1(Array.from({ length: NEXT_DRAWS }, () => Math.random()).join(',')) };
+            });
+            const games = B.bracketRounds(FORMAT, run.save).flatMap(r => r.games.map(g => `${r.name}|${g.home}|${g.away}|${g.winner}`));
+            const champ = B.bracketChampion(FORMAT, run.save);
+            count(s11d.games, same(games, bareD) && champ === one.champion && run.next === one.next && calls === oneCalls && recordsOf(teams) === regular.records && recordsOf(teamsD) === regular.records,
+              () => `${id} ${club} +${DESK_EDGE} (${mode}): ${games.find((g, k) => g !== bareD[k]) ?? `champion ${champ} against ${one.champion}, or the next draws, the draw count (${calls} against ${oneCalls}) or the records after`}`);
+            count(s11d.rounds, same(NP.nflRoundsOf(FORMAT, run.save), roundsD), () => `${id} ${club} +${DESK_EDGE} (${mode})`);
+            count(s13d.sink, sink.length === 13 && same(sink, lastsD), () => `${id} ${club} +${DESK_EDGE} (${mode}): ${sink.length} entries; the first that differs: ${JSON.stringify(sink.find((x, k) => !same(x, lastsD[k])) ?? null)}`);
+            if (mode === 'weeks') {
+              const mine = g => g.home === club || g.away === club;
+              const blog = presses.reduce((l, games) => L.addToGmGameLog(l, season, games.filter(mine)), log);
+              const fullD = L.addToGmGameLog(log, season, lastsD.filter(mine));
+              count(s13d.entries, blog !== null && fullD !== null && same(blog, fullD), () => `${id} ${club} +${DESK_EDGE}: the bracket path's log holds ${blog ? blog.games.length : 0} games, the one press path's ${fullD ? fullD.games.length : 0}`);
+            }
+          }
+        }
       }
     }
   }
@@ -756,6 +1028,32 @@ for (const set of SEEDSETS) {
   settle(9, `set ${set}: a log begun at week k holds one entry a week from k on and none before, and its record is not the league's`, s9.late);
   settle(10, `set ${set}: every game of the log tells a story, from both sides`, s10.story);
   settle(10, `set ${set}: every game of the log tells a story that the same checker adds up, from both sides`, s10.adds);
+  /* Round 1308 */
+  settle(11, `set ${set}: four presses of playBracketWeek with nflPlayTie, the save through JSON between them, give the fixture's thirteen games (home, away, winner, in order), champion, next ${NEXT_DRAWS} draws and draw count`, s11.weeks);
+  settle(11, `set ${set}: playBracketAll with nflPlayTie gives the same`, s11.all);
+  settle(11, `set ${set}: the bracket path leaves the 32 records the regular season's`, s11.records);
+  settle(11, `set ${set}: each told score is nflTell's on the fixture's own engine game, under the same key`, s11.told);
+  settle(11, `set ${set}: nflRoundsOf is runPlayoffs' rounds told the one press way, name for name and game for game`, s11.rounds);
+  settle(12, `set ${set}: a sound block through JSON comes back as it is, at every stop of the bracket`, s12.sound);
+  settle(12, `set ${set}: outside the postseason the load is null, whatever the block`, s12.outside);
+  settle(12, `set ${set}: a doctored winner, a doctored pairing, a tie out of turn, seeds that mix the conferences, a block of another season and one of an unknown version are each rebuilt unplayed with the feed line`, s12.rebuilt);
+  settle(12, `set ${set}: every rebuilt bracket plays to a champion the validator finds nothing in`, s12.plays);
+  check(12, `set ${set}: every damage of the section was made (${s12kinds.size} of 6)`, s12kinds.size === 6);
+  settle(12, `set ${set}: a hub save at week 18 passes the validator with its playoffs block`, s12.withKey);
+  settle(12, `set ${set}: the same save fails without it (no key, or null) while Week 17 with none passes`, s12.withoutKey);
+  settle(13, `set ${set}: the sink holds every game in play order as the one press path's log entry, keys included`, s13.sink);
+  settle(13, `set ${set}: no log entry in a week he has the bye, and none after he is out`, s13.when);
+  settle(13, `set ${set}: his playoff entries on the bracket path deep equal the one press path's, keys included`, s13.entries);
+  settle(13, `set ${set}: his playoff record in the log is his record in nflRoundsOf`, s13.record);
+  settle(13, `set ${set}: after the last playoff game the 32 records are the regular season's`, s13.records);
+  check(13, `set ${set}: the four clubs a season took a bye (${s13seen.bye}) and went out (${s13seen.out}) somewhere in the set`, s13seen.bye > 0 && s13seen.out > 0);
+  /* with the GM desk on (the review of 2026-10-12): the one press path played with the edges is the reference */
+  settle(11, `set ${set}: with the desk on (his club +${DESK_EDGE}), four presses and playBracketAll with nflPlayTie give the one press path's thirteen games, champion, next ${NEXT_DRAWS} draws, draw count and records`, s11d.games);
+  settle(11, `set ${set}: with the desk on, nflRoundsOf is runPlayoffs' rounds told with the edges, name for name and game for game`, s11d.rounds);
+  check(11, `set ${set}: the desk's edge moved the one press postseason in ${deskSeen.moved} of ${deskSeen.runs} club seasons (${deskSeen.qualified} of them in the bracket), so the desk on checks hold something`, deskSeen.moved > 0);
+  settle(13, `set ${set}: with the desk on, the sink holds every game in play order as the one press path's log entry, keys included`, s13d.sink);
+  settle(13, `set ${set}: with the desk on, his playoff entries on the bracket path deep equal the one press path's, keys included`, s13d.entries);
+  console.log(`set ${set}, the bracket a round a press: ${s11.weeks.n} seasons; club seasons of section 13 with a bye ${s13seen.bye}, that went out ${s13seen.out}; stops loaded ${s12.sound.n}, damaged blocks rebuilt ${s12.rebuilt.n}; desk on: ${deskSeen.runs} club seasons, ${deskSeen.qualified} in the bracket, the edge moved the postseason in ${deskSeen.moved}`);
   console.log(`set ${set}, the board's way: ${bound.games} games told by the bind; told scores that are not the engine's ${differShare.toFixed(4)}; refused ${s8.refused.bad}; points a team game ${Bn.points.toFixed(2)}, losers on 15 or fewer ${Bn.losers15.toFixed(4)}, shutouts ${Bn.shutouts.toFixed(4)}, sides on 40 or more ${Bn.forty.toFixed(4)}; ${lateSeen}`);
   const afcShare = afcTitles / lines.length;
   measured.push({ set, T, F, swappedShare, tries, shapes, afcShare, games: told.games, differShare, refused: s8.refused.bad });
@@ -822,9 +1120,16 @@ for (const set of SEEDSETS) {
      in the commit that first imports them. */
   const MOUNT_ALLOW = new Map([
     ...NEW_FILES.map(f => [f, '*']),
-    ...['src/lib/gmGameScore.test.ts', 'src/lib/gmGameDay.test.ts', 'src/lib/gmBracket.test.ts', 'src/lib/gmGameLog.test.ts', 'src/lib/frontOfficeGameDay.test.ts', 'src/lib/gmGameDayView.test.ts', 'src/components/front-office-shared/GmGameDayCard.test.tsx'].map(f => [f, '*']),
+    ...['src/lib/gmGameScore.test.ts', 'src/lib/gmGameDay.test.ts', 'src/lib/gmBracket.test.ts', 'src/lib/gmGameLog.test.ts', 'src/lib/frontOfficeGameDay.test.ts', 'src/lib/gmGameDayView.test.ts', 'src/components/front-office-shared/GmGameDayCard.test.tsx',
+      'src/lib/gmPostseason.test.ts', 'src/lib/frontOfficePostseason.test.ts', 'src/test/gmBracketLedger.test.ts',
+      'src/lib/gmBracketView.test.ts', 'src/components/front-office-shared/GmBracketCard.test.tsx'].map(f => [f, '*']),
     /* Round 1305, the press: the NFL board tells scores and keeps the log. The bind and the log, and nothing else. */
-    [NFL_BOARD, new Set([noExt(BIND), noExt(LOG), noExt(NFL_CARD)])],
+    /* Round 1309, the playoffs on the board: the press and load half of the postseason, the NFL's bind to it and the
+       bracket machine (the card and its words stay lazy: STORY_FILES below) */
+    /* and (Round 1309, the mount) the bound bracket card, through a lazy import (the check at the end of this section) */
+    [NFL_BOARD, new Set([noExt(BIND), noExt(LOG), noExt(NFL_CARD), noExt(POST), noExt(NFL_POST), noExt(BRACKET), noExt(NFL_BRACKET_CARD)])],
+    ['src/test/frontOfficeSaveRecovery.test.tsx', new Set([noExt(NFL_POST), noExt(BRACKET)])],
+    ['src/components/front-office/FrontOfficePostseason.test.tsx', new Set([noExt(LOG), noExt(BIND), noExt(POST), noExt(NFL_POST), noExt(BRACKET)])],
     /* Round 1307, the tile: the board reaches the bound card (through a lazy import: the check below) and nothing
        else of the card's files; its tile test reads the log, the bind's words and the view lib's own answers */
     ['src/components/front-office/FrontOfficeTile.test.tsx', new Set([noExt(LOG), noExt(BIND), noExt(VIEW), noExt(NFL_DAY), noExt(SCORE)])],
@@ -867,24 +1172,51 @@ for (const set of SEEDSETS) {
   /* NO BOARD READS THE STORY IN ITS OWN CHUNK. A press needs the score law, the bind and the log in the same tick, so
      those are static imports of a board. What only a drawn card reads (the told path, the story law, the game day law
      and the words of the "?") must reach a board through a lazy part or not at all, or a route that is on its weight
-     budget pays for a card nobody has opened. Read from the syntax tree: an import DECLARATION that is not type only. */
+     budget pays for a card nobody has opened. Read from the syntax tree: an import or export DECLARATION that is not
+     type only. SINCE ROUND 1308'S REVIEW THE CHECK FOLLOWS THOSE IMPORTS through every file under src (a module is
+     never split across chunks, so a story file reached through any chain of static imports is in the chunk), from the
+     four boards and from the press half a board will hold statically from Round 1309 (gmPostseason.ts and
+     frontOfficePostseason.ts). Measured on 2026-10-12: 108 files reached, none of them a story file. */
   const STORY = new Set(STORY_FILES.map(noExt));
+  const PRESS_HALF = [POST, NFL_POST];
+  const fileSet = new Set(files);
+  const srcOf = t => ['.ts', '.tsx', '/index.ts', '/index.tsx'].map(e => t + e).find(f => fileSet.has(f)) ?? null;
+  /* every static import or export declaration of a file, as a path from the repo root ('' for a package) */
+  const staticTargets = rel => {
+    const tree = ts.createSourceFile(rel, readPatched(rel), ts.ScriptTarget.Latest, false, rel.endsWith('.tsx') ? ts.ScriptKind.TSX : ts.ScriptKind.TS);
+    const out = [];
+    for (const st of tree.statements) {
+      if (ts.isImportDeclaration(st) && !st.importClause?.isTypeOnly) out.push(target(rel, st.moduleSpecifier.text));
+      else if (ts.isExportDeclaration(st) && st.moduleSpecifier && !st.isTypeOnly) out.push(target(rel, st.moduleSpecifier.text));
+    }
+    return out;
+  };
   let statics = 0;
   const heavy = [];
-  for (const rel of BOARDS) {
-    const tree = ts.createSourceFile(rel, readPatched(rel), ts.ScriptTarget.Latest, false, ts.ScriptKind.TSX);
-    for (const st of tree.statements) {
-      if (!ts.isImportDeclaration(st) || st.importClause?.isTypeOnly) continue;
-      statics += 1;
-      const t = target(rel, st.moduleSpecifier.text);
-      if (STORY.has(t)) heavy.push(`${rel} imports ${t}`);
+  const via = new Map([...BOARDS, ...PRESS_HALF].map(f => [noExt(f), null]));
+  const chain = t => { const out = [t]; for (let c = via.get(t); c; c = via.get(c)) out.push(c); return out.reverse().join(' -> '); };
+  const queue = [...BOARDS, ...PRESS_HALF];
+  while (queue.length > 0) {
+    const rel = queue.shift();
+    const list = staticTargets(rel);
+    if (BOARDS.includes(rel)) statics += list.length;
+    for (const t of list) {
+      if (!t || via.has(t)) continue;
+      via.set(t, noExt(rel));
+      if (STORY.has(t)) { heavy.push(chain(t)); continue; }
+      const f = srcOf(t);
+      if (f) queue.push(f);
     }
   }
-  check(6, `the four boards import no story law, no game day law and no help words statically (${statics} static imports read)`, heavy.length === 0 && statics >= 40, heavy.join(', ') || `only ${statics} static imports were seen`);
+  check(6, `the four boards import no story law, no game day law and no help words statically, directly or through any chain of static imports under src, and nor does the press half a board will hold (gmPostseason, frontOfficePostseason) (${statics} static imports of the boards read, ${via.size} files reached)`,
+    heavy.length === 0 && statics >= 40 && via.size >= 60, heavy.join(', ') || `only ${statics} static imports and ${via.size} files were seen`);
   /* Round 1307: the tile is mounted, and through a lazy import made once at module level (a mount list that allowed a
      card nobody mounts would be holding nothing, and a lazy part made inside a render remounts on every save) */
   const lazyCard = boardText.split(`lazyPart<GmGameDayMount>(() => import('@/components/front-office/NflGameDay'))`).length - 1;
   check(6, 'the NFL board mounts the bound Game Day card through one lazy import, made before the component', lazyCard === 1 && boardText.indexOf('lazyPart<GmGameDayMount>') < boardText.indexOf('export default function FrontOfficeBoard') && /<NflGameDay\b/.test(boardText));
+  /* Round 1309: and the bound bracket card the same way, the other face of the same box */
+  const lazyBracket = boardText.split(`lazyPart<GmBracketMount>(() => import('@/components/front-office/NflBracket'))`).length - 1;
+  check(6, 'the NFL board mounts the bound bracket card through one lazy import, made before the component', lazyBracket === 1 && boardText.indexOf('lazyPart<GmBracketMount>') < boardText.indexOf('export default function FrontOfficeBoard') && /<NflBracket\b/.test(boardText));
 }
 
 /* ─── What was measured, for the header and the notes ─── */

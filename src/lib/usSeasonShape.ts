@@ -24,9 +24,10 @@ export type ShapeSport = 'mlb' | 'nhl';
 /** The season each engine was written on, and what it still plays where the
  *  ledger holds nothing: the fallback of every reader below. It is also the
  *  season each engine DRAWS: a year of another length is drawn on this one
- *  first, the awards and the rival are judged on that draw, and the saved
- *  line is that draw carried to the true length (toSlate). So a short season
- *  hands out the awards the same season played in full would have. */
+ *  first, the awards are judged on that draw, and the saved line is that draw
+ *  carried to the true length (toSlate). So a short season hands out the
+ *  awards the same season played in full would have. The rival's head to
+ *  head is the exception since Round 1313: it reads the two saved lines. */
 export const US_ENGINE_SEASON: Readonly<Record<ShapeSport, number>> = { mlb: 162, nhl: 82 };
 
 /** How many rounds each engine's playoff ladder holds. */

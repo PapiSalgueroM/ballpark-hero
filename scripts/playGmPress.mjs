@@ -31,6 +31,30 @@ const say = (ok, what) => {
   if (!ok) failures += 1;
 };
 
+/* Round 1309: print the visible feed rows on the draft screen and, after Continue, on the hub. A row is one
+   of the feed's ticking lines (cm-tick-in, or cm-slam for the newest deal). Nothing here is a check. */
+async function printFeedAfterDraft(page, board) {
+  const rows = async () => page.locator('p.cm-tick-in:visible, p.cm-slam:visible').allInnerTexts();
+  let picks = 0;
+  for (; picks < 16; picks++) {
+    if (await page.locator('button:has-text("Continue to the hub")').count() > 0) break;
+    const pick = page.locator('.grid button').first();
+    if (await pick.count() === 0) break;
+    await pick.click();
+    await page.waitForTimeout(500);
+  }
+  await page.waitForTimeout(4000);
+  const done = await page.locator('button:has-text("Continue to the hub")').count() > 0;
+  console.log(`FEED|${board}|the draft finished: ${done ? 'yes' : 'no'} (${picks} more picks pressed after the walk's own)`);
+  for (const r of await rows()) console.log(`FEED|${board}|draft screen row|${r}`);
+  if (!done) return;
+  await page.locator('button:has-text("Continue to the hub")').first().click();
+  await page.waitForTimeout(1500);
+  const hub = await rows();
+  for (const r of hub) console.log(`FEED|${board}|hub row|${r}`);
+  console.log(`FEED|${board}|on the hub: the new mandate line ${hub.some(r => r.includes('The new mandate:')) ? 'IS' : 'is NOT'} visible; the patience line ${hub.some(r => r.includes('Your ask for patience was heard')) ? 'IS' : 'is NOT'} visible`);
+}
+
 const browser = await chromium.launch();
 
 /* ---------- Walk one: the NFL GM, introduced, scrummed, tilted ---------- */
@@ -85,7 +109,8 @@ const browser = await chromium.launch();
   for (let w = 0; w < 18; w++) {
     const btn = page.locator('button:has-text("Play Week"), button:has-text("Play the final week")');
     if (await btn.count() === 0) break;
-    await btn.first().click();
+    /* Round 1309: on Week 17 "Play Week 17" (it opens the bracket) comes first and the one press button last */
+    await btn.last().click();
     await page.waitForTimeout(350);
   }
   const scrum = page.locator('[data-gm-press]');
@@ -112,6 +137,10 @@ const browser = await chromium.launch();
   const hubText = await page.locator('body').innerText();
   say(hubText.includes('The new mandate:'), 'the offseason set a new mandate');
   say(hubText.includes('Your ask for patience was heard'), 'the feed credits the press answer for the softer bar');
+  /* Round 1309, printed and not asserted (its brief, decision 2o): the feed rows a person can see once the draft
+     has truly finished and Continue is pressed, so a run tells a stale walk (the draft not finished after three
+     picks) from a feed whose two lines sit below the rows the screen draws. */
+  await printFeedAfterDraft(page, 'NFL');
   say(errors.length === 0, `no page errors on the NFL walk (${errors.length ? errors[0] : 'clean'})`);
   await page.close();
 }
@@ -136,6 +165,37 @@ const browser = await chromium.launch();
     say(await page.locator('[data-gm-press]').count() === 0, `${path}: the answer ends the presser`);
   }
   say(errors.length === 0, `no page errors on the tri-sport walk (${errors.length ? errors[0] : 'clean'})`);
+  await page.close();
+}
+
+/* ---------- Round 1309, printed only: the other three boards' feed after their draft ---------- */
+{
+  const page = await browser.newPage({ viewport: { width: 390, height: 844 } });
+  console.log('6) Printed, not checked: the feed rows after the draft on the NBA, NHL and MLB boards');
+  for (const path of ['/nba-front-office', '/nhl-front-office', '/mlb-front-office']) {
+    try {
+      await page.goto(`${BASE}${path}`, { waitUntil: 'networkidle' });
+      await page.waitForTimeout(1200);
+      await page.locator('.grid button').first().click();
+      await page.waitForTimeout(900);
+      if (await page.locator('[data-gm-press]').count() > 0) { await page.locator('[data-gm-press] button').first().click(); await page.waitForTimeout(500); }
+      await page.getByText('Play', { exact: true }).first().click();
+      await page.waitForTimeout(400);
+      for (let r = 0; r < 120; r++) {
+        const btn = page.locator('button:has-text("Play Round"), button:has-text("Final stretch")');
+        if (await btn.count() === 0) break;
+        await btn.first().click();
+        await page.waitForTimeout(150);
+      }
+      if (await page.locator('[data-gm-press]').count() > 0) { await page.locator('[data-gm-press] button').first().click(); await page.waitForTimeout(500); }
+      if (await page.locator('button:has-text("Go to the draft")').count() === 0) { console.log(`FEED|${path}|no draft button reached; nothing to print`); continue; }
+      await page.locator('button:has-text("Go to the draft")').first().click();
+      await page.waitForTimeout(700);
+      await printFeedAfterDraft(page, path);
+    } catch (e) {
+      console.log(`FEED|${path}|the print stopped: ${String(e).split('\n')[0]}`);
+    }
+  }
   await page.close();
 }
 

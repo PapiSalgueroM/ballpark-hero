@@ -34,7 +34,7 @@ const Contact = () => {
         <div>
           <h2 className="text-lg font-semibold text-foreground mb-2">Spotted a bug or a wrong answer?</h2>
           <p>
-            The fastest route is the Report a bug button in the footer of any page. It sends your report straight to us with the exact page attached, so we can find the problem without any back and forth. For a wrong or missing player in a specific puzzle, many games also have a Report option right next to the answer.
+            The fastest route is the Report a problem button in the footer of any page. It sends your report straight to us with the exact page attached, so we can find the problem without any back and forth. For a wrong or missing player in a specific puzzle, many games also have a Report option right next to the answer.
           </p>
         </div>
 

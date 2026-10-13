@@ -33,7 +33,7 @@ export function isFrontOfficeSave(value: unknown, sport: 'NFL' | 'NHL', regularP
     && count(v.week) && count(v.homeScore) && count(v.awayScore) && (v.winner === '' || teamId(v.winner));
   if (!list(lg.champions, v => record(v) && count(v.season) && teamId(v.team))) return false;
   if (sport === 'NFL') {
-    const lastPeriod = s.phase === 'hub' ? regularPeriods : regularPeriods + 1;
+    const lastPeriod = s.phase === 'hub' && s.playoffs == null ? regularPeriods : regularPeriods + 1; /* Round 1309: a hub save in the bracket holds its block */
     if (!count(lg.week) || lg.week < 1 || lg.week > lastPeriod
       || !Array.isArray(lg.schedule) || lg.schedule.length !== regularPeriods
       || !lg.schedule.every(week => list(week, game))) return false;

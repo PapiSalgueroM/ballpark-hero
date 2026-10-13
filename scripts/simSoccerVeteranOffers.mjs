@@ -17,6 +17,14 @@ const BASE = '70d283872268f73674fc384da72f6ec4bbd34444';
 const BASE_TREE = 'dfa637171d7a6cedf9561617096a68f1a818e597';
 const ENGINE = 'src/lib/soccerCareerEngine.ts', CONTRACTS = 'src/lib/soccerCareerContracts.ts';
 const REVIEW = 'src/lib/soccerOfferReview.ts';
+/* Release BA: PR235 (Round 1283) made a club loan go only where the forecast gives 20 league games or more. That
+   changes the loan path on purpose, so the neutral group (loan21 at Real Madrid, overall 66: tier 2 forecasts 8
+   games, tier 3 forecasts 20) would compare it with BASE, which predates it. The original arm carries that one
+   filter, applied exactly once to BASE's engine, so neutral still says what it was written to say: the veteran
+   offers change nothing on a loan path. Measured on runners (ba-vet, cd2cf1f0): without this, neutral fails 768
+   of 801 rows, every one a loan21 window; with PR235's filter removed from the head instead, all 801 pass. */
+const LOAN_FILTER_FROM = '        const candidates = getClubsByTier(clubs, tier).filter(c => !exclude.has(c.name));';
+const LOAN_FILTER_TO = '        const candidates = getClubsByTier(clubs, tier).filter(c => !exclude.has(c.name) && projectLeagueApps(state.overall, c.tier, c.name, 0).min >= 20);';
 const ENV_EXPRESSION = '{"DEV":false,"PROD":true,"MODE":"production"}';
 const git = (...args) => execFileSync('git', args, { cwd: ROOT, maxBuffer: 64 * 1024 * 1024 });
 const sha = bytes => createHash('sha256').update(bytes).digest('hex');
@@ -120,6 +128,7 @@ async function bundle(id, { baseline = false, observed = false, fault = null } =
         const raw = baseline ? original(relative) : fs.readFileSync(args.path);
         let served = lf(raw.toString());
         const canonical = served;
+        if (baseline && relative === ENGINE) served = replaceOnce(served, LOAN_FILTER_FROM, LOAN_FILTER_TO, 'PR235 club loan filter carried by the original');
         if (fault && relative === fault.file) {
           const before = served;
           served = replaceOnce(served, fault.from, fault.to, fault.id);

@@ -1,0 +1,48 @@
+/* Release BB: the inverse of Round 1313 for the base pinned kits.
+ *
+ * Round 1313 (MLB and NHL My Career: your rival plays your position) changes the US seasons on purpose: the rival
+ * is a man at your position, his year and the head to head are kept on the save, and the season's rival line reads
+ * differently. It also took the US board recording and the three season receipts again, so its own harnesses hold.
+ * A kit that compares a US season with a commit older than 1313 cannot know about any of that. The first one found is
+ * the Press and market kit (scripts/qa/careerPressMarketKit.mjs, BASE 934c29d9): "No active Market retains the entire
+ * original sport state and RNG" went red on the join, its first failing season (MLB) differing only in the rival's
+ * fields (hisYears, myYears, lastLine, lastScore and the rival's line in the season's notes), and green on Release
+ * BA alone (runner result rBBg-pm).
+ *
+ * The inverse is whole files, because 1313 is the only piece that touches them: every file below is loaded as it was
+ * on 48cb9d4b (Release AY as published, the commit 1313 was cut from). It refuses unless the file on disk is byte for
+ * byte 1313's closed head (642292de), so it cannot go quietly idle and cannot hide a later change: the next round that
+ * edits one of these files must decide again, here. careerFactBeats.ts is new in 1313 and only these files import it,
+ * so with them inverted it is never loaded; if anything else ever loads it, the inverse refuses.
+ *
+ * Applied only to the node copies compared with the base, never to the browser oracle of a native walk (that one is
+ * compared with the built page, which keeps 1313).
+ */
+import assert from 'node:assert/strict';
+import { execFileSync } from 'node:child_process';
+
+export const US_RIVAL_1313_HEAD = '642292de';
+export const US_RIVAL_1313_BASE = '48cb9d4b';
+export const US_RIVAL_1313_FILES = [
+  'src/lib/careerFactBeats.ts',
+  'src/lib/careerRival.ts',
+  'src/lib/careerRivalryEvents.ts',
+  'src/lib/mlbCareerRivalryEvents.ts',
+  'src/lib/mlbMyCareer.ts',
+  'src/lib/nbaCareerRivalryEvents.ts',
+  'src/lib/nflCareerRivalryEvents.ts',
+  'src/lib/nhlCareerRivalryEvents.ts',
+  'src/lib/nhlMyCareer.ts',
+  'src/lib/usSeasonShape.ts',
+];
+
+const show = (commit, rel) => execFileSync('git', ['show', commit + ':' + rel], { maxBuffer: 64 * 1024 * 1024 }).toString('utf8').replaceAll('\r\n', '\n');
+
+/* contents: the file as read from disk (any line endings). rows: receives rel once per file inverted. */
+export function inverseUsRival1313(rel, contents, rows) {
+  if (!US_RIVAL_1313_FILES.includes(rel)) return contents;
+  assert.equal(contents.replaceAll('\r\n', '\n'), show(US_RIVAL_1313_HEAD, rel), 'Release BB: ' + rel + ' is no longer as Round 1313 closed it (' + US_RIVAL_1313_HEAD + '); decide its inverse again in scripts/lib/usRival1313Inverse.mjs');
+  assert.notEqual(rel, 'src/lib/careerFactBeats.ts', 'Release BB: careerFactBeats.ts is new in Round 1313 and only its own files import it; something else loaded it, so the inverse of 1313 is no longer whole');
+  rows.push(rel);
+  return show(US_RIVAL_1313_BASE, rel);
+}

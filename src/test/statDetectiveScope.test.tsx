@@ -9,7 +9,9 @@ vi.mock('@/components/game/GameNavbar', () => ({ GameNavbar: () => null }));
 vi.mock('@/components/game/GameNav', () => ({ GameNav: () => null }));
 vi.mock('@/components/ads/AdBanner', () => ({ default: () => null }));
 vi.mock('@/components/seo/PageSeo', () => ({ default: () => null }));
-vi.mock('@/components/seo/GameSeoContent', () => ({ default: () => null }));
+/* Release BA: since PR239 the page hands its report to the guide block (reportControl), which renders it above
+   the guide, so the stand in renders that control and nothing else. */
+vi.mock('@/components/seo/GameSeoContent', () => ({ default: ({ reportControl }: { reportControl?: import('react').ReactNode }) => <>{reportControl || null}</> }));
 vi.mock('@/components/game/ShareButtons', () => ({ default: () => null }));
 vi.mock('@/components/game/ReportQuestion', () => ({ default: (props: { gameContext: Record<string, unknown> }) => <button data-report-context={JSON.stringify(props.gameContext)}>Fixture report</button> }));
 

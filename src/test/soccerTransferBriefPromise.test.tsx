@@ -61,7 +61,7 @@ beforeEach(() => localStorage.clear());
 /** The brief's rules as a player first reads them (the storage is empty, so the rules come before the choices). */
 async function rulesText(career: CareerState): Promise<string> {
   render(<AgentBrief career={career} clubs={FALLBACK_CLUBS} onCareer={() => {}} />);
-  fireEvent.click(screen.getByRole('button', { name: 'Brief your agent' }));
+  fireEvent.click(screen.getByRole('button', { name: 'Set transfer priority' }));
   await screen.findByRole('dialog', { name: 'Your transfer brief' });
   return document.querySelector('[data-transfer-brief-help]')?.textContent ?? '';
 }

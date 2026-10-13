@@ -197,6 +197,9 @@ const best = (list: FoHubPlayer[]): FoHubPlayer | null =>
  * a signing you can afford who would actually improve the team, a payroll
  * over the line, or a table position that will cost you the season.
  */
+/* Round 1309: what the play and standings boxes say once the regular season is played (the playoffs, a period past the last) */
+const REGULAR_SEASON_OVER = 'The regular season is over.';
+
 export function foHubTiles(f: FoHubFacts): FoTile[] {
   const out: FoTile[] = [];
 
@@ -274,6 +277,8 @@ export function foHubTiles(f: FoHubFacts): FoTile[] {
     /* Round 722: a tax cheque in the post is the trade fact that matters most
        in a sport that has one. Over the cap alone is ordinary there. */
     const taxed = !!f.tax && f.tax.bill > 0;
+    /* Round 1309, the fix pass: past the last period (the NFL's playoffs) every trade is refused, so the box offers none */
+    const shut = f.period > f.periods;
     out.push({
       key: 'trade',
       icon: '🤝',
@@ -284,16 +289,20 @@ export function foHubTiles(f: FoHubFacts): FoTile[] {
           ? `${money(f.capRoom)} to shed`
           : f.tradeLine
             ? 'Deal done'
-            : `${f.roster.length} to offer`,
+            : shut
+              ? 'Shut for the playoffs'
+              : `${f.roster.length} to offer`,
       sub: taxed
         ? `${money(f.tax!.over)} over the tax line. Shed salary or pay it.`
         : over
           ? 'Move salary or the owner will'
           : f.tradeLine
             ? f.tradeLine
-            : chip
-              ? `Your biggest chip is ${chip.name}`
-              : 'Call a rival and see',
+            : shut
+              ? 'Deals open again once the season is over.'
+              : chip
+                ? `Your biggest chip is ${chip.name}`
+                : 'Call a rival and see',
       /* Over the line is the one trade state that is genuinely urgent. */
       accent: taxed || over,
     });
@@ -317,6 +326,7 @@ export function foHubTiles(f: FoHubFacts): FoTile[] {
             : `${f.periodWord[0].toUpperCase()}${f.periodWord.slice(1)} ${f.period} of ${f.periods}`,
       sub: last
         ? `Last out: ${last.won ? 'won' : 'lost'} ${last.us}-${last.them} ${last.won ? 'against' : 'to'} ${last.opponent}`
+        : postseason ? REGULAR_SEASON_OVER /* Round 1309: never "0 weeks to play" */
         : `${f.wins}-${f.losses} with ${Math.max(0, f.periods - f.period + 1)} ${f.periodWord}s to play`,
       /* The reason you opened the game. It always pulses. */
       accent: true,
@@ -331,19 +341,21 @@ export function foHubTiles(f: FoHubFacts): FoTile[] {
     /* Late and outside is the season slipping away, which is exactly when
        a GM should be looking at the table. Early it is just noise. */
     const late = left <= Math.ceil(f.periods / 3);
+    /* Round 1309: past the last period the table is final; nothing is left to play for in it and no dot pulses */
+    const over = f.period > f.periods;
     out.push({
       key: 'standings',
       icon: '📊',
       title: 'Standings',
       value: f.place > 0 ? `#${f.place} in the ${f.tableName}` : f.tableName,
-      sub: inside
+      sub: over ? REGULAR_SEASON_OVER : inside
         ? f.place === 1
           ? 'Top seed as it stands'
           : `Inside the top ${f.cut} with ${left} to play`
         : shortOf === 1
           ? `One place short of the cut, ${left} to play`
           : `${shortOf} places short of the cut, ${left} to play`,
-      accent: !inside && late && f.place > 0,
+      accent: !over && !inside && late && f.place > 0,
     });
   }
 

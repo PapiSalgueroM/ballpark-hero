@@ -141,6 +141,7 @@ const FootballGrid = () => {
         )}
 
         <GameSeoContent
+          reportControl={<ReportQuestion gameType="football-grid" gameContext={{ puzzleId: puzzle.id }} />}
           pageHasOwnH1
           title="NFL Grid | DoUKnowBall"
           description="A daily 3×3 grid puzzle where each cell requires a pro football player matching both the row and column criteria. Features a rarity scoring system based on real player selections."
@@ -162,9 +163,7 @@ const FootballGrid = () => {
 
         <AdBanner slot="7540487748" format="horizontal" className="mt-8" />
 
-        <div className="flex justify-center mt-6">
-          <ReportQuestion gameType="football-grid" gameContext={{ puzzleId: puzzle.id }} />
-        </div>
+
         <GameNav />
       </GameShell>
 

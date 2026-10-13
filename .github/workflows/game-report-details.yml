@@ -1,0 +1,205 @@
+name: Game reporting and Bingo verification
+
+on:
+  push:
+    branches:
+      - codex/game-report-details
+  workflow_dispatch:
+
+permissions:
+  contents: read
+concurrency:
+  group: game-report-details-${{ github.sha }}
+  cancel-in-progress: false
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    defaults:
+      run:
+        shell: bash
+    env:
+      SIM_NETWORK: offline
+      ENGINES: chromium
+      TZ: UTC
+      SEO_SPLIT_BASE_REF: HEAD
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Prepare exact source and remote dependencies
+        id: prepare
+        run: |
+          set -euo pipefail
+          mkdir -p game-report-artifacts
+          git rev-parse HEAD > game-report-artifacts/source-head.txt
+          git rev-parse 'HEAD^{tree}' > game-report-artifacts/source-tree.txt
+          git archive --format=tar HEAD > game-report-artifacts/source.tar
+          sha256sum package.json package-lock.json > game-report-artifacts/packages-before.txt
+          npm ci 2>&1 | tee game-report-artifacts/install.log
+          node scripts/qa/soccerAgentReviewDependencies.mjs before 2>&1 | tee game-report-artifacts/dependencies-before.log
+          cp soccer-agent-review-artifacts/dependencies-before.json game-report-artifacts/dependencies-before.json
+          browser_tools="$RUNNER_TEMP/game-report-browser-${{ github.run_id }}-${{ github.run_attempt }}"
+          mkdir -p "$browser_tools"
+          printf '{"private":true,"dependencies":{"playwright":"1.64.0"}}\n' > "$browser_tools/package.json"
+          npm install --prefix "$browser_tools" --ignore-scripts --no-audit --no-fund 2>&1 | tee game-report-artifacts/browser-install.log
+          test ! -e node_modules/playwright
+          test ! -e node_modules/playwright-core
+          ln -s "$browser_tools/node_modules/playwright" node_modules/playwright
+          ln -s "$browser_tools/node_modules/playwright-core" node_modules/playwright-core
+          cp "$browser_tools/package.json" game-report-artifacts/browser-package.json
+          cp "$browser_tools/package-lock.json" game-report-artifacts/browser-package-lock.json
+          node scripts/qa/soccerAgentReviewDependencies.mjs after 2>&1 | tee game-report-artifacts/dependencies-after.log
+          cp soccer-agent-review-artifacts/dependencies-*.json game-report-artifacts/
+          node "$browser_tools/node_modules/playwright/cli.js" install --with-deps chromium 2>&1 | tee game-report-artifacts/chromium-install.log
+          python -m pip install fonttools pillow 2>&1 | tee game-report-artifacts/fonts-install.log
+      - name: Actual app type gate
+        if: ${{ !cancelled() && steps.prepare.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee game-report-artifacts/types.log
+      - name: Report delivery, placement, game state and Bingo regressions
+        if: ${{ !cancelled() && steps.prepare.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node node_modules/vitest/vitest.mjs run src/test/reportContext.test.ts src/test/reportDetails.test.tsx src/test/gameReportPlacement.test.tsx src/test/perfectSeasonReport.test.tsx src/test/playerBingoHonours.test.ts src/test/playerBingoReport.test.tsx src/test/playerBingoTransport.test.ts src/test/playerBingoLoad.test.tsx src/test/playerBingoLineFeedback.test.tsx src/test/perfectSeasonResult.test.tsx src/test/perfectSeasonVerdict.test.tsx --maxWorkers=1 --minWorkers=1 --reporter=default --reporter=json --outputFile=game-report-artifacts/units.json 2>&1 | tee game-report-artifacts/units.log
+      - name: Retain completed type and unit diagnostics before the SEO build
+        if: ${{ !cancelled() && steps.prepare.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          du -sb game-report-artifacts > game-report-artifacts/early-size.txt
+          bytes="$(du -sb game-report-artifacts | cut -f1)"
+          test "$bytes" -lt 200000000
+      - name: Preserve early type and unit evidence
+        if: ${{ !cancelled() && steps.prepare.outcome == 'success' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: game-report-early-${{ github.run_id }}-${{ github.run_attempt }}
+          retention-days: 5
+          if-no-files-found: error
+          path: game-report-artifacts/
+      - name: Full production SEO build
+        id: build
+        if: ${{ !cancelled() && steps.prepare.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          npm run build:seo 2>&1 | tee game-report-artifacts/build.log
+      - name: Report source checks and effective Bingo controls
+        if: ${{ !cancelled() && steps.prepare.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          for control in baseline nopath footle privacy; do
+            selected="$control"
+            if test "$control" = baseline; then selected=''; fi
+            SIM_REPORT_CONTROL="$selected" SIM_OFFLINE_RECEIPT="$PWD/game-report-artifacts/report-$control.transport.log" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simReportContext.mjs > "game-report-artifacts/report-$control.stdout.log" 2> "game-report-artifacts/report-$control.stderr.log"
+            test ! -s "game-report-artifacts/report-$control.transport.log"
+            cat "game-report-artifacts/report-$control.stdout.log"
+          done
+          PLAYER_BINGO_HONOURS_OUT="$PWD/game-report-artifacts/bingo-controls" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simPlayerBingoHonours.mjs 2>&1 | tee game-report-artifacts/bingo-controls.log
+      - name: All rebuilt readers and existing guide checks
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          node scripts/lib/hostLikeServer.mjs dist 4173 > game-report-artifacts/reader-server.stdout.log 2> game-report-artifacts/reader-server.stderr.log &
+          reader_server=$!
+          trap 'kill "$reader_server" 2>/dev/null || true' EXIT
+          ready=0
+          for attempt in $(seq 1 60); do
+            if curl --fail --silent http://127.0.0.1:4173/ > /dev/null; then ready=1; break; fi
+            sleep 1
+          done
+          test "$ready" -eq 1
+          failed=0
+          printf 'harness\texit\tlines\tverdict\n' > game-report-artifacts/readers.tsv
+          for harness in simAdsense simBrand simHeadTags simHiddenPages simHubs simIndexNow simIndexing simInternalLinks simNoRivalNames simPrerender simPrerenderBoot simRetiredRoutes simSchema simSitemap simSnapshotAssets simGuideHeadings simSingleFooter; do
+            set +e
+            SIM_OFFLINE_RECEIPT="$PWD/game-report-artifacts/$harness.transport.log" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" BASE=http://127.0.0.1:4173 SWEEP_BASE=http://127.0.0.1:4173 node "scripts/$harness.mjs" > "game-report-artifacts/$harness.stdout.log" 2> "game-report-artifacts/$harness.stderr.log"
+            status=$?
+            set -e
+            lines="$(cat "game-report-artifacts/$harness.stdout.log" "game-report-artifacts/$harness.stderr.log" | awk 'NF && $0 !~ /^\[SIM_OFFLINE_BLOCK\]/ {n++} END {print n+0}')"
+            verdict=PASS
+            if test "$status" -ne 0; then verdict=FAIL; failed=1; fi
+            if test "$status" -eq 0 && test "$lines" -lt 4; then verdict=EMPTY; failed=1; fi
+            if grep -E '(^|[[:space:]])(SKIP|EMPTY)([[:space:]]|$)|^\[SIM_OFFLINE_BLOCK\]' "game-report-artifacts/$harness.stdout.log" "game-report-artifacts/$harness.stderr.log" > /dev/null; then verdict=FAIL; failed=1; fi
+            if test -s "game-report-artifacts/$harness.transport.log"; then verdict=FAIL; failed=1; fi
+            printf '%s\t%s\t%s\t%s\n' "$harness" "$status" "$lines" "$verdict" >> game-report-artifacts/readers.tsv
+            printf '%s: %s (exit %s, %s complete output lines)\n' "$harness" "$verdict" "$status" "$lines"
+          done
+          test "$(tail -n +2 game-report-artifacts/readers.tsv | wc -l)" -eq 17
+          exit "$failed"
+      - name: Actual built report placement and delivery
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          node scripts/lib/hostLikeServer.mjs dist 4173 > game-report-artifacts/browser-server.stdout.log 2> game-report-artifacts/browser-server.stderr.log &
+          report_server=$!
+          trap 'kill "$report_server" 2>/dev/null || true' EXIT
+          ready=0
+          for attempt in $(seq 1 60); do
+            if curl --fail --silent http://127.0.0.1:4173/ > /dev/null; then ready=1; break; fi
+            sleep 1
+          done
+          test "$ready" -eq 1
+          failed=0
+          printf 'journey\texit\n' > game-report-artifacts/browser.tsv
+          for control in baseline below-guide; do
+            selected="$control"
+            if test "$control" = baseline; then selected=''; fi
+            set +e
+            GAME_REPORT_CONTROL="$selected" REPORT_EVIDENCE="$PWD/game-report-artifacts/browser-$control" SIM_OFFLINE_RECEIPT="$PWD/game-report-artifacts/browser-$control.transport.log" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" BASE=http://127.0.0.1:4173 node scripts/playGameReports.mjs > "game-report-artifacts/browser-$control.stdout.log" 2> "game-report-artifacts/browser-$control.stderr.log"
+            status=$?
+            set -e
+            printf '%s\t%s\n' "$control" "$status" >> game-report-artifacts/browser.tsv
+            if test "$status" -ne 0 || test -s "game-report-artifacts/browser-$control.transport.log"; then failed=1; fi
+            cat "game-report-artifacts/browser-$control.stdout.log"
+          done
+          set +e
+          SHOTS=game-report-artifacts/draft-detective SIM_OFFLINE_RECEIPT="$PWD/game-report-artifacts/draft-detective.transport.log" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" BASE=http://127.0.0.1:4173 node scripts/playDraftDetectiveReports.mjs > game-report-artifacts/draft-detective.stdout.log 2> game-report-artifacts/draft-detective.stderr.log
+          status=$?
+          set -e
+          printf 'existing-draft-detective\t%s\n' "$status" >> game-report-artifacts/browser.tsv
+          if test "$status" -ne 0 || test -s game-report-artifacts/draft-detective.transport.log; then failed=1; fi
+          cat game-report-artifacts/draft-detective.stdout.log
+          exit "$failed"
+      - name: Keep generated pages and build evidence
+        if: ${{ !cancelled() && steps.prepare.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          if test -d dist; then cp -a dist game-report-artifacts/dist; fi
+          cp -a public game-report-artifacts/generated-public
+          cp scripts/data/lastmod.json game-report-artifacts/generated-lastmod.json
+          git diff --binary HEAD -- public scripts/data/lastmod.json > game-report-artifacts/generated.patch
+      - name: Exact source and package bytes held
+        if: ${{ !cancelled() && steps.prepare.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$(cat game-report-artifacts/source-head.txt)"
+          test "$(git rev-parse 'HEAD^{tree}')" = "$(cat game-report-artifacts/source-tree.txt)"
+          sha256sum package.json package-lock.json > game-report-artifacts/packages-after.txt
+          cmp game-report-artifacts/packages-before.txt game-report-artifacts/packages-after.txt
+          git diff --exit-code HEAD -- src scripts ':!scripts/data/lastmod.json' .github/workflows package.json package-lock.json index.html 2>&1 | tee game-report-artifacts/source-held.log
+      - name: Evidence size
+        if: ${{ !cancelled() && steps.prepare.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          du -sb game-report-artifacts > game-report-artifacts/size.txt
+          bytes="$(du -sb game-report-artifacts | cut -f1)"
+          test "$bytes" -lt 500000000
+      - name: Preserve complete or failed evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: game-report-${{ github.run_id }}-${{ github.run_attempt }}
+          retention-days: 5
+          if-no-files-found: error
+          path: game-report-artifacts/

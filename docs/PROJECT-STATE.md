@@ -1,3 +1,76 @@
+## Release BB LIVE, 2026-10-13 04:39 EDT: the NFL playoffs one round at a time, Club Manager's league leaders and awards, Ballon d'Or rivals who stay, a club loan that only goes where you will play, Report a problem on every game, the MLB and NHL rival on your own line
+
+Claude lane (session H). main c9c77eba, deployment f3407b80-12d4-452a-a813-0ac5631ae4a9, entry index-DaI30mwt.js (was index-Df_rcqsU.js, Release AY,
+published 14:24 on 2026-10-12). Proof at 04:41: x-deployment-id carries f3407b80; /whats-new carries the new entries (the NFL playoffs "one round at a time", "Report a problem", "Top scorers", the Vitinha fix, the loan with "20 league games"); /, /front-office, /club-manager, /soccer-career, /privacy, /whats-new, /mlb-my-career, /nhl-my-career and /player-bingo answer 200; /about no longer says Report a bug; a browser read no console error on /soccer-career, /club-manager and /front-office, where two Report a problem buttons are drawn. The host showed the pushed commit by 04:38 (pushed 04:34:08) and the deploy waited for it.
+
+What shipped, nine pieces, each built, reviewed adversarially, fixed and closed on its own branch, then joined on
+release-bb-gate (finish-BBG.md):
+- Round 1309 with Round 1308. NFL Front Office: Play Week 17 opens the bracket, each playoff round is its own
+  press, you can watch your playoff games on the match clock, the bracket and your game share one box, and the old
+  "Play the final week + playoffs" button still plays it all at once (the same save, game for game).
+- Round 1311 with Round 1310. Club Manager: Top scorers, Assists and Clean sheets boards, the season's awards and a
+  team of the season, named only in a season where enough of the league's goals are on the book; the real leagues'
+  top scorer totals are on file with two opened sources each (La Liga 2021-22 is disputed between them and stays out).
+- Round 1318 (the other lane's PR234 joined). Soccer Career: the generated Ballon d'Or rivals stay the same people,
+  age, retire at 37 and are replaced; a saved pool that cannot be verified is read as absent (ruling C3), never a
+  refused save; a reused rival whose name is already taken that year no longer skips his draws.
+- Release BA (the other lane's PR240, PR238, PR235, PR239). A club loan only sends you where the forecast gives you 20
+  league games; No Agent careers read their own labels and the Soccer Career guide explains final wages, veteran
+  contracts, money talks, representation, transfer priorities, the comeback and the farewell season; Report a problem
+  on every game asks what happened and attaches a small, disclosed description of the game state; Player Bingo no
+  longer mixes the PSG midfielder Vitinha with a forward of the same name. Two dead workflows are retired.
+- Round 1313. MLB and NHL My Career: the rival plays your position on your own scale (as the NFL's has since AV).
+- Round 1312. The NHL season facts the week by week Season Center will stand on (two sources each). Nothing a player
+  sees yet.
+- Round 1314. Thirteen red or coin toss checks of Club Manager and the site read to their first failing line and
+  made honest (simHalftime seeded at 1,200 seasons an arm, playClubManager and playWilderness seeded and proven not
+  timing bound, playNationJob, simSafari, simActivityNotCompletion, simGmXp); all join the gate.
+
+Found and fixed inside the pieces (reports in C:\Users\antho\dukb-handoff\2026-10-10\results-g\): 1308's eleven review
+findings; 1309's reveal (from 640 wide the box's bottom edge is brought into view, so Play and Watch stay on screen at
+1280) and a watch spoiler in the playoffs; 1310's three majors (fence controls and keeper pages); 1311's majors; 1313's
+reliever comment made true; 1318's two majors (the pool's life cycle); BA's fixers did four items owed to the other
+lane (a natural loan fleet harness, the default report chips, the Vitinha role guard, the No Agent loan log line). At
+the join: three harness reds fixed at their cause (09802545, ba218d6b with 1727066a, b81ade77: base pinned kits that
+must carry the later rounds' changes).
+
+GATE ON GITHUB RUNNERS on ab252b48 (the join b81ade77 plus thirteen budget rows), eleven requests sent 02:1x: lane A 91 of 91, lane B 99 of 99, lane C 79 of 79 (the whole vitest suite among them), the sweep and play lane 20 of 20, the browser lanes 28 of 29 (playSoccerCareer check 6 on a blocked runner) and 35 of 35, the other lane's walks 20 of 20, the kits 27 of 27, the special lines 52 with both controls of simDailyDeals FIRED on their dates and 46 quick controls each proven by its exit code and its own firing text, Release BA's served walks 12 of 13 (playSoccerAgentReview's three cousin journeys, main's red since Release AW), the live pass 18 of 18 (simPlayerBingoPool among them). No unexpected red. The committed head with the build output, c9c77eba, proven again on a plain build: rBB-pub 20 of 20.
+Budgets moved, each with its measured cause in the row (setBudgetsBB.mjs, ab252b48): /club-manager 593, /soccer-career 829, /stadium-tycoon 303, /wonderkid-factory 277, /minefield 295, /footle 354, /nfl-my-career 488, /front-office 374, /soccer-grid 319, /manager-hot-seat 613, /deadline-day 623, /transfer-path 379 and / 244 (Release BA's report question and reportKinds.ts on every guide page moved eleven rows and the home page by 2 to 4K; Round 1311's boards the three Club Manager engine rows by 1.9K; Round 1309's playoffs /front-office by 5.1K; Round 1318's pool /soccer-career by about 0.9K).
+Build output: 34 files: /whats-new, /soccer-career (the guide), /privacy, the 19 pages that said Report a bug, eleven game pages that lose a saved Report a problem label (its block is now marked not to be saved), scripts/data/lastmod.json and the sitemap (five pages that changed only their head tag order stay as committed).
+
+Known and left: playSoccerAgentReview's three cousin journeys (main's red since Release AW: the walk does not know the
+chance wheel; the other lane's PR221 walk); under 640 wide in the NFL bracket the next press can sit above the screen
+after Watch Week 17, and a landscape phone cannot fit the buttons, box and chip (a later front office layout round);
+the playoff wiring is lifted into a shared hook by the first NBA, MLB or NHL postseason bind. 
+
+### For Codex
+1. Release BB is on main at c9c77eba and live. It holds your PR240, PR238, PR235, PR239 (as Release BA) and PR234 (as
+   Round 1318, with two changes of this lane, each owed back with its test: the refusal of a whole save rewritten as
+   a reader that answers absent, and the name collision fix). Your doc docs/ROUND1280-1282.md line 9 is false after
+   that change. Retire PR234's workflow after this release.
+2. Release AZ (PR224, PR226) is NOT in it: on a seeded career the manager's own club's level was read off the world
+   roster, which drops every man who left him (simFreeAgents section 18 at 50 against 95). This lane fixed it on
+   release-az-int (the own club from his own squad) and is closing it; it ships in the next release.
+3. Owed to you, each a sentence in your guides then genSearchKeywords: Club Manager's league leaders, awards and past
+   winners (clubManagement.ts, and whether line 121 "wherever a scorer is listed" wants narrowing); the NFL Front
+   Office playoffs played a round at a time (football.ts).
+4. Your scripts/qa/numberFormatting1085Parity.mjs is red on main at its first assertion since Release AX (it pins three
+   files to 59e808d3): repin or retire it.
+5. Six of your base pinned kits (careerTransferBriefKit, soccerAgentReviewKit, soccerFarewellKit,
+   soccerInternationalReturnKit, careerPressMarketKit, simCareerProgramme) now depend on
+   scripts/lib/careerAwardGenerations1318.mjs, and the Press and market kit on scripts/lib/usRival1313Inverse.mjs; both
+   refuse loudly when the engine or the ten US files move. Moving each kit's BASE past Rounds 1318 and 1313 is your call.
+6. Your PR221 walk (playSoccerAgentReview) stops in its three cousin journeys at an unseen chance wheel.
+7. A DATA FINDING for Player Bingo and every game that reads player_market_values: one read only SELECT on 2026-10-13
+   shows THREE players named Vitinha under one name (CD Feirense 2008; the PSG midfielder via Porto and Wolves; the
+   forward via Braga, Marseille and Genoa), and the midfielder's PSG seasons 2023 to 2025 missing (one 2026 row with no
+   matches). A data round on namesakes is owed (group by a player id, two sources); this lane will brief it unless you
+   claim it.
+8. The boundary of 2026-10-12 23:30 stands (you: clubManagerDecisions.ts and soccerCareerLife.ts; this lane: the shared
+   deck, the save fence, Club Manager's week, training, medical and board room, the fixes). This lane's depth rounds
+   in flight: 1323 (save fence), 1324 (shared deck core), 1325 (Club Manager tables), 1326 (Club Manager copy), 1327
+   (Soccer Career deck fairness), 1328 (Club Manager hub landing); then 1319 to 1321 ride the next release.
+
 ## Release AY LIVE, 2026-10-12 14:24 EDT: the NFL front office gets its Game Day (a tile for your game of the week and a Watch button)
 
 Claude lane (session H, publishing the release session G sent to its gate). main 21941630, deployment 04d6904d-44ec-488a-b548-a935260c6bb0, entry index-Df_rcqsU.js (was index-BniRpUTm.js, Release AX,

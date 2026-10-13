@@ -35,3 +35,23 @@ export const REPORT_KIND_OTHER = 'Other';
 
 export const REPORT_KINDS_SITEWIDE: string[] = [...REPORT_KINDS_SHARED, REPORT_KIND_OTHER];
 export const REPORT_KINDS_QUESTION: string[] = [...REPORT_KINDS_SHARED, REPORT_KIND_DUPLICATE, REPORT_KIND_OTHER];
+
+/**
+ * Release BA. The guide's default report button (GameSeoContent) reached these
+ * pages for the first time, and none of them asks the player a question: they
+ * are careers, managers, front offices, tycoons, idle games, drafts, packs,
+ * skill games and a bracket. So the duplicate chip has nothing to point at and
+ * they get the sitewide list. Quizzes and guess games that get the default keep
+ * the per question list. gameReportPlacement.test.tsx checks every entry is a
+ * real game route.
+ */
+export const REPORT_ROUTES_WITHOUT_QUESTIONS: ReadonlySet<string> = new Set([
+  '/soccer-career', '/nfl-my-career', '/nba-my-career', '/mlb-my-career', '/nhl-my-career',
+  '/front-office', '/nba-front-office', '/mlb-front-office', '/nhl-front-office',
+  '/cfb-dynasty', '/cbb-dynasty', '/rebuild', '/aussie-rules-manager', '/manager-hot-seat', '/deadline-day',
+  '/stadium-tycoon', '/wonderkid-factory', '/fight-career', '/fight-gym', '/fight-promoter',
+  '/conquest', '/conquest-nba', '/conquest-mlb', '/conquest-nhl', '/soccer-conquest',
+  '/hall-of-champions', '/idle-arena',
+  '/budget-builder', '/dart-draft', '/fantasy-draft', '/mystery-box', '/sign-the-player', '/perfect-season-nba',
+  '/buzzer-beater', '/cage-clash', '/free-kick', '/world-cup-bracket',
+]);
