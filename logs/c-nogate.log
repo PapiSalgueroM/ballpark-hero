@@ -1,0 +1,63 @@
+NEGATIVE CONTROL ON: the deck no longer asks whether a card fits the season just played (section 4 must fail)
+The paper holds 44 stories, 23 of them under weight 1
+Driving the fleet: 200 ordinary, 200 elite and 100 loyal careers through the real engine
+   500 careers, 8215 playing seasons, 7468 batches, 7468 papers, 0 crashes
+1) The deck: 40,000 keyed draws, every tenth of the eligible list at its fair rate
+   save: ST, age 20, 5 rows; 90 eligible cards, 119804 picks over 40000 draws (2.995 a draw)
+   per tenth, observed over fair: 1.006, 0.993, 1.005, 0.999, 0.99, 1.011, 0.989, 0.996, 1.005, 1.006; single cards 0.931 to 1.053 (reported, not asserted)
+2) The paper: a weight 0.5 story prints at half the rate of a weight 1 story
+   4 stories eligible (weights 1 1 0.5 1); over 40000 papers the 0.5 story printed 5599 times, the weight 1 story 11435, others 22966: ratio 0.49 (sd 0.008)
+   the fleet's 7468 papers printed 19 of the 23 stories under weight 1, 3423 prints against a fair 3403.932; REDEMPTION 0 times
+   under weight 1 (weight printed/fair/qualified): Reveals Secret To Succes 0.5 184/183.611/2711; Followers After Viral Mo 0.5 1392/1384.158/6685; Booed By Own Fans After  0.7 320/310.656/790; Wants Out As Contract Ta 0.5 35/43.006/250; Out For Weeks With 0.5 8/5.404/29; Hits Out At Manager In S 0.3 10/11.94/127; Agent Demands Record Dea 0.4 52/48.05/1025; : Another Season Of Riva 0.5 31/27.428/430; M Bid For 0.7 473/468.841/3396; Available On Free Transf 0.5 100/90.305/705; 's Latest Purchase Raise 0.8 0/0/0; Match Is A Show Now 0.9 224/219.042/1080; Never Celebrates, Never  0.9 81/73.487/583; Walks Disciplinary Tight 0.9 44/44.134/209; Breaks The Scouting Apps 0.8 0/0/0; HAPPIEST MAN IN FOOTBALL 0.7 195/191.742/1837; 's Monster Contract 0.7 5/9.138/131; LEADER OF THE NATION: 0.6 160/176.065/2155; Bought Mum The House, An 0.6 0/0/0; Clean Sheets, Strikers I 0.6 18/18.833/192; Is Football's Coldest Wa 0.6 0/2.413/28; 's Money Now Works Harde 0.5 90/95.398/1400; Refuses To Read The Cale 0.5 1/0.282/5
+3) Keyed: the deck and the paper draw nothing from the global stream
+   200 saves: 0 decks drew beyond the catalog build, 0 batches moved with the stream, 0 papers chose other stories under another seed
+   eight seasons a save: the deck dealt 8 different batches on average, 0 of 100 saves under six; the paper printed one story all eight years in 0 of 79 saves with two or more stories
+4) Gates: a card that narrates the season fires only when the row holds it
+   card: fired / fired without its fact / batches whose row held the fact
+   1: 177/42/6000  4: 167/79/3726  7: 96/14/6000  9: 156/146/647  11: 163/130/1329  12: 161/145/472  15: 173/141/1220  17: 12/12/0  18: 104/92/249  19: 99/92/243
+  FAIL (section 4): card 1 fired 42 times in a season whose row does not hold its fact
+  FAIL (section 4): card 4 fired 79 times in a season whose row does not hold its fact
+  FAIL (section 4): card 7 fired 14 times in a season whose row does not hold its fact
+  FAIL (section 4): card 9 fired 146 times in a season whose row does not hold its fact
+  FAIL (section 4): card 11 fired 130 times in a season whose row does not hold its fact
+  FAIL (section 4): card 12 fired 145 times in a season whose row does not hold its fact
+  FAIL (section 4): card 15 fired 141 times in a season whose row does not hold its fact
+  FAIL (section 4): card 17 fired 12 times in a season whose row does not hold its fact
+  FAIL (section 4): card 17 fired 12 times: the engine's own call up tells that story
+  FAIL (section 4): card 18 fired 92 times in a season whose row does not hold its fact
+  FAIL (section 4): card 19 fired 92 times in a season whose row does not hold its fact
+   10 fixed rows asked of the engine and of this file's rules
+5) SOCIAL MEDIA SENSATION prints, and only at a million followers or more
+   printed 1392 times in 7468 papers, 0 of them under a million
+6) Every story, every position: no bare position code, no "In <lower case>" tail
+   440 stories rendered over 10 positions, 0 could not render without their facts
+   "the <nation> international": 0 stories say it of an uncapped player, 2 of a capped one
+7) Before the first paper or deck nothing moves; saves the base wrote still answer here
+   200 careers, 1146 steps compared: 200 reached a paper or deck step, 200 parted there, 200 with the season row byte equal when the paper ran (1 rows differ by the end of that step, from the draws after the paper)
+   19 old saved screens answered here (every choice of cards 1, 4, 7, 9, 11, 12, 15, 17, 18, 19, a newspaper, a transfer window)
+8) The seventh inverse gives the base's engine back byte for byte, and every change sits in this round's hunks
+  FAIL (section 8): the inverse does not apply: the deck-helpers-and-gate row of Round 1327's inverse must be in src/lib/soccerCareerEngine.ts exactly once at its turn
+
+1 !== 2
+
+   head 18b7e905bf483c8e21903bea3952333ef2c6667e3cd55a26fb75d7c888ead8ce; inverse applied 15 of 17 rows
+   base 65ffd9d102989f30c811ac80f884cb84f0b8ca4f9f3feb8e9fdcf9c00009661c (module says 65ffd9d102989f30c811ac80f884cb84f0b8ca4f9f3feb8e9fdcf9c00009661c); inverse gives nothing
+   65 diff hunks against the base, each checked against 6 regions
+9) What a narrating card or story prints is what the row holds
+  FAIL (section 9): card 11 dealt for "null" reads "An injury this season has left its mark." and logs "🏥 Took time to recover from an injury: Pace -2"
+  FAIL (section 9): card 11 dealt for "null" reads "An injury this season has left its mark." and logs "🏥 Took time to recover from an injury: Pace -2"
+  FAIL (section 9): card 11 dealt for "null" reads "An injury this season has left its mark." and logs "🏥 Took time to recover from an injury: Pace -2"
+  FAIL (section 9): card 12 dealt for a undefined finish reads "The club sacks the manager. The new one does not rate you."
+  FAIL (section 9): card 12 dealt for a undefined finish reads "The club sacks the manager. The new one does not rate you."
+  FAIL (section 9): card 11 dealt for "null" reads "An injury this season has left its mark." and logs "🏥 Took time to recover from an injury: Pace -2"
+  FAIL (section 9): card 12 dealt for a undefined finish reads "The club sacks the manager. The new one does not rate you."
+  FAIL (section 9): card 19 dealt for null reads "You are left out of the World Cup squad."
+  FAIL (section 9): card 11 dealt for "null" reads "An injury this season has left its mark." and logs "🏥 Took time to recover from an injury: Pace -2"
+  FAIL (section 9): card 19 dealt for null reads "You are left out of the World Cup squad."
+  FAIL (section 9): card 12 dealt for a undefined finish reads "The club sacks the manager. The new one does not rate you."
+  FAIL (section 9): card 11 dealt for "null" reads "An injury this season has left its mark." and logs "🏥 Took time to recover from an injury: Pace -2"
+  FAIL (section 9): card 19 dealt for null reads "You are left out of the World Cup squad."
+  FAIL (section 9): card 11 dealt for "null" reads "An injury this season has left its mark." and logs "🏥 Took time to recover from an injury: Pace -2"
+  FAIL (section 9): ... further failures in this section counted, not printed
+   18 injuries read; card 11 and INJURY BLOW rendered for 18; the fleet dealt card 11 163, 12 161, 15 173, 19 99 times and printed INJURY BLOW 8, a move story 859 times, each read against its row
+CONTROL nogate FIRED: section 4 failed (252 failures in all)

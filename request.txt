@@ -1,0 +1,32 @@
+h-storyrole: node scripts/simCareerStoryRole.mjs
+h-awards: node scripts/simCareerAwardsNight.mjs
+h-leagueseasons: node scripts/simCareerLeagueSeasons.mjs
+h-seasonhist: node scripts/simSoccerSeasonHistory.mjs
+h-derby: node scripts/simSoccerDerbyHistory.mjs
+h-trophy: node scripts/simCareerTrophyRuns.mjs
+h-social: node scripts/simCareerSocialBrands.mjs
+h-finish: node scripts/simCareerLeagueFinish.mjs
+h-dev: node scripts/simSoccerCareerDevelopment.mjs
+h-programme: node scripts/simCareerProgramme.mjs
+c-shuffle: SIM_SOCCER_DECK_FAIRNESS_CONTROL=shuffle node scripts/simSoccerDeckFairness.mjs
+c-ranking: SIM_SOCCER_DECK_FAIRNESS_CONTROL=ranking node scripts/simSoccerDeckFairness.mjs
+c-globalpick: SIM_SOCCER_DECK_FAIRNESS_CONTROL=globalpick node scripts/simSoccerDeckFairness.mjs
+c-keyseason: SIM_SOCCER_DECK_FAIRNESS_CONTROL=keyseason node scripts/simSoccerDeckFairness.mjs
+c-newsyear: SIM_SOCCER_DECK_FAIRNESS_CONTROL=newsyear node scripts/simSoccerDeckFairness.mjs
+c-nogate: SIM_SOCCER_DECK_FAIRNESS_CONTROL=nogate node scripts/simSoccerDeckFairness.mjs
+c-puskas: SIM_SOCCER_DECK_FAIRNESS_CONTROL=puskas node scripts/simSoccerDeckFairness.mjs
+c-loanclub: SIM_SOCCER_DECK_FAIRNESS_CONTROL=loanclub node scripts/simSoccerDeckFairness.mjs
+c-unit: SIM_SOCCER_DECK_FAIRNESS_CONTROL=unit node scripts/simSoccerDeckFairness.mjs
+c-poscode: SIM_SOCCER_DECK_FAIRNESS_CONTROL=poscode node scripts/simSoccerDeckFairness.mjs
+c-uncapped: SIM_SOCCER_DECK_FAIRNESS_CONTROL=uncapped node scripts/simSoccerDeckFairness.mjs
+c-prefix: SIM_SOCCER_DECK_FAIRNESS_CONTROL=prefix node scripts/simSoccerDeckFairness.mjs
+c-olddebut: SIM_SOCCER_DECK_FAIRNESS_CONTROL=olddebut node scripts/simSoccerDeckFairness.mjs
+c-outside: SIM_SOCCER_DECK_FAIRNESS_CONTROL=outside node scripts/simSoccerDeckFairness.mjs
+c-injlog: SIM_SOCCER_DECK_FAIRNESS_CONTROL=injlog node scripts/simSoccerDeckFairness.mjs
+c-injblow: SIM_SOCCER_DECK_FAIRNESS_CONTROL=injblow node scripts/simSoccerDeckFairness.mjs
+p-breakapply: SIM_SOCCER_EVENT_PROMISES_CONTROL=breakapply node scripts/simSoccerEventPromises.mjs
+p-unannounced: SIM_SOCCER_EVENT_PROMISES_CONTROL=unannounced node scripts/simSoccerEventPromises.mjs
+p-reorder: SIM_SOCCER_EVENT_PROMISES_CONTROL=reorder node scripts/simSoccerEventPromises.mjs
+k-nocooldown: SIM_CAREER_LIFE_COOLDOWNS_CONTROL=nocooldown node scripts/simCareerLifeCooldowns.mjs
+k-sharedbatch: SIM_CAREER_LIFE_COOLDOWNS_CONTROL=sharedbatch node scripts/simCareerLifeCooldowns.mjs
+k-flood: SIM_CAREER_LIFE_COOLDOWNS_CONTROL=flood node scripts/simCareerLifeCooldowns.mjs
