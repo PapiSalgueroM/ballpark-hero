@@ -1,0 +1,4343 @@
+{
+ "tag": "c320",
+ "W": 320,
+ "H": 640,
+ "SEED": 5,
+ "POS": "Central Mid",
+ "NAT": "Nigeria",
+ "ERA": "Early 90s",
+ "steps": [
+  {
+   "step": 1,
+   "phase": "youth",
+   "age": 16,
+   "senior": 0,
+   "club": "Enyimba Youth",
+   "ovr": 52,
+   "action": "Next Season",
+   "options": [],
+   "next": "contract_offer"
+  },
+  {
+   "step": 2,
+   "phase": "contract_offer",
+   "age": 17,
+   "senior": 0,
+   "club": "Enyimba Youth",
+   "ovr": 56,
+   "action": "Review contract",
+   "options": [
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Review contract"
+   ],
+   "modal": false,
+   "next": "contract_offer",
+   "txt": "🎓 Academy report Enyimba Youth, 1991/92 53 to 56 Overall +3 Pace 54 +6 Shooting 51 +2 Passing 59 +1 Dribbling 57 +2 Defending 58 +6 Physical 59 +4 18 games, 2 goals and 5 assists for the under 18s. The under 18s reached the quarter-finals of the youth cup. Your academy coach calls it a good, honest year. You are right where the staff hoped you would be. 📩 Contract Offers Choose a club to start your professional career EN Enyimba 📋 5yr 💰 €4k/wk Free transfer Tier 4 Review contract FI Fiorentina Serie A, 1992-93 📋 4yr 💰 €13k/wk Free transfer Tier 3 Review contract RE Red Star Belgrade 📋 4yr 💰 €10k/wk Free transfer Tier 3 Review contract TO Tottenham Premier League, 1992-93 📋 3yr 💰 €7"
+  },
+  {
+   "step": 3,
+   "phase": "contract_offer",
+   "age": 17,
+   "senior": 0,
+   "club": "Enyimba Youth",
+   "ovr": 56,
+   "action": "Sign contract",
+   "options": [
+    "Back",
+    "?",
+    "Sign contract",
+    "Close"
+   ],
+   "modal": true,
+   "next": "playing",
+   "txt": "🎓 Academy report Enyimba Youth, 1991/92 53 to 56 Overall +3 Pace 54 +6 Shooting 51 +2 Passing 59 +1 Dribbling 57 +2 Defending 58 +6 Physical 59 +4 18 games, 2 goals and 5 assists for the under 18s. The under 18s reached the quarter-finals of the youth cup. Your academy coach calls it a good, honest year. You are right where the staff hoped you would be. 📩 Contract Offers Choose a club to start your professional career EN Enyimba 📋 5yr 💰 €4k/wk Free transfer Tier 4 Review contract FI Fiorentina Serie A, 1992-93 📋 4yr 💰 €13k/wk Free transfer Tier 3 Review contract RE Red Star Belgrade 📋 4yr 💰 €10k/wk Free transfer Tier 3 Review contract TO Tottenham Premier League, 1992-93 📋 3yr 💰 €7"
+  },
+  {
+   "step": 4,
+   "phase": "playing",
+   "age": 17,
+   "senior": 0,
+   "club": "Red Star Belgrade",
+   "ovr": 56,
+   "action": "Week by week",
+   "options": [],
+   "next": "newspaper"
+  },
+  {
+   "step": 5,
+   "phase": "newspaper",
+   "age": 18,
+   "senior": 1,
+   "club": "Red Star Belgrade",
+   "ovr": 57,
+   "action": "NONE",
+   "options": [],
+   "next": "newspaper",
+   "txt": "📰 IN THE HEADLINES EL GOLAZO ⚠️ THE COLUMN: Ottoline Pemberton Says The Argument About Danny Okafor-Whitfield Is Over 1 goals and 2 assists in 8 games. Ottoline Pemberton wrote the obituary column, in full, with a photograph from four years ago. 90+4 MAGAZINE ⚠️ CRISIS AT RED STAR BELGRADE: Danny Okafor-Whitfield Dropped From Squad After Poor Run Of Form Sources inside the dressing room confirm that Danny Okafor-Whitfield has been left out of the matchday squad following a disappointing spell. With just 8 appearances and a 5.6 average rating, questions are mounting. Continue to Season Summary → ATTRIBUTES Pace Acceleration 54 54 Shooting Finishing 52 52 Passing Vision 60 60 Dribbling Ball C"
+  },
+  {
+   "step": 6,
+   "phase": "newspaper",
+   "age": 18,
+   "senior": 1,
+   "club": "Red Star Belgrade",
+   "ovr": 57,
+   "action": "Continue to Season Summary →",
+   "options": [
+    "Continue to Season Summary →",
+    "🗂️ Tournaments 1 played out",
+    "🏆 AFCON 1992 Morocco won it"
+   ],
+   "modal": false,
+   "next": "season_summary",
+   "txt": "📰 IN THE HEADLINES EL GOLAZO ⚠️ THE COLUMN: Ottoline Pemberton Says The Argument About Danny Okafor-Whitfield Is Over 1 goals and 2 assists in 8 games. Ottoline Pemberton wrote the obituary column, in full, with a photograph from four years ago. 90+4 MAGAZINE ⚠️ CRISIS AT RED STAR BELGRADE: Danny Okafor-Whitfield Dropped From Squad After Poor Run Of Form Sources inside the dressing room confirm that Danny Okafor-Whitfield has been left out of the matchday squad following a disappointing spell. With just 8 appearances and a 5.6 average rating, questions are mounting. Continue to Season Summary → ATTRIBUTES Pace Acceleration 54 54 Shooting Finishing 52 52 Passing Vision 60 60 Dribbling Ball C"
+  },
+  {
+   "step": 7,
+   "phase": "season_summary",
+   "age": 18,
+   "senior": 1,
+   "club": "Red Star Belgrade",
+   "ovr": 57,
+   "action": "Continue →",
+   "options": [
+    "Continue →",
+    "🗂️ Tournaments 1 played out",
+    "🏆 AFCON 1992 Morocco won it"
+   ],
+   "modal": false,
+   "next": "ballon_dor",
+   "txt": "Season Summary Red Star Belgrade · 1992/93 8 Apps 1 Goals 2 Assists Avg Rating: 5.6 · Played at OVR 56 🟨 2 🟥 0 🎯 Target missed Make 3 club assists. Finished on 2. 🏃 Development push completed +1 passing after natural growth. 🛝 One goal this season, and you tear off toward the corner flag and slide across the grass on your knees. Continue → 📺 Watch it week by week ATTRIBUTES Pace Acceleration 54 54 Shooting Finishing 52 52 Passing Vision 60 60 Dribbling Ball Control 58 58 Defending Marking 58 58 Physical Strength 61 61 Full attributes 180 cm · 75 kg · every number under the six CAREER STATS Only stats kept in your season records are shown. 26 Apps 3 Goals 7 Assists 0 Trophies 🔥 Derby h"
+  },
+  {
+   "step": 8,
+   "phase": "ballon_dor",
+   "age": 18,
+   "senior": 1,
+   "club": "Red Star Belgrade",
+   "ovr": 57,
+   "action": "🏆 AFCON 1992 Morocco won it",
+   "options": [
+    "🗂️ Tournaments 1 played out",
+    "🏆 AFCON 1992 Morocco won it"
+   ],
+   "modal": false,
+   "next": "ballon_dor",
+   "txt": "🏅 Ballon d'Or 1992 9. Ruud Gullit CAM · AC Milan 41pts 20G 10. Gabriel Batistuta ST · Fiorentina 36pts 18G The ranked list is coming in... ATTRIBUTES Pace Acceleration 54 54 Shooting Finishing 52 52 Passing Vision 60 60 Dribbling Ball Control 58 58 Defending Marking 58 58 Physical Strength 61 61 Full attributes 180 cm · 75 kg · every number under the six CAREER STATS Only stats kept in your season records are shown. 26 Apps 3 Goals 7 Assists 0 Trophies 🔥 Derby history TROPHY CABINET Tap a trophy to see the seasons behind it. 🏆 0 Leagues 🏆 0 Cups ⭐ 0 UCL 🌍 0 World Cup 🌐 0 Continental 🏅 0 Ballon d'Or 🏆 AWARDS 🏆 Player of the Month INTERNATIONAL CAREER 0 Caps 0 Goals 0 Assists 🗂️ Tour"
+  },
+  {
+   "step": 9,
+   "phase": "ballon_dor",
+   "age": 18,
+   "senior": 1,
+   "club": "Red Star Belgrade",
+   "ovr": 57,
+   "action": "← Back",
+   "options": [
+    "← Back"
+   ],
+   "modal": false,
+   "next": "ballon_dor",
+   "txt": "🏅 Ballon d'Or 1992 🥈 Marco van Basten ST · AC Milan 69pts 30G 🥉 Roberto Baggio CAM · Juventus 64pts 23G 4. Alan Shearer ST · Blackburn Rovers 59pts 26G · League 5. Romário ST · PSV 53pts 34G 6. Eric Cantona ST · Man United 46pts 17G 7. Lothar Matthäus CM · Real Madrid 45pts 15G · Cup 8. Dennis Bergkamp ST · Ajax 45pts 12G · League, Cup 9. Ruud Gullit CAM · AC Milan 41pts 20G 10. Gabriel Batistuta ST · Fiorentina 36pts 18G The ranked list is coming in... ATTRIBUTES Pace Acceleration 54 54 Shooting Finishing 52 52 Passing Vision 60 60 Dribbling Ball Control 58 58 Defending Marking 58 58 Physical Strength 61 61 Full attributes 180 cm · 75 kg · every number under the six CAREER STATS Only sta"
+  },
+  {
+   "step": 10,
+   "phase": "ballon_dor",
+   "age": 18,
+   "senior": 1,
+   "club": "Red Star Belgrade",
+   "ovr": 57,
+   "action": "🏆 AFCON 1992 Morocco won it",
+   "options": [
+    "Continue →",
+    "🗂️ Tournaments 1 played out",
+    "🏆 AFCON 1992 Morocco won it"
+   ],
+   "modal": false,
+   "next": "ballon_dor",
+   "txt": "⭐ Ballon d'Or 1992 You were not nominated this year 🥇 Hristo Stoichkov ST · Ajax 85pts 23G · League, Cup 🥈 Marco van Basten ST · AC Milan 69pts 30G 🥉 Roberto Baggio CAM · Juventus 64pts 23G 4. Alan Shearer ST · Blackburn Rovers 59pts 26G · League 5. Romário ST · PSV 53pts 34G 6. Eric Cantona ST · Man United 46pts 17G 7. Lothar Matthäus CM · Real Madrid 45pts 15G · Cup 8. Dennis Bergkamp ST · Ajax 45pts 12G · League, Cup 9. Ruud Gullit CAM · AC Milan 41pts 20G 10. Gabriel Batistuta ST · Fiorentina 36pts 18G Continue → ATTRIBUTES Pace Acceleration 54 54 Shooting Finishing 52 52 Passing Vision 60 60 Dribbling Ball Control 58 58 Defending Marking 58 58 Physical Strength 61 61 Full attributes "
+  },
+  {
+   "step": 11,
+   "phase": "ballon_dor",
+   "age": 18,
+   "senior": 1,
+   "club": "Red Star Belgrade",
+   "ovr": 57,
+   "action": "← Back",
+   "options": [
+    "Continue →",
+    "← Back"
+   ],
+   "modal": false,
+   "next": "ballon_dor",
+   "txt": "⭐ Ballon d'Or 1992 You were not nominated this year 🥇 Hristo Stoichkov ST · Ajax 85pts 23G · League, Cup 🥈 Marco van Basten ST · AC Milan 69pts 30G 🥉 Roberto Baggio CAM · Juventus 64pts 23G 4. Alan Shearer ST · Blackburn Rovers 59pts 26G · League 5. Romário ST · PSV 53pts 34G 6. Eric Cantona ST · Man United 46pts 17G 7. Lothar Matthäus CM · Real Madrid 45pts 15G · Cup 8. Dennis Bergkamp ST · Ajax 45pts 12G · League, Cup 9. Ruud Gullit CAM · AC Milan 41pts 20G 10. Gabriel Batistuta ST · Fiorentina 36pts 18G Continue → ATTRIBUTES Pace Acceleration 54 54 Shooting Finishing 52 52 Passing Vision 60 60 Dribbling Ball Control 58 58 Defending Marking 58 58 Physical Strength 61 61 Full attributes "
+  },
+  {
+   "step": 12,
+   "phase": "ballon_dor",
+   "age": 18,
+   "senior": 1,
+   "club": "Red Star Belgrade",
+   "ovr": 57,
+   "action": "Continue →",
+   "options": [
+    "Continue →",
+    "🗂️ Tournaments 1 played out",
+    "🏆 AFCON 1992 Morocco won it"
+   ],
+   "modal": false,
+   "next": "social_media_action",
+   "txt": "⭐ Ballon d'Or 1992 You were not nominated this year 🥇 Hristo Stoichkov ST · Ajax 85pts 23G · League, Cup 🥈 Marco van Basten ST · AC Milan 69pts 30G 🥉 Roberto Baggio CAM · Juventus 64pts 23G 4. Alan Shearer ST · Blackburn Rovers 59pts 26G · League 5. Romário ST · PSV 53pts 34G 6. Eric Cantona ST · Man United 46pts 17G 7. Lothar Matthäus CM · Real Madrid 45pts 15G · Cup 8. Dennis Bergkamp ST · Ajax 45pts 12G · League, Cup 9. Ruud Gullit CAM · AC Milan 41pts 20G 10. Gabriel Batistuta ST · Fiorentina 36pts 18G Continue → ATTRIBUTES Pace Acceleration 54 54 Shooting Finishing 52 52 Passing Vision 60 60 Dribbling Ball Control 58 58 Defending Marking 58 58 Physical Strength 61 61 Full attributes "
+  },
+  {
+   "step": 13,
+   "phase": "social_media_action",
+   "age": 18,
+   "senior": 1,
+   "club": "Red Star Belgrade",
+   "ovr": 57,
+   "action": "🏆 AFCON 1992 Morocco won it",
+   "options": [
+    "🏋️ Post training video Show off your sk",
+    "🎬 Go viral with celebration clip Post a",
+    "❤️ Announce charity work Highlight your ",
+    "😈 Troll your rival on social media Take",
+    "🧘 Stay off social media Focus on footba",
+    "🗂️ Tournaments 1 played out",
+    "🏆 AFCON 1992 Morocco won it"
+   ],
+   "modal": false,
+   "next": "social_media_action",
+   "txt": "📱 Social Media Choose one action this season to manage your online presence 70k followers Next unlock: 🏪 Local Brand Deal at 1M followers 🏪 1M 👟 5M 🌍 15M 👕 30M 🎮 50M 🏋️ Post training video Show off your skills in the gym +0.1-0.2M followers 🎬 Go viral with celebration clip Post an iconic goal celebration +0.5-2.0M followers 🔥 Post controversial opinion Share a hot take about football +1.0M followers ⚡ Reputation -10 ❤️ Announce charity work Highlight your philanthropic efforts +0.2M followers ⚡ Reputation +15 📸 Post about personal life Share a glimpse into your life off the pitch +0.3M followers 😈 Troll your rival on social media Take a shot at your rival online +0.8M followers ⚡"
+  },
+  {
+   "step": 14,
+   "phase": "social_media_action",
+   "age": 18,
+   "senior": 1,
+   "club": "Red Star Belgrade",
+   "ovr": 57,
+   "action": "🧘 Stay off social media Focus on football, no distractions ⚡ +2 to al",
+   "options": [
+    "🏋️ Post training video Show off your sk",
+    "🎬 Go viral with celebration clip Post a",
+    "❤️ Announce charity work Highlight your ",
+    "😈 Troll your rival on social media Take",
+    "🧘 Stay off social media Focus on footba",
+    "← Back"
+   ],
+   "modal": false,
+   "next": "social_media_action",
+   "txt": "📱 Social Media Choose one action this season to manage your online presence 70k followers Next unlock: 🏪 Local Brand Deal at 1M followers 🏪 1M 👟 5M 🌍 15M 👕 30M 🎮 50M 🏋️ Post training video Show off your skills in the gym +0.1-0.2M followers 🎬 Go viral with celebration clip Post an iconic goal celebration +0.5-2.0M followers 🔥 Post controversial opinion Share a hot take about football +1.0M followers ⚡ Reputation -10 ❤️ Announce charity work Highlight your philanthropic efforts +0.2M followers ⚡ Reputation +15 📸 Post about personal life Share a glimpse into your life off the pitch +0.3M followers 😈 Troll your rival on social media Take a shot at your rival online +0.8M followers ⚡"
+  },
+  {
+   "step": 15,
+   "phase": "social_media_action",
+   "age": 18,
+   "senior": 1,
+   "club": "Red Star Belgrade",
+   "ovr": 57,
+   "action": "← Back",
+   "options": [
+    "Continue →",
+    "← Back"
+   ],
+   "modal": false,
+   "next": "social_media_action",
+   "txt": "📱 Social Media Update 70k followers Continue → ATTRIBUTES Pace Acceleration 54 54 Shooting Finishing 52 52 Passing Vision 60 60 Dribbling Ball Control 58 58 Defending Marking 58 58 Physical Strength 61 61 Full attributes 180 cm · 75 kg · every number under the six CAREER STATS Only stats kept in your season records are shown. 26 Apps 3 Goals 7 Assists 0 Trophies 🔥 Derby history TROPHY CABINET Tap a trophy to see the seasons behind it. 🏆 0 Leagues 🏆 0 Cups ⭐ 0 UCL 🌍 0 World Cup 🌐 0 Continental 🏅 0 Ballon d'Or 🏆 AWARDS 🏆 Player of the Month INTERNATIONAL CAREER 0 Caps 0 Goals 0 Assists AFRICA CUP OF NATIONS 1992 FINAL Cameroon 0-2 Morocco SEMI-FINALS South Africa 1-2 Cameroon Senegal "
+  },
+  {
+   "step": 16,
+   "phase": "social_media_action",
+   "age": 18,
+   "senior": 1,
+   "club": "Red Star Belgrade",
+   "ovr": 57,
+   "action": "🏆 AFCON 1992 Morocco won it",
+   "options": [
+    "Continue →",
+    "🗂️ Tournaments 1 played out",
+    "🏆 AFCON 1992 Morocco won it"
+   ],
+   "modal": false,
+   "next": "social_media_action",
+   "txt": "📱 Social Media Update 70k followers Continue → ATTRIBUTES Pace Acceleration 54 54 Shooting Finishing 52 52 Passing Vision 60 60 Dribbling Ball Control 58 58 Defending Marking 58 58 Physical Strength 61 61 Full attributes 180 cm · 75 kg · every number under the six CAREER STATS Only stats kept in your season records are shown. 26 Apps 3 Goals 7 Assists 0 Trophies 🔥 Derby history TROPHY CABINET Tap a trophy to see the seasons behind it. 🏆 0 Leagues 🏆 0 Cups ⭐ 0 UCL 🌍 0 World Cup 🌐 0 Continental 🏅 0 Ballon d'Or 🏆 AWARDS 🏆 Player of the Month INTERNATIONAL CAREER 0 Caps 0 Goals 0 Assists 🗂️ Tournaments 1 played out 🏆 AFCON 1992 Morocco won it"
+  },
+  {
+   "step": 17,
+   "phase": "social_media_action",
+   "age": 18,
+   "senior": 1,
+   "club": "Red Star Belgrade",
+   "ovr": 57,
+   "action": "Continue →",
+   "options": [
+    "Continue →",
+    "← Back"
+   ],
+   "modal": false,
+   "next": "random_events",
+   "txt": "📱 Social Media Update 70k followers Continue → ATTRIBUTES Pace Acceleration 54 54 Shooting Finishing 52 52 Passing Vision 60 60 Dribbling Ball Control 58 58 Defending Marking 58 58 Physical Strength 61 61 Full attributes 180 cm · 75 kg · every number under the six CAREER STATS Only stats kept in your season records are shown. 26 Apps 3 Goals 7 Assists 0 Trophies 🔥 Derby history TROPHY CABINET Tap a trophy to see the seasons behind it. 🏆 0 Leagues 🏆 0 Cups ⭐ 0 UCL 🌍 0 World Cup 🌐 0 Continental 🏅 0 Ballon d'Or 🏆 AWARDS 🏆 Player of the Month INTERNATIONAL CAREER 0 Caps 0 Goals 0 Assists AFRICA CUP OF NATIONS 1992 FINAL Cameroon 0-2 Morocco SEMI-FINALS South Africa 1-2 Cameroon Senegal "
+  },
+  {
+   "step": 18,
+   "phase": "random_events",
+   "age": 18,
+   "senior": 1,
+   "club": "Red Star Belgrade",
+   "ovr": 57,
+   "action": "🎭 The Showman Fame comes easy: followers grow 60% faster, sponsors pa",
+   "options": [
+    "🎭 The Showman Fame comes easy: follower",
+    "🧊 Ice Cold Unshakeable: steadier morale",
+    "🌋 The Hothead Fire in everything: exclu",
+    "📐 The Professor Student of the game: ma",
+    "🃏 The Enigma Pure wildcard: cult follow",
+    "← Back"
+   ],
+   "modal": false,
+   "next": "random_events",
+   "txt": "🏠 LIFE EVENT · 3 EVENTS REMAINING 🪞 Who Are You, Really? Teammates, journalists and fans keep asking the same question: what is your deal? Time to decide what kind of player, and person, you are. This shapes your whole career. 🎭 The Showman Fame comes easy: followers grow 60% faster, sponsors pay 25% more, scandals sting 🧊 Ice Cold Unshakeable: steadier morale, trusted by sponsors, slower follower growth 🌋 The Hothead Fire in everything: exclusive chaos events, fear factor, riskier sponsors 📐 The Professor Student of the game: manager and brand respect, fewer viral moments 🃏 The Enigma Pure wildcard: cult following, chaos bonuses in both directions ATTRIBUTES Pace Acceleration 54 54 S"
+  },
+  {
+   "step": 19,
+   "phase": "random_events",
+   "age": 18,
+   "senior": 1,
+   "club": "Red Star Belgrade",
+   "ovr": 57,
+   "action": "🙄 Ignore the bird The mascot declares victory by forfeit",
+   "options": [
+    "🏃 Race the mascot 70%: win, +400k follo",
+    "🙄 Ignore the bird The mascot declares v",
+    "← Back"
+   ],
+   "modal": false,
+   "next": "random_events",
+   "txt": "🏠 LIFE EVENT · 2 EVENTS REMAINING 🦅 Mascot Beef The club mascot challenged you to a race at halftime and has been talking trash on the club's official account all week. 🏃 Race the mascot 70%: win, +400k followers. 30%: lose to a person in a giant bird suit 🙄 Ignore the bird The mascot declares victory by forfeit ATTRIBUTES Pace Acceleration 54 54 Shooting Finishing 52 52 Passing Vision 60 60 Dribbling Ball Control 58 58 Defending Marking 58 58 Physical Strength 61 61 Full attributes 180 cm · 75 kg · every number under the six CAREER STATS Only stats kept in your season records are shown. 26 Apps 3 Goals 7 Assists 0 Trophies 🔥 Derby history TROPHY CABINET Tap a trophy to see the seasons "
+  },
+  {
+   "step": 20,
+   "phase": "random_events",
+   "age": 18,
+   "senior": 1,
+   "club": "Red Star Belgrade",
+   "ovr": 57,
+   "action": "🏋️ Skip the commercial circus and train properly Pace +2 next season,",
+   "options": [
+    "🤳 Do every appearance and every clinic ",
+    "🏋️ Skip the commercial circus and train",
+    "🎒 Run a free kids clinic in a local sch",
+    "← Back"
+   ],
+   "modal": false,
+   "next": "transfer_window",
+   "txt": "🏠 LIFE EVENT · 1 EVENT REMAINING 🌏 Preseason Where Football Just Arrived Fourteen hours in the air, forty degrees on landing, and thirty thousand people who learned the club anthem last week. There are nine commercial appearances in six days. 🤳 Do every appearance and every clinic Followers +1.5M, Popularity +6, sponsor income +€300k, Morale -4 🏋️ Skip the commercial circus and train properly Pace +2 next season, Morale +3, an €80k club fine 🎒 Run a free kids clinic in a local school on your day off Integrity +8, Popularity +5, followers +500k, Morale +5 ATTRIBUTES Pace Acceleration 54 54 Shooting Finishing 52 52 Passing Vision 60 60 Dribbling Ball Control 58 58 Defending Marking 58 58 "
+  },
+  {
+   "step": 21,
+   "phase": "transfer_window",
+   "age": 18,
+   "senior": 1,
+   "club": "Orlando Pirates",
+   "ovr": 57,
+   "action": "Continue at Orlando Pirates →",
+   "options": [
+    "Continue at Orlando Pirates →",
+    "← Back"
+   ],
+   "modal": false,
+   "next": "playing",
+   "txt": "📤 Your club sold you Red Star Belgrade → Orlando Pirates The club chose this move. Your next season is at Orlando Pirates. €430/wk · 3-year contract Transfer fee: €0.8M 7 league games all season, and the projection here was 20 to 30 You averaged 5.6 across the season You are 5 rating points under what this squad expects Continue at Orlando Pirates → Your next season Roles, contracts, playing time and your comeback ATTRIBUTES Pace Acceleration 54 54 Shooting Finishing 52 52 Passing Vision 60 60 Dribbling Ball Control 58 58 Defending Marking 58 58 Physical Strength 61 61 Full attributes 180 cm · 75 kg · every number under the six CAREER STATS Only stats kept in your season records are shown. "
+  }
+ ],
+ "audits": [
+  {
+   "label": "phase contract_offer #2",
+   "step": 2,
+   "vw": 320,
+   "sw": 320,
+   "overflow": false,
+   "bad": [],
+   "off": [],
+   "trunc": [],
+   "small": [],
+   "covered": [
+    {
+     "text": "Review contract",
+     "by": "Review contract\n\nRed Star Belgrade\n\nCurr",
+     "byCls": "fixed left-[50%] top-[50%] z-50 translate-x-[-50%]"
+    },
+    {
+     "text": "Review contract",
+     "by": "Current deal\nFirst senior contract. No c",
+     "byCls": "grid grid-cols-2 gap-3 rounded-lg border border-bo"
+    },
+    {
+     "text": "Review contract",
+     "by": "Review contract\n\nRed Star Belgrade\n\nCurr",
+     "byCls": "fixed left-[50%] top-[50%] z-50 translate-x-[-50%]"
+    },
+    {
+     "text": "Your next season\nRoles, contracts, playi",
+     "by": "DIV",
+     "byCls": "fixed inset-0 z-50 bg-black/80 data-[state=open]:a"
+    }
+   ],
+   "boundary": false
+  },
+  {
+   "label": "phase playing #1",
+   "step": 3,
+   "vw": 320,
+   "sw": 320,
+   "overflow": false,
+   "bad": [],
+   "off": [
+    {
+     "tag": "DIV",
+     "cls": "bg-card border border-border rounded-xl px-4 py-2 text-center shrink-0",
+     "text": "17\nAGE",
+     "l": 307,
+     "r": 359
+    },
+    {
+     "tag": "DIV",
+     "cls": "text-lg font-black",
+     "text": "17",
+     "l": 324,
+     "r": 342
+    },
+    {
+     "tag": "DIV",
+     "cls": "text-[9px] text-muted-foreground uppercase",
+     "text": "AGE",
+     "l": 324,
+     "r": 342
+    }
+   ],
+   "trunc": [],
+   "small": [],
+   "covered": [],
+   "boundary": false
+  },
+  {
+   "label": "open ambition-s0",
+   "step": 3,
+   "vw": 320,
+   "sw": 320,
+   "overflow": false,
+   "bad": [],
+   "off": [
+    {
+     "tag": "DIV",
+     "cls": "bg-card border border-border rounded-xl px-4 py-2 text-center shrink-0",
+     "text": "17\nAGE",
+     "l": 307,
+     "r": 359
+    },
+    {
+     "tag": "DIV",
+     "cls": "text-lg font-black",
+     "text": "17",
+     "l": 324,
+     "r": 342
+    },
+    {
+     "tag": "DIV",
+     "cls": "text-[9px] text-muted-foreground uppercase",
+     "text": "AGE",
+     "l": 324,
+     "r": 342
+    }
+   ],
+   "trunc": [],
+   "small": [],
+   "covered": [
+    {
+     "text": "👥 Squad\nBy role\nThe plan: Squad player\n",
+     "by": "Your season target\n\nA personal best to c",
+     "byCls": "fixed left-[50%] top-[50%] z-50 grid w-full max-w-"
+    },
+    {
+     "text": "🎯 Season target\nChoose a personal chall",
+     "by": "Your season target\n\nA personal best to c",
+     "byCls": "fixed left-[50%] top-[50%] z-50 grid w-full max-w-"
+    },
+    {
+     "text": "🏃 Preseason plan\nBalanced, or choose yo",
+     "by": "Reward: +1 Shooting with next season's g",
+     "byCls": "block text-xs text-muted-foreground"
+    },
+    {
+     "text": "Your next season\nRoles, contracts, playi",
+     "by": "Reward: +1 Passing with next season's gr",
+     "byCls": "block text-xs text-muted-foreground"
+    },
+    {
+     "text": "Next Season",
+     "by": "DIV",
+     "byCls": "fixed inset-0 z-50 bg-black/80 data-[state=open]:a"
+    },
+    {
+     "text": "Retire",
+     "by": "DIV",
+     "byCls": "fixed inset-0 z-50 bg-black/80 data-[state=open]:a"
+    }
+   ],
+   "boundary": false
+  },
+  {
+   "label": "open preseason-s0",
+   "step": 3,
+   "vw": 320,
+   "sw": 320,
+   "overflow": false,
+   "bad": [],
+   "off": [
+    {
+     "tag": "DIV",
+     "cls": "bg-card border border-border rounded-xl px-4 py-2 text-center shrink-0",
+     "text": "17\nAGE",
+     "l": 307,
+     "r": 359
+    },
+    {
+     "tag": "DIV",
+     "cls": "text-lg font-black",
+     "text": "17",
+     "l": 324,
+     "r": 342
+    },
+    {
+     "tag": "DIV",
+     "cls": "text-[9px] text-muted-foreground uppercase",
+     "text": "AGE",
+     "l": 324,
+     "r": 342
+    }
+   ],
+   "trunc": [],
+   "small": [],
+   "covered": [
+    {
+     "text": "👥 Squad\nBy role\nThe plan: Squad player\n",
+     "by": "Development push adds 1 passing point af",
+     "byCls": "text-sm"
+    },
+    {
+     "text": "🎯 Season target\nMake 3 club assists\n199",
+     "by": "Example: a 20% injury chance becomes 23%",
+     "byCls": "text-xs text-muted-foreground"
+    },
+    {
+     "text": "🏃 Preseason plan\nBalanced, or choose yo",
+     "by": "Example: a 20% injury chance becomes 23%",
+     "byCls": "text-xs text-muted-foreground"
+    },
+    {
+     "text": "Your next season\nRoles, contracts, playi",
+     "by": "+1 passing, higher injury risk",
+     "byCls": "block text-xs text-muted-foreground"
+    },
+    {
+     "text": "Next Season",
+     "by": "DIV",
+     "byCls": "fixed inset-0 z-50 bg-black/80 data-[state=open]:a"
+    },
+    {
+     "text": "Retire",
+     "by": "DIV",
+     "byCls": "fixed inset-0 z-50 bg-black/80 data-[state=open]:a"
+    }
+   ],
+   "boundary": false
+  },
+  {
+   "label": "open squad-s0",
+   "step": 3,
+   "vw": 320,
+   "sw": 320,
+   "overflow": false,
+   "bad": [],
+   "off": [
+    {
+     "tag": "DIV",
+     "cls": "bg-card border border-border rounded-xl px-4 py-2 text-center shrink-0",
+     "text": "17\nAGE",
+     "l": 307,
+     "r": 359
+    },
+    {
+     "tag": "DIV",
+     "cls": "text-lg font-black",
+     "text": "17",
+     "l": 324,
+     "r": 342
+    },
+    {
+     "tag": "DIV",
+     "cls": "text-[9px] text-muted-foreground uppercase",
+     "text": "AGE",
+     "l": 324,
+     "r": 342
+    }
+   ],
+   "trunc": [],
+   "small": [],
+   "covered": [
+    {
+     "text": "👥 Squad\nBy role\nThe plan: Squad player\n",
+     "by": "Your rank is where your rating puts you ",
+     "byCls": ""
+    },
+    {
+     "text": "🎯 Season target\nMake 3 club assists\n199",
+     "by": "Trust is how much of the league season t",
+     "byCls": ""
+    },
+    {
+     "text": "🏃 Preseason plan\nDevelopment push · 199",
+     "by": "Trust is how much of the league season t",
+     "byCls": ""
+    },
+    {
+     "text": "Your next season\nRoles, contracts, playi",
+     "by": "Trust is how much of the league season t",
+     "byCls": ""
+    },
+    {
+     "text": "Next Season",
+     "by": "← Back",
+     "byCls": "min-h-[44px] rounded-xl border border-border px-4 "
+    },
+    {
+     "text": "Retire",
+     "by": "← Back",
+     "byCls": "min-h-[44px] rounded-xl border border-border px-4 "
+    }
+   ],
+   "boundary": false
+  },
+  {
+   "label": "open programme-s0",
+   "step": 3,
+   "vw": 320,
+   "sw": 320,
+   "overflow": false,
+   "bad": [],
+   "off": [
+    {
+     "tag": "DIV",
+     "cls": "bg-card border border-border rounded-xl px-4 py-2 text-center shrink-0",
+     "text": "17\nAGE",
+     "l": 307,
+     "r": 359
+    },
+    {
+     "tag": "DIV",
+     "cls": "text-lg font-black",
+     "text": "17",
+     "l": 324,
+     "r": 342
+    },
+    {
+     "tag": "DIV",
+     "cls": "text-[9px] text-muted-foreground uppercase",
+     "text": "AGE",
+     "l": 324,
+     "r": 342
+    }
+   ],
+   "trunc": [],
+   "small": [],
+   "covered": [
+    {
+     "text": "👥 Squad\nBy role\nThe plan: Squad player\n",
+     "by": "Pick a tile, read its effect and tradeof",
+     "byCls": ""
+    },
+    {
+     "text": "🎯 Season target\nMake 3 club assists\n199",
+     "by": "Some choices need a transfer offer, a lo",
+     "byCls": ""
+    },
+    {
+     "text": "🏃 Preseason plan\nDevelopment push · 199",
+     "by": "A plan is not a guaranteed result. The d",
+     "byCls": ""
+    },
+    {
+     "text": "Your next season\nRoles, contracts, playi",
+     "by": "Pick a tile, read its effect and tradeof",
+     "byCls": "space-y-3"
+    },
+    {
+     "text": "Next Season",
+     "by": "Pick a tile, read its effect and tradeof",
+     "byCls": "space-y-3"
+    },
+    {
+     "text": "Retire",
+     "by": "Pick a tile, read its effect and tradeof",
+     "byCls": "space-y-3"
+    }
+   ],
+   "boundary": false
+  },
+  {
+   "label": "open attributes-s0",
+   "step": 3,
+   "vw": 320,
+   "sw": 320,
+   "overflow": false,
+   "bad": [],
+   "off": [],
+   "trunc": [
+    {
+     "text": "Danny Okafor-Whitfield, full attributes",
+     "w": 223,
+     "need": 293,
+     "ell": "ellipsis"
+    }
+   ],
+   "small": [],
+   "covered": [],
+   "boundary": false
+  },
+  {
+   "label": "open ratings-s0",
+   "step": 3,
+   "vw": 320,
+   "sw": 320,
+   "overflow": false,
+   "bad": [],
+   "off": [
+    {
+     "tag": "DIV",
+     "cls": "bg-card border border-border rounded-xl px-4 py-2 text-center shrink-0",
+     "text": "17\nAGE",
+     "l": 307,
+     "r": 359
+    },
+    {
+     "tag": "DIV",
+     "cls": "text-lg font-black",
+     "text": "17",
+     "l": 324,
+     "r": 342
+    },
+    {
+     "tag": "DIV",
+     "cls": "text-[9px] text-muted-foreground uppercase",
+     "text": "AGE",
+     "l": 324,
+     "r": 342
+    }
+   ],
+   "trunc": [],
+   "small": [],
+   "covered": [
+    {
+     "text": "📈 Ratings",
+     "by": "Availability",
+     "byCls": "min-h-11 rounded-xl border border-border px-3 py-2"
+    },
+    {
+     "text": "📖 Career Story",
+     "by": "Two saved senior seasons unlock comparis",
+     "byCls": "mb-3 text-xs text-muted-foreground"
+    },
+    {
+     "text": "Next Season",
+     "by": "DIV",
+     "byCls": "fixed inset-0 z-50 bg-black/80 data-[state=open]:a"
+    },
+    {
+     "text": "Retire",
+     "by": "DIV",
+     "byCls": "fixed inset-0 z-50 bg-black/80 data-[state=open]:a"
+    },
+    {
+     "text": "📺",
+     "by": "DIV",
+     "byCls": "fixed inset-0 z-50 bg-black/80 data-[state=open]:a"
+    }
+   ],
+   "boundary": false
+  },
+  {
+   "label": "open story-s0",
+   "step": 3,
+   "vw": 320,
+   "sw": 320,
+   "overflow": false,
+   "bad": [],
+   "off": [
+    {
+     "tag": "DIV",
+     "cls": "bg-card border border-border rounded-xl px-4 py-2 text-center shrink-0",
+     "text": "17\nAGE",
+     "l": 307,
+     "r": 359
+    },
+    {
+     "tag": "DIV",
+     "cls": "text-lg font-black",
+     "text": "17",
+     "l": 324,
+     "r": 342
+    },
+    {
+     "tag": "DIV",
+     "cls": "text-[9px] text-muted-foreground uppercase",
+     "text": "AGE",
+     "l": 324,
+     "r": 342
+    }
+   ],
+   "trunc": [],
+   "small": [],
+   "covered": [
+    {
+     "text": "📈 Ratings",
+     "by": "1990\nEnyimba Youth\nAge 16 · 1 moment\n199",
+     "byCls": "grid grid-cols-3 sm:grid-cols-4 gap-2"
+    },
+    {
+     "text": "📖 Career Story",
+     "by": "1990\nEnyimba Youth\nAge 16 · 1 moment\n199",
+     "byCls": "grid grid-cols-3 sm:grid-cols-4 gap-2"
+    },
+    {
+     "text": "Next Season",
+     "by": "DIV",
+     "byCls": "fixed inset-0 z-50 bg-black/80 data-[state=open]:a"
+    },
+    {
+     "text": "Retire",
+     "by": "DIV",
+     "byCls": "fixed inset-0 z-50 bg-black/80 data-[state=open]:a"
+    },
+    {
+     "text": "📺",
+     "by": "DIV",
+     "byCls": "fixed inset-0 z-50 bg-black/80 data-[state=open]:a"
+    }
+   ],
+   "boundary": false
+  },
+  {
+   "label": "open trophy-s0",
+   "step": 3,
+   "vw": 320,
+   "sw": 320,
+   "overflow": false,
+   "bad": [],
+   "off": [
+    {
+     "tag": "DIV",
+     "cls": "bg-card border border-border rounded-xl px-4 py-2 text-center shrink-0",
+     "text": "17\nAGE",
+     "l": 307,
+     "r": 359
+    },
+    {
+     "tag": "DIV",
+     "cls": "text-lg font-black",
+     "text": "17",
+     "l": 324,
+     "r": 342
+    },
+    {
+     "tag": "DIV",
+     "cls": "text-[9px] text-muted-foreground uppercase",
+     "text": "AGE",
+     "l": 324,
+     "r": 342
+    }
+   ],
+   "trunc": [],
+   "small": [],
+   "covered": [
+    {
+     "text": "🏆\n0\nLeagues",
+     "by": "‹ Back",
+     "byCls": "min-h-11 rounded-lg bg-muted/30 px-3 text-xs font-"
+    },
+    {
+     "text": "🏆\n0\nCups",
+     "by": "‹ Back\nLeague titles\n?",
+     "byCls": "flex shrink-0 items-center gap-2 border-b border-b"
+    },
+    {
+     "text": "⭐\n0\nUCL",
+     "by": "‹ Back\nLeague titles\n?",
+     "byCls": "flex shrink-0 items-center gap-2 border-b border-b"
+    },
+    {
+     "text": "🌍\n0\nWorld Cup",
+     "by": "‹ Back\nLeague titles\n?\n\nNo wins recorded",
+     "byCls": "fixed inset-0 z-50 flex items-center justify-cente"
+    },
+    {
+     "text": "🌐\n0\nContinental",
+     "by": "‹ Back\nLeague titles\n?\n\nNo wins recorded",
+     "byCls": "fixed inset-0 z-50 flex items-center justify-cente"
+    },
+    {
+     "text": "🏅\n0\nBallon d'Or",
+     "by": "‹ Back\nLeague titles\n?\n\nNo wins recorded",
+     "byCls": "fixed inset-0 z-50 flex items-center justify-cente"
+    }
+   ],
+   "boundary": false
+  },
+  {
+   "label": "open training-s0",
+   "step": 3,
+   "vw": 320,
+   "sw": 320,
+   "overflow": false,
+   "bad": [],
+   "off": [
+    {
+     "tag": "DIV",
+     "cls": "bg-card border border-border rounded-xl px-4 py-2 text-center shrink-0",
+     "text": "17\nAGE",
+     "l": 307,
+     "r": 359
+    },
+    {
+     "tag": "DIV",
+     "cls": "text-lg font-black",
+     "text": "17",
+     "l": 324,
+     "r": 342
+    },
+    {
+     "tag": "DIV",
+     "cls": "text-[9px] text-muted-foreground uppercase",
+     "text": "AGE",
+     "l": 324,
+     "r": 342
+    }
+   ],
+   "trunc": [
+    {
+     "text": "Drill ready",
+     "w": 1,
+     "need": 70,
+     "ell": "clip"
+    },
+    {
+     "text": "unread",
+     "w": 1,
+     "need": 38,
+     "ell": "clip"
+    },
+    {
+     "text": "Danny Okafor-Whitfield",
+     "w": 200,
+     "need": 224,
+     "ell": "ellipsis"
+    }
+   ],
+   "small": [],
+   "covered": [
+    {
+     "text": "🏋️\nTraining\nDrill ready",
+     "by": "Tap cones in order with as few slips as ",
+     "byCls": ""
+    },
+    {
+     "text": "📱\nPhone\n3\nunread",
+     "by": "Tap cones in order with as few slips as ",
+     "byCls": ""
+    },
+    {
+     "text": "🚪 Retire",
+     "by": "Pause or opening these rules freezes the",
+     "byCls": ""
+    },
+    {
+     "text": "🔄 New Career",
+     "by": "Pause or opening these rules freezes the",
+     "byCls": ""
+    },
+    {
+     "text": "👥 Squad\nBy role\nThe plan: Squad player\n",
+     "by": "Your CM drill. Trains Passing. Today's t",
+     "byCls": "block text-[10px] text-muted-foreground"
+    },
+    {
+     "text": "Next Season",
+     "by": "👟\nFirst Touch\nRead the gate, time your ",
+     "byCls": "w-full flex items-center gap-3 rounded-xl border b"
+    }
+   ],
+   "boundary": false
+  },
+  {
+   "label": "open phone-s0",
+   "step": 3,
+   "vw": 320,
+   "sw": 320,
+   "overflow": false,
+   "bad": [],
+   "off": [
+    {
+     "tag": "DIV",
+     "cls": "bg-card border border-border rounded-xl px-4 py-2 text-center shrink-0",
+     "text": "17\nAGE",
+     "l": 307,
+     "r": 359
+    },
+    {
+     "tag": "DIV",
+     "cls": "text-lg font-black",
+     "text": "17",
+     "l": 324,
+     "r": 342
+    },
+    {
+     "tag": "DIV",
+     "cls": "text-[9px] text-muted-foreground uppercase",
+     "text": "AGE",
+     "l": 324,
+     "r": 342
+    }
+   ],
+   "trunc": [
+    {
+     "text": "unread",
+     "w": 1,
+     "need": 38,
+     "ell": "clip"
+    },
+    {
+     "text": "Danny Okafor-Whitfield",
+     "w": 200,
+     "need": 224,
+     "ell": "ellipsis"
+    }
+   ],
+   "small": [],
+   "covered": [
+    {
+     "text": "🏋️\nTraining",
+     "by": "£0K to your name",
+     "byCls": "text-[10px] text-emerald-300 font-bold pt-0.5"
+    },
+    {
+     "text": "📱\nPhone\n3\nunread",
+     "by": "£0K to your name",
+     "byCls": "text-[10px] text-emerald-300 font-bold pt-0.5"
+    },
+    {
+     "text": "🚪 Retire",
+     "by": "📈",
+     "byCls": "w-[52px] h-[52px] rounded-2xl bg-white/10 border b"
+    },
+    {
+     "text": "🔄 New Career",
+     "by": "🛒",
+     "byCls": "w-[52px] h-[52px] rounded-2xl bg-white/10 border b"
+    },
+    {
+     "text": "👥 Squad\nBy role\nThe plan: Squad player\n",
+     "by": "Put phone away",
+     "byCls": "min-h-11 text-[10px] font-bold text-white/50 hover"
+    },
+    {
+     "text": "Next Season",
+     "by": "1991 · age 17\n😐 50\n📶 🔋\nDanny Okafor-W",
+     "byCls": "fixed inset-0 z-50 flex items-center justify-cente"
+    }
+   ],
+   "boundary": false
+  },
+  {
+   "label": "phone messages",
+   "step": 3,
+   "vw": 320,
+   "sw": 320,
+   "overflow": false,
+   "bad": [],
+   "off": [
+    {
+     "tag": "DIV",
+     "cls": "bg-card border border-border rounded-xl px-4 py-2 text-center shrink-0",
+     "text": "17\nAGE",
+     "l": 307,
+     "r": 359
+    },
+    {
+     "tag": "DIV",
+     "cls": "text-lg font-black",
+     "text": "17",
+     "l": 324,
+     "r": 342
+    },
+    {
+     "tag": "DIV",
+     "cls": "text-[9px] text-muted-foreground uppercase",
+     "text": "AGE",
+     "l": 324,
+     "r": 342
+    }
+   ],
+   "trunc": [
+    {
+     "text": "unread",
+     "w": 1,
+     "need": 38,
+     "ell": "clip"
+    },
+    {
+     "text": "Danny Okafor-Whitfield",
+     "w": 200,
+     "need": 224,
+     "ell": "ellipsis"
+    }
+   ],
+   "small": [],
+   "covered": [
+    {
+     "text": "🏋️\nTraining",
+     "by": "❤️\nMum\n1990\nHi love, haven't heard from ",
+     "byCls": "flex-1 overflow-y-auto p-2.5 space-y-2"
+    },
+    {
+     "text": "📱\nPhone\n3\nunread",
+     "by": "❤️\nMum\n1990\nHi love, haven't heard from ",
+     "byCls": "flex-1 overflow-y-auto p-2.5 space-y-2"
+    },
+    {
+     "text": "🚪 Retire",
+     "by": "💬\nGroundskeeper\n1990\nFound a wallet in ",
+     "byCls": "w-full text-left rounded-xl bg-white/5 border bord"
+    },
+    {
+     "text": "🔄 New Career",
+     "by": "💬\nGroundskeeper\n1990\nFound a wallet in ",
+     "byCls": "w-full text-left rounded-xl bg-white/5 border bord"
+    },
+    {
+     "text": "👥 Squad\nBy role\nThe plan: Squad player\n",
+     "by": "Put phone away",
+     "byCls": "min-h-11 text-[10px] font-bold text-white/50 hover"
+    },
+    {
+     "text": "Next Season",
+     "by": "1991 · age 17\n😐 50\n📶 🔋\n‹ Home\n💬 Mess",
+     "byCls": "fixed inset-0 z-50 flex items-center justify-cente"
+    }
+   ],
+   "boundary": false
+  },
+  {
+   "label": "phone contacts",
+   "step": 3,
+   "vw": 320,
+   "sw": 320,
+   "overflow": false,
+   "bad": [],
+   "off": [
+    {
+     "tag": "DIV",
+     "cls": "bg-card border border-border rounded-xl px-4 py-2 text-center shrink-0",
+     "text": "17\nAGE",
+     "l": 307,
+     "r": 359
+    },
+    {
+     "tag": "DIV",
+     "cls": "text-lg font-black",
+     "text": "17",
+     "l": 324,
+     "r": 342
+    },
+    {
+     "tag": "DIV",
+     "cls": "text-[9px] text-muted-foreground uppercase",
+     "text": "AGE",
+     "l": 324,
+     "r": 342
+    }
+   ],
+   "trunc": [
+    {
+     "text": "unread",
+     "w": 1,
+     "need": 38,
+     "ell": "clip"
+    },
+    {
+     "text": "Danny Okafor-Whitfield",
+     "w": 200,
+     "need": 224,
+     "ell": "ellipsis"
+    }
+   ],
+   "small": [],
+   "covered": [
+    {
+     "text": "🏋️\nTraining",
+     "by": "❤️\nMum\nAnswers on the first ring\nFine\n🧔",
+     "byCls": "flex-1 overflow-y-auto p-2.5 space-y-2"
+    },
+    {
+     "text": "📱\nPhone\n3\nunread",
+     "by": "❤️\nMum\nAnswers on the first ring\nFine\n🧔",
+     "byCls": "flex-1 overflow-y-auto p-2.5 space-y-2"
+    },
+    {
+     "text": "🚪 Retire",
+     "by": "🧓\nGrandad\nShouts at the telly on your b",
+     "byCls": "w-full text-left rounded-xl bg-white/5 border bord"
+    },
+    {
+     "text": "🔄 New Career",
+     "by": "🧓\nGrandad\nShouts at the telly on your b",
+     "byCls": "w-full text-left rounded-xl bg-white/5 border bord"
+    },
+    {
+     "text": "👥 Squad\nBy role\nThe plan: Squad player\n",
+     "by": "Put phone away",
+     "byCls": "min-h-11 text-[10px] font-bold text-white/50 hover"
+    },
+    {
+     "text": "Next Season",
+     "by": "1991 · age 17\n😐 50\n📶 🔋\n‹ Home\n👥 Cont",
+     "byCls": "fixed inset-0 z-50 flex items-center justify-cente"
+    }
+   ],
+   "boundary": false
+  },
+  {
+   "label": "phone news",
+   "step": 3,
+   "vw": 320,
+   "sw": 320,
+   "overflow": false,
+   "bad": [],
+   "off": [
+    {
+     "tag": "DIV",
+     "cls": "bg-card border border-border rounded-xl px-4 py-2 text-center shrink-0",
+     "text": "17\nAGE",
+     "l": 307,
+     "r": 359
+    },
+    {
+     "tag": "DIV",
+     "cls": "text-lg font-black",
+     "text": "17",
+     "l": 324,
+     "r": 342
+    },
+    {
+     "tag": "DIV",
+     "cls": "text-[9px] text-muted-foreground uppercase",
+     "text": "AGE",
+     "l": 324,
+     "r": 342
+    }
+   ],
+   "trunc": [
+    {
+     "text": "unread",
+     "w": 1,
+     "need": 38,
+     "ell": "clip"
+    },
+    {
+     "text": "Danny Okafor-Whitfield",
+     "w": 200,
+     "need": 224,
+     "ell": "ellipsis"
+    }
+   ],
+   "small": [],
+   "covered": [
+    {
+     "text": "🏋️\nTraining",
+     "by": "World football. Nothing about you in her",
+     "byCls": "flex-1 overflow-y-auto p-2.5 space-y-2"
+    },
+    {
+     "text": "📱\nPhone\n3\nunread",
+     "by": "World football. Nothing about you in her",
+     "byCls": "flex-1 overflow-y-auto p-2.5 space-y-2"
+    },
+    {
+     "text": "🚪 Retire",
+     "by": "World football. Nothing about you in her",
+     "byCls": "flex-1 overflow-y-auto p-2.5 space-y-2"
+    },
+    {
+     "text": "🔄 New Career",
+     "by": "World football. Nothing about you in her",
+     "byCls": "flex-1 overflow-y-auto p-2.5 space-y-2"
+    },
+    {
+     "text": "👥 Squad\nBy role\nThe plan: Squad player\n",
+     "by": "Put phone away",
+     "byCls": "min-h-11 text-[10px] font-bold text-white/50 hover"
+    },
+    {
+     "text": "Next Season",
+     "by": "1991 · age 17\n😐 50\n📶 🔋\n‹ Home\n📰 Spor",
+     "byCls": "fixed inset-0 z-50 flex items-center justify-cente"
+    }
+   ],
+   "boundary": false
+  },
+  {
+   "label": "phone column",
+   "step": 3,
+   "vw": 320,
+   "sw": 320,
+   "overflow": false,
+   "bad": [],
+   "off": [
+    {
+     "tag": "DIV",
+     "cls": "bg-card border border-border rounded-xl px-4 py-2 text-center shrink-0",
+     "text": "17\nAGE",
+     "l": 307,
+     "r": 359
+    },
+    {
+     "tag": "DIV",
+     "cls": "text-lg font-black",
+     "text": "17",
+     "l": 324,
+     "r": 342
+    },
+    {
+     "tag": "DIV",
+     "cls": "text-[9px] text-muted-foreground uppercase",
+     "text": "AGE",
+     "l": 324,
+     "r": 342
+    }
+   ],
+   "trunc": [
+    {
+     "text": "unread",
+     "w": 1,
+     "need": 38,
+     "ell": "clip"
+    },
+    {
+     "text": "Danny Okafor-Whitfield",
+     "w": 200,
+     "need": 224,
+     "ell": "ellipsis"
+    }
+   ],
+   "small": [],
+   "covered": [
+    {
+     "text": "🏋️\nTraining",
+     "by": "🧐\nOttoline Pemberton\nReserving judgemen",
+     "byCls": "flex-1 overflow-y-auto p-3 space-y-2.5"
+    },
+    {
+     "text": "📱\nPhone\n3\nunread",
+     "by": "🧐\nOttoline Pemberton\nReserving judgemen",
+     "byCls": "flex-1 overflow-y-auto p-3 space-y-2.5"
+    },
+    {
+     "text": "🚪 Retire",
+     "by": "He has written about you since the day y",
+     "byCls": "text-[10px] text-white/50"
+    },
+    {
+     "text": "🔄 New Career",
+     "by": "He has written about you since the day y",
+     "byCls": "text-[10px] text-white/50"
+    },
+    {
+     "text": "👥 Squad\nBy role\nThe plan: Squad player\n",
+     "by": "Put phone away",
+     "byCls": "min-h-11 text-[10px] font-bold text-white/50 hover"
+    },
+    {
+     "text": "Next Season",
+     "by": "1991 · age 17\n😐 50\n📶 🔋\n‹ Home\n🗞️ The",
+     "byCls": "fixed inset-0 z-50 flex items-center justify-cente"
+    }
+   ],
+   "boundary": false
+  },
+  {
+   "label": "phone bank",
+   "step": 3,
+   "vw": 320,
+   "sw": 320,
+   "overflow": false,
+   "bad": [],
+   "off": [
+    {
+     "tag": "DIV",
+     "cls": "bg-card border border-border rounded-xl px-4 py-2 text-center shrink-0",
+     "text": "17\nAGE",
+     "l": 307,
+     "r": 359
+    },
+    {
+     "tag": "DIV",
+     "cls": "text-lg font-black",
+     "text": "17",
+     "l": 324,
+     "r": 342
+    },
+    {
+     "tag": "DIV",
+     "cls": "text-[9px] text-muted-foreground uppercase",
+     "text": "AGE",
+     "l": 324,
+     "r": 342
+    }
+   ],
+   "trunc": [
+    {
+     "text": "unread",
+     "w": 1,
+     "need": 38,
+     "ell": "clip"
+    },
+    {
+     "text": "Danny Okafor-Whitfield",
+     "w": 200,
+     "need": 224,
+     "ell": "ellipsis"
+    }
+   ],
+   "small": [
+    {
+     "text": "‹ Home",
+     "w": 52,
+     "h": 25
+    }
+   ],
+   "covered": [
+    {
+     "text": "🏋️\nTraining",
+     "by": "EVERYTHING YOU HAVE",
+     "byCls": "text-[10px] uppercase tracking-widest text-white/4"
+    },
+    {
+     "text": "📱\nPhone\n3\nunread",
+     "by": "EVERYTHING YOU HAVE",
+     "byCls": "text-[10px] uppercase tracking-widest text-white/4"
+    },
+    {
+     "text": "🚪 Retire",
+     "by": "€0k\nin the account",
+     "byCls": "rounded-xl bg-white/5 p-2"
+    },
+    {
+     "text": "🔄 New Career",
+     "by": "€0k\nin the account\n€0k\nsavings\n€0k\ninves",
+     "byCls": "grid grid-cols-3 gap-2 text-center"
+    },
+    {
+     "text": "👥 Squad\nBy role\nThe plan: Squad player\n",
+     "by": "Put phone away",
+     "byCls": "min-h-11 text-[10px] font-bold text-white/50 hover"
+    },
+    {
+     "text": "Next Season",
+     "by": "1991 · age 17\n😐 50\n📶 🔋\n‹ Home\n🏦 Bank",
+     "byCls": "fixed inset-0 z-50 flex items-center justify-cente"
+    }
+   ],
+   "boundary": false
+  },
+  {
+   "label": "phone market",
+   "step": 3,
+   "vw": 320,
+   "sw": 320,
+   "overflow": false,
+   "bad": [],
+   "off": [
+    {
+     "tag": "DIV",
+     "cls": "bg-card border border-border rounded-xl px-4 py-2 text-center shrink-0",
+     "text": "17\nAGE",
+     "l": 307,
+     "r": 359
+    },
+    {
+     "tag": "DIV",
+     "cls": "text-lg font-black",
+     "text": "17",
+     "l": 324,
+     "r": 342
+    },
+    {
+     "tag": "DIV",
+     "cls": "text-[9px] text-muted-foreground uppercase",
+     "text": "AGE",
+     "l": 324,
+     "r": 342
+    }
+   ],
+   "trunc": [
+    {
+     "text": "unread",
+     "w": 1,
+     "need": 38,
+     "ell": "clip"
+    },
+    {
+     "text": "Danny Okafor-Whitfield",
+     "w": 200,
+     "need": 224,
+     "ell": "ellipsis"
+    }
+   ],
+   "small": [],
+   "covered": [],
+   "boundary": false
+  },
+  {
+   "label": "phone shop",
+   "step": 3,
+   "vw": 320,
+   "sw": 320,
+   "overflow": false,
+   "bad": [],
+   "off": [
+    {
+     "tag": "DIV",
+     "cls": "bg-card border border-border rounded-xl px-4 py-2 text-center shrink-0",
+     "text": "17\nAGE",
+     "l": 307,
+     "r": 359
+    },
+    {
+     "tag": "DIV",
+     "cls": "text-lg font-black",
+     "text": "17",
+     "l": 324,
+     "r": 342
+    },
+    {
+     "tag": "DIV",
+     "cls": "text-[9px] text-muted-foreground uppercase",
+     "text": "AGE",
+     "l": 324,
+     "r": 342
+    }
+   ],
+   "trunc": [
+    {
+     "text": "unread",
+     "w": 1,
+     "need": 38,
+     "ell": "clip"
+    },
+    {
+     "text": "Danny Okafor-Whitfield",
+     "w": 200,
+     "need": 224,
+     "ell": "ellipsis"
+    }
+   ],
+   "small": [],
+   "covered": [],
+   "boundary": false
+  },
+  {
+   "label": "phone arcade",
+   "step": 3,
+   "vw": 320,
+   "sw": 320,
+   "overflow": false,
+   "bad": [],
+   "off": [
+    {
+     "tag": "DIV",
+     "cls": "bg-card border border-border rounded-xl px-4 py-2 text-center shrink-0",
+     "text": "17\nAGE",
+     "l": 307,
+     "r": 359
+    },
+    {
+     "tag": "DIV",
+     "cls": "text-lg font-black",
+     "text": "17",
+     "l": 324,
+     "r": 342
+    },
+    {
+     "tag": "DIV",
+     "cls": "text-[9px] text-muted-foreground uppercase",
+     "text": "AGE",
+     "l": 324,
+     "r": 342
+    }
+   ],
+   "trunc": [
+    {
+     "text": "unread",
+     "w": 1,
+     "need": 38,
+     "ell": "clip"
+    },
+    {
+     "text": "Danny Okafor-Whitfield",
+     "w": 200,
+     "need": 224,
+     "ell": "ellipsis"
+    }
+   ],
+   "small": [],
+   "covered": [],
+   "boundary": false
+  },
+  {
+   "label": "phone cards",
+   "step": 3,
+   "vw": 320,
+   "sw": 320,
+   "overflow": false,
+   "bad": [],
+   "off": [
+    {
+     "tag": "DIV",
+     "cls": "bg-card border border-border rounded-xl px-4 py-2 text-center shrink-0",
+     "text": "17\nAGE",
+     "l": 307,
+     "r": 359
+    },
+    {
+     "tag": "DIV",
+     "cls": "text-lg font-black",
+     "text": "17",
+     "l": 324,
+     "r": 342
+    },
+    {
+     "tag": "DIV",
+     "cls": "text-[9px] text-muted-foreground uppercase",
+     "text": "AGE",
+     "l": 324,
+     "r": 342
+    }
+   ],
+   "trunc": [
+    {
+     "text": "unread",
+     "w": 1,
+     "need": 38,
+     "ell": "clip"
+    },
+    {
+     "text": "Danny Okafor-Whitfield",
+     "w": 200,
+     "need": 224,
+     "ell": "ellipsis"
+    }
+   ],
+   "small": [],
+   "covered": [],
+   "boundary": false
+  },
+  {
+   "label": "phone social",
+   "step": 3,
+   "vw": 320,
+   "sw": 320,
+   "overflow": false,
+   "bad": [],
+   "off": [
+    {
+     "tag": "DIV",
+     "cls": "bg-card border border-border rounded-xl px-4 py-2 text-center shrink-0",
+     "text": "17\nAGE",
+     "l": 307,
+     "r": 359
+    },
+    {
+     "tag": "DIV",
+     "cls": "text-lg font-black",
+     "text": "17",
+     "l": 324,
+     "r": 342
+    },
+    {
+     "tag": "DIV",
+     "cls": "text-[9px] text-muted-foreground uppercase",
+     "text": "AGE",
+     "l": 324,
+     "r": 342
+    }
+   ],
+   "trunc": [
+    {
+     "text": "unread",
+     "w": 1,
+     "need": 38,
+     "ell": "clip"
+    },
+    {
+     "text": "Danny Okafor-Whitfield",
+     "w": 200,
+     "need": 224,
+     "ell": "ellipsis"
+    }
+   ],
+   "small": [],
+   "covered": [],
+   "boundary": false
+  },
+  {
+   "label": "phone player",
+   "step": 3,
+   "vw": 320,
+   "sw": 320,
+   "overflow": false,
+   "bad": [],
+   "off": [
+    {
+     "tag": "DIV",
+     "cls": "bg-card border border-border rounded-xl px-4 py-2 text-center shrink-0",
+     "text": "17\nAGE",
+     "l": 307,
+     "r": 359
+    },
+    {
+     "tag": "DIV",
+     "cls": "text-lg font-black",
+     "text": "17",
+     "l": 324,
+     "r": 342
+    },
+    {
+     "tag": "DIV",
+     "cls": "text-[9px] text-muted-foreground uppercase",
+     "text": "AGE",
+     "l": 324,
+     "r": 342
+    }
+   ],
+   "trunc": [
+    {
+     "text": "unread",
+     "w": 1,
+     "need": 38,
+     "ell": "clip"
+    },
+    {
+     "text": "Danny Okafor-Whitfield",
+     "w": 200,
+     "need": 224,
+     "ell": "ellipsis"
+    }
+   ],
+   "small": [],
+   "covered": [],
+   "boundary": false
+  },
+  {
+   "label": "phone peaks",
+   "step": 3,
+   "vw": 320,
+   "sw": 320,
+   "overflow": false,
+   "bad": [],
+   "off": [
+    {
+     "tag": "DIV",
+     "cls": "bg-card border border-border rounded-xl px-4 py-2 text-center shrink-0",
+     "text": "17\nAGE",
+     "l": 307,
+     "r": 359
+    },
+    {
+     "tag": "DIV",
+     "cls": "text-lg font-black",
+     "text": "17",
+     "l": 324,
+     "r": 342
+    },
+    {
+     "tag": "DIV",
+     "cls": "text-[9px] text-muted-foreground uppercase",
+     "text": "AGE",
+     "l": 324,
+     "r": 342
+    }
+   ],
+   "trunc": [
+    {
+     "text": "unread",
+     "w": 1,
+     "need": 38,
+     "ell": "clip"
+    },
+    {
+     "text": "Danny Okafor-Whitfield",
+     "w": 200,
+     "need": 224,
+     "ell": "ellipsis"
+    }
+   ],
+   "small": [],
+   "covered": [],
+   "boundary": false
+  },
+  {
+   "label": "phone life",
+   "step": 3,
+   "vw": 320,
+   "sw": 320,
+   "overflow": false,
+   "bad": [],
+   "off": [
+    {
+     "tag": "DIV",
+     "cls": "bg-card border border-border rounded-xl px-4 py-2 text-center shrink-0",
+     "text": "17\nAGE",
+     "l": 307,
+     "r": 359
+    },
+    {
+     "tag": "DIV",
+     "cls": "text-lg font-black",
+     "text": "17",
+     "l": 324,
+     "r": 342
+    },
+    {
+     "tag": "DIV",
+     "cls": "text-[9px] text-muted-foreground uppercase",
+     "text": "AGE",
+     "l": 324,
+     "r": 342
+    }
+   ],
+   "trunc": [
+    {
+     "text": "unread",
+     "w": 1,
+     "need": 38,
+     "ell": "clip"
+    },
+    {
+     "text": "Danny Okafor-Whitfield",
+     "w": 200,
+     "need": 224,
+     "ell": "ellipsis"
+    }
+   ],
+   "small": [],
+   "covered": [],
+   "boundary": false
+  },
+  {
+   "label": "week-open",
+   "step": 3,
+   "vw": 320,
+   "sw": 320,
+   "overflow": false,
+   "bad": [],
+   "off": [],
+   "trunc": [
+    {
+     "text": "Drill ready",
+     "w": 1,
+     "need": 70,
+     "ell": "clip"
+    },
+    {
+     "text": "unread",
+     "w": 1,
+     "need": 38,
+     "ell": "clip"
+    },
+    {
+     "text": "Danny Okafor-Whitfield",
+     "w": 200,
+     "need": 224,
+     "ell": "ellipsis"
+    }
+   ],
+   "small": [],
+   "covered": [
+    {
+     "text": "🏋️\nTraining\nDrill ready",
+     "by": "Your season was played the moment you pr",
+     "byCls": "leading-relaxed text-muted-foreground"
+    },
+    {
+     "text": "📱\nPhone\n3\nunread",
+     "by": "Your season was played the moment you pr",
+     "byCls": "leading-relaxed text-muted-foreground"
+    },
+    {
+     "text": "🚪 Retire",
+     "by": "Earlier-season tables use verified leagu",
+     "byCls": "leading-relaxed text-muted-foreground"
+    },
+    {
+     "text": "🔄 New Career",
+     "by": "Earlier-season tables use verified leagu",
+     "byCls": "leading-relaxed text-muted-foreground"
+    },
+    {
+     "text": "?",
+     "by": "How the Season Centre works\n\nYour season",
+     "byCls": "w-full max-w-lg space-y-3 rounded-2xl border borde"
+    },
+    {
+     "text": "Back to the papers",
+     "by": "How the Season Centre works\n\nYour season",
+     "byCls": "w-full max-w-lg space-y-3 rounded-2xl border borde"
+    }
+   ],
+   "boundary": false
+  },
+  {
+   "label": "phase newspaper #1",
+   "step": 4,
+   "vw": 320,
+   "sw": 320,
+   "overflow": false,
+   "bad": [],
+   "off": [],
+   "trunc": [
+    {
+     "text": "Drill ready",
+     "w": 1,
+     "need": 70,
+     "ell": "clip"
+    },
+    {
+     "text": "unread",
+     "w": 1,
+     "need": 38,
+     "ell": "clip"
+    },
+    {
+     "text": "Danny Okafor-Whitfield",
+     "w": 200,
+     "need": 224,
+     "ell": "ellipsis"
+    }
+   ],
+   "small": [],
+   "covered": [
+    {
+     "text": "🏋️\nTraining\nDrill ready",
+     "by": "📺 Current squad",
+     "byCls": "min-w-0 flex-1 text-sm font-black"
+    },
+    {
+     "text": "📱\nPhone\n3\nunread",
+     "by": "Back to the papers",
+     "byCls": "min-h-11 rounded-lg border border-border px-3 text"
+    },
+    {
+     "text": "🚪 Retire",
+     "by": "Your current squad",
+     "byCls": "text-sm font-bold outline-none"
+    },
+    {
+     "text": "🔄 New Career",
+     "by": "Your current squad",
+     "byCls": "text-sm font-bold outline-none"
+    }
+   ],
+   "boundary": false
+  },
+  {
+   "label": "phase newspaper #2",
+   "step": 5,
+   "vw": 320,
+   "sw": 320,
+   "overflow": false,
+   "bad": [],
+   "off": [],
+   "trunc": [
+    {
+     "text": "Drill ready",
+     "w": 1,
+     "need": 70,
+     "ell": "clip"
+    },
+    {
+     "text": "unread",
+     "w": 1,
+     "need": 38,
+     "ell": "clip"
+    },
+    {
+     "text": "Danny Okafor-Whitfield",
+     "w": 200,
+     "need": 224,
+     "ell": "ellipsis"
+    }
+   ],
+   "small": [],
+   "covered": [
+    {
+     "text": "🏋️\nTraining\nDrill ready",
+     "by": "📺 Current squad",
+     "byCls": "min-w-0 flex-1 text-sm font-black"
+    },
+    {
+     "text": "📱\nPhone\n3\nunread",
+     "by": "Back to the papers",
+     "byCls": "min-h-11 rounded-lg border border-border px-3 text"
+    },
+    {
+     "text": "🚪 Retire",
+     "by": "Your current squad",
+     "byCls": "text-sm font-bold outline-none"
+    },
+    {
+     "text": "🔄 New Career",
+     "by": "Your current squad",
+     "byCls": "text-sm font-bold outline-none"
+    }
+   ],
+   "boundary": false
+  },
+  {
+   "label": "after reload",
+   "step": 5,
+   "vw": 320,
+   "sw": 320,
+   "overflow": false,
+   "bad": [],
+   "off": [],
+   "trunc": [
+    {
+     "text": "Drill ready",
+     "w": 1,
+     "need": 70,
+     "ell": "clip"
+    },
+    {
+     "text": "unread",
+     "w": 1,
+     "need": 38,
+     "ell": "clip"
+    },
+    {
+     "text": "Danny Okafor-Whitfield",
+     "w": 200,
+     "need": 224,
+     "ell": "ellipsis"
+    }
+   ],
+   "small": [],
+   "covered": [],
+   "boundary": false
+  },
+  {
+   "label": "phase ballon_dor #1",
+   "step": 7,
+   "vw": 320,
+   "sw": 320,
+   "overflow": false,
+   "bad": [],
+   "off": [],
+   "trunc": [
+    {
+     "text": "Danny Okafor-Whitfield",
+     "w": 200,
+     "need": 224,
+     "ell": "ellipsis"
+    }
+   ],
+   "small": [],
+   "covered": [],
+   "boundary": false
+  },
+  {
+   "label": "phase random_events #1",
+   "step": 17,
+   "vw": 320,
+   "sw": 320,
+   "overflow": false,
+   "bad": [],
+   "off": [],
+   "trunc": [],
+   "small": [],
+   "covered": [
+    {
+     "text": "🎭\nThe Showman\nFame comes easy: follower",
+     "by": "🧘 Stay off social media",
+     "byCls": "group toast group-[.toaster]:bg-background group-["
+    }
+   ],
+   "boundary": false
+  },
+  {
+   "label": "phase random_events #2",
+   "step": 18,
+   "vw": 320,
+   "sw": 320,
+   "overflow": false,
+   "bad": [],
+   "off": [],
+   "trunc": [
+    {
+     "text": "Drill ready",
+     "w": 1,
+     "need": 70,
+     "ell": "clip"
+    },
+    {
+     "text": "unread",
+     "w": 1,
+     "need": 38,
+     "ell": "clip"
+    },
+    {
+     "text": "Danny Okafor-Whitfield",
+     "w": 200,
+     "need": 224,
+     "ell": "ellipsis"
+    }
+   ],
+   "small": [],
+   "covered": [],
+   "boundary": false
+  },
+  {
+   "label": "phase random_events #3",
+   "step": 19,
+   "vw": 320,
+   "sw": 320,
+   "overflow": false,
+   "bad": [],
+   "off": [],
+   "trunc": [
+    {
+     "text": "Danny Okafor-Whitfield",
+     "w": 200,
+     "need": 224,
+     "ell": "ellipsis"
+    }
+   ],
+   "small": [],
+   "covered": [],
+   "boundary": false
+  },
+  {
+   "label": "phase transfer_window #1",
+   "step": 20,
+   "vw": 320,
+   "sw": 320,
+   "overflow": false,
+   "bad": [],
+   "off": [],
+   "trunc": [],
+   "small": [],
+   "covered": [
+    {
+     "text": "Continue at Orlando Pirates →",
+     "by": "The mascot declares victory by forfeit",
+     "byCls": "group toast group-[.toaster]:bg-background group-["
+    },
+    {
+     "text": "Your next season\nRoles, contracts, playi",
+     "by": "Pace +2 next season, Morale +3, an €80k ",
+     "byCls": ""
+    }
+   ],
+   "boundary": false
+  },
+  {
+   "label": "after reload",
+   "step": 21,
+   "vw": 320,
+   "sw": 320,
+   "overflow": false,
+   "bad": [],
+   "off": [
+    {
+     "tag": "DIV",
+     "cls": "bg-card border border-border rounded-xl px-4 py-2 text-center shrink-0",
+     "text": "18\nAGE",
+     "l": 307,
+     "r": 361
+    },
+    {
+     "tag": "DIV",
+     "cls": "text-lg font-black",
+     "text": "18",
+     "l": 324,
+     "r": 344
+    },
+    {
+     "tag": "DIV",
+     "cls": "text-[9px] text-muted-foreground uppercase",
+     "text": "AGE",
+     "l": 324,
+     "r": 344
+    }
+   ],
+   "trunc": [
+    {
+     "text": "Drill ready",
+     "w": 1,
+     "need": 70,
+     "ell": "clip"
+    },
+    {
+     "text": "unread",
+     "w": 1,
+     "need": 38,
+     "ell": "clip"
+    },
+    {
+     "text": "Danny Okafor-Whitfield",
+     "w": 200,
+     "need": 224,
+     "ell": "ellipsis"
+    }
+   ],
+   "small": [],
+   "covered": [],
+   "boundary": false
+  },
+  {
+   "label": "final",
+   "step": 21,
+   "vw": 320,
+   "sw": 320,
+   "overflow": false,
+   "bad": [],
+   "off": [
+    {
+     "tag": "DIV",
+     "cls": "bg-card border border-border rounded-xl px-4 py-2 text-center shrink-0",
+     "text": "18\nAGE",
+     "l": 307,
+     "r": 361
+    },
+    {
+     "tag": "DIV",
+     "cls": "text-lg font-black",
+     "text": "18",
+     "l": 324,
+     "r": 344
+    },
+    {
+     "tag": "DIV",
+     "cls": "text-[9px] text-muted-foreground uppercase",
+     "text": "AGE",
+     "l": 324,
+     "r": 344
+    }
+   ],
+   "trunc": [
+    {
+     "text": "Drill ready",
+     "w": 1,
+     "need": 70,
+     "ell": "clip"
+    },
+    {
+     "text": "unread",
+     "w": 1,
+     "need": 38,
+     "ell": "clip"
+    },
+    {
+     "text": "Danny Okafor-Whitfield",
+     "w": 200,
+     "need": 224,
+     "ell": "ellipsis"
+    }
+   ],
+   "small": [],
+   "covered": [],
+   "boundary": false
+  }
+ ],
+ "explore": [
+  {
+   "name": "ambition-s0",
+   "season": 0,
+   "label": "🎯 Season target Choose a personal challenge for next season",
+   "step": 3,
+   "opened": "Your season target A personal best to chase at Red Star Belgrade. Choose one before you play. Beat your saved best to bank +1 training with next season's growth. It doesn't change this season's selection or stats. Example: your best is 12 goals, so the next target is 13. A serious injury or a year without appearances interrupts it. Moving clubs cancels it. Score 5 club goals Reward: +1 Shooting with next season's growth Make 3 club assists Reward: +1 Passing with next season's growth Earn a 7.0 ",
+   "shot": "c320-011-ambition-s0.jpg",
+   "audit": {
+    "vw": 320,
+    "sw": 320,
+    "overflow": false,
+    "bad": [],
+    "off": [
+     {
+      "tag": "DIV",
+      "cls": "bg-card border border-border rounded-xl px-4 py-2 text-center shrink-0",
+      "text": "17\nAGE",
+      "l": 307,
+      "r": 359
+     },
+     {
+      "tag": "DIV",
+      "cls": "text-lg font-black",
+      "text": "17",
+      "l": 324,
+      "r": 342
+     },
+     {
+      "tag": "DIV",
+      "cls": "text-[9px] text-muted-foreground uppercase",
+      "text": "AGE",
+      "l": 324,
+      "r": 342
+     }
+    ],
+    "trunc": [],
+    "small": [],
+    "covered": [
+     {
+      "text": "👥 Squad\nBy role\nThe plan: Squad player\n",
+      "by": "Your season target\n\nA personal best to c",
+      "byCls": "fixed left-[50%] top-[50%] z-50 grid w-full max-w-"
+     },
+     {
+      "text": "🎯 Season target\nChoose a personal chall",
+      "by": "Your season target\n\nA personal best to c",
+      "byCls": "fixed left-[50%] top-[50%] z-50 grid w-full max-w-"
+     },
+     {
+      "text": "🏃 Preseason plan\nBalanced, or choose yo",
+      "by": "Reward: +1 Shooting with next season's g",
+      "byCls": "block text-xs text-muted-foreground"
+     },
+     {
+      "text": "Your next season\nRoles, contracts, playi",
+      "by": "Reward: +1 Passing with next season's gr",
+      "byCls": "block text-xs text-muted-foreground"
+     },
+     {
+      "text": "Next Season",
+      "by": "DIV",
+      "byCls": "fixed inset-0 z-50 bg-black/80 data-[state=open]:a"
+     },
+     {
+      "text": "Retire",
+      "by": "DIV",
+      "byCls": "fixed inset-0 z-50 bg-black/80 data-[state=open]:a"
+     }
+    ],
+    "boundary": false
+   },
+   "afterPick": null,
+   "interact": "Make 3 club assists Reward: +1 Passing with next season's gr",
+   "closed": {
+    "ok": true,
+    "tried": []
+   },
+   "scroll": {
+    "y0": 1030,
+    "y1": 290
+   },
+   "saveChanged": true
+  },
+  {
+   "name": "preseason-s0",
+   "season": 0,
+   "label": "🏃 Preseason plan Balanced, or choose your next-season workl",
+   "step": 3,
+   "opened": "Set your preseason workload One season at Red Star Belgrade. A simulated choice, with a tradeoff. Development push adds 1 passing point after natural growth, with 3 percentage points more injury risk. Recovery focus subtracts 1 passing point after growth, with 4 percentage points less risk. Existing injury and attribute limits still apply. Example: a 20% injury chance becomes 23% with development or 16% with recovery. A serious injury or no appearances interrupts the development modifier. Moving",
+   "shot": "c320-013-preseason-s0.jpg",
+   "audit": {
+    "vw": 320,
+    "sw": 320,
+    "overflow": false,
+    "bad": [],
+    "off": [
+     {
+      "tag": "DIV",
+      "cls": "bg-card border border-border rounded-xl px-4 py-2 text-center shrink-0",
+      "text": "17\nAGE",
+      "l": 307,
+      "r": 359
+     },
+     {
+      "tag": "DIV",
+      "cls": "text-lg font-black",
+      "text": "17",
+      "l": 324,
+      "r": 342
+     },
+     {
+      "tag": "DIV",
+      "cls": "text-[9px] text-muted-foreground uppercase",
+      "text": "AGE",
+      "l": 324,
+      "r": 342
+     }
+    ],
+    "trunc": [],
+    "small": [],
+    "covered": [
+     {
+      "text": "👥 Squad\nBy role\nThe plan: Squad player\n",
+      "by": "Development push adds 1 passing point af",
+      "byCls": "text-sm"
+     },
+     {
+      "text": "🎯 Season target\nMake 3 club assists\n199",
+      "by": "Example: a 20% injury chance becomes 23%",
+      "byCls": "text-xs text-muted-foreground"
+     },
+     {
+      "text": "🏃 Preseason plan\nBalanced, or choose yo",
+      "by": "Example: a 20% injury chance becomes 23%",
+      "byCls": "text-xs text-muted-foreground"
+     },
+     {
+      "text": "Your next season\nRoles, contracts, playi",
+      "by": "+1 passing, higher injury risk",
+      "byCls": "block text-xs text-muted-foreground"
+     },
+     {
+      "text": "Next Season",
+      "by": "DIV",
+      "byCls": "fixed inset-0 z-50 bg-black/80 data-[state=open]:a"
+     },
+     {
+      "text": "Retire",
+      "by": "DIV",
+      "byCls": "fixed inset-0 z-50 bg-black/80 data-[state=open]:a"
+     }
+    ],
+    "boundary": false
+   },
+   "afterPick": null,
+   "interact": "Development push +1 passing, higher injury risk",
+   "closed": {
+    "ok": true,
+    "tried": []
+   },
+   "scroll": {
+    "y0": 290,
+    "y1": 290
+   },
+   "saveChanged": true
+  },
+  {
+   "name": "squad-s0",
+   "season": 0,
+   "label": "👥 Squad By role The plan: Squad player On our ratings 4th o",
+   "step": 3,
+   "opened": "Red Star Belgrade 1992/93 ROLES ONLY ? How the squad works This screen shows what the game already decided. Nothing here changes how many games you play. Your rank is where your rating puts you in your position group at the club. A teammate on the same rating counts as ahead of you. The eleven is the highest rated keeper, four defenders, three midfielders and three forwards on our ratings. It is a picture of the squad, not the manager's team sheet. Trust is how much of the league season the mana",
+   "shot": "c320-014-squad-s0.jpg",
+   "audit": {
+    "vw": 320,
+    "sw": 320,
+    "overflow": false,
+    "bad": [],
+    "off": [
+     {
+      "tag": "DIV",
+      "cls": "bg-card border border-border rounded-xl px-4 py-2 text-center shrink-0",
+      "text": "17\nAGE",
+      "l": 307,
+      "r": 359
+     },
+     {
+      "tag": "DIV",
+      "cls": "text-lg font-black",
+      "text": "17",
+      "l": 324,
+      "r": 342
+     },
+     {
+      "tag": "DIV",
+      "cls": "text-[9px] text-muted-foreground uppercase",
+      "text": "AGE",
+      "l": 324,
+      "r": 342
+     }
+    ],
+    "trunc": [],
+    "small": [],
+    "covered": [
+     {
+      "text": "👥 Squad\nBy role\nThe plan: Squad player\n",
+      "by": "Your rank is where your rating puts you ",
+      "byCls": ""
+     },
+     {
+      "text": "🎯 Season target\nMake 3 club assists\n199",
+      "by": "Trust is how much of the league season t",
+      "byCls": ""
+     },
+     {
+      "text": "🏃 Preseason plan\nDevelopment push · 199",
+      "by": "Trust is how much of the league season t",
+      "byCls": ""
+     },
+     {
+      "text": "Your next season\nRoles, contracts, playi",
+      "by": "Trust is how much of the league season t",
+      "byCls": ""
+     },
+     {
+      "text": "Next Season",
+      "by": "← Back",
+      "byCls": "min-h-[44px] rounded-xl border border-border px-4 "
+     },
+     {
+      "text": "Retire",
+      "by": "← Back",
+      "byCls": "min-h-[44px] rounded-xl border border-border px-4 "
+     }
+    ],
+    "boundary": false
+   },
+   "closed": {
+    "ok": true,
+    "tried": [
+     "← Back",
+     "Escape"
+    ]
+   },
+   "scroll": {
+    "y0": 290,
+    "y1": 290
+   },
+   "saveChanged": false
+  },
+  {
+   "name": "press-s0",
+   "season": 0,
+   "label": null,
+   "step": 3,
+   "missing": true
+  },
+  {
+   "name": "programme-s0",
+   "season": 0,
+   "label": "Your next season Roles, contracts, playing time and your com",
+   "step": 3,
+   "opened": "? Close Your career plans: how it works Choices for your simulated career. Check the context before choosing. Pick a tile, read its effect and tradeoff, then choose an available option. Each plan belongs to the club and season shown in its detail. Some choices need a transfer offer, a loan, an injury return or the captain's armband. An unavailable choice explains what is missing. A plan is not a guaranteed result. The detail shows your current choice and the outcome your career actually kept. Op",
+   "shot": "c320-015-programme-s0.jpg",
+   "audit": {
+    "vw": 320,
+    "sw": 320,
+    "overflow": false,
+    "bad": [],
+    "off": [
+     {
+      "tag": "DIV",
+      "cls": "bg-card border border-border rounded-xl px-4 py-2 text-center shrink-0",
+      "text": "17\nAGE",
+      "l": 307,
+      "r": 359
+     },
+     {
+      "tag": "DIV",
+      "cls": "text-lg font-black",
+      "text": "17",
+      "l": 324,
+      "r": 342
+     },
+     {
+      "tag": "DIV",
+      "cls": "text-[9px] text-muted-foreground uppercase",
+      "text": "AGE",
+      "l": 324,
+      "r": 342
+     }
+    ],
+    "trunc": [],
+    "small": [],
+    "covered": [
+     {
+      "text": "👥 Squad\nBy role\nThe plan: Squad player\n",
+      "by": "Pick a tile, read its effect and tradeof",
+      "byCls": ""
+     },
+     {
+      "text": "🎯 Season target\nMake 3 club assists\n199",
+      "by": "Some choices need a transfer offer, a lo",
+      "byCls": ""
+     },
+     {
+      "text": "🏃 Preseason plan\nDevelopment push · 199",
+      "by": "A plan is not a guaranteed result. The d",
+      "byCls": ""
+     },
+     {
+      "text": "Your next season\nRoles, contracts, playi",
+      "by": "Pick a tile, read its effect and tradeof",
+      "byCls": "space-y-3"
+     },
+     {
+      "text": "Next Season",
+      "by": "Pick a tile, read its effect and tradeof",
+      "byCls": "space-y-3"
+     },
+     {
+      "text": "Retire",
+      "by": "Pick a tile, read its effect and tradeof",
+      "byCls": "space-y-3"
+     }
+    ],
+    "boundary": false
+   },
+   "tileText": "? Close Your career plans: how it works Choices for your simulated career. Check the context before choosing. Pick a tile, read its effect and tradeoff, then choose an available option. Each plan belongs to the club and season shown in its detail. Some choices need a transfer offer, a loan, an injury return or the captain's armband. An unavailable choice explains what is missing. A plan is not a guaranteed result. The detail shows your current choice and the outcome your career actually kept. Op",
+   "optText": "? Close Your career plans: how it works Choices for your simulated career. Check the context before choosing. Pick a tile, read its effect and tradeoff, then choose an available option. Each plan belongs to the club and season shown in its detail. Some choices need a transfer offer, a loan, an injury return or the captain's armband. An unavailable choice explains what is missing. A plan is not a guaranteed result. The detail shows your current choice and the outcome your career actually kept. Op",
+   "interact": [
+    null,
+    null
+   ],
+   "closed": {
+    "ok": true,
+    "tried": [
+     "Close"
+    ]
+   },
+   "scroll": {
+    "y0": 290,
+    "y1": 290
+   },
+   "saveChanged": false
+  },
+  {
+   "name": "mentor-s0",
+   "season": 0,
+   "label": null,
+   "step": 3,
+   "missing": true
+  },
+  {
+   "name": "records-s0",
+   "season": 0,
+   "label": null,
+   "step": 3,
+   "missing": true
+  },
+  {
+   "name": "attributes-s0",
+   "season": 0,
+   "label": "Full attributes 180 cm · 75 kg · every number under the six",
+   "step": 3,
+   "opened": null,
+   "shot": "c320-018-attributes-s0.jpg",
+   "audit": {
+    "vw": 320,
+    "sw": 320,
+    "overflow": false,
+    "bad": [],
+    "off": [],
+    "trunc": [
+     {
+      "text": "Danny Okafor-Whitfield, full attributes",
+      "w": 223,
+      "need": 293,
+      "ell": "ellipsis"
+     }
+    ],
+    "small": [],
+    "covered": [],
+    "boundary": false
+   },
+   "closed": {
+    "ok": true,
+    "tried": [
+     "← Back"
+    ]
+   },
+   "scroll": {
+    "y0": 290,
+    "y1": 193
+   },
+   "saveChanged": false
+  },
+  {
+   "name": "ratings-s0",
+   "season": 0,
+   "label": "📈 Ratings",
+   "step": 3,
+   "opened": "📈 Season Ratings ? Close Read your saved season ratings, compare two seasons or check recorded availability. Compare seasons Availability Two saved senior seasons unlock comparison. No senior seasons yet. Your ratings show up here after your first season as a pro.",
+   "shot": "c320-019-ratings-s0.jpg",
+   "audit": {
+    "vw": 320,
+    "sw": 320,
+    "overflow": false,
+    "bad": [],
+    "off": [
+     {
+      "tag": "DIV",
+      "cls": "bg-card border border-border rounded-xl px-4 py-2 text-center shrink-0",
+      "text": "17\nAGE",
+      "l": 307,
+      "r": 359
+     },
+     {
+      "tag": "DIV",
+      "cls": "text-lg font-black",
+      "text": "17",
+      "l": 324,
+      "r": 342
+     },
+     {
+      "tag": "DIV",
+      "cls": "text-[9px] text-muted-foreground uppercase",
+      "text": "AGE",
+      "l": 324,
+      "r": 342
+     }
+    ],
+    "trunc": [],
+    "small": [],
+    "covered": [
+     {
+      "text": "📈 Ratings",
+      "by": "Availability",
+      "byCls": "min-h-11 rounded-xl border border-border px-3 py-2"
+     },
+     {
+      "text": "📖 Career Story",
+      "by": "Two saved senior seasons unlock comparis",
+      "byCls": "mb-3 text-xs text-muted-foreground"
+     },
+     {
+      "text": "Next Season",
+      "by": "DIV",
+      "byCls": "fixed inset-0 z-50 bg-black/80 data-[state=open]:a"
+     },
+     {
+      "text": "Retire",
+      "by": "DIV",
+      "byCls": "fixed inset-0 z-50 bg-black/80 data-[state=open]:a"
+     },
+     {
+      "text": "📺",
+      "by": "DIV",
+      "byCls": "fixed inset-0 z-50 bg-black/80 data-[state=open]:a"
+     }
+    ],
+    "boundary": false
+   },
+   "closed": {
+    "ok": true,
+    "tried": [
+     "Close"
+    ]
+   },
+   "scroll": {
+    "y0": 193,
+    "y1": 2011
+   },
+   "saveChanged": false
+  },
+  {
+   "name": "story-s0",
+   "season": 0,
+   "label": "📖 Career Story",
+   "step": 3,
+   "opened": "📖 Career Story Your recorded moments, one season at a time. 1990 Enyimba Youth Age 16 · 1 moment 1991 NOW Red Star Belgrade Age 17 · 3 moments Back to your career Close",
+   "shot": "c320-020-story-s0.jpg",
+   "audit": {
+    "vw": 320,
+    "sw": 320,
+    "overflow": false,
+    "bad": [],
+    "off": [
+     {
+      "tag": "DIV",
+      "cls": "bg-card border border-border rounded-xl px-4 py-2 text-center shrink-0",
+      "text": "17\nAGE",
+      "l": 307,
+      "r": 359
+     },
+     {
+      "tag": "DIV",
+      "cls": "text-lg font-black",
+      "text": "17",
+      "l": 324,
+      "r": 342
+     },
+     {
+      "tag": "DIV",
+      "cls": "text-[9px] text-muted-foreground uppercase",
+      "text": "AGE",
+      "l": 324,
+      "r": 342
+     }
+    ],
+    "trunc": [],
+    "small": [],
+    "covered": [
+     {
+      "text": "📈 Ratings",
+      "by": "1990\nEnyimba Youth\nAge 16 · 1 moment\n199",
+      "byCls": "grid grid-cols-3 sm:grid-cols-4 gap-2"
+     },
+     {
+      "text": "📖 Career Story",
+      "by": "1990\nEnyimba Youth\nAge 16 · 1 moment\n199",
+      "byCls": "grid grid-cols-3 sm:grid-cols-4 gap-2"
+     },
+     {
+      "text": "Next Season",
+      "by": "DIV",
+      "byCls": "fixed inset-0 z-50 bg-black/80 data-[state=open]:a"
+     },
+     {
+      "text": "Retire",
+      "by": "DIV",
+      "byCls": "fixed inset-0 z-50 bg-black/80 data-[state=open]:a"
+     },
+     {
+      "text": "📺",
+      "by": "DIV",
+      "byCls": "fixed inset-0 z-50 bg-black/80 data-[state=open]:a"
+     }
+    ],
+    "boundary": false
+   },
+   "closed": {
+    "ok": true,
+    "tried": [
+     "Back to your career"
+    ]
+   },
+   "scroll": {
+    "y0": 2011,
+    "y1": 2011
+   },
+   "saveChanged": false
+  },
+  {
+   "name": "trophy-s0",
+   "season": 0,
+   "label": "🏆 0 Leagues",
+   "step": 3,
+   "opened": "‹ Back League titles ? No wins recorded here yet.",
+   "shot": "c320-021-trophy-s0.jpg",
+   "audit": {
+    "vw": 320,
+    "sw": 320,
+    "overflow": false,
+    "bad": [],
+    "off": [
+     {
+      "tag": "DIV",
+      "cls": "bg-card border border-border rounded-xl px-4 py-2 text-center shrink-0",
+      "text": "17\nAGE",
+      "l": 307,
+      "r": 359
+     },
+     {
+      "tag": "DIV",
+      "cls": "text-lg font-black",
+      "text": "17",
+      "l": 324,
+      "r": 342
+     },
+     {
+      "tag": "DIV",
+      "cls": "text-[9px] text-muted-foreground uppercase",
+      "text": "AGE",
+      "l": 324,
+      "r": 342
+     }
+    ],
+    "trunc": [],
+    "small": [],
+    "covered": [
+     {
+      "text": "🏆\n0\nLeagues",
+      "by": "‹ Back",
+      "byCls": "min-h-11 rounded-lg bg-muted/30 px-3 text-xs font-"
+     },
+     {
+      "text": "🏆\n0\nCups",
+      "by": "‹ Back\nLeague titles\n?",
+      "byCls": "flex shrink-0 items-center gap-2 border-b border-b"
+     },
+     {
+      "text": "⭐\n0\nUCL",
+      "by": "‹ Back\nLeague titles\n?",
+      "byCls": "flex shrink-0 items-center gap-2 border-b border-b"
+     },
+     {
+      "text": "🌍\n0\nWorld Cup",
+      "by": "‹ Back\nLeague titles\n?\n\nNo wins recorded",
+      "byCls": "fixed inset-0 z-50 flex items-center justify-cente"
+     },
+     {
+      "text": "🌐\n0\nContinental",
+      "by": "‹ Back\nLeague titles\n?\n\nNo wins recorded",
+      "byCls": "fixed inset-0 z-50 flex items-center justify-cente"
+     },
+     {
+      "text": "🏅\n0\nBallon d'Or",
+      "by": "‹ Back\nLeague titles\n?\n\nNo wins recorded",
+      "byCls": "fixed inset-0 z-50 flex items-center justify-cente"
+     }
+    ],
+    "boundary": false
+   },
+   "closed": {
+    "ok": true,
+    "tried": [
+     "‹ Back"
+    ]
+   },
+   "scroll": {
+    "y0": 2011,
+    "y1": 1634
+   },
+   "saveChanged": false
+  },
+  {
+   "name": "replays-s0",
+   "season": 0,
+   "label": null,
+   "step": 3,
+   "missing": true
+  },
+  {
+   "name": "training-s0",
+   "season": 0,
+   "label": "🏋️ Training Drill ready",
+   "step": 3,
+   "opened": "🏋️ Training Ground ? Close Tap cones in order with as few slips as possible. Sprint Burst gives you five seconds to tap the track. Pick five penalty spots, or watch the tell and dive for five keeper shots. Hit eight passing gates before they close. Pause or opening these rules freezes the drill, including a shot reveal. Leaving the tab pauses it too. Close the rules, then choose Resume practice to carry on. Drills and Close discard the unfinished run. One bank per season: 50 earns +1 to the sho",
+   "shot": "c320-022-training-s0.jpg",
+   "audit": {
+    "vw": 320,
+    "sw": 320,
+    "overflow": false,
+    "bad": [],
+    "off": [
+     {
+      "tag": "DIV",
+      "cls": "bg-card border border-border rounded-xl px-4 py-2 text-center shrink-0",
+      "text": "17\nAGE",
+      "l": 307,
+      "r": 359
+     },
+     {
+      "tag": "DIV",
+      "cls": "text-lg font-black",
+      "text": "17",
+      "l": 324,
+      "r": 342
+     },
+     {
+      "tag": "DIV",
+      "cls": "text-[9px] text-muted-foreground uppercase",
+      "text": "AGE",
+      "l": 324,
+      "r": 342
+     }
+    ],
+    "trunc": [
+     {
+      "text": "Drill ready",
+      "w": 1,
+      "need": 70,
+      "ell": "clip"
+     },
+     {
+      "text": "unread",
+      "w": 1,
+      "need": 38,
+      "ell": "clip"
+     },
+     {
+      "text": "Danny Okafor-Whitfield",
+      "w": 200,
+      "need": 224,
+      "ell": "ellipsis"
+     }
+    ],
+    "small": [],
+    "covered": [
+     {
+      "text": "🏋️\nTraining\nDrill ready",
+      "by": "Tap cones in order with as few slips as ",
+      "byCls": ""
+     },
+     {
+      "text": "📱\nPhone\n3\nunread",
+      "by": "Tap cones in order with as few slips as ",
+      "byCls": ""
+     },
+     {
+      "text": "🚪 Retire",
+      "by": "Pause or opening these rules freezes the",
+      "byCls": ""
+     },
+     {
+      "text": "🔄 New Career",
+      "by": "Pause or opening these rules freezes the",
+      "byCls": ""
+     },
+     {
+      "text": "👥 Squad\nBy role\nThe plan: Squad player\n",
+      "by": "Your CM drill. Trains Passing. Today's t",
+      "byCls": "block text-[10px] text-muted-foreground"
+     },
+     {
+      "text": "Next Season",
+      "by": "👟\nFirst Touch\nRead the gate, time your ",
+      "byCls": "w-full flex items-center gap-3 rounded-xl border b"
+     }
+    ],
+    "boundary": false
+   },
+   "result": "🏋️ Training Ground ? Close 🎯 20 SESSION SCORE Rough day. No gains this time Bank the session",
+   "interact": {
+    "drill": "🎯\nPenalty Placement\nTrains Shooting\n›",
+    "bank": true
+   },
+   "closed": {
+    "ok": true,
+    "tried": [
+     "Close"
+    ]
+   },
+   "scroll": {
+    "y0": 1634,
+    "y1": 0
+   },
+   "saveChanged": true
+  },
+  {
+   "name": "phone-s0",
+   "season": 0,
+   "label": "📱 Phone 3 unread",
+   "step": 3,
+   "opened": "1991 · age 17 😐 50 📶 🔋 Danny Okafor-Whitfield Red Star Belgrade · OVR 56 £0K to your name 💬 3 Messages 👥 Contacts 📰 SportsFeed 🗞️ The Column 🏦 Bank 📈 Market 🛒 My Life 🎮 Ball Quiz 🃏 Cards 📸 SocialGram ⭐ My Player 🎖️ Peaks 😐 Life Keep in touch and people look after you. Money you leave sitting still does nothing. Put phone away",
+   "shot": "c320-025-phone-s0.jpg",
+   "audit": {
+    "vw": 320,
+    "sw": 320,
+    "overflow": false,
+    "bad": [],
+    "off": [
+     {
+      "tag": "DIV",
+      "cls": "bg-card border border-border rounded-xl px-4 py-2 text-center shrink-0",
+      "text": "17\nAGE",
+      "l": 307,
+      "r": 359
+     },
+     {
+      "tag": "DIV",
+      "cls": "text-lg font-black",
+      "text": "17",
+      "l": 324,
+      "r": 342
+     },
+     {
+      "tag": "DIV",
+      "cls": "text-[9px] text-muted-foreground uppercase",
+      "text": "AGE",
+      "l": 324,
+      "r": 342
+     }
+    ],
+    "trunc": [
+     {
+      "text": "unread",
+      "w": 1,
+      "need": 38,
+      "ell": "clip"
+     },
+     {
+      "text": "Danny Okafor-Whitfield",
+      "w": 200,
+      "need": 224,
+      "ell": "ellipsis"
+     }
+    ],
+    "small": [],
+    "covered": [
+     {
+      "text": "🏋️\nTraining",
+      "by": "£0K to your name",
+      "byCls": "text-[10px] text-emerald-300 font-bold pt-0.5"
+     },
+     {
+      "text": "📱\nPhone\n3\nunread",
+      "by": "£0K to your name",
+      "byCls": "text-[10px] text-emerald-300 font-bold pt-0.5"
+     },
+     {
+      "text": "🚪 Retire",
+      "by": "📈",
+      "byCls": "w-[52px] h-[52px] rounded-2xl bg-white/10 border b"
+     },
+     {
+      "text": "🔄 New Career",
+      "by": "🛒",
+      "byCls": "w-[52px] h-[52px] rounded-2xl bg-white/10 border b"
+     },
+     {
+      "text": "👥 Squad\nBy role\nThe plan: Squad player\n",
+      "by": "Put phone away",
+      "byCls": "min-h-11 text-[10px] font-bold text-white/50 hover"
+     },
+     {
+      "text": "Next Season",
+      "by": "1991 · age 17\n😐 50\n📶 🔋\nDanny Okafor-W",
+      "byCls": "fixed inset-0 z-50 flex items-center justify-cente"
+     }
+    ],
+    "boundary": false
+   },
+   "apps": [
+    {
+     "id": "messages",
+     "text": "1991 · age 17 😐 50 📶 🔋 ‹ Home 💬 Messages ❤️ Mum 1990 Hi love, haven't heard from you in weeks. Everything ok? Call me when you can. 🤙 Best mate 1990 Went past your old house today. New people have painted the door red. Thought you should know. 💬 Groundskeeper 1990 Found a wallet in the car par",
+     "shot": "c320-026-phone-messages-s0.jpg",
+     "audit": {
+      "vw": 320,
+      "sw": 320,
+      "overflow": false,
+      "bad": [],
+      "off": [
+       {
+        "tag": "DIV",
+        "cls": "bg-card border border-border rounded-xl px-4 py-2 text-center shrink-0",
+        "text": "17\nAGE",
+        "l": 307,
+        "r": 359
+       },
+       {
+        "tag": "DIV",
+        "cls": "text-lg font-black",
+        "text": "17",
+        "l": 324,
+        "r": 342
+       },
+       {
+        "tag": "DIV",
+        "cls": "text-[9px] text-muted-foreground uppercase",
+        "text": "AGE",
+        "l": 324,
+        "r": 342
+       }
+      ],
+      "trunc": [
+       {
+        "text": "unread",
+        "w": 1,
+        "need": 38,
+        "ell": "clip"
+       },
+       {
+        "text": "Danny Okafor-Whitfield",
+        "w": 200,
+        "need": 224,
+        "ell": "ellipsis"
+       }
+      ],
+      "small": [],
+      "covered": [
+       {
+        "text": "🏋️\nTraining",
+        "by": "❤️\nMum\n1990\nHi love, haven't heard from ",
+        "byCls": "flex-1 overflow-y-auto p-2.5 space-y-2"
+       },
+       {
+        "text": "📱\nPhone\n3\nunread",
+        "by": "❤️\nMum\n1990\nHi love, haven't heard from ",
+        "byCls": "flex-1 overflow-y-auto p-2.5 space-y-2"
+       },
+       {
+        "text": "🚪 Retire",
+        "by": "💬\nGroundskeeper\n1990\nFound a wallet in ",
+        "byCls": "w-full text-left rounded-xl bg-white/5 border bord"
+       },
+       {
+        "text": "🔄 New Career",
+        "by": "💬\nGroundskeeper\n1990\nFound a wallet in ",
+        "byCls": "w-full text-left rounded-xl bg-white/5 border bord"
+       },
+       {
+        "text": "👥 Squad\nBy role\nThe plan: Squad player\n",
+        "by": "Put phone away",
+        "byCls": "min-h-11 text-[10px] font-bold text-white/50 hover"
+       },
+       {
+        "text": "Next Season",
+        "by": "1991 · age 17\n😐 50\n📶 🔋\n‹ Home\n💬 Mess",
+        "byCls": "fixed inset-0 z-50 flex items-center justify-cente"
+       }
+      ],
+      "boundary": false
+     },
+     "buttons": [
+      "‹ Home",
+      "❤️ Mum 1990 Hi love, haven't heard from you in weeks. Everything ok? C",
+      "🤙 Best mate 1990 Went past your old house today. New people have pain",
+      "💬 Groundskeeper 1990 Found a wallet in the car park with 800 quid ins",
+      "Put phone away"
+     ],
+     "clicked": "❤️ Mum 1990 Hi love, haven't heard from you in weeks. Everything ok? C",
+     "after": "1991 · age 17 😐 50 📶 🔋 ‹ Chats ❤️ Mum Where you stand: Fine Hi love, haven't heard from you in weeks. Everything ok? Call me when you can. Call her tonightLeave it on read Put phone away",
+     "shot2": "c320-027-phone-messages-act-s0.jpg"
+    },
+    {
+     "id": "contacts",
+     "text": "1991 · age 17 😐 50 📶 🔋 ‹ Home 👥 Contacts ❤️ Mum Answers on the first ring Fine 🧔 Dad Watched every minute you ever played New 🧓 Grandad Shouts at the telly on your behalf New 🤙 Best mate Knew you before any of this Fine 💼 Your agent Always half a deal ahead of you New 📋 The gaffer Picks the",
+     "shot": "c320-028-phone-contacts-s0.jpg",
+     "audit": {
+      "vw": 320,
+      "sw": 320,
+      "overflow": false,
+      "bad": [],
+      "off": [
+       {
+        "tag": "DIV",
+        "cls": "bg-card border border-border rounded-xl px-4 py-2 text-center shrink-0",
+        "text": "17\nAGE",
+        "l": 307,
+        "r": 359
+       },
+       {
+        "tag": "DIV",
+        "cls": "text-lg font-black",
+        "text": "17",
+        "l": 324,
+        "r": 342
+       },
+       {
+        "tag": "DIV",
+        "cls": "text-[9px] text-muted-foreground uppercase",
+        "text": "AGE",
+        "l": 324,
+        "r": 342
+       }
+      ],
+      "trunc": [
+       {
+        "text": "unread",
+        "w": 1,
+        "need": 38,
+        "ell": "clip"
+       },
+       {
+        "text": "Danny Okafor-Whitfield",
+        "w": 200,
+        "need": 224,
+        "ell": "ellipsis"
+       }
+      ],
+      "small": [],
+      "covered": [
+       {
+        "text": "🏋️\nTraining",
+        "by": "❤️\nMum\nAnswers on the first ring\nFine\n🧔",
+        "byCls": "flex-1 overflow-y-auto p-2.5 space-y-2"
+       },
+       {
+        "text": "📱\nPhone\n3\nunread",
+        "by": "❤️\nMum\nAnswers on the first ring\nFine\n🧔",
+        "byCls": "flex-1 overflow-y-auto p-2.5 space-y-2"
+       },
+       {
+        "text": "🚪 Retire",
+        "by": "🧓\nGrandad\nShouts at the telly on your b",
+        "byCls": "w-full text-left rounded-xl bg-white/5 border bord"
+       },
+       {
+        "text": "🔄 New Career",
+        "by": "🧓\nGrandad\nShouts at the telly on your b",
+        "byCls": "w-full text-left rounded-xl bg-white/5 border bord"
+       },
+       {
+        "text": "👥 Squad\nBy role\nThe plan: Squad player\n",
+        "by": "Put phone away",
+        "byCls": "min-h-11 text-[10px] font-bold text-white/50 hover"
+       },
+       {
+        "text": "Next Season",
+        "by": "1991 · age 17\n😐 50\n📶 🔋\n‹ Home\n👥 Cont",
+        "byCls": "fixed inset-0 z-50 flex items-center justify-cente"
+       }
+      ],
+      "boundary": false
+     },
+     "buttons": [
+      "‹ Home",
+      "❤️ Mum Answers on the first ring Fine",
+      "🧔 Dad Watched every minute you ever played New",
+      "🧓 Grandad Shouts at the telly on your behalf New",
+      "🤙 Best mate Knew you before any of this Fine",
+      "💼 Your agent Always half a deal ahead of you New",
+      "📋 The gaffer Picks the team, picks his words New",
+      "🦁 Club captain Runs the dressing room New",
+      "🩹 Club physio Knows your body better than you New",
+      "🏋️ Fitness coach Owns the sadistic clipboard New",
+      "👴 Old youth coach Still calls you kid New",
+      "🧺 Kit man Has seen forty years of you lot New",
+      "Put phone away"
+     ],
+     "clicked": "🩹 Club physio Knows your body better than you New",
+     "after": "1991 · age 17 😐 50 📶 🔋 ‹ Contacts 🩹 Club physio 🩹 Club physio You have not spoken yet MESSAGE THEM ABOUT Own up about the niggle Put phone away",
+     "shot2": "c320-029-phone-contacts-act-s0.jpg"
+    },
+    {
+     "id": "news",
+     "text": "1991 · age 17 😐 50 📶 🔋 ‹ Home 📰 SportsFeed World football. Nothing about you in here. Quiet window. Check back after the season. Put phone away",
+     "shot": "c320-030-phone-news-s0.jpg",
+     "audit": {
+      "vw": 320,
+      "sw": 320,
+      "overflow": false,
+      "bad": [],
+      "off": [
+       {
+        "tag": "DIV",
+        "cls": "bg-card border border-border rounded-xl px-4 py-2 text-center shrink-0",
+        "text": "17\nAGE",
+        "l": 307,
+        "r": 359
+       },
+       {
+        "tag": "DIV",
+        "cls": "text-lg font-black",
+        "text": "17",
+        "l": 324,
+        "r": 342
+       },
+       {
+        "tag": "DIV",
+        "cls": "text-[9px] text-muted-foreground uppercase",
+        "text": "AGE",
+        "l": 324,
+        "r": 342
+       }
+      ],
+      "trunc": [
+       {
+        "text": "unread",
+        "w": 1,
+        "need": 38,
+        "ell": "clip"
+       },
+       {
+        "text": "Danny Okafor-Whitfield",
+        "w": 200,
+        "need": 224,
+        "ell": "ellipsis"
+       }
+      ],
+      "small": [],
+      "covered": [
+       {
+        "text": "🏋️\nTraining",
+        "by": "World football. Nothing about you in her",
+        "byCls": "flex-1 overflow-y-auto p-2.5 space-y-2"
+       },
+       {
+        "text": "📱\nPhone\n3\nunread",
+        "by": "World football. Nothing about you in her",
+        "byCls": "flex-1 overflow-y-auto p-2.5 space-y-2"
+       },
+       {
+        "text": "🚪 Retire",
+        "by": "World football. Nothing about you in her",
+        "byCls": "flex-1 overflow-y-auto p-2.5 space-y-2"
+       },
+       {
+        "text": "🔄 New Career",
+        "by": "World football. Nothing about you in her",
+        "byCls": "flex-1 overflow-y-auto p-2.5 space-y-2"
+       },
+       {
+        "text": "👥 Squad\nBy role\nThe plan: Squad player\n",
+        "by": "Put phone away",
+        "byCls": "min-h-11 text-[10px] font-bold text-white/50 hover"
+       },
+       {
+        "text": "Next Season",
+        "by": "1991 · age 17\n😐 50\n📶 🔋\n‹ Home\n📰 Spor",
+        "byCls": "fixed inset-0 z-50 flex items-center justify-cente"
+       }
+      ],
+      "boundary": false
+     }
+    },
+    {
+     "id": "column",
+     "text": "1991 · age 17 😐 50 📶 🔋 ‹ Home 🗞️ The Column 🧐 Ottoline Pemberton Reserving judgement He has written about you since the day you turned pro. He has not filed anything about you yet. Play a season. Put phone away",
+     "shot": "c320-031-phone-column-s0.jpg",
+     "audit": {
+      "vw": 320,
+      "sw": 320,
+      "overflow": false,
+      "bad": [],
+      "off": [
+       {
+        "tag": "DIV",
+        "cls": "bg-card border border-border rounded-xl px-4 py-2 text-center shrink-0",
+        "text": "17\nAGE",
+        "l": 307,
+        "r": 359
+       },
+       {
+        "tag": "DIV",
+        "cls": "text-lg font-black",
+        "text": "17",
+        "l": 324,
+        "r": 342
+       },
+       {
+        "tag": "DIV",
+        "cls": "text-[9px] text-muted-foreground uppercase",
+        "text": "AGE",
+        "l": 324,
+        "r": 342
+       }
+      ],
+      "trunc": [
+       {
+        "text": "unread",
+        "w": 1,
+        "need": 38,
+        "ell": "clip"
+       },
+       {
+        "text": "Danny Okafor-Whitfield",
+        "w": 200,
+        "need": 224,
+        "ell": "ellipsis"
+       }
+      ],
+      "small": [],
+      "covered": [
+       {
+        "text": "🏋️\nTraining",
+        "by": "🧐\nOttoline Pemberton\nReserving judgemen",
+        "byCls": "flex-1 overflow-y-auto p-3 space-y-2.5"
+       },
+       {
+        "text": "📱\nPhone\n3\nunread",
+        "by": "🧐\nOttoline Pemberton\nReserving judgemen",
+        "byCls": "flex-1 overflow-y-auto p-3 space-y-2.5"
+       },
+       {
+        "text": "🚪 Retire",
+        "by": "He has written about you since the day y",
+        "byCls": "text-[10px] text-white/50"
+       },
+       {
+        "text": "🔄 New Career",
+        "by": "He has written about you since the day y",
+        "byCls": "text-[10px] text-white/50"
+       },
+       {
+        "text": "👥 Squad\nBy role\nThe plan: Squad player\n",
+        "by": "Put phone away",
+        "byCls": "min-h-11 text-[10px] font-bold text-white/50 hover"
+       },
+       {
+        "text": "Next Season",
+        "by": "1991 · age 17\n😐 50\n📶 🔋\n‹ Home\n🗞️ The",
+        "byCls": "fixed inset-0 z-50 flex items-center justify-cente"
+       }
+      ],
+      "boundary": false
+     }
+    },
+    {
+     "id": "bank",
+     "text": "1991 · age 17 😐 50 📶 🔋 ‹ Home 🏦 Bank EVERYTHING YOU HAVE €0k wage £10,402 a week €0k in the account €0k savings €0k invested 💷 Savings pays 2.5% a season, never loses Boring, safe, and better than leaving it in the current account doing nothing. Save 25% Save half Save it all Take out half Take",
+     "shot": "c320-032-phone-bank-s0.jpg",
+     "audit": {
+      "vw": 320,
+      "sw": 320,
+      "overflow": false,
+      "bad": [],
+      "off": [
+       {
+        "tag": "DIV",
+        "cls": "bg-card border border-border rounded-xl px-4 py-2 text-center shrink-0",
+        "text": "17\nAGE",
+        "l": 307,
+        "r": 359
+       },
+       {
+        "tag": "DIV",
+        "cls": "text-lg font-black",
+        "text": "17",
+        "l": 324,
+        "r": 342
+       },
+       {
+        "tag": "DIV",
+        "cls": "text-[9px] text-muted-foreground uppercase",
+        "text": "AGE",
+        "l": 324,
+        "r": 342
+       }
+      ],
+      "trunc": [
+       {
+        "text": "unread",
+        "w": 1,
+        "need": 38,
+        "ell": "clip"
+       },
+       {
+        "text": "Danny Okafor-Whitfield",
+        "w": 200,
+        "need": 224,
+        "ell": "ellipsis"
+       }
+      ],
+      "small": [
+       {
+        "text": "‹ Home",
+        "w": 52,
+        "h": 25
+       }
+      ],
+      "covered": [
+       {
+        "text": "🏋️\nTraining",
+        "by": "EVERYTHING YOU HAVE",
+        "byCls": "text-[10px] uppercase tracking-widest text-white/4"
+       },
+       {
+        "text": "📱\nPhone\n3\nunread",
+        "by": "EVERYTHING YOU HAVE",
+        "byCls": "text-[10px] uppercase tracking-widest text-white/4"
+       },
+       {
+        "text": "🚪 Retire",
+        "by": "€0k\nin the account",
+        "byCls": "rounded-xl bg-white/5 p-2"
+       },
+       {
+        "text": "🔄 New Career",
+        "by": "€0k\nin the account\n€0k\nsavings\n€0k\ninves",
+        "byCls": "grid grid-cols-3 gap-2 text-center"
+       },
+       {
+        "text": "👥 Squad\nBy role\nThe plan: Squad player\n",
+        "by": "Put phone away",
+        "byCls": "min-h-11 text-[10px] font-bold text-white/50 hover"
+       },
+       {
+        "text": "Next Season",
+        "by": "1991 · age 17\n😐 50\n📶 🔋\n‹ Home\n🏦 Bank",
+        "byCls": "fixed inset-0 z-50 flex items-center justify-cente"
+       }
+      ],
+      "boundary": false
+     },
+     "buttons": [
+      "‹ Home",
+      "Put phone away"
+     ],
+     "clicked": "Put phone away",
+     "after": "",
+     "shot2": "c320-033-phone-bank-act-s0.jpg"
+    },
+    {
+     "id": "market",
+     "text": "",
+     "shot": "c320-034-phone-market-s0.jpg",
+     "audit": {
+      "vw": 320,
+      "sw": 320,
+      "overflow": false,
+      "bad": [],
+      "off": [
+       {
+        "tag": "DIV",
+        "cls": "bg-card border border-border rounded-xl px-4 py-2 text-center shrink-0",
+        "text": "17\nAGE",
+        "l": 307,
+        "r": 359
+       },
+       {
+        "tag": "DIV",
+        "cls": "text-lg font-black",
+        "text": "17",
+        "l": 324,
+        "r": 342
+       },
+       {
+        "tag": "DIV",
+        "cls": "text-[9px] text-muted-foreground uppercase",
+        "text": "AGE",
+        "l": 324,
+        "r": 342
+       }
+      ],
+      "trunc": [
+       {
+        "text": "unread",
+        "w": 1,
+        "need": 38,
+        "ell": "clip"
+       },
+       {
+        "text": "Danny Okafor-Whitfield",
+        "w": 200,
+        "need": 224,
+        "ell": "ellipsis"
+       }
+      ],
+      "small": [],
+      "covered": [],
+      "boundary": false
+     }
+    },
+    {
+     "id": "shop",
+     "text": "",
+     "shot": "c320-035-phone-shop-s0.jpg",
+     "audit": {
+      "vw": 320,
+      "sw": 320,
+      "overflow": false,
+      "bad": [],
+      "off": [
+       {
+        "tag": "DIV",
+        "cls": "bg-card border border-border rounded-xl px-4 py-2 text-center shrink-0",
+        "text": "17\nAGE",
+        "l": 307,
+        "r": 359
+       },
+       {
+        "tag": "DIV",
+        "cls": "text-lg font-black",
+        "text": "17",
+        "l": 324,
+        "r": 342
+       },
+       {
+        "tag": "DIV",
+        "cls": "text-[9px] text-muted-foreground uppercase",
+        "text": "AGE",
+        "l": 324,
+        "r": 342
+       }
+      ],
+      "trunc": [
+       {
+        "text": "unread",
+        "w": 1,
+        "need": 38,
+        "ell": "clip"
+       },
+       {
+        "text": "Danny Okafor-Whitfield",
+        "w": 200,
+        "need": 224,
+        "ell": "ellipsis"
+       }
+      ],
+      "small": [],
+      "covered": [],
+      "boundary": false
+     },
+     "buttons": []
+    },
+    {
+     "id": "arcade",
+     "text": "",
+     "shot": "c320-036-phone-arcade-s0.jpg",
+     "audit": {
+      "vw": 320,
+      "sw": 320,
+      "overflow": false,
+      "bad": [],
+      "off": [
+       {
+        "tag": "DIV",
+        "cls": "bg-card border border-border rounded-xl px-4 py-2 text-center shrink-0",
+        "text": "17\nAGE",
+        "l": 307,
+        "r": 359
+       },
+       {
+        "tag": "DIV",
+        "cls": "text-lg font-black",
+        "text": "17",
+        "l": 324,
+        "r": 342
+       },
+       {
+        "tag": "DIV",
+        "cls": "text-[9px] text-muted-foreground uppercase",
+        "text": "AGE",
+        "l": 324,
+        "r": 342
+       }
+      ],
+      "trunc": [
+       {
+        "text": "unread",
+        "w": 1,
+        "need": 38,
+        "ell": "clip"
+       },
+       {
+        "text": "Danny Okafor-Whitfield",
+        "w": 200,
+        "need": 224,
+        "ell": "ellipsis"
+       }
+      ],
+      "small": [],
+      "covered": [],
+      "boundary": false
+     }
+    },
+    {
+     "id": "cards",
+     "text": "",
+     "shot": "c320-037-phone-cards-s0.jpg",
+     "audit": {
+      "vw": 320,
+      "sw": 320,
+      "overflow": false,
+      "bad": [],
+      "off": [
+       {
+        "tag": "DIV",
+        "cls": "bg-card border border-border rounded-xl px-4 py-2 text-center shrink-0",
+        "text": "17\nAGE",
+        "l": 307,
+        "r": 359
+       },
+       {
+        "tag": "DIV",
+        "cls": "text-lg font-black",
+        "text": "17",
+        "l": 324,
+        "r": 342
+       },
+       {
+        "tag": "DIV",
+        "cls": "text-[9px] text-muted-foreground uppercase",
+        "text": "AGE",
+        "l": 324,
+        "r": 342
+       }
+      ],
+      "trunc": [
+       {
+        "text": "unread",
+        "w": 1,
+        "need": 38,
+        "ell": "clip"
+       },
+       {
+        "text": "Danny Okafor-Whitfield",
+        "w": 200,
+        "need": 224,
+        "ell": "ellipsis"
+       }
+      ],
+      "small": [],
+      "covered": [],
+      "boundary": false
+     }
+    },
+    {
+     "id": "social",
+     "text": "",
+     "shot": "c320-038-phone-social-s0.jpg",
+     "audit": {
+      "vw": 320,
+      "sw": 320,
+      "overflow": false,
+      "bad": [],
+      "off": [
+       {
+        "tag": "DIV",
+        "cls": "bg-card border border-border rounded-xl px-4 py-2 text-center shrink-0",
+        "text": "17\nAGE",
+        "l": 307,
+        "r": 359
+       },
+       {
+        "tag": "DIV",
+        "cls": "text-lg font-black",
+        "text": "17",
+        "l": 324,
+        "r": 342
+       },
+       {
+        "tag": "DIV",
+        "cls": "text-[9px] text-muted-foreground uppercase",
+        "text": "AGE",
+        "l": 324,
+        "r": 342
+       }
+      ],
+      "trunc": [
+       {
+        "text": "unread",
+        "w": 1,
+        "need": 38,
+        "ell": "clip"
+       },
+       {
+        "text": "Danny Okafor-Whitfield",
+        "w": 200,
+        "need": 224,
+        "ell": "ellipsis"
+       }
+      ],
+      "small": [],
+      "covered": [],
+      "boundary": false
+     }
+    },
+    {
+     "id": "player",
+     "text": "",
+     "shot": "c320-039-phone-player-s0.jpg",
+     "audit": {
+      "vw": 320,
+      "sw": 320,
+      "overflow": false,
+      "bad": [],
+      "off": [
+       {
+        "tag": "DIV",
+        "cls": "bg-card border border-border rounded-xl px-4 py-2 text-center shrink-0",
+        "text": "17\nAGE",
+        "l": 307,
+        "r": 359
+       },
+       {
+        "tag": "DIV",
+        "cls": "text-lg font-black",
+        "text": "17",
+        "l": 324,
+        "r": 342
+       },
+       {
+        "tag": "DIV",
+        "cls": "text-[9px] text-muted-foreground uppercase",
+        "text": "AGE",
+        "l": 324,
+        "r": 342
+       }
+      ],
+      "trunc": [
+       {
+        "text": "unread",
+        "w": 1,
+        "need": 38,
+        "ell": "clip"
+       },
+       {
+        "text": "Danny Okafor-Whitfield",
+        "w": 200,
+        "need": 224,
+        "ell": "ellipsis"
+       }
+      ],
+      "small": [],
+      "covered": [],
+      "boundary": false
+     }
+    },
+    {
+     "id": "peaks",
+     "text": "",
+     "shot": "c320-040-phone-peaks-s0.jpg",
+     "audit": {
+      "vw": 320,
+      "sw": 320,
+      "overflow": false,
+      "bad": [],
+      "off": [
+       {
+        "tag": "DIV",
+        "cls": "bg-card border border-border rounded-xl px-4 py-2 text-center shrink-0",
+        "text": "17\nAGE",
+        "l": 307,
+        "r": 359
+       },
+       {
+        "tag": "DIV",
+        "cls": "text-lg font-black",
+        "text": "17",
+        "l": 324,
+        "r": 342
+       },
+       {
+        "tag": "DIV",
+        "cls": "text-[9px] text-muted-foreground uppercase",
+        "text": "AGE",
+        "l": 324,
+        "r": 342
+       }
+      ],
+      "trunc": [
+       {
+        "text": "unread",
+        "w": 1,
+        "need": 38,
+        "ell": "clip"
+       },
+       {
+        "text": "Danny Okafor-Whitfield",
+        "w": 200,
+        "need": 224,
+        "ell": "ellipsis"
+       }
+      ],
+      "small": [],
+      "covered": [],
+      "boundary": false
+     }
+    },
+    {
+     "id": "life",
+     "text": "",
+     "shot": "c320-041-phone-life-s0.jpg",
+     "audit": {
+      "vw": 320,
+      "sw": 320,
+      "overflow": false,
+      "bad": [],
+      "off": [
+       {
+        "tag": "DIV",
+        "cls": "bg-card border border-border rounded-xl px-4 py-2 text-center shrink-0",
+        "text": "17\nAGE",
+        "l": 307,
+        "r": 359
+       },
+       {
+        "tag": "DIV",
+        "cls": "text-lg font-black",
+        "text": "17",
+        "l": 324,
+        "r": 342
+       },
+       {
+        "tag": "DIV",
+        "cls": "text-[9px] text-muted-foreground uppercase",
+        "text": "AGE",
+        "l": 324,
+        "r": 342
+       }
+      ],
+      "trunc": [
+       {
+        "text": "unread",
+        "w": 1,
+        "need": 38,
+        "ell": "clip"
+       },
+       {
+        "text": "Danny Okafor-Whitfield",
+        "w": 200,
+        "need": 224,
+        "ell": "ellipsis"
+       }
+      ],
+      "small": [],
+      "covered": [],
+      "boundary": false
+     }
+    }
+   ],
+   "interact": 13,
+   "closed": {
+    "ok": true,
+    "tried": []
+   },
+   "scroll": {
+    "y0": 0,
+    "y1": 0
+   },
+   "saveChanged": false
+  }
+ ],
+ "reloads": [
+  {
+   "why": "step 6 in newspaper",
+   "step": 5,
+   "same": true,
+   "phaseBefore": "newspaper",
+   "phaseAfter": "newspaper",
+   "lenBefore": 15619,
+   "lenAfter": 15619,
+   "shot": "c320-046-reload-newspaper.jpg",
+   "audit": {
+    "vw": 320,
+    "sw": 320,
+    "overflow": false,
+    "bad": [],
+    "off": [],
+    "trunc": [
+     {
+      "text": "Drill ready",
+      "w": 1,
+      "need": 70,
+      "ell": "clip"
+     },
+     {
+      "text": "unread",
+      "w": 1,
+      "need": 38,
+      "ell": "clip"
+     },
+     {
+      "text": "Danny Okafor-Whitfield",
+      "w": 200,
+      "need": 224,
+      "ell": "ellipsis"
+     }
+    ],
+    "small": [],
+    "covered": [],
+    "boundary": false
+   },
+   "uiPhaseText": "🏋️ Training Drill ready 📱 Phone 3 unread Danny Okafor-Whitfield CM · Age 18 · Nigeria 🚪 Retire 🔄 New Career 57 OVR POT 80 €490k Net Worth €10k/wk Wage €2M Value CAREER TIMELINE A 16y Enyimba Youth"
+  },
+  {
+   "why": "final",
+   "step": 21,
+   "same": true,
+   "phaseBefore": "playing",
+   "phaseAfter": "playing",
+   "lenBefore": 13245,
+   "lenAfter": 13245,
+   "shot": "c320-058-reload-playing.jpg",
+   "audit": {
+    "vw": 320,
+    "sw": 320,
+    "overflow": false,
+    "bad": [],
+    "off": [
+     {
+      "tag": "DIV",
+      "cls": "bg-card border border-border rounded-xl px-4 py-2 text-center shrink-0",
+      "text": "18\nAGE",
+      "l": 307,
+      "r": 361
+     },
+     {
+      "tag": "DIV",
+      "cls": "text-lg font-black",
+      "text": "18",
+      "l": 324,
+      "r": 344
+     },
+     {
+      "tag": "DIV",
+      "cls": "text-[9px] text-muted-foreground uppercase",
+      "text": "AGE",
+      "l": 324,
+      "r": 344
+     }
+    ],
+    "trunc": [
+     {
+      "text": "Drill ready",
+      "w": 1,
+      "need": 70,
+      "ell": "clip"
+     },
+     {
+      "text": "unread",
+      "w": 1,
+      "need": 38,
+      "ell": "clip"
+     },
+     {
+      "text": "Danny Okafor-Whitfield",
+      "w": 200,
+      "need": 224,
+      "ell": "ellipsis"
+     }
+    ],
+    "small": [],
+    "covered": [],
+    "boundary": false
+   },
+   "uiPhaseText": "🏋️ Training Drill ready 📱 Phone 3 unread Danny Okafor-Whitfield CM · Age 18 · Nigeria 🚪 Retire 🔄 New Career 57 OVR POT 80 €410k Net Worth €430/wk Wage €2M Value CAREER TIMELINE A 16y Enyimba Youth"
+  }
+ ],
+ "errors": [
+  {
+   "t": "error",
+   "at": 0,
+   "text": "Failed to load resource: net::ERR_FAILED"
+  },
+  {
+   "t": "error",
+   "at": 0,
+   "text": "Failed to load resource: net::ERR_FAILED"
+  },
+  {
+   "t": "error",
+   "at": 3,
+   "text": "Failed to load resource: net::ERR_FAILED"
+  },
+  {
+   "t": "error",
+   "at": 5,
+   "text": "Failed to load resource: net::ERR_FAILED"
+  },
+  {
+   "t": "error",
+   "at": 21,
+   "text": "Failed to load resource: net::ERR_FAILED"
+  }
+ ],
+ "pageErrors": [],
+ "failedRequests": [],
+ "events": [
+  {
+   "phase": "newspaper",
+   "age": 18,
+   "ev": "[\"THE COLUMN: Ottoline Pemberton Says The Argument About Danny Okafor-Whitfield Is Over\",\"CRISIS AT RED STAR BELGRADE: Danny Okafor-Whitfield Dropped From Squad After Poor Run Of Form\"]"
+  },
+  {
+   "phase": "newspaper",
+   "age": 18,
+   "ev": "[\"THE COLUMN: Ottoline Pemberton Says The Argument About Danny Okafor-Whitfield Is Over\",\"CRISIS AT RED STAR BELGRADE: Danny Okafor-Whitfield Dropped From Squad After Poor Run Of Form\"]"
+  },
+  {
+   "phase": "social_media_action",
+   "age": 18,
+   "ev": "social"
+  },
+  {
+   "phase": "social_media_action",
+   "age": 18,
+   "ev": "social"
+  },
+  {
+   "phase": "social_media_action",
+   "age": 18,
+   "ev": "social"
+  },
+  {
+   "phase": "social_media_action",
+   "age": 18,
+   "ev": "social"
+  },
+  {
+   "phase": "social_media_action",
+   "age": 18,
+   "ev": "social"
+  },
+  {
+   "phase": "random_events",
+   "age": 18,
+   "ev": "{\"id\":200,\"cooldown\":99,\"emoji\":\"🪞\",\"title\":\"Who Are You, Really?\",\"description\":\"Teammates, journalists and fans keep asking the same question: what is your deal? Time to decide what kind of player, and person, you are. This shapes your whole career.\",\"category\":\"life\",\"choices\":[{\"label\":\"The Showman\",\"emoji\":\"🎭\",\"color\":\"bg-pink-600\",\"consequence\":\"Fame comes easy: followers grow 60% faster, sponsors pay 25% more, scandals sting\"},{\"label\":\"Ice Cold\",\"emoji\":\"🧊\",\"color\":\"bg-blue-600\",\"consequence\":\"Unshakeable: steadier morale, trusted by sponsors, slower follower growth\"},{\"label\":\"The "
+  },
+  {
+   "phase": "random_events",
+   "age": 18,
+   "ev": "{\"id\":224,\"cooldown\":2,\"emoji\":\"🦅\",\"title\":\"Mascot Beef\",\"description\":\"The club mascot challenged you to a race at halftime and has been talking trash on the club's official account all week.\",\"category\":\"life\",\"choices\":[{\"label\":\"Race the mascot\",\"emoji\":\"🏃\",\"color\":\"bg-amber-600\",\"consequence\":\"70%: win, +400k followers. 30%: lose to a person in a giant bird suit\"},{\"label\":\"Ignore the bird\",\"emoji\":\"🙄\",\"color\":\"bg-muted\",\"consequence\":\"The mascot declares victory by forfeit\"}]}"
+  },
+  {
+   "phase": "random_events",
+   "age": 18,
+   "ev": "{\"id\":425,\"emoji\":\"🌏\",\"title\":\"Preseason Where Football Just Arrived\",\"description\":\"Fourteen hours in the air, forty degrees on landing, and thirty thousand people who learned the club anthem last week. There are nine commercial appearances in six days.\",\"category\":\"life\",\"choices\":[{\"label\":\"Do every appearance and every clinic\",\"emoji\":\"🤳\",\"color\":\"bg-emerald-600\",\"consequence\":\"Followers +1.5M, Popularity +6, sponsor income +€300k, Morale -4\"},{\"label\":\"Skip the commercial circus and train properly\",\"emoji\":\"🏋️\",\"color\":\"bg-blue-600\",\"consequence\":\"Pace +2 next season, Morale +3, an €80"
+  }
+ ],
+ "stuck": [],
+ "notes": [
+  {
+   "kind": "season-press",
+   "pre": {
+    "age": 16,
+    "ovr": 52,
+    "nw": 0,
+    "wage": 500,
+    "val": 0.1,
+    "club": "Enyimba Youth",
+    "years": 2
+   },
+   "post": {
+    "phase": "contract_offer",
+    "age": 17,
+    "ovr": 56,
+    "nw": 0,
+    "wage": 500,
+    "val": 0.8,
+    "club": "Enyimba Youth",
+    "years": 2
+   }
+  },
+  {
+   "step": 3,
+   "kind": "click-failed",
+   "text": "▶ Kick off",
+   "why": "week",
+   "err": "TimeoutError: locator.click: Timeout 3500ms exceeded. Call log:   - waiting for locator('[data-qa-idx=\"4\"]').first()"
+  },
+  {
+   "step": 3,
+   "kind": "click-failed",
+   "text": "⏭ Sim the rest",
+   "why": "week",
+   "err": "TimeoutError: locator.click: Timeout 3500ms exceeded. Call log:   - waiting for locator('[data-qa-idx=\"6\"]').first()"
+  },
+  {
+   "step": 3,
+   "kind": "click-failed",
+   "text": "Current squad",
+   "why": "week",
+   "err": "TimeoutError: locator.click: Timeout 3500ms exceeded. Call log:   - waiting for locator('[data-qa-idx=\"3\"]').first()"
+  },
+  {
+   "kind": "week",
+   "ok": true,
+   "clicks": [
+    "▶ Kick off",
+    "⏭ Sim the rest",
+    "Current squad"
+   ],
+   "end": "📺 Current squad ? Back to the papers Red Star Belgrade · Current squad · 1993/94 League Current squad Your current squad The eleven and bench below belong to your current club and its next season. Past matchday lineups were not kept in your career save. 👥 Squad By role The plan: Starter most weeks On our ratings 3rd of 8 midfielders"
+  },
+  {
+   "kind": "season-press",
+   "pre": {
+    "age": 17,
+    "ovr": 56,
+    "nw": 0,
+    "wage": 10402,
+    "val": 0.8,
+    "club": "Red Star Belgrade",
+    "years": 4
+   },
+   "post": {
+    "phase": "newspaper",
+    "age": 18,
+    "ovr": 57,
+    "nw": 0.49,
+    "wage": 10402,
+    "val": 1.5,
+    "club": "Red Star Belgrade",
+    "years": 3
+   }
+  }
+ ],
+ "shots": [
+  "c320-001-create-empty.jpg",
+  "c320-002-create-rolled.jpg",
+  "c320-003-create-rolled-full.jpg",
+  "c320-004-landing-after-begin.jpg",
+  "c320-005-ph-youth-1.jpg",
+  "c320-006-ph-contract_offer-1.jpg",
+  "c320-007-ph-contract_offer-2.jpg",
+  "c320-008-ph-playing-1.jpg",
+  "c320-009-hub-s0-top.jpg",
+  "c320-010-hub-s0-full.jpg",
+  "c320-011-ambition-s0.jpg",
+  "c320-012-ambition-picked-s0.jpg",
+  "c320-013-preseason-s0.jpg",
+  "c320-014-squad-s0.jpg",
+  "c320-015-programme-s0.jpg",
+  "c320-016-programme-tile-s0.jpg",
+  "c320-017-programme-opt-s0.jpg",
+  "c320-018-attributes-s0.jpg",
+  "c320-019-ratings-s0.jpg",
+  "c320-020-story-s0.jpg",
+  "c320-021-trophy-s0.jpg",
+  "c320-022-training-s0.jpg",
+  "c320-023-training-menu-s0.jpg",
+  "c320-024-training-result-s0.jpg",
+  "c320-025-phone-s0.jpg",
+  "c320-026-phone-messages-s0.jpg",
+  "c320-027-phone-messages-act-s0.jpg",
+  "c320-028-phone-contacts-s0.jpg",
+  "c320-029-phone-contacts-act-s0.jpg",
+  "c320-030-phone-news-s0.jpg",
+  "c320-031-phone-column-s0.jpg",
+  "c320-032-phone-bank-s0.jpg",
+  "c320-033-phone-bank-act-s0.jpg",
+  "c320-034-phone-market-s0.jpg",
+  "c320-035-phone-shop-s0.jpg",
+  "c320-036-phone-arcade-s0.jpg",
+  "c320-037-phone-cards-s0.jpg",
+  "c320-038-phone-social-s0.jpg",
+  "c320-039-phone-player-s0.jpg",
+  "c320-040-phone-peaks-s0.jpg",
+  "c320-041-phone-life-s0.jpg",
+  "c320-042-week-open.jpg",
+  "c320-043-week-end.jpg",
+  "c320-044-ph-newspaper-1.jpg",
+  "c320-045-ph-newspaper-2.jpg",
+  "c320-046-reload-newspaper.jpg",
+  "c320-047-ph-season_summary-1.jpg",
+  "c320-048-ph-ballon_dor-1.jpg",
+  "c320-049-ph-ballon_dor-2.jpg",
+  "c320-050-ph-ballon_dor-3.jpg",
+  "c320-051-ph-social_media_action-1.jpg",
+  "c320-052-ph-social_media_action-2.jpg",
+  "c320-053-ph-social_media_action-3.jpg",
+  "c320-054-ph-random_events-1.jpg",
+  "c320-055-ph-random_events-2.jpg",
+  "c320-056-ph-random_events-3.jpg",
+  "c320-057-ph-transfer_window-1.jpg",
+  "c320-058-reload-playing.jpg",
+  "c320-059-final-hub-full.jpg"
+ ],
+ "scroll": [],
+ "landing": {
+  "atBegin": {
+   "y": 1852,
+   "docH": 13209
+  },
+  "after": {
+   "y": 1852,
+   "docH": 13261,
+   "nameTop": -1642,
+   "nameText": "Danny Okafor-Whitfield",
+   "innerH": 640,
+   "firstVisibleHeading": "Live"
+  }
+ },
+ "created": {
+  "nat": "Nigeria🇳🇬",
+  "pos": "Central Mid (CM)",
+  "era": "Early 90s (1990 start)",
+  "phase": "youth",
+  "age": 16,
+  "club": "Enyimba Youth",
+  "ovr": 52,
+  "pot": 80
+ },
+ "final": {
+  "phase": "playing",
+  "age": 18,
+  "senior": 1,
+  "club": "Orlando Pirates",
+  "ovr": 57,
+  "steps": 22,
+  "secs": 93
+ },
+ "finalText": "🏋️\nTraining\nDrill ready\n📱\nPhone\n3\nunread\nDanny Okafor-Whitfield\n\nCM · Age 18 · \nNigeria\n\n🚪 Retire\n🔄 New Career\n57\nOVR\nPOT 80\n€410k\nNet Worth\n€430/wk\nWage\n€2M\nValue\nCAREER TIMELINE\nA\n16y\nEnyimba Youth\nYouth Academy\nA\n17y\nEnyimba Youth\nYouth Academy\n92\n18y\nRed Star Belgrade\n5.6\nOVR 56\n8A · 1G · 2As\nOR\nOrlando Pirates\n3yr left · €430/wk · €2M\nCM\n1992/93\n👥 Squad\nBy role\nThe plan: Starter most weeks\nOn our ratings\n2nd\nof 8 midfielders\n🎯 Season target\nChoose a personal challenge for next season\n🏃 Preseason plan\nBalanced, or choose your next-season workload\n📖 Record book\nYour best seasons and every club spell\n8 senior appearances · 1 club spell\nYour next season\nRoles, contracts, playing time and your comeback\n🎙️ Press room\nAnswer for your season\n50/100\n💰 FINANCES & LIFESTYLE\n€410k\nNet Worth\n🏚️ Humble\nLifestyle\n570k\n📱 Followers\n€430/wk\nWeekly Wage\nShow money in\n€ EUR\n£ GBP\n$ USD\nR$ BRL\nMX$ MXN\n¥ JPY\n₹ INR\nA$ AUD\n💸 Costs: €0.1M/yr\n🕴️ Agent fees: €0.1M total\n🎭 The Showman\nMorale\n55\nPopularity\n10\n🏠 MY LIFE & MONEY\n0 things owned\n€410k\nin the account\n€0k\nsavings\n€0k\ninvested\nOpen your phone\nBank, market, everything you can buy, and the card school\nATTRIBUTES\nPace\nAcceleration 54\n54\nShooting\nFinishing 52\n52\nPassing\nVision 60\n60\nDribbling\nBall Control 58\n58\nDefending\nMarking 58\n58\nPhysical\nStrength 61\n61\nFull attributes\n180 cm · 75 kg · every number under the six\nCAREER STATS\n\nOnly stats kept in your season records are shown.\n\n26\nApps\n3\nGoals\n7\nAssists\n0\nTrophies\n🔥 Derby history\nTROPHY CABINET\n\nTap a trophy to see the seasons behind it.\n\n🏆\n0\nLeagues\n🏆\n0\nCups\n⭐\n0\nUCL\n🌍\n0\nWorld Cup\n🌐\n0\nContinental\n🏅\n0\nBallon d'Or\n🏆 AWARDS\n🏆 Player of the Month\n INTERNATIONAL CAREER\n0\nCaps\n0\nGoals\n0\nAssists\n🗂️\nTournaments\n1 played out\n🏆\nAFCON 1992\nMorocco won it\nLATEST EVENTS\n📈 Ratings\n📖 Career Story\n📺 Season replays\n›\n🌏 Skipped the tour sponsor events to train. Got fined €80k and came back the fittest man at the club\n›\n📤 Red Star Belgrade have put you on the transfer list.\n›\n✍️ Signed with Orlando Pirates  (3yr, €430/wk) · Agent fee: €0.1M\nNext Season\nRetire\n📺\n18\nAGE"
+}

@@ -1,0 +1,16 @@
+[10s] created Brazil🇧🇷/Goalkeeper (GK)/Late 2000s (2005 start) -> youth age 16 at Cruzeiro Youth
+[18s] explore ambition-s0: 🎯 Season target Choose a personal challenge for next season -> closed true via  scroll 251->251
+[20s] explore preseason-s0: 🏃 Preseason plan Balanced, or choose your next-season workl -> closed true via  scroll 251->251
+[22s] explore squad-s0: 👥 Squad By role The plan: Starter most weeks On our ratings -> closed true via ← Back/Escape scroll 251->251
+[25s] explore programme-s0: Your next season Roles, contracts, playing time and your com -> closed true via Close scroll 251->251
+[26s] explore attributes-s0: Full attributes 190 cm · 84 kg · every number under the six -> closed true via ← Back scroll 251->89
+[28s] explore ratings-s0: 📈 Ratings -> closed true via Close scroll 89->1343
+[30s] explore story-s0: 📖 Career Story -> closed true via Back to your career scroll 1343->1343
+[31s] explore trophy-s0: 🏆 0 Leagues -> closed true via ‹ Back scroll 1343->1343
+[45s] explore training-s0: 🏋️ Drill ready -> closed true via Close scroll 1343->1343
+[61s] explore phone-s0: 📱 3 unread -> closed true via  scroll 1343->1343
+[75s] reload (step 15 in ballon_dor): same=true phase ballon_dor->ballon_dor
+[108s] reload (step 33 in ballon_dor): same=true phase ballon_dor->ballon_dor
+[1084s] reload (final): same=true phase ballon_dor->ballon_dor
+[1084s] done: {"phase":"ballon_dor","age":18,"senior":1,"club":"Monaco","ovr":66,"steps":619,"secs":1081} shots=51 audits=35 errors=9 pageErrors=0 stuck=0 traps=0
+WALK b1280 FINISHED

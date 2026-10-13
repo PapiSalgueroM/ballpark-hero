@@ -1,0 +1,17 @@
+[10s] created England/Striker (ST)/Current era (2025 start) -> youth age 16 at Everton Youth
+[15s] explore ambition-s0: 🎯 Season target Choose a personal challenge for next season -> closed true via  scroll 1225->366
+[17s] explore preseason-s0: 🏃 Preseason plan Balanced, or choose your next-season workl -> closed true via  scroll 366->366
+[19s] explore squad-s0: 👥 Squad Your teammates The plan: Starter most weeks On our  -> closed true via ← Back/Escape scroll 366->366
+[22s] explore programme-s0: Your next season Roles, contracts, playing time and your com -> closed true via Close scroll 366->366
+[24s] explore attributes-s0: Full attributes 183 cm · 78 kg · every number under the six -> closed true via ← Back scroll 366->193
+[25s] explore ratings-s0: 📈 Ratings -> closed true via Close scroll 193->1877
+[27s] explore story-s0: 📖 Career Story -> closed true via Back to your career scroll 1877->1877
+[28s] explore trophy-s0: 🏆 0 Leagues -> closed true via ‹ Back scroll 1877->1877
+[40s] explore training-s0: 🏋️ Training Drill ready -> closed true via Close scroll 1877->0
+[62s] reload (step 9 in newspaper): same=true phase newspaper->newspaper
+[87s] reload (step 23 in ballon_dor): same=true phase ballon_dor->ballon_dor
+[120s] reload (step 41 in ballon_dor): same=true phase ballon_dor->ballon_dor
+[154s] reload (step 60 in ballon_dor): same=true phase ballon_dor->ballon_dor
+[1084s] reload (final): same=true phase ballon_dor->ballon_dor
+[1084s] done: {"phase":"ballon_dor","age":18,"senior":1,"club":"Dinamo Zagreb","ovr":61,"steps":618,"secs":1081} shots=39 audits=21 errors=11 pageErrors=0 stuck=0 traps=0
+WALK a390 FINISHED

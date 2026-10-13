@@ -1,0 +1,16 @@
+[10s] created Nigeria🇳🇬/Central Mid (CM)/Early 90s (1990 start) -> youth age 16 at Enyimba Youth
+[15s] explore ambition-s0: 🎯 Season target Choose a personal challenge for next season -> closed true via  scroll 1030->290
+[16s] explore preseason-s0: 🏃 Preseason plan Balanced, or choose your next-season workl -> closed true via  scroll 290->290
+[19s] explore squad-s0: 👥 Squad By role The plan: Squad player On our ratings 4th o -> closed true via ← Back/Escape scroll 290->290
+[22s] explore programme-s0: Your next season Roles, contracts, playing time and your com -> closed true via Close scroll 290->290
+[23s] explore attributes-s0: Full attributes 180 cm · 75 kg · every number under the six -> closed true via ← Back scroll 290->193
+[25s] explore ratings-s0: 📈 Ratings -> closed true via Close scroll 193->2011
+[26s] explore story-s0: 📖 Career Story -> closed true via Back to your career scroll 2011->2011
+[28s] explore trophy-s0: 🏆 0 Leagues -> closed true via ‹ Back scroll 2011->1634
+[40s] explore training-s0: 🏋️ Training Drill ready -> closed true via Close scroll 1634->0
+[55s] explore phone-s0: 📱 Phone 3 unread -> closed true via  scroll 0->0
+[75s] reload (step 6 in newspaper): same=true phase newspaper->newspaper
+[93s] target reached: 1 senior seasons
+[96s] reload (final): same=true phase playing->playing
+[96s] done: {"phase":"playing","age":18,"senior":1,"club":"Orlando Pirates","ovr":57,"steps":22,"secs":93} shots=59 audits=36 errors=5 pageErrors=0 stuck=0 traps=0
+WALK c320 FINISHED
