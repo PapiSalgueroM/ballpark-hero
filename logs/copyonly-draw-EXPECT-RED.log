@@ -1,0 +1,76 @@
+CONTROL draw: one line of the head's clubManager.ts rewritten in the bundle, the run must go red
+cmCopyOnly1326: base /home/runner/work/ballpark-hero/ballpark-hero/.tb2, head /home/runner/work/ballpark-hero/ballpark-hero
+  fleets A, 2 seasons a career; bare league names La Liga, Serie A, Ligue 1, Serie B, Ligue 2
+  active rewrites: article-board, article-news, drama, intl, staff
+fleet A: 13 careers
+  FAIL: A Liverpool (now): season 1 entry 1 (week 1) differs
+      season 1 entry 1 (week 1): 1967 draws on base, 1968 on head
+  A Liverpool (now) [Premier League]: seasons 0, entries 1, draws 1967/1968, bytes -, rewrites none, stopped: season 1 entry 1 (week 1) (0s)
+  FAIL: A Barcelona (now): season 1 entry 1 (week 1) differs
+      season 1 entry 1 (week 1): 2040 draws on base, 2041 on head
+  A Barcelona (now) [La Liga]: seasons 0, entries 1, draws 2040/2041, bytes -, rewrites article-board 2, stopped: season 1 entry 1 (week 1) (0s)
+  FAIL: A Real Madrid (now): season 1 entry 1 (week 1) differs
+      season 1 entry 1 (week 1): 2140 draws on base, 2141 on head
+      season 1 entry 1 (week 1).budget: 198.3 on base, 198.1 on head
+      season 1 entry 1 (week 1).inbox[0].resolved: an undeclared string
+        base: "Fined. £400k into the club account. He is sulking."
+        head: "Fined. £200k into the club account. He is sulking."
+      season 1 entry 1 (week 1).books.season.tickets: 2.28 on base, 2.35 on head
+      season 1 entry 1 (week 1).books.season.concessions: 0.57 on base, 0.58 on head
+      season 1 entry 1 (week 1).finance.seasonGate: 2.85 on base, 2.93 on head
+      season 1 entry 1 (week 1).finance.lastGate: 2.85 on base, 2.93 on head
+  A Real Madrid (now) [La Liga]: seasons 0, entries 1, draws 2140/2141, bytes -, rewrites article-board 2, staff 1, stopped: season 1 entry 1 (week 1) (0s)
+  FAIL: A Celta Vigo (now): season 1 entry 1 (week 1) differs
+      season 1 entry 1 (week 1): 2024 draws on base, 2025 on head
+      season 1 entry 1 (week 1).budget: 18.43 on base, 18.4 on head
+      season 1 entry 1 (week 1).books.season.tickets: 0.35 on base, 0.32 on head
+      season 1 entry 1 (week 1).finance.seasonGate: 0.43 on base, 0.4 on head
+      season 1 entry 1 (week 1).finance.lastGate: 0.43 on base, 0.4 on head
+  A Celta Vigo (now) [La Liga]: seasons 0, entries 1, draws 2024/2025, bytes -, rewrites none, stopped: season 1 entry 1 (week 1) (0s)
+  FAIL: A Juventus (now): season 1 entry 1 (week 1) differs
+      season 1 entry 1 (week 1): 2047 draws on base, 2048 on head
+  A Juventus (now) [Serie A]: seasons 0, entries 1, draws 2047/2048, bytes -, rewrites article-board 2, stopped: season 1 entry 1 (week 1) (0s)
+  FAIL: A PSG (now): season 1 entry 1 (week 1) differs
+      season 1 entry 1 (week 1): 2131 draws on base, 2132 on head
+  A PSG (now) [Ligue 1]: seasons 0, entries 1, draws 2131/2132, bytes -, rewrites article-board 2, stopped: season 1 entry 1 (week 1) (0s)
+  FAIL: A Palermo (now): season 1 entry 1 (week 1) differs
+      season 1 entry 1 (week 1): 2224 draws on base, 2225 on head
+  A Palermo (now) [Serie B]: seasons 0, entries 1, draws 2224/2225, bytes -, rewrites none, stopped: season 1 entry 1 (week 1) (0s)
+  FAIL: A OB (now): season 1 entry 1 (week 1) differs
+      season 1 entry 1 (week 1): 2790 draws on base, 2791 on head
+  A OB (now) [Danish Superliga]: seasons 0, entries 1, draws 2790/2791, bytes -, rewrites none, stopped: season 1 entry 1 (week 1) (0s)
+  FAIL: A Dundee (now): season 1 entry 1 (week 1) differs
+      season 1 entry 1 (week 1): 2754 draws on base, 2755 on head
+      season 1 entry 1 (week 1).budget: 8.38 on base, 8.2 on head
+      season 1 entry 1 (week 1).books.season.tickets: 0.31 on base, 0.16 on head
+      season 1 entry 1 (week 1).books.season.concessions: 0.07 on base, 0.04 on head
+      season 1 entry 1 (week 1).finance.seasonGate: 0.38 on base, 0.2 on head
+      season 1 entry 1 (week 1).finance.lastGate: 0.38 on base, 0.2 on head
+  A Dundee (now) [Scottish Premiership]: seasons 0, entries 1, draws 2754/2755, bytes -, rewrites none, stopped: season 1 entry 1 (week 1) (0s)
+  FAIL: A West Ham (now): season 1 entry 1 (week 1) differs
+      season 1 entry 1 (week 1): 1971 draws on base, 1972 on head
+      season 1 entry 1 (week 1).budget: 35.3 on base, 35.2 on head
+      season 1 entry 1 (week 1).inbox[1].resolved: an undeclared string
+        base: "Fined. £300k into the club account. He is sulking."
+        head: "Fined. £200k into the club account. He is sulking."
+  A West Ham (now) [EFL Championship]: seasons 0, entries 1, draws 1971/1972, bytes -, rewrites none, stopped: season 1 entry 1 (week 1) (0s)
+  FAIL: A Everton (era2005): season 1 entry 1 (week 1) differs
+      season 1 entry 1 (week 1): 930 draws on base, 931 on head
+  A Everton (era2005) [Premier League]: seasons 0, entries 1, draws 930/931, bytes -, rewrites none, stopped: season 1 entry 1 (week 1) (0s)
+  FAIL: A Leicester City (era2015): season 1 entry 1 (week 1) differs
+      season 1 entry 1 (week 1): 956 draws on base, 957 on head
+  A Leicester City (era2015) [Premier League]: seasons 0, entries 1, draws 956/957, bytes -, rewrites none, stopped: season 1 entry 1 (week 1) (0s)
+  FAIL: A Bayern Munich (era2020): season 1 entry 1 (week 1) differs
+      season 1 entry 1 (week 1): 938 draws on base, 939 on head
+      season 1 entry 1 (week 1).budget: 121.23 on base, 121.67 on head
+      season 1 entry 1 (week 1).books.season.tickets: 1.79 on base, 2.15 on head
+      season 1 entry 1 (week 1).books.season.concessions: 0.44 on base, 0.52 on head
+      season 1 entry 1 (week 1).finance.seasonGate: 2.23 on base, 2.67 on head
+      season 1 entry 1 (week 1).finance.lastGate: 2.23 on base, 2.67 on head
+  A Bayern Munich (era2020) [Bundesliga]: seasons 0, entries 1, draws 938/939, bytes -, rewrites staff 1, stopped: season 1 entry 1 (week 1) (0s)
+rewrites fired over 13 careers: article-board 8, staff 2
+staff lines that carry the summer lapse sentence (comparisons): 0
+  FAIL: rewrite article-news is active on the head and fired zero times over fleets A: widen the fleet (COPY_ONLY_SEASONS), never pick seeds
+  FAIL: rewrite drama is active on the head and fired zero times over fleets A: widen the fleet (COPY_ONLY_SEASONS), never pick seeds
+  FAIL: rewrite intl is active on the head and fired zero times over fleets A: widen the fleet (COPY_ONLY_SEASONS), never pick seeds
+cmCopyOnly1326: CONTROL draw FIRED (16 failures, as it must)

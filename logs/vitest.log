@@ -1,0 +1,28 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ [32m✓[39m src/test/managerScorerMarks.test.tsx [2m([22m[2m15 tests[22m[2m)[22m[33m 451[2mms[22m[39m
+ [32m✓[39m src/lib/gmStaff.test.ts [2m([22m[2m16 tests[22m[2m)[22m[33m 1386[2mms[22m[39m
+   [33m[2m✓[22m[39m the scouting read[2m > [22mshows a band that holds every miss the scout can make, and narrows where the worst miss does [33m 306[2mms[22m[39m
+   [33m[2m✓[22m[39m the trainer[2m > [22mnever clears a player in under a week, never keeps him out longer, and on average cuts what the tile says [33m 357[2mms[22m[39m
+ [32m✓[39m src/test/staffScreen.test.tsx [2m([22m[2m12 tests[22m[2m)[22m[33m 1846[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager staff decision desk[2m > [22mkeeps no-op payoff and poaching decisions quiet and invalidates stale person confirmation [33m 328[2mms[22m[39m
+ [32m✓[39m src/lib/clubManagerInternationals.test.ts [2m([22m[2m13 tests[22m[2m)[22m[32m 35[2mms[22m[39m
+[90mstdout[2m | src/test/clubManagerEraNationalities.test.ts[2m > [22m[2mClub Manager: a past season brings its own nationalities[2m > [22m[2monce the 2005 season has loaded its men have their countries, and 2010 still has none
+[22m[39m  2005: Aaron Mokoena is South Africa, 97 call up bars; 2010: Abdelhamid El Kaoutari waits
+
+ [32m✓[39m src/test/clubManagerWorldEditor.test.tsx [2m([22m[2m14 tests[22m[2m)[22m[33m 1271[2mms[22m[39m
+   [33m[2m✓[22m[39m WorldEditorScreen[2m > [22mmoves a club in two taps, says what happened, lists it and resets [33m 562[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerEraNationalities.test.ts [2m([22m[2m3 tests[22m[2m)[22m[33m 1657[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: a past season brings its own nationalities[2m > [22mbefore its season is asked for, a past world answers nobody [33m 823[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: a past season brings its own nationalities[2m > [22monce the 2005 season has loaded its men have their countries, and 2010 still has none [33m 707[2mms[22m[39m
+ [32m✓[39m src/test/cmMinuteLabel.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 18[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m7 passed[39m[22m[90m (7)[39m
+[2m      Tests [22m [1m[32m82 passed[39m[22m[90m (82)[39m
+[2m   Start at [22m 15:52:02
+[2m   Duration [22m 10.84s[2m (transform 5.43s, setup 626ms, collect 14.39s, tests 6.66s, environment 5.16s, prepare 1.73s)[22m
+
