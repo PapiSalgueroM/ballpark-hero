@@ -1,0 +1,32 @@
+1) The brief over 200 seeded windows
+   needs: 98 windows of three, 102 of four; the dearest men for every need overrun the budget in 200 of 200 (100.0 percent)
+   ok  200 briefs: real approaches who fit the slot and clear the line, a budget that covers the cheap route and not the dear one
+2) Pricing off the desk against paying the asking price, on the same dice
+   desk score 70.36, needs 49.08, value 18.86, budget 2.44; every need filled in 93.0 percent; hours used 11.2; fee over value 1.246; sales 0.91; deals {"signed":688,"gone":399,"collapsed":13}
+   over score 67.31, needs 49.50, value 15.25, budget 2.54; every need filled in 96.0 percent; hours used 8.2; fee over value 1.303; sales 1.21; deals {"signed":694,"gone":245,"walked":12}
+   desk minus asking price: +3.05 score, +3.62 value points; desk wins 156, asking price wins 28, level 16
+   ok  the manager who prices off the desk grades higher, wins more pairs and takes more value points, and the clock still beats him sometimes
+3) A deal unfinished at the shut collapses
+   288 held deals caught at the shut, 200 of 200 days shut by the clock itself, 0 days that moved after the shut
+   the clock: 600 graded windows, 0 spent more than 12 hours, 0 shut by the clock on another count; 8959 actions read so far, 0 with the wall clock off the hours spent
+   ok  every unfinished deal collapses at the shut, none of them signs or is charged, and nothing moves after it
+4) The daily is one window per date, and a window replays from its actions
+   50 replays compared, 0 differ; 28 days, 0 repeats of the day before
+   ok  the same date is the same window, each new day is a new one, and every window replays from its seed and actions
+5) The budget never goes negative
+   13957 actions read, 0 left the budget below zero; the reckless manager asked for money the club did not have 1699 times
+   ok  no action of any manager took the budget below zero
+6) A Club Manager save's registrations survive a Deadline Day
+   ok  a custom club and a league override are the same objects after a start, 7 actions and a replay, and the window never shows them
+7) Rival clubs take the players you leave alone
+   2144 hours a rival was in for a man left alone, 644 closed (30.0 percent, the rule says 30); 1.61 players a window lost to rivals in all
+   walking away from 200 terms tables with a rival circling lost the man 111 times (55.5 percent; the engine's walk away rule is 60)
+   ok  rivals close at the rate the rules state on a man left alone, take him to the club that was in, and usually take him when you walk
+8) Nothing free stands in for the signing bonus
+   200 terms tables, 600 offers trading the bonus for free terms, 0 signed, 0.0m of bonus dodged; 0 recorded over his ask; exactly his ask signed 200
+   ok  no wage or length buys off the bonus, nothing over his ask is recorded, and his ask still signs him
+9) The worked example on the rules screen and in the guide is what the engine plays
+   6 figures on the rules screen and 6 in the guide checked against Lorient on seed 1618079 in the 2023-02-21 market, 0 differ; the guide's sum is 75 (B) and gradeWindow grades that window 75 (B: needs 50, value 24, budget 0.7)
+   ok  every figure in both worked examples is what the engine plays for Lorient on seed 1618079, and the grade adds up
+
+simDeadlineDay: green. The brief is real, the desk pays, the clock binds, the daily is one window a day, the budget holds, a Club Manager save keeps its registrations, rivals close at the stated rate, the bonus is paid and the worked examples are what the engine plays.
