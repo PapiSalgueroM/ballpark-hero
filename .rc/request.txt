@@ -1,0 +1,3 @@
+#!serve
+#!playwright
+land: git worktree add -q /tmp/lb c5fc5470 && ln -s "$PWD/node_modules" /tmp/lb/node_modules && (cd /tmp/lb && node_modules/.bin/vite build > /tmp/lb-build.log 2>&1) && SOCCER_LANDING_BASE_DIST=/tmp/lb/dist ENGINES=chromium node scripts/playSoccerLanding.mjs
