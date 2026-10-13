@@ -1,0 +1,4 @@
+#!serve
+#!playwright
+fence-simWritesAreSent: node scripts/simWritesAreSent.mjs
+fence-simResultMoment: node scripts/simResultMoment.mjs
