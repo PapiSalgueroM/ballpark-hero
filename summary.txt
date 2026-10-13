@@ -1,0 +1,3 @@
+build exit=0 23s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+mobile-head exit=1 207s |   - action bar @430: no identity name span on the career header
+mobile-base exit=0 233s | GREEN: 34 top bar measurements and 132 scroll stops, no overlaps, nothing off the side of the screen, controls reachable everywhere, footer never covered.

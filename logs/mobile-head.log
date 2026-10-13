@@ -1,0 +1,12 @@
+2:Top bar measured at 320, 390, 430, 1024, 1440 wide across 5 routes, signed out and signed in.
+5:Top bar, child boxes measured in the browser
+47:RED: 3 findings
+48:  - action bar @320: no identity name span on the career header
+49:  - action bar @390: no identity name span on the career header
+50:  - action bar @430: no identity name span on the career header
+  132 of 132 scroll stops had the controls on screen and hit testable. 7 of them had the footer showing at the same time with zero pixels of overlap.
+
+RED: 3 findings
+  - action bar @320: no identity name span on the career header
+  - action bar @390: no identity name span on the career header
+  - action bar @430: no identity name span on the career header

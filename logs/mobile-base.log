@@ -1,0 +1,9 @@
+2:Top bar measured at 320, 390, 430, 1024, 1440 wide across 5 routes, signed out and signed in.
+5:Top bar, child boxes measured in the browser
+47:GREEN: 34 top bar measurements and 132 scroll stops, no overlaps, nothing off the side of the screen, controls reachable everywhere, footer never covered.
+   320   50 scroll stops, bar 85px tall, page 15400px, controls unreachable at 0 of them, covering the footer at 0, 2 other buttons on the page mention next season and were not taken for the bar
+   390   42 scroll stops, bar 85px tall, page 13116px, controls unreachable at 0 of them, covering the footer at 0, 2 other buttons on the page mention next season and were not taken for the bar
+   430   40 scroll stops, bar 85px tall, page 12245px, controls unreachable at 0 of them, covering the footer at 0, 2 other buttons on the page mention next season and were not taken for the bar
+  132 of 132 scroll stops had the controls on screen and hit testable. 7 of them had the footer showing at the same time with zero pixels of overlap.
+
+GREEN: 34 top bar measurements and 132 scroll stops, no overlaps, nothing off the side of the screen, controls reachable everywhere, footer never covered.
