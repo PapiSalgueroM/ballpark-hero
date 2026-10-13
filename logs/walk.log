@@ -1,0 +1,35 @@
+  PASS  nfl-390-rm: the hub shows its boxes (9)
+  PASS  nfl-390-rm: the play box reaches its play button
+  PASS  nfl-390-rm: no horizontal overflow (0px)
+  PASS  nfl-390-rm: no page errors
+  PASS  nfl-390-mo: the hub shows its boxes (9)
+  PASS  nfl-390-mo: the play box reaches its play button
+  PASS  nfl-390-mo: no horizontal overflow (0px)
+  PASS  nfl-390-mo: no page errors
+  PASS  nfl-1280-rm: the hub shows its boxes (9)
+  PASS  nfl-1280-rm: the play box reaches its play button
+  PASS  nfl-1280-rm: no horizontal overflow (0px)
+  PASS  nfl-1280-rm: no page errors
+  PASS  nfl-1280-mo: the hub shows its boxes (9)
+  PASS  nfl-1280-mo: the play box reaches its play button
+  PASS  nfl-1280-mo: no horizontal overflow (0px)
+  PASS  nfl-1280-mo: no page errors
+  PASS  nba-390-rm: the hub shows its boxes (9)
+  PASS  nba-390-rm: the play box reaches its play button
+  PASS  nba-390-rm: no horizontal overflow (0px)
+  PASS  nba-390-rm: no page errors
+  PASS  nba-390-mo: the hub shows its boxes (9)
+  PASS  nba-390-mo: the play box reaches its play button
+  PASS  nba-390-mo: no horizontal overflow (0px)
+  PASS  nba-390-mo: no page errors
+  PASS  nba-1280-rm: the hub shows its boxes (9)
+  PASS  nba-1280-rm: the play box reaches its play button
+  PASS  nba-1280-rm: no horizontal overflow (0px)
+  PASS  nba-1280-rm: no page errors
+  PASS  nba-1280-mo: the hub shows its boxes (9)
+  PASS  nba-1280-mo: the play box reaches its play button
+  PASS  nba-1280-mo: no horizontal overflow (0px)
+  PASS  nba-1280-mo: no page errors
+  PASS  the scan read 344 JS responses and found the consent banner's own string in 8 (the scan works)
+  PASS  no JS file any walked page loaded carries the deck engine's strings
+rv1324walk: green

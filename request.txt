@@ -1,0 +1,4 @@
+#!serve
+#!playwright
+walk: node .rc/x/rv1324walk.mjs
+distgrep: n=$(ls dist/assets/*.js | wc -l); h=$(grep -l -e "dealt with it" -e "pack moves" dist/assets/*.js | wc -l); echo "chunks $n, carrying the deck engine strings $h"; [ "$n" -gt 100 ] && [ "$h" -eq 0 ]
