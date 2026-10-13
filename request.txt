@@ -1,0 +1,13 @@
+#!serve
+#!playwright
+#!serial
+rvwalk: node .rc/x/rvwalk.mjs
+gameday-walk: ENGINES=chromium node scripts/playFrontOfficeGameDay.mjs
+ctl-all: node scripts/controlFrontOfficeBoard.mjs all > $RC_OUT/ctl-all.log 2>&1; s=$?; grep -E "^control |controlFrontOfficeBoard:" $RC_OUT/ctl-all.log | cut -c1-200 | tail -60; exit $s
+ctl-blank: node scripts/controlFrontOfficeBoard.mjs blank
+walk-bracketjump: FO_GAMEDAY_WALK_CONTROL=bracketjump ENGINES=chromium node scripts/playFrontOfficeGameDay.mjs
+walk-playoffspoil: FO_GAMEDAY_WALK_CONTROL=playoffspoil ENGINES=chromium node scripts/playFrontOfficeGameDay.mjs
+walk-lostblock: FO_GAMEDAY_WALK_CONTROL=lostblock ENGINES=chromium node scripts/playFrontOfficeGameDay.mjs
+weight: SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs
+flagship: node scripts/simFlagshipWeight.mjs
+walk-revealdown: node .rc/x/mut-revealdown.mjs && npm run build > /tmp/rd-build.log 2>&1 && FO_GAMEDAY_WALK_CONTROL=revealdown ENGINES=chromium node scripts/playFrontOfficeGameDay.mjs; s=$?; git checkout -- src; exit $s
