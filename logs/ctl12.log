@@ -1,0 +1,4 @@
+softedge exit=1 mutated=1 | fails by section:  1 12. | simCareerPreDraft [control softedge] [seed set a]: 1 FAILURE(S)
+flathands exit=1 mutated=1 | fails by section:  8 10. 2 12. | simCareerPreDraft [control flathands] [seed set a]: 10 FAILURE(S)
+curveflip exit=1 mutated=1 | fails by section:  1 10. 1 12. | simCareerPreDraft [control curveflip] [seed set a]: 2 FAILURE(S)
+keyscurve exit=1 mutated=1 | fails by section:  1 10. 1 12. | simCareerPreDraft [control keyscurve] [seed set a]: 2 FAILURE(S)

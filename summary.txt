@@ -1,0 +1,9 @@
+pd-b exit=0 33s | simCareerPreDraft [seed set b]: ALL GREEN
+pd-a exit=0 36s | simCareerPreDraft [seed set a]: ALL GREEN
+pd-c exit=0 27s | simCareerPreDraft [seed set c]: ALL GREEN
+pd-d exit=0 30s | simCareerPreDraft [seed set d]: ALL GREEN
+pd-e exit=0 28s | simCareerPreDraft [seed set e]: ALL GREEN
+tsc exit=0 106s | 
+softedge-old exit=0 32s | OLDFLOORS control=softedge exit=0
+softedge-e exit=1 24s | simCareerPreDraft [control softedge] [seed set e]: 1 FAILURE(S)
+ctl12 exit=0 99s | keyscurve exit=1 mutated=1 | fails by section:  1 10. 1 12. | simCareerPreDraft [control keyscurve] [seed set a]: 2 FAILURE(S)
