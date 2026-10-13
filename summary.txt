@@ -1,0 +1,17 @@
+own-tests exit=0 25s |    Duration  24.43s (transform 4.67s, setup 249ms, collect 8.59s, tests 25.51s, environment 2.15s, prepare 804ms)
+tsc exit=0 95s | 
+simFreeAgents exit=0 113s | simFreeAgents: all sections passed
+fa-marketreleased-EXPECT-RED exit=1 108s | simFreeAgents: 1 failure(s)
+fa-buyreleased-EXPECT-RED exit=1 108s | simFreeAgents: 1 failure(s)
+fa-noreleasedlist-EXPECT-RED exit=1 109s | simFreeAgents: 2 failure(s)
+unseeded-noinverse-EXPECT-RED exit=1 39s | simCmUnseededWorld: CONTROL noinverse FIRED: without the inverse the fresh careers differ from the base (15 of 15)
+simCmUnseededWorld exit=0 191s | simCmUnseededWorld: green. 49 old saves with no deal and 49 with every deal play byte equal to b6eb78e7 (state, draws and saved bytes at every step), and 15 new careers w
+unseeded-guard-EXPECT-RED exit=1 178s | simCmUnseededWorld: CONTROL guard FIRED: with the guard out the deal fleet went red (49 saves) and the quiet fleet stayed green
+journey-futureyear-EXPECT-RED exit=1 4s | simCmLedgerJourney: CONTROL futureyear FIRED: 45 failure(s) of the kind "a ledger its reader refuses"
+simCmLedgerJourney exit=0 138s | simCmLedgerJourney: green. 45 seeded journeys, 9442 ledgers read at a step or a reload, and the reader refused none the game wrote; every owned record of my club is carri
+simManagerAppealIsolation exit=0 48s | Equivalent appeal outcomes must agree: passed for 24 original pairs and 3 separate generated-position pairs.
+simCmLeagueRules exit=0 69s | simCmLeagueRules: all checks passed (modern, eras, pure, drop4, cupless, shapes, chunks)
+journey-nokey-EXPECT-RED exit=1 137s | simCmLedgerJourney: CONTROL nokey FIRED: 3 failure(s) of the kind "no man of my squad carries his key"
+simClubManagerDecisions exit=0 19s | simClubManagerDecisions: 0 findings
+simNoRivalNames exit=0 19s | No rival product names found. 0 findings.
+simHarnessAnchors exit=0 42s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
