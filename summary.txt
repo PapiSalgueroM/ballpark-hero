@@ -1,0 +1,7 @@
+build exit=0 32s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+playSoccerInternationalReturn exit=0 131s | Soccer international return native 854 checks,12 journeys,3 copied observation controls,0 failures.
+playSoccerFarewell exit=0 275s | Soccer farewell native 1343 checks,18 journeys,3 copied observation controls,0 failures.
+playCareerProgramme exit=0 242s | Career programme native: 1154 checks, 21/21 completed gameplay journeys
+resultsLayout exit=0 1s | Node.js v24.21.0
+playSoccerAgentReview exit=0 448s | Soccer agent review native 1904 checks,12 journeys,3 copied observation controls,0 failures.
+pressMarket exit=0 402s | Press/Market native 1899 checks,54 journeys,3 effective observation detectors,0 failures.
