@@ -354,8 +354,9 @@ export interface CollegeMove { myTeam: string; block: CollegeSeatBlock; offer: S
  * season after the league's, with trust from the start and the offer's ask.
  */
 export function collegeTakeJob(block: CollegeSeatBlock, view: CollegeLeagueView, teamId: string, from: 'market' | 'bid'): CollegeMove | null {
+  const bid = from === 'bid' ? collegeBid(block, view) : null;
   const offer = from === 'bid'
-    ? (() => { const b = collegeBid(block, view); return b && b.teamId === teamId ? b : null; })()
+    ? (bid && bid.teamId === teamId ? bid : null)
     : collegeMarket(block, view)?.offers.find(o => o.teamId === teamId) ?? null;
   if (!offer) return null;
   return {
