@@ -1,0 +1,4 @@
+build exit=0 29s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+anchors exit=0 44s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+smalltap exit=1 49s | Shots and part1.json: /home/runner/work/_temp/rc-out/files/shots
+fences exit=1 270s | FENCE simGuideHeadings exit=0 | simGuideHeadings: green. 131 guides carry keyword h2s over h3 and h4 sections with every original sentence intact, and all 133 blocks rend
