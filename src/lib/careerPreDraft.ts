@@ -84,6 +84,17 @@ export interface PreDraftPostDraft {
   title: string;
 }
 
+/** Round 1319: one showcase drill a player can run himself, as one of the
+ *  shared training drills (the burst tap or the cone run). The name is a
+ *  plain name for what the game's drill is ("Burst test", "Agility run",
+ *  "Hit your spots"), which claims no real test, or a real test's name only
+ *  where the audit backs it twice for that era (the NHL's today: audit row
+ *  65 of docs/audits/US-PRE-DRAFT-RULES-2026-10.md). */
+export interface PreDraftStation {
+  name: string;
+  kind: 'burst' | 'cones';
+}
+
 export interface PreDraftDescriptor {
   sport: PreDraftSport;
   eraId: string;
@@ -110,6 +121,11 @@ export interface PreDraftDescriptor {
    *  where a sport's game rule drafts a position late (the NFL's kickers). A
    *  rank past the last pick is undrafted, as always. Nothing else sets it. */
   pickOffset?: (pos: string | undefined) => number;
+  /** Round 1319: the stations a player of this position can run himself at
+   *  the showcase, in order. Read through preDraftStations, which turns
+   *  anything but one or two good stations into none. `drills` is the
+   *  scouts path's list and is never read here. */
+  stations?: (pos: string | undefined) => PreDraftStation[];
   postDraft: PreDraftPostDraft | null;
   undraftedLine: string;
 }
@@ -127,6 +143,9 @@ export interface PreDraftShowcaseResult {
   drill: string;
   grade: 'A' | 'B' | 'C' | 'D' | null;
   stockDelta: number;
+  /** Round 1319: a showcase the player ran himself, one whole station score
+   *  from 0 to 100 a station, in order. Absent on the scouts' grade. */
+  played?: number[];
 }
 
 export interface PreDraftOutcome {
@@ -173,6 +192,9 @@ export interface PreDraftState {
   showcase: PreDraftShowcaseResult | null;
   draft: PreDraftOutcome | null;
   phase: PreDraftPhase;
+  /** Round 1319: present only between "run it yourself" and the grade, at
+   *  phase `showcase`. A block that carries it is settled by the loader. */
+  combine?: { approach: 'allout' | 'steady' };
 }
 
 export const clampMeter = (n: number) => Math.max(0, Math.min(100, Math.round(n)));
@@ -451,15 +473,23 @@ export function preDraftChoose(desc: PreDraftDescriptor, prev: PreDraftState, op
   return s;
 }
 
-/** The drill grade comes from one draw that ignores the approach, so the
- *  approach only decides how far the same grade moves the stock. */
-export function preDraftShowcaseGrade(s: PreDraftState, rng: () => number): 'A' | 'B' | 'C' | 'D' {
-  const roll = rng() + (s.rating - 70) * 0.02 - (100 - s.health) * 0.003;
+/** The drill grade: a number u from 0 to 1, cut by the rating and the health
+ *  into four grades. The scouts path hands it one draw that ignores the
+ *  approach (preDraftShowcaseGrade below); Round 1319 lets a showcase run by
+ *  hand hand it the drills' average instead. Same terms, same lines, so both
+ *  paths share one cut, and the approach only decides how far the same grade
+ *  moves the stock. */
+export function preDraftShowcaseGradeFrom(u: number, s: Pick<PreDraftState, 'rating' | 'health'>): 'A' | 'B' | 'C' | 'D' {
+  const roll = u + (s.rating - 70) * 0.02 - (100 - s.health) * 0.003;
   return roll > 0.8 ? 'A' : roll > 0.5 ? 'B' : roll > 0.2 ? 'C' : 'D';
+}
+export function preDraftShowcaseGrade(s: PreDraftState, rng: () => number): 'A' | 'B' | 'C' | 'D' {
+  return preDraftShowcaseGradeFrom(rng(), s);
 }
 
 export function preDraftShowcase(desc: PreDraftDescriptor, prev: PreDraftState, approach: PreDraftApproach['id']): PreDraftState {
   if (prev.phase !== 'showcase' || !PRE_DRAFT_APPROACHES.some(a => a.id === approach)) return prev;
+  if (prev.combine) return prev; /* Round 1319: an opened attempt is resolved by the drills or settled by the loader, never pressed again */
   const s: PreDraftState = { ...prev };
   if (approach === 'skip') {
     const move = preDraftShowcaseMove(s.stock, SKIP_DELTA);
@@ -524,6 +554,115 @@ export function preDraftRunDraft(desc: PreDraftDescriptor, prev: PreDraftState):
   return s;
 }
 
+/* ─── The combine you run (Round 1319) ────────────────────────────────── */
+
+/** The stations this player can run himself: the descriptor's list, kept
+ *  only when it is one or two stations of the burst or the cone kind with
+ *  distinct names that are not empty. Anything else is none, and a showcase
+ *  with no stations offers only the scouts' three buttons. */
+export function preDraftStations(desc: PreDraftDescriptor, s: Pick<PreDraftState, 'pos'>): PreDraftStation[] {
+  const list = desc.stations?.(s.pos);
+  if (!Array.isArray(list) || list.length < 1 || list.length > 2) return [];
+  const good = list.every(st => !!st && (st.kind === 'burst' || st.kind === 'cones') && typeof st.name === 'string' && st.name.trim() !== '');
+  if (!good || new Set(list.map(st => st.name)).size !== list.length) return [];
+  return list.map(st => ({ name: st.name, kind: st.kind }));
+}
+
+/** How a station was played: with a pointer (a mouse, a finger, two thumbs)
+ *  or from the keyboard. Keys tab straight onto the next marker and can
+ *  alternate two keys on the burst, so they get a curve of their own. */
+export type PreDraftInput = 'pointer' | 'keys';
+
+/** A station's raw result: the taps in the burst's five seconds, or the
+ *  milliseconds from the first marker to the last and the slips. */
+export type PreDraftStationRaw = { taps: number } | { ms: number; slips: number };
+
+/** What a station's raw result is worth, from 0 to 100. These are GAME
+ *  numbers, set so that the harness's median bot for each input averages
+ *  about 50 (scripts/simCareerPreDraft.mjs section 12, where the bots are
+ *  stated as assumptions about hands, not facts about people). They are a
+ *  tuning result, never a real performance: no time, height or count here
+ *  stands for one. burst: 100 * (taps - zeroAt) / (fullAt - zeroAt). cones:
+ *  100 * (zeroAt - ms) / (zeroAt - fullAt) - slip * slips. Both rounded and
+ *  held to 0 to 100. */
+export const COMBINE_CURVES = {
+  burst: { pointer: { zeroAt: 15, fullAt: 50 }, keys: { zeroAt: 22, fullAt: 58 } },
+  cones: { pointer: { zeroAt: 6200, fullAt: 2600, slip: 8 }, keys: { zeroAt: 2900, fullAt: 900, slip: 8 } },
+} as const;
+
+/** A station score, whole, 0 to 100. More taps never score less; more time
+ *  or more slips never score more. A raw result that is not a number is 0. */
+export function preDraftStationScore(kind: PreDraftStation['kind'], raw: PreDraftStationRaw, input: PreDraftInput): number {
+  const which: PreDraftInput = input === 'keys' ? 'keys' : 'pointer';
+  if (kind === 'burst') {
+    const b = COMBINE_CURVES.burst[which];
+    const taps = 'taps' in raw ? raw.taps : NaN;
+    return Number.isFinite(taps) ? clampMeter(100 * (taps - b.zeroAt) / (b.fullAt - b.zeroAt)) : 0;
+  }
+  const c = COMBINE_CURVES.cones[which];
+  const ms = 'ms' in raw ? raw.ms : NaN;
+  const slips = 'slips' in raw ? raw.slips : NaN;
+  return Number.isFinite(ms) && Number.isFinite(slips) ? clampMeter(100 * (c.zeroAt - ms) / (c.zeroAt - c.fullAt) - c.slip * slips) : 0;
+}
+
+/** "Run it yourself": the attempt goes on the save before any station shows.
+ *  Only at the showcase, once, with a real approach and at least one station;
+ *  anything else hands back the same object, so nothing is written. */
+export function preDraftCombineOpen(desc: PreDraftDescriptor, prev: PreDraftState, approach: PreDraftApproach['id']): PreDraftState {
+  if (prev.phase !== 'showcase' || prev.combine !== undefined || (approach !== 'allout' && approach !== 'steady')) return prev;
+  if (!preDraftStations(desc, prev).length) return prev;
+  return { ...prev, combine: { approach } };
+}
+
+/** The last station's score lands: the average of the station scores over
+ *  100 takes the place of the scouts' draw, cut by the same rating and health
+ *  terms (preDraftShowcaseGradeFrom), and moves the stock by the same table
+ *  for the approach the attempt was opened with. One whole score from 0 to
+ *  100 a station, or nothing happens. It draws nothing. */
+export function preDraftCombineResolve(desc: PreDraftDescriptor, prev: PreDraftState, scores: number[]): PreDraftState {
+  const names = preDraftStations(desc, prev).map(st => st.name);
+  const opened = prev.combine;
+  if (prev.phase !== 'showcase' || !opened || (opened.approach !== 'allout' && opened.approach !== 'steady')) return prev;
+  if (!Array.isArray(scores) || !names.length || scores.length !== names.length) return prev;
+  if (!scores.every(x => Number.isInteger(x) && x >= 0 && x <= 100)) return prev;
+  const { combine, ...rest } = prev;
+  const s: PreDraftState = { ...rest };
+  const total = scores.reduce((a, x) => a + x, 0);
+  const g = preDraftShowcaseGradeFrom(total / (100 * scores.length), s);
+  const delta = preDraftShowcaseMove(s.stock, SHOWCASE_DELTAS[combine.approach][g]);
+  s.stock += delta;
+  s.showcase = { approach: combine.approach, drill: names.join(' and '), grade: g, stockDelta: delta, played: [...scores] };
+  s.phase = 'draft';
+  return s;
+}
+
+/** An attempt left before the last station landed (Leave, a closed tab, a
+ *  reload): the scouts grade it, byte for byte what that scouts' button would
+ *  have given, because it IS that button on the state without the attempt.
+ *  The same bytes on disk settle to the same grade on every load. */
+export function preDraftCombineSettle(desc: PreDraftDescriptor, prev: PreDraftState): PreDraftState {
+  if (prev.phase !== 'showcase' || !prev.combine) return prev;
+  const { combine, ...rest } = prev;
+  return preDraftShowcase(desc, rest, combine.approach);
+}
+
+export interface PreDraftCombineCuts { A: number | null; B: number | null; C: number | null }
+
+/** The lowest average of n whole station scores that earns each grade or
+ *  better at this rating and health, found by walking every total through
+ *  the same expression the resolve uses, so the line a card prints can never
+ *  disagree with the grade. null where the grade is out of reach. */
+export function preDraftCombineCuts(s: Pick<PreDraftState, 'rating' | 'health'>, n: number): PreDraftCombineCuts {
+  const cuts: PreDraftCombineCuts = { A: null, B: null, C: null };
+  if (!Number.isInteger(n) || n < 1 || n > 2) return cuts;
+  const at = { A: 3, B: 2, C: 1, D: 0 } as const;
+  for (let total = 0; total <= 100 * n; total += 1) {
+    const reach = at[preDraftShowcaseGradeFrom(total / (100 * n), s)];
+    for (const k of ['A', 'B', 'C'] as const) if (cuts[k] === null && reach >= at[k]) cuts[k] = total / n;
+  }
+  return cuts;
+}
+
 /* ─── The save block ──────────────────────────────────────────────────── */
 
 const PHASES: PreDraftPhase[] = ['season', 'choice', 'showcase', 'draft', 'done'];
@@ -575,6 +714,23 @@ export function loadPreDraft(raw: unknown, desc?: PreDraftDescriptor): PreDraftS
     stock: clampMeter(r.stock as number),
     health: clampMeter(r.health as number),
   };
+  /* Round 1319: the attempt and the played scores are optional and checked
+     alone. A bad one is dropped and the rest of the block loads as before:
+     an older bundle in another tab can write a graded state back with the
+     attempt still on it, and an optional key must never throw a road away. */
+  if ('combine' in s) {
+    const cb = s.combine as unknown;
+    if (isRecord(cb) && (cb.approach === 'allout' || cb.approach === 'steady') && s.phase === 'showcase' && s.showcase === null) s.combine = { approach: cb.approach };
+    else delete s.combine;
+  }
+  if (isRecord(s.showcase) && 'played' in s.showcase) {
+    const p = s.showcase.played as unknown;
+    const fine = Array.isArray(p) && p.length >= 1 && p.length <= 2 && p.every(x => Number.isInteger(x) && x >= 0 && x <= 100);
+    if (!fine || s.showcase.approach === 'skip' || s.showcase.grade === null) {
+      const { played, ...kept } = s.showcase;
+      s.showcase = kept;
+    }
+  }
   if (desc) {
     if (s.sport !== desc.sport || s.eraId !== desc.eraId || !desc.routes.some(route => route.id === s.routeId)) return null;
     if (s.phase === 'done' && s.draft) {
@@ -597,6 +753,15 @@ export function loadPreDraft(raw: unknown, desc?: PreDraftDescriptor): PreDraftS
       s.pendingChoice = null;
       s.phase = s.seasonsDone >= preDraftRoute(desc, s.routeId).seasons ? 'showcase' : 'season';
     }
+    /* Round 1319: an attempt opened and never resolved (Leave, a closed tab,
+       a reload) is settled here to the scouts' keyed draw for its approach,
+       the same grade on every load. In memory only: the board never writes
+       on load, so the disk keeps the attempt until the road's next write
+       ("Draft day"), and until then the grade is worked out from today's
+       descriptor on every load, exactly as an unpressed showcase's would be.
+       A later round that renames `desc.drills` (which re-deals the scouts
+       path) moves the grade of an attempt left sitting here and must say so. */
+    if (s.phase === 'showcase' && s.combine) return preDraftCombineSettle(desc, s);
   }
   return s;
 }

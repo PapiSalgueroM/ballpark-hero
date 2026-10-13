@@ -40,6 +40,9 @@ export function nflPreDraftDescriptor(eraId?: string): PreDraftDescriptor {
     /* Round 1104: a kicker goes in round four or later, the same rule the
        quick start reads. */
     pickOffset: nflPickOffset,
+    /* Round 1319: the stations a player can run himself, in both eras. Plain
+       names: they claim no real test (docs/audits/ROUND-1319-NOTES.md). */
+    stations: () => [{ name: 'Burst test', kind: 'burst' }, { name: 'Agility run', kind: 'cones' }],
     routes: [
       {
         id: 'power', label: 'Big college program', level: 'College, big program',

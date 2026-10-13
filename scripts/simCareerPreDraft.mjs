@@ -58,9 +58,87 @@
  *      the engine FUNCTIONS; that the three buttons still call them is Round
  *      993's test (src/test/usCareerProspect.test.tsx), which this round does
  *      not edit.                        Controls `gradeshift` and `extradraw`.
+ *  10. Round 1319: A PLAYED SHOWCASE DOES WHAT THE CARD PRINTS. The combine
+ *      you run: a player's own station scores (0 to 100 each) average into
+ *      the number the scouts' draw used to be, cut by the same rating and
+ *      health terms (preDraftShowcaseGradeFrom, the one cut both paths call).
+ *      On every road's state at the showcase, both approaches, station scores
+ *      from the harness's own keyed stream and 0, 50 and 100: open adds the
+ *      attempt and nothing else; the resolve changes only stock, showcase and
+ *      phase; the grade equals an independent copy in whole tenths away from
+ *      the lines and always sits between the cuts preDraftCombineCuts prints;
+ *      the stock moves by the clamped table cell; and on 200 roads a pair each
+ *      station walked from 0 to 100 by 1 (the other held at 0, 50 and 100)
+ *      never falls and flips exactly at the printed cut. The curves on a grid
+ *      are whole, inside 0 to 100, monotone and equal a copy built from
+ *      COMBINE_CURVES. And the played path's code holds no draw and no clock.
+ *      Controls `combinewords`, `combinemean`, `combinemono`, `combinecut`,
+ *      `combinedraw` (the code read).
+ *  11. Round 1319: THE ENGINE GIVES NO SECOND TRY. After open no scouts'
+ *      button and no second open moves the state; a reload of an opened
+ *      attempt (the loader, with the descriptor) is byte for byte the scouts'
+ *      button for its approach, again on a second load and through the draft;
+ *      a graded state moves no more; a bad score list does nothing; the loader
+ *      drops a bad attempt or bad played scores alone and keeps good ones, and
+ *      no scouts path state ever carries either key. OLD SAVES on every road
+ *      at every phase: each state at the start, at every season and every
+ *      card, at the showcase, after the scouts' button and after the draft,
+ *      and the played block and its draft, loads JSON equal to itself with
+ *      and without the descriptor; an attempt put on any season or card
+ *      state is dropped alone, with and without it.
+ *                                Controls `reroll`, `wayback`, `combinegone`,
+ *      `combinephase`, `attemptbare`, `combineloose`, `scoutskeys`.
+ *      Sections 10, 11 and 12 check each pair in its own try, so a throw
+ *      names its pair and every other pair is still checked.
+ *  12. Round 1319: WHAT HANDS ARE WORTH, MEASURED AGAINST THE SCOUTS' DRAW.
+ *      For every road and approach the scouts' EXACT expected move (the four
+ *      intervals of u the rating and health cut, times the table), then five
+ *      bots whose raw results come from the harness's own keyed stream (4
+ *      replicates a road), fed through the REAL station score, open and
+ *      resolve. The bots are stated ASSUMPTIONS about hands, never facts about
+ *      people (the table is at BOTS below). Printed per pair and approach:
+ *      grade shares, the fleet gap to the draw for every bot, the median by
+ *      starting rating third beside the draw's exact mean there, the median
+ *      at 0.75 and 1.25 times its speed, MLB pitchers apart, picks per stock
+ *      point, and THE OPTIMAL LEAVER (perfect foresight of his own hands: he
+ *      keeps them only when their move beats the draw's exact expectation and
+ *      otherwise leaves, which settles to the keyed draw), for the pointer
+ *      median and the keyboard median. Asserted: the median's and the keyboard
+ *      median's fleet gaps sit within T = 0.75 stock and inside their bands;
+ *      the expert gains and the novice loses by at least their measured
+ *      extremes less a margin of four or more of one row's sds across the
+ *      five sets; the three means are ordered novice, median, expert. The
+ *      leaver and the two thumb bot are printed for the lead, never asserted.
+ *              Controls `flathands`, `curveflip`, `keyscurve`, `softedge`.
+ *      Measured 2026-10-12 over seed sets a to e (80 rows each), with the
+ *      curves as they stand (the draft's starting anchors; no tuning was
+ *      needed to bring both medians inside T):
+ *        median (pointer) gap -0.34 to +0.09, band -0.55 to +0.30 (about 0.2
+ *          beyond each end: one row's sd across the five sets is about 0.04);
+ *        keyboard median gap -0.31 to -0.05, band -0.50 to +0.15;
+ *        expert all out +6.78 to +7.29, safe +3.23 to +3.43: floors 6.5, 3.0;
+ *        novice all out -7.00 to -5.68, safe -3.14 to -2.60: ceilings -5.4,
+ *          -2.4. One row's largest sd across the five sets is 0.059, 0.027,
+ *          0.063 and 0.022 in that order, so each line sits 0.20 to 0.28
+ *          beyond the nearest measured row, 4.4 to 9 sds (the median band's
+ *          rule). Until the closing check of 2026-10-12 these lines were half
+ *          the extremes (3.4, 1.6, -2.8, -1.3), and a pointer burst curve
+ *          flattened by a third (`softedge`: the expert's edge 7 to 13 percent
+ *          smaller where a pair runs two stations, 22 percent in nhl:y2006)
+ *          passed them ALL GREEN; these lines catch it on seed set a in 14
+ *          of the 16 rows at least (the two MLB safe rows print +3.00);
+ *        two thumbs +1.03 to +7.53, above the expert in nhl:y2006 (one burst
+ *          station) in both approaches on all five sets;
+ *        the optimal leaver gains +1.08 to +1.64 all out and +0.49 to +0.75
+ *          safe over honest hands (pointer and keys together);
+ *        the median at 0.75x speed -5.82 to -2.04, at 1.25x +1.98 to +4.72.
+ *      flathands: sections 10 and 12 (the expert's gap collapses to the
+ *      median's, the means tie); curveflip: 10 and 12 (the order breaks);
+ *      keyscurve: 10 and 12 (the keyboard median gains +3 to +6.5);
+ *      softedge: 12 only (the expert or the novice past its line).
  *  13. Round 1220: DRAFT NIGHT SHOWS WHAT THE ENGINE DID, AND NEVER DRAWS
- *      (src/lib/careerDraftNight.ts; the numbers 10 to 12 are kept for the
- *      combine a later round builds on this head). On every finished road:
+ *      (src/lib/careerDraftNight.ts; the numbers 10 to 12 went to the combine
+ *      of Round 1319, built on this head). On every finished road:
  *      the closing row is the SAVED pick, round and club (the saved outcome
  *      is the witness, not the order worked out again); every pick row's
  *      club is the holder in the order the harness works out itself; picks
@@ -85,9 +163,12 @@
  *      nightopen 8 pairs (216 to 228 unbacked outcomes built a night),
  *      nightdedup 8 pairs (a gap of -1 picks, a pick shown twice, picks past
  *      the closing row), nightdraw 1 (Math.random was called), projection 8
- *      pairs (pick 19 outside the quoted 21 to 27). gradeshift and extradraw:
- *      the 8 lines of section 9 and nothing else. squeeze: 24 (sections 2, 3
- *      and 9), where it used to exit 2.
+ *      pairs (pick 19 outside the quoted 21 to 27). squeeze: 32 (sections 2, 3,
+ *      9 and 13), where it used to exit 2. extradraw: the 8 lines of section 9
+ *      and nothing else. gradeshift: the 8 lines of section 9 AND, since
+ *      Round 1319, the 8 of section 10 (16 in all), because its cut line now
+ *      lives in preDraftShowcaseGradeFrom, which the played path calls too:
+ *      that is the proof the scouts' grade and a played grade share one cut.
  *
  * Bands, measured over five seed sets (SEEDSET=a..e, 2,000 careers per sport
  * and era each, 20,000 lottery draws per era each), 2026-10-03, on the tree
@@ -162,7 +243,31 @@ const ok = m => console.log('  ok: ' + m);
                    stay inside their bands, which is why the middle band exists.
      laterlottery  4b: 200 and 192 of 200 NBA orders.
      flatlater     s4: pick 2 |z| 136.4 and 146.2 while pick 1 stays green.
-     loadershallow s8: the two broken season line cases load. */
+     loadershallow s8: the two broken season line cases load.
+   Round 1319, measured on seed set a, 2026-10-12, each exit 1:
+     combinewords  s10 and s12: 10 (an all out grade moved by the safe table;
+                   the hands' all out rows then miss their bands).
+     combinemean   s10: 7 pairs (every pair with two stations; the 2006 NHL runs one).
+     combinemono   s10 and s12: 2 (a slip adds points: the grid, and the bands).
+     combinecut    s10: 8 pairs (a mean on the cut graded above the printed line).
+     reroll        s11: 8 pairs (a reload hands the choice back).
+     wayback       s11: 8 pairs (a scouts' button grades an opened attempt).
+     combinegone   s10, s11 and s12: 18 (nothing on the save before the stations).
+     flathands     s10 and s12: 10 (the expert's gap collapses, the means tie).
+     curveflip     s10 and s12: 2 (the grid, and the order breaks).
+     keyscurve     s10 and s12: 2 (the grid, and the keyboard median gains +3 to +6.5).
+     gradeshift    s9 and s10: 16 (one cut, two paths); extradraw s9 only: 8.
+   Round 1319 review fixes, measured on seed set a, 2026-10-12 (r1319-x2), each exit 1:
+     combinephase  s11: 8 pairs (an attempt on a season or card block kept).
+     attemptbare   s11: 8 pairs (without the descriptor a good attempt dropped).
+     combineloose  s11: 8 pairs (a resolve took 50.5 and -1).
+     scoutskeys    s11: 8 pairs (a scouts path state carries `played`).
+     combinedraw   s10: 1 (the code read finds the clock in preDraftStationScore).
+     mathrandom    now 18: s5 2, s9 8 and s11 8 (one per pair since each pair
+                   runs in its own try; it was 11, with one s11 line).
+   Round 1319 closing check, measured on seed set a, 2026-10-12 (r1319-y1):
+     softedge      s12: 1, exit 1 (the expert or the novice past its line);
+                   against a copy with the old lines it exits 0, ALL GREEN. */
 const CONTROLS = {
   randomteam: ['src/lib/careerPreDraft.ts', 'const team = pick ? order[pick - 1] : teams[Math.floor(rng() * teams.length)];', 'const team = teams[Math.floor(rng() * teams.length)];'],
   flatstock: ['src/lib/careerPreDraft.ts', 'const z = (100 - clampMeter(stock)) / 100;', 'const z = 0.5 + 0 * stock;'],
@@ -189,6 +294,28 @@ const CONTROLS = {
   nightdedup: ['src/lib/careerDraftNight.ts', 'if (span <= head + tail + 1) {', 'if (span <= 0) {'],
   nightdraw: ['src/lib/careerDraftNight.ts', 'const o = preDraftOrder(desc, s.seed);', "const o = preDraftOrder(desc, s.seed + (Math.random() < 2 ? '' : 'x'));"],
   projection: ['src/lib/careerPreDraft.ts', 'return { lo: preDraftBoardRankAt(s.stock, total, 0) + off, hi: preDraftBoardRankAt(s.stock, total, 1) + off, total };', 'return { lo: preDraftBoardRankAt(s.stock, total, 0.25) + off, hi: preDraftBoardRankAt(s.stock, total, 0.75) + off, total };'],
+  /* Round 1319, sections 10 to 12 (the combine you run). */
+  combinewords: ['src/lib/careerPreDraft.ts', 'const delta = preDraftShowcaseMove(s.stock, SHOWCASE_DELTAS[combine.approach][g]);', 'const delta = preDraftShowcaseMove(s.stock, SHOWCASE_DELTAS.steady[g]);'],
+  combinemean: ['src/lib/careerPreDraft.ts', 'const g = preDraftShowcaseGradeFrom(total / (100 * scores.length), s);', 'const g = preDraftShowcaseGradeFrom(scores[0] / 100, s);'],
+  combinemono: ['src/lib/careerPreDraft.ts', 'clampMeter(100 * (c.zeroAt - ms) / (c.zeroAt - c.fullAt) - c.slip * slips)', 'clampMeter(100 * (c.zeroAt - ms) / (c.zeroAt - c.fullAt) + c.slip * slips)'],
+  combinecut: ['src/lib/careerPreDraft.ts', 'if (cuts[k] === null && reach >= at[k]) cuts[k] = total / n;', 'if (cuts[k] === null && reach >= at[k]) cuts[k] = (total + 1) / n;'],
+  reroll: ['src/lib/careerPreDraft.ts', "if (s.phase === 'showcase' && s.combine) return preDraftCombineSettle(desc, s);", "if (s.phase === 'showcase' && s.combine) delete s.combine;"],
+  wayback: ['src/lib/careerPreDraft.ts', 'if (prev.combine) return prev;', ''],
+  combinegone: ['src/lib/careerPreDraft.ts', 'return { ...prev, combine: { approach } };', 'return { ...prev };'],
+  flathands: ['src/lib/careerPreDraft.ts', 'const g = preDraftShowcaseGradeFrom(total / (100 * scores.length), s);', 'const g = preDraftShowcaseGradeFrom(0.5, s);'],
+  curveflip: ['src/lib/careerPreDraft.ts', 'clampMeter(100 * (taps - b.zeroAt) / (b.fullAt - b.zeroAt))', 'clampMeter(100 * (b.fullAt - taps) / (b.fullAt - b.zeroAt))'],
+  keyscurve: ['src/lib/careerPreDraft.ts', "const which: PreDraftInput = input === 'keys' ? 'keys' : 'pointer';", "const which: PreDraftInput = 'pointer';"],
+  /* Round 1319 review fixes: a control for each check that had none. */
+  combinephase: ['src/lib/careerPreDraft.ts', "&& s.phase === 'showcase' && s.showcase === null) s.combine = { approach: cb.approach };", '&& s.showcase === null) s.combine = { approach: cb.approach };'],
+  attemptbare: ['src/lib/careerPreDraft.ts', "&& s.phase === 'showcase' && s.showcase === null) s.combine = { approach: cb.approach };", "&& s.phase === 'showcase' && s.showcase === null && desc) s.combine = { approach: cb.approach };"],
+  combineloose: ['src/lib/careerPreDraft.ts', 'if (!scores.every(x => Number.isInteger(x) && x >= 0 && x <= 100)) return prev;', 'if (!scores.every(x => x <= 100)) return prev;'],
+  scoutskeys: ['src/lib/careerPreDraft.ts', 's.showcase = { approach, drill, grade, stockDelta: move };', 's.showcase = { approach, drill, grade, stockDelta: move, played: undefined };'],
+  combinedraw: ['src/lib/careerPreDraft.ts', "const which: PreDraftInput = input === 'keys' ? 'keys' : 'pointer';", "const which: PreDraftInput = input === 'keys' && Date.now() > 0 ? 'keys' : 'pointer';"],
+  /* Closing check of 2026-10-12: the pointer burst's slope cut by a third
+     about the median bot's 33 taps (it still scores about 51 there), so the
+     expert's edge shrinks and the median does not move. A data edit, so
+     section 10's grid, built from COMBINE_CURVES, follows it. */
+  softedge: ['src/lib/careerPreDraft.ts', 'burst: { pointer: { zeroAt: 15, fullAt: 50 },', 'burst: { pointer: { zeroAt: 6, fullAt: 59 },'],
 };
 if (CONTROL && !CONTROLS[CONTROL]) { console.error(`Unknown control ${CONTROL}`); process.exit(2); }
 if (CONTROL && RECORD) { console.error('A recording is never written from a mutated engine. Refusing to run.'); process.exit(2); }
@@ -215,6 +342,10 @@ const controlPlugin = {
     const abs = path.join(ROOT, file).replace(/\\/g, '/');
     const src = fs.readFileSync(abs, 'utf-8');
     if (!src.includes(needle)) { console.error(`Control ${CONTROL}: needle not found in ${file}. Refusing to run.`); process.exit(2); }
+    /* Round 1319: and exactly once, or the replace below would mutate the
+       first copy only. A needle is one line, so line endings cannot move the count. */
+    const copies = src.split(needle).length - 1;
+    if (copies !== 1) { console.error(`Control ${CONTROL}: the needle is in ${file} ${copies} times, not exactly once. Refusing to run.`); process.exit(2); }
     b.onLoad({ filter: /(PreDraft|careerDraftNight)\.ts$/ }, args => {
       if (args.path.replace(/\\/g, '/') !== abs) return undefined;
       const out = src.replace(needle, repl);
@@ -251,7 +382,11 @@ function road(desc, i) {
   const pos = POS[desc.sport][Math.floor(pick() * POS[desc.sport].length)];
   let s = M.preDraftStart(desc, { seed: `${SEEDSET}-${i}`, routeId: route.id, rating, pot: rating + 4 + Math.floor(pick() * 16), pos });
   const trail = [];
+  /* Round 1319: every state before the showcase, each season and each card,
+     for section 11's old save round trips. It draws nothing. */
+  const early = [];
   for (let g = 0; g < 20 && s.phase !== 'showcase'; g += 1) {
+    early.push(s);
     if (s.phase === 'season') s = M.preDraftPlaySeason(desc, s);
     else { const card = M.preDraftChoicePool(desc).find(c => c.id === s.pendingChoice); const k = Math.floor(pick() * card.options.length); trail.push({ before: s, card, k }); s = M.preDraftChoose(desc, s, k); trail[trail.length - 1].after = s; }
   }
@@ -261,7 +396,7 @@ function road(desc, i) {
   const stockAtDraft = s.stock;
   const shown = s;
   s = M.preDraftRunDraft(desc, s);
-  return { s, route, trail, approach, pre, shown, stockAtDraft };
+  return { s, route, trail, early, approach, pre, shown, stockAtDraft };
 }
 
 /* ─── Section 5 first: every draw from keyedRng ─── */
@@ -606,6 +741,360 @@ console.log('\n9. The scouts path is byte equal to its recording');
     }
   }
 }
+
+/* ─── Sections 10 to 12: the combine you run (Round 1319) ─── */
+const GRADE_RANK = { D: 0, C: 1, B: 2, A: 3 };
+const PLAYED = ['allout', 'steady'];
+/** The grade a card would print from the cuts: the highest grade whose cut the mean reaches. */
+const gradeByCuts = (cuts, mean) => (cuts.A !== null && mean >= cuts.A ? 'A' : cuts.B !== null && mean >= cuts.B ? 'B' : cuts.C !== null && mean >= cuts.C ? 'C' : 'D');
+/** The harness's own copy of the curves, built from COMBINE_CURVES and nothing else. */
+const curveCopy = (kind, raw, input) => {
+  const c = M.COMBINE_CURVES[kind][input === 'keys' ? 'keys' : 'pointer'];
+  const v = kind === 'burst' ? 100 * (raw.taps - c.zeroAt) / (c.fullAt - c.zeroAt) : 100 * (c.zeroAt - raw.ms) / (c.zeroAt - c.fullAt) - c.slip * raw.slips;
+  return Math.max(0, Math.min(100, Math.round(v)));
+};
+/** One function's code, comments stripped, found by its name and its braces.
+ *  Under a control on the engine this is the mutated code the bundle runs,
+ *  so the read in 10(0) has a control of its own (`combinedraw`). */
+const engineRaw = fs.readFileSync(path.join(ROOT, 'src/lib/careerPreDraft.ts'), 'utf-8');
+const engineCode = stripComments(CONTROL && CONTROLS[CONTROL][0] === 'src/lib/careerPreDraft.ts' ? engineRaw.replace(CONTROLS[CONTROL][1], CONTROLS[CONTROL][2]) : engineRaw);
+const codeOf = name => {
+  const at = engineCode.indexOf(`export function ${name}(`);
+  if (at < 0) return null;
+  let i = engineCode.indexOf('(', at), depth = 0;
+  for (; i < engineCode.length; i += 1) { if (engineCode[i] === '(') depth += 1; if (engineCode[i] === ')' && --depth === 0) break; }
+  const open = engineCode.indexOf('{', i);
+  depth = 0;
+  for (let j = open; j < engineCode.length; j += 1) { if (engineCode[j] === '{') depth += 1; if (engineCode[j] === '}' && --depth === 0) return engineCode.slice(at, j + 1); }
+  return null;
+};
+
+console.log('\n10. A played showcase does what the card prints');
+const realRandom10 = Math.random;
+Math.random = () => { throw new Error('Math.random was called'); };
+try {
+  /* (0) The played path draws nothing: its code reaches no stream, no
+     Math.random and no clock, and calls nothing that does. The settle draws
+     what the scouts' button draws because it IS that button (section 11). */
+  const pure = ['preDraftStations', 'preDraftStationScore', 'preDraftCombineOpen', 'preDraftCombineResolve', 'preDraftCombineCuts', 'preDraftShowcaseGradeFrom', 'preDraftShowcaseMove'];
+  const drawn = pure.filter(f => { const c = codeOf(f); return !c || /keyedRng|\brng\s*\(|Math\.random|Date\.now|new Date|preDraftShowcase\s*\(|preDraftShowcaseGrade\s*\(/.test(c); });
+  if (drawn.length) fail(`the played path reaches for a draw, a clock or the scouts' button, or is missing: ${drawn.join(', ')}`);
+  else ok(`${pure.length} functions of the played path hold no draw, no clock and no call to the scouts' button (code only)`);
+  /* (f) The curves on a grid: whole, inside 0 to 100, more taps never score
+     less, more time or more slips never score more, and each equals the
+     harness's own copy built from COMBINE_CURVES. */
+  try {
+    const bad = [];
+    for (const input of ['pointer', 'keys']) {
+      let last = -1;
+      for (let taps = 0; taps <= 80; taps += 1) {
+        const v = M.preDraftStationScore('burst', { taps }, input);
+        if (!Number.isInteger(v) || v < 0 || v > 100 || v < last || v !== curveCopy('burst', { taps }, input)) bad.push(`${input} burst at ${taps} taps scored ${v}`);
+        last = v;
+      }
+      for (let slips = 0; slips <= 8; slips += 1) for (let ms = 0; ms <= 12000; ms += 50) {
+        const v = M.preDraftStationScore('cones', { ms, slips }, input);
+        const later = ms ? M.preDraftStationScore('cones', { ms: ms - 50, slips }, input) : 100;
+        const cleaner = slips ? M.preDraftStationScore('cones', { ms, slips: slips - 1 }, input) : 100;
+        if (!Number.isInteger(v) || v < 0 || v > 100 || v > later || v > cleaner || v !== curveCopy('cones', { ms, slips }, input)) bad.push(`${input} cones at ${ms} ms and ${slips} slips scored ${v}`);
+      }
+    }
+    if (bad.length) fail(`${bad.length} station scores off the curve, first: ${bad.slice(0, 3).join(' | ')}`);
+    else ok('station scores on the grid (taps 0 to 80; 0 to 12,000 ms by 50 and 0 to 8 slips; pointer and keys) are whole, inside 0 to 100, move the right way and equal the curves');
+  } catch (e) { fail(`section 10 (f) threw: ${e.message}`); }
+  /* (a) to (e) on every road's state at the showcase, one pair at a time,
+     each in its own try (a throw names its pair and spares the others). */
+  const pair10 = d => {
+    const rs = RUNS.get(tag(d));
+    const bad = [];
+    const note = m => { if (bad.length < 400) bad.push(m); };
+    let resolved = 0, onLine = 0, walked = 0;
+    for (let i = 0; i < rs.length; i += 1) {
+      const pre = rs[i].pre;
+      const names = M.preDraftStations(d, pre).map(st => st.name);
+      const n = names.length;
+      if (!n) { note(`road ${i}: no stations`); continue; }
+      const cuts = M.preDraftCombineCuts(pre, n);
+      const own = M.keyedRng(`combine|${SEEDSET}|${tag(d)}|${i}`);
+      const sets = [Array.from({ length: n }, () => Math.floor(own() * 101)), Array(n).fill(0), Array(n).fill(50), Array(n).fill(100)];
+      for (const approach of PLAYED) {
+        const opened = M.preDraftCombineOpen(d, pre, approach);
+        const { combine, ...rest } = opened;
+        if (JSON.stringify(rest) !== JSON.stringify(pre) || JSON.stringify(combine) !== JSON.stringify({ approach })) note(`road ${i}: open did more than add the attempt`);
+        for (const scores of sets) {
+          resolved += 1;
+          const after = M.preDraftCombineResolve(d, opened, scores);
+          const sc = after.showcase;
+          const others = x => { const { stock, showcase, phase, combine: c, ...o } = x; return JSON.stringify(o); };
+          if (!sc || 'combine' in after || after.phase !== 'draft' || others(after) !== others(pre) || JSON.stringify(Object.keys(after)) !== JSON.stringify(Object.keys(pre))) { note(`road ${i}: the resolve changed more than stock, showcase and phase`); continue; }
+          const total = scores.reduce((a, x) => a + x, 0);
+          const points10 = 10 * total / n + 20 * (pre.rating - 70) - 3 * (100 - pre.health);
+          if (points10 === 800 || points10 === 500 || points10 === 200) onLine += 1;
+          else if (sc.grade !== (points10 > 800 ? 'A' : points10 > 500 ? 'B' : points10 > 200 ? 'C' : 'D')) note(`road ${i}: ${scores.join(' and ')} at rating ${pre.rating}, health ${pre.health} graded ${sc.grade} (tenths ${points10})`);
+          if (sc.grade !== gradeByCuts(cuts, total / n)) note(`road ${i}: grade ${sc.grade} for a mean of ${total / n}, the cuts say ${gradeByCuts(cuts, total / n)} (${JSON.stringify(cuts)})`);
+          const move = M.preDraftShowcaseMove(pre.stock, M.SHOWCASE_DELTAS[approach][sc.grade]);
+          if (sc.approach !== approach || sc.stockDelta !== move || after.stock - pre.stock !== move) note(`road ${i}: ${approach} ${sc.grade} moved the stock ${after.stock - pre.stock}, the table says ${move}`);
+          if (sc.drill !== names.join(' and ') || JSON.stringify(sc.played) !== JSON.stringify(scores)) note(`road ${i}: the result does not name the stations and their scores`);
+        }
+      }
+      /* (e) WALKED, not at the ends: each station from 0 to 100 by 1 with the
+         other held at 0, 50 and 100; the grade never falls and the printed
+         cut flips exactly where the grade does. */
+      if (i < 200) {
+        const opened = M.preDraftCombineOpen(d, pre, 'allout');
+        for (let j = 0; j < n; j += 1) for (const hold of n === 1 ? [0] : [0, 50, 100]) {
+          let prevRank = -1;
+          for (let v = 0; v <= 100; v += 1) {
+            const scores = Array.from({ length: n }, (_, k) => (k === j ? v : hold));
+            const g = M.preDraftCombineResolve(d, opened, scores).showcase?.grade;
+            walked += 1;
+            if (!(g in GRADE_RANK) || GRADE_RANK[g] < prevRank) { note(`road ${i}: station ${j + 1} at ${v} (other ${hold}) fell to ${g}`); break; }
+            if (g !== gradeByCuts(cuts, scores.reduce((a, x) => a + x, 0) / n)) { note(`road ${i}: station ${j + 1} at ${v} (other ${hold}) graded ${g} where the printed cut says otherwise`); break; }
+            prevRank = GRADE_RANK[g];
+          }
+        }
+      }
+    }
+    if (bad.length) fail(`${tag(d)}: ${bad.length} played showcase(s) wrong, first: ${bad.slice(0, 3).join(' | ')}`);
+    else ok(`${tag(d)}: ${resolved} resolves add, grade and move exactly as printed (${onLine} on a line, where the card follows the function), ${walked} walked steps never fall and flip at the printed cuts`);
+  };
+  for (const d of DESCS) {
+    try { pair10(d); } catch (e) { fail(`section 10 threw on ${tag(d)}: ${e.message}`); }
+  }
+} catch (e) {
+  fail(`section 10 threw: ${e.message}`);
+} finally { Math.random = realRandom10; }
+
+console.log('\n11. The engine gives no second try');
+const realRandom11 = Math.random;
+Math.random = () => { throw new Error('Math.random was called'); };
+try {
+  const J = x => JSON.stringify(x);
+  const reload = (x, desc) => M.loadPreDraft(JSON.parse(J(x)), desc);
+  /* One pair at a time, each in its own try, so a throw on one road names
+     its pair and leaves every other pair checked. */
+  const pair11 = d => {
+    const rs = RUNS.get(tag(d));
+    const bad = [];
+    const note = (i, m) => { if (bad.length < 400) bad.push(`road ${i}: ${m}`); };
+    let dropped = 0, trips = 0;
+    const droppedAt = { season: 0, choice: 0 };
+    for (let i = 0; i < rs.length; i += 1) {
+      const { pre, shown, s: done, trail, early } = rs[i];
+      const n = M.preDraftStations(d, pre).length;
+      /* Nothing the scouts path made ever carries the new keys, not even as undefined. */
+      for (const x of [pre, shown, done]) if ('combine' in x || (x.showcase && 'played' in x.showcase)) note(i, 'a scouts path state carries an attempt or played scores');
+      if (M.preDraftCombineOpen(d, pre, 'skip') !== pre) note(i, 'Skip it opened an attempt');
+      for (const x of [shown, done, ...(trail.length ? [trail[0].before] : [])]) if (M.preDraftCombineOpen(d, x, 'allout') !== x) note(i, `an attempt opened at phase ${x.phase}`);
+      /* (d) OLD SAVES, on every road at every phase (decision 3b): a block
+         with neither key, at the start, at each season and each card, at the
+         showcase, after the scouts' button and after the draft, loads JSON
+         equal to itself with and without the descriptor. */
+      for (const good of [...early, pre, shown, done]) for (const desc of [d, undefined]) {
+        trips += 1;
+        if (J(reload(good, desc)) !== J(good)) note(i, `an old block at phase ${good.phase} did not round trip byte for byte (${desc ? 'with' : 'without'} the descriptor)`);
+      }
+      for (const approach of PLAYED) {
+        const opened = M.preDraftCombineOpen(d, pre, approach);
+        const scouts = M.preDraftShowcase(d, pre, approach);
+        /* (a) after open: no scouts' button and no second open moves it. */
+        for (const a3 of ['allout', 'steady', 'skip']) if (M.preDraftShowcase(d, opened, a3) !== opened) note(i, `a scouts' button (${a3}) graded an opened attempt`);
+        for (const a2 of PLAYED) if (M.preDraftCombineOpen(d, opened, a2) !== opened) note(i, 'a second open changed the attempt');
+        /* (b) THE RELOAD: the scouts' button for that approach, byte for byte, every time, and on to the draft. */
+        const loaded = reload(opened, d);
+        if (J(loaded) !== J(scouts)) { note(i, `a reload of an opened ${approach} attempt is not the scouts' button`); continue; }
+        if (J(reload(loaded, d)) !== J(scouts)) note(i, 'a second reload moved the settled state');
+        if (J(M.preDraftRunDraft(d, loaded)) !== J(M.preDraftRunDraft(d, scouts))) note(i, 'the draft after a settled attempt is not the scouts road\'s draft');
+        const settled = M.preDraftCombineSettle(d, opened);
+        if (J(settled) !== J(scouts)) note(i, 'the settle is not the scouts\' button');
+        /* (c) after the grade, nothing moves it again; a bad score list does nothing. */
+        const resolved = M.preDraftCombineResolve(d, opened, Array(n).fill(50));
+        for (const x of [resolved, settled]) {
+          if (M.preDraftCombineOpen(d, x, approach) !== x || M.preDraftCombineResolve(d, x, Array(n).fill(100)) !== x || M.preDraftCombineSettle(d, x) !== x) note(i, `a graded state (${x === resolved ? 'played' : 'settled'}) moved again`);
+        }
+        for (const wrong of [[], Array(n + 1).fill(50), Array(n).fill(50.5), Array(n).fill(-1), Array(n).fill(101), Array(n).fill(NaN)]) if (M.preDraftCombineResolve(d, opened, wrong) !== opened) note(i, `a resolve took ${J(wrong)}`);
+        /* (d) the loader drops a bad key alone, and (e) keeps a good attempt without the descriptor. */
+        if (J(reload(opened)) !== J(opened)) note(i, 'without the descriptor a well formed attempt was not kept');
+        /* An attempt on a block at a season or a card (open refuses there, so
+           only a corrupt or hand edited save carries one) is dropped, with and
+           without the descriptor: kept, it would ride on to the showcase,
+           where the scouts' buttons ignore an opened attempt. Every road. */
+        for (const x of early) for (const desc of [d, undefined]) {
+          dropped += 1; droppedAt[x.phase] += 1;
+          const got = reload({ ...x, combine: { approach } }, desc);
+          if (!got || 'combine' in got || J(got) !== J(x)) note(i, `an attempt on a block at phase ${x.phase} was not dropped alone (${desc ? 'with' : 'without'} the descriptor)`);
+        }
+        /* The played block, its draft and the scouts' result round trip too, every road. */
+        const drafted = M.preDraftRunDraft(d, resolved);
+        for (const good of [resolved, drafted, scouts]) for (const desc of [d, undefined]) {
+          trips += 1;
+          if (J(reload(good, desc)) !== J(good)) note(i, `a good block at phase ${good.phase} did not round trip byte for byte (${desc ? 'with' : 'without'} the descriptor)`);
+        }
+        if (i >= 200) continue;
+        const skipped = M.preDraftShowcase(d, pre, 'skip');
+        const drops = [
+          [{ ...pre, combine: 'allout' }, pre], [{ ...pre, combine: { approach: 'skip' } }, pre], [{ ...pre, combine: {} }, pre], [{ ...pre, combine: null }, pre],
+          [{ ...scouts, combine: { approach } }, scouts], [{ ...done, combine: { approach } }, done],
+          ...[[], [50, 50, 50], [101], [1.5], [-3]].map(p => [{ ...resolved, showcase: { ...resolved.showcase, played: p } }, (() => { const { played, ...sc } = resolved.showcase; return { ...resolved, showcase: sc }; })()]),
+          [{ ...skipped, showcase: { ...skipped.showcase, played: [50] } }, skipped],
+        ];
+        for (const [badBlock, clean] of drops) for (const desc of [d, undefined]) {
+          dropped += 1;
+          const got = reload(badBlock, desc);
+          if (!got || J(got) !== J(clean)) note(i, `a bad key was not dropped alone (${desc ? 'with' : 'without'} the descriptor): ${J(badBlock.combine ?? badBlock.showcase?.played)}`);
+        }
+      }
+    }
+    /* Never vacuous: both phases before the showcase were loaded with an attempt on them. */
+    if (!droppedAt.season || !droppedAt.choice) note('all', `the drop cases never reached a season (${droppedAt.season}) or a card (${droppedAt.choice})`);
+    if (bad.length) fail(`${tag(d)}: ${bad.length} second tries or bad loads, first: ${bad.slice(0, 3).join(' | ')}`);
+    else ok(`${tag(d)}: no button, open or resolve moves an opened or graded attempt; every reload of an opened attempt is the scouts' button for its approach, again and through the draft; ${trips} old and good blocks round trip with and without the descriptor on every road at every phase; ${dropped} bad keys dropped alone (${droppedAt.season} attempts at a season and ${droppedAt.choice} at a card)`);
+  };
+  for (const d of DESCS) {
+    try { pair11(d); } catch (e) { fail(`section 11 threw on ${tag(d)}: ${e.message}`); }
+  }
+} catch (e) {
+  fail(`section 11 threw: ${e.message}`);
+} finally { Math.random = realRandom11; }
+
+console.log('\n12. What hands are worth, measured against the scouts\' draw');
+/* The bots are ASSUMPTIONS about hands, stated here, never facts about
+   people: no record of real drill results exists outside each player's own
+   save. taps: burst taps in the five seconds (mean, sd); ms: the cone run
+   from the first marker to the last (mean, sd); slips: Poisson mean. The
+   keyboard bot tabs onto each marker and presses Enter (it cannot slip) and
+   alternates Enter and Space on the burst, eight keys a second; the two
+   thumb bot is a pointer at about ten taps a second on the burst. */
+const BOTS = {
+  novice: { input: 'pointer', taps: [22, 3], ms: [6200, 900], slips: 1.2 },
+  median: { input: 'pointer', taps: [33, 4], ms: [4300, 600], slips: 0.5 },
+  expert: { input: 'pointer', taps: [48, 4], ms: [3000, 300], slips: 0.15 },
+  keys: { input: 'keys', taps: [40, 4], ms: [1900, 250], slips: 0 },
+  thumbs: { input: 'pointer', taps: [50, 5], ms: [4300, 600], slips: 0.5 },
+};
+const HAND_K = 4;
+const TARGET_T = 0.75;
+/* Measured 2026-10-12 over seed sets a to e (80 rows each: 8 pairs, 2
+   approaches, 5 sets), see the header for the numbers and the margins. */
+const HANDS_BAND = {
+  median: [-0.55, 0.30],
+  keys: [-0.50, 0.15],
+  expertMin: { allout: 6.5, steady: 3.0 },
+  noviceMax: { allout: -5.4, steady: -2.4 },
+};
+const realRandom12 = Math.random;
+Math.random = () => { throw new Error('Math.random was called'); };
+try {
+  const normal = (rng, [mu, sd], f) => { const z = Math.sqrt(-2 * Math.log(1 - rng())) * Math.cos(2 * Math.PI * rng()); return mu * f + sd * f * z; };
+  const poisson = (rng, lam) => { const L = Math.exp(-lam); let k = 0, p = 1; do { k += 1; p *= rng(); } while (p > L); return k - 1; };
+  /** One bot's station scores on one road, through the REAL curve. speed scales taps up and time down. */
+  const hands = (bot, stations, key, speed = 1) => {
+    const rng = M.keyedRng(key);
+    return stations.map(st => {
+      const raw = st.kind === 'burst'
+        ? { taps: Math.max(0, Math.round(normal(rng, bot.taps, speed))) }
+        : { ms: Math.max(0, Math.round(normal(rng, bot.ms, 1 / speed))), slips: bot.slips ? poisson(rng, bot.slips) : 0 };
+      return M.preDraftStationScore(st.kind, raw, bot.input);
+    });
+  };
+  /** The scouts' EXACT expected move for this state and approach: the four intervals of u the rating and health cut, times the table. */
+  const exactMove = (s, approach) => {
+    const r = (s.rating - 70) * 0.02 - (100 - s.health) * 0.003;
+    const above = u0 => Math.min(1, Math.max(0, 1 - u0));
+    const pA = above(0.8 - r), pB = above(0.5 - r) - pA, pC = above(0.2 - r) - above(0.5 - r), pD = 1 - above(0.2 - r);
+    const t = M.SHOWCASE_DELTAS[approach];
+    return pA * M.preDraftShowcaseMove(s.stock, t.A) + pB * M.preDraftShowcaseMove(s.stock, t.B) + pC * M.preDraftShowcaseMove(s.stock, t.C) + pD * M.preDraftShowcaseMove(s.stock, t.D);
+  };
+  const thirdOf = (d, i) => { const p = M.keyedRng(`sim|${SEEDSET}|${tag(d)}|${i}`); p(); const r0 = 58 + Math.floor(p() * 21); return r0 <= 64 ? 0 : r0 <= 71 ? 1 : 2; };
+  const f2 = x => (x >= 0 ? '+' : '') + x.toFixed(2);
+  const ARMS = [...Object.keys(BOTS), 'slow', 'fast', 'leaveP', 'leaveK'];
+  const MEASURED = [];
+  /* One pair at a time, each in its own try: a throw names its pair, and the
+     bands below are still read over every pair that measured. */
+  const pair12 = d => {
+    const rs = RUNS.get(tag(d));
+    const acc = {};
+    const add = (arm, a, third, gap, move, grade, sub) => {
+      for (const k of [`${arm}|${a}`, `${arm}|${a}|t${third}`, ...(sub ? [`${arm}|${a}|${sub}`] : [])]) {
+        const o = acc[k] ??= { n: 0, gap: 0, move: 0, A: 0, B: 0, C: 0, D: 0 };
+        o.n += 1; o.gap += gap; o.move += move; if (grade) o[grade] += 1;
+      }
+    };
+    const draw = {};
+    for (let i = 0; i < rs.length; i += 1) {
+      const pre = rs[i].pre;
+      const stations = M.preDraftStations(d, pre);
+      const third = thirdOf(d, i);
+      const sub = d.sport === 'mlb' ? (stations.length === 1 ? 'pitchers' : 'hitters') : '';
+      for (const a of PLAYED) {
+        const exact = exactMove(pre, a);
+        for (const k of [`${a}`, `${a}|t${third}`, ...(sub ? [`${a}|${sub}`] : [])]) { const o = draw[k] ??= { n: 0, sum: 0 }; o.n += 1; o.sum += exact; }
+        const opened = M.preDraftCombineOpen(d, pre, a);
+        const settleMove = M.preDraftCombineSettle(d, opened).stock - pre.stock;
+        for (let k = 0; k < HAND_K; k += 1) {
+          const runArm = (arm, bot, speed, keyBot) => {
+            const after = M.preDraftCombineResolve(d, opened, hands(bot, stations, `hands|${SEEDSET}|${tag(d)}|${i}|${keyBot}|${k}`, speed));
+            const move = after.stock - pre.stock;
+            add(arm, a, third, move - exact, move, after.showcase?.grade, sub);
+            return move;
+          };
+          for (const [name, bot] of Object.entries(BOTS)) {
+            const move = runArm(name, bot, 1, name);
+            /* THE OPTIMAL LEAVER: perfect foresight of his own hands, keeps them
+               only when their move beats the draw's exact expectation, and
+               otherwise leaves, which settles to the scouts' keyed draw. */
+            if (name === 'median' || name === 'keys') {
+              const kept = move > exact ? move : settleMove;
+              add(name === 'median' ? 'leaveP' : 'leaveK', a, third, kept - move, kept, '', sub);
+            }
+          }
+          runArm('slow', BOTS.median, 0.75, 'median');
+          runArm('fast', BOTS.median, 1.25, 'median');
+        }
+      }
+    }
+    const g = (arm, k) => { const o = acc[`${arm}|${k}`]; return o ? o.gap / o.n : NaN; };
+    const mv = (arm, k) => { const o = acc[`${arm}|${k}`]; return o ? o.move / o.n : NaN; };
+    const dm = k => (draw[k] ? draw[k].sum / draw[k].n : NaN);
+    const scoutGrades = rs.filter(r => r.s.showcase.grade).map(r => r.s.showcase.grade);
+    const shares = ['A', 'B', 'C', 'D'].map(x => `${x} ${(scoutGrades.filter(y => y === x).length / scoutGrades.length * 100).toFixed(0)}%`).join(' ');
+    console.log(`  ${tag(d)}: the scouts' draw, exact mean move all out ${f2(dm('allout'))}, safe ${f2(dm('steady'))}; realized grades of section 9's roads ${shares}; one stock point is about ${((M.preDraftBoardRankAt(median(rs.map(r => r.pre.stock)) - 1, d.teamIds().length * d.rounds, 0.5) - M.preDraftBoardRankAt(median(rs.map(r => r.pre.stock)) + 1, d.teamIds().length * d.rounds, 0.5)) / 2).toFixed(1)} picks at the fleet's median stock ${median(rs.map(r => r.pre.stock))}`);
+    for (const a of PLAYED) {
+      const shareOf = arm => { const o = acc[`${arm}|${a}`]; return ['A', 'B', 'C', 'D'].map(x => `${x}${Math.round(o[x] / o.n * 100)}`).join(' '); };
+      console.log(`    ${a}: fleet gap to the draw, novice ${f2(g('novice', a))}, median ${f2(g('median', a))}, keys ${f2(g('keys', a))}, thumbs ${f2(g('thumbs', a))}, expert ${f2(g('expert', a))}; median at 0.75x ${f2(g('slow', a))}, at 1.25x ${f2(g('fast', a))}; leaver gain pointer ${f2(g('leaveP', a))}, keys ${f2(g('leaveK', a))}`);
+      console.log(`      grades (percent) median ${shareOf('median')}; keys ${shareOf('keys')}; expert ${shareOf('expert')}; novice ${shareOf('novice')}`);
+      console.log(`      by starting rating third (58 to 64, 65 to 71, 72 to 78), gap [draw's exact mean]: median ${[0, 1, 2].map(t => `${f2(g('median', `${a}|t${t}`))} [${f2(dm(`${a}|t${t}`))}]`).join(', ')}; keys ${[0, 1, 2].map(t => f2(g('keys', `${a}|t${t}`))).join(', ')}; leaver pointer ${[0, 1, 2].map(t => f2(g('leaveP', `${a}|t${t}`))).join(', ')}, keys ${[0, 1, 2].map(t => f2(g('leaveK', `${a}|t${t}`))).join(', ')}`);
+      if (d.sport === 'mlb') console.log(`      pitchers (one station) median ${f2(g('median', `${a}|pitchers`))}, keys ${f2(g('keys', `${a}|pitchers`))}; hitters median ${f2(g('median', `${a}|hitters`))}, keys ${f2(g('keys', `${a}|hitters`))}`);
+      MEASURED.push({ pair: tag(d), a, novice: g('novice', a), median: g('median', a), keys: g('keys', a), thumbs: g('thumbs', a), expert: g('expert', a), leaveP: g('leaveP', a), leaveK: g('leaveK', a), order: [mv('novice', a), mv('median', a), mv('expert', a)] });
+    }
+  };
+  for (const d of DESCS) {
+    try { pair12(d); } catch (e) { fail(`section 12 threw on ${tag(d)}: ${e.message}`); }
+  }
+  /* The assertions. Bands from five seed sets (see the header), never on a
+     max, never "not significant". The leaver and the two thumbs are printed
+     for the lead and asserted nowhere: both are open rulings. */
+  const outBand = [], wrongWay = [];
+  for (const m of MEASURED) {
+    const at = `${m.pair} ${m.a}`;
+    if (!(Math.abs(m.median) <= TARGET_T && m.median >= HANDS_BAND.median[0] && m.median <= HANDS_BAND.median[1])) outBand.push(`${at} median ${f2(m.median)}`);
+    if (!(Math.abs(m.keys) <= TARGET_T && m.keys >= HANDS_BAND.keys[0] && m.keys <= HANDS_BAND.keys[1])) outBand.push(`${at} keys ${f2(m.keys)}`);
+    if (!(m.expert > 0 && m.expert >= HANDS_BAND.expertMin[m.a])) wrongWay.push(`${at} expert ${f2(m.expert)}`);
+    if (!(m.novice < 0 && m.novice <= HANDS_BAND.noviceMax[m.a])) wrongWay.push(`${at} novice ${f2(m.novice)}`);
+    if (!(m.order[0] < m.order[1] && m.order[1] < m.order[2])) wrongWay.push(`${at} means out of order (novice ${f2(m.order[0])}, median ${f2(m.order[1])}, expert ${f2(m.order[2])})`);
+  }
+  if (outBand.length) fail(`the median hands are not worth the draw (T ${TARGET_T}, median band ${HANDS_BAND.median.join(' to ')}, keys band ${HANDS_BAND.keys.join(' to ')}): ${outBand.slice(0, 6).join('; ')}`);
+  else ok(`in all ${MEASURED.length} pair and approach rows the median hands, pointer and keys, sit within ${TARGET_T} stock of the scouts' draw and inside their bands`);
+  if (wrongWay.length) fail(`hands do not order novice, median, expert: ${wrongWay.slice(0, 6).join('; ')}`);
+  else ok(`in all ${MEASURED.length} rows the expert gains (at least ${HANDS_BAND.expertMin.allout} all out, ${HANDS_BAND.expertMin.steady} safe), the novice loses (at least ${-HANDS_BAND.noviceMax.allout}, ${-HANDS_BAND.noviceMax.steady}), and the three means are in order`);
+  const leaveOver = MEASURED.filter(m => m.leaveP > 1 || m.leaveK > 1);
+  const most = Math.max(...MEASURED.flatMap(m => [m.leaveP, m.leaveK]));
+  console.log(`  for the lead (open question 1, never asserted): the optimal leaver gains ${f2(Math.min(...MEASURED.flatMap(m => [m.leaveP, m.leaveK])))} to ${f2(most)} stock over honest hands; above 1.0 in ${leaveOver.length} of ${MEASURED.length} rows (${[...new Set(leaveOver.map(m => m.a))].join(', ') || 'none'})`);
+  const thumbsOver = MEASURED.filter(m => m.thumbs > m.expert);
+  console.log(`  for the lead (open question 3, never asserted): two thumbs above the expert in ${thumbsOver.length} of ${MEASURED.length} rows${thumbsOver.length ? `: ${thumbsOver.map(m => `${m.pair} ${m.a} ${f2(m.thumbs)} over ${f2(m.expert)}`).join('; ')}` : ''}`);
+} catch (e) {
+  fail(`section 12 threw: ${e.message}`);
+} finally { Math.random = realRandom12; }
 
 /* ─── Section 13: the night shows what the engine did ─── */
 console.log('\n13. Draft night shows what the engine did, and never draws');
