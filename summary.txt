@@ -1,0 +1,8 @@
+worldtruth-s5 exit=0 79s | simSoccerWorldTruth: OK, every section green
+worldtruth exit=0 82s | simSoccerWorldTruth: OK, every section green
+worldtruth-s7 exit=0 88s | simSoccerWorldTruth: OK, every section green
+worldtruth-s9 exit=0 81s | simSoccerWorldTruth: OK, every section green
+ctl-legacy30 exit=1 84s | FIRED: WORLD_TRUTH_CONTROL=legacy30 failed section 2 (3 failures; section 2: 3, section 6: 3)
+ctl-legacy35 exit=1 85s | FIRED: WORLD_TRUTH_CONTROL=legacy35 failed section 2 (1 failures; section 2: 1, section 6: 3)
+ctl-boundary exit=1 63s | FIRED: WORLD_TRUTH_CONTROL=boundary failed section 0 (2 failures; section 0: 2, section 3: 2, section 4: 1)
+ctl-floor exit=1 61s | FIRED: WORLD_TRUTH_CONTROL=floor failed section 0 (1 failures; section 0: 1)
