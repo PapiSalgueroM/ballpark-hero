@@ -1,0 +1,11 @@
+build exit=0 22s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+playCollegeSeat exit=1 3s | Node.js v24.21.0
+playCollegeSeat-smalltap exit=1 3s | Node.js v24.21.0
+playCorruptSaves exit=0 7s | playCorruptSaves: green. No broken save traps a long game.
+simResultMoment exit=0 3s | simResultMoment: green. Every live game reaches the shared result moment or is listed with what it draws instead, the pill shows exactly the score it is given, the three 
+playReducedMotion exit=0 43s | playReducedMotion: green. Motion stops for a visitor who asked for less, content stays visible, every Round 530 route lands its reveals on the final frame, and everyone e
+playGames-cfb exit=0 46s | Played 1 games. 0 findings, 0 the harness could not drive.
+playGames-cbb exit=0 46s | Played 1 games. 0 findings, 0 the harness could not drive.
+weigh exit=0 6s | weigh done
+simRevealScroll exit=0 213s | Green. 53 presses measured, nothing dragged the page down on content that was already readable, no panel lost its top, and 5 presses proved the feature still does its job
+simMobileChrome exit=0 202s | GREEN: 34 top bar measurements and 117 scroll stops, no overlaps, nothing off the side of the screen, controls reachable everywhere, footer never covered.
