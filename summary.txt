@@ -1,0 +1,6 @@
+build exit=0 33s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+hubD-m4 exit=0 199s | playCmHubLanding: green (D 12 pass 0 fail); the hub lands on the club on its first frame
+hubD-final exit=2 2s | tail: cannot open '/tmp/d2.log' for reading: No such file or directory
+hubD-final-drift-EXPECT-RED exit=2 0s | tail: cannot open '/tmp/d3.log' for reading: No such file or directory
+corrupt-head exit=1 132s | playCorruptSaves: 1 broken save(s) trap the player: /hall-of-champions all
+corrupt-main exit=1 171s | playCorruptSaves: 1 broken save(s) trap the player: /hall-of-champions all

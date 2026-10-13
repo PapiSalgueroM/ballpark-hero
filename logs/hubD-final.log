@@ -1,0 +1,21 @@
+revert failed
+error: could not revert ca832a29e... Release BC join (m4): merge Round 1328 (origin/r1328-cm-hub-landing a7076596)
+hint: After resolving the conflicts, mark them with
+hint: "git add/rm <pathspec>", then run
+hint: "git revert --continue".
+hint: You can instead skip this commit with "git revert --skip".
+hint: To abort and get back to the state before "git revert",
+hint: run "git revert --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+D  docs/audits/ROUND-1328-NOTES.md
+M  scripts/playClubManager.mjs
+D  scripts/playCmHubLanding.mjs
+M  scripts/playCmRealFixtures.mjs
+M  scripts/simMidSeasonStart.mjs
+M  src/components/club-manager/CalendarScreen.tsx
+M  src/components/club-manager/MetersStrip.tsx
+M  src/components/club-manager/TrainingScreen.tsx
+D  src/hooks/useArrivalTop.ts
+M  src/hooks/useRevealScroll.ts
+grep: /tmp/d2.log: No such file or directory
+tail: cannot open '/tmp/d2.log' for reading: No such file or directory

@@ -1,0 +1,8 @@
+#!serve
+#!playwright
+#!serial
+hubD-m4: bash .rc/x/srv.sh 7073ed740450ab312b6e0dd2c58dd9410705b43b 4174 && bash .rc/x/srv.sh f14ec63ad576e2794f7e8226d2411c4856772abe 4175 && HEAD_URL=http://localhost:4175 BASE_URL=http://localhost:4174 HUB_LANDING_SECTIONS=D node scripts/playCmHubLanding.mjs > /tmp/d1.log 2>&1; s=$?; grep -E "  (FAIL|PASS)  D" /tmp/d1.log | cut -c1-220 | head -12; tail -1 /tmp/d1.log | cut -c1-260; exit $s
+hubD-final: bash .rc/x/srv.sh HEAD 4176 minus1328 && HEAD_URL=http://localhost:4173 BASE_URL=http://localhost:4176 HUB_LANDING_SECTIONS=D node scripts/playCmHubLanding.mjs > /tmp/d2.log 2>&1; s=$?; grep -E "  (FAIL|PASS)  D" /tmp/d2.log | cut -c1-220 | head -12; tail -1 /tmp/d2.log | cut -c1-260; exit $s
+hubD-final-drift-EXPECT-RED: bash .rc/x/srv.sh HEAD 4176 minus1328 && HEAD_URL=http://localhost:4173 BASE_URL=http://localhost:4176 HUB_LANDING_SECTIONS=D HUB_LANDING_CONTROL=drift node scripts/playCmHubLanding.mjs > /tmp/d3.log 2>&1; s=$?; tail -1 /tmp/d3.log | cut -c1-260; exit $s
+corrupt-head: node scripts/playCorruptSaves.mjs > /tmp/cs1.log 2>&1; s=$?; grep -E "FAIL|hall" /tmp/cs1.log | cut -c1-220 | head -6; tail -1 /tmp/cs1.log | cut -c1-260; exit $s
+corrupt-main: git worktree add -q --detach /tmp/mainwt 36cc9ffe7e13ed1c1e5f994b6a3998c8e3206e2c && ln -s "$PWD/node_modules" /tmp/mainwt/node_modules && cd /tmp/mainwt && npm run build > /tmp/mb.log 2>&1 && node scripts/playCorruptSaves.mjs > /tmp/cs2.log 2>&1; s=$?; grep -E "FAIL|hall" /tmp/cs2.log | cut -c1-220 | head -6; tail -1 /tmp/cs2.log | cut -c1-260; exit $s
