@@ -1,0 +1,9 @@
+#!serial
+#!playwright
+twoTabs: npm run build > /tmp/build-head.log 2>&1 && ENGINES=chromium node scripts/playTwoTabs.mjs
+twoTabs-nofence: ENGINES=chromium TWO_TABS_CONTROL=nofence node scripts/playTwoTabs.mjs
+twoTabs-nolanding: ENGINES=chromium TWO_TABS_CONTROL=nolanding node scripts/playTwoTabs.mjs
+twoTabs-nokeep: ENGINES=chromium TWO_TABS_CONTROL=nokeep node scripts/playTwoTabs.mjs
+bm-noadopt: node .rc/x/mut.mjs noadopt && npm run build > /tmp/build-m1.log 2>&1 && ENGINES=chromium SIZES=390x844 node scripts/playTwoTabs.mjs; s=$?; git checkout -- src scripts; exit $s
+bm-releasefirst: node .rc/x/mut.mjs releasefirst && npm run build > /tmp/build-m2.log 2>&1 && ENGINES=chromium SIZES=390x844 node scripts/playTwoTabs.mjs; s=$?; git checkout -- src scripts; exit $s
+bm-listenkey: node .rc/x/mut.mjs listenkey && npm run build > /tmp/build-m3.log 2>&1 && ENGINES=chromium SIZES=390x844 node scripts/playTwoTabs.mjs; s=$?; git checkout -- src scripts; exit $s
