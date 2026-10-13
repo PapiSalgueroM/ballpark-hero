@@ -1505,8 +1505,21 @@ console.log('17) a man you release never signs for you again, by any door');
     const rel = cm.releasePlayer(st, pick.p.id);
     if (!rel) fail(`the release of ${name} was refused`);
     else {
+      /* Release AZ: since Round 1250 a new modern career carries a world seed,
+         so this release also writes the world ledger, and the ledger's released
+         record is a door of its own: it takes him out of every club's world
+         roster and so off the market, list or no list (on the merge this
+         section went red with "not on the market even with the list taken
+         away"). The ledger's door is checked by itself here, and the doors
+         below read the save with that ledger taken away, which only this
+         release wrote, so each one still sees the list. */
+      const summer = { transferWindow: 'summer', windowWeeksLeft: 4, goneNames: [], releasedNames: [], freeAgents: (rel.freeAgents ?? []).filter(f => f.name !== name) };
+      if (st.worldSeed === undefined || st.worldRoster !== undefined || rel.worldRoster === undefined) fail(`the Everton career is not a new seeded save whose ledger only the release of ${name} wrote, so this cannot tell the ledger from the list`);
+      else if (cm.buildMarket({ ...rel, ...summer }).some(m => m.name === name)) fail(`the world ledger's record of ${name} does not keep him off the market`);
+      else ok(`the world ledger's record of ${name} keeps him off the market by itself`);
+      const { worldRoster: _ledger, ...unledgered } = rel;
       const later = {
-        ...rel,
+        ...unledgered,
         transferWindow: 'summer',
         windowWeeksLeft: 4,
         goneNames: [],
