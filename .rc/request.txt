@@ -1,0 +1,10 @@
+#!serve
+#!playwright
+playSoccerCareer: ENGINES=chromium node scripts/playSoccerCareer.mjs
+playSeasonCentre: ENGINES=chromium node scripts/playSeasonCentre.mjs
+playSoccerAgentReview: node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only > /dev/null 2>&1; NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" ENGINES=chromium node scripts/playSoccerAgentReview.mjs
+playSoccerFarewell: node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only > /dev/null 2>&1; NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" ENGINES=chromium node scripts/playSoccerFarewell.mjs
+playSoccerInternationalReturn: node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only > /dev/null 2>&1; NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" ENGINES=chromium node scripts/playSoccerInternationalReturn.mjs
+playSoccerEventCards: ENGINES=chromium node scripts/playSoccerEventCards.mjs
+playCareerProgramme: node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only > /dev/null 2>&1; NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" ENGINES=chromium node scripts/playCareerProgramme.mjs
+saveRetry1078: node scripts/qa/soccerCareerSaveRetry1078.mjs --prefetch-fonts-only > /dev/null 2>&1; NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" xvfb-run -a node scripts/qa/soccerCareerSaveRetry1078.mjs
