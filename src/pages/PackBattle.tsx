@@ -321,11 +321,10 @@ const PackBattle = () => {
         )}
 
 
-        <div className="flex justify-center mt-6">
-          <ReportQuestion gameType="pack-battle" />
-        </div>
+
 
         <GameSeoContent
+          reportControl={<ReportQuestion gameType="pack-battle" />}
           pageHasOwnH1
           title="Pack Battle: Football Trumps"
           description="A daily pack-opening trivia game built on real market values from the world of football. Call higher or lower before each card flips. One wrong call busts the pack."

@@ -163,9 +163,10 @@ const SOCCER_TRAINING_LOCATION = {
 };
 function reviewedGuideSentences(route, part, sentences) {
   if (route !== '/soccer-career' || part !== 'howToPlay') return sentences;
-  const originals = sentences.filter(line => line.startsWith(`${SOCCER_TRAINING_LOCATION.before} once a season.`));
-  if (originals.length !== 1) abort('Reviewed training location requires exactly one original frozen instruction');
-  return sentences.map(line => line === originals[0] ? line.replace(SOCCER_TRAINING_LOCATION.before, SOCCER_TRAINING_LOCATION.after) : line);
+  const instructions = sentences.filter(line => line.startsWith(`${SOCCER_TRAINING_LOCATION.before} once a season.`)
+    || line.startsWith(`${SOCCER_TRAINING_LOCATION.after} once a season.`));
+  if (instructions.length !== 1) abort('Reviewed training location requires exactly one original or refreshed instruction');
+  return sentences.map(line => line === instructions[0] ? line.replace(SOCCER_TRAINING_LOCATION.before, SOCCER_TRAINING_LOCATION.after) : line);
 }
 
 /* ---- freeze mode ---- */

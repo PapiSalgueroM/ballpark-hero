@@ -459,18 +459,17 @@ const StatDetective = () => {
 
         <AdBanner slot="7540487748" format="horizontal" className="mt-8" />
 
-        <div className="flex justify-center mt-6">
-          <ReportQuestion gameType="stat-detective" gameContext={{
+
+
+        <GameSeoContent
+          pageHasOwnH1
+          reportControl={<ReportQuestion gameType="stat-detective" gameContext={{
             puzzleId: mystery?.key ?? null, player: mystery?.player ?? null,
             season: mystery?.season ?? null, team: mystery?.team ?? null,
             difficulty, phase, guesses: guesses.map(guess => guess.name),
             profileScope: 'career-span-every-season-on-file',
             recordedSeasons: mysteryProfile ? careerSpan(mysteryProfile) : null,
-          }} />
-        </div>
-
-        <GameSeoContent
-          pageHasOwnH1
+          }} />}
           title="Stat Detective: Guess the NBA Player from an Anonymized Stat Line"
           description="Every case file is a real NBA season pulled from the record books, stripped down to its era, position and per 36 minute numbers. Read the line, work the clues and name the player within eight guesses. Each miss tells you whether your guess shares a franchise with the mystery player, and extra clues unlock as the misses pile up. Play Stars mode for famous seasons or Deep Cuts for the connoisseur pool."
           howToPlay={[

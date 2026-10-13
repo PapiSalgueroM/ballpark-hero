@@ -50,11 +50,11 @@ export default function AgentBrief({ career, clubs, onCareer }: {
   const selected = preview.options.find(option => option.id === brief?.priority);
 
   return <div data-transfer-brief-selection className="rounded-xl border border-border bg-card p-3 text-sm">
-    <p className="font-semibold">Agent search: {selected?.label ?? 'Normal search'}</p>
+    <p className="font-semibold">Transfer search: {selected?.label ?? 'Normal search'}</p>
     <p className="mt-1 text-xs text-muted-foreground">Choose a target before requesting a transfer. A brief lasts for this window.</p>
     <Dialog open={open} onOpenChange={changeOpen}>
       <DialogTrigger asChild>
-        <Button ref={trigger} data-transfer-brief-open variant="outline" className="mt-3 min-h-11 w-full whitespace-normal">Brief your agent</Button>
+        <Button ref={trigger} data-transfer-brief-open variant="outline" className="mt-3 min-h-11 w-full whitespace-normal">Set transfer priority</Button>
       </DialogTrigger>
       <DialogContent data-transfer-brief className="flex max-h-[calc(100dvh_-_2rem)] w-[calc(100vw_-_2rem)] max-w-md flex-col gap-3 rounded-xl p-4 [&>button:last-child]:h-11 [&>button:last-child]:w-11 [&>button:last-child]:opacity-100"
         onOpenAutoFocus={event => { event.preventDefault(); heading.current?.focus({ preventScroll: true }); }}
@@ -64,7 +64,7 @@ export default function AgentBrief({ career, clubs, onCareer }: {
         <div className="min-h-0 space-y-3 overflow-y-auto text-xs leading-relaxed">
           {help ? <div data-transfer-brief-help className="space-y-3">
             <p>Pick a priority, save the brief, then use Request transfer in the window. Saving a brief does not request a move.</p>
-            <p>{programmePromiseBroken(career) ? 'Your club broke its appearance promise, so this request gets a response for sure.' : 'The response chance stays 50%.'} Your agent searches clubs already eligible for your age and rating in this save's next season.</p>
+            <p>{programmePromiseBroken(career) ? 'Your club broke its appearance promise, so this request gets a response for sure.' : 'The response chance stays 50%.'} The search uses clubs already eligible for your age and rating in this save's next season.</p>
             <p>Minutes uses the same league appearance bands as the season engine. Club level uses the game's tiers, with tier 1 the highest. Home uses your nationality country.</p>
             <p>Example: two eligible clubs project 8 to 16 and 20 to 30 league games. Minutes targets the second club. Injuries and selection can still change your season.</p>
             <p>No matching clubs means no offer. A saved response cannot be rolled again by reloading. Club-arranged sales and loans still follow the club's decision.</p>

@@ -241,6 +241,7 @@ const NhlConnections = () => {
         </div>}
 
         <GameSeoContent
+          reportControl={<ReportQuestion gameType="nhl-connections" gameContext={{ puzzleId: puzzle?.id }} />}
           pageHasOwnH1
           title="NHL Connections | DoUKnowBall"
           description="A daily puzzle where you group NHL players by what connects them: same franchise or same career milestone."
@@ -261,9 +262,7 @@ const NhlConnections = () => {
 
         <AdBanner slot="7540487748" format="horizontal" className="mt-8" />
 
-        <div className="flex justify-center mt-6">
-          <ReportQuestion gameType="nhl-connections" gameContext={{ puzzleId: puzzle?.id }} />
-        </div>
+
         <GameNav />
 
         <NhlConnectionsHowToPlay open={showRules} onOpenChange={setShowRules} />

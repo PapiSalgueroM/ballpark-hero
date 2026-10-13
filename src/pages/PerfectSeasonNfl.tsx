@@ -813,11 +813,10 @@ const PerfectSeasonNfl = () => {
 
         <AdBanner slot="7540487748" format="horizontal" className="mt-8" />
 
-        <div className="flex justify-center mt-6">
-          <ReportQuestion gameType="perfect-season-nfl" />
-        </div>
+
 
         <GameSeoContent
+          reportControl={<ReportQuestion gameType="perfect-season-nfl" />}
           pageHasOwnH1
           title="17-0 NFL Perfect Season Challenge"
           description="Draft an offense across the modern NFL. The wheel decides which team-season you draft from, one player per spin, no repeats. Then the sim decides your fate over 17 games."
