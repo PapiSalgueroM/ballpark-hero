@@ -1,0 +1,10 @@
+join exit=0 0s | joined at 7b8021f2d79de9807c54c46cce7cedc76d90d351
+hub-before exit=1 89s | playCmHubLanding: 4 failure(s) (C 107 pass 4 fail)
+seam exit=0 0s | committed
+tsc exit=0 62s | 
+vitest exit=0 3s |    Duration  2.24s (transform 1.25s, setup 53ms, collect 1.48s, tests 11ms, environment 309ms, prepare 145ms)
+simCmCopy exit=0 17s | simCmCopy: green on this tree. Sections 1, 2, 3, 4, 5: Club Manager says what it means.
+simCmCopy-finance exit=1 17s | simCmCopy: CONTROL finance FIRED (6 failures, as it must)
+desk exit=0 60s | playCmFinanceDesk: green. The Finances desk reads at 12px, taps at 44px, cuts nothing, keeps every figure on one line and shows what the board covers and what the kitty k
+hub exit=0 46s | playCmHubLanding: green (C 111 pass 0 fail, E 63 pass 0 fail); the hub lands on the club on its first frame
+hub-tilectl exit=1 59s | playCmHubLanding: 3 failure(s) (C 108 pass 3 fail)

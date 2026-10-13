@@ -1,0 +1,5 @@
+seam1328 seam: wrote src/components/club-manager/FinancesScreen.tsx, scripts/playCmHubLanding.mjs
+ scripts/playCmHubLanding.mjs                   | 17 +++++++--------
+ src/components/club-manager/FinancesScreen.tsx | 29 ++++++++------------------
+ 2 files changed, 16 insertions(+), 30 deletions(-)
+committed
