@@ -323,6 +323,7 @@ function tileHeights() {
 
 /* ---------------- Part 1: the four components at four sizes ---------------- */
 
+const FIT_URL = 'http://cm-tables-fit.test/';
 const SORT_KEYS = ['pos', 'name', 'age', 'ovr', 'pot', 'form', 'wage', 'deal', 'worth', 'fit', 'mood'];
 
 async function partOne(which, browser, css) {
@@ -346,13 +347,18 @@ async function partOne(which, browser, css) {
       const page = await ctx.newPage();
       const errors = [];
       page.on('pageerror', e => errors.push(String(e).slice(0, 200)));
-      await page.route('**/*', r => r.abort());
-      await page.setContent(`<!doctype html><html lang="en"><head><meta name="viewport" content="width=device-width"><style>${css}</style></head><body class="dark"><main id="root" class="relative mx-auto px-4 py-6 md:py-10 max-w-4xl"></main></body></html>`);
+      /* The page is answered from memory at a made up http address and every other request is aborted: an
+         about:blank page has no localStorage, and the Everton book save is read through the engine's loadCareer. */
+      const html = `<!doctype html><html lang="en"><head><meta name="viewport" content="width=device-width"><style>${css}</style></head><body class="dark"><main id="root" class="relative mx-auto px-4 py-6 md:py-10 max-w-4xl"></main></body></html>`;
+      await page.route('**/*', r => (r.request().url() === FIT_URL ? r.fulfill({ status: 200, contentType: 'text/html', body: html }) : r.abort()));
+      await page.goto(FIT_URL);
       await page.addScriptTag({ path: outfile });
       await page.waitForFunction(() => !!window.__CMFIT__, null, { timeout: 60000 });
       const show = async (screen, career) => {
         await page.evaluate(([s, c]) => { window.__cls = 0; window.__CMFIT__.show(s, c); }, [screen, career]);
-        await page.waitForSelector(`[data-fit-screen="${screen}"]`, { timeout: 60000 });
+        await page.waitForSelector(`[data-fit-screen="${screen}"]`, { timeout: 20000 }).catch(e => {
+          throw new Error(`${which} at ${w}: the ${screen} screen for ${career} never drew. Page errors: ${errors.join(' | ') || 'none'}. ${String(e).slice(0, 120)}`);
+        });
         await page.waitForTimeout(400);
         const cls = await page.evaluate(() => window.__cls);
         if (cls > 0.001) add('shift', w, `${screen} ${career}`, `the layout shifted ${cls.toFixed(4)} after first paint`);
