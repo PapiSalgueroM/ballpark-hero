@@ -9,6 +9,7 @@ import {
    meter prints. This desk used to print a second one from its own stored
    number and the two disagreed on screen. */
 import { fanMeter } from '@/lib/clubManagerMeters';
+import { kittyChange } from '@/lib/clubManagerHubLines';
 import type { ConcessionTier, FinanceProjection, ProjectionLine } from '@/lib/clubManagerFinances';
 
 /* ─── Round 467: the finances desk. ───
@@ -48,32 +49,20 @@ function Row({ line, tone, fmt }: { line: ProjectionLine; tone: 'in' | 'out'; fm
 
 const BONUS_FOR: Record<string, string> = { title: 'winning the league', europe: 'reaching Europe', topHalf: 'a top half finish' };
 
-/* Round 1326: what the board covers and what that leaves the kitty. A red
-   "Season result" on a wage bill the board pays was a loss that never
-   happened (Liverpool showed -£7.6m while the kitty climbed £63m). The
-   running costs are summed by each spend line's own kitty flag, never by its
-   id, so a new running cost line counts the day it lands. Pure; kept here and
-   not exported, so the hub does not pull this lazy screen in. */
-function kittyView(p: FinanceProjection) {
-  const r2 = (n: number) => Math.round(n * 100) / 100;
-  const running = p.spend.filter(l => l.kitty === false);
-  const coverActual = r2(running.reduce((n, l) => n + l.actual, 0));
-  const coverProjected = r2(running.reduce((n, l) => n + l.projected, 0));
-  return {
-    coverActual,
-    coverProjected,
-    kittyActual: r2(p.resultActual + coverActual),
-    kittyProjected: r2(p.resultProjected + coverProjected),
-  };
-}
-
 export function FinancesScreen({ career: c, onTickets, onConcessions, onSponsor, onPush }: FinancesScreenProps) {
   /* Round 514: the money symbol follows the start option. Shadowing the
      import here is one line instead of a career argument on every call. */
   const money = moneyIn(c);
   const books = booksOf(c);
   const p = projectFinances(c);
-  const k = kittyView(p);
+  /* Round 1326 and Round 1328 joined: what the board covers and what that
+     leaves the kitty. The kitty change is kittyChange, the one place the
+     hub's Finances tile reads too, so the tile and this desk cannot
+     disagree. The cover row sums the running costs the board pays, each
+     spend line counted by its own kitty flag, never by its id. */
+  const kitty = kittyChange(p);
+  const cover = (pick: 'actual' | 'projected') => Math.round(p.spend.filter(l => l.kitty === false).reduce((n, l) => n + l[pick], 0) * 100) / 100;
+  const k = { coverActual: cover('actual'), coverProjected: cover('projected'), kittyActual: kitty.actual, kittyProjected: kitty.projected };
   const signed = (n: number) => `${n > 0 ? '+' : n < 0 ? '-' : ''}${money(Math.abs(n))}`;
   const ticketTier = c.finance?.ticketTier ?? 1;
   const tReact = ticketReaction(ticketTier);

@@ -609,19 +609,16 @@ async function checkTiles(page, section, tag) {
   if (tiles.Finances) {
     if (!(await clickTile(page, 'Finances'))) fail(section, `${tag}: no Finances tile to open`);
     else {
-      await page.locator('[data-projection-total="result"]').waitFor({ timeout: 10000 }).catch(() => {});
-      const desk = await page.evaluate(() => {
-        const cell = s => document.querySelector(`${s} td:last-child`)?.textContent ?? null;
-        return { result: cell('[data-projection-total="result"]'), wages: cell('[data-projection-line="playerWages"]'), staff: cell('[data-projection-line="staffWages"]'), travel: cell('[data-projection-line="travel"]') };
-      });
+      await page.locator('[data-projection-total="kitty"]').waitFor({ timeout: 10000 }).catch(() => {});
+      const desk = await page.evaluate(() => document.querySelector('[data-projection-total="kitty"] td:last-child')?.textContent ?? null);
       await page.locator('button', { hasText: 'Club home' }).first().evaluate(b => b.click()).catch(() => {});
       await page.waitForTimeout(300);
-      const parts = [desk.result, desk.wages, desk.staff, desk.travel].map(toMillions);
+      const want = toMillions(desk);
       const tile = toMillions(tiles.Finances.value);
-      const want = parts.every(v => v !== null) ? parts.reduce((a, b) => a + b, 0) : null;
-      /* The desk prints each line rounded to a tenth, so four rounded terms can
-         drift 0.2 from the tile's own rounding of the exact sum. */
-      check(section, want !== null && tile !== null && Math.abs(tile - want) <= 0.25, `${tag}: the Finances tile's ${tiles.Finances.value} is the kitty change of the desk's own lines (result ${desk.result} plus wages ${desk.wages}, staff ${desk.staff}, travel ${desk.travel} = ${want === null ? '?' : want.toFixed(2)})`);
+      /* Round 1326 and 1328 joined: the desk prints the kitty change itself
+         (its Kitty change row), from the same kittyChange the tile reads and
+         through the same formatter, so the two figures are the same number. */
+      check(section, want !== null && tile !== null && Math.abs(tile - want) <= 0.001, `${tag}: the Finances tile's ${tiles.Finances.value} is the desk's Kitty change row (${desk})`);
     }
   }
   return tiles;
