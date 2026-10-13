@@ -1,0 +1,8 @@
+#!serve
+#!playwright
+#!serial
+sweepHead: SWEEP_OFFLINE=1 ENGINES=chromium node scripts/sweepWeight.mjs 2>&1 | grep -iE "soccer-career|^[0-9]+ routes|green|fail" | head -20
+measureHead: RUNS=3 node scripts/measureRouteWeight.mjs head
+flagship: node scripts/simFlagshipWeight.mjs
+sweepBase: git worktree add -f /tmp/wb 8fea14e216fb550b4676ac29f06867234594df21 >/dev/null 2>&1; ln -sfn "$PWD/node_modules" /tmp/wb/node_modules; cd /tmp/wb && node_modules/.bin/vite build >/dev/null 2>&1; (node scripts/lib/hostLikeServer.mjs dist 4174 >/dev/null 2>&1 &) ; sleep 5; SWEEP_BASE=http://localhost:4174 SWEEP_OFFLINE=1 ENGINES=chromium node scripts/sweepWeight.mjs 2>&1 | grep -iE "soccer-career|green|fail" | head -20
+measureBase: git worktree add -f /tmp/wb 8fea14e216fb550b4676ac29f06867234594df21 >/dev/null 2>&1; ln -sfn "$PWD/node_modules" /tmp/wb/node_modules; cd /tmp/wb && node_modules/.bin/vite build >/dev/null 2>&1; RUNS=3 node scripts/measureRouteWeight.mjs base

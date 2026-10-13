@@ -1,0 +1,6 @@
+build exit=0 22s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+sweepHead exit=0 28s | sweepWeight: green. Every page is inside its budget, and the budgets came down this round.
+measureHead exit=0 54s | head     /soccer-career   total  2884K  js  2655K  reqs  48  FCP    668ms  playable  18057ms  (3 runs, median; styled nodes 151)
+flagship exit=0 1s | simFlagshipWeight: green. The flagship carries its own game and nobody else's.
+sweepBase exit=0 54s | sweepWeight: 13 failures
+measureBase exit=0 73s | base     /soccer-career   total  2882K  js  2653K  reqs  48  FCP    680ms  playable  16450ms  (3 runs, median; styled nodes 151)
