@@ -1,0 +1,22 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+worldtruth: node scripts/simSoccerWorldTruth.mjs
+vitest: node_modules/.bin/vitest run src/test/soccerWorldTruth.test.ts src/test/internationalPanelTruth.test.tsx src/test/tournamentCardMoment.test.tsx src/test/soccerEventDeckIntegrity.test.ts src/test/phonePanelFocus.test.tsx src/test/careerMomentKitLift.test.tsx src/test/soccerCareerDebutLegacy.test.tsx --testTimeout=300000 --hookTimeout=120000
+ctl-goalsonly: WORLD_TRUTH_CONTROL=goalsonly node scripts/simSoccerWorldTruth.mjs
+ctl-seasonyear: WORLD_TRUTH_CONTROL=seasonyear node scripts/simSoccerWorldTruth.mjs
+ctl-nolegacy: WORLD_TRUTH_CONTROL=nolegacy node scripts/simSoccerWorldTruth.mjs
+ctl-extradraw: WORLD_TRUTH_CONTROL=extradraw node scripts/simSoccerWorldTruth.mjs
+ctl-realmoves: WORLD_TRUTH_CONTROL=realmoves node scripts/simSoccerWorldTruth.mjs
+ctl-pastchampions: WORLD_TRUTH_CONTROL=pastchampions node scripts/simSoccerWorldTruth.mjs
+ctl-summer: WORLD_TRUTH_CONTROL=summer node scripts/simSoccerWorldTruth.mjs
+ctl-arcade: WORLD_TRUTH_CONTROL=arcade node scripts/simSoccerWorldTruth.mjs
+ctl-log: WORLD_TRUTH_CONTROL=log node scripts/simSoccerWorldTruth.mjs
+ctl-panel: WORLD_TRUTH_CONTROL=panel node scripts/simSoccerWorldTruth.mjs
+ctl-outside: WORLD_TRUTH_CONTROL=outside node scripts/simSoccerWorldTruth.mjs
+worldtruth-s7: SEED_OFFSET=7 node scripts/simSoccerWorldTruth.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simInventedNames: node scripts/simInventedNames.mjs
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
+simPhone2: node scripts/simPhone2.mjs
+simSoccerDeckFairness: node scripts/simSoccerDeckFairness.mjs
+simBallonDorTruth: node scripts/simBallonDorTruth.mjs
