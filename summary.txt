@@ -1,0 +1,7 @@
+build exit=0 31s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+simCollegeDynastyBoard exit=0 5s | simCollegeDynastyBoard: all green
+board-seatunmarked exit=0 5s | control "seatunmarked": 1 failure(s) fired as expected, the check works
+tsc exit=0 70s | 
+vitest-seat exit=0 6s |    Duration  4.81s (transform 474ms, setup 111ms, collect 1.42s, tests 5.12s, environment 723ms, prepare 168ms)
+playCollegeSeat exit=0 244s | playCollegeSeat: all stations green at 320, 390 and 1280 on both routes
+playCollegeSeat-smalltap exit=1 244s | playCollegeSeat CONTROL smalltap FIRED: the 44 px check went red (red: S2 (12), S3 (18), S5 (4), S6 (6), S8 (6))

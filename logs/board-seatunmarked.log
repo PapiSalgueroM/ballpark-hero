@@ -1,0 +1,12 @@
+1) the fixture is whole: a named sha, both sports, every station of the scripted path
+   cfb: 104 steps, 78 stations, 0 missing, 0 steps short of a field, 9471 draws at the end
+   cbb: 100 steps, 78 stations, 0 missing, 0 steps short of a field, 9492 draws at the end
+2) the replay: both boards match every recorded step
+   NEGATIVE CONTROL ON: src/components/college-dynasty/AthleticDirectorCard.tsx says "type="button" onClick={onOpen}" for "type="button" data-college-seat="tile" onClick={onOpen}"
+   vitest exit 1, 4 failed (4)
+   cfb: red, the athletic director set aside honestly: red
+   cbb: red, the athletic director set aside honestly: red
+   first mismatch: step 1 (start), in html, text
+  FAIL: the "seatunmarked" copy breaks the replay of cfb and cbb
+
+control "seatunmarked": 1 failure(s) fired as expected, the check works
