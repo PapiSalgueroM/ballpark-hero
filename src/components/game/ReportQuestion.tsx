@@ -15,12 +15,15 @@ import { REPORT_KINDS_QUESTION } from '@/components/game/reportKinds';
 interface ReportQuestionProps {
   gameType: string;
   gameContext?: Record<string, unknown>;
+  /** Release BA: a page that asks no questions passes REPORT_KINDS_SITEWIDE, so it
+   *  offers no Duplicate question chip. Defaults to the per question list. */
+  kinds?: readonly string[];
 }
 
 /* Round 446: one shared list, see reportKinds.ts for why. */
 const REPORT_REASONS = REPORT_KINDS_QUESTION;
 
-const ReportQuestion = ({ gameType, gameContext = {} }: ReportQuestionProps) => {
+const ReportQuestion = ({ gameType, gameContext = {}, kinds = REPORT_REASONS }: ReportQuestionProps) => {
   const [open, setOpen] = useState(false);
   // Release BA: the form opens from a plain button, not a DialogTrigger, so
   // Radix has no trigger to give focus back to on close. Hand it back here.
@@ -106,7 +109,7 @@ const ReportQuestion = ({ gameType, gameContext = {} }: ReportQuestionProps) => 
             <div className="space-y-4">
               {/* Reason chips */}
               <div className="flex flex-wrap gap-2">
-                {REPORT_REASONS.map((r) => (
+                {kinds.map((r) => (
                   <button
                     key={r}
                     onClick={() => setReason(r)}

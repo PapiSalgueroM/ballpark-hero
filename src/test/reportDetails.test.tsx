@@ -2,6 +2,7 @@ import { act, cleanup, fireEvent, render } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import ReportQuestion from '@/components/game/ReportQuestion';
 import ReportSiteIssue from '@/components/game/ReportSiteIssue';
+import { REPORT_KINDS_SITEWIDE } from '@/components/game/reportKinds';
 
 const delivery = vi.hoisted(() => ({ invoke: vi.fn(), insert: vi.fn() }));
 vi.mock('@/integrations/supabase/client', () => ({ supabase: { functions: { invoke: delivery.invoke }, from: (table: string) => { expect(table).toBe('question_reports'); return { insert: delivery.insert }; } } }));
@@ -105,3 +106,19 @@ for (const surface of surfaces) {
     });
   });
 }
+
+describe('game report chips', () => {
+  const chipsOf = (page: Parameters<typeof render>[0]) => {
+    const view = render(page);
+    fireEvent.click(view.getByRole('button', { name: 'Report a problem' }));
+    return view;
+  };
+  it('offers Duplicate question by default and drops it when the page passes the sitewide list', () => {
+    const quiz = chipsOf(<ReportQuestion gameType="quiz-board" />);
+    expect(quiz.getByRole('button', { name: 'Duplicate question' })).toBeInTheDocument();
+    cleanup();
+    const sim = chipsOf(<ReportQuestion gameType="soccer-career" kinds={REPORT_KINDS_SITEWIDE} />);
+    expect(sim.queryByRole('button', { name: 'Duplicate question' })).toBeNull();
+    for (const kind of REPORT_KINDS_SITEWIDE) expect(sim.getByRole('button', { name: kind })).toBeInTheDocument();
+  });
+});

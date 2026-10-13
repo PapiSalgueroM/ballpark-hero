@@ -4,8 +4,11 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import { GameShell } from '@/components/game/GameShell';
 import GameSeoContent from '@/components/seo/GameSeoContent';
 import ReportQuestion from '@/components/game/ReportQuestion';
+import { REPORT_KINDS_SITEWIDE, REPORT_ROUTES_WITHOUT_QUESTIONS } from '@/components/game/reportKinds';
+import { ALL_GAMES } from '@/data/gameRegistry';
 
-vi.mock('@/hooks/useRoutePath', () => ({ useRoutePath: () => '/player-bingo' }));
+const route = vi.hoisted(() => ({ path: '/player-bingo' }));
+vi.mock('@/hooks/useRoutePath', () => ({ useRoutePath: () => route.path }));
 vi.mock('@/components/game/GameNavbar', () => ({ GameNavbar: () => null }));
 vi.mock('@/components/game/GameHelp', () => ({ GameHelp: () => null }));
 vi.mock('@/components/seo/PageSeo', () => ({
@@ -18,12 +21,12 @@ vi.mock('@/data/gameContent/loader', () => ({
   loadGameContent: async () => null,
 }));
 vi.mock('@/components/game/ReportQuestion', () => ({
-  default: ({ gameType, gameContext }: { gameType: string; gameContext?: Record<string, unknown> }) => (
-    <button data-game={gameType} data-context={JSON.stringify(gameContext)}>Report a problem</button>
+  default: ({ gameType, gameContext, kinds }: { gameType: string; gameContext?: Record<string, unknown>; kinds?: readonly string[] }) => (
+    <button data-game={gameType} data-context={JSON.stringify(gameContext)} data-kinds={kinds ? kinds.join('|') : 'per-question default'}>Report a problem</button>
   ),
 }));
 
-afterEach(cleanup);
+afterEach(() => { cleanup(); route.path = '/player-bingo'; });
 
 const guide = (context?: Record<string, unknown>) => (
   <GameSeoContent title="Player Bingo guide" description="Guide description" howToPlay={['Guide instruction']} reportGameContext={context} />
@@ -93,5 +96,26 @@ describe('game report placement', () => {
     );
     expect(screen.queryByRole('button', { name: 'Report a problem' })).toBeNull();
     expect(screen.getByText('Guide description')).toBeInTheDocument();
+  });
+
+  it('gives a default page that asks no questions the sitewide chips, without Duplicate question', () => {
+    route.path = '/soccer-career';
+    render(<MemoryRouter>{guide()}</MemoryRouter>);
+    const button = screen.getByRole('button', { name: 'Report a problem' });
+    expect(button).toHaveAttribute('data-game', 'soccer-career');
+    expect(button).toHaveAttribute('data-kinds', REPORT_KINDS_SITEWIDE.join('|'));
+    expect(button.getAttribute('data-kinds')).not.toContain('Duplicate question');
+  });
+
+  it('keeps the per question chips on a default quiz page', () => {
+    route.path = '/quiz-board';
+    render(<MemoryRouter>{guide()}</MemoryRouter>);
+    expect(screen.getByRole('button', { name: 'Report a problem' })).toHaveAttribute('data-kinds', 'per-question default');
+  });
+
+  it('lists only real game routes as pages without questions', () => {
+    const paths = new Set(ALL_GAMES.map(game => game.path));
+    expect([...REPORT_ROUTES_WITHOUT_QUESTIONS].filter(path => !paths.has(path))).toEqual([]);
+    expect(REPORT_ROUTES_WITHOUT_QUESTIONS.size).toBeGreaterThan(0);
   });
 });

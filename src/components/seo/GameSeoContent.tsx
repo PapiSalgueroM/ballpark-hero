@@ -17,6 +17,7 @@ import { relatedGamesFor } from '@/lib/relatedGames';
 import { stripBrand, useSeoMetaTitle } from '@/components/seo/PageSeo';
 import ReportQuestion from '@/components/game/ReportQuestion';
 import { GameReportContext } from '@/components/game/GameReportContext';
+import { REPORT_KINDS_SITEWIDE, REPORT_ROUTES_WITHOUT_QUESTIONS } from '@/components/game/reportKinds';
 
 interface GameSeoContentProps {
   title: string;
@@ -228,9 +229,12 @@ const GameSeoContent = ({ title, description, howToPlay, pageHasOwnH1, children,
     >
       {reportControl !== false && (game || reportControl) && (
         <div className="flex justify-center mb-8" data-no-prerender>
+          {/* Release BA: a page that asks no questions offers no Duplicate
+              question chip (reportKinds.ts says why and which pages). */}
           {reportControl ?? <ReportQuestion
             gameType={report.gameType || path.replace(/^\//, '')}
             gameContext={reportGameContext ?? report.gameContext}
+            kinds={REPORT_ROUTES_WITHOUT_QUESTIONS.has(path) ? REPORT_KINDS_SITEWIDE : undefined}
           />}
         </div>
       )}
