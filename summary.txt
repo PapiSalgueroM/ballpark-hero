@@ -1,0 +1,13 @@
+vitest exit=0 10s |    Duration  8.50s (transform 2.91s, setup 396ms, collect 4.22s, tests 5.85s, environment 2.07s, prepare 699ms)
+decisions exit=0 17s | simClubManagerDecisions: 0 findings
+appeal1081 exit=0 53s | Equivalent appeal outcomes must agree: passed for 24 original pairs and 3 separate generated-position pairs.
+tsc exit=0 96s | 
+book exit=0 81s | simCmLeagueBook: green, 11 sections, 5 careers x 2 seasons (81s)
+awardRaces exit=0 20s | ALL AWARD RACE CHECKS PASSED
+rules exit=0 58s | simCmLeagueRules: all checks passed (modern, eras, pure, drop4, cupless, shapes, chunks)
+ownGoals exit=0 73s | simCmOwnGoals: PASS, 8 sections green
+slots exit=0 54s | simClubManagerSlots: all sections green
+book-bookleak exit=1 191s | simCmLeagueBook: CONTROL bookleak FIRED: section facts went red (1 failures), with shapes, thin as it must and no other section did (191s)
+facts exit=0 0s | simCmLeagueBookFacts: all 5897 checks passed.
+slots-dupe exit=1 63s | CONTROL FIRED: SLOTS_CONTROL=dupe turned section 2 red through its budget check (red sections: 2, 3), as it must
+anchors exit=0 45s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
