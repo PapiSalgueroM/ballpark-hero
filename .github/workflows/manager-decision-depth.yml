@@ -1,0 +1,179 @@
+name: Club Manager recorded decisions
+
+on:
+  push:
+    branches: [codex/manager-daily-decisions]
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 100
+    defaults:
+      run:
+        shell: bash
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      ENGINES: chromium
+      CM_LOCAL_ONLY: '1'
+      MANAGER_DECISION_DEPTH_PHASE: baseline
+      MANAGER_DECISION_DEPTH_BASELINE_RUN: '0'
+      MANAGER_DECISION_DEPTH_OUT: ${{ github.workspace }}/manager-decision-depth-artifacts
+      MANAGER_DECISION_DEPTH_BASELINE_REPORT: ${{ github.workspace }}/manager-decision-baseline/baseline/report.json
+      PRERENDER_ONLY: /club-manager
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Block production database transport
+        run: echo '127.0.0.1 flawuiqbvjobmkfkauhw.supabase.co' | sudo tee -a /etc/hosts
+      - name: Bind source and locked dependencies
+        run: |
+          mkdir -p "$MANAGER_DECISION_DEPTH_OUT"
+          git rev-parse HEAD > "$MANAGER_DECISION_DEPTH_OUT/source-head.txt"
+          git status --porcelain --untracked-files=no > "$MANAGER_DECISION_DEPTH_OUT/source-before.txt"
+          test ! -s "$MANAGER_DECISION_DEPTH_OUT/source-before.txt"
+          if test "$MANAGER_DECISION_DEPTH_PHASE" = baseline; then
+            git diff --exit-code 48cb9d4bbe8d8f4922113326d9db5d120dcb0b09 -- src/lib/clubManager.ts src/lib/clubManagerDecisions.ts src/lib/clubManagerMeters.ts src/pages/ClubManager.tsx src/components/club-manager/InboxCard.tsx
+          fi
+          sha256sum package.json package-lock.json bun.lock > "$MANAGER_DECISION_DEPTH_OUT/package-hashes.txt"
+          sha256sum src/lib/clubManager.ts src/lib/clubManagerDecisions.ts src/lib/clubManagerMeters.ts src/pages/ClubManager.tsx src/components/club-manager/InboxCard.tsx src/test/clubManagerDecisionDepth.test.ts scripts/playClubManagerDecisionDepth.mjs .github/workflows/manager-decision-depth.yml > "$MANAGER_DECISION_DEPTH_OUT/source-hashes.txt"
+          npm ci
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          const lock = JSON.parse(fs.readFileSync('package-lock.json'));
+          const installed = Object.entries(lock.packages).filter(([p]) => p.startsWith('node_modules/') && fs.existsSync(p + '/package.json')).map(([p, entry]) => {
+            const version = JSON.parse(fs.readFileSync(p + '/package.json')).version;
+            assert.equal(version, entry.version, p);
+            return { path: p, version };
+          });
+          assert(installed.length > 0);
+          fs.writeFileSync(process.env.MANAGER_DECISION_DEPTH_OUT + '/installed.json', JSON.stringify(installed, null, 2));
+          console.log(`Bound ${installed.length} installed locked versions.`);
+          NODE
+          npm install --prefix "$RUNNER_TEMP/manager-depth-browser" --no-save --package-lock=false playwright
+          ln -s "$RUNNER_TEMP/manager-depth-browser/node_modules/playwright" node_modules/playwright
+          ln -s "$RUNNER_TEMP/manager-depth-browser/node_modules/playwright-core" node_modules/playwright-core
+          sha256sum --check "$MANAGER_DECISION_DEPTH_OUT/package-hashes.txt"
+      - name: Application type gate
+        run: node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee "$MANAGER_DECISION_DEPTH_OUT/types.log"
+      - name: Actual context choices and preservation tests
+        run: |
+          set +e
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node_modules/.bin/vitest run src/test/clubManagerDecisionDepth.test.ts --maxWorkers=1 --reporter=verbose --reporter=json --outputFile.json="$MANAGER_DECISION_DEPTH_OUT/unit.json" 2>&1 | tee "$MANAGER_DECISION_DEPTH_OUT/unit-output.log"
+          result=${PIPESTATUS[0]}
+          set -e
+          UNIT_EXIT="$result" node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          const report = JSON.parse(fs.readFileSync(process.env.MANAGER_DECISION_DEPTH_OUT + '/unit.json'));
+          const output = fs.readFileSync(process.env.MANAGER_DECISION_DEPTH_OUT + '/unit-output.log', 'utf8');
+          assert(!/Unhandled (?:Errors?|Rejection)|Uncaught Exception|Failed to load|Failed to resolve import|Cannot find module|Module not found|ERR_MODULE_NOT_FOUND|SyntaxError|ReferenceError|TypeError/i.test(output));
+          assert.equal(report.testResults.length, 1);
+          assert(!report.testResults[0].message);
+          assert(report.testResults[0].name.replaceAll('\\', '/').endsWith('/src/test/clubManagerDecisionDepth.test.ts'));
+          assert.equal(report.numPendingTests, 0);
+          const cases = report.testResults[0].assertionResults;
+          assert.equal(cases.length, 7);
+          const ids = ['poorRun', 'boardPressure', 'pressPressure', 'injurySupport', 'academyStepUp', 'minutesCheck'];
+          const titles = ids.map(id => `${id}: recorded eligibility, exact options, saved effects and one answer`);
+          assert.deepEqual(cases.map(row => row.title).sort(), [...titles, 'preserves the seven existing card identities and desk limits'].sort());
+          assert(cases.every(row => ['passed', 'failed'].includes(row.status)));
+          const owned = cases.filter(row => titles.includes(row.title));
+          assert.equal(owned.length, 6);
+          assert(cases.filter(row => !owned.includes(row)).every(row => row.status === 'passed'));
+          if (process.env.MANAGER_DECISION_DEPTH_PHASE === 'baseline') {
+            assert.equal(Number(process.env.UNIT_EXIT), 1);
+            assert.equal(report.numFailedTests, 6);
+            assert.equal(report.numPassedTests, 1);
+            assert(owned.every(row => row.status === 'failed' && row.failureMessages.length > 0 && row.failureMessages.every(message => /^AssertionError:.*to have a length of 1 but got \+0/s.test(message))));
+            console.log('BASELINE: six precise missing-context assertions and one old-deck preservation pass.');
+          } else {
+            assert.equal(Number(process.env.UNIT_EXIT), 0);
+            assert.equal(report.numFailedTests, 0);
+            assert.equal(report.numPassedTests, 7);
+            assert(cases.every(row => row.status === 'passed'));
+            console.log('FIXED: all seven actual deck outcome cases passed.');
+          }
+          NODE
+      - name: Restore the qualified baseline definition receipt
+        if: env.MANAGER_DECISION_DEPTH_PHASE == 'fixed'
+        uses: actions/download-artifact@v4
+        with:
+          name: manager-decision-depth-${{ env.MANAGER_DECISION_DEPTH_BASELINE_RUN }}
+          run-id: ${{ env.MANAGER_DECISION_DEPTH_BASELINE_RUN }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: manager-decision-baseline
+      - name: Fixed browser and build tools
+        if: env.MANAGER_DECISION_DEPTH_PHASE == 'fixed'
+        run: |
+          node "$RUNNER_TEMP/manager-depth-browser/node_modules/playwright/cli.js" install --with-deps chromium
+          python -m pip install fonttools pillow
+      - name: Complete application build with manager snapshot
+        if: env.MANAGER_DECISION_DEPTH_PHASE == 'fixed'
+        run: |
+          npm run build:seo 2>&1 | tee "$MANAGER_DECISION_DEPTH_OUT/build.log"
+          cp scripts/data/lastmod.json "$MANAGER_DECISION_DEPTH_OUT/build-lastmod.json"
+          git diff -- scripts/data/lastmod.json > "$MANAGER_DECISION_DEPTH_OUT/build-lastmod.diff"
+      - name: Actual recorded-context method and route journeys
+        run: |
+          if test "$MANAGER_DECISION_DEPTH_PHASE" = baseline; then
+            set +e
+            NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playClubManagerDecisionDepth.mjs 2>&1 | tee "$MANAGER_DECISION_DEPTH_OUT/baseline-method.log"
+            result=${PIPESTATUS[0]}
+            set -e
+            METHOD_EXIT="$result" node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          const report = JSON.parse(fs.readFileSync(process.env.MANAGER_DECISION_DEPTH_OUT + '/baseline/report.json'));
+          assert.equal(Number(process.env.METHOD_EXIT), 1);
+          assert.equal(report.status, 'baseline-reproduced');
+          assert.equal(report.missingContexts, 6);
+          assert.equal(report.cases.length, 6);
+          assert.equal(report.controls.length, 0);
+          assert.equal(report.inventory.length, 0);
+          assert.equal(report.failures, 0);
+          assert.equal(report.setupFailures, 0);
+          assert.equal(report.sourceHeld, true);
+          assert.equal(report.installedHeld, true);
+          assert(report.checks > 0);
+          console.log('BASELINE: six absent deck contexts on actual recorded careers, no UI/image credit.');
+          NODE
+          else
+            NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playClubManagerDecisionDepth.mjs 2>&1 | tee "$MANAGER_DECISION_DEPTH_OUT/browser.log"
+          fi
+      - name: Related manager and every rebuilt-site reader
+        if: env.MANAGER_DECISION_DEPTH_PHASE == 'fixed'
+        run: |
+          ONLY=simClubManagerDecisions,simClubManagerMeters,simNoInventedQuotes,simAdsense,simBrand,simHeadTags,simHiddenPages,simHubs,simIndexNow,simIndexing,simInternalLinks,simNoRivalNames,simPrerender,simPrerenderBoot,simRetiredRoutes,simSchema,simSitemap,simSnapshotAssets node scripts/runAllSims.mjs --browser 2>&1 | tee "$MANAGER_DECISION_DEPTH_OUT/related.log"
+      - name: Final source and locked-tool holds
+        if: always()
+        run: |
+          sha256sum --check "$MANAGER_DECISION_DEPTH_OUT/source-hashes.txt"
+          sha256sum --check "$MANAGER_DECISION_DEPTH_OUT/package-hashes.txt"
+          git diff --exit-code -- src scripts ':!scripts/data/lastmod.json' package.json package-lock.json bun.lock .github/workflows
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          const installed = JSON.parse(fs.readFileSync(process.env.MANAGER_DECISION_DEPTH_OUT + '/installed.json'));
+          for (const row of installed) assert.equal(JSON.parse(fs.readFileSync(row.path + '/package.json')).version, row.version, row.path);
+          console.log(`Held ${installed.length} installed locked versions.`);
+          NODE
+      - name: Retain complete evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: manager-decision-depth-${{ github.run_id }}
+          path: manager-decision-depth-artifacts/
+          retention-days: 14
+          if-no-files-found: error
