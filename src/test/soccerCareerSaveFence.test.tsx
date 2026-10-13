@@ -160,6 +160,42 @@ describe('Soccer Career save fence', () => {
     expect(toast.error).not.toHaveBeenCalled();
   });
 
+  /* A removal the browser refuses (the save key only; the fence's own key
+     still works). Nothing moved, so no notice: the page says it could not
+     delete and keeps everything as it was. */
+  function refuseSaveRemoval() {
+    const original = Storage.prototype.removeItem;
+    vi.spyOn(Storage.prototype, 'removeItem').mockImplementation(function (this: Storage, key: string) {
+      if (key === KEY) throw new Error('TEST: removal refused');
+      return original.call(this, key);
+    });
+  }
+
+  it('New Career whose removal the browser refuses resets nothing and says so', () => {
+    const view = mount(JSON.stringify(nativeCareer()));
+    const before = localStorage.getItem(KEY);
+    const fence = localStorage.getItem(FENCE);
+    refuseSaveRemoval();
+    fireEvent.click(view.getByRole('button', { name: /New Career/ }));
+    act(() => { fireEvent.click(view.getByRole('button', { name: 'Delete & Start Over' })); });
+    expect(toast.error).toHaveBeenCalledWith('Could not delete the save. Try again.', expect.objectContaining({ position: 'top-center' }));
+    expect(localStorage.getItem(KEY)).toBe(before);
+    expect(localStorage.getItem(FENCE)).toBe(fence);
+    expect(view.queryByText('Create Your Player')).toBeNull();
+    expect(view.container.querySelector('[data-career-action-bar]')).not.toBeNull();
+    expect(notice()).toBeNull();
+  });
+
+  it('Delete unusable save whose removal the browser refuses keeps the save and says so', () => {
+    const view = mount('{broken');
+    refuseSaveRemoval();
+    act(() => { fireEvent.click(view.getByRole('button', { name: 'Delete unusable save' })); });
+    expect(toast.error).toHaveBeenCalledWith('Could not delete the save. Try again.', expect.objectContaining({ position: 'top-center' }));
+    expect(localStorage.getItem(KEY)).toBe('{broken');
+    expect(view.getByRole('button', { name: 'Delete unusable save' })).toBeVisible();
+    expect(notice()).toBeNull();
+  });
+
   it('a hand edit of the save moves no generation: no notice, and the next press writes', () => {
     const view = mount(JSON.stringify(nativeCareer()));
     const edited = { ...read(), netWorth: 12345 };
