@@ -82,7 +82,27 @@ runner (73 s on the owner's PC): a shard of three sets about 170 s.
   simGmCalendar exit 1 with the same first line on this head and on 48cb9d4b (Rounds 1314 and 1316, not this one).
 - `r1321-c1` on 5ba00f45: tsc exit 0; vitest of the two new test files, 20 tests pass; simGmDraftOrder exit 0 and
   control `mounted` FIRED (section 9); simNbaEarnedDraft exit 0.
-- `r1321-c2` on c001004a: see the closing report (sent, read after this file was written).
+- `r1321-c2` on c001004a: simNbaEarnedDraft exit 0 and all 14 controls fired; simGmDraftOrder all 40 fired; rule
+  fences exit 0 except simHarnessAnchors (one anchor a CRLF checkout could miss in section 10's raw read: fixed in
+  af5d7a3a) and two browser fences that had no Chromium in that request (rerun in `r1321-f2`).
+- `r1321-w1`: weight, see below.
+- FINAL, `r1321-f1` on af5d7a3a: tsc 0; vitest 21 files and 214 tests pass; simNbaEarnedDraft 0, all 14 controls
+  fired, FLEET=full shard 0/12 green (90 seasons, 40,000 keyed lotteries on 20, worst 2.82 standard errors);
+  simNbaGmDesk 0 and its 18 controls fired; simNbaDraftCapital and its 21 controls exit 0; simGmDraftOrder 0 and all
+  40 controls fired; simGmPicks, simDraftNight, simEngineIds, simInventedNames, simHarnessAnchors, simNoRivalNames
+  and simStorageWrites 0; the diff proof of decision 3 ok.
+- FINAL, `r1321-f2` on af5d7a3a: 23 reader harnesses 0; the rule fences 0 except simWritesAreSent (2 failures);
+  four fences that read the live database were not run (production).
+- `r1321-f3`: simWritesAreSent on a plain build of this head and of 48cb9d4b in the same job: the same 2 failures
+  on both ("could not drive Guess the Nation to a finish: locator.click timeout", then "no guess was ever
+  submitted"). Not this round's.
+- origin/main was still 48cb9d4b at the end of this run (no Release BB yet), so nothing was merged.
+
+## Weight (decision 6)
+
+`/nba-front-office` 375.3K gzipped JavaScript in 37 files on this branch and on 48cb9d4b; `/front-office` 363.4K
+in 36 files on both, the chunk lists the same file for file (runner `r1321-w1`, a plain build served like the host,
+iPhone 13, the database blocked). No budget row added or edited.
 
 The reader list: `git grep -l -E "nbaFrontOffice|gmDraftNight|gmDraftOrder|gmLotteryNight|simGmDraftOrder" -- scripts src`.
 
