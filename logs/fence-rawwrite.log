@@ -1,0 +1,14 @@
+tabs: two tabs on one career, and a Hot Seat handover beside one
+  B1 start: Brighton week 1, 1 meetings, last Aston Villa 2-3
+     after B played three: Brighton week 5, 4 meetings, last Coventry City 2-0
+     after A left: Brighton week 5, 4 meetings, last Coventry City 2-0 (A saw the move: true, its leave write landed: false)
+  REPLAY 0: B wrote "Brighton week 6, 5 meetings, last Arsenal 3-0", stale A played "Brighton week 6, 5 meetings, last Arsenal 0-2", on disk after A: "Brighton week 6, 5 meetings, last Arsenal 3-0" (A refused 2 times)
+  REPLAY 1: B wrote "Brighton week 7, 6 meetings, last Sunderland 3-2", stale A played "Brighton week 7, 6 meetings, last Sunderland 0-1", on disk after A: "Brighton week 7, 6 meetings, last Sunderland 3-2" (A refused 2 times)
+  REPLAY 2: B wrote "Brighton week 9, 7 meetings, last Crystal Palace 2-0", stale A played "Brighton week 9, 7 meetings, last Crystal Palace 0-1", on disk after A: "Brighton week 9, 7 meetings, last Crystal Palace 2-0" (A refused 2 times)
+  HOT SEAT: Arsenal handed over (saved): "Arsenal week 26, 26 meetings, last Hull City 2-0"; tab A saw it: true; after A left: "Arsenal week 26, 26 meetings, last Hull City 2-0"
+source: every call in src that writes the Club Manager save is fenced or allowed
+  FAIL [source]: a write of the Club Manager save outside the fence and off the allowed list: src/lib/clubManagerSlots.ts:210 deleteSlot setItem(SAVE_KEY)
+  95 files write storage; 6 writes of the save inside saveFence.write, 4 on the allowed list (3 entries, each still there)
+  section tabs: 14 checks, 0 red
+  section source: 11 checks, 1 red
+CONTROL FIRED: SAVE_FENCE_CONTROL=rawwrite fired 1 times and section source went red with 1 findings

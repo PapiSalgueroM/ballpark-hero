@@ -1,0 +1,15 @@
+simSaveFence exit=0 3s | simSaveFence: all green (tabs, source)
+fence-nofence exit=1 3s | CONTROL FIRED: SAVE_FENCE_CONTROL=nofence fired 1 times and section tabs went red with 11 findings
+fence-rawwrite exit=1 3s | CONTROL FIRED: SAVE_FENCE_CONTROL=rawwrite fired 1 times and section source went red with 1 findings
+vitest exit=0 20s |    Duration  18.97s (transform 3.68s, setup 980ms, collect 10.90s, tests 27.04s, environment 7.47s, prepare 2.36s)
+simClubManagerSlots exit=0 38s | simClubManagerSlots: all sections green
+simManagerAppealIsolation exit=0 27s | Equivalent appeal outcomes must agree: passed for 24 original pairs and 3 separate generated-position pairs.
+simStorageWrites exit=1 3s | simStorageWrites: 1 failed (owed: 12)
+simClubManagerSave exit=0 8s | simClubManagerSave: all sections green
+tsc exit=0 60s | 
+simDailyDeals exit=0 2s | simDailyDeals: green. 12 Hot Seat dates (5 Premier League) and 6 Deadline Day dates (3 Premier League) deal what Release AS dealt, and no daily carries the real fixture k
+simDeadlineDay exit=0 3s | simDeadlineDay: green. The brief is real, the desk pays, the clock binds, the daily is one window a day, the budget holds, a Club Manager save keeps its registrations, ri
+simManagerMatchPlans exit=0 3s | simManagerMatchPlans: 13 actual outcomes passed.
+simActivityNotCompletion exit=1 3s | simActivityNotCompletion: 2 failure(s)
+simClubManagerSaveSize exit=0 29s | simClubManagerSaveSize: all sections green
+simManagerHotSeat exit=0 37s | simManagerHotSeat: green. The target is the club's, reading the room pays, outcomes replay, a Club Manager save keeps its registrations and a survivor carries on in Club 
