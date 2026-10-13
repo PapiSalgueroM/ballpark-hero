@@ -99,7 +99,8 @@ console.log(`saves: A ${saveA.playerName} at ${saveA.currentClub}, world ${world
 const report = { site: SITE, control: CONTROL || null, runs: [], failures: [], knownSmall: [] };
 const failNote = m => { report.failures.push(m); console.error(`  FAIL: ${m}`); };
 const browser = await pw.chromium.launch({ headless: true });
-const waitText = (page, text) => page.waitForFunction(t => document.body.innerText.includes(t), text, { timeout: 30000 });
+/* textContent, not innerText: a heading in uppercase reads EVERY TOURNAMENT in innerText */
+const waitText = (page, text) => page.waitForFunction(t => document.body.textContent.includes(t), text, { timeout: 30000 });
 const phoneText = page => page.evaluate(() => document.querySelector('[aria-label="Your phone"]')?.innerText ?? '');
 const sweep = page => page.evaluate(async () => { for (let y = 0; y < document.documentElement.scrollHeight; y += 300) { window.scrollTo(0, y); await new Promise(r => setTimeout(r, 60)); } });
 const measure = page => page.evaluate(() => ({ scrollY: Math.round(window.scrollY), height: document.documentElement.scrollHeight, overflow: document.documentElement.scrollWidth > document.documentElement.clientWidth + 1 }));
@@ -256,7 +257,7 @@ try {
       await lastTile.click();
       await waitText(page, `${saveC.lastTournament.name} 2030`);
       await page.screenshot({ path: path.join(OUT, `${tag}-C-bracket.png`) });
-      const bracket = await page.evaluate(() => document.body.innerText.includes('Final'));
+      const bracket = await page.evaluate(() => document.body.textContent.includes('Final'));
       if (!bracket) failNote(`${tag} C: the 2030 bracket does not open`);
     });
     await context.close();
