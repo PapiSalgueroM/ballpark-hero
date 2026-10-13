@@ -1,0 +1,4 @@
+#!serve
+#!playwright
+walk: node scripts/playSoccerEventCards.mjs
+flagship: node scripts/simFlagshipWeight.mjs
