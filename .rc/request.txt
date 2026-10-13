@@ -1,0 +1,11 @@
+#!serve
+#!playwright
+rollback: git worktree add --detach /tmp/base 48cb9d4bbe8d8f4922113326d9db5d120dcb0b09 > /dev/null 2>&1 && R=$(pwd) && (cd /tmp/base && ln -s "$R/node_modules" node_modules && node_modules/.bin/vite build > /tmp/base-build.log 2>&1) && echo "base built" && OLD_DIST=/tmp/base/dist OLD=http://localhost:4174 node .rc/x/rb1320.mjs
+simRevealScroll: node scripts/simRevealScroll.mjs
+playReducedMotion: node scripts/playReducedMotion.mjs
+playCorruptSaves: ONLY=/cfb-dynasty,/cbb-dynasty node scripts/playCorruptSaves.mjs
+simMobileChrome: node scripts/simMobileChrome.mjs
+playGames-cfb: ONLY=/cfb-dynasty node scripts/playGames.mjs
+playGames-cbb: ONLY=/cbb-dynasty node scripts/playGames.mjs
+sweepGames-college: ENGINES=chromium OFFLINE=1 ONLY=/cfb-dynasty,/cbb-dynasty node scripts/sweepGames.mjs
+simSaveKeeper: node scripts/simSaveKeeper.mjs
