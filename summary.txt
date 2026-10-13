@@ -1,0 +1,4 @@
+worldtruth exit=0 85s | simSoccerWorldTruth: OK, every section green
+ctl-summer exit=1 88s | FIRED: WORLD_TRUTH_CONTROL=summer failed section 3 (1 failures; section 3: 1, section 6: 3)
+tsc exit=0 93s | 
+simPhone2 exit=1 118s | 1 FAILURES
