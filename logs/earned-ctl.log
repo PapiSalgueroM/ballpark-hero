@@ -1,0 +1,20 @@
+   fired  exit 1  touchseason    simNbaEarnedDraft: CONTROL touchseason FIRED. Red in section 1 (41 failures).
+   fired  exit 1  fatclass       simNbaEarnedDraft: CONTROL fatclass FIRED. Red in section 6 (3 failures).
+   fired  exit 1  nocurve        simNbaEarnedDraft: CONTROL nocurve FIRED. Red in section 6 (22 failures).
+   fired  exit 1  flatodds       simNbaEarnedDraft: CONTROL flatodds FIRED. Red in section 2 (461 failures).
+   fired  exit 1  playinmade     simNbaEarnedDraft: CONTROL playinmade FIRED. Red in section 2 and 3 and 4 and 8 and 9 (32 and 32 and 1 and 1 and 4 failures).
+   fired  exit 1  gmfirst        simNbaEarnedDraft: CONTROL gmfirst FIRED. Red in section 3 (60 failures).
+   fired  exit 1  origholder     simNbaEarnedDraft: CONTROL origholder FIRED. Red in section 3 (192 failures).
+   fired  exit 1  shortclass     simNbaEarnedDraft: CONTROL shortclass FIRED. Red in section 6 and 3 (1519 and 30 failures).
+   fired  exit 1  shownread      simNbaEarnedDraft: CONTROL shownread FIRED. Red in section 3 (545 failures).
+   fired  exit 1  redraw         simNbaEarnedDraft: CONTROL redraw FIRED. Red in section 4 (30 failures).
+   fired  exit 1  reopen         simNbaEarnedDraft: CONTROL reopen FIRED. Red in section 4 (30 failures).
+   fired  exit 1  trustblock     simNbaEarnedDraft: CONTROL trustblock FIRED. Red in section 3 and 8 (284 and 100 failures).
+   fired  exit 1  noneed         simNbaEarnedDraft: CONTROL noneed FIRED. Red in section 9 (4 failures).
+   fired  exit 1  rivalscout     simNbaEarnedDraft: CONTROL rivalscout FIRED. Red in section 9 (2 failures).
+   fired  exit 1  bigneed        simNbaEarnedDraft: CONTROL bigneed FIRED. Red in section 9 (3 failures).
+   fired  exit 1  sportname      simNbaEarnedDraft: CONTROL sportname FIRED. Red in section 10 (1 failures).
+   fired  exit 1  foreignimport  simNbaEarnedDraft: CONTROL foreignimport FIRED. Red in section 10 (1 failures).
+   fired  exit 1  elevenhead     simNbaEarnedDraft: CONTROL elevenhead FIRED. Red in section 6 (1501 failures).
+   fired  exit 1  flatclass      simNbaEarnedDraft: CONTROL flatclass FIRED. Red in section 6 (3 failures).
+simNbaEarnedDraft controls: all 19 fired, each in exactly its own sections.
