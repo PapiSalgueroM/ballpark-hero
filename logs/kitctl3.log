@@ -1,0 +1,6 @@
+expirefx exit=1 | simEventDeck: 4 failures, red sections 7 (CONTROL=expirefx fired)
+settledoff exit=1 | simEventDeck: 1 failure, red sections 7 (CONTROL=settledoff fired)
+panelexpiry exit=1 | simEventDeck: 1 failure, red sections 7 (CONTROL=panelexpiry fired)
+neutral exit=1 | simEventDeck: 1 failure, red sections 8 (CONTROL=neutral fired)
+heavy exit=1 | simEventDeck: 1 failure, red sections 10 (CONTROL=heavy fired)
+ctl: every control exited 1

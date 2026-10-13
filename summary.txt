@@ -1,0 +1,17 @@
+vitest exit=0 7s |    Duration  5.83s (transform 3.17s, setup 436ms, collect 5.47s, tests 505ms, environment 2.82s, prepare 1.06s)
+tsc exit=0 82s | 
+kit exit=0 98s | simEventDeck: green.
+kitctl2 exit=0 402s | ctl: every control exited 1
+gmdiff exit=0 8s | gmdiff: all three seeds identical to the base and green
+kitctl3 exit=0 403s | ctl: every control exited 1
+careerInbox exit=0 4s | simCareerInbox: green. Soccer is unchanged, and the NFL, MLB, NBA and NHL inboxes fire.
+careerInbox-privatecap exit=1 4s | simCareerInbox: 1 failure
+gmctl exit=0 17s | ctl: every control exited 1
+rival exit=0 25s | No rival product names found. 0 findings.
+anchors exit=0 49s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+conduct exit=0 1s | simNoInventedConduct: green. A real player can score in your sim and get hurt in it. He cannot fall out with the board in it.
+quotes exit=0 25s | simNoInventedQuotes: green. No real player is quoted or accused anywhere.
+kitctl1 exit=0 565s | ctl: every control exited 1
+reveal exit=0 11s | simRevealMoments: green. No counting number, a reduced motion rule beside every keyframe, one pace for every stagger, every fact and number on the cards is the fixture's 
+names exit=0 11s | simInventedNames: green. Every invented man on this site is invented all the way down.
+storage exit=0 2s | simStorageWrites: all green (owed: 12)
