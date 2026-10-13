@@ -1,0 +1,9 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+pd-a: SEEDSET=a node scripts/simCareerPreDraft.mjs
+pd-b: SEEDSET=b node scripts/simCareerPreDraft.mjs
+pd-c: SEEDSET=c node scripts/simCareerPreDraft.mjs
+pd-d: SEEDSET=d node scripts/simCareerPreDraft.mjs
+pd-e: SEEDSET=e node scripts/simCareerPreDraft.mjs
+ctl12: bash .rc/x/ctl.sh $RC_OUT/ctl softedge flathands curveflip keyscurve
+softedge-old: bash .rc/x/oldfloors.sh softedge
+softedge-e: SEEDSET=e SIM_PRE_DRAFT_CONTROL=softedge node scripts/simCareerPreDraft.mjs
