@@ -1,0 +1,1825 @@
+{
+ "tag": "nba390",
+ "SPORT": "nba",
+ "W": 390,
+ "H": 844,
+ "SEED": 1101,
+ "POS": "SG",
+ "steps": [
+  {
+   "t": 6,
+   "act": "road to the draft",
+   "text": "Play your road to the draft",
+   "scroll": [
+    659,
+    659,
+    185
+   ]
+  },
+  {
+   "act": "route 0"
+  },
+  {
+   "t": 9,
+   "act": "pre-draft season",
+   "text": "Play your first season",
+   "scroll": [
+    129,
+    129,
+    129
+   ]
+  },
+  {
+   "t": 12,
+   "act": "draft day",
+   "text": "Draft day",
+   "scroll": [
+    129,
+    129,
+    280
+   ]
+  },
+  {
+   "t": 18,
+   "act": "start your career",
+   "text": "Start your career",
+   "scroll": [
+    280,
+    280,
+    280
+   ]
+  },
+  {
+   "t": 22,
+   "act": "back from My Player",
+   "text": "Hub",
+   "scroll": [
+    194,
+    194,
+    194
+   ]
+  },
+  {
+   "t": 25,
+   "act": "back from The Bank",
+   "text": "Hub",
+   "scroll": [
+    194,
+    194,
+    194
+   ]
+  },
+  {
+   "t": 27,
+   "act": "back from Career Log",
+   "text": "Back to career",
+   "scroll": [
+    196,
+    196,
+    944
+   ]
+  },
+  {
+   "t": 29,
+   "act": "back from Trophy Case",
+   "text": "Hub",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 31,
+   "act": "back from News",
+   "text": "Hub",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 35,
+   "act": "back from Inbox",
+   "text": "Hub",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 66,
+   "act": "week by week",
+   "text": "📺 Week by week",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 68,
+   "act": "centre help got it",
+   "text": "Got it",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 69,
+   "act": "centre start",
+   "text": "▶ Tip off",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 69,
+   "act": "speed 3x",
+   "text": "3x",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 76,
+   "act": "next game",
+   "text": "▶ Game 2",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 82,
+   "act": "sim the rest",
+   "text": "⏭ Sim the rest",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 84,
+   "act": "fixtures back",
+   "text": "← Back",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 85,
+   "act": "leave centre",
+   "text": "Back to your season",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 89,
+   "act": "continue",
+   "text": "Continue",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 94,
+   "act": "continue",
+   "text": "Continue",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 95,
+   "act": "event option 1",
+   "text": "Stay in the gym Locker room respect",
+   "scroll": [
+    185,
+    185,
+    0
+   ]
+  },
+  {
+   "t": 96,
+   "act": "decision continue",
+   "text": "Continue",
+   "scroll": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "t": 101,
+   "act": "back from My Player",
+   "text": "Hub",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 104,
+   "act": "back from The Bank",
+   "text": "Hub",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 106,
+   "act": "back from Career Log",
+   "text": "Back to career",
+   "scroll": [
+    240,
+    197,
+    919
+   ]
+  },
+  {
+   "t": 108,
+   "act": "back from Trophy Case",
+   "text": "Hub",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 110,
+   "act": "back from News",
+   "text": "Hub",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 114,
+   "act": "back from Inbox",
+   "text": "Hub",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 115,
+   "act": "open practice",
+   "text": "Start practice",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 194,
+   "act": "close practice",
+   "text": "Close",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 224,
+   "act": "MISSING play season 2"
+  },
+  {
+   "t": 227,
+   "act": "back from Career Log",
+   "text": "Back to career",
+   "scroll": [
+    240,
+    197,
+    919
+   ]
+  },
+  {
+   "t": 229,
+   "act": "back from News",
+   "text": "Hub",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 232,
+   "act": "back from Inbox",
+   "text": "Hub",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 235,
+   "act": "centre start",
+   "text": "▶ Tip off",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 236,
+   "act": "speed 3x",
+   "text": "3x",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 242,
+   "act": "next game",
+   "text": "▶ Game 2",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 248,
+   "act": "sim the rest",
+   "text": "⏭ Sim the rest",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 251,
+   "act": "fixtures back",
+   "text": "← Back",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 251,
+   "act": "leave centre",
+   "text": "Back to your season",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  }
+ ],
+ "audits": [
+  {
+   "overX": 0,
+   "scrollY": 0,
+   "docH": 12598,
+   "bad": [],
+   "trunc": [
+    "Close [1<43]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 9,
+   "where": "first visit help",
+   "t": 4
+  },
+  {
+   "overX": 0,
+   "scrollY": 0,
+   "docH": 12598,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 8,
+   "where": "create",
+   "t": 5
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 12644,
+   "bad": [],
+   "trunc": [
+    "Your career starts here. [1<179]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 2,
+   "where": "prospect help",
+   "t": 8
+  },
+  {
+   "overX": 0,
+   "scrollY": 129,
+   "docH": 11939,
+   "bad": [],
+   "trunc": [
+    "Your career starts here. [1<179]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 4,
+   "where": "prospect routes",
+   "t": 8
+  },
+  {
+   "overX": 0,
+   "scrollY": 129,
+   "docH": 12106,
+   "bad": [],
+   "trunc": [
+    "Scouts are watching. [1<163]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 2,
+   "where": "prospect season",
+   "t": 10
+  },
+  {
+   "overX": 0,
+   "scrollY": 129,
+   "docH": 12106,
+   "bad": [],
+   "trunc": [
+    "Scouts are watching. [1<163]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 2,
+   "where": "prospect choice",
+   "t": 10
+  },
+  {
+   "overX": 0,
+   "scrollY": 129,
+   "docH": 12089,
+   "bad": [],
+   "trunc": [
+    "One last look. [1<103]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 4,
+   "where": "prospect showcase",
+   "t": 11
+  },
+  {
+   "overX": 0,
+   "scrollY": 129,
+   "docH": 11895,
+   "bad": [],
+   "trunc": [
+    "You have done the work. [1<189]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 2,
+   "where": "prospect draft day",
+   "t": 12
+  },
+  {
+   "overX": 0,
+   "scrollY": 280,
+   "docH": 12344,
+   "bad": [],
+   "trunc": [
+    "Draft night. [1<88]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 2,
+   "where": "draft night live",
+   "t": 14
+  },
+  {
+   "overX": 0,
+   "scrollY": 280,
+   "docH": 12344,
+   "bad": [],
+   "trunc": [
+    "This is your moment. [1<159]",
+    "Round 1, pick 5, 5 overall. Los Angeles Lakers take you. [1<425]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 1,
+   "where": "draft night end",
+   "t": 18
+  },
+  {
+   "overX": 0,
+   "scrollY": 280,
+   "docH": 12185,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "With pick 5, the Los Angeles Lakers select Maximilian Okonkwo-Smith. [149<301]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 8,
+   "where": "hub draft",
+   "t": 21
+  },
+  {
+   "overX": 0,
+   "scrollY": 194,
+   "docH": 11739,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 1,
+   "where": "tile My Player s0",
+   "t": 22
+  },
+  {
+   "overX": 0,
+   "scrollY": 194,
+   "docH": 11800,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 10,
+   "where": "tile The Bank s0",
+   "t": 24
+  },
+  {
+   "overX": 0,
+   "scrollY": 196,
+   "docH": 11431,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 1,
+   "where": "tile Career Log s0",
+   "t": 26
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 12238,
+   "bad": [],
+   "trunc": [
+    "Defensive Player of the Year [138<155]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 1,
+   "where": "tile Trophy Case s0",
+   "t": 28
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11487,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 4,
+   "where": "tile News s0",
+   "t": 30
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11390,
+   "bad": [],
+   "trunc": [
+    "Summer league starts Friday. You're getting the ball a lot. Mistakes a [302<463]",
+    "I'm not crying, the TV is just loud. Proud of you. First thing Monday, [302<752]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 3,
+   "where": "tile Inbox s0",
+   "t": 32
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11575,
+   "bad": [
+    "0-0"
+   ],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 12,
+   "where": "centre kickoff s1",
+   "t": 68
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11575,
+   "bad": [
+    "0-0"
+   ],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 18,
+   "where": "centre live s1",
+   "t": 72
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11575,
+   "bad": [
+    "1-0"
+   ],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 20,
+   "where": "centre final s1",
+   "t": 75
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11575,
+   "bad": [
+    "1-0"
+   ],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 18,
+   "where": "centre live s1",
+   "t": 78
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11575,
+   "bad": [
+    "2-0"
+   ],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 20,
+   "where": "centre final s1",
+   "t": 81
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11575,
+   "bad": [
+    "beat the Utah Jazz 4-0"
+   ],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 10,
+   "where": "centre review s1",
+   "t": 83
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11575,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 8,
+   "where": "centre fixtures s1",
+   "t": 84
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11575,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 1,
+   "where": "continue card s1",
+   "t": 89
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11612,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 1,
+   "where": "continue card s1",
+   "t": 94
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11926,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 8,
+   "where": "event s1",
+   "t": 95
+  },
+  {
+   "overX": 0,
+   "scrollY": 0,
+   "docH": 11512,
+   "bad": [],
+   "trunc": [
+    "to [1<13]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 1,
+   "where": "outcome s1",
+   "t": 95
+  },
+  {
+   "overX": 0,
+   "scrollY": 0,
+   "docH": 12269,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 4,
+   "where": "hub s1",
+   "t": 96
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11739,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 1,
+   "where": "tile My Player s1",
+   "t": 100
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11800,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 10,
+   "where": "tile The Bank s1",
+   "t": 102
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 12074,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [
+    "🏡 Home 80x29",
+    "🏎️ Rides 80x29",
+    "📈 Invest 80x29",
+    "💪 Body 80x29",
+    "💎 Flex 80x29",
+    "❤️ Family 80x29",
+    "$1.5M 57x29",
+    "$4.5M 59x29",
+    "$8M 48x29",
+    "$20M 55x29",
+    "$5M 48x29",
+    "$2M 48x29"
+   ],
+   "buttonsInView": 17,
+   "where": "bank shop",
+   "t": 103
+  },
+  {
+   "overX": 0,
+   "scrollY": 240,
+   "docH": 11507,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 2,
+   "where": "tile Career Log s1",
+   "t": 105
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 12238,
+   "bad": [],
+   "trunc": [
+    "Defensive Player of the Year [138<155]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 1,
+   "where": "tile Trophy Case s1",
+   "t": 107
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11556,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 4,
+   "where": "tile News s1",
+   "t": 109
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11503,
+   "bad": [],
+   "trunc": [
+    "Two a days through August if you want that jumper fixed. It's not fun. [302<417]",
+    "I cut forty minutes of how they guard the pick and roll. Want it tonig [302<492]",
+    "Summer league starts Friday. You're getting the ball a lot. Mistakes a [302<463]",
+    "I'm not crying, the TV is just loud. Proud of you. First thing Monday, [302<752]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 5,
+   "where": "tile Inbox s1",
+   "t": 111
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 12229,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "📱 Replied to Skills trainer: Book every day. Karma up. [149<233]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 19,
+   "where": "practice menu",
+   "t": 117
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 12229,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "📱 Replied to Skills trainer: Book every day. Karma up. [149<233]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 7,
+   "where": "hub after practice",
+   "t": 194
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 12229,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "📱 Replied to Skills trainer: Book every day. Karma up. [149<233]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 7,
+   "where": "hub s2",
+   "t": 225
+  },
+  {
+   "overX": 0,
+   "scrollY": 240,
+   "docH": 11507,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 2,
+   "where": "tile Career Log s2",
+   "t": 226
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11590,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 4,
+   "where": "tile News s2",
+   "t": 228
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11503,
+   "bad": [],
+   "trunc": [
+    "Two a days through August if you want that jumper fixed. It's not fun. [302<417]",
+    "I cut forty minutes of how they guard the pick and roll. Want it tonig [302<492]",
+    "Summer league starts Friday. You're getting the ball a lot. Mistakes a [302<463]",
+    "I'm not crying, the TV is just loud. Proud of you. First thing Monday, [302<752]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 5,
+   "where": "tile Inbox s2",
+   "t": 230
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 12229,
+   "bad": [
+    "0-0"
+   ],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 12,
+   "where": "centre kickoff again",
+   "t": 235
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 12229,
+   "bad": [
+    "0-0"
+   ],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 18,
+   "where": "centre live again",
+   "t": 238
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 12229,
+   "bad": [
+    "1-0"
+   ],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 20,
+   "where": "centre final again",
+   "t": 241
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 12229,
+   "bad": [
+    "1-0"
+   ],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 18,
+   "where": "centre live again",
+   "t": 244
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 12229,
+   "bad": [
+    "2-0"
+   ],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 20,
+   "where": "centre final again",
+   "t": 247
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 12229,
+   "bad": [
+    "beat the Utah Jazz 4-0"
+   ],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 10,
+   "where": "centre review again",
+   "t": 249
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 12229,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 8,
+   "where": "centre fixtures again",
+   "t": 250
+  }
+ ],
+ "errors": [
+  {
+   "t": "warning",
+   "at": 0,
+   "text": "Warning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}."
+  }
+ ],
+ "pageErrors": [],
+ "failedRequests": [],
+ "events": [
+  {
+   "tag": "s1",
+   "id": "media",
+   "text": "OFFSEASON, CARD 1 OF 1\n\nPodcast wars\n\nA famous show wants you to speak on the state of the league. Unfiltered.\n\nFull honesty\nViral fame\nStay in the gym\nLocker room respect",
+   "opts": [
+    "Full honesty Viral fame",
+    "Stay in the gym Locker room respect"
+   ],
+   "chose": 1,
+   "delta": {
+    "ovr": [
+     82,
+     82
+    ],
+    "salary": [
+     13.7,
+     13.7
+    ],
+    "team": [
+     "LAL",
+     "LAL"
+    ]
+   }
+  }
+ ],
+ "outcomes": [
+  {
+   "tag": "s1",
+   "txt": "YOUR DECISION\n\nPodcast wars\n\nYou chose: Stay in the gym\n\nMorale\n75 → \nto\n79\n+4\nContinue"
+  }
+ ],
+ "curtains": [
+  {
+   "tag": "s1",
+   "n": 1,
+   "txt": "THE 2026 SEASON\n\nLos Angeles Lakers · age 19 · SG\n\nLost the NBA Finals\n\n23.7 ppg, 4.6 rpg, 3.6 apg\n\n📊 29.9 mpg, 1.1 spg, 0.3 bpg.\n\n📊 Playoffs: 19 games, 20.1 ppg, 4.0 rpg, 3.2 apg.\n\n🔥 The rim looked like a swimming pool all season.\n\n🪞 Rowan Halstead went 9.4 ppg, 3.2 rpg, 2.1 apg. You had the better year. Head to head 1-0.\n\nContinue"
+  },
+  {
+   "tag": "s1",
+   "n": 2,
+   "txt": "🪞 RIVALRY\n\n💰\n\nThe Bigger Number\n\nRowan Halstead signs an extension, and every comment section has already decided it is bigger than yours.\n\nMorale -4, Fanbase +2\n\nMaximilian Okonkwo-Smith\n82\nVS\nRowan Halstead\n84\nContinue"
+  }
+ ],
+ "hub": [
+  {
+   "at": "drafted",
+   "save": {
+    "phase": "season",
+    "seasons": 0,
+    "year": 2026,
+    "age": 19,
+    "ovr": 81,
+    "team": "LAL",
+    "salary": 13.7,
+    "cy": 4,
+    "last": null
+   },
+   "chips": [
+    "Maximilian Okonkwo-Smith · SG",
+    "Los Angeles Lakers",
+    "2026 · age 19",
+    "OVR 81",
+    "$13.7M x4",
+    "⭐ Starting five"
+   ],
+   "play": "Play the 2026 season",
+   "so": "Career so far: 0 rings · 0 MVPs · 0 All-NBA · 0 career points",
+   "last": null,
+   "tiles": [
+    "📊 MY PLAYER OVR 81 SG, age 19, 0 rings",
+    "💰 THE BANK $1.2M $14M a year, 4 years left",
+    "📜 CAREER LOG No seasons yet Play one and it goes on the books",
+    "🏆 TROPHY CASE Empty Nothing in it. Go and win something",
+    "📰 NEWS 3 headlines With pick 5, the Los Angeles Lakers select Maximilian Okonkwo-Smith.",
+    "📱 INBOX 2 unread Somebody is waiting on a reply"
+   ]
+  },
+  {
+   "at": "after s1",
+   "outcome": "hub",
+   "save": {
+    "phase": "season",
+    "seasons": 1,
+    "year": 2027,
+    "age": 20,
+    "ovr": 82,
+    "team": "LAL",
+    "salary": 13.7,
+    "cy": 3,
+    "last": {
+     "year": 2026,
+     "team": "LAL",
+     "age": 19,
+     "ovr": 81,
+     "games": 80,
+     "ppg": 23.7,
+     "rpg": 4.6,
+     "apg": 3.6,
+     "awards": [],
+     "teamResult": "Lost the NBA Finals",
+     "salary": 13.7,
+     "mpg": 29.9,
+     "spg": 1.1,
+     "bpg": 0.3,
+     "clubWins": 60,
+     "clubLosses": 22,
+     "poGames": 19,
+     "poPpg": 20.1,
+     "poRpg": 4,
+     "poApg": 3.2
+    }
+   },
+   "chips": [
+    "Maximilian Okonkwo-Smith · SG",
+    "Los Angeles Lakers",
+    "2027 · age 20",
+    "OVR 82",
+    "$13.7M x3",
+    "⭐ Starting five"
+   ],
+   "play": "Play the 2027 season",
+   "so": "Career so far: 0 rings · 0 MVPs · 0 All-NBA · 1,896 career points",
+   "last": "Last season: 23.7 ppg, 4.6 rpg, 3.6 apg · Lost the NBA Finals",
+   "tiles": [
+    "📊 MY PLAYER OVR 82 SG, age 20, 0 rings",
+    "💰 THE BANK $7.4M $14M a year, 3 years left",
+    "📜 CAREER LOG 1 season 23.7 ppg, 4.6 rpg, 3.6 apg",
+    "🏆 TROPHY CASE Empty Nothing in it. Go and win something",
+    "📰 NEWS 6 headlines No distractions. Hooper answer.",
+    "📱 INBOX 3 unread Somebody is waiting on a reply"
+   ]
+  },
+  {
+   "at": "after s2",
+   "outcome": "hub",
+   "save": {
+    "phase": "season",
+    "seasons": 1,
+    "year": 2027,
+    "age": 20,
+    "ovr": 82,
+    "team": "LAL",
+    "salary": 13.7,
+    "cy": 3,
+    "last": {
+     "year": 2026,
+     "team": "LAL",
+     "age": 19,
+     "ovr": 81,
+     "games": 80,
+     "ppg": 23.7,
+     "rpg": 4.6,
+     "apg": 3.6,
+     "awards": [],
+     "teamResult": "Lost the NBA Finals",
+     "salary": 13.7,
+     "mpg": 29.9,
+     "spg": 1.1,
+     "bpg": 0.3,
+     "clubWins": 60,
+     "clubLosses": 22,
+     "poGames": 19,
+     "poPpg": 20.1,
+     "poRpg": 4,
+     "poApg": 3.2
+    }
+   },
+   "chips": [
+    "Maximilian Okonkwo-Smith · SG",
+    "Los Angeles Lakers",
+    "2027 · age 20",
+    "OVR 82",
+    "$13.7M x3",
+    "⭐ Starting five"
+   ],
+   "play": "Play the 2027 season",
+   "so": "Career so far: 0 rings · 0 MVPs · 0 All-NBA · 1,896 career points",
+   "last": null,
+   "tiles": [
+    "📊 MY PLAYER OVR 82 SG, age 20, 0 rings",
+    "💰 THE BANK $5.9M $14M a year, 3 years left",
+    "📜 CAREER LOG 1 season 23.7 ppg, 4.6 rpg, 3.6 apg",
+    "🏆 TROPHY CASE Empty Nothing in it. Go and win something",
+    "📰 NEWS 2 headlines 📱 Replied to Skills trainer: Book every day. Karma up.",
+    "📱 INBOX 2 unread Somebody is waiting on a reply"
+   ]
+  }
+ ],
+ "tiles": [
+  {
+   "tag": "s0",
+   "word": "My Player",
+   "shot": "nba390-15-tile-myplayer-s0.png",
+   "text": "Hub\n📊 My Player\nYour road to the draft\n\n81\n\nOVERALL\n\nMaximilian Okonkwo-Smith · SG · age 19\n\nMorale\n70\nFanbase\n60\nHealth\n100\nKarma\n50\n\n0\n\nseasons\n\n0\n\nrings",
+   "backOk": true,
+   "scroll": [
+    194,
+    194,
+    194
+   ],
+   "focus": "Skip to main content DOUKNOWBALL Back Tr"
+  },
+  {
+   "tag": "s0",
+   "word": "The Bank",
+   "shot": "nba390-16-tile-thebank-s0.png",
+   "text": "Hub\n💰 The Bank\n\nEVERYTHING YOU HAVE\n\n$1.2M\n\n$13.7M a year, 4 years left on the deal\n\n$1.2M\nin the account\n$0k\nsavings\n$0k\ninvested\n🏦 Account\n📈 Market\n🃏 Cards\n🛒 Shop\n💵 Savings\npays 2.5% a season, never loses\n\nBoring, safe, and better than leaving it in the account doing nothing.\n\nSave 25%\nSave half\nSave it all\nTake out half\nTake it all out\n📄 Statement\nlast 12 only\n\nNothing yet. Save something or buy something.\n\nOlder lines drop off so your save does not grow forever.\n\nMade on investments\n$0k / $0k lost",
+   "backOk": true,
+   "scroll": [
+    194,
+    194,
+    194
+   ],
+   "focus": "Skip to main content DOUKNOWBALL Back Tr"
+  },
+  {
+   "tag": "s0",
+   "word": "Career Log",
+   "shot": "nba390-17-tile-careerlog-s0.png",
+   "text": "Back to career\nCareer Log\n\nPick a year to review your saved season. No extra season is played.\n\nNo seasons on the books yet. Go play one.",
+   "backOk": true,
+   "scroll": [
+    194,
+    196,
+    944
+   ],
+   "focus": "📜 CAREER LOG No seasons yet Play one an"
+  },
+  {
+   "tag": "s0",
+   "word": "Trophy Case",
+   "shot": "nba390-18-tile-trophycase-s0.png",
+   "text": "Hub\n🏆 Trophy Case\n\n0 rings\n\nNothing on the shelf yet. Every award you win lands here with the year on it.\n\n🎖️ BADGES\n1 of 23\n\n🔒\nNBA champion\n\nA ring. The one everything else is measured against.\n\n🔒\nBack to back\n\nTwo titles in two seasons.\n\n🔒\nLeague MVP\n\nThe best player in the league for one year.\n\n🔒\nFinals MVP\n\nThe best player in the series that decided it.\n\n🔒\nDefensive Player of the Year\n\nThe best defender in the league for one year.\n\n🔒\nRookie of the Year\n\nThe best first year player in the league.\n\n🔒\nScoring champion\n\nLed the league in scoring across a season.\n\n🔒\nThree All-NBAs\n\nAll-NBA three times.\n\n🔒\nTen All-NBAs\n\nTen All-NBA selections.\n\n🔒\nAll-Star\n\nPicked for the All-Star Game.\n\n🔒\nTen time All-Star\n\nTen All-Star selections.\n\n🔒\nA 30 point season\n\nThirty a night across a whole season. The record average is 50.4.\n\n🔒\nTriple double season\n\nPoints, rebounds and assists all in double figures for a season.\n\n🔒\n20,000 points\n\nTwenty thousand career points.\n\n🔒\n30,000 points\n\nThirty thousand career points.\n\n🔒\n10,000 rebounds\n\nTen thousand career rebounds.\n\n🔒\n10,000 assists\n\nTen thousand career assists.\n\n🔒\nA decade in the league\n\nTen seasons played.\n\n🔒\nIron man\n\nFive seasons with all 82 games played.\n\n🪙\nFirst million\n\nA million dollars to your name, cash, savings and holdings together.\n\n🔒\n$100M to your name\n\nA hundred million dollars, cash, savings and holdings together.\n\n🔒\nWon the rivalry\n\nYour draft class rival retired behind you in the head to head.\n\n🔒\nHal",
+   "backOk": true,
+   "scroll": [
+    944,
+    185,
+    185
+   ],
+   "focus": "Skip to main content DOUKNOWBALL Back Tr"
+  },
+  {
+   "tag": "s0",
+   "word": "News",
+   "shot": "nba390-19-tile-news-s0.png",
+   "text": "Hub\n📰 News Feed\n📰 Paper\n📸 SocialGram\n🪞 Rival\n\nTHIS WEEK\n\nWith pick 5, the Los Angeles Lakers select Maximilian Okonkwo-Smith.\n\nThe city expects a savior.\n\n📋 Top five picks do not sit. You open in the starting five.",
+   "backOk": true,
+   "scroll": [
+    185,
+    185,
+    185
+   ],
+   "focus": "Skip to main content DOUKNOWBALL Back Tr"
+  },
+  {
+   "tag": "s0",
+   "word": "Inbox",
+   "shot": "nba390-20-tile-inbox-s0.png",
+   "text": "Hub\n📱 Inbox\n☀️\nSummer league coach\n☀️ Summer league, 2026\nSummer league starts Friday. You're getting the ball a lot. Mistakes are fine, hiding isn't.\n🧢\nDad\n🎓 Draft night, 2026\nI'm not crying, the TV is just loud. Proud of you. First thing Monday, learn the equipment guy's name. Those are the people who run the place.",
+   "backOk": true,
+   "scroll": [
+    185,
+    185,
+    185
+   ],
+   "focus": "Skip to main content DOUKNOWBALL Back Tr"
+  },
+  {
+   "tag": "s1",
+   "word": "My Player",
+   "shot": "nba390-38-tile-myplayer-s1.png",
+   "text": "Hub\n📊 My Player\nYour road to the draft\n\n82\n\nOVERALL\n\nMaximilian Okonkwo-Smith · SG · age 20\n\nMorale\n79\nFanbase\n64\nHealth\n100\nKarma\n51\n\n1\n\nseasons\n\n0\n\nrings",
+   "backOk": true,
+   "scroll": [
+    0,
+    185,
+    185
+   ],
+   "focus": "Skip to main content DOUKNOWBALL Back Tr"
+  },
+  {
+   "tag": "s1",
+   "word": "The Bank",
+   "shot": "nba390-39-tile-thebank-s1.png",
+   "text": "Hub\n💰 The Bank\n\nEVERYTHING YOU HAVE\n\n$7.4M\n\n$13.7M a year, 3 years left on the deal\n\n$7.4M\nin the account\n$0k\nsavings\n$0k\ninvested\n🏦 Account\n📈 Market\n🃏 Cards\n🛒 Shop\n💵 Savings\npays 2.5% a season, never loses\n\nBoring, safe, and better than leaving it in the account doing nothing.\n\nSave 25%\nSave half\nSave it all\nTake out half\nTake it all out\n📄 Statement\nlast 12 only\n\nNothing yet. Save something or buy something.\n\nOlder lines drop off so your save does not grow forever.\n\nMade on investments\n$0k / $0k lost",
+   "backOk": true,
+   "scroll": [
+    185,
+    185,
+    185
+   ],
+   "focus": "Skip to main content DOUKNOWBALL Back Tr"
+  },
+  {
+   "tag": "s1",
+   "word": "Career Log",
+   "shot": "nba390-42-tile-careerlog-s1.png",
+   "text": "Back to career\nCareer Log\n\nPick a year to review your saved season. No extra season is played.\n\nSeason highs\n2026\nLos Angeles Lakers",
+   "backOk": true,
+   "scroll": [
+    185,
+    240,
+    919
+   ],
+   "focus": "📜 CAREER LOG 1 season 23.7 ppg, 4.6 rpg"
+  },
+  {
+   "tag": "s1",
+   "word": "Trophy Case",
+   "shot": "nba390-43-tile-trophycase-s1.png",
+   "text": "Hub\n🏆 Trophy Case\n\n0 rings\n\nNothing on the shelf yet. Every award you win lands here with the year on it.\n\n🎖️ BADGES\n1 of 23\n\n🔒\nNBA champion\n\nA ring. The one everything else is measured against.\n\n🔒\nBack to back\n\nTwo titles in two seasons.\n\n🔒\nLeague MVP\n\nThe best player in the league for one year.\n\n🔒\nFinals MVP\n\nThe best player in the series that decided it.\n\n🔒\nDefensive Player of the Year\n\nThe best defender in the league for one year.\n\n🔒\nRookie of the Year\n\nThe best first year player in the league.\n\n🔒\nScoring champion\n\nLed the league in scoring across a season.\n\n🔒\nThree All-NBAs\n\nAll-NBA three times.\n\n🔒\nTen All-NBAs\n\nTen All-NBA selections.\n\n🔒\nAll-Star\n\nPicked for the All-Star Game.\n\n🔒\nTen time All-Star\n\nTen All-Star selections.\n\n🔒\nA 30 point season\n\nThirty a night across a whole season. The record average is 50.4.\n\n🔒\nTriple double season\n\nPoints, rebounds and assists all in double figures for a season.\n\n🔒\n20,000 points\n\nTwenty thousand career points.\n\n🔒\n30,000 points\n\nThirty thousand career points.\n\n🔒\n10,000 rebounds\n\nTen thousand career rebounds.\n\n🔒\n10,000 assists\n\nTen thousand career assists.\n\n🔒\nA decade in the league\n\nTen seasons played.\n\n🔒\nIron man\n\nFive seasons with all 82 games played.\n\n🪙\nFirst million\n\nA million dollars to your name, cash, savings and holdings together.\n\n🔒\n$100M to your name\n\nA hundred million dollars, cash, savings and holdings together.\n\n🔒\nWon the rivalry\n\nYour draft class rival retired behind you in the head to head.\n\n🔒\nHal",
+   "backOk": true,
+   "scroll": [
+    919,
+    185,
+    185
+   ],
+   "focus": "Skip to main content DOUKNOWBALL Back Tr"
+  },
+  {
+   "tag": "s1",
+   "word": "News",
+   "shot": "nba390-44-tile-news-s1.png",
+   "text": "Hub\n📰 News Feed\n📰 Paper\n📸 SocialGram\n🪞 Rival\n\nTHIS WEEK\n\nBought Downtown Loft.\n\nBACK PAGES\n\n📰 Los Angeles Lakers lose the Finals with the trophy in the building\n\n📰 Maximilian Okonkwo-Smith averages 23.7 points and 4.6 rebounds a night",
+   "backOk": true,
+   "scroll": [
+    185,
+    185,
+    185
+   ],
+   "focus": "Skip to main content DOUKNOWBALL Back Tr"
+  },
+  {
+   "tag": "s1",
+   "word": "Inbox",
+   "shot": "nba390-45-tile-inbox-s1.png",
+   "text": "Hub\n📱 Inbox\n🎯\nSkills trainer\n☀️ Summer league, 2026\nTwo a days through August if you want that jumper fixed. It's not fun. It works.\n📼\nAssistant coach\n🏆 Playoffs, 2026\nI cut forty minutes of how they guard the pick and roll. Want it tonight, or after shootaround?\n☀️\nSummer league coach\n☀️ Summer league, 2026\nSummer league starts Friday. You're getting the ball a lot. Mistakes are fine, hiding isn't.\n🧢\nDad\n🎓 Draft night, 2026\nI'm not crying, the TV is just loud. Proud of you. First thing Monday, learn the equipment guy's name. Those are the people who run the place.",
+   "backOk": true,
+   "scroll": [
+    185,
+    185,
+    185
+   ],
+   "focus": "Skip to main content DOUKNOWBALL Back Tr"
+  },
+  {
+   "tag": "s2",
+   "word": "Career Log",
+   "shot": "nba390-53-tile-careerlog-s2.png",
+   "text": "Back to career\nCareer Log\n\nPick a year to review your saved season. No extra season is played.\n\nSeason highs\n2026\nLos Angeles Lakers",
+   "backOk": true,
+   "scroll": [
+    185,
+    240,
+    919
+   ],
+   "focus": "📜 CAREER LOG 1 season 23.7 ppg, 4.6 rpg"
+  },
+  {
+   "tag": "s2",
+   "word": "News",
+   "shot": "nba390-54-tile-news-s2.png",
+   "text": "Hub\n📰 News Feed\n📰 Paper\n📸 SocialGram\n🪞 Rival\n\nTHIS WEEK\n\n📱 Replied to Skills trainer: Book every day. Karma up.\n\nBought Downtown Loft.\n\nBACK PAGES\n\n📰 Los Angeles Lakers lose the Finals with the trophy in the building\n\n📰 Maximilian Okonkwo-Smith averages 23.7 points and 4.6 rebounds a night",
+   "backOk": true,
+   "scroll": [
+    919,
+    185,
+    185
+   ],
+   "focus": "Skip to main content DOUKNOWBALL Back Tr"
+  },
+  {
+   "tag": "s2",
+   "word": "Inbox",
+   "shot": "nba390-55-tile-inbox-s2.png",
+   "text": "Hub\n📱 Inbox\n🎯\nSkills trainer\n☀️ Summer league, 2026\nTwo a days through August if you want that jumper fixed. It's not fun. It works.\n📼\nAssistant coach\n🏆 Playoffs, 2026\nI cut forty minutes of how they guard the pick and roll. Want it tonight, or after shootaround?\n☀️\nSummer league coach\n☀️ Summer league, 2026\nSummer league starts Friday. You're getting the ball a lot. Mistakes are fine, hiding isn't.\n🧢\nDad\n🎓 Draft night, 2026\nI'm not crying, the TV is just loud. Proud of you. First thing Monday, learn the equipment guy's name. Those are the people who run the place.",
+   "backOk": true,
+   "scroll": [
+    185,
+    185,
+    185
+   ],
+   "focus": "Skip to main content DOUKNOWBALL Back Tr"
+  }
+ ],
+ "centre": [
+  {
+   "tag": "s1",
+   "games": 2,
+   "help": true,
+   "kickoff": null,
+   "firstCard": 1,
+   "review": "📺 Season Center\nLos Angeles Lakers · 2026-27\n?\nBack to your season\nSeason review\n59-23 · Lost the NBA Finals\n80\nGames\n23.7\nPPG\n4.6\nRPG\n3.6\nAPG\nRegular season, the same numbers as your season card.\n⭐ Best game: Game 63, L 117-123 vs Chicago Bulls, 33 points, 7 rebounds, 6 assists\nLast five:\nL\nL\nW\nW\nL\nPLAYOFFS\nW\nFirst round\nbeat the Sacramento Kings 4-2\nW\nConference semifinals\nbeat the Minnesota Timberwolves 4-1\nW\nConference finals\nbeat the Utah Jazz 4-0\nL\nNBA Finals\nlost to the Toronto Raptors 0-4\nYour playoffs: 19 games, 20.1 points per game, 4 rebounds per game, 3.2 assists per game\nAfter game 82\n59-23\nHome 34-7\nAway 25-16\nStreak L1\nDivision 11-5\nConference 37-15\nLast 10:\nW\nL\nW\nW\nW\nL\nL\nW\nW\nL\n📋 Game log\n🗓 Schedule\n80\nPlayed\n23.9\nPPG\n4.6\nRPG\n3.6\nAPG\nBack to your season",
+   "notes": [],
+   "closed": true,
+   "secs": 19
+  },
+  {
+   "tag": "again",
+   "games": 2,
+   "help": false,
+   "kickoff": null,
+   "firstCard": 0,
+   "review": "📺 Season Center\nLos Angeles Lakers · 2026-27\n?\nBack to your season\nSeason review\n59-23 · Lost the NBA Finals\n80\nGames\n23.7\nPPG\n4.6\nRPG\n3.6\nAPG\nRegular season, the same numbers as your season card.\n⭐ Best game: Game 63, L 117-123 vs Chicago Bulls, 33 points, 7 rebounds, 6 assists\nLast five:\nL\nL\nW\nW\nL\nPLAYOFFS\nW\nFirst round\nbeat the Sacramento Kings 4-2\nW\nConference semifinals\nbeat the Minnesota Timberwolves 4-1\nW\nConference finals\nbeat the Utah Jazz 4-0\nL\nNBA Finals\nlost to the Toronto Raptors 0-4\nYour playoffs: 19 games, 20.1 points per game, 4 rebounds per game, 3.2 assists per game\nAfter game 82\n59-23\nHome 34-7\nAway 25-16\nStreak L1\nDivision 11-5\nConference 37-15\nLast 10:\nW\nL\nW\nW\nW\nL\nL\nW\nW\nL\n📋 Game log\n🗓 Schedule\n80\nPlayed\n23.9\nPPG\n4.6\nRPG\n3.6\nAPG\nBack to your season",
+   "notes": [],
+   "closed": true,
+   "secs": 18
+  }
+ ],
+ "stuck": [
+  {
+   "tag": "s1",
+   "texts": [],
+   "dialog": [],
+   "toast": []
+  }
+ ],
+ "notes": [
+  "bought $1.5M; save salary 13.7 -> 13.7",
+  "watch again: ↺ Watch the 2026 season again"
+ ],
+ "shots": [
+  "nba390-01-first-visit.png",
+  "nba390-02-create.png",
+  "nba390-03-create-filled.png",
+  "nba390-04-prospect-help.png",
+  "nba390-05-prospect-routes.png",
+  "nba390-06-prospect-season1.png",
+  "nba390-07-prospect-choice.png",
+  "nba390-08-prospect-showcase.png",
+  "nba390-09-prospect-draftday.png",
+  "nba390-10-draft-night-1.png",
+  "nba390-11-draft-night-2.png",
+  "nba390-12-draft-night-end.png",
+  "nba390-13-hub-draft.png",
+  "nba390-14-hub-draft-full.png",
+  "nba390-15-tile-myplayer-s0.png",
+  "nba390-16-tile-thebank-s0.png",
+  "nba390-17-tile-careerlog-s0.png",
+  "nba390-18-tile-trophycase-s0.png",
+  "nba390-19-tile-news-s0.png",
+  "nba390-20-tile-inbox-s0.png",
+  "nba390-21-inbox-open.png",
+  "nba390-22-inbox-open.png",
+  "nba390-23-centre-help-s1.png",
+  "nba390-24-centre-kickoff-s1.png",
+  "nba390-25-centre-live-s1-g1.png",
+  "nba390-26-centre-final-s1-g1.png",
+  "nba390-27-centre-live-s1-g2.png",
+  "nba390-28-centre-final-s1-g2.png",
+  "nba390-29-centre-review-s1.png",
+  "nba390-30-centre-fixtures-s1.png",
+  "nba390-31-continue-s1-1.png",
+  "nba390-32-stuck-s1-1.png",
+  "nba390-33-continue-s1-2.png",
+  "nba390-34-event-s1-1.png",
+  "nba390-35-outcome-s1.png",
+  "nba390-36-hub-s1.png",
+  "nba390-37-hub-reloaded.png",
+  "nba390-38-tile-myplayer-s1.png",
+  "nba390-39-tile-thebank-s1.png",
+  "nba390-40-bank-shop.png",
+  "nba390-41-bank-bought.png",
+  "nba390-42-tile-careerlog-s1.png",
+  "nba390-43-tile-trophycase-s1.png",
+  "nba390-44-tile-news-s1.png",
+  "nba390-45-tile-inbox-s1.png",
+  "nba390-46-inbox-open.png",
+  "nba390-47-inbox-open.png",
+  "nba390-48-practice-menu.png",
+  "nba390-49-practice-drill.png",
+  "nba390-50-practice-result.png",
+  "nba390-51-hub-after-practice.png",
+  "nba390-52-hub-s2.png",
+  "nba390-53-tile-careerlog-s2.png",
+  "nba390-54-tile-news-s2.png",
+  "nba390-55-tile-inbox-s2.png",
+  "nba390-56-inbox-open.png",
+  "nba390-57-centre-kickoff-again.png",
+  "nba390-58-centre-live-again-g1.png",
+  "nba390-59-centre-final-again-g1.png",
+  "nba390-60-centre-live-again-g2.png",
+  "nba390-61-centre-final-again-g2.png",
+  "nba390-62-centre-review-again.png",
+  "nba390-63-centre-fixtures-again.png",
+  "nba390-64-final.png"
+ ],
+ "draft": {
+  "routes": [
+   "1 season One year of college One season on campus, then you declare. Start at age 18 · Draft at 19",
+   "3 seasons Three years of college Three seasons to grow into it. Less hype, more polish. Start at age 18 · Draft at 21"
+  ],
+  "route": "1 season One year of college One season on campus, then you declare. Start at age 18 · Draft at 19",
+  "seasonShots": 1,
+  "choices": [
+   "Off the bench -> 0/2"
+  ],
+  "showcase": "Play it safe Stay within yourself. Grade A +5, B +2, C -1, D -3",
+  "range": "The scouts have you between pick 5 and pick 8 of 60.",
+  "nightSecs": 6,
+  "skipSeen": 0,
+  "result": "Your progress saves after every choice\nPick your path\nEarn your place\n3\nDraft day\n\nNBA Road to the Draft\n\nThis is your moment.\n\nLos Angeles Lakers\n\nMaximilian Okonkwo-Smith\nSG · Age 19\nRating\n81\nPotential\n95\nHealth\n100\nDraft stock\n80/100\nThis is your moment.\nSpot up shooting: grade A. Draft stock +5, now 80.\n\nTHE LOTTERY\n\n14 clubs are in the lottery and the top 4 picks are drawn. The 3 worst records share the best chance at the first pick, 14% each.\n\nA simulated lottery. The order is generated for your career.\n\n1\n1\nNets\nSeed 1 · Held\n2\n2\nHawks\nSeed 9 · Up 7\n3\n3\nBucks\nSeed 6 · Up 3\n4\n4\nWarriors\nSeed 7 · Up 3\n\nBrooklyn Nets hold the first pick.\n\n2026 DRAFT\n\nThe scouts had you between pick 5 and pick 8 of 60.\n\nPick 5: Los Angeles Lakers\nYour name is called. Round 1, pick 5.\n\nRound 1, pick 5, 5 overall. Los Angeles Lakers take you.\n\nStart your career\n2026 DRAFT\nRound 1, pick 5 (5 overall)\n\nLos Angeles Lakers hold the pick, and they take you.\n\nYour scout file\n1 season"
+ },
+ "reload": [
+  {
+   "before": {
+    "chips": [
+     "Maximilian Okonkwo-Smith · SG",
+     "Los Angeles Lakers",
+     "2027 · age 20",
+     "OVR 82",
+     "$13.7M x3",
+     "⭐ Starting five"
+    ],
+    "play": "Play the 2027 season",
+    "so": "Career so far: 0 rings · 0 MVPs · 0 All-NBA · 1,896 career points",
+    "last": "Last season: 23.7 ppg, 4.6 rpg, 3.6 apg · Lost the NBA Finals",
+    "tiles": [
+     "📊 MY PLAYER OVR 82 SG, age 20, 0 rings",
+     "💰 THE BANK $7.4M $14M a year, 3 years left",
+     "📜 CAREER LOG 1 season 23.7 ppg, 4.6 rpg, 3.6 apg",
+     "🏆 TROPHY CASE Empty Nothing in it. Go and win something",
+     "📰 NEWS 6 headlines No distractions. Hooper answer.",
+     "📱 INBOX 3 unread Somebody is waiting on a reply"
+    ]
+   },
+   "after": {
+    "chips": [
+     "Maximilian Okonkwo-Smith · SG",
+     "Los Angeles Lakers",
+     "2027 · age 20",
+     "OVR 82",
+     "$13.7M x3",
+     "⭐ Starting five"
+    ],
+    "play": "Play the 2027 season",
+    "so": "Career so far: 0 rings · 0 MVPs · 0 All-NBA · 1,896 career points",
+    "last": null,
+    "tiles": [
+     "📊 MY PLAYER OVR 82 SG, age 20, 0 rings",
+     "💰 THE BANK $7.4M $14M a year, 3 years left",
+     "📜 CAREER LOG 1 season 23.7 ppg, 4.6 rpg, 3.6 apg",
+     "🏆 TROPHY CASE Empty Nothing in it. Go and win something",
+     "📰 NEWS 2 headlines Los Angeles Lakers lose the Finals with the trophy in the building",
+     "📱 INBOX 3 unread Somebody is waiting on a reply"
+    ]
+   },
+   "save": {
+    "phase": "season",
+    "seasons": 1,
+    "year": 2027,
+    "age": 20,
+    "ovr": 82,
+    "team": "LAL",
+    "salary": 13.7,
+    "cy": 3,
+    "last": {
+     "year": 2026,
+     "team": "LAL",
+     "age": 19,
+     "ovr": 81,
+     "games": 80,
+     "ppg": 23.7,
+     "rpg": 4.6,
+     "apg": 3.6,
+     "awards": [],
+     "teamResult": "Lost the NBA Finals",
+     "salary": 13.7,
+     "mpg": 29.9,
+     "spg": 1.1,
+     "bpg": 0.3,
+     "clubWins": 60,
+     "clubLosses": 22,
+     "poGames": 19,
+     "poPpg": 20.1,
+     "poRpg": 4,
+     "poApg": 3.2
+    }
+   }
+  }
+ ],
+ "inbox": [
+  {
+   "rows": 2
+  },
+  {
+   "body": "Hub\n📱 Inbox\n← Back to inbox\n\n☀️ SUMMER LEAGUE COACH\n\n☀️ Summer league, 2026\n\nSummer league starts Friday. You're getting the ball a lot. Mistakes are fine, hiding isn't.\n\nRun the showPlay within the system",
+   "answered": "Run the show"
+  },
+  {
+   "body": "Hub\n📱 Inbox\n← Back to inbox\n\n☀️ SUMMER LEAGUE COACH\n\n☀️ Summer league, 2026\n\nSummer league starts Friday. You're getting the ball a lot. Mistakes are fine, hiding isn't.\n\nYou replied: Run the show",
+   "answered": false
+  },
+  {
+   "rows": 4
+  },
+  {
+   "body": "Hub\n📱 Inbox\n← Back to inbox\n\n🎯 SKILLS TRAINER\n\n☀️ Summer league, 2026\n\nTwo a days through August if you want that jumper fixed. It's not fun. It works.\n\nBook every dayThree days a week",
+   "answered": "Book every day"
+  },
+  {
+   "body": "Hub\n📱 Inbox\n← Back to inbox\n\n🎯 SKILLS TRAINER\n\n☀️ Summer league, 2026\n\nTwo a days through August if you want that jumper fixed. It's not fun. It works.\n\nYou replied: Book every day",
+   "answered": false
+  },
+  {
+   "rows": 4
+  },
+  {
+   "body": "Hub\n📱 Inbox\n← Back to inbox\n\n🎯 SKILLS TRAINER\n\n☀️ Summer league, 2026\n\nTwo a days through August if you want that jumper fixed. It's not fun. It works.\n\nYou replied: Book every day",
+   "answered": false
+  }
+ ],
+ "practice": [
+  {
+   "score": null,
+   "secs": 75
+  }
+ ],
+ "firstVisit": {
+  "popover": false,
+  "dialog": [
+   "How to play\nThe steps\nCreate your player"
+  ],
+  "buttons": [
+   "🏀 2026 The league as it is today. Full money, all 30 franchises.",
+   "⏪ 2003-04 throwback The 29 team league of 2003-04: the SuperSonics in ",
+   "PG",
+   "SG",
+   "SF",
+   "PF",
+   "C",
+   "🎲 Surprise me",
+   "🧑 Skin",
+   "💇 Hair",
+   "🧔 Beard",
+   "👟 Sneakers",
+   "💍 Extras",
+   "🎉 Celebration",
+   "Porcelain",
+   "Ivory",
+   "Fair",
+   "Sand",
+   "Olive",
+   "Honey"
+  ],
+  "helpText": "How to play\nThe steps\nCreate your player: name, one of 5 positions (PG, SG, SF, PF, C), and one of 15 archetypes, from Point God to Movement Sniper to Paint Beast.\nPick your league: today's NBA, or the 2003-04 throwback with the SuperSonics in Seattle, the Nets in New Jersey, the Hornets in New Orleans and no Charlotte yet.\nBuild your look: skin tone, hair, beard, accessories and a signature celebration, or hit Surprise me.\nOpen the Bank between seasons. Savings pays 2.5% a season and never loses, five things you can put money into each have a price that moves every season whether you look or not (a fund, flats back home, two shares and a coin that halves as often as it doubles), the statement keeps your last 12 moves, and the card school on the team plane is one sitting a season on odds that are printed before you sit in.\nSpend the money in 7 aisles: home, rides, investments, body, flex, family, and a shady aisle that only appears once you have something to hide.\nRead the News box. The paper writes up every season in your own position's stat, the SocialGram shows followers read off your fanbase with three fan comments under the latest post, and the rival's card keeps the head to head against the player drafted the same year as you.\nCollect badges in the Trophy Case: 23 of them, from a first ring and Rookie of the Year to an All-Star nod, 30,000 career points, a triple double season and $100M to your name, each lit the moment the facts of your career say so.\nAnswer your phone. Texts from your agent, the head coach, the GM, a teammate or your mom land on the beats of the basketball year: draft night and your first summer league, camp, the trade deadline, the All-Star break, the playoffs if you get there, the offseason, and the summer before the last year of your deal. Every text says which beat and which year it came in on, and how you answer moves your karma, morale, fanbase or bank.\nSome seasons your rival hands you a decision instead of a headline: a flagrant you can answer or let go, a debate show offering real money, a youth camp his foundation wants you to co-host, an All-Star vote his team is buying ads for. Every button prints exactly what it moves, and a gamble prints its odds.\nGet drafted by a real NBA team. Stronger prospects go higher and earn more.\nCheck the rotation. Top five picks open in the starting five; everyone else fights for the spot in camp every fall, and second-unit seasons come in bench minutes until you crack the five.\nSim each season for a full line: games, minutes, points, rebounds, assists, steals, blocks, awards, team result.\nPress 📺 Week by week instead of Play the season to watch that season one game at a time, with your stat line and your team's record after every game. It is the same season either way.\nThrowback careers play against unnamed teams, and the real seasons that were not a full 82 games (2011-12, 2012-13, 2019-20 and 2020-21) have no game by game view. The game tells you before you press.\nHandle the s",
+  "closedByEscape": true
+ },
+ "create": [
+  "*🏀 2026 The league as it is today. Full money, all 30 franch",
+  "⏪ 2003-04 throwback The 29 team league of 2003-04: the Super",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "*Bucket Getter Shot creation from anywhere",
+  "Movement Sniper Never stops running off screens",
+  "Two-Way Menace Guards the best perimeter player alive"
+ ],
+ "wbw": {
+  "visible": true,
+  "held": null
+ },
+ "final": {
+  "save": {
+   "phase": "season",
+   "seasons": 1,
+   "year": 2027,
+   "age": 20,
+   "ovr": 82,
+   "team": "LAL",
+   "salary": 13.7,
+   "cy": 3,
+   "last": {
+    "year": 2026,
+    "team": "LAL",
+    "age": 19,
+    "ovr": 81,
+    "games": 80,
+    "ppg": 23.7,
+    "rpg": 4.6,
+    "apg": 3.6,
+    "awards": [],
+    "teamResult": "Lost the NBA Finals",
+    "salary": 13.7,
+    "mpg": 29.9,
+    "spg": 1.1,
+    "bpg": 0.3,
+    "clubWins": 60,
+    "clubLosses": 22,
+    "poGames": 19,
+    "poPpg": 20.1,
+    "poRpg": 4,
+    "poApg": 3.2
+   }
+  },
+  "chips": {
+   "chips": [
+    "Maximilian Okonkwo-Smith · SG",
+    "Los Angeles Lakers",
+    "2027 · age 20",
+    "OVR 82",
+    "$13.7M x3",
+    "⭐ Starting five"
+   ],
+   "play": "Play the 2027 season",
+   "so": "Career so far: 0 rings · 0 MVPs · 0 All-NBA · 1,896 career points",
+   "last": null,
+   "tiles": [
+    "📊 MY PLAYER OVR 82 SG, age 20, 0 rings",
+    "💰 THE BANK $5.9M $14M a year, 3 years left",
+    "📜 CAREER LOG 1 season 23.7 ppg, 4.6 rpg, 3.6 apg",
+    "🏆 TROPHY CASE Empty Nothing in it. Go and win something",
+    "📰 NEWS 2 headlines 📱 Replied to Skills trainer: Book every day. Karma up.",
+    "📱 INBOX 2 unread Somebody is waiting on a reply"
+   ]
+  },
+  "secs": 252
+ }
+}

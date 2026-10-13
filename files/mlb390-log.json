@@ -1,0 +1,1824 @@
+{
+ "tag": "mlb390",
+ "SPORT": "mlb",
+ "W": 390,
+ "H": 844,
+ "SEED": 1303,
+ "POS": "SS",
+ "steps": [
+  {
+   "t": 7,
+   "act": "road to the draft",
+   "text": "Play your road to the draft",
+   "scroll": [
+    636,
+    636,
+    185
+   ]
+  },
+  {
+   "act": "route 2"
+  },
+  {
+   "t": 10,
+   "act": "pre-draft season",
+   "text": "Play your first season",
+   "scroll": [
+    209,
+    209,
+    209
+   ]
+  },
+  {
+   "t": 12,
+   "act": "pre-draft season",
+   "text": "Play the next season",
+   "scroll": [
+    209,
+    209,
+    209
+   ]
+  },
+  {
+   "t": 13,
+   "act": "pre-draft season",
+   "text": "Play the next season",
+   "scroll": [
+    209,
+    209,
+    209
+   ]
+  },
+  {
+   "t": 16,
+   "act": "draft day",
+   "text": "Draft day",
+   "scroll": [
+    209,
+    209,
+    288
+   ]
+  },
+  {
+   "t": 22,
+   "act": "start your career",
+   "text": "Start your career",
+   "scroll": [
+    288,
+    288,
+    288
+   ]
+  },
+  {
+   "t": 26,
+   "act": "back from My Player",
+   "text": "Hub",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 28,
+   "act": "back from The Bank",
+   "text": "Hub",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 31,
+   "act": "back from Career Log",
+   "text": "Back to career",
+   "scroll": [
+    196,
+    196,
+    944
+   ]
+  },
+  {
+   "t": 33,
+   "act": "back from Trophy Case",
+   "text": "Hub",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 35,
+   "act": "back from News",
+   "text": "Hub",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 37,
+   "act": "back from Inbox",
+   "text": "Hub",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 68,
+   "act": "week by week",
+   "text": "📺 Week by week",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 70,
+   "act": "centre help got it",
+   "text": "Got it",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 70,
+   "act": "centre start",
+   "text": "▶ Play ball",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 71,
+   "act": "speed 3x",
+   "text": "3x",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 77,
+   "act": "next game",
+   "text": "▶ Game 2",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 83,
+   "act": "sim the rest",
+   "text": "⏭ Sim the rest",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 86,
+   "act": "fixtures back",
+   "text": "← Back",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 86,
+   "act": "leave centre",
+   "text": "Back to your season",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 91,
+   "act": "continue",
+   "text": "Continue",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 92,
+   "act": "event option 2",
+   "text": "Take him to dinner on every road trip Morale up, money out",
+   "scroll": [
+    185,
+    185,
+    0
+   ]
+  },
+  {
+   "t": 92,
+   "act": "decision continue",
+   "text": "Continue",
+   "scroll": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "t": 97,
+   "act": "back from My Player",
+   "text": "Hub",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 100,
+   "act": "back from The Bank",
+   "text": "Hub",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 102,
+   "act": "back from Career Log",
+   "text": "Back to career",
+   "scroll": [
+    240,
+    197,
+    919
+   ]
+  },
+  {
+   "t": 104,
+   "act": "back from Trophy Case",
+   "text": "Hub",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 106,
+   "act": "back from News",
+   "text": "Hub",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 110,
+   "act": "back from Inbox",
+   "text": "Hub",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 111,
+   "act": "open practice",
+   "text": "Start practice",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 129,
+   "act": "close practice",
+   "text": "Close",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 159,
+   "act": "MISSING play season 2"
+  },
+  {
+   "t": 162,
+   "act": "back from Career Log",
+   "text": "Back to career",
+   "scroll": [
+    280,
+    0,
+    280
+   ]
+  },
+  {
+   "t": 164,
+   "act": "back from News",
+   "text": "Hub",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 167,
+   "act": "back from Inbox",
+   "text": "Hub",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 170,
+   "act": "centre start",
+   "text": "▶ Play ball",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 171,
+   "act": "speed 3x",
+   "text": "3x",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 177,
+   "act": "next game",
+   "text": "▶ Game 2",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 183,
+   "act": "sim the rest",
+   "text": "⏭ Sim the rest",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 186,
+   "act": "fixtures back",
+   "text": "← Back",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 187,
+   "act": "leave centre",
+   "text": "Back to your season",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  }
+ ],
+ "audits": [
+  {
+   "overX": 0,
+   "scrollY": 0,
+   "docH": 12076,
+   "bad": [],
+   "trunc": [
+    "Close [1<43]"
+   ],
+   "off": [],
+   "small": [
+    "SP 55x28",
+    "RP 55x28",
+    "C 55x28",
+    "1B 55x28",
+    "2B 55x28",
+    "3B 55x28",
+    "SS 55x28",
+    "LF 55x28",
+    "CF 55x28",
+    "RF 55x28",
+    "DH 55x28"
+   ],
+   "buttonsInView": 15,
+   "where": "first visit help",
+   "t": 4
+  },
+  {
+   "overX": 0,
+   "scrollY": 0,
+   "docH": 12076,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [
+    "SP 55x28",
+    "RP 55x28",
+    "C 55x28",
+    "1B 55x28",
+    "2B 55x28",
+    "3B 55x28",
+    "SS 55x28",
+    "LF 55x28",
+    "CF 55x28",
+    "RF 55x28",
+    "DH 55x28"
+   ],
+   "buttonsInView": 14,
+   "where": "create",
+   "t": 5
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 12278,
+   "bad": [],
+   "trunc": [
+    "Your career starts here. [1<179]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 2,
+   "where": "prospect help",
+   "t": 8
+  },
+  {
+   "overX": 0,
+   "scrollY": 129,
+   "docH": 11612,
+   "bad": [],
+   "trunc": [
+    "Your career starts here. [1<179]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 4,
+   "where": "prospect routes",
+   "t": 8
+  },
+  {
+   "overX": 0,
+   "scrollY": 209,
+   "docH": 11608,
+   "bad": [],
+   "trunc": [
+    "Scouts are watching. [1<163]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 2,
+   "where": "prospect season",
+   "t": 10
+  },
+  {
+   "overX": 0,
+   "scrollY": 209,
+   "docH": 11608,
+   "bad": [],
+   "trunc": [
+    "Scouts are watching. [1<163]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 2,
+   "where": "prospect choice",
+   "t": 10
+  },
+  {
+   "overX": 0,
+   "scrollY": 209,
+   "docH": 11608,
+   "bad": [],
+   "trunc": [
+    "Scouts are watching. [1<163]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 2,
+   "where": "prospect season",
+   "t": 12
+  },
+  {
+   "overX": 0,
+   "scrollY": 209,
+   "docH": 11591,
+   "bad": [],
+   "trunc": [
+    "One last look. [1<103]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 3,
+   "where": "prospect showcase",
+   "t": 15
+  },
+  {
+   "overX": 0,
+   "scrollY": 209,
+   "docH": 11397,
+   "bad": [],
+   "trunc": [
+    "You have done the work. [1<189]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 1,
+   "where": "prospect draft day",
+   "t": 16
+  },
+  {
+   "overX": 0,
+   "scrollY": 288,
+   "docH": 11989,
+   "bad": [],
+   "trunc": [
+    "Draft night. [1<88]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 2,
+   "where": "draft night live",
+   "t": 18
+  },
+  {
+   "overX": 0,
+   "scrollY": 288,
+   "docH": 11989,
+   "bad": [],
+   "trunc": [
+    "This is your moment. [1<159]",
+    "Round 9, pick 20, 260 overall. New York Yankees take you. [1<453]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 1,
+   "where": "draft night end",
+   "t": 22
+  },
+  {
+   "overX": 0,
+   "scrollY": 288,
+   "docH": 11686,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "With pick 260, the New York Yankees select Maximilian Okonkwo-Smith. [149<308]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 8,
+   "where": "hub draft",
+   "t": 25
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11240,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 1,
+   "where": "tile My Player s0",
+   "t": 26
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11302,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 10,
+   "where": "tile The Bank s0",
+   "t": 28
+  },
+  {
+   "overX": 0,
+   "scrollY": 196,
+   "docH": 10933,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 1,
+   "where": "tile Career Log s0",
+   "t": 30
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11851,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 1,
+   "where": "tile Trophy Case s0",
+   "t": 32
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11004,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 4,
+   "where": "tile News s0",
+   "t": 34
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 10835,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 1,
+   "where": "tile Inbox s0",
+   "t": 36
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11011,
+   "bad": [
+    "0-0"
+   ],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 12,
+   "where": "centre kickoff s1",
+   "t": 70
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11011,
+   "bad": [
+    "0-0"
+   ],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 18,
+   "where": "centre live s1",
+   "t": 73
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11011,
+   "bad": [
+    "Away 0-0"
+   ],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 20,
+   "where": "centre final s1",
+   "t": 77
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11011,
+   "bad": [
+    "Away 0-0"
+   ],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 18,
+   "where": "centre live s1",
+   "t": 80
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11011,
+   "bad": [
+    "Away 0-0"
+   ],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 20,
+   "where": "centre final s1",
+   "t": 83
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11011,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 10,
+   "where": "centre review s1",
+   "t": 85
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11011,
+   "bad": [
+    "W 2-0"
+   ],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 8,
+   "where": "centre fixtures s1",
+   "t": 85
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11011,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 1,
+   "where": "continue card s1",
+   "t": 90
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11518,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "📊 Postseason: 8 games, 10 for 32 (.313), 1 HR. [149<208]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 9,
+   "where": "event s1",
+   "t": 91
+  },
+  {
+   "overX": 0,
+   "scrollY": 0,
+   "docH": 11014,
+   "bad": [],
+   "trunc": [
+    "to [1<13]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 1,
+   "where": "outcome s1",
+   "t": 92
+  },
+  {
+   "overX": 0,
+   "scrollY": 0,
+   "docH": 11754,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "You learned how he thinks before you learned how he throws. It worked  [149<468]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 5,
+   "where": "hub s1",
+   "t": 92
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11240,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 1,
+   "where": "tile My Player s1",
+   "t": 97
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11302,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 10,
+   "where": "tile The Bank s1",
+   "t": 99
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11650,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [
+    "🏡 Home 80x29",
+    "🏎️ Rides 80x29",
+    "📈 Invest 80x29",
+    "💪 Body 80x29",
+    "💎 Flex 80x29",
+    "❤️ Family 80x29",
+    "$1.5M 57x29",
+    "$4.5M 59x29",
+    "$8M 48x29",
+    "$20M 55x29",
+    "$5M 48x29",
+    "$2M 48x29"
+   ],
+   "buttonsInView": 16,
+   "where": "bank shop",
+   "t": 99
+  },
+  {
+   "overX": 0,
+   "scrollY": 240,
+   "docH": 11009,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 2,
+   "where": "tile Career Log s1",
+   "t": 101
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11851,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 1,
+   "where": "tile Trophy Case s1",
+   "t": 103
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11043,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 4,
+   "where": "tile News s1",
+   "t": 105
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 10948,
+   "bad": [],
+   "trunc": [
+    "Winter caravan. Five towns in four days, schools and hospitals, a lot  [302<487]",
+    "October. Everything since spring was for this. Want to say something t [302<478]",
+    "Split squad road game tomorrow, two hours on the bus. Vets don't usual [302<486]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 4,
+   "where": "tile Inbox s1",
+   "t": 107
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11730,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "📱 Replied to Team community office: All five towns. Karma up. [149<270]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 17,
+   "where": "practice menu",
+   "t": 113
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11770,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "Practice: Rough day. No gains this time. [149<172]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 7,
+   "where": "hub after practice",
+   "t": 129
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11770,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "Practice: Rough day. No gains this time. [149<172]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 7,
+   "where": "hub s2",
+   "t": 160
+  },
+  {
+   "overX": 0,
+   "scrollY": 280,
+   "docH": 11009,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 2,
+   "where": "tile Career Log s2",
+   "t": 161
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11057,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 4,
+   "where": "tile News s2",
+   "t": 163
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 10948,
+   "bad": [],
+   "trunc": [
+    "Winter caravan. Five towns in four days, schools and hospitals, a lot  [302<487]",
+    "October. Everything since spring was for this. Want to say something t [302<478]",
+    "Split squad road game tomorrow, two hours on the bus. Vets don't usual [302<486]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 4,
+   "where": "tile Inbox s2",
+   "t": 165
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11770,
+   "bad": [
+    "0-0"
+   ],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 12,
+   "where": "centre kickoff again",
+   "t": 170
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11770,
+   "bad": [
+    "0-0"
+   ],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 18,
+   "where": "centre live again",
+   "t": 174
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11770,
+   "bad": [
+    "Away 0-0"
+   ],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 20,
+   "where": "centre final again",
+   "t": 177
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11770,
+   "bad": [
+    "Away 0-0"
+   ],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 18,
+   "where": "centre live again",
+   "t": 180
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11770,
+   "bad": [
+    "Away 0-0"
+   ],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 20,
+   "where": "centre final again",
+   "t": 183
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11770,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 10,
+   "where": "centre review again",
+   "t": 185
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11770,
+   "bad": [
+    "W 2-0"
+   ],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 8,
+   "where": "centre fixtures again",
+   "t": 186
+  }
+ ],
+ "errors": [
+  {
+   "t": "warning",
+   "at": 0,
+   "text": "Warning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}."
+  }
+ ],
+ "pageErrors": [],
+ "failedRequests": [],
+ "events": [
+  {
+   "tag": "s1",
+   "id": "mlbC_if_new_partner",
+   "text": "OFFSEASON, CARD 1 OF 1\n\nA new man next to you\n\nThe club traded for a new infielder and he plays right beside you at New York Yankees. Double plays, cutoffs, who takes the throw: none of it is written down and all of it has to be learned by April.\n\nTake him to every early workout\nRating up, morale up, health down\nLet the coaches sort it out\nMorale down\nTake him to dinner on every road trip\nMorale up, money out",
+   "opts": [
+    "Take him to every early workout Rating up, morale up, health down",
+    "Let the coaches sort it out Morale down",
+    "Take him to dinner on every road trip Morale up, money out"
+   ],
+   "chose": 2,
+   "delta": {
+    "ovr": [
+     85,
+     85
+    ],
+    "salary": [
+     0.8,
+     0.8
+    ],
+    "team": [
+     "NYY",
+     "NYY"
+    ]
+   }
+  }
+ ],
+ "outcomes": [
+  {
+   "tag": "s1",
+   "txt": "YOUR DECISION\n\nA new man next to you\n\nYou chose: Take him to dinner on every road trip\n\nMorale\n76 → \nto\n80\n+4\nCash\n$0.8M → \nto\n$0.78M\n-$0.02M\nContinue"
+  }
+ ],
+ "curtains": [
+  {
+   "tag": "s1",
+   "n": 1,
+   "txt": "THE 2029 SEASON\n\nNew York Yankees · age 24 · SS\n\nLost the Division Series\n\n.278, 24 HR, 93 RBI\n\n📊 Postseason: 8 games, 10 for 32 (.313), 1 HR.\n\n🪞 Zane Hendricks went 0.280, 22 HR. Nothing in it again. You lead the head to head 1-0.\n\nContinue"
+  }
+ ],
+ "hub": [
+  {
+   "at": "drafted",
+   "save": {
+    "phase": "season",
+    "seasons": 0,
+    "year": 2029,
+    "age": 24,
+    "ovr": 83,
+    "team": "NYY",
+    "salary": 0.8,
+    "cy": 6,
+    "last": null
+   },
+   "chips": [
+    "Maximilian Okonkwo-Smith · SS",
+    "New York Yankees",
+    "2029 · age 24",
+    "OVR 83",
+    "$0.8M x6",
+    "⭐ Everyday"
+   ],
+   "play": "Play the 2029 season",
+   "so": "Career so far: 0 rings · 0 MVPs · 0 All-Star · 0 career home runs",
+   "last": null,
+   "tiles": [
+    "📊 MY PLAYER OVR 83 The fans down at 30",
+    "💰 THE BANK $0.4M $0.8M a year, 6 years left",
+    "📜 CAREER LOG No seasons yet Play one and it goes on the books",
+    "🏆 TROPHY CASE Empty Nothing in it. Go and win something",
+    "📰 NEWS 3 headlines With pick 260, the New York Yankees select Maximilian Okonkwo-Smith.",
+    "📱 INBOX All caught up Texts show up between seasons"
+   ]
+  },
+  {
+   "at": "after s1",
+   "outcome": "hub",
+   "save": {
+    "phase": "season",
+    "seasons": 1,
+    "year": 2030,
+    "age": 25,
+    "ovr": 85,
+    "team": "NYY",
+    "salary": 0.8,
+    "cy": 5,
+    "last": {
+     "year": 2029,
+     "team": "NYY",
+     "age": 24,
+     "ovr": 83,
+     "games": 162,
+     "awards": [],
+     "teamResult": "Lost the Division Series",
+     "salary": 0.8,
+     "avg": 0.278,
+     "hr": 24,
+     "rbi": 93,
+     "sb": 4,
+     "doubles": 39,
+     "obp": 0.347,
+     "poGames": 8,
+     "poLine": "10 for 32 (.313), 1 HR"
+    }
+   },
+   "chips": [
+    "Maximilian Okonkwo-Smith · SS",
+    "New York Yankees",
+    "2030 · age 25",
+    "OVR 85",
+    "$0.8M x5",
+    "⭐ Everyday"
+   ],
+   "play": "Play the 2030 season",
+   "so": "Career so far: 0 rings · 0 MVPs · 0 All-Star · 24 career home runs",
+   "last": "Last season: .278, 24 HR, 93 RBI · Lost the Division Series",
+   "tiles": [
+    "📊 MY PLAYER OVR 85 The fans down at 30",
+    "💰 THE BANK $0.8M $0.8M a year, 5 years left",
+    "📜 CAREER LOG 1 season .278, 24 HR, 93 RBI",
+    "🏆 TROPHY CASE Empty Nothing in it. Go and win something",
+    "📰 NEWS 3 headlines You learned how he thinks before you learned how he throws. It worked anyway. Morale +4, net worth -0.02M.",
+    "📱 INBOX 3 unread Somebody is waiting on a reply"
+   ]
+  },
+  {
+   "at": "after s2",
+   "outcome": "hub",
+   "save": {
+    "phase": "season",
+    "seasons": 1,
+    "year": 2030,
+    "age": 25,
+    "ovr": 85,
+    "team": "NYY",
+    "salary": 0.8,
+    "cy": 5,
+    "last": {
+     "year": 2029,
+     "team": "NYY",
+     "age": 24,
+     "ovr": 83,
+     "games": 162,
+     "awards": [],
+     "teamResult": "Lost the Division Series",
+     "salary": 0.8,
+     "avg": 0.278,
+     "hr": 24,
+     "rbi": 93,
+     "sb": 4,
+     "doubles": 39,
+     "obp": 0.347,
+     "poGames": 8,
+     "poLine": "10 for 32 (.313), 1 HR"
+    }
+   },
+   "chips": [
+    "Maximilian Okonkwo-Smith · SS",
+    "New York Yankees",
+    "2030 · age 25",
+    "OVR 85",
+    "$0.8M x5",
+    "⭐ Everyday"
+   ],
+   "play": "Play the 2030 season",
+   "so": "Career so far: 0 rings · 0 MVPs · 0 All-Star · 24 career home runs",
+   "last": null,
+   "tiles": [
+    "📊 MY PLAYER OVR 85 The fans down at 34",
+    "💰 THE BANK $0.8M $0.8M a year, 5 years left",
+    "📜 CAREER LOG 1 season .278, 24 HR, 93 RBI",
+    "🏆 TROPHY CASE Empty Nothing in it. Go and win something",
+    "📰 NEWS 2 headlines Practice: Rough day. No gains this time.",
+    "📱 INBOX 2 unread Somebody is waiting on a reply"
+   ]
+  }
+ ],
+ "tiles": [
+  {
+   "tag": "s0",
+   "word": "My Player",
+   "shot": "mlb390-16-tile-myplayer-s0.png",
+   "text": "Hub\n📊 My Player\nYour road to the draft\n\n83\n\nOVERALL\n\nMaximilian Okonkwo-Smith · SS · age 24\n\nMorale\n70\nFanbase\n30\nHealth\n100\nKarma\n50\n\n0\n\nseasons\n\n0\n\nrings",
+   "backOk": true,
+   "scroll": [
+    287,
+    185,
+    185
+   ],
+   "focus": "Skip to main content DOUKNOWBALL Back Tr"
+  },
+  {
+   "tag": "s0",
+   "word": "The Bank",
+   "shot": "mlb390-17-tile-thebank-s0.png",
+   "text": "Hub\n💰 The Bank\n\nEVERYTHING YOU HAVE\n\n$400k\n\n$0.8M a year, 6 years left on the deal\n\n$400k\nin the account\n$0k\nsavings\n$0k\ninvested\n🏦 Account\n📈 Market\n🃏 Cards\n🛒 Shop\n💵 Savings\npays 2.5% a season, never loses\n\nBoring, safe, and better than leaving it in the account doing nothing.\n\nSave 25%\nSave half\nSave it all\nTake out half\nTake it all out\n📄 Statement\nlast 12 only\n\nNothing yet. Save something or buy something.\n\nOlder lines drop off so your save does not grow forever.\n\nMade on investments\n$0k / $0k lost",
+   "backOk": true,
+   "scroll": [
+    185,
+    185,
+    185
+   ],
+   "focus": "Skip to main content DOUKNOWBALL Back Tr"
+  },
+  {
+   "tag": "s0",
+   "word": "Career Log",
+   "shot": "mlb390-18-tile-careerlog-s0.png",
+   "text": "Back to career\nCareer Log\n\nPick a year to review your saved season. No extra season is played.\n\nNo seasons on the books yet. Go play one.",
+   "backOk": true,
+   "scroll": [
+    185,
+    196,
+    944
+   ],
+   "focus": "📜 CAREER LOG No seasons yet Play one an"
+  },
+  {
+   "tag": "s0",
+   "word": "Trophy Case",
+   "shot": "mlb390-19-tile-trophycase-s0.png",
+   "text": "Hub\n🏆 Trophy Case\n\n0 rings\n\nNothing on the shelf yet. Every award you win lands here with the year on it.\n\n🎖️ BADGES\n0 of 26\n\n🔒\nWorld Series champion\n\nA ring, and a parade down the middle of the city.\n\n🔒\nBack to back\n\nTwo World Series in two seasons.\n\n🔒\nMVP or Cy Young\n\nThe biggest individual award your side of the ball has.\n\n🔒\nRookie of the Year\n\nThe best first year player in the league.\n\n🔒\nFive All-Star nods\n\nPicked for the All-Star team five times.\n\n🔒\nTen All-Star nods\n\nPicked for the All-Star team ten times.\n\n🔒\nGold Glove\n\nThe best fielder at your position for a year.\n\n🔒\nSilver Slugger\n\nThe best bat at your position for a year.\n\n🔒\nBatting title\n\nThe highest average in the league.\n\n🔒\nHome run champion\n\nLed the league in home runs.\n\n🔒\nA 50 home run season\n\nFifty in one year. The single season record is 73.\n\n🔒\nA .330 season\n\nA .330 average over a full year. Nobody has hit .400 since 1941.\n\n🔒\nA 50 steal season\n\nFifty bags in one year. The single season record is 130.\n\n🔒\n500 home runs\n\nFive hundred career home runs.\n\n🔒\n1,500 driven in\n\nFifteen hundred career runs batted in.\n\n🔒\n400 stolen bases\n\nFour hundred career steals.\n\n🔒\nA sub 2.00 season\n\nAn ERA under 2.00 across a full year on the mound.\n\n🔒\n300 wins\n\nThree hundred career wins on the mound.\n\n🔒\n3,000 strikeouts\n\nThree thousand career strikeouts. The record is 5,714.\n\n🔒\n300 saves\n\nThree hundred career saves out of the bullpen.\n\n🔒\nA decade in the league\n\nTen seasons played.\n\n🔒\nIron man\n\nFive seasons w",
+   "backOk": true,
+   "scroll": [
+    944,
+    185,
+    185
+   ],
+   "focus": "Skip to main content DOUKNOWBALL Back Tr"
+  },
+  {
+   "tag": "s0",
+   "word": "News",
+   "shot": "mlb390-20-tile-news-s0.png",
+   "text": "Hub\n📰 News Feed\n📰 Paper\n📸 SocialGram\n🪞 Rival\n\nTHIS WEEK\n\nWith pick 260, the New York Yankees select Maximilian Okonkwo-Smith.\n\nLate pick. Everything must be earned.\n\n📋 You outhit the veteran all spring. The job is yours from Opening Day.",
+   "backOk": true,
+   "scroll": [
+    185,
+    185,
+    185
+   ],
+   "focus": "Skip to main content DOUKNOWBALL Back Tr"
+  },
+  {
+   "tag": "s0",
+   "word": "Inbox",
+   "shot": "mlb390-21-tile-inbox-s0.png",
+   "text": "Hub\n📱 Inbox\n\nNo texts yet. Play a season and your phone will buzz.",
+   "backOk": true,
+   "scroll": [
+    185,
+    185,
+    185
+   ],
+   "focus": "Skip to main content DOUKNOWBALL Back Tr"
+  },
+  {
+   "tag": "s1",
+   "word": "My Player",
+   "shot": "mlb390-35-tile-myplayer-s1.png",
+   "text": "Hub\n📊 My Player\nYour road to the draft\n\n85\n\nOVERALL\n\nMaximilian Okonkwo-Smith · SS · age 25\n\nMorale\n80\nFanbase\n30\nHealth\n100\nKarma\n50\n\n1\n\nseasons\n\n0\n\nrings",
+   "backOk": true,
+   "scroll": [
+    0,
+    185,
+    185
+   ],
+   "focus": "Skip to main content DOUKNOWBALL Back Tr"
+  },
+  {
+   "tag": "s1",
+   "word": "The Bank",
+   "shot": "mlb390-36-tile-thebank-s1.png",
+   "text": "Hub\n💰 The Bank\n\nEVERYTHING YOU HAVE\n\n$780k\n\n$0.8M a year, 5 years left on the deal\n\n$780k\nin the account\n$0k\nsavings\n$0k\ninvested\n🏦 Account\n📈 Market\n🃏 Cards\n🛒 Shop\n💵 Savings\npays 2.5% a season, never loses\n\nBoring, safe, and better than leaving it in the account doing nothing.\n\nSave 25%\nSave half\nSave it all\nTake out half\nTake it all out\n📄 Statement\nlast 12 only\n\nNothing yet. Save something or buy something.\n\nOlder lines drop off so your save does not grow forever.\n\nMade on investments\n$0k / $0k lost",
+   "backOk": true,
+   "scroll": [
+    185,
+    185,
+    185
+   ],
+   "focus": "Skip to main content DOUKNOWBALL Back Tr"
+  },
+  {
+   "tag": "s1",
+   "word": "Career Log",
+   "shot": "mlb390-38-tile-careerlog-s1.png",
+   "text": "Back to career\nCareer Log\n\nPick a year to review your saved season. No extra season is played.\n\nSeason highs\n2029\nNew York Yankees",
+   "backOk": true,
+   "scroll": [
+    185,
+    240,
+    919
+   ],
+   "focus": "📜 CAREER LOG 1 season .278, 24 HR, 93 R"
+  },
+  {
+   "tag": "s1",
+   "word": "Trophy Case",
+   "shot": "mlb390-39-tile-trophycase-s1.png",
+   "text": "Hub\n🏆 Trophy Case\n\n0 rings\n\nNothing on the shelf yet. Every award you win lands here with the year on it.\n\n🎖️ BADGES\n0 of 26\n\n🔒\nWorld Series champion\n\nA ring, and a parade down the middle of the city.\n\n🔒\nBack to back\n\nTwo World Series in two seasons.\n\n🔒\nMVP or Cy Young\n\nThe biggest individual award your side of the ball has.\n\n🔒\nRookie of the Year\n\nThe best first year player in the league.\n\n🔒\nFive All-Star nods\n\nPicked for the All-Star team five times.\n\n🔒\nTen All-Star nods\n\nPicked for the All-Star team ten times.\n\n🔒\nGold Glove\n\nThe best fielder at your position for a year.\n\n🔒\nSilver Slugger\n\nThe best bat at your position for a year.\n\n🔒\nBatting title\n\nThe highest average in the league.\n\n🔒\nHome run champion\n\nLed the league in home runs.\n\n🔒\nA 50 home run season\n\nFifty in one year. The single season record is 73.\n\n🔒\nA .330 season\n\nA .330 average over a full year. Nobody has hit .400 since 1941.\n\n🔒\nA 50 steal season\n\nFifty bags in one year. The single season record is 130.\n\n🔒\n500 home runs\n\nFive hundred career home runs.\n\n🔒\n1,500 driven in\n\nFifteen hundred career runs batted in.\n\n🔒\n400 stolen bases\n\nFour hundred career steals.\n\n🔒\nA sub 2.00 season\n\nAn ERA under 2.00 across a full year on the mound.\n\n🔒\n300 wins\n\nThree hundred career wins on the mound.\n\n🔒\n3,000 strikeouts\n\nThree thousand career strikeouts. The record is 5,714.\n\n🔒\n300 saves\n\nThree hundred career saves out of the bullpen.\n\n🔒\nA decade in the league\n\nTen seasons played.\n\n🔒\nIron man\n\nFive seasons w",
+   "backOk": true,
+   "scroll": [
+    919,
+    185,
+    185
+   ],
+   "focus": "Skip to main content DOUKNOWBALL Back Tr"
+  },
+  {
+   "tag": "s1",
+   "word": "News",
+   "shot": "mlb390-40-tile-news-s1.png",
+   "text": "Hub\n📰 News Feed\n📰 Paper\n📸 SocialGram\n🪞 Rival\n\nTHIS WEEK\n\nQuiet week. Play a season and the headlines write themselves.\n\nBACK PAGES\n\n📰 Maximilian Okonkwo-Smith hits .278 with 24 home runs and 93 driven in",
+   "backOk": true,
+   "scroll": [
+    185,
+    185,
+    185
+   ],
+   "focus": "Skip to main content DOUKNOWBALL Back Tr"
+  },
+  {
+   "tag": "s1",
+   "word": "Inbox",
+   "shot": "mlb390-41-tile-inbox-s1.png",
+   "text": "Hub\n📱 Inbox\n🚐\nTeam community office\n❄️ Offseason, 2029\nWinter caravan. Five towns in four days, schools and hospitals, a lot of handshakes. You in?\n🧢\nManager\n🏆 October, 2029\nOctober. Everything since spring was for this. Want to say something to the room tonight?\n🚌\nVeteran teammate\n🌵 Spring training, 2029\nSplit squad road game tomorrow, two hours on the bus. Vets don't usually go. You coming?",
+   "backOk": true,
+   "scroll": [
+    185,
+    185,
+    185
+   ],
+   "focus": "Skip to main content DOUKNOWBALL Back Tr"
+  },
+  {
+   "tag": "s2",
+   "word": "Career Log",
+   "shot": "mlb390-49-tile-careerlog-s2.png",
+   "text": "Back to career\nCareer Log\n\nPick a year to review your saved season. No extra season is played.\n\nSeason highs\n2029\nNew York Yankees",
+   "backOk": true,
+   "scroll": [
+    185,
+    280,
+    280
+   ],
+   "focus": "📜 CAREER LOG 1 season .278, 24 HR, 93 R"
+  },
+  {
+   "tag": "s2",
+   "word": "News",
+   "shot": "mlb390-50-tile-news-s2.png",
+   "text": "Hub\n📰 News Feed\n📰 Paper\n📸 SocialGram\n🪞 Rival\n\nTHIS WEEK\n\nPractice: Rough day. No gains this time.\n\n📱 Replied to Team community office: All five towns. Karma up.\n\nBACK PAGES\n\n📰 Maximilian Okonkwo-Smith hits .278 with 24 home runs and 93 driven in",
+   "backOk": true,
+   "scroll": [
+    280,
+    185,
+    185
+   ],
+   "focus": "Skip to main content DOUKNOWBALL Back Tr"
+  },
+  {
+   "tag": "s2",
+   "word": "Inbox",
+   "shot": "mlb390-51-tile-inbox-s2.png",
+   "text": "Hub\n📱 Inbox\n🚐\nTeam community office\n❄️ Offseason, 2029\nWinter caravan. Five towns in four days, schools and hospitals, a lot of handshakes. You in?\n🧢\nManager\n🏆 October, 2029\nOctober. Everything since spring was for this. Want to say something to the room tonight?\n🚌\nVeteran teammate\n🌵 Spring training, 2029\nSplit squad road game tomorrow, two hours on the bus. Vets don't usually go. You coming?",
+   "backOk": true,
+   "scroll": [
+    185,
+    185,
+    185
+   ],
+   "focus": "Skip to main content DOUKNOWBALL Back Tr"
+  }
+ ],
+ "centre": [
+  {
+   "tag": "s1",
+   "games": 2,
+   "help": true,
+   "kickoff": null,
+   "firstCard": 1,
+   "review": "📺 Season Center\nNew York Yankees · 2029\n?\nBack to your season\nSeason review\n90-72 · Lost the Division Series\n162\nGames\n.278\nAVG\n24\nHR\n93\nRBI\nRegular season, the same numbers as your season card.\n⭐ Best game: Game 65, W 8-3 vs Miami Marlins, 2 for 5 with 2 home runs and 3 RBI\nLast five:\nL\nL\nW\nW\nW\nPLAYOFFS\nW\nWild Card Series\nbeat another team 2-1\nL\nDivision Series\nlost to another team 2-3\nYour playoffs: 8 games, 10 for 32 (.313), 1 HR\nAfter game 162\n90-72\nHome 50-31\nAway 40-41\nStreak W3\nDivision 30-22\nLeague 61-53\nLast 10:\nL\nL\nW\nW\nW\nL\nL\nW\nW\nW\n📋 Game log\n🗓 Schedule\n162\nPlayed\n.278\nAVG\n24\nHR\n93\nRBI\nBack to your season",
+   "notes": [],
+   "closed": true,
+   "secs": 18
+  },
+  {
+   "tag": "again",
+   "games": 2,
+   "help": false,
+   "kickoff": null,
+   "firstCard": 0,
+   "review": "📺 Season Center\nNew York Yankees · 2029\n?\nBack to your season\nSeason review\n90-72 · Lost the Division Series\n162\nGames\n.278\nAVG\n24\nHR\n93\nRBI\nRegular season, the same numbers as your season card.\n⭐ Best game: Game 65, W 8-3 vs Miami Marlins, 2 for 5 with 2 home runs and 3 RBI\nLast five:\nL\nL\nW\nW\nW\nPLAYOFFS\nW\nWild Card Series\nbeat another team 2-1\nL\nDivision Series\nlost to another team 2-3\nYour playoffs: 8 games, 10 for 32 (.313), 1 HR\nAfter game 162\n90-72\nHome 50-31\nAway 40-41\nStreak W3\nDivision 30-22\nLeague 61-53\nLast 10:\nL\nL\nW\nW\nW\nL\nL\nW\nW\nW\n📋 Game log\n🗓 Schedule\n162\nPlayed\n.278\nAVG\n24\nHR\n93\nRBI\nBack to your season",
+   "notes": [],
+   "closed": true,
+   "secs": 18
+  }
+ ],
+ "stuck": [],
+ "notes": [
+  "watch again: ↺ Watch the 2029 season again"
+ ],
+ "shots": [
+  "mlb390-01-first-visit.png",
+  "mlb390-02-create.png",
+  "mlb390-03-create-filled.png",
+  "mlb390-04-prospect-help.png",
+  "mlb390-05-prospect-routes.png",
+  "mlb390-06-prospect-season1.png",
+  "mlb390-07-prospect-choice.png",
+  "mlb390-08-prospect-season2.png",
+  "mlb390-09-prospect-showcase.png",
+  "mlb390-10-prospect-draftday.png",
+  "mlb390-11-draft-night-1.png",
+  "mlb390-12-draft-night-2.png",
+  "mlb390-13-draft-night-end.png",
+  "mlb390-14-hub-draft.png",
+  "mlb390-15-hub-draft-full.png",
+  "mlb390-16-tile-myplayer-s0.png",
+  "mlb390-17-tile-thebank-s0.png",
+  "mlb390-18-tile-careerlog-s0.png",
+  "mlb390-19-tile-trophycase-s0.png",
+  "mlb390-20-tile-news-s0.png",
+  "mlb390-21-tile-inbox-s0.png",
+  "mlb390-22-centre-help-s1.png",
+  "mlb390-23-centre-kickoff-s1.png",
+  "mlb390-24-centre-live-s1-g1.png",
+  "mlb390-25-centre-final-s1-g1.png",
+  "mlb390-26-centre-live-s1-g2.png",
+  "mlb390-27-centre-final-s1-g2.png",
+  "mlb390-28-centre-review-s1.png",
+  "mlb390-29-centre-fixtures-s1.png",
+  "mlb390-30-continue-s1-1.png",
+  "mlb390-31-event-s1-1.png",
+  "mlb390-32-outcome-s1.png",
+  "mlb390-33-hub-s1.png",
+  "mlb390-34-hub-reloaded.png",
+  "mlb390-35-tile-myplayer-s1.png",
+  "mlb390-36-tile-thebank-s1.png",
+  "mlb390-37-bank-shop.png",
+  "mlb390-38-tile-careerlog-s1.png",
+  "mlb390-39-tile-trophycase-s1.png",
+  "mlb390-40-tile-news-s1.png",
+  "mlb390-41-tile-inbox-s1.png",
+  "mlb390-42-inbox-open.png",
+  "mlb390-43-inbox-open.png",
+  "mlb390-44-practice-menu.png",
+  "mlb390-45-practice-drill.png",
+  "mlb390-46-practice-result.png",
+  "mlb390-47-hub-after-practice.png",
+  "mlb390-48-hub-s2.png",
+  "mlb390-49-tile-careerlog-s2.png",
+  "mlb390-50-tile-news-s2.png",
+  "mlb390-51-tile-inbox-s2.png",
+  "mlb390-52-inbox-open.png",
+  "mlb390-53-centre-kickoff-again.png",
+  "mlb390-54-centre-live-again-g1.png",
+  "mlb390-55-centre-final-again-g1.png",
+  "mlb390-56-centre-live-again-g2.png",
+  "mlb390-57-centre-final-again-g2.png",
+  "mlb390-58-centre-review-again.png",
+  "mlb390-59-centre-fixtures-again.png",
+  "mlb390-60-final.png"
+ ],
+ "draft": {
+  "routes": [
+   "1 season High school senior Eligible the day you graduate. The rawest road, and one season to show it. Start at age 17 ·",
+   "2 seasons Junior college Eligible after any year. Two seasons of reps against grown men. Start at age 18 · Draft at 20",
+   "3 seasons Four year college Eligible after your junior year. Three seasons, and the scouts know exactly what you are. St"
+  ],
+  "route": "3 seasons Four year college Eligible after your junior year. Three seasons, and the scouts know exactly what you are. St",
+  "seasonShots": 3,
+  "choices": [
+   "The offseason -> 0/2",
+   "The film room -> 1/2",
+   "A summer wood bat league -> 1/2"
+  ],
+  "showcase": "Play it safe Stay within yourself. Grade A +5, B +2, C -1, D -3",
+  "range": "The scouts have you between pick 175 and pick 291 of 600.",
+  "nightSecs": 6,
+  "skipSeen": 0,
+  "result": "Your progress saves after every choice\nPick your path\nEarn your place\n3\nDraft day\n\nMLB Road to the Draft\n\nThis is your moment.\n\nNew York Yankees\n\nMaximilian Okonkwo-Smith\nSS · Age 24\nRating\n83\nPotential\n95\nHealth\n100\nDraft stock\n52/100\nThis is your moment.\nSixty yard dash: grade A. Draft stock +5, now 52.\n\n2026 DRAFT\n\nThe scouts had you between pick 175 and pick 291 of 600.\n\n1\nWashington Nationals\nRound 1\n2\nBaltimore Orioles\nRound 1\n3\nMiami Marlins\nRound 1\nPicks 4 to 256 come off the board, round 1 into round 9.\n257\nSt. Louis Cardinals\nRound 9\n258\nCleveland Guardians\nRound 9\n259\nPittsburgh Pirates\nRound 9\nPick 260: New York Yankees\nYour name is called. Round 9, pick 20.\n\nRound 9, pick 20, 260 overall. New York Yankees take you.\n\nStart your career\n2026 DRAFT\nRound 9, pick 20 (260 overall)\n\nNew York Yankees hold the pick, and they take you.\n\nMinor league seasons\nAge 21, A ball\nAVG .338, OBP .434, SLG .582\nAge 22, Double-A\nAVG .356, OBP .447, SLG .609\nAge 23, Triple-A\nAVG .313, OBP .402, SLG .521\nYour scout file\n3 seasons"
+ },
+ "reload": [
+  {
+   "before": {
+    "chips": [
+     "Maximilian Okonkwo-Smith · SS",
+     "New York Yankees",
+     "2030 · age 25",
+     "OVR 85",
+     "$0.8M x5",
+     "⭐ Everyday"
+    ],
+    "play": "Play the 2030 season",
+    "so": "Career so far: 0 rings · 0 MVPs · 0 All-Star · 24 career home runs",
+    "last": "Last season: .278, 24 HR, 93 RBI · Lost the Division Series",
+    "tiles": [
+     "📊 MY PLAYER OVR 85 The fans down at 30",
+     "💰 THE BANK $0.8M $0.8M a year, 5 years left",
+     "📜 CAREER LOG 1 season .278, 24 HR, 93 RBI",
+     "🏆 TROPHY CASE Empty Nothing in it. Go and win something",
+     "📰 NEWS 3 headlines You learned how he thinks before you learned how he throws. It worked anyway. Morale +4, net worth -0.02M.",
+     "📱 INBOX 3 unread Somebody is waiting on a reply"
+    ]
+   },
+   "after": {
+    "chips": [
+     "Maximilian Okonkwo-Smith · SS",
+     "New York Yankees",
+     "2030 · age 25",
+     "OVR 85",
+     "$0.8M x5",
+     "⭐ Everyday"
+    ],
+    "play": "Play the 2030 season",
+    "so": "Career so far: 0 rings · 0 MVPs · 0 All-Star · 24 career home runs",
+    "last": null,
+    "tiles": [
+     "📊 MY PLAYER OVR 85 The fans down at 30",
+     "💰 THE BANK $0.8M $0.8M a year, 5 years left",
+     "📜 CAREER LOG 1 season .278, 24 HR, 93 RBI",
+     "🏆 TROPHY CASE Empty Nothing in it. Go and win something",
+     "📰 NEWS 1 headline Maximilian Okonkwo-Smith hits .278 with 24 home runs and 93 driven in",
+     "📱 INBOX 3 unread Somebody is waiting on a reply"
+    ]
+   },
+   "save": {
+    "phase": "season",
+    "seasons": 1,
+    "year": 2030,
+    "age": 25,
+    "ovr": 85,
+    "team": "NYY",
+    "salary": 0.8,
+    "cy": 5,
+    "last": {
+     "year": 2029,
+     "team": "NYY",
+     "age": 24,
+     "ovr": 83,
+     "games": 162,
+     "awards": [],
+     "teamResult": "Lost the Division Series",
+     "salary": 0.8,
+     "avg": 0.278,
+     "hr": 24,
+     "rbi": 93,
+     "sb": 4,
+     "doubles": 39,
+     "obp": 0.347,
+     "poGames": 8,
+     "poLine": "10 for 32 (.313), 1 HR"
+    }
+   }
+  }
+ ],
+ "inbox": [
+  {
+   "rows": 0
+  },
+  {
+   "rows": 3
+  },
+  {
+   "body": "Hub\n📱 Inbox\n← Back to inbox\n\n🚐 TEAM COMMUNITY OFFICE\n\n❄️ Offseason, 2029\n\nWinter caravan. Five towns in four days, schools and hospitals, a lot of handshakes. You in?\n\nAll five townsOne stop",
+   "answered": "All five towns"
+  },
+  {
+   "body": "Hub\n📱 Inbox\n← Back to inbox\n\n🚐 TEAM COMMUNITY OFFICE\n\n❄️ Offseason, 2029\n\nWinter caravan. Five towns in four days, schools and hospitals, a lot of handshakes. You in?\n\nYou replied: All five towns",
+   "answered": false
+  },
+  {
+   "rows": 3
+  },
+  {
+   "body": "Hub\n📱 Inbox\n← Back to inbox\n\n🚐 TEAM COMMUNITY OFFICE\n\n❄️ Offseason, 2029\n\nWinter caravan. Five towns in four days, schools and hospitals, a lot of handshakes. You in?\n\nYou replied: All five towns",
+   "answered": false
+  }
+ ],
+ "practice": [
+  {
+   "score": "0",
+   "secs": 14
+  },
+  {
+   "banked": true,
+   "ovr": [
+    85,
+    85
+   ]
+  }
+ ],
+ "firstVisit": {
+  "popover": false,
+  "dialog": [
+   "How to play\nThe steps\nCreate your player"
+  ],
+  "buttons": [
+   "⚾ 2026 The league as it is today. Full money, all 30 franchises.",
+   "⏪ 2004 throwback The 2004 league: the Expos in their last Montreal sum",
+   "SP",
+   "RP",
+   "C",
+   "1B",
+   "2B",
+   "3B",
+   "SS",
+   "LF",
+   "CF",
+   "RF",
+   "DH",
+   "🎲 Surprise me",
+   "🧑 Skin",
+   "💇 Hair",
+   "🧔 Beard",
+   "👟 Cleats",
+   "💍 Extras",
+   "🎉 Celebration"
+  ],
+  "helpText": "How to play\nThe steps\nCreate your player: name, one of 11 positions (SP, RP, C, 1B, 2B, 3B, SS, LF, CF, RF, DH), and one of 33 archetypes, from Flamethrower to The Framer to Pure Masher.\nPick your league: today's MLB, or the 2004 throwback with the Expos in Montreal, the Anaheim Angels, the Florida Marlins and the Devil Rays.\nBuild your look, then spend the money in 7 aisles including a shady one that only appears once you have something to hide.\nOpen the Bank between seasons. Savings pays 2.5% a season and never loses, five things you can put money into each have a price that moves every season whether you look or not (a fund, flats back home, two shares and a coin that halves as often as it doubles), the statement keeps your last 12 moves, and the card school in the clubhouse is one sitting a season on odds that are printed before you sit in.\nRead the News box. The paper writes up every season in your own position's stat, the SocialGram shows followers read off your fanbase with three fan comments under the latest post, and the rival's card keeps the head to head against the player drafted the same year as you.\nCollect badges in the Trophy Case: 26 of them, from a first ring and Rookie of the Year to 500 home runs, 3,000 strikeouts and $100M to your name, each lit the moment the facts of your career say so.\nAnswer your phone. Texts from your agent, the manager, the GM, a teammate or your mom land on the beats of the baseball year: draft day, spring training, the All-Star break, the trade deadline, September, October if you get there, the offseason, an arbitration winter and the winter you hit free agency. Every text says which beat and which year it came in on, and how you answer moves your karma, morale, fanbase or bank.\nSome seasons your rival puts a decision on your plate instead of a story: benches clearing that you can answer or calm down, a debate show offering real money, a youth clinic his foundation wants you to co-host, an All-Star vote his club is buying ads for. Every button prints exactly what it moves, and a gamble prints its odds.\nEnter the draft, land on a real club, and play seasons for full stat lines: average, homers and RBI, or wins, ERA and strikeouts.\nOpen Career Log and pick a year to review its saved overview, regular season and postseason. Changes compare with the previous saved season; older missing values say Not recorded. Back to seasons returns to the year tiles, and Review seasons is available after retirement.\nCheck the lineup card. Top ten picks play from Opening Day; everyone else fights the veteran in spring, with bench bats and long-relief arms waiting on spot starts until the job flips. Relievers climb their own bullpen ladder instead.\nHandle the winter, up to three decisions one card at a time: winter training, surgery calls, trade rumors. Only the first card can move your rating, and a card you just saw rests for a while (press moments follow your season, so those can come right back).\nAfter a normal offsea",
+  "closedByEscape": true
+ },
+ "create": [
+  "*⚾ 2026 The league as it is today. Full money, all 30 franchi",
+  "⏪ 2004 throwback The 2004 league: the Expos in their last Mo",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "*The Wizard Glove first, gold always",
+  "Slugging Shortstop The modern monster",
+  "Sparkplug Leadoff energy, dirt on the jersey"
+ ],
+ "wbw": {
+  "visible": true,
+  "held": null
+ },
+ "final": {
+  "save": {
+   "phase": "season",
+   "seasons": 1,
+   "year": 2030,
+   "age": 25,
+   "ovr": 85,
+   "team": "NYY",
+   "salary": 0.8,
+   "cy": 5,
+   "last": {
+    "year": 2029,
+    "team": "NYY",
+    "age": 24,
+    "ovr": 83,
+    "games": 162,
+    "awards": [],
+    "teamResult": "Lost the Division Series",
+    "salary": 0.8,
+    "avg": 0.278,
+    "hr": 24,
+    "rbi": 93,
+    "sb": 4,
+    "doubles": 39,
+    "obp": 0.347,
+    "poGames": 8,
+    "poLine": "10 for 32 (.313), 1 HR"
+   }
+  },
+  "chips": {
+   "chips": [
+    "Maximilian Okonkwo-Smith · SS",
+    "New York Yankees",
+    "2030 · age 25",
+    "OVR 85",
+    "$0.8M x5",
+    "⭐ Everyday"
+   ],
+   "play": "Play the 2030 season",
+   "so": "Career so far: 0 rings · 0 MVPs · 0 All-Star · 24 career home runs",
+   "last": null,
+   "tiles": [
+    "📊 MY PLAYER OVR 85 The fans down at 34",
+    "💰 THE BANK $0.8M $0.8M a year, 5 years left",
+    "📜 CAREER LOG 1 season .278, 24 HR, 93 RBI",
+    "🏆 TROPHY CASE Empty Nothing in it. Go and win something",
+    "📰 NEWS 2 headlines Practice: Rough day. No gains this time.",
+    "📱 INBOX 2 unread Somebody is waiting on a reply"
+   ]
+  },
+  "secs": 188
+ }
+}

@@ -1,0 +1,1827 @@
+{
+ "tag": "nfl390",
+ "SPORT": "nfl",
+ "W": 390,
+ "H": 844,
+ "SEED": 1202,
+ "POS": "WR",
+ "steps": [
+  {
+   "t": 7,
+   "act": "road to the draft",
+   "text": "Play your road to the draft",
+   "scroll": [
+    644,
+    644,
+    185
+   ]
+  },
+  {
+   "act": "route 0"
+  },
+  {
+   "t": 10,
+   "act": "pre-draft season",
+   "text": "Play your first season",
+   "scroll": [
+    129,
+    129,
+    129
+   ]
+  },
+  {
+   "t": 12,
+   "act": "pre-draft season",
+   "text": "Play the next season",
+   "scroll": [
+    142,
+    142,
+    142
+   ]
+  },
+  {
+   "t": 13,
+   "act": "pre-draft season",
+   "text": "Play the next season",
+   "scroll": [
+    142,
+    142,
+    142
+   ]
+  },
+  {
+   "t": 16,
+   "act": "draft day",
+   "text": "Draft day",
+   "scroll": [
+    142,
+    142,
+    272
+   ]
+  },
+  {
+   "t": 22,
+   "act": "start your career",
+   "text": "Start your career",
+   "scroll": [
+    272,
+    272,
+    272
+   ]
+  },
+  {
+   "t": 27,
+   "act": "back from My Player",
+   "text": "Hub",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 29,
+   "act": "back from The Bank",
+   "text": "Hub",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 31,
+   "act": "back from Career Log",
+   "text": "Back to career",
+   "scroll": [
+    185,
+    185,
+    923
+   ]
+  },
+  {
+   "t": 33,
+   "act": "back from Trophy Case",
+   "text": "Hub",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 35,
+   "act": "back from News",
+   "text": "Hub",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 38,
+   "act": "back from Inbox",
+   "text": "Hub",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 69,
+   "act": "week by week",
+   "text": "📺 Week by week",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 71,
+   "act": "centre help got it",
+   "text": "Got it",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 72,
+   "act": "centre start",
+   "text": "▶ Kick off",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 72,
+   "act": "speed 3x",
+   "text": "3x",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 78,
+   "act": "next game",
+   "text": "▶ Game 2",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 85,
+   "act": "sim the rest",
+   "text": "⏭ Sim the rest",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 87,
+   "act": "fixtures back",
+   "text": "← Back",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 88,
+   "act": "leave centre",
+   "text": "Back to your season",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 92,
+   "act": "continue",
+   "text": "Continue",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 97,
+   "act": "continue",
+   "text": "Continue",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 98,
+   "act": "event option 0",
+   "text": "Treat it as the biggest night of your life High risk, high f",
+   "scroll": [
+    185,
+    185,
+    0
+   ]
+  },
+  {
+   "t": 99,
+   "act": "decision continue",
+   "text": "Continue",
+   "scroll": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "t": 103,
+   "act": "back from My Player",
+   "text": "Hub",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 107,
+   "act": "back from The Bank",
+   "text": "Hub",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 109,
+   "act": "back from Career Log",
+   "text": "Back to career",
+   "scroll": [
+    224,
+    197,
+    903
+   ]
+  },
+  {
+   "t": 111,
+   "act": "back from Trophy Case",
+   "text": "Hub",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 113,
+   "act": "back from News",
+   "text": "Hub",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 117,
+   "act": "back from Inbox",
+   "text": "Hub",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 118,
+   "act": "open practice",
+   "text": "Start practice",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 173,
+   "act": "close practice",
+   "text": "Close",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 204,
+   "act": "MISSING play season 2"
+  },
+  {
+   "t": 206,
+   "act": "back from Career Log",
+   "text": "Back to career",
+   "scroll": [
+    264,
+    0,
+    264
+   ]
+  },
+  {
+   "t": 208,
+   "act": "back from News",
+   "text": "Hub",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 211,
+   "act": "back from Inbox",
+   "text": "Hub",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 215,
+   "act": "centre start",
+   "text": "▶ Kick off",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 215,
+   "act": "speed 3x",
+   "text": "3x",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 221,
+   "act": "next game",
+   "text": "▶ Game 2",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 227,
+   "act": "sim the rest",
+   "text": "⏭ Sim the rest",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 230,
+   "act": "fixtures back",
+   "text": "← Back",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 230,
+   "act": "leave centre",
+   "text": "Back to your season",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  }
+ ],
+ "audits": [
+  {
+   "overX": 0,
+   "scrollY": 0,
+   "docH": 12858,
+   "bad": [],
+   "trunc": [
+    "Close [1<43]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 12,
+   "where": "first visit help",
+   "t": 4
+  },
+  {
+   "overX": 0,
+   "scrollY": 0,
+   "docH": 12858,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 11,
+   "where": "create",
+   "t": 5
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 12899,
+   "bad": [],
+   "trunc": [
+    "Your career starts here. [1<179]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 2,
+   "where": "prospect help",
+   "t": 8
+  },
+  {
+   "overX": 0,
+   "scrollY": 129,
+   "docH": 12233,
+   "bad": [],
+   "trunc": [
+    "Your career starts here. [1<179]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 4,
+   "where": "prospect routes",
+   "t": 8
+  },
+  {
+   "overX": 0,
+   "scrollY": 129,
+   "docH": 12382,
+   "bad": [],
+   "trunc": [
+    "Scouts are watching. [1<163]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 2,
+   "where": "prospect season",
+   "t": 10
+  },
+  {
+   "overX": 0,
+   "scrollY": 129,
+   "docH": 12382,
+   "bad": [],
+   "trunc": [
+    "Scouts are watching. [1<163]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 2,
+   "where": "prospect choice",
+   "t": 10
+  },
+  {
+   "overX": 0,
+   "scrollY": 142,
+   "docH": 12382,
+   "bad": [],
+   "trunc": [
+    "Scouts are watching. [1<163]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 3,
+   "where": "prospect season",
+   "t": 12
+  },
+  {
+   "overX": 0,
+   "scrollY": 142,
+   "docH": 12365,
+   "bad": [],
+   "trunc": [
+    "One last look. [1<103]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 4,
+   "where": "prospect showcase",
+   "t": 15
+  },
+  {
+   "overX": 0,
+   "scrollY": 142,
+   "docH": 12171,
+   "bad": [],
+   "trunc": [
+    "You have done the work. [1<189]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 2,
+   "where": "prospect draft day",
+   "t": 16
+  },
+  {
+   "overX": 0,
+   "scrollY": 272,
+   "docH": 12612,
+   "bad": [],
+   "trunc": [
+    "Draft night. [1<88]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 2,
+   "where": "draft night live",
+   "t": 18
+  },
+  {
+   "overX": 0,
+   "scrollY": 272,
+   "docH": 12612,
+   "bad": [],
+   "trunc": [
+    "This is your moment. [1<159]",
+    "Round 1, pick 16, 16 overall. Philadelphia Eagles take you. [1<437]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 1,
+   "where": "draft night end",
+   "t": 22
+  },
+  {
+   "overX": 0,
+   "scrollY": 272,
+   "docH": 12445,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "With pick 16, the Philadelphia Eagles select Maximilian Okonkwo-Smith. [149<305]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 8,
+   "where": "hub draft",
+   "t": 25
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 12015,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 1,
+   "where": "tile My Player s0",
+   "t": 26
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 12076,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 10,
+   "where": "tile The Bank s0",
+   "t": 28
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11707,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 1,
+   "where": "tile Career Log s0",
+   "t": 30
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 12598,
+   "bad": [],
+   "trunc": [
+    "Defensive Player of the Year [138<155]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 1,
+   "where": "tile Trophy Case s0",
+   "t": 32
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11779,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 4,
+   "where": "tile News s0",
+   "t": 34
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11610,
+   "bad": [],
+   "trunc": [
+    "Bro. We watched it at the old field house, the whole senior year team. [302<542]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 2,
+   "where": "tile Inbox s0",
+   "t": 36
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11786,
+   "bad": [
+    "0-0"
+   ],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 12,
+   "where": "centre kickoff s1",
+   "t": 71
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11786,
+   "bad": [
+    "0-0"
+   ],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 18,
+   "where": "centre live s1",
+   "t": 75
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11786,
+   "bad": [
+    "1-0"
+   ],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 20,
+   "where": "centre final s1",
+   "t": 78
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11786,
+   "bad": [
+    "1-0"
+   ],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 18,
+   "where": "centre live s1",
+   "t": 81
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11786,
+   "bad": [
+    "Home 1-0"
+   ],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 20,
+   "where": "centre final s1",
+   "t": 84
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11786,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 10,
+   "where": "centre review s1",
+   "t": 86
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11786,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 8,
+   "where": "centre fixtures s1",
+   "t": 87
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11786,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 1,
+   "where": "continue card s1",
+   "t": 91
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11888,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 1,
+   "where": "continue card s1",
+   "t": 96
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 12293,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 9,
+   "where": "event s1",
+   "t": 97
+  },
+  {
+   "overX": 0,
+   "scrollY": 0,
+   "docH": 11808,
+   "bad": [],
+   "trunc": [
+    "to [1<13]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 1,
+   "where": "outcome s1",
+   "t": 98
+  },
+  {
+   "overX": 0,
+   "scrollY": 0,
+   "docH": 12513,
+   "bad": [],
+   "trunc": [
+    "You pressed all night and it showed on every replay in slow motion. Fa [149<384]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 5,
+   "where": "hub s1",
+   "t": 99
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 12015,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 1,
+   "where": "tile My Player s1",
+   "t": 103
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 12076,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 10,
+   "where": "tile The Bank s1",
+   "t": 105
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 12455,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [
+    "🏡 Home 80x29",
+    "🏎️ Rides 80x29",
+    "📈 Invest 80x29",
+    "💪 Body 80x29",
+    "💎 Flex 80x29",
+    "❤️ Family 80x29",
+    "$1.2M 57x29",
+    "$3.5M 59x29",
+    "$6M 48x29",
+    "$14M 53x29",
+    "$4M 48x29",
+    "$2.5M 59x29"
+   ],
+   "buttonsInView": 16,
+   "where": "bank shop",
+   "t": 105
+  },
+  {
+   "overX": 0,
+   "scrollY": 224,
+   "docH": 11783,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 2,
+   "where": "tile Career Log s1",
+   "t": 108
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 12645,
+   "bad": [],
+   "trunc": [
+    "Defensive Player of the Year [138<155]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 1,
+   "where": "tile Trophy Case s1",
+   "t": 110
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11816,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 4,
+   "where": "tile News s1",
+   "t": 112
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11779,
+   "bad": [],
+   "trunc": [
+    "Cleat deal on the table. Good money, but the brand got caught running  [302<543]",
+    "You left your road pads at the hotel again. Team wants to fine you. I  [302<506]",
+    "Install starts tomorrow. Three hundred plays in a week. Want the cutup [302<538]",
+    "Bro. We watched it at the old field house, the whole senior year team. [302<542]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 5,
+   "where": "tile Inbox s1",
+   "t": 114
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 12489,
+   "bad": [],
+   "trunc": [
+    "📱 Replied to Agent: Take the money. Karma down. [149<220]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 17,
+   "where": "practice menu",
+   "t": 120
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 12529,
+   "bad": [],
+   "trunc": [
+    "Practice: Rough day. No gains this time. [149<172]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 7,
+   "where": "hub after practice",
+   "t": 174
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 12529,
+   "bad": [],
+   "trunc": [
+    "Practice: Rough day. No gains this time. [149<172]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 7,
+   "where": "hub s2",
+   "t": 205
+  },
+  {
+   "overX": 0,
+   "scrollY": 264,
+   "docH": 11783,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 2,
+   "where": "tile Career Log s2",
+   "t": 206
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11884,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 4,
+   "where": "tile News s2",
+   "t": 208
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11779,
+   "bad": [],
+   "trunc": [
+    "Cleat deal on the table. Good money, but the brand got caught running  [302<543]",
+    "You left your road pads at the hotel again. Team wants to fine you. I  [302<506]",
+    "Install starts tomorrow. Three hundred plays in a week. Want the cutup [302<538]",
+    "Bro. We watched it at the old field house, the whole senior year team. [302<542]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 5,
+   "where": "tile Inbox s2",
+   "t": 210
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 12529,
+   "bad": [
+    "0-0"
+   ],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 12,
+   "where": "centre kickoff again",
+   "t": 214
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 12529,
+   "bad": [
+    "0-0"
+   ],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 18,
+   "where": "centre live again",
+   "t": 218
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 12529,
+   "bad": [
+    "1-0"
+   ],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 20,
+   "where": "centre final again",
+   "t": 221
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 12529,
+   "bad": [
+    "1-0"
+   ],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 18,
+   "where": "centre live again",
+   "t": 224
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 12529,
+   "bad": [
+    "Home 1-0"
+   ],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 20,
+   "where": "centre final again",
+   "t": 227
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 12529,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 10,
+   "where": "centre review again",
+   "t": 229
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 12529,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 8,
+   "where": "centre fixtures again",
+   "t": 229
+  }
+ ],
+ "errors": [
+  {
+   "t": "warning",
+   "at": 0,
+   "text": "Warning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}."
+  }
+ ],
+ "pageErrors": [],
+ "failedRequests": [],
+ "events": [
+  {
+   "tag": "s1",
+   "id": "lifeA_primetime",
+   "text": "OFFSEASON, CARD 1 OF 1\n\nFlexed into Sunday night\n\nThe league moved your division game into the last window of the day. One night, every eyeball in the country, and a broadcast crew already calling it your audition.\n\nTreat it as the biggest night of your life\nHigh risk, high fame\nSame routine as any 1pm in October\nSteady hands\nRent a suite for 60 people from your block\nMoney for city love",
+   "opts": [
+    "Treat it as the biggest night of your life High risk, high fame",
+    "Same routine as any 1pm in October Steady hands",
+    "Rent a suite for 60 people from your block Money for city love"
+   ],
+   "chose": 0,
+   "delta": {
+    "ovr": [
+     87,
+     87
+    ],
+    "salary": [
+     5.6,
+     5.6
+    ],
+    "team": [
+     "PHI",
+     "PHI"
+    ]
+   }
+  }
+ ],
+ "outcomes": [
+  {
+   "tag": "s1",
+   "txt": "YOUR DECISION\n\nFlexed into Sunday night\n\nYou chose: Treat it as the biggest night of your life\n\nMorale\n71 → \nto\n64\n-7\nFanbase\n65 → \nto\n58\n-7\nContinue"
+  }
+ ],
+ "curtains": [
+  {
+   "tag": "s1",
+   "n": 1,
+   "txt": "THE 2026 SEASON\n\nPhiladelphia Eagles · age 21 · WR\n\nMissed the playoffs\n\n97 rec, 1,151 yds, 11 TD\n\n🏆 Offensive Rookie of the Year.\n\n🪞 Dominic Delgado went 83 rec, 1,195 yds, 8 TD. Nothing in it again. You lead the head to head 1-0.\n\nContinue"
+  },
+  {
+   "tag": "s1",
+   "n": 2,
+   "txt": "🪞 RIVALRY\n\n👕\n\nThe Jersey Swap\n\nAfter a hard fought game, you and Dominic Delgado trade jerseys at midfield. The photo is everywhere by Monday morning.\n\nFanbase +8, the feud softens\n\nMaximilian Okonkwo-Smith\n87\nVS\nDominic Delgado\n88\nContinue"
+  }
+ ],
+ "hub": [
+  {
+   "at": "drafted",
+   "save": {
+    "phase": "season",
+    "seasons": 0,
+    "year": 2026,
+    "age": 21,
+    "ovr": 85,
+    "team": "PHI",
+    "salary": 5.6,
+    "cy": 4,
+    "last": null
+   },
+   "chips": [
+    "Maximilian Okonkwo-Smith · WR",
+    "Philadelphia Eagles",
+    "2026 · age 21",
+    "OVR 85",
+    "$5.6M x4",
+    "⭐ Starter"
+   ],
+   "play": "Play the 2026 season",
+   "so": "Career so far: 0 rings · 0 MVPs · 0 All-Pros · 0 rec yds",
+   "last": null,
+   "tiles": [
+    "📊 MY PLAYER OVR 85 WR, age 21, 0 rings",
+    "💰 THE BANK $0.6M $5.6M a year, 4 years left",
+    "📜 CAREER LOG No seasons yet Play one and it goes on the books",
+    "🏆 TROPHY CASE Empty Nothing in it. Go and win something",
+    "📰 NEWS 3 headlines With pick 16, the Philadelphia Eagles select Maximilian Okonkwo-Smith.",
+    "📱 INBOX 1 unread Somebody is waiting on a reply"
+   ]
+  },
+  {
+   "at": "after s1",
+   "outcome": "hub",
+   "save": {
+    "phase": "season",
+    "seasons": 1,
+    "year": 2027,
+    "age": 22,
+    "ovr": 87,
+    "team": "PHI",
+    "salary": 5.6,
+    "cy": 3,
+    "last": {
+     "year": 2026,
+     "team": "PHI",
+     "age": 21,
+     "ovr": 85,
+     "games": 17,
+     "awards": [
+      "Offensive Rookie of the Year"
+     ],
+     "teamResult": "Missed the playoffs",
+     "salary": 5.6,
+     "rec": 97,
+     "recYds": 1151,
+     "recTd": 11
+    }
+   },
+   "chips": [
+    "Maximilian Okonkwo-Smith · WR",
+    "Philadelphia Eagles",
+    "2027 · age 22",
+    "OVR 87",
+    "$5.6M x3",
+    "⭐ Starter"
+   ],
+   "play": "Play the 2027 season",
+   "so": "Career so far: 0 rings · 0 MVPs · 0 All-Pros · 1,151 rec yds",
+   "last": "Last season: 97 rec, 1,151 yds, 11 TD · Missed the playoffs",
+   "tiles": [
+    "📊 MY PLAYER OVR 87 WR, age 22, 0 rings",
+    "💰 THE BANK $3M $5.6M a year, 3 years left",
+    "📜 CAREER LOG 1 season 97 rec, 1,151 yds, 11 TD",
+    "🏆 TROPHY CASE 1 honour 1 in other awards, no ring yet",
+    "📰 NEWS 4 headlines You pressed all night and it showed on every replay in slow motion. Fanbase -7, morale -7.",
+    "📱 INBOX 3 unread Somebody is waiting on a reply"
+   ]
+  },
+  {
+   "at": "after s2",
+   "outcome": "hub",
+   "save": {
+    "phase": "season",
+    "seasons": 1,
+    "year": 2027,
+    "age": 22,
+    "ovr": 87,
+    "team": "PHI",
+    "salary": 5.6,
+    "cy": 3,
+    "last": {
+     "year": 2026,
+     "team": "PHI",
+     "age": 21,
+     "ovr": 85,
+     "games": 17,
+     "awards": [
+      "Offensive Rookie of the Year"
+     ],
+     "teamResult": "Missed the playoffs",
+     "salary": 5.6,
+     "rec": 97,
+     "recYds": 1151,
+     "recTd": 11
+    }
+   },
+   "chips": [
+    "Maximilian Okonkwo-Smith · WR",
+    "Philadelphia Eagles",
+    "2027 · age 22",
+    "OVR 87",
+    "$5.6M x3",
+    "⭐ Starter"
+   ],
+   "play": "Play the 2027 season",
+   "so": "Career so far: 0 rings · 0 MVPs · 0 All-Pros · 1,151 rec yds",
+   "last": null,
+   "tiles": [
+    "📊 MY PLAYER OVR 87 WR, age 22, 0 rings",
+    "💰 THE BANK $3M $5.6M a year, 3 years left",
+    "📜 CAREER LOG 1 season 97 rec, 1,151 yds, 11 TD",
+    "🏆 TROPHY CASE 1 honour 1 in other awards, no ring yet",
+    "📰 NEWS 3 headlines Practice: Rough day. No gains this time.",
+    "📱 INBOX 2 unread Somebody is waiting on a reply"
+   ]
+  }
+ ],
+ "tiles": [
+  {
+   "tag": "s0",
+   "word": "My Player",
+   "shot": "nfl390-16-tile-myplayer-s0.png",
+   "text": "Hub\n📊 My Player\nYour road to the draft\n\n85\n\nOVERALL\n\nMaximilian Okonkwo-Smith · WR · age 21\n\nMorale\n70\nFanbase\n55\nHealth\n100\nKarma\n50\n\n0\n\nseasons\n\n0\n\nrings",
+   "backOk": true,
+   "scroll": [
+    265,
+    185,
+    185
+   ],
+   "focus": "Skip to main content DOUKNOWBALL Back Tr"
+  },
+  {
+   "tag": "s0",
+   "word": "The Bank",
+   "shot": "nfl390-17-tile-thebank-s0.png",
+   "text": "Hub\n💰 The Bank\n\nEVERYTHING YOU HAVE\n\n$600k\n\n$5.6M a year, 4 years left on the deal\n\n$600k\nin the account\n$0k\nsavings\n$0k\ninvested\n🏦 Account\n📈 Market\n🃏 Cards\n🛒 Shop\n💵 Savings\npays 2.5% a season, never loses\n\nBoring, safe, and better than leaving it in the account doing nothing.\n\nSave 25%\nSave half\nSave it all\nTake out half\nTake it all out\n📄 Statement\nlast 12 only\n\nNothing yet. Save something or buy something.\n\nOlder lines drop off so your save does not grow forever.\n\nMade on investments\n$0k / $0k lost",
+   "backOk": true,
+   "scroll": [
+    185,
+    185,
+    185
+   ],
+   "focus": "Skip to main content DOUKNOWBALL Back Tr"
+  },
+  {
+   "tag": "s0",
+   "word": "Career Log",
+   "shot": "nfl390-18-tile-careerlog-s0.png",
+   "text": "Back to career\nCareer Log\n\nPick a year to review your saved season. No extra season is played.\n\nNo seasons on the books yet. Go play one.",
+   "backOk": true,
+   "scroll": [
+    185,
+    185,
+    923
+   ],
+   "focus": "📜 CAREER LOG No seasons yet Play one an"
+  },
+  {
+   "tag": "s0",
+   "word": "Trophy Case",
+   "shot": "nfl390-19-tile-trophycase-s0.png",
+   "text": "Hub\n🏆 Trophy Case\n\n0 rings\n\nNothing on the shelf yet. Every award you win lands here with the year on it.\n\n🎖️ BADGES\n0 of 25\n\n🔒\nSuper Bowl champion\n\nA ring. The one everything else is measured against.\n\n🔒\nBack to back\n\nTwo Super Bowls in two seasons.\n\n🔒\nLeague MVP\n\nThe best player in the league for one year.\n\n🔒\nDefensive Player of the Year\n\nThe best defender in the league for one year.\n\n🔒\nRookie of the Year\n\nThe best first year player on your side of the ball.\n\n🔒\nThree All-Pros\n\nFirst team All-Pro three times.\n\n🔒\nTen All-Pros\n\nTen first team All-Pro selections, the mark Jerry Rice and Jim Otto share.\n\n🔒\n10,000 passing yards\n\nTen thousand career yards through the air.\n\n🔒\n50,000 passing yards\n\nFifty thousand career passing yards.\n\n🔒\nA 5,000 yard season\n\nFive thousand passing yards in one year. The record is 5,477.\n\n🔒\n10,000 rushing yards\n\nTen thousand career yards on the ground.\n\n🔒\nA 2,000 yard season\n\nTwo thousand rushing yards in one year. The record is 2,105.\n\n🔒\n10,000 receiving yards\n\nTen thousand career receiving yards.\n\n🔒\n75 receiving touchdowns\n\nSeventy five career catches in the end zone.\n\n🔒\n100 sacks\n\nA hundred career sacks.\n\n🔒\nA 20 sack season\n\nTwenty sacks in one year. The record is 23.\n\n🔒\n30 interceptions\n\nThirty career interceptions.\n\n🔒\n1,000 tackles\n\nA thousand career tackles.\n\n🔒\n300 field goals\n\nThree hundred career field goals.\n\n🔒\nA decade in the league\n\nTen seasons played.\n\n🔒\nIron man\n\nFive full seasons without missing a game.\n\n🔒\nFirst m",
+   "backOk": true,
+   "scroll": [
+    923,
+    185,
+    185
+   ],
+   "focus": "Skip to main content DOUKNOWBALL Back Tr"
+  },
+  {
+   "tag": "s0",
+   "word": "News",
+   "shot": "nfl390-20-tile-news-s0.png",
+   "text": "Hub\n📰 News Feed\n📰 Paper\n📸 SocialGram\n🪞 Rival\n\nTHIS WEEK\n\nWith pick 16, the Philadelphia Eagles select Maximilian Okonkwo-Smith.\n\nFirst round money, first round pressure.\n\n📋 You outplayed the veteran in camp. The chart has your name on top.",
+   "backOk": true,
+   "scroll": [
+    185,
+    185,
+    185
+   ],
+   "focus": "Skip to main content DOUKNOWBALL Back Tr"
+  },
+  {
+   "tag": "s0",
+   "word": "Inbox",
+   "shot": "nfl390-21-tile-inbox-s0.png",
+   "text": "Hub\n📱 Inbox\n🏫\nHigh school teammate\n🎓 Draft night, 2026\nBro. We watched it at the old field house, the whole senior year team. You owe every one of us a jersey.",
+   "backOk": true,
+   "scroll": [
+    185,
+    185,
+    185
+   ],
+   "focus": "Skip to main content DOUKNOWBALL Back Tr"
+  },
+  {
+   "tag": "s1",
+   "word": "My Player",
+   "shot": "nfl390-38-tile-myplayer-s1.png",
+   "text": "Hub\n📊 My Player\nYour road to the draft\n\n87\n\nOVERALL\n\nMaximilian Okonkwo-Smith · WR · age 22\n\nMorale\n64\nFanbase\n58\nHealth\n100\nKarma\n54\n\n1\n\nseasons\n\n0\n\nrings",
+   "backOk": true,
+   "scroll": [
+    0,
+    185,
+    185
+   ],
+   "focus": "Skip to main content DOUKNOWBALL Back Tr"
+  },
+  {
+   "tag": "s1",
+   "word": "The Bank",
+   "shot": "nfl390-39-tile-thebank-s1.png",
+   "text": "Hub\n💰 The Bank\n\nEVERYTHING YOU HAVE\n\n$3.0M\n\n$5.6M a year, 3 years left on the deal\n\n$3.0M\nin the account\n$0k\nsavings\n$0k\ninvested\n🏦 Account\n📈 Market\n🃏 Cards\n🛒 Shop\n💵 Savings\npays 2.5% a season, never loses\n\nBoring, safe, and better than leaving it in the account doing nothing.\n\nSave 25%\nSave half\nSave it all\nTake out half\nTake it all out\n📄 Statement\nlast 12 only\n\nNothing yet. Save something or buy something.\n\nOlder lines drop off so your save does not grow forever.\n\nMade on investments\n$0k / $0k lost",
+   "backOk": true,
+   "scroll": [
+    185,
+    185,
+    185
+   ],
+   "focus": "Skip to main content DOUKNOWBALL Back Tr"
+  },
+  {
+   "tag": "s1",
+   "word": "Career Log",
+   "shot": "nfl390-42-tile-careerlog-s1.png",
+   "text": "Back to career\nCareer Log\n\nPick a year to review your saved season. No extra season is played.\n\nSeason highs\n2026\nPhiladelphia Eagles",
+   "backOk": true,
+   "scroll": [
+    185,
+    224,
+    903
+   ],
+   "focus": "📜 CAREER LOG 1 season 97 rec, 1,151 yds"
+  },
+  {
+   "tag": "s1",
+   "word": "Trophy Case",
+   "shot": "nfl390-43-tile-trophycase-s1.png",
+   "text": "Hub\n🏆 Trophy Case\n\n0 rings\n\n1 individual honour across 1 season.\n\nOffensive Rookie of the Year\nx1\n\n2026\n\n🎖️ BADGES\n2 of 25\n\n🔒\nSuper Bowl champion\n\nA ring. The one everything else is measured against.\n\n🔒\nBack to back\n\nTwo Super Bowls in two seasons.\n\n🔒\nLeague MVP\n\nThe best player in the league for one year.\n\n🔒\nDefensive Player of the Year\n\nThe best defender in the league for one year.\n\n🌱\nRookie of the Year\n\nThe best first year player on your side of the ball.\n\n🔒\nThree All-Pros\n\nFirst team All-Pro three times.\n\n🔒\nTen All-Pros\n\nTen first team All-Pro selections, the mark Jerry Rice and Jim Otto share.\n\n🔒\n10,000 passing yards\n\nTen thousand career yards through the air.\n\n🔒\n50,000 passing yards\n\nFifty thousand career passing yards.\n\n🔒\nA 5,000 yard season\n\nFive thousand passing yards in one year. The record is 5,477.\n\n🔒\n10,000 rushing yards\n\nTen thousand career yards on the ground.\n\n🔒\nA 2,000 yard season\n\nTwo thousand rushing yards in one year. The record is 2,105.\n\n🔒\n10,000 receiving yards\n\nTen thousand career receiving yards.\n\n🔒\n75 receiving touchdowns\n\nSeventy five career catches in the end zone.\n\n🔒\n100 sacks\n\nA hundred career sacks.\n\n🔒\nA 20 sack season\n\nTwenty sacks in one year. The record is 23.\n\n🔒\n30 interceptions\n\nThirty career interceptions.\n\n🔒\n1,000 tackles\n\nA thousand career tackles.\n\n🔒\n300 field goals\n\nThree hundred career field goals.\n\n🔒\nA decade in the league\n\nTen seasons played.\n\n🔒\nIron man\n\nFive full seasons without missing a game.\n\n🪙\nFirst mil",
+   "backOk": true,
+   "scroll": [
+    903,
+    185,
+    185
+   ],
+   "focus": "Skip to main content DOUKNOWBALL Back Tr"
+  },
+  {
+   "tag": "s1",
+   "word": "News",
+   "shot": "nfl390-44-tile-news-s1.png",
+   "text": "Hub\n📰 News Feed\n📰 Paper\n📸 SocialGram\n🪞 Rival\n\nTHIS WEEK\n\nBought Downtown Condo.\n\nBACK PAGES\n\n📰 Maximilian Okonkwo-Smith takes Rookie of the Year\n\n📰 Maximilian Okonkwo-Smith hauls in 97 catches for 1,151 yards",
+   "backOk": true,
+   "scroll": [
+    185,
+    185,
+    185
+   ],
+   "focus": "Skip to main content DOUKNOWBALL Back Tr"
+  },
+  {
+   "tag": "s1",
+   "word": "Inbox",
+   "shot": "nfl390-45-tile-inbox-s1.png",
+   "text": "Hub\n📱 Inbox\n💼\nAgent\n🌴 Offseason, 2026\nCleat deal on the table. Good money, but the brand got caught running sweatshops last year. Your call.\n🧺\nEquipment manager\n⏰ Trade deadline, 2026\nYou left your road pads at the hotel again. Team wants to fine you. I can cover for you this once.\n📚\nPosition coach\n🏕️ Training camp, 2026\nInstall starts tomorrow. Three hundred plays in a week. Want the cutups tonight so you're ahead of it?\n🏫\nHigh school teammate\n🎓 Draft night, 2026\nBro. We watched it at the old field house, the whole senior year team. You owe every one of us a jersey.",
+   "backOk": true,
+   "scroll": [
+    185,
+    185,
+    185
+   ],
+   "focus": "Skip to main content DOUKNOWBALL Back Tr"
+  },
+  {
+   "tag": "s2",
+   "word": "Career Log",
+   "shot": "nfl390-53-tile-careerlog-s2.png",
+   "text": "Back to career\nCareer Log\n\nPick a year to review your saved season. No extra season is played.\n\nSeason highs\n2026\nPhiladelphia Eagles",
+   "backOk": true,
+   "scroll": [
+    185,
+    264,
+    264
+   ],
+   "focus": "📜 CAREER LOG 1 season 97 rec, 1,151 yds"
+  },
+  {
+   "tag": "s2",
+   "word": "News",
+   "shot": "nfl390-54-tile-news-s2.png",
+   "text": "Hub\n📰 News Feed\n📰 Paper\n📸 SocialGram\n🪞 Rival\n\nTHIS WEEK\n\nPractice: Rough day. No gains this time.\n\n📱 Replied to Agent: Take the money. Karma down.\n\nBought Downtown Condo.\n\nBACK PAGES\n\n📰 Maximilian Okonkwo-Smith takes Rookie of the Year\n\n📰 Maximilian Okonkwo-Smith hauls in 97 catches for 1,151 yards",
+   "backOk": true,
+   "scroll": [
+    264,
+    185,
+    185
+   ],
+   "focus": "Skip to main content DOUKNOWBALL Back Tr"
+  },
+  {
+   "tag": "s2",
+   "word": "Inbox",
+   "shot": "nfl390-55-tile-inbox-s2.png",
+   "text": "Hub\n📱 Inbox\n💼\nAgent\n🌴 Offseason, 2026\nCleat deal on the table. Good money, but the brand got caught running sweatshops last year. Your call.\n🧺\nEquipment manager\n⏰ Trade deadline, 2026\nYou left your road pads at the hotel again. Team wants to fine you. I can cover for you this once.\n📚\nPosition coach\n🏕️ Training camp, 2026\nInstall starts tomorrow. Three hundred plays in a week. Want the cutups tonight so you're ahead of it?\n🏫\nHigh school teammate\n🎓 Draft night, 2026\nBro. We watched it at the old field house, the whole senior year team. You owe every one of us a jersey.",
+   "backOk": true,
+   "scroll": [
+    185,
+    185,
+    185
+   ],
+   "focus": "Skip to main content DOUKNOWBALL Back Tr"
+  }
+ ],
+ "centre": [
+  {
+   "tag": "s1",
+   "games": 2,
+   "help": true,
+   "kickoff": null,
+   "firstCard": 1,
+   "review": "📺 Season Center\nPhiladelphia Eagles · 2026\n?\nBack to your season\nSeason review\n8-9 · Missed the playoffs\n17\nGames\n97\nRec\n1,151\nRec yds\n11\nRec TD\nRegular season, the same numbers as your season card.\n⭐ Best game: Game 14, W 31-23 vs New York Giants, 10 catches for 107 yards, 2 touchdowns\nLast five:\nL\nW\nW\nL\nW\nOffensive Rookie of the Year\nAfter game 17\n8-9\nHome 6-3\nAway 2-6\nStreak W1\nDivision 2-4\nConference 5-7\nLast 10:\nW\nL\nW\nL\nL\nL\nW\nW\nL\nW\n📋 Game log\n🗓 Schedule\n17\nPlayed\n97\nRec\n1,151\nRec yds\n11\nTD\nBack to your season",
+   "notes": [],
+   "closed": true,
+   "secs": 18
+  },
+  {
+   "tag": "again",
+   "games": 2,
+   "help": false,
+   "kickoff": null,
+   "firstCard": 0,
+   "review": "📺 Season Center\nPhiladelphia Eagles · 2026\n?\nBack to your season\nSeason review\n8-9 · Missed the playoffs\n17\nGames\n97\nRec\n1,151\nRec yds\n11\nRec TD\nRegular season, the same numbers as your season card.\n⭐ Best game: Game 14, W 31-23 vs New York Giants, 10 catches for 107 yards, 2 touchdowns\nLast five:\nL\nW\nW\nL\nW\nOffensive Rookie of the Year\nAfter game 17\n8-9\nHome 6-3\nAway 2-6\nStreak W1\nDivision 2-4\nConference 5-7\nLast 10:\nW\nL\nW\nL\nL\nL\nW\nW\nL\nW\n📋 Game log\n🗓 Schedule\n17\nPlayed\n97\nRec\n1,151\nRec yds\n11\nTD\nBack to your season",
+   "notes": [],
+   "closed": true,
+   "secs": 18
+  }
+ ],
+ "stuck": [
+  {
+   "tag": "s1",
+   "texts": [],
+   "dialog": [],
+   "toast": []
+  }
+ ],
+ "notes": [
+  "bought $1.2M; save salary 5.6 -> 5.6",
+  "watch again: ↺ Watch the 2026 season again"
+ ],
+ "shots": [
+  "nfl390-01-first-visit.png",
+  "nfl390-02-create.png",
+  "nfl390-03-create-filled.png",
+  "nfl390-04-prospect-help.png",
+  "nfl390-05-prospect-routes.png",
+  "nfl390-06-prospect-season1.png",
+  "nfl390-07-prospect-choice.png",
+  "nfl390-08-prospect-season2.png",
+  "nfl390-09-prospect-showcase.png",
+  "nfl390-10-prospect-draftday.png",
+  "nfl390-11-draft-night-1.png",
+  "nfl390-12-draft-night-2.png",
+  "nfl390-13-draft-night-end.png",
+  "nfl390-14-hub-draft.png",
+  "nfl390-15-hub-draft-full.png",
+  "nfl390-16-tile-myplayer-s0.png",
+  "nfl390-17-tile-thebank-s0.png",
+  "nfl390-18-tile-careerlog-s0.png",
+  "nfl390-19-tile-trophycase-s0.png",
+  "nfl390-20-tile-news-s0.png",
+  "nfl390-21-tile-inbox-s0.png",
+  "nfl390-22-inbox-open.png",
+  "nfl390-23-centre-help-s1.png",
+  "nfl390-24-centre-kickoff-s1.png",
+  "nfl390-25-centre-live-s1-g1.png",
+  "nfl390-26-centre-final-s1-g1.png",
+  "nfl390-27-centre-live-s1-g2.png",
+  "nfl390-28-centre-final-s1-g2.png",
+  "nfl390-29-centre-review-s1.png",
+  "nfl390-30-centre-fixtures-s1.png",
+  "nfl390-31-continue-s1-1.png",
+  "nfl390-32-stuck-s1-1.png",
+  "nfl390-33-continue-s1-2.png",
+  "nfl390-34-event-s1-1.png",
+  "nfl390-35-outcome-s1.png",
+  "nfl390-36-hub-s1.png",
+  "nfl390-37-hub-reloaded.png",
+  "nfl390-38-tile-myplayer-s1.png",
+  "nfl390-39-tile-thebank-s1.png",
+  "nfl390-40-bank-shop.png",
+  "nfl390-41-bank-bought.png",
+  "nfl390-42-tile-careerlog-s1.png",
+  "nfl390-43-tile-trophycase-s1.png",
+  "nfl390-44-tile-news-s1.png",
+  "nfl390-45-tile-inbox-s1.png",
+  "nfl390-46-inbox-open.png",
+  "nfl390-47-inbox-open.png",
+  "nfl390-48-practice-menu.png",
+  "nfl390-49-practice-drill.png",
+  "nfl390-50-practice-result.png",
+  "nfl390-51-hub-after-practice.png",
+  "nfl390-52-hub-s2.png",
+  "nfl390-53-tile-careerlog-s2.png",
+  "nfl390-54-tile-news-s2.png",
+  "nfl390-55-tile-inbox-s2.png",
+  "nfl390-56-inbox-open.png",
+  "nfl390-57-centre-kickoff-again.png",
+  "nfl390-58-centre-live-again-g1.png",
+  "nfl390-59-centre-final-again-g1.png",
+  "nfl390-60-centre-live-again-g2.png",
+  "nfl390-61-centre-final-again-g2.png",
+  "nfl390-62-centre-review-again.png",
+  "nfl390-63-centre-fixtures-again.png",
+  "nfl390-64-final.png"
+ ],
+ "draft": {
+  "routes": [
+   "3 seasons Big college program Every game on TV and scouts at every practice. Three seasons before you can declare. Start",
+   "3 seasons Small school Fewer eyes on you, so the scouts have to come looking. Three seasons before you can declare. Star"
+  ],
+  "route": "3 seasons Big college program Every game on TV and scouts at every practice. Three seasons before you can declare. Start",
+  "seasonShots": 3,
+  "choices": [
+   "Playing through it -> 1/2",
+   "The offseason -> 0/2",
+   "The film room -> 0/2"
+  ],
+  "showcase": "Go all out Push every drill to the limit. Grade A +10, B +4, C -3, D -8",
+  "range": "The scouts have you between pick 11 and pick 18 of 224.",
+  "nightSecs": 6,
+  "skipSeen": 0,
+  "result": "Your progress saves after every choice\nPick your path\nEarn your place\n3\nDraft day\n\nNFL Road to the Draft\n\nThis is your moment.\n\nPhiladelphia Eagles\n\nMaximilian Okonkwo-Smith\nWR · Age 21\nRating\n85\nPotential\n99\nHealth\n100\nDraft stock\n85/100\nThis is your moment.\nBench press: grade B. Draft stock +4, now 85.\n\n2026 DRAFT\n\nThe scouts had you between pick 11 and pick 18 of 224.\n\n1\nKansas City Chiefs\nRound 1\n2\nMiami Dolphins\nRound 1\n3\nJacksonville Jaguars\nRound 1\nPicks 4 to 12 come off the board.\n13\nLos Angeles Rams\nRound 1\n14\nNew Orleans Saints\nRound 1\n15\nNew York Jets\nRound 1\nPick 16: Philadelphia Eagles\nYour name is called. Round 1, pick 16.\n\nRound 1, pick 16, 16 overall. Philadelphia Eagles take you.\n\nStart your career\n2026 DRAFT\nRound 1, pick 16 (16 overall)\n\nPhiladelphia Eagles hold the pick, and they take you.\n\nYour scout file\n3 seasons"
+ },
+ "reload": [
+  {
+   "before": {
+    "chips": [
+     "Maximilian Okonkwo-Smith · WR",
+     "Philadelphia Eagles",
+     "2027 · age 22",
+     "OVR 87",
+     "$5.6M x3",
+     "⭐ Starter"
+    ],
+    "play": "Play the 2027 season",
+    "so": "Career so far: 0 rings · 0 MVPs · 0 All-Pros · 1,151 rec yds",
+    "last": "Last season: 97 rec, 1,151 yds, 11 TD · Missed the playoffs",
+    "tiles": [
+     "📊 MY PLAYER OVR 87 WR, age 22, 0 rings",
+     "💰 THE BANK $3M $5.6M a year, 3 years left",
+     "📜 CAREER LOG 1 season 97 rec, 1,151 yds, 11 TD",
+     "🏆 TROPHY CASE 1 honour 1 in other awards, no ring yet",
+     "📰 NEWS 4 headlines You pressed all night and it showed on every replay in slow motion. Fanbase -7, morale -7.",
+     "📱 INBOX 3 unread Somebody is waiting on a reply"
+    ]
+   },
+   "after": {
+    "chips": [
+     "Maximilian Okonkwo-Smith · WR",
+     "Philadelphia Eagles",
+     "2027 · age 22",
+     "OVR 87",
+     "$5.6M x3",
+     "⭐ Starter"
+    ],
+    "play": "Play the 2027 season",
+    "so": "Career so far: 0 rings · 0 MVPs · 0 All-Pros · 1,151 rec yds",
+    "last": null,
+    "tiles": [
+     "📊 MY PLAYER OVR 87 WR, age 22, 0 rings",
+     "💰 THE BANK $3M $5.6M a year, 3 years left",
+     "📜 CAREER LOG 1 season 97 rec, 1,151 yds, 11 TD",
+     "🏆 TROPHY CASE 1 honour 1 in other awards, no ring yet",
+     "📰 NEWS 2 headlines Maximilian Okonkwo-Smith takes Rookie of the Year",
+     "📱 INBOX 3 unread Somebody is waiting on a reply"
+    ]
+   },
+   "save": {
+    "phase": "season",
+    "seasons": 1,
+    "year": 2027,
+    "age": 22,
+    "ovr": 87,
+    "team": "PHI",
+    "salary": 5.6,
+    "cy": 3,
+    "last": {
+     "year": 2026,
+     "team": "PHI",
+     "age": 21,
+     "ovr": 85,
+     "games": 17,
+     "awards": [
+      "Offensive Rookie of the Year"
+     ],
+     "teamResult": "Missed the playoffs",
+     "salary": 5.6,
+     "rec": 97,
+     "recYds": 1151,
+     "recTd": 11
+    }
+   }
+  }
+ ],
+ "inbox": [
+  {
+   "rows": 1
+  },
+  {
+   "body": "Hub\n📱 Inbox\n← Back to inbox\n\n🏫 HIGH SCHOOL TEAMMATE\n\n🎓 Draft night, 2026\n\nBro. We watched it at the old field house, the whole senior year team. You owe every one of us a jersey.\n\nJerseys for all of themOne signed for the field houseLeave him on read",
+   "answered": "Jerseys for all of them"
+  },
+  {
+   "rows": 4
+  },
+  {
+   "body": "Hub\n📱 Inbox\n← Back to inbox\n\n💼 AGENT\n\n🌴 Offseason, 2026\n\nCleat deal on the table. Good money, but the brand got caught running sweatshops last year. Your call.\n\nTake the moneyTurn it down publiclyQuietly decline",
+   "answered": "Take the money"
+  },
+  {
+   "body": "Hub\n📱 Inbox\n← Back to inbox\n\n💼 AGENT\n\n🌴 Offseason, 2026\n\nCleat deal on the table. Good money, but the brand got caught running sweatshops last year. Your call.\n\nYou replied: Take the money",
+   "answered": false
+  },
+  {
+   "rows": 4
+  },
+  {
+   "body": "Hub\n📱 Inbox\n← Back to inbox\n\n💼 AGENT\n\n🌴 Offseason, 2026\n\nCleat deal on the table. Good money, but the brand got caught running sweatshops last year. Your call.\n\nYou replied: Take the money",
+   "answered": false
+  }
+ ],
+ "practice": [
+  {
+   "score": "13",
+   "secs": 51
+  },
+  {
+   "banked": true,
+   "ovr": [
+    87,
+    87
+   ]
+  }
+ ],
+ "firstVisit": {
+  "popover": false,
+  "dialog": [
+   "How to play\nThe steps\nCreate your player"
+  ],
+  "buttons": [
+   "🏈 2026 The league as it is today. Full money, every current franchise",
+   "⏪ 2005 throwback The 2005 league: the Raiders in Oakland, the Chargers",
+   "QB",
+   "RB",
+   "WR",
+   "TE",
+   "LB",
+   "CB",
+   "EDGE",
+   "K",
+   "🎲 Surprise me",
+   "🧑 Skin",
+   "💇 Hair",
+   "🧔 Beard",
+   "👟 Cleats",
+   "💍 Extras",
+   "🎉 Celebration",
+   "Porcelain",
+   "Ivory",
+   "Fair"
+  ],
+  "helpText": "How to play\nThe steps\nCreate your player: name, one of 8 positions (QB, RB, WR, TE, LB, CB, EDGE, K), and an archetype like Cannon Arm, Island Corner, Speed Bender or Ice in December that sets ceiling and durability.\nPick your league: today's NFL, or the 2005 throwback with the Raiders in Oakland, the Chargers in San Diego and the Rams in St. Louis.\nBuild your look: skin tone, hair, beard, accessories and a signature celebration, or hit Surprise me.\nEnter the draft. Your hidden rating decides the slot, and a real team calls your name.\nCheck the depth chart. Top twelve picks open as starters; everyone else fights the incumbent in camp, every single summer, and backup seasons are spot duty until you take the job.\nPlay each season with one tap: yards, touchdowns, awards, how far the team went.\nOpen Career Log and pick a year to review its saved overview, regular season and postseason. Changes compare with the previous saved season; older missing values say Not recorded. Back to seasons returns to the year tiles, and Review seasons is available after retirement.\nWhen the deal expires, work a real free agency window: competing offers from named teams with their own money, length and roster quality, and one push for more on any of them.\nMake up to three offseason calls, one card at a time: train skills or body, fix the knee or play through it, take the envelope or report it. Only the first card of a summer can move your rating, and a card you just saw rests for a while before it comes back (press moments follow your season, so those can come right back).\nAfter a normal offseason choice, the result shows the actual changes. Expand it for any extra changes, then Continue opens the next card, or takes you back to your career after the last one, without applying the choice again.\nOpen the Bank between seasons. Savings pays 2.5% a season and never loses, five things you can put money into each have a price that moves every season whether you look or not (a fund, flats back home, two shares and a coin that halves as often as it doubles), the statement keeps your last 12 moves, and the card school in the locker room is one sitting a season on odds that are printed before you sit in.\nSpend the money in 7 aisles: home, rides, investments, body, flex, family, and a shady aisle that only appears once you have something to hide.\nRead the News box. The paper writes up every season in your own position's stat, the SocialGram shows followers read off your fanbase with three fan comments under the latest post, and the rival's card keeps the head to head against the player drafted the same year as you.\nFrom 30, a falling rating brings the retirement talk: stop now, play one more year, or announce a farewell season. Then the legacy verdict, and the Hall of Fame wait one ballot at a time.\nCollect badges in the Trophy Case: 25 of them, from a first ring and Rookie of the Year to 10,000 passing yards, a 20 sack season and $100M to your name, each lit the moment the facts o",
+  "closedByEscape": true
+ },
+ "create": [
+  "*🏈 2026 The league as it is today. Full money, every current",
+  "⏪ 2005 throwback The 2005 league: the Raiders in Oakland, th",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "*Burner Takes the top off",
+  "Chain Mover Third down security blanket",
+  "Alpha X Contested catch king"
+ ],
+ "wbw": {
+  "visible": true,
+  "held": null
+ },
+ "final": {
+  "save": {
+   "phase": "season",
+   "seasons": 1,
+   "year": 2027,
+   "age": 22,
+   "ovr": 87,
+   "team": "PHI",
+   "salary": 5.6,
+   "cy": 3,
+   "last": {
+    "year": 2026,
+    "team": "PHI",
+    "age": 21,
+    "ovr": 85,
+    "games": 17,
+    "awards": [
+     "Offensive Rookie of the Year"
+    ],
+    "teamResult": "Missed the playoffs",
+    "salary": 5.6,
+    "rec": 97,
+    "recYds": 1151,
+    "recTd": 11
+   }
+  },
+  "chips": {
+   "chips": [
+    "Maximilian Okonkwo-Smith · WR",
+    "Philadelphia Eagles",
+    "2027 · age 22",
+    "OVR 87",
+    "$5.6M x3",
+    "⭐ Starter"
+   ],
+   "play": "Play the 2027 season",
+   "so": "Career so far: 0 rings · 0 MVPs · 0 All-Pros · 1,151 rec yds",
+   "last": null,
+   "tiles": [
+    "📊 MY PLAYER OVR 87 WR, age 22, 0 rings",
+    "💰 THE BANK $3M $5.6M a year, 3 years left",
+    "📜 CAREER LOG 1 season 97 rec, 1,151 yds, 11 TD",
+    "🏆 TROPHY CASE 1 honour 1 in other awards, no ring yet",
+    "📰 NEWS 3 headlines Practice: Rough day. No gains this time.",
+    "📱 INBOX 2 unread Somebody is waiting on a reply"
+   ]
+  },
+  "secs": 232
+ }
+}

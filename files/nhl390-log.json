@@ -1,0 +1,1222 @@
+{
+ "tag": "nhl390",
+ "SPORT": "nhl",
+ "W": 390,
+ "H": 844,
+ "SEED": 1404,
+ "POS": "C",
+ "steps": [
+  {
+   "t": 6,
+   "act": "road to the draft",
+   "text": "Play your road to the draft",
+   "scroll": [
+    628,
+    644,
+    185
+   ]
+  },
+  {
+   "act": "route 0"
+  },
+  {
+   "t": 9,
+   "act": "pre-draft season",
+   "text": "Play your first season",
+   "scroll": [
+    129,
+    129,
+    129
+   ]
+  },
+  {
+   "t": 11,
+   "act": "pre-draft season",
+   "text": "Play the next season",
+   "scroll": [
+    129,
+    129,
+    129
+   ]
+  },
+  {
+   "t": 14,
+   "act": "draft day",
+   "text": "Draft day",
+   "scroll": [
+    142,
+    142,
+    268
+   ]
+  },
+  {
+   "t": 20,
+   "act": "start your career",
+   "text": "Start your career",
+   "scroll": [
+    268,
+    268,
+    268
+   ]
+  },
+  {
+   "t": 24,
+   "act": "back from My Player",
+   "text": "Hub",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 26,
+   "act": "back from The Bank",
+   "text": "Hub",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 28,
+   "act": "back from Career Log",
+   "text": "Back to career",
+   "scroll": [
+    185,
+    185,
+    887
+   ]
+  },
+  {
+   "t": 30,
+   "act": "back from Trophy Case",
+   "text": "Hub",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 32,
+   "act": "back from News",
+   "text": "Hub",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 34,
+   "act": "back from Inbox",
+   "text": "Hub",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 65,
+   "act": "MISSING play season 1"
+  },
+  {
+   "t": 70,
+   "act": "back from My Player",
+   "text": "Hub",
+   "scroll": [
+    40,
+    40,
+    40
+   ]
+  },
+  {
+   "t": 73,
+   "act": "back from The Bank",
+   "text": "Hub",
+   "scroll": [
+    40,
+    40,
+    40
+   ]
+  },
+  {
+   "t": 75,
+   "act": "back from Career Log",
+   "text": "Back to career",
+   "scroll": [
+    0,
+    0,
+    144
+   ]
+  },
+  {
+   "t": 77,
+   "act": "back from Trophy Case",
+   "text": "Hub",
+   "scroll": [
+    144,
+    144,
+    144
+   ]
+  },
+  {
+   "t": 79,
+   "act": "back from News",
+   "text": "Hub",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 81,
+   "act": "back from Inbox",
+   "text": "Hub",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 82,
+   "act": "open practice",
+   "text": "Start practice",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 128,
+   "act": "close practice",
+   "text": "Close",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 159,
+   "act": "MISSING play season 2"
+  },
+  {
+   "t": 161,
+   "act": "back from Career Log",
+   "text": "Back to career",
+   "scroll": [
+    185,
+    185,
+    927
+   ]
+  },
+  {
+   "t": 163,
+   "act": "back from News",
+   "text": "Hub",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 165,
+   "act": "back from Inbox",
+   "text": "Hub",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  }
+ ],
+ "audits": [
+  {
+   "overX": 0,
+   "scrollY": 0,
+   "docH": 11613,
+   "bad": [],
+   "trunc": [
+    "Close [1<43]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 9,
+   "where": "first visit help",
+   "t": 4
+  },
+  {
+   "overX": 0,
+   "scrollY": 0,
+   "docH": 11613,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 8,
+   "where": "create",
+   "t": 5
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11761,
+   "bad": [],
+   "trunc": [
+    "Your career starts here. [1<179]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 2,
+   "where": "prospect help",
+   "t": 7
+  },
+  {
+   "overX": 0,
+   "scrollY": 129,
+   "docH": 11095,
+   "bad": [],
+   "trunc": [
+    "Your career starts here. [1<179]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 4,
+   "where": "prospect routes",
+   "t": 8
+  },
+  {
+   "overX": 0,
+   "scrollY": 129,
+   "docH": 11091,
+   "bad": [],
+   "trunc": [
+    "Scouts are watching. [1<163]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 2,
+   "where": "prospect season",
+   "t": 10
+  },
+  {
+   "overX": 0,
+   "scrollY": 129,
+   "docH": 11091,
+   "bad": [],
+   "trunc": [
+    "Scouts are watching. [1<163]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 2,
+   "where": "prospect choice",
+   "t": 10
+  },
+  {
+   "overX": 0,
+   "scrollY": 129,
+   "docH": 11091,
+   "bad": [],
+   "trunc": [
+    "Scouts are watching. [1<163]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 2,
+   "where": "prospect season",
+   "t": 12
+  },
+  {
+   "overX": 0,
+   "scrollY": 142,
+   "docH": 11074,
+   "bad": [],
+   "trunc": [
+    "One last look. [1<103]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 4,
+   "where": "prospect showcase",
+   "t": 12
+  },
+  {
+   "overX": 0,
+   "scrollY": 142,
+   "docH": 10860,
+   "bad": [],
+   "trunc": [
+    "You have done the work. [1<189]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 2,
+   "where": "prospect draft day",
+   "t": 13
+  },
+  {
+   "overX": 0,
+   "scrollY": 268,
+   "docH": 11432,
+   "bad": [],
+   "trunc": [
+    "Draft night. [1<88]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 2,
+   "where": "draft night live",
+   "t": 15
+  },
+  {
+   "overX": 0,
+   "scrollY": 268,
+   "docH": 11432,
+   "bad": [],
+   "trunc": [
+    "This is your moment. [1<159]",
+    "Round 2, pick 31, 63 overall. New Jersey Devils take you. [1<438]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 1,
+   "where": "draft night end",
+   "t": 19
+  },
+  {
+   "overX": 0,
+   "scrollY": 268,
+   "docH": 11117,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "With pick 63, the New Jersey Devils select Maximilian Okonkwo-Smith. [149<304]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 9,
+   "where": "hub draft",
+   "t": 22
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 10723,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 1,
+   "where": "tile My Player s0",
+   "t": 23
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 10785,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 10,
+   "where": "tile The Bank s0",
+   "t": 25
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 10416,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 1,
+   "where": "tile Career Log s0",
+   "t": 27
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11250,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 1,
+   "where": "tile Trophy Case s0",
+   "t": 29
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 10487,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 4,
+   "where": "tile News s0",
+   "t": 32
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 10318,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 1,
+   "where": "tile Inbox s0",
+   "t": 34
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11117,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "With pick 63, the New Jersey Devils select Maximilian Okonkwo-Smith. [149<304]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 7,
+   "where": "hub s1",
+   "t": 65
+  },
+  {
+   "overX": 0,
+   "scrollY": 40,
+   "docH": 10723,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 1,
+   "where": "tile My Player s1",
+   "t": 70
+  },
+  {
+   "overX": 0,
+   "scrollY": 40,
+   "docH": 10785,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 10,
+   "where": "tile The Bank s1",
+   "t": 72
+  },
+  {
+   "overX": 0,
+   "scrollY": 40,
+   "docH": 11391,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [
+    "🏡 Home 80x29",
+    "🏎️ Rides 80x29",
+    "📈 Invest 80x29",
+    "💪 Body 80x29",
+    "💎 Flex 80x29",
+    "❤️ Family 80x29",
+    "$1.5M 57x29",
+    "$4.5M 59x29",
+    "$8M 48x29",
+    "$20M 55x29",
+    "$5M 48x29",
+    "$2M 48x29",
+    "$0.8M 59x29",
+    "$2.5M 59x29"
+   ],
+   "buttonsInView": 15,
+   "where": "bank shop",
+   "t": 72
+  },
+  {
+   "overX": 0,
+   "scrollY": 0,
+   "docH": 10416,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 1,
+   "where": "tile Career Log s1",
+   "t": 74
+  },
+  {
+   "overX": 0,
+   "scrollY": 144,
+   "docH": 11250,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 1,
+   "where": "tile Trophy Case s1",
+   "t": 76
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 10423,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 4,
+   "where": "tile News s1",
+   "t": 78
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 10318,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 1,
+   "where": "tile Inbox s1",
+   "t": 80
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11117,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 19,
+   "where": "practice menu",
+   "t": 83
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11157,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "Practice: Rough day. No gains this time. [149<172]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 7,
+   "where": "hub after practice",
+   "t": 129
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11157,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "Practice: Rough day. No gains this time. [149<172]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 7,
+   "where": "hub s2",
+   "t": 160
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 10416,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 1,
+   "where": "tile Career Log s2",
+   "t": 161
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 10387,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 4,
+   "where": "tile News s2",
+   "t": 163
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 10318,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 1,
+   "where": "tile Inbox s2",
+   "t": 165
+  }
+ ],
+ "errors": [
+  {
+   "t": "warning",
+   "at": 0,
+   "text": "Warning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}."
+  }
+ ],
+ "pageErrors": [],
+ "failedRequests": [],
+ "events": [],
+ "outcomes": [],
+ "curtains": [],
+ "hub": [
+  {
+   "at": "drafted",
+   "save": {
+    "phase": "season",
+    "seasons": 0,
+    "year": 2027,
+    "age": 19,
+    "ovr": 79,
+    "team": "NJD",
+    "salary": 0.9,
+    "cy": 3,
+    "last": null
+   },
+   "chips": [
+    "Maximilian Okonkwo-Smith · C",
+    "New Jersey Devils",
+    "2027 · age 19",
+    "OVR 79",
+    "$0.9M x3",
+    "🪑 Fourth line"
+   ],
+   "play": "Play the 2027 season",
+   "so": "Career so far: 0 Cups · 0 Harts · 0 All-Star · 0 career points",
+   "last": null,
+   "tiles": [
+    "📊 MY PLAYER OVR 79 The fans down at 32",
+    "💰 THE BANK $0.5M $0.9M a year, 3 years left",
+    "📜 CAREER LOG No seasons yet Play one and it goes on the books",
+    "🏆 TROPHY CASE Empty Nothing in it. Go and win something",
+    "📰 NEWS 3 headlines With pick 63, the New Jersey Devils select Maximilian Okonkwo-Smith.",
+    "📱 INBOX All caught up Texts show up between seasons"
+   ]
+  },
+  {
+   "at": "after s1",
+   "outcome": "hub",
+   "save": {
+    "phase": "season",
+    "seasons": 0,
+    "year": 2027,
+    "age": 19,
+    "ovr": 79,
+    "team": "NJD",
+    "salary": 0.9,
+    "cy": 3,
+    "last": null
+   },
+   "chips": [
+    "Maximilian Okonkwo-Smith · C",
+    "New Jersey Devils",
+    "2027 · age 19",
+    "OVR 79",
+    "$0.9M x3",
+    "🪑 Fourth line"
+   ],
+   "play": "Play the 2027 season",
+   "so": "Career so far: 0 Cups · 0 Harts · 0 All-Star · 0 career points",
+   "last": null,
+   "tiles": [
+    "📊 MY PLAYER OVR 79 The fans down at 32",
+    "💰 THE BANK $0.5M $0.9M a year, 3 years left",
+    "📜 CAREER LOG No seasons yet Play one and it goes on the books",
+    "🏆 TROPHY CASE Empty Nothing in it. Go and win something",
+    "📰 NEWS 3 headlines With pick 63, the New Jersey Devils select Maximilian Okonkwo-Smith.",
+    "📱 INBOX All caught up Texts show up between seasons"
+   ]
+  },
+  {
+   "at": "after s2",
+   "outcome": "hub",
+   "save": {
+    "phase": "season",
+    "seasons": 0,
+    "year": 2027,
+    "age": 19,
+    "ovr": 79,
+    "team": "NJD",
+    "salary": 0.9,
+    "cy": 3,
+    "last": null
+   },
+   "chips": [
+    "Maximilian Okonkwo-Smith · C",
+    "New Jersey Devils",
+    "2027 · age 19",
+    "OVR 79",
+    "$0.9M x3",
+    "🪑 Fourth line"
+   ],
+   "play": "Play the 2027 season",
+   "so": "Career so far: 0 Cups · 0 Harts · 0 All-Star · 0 career points",
+   "last": null,
+   "tiles": [
+    "📊 MY PLAYER OVR 79 The fans down at 32",
+    "💰 THE BANK $0.5M $0.9M a year, 3 years left",
+    "📜 CAREER LOG No seasons yet Play one and it goes on the books",
+    "🏆 TROPHY CASE Empty Nothing in it. Go and win something",
+    "📰 NEWS 1 headline Practice: Rough day. No gains this time.",
+    "📱 INBOX All caught up Texts show up between seasons"
+   ]
+  }
+ ],
+ "tiles": [
+  {
+   "tag": "s0",
+   "word": "My Player",
+   "shot": "nhl390-16-tile-myplayer-s0.png",
+   "text": "Hub\n📊 My Player\nYour road to the draft\n\n79\n\nOVERALL\n\nMaximilian Okonkwo-Smith · C · age 19\n\nMorale\n70\nFanbase\n32\nHealth\n100\nKarma\n50\n\n0\n\nseasons\n\n0\n\nCups",
+   "backOk": true,
+   "scroll": [
+    268,
+    185,
+    185
+   ],
+   "focus": "Skip to main content DOUKNOWBALL Back Tr"
+  },
+  {
+   "tag": "s0",
+   "word": "The Bank",
+   "shot": "nhl390-17-tile-thebank-s0.png",
+   "text": "Hub\n💰 The Bank\n\nEVERYTHING YOU HAVE\n\n$500k\n\n$0.9M a year, 3 years left on the deal\n\n$500k\nin the account\n$0k\nsavings\n$0k\ninvested\n🏦 Account\n📈 Market\n🃏 Cards\n🛒 Shop\n💵 Savings\npays 2.5% a season, never loses\n\nBoring, safe, and better than leaving it in the account doing nothing.\n\nSave 25%\nSave half\nSave it all\nTake out half\nTake it all out\n📄 Statement\nlast 12 only\n\nNothing yet. Save something or buy something.\n\nOlder lines drop off so your save does not grow forever.\n\nMade on investments\n$0k / $0k lost",
+   "backOk": true,
+   "scroll": [
+    185,
+    185,
+    185
+   ],
+   "focus": "Skip to main content DOUKNOWBALL Back Tr"
+  },
+  {
+   "tag": "s0",
+   "word": "Career Log",
+   "shot": "nhl390-18-tile-careerlog-s0.png",
+   "text": "Back to career\nCareer Log\n\nPick a year to review your saved season. No extra season is played.\n\nNo seasons on the books yet. Go play one.",
+   "backOk": true,
+   "scroll": [
+    185,
+    185,
+    887
+   ],
+   "focus": "📜 CAREER LOG No seasons yet Play one an"
+  },
+  {
+   "tag": "s0",
+   "word": "Trophy Case",
+   "shot": "nhl390-19-tile-trophycase-s0.png",
+   "text": "Hub\n🏆 Trophy Case\n\n0 Cups\n\nNothing on the shelf yet. Every award you win lands here with the year on it.\n\n🎖️ BADGES\n0 of 23\n\n🔒\nStanley Cup champion\n\nYour name goes on the Cup, and it stays there.\n\n🔒\nBack to back\n\nTwo Cups in two seasons.\n\n🔒\nThe major\n\nThe Hart, the Vezina or the Norris, whichever your position plays for.\n\n🔒\nConn Smythe\n\nThe best player in the run that won it.\n\n🔒\nCalder Trophy\n\nThe best first year player in the league.\n\n🔒\nArt Ross\n\nMost points in the league across a season.\n\n🔒\nRocket Richard\n\nMost goals in the league across a season.\n\n🔒\nFive All-Star nods\n\nPicked for the All-Star team five times.\n\n🔒\nTen All-Star nods\n\nPicked for the All-Star team ten times.\n\n🔒\nA 50 goal season\n\nFifty in one season. The single season record is 92.\n\n🔒\nA 100 point season\n\nA hundred points in one season. The record is 215.\n\n🔒\n500 goals\n\nFive hundred career goals.\n\n🔒\n1,000 points\n\nA thousand career points.\n\n🔒\n1,500 points\n\nFifteen hundred career points.\n\n🔒\nA 40 win season\n\nForty wins in the crease in one season. The record is 48, shared.\n\n🔒\nA .930 season\n\nA .930 save percentage across a season in the crease.\n\n🔒\n400 wins\n\nFour hundred career wins in the crease.\n\n🔒\nA decade in the league\n\nTen seasons played.\n\n🔒\nIron man\n\nFive seasons with the whole schedule played.\n\n🔒\nFirst million\n\nA million dollars to your name, cash, savings and holdings together.\n\n🔒\n$100M to your name\n\nA hundred million dollars, cash, savings and holdings together.\n\n🔒\nWon the rivalry\n\nYour",
+   "backOk": true,
+   "scroll": [
+    887,
+    185,
+    185
+   ],
+   "focus": "Skip to main content DOUKNOWBALL Back Tr"
+  },
+  {
+   "tag": "s0",
+   "word": "News",
+   "shot": "nhl390-20-tile-news-s0.png",
+   "text": "Hub\n📰 News Feed\n📰 Paper\n📸 SocialGram\n🪞 Rival\n\nTHIS WEEK\n\nWith pick 63, the New Jersey Devils select Maximilian Okonkwo-Smith.\n\nLate pick. Everything must be earned.\n\n📋 You open down the lineup: fourth-line shifts while you earn trust.",
+   "backOk": true,
+   "scroll": [
+    185,
+    185,
+    185
+   ],
+   "focus": "Skip to main content DOUKNOWBALL Back Tr"
+  },
+  {
+   "tag": "s0",
+   "word": "Inbox",
+   "shot": "nhl390-21-tile-inbox-s0.png",
+   "text": "Hub\n📱 Inbox\n\nNo texts yet. Play a season and your phone will buzz.",
+   "backOk": true,
+   "scroll": [
+    185,
+    185,
+    185
+   ],
+   "focus": "Skip to main content DOUKNOWBALL Back Tr"
+  },
+  {
+   "tag": "s1",
+   "word": "My Player",
+   "shot": "nhl390-24-tile-myplayer-s1.png",
+   "text": "Hub\n📊 My Player\nYour road to the draft\n\n79\n\nOVERALL\n\nMaximilian Okonkwo-Smith · C · age 19\n\nMorale\n70\nFanbase\n32\nHealth\n100\nKarma\n50\n\n0\n\nseasons\n\n0\n\nCups",
+   "backOk": true,
+   "scroll": [
+    0,
+    40,
+    40
+   ],
+   "focus": "Skip to main content DOUKNOWBALL Back Tr"
+  },
+  {
+   "tag": "s1",
+   "word": "The Bank",
+   "shot": "nhl390-25-tile-thebank-s1.png",
+   "text": "Hub\n💰 The Bank\n\nEVERYTHING YOU HAVE\n\n$500k\n\n$0.9M a year, 3 years left on the deal\n\n$500k\nin the account\n$0k\nsavings\n$0k\ninvested\n🏦 Account\n📈 Market\n🃏 Cards\n🛒 Shop\n💵 Savings\npays 2.5% a season, never loses\n\nBoring, safe, and better than leaving it in the account doing nothing.\n\nSave 25%\nSave half\nSave it all\nTake out half\nTake it all out\n📄 Statement\nlast 12 only\n\nNothing yet. Save something or buy something.\n\nOlder lines drop off so your save does not grow forever.\n\nMade on investments\n$0k / $0k lost",
+   "backOk": true,
+   "scroll": [
+    40,
+    40,
+    40
+   ],
+   "focus": "Skip to main content DOUKNOWBALL Back Tr"
+  },
+  {
+   "tag": "s1",
+   "word": "Career Log",
+   "shot": "nhl390-27-tile-careerlog-s1.png",
+   "text": "Back to career\nCareer Log\n\nPick a year to review your saved season. No extra season is played.\n\nNo seasons on the books yet. Go play one.",
+   "backOk": true,
+   "scroll": [
+    40,
+    0,
+    144
+   ],
+   "focus": "📜 CAREER LOG No seasons yet Play one an"
+  },
+  {
+   "tag": "s1",
+   "word": "Trophy Case",
+   "shot": "nhl390-28-tile-trophycase-s1.png",
+   "text": "Hub\n🏆 Trophy Case\n\n0 Cups\n\nNothing on the shelf yet. Every award you win lands here with the year on it.\n\n🎖️ BADGES\n0 of 23\n\n🔒\nStanley Cup champion\n\nYour name goes on the Cup, and it stays there.\n\n🔒\nBack to back\n\nTwo Cups in two seasons.\n\n🔒\nThe major\n\nThe Hart, the Vezina or the Norris, whichever your position plays for.\n\n🔒\nConn Smythe\n\nThe best player in the run that won it.\n\n🔒\nCalder Trophy\n\nThe best first year player in the league.\n\n🔒\nArt Ross\n\nMost points in the league across a season.\n\n🔒\nRocket Richard\n\nMost goals in the league across a season.\n\n🔒\nFive All-Star nods\n\nPicked for the All-Star team five times.\n\n🔒\nTen All-Star nods\n\nPicked for the All-Star team ten times.\n\n🔒\nA 50 goal season\n\nFifty in one season. The single season record is 92.\n\n🔒\nA 100 point season\n\nA hundred points in one season. The record is 215.\n\n🔒\n500 goals\n\nFive hundred career goals.\n\n🔒\n1,000 points\n\nA thousand career points.\n\n🔒\n1,500 points\n\nFifteen hundred career points.\n\n🔒\nA 40 win season\n\nForty wins in the crease in one season. The record is 48, shared.\n\n🔒\nA .930 season\n\nA .930 save percentage across a season in the crease.\n\n🔒\n400 wins\n\nFour hundred career wins in the crease.\n\n🔒\nA decade in the league\n\nTen seasons played.\n\n🔒\nIron man\n\nFive seasons with the whole schedule played.\n\n🔒\nFirst million\n\nA million dollars to your name, cash, savings and holdings together.\n\n🔒\n$100M to your name\n\nA hundred million dollars, cash, savings and holdings together.\n\n🔒\nWon the rivalry\n\nYour",
+   "backOk": true,
+   "scroll": [
+    144,
+    144,
+    144
+   ],
+   "focus": "Skip to main content DOUKNOWBALL Back Tr"
+  },
+  {
+   "tag": "s1",
+   "word": "News",
+   "shot": "nhl390-29-tile-news-s1.png",
+   "text": "Hub\n📰 News Feed\n📰 Paper\n📸 SocialGram\n🪞 Rival\n\nTHIS WEEK\n\nQuiet week. Play a season and the headlines write themselves.",
+   "backOk": true,
+   "scroll": [
+    144,
+    185,
+    185
+   ],
+   "focus": "Skip to main content DOUKNOWBALL Back Tr"
+  },
+  {
+   "tag": "s1",
+   "word": "Inbox",
+   "shot": "nhl390-30-tile-inbox-s1.png",
+   "text": "Hub\n📱 Inbox\n\nNo texts yet. Play a season and your phone will buzz.",
+   "backOk": true,
+   "scroll": [
+    185,
+    185,
+    185
+   ],
+   "focus": "Skip to main content DOUKNOWBALL Back Tr"
+  },
+  {
+   "tag": "s2",
+   "word": "Career Log",
+   "shot": "nhl390-36-tile-careerlog-s2.png",
+   "text": "Back to career\nCareer Log\n\nPick a year to review your saved season. No extra season is played.\n\nNo seasons on the books yet. Go play one.",
+   "backOk": true,
+   "scroll": [
+    185,
+    185,
+    927
+   ],
+   "focus": "📜 CAREER LOG No seasons yet Play one an"
+  },
+  {
+   "tag": "s2",
+   "word": "News",
+   "shot": "nhl390-37-tile-news-s2.png",
+   "text": "Hub\n📰 News Feed\n📰 Paper\n📸 SocialGram\n🪞 Rival\n\nTHIS WEEK\n\nPractice: Rough day. No gains this time.",
+   "backOk": true,
+   "scroll": [
+    927,
+    185,
+    185
+   ],
+   "focus": "Skip to main content DOUKNOWBALL Back Tr"
+  },
+  {
+   "tag": "s2",
+   "word": "Inbox",
+   "shot": "nhl390-38-tile-inbox-s2.png",
+   "text": "Hub\n📱 Inbox\n\nNo texts yet. Play a season and your phone will buzz.",
+   "backOk": true,
+   "scroll": [
+    185,
+    185,
+    185
+   ],
+   "focus": "Skip to main content DOUKNOWBALL Back Tr"
+  }
+ ],
+ "centre": [],
+ "stuck": [],
+ "notes": [],
+ "shots": [
+  "nhl390-01-first-visit.png",
+  "nhl390-02-create.png",
+  "nhl390-03-create-filled.png",
+  "nhl390-04-prospect-help.png",
+  "nhl390-05-prospect-routes.png",
+  "nhl390-06-prospect-season1.png",
+  "nhl390-07-prospect-choice.png",
+  "nhl390-08-prospect-season2.png",
+  "nhl390-09-prospect-showcase.png",
+  "nhl390-10-prospect-draftday.png",
+  "nhl390-11-draft-night-1.png",
+  "nhl390-12-draft-night-2.png",
+  "nhl390-13-draft-night-end.png",
+  "nhl390-14-hub-draft.png",
+  "nhl390-15-hub-draft-full.png",
+  "nhl390-16-tile-myplayer-s0.png",
+  "nhl390-17-tile-thebank-s0.png",
+  "nhl390-18-tile-careerlog-s0.png",
+  "nhl390-19-tile-trophycase-s0.png",
+  "nhl390-20-tile-news-s0.png",
+  "nhl390-21-tile-inbox-s0.png",
+  "nhl390-22-hub-s1.png",
+  "nhl390-23-hub-reloaded.png",
+  "nhl390-24-tile-myplayer-s1.png",
+  "nhl390-25-tile-thebank-s1.png",
+  "nhl390-26-bank-shop.png",
+  "nhl390-27-tile-careerlog-s1.png",
+  "nhl390-28-tile-trophycase-s1.png",
+  "nhl390-29-tile-news-s1.png",
+  "nhl390-30-tile-inbox-s1.png",
+  "nhl390-31-practice-menu.png",
+  "nhl390-32-practice-drill.png",
+  "nhl390-33-practice-result.png",
+  "nhl390-34-hub-after-practice.png",
+  "nhl390-35-hub-s2.png",
+  "nhl390-36-tile-careerlog-s2.png",
+  "nhl390-37-tile-news-s2.png",
+  "nhl390-38-tile-inbox-s2.png",
+  "nhl390-39-final.png"
+ ],
+ "draft": {
+  "routes": [
+   "2 seasons Major junior Long season, long bus rides, scouts in every rink. Enter the draft at 18. Start at age 16 · Draft",
+   "2 seasons US junior, then college Two seasons of US junior, enter the draft at 18, then take your college place. Start a",
+   "2 seasons Europe Two seasons in a European junior league, enter the draft at 18, then develop at home. Start at age 16 ·"
+  ],
+  "route": "2 seasons Major junior Long season, long bus rides, scouts in every rink. Enter the draft at 18. Start at age 16 · Draft",
+  "seasonShots": 2,
+  "choices": [
+   "A big stage -> 0/2",
+   "Playing through it -> 1/2"
+  ],
+  "showcase": "Play it safe Stay within yourself. Grade A +5, B +2, C -1, D -3",
+  "range": "The scouts have you between pick 48 and pick 79 of 224.",
+  "nightSecs": 6,
+  "skipSeen": 0,
+  "result": "Your progress saves after every choice\nPick your path\nEarn your place\n3\nDraft day\n\nNHL Road to the Draft\n\nThis is your moment.\n\nNew Jersey Devils\n\nMaximilian Okonkwo-Smith\nC · Age 19\nRating\n79\nPotential\n91\nHealth\n100\nDraft stock\n61/100\nThis is your moment.\nPro agility: grade B. Draft stock +2, now 61.\n\n2026 DRAFT\n\nThe scouts had you between pick 48 and pick 79 of 224.\n\n1\nAnaheim Ducks\nRound 1\n2\nLos Angeles Kings\nRound 1\n3\nWashington Capitals\nRound 1\nPicks 4 to 59 come off the board, round 1 into round 2.\n60\nPhiladelphia Flyers\nRound 2\n61\nSeattle Kraken\nRound 2\n62\nDetroit Red Wings\nRound 2\nPick 63: New Jersey Devils\nYour name is called. Round 2, pick 31.\n\nRound 2, pick 31, 63 overall. New Jersey Devils take you.\n\nStart your career\n2026 DRAFT\nRound 2, pick 31 (63 overall)\n\nNew Jersey Devils hold the pick, and they take you.\n\nDevelopment seasons\nAge 18, Major junior\nG/GP 0.48, A/GP 0.55, PTS/GP 1.03\nYour scout file\n2 seasons"
+ },
+ "reload": [
+  {
+   "before": {
+    "chips": [
+     "Maximilian Okonkwo-Smith · C",
+     "New Jersey Devils",
+     "2027 · age 19",
+     "OVR 79",
+     "$0.9M x3",
+     "🪑 Fourth line"
+    ],
+    "play": "Play the 2027 season",
+    "so": "Career so far: 0 Cups · 0 Harts · 0 All-Star · 0 career points",
+    "last": null,
+    "tiles": [
+     "📊 MY PLAYER OVR 79 The fans down at 32",
+     "💰 THE BANK $0.5M $0.9M a year, 3 years left",
+     "📜 CAREER LOG No seasons yet Play one and it goes on the books",
+     "🏆 TROPHY CASE Empty Nothing in it. Go and win something",
+     "📰 NEWS 3 headlines With pick 63, the New Jersey Devils select Maximilian Okonkwo-Smith.",
+     "📱 INBOX All caught up Texts show up between seasons"
+    ]
+   },
+   "after": {
+    "chips": [
+     "Maximilian Okonkwo-Smith · C",
+     "New Jersey Devils",
+     "2027 · age 19",
+     "OVR 79",
+     "$0.9M x3",
+     "🪑 Fourth line",
+     "Play Now"
+    ],
+    "play": "Play the 2027 season",
+    "so": "Career so far: 0 Cups · 0 Harts · 0 All-Star · 0 career points",
+    "last": null,
+    "tiles": [
+     "📊 MY PLAYER OVR 79 The fans down at 32",
+     "💰 THE BANK $0.5M $0.9M a year, 3 years left",
+     "📜 CAREER LOG No seasons yet Play one and it goes on the books",
+     "🏆 TROPHY CASE Empty Nothing in it. Go and win something",
+     "📰 NEWS Quiet week Nobody is writing about you yet",
+     "📱 INBOX All caught up Texts show up between seasons"
+    ]
+   },
+   "save": {
+    "phase": "season",
+    "seasons": 0,
+    "year": 2027,
+    "age": 19,
+    "ovr": 79,
+    "team": "NJD",
+    "salary": 0.9,
+    "cy": 3,
+    "last": null
+   }
+  }
+ ],
+ "inbox": [
+  {
+   "rows": 0
+  },
+  {
+   "rows": 0
+  },
+  {
+   "rows": 0
+  }
+ ],
+ "practice": [
+  {
+   "score": "25",
+   "secs": 42
+  },
+  {
+   "banked": true,
+   "ovr": [
+    79,
+    79
+   ]
+  }
+ ],
+ "firstVisit": {
+  "popover": false,
+  "dialog": [
+   "How to play\nThe steps\nCreate your player"
+  ],
+  "buttons": [
+   "🏒 2026 The league as it is today. Full money, all 32 franchises.",
+   "⏪ 2006-07 throwback The 30 team league of 2006-07: the Thrashers in At",
+   "C",
+   "LW",
+   "RW",
+   "D",
+   "G",
+   "🎲 Surprise me",
+   "🧑 Skin",
+   "💇 Hair",
+   "🧔 Beard",
+   "⛸️ Skates",
+   "💍 Extras",
+   "🎉 Celebration",
+   "Porcelain",
+   "Ivory",
+   "Fair",
+   "Sand",
+   "Olive",
+   "Honey"
+  ],
+  "helpText": "How to play\nThe steps\nCreate your player: name, one of 5 positions (C, LW, RW, D, G), and one of 17 archetypes, from Generational Talent to The Agitator to The Workhorse in net.\nPick your league: today's NHL, or the 2006-07 throwback with the Thrashers in Atlanta and the Coyotes in Phoenix, before Vegas or Seattle existed.\nBuild your look, then spend the money in 7 aisles including a shady one that only appears once you have something to hide.\nOpen the Bank between seasons. Savings pays 2.5% a season and never loses, five things you can put money into each have a price that moves every season whether you look or not (a fund, flats back home, two shares and a coin that halves as often as it doubles), the statement keeps your last 12 moves, and the card school at the back of the plane is one sitting a season on odds that are printed before you sit in.\nRead the News box. The paper writes up every season in your own position's stat, the SocialGram shows followers read off your fanbase with three fan comments under the latest post, and the rival's card keeps the head to head against the player drafted the same year as you.\nCollect badges in the Trophy Case: 23 of them, from a first Cup and the Calder to 500 goals, a 50 goal season and $100M to your name, each lit the moment the facts of your career say so.\nAnswer your phone. Texts from your agent, the head coach, the GM, a teammate or your mom land on the beats of the hockey year: draft day, camp, the World Juniors while you are young enough to go, the All-Star break, the trade deadline, the playoffs if you get there, the offseason, and the summer before the last year of your deal. Every text says which beat and which year it came in on, and how you answer moves your karma, morale, fanbase or bank.\nSome seasons your rival forces a decision instead of making a headline: a cheap shot after the whistle you can settle or shrug off, a debate show offering real money, a youth clinic his foundation wants you to co-host, an All-Star vote his club is buying ads for. Every button prints exactly what it moves, and a gamble prints its odds.\nGet drafted by a real club; your slot reflects your starting ability.\nCheck the lineup. Top ten skaters step straight in; everyone else fights the incumbent in camp every fall. Goalies always apprentice first, because no rookie walks into a number one crease.\nPlay each season: skaters post goals, assists and points, goalies post wins and save percentage.\nFace up to three offseason decisions each year, one card at a time: training, trade requests, media noise. Only the first card can move your rating, and a card you just saw rests for a while (press moments follow your season, so those can come right back).\nAfter a normal offseason choice, the result shows the actual changes. Expand it for any extra changes, then Continue opens the next card, or takes you back to your career after the last one, without applying the choice again.\nOpen Career Log and pick a year to review its sav",
+  "closedByEscape": true
+ },
+ "create": [
+  "*🏒 2026 The league as it is today. Full money, all 32 franch",
+  "⏪ 2006-07 throwback The 30 team league of 2006-07: the Thras",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "*Generational Talent The hype since you were 14",
+  "Two-Way Center Selke ceilings, coach in skates",
+  "Power Center Net-front nightmare",
+  "Faceoff Artist Wins the draw, kills the penalty, plays to 40"
+ ],
+ "wbw": {
+  "visible": false,
+  "held": null
+ },
+ "final": {
+  "save": {
+   "phase": "season",
+   "seasons": 0,
+   "year": 2027,
+   "age": 19,
+   "ovr": 79,
+   "team": "NJD",
+   "salary": 0.9,
+   "cy": 3,
+   "last": null
+  },
+  "chips": {
+   "chips": [
+    "Maximilian Okonkwo-Smith · C",
+    "New Jersey Devils",
+    "2027 · age 19",
+    "OVR 79",
+    "$0.9M x3",
+    "🪑 Fourth line"
+   ],
+   "play": "Play the 2027 season",
+   "so": "Career so far: 0 Cups · 0 Harts · 0 All-Star · 0 career points",
+   "last": null,
+   "tiles": [
+    "📊 MY PLAYER OVR 79 The fans down at 32",
+    "💰 THE BANK $0.5M $0.9M a year, 3 years left",
+    "📜 CAREER LOG No seasons yet Play one and it goes on the books",
+    "🏆 TROPHY CASE Empty Nothing in it. Go and win something",
+    "📰 NEWS 1 headline Practice: Rough day. No gains this time.",
+    "📱 INBOX All caught up Texts show up between seasons"
+   ]
+  },
+  "secs": 166
+ }
+}
