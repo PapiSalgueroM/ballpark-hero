@@ -1,0 +1,12 @@
+vitest exit=0 9s |    Duration  8.03s (transform 3.34s, setup 513ms, collect 9.77s, tests 5.29s, environment 3.47s, prepare 1.09s)
+fence-nofence exit=1 2s | CONTROL FIRED: SAVE_FENCE_CONTROL=nofence fired 1 times and section tabs went red with 11 findings
+fence-rawwrite exit=1 2s | CONTROL FIRED: SAVE_FENCE_CONTROL=rawwrite fired 1 times and section source went red with 1 findings
+fleet-loaddraw exit=1 13s | CONTROL FIRED: SAVE_FENCE_CONTROL=loaddraw fired 1 times and section fleet went red with 1 findings
+fleet-repairall exit=1 13s | CONTROL FIRED: SAVE_FENCE_CONTROL=repairall fired 1 times and section fleet went red with 5 findings
+simStorageWrites exit=0 3s | simStorageWrites: all green (owed: 12)
+fleet exit=0 57s | simSaveFence: all green (tabs, source, fleet)
+tsc exit=0 63s | 
+simClubManagerSlots exit=0 41s | simClubManagerSlots: all sections green
+simManagerAppealIsolation exit=0 33s | Equivalent appeal outcomes must agree: passed for 24 original pairs and 3 separate generated-position pairs.
+simClubManagerSave exit=0 8s | simClubManagerSave: all sections green
+simManagerHotSeat exit=0 44s | simManagerHotSeat: green. The target is the club's, reading the room pays, outcomes replay, a Club Manager save keeps its registrations and a survivor carries on in Club 
