@@ -22,6 +22,22 @@
       naming a league, except two allowlisted shapes, each counted exactly.
       Control CM_COPY_CONTROL=article: leagueDemand's title line back to
       `Win the ${league.name}`.
+   2. DRAMA (cm p4). Every DRAMA_POOL entry with every ordered pair of
+      distinct descriptors through dramaText: a capital at the start and
+      after every ". ", "? " and "! ", nothing changed but capitals, and the
+      engine builds its drama line with dramaText (code, comments stripped).
+      Control drama: dramaText's sentence rule back to the first letter only
+      (the failure names the protein cereal entry).
+   3. THE BREAK NOTE AND THE CALENDAR LINE (cm m1, the copy half). The note
+      at week 0 and after it, with starters and without; the calendar line
+      played and not, confirmed and approximate. None says "do not stop" or
+      what real leagues do; the in season note keeps its prefix and names
+      this calendar's rule; the preseason note keeps "from preseason".
+      Control intl: the in season clause back to the old words.
+   4. THE STAFF APPROACH (cm p5). A level 9 desk ticked week by week until an
+      approach, at 2, 1 and 0 matches left: the line names the club, the
+      man, his post and the weeks off the approach, counts offers, and never
+      says "N matches left this season". Control staff: the line back.
 
    Run: node scripts/simCmCopy.mjs [--section=1,2,3,4,5]
         CM_COPY_ROOT=<another tree> node scripts/simCmCopy.mjs   (the base: must be red)
@@ -39,7 +55,7 @@ const ROOT = path.resolve(process.env.CM_COPY_ROOT || SCRIPT_ROOT);
 const FWD = ROOT.split(String.fromCharCode(92)).join('/');
 const CONTROL = process.env.CM_COPY_CONTROL || '';
 const secArg = process.argv.slice(2).find(a => a.startsWith('--section='));
-const SECTIONS = secArg ? secArg.slice(10).split(',').map(Number) : [1];
+const SECTIONS = secArg ? secArg.slice(10).split(',').map(Number) : [1, 2, 3, 4];
 const cannot = m => { console.error(`simCmCopy: could not run: ${m}`); process.exit(2); };
 
 /* Each control rewrites one line of one file as the bundler (and the source
@@ -49,6 +65,21 @@ const CONTROLS = {
     file: 'src/lib/clubManager.ts', section: 1,
     fixed: '\n    return { target: 1, label: `Win ${toLeague(league.name)}` };',
     broken: '\n    return { target: 1, label: `Win the ${league.name}` };',
+  },
+  drama: {
+    file: 'src/lib/clubManager.ts', section: 2,
+    fixed: 'return text.replace(/(^|[.?!] )([a-z])/g,',
+    broken: 'return text.replace(/(^)([a-z])/g,',
+  },
+  intl: {
+    file: 'src/lib/clubManagerInternationals.ts', section: 3,
+    fixed: "'and the calendar here keeps your fixtures going through it, so they went straight after your last game'",
+    broken: "'and your fixtures do not stop for it, so they went straight after your last game'",
+  },
+  staff: {
+    file: 'src/lib/clubManagerStaff.ts', section: 4,
+    fixed: "? `${lead} Match their offer on the Staff desk within ${inWeeks} or he goes. You can match ${n} more offer${n === 1 ? '' : 's'} this season.`",
+    broken: "? `${STAFF_POST_INFO[post].emoji} ${club} have come in for ${person.name}. Match them or lose him: ${s.matchesLeft} match${s.matchesLeft === 1 ? '' : 'es'} left this season.`",
   },
 };
 const ctl = CONTROL ? CONTROLS[CONTROL] : null;
@@ -94,9 +125,22 @@ async function bundle(name, lines) {
       name: 'cm-copy-control',
       setup(b) {
         b.onLoad({ filter: /\.tsx?$/ }, a => {
-          if (!ctl || path.resolve(a.path) !== path.resolve(ROOT, ctl.file)) return undefined;
-          reached = true;
-          return { contents: readTree(ctl.file), loader: a.path.endsWith('x') ? 'tsx' : 'ts', resolveDir: path.dirname(a.path) };
+          const rel = path.relative(ROOT, a.path).split(path.sep).join('/');
+          const isEngine = rel === 'src/lib/clubManager.ts';
+          const isCtl = !!ctl && rel === ctl.file;
+          if (!isEngine && !isCtl) return undefined;
+          if (isCtl) reached = true;
+          let contents = readTree(rel);
+          /* generatePlayerMessage is private on every tree, and DRAMA_POOL was
+             before this round: both are exported in memory, so the base and
+             the head are asked the same question. */
+          if (isEngine) {
+            const extra = [];
+            if (/\nfunction generatePlayerMessage\(/.test(contents)) extra.push('generatePlayerMessage as __generatePlayerMessage');
+            if (/\nconst DRAMA_POOL\b/.test(contents)) extra.push('DRAMA_POOL as __DRAMA_POOL');
+            if (extra.length) contents += `\nexport { ${extra.join(', ')} };\n`;
+          }
+          return { contents, loader: a.path.endsWith('x') ? 'tsx' : 'ts', resolveDir: path.dirname(a.path) };
         });
       },
     }],
@@ -106,6 +150,8 @@ async function bundle(name, lines) {
 const engine = await bundle('engine', [
   `export * as cm from '${FWD}/src/lib/clubManager.ts';`,
   `export * as eras from '${FWD}/src/lib/clubManagerEras.ts';`,
+  `export * as staff from '${FWD}/src/lib/clubManagerStaff.ts';`,
+  `export * as intl from '${FWD}/src/lib/clubManagerInternationals.ts';`,
 ]);
 const { cm } = engine;
 if (ctl && ctl.file.startsWith('src/lib/') && !reached) cannot(`control ${CONTROL}: the rewritten ${ctl.file} never reached the bundle`);
@@ -200,7 +246,139 @@ async function sectionArticles() {
 }
 
 /* ------------------------------------------------------------------ */
-const RUN = { 1: sectionArticles };
+/* Every descriptor squadDescriptor and otherDescriptor (clubManager.ts, beside
+   DRAMA_POOL) can return. Written out here so a new one is a decision. */
+const DESCRIPTORS = ['one of the academy lads', 'your star man', 'one of your keepers', 'one of your defenders',
+  'one of your midfielders', 'one of your forwards', 'one of your senior lads', 'another of the senior lads'];
+async function sectionDrama() {
+  console.log('2) drama: every sentence of a drama line opens on a capital');
+  const pool = cm.DRAMA_POOL ?? cm.__DRAMA_POOL;
+  if (!Array.isArray(pool) || !pool.length) cannot('clubManager.ts holds no DRAMA_POOL to read');
+  /* The engine's own output first: generatePlayerMessage called on a seeded
+     squad until every entry has landed, each drama line read as printed. */
+  const gen = cm.__generatePlayerMessage;
+  if (typeof gen !== 'function') cannot('clubManager.ts holds no generatePlayerMessage');
+  const asRe = t => new RegExp(`^${t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&').replace('\\{P\\}', '(.+)').replace('\\{Q\\}', '(.+)')}$`, 'i');
+  const shapes = pool.map(e => asRe(e.text));
+  const seen = pool.map(() => 0);
+  Math.random = seeded(hashKey('cm-copy|drama'));
+  const st = cm.startCareer('Liverpool', 'now');
+  const xi = st.squad.slice(0, 11);
+  let calls = 0;
+  let dramas = 0;
+  for (; calls < 20000 && seen.some(n => n === 0); calls++) {
+    st.inbox = [];
+    gen(st, xi, calls % 2 === 0, 1);
+    for (const m of st.inbox) {
+      if (m.kind !== 'drama') continue;
+      dramas += 1;
+      const k = shapes.findIndex(r => r.test(m.text));
+      if (k < 0) { fail(`a drama line matches no entry: "${m.text}"`); continue; }
+      seen[k] += 1;
+      const lower = [...m.text.matchAll(/(^|[.?!] )([a-z])/g)];
+      if (lower.length && seen[k] === 1) fail(`the engine printed "${m.text}": a sentence opens in lower case`);
+    }
+  }
+  Math.random = REAL_RANDOM;
+  const missing = pool.filter((e, i) => !seen[i]).map(e => e.text.slice(0, 40));
+  if (missing.length) fail(`${missing.length} entries never landed in ${calls} calls: ${missing.join(' | ')}`);
+  console.log(`   the engine: ${calls} calls, ${dramas} drama lines, every one of ${pool.length} entries landed`);
+  if (typeof cm.dramaText !== 'function') { fail('clubManager.ts has no dramaText: the drama line opens only its first letter (cm p4)'); return; }
+  let checked = 0;
+  for (const entry of pool) {
+    for (const d1 of DESCRIPTORS) {
+      for (const d2 of DESCRIPTORS) {
+        if (d1 === d2) continue;
+        const got = cm.dramaText(entry.text, d1, d2);
+        const plain = entry.text.replace('{P}', d1).replace('{Q}', d2);
+        checked += 1;
+        if (got.toLowerCase() !== plain.toLowerCase()) { fail(`"${entry.text.slice(0, 50)}": dramaText changed more than capitals ("${got.slice(0, 80)}")`); continue; }
+        const lower = [...got.matchAll(/(^|[.?!] )([a-z])/g)];
+        if (lower.length) fail(`"${entry.text.slice(0, 60)}" with ${d1} / ${d2}: a sentence opens in lower case ("...${got.slice(Math.max(0, lower[0].index - 20), lower[0].index + 30)}...")`);
+      }
+    }
+  }
+  /* And the engine builds its drama line through it (the code, comments stripped). */
+  const code = (await transform(readTree('src/lib/clubManager.ts'), { loader: 'ts' })).code;
+  if (!/text: dramaText\(drama\.text, d1, otherDescriptor\(p2, d1\)\)/.test(code)) fail('generatePlayerMessage does not build its drama text with dramaText');
+  console.log(`   ${pool.length} entries x ${DESCRIPTORS.length * (DESCRIPTORS.length - 1)} ordered pairs: ${checked} lines read`);
+}
+
+async function sectionIntl() {
+  console.log('3) the break note and the calendar line: this calendar\'s rule, never football\'s');
+  const { intl } = engine;
+  Math.random = seeded(hashKey('cm-copy|intl'));
+  const s = cm.startCareer('Liverpool', 'now');
+  Math.random = REAL_RANDOM;
+  const called = intl.callUpsFor(s, { id: '2026-nov', matches: 2 });
+  if (called.length < 2) { fail(`Liverpool have ${called.length} men called up, too few to read the note`); return; }
+  const brk = { windowId: '2026-nov', label: '9 to 17 Nov', backWeek: 7, backOpponent: 'Everton' };
+  const notes = [];
+  for (const atWeek of [0, 6]) {
+    for (const starts of [true, false]) {
+      const m = intl.breakMessage({ ...brk, atWeek, called: called.map(c => ({ ...c, starts, injuredWeeks: 0 })) });
+      notes.push([atWeek, starts, m?.text ?? '']);
+    }
+  }
+  const w = intl.intlWindowsFor(2026)[0];
+  const lines = [];
+  for (const done of [false, true]) for (const partial of [false, true]) lines.push(intl.intlMarkLine({ window: w, key: 0, label: '21 Sep to 6 Oct', partial, done }));
+  const BANNED = [/do not stop/i, /does not stop/i, /real league/i, /top leagues/i, /in real football/i, /in real life/i];
+  for (const [atWeek, starts, text] of notes) {
+    const tag = `the note at week ${atWeek}${starts ? ' with starters' : ' without'}`;
+    if (!text.startsWith('International break: the window runs 9 to 17 Nov, ')) fail(`${tag} lost its prefix: "${text.slice(0, 70)}"`);
+    if (atWeek === 0 && !text.includes('so they went from preseason')) fail(`${tag} lost "from preseason"`);
+    if (atWeek > 0 && !text.includes('and the calendar here keeps your fixtures going through it, so they went straight after your last game')) fail(`${tag} does not name this calendar's rule: "${text.slice(0, 160)}"`);
+    for (const b of BANNED) if (b.test(text)) fail(`${tag} says ${b}: "${text.slice(0, 160)}"`);
+  }
+  for (const line of lines) {
+    for (const b of BANNED) if (b.test(line)) fail(`the calendar line says ${b}: "${line}"`);
+  }
+  const open = lines.filter(l => !l.includes('Played.'));
+  for (const l of open) if (!l.includes('This calendar plays on through it')) fail(`the calendar line does not name this calendar's rule: "${l}"`);
+  console.log(`   ${notes.length} notes and ${lines.length} calendar lines read; e.g. "${open[0]}"`);
+}
+
+async function sectionStaff() {
+  console.log('4) the staff approach: offers counted, the weeks given');
+  const { staff } = engine;
+  const POSTS = ['attack', 'defence', 'goalkeeping', 'scout'];
+  for (const n of [2, 1, 0]) {
+    Math.random = seeded(hashKey('cm-copy|staff'));
+    const career = cm.startCareer('Liverpool', 'now');
+    Math.random = REAL_RANDOM;
+    const desk = staff.ensureStaff(career);
+    for (const post of POSTS) if (desk[post]) desk[post] = { ...desk[post], level: 9, potential: 10, wage: staff.staffWage(9, false) };
+    desk.matchesLeft = n;
+    let line = null;
+    for (let season = 0; season < 2 && !line; season++) {
+      career.season = (career.season ?? 0) + season;
+      for (let week = 1; week <= 46 && !line; week++) {
+        career.week = week;
+        const before = career.aiHeadlines[0];
+        staff.tickStaff(career);
+        const d = staff.staffOf(career);
+        if (d.poach && career.aiHeadlines[0] !== before) {
+          const p = d[d.poach.postId];
+          line = { text: career.aiHeadlines[0], club: d.poach.club, name: p.name, post: staff.STAFF_POST_INFO[d.poach.postId], weeks: d.poach.weeksLeft, left: d.matchesLeft };
+        }
+      }
+    }
+    if (!line) { fail(`no approach for a level 9 desk in two seasons (matches left ${n})`); continue; }
+    const w = `${line.weeks} week${line.weeks === 1 ? '' : 's'}`;
+    const lead = `${line.post.emoji} ${line.club} have come in for ${line.name}, your ${line.post.label.toLowerCase()}.`;
+    const want = n > 0
+      ? `${lead} Match their offer on the Staff desk within ${w} or he goes. You can match ${n} more offer${n === 1 ? '' : 's'} this season.`
+      : `${lead} You have matched all the offers you can this season, so he goes in ${w} unless you let him go sooner.`;
+    if (line.left !== n) fail(`the desk holds ${line.left} matches after the tick, where ${n} were set`);
+    if (/\d+ match(es)? left this season/.test(line.text)) fail(`with ${n} left the line still counts matches: "${line.text}"`);
+    if (line.text !== want) fail(`with ${n} left the line reads\n      "${line.text}"\n    want\n      "${want}"`);
+    else console.log(`   ${n} left: "${line.text}"`);
+  }
+}
+
+/* ------------------------------------------------------------------ */
+const RUN = { 1: sectionArticles, 2: sectionDrama, 3: sectionIntl, 4: sectionStaff };
 for (const n of SECTIONS) {
   if (!RUN[n]) cannot(`no section ${n}`);
   await RUN[n]();
@@ -212,5 +390,5 @@ if (ctl) {
   process.exit(3);
 }
 if (failures) { console.log(`simCmCopy: RED on ${where}, ${failures} failures`); process.exit(1); }
-console.log(`simCmCopy: green on ${where}. Sections ${SECTIONS.join(', ')}: the board, the news and the screens say the league the way people say it.`);
+console.log(`simCmCopy: green on ${where}. Sections ${SECTIONS.join(', ')}: Club Manager says what it means.`);
 process.exit(0);

@@ -9404,7 +9404,18 @@ function otherDescriptor(p: CMPlayer, taken: string): string {
   return p.isYouth ? 'one of the academy lads' : 'another of the senior lads';
 }
 
-const DRAMA_POOL: { text: string; options: { label: string; effect: MessageEffect }[] }[] = [
+/**
+ * Round 1326: a drama line with its two descriptors filled in, every sentence
+ * opening on a capital ("...in the players lounge. One of your defenders
+ * reckons..."): the first letter and any lower case letter after a full stop,
+ * a question mark or an exclamation mark and a space. Pure; draws nothing.
+ */
+export function dramaText(template: string, d1: string, d2: string): string {
+  const text = template.replace('{P}', d1).replace('{Q}', d2);
+  return text.replace(/(^|[.?!] )([a-z])/g, (_m, lead: string, c: string) => lead + c.toUpperCase());
+}
+
+export const DRAMA_POOL: { text: string; options: { label: string; effect: MessageEffect }[] }[] = [
   { text: '{P} got caught selling his match worn boots on eBay. Buy it now, no returns.', options: [{ label: 'Fine him', effect: 'fine' }, { label: 'Buy a pair yourself', effect: 'laugh' }] },
   { text: '{P} showed up to training in a full chrome wrap on his car with his own face printed on the hood.', options: [{ label: 'Fine him for the parking spot he took', effect: 'fine' }, { label: 'Respect it, honestly', effect: 'laugh' }] },
   { text: '{P} has started a podcast. Episode one is called Why My Manager Does Not Understand Football.', options: [{ label: 'Make him listen to it in front of everyone', effect: 'fine' }, { label: 'Go on the podcast', effect: 'support' }] },
@@ -9588,14 +9599,11 @@ function generatePlayerMessage(state: CareerState, xi: CMPlayer[], won: boolean,
      on somebody, but it is metadata now: InboxCard renders text and nothing
      else, so no roster name reaches the screen through this branch. */
   const d1 = squadDescriptor(p1);
-  const text = drama.text
-    .replace('{P}', d1)
-    .replace('{Q}', otherDescriptor(p2, d1));
   pushMessage(state, {
     playerName: p1.name,
     playerId: p1.id,
     kind: 'drama',
-    text: text.charAt(0).toUpperCase() + text.slice(1),
+    text: dramaText(drama.text, d1, otherDescriptor(p2, d1)),
     options: drama.options,
   });
 }
