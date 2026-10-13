@@ -72,8 +72,9 @@
  *     of a visit (a week, then a playoff round), the first button's top is
  *     on the screen and so is the whole box, at 1280 by 800 and 1280 by 900,
  *     and (the fix pass) the back chip under the box when his game is on it;
- *     under sm the numbers are printed. At 1280 a window resized across sm
- *     and back scrolls nothing;
+ *     under sm the numbers are printed, except the back chip (above the box
+ *     under sm since the closing check), asserted on the screen at 390 by
+ *     844. At 1280 a window resized across sm and back scrolls nothing;
  *  13 a desk off save refuses a trade in the bracket with the playoffs' line;
  *  14 the title run (A): the bracket says he has the bye, a round a press,
  *     his game on the box each time he plays and the bracket when he does
@@ -94,6 +95,15 @@
  *     time the press card and the owner card read as before the press, no
  *     answer of the card is open and no recap is drawn; at full time the
  *     recap comes with the room the result called (the podium or the scrum).
+ *  19 (the closing check) "Watch Week 17" on E (A with a title mandate and
+ *     trust 60, the review's own save: the owner card a line taller, so the
+ *     feed box the press writes above the week box leaves less than the
+ *     hook's 160 px of the box readable at 390 and the reveal fires): at full
+ *     time his result, the next press and the back chip are on the screen;
+ *     then the back chip and his bye round: the next press and the box's top
+ *     on the screen. Asserted at 390 by 844 (ruling 2b), printed at 320 by
+ *     640 and at 1280 (point 12 holds the reveal from sm up). Its proof is
+ *     the board before the closing check built and walked: red at 19.
  * Point 8 covers the bracket's faces too (its tie list and week chips are
  * the face's named scrollers).
  *
@@ -679,7 +689,14 @@ function titleGameSaves() {
   }
   return out;
 }
-const FIXTURES = { A: week17Save(), B: divisionalLossSave(), C: bracketOpenSave(), D: titleGameSaves() };
+/** E (the closing check): A with a title mandate and trust 60, the review's own save (its r1309RunWalk.mjs): the owner
+ *  card a line taller than A's, so at 390 the feed box the press writes above the week box tips the reveal. */
+function week17TitleSave() {
+  const s = JSON.parse(week17Save());
+  const mandate = { tier: 'title', text: 'Win the Super Bowl. Anything less is a failed season upstairs.', winFloor: 0, reqLevel: 4, season: s.league.season };
+  return JSON.stringify({ ...s, mandate, trust: 60 });
+}
+const FIXTURES = { A: week17Save(), B: divisionalLossSave(), C: bracketOpenSave(), D: titleGameSaves(), E: week17TitleSave() };
 
 /* in the page: the bracket's parts, the press row and where his result is */
 const playoffOf = () => {
@@ -732,6 +749,8 @@ function revealSay(size, p, what) {
   /* the fix pass (the review's minor 4): with his game on the box, the back chip under it is on the screen too */
   const chip = `${size.w}x${size.h}, ${what}: the back chip from ${p.back?.top} to ${p.back?.bottom} of ${size.h}`;
   if (size.w >= 640 && p.back) say(12, p.back.top >= 0 && p.back.bottom <= size.h, `${chip}: on the screen with the box`);
+  /* the closing check (its finding 2): under sm the chip's row is above the box, so at 390 by 844 it is on the screen */
+  else if (size.w === 390 && p.back) say(12, p.back.top >= 0 && p.back.bottom <= size.h, `${chip}: on the screen with the buttons`);
   else if (p.back) note(chip);
 }
 /* correction 27: after a playoff press, his result and the next press button inside the screen with no scroll by him;
@@ -906,6 +925,45 @@ async function titleWatchRun(page, size, plant) {
   await shot(page, size, '18-title-watched');
 }
 
+/* 19 (the closing check, ruling 2b): "Watch Week 17" on E, the first press of a visit, watched to full time at 3x; then
+   the back chip and his bye round. Asserted at 390 by 844, printed at the other sizes. */
+const onScreen = (r, h) => !!r && r.top >= 0 && r.bottom <= h;
+async function week17WatchRun(page, size) {
+  await loadSave(page, FIXTURES.E);
+  const p0 = await po(page);
+  await pressAt(page, '[data-watch-week]');
+  let samples = 0;
+  const t0 = Date.now();
+  for (;;) {
+    const st = await state(page);
+    if (st.face === 'result') break;
+    if (Date.now() - t0 > 45000) break;
+    if (st.face === 'watch') {
+      samples += 1;
+      if (samples === 2) await page.locator('[data-gameday-speed="3x"]').click();
+    }
+    await page.waitForTimeout(200);
+  }
+  await page.waitForTimeout(900);
+  const p = await po(page);
+  const next = p.buttons[0];
+  const res = p.face === 'game' ? p.final : null;
+  const line = `${size.w}x${size.h}, "Watch Week 17" on E at full time (${samples} samples on the clock; the week box from ${p0.weekBox?.top} before the press to ${p.weekBox?.top}, the box from ${p0.box?.top} to ${p.box?.top}): his result from ${res?.top} to ${res?.bottom}, the next press from ${next?.top} to ${next?.bottom}, the back chip from ${p.back?.top} to ${p.back?.bottom}`;
+  const ok = samples >= 2 && onScreen(res, size.h) && onScreen(next, size.h) && onScreen(p.back, size.h);
+  if (size.w === 390) say(19, ok, `${line}: all on the screen`);
+  else note(line);
+  await shot(page, size, '19-w17-watched');
+  await pressAt(page, '[data-bracket-back]');
+  await page.waitForSelector('[data-gameday-box] [data-bracket]', { timeout: 20000 });
+  await pressAt(page, '[data-press="round"]');
+  const q = await po(page);
+  const qNext = q.buttons[0];
+  const qLine = `${size.w}x${size.h}, then his bye round (the box's face: ${q.face}, "${q.placeLine}"): the next press from ${qNext?.top} to ${qNext?.bottom}, the box's top at ${q.box?.top}`;
+  if (size.w === 390) say(19, q.face === 'bracket' && onScreen(qNext, size.h) && !!q.box && q.box.top >= 0 && q.box.top < size.h - MIN_LEAD, `${qLine}: the next press and the box's top on the screen`);
+  else note(qLine);
+  await shot(page, size, '19-bye');
+}
+
 /* 12's reveal at 1280 by 900 as well (the size the review measured the scroll of 0 to 778 at): the first press of a
    visit, a week (A) and then a playoff round (B, a new visit) */
 async function revealPass(browser, size) {
@@ -924,7 +982,7 @@ async function revealPass(browser, size) {
   await ctx.close();
 }
 
-/* Points 11 to 18 at one size. Plants of the 390 walk: bracketjump (14), playoffspoil (14), lostblock (15), titlespoil (18). */
+/* Points 11 to 19 at one size. Plants of the 390 walk: bracketjump (14), playoffspoil (14), lostblock (15), titlespoil (18). */
 async function playoffsWalk(browser, size) {
   console.log(`\n=== ${size.w} by ${size.h}, the playoffs ===`);
   const { ctx, page, errors } = await newPage(browser, size);
@@ -984,6 +1042,7 @@ async function playoffsWalk(browser, size) {
   await watchRun(page, size, plant);
   await reloadAndHelp(page, size, plant);
   await titleWatchRun(page, size, plant);
+  await week17WatchRun(page, size);
 
   /* 16: the old button, on the morning of Week 17, goes straight to the recap as it always did */
   await loadSave(page, FIXTURES.A);
