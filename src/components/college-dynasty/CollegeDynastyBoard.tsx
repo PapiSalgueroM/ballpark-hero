@@ -29,13 +29,16 @@ import { useRevealScroll } from '@/hooks/useRevealScroll';
    (src/lib/collegeSeatBind.ts), every word the seat's (src/lib/collegeSeat.ts),
    and every node it draws carries data-college-seat. */
 import {
-  applyCollegeClose, collegeSeatFirstPress, collegeSeatOnLoad, optInCollegeSeat, startCollegeSeat,
+  applyCollegeClose, applyCollegeMove, collegeSeatFirstPress, collegeSeatOnLoad, collegeYearOut, optInCollegeSeat, startCollegeSeat,
   type CollegeSeatBinding,
 } from '@/lib/collegeSeatBind';
-import { collegeRecapView, holdsSeat, type CollegeSeatBlock } from '@/lib/collegeSeat';
-import { SeatCard, SeatPickLine, SeatRecapLine, SeatSlot } from '@/components/college-dynasty/AthleticDirectorCard';
+import { collegeCanSitOut, collegeMarket, collegeRecapView, collegeTakeJob, holdsSeat, type CollegeSeatBlock } from '@/lib/collegeSeat';
+import {
+  SeatCard, SeatFiredRecap, SeatMarket, SeatPickLine, SeatRecapLine, SeatSeeWhoCalls, SeatSlot,
+} from '@/components/college-dynasty/AthleticDirectorCard';
 
-export type CollegePhase = 'pick' | 'season' | 'recap' | 'recruit';
+/** Round 1320: 'market' is a screen and never saved (the save stays on the recap it opened from). */
+export type CollegePhase = 'pick' | 'season' | 'recap' | 'recruit' | 'market';
 type Tab = 'team' | 'play' | 'schedule' | 'rankings' | 'standings';
 
 export interface CollegePlayer { id: string; name: string; pos: string; cls: string; ovr: number; stars: number }
@@ -227,6 +230,8 @@ export default function CollegeDynastyBoard<
      (nothing saved: a reload offers him again). */
   const [seatOpen, setSeatOpen] = useState(false);
   const [passedSeason, setPassedSeason] = useState<number | null>(null);
+  /* The market a press already acted on, so a double tap in one render takes one job or one year out. */
+  const marketActed = useRef('');
 
   useGameCompletion(sport.completionId, wonNow, (st?.myTitles ?? 0) * 100 + (st?.seasonsPlayed ?? 0) * 5);
 
@@ -272,6 +277,12 @@ export default function CollegeDynastyBoard<
       setPortal(s.portal ?? null);
       if (seatRule === 'recruit') { openRecruiting(s.st); return; }
       if (seatRule === 'season') { setPhase('season'); return; }
+      if (seatRule === 'market') {
+        const held = sport.recapOf(s);
+        if (held) setRecap(held);
+        setPhase('market');
+        return;
+      }
       /* Round 426 part three (CFB) and Round 823 (CBB): a reload on the recap
          used to map back to the season screen, and one click played the last
          round and the whole postseason a second time on a season that was
@@ -349,6 +360,29 @@ export default function CollegeDynastyBoard<
     if (!optInCollegeSeat(state, sport.seat)) return;
     setSt(state);
     persist(state, 'season', recruits, portal);
+  };
+
+  /* Round 1320: the job market. Taking a job moves him (exactly myTeam and
+     lastRivalry in the engine's state) and opens the new program's trail. The
+     market is a screen and never saved: the save stays on the recap it opened
+     from, so a reload, or an older build, finds that recap. */
+  const marketKey = (s: S) => `${s.season}:${s.seat?.career.seasonsOut ?? -1}:${s.seat?.career.stints.length ?? 0}`;
+  const takeJob = (teamId: string) => {
+    if (!st || !sport.seat || !st.seat || marketActed.current === marketKey(st)) return;
+    const state: S = JSON.parse(JSON.stringify(st));
+    const move = collegeTakeJob(state.seat!, sport.seat.view(state), teamId, 'market');
+    if (!move) return;
+    marketActed.current = marketKey(st);
+    applyCollegeMove(state, move);
+    openRecruiting(state);
+  };
+  const sitYearOut = () => {
+    if (!st || !sport.seat || marketActed.current === marketKey(st)) return;
+    const res = collegeYearOut(st, sport.seat, sport, Math.random);
+    if (!res.ok) return;
+    marketActed.current = marketKey(st);
+    setSt(res.st); setRecap(res.recap); setLastGames([]); setFeed([]); setPhase('market');
+    persist(res.st, 'recap', null, null, res.recap);
   };
 
   const sign = (r: Rc, fromPortal: boolean) => {
@@ -462,20 +496,41 @@ export default function CollegeDynastyBoard<
           {isChamp && <ConfettiBurst seed={st.season} count={34} />}
           <Crown className="cm-slam mx-auto h-10 w-10 text-gold" />
           <RecapBody st={st} my={my} recap={recap} isChamp={isChamp} label={label} signed={signed} />
-          {seatRecap && <SeatRecapLine verdict={seatRecap.verdict} trust={seatRecap.trust} hot={seatRecap.hot} />}
+          {seatRecap && (seatRecap.fired
+            ? <SeatFiredRecap verdict={seatRecap.verdict} line={collegeMarket(st.seat!, sport.seat!.view(st))?.line ?? ''} />
+            : <SeatRecapLine verdict={seatRecap.verdict} trust={seatRecap.trust} hot={seatRecap.hot} />)}
           <div className="cm-rise mt-3 flex items-center justify-center gap-3 text-sm" style={{ animationDelay: '0.9s' }}>
             <span className="rounded-full border border-border bg-background px-3 py-1.5">{sport.recapTitles} <b className="text-gold">{st.myTitles}</b></span>
             <span className="rounded-full border border-border bg-background px-3 py-1.5">Seasons <b className="text-primary">{st.seasonsPlayed}</b></span>
           </div>
           <div className="cm-rise mt-4 flex flex-col items-center gap-3 sm:flex-row sm:justify-center" style={{ animationDelay: '0.9s' }}>
-            <button onClick={startRecruiting} className="inline-flex items-center gap-2 rounded-full bg-primary px-8 py-2.5 text-sm font-bold text-primary-foreground hover:opacity-90">
-              <GraduationCap className="h-4 w-4" /> Hit the recruiting trail
-            </button>
+            {seatRecap?.fired ? <SeatSeeWhoCalls onClick={() => setPhase('market')} /> : (
+              <button onClick={startRecruiting} className="inline-flex items-center gap-2 rounded-full bg-primary px-8 py-2.5 text-sm font-bold text-primary-foreground hover:opacity-90">
+                <GraduationCap className="h-4 w-4" /> Hit the recruiting trail
+              </button>
+            )}
             <ShareButtons {...sport.share(st, isChamp, recap, label)} />
           </div>
         </div>
       </div>
     );
+  }
+
+  /* Round 1320: the job market, after a firing or a year out. */
+  if (phase === 'market' && sport.seat && st.seat) {
+    const marketView = sport.seat.view(st);
+    const market = collegeMarket(st.seat, marketView);
+    if (market) {
+      return (
+        <div className="space-y-4">
+          <CelebrationStyles />
+          <SeatMarket
+            block={st.seat} view={marketView} market={market} canSit={collegeCanSitOut(st.seat, marketView)}
+            onTake={takeJob} onSit={sitYearOut} onNew={reset}
+          />
+        </div>
+      );
+    }
   }
 
   if (phase === 'recruit' && (recruits || portal)) {

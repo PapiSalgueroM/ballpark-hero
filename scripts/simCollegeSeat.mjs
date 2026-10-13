@@ -51,9 +51,18 @@
  *
  * Controls (SIM_COLLEGE_SEAT_CONTROL), each an in memory rewrite at bundle time, refused unless its line is in
  * its file exactly once: see EDITS. Each must turn its own section red; the closing line says FIRED or DID NOT
- * FIRE. Variant SIM_COLLEGE_SEAT_TILT=none (not a control): runs with no college tilt, for the lead's ruling.
+ * FIRE. Variants SIM_COLLEGE_SEAT_TILT=cfb-none (no football tilt) and none (the pro ladder in both sports) are
+ * not controls: they print the asks the lead ruled on (C:/Users/antho/dukb-handoff/2026-10-10/results-g/
+ * step1-1320.md).
  *
- * MEASURED: see the block above T below.
+ * MEASURED (GitHub runners, 300 dynasties a sport a seed, seeds 1,2,3, ten seasons, about 120 to 200 s):
+ *   as built (r1320-s1b's cfb-soft run): CFB fired within ten seasons by starting tier 10.7, 17.3, 19.6, 24.9
+ *   percent, 177 firings, 470 bids; CBB 13.3, 0.0, 0.9, 4.0 percent, 41 firings, 605 bids. With no football tilt
+ *   (r1320-s1): CFB 87.1, 95.6, 67.1, 48.9 percent, 768 firings. S8 compared 57618 CFB and 72450 CBB rounds byte
+ *   for byte. Every section counts and requires its own floor (firings, bids, feeds, years out, refusals above
+ *   zero), so none can pass empty. The controls, each on seed 1 but allowfirer on all three, fired on r1320-s1c:
+ *   rankbyprestige S1 2287, ccgcount S2 1266, flattrust S3 6201, firedends S4 244, allowfirer S5 5, anyseason S6
+ *   985, bidtier S6 227, seatdraw S7, seatleak S8 4397, nextyear S9, yearoutskip SY 235.
  */
 import fs from 'node:fs';
 import os from 'node:os';
@@ -68,7 +77,7 @@ const lf = s => s.replaceAll('\r\n', '\n');
 const sha = s => crypto.createHash('sha1').update(s).digest('hex');
 
 const CONTROL = process.env.SIM_COLLEGE_SEAT_CONTROL || '';
-const TILT = process.env.SIM_COLLEGE_SEAT_TILT || 'cbb-bottom';
+const TILT = process.env.SIM_COLLEGE_SEAT_TILT || 'built';
 const SEEDS = (process.env.SIM_COLLEGE_SEAT_SEEDS || '1,2,3').split(',').map(Number);
 const FLEET = Number(process.env.SIM_COLLEGE_SEAT_FLEET || 300);
 const SEASONS = Number(process.env.SIM_COLLEGE_SEAT_SEASONS || 10);
@@ -126,12 +135,15 @@ const EDITS = {
 /* The tilt table as built, and the variants measured for the lead: each rewrites COLLEGE_ASK_TILT, and the
    S1 oracle reads the same table from VARIANT_TABLE, never from the bundle. */
 const CBB_LINE = '  cbb: { respect: 1, rebuild: 1 },';
-const CFB_LINE = '  cfb: {},';
+const CFB_LINE = '  cfb: { title: -1, contend: -1, playoffs: -1 },';
+const BUILT = { cfb: { title: -1, contend: -1, playoffs: -1 }, cbb: { respect: 1, rebuild: 1 } };
 const VARIANTS = {
-  'cbb-bottom': { table: { cfb: {}, cbb: { respect: 1, rebuild: 1 } }, edits: [] },
-  none: { table: { cfb: {}, cbb: {} }, edits: [['seat', CBB_LINE, '  cbb: {},']] },
-  'cfb-soft': { table: { cfb: { title: -1, contend: -1, playoffs: -1 }, cbb: { respect: 1, rebuild: 1 } },
-    edits: [['seat', CFB_LINE, '  cfb: { title: -1, contend: -1, playoffs: -1 },']] },
+  /* as built: football one step softer on every postseason ask, basketball one step more of its bottom rosters */
+  built: { table: BUILT, edits: [] },
+  /* the lead's prior: no football tilt */
+  'cfb-none': { table: { ...BUILT, cfb: {} }, edits: [['seat', CFB_LINE, '  cfb: {},']] },
+  /* the pro ladder unchanged in both sports */
+  none: { table: { cfb: {}, cbb: {} }, edits: [['seat', CFB_LINE, '  cfb: {},'], ['seat', CBB_LINE, '  cbb: {},']] },
 };
 if (CONTROL && !EDITS[CONTROL]) {
   console.error(`SIM_COLLEGE_SEAT_CONTROL=${CONTROL} is not a control this harness knows (${Object.keys(EDITS).join(', ')})`);
@@ -171,7 +183,7 @@ if (CONTROL) {
   for (let i = 0; i < rest.length; i += 3) apply(CONTROL, rest[i], rest[i + 1], rest[i + 2]);
   console.log(`NEGATIVE CONTROL ON: ${CONTROL}; section ${section} must go red`);
 }
-if (TILT !== 'cbb-bottom') console.log(`VARIANT: SIM_COLLEGE_SEAT_TILT=${TILT}`);
+if (TILT !== 'built') console.log(`VARIANT: SIM_COLLEGE_SEAT_TILT=${TILT}`);
 
 /* ---- one bundle, in a folder of this run's own ---- */
 const NM = modulesDir();

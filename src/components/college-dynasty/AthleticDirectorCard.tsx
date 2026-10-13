@@ -19,8 +19,8 @@ import { useState } from 'react';
 import { ArrowLeft, CircleHelp } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import {
-  collegeSeatRules, collegeStintRows, collegeTileView, holdsSeat,
-  type CollegeLeagueView, type CollegeSeatBlock,
+  championOf, collegePack, collegeSeatRules, collegeStintRows, collegeTileView, holdsSeat,
+  type CollegeLeagueView, type CollegeMarket, type CollegeSeatBlock,
 } from '@/lib/collegeSeat';
 
 /** The slot's one height, every state, every width. */
@@ -155,5 +155,90 @@ export function SeatPickLine() {
     <p data-college-seat="pick" className="mt-2 text-xs text-muted-foreground">
       Every new dynasty comes with an athletic director: he sets an ask each season and grades it.
     </p>
+  );
+}
+
+/** The recap the day he is let go: the title, the verdict and the market's first line. */
+export function SeatFiredRecap({ verdict, line }: { verdict: string; line: string }) {
+  return (
+    <div data-college-seat="fired" className="mt-3 rounded-xl border border-destructive/50 bg-background px-3 py-2 text-sm">
+      <p className="cm-slam font-display text-lg font-black text-destructive" style={{ animationDelay: '0.6s' }}>The athletic director let you go</p>
+      <p className="cm-rise mt-1 text-foreground" style={{ animationDelay: '0.75s' }}>{verdict}</p>
+      <p className="cm-rise mt-1 text-xs text-muted-foreground" style={{ animationDelay: '0.85s' }}>{line}</p>
+    </div>
+  );
+}
+
+/** The fired recap's one way on, in place of the trail button. It rises gated: never pressable before it shows. */
+export function SeatSeeWhoCalls({ onClick }: { onClick: () => void }) {
+  return (
+    <span data-college-seat="calls" className="cm-rise-gated inline-flex" style={{ animationDelay: '1.1s' }}>
+      <button type="button" onClick={onClick} className={cn(TAP, 'inline-flex items-center gap-2 rounded-full bg-primary px-8 text-sm font-bold text-primary-foreground hover:opacity-90')}>
+        See who calls
+      </button>
+    </span>
+  );
+}
+
+const TIER_WORDS = ['', 'top tier', 'second tier', 'third tier', 'bottom tier'] as const;
+
+/** The job market, a screen of its own after a firing or a year out: who called, a year out, or a new dynasty. */
+export function SeatMarket({ block, view, market, canSit, onTake, onSit, onNew }: {
+  block: CollegeSeatBlock; view: CollegeLeagueView; market: CollegeMarket; canSit: boolean;
+  onTake: (teamId: string) => void; onSit: () => void; onNew: () => void;
+}) {
+  const rows = collegeStintRows(block, view);
+  const champ = championOf(view, view.season);
+  const champName = champ ? view.programs.find(p => p.id === champ)?.name ?? champ : null;
+  return (
+    <div data-college-seat="market" className="space-y-3">
+      <div className="cm-rise rounded-2xl border border-border bg-card p-4 text-center">
+        <p className="font-display text-lg font-bold text-foreground">{market.state === 'offers' ? 'The phone is ringing' : market.state === 'closed' ? 'The phone has stopped' : 'Out of work'}</p>
+        <p className="mt-1 text-sm text-muted-foreground">{market.line}</p>
+        {market.seasonsOut > 0 && champName && (
+          <p className="mt-1 text-xs text-muted-foreground">The country played {view.season} without you, and {champName} won {collegePack(view.sport).words.title}.</p>
+        )}
+      </div>
+      {market.offers.map((o, i) => {
+        const f = market.facts[o.teamId];
+        return (
+          <div key={o.teamId} className="cm-rise rounded-2xl border border-gold/40 bg-card p-4" style={{ animationDelay: `${0.1 + i * 0.08}s` }}>
+            <p className="flex items-baseline justify-between gap-2">
+              <span className="font-display text-base font-bold text-foreground">{o.teamName}</span>
+              <span className="shrink-0 text-xs text-muted-foreground">{TIER_WORDS[o.tier]} program</span>
+            </p>
+            {f && <p className="mt-0.5 text-xs text-muted-foreground">Prestige {f.prestige}, roster #{f.rosterRank} of {f.of}, {f.record} last season</p>}
+            <p className="mt-2 text-xs text-foreground">{o.ask.text}</p>
+            <p className="mt-1 text-xs text-muted-foreground">{o.reason}</p>
+            <span className="cm-rise-gated mt-2 flex" style={{ animationDelay: `${0.3 + i * 0.08}s` }}>
+              <button type="button" onClick={() => onTake(o.teamId)} aria-label={`Take the job at ${o.teamName}`} className={cn(TAP, 'w-full rounded-full bg-primary px-4 text-sm font-bold text-primary-foreground hover:opacity-90')}>
+                Take the job
+              </button>
+            </span>
+          </div>
+        );
+      })}
+      <div className="flex flex-col gap-2 sm:flex-row sm:justify-center">
+        {canSit && (
+          <button type="button" onClick={onSit} className={cn(TAP, 'rounded-full border border-border bg-card px-6 text-sm font-semibold text-foreground hover:border-primary/60')}>
+            Sit the year out
+          </button>
+        )}
+        <button type="button" onClick={onNew} className={cn(TAP, 'rounded-full border border-border bg-card px-6 text-sm font-semibold text-muted-foreground hover:text-foreground')}>
+          Start a new dynasty
+        </button>
+      </div>
+      <div className="rounded-2xl border border-border bg-card p-3">
+        <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Your record</p>
+        <div className="mt-1 max-h-40 space-y-1 overflow-y-auto">
+          {rows.map((s, i) => (
+            <p key={`${s.team}:${s.since}:${i}`} className="flex items-center justify-between gap-2 rounded-lg border border-border/60 bg-background px-2.5 py-1.5 text-xs">
+              <span className="min-w-0 truncate font-semibold text-foreground">{s.name}, since {s.since}</span>
+              <span className="shrink-0 text-muted-foreground">{s.seasons} {s.seasons === 1 ? 'season' : 'seasons'}, {s.titles} {s.titles === 1 ? 'title' : 'titles'}{s.ended ? `, ${s.ended}` : ''}</span>
+            </p>
+          ))}
+        </div>
+      </div>
+    </div>
   );
 }

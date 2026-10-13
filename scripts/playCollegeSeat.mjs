@@ -9,7 +9,11 @@
  *    before and after the first press, and on an older save the slot's height and the Play button's top
  *    before "Take the ask", after it, and after "Not now", all equal to the pixel;
  *  4 the final press: the recap with the verdict and trust; under prefers-reduced-motion the verdict is on its
- *    last frame at first paint (opacity 1, no transform, no running animation).
+ *    last frame at first paint (opacity 1, no transform, no running animation);
+ *  5 trust at zero: the fired recap, "See who calls" in place of the trail button;
+ *  6 the market, and a reload reading the same market;
+ *  7 "Take the job": the new program's recruiting trail, the record two stints long.
+ *  Under reduced motion the fired title, "See who calls" and the market land on their last frame too.
  * At every station: no seat element sits over another element, none runs past the page's right edge, no seat
  * text is under 12 px, and every seat button is at least 44 px tall.
  *
@@ -92,10 +96,21 @@ const fresh = async (vw, vh, route, reduce = false) => {
   const page = await ctx.newPage();
   const errors = [];
   page.on('pageerror', e => errors.push(String(e)));
+  page.on('framenavigated', fr => { if (fr === page.mainFrame()) page.__navs = [...(page.__navs ?? []), fr.url()]; });
   return { ctx, page, errors };
 };
 const control = async page => { if (CONTROL === 'smalltap') await page.addStyleTag({ content: SMALL_TAP }); };
 const clickText = async (page, re) => {
+  for (let attempt = 0; attempt < 4; attempt += 1) {
+    try { return await clickOnce(page, re); } catch (e) {
+      if (!String(e).includes('Execution context was destroyed')) throw e;
+      await page.waitForLoadState('load').catch(() => {});
+      await page.waitForTimeout(800);
+    }
+  }
+  return false;
+};
+const clickOnce = async (page, re) => {
   const ok = await page.evaluate(src => {
     const b = [...document.querySelectorAll('button')].find(x => new RegExp(src).test(x.textContent.trim()));
     if (b) b.click();
@@ -107,15 +122,18 @@ const clickText = async (page, re) => {
 const docTop = async (page, sel) => page.evaluate(s => { const e = document.querySelector(s); return e ? e.getBoundingClientRect().top + window.scrollY : null; }, sel);
 const height = async (page, sel) => page.evaluate(s => document.querySelector(s)?.getBoundingClientRect().height ?? null, sel);
 const recapSaves = {};
+const fireSaves = {};
 
 for (const { route, key, school } of ROUTES) {
   for (const [vw, vh] of VIEWPORTS) {
     const tag = `${route.slice(1)}-${vw}`;
     const { ctx, page, errors } = await fresh(vw, vh, route);
-    await page.goto(`${BASE}${route}`, { waitUntil: 'load' });
+    await page.goto(`${BASE}${route}`, { waitUntil: 'networkidle' });
+    await page.waitForSelector('[data-college-seat="pick"]', { timeout: 15000 }).catch(() => {});
     await page.waitForTimeout(900);
 
     where = 'S1';
+    console.log(`   ${tag}: navigations after load ${JSON.stringify(page.__navs ?? [])}`);
     say(await page.locator('[data-college-seat="pick"]').count() === 1, `${tag}: the pick screen says a new dynasty comes with the athletic director`);
     say(await clickText(page, new RegExp(`^${school}Prestige`)), `${tag}: picked ${school}`);
     await page.waitForTimeout(500);
@@ -177,6 +195,51 @@ for (const { route, key, school } of ROUTES) {
     await seatChecks(page, `${tag} station 4`);
     await shot(page, `${tag}-4-recap`);
     if (vw === 390) recapSaves[route] = await page.evaluate(k => localStorage.getItem(k), key);
+    /* Stations 5 to 7: the same start, at the season's last round, a roster gutted to 40 so no title can come,
+       a title ask, one trust point left and three titles behind him so the market wants him. */
+    where = 'S5';
+    const fire = JSON.parse(startSave);
+    fire.st.round = route === '/cfb-dynasty' ? 12 : 10;
+    for (const p of fire.st.teams[fire.st.myTeam].players) p.ovr = 40;
+    fire.st.seat.trust = 1;
+    fire.st.seat.mandate = { ...fire.st.seat.mandate, tier: 'title', reqLevel: 4, winFloor: 0 };
+    fire.st.seat.career.stints[0] = { ...fire.st.seat.career.stints[0], from: fire.st.season - 3, grades: ['title', 'title', 'title'] };
+    if (vw === 390) fireSaves[route] = JSON.stringify(fire);
+    await page.evaluate(([k, v]) => localStorage.setItem(k, v), [key, JSON.stringify(fire)]);
+    await page.reload({ waitUntil: 'networkidle' });
+    await page.waitForTimeout(700);
+    await control(page);
+    await clickText(page, /^Play$/);
+    await clickText(page, PLAY);
+    await page.waitForTimeout(1600);
+    say(await page.locator('[data-college-seat="fired"]').count() === 1, `${tag}: trust at zero shows the fired recap`);
+    say(await page.locator('[data-college-seat="calls"]').count() === 1 && !(await page.locator('body').innerText()).includes('Hit the recruiting trail'), `${tag}: See who calls stands in for the trail`);
+    await seatChecks(page, `${tag} station 5`);
+    await shot(page, `${tag}-5-fired`);
+
+    where = 'S6';
+    await clickText(page, /^See who calls$/);
+    await page.waitForTimeout(900);
+    const market1 = await page.locator('[data-college-seat="market"]').innerText().catch(() => '');
+    say(market1.includes('let you go'), `${tag}: the market opens and says who let him go`);
+    await seatChecks(page, `${tag} station 6`);
+    await shot(page, `${tag}-6-market`);
+    await page.reload({ waitUntil: 'networkidle' });
+    await page.waitForTimeout(1200);
+    await control(page);
+    const market2 = await page.locator('[data-college-seat="market"]').innerText().catch(() => '');
+    say(market2 === market1 && market1.length > 0, `${tag}: a reload reads the same market`);
+
+    where = 'S7';
+    const before7 = JSON.parse(await page.evaluate(k => localStorage.getItem(k), key));
+    const took = await clickText(page, /^Take the job$/);
+    await page.waitForTimeout(900);
+    const after7 = JSON.parse(await page.evaluate(k => localStorage.getItem(k), key));
+    if (say(took, `${tag}: a coach with three titles drew no offer to take`)) {
+      say(after7.phase === 'recruit' && after7.st.myTeam !== before7.st.myTeam && after7.st.seat.career.stints.length === 2, `${tag}: Take the job opens the new program's trail`);
+      say((await page.locator('body').innerText()).includes(`The ${after7.st.season + 1} class`), `${tag}: the trail is the new program's class`);
+      await shot(page, `${tag}-7-new-trail`);
+    }
     where = 'errors';
     say(errors.length === 0, `${tag}: page errors ${errors.slice(0, 2).join(' | ')}`);
     await ctx.close();
@@ -205,8 +268,35 @@ for (const { route, key } of ROUTES) {
   await ctx.close();
 }
 
+/* Reduced motion: the fired title and the market on their last frame at first paint. */
+where = 'S5-reduced';
+for (const { route, key } of ROUTES) {
+  if (!say(!!fireSaves[route], `${route}: no firing save was kept for the reduced motion check`)) continue;
+  const { ctx, page } = await fresh(390, 844, route, true);
+  await page.goto(`${BASE}${route}`, { waitUntil: 'networkidle' });
+  await page.evaluate(([k, v]) => localStorage.setItem(k, v), [key, fireSaves[route]]);
+  await page.reload({ waitUntil: 'networkidle' });
+  await page.waitForTimeout(600);
+  await clickText(page, /^Play$/);
+  await clickText(page, PLAY);
+  const frame = sel => page.evaluate(s => {
+    const els = [...document.querySelectorAll(s)];
+    if (!els.length) return null;
+    return els.map(el => { const cs = getComputedStyle(el); return { o: cs.opacity, t: cs.transform, v: cs.visibility, r: el.getAnimations().filter(a => a.playState === 'running').length }; });
+  }, sel);
+  const settled = xs => !!xs && xs.every(x => x.o === '1' && (x.t === 'none' || x.t === '') && x.v === 'visible' && x.r === 0);
+  const fired = await frame('[data-college-seat="fired"] .cm-slam, [data-college-seat="fired"] .cm-rise, [data-college-seat="calls"]');
+  console.log(`   ${route} reduced motion, fired recap: ${JSON.stringify(fired)}`);
+  say(settled(fired), `${route}: under reduced motion the fired title or See who calls is not on its last frame at first paint`);
+  await clickText(page, /^See who calls$/);
+  const market = await frame('[data-college-seat="market"] .cm-rise, [data-college-seat="market"] .cm-rise-gated');
+  console.log(`   ${route} reduced motion, market: ${JSON.stringify(market)}`);
+  say(settled(market), `${route}: under reduced motion the market is not on its last frame at first paint`);
+  await ctx.close();
+}
+
 await browser.close();
-const red = [...failedIn.entries()].map(([k, n]) => `${k} (${n})`).join(', ');
+const red =[...failedIn.entries()].map(([k, n]) => `${k} (${n})`).join(', ');
 if (CONTROL) {
   const fired = shortFails > 0;
   console.log(fired ? `playCollegeSeat CONTROL ${CONTROL} FIRED: the 44 px check went red (red: ${red})` : `playCollegeSeat CONTROL ${CONTROL} DID NOT FIRE (red: ${red || 'none'})`);

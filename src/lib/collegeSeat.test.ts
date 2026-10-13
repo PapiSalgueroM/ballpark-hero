@@ -32,12 +32,14 @@ describe('the ask', () => {
     expect(a.text).not.toMatch(/ownership|franchise|\{/i);
   });
   it('lifts a CBB win total ask one step, and nothing else', () => {
-    expect(COLLEGE_ASK_TILT.cfb).toEqual({});
+    expect(COLLEGE_ASK_TILT.cfb).toEqual({ title: -1, contend: -1, playoffs: -1 });
     /* p12's roster is the weakest of the twenty: football asks it to rebuild, basketball one step more */
     expect(collegeAsk(view({ sport: 'cfb', myTeam: 'p12' }), 2026).tier).toBe('rebuild');
     expect(collegeAsk(view({ sport: 'cbb', myTeam: 'p12' }), 2026).tier).toBe('respect');
     const top = view({ sport: 'cbb', myTeam: 'p00' });
-    expect(collegeAsk(top, 2026).tier).toBe(collegeAsk({ ...top, sport: 'cfb' }, 2026).tier);
+    /* the best roster: basketball asks for the title, football one step less (a single elimination field of 12) */
+    expect(collegeAsk(top, 2026).tier).toBe('title');
+    expect(collegeAsk({ ...top, sport: 'cfb' }, 2026).tier).toBe('contend');
   });
 });
 

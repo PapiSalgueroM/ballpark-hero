@@ -12,11 +12,10 @@
    What it decides, all of it this game's rule and none of it a claim about how
    real schools hire or fire:
    - THE ASK is gmSeat.seatMandate over where his ROSTER ranks (the engine's own
-     strength), in the college pack's words. One tilt is this game's own: in
-     college basketball, where 32 of 40 programs make the national tournament,
-     a roster the ladder would ask only for a win total is asked one step more
-     (COLLEGE_ASK_TILT). The ask is about the roster; the market is about the
-     program.
+     strength), in the college pack's words, moved one step per sport where
+     the pro ladder does not fit a college field (COLLEGE_ASK_TILT: basketball
+     asks more of its bottom rosters, football less of every postseason ask).
+     The ask is about the roster; the market is about the program.
    - THE MARKET reads the program: tiers are quarters of the country by
      editorial prestige (gmSeat.leagueTiers), which never moves in this round.
    - THE GRADE is gmSeat.seatGrade, trust is foOwnerMandate.applyMandateResult
@@ -114,15 +113,22 @@ export function rosterRank(view: CollegeLeagueView, id: string): number {
 }
 
 /**
- * This game's one change to the ladder, by sport and by the tier the ladder
- * gives: in college basketball a roster the ladder would ask only for a win
- * total ('respect' or 'rebuild') is asked one step more, because 32 of the 40
- * programs make the national tournament. Never a flat tilt (that would move
- * every band). Football has none. Each entry is the step for the tier the
- * ladder gives; a tier not listed is asked as the ladder asks.
+ * This game's change to the ladder, by sport and by the tier the ladder gives.
+ * The ladder's fractions were set for pro leagues where 37 to 53 percent of the
+ * teams make a postseason of series. College is neither:
+ * - In college basketball 32 of the 40 programs make the national tournament,
+ *   so a roster the ladder would ask only for a win total ('respect' or
+ *   'rebuild') is asked one step more.
+ * - In college football 12 of 44 make a single elimination Playoff, so every
+ *   postseason ask is one step softer: measured over 900 ten season dynasties
+ *   (simCollegeSeat, runner results r1320-s1 and r1320-s1b), the ladder as it
+ *   stands let go 87 percent of the coaches who started at a top tier program
+ *   and 96 percent at a second tier one, and one step softer let go 11 and 17.
+ * Never a flat tilt (that would move every band). Each entry is the step for
+ * the tier the ladder gives; a tier not listed is asked as the ladder asks.
  */
 export const COLLEGE_ASK_TILT: Record<CollegeSeatSport, Partial<Record<FoTier, -1 | 1>>> = {
-  cfb: {},
+  cfb: { title: -1, contend: -1, playoffs: -1 },
   cbb: { respect: 1, rebuild: 1 },
 };
 
@@ -505,8 +511,11 @@ export function collegeSeatRules(view: CollegeLeagueView): { rules: string[]; ex
   const sgn = (n: number) => (n > 0 ? `+${n}` : `${n}`);
   const tilted = Object.entries(COLLEGE_ASK_TILT[view.sport]);
   const rules = [
-    `Before every season the athletic director names an ask, read off where your roster ranks in the country, not off the program's name: the best rosters are asked for ${pack.words.title}, the next ones to win ${pack.words.round}, then to make ${pack.words.playoffs}, and the rest for a win total.`,
-    ...(tilted.length ? [`In this game the athletic director asks one step more of a roster that would only be asked for a win total, because ${view.fieldSize} of ${view.programs.length} programs make ${pack.words.playoffs}.`] : []),
+    tilted.some(([, s]) => s === -1)
+      ? "Before every season the athletic director names an ask, read off where your roster ranks in the country, not off the program's name."
+      : `Before every season the athletic director names an ask, read off where your roster ranks in the country, not off the program's name: the best rosters are asked for ${pack.words.title}, the next ones to win ${pack.words.round}, then to make ${pack.words.playoffs}, and the rest for a win total.`,
+    ...(tilted.some(([, s]) => s === 1) ? [`In this game the athletic director asks one step more of a roster that would only be asked for a win total, because ${view.fieldSize} of ${view.programs.length} programs make ${pack.words.playoffs}.`] : []),
+    ...(tilted.some(([, s]) => s === -1) ? [`In this game the athletic director asks one step less of every roster that would be asked for a postseason result, because only ${view.fieldSize} of ${view.programs.length} programs make ${pack.words.playoffs} and one loss ends a run there: the best rosters are asked to make ${pack.words.playoffs} and win ${pack.words.round}, the next ones to make it, and nobody is asked for ${pack.words.title} outright.`] : []),
     `Trust starts at ${FO_TRUST_START} of 100. At the end of every season it moves by the grade: ${sgn(title)} for ${pack.words.title}, ${sgn(beat)} for beating the ask, ${sgn(met)} for meeting it, ${sgn(short)} for falling short and ${sgn(far)} for missing it by a mile.`,
     'Trust at zero and you are let go. The dynasty does not end there: the phone rings with the jobs you have earned, or nobody calls and you can sit a year out while the country plays on. If the phone stops for good, a new dynasty is the way back in.',
     `Let go straight after a season nowhere near the ask and no program above the ${['', 'top', 'second', 'third', 'bottom'][BADLY_FIRED_CEILING]} tier will call. A program that let you go never calls again. Those are this game's rules.`,

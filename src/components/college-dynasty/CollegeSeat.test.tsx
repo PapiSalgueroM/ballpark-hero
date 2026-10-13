@@ -12,8 +12,8 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import { cleanup, fireEvent, render } from '@testing-library/react';
 import CfbDynastyBoard from '@/components/cfb-dynasty/CfbDynastyBoard';
 import CbbDynastyBoard from '@/components/cbb-dynasty/CbbDynastyBoard';
-import { initCfb } from '@/lib/cfbDynasty';
-import { initCbb } from '@/lib/cbbDynasty';
+import { initCfb, CFB_SCHOOLS } from '@/lib/cfbDynasty';
+import { initCbb, CBB_SCHOOLS } from '@/lib/cbbDynasty';
 import { cfbSeatBinding } from '@/lib/cfbSeatBind';
 import { cbbSeatBinding } from '@/lib/cbbSeatBind';
 import { collegeTileView, newCollegeSeat } from '@/lib/collegeSeat';
@@ -138,5 +138,125 @@ describe('Round 1320: the athletic director on the college boards', () => {
         expect(m.q('[data-college-seat="tile"]')).toBeNull();
       }
     });
+
+    /* ---- Round 1320 step 2b: the firing, the market, the move, the year out ---- */
+
+    /** A coach with two titles behind him at the weakest program, one trust point left, asked to make the
+        field, at the season's last round: anything short of the field is a firing, and the market wants him. */
+    const firingSave = () => {
+      const schools = sport.name === 'cfb' ? CFB_SCHOOLS : CBB_SCHOOLS;
+      const weak = [...schools].sort((a, b) => a.prestige - b.prestige || a.id.localeCompare(b.id))[0].id;
+      const st = sport.init(weak, lehmer(9), { depth: true });
+      const seat = newCollegeSeat(sport.binding.view(st));
+      seat.trust = 1;
+      seat.mandate = { ...seat.mandate!, tier: 'playoffs', reqLevel: 1, winFloor: 0 };
+      seat.career.stints[0] = { ...seat.career.stints[0], from: st.season - 3, grades: ['title', 'title', 'overachieved'] };
+      st.seat = seat;
+      st.round = sport.name === 'cfb' ? 12 : 10;
+      return { st, phase: 'season', recruits: null, portal: null };
+    };
+    const fireIt = (m: ReturnType<typeof mount>) => {
+      fireEvent.click(m.button('Play'));
+      fireEvent.click(m.button(PLAY));
+    };
+
+    it(`${sport.name}: trust at zero is a firing, the recap says so, and See who calls opens the same market after a reload`, () => {
+      vi.spyOn(Math, 'random').mockImplementation(lehmer(1324));
+      const m = mount(sport, firingSave());
+      fireIt(m);
+      expect(m.q('[data-college-seat="fired"]')).toBeTruthy();
+      expect(m.buttons().some(b => txt(b).includes('Hit the recruiting trail'))).toBe(false);
+      expect(m.saved().phase).toBe('recap');
+      expect(m.saved().st.seat.career.stints[0].ended).toBe('fired');
+      fireEvent.click(m.button('See who calls'));
+      const market = txt(m.q('[data-college-seat="market"]')!);
+      expect(market).toContain('let you go');
+      expect(m.saved().phase).toBe('recap');
+      cleanup();
+      const again = mount(sport, again0(sport));
+      expect(txt(again.q('[data-college-seat="market"]')!)).toBe(market);
+    });
+
+    it(`${sport.name}: Take the job moves him once and opens the new program's trail; Sit the year out plays a season without him`, () => {
+      vi.spyOn(Math, 'random').mockImplementation(lehmer(1325));
+      const m = mount(sport, firingSave());
+      fireIt(m);
+      fireEvent.click(m.button('See who calls'));
+      const fired = m.saved();
+      const take = m.buttons().find(b => txt(b) === 'Take the job');
+      expect(take, 'a coach with two titles behind him drew no offer').toBeTruthy();
+      const to = take!.getAttribute('aria-label')!.replace('Take the job at ', '');
+      fireEvent.click(take!);
+      fireEvent.click(take!);
+      const after = m.saved();
+      expect(after.phase).toBe('recruit');
+      expect(after.st.seat.career.stints.length).toBe(2);
+      expect(after.st.seat.career.stints[1].from).toBe(fired.st.season + 1);
+      expect(after.st.seat.trust).toBe(60);
+      expect(after.st.myTeam).not.toBe(fired.st.myTeam);
+      expect(sport.binding.view(after.st).programs.find((p: { id: string; name: string }) => p.id === after.st.myTeam).name).toBe(to);
+      if ('lastRivalry' in after.st) expect(after.st.lastRivalry).toBeNull();
+      cleanup();
+      /* the year out, from the same fired save */
+      localStorage.clear();
+      const y = mount(sport, fired);
+      const sit = y.buttons().find(b => txt(b) === 'Sit the year out');
+      if (sit) {
+        fireEvent.click(sit);
+        const out = y.saved();
+        expect(out.st.season).toBe(fired.st.season + 1);
+        expect(out.st.myTitles).toBe(fired.st.myTitles);
+        expect(out.st.seasonsPlayed).toBe(fired.st.seasonsPlayed);
+        expect(out.st.seat.career.seasonsOut).toBe(fired.st.seat.career.seasonsOut + 1);
+        expect(out.phase).toBe('recap');
+        expect(y.q('[data-college-seat="market"]')).toBeTruthy();
+      }
+    });
+
+    it(`${sport.name}: a closed market offers only a new dynasty, and hostile market saves load somewhere sane`, () => {
+      vi.spyOn(Math, 'random').mockImplementation(lehmer(1326));
+      const m = mount(sport, firingSave());
+      fireIt(m);
+      const fired = m.saved();
+      cleanup();
+      const shut = JSON.parse(JSON.stringify(fired));
+      shut.st.seat.career = { version: 1, seasonsOut: 4, stints: [{ team: shut.st.myTeam, tier: 4, from: shut.st.season, grades: ['badly'], ended: 'fired' }] };
+      const c = mount(sport, shut);
+      expect(c.q('[data-college-seat="market"]')).toBeTruthy();
+      expect(c.buttons().map(txt)).toContain('Start a new dynasty');
+      expect(c.buttons().some(b => txt(b) === 'Take the job' || txt(b) === 'Sit the year out')).toBe(false);
+      cleanup();
+      /* phase 'market' and no seat on an open season: the season screen */
+      const plain = { st: sport.init(sport.school, lehmer(10), { depth: true }), phase: 'market', recruits: null, portal: null };
+      const p = mount(sport, plain);
+      expect(p.q('[data-college-seat="market"]')).toBeNull();
+      expect(p.buttons().some(b => txt(b) === 'Play')).toBe(true);
+      cleanup();
+      /* phase 'market' with a seat he still holds on a closed season: the trail, never an empty market */
+      const holding = JSON.parse(JSON.stringify(fired));
+      holding.phase = 'market';
+      holding.st.seat.career.stints[0].ended = undefined;
+      holding.st.seat.trust = 30;
+      const h = mount(sport, holding);
+      expect(h.q('[data-college-seat="market"]')).toBeNull();
+      expect(h.saved().phase).toBe('recruit');
+      cleanup();
+      /* a fired seat on a season screen whose season is closed: the market */
+      const onSeason = JSON.parse(JSON.stringify(fired));
+      onSeason.phase = 'season';
+      const s2 = mount(sport, onSeason);
+      expect(s2.q('[data-college-seat="market"]')).toBeTruthy();
+      cleanup();
+      /* a fired seat on the trail (no build writes it): the seat is dropped and the dynasty plays on */
+      const onTrail = JSON.parse(JSON.stringify(fired));
+      onTrail.phase = 'recruit';
+      const t = mount(sport, onTrail);
+      expect(t.q('[data-college-seat="market"]')).toBeNull();
+    });
   }
 });
+
+/** The save as the board left it (the market is never saved, so this is the recap it opened from). */
+function again0(sport: Sport) {
+  return JSON.parse(localStorage.getItem(sport.key) ?? 'null');
+}
