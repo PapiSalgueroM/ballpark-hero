@@ -1,0 +1,4 @@
+deck: node scripts/simEventDeck.mjs
+deck-replay: EVENT_DECK_CONTROL=replay node scripts/simEventDeck.mjs
+anchors: node scripts/simHarnessAnchors.mjs
+rivals: node scripts/simNoRivalNames.mjs
