@@ -28,8 +28,16 @@ export default function SaveMovedNotice({ message, onReload }: Props) {
     document.body.appendChild(host);
     const others = Array.from(document.body.children).filter(el => el !== host && !el.hasAttribute('inert'));
     others.forEach(el => el.setAttribute('inert', ''));
+    /* Inert stops presses and focus, not a key listener on window (the live
+       match pauses on Escape), so keys stop here, first of all. A button's
+       own Enter and Space still press it: that is its default, not a listener. */
+    const stop = (e: KeyboardEvent) => e.stopImmediatePropagation();
+    window.addEventListener('keydown', stop, true);
+    window.addEventListener('keyup', stop, true);
     button.current?.focus();
     return () => {
+      window.removeEventListener('keydown', stop, true);
+      window.removeEventListener('keyup', stop, true);
       others.forEach(el => el.removeAttribute('inert'));
       host.remove();
     };
@@ -39,6 +47,7 @@ export default function SaveMovedNotice({ message, onReload }: Props) {
     <div
       role="alertdialog"
       aria-modal="true"
+      aria-labelledby="save-moved-words"
       aria-describedby="save-moved-words"
       data-testid="save-moved-notice"
       className="fixed inset-0 z-[1000] flex items-center justify-center bg-background/85 p-4"

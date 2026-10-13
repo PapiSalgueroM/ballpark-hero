@@ -30,6 +30,26 @@ describe('SaveMovedNotice', () => {
     expect(document.querySelector('[data-testid="save-moved-notice"]')).toBeNull();
   });
 
+  it('is named by its words (an alertdialog needs a name)', () => {
+    const r = render(<SaveMovedNotice message={WORDS} onReload={() => undefined} />);
+    expect(screen.getByRole('alertdialog', { name: WORDS })).toBeTruthy();
+    r.unmount();
+  });
+
+  it('no key reaches a listener on window behind it, and they come back when it goes', () => {
+    const seen: string[] = [];
+    const onKey = (e: KeyboardEvent) => { seen.push(e.key); };
+    window.addEventListener('keydown', onKey);
+    const r = render(<div><button>Quick Sim</button><SaveMovedNotice message={WORDS} onReload={() => undefined} /></div>);
+    fireEvent.keyDown(screen.getByRole('button', { name: 'Reload' }), { key: 'Escape' });
+    fireEvent.keyDown(document.body, { key: 'Escape' });
+    expect(seen).toEqual([]);
+    r.unmount();
+    fireEvent.keyDown(document.body, { key: 'Escape' });
+    expect(seen).toEqual(['Escape']);
+    window.removeEventListener('keydown', onKey);
+  });
+
   it('Reload calls the reload it is given', () => {
     const onReload = vi.fn();
     const r = render(<SaveMovedNotice message={WORDS} onReload={onReload} />);
