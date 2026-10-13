@@ -1,0 +1,7 @@
+simSoccerDeckFairness: node scripts/simSoccerDeckFairness.mjs
+simCareerLeagueSeasons: node scripts/simCareerLeagueSeasons.mjs
+worldtruth-s1: SEED_OFFSET=1 node scripts/simSoccerWorldTruth.mjs
+worldtruth-s2: SEED_OFFSET=2 node scripts/simSoccerWorldTruth.mjs
+worldtruth-s3: SEED_OFFSET=3 node scripts/simSoccerWorldTruth.mjs
+worldtruth-s4: SEED_OFFSET=4 node scripts/simSoccerWorldTruth.mjs
+simCareerLeagueSeasons-base: git worktree add -q /tmp/base1329 c5fc5470b3e377f22d6d538f459b9f5310b08dd0 && ln -s "$PWD/node_modules" /tmp/base1329/node_modules && cd /tmp/base1329 && node scripts/simCareerLeagueSeasons.mjs
