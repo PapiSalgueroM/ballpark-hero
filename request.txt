@@ -1,0 +1,15 @@
+#!serve
+#!playwright
+weight: ENGINES=chromium node scripts/sweepWeight.mjs
+twoTabs: ENGINES=chromium node scripts/playTwoTabs.mjs
+twoTabs-nofence: ENGINES=chromium SIZES=390x844 TWO_TABS_CONTROL=nofence node scripts/playTwoTabs.mjs
+twoTabs-nolanding: ENGINES=chromium SIZES=390x844 TWO_TABS_CONTROL=nolanding node scripts/playTwoTabs.mjs
+twoTabs-nokeep: ENGINES=chromium SIZES=390x844 TWO_TABS_CONTROL=nokeep node scripts/playTwoTabs.mjs
+w1077: node scripts/qa/managerWorldBrowser1077.mjs --prefetch-fonts-only && if command -v xvfb-run >/dev/null; then NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" xvfb-run -a node scripts/qa/managerWorldBrowser1077.mjs; else NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/managerWorldBrowser1077.mjs; fi
+w1079: node scripts/qa/managerMatchPlans1079.mjs --prefetch-fonts-only && if command -v xvfb-run >/dev/null; then NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" xvfb-run -a node scripts/qa/managerMatchPlans1079.mjs; else NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/managerMatchPlans1079.mjs; fi
+simResultMoment: node scripts/simResultMoment.mjs
+playSaveKeeper-base: git worktree add -q /tmp/kb 36cc9ffe && ln -s "$PWD/node_modules" /tmp/kb/node_modules && (cd /tmp/kb && node_modules/.bin/vite build > /tmp/kb-build.log 2>&1) && KEEPER_BASE_DIST=/tmp/kb/dist ENGINES=chromium node scripts/playSaveKeeper.mjs
+playClubManagerSaveLeave: ENGINES=chromium node scripts/playClubManagerSaveLeave.mjs
+playClubManagerSlots: ENGINES=chromium node scripts/playClubManagerSlots.mjs
+playStorageBlocked: ENGINES=chromium node scripts/playStorageBlocked.mjs
+playHomeFold: ENGINES=chromium node scripts/playHomeFold.mjs
