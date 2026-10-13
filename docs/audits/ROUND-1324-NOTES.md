@@ -264,15 +264,41 @@ mutations of rules this round adds survived every gate. The read review found mi
 - Minor 10 (573a4c73). gmPackProblems refuses a `{ fact }` subject that names a yes or no fact (gmSubjectKey reads
   every bool as no value, so the card could never be dealt), with a unit test.
 
-Not fixed here, for the lead's next briefs (W1b, W2, W3):
+Left by the fix pass, then raised to majors by the closing check (see the next section for what became of them):
 - Minor 3 and the second half of minor 5: the shared panel (GmInboxPanel.tsx and us-career/InboxPanel.tsx) would show
-  a settled card as "You replied: <label>" and keep saying "Nothing new lands until you answer one." This round may
-  not touch src/components; the binding round must read `auto` and render gmExpiredLine.
-- Minor 5: a card the staff settle can be dropped by the kept cap in the same call, and gmInboxWeek returns only what
-  was dealt, so a seat cannot reliably show gmExpiredLine. The brief (3.3.6) prescribed the drop; returning or
-  recording what was settled this tick is an API change for the W1b or W3 brief.
-- Minor 11: the settled line doubles when the voice is the assistant ("Your assistant: your assistant dealt with
-  it"), and `gmExpiredLine`'s `pack` parameter is unused. The template is the brief's; a copy pass in W3.
+  a settled card as "You replied: <label>" and keep saying "Nothing new lands until you answer one."
+- Minor 5: a card the staff settle can be dropped by the kept cap in the same call, and gmInboxWeek returned only
+  what was dealt, so a seat could not reliably show gmExpiredLine.
+- Minor 11: the settled line doubled when the voice is the assistant ("Your assistant: your assistant dealt with
+  it"), and `gmExpiredLine`'s `pack` parameter was unused.
+
+### The closing check's three majors (second fix pass, from head 93133a41)
+
+- Finding 3, FIXED (bfb37cad). `gmExpiredLine(msg)` names the assistant once when the card's voice already is the
+  assistant (`📨 Your assistant dealt with it (Leave it).`, and the same for "Your assistant GM"); every other voice
+  keeps the brief's line. The unread `pack` parameter is gone (its only callers were this round's test and kit). A unit
+  test covers three voices, and kit section 7 now fails a line that names the assistant other than once (FX_EXPIRE's
+  voice is the assistant, so the kit printed the doubled line until now).
+- Finding 2, FIXED (3009cf89). `gmInboxWeek(s, seat, beat, facts, clock, rng, settled?)`: a seat that hands in a list
+  gets every card step (2) settles pushed onto it, as settled, before the kept cap runs. The brief's drop stays as
+  written; the seat no longer depends on the desk to learn what was settled. It draws nothing and writes nothing else,
+  so the replay cannot move. Proof: a unit test where week 4 settles a card and the cap drops it in the same call, the
+  list still names it, `gmExpiredLine` reads it, and the same desk without the list is byte equal; kit section 7's
+  FX_TOLD drive (two expiring cards, four plain ones answered every week) checks every call that the list names exactly
+  the cards that stopped being open, in order, auto on the neutral option. Measured at seeds 1 to 10 with a probe of
+  the same loop: 1,556 to 1,576 settled, 292 to 346 of them dropped in the call that settled them, 0 disagreements;
+  with no list handed in, 1,412 or more weeks disagree. New control `settledoff` (the push removed). The silent
+  FX_EXPIRE desks never hit the drop case (0 at every seed), which is why FX_TOLD exists.
+- Finding 1, NOT FIXED in the panel, FENCED. The two components are in the brief's "must not touch" list and decision
+  3(b) requires `git diff origin/main -- src/components/front-office-shared` to be empty, so the panel fix belongs to
+  the round that binds a seat (W2 for Soccer Career's card, W3 for Club Manager's InboxCard, a GM bind for
+  GmInboxPanel). No player can meet it today: no seat binds gmInbox and no GM card expires. So it cannot slip in
+  later unnoticed, `PACK_INDEXES` now names the component that shows each index's cards, and kit section 7 fails any
+  index holding an expiring card whose component never calls `gmExpiredLine` (read in the code, comments stripped).
+  It holds today (0 expiring GM cards). New control `panelexpiry` gives one GM card an expiry in the fence's own copy
+  and section 7 must go red. What the binding round still owes: render `gmExpiredLine` for `auto` cards (from the
+  settled list or the desk) instead of "You replied", and say "Nothing new lands until you answer one" only for a pack
+  with no expiring card. W2 and W3 append their own index row with their own component.
 
 ### The fix pass on the runners (head 69dee50e)
 
