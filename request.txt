@@ -1,0 +1,7 @@
+c-uncapped: SIM_SOCCER_DECK_FAIRNESS_CONTROL=uncapped node scripts/simSoccerDeckFairness.mjs
+c-puskas: SIM_SOCCER_DECK_FAIRNESS_CONTROL=puskas node scripts/simSoccerDeckFairness.mjs
+c-loanclub: SIM_SOCCER_DECK_FAIRNESS_CONTROL=loanclub node scripts/simSoccerDeckFairness.mjs
+c-keyseason: SIM_SOCCER_DECK_FAIRNESS_CONTROL=keyseason node scripts/simSoccerDeckFairness.mjs
+c-newsyear: SIM_SOCCER_DECK_FAIRNESS_CONTROL=newsyear node scripts/simSoccerDeckFairness.mjs
+c-injlog: SIM_SOCCER_DECK_FAIRNESS_CONTROL=injlog node scripts/simSoccerDeckFairness.mjs
+c-injblow: SIM_SOCCER_DECK_FAIRNESS_CONTROL=injblow node scripts/simSoccerDeckFairness.mjs

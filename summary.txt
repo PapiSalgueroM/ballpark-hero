@@ -1,0 +1,7 @@
+c-puskas exit=1 69s | CONTROL puskas FIRED: section 4 failed (2 failures in all)
+c-uncapped exit=1 70s | CONTROL uncapped FIRED: section 6 failed (2 failures in all)
+c-loanclub exit=1 74s | CONTROL loanclub FIRED: section 4 failed (3 failures in all)
+c-keyseason exit=1 63s | CONTROL keyseason FIRED: section 3 failed (2 failures in all)
+c-injlog exit=1 72s | CONTROL injlog FIRED: section 9 failed (51 failures in all)
+c-newsyear exit=1 76s | CONTROL newsyear FIRED: section 3 failed (2 failures in all)
+c-injblow exit=1 52s | CONTROL injblow FIRED: section 9 failed (27 failures in all)
