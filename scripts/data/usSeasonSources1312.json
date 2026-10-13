@@ -1,0 +1,804 @@
+{
+  "round": 1312,
+  "readOn": "2026-10-12",
+  "about": "Receipts for the facts Round 1312 added to src/data/usSeasonLedgerNhl.ts, read on 2026-10-12, each page drawn by script in a real browser (Chromium) and its own words read. A receipt of scripts/data/usSeasonSources1211.json is never repeated here: a page read again today is a new key in this file. Groups as in that file: the league's own site, its records site and its feed are one source (nhl); NBC Sports and NBC Chicago are one (nbc); Hockey Reference is one (sportsreference-hockey).",
+  "groups": {
+    "nhl": "The National Hockey League: its own site, its records site and its standings feed are one source, never two.",
+    "nbc": "NBC Sports and NBC Chicago are one source.",
+    "sportsreference-hockey": "Hockey Reference."
+  },
+  "sources": {
+    "nhl-records-playoffs": {
+      "sport": "nhl",
+      "group": "nhl",
+      "publisher": "NHL Records (the league's own records site)",
+      "title": "<season> Playoff Results (every series of the season, round by round, with its result and its series type)",
+      "url": "https://records.nhl.com/history/yearly-playoff-results?year=<both years of the season, as 20062007>",
+      "read": "2026-10-12",
+      "years": {
+        "2006": "\"2006-07 Playoff Results\": Conference Quarterfinals, 8 series; Conference Semifinals, 4 series; Conference Finals, 2 series; Stanley Cup Final, 1 series; every one Best-of-7. The Stanley Cup Final: Anaheim Ducks over Ottawa Senators, 4 - 1.",
+        "2007": "\"2007-08 Playoff Results\": Conference Quarterfinals, 8 series; Conference Semifinals, 4 series; Conference Finals, 2 series; Stanley Cup Final, 1 series; every one Best-of-7. The Stanley Cup Final: Detroit Red Wings over Pittsburgh Penguins, 4 - 2.",
+        "2008": "\"2008-09 Playoff Results\": Conference Quarterfinals, 8 series; Conference Semifinals, 4 series; Conference Finals, 2 series; Stanley Cup Final, 1 series; every one Best-of-7. The Stanley Cup Final: Pittsburgh Penguins over Detroit Red Wings, 4 - 3.",
+        "2009": "\"2009-10 Playoff Results\": Conference Quarterfinals, 8 series; Conference Semifinals, 4 series; Conference Finals, 2 series; Stanley Cup Final, 1 series; every one Best-of-7. The Stanley Cup Final: Chicago Blackhawks over Philadelphia Flyers, 4 - 2.",
+        "2010": "\"2010-11 Playoff Results\": Conference Quarterfinals, 8 series; Conference Semifinals, 4 series; Conference Finals, 2 series; Stanley Cup Final, 1 series; every one Best-of-7. The Stanley Cup Final: Boston Bruins over Vancouver Canucks, 4 - 3.",
+        "2011": "\"2011-12 Playoff Results\": Conference Quarterfinals, 8 series; Conference Semifinals, 4 series; Conference Finals, 2 series; Stanley Cup Final, 1 series; every one Best-of-7. The Stanley Cup Final: Los Angeles Kings over New Jersey Devils, 4 - 2.",
+        "2012": "\"2012-13 Playoff Results\": Conference Quarterfinals, 8 series; Conference Semifinals, 4 series; Conference Finals, 2 series; Stanley Cup Final, 1 series; every one Best-of-7. The Stanley Cup Final: Chicago Blackhawks over Boston Bruins, 4 - 2.",
+        "2013": "\"2013-14 Playoff Results\": 1st Round, 8 series; 2nd Round, 4 series; Conference Finals, 2 series; Stanley Cup Final, 1 series; every one Best-of-7. The Stanley Cup Final: Los Angeles Kings over New York Rangers, 4 - 1.",
+        "2014": "\"2014-15 Playoff Results\": 1st Round, 8 series; 2nd Round, 4 series; Conference Finals, 2 series; Stanley Cup Final, 1 series; every one Best-of-7. The Stanley Cup Final: Chicago Blackhawks over Tampa Bay Lightning, 4 - 2.",
+        "2015": "\"2015-16 Playoff Results\": 1st Round, 8 series; 2nd Round, 4 series; Conference Finals, 2 series; Stanley Cup Final, 1 series; every one Best-of-7. The Stanley Cup Final: Pittsburgh Penguins over San Jose Sharks, 4 - 2.",
+        "2016": "\"2016-17 Playoff Results\": 1st Round, 8 series; 2nd Round, 4 series; Conference Finals, 2 series; Stanley Cup Final, 1 series; every one Best-of-7. The Stanley Cup Final: Pittsburgh Penguins over Nashville Predators, 4 - 2.",
+        "2017": "\"2017-18 Playoff Results\": 1st Round, 8 series; 2nd Round, 4 series; Conference Finals, 2 series; Stanley Cup Final, 1 series; every one Best-of-7. The Stanley Cup Final: Washington Capitals over Vegas Golden Knights, 4 - 1.",
+        "2018": "\"2018-19 Playoff Results\": 1st Round, 8 series; 2nd Round, 4 series; Conference Finals, 2 series; Stanley Cup Final, 1 series; every one Best-of-7. The Stanley Cup Final: St. Louis Blues over Boston Bruins, 4 - 3.",
+        "2019": "\"2019-20 Playoff Results\": 1st Round, 8 series; 2nd Round, 4 series; Conference Finals, 2 series; Stanley Cup Final, 1 series; every one Best-of-7. The Stanley Cup Final: Tampa Bay Lightning over Dallas Stars, 4 - 2. Printed before them: Western Conference Round Robin (games, not series); Eastern Conference Round Robin (games, not series); Stanley Cup Qualifiers (8 series, Best-of-5).",
+        "2020": "\"2020-21 Playoff Results\": 1st Round, 8 series; 2nd Round, 4 series; Stanley Cup Semifinals, 2 series; Stanley Cup Final, 1 series; every one Best-of-7. The Stanley Cup Final: Tampa Bay Lightning over Montreal Canadiens, 4 - 1.",
+        "2021": "\"2021-22 Playoff Results\": 1st Round, 8 series; 2nd Round, 4 series; Conference Finals, 2 series; Stanley Cup Final, 1 series; every one Best-of-7. The Stanley Cup Final: Colorado Avalanche over Tampa Bay Lightning, 4 - 2.",
+        "2022": "\"2022-23 Playoff Results\": 1st Round, 8 series; 2nd Round, 4 series; Conference Finals, 2 series; Stanley Cup Final, 1 series; every one Best-of-7. The Stanley Cup Final: Vegas Golden Knights over Florida Panthers, 4 - 1.",
+        "2023": "\"2023-24 Playoff Results\": 1st Round, 8 series; 2nd Round, 4 series; Conference Finals, 2 series; Stanley Cup Final, 1 series; every one Best-of-7. The Stanley Cup Final: Florida Panthers over Edmonton Oilers, 4 - 3.",
+        "2024": "\"2024-25 Playoff Results\": 1st Round, 8 series; 2nd Round, 4 series; Conference Finals, 2 series; Stanley Cup Final, 1 series; every one Best-of-7. The Stanley Cup Final: Florida Panthers over Edmonton Oilers, 4 - 2.",
+        "2025": "\"2025-26 Playoff Results\": 1st Round, 8 series; 2nd Round, 4 series; Conference Finals, 2 series; Stanley Cup Final, 1 series; every one Best-of-7. The Stanley Cup Final: Carolina Hurricanes over Vegas Golden Knights, 4 - 2."
+      },
+      "values": {
+        "rounds": {
+          "2006": ["Conference Quarterfinals", "Conference Semifinals", "Conference Finals", "Stanley Cup Final"],
+          "2007": ["Conference Quarterfinals", "Conference Semifinals", "Conference Finals", "Stanley Cup Final"],
+          "2008": ["Conference Quarterfinals", "Conference Semifinals", "Conference Finals", "Stanley Cup Final"],
+          "2009": ["Conference Quarterfinals", "Conference Semifinals", "Conference Finals", "Stanley Cup Final"],
+          "2010": ["Conference Quarterfinals", "Conference Semifinals", "Conference Finals", "Stanley Cup Final"],
+          "2011": ["Conference Quarterfinals", "Conference Semifinals", "Conference Finals", "Stanley Cup Final"],
+          "2012": ["Conference Quarterfinals", "Conference Semifinals", "Conference Finals", "Stanley Cup Final"],
+          "2013": ["1st Round", "2nd Round", "Conference Finals", "Stanley Cup Final"],
+          "2014": ["1st Round", "2nd Round", "Conference Finals", "Stanley Cup Final"],
+          "2015": ["1st Round", "2nd Round", "Conference Finals", "Stanley Cup Final"],
+          "2016": ["1st Round", "2nd Round", "Conference Finals", "Stanley Cup Final"],
+          "2017": ["1st Round", "2nd Round", "Conference Finals", "Stanley Cup Final"],
+          "2018": ["1st Round", "2nd Round", "Conference Finals", "Stanley Cup Final"],
+          "2019": ["1st Round", "2nd Round", "Conference Finals", "Stanley Cup Final"],
+          "2020": ["1st Round", "2nd Round", "Stanley Cup Semifinals", "Stanley Cup Final"],
+          "2021": ["1st Round", "2nd Round", "Conference Finals", "Stanley Cup Final"],
+          "2022": ["1st Round", "2nd Round", "Conference Finals", "Stanley Cup Final"],
+          "2023": ["1st Round", "2nd Round", "Conference Finals", "Stanley Cup Final"],
+          "2024": ["1st Round", "2nd Round", "Conference Finals", "Stanley Cup Final"],
+          "2025": ["1st Round", "2nd Round", "Conference Finals", "Stanley Cup Final"]
+        },
+        "series": {
+          "2006": [
+            ["SJS NSH 4-1", "VAN DAL 4-3", "ANA MIN 4-1", "DET CGY 4-2", "OTT PIT 4-1", "NYR ATL 4-0", "NJD TBL 4-2", "BUF NYI 4-1"],
+            ["ANA VAN 4-1", "DET SJS 4-2", "OTT NJD 4-1", "BUF NYR 4-2"],
+            ["ANA DET 4-2", "OTT BUF 4-1"],
+            ["ANA OTT 4-1"]
+          ],
+          "2007": [
+            ["DAL ANA 4-2", "COL MIN 4-2", "SJS CGY 4-3", "DET NSH 4-2", "NYR NJD 4-1", "PHI WSH 4-3", "PIT OTT 4-0", "MTL BOS 4-3"],
+            ["DAL SJS 4-2", "DET COL 4-0", "PIT NYR 4-1", "PHI MTL 4-1"],
+            ["DET DAL 4-2", "PIT PHI 4-1"],
+            ["DET PIT 4-2"]
+          ],
+          "2008": [
+            ["CHI CGY 4-2", "VAN STL 4-0", "DET CBJ 4-0", "ANA SJS 4-2", "PIT PHI 4-2", "CAR NJD 4-3", "WSH NYR 4-3", "BOS MTL 4-0"],
+            ["CHI VAN 4-2", "DET ANA 4-3", "PIT WSH 4-3", "CAR BOS 4-3"],
+            ["DET CHI 4-1", "PIT CAR 4-0"],
+            ["PIT DET 4-3"]
+          ],
+          "2009": [
+            ["DET PHX 4-3", "VAN LAK 4-2", "CHI NSH 4-2", "SJS COL 4-2", "PIT OTT 4-2", "BOS BUF 4-2", "PHI NJD 4-1", "MTL WSH 4-3"],
+            ["CHI VAN 4-2", "SJS DET 4-1", "PHI BOS 4-3", "MTL PIT 4-3"],
+            ["CHI SJS 4-0", "PHI MTL 4-1"],
+            ["CHI PHI 4-2"]
+          ],
+          "2010": [
+            ["NSH ANA 4-2", "DET PHX 4-0", "SJS LAK 4-2", "VAN CHI 4-3", "TBL PIT 4-3", "BOS MTL 4-3", "PHI BUF 4-3", "WSH NYR 4-1"],
+            ["SJS DET 4-3", "VAN NSH 4-2", "BOS PHI 4-0", "TBL WSH 4-0"],
+            ["VAN SJS 4-1", "BOS TBL 4-3"],
+            ["BOS VAN 4-3"]
+          ],
+          "2011": [
+            ["NSH DET 4-1", "PHX CHI 4-2", "STL SJS 4-1", "LAK VAN 4-1", "PHI PIT 4-2", "NJD FLA 4-3", "WSH BOS 4-3", "NYR OTT 4-3"],
+            ["PHX NSH 4-1", "LAK STL 4-0", "NJD PHI 4-1", "NYR WSH 4-3"],
+            ["LAK PHX 4-1", "NJD NYR 4-2"],
+            ["LAK NJD 4-2"]
+          ],
+          "2012": [
+            ["LAK STL 4-2", "SJS VAN 4-0", "DET ANA 4-3", "CHI MIN 4-1", "BOS TOR 4-3", "NYR WSH 4-3", "OTT MTL 4-1", "PIT NYI 4-2"],
+            ["LAK SJS 4-3", "CHI DET 4-3", "BOS NYR 4-1", "PIT OTT 4-1"],
+            ["CHI LAK 4-1", "BOS PIT 4-0"],
+            ["CHI BOS 4-2"]
+          ],
+          "2013": [
+            ["LAK SJS 4-3", "ANA DAL 4-2", "CHI STL 4-2", "MIN COL 4-3", "NYR PHI 4-3", "PIT CBJ 4-2", "MTL TBL 4-0", "BOS DET 4-1"],
+            ["LAK ANA 4-3", "CHI MIN 4-2", "NYR PIT 4-3", "MTL BOS 4-3"],
+            ["LAK CHI 4-3", "NYR MTL 4-2"],
+            ["LAK NYR 4-1"]
+          ],
+          "2014": [
+            ["CGY VAN 4-2", "ANA WPG 4-0", "CHI NSH 4-2", "MIN STL 4-2", "WSH NYI 4-3", "NYR PIT 4-1", "TBL DET 4-3", "MTL OTT 4-2"],
+            ["ANA CGY 4-1", "CHI MIN 4-0", "NYR WSH 4-3", "TBL MTL 4-2"],
+            ["CHI ANA 4-3", "TBL NYR 4-3"],
+            ["CHI TBL 4-2"]
+          ],
+          "2015": [
+            ["SJS LAK 4-1", "NSH ANA 4-3", "STL CHI 4-3", "DAL MIN 4-2", "PIT NYR 4-1", "WSH PHI 4-2", "TBL DET 4-1", "NYI FLA 4-2"],
+            ["SJS NSH 4-3", "STL DAL 4-3", "PIT WSH 4-2", "TBL NYI 4-1"],
+            ["SJS STL 4-2", "PIT TBL 4-3"],
+            ["PIT SJS 4-2"]
+          ],
+          "2016": [
+            ["EDM SJS 4-2", "ANA CGY 4-0", "STL MIN 4-1", "NSH CHI 4-0", "PIT CBJ 4-1", "WSH TOR 4-2", "OTT BOS 4-2", "NYR MTL 4-2"],
+            ["ANA EDM 4-3", "NSH STL 4-2", "PIT WSH 4-3", "OTT NYR 4-2"],
+            ["NSH ANA 4-2", "PIT OTT 4-3"],
+            ["PIT NSH 4-2"]
+          ],
+          "2017": [
+            ["SJS ANA 4-0", "VGK LAK 4-0", "WPG MIN 4-1", "NSH COL 4-2", "PIT PHI 4-2", "WSH CBJ 4-2", "BOS TOR 4-3", "TBL NJD 4-1"],
+            ["VGK SJS 4-2", "WPG NSH 4-3", "WSH PIT 4-2", "TBL BOS 4-1"],
+            ["VGK WPG 4-1", "WSH TBL 4-3"],
+            ["WSH VGK 4-1"]
+          ],
+          "2018": [
+            ["SJS VGK 4-3", "COL CGY 4-1", "STL WPG 4-2", "DAL NSH 4-2", "NYI PIT 4-0", "CAR WSH 4-3", "BOS TOR 4-3", "CBJ TBL 4-0"],
+            ["SJS COL 4-3", "STL DAL 4-3", "CAR NYI 4-0", "BOS CBJ 4-2"],
+            ["STL SJS 4-2", "BOS CAR 4-0"],
+            ["STL BOS 4-3"]
+          ],
+          "2019": [
+            ["VAN STL 4-2", "DAL CGY 4-2", "COL ARI 4-1", "VGK CHI 4-1", "BOS CAR 4-1", "NYI WSH 4-1", "TBL CBJ 4-1", "PHI MTL 4-2"],
+            ["DAL COL 4-3", "VGK VAN 4-3", "TBL BOS 4-1", "NYI PHI 4-3"],
+            ["DAL VGK 4-1", "TBL NYI 4-2"],
+            ["TBL DAL 4-2"]
+          ],
+          "2020": [
+            ["WPG EDM 4-0", "MTL TOR 4-3", "VGK MIN 4-3", "COL STL 4-0", "TBL FLA 4-2", "CAR NSH 4-2", "BOS WSH 4-1", "NYI PIT 4-2"],
+            ["MTL WPG 4-0", "VGK COL 4-2", "TBL CAR 4-1", "NYI BOS 4-2"],
+            ["TBL NYI 4-3", "MTL VGK 4-2"],
+            ["TBL MTL 4-1"]
+          ],
+          "2021": [
+            ["EDM LAK 4-3", "CGY DAL 4-3", "STL MIN 4-2", "COL NSH 4-0", "NYR PIT 4-3", "CAR BOS 4-3", "TBL TOR 4-3", "FLA WSH 4-2"],
+            ["EDM CGY 4-1", "COL STL 4-2", "NYR CAR 4-3", "TBL FLA 4-0"],
+            ["COL EDM 4-0", "TBL NYR 4-2"],
+            ["COL TBL 4-2"]
+          ],
+          "2022": [
+            ["EDM LAK 4-2", "VGK WPG 4-1", "DAL MIN 4-2", "SEA COL 4-3", "NJD NYR 4-3", "CAR NYI 4-2", "TOR TBL 4-2", "FLA BOS 4-3"],
+            ["VGK EDM 4-2", "DAL SEA 4-3", "CAR NJD 4-1", "FLA TOR 4-1"],
+            ["VGK DAL 4-2", "FLA CAR 4-0"],
+            ["VGK FLA 4-1"]
+          ],
+          "2023": [
+            ["EDM LAK 4-1", "VAN NSH 4-2", "COL WPG 4-1", "DAL VGK 4-3", "CAR NYI 4-1", "NYR WSH 4-0", "BOS TOR 4-3", "FLA TBL 4-1"],
+            ["EDM VAN 4-3", "DAL COL 4-2", "NYR CAR 4-2", "FLA BOS 4-2"],
+            ["EDM DAL 4-2", "FLA NYR 4-2"],
+            ["FLA EDM 4-3"]
+          ],
+          "2024": [
+            ["EDM LAK 4-2", "VGK MIN 4-2", "DAL COL 4-3", "WPG STL 4-3", "CAR NJD 4-1", "WSH MTL 4-1", "FLA TBL 4-1", "TOR OTT 4-2"],
+            ["EDM VGK 4-1", "DAL WPG 4-2", "CAR WSH 4-1", "FLA TOR 4-3"],
+            ["EDM DAL 4-1", "FLA CAR 4-1"],
+            ["FLA EDM 4-2"]
+          ],
+          "2025": [
+            ["ANA EDM 4-2", "VGK UTA 4-2", "MIN DAL 4-2", "COL LAK 4-0", "PHI PIT 4-2", "CAR OTT 4-0", "MTL TBL 4-3", "BUF BOS 4-2"],
+            ["VGK ANA 4-2", "COL MIN 4-1", "CAR PHI 4-0", "MTL BUF 4-3"],
+            ["VGK COL 4-0", "CAR MTL 4-1"],
+            ["CAR VGK 4-2"]
+          ]
+        },
+        "before": {
+          "2019": ["Western Conference Round Robin", "Eastern Conference Round Robin", "Stanley Cup Qualifiers"]
+        }
+      },
+      "note": "Twenty seasons, 2006-07 to 2025-26, each page drawn in Chromium on a GitHub runner on 2026-10-12 and its words read. Keyed by the year the season starts in. `rounds`: the four best of seven rounds as the page names them, first to last. `series`: the same rounds, each series as winner, loser and result, with the league feed's three letter ids. `before`: what the page prints before those four rounds."
+    },
+    "hr-playoffs-1312": {
+      "sport": "nhl",
+      "group": "sportsreference-hockey",
+      "publisher": "Hockey Reference",
+      "title": "<year> NHL Stanley Cup Playoffs Summary, its \"League Playoff Series\" table",
+      "url": "https://www.hockey-reference.com/playoffs/NHL_<year the season ends in>.html",
+      "read": "2026-10-12",
+      "years": {
+        "2006": "The 2007 playoffs, \"League Playoff Series\": Conference Quarter-Finals, 8 series; Conference Semi-Finals, 4 series; Conference Finals, 2 series; Final, 1 series; every winner on four wins. Final: Anaheim Ducks over Ottawa Senators (4-1).",
+        "2007": "The 2008 playoffs, \"League Playoff Series\": Conference Quarter-Finals, 8 series; Conference Semi-Finals, 4 series; Conference Finals, 2 series; Final, 1 series; every winner on four wins. Final: Detroit Red Wings over Pittsburgh Penguins (4-2).",
+        "2008": "The 2009 playoffs, \"League Playoff Series\": Conference Quarter-Finals, 8 series; Conference Semi-Finals, 4 series; Conference Finals, 2 series; Final, 1 series; every winner on four wins. Final: Pittsburgh Penguins over Detroit Red Wings (4-3).",
+        "2009": "The 2010 playoffs, \"League Playoff Series\": Conference Quarter-Finals, 8 series; Conference Semi-Finals, 4 series; Conference Finals, 2 series; Final, 1 series; every winner on four wins. Final: Chicago Blackhawks over Philadelphia Flyers (4-2).",
+        "2010": "The 2011 playoffs, \"League Playoff Series\": Conference Quarter-Finals, 8 series; Conference Semi-Finals, 4 series; Conference Finals, 2 series; Final, 1 series; every winner on four wins. Final: Boston Bruins over Vancouver Canucks (4-3).",
+        "2011": "The 2012 playoffs, \"League Playoff Series\": Conference Quarter-Finals, 8 series; Conference Semi-Finals, 4 series; Conference Finals, 2 series; Final, 1 series; every winner on four wins. Final: Los Angeles Kings over New Jersey Devils (4-2).",
+        "2012": "The 2013 playoffs, \"League Playoff Series\": Conference Quarter-Finals, 8 series; Conference Semi-Finals, 4 series; Conference Finals, 2 series; Final, 1 series; every winner on four wins. Final: Chicago Blackhawks over Boston Bruins (4-2).",
+        "2013": "The 2014 playoffs, \"League Playoff Series\": First Round, 8 series; Second Round, 4 series; Conference Finals, 2 series; Final, 1 series; every winner on four wins. Final: Los Angeles Kings over New York Rangers (4-1).",
+        "2014": "The 2015 playoffs, \"League Playoff Series\": First Round, 8 series; Second Round, 4 series; Conference Finals, 2 series; Final, 1 series; every winner on four wins. Final: Chicago Blackhawks over Tampa Bay Lightning (4-2).",
+        "2015": "The 2016 playoffs, \"League Playoff Series\": First Round, 8 series; Second Round, 4 series; Conference Finals, 2 series; Final, 1 series; every winner on four wins. Final: Pittsburgh Penguins over San Jose Sharks (4-2).",
+        "2016": "The 2017 playoffs, \"League Playoff Series\": First Round, 8 series; Second Round, 4 series; Conference Finals, 2 series; Final, 1 series; every winner on four wins. Final: Pittsburgh Penguins over Nashville Predators (4-2).",
+        "2017": "The 2018 playoffs, \"League Playoff Series\": First Round, 8 series; Second Round, 4 series; Conference Finals, 2 series; Final, 1 series; every winner on four wins. Final: Washington Capitals over Vegas Golden Knights (4-1).",
+        "2018": "The 2019 playoffs, \"League Playoff Series\": First Round, 8 series; Second Round, 4 series; Conference Finals, 2 series; Final, 1 series; every winner on four wins. Final: St. Louis Blues over Boston Bruins (4-3).",
+        "2019": "The 2020 playoffs, \"League Playoff Series\": First Round, 8 series; Second Round, 4 series; Conference Finals, 2 series; Final, 1 series; every winner on four wins. Final: Tampa Bay Lightning over Dallas Stars (4-2). Printed before them: Qualifying Round, 8 series each won with three wins.",
+        "2020": "The 2021 playoffs, \"League Playoff Series\": First Round, 8 series; Second Round, 4 series; Semi-Finals, 2 series; Final, 1 series; every winner on four wins. Final: Tampa Bay Lightning over Montreal Canadiens (4-1).",
+        "2021": "The 2022 playoffs, \"League Playoff Series\": First Round, 8 series; Second Round, 4 series; Conference Finals, 2 series; Final, 1 series; every winner on four wins. Final: Colorado Avalanche over Tampa Bay Lightning (4-2).",
+        "2022": "The 2023 playoffs, \"League Playoff Series\": First Round, 8 series; Second Round, 4 series; Conference Finals, 2 series; Final, 1 series; every winner on four wins. Final: Vegas Golden Knights over Florida Panthers (4-1).",
+        "2023": "The 2024 playoffs, \"League Playoff Series\": First Round, 8 series; Second Round, 4 series; Conference Finals, 2 series; Final, 1 series; every winner on four wins. Final: Florida Panthers over Edmonton Oilers (4-3).",
+        "2024": "The 2025 playoffs, \"League Playoff Series\": First Round, 8 series; Second Round, 4 series; Conference Finals, 2 series; Final, 1 series; every winner on four wins. Final: Florida Panthers over Edmonton Oilers (4-2).",
+        "2025": "The 2026 playoffs, \"League Playoff Series\": First Round, 8 series; Second Round, 4 series; Conference Finals, 2 series; Final, 1 series; every winner on four wins. Final: Carolina Hurricanes over Vegas Golden Knights (4-2)."
+      },
+      "values": {
+        "rounds": {
+          "2006": ["Conference Quarter-Finals", "Conference Semi-Finals", "Conference Finals", "Final"],
+          "2007": ["Conference Quarter-Finals", "Conference Semi-Finals", "Conference Finals", "Final"],
+          "2008": ["Conference Quarter-Finals", "Conference Semi-Finals", "Conference Finals", "Final"],
+          "2009": ["Conference Quarter-Finals", "Conference Semi-Finals", "Conference Finals", "Final"],
+          "2010": ["Conference Quarter-Finals", "Conference Semi-Finals", "Conference Finals", "Final"],
+          "2011": ["Conference Quarter-Finals", "Conference Semi-Finals", "Conference Finals", "Final"],
+          "2012": ["Conference Quarter-Finals", "Conference Semi-Finals", "Conference Finals", "Final"],
+          "2013": ["First Round", "Second Round", "Conference Finals", "Final"],
+          "2014": ["First Round", "Second Round", "Conference Finals", "Final"],
+          "2015": ["First Round", "Second Round", "Conference Finals", "Final"],
+          "2016": ["First Round", "Second Round", "Conference Finals", "Final"],
+          "2017": ["First Round", "Second Round", "Conference Finals", "Final"],
+          "2018": ["First Round", "Second Round", "Conference Finals", "Final"],
+          "2019": ["First Round", "Second Round", "Conference Finals", "Final"],
+          "2020": ["First Round", "Second Round", "Semi-Finals", "Final"],
+          "2021": ["First Round", "Second Round", "Conference Finals", "Final"],
+          "2022": ["First Round", "Second Round", "Conference Finals", "Final"],
+          "2023": ["First Round", "Second Round", "Conference Finals", "Final"],
+          "2024": ["First Round", "Second Round", "Conference Finals", "Final"],
+          "2025": ["First Round", "Second Round", "Conference Finals", "Final"]
+        },
+        "series": {
+          "2006": [
+            ["SJS NSH 4-1", "VAN DAL 4-3", "ANA MIN 4-1", "DET CGY 4-2", "OTT PIT 4-1", "NYR ATL 4-0", "NJD TBL 4-2", "BUF NYI 4-1"],
+            ["ANA VAN 4-1", "DET SJS 4-2", "OTT NJD 4-1", "BUF NYR 4-2"],
+            ["ANA DET 4-2", "OTT BUF 4-1"],
+            ["ANA OTT 4-1"]
+          ],
+          "2007": [
+            ["DAL ANA 4-2", "COL MIN 4-2", "SJS CGY 4-3", "DET NSH 4-2", "NYR NJD 4-1", "PHI WSH 4-3", "PIT OTT 4-0", "MTL BOS 4-3"],
+            ["DAL SJS 4-2", "DET COL 4-0", "PIT NYR 4-1", "PHI MTL 4-1"],
+            ["DET DAL 4-2", "PIT PHI 4-1"],
+            ["DET PIT 4-2"]
+          ],
+          "2008": [
+            ["CHI CGY 4-2", "VAN STL 4-0", "DET CBJ 4-0", "ANA SJS 4-2", "PIT PHI 4-2", "CAR NJD 4-3", "WSH NYR 4-3", "BOS MTL 4-0"],
+            ["CHI VAN 4-2", "DET ANA 4-3", "PIT WSH 4-3", "CAR BOS 4-3"],
+            ["DET CHI 4-1", "PIT CAR 4-0"],
+            ["PIT DET 4-3"]
+          ],
+          "2009": [
+            ["DET PHX 4-3", "VAN LAK 4-2", "CHI NSH 4-2", "SJS COL 4-2", "PIT OTT 4-2", "BOS BUF 4-2", "PHI NJD 4-1", "MTL WSH 4-3"],
+            ["CHI VAN 4-2", "SJS DET 4-1", "PHI BOS 4-3", "MTL PIT 4-3"],
+            ["CHI SJS 4-0", "PHI MTL 4-1"],
+            ["CHI PHI 4-2"]
+          ],
+          "2010": [
+            ["NSH ANA 4-2", "DET PHX 4-0", "SJS LAK 4-2", "VAN CHI 4-3", "TBL PIT 4-3", "BOS MTL 4-3", "PHI BUF 4-3", "WSH NYR 4-1"],
+            ["SJS DET 4-3", "VAN NSH 4-2", "BOS PHI 4-0", "TBL WSH 4-0"],
+            ["VAN SJS 4-1", "BOS TBL 4-3"],
+            ["BOS VAN 4-3"]
+          ],
+          "2011": [
+            ["NSH DET 4-1", "PHX CHI 4-2", "STL SJS 4-1", "LAK VAN 4-1", "PHI PIT 4-2", "NJD FLA 4-3", "WSH BOS 4-3", "NYR OTT 4-3"],
+            ["PHX NSH 4-1", "LAK STL 4-0", "NJD PHI 4-1", "NYR WSH 4-3"],
+            ["LAK PHX 4-1", "NJD NYR 4-2"],
+            ["LAK NJD 4-2"]
+          ],
+          "2012": [
+            ["LAK STL 4-2", "SJS VAN 4-0", "DET ANA 4-3", "CHI MIN 4-1", "BOS TOR 4-3", "NYR WSH 4-3", "OTT MTL 4-1", "PIT NYI 4-2"],
+            ["PIT OTT 4-1", "BOS NYR 4-1", "CHI DET 4-3", "LAK SJS 4-3"],
+            ["CHI LAK 4-1", "BOS PIT 4-0"],
+            ["CHI BOS 4-2"]
+          ],
+          "2013": [
+            ["NYR PHI 4-3", "PIT CBJ 4-2", "MTL TBL 4-0", "BOS DET 4-1", "LAK SJS 4-3", "ANA DAL 4-2", "CHI STL 4-2", "MIN COL 4-3"],
+            ["LAK ANA 4-3", "CHI MIN 4-2", "NYR PIT 4-3", "MTL BOS 4-3"],
+            ["NYR MTL 4-2", "LAK CHI 4-3"],
+            ["LAK NYR 4-1"]
+          ],
+          "2014": [
+            ["WSH NYI 4-3", "NYR PIT 4-1", "TBL DET 4-3", "MTL OTT 4-2", "CGY VAN 4-2", "ANA WPG 4-0", "CHI NSH 4-2", "MIN STL 4-2"],
+            ["TBL MTL 4-2", "NYR WSH 4-3", "ANA CGY 4-1", "CHI MIN 4-0"],
+            ["TBL NYR 4-3", "CHI ANA 4-3"],
+            ["CHI TBL 4-2"]
+          ],
+          "2015": [
+            ["WSH PHI 4-2", "PIT NYR 4-1", "TBL DET 4-1", "NYI FLA 4-2", "NSH ANA 4-3", "SJS LAK 4-1", "DAL MIN 4-2", "STL CHI 4-3"],
+            ["SJS NSH 4-3", "STL DAL 4-3", "PIT WSH 4-2", "TBL NYI 4-1"],
+            ["SJS STL 4-2", "PIT TBL 4-3"],
+            ["PIT SJS 4-2"]
+          ],
+          "2016": [
+            ["PIT CBJ 4-1", "WSH TOR 4-2", "OTT BOS 4-2", "NYR MTL 4-2", "EDM SJS 4-2", "ANA CGY 4-0", "STL MIN 4-1", "NSH CHI 4-0"],
+            ["NSH STL 4-2", "ANA EDM 4-3", "OTT NYR 4-2", "PIT WSH 4-3"],
+            ["NSH ANA 4-2", "PIT OTT 4-3"],
+            ["PIT NSH 4-2"]
+          ],
+          "2017": [
+            ["PIT PHI 4-2", "BOS TOR 4-3", "WSH CBJ 4-2", "TBL NJD 4-1", "SJS ANA 4-0", "WPG MIN 4-1", "VGK LAK 4-0", "NSH COL 4-2"],
+            ["WPG NSH 4-3", "VGK SJS 4-2", "TBL BOS 4-1", "WSH PIT 4-2"],
+            ["VGK WPG 4-1", "WSH TBL 4-3"],
+            ["WSH VGK 4-1"]
+          ],
+          "2018": [
+            ["NYI PIT 4-0", "BOS TOR 4-3", "CAR WSH 4-3", "CBJ TBL 4-0", "SJS VGK 4-3", "STL WPG 4-2", "COL CGY 4-1", "DAL NSH 4-2"],
+            ["CAR NYI 4-0", "STL DAL 4-3", "SJS COL 4-3", "BOS CBJ 4-2"],
+            ["STL SJS 4-2", "BOS CAR 4-0"],
+            ["STL BOS 4-3"]
+          ],
+          "2019": [
+            ["DAL CGY 4-2", "VAN STL 4-2", "COL ARI 4-1", "VGK CHI 4-1", "TBL CBJ 4-1", "NYI WSH 4-1", "BOS CAR 4-1", "PHI MTL 4-2"],
+            ["VGK VAN 4-3", "DAL COL 4-3", "NYI PHI 4-3", "TBL BOS 4-1"],
+            ["DAL VGK 4-1", "TBL NYI 4-2"],
+            ["TBL DAL 4-2"]
+          ],
+          "2020": [
+            ["BOS WSH 4-1", "NYI PIT 4-2", "WPG EDM 4-0", "MTL TOR 4-3", "TBL FLA 4-2", "CAR NSH 4-2", "VGK MIN 4-3", "COL STL 4-0"],
+            ["MTL WPG 4-0", "TBL CAR 4-1", "VGK COL 4-2", "NYI BOS 4-2"],
+            ["MTL VGK 4-2", "TBL NYI 4-3"],
+            ["TBL MTL 4-1"]
+          ],
+          "2021": [
+            ["CGY DAL 4-3", "COL NSH 4-0", "FLA WSH 4-2", "NYR PIT 4-3", "EDM LAK 4-3", "STL MIN 4-2", "TBL TOR 4-3", "CAR BOS 4-3"],
+            ["EDM CGY 4-1", "COL STL 4-2", "NYR CAR 4-3", "TBL FLA 4-0"],
+            ["TBL NYR 4-2", "COL EDM 4-0"],
+            ["COL TBL 4-2"]
+          ],
+          "2022": [
+            ["EDM LAK 4-2", "VGK WPG 4-1", "DAL MIN 4-2", "SEA COL 4-3", "NJD NYR 4-3", "CAR NYI 4-2", "TOR TBL 4-2", "FLA BOS 4-3"],
+            ["VGK EDM 4-2", "DAL SEA 4-3", "FLA TOR 4-1", "CAR NJD 4-1"],
+            ["VGK DAL 4-2", "FLA CAR 4-0"],
+            ["VGK FLA 4-1"]
+          ],
+          "2023": [
+            ["BOS TOR 4-3", "CAR NYI 4-1", "NYR WSH 4-0", "FLA TBL 4-1", "EDM LAK 4-1", "DAL VGK 4-3", "VAN NSH 4-2", "COL WPG 4-1"],
+            ["EDM VAN 4-3", "DAL COL 4-2", "FLA BOS 4-2", "NYR CAR 4-2"],
+            ["EDM DAL 4-2", "FLA NYR 4-2"],
+            ["FLA EDM 4-3"]
+          ],
+          "2024": [
+            ["EDM LAK 4-2", "VGK MIN 4-2", "DAL COL 4-3", "WPG STL 4-3", "CAR NJD 4-1", "WSH MTL 4-1", "FLA TBL 4-1", "TOR OTT 4-2"],
+            ["DAL WPG 4-2", "EDM VGK 4-1", "CAR WSH 4-1", "FLA TOR 4-3"],
+            ["EDM DAL 4-1", "FLA CAR 4-1"],
+            ["FLA EDM 4-2"]
+          ],
+          "2025": [
+            ["ANA EDM 4-2", "VGK UTA 4-2", "MIN DAL 4-2", "COL LAK 4-0", "PHI PIT 4-2", "CAR OTT 4-0", "MTL TBL 4-3", "BUF BOS 4-2"],
+            ["VGK ANA 4-2", "COL MIN 4-1", "CAR PHI 4-0", "MTL BUF 4-3"],
+            ["CAR MTL 4-1", "VGK COL 4-0"],
+            ["CAR VGK 4-2"]
+          ]
+        },
+        "before": {
+          "2019": ["Qualifying Round"]
+        }
+      },
+      "note": "Read again on 2026-10-12 for every season of 2006-07 to 2025-26 (the four seasons of the 1211 receipt hr-playoffs among them), each page drawn in Chromium on a GitHub runner. Keyed by the year the season starts in. The summary page calls the last round \"Final\"; its matchup pages (hr-final-matchups) call it the Stanley Cup Final."
+    },
+    "hr-final-matchups": {
+      "sport": "nhl",
+      "group": "sportsreference-hockey",
+      "publisher": "Hockey Reference",
+      "title": "<year> NHL Stanley Cup Final: <club> vs. <club> (the matchup page of each season's last round)",
+      "url": "https://www.hockey-reference.com/playoffs/<year>-<club>-vs-<club>-stanley-cup-final.html",
+      "read": "2026-10-12",
+      "years": {
+        "2006": "Heading of the matchup page of the last round: \"2007 NHL Stanley Cup Final Anaheim Ducks defeat Ottawa Senators 4-1\".",
+        "2007": "Heading of the matchup page of the last round: \"2008 NHL Stanley Cup Final Detroit Red Wings defeat Pittsburgh Penguins 4-2\".",
+        "2008": "Heading of the matchup page of the last round: \"2009 NHL Stanley Cup Final Pittsburgh Penguins defeat Detroit Red Wings 4-3\".",
+        "2009": "Heading of the matchup page of the last round: \"2010 NHL Stanley Cup Final Chicago Blackhawks defeat Philadelphia Flyers 4-2\".",
+        "2010": "Heading of the matchup page of the last round: \"2011 NHL Stanley Cup Final Boston Bruins defeat Vancouver Canucks 4-3\".",
+        "2011": "Heading of the matchup page of the last round: \"2012 NHL Stanley Cup Final Los Angeles Kings defeat New Jersey Devils 4-2\".",
+        "2012": "Heading of the matchup page of the last round: \"2013 NHL Stanley Cup Final Chicago Blackhawks defeat Boston Bruins 4-2\".",
+        "2013": "Heading of the matchup page of the last round: \"2014 NHL Stanley Cup Final Los Angeles Kings defeat New York Rangers 4-1\".",
+        "2014": "Heading of the matchup page of the last round: \"2015 NHL Stanley Cup Final Chicago Blackhawks defeat Tampa Bay Lightning 4-2\".",
+        "2015": "Heading of the matchup page of the last round: \"2016 NHL Stanley Cup Final Pittsburgh Penguins defeat San Jose Sharks 4-2\".",
+        "2016": "Heading of the matchup page of the last round: \"2017 NHL Stanley Cup Final Pittsburgh Penguins defeat Nashville Predators 4-2\".",
+        "2017": "Heading of the matchup page of the last round: \"2018 NHL Stanley Cup Final Washington Capitals defeat Vegas Golden Knights 4-1\".",
+        "2018": "Heading of the matchup page of the last round: \"2019 NHL Stanley Cup Final St. Louis Blues defeat Boston Bruins 4-3\".",
+        "2019": "Heading of the matchup page of the last round: \"2020 NHL Stanley Cup Final Tampa Bay Lightning defeat Dallas Stars 4-2\".",
+        "2020": "Heading of the matchup page of the last round: \"2021 NHL Stanley Cup Final Tampa Bay Lightning defeat Montreal Canadiens 4-1\".",
+        "2021": "Heading of the matchup page of the last round: \"2022 NHL Stanley Cup Final Colorado Avalanche defeat Tampa Bay Lightning 4-2\".",
+        "2022": "Heading of the matchup page of the last round: \"2023 NHL Stanley Cup Final Vegas Golden Knights defeat Florida Panthers 4-1\".",
+        "2023": "Heading of the matchup page of the last round: \"2024 NHL Stanley Cup Final Florida Panthers defeat Edmonton Oilers 4-3\".",
+        "2024": "Heading of the matchup page of the last round: \"2025 NHL Stanley Cup Final Florida Panthers defeat Edmonton Oilers 4-2\".",
+        "2025": "Heading of the matchup page of the last round: \"2026 NHL Stanley Cup Final Carolina Hurricanes defeat Vegas Golden Knights 4-2\"."
+      },
+      "values": {
+        "rounds": {
+          "2006": [null, null, null, "Stanley Cup Final"],
+          "2007": [null, null, null, "Stanley Cup Final"],
+          "2008": [null, null, null, "Stanley Cup Final"],
+          "2009": [null, null, null, "Stanley Cup Final"],
+          "2010": [null, null, null, "Stanley Cup Final"],
+          "2011": [null, null, null, "Stanley Cup Final"],
+          "2012": [null, null, null, "Stanley Cup Final"],
+          "2013": [null, null, null, "Stanley Cup Final"],
+          "2014": [null, null, null, "Stanley Cup Final"],
+          "2015": [null, null, null, "Stanley Cup Final"],
+          "2016": [null, null, null, "Stanley Cup Final"],
+          "2017": [null, null, null, "Stanley Cup Final"],
+          "2018": [null, null, null, "Stanley Cup Final"],
+          "2019": [null, null, null, "Stanley Cup Final"],
+          "2020": [null, null, null, "Stanley Cup Final"],
+          "2021": [null, null, null, "Stanley Cup Final"],
+          "2022": [null, null, null, "Stanley Cup Final"],
+          "2023": [null, null, null, "Stanley Cup Final"],
+          "2024": [null, null, null, "Stanley Cup Final"],
+          "2025": [null, null, null, "Stanley Cup Final"]
+        }
+      },
+      "note": "Reached from the \"View Matchup\" link of the last round on each summary page, drawn in Chromium on a GitHub runner on 2026-10-12. `rounds` holds only the last round's name; the others are null here."
+    },
+    "nhl-84-again": {
+      "sport": "nhl",
+      "group": "nhl",
+      "publisher": "NHL.com (NHL Public Relations)",
+      "title": "10 things to know about 2026-27 NHL regular season",
+      "published": "2026-07-16",
+      "url": "https://www.nhl.com/news/nhl-stats-pack-2026-27-regular-season-schedule",
+      "read": "2026-10-12",
+      "seasons": [2026],
+      "says": ["84-game campaign per team begins Sept. 29 with nationally televised tripleheader on ESPN", "Below are 10 things to know about the 2026-27 regular-season schedule.", "The Golden Knights hit the ice for the first time since Game 6 of the 2026 Stanley Cup Final"],
+      "note": "The page of the 1211 receipt nhl-84, read again on 2026-10-12 (a new key, as a page read again on a later day is). Drawn in Chromium on a GitHub runner. The page was searched for playoff, postseason, format and best-of: it says nothing of the playoff format."
+    },
+    "espn-84-again": {
+      "sport": "nhl",
+      "group": "espn",
+      "publisher": "ESPN (Greg Wyshynski)",
+      "title": "NHL releases expanded 84-game schedule for 2026-27 season",
+      "published": "2026-07-16",
+      "url": "https://www.espn.com/nhl/story/_/id/49376073/nhl-releases-expanded-84-game-schedule-2026-27-season",
+      "read": "2026-10-12",
+      "seasons": [2026],
+      "says": ["the league expands its campaign from 82 to 84 games this season.", "Under the league's new collective bargaining agreement with the players, which begins its four-year term Sept. 16, the schedule was increased to 84 games.", "followed by the Chicago Blackhawks traveling to face the Stanley Cup Final runner-up Vegas Golden Knights"],
+      "note": "The page of the 1211 receipt espn-84, read again on 2026-10-12 in the desktop app's own browser pane (the runner was answered with an empty page). The whole report was read: it says nothing of the playoff format."
+    },
+    "nhl-playoff-format-again": {
+      "sport": "nhl",
+      "group": "nhl",
+      "publisher": "NHL.com",
+      "title": "Playoff Format",
+      "url": "https://www.nhl.com/info/standings-info/playoff-format",
+      "read": "2026-10-12",
+      "says": ["16 teams will qualify for the Stanley Cup Playoffs.", "The format is a set bracket that is largely division-based with wild cards.", "Each of the four rounds is a best-of-7; the first team to win four games advances to the next round.", "First-round winners within each bracket play one another to determine the four participants in the Conference Finals.", "In the Conference Finals and Stanley Cup Final, home-ice advantage goes to the team that had the better regular-season record"],
+      "note": "The page of the 1211 receipt nhl-playoff-format, read again on 2026-10-12, during the 2026-27 season, as the third reading the brief asks for when both schedule articles are silent. It describes the format in force and names no season."
+    },
+    "nbc-2020-format": {
+      "sport": "nhl",
+      "group": "nbc",
+      "publisher": "NBC Sports (James O'Brien)",
+      "title": "How 2020 NHL playoffs will work: Format, seeding, locations, more for Stanley Cup playoffs",
+      "published": "2020-08-24",
+      "url": "https://www.nbcsports.com/nhl/news/how-2020-nhl-playoffs-will-work-stanley-cup",
+      "read": "2026-10-12",
+      "years": {
+        "2019": "The 2020 playoffs: a 24 team playoff; a round robin of the top four of each conference for First Round seeding and a Qualifying Round of best of five series for the other eight; then First Round, Second Round, Conference Finals and Stanley Cup Final, each best of seven."
+      },
+      "values": {
+        "rounds": {
+          "2019": ["First Round", "Second Round", "Conference Finals", "Stanley Cup Final"]
+        },
+        "before": {
+          "2019": ["Round Robin", "Qualifying Round"]
+        }
+      },
+      "says": ["How the 24-team playoff format works", "Round Robin: The top 4 teams play for First Round seeding (regular-season overtime rules in effect)", "Qualifying Round: The remaining 8 teams play best-of-5 series to advance to the First Round (playoff overtime rules in effect)", "First Round and Second Round: Format (seeding vs. bracket) and series lengths will be best-of-seven.", "Conference Finals and Stanley Cup Final: Best-of-7 series will take place at Rogers Place in Edmonton."],
+      "note": "Drawn in Chromium on a GitHub runner on 2026-10-12. Each quotation is a line of the page, its bullet left off."
+    },
+    "cbs-2020-format": {
+      "sport": "nhl",
+      "group": "cbs",
+      "publisher": "CBS Sports (Shanna McCarriston)",
+      "title": "NHL announces format for Stanley Cup playoffs for when 2020 season resumes",
+      "published": "2020-06-04",
+      "url": "https://www.cbssports.com/nhl/news/nhl-announces-format-for-stanley-cup-playoffs-for-when-2020-season-resumes/",
+      "read": "2026-10-12",
+      "years": {
+        "2019": "The 2019-20 playoff format: a 24 team, conference based plan; a play-in qualifying round of best of five; then four playoff rounds (first round, second round, conference finals and Stanley Cup Final), each best of seven, the teams seeded again after each round."
+      },
+      "values": {
+        "rounds": {
+          "2019": ["first round", "second round", "conference finals", "Stanley Cup Final"]
+        },
+        "before": {
+          "2019": ["qualifying round"]
+        }
+      },
+      "says": ["Both sides came to the agreement that all four playoff rounds (first round, second round, conference finals and Stanley Cup Final) will be best-of-seven and the play-in, qualifying round will be best-of-five.", "After each round, the teams will be re-seeded and will not be bracketed.", "The playoff format involves a 24-team, conference-based plan."],
+      "note": "Drawn in Chromium on a GitHub runner on 2026-10-12. Its names are in lower case; a name counts when two sources agree on it, hyphen and case aside."
+    },
+    "nbc-2021-season": {
+      "sport": "nhl",
+      "group": "nbc",
+      "publisher": "NBC Sports (James O'Brien)",
+      "title": "What we know about 2020-21 NHL season: Key dates, playoff format, more",
+      "published": "2020-12-22",
+      "url": "https://www.nbcsports.com/nhl/news/what-we-know-about-2020-21-nhl-season-key-dates-playoff-format-more",
+      "read": "2026-10-12",
+      "years": {
+        "2020": "The 2020-21 season: 56 games, four realigned divisions, play only inside the division; the top four of each division make the 16 playoff clubs; first against fourth and second against third in each division; the winners meet in the second round; then the last four are seeded again; the Stanley Cup Final."
+      },
+      "values": {
+        "rounds": {
+          "2020": [null, "second round", null, "Stanley Cup Final"]
+        }
+      },
+      "says": ["we know how the NHL plans to run its 56-game, 2020-21 season.", "Instead, it’s quite simple: the top four teams from each of the four divisions will make up the 16 playoff squads.", "From there, the top seed in each division faces the fourth seed, while the second faces the third. The winners face off in the second round. After the divisional bracketing is taken care of, the four remaining playoff teams will be re-seeded.", "This could create some fascinating, one-of-a-kind matchups for the 2021 Stanley Cup Final."],
+      "note": "Drawn in Chromium on a GitHub runner on 2026-10-12. It names the second round and the Final, not the first round or the round of the last four."
+    },
+    "nhl-2021-keyq": {
+      "sport": "nhl",
+      "group": "nhl",
+      "publisher": "NHL.com (Tom Gulitti)",
+      "title": "Key questions, answers on 2020-21 NHL season",
+      "published": "2020-12-23",
+      "url": "https://www.nhl.com/news/key-questions-answers-2020-21-nhl-season-319847468",
+      "read": "2026-10-12",
+      "years": {
+        "2020": "The 2020-21 season: a 56 game regular season; four new divisions and only games inside the division; the top four of each division qualify; the first two rounds inside the division, first against fourth and second against third in the first round; the four clubs of the Semifinal Round seeded by points; the traditional four round, best of seven format."
+      },
+      "values": {
+        "rounds": {
+          "2020": ["first round", null, "Semifinal Round", null]
+        }
+      },
+      "says": ["The NHL and NHL Players' Association announced Sunday an agreement to play a 56-game regular season beginning Jan. 13, 2021.", "The playoffs, featuring the traditional four-round, best-of-7 format, are tentatively scheduled to begin May 11 and end no later than July 9", "For the 2020-21 season, the teams will be realigned into four new divisions, and play will be limited to intradivisional games because of travel restrictions in the United States and Canada.", "The top four teams in each division will qualify for the playoffs. The first two rounds of the playoffs will be intradivisional, with the first-place team facing the fourth-place team and the second-place team playing the third-place team in the first round.", "The four teams that advance to the Semifinal Round will be seeded by their point total in the regular season"],
+      "note": "Drawn in Chromium on a GitHub runner on 2026-10-12 (a digest of it was all the scout had). The league's own site: group nhl, one source with the records site."
+    },
+    "nbc-2021-semis": {
+      "sport": "nhl",
+      "group": "nbc",
+      "publisher": "NBC Sports (Sean Leahy)",
+      "title": "PHT’s 2021 NHL Stanley Cup Semifinals predictions",
+      "published": "2021-06-13",
+      "url": "https://www.nbcsports.com/nhl/news/phts-2021-nhl-stanley-cup-semifinals-predictions",
+      "read": "2026-10-12",
+      "years": {
+        "2020": "The round of the last four of the 2021 playoffs, under the name Stanley Cup Semifinals: Montreal against Vegas and the Islanders against Tampa Bay, after two rounds and a re-seeding."
+      },
+      "values": {
+        "rounds": {
+          "2020": [null, null, "Stanley Cup Semifinals", null]
+        }
+      },
+      "says": ["PHT’s 2021 NHL Stanley Cup Semifinals predictions", "Two rounds down, two more to go on the road to the 2021 Stanley Cup.", "a first-time playoff meeting between Montreal and Vegas thanks to this unique playoff and the semifinal re-seeding."],
+      "note": "Read on 2026-10-12 in the desktop app's own browser pane; the address found by a search, the page itself read. NBC Sports and NBC Chicago are one group."
+    },
+    "nhl-gm-overtime": {
+      "sport": "nhl",
+      "group": "nhl",
+      "publisher": "NHL.com (Nicholas J. Cotsonika)",
+      "title": "NHL general managers discuss, endorse OT format at meetings",
+      "published": "2024-03-18",
+      "url": "https://www.nhl.com/news/nhl-general-managers-discuss-overtime-format",
+      "read": "2026-10-12",
+      "says": ["It introduced five-minute, 5-on-5 sudden-death OT for the 1983-84 regular season, but eventually the feeling was that too many games were still ending in ties.", "The League went to 4-on-4 OT in 1999-2000 and began awarding a point to teams that lost in OT.", "The shootout was introduced in 2005-06 as part of a comprehensive package of rule changes coming out of the 2004-05 lockout, but eventually the feeling was that too many games were ending in shootouts.", "And so, the NHL went to 3-on-3 OT in 2015-16."],
+      "note": "Drawn in Chromium on a GitHub runner on 2026-10-12 (a digest of it was all the scout had). It also gives four skaters a side from 1999-2000, which is not this round's to write (row T2 of the brief)."
+    },
+    "espn-overtime": {
+      "sport": "nhl",
+      "group": "espn",
+      "publisher": "ESPN (ESPN staff)",
+      "title": "What are NHL overtime rules?",
+      "published": "2024-01-29",
+      "url": "https://www.espn.com/nhl/story/_/id/39345002/what-nhl-rules",
+      "read": "2026-10-12",
+      "says": ["Even with overtime in place, the league allowed games to end in a draw until 2005, when the introduction of the shootout in the regular season eliminated the possibility for a game to end in a tie.", "Ties used to be a regular occurrence in hockey until 2005, when the NHL introduced the shootout following the end of overtime.", "If neither team scores in the sudden-death overtime period, the game goes to a shootout.", "This continues until one team scores and the other does not.", "The extra point for an overtime/shootout loss was introduced in 1999, six years before the elimination of the tie."],
+      "note": "Read on 2026-10-12 in the desktop app's own browser pane (the runner was answered with an empty page); every quotation checked against the page's text in the pane."
+    },
+    "nhl-feed-1312": {
+      "sport": "nhl",
+      "group": "nhl",
+      "publisher": "National Hockey League, its own standings feed",
+      "title": "Standings on the last day of each regular season, 2006-07 to 2025-26 (every club's games, wins, losses, overtime losses and shootout wins and losses)",
+      "url": "https://api-web.nhle.com/v1/standings/<last day of the regular season>",
+      "read": "2026-10-12",
+      "years": {
+        "2006": "2007-04-08: 30 clubs, 2460 games played between them; overtime losses add up to 281, shootout wins to 164 and shootout losses to 164.",
+        "2007": "2008-04-06: 30 clubs, 2460 games played between them; overtime losses add up to 272, shootout wins to 156 and shootout losses to 156.",
+        "2008": "2009-04-12: 30 clubs, 2460 games played between them; overtime losses add up to 282, shootout wins to 159 and shootout losses to 159.",
+        "2009": "2010-04-11: 30 clubs, 2460 games played between them; overtime losses add up to 301, shootout wins to 184 and shootout losses to 184.",
+        "2010": "2011-04-10: 30 clubs, 2460 games played between them; overtime losses add up to 297, shootout wins to 149 and shootout losses to 149.",
+        "2011": "2012-04-07: 30 clubs, 2460 games played between them; overtime losses add up to 300, shootout wins to 181 and shootout losses to 181.",
+        "2012": "2013-04-28: 30 clubs, 1440 games played between them; overtime losses add up to 162, shootout wins to 97 and shootout losses to 97.",
+        "2013": "2014-04-13: 30 clubs, 2460 games played between them; overtime losses add up to 307, shootout wins to 178 and shootout losses to 178.",
+        "2014": "2015-04-11: 30 clubs, 2460 games played between them; overtime losses add up to 306, shootout wins to 170 and shootout losses to 170.",
+        "2015": "2016-04-10: 30 clubs, 2460 games played between them; overtime losses add up to 275, shootout wins to 107 and shootout losses to 107.",
+        "2016": "2017-04-09: 30 clubs, 2460 games played between them; overtime losses add up to 289, shootout wins to 99 and shootout losses to 99.",
+        "2017": "2018-04-08: 31 clubs, 2542 games played between them; overtime losses add up to 296, shootout wins to 103 and shootout losses to 103.",
+        "2018": "2019-04-06: 31 clubs, 2542 games played between them; overtime losses add up to 271, shootout wins to 87 and shootout losses to 87.",
+        "2019": "2020-03-11: 31 clubs, 2164 games played between them; overtime losses add up to 250, shootout wins to 86 and shootout losses to 86.",
+        "2020": "2021-05-19: 31 clubs, 1736 games played between them; overtime losses add up to 195, shootout wins to 65 and shootout losses to 65.",
+        "2021": "2022-05-01: 32 clubs, 2624 games played between them; overtime losses add up to 288, shootout wins to 102 and shootout losses to 102.",
+        "2022": "2023-04-14: 32 clubs, 2624 games played between them; overtime losses add up to 302, shootout wins to 95 and shootout losses to 95.",
+        "2023": "2024-04-18: 32 clubs, 2624 games played between them; overtime losses add up to 271, shootout wins to 82 and shootout losses to 82.",
+        "2024": "2025-04-17: 32 clubs, 2624 games played between them; overtime losses add up to 271, shootout wins to 77 and shootout losses to 77.",
+        "2025": "2026-04-16: 32 clubs, 2624 games played between them; overtime losses add up to 326, shootout wins to 119 and shootout losses to 119."
+      },
+      "values": {
+        "teamGames": {
+          "2006": 2460,
+          "2007": 2460,
+          "2008": 2460,
+          "2009": 2460,
+          "2010": 2460,
+          "2011": 2460,
+          "2012": 1440,
+          "2013": 2460,
+          "2014": 2460,
+          "2015": 2460,
+          "2016": 2460,
+          "2017": 2542,
+          "2018": 2542,
+          "2019": 2164,
+          "2020": 1736,
+          "2021": 2624,
+          "2022": 2624,
+          "2023": 2624,
+          "2024": 2624,
+          "2025": 2624
+        },
+        "overtimeLosses": {
+          "2006": 281,
+          "2007": 272,
+          "2008": 282,
+          "2009": 301,
+          "2010": 297,
+          "2011": 300,
+          "2012": 162,
+          "2013": 307,
+          "2014": 306,
+          "2015": 275,
+          "2016": 289,
+          "2017": 296,
+          "2018": 271,
+          "2019": 250,
+          "2020": 195,
+          "2021": 288,
+          "2022": 302,
+          "2023": 271,
+          "2024": 271,
+          "2025": 326
+        },
+        "shootoutWins": {
+          "2006": 164,
+          "2007": 156,
+          "2008": 159,
+          "2009": 184,
+          "2010": 149,
+          "2011": 181,
+          "2012": 97,
+          "2013": 178,
+          "2014": 170,
+          "2015": 107,
+          "2016": 99,
+          "2017": 103,
+          "2018": 87,
+          "2019": 86,
+          "2020": 65,
+          "2021": 102,
+          "2022": 95,
+          "2023": 82,
+          "2024": 77,
+          "2025": 119
+        },
+        "shootoutLosses": {
+          "2006": 164,
+          "2007": 156,
+          "2008": 159,
+          "2009": 184,
+          "2010": 149,
+          "2011": 181,
+          "2012": 97,
+          "2013": 178,
+          "2014": 170,
+          "2015": 107,
+          "2016": 99,
+          "2017": 103,
+          "2018": 87,
+          "2019": 86,
+          "2020": 65,
+          "2021": 102,
+          "2022": 95,
+          "2023": 82,
+          "2024": 77,
+          "2025": 119
+        }
+      },
+      "note": "The feed of the 1211 receipt nhl, read again on 2026-10-12 for all twenty seasons (a new key), each answer drawn in Chromium on a GitHub runner and summed club by club. Keyed by the year the season starts in. teamGames is the sum of every club's games played, twice the league's games."
+    },
+    "hr-standings-1312": {
+      "sport": "nhl",
+      "group": "sportsreference-hockey",
+      "publisher": "Hockey Reference",
+      "title": "<year> NHL Standings, its \"Expanded Standings\" table (each club's overall record and shootout record)",
+      "url": "https://www.hockey-reference.com/leagues/NHL_<year the season ends in>_standings.html",
+      "read": "2026-10-12",
+      "years": {
+        "2006": "The 2007 standings, \"Expanded Standings\": 30 clubs; the losses after sixty minutes (the third number of each Overall record) add up to 281; the Shootout records add up to 164 wins and 164 losses; club for club the league feed's numbers.",
+        "2007": "The 2008 standings, \"Expanded Standings\": 30 clubs; the losses after sixty minutes (the third number of each Overall record) add up to 272; the Shootout records add up to 156 wins and 156 losses; club for club the league feed's numbers.",
+        "2008": "The 2009 standings, \"Expanded Standings\": 30 clubs; the losses after sixty minutes (the third number of each Overall record) add up to 282; the Shootout records add up to 159 wins and 159 losses; club for club the league feed's numbers.",
+        "2009": "The 2010 standings, \"Expanded Standings\": 30 clubs; the losses after sixty minutes (the third number of each Overall record) add up to 301; the Shootout records add up to 184 wins and 184 losses; club for club the league feed's numbers.",
+        "2010": "The 2011 standings, \"Expanded Standings\": 30 clubs; the losses after sixty minutes (the third number of each Overall record) add up to 297; the Shootout records add up to 149 wins and 149 losses; club for club the league feed's numbers.",
+        "2011": "The 2012 standings, \"Expanded Standings\": 30 clubs; the losses after sixty minutes (the third number of each Overall record) add up to 300; the Shootout records add up to 181 wins and 181 losses; club for club the league feed's numbers.",
+        "2012": "The 2013 standings, \"Expanded Standings\": 30 clubs; the losses after sixty minutes (the third number of each Overall record) add up to 162; the Shootout records add up to 97 wins and 97 losses; club for club the league feed's numbers.",
+        "2013": "The 2014 standings, \"Expanded Standings\": 30 clubs; the losses after sixty minutes (the third number of each Overall record) add up to 307; the Shootout records add up to 178 wins and 178 losses; club for club the league feed's numbers.",
+        "2014": "The 2015 standings, \"Expanded Standings\": 30 clubs; the losses after sixty minutes (the third number of each Overall record) add up to 306; the Shootout records add up to 170 wins and 170 losses; club for club the league feed's numbers.",
+        "2015": "The 2016 standings, \"Expanded Standings\": 30 clubs; the losses after sixty minutes (the third number of each Overall record) add up to 275; the Shootout records add up to 107 wins and 107 losses; club for club the league feed's numbers.",
+        "2016": "The 2017 standings, \"Expanded Standings\": 30 clubs; the losses after sixty minutes (the third number of each Overall record) add up to 289; the Shootout records add up to 99 wins and 99 losses; club for club the league feed's numbers.",
+        "2017": "The 2018 standings, \"Expanded Standings\": 31 clubs; the losses after sixty minutes (the third number of each Overall record) add up to 296; the Shootout records add up to 103 wins and 103 losses; club for club the league feed's numbers.",
+        "2018": "The 2019 standings, \"Expanded Standings\": 31 clubs; the losses after sixty minutes (the third number of each Overall record) add up to 271; the Shootout records add up to 87 wins and 87 losses; club for club the league feed's numbers.",
+        "2019": "The 2020 standings, \"Expanded Standings\": 31 clubs; the losses after sixty minutes (the third number of each Overall record) add up to 250; the Shootout records add up to 86 wins and 86 losses; club for club the league feed's numbers.",
+        "2020": "The 2021 standings, \"Expanded Standings\": 31 clubs; the losses after sixty minutes (the third number of each Overall record) add up to 195; the Shootout records add up to 65 wins and 65 losses; club for club the league feed's numbers.",
+        "2021": "The 2022 standings, \"Expanded Standings\": 32 clubs; the losses after sixty minutes (the third number of each Overall record) add up to 288; the Shootout records add up to 102 wins and 102 losses; club for club the league feed's numbers.",
+        "2022": "The 2023 standings, \"Expanded Standings\": 32 clubs; the losses after sixty minutes (the third number of each Overall record) add up to 302; the Shootout records add up to 95 wins and 95 losses; club for club the league feed's numbers.",
+        "2023": "The 2024 standings, \"Expanded Standings\": 32 clubs; the losses after sixty minutes (the third number of each Overall record) add up to 271; the Shootout records add up to 82 wins and 82 losses; club for club the league feed's numbers.",
+        "2024": "The 2025 standings, \"Expanded Standings\": 32 clubs; the losses after sixty minutes (the third number of each Overall record) add up to 271; the Shootout records add up to 77 wins and 77 losses; club for club the league feed's numbers.",
+        "2025": "The 2026 standings, \"Expanded Standings\": 32 clubs; the losses after sixty minutes (the third number of each Overall record) add up to 326; the Shootout records add up to 119 wins and 119 losses; club for club the league feed's numbers."
+      },
+      "values": {
+        "overtimeLosses": {
+          "2006": 281,
+          "2007": 272,
+          "2008": 282,
+          "2009": 301,
+          "2010": 297,
+          "2011": 300,
+          "2012": 162,
+          "2013": 307,
+          "2014": 306,
+          "2015": 275,
+          "2016": 289,
+          "2017": 296,
+          "2018": 271,
+          "2019": 250,
+          "2020": 195,
+          "2021": 288,
+          "2022": 302,
+          "2023": 271,
+          "2024": 271,
+          "2025": 326
+        },
+        "shootoutWins": {
+          "2006": 164,
+          "2007": 156,
+          "2008": 159,
+          "2009": 184,
+          "2010": 149,
+          "2011": 181,
+          "2012": 97,
+          "2013": 178,
+          "2014": 170,
+          "2015": 107,
+          "2016": 99,
+          "2017": 103,
+          "2018": 87,
+          "2019": 86,
+          "2020": 65,
+          "2021": 102,
+          "2022": 95,
+          "2023": 82,
+          "2024": 77,
+          "2025": 119
+        },
+        "shootoutLosses": {
+          "2006": 164,
+          "2007": 156,
+          "2008": 159,
+          "2009": 184,
+          "2010": 149,
+          "2011": 181,
+          "2012": 97,
+          "2013": 178,
+          "2014": 170,
+          "2015": 107,
+          "2016": 99,
+          "2017": 103,
+          "2018": 87,
+          "2019": 86,
+          "2020": 65,
+          "2021": 102,
+          "2022": 95,
+          "2023": 82,
+          "2024": 77,
+          "2025": 119
+        }
+      },
+      "note": "The page of the 1211 receipt hr-shootout, read again on 2026-10-12 for all twenty seasons (a new key), drawn in Chromium on a GitHub runner; the table sits in a comment of the page and was read from it. Keyed by the year the season starts in."
+    }
+  }
+}
