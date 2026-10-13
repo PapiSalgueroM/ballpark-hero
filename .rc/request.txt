@@ -1,0 +1,6 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simCmTablesTruth: node scripts/simCmTablesTruth.mjs
+defeatraw: CM_TABLES_TRUTH_CONTROL=defeatraw node scripts/simCmTablesTruth.mjs
+basered: mkdir -p .sim-control/b1325 && git show 8fea14e2:src/components/club-manager/ClubManagerCareerPanel.tsx > .sim-control/b1325/Panel.tsx && NO_DOUBLE_SWAP="{\"@/components/club-manager/ClubManagerCareerPanel\":\"$PWD/.sim-control/b1325/Panel.tsx\"}" node_modules/.bin/vitest run src/test/cmTablesTruth.test.tsx --testTimeout=300000 --hookTimeout=300000
+vitest-face: node_modules/.bin/vitest run src/test/clubManagerManagerFace.test.tsx src/test/numberFormatting.test.tsx --testTimeout=300000 --hookTimeout=120000
+simNumberFormatting: node scripts/simNumberFormatting.mjs
