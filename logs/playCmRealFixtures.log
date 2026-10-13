@@ -1,0 +1,30 @@
+390-real passed=false
+  AssertionError [ERR_ASSERTION]: calendar-sources: the actual content must become readable and stable after its native interaction
+      at captureVisible (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playCmRealFixtures.mjs:170:5)
+      at async journey (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playCmRealFixtures.mjs:207:73)
+      at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playCmRealFixtures.mjs:283:34
+  capture calendar-sources failed, last frame {"box":{"x":16,"y":-36,"width":358,"height":82,"top":-36,"bottom":46,"right":374},"viewport":{"width":390,"height":844,"scrollX":0,"scrollY":636,"documentWidth":390},"style":{"display":"block","visibility":"visible","opacity":"1"},"ancestors":[{"tag":"DIV","scrollTop":0,"scrollLeft":0,"overflow":"visible","display":"block","visibility":"visible","opacity":"1"},{"tag":"DIV","scrollTop":0,"scrollLeft":0,"overflow":"visible","display":"block","visibility":"visible","opacity":"1"},{"tag":"DIV","scrollTop":0,"scrollLeft":0,"overflow":"visible","display":"block","visibility":"visible","opacity":"1"},{"tag":"DIV","scrollTop":0,"scrollLeft":0,"overflow":"visible","display":"block","visibility":"visible","opacity":"1"},{"tag":"DIV","scrollTop":0,"scrollLeft":0,"overflow":"visible","display":"block","visibility":"visible","opacity":"1"},{"tag":"DIV","scrollTop":0,"scrollLeft":0,"overflow":"visible
+390-later passed=true
+1280-real passed=true
+1280-legacy passed=true
+1280-later passed=true
+1280-later-calendar-overview.png
+1280-later-calendar.png
+1280-later-help.png
+1280-later-result.png
+1280-legacy-calendar-overview.png
+1280-legacy-calendar.png
+1280-legacy-help.png
+1280-legacy-result.png
+1280-real-calendar-overview.png
+1280-real-calendar-sources.png
+1280-real-calendar.png
+1280-real-help.png
+1280-real-result.png
+390-later-calendar-overview.png
+390-later-calendar.png
+390-later-help.png
+390-later-result.png
+390-real-calendar-overview.png
+390-real-failure.png
+report.json
