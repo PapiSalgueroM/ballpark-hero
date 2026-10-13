@@ -1,0 +1,7 @@
+replay exit=1 | simEventDeck: 4 failures, red sections 1, 3, 12 (CONTROL=replay fired)
+weightoff exit=1 | simEventDeck: 2 failures, red sections 3, 12 (CONTROL=weightoff fired)
+weightkeep exit=1 | simEventDeck: 2 failures, red sections 3, 12 (CONTROL=weightkeep fired)
+story exit=1 | simEventDeck: 3 failures, red sections 4, 12 (CONTROL=story fired)
+rest exit=1 | simEventDeck: 4 failures, red sections 5, 12 (CONTROL=rest fired)
+failopen exit=1 | simEventDeck: 2 failures, red sections 5, 12 (CONTROL=failopen fired)
+ctl: every control exited 1

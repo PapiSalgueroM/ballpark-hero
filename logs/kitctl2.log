@@ -1,0 +1,6 @@
+restfall exit=1 | simEventDeck: 4 failures, red sections 5, 12 (CONTROL=restfall fired)
+expirefall exit=1 | simEventDeck: 4 failures, red sections 7, 12 (CONTROL=expirefall fired)
+textrng exit=1 | simEventDeck: 3 failures, red sections 6, 12 (CONTROL=textrng fired)
+seasonweek exit=1 | simEventDeck: 3 failures, red sections 9, 12 (CONTROL=seasonweek fired)
+expireoff exit=1 | simEventDeck: 8 failures, red sections 7, 12 (CONTROL=expireoff fired)
+ctl: every control exited 1

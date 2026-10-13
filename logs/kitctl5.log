@@ -1,0 +1,6 @@
+conductreal exit=1 | simEventDeck: 2 failures, red sections 12 (CONTROL=conductreal fired)
+slotopen exit=1 | simEventDeck: 2 failures, red sections 12 (CONTROL=slotopen fired)
+quoteslot exit=1 | simEventDeck: 1 failure, red sections 12 (CONTROL=quoteslot fired)
+untagged exit=1 | simEventDeck: 1 failure, red sections 12 (CONTROL=untagged fired)
+rosterword exit=1 | simEventDeck: 1 failure, red sections 12 (CONTROL=rosterword fired)
+ctl: every control exited 1
