@@ -1,0 +1,8 @@
+#!build
+#!playwright
+oldgrid: CM_FIT_PART=1 CM_FIT_CONTROL=oldgrid node scripts/playCmTablesFit.mjs
+scrollbox: CM_FIT_PART=1 CM_FIT_CONTROL=scrollbox node scripts/playCmTablesFit.mjs
+truncate: CM_FIT_PART=1 CM_FIT_CONTROL=truncate node scripts/playCmTablesFit.mjs
+smalltap: CM_FIT_PART=1 CM_FIT_CONTROL=smalltap node scripts/playCmTablesFit.mjs
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simCmTablesTruth: node scripts/simCmTablesTruth.mjs
