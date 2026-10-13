@@ -1,0 +1,12 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/test/saveFence.test.ts src/test/saveMovedNotice.test.tsx src/lib/clubManagerSlots.test.ts src/test/clubManagerSlots.test.tsx src/test/managerHotSeatCarryOn src/test/managerHotSeatCarryOnCard src/test/clubManagerSave --testTimeout=300000 --hookTimeout=120000
+fleet: git worktree add -q /tmp/f1 8fea14e2 && ln -s "$PWD/node_modules" /tmp/f1/node_modules && FENCE_BASE=/tmp/f1 node scripts/simSaveFence.mjs
+fence-nofence: SAVE_FENCE_CONTROL=nofence node scripts/simSaveFence.mjs
+fence-rawwrite: SAVE_FENCE_CONTROL=rawwrite node scripts/simSaveFence.mjs
+fleet-loaddraw: git worktree add -q /tmp/f2 8fea14e2 && ln -s "$PWD/node_modules" /tmp/f2/node_modules && FENCE_BASE=/tmp/f2 SAVE_FENCE_CONTROL=loaddraw SAVE_FENCE_SEEDS=0 node scripts/simSaveFence.mjs
+fleet-repairall: git worktree add -q /tmp/f3 8fea14e2 && ln -s "$PWD/node_modules" /tmp/f3/node_modules && FENCE_BASE=/tmp/f3 SAVE_FENCE_CONTROL=repairall SAVE_FENCE_SEEDS=0 node scripts/simSaveFence.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+simClubManagerSlots: node scripts/simClubManagerSlots.mjs
+simManagerAppealIsolation: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simManagerAppealIsolation.mjs
+simManagerHotSeat: node scripts/simManagerHotSeat.mjs
+simClubManagerSave: node scripts/simClubManagerSave.mjs
