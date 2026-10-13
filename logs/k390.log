@@ -1,0 +1,29 @@
+[10s] created Brazil🇧🇷/Striker (ST)/Current era (2025 start) -> youth age 16 at Vitoria Youth
+[17s] explore ambition-s0: 🎯 Season target Choose a personal challenge for next season -> closed true via  scroll 366->366
+[19s] explore preseason-s0: 🏃 Preseason plan Balanced, or choose your next-season workl -> closed true via  scroll 366->366
+[22s] explore squad-s0: 👥 Squad Your teammates The plan: Starter most weeks On our  -> closed true via ← Back/Escape scroll 366->366
+[25s] explore programme-s0: Your next season Roles, contracts, playing time and your com -> closed true via Close scroll 366->366
+[27s] explore attributes-s0: Full attributes 183 cm · 78 kg · every number under the six -> closed true via ← Back scroll 1157->193
+[29s] explore ratings-s0: 📈 Ratings -> closed true via Close scroll 1877->1877
+[31s] explore story-s0: 📖 Career Story -> closed true via Back to your career scroll 1877->1877
+[33s] explore trophy-s0: 🏆 0 Leagues -> closed true via ‹ Back scroll 1877->1877
+[166s] explore ambition-s6: 🎯 Season target Choose a personal challenge for next season -> closed true via  scroll 397->219
+[167s] explore preseason-s6: 🏃 Preseason plan Balanced, or choose your next-season workl -> closed true via  scroll 219->219
+[169s] explore squad-s6: 👥 Squad Your teammates The plan: Starter most weeks On our  -> closed true via Escape scroll 219->219
+[173s] explore press-s6: 🎙️ Press room Answer for your season 50/100 -> closed true via Escape scroll 219->219
+[176s] explore programme-s6: Your next season Roles, contracts, playing time and your com -> closed true via Close scroll 219->219
+[201s] reload (step 150 in newspaper): same=true phase newspaper->newspaper
+[400s] explore ambition-s12: 🎯 Season target Choose a personal challenge for next season -> closed true via  scroll 392->392
+[402s] explore preseason-s12: 🏃 Preseason plan Balanced, or choose your next-season workl -> closed true via  scroll 392->392
+[404s] explore squad-s12: 👥 Squad Your teammates The plan: Starter most weeks On our  -> closed true via Escape scroll 392->392
+[407s] explore press-s12: 🎙️ Press room Answer for your season 50/100 -> closed true via Escape scroll 392->392
+[410s] explore programme-s12: Your next season Roles, contracts, playing time and your com -> closed true via Close scroll 392->392
+[553s] explore ambition-s18: 🎯 Season target Choose a personal challenge for next season -> closed true via  scroll 516->338
+[555s] explore preseason-s18: 🏃 Preseason plan Balanced, or choose your next-season workl -> closed true via  scroll 338->338
+[557s] explore squad-s18: 👥 Squad Your teammates The plan: Starter most weeks On our  -> closed true via Escape scroll 338->338
+[561s] explore press-s18: 🎙️ Press room Answer for your season 52/100 -> closed true via Escape scroll 338->338
+[564s] explore programme-s18: Your next season Roles, contracts, playing time and your com -> closed true via Close scroll 338->338
+[740s] retired at 41
+[743s] reload (final): same=true phase retired->retired
+[743s] done: {"phase":"retired","age":41,"senior":23,"club":"Vitoria","ovr":45,"steps":594,"secs":740} shots=72 audits=94 errors=31 pageErrors=0 stuck=0 traps=0
+WALK k390 FINISHED

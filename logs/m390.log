@@ -1,0 +1,28 @@
+[10s] created Scotland🇬🇧/Defensive Mid (CDM)/Late 90s (1995 start) -> youth age 16 at Hibernian Youth
+[17s] explore ambition-s0: 🎯 Season target Choose a personal challenge for next season -> closed true via  scroll 366->366
+[19s] explore preseason-s0: 🏃 Preseason plan Balanced, or choose your next-season workl -> closed true via  scroll 366->366
+[22s] explore squad-s0: 👥 Squad By role The plan: Squad player On our ratings 4th o -> closed true via ← Back/Escape scroll 366->366
+[25s] explore programme-s0: Your next season Roles, contracts, playing time and your com -> closed true via Close scroll 366->366
+[27s] explore attributes-s0: Full attributes 183 cm · 78 kg · every number under the six -> closed true via ← Back scroll 1157->193
+[29s] explore ratings-s0: 📈 Ratings -> closed true via Close scroll 1877->1877
+[31s] explore story-s0: 📖 Career Story -> closed true via Back to your career scroll 1877->1877
+[33s] explore trophy-s0: 🏆 0 Leagues -> closed true via ‹ Back scroll 1877->1877
+[45s] explore training-s0: 🏋️ Training Drill ready -> closed true via Close scroll 0->0
+[70s] reload (step 25 in ballon_dor): same=true phase ballon_dor->ballon_dor
+[86s] explore ambition-s2: 🎯 Season target Choose a personal challenge for next season -> closed true via  scroll 366->366
+[87s] explore preseason-s2: 🏃 Preseason plan Balanced, or choose your next-season workl -> closed true via  scroll 366->366
+[89s] explore squad-s2: 👥 Squad By role The plan: Starter most weeks On our ratings -> closed true via Escape scroll 366->366
+[93s] explore press-s2: 🎙️ Press room Answer for your season 50/100 -> closed true via Escape scroll 366->366
+[96s] explore programme-s2: Your next season Roles, contracts, playing time and your com -> closed true via Close scroll 366->366
+[108s] explore training-s2: 🏋️ Training Drill ready -> closed true via Close scroll 0->0
+[133s] reload (step 60 in playing): same=true phase playing->playing
+[158s] explore ambition-s4: 🎯 Season target Choose a personal challenge for next season -> closed true via  scroll 353->353
+[159s] explore preseason-s4: 🏃 Preseason plan Balanced, or choose your next-season workl -> closed true via  scroll 353->353
+[161s] explore squad-s4: 👥 Squad By role The plan: Starter most weeks On our ratings -> closed true via Escape scroll 353->353
+[165s] explore press-s4: 🎙️ Press room Answer for your season 50/100 -> closed true via Escape scroll 353->353
+[168s] explore programme-s4: Your next season Roles, contracts, playing time and your com -> closed true via Close scroll 353->353
+[180s] explore training-s4: 🏋️ Training Drill ready -> closed true via Close scroll 0->0
+[204s] target reached: 5 senior seasons
+[207s] reload (final): same=true phase playing->playing
+[207s] done: {"phase":"playing","age":22,"senior":5,"club":"Anderlecht","ovr":62,"steps":107,"secs":204} shots=81 audits=43 errors=10 pageErrors=0 stuck=0 traps=0
+WALK m390 FINISHED

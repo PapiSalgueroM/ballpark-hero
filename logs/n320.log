@@ -1,0 +1,29 @@
+[10s] created Germany🇩🇪/Goalkeeper (GK)/Early 2010s (2010 start) -> youth age 16 at Hertha Berlin Youth
+[15s] explore ambition-s0: 🎯 Season target Choose a personal challenge for next season -> closed true via  scroll 492->306
+[17s] explore preseason-s0: 🏃 Preseason plan Balanced, or choose your next-season workl -> closed true via  scroll 306->306
+[20s] explore squad-s0: 👥 Squad By role The plan: Starter most weeks On our ratings -> closed true via ← Back/Escape scroll 306->306
+[23s] explore programme-s0: Your next season Roles, contracts, playing time and your com -> closed true via Close scroll 306->306
+[25s] explore attributes-s0: Full attributes 190 cm · 84 kg · every number under the six -> closed true via ← Back scroll 1347->193
+[27s] explore ratings-s0: 📈 Ratings -> closed true via Close scroll 2027->2027
+[29s] explore story-s0: 📖 Career Story -> closed true via Back to your career scroll 2027->2027
+[31s] explore trophy-s0: 🏆 0 Leagues -> closed true via ‹ Back scroll 1650->1650
+[44s] explore training-s0: 🏋️ Training Drill ready -> closed true via Close scroll 0->0
+[62s] explore phone-s0: 📱 Phone 3 unread -> closed true via ‹ Home/Escape scroll 0->0
+[73s] reload (step 10 in social_media_action): same=true phase social_media_action->social_media_action
+[85s] explore ambition-s1: 🎯 Season target Choose a personal challenge for next season -> closed true via  scroll 309->309
+[87s] explore preseason-s1: 🏃 Preseason plan Balanced, or choose your next-season workl -> closed true via  scroll 309->309
+[89s] explore squad-s1: 👥 Squad By role The plan: Starter most weeks On our ratings -> closed true via Escape scroll 309->309
+[92s] explore press-s1: 🎙️ Press room Answer for your season 50/100 -> closed true via Escape scroll 336->624
+[96s] explore programme-s1: Your next season Roles, contracts, playing time and your com -> closed true via Close scroll 624->624
+[97s] explore records-s1: 📖 Record book Your best seasons and every club spell 27 sen -> closed true via Close scroll 624->624
+[99s] explore attributes-s1: Full attributes 190 cm · 84 kg · every number under the six -> closed true via ← Back scroll 1520->193
+[101s] explore ratings-s1: 📈 Ratings -> closed true via Close scroll 2499->2499
+[103s] explore story-s1: 📖 Career Story -> closed true via Back to your career scroll 2499->2499
+[105s] explore trophy-s1: 🏆 0 Leagues -> closed true via ‹ Back scroll 1875->1875
+[107s] explore replays-s1: 📺 Season replays -> closed true via Back to your career scroll 2547->2547
+[121s] explore training-s1: 🏋️ Training Drill ready -> closed true via Close scroll 0->0
+[139s] explore phone-s1: 📱 Phone 3 unread -> closed true via ‹ Home/Escape scroll 0->0
+[165s] target reached: 2 senior seasons
+[167s] reload (final): same=true phase playing->playing
+[168s] done: {"phase":"playing","age":19,"senior":2,"club":"Villarreal","ovr":59,"steps":47,"secs":165} shots=91 audits=71 errors=6 pageErrors=0 stuck=0 traps=0
+WALK n320 FINISHED
