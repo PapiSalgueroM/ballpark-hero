@@ -1,0 +1,6 @@
+#!serve
+#!playwright
+land-base: git worktree add -q /tmp/lb c5fc5470 && ln -s "$PWD/node_modules" /tmp/lb/node_modules && (cd /tmp/lb && node_modules/.bin/vite build > /tmp/lb-build.log 2>&1) && mkdir -p $RC_OUT/landbase && RC_OUT=$RC_OUT/landbase SOCCER_LANDING_BASE_DIST=/tmp/lb/dist SOCCER_LANDING_ARMS=base ENGINES=chromium node scripts/playSoccerLanding.mjs
+tt-14: RC_OUT=$RC_OUT/tt14 CASES=14 ENGINES=chromium node scripts/playTwoTabs.mjs
+stbc-head: node scripts/simTransferBriefPageControl.mjs; s=$?; echo "simTransferBriefPageControl exit $s"; exit $s
+stbc-base: git worktree add -q /tmp/b2 c5fc5470 && ln -s "$PWD/node_modules" /tmp/b2/node_modules && cd /tmp/b2 && node scripts/simTransferBriefPageControl.mjs; s=$?; echo "base simTransferBriefPageControl exit $s"; exit $s
