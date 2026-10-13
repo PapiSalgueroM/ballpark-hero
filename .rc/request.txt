@@ -1,0 +1,7 @@
+#!build
+#!playwright
+#!serial
+weight-head: ROUTES=/soccer-career RUNS=3 node scripts/measureRouteWeight.mjs head
+flagship-head: node scripts/simFlagshipWeight.mjs
+chunks-head: ls -l dist/assets | awk '{print $5, $9}' | sort -n | tail -25
+weight-base: git worktree add -q /tmp/b1329 c5fc5470b3e377f22d6d538f459b9f5310b08dd0 && ln -s "$PWD/node_modules" /tmp/b1329/node_modules && cd /tmp/b1329 && node_modules/.bin/vite build > /tmp/b1329-build.log 2>&1 && ROUTES=/soccer-career RUNS=3 node scripts/measureRouteWeight.mjs base && node scripts/simFlagshipWeight.mjs && ls -l dist/assets | awk '{print $5, $9}' | sort -n | tail -25
