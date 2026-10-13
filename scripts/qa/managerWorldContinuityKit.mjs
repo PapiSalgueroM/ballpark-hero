@@ -10,7 +10,12 @@ import { fileURLToPath } from 'node:url';
 import { build } from 'esbuild';
 
 export const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
-export const BASE = 'b6eb78e799b12c851e4e8e583e9e926aed117f1c';
+/* Release BC's join: the original engine is b6eb78e7 (Release AX) unless MANAGER_WORLD_CONTINUITY_BASE names
+   another commit. On a head where main has moved past Release AX, b6eb78e7 differs from this tree by more than
+   Release AZ (on Release BC the inactive and constructors groups read Round 1326's "Win La Liga" against "Win the
+   La Liga", rBCg-gP1), so the gate hands it this tree with only AZ's merge taken out:
+   MANAGER_WORLD_CONTINUITY_BASE=$(node scripts/lib/treeWithoutMerge.mjs 5ec5a724 36cc9ffe). */
+export const BASE = process.env.MANAGER_WORLD_CONTINUITY_BASE || 'b6eb78e799b12c851e4e8e583e9e926aed117f1c';
 export const sha = value => createHash('sha256').update(value).digest('hex');
 export const lf = value => value.replaceAll('\r\n', '\n');
 export const clone = value => structuredClone(value);
