@@ -172,6 +172,28 @@
  *      them owing less than the upkeep sold, 0 wrong. Floor: 6 such bills.
  *      Without the floor at 0 (noclamp, N=120) all 12 come out at -0.024.
  *
+ * ROUND 1327, 2026-10-13: RE-MEASURED, BANDS UNMOVED. The deck no longer
+ * shuffles with a sort on Math.random (the front of the catalog came up 1.6
+ * times as often as the back): it takes careerEventDeck.ts's takeFresh, one
+ * uniform pick per card, on a stream keyed to the career and the season, so
+ * every seeded career below draws other batches from its first deck on and
+ * every number above was read on the old draw. Read again on the runner
+ * (r1327-b2, head 8c2af0d6) at seed offsets 0 to 4:
+ *   section 2: 1,793, 1,730, 1,736, 1,789 and 1,815 repeat firings checked,
+ *     0 inside a cooldown, 0 in the same or the next season, 0 doubled
+ *     batches; nocooldown (seed 0) 725 of 2,426 inside one, 251 the next
+ *     season; sharedbatch (seed 0) 6 doubled batches.
+ *   section 3b: 215, 241, 217, 200 and 210 comeback games, every one a
+ *     season after the injury.
+ *   section 4: events per batch 3.26, 3.26, 3.26, 3.25, 3.26; batches per
+ *     playing season 0.91, 0.90, 0.91, 0.91, 0.91; life share 0.26 in all
+ *     five; life events per playing season 0.77, 0.76, 0.77, 0.77, 0.77.
+ *     flood (seed 0): 5.26 a batch and 1.16 life events a season.
+ * The fair pick moved none of the four rates by more than 0.02. Two controls
+ * follow the pick to its new lines: sharedbatch now drops the story rule in
+ * a copy of careerEventDeck.ts (takeFresh's own filter), flood the count line
+ * of drawEventBatch. nocooldown's line did not move.
+ *
  * NEGATIVE CONTROLS, one or more per section. Each puts a defect back into an
  * in memory copy of one source file (also written to the temp directory for
  * inspection), bundled in place of the real one for EVERY importer. A control
