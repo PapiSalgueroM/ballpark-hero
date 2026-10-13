@@ -20,8 +20,8 @@ jobs:
       SIM_NETWORK: offline
       ENGINES: chromium
       CM_LOCAL_ONLY: '1'
-      MANAGER_DECISION_DEPTH_PHASE: baseline
-      MANAGER_DECISION_DEPTH_BASELINE_RUN: '0'
+      MANAGER_DECISION_DEPTH_PHASE: fixed
+      MANAGER_DECISION_DEPTH_BASELINE_RUN: '38329792123'
       MANAGER_DECISION_DEPTH_OUT: ${{ github.workspace }}/manager-decision-depth-artifacts
       MANAGER_DECISION_DEPTH_BASELINE_REPORT: ${{ github.workspace }}/manager-decision-baseline/baseline/report.json
       PRERENDER_ONLY: /club-manager
@@ -47,6 +47,9 @@ jobs:
           fi
           sha256sum package.json package-lock.json bun.lock > "$MANAGER_DECISION_DEPTH_OUT/package-hashes.txt"
           sha256sum src/lib/clubManager.ts src/lib/clubManagerDecisions.ts src/lib/clubManagerMeters.ts src/pages/ClubManager.tsx src/components/club-manager/InboxCard.tsx src/test/clubManagerDecisionDepth.test.ts scripts/playClubManagerDecisionDepth.mjs .github/workflows/manager-decision-depth.yml > "$MANAGER_DECISION_DEPTH_OUT/source-hashes.txt"
+          if test "$MANAGER_DECISION_DEPTH_PHASE" = fixed; then
+            sha256sum scripts/simClubManagerDecisions.mjs >> "$MANAGER_DECISION_DEPTH_OUT/source-hashes.txt"
+          fi
           npm ci
           node --input-type=module <<'NODE'
           import fs from 'node:fs';
@@ -167,6 +170,24 @@ jobs:
             sleep 1
           done
           BASE=http://127.0.0.1:4173 SWEEP_OFFLINE=1 NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/sweepWeight.mjs 2>&1 | tee "$MANAGER_DECISION_DEPTH_OUT/weight.log"
+      - name: Effective graduate coverage omission control
+        if: env.MANAGER_DECISION_DEPTH_PHASE == 'fixed'
+        run: |
+          set +e
+          CM_DECISIONS_CONTROL=depthcohort NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simClubManagerDecisions.mjs 2>&1 | tee "$MANAGER_DECISION_DEPTH_OUT/control-depthcohort.log"
+          result=${PIPESTATUS[0]}
+          set -e
+          CONTROL_EXIT="$result" node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          const log = fs.readFileSync(process.env.MANAGER_DECISION_DEPTH_OUT + '/control-depthcohort.log', 'utf8');
+          assert.equal(Number(process.env.CONTROL_EXIT), 1);
+          assert(!/Unhandled (?:Errors?|Rejection)|Uncaught Exception|Failed to load|Failed to resolve import|Cannot find module|Module not found|ERR_MODULE_NOT_FOUND|SyntaxError|ReferenceError|TypeError/i.test(log));
+          assert.deepEqual(log.split('\n').filter(line => line.startsWith('FAIL ')), ['FAIL [4] only 33 of 36 card answers were walked; missing academyStepUp#0, academyStepUp#1, academyStepUp#2']);
+          assert(log.includes('simClubManagerDecisions (control depthcohort): 1 findings'));
+          assert(/Effective depthcohort source control: [a-f0-9]{64}/.test(log));
+          console.log('Effective graduate cohort omission: exactly its three answer paths lost, all other findings absent.');
+          NODE
       - name: Final source and locked-tool holds
         if: always()
         run: |

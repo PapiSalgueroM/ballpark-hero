@@ -57,6 +57,7 @@
  *   CM_DECISIONS_CONTROL=noexpiry     an unanswered appeal never closes (3b)
  *   CM_DECISIONS_CONTROL=carry        the desk crosses the summer (7)
  *   CM_DECISIONS_CONTROL=gate         board answers also nudge the gate (4)
+ *   CM_DECISIONS_CONTROL=depthcohort  skip the actual graduate cohort (4)
  *
  * Each was run on 2026-10-03 and went red in its own section and nowhere
  * else: freeloss 12 findings in section 3 (a lost appeal left the ban where
@@ -103,6 +104,7 @@
  */
 import './lib/seedRandom.mjs';
 import { execSync } from 'node:child_process';
+import { createHash } from 'node:crypto';
 import os from 'node:os';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -114,7 +116,7 @@ const TMP = path.join(os.tmpdir(), `cmDecisions-${process.pid}`).replaceAll('\\'
 fs.mkdirSync(TMP, { recursive: true });
 
 const CONTROL = process.env.CM_DECISIONS_CONTROL || '';
-const KNOWN = ['freeloss', 'liar', 'leaky', 'dice', 'yellowappeal', 'quote', 'firstred', 'noexpiry', 'carry', 'gate'];
+const KNOWN = ['freeloss', 'liar', 'leaky', 'dice', 'yellowappeal', 'quote', 'firstred', 'noexpiry', 'carry', 'gate', 'depthcohort'];
 if (CONTROL && !KNOWN.includes(CONTROL)) {
   console.error(`CM_DECISIONS_CONTROL=${CONTROL} is not a control this harness knows (${KNOWN.join(', ')})`);
   process.exit(1);
@@ -180,7 +182,44 @@ fs.writeFileSync(`${TMP}/engineMain.ts`, mainEngine);
 
 const ENTRY = `${TMP}/entry.mjs`;
 const BUNDLE = `${TMP}/bundle.mjs`;
-fs.writeFileSync(ENTRY, `
+/* This separate cohort changes only legal manager actions. Its played state
+   supplies the first three graduate appearances the old passive cohort lacks. */
+function runGraduateCohort(E, seed, reset, copy) {
+  const cohort = { careers: 0, entries: 0, promotions: 0, boundCareers: 3, boundEntriesPerCareer: 180, skipped: false, state: null };
+  for (const [index, club] of ['Arsenal', 'Everton', 'Brighton'].entries()) {
+    reset(seed + index * 97);
+    cohort.careers++;
+    let state = E.startCareer(club);
+    for (let step = 0; step < 180 && !state.sacked; step++) {
+      let graduate = state.squad.find(player => player.academyGrad === true && (player.apps ?? 0) < 3);
+      if (!graduate) {
+        const prospect = state.academy?.prospects.find(player => player.fee <= state.budget);
+        if (prospect) {
+          const promoted = E.promoteProspect(state, prospect.id);
+          if (promoted) { state = promoted; cohort.promotions++; }
+        }
+      }
+      const formation = E.FORMATIONS[state.formationIndex];
+      const xiIds = E.autoPickXI(state.squad, formation);
+      graduate = state.squad.find(player => player.academyGrad === true && (player.apps ?? 0) < 3 && !player.injuryWeeks && !player.suspendedMatches);
+      if (graduate && !xiIds.includes(graduate.id)) {
+        const slot = formation.slots.findIndex(position => E.fitPenalty(graduate, position) === 0);
+        if (slot >= 0) xiIds[slot] = graduate.id;
+      }
+      state = { ...state, xiIds };
+      const result = E.playNextEntry(state, { skipHalftime: true });
+      cohort.entries++;
+      state = result.state;
+      graduate = state.squad.find(player => player.academyGrad === true && player.apps >= 1 && player.apps <= 3);
+      if (result.kind === 'match' && !state.sacked && graduate) {
+        return { ...cohort, club, seed: seed + index * 97, graduateId: graduate.id, apps: graduate.apps, state: copy(state) };
+      }
+      if (!state.sacked && result.kind === 'seasonOver') state = E.startNextSeason(E.finishSeason(state).state);
+    }
+  }
+  return cohort;
+}
+let entrySource = `
 globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };
 /* Production is off limits: any network call from the bundled engine throws
    and is counted rather than reaching the live database. */
@@ -189,12 +228,30 @@ globalThis.fetch = async () => { globalThis.__netCalls += 1; throw new Error('ne
 export const A = await import('${TMP}/engineA.ts');
 export const M = await import('${TMP}/engineMain.ts');
 export const D = await import('${deskCopy}');
-`);
+${runGraduateCohort.toString()}
+export const G = runGraduateCohort;
+`;
+if (CONTROL === 'depthcohort') {
+  const anchor = 'export const G = runGraduateCohort;';
+  if (entrySource.split(anchor).length - 1 !== 1) throw new Error('depthcohort requires one actual cohort binding');
+  const before = entrySource;
+  entrySource = swap(before, anchor, 'export const G = () => ({ careers: 0, entries: 0, promotions: 0, boundCareers: 3, boundEntriesPerCareer: 180, skipped: true, state: null });', 'the actual graduate cohort binding');
+  if (entrySource === before) throw new Error('depthcohort did not change the actual compiled cohort');
+  if (process.env.MANAGER_DECISION_DEPTH_OUT) {
+    const out = path.resolve(process.env.MANAGER_DECISION_DEPTH_OUT);
+    fs.mkdirSync(out, { recursive: true });
+    fs.writeFileSync(path.join(out, 'depthcohort-entry.before.mjs'), before);
+    fs.writeFileSync(path.join(out, 'depthcohort-entry.control.mjs'), entrySource);
+  }
+  const digest = text => createHash('sha256').update(text).digest('hex');
+  console.log(`Effective depthcohort source control: ${digest(entrySource)}; one unique actual binding changed; before=${digest(before)}.`);
+}
+fs.writeFileSync(ENTRY, entrySource);
 execSync(
   `"${findBin('esbuild')}" "${ENTRY}" --bundle --format=esm --platform=node --outfile="${BUNDLE}" --log-level=error --alias:@=${ROOT_URL}/src`,
   { stdio: 'inherit' },
 );
-const { A, M, D } = await import(pathToFileURL(BUNDLE).href);
+const { A, M, D, G } = await import(pathToFileURL(BUNDLE).href);
 
 /* One stream per run, reset on purpose, so the shipped engine and main can be
    handed the identical sequence of draws. seedRandom above stays the first
@@ -491,6 +548,18 @@ console.log(`   odds read against his own red count on ${s3.oddsChecked} appeals
 if (s7.rollovers < MIN_ROLLOVERS) fail(7, `only ${s7.rollovers} summers crossed with a desk on the save, under the floor of ${MIN_ROLLOVERS}`);
 console.log(`7. summers: ${s7.rollovers} crossed with a desk on the save, ${s7.carried} cards carried across`);
 
+const randomBeforeGraduate = Math.random;
+const clockBeforeGraduate = Date.now;
+let graduateCohort = null;
+try {
+  if (D.DECK.some(card => card.id === 'academyStepUp')) graduateCohort = G(A, BASE_SEED + 50000, reseed, clone);
+  else if (CONTROL === 'depthcohort') throw new Error('depthcohort requires the actual academyStepUp card');
+} finally {
+  Math.random = randomBeforeGraduate;
+  Date.now = clockBeforeGraduate;
+}
+if (graduateCohort && !graduateCohort.state && CONTROL !== 'depthcohort') fail(4, 'actual graduate cohort found no played apps1-3 state within 3 careers of 180 entries');
+
 /* ---------- 4b. every answer of every card, from real mid season states ---------- */
 for (const [k, base] of kept.entries()) {
   for (const card of D.DECK) {
@@ -499,6 +568,23 @@ for (const [k, base] of kept.entries()) {
     const s = { ...base, decisions: [item] };
     item.options.forEach((_, idx) => checkAnswer(`kept ${k} ${card.id}`, s, A.answerMessage(s, item.id, idx), item, idx));
   }
+}
+const pairsBeforeGraduate = new Set(s4.pairs);
+if (graduateCohort?.state) {
+  const base = graduateCohort.state;
+  const card = D.DECK.find(card => card.id === 'academyStepUp');
+  if (!card.fits(base) || (card.who && !card.who(base))) fail(4, 'actual graduate cohort did not meet the academyStepUp gate');
+  else {
+    const item = D.buildSituation(base, card);
+    const s = { ...base, decisions: [item] };
+    item.options.forEach((_, idx) => checkAnswer(`graduate ${card.id}`, s, A.answerMessage(s, item.id, idx), item, idx));
+  }
+}
+const addedGraduatePairs = [...s4.pairs].filter(pair => !pairsBeforeGraduate.has(pair) && pair.startsWith('academyStepUp#'));
+if (graduateCohort && CONTROL !== 'depthcohort' && addedGraduatePairs.length !== 3) fail(4, `actual graduate cohort added ${addedGraduatePairs.length} academyStepUp answer pairs, expected 3`);
+if (graduateCohort) {
+  console.log(`4b. actual graduate cohort: ${graduateCohort.careers} careers, ${graduateCohort.entries} entries, ${graduateCohort.promotions} promotions, ${graduateCohort.state ? 1 : 0} kept state, apps ${graduateCohort.apps ?? 0}, ${addedGraduatePairs.length} added academyStepUp pairs; bounds 3 careers x 180 entries; skipped=${graduateCohort.skipped}.`);
+  if (process.env.MANAGER_DECISION_DEPTH_OUT) fs.writeFileSync(path.join(path.resolve(process.env.MANAGER_DECISION_DEPTH_OUT), `graduate-cohort-${CONTROL || 'normal'}.json`), JSON.stringify({ ...graduateCohort, addedPairs: addedGraduatePairs }, null, 2) + '\n');
 }
 /* ---------- 3b, planted: an unanswered appeal on every kept state ---------- */
 /* The ignore seasons above meet only a handful of reds, so an appeal is also
@@ -531,7 +617,9 @@ if (s3b.plantedExpired < MIN_EXPIRED_APPEALS) fail('3b', `only ${s3b.plantedExpi
 console.log(`3b. planted: ${s3b.plantedExpired} of ${s3b.planted} planted appeals closed as expired at the next match`);
 
 const allPairs = D.DECK.reduce((n, c) => n + c.options.length, 0);
-if (s4.pairs.size !== allPairs) fail(4, `only ${s4.pairs.size} of ${allPairs} card answers were walked`);
+const missingPairs = D.DECK.flatMap(card => card.options.map((_, index) => `${card.id}#${index}`)).filter(pair => !s4.pairs.has(pair));
+if (s4.pairs.size !== allPairs) fail(4, `only ${s4.pairs.size} of ${allPairs} card answers were walked; missing ${missingPairs.join(', ')}`);
+if (CONTROL === 'depthcohort' && (!graduateCohort?.skipped || JSON.stringify(missingPairs) !== JSON.stringify(['academyStepUp#0', 'academyStepUp#1', 'academyStepUp#2']))) fail(4, 'depthcohort did not remove exactly the three academyStepUp answer pairs');
 if (s4.answered < MIN_SITUATIONS) fail(4, `only ${s4.answered} situation answers applied`);
 console.log(`4. answers: ${s4.answered} applied, ${s4.pairs.size} of ${allPairs} card answers walked, ${s4.clamped} met a bound, from ${kept.length} kept states`);
 
@@ -556,7 +644,7 @@ const e2e = s3.lodged ? `${((100 * s3.won) / s3.lodged).toFixed(1)}% of ${s3.lod
 console.log(`2. odds: ${tierLines.join('; ')}; end to end ${e2e}`);
 
 /* ---------- 6. words ---------- */
-const ROLES = new Set(['The club secretary', 'The commercial team', 'The board', 'The head coach', 'The community department', 'The press officer', 'The supporters trust']);
+const ROLES = new Set(['The club secretary', 'The commercial team', 'The board', 'The head coach', 'The community department', 'The press officer', 'The supporters trust', 'The medical team', 'The academy staff']);
 for (const d of deskSeen) {
   if (!ROLES.has(d.from)) fail(6, `${d.id} speaks through "${d.from}", which is not a role on the list`);
   for (const t of [d.text, d.resolved ?? '', ...d.options.map(o => o.label)]) {
