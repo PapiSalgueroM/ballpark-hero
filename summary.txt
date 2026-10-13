@@ -1,0 +1,4 @@
+build exit=0 32s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+playGameReports exit=0 8s | PASS all eight game report journeys
+reports-below exit=0 5s | PASS below-guide control fired on all eight actual pages
+weight exit=1 27s | sweepWeight: 12 failures
