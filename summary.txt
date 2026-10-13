@@ -1,0 +1,9 @@
+simCmCopy exit=0 7s | simCmCopy: green on this tree. Sections 1, 2, 3, 4, 5: Club Manager says what it means.
+simCmCopy-finance exit=1 2s | simCmCopy: CONTROL finance FIRED (6 failures, as it must)
+vitest exit=0 10s |    Duration  9.89s (transform 4.68s, setup 771ms, collect 12.26s, tests 6.53s, environment 4.63s, prepare 1.43s)
+simSponsors exit=0 1s | simSponsors: green. The commercial desk pays real money for real reasons, and every brand is made up.
+simNoRivalNames exit=0 18s | No rival product names found. 0 findings.
+simClubManagerFinances exit=0 69s | simClubManagerFinances: PASS. The books add up, the projection lands, prices move the fans and the board, and the sponsor desk pays what it says.
+simHarnessAnchors exit=0 52s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+tsc exit=0 99s | 
+copyonly-A exit=0 31s | cmCopyOnly1326: green. 13 careers, every entry equal on both trees but for the declared rewrites (intl 710, staff 91, article-board 462, article-news 1440, drama 96), dra
