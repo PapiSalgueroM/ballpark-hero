@@ -1,0 +1,5 @@
+earned exit=0 23s | simNbaEarnedDraft: green.
+vitest exit=0 24s |    Duration  23.26s (transform 4.62s, setup 2.45s, collect 15.32s, tests 26.28s, environment 14.82s, prepare 3.14s)
+ctl-rivalscout exit=1 16s | simNbaEarnedDraft: CONTROL rivalscout FIRED. Red in section 9 (2 failures).
+tsc exit=0 83s | 
+earned-ctl exit=0 162s | simNbaEarnedDraft controls: all 19 fired, each in exactly its own sections.
