@@ -1,0 +1,12 @@
+vitest-units exit=0 13s |    Duration  12.06s (transform 6.11s, setup 582ms, collect 16.44s, tests 8.65s, environment 3.43s, prepare 1.03s)
+simCmTablesTruth exit=0 28s | simCmTablesTruth: every case green
+simSquadRows exit=0 3s | simSquadRows: all green
+simContractPreview-all exit=0 27s | Contract preview cleanup: owned copies/reports removed; production component, engine and test bytes stayed identical.
+squadControls exit=0 23s | SQUAD_ROWS_CONTROL=allopen exit=1 | simSquadRows control allopen: RED ON ITS OWN CHECK, as it should be
+simFreeAgents exit=0 20s | simFreeAgents: all sections passed
+simClubManagerDeskCues exit=0 6s | simClubManagerDeskCues: green
+deskCuesPlural exit=0 6s | simClubManagerDeskCues: green
+deskCuesPlural exit=0 6s | simClubManagerDeskCues: green
+simReleaseClause exit=0 2s | simReleaseClause: green. The exit door is real, priced, hunted, and honestly escapable only at full wage.
+tsc exit=0 91s | 
+faControls exit=0 50s | FA_CONTROL=onetap exit=1 | simFreeAgents: 1 failure(s)
