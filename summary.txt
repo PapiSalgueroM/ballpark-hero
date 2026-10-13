@@ -1,0 +1,7 @@
+build exit=0 32s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+playEra2005 exit=0 12s | playEra2005: green. The 2005-06 branch plays like a person would find it.
+sweepPhone exit=0 3s | sweepPhone: green. Every page of the site fits the phone it is played on.
+playReducedMotion exit=0 47s | playReducedMotion: green. Motion stops for a visitor who asked for less, content stays visible, every Round 530 route lands its reveals on the final frame, and everyone e
+playClubManagerSlots exit=0 11s | playClubManagerSlots: green
+playClubManager exit=0 160s | Played Club Manager through its own screens. 0 findings.
+simRevealScroll exit=0 215s | Green. 53 presses measured, nothing dragged the page down on content that was already readable, no panel lost its top, and 4 presses proved the feature still does its job
