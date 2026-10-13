@@ -1,0 +1,6 @@
+#!serve
+#!playwright
+#!serial
+playGameReports: ENGINES=chromium node scripts/playGameReports.mjs
+reports-below: ENGINES=chromium GAME_REPORT_CONTROL=below-guide node scripts/playGameReports.mjs
+weight: SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs
