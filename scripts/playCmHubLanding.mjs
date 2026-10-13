@@ -543,7 +543,7 @@ async function checkTiles(page, section, tag) {
     const panel = (await panelText(page, 'Inbox')) ?? '';
     const empty = panel.includes('Nobody has texted you yet');
     check(section, (tiles.Inbox.sub === 'No messages yet') === empty, `${tag}: the Inbox tile says "${tiles.Inbox.value}" over "${tiles.Inbox.sub}", and the panel ${empty ? 'is empty' : 'holds something'}`);
-    if (!['No messages yet', 'Red card appeal'].includes(tiles.Inbox.sub)) check(section, panel.includes(tiles.Inbox.sub), `${tag}: the Inbox panel names "${tiles.Inbox.sub}" too`);
+    if (!['No messages yet', 'Red card appeal'].includes(tiles.Inbox.sub)) check(section, panel.toLowerCase().includes(tiles.Inbox.sub.toLowerCase()), `${tag}: the Inbox panel names "${tiles.Inbox.sub}" too (its card headings are drawn uppercase, so read without case)`);
     check(section, /^(All quiet|[\d,]+ new)$/.test(tiles.Inbox.value), `${tag}: the Inbox tile's count reads "${tiles.Inbox.value}"`);
   }
   if (tiles.League && /Season not started/.test(header)) check(section, !tiles.League.value.startsWith('#'), `${tag}: at week 0 the League tile reads "${tiles.League.value}", not a rank, under "Season not started"`);
