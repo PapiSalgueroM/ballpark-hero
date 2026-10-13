@@ -22,9 +22,10 @@
  *      reads is then read from that commit). 1a GUARDS THE ENGINE AND THE
  *      DESK, NOT THE BOARD: this harness replays the board's calls and never
  *      mounts it, and in part A nothing calls the new code; the board is
- *      untouched and the round's git diff proves it. 1b: the desk off fixture
- *      and its harnesses equal the base (git diff --quiet against the sha the
- *      fixture was recorded from).
+ *      untouched and the round's git diff proves it. 1b: whether the desk off
+ *      fixture and its harnesses equal the base (git diff --quiet against the
+ *      sha the fixture was recorded from), PRINTED and not a check, as brief
+ *      3.4 asks: the proof is the gate's own git diff line.
  *   THE WALK, for sections 2, 3, 4, 8 and 9: ten leagues (thirty with
  *      FLEET=full) of three seasons, desk on, the earned draft through the
  *      libraries' own presses, a seeded handful of this year's picks moved
@@ -438,11 +439,15 @@ open(1);
     calls += got[s].calls;
   }
   console.log(`   1a: 30 seasons to the draft, desk on, every club the user once: league, desk and ${calls} draws held to the base ${fixture.recordedFrom}`);
-  /* 1b. The desk off path is held by simNbaGmDesk's own fixture; here only that it and its harnesses did not move. */
+  /* 1b. The desk off path is held by simNbaGmDesk's own fixture (its check 1); here only whether it and its
+     harnesses moved since the base, PRINTED and never a failing check, as brief 3.4 asks ("printed, not re-proven
+     here"). The proof of decision 3 (a) is the gate's own `git diff --quiet <base> -- ...` line. As a check it went
+     red by construction in part B, which edits nbaGmDesk.ts and simNbaGmDesk.mjs, and on a clone without the base
+     sha (git exits 128): review 2026-10-12. */
   const held = ['scripts/data/nbaGmDeskFixture.json', 'scripts/simNbaGmDesk.mjs', 'scripts/simNbaDraftCapital.mjs', 'src/lib/nbaGmDesk.ts'];
   const diff = spawnSync('git', ['diff', '--quiet', fixture.recordedFrom, '--', ...held], { cwd: ROOT, encoding: 'utf8' });
-  check(diff.status === 0, `git diff --quiet ${fixture.recordedFrom} -- ${held.join(' ')} exited ${diff.status}${diff.status === 1 ? ': one of them moved' : ': git could not answer'}`);
-  console.log(`   1b: git diff --quiet ${fixture.recordedFrom} -- ${held.length} files: exit ${diff.status}`);
+  const said = diff.status === 0 ? 'all equal to the base' : diff.status === 1 ? 'one of them MOVED since the base' : 'git could not answer';
+  console.log(`   1b: git diff --quiet ${fixture.recordedFrom} -- ${held.join(' ')}: exit ${diff.status}, ${said} (printed, not a check)`);
 }
 
 /* ================================================================== */
