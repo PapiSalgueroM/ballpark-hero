@@ -422,6 +422,14 @@
       the prune alone out leaves 7 entries red, the other alone out 24.
       Written on the runner (azfx-5, line write-digest, 33 lines changed),
       then run green whole there.
+      The closing check's fixer (2026-10-12) took it once more, for
+      7942d4d1: a seeded career's summer emergency signing now carries
+      the key of its ledger record. 6 modern entries moved, in the state
+      after the summer only (wholeNext 6, s2_whole 3, no readable field).
+      Attribution on a runner at 7942d4d1 (remote check fx2-b, line
+      rules-nokey): with that one line taken out the committed file is
+      green whole. Written on the same runner (line write-digest, 9 lines
+      changed), then run green whole there.
    2. DIGEST, ERAS (hard). The same for every league of every historic era,
       one career each.
    3. DIGEST, PURE (hard). For every modern and era league: the drop count,
