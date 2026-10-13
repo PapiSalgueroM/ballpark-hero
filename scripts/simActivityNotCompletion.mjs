@@ -33,8 +33,21 @@
                                   section 2 must go red.
      SIM_ACTIVITY_CONTROL=heavy   adds a saveAuthCompletion call to the ping
                                   in memory; section 3 must go red.
+     SIM_ACTIVITY_CONTROL=noping  (Round 1314) removes Soccer Career's ping in
+                                  memory; section 2 must fail on the ping
+                                  line alone.
+     SIM_ACTIVITY_CONTROL=twocalls (Round 1314) adds a second advance call in
+                                  memory; section 2 must fail on the "called
+                                  more than once" line alone.
+     SIM_ACTIVITY_CONTROL=twodotted (fix review of Round 1314) the same, with
+                                  the second call written
+                                  advanceProSeason(s.career, clubs); section 2
+                                  must fail on that line alone.
    Each control refuses to run if what it rewrites is not there to rewrite,
-   and is judged on its own section only.
+   and is judged on its own section only; career, noping and twocalls are
+   judged on their exact sentences too (career: the ping line and the
+   completion line, never the anchor line). A control that fired prints
+   "fired in section N as expected" and exits 0; anything else exits 1.
 
    Run: node scripts/simActivityNotCompletion.mjs
 */
@@ -49,7 +62,8 @@ const TEST = 'src/hooks/useClubManager.test.ts';
 
 const failures = { 1: 0, 2: 0, 3: 0 };
 let section = 1;
-const fail = m => { failures[section] += 1; console.error('  FAIL: ' + m); };
+const firedKeys = { 1: new Set(), 2: new Set(), 3: new Set() };
+const fail = (m, key = '') => { failures[section] += 1; if (key) firedKeys[section].add(key); console.error('  FAIL: ' + m); };
 const abort = m => { console.error(m); process.exit(1); };
 const read = f => fs.readFileSync(path.join(ROOT, f), 'utf8').split('\r\n').join('\n');
 const stripComments = s => s.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '');
@@ -120,14 +134,46 @@ console.log('2) Soccer Career, as code: the season advance pings activity and th
     code = swapped;
     console.log('   NEGATIVE CONTROL ON: the season ping swapped back to a completion in memory');
   }
-  const advance = code.indexOf('advanceProSeason(career, clubs)');
-  if (advance < 0) fail('the season advance (advanceProSeason(career, clubs)) is not in the file, the check needs re-anchoring');
+  /* Round 1314: the anchor is the CALL, not its argument names. Round 1047
+     (1c8ce33c) wrapped the advance as
+     stepWithMomentsBanked(c => advanceProSeason(c, clubs)), which renamed
+     the first argument and left this section red on a rule that still held
+     (the ping sat nine lines below it in the same handler). Now the one
+     call advanceProSeason(...) in the comment stripped file is the
+     anchor; none fails, and more than one fails too, because a second
+     advance is a new site this check has to be told about. */
+  if (CONTROL === 'noping') {
+    const gone = code.split("recordActivity('/soccer-career')").join('');
+    if (gone === code) abort('control cannot run: SoccerCareer.tsx has no activity ping to remove');
+    code = gone;
+    console.log("   NEGATIVE CONTROL ON: the season ping removed in memory");
+  }
+  /* Fix review of Round 1314: every call is counted, whatever its first
+     argument is. The first cut counted only advanceProSeason(<bare name>,
+     so a second advance written as advanceProSeason(s.career, clubs) in a
+     handler that never pings passed as "1 call". The import list has no
+     parenthesis after the name, so it is not counted. */
+  const CALL = /\badvanceProSeason\s*\(/g;
+  if (CONTROL === 'twocalls' || CONTROL === 'twodotted') {
+    if (!CALL.test(code)) abort('control cannot run: SoccerCareer.tsx has no advance call to duplicate');
+    CALL.lastIndex = 0;
+    code += CONTROL === 'twocalls'
+      ? '\nfunction controlSecondAdvance(c, clubs) { return advanceProSeason(c, clubs); }\n'
+      : '\nfunction controlSecondAdvance(s, clubs) { return advanceProSeason(s.career, clubs); }\n';
+    console.log(`   NEGATIVE CONTROL ON: a second advance call (${CONTROL === 'twocalls' ? 'a bare name' : 'a dotted first argument'}) added in memory`);
+  }
+  const calls = [...code.matchAll(CALL)];
+  if (calls.length === 0) fail('the season advance (a call advanceProSeason(...)) is not in the file, the check needs re-anchoring', 'anchor');
+  if (calls.length > 1) fail(`the season advance is called ${calls.length} times; a second call is a new site this check must be told about`, 'anchor');
+  const advance = calls.length > 0 ? calls[0].index : -1;
   const window_ = advance < 0 ? '' : code.slice(advance, advance + 600);
-  if (!window_.includes("recordActivity('/soccer-career')")) fail("the season advance no longer pings recordActivity('/soccer-career') within 600 characters");
+  const pingAt = advance < 0 ? -1 : code.indexOf("recordActivity('/soccer-career')", advance);
+  const distance = pingAt < 0 ? 'no ping' : `ping ${pingAt - advance} characters`;
+  if (!window_.includes("recordActivity('/soccer-career')")) fail("the season advance no longer pings recordActivity('/soccer-career') within 600 characters", 'ping');
   const own = (code.match(/recordCompletion\('\/soccer-career'/g) || []).length;
-  if (own > 0) fail(`SoccerCareer.tsx calls recordCompletion('/soccer-career') ${own} time(s); the scored completion is the retirement through useGameCompletion, a season is activity`);
-  if (!/useGameCompletion\('soccer-career'/.test(code)) fail('the retirement completion (useGameCompletion(\'soccer-career\', ...)) is gone, so nothing scores a career');
-  console.log(`   advance ping present: ${window_.includes("recordActivity('/soccer-career')")}, own completions: ${own}`);
+  if (own > 0) fail(`SoccerCareer.tsx calls recordCompletion('/soccer-career') ${own} time(s); the scored completion is the retirement through useGameCompletion, a season is activity`, 'completion');
+  if (!/useGameCompletion\('soccer-career'/.test(code)) fail('the retirement completion (useGameCompletion(\'soccer-career\', ...)) is gone, so nothing scores a career', 'retirement');
+  console.log(`   advance calls: ${calls.length}, ${distance} after the call (window 600), advance ping present: ${window_.includes("recordActivity('/soccer-career')")}, own completions: ${own}`);
 }
 
 section = 3;
@@ -153,8 +199,21 @@ console.log('3) The ping is light, as code: recordActivity reaches neither the s
 
 const total = failures[1] + failures[2] + failures[3];
 if (CONTROL) {
-  const own = { match: 1, career: 2, heavy: 3 }[CONTROL];
-  if (!own) abort(`unknown control "${CONTROL}" (match, career, heavy)`);
+  const own = { match: 1, career: 2, heavy: 3, noping: 2, twocalls: 2, twodotted: 2 }[CONTROL];
+  if (!own) abort(`unknown control "${CONTROL}" (match, career, heavy, noping, twocalls, twodotted)`);
+  /* Round 1314: the section 2 controls are judged on their own SENTENCES,
+     not just on their section going red: career must fire the ping and
+     the completion lines and not the anchor line (before this round the
+     stale anchor made it fire for the wrong reason), noping the ping line
+     alone, twocalls the anchor line alone. */
+  const SENTENCES = { career: ['ping', 'completion'], noping: ['ping'], twocalls: ['anchor'], twodotted: ['anchor'] }[CONTROL];
+  if (SENTENCES) {
+    const got = [...firedKeys[own]].sort();
+    const want = [...SENTENCES].sort();
+    if (got.join(',') !== want.join(',') || failures[own] !== want.length) {
+      abort(`\ncontrol "${CONTROL}": section ${own} fired [${got.join(', ')}] (${failures[own]} failure(s)), expected exactly [${want.join(', ')}], the check is not doing what it says`);
+    }
+  }
   if (failures[own] > 0) {
     console.log(`\ncontrol "${CONTROL}": ${failures[own]} failure(s) fired in section ${own} as expected, the check works`);
     process.exit(0);

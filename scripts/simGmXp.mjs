@@ -69,7 +69,16 @@
  *               4 red at points 1 to 4 and section 4b red.
  *   pastceiling development forgets the ceiling: section 4b red.
  *   cushiongain the ownership cushion shrinks a trust gain too: section 4b red.
+ *   growthshape (Round 1314) the NBA growth step written as floor(rng() * 3) + 1,
+ *               a shape neither growth reader takes, in memory: the "no longer
+ *               grows" line fails for nbaFrontOffice.ts alone, and the thin line
+ *               follows (three leagues read). Measured on 1f99084f: 2 failures.
  * A control that leaves every check green exits 1.
+ * Round 1314: the growth reader takes the one line form and the two line form
+ * (const step = a + floor(rng() * n), then p.ovr = Math.min(p.pot, p.ovr +
+ * (opts?.growth ? ... : step))). Measured on 1f99084f: growth draws NFL 1/2,
+ * NBA 1/2/3, MLB 1/2/3, NHL 1/2/3, all checks passed in about 6 s on the owner's
+ * PC; all ten controls fire (closing line "N failure(s) under GMXP_CONTROL=...").
  *
  * Nothing here reads the network: it bundles src/lib modules, the four front
  * office engines among them, that import no client (25 bundled inputs, none
@@ -94,7 +103,7 @@ const CM_PATH = `${ROOT}/src/lib/clubManagerXp.ts`;
 const GM_PATH = `${ROOT}/src/lib/gmXp.ts`;
 const RECORD = process.env.GMXP_RECORD === '1';
 const CONTROL = process.env.GMXP_CONTROL || '';
-const KNOWN = ['curvestep', 'gmcap', 'nocap', 'saturate', 'notneutral', 'claim', 'fractional', 'pastceiling', 'cushiongain'];
+const KNOWN = ['curvestep', 'gmcap', 'nocap', 'saturate', 'notneutral', 'claim', 'fractional', 'pastceiling', 'cushiongain', 'growthshape'];
 if (CONTROL && !KNOWN.includes(CONTROL)) {
   console.error(`GMXP_CONTROL=${CONTROL} is not a control this harness knows (${KNOWN.join(', ')})`);
   process.exit(1);
@@ -495,13 +504,37 @@ const REAL = (() => {
      an engine is a retune of what this harness walks. */
   const strip = s => s.replace(/\/\*[\s\S]*?\*\//g, '').replace(/(^|[^:])\/\/.*$/gm, '$1');
   const growth = [];
+  /* Round 1314: two shapes. The one line form above, and the two line form
+     Rounds 1018 (NBA, 93a18bc2) and 1020 (MLB, 08c90228) wrote so a desk's
+     development coach can stretch the step: const NAME = a + floor(rng() * n)
+     whose NAME is the default arm of the VERY NEXT
+     p.ovr = Math.min(p.pot, p.ovr + (opts?.growth ? ... : NAME)). Both yield
+     the draws a to a + n - 1. Keyed on the shape, not the name (the NBA calls
+     it step, the MLB gain). Before this the two sports read nothing and the
+     harness was red on a rule that still held. */
+  const ONE_LINE = /p\.ovr = Math\.min\(p\.pot, p\.ovr \+ (\d+) \+ Math\.floor\(rng\(\) \* (\d+)\)\)/g;
+  const TWO_LINE = /const (\w+) = (\d+) \+ Math\.floor\(rng\(\) \* (\d+)\);\s*p\.ovr = Math\.min\(p\.pot, p\.ovr \+ \(opts\?\.growth \? [^;:]+ : \1\)\);/g;
   for (const [league, file] of [['NFL', 'frontOffice'], ['NBA', 'nbaFrontOffice'], ['MLB', 'mlbFrontOffice'], ['NHL', 'nhlFrontOffice']]) {
-    const code = strip(readSrc(`${ROOT}/src/lib/${file}.ts`));
+    let code = strip(readSrc(`${ROOT}/src/lib/${file}.ts`));
+    if (CONTROL === 'growthshape' && file === 'nbaFrontOffice') {
+      /* The step written in a shape neither form reads: the NBA alone must fail. */
+      const from = 'const step = 1 + Math.floor(rng() * 3);';
+      if (!code.includes(from)) {
+        console.error(`control cannot run: nbaFrontOffice.ts does not contain the text GMXP_CONTROL=${CONTROL} rewrites`);
+        console.error(`  looked for: ${from}`);
+        process.exit(1);
+      }
+      code = code.replace(from, 'const step = Math.floor(rng() * 3) + 1;');
+      console.log('   NEGATIVE CONTROL ON: the NBA growth step rewritten as floor(rng() * 3) + 1 in memory');
+    }
     const draws = new Set();
-    for (const m of code.matchAll(/p\.ovr = Math\.min\(p\.pot, p\.ovr \+ (\d+) \+ Math\.floor\(rng\(\) \* (\d+)\)\)/g)) {
+    for (const m of code.matchAll(ONE_LINE)) {
       for (let k = 0; k < Number(m[2]); k++) draws.add(Number(m[1]) + k);
     }
-    if (!draws.size) fail(`${file}.ts no longer grows a young player the way this harness reads (p.ovr + a + floor(rng() * n), capped at p.pot)`);
+    for (const m of code.matchAll(TWO_LINE)) {
+      for (let k = 0; k < Number(m[3]); k++) draws.add(Number(m[2]) + k);
+    }
+    if (!draws.size) fail(`${file}.ts no longer grows a young player the way this harness reads (p.ovr + a + floor(rng() * n), or a const of that shape as the default arm of the next p.ovr line, capped at p.pot)`);
     for (const g of [...draws].sort()) growth.push({ league, g });
   }
   return {
