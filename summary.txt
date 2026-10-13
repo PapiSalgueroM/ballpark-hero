@@ -1,0 +1,12 @@
+rv-long-0 exit=0 37s | rvcmw-long: green, no refusal, no duplicate, nobody misplaced
+rv-long-1 exit=0 40s | rvcmw-long: green, no refusal, no duplicate, nobody misplaced
+tsc exit=0 57s | 
+rv-long-2 exit=0 24s | rvcmw-long: green, no refusal, no duplicate, nobody misplaced
+rv-long-3 exit=0 25s | rvcmw-long: green, no refusal, no duplicate, nobody misplaced
+rv-long-4 exit=0 20s | rvcmw-long: green, no refusal, no duplicate, nobody misplaced
+rv-long-5 exit=0 22s | rvcmw-long: green, no refusal, no duplicate, nobody misplaced
+simCmLeagueRules exit=0 42s | simCmLeagueRules: all checks passed (modern, eras, pure, drop4, cupless, shapes, chunks)
+simCmLedgerJourney exit=0 81s | simCmLedgerJourney: green. 45 seeded journeys, 9442 ledgers read at a step or a reload, and the reader refused none the game wrote; every owned record of my club is carri
+simCmLedgerJourney-nokey-EXPECT-RED exit=1 80s | simCmLedgerJourney: CONTROL nokey FIRED: 3 failure(s) of the kind "no man of my squad carries his key"
+simManagerAppealIsolation exit=0 30s | Equivalent appeal outcomes must agree: passed for 24 original pairs and 3 separate generated-position pairs.
+simClubManagerDecisions exit=0 11s | simClubManagerDecisions: 0 findings
