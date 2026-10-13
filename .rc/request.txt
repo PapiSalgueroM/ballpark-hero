@@ -1,0 +1,5 @@
+#!build
+#!playwright
+#!serial
+cmp-head2: ONLY=simAcademyFilters,simActivityNotCompletion,simBrand,simFootleUnlimited,simIdleTimers,simNbaOpeningRatingInputs,simNflDraftCapital,simNflRatingEvidence,simRugbyLeagueReview,simTransferBriefPageControl,simConnect4ClubRecords,simFootleDaily,simGmStaff,simMoney,simNascarDriver,simPerfectSeasonWheel,simSafari,simSoccerStints,simTycoonSeasonReview,simWhodTheyBeat node scripts/runAllSims.mjs > /tmp/h.txt 2>&1; s=$?; cp /tmp/h.txt "$RC_OUT/head2.txt"; tail -2 /tmp/h.txt; exit $s
+cmp-base2: git checkout -f -q 8fea14e2 && node_modules/.bin/vite build > /tmp/bb.log 2>&1; git log --oneline -1 | cut -c1-40; ONLY=simAcademyFilters,simActivityNotCompletion,simBrand,simFootleUnlimited,simIdleTimers,simNbaOpeningRatingInputs,simNflDraftCapital,simNflRatingEvidence,simRugbyLeagueReview,simTransferBriefPageControl,simConnect4ClubRecords,simFootleDaily,simGmStaff,simMoney,simNascarDriver,simPerfectSeasonWheel,simSafari,simSoccerStints,simTycoonSeasonReview,simWhodTheyBeat node scripts/runAllSims.mjs > /tmp/b.txt 2>&1; s=$?; cp /tmp/b.txt "$RC_OUT/base2.txt"; tail -2 /tmp/b.txt; exit $s
