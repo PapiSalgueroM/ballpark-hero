@@ -15,6 +15,14 @@ const sha = value => createHash('sha256').update(value).digest('hex');
 const git = args => execFileSync('git', args, { cwd: ROOT, encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 }).trim();
 const HEAD = git(['rev-parse', 'HEAD']), TREE = git(['rev-parse', 'HEAD^{tree}']), BASE_TREE = git(['rev-parse', `${BASE}^{tree}`]);
 assert.equal(BASE_TREE, 'df728482ceb7551f0b33c89f85f0c3f1a0d88c07');
+/* Release AZ fix pass 3 (the lead's finding 2): the digest expansion control's subject. Since the summer prune
+   (4e87f296) the head's own Slots ledgers hold only real men, whose packed bytes are the same in the alone and
+   interleaved runs, so a digest that skips the decode still matched all twenty pairs and the control could not
+   fire on them. Its subject is now a third arm measured here from CONTROL_INPUT, the integration head before the
+   prune, whose packed ledgers carry the run dependent generated ids the decode exists for (azfx-10d proved the
+   control fires there). The control, its fault, its undo and every assertion of it are unchanged. */
+const CONTROL_INPUT = '3ac21642326a76f4dbc1e173a2c82bddcbabfd5e';
+assert.equal(git(['rev-parse', `${CONTROL_INPUT}^{tree}`]), '6ca6f91b4338d98c0bb9b0abf905f4ef4ea765a3');
 const SLOT_IMPORT = "import { expandPackedWorldRosterState } from './qa/managerWorldRosterDigest.cjs';\n";
 const SLOT_INITIALIZER = '  const { h2h, ...rest } = s;';
 const SLOT_ADAPTER = '  const { h2h, ...rest } = expandPackedWorldRosterState(s);';
@@ -329,6 +337,7 @@ function digestExpansionControl(inputDirectory) {
   assert.deepEqual(failures(observations.healthy), []);
   assert.deepEqual(failures(observations.fault).map(row => row.group), ['decoded-slot-replay']);
   assert(observations.fault.same < observations.healthy.same, 'The missing decode changes the actual complete comparison');
+  console.log(`DIAGNOSTIC digest control on ${inputSource.ref}: healthy ${observations.healthy.same} of ${observations.healthy.total} pairs equal, missing decode ${observations.fault.same}, undo ${observations.undo.same}`);
   assert.deepEqual(failures(observations.undo), []);
   assert.deepEqual(observations.undo, observations.healthy, 'Full undo restores all complete digests, vectors, sidecars and inputs');
   assert.equal(sha(JSON.stringify(frames)), inputStateSha256, 'Every original complete state and draw vector stays unchanged');
@@ -358,7 +367,7 @@ try {
     fs.writeFileSync(path.join(OUT, 'digest-only-report.json'), JSON.stringify({ head: HEAD, tree: TREE, base: BASE, baseTree: BASE_TREE,
       scope: 'Retained-data representation control only. No new engine, budget or historical harness acceptance.', sourceBefore: before, sourceAfter: after, sourceHeld: true, observerStopControl, digestExpansion }, null, 2));
   } else {
-  for (const [arm, ref] of [['original', BASE], ['current', HEAD]]) {
+  for (const [arm, ref] of [['original', BASE], ['current', HEAD], ['control-input', CONTROL_INPUT]]) {
     const directory = path.join(TEMP, arm); fs.mkdirSync(directory);
     const paths = git(['ls-tree', '--name-only', ref]).split('\n').filter(name => selected.has(name));
     assert(paths.includes('src') && paths.includes('scripts') && paths.includes('vitest.config.ts'));
@@ -373,7 +382,7 @@ try {
     }
     if (arm==='current') assert.equal(sourceManifest['scripts/qa/managerWorldRosterDigest.cjs'], sha(fs.readFileSync(digestHelper)),
       'The actual imported current decoder matches the held independent observer decoder');
-    for (const name of ['simClubManagerSaveSize.mjs','simClubManagerSlots.mjs']) {
+    for (const name of arm==='control-input'?['simClubManagerSlots.mjs']:['simClubManagerSaveSize.mjs','simClubManagerSlots.mjs']) {
       const evidence = path.join(OUT,arm,name);fs.mkdirSync(evidence,{recursive:true});
       const file = path.join(directory,'scripts',name);
       const original = fs.readFileSync(file,'utf8').replaceAll('\r\n','\n'); let source=original;
@@ -401,7 +410,7 @@ try {
         source=replace(source,'const total = cmKeys.reduce((a, k) => a + bytesOf(k), 0);',
           "const total = cmKeys.reduce((a, k) => a + bytesOf(k), 0);\n__diagnostic.storage([...store.entries()]);\n__diagnostic.stop();",arm+'/'+name);
       }
-      if (arm==='current' && name==='simClubManagerSlots.mjs' && contract.representationAdapter) source=replace(source,SLOT_ADAPTER,
+      if (arm!=='original' && name==='simClubManagerSlots.mjs' && contract.representationAdapter) source=replace(source,SLOT_ADAPTER,
         '  const { h2h, ...rest } = __diagnostic.expanded(s, expandPackedWorldRosterState);',arm+'/'+name);
       source=prefix+source;fs.writeFileSync(file,source);
       fs.writeFileSync(path.join(evidence,name),source);
@@ -423,9 +432,9 @@ try {
       console.log(`DIAGNOSTIC ${arm} ${name}: exit ${run.status}, ${result.finishedSeasons} finished size seasons, ${result.slotSeasonFrames} slot season frames`);
     }
   }
-  digestExpansion = digestExpansionControl(path.join(OUT, 'current/simClubManagerSlots.mjs'));
+  digestExpansion = digestExpansionControl(path.join(OUT, 'control-input/simClubManagerSlots.mjs'));
   const after=heldSources();assert.deepEqual(after,before);
-  assert.equal(results.length,4);assert(results.every(row=>row.error===null&&row.signal===null),'All diagnostic processes completed');
+  assert.equal(results.length,5);assert(results.every(row=>row.error===null&&row.signal===null),'All diagnostic processes completed');
   for(const result of results){assert.equal(result.name==='simClubManagerSaveSize.mjs'?result.finishedSeasons:result.slotSeasonFrames,result.name==='simClubManagerSaveSize.mjs'?45:65,'All original/current fixed historical season frames retained');}
   fs.writeFileSync(path.join(OUT,'report.json'),JSON.stringify({head:HEAD,tree:TREE,base:BASE,baseTree:BASE_TREE,harnessBlobs,simSeed:process.env.SIM_SEED??null,
     scope:'diagnostic only, historical budget failures remain failures',sourceBefore:before,sourceAfter:after,sourceHeld:true,observerStopControl,digestExpansion,results,patches},null,2));
