@@ -1,0 +1,40 @@
+deck-weightkeep-EXPECT-RED exit=1 69s | simEventDeck: 1 failure, red sections 3 (CONTROL=weightkeep fired)
+deck-story-EXPECT-RED exit=1 86s | simEventDeck: 2 failures, red sections 4 (CONTROL=story fired)
+deck-weightoff-EXPECT-RED exit=1 93s | simEventDeck: 1 failure, red sections 3 (CONTROL=weightoff fired)
+deck-failopen-EXPECT-RED exit=1 67s | simEventDeck: 1 failure, red sections 5 (CONTROL=failopen fired)
+deck-rest-EXPECT-RED exit=1 92s | simEventDeck: 3 failures, red sections 5 (CONTROL=rest fired)
+deck-restfall-EXPECT-RED exit=1 95s | simEventDeck: 3 failures, red sections 5 (CONTROL=restfall fired)
+deck-textrng-EXPECT-RED exit=1 75s | simEventDeck: 2 failures, red sections 6 (CONTROL=textrng fired)
+deck-expirefall-EXPECT-RED exit=1 92s | simEventDeck: 3 failures, red sections 7 (CONTROL=expirefall fired)
+deck-seasonweek-EXPECT-RED exit=1 93s | simEventDeck: 2 failures, red sections 9 (CONTROL=seasonweek fired)
+deck-expireoff-EXPECT-RED exit=1 81s | simEventDeck: 7 failures, red sections 7 (CONTROL=expireoff fired)
+deck-expirefx-EXPECT-RED exit=1 78s | simEventDeck: 4 failures, red sections 7 (CONTROL=expirefx fired)
+deck-settledoff-EXPECT-RED exit=1 88s | simEventDeck: 1 failure, red sections 7 (CONTROL=settledoff fired)
+deck-neutral-EXPECT-RED exit=1 75s | simEventDeck: 1 failure, red sections 8 (CONTROL=neutral fired)
+simGmInbox exit=0 1s | simGmInbox: green.
+gminbox-quote-EXPECT-RED exit=1 2s | simGmInbox: 3 failures (CONTROL=quote)
+gminbox-flip-EXPECT-RED exit=1 2s | simGmInbox: 2 failures (CONTROL=flip)
+gminbox-cool-EXPECT-RED exit=1 2s | simGmInbox: 8 failures (CONTROL=cool)
+gminbox-drift-EXPECT-RED exit=1 1s | simGmInbox: 1 failure (CONTROL=drift)
+deck-panelexpiry-EXPECT-RED exit=1 88s | simEventDeck: 1 failure, red sections 7 (CONTROL=panelexpiry fired)
+gminbox-never-EXPECT-RED exit=1 1s | simGmInbox: 1 failure (CONTROL=never)
+gminbox-shift-EXPECT-RED exit=1 2s | simGmInbox: 1 failure (CONTROL=shift)
+gminbox-random-EXPECT-RED exit=1 2s | simGmInbox: 1 failure (CONTROL=random)
+gminbox-opencap-EXPECT-RED exit=1 2s | simGmInbox: 1 failure (CONTROL=opencap)
+gminbox-maxcap-EXPECT-RED exit=1 2s | simGmInbox: 3 failures (CONTROL=maxcap)
+gminbox-oneshot-EXPECT-RED exit=1 2s | simGmInbox: 2 failures (CONTROL=oneshot)
+gminbox-ungate-EXPECT-RED exit=1 2s | simGmInbox: 1 failure (CONTROL=ungate)
+gminbox-quotevariant-EXPECT-RED exit=1 1s | simGmInbox: 1 failure (CONTROL=quotevariant)
+gminbox-unclamp-EXPECT-RED exit=1 1s | simGmInbox: 1 failure (CONTROL=unclamp)
+gminbox-effectvariant-EXPECT-RED exit=1 1s | simGmInbox: 1 failure (CONTROL=effectvariant)
+inbox-privatecap-EXPECT-RED exit=1 3s | simCareerInbox: 1 failure
+vitest3 exit=0 6s |    Duration  6.24s (transform 2.64s, setup 238ms, collect 7.27s, tests 1.82s, environment 1.78s, prepare 697ms)
+og-revert-EXPECT-RED exit=1 8s | ::error file=/tmp/ogrev/src/test/seasonCentreOwnGoals.test.tsx,title=src/test/seasonCentreOwnGoals.test.tsx > Season Centre%3A own goals on the page (Round 1167%2C read a
+promises exit=0 28s | simSoccerEventPromises: all sections green
+deck-heavy-EXPECT-RED exit=1 99s | simEventDeck: 1 failure, red sections 10 (CONTROL=heavy fired)
+fairness exit=0 59s | simSoccerDeckFairness: all sections green
+fair1 exit=0 64s | simSoccerDeckFairness: all sections green
+fair2 exit=0 71s | simSoccerDeckFairness: all sections green
+fair3 exit=0 76s | simSoccerDeckFairness: all sections green
+fair4 exit=0 58s | simSoccerDeckFairness: all sections green
+cool-nocooldown-control exit=0 52s | CONTROL FIRED: section 2 failed with the defect back in, as it should, and nothing else did.
