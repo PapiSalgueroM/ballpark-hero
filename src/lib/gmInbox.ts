@@ -365,12 +365,19 @@ const drop = (list: GmEventDef[], hit: (x: GmEventDef) => boolean) => {
 /* ─── the week ───────────────────────────────────────────────────────────── */
 
 /**
- * One week of the deck. `beat` is where the seat's year stands, `facts` the
- * plain facts of the moment, `clock` the save's own week counter (it only
- * ever goes up). Every eligible event rolls its chance in pack order, then up
- * to `perWeek` of those that came up are drawn at random, never past
- * GM_INBOX_OPEN unanswered (rule 3). The draws all come from `rng`, so the
- * same seed deals the same deck. Returns what arrived.
+ * One week of the deck (one tick: a season, on a season clock). `beat` is
+ * where the seat's year stands, `facts` the plain facts of the moment,
+ * `clock` the save's own tick counter, which a seat may hand in falling (the
+ * week of its season), so the books are rebased. The steps, in this order:
+ * (1) rebase the cooldown book and the rest book from the future, pruning
+ * the rest book; (2) settle the expired cards; (3) count the open ones and
+ * `want`; (4) the eligible events (beat, conditions, subject rest, story,
+ * one shots, cooldowns); (5) one chance roll per eligible event in pack
+ * order; (6) up to `perWeek` picks, never past GM_INBOX_OPEN unanswered
+ * (rule 3), each dropping its story and subject siblings with no draw;
+ * (7) each pick's wording, from a keyed draw, never `rng`; (8) the kept cap.
+ * The deck's draws all come from `rng`, so the same seed deals the same
+ * deck. Returns what arrived.
  */
 export function gmInboxWeek<S extends GmInboxHost>(
   s: S, seat: GmInboxSeat<S>, beat: string, facts: GmFacts, clock: number, rng: () => number,
