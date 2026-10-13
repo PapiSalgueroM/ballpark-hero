@@ -203,16 +203,15 @@ describe('Round 1320: the athletic director on the college boards', () => {
       localStorage.clear();
       const y = mount(sport, fired);
       const sit = y.buttons().find(b => txt(b) === 'Sit the year out');
-      if (sit) {
-        fireEvent.click(sit);
-        const out = y.saved();
-        expect(out.st.season).toBe(fired.st.season + 1);
-        expect(out.st.myTitles).toBe(fired.st.myTitles);
-        expect(out.st.seasonsPlayed).toBe(fired.st.seasonsPlayed);
-        expect(out.st.seat.career.seasonsOut).toBe(fired.st.seat.career.seasonsOut + 1);
-        expect(out.phase).toBe('recap');
-        expect(y.q('[data-college-seat="market"]')).toBeTruthy();
-      }
+      expect(sit, 'the fired save offered no year out, so the year out went untested').toBeTruthy();
+      fireEvent.click(sit!);
+      const out = y.saved();
+      expect(out.st.season).toBe(fired.st.season + 1);
+      expect(out.st.myTitles).toBe(fired.st.myTitles);
+      expect(out.st.seasonsPlayed).toBe(fired.st.seasonsPlayed);
+      expect(out.st.seat.career.seasonsOut).toBe(fired.st.seat.career.seasonsOut + 1);
+      expect(out.phase).toBe('recap');
+      expect(y.q('[data-college-seat="market"]')).toBeTruthy();
     });
 
     it(`${sport.name}: a closed market offers only a new dynasty, and hostile market saves load somewhere sane`, () => {
@@ -254,6 +253,24 @@ describe('Round 1320: the athletic director on the college boards', () => {
       onTrail.phase = 'recruit';
       const t = mount(sport, onTrail);
       expect(t.q('[data-college-seat="market"]')).toBeNull();
+      cleanup();
+      /* a fired seat on a season still open (no build writes it): the seat is dropped alone and the season plays on */
+      const open = JSON.parse(JSON.stringify(fired));
+      if (sport.name === 'cfb') open.st.natties = open.st.natties.filter((n: { season: number }) => n.season !== open.st.season);
+      else open.st.titles = open.st.titles.filter((n: { season: number }) => n.season !== open.st.season);
+      open.phase = 'season';
+      const o = mount(sport, open);
+      expect(o.q('[data-college-seat="market"]')).toBeNull();
+      expect(o.q('[data-college-seat="tile"]')).toBeNull();
+      expect(o.q('[data-college-seat="passed"]')).toBeTruthy();
+      expect(o.buttons().some(b => txt(b) === 'Play')).toBe(true);
+      cleanup();
+      /* a fired seat saved on 'market' (no build writes that phase) on a closed season: the market, the same one */
+      const onMarket = JSON.parse(JSON.stringify(fired));
+      onMarket.phase = 'market';
+      const k = mount(sport, onMarket);
+      expect(k.q('[data-college-seat="market"]')).toBeTruthy();
+      expect(txt(k.q('[data-college-seat="market"]')!)).toContain('let you go');
     });
   }
 });
