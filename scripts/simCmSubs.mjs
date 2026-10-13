@@ -112,7 +112,9 @@ function check(part, name, ok, detail = '') {
 
 const require = createRequire(import.meta.url);
 /** Manager Hot Seat, bundled with each engine (the engine module is the key). */
-const HS = new Map();
+const HS = new WeakMap();
+/** Where each engine bundle was written, so a fresh copy of it can be loaded. */
+const OUT = new WeakMap();
 /** The engine (src/lib/clubManager.ts as `text`) bundled with Manager Hot Seat beside it. `srcRoot` is the
  *  src tree everything else comes from (SUBS_BASE's for the base arm); `hsText` a patched Hot Seat file. */
 async function bundleEngine(text, name, folder, { srcRoot = path.join(root, 'src'), hsText = null } = {}) {
@@ -130,6 +132,7 @@ async function bundleEngine(text, name, folder, { srcRoot = path.join(root, 'src
   await build({ entryPoints: [entry], bundle: true, platform: 'node', format: 'cjs', outfile: output, logLevel: 'silent', alias, nodePaths: [path.join(root, 'node_modules')] });
   const mod = require(output);
   HS.set(mod.cm, mod.hs);
+  OUT.set(mod.cm, output);
   return mod.cm;
 }
 async function bundleRule(folder) {
@@ -361,16 +364,28 @@ function playSeasons(cm, { club, era, seed, opts, base }) {
   }
   return { hash: hashOf(strip(s)), draws: DRAWS.n, at: `season ${s.season} week ${s.week}` };
 }
-function compareArms(P, label, head, base, runs) {
+/** A fresh copy of an engine bundle, the way a page load gets one: the engine keeps counters at module level
+ *  (question ids, the like), so two engines compared byte for byte must each start every run from a fresh
+ *  module, or a run one of them played earlier shows up as a difference. */
+async function freshEngine(cm) {
+  const output = OUT.get(cm);
+  delete require.cache[require.resolve(output)];
+  const mod = require(output);
+  HS.set(mod.cm, mod.hs);
+  OUT.set(mod.cm, output);
+  await mod.cm.ensureAllEraRosters();
+  return mod.cm;
+}
+async function compareArms(P, label, head, base, runs) {
   let bad = 0, first = '';
   for (const r of runs) {
-    const h = playSeasons(head, { ...r, base: label === 'legacy' });
-    const b = playSeasons(base, { ...r, base: false });
+    const h = playSeasons(await freshEngine(head), { ...r, base: label === 'legacy' });
+    const b = playSeasons(await freshEngine(base), { ...r, base: false });
     if (h.hash !== b.hash || h.draws !== b.draws) { bad += 1; first ||= `${r.club} ${r.era ?? 'now'} seed ${r.seed} ${r.mode}: head ${h.hash} ${h.draws} draws, base ${b.hash} ${b.draws} draws (${h.at})`; }
   }
   check(P, `${runs.length} careers, every save byte and every draw equal to SUBS_BASE`, bad === 0 && runs.length > 0, bad ? `${bad} differ; first ${first}` : '');
 }
-function legacySection(cm, { base }) {
+async function legacySection(cm, { base }) {
   const runs = [];
   for (let seed = 0; seed < LEGACY_SEEDS; seed++) {
     for (const [club, era] of [['Everton', 'era2005'], ['Barcelona', 'era2015'], ['Liverpool', null]]) {
@@ -378,16 +393,16 @@ function legacySection(cm, { base }) {
     }
     for (const club of ['Westerlo', 'Nottingham Forest']) runs.push({ club, era: null, seed, mode: 'hotseat', opts: HOT_STYLE });
   }
-  compareArms('legacy', 'legacy', cm, base, runs);
+  await compareArms('legacy', 'legacy', cm, base, runs);
 }
-function threeSection(cm, { base, threeHead }) {
+async function threeSection(cm, { base, threeHead }) {
   const runs = [];
   for (let seed = 0; seed < LEGACY_SEEDS; seed++) {
     for (const [club, era] of [['Everton', 'era2005'], ['Barcelona', 'era2015']]) {
       for (const mode of Object.keys(QUICK)) runs.push({ club, era, seed, mode, opts: QUICK[mode] });
     }
   }
-  compareArms('three', 'three', threeHead, base, runs);
+  await compareArms('three', 'three', threeHead, base, runs);
 }
 
 /* Section press: every bigGame or derby question asked at a whistle names the next fixture's opponent. */
@@ -440,15 +455,16 @@ function pressSection(cm, { base }) {
 }
 
 /* Section hotseat: the 30 dailies before the cutover and an unstamped free run replay exactly as on SUBS_BASE. */
-function hotseatSection(cm, { base }) {
+async function hotseatSection(cm, { base }) {
   const P = 'hotseat';
-  const hs = HS.get(cm), hb = HS.get(base);
+  const hs0 = HS.get(cm);
   const SCRIPT = Array.from({ length: 6 }, () => ({ t: 'match', m: 'balanced', talk: null }));
-  const from = hs.HOT_SEAT_RULES_FROM;
+  const from = hs0.HOT_SEAT_RULES_FROM;
   const dates = [];
   for (let d = new Date(Date.UTC(2026, 8, 24)); dates.length < 30; d.setUTCDate(d.getUTCDate() + 1)) dates.push(d.toISOString().slice(0, 10));
   let bad = 0, unmarked = 0, first = '';
   for (const date of dates) {
+    const hs = HS.get(await freshEngine(cm)), hb = HS.get(await freshEngine(base));
     const sh = hs.dailyHotSeat(date), sb = hb.dailyHotSeat(date);
     const h = withSeed(11, () => hs.replayHotSeat({ club: sh.club, seed: sh.seed, daily: sh.daily }, SCRIPT));
     const b = withSeed(11, () => hb.replayHotSeat({ club: sb.club, seed: sb.seed, daily: sb.daily }, SCRIPT));
@@ -460,6 +476,7 @@ function hotseatSection(cm, { base }) {
   check(P, 'every daily before the cutover plays the base rules', unmarked === 0, `${unmarked} of 30 unmarked`);
   check(P, 'every daily before the cutover replays exactly as on SUBS_BASE', bad === 0, bad ? `${bad} differ, first ${first}` : '');
   const free = { club: 'Westerlo', seed: 424242 };
+  const hs = HS.get(await freshEngine(cm)), hb = HS.get(await freshEngine(base));
   const fh = withSeed(12, () => hs.replayHotSeat(free, SCRIPT)), fb = withSeed(12, () => hb.replayHotSeat(free, SCRIPT));
   check(P, 'a free run saved without the stamp replays exactly as on SUBS_BASE', hashOf(strip(fh.state)) === hashOf(strip(fb.state)) && fh.points === fb.points);
   const carried = hs.handoverState(fh);
