@@ -1,0 +1,17 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+own-tests: node_modules/.bin/vitest run src/lib/clubManagerOwnClubLevel.test.ts src/lib/clubManagerWorldRoster.test.ts src/lib/clubManagerTrajectory.test.ts --testTimeout=300000 --hookTimeout=120000
+simFreeAgents: node scripts/simFreeAgents.mjs
+fa-marketreleased-EXPECT-RED: FA_CONTROL=marketreleased node scripts/simFreeAgents.mjs
+fa-buyreleased-EXPECT-RED: FA_CONTROL=buyreleased node scripts/simFreeAgents.mjs
+fa-noreleasedlist-EXPECT-RED: FA_CONTROL=noreleasedlist node scripts/simFreeAgents.mjs
+simCmUnseededWorld: node scripts/simCmUnseededWorld.mjs
+unseeded-guard-EXPECT-RED: CM_UNSEEDED_CONTROL=guard node scripts/simCmUnseededWorld.mjs
+unseeded-noinverse-EXPECT-RED: CM_UNSEEDED_CONTROL=noinverse node scripts/simCmUnseededWorld.mjs
+simCmLedgerJourney: node scripts/simCmLedgerJourney.mjs
+journey-nokey-EXPECT-RED: CM_LEDGER_CONTROL=nokey node scripts/simCmLedgerJourney.mjs
+journey-futureyear-EXPECT-RED: CM_LEDGER_CONTROL=futureyear node scripts/simCmLedgerJourney.mjs
+simCmLeagueRules: node scripts/simCmLeagueRules.mjs
+simManagerAppealIsolation: node scripts/simManagerAppealIsolation.mjs
+simClubManagerDecisions: node scripts/simClubManagerDecisions.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
