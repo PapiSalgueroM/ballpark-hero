@@ -1,0 +1,8 @@
+AUDIT s1m1-report: 4 overlapping text pairs: "🔁 Sub: Tariq Lindqvist (Youth) on for T" x "46'" (15x11 at 633,1184)
+AUDIT s1q-quick-report: 2 overlapping text pairs: "🔁 Sub: Dmitriy Chistyakov on for Luca M" x "66'" (15x11 at 633,1221)
+AUDIT s2q-quick-report: 1 overlapping text pairs: "🔁 Sub: Alieu Njie on for Pedro Gonçalve" x "73'" (15x11 at 633,1301)
+AUDIT s3-summer-bid-open: 2 overlapping text pairs: "Bayer Leverkusen · 36y · worth £500k to " x "Pick when you start too: today's game, o" (16x11 at 320,2038)
+AUDIT s3m1-report: 5 overlapping text pairs: "🔁 Sub: Ravi Hansen (Youth) on for Dean " x "46'" (15x11 at 633,1315)
+AUDIT s3q-quick-report: 1 overlapping text pairs: "🔁 Sub: Jean-Philippe Mateta on for Jørg" x "80'" (15x11 at 633,1451)
+FIND [note] sacked :: season 3
+SEASON s1280dk done: 1 findings, 0 errors, 79 shots, 350s

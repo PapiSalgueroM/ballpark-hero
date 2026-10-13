@@ -1,0 +1,5 @@
+#!serve
+#!playwright
+season1280dk: TAG=s1280dk W=1280 H=900 NATION=/Denmark/ LEAGUE=0 CLUB=last SEASONS=3 LIVE=1 TAKEJOB=1 MINUTES=50 node .rc/x/walkSeason.mjs
+season390ch: TAG=s390ch W=390 H=844 NATION=/England/ LEAGUE=1 CLUB=first SEASONS=2 LIVE=1 MINUTES=50 node .rc/x/walkSeason.mjs
+season390it: TAG=s390it W=390 H=844 NATION=/Italy/ LEAGUE=0 CLUB=last SEASONS=2 LIVE=1 MINUTES=50 node .rc/x/walkSeason.mjs

@@ -1,0 +1,4 @@
+build exit=0 30s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+season390it exit=0 125s | SEASON s390it done: 1 findings, 0 errors, 25 shots, 125s
+season390ch exit=0 249s | SEASON s390ch done: 1 findings, 0 errors, 51 shots, 249s
+season1280dk exit=0 351s | SEASON s1280dk done: 1 findings, 0 errors, 79 shots, 350s

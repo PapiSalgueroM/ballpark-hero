@@ -1,0 +1,11 @@
+AUDIT picker-team: 2 overlapping text pairs: "Win the EFL Championship" x "Board wants" (14x12 at 212,496)
+AUDIT s1-summer-market: 7 overlapping text pairs: "Manchester City · 25y · worth £133.5m to" x "94" (18x7 at 250,845)
+AUDIT s1-summer-bid-open: 3 overlapping text pairs: "Wellington Phoenix · 30y · worth £400k t" x "62" (17x7 at 260,1536)
+AUDIT s1m1-report: 3 overlapping text pairs: "🟨 Booked: Maximilian Kilman" x "52'" (4x11 at 188,1300)
+AUDIT s1q-quick-report: 9 overlapping text pairs: "🧤 Shot saved: Taty Castellanos" x "7'" (9x11 at 191,1032)
+AUDIT s2-summer-market: 4 overlapping text pairs: "Real Madrid · 23y · worth £92.4m to £115" x "95" (13x7 at 251,984)
+AUDIT s2-summer-bid-open: 2 overlapping text pairs: "Chicago Fire · 38y · worth £500k to £600" x "71" (14x7 at 222,1341)
+AUDIT s2m1-report: 4 overlapping text pairs: "🧤 Shot saved: Taty Castellanos" x "25'" (14x11 at 188,1186)
+AUDIT s2q-quick-report: 4 overlapping text pairs: "🧤 Shot saved: Manor Solomon" x "45+1'" (18x11 at 182,1163)
+FIND [note] sacked :: season 2
+SEASON s390ch done: 1 findings, 0 errors, 51 shots, 249s

@@ -1,0 +1,8 @@
+AUDIT picker-team: 2 overlapping text pairs: "Qualify for the Europa League" x "Board wants" (29x12 at 212,863)
+AUDIT s1-summer-market: 6 overlapping text pairs: "Manchester City · 25y · worth £124.9m to" x "94" (18x7 at 250,881)
+AUDIT s1-summer-bid-open: 3 overlapping text pairs: "Wellington Phoenix · 30y · worth £400k t" x "62" (17x7 at 260,1572)
+AUDIT s1m1-live-kickoff: 1 overlapping text pairs: "8 McKennie" x "6 Schmid" (6x6 at 248,240)
+AUDIT s1m1-report: 8 overlapping text pairs: "🅰️ Romano Schmid" x "17'" (15x11 at 188,1290)
+AUDIT s1q-quick-report: 3 overlapping text pairs: "🧤 Shot saved: Daniel Bîrligea" x "67'" (4x11 at 188,1229)
+FIND [note] sacked :: season 1
+SEASON s390it done: 1 findings, 0 errors, 25 shots, 125s
