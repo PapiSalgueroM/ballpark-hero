@@ -1,0 +1,40 @@
+ [32m✓[39m src/test/perfectSeasonReport.test.tsx [2m([22m[2m1 test[22m[2m)[22m[32m 155[2mms[22m[39m
+ [32m✓[39m src/test/ownerMandateMotion.test.tsx [2m([22m[2m7 tests[22m[2m)[22m[32m 100[2mms[22m[39m
+ [32m✓[39m src/test/soccerAwardGeneration.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 102[2mms[22m[39m
+[90mstdout[2m | src/test/careerWallShotFriendly.test.ts[2m > [22m[2mcareer wall shot forgiveness[2m > [22m[2mscores more with modest aiming and timing errors than the previous ladder
+[22m[39mwall shot forgiveness: 12810/18000 scored, previous 12565/18000
+
+ [32m✓[39m src/test/careerWallShotFriendly.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 100[2mms[22m[39m
+ [32m✓[39m src/test/reservedNames.test.ts [2m([22m[2m89 tests[22m[2m)[22m[32m 12[2mms[22m[39m
+ [32m✓[39m src/test/soccerBallonPoolReadAsAbsent.test.tsx [2m([22m[2m29 tests[22m[2m)[22m[33m 857[2mms[22m[39m
+ [32m✓[39m src/test/liveScoresTransport.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 16[2mms[22m[39m
+ [32m✓[39m src/components/front-office-shared/GmInboxPanel.test.tsx [2m([22m[2m3 tests[22m[2m)[22m[32m 75[2mms[22m[39m
+ [32m✓[39m src/lib/careerChanceWheel.test.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 9[2mms[22m[39m
+ [32m✓[39m src/pages/NotFound.test.tsx [2m([22m[2m1 test[22m[2m)[22m[32m 129[2mms[22m[39m
+ [32m✓[39m src/lib/gridRarity.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 3[2mms[22m[39m
+ [32m✓[39m src/data/gameRegistry.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 3[2mms[22m[39m
+ [32m✓[39m src/test/example.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 2[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/seasonCentreOwnGoals.test.tsx[2m > [22mSeason Centre: own goals on the page (Round 1167, read after the Release AP merge)[2m > [22mprints an own goal for side "them" with who did it and the club that got it, the same live, held and replayed
+[31m[1mError[22m: seasonCentreOwnGoals: matchday 29 is not on the stage (live)[39m
+[36m [2m❯[22m linesOf src/test/seasonCentreOwnGoals.test.tsx:[2m164:19[22m[39m
+    [90m162| [39m  [35mif[39m (past) [35mawait[39m [34mact[39m([35masync[39m () [33m=>[39m { fireEvent[33m.[39m[34mclick[39m(past)[33m;[39m })[33m;[39m
+    [90m163| [39m  [35mconst[39m day [33m=[39m container[33m.[39m[34mquerySelector[39m([32m`[data-matchday="[39m[36m${[39mspot[33m.[39mmd[36m}[39m[32m"]`[39m)[33m;[39m
+    [90m164| [39m  if (!day) throw new Error(`seasonCentreOwnGoals: matchday ${spot.md}…
+    [90m   | [39m                  [31m^[39m
+    [90m165| [39m  expect(day.querySelector('[data-full-time]'), `${way}: the match is …
+    [90m166| [39m  return [...day.querySelectorAll('[data-clock-events] li')].map(li =>…
+[90m [2m❯[22m src/test/seasonCentreOwnGoals.test.tsx:[2m205:21[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m494 passed[39m[22m[2m | [22m[33m2 skipped[39m[90m (497)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m7533 passed[39m[22m[2m | [22m[33m58 skipped[39m[90m (7592)[39m
+[2m   Start at [22m 08:45:51
+[2m   Duration [22m 533.06s[2m (transform 37.14s, setup 19.76s, collect 159.14s, tests 1141.79s, environment 160.75s, prepare 33.37s)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/seasonCentreOwnGoals.test.tsx,title=src/test/seasonCentreOwnGoals.test.tsx > Season Centre%3A own goals on the page (Round 1167%2C read after the Release AP merge) > prints an own goal for side "them" with who did it and the club that got it%2C the same live%2C held and replayed,line=164,column=19::Error: seasonCentreOwnGoals: matchday 29 is not on the stage (live)%0A ❯ linesOf src/test/seasonCentreOwnGoals.test.tsx:164:19%0A ❯ src/test/seasonCentreOwnGoals.test.tsx:205:21%0A%0A
