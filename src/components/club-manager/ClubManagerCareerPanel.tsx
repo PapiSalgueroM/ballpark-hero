@@ -59,7 +59,7 @@ export default function ClubManagerCareerPanel({ c, g, nationOffer }: {
                     </p>
                     <button
                       onClick={g.resignNation}
-                      className="mt-2 w-full py-2 rounded-lg bg-secondary text-foreground text-xs font-bold hover:opacity-90 transition-opacity"
+                      className="mt-2 w-full min-h-11 py-2 rounded-lg bg-secondary text-foreground text-xs font-bold hover:opacity-90 transition-opacity"
                     >
                       Step down from the national team
                     </button>
@@ -71,7 +71,7 @@ export default function ClubManagerCareerPanel({ c, g, nationOffer }: {
                     <p className="text-[11px] text-muted-foreground mb-2">{nationOffer.blurb}</p>
                     <button
                       onClick={g.acceptNation}
-                      className="w-full py-2 rounded-lg bg-primary text-primary-foreground text-xs font-bold hover:opacity-90 transition-opacity"
+                      className="w-full min-h-11 py-2 rounded-lg bg-primary text-primary-foreground text-xs font-bold hover:opacity-90 transition-opacity"
                     >
                       🌐 Take the {nationOffer.nation} job as well
                     </button>
@@ -91,14 +91,14 @@ export default function ClubManagerCareerPanel({ c, g, nationOffer }: {
                       {!huntBusy(c) && (
                         <button
                           onClick={() => g.answerApproach(true)}
-                          className="flex-1 py-2 rounded-lg bg-primary text-primary-foreground text-xs font-bold hover:opacity-90 transition-opacity"
+                          className="flex-1 min-h-11 py-2 rounded-lg bg-primary text-primary-foreground text-xs font-bold hover:opacity-90 transition-opacity"
                         >
                           🤝 Shake hands for the summer
                         </button>
                       )}
                       <button
                         onClick={() => g.answerApproach(false)}
-                        className="flex-1 py-2 rounded-lg border border-border bg-card text-xs font-bold text-foreground hover:border-primary transition-colors"
+                        className="flex-1 min-h-11 py-2 rounded-lg border border-border bg-card text-xs font-bold text-foreground hover:border-primary transition-colors"
                       >
                         Turn them down
                       </button>
@@ -139,7 +139,7 @@ export default function ClubManagerCareerPanel({ c, g, nationOffer }: {
                       <button
                         type="button"
                         onClick={() => setEditing(true)}
-                        className="shrink-0 inline-flex items-center gap-1 rounded-full border border-border px-2 py-1 text-[10px] font-bold text-muted-foreground hover:text-foreground hover:border-primary transition-colors"
+                        className="shrink-0 inline-flex min-h-11 items-center gap-1 rounded-full border border-border px-3 py-1 text-xs font-bold text-muted-foreground hover:text-foreground hover:border-primary transition-colors"
                       >
                         <Pencil className="w-3 h-3" /> Edit
                       </button>
@@ -149,7 +149,7 @@ export default function ClubManagerCareerPanel({ c, g, nationOffer }: {
                       type="button"
                       data-name-manager
                       onClick={() => setEditing(true)}
-                      className="w-full mb-2 inline-flex items-center justify-center gap-1.5 rounded-lg border border-dashed border-border px-2.5 py-2 text-[11px] font-bold text-muted-foreground hover:text-foreground hover:border-primary transition-colors"
+                      className="w-full min-h-11 mb-2 inline-flex items-center justify-center gap-1.5 rounded-lg border border-dashed border-border px-2.5 py-2 text-xs font-bold text-muted-foreground hover:text-foreground hover:border-primary transition-colors"
                     >
                       <UserPlus className="w-3.5 h-3.5" /> Name your manager
                     </button>

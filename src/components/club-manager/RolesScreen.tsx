@@ -47,19 +47,19 @@ function PlayerRow({ p, onOpen, showRole }: { p: CMPlayer; onOpen: () => void; s
     <button
       data-cm-room-row={p.id}
       onClick={onOpen}
-      className="w-full flex items-center gap-2 py-1.5 border-b border-border/30 last:border-0 text-left hover:bg-secondary/40 transition-colors rounded px-1"
+      className="w-full min-h-11 flex items-center gap-2 py-1.5 border-b border-border/30 last:border-0 text-left hover:bg-secondary/40 transition-colors rounded px-1"
     >
       <span className="w-8 shrink-0 text-[9px] font-bold text-muted-foreground bg-secondary rounded px-1 py-0.5 text-center">{p.position}</span>
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-1.5">
-          <span className="text-xs text-foreground truncate">{p.name}</span>
+          <span className="text-xs text-foreground truncate" title={p.name}>{p.name}</span>
           {p.wantsOut && (
             <span className="shrink-0 text-[8px] font-bold text-red-400 border border-red-400/60 rounded px-1">WANTS OUT</span>
           )}
         </div>
         <div className="flex items-center gap-1.5 mt-0.5 min-w-0">
           <LastTen p={p} />
-          <span className="text-[9px] text-muted-foreground truncate">
+          <span className="min-w-0 text-xs text-muted-foreground break-words">
             {of ? `${played} in last ${of}` : ''}{showRole ? ` · ${ROLE_INFO[roleOf(p)].label.toLowerCase()}` : ''}
           </span>
         </div>
@@ -107,7 +107,7 @@ export function RolesScreen({ career, onSetRole }: RolesScreenProps) {
         <button
           data-cm-room-back="player"
           onClick={() => setOpenId(null)}
-          className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors"
+          className="inline-flex min-h-11 items-center gap-1 pr-2 text-xs text-muted-foreground hover:text-foreground transition-colors"
         >
           <ChevronLeft className="w-3.5 h-3.5" /> {openRole ? ROLE_INFO[openRole].label : 'The dressing room'}
         </button>
@@ -156,7 +156,7 @@ export function RolesScreen({ career, onSetRole }: RolesScreenProps) {
                   disabled={isNow || tooDear}
                   onClick={() => onSetRole(open.id, r)}
                   className={cn(
-                    'w-full rounded-lg border px-2.5 py-2 text-left transition-colors',
+                    'w-full min-h-11 rounded-lg border px-2.5 py-2 text-left transition-colors',
                     isNow ? 'border-primary bg-primary/10' : tooDear ? 'border-border/50 opacity-50' : 'border-border hover:border-primary/60',
                   )}
                 >
@@ -189,7 +189,7 @@ export function RolesScreen({ career, onSetRole }: RolesScreenProps) {
         <button
           data-cm-room-back="rung"
           onClick={() => setOpenRole(null)}
-          className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors"
+          className="inline-flex min-h-11 items-center gap-1 pr-2 text-xs text-muted-foreground hover:text-foreground transition-colors"
         >
           <ChevronLeft className="w-3.5 h-3.5" /> The dressing room
         </button>
@@ -240,7 +240,7 @@ export function RolesScreen({ career, onSetRole }: RolesScreenProps) {
         </div>
       )}
 
-      <div className="grid grid-cols-2 gap-2">
+      <div className="grid grid-cols-2 auto-rows-fr gap-2">
         {ROLE_LADDER.map(r => {
           const group = groups.find(g => g.role === r);
           const n = group?.players.length ?? 0;
@@ -251,16 +251,16 @@ export function RolesScreen({ career, onSetRole }: RolesScreenProps) {
               data-cm-rung={r}
               onClick={() => setOpenRole(r)}
               className={cn(
-                'rounded-xl border p-3 text-left transition-all bg-card hover:border-primary hover:-translate-y-0.5',
+                'rounded-xl border p-3 text-left transition-all bg-card hover:border-primary hover:-translate-y-0.5 motion-reduce:transition-none motion-reduce:hover:translate-y-0',
                 unhappy > 0 ? 'border-red-500/40' : 'border-border',
               )}
             >
               <div className="text-base leading-none mb-1">{ROLE_INFO[r].emoji}</div>
-              <div className="text-[10px] text-muted-foreground uppercase tracking-wider truncate">{ROLE_INFO[r].label}</div>
+              <div className="text-xs text-muted-foreground uppercase tracking-wider break-words">{ROLE_INFO[r].label}</div>
               <div className="text-sm font-bold font-display text-foreground">
                 {n} {n === 1 ? 'player' : 'players'}
               </div>
-              <div className={cn('text-[9px] truncate mt-0.5', unhappy > 0 ? 'text-red-400' : 'text-muted-foreground')}>
+              <div className={cn('text-xs mt-0.5 break-words', unhappy > 0 ? 'text-red-400' : 'text-muted-foreground')}>
                 {unhappy > 0 ? `${unhappy} not happy` : `Promised ${Math.round(ROLE_INFO[r].share * 100)}% of games`}
               </div>
             </button>
