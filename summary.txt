@@ -1,0 +1,14 @@
+rivals exit=0 17s | No rival product names found. 0 findings.
+storage exit=0 3s | simStorageWrites: all green (owed: 12)
+vitest exit=0 19s |    Duration  18.25s (transform 3.95s, setup 509ms, collect 11.29s, tests 28.26s, environment 3.05s, prepare 749ms)
+anchors exit=0 47s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+pd-a exit=0 21s | simCareerPreDraft [seed set a]: ALL GREEN
+pd-b exit=0 22s | simCareerPreDraft [seed set b]: ALL GREEN
+tsc exit=0 78s | 
+pd-c exit=0 23s | simCareerPreDraft [seed set c]: ALL GREEN
+pd-d exit=0 22s | simCareerPreDraft [seed set d]: ALL GREEN
+pd-e exit=0 21s | simCareerPreDraft [seed set e]: ALL GREEN
+ctl-new exit=0 179s | extradraw exit=1 mutated=1 | fails by section:  8 9. | simCareerPreDraft [control extradraw] [seed set a]: 8 FAILURE(S)
+softedge-old exit=0 22s | OLDFLOORS control=softedge exit=0
+ctl-round exit=0 280s | projection exit=1 mutated=1 | fails by section:  8 13. | simCareerPreDraft [control projection] [seed set a]: 8 FAILURE(S)
+pjloop exit=0 340s | PJLOOP prospect=0 predraft=0 total 339s
