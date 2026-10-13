@@ -23,6 +23,12 @@ Kept current at every push. The brief is `dukb-handoff/2026-10-10/briefs/brief-1
 | (d) row gates, woken stories, MINOR 21, POLISH 23 | d2506229 | r1327-d1, r1327-r1, r1327-r2 | tsc 0; promises and fairness green at seeds 0 to 2; nogate, unit, poscode, ranking FIRED |
 | (e1) the inverse and its proof | 45ae5ccb | r1327-e1 | fairness green at seeds 0, 3, 4 with section 8; outside FIRED |
 | (e2) wired in three history harnesses | 833b4caa | r1327-e2 | awards night 179 checks, season and derby history green, vitest 16 of 16 |
+| (e3) wired in the other six | 67a8d888 | r1327-e5, r1327-f2 | all nine green; story role all mode 17 controls caught |
+| (f) the walk | 73a811db, 6cc87348, cf5a2e0b | r1327-w1, r1327-w2, r1327-p1 | green over 6 runs; pictures looked at |
+| cooldowns readings | 26aad2c0 | r1327-b2 | readings written under a dated line |
+| harness reads | c1267e36, 81fb1141 | r1327-f4 | simHarnessAnchors green |
+| 12 and 15 gated on his club | d50c85d4 | r1327-g1, r1327-g2 | tsc 0; promises, fairness seeds 0 to 4, cooldowns, unit, nine history green; nogate and outside FIRED |
+| six more RNG holding harnesses | ab98a0ca | r1327-x3 | see below |
 
 ## The deck (sc MAJOR 7), simSoccerDeckFairness section 1, 40,000 draws per run
 
@@ -178,3 +184,135 @@ story keeps the code, and it never prints (the milestone replaces it); in every 
 Owed: that file's performance set learns the word form, and the story drops its branch. Section 6 renders all 44
 stories for all ten positions with no milestone due: no bare code, no "In <lower case>" tail. Control `poscode`
 fires.
+
+## The seventh inverse (design 3.4 (h)) and decision 3 (i)
+
+`scripts/lib/careerDeckFair1327.mjs`: 18 rows (`imports`, `dilemma-comment`, `pickn`, `position-words`,
+`best-in-the-world`, `interview-and-sensation`, `injury-story`, `bid-and-move-stories`, `academy-story`,
+`weighted-paper`, `cards-1-to-6`, `cards-7-to-10`, `cards-11-to-16`, `cards-17-to-22`, `cards-23-to-29`,
+`cards-30-to-40`, `deck-helpers-and-gate`, `keyed-pick`), applied in order, each required exactly once at its turn.
+Applied to the head's engine they give the base's engine byte for byte: base sha256
+`0d9ab4a21241ca1d993fbc7a7176d3ed0de988d6cd2e6989d662c6a1307730ea`; head sha256 (d50c85d4)
+`0bc8e990eb2e...` (the full value is in the module header). simSoccerDeckFairness section 8 asserts it on every run
+and checks all 64 diff hunks against the six regions of decision 1 (the imports, the dilemma comment, pickN,
+generateNewsArticles, the 40 inline cards, the helpers and generateRandomEvents). Control `outside` (one market
+constant changed in a copy) breaks both the sha256 and the region check.
+
+Wired FIRST (the newest change first) into the nine history harnesses, nothing re-recorded:
+
+| Harness | How | Green on |
+|---|---|---|
+| simCareerAwardsNight | before trainOutOf on the attributed engine | r1327-g2, 179 checks |
+| simSoccerSeasonHistory, simSoccerDerbyHistory | in the kits' copies that compare with the base (scripts/qa/seasonHistory1193.mjs, derbyHistory1195.mjs) | r1327-g2 |
+| simCareerTrophyRuns | same shape as the kits | r1327-g2 |
+| simCareerLeagueFinish | in both historical bundles (the attributed engine, read through the control copy's relocation, and the train-out plugin) | r1327-g2 |
+| simCareerSocialBrands | before the control rewrite and the train-out in the historical bundle | r1327-g2 |
+| simSoccerCareerDevelopment | ahead of the next ten and veteran pay rows | r1327-g2 |
+| simCareerStoryRole | an attribution kept apart from the copied faults, on every engine it compares with AR (so "uncopied" now reads the tree with Round 1327 out, and the milestone engine news compares the paper's draws on it) | r1327-g2, and the all mode r1327-f2 (17 copied controls caught) |
+| simCareerLeagueSeasons | a 1327 arm tried right after the raw replay, carrying any control's edit | r1327-g2: 12 of 12 careers identical only with Round 1327 taken out |
+
+Without the inverse (head d2506229, r1327-e3): awards night dies on the train-out anchor (card 9's old consequence),
+season and derby history fail "engine baseline". The six others were red on r1327-e4 before their wiring.
+
+Six more harnesses hold a season to its original RNG and were not on the brief's list; green on the base
+(r1327-x2), red on this head (r1327-x1), so they take the inverse too (node bundles only; the browser oracles stay the
+tree as built): simCareerProgramme (its compatibility arm), and the kits of simCareerPressMarket,
+simCareerTransferBrief, simSoccerAgentReview, simSoccerFarewell and simSoccerInternationalReturn.
+
+## Decision 3 (iii) and (v), section 7
+
+Prefix, 200 careers on the base bundle and this one, same seed: every career parts at the first paper or deck step,
+none before (r1327-g1: 200 of 200 at seeds 0 to 4), and in that step the season row the paper is handed is byte
+equal in 200 of 200. One or two rows a run differ by the end of that step: the finances and the summer draw into the
+row after the paper, from a stream the old sort no longer shifts. Control `prefix` (an extra draw in the youth year)
+fires. Old saves: every choice of cards 1, 4, 7, 9, 11, 12, 15, 17, 18 and 19 from a save the base wrote, a newspaper
+and a transfer window: 19 screens answered, nothing thrown, the ledger keeps its shape, no save field added, card 17
+records the debut. Control `olddebut` fires. eventChoiceAfterReload.test.ts unedited and green.
+
+## Decision 3 (vi): the dailies never re-deal
+
+`git grep -l soccerCareerEngine -- src` outside Soccer Career's own modules (checked on this head): soccerArcade,
+careerEras, careerSeasonRatings, seasonFamilySummary and season/belgianOpponentLabels import types only
+(`import type`); careerDrills takes values (effectivePotential, trainingStatFor) and is loaded only by Soccer
+Career's training ground, its boards and season/soccer.ts. No daily imports the deck or the paper.
+
+## Decision 3 (vii): the economy
+
+simCareerLifeCooldowns section 4 at seed offsets 0 to 4 (r1327-b2): events per batch 3.25 to 3.26, batches per playing
+season 0.90 to 0.91, life share 0.26, life events per season 0.76 to 0.77, all inside their unmoved bands; readings
+in its header under a dated Round 1327 line. The only follower gains added are the three printed ones. simCareerSocialBrands
+and simSoccerCurrency green; simMoney and simCreation are red on the base too, on their save size budgets only
+(r1327-base1: biggest save 84.3 KB base, 84.6 KB head against 46 KB; a full career save 82.4 KB base, 92.8 KB head
+against 60,000 bytes, one seeded career that plays differently now).
+
+## Weight (decision 6)
+
+| Measure | Base 8fea14e2 | Head | Result |
+|---|---|---|---|
+| sweepWeight /soccer-career, gz | 822.9K (r1327-wt2) | 823.9K (r1327-wt, head cf5a2e0b) | +1.0K, inside the 824K row by 0.1K |
+| measureRouteWeight RUNS=3, raw | total 2882K, js 2653K | total 2884K, js 2655K | +2K raw |
+| simFlagshipWeight | | green (r1327-w1, r1327-wt) | inside the 2700 KB ceiling |
+
+New code in the chunk: careerEventDeck.ts (takeFresh), the gates, the helpers, the position words and the longer
+card texts; pickN and the dropped clauses went. No budget row was edited.
+
+## The walk (design 3.4 (l))
+
+scripts/playSoccerEventCards.mjs, database blocked: a save the base engine wrote with cards 1, 7 and 18 on screen
+(each title proven on screen before the first tap) and a newspaper this engine printed holding a story under weight 1,
+at 320, 390 and 1280, reduced motion on and off: green over 6 runs (r1327-w2 and later). Every choice 75 px or more
+(91 px for Puskas Nominee at 320, its saved line wraps), no sideways scroll, nothing on top of a choice that is on
+screen, every card starting on screen, scrollY unmoved by an answer. Text under 12 px inside the card: only the two
+known lines of the page (the category line at 10 px and the consequence line at 11 px, SoccerCareer.tsx, F11's page).
+Pictures in dukb-handoff/2026-10-10/review-shots/r1327/ (card, whole card, answer, paper, per width and motion),
+looked at: the first run showed a saved chance wheel and the privacy banner over the card, so the walk now closes
+the wheel the drive left unseen and makes the essential only privacy choice, and checks that nothing lies on a choice.
+
+## PR249 (the other lane's Round 1350)
+
+On a scratch merge of this head and origin/codex/soccer-career-daily-life on a runner (never pushed, r1327-pr249):
+simSoccerCareerRoutineEvents.mjs as is exits 1, "Actual picker did not queue routine 600 within 2048 fixed seeds"
+(its delivery proof varies only Math.random's seed, which the keyed pick ignores). With one line changed it is
+green: in its picker loop,
+`const actual = draw({ ...found.state, playerName: \`${found.state.playerName} ${seed}\` }, 12000 + id * 2048 + seed);`
+(vary the career's name per trial, the key's moving part). The merge itself has no conflict.
+
+## Not this round's, seen on the way
+
+- src/test/seasonCentreOwnGoals.test.tsx (Round 1167): green on the base, red on this head (r1327-v1, r1327-f4). It
+  finds its saves by a seeded search over careers; the keyed deck moves the stream, so it now finds a "them" save
+  whose matchday 29 sits behind two steps of the centre bar instead of one (probe r1327-og: the bar reads
+  "▶ Matchday 29" after the first step, and one more step reaches it). The product is fine; the test steps past one
+  screen only. Fix in the test, not done here (not this round's file): step past at most three screens until
+  `[data-matchday="${spot.md}"]` shows, the assertions unchanged.
+- simWritesAreSent (a rule fence): on the runner it could not drive Guess the Nation to a finish (a locator timeout
+  on a guess, r1327-f4); that game loads none of Soccer Career's code; not measured on the base.
+
+## Owed (design 3.6, plus what this round found)
+
+1. The column repeats its stance headline (soccerCareerCritic.ts 121 to 123); the phone's relatives send the same reply
+   (soccerPhone.ts 975). Not touched.
+2. Never kept promises outside the 40 (simSoccerEventPromises section 2, REPORT): the other lane for life, realism
+   and corruption; this lane for careerEras.ts 41 to 72, critic and boot.
+3. A second tab can still deal a different eligible list (the catalogs' own Math.random gates): F11 and the other lane.
+4. careerEventDeck.ts's header ("Until soccer imports anything ...") is now stale: the next round that edits that file.
+5. The 11 px consequence line and the 10 px category line of the event card: F11.
+6. PR249's harness: the failure and its one line fix, above.
+7. F13a keeps the Player of the Month award's shape (`{ year: thisYear, name: "Player of the Month" }`) or moves
+   card 4's gate with it.
+8. The paper can repeat a story two seasons running (no saved memory of it): a save field after BB. SOCIAL MEDIA
+   SENSATION now prints in about one paper in five (1,357 to 1,433 of about 7,400 papers a fleet), because nearly
+   every career passes a million followers; a crossing rule or a memory would calm it. For the lead to rule.
+9. For the lead only: cards 32 and 36 print "Netflix-style" and "Forbes Top 10" about the generated player.
+10. soccerCareerMilestone.ts's performance set should read the position word, so the "Best In The World" story can
+    drop its milestone branch.
+11. feeDescription (engine 4343) has no caller left; delete it in the next round that owns that hunk.
+12. Card 5's deal pays its first year on signing and the brand pays every year after, so year one is paid twice
+    (F14, money).
+13. seasonCentreOwnGoals.test.tsx needs its bounded step past (above) before this branch can merge green.
+14. The paper's weighted draw reads 0.48 to 0.493 of the weight 1 rate over five seeds where 0.5 is fair (each run
+    1 to 2.5 sd low, the five together about 3 sd): inside its band, worth a look at keyedRng's first draw over
+    near identical keys if it persists.
+- simSchemaNames and simLeaderboardCaps need the live database (blocked on the runner by design).
+
+
