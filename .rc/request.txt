@@ -1,0 +1,1 @@
+usc-base: git checkout -f -q 8fea14e2 && node scripts/simUsCareerSummer.mjs > /tmp/u.txt 2>&1; s=$?; cp /tmp/u.txt "$RC_OUT/usc-base.txt"; tail -2 /tmp/u.txt; exit $s
