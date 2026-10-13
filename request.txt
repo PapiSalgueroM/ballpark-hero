@@ -1,0 +1,3 @@
+#!build
+#!serial
+sims2: ONLY=simLiveSim,simManagerCareer,simManagerSpec,simManagerXp,simManagers,simMatchDetail,simMatchScreen,simMidSeasonStart,simMissingElevenSources,simNationJob,simNbaLuxuryTax,simNbaSeasonStats,simOpposition,simPerfectSeasonOdds,simPromotion,simReleaseClause,simSeasonCentreNeutral,simSeasonLaw,simSoccerConquest,simSponsors,simSquadRows,simStadiumTycoon,simStatsCentre,simTacticsEngine,simTransfers,simTrustCopy,simTycoonLeague,simUclField,simUclFormatHistory,simUclLegMigration,simUclLegs,simUclPlaces,simUclSeasonOne,simWorld,simWorldEditor,simYouthPadding node scripts/runAllSims.mjs
