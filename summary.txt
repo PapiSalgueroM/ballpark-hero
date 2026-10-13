@@ -1,0 +1,24 @@
+prom exit=0 27s | simSoccerEventPromises: all sections green
+fair0 exit=0 76s | simSoccerDeckFairness: all sections green
+cool exit=0 61s | simCareerLifeCooldowns: green. No event repeats inside its cooldown, every new event fires, the rate held, and the catalog has two real choices everywhere.
+tsc exit=0 92s | 
+vitest3 exit=1 7s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/seasonCentreOwnGoals.test.tsx,title=src/test/seasonCentreOwnGoals.test.tsx > Season Centre%3A own goal
+fair-s7 exit=0 73s | simSoccerDeckFairness: all sections green
+c-shuffle exit=1 77s | CONTROL shuffle FIRED: section 1 failed (10 failures in all)
+fair-n400-s9 exit=0 121s | simSoccerDeckFairness: all sections green
+c-ranking exit=1 63s | CONTROL ranking FIRED: section 2 failed (9 failures in all)
+c-globalpick exit=1 75s | CONTROL globalpick FIRED: section 3 failed (4 failures in all)
+c-unit exit=1 62s | CONTROL unit FIRED: section 5 failed (2 failures in all)
+c-nogate exit=1 71s | CONTROL nogate FIRED: section 4 failed (12 failures in all)
+c-poscode exit=1 75s | CONTROL poscode FIRED: section 6 failed (11 failures in all)
+c-olddebut exit=1 59s | CONTROL olddebut FIRED: section 7 failed (2 failures in all)
+c-prefix exit=1 71s | CONTROL prefix FIRED: section 7 failed (203 failures in all)
+p-breakapply exit=1 20s | CONTROL breakapply FIRED: section 1 failed (1 failures in all)
+p-unannounced exit=1 28s | CONTROL unannounced FIRED: section 1 failed (1 failures in all)
+p-reorder exit=1 27s | CONTROL reorder FIRED: section 3 failed (3 failures in all)
+c-outside exit=1 64s | CONTROL outside FIRED: section 8 failed (67 failures in all)
+k-nocooldown exit=0 64s | CONTROL FIRED: section 2 failed with the defect back in, as it should, and nothing else did.
+k-sharedbatch exit=0 67s | CONTROL FIRED: section 2 failed with the defect back in, as it should, and nothing else did.
+k-flood exit=0 68s | CONTROL FIRED: section 4 failed with the defect back in, as it should, and nothing else did.
+rival exit=0 15s | No rival product names found. 0 findings.
+anchors exit=0 45s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.

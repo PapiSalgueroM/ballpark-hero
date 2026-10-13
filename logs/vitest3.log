@@ -1,0 +1,41 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/test/eventChoiceAfterReload.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 77[2mms[22m[39m
+ [32m✓[39m src/test/soccerEventDeckIntegrity.test.ts [2m([22m[2m13 tests[22m[2m)[22m[32m 65[2mms[22m[39m
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ [31m❯[39m src/test/seasonCentreOwnGoals.test.tsx [2m([22m[2m7 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[33m 1152[2mms[22m[39m
+   [32m✓[39m Season Centre: own goals on the page (Round 1167, read after the Release AP merge)[2m > [22mfound its three saves in the seeded careers[32m 2[2mms[22m[39m
+   [33m[2m✓[22m[39m Season Centre: own goals on the page (Round 1167, read after the Release AP merge)[2m > [22mprints an own goal for side "us" with who did it and the club that got it, the same live, held and replayed [33m 378[2mms[22m[39m
+[31m   [31m×[31m Season Centre: own goals on the page (Round 1167, read after the Release AP merge)[2m > [22mprints an own goal for side "them" with who did it and the club that got it, the same live, held and replayed[39m[32m 87[2mms[22m[39m
+[31m     → seasonCentreOwnGoals: matchday 29 is not on the stage (live)[39m
+   [32m✓[39m Season Centre: own goals on the page (Round 1167, read after the Release AP merge)[2m > [22mleaves a return match alone in a replay exactly as it does live (the moments are planned, offered or not)[32m 277[2mms[22m[39m
+   [32m✓[39m Season Centre: own goals on the page (Round 1167, read after the Release AP merge)[2m > [22mhands back the same game for the same question, so the pitch does not take it for a changed match[32m 5[2mms[22m[39m
+   [32m✓[39m Season Centre: the little pitch and an own goal (Release AP)[2m > [22msays whose own goal it was under the pitch, and rings him when it was his[32m 26[2mms[22m[39m
+   [32m✓[39m Season Centre: the little pitch and an own goal (Release AP)[2m > [22msays nothing of the kind for an ordinary goal against[32m 7[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/seasonCentreOwnGoals.test.tsx[2m > [22mSeason Centre: own goals on the page (Round 1167, read after the Release AP merge)[2m > [22mprints an own goal for side "them" with who did it and the club that got it, the same live, held and replayed
+[31m[1mError[22m: seasonCentreOwnGoals: matchday 29 is not on the stage (live)[39m
+[36m [2m❯[22m linesOf src/test/seasonCentreOwnGoals.test.tsx:[2m164:19[22m[39m
+    [90m162| [39m  [35mif[39m (past) [35mawait[39m [34mact[39m([35masync[39m () [33m=>[39m { fireEvent[33m.[39m[34mclick[39m(past)[33m;[39m })[33m;[39m
+    [90m163| [39m  [35mconst[39m day [33m=[39m container[33m.[39m[34mquerySelector[39m([32m`[data-matchday="[39m[36m${[39mspot[33m.[39mmd[36m}[39m[32m"]`[39m)[33m;[39m
+    [90m164| [39m  if (!day) throw new Error(`seasonCentreOwnGoals: matchday ${spot.md}…
+    [90m   | [39m                  [31m^[39m
+    [90m165| [39m  expect(day.querySelector('[data-full-time]'), `${way}: the match is …
+    [90m166| [39m  return [...day.querySelectorAll('[data-clock-events] li')].map(li =>…
+[90m [2m❯[22m src/test/seasonCentreOwnGoals.test.tsx:[2m205:21[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m2 passed[39m[22m[90m (3)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m22 passed[39m[22m[90m (23)[39m
+[2m   Start at [22m 10:33:17
+[2m   Duration [22m 5.65s[2m (transform 2.51s, setup 313ms, collect 7.06s, tests 1.29s, environment 2.17s, prepare 826ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/seasonCentreOwnGoals.test.tsx,title=src/test/seasonCentreOwnGoals.test.tsx > Season Centre%3A own goals on the page (Round 1167%2C read after the Release AP merge) > prints an own goal for side "them" with who did it and the club that got it%2C the same live%2C held and replayed,line=164,column=19::Error: seasonCentreOwnGoals: matchday 29 is not on the stage (live)%0A ❯ linesOf src/test/seasonCentreOwnGoals.test.tsx:164:19%0A ❯ src/test/seasonCentreOwnGoals.test.tsx:205:21%0A%0A

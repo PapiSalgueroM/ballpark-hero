@@ -1,0 +1,35 @@
+NEGATIVE CONTROL ON: the deck and the paper draw from Math.random instead of their keyed streams (section 3 must fail)
+The paper holds 44 stories, 23 of them under weight 1
+Driving the fleet: 200 ordinary, 200 elite and 100 loyal careers through the real engine
+   500 careers, 8207 playing seasons, 7457 batches, 7457 papers, 0 crashes
+1) The deck: 40,000 keyed draws, every tenth of the eligible list at its fair rate
+   save: ST, age 20, 5 rows; 95 eligible cards, 119877 picks over 40000 draws (2.997 a draw)
+   per tenth, observed over fair: 1.003, 0.999, 1.012, 0.993, 1.007, 0.991, 0.981, 1.016, 0.99, 1.009; single cards 0.938 to 1.072 (reported, not asserted)
+2) The paper: a weight 0.5 story prints at half the rate of a weight 1 story
+   4 stories eligible (weights 1 1 0.5 1); over 40000 papers the 0.5 story printed 5606 times, the weight 1 story 11452, others 22942: ratio 0.49 (sd 0.008)
+   the fleet's 7457 papers printed 19 of the 23 stories under weight 1, 3445 prints against a fair 3386.449; REDEMPTION 4 times
+   under weight 1 (weight printed/fair/qualified): Reveals Secret To Succes 0.5 191/185.195/2769; Followers After Viral Mo 0.5 1368/1343.621/6676; Booed By Own Fans After  0.7 322/319.593/832; Wants Out As Contract Ta 0.5 31/37.573/207; Out For Weeks With 0.5 8/8.129/44; Hits Out At Manager In S 0.3 19/14.293/129; Agent Demands Record Dea 0.4 45/46.96/1035; : Another Season Of Riva 0.5 30/33.989/532; M Bid For 0.7 494/453.471/3375; Available On Free Transf 0.5 82/89.709/738; 's Latest Purchase Raise 0.8 0/0/0; Match Is A Show Now 0.9 241/228.355/1135; Never Celebrates, Never  0.9 73/67.658/554; Walks Disciplinary Tight 0.9 53/46.815/195; Breaks The Scouting Apps 0.8 0/0/0; HAPPIEST MAN IN FOOTBALL 0.7 187/202.458/1977; 's Monster Contract 0.7 5/8.018/119; LEADER OF THE NATION: 0.6 189/187.856/2327; Bought Mum The House, An 0.6 0/0/0; Clean Sheets, Strikers I 0.6 17/17.921/182; Is Football's Coldest Wa 0.6 2/1.435/18; 's Money Now Works Harde 0.5 88/92.843/1412; Refuses To Read The Cale 0.5 0/0.556/8
+3) Keyed: the deck and the paper draw nothing from the global stream
+   200 saves: 200 decks drew beyond the catalog build, 200 batches moved with the stream, 94 papers chose other stories under another seed
+  FAIL (section 3): 200 of 200 decks drew from Math.random beyond the catalog build
+  FAIL (section 3): 200 of 200 batches changed with the stream after the catalog build
+  FAIL (section 3): 94 of 200 papers chose different stories under a different seed
+4) Gates: a card that narrates the season fires only when the row holds it
+   card: fired / fired without its fact / batches whose row held the fact
+   1: 124/0/5986  4: 95/0/3779  7: 98/0/5986  9: 14/0/596  11: 29/0/1381  12: 16/0/489  15: 48/0/1323  17: 0/0/0  18: 6/0/259  19: 8/0/242
+5) SOCIAL MEDIA SENSATION prints, and only at a million followers or more
+   printed 1368 times in 7457 papers, 0 of them under a million
+6) Every story, every position: no bare position code, no "In <lower case>" tail
+   440 stories rendered over 10 positions, 0 could not render without their facts
+7) Before the first paper or deck nothing moves; saves the base wrote still answer here
+   200 careers, 1213 steps compared: 200 reached a paper or deck step, 200 parted there, 200 with the season row byte equal when the paper ran (3 rows differ by the end of that step, from the draws after the paper)
+   19 old saved screens answered here (every choice of cards 1, 4, 7, 9, 11, 12, 15, 17, 18, 19, a newspaper, a transfer window)
+8) The seventh inverse gives the base's engine back byte for byte, and every change sits in this round's hunks
+  FAIL (section 8): the inverse does not apply: the weighted-paper row of Round 1327's inverse must be in src/lib/soccerCareerEngine.ts exactly once at its turn
+
+1 !== 2
+
+   head 9d8632fdcbe5c254db6ccd9b2acea6b9b80447c4410c480c46cf1ed2aa7227a6; inverse applied 9 of 18 rows
+   base 65ffd9d102989f30c811ac80f884cb84f0b8ca4f9f3feb8e9fdcf9c00009661c (module says 65ffd9d102989f30c811ac80f884cb84f0b8ca4f9f3feb8e9fdcf9c00009661c); inverse gives nothing
+   64 diff hunks against the base, each checked against 6 regions
+CONTROL globalpick FIRED: section 3 failed (4 failures in all)
