@@ -1,0 +1,4 @@
+#!serve
+#!playwright
+basebuild: git worktree add /tmp/base 8fea14e216fb550b4676ac29f06867234594df21 > /dev/null 2>&1; ln -s "$PWD/node_modules" /tmp/base/node_modules; (cd /tmp/base && npm run build > /tmp/basebuild.log 2>&1); s=$?; tail -3 /tmp/basebuild.log; nohup node scripts/lib/hostLikeServer.mjs /tmp/base/dist 4174 > /tmp/baseserver.log 2>&1 & sleep 3; curl -s -o /dev/null -w "base server %{http_code}\n" http://localhost:4174/club-manager; exit $s
+simWritesAreSent-base: for i in $(seq 1 180); do curl -s -o /dev/null http://localhost:4174/club-manager && break; sleep 5; done; R="$PWD"; cd /tmp/base && BASE=http://localhost:4174 SWEEP_BASE=http://localhost:4174 node scripts/simWritesAreSent.mjs 2>&1 | grep -E "FAIL|simWritesAreSent" | cut -c1-200; exit ${PIPESTATUS[0]}
