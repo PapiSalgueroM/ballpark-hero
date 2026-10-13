@@ -1,0 +1,14 @@
+seed 1987332285; arms head; sections toasts; sizes 320x640, 390x844, 1280x900
+== head 320x640
+   1 toast(s) audited over a drive through youth, contract_offer, playing, phone: no category
+     "Signed with QPR!" first frame at 16,-37 288x54 (scrollY 193): nothing under it
+     "Signed with QPR!" settled at 16,16 288x54 (scrollY 193): ["heading Danny Okafor-Whitfield"]
+== head 390x844
+   1 toast(s) audited over a drive through youth, contract_offer, playing, phone: no category
+     "Signed with QPR!" first frame at 16,-37 358x54 (scrollY 193): nothing under it
+     "Signed with QPR!" settled at 16,16 358x54 (scrollY 193): ["heading Danny Okafor-Whitfield"]
+== head 1280x900
+   1 toast(s) audited over a drive through youth, contract_offer, playing, phone: no category
+     "Signed with QPR!" first frame at 462,-21 356x54 (scrollY 101): ["heading Danny Okafor-Whitfield"]
+     "Signed with QPR!" settled at 462,32 356x54 (scrollY 101): ["heading Danny Okafor-Whitfield"]
+playSoccerLanding: green at 320x640, 390x844, 1280x900 (toasts), HEAD ONLY

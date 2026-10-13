@@ -1,0 +1,4 @@
+build exit=0 33s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+weight exit=0 33s | simFlagshipWeight: green. The flagship carries its own game and nobody else's.
+joined-before-drop exit=0 93s | playSoccerLanding: green at 320x640, 390x844, 1280x900 (toasts), HEAD ONLY
+land exit=1 390s | playSoccerLanding: RED, 9 finding(s)

@@ -1,0 +1,93 @@
+1) Every page is inside its download budget
+  FAIL: /club-manager: 602K of gzipped JavaScript against a budget of 593K
+  FAIL: /soccer-career: 830K of gzipped JavaScript against a budget of 829K
+  FAIL: /manager-hot-seat: 621K of gzipped JavaScript against a budget of 613K
+  FAIL: /deadline-day: 631K of gzipped JavaScript against a budget of 623K
+   /                   243K gz over   3 files (budget 244K, 243.2K to the tenth)
+   /club-manager       602K gz over  42 files (budget 593K, 602.4K to the tenth)
+   /soccer-career      830K gz over  48 files (budget 829K, 829.6K to the tenth)
+   /stadium-tycoon     302K gz over  24 files (budget 303K, 302.0K to the tenth)
+   /wonderkid-factory  276K gz over  20 files (budget 277K, 275.8K to the tenth)
+   /minefield          294K gz over  21 files (budget 295K, 293.7K to the tenth)
+   /footle             352K gz over  39 files (budget 354K, 352.1K to the tenth)
+   /nfl-my-career      486K gz over  48 files (budget 488K, 486.3K to the tenth)
+   /front-office       372K gz over  38 files (budget 374K, 372.4K to the tenth)
+   /soccer-grid        317K gz over  35 files (budget 319K, 317.2K to the tenth)
+   /leaderboard        251K gz over   9 files (budget 266K, 251.3K to the tenth)
+   /manager-hot-seat   621K gz over  44 files (budget 613K, 620.7K to the tenth)
+   /deadline-day       631K gz over  47 files (budget 623K, 630.6K to the tenth)
+   /transfer-path      378K gz over  39 files (budget 379K, 377.8K to the tenth)
+2) The two things Round 210 moved off the critical path stay off it
+   the screenshot library and the merged guide map are both off the critical path
+3) Every guide is still reachable, one sport at a time
+   132 guides across 13 sport files, every one of them routed
+4) The data these pages never read is in none of the files they fetch
+   10 probe sets (400 probes) all found in the build; 4 routes checked, 0 findings; /soccer-career still fetches the pools (SoccerCareer-C1l6JsO-.js)
+
+sweepWeight: 4 failures
+  395.71K  SoccerCareer-C1l6JsO-.js
+  237.01K  index-BI9nB-3S.js
+   65.88K  useCareerMoment-DTuew-T1.js
+   36.69K  soccer2-Utdb7HxI.js
+   14.55K  AppearanceBuilder-otY5qZde.js
+   10.33K  clubRivalries-DuNC-DyB.js
+    7.49K  soccerInternational-FiWGI8ks.js
+    7.23K  select-jBTmIj-W.js
+    6.03K  intlNames-DiJYNZJt.js
+    4.43K  ShareButtons-DZzVspSm.js
+    3.83K  PlayerAvatar-B5OlsTXc.js
+    3.71K  GameNavbar-otGKaBWL.js
+    3.38K  uclFormatHistory-DwuhruDw.js
+    2.95K  GameReportContext-CzIMx8wc.js
+    2.91K  FlagImg-DU0Xes_-.js
+    2.49K  soccerCareerAppearance-C4EKR5O3.js
+    2.38K  GameSeoContent-CjVo7HBs.js
+    2.38K  careerRivalryChoices-B2c2ZYXB.js
+    2.24K  badges-DvZGyx9z.js
+    1.61K  saveFence-zx2EId9L.js
+    1.53K  managerOffers-EoQ6k_gA.js
+    1.27K  VictoryMoment-i2uf1sgY.js
+    1.24K  careerAwardsNight-BDQnO6dK.js
+    1.08K  freeKick-BSoL5hQo.js
+    0.97K  soccerBoots-BK_dXNrV.js
+    0.94K  seoMetaPart30-C2bf-ABQ.js
+    0.80K  Celebration-Cwnbyntd.js
+    0.79K  useRevealScroll-BP3bSosd.js
+    0.77K  GameHelp-Cm-qX5eT.js
+    0.75K  HowToPlayPopover-D18Fsl1v.js
+    0.72K  confederationGroups-8jgsrX6T.js
+    0.71K  CelebrationStyles-KBxWum4m.js
+    0.59K  Confetti-CVg3278H.js
+    0.48K  useGameCompletion-C21r_vq_.js
+    0.40K  useArrivalTop-DdZ56Q3l.js
+    0.39K  star-CRLP1sCQ.js
+    0.38K  medal-CmLyMQEN.js
+    0.31K  arcade-CUT7KVjC.js
+    0.30K  copy-CKeky8T1.js
+    0.30K  flag-B0mrCoIu.js
+    0.29K  circle-help-C5l14DDf.js
+    0.26K  arrow-left-BoR5ia7t.js
+    0.24K  chevron-up-CI331ppJ.js
+    0.23K  chevron-down-YxsnQFgK.js
+    0.20K  keyedRng-BKZQ2UGv.js
+    0.20K  soccerBootIds-BWkyFIXk.js
+    0.15K  formatNumber-CGuttX8h.js
+    0.13K  dialogA11y-BCgxbiii.js
+TOTAL /soccer-career 829.6K over 48 files
+1) the flagship carries no other game
+   176 modules, 3412 KB of source, 4 foreign engines checked, 0 present
+1b) the Season Centre and the training ground are not in the first download
+   14 paths that must stay lazy, 0 in the static closure
+1c) the US careers' fact beat and roster beat builders are not in the first download
+   5 US career modules checked, 0 in the static closure
+2) the job market is loaded on demand, and something loads it
+   engine loads it dynamically, the page preloads it on both phases, the not-loaded state is honest
+3) the built weight of /soccer-career
+   91 lazy dependencies including the Club Manager chunk (45 are shared chunks the page already has, which is normal)
+   46 chunks, 2662 KB raw (ceiling 2700), 792 KB over the wire
+   raw bytes 2725950; the chunks: AppearanceBuilder-otY5qZde.js 47218, Celebration-Cwnbyntd.js 1527, CelebrationStyles-KBxWum4m.js 2126, Confetti-CVg3278H.js 904, FlagImg-DU0Xes_-.js 5846, GameHelp-Cm-qX5eT.js 1656, GameNavbar-otGKaBWL.js 10360, GameReportContext-CzIMx8wc.js 8487, GameSeoContent-CjVo7HBs.js 7131, HowToPlayPopover-D18Fsl1v.js 1367, PlayerAvatar-B5OlsTXc.js 15162, ShareButtons-DZzVspSm.js 11646, SoccerCareer-C1l6JsO-.js 1399109, VictoryMoment-i2uf1sgY.js 3669, arcade-CUT7KVjC.js 489, arrow-left-BoR5ia7t.js 333, badges-DvZGyx9z.js 5813, careerAwardsNight-BDQnO6dK.js 2575, careerRivalryChoices-B2c2ZYXB.js 5988, chevron-down-YxsnQFgK.js 291, chevron-up-CI331ppJ.js 291, circle-help-C5l14DDf.js 407, clubRivalries-DuNC-DyB.js 36634, confederationGroups-8jgsrX6T.js 1449, copy-CKeky8T1.js 405, dialogA11y-BCgxbiii.js 150, flag-B0mrCoIu.js 388, formatNumber-CGuttX8h.js 152, freeKick-BSoL5hQo.js 1943, index-BI9nB-3S.js 797015, intlNames-DiJYNZJt.js 13296, keyedRng-BKZQ2UGv.js 254, managerOffers-EoQ6k_gA.js 3116, medal-CmLyMQEN.js 604, saveFence-zx2EId9L.js 3659, select-jBTmIj-W.js 21290, soccerBootIds-BWkyFIXk.js 293, soccerBoots-BK_dXNrV.js 2017, soccerCareerAppearance-C4EKR5O3.js 6153, soccerInternational-FiWGI8ks.js 21073, star-CRLP1sCQ.js 641, uclFormatHistory-DwuhruDw.js 12334, useArrivalTop-DdZ56Q3l.js 609, useCareerMoment-DTuew-T1.js 267307, useGameCompletion-C21r_vq_.js 810, useRevealScroll-BP3bSosd.js 1963
+3b) the moved cards' words are in no chunk of the first download, and are built
+   "are both on them": in the first download 0, elsewhere 1 (usCareerSeasonReview-CVjA-BKV.js)
+   "It goes down as one more line in the argument": in the first download 0, elsewhere 1 (usCareerSeasonReview-CVjA-BKV.js)
+
+simFlagshipWeight: green. The flagship carries its own game and nobody else's.
