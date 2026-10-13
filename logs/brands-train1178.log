@@ -1,0 +1,19 @@
+ATTRIBUTION train1178: src/lib/soccerCareerEngine.ts, src/lib/soccerPhone.ts bundled with the train taken out; section 1 must replay the fixture from before it
+
+1. Soccer Career replays the pre lift fixture byte for byte
+  ok   the fixture names the main it was recorded from (a2a999a1)
+file:///home/runner/work/_temp/t-brands-train1178/soccerbrand835-EozHac/bundle.mjs:34280
+  const programmeLoanClub = s2.loan ? worldClubs.find((club) => club.name === s2.currentClub) : void 0;
+                                      ^
+
+ReferenceError: worldClubs is not defined
+    at playPendingProSeason (file:///home/runner/work/_temp/t-brands-train1178/soccerbrand835-EozHac/bundle.mjs:34280:39)
+    at Object.advanceProSeason (file:///home/runner/work/_temp/t-brands-train1178/soccerbrand835-EozHac/bundle.mjs:33973:10)
+    at step (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/lib/soccerBrandProbe835.mjs:179:36)
+    at driveFrom (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/lib/soccerBrandProbe835.mjs:262:27)
+    at probeOldSaves (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/lib/soccerBrandProbe835.mjs:362:13)
+    at probeSoccerBrand (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/lib/soccerBrandProbe835.mjs:484:15)
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCareerSocialBrands.mjs:350:15
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+
+Node.js v24.21.0

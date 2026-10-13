@@ -1,0 +1,5 @@
+ok   this head: one edit, one receipt row
+ok   a7c6befe inverted equals its parent byte for byte
+ok   refuses main 8fea14e2, whose engine has no such line
+ok   any other file comes back as it was
+checkInverse: all 4 checks passed
