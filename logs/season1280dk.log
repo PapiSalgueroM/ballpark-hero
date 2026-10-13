@@ -1,0 +1,8 @@
+AUDIT s1-summer-market: 15 overlapping text pairs: "Arsenal · 24y · worth £95.1m to £99.1m" x "Club Manager: Free Football Management G" (624x14 at 320,1189) static/static
+AUDIT s1m1-live-kickoff: 15 overlapping text pairs: "Live scores temporarily unavailable" x "?" (44x13 at 142,18) static/static
+AUDIT s1m1-live-sheet: 15 overlapping text pairs: "-" x "Pick when you start too: today's game, o" (65x32 at 351,24) static/static
+AUDIT s1m1-report: 3 overlapping text pairs: "Skip to main content" x "Live" (57x18 at 8,-100) fixed/static ;; leak minus zero?: "yskE 1-2 Brøndby IF Randers FC 1-1 AGF Viborg FF 1-0 Lyngby Silkeborg IF 0-4 FC Nordsjælland AC Hors"
+AUDIT s1q-quick-report: leak minus zero?: "8) Steady Continue AROUND THE GROUNDS Randers FC 2-0 SønderjyskE Brøndby IF 0-0 FC Copenhagen AGF 0-"
+AUDIT s1-jan-market: 15 overlapping text pairs: "Arsenal · 24y · worth £95.1m to £99.1m" x "Club Manager: Free Football Management G" (624x14 at 320,1149) static/static
+FIND [major] season did not reach its review :: season 1 ended on "OB"
+SEASON s1280dk done: 1 findings, 0 errors, 32 shots, 106s

@@ -1,0 +1,1456 @@
+{
+ "tag": "s390pl",
+ "width": 390,
+ "height": 844,
+ "started": "2026-10-13T00:13:34.748Z",
+ "steps": [
+  {
+   "s": 1,
+   "what": "open /club-manager"
+  },
+  {
+   "s": 6,
+   "what": "era picked"
+  },
+  {
+   "s": 7,
+   "what": "nation picked"
+  },
+  {
+   "s": 10,
+   "what": "league picked"
+  },
+  {
+   "s": 13,
+   "what": "club picked"
+  },
+  {
+   "s": 18,
+   "what": "hub reached",
+   "ok": true,
+   "save": {
+    "club": "Liverpool",
+    "season": 1,
+    "week": 0,
+    "cal": 54,
+    "budget": 137,
+    "squad": 26,
+    "inbox": 0,
+    "form": "",
+    "results": 0,
+    "live": false,
+    "window": "summer"
+   }
+  },
+  {
+   "s": 18,
+   "what": "season 1 start"
+  },
+  {
+   "s": 19,
+   "what": "window s1-summer"
+  },
+  {
+   "s": 22,
+   "what": "live s1m1"
+  },
+  {
+   "s": 62,
+   "what": "live s1m1 done",
+   "res": {
+    "ok": true,
+    "vars": 0,
+    "goalsSeen": 1,
+    "subRowsAtBreak": 11,
+    "sub": true,
+    "benchOffered": 15,
+    "liveSub": true
+   },
+   "save": {
+    "club": "Liverpool",
+    "season": 1,
+    "week": 1,
+    "cal": 54,
+    "budget": 135.9,
+    "squad": 27,
+    "inbox": 1,
+    "form": "W",
+    "results": 1,
+    "live": false,
+    "window": "summer"
+   }
+  },
+  {
+   "s": 62,
+   "what": "live s1m2"
+  },
+  {
+   "s": 85,
+   "what": "live s1m2 done",
+   "res": {
+    "ok": true,
+    "vars": 0,
+    "goalsSeen": 0,
+    "subRowsAtBreak": 11,
+    "sub": true,
+    "benchOffered": 14,
+    "liveSub": true
+   },
+   "save": {
+    "club": "Liverpool",
+    "season": 1,
+    "week": 2,
+    "cal": 54,
+    "budget": 139.03,
+    "squad": 27,
+    "inbox": 3,
+    "form": "WD",
+    "results": 2,
+    "live": false,
+    "window": "summer"
+   }
+  },
+  {
+   "s": 92,
+   "what": "s1 ff 0",
+   "r": "FULL TIME",
+   "sv": {
+    "club": "Liverpool",
+    "season": 1,
+    "week": 11,
+    "cal": 54,
+    "budget": 151.14,
+    "squad": 27,
+    "inbox": 4,
+    "form": "WWDWW",
+    "results": 9,
+    "live": false,
+    "window": null
+   }
+  },
+  {
+   "s": 94,
+   "what": "s1 ff 1",
+   "r": "no calendar tile",
+   "sv": {
+    "club": "Liverpool",
+    "season": 1,
+    "week": 11,
+    "cal": 54,
+    "budget": 151.14,
+    "squad": 27,
+    "inbox": 4,
+    "form": "WWDWW",
+    "results": 9,
+    "live": false,
+    "window": null
+   }
+  },
+  {
+   "s": 107,
+   "what": "s1 ff 2",
+   "r": "FULL TIME",
+   "sv": {
+    "club": "Liverpool",
+    "season": 1,
+    "week": 18,
+    "cal": 54,
+    "budget": 161.86,
+    "squad": 27,
+    "inbox": 4,
+    "form": "LWWDD",
+    "results": 14,
+    "live": false,
+    "window": null
+   }
+  },
+  {
+   "s": 109,
+   "what": "s1 ff 3",
+   "r": "no calendar tile",
+   "sv": {
+    "club": "Liverpool",
+    "season": 1,
+    "week": 18,
+    "cal": 54,
+    "budget": 161.86,
+    "squad": 27,
+    "inbox": 4,
+    "form": "LWWDD",
+    "results": 14,
+    "live": false,
+    "window": null
+   }
+  },
+  {
+   "s": 110,
+   "what": "s1 ff 4",
+   "r": "no calendar tile",
+   "sv": {
+    "club": "Liverpool",
+    "season": 1,
+    "week": 18,
+    "cal": 54,
+    "budget": 161.86,
+    "squad": 27,
+    "inbox": 4,
+    "form": "LWWDD",
+    "results": 14,
+    "live": false,
+    "window": null
+   }
+  },
+  {
+   "s": 111,
+   "what": "s1 ff 5",
+   "r": "no calendar tile",
+   "sv": {
+    "club": "Liverpool",
+    "season": 1,
+    "week": 18,
+    "cal": 54,
+    "budget": 161.86,
+    "squad": 27,
+    "inbox": 4,
+    "form": "LWWDD",
+    "results": 14,
+    "live": false,
+    "window": null
+   }
+  },
+  {
+   "s": 112,
+   "what": "s1 ff 6",
+   "r": "no calendar tile",
+   "sv": {
+    "club": "Liverpool",
+    "season": 1,
+    "week": 18,
+    "cal": 54,
+    "budget": 161.86,
+    "squad": 27,
+    "inbox": 4,
+    "form": "LWWDD",
+    "results": 14,
+    "live": false,
+    "window": null
+   }
+  },
+  {
+   "s": 113,
+   "what": "s1 ff 7",
+   "r": "no calendar tile",
+   "sv": {
+    "club": "Liverpool",
+    "season": 1,
+    "week": 18,
+    "cal": 54,
+    "budget": 161.86,
+    "squad": 27,
+    "inbox": 4,
+    "form": "LWWDD",
+    "results": 14,
+    "live": false,
+    "window": null
+   }
+  },
+  {
+   "s": 114,
+   "what": "s1 ff 8",
+   "r": "no calendar tile",
+   "sv": {
+    "club": "Liverpool",
+    "season": 1,
+    "week": 18,
+    "cal": 54,
+    "budget": 161.86,
+    "squad": 27,
+    "inbox": 4,
+    "form": "LWWDD",
+    "results": 14,
+    "live": false,
+    "window": null
+   }
+  },
+  {
+   "s": 115,
+   "what": "s1 ff 9",
+   "r": "no calendar tile",
+   "sv": {
+    "club": "Liverpool",
+    "season": 1,
+    "week": 18,
+    "cal": 54,
+    "budget": 161.86,
+    "squad": 27,
+    "inbox": 4,
+    "form": "LWWDD",
+    "results": 14,
+    "live": false,
+    "window": null
+   }
+  },
+  {
+   "s": 116,
+   "what": "s1 ff 10",
+   "r": "no calendar tile",
+   "sv": {
+    "club": "Liverpool",
+    "season": 1,
+    "week": 18,
+    "cal": 54,
+    "budget": 161.86,
+    "squad": 27,
+    "inbox": 4,
+    "form": "LWWDD",
+    "results": 14,
+    "live": false,
+    "window": null
+   }
+  },
+  {
+   "s": 117,
+   "what": "s1 ff 11",
+   "r": "no calendar tile",
+   "sv": {
+    "club": "Liverpool",
+    "season": 1,
+    "week": 18,
+    "cal": 54,
+    "budget": 161.86,
+    "squad": 27,
+    "inbox": 4,
+    "form": "LWWDD",
+    "results": 14,
+    "live": false,
+    "window": null
+   }
+  },
+  {
+   "s": 118,
+   "what": "s1 ff 12",
+   "r": "no calendar tile",
+   "sv": {
+    "club": "Liverpool",
+    "season": 1,
+    "week": 18,
+    "cal": 54,
+    "budget": 161.86,
+    "squad": 27,
+    "inbox": 4,
+    "form": "LWWDD",
+    "results": 14,
+    "live": false,
+    "window": null
+   }
+  },
+  {
+   "s": 119,
+   "what": "s1 ff 13",
+   "r": "no calendar tile",
+   "sv": {
+    "club": "Liverpool",
+    "season": 1,
+    "week": 18,
+    "cal": 54,
+    "budget": 161.86,
+    "squad": 27,
+    "inbox": 4,
+    "form": "LWWDD",
+    "results": 14,
+    "live": false,
+    "window": null
+   }
+  },
+  {
+   "s": 119,
+   "what": "end"
+  }
+ ],
+ "findings": [
+  {
+   "sev": "major",
+   "what": "season did not reach its review",
+   "detail": "season 1 ended on \"LIVERPOOL\"",
+   "at": "s1 ff 13"
+  }
+ ],
+ "errors": [],
+ "shots": [
+  {
+   "file": "s390pl-001-picker-era.jpg",
+   "at": "open /club-manager",
+   "bytes": 27363
+  },
+  {
+   "file": "s390pl-002-picker-nation.jpg",
+   "at": "era picked",
+   "bytes": 23231
+  },
+  {
+   "file": "s390pl-003-picker-league.jpg",
+   "at": "nation picked",
+   "bytes": 27533
+  },
+  {
+   "file": "s390pl-004-picker-team.jpg",
+   "at": "league picked",
+   "bytes": 113851
+  },
+  {
+   "file": "s390pl-005-picker-confirm-bar.jpg",
+   "at": "league picked",
+   "bytes": 28473
+  },
+  {
+   "file": "s390pl-006-manager-form.jpg",
+   "at": "club picked",
+   "bytes": 71527
+  },
+  {
+   "file": "s390pl-007-hub-start.jpg",
+   "at": "hub reached",
+   "bytes": 154401
+  },
+  {
+   "file": "s390pl-008-s1-summer-market.jpg",
+   "at": "window s1-summer",
+   "bytes": 117309
+  },
+  {
+   "file": "s390pl-009-s1-summer-after-clause.jpg",
+   "at": "window s1-summer",
+   "bytes": 28127
+  },
+  {
+   "file": "s390pl-010-s1m1-live-kickoff.jpg",
+   "at": "live s1m1",
+   "bytes": 17593
+  },
+  {
+   "file": "s390pl-011-s1m1-interval.jpg",
+   "at": "live s1m1",
+   "bytes": 86859
+  },
+  {
+   "file": "s390pl-012-s1m1-after-sub.jpg",
+   "at": "live s1m1",
+   "bytes": 86134
+  },
+  {
+   "file": "s390pl-013-s1m1-live-sheet.jpg",
+   "at": "live s1m1",
+   "bytes": 19797
+  },
+  {
+   "file": "s390pl-014-s1m1-after-live-sub.jpg",
+   "at": "live s1m1",
+   "bytes": 18577
+  },
+  {
+   "file": "s390pl-015-s1m1-fulltime-pitch.jpg",
+   "at": "live s1m1",
+   "bytes": 14831
+  },
+  {
+   "file": "s390pl-016-s1m1-report.jpg",
+   "at": "live s1m1",
+   "bytes": 94526
+  },
+  {
+   "file": "s390pl-017-s1m2-live-kickoff.jpg",
+   "at": "live s1m2",
+   "bytes": 17673
+  },
+  {
+   "file": "s390pl-018-s1m2-interval.jpg",
+   "at": "live s1m2",
+   "bytes": 86918
+  },
+  {
+   "file": "s390pl-019-s1m2-after-sub.jpg",
+   "at": "live s1m2",
+   "bytes": 86532
+  },
+  {
+   "file": "s390pl-020-s1m2-live-sheet.jpg",
+   "at": "live s1m2",
+   "bytes": 22642
+  },
+  {
+   "file": "s390pl-021-s1m2-after-live-sub.jpg",
+   "at": "live s1m2",
+   "bytes": 18564
+  },
+  {
+   "file": "s390pl-022-s1m2-fulltime-pitch.jpg",
+   "at": "live s1m2",
+   "bytes": 15275
+  },
+  {
+   "file": "s390pl-023-s1m2-report.jpg",
+   "at": "live s1m2",
+   "bytes": 96006
+  },
+  {
+   "file": "s390pl-024-s1q-quick-report.jpg",
+   "at": "live s1m2 done",
+   "bytes": 96030
+  },
+  {
+   "file": "s390pl-025-s1-ff-stuck-1.jpg",
+   "at": "s1 ff 1",
+   "bytes": 75189
+  },
+  {
+   "file": "s390pl-026-s1-ff-stuck-3.jpg",
+   "at": "s1 ff 3",
+   "bytes": 72859
+  },
+  {
+   "file": "s390pl-027-s1-ff-stuck-4.jpg",
+   "at": "s1 ff 4",
+   "bytes": 72859
+  },
+  {
+   "file": "s390pl-028-s1-ff-stuck-5.jpg",
+   "at": "s1 ff 5",
+   "bytes": 72859
+  },
+  {
+   "file": "s390pl-029-s1-ff-stuck-6.jpg",
+   "at": "s1 ff 6",
+   "bytes": 72859
+  },
+  {
+   "file": "s390pl-030-s1-ff-stuck-7.jpg",
+   "at": "s1 ff 7",
+   "bytes": 72859
+  },
+  {
+   "file": "s390pl-031-s1-ff-stuck-8.jpg",
+   "at": "s1 ff 8",
+   "bytes": 72859
+  },
+  {
+   "file": "s390pl-032-s1-ff-stuck-9.jpg",
+   "at": "s1 ff 9",
+   "bytes": 72859
+  },
+  {
+   "file": "s390pl-033-s1-ff-stuck-10.jpg",
+   "at": "s1 ff 10",
+   "bytes": 72859
+  },
+  {
+   "file": "s390pl-034-s1-ff-stuck-11.jpg",
+   "at": "s1 ff 11",
+   "bytes": 72859
+  },
+  {
+   "file": "s390pl-035-s1-ff-stuck-12.jpg",
+   "at": "s1 ff 12",
+   "bytes": 72859
+  },
+  {
+   "file": "s390pl-036-s1-ff-stuck-13.jpg",
+   "at": "s1 ff 13",
+   "bytes": 72859
+  },
+  {
+   "file": "s390pl-037-s1-noreview.jpg",
+   "at": "s1 ff 13",
+   "bytes": 72859
+  }
+ ],
+ "audits": [
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [],
+   "overlaps": [],
+   "leaks": [],
+   "tinyTaps": [],
+   "scrollY": 0,
+   "docH": 22080,
+   "label": "picker-era"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [],
+   "overlaps": [],
+   "leaks": [],
+   "tinyTaps": [
+    "button.inline-flex.items-center.gap-1 \"All nations\" 76x16"
+   ],
+   "scrollY": 0,
+   "docH": 21599,
+   "label": "picker-league"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [
+    "\"Win the Premier League\" shown 81px of 115px",
+    "\"Win the Premier League\" shown 81px of 115px",
+    "\"Win the Premier League\" shown 81px of 115px",
+    "\"Win the Premier League\" shown 81px of 115px",
+    "\"Win the Premier League\" shown 81px of 115px",
+    "\"Qualify for the Champions League\" shown 81px of 165px",
+    "\"Qualify for the Europa League\" shown 81px of 144px",
+    "\"Qualify for the Europa League\" shown 81px of 144px",
+    "\"Qualify for the Conference League\" shown 81px of 167px",
+    "\"Qualify for the Conference League\" shown 81px of 167px",
+    "\"Finish in the top half\" shown 81px of 98px",
+    "\"Finish in the top half\" shown 81px of 98px",
+    "\"Finish in the top half\" shown 81px of 98px",
+    "\"Stay up. Avoid relegation\" shown 81px of 121px",
+    "\"Stay up. Avoid relegation\" shown 81px of 121px",
+    "\"Stay up. Avoid relegation\" shown 81px of 121px",
+    "\"Stay up. Avoid relegation\" shown 81px of 121px",
+    "\"Stay up. Avoid relegation\" shown 81px of 121px",
+    "\"Stay up. Avoid relegation\" shown 81px of 121px",
+    "\"Stay up. Avoid relegation\" shown 81px of 121px"
+   ],
+   "overlaps": [],
+   "leaks": [],
+   "tinyTaps": [
+    "button.inline-flex.items-center.gap-1 \"Premier League\" 127x16"
+   ],
+   "scrollY": 0,
+   "docH": 22791,
+   "label": "picker-team"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [],
+   "overlaps": [],
+   "leaks": [],
+   "tinyTaps": [
+    "button.inline-flex.items-center.gap-1 \"Liverpool\" 71x16",
+    "button.rounded-md.border.border-border \"Previous skin\" 20x20",
+    "button.rounded-md.border.border-border \"Next skin\" 20x20",
+    "button.rounded-md.border.border-border \"Previous hair\" 20x20",
+    "button.rounded-md.border.border-border \"Next hair\" 20x20",
+    "button.rounded-md.border.border-border \"Previous colour\" 20x20",
+    "button.rounded-md.border.border-border \"Next colour\" 20x20",
+    "button.rounded-md.border.border-border \"Previous beard\" 20x20",
+    "button.rounded-md.border.border-border \"Next beard\" 20x20",
+    "button.rounded-md.border.border-border \"Previous outfit\" 20x20",
+    "button.rounded-md.border.border-border \"Next outfit\" 20x20",
+    "button.rounded-md.border.border-border \"Previous age\" 20x20",
+    "button.rounded-md.border.border-border \"Next age\" 20x20",
+    "button.w-5.h-5.rounded-full \"Navy\" 22x22",
+    "button.w-5.h-5.rounded-full \"Red\" 20x20",
+    "button.w-5.h-5.rounded-full \"Sky\" 20x20",
+    "button.w-5.h-5.rounded-full \"Green\" 20x20",
+    "button.w-5.h-5.rounded-full \"Claret\" 20x20",
+    "button.w-5.h-5.rounded-full \"Gold\" 20x20",
+    "button.w-5.h-5.rounded-full \"Black\" 20x20",
+    "button.w-5.h-5.rounded-full \"White\" 20x20"
+   ],
+   "scrollY": 0,
+   "docH": 23172,
+   "label": "manager-form"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [
+    "\"Fans hopeful · prices, sponsor, the books\" shown 149px of 176px",
+    "\"Stadium, training, medical, dressing room\" shown 149px of 178px",
+    "\"Tactics, recruitment, money, the press\" shown 149px of 163px",
+    "\"Currency, the international job, haggling\" shown 149px of 169px",
+    "\"Nobody has an opinion\" shown 149px of 160px"
+   ],
+   "overlaps": [],
+   "leaks": [],
+   "tinyTaps": [
+    "button.underline.underline-offset-2.hover:text-primary \"Managers\" 57x16",
+    "button.mt-2.text-[11px].font-bold \"📊 Match Centre: form, head to head, odds, team talk\" 290x17"
+   ],
+   "scrollY": 1742,
+   "docH": 22572,
+   "label": "hub-start"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [],
+   "overlaps": [
+    "\"RW\" x \"Club Manager: Free Football Management G\" (29x15 at 32,1301) static/static",
+    "\"Bukayo Saka\" x \"Club Manager: Free Football Management G\" (75x7 at 89,1301) static/static",
+    "\"Arsenal · 24y · worth £97.5m\" x \"Club Manager: Free Football Management G\" (177x14 at 69,1308) static/static",
+    "\"91\" x \"Club Manager: Free Football Management G\" (15x16 at 254,1301) static/static",
+    "\"Talk · £107.3m\" x \"Club Manager: Free Football Management G\" (81x15 at 277,1301) static/static",
+    "\"CAM\" x \"Club Manager: Free Football Management G\" (29x17 at 32,1339) static/static",
+    "\"Cole Palmer\" x \"Club Manager: Free Football Management G\" (70x16 at 89,1334) static/static",
+    "\"Chelsea · 23y · worth £89.3m\" x \"Club Manager: Free Football Management G\" (180x7 at 69,1350) static/static",
+    "\"91\" x \"Club Manager: Free Football Management G\" (15x18 at 257,1339) static/static",
+    "\"Talk · £111.6m\" x \"Club Manager: Free Football Management G\" (78x21 at 280,1335) static/static",
+    "\"CM\" x \"A full club-management sim in your brows\" (29x19 at 32,1382) static/static",
+    "\"Declan Rice\" x \"A full club-management sim in your brows\" (68x16 at 89,1377) static/static",
+    "\"Arsenal · 26y · worth £97.5m\" x \"A full club-management sim in your brows\" (177x14 at 69,1393) static/static",
+    "\"91\" x \"A full club-management sim in your brows\" (15x20 at 254,1381) static/static",
+    "\"Talk · £107.3m\" x \"A full club-management sim in your brows\" (81x23 at 277,1378) static/static"
+   ],
+   "leaks": [],
+   "tinyTaps": [
+    "button.underline.underline-offset-2.hover:text-primary \"Managers\" 57x16",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £178.2m\" 89x23",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £178.2m\" 89x23",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £202.5m\" 91x23",
+    "button.flex-1.px-1.5.py-0.5 \"£377.5m\" 91x20",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £141.6m\" 88x23",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £124.6m\" 90x23",
+    "button.flex-1.px-1.5.py-0.5 \"£268.5m\" 90x20",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £151.9m\" 87x23",
+    "button.flex-1.px-1.5.py-0.5 \"£232.1m\" 87x20",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £133.7m\" 87x23",
+    "button.flex-1.px-1.5.py-0.5 \"£253.9m\" 87x20",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £124.7m\" 88x23",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £107.3m\" 88x23",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £111.6m\" 85x23",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £107.3m\" 88x23",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £107.3m\" 88x23",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £121.9m\" 87x23",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £111.6m\" 85x23",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £91.1m\" 80x23",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £91m\" 74x23",
+    "button.flex-1.px-1.5.py-0.5 \"£130.3m\" 74x20",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £91m\" 74x23",
+    "button.flex-1.px-1.5.py-0.5 \"£180.5m\" 74x20",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £80.1m\" 83x23"
+   ],
+   "scrollY": 0,
+   "docH": 22223,
+   "label": "s1-summer-market"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [
+    "\"3 Livramento\" shown 47px of 54px",
+    "\"1 Mamardashvili\" shown 47px of 69px",
+    "\"7 Szoboszlai\" shown 47px of 54px",
+    "\"8 Gravenberch\" shown 47px of 62px",
+    "\"Balance of play:\" shown 1px of 83px"
+   ],
+   "overlaps": [
+    "\"DoUKnowBall\" x \"?\" (44x21 at 52,15) static/static",
+    "\"DoUKnowBall\" x \"Premier League · Round 1\" (62x13 at 100,18) static/static",
+    "\"Back\" x \"Stats\" (23x16 at 341,18) static/static",
+    "\"Track stats\" x \"-\" (55x16 at 173,57) static/static",
+    "\"Track stats\" x \"0\" (12x16 at 175,57) static/static",
+    "\"Track stats\" x \"0\" (12x16 at 204,57) static/static",
+    "\"2 Thiaw\" x \"Club Manager: Free Football Management G\" (33x6 at 54,243) static/static",
+    "\"3 Livramento\" x \"Club Manager: Free Football Management G\" (47x9 at 133,220) static/static",
+    "\"4 Hall\" x \"Club Manager: Free Football Management G\" (24x9 at 240,227) static/static",
+    "\"5 Botman\" x \"A full club-management sim in your brows\" (40x5 at 312,257) static/static",
+    "\"6 Ramsey\" x \"A full club-management sim in your brows\" (42x9 at 61,347) static/static",
+    "\"7 Joelinton\" x \"A full club-management sim in your brows\" (45x9 at 143,334) static/static",
+    "\"8 Miley\" x \"A full club-management sim in your brows\" (30x9 at 228,326) static/static",
+    "\"9 Bamba\" x \"A full club-management sim in your brows\" (38x9 at 308,349) static/static",
+    "\"10 Elanga\" x \"A full club-management sim in your brows\" (42x9 at 145,429) static/static"
+   ],
+   "leaks": [],
+   "tinyTaps": [],
+   "scrollY": 0,
+   "docH": 21116,
+   "label": "s1m1-live-kickoff"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [],
+   "overlaps": [],
+   "leaks": [],
+   "tinyTaps": [],
+   "scrollY": 0,
+   "docH": 22392,
+   "label": "s1m1-interval"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [
+    "\"3 Livramento\" shown 47px of 54px",
+    "\"7 Szoboszlai\" shown 47px of 54px",
+    "\"8 Gravenberch\" shown 47px of 62px",
+    "\"Balance of play:\" shown 1px of 83px"
+   ],
+   "overlaps": [
+    "\"Skip to main content\" x \"Club Manager is the site's big one: a fu\" (166x40 at 32,-96) fixed/static",
+    "\"?\" x \"Club Manager is the site's big one: a fu\" (44x44 at 52,2) static/static",
+    "\"Liverpool\" x \"Club Manager is the site's big one: a fu\" (121x20 at 32,54) static/static",
+    "\"-\" x \"Club Manager is the site's big one: a fu\" (65x32 at 163,48) static/static",
+    "\"0\" x \"Club Manager is the site's big one: a fu\" (12x26 at 175,51) static/static",
+    "\"1\" x \"Club Manager is the site's big one: a fu\" (12x26 at 204,51) static/static",
+    "\"Newcastle\" x \"Club Manager is the site's big one: a fu\" (121x20 at 238,54) static/static",
+    "\"Premier League · Round 1\" x \"Club Manager is the site's big one: a fu\" (172x13 at 100,18) static/static",
+    "\"LIVE 51'\" x \"Club Manager is the site's big one: a fu\" (61x25 at 276,12) static/static",
+    "\"Stats\" x \"Club Manager is the site's big one: a fu\" (17x44 at 341,2) static/static",
+    "\"1 Hornicek\" x \"Pick when you start too: today's game, o\" (45x9 at 187,182) static/static",
+    "\"2 Thiaw\" x \"Pick when you start too: today's game, o\" (33x9 at 65,284) static/static",
+    "\"3 Livramento\" x \"Pick when you start too: today's game, o\" (47x9 at 146,265) static/static",
+    "\"4 Hall\" x \"Pick when you start too: today's game, o\" (24x9 at 249,267) static/static",
+    "\"5 Botman\" x \"Pick when you start too: today's game, o\" (33x9 at 325,274) static/static"
+   ],
+   "leaks": [],
+   "tinyTaps": [],
+   "scrollY": 825,
+   "docH": 21116,
+   "label": "s1m1-live-sheet"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [
+    "\"🧤 Shot saved: Bazoumana Touré\" shown 119px of 162px",
+    "\"⚽ Goal: Bazoumana Touré\" shown 119px of 130px",
+    "\"🧤 Shot saved: Federico Chiesa\" shown 119px of 151px",
+    "\"🔁 Sub: Alisson on for Giorgi Mamardashvili\" shown 119px of 206px",
+    "\"🧤 Shot saved: Alexander Isak\" shown 119px of 144px",
+    "\"🔁 Sub: Alexis Mac Allister on for Dominik Szoboszlai\" shown 119px of 250px",
+    "\"🟨 Booked: Giovanni Leoni\" shown 119px of 127px",
+    "\"🎯 Penalty: Alexander Isak\" shown 119px of 126px",
+    "\"⚽ Goal: Alexander Isak\" shown 103px of 115px",
+    "\"🧤 Shot saved: Bradley Barcola\" shown 119px of 151px",
+    "\"🔁 Sub: Harvey Barnes on for Bazoumana Touré\" shown 119px of 234px",
+    "\"🧤 Shot saved: Federico Chiesa\" shown 119px of 151px",
+    "\"⚽ Goal: Ryan Gravenberch 🅰️ Jérémy Jacquet\" shown 119px of 230px",
+    "\"⚽ Goal: Bradley Barcola 🅰️ Ryan Gravenberch\" shown 119px of 228px",
+    "\"🩹 Injured: Bradley Barcola\" shown 119px of 131px",
+    "\"🔁 Sub: Matias Fernandez-Pardo on for Lewis Hall\" shown 119px of 240px",
+    "\"🧤 Shot saved: Sven Botman\" shown 119px of 138px",
+    "\"🟨 Booked: Ronald Araujo\" shown 119px of 123px",
+    "\"🧤 Shot saved: Alexander Isak\" shown 119px of 144px"
+   ],
+   "overlaps": [
+    "\"Skip to main content\" x \"DoUKnowBall\" (150x21 at 12,-86) fixed/static",
+    "\"🅰️ Jérémy Jacquet\" x \"65'\" (32x12 at 183,1354) static/static",
+    "\"🅰️ Ryan Gravenberch\" x \"67'\" (40x12 at 175,1401) static/static"
+   ],
+   "leaks": [
+    "minus zero?: \"+4.5) Secure Continue AROUND THE GROUNDS Arsenal 3-0 Coventry City Hull City 1-0 Manchester United E\""
+   ],
+   "tinyTaps": [
+    "button.mt-2.inline-flex.items-center \"All player ratings\" 95x15"
+   ],
+   "scrollY": 101,
+   "docH": 23326,
+   "label": "s1m1-report"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [
+    "\"3 Diomande\" shown 47px of 51px",
+    "\"4 Milenković\" shown 47px of 52px",
+    "\"6 Gibbs-White\" shown 47px of 64px",
+    "\"9 Domínguez\" shown 47px of 56px",
+    "\"1 Mamardashvili\" shown 47px of 69px",
+    "\"7 Szoboszlai\" shown 47px of 54px",
+    "\"8 Gravenberch\" shown 47px of 62px",
+    "\"Balance of play:\" shown 1px of 83px"
+   ],
+   "overlaps": [
+    "\"Track stats\" x \"Premier League · Round 2\" (65x13 at 173,18) static/static",
+    "\"MATCH LIVE\" x \"-\" (65x9 at 163,71) static/static",
+    "\"1 Victor\" x \"Club Manager: Free Football Management G\" (32x9 at 160,198) static/static",
+    "\"2 Murillo\" x \"A full club-management sim in your brows\" (19x9 at 32,422) static/static",
+    "\"3 Diomande\" x \"A full club-management sim in your brows\" (47x9 at 97,402) static/static",
+    "\"4 Milenković\" x \"A full club-management sim in your brows\" (47x9 at 190,403) static/static",
+    "\"5 Muñoz\" x \"A full club-management sim in your brows\" (36x9 at 281,467) static/static",
+    "\"6 Gibbs-White\" x \"A full club-management sim in your brows\" (13x9 at 32,563) static/static",
+    "\"7 McAtee\" x \"A full club-management sim in your brows\" (40x9 at 109,507) static/static",
+    "\"8 Sangaré\" x \"A full club-management sim in your brows\" (43x9 at 184,506) static/static",
+    "\"9 Domínguez\" x \"A full club-management sim in your brows\" (47x9 at 268,569) static/static",
+    "\"1 Mamardashvili\" x \"Club Manager is the site's big one: a fu\" (47x9 at 153,712) static/static",
+    "\"2 Jacquet\" x \"A full club-management sim in your brows\" (42x9 at 234,636) static/static",
+    "\"3 Leoni\" x \"A full club-management sim in your brows\" (30x9 at 171,605) static/static",
+    "\"4 Araujo\" x \"A full club-management sim in your brows\" (34x9 at 95,604) static/static"
+   ],
+   "leaks": [],
+   "tinyTaps": [],
+   "scrollY": 42,
+   "docH": 21116,
+   "label": "s1m2-live-kickoff"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [],
+   "overlaps": [],
+   "leaks": [],
+   "tinyTaps": [],
+   "scrollY": 42,
+   "docH": 22392,
+   "label": "s1m2-interval"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [
+    "\"3 Diomande\" shown 47px of 51px",
+    "\"4 Milenković\" shown 47px of 52px",
+    "\"6 Gibbs-White\" shown 47px of 64px",
+    "\"9 Domínguez\" shown 47px of 56px",
+    "\"25 Woodman\" shown 47px of 57px",
+    "\"7 Szoboszlai\" shown 47px of 54px",
+    "\"8 Gravenberch\" shown 47px of 62px",
+    "\"Balance of play:\" shown 1px of 83px"
+   ],
+   "overlaps": [
+    "\"Skip to main content\" x \"Club Manager is the site's big one: a fu\" (166x40 at 32,-96) fixed/static",
+    "\"?\" x \"Club Manager is the site's big one: a fu\" (44x44 at 52,2) static/static",
+    "\"Liverpool\" x \"Club Manager is the site's big one: a fu\" (121x20 at 32,54) static/static",
+    "\"-\" x \"Club Manager is the site's big one: a fu\" (65x32 at 163,48) static/static",
+    "\"0\" x \"Club Manager is the site's big one: a fu\" (12x26 at 175,51) static/static",
+    "\"1\" x \"Club Manager is the site's big one: a fu\" (12x26 at 204,51) static/static",
+    "\"Nottingham Forest\" x \"Club Manager is the site's big one: a fu\" (121x20 at 238,54) static/static",
+    "\"Premier League · Round 2\" x \"Club Manager is the site's big one: a fu\" (172x13 at 100,18) static/static",
+    "\"LIVE 51'\" x \"Club Manager is the site's big one: a fu\" (61x25 at 276,12) static/static",
+    "\"Stats\" x \"Club Manager is the site's big one: a fu\" (17x44 at 341,2) static/static",
+    "\"1 Victor\" x \"Club Manager is the site's big one: a fu\" (32x9 at 183,96) static/static",
+    "\"2 Murillo\" x \"Pick when you start too: today's game, o\" (35x9 at 43,220) static/static",
+    "\"3 Diomande\" x \"Pick when you start too: today's game, o\" (47x9 at 107,196) static/static",
+    "\"4 Milenković\" x \"Pick when you start too: today's game, o\" (47x9 at 182,204) static/static",
+    "\"5 Muñoz\" x \"Pick when you start too: today's game, o\" (36x9 at 256,209) static/static"
+   ],
+   "leaks": [],
+   "tinyTaps": [],
+   "scrollY": 825,
+   "docH": 21116,
+   "label": "s1m2-live-sheet"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [
+    "\"Nottingham Forest\" shown 109px of 129px",
+    "\"🧤 Shot saved: Alexander Isak\" shown 119px of 144px",
+    "\"⚽ Goal: Morgan Gibbs-White\" shown 119px of 144px",
+    "\"🧤 Shot saved: Dominik Szoboszlai\" shown 119px of 165px",
+    "\"🧤 Shot saved: Liam Delap\" shown 119px of 127px",
+    "\"🔁 Sub: Freddie Woodman on for Giorgi Mamardashvili\" shown 119px of 260px",
+    "\"🧤 Shot saved: Alexander Isak\" shown 119px of 144px",
+    "\"🧤 Shot saved: Cody Gakpo\" shown 119px of 132px",
+    "\"🧤 Shot saved: Cody Gakpo\" shown 119px of 132px",
+    "\"🔁 Sub: Trey Nyoni on for Dominik Szoboszlai\" shown 119px of 217px",
+    "\"🧤 Shot saved: Alexander Isak\" shown 119px of 144px",
+    "\"🔁 Sub: Neco Williams on for Morgan Gibbs-White\" shown 119px of 238px",
+    "\"🔁 Sub: Ola Aina on for Ousmane Diomande\" shown 119px of 211px",
+    "\"🎯 Penalty: Ibrahim Sangaré\" shown 119px of 135px",
+    "\"🧤 Shot saved: Cody Gakpo\" shown 119px of 132px",
+    "\"🧤 Penalty saved: Ibrahim Sangaré\" shown 119px of 167px",
+    "\"🟨 Booked: Jérémy Jacquet\" shown 119px of 136px",
+    "\"🧤 Shot saved: Ronald Araujo\" shown 119px of 140px",
+    "\"🩹 Injured: Federico Chiesa\" shown 119px of 131px"
+   ],
+   "overlaps": [
+    "\"Skip to main content\" x \"DoUKnowBall\" (150x21 at 12,-86) fixed/static"
+   ],
+   "leaks": [
+    "minus zero?: \") Secure Continue AROUND THE GROUNDS Aston Villa 1-0 Arsenal Bournemouth 1-1 Everton Chelsea 1-0 Bri\""
+   ],
+   "tinyTaps": [
+    "button.mt-2.inline-flex.items-center \"All player ratings\" 95x15"
+   ],
+   "scrollY": 101,
+   "docH": 23257,
+   "label": "s1m2-report"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [
+    "\"🧤 Shot saved: Julio Enciso\" shown 119px of 130px",
+    "\"🧤 Shot saved: Anis Mehmeti\" shown 119px of 138px",
+    "\"🧤 Shot saved: Florian Wirtz\" shown 119px of 134px",
+    "\"🧤 Shot saved: Julio Enciso\" shown 119px of 130px",
+    "\"🟨 Booked: Federico Chiesa\" shown 119px of 134px",
+    "\"🟥 Sent off: Ryan Gravenberch\" shown 119px of 149px",
+    "\"🔁 Sub: Saša Lukić on for Florentino\" shown 119px of 172px",
+    "\"🧤 Shot saved: Jérémy Jacquet\" shown 119px of 153px",
+    "\"🔁 Sub: Jeremie Frimpong on for Federico Chiesa\" shown 119px of 238px",
+    "\"🧤 Shot saved: Jack Clarke\" shown 119px of 130px",
+    "\"🔁 Sub: Azor Matusiwa on for Julio Enciso\" shown 119px of 201px",
+    "\"⚽ Goal: Jeremie Frimpong\" shown 119px of 130px",
+    "\"⚽ Goal: Cody Gakpo 🅰️ Florian Wirtz\" shown 119px of 179px",
+    "\"🧤 Shot saved: Cody Gakpo\" shown 119px of 132px",
+    "\"🔁 Sub: Virgil van Dijk on for Giovanni Leoni\" shown 119px of 207px",
+    "\"🧤 Shot saved: Jeremie Frimpong\" shown 119px of 161px"
+   ],
+   "overlaps": [
+    "\"🅰️ Florian Wirtz\" x \"75'\" (40x12 at 175,1416) static/static"
+   ],
+   "leaks": [
+    "minus zero?: \"eeds United Everton 2-2 Manchester United Fulham 1-0 Crystal Palace Hull City 0-3 Aston Villa Manche\""
+   ],
+   "tinyTaps": [
+    "button.mt-2.inline-flex.items-center \"All player ratings\" 95x15"
+   ],
+   "scrollY": 42,
+   "docH": 23219,
+   "label": "s1q-quick-report"
+  }
+ ],
+ "seasons": [
+  {
+   "n": 1,
+   "start": {
+    "club": "Liverpool",
+    "season": 1,
+    "week": 0,
+    "cal": 54,
+    "budget": 137,
+    "squad": 26,
+    "inbox": 0,
+    "form": "",
+    "results": 0,
+    "live": false,
+    "window": "summer"
+   },
+   "live": [
+    {
+     "ok": true,
+     "vars": 0,
+     "goalsSeen": 1,
+     "subRowsAtBreak": 11,
+     "sub": true,
+     "benchOffered": 15,
+     "liveSub": true,
+     "reportText": "DOUKNOWBALL\nBack\nTrack stats\nFULL TIME\nPREMIER LEAGUE · ROUND 1\n🏟️ Away day · crowd 48,276\n45+2'\nADDED TIME\n90+8'\nVICTORY\nNewcastle\n1 - 5\nLiverpool\nLIVERPOOL\n\n⚽ Alexander Isak 57' (P)\n\n⚽ Ryan Gravenberch 65' · 🅰️ Jérémy Jacquet\n\n⚽ Bradley Barcola 67' · 🅰️ Ryan Gravenberch\n\n⚽ Florian Wirtz 69'\n\n⚽ Alexander Isak 90+3'\n\nNEWCASTLE\n\n⚽ Bazoumana Touré 21'\n\n🟨 Giovanni Leoni 52'\n🟨 Ronald Araujo 90'\n🩹 Bradley Barcola 67' (4w)\n▲ Alisson ▼ Giorgi Mamardashvili 46'\n▲ Alexis Mac Allister ▼ Dominik Szoboszlai 51'\nNEWCASTLE ▲ Harvey Barnes ▼ Bazoumana Touré 60'\nNEWCASTLE ▲ Matias Fernandez-Pardo ▼ Lewis Hall 86'\nLiverpool\nMATCH STATS\nNewcastle\n51%\nPOSSESSION\n49%\n18\nSHOTS\n10\n10\nON TARGET\n3\n2.86\nEXPECTED GOALS\n0.99\n7\nCORNERS\n5\n10\nFOULS\n14\n2\nKEEPER SAVES\n5\n2\nYELLOW CARDS\n0\n0\nRED CARDS\n0\n2\nSUBSTITUTIONS\n2\n51%\nBALANCE OF PLAY\n49%\n▲ LIVERPOOL\n▼ NEWCASTLE\n0'\n45'\n90'\n18 (10)\nSHOTS (ON TARGET)\n10 (3)\nLive"
+    },
+    {
+     "ok": true,
+     "vars": 0,
+     "goalsSeen": 0,
+     "subRowsAtBreak": 11,
+     "sub": true,
+     "benchOffered": 14,
+     "liveSub": true,
+     "reportText": "DOUKNOWBALL\nBack\nTrack stats\nFULL TIME\nPREMIER LEAGUE · ROUND 2\n🏟️ Your ground · crowd 66,107\n45+3'\nADDED TIME\n90+8'\nDRAW\nLiverpool\n2 - 2\nNottingham Forest\nLIVERPOOL\n\n⚽ Florian Wirtz 75'\n\n⚽ Federico Chiesa 90+5'\n\nNOTTINGHAM FOREST\n\n⚽ Morgan Gibbs-White 21'\n\n⚽ Dan Ndoye 66'\n\n🟨 Trey Nyoni 90'\n🟨 Jérémy Jacquet 90+1'\n🩹 Federico Chiesa 90+5' (1w)\n▲ Freddie Woodman ▼ Giorgi Mamardashvili 46'\n▲ Trey Nyoni ▼ Dominik Szoboszlai 51'\nNF 🟨 Murillo 41'\nNF ▲ Neco Williams ▼ Morgan Gibbs-White 69'\nNF ▲ Ola Aina ▼ Ousmane Diomande 81'\nLiverpool\nMATCH STATS\nNottingham Forest\n54%\nPOSSESSION\n46%\n18\nSHOTS\n10\n10\nON TARGET\n4\n2.33\nEXPECTED GOALS\n1.41\n8\nCORNERS\n6\n12\nFOULS\n8\n2\nKEEPER SAVES\n8\n2\nYELLOW CARDS\n1\n0\nRED CARDS\n0\n2\nSUBSTITUTIONS\n2\n54%\nBALANCE OF PLAY\n46%\n▲ LIVERPOOL\n▼ NOTTINGHAM FOREST\n0'\n45'\n90'\n18 (10)\nSHOTS (ON TARGET)\n10 (4)\nLiverpool\nTIMELINE\nNottingham Forest\n0'\n⏱️ KICK OFF\n🧤 Shot saved: Ale"
+    }
+   ],
+   "ffs": [
+    {
+     "k": 0,
+     "r": "FULL TIME",
+     "sv": {
+      "club": "Liverpool",
+      "season": 1,
+      "week": 11,
+      "cal": 54,
+      "budget": 151.14,
+      "squad": 27,
+      "inbox": 4,
+      "form": "WWDWW",
+      "results": 9,
+      "live": false,
+      "window": null
+     }
+    },
+    {
+     "k": 1,
+     "r": "no calendar tile",
+     "sv": {
+      "club": "Liverpool",
+      "season": 1,
+      "week": 11,
+      "cal": 54,
+      "budget": 151.14,
+      "squad": 27,
+      "inbox": 4,
+      "form": "WWDWW",
+      "results": 9,
+      "live": false,
+      "window": null
+     }
+    },
+    {
+     "k": 2,
+     "r": "FULL TIME",
+     "sv": {
+      "club": "Liverpool",
+      "season": 1,
+      "week": 18,
+      "cal": 54,
+      "budget": 161.86,
+      "squad": 27,
+      "inbox": 4,
+      "form": "LWWDD",
+      "results": 14,
+      "live": false,
+      "window": null
+     }
+    },
+    {
+     "k": 3,
+     "r": "no calendar tile",
+     "sv": {
+      "club": "Liverpool",
+      "season": 1,
+      "week": 18,
+      "cal": 54,
+      "budget": 161.86,
+      "squad": 27,
+      "inbox": 4,
+      "form": "LWWDD",
+      "results": 14,
+      "live": false,
+      "window": null
+     }
+    },
+    {
+     "k": 4,
+     "r": "no calendar tile",
+     "sv": {
+      "club": "Liverpool",
+      "season": 1,
+      "week": 18,
+      "cal": 54,
+      "budget": 161.86,
+      "squad": 27,
+      "inbox": 4,
+      "form": "LWWDD",
+      "results": 14,
+      "live": false,
+      "window": null
+     }
+    },
+    {
+     "k": 5,
+     "r": "no calendar tile",
+     "sv": {
+      "club": "Liverpool",
+      "season": 1,
+      "week": 18,
+      "cal": 54,
+      "budget": 161.86,
+      "squad": 27,
+      "inbox": 4,
+      "form": "LWWDD",
+      "results": 14,
+      "live": false,
+      "window": null
+     }
+    },
+    {
+     "k": 6,
+     "r": "no calendar tile",
+     "sv": {
+      "club": "Liverpool",
+      "season": 1,
+      "week": 18,
+      "cal": 54,
+      "budget": 161.86,
+      "squad": 27,
+      "inbox": 4,
+      "form": "LWWDD",
+      "results": 14,
+      "live": false,
+      "window": null
+     }
+    },
+    {
+     "k": 7,
+     "r": "no calendar tile",
+     "sv": {
+      "club": "Liverpool",
+      "season": 1,
+      "week": 18,
+      "cal": 54,
+      "budget": 161.86,
+      "squad": 27,
+      "inbox": 4,
+      "form": "LWWDD",
+      "results": 14,
+      "live": false,
+      "window": null
+     }
+    },
+    {
+     "k": 8,
+     "r": "no calendar tile",
+     "sv": {
+      "club": "Liverpool",
+      "season": 1,
+      "week": 18,
+      "cal": 54,
+      "budget": 161.86,
+      "squad": 27,
+      "inbox": 4,
+      "form": "LWWDD",
+      "results": 14,
+      "live": false,
+      "window": null
+     }
+    },
+    {
+     "k": 9,
+     "r": "no calendar tile",
+     "sv": {
+      "club": "Liverpool",
+      "season": 1,
+      "week": 18,
+      "cal": 54,
+      "budget": 161.86,
+      "squad": 27,
+      "inbox": 4,
+      "form": "LWWDD",
+      "results": 14,
+      "live": false,
+      "window": null
+     }
+    },
+    {
+     "k": 10,
+     "r": "no calendar tile",
+     "sv": {
+      "club": "Liverpool",
+      "season": 1,
+      "week": 18,
+      "cal": 54,
+      "budget": 161.86,
+      "squad": 27,
+      "inbox": 4,
+      "form": "LWWDD",
+      "results": 14,
+      "live": false,
+      "window": null
+     }
+    },
+    {
+     "k": 11,
+     "r": "no calendar tile",
+     "sv": {
+      "club": "Liverpool",
+      "season": 1,
+      "week": 18,
+      "cal": 54,
+      "budget": 161.86,
+      "squad": 27,
+      "inbox": 4,
+      "form": "LWWDD",
+      "results": 14,
+      "live": false,
+      "window": null
+     }
+    },
+    {
+     "k": 12,
+     "r": "no calendar tile",
+     "sv": {
+      "club": "Liverpool",
+      "season": 1,
+      "week": 18,
+      "cal": 54,
+      "budget": 161.86,
+      "squad": 27,
+      "inbox": 4,
+      "form": "LWWDD",
+      "results": 14,
+      "live": false,
+      "window": null
+     }
+    },
+    {
+     "k": 13,
+     "r": "no calendar tile",
+     "sv": {
+      "club": "Liverpool",
+      "season": 1,
+      "week": 18,
+      "cal": 54,
+      "budget": 161.86,
+      "squad": 27,
+      "inbox": 4,
+      "form": "LWWDD",
+      "results": 14,
+      "live": false,
+      "window": null
+     }
+    }
+   ],
+   "quick": "DOUKNOWBALL\nBack\nTrack stats\nFULL TIME\nPREMIER LEAGUE · ROUND 3\n🏟️ Away day · crowd 29,520\n45+5'\nADDED TIME\n90+8'\nVICTORY\nIpswich Town\n2 - 3\nLiverpool\nLIVERPOOL\n\n⚽ Federico Chiesa 51'\n\n⚽ Jeremie Frimpong 74'\n\n⚽ Cody Gakpo 75' · 🅰️ Florian Wirtz\n\nIPSWICH TOWN\n\n⚽ Jack Clarke 35'\n\n⚽ Abdul Fatawu 38'\n\n🟨 Federico Chiesa 44'\n🟥 Ryan Gravenberch 50'\n▲ Jeremie Frimpong ▼ Federico Chiesa 64'\n▲ Virgil van Dijk ▼ Giovanni Leoni 75'\nIT 🟨 Julio Enciso 68'\nIT ▲ Saša Lukić ▼ Florentino 60'\nIT ▲ Azor Matusiwa ▼ Julio Enciso 73'\nLiverpool\nMATCH STATS\nIpswich Town\n55%\nPOSSESSION\n45%\n11\nSHOTS\n11\n7\nON TARGET\n6\n1.91\nEXPECTED GOALS\n1.47\n4\nCORNERS\n7\n10\nFOULS\n10\n4\nKEEPER SAVES\n4\n1\nYELLOW CARDS\n1\n1\nRED CARDS\n0\n2\nSUBSTITUTIONS\n2\n55%\nBALANCE OF PLAY\n45%\n▲ LIVERPOOL\n▼ IPSWICH TOWN\n0'\n45'\n90'\n11 (7)\nSHOTS (ON TARGET)\n11 (6)\nLiverpool\nTIMELINE\nIpswich Town\n0'\n⏱️ KICK OFF\n16'\n🧤 Shot saved: Julio Enciso\n19'\n🧤 Sho",
+   "reload": {
+    "b": {
+     "club": "Liverpool",
+     "season": 1,
+     "week": 11,
+     "cal": 54,
+     "budget": 151.14,
+     "squad": 27,
+     "inbox": 4,
+     "form": "WWDWW",
+     "results": 9,
+     "live": false,
+     "window": null
+    },
+    "a": {
+     "club": "Liverpool",
+     "season": 1,
+     "week": 11,
+     "cal": 54,
+     "budget": 151.14,
+     "squad": 27,
+     "inbox": 4,
+     "form": "WWDWW",
+     "results": 9,
+     "live": false,
+     "window": null
+    }
+   },
+   "end": "LIVERPOOL"
+  }
+ ],
+ "elapsedS": 119,
+ "clubList": [
+  "Arsenal 👑 Elite Squad 89 Budget £167m Board wants Win the Premier League",
+  "Manchester City 👑 Elite Squad 89 Budget £160m Board wants Win the Premier League",
+  "Liverpool 👑 Elite Squad 88 Budget £137m Board wants Win the Premier League",
+  "Chelsea 👑 Elite Squad 88 Budget £131m Board wants Win the Premier League",
+  "Manchester United 🥇 Contenders Squad 87 Budget £118m Board wants Win the Premier League",
+  "Tottenham 🥇 Contenders Squad 86 Budget £114m Board wants Qualify for the Champions League",
+  "Newcastle 🥇 Contenders Squad 84 Budget £69m Board wants Qualify for the Europa League",
+  "Nottingham Forest 🥇 Contenders Squad 84 Budget £70m Board wants Qualify for the Europa League",
+  "Aston Villa 🥇 Contenders Squad 84 Budget £73m Board wants Qualify for the Conference League",
+  "Crystal Palace 🥇 Contenders Squad 84 Budget £76m Board wants Qualify for the Conference League",
+  "Brentford 🥇 Contenders Squad 84 Budget £69m Board wants Finish in the top half",
+  "Bournemouth 🥇 Contenders Squad 83 Budget £68m Board wants Finish in the top half",
+  "Brighton 🥇 Contenders Squad 83 Budget £73m Board wants Finish in the top half",
+  "Everton 🥇 Contenders Squad 83 Budget £54m Board wants Stay up. Avoid relegation",
+  "Fulham ⚔️ Challengers Squad 83 Budget £54m Board wants Stay up. Avoid relegation",
+  "Sunderland ⚔️ Challengers Squad 82 Budget £50m Board wants Stay up. Avoid relegation",
+  "Leeds United ⚔️ Challengers Squad 82 Budget £48m Board wants Stay up. Avoid relegation",
+  "Ipswich Town ⚔️ Challengers Squad 80 Budget £43m Board wants Stay up. Avoid relegation",
+  "Coventry City ⚔️ Challengers Squad 79 Budget £32m Board wants Stay up. Avoid relegation",
+  "Hull City ⚔️ Challengers Squad 79 Budget £27m Board wants Stay up. Avoid relegation"
+ ],
+ "s1-summer_deal": {
+  "signed": [
+   {
+    "who": "Dmitriy Chistyakov",
+    "inSquad": true,
+    "budgetBefore": 137,
+    "budgetAfter": 135.9
+   }
+  ],
+  "sold": [],
+  "bid": null
+ },
+ "finalKeys": [
+  "saveVersion",
+  "clubName",
+  "season",
+  "week",
+  "startYear",
+  "eraId",
+  "retiredNames",
+  "retiredLastSummer",
+  "budget",
+  "boardConfidence",
+  "sacked",
+  "squad",
+  "xiIds",
+  "formationIndex",
+  "mentality",
+  "leagueClubs",
+  "balancedFixtures",
+  "table",
+  "form",
+  "calendar",
+  "clubStrengths",
+  "transferWindow",
+  "windowWeeksLeft",
+  "aiHeadlines",
+  "goneNames",
+  "seasonSignings",
+  "cupRound",
+  "cupDraw",
+  "uclField",
+  "uclGroup",
+  "uclKoRound",
+  "uclDraw",
+  "cupBracket",
+  "world",
+  "trophies",
+  "history",
+  "careerStats",
+  "pendingSummary",
+  "boardObjectives",
+  "cupExit",
+  "uclExit",
+  "negotiation",
+  "incomingBids",
+  "coldNames",
+  "loanedOut",
+  "transferLog",
+  "resultLog",
+  "inbox",
+  "promisedStarts",
+  "pairResults",
+  "realLeagueFixtures",
+  "wageCap",
+  "freeAgents",
+  "severance",
+  "training",
+  "academy",
+  "academyGraduates",
+  "teamTalk",
+  "press",
+  "managers",
+  "boardAsksVersion",
+  "scorerRace",
+  "leagueBook",
+  "setPieces",
+  "intl",
+  "facilities",
+  "books",
+  "staff",
+  "managerXp",
+  "startOptions",
+  "clubForm",
+  "live",
+  "h2h",
+  "decisions",
+  "finance"
+ ],
+ "finalInbox": [
+  [
+   9,
+   "International break: the window runs 21 Sep to 6 Oct, and your fixtures do not stop for it, so they "
+  ],
+  [
+   1,
+   "An agent has been in touch about Milos Kerkez, who is 22 and has a year left. The desk prices a new "
+  ],
+  [
+   1,
+   "One of your midfielders keeps changing the dressing room playlist thirty seconds into every song and"
+  ],
+  [
+   0,
+   "A reporter from the local paper is running a piece on whether this squad is good enough for what the"
+  ]
+ ]
+}

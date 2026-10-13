@@ -1,0 +1,10 @@
+AUDIT s1-summer-market: 15 overlapping text pairs: "RW" x "Club Manager: Free Football Management G" (29x15 at 32,1301) static/static
+AUDIT s1m1-live-kickoff: 15 overlapping text pairs: "DoUKnowBall" x "?" (44x21 at 52,15) static/static
+AUDIT s1m1-live-sheet: 15 overlapping text pairs: "Skip to main content" x "Club Manager is the site's big one: a fu" (166x40 at 32,-96) fixed/static
+AUDIT s1m1-report: 3 overlapping text pairs: "Skip to main content" x "DoUKnowBall" (150x21 at 12,-86) fixed/static ;; leak minus zero?: "+4.5) Secure Continue AROUND THE GROUNDS Arsenal 3-0 Coventry City Hull City 1-0 Manchester United E"
+AUDIT s1m2-live-kickoff: 15 overlapping text pairs: "Track stats" x "Premier League · Round 2" (65x13 at 173,18) static/static
+AUDIT s1m2-live-sheet: 15 overlapping text pairs: "Skip to main content" x "Club Manager is the site's big one: a fu" (166x40 at 32,-96) fixed/static
+AUDIT s1m2-report: 1 overlapping text pairs: "Skip to main content" x "DoUKnowBall" (150x21 at 12,-86) fixed/static ;; leak minus zero?: ") Secure Continue AROUND THE GROUNDS Aston Villa 1-0 Arsenal Bournemouth 1-1 Everton Chelsea 1-0 Bri"
+AUDIT s1q-quick-report: 1 overlapping text pairs: "🅰️ Florian Wirtz" x "75'" (40x12 at 175,1416) static/static ;; leak minus zero?: "eeds United Everton 2-2 Manchester United Fulham 1-0 Crystal Palace Hull City 0-3 Aston Villa Manche"
+FIND [major] season did not reach its review :: season 1 ended on "LIVERPOOL"
+SEASON s390pl done: 1 findings, 0 errors, 37 shots, 119s

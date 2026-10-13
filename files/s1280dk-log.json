@@ -1,0 +1,1273 @@
+{
+ "tag": "s1280dk",
+ "width": 1280,
+ "height": 900,
+ "started": "2026-10-13T00:13:34.750Z",
+ "steps": [
+  {
+   "s": 1,
+   "what": "open /club-manager"
+  },
+  {
+   "s": 6,
+   "what": "era picked"
+  },
+  {
+   "s": 7,
+   "what": "nation picked"
+  },
+  {
+   "s": 10,
+   "what": "league picked"
+  },
+  {
+   "s": 13,
+   "what": "club picked"
+  },
+  {
+   "s": 18,
+   "what": "hub reached",
+   "ok": true,
+   "save": {
+    "club": "OB",
+    "season": 1,
+    "week": 0,
+    "cal": 38,
+    "budget": 8,
+    "squad": 16,
+    "inbox": 0,
+    "form": "",
+    "results": 0,
+    "live": false,
+    "window": "summer"
+   }
+  },
+  {
+   "s": 18,
+   "what": "season 1 start"
+  },
+  {
+   "s": 19,
+   "what": "window s1-summer"
+  },
+  {
+   "s": 22,
+   "what": "live s1m1"
+  },
+  {
+   "s": 67,
+   "what": "live s1m1 done",
+   "res": {
+    "ok": true,
+    "vars": 0,
+    "goalsSeen": 1,
+    "subRowsAtBreak": 11,
+    "sub": true,
+    "benchOffered": 5,
+    "liveSub": true
+   },
+   "save": {
+    "club": "OB",
+    "season": 1,
+    "week": 1,
+    "cal": 38,
+    "budget": 6.9,
+    "squad": 17,
+    "inbox": 0,
+    "form": "L",
+    "results": 1,
+    "live": false,
+    "window": "summer"
+   }
+  },
+  {
+   "s": 74,
+   "what": "s1 ff 0",
+   "r": "FULL TIME",
+   "sv": {
+    "club": "OB",
+    "season": 1,
+    "week": 11,
+    "cal": 38,
+    "budget": 8.58,
+    "squad": 17,
+    "inbox": 3,
+    "form": "WWWDW",
+    "results": 8,
+    "live": false,
+    "window": null
+   }
+  },
+  {
+   "s": 76,
+   "what": "s1 ff 1",
+   "r": "no calendar tile",
+   "sv": {
+    "club": "OB",
+    "season": 1,
+    "week": 11,
+    "cal": 38,
+    "budget": 8.58,
+    "squad": 17,
+    "inbox": 3,
+    "form": "WWWDW",
+    "results": 8,
+    "live": false,
+    "window": null
+   }
+  },
+  {
+   "s": 89,
+   "what": "s1 ff 2",
+   "r": "FULL TIME",
+   "sv": {
+    "club": "OB",
+    "season": 1,
+    "week": 19,
+    "cal": 38,
+    "budget": 9.23,
+    "squad": 17,
+    "inbox": 3,
+    "form": "LWWDL",
+    "results": 13,
+    "live": false,
+    "window": null
+   }
+  },
+  {
+   "s": 92,
+   "what": "window s1-jan"
+  },
+  {
+   "s": 95,
+   "what": "s1 ff 3",
+   "r": "no calendar tile",
+   "sv": {
+    "club": "OB",
+    "season": 1,
+    "week": 20,
+    "cal": 38,
+    "budget": 8.2,
+    "squad": 18,
+    "inbox": 3,
+    "form": "LWWDL",
+    "results": 13,
+    "live": false,
+    "window": "january"
+   }
+  },
+  {
+   "s": 96,
+   "what": "s1 ff 4",
+   "r": "no calendar tile",
+   "sv": {
+    "club": "OB",
+    "season": 1,
+    "week": 20,
+    "cal": 38,
+    "budget": 8.2,
+    "squad": 18,
+    "inbox": 3,
+    "form": "LWWDL",
+    "results": 13,
+    "live": false,
+    "window": "january"
+   }
+  },
+  {
+   "s": 97,
+   "what": "s1 ff 5",
+   "r": "no calendar tile",
+   "sv": {
+    "club": "OB",
+    "season": 1,
+    "week": 20,
+    "cal": 38,
+    "budget": 8.2,
+    "squad": 18,
+    "inbox": 3,
+    "form": "LWWDL",
+    "results": 13,
+    "live": false,
+    "window": "january"
+   }
+  },
+  {
+   "s": 98,
+   "what": "s1 ff 6",
+   "r": "no calendar tile",
+   "sv": {
+    "club": "OB",
+    "season": 1,
+    "week": 20,
+    "cal": 38,
+    "budget": 8.2,
+    "squad": 18,
+    "inbox": 3,
+    "form": "LWWDL",
+    "results": 13,
+    "live": false,
+    "window": "january"
+   }
+  },
+  {
+   "s": 99,
+   "what": "s1 ff 7",
+   "r": "no calendar tile",
+   "sv": {
+    "club": "OB",
+    "season": 1,
+    "week": 20,
+    "cal": 38,
+    "budget": 8.2,
+    "squad": 18,
+    "inbox": 3,
+    "form": "LWWDL",
+    "results": 13,
+    "live": false,
+    "window": "january"
+   }
+  },
+  {
+   "s": 100,
+   "what": "s1 ff 8",
+   "r": "no calendar tile",
+   "sv": {
+    "club": "OB",
+    "season": 1,
+    "week": 20,
+    "cal": 38,
+    "budget": 8.2,
+    "squad": 18,
+    "inbox": 3,
+    "form": "LWWDL",
+    "results": 13,
+    "live": false,
+    "window": "january"
+   }
+  },
+  {
+   "s": 101,
+   "what": "s1 ff 9",
+   "r": "no calendar tile",
+   "sv": {
+    "club": "OB",
+    "season": 1,
+    "week": 20,
+    "cal": 38,
+    "budget": 8.2,
+    "squad": 18,
+    "inbox": 3,
+    "form": "LWWDL",
+    "results": 13,
+    "live": false,
+    "window": "january"
+   }
+  },
+  {
+   "s": 102,
+   "what": "s1 ff 10",
+   "r": "no calendar tile",
+   "sv": {
+    "club": "OB",
+    "season": 1,
+    "week": 20,
+    "cal": 38,
+    "budget": 8.2,
+    "squad": 18,
+    "inbox": 3,
+    "form": "LWWDL",
+    "results": 13,
+    "live": false,
+    "window": "january"
+   }
+  },
+  {
+   "s": 103,
+   "what": "s1 ff 11",
+   "r": "no calendar tile",
+   "sv": {
+    "club": "OB",
+    "season": 1,
+    "week": 20,
+    "cal": 38,
+    "budget": 8.2,
+    "squad": 18,
+    "inbox": 3,
+    "form": "LWWDL",
+    "results": 13,
+    "live": false,
+    "window": "january"
+   }
+  },
+  {
+   "s": 104,
+   "what": "s1 ff 12",
+   "r": "no calendar tile",
+   "sv": {
+    "club": "OB",
+    "season": 1,
+    "week": 20,
+    "cal": 38,
+    "budget": 8.2,
+    "squad": 18,
+    "inbox": 3,
+    "form": "LWWDL",
+    "results": 13,
+    "live": false,
+    "window": "january"
+   }
+  },
+  {
+   "s": 105,
+   "what": "s1 ff 13",
+   "r": "no calendar tile",
+   "sv": {
+    "club": "OB",
+    "season": 1,
+    "week": 20,
+    "cal": 38,
+    "budget": 8.2,
+    "squad": 18,
+    "inbox": 3,
+    "form": "LWWDL",
+    "results": 13,
+    "live": false,
+    "window": "january"
+   }
+  },
+  {
+   "s": 106,
+   "what": "end"
+  }
+ ],
+ "findings": [
+  {
+   "sev": "major",
+   "what": "season did not reach its review",
+   "detail": "season 1 ended on \"OB\"",
+   "at": "s1 ff 13"
+  }
+ ],
+ "errors": [],
+ "shots": [
+  {
+   "file": "s1280dk-001-picker-era.jpg",
+   "at": "open /club-manager",
+   "bytes": 44873
+  },
+  {
+   "file": "s1280dk-002-picker-nation.jpg",
+   "at": "era picked",
+   "bytes": 40863
+  },
+  {
+   "file": "s1280dk-003-picker-league.jpg",
+   "at": "nation picked",
+   "bytes": 56563
+  },
+  {
+   "file": "s1280dk-004-picker-team.jpg",
+   "at": "league picked",
+   "bytes": 195610
+  },
+  {
+   "file": "s1280dk-005-picker-confirm-bar.jpg",
+   "at": "league picked",
+   "bytes": 51046
+  },
+  {
+   "file": "s1280dk-006-manager-form.jpg",
+   "at": "club picked",
+   "bytes": 125485
+  },
+  {
+   "file": "s1280dk-007-hub-start.jpg",
+   "at": "hub reached",
+   "bytes": 261452
+  },
+  {
+   "file": "s1280dk-008-s1-summer-market.jpg",
+   "at": "window s1-summer",
+   "bytes": 183087
+  },
+  {
+   "file": "s1280dk-009-s1-summer-after-clause.jpg",
+   "at": "window s1-summer",
+   "bytes": 43089
+  },
+  {
+   "file": "s1280dk-010-s1m1-live-kickoff.jpg",
+   "at": "live s1m1",
+   "bytes": 33223
+  },
+  {
+   "file": "s1280dk-011-s1m1-interval.jpg",
+   "at": "live s1m1",
+   "bytes": 131524
+  },
+  {
+   "file": "s1280dk-012-s1m1-after-sub.jpg",
+   "at": "live s1m1",
+   "bytes": 132991
+  },
+  {
+   "file": "s1280dk-013-s1m1-live-sheet.jpg",
+   "at": "live s1m1",
+   "bytes": 32734
+  },
+  {
+   "file": "s1280dk-014-s1m1-after-live-sub.jpg",
+   "at": "live s1m1",
+   "bytes": 32829
+  },
+  {
+   "file": "s1280dk-015-s1m1-fulltime-pitch.jpg",
+   "at": "live s1m1",
+   "bytes": 27715
+  },
+  {
+   "file": "s1280dk-016-s1m1-report.jpg",
+   "at": "live s1m1",
+   "bytes": 148802
+  },
+  {
+   "file": "s1280dk-017-s1q-quick-report.jpg",
+   "at": "live s1m1 done",
+   "bytes": 157919
+  },
+  {
+   "file": "s1280dk-018-s1-ff-stuck-1.jpg",
+   "at": "s1 ff 1",
+   "bytes": 132198
+  },
+  {
+   "file": "s1280dk-019-s1-jan-market.jpg",
+   "at": "window s1-jan",
+   "bytes": 183461
+  },
+  {
+   "file": "s1280dk-020-s1-jan-after-clause.jpg",
+   "at": "window s1-jan",
+   "bytes": 50921
+  },
+  {
+   "file": "s1280dk-021-s1-ff-stuck-3.jpg",
+   "at": "s1 ff 3",
+   "bytes": 119324
+  },
+  {
+   "file": "s1280dk-022-s1-ff-stuck-4.jpg",
+   "at": "s1 ff 4",
+   "bytes": 119324
+  },
+  {
+   "file": "s1280dk-023-s1-ff-stuck-5.jpg",
+   "at": "s1 ff 5",
+   "bytes": 119324
+  },
+  {
+   "file": "s1280dk-024-s1-ff-stuck-6.jpg",
+   "at": "s1 ff 6",
+   "bytes": 119324
+  },
+  {
+   "file": "s1280dk-025-s1-ff-stuck-7.jpg",
+   "at": "s1 ff 7",
+   "bytes": 119324
+  },
+  {
+   "file": "s1280dk-026-s1-ff-stuck-8.jpg",
+   "at": "s1 ff 8",
+   "bytes": 119324
+  },
+  {
+   "file": "s1280dk-027-s1-ff-stuck-9.jpg",
+   "at": "s1 ff 9",
+   "bytes": 119324
+  },
+  {
+   "file": "s1280dk-028-s1-ff-stuck-10.jpg",
+   "at": "s1 ff 10",
+   "bytes": 119324
+  },
+  {
+   "file": "s1280dk-029-s1-ff-stuck-11.jpg",
+   "at": "s1 ff 11",
+   "bytes": 119324
+  },
+  {
+   "file": "s1280dk-030-s1-ff-stuck-12.jpg",
+   "at": "s1 ff 12",
+   "bytes": 119324
+  },
+  {
+   "file": "s1280dk-031-s1-ff-stuck-13.jpg",
+   "at": "s1 ff 13",
+   "bytes": 119324
+  },
+  {
+   "file": "s1280dk-032-s1-noreview.jpg",
+   "at": "s1 ff 13",
+   "bytes": 119324
+  }
+ ],
+ "audits": [
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [],
+   "overlaps": [],
+   "leaks": [],
+   "tinyTaps": [],
+   "scrollY": 0,
+   "docH": 13092,
+   "label": "picker-era"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [],
+   "overlaps": [],
+   "leaks": [],
+   "tinyTaps": [
+    "button.inline-flex.items-center.gap-1 \"All nations\" 76x16"
+   ],
+   "scrollY": 113,
+   "docH": 12715,
+   "label": "picker-league"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [],
+   "overlaps": [],
+   "leaks": [],
+   "tinyTaps": [
+    "button.inline-flex.items-center.gap-1 \"Danish Superliga\" 132x16"
+   ],
+   "scrollY": 113,
+   "docH": 13239,
+   "label": "picker-team"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [],
+   "overlaps": [],
+   "leaks": [],
+   "tinyTaps": [
+    "button.inline-flex.items-center.gap-1 \"OB\" 35x16",
+    "button.rounded-md.border.border-border \"Previous skin\" 20x20",
+    "button.rounded-md.border.border-border \"Next skin\" 20x20",
+    "button.rounded-md.border.border-border \"Previous hair\" 20x20",
+    "button.rounded-md.border.border-border \"Next hair\" 20x20",
+    "button.rounded-md.border.border-border \"Previous colour\" 20x20",
+    "button.rounded-md.border.border-border \"Next colour\" 20x20",
+    "button.rounded-md.border.border-border \"Previous beard\" 20x20",
+    "button.rounded-md.border.border-border \"Next beard\" 20x20",
+    "button.rounded-md.border.border-border \"Previous outfit\" 20x20",
+    "button.rounded-md.border.border-border \"Next outfit\" 20x20",
+    "button.rounded-md.border.border-border \"Previous age\" 20x20",
+    "button.rounded-md.border.border-border \"Next age\" 20x20",
+    "button.w-5.h-5.rounded-full \"Navy\" 22x22",
+    "button.w-5.h-5.rounded-full \"Red\" 20x20",
+    "button.w-5.h-5.rounded-full \"Sky\" 20x20",
+    "button.w-5.h-5.rounded-full \"Green\" 20x20",
+    "button.w-5.h-5.rounded-full \"Claret\" 20x20",
+    "button.w-5.h-5.rounded-full \"Gold\" 20x20",
+    "button.w-5.h-5.rounded-full \"Black\" 20x20",
+    "button.w-5.h-5.rounded-full \"White\" 20x20"
+   ],
+   "scrollY": 113,
+   "docH": 13972,
+   "label": "manager-form"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [],
+   "overlaps": [],
+   "leaks": [],
+   "tinyTaps": [
+    "button.underline.underline-offset-2.hover:text-primary \"Managers\" 57x16",
+    "button.mt-2.text-[11px].font-bold \"📊 Match Centre: form, head to head, odds, team talk\" 290x17"
+   ],
+   "scrollY": 1253,
+   "docH": 13518,
+   "label": "hub-start"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [],
+   "overlaps": [
+    "\"Arsenal · 24y · worth £95.1m to £99.1m\" x \"Club Manager: Free Football Management G\" (624x14 at 320,1189) static/static",
+    "\"91\" x \"Club Manager: Free Football Management G\" (8x16 at 952,1182) static/static",
+    "\"Cole Palmer\" x \"A full club-management sim in your brows\" (31x14 at 320,1218) static/static",
+    "\"Chelsea · 23y · worth £65.6m to £109.6m\" x \"A full club-management sim in your brows\" (627x14 at 320,1231) static/static",
+    "\"91\" x \"A full club-management sim in your brows\" (5x20 at 955,1220) static/static",
+    "\"Declan Rice\" x \"A full club-management sim in your brows\" (29x16 at 320,1258) static/static",
+    "\"Arsenal · 26y · worth £87.1m to £100.6m\" x \"A full club-management sim in your brows\" (624x14 at 320,1274) static/static",
+    "\"91\" x \"A full club-management sim in your brows\" (8x20 at 952,1262) static/static",
+    "\"Federico Valverde\" x \"A full club-management sim in your brows\" (64x16 at 320,1300) static/static",
+    "\"Real Madrid · 27y · worth £83.4m to £98.\" x \"A full club-management sim in your brows\" (624x14 at 320,1316) static/static",
+    "\"91\" x \"A full club-management sim in your brows\" (8x20 at 952,1305) static/static",
+    "\"Florian Wirtz\" x \"A full club-management sim in your brows\" (34x16 at 320,1343) static/static",
+    "\"Liverpool · 22y · worth £71.6m to £106.9\" x \"A full club-management sim in your brows\" (627x14 at 320,1359) static/static",
+    "\"91\" x \"A full club-management sim in your brows\" (5x20 at 955,1347) static/static",
+    "\"Jamal Musiala\" x \"A full club-management sim in your brows\" (43x16 at 320,1385) static/static"
+   ],
+   "leaks": [],
+   "tinyTaps": [
+    "button.underline.underline-offset-2.hover:text-primary \"Managers\" 57x16",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £178.2m\" 89x23",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £178.2m\" 89x23",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £202.5m\" 91x23",
+    "button.flex-1.px-1.5.py-0.5 \"£377.5m\" 91x20",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £141.6m\" 88x23",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £124.6m\" 90x23",
+    "button.flex-1.px-1.5.py-0.5 \"£268.5m\" 90x20",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £151.9m\" 87x23",
+    "button.flex-1.px-1.5.py-0.5 \"£232.1m\" 87x20",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £133.7m\" 87x23",
+    "button.flex-1.px-1.5.py-0.5 \"£253.9m\" 87x20",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £124.7m\" 88x23",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £107.3m\" 88x23",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £111.6m\" 85x23",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £107.3m\" 88x23",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £107.3m\" 88x23",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £111.6m\" 85x23",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £121.9m\" 87x23",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £111.6m\" 85x23",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £91.1m\" 80x23",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £89.1m\" 83x23",
+    "button.flex-1.px-1.5.py-0.5 \"£187.1m\" 83x20",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £91m\" 74x23",
+    "button.flex-1.px-1.5.py-0.5 \"£130.3m\" 74x20"
+   ],
+   "scrollY": 0,
+   "docH": 13364,
+   "label": "s1-summer-market"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [
+    "\"10 Elyounoussi\" shown 52px of 63px",
+    "\"Tap to carry on\" shown 1px of 116px"
+   ],
+   "overlaps": [
+    "\"Live scores temporarily unavailable\" x \"?\" (44x13 at 142,18) static/static",
+    "\"DoUKnowBall\" x \"?\" (44x20 at 142,42) static/static",
+    "\"MATCH LIVE\" x \"6'\" (44x15 at 839,125) static/static",
+    "\"MATCH LIVE\" x \"Throw in, FC Copenhagen\" (147x14 at 891,125) static/static",
+    "\"1 Ramaj\" x \"Mohamed Elyounoussi\" (34x9 at 437,200) static/static",
+    "\"3 Huescas\" x \"A full club-management sim in your brows\" (45x9 at 367,402) static/static",
+    "\"4 López\" x \"A full club-management sim in your brows\" (34x9 at 502,402) static/static",
+    "\"5 Buta\" x \"A full club-management sim in your brows\" (27x9 at 625,421) static/static",
+    "\"6 Král\" x \"Club Manager is the site's big one: a fu\" (24x9 at 352,532) static/static",
+    "\"7 Mattsson\" x \"Club Manager is the site's big one: a fu\" (47x9 at 430,516) static/static",
+    "\"8 Clem\" x \"Club Manager is the site's big one: a fu\" (30x9 at 548,519) static/static",
+    "\"10 Elyounoussi\" x \"Club Manager is the site's big one: a fu\" (52x9 at 423,589) static/static",
+    "\"11 Achouri\" x \"Club Manager is the site's big one: a fu\" (45x9 at 594,602) static/static",
+    "\"1 Hallberg\" x \"Pick when you start too: today's game, o\" (44x9 at 459,734) static/static",
+    "\"2 Weston\" x \"Pick when you start too: today's game, o\" (40x9 at 582,675) static/static"
+   ],
+   "leaks": [],
+   "tinyTaps": [],
+   "scrollY": 0,
+   "docH": 12392,
+   "label": "s1m1-live-kickoff"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [],
+   "overlaps": [],
+   "leaks": [],
+   "tinyTaps": [],
+   "scrollY": 0,
+   "docH": 13626,
+   "label": "s1m1-interval"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [
+    "\"10 Elyounoussi\" shown 52px of 63px",
+    "\"12 SanderC\" shown 52px of 57px"
+   ],
+   "overlaps": [
+    "\"-\" x \"Pick when you start too: today's game, o\" (65x32 at 351,24) static/static",
+    "\"0\" x \"Pick when you start too: today's game, o\" (12x26 at 363,27) static/static",
+    "\"2\" x \"Pick when you start too: today's game, o\" (12x26 at 392,27) static/static",
+    "\"FC Copenhagen\" x \"Pick when you start too: today's game, o\" (149x20 at 426,30) static/static",
+    "\"Danish Superliga · Round 1\" x \"Pick when you start too: today's game, o\" (168x13 at 581,34) static/static",
+    "\"LIVE 55'\" x \"Pick when you start too: today's game, o\" (61x25 at 755,28) static/static",
+    "\"1 Ramaj\" x \"How to play Club Manager, a free online \" (34x5 at 421,200) static/static",
+    "\"3 Huescas\" x \"Or move clubs between leagues with the w\" (45x6 at 348,415) static/static",
+    "\"4 López\" x \"In today's world, the World editor tile \" (34x6 at 472,427) static/static",
+    "\"5 Buta\" x \"In today's world, the World editor tile \" (27x9 at 599,436) static/static",
+    "\"7 Mattsson\" x \"Example: swap Celtic with Brentford and \" (47x6 at 400,526) static/static",
+    "\"8 Clem\" x \"Example: swap Celtic with Brentford and \" (30x9 at 518,537) static/static",
+    "\"10 Elyounoussi\" x \"Match days: team sheet, Play Live or Qui\" (52x9 at 401,687) static/static",
+    "\"11 Achouri\" x \"Example: swap Celtic with Brentford and \" (45x9 at 572,617) static/static",
+    "\"12 Sander\" x \"Before each match set formation, mentali\" (52x3 at 410,753) static/static"
+   ],
+   "leaks": [],
+   "tinyTaps": [],
+   "scrollY": 785,
+   "docH": 12392,
+   "label": "s1m1-live-sheet"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [
+    "\"⚽ Goal, free kick: Mohamed Elyounoussi\" shown 164px of 200px",
+    "\"🟨 Booked: Ondrej Adeyemi (Youth)\" shown 164px of 172px",
+    "\"🧤 Shot saved: Youssoufa Moukoko\" shown 164px of 170px",
+    "\"🧤 Shot saved: Mohamed Elyounoussi\" shown 164px of 181px",
+    "\"🧤 Shot saved: Mats Ashworth (Youth)\" shown 164px of 183px",
+    "\"🔁 Sub: Theo Sander on for Dimitri Hallberg (Youth)\" shown 164px of 244px",
+    "\"🔁 Sub: Hugo Berg (Youth) on for Mats Ashworth (Youth)\" shown 164px of 272px",
+    "\"🧤 Shot saved: Youssoufa Moukoko\" shown 164px of 170px",
+    "\"🔁 Sub: Birger Meling on for Elias Achouri\" shown 164px of 198px",
+    "\"🧤 Shot saved: Dimitri Tarrant (Youth)\" shown 164px of 178px",
+    "\"FC Nordsjælland\" shown 84px of 89px"
+   ],
+   "overlaps": [
+    "\"Skip to main content\" x \"Live\" (57x18 at 8,-100) fixed/static",
+    "\"Skip to main content\" x \"Live scores temporarily unavailable\" (133x18 at 65,-100) fixed/static",
+    "\"Skip to main content\" x \"DoUKnowBall\" (186x15 at 12,-71) fixed/static"
+   ],
+   "leaks": [
+    "minus zero?: \"yskE 1-2 Brøndby IF Randers FC 1-1 AGF Viborg FF 1-0 Lyngby Silkeborg IF 0-4 FC Nordsjælland AC Hors\""
+   ],
+   "tinyTaps": [
+    "button.mt-2.inline-flex.items-center \"All player ratings\" 95x15"
+   ],
+   "scrollY": 113,
+   "docH": 14237,
+   "label": "s1m1-report"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [
+    "\"🧤 Shot saved: Dimitri Tarrant (Youth)\" shown 164px of 178px",
+    "\"🧤 Shot saved: Mats Ashworth (Youth)\" shown 164px of 183px",
+    "\"🧤 Shot saved: Rune Marchetti (Youth)\" shown 164px of 184px",
+    "\"🟨 Booked: Rune Marchetti (Youth)\" shown 164px of 167px",
+    "\"🟨 Booked: Ondrej Adeyemi (Youth)\" shown 164px of 172px",
+    "\"FC Nordsjælland\" shown 84px of 89px"
+   ],
+   "overlaps": [],
+   "leaks": [
+    "minus zero?: \"8) Steady Continue AROUND THE GROUNDS Randers FC 2-0 SønderjyskE Brøndby IF 0-0 FC Copenhagen AGF 0-\""
+   ],
+   "tinyTaps": [
+    "button.mt-2.inline-flex.items-center \"All player ratings\" 95x15"
+   ],
+   "scrollY": 14,
+   "docH": 13971,
+   "label": "s1q-quick-report"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [],
+   "overlaps": [
+    "\"Arsenal · 24y · worth £95.1m to £99.1m\" x \"Club Manager: Free Football Management G\" (624x14 at 320,1149) static/static",
+    "\"91\" x \"Club Manager: Free Football Management G\" (8x16 at 952,1142) static/static",
+    "\"Cole Palmer\" x \"A full club-management sim in your brows\" (31x14 at 320,1178) static/static",
+    "\"Chelsea · 23y · worth £65.6m to £109.6m\" x \"A full club-management sim in your brows\" (627x14 at 320,1191) static/static",
+    "\"91\" x \"A full club-management sim in your brows\" (5x20 at 955,1180) static/static",
+    "\"Declan Rice\" x \"A full club-management sim in your brows\" (29x16 at 320,1218) static/static",
+    "\"Arsenal · 26y · worth £87.1m to £100.6m\" x \"A full club-management sim in your brows\" (624x14 at 320,1234) static/static",
+    "\"91\" x \"A full club-management sim in your brows\" (8x20 at 952,1222) static/static",
+    "\"Federico Valverde\" x \"A full club-management sim in your brows\" (64x16 at 320,1260) static/static",
+    "\"Real Madrid · 27y · worth £83.4m to £98.\" x \"A full club-management sim in your brows\" (624x14 at 320,1276) static/static",
+    "\"91\" x \"A full club-management sim in your brows\" (8x20 at 952,1265) static/static",
+    "\"Florian Wirtz\" x \"A full club-management sim in your brows\" (34x16 at 320,1303) static/static",
+    "\"Liverpool · 22y · worth £71.6m to £106.9\" x \"A full club-management sim in your brows\" (627x14 at 320,1319) static/static",
+    "\"91\" x \"A full club-management sim in your brows\" (5x20 at 955,1307) static/static",
+    "\"Jamal Musiala\" x \"A full club-management sim in your brows\" (43x16 at 320,1345) static/static"
+   ],
+   "leaks": [],
+   "tinyTaps": [
+    "button.underline.underline-offset-2.hover:text-primary \"Managers\" 57x16",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £178.2m\" 89x23",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £178.2m\" 89x23",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £202.5m\" 91x23",
+    "button.flex-1.px-1.5.py-0.5 \"£377.5m\" 91x20",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £141.6m\" 88x23",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £124.6m\" 90x23",
+    "button.flex-1.px-1.5.py-0.5 \"£268.5m\" 90x20",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £151.9m\" 87x23",
+    "button.flex-1.px-1.5.py-0.5 \"£232.1m\" 87x20",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £133.7m\" 87x23",
+    "button.flex-1.px-1.5.py-0.5 \"£253.9m\" 87x20",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £124.7m\" 88x23",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £107.3m\" 88x23",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £111.6m\" 85x23",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £107.3m\" 88x23",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £107.3m\" 88x23",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £111.6m\" 85x23",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £121.9m\" 87x23",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £111.6m\" 85x23",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £91.1m\" 80x23",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £89.1m\" 83x23",
+    "button.flex-1.px-1.5.py-0.5 \"£187.1m\" 83x20",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £91m\" 74x23",
+    "button.flex-1.px-1.5.py-0.5 \"£130.3m\" 74x20"
+   ],
+   "scrollY": 0,
+   "docH": 13324,
+   "label": "s1-jan-market"
+  }
+ ],
+ "seasons": [
+  {
+   "n": 1,
+   "start": {
+    "club": "OB",
+    "season": 1,
+    "week": 0,
+    "cal": 38,
+    "budget": 8,
+    "squad": 16,
+    "inbox": 0,
+    "form": "",
+    "results": 0,
+    "live": false,
+    "window": "summer"
+   },
+   "live": [
+    {
+     "ok": true,
+     "vars": 0,
+     "goalsSeen": 1,
+     "subRowsAtBreak": 11,
+     "sub": true,
+     "benchOffered": 5,
+     "liveSub": true,
+     "reportText": "DOUKNOWBALL\nBack\nSign up to track your stats\nFULL TIME\nDANISH SUPERLIGA · ROUND 1\n🏟️ Away day · crowd 12,712\n45+5'\nADDED TIME\n90+8'\nDEFEAT\nFC Copenhagen\n2 - 0\nOB\nOB\n\n-\n\nFC COPENHAGEN\n\n⚽ Youssoufa Moukoko 4'\n\n⚽ Mohamed Elyounoussi 8'\n\n🟨 Ondrej Adeyemi (Youth) 25'\n🟨 Mats Ozturk (Youth) 59'\n🩹 Kaan Moretti (Youth) 84' (4w)\n▲ Theo Sander ▼ Dimitri Hallberg (Youth) 46'\n▲ Hugo Berg (Youth) ▼ Mats Ashworth (Youth) 55'\nFC 🟨 Aurélio Buta 59'\nFC 🟨 Marcos López 65'\nFC ▲ Birger Meling ▼ Elias Achouri 78'\nOB\nMATCH STATS\nFC Copenhagen\n39%\nPOSSESSION\n61%\n6\nSHOTS\n16\n2\nON TARGET\n6\n0.42\nEXPECTED GOALS\n2.03\n6\nCORNERS\n7\n10\nFOULS\n11\n4\nKEEPER SAVES\n2\n2\nYELLOW CARDS\n2\n0\nRED CARDS\n0\n2\nSUBSTITUTIONS\n1\n39%\nBALANCE OF PLAY\n61%\n▲ OB\n▼ FC COPENHAGEN\n0'\n45'\n90'\n6 (2)\nSHOTS (ON TARGET)\n16 (6)\nOB\nTIMELINE\nFC Copenhagen\n0'\n⏱️ KICK OFF\n4'\n⚽ Goal: Youssoufa Moukoko\n6'\n🧤 Shot saved: Elias Achouri\n8'\n⚽ Goal, free kick"
+    }
+   ],
+   "ffs": [
+    {
+     "k": 0,
+     "r": "FULL TIME",
+     "sv": {
+      "club": "OB",
+      "season": 1,
+      "week": 11,
+      "cal": 38,
+      "budget": 8.58,
+      "squad": 17,
+      "inbox": 3,
+      "form": "WWWDW",
+      "results": 8,
+      "live": false,
+      "window": null
+     }
+    },
+    {
+     "k": 1,
+     "r": "no calendar tile",
+     "sv": {
+      "club": "OB",
+      "season": 1,
+      "week": 11,
+      "cal": 38,
+      "budget": 8.58,
+      "squad": 17,
+      "inbox": 3,
+      "form": "WWWDW",
+      "results": 8,
+      "live": false,
+      "window": null
+     }
+    },
+    {
+     "k": 2,
+     "r": "FULL TIME",
+     "sv": {
+      "club": "OB",
+      "season": 1,
+      "week": 19,
+      "cal": 38,
+      "budget": 9.23,
+      "squad": 17,
+      "inbox": 3,
+      "form": "LWWDL",
+      "results": 13,
+      "live": false,
+      "window": null
+     }
+    },
+    {
+     "k": 3,
+     "r": "no calendar tile",
+     "sv": {
+      "club": "OB",
+      "season": 1,
+      "week": 20,
+      "cal": 38,
+      "budget": 8.2,
+      "squad": 18,
+      "inbox": 3,
+      "form": "LWWDL",
+      "results": 13,
+      "live": false,
+      "window": "january"
+     }
+    },
+    {
+     "k": 4,
+     "r": "no calendar tile",
+     "sv": {
+      "club": "OB",
+      "season": 1,
+      "week": 20,
+      "cal": 38,
+      "budget": 8.2,
+      "squad": 18,
+      "inbox": 3,
+      "form": "LWWDL",
+      "results": 13,
+      "live": false,
+      "window": "january"
+     }
+    },
+    {
+     "k": 5,
+     "r": "no calendar tile",
+     "sv": {
+      "club": "OB",
+      "season": 1,
+      "week": 20,
+      "cal": 38,
+      "budget": 8.2,
+      "squad": 18,
+      "inbox": 3,
+      "form": "LWWDL",
+      "results": 13,
+      "live": false,
+      "window": "january"
+     }
+    },
+    {
+     "k": 6,
+     "r": "no calendar tile",
+     "sv": {
+      "club": "OB",
+      "season": 1,
+      "week": 20,
+      "cal": 38,
+      "budget": 8.2,
+      "squad": 18,
+      "inbox": 3,
+      "form": "LWWDL",
+      "results": 13,
+      "live": false,
+      "window": "january"
+     }
+    },
+    {
+     "k": 7,
+     "r": "no calendar tile",
+     "sv": {
+      "club": "OB",
+      "season": 1,
+      "week": 20,
+      "cal": 38,
+      "budget": 8.2,
+      "squad": 18,
+      "inbox": 3,
+      "form": "LWWDL",
+      "results": 13,
+      "live": false,
+      "window": "january"
+     }
+    },
+    {
+     "k": 8,
+     "r": "no calendar tile",
+     "sv": {
+      "club": "OB",
+      "season": 1,
+      "week": 20,
+      "cal": 38,
+      "budget": 8.2,
+      "squad": 18,
+      "inbox": 3,
+      "form": "LWWDL",
+      "results": 13,
+      "live": false,
+      "window": "january"
+     }
+    },
+    {
+     "k": 9,
+     "r": "no calendar tile",
+     "sv": {
+      "club": "OB",
+      "season": 1,
+      "week": 20,
+      "cal": 38,
+      "budget": 8.2,
+      "squad": 18,
+      "inbox": 3,
+      "form": "LWWDL",
+      "results": 13,
+      "live": false,
+      "window": "january"
+     }
+    },
+    {
+     "k": 10,
+     "r": "no calendar tile",
+     "sv": {
+      "club": "OB",
+      "season": 1,
+      "week": 20,
+      "cal": 38,
+      "budget": 8.2,
+      "squad": 18,
+      "inbox": 3,
+      "form": "LWWDL",
+      "results": 13,
+      "live": false,
+      "window": "january"
+     }
+    },
+    {
+     "k": 11,
+     "r": "no calendar tile",
+     "sv": {
+      "club": "OB",
+      "season": 1,
+      "week": 20,
+      "cal": 38,
+      "budget": 8.2,
+      "squad": 18,
+      "inbox": 3,
+      "form": "LWWDL",
+      "results": 13,
+      "live": false,
+      "window": "january"
+     }
+    },
+    {
+     "k": 12,
+     "r": "no calendar tile",
+     "sv": {
+      "club": "OB",
+      "season": 1,
+      "week": 20,
+      "cal": 38,
+      "budget": 8.2,
+      "squad": 18,
+      "inbox": 3,
+      "form": "LWWDL",
+      "results": 13,
+      "live": false,
+      "window": "january"
+     }
+    },
+    {
+     "k": 13,
+     "r": "no calendar tile",
+     "sv": {
+      "club": "OB",
+      "season": 1,
+      "week": 20,
+      "cal": 38,
+      "budget": 8.2,
+      "squad": 18,
+      "inbox": 3,
+      "form": "LWWDL",
+      "results": 13,
+      "live": false,
+      "window": "january"
+     }
+    }
+   ],
+   "quick": "DOUKNOWBALL\nBack\nSign up to track your stats\nFULL TIME\nDANISH SUPERLIGA · ROUND 2\n🏟️ Your ground · crowd 10,954\n45+2'\nADDED TIME\n90+6'\nDEFEAT\nOB\n0 - 1\nSilkeborg IF\nOB\n\n-\n\nSILKEBORG IF\n\n⚽ Callum McCowatt 63'\n\n🟥 Kofi Ashworth (Youth) 56'\n🟨 Rune Marchetti (Youth) 60'\n🟨 Ondrej Adeyemi (Youth) 63'\nOB\nMATCH STATS\nSilkeborg IF\n58%\nPOSSESSION\n42%\n10\nSHOTS\n10\n3\nON TARGET\n4\n0.88\nEXPECTED GOALS\n1.23\n5\nCORNERS\n6\n13\nFOULS\n11\n3\nKEEPER SAVES\n3\n2\nYELLOW CARDS\n0\n1\nRED CARDS\n0\n0\nSUBSTITUTIONS\n0\n58%\nBALANCE OF PLAY\n42%\n▲ OB\n▼ SILKEBORG IF\n0'\n45'\n90'\n10 (3)\nSHOTS (ON TARGET)\n10 (4)\nOB\nTIMELINE\nSilkeborg IF\n0'\n⏱️ KICK OFF\n🧤 Shot saved: Dimitri Tarrant (Youth)\n11'\n14'\n🧤 Shot saved\n45+2'\n⏸️ HALF TIME\n54'\n🧤 Shot saved\n🧤 Shot saved: Mats Ashworth (Youth)\n55'\n🟥 Sent off: Kofi Ashworth (Youth)\n56'\n🧤 Shot saved: Rune Marchetti (Youth)\n59'\n🟨 Booked: Rune Marchetti (Youth)\n60'\n63'\n⚽ Goal: Callum McCowatt\n\ud83d",
+   "reload": {
+    "b": {
+     "club": "OB",
+     "season": 1,
+     "week": 11,
+     "cal": 38,
+     "budget": 8.58,
+     "squad": 17,
+     "inbox": 3,
+     "form": "WWWDW",
+     "results": 8,
+     "live": false,
+     "window": null
+    },
+    "a": {
+     "club": "OB",
+     "season": 1,
+     "week": 11,
+     "cal": 38,
+     "budget": 8.58,
+     "squad": 17,
+     "inbox": 3,
+     "form": "WWWDW",
+     "results": 8,
+     "live": false,
+     "window": null
+    }
+   },
+   "end": "OB"
+  }
+ ],
+ "elapsedS": 106,
+ "clubList": [
+  "FC Midtjylland 🐺 Underdogs Squad 74 Budget £11m Board wants Win the Danish Superliga",
+  "FC Copenhagen 🐺 Underdogs Squad 74 Budget £9m Board wants Win the Danish Superliga",
+  "Brøndby IF 🐺 Underdogs Squad 68 Budget £8m Board wants Qualify for the Europa League",
+  "FC Nordsjælland 🐺 Underdogs Squad 67 Budget £8m Board wants Qualify for the Europa League",
+  "AGF 🐺 Underdogs· partial data Squad 65 Budget £8m Board wants Qualify for the Europa League",
+  "Viborg FF 🐺 Underdogs· partial data Squad 63 Budget £8m Board wants Qualify for the Conference League",
+  "SønderjyskE 🐺 Underdogs· partial data Squad 66 Budget £8m Board wants Qualify for the Conference League",
+  "Randers FC 🐺 Underdogs· partial data Squad 62 Budget £8m Board wants Finish in the top half",
+  "Lyngby 🐺 Underdogs· partial data Squad 62 Budget £8m Board wants Stay up. Avoid relegation",
+  "AC Horsens 🐺 Underdogs· partial data Squad 66 Budget £8m Board wants Stay up. Avoid relegation",
+  "Silkeborg IF 🐺 Underdogs· partial data Squad 61 Budget £8m Board wants Stay up. Avoid relegation",
+  "OB 🐺 Underdogs· partial data Squad 60 Budget £8m Board wants Stay up. Avoid relegation"
+ ],
+ "s1-summer_deal": {
+  "signed": [
+   {
+    "who": "Dmitriy Chistyakov",
+    "inSquad": true,
+    "budgetBefore": 8,
+    "budgetAfter": 6.9
+   }
+  ],
+  "sold": [],
+  "bid": null
+ },
+ "s1-jan_deal": {
+  "signed": [
+   {
+    "who": "Brandon Borrello",
+    "inSquad": true,
+    "budgetBefore": 9.23,
+    "budgetAfter": 8.2
+   }
+  ],
+  "sold": [],
+  "bid": null
+ },
+ "finalKeys": [
+  "saveVersion",
+  "clubName",
+  "season",
+  "week",
+  "startYear",
+  "eraId",
+  "retiredNames",
+  "retiredLastSummer",
+  "budget",
+  "boardConfidence",
+  "sacked",
+  "squad",
+  "xiIds",
+  "formationIndex",
+  "mentality",
+  "leagueClubs",
+  "balancedFixtures",
+  "table",
+  "form",
+  "calendar",
+  "clubStrengths",
+  "transferWindow",
+  "windowWeeksLeft",
+  "aiHeadlines",
+  "goneNames",
+  "seasonSignings",
+  "cupRound",
+  "cupDraw",
+  "uclField",
+  "uclGroup",
+  "uclKoRound",
+  "uclDraw",
+  "cupBracket",
+  "world",
+  "trophies",
+  "history",
+  "careerStats",
+  "pendingSummary",
+  "boardObjectives",
+  "cupExit",
+  "uclExit",
+  "negotiation",
+  "incomingBids",
+  "coldNames",
+  "loanedOut",
+  "transferLog",
+  "resultLog",
+  "inbox",
+  "promisedStarts",
+  "pairResults",
+  "wageCap",
+  "freeAgents",
+  "severance",
+  "training",
+  "academy",
+  "academyGraduates",
+  "teamTalk",
+  "press",
+  "managers",
+  "boardAsksVersion",
+  "scorerRace",
+  "leagueBook",
+  "cupByes",
+  "setPieces",
+  "intl",
+  "facilities",
+  "books",
+  "staff",
+  "managerXp",
+  "startOptions",
+  "clubForm",
+  "live",
+  "h2h",
+  "decisions",
+  "finance"
+ ],
+ "finalInbox": [
+  [
+   7,
+   "Theo Sander's agent has been in touch about his minutes. Politely, for now."
+  ],
+  [
+   6,
+   "Your assistant has been watching the under 21s. 14 of them are still improving and the plan is not p"
+  ],
+  [
+   3,
+   "One of your defenders claims a fortune teller told him he will score a hat-trick this weekend, and h"
+  ]
+ ]
+}

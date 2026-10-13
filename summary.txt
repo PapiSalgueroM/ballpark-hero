@@ -1,0 +1,4 @@
+build exit=0 32s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+season320es exit=127 0s | bash: line 1: Mallorca/: No such file or directory
+season1280dk exit=0 106s | SEASON s1280dk done: 1 findings, 0 errors, 32 shots, 106s
+season390pl exit=0 120s | SEASON s390pl done: 1 findings, 0 errors, 37 shots, 119s
