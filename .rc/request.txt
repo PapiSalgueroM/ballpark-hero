@@ -1,0 +1,3 @@
+#!playwright
+#!serial
+base-walks: git worktree add -q /tmp/b1329 c5fc5470b3e377f22d6d538f459b9f5310b08dd0 && ln -s "$PWD/node_modules" /tmp/b1329/node_modules && cd /tmp/b1329 && node_modules/.bin/vite build > /tmp/b1329-build.log 2>&1 && (node scripts/lib/hostLikeServer.mjs dist 4180 > /tmp/b1329-serve.log 2>&1 &) && sleep 5 && export BASE=http://localhost:4180 SWEEP_BASE=http://localhost:4180; node scripts/playSoccerCareerDepth.mjs 2>&1 | grep -v SIM_OFFLINE | grep "RNG calls\|FAIL\|checks"; node scripts/playCorruptSaves.mjs 2>&1 | tail -3; node scripts/simWritesAreSent.mjs 2>&1 | tail -3
