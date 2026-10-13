@@ -1,0 +1,9 @@
+lb-t2-s0 exit=0 180s | simSoccerLoanBite PASS
+lb-t2-s1 exit=0 204s | simSoccerLoanBite PASS
+lb-t2-s2 exit=0 221s | simSoccerLoanBite PASS
+lb-t1-s1 exit=0 201s | simSoccerLoanBite PASS
+lb-t1-s0 exit=0 233s | simSoccerLoanBite PASS
+lb-t1-s2 exit=0 219s | simSoccerLoanBite PASS
+lb-strict26 exit=0 68s | control "strict26" fired: checks 3, 5 failed as expected
+lb-nofilter exit=0 70s | control "nofilter" fired: checks 2, 4, 5 failed as expected
+lb-t1-s3 exit=0 160s | simSoccerLoanBite PASS
