@@ -1,0 +1,8 @@
+#!serial
+#!playwright
+walk5: npm run build > /tmp/hb.log 2>&1 && { node scripts/lib/hostLikeServer.mjs dist 4178 > /dev/null 2>&1 & } && sleep 4 && BASE=http://localhost:4178 ENGINES=chromium node .rc/x/walk5.mjs
+weight-main: R=$PWD; git worktree add -q /tmp/om origin/main && cd /tmp/om && ln -s "$R/node_modules" node_modules && npm run build > /tmp/ombuild.log 2>&1 && { node scripts/lib/hostLikeServer.mjs dist 4176 > /dev/null 2>&1 & } && sleep 4 && BASE=http://localhost:4176 SWEEP_BASE=http://localhost:4176 ENGINES=chromium node scripts/sweepWeight.mjs; s=$?; echo "origin/main $(git rev-parse --short HEAD) sweepWeight exit $s"; exit $s
+weight-merged-2: R=$PWD; git worktree add -q /tmp/m2 HEAD && cd /tmp/m2 && ln -s "$R/node_modules" node_modules && git -c user.email=r@x -c user.name=r merge -q --no-edit -X ours origin/main && npm run build > /tmp/m2build.log 2>&1 && { node scripts/lib/hostLikeServer.mjs dist 4177 > /dev/null 2>&1 & } && sleep 4 && BASE=http://localhost:4177 SWEEP_BASE=http://localhost:4177 ENGINES=chromium node scripts/sweepWeight.mjs; s=$?; echo "merged $(git rev-parse --short HEAD) sweepWeight exit $s"; exit $s
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simGuideHeadings: node scripts/simGuideHeadings.mjs
