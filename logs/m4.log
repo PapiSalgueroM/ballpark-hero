@@ -1,0 +1,12 @@
+M4: applied (const w = Math.min(m.w, clock); -> const w = m.w; /* M4 */)
+   FAIL only 0 cards settled across a fall: nothing was tested
+   FAIL 10252 expiry breaks on a clock that falls every 20 weeks
+   FAIL on a falling clock the deck froze: nothing dealt in the tenth season
+simEventDeck: 3 failures, red sections 7
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+[41m[1m FAIL [22m[49m src/lib/gmInbox.test.ts[2m > [22mgmInbox deck rules, the review cases[2m > [22mon a clock that falls, an open expiring card counts its weeks from the fall
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m41 passed[39m[22m[90m (42)[39m
+simEventDeck: 3 failures, red sections 7
+simGmInbox: green.
+kit=1 gm=0 vitest=1
+VERDICT: CAUGHT

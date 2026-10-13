@@ -1,0 +1,10 @@
+M7: applied (return came.splice(i, 1)[0]; -> return came[i]; /* M7 */)
+   FAIL FX_WEIGHT two a week (weights 1, 3 and 2) over 5000 weeks: 1966 weeks dealt one card twice, 0 weeks dealt other than two; shares 0.164, 0.504, 0.331
+simEventDeck: 1 failure, red sections 3
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+[41m[1m FAIL [22m[49m src/lib/gmInbox.test.ts[2m > [22mgmInbox deck rules, the review cases[2m > [22ma weighted draw of two a week takes the picked card out, so no card lands twice
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m41 passed[39m[22m[90m (42)[39m
+simEventDeck: 1 failure, red sections 3
+simGmInbox: green.
+kit=1 gm=0 vitest=1
+VERDICT: CAUGHT

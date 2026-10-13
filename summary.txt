@@ -1,0 +1,4 @@
+m0 exit=0 21s | VERDICT: SURVIVED
+m3 exit=1 21s | VERDICT: CAUGHT
+m4 exit=1 20s | VERDICT: CAUGHT
+m7 exit=1 19s | VERDICT: CAUGHT
