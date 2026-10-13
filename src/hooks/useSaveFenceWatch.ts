@@ -17,7 +17,8 @@ import { saveFence, fenceKeyOf } from '@/lib/saveFence';
    any other key, the save's own bytes included, is not a game write: a person
    or a walk editing the save by hand moves nothing.
 
-   No adopt, no release and no write here: those stay the game's. */
+   No adopt, no release and no write here: those stay the game's. One listener
+   serves all three events (the page's first download is on a tight budget). */
 export function useSaveFenceWatch(saveKey: string) {
   const [moved, setMoved] = useState(false);
 
@@ -29,16 +30,16 @@ export function useSaveFenceWatch(saveKey: string) {
 
   useEffect(() => {
     const fenceKey = fenceKeyOf(saveKey);
-    const onStorage = (e: StorageEvent) => { if (e.key === null || e.key === fenceKey) check(); };
-    const onShow = () => { check(); };
-    const onVisible = () => { if (document.visibilityState === 'visible') check(); };
-    window.addEventListener('storage', onStorage);
-    window.addEventListener('pageshow', onShow);
-    document.addEventListener('visibilitychange', onVisible);
+    const on = (e: Event) => {
+      if (e.type === 'storage' ? [null, fenceKey].includes((e as StorageEvent).key) : e.type === 'pageshow' || document.visibilityState === 'visible') check();
+    };
+    window.addEventListener('storage', on);
+    window.addEventListener('pageshow', on);
+    document.addEventListener('visibilitychange', on);
     return () => {
-      window.removeEventListener('storage', onStorage);
-      window.removeEventListener('pageshow', onShow);
-      document.removeEventListener('visibilitychange', onVisible);
+      window.removeEventListener('storage', on);
+      window.removeEventListener('pageshow', on);
+      document.removeEventListener('visibilitychange', on);
     };
   }, [saveKey, check]);
 

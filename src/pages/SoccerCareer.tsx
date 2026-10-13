@@ -1495,7 +1495,7 @@ export default function SoccerCareer() {
             'Preseason plan: choose development (+1 position skill after growth, 3 percentage points more injury risk), recovery (-1 skill, 4 points less risk), or balanced. Example: 20% injury risk becomes 23% or 16%, within existing limits. A serious injury or no appearances interrupts development; a move cancels the plan.',
             'Academy mentoring: the Youth Mentor event starts one generated player. Ten senior appearances at your shared club adds one mentoring year. Example: 12 appearances moves 0/3 to 1/3; six appearances pauses it. Three qualifying years complete it, a move ends it, and its history stays in the mentor tile.',
             ...STORY_ROLE_HELP_RULES,
-            'One tab at a time: your career plays in the newest tab you opened it in. An older tab covers itself and asks you to reload. Example: open the career in two tabs and play a season in the second; the first now asks you to reload, and reloading shows the season you just played.',
+            'One tab at a time: the career plays in the newest tab you opened. An older tab asks you to reload. Example: open it in two tabs and play a season in the second; the first asks you to reload, and the reload shows that season.',
           ]} className={career ? "h-11 w-11 sm:h-auto sm:w-auto" : undefined} />
         </div>
         <main id="dukb-main" className="flex-1 w-full max-w-5xl mx-auto px-3 sm:px-4 py-4">
