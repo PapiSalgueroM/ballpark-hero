@@ -1,0 +1,7 @@
+#!serve
+#!playwright
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+widths: mkdir -p $RC_OUT/widths && RC_OUT=$RC_OUT/widths SIZES=340x720,360x780,375x667,412x915 SECTIONS=bar,name,retire SOCCER_LANDING_HEAD_ONLY=1 ENGINES=chromium node scripts/playSoccerLanding.mjs > "$RC_OUT/widths.out" 2>&1; s=$?; grep -E "^== |FAIL|BLIND|AGE|Age" "$RC_OUT/widths.out" | cut -c1-220 | head -60; tail -2 "$RC_OUT/widths.out"; exit $s
+bar: git worktree add -q /tmp/bb c5fc5470 && ln -s "$PWD/node_modules" /tmp/bb/node_modules && (cd /tmp/bb && node_modules/.bin/vite build > /tmp/bb-build.log 2>&1) && mkdir -p $RC_OUT/bar && RC_OUT=$RC_OUT/bar BASE_PORT=4192 SOCCER_LANDING_BASE_DIST=/tmp/bb/dist SECTIONS=bar SIZES=360x780,375x667,412x915 ENGINES=chromium node scripts/playSoccerLanding.mjs > "$RC_OUT/bar.out" 2>&1; s=$?; grep -E "^== |FAIL|base \[|BLIND|AGE|Age" "$RC_OUT/bar.out" | cut -c1-240 | head -60; tail -2 "$RC_OUT/bar.out"; exit $s
+mobile: ENGINES=chromium node scripts/simMobileChrome.mjs > "$RC_OUT/mobile.out" 2>&1; s=$?; grep -n -E "identity|name is not whole|FAIL|RED|Playtest" "$RC_OUT/mobile.out" | tail -12; tail -3 "$RC_OUT/mobile.out"; exit $s
+mobile-nowrap: SIM_MOBILE_CONTROL=nowrap ENGINES=chromium node scripts/simMobileChrome.mjs > "$RC_OUT/nowrap.out" 2>&1; s=$?; grep -n -E "identity|name is not whole|CONTROL|Playtest" "$RC_OUT/nowrap.out" | tail -8; tail -3 "$RC_OUT/nowrap.out"; exit $s

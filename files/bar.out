@@ -1,0 +1,116 @@
+seed 1987332285; arms head, base; sections bar; sizes 360x780, 375x667, 412x915
+bar save youth: phase youth, age 16
+bar save playing: phase playing, age 18
+bar save manager: phase manager_season, age 18, employed
+bar save pundit: phase pundit_season, age 18
+bar save owner: phase owner_season, age 18
+bar save retired: phase retired, age 18
+bar save managerOut: phase manager_season, age 18, out of work
+== head 360x780
+   bar youth (floating): ["Next Year"], AGE 323 to 343
+   bar playing (floating): ["Next Season","Week by week: live the season match by match"], AGE 323 to 343
+   bar manager (floating): ["Next Manager Season","Retire"], AGE 323 to 343
+   bar pundit (floating): ["Next Season"], AGE 323 to 343
+   bar owner (floating): ["Next Owner Season","Sell Club"], AGE 323 to 343
+   bar retired (floating): ["📤 Share Legacy","⚽ New Career"], AGE 323 to 343
+   bar managerOut (floating): ["Sit Out A Season","Walk Away"], AGE 323 to 343
+== head 375x667
+   bar youth (floating): ["Next Year"], AGE 338 to 358
+   bar playing (floating): ["Next Season","Week by week: live the season match by match"], AGE 338 to 358
+   bar manager (floating): ["Next Manager Season","Retire"], AGE 338 to 358
+   bar pundit (floating): ["Next Season"], AGE 338 to 358
+   bar owner (floating): ["Next Owner Season","Sell Club"], AGE 338 to 358
+   bar retired (floating): ["📤 Share Legacy","⚽ New Career"], AGE 338 to 358
+   bar managerOut (floating): ["Sit Out A Season","Walk Away"], AGE 338 to 358
+== head 412x915
+   bar youth (floating): ["Next Year"], AGE 363 to 383
+   bar playing (floating): ["Next Season","Week by week: live the season match by match"], AGE 363 to 383
+   bar manager (floating): ["Next Manager Season","Retire"], AGE 363 to 383
+   bar pundit (floating): ["Next Season"], AGE 363 to 383
+   bar owner (floating): ["Next Owner Season","Sell Club"], AGE 363 to 383
+   bar retired (floating): ["📤 Share Legacy","⚽ New Career"], AGE 363 to 383
+   bar managerOut (floating): ["Sit Out A Season","Walk Away"], AGE 363 to 383
+== head 360x780 (bar only)
+   bar youth (floating): ["Next Year"], AGE 323 to 343
+   bar playing (floating): ["Next Season","Week by week: live the season match by match"], AGE 323 to 343
+   bar manager (floating): ["Next Manager Season","Retire"], AGE 323 to 343
+   bar pundit (floating): ["Next Season"], AGE 323 to 343
+   bar owner (floating): ["Next Owner Season","Sell Club"], AGE 323 to 343
+   bar retired (floating): ["📤 Share Legacy","⚽ New Career"], AGE 323 to 343
+   bar managerOut (floating): ["Sit Out A Season","Walk Away"], AGE 323 to 343
+== head 375x667 (bar only)
+   bar youth (floating): ["Next Year"], AGE 338 to 358
+   bar playing (floating): ["Next Season","Week by week: live the season match by match"], AGE 338 to 358
+   bar manager (floating): ["Next Manager Season","Retire"], AGE 338 to 358
+   bar pundit (floating): ["Next Season"], AGE 338 to 358
+   bar owner (floating): ["Next Owner Season","Sell Club"], AGE 338 to 358
+   bar retired (floating): ["📤 Share Legacy","⚽ New Career"], AGE 338 to 358
+   bar managerOut (floating): ["Sit Out A Season","Walk Away"], AGE 338 to 358
+== base 360x780
+   bar youth (floating): ["Next Year","Retire"], AGE 311 to 331
+   bar playing (floating): ["Next Season","Retire","Week by week: live the season match by match"], AGE 324 to 344
+  base [bar 360x780]: playing: 18Age spans 307 to 361 on a 360 screen
+   bar manager (floating): ["Next Manager Season","Retire"], AGE 352 to 372
+  base [bar 360x780]: manager: 18Age spans 335 to 389 on a 360 screen
+  base [bar 360x780]: manager: the AGE number is not fully on screen (352 to 372)
+   bar pundit (floating): ["Next Season"], AGE 311 to 331
+   bar owner (floating): ["Next Owner Season","Sell Club"], AGE 355 to 375
+  base [bar 360x780]: owner: 18Age spans 338 to 392 on a 360 screen
+  base [bar 360x780]: owner: the AGE number is not fully on screen (355 to 375)
+   bar retired (floating): ["📤 Share Legacy","⚽ New Career"], AGE 346 to 366
+  base [bar 360x780]: retired: 18Age spans 329 to 383 on a 360 screen
+  base [bar 360x780]: retired: the AGE number is not fully on screen (346 to 366)
+   bar managerOut (floating): ["Sit Out A Season","Walk Away"], AGE 343 to 363
+  base [bar 360x780]: managerOut: 18Age spans 326 to 380 on a 360 screen
+  base [bar 360x780]: managerOut: the AGE number is not fully on screen (343 to 363)
+== base 375x667
+   bar youth (floating): ["Next Year","Retire"], AGE 326 to 346
+   bar playing (floating): ["Next Season","Retire","Week by week: live the season match by match"], AGE 326 to 346
+   bar manager (floating): ["Next Manager Season","Retire"], AGE 352 to 372
+  base [bar 375x667]: manager: 18Age spans 335 to 389 on a 375 screen
+   bar pundit (floating): ["Next Season"], AGE 326 to 346
+   bar owner (floating): ["Next Owner Season","Sell Club"], AGE 355 to 375
+  base [bar 375x667]: owner: 18Age spans 338 to 392 on a 375 screen
+   bar retired (floating): ["📤 Share Legacy","⚽ New Career"], AGE 346 to 366
+  base [bar 375x667]: retired: 18Age spans 329 to 383 on a 375 screen
+   bar managerOut (floating): ["Sit Out A Season","Walk Away"], AGE 343 to 363
+  base [bar 375x667]: managerOut: 18Age spans 326 to 380 on a 375 screen
+== base 412x915
+   bar youth (floating): ["Next Year","Retire"], AGE 363 to 383
+   bar playing (floating): ["Next Season","Retire","Week by week: live the season match by match"], AGE 363 to 383
+   bar manager (floating): ["Next Manager Season","Retire"], AGE 363 to 383
+   bar pundit (floating): ["Next Season"], AGE 363 to 383
+   bar owner (floating): ["Next Owner Season","Sell Club"], AGE 363 to 383
+   bar retired (floating): ["📤 Share Legacy","⚽ New Career"], AGE 363 to 383
+   bar managerOut (floating): ["Sit Out A Season","Walk Away"], AGE 363 to 383
+== base 360x780 (bar only)
+   bar youth (floating): ["Next Year","Retire"], AGE 311 to 331
+   bar playing (floating): ["Next Season","Retire","Week by week: live the season match by match"], AGE 324 to 344
+  base [bar 360x780]: playing: 18Age spans 307 to 361 on a 360 screen
+   bar manager (floating): ["Next Manager Season","Retire"], AGE 352 to 372
+  base [bar 360x780]: manager: 18Age spans 335 to 389 on a 360 screen
+  base [bar 360x780]: manager: the AGE number is not fully on screen (352 to 372)
+   bar pundit (floating): ["Next Season"], AGE 311 to 331
+   bar owner (floating): ["Next Owner Season","Sell Club"], AGE 355 to 375
+  base [bar 360x780]: owner: 18Age spans 338 to 392 on a 360 screen
+  base [bar 360x780]: owner: the AGE number is not fully on screen (355 to 375)
+   bar retired (floating): ["📤 Share Legacy","⚽ New Career"], AGE 346 to 366
+  base [bar 360x780]: retired: 18Age spans 329 to 383 on a 360 screen
+  base [bar 360x780]: retired: the AGE number is not fully on screen (346 to 366)
+   bar managerOut (floating): ["Sit Out A Season","Walk Away"], AGE 343 to 363
+  base [bar 360x780]: managerOut: 18Age spans 326 to 380 on a 360 screen
+  base [bar 360x780]: managerOut: the AGE number is not fully on screen (343 to 363)
+== base 375x667 (bar only)
+   bar youth (floating): ["Next Year","Retire"], AGE 326 to 346
+   bar playing (floating): ["Next Season","Retire","Week by week: live the season match by match"], AGE 326 to 346
+   bar manager (floating): ["Next Manager Season","Retire"], AGE 352 to 372
+  base [bar 375x667]: manager: 18Age spans 335 to 389 on a 375 screen
+   bar pundit (floating): ["Next Season"], AGE 326 to 346
+   bar owner (floating): ["Next Owner Season","Sell Club"], AGE 355 to 375
+  base [bar 375x667]: owner: 18Age spans 338 to 392 on a 375 screen
+   bar retired (floating): ["📤 Share Legacy","⚽ New Career"], AGE 346 to 366
+  base [bar 375x667]: retired: 18Age spans 329 to 383 on a 375 screen
+   bar managerOut (floating): ["Sit Out A Season","Walk Away"], AGE 343 to 363
+  base [bar 375x667]: managerOut: 18Age spans 326 to 380 on a 375 screen
+  base bar: the measurement sees the bug on the base (26 finding(s))
+playSoccerLanding: green at 360x780, 375x667, 412x915 (also bar 360x780, bar 375x667; bar), every marked section red on the base

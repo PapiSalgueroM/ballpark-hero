@@ -1,0 +1,6 @@
+1:CONTROL: re-applying the single row career header, this run must go red
+50:  - action bar @320: the player's own name is not whole on the career header (shows "Playtest", crushed onto 8 lines)
+51:CONTROL nowrap FIRED: the single row header crushed the player's name at 1 measured width(s)
+RED: 1 finding
+  - action bar @320: the player's own name is not whole on the career header (shows "Playtest", crushed onto 8 lines)
+CONTROL nowrap FIRED: the single row header crushed the player's name at 1 measured width(s)

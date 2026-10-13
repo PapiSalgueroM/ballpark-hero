@@ -1,0 +1,6 @@
+build exit=0 28s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+tsc exit=0 68s | 
+bar exit=0 130s | playSoccerLanding: green at 360x780, 375x667, 412x915 (also bar 360x780, bar 375x667; bar), every marked section red on the base
+widths exit=0 165s | playSoccerLanding: green at 340x720, 360x780, 375x667, 412x915 (also bar 360x780, bar 375x667, name 480x800, name 768x1024; bar, name, retire), HEAD ONLY
+mobile exit=0 206s | GREEN: 34 top bar measurements and 132 scroll stops, no overlaps, nothing off the side of the screen, controls reachable everywhere, footer never covered.
+mobile-nowrap exit=1 205s | CONTROL nowrap FIRED: the single row header crushed the player's name at 1 measured width(s)
