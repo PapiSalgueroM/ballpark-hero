@@ -1,0 +1,2 @@
+kit15 exit=0 36s | simEventDeck: green. Sections 15 only.
+measure15 exit=0 373s | simEventDeck: green. Sections 15 only.
