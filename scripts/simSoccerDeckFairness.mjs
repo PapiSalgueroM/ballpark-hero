@@ -184,9 +184,9 @@ async function bundle(tag, { ref = null, control = null } = {}) {
     b.onLoad({ filter: /\.(ts|tsx)$/ }, args => {
       const rel = path.relative(ROOT, args.path).split(path.sep).join('/');
       if (!rel.startsWith('src/')) return undefined;
-      let source = (ref
-        ? execFileSync('git', ['show', `${ref}:${rel}`], { cwd: ROOT, encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 })
-        : fs.readFileSync(args.path, 'utf8')).replace(/\r\n/g, '\n');
+      let source = ref
+        ? execFileSync('git', ['show', `${ref}:${rel}`], { cwd: ROOT, encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 }).replace(/\r\n/g, '\n')
+        : fs.readFileSync(args.path, 'utf8').replace(/\r\n/g, '\n');
       if (control && rel === ENGINE) { source = control; hits += 1; }
       if (rel === ENGINE) source = mark(source);
       return { contents: source, loader: rel.endsWith('.tsx') ? 'tsx' : 'ts', resolveDir: path.dirname(args.path) };
@@ -375,7 +375,8 @@ function parseTemplates(source) {
     return { weight, fragments, fragment: fragments[0] || '', headline: headlines.join(' | ') };
   });
 }
-const ENGINE_SOURCE = (controlSource ?? fs.readFileSync(path.join(ROOT, ENGINE), 'utf8')).replace(/\r\n/g, '\n');
+/* controlSource is already read with LF line endings */
+const ENGINE_SOURCE = controlSource ?? fs.readFileSync(path.join(ROOT, ENGINE), 'utf8').replace(/\r\n/g, '\n');
 const TEMPLATES = parseTemplates(ENGINE_SOURCE);
 const storyOf = headline => TEMPLATES.findIndex(t => t.fragments.some(f => f && headline.includes(f)));
 const lightTemplates = TEMPLATES.filter(t => t.weight < 1);
