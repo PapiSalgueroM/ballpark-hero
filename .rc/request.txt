@@ -1,0 +1,9 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+fairness: node scripts/simSoccerDeckFairness.mjs
+promises: node scripts/simSoccerEventPromises.mjs
+fair-shuffle: SIM_SOCCER_DECK_FAIRNESS_CONTROL=shuffle node scripts/simSoccerDeckFairness.mjs
+fair-ranking: SIM_SOCCER_DECK_FAIRNESS_CONTROL=ranking node scripts/simSoccerDeckFairness.mjs
+fair-globalpick: SIM_SOCCER_DECK_FAIRNESS_CONTROL=globalpick node scripts/simSoccerDeckFairness.mjs
+fair-prefix: SIM_SOCCER_DECK_FAIRNESS_CONTROL=prefix node scripts/simSoccerDeckFairness.mjs
+fair-unit: SIM_SOCCER_DECK_FAIRNESS_CONTROL=unit node scripts/simSoccerDeckFairness.mjs
+fair-seed1: SEED_OFFSET=1 node scripts/simSoccerDeckFairness.mjs
