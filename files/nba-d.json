@@ -1,0 +1,1902 @@
+[
+ {
+  "t": "00:37:46",
+  "kind": "help",
+  "open": false
+ },
+ {
+  "t": "00:37:47",
+  "kind": "audit",
+  "where": "pick screen",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [],
+  "tap44": 2,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 36
+ },
+ {
+  "t": "00:37:47",
+  "kind": "pick",
+  "text": "NBA Front Office Curated rosters, original ratings, simulated contracts. The play-in is waiting for your mistakes. Take over a front office Curated NBA roster snapshot with original simulation ratings. Run the cap, work the phones, survive the play-in, draft the future. Ages and contracts are simulated. Saves automatically. Opening estimates use 2024-25 and 2025-26 regular seasons. Box scores only partly measure defense and roles; missing matches use a marked game prior. Denver Nuggets West Okla"
+ },
+ {
+  "t": "00:37:47",
+  "kind": "club",
+  "clubs": 30,
+  "idx": 9,
+  "club": "Indiana Pacers East"
+ },
+ {
+  "t": "00:37:48",
+  "kind": "audit",
+  "where": "hub start",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [
+   "2026 · Round 1/20 Record 0-0 Strength 83 Cap room $-42.8M Current tax est. none 🏛️ OWNERS"
+  ],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 2,
+  "tinyText": 12,
+  "tinyTextSample": [
+   "9px span.shrink-0.rounded-full.border \"MEASURED\"",
+   "9px span.shrink-0.rounded-full.border \"CANDID\"",
+   "9px span.shrink-0.rounded-full.border \"BOLD\"",
+   "9px div.mt-0.5.truncate.text-[9px] \"4 short of the 14 man floor. Filled on minimum dea\""
+  ],
+  "text10": 18
+ },
+ {
+  "t": "00:37:48",
+  "kind": "hub",
+  "text": "NBA Front Office Curated rosters, original ratings, simulated contracts. The play-in is waiting for your mistakes. Indiana Pacers 2026 · Round 1/20 Record 0-0 Strength 83 Cap room $-42.8M Current tax est. none 🏛️ OWNERSHIP Trust 60 Make the playoffs. Ownership thinks this roster belongs there. 🎙️ PRESS CONFERENCE The introduction First day, full room. The Indiana Pacers beat writers want to know what kind of front office this is going to be. Process, patience, all the safe words MEASURED Nobody clips it. That is the point Name the roster holes out loud CANDID Candor plays upstairs, usually · a real gamble Say the Finals is the only bar BOLD The clip will outlive you, either way · a real gamble 👔 ROSTER 10 under contract 4 short of the 14 man floor. Filled on minimum deals at tip off. 💼 FREE AGENCY -$43M over Keon Oakhurst wants $23M, out of reach 🤝 TRADES -$43M to shed Move salary or the owner will 🏟️ PLAY Round 1 of 20 0-0 with 20 rounds to play 📊 STANDINGS #9 in the East Inside the top 10 with 20 to play 📋 STAFF 5 of 5 jobs filled No edge from the bench yet ✍️ RE-SIGN DESK Nobody expiring Nobody is out of contract this summer 🎟️ DRAFT PICKS 2 picks in 2026 14 picks over 7 drafts 🔁 TRADE DESK 12 rounds to the deadline Players and picks, up to five a side Welcome to the Indiana Pacers front office. The 2026 season tips off now. 🏛️ The ownership mandate: Make the play"
+ },
+ {
+  "t": "00:37:48",
+  "kind": "press",
+  "answered": "Process, patience, all the safe words MEASURED Nobody clips it. That is the point"
+ },
+ {
+  "t": "00:37:49",
+  "kind": "economy",
+  "label": "start",
+  "cap": 164.961,
+  "season": 2026,
+  "my": "IND",
+  "teams": 30,
+  "list": "BKN:96.2/10 CHI:140.6/10 TOR:144.8/10 WAS:146.9/10 DET:151.1/10 MIA:153.2/10 UTA:153.2/10 MEM:155.3/10 CHA:155.3/10 NOP:163.7/10 PHX:170/10 ATL:176.3/10 SAC:178.4/10 LAL:188.9/10 MIL:188.9/10 POR:188.9/10 ORL:193.1/10 DAL:197.3/10 PHI:201.5/10 SAS:205.7/10 CLE:207.8/10 IND:207.8/10 GSW:209.9/10 LAC:209.9/10 MIN:212/10 HOU:220.4/10 BOS:235.1/10 NYK:243.5/10 OKC:264.5/10 DEN:266.6/10",
+  "saveChars": 120802,
+  "storageChars": 120883
+ },
+ {
+  "t": "00:37:49",
+  "kind": "tiles",
+  "label": "s1start",
+  "tiles": [
+   "ROSTER 10 under contract 4 short of the 14 man floor. Filled on minimu",
+   "FREE AGENCY -$43M over Keon Oakhurst wants $23M, out of reach",
+   "TRADES -$43M to shed Move salary or the owner will",
+   "PLAY Round 1 of 20 0-0 with 20 rounds to play",
+   "STANDINGS #9 in the East Inside the top 10 with 20 to play",
+   "STAFF 5 of 5 jobs filled No edge from the bench yet",
+   "RE-SIGN DESK Nobody expiring Nobody is out of contract this summer",
+   "DRAFT PICKS 2 picks in 2026 14 picks over 7 drafts",
+   "TRADE DESK 12 rounds to the deadline Players and picks, up to five a s"
+  ]
+ },
+ {
+  "t": "00:37:50",
+  "kind": "audit",
+  "where": "s1start tile 0 ROSTER 10 under contract 4 sho",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [
+   "2026 · Round 1/20 Record 0-0 Strength 83 Cap room $-42.8M Current tax est. none 🏛️ OWNERS"
+  ],
+  "tinyTap": [
+   {
+    "el": "button.rounded-full.border.border-border \"Waive, $17.5M dead\"",
+    "w": 113,
+    "h": 22
+   },
+   {
+    "el": "button.rounded-full.border.border-border \"Waive, $13.9M dead\"",
+    "w": 114,
+    "h": 22
+   },
+   {
+    "el": "button.rounded-full.border.border-border \"Waive, $13M dead\"",
+    "w": 105,
+    "h": 22
+   },
+   {
+    "el": "button.rounded-full.border.border-border \"Waive, $12M dead\"",
+    "w": 105,
+    "h": 22
+   },
+   {
+    "el": "button.rounded-full.border.border-border \"Waive, $12M dead\"",
+    "w": 105,
+    "h": 22
+   },
+   {
+    "el": "button.rounded-full.border.border-border \"Waive, $11.1M dead\"",
+    "w": 109,
+    "h": 22
+   },
+   {
+    "el": "button.rounded-full.border.border-border \"Waive, $10.2M dead\"",
+    "w": 114,
+    "h": 22
+   },
+   {
+    "el": "button.rounded-full.border.border-border \"Waive, $6.6M dead\"",
+    "w": 110,
+    "h": 22
+   }
+  ],
+  "tap44": 3,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 41
+ },
+ {
+  "t": "00:37:50",
+  "kind": "panel",
+  "label": "s1start",
+  "tile": "ROSTER 10 under contract 4 short of the ",
+  "text": "NBA Front Office Curated rosters, original ratings, simulated contracts. The play-in is waiting for your mistakes. Indiana Pacers 2026 · Round 1/20 Record 0-0 Strength 83 Cap room $-42.8M Current tax est. none 🏛️ OWNERSHIP Trust 63 Make the playoffs. Ownership thinks this roster belongs there. Hub Roster 🎙️ Nobody clips it. That is the point. Welcome to the Indiana Pacers front office. The 2026 season tips off now. 🏛️ The ownership mandate: Make the playoffs. Ownership thinks this roster belongs there. Payroll $207.8M of $164.961M (current) Cap figures as of September 2026 Luxury tax line $226.7M, first apron $236.4M, second apron $250.7M. Under the tax line by $18.9M. 10 of 15 roster spots filled, 14 needed at tip off. 4 short: the league fills the gap on minimum deals ($2M each) when the season tips off. No other moves: 4 minimum contracts at $2M add $8M at tip-off. Tip-off payroll "
+ },
+ {
+  "t": "00:37:51",
+  "kind": "audit",
+  "where": "s1start tile 1 FREE AGENCY -$43M over Keon Oa",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [
+   "2026 · Round 1/20 Record 0-0 Strength 83 Cap room $-42.8M Current tax est. none 🏛️ OWNERS",
+   "this roster belongs there. Free agents (cap room $-42.8M). A man you waived waits until n"
+  ],
+  "tinyTap": [
+   {
+    "el": "button.rounded-full.bg-primary.px-2.5 \"Sign\"",
+    "w": 42,
+    "h": 20
+   },
+   {
+    "el": "button.rounded-full.bg-primary.px-2.5 \"Sign\"",
+    "w": 42,
+    "h": 20
+   },
+   {
+    "el": "button.rounded-full.bg-primary.px-2.5 \"Sign\"",
+    "w": 42,
+    "h": 20
+   },
+   {
+    "el": "button.rounded-full.bg-primary.px-2.5 \"Sign\"",
+    "w": 42,
+    "h": 20
+   },
+   {
+    "el": "button.rounded-full.bg-primary.px-2.5 \"Sign\"",
+    "w": 42,
+    "h": 20
+   },
+   {
+    "el": "button.rounded-full.bg-primary.px-2.5 \"Sign\"",
+    "w": 42,
+    "h": 20
+   },
+   {
+    "el": "button.rounded-full.bg-primary.px-2.5 \"Sign\"",
+    "w": 42,
+    "h": 20
+   },
+   {
+    "el": "button.rounded-full.bg-primary.px-2.5 \"Sign\"",
+    "w": 42,
+    "h": 20
+   }
+  ],
+  "tap44": 3,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 26
+ },
+ {
+  "t": "00:37:51",
+  "kind": "panel",
+  "label": "s1start",
+  "tile": "FREE AGENCY -$43M over Keon Oakhurst wan",
+  "text": "NBA Front Office Curated rosters, original ratings, simulated contracts. The play-in is waiting for your mistakes. Indiana Pacers 2026 · Round 1/20 Record 0-0 Strength 83 Cap room $-42.8M Current tax est. none 🏛️ OWNERSHIP Trust 63 Make the playoffs. Ownership thinks this roster belongs there. Hub Free agency 🎙️ Nobody clips it. That is the point. Welcome to the Indiana Pacers front office. The 2026 season tips off now. 🏛️ The ownership mandate: Make the playoffs. Ownership thinks this roster belongs there. Free agents (cap room $-42.8M). A man you waived waits until next season. Keon Oakhurst F · 26y · wants $23.3M 81 Sign Lamar Ashgrove C · 30y · wants $23.3M 81 Sign Isaiah Northcutt F · 28y · wants $19.1M 79 Sign Malik Beaudry G · 30y · wants $17M 78 Sign Dashawn Halverson G · 33y · wants $17M 78 Sign Marquis Ridgeway F · 26y · wants $12.8M 76 Sign Vontae Eastwick F · 31y · wants $"
+ },
+ {
+  "t": "00:37:52",
+  "kind": "audit",
+  "where": "s1start tile 2 TRADES -$43M to shed Move sala",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [
+   "2026 · Round 1/20 Record 0-0 Strength 83 Cap room $-42.8M Current tax est. none 🏛️ OWNERS"
+  ],
+  "tinyTap": [
+   {
+    "el": "button.rounded-full.border.px-2 \"DEN\"",
+    "w": 39,
+    "h": 21
+   },
+   {
+    "el": "button.rounded-full.border.px-2 \"OKC\"",
+    "w": 40,
+    "h": 21
+   },
+   {
+    "el": "button.rounded-full.border.px-2 \"BOS\"",
+    "w": 40,
+    "h": 21
+   },
+   {
+    "el": "button.rounded-full.border.px-2 \"NYK\"",
+    "w": 40,
+    "h": 21
+   },
+   {
+    "el": "button.rounded-full.border.px-2 \"LAL\"",
+    "w": 37,
+    "h": 21
+   },
+   {
+    "el": "button.rounded-full.border.px-2 \"MIL\"",
+    "w": 36,
+    "h": 21
+   },
+   {
+    "el": "button.rounded-full.border.px-2 \"MIN\"",
+    "w": 38,
+    "h": 21
+   },
+   {
+    "el": "button.rounded-full.border.px-2 \"HOU\"",
+    "w": 40,
+    "h": 21
+   }
+  ],
+  "tap44": 4,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 47
+ },
+ {
+  "t": "00:37:52",
+  "kind": "panel",
+  "label": "s1start",
+  "tile": "TRADES -$43M to shed Move salary or the ",
+  "text": "NBA Front Office Curated rosters, original ratings, simulated contracts. The play-in is waiting for your mistakes. Indiana Pacers 2026 · Round 1/20 Record 0-0 Strength 83 Cap room $-42.8M Current tax est. none 🏛️ OWNERSHIP Trust 63 Make the playoffs. Ownership thinks this roster belongs there. Hub Trades 🎙️ Nobody clips it. That is the point. Welcome to the Indiana Pacers front office. The 2026 season tips off now. 🏛️ The ownership mandate: Make the playoffs. Ownership thinks this roster belongs there. Trade deadline: the break after round 12 is the last chance, and deals shut once round 13 is played. Packages with picks are on the Trade desk box. 🔍 Trade Finder Pick one of your players and shop him. Only deals the AI genuinely accepts show up, cap checked. Pascal Siakam (F) Opening estimate 89: retained-season box scores. Limited defense and role evidence. 89e Ivica Zubac (C) Openin"
+ },
+ {
+  "t": "00:37:53",
+  "kind": "audit",
+  "where": "s1start tile 3 PLAY Round 1 of 20 0-0 with 20",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [
+   "2026 · Round 1/20 Record 0-0 Strength 83 Cap room $-42.8M Current tax est. none 🏛️ OWNERS"
+  ],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 4,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 7
+ },
+ {
+  "t": "00:37:53",
+  "kind": "panel",
+  "label": "s1start",
+  "tile": "PLAY Round 1 of 20 0-0 with 20 rounds to",
+  "text": "NBA Front Office Curated rosters, original ratings, simulated contracts. The play-in is waiting for your mistakes. Indiana Pacers 2026 · Round 1/20 Record 0-0 Strength 83 Cap room $-42.8M Current tax est. none 🏛️ OWNERSHIP Trust 63 Make the playoffs. Ownership thinks this roster belongs there. Hub Play 🎙️ Nobody clips it. That is the point. Welcome to the Indiana Pacers front office. The 2026 season tips off now. 🏛️ The ownership mandate: Make the playoffs. Ownership thinks this roster belongs there. Each round simulates a stretch of games across the league. 4 short of the 14 man floor. At tip off the league fills the gap on minimum deals ($2M each), so sign who you want first. Play Round 1 The season ends with the play-in for seeds 7 to 10, then best-of-7 rounds to the Finals. Abandon franchise and restart NBA Front Office: Basketball GM Simulator Take over an NBA franchise from a cu"
+ },
+ {
+  "t": "00:37:55",
+  "kind": "audit",
+  "where": "s1start tile 4 STANDINGS #9 in the East Insid",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [
+   "2026 · Round 1/20 Record 0-0 Strength 83 Cap room $-42.8M Current tax est. none 🏛️ OWNERS"
+  ],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 3,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 8
+ },
+ {
+  "t": "00:37:55",
+  "kind": "panel",
+  "label": "s1start",
+  "tile": "STANDINGS #9 in the East Inside the top ",
+  "text": "NBA Front Office Curated rosters, original ratings, simulated contracts. The play-in is waiting for your mistakes. Indiana Pacers 2026 · Round 1/20 Record 0-0 Strength 83 Cap room $-42.8M Current tax est. none 🏛️ OWNERSHIP Trust 63 Make the playoffs. Ownership thinks this roster belongs there. Hub Standings 🎙️ Nobody clips it. That is the point. Welcome to the Indiana Pacers front office. The 2026 season tips off now. 🏛️ The ownership mandate: Make the playoffs. Ownership thinks this roster belongs there. EAST 1. Boston Celtics 0-0 2. Cleveland Cavaliers 0-0 3. New York Knicks 0-0 4. Toronto Raptors 0-0 5. Atlanta Hawks 0-0 6. Charlotte Hornets 0-0 7. Philadelphia 76ers (play-in) 0-0 8. Orlando Magic (play-in) 0-0 9. Indiana Pacers (play-in) 0-0 10. Chicago Bulls (play-in) 0-0 11. Detroit Pistons 0-0 12. Miami Heat 0-0 13. Washington Wizards 0-0 14. Milwaukee Bucks 0-0 15. Brooklyn Ne"
+ },
+ {
+  "t": "00:37:56",
+  "kind": "audit",
+  "where": "s1start tile 5 STAFF 5 of 5 jobs filled No ed",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [
+   "2026 · Round 1/20 Record 0-0 Strength 83 Cap room $-42.8M Current tax est. none 🏛️ OWNERS"
+  ],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 3,
+  "tinyText": 5,
+  "tinyTextSample": [
+   "9px div.text-[9px].text-muted-foreground \"Level 1 · 26k a round\"",
+   "9px div.text-[9px].text-muted-foreground \"Level 1 · 10k a round\"",
+   "9px div.text-[9px].text-muted-foreground \"Level 1 · 5k a round\"",
+   "9px div.text-[9px].text-muted-foreground \"Level 1 · 5k a round\""
+  ],
+  "text10": 12
+ },
+ {
+  "t": "00:37:56",
+  "kind": "panel",
+  "label": "s1start",
+  "tile": "STAFF 5 of 5 jobs filled No edge from th",
+  "text": "NBA Front Office Curated rosters, original ratings, simulated contracts. The play-in is waiting for your mistakes. Indiana Pacers 2026 · Round 1/20 Record 0-0 Strength 83 Cap room $-42.8M Current tax est. none 🏛️ OWNERSHIP Trust 63 Make the playoffs. Ownership thinks this roster belongs there. Hub Staff Ownership gives the staff desk $9.00M each summer for fees and pay offs. Wages are paid outside the cap. One strength number covers both ends of the floor here, so a coach's point at either end counts 50 percent. The development coach works every summer on your men with room to grow who are 23 or under today, since everyone turns a year older before the summer's growth. STAFF · $9.00M TO SPEND · 51K A ROUND ON THE DESK ? 📋 Head coach · your call Fenwick Lindqvist Level 1 · 26k a round 🗣️ Lead assistant Zebulon Stanhope Level 1 · 10k a round 📈 Development Dashiell Birtwhistle Level 1 ·"
+ },
+ {
+  "t": "00:37:57",
+  "kind": "audit",
+  "where": "s1start tile 6 RE-SIGN DESK Nobody expiring N",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [
+   "2026 · Round 1/20 Record 0-0 Strength 83 Cap room $-42.8M Current tax est. none 🏛️ OWNERS"
+  ],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 4,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 7
+ },
+ {
+  "t": "00:37:57",
+  "kind": "panel",
+  "label": "s1start",
+  "tile": "RE-SIGN DESK Nobody expiring Nobody is o",
+  "text": "NBA Front Office Curated rosters, original ratings, simulated contracts. The play-in is waiting for your mistakes. Indiana Pacers 2026 · Round 1/20 Record 0-0 Strength 83 Cap room $-42.8M Current tax est. none 🏛️ OWNERSHIP Trust 63 Make the playoffs. Ownership thinks this roster belongs there. Hub Re-sign desk Re-sign desk Nobody is out of contract this winter. Decide any time this season. Anyone you leave open is settled by your staff's own rule when the summer starts, never by a coin flip. The luxury tax still bills whatever payroll you keep. The money is this game's own figures, not real contracts. The rules are each league's own, read in October 2026. The money is this game's own figure, not anybody's real contract. 🎙️ Nobody clips it. That is the point. Welcome to the Indiana Pacers front office. The 2026 season tips off now. 🏛️ The ownership mandate: Make the playoffs. Ownership"
+ },
+ {
+  "t": "00:37:59",
+  "kind": "audit",
+  "where": "s1start tile 7 DRAFT PICKS 2 picks in 2026 14",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [
+   "2026 · Round 1/20 Record 0-0 Strength 83 Cap room $-42.8M Current tax est. none 🏛️ OWNERS"
+  ],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 3,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 10
+ },
+ {
+  "t": "00:37:59",
+  "kind": "panel",
+  "label": "s1start",
+  "tile": "DRAFT PICKS 2 picks in 2026 14 picks ove",
+  "text": "NBA Front Office Curated rosters, original ratings, simulated contracts. The play-in is waiting for your mistakes. Indiana Pacers 2026 · Round 1/20 Record 0-0 Strength 83 Cap room $-42.8M Current tax est. none 🏛️ OWNERSHIP Trust 63 Make the playoffs. Ownership thinks this roster belongs there. Hub Draft picks DRAFT CAPITAL 14 picks, 7 firsts Trade deadline after round 12. 12 rounds to go. 2026 (this year) 1st 2nd 2027 1st 2nd 2028 1st 2nd 2029 1st 2nd 2030 1st 2nd 2031 1st 2nd 2032 1st 2nd The lottery table is the one the 2026 draft used. The league switched to a new lottery from the 2027 draft, and this game does not model it yet. In the second round, every club that missed the playoffs picks ahead of every playoff club here. The lottery is in the rules, but draft night here is the game's own short draft: you pick first in each batch, then the other clubs go in reverse standings. 🎙️ N"
+ },
+ {
+  "t": "00:38:00",
+  "kind": "audit",
+  "where": "s1start tile 8 TRADE DESK 12 rounds to the de",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [
+   "2026 · Round 1/20 Record 0-0 Strength 83 Cap room $-42.8M Current tax est. none 🏛️ OWNERS"
+  ],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 52,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 56
+ },
+ {
+  "t": "00:38:00",
+  "kind": "panel",
+  "label": "s1start",
+  "tile": "TRADE DESK 12 rounds to the deadline Pla",
+  "text": "NBA Front Office Curated rosters, original ratings, simulated contracts. The play-in is waiting for your mistakes. Indiana Pacers 2026 · Round 1/20 Record 0-0 Strength 83 Cap room $-42.8M Current tax est. none 🏛️ OWNERSHIP Trust 63 Make the playoffs. Ownership thinks this roster belongs there. Hub Trade desk Deal with Atlanta Hawks (holding) Brooklyn Nets (holding) Boston Celtics (holding) Charlotte Hornets (holding) Chicago Bulls (holding) Cleveland Cavaliers (holding) Dallas Mavericks (holding) Denver Nuggets (holding) Detroit Pistons (holding) Golden State Warriors (holding) Houston Rockets (holding) LA Clippers (holding) Los Angeles Lakers (holding) Memphis Grizzlies (holding) Miami Heat (holding) Milwaukee Bucks (holding) Minnesota Timberwolves (holding) New Orleans Pelicans (holding) New York Knicks (holding) Oklahoma City Thunder (holding) Orlando Magic (holding) Philadelphia 76e"
+ },
+ {
+  "t": "00:38:02",
+  "kind": "sign",
+  "did": null,
+  "text": "NBA Front Office Curated rosters, original ratings, simulated contracts. The play-in is waiting for your mistakes. Indiana Pacers 2026 · Round 1/20 Record 0-0 Strength 83 Cap room $-42.8M Current tax est. none 🏛️ OWNERSHIP Trust 63 Make the playoffs. Ownership thinks this roster belongs there. Hub Free agency 🎙️ Nobody clips it. That is the point. Welcome to the Indiana Pacers front office. The 2026 season tips off now. 🏛️ The ownership mandate: Make the playoffs. Ownership thinks this roster"
+ },
+ {
+  "t": "00:38:04",
+  "kind": "audit",
+  "where": "s1a press 1 Play Round 1",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [
+   "2026 · Round 2/20 Record 1-3 Strength 82 Cap room $-50.8M Current tax est. none 🏛️ OWNERS"
+  ],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 4,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:38:04",
+  "kind": "week",
+  "label": "s1a",
+  "pressed": "Play Round 1",
+  "text": "NBA Front Office Curated rosters, original ratings, simulated contracts. The play-in is waiting for your mistakes. Indiana Pacers 2026 · Round 2/20 Record 1-3 Strength 82 Cap room $-50.8M Current tax est. none 🏛️ OWNERSHIP Trust 63 Make the playoffs. Ownership thinks this roster belongs there. 📉 Outside the line right now. Upstairs is watching. Hub Play Round 1: you went 1-3. 📋 You tipped off with 10 under contract, so the league filled you to 14 on minimum deals: Andre Coltrane, Jalen Vance, Vontae Eastwick, Andre Ridgeway, $2M each. 🚑 Pascal Siakam is out 1 round. Each round simulates a "
+ },
+ {
+  "t": "00:38:04",
+  "kind": "audit",
+  "where": "s1a press 2 Play Round 2",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [
+   "2026 · Round 3/20 Record 3-5 Strength 83 Cap room $-50.8M Current tax est. none 🏛️ OWNERS"
+  ],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 4,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:38:05",
+  "kind": "audit",
+  "where": "s1a press 3 Play Round 3",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [
+   "2026 · Round 4/20 Record 6-6 Strength 83 Cap room $-50.8M Current tax est. none 🏛️ OWNERS"
+  ],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 4,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:38:06",
+  "kind": "audit",
+  "where": "s1a press 4 Play Round 4",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [
+   "2026 · Round 5/20 Record 7-9 Strength 83 Cap room $-50.8M Current tax est. none 🏛️ OWNERS"
+  ],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 4,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:38:07",
+  "kind": "audit",
+  "where": "s1a press 5 Play Round 5",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [
+   "026 · Round 6/20 Record 7-13 Strength 83 Cap room $-50.8M Current tax est. none 🏛️ OWNERS"
+  ],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 4,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:38:07",
+  "kind": "audit",
+  "where": "s1a press 6 Play Round 6",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [
+   "26 · Round 7/20 Record 10-14 Strength 83 Cap room $-50.8M Current tax est. none 🏛️ OWNERS"
+  ],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 4,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:38:08",
+  "kind": "audit",
+  "where": "s1a press 7 Play Round 7",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [
+   "26 · Round 8/20 Record 12-16 Strength 83 Cap room $-50.8M Current tax est. none 🏛️ OWNERS"
+  ],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 4,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:38:08",
+  "kind": "week",
+  "label": "s1a",
+  "pressed": "Play Round 7",
+  "text": "NBA Front Office Curated rosters, original ratings, simulated contracts. The play-in is waiting for your mistakes. Indiana Pacers 2026 · Round 8/20 Record 12-16 Strength 83 Cap room $-50.8M Current tax est. none 🏛️ OWNERSHIP Trust 63 Make the playoffs. Ownership thinks this roster belongs there. 📉 Outside the line right now. Upstairs is watching. Hub Play Round 7: you went 2-2. Each round simulates a stretch of games across the league. Play Round 8 The season ends with the play-in for seeds 7 to 10, then best-of-7 rounds to the Finals. Abandon franchise and restart NBA Front Office: Basketba"
+ },
+ {
+  "t": "00:38:09",
+  "kind": "audit",
+  "where": "s1a press 8 Play Round 8",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [
+   "26 · Round 9/20 Record 15-17 Strength 83 Cap room $-50.8M Current tax est. none 🏛️ OWNERS"
+  ],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 4,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:38:09",
+  "kind": "audit",
+  "where": "s1a press 9 Play Round 9",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [
+   "6 · Round 10/20 Record 17-19 Strength 83 Cap room $-50.8M Current tax est. none 🏛️ OWNERS"
+  ],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 4,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:38:10",
+  "kind": "audit",
+  "where": "s1a press 10 Play Round 10",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [
+   "6 · Round 11/20 Record 21-19 Strength 83 Cap room $-50.8M Current tax est. none 🏛️ OWNERS"
+  ],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 4,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:38:11",
+  "kind": "audit",
+  "where": "s1a press 11 Play Round 11",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [
+   "6 · Round 12/20 Record 23-21 Strength 83 Cap room $-50.8M Current tax est. none 🏛️ OWNERS"
+  ],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 4,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:38:11",
+  "kind": "season",
+  "part": "s1a",
+  "presses": 11,
+  "end": "paused",
+  "secs": 26
+ },
+ {
+  "t": "00:38:11",
+  "kind": "audit",
+  "where": "mid season hub",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [
+   "6 · Round 12/20 Record 23-21 Strength 83 Cap room $-50.8M Current tax est. none 🏛️ OWNERS"
+  ],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 2,
+  "tinyText": 9,
+  "tinyTextSample": [
+   "9px div.mt-0.5.truncate.text-[9px] \"Pascal Siakam leads them at 89\"",
+   "9px div.mt-0.5.truncate.text-[9px] \"Keon Oakhurst wants $23M, out of reach\"",
+   "9px div.mt-0.5.truncate.text-[9px] \"Move salary or the owner will\"",
+   "9px div.mt-0.5.truncate.text-[9px] \"23-21 with 9 rounds to play\""
+  ],
+  "text10": 15
+ },
+ {
+  "t": "00:38:11",
+  "kind": "midhub",
+  "text": "NBA Front Office Curated rosters, original ratings, simulated contracts. The play-in is waiting for your mistakes. Indiana Pacers 2026 · Round 12/20 Record 23-21 Strength 83 Cap room $-50.8M Current tax est. none 🏛️ OWNERSHIP Trust 63 Make the playoffs. Ownership thinks this roster belongs there. 📉 Outside the line right now. Upstairs is watching. 👔 ROSTER 14 under contract Pascal Siakam leads them at 89 💼 FREE AGENCY -$51M over Keon Oakhurst wants $23M, out of reach 🤝 TRADES -$51M to shed Move salary or the owner will 🏟️ PLAY Round 12 of 20 23-21 with 9 rounds to play 📊 STANDINGS #9 in the East Inside the top 10 with 9 to play 📋 STAFF 5 of 5 jobs filled No edge from the bench yet ✍️ RE-SIGN DESK 4 deals end this summer 4 still waiting on you 🎟️ DRAFT PICKS 2 picks in 2026 14 picks over 7 drafts 🔁 TRADE DESK 1 round to the deadline Players and picks, up to five a side Round 11: you went 2-2. Abandon franchise and restart NBA Front Office: Basketball GM Simulator Take over an NBA franchise from a curated roster snapshot. New games use original 2024-25 and 2025-26 regular-season rating estimates with limited defensive and role evidence; ages, potential and contracts are sim"
+ },
+ {
+  "t": "00:38:11",
+  "kind": "tiles",
+  "label": "s1mid",
+  "tiles": [
+   "ROSTER 14 under contract Pascal Siakam leads them at 89",
+   "FREE AGENCY -$51M over Keon Oakhurst wants $23M, out of reach",
+   "TRADES -$51M to shed Move salary or the owner will",
+   "PLAY Round 12 of 20 23-21 with 9 rounds to play",
+   "STANDINGS #9 in the East Inside the top 10 with 9 to play",
+   "STAFF 5 of 5 jobs filled No edge from the bench yet",
+   "RE-SIGN DESK 4 deals end this summer 4 still waiting on you",
+   "DRAFT PICKS 2 picks in 2026 14 picks over 7 drafts",
+   "TRADE DESK 1 round to the deadline Players and picks, up to five a sid"
+  ]
+ },
+ {
+  "t": "00:38:12",
+  "kind": "audit",
+  "where": "s1mid tile 0 ROSTER 14 under contract Pasca",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [
+   "6 · Round 12/20 Record 23-21 Strength 83 Cap room $-50.8M Current tax est. none 🏛️ OWNERS"
+  ],
+  "tinyTap": [
+   {
+    "el": "button.rounded-full.border.border-border \"Waive, $17.5M dead\"",
+    "w": 113,
+    "h": 22
+   },
+   {
+    "el": "button.rounded-full.border.border-border \"Waive, $13.9M dead\"",
+    "w": 114,
+    "h": 22
+   },
+   {
+    "el": "button.rounded-full.border.border-border \"Waive, $13M dead\"",
+    "w": 105,
+    "h": 22
+   },
+   {
+    "el": "button.rounded-full.border.border-border \"Waive, $12M dead\"",
+    "w": 105,
+    "h": 22
+   },
+   {
+    "el": "button.rounded-full.border.border-border \"Waive, $12M dead\"",
+    "w": 105,
+    "h": 22
+   },
+   {
+    "el": "button.rounded-full.border.border-border \"Waive, $11.1M dead\"",
+    "w": 109,
+    "h": 22
+   },
+   {
+    "el": "button.rounded-full.border.border-border \"Waive, $10.2M dead\"",
+    "w": 114,
+    "h": 22
+   },
+   {
+    "el": "button.rounded-full.border.border-border \"Waive, $6.6M dead\"",
+    "w": 110,
+    "h": 22
+   }
+  ],
+  "tap44": 3,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:38:12",
+  "kind": "panel",
+  "label": "s1mid",
+  "tile": "ROSTER 14 under contract Pascal Siakam l",
+  "text": "NBA Front Office Curated rosters, original ratings, simulated contracts. The play-in is waiting for your mistakes. Indiana Pacers 2026 · Round 12/20 Record 23-21 Strength 83 Cap room $-50.8M Current tax est. none 🏛️ OWNERSHIP Trust 63 Make the playoffs. Ownership thinks this roster belongs there. 📉 Outside the line right now. Upstairs is watching. Hub Roster Round 11: you went 2-2. Payroll $215.8M of $164.961M (current) Cap figures as of September 2026 Luxury tax line $226.7M, first apron $236.4M, second apron $250.7M. Under the tax line by $10.9M. 14 of 15 roster spots filled, 14 needed at tip off. Set rotation OVR, ages, potential and contracts are simulated. Opening estimates use 2024-25 and 2025-26 regular-season inputs. e means limited defense and role evidence. Later changes come from this save. Pascal Siakam F · 24y · $34.9M x4 Opening estimate 89: retained-season box scores. Li"
+ },
+ {
+  "t": "00:38:14",
+  "kind": "audit",
+  "where": "s1mid tile 1 FREE AGENCY -$51M over Keon Oa",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [
+   "6 · Round 12/20 Record 23-21 Strength 83 Cap room $-50.8M Current tax est. none 🏛️ OWNERS",
+   "y Round 11: you went 2-2. Free agents (cap room $-50.8M). A man you waived waits until n"
+  ],
+  "tinyTap": [
+   {
+    "el": "button.rounded-full.bg-primary.px-2.5 \"Sign\"",
+    "w": 42,
+    "h": 20
+   },
+   {
+    "el": "button.rounded-full.bg-primary.px-2.5 \"Sign\"",
+    "w": 42,
+    "h": 20
+   },
+   {
+    "el": "button.rounded-full.bg-primary.px-2.5 \"Sign\"",
+    "w": 42,
+    "h": 20
+   },
+   {
+    "el": "button.rounded-full.bg-primary.px-2.5 \"Sign\"",
+    "w": 42,
+    "h": 20
+   },
+   {
+    "el": "button.rounded-full.bg-primary.px-2.5 \"Sign\"",
+    "w": 42,
+    "h": 20
+   },
+   {
+    "el": "button.rounded-full.bg-primary.px-2.5 \"Sign\"",
+    "w": 42,
+    "h": 20
+   },
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 3,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:38:14",
+  "kind": "panel",
+  "label": "s1mid",
+  "tile": "FREE AGENCY -$51M over Keon Oakhurst wan",
+  "text": "NBA Front Office Curated rosters, original ratings, simulated contracts. The play-in is waiting for your mistakes. Indiana Pacers 2026 · Round 12/20 Record 23-21 Strength 83 Cap room $-50.8M Current tax est. none 🏛️ OWNERSHIP Trust 63 Make the playoffs. Ownership thinks this roster belongs there. 📉 Outside the line right now. Upstairs is watching. Hub Free agency Round 11: you went 2-2. Free agents (cap room $-50.8M). A man you waived waits until next season. Keon Oakhurst F · 26y · wants $23.3M 81 Sign Lamar Ashgrove C · 30y · wants $23.3M 81 Sign Isaiah Northcutt F · 28y · wants $19.1M 79 Sign Malik Beaudry G · 30y · wants $17M 78 Sign Dashawn Halverson G · 33y · wants $17M 78 Sign Marquis Ridgeway F · 26y · wants $12.8M 76 Sign Abandon franchise and restart NBA Front Office: Basketball GM Simulator Take over an NBA franchise from a curated roster snapshot. New games use original 202"
+ },
+ {
+  "t": "00:38:15",
+  "kind": "audit",
+  "where": "s1mid tile 2 TRADES -$51M to shed Move sala",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [
+   "6 · Round 12/20 Record 23-21 Strength 83 Cap room $-50.8M Current tax est. none 🏛️ OWNERS"
+  ],
+  "tinyTap": [
+   {
+    "el": "button.rounded-full.border.px-2 \"DEN\"",
+    "w": 39,
+    "h": 21
+   },
+   {
+    "el": "button.rounded-full.border.px-2 \"OKC\"",
+    "w": 40,
+    "h": 21
+   },
+   {
+    "el": "button.rounded-full.border.px-2 \"BOS\"",
+    "w": 40,
+    "h": 21
+   },
+   {
+    "el": "button.rounded-full.border.px-2 \"NYK\"",
+    "w": 40,
+    "h": 21
+   },
+   {
+    "el": "button.rounded-full.border.px-2 \"LAL\"",
+    "w": 37,
+    "h": 21
+   },
+   {
+    "el": "button.rounded-full.border.px-2 \"MIL\"",
+    "w": 36,
+    "h": 21
+   },
+   {
+    "el": "button.rounded-full.border.px-2 \"MIN\"",
+    "w": 38,
+    "h": 21
+   },
+   {
+    "el": "button.rounded-full.border.px-2 \"HOU\"",
+    "w": 40,
+    "h": 21
+   }
+  ],
+  "tap44": 6,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:38:15",
+  "kind": "panel",
+  "label": "s1mid",
+  "tile": "TRADES -$51M to shed Move salary or the ",
+  "text": "NBA Front Office Curated rosters, original ratings, simulated contracts. The play-in is waiting for your mistakes. Indiana Pacers 2026 · Round 12/20 Record 23-21 Strength 83 Cap room $-50.8M Current tax est. none 🏛️ OWNERSHIP Trust 63 Make the playoffs. Ownership thinks this roster belongs there. 📉 Outside the line right now. Upstairs is watching. Hub Trades Round 11: you went 2-2. Trade deadline: the break after round 12 is the last chance, and deals shut once round 13 is played. Packages with picks are on the Trade desk box. 🔍 Trade Finder Pick one of your players and shop him. Only deals the AI genuinely accepts show up, cap checked. Pascal Siakam (F) Opening estimate 89: retained-season box scores. Limited defense and role evidence. 89e Ivica Zubac (C) Opening estimate 85: retained-season box scores. Limited defense and role evidence. 85e Andrew Nembhard (G) Opening estimate 84: r"
+ },
+ {
+  "t": "00:38:16",
+  "kind": "audit",
+  "where": "s1mid tile 3 PLAY Round 12 of 20 23-21 with",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [
+   "6 · Round 12/20 Record 23-21 Strength 83 Cap room $-50.8M Current tax est. none 🏛️ OWNERS"
+  ],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 4,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:38:16",
+  "kind": "panel",
+  "label": "s1mid",
+  "tile": "PLAY Round 12 of 20 23-21 with 9 rounds ",
+  "text": "NBA Front Office Curated rosters, original ratings, simulated contracts. The play-in is waiting for your mistakes. Indiana Pacers 2026 · Round 12/20 Record 23-21 Strength 83 Cap room $-50.8M Current tax est. none 🏛️ OWNERSHIP Trust 63 Make the playoffs. Ownership thinks this roster belongs there. 📉 Outside the line right now. Upstairs is watching. Hub Play Round 11: you went 2-2. Each round simulates a stretch of games across the league. Play Round 12 The season ends with the play-in for seeds 7 to 10, then best-of-7 rounds to the Finals. Abandon franchise and restart NBA Front Office: Basketball GM Simulator Take over an NBA franchise from a curated roster snapshot. New games use original 2024-25 and 2025-26 regular-season rating estimates with limited defensive and role evidence; ages, potential and contracts are simulated. Manage the cap, waive and sign, trade, survive the play-in f"
+ },
+ {
+  "t": "00:38:17",
+  "kind": "audit",
+  "where": "s1mid tile 4 STANDINGS #9 in the East Insid",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [
+   "6 · Round 12/20 Record 23-21 Strength 83 Cap room $-50.8M Current tax est. none 🏛️ OWNERS"
+  ],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 3,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:38:17",
+  "kind": "panel",
+  "label": "s1mid",
+  "tile": "STANDINGS #9 in the East Inside the top ",
+  "text": "NBA Front Office Curated rosters, original ratings, simulated contracts. The play-in is waiting for your mistakes. Indiana Pacers 2026 · Round 12/20 Record 23-21 Strength 83 Cap room $-50.8M Current tax est. none 🏛️ OWNERSHIP Trust 63 Make the playoffs. Ownership thinks this roster belongs there. 📉 Outside the line right now. Upstairs is watching. Hub Standings Round 11: you went 2-2. EAST 1. New York Knicks 30-14 2. Cleveland Cavaliers 29-15 3. Charlotte Hornets 29-15 4. Boston Celtics 27-17 5. Detroit Pistons 26-18 6. Orlando Magic 25-19 7. Philadelphia 76ers (play-in) 25-19 8. Atlanta Hawks (play-in) 23-21 9. Indiana Pacers (play-in) 23-21 10. Chicago Bulls (play-in) 22-22 11. Toronto Raptors 19-25 12. Miami Heat 19-25 13. Washington Wizards 16-28 14. Milwaukee Bucks 16-28 15. Brooklyn Nets 14-30 WEST 1. Minnesota Timberwolves 29-15 2. Portland Trail Blazers 24-20 3. Utah Jazz 24-20"
+ },
+ {
+  "t": "00:38:19",
+  "kind": "audit",
+  "where": "s1mid tile 5 STAFF 5 of 5 jobs filled No ed",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [
+   "6 · Round 12/20 Record 23-21 Strength 83 Cap room $-50.8M Current tax est. none 🏛️ OWNERS"
+  ],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 3,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:38:19",
+  "kind": "panel",
+  "label": "s1mid",
+  "tile": "STAFF 5 of 5 jobs filled No edge from th",
+  "text": "NBA Front Office Curated rosters, original ratings, simulated contracts. The play-in is waiting for your mistakes. Indiana Pacers 2026 · Round 12/20 Record 23-21 Strength 83 Cap room $-50.8M Current tax est. none 🏛️ OWNERSHIP Trust 63 Make the playoffs. Ownership thinks this roster belongs there. 📉 Outside the line right now. Upstairs is watching. Hub Staff Ownership gives the staff desk $9.00M each summer for fees and pay offs. Wages are paid outside the cap. One strength number covers both ends of the floor here, so a coach's point at either end counts 50 percent. The development coach works every summer on your men with room to grow who are 23 or under today, since everyone turns a year older before the summer's growth. STAFF · $9.00M TO SPEND · 51K A ROUND ON THE DESK ? 📋 Head coach · your call Fenwick Lindqvist Level 1 · 26k a round 🗣️ Lead assistant Zebulon Stanhope Level 1 · 1"
+ },
+ {
+  "t": "00:38:20",
+  "kind": "audit",
+  "where": "s1mid tile 6 RE-SIGN DESK 4 deals end this ",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [
+   "6 · Round 12/20 Record 23-21 Strength 83 Cap room $-50.8M Current tax est. none 🏛️ OWNERS"
+  ],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 4,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:38:20",
+  "kind": "panel",
+  "label": "s1mid",
+  "tile": "RE-SIGN DESK 4 deals end this summer 4 s",
+  "text": "NBA Front Office Curated rosters, original ratings, simulated contracts. The play-in is waiting for your mistakes. Indiana Pacers 2026 · Round 12/20 Record 23-21 Strength 83 Cap room $-50.8M Current tax est. none 🏛️ OWNERSHIP Trust 63 Make the playoffs. Ownership thinks this roster belongs there. 📉 Outside the line right now. Upstairs is watching. Hub Re-sign desk Re-sign desk 4 still waiting on you. Vontae Eastwick F 75 overall, age 31 Asks $11.5M for 2 seasons Full Bird rights Andre Ridgeway C 75 overall, age 31 Asks $11.5M for 2 seasons Full Bird rights Jalen Vance G 74 overall, age 33 Asks $8.3M for 1 season Full Bird rights Andre Coltrane G 72 overall, age 27 Asks $5.3M for 3 seasons Full Bird rights Decide any time this season. Anyone you leave open is settled by your staff's own rule when the summer starts, never by a coin flip. The luxury tax still bills whatever payroll you ke"
+ },
+ {
+  "t": "00:38:21",
+  "kind": "audit",
+  "where": "s1mid tile 7 DRAFT PICKS 2 picks in 2026 14",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [
+   "6 · Round 12/20 Record 23-21 Strength 83 Cap room $-50.8M Current tax est. none 🏛️ OWNERS"
+  ],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 3,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:38:21",
+  "kind": "panel",
+  "label": "s1mid",
+  "tile": "DRAFT PICKS 2 picks in 2026 14 picks ove",
+  "text": "NBA Front Office Curated rosters, original ratings, simulated contracts. The play-in is waiting for your mistakes. Indiana Pacers 2026 · Round 12/20 Record 23-21 Strength 83 Cap room $-50.8M Current tax est. none 🏛️ OWNERSHIP Trust 63 Make the playoffs. Ownership thinks this roster belongs there. 📉 Outside the line right now. Upstairs is watching. Hub Draft picks DRAFT CAPITAL 14 picks, 7 firsts Trade deadline after round 12. 1 round to go. 2026 (this year) 1st 2nd 2027 1st 2nd 2028 1st 2nd 2029 1st 2nd 2030 1st 2nd 2031 1st 2nd 2032 1st 2nd The lottery table is the one the 2026 draft used. The league switched to a new lottery from the 2027 draft, and this game does not model it yet. In the second round, every club that missed the playoffs picks ahead of every playoff club here. The lottery is in the rules, but draft night here is the game's own short draft: you pick first in each batc"
+ },
+ {
+  "t": "00:38:23",
+  "kind": "audit",
+  "where": "s1mid tile 8 TRADE DESK 1 round to the dead",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [
+   "6 · Round 12/20 Record 23-21 Strength 83 Cap room $-50.8M Current tax est. none 🏛️ OWNERS"
+  ],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 60,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:38:23",
+  "kind": "panel",
+  "label": "s1mid",
+  "tile": "TRADE DESK 1 round to the deadline Playe",
+  "text": "NBA Front Office Curated rosters, original ratings, simulated contracts. The play-in is waiting for your mistakes. Indiana Pacers 2026 · Round 12/20 Record 23-21 Strength 83 Cap room $-50.8M Current tax est. none 🏛️ OWNERSHIP Trust 63 Make the playoffs. Ownership thinks this roster belongs there. 📉 Outside the line right now. Upstairs is watching. Hub Trade desk Deal with Atlanta Hawks (buying) Brooklyn Nets (selling) Boston Celtics (buying) Charlotte Hornets (buying) Chicago Bulls (buying) Cleveland Cavaliers (buying) Dallas Mavericks (buying) Denver Nuggets (buying) Detroit Pistons (buying) Golden State Warriors (buying) Houston Rockets (selling) LA Clippers (selling) Los Angeles Lakers (buying) Memphis Grizzlies (buying) Miami Heat (holding) Milwaukee Bucks (selling) Minnesota Timberwolves (buying) New Orleans Pelicans (buying) New York Knicks (buying) Oklahoma City Thunder (holding"
+ },
+ {
+  "t": "00:38:24",
+  "kind": "audit",
+  "where": "s1b press 1 Play Round 12",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [
+   "6 · Round 13/20 Record 24-24 Strength 83 Cap room $-50.8M Current tax est. none 🏛️ OWNERS"
+  ],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 4,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:38:24",
+  "kind": "week",
+  "label": "s1b",
+  "pressed": "Play Round 12",
+  "text": "NBA Front Office Curated rosters, original ratings, simulated contracts. The play-in is waiting for your mistakes. Indiana Pacers 2026 · Round 13/20 Record 24-24 Strength 83 Cap room $-50.8M Current tax est. none 🏛️ OWNERSHIP Trust 63 Make the playoffs. Ownership thinks this roster belongs there. 📉 Outside the line right now. Upstairs is watching. Hub Play Round 12: you went 1-3. Each round simulates a stretch of games across the league. Play Round 13 The season ends with the play-in for seeds 7 to 10, then best-of-7 rounds to the Finals. Abandon franchise and restart NBA Front Office: Baske"
+ },
+ {
+  "t": "00:38:25",
+  "kind": "audit",
+  "where": "s1b press 2 Play Round 13",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [
+   "6 · Round 14/20 Record 28-24 Strength 83 Cap room $-50.8M Current tax est. none 🏛️ OWNERS"
+  ],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 4,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:38:26",
+  "kind": "audit",
+  "where": "s1b press 3 Play Round 14",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [
+   "6 · Round 15/20 Record 30-26 Strength 83 Cap room $-50.8M Current tax est. none 🏛️ OWNERS"
+  ],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 4,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:38:27",
+  "kind": "audit",
+  "where": "s1b press 4 Play Round 15",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [
+   "6 · Round 16/20 Record 34-26 Strength 83 Cap room $-50.8M Current tax est. none 🏛️ OWNERS"
+  ],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 4,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:38:27",
+  "kind": "audit",
+  "where": "s1b press 5 Play Round 16",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [
+   "6 · Round 17/20 Record 35-29 Strength 83 Cap room $-50.8M Current tax est. none 🏛️ OWNERS"
+  ],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 4,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:38:28",
+  "kind": "audit",
+  "where": "s1b press 6 Play Round 17",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [
+   "6 · Round 18/20 Record 38-30 Strength 83 Cap room $-50.8M Current tax est. none 🏛️ OWNERS"
+  ],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 4,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:38:29",
+  "kind": "audit",
+  "where": "s1b press 7 Play Round 18",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [
+   "6 · Round 19/20 Record 41-31 Strength 83 Cap room $-50.8M Current tax est. none 🏛️ OWNERS"
+  ],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 4,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:38:29",
+  "kind": "week",
+  "label": "s1b",
+  "pressed": "Play Round 18",
+  "text": "NBA Front Office Curated rosters, original ratings, simulated contracts. The play-in is waiting for your mistakes. Indiana Pacers 2026 · Round 19/20 Record 41-31 Strength 83 Cap room $-50.8M Current tax est. none 🏛️ OWNERSHIP Trust 63 Make the playoffs. Ownership thinks this roster belongs there. 📈 In the postseason picture. Hold it. Hub Play Round 18: you went 3-1. Each round simulates a stretch of games across the league. Play Round 19 The season ends with the play-in for seeds 7 to 10, then best-of-7 rounds to the Finals. Abandon franchise and restart NBA Front Office: Basketball GM Simul"
+ },
+ {
+  "t": "00:38:29",
+  "kind": "audit",
+  "where": "s1b press 8 Play Round 19",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [
+   "6 · Round 20/20 Record 44-32 Strength 83 Cap room $-50.8M Current tax est. none 🏛️ OWNERS"
+  ],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 4,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:38:33",
+  "kind": "week",
+  "label": "s1b",
+  "pressed": "Final stretch + playoffs",
+  "text": "NBA Front Office Curated rosters, original ratings, simulated contracts. The play-in is waiting for your mistakes. Minnesota Timberwolves win the 2026 title Your Indiana Pacers finished 46-34, No. 5 in the East. 📈 Ahead of the ask. Ownership noticed. Trust upstairs: 85 of 100. ✅ Under the $226.7M tax line by $10.9M. No cheque upstairs. 5 clubs paid tax this season, the biggest bill $189.6M (Denver Nuggets). Finals: Minnesota Timberwolves beat Orlando Magic 4-2 East Play-In 7v8: Philadelphia 76ers 1-0 East Play-In 9v10: Detroit Pistons 1-0 East Play-In final: Orlando Magic 1-0 East R1: Orlando"
+ },
+ {
+  "t": "00:38:33",
+  "kind": "season",
+  "part": "s1b",
+  "presses": 9,
+  "end": "recap",
+  "secs": 48
+ },
+ {
+  "t": "00:38:36",
+  "kind": "audit",
+  "where": "recap",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [],
+  "tap44": 7,
+  "tinyText": 7,
+  "tinyTextSample": [
+   "9px p.text-[9px].text-muted-foreground \"Rule: points plus rebounds plus assists a game, pl\"",
+   "9px p.text-[9px].text-muted-foreground \"Rule: the five best by the MVP score, any position\"",
+   "9px p.text-[9px].text-muted-foreground \"Rule: points plus rebounds plus assists a game, am\"",
+   "9px p.text-[9px].text-muted-foreground \"Rule: steals plus blocks plus half his rebounds a \""
+  ],
+  "text10": 8
+ },
+ {
+  "t": "00:38:36",
+  "kind": "recap",
+  "text": "NBA Front Office Curated rosters, original ratings, simulated contracts. The play-in is waiting for your mistakes. Minnesota Timberwolves win the 2026 title Your Indiana Pacers finished 46-34, No. 5 in the East. 📈 Ahead of the ask. Ownership noticed. Trust upstairs: 85 of 100. ✅ Under the $226.7M tax line by $10.9M. No cheque upstairs. 5 clubs paid tax this season, the biggest bill $189.6M (Denver Nuggets). Finals: Minnesota Timberwolves beat Orlando Magic 4-2 East Play-In 7v8: Philadelphia 76ers 1-0 East Play-In 9v10: Detroit Pistons 1-0 East Play-In final: Orlando Magic 1-0 East R1: Orlando Magic 4-1 East R1: Indiana Pacers 4-0 East R1: Cleveland Cavaliers 4-2 East R1: Philadelphia 76ers 4-1 East Semis: Orlando Magic 4-3 East Semis: Cleveland Cavaliers 4-1 East Finals: Orlando Magic 4-1 West Play-In 7v8: Utah Jazz 1-0 West Play-In 9v10: Sacramento Kings 1-0 West Play-In final: Golden State Warriors 1-0 West R1: Denver Nuggets 4-3 West R1: Los Angeles Lakers 4-1 West R1: Minnesota Timberwolves 4-0 West R1: Utah Jazz 4-2 West Semis: Denver Nuggets 4-2 West Semis: Minnesota Timberwolves 4-2 West Finals: Minnesota Timberwolves 4-1 Titles 0 Seasons 1 Go to the draft 🏢 NBA Front Office Oct 13, 2026 RESULT 0 titles in 1 seasons DoUKnowBall douknowball.com/nba-front-office Share result Copy challenge 📋 Copy Score Card 🖼️ Save Image SHARE YOUR RESULT The 2026 season in numbers Sim season: every line and award here comes from this save's games, not real NBA stats. Awards Leaders Your lines MVP Nikola Jokic (DEN) 24.4 pts, 12.6 reb, 2.6 ast a game Rule: points plus rebounds plus assists a game, plus 20 times his club's winning share. All-League First Team Nikola Jokic (DEN) 24.4 pts, 12.6 reb, 2.6 ast a game Luka Doncic (LAL) 27.9 pts, 8.3 reb, 4.4 ast a game Cade Cunningham"
+ },
+ {
+  "t": "00:38:36",
+  "kind": "economy",
+  "label": "recap",
+  "cap": 164.961,
+  "season": 2026,
+  "my": "IND",
+  "teams": 30,
+  "list": "BKN:104.2/14 CHI:148.6/14 TOR:152.8/14 WAS:154.9/14 DET:159.1/14 MIA:161.2/14 UTA:161.2/14 MEM:163.3/14 CHA:163.3/14 NOP:171.7/14 PHX:178/14 ATL:184.3/14 SAC:186.4/14 LAL:196.9/14 MIL:196.9/14 POR:196.9/14 ORL:201.1/14 DAL:205.3/14 PHI:209.5/14 SAS:213.7/14 CLE:215.8/14 IND:215.8/14 GSW:217.9/14 LAC:217.9/14 MIN:220/14 HOU:228.4/14 BOS:243.1/14 NYK:251.5/14 OKC:272.5/14 DEN:274.6/14",
+  "saveChars": 191444,
+  "storageChars": 191597
+ },
+ {
+  "t": "00:38:38",
+  "kind": "recapReload",
+  "draftButton": true,
+  "text": "NBA Front Office Curated rosters, original ratings, simulated contracts. The play-in is waiting for your mistakes. Minnesota Timberwolves win the 2026 title Your Indiana Pacers finished 46-34, No. 5 in the East. 📈 Ahead of the ask. Ownership noticed. Trust upstairs: 85 of 100. ✅ Under the $226.7M tax line by $10.9M. No cheque upstairs. 5 clubs paid tax this season, the biggest bill $189.6M (Denve"
+ },
+ {
+  "t": "00:38:39",
+  "kind": "draft",
+  "label": "off",
+  "text": "NBA Front Office Curated rosters, original ratings, simulated contracts. The play-in is waiting for your mistakes. The 2027 Draft You hold 2 picks. Scout grades carry error. Trey Reeves F · age 21 90 Jaylen Eastwick G · age 20 90 Jaylen Grissom G · age 19 89 Lamar Lockridge G · age 21 88 Jalen Strother F · age 21 88 Quentin Oakhurst G · age 19 87 Kobi Holiday C · age 20 85 Kobi Isley F · age 20 84 Keon Isley F · age 20 83 Isaiah Kingman G · age 21 81 Tyrese Eastwick C · age 19 81 Marquis Fairweather G · age 20 80 Tarik Jarreau F · age 21 80 Quentin Ridgeway F · age 21 80 NBA Front Office: Basketball GM Simulator Take over an NBA franchise from a curated roster snapshot. New games use original 2024-25 and 2025-26 regular-season rating estimates with limited defensive and role evidence; ages, potential and contracts are simulated. Manage the cap, waive and sign, trade, survive the play-in "
+ },
+ {
+  "t": "00:38:39",
+  "kind": "draftclick",
+  "label": "off",
+  "rule": "prospect",
+  "text": "Trey Reeves F · age 21 90"
+ },
+ {
+  "t": "00:38:40",
+  "kind": "draftclick",
+  "label": "off",
+  "rule": "prospect",
+  "text": "Jaylen Eastwick G · age 20 90"
+ },
+ {
+  "t": "00:38:44",
+  "kind": "draftdone",
+  "label": "off",
+  "text": "NBA Front Office Curated rosters, original ratings, simulated contracts. The play-in is waiting for your mistakes. The 2027 Draft That is your draft done. The offseason has run and the new season is set up on the hub. ON THE CLOCK Your pick is in, and 5 more went off the board. 1. IND select Jaylen Eastwick G · your pick 90 2. BKN take Emory Halverson G 77 3. HOU take Jalen Strother F 88 4. WAS take Marquis Fairweather G 80 5. MIL take Kobi Holiday C 85 6. PHX take Omari Ashgrove F 80 Continue to the hub 🏛️ The new mandate: Win the Finals. Anything less is a failed season upstairs. 📋 The re-sign desk: 0 kept, 4 gone. 📋 You left 4 deals open, so your staff settled them by its own rule. NBA Front Office: Basketball GM Simulator Take over an NBA franchise from a curated roster snapshot. New games use original 2024-25 and 2025-26 regular-season rating estimates with limited defensive and "
+ },
+ {
+  "t": "00:38:44",
+  "kind": "draftclick",
+  "label": "off",
+  "rule": "continue",
+  "text": "Continue to the hub"
+ },
+ {
+  "t": "00:38:45",
+  "kind": "offseason",
+  "picks": 2,
+  "end": "hub",
+  "secs": 60
+ },
+ {
+  "t": "00:38:46",
+  "kind": "economy",
+  "label": "season2",
+  "cap": 177,
+  "season": 2027,
+  "my": "IND",
+  "teams": 30,
+  "list": "BKN:119.3/14 CHI:149/14 TOR:153.2/14 DET:159.9/14 MIA:161.6/14 UTA:161.6/14 MEM:163.7/14 CHA:163.7/14 WAS:170/15 NOP:172.1/14 ATL:184.7/14 SAC:186.8/14 PHX:193/15 LAL:197.3/14 POR:197.3/14 ORL:201.5/14 DAL:205.7/14 PHI:210.3/14 MIL:211.6/14 SAS:214.1/14 CLE:216.2/14 GSW:218.3/14 LAC:218.3/14 MIN:220.4/14 IND:228.4/12 BOS:243.5/14 HOU:244.7/14 NYK:251.9/14 OKC:272.9/14 DEN:275/14",
+  "saveChars": 143717,
+  "storageChars": 143870
+ },
+ {
+  "t": "00:38:46",
+  "kind": "audit",
+  "where": "season 2 hub",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [
+   "2027 · Round 1/20 Record 0-0 Strength 86 Cap room $-51.4M Current tax est. none 🏛️ OWNERS"
+  ],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 2,
+  "tinyText": 9,
+  "tinyTextSample": [
+   "9px div.mt-0.5.truncate.text-[9px] \"2 short of the 14 man floor. Filled on minimum dea\"",
+   "9px div.mt-0.5.truncate.text-[9px] \"Keon Oakhurst wants $25M, out of reach\"",
+   "9px div.mt-0.5.truncate.text-[9px] \"Move salary or the owner will\"",
+   "9px div.mt-0.5.truncate.text-[9px] \"0-0 with 20 rounds to play\""
+  ],
+  "text10": 15
+ },
+ {
+  "t": "00:38:46",
+  "kind": "s2hub",
+  "text": "NBA Front Office Curated rosters, original ratings, simulated contracts. The play-in is waiting for your mistakes. Indiana Pacers 2027 · Round 1/20 Record 0-0 Strength 86 Cap room $-51.4M Current tax est. none 🏛️ OWNERSHIP Trust 85 Win the Finals. Anything less is a failed season upstairs. 👔 ROSTER 12 under contract 2 short of the 14 man floor. Filled on minimum deals at tip off. 💼 FREE AGENCY -$51M over Keon Oakhurst wants $25M, out of reach 🤝 TRADES -$51M to shed Move salary or the owner will 🏟️ PLAY Round 1 of 20 0-0 with 20 rounds to play 📊 STANDINGS #1 in the East Top seed as it stands 📋 STAFF 5 of 5 jobs filled +0.33 team strength from the bench ✍️ RE-SIGN DESK 3 deals end this summer 3 still waiting on you 🎟️ DRAFT PICKS 2 picks in 2027 14 picks over 7 drafts 🔁 TRADE DESK 12 rounds to the deadline Players and picks, up to five a side 🏛️ The new mandate: Win the Finals. Anything less is a failed season upstairs. 📋 The re-sign desk: 0 kept, 4 gone. 📋 You left 4 deals open, so your staff settled them by its own rule. Abandon franchise and restart NBA Front Office: Basketball GM Simulator Take over an NBA franchise from a curated roster snapshot. New games use original 2024-25 and 2025-26 regular-season rating estimates with limited defensive and role evidence; ages, potential and contracts are simulated. Manage the cap, waive and sign, trade, survive the play-in for seeds 7 to 10, then draft and develop across saved seasons. Running an NBA franchise looks easy from the couch. This sim hands you a curated roster snapshot, a cap sheet and 29 rivals so you can "
+ },
+ {
+  "t": "00:38:46",
+  "kind": "tiles",
+  "label": "s2",
+  "tiles": [
+   "ROSTER 12 under contract 2 short of the 14 man floor. Filled on minimu",
+   "FREE AGENCY -$51M over Keon Oakhurst wants $25M, out of reach",
+   "TRADES -$51M to shed Move salary or the owner will",
+   "PLAY Round 1 of 20 0-0 with 20 rounds to play",
+   "STANDINGS #1 in the East Top seed as it stands",
+   "STAFF 5 of 5 jobs filled +0.33 team strength from the bench",
+   "RE-SIGN DESK 3 deals end this summer 3 still waiting on you",
+   "DRAFT PICKS 2 picks in 2027 14 picks over 7 drafts",
+   "TRADE DESK 12 rounds to the deadline Players and picks, up to five a s"
+  ]
+ },
+ {
+  "t": "00:38:47",
+  "kind": "audit",
+  "where": "s2 tile 0 ROSTER 12 under contract 2 sho",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [
+   "2027 · Round 1/20 Record 0-0 Strength 86 Cap room $-51.4M Current tax est. none 🏛️ OWNERS"
+  ],
+  "tinyTap": [
+   {
+    "el": "button.rounded-full.border.border-border \"Waive, $17.5M dead\"",
+    "w": 113,
+    "h": 22
+   },
+   {
+    "el": "button.rounded-full.border.border-border \"Waive, $5.2M dead\"",
+    "w": 110,
+    "h": 22
+   },
+   {
+    "el": "button.rounded-full.border.border-border \"Waive, $5.2M dead\"",
+    "w": 110,
+    "h": 22
+   },
+   {
+    "el": "button.rounded-full.border.border-border \"Waive, $13M dead\"",
+    "w": 105,
+    "h": 22
+   },
+   {
+    "el": "button.rounded-full.border.border-border \"Waive, $13.9M dead\"",
+    "w": 114,
+    "h": 22
+   },
+   {
+    "el": "button.rounded-full.border.border-border \"Waive, $11.1M dead\"",
+    "w": 109,
+    "h": 22
+   },
+   {
+    "el": "button.rounded-full.border.border-border \"Waive, $12M dead\"",
+    "w": 105,
+    "h": 22
+   },
+   {
+    "el": "button.rounded-full.border.border-border \"Waive, $12M dead\"",
+    "w": 105,
+    "h": 22
+   }
+  ],
+  "tap44": 3,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:38:47",
+  "kind": "panel",
+  "label": "s2",
+  "tile": "ROSTER 12 under contract 2 short of the ",
+  "text": "NBA Front Office Curated rosters, original ratings, simulated contracts. The play-in is waiting for your mistakes. Indiana Pacers 2027 · Round 1/20 Record 0-0 Strength 86 Cap room $-51.4M Current tax est. none 🏛️ OWNERSHIP Trust 85 Win the Finals. Anything less is a failed season upstairs. Hub Roster 🏛️ The new mandate: Win the Finals. Anything less is a failed season upstairs. 📋 The re-sign desk: 0 kept, 4 gone. 📋 You left 4 deals open, so your staff settled them by its own rule. Payroll $228.4M of $177M (current) Cap figures as of September 2026 Luxury tax line $243.2M, first apron $253.7M, second apron $269M. Under the tax line by $14.8M. 12 of 15 roster spots filled, 14 needed at tip off. 2 short: the league fills the gap on minimum deals ($2.1M each) when the season tips off. No other moves: 2 minimum contracts at $2.1M add $4.2M at tip-off. Tip-off payroll $232.6M. Tax estimate"
+ },
+ {
+  "t": "00:38:48",
+  "kind": "audit",
+  "where": "s2 tile 1 FREE AGENCY -$51M over Keon Oa",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [
+   "2027 · Round 1/20 Record 0-0 Strength 86 Cap room $-51.4M Current tax est. none 🏛️ OWNERS",
+   "tled them by its own rule. Free agents (cap room $-51.4M). A man you waived waits until n"
+  ],
+  "tinyTap": [
+   {
+    "el": "button.rounded-full.bg-primary.px-2.5 \"Sign\"",
+    "w": 42,
+    "h": 20
+   },
+   {
+    "el": "button.rounded-full.bg-primary.px-2.5 \"Sign\"",
+    "w": 42,
+    "h": 20
+   },
+   {
+    "el": "button.rounded-full.bg-primary.px-2.5 \"Sign\"",
+    "w": 42,
+    "h": 20
+   },
+   {
+    "el": "button.rounded-full.bg-primary.px-2.5 \"Sign\"",
+    "w": 42,
+    "h": 20
+   },
+   {
+    "el": "button.rounded-full.bg-primary.px-2.5 \"Sign\"",
+    "w": 42,
+    "h": 20
+   },
+   {
+    "el": "button.rounded-full.bg-primary.px-2.5 \"Sign\"",
+    "w": 42,
+    "h": 20
+   },
+   {
+    "el": "button.rounded-full.bg-primary.px-2.5 \"Sign\"",
+    "w": 42,
+    "h": 20
+   },
+   {
+    "el": "button.rounded-full.bg-primary.px-2.5 \"Sign\"",
+    "w": 42,
+    "h": 20
+   }
+  ],
+  "tap44": 3,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:38:48",
+  "kind": "panel",
+  "label": "s2",
+  "tile": "FREE AGENCY -$51M over Keon Oakhurst wan",
+  "text": "NBA Front Office Curated rosters, original ratings, simulated contracts. The play-in is waiting for your mistakes. Indiana Pacers 2027 · Round 1/20 Record 0-0 Strength 86 Cap room $-51.4M Current tax est. none 🏛️ OWNERSHIP Trust 85 Win the Finals. Anything less is a failed season upstairs. Hub Free agency 🏛️ The new mandate: Win the Finals. Anything less is a failed season upstairs. 📋 The re-sign desk: 0 kept, 4 gone. 📋 You left 4 deals open, so your staff settled them by its own rule. Free agents (cap room $-51.4M). A man you waived waits until next season. Keon Oakhurst F · 27y · wants $25M 81 Sign Lamar Ashgrove C · 31y · wants $25M 81 Sign Isaiah Northcutt F · 29y · wants $20.5M 79 Sign Malik Beaudry G · 31y · wants $18.2M 78 Sign Dashawn Halverson G · 34y · wants $16M 77 Sign Marquis Ridgeway F · 27y · wants $13.7M 76 Sign Vontae Eastwick F · 32y · wants $9.2M 74 Sign Andre Ridg"
+ },
+ {
+  "t": "00:38:49",
+  "kind": "audit",
+  "where": "s2 tile 2 TRADES -$51M to shed Move sala",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [
+   "2027 · Round 1/20 Record 0-0 Strength 86 Cap room $-51.4M Current tax est. none 🏛️ OWNERS"
+  ],
+  "tinyTap": [
+   {
+    "el": "button.rounded-full.border.px-2 \"DEN\"",
+    "w": 39,
+    "h": 21
+   },
+   {
+    "el": "button.rounded-full.border.px-2 \"OKC\"",
+    "w": 40,
+    "h": 21
+   },
+   {
+    "el": "button.rounded-full.border.px-2 \"BOS\"",
+    "w": 40,
+    "h": 21
+   },
+   {
+    "el": "button.rounded-full.border.px-2 \"NYK\"",
+    "w": 40,
+    "h": 21
+   },
+   {
+    "el": "button.rounded-full.border.px-2 \"LAL\"",
+    "w": 37,
+    "h": 21
+   },
+   {
+    "el": "button.rounded-full.border.px-2 \"MIL\"",
+    "w": 36,
+    "h": 21
+   },
+   {
+    "el": "button.rounded-full.border.px-2 \"MIN\"",
+    "w": 38,
+    "h": 21
+   },
+   {
+    "el": "button.rounded-full.border.px-2 \"HOU\"",
+    "w": 40,
+    "h": 21
+   }
+  ],
+  "tap44": 4,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:38:49",
+  "kind": "panel",
+  "label": "s2",
+  "tile": "TRADES -$51M to shed Move salary or the ",
+  "text": "NBA Front Office Curated rosters, original ratings, simulated contracts. The play-in is waiting for your mistakes. Indiana Pacers 2027 · Round 1/20 Record 0-0 Strength 86 Cap room $-51.4M Current tax est. none 🏛️ OWNERSHIP Trust 85 Win the Finals. Anything less is a failed season upstairs. Hub Trades 🏛️ The new mandate: Win the Finals. Anything less is a failed season upstairs. 📋 The re-sign desk: 0 kept, 4 gone. 📋 You left 4 deals open, so your staff settled them by its own rule. Trade deadline: the break after round 12 is the last chance, and deals shut once round 13 is played. Packages with picks are on the Trade desk box. 🔍 Trade Finder Pick one of your players and shop him. Only deals the AI genuinely accepts show up, cap checked. Pascal Siakam (F) Opening estimate 89: retained-season box scores. Limited defense and role evidence. 89e Trey Reeves (F) 89 Jaylen Eastwick (G) 89 A"
+ },
+ {
+  "t": "00:38:50",
+  "kind": "audit",
+  "where": "s2 tile 3 PLAY Round 1 of 20 0-0 with 20",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [
+   "2027 · Round 1/20 Record 0-0 Strength 86 Cap room $-51.4M Current tax est. none 🏛️ OWNERS"
+  ],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 4,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:38:50",
+  "kind": "panel",
+  "label": "s2",
+  "tile": "PLAY Round 1 of 20 0-0 with 20 rounds to",
+  "text": "NBA Front Office Curated rosters, original ratings, simulated contracts. The play-in is waiting for your mistakes. Indiana Pacers 2027 · Round 1/20 Record 0-0 Strength 86 Cap room $-51.4M Current tax est. none 🏛️ OWNERSHIP Trust 85 Win the Finals. Anything less is a failed season upstairs. Hub Play 🏛️ The new mandate: Win the Finals. Anything less is a failed season upstairs. 📋 The re-sign desk: 0 kept, 4 gone. 📋 You left 4 deals open, so your staff settled them by its own rule. Each round simulates a stretch of games across the league. 2 short of the 14 man floor. At tip off the league fills the gap on minimum deals ($2.1M each), so sign who you want first. Play Round 1 The season ends with the play-in for seeds 7 to 10, then best-of-7 rounds to the Finals. Abandon franchise and restart NBA Front Office: Basketball GM Simulator Take over an NBA franchise from a curated roster snapsh"
+ },
+ {
+  "t": "00:38:52",
+  "kind": "audit",
+  "where": "s2 tile 4 STANDINGS #1 in the East Top s",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [
+   "2027 · Round 1/20 Record 0-0 Strength 86 Cap room $-51.4M Current tax est. none 🏛️ OWNERS"
+  ],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 3,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:38:52",
+  "kind": "panel",
+  "label": "s2",
+  "tile": "STANDINGS #1 in the East Top seed as it ",
+  "text": "NBA Front Office Curated rosters, original ratings, simulated contracts. The play-in is waiting for your mistakes. Indiana Pacers 2027 · Round 1/20 Record 0-0 Strength 86 Cap room $-51.4M Current tax est. none 🏛️ OWNERSHIP Trust 85 Win the Finals. Anything less is a failed season upstairs. Hub Standings 🏛️ The new mandate: Win the Finals. Anything less is a failed season upstairs. 📋 The re-sign desk: 0 kept, 4 gone. 📋 You left 4 deals open, so your staff settled them by its own rule. EAST 1. Indiana Pacers 0-0 2. Boston Celtics 0-0 3. Cleveland Cavaliers 0-0 4. Charlotte Hornets 0-0 5. Toronto Raptors 0-0 6. New York Knicks 0-0 7. Orlando Magic (play-in) 0-0 8. Atlanta Hawks (play-in) 0-0 9. Philadelphia 76ers (play-in) 0-0 10. Milwaukee Bucks (play-in) 0-0 11. Chicago Bulls 0-0 12. Detroit Pistons 0-0 13. Miami Heat 0-0 14. Washington Wizards 0-0 15. Brooklyn Nets 0-0 WEST 1. Housto"
+ },
+ {
+  "t": "00:38:53",
+  "kind": "audit",
+  "where": "s2 tile 5 STAFF 5 of 5 jobs filled +0.33",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [
+   "2027 · Round 1/20 Record 0-0 Strength 86 Cap room $-51.4M Current tax est. none 🏛️ OWNERS"
+  ],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 3,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:38:53",
+  "kind": "panel",
+  "label": "s2",
+  "tile": "STAFF 5 of 5 jobs filled +0.33 team stre",
+  "text": "NBA Front Office Curated rosters, original ratings, simulated contracts. The play-in is waiting for your mistakes. Indiana Pacers 2027 · Round 1/20 Record 0-0 Strength 86 Cap room $-51.4M Current tax est. none 🏛️ OWNERSHIP Trust 85 Win the Finals. Anything less is a failed season upstairs. Hub Staff Ownership gives the staff desk $9.00M each summer for fees and pay offs. Wages are paid outside the cap. One strength number covers both ends of the floor here, so a coach's point at either end counts 50 percent. The development coach works every summer on your men with room to grow who are 23 or under today, since everyone turns a year older before the summer's growth. STAFF · $9.00M TO SPEND · 67K A ROUND ON THE DESK ? 📋 Head coach · your call Fenwick Lindqvist Level 2 · 36k a round 🗣️ Lead assistant Zebulon Stanhope Level 2 · 14k a round 📈 Development Dashiell Birtwhistle Level 1 · 5k "
+ },
+ {
+  "t": "00:38:54",
+  "kind": "audit",
+  "where": "s2 tile 6 RE-SIGN DESK 3 deals end this ",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [
+   "2027 · Round 1/20 Record 0-0 Strength 86 Cap room $-51.4M Current tax est. none 🏛️ OWNERS"
+  ],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 4,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:38:54",
+  "kind": "panel",
+  "label": "s2",
+  "tile": "RE-SIGN DESK 3 deals end this summer 3 s",
+  "text": "NBA Front Office Curated rosters, original ratings, simulated contracts. The play-in is waiting for your mistakes. Indiana Pacers 2027 · Round 1/20 Record 0-0 Strength 86 Cap room $-51.4M Current tax est. none 🏛️ OWNERSHIP Trust 85 Win the Finals. Anything less is a failed season upstairs. Hub Re-sign desk Re-sign desk 3 still waiting on you. Tyrese Haliburton G 83 overall, age 31 Asks $31.5M for 2 seasons Full Bird rights Obi Toppin F 82 overall, age 32 Asks $29.1M for 2 seasons Full Bird rights Aaron Nesmith F 75 overall, age 34 Asks $11.1M for 1 season Full Bird rights Decide any time this season. Anyone you leave open is settled by your staff's own rule when the summer starts, never by a coin flip. The luxury tax still bills whatever payroll you keep. The money is this game's own figures, not real contracts. The rules are each league's own, read in October 2026. The money is this ga"
+ },
+ {
+  "t": "00:38:55",
+  "kind": "audit",
+  "where": "s2 tile 7 DRAFT PICKS 2 picks in 2027 14",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [
+   "2027 · Round 1/20 Record 0-0 Strength 86 Cap room $-51.4M Current tax est. none 🏛️ OWNERS"
+  ],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 3,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:38:55",
+  "kind": "panel",
+  "label": "s2",
+  "tile": "DRAFT PICKS 2 picks in 2027 14 picks ove",
+  "text": "NBA Front Office Curated rosters, original ratings, simulated contracts. The play-in is waiting for your mistakes. Indiana Pacers 2027 · Round 1/20 Record 0-0 Strength 86 Cap room $-51.4M Current tax est. none 🏛️ OWNERSHIP Trust 85 Win the Finals. Anything less is a failed season upstairs. Hub Draft picks DRAFT CAPITAL 14 picks, 7 firsts Trade deadline after round 12. 12 rounds to go. 2027 (this year) 1st 2nd 2028 1st 2nd 2029 1st 2nd 2030 1st 2nd 2031 1st 2nd 2032 1st 2nd 2033 1st 2nd The lottery table is the one the 2026 draft used. The league switched to a new lottery from the 2027 draft, and this game does not model it yet. In the second round, every club that missed the playoffs picks ahead of every playoff club here. The lottery is in the rules, but draft night here is the game's own short draft: you pick first in each batch, then the other clubs go in reverse standings. 🏛️ The n"
+ },
+ {
+  "t": "00:38:57",
+  "kind": "audit",
+  "where": "s2 tile 8 TRADE DESK 12 rounds to the de",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [
+   "2027 · Round 1/20 Record 0-0 Strength 86 Cap room $-51.4M Current tax est. none 🏛️ OWNERS"
+  ],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 58,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:38:57",
+  "kind": "panel",
+  "label": "s2",
+  "tile": "TRADE DESK 12 rounds to the deadline Pla",
+  "text": "NBA Front Office Curated rosters, original ratings, simulated contracts. The play-in is waiting for your mistakes. Indiana Pacers 2027 · Round 1/20 Record 0-0 Strength 86 Cap room $-51.4M Current tax est. none 🏛️ OWNERSHIP Trust 85 Win the Finals. Anything less is a failed season upstairs. Hub Trade desk Deal with Atlanta Hawks (holding) Brooklyn Nets (holding) Boston Celtics (holding) Charlotte Hornets (holding) Chicago Bulls (holding) Cleveland Cavaliers (holding) Dallas Mavericks (holding) Denver Nuggets (holding) Detroit Pistons (holding) Golden State Warriors (holding) Houston Rockets (holding) LA Clippers (holding) Los Angeles Lakers (holding) Memphis Grizzlies (holding) Miami Heat (holding) Milwaukee Bucks (holding) Minnesota Timberwolves (holding) New Orleans Pelicans (holding) New York Knicks (holding) Oklahoma City Thunder (holding) Orlando Magic (holding) Philadelphia 76ers ("
+ },
+ {
+  "t": "00:38:58",
+  "kind": "audit",
+  "where": "s2 press 1 Play Round 1",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [
+   "2027 · Round 2/20 Record 2-2 Strength 86 Cap room $-55.6M Current tax est. none 🏛️ OWNERS"
+  ],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 4,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:38:59",
+  "kind": "week",
+  "label": "s2",
+  "pressed": "Play Round 1",
+  "text": "NBA Front Office Curated rosters, original ratings, simulated contracts. The play-in is waiting for your mistakes. Indiana Pacers 2027 · Round 2/20 Record 2-2 Strength 86 Cap room $-55.6M Current tax est. none 🏛️ OWNERSHIP Trust 85 Win the Finals. Anything less is a failed season upstairs. 📈 In the postseason picture. Hold it. Hub Play Round 1: you went 2-2. 📋 You tipped off with 12 under contract, so the league filled you to 14 on minimum deals: Tarik Vance, Malik Marchand, $2.1M each. Each round simulates a stretch of games across the league. Play Round 2 The season ends with the play-in "
+ },
+ {
+  "t": "00:38:59",
+  "kind": "audit",
+  "where": "s2 press 2 Play Round 2",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [
+   "2027 · Round 3/20 Record 3-5 Strength 86 Cap room $-55.6M Current tax est. none 🏛️ OWNERS"
+  ],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 4,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:39:00",
+  "kind": "audit",
+  "where": "s2 press 3 Play Round 3",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [
+   "2027 · Round 4/20 Record 5-7 Strength 86 Cap room $-55.6M Current tax est. none 🏛️ OWNERS"
+  ],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 4,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:39:00",
+  "kind": "season",
+  "part": "s2",
+  "presses": 3,
+  "end": "paused"
+ },
+ {
+  "t": "00:39:03",
+  "kind": "reload",
+  "same": true,
+  "beforeReload": "NBA Front Office Curated rosters, original ratings, simulated contracts. The play-in is waiting for your mistakes. Indiana Pacers 2027 · Round 4/20 Record 5-7 Strength 86 Cap room $-55.6M Current tax est. none 🏛️ OWNERSHIP Trust 85 Win the Finals. Anything less is a failed season upstairs. 📉 Outsi",
+  "after": "NBA Front Office Curated rosters, original ratings, simulated contracts. The play-in is waiting for your mistakes. Indiana Pacers 2027 · Round 4/20 Record 5-7 Strength 86 Cap room $-55.6M Current tax est. none 🏛️ OWNERSHIP Trust 85 Win the Finals. Anything less is a failed season upstairs. 📉 Outsi"
+ },
+ {
+  "t": "00:39:03",
+  "kind": "done",
+  "secs": 78
+ }
+]

@@ -1,0 +1,5 @@
+#!serve
+#!playwright
+nfl: node .rc/x/walkFo.mjs nfl
+nba: node .rc/x/walkFo.mjs nba
+quota-nfl: node .rc/x/walkQuota.mjs nfl 900000
