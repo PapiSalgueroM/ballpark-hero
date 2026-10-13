@@ -1,0 +1,77 @@
+name: Soccer Career documentary target control
+
+on:
+  push:
+    branches: [codex/documentary-target-control]
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      CAREER_DOCUMENTARY_PHASE: fixed
+      CAREER_DOCUMENTARY_OUT: ${{ github.workspace }}/career-documentary-target-artifacts
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Bind the fixed app and locked dependencies
+        run: |
+          echo '127.0.0.1 flawuiqbvjobmkfkauhw.supabase.co' | sudo tee -a /etc/hosts
+          mkdir -p "$CAREER_DOCUMENTARY_OUT"
+          git rev-parse HEAD > "$CAREER_DOCUMENTARY_OUT/source-head.txt"
+          git status --porcelain --untracked-files=no > "$CAREER_DOCUMENTARY_OUT/source-before.txt"
+          test ! -s "$CAREER_DOCUMENTARY_OUT/source-before.txt"
+          git diff --exit-code f1839dd7a22e3b8fbf9e8038554a295bffd0700a -- src scripts .github/workflows package.json package-lock.json bun.lock ':!scripts/qa/qualifySoccerCareerDocumentaryTarget.mjs' ':!.github/workflows/soccer-career-documentary-target-control.yml'
+          find src scripts .github/workflows -type f ! -path scripts/data/lastmod.json -print0 | sort -z | xargs -0 sha256sum > "$CAREER_DOCUMENTARY_OUT/source-hashes.txt"
+          sha256sum package.json package-lock.json bun.lock > "$CAREER_DOCUMENTARY_OUT/package-hashes.txt"
+          npm ci
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          const lock = JSON.parse(fs.readFileSync('package-lock.json'));
+          const installed = Object.entries(lock.packages).filter(([p]) => p.startsWith('node_modules/') && fs.existsSync(p + '/package.json')).map(([p, entry]) => {
+            const version = JSON.parse(fs.readFileSync(p + '/package.json')).version;
+            assert.equal(version, entry.version, p); return { path: p, version };
+          });
+          assert.equal(installed.length, 521);
+          fs.writeFileSync(process.env.CAREER_DOCUMENTARY_OUT + '/installed.json', JSON.stringify(installed, null, 2));
+          console.log(`Bound ${installed.length} installed locked versions.`);
+          NODE
+      - name: Check app types
+        run: node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee "$CAREER_DOCUMENTARY_OUT/types.log"
+      - name: Reject the actual expired repeat target
+        run: node scripts/qa/qualifySoccerCareerDocumentaryTarget.mjs 2>&1 | tee "$CAREER_DOCUMENTARY_OUT/target-control.log"
+      - name: Hold every actual source and package byte
+        if: always()
+        run: |
+          sha256sum --check "$CAREER_DOCUMENTARY_OUT/source-hashes.txt" > "$CAREER_DOCUMENTARY_OUT/source-holds.log"
+          sha256sum --check "$CAREER_DOCUMENTARY_OUT/package-hashes.txt"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          const installed = JSON.parse(fs.readFileSync(process.env.CAREER_DOCUMENTARY_OUT + '/installed.json'));
+          for (const row of installed) assert.equal(JSON.parse(fs.readFileSync(row.path + '/package.json')).version, row.version, row.path);
+          assert.equal(installed.length, 521);
+          console.log(`Held ${installed.length} installed locked versions.`);
+          NODE
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: career-documentary-target-${{ github.run_id }}
+          path: career-documentary-target-artifacts
+          include-hidden-files: true
+          if-no-files-found: error
