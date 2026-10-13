@@ -1,0 +1,5 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/lib/collegeSeat.test.ts --testTimeout=300000
+simCollegeSeat: node scripts/simCollegeSeat.mjs
+simCollegeSeat-cfbsoft: SIM_COLLEGE_SEAT_TILT=cfb-soft node scripts/simCollegeSeat.mjs
+simCollegeSeat-anchors: SIM_COLLEGE_SEAT_ANCHORS=1 node scripts/simCollegeSeat.mjs
