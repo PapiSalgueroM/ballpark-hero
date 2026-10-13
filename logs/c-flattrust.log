@@ -1,0 +1,70 @@
+NEGATIVE CONTROL ON: flattrust; section S3 must go red
+  FAIL [S2]: cfb season 2026: graded met, gradeSeason says missed
+  FAIL [S3]: cfb season 2026: trust 60 to 74, gradeSeason's -16 makes 44
+  FAIL [S3]: cfb bucket post:1: the seat moved 14, gradeSeason -16
+  FAIL [S2]: cfb season 2027: graded met, gradeSeason says missed
+  FAIL [S3]: cfb season 2027: trust 74 to 88, gradeSeason's -16 makes 58
+  FAIL [S3]: cfb bucket post:1: the seat moved 14, gradeSeason -16
+  FAIL [S2]: cfb season 2028: graded met, gradeSeason says missed
+  FAIL [S3]: cfb season 2028: trust 88 to 100, gradeSeason's -16 makes 72
+  FAIL [S3]: cfb bucket post:1: the seat moved 14, gradeSeason -16
+  FAIL [S2]: cfb season 2030: graded met, gradeSeason says missed
+  FAIL [S3]: (further failures in this check not printed)
+  FAIL [S2]: cfb season 2031: graded met, gradeSeason says title
+  FAIL [S2]: cfb season 2032: graded met, gradeSeason says badly
+  FAIL [S2]: (further failures in this check not printed)
+simCollegeSeat: cfb, cbb over seeds 1, 300 dynasties a sport a seed, 10 seasons, 68 s
+S1) the ask is the roster's, in the pack's words
+   cfb: 3000 season starts, 3000 against the oracle, 0 first seasons kept the offer's ask, 2721 with a roster rank other than the prestige rank
+   cbb: 3000 season starts, 3000 against the oracle, 0 first seasons kept the offer's ask, 2815 with a roster rank other than the prestige rank
+S2) the outcome is the engine's, and the grade is gradeSeason's
+   cfb: 3000 graded seasons. Grade shares by ask tier:
+     contend    181  title 0.0%, overachieved 0.0%, met 100.0%, missed 0.0%, badly 0.0%
+     playoffs   833  title 0.0%, overachieved 0.0%, met 100.0%, missed 0.0%, badly 0.0%
+     respect   1783  title 0.0%, overachieved 0.0%, met 100.0%, missed 0.0%, badly 0.0%
+     rebuild    203  title 0.0%, overachieved 0.0%, met 100.0%, missed 0.0%, badly 0.0%
+     fired within the run, by first ask tier: contend 0.0% of 34, playoffs 0.0% of 48, respect 0.0% of 168, rebuild 0.0% of 50
+     fired within the run, by starting tier: tier 1 0.0%, tier 2 0.0%, tier 3 0.0%, tier 4 0.0%
+     first feeds already closed, by starting tier: tier 1 0 of 0, tier 2 0 of 0, tier 3 0 of 0, tier 4 0 of 0
+   cbb: 3000 graded seasons. Grade shares by ask tier:
+     title      187  title 0.0%, overachieved 0.0%, met 100.0%, missed 0.0%, badly 0.0%
+     contend    988  title 0.0%, overachieved 0.0%, met 100.0%, missed 0.0%, badly 0.0%
+     playoffs  1726  title 0.0%, overachieved 0.0%, met 100.0%, missed 0.0%, badly 0.0%
+     respect     99  title 0.0%, overachieved 0.0%, met 100.0%, missed 0.0%, badly 0.0%
+     fired within the run, by first ask tier: title 0.0% of 37, contend 0.0% of 55, playoffs 0.0% of 144, respect 0.0% of 64
+     fired within the run, by starting tier: tier 1 0.0%, tier 2 0.0%, tier 3 0.0%, tier 4 0.0%
+     first feeds already closed, by starting tier: tier 1 0 of 0, tier 2 0 of 0, tier 3 0 of 0, tier 4 0 of 0
+S3) trust moves by gradeSeason, never rising with the shortfall
+   cfb: floor:4:0 n97 move 14; floor:4:1 n40 move 14; floor:4:2 n20 move 14; floor:4:3 n11 move 14; floor:4:4 n2 move 14; floor:5:0 n982 move 14; floor:5:1 n182 move 14; floor:5:2 n130 move 14; floor:5:3 n60 move 14; floor:5:4 n26 move 14; floor:in n435 move 14; post:-1 n214 move 14; post:-2 n24 move 14; post:0 n260 move 14; post:1 n457 move 14; post:2 n28 move 14; title n32 move 14
+   cbb: floor:9:2 n2 move 14; floor:9:3 n7 move 14; floor:9:4 n64 move 14; floor:in n26 move 14; post:-1 n732 move 14; post:-2 n1 move 14; post:0 n1803 move 14; post:1 n188 move 14; post:2 n114 move 14; post:3 n4 move 14; title n59 move 14
+S4) a firing at zero trust opens a market, never the end
+   cfb: 0 firings, 0 jobs taken off the market, 0 years out, 0 dynasties that met a closed market
+  FAIL [S4]: cfb: no coach was ever fired, so the firing is untested
+   cbb: 0 firings, 0 jobs taken off the market, 0 years out, 0 dynasties that met a closed market
+  FAIL [S4]: cbb: no coach was ever fired, so the firing is untested
+S5) a program that let him go never calls again
+   cfb: 0 feeds holding 0 offers; this game's wider rule removed 0 offers (n/a of what seatOffers drew) and 0 bids (n/a of the bids drawn)
+  FAIL [S5]: cfb: no feed was read
+   cbb: 0 feeds holding 0 offers; this game's wider rule removed 0 offers (n/a of what seatOffers drew) and 0 bids (n/a of the bids drawn)
+  FAIL [S5]: cbb: no feed was read
+S6) a bid comes from one tier up after a big year
+   cfb: 0 bids; after a title 0 of 0 (n/a), after beating the ask 0 of 0 (n/a); 0 taken (even dynasties go, odd ones stay)
+  FAIL [S6]: cfb: no bid was ever drawn, so the bid is untested
+   cbb: 0 bids; after a title 0 of 0 (n/a), after beating the ask 0 of 0 (n/a); 0 taken (even dynasties go, odd ones stay)
+  FAIL [S6]: cbb: no bid was ever drawn, so the bid is untested
+S7) keyed, never random
+   30600 seat calls under a Math.random that throws; 0 drew from it
+S8) the seat watches: the same games with it and without it
+   cfb: 33000 rounds and 5700 closes and offseasons compared byte for byte before a move or a firing
+   cbb: 27000 rounds and 5700 closes and offseasons compared byte for byte before a move or a firing
+S9) one rule for next year
+   ladder of 40320 careers: hostNextYear e3b0c4481b69e5a822e4f8bb953bcb35481fd2a9, seatNextYear e3b0c4481b69e5a822e4f8bb953bcb35481fd2a9, the base printed e3b0c4481b69e5a822e4f8bb953bcb35481fd2a9
+   collegeNextYear checked against seatNextYear over 40920 careers (600 from the fleets)
+SY) the year out
+   cfb: 0 years out played; refused in a seat 3000, on an open season 0, with next year shut 0; chairs left empty at the program that let him go during a year out 0
+  FAIL [SY]: cfb: a refusal was never tried
+  FAIL [SY]: cfb: no year out was played over a full fleet
+   cbb: 0 years out played; refused in a seat 3000, on an open season 0, with next year shut 0; chairs left empty at the program that let him go during a year out 0
+  FAIL [SY]: cbb: a refusal was never tried
+  FAIL [SY]: cbb: no year out was played over a full fleet
+simCollegeSeat CONTROL flattrust FIRED: S3 went red with 4446 failures (red: S2 (2858), S3 (4446), S4 (2), S5 (2), S6 (2), SY (4))

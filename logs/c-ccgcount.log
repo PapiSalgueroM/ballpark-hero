@@ -1,0 +1,67 @@
+NEGATIVE CONTROL ON: ccgcount; section S2 must go red
+  FAIL [S2]: cfb ALA season 2027: the seat read roundsWon 1, the engine's return says 0
+  FAIL [S2]: cfb season 2027: graded met, gradeSeason says missed
+  FAIL [S3]: cfb season 2027: trust 44 to 58, gradeSeason's -16 makes 28
+  FAIL [S3]: cfb bucket post:1: the seat moved 14, gradeSeason -16
+  FAIL [S2]: cfb ALA season 2031: the seat read roundsWon 5, the engine's return says 4
+  FAIL [S2]: cfb ALA season 2034: the seat read madePlayoffs true, the engine's return says false
+  FAIL [S2]: cfb season 2034: graded met, gradeSeason says missed
+  FAIL [S3]: cfb season 2034: trust 74 to 88, gradeSeason's -16 makes 58
+  FAIL [S3]: cfb bucket post:1: the seat moved 14, gradeSeason -16
+  FAIL [S2]: cfb UGA season 2026: the seat read roundsWon 2, the engine's return says 1
+  FAIL [S2]: (further failures in this check not printed)
+  FAIL [S3]: cfb bucket post:0: the seat moved 22, gradeSeason 14
+  FAIL [S3]: cfb bucket floor:5:0: the seat moved 22, gradeSeason 14
+  FAIL [S6]: cfb: a bid after a season graded overachieved (oracle met)
+  FAIL [S3]: (further failures in this check not printed)
+  FAIL [S6]: cfb: a bid after a season graded overachieved (oracle met)
+  FAIL [S6]: cfb: a bid after a season graded overachieved (oracle met)
+  FAIL [S6]: cfb: a bid after a season graded overachieved (oracle met)
+  FAIL [S6]: cfb: a bid after a season graded overachieved (oracle met)
+  FAIL [S6]: cfb: a bid after a season graded overachieved (oracle met)
+  FAIL [S6]: (further failures in this check not printed)
+simCollegeSeat: cfb, cbb over seeds 1, 300 dynasties a sport a seed, 10 seasons, 52 s
+S1) the ask is the roster's, in the pack's words
+   cfb: 2864 season starts, 2791 against the oracle, 73 first seasons kept the offer's ask, 2511 with a roster rank other than the prestige rank
+   cbb: 2912 season starts, 2852 against the oracle, 60 first seasons kept the offer's ask, 2667 with a roster rank other than the prestige rank
+S2) the outcome is the engine's, and the grade is gradeSeason's
+   cfb: 2864 graded seasons. Grade shares by ask tier:
+     contend    196  title 12.2%, overachieved 7.1%, met 51.0%, missed 15.3%, badly 14.3%
+     playoffs   869  title 1.2%, overachieved 31.2%, met 18.9%, missed 48.8%, badly 0.0%
+     respect   1576  title 0.1%, overachieved 25.0%, met 52.8%, missed 10.2%, badly 11.9%
+     rebuild    223  title 0.0%, overachieved 58.3%, met 13.0%, missed 13.5%, badly 15.2%
+     fired within the run, by first ask tier: contend 0.0% of 34, playoffs 14.6% of 48, respect 20.2% of 168, rebuild 20.0% of 50
+     fired within the run, by starting tier: tier 1 9.3%, tier 2 12.0%, tier 3 20.0%, tier 4 26.7%
+     first feeds already closed, by starting tier: tier 1 1 of 8, tier 2 0 of 9, tier 3 9 of 17, tier 4 11 of 20
+   cbb: 2912 graded seasons. Grade shares by ask tier:
+     title      204  title 18.6%, overachieved 0.0%, met 0.0%, missed 18.6%, badly 62.7%
+     contend   1013  title 2.6%, overachieved 2.7%, met 82.8%, missed 11.9%, badly 0.0%
+     playoffs  1598  title 0.1%, overachieved 41.1%, met 57.0%, missed 1.9%, badly 0.0%
+     respect     97  title 0.0%, overachieved 27.8%, met 0.0%, missed 2.1%, badly 70.1%
+     fired within the run, by first ask tier: title 32.4% of 37, contend 0.0% of 55, playoffs 0.7% of 144, respect 6.3% of 64
+     fired within the run, by starting tier: tier 1 16.0%, tier 2 0.0%, tier 3 1.3%, tier 4 5.3%
+     first feeds already closed, by starting tier: tier 1 7 of 12, tier 2 0 of 0, tier 3 0 of 1, tier 4 3 of 4
+S3) trust moves by gradeSeason, never rising with the shortfall
+   cfb: floor:4:0 n109 move 14/22; floor:4:1 n43 move -16/22; floor:4:2 n22 move -28; floor:4:3 n10 move -28; floor:4:4 n2 move -28; floor:5:0 n922 move 14/22; floor:5:1 n162 move -16/22; floor:5:2 n115 move -28; floor:5:3 n50 move -28; floor:5:4 n22 move -28; floor:in n340 move 22; post:-1 n216 move 22; post:-2 n26 move 22; post:0 n269 move 14/22; post:1 n492 move -16/14; post:2 n28 move -28; title n36 move 40
+   cbb: floor:9:2 n2 move -16; floor:9:3 n7 move -28; floor:9:4 n61 move -28; floor:in n27 move 22; post:-1 n681 move 22; post:-2 n2 move 22; post:0 n1750 move 14; post:1 n189 move -16; post:2 n123 move -28; post:3 n5 move -28; title n65 move 40
+S4) a firing at zero trust opens a market, never the end
+   cfb: 54 firings, 22 jobs taken off the market, 16 years out, 31 dynasties that met a closed market
+   cbb: 17 firings, 4 jobs taken off the market, 5 years out, 13 dynasties that met a closed market
+S5) a program that let him go never calls again
+   cfb: 70 feeds holding 24 offers; this game's wider rule removed 0 offers (0.0% of what seatOffers drew) and 0 bids (0.0% of the bids drawn)
+   cbb: 22 feeds holding 4 offers; this game's wider rule removed 0 offers (0.0% of what seatOffers drew) and 0 bids (0.0% of the bids drawn)
+S6) a bid comes from one tier up after a big year
+   cfb: 226 bids; after a title 4 of 36 (11.1%), after beating the ask 222 of 809 (27.4%); 59 taken (even dynasties go, odd ones stay)
+   cbb: 200 bids; after a title 8 of 65 (12.3%), after beating the ask 192 of 710 (27.0%); 63 taken (even dynasties go, odd ones stay)
+S7) keyed, never random
+   29966 seat calls under a Math.random that throws; 0 drew from it
+S8) the seat watches: the same games with it and without it
+   cfb: 28083 rounds and 4806 closes and offseasons compared byte for byte before a move or a firing
+   cbb: 23985 rounds and 5030 closes and offseasons compared byte for byte before a move or a firing
+S9) one rule for next year
+   ladder of 40320 careers: hostNextYear e3b0c4481b69e5a822e4f8bb953bcb35481fd2a9, seatNextYear e3b0c4481b69e5a822e4f8bb953bcb35481fd2a9, the base printed e3b0c4481b69e5a822e4f8bb953bcb35481fd2a9
+   collegeNextYear checked against seatNextYear over 40920 careers (600 from the fleets)
+SY) the year out
+   cfb: 16 years out played; refused in a seat 2810, on an open season 54, with next year shut 38; chairs left empty at the program that let him go during a year out 3
+   cbb: 5 years out played; refused in a seat 2895, on an open season 17, with next year shut 15; chairs left empty at the program that let him go during a year out 3
+simCollegeSeat CONTROL ccgcount FIRED: S2 went red with 877 failures (red: S2 (877), S3 (424), S6 (74))
