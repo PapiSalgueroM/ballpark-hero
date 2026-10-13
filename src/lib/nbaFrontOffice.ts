@@ -855,8 +855,8 @@ export function nbaOffseason(league: NbaLeague, rng: () => number, myTeam?: stri
 /* ------------------------------------------------------------------ */
 /* Round 1321: the earned draft's class, need and markers              */
 /* ------------------------------------------------------------------ */
-/* Part A of the earned draft (src/lib/nbaEarnedDraft.ts binds the shared
-   draft night to this engine). New exports only: nbaDraftClass,
+/* Part A of the earned draft (the NBA's earned draft library binds the
+   shared draft night to this engine). New exports only: nbaDraftClass,
    nbaAiDraftPicks, nbaConsumeDraftPick and nbaProspectToPlayer above are the
    old draft's and are not touched, so a save on the old draft and the desk
    off fixture play draw for draw as before. Nothing in the game calls these
