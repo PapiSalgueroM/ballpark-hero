@@ -1,0 +1,27 @@
+== head 360x780
+  FAIL [bar 360x780]: manager: 18Age spans 335 to 373 on a 360 screen
+  FAIL [bar 360x780]: manager: the AGE number is not fully on screen (344 to 364)
+  FAIL [bar 360x780]: owner: 18Age spans 338 to 376 on a 360 screen
+  FAIL [bar 360x780]: owner: the AGE number is not fully on screen (347 to 367)
+  FAIL [bar 360x780]: retired: 18Age spans 329 to 367 on a 360 screen
+  FAIL [bar 360x780]: managerOut: 18Age spans 326 to 364 on a 360 screen
+== head 375x667
+  FAIL [bar 375x667]: owner: 18Age spans 338 to 376 on a 375 screen
+== head 412x915
+== base 360x780
+  base [bar 360x780]: playing: 18Age spans 307 to 361 on a 360 screen
+  base [bar 360x780]: manager: 18Age spans 335 to 389 on a 360 screen
+  base [bar 360x780]: manager: the AGE number is not fully on screen (352 to 372)
+  base [bar 360x780]: owner: 18Age spans 338 to 392 on a 360 screen
+  base [bar 360x780]: owner: the AGE number is not fully on screen (355 to 375)
+  base [bar 360x780]: retired: 18Age spans 329 to 383 on a 360 screen
+  base [bar 360x780]: retired: the AGE number is not fully on screen (346 to 366)
+  base [bar 360x780]: managerOut: 18Age spans 326 to 380 on a 360 screen
+  base [bar 360x780]: managerOut: the AGE number is not fully on screen (343 to 363)
+== base 375x667
+  base [bar 375x667]: manager: 18Age spans 335 to 389 on a 375 screen
+  base [bar 375x667]: owner: 18Age spans 338 to 392 on a 375 screen
+  base [bar 375x667]: retired: 18Age spans 329 to 383 on a 375 screen
+  base [bar 375x667]: managerOut: 18Age spans 326 to 380 on a 375 screen
+== base 412x915
+playSoccerLanding: RED, 7 finding(s)

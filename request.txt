@@ -1,0 +1,3 @@
+#!serve
+#!playwright
+bar: git worktree add -q /tmp/bb c5fc5470 && ln -s "$PWD/node_modules" /tmp/bb/node_modules && (cd /tmp/bb && node_modules/.bin/vite build > /tmp/bb-build.log 2>&1) && SOCCER_LANDING_BASE_DIST=/tmp/bb/dist SECTIONS=bar SIZES=360x780,375x667,412x915 ENGINES=chromium node scripts/playSoccerLanding.mjs > "$RC_OUT/bar.out" 2>&1; s=$?; grep -E "^== |FAIL|base \[|playSoccerLanding|BLIND" "$RC_OUT/bar.out" | cut -c1-240 | head -60; exit $s
