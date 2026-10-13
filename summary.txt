@@ -1,0 +1,20 @@
+worldtruth exit=1 86s | simSoccerWorldTruth: 8 FAILURES (section 4: 1, section 5: 7)
+worldtruth-s1 exit=1 88s | simSoccerWorldTruth: 9 FAILURES (section 3: 1, section 4: 1, section 5: 7)
+tsc exit=0 94s | 
+worldtruth-s4 exit=1 74s | simSoccerWorldTruth: 9 FAILURES (section 3: 1, section 4: 1, section 5: 7)
+worldtruth-s3 exit=1 84s | simSoccerWorldTruth: 9 FAILURES (section 3: 1, section 4: 1, section 5: 7)
+worldtruth-s2 exit=1 86s | simSoccerWorldTruth: 9 FAILURES (section 3: 1, section 4: 1, section 5: 7)
+ctl-realmoves exit=1 83s | FIRED: WORLD_TRUTH_CONTROL=realmoves failed section 3 (2 failures; section 3: 2, section 4: 2, section 5: 7)
+ctl-pastchampions exit=1 82s | FIRED: WORLD_TRUTH_CONTROL=pastchampions failed section 3 (1 failures; section 3: 1, section 4: 1, section 5: 7)
+ctl-summer exit=1 86s | FIRED: WORLD_TRUTH_CONTROL=summer failed section 3 (1 failures; section 3: 1, section 4: 1, section 5: 7)
+simBallonDorTruth exit=0 6s | simBallonDorTruth: green. Every medal on the ceremony was won by the club that holds it, and the player's card is the record.
+simCareerCleanSheets exit=0 14s | simCareerCleanSheets: green. 24 careers a position, 8 seasons each. Defenders keep clean sheets at the keeper's rate, forwards keep none.
+simCareerDomesticCup exit=0 15s | simCareerDomesticCup: all sections green
+simPhone2 exit=1 188s | 1 FAILURES
+simEraBakeExtend exit=0 0s | simEraBakeExtend: green. The shared extend step still fails closed on every guard.
+simPhone2-base exit=1 185s | 1 FAILURES
+simInventedNames exit=0 11s | simInventedNames: green. Every invented man on this site is invented all the way down.
+simSeasonCentreNeutral exit=0 24s | simSeasonCentreNeutral: 37 checks, 0 failed
+vitest-phone exit=0 5s |    Duration  4.58s (transform 1.75s, setup 170ms, collect 2.44s, tests 1.63s, environment 1.10s, prepare 408ms)
+simCareerLeagueSeasons exit=1 20s | Node.js v24.21.0
+simCareerSquad exit=0 326s | simCareerSquad: 2217 checks, 0 failed

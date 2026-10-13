@@ -1,0 +1,42 @@
+fleet: 400 careers a tree (seed offset 3, 5 seeds), 7121 seasons on this tree in 35 s, 7101 on the base
+1) Player of the Month reads the month's football, with the true year
+   this tree: 2509 months over 6721 seasons; rated 8.0+ 2.74 a season (691), 7.0 to 7.5 any 0.03 (1625); at 7.5 to 8.5 all 1.07: GK 0.95 (248), DEF 0.98 (397), MID 0.91 (240), ATT 1.19 (608)
+   base:      5275 months over 6701 seasons; rated 8.0+ 2.18 a season (663), 7.0 to 7.5 any 0.48 (1585); at 7.5 to 8.5 all 1.15: GK 0.43 (263), DEF 0.46 (356), MID 0.7 (257), ATT 1.97 (630)
+   under the floor and still won: 0 here, 919 on the base; 0 goal keepers rated 6.0 or less who won: 0 of 39 here, 9 of 33 on the base
+   month lines with the wrong year: 0 here, 2677 on the base; seasons whose lines and awards disagree: 0 here, 0 on the base
+   planted: a 0 goal keeper rated 6.0 over 10,000 identities won 0 months
+2) The month award and the world tick leave the season's draws where they were
+   200 careers in lockstep with the base: 5675 steps, 810 seasons, 589 month blocks and 589 world ticks compared, 5261 world records; 0 careers with a count, seed or record off the base
+   first fields to differ: pendingBallonDor phone.feed phone.world phone.clubs 104; events awards pendingBallonDor phone.feed phone.world phone.clubs 71; phone.feed phone.world phone.clubs 17; events awards phone.feed phone.world phone.clubs 4; seasons events pendingSummary awards pendingBallonDor phone.feed phone.world phone.clubs 2; events pendingBallonDor phone.feed phone.world phone.clubs 2; never differed 0; compared until a season's input differed in 199, by pendingEvents eventLastFired 187; seasons pendingSummary pendingBallonDor 11; pendingEvents 1
+3) The phone's world says nothing it cannot stand behind
+   this tree: 6107 seasons (4357 happened, 1750 to come), 16985 lines, 5229 champion lines in seasons to come, 2146 moves of generated men
+              real names in a past season 1, past champions, transfers or scorers 0, a missed summer's winner 0, moves of real men 0, real top scorers 0, real men off their era club 0, lines off the record 0
+   base:      6099 seasons, 46346 lines; real names in a past season 17303, past champions, transfers or scorers 30261, a missed summer's winner 1030, moves of real men 32206, real top scorers 10650, real men off their era club 65035, lines off the record 0
+   lines naming the player or his club: 54 here (the feed names his club: "🔄 Brian Nielsen has left Fenerbahce for Barcelona."), 322 on the base (the feed names his club: "🔄 DONE DEAL. Kaká joins Inter Milan from AC Milan. Fee around 95m.")
+  FAIL (section 3): 1 findings of kind pastName, for example 2025: a real name in "🔄 Xavi Diallo has left Mamelodi Sundowns for Kairat Almaty."
+4) The phone's quiz asks about the world only where the world is the game's own
+   this tree: three questions in 6720 of 6721 seasons (1); world questions about a season that happened 5256, about a real man 0, answers not in the save 0, world questions asked 7847
+   base:      three questions in 6700 of 6701 seasons (1); world questions about a season that happened 7556, about a real man 4660, answers not in the save 0
+     e.g. 1992: "Who won La Liga in 1992?" (Barcelona)
+     e.g. 1992: "Who were champions of Europe in 1992?" (Bayern Munich)
+     e.g. 1993: "Who won Bundesliga in 1993?" (Werder Bremen)
+     e.g. 1993: "Who were champions of Europe in 1993?" (Juventus)
+  FAIL (section 4): 5256 quiz questions about the world in a season that happened
+5) The season log and the International panel name a winner only where the rule allows
+   this tree: 3153 summers; winner lines missing where they belong 0, printed for a summer he missed 1032; kept for finals he played 1085, kept for a summer to come 692, held back 1032
+   base:      3149 summers; printed for a summer he missed that happened 1037
+     e.g. 1992 European Championship, he was not in the setup: "🏆 England won the European Championship without you."
+     e.g. 1994 World Cup, he was not in the setup: "🌍 Spain won the World Cup."
+     e.g. 1996 European Championship, he was not in the setup: "🌍 Croatia won the European Championship."
+  FAIL (section 5): 1032 summers he missed, that really happened, still name their winner in the season log
+   a past summer he missed: champions line true, bracket tile true, last tile winner true (base true, true, true)
+  FAIL (section 5): a past summer he missed: champions is true, the rule says false
+  FAIL (section 5): a past summer he missed: bracket is true, the rule says false
+  FAIL (section 5): a past summer he missed: wonIt is true, the rule says false
+   a past summer he played: champions line true, bracket tile true, last tile winner true (base true, true, true)
+   a summer to come he missed: champions line true, bracket tile true, last tile winner true (base true, true, true)
+   an old save's history, a missed 2010 last: champions line true, bracket tile true, last tile winner true (base true, true, true)
+  FAIL (section 5): an old save's history, a missed 2010 last: champions is true, the rule says false
+  FAIL (section 5): an old save's history, a missed 2010 last: bracket is true, the rule says false
+  FAIL (section 5): an old save's history, a missed 2010 last: wonIt is true, the rule says false
+simSoccerWorldTruth: 9 FAILURES (section 3: 1, section 4: 1, section 5: 7)
