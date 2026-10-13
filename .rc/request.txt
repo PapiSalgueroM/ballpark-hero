@@ -1,0 +1,3 @@
+#!serial
+diag-head: MANAGER_SIZE_DIAGNOSTICS=/tmp/diag-head NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/managerWorldSizeDiagnostic.mjs; s=$?; node .rc/x/diagSummary.mjs /tmp/diag-head; exit $s
+diag-noprune: node .rc/x/fxmut.mjs noprune && git -c user.email=fx@example.com -c user.name=fx commit -qam fxmut && MANAGER_SIZE_DIAGNOSTICS=/tmp/diag-np NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/managerWorldSizeDiagnostic.mjs; s=$?; node .rc/x/diagSummary.mjs /tmp/diag-np; git reset -q --hard HEAD~1; exit $s
