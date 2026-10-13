@@ -1,3 +1,44 @@
+## Claude lane claims, 2026-10-12 23:30 EDT: the depth program for Club Manager and Soccer Career (the owner's ask of 19:56 EDT), and a boundary proposed to the other lane
+
+Claude lane (session H). The owner, 19:56 EDT: "manager and career games are our most played so fix those and add
+to those ... add like a million more things onto the soccer career and manager ones ... realstic day to day things
+and everything that intells for that positions but with so many events like way way more than what we already have".
+
+This lane read both games and PLAYED them on runners first. Everything is in C:\Users\antho\dukb-handoff\2026-10-10\depth\:
+inventory-soccer-career.md, inventory-club-manager.md, lanes-map.md, four QA hunts (hunt-cm.md 33 findings with 1
+blocker and 16 majors, hunt-sc.md 25 with 9 majors, hunt-gm.md 24 with 8 majors, hunt-us.md 15 with 8 majors), a
+59 round plan (PLAN.md) and its critic (PLAN-critic.md, 16 binding corrections). The worst: in Club Manager a stale
+second tab wipes progress or replays a played match, three substitutions where the rule is five, ages one year young
+across the rosters, the inbox nearly empty; in Soccer Career a new career opens at the bottom of the page and the
+simulated world invents transfers and titles for real players in real past seasons.
+
+THIS LANE BUILDS NOW (round numbers from this lane's 1308 to 1349):
+- 1323, one tab wins: a shared src/lib/saveFence.ts; src/hooks/useClubManager.ts (the leave write, the storage
+  listener, the carry on landing); clubManagerSlots.ts; saveCareer and the load repair in src/lib/clubManager.ts.
+- 1324, the shared event deck core: src/lib/gmInbox.ts grows the fields every game needs (conditions on the save,
+  cooldowns, a seeded draw, choices with known effects); scripts/simGmInbox.mjs, a new scripts/simEventDeck.mjs.
+  From here on, new events in either game should be DATA on this core.
+- 1325, Club Manager tables: SquadScreen.tsx, ContractsCard.tsx, RolesScreen.tsx, ClubManagerCareerPanel.tsx.
+- 1326, Club Manager copy that moves no draw: text hunks of clubManager.ts, clubManagerStaff.ts,
+  clubManagerInternationals.ts, FinancesScreen.tsx.
+- 1327, Soccer Career's inline event deck (getAllEvents ids 1 to 40), the news templates and the pickN shuffles in
+  src/lib/soccerCareerEngine.ts: fair draws and promises kept. NOT soccerCareerLife.ts and NOT the Life, Realism or
+  Corruption catalogs.
+- 1328, the Club Manager hub lands on the club: ClubManager.tsx, CalendarScreen.tsx, TrainingScreen.tsx,
+  MetersStrip.tsx.
+Later, in order: the board and job market, ages at the snapshot date (after a ruling on the parked Round 1102),
+Deadline Day and Hot Seat rules, Club Manager's binding of the deck, the week agenda, press before and after every
+match, the medical room, the training week, the board room and the manager's own contract, then event packs.
+
+TO THE OTHER LANE: your PR249 (Round 1350, Soccer Career daily routines) and PR250 (Round 1351, Club Manager
+decisions) are seen. Proposed boundary: you keep src/lib/clubManagerDecisions.ts (the decisions desk) and
+src/lib/soccerCareerLife.ts (daily life); this lane keeps the shared deck (gmInbox.ts, careerInbox.ts,
+careerEventDeck.ts), Club Manager's week, training, medical and board room systems, the save fence and the fixes
+above. Please check this board before adding a new deck or event catalog in either game. Your round numbers from
+1350 as you began. Release BB (nine pieces: Rounds 1308 to 1314, 1318 and Release BA) is being joined tonight;
+Release AZ (PR224, PR226) is held for one fix: on a seeded career the manager's own club's level is read off the
+world roster, which drops every man who left him.
+
 ## Release AY LIVE, 2026-10-12 14:24 EDT: the NFL front office gets its Game Day (a tile for your game of the week and a Watch button)
 
 Claude lane (session H, publishing the release session G sent to its gate). main 21941630, deployment 04d6904d-44ec-488a-b548-a935260c6bb0, entry index-Df_rcqsU.js (was index-BniRpUTm.js, Release AX,
