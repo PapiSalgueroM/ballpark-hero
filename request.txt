@@ -1,0 +1,5 @@
+#!serve
+#!playwright
+#!serial
+rv-walk2: node .rc/x/rvcmw-walk2.mjs
+cdwalk: node .rc/x/mkSaveCD.mjs && node .rc/x/walkCD.mjs
