@@ -485,4 +485,24 @@ describe('the combine you run, the engine', () => {
     expect(loadPreDraft({ ...skipped, showcase: { ...skipped.showcase, played: [50] } }, d)).toEqual(skipped);
     expect('combine' in loadPreDraft(JSON.parse(JSON.stringify(pre)), d)!).toBe(false);
   });
+  it('an attempt on a block at a season or a card is dropped, with and without the descriptor', () => {
+    /* Open refuses there, so only a corrupt or hand edited save carries one;
+       kept, it would ride on to the showcase, where the scouts' buttons
+       ignore an opened attempt. */
+    const early: PreDraftState[] = [];
+    for (const route of d.routes) for (let k = 0; k < 6; k += 1) {
+      let s = preDraftStart(d, { seed: `early-${route.id}-${k}`, routeId: route.id, rating: 70, pot: 86, pos: 'QB' });
+      for (let guard = 0; guard < 20 && s.phase !== 'showcase'; guard += 1) {
+        early.push(s);
+        s = s.phase === 'season' ? preDraftPlaySeason(d, s) : preDraftChoose(d, s, 0);
+      }
+    }
+    expect(early.some(s => s.phase === 'season')).toBe(true);
+    expect(early.some(s => s.phase === 'choice')).toBe(true);
+    for (const s of early) for (const approach of ['allout', 'steady'] as const) for (const desc of [d, undefined]) {
+      const got = loadPreDraft(JSON.parse(JSON.stringify({ ...s, combine: { approach } })), desc)!;
+      expect('combine' in got).toBe(false);
+      expect(JSON.stringify(got)).toBe(JSON.stringify(s));
+    }
+  });
 });

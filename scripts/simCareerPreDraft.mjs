@@ -79,7 +79,12 @@
  *      button for its approach, again on a second load and through the draft;
  *      a graded state moves no more; a bad score list does nothing; the loader
  *      drops a bad attempt or bad played scores alone and keeps good ones, and
- *      no scouts path state ever carries either key.
+ *      no scouts path state ever carries either key. OLD SAVES on every road
+ *      at every phase: each state at the start, at every season and every
+ *      card, at the showcase, after the scouts' button and after the draft,
+ *      and the played block and its draft, loads JSON equal to itself with
+ *      and without the descriptor; an attempt put on any season or card
+ *      state is dropped alone, with and without it.
  *                                Controls `reroll`, `wayback`, `combinegone`.
  *  12. Round 1319: WHAT HANDS ARE WORTH, MEASURED AGAINST THE SCOUTS' DRAW.
  *      For every road and approach the scouts' EXACT expected move (the four
@@ -336,7 +341,11 @@ function road(desc, i) {
   const pos = POS[desc.sport][Math.floor(pick() * POS[desc.sport].length)];
   let s = M.preDraftStart(desc, { seed: `${SEEDSET}-${i}`, routeId: route.id, rating, pot: rating + 4 + Math.floor(pick() * 16), pos });
   const trail = [];
+  /* Round 1319: every state before the showcase, each season and each card,
+     for section 11's old save round trips. It draws nothing. */
+  const early = [];
   for (let g = 0; g < 20 && s.phase !== 'showcase'; g += 1) {
+    early.push(s);
     if (s.phase === 'season') s = M.preDraftPlaySeason(desc, s);
     else { const card = M.preDraftChoicePool(desc).find(c => c.id === s.pendingChoice); const k = Math.floor(pick() * card.options.length); trail.push({ before: s, card, k }); s = M.preDraftChoose(desc, s, k); trail[trail.length - 1].after = s; }
   }
@@ -346,7 +355,7 @@ function road(desc, i) {
   const stockAtDraft = s.stock;
   const shown = s;
   s = M.preDraftRunDraft(desc, s);
-  return { s, route, trail, approach, pre, shown, stockAtDraft };
+  return { s, route, trail, early, approach, pre, shown, stockAtDraft };
 }
 
 /* ─── Section 5 first: every draw from keyedRng ─── */
@@ -818,14 +827,23 @@ try {
     const rs = RUNS.get(tag(d));
     const bad = [];
     const note = (i, m) => { if (bad.length < 400) bad.push(`road ${i}: ${m}`); };
-    let dropped = 0;
+    let dropped = 0, trips = 0;
+    const droppedAt = { season: 0, choice: 0 };
     for (let i = 0; i < rs.length; i += 1) {
-      const { pre, shown, s: done, trail } = rs[i];
+      const { pre, shown, s: done, trail, early } = rs[i];
       const n = M.preDraftStations(d, pre).length;
       /* Nothing the scouts path made ever carries the new keys, not even as undefined. */
       for (const x of [pre, shown, done]) if ('combine' in x || (x.showcase && 'played' in x.showcase)) note(i, 'a scouts path state carries an attempt or played scores');
       if (M.preDraftCombineOpen(d, pre, 'skip') !== pre) note(i, 'Skip it opened an attempt');
       for (const x of [shown, done, ...(trail.length ? [trail[0].before] : [])]) if (M.preDraftCombineOpen(d, x, 'allout') !== x) note(i, `an attempt opened at phase ${x.phase}`);
+      /* (d) OLD SAVES, on every road at every phase (decision 3b): a block
+         with neither key, at the start, at each season and each card, at the
+         showcase, after the scouts' button and after the draft, loads JSON
+         equal to itself with and without the descriptor. */
+      for (const good of [...early, pre, shown, done]) for (const desc of [d, undefined]) {
+        trips += 1;
+        if (J(reload(good, desc)) !== J(good)) note(i, `an old block at phase ${good.phase} did not round trip byte for byte (${desc ? 'with' : 'without'} the descriptor)`);
+      }
       for (const approach of PLAYED) {
         const opened = M.preDraftCombineOpen(d, pre, approach);
         const scouts = M.preDraftShowcase(d, pre, approach);
@@ -847,6 +865,21 @@ try {
         for (const wrong of [[], Array(n + 1).fill(50), Array(n).fill(50.5), Array(n).fill(-1), Array(n).fill(101), Array(n).fill(NaN)]) if (M.preDraftCombineResolve(d, opened, wrong) !== opened) note(i, `a resolve took ${J(wrong)}`);
         /* (d) the loader drops a bad key alone, and (e) keeps a good attempt without the descriptor. */
         if (J(reload(opened)) !== J(opened)) note(i, 'without the descriptor a well formed attempt was not kept');
+        /* An attempt on a block at a season or a card (open refuses there, so
+           only a corrupt or hand edited save carries one) is dropped, with and
+           without the descriptor: kept, it would ride on to the showcase,
+           where the scouts' buttons ignore an opened attempt. Every road. */
+        for (const x of early) for (const desc of [d, undefined]) {
+          dropped += 1; droppedAt[x.phase] += 1;
+          const got = reload({ ...x, combine: { approach } }, desc);
+          if (!got || 'combine' in got || J(got) !== J(x)) note(i, `an attempt on a block at phase ${x.phase} was not dropped alone (${desc ? 'with' : 'without'} the descriptor)`);
+        }
+        /* The played block, its draft and the scouts' result round trip too, every road. */
+        const drafted = M.preDraftRunDraft(d, resolved);
+        for (const good of [resolved, drafted, scouts]) for (const desc of [d, undefined]) {
+          trips += 1;
+          if (J(reload(good, desc)) !== J(good)) note(i, `a good block at phase ${good.phase} did not round trip byte for byte (${desc ? 'with' : 'without'} the descriptor)`);
+        }
         if (i >= 200) continue;
         const skipped = M.preDraftShowcase(d, pre, 'skip');
         const drops = [
@@ -860,12 +893,12 @@ try {
           const got = reload(badBlock, desc);
           if (!got || J(got) !== J(clean)) note(i, `a bad key was not dropped alone (${desc ? 'with' : 'without'} the descriptor): ${J(badBlock.combine ?? badBlock.showcase?.played)}`);
         }
-        const drafted = M.preDraftRunDraft(d, resolved);
-        for (const good of [resolved, drafted, pre, scouts, done]) for (const desc of [d, undefined]) if (J(reload(good, desc)) !== J(good)) note(i, `a good block at phase ${good.phase} did not round trip byte for byte`);
       }
     }
+    /* Never vacuous: both phases before the showcase were loaded with an attempt on them. */
+    if (!droppedAt.season || !droppedAt.choice) note('all', `the drop cases never reached a season (${droppedAt.season}) or a card (${droppedAt.choice})`);
     if (bad.length) fail(`${tag(d)}: ${bad.length} second tries or bad loads, first: ${bad.slice(0, 3).join(' | ')}`);
-    else ok(`${tag(d)}: no button, open or resolve moves an opened or graded attempt; every reload of an opened attempt is the scouts' button for its approach, again and through the draft; ${dropped} bad keys dropped alone`);
+    else ok(`${tag(d)}: no button, open or resolve moves an opened or graded attempt; every reload of an opened attempt is the scouts' button for its approach, again and through the draft; ${trips} old and good blocks round trip with and without the descriptor on every road at every phase; ${dropped} bad keys dropped alone (${droppedAt.season} attempts at a season and ${droppedAt.choice} at a card)`);
   }
 } catch (e) {
   fail(`section 11 threw: ${e.message}`);
