@@ -1,0 +1,5 @@
+#!serve
+#!playwright
+g390: TAG=g390 W=390 H=844 SEED=404 SENIOR=3 INJECT=.rc/x/seed-mid.json EXPLORE=hub,phone,train,week RELOADS=12,30 MAXMIN=18 SHOTMAX=110 node .rc/x/scwalk.mjs
+h1280: TAG=h1280 W=1280 H=900 SEED=505 SENIOR=3 INJECT=.rc/x/seed-rich.json EXPLORE=hub,phone,train,double CURRENCY=GBP RELOADS=20 MAXMIN=18 SHOTMAX=110 node .rc/x/scwalk.mjs
+twotab: W=390 H=844 INJECT=.rc/x/seed-mid1280.json node .rc/x/twotab.mjs
