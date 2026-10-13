@@ -1,0 +1,17 @@
+# Release BC gate, lane W2: the nine pieces' served walks and controls
+#!serve
+#!playwright
+#!serial
+ctl-noscroll: RC_OUT="$RC_OUT/noscroll" HUB_LANDING_CONTROL=noscroll HUB_LANDING_SECTIONS=A node scripts/playCmHubLanding.mjs > /tmp/c1.log 2>&1; s=$?; tail -1 /tmp/c1.log | cut -c1-300; exit $s
+ctl-stale: RC_OUT="$RC_OUT/stale" HUB_LANDING_CONTROL=stale HUB_LANDING_SECTIONS=B node scripts/playCmHubLanding.mjs > /tmp/c3.log 2>&1; s=$?; tail -1 /tmp/c3.log | cut -c1-300; exit $s
+hub-tilectl-EXPECT-RED: node .rc/x/seam1328.mjs tilectl && bash .rc/x/join1328.sh build 4177 && HEAD_URL=http://localhost:4177 HUB_LANDING_SECTIONS=C node scripts/playCmHubLanding.mjs; s=$?; git checkout -- src/pages/ClubManager.tsx; exit $s
+fonts: mkdir -p .tmp-fx/font-cache && FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only 2>&1 | tail -2
+simCmRealFixtures: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCmRealFixtures.mjs > /tmp/sf.log 2>&1; s=$?; tail -2 /tmp/sf.log | cut -c1-300; exit $s
+playCmRealFixtures-1: FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" CM_REAL_FIXTURE_NATIVE_ARTIFACTS=/tmp/rf1 NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playCmRealFixtures.mjs > /tmp/rf1.log 2>&1; s=$?; node .rc/x/rfReport.mjs /tmp/rf1/report.json; tail -1 /tmp/rf1.log | cut -c1-200; exit $s
+playCmRealFixtures-2: FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" CM_REAL_FIXTURE_NATIVE_ARTIFACTS=/tmp/rf2 NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playCmRealFixtures.mjs > /tmp/rf2.log 2>&1; s=$?; node .rc/x/rfReport.mjs /tmp/rf2/report.json; tail -1 /tmp/rf2.log | cut -c1-200; exit $s
+playNationJob: ENGINES=chromium node scripts/playNationJob.mjs > /tmp/nj.log 2>&1; s=$?; grep -c -i "fail" /tmp/nj.log; tail -2 /tmp/nj.log | cut -c1-250; exit $s
+playClubManager: node scripts/playClubManager.mjs > /tmp/pcm.log 2>&1; s=$?; grep -c "FAIL" /tmp/pcm.log; tail -2 /tmp/pcm.log | cut -c1-250; exit $s
+simRevealScroll: node scripts/simRevealScroll.mjs > /tmp/rs.log 2>&1; s=$?; grep -E "club-manager" /tmp/rs.log | cut -c1-200 | head -4; tail -2 /tmp/rs.log | cut -c1-250; exit $s
+hub-base: bash .rc/x/basesrv.sh f14ec63a 7073ed74 4174
+hub-walk-full: RC_OUT="$RC_OUT/head" HEAD_URL=http://localhost:4173 BASE_URL=http://localhost:4174 node scripts/playCmHubLanding.mjs > /tmp/wf.log 2>&1; s=$?; grep "  FAIL" /tmp/wf.log | cut -c1-300 | head -12; tail -1 /tmp/wf.log | cut -c1-300; exit $s
+hub-drift-EXPECT-RED: HEAD_URL=http://localhost:4173 BASE_URL=http://localhost:4174 HUB_LANDING_SECTIONS=D HUB_LANDING_CONTROL=drift node scripts/playCmHubLanding.mjs > /tmp/wd.log 2>&1; s=$?; tail -1 /tmp/wd.log | cut -c1-300; exit $s
