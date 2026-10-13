@@ -1,0 +1,7 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-college: node_modules/.bin/vitest run src/components/college-dynasty src/lib/collegeSeat.test.ts --testTimeout=300000 --hookTimeout=120000
+simCollegeSeat: node scripts/simCollegeSeat.mjs
+c-allowfirer: SIM_COLLEGE_SEAT_SEEDS=1 SIM_COLLEGE_SEAT_CONTROL=allowfirer node scripts/simCollegeSeat.mjs
+c-bidfirer: SIM_COLLEGE_SEAT_SEEDS=1 SIM_COLLEGE_SEAT_CONTROL=bidfirer node scripts/simCollegeSeat.mjs
+c-placeoff: SIM_COLLEGE_SEAT_SEEDS=1 SIM_COLLEGE_SEAT_CONTROL=placeoff node scripts/simCollegeSeat.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs

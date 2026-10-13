@@ -1,0 +1,7 @@
+vitest-college exit=0 7s |    Duration  6.35s (transform 644ms, setup 195ms, collect 1.74s, tests 8.12s, environment 1.68s, prepare 899ms)
+tsc exit=0 54s | 
+c-allowfirer exit=1 53s | simCollegeSeat CONTROL allowfirer FIRED: S5 went red with 198 failures (red: S5 (198))
+c-bidfirer exit=1 57s | simCollegeSeat CONTROL bidfirer FIRED: S5 went red with 229 failures (red: S5 (229))
+c-placeoff exit=1 61s | simCollegeSeat CONTROL placeoff FIRED: S1 went red with 5714 failures (red: S1 (5714))
+simHarnessAnchors exit=0 30s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simCollegeSeat exit=0 150s | simCollegeSeat: all sections green (S1 to S9 and SY)
