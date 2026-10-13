@@ -1,0 +1,18 @@
+c0649d58e Merge remote-tracking branch 'origin/release-bc-gate' into HEAD
+fleet: 400 careers a tree (seed offset 0, 5 seeds), 0 seasons on this tree in 0 s, 0 on the base
+1) Player of the Month reads the month's football, with the true year
+2) The month award and the world tick leave the season's draws where they were
+3) The phone's world says nothing it cannot stand behind
+4) The phone's quiz asks about the world only where the world is the game's own
+5) The season log and the International panel name a winner only where the rule allows
+6) The eighth inverse gives the base's four files back, and every change sits in this round's hunks
+   src/lib/soccerCareerEngine.ts: head 1a1c05feb120de04 (pinned 1a1c05feb120de04), inverse 44f323390d962fc1, base 44f323390d962fc1 (pinned 44f323390d962fc1)
+     5 hunks against the base, in 3 regions
+   src/lib/soccerPhone.ts: head 8867992a7548521d (pinned 8867992a7548521d), inverse 43c30266828c0d6e, base 43c30266828c0d6e (pinned 43c30266828c0d6e)
+     11 hunks against the base, in 3 regions
+   src/lib/soccerArcade.ts: head 9b6bb4f82528546c (pinned 9b6bb4f82528546c), inverse bc8301f8b1405f6e, base bc8301f8b1405f6e (pinned bc8301f8b1405f6e)
+     5 hunks against the base, in 2 regions
+   src/components/soccer-career/InternationalPanel.tsx: head 872a55fb5a772279 (pinned 872a55fb5a772279), inverse df3dd4e16e8a046a, base df3dd4e16e8a046a (pinned df3dd4e16e8a046a)
+     10 hunks against the base, in 9 regions
+   rows applied: 31 of 31
+simSoccerWorldTruth: OK, every section green

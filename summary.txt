@@ -1,0 +1,7 @@
+oldsaves-s0 exit=1 11s | r1329run-oldsaves: 8 problems
+oldsaves-s7 exit=1 11s | r1329run-oldsaves: 8 problems
+worldtruth-s5 exit=1 83s | simSoccerWorldTruth: 1 FAILURES (section 4: 1)
+worldtruth-s8 exit=1 87s | simSoccerWorldTruth: 1 FAILURES (section 4: 1)
+worldtruth-s6 exit=1 88s | simSoccerWorldTruth: 1 FAILURES (section 4: 1)
+worldtruth-s9 exit=1 66s | simSoccerWorldTruth: 1 FAILURES (section 4: 1)
+merge-gate exit=0 70s | simSoccerWorldTruth: OK, every section green
