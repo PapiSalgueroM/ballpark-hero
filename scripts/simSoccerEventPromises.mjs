@@ -300,7 +300,7 @@ const FIELD = {
 const FLAVOR = {
   'No deal, stay independent': 'nothing changes, and nothing does',
   'Appeal submitted': 'the appeal result is the next screen; a lost appeal queues its ban there (dismissAppealResult)',
-  'result in 3-5 days': 'scenery: the result is the very next screen',
+  'result in 3-5 days': 'the days pass in the story; on screen the verdict is the very next screen, and since the review of 2026-10-13 a lost appeal keeps the 3-match ban the card printed (the unit file checks it)',
   'family support': 'scenery beside the Physical +1',
   'appearances maintained': 'nothing else changes, and nothing does',
   'No risk, no reward': 'nothing changes, and nothing does',

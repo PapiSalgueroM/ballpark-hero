@@ -6410,7 +6410,8 @@ export function getAllEvents(state: CareerState): RandomEvent[] {
         { label: "Appeal the decision", emoji: "⚖️", color: "bg-amber-600", consequence: "Appeal submitted, result in 3-5 days",
           apply: s => {
             const success = rollCareerChance(s, 0.5, 'Red card appeal', 'Appeal successful', 'Appeal rejected');
-            const banLength = success ? 0 : rand(2, 4);
+            /* a lost appeal leaves the 3-match ban the card printed (it drew 2 to 4, so a lost appeal could shorten it) */
+            const banLength = success ? 0 : 3;
             s.pendingAppealResult = { success, banLength };
             s.phase = "red_card_appeal_result" as any;
             return s;

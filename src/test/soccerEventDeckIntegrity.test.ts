@@ -9,7 +9,7 @@
  * scripts/simSoccerDeckFairness.mjs and scripts/simSoccerEventPromises.mjs
  * measure the same things at scale.
  */
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import {
   initCareer, applyEventChoice, getAllEvents, repairCareer, FALLBACK_CLUBS,
   drawEventBatch, cardFitsSeason, soccerDeckIdentity, tournamentForYear,
@@ -118,6 +118,22 @@ describe('the follower promises', () => {
   it.each([[1, 0.05], [7, 0.1], [18, 0.075]])('card %i adds the followers it prints', (id, gain) => {
     const after = choice(id).apply({ ...s, events: [...s.events] });
     expect(after.socialMediaFollowers - 2).toBeCloseTo(gain, 9);
+  });
+});
+
+describe('card 9: a lost appeal keeps the 3-match ban the card printed', () => {
+  it('queues 3 matches when the appeal fails and none when it wins', () => {
+    const s = career([row({ redCards: 1 })]);
+    const appeal = getAllEvents(s).find(e => e.id === 9)!.choices[1];
+    const roll = vi.spyOn(Math, 'random');
+    try {
+      roll.mockReturnValue(0.95);
+      expect(appeal.apply({ ...s, events: [...s.events] }).pendingAppealResult).toEqual({ success: false, banLength: 3 });
+      roll.mockReturnValue(0.05);
+      expect(appeal.apply({ ...s, events: [...s.events] }).pendingAppealResult).toEqual({ success: true, banLength: 0 });
+    } finally {
+      roll.mockRestore();
+    }
   });
 });
 
