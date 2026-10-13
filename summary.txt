@@ -1,0 +1,9 @@
+unseeded-noinverse-EXPECT-RED exit=1 42s | simCmUnseededWorld: CONTROL noinverse FIRED: without the inverse the fresh careers differ from the base (15 of 15)
+probe-vs-minus1323 exit=0 14s | probeSquad PART B floor 14/15: 506 of 506 same
+gmcmp-vs-minus1324 exit=0 7s | simGmInbox: green.
+fence-squadline-EXPECT-RED exit=1 119s | CONTROL FIRED: SAVE_FENCE_CONTROL=squadline fired 1 times and section fleet went red with 1 findings
+eras-dropman-EXPECT-RED exit=1 2s | 2 FAILURES
+fleet-vs-minus1323 exit=0 122s | simSaveFence: all green (tabs, source, fleet)
+eras-unflag-EXPECT-RED exit=1 1s | 1 FAILURES
+eras-twoclubs-EXPECT-RED exit=1 1s | 1 FAILURES
+eras-champgap-EXPECT-RED exit=1 617s | CONTROL champgap FIRED: 480 seasons raised, the champion's gap 21.4 against the band of 5.0, still football

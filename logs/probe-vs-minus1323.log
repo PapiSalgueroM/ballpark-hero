@@ -1,0 +1,10 @@
+treeWithoutMerge: 4fdb6c3f4d89c67d2c89b3b67607b237aa1c7ce4, c955bcda without 2f58fe45; conflicts kept from c955bcda: src/pages/WhatsNew.tsx
+PART A: the squad floor through the engine's own functions
+  Everton: loaned in 2, squad 22; loaned out down to 14; after breakLoan: squad 12, budget 64.4. Saved squad 12. Loaded on HEAD: 12 men, 0 draws. On BASE: 12 men, 0 draws. HEAD added: nobody
+  Brighton: loaned in 2, squad 29; loaned out down to 14; after breakLoan: squad 12, budget 91.9. Saved squad 12. Loaded on HEAD: 12 men, 0 draws. On BASE: 12 men, 0 draws. HEAD added: nobody
+  Fulham: loaned in 2, squad 26; loaned out down to 14; after breakLoan: squad 12, budget 67.2. Saved squad 12. Loaded on HEAD: 12 men, 0 draws. On BASE: 12 men, 0 draws. HEAD added: nobody
+PART A: 0 of 3 engine-written saves changed on load by the squad repair
+PART B: old saves (BASE engine, manager squeezes the squad at each window) load the same on HEAD and BASE
+PART B: 506 saves, 506 with a squad under 14, 506 open to the same JSON and draw count on HEAD and BASE. First difference: none
+probeSquad: done (partA changed 0, partB 0 differ)
+probeSquad PART B floor 14/15: 506 of 506 same

@@ -1,0 +1,11 @@
+# Release BC gate, lane P6: the nine pieces' plain lines and controls
+#!playwright
+unseeded-noinverse-EXPECT-RED: export TMPDIR=$(mktemp -d); CM_UNSEEDED_BASE=$(node scripts/lib/treeWithoutMerge.mjs 5ec5a724 36cc9ffe) && export CM_UNSEEDED_BASE && CM_UNSEEDED_CONTROL=noinverse node scripts/simCmUnseededWorld.mjs
+fleet-vs-minus1323: export TMPDIR=$(mktemp -d); B=$(node scripts/lib/treeWithoutMerge.mjs 2f58fe45 f14ec63a) && git worktree add -q --detach /tmp/f1 $B && ln -s "$PWD/node_modules" /tmp/f1/node_modules && FENCE_BASE=/tmp/f1 node scripts/simSaveFence.mjs
+fence-squadline-EXPECT-RED: export TMPDIR=$(mktemp -d); B=$(node scripts/lib/treeWithoutMerge.mjs 2f58fe45 f14ec63a) && git worktree add -q --detach /tmp/f2 $B && ln -s "$PWD/node_modules" /tmp/f2/node_modules && FENCE_BASE=/tmp/f2 SAVE_FENCE_CONTROL=squadline node scripts/simSaveFence.mjs
+probe-vs-minus1323: export TMPDIR=$(mktemp -d); B=$(node scripts/lib/treeWithoutMerge.mjs 2f58fe45 f14ec63a) && git worktree add -q --detach /tmp/pb $B && ln -s "$PWD/node_modules" /tmp/pb/node_modules && PROBE_BASE=/tmp/pb node .rc/x/probeSquad.mjs
+gmcmp-vs-minus1324: export TMPDIR=$(mktemp -d); B=$(node scripts/lib/treeWithoutMerge.mjs fd36709e 25c07316) && git worktree add -q --detach .rcb $B && for s in 1 2 3; do SEED=$s node .rcb/scripts/simGmInbox.mjs > /tmp/b$s.txt 2>&1; SEED=$s node scripts/simGmInbox.mjs > /tmp/h$s.txt 2>&1; if diff /tmp/b$s.txt /tmp/h$s.txt > /dev/null; then echo "seed $s: every line the same as the base"; else echo "seed $s DIFFERS"; diff /tmp/b$s.txt /tmp/h$s.txt | head -20; x=1; fi; tail -1 /tmp/h$s.txt; done; exit ${x:-0}
+eras-champgap-EXPECT-RED: export TMPDIR=$(mktemp -d); SIM_ERAS_CONTROL=champgap node scripts/simEras.mjs
+eras-dropman-EXPECT-RED: export TMPDIR=$(mktemp -d); SIM_ERAS_CONTROL=dropman node scripts/simEras.mjs
+eras-unflag-EXPECT-RED: export TMPDIR=$(mktemp -d); SIM_ERAS_CONTROL=unflag node scripts/simEras.mjs
+eras-twoclubs-EXPECT-RED: export TMPDIR=$(mktemp -d); SIM_ERAS_CONTROL=twoclubs node scripts/simEras.mjs
