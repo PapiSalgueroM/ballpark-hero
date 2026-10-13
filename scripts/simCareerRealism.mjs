@@ -116,7 +116,7 @@ console.log('\nMLB');
   check('MLB', 'SP', 'so', acc.SP.so ?? [], { ceiling: 383, medLo: 90, medHi: 230, spread: 1.6 });
   check('MLB', 'SP', 'wins', acc.SP.wins ?? [], { ceiling: 31, medLo: 5, medHi: 18 });
   check('MLB', 'SP', 'era', acc.SP.era ?? [], { ceiling: 12, medLo: 2.4, medHi: 5.2 });
-  check('MLB', 'RP', 'so', acc.RP.so ?? [], { ceiling: 143, medLo: 35, medHi: 85, note: "Josh Hader's 143 in 2018, the most in the National League since Brad Lidge's 157 in 2004; Dick Radatz's 181 in 1964 came over 157 relief innings" });
+  check('MLB', 'RP', 'so', acc.RP.so ?? [], { ceiling: 143, medLo: 35, medHi: 85, note: "Josh Hader's 143 in 2018; Brad Lidge struck out 157 in 2004, and the record, Dick Radatz's 181 in 1964, came over 157 relief innings" });
   check('MLB', 'RP', 'saves', acc.RP.saves ?? [], { ceiling: 62, medLo: 0, medHi: 40 });
   check('MLB', 'RP', 'holds', acc.RP.holds ?? [], { ceiling: 41, medLo: 0, medHi: 28 });
 }
