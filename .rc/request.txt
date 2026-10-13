@@ -1,0 +1,21 @@
+#!playwright
+simAllocation: node scripts/simAllocation.mjs
+simCareerAcademy: node scripts/simCareerAcademy.mjs
+simCareerClubPool: node scripts/simCareerClubPool.mjs
+simCareerContinental: node scripts/simCareerContinental.mjs
+simCareerDerbies: node scripts/simCareerDerbies.mjs
+simCareerDilemmaReach: node scripts/simCareerDilemmaReach.mjs
+simCareerDilemmaTruth: node scripts/simCareerDilemmaTruth.mjs
+simCareerDrills: node scripts/simCareerDrills.mjs
+simCareerEngaged: node scripts/simCareerEngaged.mjs
+simCareerEras: node scripts/simCareerEras.mjs
+simCareerInbox: node scripts/simCareerInbox.mjs
+simCareerInboxBeats: node scripts/simCareerInboxBeats.mjs
+simCareerLeagueWorld: node scripts/simCareerLeagueWorld.mjs
+simCareerLife: node scripts/simCareerLife.mjs
+simCareerMoneyAfterRetirement: node scripts/simCareerMoneyAfterRetirement.mjs
+simCareerNoDeadEnd: node scripts/simCareerNoDeadEnd.mjs
+simCareerParity: node scripts/simCareerParity.mjs
+simCareerPositionRatings: node scripts/simCareerPositionRatings.mjs
+simCareerRecordedStats: node scripts/simCareerRecordedStats.mjs
+simCareerRivalryEvents: node scripts/simCareerRivalryEvents.mjs
