@@ -421,8 +421,20 @@ function worldMarket(career: CareerState): MarketPlayer[] {
       ...(p.worldRosterKey ? { worldRosterKey: p.worldRosterKey, worldRosterSince: p.since, potential: p.potential } : {}) });
   }
   out.sort((a, b) => b.rating - a.rating || a.name.localeCompare(b.name));
-  WORLD_MARKET_MEMO.set(raw, { years, year, start: current.startYear, era: current.eraId, seed, club: current.clubName, out });
-  return out;
+  /* Release AZ fix pass 4 (scripts/simBooks.mjs section 1, which nobody had run on this train): marketBase lists
+     one man per name, because a few real men share one (Paulinho of Palmeiras and of Toluca, Allan of Manchester
+     City and of Corinthians), and this list did not, so from a seeded career's first recorded deal six names were
+     on sale twice. One listing per name again: the one the projected market lists while he is still there,
+     otherwise the best rated. */
+  const baseClub = new Map(fallback.map(p => [p.name, p.club] as const));
+  const chosen = new Map<string, MarketPlayer>();
+  for (const p of out) {
+    const had = chosen.get(p.name);
+    if (!had || (had.club !== baseClub.get(p.name) && p.club === baseClub.get(p.name))) chosen.set(p.name, p);
+  }
+  const once = chosen.size === out.length ? out : out.filter(p => chosen.get(p.name) === p);
+  WORLD_MARKET_MEMO.set(raw, { years, year, start: current.startYear, era: current.eraId, seed, club: current.clubName, out: once });
+  return once;
 }
 
 /** Only a projected source or an already certified ownership record supplies deal provenance. */
