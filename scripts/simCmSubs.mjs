@@ -306,6 +306,8 @@ async function main() {
   }
   const needsEngine = PARTS.some(p => p !== 'ledger');
   const cm = needsEngine ? await bundleEngine(text, CONTROL || 'head', folder) : null;
+  /* The past seasons' squads load on demand in the game; every era this file plays is loaded first. */
+  if (cm) await cm.ensureAllEraRosters();
   globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {}, clear: () => {} };
   const rule = await bundleRule(folder);
   for (const part of PARTS) {
