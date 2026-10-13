@@ -1,0 +1,6 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/lib/gmInbox.test.ts src/components/front-office-shared/GmInboxPanel.test.tsx --testTimeout=300000 --hookTimeout=120000
+deck: node scripts/simEventDeck.mjs
+deck-weightkeep: EVENT_DECK_CONTROL=weightkeep node scripts/simEventDeck.mjs
+deck-restfall: EVENT_DECK_CONTROL=restfall node scripts/simEventDeck.mjs
+deck-expirefall: EVENT_DECK_CONTROL=expirefall node scripts/simEventDeck.mjs
