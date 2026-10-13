@@ -33,10 +33,10 @@ import {
   type CollegeSeatBinding,
 } from '@/lib/collegeSeatBind';
 import {
-  collegeBid, collegeBidView, collegeMarket, collegeRecapView, collegeTakeJob, holdsSeat, type CollegeSeatBlock,
+  collegeBid, collegeBidView, collegeMarket, collegeRecapView, collegeTakeJob, holdsSeat, justMoved, type CollegeSeatBlock,
 } from '@/lib/collegeSeat';
 import {
-  SeatBid, SeatCard, SeatFiredRecap, SeatMarket, SeatPickLine, SeatRecapLine, SeatSeeWhoCalls, SeatSlot,
+  SeatBid, SeatCard, SeatFiredRecap, SeatMarket, SeatNewProgram, SeatPickLine, SeatRecapLine, SeatSeeWhoCalls, SeatSlot,
 } from '@/components/college-dynasty/AthleticDirectorCard';
 
 /** Round 1320: 'market' is a screen and never saved (the save stays on the recap it opened from). */
@@ -568,6 +568,7 @@ export default function CollegeDynastyBoard<
         <CelebrationStyles />
         <div className="rounded-2xl border border-border bg-card p-4 text-center">
           <p className="font-display text-lg font-bold text-foreground">The {st.season + 1} class</p>
+          {sport.seat && st.seat && justMoved(st.seat, st.season) && <SeatNewProgram name={label(st.myTeam)} />}
           <p className="mt-1 text-xs text-muted-foreground">
             NIL budget: <b className="text-gold">{st.nil}</b> points. High school grades carry scouting error; portal players have real tape.{w.classNote}
           </p>

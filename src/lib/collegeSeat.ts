@@ -154,6 +154,12 @@ export const holdsSeat = (block: CollegeSeatBlock): boolean => !currentStint(blo
 /** He was let go and has not taken a job since. */
 export const isFired = (block: CollegeSeatBlock): boolean => currentStint(block.career).ended === 'fired';
 
+/** He took a job at the close just played: his newest stint starts the season after the one on record,
+    which only a move writes (a new dynasty's first stint starts at its first season). */
+export function justMoved(block: CollegeSeatBlock, season: number): boolean {
+  return holdsSeat(block) && block.career.stints.length > 1 && currentStint(block.career).from === season + 1;
+}
+
 /** The last season graded in the seat he holds, or null before his first close there. */
 export function lastGraded(block: CollegeSeatBlock): number | null {
   const s = currentStint(block.career);

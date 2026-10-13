@@ -167,6 +167,15 @@ export function SeatRecapLine({ verdict, trust, hot }: { verdict: string; trust:
   );
 }
 
+/** The trail's line after a move: where he coaches now, since the class screen names no program. */
+export function SeatNewProgram({ name }: { name: string }) {
+  return (
+    <p data-college-seat="moved" className="mt-1 text-sm font-semibold text-gold">
+      You are the head coach at {name} now. This class is your first one there.
+    </p>
+  );
+}
+
 /** The pick screen's one line: a new dynasty comes with an athletic director. */
 export function SeatPickLine() {
   return (

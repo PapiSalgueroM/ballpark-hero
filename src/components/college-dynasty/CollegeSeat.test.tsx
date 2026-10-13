@@ -201,6 +201,7 @@ describe('Round 1320: the athletic director on the college boards', () => {
       expect(after.st.seat.trust).toBe(60);
       expect(after.st.myTeam).not.toBe(fired.st.myTeam);
       expect(sport.binding.view(after.st).programs.find((p: { id: string; name: string }) => p.id === after.st.myTeam).name).toBe(to);
+      expect(txt(m.q('[data-college-seat="moved"]')!)).toContain(`head coach at ${to} now`);
       if ('lastRivalry' in after.st) expect(after.st.lastRivalry).toBeNull();
       /* a reload on the new program's trail keeps him: the new stint starts the season after the one on record */
       reloadOnTrail(sport, after);
@@ -288,7 +289,9 @@ function reloadOnTrail(sport: Sport, moved: { phase: string; st: { myTeam: strin
   expect(moved.st.seat.career.stints.at(-1)!.from).toBe(moved.st.season + 1);
   cleanup();
   const back = mount(sport, moved);
+  expect(back.q('[data-college-seat="moved"]'), 'the trail after a reload does not say where he coaches now').toBeTruthy();
   fireEvent.click(back.button('Close the class, run it back'));
+  expect(back.q('[data-college-seat="moved"]')).toBeNull();
   const next = back.saved();
   expect(next.st.myTeam).toBe(moved.st.myTeam);
   expect(next.st.seat?.career.stints.length, 'a reload on the trail after a move dropped the athletic director').toBe(moved.st.seat.career.stints.length);
@@ -356,10 +359,12 @@ describe('Round 1320: a buyout bid after a big year', () => {
       expect(after.st.seat.career.stints.length).toBe(2);
       expect(after.st.seat.career.stints[0].ended).toBe('poached');
       expect(after.st.seat.trust).toBe(60);
+      expect(txt(m.q('[data-college-seat="moved"]')!)).toContain(`head coach at ${bid.teamName} now`);
       reloadOnTrail(sport, after);
       cleanup();
       const stay = mount(sport, save);
       fireEvent.click(stay.button('Stay put'));
+      expect(stay.q('[data-college-seat="moved"]')).toBeNull();
       const kept = stay.saved();
       expect(kept.phase).toBe('recruit');
       expect(kept.st.myTeam).toBe(save.st.myTeam);
