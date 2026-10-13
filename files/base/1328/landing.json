@@ -1,0 +1,32 @@
+{
+ "landing": [],
+ "fails": [
+  {
+   "section": "B",
+   "msg": "celta-320: the calendar's intensity buttons read Rest first, Balanced, Full training"
+  },
+  {
+   "section": "B",
+   "msg": "celta-320: the calendar says neither Rest first nor Full training"
+  },
+  {
+   "section": "B",
+   "msg": "liverpool-390: the calendar's intensity buttons read Rest first, Balanced, Full training"
+  },
+  {
+   "section": "B",
+   "msg": "liverpool-390: the calendar says neither Rest first nor Full training"
+  },
+  {
+   "section": "B",
+   "msg": "aberdeen-1280: the calendar's intensity buttons read Rest first, Balanced, Full training"
+  },
+  {
+   "section": "B",
+   "msg": "aberdeen-1280: the calendar says neither Rest first nor Full training"
+  }
+ ],
+ "counts": {
+  "B": 57
+ }
+}

@@ -1,0 +1,12 @@
+build exit=0 31s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+vitest exit=0 13s |    Duration  12.55s (transform 4.65s, setup 535ms, collect 12.46s, tests 15.43s, environment 4.33s, prepare 1.25s)
+basebuild exit=0 47s | base server 200
+walk-base-B exit=1 19s | playCmHubLanding: 6 failure(s) (B 57 pass 6 fail)
+tsc exit=0 86s | tsc exit 0
+control-nosticky exit=3 20s | playCmHubLanding: CONTROL nosticky DID NOT FIRE, section B stayed green (B 63 pass 0 fail)
+simCalendarCurrentDate exit=0 7s | Calendar Current date: normalized copied controls, original bytes held, owned temporary files cleaned. Native geometry/keyboard acceptance remains pending.
+simClubManagerCalendar exit=0 38s | simClubManagerCalendar: all green
+simHarnessAnchors exit=0 42s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+walk-head exit=0 210s | playCmHubLanding: green (A 8 pass 0 fail, B 63 pass 0 fail, D 12 pass 0 fail, E 4 pass 0 fail); the hub lands on the club on its first frame
+simAcademy exit=0 266s | ALL ACADEMY CHECKS PASSED
+playClubManager exit=0 241s | Played Club Manager through its own screens. 0 findings.
