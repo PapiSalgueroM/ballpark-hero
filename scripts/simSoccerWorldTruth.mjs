@@ -428,6 +428,8 @@ function drive(B, c) {
     }
     /* the finished save's size, for a reading beside the base's (the feed is emptied the same way on both) */
     recs.size = JSON.stringify(s).length;
+    /* his own Ballon d'Or finish in every season he played, read off the finished save (the night writes it) */
+    recs.bdor = (s.seasons || []).filter(r => r.type === 'playing').map(r => [r.ballonDorRank ?? null, !!r.ballonDor]);
   } finally { Math.random = real; }
   return recs;
 }
@@ -467,6 +469,15 @@ const flatHead = headRecs.flat(), flatBase = baseRecs.flat();
 if (needFleet) {
   const kb = recs => { const v = recs.map(r => r.size).filter(Number.isFinite).sort((a, b) => a - b); return v.length ? `mean ${(v.reduce((a, b) => a + b, 0) / v.length / 1024).toFixed(1)} KB, median ${(v[v.length >> 1] / 1024).toFixed(1)} KB` : 'none'; };
   console.log(`finished saves: this tree ${kb(headRecs)}, the base ${kb(baseRecs)} (a reading, not a check)`);
+  /* Re-seating a real nominee at his era club also moves his honours points on the night, so the order can move
+     (the review's finding 11). His own finish, base against this tree: a reading, not a check, since the careers
+     part ways at the first month award and a test of "no difference" would pass for want of data. */
+  const bd = all => {
+    let n = 0, won = 0, top3 = 0, nom = 0;
+    for (const recs of all) for (const [rank, w] of recs.bdor || []) { n += 1; if (w) won += 1; if (rank && rank <= 3) top3 += 1; if (rank && rank <= 10) nom += 1; }
+    return `${won} won, ${top3} top three, ${nom} in the top ten, of ${n} seasons played`;
+  };
+  console.log(`his own Ballon d'Or: this tree ${bd(headRecs)}; the base ${bd(baseRecs)} (a reading, not a check)`);
 }
 console.log(`fleet: ${FLEET.length} careers a tree (seed offset ${SEED_OFFSET}, ${SEEDS} seeds), ${flatHead.length} seasons on this tree in ${Math.round((t1 - t0) / 1000)} s, ${flatBase.length} on the base`);
 
