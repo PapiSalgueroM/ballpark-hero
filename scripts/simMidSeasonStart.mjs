@@ -234,7 +234,7 @@ console.log('5) The save and the copy both say the run-in was simulated');
     if (claim.test(form)) fail(`the dugout screen makes a historical claim this feature cannot support: ${claim}`);
   }
   const hub = strip(fs.readFileSync(path.join(ROOT, 'src/pages/ClubManager.tsx'), 'utf8'));
-  if (!/run-in simulated/i.test(hub)) fail('the hub does not carry the mid season badge, so the framing is lost once the picker is gone');
+  if (!/the games before you arrived were simulated/i.test(hub)) fail('the hub does not carry the mid season badge, so the framing is lost once the picker is gone');
   if (failures === before) console.log('   the save records it, the dugout says simulated, the hub keeps saying it');
 }
 

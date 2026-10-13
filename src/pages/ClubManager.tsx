@@ -285,7 +285,7 @@ const ClubManager = () => {
         reportGameType="club-manager"
       >
         <div className="relative">
-          <HowToPlayPopover title="How to Play Club Manager" triggerSide="right">
+          <HowToPlayPopover title="How to Play Club Manager" triggerSide="right" className="inline-flex min-h-[44px] min-w-[44px] items-center justify-center">
             <ScreenLoading><ClubManagerHelp /></ScreenLoading>
           </HowToPlayPopover>
           {/* Round 634: the save was refused and the player is told, in plain
@@ -941,7 +941,7 @@ const ClubManager = () => {
     <div ref={hubTopRef} data-cm-hub>
       {/* Header */}
       <header className="mb-4">
-        <div className="flex items-center justify-center gap-2 mb-1 flex-wrap">
+        <div className="flex items-center justify-center gap-2 mb-1 flex-wrap px-12 md:px-0">
           {/* Round 154: a club you founded wears its crest where every other
               club wears its color dot. */}
           {c.customClub && c.customClub.name === c.clubName
@@ -950,16 +950,20 @@ const ClubManager = () => {
           <h1 className="text-2xl md:text-3xl font-bold text-primary font-display">{c.clubName}</h1>
           {/* Round 132: the save now knows what year it is, so it says so, next
               to the season count it has always shown. */}
-          <span className="text-[10px] font-bold text-muted-foreground border border-border rounded-full px-2 py-0.5 whitespace-nowrap">
+          <span className="text-xs font-bold text-muted-foreground border border-border rounded-full px-2 py-0.5 whitespace-nowrap">
             {worldSeasonLabel(c)} · Season {c.season}
           </span>
           {/* Round 549: a career that began part way through says so for as long
-              as that season runs. The run-in was simulated, and a badge that
-              only lives on the picker would let somebody forget that by the
-              time they are reading the table. */}
+              as that season runs. The games before the takeover were simulated,
+              and a badge that only lives on the picker would let somebody forget
+              that by the time they are reading the table. Round 1328: it used to
+              call those games the run-in, but a run-in is the end of a season,
+              and "The run-in" is itself one of the three takeover points; the words
+              now hold for the Autumn, the New year and the run-in takeovers and
+              for a Hot Seat carry on alike. */}
           {c.midSeasonStart && c.season === 1 && (
-            <span className="text-[10px] font-bold text-muted-foreground border border-border rounded-full px-2 py-0.5 whitespace-nowrap">
-              🗓️ Took over mid season · run-in simulated
+            <span className="text-xs font-bold text-muted-foreground border border-border rounded-full px-2 py-0.5 text-center leading-snug">
+              🗓️ Took over mid season · the games before you arrived were simulated
             </span>
           )}
         </div>
@@ -983,13 +987,16 @@ const ClubManager = () => {
           </span>
           {c.trophies.length > 0 && <span>🏆×{c.trophies.length}</span>}
           {/* Round 928: back to the three manager slots, this career saved first. */}
-          <button onClick={g.showSlots} data-testid="cm-show-slots" className="underline underline-offset-2 hover:text-primary transition-colors">
+          <button onClick={g.showSlots} data-testid="cm-show-slots" className="inline-flex min-h-[44px] items-center underline underline-offset-2 hover:text-primary transition-colors">
             Managers
           </button>
         </div>
         {/* Round 465: the board and the fans, on every tab, words by default
             and the number on tap. */}
-        <ScreenLoading compact><MetersStrip career={c} /></ScreenLoading>
+        {/* Round 1328: the strip is a lazy chunk, so its slot holds the drawn
+            height (8px of margin over a 44px meter) while it loads, and the
+            hub does not shift when it lands. */}
+        <div className="min-h-[52px]"><ScreenLoading compact><MetersStrip career={c} /></ScreenLoading></div>
       </header>
 
       <Tabs value={g.activeTab} onValueChange={(v) => g.setActiveTab(v as HubTab)}>
@@ -1328,7 +1335,7 @@ const ClubManager = () => {
             <div ref={panelRef} className="space-y-3">
               <button
                 onClick={() => setHubPanel(null)}
-                className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors"
+                className="inline-flex min-h-[44px] min-w-[44px] items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors"
               >
                 <ChevronLeft className="w-3.5 h-3.5" /> Club home
               </button>

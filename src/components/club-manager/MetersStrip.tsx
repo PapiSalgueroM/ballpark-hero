@@ -38,14 +38,15 @@ function MeterBar({ name, meter, numbers, onToggle }: { name: string; meter: Met
          under the 30px floor every tap target on this site is held to. The
          padding takes it to 34 without moving a pixel of what is drawn, and
          to 34 rather than exactly 30 because a sub pixel layout landed the
-         first try on 29.98 and read as under the floor. */
-      className="block w-full text-left rounded-md py-1.5 focus:outline-none focus-visible:ring-1 focus-visible:ring-primary"
+         first try on 29.98 and read as under the floor. Round 1328: the
+         floor is 44 now, so min-h takes it there, and the words are 12px. */
+      className="block w-full min-h-[44px] text-left rounded-md py-1.5 focus:outline-none focus-visible:ring-1 focus-visible:ring-primary"
       data-cm-meter={name.toLowerCase()}
       data-cm-value={meter.shown}
     >
-      <div className="flex items-center justify-between gap-1 text-[9px] text-muted-foreground mb-0.5 whitespace-nowrap">
-        <span>{name}</span>
-        <span className={cn('font-semibold', TEXT_TONE[meter.tone])}>
+      <div className="flex items-center justify-between gap-1 text-xs text-muted-foreground mb-0.5">
+        <span className="shrink-0">{name}</span>
+        <span className={cn('min-w-0 text-right font-semibold', TEXT_TONE[meter.tone])}>
           {numbers ? `${meter.shown}/100` : meter.band}
         </span>
       </div>
