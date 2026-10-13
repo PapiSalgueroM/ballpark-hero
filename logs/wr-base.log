@@ -1,0 +1,25 @@
+1) no database write in src is built and then dropped on the floor
+   22 write calls in src, 0 never sent
+2) a finished round really does put a request on the wire
+node:events:505
+    throw er; // Unhandled 'error' event
+    ^
+
+Error: listen EADDRINUSE: address already in use :::4186
+    at Server.setupListenHandle [as _listen2] (node:net:2328:16)
+    at listenInCluster (node:net:2437:12)
+    at Server.listen (node:net:2562:7)
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/.tbw/scripts/simWritesAreSent.mjs:169:33
+    at new Promise (<anonymous>)
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/.tbw/scripts/simWritesAreSent.mjs:169:9
+Emitted 'error' event on Server instance at:
+    at emitErrorNT (node:net:2416:8)
+    at process.processTicksAndRejections (node:internal/process/task_queues:90:21) {
+  code: 'EADDRINUSE',
+  errno: -98,
+  syscall: 'listen',
+  address: '::',
+  port: 4186
+}
+
+Node.js v24.21.0
