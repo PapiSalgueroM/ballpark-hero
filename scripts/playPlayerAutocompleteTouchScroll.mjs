@@ -370,7 +370,7 @@ async function other(base, kind) {
       await capture(walk, row, 'selected-without-auto-lock', lock);
       await lock.tap(); const locked = await poll(() => snapshot(walk), value => value.missing.raw !== chosen.missing.raw, row.id + ': next explicit Lock did not save its one guess.');
       row.stages.push({ stage: 'explicit-next-lock-saved-one-wrong-guess', ...locked });
-      const payload = JSON.parse(locked.missing.raw); const expected = { v: 1, date: '2026-10-13', puzzleIndex: 0, puzzleId: 'missing-xi-daily', guesses: [{ t: 'miss', name }], gameStatus: 'playing' };
+      const payload = JSON.parse(locked.missing.raw); const expected = { v: 1, date: '2026-10-13', puzzleIndex: 0, guesses: [{ t: 'miss', name }], gameStatus: 'playing' };
       check(locked.missing.raw === JSON.stringify(expected) && same(payload, expected) && row.validatorRequests.length === 0
         && locked.pageText.includes('Guess 2 of 3'), row.id + ': explicit Lock must write exactly one actual wrong action and no other saved fields.', row);
       await capture(walk, row, 'explicit-lock-one-guess', walk.page.getByText('Already tried: ' + name, { exact: true }));
