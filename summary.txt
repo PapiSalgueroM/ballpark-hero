@@ -1,0 +1,3 @@
+ctl-new exit=0 160s | extradraw exit=1 mutated=1 | fails by section:  8 9. | simCareerPreDraft [control extradraw] [seed set a]: 8 FAILURE(S)
+ctl-lane exit=0 239s | loadershallow exit=1 mutated=1 | fails by section:  1 8. | simCareerPreDraft [control loadershallow] [seed set a]: 1 FAILURE(S)
+ctl-round exit=0 266s | projection exit=1 mutated=1 | fails by section:  8 13. | simCareerPreDraft [control projection] [seed set a]: 8 FAILURE(S)
