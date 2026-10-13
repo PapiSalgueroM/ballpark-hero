@@ -1,0 +1,34 @@
+#!serve
+#!playwright
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-all: node_modules/.bin/vitest run $(git grep -l -E "soccerCareerEngine|soccerPhone|soccerArcade|InternationalPanel|soccerWorldTruth" -- 'src/test/*.test.ts' 'src/test/*.test.tsx') --testTimeout=300000 --hookTimeout=120000
+worldtruth: node scripts/simSoccerWorldTruth.mjs
+worldtruth-s5: SEED_OFFSET=5 node scripts/simSoccerWorldTruth.mjs
+ctl-outside: WORLD_TRUTH_CONTROL=outside node scripts/simSoccerWorldTruth.mjs
+ctl-summer: WORLD_TRUTH_CONTROL=summer node scripts/simSoccerWorldTruth.mjs
+ctl-boundary: WORLD_TRUTH_CONTROL=boundary node scripts/simSoccerWorldTruth.mjs
+simSoccerDeckFairness: node scripts/simSoccerDeckFairness.mjs
+simCareerLeagueSeasons: node scripts/simCareerLeagueSeasons.mjs
+simCareerAwardsNight: node scripts/simCareerAwardsNight.mjs
+simCareerLeagueFinish: node scripts/simCareerLeagueFinish.mjs
+simCareerSocialBrands: node scripts/simCareerSocialBrands.mjs
+simCareerStoryRole: node scripts/simCareerStoryRole.mjs
+simCareerTrophyRuns: node scripts/simCareerTrophyRuns.mjs
+simSoccerCareerDevelopment: node scripts/simSoccerCareerDevelopment.mjs
+simCareerPressMarket: node scripts/simCareerPressMarket.mjs
+simCareerTransferBrief: node scripts/simCareerTransferBrief.mjs
+simSoccerDerbyHistory: node scripts/simSoccerDerbyHistory.mjs
+simSoccerSeasonHistory: node scripts/simSoccerSeasonHistory.mjs
+simSoccerAgentReview: node scripts/simSoccerAgentReview.mjs
+simSoccerFarewell: node scripts/simSoccerFarewell.mjs
+simSoccerInternationalReturn: node scripts/simSoccerInternationalReturn.mjs
+simCareerProgramme: CI=1 node scripts/simCareerProgramme.mjs
+simPhone2: node scripts/simPhone2.mjs
+simMoney: node scripts/simMoney.mjs
+simRevealMoments: node scripts/simRevealMoments.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+simTrustCopy: node scripts/simTrustCopy.mjs
+walk: node scripts/playSoccerWorldTruth.mjs
+sweep: SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs

@@ -1,0 +1,10 @@
+CONTROL FIRED wrong-source-year: receipt-integrity
+CONTROL FIRED uncapped-return: eligibility-fail-closed
+CONTROL FIRED repeat-recorded-year: same-year-held-once
+CONTROL FIRED free-cap: declaration-whole-state, later-recorded-year
+CONTROL FIRED ignore-eligibility: eligibility-fail-closed, receipt-integrity, same-year-held-once
+CONTROL FIRED guaranteed-selection: original-selection-not-guaranteed
+PASS actual original09df full inactive saves and vectors: 90 pairs.
+PASS actual return source groups: 8.
+PASS actual selected, not-selected, ban and tournament fixtures: 4.
+PASS international return copied production source bytes held.

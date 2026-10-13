@@ -1,0 +1,33 @@
+build exit=0 32s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+worldtruth exit=0 132s | simSoccerWorldTruth: OK, every section green
+tsc exit=0 151s | 
+vitest-all exit=0 162s |    Duration  161.62s (transform 13.77s, setup 7.75s, collect 72.78s, tests 305.79s, environment 51.65s, prepare 11.29s)
+worldtruth-s5 exit=0 100s | simSoccerWorldTruth: OK, every section green
+ctl-outside exit=1 84s | FIRED: WORLD_TRUTH_CONTROL=outside failed section 6 (3 failures; section 2: 29, section 6: 3)
+ctl-summer exit=1 86s | FIRED: WORLD_TRUTH_CONTROL=summer failed section 3 (1 failures; section 3: 1, section 6: 3)
+simCareerLeagueSeasons exit=1 19s | Node.js v24.21.0
+simSoccerDeckFairness exit=0 73s | simSoccerDeckFairness: all sections green
+ctl-boundary exit=1 91s | FIRED: WORLD_TRUTH_CONTROL=boundary failed section 0 (2 failures; section 0: 2, section 3: 2, section 4: 1)
+simCareerLeagueFinish exit=0 20s | simCareerLeagueFinish: green. 756 careers, 6048 seasons, 4825 in a verified league; finish and title agree, the ladder holds, the historical stream holds after documented
+simCareerSocialBrands exit=0 37s | ALL SOCIAL AND BRAND CHECKS PASSED
+simCareerAwardsNight exit=0 95s | simCareerAwardsNight: ALL 179 CHECKS PASSED
+simCareerTrophyRuns exit=0 4s | Trophy campaigns: 9 groups, 24 full AR season pairs, 192 full campaign/RNG pairs, 0 effective controls; artifacts /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/ca
+simSoccerCareerDevelopment exit=0 7s | simSoccerCareerDevelopment: 18 outcome groups, 16+16 complete baseline saves/RNG, 16 form draws, 16 played plan seasons, 7 interruption paths, 0 failed
+simCareerPressMarket exit=0 10s | Press/Market:6 outcomes,27 full original state/RNG pairs,6 effective copied source controls,18 native fixture branches.
+simSoccerDerbyHistory exit=0 4s | Derby history: 11 groups,24 full main season pairs,192 full campaign/RNG pairs,0 effective controls; artifacts /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/derby
+simCareerTransferBrief exit=0 10s | Transfer Brief:9 healthy outcome groups,60 full original state/RNG pairs,8 effective copied source controls,9 prepared native branches.
+simSoccerSeasonHistory exit=0 4s | Season history: 9 groups,24 full AR season pairs,192 full campaign/RNG pairs,0 effective controls; artifacts /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/season-
+simCareerStoryRole exit=0 56s | simCareerStoryRole: 16 groups, 0 failed, 48 full AR pairs
+simSoccerFarewell exit=0 11s | Soccer farewell:9 healthy groups,168 full original state/RNG pairs,6 effective source controls,6 prepared native branches.
+simSoccerInternationalReturn exit=0 10s | PASS international return copied production source bytes held.
+simSoccerAgentReview exit=0 17s | PASS agent review product and proof source bytes held.
+simCareerProgramme exit=0 91s | Career programme:50 original/compatibility/full product season pairs with exact RNG,240 opted gameplay seasons,21 effective loaded faults,164 unchanged original chance ou
+simRevealMoments exit=0 12s | simRevealMoments: green. No counting number, a reduced motion rule beside every keyframe, one pace for every stagger, every fact and number on the cards is the fixture's 
+simNoRivalNames exit=0 19s | No rival product names found. 0 findings.
+simPhone2 exit=1 179s | 1 FAILURES
+simHarnessAnchors exit=1 59s | simHarnessAnchors: 1 failure(s)
+simTrustCopy exit=0 1s | simTrustCopy: green. One disclaimer under every page and one count of the games, the registry's own.
+simStorageWrites exit=0 4s | simStorageWrites: all green (owed: 12)
+sweep exit=0 28s | sweepWeight: green. Every page is inside its budget, and the budgets came down this round.
+walk exit=0 33s | playSoccerWorldTruth: green over 3 sizes
+simMoney exit=1 265s | 1 FAILURES
