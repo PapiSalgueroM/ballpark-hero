@@ -1,0 +1,15 @@
+   set 5 (seeds 41 to 50), run 1: 60 careers in 57.4 s
+   shard 4/12: 60 careers in 57.4 s; Math.random called 0 times while the fleet played
+   old run 1 set 5: S1 83.09 / 82.17, S2 106.5, S3 80.0 (n 80), S4 81.1 (n 180), S6 dead 0.1 payers 2.31, signed a night 12.0
+   section 1: green
+   section 6: green
+   section 2: green
+   section 3: green
+   section 4: green
+   section 8: green
+   section 9: green
+   section 10: green
+   section 7: green
+   9 sections ran (1, 6, 2, 3, 4, 8, 9, 10, 7), 212780 checks
+simNbaEarnedDraft: green.
+harness exit 0; set 5 from shard 4/12 on d4755bcb vs r1321-a1 (shard 1/4 on eca5bd25): cmp exit 0
