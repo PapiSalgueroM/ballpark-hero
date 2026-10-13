@@ -150,8 +150,8 @@
  *      nightopen 8 pairs (216 to 228 unbacked outcomes built a night),
  *      nightdedup 8 pairs (a gap of -1 picks, a pick shown twice, picks past
  *      the closing row), nightdraw 1 (Math.random was called), projection 8
- *      pairs (pick 19 outside the quoted 21 to 27). squeeze: 24 (sections 2, 3
- *      and 9), where it used to exit 2. extradraw: the 8 lines of section 9
+ *      pairs (pick 19 outside the quoted 21 to 27). squeeze: 32 (sections 2, 3,
+ *      9 and 13), where it used to exit 2. extradraw: the 8 lines of section 9
  *      and nothing else. gradeshift: the 8 lines of section 9 AND, since
  *      Round 1319, the 8 of section 10 (16 in all), because its cut line now
  *      lives in preDraftShowcaseGradeFrom, which the played path calls too:
