@@ -1,0 +1,42 @@
+W1-live: stale tab A presses Back mid Play Live (390x844)
+  note  A reached /club-manager by link, hub true
+  note  A live stage up: false
+  note  disk with A mid match: week 0, 0 results, last none, live minute 0, fence 2
+  note  B on hub true, played 3 quick sims; disk: week 3, 3 results, last Leeds United 1-2, live minute null, fence 6
+  note  A shows the notice: true
+  note  A after Back: url http://localhost:4173/, same document true; disk: week 0, 0 results, last none, live minute 24, fence 7
+  RED   W1-live: CLOBBER by Back: B left "week 3, 3 results, last Leeds United 1-2, live minute null, fence 6", after A's Back the disk holds "week 0, 0 results, last none, live minute 24, fence 7"
+  note  B errors 0, A errors 0: 
+W2-hub: stale tab A presses Back on the hub (390x844)
+  note  A reached /club-manager by link, hub true
+  note  disk with A on the hub: week 0, 0 results, last none, live minute null, fence 1
+  note  B on hub true, played 3 quick sims; disk: week 3, 3 results, last Leeds United 1-1, live minute null, fence 5
+  note  A shows the notice: true
+  note  A after Back: url http://localhost:4173/, same document true; disk: week 3, 3 results, last Leeds United 1-1, live minute null, fence 5
+  ok    W2-hub: the disk is still B's after A's Back
+  note  B errors 0, A errors 0: 
+W3-390x844-motion: the notice, Escape, Tab, Reload
+  note  W3-390x844-motion: notice true; before {"scrollY":120,"docH":22588}; notice {"card":[16,347,358,150],"reloadH":44,"inView":true,"minFont":16,"anims":2,"focusIn":true,"name":null,"scrollY":120,"docH":22588}
+  note  W3-390x844-motion: 2 animations running in the document while the notice shows
+  note  W3-390x844-motion: after Escape the notice is up true; after four Tabs focus inside it true
+  note  W3-390x844-motion: A reloaded onto the managers screen; disk week 1, 1 results, last Aston Villa 1-1, live minute null, fence 4 (B left week 1, 1 results, last Aston Villa 1-1, live minute null, fence 3); B shows the notice now: true
+W3-390x844-rm: the notice, Escape, Tab, Reload
+  note  W3-390x844-rm: notice true; before {"scrollY":120,"docH":22588}; notice {"card":[16,347,358,150],"reloadH":44,"inView":true,"minFont":16,"anims":0,"focusIn":true,"name":null,"scrollY":120,"docH":22588}
+  note  W3-390x844-rm: after Escape the notice is up true; after four Tabs focus inside it true
+  note  W3-390x844-rm: A reloaded onto the managers screen; disk week 1, 1 results, last Aston Villa 2-1, live minute null, fence 4 (B left week 1, 1 results, last Aston Villa 2-1, live minute null, fence 3); B shows the notice now: true
+W3-1280x900-motion: the notice, Escape, Tab, Reload
+  note  W3-1280x900-motion: notice true; before {"scrollY":120,"docH":13518}; notice {"card":[448,375,384,150],"reloadH":44,"inView":true,"minFont":16,"anims":2,"focusIn":true,"name":null,"scrollY":120,"docH":13518}
+  note  W3-1280x900-motion: 2 animations running in the document while the notice shows
+  note  W3-1280x900-motion: after Escape the notice is up true; after four Tabs focus inside it true
+  note  W3-1280x900-motion: A reloaded onto the managers screen; disk week 1, 1 results, last Aston Villa 1-1, live minute null, fence 4 (B left week 1, 1 results, last Aston Villa 1-1, live minute null, fence 3); B shows the notice now: true
+W3-1280x900-rm: the notice, Escape, Tab, Reload
+  note  W3-1280x900-rm: notice true; before {"scrollY":120,"docH":13518}; notice {"card":[448,375,384,150],"reloadH":44,"inView":true,"minFont":16,"anims":0,"focusIn":true,"name":null,"scrollY":120,"docH":13518}
+  note  W3-1280x900-rm: after Escape the notice is up true; after four Tabs focus inside it true
+  note  W3-1280x900-rm: A reloaded onto the managers screen; disk week 1, 1 results, last Aston Villa 0-0, live minute null, fence 4 (B left week 1, 1 results, last Aston Villa 0-0, live minute null, fence 3); B shows the notice now: true
+  note  W4-390x844: managers screen true; damaged line "You can clear it and start a new manager here. A copy is kept on this device."; buttons [["Clear it",44],["Keep",44],["New manager",44],["New manager",44]]; backups byte equal [true]; url http://localhost:4173/club-manager
+  note  W4-390x844: help block found 1; text "🗂️ One tab at a time. Each career has one save, so if Club Manager is open in two tabs, the newest tab is the one that plays. The older tab stops saving and puts up a notice asking you to reload, so it can never write an old week over what you played in the other one, or play a match again that is already done. Reloading a tab makes it the newest. Example: you are on week 5 in one tab, open Club Manager again in a second tab and play three matches there. Go back to the first tab and it says the career moved on in another tab. Tap Reload and it opens where the second tab left off, all three results in."
+  note  W4-390x844: What's New entry "Club Manager: one tab at a time, and nothing you played gets lost. With Club Manager open in two tabs, only the newest one plays now. The older tab stops saving and asks you to reload, so closing it can no longer put an old week back over the matches you played in the other tab, and it can no longer play a finished match again and change its result. A save that cannot be read now stays on your managers screen and says so, and clearing it keeps a copy on this device that the game offers to put back. And carrying a Manager Hot Seat job on into Club Manager now opens straight on your club."
+  note  W4-1280x900: managers screen true; damaged line "You can clear it and start a new manager here. A copy is kept on this device."; buttons [["Clear it",44],["Keep",44],["New manager",44],["New manager",44]]; backups byte equal [true]; url http://localhost:4173/club-manager
+  note  W4-1280x900: help block found 1; text "🗂️ One tab at a time. Each career has one save, so if Club Manager is open in two tabs, the newest tab is the one that plays. The older tab stops saving and puts up a notice asking you to reload, so it can never write an old week over what you played in the other one, or play a match again that is already done. Reloading a tab makes it the newest. Example: you are on week 5 in one tab, open Club Manager again in a second tab and play three matches there. Go back to the first tab and it says the career moved on in another tab. Tap Reload and it opens where the second tab left off, all three results in."
+  note  W4-1280x900: What's New entry "Club Manager: one tab at a time, and nothing you played gets lost. With Club Manager open in two tabs, only the newest one plays now. The older tab stops saving and asks you to reload, so closing it can no longer put an old week back over the matches you played in the other tab, and it can no longer play a finished match again and change its result. A save that cannot be read now stays on your managers screen and says so, and clearing it keeps a copy on this device that the game offers to put back. And carrying a Manager Hot Seat job on into Club Manager now opens straight on your club."
+walkRun: RED, 1 findings (W1 kept false, W2 kept true)
