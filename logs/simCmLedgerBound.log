@@ -1,0 +1,29 @@
+  Everton season 5: save 103758 units, ledger 22 records, 1991 units
+  Everton season 10: save 117371 units, ledger 29 records, 2558 units
+  time Everton season 10: ledger 29 records; market after a deal 26.4 ms; a tap 1.8 ms against 1.7 ms with no seed or ledger; a matchday 17.5 against 13.3 ms
+  Everton season 15: save 119387 units, ledger 34 records, 3036 units
+  Everton season 20: save 122498 units, ledger 37 records, 3329 units
+  Everton season 25: save 121792 units, ledger 33 records, 2958 units
+  Everton season 30: save 121066 units, ledger 28 records, 2563 units
+  time Everton season 30: ledger 28 records; market after a deal 40.1 ms; a tap 2.2 ms against 1.8 ms with no seed or ledger; a matchday 15.8 against 9.4 ms
+  Everton: ledger slope from season 15 on -45.5 units a season (3036 at 15, 2563 at 30)
+  Real Madrid season 5: save 110208 units, ledger 34 records, 2861 units
+  Real Madrid season 10: save 117750 units, ledger 38 records, 3193 units
+  time Real Madrid season 10: ledger 38 records; market after a deal 25.5 ms; a tap 1.8 ms against 1.6 ms with no seed or ledger; a matchday 16.2 against 9.2 ms
+  Real Madrid season 15: save 119679 units, ledger 36 records, 3153 units
+  Real Madrid season 20: save 123944 units, ledger 39 records, 3365 units
+  Real Madrid season 25: save 119002 units, ledger 35 records, 2860 units
+  Real Madrid season 30: save 122146 units, ledger 33 records, 2923 units
+  time Real Madrid season 30: ledger 33 records; market after a deal 165.3 ms; a tap 3.3 ms against 3.1 ms with no seed or ledger; a matchday 31.0 against 17.7 ms
+  Real Madrid: ledger slope from season 15 on -24.3 units a season (3153 at 15, 2923 at 30)
+  Blackburn Rovers season 5: save 61791 units, ledger 20 records, 2139 units
+  Blackburn Rovers season 10: save 73216 units, ledger 27 records, 2574 units
+  time Blackburn Rovers season 10: ledger 27 records; market after a deal 9.0 ms; a tap 0.9 ms against 0.7 ms with no seed or ledger; a matchday 14.5 against 8.8 ms
+  Blackburn Rovers season 15: save 77430 units, ledger 34 records, 3047 units
+  Blackburn Rovers season 20: save 77528 units, ledger 30 records, 2696 units
+  Blackburn Rovers season 25: save 78406 units, ledger 28 records, 2664 units
+  Blackburn Rovers season 30: save 77527 units, ledger 21 records, 2230 units
+  time Blackburn Rovers season 30: ledger 21 records; market after a deal 8.6 ms; a tap 1.1 ms against 0.8 ms with no seed or ledger; a matchday 12.0 against 7.3 ms
+  Blackburn Rovers: ledger slope from season 15 on -44.5 units a season (3047 at 15, 2230 at 30)
+simCmLedgerBound: 3 careers to season 30; 52 real men and 15 academy men sold; made up men seen at a rival 296, on the market 296; sold men past the deal they had with me 64
+simCmLedgerBound: green, all four sections held
