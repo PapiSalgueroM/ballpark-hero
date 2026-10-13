@@ -160,6 +160,9 @@ try {
         const unknown = m.small.filter(x => !KNOWN_SMALL.some(k => x.cls.includes(k)));
         for (const x of unknown) failNote(`${tag}: "${x.text}" is ${x.size} px on "${m.title}"`);
         const before = m.scrollY;
+        /* the whole card with its consequence lines, then the page put back where it was before the tap */
+        await page.locator('h3', { hasText: CARD_TITLES[i] }).locator('xpath=ancestor::div[contains(@class,"border-2")][1]').screenshot({ path: path.join(OUT, `${tag}-card${i + 1}-whole.png`) });
+        await page.evaluate(y => window.scrollTo(0, y), before);
         await page.evaluate(() => [...document.querySelectorAll('h3')].find(x => x.closest('.rounded-xl.border-2')).closest('.rounded-xl.border-2').querySelector('button').click());
         if (i + 1 < CARD_TITLES.length) await waitText(page, CARD_TITLES[i + 1]); else await page.waitForTimeout(1200);
         const after = await page.evaluate(() => window.scrollY);
