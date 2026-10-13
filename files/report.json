@@ -1,0 +1,1919 @@
+{
+  "site": "http://localhost:4173",
+  "notes": [
+    "A: base save, titles Serious Injury! | New Manager! | International Call-Up! | World Cup Snub!; last row {\"y\":2025,\"inj\":\"Tight calf\",\"fin\":2}",
+    "B: head cards found 11 \"Your MCL sprain this season has left its mark.\" row {\"inj\":\"MCL sprain\",\"lapps\":9,\"club\":\"Corinthians\",\"cur\":\"Corinthians\"} || 12 \"After finishing 15th, the club sacks the manager. The new one does not rate you.\" row {\"inj\":null,\"fin\":15,\"size\":20,\"lapps\":24,\"club\":\"Nice\",\"cur\":\"Nice\"} || 15 \"Only 15 league games this season, and now you are dropped from the starting lineup without explanation.\" row {\"inj\":null,\"lapps\":15,\"club\":\"Corinthians\",\"cur\":\"Corinthians\"}",
+    "C: live save Walk Player, age 20, 5 rows, club Palmeiras"
+  ],
+  "failures": [],
+  "runs": [
+    {
+      "tag": "390-still",
+      "A": [
+        {
+          "title": "Serious Injury!",
+          "text": "⚠️ CHALLENGE · 4 EVENTS REMAINING 🏥 Serious Injury! You pick up a serious hamstring injury. 🏥 Focus on recovery Pace -2 permanently, miss apps next season ⚡ Rush back early Pace -1 but 30% chance of reinjury (Pace -3)",
+          "buttons": [
+            {
+              "label": "🏥Focus on recoveryPace -2 permanently, miss apps next season",
+              "height": 75,
+              "left": 34,
+              "right": 356
+            },
+            {
+              "label": "⚡Rush back earlyPace -1 but 30% chance of reinjury (Pace -3)",
+              "height": 75,
+              "left": 34,
+              "right": 356
+            }
+          ],
+          "small": [
+            "10px ⚠️ Challenge",
+            "10px ·",
+            "10px 4",
+            "10px event",
+            "10px s",
+            "10px remaining",
+            "11px Pace -2 permanently, miss apps next season",
+            "11px Pace -1 but 30% chance of reinjury (Pace -3)"
+          ],
+          "overflow": false,
+          "top": 399,
+          "bottom": 755,
+          "vh": 844,
+          "vw": 390,
+          "scrollY": 0,
+          "scroll": "0->0"
+        },
+        {
+          "title": "New Manager!",
+          "text": "⚠️ CHALLENGE · 3 EVENTS REMAINING 👔 New Manager! Your manager is sacked. The new manager does not rate you. 💪 Prove yourself in training Morale -5 but possible stat boost 😔 Accept reduced role Morale -10, 4 fewer planned league games next season at this club",
+          "buttons": [
+            {
+              "label": "💪Prove yourself in trainingMorale -5 but possible stat boost",
+              "height": 75,
+              "left": 34,
+              "right": 356
+            },
+            {
+              "label": "😔Accept reduced roleMorale -10, 4 fewer planned league games next sea",
+              "height": 91,
+              "left": 34,
+              "right": 356
+            }
+          ],
+          "small": [
+            "10px ⚠️ Challenge",
+            "10px ·",
+            "10px 3",
+            "10px event",
+            "10px s",
+            "10px remaining",
+            "11px Morale -5 but possible stat boost",
+            "11px Morale -10, 4 fewer planned league games next seas"
+          ],
+          "overflow": false,
+          "top": 399,
+          "bottom": 794,
+          "vh": 844,
+          "vw": 390,
+          "scrollY": 0,
+          "scroll": "0->0"
+        },
+        {
+          "title": "International Call-Up!",
+          "text": "🌍 INTERNATIONAL · 2 EVENTS REMAINING 🇺🇳 International Call-Up! You receive your first call-up to the national team. 🏳️ Accept with pride International career begins, Morale +15",
+          "buttons": [
+            {
+              "label": "🏳️Accept with prideInternational career begins, Morale +15",
+              "height": 75,
+              "left": 34,
+              "right": 356
+            }
+          ],
+          "small": [
+            "10px 🌍 International",
+            "10px ·",
+            "10px 2",
+            "10px event",
+            "10px s",
+            "10px remaining",
+            "11px International career begins, Morale +15"
+          ],
+          "overflow": false,
+          "top": 399,
+          "bottom": 695,
+          "vh": 844,
+          "vw": 390,
+          "scrollY": 0,
+          "scroll": "0->0"
+        },
+        {
+          "title": "World Cup Snub!",
+          "text": "🌍 INTERNATIONAL · 1 EVENT REMAINING 🏆❌ World Cup Snub! You are left out of the World Cup squad despite a great season. 😔 Accept decision gracefully Morale -5, Respect +5 🎙️ Publicly question manager Popularity +5, International career at risk 🚶 Retire from internationals International career ends",
+          "buttons": [
+            {
+              "label": "😔Accept decision gracefullyMorale -5, Respect +5",
+              "height": 75,
+              "left": 34,
+              "right": 356
+            },
+            {
+              "label": "🎙️Publicly question managerPopularity +5, International career at ris",
+              "height": 75,
+              "left": 34,
+              "right": 356
+            },
+            {
+              "label": "🚶Retire from internationalsInternational career ends",
+              "height": 75,
+              "left": 34,
+              "right": 356
+            }
+          ],
+          "small": [
+            "10px 🌍 International",
+            "10px ·",
+            "10px 1",
+            "10px event",
+            "10px remaining",
+            "11px Morale -5, Respect +5",
+            "11px Popularity +5, International career at risk",
+            "11px International career ends"
+          ],
+          "overflow": false,
+          "top": 399,
+          "bottom": 860,
+          "vh": 844,
+          "vw": 390,
+          "scrollY": 0,
+          "scroll": "0->0"
+        },
+        {
+          "phase": "transfer_window",
+          "debut": 2025,
+          "debutAge": 21,
+          "intl": true,
+          "lastEvents": [
+            "🏆 Won Player of the Month (February 2025)!",
+            "🏥 Took time to recover from a tight calf: Pace -2",
+            "👔 New manager, training harder",
+            "🇺🇳 Called up to England national team!",
+            "🏆❌ Left out of World Cup, accepted it"
+          ]
+        }
+      ],
+      "B": [
+        {
+          "id": 11,
+          "screen": "⚠️ CHALLENGE · 1 EVENT REMAINING 🏥 Injury Trouble! Your MCL sprain this season has left its mark. 🏥 Focus on recovery Pace -2, Morale -10 ⚡ Rush back early Pace -1, with a 30% chance of reinjury (Pace -3 instead)",
+          "row": {
+            "injury": "MCL sprain",
+            "finish": null,
+            "size": null,
+            "leagueApps": 9
+          },
+          "logged": [
+            "👕 The Shirt Swap",
+            "🏥 Took time to recover from an MCL sprain: Pace -2"
+          ],
+          "scroll": "0->0",
+          "small": [
+            "10px ⚠️ Challenge",
+            "10px ·",
+            "10px 1",
+            "10px event",
+            "10px remaining",
+            "11px Pace -2, Morale -10",
+            "11px Pace -1, with a 30% chance of reinjury (Pace -3 in"
+          ]
+        },
+        {
+          "id": 12,
+          "screen": "⚠️ CHALLENGE · 1 EVENT REMAINING 👔 New Manager! After finishing 15th, the club sacks the manager. The new one does not rate you. 💪 Prove yourself in training Morale -5, Physical +1 next season 😔 Accept reduced role Morale -10, 4 fewer planned league games next season at this club",
+          "row": {
+            "injury": null,
+            "finish": 15,
+            "size": 20,
+            "leagueApps": 24
+          },
+          "logged": [
+            "🌍 Brazil won the World Cup.",
+            "👔 New manager, training harder"
+          ],
+          "scroll": "0->0",
+          "small": [
+            "10px ⚠️ Challenge",
+            "10px ·",
+            "10px 1",
+            "10px event",
+            "10px remaining",
+            "11px Morale -5, Physical +1 next season",
+            "11px Morale -10, 4 fewer planned league games next seas"
+          ]
+        },
+        {
+          "id": 15,
+          "screen": "⚠️ CHALLENGE · 1 EVENT REMAINING 📋 Dropped! Only 15 league games this season, and now you are dropped from the starting lineup without explanation. 😠 Demand explanation Morale -5, 50% chance manager explains 💪 Train harder, fight for place Physical +1, Morale +5",
+          "row": {
+            "injury": null,
+            "finish": null,
+            "size": null,
+            "leagueApps": 15
+          },
+          "logged": [
+            "🌍 Spain won the World Cup.",
+            "📋 Demanded explanation, manager understood"
+          ],
+          "scroll": "0->0",
+          "small": [
+            "10px ⚠️ Challenge",
+            "10px ·",
+            "10px 1",
+            "10px event",
+            "10px remaining",
+            "11px Morale -5, 50% chance manager explains",
+            "11px Physical +1, Morale +5"
+          ]
+        }
+      ],
+      "C": [
+        {
+          "paper": [
+            "THE COLUMN: Desmond Pemberton Has Seen Enough, And He Is Saying So",
+            "Walk Player And Eduardo Johansson: Another Season Of Rivalry"
+          ]
+        },
+        {
+          "nodeStep": "ballon_dor"
+        },
+        {
+          "nodeStep": "rivalry_event"
+        },
+        {
+          "nodeStep": "social_media_action"
+        },
+        {
+          "card": 427,
+          "title": "Three Thousand Metres Above Sea Level",
+          "desc": "The home team has lived up here their whole lives. Twenty minutes in, your legs work fine and your lungs have resigned. The stadium is at the top of a road with no barriers.",
+          "row": {
+            "year": 2025,
+            "goals": 19,
+            "injury": null,
+            "finish": null
+          },
+          "scroll": "0->0",
+          "small": [
+            "10px 🏠 Life Event",
+            "10px ·",
+            "10px 2",
+            "10px event",
+            "10px s",
+            "10px remaining",
+            "11px Net worth -€200k, Physical +2 next season, Morale ",
+            "11px Morale +5, no fitness gain, pure adrenaline",
+            "11px Physical +1 next season, Popularity +3, Morale +4,"
+          ],
+          "buttons": [
+            123,
+            87,
+            123
+          ]
+        },
+        {
+          "card": 437,
+          "title": "The Recovery Palace",
+          "desc": "A cryo chamber, a hyperbaric tent and a compression rig for the spare room. Three hundred thousand euros, six weeks of work, and one electrician who keeps asking what any of it is for.",
+          "row": {
+            "year": 2025,
+            "goals": 19,
+            "injury": null,
+            "finish": null
+          },
+          "scroll": "0->0",
+          "small": [
+            "10px 🏠 Life Event",
+            "10px ·",
+            "10px 1",
+            "10px event",
+            "10px remaining",
+            "11px Net worth -€300k, Physical +2 and Pace +1 next sea",
+            "11px Net worth -€50k, Physical +1 next season, Morale +",
+            "11px Net worth -€300k, Morale +10, Integrity +5, Popula"
+          ],
+          "buttons": [
+            91,
+            103,
+            103
+          ]
+        },
+        {
+          "nodeStep": "transfer_window"
+        },
+        {
+          "paper": [
+            "THE COLUMN: Desmond Pemberton Has Seen Enough, And He Is Saying So",
+            "Walk Player Silences Critics With Stunning Performance"
+          ]
+        },
+        {
+          "nodeStep": "ballon_dor"
+        },
+        {
+          "nodeStep": "world_cup"
+        },
+        {
+          "nodeStep": "rivalry_event"
+        },
+        {
+          "nodeStep": "social_media_action"
+        },
+        {
+          "card": 226,
+          "title": "Buy an Esports Team?",
+          "desc": "A struggling esports org is for sale for €800k. Your gamer teammates swear it is about to blow up.",
+          "row": {
+            "year": 2026,
+            "goals": 14,
+            "injury": null,
+            "finish": 4
+          },
+          "scroll": "0->0",
+          "small": [
+            "10px 🏠 Life Event",
+            "10px ·",
+            "10px 3",
+            "10px event",
+            "10px s",
+            "10px remaining",
+            "11px Results arrive next season",
+            "11px Stick to the grass game"
+          ],
+          "buttons": [
+            75,
+            75
+          ]
+        },
+        {
+          "card": 422,
+          "title": "Somebody Screenshotted The Squad Group Chat",
+          "desc": "Two hundred messages are on a fan forum, including your detailed review of the manager's training drills and eleven voice notes you do not remember sending.",
+          "row": {
+            "year": 2026,
+            "goals": 14,
+            "injury": null,
+            "finish": 4
+          },
+          "scroll": "0->0",
+          "small": [
+            "10px ⚠️ Challenge",
+            "10px ·",
+            "10px 2",
+            "10px event",
+            "10px s",
+            "10px remaining",
+            "11px Morale +4, Integrity +6, Popularity +2",
+            "11px Half the time you find him and the room tightens, ",
+            "11px Morale +3, Popularity +1, you set the standard"
+          ],
+          "buttons": [
+            87,
+            91,
+            87
+          ]
+        },
+        {
+          "card": 229,
+          "title": "The Milk Protocol",
+          "desc": "A wellness influencer convinces half the squad that an all-dairy recovery protocol is the future. There is a group discount.",
+          "row": {
+            "year": 2026,
+            "goals": 14,
+            "injury": null,
+            "finish": 4
+          },
+          "scroll": "0->0",
+          "small": [
+            "10px 🏠 Life Event",
+            "10px ·",
+            "10px 1",
+            "10px event",
+            "10px remaining",
+            "11px 50%: Physical +1 next season somehow. 50%: catastr",
+            "11px Sensible: Morale +2"
+          ],
+          "buttons": [
+            91,
+            75
+          ]
+        },
+        {
+          "nodeStep": "transfer_window"
+        },
+        {
+          "paper": [
+            "THE COLUMN: Desmond Pemberton Has Seen Enough, And He Is Saying So",
+            "Walk Player Silences Critics With Stunning Performance"
+          ]
+        },
+        {
+          "nodeStep": "ballon_dor"
+        },
+        {
+          "nodeStep": "social_media_action"
+        },
+        {
+          "card": 436,
+          "title": "The Tunnel Feeling",
+          "desc": "In the tunnel, for the first time, you could not get a full breath. You played 90 minutes, got a 7, and told absolutely nobody about the ten minutes before kickoff.",
+          "row": {
+            "year": 2027,
+            "goals": 14,
+            "injury": "Calf tear",
+            "finish": 2
+          },
+          "scroll": "0->0",
+          "small": [
+            "10px 🏠 Life Event",
+            "10px ·",
+            "10px 2",
+            "10px event",
+            "10px s",
+            "10px remaining",
+            "11px Morale +10, Physical +1 next season, Integrity +2",
+            "11px Morale +8, Popularity +6, Integrity +8, three team",
+            "11px Morale -3, Popularity +2, nobody ever sees a crack"
+          ],
+          "buttons": [
+            103,
+            91,
+            91
+          ]
+        },
+        {
+          "card": 476,
+          "title": "The New Owner Has A Slideshow",
+          "desc": "Palmeiras has been bought. Slide four promises three Champions League signings. Slide nine is a 90,000 seat stadium. Slide eleven is a hotel and it does not appear to be a joke.",
+          "row": {
+            "year": 2027,
+            "goals": 14,
+            "injury": "Calf tear",
+            "finish": 2
+          },
+          "scroll": "0->0",
+          "small": [
+            "10px 🏠 Life Event",
+            "10px ·",
+            "10px 1",
+            "10px event",
+            "10px remaining",
+            "11px Wage +12%, Popularity +6, 40% it all collapses nex",
+            "11px Morale +2, wage unchanged, every option stays open",
+            "11px Wage +4%, Integrity +6, Morale +8, an exit that ac"
+          ],
+          "buttons": [
+            103,
+            91,
+            103
+          ]
+        },
+        {
+          "nodeStep": "transfer_window"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "tag": "390-motion",
+      "A": [
+        {
+          "title": "Serious Injury!",
+          "text": "⚠️ CHALLENGE · 4 EVENTS REMAINING 🏥 Serious Injury! You pick up a serious hamstring injury. 🏥 Focus on recovery Pace -2 permanently, miss apps next season ⚡ Rush back early Pace -1 but 30% chance of reinjury (Pace -3)",
+          "buttons": [
+            {
+              "label": "🏥Focus on recoveryPace -2 permanently, miss apps next season",
+              "height": 75,
+              "left": 34,
+              "right": 356
+            },
+            {
+              "label": "⚡Rush back earlyPace -1 but 30% chance of reinjury (Pace -3)",
+              "height": 75,
+              "left": 34,
+              "right": 356
+            }
+          ],
+          "small": [
+            "10px ⚠️ Challenge",
+            "10px ·",
+            "10px 4",
+            "10px event",
+            "10px s",
+            "10px remaining",
+            "11px Pace -2 permanently, miss apps next season",
+            "11px Pace -1 but 30% chance of reinjury (Pace -3)"
+          ],
+          "overflow": false,
+          "top": 399,
+          "bottom": 755,
+          "vh": 844,
+          "vw": 390,
+          "scrollY": 0,
+          "scroll": "0->0"
+        },
+        {
+          "title": "New Manager!",
+          "text": "⚠️ CHALLENGE · 3 EVENTS REMAINING 👔 New Manager! Your manager is sacked. The new manager does not rate you. 💪 Prove yourself in training Morale -5 but possible stat boost 😔 Accept reduced role Morale -10, 4 fewer planned league games next season at this club",
+          "buttons": [
+            {
+              "label": "💪Prove yourself in trainingMorale -5 but possible stat boost",
+              "height": 75,
+              "left": 34,
+              "right": 356
+            },
+            {
+              "label": "😔Accept reduced roleMorale -10, 4 fewer planned league games next sea",
+              "height": 91,
+              "left": 34,
+              "right": 356
+            }
+          ],
+          "small": [
+            "10px ⚠️ Challenge",
+            "10px ·",
+            "10px 3",
+            "10px event",
+            "10px s",
+            "10px remaining",
+            "11px Morale -5 but possible stat boost",
+            "11px Morale -10, 4 fewer planned league games next seas"
+          ],
+          "overflow": false,
+          "top": 399,
+          "bottom": 794,
+          "vh": 844,
+          "vw": 390,
+          "scrollY": 0,
+          "scroll": "0->0"
+        },
+        {
+          "title": "International Call-Up!",
+          "text": "🌍 INTERNATIONAL · 2 EVENTS REMAINING 🇺🇳 International Call-Up! You receive your first call-up to the national team. 🏳️ Accept with pride International career begins, Morale +15",
+          "buttons": [
+            {
+              "label": "🏳️Accept with prideInternational career begins, Morale +15",
+              "height": 75,
+              "left": 34,
+              "right": 356
+            }
+          ],
+          "small": [
+            "10px 🌍 International",
+            "10px ·",
+            "10px 2",
+            "10px event",
+            "10px s",
+            "10px remaining",
+            "11px International career begins, Morale +15"
+          ],
+          "overflow": false,
+          "top": 399,
+          "bottom": 695,
+          "vh": 844,
+          "vw": 390,
+          "scrollY": 0,
+          "scroll": "0->0"
+        },
+        {
+          "title": "World Cup Snub!",
+          "text": "🌍 INTERNATIONAL · 1 EVENT REMAINING 🏆❌ World Cup Snub! You are left out of the World Cup squad despite a great season. 😔 Accept decision gracefully Morale -5, Respect +5 🎙️ Publicly question manager Popularity +5, International career at risk 🚶 Retire from internationals International career ends",
+          "buttons": [
+            {
+              "label": "😔Accept decision gracefullyMorale -5, Respect +5",
+              "height": 75,
+              "left": 34,
+              "right": 356
+            },
+            {
+              "label": "🎙️Publicly question managerPopularity +5, International career at ris",
+              "height": 75,
+              "left": 34,
+              "right": 356
+            },
+            {
+              "label": "🚶Retire from internationalsInternational career ends",
+              "height": 75,
+              "left": 34,
+              "right": 356
+            }
+          ],
+          "small": [
+            "10px 🌍 International",
+            "10px ·",
+            "10px 1",
+            "10px event",
+            "10px remaining",
+            "11px Morale -5, Respect +5",
+            "11px Popularity +5, International career at risk",
+            "11px International career ends"
+          ],
+          "overflow": false,
+          "top": 399,
+          "bottom": 860,
+          "vh": 844,
+          "vw": 390,
+          "scrollY": 0,
+          "scroll": "0->0"
+        },
+        {
+          "phase": "transfer_window",
+          "debut": 2025,
+          "debutAge": 21,
+          "intl": true,
+          "lastEvents": [
+            "🏆 Won Player of the Month (February 2025)!",
+            "🏥 Took time to recover from a tight calf: Pace -2",
+            "👔 New manager, training harder",
+            "🇺🇳 Called up to England national team!",
+            "🏆❌ Left out of World Cup, accepted it"
+          ]
+        }
+      ],
+      "B": [
+        {
+          "id": 11,
+          "screen": "⚠️ CHALLENGE · 1 EVENT REMAINING 🏥 Injury Trouble! Your MCL sprain this season has left its mark. 🏥 Focus on recovery Pace -2, Morale -10 ⚡ Rush back early Pace -1, with a 30% chance of reinjury (Pace -3 instead)",
+          "row": {
+            "injury": "MCL sprain",
+            "finish": null,
+            "size": null,
+            "leagueApps": 9
+          },
+          "logged": [
+            "👕 The Shirt Swap",
+            "🏥 Took time to recover from an MCL sprain: Pace -2"
+          ],
+          "scroll": "0->0",
+          "small": [
+            "10px ⚠️ Challenge",
+            "10px ·",
+            "10px 1",
+            "10px event",
+            "10px remaining",
+            "11px Pace -2, Morale -10",
+            "11px Pace -1, with a 30% chance of reinjury (Pace -3 in"
+          ]
+        },
+        {
+          "id": 12,
+          "screen": "⚠️ CHALLENGE · 1 EVENT REMAINING 👔 New Manager! After finishing 15th, the club sacks the manager. The new one does not rate you. 💪 Prove yourself in training Morale -5, Physical +1 next season 😔 Accept reduced role Morale -10, 4 fewer planned league games next season at this club",
+          "row": {
+            "injury": null,
+            "finish": 15,
+            "size": 20,
+            "leagueApps": 24
+          },
+          "logged": [
+            "🌍 Brazil won the World Cup.",
+            "👔 New manager, training harder"
+          ],
+          "scroll": "0->0",
+          "small": [
+            "10px ⚠️ Challenge",
+            "10px ·",
+            "10px 1",
+            "10px event",
+            "10px remaining",
+            "11px Morale -5, Physical +1 next season",
+            "11px Morale -10, 4 fewer planned league games next seas"
+          ]
+        },
+        {
+          "id": 15,
+          "screen": "⚠️ CHALLENGE · 1 EVENT REMAINING 📋 Dropped! Only 15 league games this season, and now you are dropped from the starting lineup without explanation. 😠 Demand explanation Morale -5, 50% chance manager explains 💪 Train harder, fight for place Physical +1, Morale +5",
+          "row": {
+            "injury": null,
+            "finish": null,
+            "size": null,
+            "leagueApps": 15
+          },
+          "logged": [
+            "🌍 Spain won the World Cup.",
+            "📋 Demanded explanation, manager understood"
+          ],
+          "scroll": "0->0",
+          "small": [
+            "10px ⚠️ Challenge",
+            "10px ·",
+            "10px 1",
+            "10px event",
+            "10px remaining",
+            "11px Morale -5, 50% chance manager explains",
+            "11px Physical +1, Morale +5"
+          ]
+        }
+      ],
+      "C": [
+        {
+          "paper": [
+            "THE COLUMN: Desmond Pemberton Has Seen Enough, And He Is Saying So",
+            "Walk Player And Eduardo Johansson: Another Season Of Rivalry"
+          ]
+        },
+        {
+          "nodeStep": "ballon_dor"
+        },
+        {
+          "nodeStep": "social_media_action"
+        },
+        {
+          "card": 427,
+          "title": "Three Thousand Metres Above Sea Level",
+          "desc": "The home team has lived up here their whole lives. Twenty minutes in, your legs work fine and your lungs have resigned. The stadium is at the top of a road with no barriers.",
+          "row": {
+            "year": 2025,
+            "goals": 19,
+            "injury": "Groin strain",
+            "finish": null
+          },
+          "scroll": "0->0",
+          "small": [
+            "10px 🏠 Life Event",
+            "10px ·",
+            "10px 2",
+            "10px event",
+            "10px s",
+            "10px remaining",
+            "11px Net worth -€200k, Physical +2 next season, Morale ",
+            "11px Morale +5, no fitness gain, pure adrenaline",
+            "11px Physical +1 next season, Popularity +3, Morale +4,"
+          ],
+          "buttons": [
+            123,
+            87,
+            123
+          ]
+        },
+        {
+          "card": 437,
+          "title": "The Recovery Palace",
+          "desc": "A cryo chamber, a hyperbaric tent and a compression rig for the spare room. Three hundred thousand euros, six weeks of work, and one electrician who keeps asking what any of it is for.",
+          "row": {
+            "year": 2025,
+            "goals": 19,
+            "injury": "Groin strain",
+            "finish": null
+          },
+          "scroll": "0->0",
+          "small": [
+            "10px 🏠 Life Event",
+            "10px ·",
+            "10px 1",
+            "10px event",
+            "10px remaining",
+            "11px Net worth -€300k, Physical +2 and Pace +1 next sea",
+            "11px Net worth -€50k, Physical +1 next season, Morale +",
+            "11px Net worth -€300k, Morale +10, Integrity +5, Popula"
+          ],
+          "buttons": [
+            91,
+            103,
+            103
+          ]
+        },
+        {
+          "nodeStep": "transfer_window"
+        },
+        {
+          "paper": [
+            "THE COLUMN: Desmond Pemberton Has Seen Enough, And He Is Saying So",
+            "Walk Player Silences Critics With Stunning Performance"
+          ]
+        },
+        {
+          "nodeStep": "ballon_dor"
+        },
+        {
+          "nodeStep": "world_cup"
+        },
+        {
+          "nodeStep": "rivalry_event"
+        },
+        {
+          "nodeStep": "social_media_action"
+        },
+        {
+          "card": 228,
+          "title": "The Golf Bug",
+          "desc": "A veteran teammate takes you golfing once. ONCE. You now own four putters and talk about wind.",
+          "row": {
+            "year": 2026,
+            "goals": 23,
+            "injury": null,
+            "finish": 1
+          },
+          "scroll": "0->0",
+          "small": [
+            "10px 🏠 Life Event",
+            "10px ·",
+            "10px 3",
+            "10px event",
+            "10px s",
+            "10px remaining",
+            "11px Morale +8, Pace -1 next season (cart life)",
+            "11px Focus preserved. The putters stay in the garage"
+          ],
+          "buttons": [
+            75,
+            91
+          ]
+        },
+        {
+          "card": 419,
+          "title": "The Fines Committee",
+          "desc": "Late for the bus is €500, phone in a meeting is €300, and a new haircut on matchday is €1,000. You have just been elected treasurer, mostly as a joke.",
+          "row": {
+            "year": 2026,
+            "goals": 23,
+            "injury": null,
+            "finish": 1
+          },
+          "scroll": "0->0",
+          "small": [
+            "10px 🏠 Life Event",
+            "10px ·",
+            "10px 2",
+            "10px event",
+            "10px s",
+            "10px remaining",
+            "11px Morale +5, Popularity +1, discipline holds",
+            "11px Net worth -€150k, Morale +10, you own the dressing",
+            "11px Integrity +10, Popularity +7, Morale +3"
+          ],
+          "buttons": [
+            87,
+            103,
+            87
+          ]
+        },
+        {
+          "card": 229,
+          "title": "The Milk Protocol",
+          "desc": "A wellness influencer convinces half the squad that an all-dairy recovery protocol is the future. There is a group discount.",
+          "row": {
+            "year": 2026,
+            "goals": 23,
+            "injury": null,
+            "finish": 1
+          },
+          "scroll": "0->0",
+          "small": [
+            "10px 🏠 Life Event",
+            "10px ·",
+            "10px 1",
+            "10px event",
+            "10px remaining",
+            "11px 50%: Physical +1 next season somehow. 50%: catastr",
+            "11px Sensible: Morale +2"
+          ],
+          "buttons": [
+            91,
+            75
+          ]
+        },
+        {
+          "nodeStep": "transfer_window"
+        },
+        {
+          "paper": [
+            "THE COLUMN: Desmond Pemberton Has Seen Enough, And He Is Saying So",
+            "Walk Player Reaches 100 Senior Club Goals"
+          ]
+        },
+        {
+          "nodeStep": "ballon_dor"
+        },
+        {
+          "nodeStep": "rivalry_event"
+        },
+        {
+          "nodeStep": "social_media_action"
+        },
+        {
+          "card": 436,
+          "title": "The Tunnel Feeling",
+          "desc": "In the tunnel, for the first time, you could not get a full breath. You played 90 minutes, got a 7, and told absolutely nobody about the ten minutes before kickoff.",
+          "row": {
+            "year": 2027,
+            "goals": 21,
+            "injury": null,
+            "finish": 3
+          },
+          "scroll": "0->0",
+          "small": [
+            "10px 🏠 Life Event",
+            "10px ·",
+            "10px 2",
+            "10px event",
+            "10px s",
+            "10px remaining",
+            "11px Morale +10, Physical +1 next season, Integrity +2",
+            "11px Morale +8, Popularity +6, Integrity +8, three team",
+            "11px Morale -3, Popularity +2, nobody ever sees a crack"
+          ],
+          "buttons": [
+            103,
+            91,
+            91
+          ]
+        },
+        {
+          "card": 476,
+          "title": "The New Owner Has A Slideshow",
+          "desc": "Palmeiras has been bought. Slide four promises three Champions League signings. Slide nine is a 90,000 seat stadium. Slide eleven is a hotel and it does not appear to be a joke.",
+          "row": {
+            "year": 2027,
+            "goals": 21,
+            "injury": null,
+            "finish": 3
+          },
+          "scroll": "0->0",
+          "small": [
+            "10px 🏠 Life Event",
+            "10px ·",
+            "10px 1",
+            "10px event",
+            "10px remaining",
+            "11px Wage +12%, Popularity +6, 40% it all collapses nex",
+            "11px Morale +2, wage unchanged, every option stays open",
+            "11px Wage +4%, Integrity +6, Morale +8, an exit that ac"
+          ],
+          "buttons": [
+            103,
+            91,
+            103
+          ]
+        },
+        {
+          "nodeStep": "transfer_window"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "tag": "1280-still",
+      "A": [
+        {
+          "title": "Serious Injury!",
+          "text": "⚠️ CHALLENGE · 4 EVENTS REMAINING 🏥 Serious Injury! You pick up a serious hamstring injury. 🏥 Focus on recovery Pace -2 permanently, miss apps next season ⚡ Rush back early Pace -1 but 30% chance of reinjury (Pace -3)",
+          "buttons": [
+            {
+              "label": "🏥Focus on recoveryPace -2 permanently, miss apps next season",
+              "height": 75,
+              "left": 438,
+              "right": 1114
+            },
+            {
+              "label": "⚡Rush back earlyPace -1 but 30% chance of reinjury (Pace -3)",
+              "height": 75,
+              "left": 438,
+              "right": 1114
+            }
+          ],
+          "small": [
+            "10px ⚠️ Challenge",
+            "10px ·",
+            "10px 4",
+            "10px event",
+            "10px s",
+            "10px remaining",
+            "11px Pace -2 permanently, miss apps next season",
+            "11px Pace -1 but 30% chance of reinjury (Pace -3)"
+          ],
+          "overflow": false,
+          "top": 263,
+          "bottom": 618,
+          "vh": 900,
+          "vw": 1280,
+          "scrollY": 0,
+          "scroll": "0->0"
+        },
+        {
+          "title": "New Manager!",
+          "text": "⚠️ CHALLENGE · 3 EVENTS REMAINING 👔 New Manager! Your manager is sacked. The new manager does not rate you. 💪 Prove yourself in training Morale -5 but possible stat boost 😔 Accept reduced role Morale -10, 4 fewer planned league games next season at this club",
+          "buttons": [
+            {
+              "label": "💪Prove yourself in trainingMorale -5 but possible stat boost",
+              "height": 75,
+              "left": 438,
+              "right": 1114
+            },
+            {
+              "label": "😔Accept reduced roleMorale -10, 4 fewer planned league games next sea",
+              "height": 75,
+              "left": 438,
+              "right": 1114
+            }
+          ],
+          "small": [
+            "10px ⚠️ Challenge",
+            "10px ·",
+            "10px 3",
+            "10px event",
+            "10px s",
+            "10px remaining",
+            "11px Morale -5 but possible stat boost",
+            "11px Morale -10, 4 fewer planned league games next seas"
+          ],
+          "overflow": false,
+          "top": 263,
+          "bottom": 618,
+          "vh": 900,
+          "vw": 1280,
+          "scrollY": 0,
+          "scroll": "0->0"
+        },
+        {
+          "title": "International Call-Up!",
+          "text": "🌍 INTERNATIONAL · 2 EVENTS REMAINING 🇺🇳 International Call-Up! You receive your first call-up to the national team. 🏳️ Accept with pride International career begins, Morale +15",
+          "buttons": [
+            {
+              "label": "🏳️Accept with prideInternational career begins, Morale +15",
+              "height": 75,
+              "left": 438,
+              "right": 1114
+            }
+          ],
+          "small": [
+            "10px 🌍 International",
+            "10px ·",
+            "10px 2",
+            "10px event",
+            "10px s",
+            "10px remaining",
+            "11px International career begins, Morale +15"
+          ],
+          "overflow": false,
+          "top": 263,
+          "bottom": 536,
+          "vh": 900,
+          "vw": 1280,
+          "scrollY": 0,
+          "scroll": "0->0"
+        },
+        {
+          "title": "World Cup Snub!",
+          "text": "🌍 INTERNATIONAL · 1 EVENT REMAINING 🏆❌ World Cup Snub! You are left out of the World Cup squad despite a great season. 😔 Accept decision gracefully Morale -5, Respect +5 🎙️ Publicly question manager Popularity +5, International career at risk 🚶 Retire from internationals International career ends",
+          "buttons": [
+            {
+              "label": "😔Accept decision gracefullyMorale -5, Respect +5",
+              "height": 75,
+              "left": 438,
+              "right": 1114
+            },
+            {
+              "label": "🎙️Publicly question managerPopularity +5, International career at ris",
+              "height": 75,
+              "left": 438,
+              "right": 1114
+            },
+            {
+              "label": "🚶Retire from internationalsInternational career ends",
+              "height": 75,
+              "left": 438,
+              "right": 1114
+            }
+          ],
+          "small": [
+            "10px 🌍 International",
+            "10px ·",
+            "10px 1",
+            "10px event",
+            "10px remaining",
+            "11px Morale -5, Respect +5",
+            "11px Popularity +5, International career at risk",
+            "11px International career ends"
+          ],
+          "overflow": false,
+          "top": 263,
+          "bottom": 701,
+          "vh": 900,
+          "vw": 1280,
+          "scrollY": 0,
+          "scroll": "0->0"
+        },
+        {
+          "phase": "transfer_window",
+          "debut": 2025,
+          "debutAge": 21,
+          "intl": true,
+          "lastEvents": [
+            "🏆 Won Player of the Month (February 2025)!",
+            "🏥 Took time to recover from a tight calf: Pace -2",
+            "👔 New manager, training harder",
+            "🇺🇳 Called up to England national team!",
+            "🏆❌ Left out of World Cup, accepted it"
+          ]
+        }
+      ],
+      "B": [
+        {
+          "id": 11,
+          "screen": "⚠️ CHALLENGE · 1 EVENT REMAINING 🏥 Injury Trouble! Your MCL sprain this season has left its mark. 🏥 Focus on recovery Pace -2, Morale -10 ⚡ Rush back early Pace -1, with a 30% chance of reinjury (Pace -3 instead)",
+          "row": {
+            "injury": "MCL sprain",
+            "finish": null,
+            "size": null,
+            "leagueApps": 9
+          },
+          "logged": [
+            "👕 The Shirt Swap",
+            "🏥 Took time to recover from an MCL sprain: Pace -2"
+          ],
+          "scroll": "0->0",
+          "small": [
+            "10px ⚠️ Challenge",
+            "10px ·",
+            "10px 1",
+            "10px event",
+            "10px remaining",
+            "11px Pace -2, Morale -10",
+            "11px Pace -1, with a 30% chance of reinjury (Pace -3 in"
+          ]
+        },
+        {
+          "id": 12,
+          "screen": "⚠️ CHALLENGE · 1 EVENT REMAINING 👔 New Manager! After finishing 15th, the club sacks the manager. The new one does not rate you. 💪 Prove yourself in training Morale -5, Physical +1 next season 😔 Accept reduced role Morale -10, 4 fewer planned league games next season at this club",
+          "row": {
+            "injury": null,
+            "finish": 15,
+            "size": 20,
+            "leagueApps": 24
+          },
+          "logged": [
+            "🌍 Brazil won the World Cup.",
+            "👔 New manager, training harder"
+          ],
+          "scroll": "0->0",
+          "small": [
+            "10px ⚠️ Challenge",
+            "10px ·",
+            "10px 1",
+            "10px event",
+            "10px remaining",
+            "11px Morale -5, Physical +1 next season",
+            "11px Morale -10, 4 fewer planned league games next seas"
+          ]
+        },
+        {
+          "id": 15,
+          "screen": "⚠️ CHALLENGE · 1 EVENT REMAINING 📋 Dropped! Only 15 league games this season, and now you are dropped from the starting lineup without explanation. 😠 Demand explanation Morale -5, 50% chance manager explains 💪 Train harder, fight for place Physical +1, Morale +5",
+          "row": {
+            "injury": null,
+            "finish": null,
+            "size": null,
+            "leagueApps": 15
+          },
+          "logged": [
+            "🌍 Spain won the World Cup.",
+            "📋 Demanded explanation, manager understood"
+          ],
+          "scroll": "0->0",
+          "small": [
+            "10px ⚠️ Challenge",
+            "10px ·",
+            "10px 1",
+            "10px event",
+            "10px remaining",
+            "11px Morale -5, 50% chance manager explains",
+            "11px Physical +1, Morale +5"
+          ]
+        }
+      ],
+      "C": [
+        {
+          "paper": [
+            "THE COLUMN: Desmond Pemberton Has Seen Enough, And He Is Saying So",
+            "Manchester City Launch €98M Bid For Walk Player"
+          ]
+        },
+        {
+          "nodeStep": "ballon_dor"
+        },
+        {
+          "nodeStep": "rivalry_event"
+        },
+        {
+          "nodeStep": "social_media_action"
+        },
+        {
+          "card": 426,
+          "title": "Minus Twenty And The League Plays On",
+          "desc": "The pitch is heated. The air is not. Your eyelashes froze during the anthem and a substitute lost feeling in three fingers before he got on.",
+          "row": {
+            "year": 2025,
+            "goals": 21,
+            "injury": "Dead leg",
+            "finish": 1
+          },
+          "scroll": "0->0",
+          "small": [
+            "10px 🏠 Life Event",
+            "10px ·",
+            "10px 2",
+            "10px event",
+            "10px s",
+            "10px remaining",
+            "11px Net worth -€60k, Morale +8, you lead the room",
+            "11px Physical +3 next season, Morale -4",
+            "11px Net worth -€150k, Pace +2 next season, Morale +7"
+          ],
+          "buttons": [
+            75,
+            75,
+            75
+          ]
+        },
+        {
+          "card": 437,
+          "title": "The Recovery Palace",
+          "desc": "A cryo chamber, a hyperbaric tent and a compression rig for the spare room. Three hundred thousand euros, six weeks of work, and one electrician who keeps asking what any of it is for.",
+          "row": {
+            "year": 2025,
+            "goals": 21,
+            "injury": "Dead leg",
+            "finish": 1
+          },
+          "scroll": "0->0",
+          "small": [
+            "10px 🏠 Life Event",
+            "10px ·",
+            "10px 1",
+            "10px event",
+            "10px remaining",
+            "11px Net worth -€300k, Physical +2 and Pace +1 next sea",
+            "11px Net worth -€50k, Physical +1 next season, Morale +",
+            "11px Net worth -€300k, Morale +10, Integrity +5, Popula"
+          ],
+          "buttons": [
+            75,
+            75,
+            75
+          ]
+        },
+        {
+          "nodeStep": "transfer_window"
+        },
+        {
+          "paper": [
+            "THE COLUMN: Desmond Pemberton Has Seen Enough, And He Is Saying So",
+            "Walk Player Silences Critics With Stunning Performance"
+          ]
+        },
+        {
+          "nodeStep": "ballon_dor"
+        },
+        {
+          "nodeStep": "world_cup"
+        },
+        {
+          "nodeStep": "social_media_action"
+        },
+        {
+          "card": 229,
+          "title": "The Milk Protocol",
+          "desc": "A wellness influencer convinces half the squad that an all-dairy recovery protocol is the future. There is a group discount.",
+          "row": {
+            "year": 2026,
+            "goals": 31,
+            "injury": null,
+            "finish": 2
+          },
+          "scroll": "0->0",
+          "small": [
+            "10px 🏠 Life Event",
+            "10px ·",
+            "10px 3",
+            "10px event",
+            "10px s",
+            "10px remaining",
+            "11px 50%: Physical +1 next season somehow. 50%: catastr",
+            "11px Sensible: Morale +2"
+          ],
+          "buttons": [
+            75,
+            75
+          ]
+        },
+        {
+          "card": 423,
+          "title": "The New Striker Wants Your Penalties",
+          "desc": "He signed for €40M, he has scored 11 in 14, and he has just asked you, in front of eight people, whether he can take the penalties now.",
+          "row": {
+            "year": 2026,
+            "goals": 31,
+            "injury": null,
+            "finish": 2
+          },
+          "scroll": "0->0",
+          "small": [
+            "10px 🏠 Life Event",
+            "10px ·",
+            "10px 2",
+            "10px event",
+            "10px s",
+            "10px remaining",
+            "11px Morale +5, Integrity +5, Shooting -1 next season, ",
+            "11px Shooting +2 next season, Morale +3, tension every ",
+            "11px Morale +8 either way, and the winner takes them"
+          ],
+          "buttons": [
+            75,
+            75,
+            75
+          ]
+        },
+        {
+          "card": 230,
+          "title": "The Cursed Boots",
+          "desc": "Your new limited-edition boots have not seen a single win. Seven matches. The kit man refuses to touch them. He crosses himself near your locker.",
+          "row": {
+            "year": 2026,
+            "goals": 31,
+            "injury": null,
+            "finish": 2
+          },
+          "scroll": "0->0",
+          "small": [
+            "10px 🏠 Life Event",
+            "10px ·",
+            "10px 1",
+            "10px event",
+            "10px remaining",
+            "11px Science! The curse saga continues next season",
+            "11px Morale +5, sponsor mildly concerned, the video goe"
+          ],
+          "buttons": [
+            75,
+            75
+          ]
+        },
+        {
+          "nodeStep": "transfer_window"
+        },
+        {
+          "paper": [
+            "THE COLUMN: Desmond Pemberton Has Seen Enough, And He Is Saying So",
+            "Walk Player Reaches 100 Senior Club Goals"
+          ]
+        },
+        {
+          "nodeStep": "ballon_dor"
+        },
+        {
+          "nodeStep": "rivalry_event"
+        },
+        {
+          "nodeStep": "social_media_action"
+        },
+        {
+          "card": 438,
+          "title": "The Boot Deal Is Up",
+          "desc": "Your brand offers a renewal at the same money. A rival brand offers a lot more and a boot that, in the two pairs they sent, feels like a shoebox with laces.",
+          "row": {
+            "year": 2027,
+            "goals": 22,
+            "injury": null,
+            "finish": 2
+          },
+          "scroll": "0->0",
+          "small": [
+            "10px 🏠 Life Event",
+            "10px ·",
+            "10px 2",
+            "10px event",
+            "10px s",
+            "10px remaining",
+            "11px Sponsor income +€400k, Pace +1 next season, Morale",
+            "11px Net worth +€500k, sponsor income +€1.2M, Pace -1 n",
+            "11px Net worth -€80k, Pace +2 next season, Integrity +5"
+          ],
+          "buttons": [
+            75,
+            75,
+            75
+          ]
+        },
+        {
+          "card": 477,
+          "title": "They Sacked The Man Who Made You",
+          "desc": "The manager who gave you your debut was sacked by text message on a Tuesday. He is in the car park now, putting cardboard boxes into a Skoda, on his own.",
+          "row": {
+            "year": 2027,
+            "goals": 22,
+            "injury": null,
+            "finish": 2
+          },
+          "scroll": "0->0",
+          "small": [
+            "10px ⚠️ Challenge",
+            "10px ·",
+            "10px 1",
+            "10px event",
+            "10px remaining",
+            "11px Popularity +9, Integrity +10, Morale +6, the board",
+            "11px Popularity +6, Morale +1, the new man benches you ",
+            "11px Morale -6, but Shooting +1 and Passing +1 next sea"
+          ],
+          "buttons": [
+            75,
+            75,
+            75
+          ]
+        },
+        {
+          "nodeStep": "transfer_window"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "tag": "1280-motion",
+      "A": [
+        {
+          "title": "Serious Injury!",
+          "text": "⚠️ CHALLENGE · 4 EVENTS REMAINING 🏥 Serious Injury! You pick up a serious hamstring injury. 🏥 Focus on recovery Pace -2 permanently, miss apps next season ⚡ Rush back early Pace -1 but 30% chance of reinjury (Pace -3)",
+          "buttons": [
+            {
+              "label": "🏥Focus on recoveryPace -2 permanently, miss apps next season",
+              "height": 75,
+              "left": 438,
+              "right": 1114
+            },
+            {
+              "label": "⚡Rush back earlyPace -1 but 30% chance of reinjury (Pace -3)",
+              "height": 75,
+              "left": 438,
+              "right": 1114
+            }
+          ],
+          "small": [
+            "10px ⚠️ Challenge",
+            "10px ·",
+            "10px 4",
+            "10px event",
+            "10px s",
+            "10px remaining",
+            "11px Pace -2 permanently, miss apps next season",
+            "11px Pace -1 but 30% chance of reinjury (Pace -3)"
+          ],
+          "overflow": false,
+          "top": 263,
+          "bottom": 618,
+          "vh": 900,
+          "vw": 1280,
+          "scrollY": 0,
+          "scroll": "0->0"
+        },
+        {
+          "title": "New Manager!",
+          "text": "⚠️ CHALLENGE · 3 EVENTS REMAINING 👔 New Manager! Your manager is sacked. The new manager does not rate you. 💪 Prove yourself in training Morale -5 but possible stat boost 😔 Accept reduced role Morale -10, 4 fewer planned league games next season at this club",
+          "buttons": [
+            {
+              "label": "💪Prove yourself in trainingMorale -5 but possible stat boost",
+              "height": 75,
+              "left": 438,
+              "right": 1114
+            },
+            {
+              "label": "😔Accept reduced roleMorale -10, 4 fewer planned league games next sea",
+              "height": 75,
+              "left": 438,
+              "right": 1114
+            }
+          ],
+          "small": [
+            "10px ⚠️ Challenge",
+            "10px ·",
+            "10px 3",
+            "10px event",
+            "10px s",
+            "10px remaining",
+            "11px Morale -5 but possible stat boost",
+            "11px Morale -10, 4 fewer planned league games next seas"
+          ],
+          "overflow": false,
+          "top": 263,
+          "bottom": 618,
+          "vh": 900,
+          "vw": 1280,
+          "scrollY": 0,
+          "scroll": "0->0"
+        },
+        {
+          "title": "International Call-Up!",
+          "text": "🌍 INTERNATIONAL · 2 EVENTS REMAINING 🇺🇳 International Call-Up! You receive your first call-up to the national team. 🏳️ Accept with pride International career begins, Morale +15",
+          "buttons": [
+            {
+              "label": "🏳️Accept with prideInternational career begins, Morale +15",
+              "height": 75,
+              "left": 438,
+              "right": 1114
+            }
+          ],
+          "small": [
+            "10px 🌍 International",
+            "10px ·",
+            "10px 2",
+            "10px event",
+            "10px s",
+            "10px remaining",
+            "11px International career begins, Morale +15"
+          ],
+          "overflow": false,
+          "top": 263,
+          "bottom": 536,
+          "vh": 900,
+          "vw": 1280,
+          "scrollY": 0,
+          "scroll": "0->0"
+        },
+        {
+          "title": "World Cup Snub!",
+          "text": "🌍 INTERNATIONAL · 1 EVENT REMAINING 🏆❌ World Cup Snub! You are left out of the World Cup squad despite a great season. 😔 Accept decision gracefully Morale -5, Respect +5 🎙️ Publicly question manager Popularity +5, International career at risk 🚶 Retire from internationals International career ends",
+          "buttons": [
+            {
+              "label": "😔Accept decision gracefullyMorale -5, Respect +5",
+              "height": 75,
+              "left": 438,
+              "right": 1114
+            },
+            {
+              "label": "🎙️Publicly question managerPopularity +5, International career at ris",
+              "height": 75,
+              "left": 438,
+              "right": 1114
+            },
+            {
+              "label": "🚶Retire from internationalsInternational career ends",
+              "height": 75,
+              "left": 438,
+              "right": 1114
+            }
+          ],
+          "small": [
+            "10px 🌍 International",
+            "10px ·",
+            "10px 1",
+            "10px event",
+            "10px remaining",
+            "11px Morale -5, Respect +5",
+            "11px Popularity +5, International career at risk",
+            "11px International career ends"
+          ],
+          "overflow": false,
+          "top": 263,
+          "bottom": 701,
+          "vh": 900,
+          "vw": 1280,
+          "scrollY": 0,
+          "scroll": "0->0"
+        },
+        {
+          "phase": "transfer_window",
+          "debut": 2025,
+          "debutAge": 21,
+          "intl": true,
+          "lastEvents": [
+            "🏆 Won Player of the Month (February 2025)!",
+            "🏥 Took time to recover from a tight calf: Pace -2",
+            "👔 New manager, training harder",
+            "🇺🇳 Called up to England national team!",
+            "🏆❌ Left out of World Cup, accepted it"
+          ]
+        }
+      ],
+      "B": [
+        {
+          "id": 11,
+          "screen": "⚠️ CHALLENGE · 1 EVENT REMAINING 🏥 Injury Trouble! Your MCL sprain this season has left its mark. 🏥 Focus on recovery Pace -2, Morale -10 ⚡ Rush back early Pace -1, with a 30% chance of reinjury (Pace -3 instead)",
+          "row": {
+            "injury": "MCL sprain",
+            "finish": null,
+            "size": null,
+            "leagueApps": 9
+          },
+          "logged": [
+            "👕 The Shirt Swap",
+            "🏥 Took time to recover from an MCL sprain: Pace -2"
+          ],
+          "scroll": "0->0",
+          "small": [
+            "10px ⚠️ Challenge",
+            "10px ·",
+            "10px 1",
+            "10px event",
+            "10px remaining",
+            "11px Pace -2, Morale -10",
+            "11px Pace -1, with a 30% chance of reinjury (Pace -3 in"
+          ]
+        },
+        {
+          "id": 12,
+          "screen": "⚠️ CHALLENGE · 1 EVENT REMAINING 👔 New Manager! After finishing 15th, the club sacks the manager. The new one does not rate you. 💪 Prove yourself in training Morale -5, Physical +1 next season 😔 Accept reduced role Morale -10, 4 fewer planned league games next season at this club",
+          "row": {
+            "injury": null,
+            "finish": 15,
+            "size": 20,
+            "leagueApps": 24
+          },
+          "logged": [
+            "🌍 Brazil won the World Cup.",
+            "👔 New manager, training harder"
+          ],
+          "scroll": "0->0",
+          "small": [
+            "10px ⚠️ Challenge",
+            "10px ·",
+            "10px 1",
+            "10px event",
+            "10px remaining",
+            "11px Morale -5, Physical +1 next season",
+            "11px Morale -10, 4 fewer planned league games next seas"
+          ]
+        },
+        {
+          "id": 15,
+          "screen": "⚠️ CHALLENGE · 1 EVENT REMAINING 📋 Dropped! Only 15 league games this season, and now you are dropped from the starting lineup without explanation. 😠 Demand explanation Morale -5, 50% chance manager explains 💪 Train harder, fight for place Physical +1, Morale +5",
+          "row": {
+            "injury": null,
+            "finish": null,
+            "size": null,
+            "leagueApps": 15
+          },
+          "logged": [
+            "🌍 Spain won the World Cup.",
+            "📋 Demanded explanation, manager understood"
+          ],
+          "scroll": "0->0",
+          "small": [
+            "10px ⚠️ Challenge",
+            "10px ·",
+            "10px 1",
+            "10px event",
+            "10px remaining",
+            "11px Morale -5, 50% chance manager explains",
+            "11px Physical +1, Morale +5"
+          ]
+        }
+      ],
+      "C": [
+        {
+          "paper": [
+            "THE COLUMN: Desmond Pemberton Has Seen Enough, And He Is Saying So",
+            "Walk Player And Eduardo Johansson: Another Season Of Rivalry"
+          ]
+        },
+        {
+          "nodeStep": "ballon_dor"
+        },
+        {
+          "nodeStep": "rivalry_event"
+        },
+        {
+          "nodeStep": "social_media_action"
+        },
+        {
+          "card": 427,
+          "title": "Three Thousand Metres Above Sea Level",
+          "desc": "The home team has lived up here their whole lives. Twenty minutes in, your legs work fine and your lungs have resigned. The stadium is at the top of a road with no barriers.",
+          "row": {
+            "year": 2025,
+            "goals": 20,
+            "injury": null,
+            "finish": null
+          },
+          "scroll": "0->0",
+          "small": [
+            "10px 🏠 Life Event",
+            "10px ·",
+            "10px 2",
+            "10px event",
+            "10px s",
+            "10px remaining",
+            "11px Net worth -€200k, Physical +2 next season, Morale ",
+            "11px Morale +5, no fitness gain, pure adrenaline",
+            "11px Physical +1 next season, Popularity +3, Morale +4,"
+          ],
+          "buttons": [
+            75,
+            75,
+            75
+          ]
+        },
+        {
+          "card": 437,
+          "title": "The Recovery Palace",
+          "desc": "A cryo chamber, a hyperbaric tent and a compression rig for the spare room. Three hundred thousand euros, six weeks of work, and one electrician who keeps asking what any of it is for.",
+          "row": {
+            "year": 2025,
+            "goals": 20,
+            "injury": null,
+            "finish": null
+          },
+          "scroll": "0->0",
+          "small": [
+            "10px 🏠 Life Event",
+            "10px ·",
+            "10px 1",
+            "10px event",
+            "10px remaining",
+            "11px Net worth -€300k, Physical +2 and Pace +1 next sea",
+            "11px Net worth -€50k, Physical +1 next season, Morale +",
+            "11px Net worth -€300k, Morale +10, Integrity +5, Popula"
+          ],
+          "buttons": [
+            75,
+            75,
+            75
+          ]
+        },
+        {
+          "nodeStep": "transfer_window"
+        },
+        {
+          "paper": [
+            "THE COLUMN: Desmond Pemberton Has Seen Enough, And He Is Saying So",
+            "Walk Player Silences Critics With Stunning Performance"
+          ]
+        },
+        {
+          "nodeStep": "ballon_dor"
+        },
+        {
+          "nodeStep": "world_cup"
+        },
+        {
+          "nodeStep": "rivalry_event"
+        },
+        {
+          "nodeStep": "social_media_action"
+        },
+        {
+          "card": 228,
+          "title": "The Golf Bug",
+          "desc": "A veteran teammate takes you golfing once. ONCE. You now own four putters and talk about wind.",
+          "row": {
+            "year": 2026,
+            "goals": 24,
+            "injury": "Groin strain",
+            "finish": 1
+          },
+          "scroll": "0->0",
+          "small": [
+            "10px 🏠 Life Event",
+            "10px ·",
+            "10px 3",
+            "10px event",
+            "10px s",
+            "10px remaining",
+            "11px Morale +8, Pace -1 next season (cart life)",
+            "11px Focus preserved. The putters stay in the garage"
+          ],
+          "buttons": [
+            75,
+            75
+          ]
+        },
+        {
+          "card": 421,
+          "title": "Forty Minutes After Everyone Else Goes In",
+          "desc": "The 36 year old with the ridiculous whip on his free kicks offers to teach you. One condition: every day, no excuses, including the day after a night game.",
+          "row": {
+            "year": 2026,
+            "goals": 24,
+            "injury": "Groin strain",
+            "finish": 1
+          },
+          "scroll": "0->0",
+          "small": [
+            "10px ⚡ Positive Event",
+            "10px ·",
+            "10px 2",
+            "10px event",
+            "10px s",
+            "10px remaining",
+            "11px Shooting +4 and Passing +1 next season, Morale -2",
+            "11px Shooting +2 and Pace +1 next season",
+            "11px Shooting +1 next season, Morale +6, Popularity +2,"
+          ],
+          "buttons": [
+            75,
+            75,
+            75
+          ]
+        },
+        {
+          "card": 229,
+          "title": "The Milk Protocol",
+          "desc": "A wellness influencer convinces half the squad that an all-dairy recovery protocol is the future. There is a group discount.",
+          "row": {
+            "year": 2026,
+            "goals": 24,
+            "injury": "Groin strain",
+            "finish": 1
+          },
+          "scroll": "0->0",
+          "small": [
+            "10px 🏠 Life Event",
+            "10px ·",
+            "10px 1",
+            "10px event",
+            "10px remaining",
+            "11px 50%: Physical +1 next season somehow. 50%: catastr",
+            "11px Sensible: Morale +2"
+          ],
+          "buttons": [
+            75,
+            75
+          ]
+        },
+        {
+          "nodeStep": "transfer_window"
+        },
+        {
+          "paper": [
+            "THE COLUMN: Desmond Pemberton Has Seen Enough, And He Is Saying So",
+            "Walk Player Reaches 100 Senior Club Goals"
+          ]
+        },
+        {
+          "nodeStep": "ballon_dor"
+        },
+        {
+          "nodeStep": "social_media_action"
+        },
+        {
+          "card": 438,
+          "title": "The Boot Deal Is Up",
+          "desc": "Your brand offers a renewal at the same money. A rival brand offers a lot more and a boot that, in the two pairs they sent, feels like a shoebox with laces.",
+          "row": {
+            "year": 2027,
+            "goals": 31,
+            "injury": null,
+            "finish": 1
+          },
+          "scroll": "0->0",
+          "small": [
+            "10px 🏠 Life Event",
+            "10px ·",
+            "10px 2",
+            "10px event",
+            "10px s",
+            "10px remaining",
+            "11px Sponsor income +€400k, Pace +1 next season, Morale",
+            "11px Net worth +€500k, sponsor income +€1.2M, Pace -1 n",
+            "11px Net worth -€80k, Pace +2 next season, Integrity +5"
+          ],
+          "buttons": [
+            75,
+            75,
+            75
+          ]
+        },
+        {
+          "card": 476,
+          "title": "The New Owner Has A Slideshow",
+          "desc": "Palmeiras has been bought. Slide four promises three Champions League signings. Slide nine is a 90,000 seat stadium. Slide eleven is a hotel and it does not appear to be a joke.",
+          "row": {
+            "year": 2027,
+            "goals": 31,
+            "injury": null,
+            "finish": 1
+          },
+          "scroll": "0->0",
+          "small": [
+            "10px 🏠 Life Event",
+            "10px ·",
+            "10px 1",
+            "10px event",
+            "10px remaining",
+            "11px Wage +12%, Popularity +6, 40% it all collapses nex",
+            "11px Morale +2, wage unchanged, every option stays open",
+            "11px Wage +4%, Integrity +6, Morale +8, an exit that ac"
+          ],
+          "buttons": [
+            75,
+            75,
+            75
+          ]
+        },
+        {
+          "nodeStep": "transfer_window"
+        }
+      ],
+      "errors": []
+    }
+  ]
+}
