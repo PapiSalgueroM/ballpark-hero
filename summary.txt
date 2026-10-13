@@ -1,0 +1,3 @@
+s1-draw exit=1 3s | cmCopyOnly1326: CONTROL draw FIRED (13 failures, as it must)
+s1-word exit=1 10s | cmCopyOnly1326: CONTROL word FIRED (12 failures, as it must)
+s1-fleets exit=0 81s | cmCopyOnly1326: green. 67 careers, every entry equal on both trees but for the declared rewrites (none), draws equal.
