@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { render, cleanup } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { useArrivalTop } from '@/hooks/useArrivalTop';
@@ -13,6 +14,19 @@ let scrollSpy: ReturnType<typeof vi.fn>;
 function Probe({ k }: { k: string | null }) {
   const ref = useArrivalTop<HTMLDivElement>(k);
   return <div ref={ref}>hub</div>;
+}
+
+/* A passive effect inside the new screen, which React runs after the browser
+   may already have painted. Children run their effects before their parent
+   in each phase, so this one sees the move only when the hook made it in the
+   layout phase, which runs to the end before any passive effect starts. */
+function PassiveWitness({ seen }: { seen: number[] }) {
+  useEffect(() => { seen.push(scrollSpy.mock.calls.length); }, [seen]);
+  return null;
+}
+function ProbeWithWitness({ k, seen }: { k: string | null; seen: number[] }) {
+  const ref = useArrivalTop<HTMLDivElement>(k);
+  return <div ref={ref}>hub<PassiveWitness seen={seen} /></div>;
 }
 
 beforeEach(() => {
@@ -36,6 +50,19 @@ describe('useArrivalTop', () => {
     render(<Probe k="hub" />);
     expect(scrollSpy).toHaveBeenCalledTimes(1);
     expect(scrollSpy.mock.calls[0][0]).toMatchObject({ block: 'start', behavior: 'instant' });
+  });
+
+  it('the move is made in the layout phase, before paint: a passive effect of the new screen already sees it', () => {
+    rect = { top: -1700, bottom: -1100, height: 600 };
+    const seen: number[] = [];
+    render(<ProbeWithWitness k="hub" seen={seen} />);
+    expect(seen).toEqual([1]);
+  });
+
+  it('a tall screen that spans the viewport but starts above it lands (the real hub shape)', () => {
+    rect = { top: -1700, bottom: 3000, height: 4700 };
+    render(<Probe k="hub" />);
+    expect(scrollSpy).toHaveBeenCalledTimes(1);
   });
 
   it('a top that is already readable moves nothing', () => {
