@@ -1,0 +1,4 @@
+tsc exit=0 38s | 
+vitest exit=0 1s |    Duration  773ms (transform 63ms, setup 105ms, collect 234ms, tests 134ms, environment 768ms, prepare 308ms)
+ctl-nostorage exit=1 1s | control exit 1
+ctl-nounmount exit=1 1s | control exit 1

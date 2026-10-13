@@ -1,0 +1,5 @@
+#!serial
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/test/useSaveFenceWatch.test.tsx src/test/saveFence.test.ts src/test/saveMovedNotice.test.tsx --testTimeout=300000 --hookTimeout=120000
+ctl-nostorage: c=$(grep -c "e.key === fenceKey" src/hooks/useSaveFenceWatch.ts); echo "anchor count $c"; [ "$c" = 1 ] || exit 3; sed -i "s/e.key === fenceKey/false/" src/hooks/useSaveFenceWatch.ts; grep -c "e.key === fenceKey" src/hooks/useSaveFenceWatch.ts; node_modules/.bin/vitest run src/test/useSaveFenceWatch.test.tsx; s=$?; git checkout -- src; echo "control exit $s"; exit $s
+ctl-nounmount: c=$(grep -c "window.removeEventListener('storage', onStorage);" src/hooks/useSaveFenceWatch.ts); echo "anchor count $c"; [ "$c" = 1 ] || exit 3; sed -i "s/window.removeEventListener('storage', onStorage);//" src/hooks/useSaveFenceWatch.ts; node_modules/.bin/vitest run src/test/useSaveFenceWatch.test.tsx; s=$?; git checkout -- src; echo "control exit $s"; exit $s
