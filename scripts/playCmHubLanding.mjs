@@ -253,39 +253,55 @@ async function advance(page, how) {
   return 'nothing';
 }
 
+/* A whole season played out by "Rest of season" with nobody managing can end
+   in the sack: an unseeded run on a runner did (fx1328-b, "SACKED!"), which is
+   the game, not the landing. So the case runs on section D's seeded, counted
+   Math.random and frozen clock, and if the board sacks him anyway it starts
+   again on the next seed: more careers, never a looser check. */
+const SEASON2_SEEDS = [21, 22, 23];
 if (SECTIONS.has('A')) {
   console.log('A. Landing: a new season pressed from the bottom of the season review');
   const s = { id: 'liverpool-season2-390', size: 's390', era: '2026-27', nation: 'England', league: 'Premier League', club: 'Liverpool', take: false };
-  const { ctx, page } = await openPage(HEAD, SIZE[s.size]);
-  try {
-    await startCareer(page, HEAD, s);
-    const steps = [];
-    let word = '';
-    for (let i = 0; i < 60 && word !== 'review'; i += 1) {
-      word = await advance(page, 'rest');
-      steps.push(word);
-      await page.waitForTimeout(word === 'rest' || word === 'see-review' ? 2500 : 700);
+  const sackedOn = [];
+  for (const seed of SEASON2_SEEDS) {
+    const { ctx, page } = await openPage(HEAD, SIZE[s.size], { seed });
+    let sacked = false;
+    try {
+      await startCareer(page, HEAD, s);
+      const steps = [];
+      let word = '';
+      for (let i = 0; i < 60 && word !== 'review'; i += 1) {
+        if (await page.locator('h1', { hasText: 'SACKED!' }).count()) { sacked = true; break; }
+        word = await advance(page, 'rest');
+        steps.push(word);
+        await page.waitForTimeout(word === 'rest' || word === 'see-review' ? 2500 : 700);
+      }
+      if (sacked) {
+        sackedOn.push(seed);
+        console.log(`  INFO  A  ${s.id}: seed ${seed} ended in the sack after ${steps.length} presses; the next seed starts again`);
+      } else if (word !== 'review') {
+        const seen = await page.evaluate(() => ({ h1: [...document.querySelectorAll("h1")].map(h => h.innerText.trim()).join(" / "), buttons: [...document.querySelectorAll("button")].filter(b => b.offsetParent).map(b => b.innerText.trim().slice(0, 30)).filter(Boolean).slice(0, 14).join(" | ") }));
+        fail('A', `${s.id}: the season review never came up on seed ${seed} (presses ${steps.join(", ")}; headings ${seen.h1}; buttons ${seen.buttons})`);
+        await shot(page, `A-${s.id}-noreview`);
+      } else {
+        await page.evaluate(() => { window.__hubFirst = null; window.scrollTo(0, document.documentElement.scrollHeight); });
+        await page.waitForTimeout(300);
+        const before = await page.evaluate(() => window.scrollY);
+        await page.getByRole('button', { name: /^Continue to Season \d+/ }).first().click();
+        await page.waitForFunction(() => window.__hubFirst !== null, null, { timeout: 60000 });
+        const first = await page.evaluate(() => window.__hubFirst);
+        landing.push({ id: s.id, seed, ...first });
+        await shot(page, `A-${s.id}`);
+        check('A', landed(first), `${s.id}: from scrollY ${Math.round(before)} at the review, hub header top ${Math.round(first.top)} px on the first frame of season 2 (seed ${seed}, ${steps.length} presses to the review)`);
+      }
+    } catch (e) {
+      fail('A', `${s.id}: seed ${seed}: ${String(e).split('\n')[0].slice(0, 200)}`);
+      await shot(page, `A-${s.id}-stuck`);
     }
-    if (word !== 'review') {
-      const seen = await page.evaluate(() => ({ h1: [...document.querySelectorAll("h1")].map(h => h.innerText.trim()).join(" / "), buttons: [...document.querySelectorAll("button")].filter(b => b.offsetParent).map(b => b.innerText.trim().slice(0, 30)).filter(Boolean).slice(0, 14).join(" | ") }));
-      fail('A', `${s.id}: the season review never came up (presses ${steps.join(", ")}; headings ${seen.h1}; buttons ${seen.buttons})`);
-      await shot(page, `A-${s.id}-noreview`);
-    } else {
-      await page.evaluate(() => { window.__hubFirst = null; window.scrollTo(0, document.documentElement.scrollHeight); });
-      await page.waitForTimeout(300);
-      const before = await page.evaluate(() => window.scrollY);
-      await page.getByRole('button', { name: /^Continue to Season \d+/ }).first().click();
-      await page.waitForFunction(() => window.__hubFirst !== null, null, { timeout: 60000 });
-      const first = await page.evaluate(() => window.__hubFirst);
-      landing.push({ id: s.id, ...first });
-      await shot(page, `A-${s.id}`);
-      check('A', landed(first), `${s.id}: from scrollY ${Math.round(before)} at the review, hub header top ${Math.round(first.top)} px on the first frame of season 2 (${steps.length} presses to the review)`);
-    }
-  } catch (e) {
-    fail('A', `${s.id}: ${String(e).split('\n')[0].slice(0, 200)}`);
-    await shot(page, `A-${s.id}-stuck`);
+    await ctx.close();
+    if (!sacked) break;
   }
-  await ctx.close();
+  if (sackedOn.length === SEASON2_SEEDS.length) fail('A', `${s.id}: the board sacked him on every seed (${sackedOn.join(', ')}), so the season 2 landing went unmeasured`);
 }
 
 /* ---------------- B. Calendar ---------------- */
