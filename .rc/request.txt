@@ -1,0 +1,6 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simCmShootoutOrder: node scripts/simCmShootoutOrder.mjs
+ctl-unsetpath: CM_SHOOTOUT_CONTROL=unsetpath node scripts/simCmShootoutOrder.mjs
+azjoin: bash .rc/x/azjoin.sh
+simCmCopy: node scripts/simCmCopy.mjs
+simGmStaff: node scripts/simGmStaff.mjs
