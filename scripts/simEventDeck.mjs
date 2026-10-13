@@ -41,7 +41,9 @@
      5) SUBJECT REST. FX_SUBJECT (role and fact subjects) over 50 desks of
         400 weeks: no subject inside its rest or twice in a week, the rest
         book never holds a finished rest or more than one window's deals;
-        subjectRest 0 deals exactly as no subjects.
+        subjectRest 0 deals exactly as no subjects; on a clock that falls
+        every 20 weeks the book is rebased (never ahead of the clock) and a
+        lone card about the captain comes back every season.
      6) TEXTS. FX_TEXTS (cards of 2 and 4 wordings): the same deals and deck
         draws with and without wordings, the same key reads the same words,
         another key other words with the same deal, and every wording comes
@@ -51,8 +53,9 @@
         arrival plus its expiry on its neutral option with auto set, no meter
         ever moves, the settled line names the neutral label with no dash,
         the deck never freezes (a measured multiple of the deals the same
-        pack makes without expiry), and a card whose def lost its expiry
-        stays open.
+        pack makes without expiry), a card whose def lost its expiry stays
+        open, and on the FALLEN drive's falling clock every card settles in
+        exactly its due week, a card across a fall counting from the fall.
      8) NEUTRAL. Every card of every pack off NEUTRAL_BASELINE has an option
         that moves nothing, every pack on it still lacks one somewhere (the
         ratchet), gmPackProblems is empty for every pack the kit knows, and
@@ -84,6 +87,10 @@
                 two a week pack can deal one card twice; section 3 fails.
      story      the book key ignores the story; section 4 fails.
      rest       the subject rest test always passes; section 5 fails.
+     restfall   the rest book keeps an entry from the future when the clock
+                falls; section 5 fails.
+     expirefall an open card's arrival week is not rebased when the clock
+                falls; section 7 fails.
      textrng    the wording drawn from the deck's rng; section 6 fails (and 1
                 would, if a recorded pack had wordings).
      seasonweek the season pack uses the week comparison; section 9 fails.
@@ -117,7 +124,7 @@ const CONTROL = process.env.EVENT_DECK_CONTROL || '';
 const RECORD = process.env.SIM_EVENT_DECK_RECORD || '';
 const SHARD = process.env.SIM_EVENT_DECK_SHARD || '';
 const REPLAY_FILE = path.join(ROOT, 'scripts/data/gmInboxReplay.json');
-const CONTROLS = ['replay', 'weightoff', 'weightkeep', 'story', 'rest', 'textrng', 'seasonweek', 'expireoff', 'expirefx', 'neutral', 'heavy'];
+const CONTROLS = ['replay', 'weightoff', 'weightkeep', 'story', 'rest', 'restfall', 'expirefall', 'textrng', 'seasonweek', 'expireoff', 'expirefx', 'neutral', 'heavy'];
 if (CONTROL && !CONTROLS.includes(CONTROL)) { console.error(`EVENT_DECK_CONTROL=${CONTROL} is not a control this kit knows`); process.exit(2); }
 if (RECORD && (CONTROL || SHARD)) { console.error('a recording runs the whole replay with no control, refusing'); process.exit(2); }
 const red = new Set();
@@ -144,6 +151,8 @@ const ENGINE_CONTROLS = {
   weightkeep: ['return came.splice(i, 1)[0];', 'return came[i]; /* weightkeep control */'],
   story: ['const bookKey = (e: GmEventDef): string => ledgerKey(e);', 'const bookKey = (e: GmEventDef): string => e.id; /* story control */'],
   rest: ['if (r !== undefined && clock - r < restFor) return false;', '/* rest control */'],
+  restfall: ['if (clock - Math.min(at, clock) < restFor) rest[k] = Math.min(at, clock);', 'if (clock - at < restFor) rest[k] = at; /* restfall control */'],
+  expirefall: ['const w = Math.min(m.w, clock);', 'const w = m.w; /* expirefall control */'],
   textrng: ["const pick = alt > 0 ? Math.floor(keyedRng(`${seat.keyOf?.(s) ?? ''}|${e.id}|${year}|${clock}`)() * (1 + alt)) : 0;",
     'const pick = alt > 0 ? Math.floor(rng() * (1 + alt)) : 0; /* textrng control */'],
   seasonweek: ["if (pack.clock === 'season') return !onCooldown(last, e, clock, pack.cooldown);", '/* seasonweek control */'],
@@ -370,8 +379,10 @@ const fxPack = (seat, events, extra = {}) => ({
   perWeek: 1, cooldown: 0, chance: 1, events, ...extra,
 });
 /** One fixture desk over `ticks` weeks: facts(clock, rng) hands in the
- *  facts, answer 'all' answers every open message on its first option. */
-function fxRun(pack, key, ticks, { facts = () => ({}), answer = 'all', bind = {} } = {}) {
+ *  facts, answer 'all' answers every open message on its first option,
+ *  clockOf(tick) is the clock the desk hands in (the tick itself, or a
+ *  clock that falls, the week of a season). */
+function fxRun(pack, key, ticks, { facts = () => ({}), answer = 'all', bind = {}, clockOf = t => t } = {}) {
   const rawDeck = keyedRng(`simEventDeck|fx|${key}|deck`);
   const factRng = keyedRng(`simEventDeck|fx|${key}|facts`);
   let calls = 0;
@@ -379,10 +390,11 @@ function fxRun(pack, key, ticks, { facts = () => ({}), answer = 'all', bind = {}
   const s = newDesk();
   const bound = E.bindGmInbox(pack, { ...BINDING, ...bind });
   const log = [];
-  for (let clock = 0; clock < ticks; clock++) {
+  for (let t = 0; t < ticks; t++) {
+    const clock = clockOf(t);
     const f = facts(clock, factRng);
     const got = E.gmInboxWeek(s, bound, 'a', f, clock, rng);
-    log.push({ clock, got, facts: f, rest: s.gmInboxRest ? { ...s.gmInboxRest } : undefined });
+    log.push({ t, clock, got, facts: f, rest: s.gmInboxRest ? { ...s.gmInboxRest } : undefined });
     if (answer === 'all') for (const m of openOf(s)) E.answerGmInbox(s, m.id, 0, bound);
   }
   return { s, log, calls: () => calls };
@@ -568,6 +580,47 @@ console.log('5) Subject rest: no subject inside its rest or twice in a week, the
   else if ('gmInboxRest' in zero.s) fail(5, 'a pack with subjectRest 0 wrote a rest book');
   else ok(`subjectRest 0 deals exactly as no subjects (${zero.log.reduce((n, w) => n + w.got.length, 0)} deals, ${zero.calls()} draws) and writes no book`);
   if (gmStates > 0 && gmGrew === 0) ok(`no GM desk gained gmInboxRest over section 2's ${gmStates} states`);
+  /* On a clock that falls (a seat handing in the week of its season) the rest
+     book is rebased like the cooldown book: an entry from the future reads
+     as dealt now, so the man rests one more rest after the fall and comes
+     back, never a whole season. Both proofs are exact. The restfall control
+     keeps the entry from the future. */
+  const SPAN = 20;
+  const fallClock = t => t % SPAN;
+  const fallBad = [];
+  let fallDealt = 0;
+  for (let d = 0; d < 50; d++) {
+    const { log } = fxRun(FX_SUBJECT, `subject|${SEED}|fall|${d}`, 400, { facts, clockOf: fallClock });
+    const at = {};
+    for (const w of log) {
+      const seen = new Set();
+      for (const m of w.got) {
+        const k = keyOf(m, w.facts);
+        if (!k) continue;
+        fallDealt++;
+        if (seen.has(k)) fallBad.push(`desk ${d} tick ${w.t}: two cards about ${k}`);
+        seen.add(k);
+        if (at[k] !== undefined && w.t - at[k] < REST) fallBad.push(`desk ${d}: ${k} again after ${w.t - at[k]} ticks, rest ${REST}`);
+        at[k] = w.t;
+      }
+      for (const [k, t] of Object.entries(w.rest ?? {})) {
+        if (t > w.clock) fallBad.push(`desk ${d} tick ${w.t}: ${k} sits in the book at ${t}, ahead of the clock ${w.clock}`);
+        else if (w.clock - t >= REST) fallBad.push(`desk ${d} tick ${w.t}: ${k} still in the book after its rest`);
+      }
+    }
+  }
+  for (const b of fallBad.slice(0, 6)) console.error(`     ${b}`);
+  if (fallDealt < 1000) fail(5, `only ${fallDealt} subject cards dealt on a falling clock: nothing was tested`);
+  if (fallBad.length) fail(5, `${fallBad.length} subject rest breaks on a clock that falls every ${SPAN} weeks`);
+  else ok(`on a clock that falls every ${SPAN} weeks: ${fallDealt} subject cards over 50 desks, none inside its rest, the book never ahead of the clock or past a rest`);
+  /* One card about the captain, chance 1, every week answered: dealt at
+     weeks 0, 6, 12 and 18 of the first season, then the fall rebases week
+     18 to week 0, so 6, 12 and 18 of every later season. */
+  const FX_ALONE = fxPack('fx_alone', [fxCard('solo', { subject: 'captain' })], { subjectRest: REST });
+  const alone = fxRun(FX_ALONE, `subject|${SEED}|alone`, SPAN * 10, { clockOf: fallClock }).log.filter(w => w.got.length).map(w => w.t);
+  const wantAlone = [0, ...Array.from({ length: 10 }, (_, sn) => [6, 12, 18].map(c => sn * SPAN + c)).flat()];
+  const lineAlone = `one card about the captain on that clock: ${alone.length} deals over ten seasons, ${wantAlone.length} expected (ticks ${alone.slice(0, 7).join(', ')} and on)`;
+  if (alone.join() !== wantAlone.join()) fail(5, lineAlone); else ok(lineAlone);
 }
 
 /* ═══ 6. TEXTS: wordings move no deal, and a key reads the same words ═══ */
@@ -679,6 +732,47 @@ const FX_EXPIRE = fxPack('fx_expire', [
   const lineRise = `silent desks were dealt ${r.deals} cards, ${rise.toFixed(1)} times the ${still.deals} of the same pack without expiry, ${r.lastSeason} in the tenth season`;
   if (rise < 30 || r.lastSeason === 0) fail(7, lineRise); else ok(lineRise);
   if (MEASURE) console.log(`   measure: expiry rise at seeds 1 to 10: ${TEN.map(sd => (run(FX_EXPIRE, sd).deals / run(STILL, sd).deals).toFixed(2)).join(', ')}`);
+  /* On a clock that falls (the FALLEN drive's week of the season, answered
+     never) a card's arrival week is rebased like the book: one that arrived
+     in week c with expiry e settles e weeks later when that is still inside
+     the season, otherwise e weeks into the next (the fall reads as its
+     arrival). Exact, per card, counted in real weeks; a card the kept cap
+     drops in the call that settles it counts as settled that week (only an
+     answered card is ever dropped). The expirefall control keeps the
+     arrival week from the future. */
+  const span = E.gmSeasonWeeks(FX_EXPIRE).length;
+  const fall = { bad: [], settled: 0, crossed: 0, lastSeason: 0 };
+  let due = new Map();
+  const observeFall = w => {
+    if (w.season === 0 && w.week === 0) due = new Map();
+    const t = w.season * span + w.week;
+    const now = new Map((w.s.phoneInbox ?? []).map(m => [m.id, m]));
+    for (const [id, a] of due) {
+      const m = now.get(id);
+      if (m && m.answered === undefined) {
+        if (t >= a.at) fall.bad.push(`desk ${w.desk}: ${id} still open in real week ${t}, due in week ${a.at}`);
+        continue;
+      }
+      due.delete(id);
+      fall.settled++;
+      if (a.crosses) fall.crossed++;
+      if (t !== a.at) fall.bad.push(`desk ${w.desk}: ${id} settled in real week ${t}, due in week ${a.at}`);
+      if (m && (m.answered !== 1 || m.auto !== true)) fall.bad.push(`desk ${w.desk}: ${id} settled on option ${m.answered}, auto ${m.auto}`);
+    }
+    if (meters(w.s) !== calm) fall.bad.push(`desk ${w.desk} week ${t}: a meter moved on a desk that never answers`);
+    if (w.season === SEASONS - 1) fall.lastSeason += w.got.length;
+    for (const m of w.got) {
+      const e = ttl.get(m.defId);
+      const crosses = w.clock + e >= span;
+      due.set(m.id, { at: t + (crosses ? span - w.clock + e : e), crosses });
+    }
+  };
+  for (let d = 0; d < DRIVES.SILENT.desks; d++) runDesk(FX_EXPIRE, 'fx_expire_fall', SEED, 'FALLEN', d, { observe: observeFall, policy: 'never' });
+  for (const b of fall.bad.slice(0, 6)) console.error(`     ${b}`);
+  if (fall.crossed < 100) fail(7, `only ${fall.crossed} cards settled across a fall: nothing was tested`);
+  if (fall.bad.length) fail(7, `${fall.bad.length} expiry breaks on a clock that falls every ${span} weeks`);
+  else ok(`on a clock that falls every ${span} weeks: ${fall.settled} cards settled on ${DRIVES.SILENT.desks} silent desks, each in exactly its due week, ${fall.crossed} of them across a fall, no meter moved`);
+  if (fall.lastSeason === 0) fail(7, 'on a falling clock the deck froze: nothing dealt in the tenth season');
   /* A card whose def lost its expiry stays open: the manager answers it. */
   const s = newDesk();
   E.gmInboxWeek(s, E.bindGmInbox(FX_EXPIRE, BINDING), 'a', {}, 0, () => 0);

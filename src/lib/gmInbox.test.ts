@@ -459,4 +459,31 @@ describe('gmInbox deck rules, the review cases', () => {
     /* A high draw lands on the last card, then on the heavier of the two left. */
     expect(gmInboxWeek(desk(), seat, 'a', {}, 0, () => 0.99).map(m => m.defId)).toEqual(['w2', 'w3']);
   });
+
+  it('on a clock that falls, the rest book is rebased like the cooldown book', () => {
+    const seat = seatFor(deck([card('r1', { subject: 'star' })], { subjectRest: 4 }));
+    const s = desk();
+    const dealt: string[] = [];
+    for (let season = 0; season < 2; season++) {
+      for (let clock = 0; clock < 10; clock++) {
+        for (const m of gmInboxWeek(s, seat, 'a', {}, clock, () => 0)) { dealt.push(`${season}:${clock}`); answerGmInbox(s, m.id, 0, seat); }
+        if (season === 1 && clock === 0) expect(s.gmInboxRest).toEqual({ 'role:star': 0 });
+      }
+    }
+    expect(dealt).toEqual(['0:0', '0:4', '0:8', '1:4', '1:8']);
+  });
+
+  it('on a clock that falls, an open expiring card counts its weeks from the fall', () => {
+    const seat = seatFor(deck([card('x', { expires: 2 })], { cooldown: 100 }));
+    const s = desk();
+    gmInboxWeek(s, seat, 'a', {}, 9, () => 0);
+    const seen: string[] = [];
+    for (let clock = 0; clock < 4; clock++) {
+      gmInboxWeek(s, seat, 'a', {}, clock, () => 0);
+      const m = s.phoneInbox![0] as GmInboxMessage;
+      seen.push(`${clock}:${m.w}:${m.answered === undefined ? 'open' : m.auto ? 'auto' : 'answered'}`);
+    }
+    expect(s.phoneInbox).toHaveLength(1);
+    expect(seen).toEqual(['0:0:open', '1:0:open', '2:0:auto', '3:0:auto']);
+  });
 });
