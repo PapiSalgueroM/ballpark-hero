@@ -1,0 +1,6 @@
+dupe exit=2 0s | Control keyscurve: the needle is in src/lib/careerPreDraft.ts 2 times, not exactly once. Refusing to run.
+season-law exit=3 14s | simUsSeasonCentre digest compare: NOT COMPARED, 2 bundled files are not the ones the record was made on (exit 3: this is no red of the score law)
+r-law exit=0 14s | simUsSeasonCentre digest compare: 11 digests, 0 moved (a receipt of Round 1221's law move, in no gate)
+r-lay exit=0 14s | simUsSeasonCentre digest compare: 11 digests, 0 moved (a receipt of Round 1300's playoff lay, in no gate)
+r-seam exit=0 14s | simUsSeasonCentre digest compare: 11 digests, 0 moved (a receipt of Round 1212's seam, in no gate)
+status exit=0 0s | TREE-CLEAN-CHECK done

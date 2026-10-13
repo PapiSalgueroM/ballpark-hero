@@ -1,0 +1,7 @@
+#!serial
+dupe: echo "// const which: PreDraftInput = input === 'keys' ? 'keys' : 'pointer';" >> src/lib/careerPreDraft.ts && SIM_PRE_DRAFT_CONTROL=keyscurve node scripts/simCareerPreDraft.mjs; s=$?; git checkout -- src; exit $s
+season-law: US_SEASON_DIGEST=compare node scripts/simUsSeasonCentre.mjs
+r-law: node .rc/x/rvrcpt.mjs law && US_SEASON_DIGEST=compare node scripts/simUsSeasonCentre.mjs; s=$?; git checkout -- scripts/data; exit $s
+r-lay: node .rc/x/rvrcpt.mjs lay && US_SEASON_DIGEST=compare US_SEASON_DIGEST_RECEIPT=lay node scripts/simUsSeasonCentre.mjs; s=$?; git checkout -- scripts/data; exit $s
+r-seam: node .rc/x/rvrcpt.mjs seam && US_SEASON_DIGEST=compare US_SEASON_DIGEST_RECEIPT=seam node scripts/simUsSeasonCentre.mjs; s=$?; git checkout -- scripts/data; exit $s
+status: git status --short | grep -v '^??' | head; echo TREE-CLEAN-CHECK done
