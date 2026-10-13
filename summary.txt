@@ -1,0 +1,4 @@
+build exit=0 26s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+tabs390 exit=0 376s | TABS done: 1 findings, 0 errors, 375s
+tour1280sco exit=0 545s | TOUR t1280sco done: 0 findings, 0 errors, 108 shots, 545s
+tour390pl exit=0 729s | TOUR t390pl done: 0 findings, 0 errors, 88 shots, 729s

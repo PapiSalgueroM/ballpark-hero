@@ -1,0 +1,11 @@
+DEAD? tab-Squad: FIT
+DEAD? tab-Market: Buy | ALL | None
+DEAD? tile-Calendar: Current date
+DEAD? tile-Stats: All comps | APPS | Y/R | AVG
+DEAD? tile-Options: £ Pounds | On
+DEAD? tile-Academy: 🇧🇷 Brazil | 🇫🇷 France | 🇦🇷 Argentina | 🇪🇸 Spain | 🏴󠁧󠁢󠁥󠁮󠁧󠁿 England | 🇩🇪 Germany | 🇵🇹 Portugal | 🇳🇱 Netherlands | 🇮🇹 Italy | 🇧🇪 Belgium | 🇺🇾 Uruguay | 🇨🇴 Colombia | 🇭🇷 Croatia
+AUDIT m1-report: 2 overlapping text pairs: "🧤 Penalty saved: Diego Keane (Youth)" x "14'" (5x11 at 633,1099)
+AUDIT m2-quick-report: 3 overlapping text pairs: "🅰️ Tyler Ferreiro (Youth)" x "37'" (15x11 at 633,1101)
+AUDIT ff-report-0: 1 overlapping text pairs: "🔁 Sub: Ravi Reyes (Youth) on for Jamie " x "67'" (15x11 at 633,1215)
+AUDIT ff-report-1: 4 overlapping text pairs: "🅰️ Aleks Hansen (Youth)" x "20'" (15x11 at 633,1219)
+TOUR t1280sco done: 0 findings, 0 errors, 108 shots, 545s

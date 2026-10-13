@@ -1,0 +1,15 @@
+AUDIT picker-team: 2 overlapping text pairs: "Qualify for the Europa League" x "Board wants" (29x12 at 212,863)
+AUDIT tab-Squad: 6 overlapping text pairs: "Giorgi Mamardashvili" x "XI" (9x11 at 204,873)
+AUDIT tab-Market: 1 overlapping text pairs: "Bukayo Saka" x "Club Manager: Free Football Management G" (75x4 at 89,1315)
+DEAD? tab-Market: Buy | ALL | None
+DEAD? tile-Calendar: Current date
+DEAD? tile-Stats: All comps | APPS | Y/R | AVG
+DEAD? tile-Options: £ Pounds | On
+DEAD? tile-Academy: 🇧🇷 Brazil | 🇫🇷 France | 🇦🇷 Argentina | 🇪🇸 Spain | 🏴󠁧󠁢󠁥󠁮󠁧󠁿 England | 🇩🇪 Germany | 🇵🇹 Portugal | 🇳🇱 Netherlands | 🇮🇹 Italy | 🇧🇪 Belgium | 🇺🇾 Uruguay | 🇨🇴 Colombia | 🇭🇷 Croatia
+AUDIT tile-Market: 1 overlapping text pairs: "Bukayo Saka" x "Club Manager: Free Football Management G" (75x4 at 89,1772)
+AUDIT m1-report: 1 overlapping text pairs: "🧤 Shot saved: Federico Chiesa" x "67'" (14x11 at 188,1229)
+AUDIT m2-quick-report: 4 overlapping text pairs: "🧤 Shot saved: Alexander Isak" x "51'" (7x11 at 188,1219)
+AUDIT ff-report-0: 3 overlapping text pairs: "🔁 Sub: Cody Gakpo on for Jérémy Jacquet" x "38'" (15x11 at 188,1173)
+AUDIT ff-report-1: 7 overlapping text pairs: "🧤 Shot saved: Bradley Barcola" x "3'" (9x11 at 191,1163)
+AUDIT ff-report-2: 3 overlapping text pairs: "🟨 Booked: Dominik Szoboszlai" x "17'" (11x11 at 188,1214)
+TOUR t390pl done: 0 findings, 0 errors, 88 shots, 729s

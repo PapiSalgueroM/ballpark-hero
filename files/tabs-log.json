@@ -1,0 +1,929 @@
+{
+ "tag": "tabs",
+ "width": 390,
+ "height": 844,
+ "started": "2026-10-13T00:57:23.973Z",
+ "steps": [
+  {
+   "s": 1,
+   "what": "open /club-manager"
+  },
+  {
+   "s": 7,
+   "what": "era picked"
+  },
+  {
+   "s": 8,
+   "what": "nation picked"
+  },
+  {
+   "s": 11,
+   "what": "league picked"
+  },
+  {
+   "s": 14,
+   "what": "club picked"
+  },
+  {
+   "s": 19,
+   "what": "hub reached",
+   "ok": true,
+   "save": {
+    "club": "Brighton",
+    "season": 1,
+    "week": 0,
+    "cal": 54,
+    "budget": 73,
+    "squad": 27,
+    "inbox": 0,
+    "form": "",
+    "results": 0,
+    "live": false,
+    "window": "summer"
+   }
+  },
+  {
+   "s": 21,
+   "what": "replay: tab B plays, stale tab A plays the same fixture"
+  },
+  {
+   "s": 64,
+   "what": "clobber: B plays three, stale A leaves the page"
+  },
+  {
+   "s": 94,
+   "what": "case truncated"
+  },
+  {
+   "s": 97,
+   "what": "case budget-text"
+  },
+  {
+   "s": 112,
+   "what": "case budget-negative"
+  },
+  {
+   "s": 127,
+   "what": "case week-past-end"
+  },
+  {
+   "s": 214,
+   "what": "case squad-five"
+  },
+  {
+   "s": 229,
+   "what": "case xi-missing"
+  },
+  {
+   "s": 244,
+   "what": "case inbox-spam"
+  },
+  {
+   "s": 259,
+   "what": "case unknown-club"
+  },
+  {
+   "s": 346,
+   "what": "case board-zero"
+  },
+  {
+   "s": 361,
+   "what": "case fitness-nan"
+  },
+  {
+   "s": 375,
+   "what": "end"
+  }
+ ],
+ "findings": [
+  {
+   "sev": "blocker",
+   "what": "closing or leaving a stale second tab wipes the matches played in the other tab",
+   "detail": "{\"startWeek\":5,\"afterB\":{\"week\":9,\"results\":7},\"afterLeave\":{\"week\":5,\"results\":4}}",
+   "at": "clobber: B plays three, stale A leaves the page"
+  }
+ ],
+ "errors": [],
+ "shots": [
+  {
+   "file": "tabs-001-picker-era.jpg",
+   "at": "open /club-manager",
+   "bytes": 27363
+  },
+  {
+   "file": "tabs-002-picker-nation.jpg",
+   "at": "era picked",
+   "bytes": 23231
+  },
+  {
+   "file": "tabs-003-picker-league.jpg",
+   "at": "nation picked",
+   "bytes": 27533
+  },
+  {
+   "file": "tabs-004-picker-team.jpg",
+   "at": "league picked",
+   "bytes": 113851
+  },
+  {
+   "file": "tabs-005-picker-confirm-bar.jpg",
+   "at": "league picked",
+   "bytes": 30021
+  },
+  {
+   "file": "tabs-006-manager-form.jpg",
+   "at": "club picked",
+   "bytes": 72125
+  },
+  {
+   "file": "tabs-007-after-replays.jpg",
+   "at": "replay: tab B plays, stale tab A plays the same fixture",
+   "bytes": 50551
+  },
+  {
+   "file": "tabs-008-case-truncated-open.jpg",
+   "at": "case truncated",
+   "bytes": 66524
+  },
+  {
+   "file": "tabs-009-case-truncated.jpg",
+   "at": "case truncated",
+   "bytes": 86134
+  },
+  {
+   "file": "tabs-010-case-budget-text-open.jpg",
+   "at": "case budget-text",
+   "bytes": 55819
+  },
+  {
+   "file": "tabs-011-case-budget-text.jpg",
+   "at": "case budget-text",
+   "bytes": 66951
+  },
+  {
+   "file": "tabs-012-case-budget-negative-open.jpg",
+   "at": "case budget-negative",
+   "bytes": 55819
+  },
+  {
+   "file": "tabs-013-case-budget-negative.jpg",
+   "at": "case budget-negative",
+   "bytes": 66868
+  },
+  {
+   "file": "tabs-014-case-week-past-end-open.jpg",
+   "at": "case week-past-end",
+   "bytes": 55823
+  },
+  {
+   "file": "tabs-015-case-week-past-end.jpg",
+   "at": "case week-past-end",
+   "bytes": 67522
+  },
+  {
+   "file": "tabs-016-case-squad-five-open.jpg",
+   "at": "case squad-five",
+   "bytes": 55819
+  },
+  {
+   "file": "tabs-017-case-squad-five.jpg",
+   "at": "case squad-five",
+   "bytes": 66688
+  },
+  {
+   "file": "tabs-018-case-xi-missing-open.jpg",
+   "at": "case xi-missing",
+   "bytes": 55819
+  },
+  {
+   "file": "tabs-019-case-xi-missing.jpg",
+   "at": "case xi-missing",
+   "bytes": 66941
+  },
+  {
+   "file": "tabs-020-case-inbox-spam-open.jpg",
+   "at": "case inbox-spam",
+   "bytes": 55819
+  },
+  {
+   "file": "tabs-021-case-inbox-spam.jpg",
+   "at": "case inbox-spam",
+   "bytes": 66904
+  },
+  {
+   "file": "tabs-022-case-unknown-club-open.jpg",
+   "at": "case unknown-club",
+   "bytes": 56291
+  },
+  {
+   "file": "tabs-023-case-unknown-club.jpg",
+   "at": "case unknown-club",
+   "bytes": 66443
+  },
+  {
+   "file": "tabs-024-case-board-zero-open.jpg",
+   "at": "case board-zero",
+   "bytes": 55770
+  },
+  {
+   "file": "tabs-025-case-board-zero.jpg",
+   "at": "case board-zero",
+   "bytes": 66973
+  },
+  {
+   "file": "tabs-026-case-fitness-nan-open.jpg",
+   "at": "case fitness-nan",
+   "bytes": 55819
+  },
+  {
+   "file": "tabs-027-case-fitness-nan.jpg",
+   "at": "case fitness-nan",
+   "bytes": 66971
+  }
+ ],
+ "audits": [
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [],
+   "overlaps": [],
+   "leaks": [],
+   "tinyTaps": [],
+   "scrollY": 0,
+   "docH": 22080,
+   "label": "picker-era"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [],
+   "overlaps": [],
+   "leaks": [],
+   "tinyTaps": [
+    "button.inline-flex.items-center.gap-1 \"All nations\" 76x16"
+   ],
+   "scrollY": 0,
+   "docH": 21599,
+   "label": "picker-league"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [
+    "\"Win the Premier League\" shown 81px of 115px",
+    "\"Win the Premier League\" shown 81px of 115px",
+    "\"Win the Premier League\" shown 81px of 115px",
+    "\"Win the Premier League\" shown 81px of 115px",
+    "\"Win the Premier League\" shown 81px of 115px",
+    "\"Qualify for the Champions League\" shown 81px of 165px",
+    "\"Qualify for the Europa League\" shown 81px of 144px",
+    "\"Qualify for the Europa League\" shown 81px of 144px",
+    "\"Qualify for the Conference League\" shown 81px of 167px",
+    "\"Qualify for the Conference League\" shown 81px of 167px",
+    "\"Finish in the top half\" shown 81px of 98px",
+    "\"Finish in the top half\" shown 81px of 98px",
+    "\"Finish in the top half\" shown 81px of 98px",
+    "\"Stay up. Avoid relegation\" shown 81px of 121px",
+    "\"Stay up. Avoid relegation\" shown 81px of 121px",
+    "\"Stay up. Avoid relegation\" shown 81px of 121px",
+    "\"Stay up. Avoid relegation\" shown 81px of 121px",
+    "\"Stay up. Avoid relegation\" shown 81px of 121px",
+    "\"Stay up. Avoid relegation\" shown 81px of 121px",
+    "\"Stay up. Avoid relegation\" shown 81px of 121px"
+   ],
+   "overlaps": [
+    "\"Qualify for the Europa League\" x \"Board wants\" (29x12 at 212,863)",
+    "\"Qualify for the Conference League\" x \"Board wants\" (52x12 at 212,986)"
+   ],
+   "leaks": [],
+   "tinyTaps": [
+    "button.inline-flex.items-center.gap-1 \"Premier League\" 127x16"
+   ],
+   "scrollY": 0,
+   "docH": 22791,
+   "label": "picker-team"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [],
+   "overlaps": [],
+   "leaks": [],
+   "tinyTaps": [
+    "button.inline-flex.items-center.gap-1 \"Brighton\" 66x16",
+    "button.rounded-md.border.border-border \"Previous skin\" 20x20",
+    "button.rounded-md.border.border-border \"Next skin\" 20x20",
+    "button.rounded-md.border.border-border \"Previous hair\" 20x20",
+    "button.rounded-md.border.border-border \"Next hair\" 20x20",
+    "button.rounded-md.border.border-border \"Previous colour\" 20x20",
+    "button.rounded-md.border.border-border \"Next colour\" 20x20",
+    "button.rounded-md.border.border-border \"Previous beard\" 20x20",
+    "button.rounded-md.border.border-border \"Next beard\" 20x20",
+    "button.rounded-md.border.border-border \"Previous outfit\" 20x20",
+    "button.rounded-md.border.border-border \"Next outfit\" 20x20",
+    "button.rounded-md.border.border-border \"Previous age\" 20x20",
+    "button.rounded-md.border.border-border \"Next age\" 20x20",
+    "button.w-5.h-5.rounded-full \"Navy\" 22x22",
+    "button.w-5.h-5.rounded-full \"Red\" 20x20",
+    "button.w-5.h-5.rounded-full \"Sky\" 20x20",
+    "button.w-5.h-5.rounded-full \"Green\" 20x20",
+    "button.w-5.h-5.rounded-full \"Claret\" 20x20",
+    "button.w-5.h-5.rounded-full \"Gold\" 20x20",
+    "button.w-5.h-5.rounded-full \"Black\" 20x20",
+    "button.w-5.h-5.rounded-full \"White\" 20x20"
+   ],
+   "scrollY": 101,
+   "docH": 23172,
+   "label": "manager-form"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [],
+   "overlaps": [],
+   "leaks": [],
+   "tinyTaps": [],
+   "scrollY": 0,
+   "docH": 22080,
+   "label": "case-truncated"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [
+    "\"Fans turning · prices, sponsor, the books\" shown 149px of 174px",
+    "\"Stadium, training, medical, dressing room\" shown 149px of 178px",
+    "\"Tactics, recruitment, money, the press\" shown 149px of 163px",
+    "\"Currency, the international job, haggling\" shown 149px of 169px"
+   ],
+   "overlaps": [],
+   "leaks": [],
+   "tinyTaps": [
+    "button.underline.underline-offset-2.hover:text-primary \"Managers\" 57x16",
+    "button.mt-2.text-[11px].font-bold \"📊 Match Centre: form, head to head, odds, team talk\" 290x17"
+   ],
+   "scrollY": 1594,
+   "docH": 22502,
+   "label": "case-budget-text"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [
+    "\"Fans turning · prices, sponsor, the books\" shown 149px of 174px",
+    "\"Stadium, training, medical, dressing room\" shown 149px of 178px",
+    "\"Tactics, recruitment, money, the press\" shown 149px of 163px",
+    "\"Currency, the international job, haggling\" shown 149px of 169px"
+   ],
+   "overlaps": [],
+   "leaks": [],
+   "tinyTaps": [
+    "button.underline.underline-offset-2.hover:text-primary \"Managers\" 57x16",
+    "button.mt-2.text-[11px].font-bold \"📊 Match Centre: form, head to head, odds, team talk\" 290x17"
+   ],
+   "scrollY": 1517,
+   "docH": 22502,
+   "label": "case-budget-negative"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [
+    "\"Fans turning · prices, sponsor, the books\" shown 149px of 174px",
+    "\"Stadium, training, medical, dressing room\" shown 149px of 178px",
+    "\"Tactics, recruitment, money, the press\" shown 149px of 163px",
+    "\"Currency, the international job, haggling\" shown 149px of 169px"
+   ],
+   "overlaps": [],
+   "leaks": [],
+   "tinyTaps": [
+    "button.underline.underline-offset-2.hover:text-primary \"Managers\" 57x16"
+   ],
+   "scrollY": 0,
+   "docH": 22428,
+   "label": "case-week-past-end"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [
+    "\"Fans turning · prices, sponsor, the books\" shown 149px of 174px",
+    "\"Stadium, training, medical, dressing room\" shown 149px of 178px",
+    "\"Tactics, recruitment, money, the press\" shown 149px of 163px",
+    "\"Currency, the international job, haggling\" shown 149px of 169px"
+   ],
+   "overlaps": [],
+   "leaks": [],
+   "tinyTaps": [
+    "button.underline.underline-offset-2.hover:text-primary \"Managers\" 57x16",
+    "button.mt-2.text-[11px].font-bold \"📊 Match Centre: form, head to head, odds, team talk\" 290x17"
+   ],
+   "scrollY": 1511,
+   "docH": 22502,
+   "label": "case-squad-five"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [
+    "\"Fans turning · prices, sponsor, the books\" shown 149px of 174px",
+    "\"Stadium, training, medical, dressing room\" shown 149px of 178px",
+    "\"Tactics, recruitment, money, the press\" shown 149px of 163px",
+    "\"Currency, the international job, haggling\" shown 149px of 169px"
+   ],
+   "overlaps": [],
+   "leaks": [],
+   "tinyTaps": [
+    "button.underline.underline-offset-2.hover:text-primary \"Managers\" 57x16",
+    "button.mt-2.text-[11px].font-bold \"📊 Match Centre: form, head to head, odds, team talk\" 290x17"
+   ],
+   "scrollY": 1312,
+   "docH": 22502,
+   "label": "case-xi-missing"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [
+    "\"Fans turning · prices, sponsor, the books\" shown 149px of 174px",
+    "\"Stadium, training, medical, dressing room\" shown 149px of 178px",
+    "\"Tactics, recruitment, money, the press\" shown 149px of 163px",
+    "\"Currency, the international job, haggling\" shown 149px of 169px"
+   ],
+   "overlaps": [],
+   "leaks": [],
+   "tinyTaps": [
+    "button.underline.underline-offset-2.hover:text-primary \"Managers\" 57x16",
+    "button.mt-2.text-[11px].font-bold \"📊 Match Centre: form, head to head, odds, team talk\" 290x17"
+   ],
+   "scrollY": 1381,
+   "docH": 22502,
+   "label": "case-inbox-spam"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [
+    "\"Fans turning · prices, sponsor, the books\" shown 149px of 174px",
+    "\"Stadium, training, medical, dressing room\" shown 149px of 178px",
+    "\"Tactics, recruitment, money, the press\" shown 149px of 163px",
+    "\"Currency, the international job, haggling\" shown 149px of 169px"
+   ],
+   "overlaps": [],
+   "leaks": [],
+   "tinyTaps": [
+    "button.underline.underline-offset-2.hover:text-primary \"Managers\" 57x16"
+   ],
+   "scrollY": 0,
+   "docH": 22476,
+   "label": "case-unknown-club"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [],
+   "overlaps": [],
+   "leaks": [],
+   "tinyTaps": [
+    "button.mt-4.text-xs.text-muted-foreground \"Your managers\" 86x16"
+   ],
+   "scrollY": 2118,
+   "docH": 22210,
+   "label": "case-board-zero"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [
+    "\"Fans turning · prices, sponsor, the books\" shown 149px of 174px",
+    "\"Stadium, training, medical, dressing room\" shown 149px of 178px",
+    "\"Tactics, recruitment, money, the press\" shown 149px of 163px",
+    "\"Currency, the international job, haggling\" shown 149px of 169px"
+   ],
+   "overlaps": [],
+   "leaks": [],
+   "tinyTaps": [
+    "button.underline.underline-offset-2.hover:text-primary \"Managers\" 57x16",
+    "button.mt-2.text-[11px].font-bold \"📊 Match Centre: form, head to head, odds, team talk\" 290x17"
+   ],
+   "scrollY": 1053,
+   "docH": 22502,
+   "label": "case-fitness-nan"
+  }
+ ],
+ "cases": [
+  {
+   "label": "truncated",
+   "hadResume": false,
+   "hub": false,
+   "h1": "CLUB MANAGER",
+   "slotsText": "DOUKNOWBALL Back Track stats CLUB MANAGER 27 real league tables and 454 clubs today, squads as of August 2026, after the summer window (the A-League Men and the Russian Premier League in October 2026), plus four real past seasons: 2020-21, 2015-16, 2010-11 and 2005-06. Pick when you start, then your nation, your league, your club. 1. When 2. Nation 3. League 4. Team 5. Dugout 📅 2026-27 Today. R",
+   "text": "DOUKNOWBALL Back Track stats CLUB MANAGER 27 real league tables and 454 clubs today, squads as of August 2026, after the summer window (the A-League Men and the Russian Premier League in October 2026), plus four real past seasons: 2020-21, 2015-16, 2010-11 and 2005-06. Pick when you start, then your nation, your league, your club. 1. When 2. Nation 3. League 4. Team 5. Dugout 📅 2026-27 Today. R",
+   "played": null,
+   "tiles": [],
+   "errors": [],
+   "saveAfter": {
+    "err": "SyntaxError: Unterminated string in JSON at position 50012 (line 1 column 50013)"
+   }
+  },
+  {
+   "label": "budget-text",
+   "hadResume": true,
+   "hub": true,
+   "h1": "BRIGHTON",
+   "slotsText": "DOUKNOWBALL Back Track stats CLUB MANAGER Your managers on this device. Up to three careers, each one saved on its own. SLOT 1 · LAST PLAYED You Brighton 2026-27 · Season 1 Week 11 of 54 · Board 30/100 🏆 0 trophies Resume CareerDelete SLOT 2 💼 Empty slot New manager SLOT 3 💼 Empty slot New manager Club Manager: Free Football Management Game A full club-management sim in your browser: 454 clu",
+   "text": "DOUKNOWBALL Back Track stats Brighton 2026-27 · Season 1 #16 in league £NaNk Managers Board Under pressure Fans Turning Home Squad Tactics Table Market PREMIER LEAGUE · ROUND 9 Brighton vs Manchester City Away · their strength ~89 · your XI avg 83 Play Live ⚡ Quick Sim Play live to make your calls. Quick Sim handles your subs. 📊 Match Centre: form, head to head, odds, team talk 📋 BOARD 4 behin",
+   "played": " VICTORY Liverpool 2 - 3 Brighton ",
+   "tiles": [
+    "Finances:37381",
+    "Board:34947",
+    "Inbox:36460",
+    "Dressing room:35035"
+   ],
+   "errors": [],
+   "saveAfter": {
+    "club": "Brighton",
+    "season": 1,
+    "week": 11,
+    "cal": 54,
+    "budget": "lots",
+    "squad": 27,
+    "inbox": 5,
+    "form": "LLLLW",
+    "results": 9,
+    "live": false,
+    "window": null
+   }
+  },
+  {
+   "label": "budget-negative",
+   "hadResume": true,
+   "hub": true,
+   "h1": "BRIGHTON",
+   "slotsText": "DOUKNOWBALL Back Track stats CLUB MANAGER Your managers on this device. Up to three careers, each one saved on its own. SLOT 1 · LAST PLAYED You Brighton 2026-27 · Season 1 Week 11 of 54 · Board 30/100 🏆 0 trophies Resume CareerDelete SLOT 2 💼 Empty slot New manager SLOT 3 💼 Empty slot New manager Club Manager: Free Football Management Game A full club-management sim in your browser: 454 clu",
+   "text": "DOUKNOWBALL Back Track stats Brighton 2026-27 · Season 1 #20 in league £0k Managers Board Under pressure Fans Turning Home Squad Tactics Table Market PREMIER LEAGUE · ROUND 9 Brighton vs Manchester City Away · their strength ~89 · your XI avg 83 Play Live ⚡ Quick Sim Play live to make your calls. Quick Sim handles your subs. 📊 Match Centre: form, head to head, odds, team talk 📋 BOARD 4 behind ",
+   "played": " DEFEAT Liverpool 2 - 1 Brighton ",
+   "tiles": [
+    "Finances:37375",
+    "Board:34945",
+    "Inbox:36458",
+    "Dressing room:35033"
+   ],
+   "errors": [],
+   "saveAfter": {
+    "club": "Brighton",
+    "season": 1,
+    "week": 11,
+    "cal": 54,
+    "budget": -250,
+    "squad": 27,
+    "inbox": 6,
+    "form": "LLLLL",
+    "results": 9,
+    "live": false,
+    "window": null
+   }
+  },
+  {
+   "label": "week-past-end",
+   "hadResume": true,
+   "hub": true,
+   "h1": "BRIGHTON",
+   "slotsText": "DOUKNOWBALL Back Track stats CLUB MANAGER Your managers on this device. Up to three careers, each one saved on its own. SLOT 1 · LAST PLAYED You Brighton 2026-27 · Season 1 Week 54 of 54 · Board 30/100 🏆 0 trophies Resume CareerDelete SLOT 2 💼 Empty slot New manager SLOT 3 💼 Empty slot New manager Club Manager: Free Football Management Game A full club-management sim in your browser: 454 clu",
+   "text": "DOUKNOWBALL Back Track stats Brighton 2026-27 · Season 1 #19 in league £81.2m Managers Board Under pressure Fans Turning Home Squad Tactics Table Market Season complete! See Season Review 📋 BOARD 5 behind Contenders patience 📩 INBOX 4 new Mats Wieffer 📅 CALENDAR L 1-2 See the schedule 🏆 LEAGUE #19 Form: L L L L L 🏅 CUPS Knocked out FA Cup 📊 STATS 11 goals Georginio Rutter leads with 6 💰 FIN",
+   "played": "DOUKNOWBALL Back Track stats Brighton 2026-27 · Season 1 #19 in league £81.2m Managers Board Under pressure Fans Turning",
+   "tiles": [
+    "Finances:37187",
+    "Board:34751",
+    "Inbox:36270",
+    "Dressing room:34845"
+   ],
+   "errors": [],
+   "saveAfter": {
+    "club": "Brighton",
+    "season": 1,
+    "week": 59,
+    "cal": 54,
+    "budget": 81.2,
+    "squad": 27,
+    "inbox": 5,
+    "form": "LLLLL",
+    "results": 8,
+    "live": false,
+    "window": null
+   }
+  },
+  {
+   "label": "squad-five",
+   "hadResume": true,
+   "hub": true,
+   "h1": "BRIGHTON",
+   "slotsText": "DOUKNOWBALL Back Track stats CLUB MANAGER Your managers on this device. Up to three careers, each one saved on its own. SLOT 1 · LAST PLAYED You Brighton 2026-27 · Season 1 Week 11 of 54 · Board 30/100 🏆 0 trophies Resume CareerDelete SLOT 2 💼 Empty slot New manager SLOT 3 💼 Empty slot New manager Club Manager: Free Football Management Game A full club-management sim in your browser: 454 clu",
+   "text": "DOUKNOWBALL Back Track stats Brighton 2026-27 · Season 1 #20 in league £81.2m Managers Board Under pressure Fans Turning Home Squad Tactics Table Market PREMIER LEAGUE · ROUND 9 Brighton vs Manchester City Away · their strength ~89 · your XI avg 85 Play Live ⚡ Quick Sim Play live to make your calls. Quick Sim handles your subs. 📊 Match Centre: form, head to head, odds, team talk 📋 BOARD 4 behi",
+   "played": " DEFEAT Liverpool 4 - 0 Brighton ",
+   "tiles": [
+    "Finances:37382",
+    "Board:34948",
+    "Inbox:36461",
+    "Dressing room:34709"
+   ],
+   "errors": [],
+   "saveAfter": {
+    "club": "Brighton",
+    "season": 1,
+    "week": 11,
+    "cal": 54,
+    "budget": 81.2,
+    "squad": 5,
+    "inbox": 5,
+    "form": "LLLLL",
+    "results": 9,
+    "live": false,
+    "window": null
+   }
+  },
+  {
+   "label": "xi-missing",
+   "hadResume": true,
+   "hub": true,
+   "h1": "BRIGHTON",
+   "slotsText": "DOUKNOWBALL Back Track stats CLUB MANAGER Your managers on this device. Up to three careers, each one saved on its own. SLOT 1 · LAST PLAYED You Brighton 2026-27 · Season 1 Week 11 of 54 · Board 30/100 🏆 0 trophies Resume CareerDelete SLOT 2 💼 Empty slot New manager SLOT 3 💼 Empty slot New manager Club Manager: Free Football Management Game A full club-management sim in your browser: 454 clu",
+   "text": "DOUKNOWBALL Back Track stats Brighton 2026-27 · Season 1 #20 in league £81.2m Managers Board Under pressure Fans Turning Home Squad Tactics Table Market PREMIER LEAGUE · ROUND 9 Brighton vs Manchester City Away · their strength ~89 · your XI avg 0 Play Live ⚡ Quick Sim Play live to make your calls. Quick Sim handles your subs. 📊 Match Centre: form, head to head, odds, team talk 📋 BOARD 4 behin",
+   "played": "DOUKNOWBALL Back Track stats FULL TIME Loading screen... Club Manager: Free Football Management Game A full club-managem",
+   "tiles": [
+    "Finances:37383",
+    "Board:34947",
+    "Inbox:36460",
+    "Dressing room:35035"
+   ],
+   "errors": [],
+   "saveAfter": {
+    "club": "Brighton",
+    "season": 1,
+    "week": 11,
+    "cal": 54,
+    "budget": 81.2,
+    "squad": 27,
+    "inbox": 5,
+    "form": "LLLLL",
+    "results": 9,
+    "live": false,
+    "window": null
+   }
+  },
+  {
+   "label": "inbox-spam",
+   "hadResume": true,
+   "hub": true,
+   "h1": "BRIGHTON",
+   "slotsText": "DOUKNOWBALL Back Track stats CLUB MANAGER Your managers on this device. Up to three careers, each one saved on its own. SLOT 1 · LAST PLAYED You Brighton 2026-27 · Season 1 Week 11 of 54 · Board 30/100 🏆 0 trophies Resume CareerDelete SLOT 2 💼 Empty slot New manager SLOT 3 💼 Empty slot New manager Club Manager: Free Football Management Game A full club-management sim in your browser: 454 clu",
+   "text": "DOUKNOWBALL Back Track stats Brighton 2026-27 · Season 1 #19 in league £81.2m Managers Board Under pressure Fans Turning Home Squad Tactics Table Market PREMIER LEAGUE · ROUND 9 Brighton vs Manchester City Away · their strength ~89 · your XI avg 83 Play Live ⚡ Quick Sim Play live to make your calls. Quick Sim handles your subs. 📊 Match Centre: form, head to head, odds, team talk 📋 BOARD 4 behi",
+   "played": " DEFEAT Liverpool 1 - 0 Brighton ",
+   "tiles": [
+    "Finances:37384",
+    "Board:34948",
+    "Inbox:34951",
+    "Dressing room:35036"
+   ],
+   "errors": [],
+   "saveAfter": {
+    "club": "Brighton",
+    "season": 1,
+    "week": 11,
+    "cal": 54,
+    "budget": 81.2,
+    "squad": 27,
+    "inbox": 8,
+    "form": "LLLLL",
+    "results": 9,
+    "live": false,
+    "window": null
+   }
+  },
+  {
+   "label": "unknown-club",
+   "hadResume": true,
+   "hub": true,
+   "h1": "ATLANTIS WANDERERS",
+   "slotsText": "DOUKNOWBALL Back Track stats CLUB MANAGER Your managers on this device. Up to three careers, each one saved on its own. SLOT 1 · LAST PLAYED You Atlantis Wanderers 2026-27 · Season 1 Week 11 of 54 · Board 30/100 🏆 0 trophies Resume CareerDelete SLOT 2 💼 Empty slot New manager SLOT 3 💼 Empty slot New manager Club Manager: Free Football Management Game A full club-management sim in your browse",
+   "text": "DOUKNOWBALL Back Track stats Atlantis Wanderers 2026-27 · Season 1 #- in league £81.2m Managers Board Under pressure Fans Turning Home Squad Tactics Table Market MID-SEASON BREAK ❄️ January transfer window Open the Window 📋 BOARD 1 behind Underdogs patience 📩 INBOX 4 new Mats Wieffer 📅 CALENDAR L 1-2 See the schedule 🏆 LEAGUE #- Form: L L L L L 🏅 CUPS Knocked out FA Cup 📊 STATS 11 goals Geor",
+   "played": "DOUKNOWBALL Back Track stats Atlantis Wanderers 2026-27 · Season 1 #- in league £81.2m Managers Board Under pressure Fan",
+   "tiles": [
+    "Finances:37219",
+    "Board:34794",
+    "Inbox:36304",
+    "Dressing room:34879"
+   ],
+   "errors": [],
+   "saveAfter": {
+    "club": "Atlantis Wanderers",
+    "season": 1,
+    "week": 10,
+    "cal": 54,
+    "budget": 81.2,
+    "squad": 27,
+    "inbox": 5,
+    "form": "LLLLL",
+    "results": 8,
+    "live": false,
+    "window": null
+   }
+  },
+  {
+   "label": "board-zero",
+   "hadResume": true,
+   "hub": true,
+   "h1": "SACKED!",
+   "slotsText": "DOUKNOWBALL Back Track stats CLUB MANAGER Your managers on this device. Up to three careers, each one saved on its own. SLOT 1 · LAST PLAYED You Brighton 2026-27 · Season 1 Week 11 of 54 · Board 1/100 🏆 0 trophies Resume CareerDelete SLOT 2 💼 Empty slot New manager SLOT 3 💼 Empty slot New manager Club Manager: Free Football Management Game A full club-management sim in your browser: 454 club",
+   "text": "DOUKNOWBALL Back Track stats SACKED! SOCCER · NOT THIS TIME 🚪 You've been sacked The Brighton board ran out of patience in Season 1. SEASONS 1 WIN % 11% TROPHIES 0 🚪 Sacked in S1 · 1W 2D 6L · 🏆×0 🧳 OUT OF WORK You are between jobs. Clubs will call, but the longer you sit out the quieter the phone gets. ⏭️ Wait a week for the phone to ring Trophies and promotions open doors; relegations ",
+   "played": " DRAW Liverpool 0 - 0 Brighton ",
+   "tiles": [
+    "Finances:37396",
+    "Board:34960",
+    "Inbox:36473",
+    "Dressing room:35048"
+   ],
+   "errors": [],
+   "saveAfter": {
+    "club": "Brighton",
+    "season": 1,
+    "week": 11,
+    "cal": 54,
+    "budget": 81.2,
+    "squad": 27,
+    "inbox": 5,
+    "form": "LLLLD",
+    "results": 9,
+    "live": false,
+    "window": null
+   }
+  },
+  {
+   "label": "fitness-nan",
+   "hadResume": true,
+   "hub": true,
+   "h1": "BRIGHTON",
+   "slotsText": "DOUKNOWBALL Back Track stats CLUB MANAGER Your managers on this device. Up to three careers, each one saved on its own. SLOT 1 · LAST PLAYED You Brighton 2026-27 · Season 1 Week 11 of 54 · Board 30/100 🏆 0 trophies Resume CareerDelete SLOT 2 💼 Empty slot New manager SLOT 3 💼 Empty slot New manager Club Manager: Free Football Management Game A full club-management sim in your browser: 454 clu",
+   "text": "DOUKNOWBALL Back Track stats Brighton 2026-27 · Season 1 #19 in league £81.2m Managers Board Under pressure Fans Turning Home Squad Tactics Table Market PREMIER LEAGUE · ROUND 9 Brighton vs Manchester City Away · their strength ~89 · your XI avg 83 Play Live ⚡ Quick Sim Play live to make your calls. Quick Sim handles your subs. 📊 Match Centre: form, head to head, odds, team talk 📋 BOARD 4 behi",
+   "played": " DRAW Liverpool 0 - 0 Brighton ",
+   "tiles": [
+    "Finances:37384",
+    "Board:34948",
+    "Inbox:36461",
+    "Dressing room:35036"
+   ],
+   "errors": [],
+   "saveAfter": {
+    "club": "Brighton",
+    "season": 1,
+    "week": 11,
+    "cal": 54,
+    "budget": 81.2,
+    "squad": 27,
+    "inbox": 6,
+    "form": "LLLLD",
+    "results": 9,
+    "live": false,
+    "window": null
+   }
+  }
+ ],
+ "elapsedS": 375,
+ "clubList": [
+  "Arsenal 👑 Elite Squad 89 Budget £167m Board wants Win the Premier League",
+  "Manchester City 👑 Elite Squad 89 Budget £160m Board wants Win the Premier League",
+  "Liverpool 👑 Elite Squad 88 Budget £137m Board wants Win the Premier League",
+  "Chelsea 👑 Elite Squad 88 Budget £131m Board wants Win the Premier League",
+  "Manchester United 🥇 Contenders Squad 87 Budget £118m Board wants Win the Premier League",
+  "Tottenham 🥇 Contenders Squad 86 Budget £114m Board wants Qualify for the Champions League",
+  "Newcastle 🥇 Contenders Squad 84 Budget £69m Board wants Qualify for the Europa League",
+  "Nottingham Forest 🥇 Contenders Squad 84 Budget £70m Board wants Qualify for the Europa League",
+  "Aston Villa 🥇 Contenders Squad 84 Budget £73m Board wants Qualify for the Conference League",
+  "Crystal Palace 🥇 Contenders Squad 84 Budget £76m Board wants Qualify for the Conference League",
+  "Brentford 🥇 Contenders Squad 84 Budget £69m Board wants Finish in the top half",
+  "Bournemouth 🥇 Contenders Squad 83 Budget £68m Board wants Finish in the top half",
+  "Brighton 🥇 Contenders Squad 83 Budget £73m Board wants Finish in the top half",
+  "Everton 🥇 Contenders Squad 83 Budget £54m Board wants Stay up. Avoid relegation",
+  "Fulham ⚔️ Challengers Squad 83 Budget £54m Board wants Stay up. Avoid relegation",
+  "Sunderland ⚔️ Challengers Squad 82 Budget £50m Board wants Stay up. Avoid relegation",
+  "Leeds United ⚔️ Challengers Squad 82 Budget £48m Board wants Stay up. Avoid relegation",
+  "Ipswich Town ⚔️ Challengers Squad 80 Budget £43m Board wants Stay up. Avoid relegation",
+  "Coventry City ⚔️ Challengers Squad 79 Budget £32m Board wants Stay up. Avoid relegation",
+  "Hull City ⚔️ Challengers Squad 79 Budget £27m Board wants Stay up. Avoid relegation"
+ ],
+ "replay": [
+  {
+   "aBefore": 1,
+   "rb": {
+    "fx": "PREMIER LEAGUE · ROUND 2 Brighton vs Chelsea Away · their strength ~90 · your XI avg 83 Pl",
+    "score": "DOUKNOWBALL Back Track stats FULL TIME Loading screen... Club Manager: Free Football Management Game A full club-managem",
+    "weekBefore": 1
+   },
+   "afterB": {
+    "week": 2,
+    "results": [
+     "0:Aston Villa:3-1",
+     "1:Chelsea:0-2"
+    ]
+   },
+   "ra": {
+    "fx": "PREMIER LEAGUE · ROUND 2 Brighton vs Chelsea Away · their strength ~90 · your XI avg 83 Pl",
+    "score": " DEFEAT Chelsea 2 - 1 Brighton ",
+    "weekBefore": 2
+   },
+   "afterA": {
+    "week": 2,
+    "results": [
+     "0:Aston Villa:3-1",
+     "1:Chelsea:1-2"
+    ]
+   }
+  },
+  {
+   "aBefore": 2,
+   "rb": {
+    "fx": "PREMIER LEAGUE · ROUND 3 Brighton vs Leeds United Home · their strength ~82 · your XI avg ",
+    "score": "DOUKNOWBALL Back Track stats FULL TIME Loading screen... Club Manager: Free Football Management Game A full club-managem",
+    "weekBefore": 2
+   },
+   "afterB": {
+    "week": 3,
+    "results": [
+     "0:Aston Villa:3-1",
+     "1:Chelsea:1-2",
+     "2:Leeds United:1-2"
+    ]
+   },
+   "ra": {
+    "fx": "PREMIER LEAGUE · ROUND 3 Brighton vs Leeds United Home · their strength ~82 · your XI avg ",
+    "score": " DRAW Brighton 1 - 1 Leeds ",
+    "weekBefore": 3
+   },
+   "afterA": {
+    "week": 3,
+    "results": [
+     "0:Aston Villa:3-1",
+     "1:Chelsea:1-2",
+     "2:Leeds United:1-1"
+    ]
+   }
+  },
+  {
+   "aBefore": 3,
+   "rb": {
+    "fx": "PREMIER LEAGUE · ROUND 4 Brighton vs Coventry City Away · their strength ~79 · your XI avg",
+    "score": "DOUKNOWBALL Back Track stats FULL TIME Loading screen... Club Manager: Free Football Management Game A full club-managem",
+    "weekBefore": 3
+   },
+   "afterB": {
+    "week": 5,
+    "results": [
+     "0:Aston Villa:3-1",
+     "1:Chelsea:1-2",
+     "2:Leeds United:1-1",
+     "4:Coventry City:3-1"
+    ]
+   },
+   "ra": {
+    "fx": "PREMIER LEAGUE · ROUND 4 Brighton vs Coventry City Away · their strength ~79 · your XI avg",
+    "score": " DEFEAT Coventry City 2 - 1 Brighton ",
+    "weekBefore": 5
+   },
+   "afterA": {
+    "week": 5,
+    "results": [
+     "0:Aston Villa:3-1",
+     "1:Chelsea:1-2",
+     "2:Leeds United:1-1",
+     "4:Coventry City:1-2"
+    ]
+   }
+  }
+ ],
+ "clobber": {
+  "startWeek": 5,
+  "afterB": {
+   "week": 9,
+   "results": 7
+  },
+  "afterLeave": {
+   "week": 5,
+   "results": 4
+  },
+  "tabBHub": "DOUKNOWBALL Back Track stats Brighton 2026-27 · Season 1 #19 in league £79.7m Managers Board Under pressure Fans Turning Home Squad Tactics Table Market FA CUP · ROUND OF 16 Brighton vs Hull City Home · their strength ~77 · your XI avg 83 Play Live ⚡ Quick Sim Play live to make your calls. Quick Sim"
+ }
+}

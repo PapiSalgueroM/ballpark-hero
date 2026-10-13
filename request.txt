@@ -1,0 +1,5 @@
+#!serve
+#!playwright
+tour390pl: TAG=t390pl W=390 H=844 NATION=/England/ LEAGUE=/Premier/ CLUB=/Liverpool/ NAME="Tom Hollis" MINUTES=45 node .rc/x/walkTour.mjs
+tour1280sco: TAG=t1280sco W=1280 H=900 NATION=/Scotland/ LEAGUE=0 CLUB=last MINUTES=45 node .rc/x/walkTour.mjs
+tabs390: TAG=tabs W=390 H=844 node .rc/x/walkTabs.mjs
