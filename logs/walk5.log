@@ -1,0 +1,6 @@
+W5: damaged save, Clear, reload: is it offered back?
+  note  before Clear the card was offered 0 times; keys after Clear [["dukb-club-manager-save.broken-2026-10-13T10-51-35-2",400]]; offered on the same screen false; offered after a reload true
+  note  after the put back: damaged tile shown 1, save on disk 400 chars
+W6: Escape behind the notice while the stale tab is mid Play Live
+  note  notice true; stage before Escape "first min 5", right after "first min 5", two seconds later "first min 5"
+walk5: green

@@ -1,0 +1,6 @@
+walk5 exit=0 51s | walk5: green
+weight-main exit=0 65s | origin/main 36cc9ffe7 sweepWeight exit 0
+weight-merged-2 exit=1 64s | merged ea47309ca sweepWeight exit 1
+simHarnessAnchors exit=0 37s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simNoRivalNames exit=0 13s | No rival product names found. 0 findings.
+simGuideHeadings exit=0 1s | simGuideHeadings: green. 131 guides carry keyword h2s over h3 and h4 sections with every original sentence intact, and all 133 blocks render a clean outline.
