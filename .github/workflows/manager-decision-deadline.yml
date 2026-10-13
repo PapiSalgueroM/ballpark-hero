@@ -169,4 +169,3 @@ jobs:
           path: manager-deadline-artifacts/
           retention-days: 14
           if-no-files-found: error
-

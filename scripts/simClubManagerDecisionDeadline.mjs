@@ -134,4 +134,3 @@ try {
   console.log(`simClubManagerDecisionDeadline ${RED ? 'expected baseline red' : CONTROL || 'normal'}: green.`);
 } catch (error) { receipt({ methodError: error?.stack || String(error) }); throw error;
 } finally { fs.rmSync(tmp, { recursive: true, force: true }); }
-
