@@ -1,0 +1,5 @@
+#!serve
+#!playwright
+a390: TAG=a390 W=390 H=844 SEED=11 SENIOR=4 POS=Striker NAT=England ERA="Current era" EXPLORE=hub,train,week RELOADS=9,23,41,60 MAXMIN=18 SHOTMAX=90 node .rc/x/scwalk.mjs
+b1280: TAG=b1280 W=1280 H=900 SEED=29 SENIOR=4 POS=Goalkeeper NAT=Brazil ERA="Late 2000s" EXPLORE=hub,phone,train,double CURRENCY=USD RELOADS=15,33 MAXMIN=18 SHOTMAX=90 node .rc/x/scwalk.mjs
+c320: TAG=c320 W=320 H=640 SEED=5 SENIOR=1 POS="Central Mid" NAT=Nigeria ERA="Early 90s" EXPLORE=hub,phone,train,week RELOADS=6 MAXMIN=14 SHOTMAX=90 node .rc/x/scwalk.mjs
