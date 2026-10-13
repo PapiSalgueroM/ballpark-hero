@@ -1,0 +1,15 @@
+build exit=0 33s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+walk exit=0 31s | playSoccerWorldTruth: green over 3 sizes
+walk-pastfeed exit=1 30s | FIRED: WALK_CONTROL=pastfeed (3 failures)
+playSoccerCareerDepth exit=0 11s | playSoccerCareerDepth: 80 checks, 0 failed
+playSeasonCentre exit=0 116s | playSeasonCentre: 41 checks, 0 failed
+playSoccerCareerContracts exit=0 25s | playSoccerCareerContracts: 201 checks, 0 failed
+playCorruptSaves exit=1 132s | playCorruptSaves: 1 broken save(s) trap the player: /hall-of-champions all
+playReducedMotion exit=0 46s | playReducedMotion: green. Motion stops for a visitor who asked for less, content stays visible, every Round 530 route lands its reveals on the final frame, and everyone e
+playSoccerEventCards exit=0 29s | playSoccerEventCards: green over 6 runs (known small lines: text-[10px], text-[11px])
+playSoccerCareer exit=1 479s |   - 6. no console or page errors across the walk: Failed to load resource: net::ERR_CONNECTION_REFUSED | Failed to load resource: net::ERR_CONNECTION_REFUSED | Failed to 
+simMobileChrome exit=0 207s | GREEN: 34 top bar measurements and 132 scroll stops, no overlaps, nothing off the side of the screen, controls reachable everywhere, footer never covered.
+simRevealScroll exit=0 214s | Green. 53 presses measured, nothing dragged the page down on content that was already readable, no panel lost its top, and 5 presses proved the feature still does its job
+weight-head exit=0 55s | head     /soccer-career   total  2897K  js  2665K  reqs  50  FCP    700ms  playable  18499ms  (3 runs, median; styled nodes 154)
+flagship-head exit=0 1s | simFlagshipWeight: green. The flagship carries its own game and nobody else's.
+sweep-head exit=1 27s | sweepWeight: 3 failures
