@@ -1,0 +1,5 @@
+build exit=0 30s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+twoTabs-nolanding exit=1 11s | CONTROL FIRED: TWO_TABS_CONTROL=nolanding dropped 1 writes and turned case(s) 4 red
+twoTabs-nokeep exit=1 29s | CONTROL FIRED: TWO_TABS_CONTROL=nokeep dropped 2 writes and turned case(s) 5 red
+twoTabs-nofence exit=1 74s | CONTROL FIRED: TWO_TABS_CONTROL=nofence dropped 27 writes and turned case(s) 1, 2, 3, 6 red
+twoTabs exit=0 224s | playTwoTabs: green at 320x640, 390x844, 1280x900
