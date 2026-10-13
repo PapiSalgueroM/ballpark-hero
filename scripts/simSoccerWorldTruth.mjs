@@ -67,7 +67,17 @@
  *      hunk of the diff against the base sits inside the regions this round
  *      may edit.
  *
- * MEASURED: see docs/audits/ROUND-1329-NOTES.md, updated every step.
+ * MEASURED (section 1's bands, this tree, 400 careers a run, on GitHub runners
+ * r1329-fx-b and r1329-fx-c at seed offsets 0, 3, 5, 7 and 9):
+ *   GREAT_BAND [1.0, 3.0], a season rated 8.0+ wins 2.60, 2.74, 2.83, 2.76
+ *     and 2.65 months; the ceiling has 0.17 of room over the highest reading.
+ *   FAIR_ANY_MAX 0.2, a season rated 7.0 to 7.5 wins any month 0.03, 0.03,
+ *     0.03, 0.03 and 0.04 of the time.
+ *   GROUP_BAND 0.3, the widest gap of a group's mean at 7.5 to 8.5 from the
+ *     four together is 17, 15, 9, 8 and 10 percent.
+ *   Section 4's champion questions: 1462 (offset 0) and 1435 (offset 3)
+ *     asked, against a floor of 100 to judge their wording.
+ * The rest of the readings: docs/audits/ROUND-1329-NOTES.md.
  *
  * NEGATIVE CONTROLS (WORLD_TRUTH_CONTROL), each on a COPY of a source file.
  * Text not in the file exactly once refuses to run (ABORT, exit 1); the last
@@ -462,7 +472,7 @@ console.log(`fleet: ${FLEET.length} careers a tree (seed offset ${SEED_OFFSET}, 
 
 /* ─── 1. months ────────────────────────────────────────────────────────── */
 
-/* Design bands, set from the fleet (readings in docs/audits/ROUND-1329-NOTES.md): a season rated 8.0 or more
+/* Design bands, set from the fleet (readings in the header's MEASURED block): a season rated 8.0 or more
    wins one to three months on average, one rated 7.0 to 7.5 wins any in well under one season in three, and
    at 7.5 to 8.5 each position group's mean is within 30 percent of the four groups together. */
 const GREAT_BAND = [1.0, 3.0];
