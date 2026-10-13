@@ -1,0 +1,2418 @@
+mutation M5 on src/pages/SoccerCareer.tsx: anchor count 1
+MUTATION APPLIED M5
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [31m❯[39m src/test/soccerCareerSaveFence.test.tsx [2m([22m[2m6 tests[22m[2m | [22m[31m4 failed[39m[2m)[22m[33m 4413[2mms[22m[39m
+   [32m✓[39m Soccer Career save fence[2m > [22man old save with no fence key opens, plays, and is fenced from its first write[32m 110[2mms[22m[39m
+[31m   [31m×[31m Soccer Career save fence[2m > [22manother tab playing on shows the notice at once, and a press forced past it writes nothing[39m[33m 1032[2mms[22m[39m
+[31m     → Unable to find an element by: [data-testid="save-moved-notice"]
+
+Ignored nodes: comments, script, style
+[36m<body>[31m
+  [36m<div>[31m
+    [36m<div[31m
+      [33mclass[31m=[32m"min-h-screen bg-background text-foreground flex flex-col pb-[88px]"[31m
+    [36m>[31m
+      [36m<div[31m
+        [33mclass[31m=[32m"relative z-10 mx-auto w-full max-w-4xl h-11 sm:h-0"[31m
+      [36m/>[31m
+      [36m<main[31m
+        [33mclass[31m=[32m"flex-1 w-full max-w-5xl mx-auto px-3 sm:px-4 py-4"[31m
+        [33mid[31m=[32m"dukb-main"[31m
+      [36m>[31m
+        [36m<div[31m
+          [33mclass[31m=[32m"mb-3 flex gap-2 sm:contents"[31m
+          [33mdata-career-utilities[31m=[32m"true"[31m
+          [33mstyle[31m=[32m"--career-utility-lift: 0px;"[31m
+        [36m>[31m
+          [36m<button[31m
+            [33maria-label[31m=[32m"Open the training ground"[31m
+            [33mclass[31m=[32m"relative min-h-11 flex-1 rounded-xl bg-zinc-900 border-2 border-zinc-700 flex items-center justify-center gap-2 px-3 text-sm font-bold text-white sm:fixed sm:bottom-[5.5rem] sm:right-4 sm:z-40 sm:w-14 sm:h-14 sm:flex-none sm:px-0 sm:text-2xl sm:shadow-xl sm:[translate:0_var(--career-utility-lift)] hover:bg-zinc-800 active:bg-zinc-700"[31m
+            [33mdata-career-utility[31m=[32m"training"[31m
+            [33mtype[31m=[32m"button"[31m
+          [36m>[31m
+            [36m<span[31m
+              [33maria-hidden[31m=[32m"true"[31m
+            [36m>[31m
+              [0m🏋️[0m
+            [36m</span>[31m
+            [36m<span[31m
+              [33mclass[31m=[32m"sm:hidden"[31m
+            [36m>[31m
+              [0mTraining[0m
+            [36m</span>[31m
+            [36m<span[31m
+              [33mclass[31m=[32m"absolute -top-1 -right-1 w-3.5 h-3.5 rounded-full bg-emerald-500 border-2 border-zinc-900"[31m
+            [36m>[31m
+              [36m<span[31m
+                [33mclass[31m=[32m"sr-only"[31m
+              [36m>[31m
+                [0mDrill ready[0m
+              [36m</span>[31m
+            [36m</span>[31m
+          [36m</button>[31m
+          [36m<button[31m
+            [33maria-label[31m=[32m"Open your phone"[31m
+            [33mclass[31m=[32m"relative min-h-11 flex-1 rounded-xl bg-zinc-900 border-2 border-zinc-700 flex items-center justify-center gap-2 px-3 text-sm font-bold text-white sm:fixed sm:bottom-5 sm:right-4 sm:z-40 sm:w-14 sm:h-14 sm:flex-none sm:px-0 sm:text-2xl sm:shadow-xl sm:[translate:0_var(--career-utility-lift)] hover:bg-zinc-800 active:bg-zinc-700"[31m
+            [33mdata-career-utility[31m=[32m"phone"[31m
+            [33mtype[31m=[32m"button"[31m
+          [36m>[31m
+            [36m<span[31m
+              [33maria-hidden[31m=[32m"true"[31m
+            [36m>[31m
+              [0m📱[0m
+            [36m</span>[31m
+            [36m<span[31m
+              [33mclass[31m=[32m"sm:hidden"[31m
+            [36m>[31m
+              [0mPhone[0m
+            [36m</span>[31m
+            [36m<span[31m
+              [33mclass[31m=[32m"min-w-5 h-5 px-1 rounded-full bg-red-500 text-[11px] font-black text-black flex items-center justify-center sm:absolute sm:-top-1.5 sm:-right-1.5"[31m
+            [36m>[31m
+              [0m2[0m
+              [36m<span[31m
+                [33mclass[31m=[32m"sr-only"[31m
+              [36m>[31m
+                [0m unread[0m
+              [36m</span>[31m
+            [36m</span>[31m
+          [36m</button>[31m
+        [36m</div>[31m
+        [36m<div[31m
+          [33mclass[31m=[32m"space-y-3 pb-20"[31m
+        [36m>[31m
+          [36m<div[31m
+            [33mclass[31m=[32m"flex flex-wrap items-center justify-between gap-2"[31m
+          [36m>[31m
+            [36m<div[31m
+              [33mclass[31m=[32m"flex items-center gap-2.5 min-w-0 w-full min-[480px]:w-auto min-[480px]:flex-1"[31m
+            [36m>[31m
+              [36m<div[31m
+                [33mclass[31m=[32m"min-w-0 flex-1"[31m
+              [36m>[31m
+                [36m<h1[31m
+                  [33mclass[31m=[32m"text-xl sm:text-2xl font-black flex items-center gap-2 min-w-0"[31m
+                [36m>[31m
+                  [36m<span[31m
+                    [33mclass[31m=[32m"inline-flex items-center gap-1 align-middle shrink-0"[31m
+                  [36m>[31m
+                    [36m<svg[31m
+                      [33maria-hidden[31m=[32m"true"[31m
+                      [33mheight[31m=[32m"18"[31m
+                      [33mstyle[31m=[32m"display: block; border-radius: 2px;"[31m
+                      [33mviewBox[31m=[32m"0 0 60 36"[31m
+                      [33mwidth[31m=[32m"24"[31m
+                    [36m>[31m
+                      [36m<rect[31m
+                        [33mfill[31m=[32m"#fff"[31m
+                        [33mheight[31m=[32m"36"[31m
+                        [33mwidth[31m=[32m"60"[31m
+                      [36m/>[31m
+                      [36m<rect[31m
+                        [33mfill[31m=[32m"#CE1124"[31m
+                        [33mheight[31m=[32m"36"[31m
+                        [33mwidth[31m=[32m"10"[31m
+                        [33mx[31m=[32m"25"[31m
+                      [36m/>[31m
+                      [36m<rect[31m
+                        [33mfill[31m=[32m"#CE1124"[31m
+                        [33mheight[31m=[32m"10"[31m
+                        [33mwidth[31m=[32m"60"[31m
+                        [33my[31m=[32m"13"[31m
+                      [36m/>[31m
+                    [36m</svg>[31m
+                  [36m</span>[31m
+                  [36m<span[31m
+                    [33mclass[31m=[32m"min-w-0 [overflow-wrap:anywhere] min-[480px]:truncate"[31m
+                  [36m>[31m
+                    [0mFence Tester[0m
+                  [36m</span>[31m
+                [36m</h1>[31m
+                [36m<p[31m
+                  [33mclass[31m=[32m"text-xs text-muted-foreground"[31m
+                [36m>[31m
+                  [0mCM[0m
+                  [0m · Age [0m
+                  [0m16[0m
+                  [0m · [0m
+                  [36m<span[31m
+                    [33mclass[31m=[32m"inline-flex items-center gap-1 align-middle shrink-0"[31m
+                  [36m>[31m
+                    [36m<svg[31m
+                      [33maria-hidden[31m=[32m"true"[31m
+                      [33mheight[31m=[32m"9"[31m
+                      [33mstyle[31m=[32m"display: block; border-radius: 2px;"[31m
+                      [33mviewBox[31m=[32m"0 0 60 36"[31m
+                      [33mwidth[31m=[32m"12"[31m
+                    [36m>[31m
+                      [36m<rect[31m
+                        [33mfill[31m=[32m"#fff"[31m
+                        [33mheight[31m=[32m"36"[31m
+                        [33mwidth[31m=[32m"60"[31m
+                      [36m/>[31m
+                      [36m<rect[31m
+                        [33...
+
+Ignored nodes: comments, script, style
+[36m<body>[31m
+  [36m<div>[31m
+    [36m<div[31m
+      [33mclass[31m=[32m"min-h-screen bg-background text-foreground flex flex-col pb-[88px]"[31m
+    [36m>[31m
+      [36m<div[31m
+        [33mclass[31m=[32m"relative z-10 mx-auto w-full max-w-4xl h-11 sm:h-0"[31m
+      [36m/>[31m
+      [36m<main[31m
+        [33mclass[31m=[32m"flex-1 w-full max-w-5xl mx-auto px-3 sm:px-4 py-4"[31m
+        [33mid[31m=[32m"dukb-main"[31m
+      [36m>[31m
+        [36m<div[31m
+          [33mclass[31m=[32m"mb-3 flex gap-2 sm:contents"[31m
+          [33mdata-career-utilities[31m=[32m"true"[31m
+          [33mstyle[31m=[32m"--career-utility-lift: 0px;"[31m
+        [36m>[31m
+          [36m<button[31m
+            [33maria-label[31m=[32m"Open the training ground"[31m
+            [33mclass[31m=[32m"relative min-h-11 flex-1 rounded-xl bg-zinc-900 border-2 border-zinc-700 flex items-center justify-center gap-2 px-3 text-sm font-bold text-white sm:fixed sm:bottom-[5.5rem] sm:right-4 sm:z-40 sm:w-14 sm:h-14 sm:flex-none sm:px-0 sm:text-2xl sm:shadow-xl sm:[translate:0_var(--career-utility-lift)] hover:bg-zinc-800 active:bg-zinc-700"[31m
+            [33mdata-career-utility[31m=[32m"training"[31m
+            [33mtype[31m=[32m"button"[31m
+          [36m>[31m
+            [36m<span[31m
+              [33maria-hidden[31m=[32m"true"[31m
+            [36m>[31m
+              [0m🏋️[0m
+            [36m</span>[31m
+            [36m<span[31m
+              [33mclass[31m=[32m"sm:hidden"[31m
+            [36m>[31m
+              [0mTraining[0m
+            [36m</span>[31m
+            [36m<span[31m
+              [33mclass[31m=[32m"absolute -top-1 -right-1 w-3.5 h-3.5 rounded-full bg-emerald-500 border-2 border-zinc-900"[31m
+            [36m>[31m
+              [36m<span[31m
+                [33mclass[31m=[32m"sr-only"[31m
+              [36m>[31m
+                [0mDrill ready[0m
+              [36m</span>[31m
+            [36m</span>[31m
+          [36m</button>[31m
+          [36m<button[31m
+            [33maria-label[31m=[32m"Open your phone"[31m
+            [33mclass[31m=[32m"relative min-h-11 flex-1 rounded-xl bg-zinc-900 border-2 border-zinc-700 flex items-center justify-center gap-2 px-3 text-sm font-bold text-white sm:fixed sm:bottom-5 sm:right-4 sm:z-40 sm:w-14 sm:h-14 sm:flex-none sm:px-0 sm:text-2xl sm:shadow-xl sm:[translate:0_var(--career-utility-lift)] hover:bg-zinc-800 active:bg-zinc-700"[31m
+            [33mdata-career-utility[31m=[32m"phone"[31m
+            [33mtype[31m=[32m"button"[31m
+          [36m>[31m
+            [36m<span[31m
+              [33maria-hidden[31m=[32m"true"[31m
+            [36m>[31m
+              [0m📱[0m
+            [36m</span>[31m
+            [36m<span[31m
+              [33mclass[31m=[32m"sm:hidden"[31m
+            [36m>[31m
+              [0mPhone[0m
+            [36m</span>[31m
+            [36m<span[31m
+              [33mclass[31m=[32m"min-w-5 h-5 px-1 rounded-full bg-red-500 text-[11px] font-black text-black flex items-center justify-center sm:absolute sm:-top-1.5 sm:-right-1.5"[31m
+            [36m>[31m
+              [0m2[0m
+              [36m<span[31m
+                [33mclass[31m=[32m"sr-only"[31m
+              [36m>[31m
+                [0m unread[0m
+              [36m</span>[31m
+            [36m</span>[31m
+          [36m</button>[31m
+        [36m</div>[31m
+        [36m<div[31m
+          [33mclass[31m=[32m"space-y-3 pb-20"[31m
+        [36m>[31m
+          [36m<div[31m
+            [33mclass[31m=[32m"flex flex-wrap items-center justify-between gap-2"[31m
+          [36m>[31m
+            [36m<div[31m
+              [33mclass[31m=[32m"flex items-center gap-2.5 min-w-0 w-full min-[480px]:w-auto min-[480px]:flex-1"[31m
+            [36m>[31m
+              [36m<div[31m
+                [33mclass[31m=[32m"min-w-0 flex-1"[31m
+              [36m>[31m
+                [36m<h1[31m
+                  [33mclass[31m=[32m"text-xl sm:text-2xl font-black flex items-center gap-2 min-w-0"[31m
+                [36m>[31m
+                  [36m<span[31m
+                    [33mclass[31m=[32m"inline-flex items-center gap-1 align-middle shrink-0"[31m
+                  [36m>[31m
+                    [36m<svg[31m
+                      [33maria-hidden[31m=[32m"true"[31m
+                      [33mheight[31m=[32m"18"[31m
+                      [33mstyle[31m=[32m"display: block; border-radius: 2px;"[31m
+                      [33mviewBox[31m=[32m"0 0 60 36"[31m
+                      [33mwidth[31m=[32m"24"[31m
+                    [36m>[31m
+                      [36m<rect[31m
+                        [33mfill[31m=[32m"#fff"[31m
+                        [33mheight[31m=[32m"36"[31m
+                        [33mwidth[31m=[32m"60"[31m
+                      [36m/>[31m
+                      [36m<rect[31m
+                        [33mfill[31m=[32m"#CE1124"[31m
+                        [33mheight[31m=[32m"36"[31m
+                        [33mwidth[31m=[32m"10"[31m
+                        [33mx[31m=[32m"25"[31m
+                      [36m/>[31m
+                      [36m<rect[31m
+                        [33mfill[31m=[32m"#CE1124"[31m
+                        [33mheight[31m=[32m"10"[31m
+                        [33mwidth[31m=[32m"60"[31m
+                        [33my[31m=[32m"13"[31m
+                      [36m/>[31m
+                    [36m</svg>[31m
+                  [36m</span>[31m
+                  [36m<span[31m
+                    [33mclass[31m=[32m"min-w-0 [overflow-wrap:anywhere] min-[480px]:truncate"[31m
+                  [36m>[31m
+                    [0mFence Tester[0m
+                  [36m</span>[31m
+                [36m</h1>[31m
+                [36m<p[31m
+                  [33mclass[31m=[32m"text-xs text-muted-foreground"[31m
+                [36m>[31m
+                  [0mCM[0m
+                  [0m · Age [0m
+                  [0m16[0m
+                  [0m · [0m
+                  [36m<span[31m
+                    [33mclass[31m=[32m"inline-flex items-center gap-1 align-middle shrink-0"[31m
+                  [36m>[31m
+                    [36m<svg[31m
+                      [33maria-hidden[31m=[32m"true"[31m
+                      [33mheight[31m=[32m"9"[31m
+                      [33mstyle[31m=[32m"display: block; border-radius: 2px;"[31m
+                      [33mviewBox[31m=[32m"0 0 60 36"[31m
+                      [33mwidth[31m=[32m"12"[31m
+                    [36m>[31m
+                      [36m<rect[31m
+                        [33mfill[31m=[32m"#fff"[31m
+                        [33mheight[31m=[32m"36"[31m
+                        [33mwidth[31m=[32m"60"[31m
+                      [36m/>[31m
+                      [36m<rect[31m
+                        [33...[39m
+[31m   [31m×[31m Soccer Career save fence[2m > [22mwith no event at all, the press finds the move at write time and writes nothing[39m[33m 1036[2mms[22m[39m
+[31m     → Unable to find an element by: [data-testid="save-moved-notice"]
+
+Ignored nodes: comments, script, style
+[36m<body>[31m
+  [36m<div>[31m
+    [36m<div[31m
+      [33mclass[31m=[32m"min-h-screen bg-background text-foreground flex flex-col pb-[88px]"[31m
+    [36m>[31m
+      [36m<div[31m
+        [33mclass[31m=[32m"relative z-10 mx-auto w-full max-w-4xl h-11 sm:h-0"[31m
+      [36m/>[31m
+      [36m<main[31m
+        [33mclass[31m=[32m"flex-1 w-full max-w-5xl mx-auto px-3 sm:px-4 py-4"[31m
+        [33mid[31m=[32m"dukb-main"[31m
+      [36m>[31m
+        [36m<div[31m
+          [33mclass[31m=[32m"mb-3 flex gap-2 sm:contents"[31m
+          [33mdata-career-utilities[31m=[32m"true"[31m
+          [33mstyle[31m=[32m"--career-utility-lift: 0px;"[31m
+        [36m>[31m
+          [36m<button[31m
+            [33maria-label[31m=[32m"Open the training ground"[31m
+            [33mclass[31m=[32m"relative min-h-11 flex-1 rounded-xl bg-zinc-900 border-2 border-zinc-700 flex items-center justify-center gap-2 px-3 text-sm font-bold text-white sm:fixed sm:bottom-[5.5rem] sm:right-4 sm:z-40 sm:w-14 sm:h-14 sm:flex-none sm:px-0 sm:text-2xl sm:shadow-xl sm:[translate:0_var(--career-utility-lift)] hover:bg-zinc-800 active:bg-zinc-700"[31m
+            [33mdata-career-utility[31m=[32m"training"[31m
+            [33mtype[31m=[32m"button"[31m
+          [36m>[31m
+            [36m<span[31m
+              [33maria-hidden[31m=[32m"true"[31m
+            [36m>[31m
+              [0m🏋️[0m
+            [36m</span>[31m
+            [36m<span[31m
+              [33mclass[31m=[32m"sm:hidden"[31m
+            [36m>[31m
+              [0mTraining[0m
+            [36m</span>[31m
+            [36m<span[31m
+              [33mclass[31m=[32m"absolute -top-1 -right-1 w-3.5 h-3.5 rounded-full bg-emerald-500 border-2 border-zinc-900"[31m
+            [36m>[31m
+              [36m<span[31m
+                [33mclass[31m=[32m"sr-only"[31m
+              [36m>[31m
+                [0mDrill ready[0m
+              [36m</span>[31m
+            [36m</span>[31m
+          [36m</button>[31m
+          [36m<button[31m
+            [33maria-label[31m=[32m"Open your phone"[31m
+            [33mclass[31m=[32m"relative min-h-11 flex-1 rounded-xl bg-zinc-900 border-2 border-zinc-700 flex items-center justify-center gap-2 px-3 text-sm font-bold text-white sm:fixed sm:bottom-5 sm:right-4 sm:z-40 sm:w-14 sm:h-14 sm:flex-none sm:px-0 sm:text-2xl sm:shadow-xl sm:[translate:0_var(--career-utility-lift)] hover:bg-zinc-800 active:bg-zinc-700"[31m
+            [33mdata-career-utility[31m=[32m"phone"[31m
+            [33mtype[31m=[32m"button"[31m
+          [36m>[31m
+            [36m<span[31m
+              [33maria-hidden[31m=[32m"true"[31m
+            [36m>[31m
+              [0m📱[0m
+            [36m</span>[31m
+            [36m<span[31m
+              [33mclass[31m=[32m"sm:hidden"[31m
+            [36m>[31m
+              [0mPhone[0m
+            [36m</span>[31m
+            [36m<span[31m
+              [33mclass[31m=[32m"min-w-5 h-5 px-1 rounded-full bg-red-500 text-[11px] font-black text-black flex items-center justify-center sm:absolute sm:-top-1.5 sm:-right-1.5"[31m
+            [36m>[31m
+              [0m3[0m
+              [36m<span[31m
+                [33mclass[31m=[32m"sr-only"[31m
+              [36m>[31m
+                [0m unread[0m
+              [36m</span>[31m
+            [36m</span>[31m
+          [36m</button>[31m
+        [36m</div>[31m
+        [36m<div[31m
+          [33mclass[31m=[32m"space-y-3 pb-20"[31m
+        [36m>[31m
+          [36m<div[31m
+            [33mclass[31m=[32m"flex flex-wrap items-center justify-between gap-2"[31m
+          [36m>[31m
+            [36m<div[31m
+              [33mclass[31m=[32m"flex items-center gap-2.5 min-w-0 w-full min-[480px]:w-auto min-[480px]:flex-1"[31m
+            [36m>[31m
+              [36m<div[31m
+                [33mclass[31m=[32m"min-w-0 flex-1"[31m
+              [36m>[31m
+                [36m<h1[31m
+                  [33mclass[31m=[32m"text-xl sm:text-2xl font-black flex items-center gap-2 min-w-0"[31m
+                [36m>[31m
+                  [36m<span[31m
+                    [33mclass[31m=[32m"inline-flex items-center gap-1 align-middle shrink-0"[31m
+                  [36m>[31m
+                    [36m<svg[31m
+                      [33maria-hidden[31m=[32m"true"[31m
+                      [33mheight[31m=[32m"18"[31m
+                      [33mstyle[31m=[32m"display: block; border-radius: 2px;"[31m
+                      [33mviewBox[31m=[32m"0 0 60 36"[31m
+                      [33mwidth[31m=[32m"24"[31m
+                    [36m>[31m
+                      [36m<rect[31m
+                        [33mfill[31m=[32m"#fff"[31m
+                        [33mheight[31m=[32m"36"[31m
+                        [33mwidth[31m=[32m"60"[31m
+                      [36m/>[31m
+                      [36m<rect[31m
+                        [33mfill[31m=[32m"#CE1124"[31m
+                        [33mheight[31m=[32m"36"[31m
+                        [33mwidth[31m=[32m"10"[31m
+                        [33mx[31m=[32m"25"[31m
+                      [36m/>[31m
+                      [36m<rect[31m
+                        [33mfill[31m=[32m"#CE1124"[31m
+                        [33mheight[31m=[32m"10"[31m
+                        [33mwidth[31m=[32m"60"[31m
+                        [33my[31m=[32m"13"[31m
+                      [36m/>[31m
+                    [36m</svg>[31m
+                  [36m</span>[31m
+                  [36m<span[31m
+                    [33mclass[31m=[32m"min-w-0 [overflow-wrap:anywhere] min-[480px]:truncate"[31m
+                  [36m>[31m
+                    [0mFence Tester[0m
+                  [36m</span>[31m
+                [36m</h1>[31m
+                [36m<p[31m
+                  [33mclass[31m=[32m"text-xs text-muted-foreground"[31m
+                [36m>[31m
+                  [0mCM[0m
+                  [0m · Age [0m
+                  [0m17[0m
+                  [0m · [0m
+                  [36m<span[31m
+                    [33mclass[31m=[32m"inline-flex items-center gap-1 align-middle shrink-0"[31m
+                  [36m>[31m
+                    [36m<svg[31m
+                      [33maria-hidden[31m=[32m"true"[31m
+                      [33mheight[31m=[32m"9"[31m
+                      [33mstyle[31m=[32m"display: block; border-radius: 2px;"[31m
+                      [33mviewBox[31m=[32m"0 0 60 36"[31m
+                      [33mwidth[31m=[32m"12"[31m
+                    [36m>[31m
+                      [36m<rect[31m
+                        [33mfill[31m=[32m"#fff"[31m
+                        [33mheight[31m=[32m"36"[31m
+                        [33mwidth[31m=[32m"60"[31m
+                      [36m/>[31m
+                      [36m<rect[31m
+                        [33...
+
+Ignored nodes: comments, script, style
+[36m<body>[31m
+  [36m<div>[31m
+    [36m<div[31m
+      [33mclass[31m=[32m"min-h-screen bg-background text-foreground flex flex-col pb-[88px]"[31m
+    [36m>[31m
+      [36m<div[31m
+        [33mclass[31m=[32m"relative z-10 mx-auto w-full max-w-4xl h-11 sm:h-0"[31m
+      [36m/>[31m
+      [36m<main[31m
+        [33mclass[31m=[32m"flex-1 w-full max-w-5xl mx-auto px-3 sm:px-4 py-4"[31m
+        [33mid[31m=[32m"dukb-main"[31m
+      [36m>[31m
+        [36m<div[31m
+          [33mclass[31m=[32m"mb-3 flex gap-2 sm:contents"[31m
+          [33mdata-career-utilities[31m=[32m"true"[31m
+          [33mstyle[31m=[32m"--career-utility-lift: 0px;"[31m
+        [36m>[31m
+          [36m<button[31m
+            [33maria-label[31m=[32m"Open the training ground"[31m
+            [33mclass[31m=[32m"relative min-h-11 flex-1 rounded-xl bg-zinc-900 border-2 border-zinc-700 flex items-center justify-center gap-2 px-3 text-sm font-bold text-white sm:fixed sm:bottom-[5.5rem] sm:right-4 sm:z-40 sm:w-14 sm:h-14 sm:flex-none sm:px-0 sm:text-2xl sm:shadow-xl sm:[translate:0_var(--career-utility-lift)] hover:bg-zinc-800 active:bg-zinc-700"[31m
+            [33mdata-career-utility[31m=[32m"training"[31m
+            [33mtype[31m=[32m"button"[31m
+          [36m>[31m
+            [36m<span[31m
+              [33maria-hidden[31m=[32m"true"[31m
+            [36m>[31m
+              [0m🏋️[0m
+            [36m</span>[31m
+            [36m<span[31m
+              [33mclass[31m=[32m"sm:hidden"[31m
+            [36m>[31m
+              [0mTraining[0m
+            [36m</span>[31m
+            [36m<span[31m
+              [33mclass[31m=[32m"absolute -top-1 -right-1 w-3.5 h-3.5 rounded-full bg-emerald-500 border-2 border-zinc-900"[31m
+            [36m>[31m
+              [36m<span[31m
+                [33mclass[31m=[32m"sr-only"[31m
+              [36m>[31m
+                [0mDrill ready[0m
+              [36m</span>[31m
+            [36m</span>[31m
+          [36m</button>[31m
+          [36m<button[31m
+            [33maria-label[31m=[32m"Open your phone"[31m
+            [33mclass[31m=[32m"relative min-h-11 flex-1 rounded-xl bg-zinc-900 border-2 border-zinc-700 flex items-center justify-center gap-2 px-3 text-sm font-bold text-white sm:fixed sm:bottom-5 sm:right-4 sm:z-40 sm:w-14 sm:h-14 sm:flex-none sm:px-0 sm:text-2xl sm:shadow-xl sm:[translate:0_var(--career-utility-lift)] hover:bg-zinc-800 active:bg-zinc-700"[31m
+            [33mdata-career-utility[31m=[32m"phone"[31m
+            [33mtype[31m=[32m"button"[31m
+          [36m>[31m
+            [36m<span[31m
+              [33maria-hidden[31m=[32m"true"[31m
+            [36m>[31m
+              [0m📱[0m
+            [36m</span>[31m
+            [36m<span[31m
+              [33mclass[31m=[32m"sm:hidden"[31m
+            [36m>[31m
+              [0mPhone[0m
+            [36m</span>[31m
+            [36m<span[31m
+              [33mclass[31m=[32m"min-w-5 h-5 px-1 rounded-full bg-red-500 text-[11px] font-black text-black flex items-center justify-center sm:absolute sm:-top-1.5 sm:-right-1.5"[31m
+            [36m>[31m
+              [0m3[0m
+              [36m<span[31m
+                [33mclass[31m=[32m"sr-only"[31m
+              [36m>[31m
+                [0m unread[0m
+              [36m</span>[31m
+            [36m</span>[31m
+          [36m</button>[31m
+        [36m</div>[31m
+        [36m<div[31m
+          [33mclass[31m=[32m"space-y-3 pb-20"[31m
+        [36m>[31m
+          [36m<div[31m
+            [33mclass[31m=[32m"flex flex-wrap items-center justify-between gap-2"[31m
+          [36m>[31m
+            [36m<div[31m
+              [33mclass[31m=[32m"flex items-center gap-2.5 min-w-0 w-full min-[480px]:w-auto min-[480px]:flex-1"[31m
+            [36m>[31m
+              [36m<div[31m
+                [33mclass[31m=[32m"min-w-0 flex-1"[31m
+              [36m>[31m
+                [36m<h1[31m
+                  [33mclass[31m=[32m"text-xl sm:text-2xl font-black flex items-center gap-2 min-w-0"[31m
+                [36m>[31m
+                  [36m<span[31m
+                    [33mclass[31m=[32m"inline-flex items-center gap-1 align-middle shrink-0"[31m
+                  [36m>[31m
+                    [36m<svg[31m
+                      [33maria-hidden[31m=[32m"true"[31m
+                      [33mheight[31m=[32m"18"[31m
+                      [33mstyle[31m=[32m"display: block; border-radius: 2px;"[31m
+                      [33mviewBox[31m=[32m"0 0 60 36"[31m
+                      [33mwidth[31m=[32m"24"[31m
+                    [36m>[31m
+                      [36m<rect[31m
+                        [33mfill[31m=[32m"#fff"[31m
+                        [33mheight[31m=[32m"36"[31m
+                        [33mwidth[31m=[32m"60"[31m
+                      [36m/>[31m
+                      [36m<rect[31m
+                        [33mfill[31m=[32m"#CE1124"[31m
+                        [33mheight[31m=[32m"36"[31m
+                        [33mwidth[31m=[32m"10"[31m
+                        [33mx[31m=[32m"25"[31m
+                      [36m/>[31m
+                      [36m<rect[31m
+                        [33mfill[31m=[32m"#CE1124"[31m
+                        [33mheight[31m=[32m"10"[31m
+                        [33mwidth[31m=[32m"60"[31m
+                        [33my[31m=[32m"13"[31m
+                      [36m/>[31m
+                    [36m</svg>[31m
+                  [36m</span>[31m
+                  [36m<span[31m
+                    [33mclass[31m=[32m"min-w-0 [overflow-wrap:anywhere] min-[480px]:truncate"[31m
+                  [36m>[31m
+                    [0mFence Tester[0m
+                  [36m</span>[31m
+                [36m</h1>[31m
+                [36m<p[31m
+                  [33mclass[31m=[32m"text-xs text-muted-foreground"[31m
+                [36m>[31m
+                  [0mCM[0m
+                  [0m · Age [0m
+                  [0m17[0m
+                  [0m · [0m
+                  [36m<span[31m
+                    [33mclass[31m=[32m"inline-flex items-center gap-1 align-middle shrink-0"[31m
+                  [36m>[31m
+                    [36m<svg[31m
+                      [33maria-hidden[31m=[32m"true"[31m
+                      [33mheight[31m=[32m"9"[31m
+                      [33mstyle[31m=[32m"display: block; border-radius: 2px;"[31m
+                      [33mviewBox[31m=[32m"0 0 60 36"[31m
+                      [33mwidth[31m=[32m"12"[31m
+                    [36m>[31m
+                      [36m<rect[31m
+                        [33mfill[31m=[32m"#fff"[31m
+                        [33mheight[31m=[32m"36"[31m
+                        [33mwidth[31m=[32m"60"[31m
+                      [36m/>[31m
+                      [36m<rect[31m
+                        [33...[39m
+[31m   [31m×[31m Soccer Career save fence[2m > [22mNew Career in a stale tab clears nothing[39m[33m 1148[2mms[22m[39m
+[31m     → Unable to find an element by: [data-testid="save-moved-notice"]
+
+Ignored nodes: comments, script, style
+[36m<body>[31m
+  [36m<div>[31m
+    [36m<div[31m
+      [33mclass[31m=[32m"min-h-screen bg-background text-foreground flex flex-col "[31m
+    [36m>[31m
+      [36m<div[31m
+        [33mclass[31m=[32m"relative z-10 mx-auto w-full max-w-4xl "[31m
+      [36m/>[31m
+      [36m<main[31m
+        [33mclass[31m=[32m"flex-1 w-full max-w-5xl mx-auto px-3 sm:px-4 py-4"[31m
+        [33mid[31m=[32m"dukb-main"[31m
+      [36m>[31m
+        [36m<div[31m
+          [33mclass[31m=[32m"max-w-xl mx-auto space-y-5"[31m
+        [36m>[31m
+          [36m<div[31m
+            [33mclass[31m=[32m"text-center space-y-1"[31m
+          [36m>[31m
+            [36m<h1[31m
+              [33mclass[31m=[32m"text-3xl sm:text-4xl font-black tracking-tight"[31m
+            [36m>[31m
+              [0m⚽ Soccer Career[0m
+            [36m</h1>[31m
+            [36m<p[31m
+              [33mclass[31m=[32m"text-muted-foreground text-sm"[31m
+            [36m>[31m
+              [0mCreate your player. Build your legend.[0m
+            [36m</p>[31m
+          [36m</div>[31m
+          [36m<div[31m
+            [33mclass[31m=[32m"space-y-4 bg-card border border-border rounded-xl p-4 sm:p-5"[31m
+          [36m>[31m
+            [36m<h2[31m
+              [33mclass[31m=[32m"text-lg font-bold"[31m
+            [36m>[31m
+              [0mCreate Your Player[0m
+            [36m</h2>[31m
+            [36m<div[31m
+              [33mclass[31m=[32m"space-y-1.5"[31m
+            [36m>[31m
+              [36m<label[31m
+                [33mclass[31m=[32m"text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"[31m
+                [33mfor[31m=[32m"pname"[31m
+              [36m>[31m
+                [0mPlayer Name[0m
+              [36m</label>[31m
+              [36m<input[31m
+                [33mclass[31m=[32m"flex h-10 w-full rounded-md border border-input px-3 py-2 text-base ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 md:text-sm bg-muted/30"[31m
+                [33mid[31m=[32m"pname"[31m
+                [33mmaxlength[31m=[32m"40"[31m
+                [33mplaceholder[31m=[32m"Enter your player name..."[31m
+                [33mvalue[31m=[32m""[31m
+              [36m/>[31m
+            [36m</div>[31m
+            [36m<div[31m
+              [33mclass[31m=[32m"space-y-1.5"[31m
+            [36m>[31m
+              [36m<label[31m
+                [33mclass[31m=[32m"text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"[31m
+              [36m>[31m
+                [0mNationality[0m
+              [36m</label>[31m
+              [36m<select>[31m
+                [36m<option[31m
+                  [33mvalue[31m=[32m"Albania"[31m
+                [36m>[31m
+                  [36m<span[31m
+                    [33mclass[31m=[32m"flex items-center gap-2"[31m
+                  [36m>[31m
+                    [0mAlbania[0m
+                    [36m<span[31m
+                      [33mclass[31m=[32m"inline-flex items-center gap-1 align-middle shrink-0"[31m
+                    [36m>[31m
+                      [36m<img[31m
+                        [33malt[31m=[32m"Albania"[31m
+                        [33mclass[31m=[32m"inline-block align-middle object-cover"[31m
+                        [33mloading[31m=[32m"lazy"[31m
+                        [33msrc[31m=[32m"https://flagcdn.com/w40/al.png"[31m
+                        [33mstyle[31m=[32m"width: 18px; height: 14px; border-radius: 2px;"[31m
+                      [36m/>[31m
+                      [36m<span[31m
+                        [33maria-hidden[31m=[32m"true"[31m
+                        [33mstyle[31m=[32m"display: none; font-size: 16.2px; line-height: 1;"[31m
+                      [36m>[31m
+                        [0m🇦🇱[0m
+                      [36m</span>[31m
+                    [36m</span>[31m
+                  [36m</span>[31m
+                [36m</option>[31m
+                [36m<option[31m
+                  [33mvalue[31m=[32m"Armenia"[31m
+                [36m>[31m
+                  [36m<span[31m
+                    [33mclass[31m=[32m"flex items-center gap-2"[31m
+                  [36m>[31m
+                    [0mArmenia[0m
+                    [36m<span[31m
+                      [33mclass[31m=[32m"inline-flex items-center gap-1 align-middle shrink-0"[31m
+                    [36m>[31m
+                      [36m<img[31m
+                        [33malt[31m=[32m"Armenia"[31m
+                        [33mclass[31m=[32m"inline-block align-middle object-cover"[31m
+                        [33mloading[31m=[32m"lazy"[31m
+                        [33msrc[31m=[32m"https://flagcdn.com/w40/am.png"[31m
+                        [33mstyle[31m=[32m"width: 18px; height: 14px; border-radius: 2px;"[31m
+                      [36m/>[31m
+                      [36m<span[31m
+                        [33maria-hidden[31m=[32m"true"[31m
+                        [33mstyle[31m=[32m"display: none; font-size: 16.2px; line-height: 1;"[31m
+                      [36m>[31m
+                        [0m🇦🇲[0m
+                      [36m</span>[31m
+                    [36m</span>[31m
+                  [36m</span>[31m
+                [36m</option>[31m
+                [36m<option[31m
+                  [33mvalue[31m=[32m"Austria"[31m
+                [36m>[31m
+                  [36m<span[31m
+                    [33mclass[31m=[32m"flex items-center gap-2"[31m
+                  [36m>[31m
+                    [0mAustria[0m
+                    [36m<span[31m
+                      [33mclass[31m=[32m"inline-flex items-center gap-1 align-middle shrink-0"[31m
+                    [36m>[31m
+                      [36m<img[31m
+                        [33malt[31m=[32m"Austria"[31m
+                        [33mclass[31m=[32m"inline-block align-middle object-cover"[31m
+                        [33mloading[31m=[32m"lazy"[31m
+                        [33msrc[31m=[32m"https://flagcdn.com/w40/at.png"[31m
+                        [33mstyle[31m=[32m"width: 18px; height: 14px; border-radius: 2px;"[31m
+                      [36m/>[31m
+                      [36m<span[31m
+                        [33maria-hidden[31m=[32m"true"[31m
+                        [33mstyle[31m=[32m"display: none; font-size: 16.2px; line-height: 1;"[31m
+                      [36m>[31m
+                        [0m🇦🇹[0m
+                      [36m</span>[31m
+                    [36m</span>[31m
+                  [36m</span>[31m
+                [36m</option>...
+
+Ignored nodes: comments, script, style
+[36m<body>[31m
+  [36m<div>[31m
+    [36m<div[31m
+      [33mclass[31m=[32m"min-h-screen bg-background text-foreground flex flex-col "[31m
+    [36m>[31m
+      [36m<div[31m
+        [33mclass[31m=[32m"relative z-10 mx-auto w-full max-w-4xl "[31m
+      [36m/>[31m
+      [36m<main[31m
+        [33mclass[31m=[32m"flex-1 w-full max-w-5xl mx-auto px-3 sm:px-4 py-4"[31m
+        [33mid[31m=[32m"dukb-main"[31m
+      [36m>[31m
+        [36m<div[31m
+          [33mclass[31m=[32m"max-w-xl mx-auto space-y-5"[31m
+        [36m>[31m
+          [36m<div[31m
+            [33mclass[31m=[32m"text-center space-y-1"[31m
+          [36m>[31m
+            [36m<h1[31m
+              [33mclass[31m=[32m"text-3xl sm:text-4xl font-black tracking-tight"[31m
+            [36m>[31m
+              [0m⚽ Soccer Career[0m
+            [36m</h1>[31m
+            [36m<p[31m
+              [33mclass[31m=[32m"text-muted-foreground text-sm"[31m
+            [36m>[31m
+              [0mCreate your player. Build your legend.[0m
+            [36m</p>[31m
+          [36m</div>[31m
+          [36m<div[31m
+            [33mclass[31m=[32m"space-y-4 bg-card border border-border rounded-xl p-4 sm:p-5"[31m
+          [36m>[31m
+            [36m<h2[31m
+              [33mclass[31m=[32m"text-lg font-bold"[31m
+            [36m>[31m
+              [0mCreate Your Player[0m
+            [36m</h2>[31m
+            [36m<div[31m
+              [33mclass[31m=[32m"space-y-1.5"[31m
+            [36m>[31m
+              [36m<label[31m
+                [33mclass[31m=[32m"text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"[31m
+                [33mfor[31m=[32m"pname"[31m
+              [36m>[31m
+                [0mPlayer Name[0m
+              [36m</label>[31m
+              [36m<input[31m
+                [33mclass[31m=[32m"flex h-10 w-full rounded-md border border-input px-3 py-2 text-base ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 md:text-sm bg-muted/30"[31m
+                [33mid[31m=[32m"pname"[31m
+                [33mmaxlength[31m=[32m"40"[31m
+                [33mplaceholder[31m=[32m"Enter your player name..."[31m
+                [33mvalue[31m=[32m""[31m
+              [36m/>[31m
+            [36m</div>[31m
+            [36m<div[31m
+              [33mclass[31m=[32m"space-y-1.5"[31m
+            [36m>[31m
+              [36m<label[31m
+                [33mclass[31m=[32m"text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"[31m
+              [36m>[31m
+                [0mNationality[0m
+              [36m</label>[31m
+              [36m<select>[31m
+                [36m<option[31m
+                  [33mvalue[31m=[32m"Albania"[31m
+                [36m>[31m
+                  [36m<span[31m
+                    [33mclass[31m=[32m"flex items-center gap-2"[31m
+                  [36m>[31m
+                    [0mAlbania[0m
+                    [36m<span[31m
+                      [33mclass[31m=[32m"inline-flex items-center gap-1 align-middle shrink-0"[31m
+                    [36m>[31m
+                      [36m<img[31m
+                        [33malt[31m=[32m"Albania"[31m
+                        [33mclass[31m=[32m"inline-block align-middle object-cover"[31m
+                        [33mloading[31m=[32m"lazy"[31m
+                        [33msrc[31m=[32m"https://flagcdn.com/w40/al.png"[31m
+                        [33mstyle[31m=[32m"width: 18px; height: 14px; border-radius: 2px;"[31m
+                      [36m/>[31m
+                      [36m<span[31m
+                        [33maria-hidden[31m=[32m"true"[31m
+                        [33mstyle[31m=[32m"display: none; font-size: 16.2px; line-height: 1;"[31m
+                      [36m>[31m
+                        [0m🇦🇱[0m
+                      [36m</span>[31m
+                    [36m</span>[31m
+                  [36m</span>[31m
+                [36m</option>[31m
+                [36m<option[31m
+                  [33mvalue[31m=[32m"Armenia"[31m
+                [36m>[31m
+                  [36m<span[31m
+                    [33mclass[31m=[32m"flex items-center gap-2"[31m
+                  [36m>[31m
+                    [0mArmenia[0m
+                    [36m<span[31m
+                      [33mclass[31m=[32m"inline-flex items-center gap-1 align-middle shrink-0"[31m
+                    [36m>[31m
+                      [36m<img[31m
+                        [33malt[31m=[32m"Armenia"[31m
+                        [33mclass[31m=[32m"inline-block align-middle object-cover"[31m
+                        [33mloading[31m=[32m"lazy"[31m
+                        [33msrc[31m=[32m"https://flagcdn.com/w40/am.png"[31m
+                        [33mstyle[31m=[32m"width: 18px; height: 14px; border-radius: 2px;"[31m
+                      [36m/>[31m
+                      [36m<span[31m
+                        [33maria-hidden[31m=[32m"true"[31m
+                        [33mstyle[31m=[32m"display: none; font-size: 16.2px; line-height: 1;"[31m
+                      [36m>[31m
+                        [0m🇦🇲[0m
+                      [36m</span>[31m
+                    [36m</span>[31m
+                  [36m</span>[31m
+                [36m</option>[31m
+                [36m<option[31m
+                  [33mvalue[31m=[32m"Austria"[31m
+                [36m>[31m
+                  [36m<span[31m
+                    [33mclass[31m=[32m"flex items-center gap-2"[31m
+                  [36m>[31m
+                    [0mAustria[0m
+                    [36m<span[31m
+                      [33mclass[31m=[32m"inline-flex items-center gap-1 align-middle shrink-0"[31m
+                    [36m>[31m
+                      [36m<img[31m
+                        [33malt[31m=[32m"Austria"[31m
+                        [33mclass[31m=[32m"inline-block align-middle object-cover"[31m
+                        [33mloading[31m=[32m"lazy"[31m
+                        [33msrc[31m=[32m"https://flagcdn.com/w40/at.png"[31m
+                        [33mstyle[31m=[32m"width: 18px; height: 14px; border-radius: 2px;"[31m
+                      [36m/>[31m
+                      [36m<span[31m
+                        [33maria-hidden[31m=[32m"true"[31m
+                        [33mstyle[31m=[32m"display: none; font-size: 16.2px; line-height: 1;"[31m
+                      [36m>[31m
+                        [0m🇦🇹[0m
+                      [36m</span>[31m
+                    [36m</span>[31m
+                  [36m</span>[31m
+                [36m</option>...[39m
+[31m   [31m×[31m Soccer Career save fence[2m > [22mDelete unusable save in a stale tab deletes nothing[39m[33m 1064[2mms[22m[39m
+[31m     → Unable to find an element by: [data-testid="save-moved-notice"]
+
+Ignored nodes: comments, script, style
+[36m<body>[31m
+  [36m<div>[31m
+    [36m<div[31m
+      [33mclass[31m=[32m"min-h-screen bg-background text-foreground flex flex-col "[31m
+    [36m>[31m
+      [36m<div[31m
+        [33mclass[31m=[32m"relative z-10 mx-auto w-full max-w-4xl "[31m
+      [36m/>[31m
+      [36m<main[31m
+        [33mclass[31m=[32m"flex-1 w-full max-w-5xl mx-auto px-3 sm:px-4 py-4"[31m
+        [33mid[31m=[32m"dukb-main"[31m
+      [36m>[31m
+        [36m<div[31m
+          [33mclass[31m=[32m"max-w-xl mx-auto space-y-5"[31m
+        [36m>[31m
+          [36m<div[31m
+            [33mclass[31m=[32m"text-center space-y-1"[31m
+          [36m>[31m
+            [36m<h1[31m
+              [33mclass[31m=[32m"text-3xl sm:text-4xl font-black tracking-tight"[31m
+            [36m>[31m
+              [0m⚽ Soccer Career[0m
+            [36m</h1>[31m
+            [36m<p[31m
+              [33mclass[31m=[32m"text-muted-foreground text-sm"[31m
+            [36m>[31m
+              [0mCreate your player. Build your legend.[0m
+            [36m</p>[31m
+          [36m</div>[31m
+          [36m<div[31m
+            [33mclass[31m=[32m"space-y-4 bg-card border border-border rounded-xl p-4 sm:p-5"[31m
+          [36m>[31m
+            [36m<h2[31m
+              [33mclass[31m=[32m"text-lg font-bold"[31m
+            [36m>[31m
+              [0mCreate Your Player[0m
+            [36m</h2>[31m
+            [36m<div[31m
+              [33mclass[31m=[32m"space-y-1.5"[31m
+            [36m>[31m
+              [36m<label[31m
+                [33mclass[31m=[32m"text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"[31m
+                [33mfor[31m=[32m"pname"[31m
+              [36m>[31m
+                [0mPlayer Name[0m
+              [36m</label>[31m
+              [36m<input[31m
+                [33mclass[31m=[32m"flex h-10 w-full rounded-md border border-input px-3 py-2 text-base ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 md:text-sm bg-muted/30"[31m
+                [33mid[31m=[32m"pname"[31m
+                [33mmaxlength[31m=[32m"40"[31m
+                [33mplaceholder[31m=[32m"Enter your player name..."[31m
+                [33mvalue[31m=[32m""[31m
+              [36m/>[31m
+            [36m</div>[31m
+            [36m<div[31m
+              [33mclass[31m=[32m"space-y-1.5"[31m
+            [36m>[31m
+              [36m<label[31m
+                [33mclass[31m=[32m"text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"[31m
+              [36m>[31m
+                [0mNationality[0m
+              [36m</label>[31m
+              [36m<select>[31m
+                [36m<option[31m
+                  [33mvalue[31m=[32m"Albania"[31m
+                [36m>[31m
+                  [36m<span[31m
+                    [33mclass[31m=[32m"flex items-center gap-2"[31m
+                  [36m>[31m
+                    [0mAlbania[0m
+                    [36m<span[31m
+                      [33mclass[31m=[32m"inline-flex items-center gap-1 align-middle shrink-0"[31m
+                    [36m>[31m
+                      [36m<img[31m
+                        [33malt[31m=[32m"Albania"[31m
+                        [33mclass[31m=[32m"inline-block align-middle object-cover"[31m
+                        [33mloading[31m=[32m"lazy"[31m
+                        [33msrc[31m=[32m"https://flagcdn.com/w40/al.png"[31m
+                        [33mstyle[31m=[32m"width: 18px; height: 14px; border-radius: 2px;"[31m
+                      [36m/>[31m
+                      [36m<span[31m
+                        [33maria-hidden[31m=[32m"true"[31m
+                        [33mstyle[31m=[32m"display: none; font-size: 16.2px; line-height: 1;"[31m
+                      [36m>[31m
+                        [0m🇦🇱[0m
+                      [36m</span>[31m
+                    [36m</span>[31m
+                  [36m</span>[31m
+                [36m</option>[31m
+                [36m<option[31m
+                  [33mvalue[31m=[32m"Armenia"[31m
+                [36m>[31m
+                  [36m<span[31m
+                    [33mclass[31m=[32m"flex items-center gap-2"[31m
+                  [36m>[31m
+                    [0mArmenia[0m
+                    [36m<span[31m
+                      [33mclass[31m=[32m"inline-flex items-center gap-1 align-middle shrink-0"[31m
+                    [36m>[31m
+                      [36m<img[31m
+                        [33malt[31m=[32m"Armenia"[31m
+                        [33mclass[31m=[32m"inline-block align-middle object-cover"[31m
+                        [33mloading[31m=[32m"lazy"[31m
+                        [33msrc[31m=[32m"https://flagcdn.com/w40/am.png"[31m
+                        [33mstyle[31m=[32m"width: 18px; height: 14px; border-radius: 2px;"[31m
+                      [36m/>[31m
+                      [36m<span[31m
+                        [33maria-hidden[31m=[32m"true"[31m
+                        [33mstyle[31m=[32m"display: none; font-size: 16.2px; line-height: 1;"[31m
+                      [36m>[31m
+                        [0m🇦🇲[0m
+                      [36m</span>[31m
+                    [36m</span>[31m
+                  [36m</span>[31m
+                [36m</option>[31m
+                [36m<option[31m
+                  [33mvalue[31m=[32m"Austria"[31m
+                [36m>[31m
+                  [36m<span[31m
+                    [33mclass[31m=[32m"flex items-center gap-2"[31m
+                  [36m>[31m
+                    [0mAustria[0m
+                    [36m<span[31m
+                      [33mclass[31m=[32m"inline-flex items-center gap-1 align-middle shrink-0"[31m
+                    [36m>[31m
+                      [36m<img[31m
+                        [33malt[31m=[32m"Austria"[31m
+                        [33mclass[31m=[32m"inline-block align-middle object-cover"[31m
+                        [33mloading[31m=[32m"lazy"[31m
+                        [33msrc[31m=[32m"https://flagcdn.com/w40/at.png"[31m
+                        [33mstyle[31m=[32m"width: 18px; height: 14px; border-radius: 2px;"[31m
+                      [36m/>[31m
+                      [36m<span[31m
+                        [33maria-hidden[31m=[32m"true"[31m
+                        [33mstyle[31m=[32m"display: none; font-size: 16.2px; line-height: 1;"[31m
+                      [36m>[31m
+                        [0m🇦🇹[0m
+                      [36m</span>[31m
+                    [36m</span>[31m
+                  [36m</span>[31m
+                [36m</option>...
+
+Ignored nodes: comments, script, style
+[36m<body>[31m
+  [36m<div>[31m
+    [36m<div[31m
+      [33mclass[31m=[32m"min-h-screen bg-background text-foreground flex flex-col "[31m
+    [36m>[31m
+      [36m<div[31m
+        [33mclass[31m=[32m"relative z-10 mx-auto w-full max-w-4xl "[31m
+      [36m/>[31m
+      [36m<main[31m
+        [33mclass[31m=[32m"flex-1 w-full max-w-5xl mx-auto px-3 sm:px-4 py-4"[31m
+        [33mid[31m=[32m"dukb-main"[31m
+      [36m>[31m
+        [36m<div[31m
+          [33mclass[31m=[32m"max-w-xl mx-auto space-y-5"[31m
+        [36m>[31m
+          [36m<div[31m
+            [33mclass[31m=[32m"text-center space-y-1"[31m
+          [36m>[31m
+            [36m<h1[31m
+              [33mclass[31m=[32m"text-3xl sm:text-4xl font-black tracking-tight"[31m
+            [36m>[31m
+              [0m⚽ Soccer Career[0m
+            [36m</h1>[31m
+            [36m<p[31m
+              [33mclass[31m=[32m"text-muted-foreground text-sm"[31m
+            [36m>[31m
+              [0mCreate your player. Build your legend.[0m
+            [36m</p>[31m
+          [36m</div>[31m
+          [36m<div[31m
+            [33mclass[31m=[32m"space-y-4 bg-card border border-border rounded-xl p-4 sm:p-5"[31m
+          [36m>[31m
+            [36m<h2[31m
+              [33mclass[31m=[32m"text-lg font-bold"[31m
+            [36m>[31m
+              [0mCreate Your Player[0m
+            [36m</h2>[31m
+            [36m<div[31m
+              [33mclass[31m=[32m"space-y-1.5"[31m
+            [36m>[31m
+              [36m<label[31m
+                [33mclass[31m=[32m"text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"[31m
+                [33mfor[31m=[32m"pname"[31m
+              [36m>[31m
+                [0mPlayer Name[0m
+              [36m</label>[31m
+              [36m<input[31m
+                [33mclass[31m=[32m"flex h-10 w-full rounded-md border border-input px-3 py-2 text-base ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 md:text-sm bg-muted/30"[31m
+                [33mid[31m=[32m"pname"[31m
+                [33mmaxlength[31m=[32m"40"[31m
+                [33mplaceholder[31m=[32m"Enter your player name..."[31m
+                [33mvalue[31m=[32m""[31m
+              [36m/>[31m
+            [36m</div>[31m
+            [36m<div[31m
+              [33mclass[31m=[32m"space-y-1.5"[31m
+            [36m>[31m
+              [36m<label[31m
+                [33mclass[31m=[32m"text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"[31m
+              [36m>[31m
+                [0mNationality[0m
+              [36m</label>[31m
+              [36m<select>[31m
+                [36m<option[31m
+                  [33mvalue[31m=[32m"Albania"[31m
+                [36m>[31m
+                  [36m<span[31m
+                    [33mclass[31m=[32m"flex items-center gap-2"[31m
+                  [36m>[31m
+                    [0mAlbania[0m
+                    [36m<span[31m
+                      [33mclass[31m=[32m"inline-flex items-center gap-1 align-middle shrink-0"[31m
+                    [36m>[31m
+                      [36m<img[31m
+                        [33malt[31m=[32m"Albania"[31m
+                        [33mclass[31m=[32m"inline-block align-middle object-cover"[31m
+                        [33mloading[31m=[32m"lazy"[31m
+                        [33msrc[31m=[32m"https://flagcdn.com/w40/al.png"[31m
+                        [33mstyle[31m=[32m"width: 18px; height: 14px; border-radius: 2px;"[31m
+                      [36m/>[31m
+                      [36m<span[31m
+                        [33maria-hidden[31m=[32m"true"[31m
+                        [33mstyle[31m=[32m"display: none; font-size: 16.2px; line-height: 1;"[31m
+                      [36m>[31m
+                        [0m🇦🇱[0m
+                      [36m</span>[31m
+                    [36m</span>[31m
+                  [36m</span>[31m
+                [36m</option>[31m
+                [36m<option[31m
+                  [33mvalue[31m=[32m"Armenia"[31m
+                [36m>[31m
+                  [36m<span[31m
+                    [33mclass[31m=[32m"flex items-center gap-2"[31m
+                  [36m>[31m
+                    [0mArmenia[0m
+                    [36m<span[31m
+                      [33mclass[31m=[32m"inline-flex items-center gap-1 align-middle shrink-0"[31m
+                    [36m>[31m
+                      [36m<img[31m
+                        [33malt[31m=[32m"Armenia"[31m
+                        [33mclass[31m=[32m"inline-block align-middle object-cover"[31m
+                        [33mloading[31m=[32m"lazy"[31m
+                        [33msrc[31m=[32m"https://flagcdn.com/w40/am.png"[31m
+                        [33mstyle[31m=[32m"width: 18px; height: 14px; border-radius: 2px;"[31m
+                      [36m/>[31m
+                      [36m<span[31m
+                        [33maria-hidden[31m=[32m"true"[31m
+                        [33mstyle[31m=[32m"display: none; font-size: 16.2px; line-height: 1;"[31m
+                      [36m>[31m
+                        [0m🇦🇲[0m
+                      [36m</span>[31m
+                    [36m</span>[31m
+                  [36m</span>[31m
+                [36m</option>[31m
+                [36m<option[31m
+                  [33mvalue[31m=[32m"Austria"[31m
+                [36m>[31m
+                  [36m<span[31m
+                    [33mclass[31m=[32m"flex items-center gap-2"[31m
+                  [36m>[31m
+                    [0mAustria[0m
+                    [36m<span[31m
+                      [33mclass[31m=[32m"inline-flex items-center gap-1 align-middle shrink-0"[31m
+                    [36m>[31m
+                      [36m<img[31m
+                        [33malt[31m=[32m"Austria"[31m
+                        [33mclass[31m=[32m"inline-block align-middle object-cover"[31m
+                        [33mloading[31m=[32m"lazy"[31m
+                        [33msrc[31m=[32m"https://flagcdn.com/w40/at.png"[31m
+                        [33mstyle[31m=[32m"width: 18px; height: 14px; border-radius: 2px;"[31m
+                      [36m/>[31m
+                      [36m<span[31m
+                        [33maria-hidden[31m=[32m"true"[31m
+                        [33mstyle[31m=[32m"display: none; font-size: 16.2px; line-height: 1;"[31m
+                      [36m>[31m
+                        [0m🇦🇹[0m
+                      [36m</span>[31m
+                    [36m</span>[31m
+                  [36m</span>[31m
+                [36m</option>...[39m
+   [32m✓[39m Soccer Career save fence[2m > [22ma hand edit of the save moves no generation: no notice, and the next press writes[32m 22[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 4 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/soccerCareerSaveFence.test.tsx[2m > [22mSoccer Career save fence[2m > [22manother tab playing on shows the notice at once, and a press forced past it writes nothing
+[31m[1mTestingLibraryElementError[22m[39m: Unable to find an element by: [data-testid="save-moved-notice"]
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div>[39m
+    [36m<div[39m
+      [33mclass[39m=[32m"min-h-screen bg-background text-foreground flex flex-col pb-[88px]"[39m
+    [36m>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"relative z-10 mx-auto w-full max-w-4xl h-11 sm:h-0"[39m
+      [36m/>[39m
+      [36m<main[39m
+        [33mclass[39m=[32m"flex-1 w-full max-w-5xl mx-auto px-3 sm:px-4 py-4"[39m
+        [33mid[39m=[32m"dukb-main"[39m
+      [36m>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"mb-3 flex gap-2 sm:contents"[39m
+          [33mdata-career-utilities[39m=[32m"true"[39m
+          [33mstyle[39m=[32m"--career-utility-lift: 0px;"[39m
+        [36m>[39m
+          [36m<button[39m
+            [33maria-label[39m=[32m"Open the training ground"[39m
+            [33mclass[39m=[32m"relative min-h-11 flex-1 rounded-xl bg-zinc-900 border-2 border-zinc-700 flex items-center justify-center gap-2 px-3 text-sm font-bold text-white sm:fixed sm:bottom-[5.5rem] sm:right-4 sm:z-40 sm:w-14 sm:h-14 sm:flex-none sm:px-0 sm:text-2xl sm:shadow-xl sm:[translate:0_var(--career-utility-lift)] hover:bg-zinc-800 active:bg-zinc-700"[39m
+            [33mdata-career-utility[39m=[32m"training"[39m
+            [33mtype[39m=[32m"button"[39m
+          [36m>[39m
+            [36m<span[39m
+              [33maria-hidden[39m=[32m"true"[39m
+            [36m>[39m
+              [0m🏋️[0m
+            [36m</span>[39m
+            [36m<span[39m
+              [33mclass[39m=[32m"sm:hidden"[39m
+            [36m>[39m
+              [0mTraining[0m
+            [36m</span>[39m
+            [36m<span[39m
+              [33mclass[39m=[32m"absolute -top-1 -right-1 w-3.5 h-3.5 rounded-full bg-emerald-500 border-2 border-zinc-900"[39m
+            [36m>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"sr-only"[39m
+              [36m>[39m
+                [0mDrill ready[0m
+              [36m</span>[39m
+            [36m</span>[39m
+          [36m</button>[39m
+          [36m<button[39m
+            [33maria-label[39m=[32m"Open your phone"[39m
+            [33mclass[39m=[32m"relative min-h-11 flex-1 rounded-xl bg-zinc-900 border-2 border-zinc-700 flex items-center justify-center gap-2 px-3 text-sm font-bold text-white sm:fixed sm:bottom-5 sm:right-4 sm:z-40 sm:w-14 sm:h-14 sm:flex-none sm:px-0 sm:text-2xl sm:shadow-xl sm:[translate:0_var(--career-utility-lift)] hover:bg-zinc-800 active:bg-zinc-700"[39m
+            [33mdata-career-utility[39m=[32m"phone"[39m
+            [33mtype[39m=[32m"button"[39m
+          [36m>[39m
+            [36m<span[39m
+              [33maria-hidden[39m=[32m"true"[39m
+            [36m>[39m
+              [0m📱[0m
+            [36m</span>[39m
+            [36m<span[39m
+              [33mclass[39m=[32m"sm:hidden"[39m
+            [36m>[39m
+              [0mPhone[0m
+            [36m</span>[39m
+            [36m<span[39m
+              [33mclass[39m=[32m"min-w-5 h-5 px-1 rounded-full bg-red-500 text-[11px] font-black text-black flex items-center justify-center sm:absolute sm:-top-1.5 sm:-right-1.5"[39m
+            [36m>[39m
+              [0m2[0m
+              [36m<span[39m
+                [33mclass[39m=[32m"sr-only"[39m
+              [36m>[39m
+                [0m unread[0m
+              [36m</span>[39m
+            [36m</span>[39m
+          [36m</button>[39m
+        [36m</div>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"space-y-3 pb-20"[39m
+        [36m>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"flex flex-wrap items-center justify-between gap-2"[39m
+          [36m>[39m
+            [36m<div[39m
+              [33mclass[39m=[32m"flex items-center gap-2.5 min-w-0 w-full min-[480px]:w-auto min-[480px]:flex-1"[39m
+            [36m>[39m
+              [36m<div[39m
+                [33mclass[39m=[32m"min-w-0 flex-1"[39m
+              [36m>[39m
+                [36m<h1[39m
+                  [33mclass[39m=[32m"text-xl sm:text-2xl font-black flex items-center gap-2 min-w-0"[39m
+                [36m>[39m
+                  [36m<span[39m
+                    [33mclass[39m=[32m"inline-flex items-center gap-1 align-middle shrink-0"[39m
+                  [36m>[39m
+                    [36m<svg[39m
+                      [33maria-hidden[39m=[32m"true"[39m
+                      [33mheight[39m=[32m"18"[39m
+                      [33mstyle[39m=[32m"display: block; border-radius: 2px;"[39m
+                      [33mviewBox[39m=[32m"0 0 60 36"[39m
+                      [33mwidth[39m=[32m"24"[39m
+                    [36m>[39m
+                      [36m<rect[39m
+                        [33mfill[39m=[32m"#fff"[39m
+                        [33mheight[39m=[32m"36"[39m
+                        [33mwidth[39m=[32m"60"[39m
+                      [36m/>[39m
+                      [36m<rect[39m
+                        [33mfill[39m=[32m"#CE1124"[39m
+                        [33mheight[39m=[32m"36"[39m
+                        [33mwidth[39m=[32m"10"[39m
+                        [33mx[39m=[32m"25"[39m
+                      [36m/>[39m
+                      [36m<rect[39m
+                        [33mfill[39m=[32m"#CE1124"[39m
+                        [33mheight[39m=[32m"10"[39m
+                        [33mwidth[39m=[32m"60"[39m
+                        [33my[39m=[32m"13"[39m
+                      [36m/>[39m
+                    [36m</svg>[39m
+                  [36m</span>[39m
+                  [36m<span[39m
+                    [33mclass[39m=[32m"min-w-0 [overflow-wrap:anywhere] min-[480px]:truncate"[39m
+                  [36m>[39m
+                    [0mFence Tester[0m
+                  [36m</span>[39m
+                [36m</h1>[39m
+                [36m<p[39m
+                  [33mclass[39m=[32m"text-xs text-muted-foreground"[39m
+                [36m>[39m
+                  [0mCM[0m
+                  [0m · Age [0m
+                  [0m16[0m
+                  [0m · [0m
+                  [36m<span[39m
+                    [33mclass[39m=[32m"inline-flex items-center gap-1 align-middle shrink-0"[39m
+                  [36m>[39m
+                    [36m<svg[39m
+                      [33maria-hidden[39m=[32m"true"[39m
+                      [33mheight[39m=[32m"9"[39m
+                      [33mstyle[39m=[32m"display: block; border-radius: 2px;"[39m
+                      [33mviewBox[39m=[32m"0 0 60 36"[39m
+                      [33mwidth[39m=[32m"12"[39m
+                    [36m>[39m
+                      [36m<rect[39m
+                        [33mfill[39m=[32m"#fff"[39m
+                        [33mheight[39m=[32m"36"[39m
+                        [33mwidth[39m=[32m"60"[39m
+                      [36m/>[39m
+                      [36m<rect[39m
+                        [33...
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div>[39m
+    [36m<div[39m
+      [33mclass[39m=[32m"min-h-screen bg-background text-foreground flex flex-col pb-[88px]"[39m
+    [36m>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"relative z-10 mx-auto w-full max-w-4xl h-11 sm:h-0"[39m
+      [36m/>[39m
+      [36m<main[39m
+        [33mclass[39m=[32m"flex-1 w-full max-w-5xl mx-auto px-3 sm:px-4 py-4"[39m
+        [33mid[39m=[32m"dukb-main"[39m
+      [36m>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"mb-3 flex gap-2 sm:contents"[39m
+          [33mdata-career-utilities[39m=[32m"true"[39m
+          [33mstyle[39m=[32m"--career-utility-lift: 0px;"[39m
+        [36m>[39m
+          [36m<button[39m
+            [33maria-label[39m=[32m"Open the training ground"[39m
+            [33mclass[39m=[32m"relative min-h-11 flex-1 rounded-xl bg-zinc-900 border-2 border-zinc-700 flex items-center justify-center gap-2 px-3 text-sm font-bold text-white sm:fixed sm:bottom-[5.5rem] sm:right-4 sm:z-40 sm:w-14 sm:h-14 sm:flex-none sm:px-0 sm:text-2xl sm:shadow-xl sm:[translate:0_var(--career-utility-lift)] hover:bg-zinc-800 active:bg-zinc-700"[39m
+            [33mdata-career-utility[39m=[32m"training"[39m
+            [33mtype[39m=[32m"button"[39m
+          [36m>[39m
+            [36m<span[39m
+              [33maria-hidden[39m=[32m"true"[39m
+            [36m>[39m
+              [0m🏋️[0m
+            [36m</span>[39m
+            [36m<span[39m
+              [33mclass[39m=[32m"sm:hidden"[39m
+            [36m>[39m
+              [0mTraining[0m
+            [36m</span>[39m
+            [36m<span[39m
+              [33mclass[39m=[32m"absolute -top-1 -right-1 w-3.5 h-3.5 rounded-full bg-emerald-500 border-2 border-zinc-900"[39m
+            [36m>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"sr-only"[39m
+              [36m>[39m
+                [0mDrill ready[0m
+              [36m</span>[39m
+            [36m</span>[39m
+          [36m</button>[39m
+          [36m<button[39m
+            [33maria-label[39m=[32m"Open your phone"[39m
+            [33mclass[39m=[32m"relative min-h-11 flex-1 rounded-xl bg-zinc-900 border-2 border-zinc-700 flex items-center justify-center gap-2 px-3 text-sm font-bold text-white sm:fixed sm:bottom-5 sm:right-4 sm:z-40 sm:w-14 sm:h-14 sm:flex-none sm:px-0 sm:text-2xl sm:shadow-xl sm:[translate:0_var(--career-utility-lift)] hover:bg-zinc-800 active:bg-zinc-700"[39m
+            [33mdata-career-utility[39m=[32m"phone"[39m
+            [33mtype[39m=[32m"button"[39m
+          [36m>[39m
+            [36m<span[39m
+              [33maria-hidden[39m=[32m"true"[39m
+            [36m>[39m
+              [0m📱[0m
+            [36m</span>[39m
+            [36m<span[39m
+              [33mclass[39m=[32m"sm:hidden"[39m
+            [36m>[39m
+              [0mPhone[0m
+            [36m</span>[39m
+            [36m<span[39m
+              [33mclass[39m=[32m"min-w-5 h-5 px-1 rounded-full bg-red-500 text-[11px] font-black text-black flex items-center justify-center sm:absolute sm:-top-1.5 sm:-right-1.5"[39m
+            [36m>[39m
+              [0m2[0m
+              [36m<span[39m
+                [33mclass[39m=[32m"sr-only"[39m
+              [36m>[39m
+                [0m unread[0m
+              [36m</span>[39m
+            [36m</span>[39m
+          [36m</button>[39m
+        [36m</div>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"space-y-3 pb-20"[39m
+        [36m>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"flex flex-wrap items-center justify-between gap-2"[39m
+          [36m>[39m
+            [36m<div[39m
+              [33mclass[39m=[32m"flex items-center gap-2.5 min-w-0 w-full min-[480px]:w-auto min-[480px]:flex-1"[39m
+            [36m>[39m
+              [36m<div[39m
+                [33mclass[39m=[32m"min-w-0 flex-1"[39m
+              [36m>[39m
+                [36m<h1[39m
+                  [33mclass[39m=[32m"text-xl sm:text-2xl font-black flex items-center gap-2 min-w-0"[39m
+                [36m>[39m
+                  [36m<span[39m
+                    [33mclass[39m=[32m"inline-flex items-center gap-1 align-middle shrink-0"[39m
+                  [36m>[39m
+                    [36m<svg[39m
+                      [33maria-hidden[39m=[32m"true"[39m
+                      [33mheight[39m=[32m"18"[39m
+                      [33mstyle[39m=[32m"display: block; border-radius: 2px;"[39m
+                      [33mviewBox[39m=[32m"0 0 60 36"[39m
+                      [33mwidth[39m=[32m"24"[39m
+                    [36m>[39m
+                      [36m<rect[39m
+                        [33mfill[39m=[32m"#fff"[39m
+                        [33mheight[39m=[32m"36"[39m
+                        [33mwidth[39m=[32m"60"[39m
+                      [36m/>[39m
+                      [36m<rect[39m
+                        [33mfill[39m=[32m"#CE1124"[39m
+                        [33mheight[39m=[32m"36"[39m
+                        [33mwidth[39m=[32m"10"[39m
+                        [33mx[39m=[32m"25"[39m
+                      [36m/>[39m
+                      [36m<rect[39m
+                        [33mfill[39m=[32m"#CE1124"[39m
+                        [33mheight[39m=[32m"10"[39m
+                        [33mwidth[39m=[32m"60"[39m
+                        [33my[39m=[32m"13"[39m
+                      [36m/>[39m
+                    [36m</svg>[39m
+                  [36m</span>[39m
+                  [36m<span[39m
+                    [33mclass[39m=[32m"min-w-0 [overflow-wrap:anywhere] min-[480px]:truncate"[39m
+                  [36m>[39m
+                    [0mFence Tester[0m
+                  [36m</span>[39m
+                [36m</h1>[39m
+                [36m<p[39m
+                  [33mclass[39m=[32m"text-xs text-muted-foreground"[39m
+                [36m>[39m
+                  [0mCM[0m
+                  [0m · Age [0m
+                  [0m16[0m
+                  [0m · [0m
+                  [36m<span[39m
+                    [33mclass[39m=[32m"inline-flex items-center gap-1 align-middle shrink-0"[39m
+                  [36m>[39m
+                    [36m<svg[39m
+                      [33maria-hidden[39m=[32m"true"[39m
+                      [33mheight[39m=[32m"9"[39m
+                      [33mstyle[39m=[32m"display: block; border-radius: 2px;"[39m
+                      [33mviewBox[39m=[32m"0 0 60 36"[39m
+                      [33mwidth[39m=[32m"12"[39m
+                    [36m>[39m
+                      [36m<rect[39m
+                        [33mfill[39m=[32m"#fff"[39m
+                        [33mheight[39m=[32m"36"[39m
+                        [33mwidth[39m=[32m"60"[39m
+                      [36m/>[39m
+                      [36m<rect[39m
+                        [33...
+[90m [2m❯[22m waitForWrapper node_modules/@testing-library/dom/dist/wait-for.js:[2m163:27[22m[39m
+[90m [2m❯[22m findByTestId node_modules/@testing-library/dom/dist/query-helpers.js:[2m86:33[22m[39m
+[36m [2m❯[22m noticeShows src/test/soccerCareerSaveFence.test.tsx:[2m92:30[22m[39m
+    [90m 90| [39m[33m}[39m
+    [90m 91| [39masync function noticeShows() [33m{[39m
+    [90m 92| [39m  [35mconst[39m shown [33m=[39m [35mawait[39m screen[33m.[39m[34mfindByTestId[39m([32m'save-moved-notice'[39m)[33m;[39m
+    [90m   | [39m                             [31m^[39m
+    [90m 93| [39m  expect(shown).toHaveTextContent('This career moved on in another tab…
+    [90m 94| [39m[33m}[39m
+[90m [2m❯[22m src/test/soccerCareerSaveFence.test.tsx:[2m122:11[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/4]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/soccerCareerSaveFence.test.tsx[2m > [22mSoccer Career save fence[2m > [22mwith no event at all, the press finds the move at write time and writes nothing
+[31m[1mTestingLibraryElementError[22m[39m: Unable to find an element by: [data-testid="save-moved-notice"]
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div>[39m
+    [36m<div[39m
+      [33mclass[39m=[32m"min-h-screen bg-background text-foreground flex flex-col pb-[88px]"[39m
+    [36m>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"relative z-10 mx-auto w-full max-w-4xl h-11 sm:h-0"[39m
+      [36m/>[39m
+      [36m<main[39m
+        [33mclass[39m=[32m"flex-1 w-full max-w-5xl mx-auto px-3 sm:px-4 py-4"[39m
+        [33mid[39m=[32m"dukb-main"[39m
+      [36m>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"mb-3 flex gap-2 sm:contents"[39m
+          [33mdata-career-utilities[39m=[32m"true"[39m
+          [33mstyle[39m=[32m"--career-utility-lift: 0px;"[39m
+        [36m>[39m
+          [36m<button[39m
+            [33maria-label[39m=[32m"Open the training ground"[39m
+            [33mclass[39m=[32m"relative min-h-11 flex-1 rounded-xl bg-zinc-900 border-2 border-zinc-700 flex items-center justify-center gap-2 px-3 text-sm font-bold text-white sm:fixed sm:bottom-[5.5rem] sm:right-4 sm:z-40 sm:w-14 sm:h-14 sm:flex-none sm:px-0 sm:text-2xl sm:shadow-xl sm:[translate:0_var(--career-utility-lift)] hover:bg-zinc-800 active:bg-zinc-700"[39m
+            [33mdata-career-utility[39m=[32m"training"[39m
+            [33mtype[39m=[32m"button"[39m
+          [36m>[39m
+            [36m<span[39m
+              [33maria-hidden[39m=[32m"true"[39m
+            [36m>[39m
+              [0m🏋️[0m
+            [36m</span>[39m
+            [36m<span[39m
+              [33mclass[39m=[32m"sm:hidden"[39m
+            [36m>[39m
+              [0mTraining[0m
+            [36m</span>[39m
+            [36m<span[39m
+              [33mclass[39m=[32m"absolute -top-1 -right-1 w-3.5 h-3.5 rounded-full bg-emerald-500 border-2 border-zinc-900"[39m
+            [36m>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"sr-only"[39m
+              [36m>[39m
+                [0mDrill ready[0m
+              [36m</span>[39m
+            [36m</span>[39m
+          [36m</button>[39m
+          [36m<button[39m
+            [33maria-label[39m=[32m"Open your phone"[39m
+            [33mclass[39m=[32m"relative min-h-11 flex-1 rounded-xl bg-zinc-900 border-2 border-zinc-700 flex items-center justify-center gap-2 px-3 text-sm font-bold text-white sm:fixed sm:bottom-5 sm:right-4 sm:z-40 sm:w-14 sm:h-14 sm:flex-none sm:px-0 sm:text-2xl sm:shadow-xl sm:[translate:0_var(--career-utility-lift)] hover:bg-zinc-800 active:bg-zinc-700"[39m
+            [33mdata-career-utility[39m=[32m"phone"[39m
+            [33mtype[39m=[32m"button"[39m
+          [36m>[39m
+            [36m<span[39m
+              [33maria-hidden[39m=[32m"true"[39m
+            [36m>[39m
+              [0m📱[0m
+            [36m</span>[39m
+            [36m<span[39m
+              [33mclass[39m=[32m"sm:hidden"[39m
+            [36m>[39m
+              [0mPhone[0m
+            [36m</span>[39m
+            [36m<span[39m
+              [33mclass[39m=[32m"min-w-5 h-5 px-1 rounded-full bg-red-500 text-[11px] font-black text-black flex items-center justify-center sm:absolute sm:-top-1.5 sm:-right-1.5"[39m
+            [36m>[39m
+              [0m3[0m
+              [36m<span[39m
+                [33mclass[39m=[32m"sr-only"[39m
+              [36m>[39m
+                [0m unread[0m
+              [36m</span>[39m
+            [36m</span>[39m
+          [36m</button>[39m
+        [36m</div>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"space-y-3 pb-20"[39m
+        [36m>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"flex flex-wrap items-center justify-between gap-2"[39m
+          [36m>[39m
+            [36m<div[39m
+              [33mclass[39m=[32m"flex items-center gap-2.5 min-w-0 w-full min-[480px]:w-auto min-[480px]:flex-1"[39m
+            [36m>[39m
+              [36m<div[39m
+                [33mclass[39m=[32m"min-w-0 flex-1"[39m
+              [36m>[39m
+                [36m<h1[39m
+                  [33mclass[39m=[32m"text-xl sm:text-2xl font-black flex items-center gap-2 min-w-0"[39m
+                [36m>[39m
+                  [36m<span[39m
+                    [33mclass[39m=[32m"inline-flex items-center gap-1 align-middle shrink-0"[39m
+                  [36m>[39m
+                    [36m<svg[39m
+                      [33maria-hidden[39m=[32m"true"[39m
+                      [33mheight[39m=[32m"18"[39m
+                      [33mstyle[39m=[32m"display: block; border-radius: 2px;"[39m
+                      [33mviewBox[39m=[32m"0 0 60 36"[39m
+                      [33mwidth[39m=[32m"24"[39m
+                    [36m>[39m
+                      [36m<rect[39m
+                        [33mfill[39m=[32m"#fff"[39m
+                        [33mheight[39m=[32m"36"[39m
+                        [33mwidth[39m=[32m"60"[39m
+                      [36m/>[39m
+                      [36m<rect[39m
+                        [33mfill[39m=[32m"#CE1124"[39m
+                        [33mheight[39m=[32m"36"[39m
+                        [33mwidth[39m=[32m"10"[39m
+                        [33mx[39m=[32m"25"[39m
+                      [36m/>[39m
+                      [36m<rect[39m
+                        [33mfill[39m=[32m"#CE1124"[39m
+                        [33mheight[39m=[32m"10"[39m
+                        [33mwidth[39m=[32m"60"[39m
+                        [33my[39m=[32m"13"[39m
+                      [36m/>[39m
+                    [36m</svg>[39m
+                  [36m</span>[39m
+                  [36m<span[39m
+                    [33mclass[39m=[32m"min-w-0 [overflow-wrap:anywhere] min-[480px]:truncate"[39m
+                  [36m>[39m
+                    [0mFence Tester[0m
+                  [36m</span>[39m
+                [36m</h1>[39m
+                [36m<p[39m
+                  [33mclass[39m=[32m"text-xs text-muted-foreground"[39m
+                [36m>[39m
+                  [0mCM[0m
+                  [0m · Age [0m
+                  [0m17[0m
+                  [0m · [0m
+                  [36m<span[39m
+                    [33mclass[39m=[32m"inline-flex items-center gap-1 align-middle shrink-0"[39m
+                  [36m>[39m
+                    [36m<svg[39m
+                      [33maria-hidden[39m=[32m"true"[39m
+                      [33mheight[39m=[32m"9"[39m
+                      [33mstyle[39m=[32m"display: block; border-radius: 2px;"[39m
+                      [33mviewBox[39m=[32m"0 0 60 36"[39m
+                      [33mwidth[39m=[32m"12"[39m
+                    [36m>[39m
+                      [36m<rect[39m
+                        [33mfill[39m=[32m"#fff"[39m
+                        [33mheight[39m=[32m"36"[39m
+                        [33mwidth[39m=[32m"60"[39m
+                      [36m/>[39m
+                      [36m<rect[39m
+                        [33...
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div>[39m
+    [36m<div[39m
+      [33mclass[39m=[32m"min-h-screen bg-background text-foreground flex flex-col pb-[88px]"[39m
+    [36m>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"relative z-10 mx-auto w-full max-w-4xl h-11 sm:h-0"[39m
+      [36m/>[39m
+      [36m<main[39m
+        [33mclass[39m=[32m"flex-1 w-full max-w-5xl mx-auto px-3 sm:px-4 py-4"[39m
+        [33mid[39m=[32m"dukb-main"[39m
+      [36m>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"mb-3 flex gap-2 sm:contents"[39m
+          [33mdata-career-utilities[39m=[32m"true"[39m
+          [33mstyle[39m=[32m"--career-utility-lift: 0px;"[39m
+        [36m>[39m
+          [36m<button[39m
+            [33maria-label[39m=[32m"Open the training ground"[39m
+            [33mclass[39m=[32m"relative min-h-11 flex-1 rounded-xl bg-zinc-900 border-2 border-zinc-700 flex items-center justify-center gap-2 px-3 text-sm font-bold text-white sm:fixed sm:bottom-[5.5rem] sm:right-4 sm:z-40 sm:w-14 sm:h-14 sm:flex-none sm:px-0 sm:text-2xl sm:shadow-xl sm:[translate:0_var(--career-utility-lift)] hover:bg-zinc-800 active:bg-zinc-700"[39m
+            [33mdata-career-utility[39m=[32m"training"[39m
+            [33mtype[39m=[32m"button"[39m
+          [36m>[39m
+            [36m<span[39m
+              [33maria-hidden[39m=[32m"true"[39m
+            [36m>[39m
+              [0m🏋️[0m
+            [36m</span>[39m
+            [36m<span[39m
+              [33mclass[39m=[32m"sm:hidden"[39m
+            [36m>[39m
+              [0mTraining[0m
+            [36m</span>[39m
+            [36m<span[39m
+              [33mclass[39m=[32m"absolute -top-1 -right-1 w-3.5 h-3.5 rounded-full bg-emerald-500 border-2 border-zinc-900"[39m
+            [36m>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"sr-only"[39m
+              [36m>[39m
+                [0mDrill ready[0m
+              [36m</span>[39m
+            [36m</span>[39m
+          [36m</button>[39m
+          [36m<button[39m
+            [33maria-label[39m=[32m"Open your phone"[39m
+            [33mclass[39m=[32m"relative min-h-11 flex-1 rounded-xl bg-zinc-900 border-2 border-zinc-700 flex items-center justify-center gap-2 px-3 text-sm font-bold text-white sm:fixed sm:bottom-5 sm:right-4 sm:z-40 sm:w-14 sm:h-14 sm:flex-none sm:px-0 sm:text-2xl sm:shadow-xl sm:[translate:0_var(--career-utility-lift)] hover:bg-zinc-800 active:bg-zinc-700"[39m
+            [33mdata-career-utility[39m=[32m"phone"[39m
+            [33mtype[39m=[32m"button"[39m
+          [36m>[39m
+            [36m<span[39m
+              [33maria-hidden[39m=[32m"true"[39m
+            [36m>[39m
+              [0m📱[0m
+            [36m</span>[39m
+            [36m<span[39m
+              [33mclass[39m=[32m"sm:hidden"[39m
+            [36m>[39m
+              [0mPhone[0m
+            [36m</span>[39m
+            [36m<span[39m
+              [33mclass[39m=[32m"min-w-5 h-5 px-1 rounded-full bg-red-500 text-[11px] font-black text-black flex items-center justify-center sm:absolute sm:-top-1.5 sm:-right-1.5"[39m
+            [36m>[39m
+              [0m3[0m
+              [36m<span[39m
+                [33mclass[39m=[32m"sr-only"[39m
+              [36m>[39m
+                [0m unread[0m
+              [36m</span>[39m
+            [36m</span>[39m
+          [36m</button>[39m
+        [36m</div>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"space-y-3 pb-20"[39m
+        [36m>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"flex flex-wrap items-center justify-between gap-2"[39m
+          [36m>[39m
+            [36m<div[39m
+              [33mclass[39m=[32m"flex items-center gap-2.5 min-w-0 w-full min-[480px]:w-auto min-[480px]:flex-1"[39m
+            [36m>[39m
+              [36m<div[39m
+                [33mclass[39m=[32m"min-w-0 flex-1"[39m
+              [36m>[39m
+                [36m<h1[39m
+                  [33mclass[39m=[32m"text-xl sm:text-2xl font-black flex items-center gap-2 min-w-0"[39m
+                [36m>[39m
+                  [36m<span[39m
+                    [33mclass[39m=[32m"inline-flex items-center gap-1 align-middle shrink-0"[39m
+                  [36m>[39m
+                    [36m<svg[39m
+                      [33maria-hidden[39m=[32m"true"[39m
+                      [33mheight[39m=[32m"18"[39m
+                      [33mstyle[39m=[32m"display: block; border-radius: 2px;"[39m
+                      [33mviewBox[39m=[32m"0 0 60 36"[39m
+                      [33mwidth[39m=[32m"24"[39m
+                    [36m>[39m
+                      [36m<rect[39m
+                        [33mfill[39m=[32m"#fff"[39m
+                        [33mheight[39m=[32m"36"[39m
+                        [33mwidth[39m=[32m"60"[39m
+                      [36m/>[39m
+                      [36m<rect[39m
+                        [33mfill[39m=[32m"#CE1124"[39m
+                        [33mheight[39m=[32m"36"[39m
+                        [33mwidth[39m=[32m"10"[39m
+                        [33mx[39m=[32m"25"[39m
+                      [36m/>[39m
+                      [36m<rect[39m
+                        [33mfill[39m=[32m"#CE1124"[39m
+                        [33mheight[39m=[32m"10"[39m
+                        [33mwidth[39m=[32m"60"[39m
+                        [33my[39m=[32m"13"[39m
+                      [36m/>[39m
+                    [36m</svg>[39m
+                  [36m</span>[39m
+                  [36m<span[39m
+                    [33mclass[39m=[32m"min-w-0 [overflow-wrap:anywhere] min-[480px]:truncate"[39m
+                  [36m>[39m
+                    [0mFence Tester[0m
+                  [36m</span>[39m
+                [36m</h1>[39m
+                [36m<p[39m
+                  [33mclass[39m=[32m"text-xs text-muted-foreground"[39m
+                [36m>[39m
+                  [0mCM[0m
+                  [0m · Age [0m
+                  [0m17[0m
+                  [0m · [0m
+                  [36m<span[39m
+                    [33mclass[39m=[32m"inline-flex items-center gap-1 align-middle shrink-0"[39m
+                  [36m>[39m
+                    [36m<svg[39m
+                      [33maria-hidden[39m=[32m"true"[39m
+                      [33mheight[39m=[32m"9"[39m
+                      [33mstyle[39m=[32m"display: block; border-radius: 2px;"[39m
+                      [33mviewBox[39m=[32m"0 0 60 36"[39m
+                      [33mwidth[39m=[32m"12"[39m
+                    [36m>[39m
+                      [36m<rect[39m
+                        [33mfill[39m=[32m"#fff"[39m
+                        [33mheight[39m=[32m"36"[39m
+                        [33mwidth[39m=[32m"60"[39m
+                      [36m/>[39m
+                      [36m<rect[39m
+                        [33...
+[90m [2m❯[22m waitForWrapper node_modules/@testing-library/dom/dist/wait-for.js:[2m163:27[22m[39m
+[90m [2m❯[22m findByTestId node_modules/@testing-library/dom/dist/query-helpers.js:[2m86:33[22m[39m
+[36m [2m❯[22m noticeShows src/test/soccerCareerSaveFence.test.tsx:[2m92:30[22m[39m
+    [90m 90| [39m[33m}[39m
+    [90m 91| [39masync function noticeShows() [33m{[39m
+    [90m 92| [39m  [35mconst[39m shown [33m=[39m [35mawait[39m screen[33m.[39m[34mfindByTestId[39m([32m'save-moved-notice'[39m)[33m;[39m
+    [90m   | [39m                             [31m^[39m
+    [90m 93| [39m  expect(shown).toHaveTextContent('This career moved on in another tab…
+    [90m 94| [39m[33m}[39m
+[90m [2m❯[22m src/test/soccerCareerSaveFence.test.tsx:[2m136:11[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/4]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/soccerCareerSaveFence.test.tsx[2m > [22mSoccer Career save fence[2m > [22mNew Career in a stale tab clears nothing
+[31m[1mTestingLibraryElementError[22m[39m: Unable to find an element by: [data-testid="save-moved-notice"]
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div>[39m
+    [36m<div[39m
+      [33mclass[39m=[32m"min-h-screen bg-background text-foreground flex flex-col "[39m
+    [36m>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"relative z-10 mx-auto w-full max-w-4xl "[39m
+      [36m/>[39m
+      [36m<main[39m
+        [33mclass[39m=[32m"flex-1 w-full max-w-5xl mx-auto px-3 sm:px-4 py-4"[39m
+        [33mid[39m=[32m"dukb-main"[39m
+      [36m>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"max-w-xl mx-auto space-y-5"[39m
+        [36m>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"text-center space-y-1"[39m
+          [36m>[39m
+            [36m<h1[39m
+              [33mclass[39m=[32m"text-3xl sm:text-4xl font-black tracking-tight"[39m
+            [36m>[39m
+              [0m⚽ Soccer Career[0m
+            [36m</h1>[39m
+            [36m<p[39m
+              [33mclass[39m=[32m"text-muted-foreground text-sm"[39m
+            [36m>[39m
+              [0mCreate your player. Build your legend.[0m
+            [36m</p>[39m
+          [36m</div>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"space-y-4 bg-card border border-border rounded-xl p-4 sm:p-5"[39m
+          [36m>[39m
+            [36m<h2[39m
+              [33mclass[39m=[32m"text-lg font-bold"[39m
+            [36m>[39m
+              [0mCreate Your Player[0m
+            [36m</h2>[39m
+            [36m<div[39m
+              [33mclass[39m=[32m"space-y-1.5"[39m
+            [36m>[39m
+              [36m<label[39m
+                [33mclass[39m=[32m"text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"[39m
+                [33mfor[39m=[32m"pname"[39m
+              [36m>[39m
+                [0mPlayer Name[0m
+              [36m</label>[39m
+              [36m<input[39m
+                [33mclass[39m=[32m"flex h-10 w-full rounded-md border border-input px-3 py-2 text-base ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 md:text-sm bg-muted/30"[39m
+                [33mid[39m=[32m"pname"[39m
+                [33mmaxlength[39m=[32m"40"[39m
+                [33mplaceholder[39m=[32m"Enter your player name..."[39m
+                [33mvalue[39m=[32m""[39m
+              [36m/>[39m
+            [36m</div>[39m
+            [36m<div[39m
+              [33mclass[39m=[32m"space-y-1.5"[39m
+            [36m>[39m
+              [36m<label[39m
+                [33mclass[39m=[32m"text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"[39m
+              [36m>[39m
+                [0mNationality[0m
+              [36m</label>[39m
+              [36m<select>[39m
+                [36m<option[39m
+                  [33mvalue[39m=[32m"Albania"[39m
+                [36m>[39m
+                  [36m<span[39m
+                    [33mclass[39m=[32m"flex items-center gap-2"[39m
+                  [36m>[39m
+                    [0mAlbania[0m
+                    [36m<span[39m
+                      [33mclass[39m=[32m"inline-flex items-center gap-1 align-middle shrink-0"[39m
+                    [36m>[39m
+                      [36m<img[39m
+                        [33malt[39m=[32m"Albania"[39m
+                        [33mclass[39m=[32m"inline-block align-middle object-cover"[39m
+                        [33mloading[39m=[32m"lazy"[39m
+                        [33msrc[39m=[32m"https://flagcdn.com/w40/al.png"[39m
+                        [33mstyle[39m=[32m"width: 18px; height: 14px; border-radius: 2px;"[39m
+                      [36m/>[39m
+                      [36m<span[39m
+                        [33maria-hidden[39m=[32m"true"[39m
+                        [33mstyle[39m=[32m"display: none; font-size: 16.2px; line-height: 1;"[39m
+                      [36m>[39m
+                        [0m🇦🇱[0m
+                      [36m</span>[39m
+                    [36m</span>[39m
+                  [36m</span>[39m
+                [36m</option>[39m
+                [36m<option[39m
+                  [33mvalue[39m=[32m"Armenia"[39m
+                [36m>[39m
+                  [36m<span[39m
+                    [33mclass[39m=[32m"flex items-center gap-2"[39m
+                  [36m>[39m
+                    [0mArmenia[0m
+                    [36m<span[39m
+                      [33mclass[39m=[32m"inline-flex items-center gap-1 align-middle shrink-0"[39m
+                    [36m>[39m
+                      [36m<img[39m
+                        [33malt[39m=[32m"Armenia"[39m
+                        [33mclass[39m=[32m"inline-block align-middle object-cover"[39m
+                        [33mloading[39m=[32m"lazy"[39m
+                        [33msrc[39m=[32m"https://flagcdn.com/w40/am.png"[39m
+                        [33mstyle[39m=[32m"width: 18px; height: 14px; border-radius: 2px;"[39m
+                      [36m/>[39m
+                      [36m<span[39m
+                        [33maria-hidden[39m=[32m"true"[39m
+                        [33mstyle[39m=[32m"display: none; font-size: 16.2px; line-height: 1;"[39m
+                      [36m>[39m
+                        [0m🇦🇲[0m
+                      [36m</span>[39m
+                    [36m</span>[39m
+                  [36m</span>[39m
+                [36m</option>[39m
+                [36m<option[39m
+                  [33mvalue[39m=[32m"Austria"[39m
+                [36m>[39m
+                  [36m<span[39m
+                    [33mclass[39m=[32m"flex items-center gap-2"[39m
+                  [36m>[39m
+                    [0mAustria[0m
+                    [36m<span[39m
+                      [33mclass[39m=[32m"inline-flex items-center gap-1 align-middle shrink-0"[39m
+                    [36m>[39m
+                      [36m<img[39m
+                        [33malt[39m=[32m"Austria"[39m
+                        [33mclass[39m=[32m"inline-block align-middle object-cover"[39m
+                        [33mloading[39m=[32m"lazy"[39m
+                        [33msrc[39m=[32m"https://flagcdn.com/w40/at.png"[39m
+                        [33mstyle[39m=[32m"width: 18px; height: 14px; border-radius: 2px;"[39m
+                      [36m/>[39m
+                      [36m<span[39m
+                        [33maria-hidden[39m=[32m"true"[39m
+                        [33mstyle[39m=[32m"display: none; font-size: 16.2px; line-height: 1;"[39m
+                      [36m>[39m
+                        [0m🇦🇹[0m
+                      [36m</span>[39m
+                    [36m</span>[39m
+                  [36m</span>[39m
+                [36m</option>...
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div>[39m
+    [36m<div[39m
+      [33mclass[39m=[32m"min-h-screen bg-background text-foreground flex flex-col "[39m
+    [36m>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"relative z-10 mx-auto w-full max-w-4xl "[39m
+      [36m/>[39m
+      [36m<main[39m
+        [33mclass[39m=[32m"flex-1 w-full max-w-5xl mx-auto px-3 sm:px-4 py-4"[39m
+        [33mid[39m=[32m"dukb-main"[39m
+      [36m>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"max-w-xl mx-auto space-y-5"[39m
+        [36m>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"text-center space-y-1"[39m
+          [36m>[39m
+            [36m<h1[39m
+              [33mclass[39m=[32m"text-3xl sm:text-4xl font-black tracking-tight"[39m
+            [36m>[39m
+              [0m⚽ Soccer Career[0m
+            [36m</h1>[39m
+            [36m<p[39m
+              [33mclass[39m=[32m"text-muted-foreground text-sm"[39m
+            [36m>[39m
+              [0mCreate your player. Build your legend.[0m
+            [36m</p>[39m
+          [36m</div>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"space-y-4 bg-card border border-border rounded-xl p-4 sm:p-5"[39m
+          [36m>[39m
+            [36m<h2[39m
+              [33mclass[39m=[32m"text-lg font-bold"[39m
+            [36m>[39m
+              [0mCreate Your Player[0m
+            [36m</h2>[39m
+            [36m<div[39m
+              [33mclass[39m=[32m"space-y-1.5"[39m
+            [36m>[39m
+              [36m<label[39m
+                [33mclass[39m=[32m"text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"[39m
+                [33mfor[39m=[32m"pname"[39m
+              [36m>[39m
+                [0mPlayer Name[0m
+              [36m</label>[39m
+              [36m<input[39m
+                [33mclass[39m=[32m"flex h-10 w-full rounded-md border border-input px-3 py-2 text-base ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 md:text-sm bg-muted/30"[39m
+                [33mid[39m=[32m"pname"[39m
+                [33mmaxlength[39m=[32m"40"[39m
+                [33mplaceholder[39m=[32m"Enter your player name..."[39m
+                [33mvalue[39m=[32m""[39m
+              [36m/>[39m
+            [36m</div>[39m
+            [36m<div[39m
+              [33mclass[39m=[32m"space-y-1.5"[39m
+            [36m>[39m
+              [36m<label[39m
+                [33mclass[39m=[32m"text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"[39m
+              [36m>[39m
+                [0mNationality[0m
+              [36m</label>[39m
+              [36m<select>[39m
+                [36m<option[39m
+                  [33mvalue[39m=[32m"Albania"[39m
+                [36m>[39m
+                  [36m<span[39m
+                    [33mclass[39m=[32m"flex items-center gap-2"[39m
+                  [36m>[39m
+                    [0mAlbania[0m
+                    [36m<span[39m
+                      [33mclass[39m=[32m"inline-flex items-center gap-1 align-middle shrink-0"[39m
+                    [36m>[39m
+                      [36m<img[39m
+                        [33malt[39m=[32m"Albania"[39m
+                        [33mclass[39m=[32m"inline-block align-middle object-cover"[39m
+                        [33mloading[39m=[32m"lazy"[39m
+                        [33msrc[39m=[32m"https://flagcdn.com/w40/al.png"[39m
+                        [33mstyle[39m=[32m"width: 18px; height: 14px; border-radius: 2px;"[39m
+                      [36m/>[39m
+                      [36m<span[39m
+                        [33maria-hidden[39m=[32m"true"[39m
+                        [33mstyle[39m=[32m"display: none; font-size: 16.2px; line-height: 1;"[39m
+                      [36m>[39m
+                        [0m🇦🇱[0m
+                      [36m</span>[39m
+                    [36m</span>[39m
+                  [36m</span>[39m
+                [36m</option>[39m
+                [36m<option[39m
+                  [33mvalue[39m=[32m"Armenia"[39m
+                [36m>[39m
+                  [36m<span[39m
+                    [33mclass[39m=[32m"flex items-center gap-2"[39m
+                  [36m>[39m
+                    [0mArmenia[0m
+                    [36m<span[39m
+                      [33mclass[39m=[32m"inline-flex items-center gap-1 align-middle shrink-0"[39m
+                    [36m>[39m
+                      [36m<img[39m
+                        [33malt[39m=[32m"Armenia"[39m
+                        [33mclass[39m=[32m"inline-block align-middle object-cover"[39m
+                        [33mloading[39m=[32m"lazy"[39m
+                        [33msrc[39m=[32m"https://flagcdn.com/w40/am.png"[39m
+                        [33mstyle[39m=[32m"width: 18px; height: 14px; border-radius: 2px;"[39m
+                      [36m/>[39m
+                      [36m<span[39m
+                        [33maria-hidden[39m=[32m"true"[39m
+                        [33mstyle[39m=[32m"display: none; font-size: 16.2px; line-height: 1;"[39m
+                      [36m>[39m
+                        [0m🇦🇲[0m
+                      [36m</span>[39m
+                    [36m</span>[39m
+                  [36m</span>[39m
+                [36m</option>[39m
+                [36m<option[39m
+                  [33mvalue[39m=[32m"Austria"[39m
+                [36m>[39m
+                  [36m<span[39m
+                    [33mclass[39m=[32m"flex items-center gap-2"[39m
+                  [36m>[39m
+                    [0mAustria[0m
+                    [36m<span[39m
+                      [33mclass[39m=[32m"inline-flex items-center gap-1 align-middle shrink-0"[39m
+                    [36m>[39m
+                      [36m<img[39m
+                        [33malt[39m=[32m"Austria"[39m
+                        [33mclass[39m=[32m"inline-block align-middle object-cover"[39m
+                        [33mloading[39m=[32m"lazy"[39m
+                        [33msrc[39m=[32m"https://flagcdn.com/w40/at.png"[39m
+                        [33mstyle[39m=[32m"width: 18px; height: 14px; border-radius: 2px;"[39m
+                      [36m/>[39m
+                      [36m<span[39m
+                        [33maria-hidden[39m=[32m"true"[39m
+                        [33mstyle[39m=[32m"display: none; font-size: 16.2px; line-height: 1;"[39m
+                      [36m>[39m
+                        [0m🇦🇹[0m
+                      [36m</span>[39m
+                    [36m</span>[39m
+                  [36m</span>[39m
+                [36m</option>...
+[90m [2m❯[22m waitForWrapper node_modules/@testing-library/dom/dist/wait-for.js:[2m163:27[22m[39m
+[90m [2m❯[22m findByTestId node_modules/@testing-library/dom/dist/query-helpers.js:[2m86:33[22m[39m
+[36m [2m❯[22m noticeShows src/test/soccerCareerSaveFence.test.tsx:[2m92:30[22m[39m
+    [90m 90| [39m[33m}[39m
+    [90m 91| [39masync function noticeShows() [33m{[39m
+    [90m 92| [39m  [35mconst[39m shown [33m=[39m [35mawait[39m screen[33m.[39m[34mfindByTestId[39m([32m'save-moved-notice'[39m)[33m;[39m
+    [90m   | [39m                             [31m^[39m
+    [90m 93| [39m  expect(shown).toHaveTextContent('This career moved on in another tab…
+    [90m 94| [39m[33m}[39m
+[90m [2m❯[22m src/test/soccerCareerSaveFence.test.tsx:[2m147:11[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/4]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/soccerCareerSaveFence.test.tsx[2m > [22mSoccer Career save fence[2m > [22mDelete unusable save in a stale tab deletes nothing
+[31m[1mTestingLibraryElementError[22m[39m: Unable to find an element by: [data-testid="save-moved-notice"]
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div>[39m
+    [36m<div[39m
+      [33mclass[39m=[32m"min-h-screen bg-background text-foreground flex flex-col "[39m
+    [36m>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"relative z-10 mx-auto w-full max-w-4xl "[39m
+      [36m/>[39m
+      [36m<main[39m
+        [33mclass[39m=[32m"flex-1 w-full max-w-5xl mx-auto px-3 sm:px-4 py-4"[39m
+        [33mid[39m=[32m"dukb-main"[39m
+      [36m>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"max-w-xl mx-auto space-y-5"[39m
+        [36m>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"text-center space-y-1"[39m
+          [36m>[39m
+            [36m<h1[39m
+              [33mclass[39m=[32m"text-3xl sm:text-4xl font-black tracking-tight"[39m
+            [36m>[39m
+              [0m⚽ Soccer Career[0m
+            [36m</h1>[39m
+            [36m<p[39m
+              [33mclass[39m=[32m"text-muted-foreground text-sm"[39m
+            [36m>[39m
+              [0mCreate your player. Build your legend.[0m
+            [36m</p>[39m
+          [36m</div>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"space-y-4 bg-card border border-border rounded-xl p-4 sm:p-5"[39m
+          [36m>[39m
+            [36m<h2[39m
+              [33mclass[39m=[32m"text-lg font-bold"[39m
+            [36m>[39m
+              [0mCreate Your Player[0m
+            [36m</h2>[39m
+            [36m<div[39m
+              [33mclass[39m=[32m"space-y-1.5"[39m
+            [36m>[39m
+              [36m<label[39m
+                [33mclass[39m=[32m"text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"[39m
+                [33mfor[39m=[32m"pname"[39m
+              [36m>[39m
+                [0mPlayer Name[0m
+              [36m</label>[39m
+              [36m<input[39m
+                [33mclass[39m=[32m"flex h-10 w-full rounded-md border border-input px-3 py-2 text-base ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 md:text-sm bg-muted/30"[39m
+                [33mid[39m=[32m"pname"[39m
+                [33mmaxlength[39m=[32m"40"[39m
+                [33mplaceholder[39m=[32m"Enter your player name..."[39m
+                [33mvalue[39m=[32m""[39m
+              [36m/>[39m
+            [36m</div>[39m
+            [36m<div[39m
+              [33mclass[39m=[32m"space-y-1.5"[39m
+            [36m>[39m
+              [36m<label[39m
+                [33mclass[39m=[32m"text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"[39m
+              [36m>[39m
+                [0mNationality[0m
+              [36m</label>[39m
+              [36m<select>[39m
+                [36m<option[39m
+                  [33mvalue[39m=[32m"Albania"[39m
+                [36m>[39m
+                  [36m<span[39m
+                    [33mclass[39m=[32m"flex items-center gap-2"[39m
+                  [36m>[39m
+                    [0mAlbania[0m
+                    [36m<span[39m
+                      [33mclass[39m=[32m"inline-flex items-center gap-1 align-middle shrink-0"[39m
+                    [36m>[39m
+                      [36m<img[39m
+                        [33malt[39m=[32m"Albania"[39m
+                        [33mclass[39m=[32m"inline-block align-middle object-cover"[39m
+                        [33mloading[39m=[32m"lazy"[39m
+                        [33msrc[39m=[32m"https://flagcdn.com/w40/al.png"[39m
+                        [33mstyle[39m=[32m"width: 18px; height: 14px; border-radius: 2px;"[39m
+                      [36m/>[39m
+                      [36m<span[39m
+                        [33maria-hidden[39m=[32m"true"[39m
+                        [33mstyle[39m=[32m"display: none; font-size: 16.2px; line-height: 1;"[39m
+                      [36m>[39m
+                        [0m🇦🇱[0m
+                      [36m</span>[39m
+                    [36m</span>[39m
+                  [36m</span>[39m
+                [36m</option>[39m
+                [36m<option[39m
+                  [33mvalue[39m=[32m"Armenia"[39m
+                [36m>[39m
+                  [36m<span[39m
+                    [33mclass[39m=[32m"flex items-center gap-2"[39m
+                  [36m>[39m
+                    [0mArmenia[0m
+                    [36m<span[39m
+                      [33mclass[39m=[32m"inline-flex items-center gap-1 align-middle shrink-0"[39m
+                    [36m>[39m
+                      [36m<img[39m
+                        [33malt[39m=[32m"Armenia"[39m
+                        [33mclass[39m=[32m"inline-block align-middle object-cover"[39m
+                        [33mloading[39m=[32m"lazy"[39m
+                        [33msrc[39m=[32m"https://flagcdn.com/w40/am.png"[39m
+                        [33mstyle[39m=[32m"width: 18px; height: 14px; border-radius: 2px;"[39m
+                      [36m/>[39m
+                      [36m<span[39m
+                        [33maria-hidden[39m=[32m"true"[39m
+                        [33mstyle[39m=[32m"display: none; font-size: 16.2px; line-height: 1;"[39m
+                      [36m>[39m
+                        [0m🇦🇲[0m
+                      [36m</span>[39m
+                    [36m</span>[39m
+                  [36m</span>[39m
+                [36m</option>[39m
+                [36m<option[39m
+                  [33mvalue[39m=[32m"Austria"[39m
+                [36m>[39m
+                  [36m<span[39m
+                    [33mclass[39m=[32m"flex items-center gap-2"[39m
+                  [36m>[39m
+                    [0mAustria[0m
+                    [36m<span[39m
+                      [33mclass[39m=[32m"inline-flex items-center gap-1 align-middle shrink-0"[39m
+                    [36m>[39m
+                      [36m<img[39m
+                        [33malt[39m=[32m"Austria"[39m
+                        [33mclass[39m=[32m"inline-block align-middle object-cover"[39m
+                        [33mloading[39m=[32m"lazy"[39m
+                        [33msrc[39m=[32m"https://flagcdn.com/w40/at.png"[39m
+                        [33mstyle[39m=[32m"width: 18px; height: 14px; border-radius: 2px;"[39m
+                      [36m/>[39m
+                      [36m<span[39m
+                        [33maria-hidden[39m=[32m"true"[39m
+                        [33mstyle[39m=[32m"display: none; font-size: 16.2px; line-height: 1;"[39m
+                      [36m>[39m
+                        [0m🇦🇹[0m
+                      [36m</span>[39m
+                    [36m</span>[39m
+                  [36m</span>[39m
+                [36m</option>...
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div>[39m
+    [36m<div[39m
+      [33mclass[39m=[32m"min-h-screen bg-background text-foreground flex flex-col "[39m
+    [36m>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"relative z-10 mx-auto w-full max-w-4xl "[39m
+      [36m/>[39m
+      [36m<main[39m
+        [33mclass[39m=[32m"flex-1 w-full max-w-5xl mx-auto px-3 sm:px-4 py-4"[39m
+        [33mid[39m=[32m"dukb-main"[39m
+      [36m>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"max-w-xl mx-auto space-y-5"[39m
+        [36m>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"text-center space-y-1"[39m
+          [36m>[39m
+            [36m<h1[39m
+              [33mclass[39m=[32m"text-3xl sm:text-4xl font-black tracking-tight"[39m
+            [36m>[39m
+              [0m⚽ Soccer Career[0m
+            [36m</h1>[39m
+            [36m<p[39m
+              [33mclass[39m=[32m"text-muted-foreground text-sm"[39m
+            [36m>[39m
+              [0mCreate your player. Build your legend.[0m
+            [36m</p>[39m
+          [36m</div>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"space-y-4 bg-card border border-border rounded-xl p-4 sm:p-5"[39m
+          [36m>[39m
+            [36m<h2[39m
+              [33mclass[39m=[32m"text-lg font-bold"[39m
+            [36m>[39m
+              [0mCreate Your Player[0m
+            [36m</h2>[39m
+            [36m<div[39m
+              [33mclass[39m=[32m"space-y-1.5"[39m
+            [36m>[39m
+              [36m<label[39m
+                [33mclass[39m=[32m"text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"[39m
+                [33mfor[39m=[32m"pname"[39m
+              [36m>[39m
+                [0mPlayer Name[0m
+              [36m</label>[39m
+              [36m<input[39m
+                [33mclass[39m=[32m"flex h-10 w-full rounded-md border border-input px-3 py-2 text-base ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 md:text-sm bg-muted/30"[39m
+                [33mid[39m=[32m"pname"[39m
+                [33mmaxlength[39m=[32m"40"[39m
+                [33mplaceholder[39m=[32m"Enter your player name..."[39m
+                [33mvalue[39m=[32m""[39m
+              [36m/>[39m
+            [36m</div>[39m
+            [36m<div[39m
+              [33mclass[39m=[32m"space-y-1.5"[39m
+            [36m>[39m
+              [36m<label[39m
+                [33mclass[39m=[32m"text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"[39m
+              [36m>[39m
+                [0mNationality[0m
+              [36m</label>[39m
+              [36m<select>[39m
+                [36m<option[39m
+                  [33mvalue[39m=[32m"Albania"[39m
+                [36m>[39m
+                  [36m<span[39m
+                    [33mclass[39m=[32m"flex items-center gap-2"[39m
+                  [36m>[39m
+                    [0mAlbania[0m
+                    [36m<span[39m
+                      [33mclass[39m=[32m"inline-flex items-center gap-1 align-middle shrink-0"[39m
+                    [36m>[39m
+                      [36m<img[39m
+                        [33malt[39m=[32m"Albania"[39m
+                        [33mclass[39m=[32m"inline-block align-middle object-cover"[39m
+                        [33mloading[39m=[32m"lazy"[39m
+                        [33msrc[39m=[32m"https://flagcdn.com/w40/al.png"[39m
+                        [33mstyle[39m=[32m"width: 18px; height: 14px; border-radius: 2px;"[39m
+                      [36m/>[39m
+                      [36m<span[39m
+                        [33maria-hidden[39m=[32m"true"[39m
+                        [33mstyle[39m=[32m"display: none; font-size: 16.2px; line-height: 1;"[39m
+                      [36m>[39m
+                        [0m🇦🇱[0m
+                      [36m</span>[39m
+                    [36m</span>[39m
+                  [36m</span>[39m
+                [36m</option>[39m
+                [36m<option[39m
+                  [33mvalue[39m=[32m"Armenia"[39m
+                [36m>[39m
+                  [36m<span[39m
+                    [33mclass[39m=[32m"flex items-center gap-2"[39m
+                  [36m>[39m
+                    [0mArmenia[0m
+                    [36m<span[39m
+                      [33mclass[39m=[32m"inline-flex items-center gap-1 align-middle shrink-0"[39m
+                    [36m>[39m
+                      [36m<img[39m
+                        [33malt[39m=[32m"Armenia"[39m
+                        [33mclass[39m=[32m"inline-block align-middle object-cover"[39m
+                        [33mloading[39m=[32m"lazy"[39m
+                        [33msrc[39m=[32m"https://flagcdn.com/w40/am.png"[39m
+                        [33mstyle[39m=[32m"width: 18px; height: 14px; border-radius: 2px;"[39m
+                      [36m/>[39m
+                      [36m<span[39m
+                        [33maria-hidden[39m=[32m"true"[39m
+                        [33mstyle[39m=[32m"display: none; font-size: 16.2px; line-height: 1;"[39m
+                      [36m>[39m
+                        [0m🇦🇲[0m
+                      [36m</span>[39m
+                    [36m</span>[39m
+                  [36m</span>[39m
+                [36m</option>[39m
+                [36m<option[39m
+                  [33mvalue[39m=[32m"Austria"[39m
+                [36m>[39m
+                  [36m<span[39m
+                    [33mclass[39m=[32m"flex items-center gap-2"[39m
+                  [36m>[39m
+                    [0mAustria[0m
+                    [36m<span[39m
+                      [33mclass[39m=[32m"inline-flex items-center gap-1 align-middle shrink-0"[39m
+                    [36m>[39m
+                      [36m<img[39m
+                        [33malt[39m=[32m"Austria"[39m
+                        [33mclass[39m=[32m"inline-block align-middle object-cover"[39m
+                        [33mloading[39m=[32m"lazy"[39m
+                        [33msrc[39m=[32m"https://flagcdn.com/w40/at.png"[39m
+                        [33mstyle[39m=[32m"width: 18px; height: 14px; border-radius: 2px;"[39m
+                      [36m/>[39m
+                      [36m<span[39m
+                        [33maria-hidden[39m=[32m"true"[39m
+                        [33mstyle[39m=[32m"display: none; font-size: 16.2px; line-height: 1;"[39m
+                      [36m>[39m
+                        [0m🇦🇹[0m
+                      [36m</span>[39m
+                    [36m</span>[39m
+                  [36m</span>[39m
+                [36m</option>...
+[90m [2m❯[22m waitForWrapper node_modules/@testing-library/dom/dist/wait-for.js:[2m163:27[22m[39m
+[90m [2m❯[22m findByTestId node_modules/@testing-library/dom/dist/query-helpers.js:[2m86:33[22m[39m
+[36m [2m❯[22m noticeShows src/test/soccerCareerSaveFence.test.tsx:[2m92:30[22m[39m
+    [90m 90| [39m[33m}[39m
+    [90m 91| [39masync function noticeShows() [33m{[39m
+    [90m 92| [39m  [35mconst[39m shown [33m=[39m [35mawait[39m screen[33m.[39m[34mfindByTestId[39m([32m'save-moved-notice'[39m)[33m;[39m
+    [90m   | [39m                             [31m^[39m
+    [90m 93| [39m  expect(shown).toHaveTextContent('This career moved on in another tab…
+    [90m 94| [39m[33m}[39m
+[90m [2m❯[22m src/test/soccerCareerSaveFence.test.tsx:[2m158:11[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/4]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m4 failed[39m[22m[2m | [22m[1m[32m2 passed[39m[22m[90m (6)[39m
+[2m   Start at [22m 19:58:52
+[2m   Duration [22m 6.87s[2m (transform 1.39s, setup 34ms, collect 1.93s, tests 4.41s, environment 196ms, prepare 102ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerCareerSaveFence.test.tsx,title=src/test/soccerCareerSaveFence.test.tsx > Soccer Career save fence > another tab playing on shows the notice at once%2C and a press forced past it writes nothing,line=92,column=30::TestingLibraryElementError: Unable to find an element by: [data-testid="save-moved-notice"]%0A%0AIgnored nodes: comments, script, style%0A<body>%0A  <div>%0A    <div%0A      class="min-h-screen bg-background text-foreground flex flex-col pb-[88px]"%0A    >%0A      <div%0A        class="relative z-10 mx-auto w-full max-w-4xl h-11 sm:h-0"%0A      />%0A      <main%0A        class="flex-1 w-full max-w-5xl mx-auto px-3 sm:px-4 py-4"%0A        id="dukb-main"%0A      >%0A        <div%0A          class="mb-3 flex gap-2 sm:contents"%0A          data-career-utilities="true"%0A          style="--career-utility-lift: 0px;"%0A        >%0A          <button%0A            aria-label="Open the training ground"%0A            class="relative min-h-11 flex-1 rounded-xl bg-zinc-900 border-2 border-zinc-700 flex items-center justify-center gap-2 px-3 text-sm font-bold text-white sm:fixed sm:bottom-[5.5rem] sm:right-4 sm:z-40 sm:w-14 sm:h-14 sm:flex-none sm:px-0 sm:text-2xl sm:shadow-xl sm:[translate:0_var(--career-utility-lift)] hover:bg-zinc-800 active:bg-zinc-700"%0A            data-career-utility="training"%0A            type="button"%0A          >%0A            <span%0A              aria-hidden="true"%0A            >%0A              🏋️%0A            </span>%0A            <span%0A              class="sm:hidden"%0A            >%0A              Training%0A            </span>%0A            <span%0A              class="absolute -top-1 -right-1 w-3.5 h-3.5 rounded-full bg-emerald-500 border-2 border-zinc-900"%0A            >%0A              <span%0A                class="sr-only"%0A              >%0A                Drill ready%0A              </span>%0A            </span>%0A          </button>%0A          <button%0A            aria-label="Open your phone"%0A            class="relative min-h-11 flex-1 rounded-xl bg-zinc-900 border-2 border-zinc-700 flex items-center justify-center gap-2 px-3 text-sm font-bold text-white sm:fixed sm:bottom-5 sm:right-4 sm:z-40 sm:w-14 sm:h-14 sm:flex-none sm:px-0 sm:text-2xl sm:shadow-xl sm:[translate:0_var(--career-utility-lift)] hover:bg-zinc-800 active:bg-zinc-700"%0A            data-career-utility="phone"%0A            type="button"%0A          >%0A            <span%0A              aria-hidden="true"%0A            >%0A              📱%0A            </span>%0A            <span%0A              class="sm:hidden"%0A            >%0A              Phone%0A            </span>%0A            <span%0A              class="min-w-5 h-5 px-1 rounded-full bg-red-500 text-[11px] font-black text-black flex items-center justify-center sm:absolute sm:-top-1.5 sm:-right-1.5"%0A            >%0A              2%0A              <span%0A                class="sr-only"%0A              >%0A                 unread%0A              </span>%0A            </span>%0A          </button>%0A        </div>%0A        <div%0A          class="space-y-3 pb-20"%0A        >%0A          <div%0A            class="flex flex-wrap items-center justify-between gap-2"%0A          >%0A            <div%0A              class="flex items-center gap-2.5 min-w-0 w-full min-[480px]:w-auto min-[480px]:flex-1"%0A            >%0A              <div%0A                class="min-w-0 flex-1"%0A              >%0A                <h1%0A                  class="text-xl sm:text-2xl font-black flex items-center gap-2 min-w-0"%0A                >%0A                  <span%0A                    class="inline-flex items-center gap-1 align-middle shrink-0"%0A                  >%0A                    <svg%0A                      aria-hidden="true"%0A                      height="18"%0A                      style="display: block; border-radius: 2px;"%0A                      viewBox="0 0 60 36"%0A                      width="24"%0A                    >%0A                      <rect%0A                        fill="#fff"%0A                        height="36"%0A                        width="60"%0A                      />%0A                      <rect%0A                        fill="#CE1124"%0A                        height="36"%0A                        width="10"%0A                        x="25"%0A                      />%0A                      <rect%0A                        fill="#CE1124"%0A                        height="10"%0A                        width="60"%0A                        y="13"%0A                      />%0A                    </svg>%0A                  </span>%0A                  <span%0A                    class="min-w-0 [overflow-wrap:anywhere] min-[480px]:truncate"%0A                  >%0A                    Fence Tester%0A                  </span>%0A                </h1>%0A                <p%0A                  class="text-xs text-muted-foreground"%0A                >%0A                  CM%0A                   · Age %0A                  16%0A                   · %0A                  <span%0A                    class="inline-flex items-center gap-1 align-middle shrink-0"%0A                  >%0A                    <svg%0A                      aria-hidden="true"%0A                      height="9"%0A                      style="display: block; border-radius: 2px;"%0A                      viewBox="0 0 60 36"%0A                      width="12"%0A                    >%0A                      <rect%0A                        fill="#fff"%0A                        height="36"%0A                        width="60"%0A                      />%0A                      <rect%0A                        ...%0A%0AIgnored nodes: comments, script, style%0A<body>%0A  <div>%0A    <div%0A      class="min-h-screen bg-background text-foreground flex flex-col pb-[88px]"%0A    >%0A      <div%0A        class="relative z-10 mx-auto w-full max-w-4xl h-11 sm:h-0"%0A      />%0A      <main%0A        class="flex-1 w-full max-w-5xl mx-auto px-3 sm:px-4 py-4"%0A        id="dukb-main"%0A      >%0A        <div%0A          class="mb-3 flex gap-2 sm:contents"%0A          data-career-utilities="true"%0A          style="--career-utility-lift: 0px;"%0A        >%0A          <button%0A            aria-label="Open the training ground"%0A            class="relative min-h-11 flex-1 rounded-xl bg-zinc-900 border-2 border-zinc-700 flex items-center justify-center gap-2 px-3 text-sm font-bold text-white sm:fixed sm:bottom-[5.5rem] sm:right-4 sm:z-40 sm:w-14 sm:h-14 sm:flex-none sm:px-0 sm:text-2xl sm:shadow-xl sm:[translate:0_var(--career-utility-lift)] hover:bg-zinc-800 active:bg-zinc-700"%0A            data-career-utility="training"%0A            type="button"%0A          >%0A            <span%0A              aria-hidden="true"%0A            >%0A              🏋️%0A            </span>%0A            <span%0A              class="sm:hidden"%0A            >%0A              Training%0A            </span>%0A            <span%0A              class="absolute -top-1 -right-1 w-3.5 h-3.5 rounded-full bg-emerald-500 border-2 border-zinc-900"%0A            >%0A              <span%0A                class="sr-only"%0A              >%0A                Drill ready%0A              </span>%0A            </span>%0A          </button>%0A          <button%0A            aria-label="Open your phone"%0A            class="relative min-h-11 flex-1 rounded-xl bg-zinc-900 border-2 border-zinc-700 flex items-center justify-center gap-2 px-3 text-sm font-bold text-white sm:fixed sm:bottom-5 sm:right-4 sm:z-40 sm:w-14 sm:h-14 sm:flex-none sm:px-0 sm:text-2xl sm:shadow-xl sm:[translate:0_var(--career-utility-lift)] hover:bg-zinc-800 active:bg-zinc-700"%0A            data-career-utility="phone"%0A            type="button"%0A          >%0A            <span%0A              aria-hidden="true"%0A            >%0A              📱%0A            </span>%0A            <span%0A              class="sm:hidden"%0A            >%0A              Phone%0A            </span>%0A            <span%0A              class="min-w-5 h-5 px-1 rounded-full bg-red-500 text-[11px] font-black text-black flex items-center justify-center sm:absolute sm:-top-1.5 sm:-right-1.5"%0A            >%0A              2%0A              <span%0A                class="sr-only"%0A              >%0A                 unread%0A              </span>%0A            </span>%0A          </button>%0A        </div>%0A        <div%0A          class="space-y-3 pb-20"%0A        >%0A          <div%0A            class="flex flex-wrap items-center justify-between gap-2"%0A          >%0A            <div%0A              class="flex items-center gap-2.5 min-w-0 w-full min-[480px]:w-auto min-[480px]:flex-1"%0A            >%0A              <div%0A                class="min-w-0 flex-1"%0A              >%0A                <h1%0A                  class="text-xl sm:text-2xl font-black flex items-center gap-2 min-w-0"%0A                >%0A                  <span%0A                    class="inline-flex items-center gap-1 align-middle shrink-0"%0A                  >%0A                    <svg%0A                      aria-hidden="true"%0A                      height="18"%0A                      style="display: block; border-radius: 2px;"%0A                      viewBox="0 0 60 36"%0A                      width="24"%0A                    >%0A                      <rect%0A                        fill="#fff"%0A                        height="36"%0A                        width="60"%0A                      />%0A                      <rect%0A                        fill="#CE1124"%0A                        height="36"%0A                        width="10"%0A                        x="25"%0A                      />%0A                      <rect%0A                        fill="#CE1124"%0A                        height="10"%0A                        width="60"%0A                        y="13"%0A                      />%0A                    </svg>%0A                  </span>%0A                  <span%0A                    class="min-w-0 [overflow-wrap:anywhere] min-[480px]:truncate"%0A                  >%0A                    Fence Tester%0A                  </span>%0A                </h1>%0A                <p%0A                  class="text-xs text-muted-foreground"%0A                >%0A                  CM%0A                   · Age %0A                  16%0A                   · %0A                  <span%0A                    class="inline-flex items-center gap-1 align-middle shrink-0"%0A                  >%0A                    <svg%0A                      aria-hidden="true"%0A                      height="9"%0A                      style="display: block; border-radius: 2px;"%0A                      viewBox="0 0 60 36"%0A                      width="12"%0A                    >%0A                      <rect%0A                        fill="#fff"%0A                        height="36"%0A                        width="60"%0A                      />%0A                      <rect%0A                        ...%0A ❯ waitForWrapper node_modules/@testing-library/dom/dist/wait-for.js:163:27%0A ❯ findByTestId node_modules/@testing-library/dom/dist/query-helpers.js:86:33%0A ❯ noticeShows src/test/soccerCareerSaveFence.test.tsx:92:30%0A ❯ src/test/soccerCareerSaveFence.test.tsx:122:11%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerCareerSaveFence.test.tsx,title=src/test/soccerCareerSaveFence.test.tsx > Soccer Career save fence > with no event at all%2C the press finds the move at write time and writes nothing,line=92,column=30::TestingLibraryElementError: Unable to find an element by: [data-testid="save-moved-notice"]%0A%0AIgnored nodes: comments, script, style%0A<body>%0A  <div>%0A    <div%0A      class="min-h-screen bg-background text-foreground flex flex-col pb-[88px]"%0A    >%0A      <div%0A        class="relative z-10 mx-auto w-full max-w-4xl h-11 sm:h-0"%0A      />%0A      <main%0A        class="flex-1 w-full max-w-5xl mx-auto px-3 sm:px-4 py-4"%0A        id="dukb-main"%0A      >%0A        <div%0A          class="mb-3 flex gap-2 sm:contents"%0A          data-career-utilities="true"%0A          style="--career-utility-lift: 0px;"%0A        >%0A          <button%0A            aria-label="Open the training ground"%0A            class="relative min-h-11 flex-1 rounded-xl bg-zinc-900 border-2 border-zinc-700 flex items-center justify-center gap-2 px-3 text-sm font-bold text-white sm:fixed sm:bottom-[5.5rem] sm:right-4 sm:z-40 sm:w-14 sm:h-14 sm:flex-none sm:px-0 sm:text-2xl sm:shadow-xl sm:[translate:0_var(--career-utility-lift)] hover:bg-zinc-800 active:bg-zinc-700"%0A            data-career-utility="training"%0A            type="button"%0A          >%0A            <span%0A              aria-hidden="true"%0A            >%0A              🏋️%0A            </span>%0A            <span%0A              class="sm:hidden"%0A            >%0A              Training%0A            </span>%0A            <span%0A              class="absolute -top-1 -right-1 w-3.5 h-3.5 rounded-full bg-emerald-500 border-2 border-zinc-900"%0A            >%0A              <span%0A                class="sr-only"%0A              >%0A                Drill ready%0A              </span>%0A            </span>%0A          </button>%0A          <button%0A            aria-label="Open your phone"%0A            class="relative min-h-11 flex-1 rounded-xl bg-zinc-900 border-2 border-zinc-700 flex items-center justify-center gap-2 px-3 text-sm font-bold text-white sm:fixed sm:bottom-5 sm:right-4 sm:z-40 sm:w-14 sm:h-14 sm:flex-none sm:px-0 sm:text-2xl sm:shadow-xl sm:[translate:0_var(--career-utility-lift)] hover:bg-zinc-800 active:bg-zinc-700"%0A            data-career-utility="phone"%0A            type="button"%0A          >%0A            <span%0A              aria-hidden="true"%0A            >%0A              📱%0A            </span>%0A            <span%0A              class="sm:hidden"%0A            >%0A              Phone%0A            </span>%0A            <span%0A              class="min-w-5 h-5 px-1 rounded-full bg-red-500 text-[11px] font-black text-black flex items-center justify-center sm:absolute sm:-top-1.5 sm:-right-1.5"%0A            >%0A              3%0A              <span%0A                class="sr-only"%0A              >%0A                 unread%0A              </span>%0A            </span>%0A          </button>%0A        </div>%0A        <div%0A          class="space-y-3 pb-20"%0A        >%0A          <div%0A            class="flex flex-wrap items-center justify-between gap-2"%0A          >%0A            <div%0A              class="flex items-center gap-2.5 min-w-0 w-full min-[480px]:w-auto min-[480px]:flex-1"%0A            >%0A              <div%0A                class="min-w-0 flex-1"%0A              >%0A                <h1%0A                  class="text-xl sm:text-2xl font-black flex items-center gap-2 min-w-0"%0A                >%0A                  <span%0A                    class="inline-flex items-center gap-1 align-middle shrink-0"%0A                  >%0A                    <svg%0A                      aria-hidden="true"%0A                      height="18"%0A                      style="display: block; border-radius: 2px;"%0A                      viewBox="0 0 60 36"%0A                      width="24"%0A                    >%0A                      <rect%0A                        fill="#fff"%0A                        height="36"%0A                        width="60"%0A                      />%0A                      <rect%0A                        fill="#CE1124"%0A                        height="36"%0A                        width="10"%0A                        x="25"%0A                      />%0A                      <rect%0A                        fill="#CE1124"%0A                        height="10"%0A                        width="60"%0A                        y="13"%0A                      />%0A                    </svg>%0A                  </span>%0A                  <span%0A                    class="min-w-0 [overflow-wrap:anywhere] min-[480px]:truncate"%0A                  >%0A                    Fence Tester%0A                  </span>%0A                </h1>%0A                <p%0A                  class="text-xs text-muted-foreground"%0A                >%0A                  CM%0A                   · Age %0A                  17%0A                   · %0A                  <span%0A                    class="inline-flex items-center gap-1 align-middle shrink-0"%0A                  >%0A                    <svg%0A                      aria-hidden="true"%0A                      height="9"%0A                      style="display: block; border-radius: 2px;"%0A                      viewBox="0 0 60 36"%0A                      width="12"%0A                    >%0A                      <rect%0A                        fill="#fff"%0A                        height="36"%0A                        width="60"%0A                      />%0A                      <rect%0A                        ...%0A%0AIgnored nodes: comments, script, style%0A<body>%0A  <div>%0A    <div%0A      class="min-h-screen bg-background text-foreground flex flex-col pb-[88px]"%0A    >%0A      <div%0A        class="relative z-10 mx-auto w-full max-w-4xl h-11 sm:h-0"%0A      />%0A      <main%0A        class="flex-1 w-full max-w-5xl mx-auto px-3 sm:px-4 py-4"%0A        id="dukb-main"%0A      >%0A        <div%0A          class="mb-3 flex gap-2 sm:contents"%0A          data-career-utilities="true"%0A          style="--career-utility-lift: 0px;"%0A        >%0A          <button%0A            aria-label="Open the training ground"%0A            class="relative min-h-11 flex-1 rounded-xl bg-zinc-900 border-2 border-zinc-700 flex items-center justify-center gap-2 px-3 text-sm font-bold text-white sm:fixed sm:bottom-[5.5rem] sm:right-4 sm:z-40 sm:w-14 sm:h-14 sm:flex-none sm:px-0 sm:text-2xl sm:shadow-xl sm:[translate:0_var(--career-utility-lift)] hover:bg-zinc-800 active:bg-zinc-700"%0A            data-career-utility="training"%0A            type="button"%0A          >%0A            <span%0A              aria-hidden="true"%0A            >%0A              🏋️%0A            </span>%0A            <span%0A              class="sm:hidden"%0A            >%0A              Training%0A            </span>%0A            <span%0A              class="absolute -top-1 -right-1 w-3.5 h-3.5 rounded-full bg-emerald-500 border-2 border-zinc-900"%0A            >%0A              <span%0A                class="sr-only"%0A              >%0A                Drill ready%0A              </span>%0A            </span>%0A          </button>%0A          <button%0A            aria-label="Open your phone"%0A            class="relative min-h-11 flex-1 rounded-xl bg-zinc-900 border-2 border-zinc-700 flex items-center justify-center gap-2 px-3 text-sm font-bold text-white sm:fixed sm:bottom-5 sm:right-4 sm:z-40 sm:w-14 sm:h-14 sm:flex-none sm:px-0 sm:text-2xl sm:shadow-xl sm:[translate:0_var(--career-utility-lift)] hover:bg-zinc-800 active:bg-zinc-700"%0A            data-career-utility="phone"%0A            type="button"%0A          >%0A            <span%0A              aria-hidden="true"%0A            >%0A              📱%0A            </span>%0A            <span%0A              class="sm:hidden"%0A            >%0A              Phone%0A            </span>%0A            <span%0A              class="min-w-5 h-5 px-1 rounded-full bg-red-500 text-[11px] font-black text-black flex items-center justify-center sm:absolute sm:-top-1.5 sm:-right-1.5"%0A            >%0A              3%0A              <span%0A                class="sr-only"%0A              >%0A                 unread%0A              </span>%0A            </span>%0A          </button>%0A        </div>%0A        <div%0A          class="space-y-3 pb-20"%0A        >%0A          <div%0A            class="flex flex-wrap items-center justify-between gap-2"%0A          >%0A            <div%0A              class="flex items-center gap-2.5 min-w-0 w-full min-[480px]:w-auto min-[480px]:flex-1"%0A            >%0A              <div%0A                class="min-w-0 flex-1"%0A              >%0A                <h1%0A                  class="text-xl sm:text-2xl font-black flex items-center gap-2 min-w-0"%0A                >%0A                  <span%0A                    class="inline-flex items-center gap-1 align-middle shrink-0"%0A                  >%0A                    <svg%0A                      aria-hidden="true"%0A                      height="18"%0A                      style="display: block; border-radius: 2px;"%0A                      viewBox="0 0 60 36"%0A                      width="24"%0A                    >%0A                      <rect%0A                        fill="#fff"%0A                        height="36"%0A                        width="60"%0A                      />%0A                      <rect%0A                        fill="#CE1124"%0A                        height="36"%0A                        width="10"%0A                        x="25"%0A                      />%0A                      <rect%0A                        fill="#CE1124"%0A                        height="10"%0A                        width="60"%0A                        y="13"%0A                      />%0A                    </svg>%0A                  </span>%0A                  <span%0A                    class="min-w-0 [overflow-wrap:anywhere] min-[480px]:truncate"%0A                  >%0A                    Fence Tester%0A                  </span>%0A                </h1>%0A                <p%0A                  class="text-xs text-muted-foreground"%0A                >%0A                  CM%0A                   · Age %0A                  17%0A                   · %0A                  <span%0A                    class="inline-flex items-center gap-1 align-middle shrink-0"%0A                  >%0A                    <svg%0A                      aria-hidden="true"%0A                      height="9"%0A                      style="display: block; border-radius: 2px;"%0A                      viewBox="0 0 60 36"%0A                      width="12"%0A                    >%0A                      <rect%0A                        fill="#fff"%0A                        height="36"%0A                        width="60"%0A                      />%0A                      <rect%0A                        ...%0A ❯ waitForWrapper node_modules/@testing-library/dom/dist/wait-for.js:163:27%0A ❯ findByTestId node_modules/@testing-library/dom/dist/query-helpers.js:86:33%0A ❯ noticeShows src/test/soccerCareerSaveFence.test.tsx:92:30%0A ❯ src/test/soccerCareerSaveFence.test.tsx:136:11%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerCareerSaveFence.test.tsx,title=src/test/soccerCareerSaveFence.test.tsx > Soccer Career save fence > New Career in a stale tab clears nothing,line=92,column=30::TestingLibraryElementError: Unable to find an element by: [data-testid="save-moved-notice"]%0A%0AIgnored nodes: comments, script, style%0A<body>%0A  <div>%0A    <div%0A      class="min-h-screen bg-background text-foreground flex flex-col "%0A    >%0A      <div%0A        class="relative z-10 mx-auto w-full max-w-4xl "%0A      />%0A      <main%0A        class="flex-1 w-full max-w-5xl mx-auto px-3 sm:px-4 py-4"%0A        id="dukb-main"%0A      >%0A        <div%0A          class="max-w-xl mx-auto space-y-5"%0A        >%0A          <div%0A            class="text-center space-y-1"%0A          >%0A            <h1%0A              class="text-3xl sm:text-4xl font-black tracking-tight"%0A            >%0A              ⚽ Soccer Career%0A            </h1>%0A            <p%0A              class="text-muted-foreground text-sm"%0A            >%0A              Create your player. Build your legend.%0A            </p>%0A          </div>%0A          <div%0A            class="space-y-4 bg-card border border-border rounded-xl p-4 sm:p-5"%0A          >%0A            <h2%0A              class="text-lg font-bold"%0A            >%0A              Create Your Player%0A            </h2>%0A            <div%0A              class="space-y-1.5"%0A            >%0A              <label%0A                class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"%0A                for="pname"%0A              >%0A                Player Name%0A              </label>%0A              <input%0A                class="flex h-10 w-full rounded-md border border-input px-3 py-2 text-base ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 md:text-sm bg-muted/30"%0A                id="pname"%0A                maxlength="40"%0A                placeholder="Enter your player name..."%0A                value=""%0A              />%0A            </div>%0A            <div%0A              class="space-y-1.5"%0A            >%0A              <label%0A                class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"%0A              >%0A                Nationality%0A              </label>%0A              <select>%0A                <option%0A                  value="Albania"%0A                >%0A                  <span%0A                    class="flex items-center gap-2"%0A                  >%0A                    Albania%0A                    <span%0A                      class="inline-flex items-center gap-1 align-middle shrink-0"%0A                    >%0A                      <img%0A                        alt="Albania"%0A                        class="inline-block align-middle object-cover"%0A                        loading="lazy"%0A                        src="https://flagcdn.com/w40/al.png"%0A                        style="width: 18px; height: 14px; border-radius: 2px;"%0A                      />%0A                      <span%0A                        aria-hidden="true"%0A                        style="display: none; font-size: 16.2px; line-height: 1;"%0A                      >%0A                        🇦🇱%0A                      </span>%0A                    </span>%0A                  </span>%0A                </option>%0A                <option%0A                  value="Armenia"%0A                >%0A                  <span%0A                    class="flex items-center gap-2"%0A                  >%0A                    Armenia%0A                    <span%0A                      class="inline-flex items-center gap-1 align-middle shrink-0"%0A                    >%0A                      <img%0A                        alt="Armenia"%0A                        class="inline-block align-middle object-cover"%0A                        loading="lazy"%0A                        src="https://flagcdn.com/w40/am.png"%0A                        style="width: 18px; height: 14px; border-radius: 2px;"%0A                      />%0A                      <span%0A                        aria-hidden="true"%0A                        style="display: none; font-size: 16.2px; line-height: 1;"%0A                      >%0A                        🇦🇲%0A                      </span>%0A                    </span>%0A                  </span>%0A                </option>%0A                <option%0A                  value="Austria"%0A                >%0A                  <span%0A                    class="flex items-center gap-2"%0A                  >%0A                    Austria%0A                    <span%0A                      class="inline-flex items-center gap-1 align-middle shrink-0"%0A                    >%0A                      <img%0A                        alt="Austria"%0A                        class="inline-block align-middle object-cover"%0A                        loading="lazy"%0A                        src="https://flagcdn.com/w40/at.png"%0A                        style="width: 18px; height: 14px; border-radius: 2px;"%0A                      />%0A                      <span%0A                        aria-hidden="true"%0A                        style="display: none; font-size: 16.2px; line-height: 1;"%0A                      >%0A                        🇦🇹%0A                      </span>%0A                    </span>%0A                  </span>%0A                </option>...%0A%0AIgnored nodes: comments, script, style%0A<body>%0A  <div>%0A    <div%0A      class="min-h-screen bg-background text-foreground flex flex-col "%0A    >%0A      <div%0A        class="relative z-10 mx-auto w-full max-w-4xl "%0A      />%0A      <main%0A        class="flex-1 w-full max-w-5xl mx-auto px-3 sm:px-4 py-4"%0A        id="dukb-main"%0A      >%0A        <div%0A          class="max-w-xl mx-auto space-y-5"%0A        >%0A          <div%0A            class="text-center space-y-1"%0A          >%0A            <h1%0A              class="text-3xl sm:text-4xl font-black tracking-tight"%0A            >%0A              ⚽ Soccer Career%0A            </h1>%0A            <p%0A              class="text-muted-foreground text-sm"%0A            >%0A              Create your player. Build your legend.%0A            </p>%0A          </div>%0A          <div%0A            class="space-y-4 bg-card border border-border rounded-xl p-4 sm:p-5"%0A          >%0A            <h2%0A              class="text-lg font-bold"%0A            >%0A              Create Your Player%0A            </h2>%0A            <div%0A              class="space-y-1.5"%0A            >%0A              <label%0A                class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"%0A                for="pname"%0A              >%0A                Player Name%0A              </label>%0A              <input%0A                class="flex h-10 w-full rounded-md border border-input px-3 py-2 text-base ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 md:text-sm bg-muted/30"%0A                id="pname"%0A                maxlength="40"%0A                placeholder="Enter your player name..."%0A                value=""%0A              />%0A            </div>%0A            <div%0A              class="space-y-1.5"%0A            >%0A              <label%0A                class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"%0A              >%0A                Nationality%0A              </label>%0A              <select>%0A                <option%0A                  value="Albania"%0A                >%0A                  <span%0A                    class="flex items-center gap-2"%0A                  >%0A                    Albania%0A                    <span%0A                      class="inline-flex items-center gap-1 align-middle shrink-0"%0A                    >%0A                      <img%0A                        alt="Albania"%0A                        class="inline-block align-middle object-cover"%0A                        loading="lazy"%0A                        src="https://flagcdn.com/w40/al.png"%0A                        style="width: 18px; height: 14px; border-radius: 2px;"%0A                      />%0A                      <span%0A                        aria-hidden="true"%0A                        style="display: none; font-size: 16.2px; line-height: 1;"%0A                      >%0A                        🇦🇱%0A                      </span>%0A                    </span>%0A                  </span>%0A                </option>%0A                <option%0A                  value="Armenia"%0A                >%0A                  <span%0A                    class="flex items-center gap-2"%0A                  >%0A                    Armenia%0A                    <span%0A                      class="inline-flex items-center gap-1 align-middle shrink-0"%0A                    >%0A                      <img%0A                        alt="Armenia"%0A                        class="inline-block align-middle object-cover"%0A                        loading="lazy"%0A                        src="https://flagcdn.com/w40/am.png"%0A                        style="width: 18px; height: 14px; border-radius: 2px;"%0A                      />%0A                      <span%0A                        aria-hidden="true"%0A                        style="display: none; font-size: 16.2px; line-height: 1;"%0A                      >%0A                        🇦🇲%0A                      </span>%0A                    </span>%0A                  </span>%0A                </option>%0A                <option%0A                  value="Austria"%0A                >%0A                  <span%0A                    class="flex items-center gap-2"%0A                  >%0A                    Austria%0A                    <span%0A                      class="inline-flex items-center gap-1 align-middle shrink-0"%0A                    >%0A                      <img%0A                        alt="Austria"%0A                        class="inline-block align-middle object-cover"%0A                        loading="lazy"%0A                        src="https://flagcdn.com/w40/at.png"%0A                        style="width: 18px; height: 14px; border-radius: 2px;"%0A                      />%0A                      <span%0A                        aria-hidden="true"%0A                        style="display: none; font-size: 16.2px; line-height: 1;"%0A                      >%0A                        🇦🇹%0A                      </span>%0A                    </span>%0A                  </span>%0A                </option>...%0A ❯ waitForWrapper node_modules/@testing-library/dom/dist/wait-for.js:163:27%0A ❯ findByTestId node_modules/@testing-library/dom/dist/query-helpers.js:86:33%0A ❯ noticeShows src/test/soccerCareerSaveFence.test.tsx:92:30%0A ❯ src/test/soccerCareerSaveFence.test.tsx:147:11%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerCareerSaveFence.test.tsx,title=src/test/soccerCareerSaveFence.test.tsx > Soccer Career save fence > Delete unusable save in a stale tab deletes nothing,line=92,column=30::TestingLibraryElementError: Unable to find an element by: [data-testid="save-moved-notice"]%0A%0AIgnored nodes: comments, script, style%0A<body>%0A  <div>%0A    <div%0A      class="min-h-screen bg-background text-foreground flex flex-col "%0A    >%0A      <div%0A        class="relative z-10 mx-auto w-full max-w-4xl "%0A      />%0A      <main%0A        class="flex-1 w-full max-w-5xl mx-auto px-3 sm:px-4 py-4"%0A        id="dukb-main"%0A      >%0A        <div%0A          class="max-w-xl mx-auto space-y-5"%0A        >%0A          <div%0A            class="text-center space-y-1"%0A          >%0A            <h1%0A              class="text-3xl sm:text-4xl font-black tracking-tight"%0A            >%0A              ⚽ Soccer Career%0A            </h1>%0A            <p%0A              class="text-muted-foreground text-sm"%0A            >%0A              Create your player. Build your legend.%0A            </p>%0A          </div>%0A          <div%0A            class="space-y-4 bg-card border border-border rounded-xl p-4 sm:p-5"%0A          >%0A            <h2%0A              class="text-lg font-bold"%0A            >%0A              Create Your Player%0A            </h2>%0A            <div%0A              class="space-y-1.5"%0A            >%0A              <label%0A                class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"%0A                for="pname"%0A              >%0A                Player Name%0A              </label>%0A              <input%0A                class="flex h-10 w-full rounded-md border border-input px-3 py-2 text-base ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 md:text-sm bg-muted/30"%0A                id="pname"%0A                maxlength="40"%0A                placeholder="Enter your player name..."%0A                value=""%0A              />%0A            </div>%0A            <div%0A              class="space-y-1.5"%0A            >%0A              <label%0A                class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"%0A              >%0A                Nationality%0A              </label>%0A              <select>%0A                <option%0A                  value="Albania"%0A                >%0A                  <span%0A                    class="flex items-center gap-2"%0A                  >%0A                    Albania%0A                    <span%0A                      class="inline-flex items-center gap-1 align-middle shrink-0"%0A                    >%0A                      <img%0A                        alt="Albania"%0A                        class="inline-block align-middle object-cover"%0A                        loading="lazy"%0A                        src="https://flagcdn.com/w40/al.png"%0A                        style="width: 18px; height: 14px; border-radius: 2px;"%0A                      />%0A                      <span%0A                        aria-hidden="true"%0A                        style="display: none; font-size: 16.2px; line-height: 1;"%0A                      >%0A                        🇦🇱%0A                      </span>%0A                    </span>%0A                  </span>%0A                </option>%0A                <option%0A                  value="Armenia"%0A                >%0A                  <span%0A                    class="flex items-center gap-2"%0A                  >%0A                    Armenia%0A                    <span%0A                      class="inline-flex items-center gap-1 align-middle shrink-0"%0A                    >%0A                      <img%0A                        alt="Armenia"%0A                        class="inline-block align-middle object-cover"%0A                        loading="lazy"%0A                        src="https://flagcdn.com/w40/am.png"%0A                        style="width: 18px; height: 14px; border-radius: 2px;"%0A                      />%0A                      <span%0A                        aria-hidden="true"%0A                        style="display: none; font-size: 16.2px; line-height: 1;"%0A                      >%0A                        🇦🇲%0A                      </span>%0A                    </span>%0A                  </span>%0A                </option>%0A                <option%0A                  value="Austria"%0A                >%0A                  <span%0A                    class="flex items-center gap-2"%0A                  >%0A                    Austria%0A                    <span%0A                      class="inline-flex items-center gap-1 align-middle shrink-0"%0A                    >%0A                      <img%0A                        alt="Austria"%0A                        class="inline-block align-middle object-cover"%0A                        loading="lazy"%0A                        src="https://flagcdn.com/w40/at.png"%0A                        style="width: 18px; height: 14px; border-radius: 2px;"%0A                      />%0A                      <span%0A                        aria-hidden="true"%0A                        style="display: none; font-size: 16.2px; line-height: 1;"%0A                      >%0A                        🇦🇹%0A                      </span>%0A                    </span>%0A                  </span>%0A                </option>...%0A%0AIgnored nodes: comments, script, style%0A<body>%0A  <div>%0A    <div%0A      class="min-h-screen bg-background text-foreground flex flex-col "%0A    >%0A      <div%0A        class="relative z-10 mx-auto w-full max-w-4xl "%0A      />%0A      <main%0A        class="flex-1 w-full max-w-5xl mx-auto px-3 sm:px-4 py-4"%0A        id="dukb-main"%0A      >%0A        <div%0A          class="max-w-xl mx-auto space-y-5"%0A        >%0A          <div%0A            class="text-center space-y-1"%0A          >%0A            <h1%0A              class="text-3xl sm:text-4xl font-black tracking-tight"%0A            >%0A              ⚽ Soccer Career%0A            </h1>%0A            <p%0A              class="text-muted-foreground text-sm"%0A            >%0A              Create your player. Build your legend.%0A            </p>%0A          </div>%0A          <div%0A            class="space-y-4 bg-card border border-border rounded-xl p-4 sm:p-5"%0A          >%0A            <h2%0A              class="text-lg font-bold"%0A            >%0A              Create Your Player%0A            </h2>%0A            <div%0A              class="space-y-1.5"%0A            >%0A              <label%0A                class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"%0A                for="pname"%0A              >%0A                Player Name%0A              </label>%0A              <input%0A                class="flex h-10 w-full rounded-md border border-input px-3 py-2 text-base ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 md:text-sm bg-muted/30"%0A                id="pname"%0A                maxlength="40"%0A                placeholder="Enter your player name..."%0A                value=""%0A              />%0A            </div>%0A            <div%0A              class="space-y-1.5"%0A            >%0A              <label%0A                class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"%0A              >%0A                Nationality%0A              </label>%0A              <select>%0A                <option%0A                  value="Albania"%0A                >%0A                  <span%0A                    class="flex items-center gap-2"%0A                  >%0A                    Albania%0A                    <span%0A                      class="inline-flex items-center gap-1 align-middle shrink-0"%0A                    >%0A                      <img%0A                        alt="Albania"%0A                        class="inline-block align-middle object-cover"%0A                        loading="lazy"%0A                        src="https://flagcdn.com/w40/al.png"%0A                        style="width: 18px; height: 14px; border-radius: 2px;"%0A                      />%0A                      <span%0A                        aria-hidden="true"%0A                        style="display: none; font-size: 16.2px; line-height: 1;"%0A                      >%0A                        🇦🇱%0A                      </span>%0A                    </span>%0A                  </span>%0A                </option>%0A                <option%0A                  value="Armenia"%0A                >%0A                  <span%0A                    class="flex items-center gap-2"%0A                  >%0A                    Armenia%0A                    <span%0A                      class="inline-flex items-center gap-1 align-middle shrink-0"%0A                    >%0A                      <img%0A                        alt="Armenia"%0A                        class="inline-block align-middle object-cover"%0A                        loading="lazy"%0A                        src="https://flagcdn.com/w40/am.png"%0A                        style="width: 18px; height: 14px; border-radius: 2px;"%0A                      />%0A                      <span%0A                        aria-hidden="true"%0A                        style="display: none; font-size: 16.2px; line-height: 1;"%0A                      >%0A                        🇦🇲%0A                      </span>%0A                    </span>%0A                  </span>%0A                </option>%0A                <option%0A                  value="Austria"%0A                >%0A                  <span%0A                    class="flex items-center gap-2"%0A                  >%0A                    Austria%0A                    <span%0A                      class="inline-flex items-center gap-1 align-middle shrink-0"%0A                    >%0A                      <img%0A                        alt="Austria"%0A                        class="inline-block align-middle object-cover"%0A                        loading="lazy"%0A                        src="https://flagcdn.com/w40/at.png"%0A                        style="width: 18px; height: 14px; border-radius: 2px;"%0A                      />%0A                      <span%0A                        aria-hidden="true"%0A                        style="display: none; font-size: 16.2px; line-height: 1;"%0A                      >%0A                        🇦🇹%0A                      </span>%0A                    </span>%0A                  </span>%0A                </option>...%0A ❯ waitForWrapper node_modules/@testing-library/dom/dist/wait-for.js:163:27%0A ❯ findByTestId node_modules/@testing-library/dom/dist/query-helpers.js:86:33%0A ❯ noticeShows src/test/soccerCareerSaveFence.test.tsx:92:30%0A ❯ src/test/soccerCareerSaveFence.test.tsx:158:11%0A%0A
+  96 files write storage; 6 writes of the save inside saveFence.write, 4 on the allowed list (3 entries, each still there)
+  Soccer Career: 3 writes of soccerCareerSave inside saveFence.write, 4 on the allowed list (3 entries, each still there)
+  section source: 17 checks, 0 red
+simSaveFence: all green (source)
+MUT exit 1

@@ -1,0 +1,46 @@
+anchor count 1
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [31m❯[39m src/test/useSaveFenceWatch.test.tsx [2m([22m[2m9 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[32m 27[2mms[22m[39m
+   [32m✓[39m useSaveFenceWatch[2m > [22ma storage event for the fence key sets moved after another tab wrote[32m 10[2mms[22m[39m
+   [32m✓[39m useSaveFenceWatch[2m > [22ma clear (key null) checks too[32m 1[2mms[22m[39m
+   [32m✓[39m useSaveFenceWatch[2m > [22mpageshow checks[32m 1[2mms[22m[39m
+   [32m✓[39m useSaveFenceWatch[2m > [22mbecoming visible checks, going hidden does not[32m 2[2mms[22m[39m
+   [32m✓[39m useSaveFenceWatch[2m > [22man event for any other key does nothing, the save itself included[32m 2[2mms[22m[39m
+   [32m✓[39m useSaveFenceWatch[2m > [22man absent fence key is never moved[32m 1[2mms[22m[39m
+   [32m✓[39m useSaveFenceWatch[2m > [22mwrites nothing and adopts nothing: a page that never adopted is never moved[32m 1[2mms[22m[39m
+   [32m✓[39m useSaveFenceWatch[2m > [22monce moved it stays moved[32m 1[2mms[22m[39m
+[31m   [31m×[31m useSaveFenceWatch[2m > [22mevery listener is gone after unmount[39m[32m 7[2mms[22m[39m
+[31m     → storage listener removed: expected false to be true // Object.is equality[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/useSaveFenceWatch.test.tsx[2m > [22museSaveFenceWatch[2m > [22mevery listener is gone after unmount
+[31m[1mAssertionError[22m: storage listener removed: expected false to be true // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- true[39m
+[31m+ false[39m
+
+[36m [2m❯[22m src/test/useSaveFenceWatch.test.tsx:[2m147:59[22m[39m
+    [90m145| [39m    [35mfor[39m ([35mconst[39m [type[33m,[39m handler] [35mof[39m added) {
+    [90m146| [39m      const removed = [...winRemove.mock.calls, ...docRemove.mock.call…
+    [90m147| [39m      [34mexpect[39m(removed[33m,[39m [32m`[39m[36m${[39m[33mString[39m(type)[36m}[39m[32m listener removed`[39m)[33m.[39m[34mtoBe[39m([35mtrue[39m)[33m;[39m
+    [90m   | [39m                                                          [31m^[39m
+    [90m148| [39m    }
+    [90m149| [39m  })[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m8 passed[39m[22m[90m (9)[39m
+[2m   Start at [22m 19:59:24
+[2m   Duration [22m 601ms[2m (transform 40ms, setup 32ms, collect 81ms, tests 27ms, environment 190ms, prepare 85ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/useSaveFenceWatch.test.tsx,title=src/test/useSaveFenceWatch.test.tsx > useSaveFenceWatch > every listener is gone after unmount,line=147,column=59::AssertionError: storage listener removed: expected false to be true // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- true%0A+ false%0A%0A ❯ src/test/useSaveFenceWatch.test.tsx:147:59%0A%0A
+control exit 1

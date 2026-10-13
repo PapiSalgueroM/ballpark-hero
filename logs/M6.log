@@ -1,0 +1,17 @@
+mutation M6 on src/pages/SoccerCareer.tsx: anchor count 1
+MUTATION APPLIED M6
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/test/soccerCareerSaveFence.test.tsx [2m([22m[2m6 tests[22m[2m)[22m[33m 436[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m6 passed[39m[22m[90m (6)[39m
+[2m   Start at [22m 19:59:01
+[2m   Duration [22m 2.83s[2m (transform 1.33s, setup 33ms, collect 1.86s, tests 436ms, environment 191ms, prepare 49ms)[22m
+
+  96 files write storage; 6 writes of the save inside saveFence.write, 4 on the allowed list (3 entries, each still there)
+  Soccer Career: 3 writes of soccerCareerSave inside saveFence.write, 4 on the allowed list (3 entries, each still there)
+  section source: 17 checks, 0 red
+simSaveFence: all green (source)
+MUT exit 0

@@ -1,0 +1,11 @@
+M1 exit=1 7s | MUT exit 1
+M2 exit=1 7s | MUT exit 1
+M3 exit=1 7s | MUT exit 1
+M5 exit=1 9s | MUT exit 1
+M6 exit=0 4s | MUT exit 0
+M10 exit=0 7s | MUT exit 0
+M4 exit=1 5s | MUT exit 1
+mutfence exit=1 5s | CONTROL FIRED: the raw write turned the fence test red (vitest exit 1)
+ctl-nostorage exit=1 1s | control exit 1
+ctl-nounmount exit=1 0s | control exit 1
+ctl-novisible exit=1 0s | control exit 1
