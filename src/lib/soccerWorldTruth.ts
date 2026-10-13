@@ -77,6 +77,13 @@ export function tournamentWinnerShown(year: number, myResult: string | null | un
   return !summerHappened(year) || playedFinals(myResult);
 }
 
+/** His own line for a summer he watched from home, where the winner is not named. */
+export function summerAtHomeLine(myResult: string | null | undefined): string {
+  if (myResult === "Did Not Qualify") return "Did not qualify";
+  if (myResult === "Not Selected") return "Left out";
+  return "Watched from home";
+}
+
 /** "2027-28" for the season starting in 2027, the shape seasonSpan prints. */
 export function seasonLabel(year: number): string {
   return `${year}-${String((year + 1) % 100).padStart(2, "0")}`;

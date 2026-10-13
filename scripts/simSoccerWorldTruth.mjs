@@ -63,6 +63,8 @@
  *   realmoves   real men are moved between clubs again: section 3.
  *   pastchampions  a season that happened prints its champions: section 3.
  *   summer      the feed names the winner of a missed summer that happened: section 3.
+ *   log         the season log names the winner of every summer again: section 5.
+ *   panel       the International panel names every winner again: section 5.
  *
  * Run: node scripts/simSoccerWorldTruth.mjs [seeds]   (default 5 seeds, 400 careers a tree)
  *      SEED_OFFSET=1 node scripts/simSoccerWorldTruth.mjs   another five seeds
@@ -120,6 +122,10 @@ const CONTROLS = {
     edits: { [PHONE]: [['  if (!happened) {\n    if (ucl !== s.currentClub)', '  if (true) {\n    if (ucl !== s.currentClub)']] } },
   summer: { breaks: '3', note: 'the feed names the winner of a summer he missed that happened',
     edits: { [PHONE]: [['  if (intl && tournamentWinnerShown(year, myFinals))', '  if (intl)']] } },
+  log: { breaks: '5', note: 'the season log names the winner of every summer again',
+    edits: { [ENGINE]: [['  if (tournamentWinnerShown(year, eligible ? t.myResult : "")) {', '  if (true) {']] } },
+  panel: { breaks: '5', note: 'the International panel names every winner again',
+    edits: { [PANEL]: [['import { summerAtHomeLine, tournamentWinnerShown } from "@/lib/soccerWorldTruth";', 'import { summerAtHomeLine } from "@/lib/soccerWorldTruth";\nconst tournamentWinnerShown = (..._: unknown[]) => true;']] } },
   extradraw: { breaks: '2', note: 'the world tick makes one extra draw before Europe',
     edits: { [PHONE]: [['  const ucl = draw(notMine(topClubs, opts.playerUcl));', '  rng.next();\n  const ucl = draw(notMine(topClubs, opts.playerUcl));']] } },
 };

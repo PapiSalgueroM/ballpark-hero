@@ -9,6 +9,7 @@ import { revealDelay } from "@/components/club-manager/Celebration";
 import { SpeechChoices, SpokenSpeech } from "@/components/career/AwardsNightCard";
 import { givenSpeechOf, type GivenSpeech } from "@/lib/careerAwardsNight";
 import { SOCCER_WORLD_CUP_SPEECHES } from "@/lib/soccerCareerEngine";
+import { summerAtHomeLine, tournamentWinnerShown } from "@/lib/soccerWorldTruth";
 import type {
   IntlTournament, IntlTie, IntlRound, IntlTableRow, IntlHistoryEntry,
 } from "@/lib/soccerCareerEngine";
@@ -300,7 +301,7 @@ export function TournamentCard({
             {back}
           </>
         )}
-        {screen === "bracket" && (
+        {screen === "bracket" && tournamentWinnerShown(t.year, t.myResult) && (
           <>
             <h3 className="text-sm font-black uppercase tracking-wide">The Bracket</h3>
             {[...FULL_ROUNDS].reverse().map(round => {
@@ -377,7 +378,9 @@ export function TournamentCard({
       key: "squad", emoji: "📋", label: "The Squad",
       sub: t.squad?.called ? (t.squad.role ?? "In") : t.qualified ? "Left out" : "No squad",
     },
-    { key: "bracket", emoji: "🗺️", label: "Bracket", sub: `${t.teams} nations` },
+    /* Round 1329: the whole edition's bracket names who won it, so it is offered only where the winner may be
+       named: a summer still to come, or finals he played (soccerWorldTruth.ts). */
+    ...(tournamentWinnerShown(t.year, t.myResult) ? [{ key: "bracket" as const, emoji: "🗺️", label: "Bracket", sub: `${t.teams} nations` }] : []),
     { key: "matches", emoji: "⚽", label: "Your Games", sub: `${t.playerApps} apps` },
   ];
 
@@ -413,7 +416,9 @@ export function TournamentCard({
       <ResultPill result={t.myResult} />
     </div>
   );
-  const championsLine = (
+  /* Round 1329: who won a summer that really happened is the world's fact, so
+     the line is there only for a summer still to come or finals he played. */
+  const championsLine = tournamentWinnerShown(t.year, t.myResult) ? (
     <p
       className={`text-[11px] text-muted-foreground flex items-center justify-center gap-1 flex-wrap${won ? " cm-rise" : ""}`}
       style={won ? nextBeat() : undefined}
@@ -422,7 +427,7 @@ export function TournamentCard({
       <span className="font-bold text-foreground">{t.champion}</span>
       {t.runnerUp && <span>beat {t.runnerUp} in the final</span>}
     </p>
-  );
+  ) : null;
 
   return (
     <div
@@ -490,7 +495,7 @@ export function TournamentCard({
         </div>
       )}
 
-      <div className="grid grid-cols-2 gap-1.5">
+      <div className="grid grid-cols-2 gap-1.5 [&>*:last-child:nth-child(odd)]:col-span-2">
         {tiles.map(tile => (
           /* Round 926: the entrance sits on this wrapper, not the button, so
              the button's hover still works once the animation has filled. It
@@ -567,10 +572,14 @@ export function InternationalHistoryTile({
                 <span className="flex-1 min-w-0 break-words font-semibold">{h.short}</span>
               </div>
               <div className="flex items-start justify-between gap-2">
-                <span className="flex flex-1 items-center gap-1 min-w-0">
-                  <FlagImg name={h.champion} size={13} />
-                  <span className="min-w-0 break-words">{h.champion}</span>
-                </span>
+                {tournamentWinnerShown(h.year, h.myResult) ? (
+                  <span className="flex flex-1 items-center gap-1 min-w-0">
+                    <FlagImg name={h.champion} size={13} />
+                    <span className="min-w-0 break-words">{h.champion}</span>
+                  </span>
+                ) : (
+                  <span className="flex-1 min-w-0 text-xs text-muted-foreground">Watched from home</span>
+                )}
                 <span className="shrink-0"><ResultPill result={h.myResult} /></span>
               </div>
             </div>
@@ -581,7 +590,9 @@ export function InternationalHistoryTile({
     );
   }
 
-  if (open === "bracket" && last) {
+  /* Round 1329: the last edition's bracket and winner follow the card's rule. */
+  const lastShown = !!last && tournamentWinnerShown(last.year, last.myResult);
+  if (open === "bracket" && last && lastShown) {
     return (
       <div ref={revealRef} className="space-y-2">
         <div className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
@@ -614,12 +625,14 @@ export function InternationalHistoryTile({
         <div className="text-[9px] text-muted-foreground truncate">{history.length} played out</div>
       </button>
       <button
-        onClick={() => setOpen(last ? "bracket" : "history")}
+        onClick={() => setOpen(lastShown ? "bracket" : "history")}
         className="bg-muted/20 hover:bg-muted/40 border border-border rounded-lg p-2 text-left transition-colors min-w-0"
       >
         <div className="text-base leading-none">🏆</div>
         <div className="text-[11px] font-bold truncate">{latest?.short ?? "Last"} {latest?.year ?? ""}</div>
-        <div className="text-[9px] text-muted-foreground truncate">{latest?.champion ?? ""} won it</div>
+        <div className="text-[9px] text-muted-foreground truncate">
+          {latest && tournamentWinnerShown(latest.year, latest.myResult) ? `${latest.champion} won it` : summerAtHomeLine(latest?.myResult)}
+        </div>
       </button>
     </div>
   );

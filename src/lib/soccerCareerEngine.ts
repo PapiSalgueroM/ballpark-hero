@@ -180,7 +180,7 @@ export {
 /* Round 1327: the event deck and the paper draw from keyed streams, and the deck's pick is the shared one. */
 import { takeFresh } from "./careerEventDeck";
 import { keyedRng } from "./keyedRng";
-import { monthAwards, monthYear } from "./soccerWorldTruth";
+import { monthAwards, monthYear, tournamentWinnerShown } from "./soccerWorldTruth";
 import { personalGoalMilestone } from "./soccerCareerMilestone";
 
 export interface ClubData {
@@ -5086,11 +5086,16 @@ function runTournamentSummer(s: CareerState, season: SeasonRecord, year: number,
   season.tournament = t.name;
   season.tournamentResult = eligible ? t.myResult : null;
 
-  // The champion is announced whether you were there or not.
-  if (t.champion === s.nationality && !eligible) {
-    s.events.push(`🏆 ${s.nationality} won the ${t.name} without you.`);
-  } else if (t.champion !== s.nationality) {
-    s.events.push(`🌍 ${t.champion} won the ${t.name}.`);
+  /* The champion is announced whether you were there or not. Round 1329: who
+     won a summer that really happened is a fact about the real world, so it
+     goes in the log only when he played those finals (then it is his story);
+     a summer still to come is the game's own and keeps both lines. */
+  if (tournamentWinnerShown(year, eligible ? t.myResult : "")) {
+    if (t.champion === s.nationality && !eligible) {
+      s.events.push(`🏆 ${s.nationality} won the ${t.name} without you.`);
+    } else if (t.champion !== s.nationality) {
+      s.events.push(`🌍 ${t.champion} won the ${t.name}.`);
+    }
   }
 
   if (!eligible) return;
