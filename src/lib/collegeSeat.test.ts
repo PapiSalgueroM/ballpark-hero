@@ -32,7 +32,7 @@ describe('the ask', () => {
     expect(a.text).not.toMatch(/ownership|franchise|\{/i);
   });
   it('lifts a CBB win total ask one step, and nothing else', () => {
-    expect(COLLEGE_ASK_TILT.cfb).toEqual([]);
+    expect(COLLEGE_ASK_TILT.cfb).toEqual({});
     /* p12's roster is the weakest of the twenty: football asks it to rebuild, basketball one step more */
     expect(collegeAsk(view({ sport: 'cfb', myTeam: 'p12' }), 2026).tier).toBe('rebuild');
     expect(collegeAsk(view({ sport: 'cbb', myTeam: 'p12' }), 2026).tier).toBe('respect');

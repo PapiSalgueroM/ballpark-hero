@@ -123,9 +123,15 @@ const EDITS = {
   nextyear: ['S9', 'gm', '  const later = { ...p, seasonsOut: p.seasonsOut + 1 };', '  const later = { ...p, seasonsOut: p.seasonsOut + 2 };'],
   yearoutskip: ['SY', 'bind', '  copy.seat = collegeSitOut(st.seat, view);', '  copy.seat = st.seat;'],
 };
+/* The tilt table as built, and the variants measured for the lead: each rewrites COLLEGE_ASK_TILT, and the
+   S1 oracle reads the same table from VARIANT_TABLE, never from the bundle. */
+const CBB_LINE = '  cbb: { respect: 1, rebuild: 1 },';
+const CFB_LINE = '  cfb: {},';
 const VARIANTS = {
-  'cbb-bottom': [],
-  none: [['seat', "  cbb: ['respect', 'rebuild'],", '  cbb: [],']],
+  'cbb-bottom': { table: { cfb: {}, cbb: { respect: 1, rebuild: 1 } }, edits: [] },
+  none: { table: { cfb: {}, cbb: {} }, edits: [['seat', CBB_LINE, '  cbb: {},']] },
+  'cfb-soft': { table: { cfb: { title: -1, contend: -1, playoffs: -1 }, cbb: { respect: 1, rebuild: 1 } },
+    edits: [['seat', CFB_LINE, '  cfb: { title: -1, contend: -1, playoffs: -1 },']] },
 };
 if (CONTROL && !EDITS[CONTROL]) {
   console.error(`SIM_COLLEGE_SEAT_CONTROL=${CONTROL} is not a control this harness knows (${Object.keys(EDITS).join(', ')})`);
@@ -150,10 +156,16 @@ if (process.env.SIM_COLLEGE_SEAT_ANCHORS) {
       if (src.split(rest[i + 1]).length !== 2) { bad += 1; console.error(`  ANCHOR ${name}: not in ${rest[i]} exactly once`); }
     }
   }
-  console.log(`simCollegeSeat anchors: ${n} rewrites of ${Object.keys(EDITS).length} controls checked, ${bad} cannot run`);
+  for (const [name, v] of Object.entries(VARIANTS)) {
+    for (const [which, from] of v.edits) {
+      n += 1;
+      if (srcOf(which).split(from).length !== 2) { bad += 1; console.error(`  ANCHOR variant ${name}: not in ${which} exactly once`); }
+    }
+  }
+  console.log(`simCollegeSeat anchors: ${n} rewrites of ${Object.keys(EDITS).length} controls and ${Object.keys(VARIANTS).length} variants checked, ${bad} cannot run`);
   process.exit(bad ? 1 : 0);
 }
-for (const [which, from, to] of VARIANTS[TILT]) apply(`tilt ${TILT}`, which, from, to);
+for (const [which, from, to] of VARIANTS[TILT].edits) apply(`tilt ${TILT}`, which, from, to);
 if (CONTROL) {
   const [section, ...rest] = EDITS[CONTROL];
   for (let i = 0; i < rest.length; i += 3) apply(CONTROL, rest[i], rest[i + 1], rest[i + 2]);
@@ -313,7 +325,7 @@ function prestigeTiers(schools) {
   const sorted = [...schools].sort((a, b) => b.prestige - a.prestige || a.id.localeCompare(b.id));
   return new Map(sorted.map((s, i) => [s.id, 1 + Math.floor((i * 4) / sorted.length)]));
 }
-const TILT_TIERS = TILT === 'none' ? [] : ['respect', 'rebuild'];
+const VARIANT_TABLE = VARIANTS[TILT].table;
 function oracleAsk(sp, sportId, st, teamId, season) {
   const pack = GM_SEAT_PACKS[sportId];
   const strengths = Object.values(st.teams).map(t => [t.id, sp.E[sportId === 'cfb' ? 'cfbStrength' : 'cbbStrength'](t)]);
@@ -322,8 +334,8 @@ function oracleAsk(sp, sportId, st, teamId, season) {
   const champs = sportId === 'cfb' ? st.natties : st.titles;
   const defending = champs.some(c => c.season === season - 1 && c.team === teamId);
   const base = SEAT.seatMandate(pack, rank, strengths.length, defending, season, 0);
-  const lift = sportId === 'cbb' && TILT_TIERS.includes(base.tier);
-  return { ask: lift ? SEAT.seatMandate(pack, rank, strengths.length, defending, season, 1) : base, rank };
+  const step = VARIANT_TABLE[sportId][base.tier];
+  return { ask: step ? SEAT.seatMandate(pack, rank, strengths.length, defending, season, step) : base, rank };
 }
 function prestigeRank(schools, id) {
   const mine = schools.find(s => s.id === id).prestige;

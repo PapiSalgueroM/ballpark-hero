@@ -118,11 +118,12 @@ export function rosterRank(view: CollegeLeagueView, id: string): number {
  * gives: in college basketball a roster the ladder would ask only for a win
  * total ('respect' or 'rebuild') is asked one step more, because 32 of the 40
  * programs make the national tournament. Never a flat tilt (that would move
- * every band). Football has none.
+ * every band). Football has none. Each entry is the step for the tier the
+ * ladder gives; a tier not listed is asked as the ladder asks.
  */
-export const COLLEGE_ASK_TILT: Record<CollegeSeatSport, readonly FoTier[]> = {
-  cfb: [],
-  cbb: ['respect', 'rebuild'],
+export const COLLEGE_ASK_TILT: Record<CollegeSeatSport, Partial<Record<FoTier, -1 | 1>>> = {
+  cfb: {},
+  cbb: { respect: 1, rebuild: 1 },
 };
 
 /** The ask a program's roster earns for a season: gmSeat.seatMandate over its
@@ -134,7 +135,8 @@ export function collegeAskFor(view: CollegeLeagueView, teamId: string, season: n
   const n = view.programs.length;
   const defending = championOf(view, season - 1) === teamId;
   const base = seatMandate(pack, rank, n, defending, season, 0);
-  return COLLEGE_ASK_TILT[view.sport].includes(base.tier) ? seatMandate(pack, rank, n, defending, season, 1) : base;
+  const step = COLLEGE_ASK_TILT[view.sport][base.tier];
+  return step ? seatMandate(pack, rank, n, defending, season, step) : base;
 }
 
 /** His ask for a season. */
