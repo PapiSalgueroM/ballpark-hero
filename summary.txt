@@ -1,0 +1,11 @@
+mut-Z exit=0 93s | MUT Z: simCollegeSeat exit=0 vitest exit=0 => NOT CAUGHT
+mut-A exit=0 106s | MUT A: simCollegeSeat exit=1 vitest exit=1 => CAUGHT
+mut-B exit=0 110s | MUT B: simCollegeSeat exit=0 vitest exit=0 => NOT CAUGHT
+mut-C exit=0 105s | MUT C: simCollegeSeat exit=1 vitest exit=0 => CAUGHT
+mut-E exit=0 97s | MUT E: simCollegeSeat exit=1 vitest exit=0 => CAUGHT
+mut-D exit=0 108s | MUT D: simCollegeSeat exit=1 vitest exit=0 => CAUGHT
+mut-H exit=0 88s | MUT H: simCollegeSeat exit=0 vitest exit=0 => NOT CAUGHT
+mut-I exit=0 99s | MUT I: simCollegeSeat exit=1 vitest exit=1 => CAUGHT
+mut-G exit=0 292s | MUT G: simCollegeSeat exit=0 vitest exit=0 => NOT CAUGHT
+mut-F exit=0 303s | MUT F: simCollegeSeat exit=0 vitest exit=0 => NOT CAUGHT
+mut-J exit=0 99s | MUT J: simCollegeSeat exit=1 vitest exit=1 => CAUGHT

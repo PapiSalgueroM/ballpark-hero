@@ -1,0 +1,31 @@
+MUT A: applied to src/lib/collegeSeat.ts
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+  FAIL [S1]: cfb AUB season 2031: stored ask respect/Win 5 games and give the boosters a reason to keep writing checks. against the oracle's playoffs/Make the Playoff. The athletic director thinks this roster belongs there. (roster rank 13)
+  FAIL [S2]: a second close of the same season graded it again
+  FAIL [S2]: a second close of the same season graded it again
+  FAIL [S2]: a second close of the same season graded it again
+  FAIL [S2]: a second close of the same season graded it again
+  FAIL [S2]: a second close of the same season graded it again
+  FAIL [S2]: a second close of the same season graded it again
+  FAIL [S2]: (further failures in this check not printed)
+  FAIL [S1]: cfb MISS season 2033: stored ask playoffs/Make the Playoff. The athletic director thinks this roster belongs there. against the oracle's respect/Win 5 games and give the boosters a reason to keep writing checks. (roster rank 15)
+  FAIL [S1]: cfb OKST season 2029: stored ask rebuild/Rebuild it right: 4 wins keeps the athletic director on your side. against the oracle's respect/Win 5 games and give the boosters a reason to keep writing checks. (roster rank 24)
+  FAIL [S1]: cfb MIA season 2027: stored ask respect/Win 5 games and give the boosters a reason to keep writing checks. against the oracle's playoffs/Make the Playoff. The athletic director thinks this roster belongs there. (roster rank 11)
+  FAIL [S1]: cfb ISU season 2034: stored ask rebuild/Rebuild it right: 4 wins keeps the athletic director on your side. against the oracle's respect/Win 5 games and give the boosters a reason to keep writing checks. (roster rank 29)
+--- sim tail:
+   cbb: 5 years out played; refused in a seat 2895, on an open season 17, with next year shut 15; chairs left empty at the program that let him go during a year out 3
+simCollegeSeat: RED in S1 (41), S2 (529)
+[41m[1m FAIL [22m[49m src/lib/collegeSeat.test.ts[2m > [22mthe market and the move[2m > [22mnever offers a program that let him go, and a second press takes nothing
+[31m[1mAssertionError[22m: expected 2026 to be 2027 // Object.is equality[39m
+[32m- Expected[39m
+[31m+ Received[39m
+[41m[1m FAIL [22m[49m src/components/college-dynasty/CollegeSeat.test.tsx[2m > [22mRound 1320: the athletic director on the college boards[2m > [22mcfb: Take the job moves him once and opens the new program's trail; Sit the year out plays a season without him
+[41m[1m FAIL [22m[49m src/components/college-dynasty/CollegeSeat.test.tsx[2m > [22mRound 1320: the athletic director on the college boards[2m > [22mcbb: Take the job moves him once and opens the new program's trail; Sit the year out plays a season without him
+[31m[1mAssertionError[22m: expected 2026 to be 2027 // Object.is equality[39m
+[32m- Expected[39m
+[31m+ Received[39m
+[2m Test Files [22m [1m[31m2 failed[39m[22m[2m | [22m[1m[32m1 passed[39m[22m[90m (3)[39m
+::error file=/tmp/mut-A/src/lib/collegeSeat.test.ts,title=src/lib/collegeSeat.test.ts > the market and the move > never offers a program that let him go%2C and a second press takes nothing,line=86,column=84::AssertionError: expected 2026 to be 2027 // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- 2027%0A+ 2026%0A%0A ❯ src/lib/collegeSeat.test.ts:86:84%0A%0A
+::error file=/tmp/mut-A/src/components/college-dynasty/CollegeSeat.test.tsx,title=src/components/college-dynasty/CollegeSeat.test.tsx > Round 1320%3A the athletic director on the college boards > cfb%3A Take the job moves him once and opens the new program's trail; Sit the year out plays a season without him,line=194,column=51::AssertionError: expected 2026 to be 2027 // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- 2027%0A+ 2026%0A%0A ❯ src/components/college-dynasty/CollegeSeat.test.tsx:194:51%0A%0A
+::error file=/tmp/mut-A/src/components/college-dynasty/CollegeSeat.test.tsx,title=src/components/college-dynasty/CollegeSeat.test.tsx > Round 1320%3A the athletic director on the college boards > cbb%3A Take the job moves him once and opens the new program's trail; Sit the year out plays a season without him,line=194,column=51::AssertionError: expected 2026 to be 2027 // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- 2027%0A+ 2026%0A%0A ❯ src/components/college-dynasty/CollegeSeat.test.tsx:194:51%0A%0A
+MUT A: simCollegeSeat exit=1 vitest exit=1 => CAUGHT

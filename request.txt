@@ -1,0 +1,11 @@
+mut-Z: bash .rc/x/mutrun.sh Z 1
+mut-A: bash .rc/x/mutrun.sh A 1
+mut-B: bash .rc/x/mutrun.sh B 1
+mut-C: bash .rc/x/mutrun.sh C 1
+mut-D: bash .rc/x/mutrun.sh D 1
+mut-E: bash .rc/x/mutrun.sh E 1
+mut-F: bash .rc/x/mutrun.sh F 1,2,3
+mut-G: bash .rc/x/mutrun.sh G 1,2,3
+mut-H: bash .rc/x/mutrun.sh H 1
+mut-I: bash .rc/x/mutrun.sh I 1
+mut-J: bash .rc/x/mutrun.sh J 1

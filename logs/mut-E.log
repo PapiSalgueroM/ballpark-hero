@@ -1,0 +1,19 @@
+MUT E: applied to src/lib/collegeSeat.ts
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+  FAIL [S1]: cfb ALA season 2027: stored ask contend/Make the Playoff and win a Playoff game. The boosters paid for this roster. against the oracle's contend/Make the Playoff and win a Playoff game. The boosters paid for this roster. (roster rank 2)
+  FAIL [S1]: cfb ALA season 2028: stored ask contend/Make the Playoff and win a Playoff game. The boosters paid for this roster. against the oracle's playoffs/Make the Playoff. The athletic director thinks this roster belongs there. (roster rank 7)
+  FAIL [S1]: cfb ALA season 2029: stored ask playoffs/Make the Playoff. The athletic director thinks this roster belongs there. against the oracle's playoffs/Make the Playoff. The athletic director thinks this roster belongs there. (roster rank 10)
+  FAIL [S1]: cfb ALA season 2030: stored ask playoffs/Make the Playoff. The athletic director thinks this roster belongs there. against the oracle's playoffs/Make the Playoff. The athletic director thinks this roster belongs there. (roster rank 7)
+  FAIL [S1]: cfb ALA season 2031: stored ask playoffs/Make the Playoff. The athletic director thinks this roster belongs there. against the oracle's contend/Make the Playoff and win a Playoff game. The boosters paid for this roster. (roster rank 3)
+  FAIL [S1]: cfb ALA season 2032: stored ask contend/Make the Playoff and win a Playoff game. The boosters paid for this roster. against the oracle's contend/Defend the crown: the boosters expect another deep run in the Playoff. (roster rank 10)
+  FAIL [S1]: (further failures in this check not printed)
+     fired within the run, by first ask tier: contend 2.9% of 34, playoffs 12.5% of 48, respect 16.1% of 168, rebuild 22.0% of 50
+     fired within the run, by starting tier: tier 1 8.0%, tier 2 6.7%, tier 3 17.3%, tier 4 28.0%
+     fired within the run, by first ask tier: title 24.3% of 37, contend 0.0% of 55, playoffs 1.4% of 144, respect 7.8% of 64
+     fired within the run, by starting tier: tier 1 12.0%, tier 2 0.0%, tier 3 2.7%, tier 4 6.7%
+   cfb: 28468 rounds and 4876 closes and offseasons compared byte for byte before a move or a firing
+--- sim tail:
+   cbb: 6 years out played; refused in a seat 2929, on an open season 16, with next year shut 13; chairs left empty at the program that let him go during a year out 4
+simCollegeSeat: RED in S1 (5086)
+[2m Test Files [22m [1m[32m3 passed[39m[22m[90m (3)[39m
+MUT E: simCollegeSeat exit=1 vitest exit=0 => CAUGHT

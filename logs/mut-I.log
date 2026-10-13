@@ -1,0 +1,29 @@
+MUT I: applied to src/lib/collegeSeatBind.ts
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+  FAIL [S4]: the move did not set the new program, fresh trust and no rivalry carried
+  FAIL [S4]: the move did not set the new program, fresh trust and no rivalry carried
+  FAIL [S4]: the move did not set the new program, fresh trust and no rivalry carried
+  FAIL [S4]: the move did not set the new program, fresh trust and no rivalry carried
+  FAIL [S4]: the move did not set the new program, fresh trust and no rivalry carried
+  FAIL [S4]: the move did not set the new program, fresh trust and no rivalry carried
+  FAIL [S4]: (further failures in this check not printed)
+     fired within the run, by first ask tier: contend 2.9% of 34, playoffs 14.6% of 48, respect 20.2% of 168, rebuild 22.0% of 50
+     fired within the run, by starting tier: tier 1 10.7%, tier 2 12.0%, tier 3 20.0%, tier 4 28.0%
+     fired within the run, by first ask tier: title 32.4% of 37, contend 0.0% of 55, playoffs 0.7% of 144, respect 6.3% of 64
+     fired within the run, by starting tier: tier 1 16.0%, tier 2 0.0%, tier 3 1.3%, tier 4 5.3%
+   cfb: 28281 rounds and 4842 closes and offseasons compared byte for byte before a move or a firing
+--- sim tail:
+   cbb: 5 years out played; refused in a seat 2895, on an open season 17, with next year shut 15; chairs left empty at the program that let him go during a year out 3
+simCollegeSeat: RED in S4 (27)
+[41m[1m FAIL [22m[49m src/components/college-dynasty/CollegeSeat.test.tsx[2m > [22mRound 1320: the athletic director on the college boards[2m > [22mcfb: Take the job moves him once and opens the new program's trail; Sit the year out plays a season without him
+[31m[1mAssertionError[22m: expected { season: 2026, opp: 'VT', …(6) } to be null[39m
+[32m- Expected:[39m 
+[31m+ Received:[39m 
+[41m[1m FAIL [22m[49m src/components/college-dynasty/CollegeSeat.test.tsx[2m > [22mRound 1320: the athletic director on the college boards[2m > [22mcbb: Take the job moves him once and opens the new program's trail; Sit the year out plays a season without him
+[31m[1mAssertionError[22m: expected { season: 2026, opp: 'NCST', …(6) } to be null[39m
+[32m- Expected:[39m 
+[31m+ Received:[39m 
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m2 passed[39m[22m[90m (3)[39m
+::error file=/tmp/mut-I/src/components/college-dynasty/CollegeSeat.test.tsx,title=src/components/college-dynasty/CollegeSeat.test.tsx > Round 1320%3A the athletic director on the college boards > cfb%3A Take the job moves him once and opens the new program's trail; Sit the year out plays a season without him,line=198,column=67::AssertionError: expected { season: 2026, opp: 'VT', …(6) } to be null%0A%0A- Expected: %0Anull%0A%0A+ Received: %0A{%0A  "kind": "generated",%0A  "morale": -1.5,%0A  "opp": "VT",%0A  "recruit": -8,%0A  "season": 2026,%0A  "them": 36,%0A  "us": 14,%0A  "won": false,%0A}%0A%0A ❯ src/components/college-dynasty/CollegeSeat.test.tsx:198:67%0A%0A
+::error file=/tmp/mut-I/src/components/college-dynasty/CollegeSeat.test.tsx,title=src/components/college-dynasty/CollegeSeat.test.tsx > Round 1320%3A the athletic director on the college boards > cbb%3A Take the job moves him once and opens the new program's trail; Sit the year out plays a season without him,line=198,column=67::AssertionError: expected { season: 2026, opp: 'NCST', …(6) } to be null%0A%0A- Expected: %0Anull%0A%0A+ Received: %0A{%0A  "kind": "generated",%0A  "morale": -1.46,%0A  "opp": "NCST",%0A  "recruit": -8,%0A  "season": 2026,%0A  "them": 76,%0A  "us": 52,%0A  "won": false,%0A}%0A%0A ❯ src/components/college-dynasty/CollegeSeat.test.tsx:198:67%0A%0A
+MUT I: simCollegeSeat exit=1 vitest exit=1 => CAUGHT

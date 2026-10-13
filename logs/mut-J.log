@@ -1,0 +1,24 @@
+MUT J: applied to src/lib/collegeSeat.ts
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+  FAIL [S2]: a second close of the same season graded it again
+  FAIL [S2]: a second close of the same season graded it again
+  FAIL [S2]: a second close of the same season graded it again
+  FAIL [S2]: a second close of the same season graded it again
+  FAIL [S2]: a second close of the same season graded it again
+  FAIL [S2]: a second close of the same season graded it again
+  FAIL [S2]: (further failures in this check not printed)
+     fired within the run, by first ask tier: contend 2.9% of 34, playoffs 14.6% of 48, respect 19.6% of 168, rebuild 22.0% of 50
+     fired within the run, by starting tier: tier 1 10.7%, tier 2 12.0%, tier 3 18.7%, tier 4 28.0%
+     fired within the run, by first ask tier: title 32.4% of 37, contend 0.0% of 55, playoffs 0.7% of 144, respect 6.3% of 64
+     fired within the run, by starting tier: tier 1 16.0%, tier 2 0.0%, tier 3 1.3%, tier 4 5.3%
+   cfb: 28281 rounds and 4842 closes and offseasons compared byte for byte before a move or a firing
+--- sim tail:
+   cbb: 5 years out played; refused in a seat 2895, on an open season 17, with next year shut 15; chairs left empty at the program that let him go during a year out 3
+simCollegeSeat: RED in S2 (5697)
+[41m[1m FAIL [22m[49m src/lib/collegeSeat.test.ts[2m > [22mthe close[2m > [22mgrades with gradeSeason, moves trust, and grades a season once
+[31m[1mAssertionError[22m: expected { block: { v: 1, …(3) }, …(5) } to be null[39m
+[32m- Expected:[39m 
+[31m+ Received:[39m 
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m2 passed[39m[22m[90m (3)[39m
+::error file=/tmp/mut-J/src/lib/collegeSeat.test.ts,title=src/lib/collegeSeat.test.ts > the close > grades with gradeSeason%2C moves trust%2C and grades a season once,line=54,column=54::AssertionError: expected { block: { v: 1, …(3) }, …(5) } to be null%0A%0A- Expected: %0Anull%0A%0A+ Received: %0A{%0A  "block": {%0A    "career": {%0A      "seasonsOut": 0,%0A      "stints": [%0A        {%0A          "from": 2026,%0A          "grades": [%0A            "badly",%0A            "badly",%0A          ],%0A          "team": "p00",%0A          "tier": 1,%0A        },%0A      ],%0A      "version": 1,%0A    },%0A    "mandate": {%0A      "reqLevel": 2,%0A      "season": 2026,%0A      "text": "Make the Playoff and win a Playoff game. The boosters paid for this roster.",%0A      "tier": "contend",%0A      "winFloor": 0,%0A    },%0A    "trust": 4,%0A    "v": 1,%0A  },%0A  "fired": false,%0A  "grade": {%0A    "result": "badly",%0A    "trustDelta": -28,%0A    "verdict": "🔻 Nowhere near the ask. The athletic director stopped returning calls.",%0A  },%0A  "mandate": {%0A    "reqLevel": 2,%0A    "season": 2026,%0A    "text": "Make the Playoff and win a Playoff game. The boosters paid for this roster.",%0A    "tier": "contend",%0A    "winFloor": 0,%0A  },%0A  "trustBefore": 32,%0A  "warning": true,%0A}%0A%0A ❯ src/lib/collegeSeat.test.ts:54:54%0A%0A
+MUT J: simCollegeSeat exit=1 vitest exit=1 => CAUGHT

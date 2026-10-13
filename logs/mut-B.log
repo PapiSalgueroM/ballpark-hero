@@ -1,0 +1,13 @@
+MUT B: applied to src/lib/collegeSeat.ts
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+     fired within the run, by first ask tier: contend 2.9% of 34, playoffs 14.6% of 48, respect 19.6% of 168, rebuild 22.0% of 50
+     fired within the run, by starting tier: tier 1 10.7%, tier 2 12.0%, tier 3 18.7%, tier 4 28.0%
+     fired within the run, by first ask tier: title 32.4% of 37, contend 0.0% of 55, playoffs 0.7% of 144, respect 6.3% of 64
+     fired within the run, by starting tier: tier 1 16.0%, tier 2 0.0%, tier 3 1.3%, tier 4 5.3%
+   cfb: 28281 rounds and 4842 closes and offseasons compared byte for byte before a move or a firing
+   cbb: 23985 rounds and 5030 closes and offseasons compared byte for byte before a move or a firing
+--- sim tail:
+   cbb: 5 years out played; refused in a seat 2895, on an open season 17, with next year shut 15; chairs left empty at the program that let him go during a year out 3
+simCollegeSeat: all sections green (S1 to S9 and SY)
+[2m Test Files [22m [1m[32m3 passed[39m[22m[90m (3)[39m
+MUT B: simCollegeSeat exit=0 vitest exit=0 => NOT CAUGHT
