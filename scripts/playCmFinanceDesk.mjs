@@ -18,7 +18,9 @@
  *   - under reduced motion (emulated for the whole walk) no animation runs on
  *     the desk once it has settled.
  * Pictures of the desk are saved per size into $RC_OUT (or a temp folder), to
- * be looked at, and the kitty row's place on the 390 phone is printed.
+ * be looked at, and the kitty row's place on the 390 phone is printed. Under
+ * a control their names start control-<name>-, so they never overwrite the
+ * green run's.
  *
  * Controls, by page style so no source changes (each asserts its target is on
  * the page before it applies, or the run refuses with exit 2):
@@ -51,6 +53,11 @@ const BASE = SUPPLIED || `http://127.0.0.1:${PORT}`;
 const KEY = 'dukb-club-manager-save';
 const CONTROL = process.env.CM_FINANCE_CONTROL || '';
 const OUT = process.env.RC_OUT || fs.mkdtempSync(path.join(os.tmpdir(), 'playCmFinanceDesk-'));
+/* A control run names its pictures after the control, so a request that runs
+   the green walk and its controls side by side with one RC_OUT keeps the
+   green pictures (review of 2026-10-13: the wrap control had overwritten
+   finance-desk-320.png). */
+const SHOT = CONTROL ? `control-${CONTROL}-` : '';
 const SIZES = [[320, 640], [390, 844], [1280, 900]];
 const WEEKS = 10;
 const CARDS = ['data-finance-projection', 'data-pricing-desk', 'data-sponsor-desk', 'data-finance-books'];
@@ -270,8 +277,8 @@ async function measure(w, h) {
   const k = r.kitty || r.result;
   console.log(`  ${at}: ${r.texts} text holders, ${r.buttons} buttons and ${r.figures} figures measured; ${r.kitty ? 'kitty' : 'result'} row at y ${k ? k.y : '?'} (on screen at ${k ? k.vy : '?'})` +
     (r.kitty ? `, reads ${r.kitty.cells.map(c => c.text).join(' | ')}; cover ${r.cover ? r.cover.cells.map(c => c.text).join(' | ') : '?'}` : ''));
-  await page.screenshot({ path: path.join(OUT, `finance-view-${w}.png`) }).catch(() => {});
-  await page.locator('[data-finance-projection]').first().locator('..').screenshot({ path: path.join(OUT, `finance-desk-${w}.png`) }).catch(() => {});
+  await page.screenshot({ path: path.join(OUT, `${SHOT}finance-view-${w}.png`) }).catch(() => {});
+  await page.locator('[data-finance-projection]').first().locator('..').screenshot({ path: path.join(OUT, `${SHOT}finance-desk-${w}.png`) }).catch(() => {});
 }
 
 /* A picture of the "?" open at its money paragraph, to be read beside the new
@@ -282,7 +289,7 @@ async function helpPicture() {
   await para.waitFor({ timeout: 5000 }).catch(() => {});
   await para.evaluate(el => el.scrollIntoView({ block: 'center' })).catch(() => {});
   await page.waitForTimeout(300);
-  await page.screenshot({ path: path.join(OUT, 'finance-help-390.png') }).catch(() => {});
+  await page.screenshot({ path: path.join(OUT, `${SHOT}finance-help-390.png`) }).catch(() => {});
   await page.keyboard.press('Escape').catch(() => {});
 }
 
