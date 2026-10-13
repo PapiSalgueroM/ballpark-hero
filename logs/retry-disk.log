@@ -1,0 +1,46 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [31m×[39m src/test/soccerCareerSaveRetry.test.tsx[2m > [22mSoccer Career failed write recovery[2m > [22mkeeps the restored career and old bytes while showing a persistent save warning and one toast[32m 268[2mms[22m[39m
+[31m   → expected null to be '{"playerName":"Write Tester","nationa…' // Object.is equality[39m
+ [2m[90m↓[39m[22m src/test/soccerCareerSaveRetry.test.tsx[2m > [22mSoccer Career failed write recovery[2m > [22mkeeps repeated refused retries visible without replaying progress or repeating the toast
+ [2m[90m↓[39m[22m src/test/soccerCareerSaveRetry.test.tsx[2m > [22mSoccer Career failed write recovery[2m > [22mretries the actually earned training result exactly once and restores it on the next mount
+ [2m[90m↓[39m[22m src/test/soccerCareerSaveRetry.test.tsx[2m > [22mSoccer Career failed write recovery[2m > [22mretries the latest earned season after more than one failed career change without rerunning its engine
+ [2m[90m↓[39m[22m src/test/soccerCareerSaveRetry.test.tsx[2m > [22mSoccer Career failed write recovery[2m > [22mclears a failed save on the next successful automatic save and alerts again on a later refusal
+ [2m[90m↓[39m[22m src/test/soccerCareerSaveRetry.test.tsx[2m > [22mSoccer Career failed write recovery[2m > [22mclears the old failure after explicit reset and saves the replacement career without old progress
+ [2m[90m↓[39m[22m src/test/soccerCareerSaveRetry.test.tsx[2m > [22mSoccer Career failed write recovery[2m > [22mpersists the finished retirement on retry without recording its completion a second time
+ [32m✓[39m src/test/soccerCareerSaveRetry.test.tsx[2m > [22mSoccer Career failed write recovery[2m > [22mretains an independent valid restore and earned engine baseline without mounting the page[32m 9[2mms[22m[39m
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m1 passed[39m[22m[2m | [22m[33m6 skipped[39m[90m (8)[39m
+[2m   Start at [22m 18:51:03
+[2m   Duration [22m 5.38s[2m (transform 3.02s, setup 80ms, collect 4.10s, tests 278ms, environment 492ms, prepare 131ms)[22m
+
+JSON report written to /home/runner/work/ballpark-hero/ballpark-hero/soccer-career-save-retry-artifacts/mounted/disk-report.json
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/soccerCareerSaveRetry.test.tsx[2m > [22mSoccer Career failed write recovery[2m > [22mkeeps the restored career and old bytes while showing a persistent save warning and one toast
+[31m[1mAssertionError[22m: expected null to be '{"playerName":"Write Tester","nationa…' // Object.is equality[39m
+
+[32m- Expected:[39m 
+"{\"playerName\":\"Write Tester\",\"nationality\":\"England\",\"position\":\"CM\",\"era\":\"2020-24\",\"age\":16,\"potential\":88,\"potentialEarned\":0,\"eliteStreak\":0,\"startingOverall\":70,\"physique\":{\"heightCm\":180,\"weightKg\":75},\"attrShape\":{},\"karma\":50,\"phoneUsedIds\":[\"youth_bully\"],\"phoneInbox\":[{\"id\":\"youth_bully-2020\",\"defId\":\"youth_bully\",\"from\":\"Academy mate\",\"emoji\":\"🥺\",\"text\":\"The older lads keep hiding my boots and binning my kit. Coach says toughen up. Don't know what to do.\",\"year\":2020,\"choices\":[{\"label\":\"Stand up for him\",\"reply\":\"Sit with me at lunch. If they touch your stuff again they deal with me\",\"karma\":10,\"morale\":2},{\"label\":\"Stay out of it\",\"reply\":\"Rough mate. Keep your head down\",\"karma\":-6}]}],\"currentClub\":\"Arsenal Youth\",\"currentClubCountry\":\"England\",\"currentClubTier\":1,\"currentClubColor\":\"#EF0107\",\"currentLeague\":\"Premier League\",\"contractYearsLeft\":2,\"weeklyWage\":500,\"marketValue\":0.1,\"pace\":70,\"shooting\":70,\"passing\":70,\"dribbling\":70,\"defending\":70,\"physical\":70,\"reflexes\":70,\"overall\":70,\"seasons\":[{\"year\":2020,\"age\":16,\"club\":\"Arsenal Youth\",\"clubCountry\":\"England\",\"clubTier\":1,\"apps\":0,\"goals\":0,\"assists\":0,\"cleanSheets\":0,\"yellowCards\":0,\"redCards\":0,\"rating\":0,\"leagueTitle\":false,\"domesticCup\":false,\"championsLeague\":false,\"worldCup\":false,\"ballonDor\":false,\"ballonDorRank\":null,\"type\":\"youth\",\"intApps\":0,\"intGoals\":0,\"intAssists\":0,\"intRating\":0,\"tournament\":null,\"tournamentResult\":null}],\"events\":[\"📋 Joined Arsenal Youth Academy aged 16\"],\"retired\":false,\"phase\":\"youth\",\"pendingOffers\":[],\"pendingSummary\":null,\"transferSituation\":null,\"loan\":null,\"pendingLoanOffers\":null,\"pendingEvents\":[],\"lastEventId\":null,\"statBoostNextSeason\":{},\"pendingNews\":[],\"internationalCareer\":false,\"sponsorDeal\":null,\"totalEarnings\":0,\"popularity\":10,\"morale\":70,\"isLeader\":false,\"hasRelationship\":false,\"intStats\":{\"caps\":0,\"goals\":0,\"assists\":0,\"tournaments\":0,\"worldCups\":0,\"continentals\":0,\"worldCupWins\":0,\"continentalWins\":0,\"isCaptain\":false,\"isRetired\":false,\"debutYear\":null,\"debutAge\":null,\"worldCupResults\":[],\"squadSnubs\":0,\"failedQualifications\":0},\"pendingWorldCup\":null,\"pendingTournament\":null,\"lastTournament\":null,\"intlHistory\":[],\"rival\":null,\"rivalCreated\":false,\"pendingRivalryEvent\":null,\"lastRivalryEventId\":null,\"rivalrySummary\":null,\"netWorth\":0,\"lifestyleLevel\":\"Humble\",\"lifestyleCostPerYear\":0.02,\"socialMediaFollowers\":0,\"sponsorshipIncome\":0,\"properties\":[],\"investments\":[],\"consecutiveDeficitYears\":0,\"agentFeesPaid\":0,\"family\":{\"isMarried\":false,\"marriedAge\":null,\"children\":0,\"isDivorced\":false,\"divorceAge\":null},\"purchasedItems\":[],\"investmentHoldings\":[],\"totalAssetValue\":0,\"customYearlyCosts\":0,\"awards\":[],\"pendingBallonDor\":null,\"lastUCLResult\":null,\"legacy\":null,\"postRetirementChoice\":null,\"managerState\":null,\"isFinalSeason\":false,\"isPundit\":false,\"punditEvents\":[],\"primeType\":\"normal\",\"socialMediaActionUsedThisSeason\":false,\"socialMediaFocusBoost\":false,\"pendingCoverAthleteEvent\":false,\"coverAthleteAccepted\":false,\"activeSponsorship\":null,\"personality\":null,\"agentId\":null,\"lifeFlags\":{},\"appearance\":null,\"corruptionHeat\":0,\"dirtyMoney\":0,\"prisonSeasons\":0,\"academyClubName\":\"Arsenal\",\"moralDilemmasTriggered\":[],\"pendingMoralDilemma\":null,\"pedSeasonsRemaining\":0,\"pedActive\":false,\"matchFixBanned\":0,\"divingActive\":false,\"integrityBonus\":0,\"pendingAppealResult\":null,\"childEventsSeen\":[],\"pregnancyAnnounced\":false,\"punditState\":null,\"ownerState\":null,\"peakOverall\":70,\"retirementSuggested\":false,\"phone\":{\"threads\":[{\"id\":\"th_academy\",\"c\":\"academy\",\"name\":\"Academy kid\",\"emoji\":\"🌱\",\"lines\":[{\"w\":0,\"t\":\"The older lads keep hiding my boots and binning my kit. Coach says toughen up. Don't know what to do.\",\"y\":2020}],\"rel\":50,\"pending\":{\"kind\":\"legacy\",\"msgId\":\"youth_bully-2020\"},\"waiting\":2020,\"cold\":0,\"seen\":[],\"lastReplyYear\":null},{\"id\":\"th_mum\",\"c\":\"mum\",\"name\":\"Mum\",\"emoji\":\"❤️\",\"lines\":[{\"w\":0,\"t\":\"Just checking you are eating something other than chicken and rice. Are you?\",\"y\":2020}],\"rel\":50,\"pending\":{\"kind\":\"convo\",\"convo\":\"mum_checkin\",\"beat\":0},\"waiting\":2020,\"cold\":0,\"seen\":[\"mum_checkin\"],\"lastReplyYear\":null}],\"feed\":[],\"world\":null,\"clubs\":{},\"rivalClub\":null,\"seed\":3667530511,\"offers\":0,\"perksTaken\":0}}"
+
+[31m+ Received:[39m 
+null
+
+[36m [2m❯[22m src/test/soccerCareerSaveRetry.test.tsx:[2m130:39[22m[39m
+    [90m128| [39m    [35mconst[39m m [33m=[39m [34mmount[39m([34mnativeCareer[39m()[33m,[39m [35mtrue[39m)[33m;[39m [34massertWarning[39m(m[33m.[39mview)[33m;[39m
+    [90m129| [39m    expect(m.view.container.textContent).toContain('Write Tester'); ex…
+    [90m130| [39m    expect(localStorage.getItem(KEY)).toBe(m.raw); expect(localStorage…
+    [90m   | [39m                                      [31m^[39m
+    [90m131| [39m    expect(m.attempts).toHaveLength(1); expect(m.removes).not.toHaveBe…
+    [90m132| [39m    expect(toast.error).toHaveBeenCalledExactlyOnceWith(notice, expect…
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+simSoccerCareerSaveRetry disk: mapped save retry outcome rejected changed source; independent restore passed.
