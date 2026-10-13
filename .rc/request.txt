@@ -1,0 +1,21 @@
+#!playwright
+simCareerSeasonRatings: node scripts/simCareerSeasonRatings.mjs
+simCareerStory: node scripts/simCareerStory.mjs
+simCareerTraining: node scripts/simCareerTraining.mjs
+simClubCaptaincy: node scripts/simClubCaptaincy.mjs
+simClubManagerNewLeagues: node scripts/simClubManagerNewLeagues.mjs
+simClubSquads: node scripts/simClubSquads.mjs
+simClubVerdict: node scripts/simClubVerdict.mjs
+simCmDataOnDemand: node scripts/simCmDataOnDemand.mjs
+simCreation: node scripts/simCreation.mjs
+simHomeFront: node scripts/simHomeFront.mjs
+simInjuryArc: node scripts/simInjuryArc.mjs
+simLoanSpell: node scripts/simLoanSpell.mjs
+simManagerCareer: node scripts/simManagerCareer.mjs
+simManagerEpilogue: node scripts/simManagerEpilogue.mjs
+simMobileChrome: node scripts/simMobileChrome.mjs
+simPhone: node scripts/simPhone.mjs
+simPotential: node scripts/simPotential.mjs
+simRevealMoments: node scripts/simRevealMoments.mjs
+simRevealScroll: node scripts/simRevealScroll.mjs
+simSaveKeeper: node scripts/simSaveKeeper.mjs
