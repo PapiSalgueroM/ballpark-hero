@@ -54,7 +54,7 @@ export function startCollegeSeat<S extends CollegeSeatState>(st: S, b: CollegeSe
 /** An older dynasty takes the athletic director: only at the first press of a season. */
 export function optInCollegeSeat<S extends CollegeSeatState>(st: S, b: CollegeSeatBinding<S, unknown>): boolean {
   if (st.seat || st.round !== 1) return false;
-  st.seat = newCollegeSeat(b.view(st));
+  startCollegeSeat(st, b);
   return true;
 }
 

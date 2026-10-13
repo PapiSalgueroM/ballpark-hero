@@ -25,6 +25,15 @@ import {
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { cn } from '@/lib/utils';
 import { useRevealScroll } from '@/hooks/useRevealScroll';
+/* Round 1320: the athletic director. Every write into the state is the glue's
+   (src/lib/collegeSeatBind.ts), every word the seat's (src/lib/collegeSeat.ts),
+   and every node it draws carries data-college-seat. */
+import {
+  applyCollegeClose, collegeSeatFirstPress, collegeSeatOnLoad, optInCollegeSeat, startCollegeSeat,
+  type CollegeSeatBinding,
+} from '@/lib/collegeSeatBind';
+import { collegeRecapView, holdsSeat, type CollegeSeatBlock } from '@/lib/collegeSeat';
+import { SeatCard, SeatPickLine, SeatRecapLine, SeatSlot } from '@/components/college-dynasty/AthleticDirectorCard';
 
 export type CollegePhase = 'pick' | 'season' | 'recap' | 'recruit';
 type Tab = 'team' | 'play' | 'schedule' | 'rankings' | 'standings';
@@ -35,6 +44,8 @@ export interface CollegeState<T extends CollegeTeam> {
   season: number; round: number; myTeam: string; nil: number; myTitles: number; seasonsPlayed: number;
   teams: Record<string, T>;
   depth?: number; lastRivalry?: RivalryResult | null; mySlate?: SlateGame[]; staffWindow?: StaffWindow | null;
+  /** Round 1320: the athletic director's block. Absent on every save that never took him. */
+  seat?: CollegeSeatBlock;
 }
 export interface CollegeGame { home: string; away: string; hs: number; as: number; winner: string }
 export interface CollegeRecruit { id: string; name: string; pos: string; stars: number; grade: number; nilAsk: number }
@@ -100,6 +111,8 @@ export interface CollegeSport<T extends CollegeTeam, S extends CollegeState<T>, 
   share: (st: S, isChamp: boolean, recap: R, label: (id: string) => string) => { gameName: string; gamePath: string; score: string; customText: string };
   words: CollegeWords<T, S, Rc>;
   skin: CollegeSkin;
+  /** Round 1320: the athletic director's binding (src/lib/cfbSeatBind.ts, src/lib/cbbSeatBind.ts). */
+  seat?: CollegeSeatBinding<S, R>;
 }
 
 /** Every line of copy that is the sport's own. */
@@ -209,6 +222,11 @@ export default function CollegeDynastyBoard<
   /* Round 728: which chair's market is open in the hiring window, one at a
      time so the offseason screen stays short. */
   const [shopRole, setShopRole] = useState<StaffRole | null>(null);
+  /* Round 1320: the athletic director's card is open in place of the tab
+     content, and the season an older dynasty said "Not now" to his offer
+     (nothing saved: a reload offers him again). */
+  const [seatOpen, setSeatOpen] = useState(false);
+  const [passedSeason, setPassedSeason] = useState<number | null>(null);
 
   useGameCompletion(sport.completionId, wonNow, (st?.myTitles ?? 0) * 100 + (st?.seasonsPlayed ?? 0) * 5);
 
@@ -245,9 +263,15 @@ export default function CollegeDynastyBoard<
          portal are minted from the same counter as the rosters, so all three
          are one id space and the repair has to see all three at once. */
       sport.ensureIds(s.st, s.recruits, s.portal);
+      /* Round 1320: a stored athletic director that does not check out is
+         dropped alone, in memory (the save is written again at the next
+         press), and the load rules say where a seat save opens. */
+      const seatRule = sport.seat ? collegeSeatOnLoad(s.st, s.phase, sport.seat) : null;
       setSt(s.st);
       setRecruits(s.recruits ?? null);
       setPortal(s.portal ?? null);
+      if (seatRule === 'recruit') { openRecruiting(s.st); return; }
+      if (seatRule === 'season') { setPhase('season'); return; }
       /* Round 426 part three (CFB) and Round 823 (CBB): a reload on the recap
          used to map back to the season screen, and one click played the last
          round and the whole postseason a second time on a season that was
@@ -270,7 +294,8 @@ export default function CollegeDynastyBoard<
 
   const start = (id: string) => {
     const state = sport.init(id, Math.random, { depth: true });
-    setSt(state); setPhase('season'); setTab('team');
+    if (sport.seat) startCollegeSeat(state, sport.seat);
+    setSt(state); setPhase('season'); setTab('team'); setSeatOpen(false);
     setFeed(w.welcome(state, id, ctx));
     setRecap(null); setWonNow(false);
     persist(state, 'season', null, null);
@@ -286,6 +311,7 @@ export default function CollegeDynastyBoard<
        football (Round 426 part three) after the final round is played. */
     if (sport.closedBeforeRound(st)) return;
     const state: S = JSON.parse(JSON.stringify(st));
+    if (sport.seat) collegeSeatFirstPress(state, sport.seat);
     const { games, lines } = sport.playRound(state, Math.random, ctx);
     setLastGames(games);
     if (state.round >= sport.rounds) {
@@ -294,6 +320,8 @@ export default function CollegeDynastyBoard<
       const won = sport.championOf(held) === state.myTeam;
       if (won) state.myTitles += 1;
       state.seasonsPlayed += 1;
+      if (sport.seat) applyCollegeClose(state, sport.seat, held);
+      setSeatOpen(false);
       setWonNow(won);
       setRecap(held);
       setPhase('recap');
@@ -311,6 +339,16 @@ export default function CollegeDynastyBoard<
   const startRecruiting = () => {
     if (!st) return;
     openRecruiting(st);
+  };
+
+  /* Round 1320: an older dynasty takes the athletic director, only before a
+     season's first press. The one way an old save ever gains a field. */
+  const takeSeatOffer = () => {
+    if (!st || !sport.seat) return;
+    const state: S = JSON.parse(JSON.stringify(st));
+    if (!optInCollegeSeat(state, sport.seat)) return;
+    setSt(state);
+    persist(state, 'season', recruits, portal);
   };
 
   const sign = (r: Rc, fromPortal: boolean) => {
@@ -383,6 +421,7 @@ export default function CollegeDynastyBoard<
         <div className="rounded-2xl border border-border bg-card p-4 text-center">
           <p className="font-display text-lg font-bold text-foreground">Pick your program</p>
           <p className="mt-1 text-xs text-muted-foreground">{w.pickIntro}</p>
+          {sport.seat && <SeatPickLine />}
         </div>
         {sport.confs.map(conf => (
           <div key={conf}>
@@ -409,6 +448,7 @@ export default function CollegeDynastyBoard<
   if (phase === 'recap' && recap && sport.recapDrawable(recap)) {
     const isChamp = sport.championOf(recap) === st.myTeam;
     const { RecapBody } = sport;
+    const seatRecap = sport.seat && st.seat ? collegeRecapView(st.seat, sport.seat.view(st)) : null;
     /* Round 530: the season curtain. Pure presentation over the postseason
        the engine already ran: the champion slams in, your own line rises,
        the award lands after the champion, then the title game and the ledger
@@ -422,6 +462,7 @@ export default function CollegeDynastyBoard<
           {isChamp && <ConfettiBurst seed={st.season} count={34} />}
           <Crown className="cm-slam mx-auto h-10 w-10 text-gold" />
           <RecapBody st={st} my={my} recap={recap} isChamp={isChamp} label={label} signed={signed} />
+          {seatRecap && <SeatRecapLine verdict={seatRecap.verdict} trust={seatRecap.trust} hot={seatRecap.hot} />}
           <div className="cm-rise mt-3 flex items-center justify-center gap-3 text-sm" style={{ animationDelay: '0.9s' }}>
             <span className="rounded-full border border-border bg-background px-3 py-1.5">{sport.recapTitles} <b className="text-gold">{st.myTitles}</b></span>
             <span className="rounded-full border border-border bg-background px-3 py-1.5">Seasons <b className="text-primary">{st.seasonsPlayed}</b></span>
@@ -571,6 +612,10 @@ export default function CollegeDynastyBoard<
     );
   }
 
+  /* Round 1320: the athletic director's view of the league, when this sport binds him. */
+  const seatView = sport.seat ? sport.seat.view(st) : null;
+  const seatCard = seatOpen && seatView && st.seat && holdsSeat(st.seat);
+
   return (
     <div className="space-y-4">
       <CelebrationStyles />
@@ -582,6 +627,13 @@ export default function CollegeDynastyBoard<
         <span className="rounded-full border border-border bg-card px-3 py-1 text-muted-foreground">Strength <b className="text-primary">{strength}</b></span>
       </div>
 
+      {seatView && (
+        <SeatSlot
+          block={st.seat} view={seatView} offer={!st.seat && st.round === 1 && passedSeason !== st.season}
+          onOpen={() => setSeatOpen(true)} onTake={takeSeatOffer} onPass={() => setPassedSeason(st.season)}
+        />
+      )}
+
       <div className="flex items-center justify-center gap-0.5 rounded-full bg-secondary p-1 text-xs sm:gap-1">
         {/* Round 728: five tabs, so the icons step aside on a phone. */}
         {([
@@ -591,7 +643,7 @@ export default function CollegeDynastyBoard<
           ['rankings', 'Top 25', ListOrdered],
           ['standings', w.standingsTab, Trophy],
         ] as [Tab, string, typeof Users][]).map(([key, lbl, Icon]) => (
-          <button key={key} onClick={() => setTab(key)} className={cn('inline-flex items-center gap-1 rounded-full px-1.5 py-1.5 font-semibold transition-all min-[360px]:px-2 sm:px-3', tab === key ? 'bg-background text-foreground shadow-sm' : 'text-muted-foreground hover:text-foreground')}>
+          <button key={key} onClick={() => { setTab(key); setSeatOpen(false); }} className={cn('inline-flex items-center gap-1 rounded-full px-1.5 py-1.5 font-semibold transition-all min-[360px]:px-2 sm:px-3', tab === key ? 'bg-background text-foreground shadow-sm' : 'text-muted-foreground hover:text-foreground')}>
             <Icon className="hidden h-3.5 w-3.5 sm:inline" /> {lbl}
           </button>
         ))}
@@ -607,7 +659,9 @@ export default function CollegeDynastyBoard<
         </div>
       )}
 
-      {tab === 'team' && (
+      {seatCard && <SeatCard block={st.seat!} view={seatView!} onBack={() => setSeatOpen(false)} />}
+
+      {!seatCard && tab === 'team' && (
         <div className="rounded-2xl border border-border bg-card p-3">
           <p className="mb-2 text-center text-xs text-muted-foreground">{school.name} {w.depthChart}, prestige {school.prestige}</p>
           {/* Round 728: the two units and who coaches them. */}
@@ -643,7 +697,7 @@ export default function CollegeDynastyBoard<
         </div>
       )}
 
-      {tab === 'play' && (
+      {!seatCard && tab === 'play' && (
         <div className="space-y-3">
           <div className="rounded-2xl border border-gold/40 bg-card p-4 text-center">
             <p className="mb-2 text-sm text-foreground">{w.playIntro(!!st.depth)}</p>
@@ -674,7 +728,7 @@ export default function CollegeDynastyBoard<
         </div>
       )}
 
-      {tab === 'schedule' && (
+      {!seatCard && tab === 'schedule' && (
         <div className="rounded-2xl border border-border bg-card p-3">
           <p className="mb-1 text-center text-[10px] font-bold uppercase tracking-wider text-muted-foreground">{school.name} {w.seasonLabel(st.season)} schedule</p>
           {st.depth ? (() => {
@@ -709,7 +763,7 @@ export default function CollegeDynastyBoard<
         </div>
       )}
 
-      {tab === 'rankings' && (
+      {!seatCard && tab === 'rankings' && (
         <div className="rounded-2xl border border-border bg-card p-3">
           <p className="mb-1 text-center text-[10px] font-bold uppercase tracking-wider text-muted-foreground">The Top 25</p>
           {(() => {
@@ -730,7 +784,7 @@ export default function CollegeDynastyBoard<
         </div>
       )}
 
-      {tab === 'standings' && (
+      {!seatCard && tab === 'standings' && (
         <div className="rounded-2xl border border-border bg-card p-3">
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
             {sport.confs.map(conf => (

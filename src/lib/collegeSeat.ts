@@ -36,7 +36,7 @@
    (the athletic director, the boosters), nothing is a quote, nobody is real. */
 
 import {
-  careerTotals, currentStint, endSeatStint, leagueTiers, newGmCareer, poachBid,
+  careerTotals, currentStint, endSeatStint, fillSeatWords, leagueTiers, newGmCareer, poachBid, BADLY_FIRED_CEILING,
   recordSeatSeason, sanitizeGmCareer, seatGrade, seatMandate, seatNextYear, seatOffers, sitOutYear, startSeatStint,
   type GmCareer, type GmSeatPack, type SeatNextYear, type SeatOffer, type SeatTeam,
 } from './gmSeat';
@@ -458,4 +458,67 @@ export function collegeSeatLoad(seat: CollegeSeatBlock | null, phase: string, cl
 export function collegeCareerTotals(block: CollegeSeatBlock): { seasons: number; titles: number; programs: number } {
   const t = careerTotals(block.career);
   return { seasons: t.seasons, titles: t.titles, programs: block.career.stints.length };
+}
+
+/* ---------------- what the screens read ---------------- */
+
+/** The season screen's tile: the ask, trust and the live line. Null while he holds no seat. */
+export function collegeTileView(block: CollegeSeatBlock, view: CollegeLeagueView): { ask: string; trust: number; line: string; onTrack: boolean } | null {
+  const pace = collegePace(block, view);
+  if (!pace) return null;
+  const mandate = block.mandate && block.mandate.season === view.season ? block.mandate : collegeAsk(view, view.season);
+  return { ask: mandate.text, trust: block.trust, line: pace.line, onTrack: pace.onTrack };
+}
+
+/** The recap's line for the season just closed: the verdict in the pack's words and trust. Null when the season was not graded. */
+export function collegeRecapView(block: CollegeSeatBlock, view: CollegeLeagueView): { verdict: string; trust: number; hot: boolean; fired: boolean } | null {
+  if (lastGraded(block) !== view.season) return null;
+  const s = currentStint(block.career);
+  const grade = s.grades[s.grades.length - 1];
+  const pack = collegePack(view.sport);
+  const fired = s.ended === 'fired';
+  return { verdict: fillSeatWords(pack.verdicts[grade], pack, block.mandate?.winFloor ?? 0), trust: block.trust, hot: !fired && block.trust <= 25, fired };
+}
+
+/** One row a stint for the card's record. */
+export interface CollegeStintRow { team: string; name: string; since: number; seasons: number; titles: number; ended: string | null }
+
+export function collegeStintRows(block: CollegeSeatBlock, view: CollegeLeagueView): CollegeStintRow[] {
+  const words: Record<string, string> = { fired: 'let go', poached: 'took the buyout', walked: 'walked', expired: 'deal ran out' };
+  return block.career.stints.map(s => ({
+    team: s.team, name: nameOf(view, s.team), since: s.from, seasons: s.grades.length,
+    titles: s.grades.filter(g => g === 'title').length, ended: s.ended ? words[s.ended] : null,
+  }));
+}
+
+/** The "?" behind the athletic director: the rules and a worked example, every number read off the code. */
+export function collegeSeatRules(view: CollegeLeagueView): { rules: string[]; example: string[] } {
+  const pack = collegePack(view.sport);
+  /* the five trust moves, read off gradeSeason on a 'win a game' ask */
+  const ask: OwnerMandate = { tier: 'contend', text: '', winFloor: 0, reqLevel: 2, season: view.season };
+  const move = (o: Partial<FoSeasonOutcome>) => seatGrade(pack, ask, { wins: 0, madePlayoffs: false, roundsWon: 0, reachedFinal: false, wonTitle: false, ...o }).trustDelta;
+  const title = move({ wonTitle: true, madePlayoffs: true, reachedFinal: true });
+  const beat = move({ madePlayoffs: true, roundsWon: 2, reachedFinal: true });
+  const met = move({ madePlayoffs: true, roundsWon: 1 });
+  const short = move({ madePlayoffs: true });
+  const far = move({});
+  const sgn = (n: number) => (n > 0 ? `+${n}` : `${n}`);
+  const tilted = Object.entries(COLLEGE_ASK_TILT[view.sport]);
+  const rules = [
+    `Before every season the athletic director names an ask, read off where your roster ranks in the country, not off the program's name: the best rosters are asked for ${pack.words.title}, the next ones to win ${pack.words.round}, then to make ${pack.words.playoffs}, and the rest for a win total.`,
+    ...(tilted.length ? [`In this game the athletic director asks one step more of a roster that would only be asked for a win total, because ${view.fieldSize} of ${view.programs.length} programs make ${pack.words.playoffs}.`] : []),
+    `Trust starts at ${FO_TRUST_START} of 100. At the end of every season it moves by the grade: ${sgn(title)} for ${pack.words.title}, ${sgn(beat)} for beating the ask, ${sgn(met)} for meeting it, ${sgn(short)} for falling short and ${sgn(far)} for missing it by a mile.`,
+    'Trust at zero and you are let go. The dynasty does not end there: the phone rings with the jobs you have earned, or nobody calls and you can sit a year out while the country plays on. If the phone stops for good, a new dynasty is the way back in.',
+    `Let go straight after a season nowhere near the ask and no program above the ${['', 'top', 'second', 'third', 'bottom'][BADLY_FIRED_CEILING]} tier will call. A program that let you go never calls again. Those are this game's rules.`,
+    'Sit a year out and the program that let you go plays the season with nobody in your chair, so a coordinator it loses that offseason stays unreplaced until the next one.',
+  ];
+  const t1 = applyMandateResult(FO_TRUST_START, { result: 'missed', verdict: '', trustDelta: short }).trust;
+  const t2 = applyMandateResult(t1, { result: 'badly', verdict: '', trustDelta: far });
+  const t3 = applyMandateResult(t2.trust, { result: 'badly', verdict: '', trustDelta: far });
+  const example = [
+    `Say you take over with trust ${FO_TRUST_START} and fall short of the ask: ${FO_TRUST_START} ${sgn(short)} leaves ${t1}.`,
+    `Next season you miss it by a mile: ${t1} ${sgn(far)} leaves ${t2.trust}${t2.warning ? ', and the seat is hot' : ''}.`,
+    `Do it again and trust hits ${t3.trust}${t3.fired ? ': you are let go, and the job market opens' : ''}.`,
+  ];
+  return { rules, example };
 }
