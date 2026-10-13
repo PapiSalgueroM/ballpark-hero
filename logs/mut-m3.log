@@ -1,0 +1,15 @@
+MUTATION m3 APPLIED to src/lib/nbaEarnedDraft.ts
+   section 1: green
+   section 6: green
+   section 2: green
+   section 3: green
+   section 4: green
+   section 8: green
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+[41m[1m FAIL [22m[49m src/lib/nbaEarnedDraft.test.ts[2m > [22mthe host and the three presses[2m > [22mthe staff press is done, and every man of his reaches the re-sign ledger with his round
+[31m[1mAssertionError[22m: expected 5 to be 4 // Object.is equality[39m
+[32m- Expected[39m
+[31m+ Received[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m23 passed[39m[22m[90m (24)[39m
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/nbaEarnedDraft.test.ts,title=src/lib/nbaEarnedDraft.test.ts > the host and the three presses > the staff press is done%2C and every man of his reaches the re-sign ledger with his round,line=164,column=68::AssertionError: expected 5 to be 4 // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- 4%0A+ 5%0A%0A ❯ src/lib/nbaEarnedDraft.test.ts:164:68%0A%0A
+m3 CAUGHT: harness 0, vitest 1

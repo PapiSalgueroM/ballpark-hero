@@ -1,0 +1,15 @@
+MUTATION m1 APPLIED to src/lib/nbaEarnedDraft.ts
+  FAIL [9]: 1462 of 1754 rival choices are not the man the rule picks on the engine's grade plus 2 a point of need
+  FAIL [9]: 1131 rival choices passed a man whose grade beat theirs by more than 2
+   section 1: green
+   section 6: green
+   section 2: green
+   section 3: green
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+[41m[1m FAIL [22m[49m src/lib/nbaEarnedDraft.test.ts[2m > [22mthe host and the three presses[2m > [22ma rival reads the engine's own grade; he, his staff and every card read his scout (A5)
+[31m[1mAssertionError[22m: expected 85 to be 88 // Object.is equality[39m
+[32m- Expected[39m
+[31m+ Received[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m23 passed[39m[22m[90m (24)[39m
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/nbaEarnedDraft.test.ts,title=src/lib/nbaEarnedDraft.test.ts > the host and the three presses > a rival reads the engine's own grade; he%2C his staff and every card read his scout (A5),line=141,column=78::AssertionError: expected 85 to be 88 // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- 88%0A+ 85%0A%0A ❯ src/lib/nbaEarnedDraft.test.ts:141:78%0A%0A
+m1 CAUGHT: harness 1, vitest 1

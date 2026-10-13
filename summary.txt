@@ -1,0 +1,5 @@
+mut-m1 exit=1 11s | m1 CAUGHT: harness 1, vitest 1
+mut-m3 exit=1 10s | m3 CAUGHT: harness 0, vitest 1
+mut-m4 exit=1 10s | m4 CAUGHT: harness 0, vitest 1
+mut-m5 exit=1 10s | m5 CAUGHT: harness 1, vitest 0
+after exit=0 8s | simNbaEarnedDraft: green.
