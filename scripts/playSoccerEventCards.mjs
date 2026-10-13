@@ -83,14 +83,16 @@ const CARD_IDS = [1, 7, 18];
 const baseState = drive(B, 1327, (s, played) => s.phase === 'random_events' && played >= 4);
 assert.ok(baseState, 'the base drive reached a card batch');
 const catalog = B.getAllEvents(JSON.parse(JSON.stringify(baseState)));
-const cardsSave = JSON.parse(JSON.stringify({ ...baseState, phase: 'random_events', pendingEvents: CARD_IDS.map(id => catalog.find(e => e.id === id)) }));
+/* A chance wheel the drive left unseen would open over the cards: it is marked seen, as if the player had closed it. */
+const seen = s => (s.chanceWheel ? { ...s, chanceWheel: { ...s.chanceWheel, seen: true } } : s);
+const cardsSave = JSON.parse(JSON.stringify(seen({ ...baseState, phase: 'random_events', pendingEvents: CARD_IDS.map(id => catalog.find(e => e.id === id)) })));
 const CARD_TITLES = cardsSave.pendingEvents.map(e => e.title);
 const WOKEN = ['Reveals Secret To Success', 'Booed By Own Fans', 'Wants Out As Contract Talks', 'Out For Weeks With', 'Hits Out At Manager', 'M Bid For',
   'Available On Free Transfer', 'HAPPIEST MAN', 'Match Is A Show Now', 'Followers After Viral Moment', 'LEADER OF THE NATION', 'Works Harder Than'];
 let paperSave = null, wokenHeadline = null;
 for (let seed = 1; seed < 400 && !paperSave; seed += 1) {
   const s = drive(E, 50000 + seed, st => st.phase === 'newspaper' && (st.pendingNews || []).some(a => WOKEN.some(w => a.headline.includes(w))));
-  if (s) { paperSave = JSON.parse(JSON.stringify(s)); wokenHeadline = s.pendingNews.find(a => WOKEN.some(w => a.headline.includes(w))).headline; }
+  if (s) { paperSave = JSON.parse(JSON.stringify(seen(s))); wokenHeadline = s.pendingNews.find(a => WOKEN.some(w => a.headline.includes(w))).headline; }
 }
 assert.ok(paperSave, 'some career printed a story under weight 1');
 console.log(`saves: cards ${CARD_TITLES.join(', ')} (base engine); paper "${wokenHeadline}" (this engine)`);
@@ -105,7 +107,13 @@ const readCard = page => page.evaluate(() => {
   const card = h?.closest('.rounded-xl.border-2');
   if (!card) return null;
   const vw = document.documentElement.clientWidth;
-  const buttons = [...card.querySelectorAll('button')].map(b => { const r = b.getBoundingClientRect(); return { label: b.textContent.trim().slice(0, 60), height: r.height, left: r.left, right: r.right }; });
+  const buttons = [...card.querySelectorAll('button')].map(b => {
+    const r = b.getBoundingClientRect();
+    const x = r.left + r.width / 2, y = r.top + Math.min(r.height / 2, 20);
+    const inView = y >= 0 && y < innerHeight;
+    const top = inView ? document.elementFromPoint(x, y) : null;
+    return { label: b.textContent.trim().slice(0, 60), height: r.height, left: r.left, right: r.right, inView, covered: inView && !(top && b.contains(top)) };
+  });
   const small = [];
   const walker = document.createTreeWalker(card, NodeFilter.SHOW_TEXT);
   for (let n = walker.nextNode(); n; n = walker.nextNode()) {
@@ -114,7 +122,7 @@ const readCard = page => page.evaluate(() => {
     if (size < 12) small.push({ text: n.textContent.trim().slice(0, 60), size, cls: String(el.className) });
   }
   const r = card.getBoundingClientRect();
-  return { title: h.textContent, buttons, small, overflow: document.documentElement.scrollWidth > vw + 1, left: r.left, right: r.right, vw, scrollY: window.scrollY };
+  return { title: h.textContent, buttons, small, overflow: document.documentElement.scrollWidth > vw + 1, left: r.left, right: r.right, top: r.top, vh: innerHeight, vw, scrollY: window.scrollY };
 });
 const waitText = (page, text) => page.waitForFunction(t => document.body.innerText.includes(t), text, { timeout: 30000 });
 const browser = await pw.chromium.launch({ headless: true });
@@ -129,7 +137,8 @@ try {
     try {
       const open = async save => {
         await page.goto(`${SITE}/robots.txt`);
-        await page.evaluate(v => localStorage.setItem('soccerCareerSave', v), JSON.stringify(save));
+        /* the privacy choice is made (essential only) so the banner does not sit on the cards */
+        await page.evaluate(v => { localStorage.setItem('soccerCareerSave', v); localStorage.setItem('cookie-consent', 'essential'); }, JSON.stringify(save));
         await page.goto(`${SITE}/soccer-career`, { waitUntil: 'domcontentloaded' });
       };
       await open(cardsSave);
@@ -143,7 +152,10 @@ try {
         for (const b of m.buttons) {
           if (b.height < 44) failNote(`${tag}: "${b.label}" is ${b.height} px tall`);
           if (b.left < -0.5 || b.right > m.vw + 0.5) failNote(`${tag}: "${b.label}" is cut off at the side`);
+          if (b.covered) failNote(`${tag}: something lies on top of "${b.label}"`);
         }
+        /* the reveal may move the page to bring a new card into view; whatever moved it, the card must start on screen */
+        if (m.top < -1 || m.top > m.vh - 40) failNote(`${tag}: "${m.title}" starts at ${Math.round(m.top)} px, off the screen`);
         if (m.overflow) failNote(`${tag}: the page scrolls sideways on "${m.title}"`);
         const unknown = m.small.filter(x => !KNOWN_SMALL.some(k => x.cls.includes(k)));
         for (const x of unknown) failNote(`${tag}: "${x.text}" is ${x.size} px on "${m.title}"`);
@@ -152,7 +164,7 @@ try {
         if (i + 1 < CARD_TITLES.length) await waitText(page, CARD_TITLES[i + 1]); else await page.waitForTimeout(1200);
         const after = await page.evaluate(() => window.scrollY);
         await page.screenshot({ path: path.join(OUT, `${tag}-answer${i + 1}.png`), fullPage: false });
-        run.steps.push({ card: m.title, buttons: m.buttons.map(b => Math.round(b.height)), small: m.small.map(x => `${x.size}px ${x.text}`), scrollBefore: before, scrollAfter: after });
+        run.steps.push({ card: m.title, buttons: m.buttons.map(b => Math.round(b.height)), small: m.small.map(x => `${x.size}px ${x.text}`), scrollBefore: before, scrollAfter: after, cardTop: Math.round(m.top) });
       }
       await open(paperSave);
       await waitText(page, wokenHeadline);
