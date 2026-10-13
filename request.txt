@@ -1,0 +1,26 @@
+#!playwright
+simSoccerVeteranOffers: node scripts/simSoccerVeteranOffers.mjs
+simSoccerVeteranTalks: node scripts/simSoccerVeteranTalks.mjs
+simThroughBallDrill: node scripts/simThroughBallDrill.mjs
+simTraining: node scripts/simTraining.mjs
+simTransferBriefPageControl: node scripts/simTransferBriefPageControl.mjs
+simAwards: node scripts/simAwards.mjs
+simBallonDorFairness: node scripts/simBallonDorFairness.mjs
+simBallonDorTruth: node scripts/simBallonDorTruth.mjs
+simSoccerEventPromises: node scripts/simSoccerEventPromises.mjs
+cooldowns-s0: node scripts/simCareerLifeCooldowns.mjs
+cooldowns-s1: SEED_OFFSET=1 node scripts/simCareerLifeCooldowns.mjs
+cooldowns-s2: SEED_OFFSET=2 node scripts/simCareerLifeCooldowns.mjs
+cooldowns-s3: SEED_OFFSET=3 node scripts/simCareerLifeCooldowns.mjs
+cooldowns-s4: SEED_OFFSET=4 node scripts/simCareerLifeCooldowns.mjs
+cooldowns-nocooldown: SIM_CAREER_LIFE_COOLDOWNS_CONTROL=nocooldown node scripts/simCareerLifeCooldowns.mjs
+cooldowns-sharedbatch: SIM_CAREER_LIFE_COOLDOWNS_CONTROL=sharedbatch node scripts/simCareerLifeCooldowns.mjs
+cooldowns-keynostory: SIM_CAREER_LIFE_COOLDOWNS_CONTROL=keynostory node scripts/simCareerLifeCooldowns.mjs
+simCareerCleanSheets: node scripts/simCareerCleanSheets.mjs
+simCareerDomesticCup: node scripts/simCareerDomesticCup.mjs
+simCareerFacts: node scripts/simCareerFacts.mjs
+simCareerKeepPlaying: node scripts/simCareerKeepPlaying.mjs
+simInternational: node scripts/simInternational.mjs
+simStartingXi: node scripts/simStartingXi.mjs
+simCareerSquad: node scripts/simCareerSquad.mjs
+simSeasonCentreNeutral: node scripts/simSeasonCentreNeutral.mjs
