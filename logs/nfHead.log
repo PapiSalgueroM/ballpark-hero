@@ -1,0 +1,25 @@
+7d3df05cf436fb9fc1a2565c83fa0fa1f21fe26a
+CI=true
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Exact unchanged historical test
++ actual - expected
+
++ 'be30e87b95f0bb70918269c62b1f7e1dc203afec3a8d64ba5ab5164af2637dce'
+- 'f86d416b73e5cae13242f4ab1ad3dbdb379b6f4a24fbd8c37843ed969ab151c8'
+
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/numberFormatting1085Parity.mjs:188:10
+    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)
+    at async node:internal/modules/esm/loader:647:26
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 'be30e87b95f0bb70918269c62b1f7e1dc203afec3a8d64ba5ab5164af2637dce',
+  expected: 'f86d416b73e5cae13242f4ab1ad3dbdb379b6f4a24fbd8c37843ed969ab151c8',
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0

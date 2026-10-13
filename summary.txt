@@ -1,0 +1,4 @@
+nfPins exit=0 0s | HEAD src/lib/usCareerStatLine.ts d127a958f28ffebf
+nfHead exit=1 1s | Node.js v24.21.0
+nfMain exit=1 1s | Node.js v24.21.0
+tsc exit=0 57s | 7d3df05cf436fb9fc1a2565c83fa0fa1f21fe26a
