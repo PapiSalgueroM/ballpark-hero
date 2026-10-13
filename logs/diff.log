@@ -1,0 +1,6 @@
+group A: 210 desks, 54600 weeks, 9873 deals, 0 desks that differed
+group B: 210 desks, 54600 weeks, 9659 deals, 0 desks that differed
+group C: 210 desks, 54600 weeks, 9479 deals, 0 desks that differed
+group D: 210 desks, 54600 weeks, 9776 deals, 0 desks that differed
+rv1324diff: 218400 weeks, 38787 deals, 13121 falling clocks, 76312 answers tried, 10868 reloads, 6.5 s
+rv1324diff: green, the head is byte equal to the base on every drive

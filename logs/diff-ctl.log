@@ -1,0 +1,20 @@
+M9: applied (const e = came.splice(Math.floor(rng() * came.length), 1)[0] -> rng(); const e = came.splice(Math.floor(rng() * came.length))
+   nfl group A desk seed 871381 week 0 clock 21: state equal, fresh equal, draws 2/3
+   nfl group B desk seed 2655307142 week 20 clock 18: state equal, fresh equal, draws 4/5
+   nfl group C desk seed 1014775607 week 3 clock 4: state equal, fresh equal, draws 2/3
+   nfl group D desk seed 3669211368 week 51 clock 80: state equal, fresh equal, draws 25/26
+   nfl group A desk seed 2028679833 week 4 clock 5: state equal, fresh equal, draws 4/5
+   nfl group B desk seed 388148298 week 3 clock 3: state equal, fresh equal, draws 2/3
+   nfl group C desk seed 3042584059 week 2 clock 3: state equal, fresh equal, draws 2/3
+   nfl group D desk seed 1402052524 week 87 clock 26: state equal, fresh equal, draws 27/28
+   nfl group A desk seed 4056488285 week 3 clock 0: state equal, fresh equal, draws 2/3
+   nfl group B desk seed 2415956750 week 1 clock 2: state equal, fresh equal, draws 2/3
+   nfl group C desk seed 775425215 week 16 clock 7: state equal, fresh equal, draws 3/4
+   nfl group D desk seed 3429860976 week 100 clock 30: state equal, fresh equal, draws 43/44
+group A: 210 desks, 884 weeks, 213 deals, 210 desks that differed
+group B: 210 desks, 842 weeks, 212 deals, 210 desks that differed
+group C: 210 desks, 1140 weeks, 216 deals, 210 desks that differed
+group D: 210 desks, 28549 weeks, 5304 deals, 205 desks that differed
+rv1324diff: 31415 weeks, 5945 deals, 1881 falling clocks, 10014 answers tried, 1579 reloads, 0.9 s
+rv1324diff: VACUOUS, the drive did not exercise the engine
+rv1324diff: RED, 835 desks differed between the base and the head
