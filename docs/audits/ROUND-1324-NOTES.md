@@ -212,3 +212,17 @@ Files this round owns: src/lib/gmInbox.ts, src/lib/gmInbox.test.ts, scripts/simG
 - rc r1324-w2 (head 0b6889d6 against a build of the new main 36cc9ffe): build exit 0; 516 JS chunks, 0 carry "pack
   moves" on either; sweepWeight exit 0 on both with equal rows: /club-manager 592.0K gz, /soccer-career 826.7K,
   /front-office 372.1K.
+
+## runAllSims on the runners (head 63c7fe1c, the code of 94cd6535, before the merge)
+
+- One line (rc r1324-all) hit the runner's 4,200 s per command cap: exit 124, no output.
+- Six round robin shards (rc r1324-all1 to all6): shards 1, 3, 4 and 6 finished (14, 19, 10 and 19 not green); shards
+  2 and 5 hit the cap again and were rerun harness by harness (rc r1324-each2a, 2b, 5a, 5b): 8, 3, 2 and 9 non zero,
+  simUsCareerSummer and simFootleKitNumbers killed at that runner script's own 25 minute cap.
+- Every non-green harness was rerun on the head and on the base 8fea14e2 on one runner. rc r1324-cmp1b: the 52 of
+  shards 1, 3 and 6, the same 51 names non-green on both (simRunnerTransport green alone on both: a flake under load).
+  rc r1324-cmp2 (base checked out at the same path): 20 of 20 identical, verdict and first failing line (the 10 whose
+  first lines still differed when the base ran as a nested worktree, plus shard 4's 10). rc r1324-cmp3 and cmp3b: the
+  21 per harness reds of shards 2 and 5, 21 of 21 identical, exit code and last line. rc r1324-usc: simUsCareerSummer
+  alone on the head exit 0, `simUsCareerSummer: green.` (2,513 s). No red is this round's; most need the live
+  database or a browser the runner does not give them.
