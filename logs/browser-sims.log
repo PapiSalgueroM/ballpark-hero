@@ -1,0 +1,8 @@
+Panel tops after a scroll ran from 12px to 12px down the screen.
+
+The feature still works: 5 presses took content that could not be read where it was and put it back under the top of the screen, 0 of them from completely off screen.
+
+Green. 53 presses measured, nothing dragged the page down on content that was already readable, no panel lost its top, and 5 presses proved the feature still does its job.
+
+
+1 harness not green.

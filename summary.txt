@@ -1,0 +1,7 @@
+build exit=0 23s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+creation-base exit=1 233s | 1 FAILURES
+browser-sims exit=1 234s | 1 harness not green.
+rivals exit=0 12s | No rival product names found. 0 findings.
+storage exit=0 2s | simStorageWrites: all green (owed: 12)
+anchors exit=0 30s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+land-toasts exit=0 399s | playSoccerLanding: green at 320x640, 390x844, 1280x900 (also no extra sizes; toasts, bytes), every marked section red on the base
