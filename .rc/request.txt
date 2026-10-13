@@ -1,0 +1,6 @@
+#!build
+#!playwright
+#!serial
+fonts: mkdir -p .tmp-fx/font-cache && FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only 2>&1 | tail -3
+simCmRealFixtures: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCmRealFixtures.mjs > /tmp/sf.log 2>&1; s=$?; tail -2 /tmp/sf.log | cut -c1-300; exit $s
+playCmRealFixtures: FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" CM_REAL_FIXTURE_NATIVE_ARTIFACTS="$RC_OUT/rf" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playCmRealFixtures.mjs > /tmp/rf.log 2>&1; s=$?; node .rc/x/rfReport.mjs "$RC_OUT/rf/report.json"; find "$RC_OUT/rf" -name "*.json" ! -name "*failure*" ! -name "report.json" -delete; ls "$RC_OUT/rf" | head -30; exit $s
