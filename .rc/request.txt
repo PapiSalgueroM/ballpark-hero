@@ -1,0 +1,5 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/test/careerPreDraft.test.tsx --testTimeout=300000 --hookTimeout=120000
+pd-a: SEEDSET=a node scripts/simCareerPreDraft.mjs
+pd-c: SEEDSET=c node scripts/simCareerPreDraft.mjs
+ctl-phase: bash .rc/x/ctl.sh $RC_OUT/ctl combinephase attemptbare scoutskeys
