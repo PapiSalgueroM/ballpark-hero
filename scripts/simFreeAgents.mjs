@@ -376,13 +376,16 @@ if (CONTROL === 'nosev') {
     '    budget: Math.round((career.budget - fee) * 10) / 10,\n    squad: [...career.squad, player],\n    freeAgents: pool.filter(x => x.name !== fa.name),',
     '    squad: [...career.squad, player],\n    freeAgents: pool.filter(x => x.name !== fa.name),');
 } else if (CONTROL === 'marketreleased') {
+  /* Release AZ fix pass 3 (the lead's finding 3): both anchors below went stale at Round 634 (02f7a00a put
+     the loan filter after this one, 1606068d made the deal check return a reason), so these two controls
+     aborted on every head before this train. Each now cuts the same rule from today's line. */
   rewrite('marketreleased', 'engine',
-    ' && !retired.has(p.name) && !released.has(p.name));',
-    ' && !retired.has(p.name));');
+    ' && !released.has(p.name) && !onLoanOut.has(sameManKey(p)));',
+    ' && !onLoanOut.has(sameManKey(p)));');
 } else if (CONTROL === 'buyreleased') {
   rewrite('buyreleased', 'engine',
-    '  if (releasedByYouNames(career).has(mp.name)) return null;\n',
-    '');
+    '  if (releasedByYouNames(career).has(mp.name)) return `You released ${mp.name}. He will not sign for you again.`;\n  /* Round 634: nor a man you have out on loan',
+    '  /* Round 634: nor a man you have out on loan');
 } else if (CONTROL === 'noreleasedlist') {
   rewrite('noreleasedlist', 'engine',
     '    releasedNames: (career.releasedNames ?? []).includes(p.name)\n      ? career.releasedNames\n      : [...(career.releasedNames ?? []), p.name],\n',
