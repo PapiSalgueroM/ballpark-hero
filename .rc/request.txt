@@ -1,0 +1,4 @@
+# Round 1326 step 1: the proof tool on the base (head = the tool's own commit, whose src is c9c77eba's)
+s1-fleets: mkdir -p .tb1 && git archive c9c77eba src | tar -x -C .tb1 && node scripts/qa/cmCopyOnly1326.mjs --base .tb1 --fleet=A,B,C,D
+s1-draw: mkdir -p .tb2 && git archive c9c77eba src | tar -x -C .tb2 && COPY_ONLY_CONTROL=draw node scripts/qa/cmCopyOnly1326.mjs --base .tb2 --fleet=A
+s1-word: mkdir -p .tb3 && git archive c9c77eba src | tar -x -C .tb3 && COPY_ONLY_CONTROL=word node scripts/qa/cmCopyOnly1326.mjs --base .tb3 --fleet=A
