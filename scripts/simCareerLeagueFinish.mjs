@@ -69,6 +69,10 @@ import { NEXT_TEN_WHEEL_FILE, inverseCareerNextTen } from './lib/careerNextTenAt
 /* Release AW: Rounds 1262 to 1264 pay a career of 30 or more by age and form on purpose. Both attribution
    bundles take that out of a copy of the contracts file too: scripts/lib/careerVeteranPay1262.mjs. */
 import { VETERAN_PAY_ADDITIONS, veteranPayOutPlugin } from './lib/careerVeteranPay1262.mjs';
+/* Round 1327: the event deck draws on a keyed stream and the paper picks by weight, which moves every seeded
+   career from its first deck or paper on. Both historical bundles take that out first, the newest change first:
+   scripts/lib/careerDeckFair1327.mjs. */
+import { inverseDeckFair, deckFairPatches, DECK_FAIR_ADDITIONS } from './lib/careerDeckFair1327.mjs';
 import crypto from 'node:crypto';
 import os from 'node:os';
 import fs from 'node:fs';
@@ -110,7 +114,7 @@ const sourceFiles = ['src/lib/soccerCareerEngine.ts', 'src/lib/soccerCareerLeagu
   'scripts/lib/careerDevelopmentAttribution1185.mjs', 'scripts/lib/careerStoryRoleAttribution1190.mjs', 'scripts/simCareerLeagueFinish.mjs'];
 const sourceHashes = () => Object.fromEntries(sourceFiles.map(file => [file,
   crypto.createHash('sha256').update(fs.readFileSync(path.join(ROOT, file))).digest('hex')]));
-const proof = { control: CONTROL, sourceBefore: sourceHashes(), sourceAfter: null, sourceHeld: false, attribution: [], storyRoleAttribution: [], nextTenAttribution: [], veteranPayAttribution: [], originalSources: [], careers: [] };
+const proof = { control: CONTROL, sourceBefore: sourceHashes(), sourceAfter: null, sourceHeld: false, attribution: [], storyRoleAttribution: [], nextTenAttribution: [], veteranPayAttribution: [], deckFairAttribution: [], originalSources: [], careers: [] };
 
 /* A control edits a COPY. The copies live outside src/lib, so their relative
    imports are pointed back at the real files, except the engine's import of
@@ -183,9 +187,23 @@ function wheelOutPlugin() {
     });
   } };
 }
+/* Round 1327's rows come off first. A control's copy of the engine has its imports pointed back at src/lib
+   (relocate), so the rows are read through the same relocation as the copy they are applied to. */
+function deckFairOut(text) {
+  const copied = enginePath !== `${ROOT}/src/lib/soccerCareerEngine.ts`;
+  const keep = CONTROL === 'stream' || CONTROL === 'notitle' ? 'soccerCareerLeague' : '';
+  let out = text;
+  for (const row of deckFairPatches()) {
+    const from = copied ? relocate(row.from, keep) : row.from, to = copied ? relocate(row.to, keep) : row.to;
+    assert.equal(out.split(from).length, 2, `${row.id} of Round 1327's inverse is in the engine exactly once at its turn`);
+    out = out.replace(from, () => to);
+    proof.deckFairAttribution.push({ addition: row.addition, file: ENGINE_REL, bundle: 'attributed' });
+  }
+  return out;
+}
 async function attributionEngine() {
   const before = fs.readFileSync(enginePath, 'utf8').replaceAll('\r\n', '\n');
-  const attributed = inverseCareerStoryRole(inverseCareerDevelopment(before, proof.attribution), proof.storyRoleAttribution);
+  const attributed = inverseCareerStoryRole(inverseCareerDevelopment(deckFairOut(before), proof.attribution), proof.storyRoleAttribution);
   assert.notEqual(attributed, before, 'Historical attribution changes its copied engine');
   const file = path.join(WORK, 'attributedEngine.ts'), entry = path.join(WORK, 'attributedEntry.mjs'), out = path.join(WORK, 'attributedBundle.mjs'), veteranOut = [];
   fs.writeFileSync(file, relocate(attributed, CONTROL === 'stream' || CONTROL === 'notitle' ? 'soccerCareerLeague' : ''));
@@ -219,7 +237,14 @@ function bothOutPlugin() {
       if (!full.toLowerCase().startsWith(`${base}/`)) return undefined;
       const rel = full.slice(base.length + 1);
       if (rel !== ENGINE_REL && !SOCCER_TRAIN_FILES.includes(rel)) return undefined;
-      let text = out.rewrite(rel, fs.readFileSync(args.path, 'utf8')).split('\r\n').join('\n');
+      let text = fs.readFileSync(args.path, 'utf8').split('\r\n').join('\n');
+      if (rel === ENGINE_REL) {
+        const receipt = [];
+        text = inverseDeckFair(ENGINE_REL, text, receipt);
+        assert.deepEqual(receipt.map(row => row.addition), DECK_FAIR_ADDITIONS, 'The historical bundle takes Round 1327 out of the engine once, every row in order');
+        proof.deckFairAttribution.push(...receipt.map(row => ({ ...row, bundle: 'both-out' })));
+      }
+      text = out.rewrite(rel, text).split('\r\n').join('\n');
       if (rel === ENGINE_REL) text = inverseCareerStoryRole(inverseCareerDevelopment(text, proof.attribution), proof.storyRoleAttribution);
       return { contents: text, loader: rel.endsWith('.tsx') ? 'tsx' : 'ts' };
     });

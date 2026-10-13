@@ -115,6 +115,7 @@ import { createRequire } from 'node:module';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { build } from 'esbuild';
 import { inverseCareerDevelopment } from './lib/careerDevelopmentAttribution1185.mjs';
+import { inverseDeckFair, DECK_FAIR_ADDITIONS } from './lib/careerDeckFair1327.mjs';
 import { readLedgers, buildSeasons, render, identityKey as genIdentity, OUT as GEN_OUT } from './genCareerLeagueSeasons.mjs';
 import { soccerTrainOutPlugin, withoutTrainFields } from './lib/soccerTrain1178.mjs';
 
@@ -816,9 +817,24 @@ const r1185Out = with1041 => ({ name: with1041 ? 'r1185and1041out' : 'r1185out',
   });
 } });
 const futurePlugins = CONTROL === 'future' ? [controlPlugin] : [];
+/* Round 1327: the event deck draws on a keyed stream and the paper picks by weight, which moves a career from its
+   first deck or paper on, against a base that has neither. This arm reads the engine as the tree's own bundle does
+   (any control's edit included, through readSrc and controlPlugin, so an arm without the fault can never call a
+   faulted career equal) and takes Round 1327 out with scripts/lib/careerDeckFair1327.mjs, every row once, in order. */
+const r1327Out = { name: 'r1327out', setup(b) {
+  b.onLoad({ filter: /soccerCareerEngine\.ts$/ }, args => {
+    if (!path.resolve(args.path).toLowerCase().startsWith(path.resolve(ROOT, 'src').toLowerCase())) return undefined;
+    const receipts = [];
+    const src = inverseDeckFair('src/lib/soccerCareerEngine.ts', readSrc('src/lib/soccerCareerEngine.ts'), receipts);
+    if (receipts.map(row => row.addition).join() !== DECK_FAIR_ADDITIONS.join()) { console.error('Round 1327 arm: the inverse did not apply every row once, in order'); process.exit(2); }
+    for (const receipt of receipts) replayReceipt.inverses.push({ ...receipt, arm: '1327' });
+    return { contents: src, loader: 'ts' };
+  });
+} };
 if (baseRoot) {
   const B = await bundle(baseRoot, 'base', [releasePins(true)], false);
   const Bkeep = await bundle(baseRoot, 'basekeep', [releasePins(false)], false);
+  let by1327 = 0; let Mout1327 = null;
   let same = 0; let differ = 0; let pinsMove = 0; let rows = 0; let by1041 = 0; let by1100 = 0; let by1052 = 0; let byBoth = 0; let by1185 = 0;
   let Mout = null; let Mout1100 = null; let Mout1052 = null; let MoutBoth = null;
   /* Release AQ: the Soccer Career train (Rounds 1169 to 1178) moves a career
@@ -872,6 +888,7 @@ if (baseRoot) {
     };
     rows += JSON.parse(mine).seasons.length + JSON.parse(mine).dug.length;
     if (mine === base) { same += 1; receipt.acceptedArm = 'raw'; }
+    else if (await tryArm('1327', Mout1327 ??= await bundle(ROOT, 'tree1327out', [r1327Out, controlPlugin]))) { same += 1; by1327 += 1; }
     else if (await tryArm('1041', Mout ??= await bundle(ROOT, 'tree1041out', [r1041Out]))) { same += 1; by1041 += 1; console.log(`  career ${seed}: moved by Round 1041's two truth fixes (equal to the base with them taken out)`); }
     else if (await tryArm('1100', Mout1100 ??= await bundle(ROOT, 'tree1100out', [r1100Out, ...futurePlugins]))) { same += 1; by1100 += 1; }
     else if (await tryArm('1052', Mout1052 ??= await bundle(ROOT, 'tree1052out', [r1052Out, ...futurePlugins]))) { same += 1; by1052 += 1; console.log(`  career ${seed}: moved by Round 1052's new league in the dugout's job market (equal to the base with the league taken out)`); }
@@ -890,11 +907,12 @@ if (baseRoot) {
     if (base !== kept) pinsMove += 1;
   }
   console.log(`  ${same} of ${BASELINE_CAREERS} careers from 2025 identical from 2026-27 on (${rows} seasons and dugout rows compared); releasing the seven pins alone moves ${pinsMove} of them (attributed to the release, not the binds); ${by1041} of the identical ones only once Round 1041's two truth fixes are taken out, ${by1100} only once Round 1100's seven files are read from the base (the pool, the rows and the band moved them, on purpose)`);
+  if (by1327) console.log(`  ${by1327} of the identical careers are identical only with Round 1327's keyed deck and weighted paper taken out`);
   if (by1052) console.log(`  ${by1052} of the identical careers are identical only with Round 1052's league taken out of the dugout's job market`);
   if (byBoth) console.log(`  ${byBoth} of the identical careers are identical only with Round 1100's seven files read from the base and Round 1052's league taken out, both at once`);
   if (byTrain) console.log(`  ${byTrain} of the identical careers are identical only with the Soccer Career train (Rounds 1169 to 1178) taken out (${trainOut.seen().join(', ')} rewritten in memory)`);
   if (by1185) console.log(`  ${by1185} complete replays equal the historical base only with Rounds 1185 and 1187's form adjustment and whole Youth Mentor catalog restored, plus any explicitly named earlier inverse arms`);
-  replayReceipt.baseline = { careers: BASELINE_CAREERS, same, differ, rows, pinsMove, by1041, by1100, by1052, byBoth, byTrain, by1185 };
+  replayReceipt.baseline = { careers: BASELINE_CAREERS, same, differ, rows, pinsMove, by1327, by1041, by1100, by1052, byBoth, byTrain, by1185 };
   /* 430, 428 and 431 rows over seeds 1 to 3 */
   ok(rows >= BASELINE_CAREERS * 25, `only ${rows} rows compared over ${BASELINE_CAREERS} careers (floor ${BASELINE_CAREERS * 25})`);
 }

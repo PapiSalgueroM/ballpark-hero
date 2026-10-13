@@ -13,6 +13,13 @@ import { fileURLToPath } from 'node:url';
 import { gzipSync } from 'node:zlib';
 import { nextTenPatches } from './lib/careerNextTenAttribution1197.mjs';
 import { veteranPayPatches } from './lib/careerVeteranPay1262.mjs';
+/* Round 1327: the event deck draws on a keyed stream and the paper picks by weight, so advanceProSeason makes other
+   global draws from its paper on (the old sort drew from Math.random). Every engine this file compares with the AR
+   tree (the uncopied one, the copied fault one and the historical ones) therefore loads with Round 1327 taken out
+   first, as an attribution kept apart from the copied faults: scripts/lib/careerDeckFair1327.mjs. The milestone
+   engine news check compares the paper's global draws with AR's, so it reads that attributed engine too. */
+import { deckFairPatches } from './lib/careerDeckFair1327.mjs';
+const deckFair1327 = () => deckFairPatches().map(row => ({ id: row.id, file: row.file, from: row.from, to: row.to }));
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const SELF = fileURLToPath(import.meta.url);
@@ -44,12 +51,12 @@ export function withCareerStorySeed(seed, fn) {
 /** Uses Git's frozen source for every transitive src import in the original arm.
  * Faults are confined to current copied input. Their unique anchors must load.
  */
-export async function bundleCareerStoryRole({ original = false, patches = [], expose = false } = {}) {
+export async function bundleCareerStoryRole({ original = false, patches = [], expose = false, attribution = [] } = {}) {
   const require = createRequire(path.join(ROOT, 'package.json'));
   const esbuild = require('esbuild');
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'career-story-role-'));
   const outfile = path.join(dir, 'engine.cjs');
-  const applied = new Set(), loaded = [];
+  const applied = new Set(), loaded = [], attributed = [];
   const rootSrc = path.join(ROOT, 'src') + path.sep;
   const enginePath = path.join(ROOT, ENGINE).replaceAll('\\', '/');
   const extra = original ? '' : ['role:soccerCareerRole', 'milestone:soccerCareerMilestone', 'squad:soccerClubSquad', 'sheet:soccerClubSquadSheet'].map(item => { const [name, file] = item.split(':'); return `export * as ${name} from '${path.join(ROOT, 'src/lib', file + '.ts').replaceAll('\\', '/')}';`; }).join('\n');
@@ -59,6 +66,11 @@ export async function bundleCareerStoryRole({ original = false, patches = [], ex
       const file = path.relative(ROOT, args.path).replaceAll('\\', '/');
       let contents = original ? originalAt(file) : textAt(file);
       const beforeSha256 = sha(contents);
+      for (const row of original ? [] : attribution.filter(p => p.file === file)) {
+        assert.equal(contents.split(row.from).length - 1, 1, `unique attribution anchor ${row.id}`);
+        contents = contents.replace(row.from, () => row.to);
+        attributed.push({ id: row.id, file });
+      }
       for (const patch of patches.filter(p => p.file === file)) {
         assert.equal(contents.split(patch.from).length - 1, 1, `unique control anchor ${patch.id}`);
         const before = contents;
@@ -75,9 +87,10 @@ export async function bundleCareerStoryRole({ original = false, patches = [], ex
   try {
     await esbuild.build({ stdin: { contents: `export * as soccer from '${enginePath}';\n${extra}`, resolveDir: ROOT, sourcefile: 'story-role-entry.ts' }, bundle: true, format: 'cjs', platform: 'node', jsx: 'automatic', outfile, logLevel: 'error', plugins: [plugin], alias: { '@': path.join(ROOT, 'src') }, define: { 'import.meta.env': '{"DEV":false,"PROD":true,"MODE":"production"}' } });
     for (const patch of patches) assert.ok(applied.has(patch.id), `control module loaded ${patch.id}`);
+    if (!original) assert.deepEqual(attributed.map(row => row.id), attribution.map(row => row.id), 'every attribution row was applied once, in order');
     globalThis.localStorage ??= { getItem: () => null, setItem: () => {}, removeItem: () => {} };
     const result = require(outfile);
-    return { ...result, loaded, faultEdits: patches.map(p => p.receipt) };
+    return { ...result, loaded, faultEdits: patches.map(p => p.receipt), attributionEdits: attributed };
   } finally { fs.rmSync(dir, { recursive: true, force: true }); }
 }
 
@@ -122,8 +135,9 @@ async function runOutcomes(control = '') {
   const report = { head: execFileSync('git', ['rev-parse', 'HEAD'], { cwd: ROOT, encoding: 'utf8' }).trim(), tree: execFileSync('git', ['rev-parse', 'HEAD^{tree}'], { cwd: ROOT, encoding: 'utf8' }).trim(), baseHead: STORY_ROLE_BASE, baseTree: BASE_TREE, control, cases: [], counts: {}, faultEdits: [], sourceHeld: false };
   const check = async (id, fn) => { try { await fn(); report.cases.push({ id, passed: true }); console.log(`PASS [${id}]`); } catch (error) { report.cases.push({ id, passed: false, name: error.name, message: error.message, stack: error.stack }); console.error(`FAIL [${id}] ${error.name}: ${error.message}`); } };
   const original = await bundleCareerStoryRole({ original: true, expose: true });
-  const uncopied = await bundleCareerStoryRole({ expose: true });
-  const current = control ? await bundleCareerStoryRole({ patches: controlPatches(control), expose: true }) : uncopied;
+  const uncopied = await bundleCareerStoryRole({ expose: true, attribution: deckFair1327() });
+  const current = control ? await bundleCareerStoryRole({ patches: controlPatches(control), expose: true, attribution: deckFair1327() }) : uncopied;
+  report.attribution1327 = uncopied.attributionEdits;
   report.faultEdits = current.faultEdits;
   save('original-source', original.loaded);
   save('candidate-source', uncopied.loaded);
@@ -242,11 +256,11 @@ function fullCareer(E, seed) {
 
 async function fullCareerChecks(check, current, uncopied, original, save, report, out, control) {
   const inverse = inverseTruthPatches();
-  const neutral = await bundleCareerStoryRole({ patches: inverse, expose: true });
+  const neutral = await bundleCareerStoryRole({ patches: inverse, expose: true, attribution: deckFair1327() });
   const faults = control ? controlPatches(control) : [];
   const shared = inverse.filter(edit => faults.some(fault => fault.file === edit.file && fault.from === edit.from && fault.to === edit.to));
   const remaining = inverse.filter(edit => !shared.includes(edit));
-  const controlled = control ? await bundleCareerStoryRole({ patches: [...faults, ...remaining], expose: true }) : neutral;
+  const controlled = control ? await bundleCareerStoryRole({ patches: [...faults, ...remaining], expose: true, attribution: deckFair1327() }) : neutral;
   report.attribution = { edits: neutral.faultEdits, sharedFaultInverses: shared.map(edit => ({ inverseId: edit.id, faultId: faults.find(fault => fault.file === edit.file && fault.from === edit.from && fault.to === edit.to).id, fromSha256: sha(edit.from), toSha256: sha(edit.to), effective: true })), controlledEdits: controlled.faultEdits };
   save('attribution-edits', report.attribution);
   await check('attribution boundaries', () => {
