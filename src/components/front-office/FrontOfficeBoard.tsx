@@ -294,9 +294,16 @@ export default function FrontOfficeBoard() {
      window resized across sm changes no key and no option and scrolls
      nothing (useRevealScroll.ts is not edited). */
   const [wideAtLoad] = useState(() => typeof window !== 'undefined' && typeof window.matchMedia === 'function' && window.matchMedia('(min-width: 640px)').matches);
+  /* The closing check of Round 1309 (ruling 2b, asserted at 390 by 844): under sm in the bracket the wrapper is still
+     the element, but when the hook has to move the page it aligns the wrapper's END (the hook honours that only when
+     the wrapper fits the screen, as the box does in the bracket, where no league grid is drawn). Top aligned, the box
+     went to the screen's top and the stacked buttons above it: after "Watch Week 17" the feed box arriving above the
+     week box left 126 px of the box readable, the hook fired, and the next press sat at -96. In the regular season
+     nothing changes (Round 1307's numbers). */
+  const inBracket = (!!playoffs && (league?.week ?? 0) > REGULAR_WEEKS) || (!!hold && !!heldBracket && hold.week > REGULAR_WEEKS);
   const revealRef = useRevealScroll<HTMLDivElement>(
     `${phase}:${league?.week ?? 0}:${weekResults.length}:${hold ? 'watch' : ''}:${playoffs?.played.length ?? 0}`,
-    wideAtLoad ? { block: 'end' } : undefined,
+    wideAtLoad ? { block: 'end' } : inBracket ? { block: 'end' } : undefined,
   );
 
   useGameCompletion('front-office', roomHeld ? roomHeld.won : wonTitleNow, titles * 100 + seasonsPlayed * 5);
