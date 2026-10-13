@@ -42,9 +42,9 @@ jobs:
           git status --porcelain --untracked-files=no > "$MANAGER_DEADLINE_OUT/source-before.txt"
           test ! -s "$MANAGER_DEADLINE_OUT/source-before.txt"
           if test "$MANAGER_DEADLINE_PHASE" = baseline; then
-            git diff --exit-code 1ed26406 -- src ':!src/test/clubManagerDecisionDeadline.test.ts' scripts ':!scripts/simClubManagerDecisionDeadline.mjs' ':!scripts/playClubManagerDecisionDeadline.mjs' .github/workflows ':!.github/workflows/manager-decision-deadline.yml' index.html package.json package-lock.json bun.lock
+            git diff --exit-code 1ed26406 -- src ':!src/test/clubManagerDecisionDeadline.test.ts' ':!src/test/clubManagerDecisions.test.tsx' scripts ':!scripts/simClubManagerDecisionDeadline.mjs' ':!scripts/playClubManagerDecisionDeadline.mjs' .github/workflows ':!.github/workflows/manager-decision-deadline.yml' index.html package.json package-lock.json bun.lock
           else
-            git diff --exit-code 1ed26406 -- src ':!src/lib/clubManagerDecisions.ts' ':!src/test/clubManagerDecisionDeadline.test.ts' scripts ':!scripts/simClubManagerDecisionDeadline.mjs' ':!scripts/playClubManagerDecisionDeadline.mjs' .github/workflows ':!.github/workflows/manager-decision-deadline.yml' index.html package.json package-lock.json bun.lock
+            git diff --exit-code 1ed26406 -- src ':!src/lib/clubManagerDecisions.ts' ':!src/test/clubManagerDecisionDeadline.test.ts' ':!src/test/clubManagerDecisions.test.tsx' scripts ':!scripts/simClubManagerDecisionDeadline.mjs' ':!scripts/playClubManagerDecisionDeadline.mjs' .github/workflows ':!.github/workflows/manager-decision-deadline.yml' index.html package.json package-lock.json bun.lock
           fi
           sha256sum package.json package-lock.json bun.lock > "$MANAGER_DEADLINE_OUT/package-hashes.txt"
           git ls-files -z src scripts .github/workflows index.html | xargs -0 sha256sum > "$MANAGER_DEADLINE_OUT/source-wide.txt"
@@ -73,6 +73,55 @@ jobs:
             NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simClubManagerDecisionDeadline.mjs 2>&1 | tee "$MANAGER_DEADLINE_OUT/fixed.log"
             CM_DEADLINE_CONTROL=late NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simClubManagerDecisionDeadline.mjs 2>&1 | tee "$MANAGER_DEADLINE_OUT/control-late.log"
           fi
+      - name: Original fourteen desk regressions and effective label guard
+        run: |
+          for control in normal substring; do
+            set +e
+            CM_GATE_WORDS_CONTROL="$control" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node_modules/.bin/vitest run src/test/clubManagerDecisions.test.tsx --maxWorkers=1 --reporter=verbose --reporter=json --outputFile.json="$MANAGER_DEADLINE_OUT/original-unit-$control.json" 2>&1 | tee "$MANAGER_DEADLINE_OUT/original-unit-$control.log"
+            result=${PIPESTATUS[0]}
+            set -e
+            CM_GATE_WORDS_EXIT="$result" CM_GATE_WORDS_MODE="$control" node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          const mode = process.env.CM_GATE_WORDS_MODE, fault = mode === 'substring', root = process.env.MANAGER_DEADLINE_OUT;
+          assert(['normal', 'substring'].includes(mode));
+          const report = JSON.parse(fs.readFileSync(root + '/original-unit-' + mode + '.json'));
+          const output = fs.readFileSync(root + '/original-unit-' + mode + '.log', 'utf8');
+          assert(!/TypeError:|ReferenceError:|SyntaxError:|ERR_MODULE_NOT_FOUND|Unhandled (?:Errors?|Rejection)|Uncaught Exception|Failed to load|Failed to resolve import/i.test(output), 'No fixture or setup failure credit');
+          assert.equal(report.testResults.length, 1);
+          const file = report.testResults[0];
+          assert(file.name.endsWith('/src/test/clubManagerDecisions.test.tsx') && !file.message);
+          const names = [
+            'states the odds by tier and walks every step of the ladder',
+            'offers nothing for a man with no ban',
+            'moves suspendedMatches exactly as the card says, and nothing else',
+            'refuses an appeal once the ban has started being served',
+            'closes the appeal window once the next match has kicked off',
+            'closes an unanswered appeal at the next match with the ban untouched',
+            'moves only the number each answer names, by exactly its amount',
+            'never draws from Math.random',
+            'reads a damaged block as empty and leaves the rest of the save alone',
+            'shares the inbox answer path',
+            'shows an appeal with its odds and answers it through onAnswer',
+            'shows the answered line once the card is resolved',
+            'keeps closed cards behind a toggle while a card is open',
+            'renders nothing with an empty inbox and an empty desk',
+          ];
+          const cases = file.assertionResults;
+          assert.deepEqual(cases.map(row => row.title).sort(), [...names].sort());
+          assert.equal(report.numTotalTests, 14); assert.equal(report.numPendingTests, 0);
+          assert(cases.every(row => ['passed', 'failed'].includes(row.status)));
+          const failed = cases.filter(row => row.status === 'failed');
+          assert.deepEqual(failed.map(row => row.title), fault ? [names[6]] : []);
+          for (const row of failed) assert(row.failureMessages.length > 0 && row.failureMessages.every(message =>
+            /^AssertionError:.*unlabelled gate guard rejected the delegate action.*expected false to be true/s.test(message)));
+          assert.equal(report.numFailedTests, fault ? 1 : 0); assert.equal(report.numPassedTests, fault ? 13 : 14);
+          assert.equal(Number(process.env.CM_GATE_WORDS_EXIT), fault ? 1 : 0);
+          fs.writeFileSync(root + '/original-unit-' + mode + '-qualified.json', JSON.stringify({ mode, completedNames: cases.map(row => row.title),
+            passed: report.numPassedTests, intendedFailures: failed.length, effectiveBinding: fault ? 'original substring gate regex' : 'original fan mood/crowd plus whole-word gate' }, null, 2) + '\n');
+          console.log('Original desk unit: all14 named outcomes, ' + report.numPassedTests + ' passes, ' + failed.length + ' exact label-guard faults; no setup or fixture failure.');
+          NODE
+          done
       - name: Preserve all seven recorded-context depth outcomes
         run: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node_modules/.bin/vitest run src/test/clubManagerDecisionDepth.test.ts --maxWorkers=1 --reporter=verbose --reporter=json --outputFile.json="$MANAGER_DEADLINE_OUT/prior-unit.json" 2>&1 | tee "$MANAGER_DEADLINE_OUT/prior-unit.log"
       - name: Preserve actual decision coverage and effective omission controls

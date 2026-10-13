@@ -383,7 +383,7 @@ async function runCase(base, profile, fixture, variant = 'played') {
         window.__deadlineDeletedCareer = { before, after: localStorage.getItem(key) };
       }, KEY);
       await walk.page.reload({ waitUntil: 'domcontentloaded' });
-      await walk.page.locator('[data-testid="cm-world-editor-tile"]').waitFor({ timeout: 45000 });
+      await walk.page.getByRole('heading', { name: 'CLUB MANAGER', exact: true }).waitFor({ timeout: 45000 });
       await walk.page.evaluate(() => document.fonts.ready);
       const removed = await walk.page.evaluate(() => window.__deadlineDeletedCareer), lost = await walk.raw();
       row.detected = outcomeIssues(before, lost, fixture);
