@@ -84,7 +84,7 @@ function run(kind = '') {
   const json = JSON.parse(fs.readFileSync(report, 'utf8'));
   const rows = json.testResults.flatMap(f => f.assertionResults);
   const failed = rows.filter(x => x.status === 'failed');
-  const fileErrors = json.testResults.filter(f => f.status === 'failed' && f.assertionResults.length === 0).map(f => f.message);
+  const fileErrors = json.testResults.filter(f => f.message).map(f => f.message);
   console.log(`   ${kind || 'suite'}: ${json.numTotalTests} cases, ${json.numPassedTests} passed, ${failed.length} failed, ${json.numPendingTests} skipped, ${secs}s`);
   if (fileErrors.length) { console.log(`FAIL ${kind || 'suite'}: the test file did not run: ${String(fileErrors[0]).slice(0, 600)}`); return 3; }
   if (json.numPendingTests > 0) { console.log(`FAIL ${kind || 'suite'}: ${json.numPendingTests} cases skipped`); return 3; }

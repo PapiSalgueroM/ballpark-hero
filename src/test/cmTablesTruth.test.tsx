@@ -30,6 +30,7 @@ import {
   startCareer, loadCareer, SAVE_KEY, ensureFreeAgents, signFreeAgent, promoteProspect, playNextEntry,
   type CareerState, type CMPlayer, type Prospect,
 } from '@/lib/clubManager';
+import { ensureEraRosters } from '@/lib/clubManagerEras';
 
 /* ---------------- this file's own rule for who is real ---------------- */
 
@@ -98,8 +99,10 @@ const BUILDERS: Record<string, () => CareerState> = {
 const FLEET = Object.keys(BUILDERS);
 const built = new Map<string, CareerState>();
 
-beforeAll(() => {
+beforeAll(async () => {
   window.scrollTo = vi.fn() as unknown as typeof window.scrollTo;
+  /* A past season's squads load on demand, the way the page loads them. */
+  await ensureEraRosters('era2005');
   FLEET.forEach((name, i) => built.set(name, withSeed(1325 + i, BUILDERS[name])));
 }, 240000);
 afterEach(cleanup);
@@ -343,7 +346,7 @@ describe('6 nothing drawn reads undefined, NaN, [object Object] or Infinity', { 
 
 describe('the fleet', () => {
   it('holds a real man, a youth pad, an academy graduate and a made up man', () => {
-    const kinds = new Set(FLEET.flatMap(name => built.get(name)!.squad.map(kindOf)));
+    const kinds = new Set<string>(FLEET.flatMap(name => built.get(name)!.squad.map(kindOf)));
     for (const want of ['real', 'youth', 'academy', 'generated']) {
       expect(kinds.has(want), `the fleet has no ${want} player`).toBe(true);
     }
