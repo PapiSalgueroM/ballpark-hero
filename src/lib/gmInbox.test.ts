@@ -6,6 +6,8 @@ import {
 import type { GmInboxHost, GmInboxPack } from './gmInbox';
 import { GM_INBOX_PACKS } from '@/data/gmInbox';
 import { keyedRng } from './keyedRng';
+import { gmNeutralIndex, gmPackProblems, gmSubjectKey } from './gmInbox';
+import type { GmEventDef } from './gmInbox';
 
 interface Desk extends GmInboxHost {
   trust: number; fans: number; cash: number; year: number; recruit: number;
@@ -220,5 +222,119 @@ describe('gmInbox packs', () => {
       expect(c.popularity).toBeUndefined();
     }
     expect(p.events.filter(e => e.oneShot).length).toBeGreaterThan(0);
+  });
+});
+
+/* Round 1324: the rules a deck of hundreds of cards needs. */
+describe('gmInbox deck rules', () => {
+  const card = (id: string, extra: Partial<GmEventDef> = {}): GmEventDef => ({
+    id, beat: 'a', from: 'Ownership', emoji: 'x', text: `${id}.`,
+    choices: [{ label: 'Leave it', reply: 'Fine.', karma: 0 }, { label: 'Push', reply: 'Push.', karma: 2 }], ...extra,
+  });
+  const deck = (events: GmEventDef[], extra: Partial<GmInboxPack> = {}): GmInboxPack => ({
+    ...TOY, calendar: [{ id: 'a', label: 'A', emoji: 'A' }], span: { a: 10 },
+    facts: { man: { kind: 'num', min: 1, max: 9, per: 'week' } }, perWeek: 1, cooldown: 0, chance: 1, events, ...extra,
+  });
+  /* A stream that hands out the given values in turn and counts the draws. */
+  const stream = (vals: number[]) => { let i = 0; const f = () => vals[i++]; return { f, calls: () => i }; };
+
+  it('equal weights pick what the uniform line picks, for the same draws', () => {
+    for (const w of [undefined, 1, 2.5]) {
+      for (const u of [0, 0.2, 0.5, 0.74, 0.99]) {
+        const evs = ['p', 'q', 'r', 's'].map(id => card(id, w === undefined ? {} : { weight: w }));
+        const r = stream([0, 0, 0, 0, u]);
+        const [m] = gmInboxWeek(desk(), seatFor(deck(evs)), 'a', {}, 0, r.f);
+        expect(m.defId).toBe(evs[Math.floor(u * 4)].id);
+        expect(r.calls()).toBe(5);
+      }
+    }
+  });
+
+  it('a weighted pick takes one draw and lands on the running sum', () => {
+    const evs = [card('light', { weight: 1 }), card('heavy', { weight: 3 })];
+    for (const [u, want] of [[0.2, 'light'], [0.249, 'light'], [0.25, 'heavy'], [0.99, 'heavy']] as const) {
+      const r = stream([0, 0, u]);
+      const [m] = gmInboxWeek(desk(), seatFor(deck(evs)), 'a', {}, 0, r.f);
+      expect(m.defId).toBe(want);
+      expect(r.calls()).toBe(3);
+    }
+  });
+
+  it('cards of one story share one stamp and never land in one week', () => {
+    const p = deck([card('f1', { story: 'feud' }), card('f2', { story: 'feud' }), card('solo')], { perWeek: 3, cooldown: 5 });
+    const s = desk();
+    const got = gmInboxWeek(s, seatFor(p), 'a', {}, 0, () => 0).map(m => m.defId);
+    expect(got.filter(id => id.startsWith('f'))).toHaveLength(1);
+    expect(got).toContain('solo');
+    expect(s.gmInboxLast).toEqual({ 'story:feud': 0, solo: 0 });
+    for (let clock = 1; clock < 5; clock++) expect(gmEligible(p, 'a', {}, [], s.gmInboxLast!, clock).map(e => e.id)).toEqual([]);
+    expect(gmEligible(p, 'a', {}, [], s.gmInboxLast!, 5).map(e => e.id)).toEqual(['f1', 'f2', 'solo']);
+  });
+
+  it('a one shot story is used once for the whole story', () => {
+    const p = deck([card('x1', { story: 'exit', oneShot: true }), card('x2', { story: 'exit', oneShot: true })]);
+    const s = desk();
+    gmInboxWeek(s, seatFor(p), 'a', {}, 0, () => 0);
+    expect(s.phoneUsedIds).toEqual(['story:exit']);
+    expect(gmEligible(p, 'a', {}, s.phoneUsedIds!, s.gmInboxLast!, 50)).toEqual([]);
+  });
+
+  it('a role subject and a fact subject rest, and a missing fact holds the card', () => {
+    const p = deck([card('r1', { subject: 'star' }), card('r2', { subject: 'star' }), card('f1', { subject: { fact: 'man' } })],
+      { perWeek: 3, subjectRest: 4 });
+    const s = desk();
+    const got = gmInboxWeek(s, seatFor(p), 'a', { man: 7 }, 0, () => 0).map(m => m.defId);
+    expect(got.filter(id => id.startsWith('r'))).toHaveLength(1);
+    expect(got).toContain('f1');
+    expect(s.gmInboxRest).toEqual({ 'role:star': 0, 'id:7': 0 });
+    expect(gmEligible(p, 'a', { man: 7 }, [], {}, 3, s.gmInboxRest).map(e => e.id)).toEqual([]);
+    expect(gmEligible(p, 'a', { man: 8 }, [], {}, 3, s.gmInboxRest).map(e => e.id)).toEqual(['f1']);
+    expect(gmEligible(p, 'a', { man: 7 }, [], {}, 4, s.gmInboxRest).map(e => e.id)).toEqual(['r1', 'r2', 'f1']);
+    expect(gmEligible(p, 'a', {}, [], {}, 4, s.gmInboxRest).map(e => e.id)).toEqual(['r1', 'r2']);
+    expect(gmSubjectKey(card('b', { subject: { fact: 'man' } }), { man: true })).toBeNull();
+  });
+
+  it('the rest book is born pruned, and a pack with no rest never writes one', () => {
+    const p = deck([card('r1', { subject: 'star' })], { subjectRest: 4 });
+    const s = desk();
+    const seat = seatFor(p);
+    gmInboxWeek(s, seat, 'a', {}, 0, () => 0);
+    answerGmInbox(s, s.phoneInbox![0].id, 0, seat);
+    gmInboxWeek(s, seat, 'z', {}, 3, () => 0);
+    expect(s.gmInboxRest).toEqual({ 'role:star': 0 });
+    gmInboxWeek(s, seat, 'z', {}, 4, () => 0);
+    expect(s.gmInboxRest).toEqual({});
+    const plain = desk();
+    gmInboxWeek(plain, seatFor(deck([card('r1', { subject: 'star' })])), 'a', {}, 0, () => 0);
+    expect('gmInboxRest' in plain).toBe(false);
+  });
+
+  it('a bad rest book is dropped alone', () => {
+    const s = { ...desk(), gmInboxRest: 'junk' as unknown as Record<string, number> };
+    gmInboxWeek(s, seatFor(TOY), 'b', {}, 0, () => 0);
+    repairGmInbox(s);
+    expect('gmInboxRest' in s).toBe(false);
+    expect(s.phoneInbox).toHaveLength(1);
+  });
+
+  it('every pack check lives in gmPackProblems, and bind refuses a broken pack', () => {
+    for (const p of Object.values(GM_INBOX_PACKS)) expect(gmPackProblems(p)).toEqual([]);
+    const broken: [Partial<GmEventDef>, RegExp][] = [
+      [{ weight: 0 }, /weight 0/], [{ weight: NaN }, /weight NaN/], [{ story: '' }, /empty story/],
+      [{ subject: 'nobody' }, /nobody, not a target/], [{ subject: { fact: 'nope' } }, /does not declare/],
+    ];
+    for (const [extra, re] of broken) {
+      const p = deck([card('bad', extra)]);
+      expect(gmPackProblems(p).join(' ')).toMatch(re);
+      expect(() => seatFor(p)).toThrow(re);
+    }
+    expect(gmPackProblems(deck([card('ok')], { subjectRest: 1.5 }))).toHaveLength(1);
+  });
+
+  it('the neutral option is the first that moves nothing', () => {
+    const c = (o: Partial<GmEventDef['choices'][number]>) => ({ label: 'x', reply: 'x', karma: 0, ...o });
+    expect(gmNeutralIndex([c({ karma: 2 }), c({}), c({ cash: 1 })])).toBe(1);
+    expect(gmNeutralIndex([c({ out: { who: 'star', weeks: 0 } })])).toBe(0);
+    expect(gmNeutralIndex([c({ morale: 1 }), c({ recruit: 2 }), c({ rating: { who: 'star', delta: 1 } })])).toBe(-1);
   });
 });

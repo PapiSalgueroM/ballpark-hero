@@ -30,3 +30,33 @@ Files this round owns: src/lib/gmInbox.ts, src/lib/gmInbox.test.ts, scripts/simG
   src/components/front-office-shared/GmInboxPanel.tsx and GmInboxPanel.test.tsx (the panel is imported by its test
   alone), scripts/simGmInbox.mjs and scripts/simCareerInbox.mjs (its single home rule names gmInbox.ts). No daily,
   no page, no hook: Hot Seat, Deadline Day, the Career Ladder and every dated puzzle cannot move.
+
+### Step (a) proof on a runner (rc r1324-a, head 604d2887)
+
+- `deck: node scripts/simEventDeck.mjs` exit 0 in 23 s, closing line `simEventDeck: green.`: all 84 rows byte equal
+  on Linux to the recording made on this Windows PC, so the recording is platform independent.
+- `deck-replay: EVENT_DECK_CONTROL=replay node scripts/simEventDeck.mjs` exit 1, closing line `simEventDeck: 1 failure,
+  red sections 1 (CONTROL=replay fired)`: 84 of 84 rows moved (nfl|3|FLEET: deck draws 11,463 not 8,592).
+- simHarnessAnchors exit 0 (green), simNoRivalNames exit 0 (0 findings).
+
+## Step (b): weight, story, the subject rest and the pack validator
+
+- `weight` (3.3.1): `gmTake` keeps the uniform line verbatim for equal weights (all absent, or all one number) and
+  otherwise lands one draw on the running sum. One draw a pick either way.
+- `story` (3.3.2): the book key is careerEventDeck's `ledgerKey` (imported; careerEventDeck.ts untouched). A one shot
+  with a story is used once for the story AND waits out the story's stamp (the brief's "no two cards of one story
+  inside the story's cooldown"; a plain one shot still ignores cooldowns, line 225 kept verbatim). After a pick every
+  other card of the story leaves the week's draw.
+- `subject` and `subjectRest` (3.3.3): keys `role:<target>` and `id:<value>`; a fact subject with no usable value
+  (missing, boolean, empty string, not finite) holds the card back. The rest book `gmInboxRest` is written only by a
+  pack whose subjectRest is above 0, only once such a card is dealt, and is rebased and pruned at the top of every week.
+  With subjectRest 0 the subjects are inert (no hold, no sibling removal, no book). `repairGmInbox` drops a bad book
+  alone (the field is deleted, so a desk reads as never having had one).
+- `gmPackProblems` (3.3.8) lists every problem (bad weight, empty story, a role subject not in targets, an undeclared
+  fact subject, a subjectRest that is not a whole number); `bindGmInbox` throws on the first, after its existing
+  effect check. `gmNeutralIndex` is in this step too, for (d).
+- Measured (kit, seeds 1 to 10): FX_WEIGHT light share 0.2385 to 0.2636 (mean 0.2478), band 0.23 to 0.272, the
+  weightoff control 0.4983; FX_STORY loose cards deal 1.756 to 1.767 times as many, floor 1.5, the story control
+  1.00 with 8,151 story breaks; FX_SUBJECT 13,343 subject cards, book never above 5 entries, the rest control 26,968
+  breaks.
+- Engine size: 17,298 bytes LF (17,663 CRLF, the brief's measure) before; 23,124 LF (23,603 CRLF) after (b).
