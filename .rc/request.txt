@@ -1,0 +1,9 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/lib/clubManagerInternationals.test.ts src/test/clubManagerWorldEditor.test.tsx src/test/staffScreen.test.tsx src/lib/gmStaff.test.ts src/test/clubManagerEraNationalities.test.ts src/test/cmMinuteLabel.test.ts src/test/managerScorerMarks.test.tsx --testTimeout=300000 --hookTimeout=120000
+simCmCopy: node scripts/simCmCopy.mjs
+simCmCopy-finance: CM_COPY_CONTROL=finance node scripts/simCmCopy.mjs --section=5
+simClubManagerFinances: node scripts/simClubManagerFinances.mjs
+simSponsors: node scripts/simSponsors.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+copyonly-A: mkdir -p .tb1 && git archive c9c77eba src | tar -x -C .tb1 && node scripts/qa/cmCopyOnly1326.mjs --base .tb1 --fleet=A
