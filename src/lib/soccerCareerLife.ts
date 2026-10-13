@@ -161,7 +161,7 @@ export function getPriorityLifeEventIds(state: CareerState): number[] {
   if (comebackDue(state) && !state.retired) ids.push(262);
   if (!state.retired) {
     const year = state.seasons[state.seasons.length - 1]?.year ?? 0;
-    for (const [acquisition, followup, key] of [[226, 227, "esports"], [230, 231, "cursedBoots"]] as const) {
+    for (const [acquisition, followup, key] of [[226, 227, "esports"], [230, 231, "cursedBoots"], [236, 237, "teammateLoan"], [270, 630, "coachingBadges"]] as const) {
       const acquired = state.eventLastFired?.[String(acquisition)];
       if (flag(state, key) === 1 && (typeof acquired !== "number" || !Number.isFinite(acquired) || acquired < year)) ids.push(followup);
     }
@@ -942,6 +942,22 @@ export function getLifeEvents(state: CareerState): RandomEvent[] {
           apply: s => { setFlag(s, "coachingBadges", 2); s.morale = clamp(s.morale + 2, 0, 100); log(s, "⚽ Turned down the coaching course. For now. The gaffer wrote the date down"); return s; } },
         { label: "Suggest the captain instead", emoji: "🤝", color: "bg-blue-600", consequence: "Integrity +1, Morale +1",
           apply: s => { setFlag(s, "coachingBadges", 2); s.integrityBonus += 1; s.morale = clamp(s.morale + 1, 0, 100); log(s, "🤝 Pointed the coaching course at the captain. He is already correcting the gaffer"); return s; } },
+      ] });
+  }
+
+  const startedCourse = state.eventLastFired?.["270"];
+  const courseYear = state.seasons[state.seasons.length - 1]?.year ?? 0;
+  if ((state.pendingEvents ?? []).some(event => event.id === 630) || (!state.retired && flag(state, "coachingBadges") === 1
+    && (typeof startedCourse !== "number" || !Number.isFinite(startedCourse) || startedCourse < courseYear))) {
+    push({ id: 630, cooldown: COOLDOWN.once, emoji: "📚", title: "The course notebook",
+      description: "Your coaching course has practical work to review. Finish a piece of work, or leave the course.",
+      category: "life", choices: [
+        { label: "Review your match-analysis assignment", emoji: "📋", color: "bg-blue-600", consequence: "Passing +1 next season, Integrity +2. Course review complete",
+          apply: s => { setFlag(s, "coachingBadges", 3); bump(s, "passing", 1); s.integrityBonus += 2; log(s, "📚 Reviewed the course match-analysis assignment"); return s; } },
+        { label: "Finish your youth-session plan", emoji: "🤝", color: "bg-emerald-600", consequence: "Defending +1 next season, Integrity +1. Course review complete",
+          apply: s => { setFlag(s, "coachingBadges", 3); bump(s, "defending", 1); s.integrityBonus += 1; log(s, "📚 Finished the course youth-session plan"); return s; } },
+        { label: "Leave the course", emoji: "⚽", color: "bg-muted", consequence: "Morale +2. Course closed",
+          apply: s => { setFlag(s, "coachingBadges", 4); s.morale = clamp(s.morale + 2, 0, 100); log(s, "⚽ Left the coaching course to focus on playing"); return s; } },
       ] });
   }
 

@@ -16,7 +16,7 @@ jobs:
       SIM_NETWORK: offline
       ENGINES: chromium
       CAREER_SEASON_LOCAL_ONLY: '1'
-      CAREER_REVIEWS_PHASE: baseline
+      CAREER_REVIEWS_PHASE: fixed
       CAREER_REVIEWS_OUT: ${{ github.workspace }}/career-review-artifacts
       SOCCER_ROUTINE_OUT: ${{ github.workspace }}/career-review-artifacts/prior-routines
       SOCCER_ROUTINE_PHASE: fixed
