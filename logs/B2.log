@@ -1,0 +1,17 @@
+mutation B2 on src/pages/SoccerCareer.tsx: anchor count 1
+MUTATION APPLIED B2
+seed 1987332285; arms head; sections retire; sizes 390x844
+bar save youth: phase youth, age 16
+bar save playing: phase playing, age 18
+bar save manager: phase manager_season, age 18, employed
+bar save pundit: phase pundit_season, age 18
+bar save owner: phase owner_season, age 18
+bar save retired: phase retired, age 18
+bar save managerOut: phase manager_season, age 18, out of work
+== head 390x844
+   youth: 1 Retire control(s)
+   playing: 1 Retire control(s)
+   retired: 1 Weekly Wage tile(s)
+  FAIL [retire 390x844]: the retired screen shows 1 Weekly Wage tile(s)
+  head retire: 1 finding(s)
+playSoccerLanding: RED, 1 finding(s)

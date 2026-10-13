@@ -1,0 +1,6 @@
+build exit=0 25s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+widths exit=1 109s | playSoccerLanding: RED, 7 finding(s)
+B1 exit=1 53s | playSoccerLanding: RED, 4 finding(s)
+B2 exit=1 34s | playSoccerLanding: RED, 1 finding(s)
+B3 exit=1 47s | playSoccerLanding: RED, 3 finding(s)
+B4 exit=1 63s | playSoccerLanding: RED, 4 finding(s)

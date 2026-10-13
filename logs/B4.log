@@ -1,0 +1,17 @@
+mutation B4 on src/pages/SoccerCareer.tsx: anchor count 1
+MUTATION APPLIED B4
+seed 1987332285; arms head; sections toasts; sizes 1280x900, 390x844
+== head 1280x900
+   2 toast sample(s) over a drive through youth, contract_offer, playing, phone: no category, newspaper, season_summary, ballon_dor; toasts raised: ["Signed with QPR!"]
+     "Signed with QPR!" first frame at 892,868 356x54 (scrollY 101): ["control Week by week: live the season match by match","control Open your phone"]
+  FAIL [toasts 1280x900]: "Signed with QPR!" (first frame) lies over ["control Week by week: live the season match by match","control Open your phone"]
+     "Signed with QPR!" settled at 892,815 356x54 (scrollY 101): ["control Week by week: live the season match by match","control Open your phone"]
+  FAIL [toasts 1280x900]: "Signed with QPR!" (settled) lies over ["control Week by week: live the season match by match","control Open your phone"]
+== head 390x844
+   2 toast sample(s) over a drive through youth, contract_offer, playing, phone: no category, newspaper, season_summary, ballon_dor; toasts raised: ["Signed with QPR!"]
+     "Signed with QPR!" first frame at 16,748 358x54 (scrollY 193): ["control Your next seasonRoles, contracts, playing time and","control Next Season"]
+  FAIL [toasts 390x844]: "Signed with QPR!" (first frame) lies over ["control Your next seasonRoles, contracts, playing time and","control Next Season"]
+     "Signed with QPR!" settled at 16,695 358x54 (scrollY 193): ["control Your next seasonRoles, contracts, playing time and"]
+  FAIL [toasts 390x844]: "Signed with QPR!" (settled) lies over ["control Your next seasonRoles, contracts, playing time and"]
+  head toasts: 4 finding(s)
+playSoccerLanding: RED, 4 finding(s)

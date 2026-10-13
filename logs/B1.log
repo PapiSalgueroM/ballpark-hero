@@ -1,0 +1,16 @@
+mutation B1 on src/pages/SoccerCareer.tsx: anchor count 1
+MUTATION APPLIED B1
+seed 1987332285; arms head; sections landing; sizes 390x844
+== head 390x844
+   "Danny Okafor-Whitfield": from scrollY 1632 of 12671; first frame name heading -1422 to -1394, readable 0 to 760, scrollY 1632; one second later name heading -1422 to -1394, readable 0 to 760, scrollY 1632
+  FAIL [landing 390x844]: "Danny Okafor-Whitfield": in the first frame after Begin Career the name heading is not in the readable area (name heading -1422 to -1394, readable 0 to 760, scrollY 1632)
+  FAIL [landing 390x844]: "Danny Okafor-Whitfield": one second after Begin Career the name heading is not in the readable area (name heading -1422 to -1394, readable 0 to 760, scrollY 1632)
+   "Danny Okafor-Whitfield": the club "QPR Youth" at 256 to 271, in the readable area: true
+   "Danny Okafor-Whitfield" after New Career: from scrollY 1632 of 12671; first frame name heading 17 to 45, readable 0 to 760, scrollY 193; one second later name heading 17 to 45, readable 0 to 760, scrollY 193
+   "Danny Okafor-Whitfield" after New Career: the club "Stoke City Youth" at 240 to 257, in the readable area: true
+   "Supercalifragilisticexpialidociouswinger": from scrollY 1632 of 12671; first frame name heading -1427 to -1371, readable 0 to 760, scrollY 1632; one second later name heading -1427 to -1371, readable 0 to 760, scrollY 1632
+  FAIL [landing 390x844]: "Supercalifragilisticexpialidociouswinger": in the first frame after Begin Career the name heading is not in the readable area (name heading -1427 to -1371, readable 0 to 760, scrollY 1632)
+  FAIL [landing 390x844]: "Supercalifragilisticexpialidociouswinger": one second after Begin Career the name heading is not in the readable area (name heading -1427 to -1371, readable 0 to 760, scrollY 1632)
+   "Supercalifragilisticexpialidociouswinger": the club "QPR Youth" at 274 to 289, in the readable area: true
+  head landing: 4 finding(s)
+playSoccerLanding: RED, 4 finding(s)
