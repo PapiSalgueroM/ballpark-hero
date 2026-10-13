@@ -1,0 +1,8 @@
+#!build
+#!playwright
+#!serial
+w1077-head: node scripts/qa/managerWorldBrowser1077.mjs --prefetch-fonts-only && if command -v xvfb-run >/dev/null; then NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" xvfb-run -a node scripts/qa/managerWorldBrowser1077.mjs; else NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/managerWorldBrowser1077.mjs; fi
+w1077-base: git worktree add -q /tmp/wb 8fea14e2 && ln -s "$PWD/node_modules" /tmp/wb/node_modules && cd /tmp/wb && node scripts/qa/managerWorldBrowser1077.mjs --prefetch-fonts-only && if command -v xvfb-run >/dev/null; then NODE_OPTIONS="--require=/tmp/wb/scripts/lib/offlineTransport.cjs" xvfb-run -a node scripts/qa/managerWorldBrowser1077.mjs; else NODE_OPTIONS="--require=/tmp/wb/scripts/lib/offlineTransport.cjs" node scripts/qa/managerWorldBrowser1077.mjs; fi
+simWritesAreSent-head: node scripts/simWritesAreSent.mjs
+simWritesAreSent-base: git worktree add -q /tmp/sb 8fea14e2 && ln -s "$PWD/node_modules" /tmp/sb/node_modules && cd /tmp/sb && node_modules/.bin/vite build > /tmp/sb-build.log 2>&1 && node scripts/simWritesAreSent.mjs
+playCmRealFixtures: mkdir -p cm-real-fixture-artifacts && FREE_KICK_FONT_CACHE=cm-real-fixture-artifacts/font-cache node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only && FREE_KICK_FONT_CACHE=cm-real-fixture-artifacts/font-cache ENGINES=chromium node scripts/playCmRealFixtures.mjs
