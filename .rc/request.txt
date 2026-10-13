@@ -1,0 +1,19 @@
+#!serve
+#!playwright
+sweepWeight: SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs
+playEra2005: node scripts/playEra2005.mjs
+playEra2010: node scripts/playEra2010.mjs
+playEra2015: node scripts/playEra2015.mjs
+playEra2020: node scripts/playEra2020.mjs
+playSponsors: node scripts/playSponsors.mjs
+playInboxCard: node scripts/playInboxCard.mjs
+playClubManagerNewCountries: node scripts/playClubManagerNewCountries.mjs
+playClubManager: node scripts/playClubManager.mjs
+playCmVar: node scripts/playCmVar.mjs
+playLiveMatchFit: node scripts/playLiveMatchFit.mjs
+playCmLeagueLeaders: node scripts/playCmLeagueLeaders.mjs
+playCmDataOnDemand: node scripts/playCmDataOnDemand.mjs
+playCmRealFixtures: node scripts/playCmRealFixtures.mjs
+playWilderness: node scripts/playWilderness.mjs
+playCmQuickSubs: node scripts/playCmQuickSubs.mjs
+playLeagueTableFit: node scripts/playLeagueTableFit.mjs
