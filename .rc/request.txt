@@ -1,0 +1,10 @@
+#!serial
+mut-noacademy: node .rc/x/mut1325.mjs noacademy && node scripts/simCmTablesTruth.mjs; s=$?; git checkout -- src scripts; exit $s
+mut-noyouth: node .rc/x/mut1325.mjs noyouth && node scripts/simCmTablesTruth.mjs; s=$?; git checkout -- src scripts; exit $s
+mut-desknote: node .rc/x/mut1325.mjs desknote && node scripts/simCmTablesTruth.mjs; s=$?; git checkout -- src scripts; exit $s
+mut-footevery: node .rc/x/mut1325.mjs footevery && node scripts/simCmTablesTruth.mjs; s=$?; git checkout -- src scripts; exit $s
+mut-roomstale: node .rc/x/mut1325.mjs roomstale && node scripts/simCmTablesTruth.mjs; s=$?; git checkout -- src scripts; exit $s
+mut-detailstale: node .rc/x/mut1325.mjs detailstale && node scripts/simCmTablesTruth.mjs; s=$?; git checkout -- src scripts; exit $s
+mut-showcount: node .rc/x/mut1325.mjs showcount && node scripts/simCmTablesTruth.mjs; s=$?; git checkout -- src scripts; exit $s
+mut-sliceone: node .rc/x/mut1325.mjs sliceone && node scripts/simCmTablesTruth.mjs; s=$?; git checkout -- src scripts; exit $s
+mut-lowswap: node .rc/x/mut1325.mjs lowswap && node scripts/simCmTablesTruth.mjs; s=$?; git checkout -- src scripts; exit $s
