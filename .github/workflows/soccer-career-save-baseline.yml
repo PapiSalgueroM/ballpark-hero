@@ -1,0 +1,40 @@
+name: Soccer Career save cap diagnostic
+
+on:
+  push:
+    branches: [codex/soccer-career-save-baseline]
+
+permissions:
+  contents: read
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      CAREER_SEASON_LOCAL_ONLY: '1'
+      CREATION_SIZE_OUT: ${{ github.workspace }}/creation-size-artifacts
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Block production database transport
+        run: echo '127.0.0.1 flawuiqbvjobmkfkauhw.supabase.co' | sudo tee -a /etc/hosts
+      - name: Install held locked dependencies
+        run: npm ci
+      - name: Sequential exact-source full-stream observer pair
+        run: node scripts/diagnoseSoccerCareerSaveSize.mjs
+      - name: Retain raw paired diagnostic even on failure
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: soccer-career-save-baseline-${{ github.run_id }}
+          path: creation-size-artifacts
+          if-no-files-found: error
