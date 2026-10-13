@@ -342,8 +342,16 @@ export function useClubManager() {
          career it is holding costs one localStorage write and closes the gap
          between a commit and the passive effect that would have saved it. */
       write();
-      /* Round 1323: the last write is done, so this page holds nothing now. */
-      saveFence.release(SAVE_KEY);
+      /* Round 1323: the last write is done, so this page holds nothing now.
+         Review: except a page another tab has moved on. React runs this
+         cleanup before its children's, and the live viewer's own unmount
+         write (Round 543's onMark, through markMinute) comes after it:
+         released, that write is a claim and puts this stale career back over
+         the other tab's (a stale tab left by Back mid match wiped three
+         matches). Held, saveCareer refuses it. The release waits for the end
+         of this commit, and is dropped if a page has adopted the save since. */
+      if (!saveFence.moved(SAVE_KEY)) saveFence.release(SAVE_KEY);
+      else queueMicrotask(() => { if (saveFence.moved(SAVE_KEY)) saveFence.release(SAVE_KEY); });
     };
   }, []);
 

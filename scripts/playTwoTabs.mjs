@@ -34,17 +34,27 @@
  *               the dialog sits inside the viewport; Tab and a click where
  *               Quick Sim was reach nothing behind it; no animation, reduced
  *               motion or not.
+ *   9 BACK      the review's door: tab A comes in by a link from the home page
+ *               (so Back stays in the same document), B plays three, A shows
+ *               the notice and leaves by the browser's Back, once mid Play
+ *               Live and once on the hub: the save on disk is still B's. Then
+ *               that same document carries a Hot Seat job on, which must land
+ *               (a stale page lets go of the fence once its unmount is over).
+ *               Proven against the code on a runner by mutation, not by a
+ *               control here: the old unconditional release and a release
+ *               before the last write each turn this case red (see the round's
+ *               notes), and a page that never lets go turns its carry on red.
  *
  * NEGATIVE CONTROLS (TWO_TABS_CONTROL; each counts what it dropped and a
  * control that dropped nothing exits 2):
  *   nofence   an init script drops every write to a 'dukb-fence:' key in every
- *             page: cases 1, 2, 3 and 6 go red.
+ *             page: cases 1, 2, 3, 6 and 9 go red.
  *   nolanding drops the carry on's one shot mark: case 4 goes red.
  *   nokeep    drops every write to a key holding '.broken-': case 5's backup
  *             check goes red.
  *
  * Pictures of every case at every size go to RC_OUT (or two-tabs-artifacts/).
- * Run: ENGINES=chromium node scripts/playTwoTabs.mjs   [SIZES=390x844] [TWO_TABS_CONTROL=...]
+ * Run: ENGINES=chromium node scripts/playTwoTabs.mjs   [SIZES=390x844] [CASES=9] [TWO_TABS_CONTROL=...]
  */
 import { spawn } from 'node:child_process';
 import fs from 'node:fs';
@@ -64,7 +74,7 @@ const FENCE = 'dukb-fence:' + KEY;
 const OUT = process.env.RC_OUT || path.join(ROOT, 'two-tabs-artifacts');
 fs.mkdirSync(OUT, { recursive: true });
 const CONTROL = process.env.TWO_TABS_CONTROL || '';
-const CONTROLS = { nofence: [1, 2, 3, 6], nolanding: [4], nokeep: [5] };
+const CONTROLS = { nofence: [1, 2, 3, 6, 9], nolanding: [4], nokeep: [5] };
 if (CONTROL && !(CONTROL in CONTROLS)) { console.error(`TWO_TABS_CONTROL=${CONTROL} is not a control here (${Object.keys(CONTROLS).join(', ')})`); process.exit(1); }
 const SIZES = (process.env.SIZES || '320x640,390x844,1280x900').split(',').map(s => s.split('x').map(Number));
 const NOTICE_WORDS = 'This career moved on in another tab. Reload to carry on.';
@@ -175,7 +185,7 @@ const disk = p => p.evaluate(k => {
     const c = JSON.parse(raw);
     const log = c.resultLog ?? [];
     const last = log[log.length - 1];
-    return { club: c.clubName, week: c.week, results: log.length, last: last ? `${last.opp} ${last.score}` : 'none', squad: (c.squad ?? []).length, xi: c.xiIds, budget: c.budget };
+    return { club: c.clubName, week: c.week, results: log.length, last: last ? `${last.opp} ${last.score}` : 'none', squad: (c.squad ?? []).length, xi: c.xiIds, budget: c.budget, live: c.live ? `minute ${c.live.minute ?? '?'}` : 'none' };
   } catch { return { unreadable: true }; }
 }, KEY);
 const say = d => (d ? `${d.club} week ${d.week}, ${d.results} results, last ${d.last}` : 'no save');
@@ -504,8 +514,92 @@ async function caseOldSave(ctx, tag) {
   await B.close();
 }
 
+/** Into /club-manager by an in-app link from the home page, so Back pops the router and stays in this document. */
+async function spaIntoCM(p) {
+  await p.goto(BASE + '/', { waitUntil: 'domcontentloaded', timeout: 30000 });
+  await clearBanner(p);
+  const link = p.locator('a[href="/club-manager"]:visible').first();
+  if (await link.count().catch(() => 0)) await link.click({ timeout: 5000 }).catch(() => {});
+  await p.waitForTimeout(800);
+  let how = 'a link';
+  if (!p.url().endsWith('/club-manager')) {
+    how = 'the router';
+    await p.evaluate(() => { history.pushState({}, '', '/club-manager'); window.dispatchEvent(new PopStateEvent('popstate', { state: {} })); });
+  }
+  await p.locator('[data-cm-way="quick"], [data-testid="cm-slots"]').first().waitFor({ timeout: 20000 }).catch(() => {});
+  await clearBanner(p);
+  if (await onSlots(p)) await p.getByRole('button', { name: 'Resume Career', exact: true }).first().click({ timeout: 5000 }).catch(() => {});
+  const hub = await p.locator('[data-cm-way="quick"]').first().waitFor({ timeout: 15000 }).then(() => true).catch(() => false);
+  return { how, hub };
+}
+/* The review's door (r1323-run-d W1): a stale tab that came in by a link and
+   leaves by the browser's Back stays in the same document, so no pagehide
+   fires; the page unmounts instead. Mid Play Live, the live viewer's own
+   unmount write ran after the hook had let go of the fence and put the stale
+   career back over three matches. On the hub, a release before the hook's own
+   last write would do the same. Then, in that same document, a Hot Seat carry
+   on (a claim) must still land: a stale page that never lets go would refuse
+   every later write of this game until a reload. */
+async function caseBack(ctx, tag) {
+  console.log(`9) BACK: a stale tab leaves by the browser's Back, mid Play Live and on the hub (${tag})`);
+  for (const live of [true, false]) {
+    const how = live ? 'mid Play Live' : 'on the hub';
+    const A = await newPage(ctx);
+    await plant(A, HOT ? { [KEY]: BRIGHTON, 'manager-hot-seat-free': JSON.stringify(HOT) } : { [KEY]: BRIGHTON });
+    const into = await spaIntoCM(A);
+    if (!into.hub) { fail(9, `${how}: tab A never reached the hub by ${into.how}`); await A.close(); continue; }
+    if (live) {
+      await A.locator('button:visible[data-cm-way="live"]').first().click({ timeout: 5000 }).catch(() => {});
+      const staged = await A.locator('[data-cm-live-stage]').first().waitFor({ timeout: 15000 }).then(() => true).catch(() => false);
+      if (!staged) fail(9, 'tab A never put a live match on the stage');
+      await A.waitForTimeout(5000);
+    }
+    const B = await newPage(ctx);
+    await openCM(B);
+    let played = 0;
+    for (let i = 0; i < 3; i++) if (await quick(B)) played += 1;
+    const afterB = await disk(B);
+    const up = await waitNotice(A);
+    await shot(A, `${tag}-9-${live ? 'live' : 'hub'}-A-stale`);
+    const doc0 = await A.evaluate(() => performance.timeOrigin);
+    await A.goBack({ timeout: 10000 }).catch(() => {});
+    await A.waitForTimeout(1500);
+    const doc1 = await A.evaluate(() => performance.timeOrigin).catch(() => null);
+    const afterBack = await disk(B);
+    console.log(`   ${how}: A came in by ${into.how}; B played ${played}: "${say(afterB)}" (live ${afterB?.live}); A saw the notice: ${up}; after A's Back (same document ${doc0 === doc1}) "${say(afterBack)}" (live ${afterBack?.live})`);
+    if (!up) fail(9, `${how}: tab A never showed the notice`);
+    if (played < 3) fail(9, `${how}: tab B played ${played} of three matches`);
+    if (doc0 !== doc1) fail(9, `${how}: Back left the document, so this is not the in-app Back the case is for`);
+    if (say(afterBack) !== say(afterB) || afterBack?.live !== afterB?.live) fail(9, `CLOBBER by Back ${how}: B left "${say(afterB)}" (live ${afterB?.live}), after A's Back the save holds "${say(afterBack)}" (live ${afterBack?.live})`);
+    else ok(`A left by Back ${how}: the save is still B's`);
+    await shot(A, `${tag}-9-${live ? 'live' : 'hub'}-A-after-back`);
+    if (!live) {
+      /* The same document, after the stale page let go: a Hot Seat carry on. */
+      if (!HOT) fail(9, 'no surviving Hot Seat manager to hand over after the Back');
+      else {
+        await A.evaluate(() => { history.pushState({}, '', '/manager-hot-seat'); window.dispatchEvent(new PopStateEvent('popstate', { state: {} })); });
+        await A.waitForTimeout(1500);
+        await clearDialogs(A);
+        await A.getByRole('button', { name: `See the Club Manager offer for ${HOT.club}` }).first().click({ timeout: 15000 }).catch(() => {});
+        await A.getByRole('button', { name: 'Carry on in Club Manager' }).first().click({ timeout: 15000 }).catch(() => {});
+        await A.getByRole('button', { name: /^Replace it and carry on/ }).first().click({ timeout: 8000 }).catch(() => {});
+        await A.waitForURL(/\/club-manager/, { timeout: 15000 }).catch(() => {});
+        await A.waitForTimeout(1000);
+        const handed = await disk(A);
+        await shot(A, `${tag}-9-hub-A-carry-on`);
+        console.log(`   then in the same document a Hot Seat carry on: the save holds "${say(handed)}"`);
+        if (!handed || handed.club !== HOT.club) fail(9, `after the stale tab let go, its Hot Seat carry on did not land: the save holds "${say(handed)}", not ${HOT.club}`);
+        else ok('the same document carried a Hot Seat job on afterwards');
+      }
+    }
+    await A.close();
+    await B.close();
+  }
+}
+
 /* ---------- run ---------- */
-const want = c => !CONTROL || CONTROLS[CONTROL].includes(c);
+const ONLY_CASES = process.env.CASES ? process.env.CASES.split(',').map(Number) : null;
+const want = c => (!CONTROL || CONTROLS[CONTROL].includes(c)) && (!ONLY_CASES || ONLY_CASES.includes(c));
 try {
   for (const [w, h] of SIZES) {
     const tag = `${w}x${h}`;
@@ -518,6 +612,7 @@ try {
       if (want(5)) await caseDamaged(ctx, tag);
       if (want(6)) await casePutBack(ctx, tag);
       if (want(7)) await caseOldSave(ctx, tag);
+      if (want(9)) await caseBack(ctx, tag);
     } catch (e) {
       fail(0, `${tag} threw: ${String(e?.message ?? e).slice(0, 300)}`);
     }
