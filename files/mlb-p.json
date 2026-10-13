@@ -1,0 +1,446 @@
+[
+ {
+  "t": "00:20:55",
+  "kind": "help",
+  "open": false
+ },
+ {
+  "t": "00:20:56",
+  "kind": "audit",
+  "where": "pick screen",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [],
+  "tap44": 2,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 36
+ },
+ {
+  "t": "00:20:56",
+  "kind": "pick",
+  "text": "MLB Front Office Real 2026 rosters. Real tax-line pain. October does not forgive. Take over a baseball front office Every club's real 26 from MLB's own data, as they stood on the last day of the 2026 regular season, rated off their 2026 numbers. Manage the payroll under the tax line, survive the 162, then October: Wild Card, Division Series, LCS, World Series. Saves automatically. New York Yankees American League Boston Red Sox American League Toronto Blue Jays American League Tampa Bay Rays Ame"
+ },
+ {
+  "t": "00:20:56",
+  "kind": "club",
+  "clubs": 30,
+  "idx": 0,
+  "club": "New York Yankees American League"
+ },
+ {
+  "t": "00:20:57",
+  "kind": "audit",
+  "where": "hub start",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 3,
+  "tinyText": 12,
+  "tinyTextSample": [
+   "9px span.shrink-0.rounded-full.border \"MEASURED\"",
+   "9px span.shrink-0.rounded-full.border \"CANDID\"",
+   "9px span.shrink-0.rounded-full.border \"BOLD\"",
+   "9px div.mt-0.5.truncate.text-[9px] \"Ben Rice leads them at 96\""
+  ],
+  "text10": 18
+ },
+ {
+  "t": "00:20:57",
+  "kind": "hub",
+  "text": "MLB Front Office Real 2026 rosters. Real tax-line pain. October does not forgive. New York Yankees 2026 · Round 1/27 Record 0-0 Strength 89 Tax room $30.8M 🏛️ OWNERSHIP Trust 60 Make October and win a series. This roster is built for it. 🎙️ PRESS CONFERENCE The introduction First day, full room. The New York Yankees beat writers want to know what kind of front office this is going to be. Process, patience, all the safe words MEASURED Nobody clips it. That is the point Name the roster holes out loud CANDID Candor plays upstairs, usually · a real gamble Say the World Series is the only bar BOLD The clip will outlive you, either way · a real gamble 👔 ROSTER 26 under contract Ben Rice leads them at 96 💼 FREE AGENCY $31M of room In reach: Osvaldo Calloway at 80 🤝 TRADES 26 to offer Your biggest chip is Ben Rice 🏟️ PLAY Round 1 of 27 0-0 with 27 rounds to play 📊 STANDINGS #1 in the AL Top seed as it stands How the GM desk works 📋 STAFF 6 of 6 jobs filled +1.94 team strength from the dugout ✍️ RE-SIGN DESK Nobody expiring Nobody is out of contract this winter 🎟️ DRAFT PICKS 2 picks in 2026 Ordinary MLB picks cannot be traded 🔁 TRADE DESK 18 rounds to the deadline Players, and cash toward a salary Welcome to the New York Yankees front office. Opening Day of the 2026 season is here. 🏛️ The ownership mandate: Make October and win a series. This roster is built for it. Abandon "
+ },
+ {
+  "t": "00:20:57",
+  "kind": "press",
+  "answered": "Process, patience, all the safe words MEASURED Nobody clips it. That is the point"
+ },
+ {
+  "t": "00:20:58",
+  "kind": "tiles",
+  "label": "s1start",
+  "tiles": [
+   "👔 ROSTER 26 under contract Ben Rice leads them at 96",
+   "💼 FREE AGENCY $31M of room In reach: Osvaldo Calloway at 80",
+   "🤝 TRADES 26 to offer Your biggest chip is Ben Rice",
+   "🏟️ PLAY Round 1 of 27 0-0 with 27 rounds to play",
+   "📊 STANDINGS #1 in the AL Top seed as it stands",
+   "📋 STAFF 6 of 6 jobs filled +1.94 team strength from the dugout",
+   "✍️ RE-SIGN DESK Nobody expiring Nobody is out of contract this winter",
+   "🎟️ DRAFT PICKS 2 picks in 2026 Ordinary MLB picks cannot be traded",
+   "🔁 TRADE DESK 18 rounds to the deadline Players, and cash toward a sal"
+  ]
+ },
+ {
+  "t": "00:20:59",
+  "kind": "audit",
+  "where": "s1start tile 0 👔 ROSTER 26 under contract Be",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.rounded-full.border.border-border \"DFA, $10.9M dead\"",
+    "w": 104,
+    "h": 22
+   },
+   {
+    "el": "button.rounded-full.border.border-border \"DFA, $10.1M dead\"",
+    "w": 101,
+    "h": 22
+   },
+   {
+    "el": "button.rounded-full.border.border-border \"DFA, $9.7M dead\"",
+    "w": 100,
+    "h": 22
+   },
+   {
+    "el": "button.rounded-full.border.border-border \"DFA, $7.2M dead\"",
+    "w": 99,
+    "h": 22
+   },
+   {
+    "el": "button.rounded-full.border.border-border \"DFA, $6.7M dead\"",
+    "w": 100,
+    "h": 22
+   },
+   {
+    "el": "button.rounded-full.border.border-border \"DFA, $5.5M dead\"",
+    "w": 100,
+    "h": 22
+   },
+   {
+    "el": "button.rounded-full.border.border-border \"DFA, $3.8M dead\"",
+    "w": 100,
+    "h": 22
+   },
+   {
+    "el": "button.rounded-full.border.border-border \"DFA, $3.4M dead\"",
+    "w": 100,
+    "h": 22
+   }
+  ],
+  "tap44": 3,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 91
+ },
+ {
+  "t": "00:20:59",
+  "kind": "panel",
+  "label": "s1start",
+  "tile": "👔 ROSTER 26 under contract Ben Rice lea",
+  "text": "MLB Front Office Real 2026 rosters. Real tax-line pain. October does not forgive. New York Yankees 2026 · Round 1/27 Record 0-0 Strength 89 Tax room $30.8M 🏛️ OWNERSHIP Trust 63 Make October and win a series. This roster is built for it. Hub Roster 🎙️ Nobody clips it. That is the point. Welcome to the New York Yankees front office. Opening Day of the 2026 season is here. 🏛️ The ownership mandate: Make October and win a series. This roster is built for it. Payroll $213.2M against the $244M tax line Cap figures as of September 2026 26 on the roster. The sim plays your best healthy 8 bats, 3 starters and 2 relievers. Salaries are the game's own, not real contracts. The men the sim plays opened at their rating's price and the rest on 0.7M depth deals. When any deal runs out he re-signs at his rating's price or walks, so a last year deal can cost a lot more next season. POSITION PLAYERS (1"
+ },
+ {
+  "t": "00:21:00",
+  "kind": "audit",
+  "where": "s1start tile 1 💼 FREE AGENCY $31M of room In",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.rounded-full.bg-primary.px-2.5 \"Sign\"",
+    "w": 42,
+    "h": 20
+   },
+   {
+    "el": "button.rounded-full.bg-primary.px-2.5 \"Sign\"",
+    "w": 42,
+    "h": 20
+   },
+   {
+    "el": "button.rounded-full.bg-primary.px-2.5 \"Sign\"",
+    "w": 42,
+    "h": 20
+   },
+   {
+    "el": "button.rounded-full.bg-primary.px-2.5 \"Sign\"",
+    "w": 42,
+    "h": 20
+   },
+   {
+    "el": "button.rounded-full.bg-primary.px-2.5 \"Sign\"",
+    "w": 42,
+    "h": 20
+   },
+   {
+    "el": "button.rounded-full.bg-primary.px-2.5 \"Sign\"",
+    "w": 42,
+    "h": 20
+   },
+   {
+    "el": "button.rounded-full.bg-primary.px-2.5 \"Sign\"",
+    "w": 42,
+    "h": 20
+   },
+   {
+    "el": "button.rounded-full.bg-primary.px-2.5 \"Sign\"",
+    "w": 42,
+    "h": 20
+   }
+  ],
+  "tap44": 3,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 26
+ },
+ {
+  "t": "00:21:00",
+  "kind": "panel",
+  "label": "s1start",
+  "tile": "💼 FREE AGENCY $31M of room In reach: Os",
+  "text": "MLB Front Office Real 2026 rosters. Real tax-line pain. October does not forgive. New York Yankees 2026 · Round 1/27 Record 0-0 Strength 89 Tax room $30.8M 🏛️ OWNERSHIP Trust 63 Make October and win a series. This roster is built for it. Hub Free agency 🎙️ Nobody clips it. That is the point. Welcome to the New York Yankees front office. Opening Day of the 2026 season is here. 🏛️ The ownership mandate: Make October and win a series. This roster is built for it. Free agents (tax room $30.8M). A man you designated for assignment waits until next season. Osvaldo Calloway C · 33y · wants $8.4M 80 Sign Ronan Escalante 1B · 31y · wants $8.4M 80 Sign Nico Mabry 3B · 27y · wants $8.4M 80 Sign Junior Rademacher OF · 31y · wants $7.6M 79 Sign Kip Whitfield OF · 31y · wants $7.6M 79 Sign Trey Ballinger SS · 29y · wants $6.7M 78 Sign Marek Zaragoza SP · 33y · wants $6.7M 78 Sign Deacon Villar DH ·"
+ },
+ {
+  "t": "00:21:01",
+  "kind": "audit",
+  "where": "s1start tile 2 🤝 TRADES 26 to offer Your big",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 3,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 38
+ },
+ {
+  "t": "00:21:01",
+  "kind": "panel",
+  "label": "s1start",
+  "tile": "🤝 TRADES 26 to offer Your biggest chip ",
+  "text": "MLB Front Office Real 2026 rosters. Real tax-line pain. October does not forgive. New York Yankees 2026 · Round 1/27 Record 0-0 Strength 89 Tax room $30.8M 🏛️ OWNERSHIP Trust 63 Make October and win a series. This roster is built for it. Hub Trades 🎙️ Nobody clips it. That is the point. Welcome to the New York Yankees front office. Opening Day of the 2026 season is here. 🏛️ The ownership mandate: Make October and win a series. This roster is built for it. 🔍 Trade Finder Pick one of your players and shop him. Only deals the AI genuinely accepts show up, payroll checked. No pick sweeteners: in MLB only Competitive Balance picks can be traded, and this game awards none. Showing 8 of 26 players Ben Rice (DH) 96 Cam Schlittler (SP) 95 Max Fried (SP) 95 Aaron Judge (RF) 94 Luis García Jr. (1B) 93 David Bednar (CL) 91 Brent Headrick (RP) 89 Cody Bellinger (LF) 87 Load more playersShop him a"
+ },
+ {
+  "t": "00:21:03",
+  "kind": "audit",
+  "where": "s1start tile 3 🏟️ PLAY Round 1 of 27 0-0 wit",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 4,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 7
+ },
+ {
+  "t": "00:21:03",
+  "kind": "panel",
+  "label": "s1start",
+  "tile": "🏟️ PLAY Round 1 of 27 0-0 with 27 round",
+  "text": "MLB Front Office Real 2026 rosters. Real tax-line pain. October does not forgive. New York Yankees 2026 · Round 1/27 Record 0-0 Strength 89 Tax room $30.8M 🏛️ OWNERSHIP Trust 63 Make October and win a series. This roster is built for it. Hub Play 🎙️ Nobody clips it. That is the point. Welcome to the New York Yankees front office. Opening Day of the 2026 season is here. 🏛️ The ownership mandate: Make October and win a series. This roster is built for it. Each round simulates a week and a half of baseball across the league. Play Round 1 Division winners seed 1-3, wild cards 4-6. Top two seeds skip the best-of-3 Wild Card round. Abandon franchise and restart MLB Front Office: Baseball GM Simulator Take over a real MLB club with its real 26 man roster from the last day of the 2026 regular season, every player rated off his real 2026 numbers pulled from the league's own data. Manage the pa"
+ },
+ {
+  "t": "00:21:04",
+  "kind": "audit",
+  "where": "s1start tile 4 📊 STANDINGS #1 in the AL Top ",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 3,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 13
+ },
+ {
+  "t": "00:21:04",
+  "kind": "panel",
+  "label": "s1start",
+  "tile": "📊 STANDINGS #1 in the AL Top seed as it",
+  "text": "MLB Front Office Real 2026 rosters. Real tax-line pain. October does not forgive. New York Yankees 2026 · Round 1/27 Record 0-0 Strength 89 Tax room $30.8M 🏛️ OWNERSHIP Trust 63 Make October and win a series. This roster is built for it. Hub Standings 🎙️ Nobody clips it. That is the point. Welcome to the New York Yankees front office. Opening Day of the 2026 season is here. 🏛️ The ownership mandate: Make October and win a series. This roster is built for it. AL EAST 1. New York Yankees 0-0 2. Boston Red Sox 0-0 3. Tampa Bay Rays 0-0 4. Baltimore Orioles 0-0 5. Toronto Blue Jays 0-0 AL CENTRAL 1. Minnesota Twins 0-0 2. Chicago White Sox 0-0 3. Cleveland Guardians 0-0 4. Detroit Tigers 0-0 5. Kansas City Royals 0-0 AL WEST 1. Texas Rangers 0-0 2. Houston Astros 0-0 3. Sacramento Athletics 0-0 4. Seattle Mariners 0-0 5. Los Angeles Angels 0-0 NL EAST 1. Philadelphia Phillies 0-0 2. Miami"
+ },
+ {
+  "t": "00:21:05",
+  "kind": "audit",
+  "where": "s1start tile 5 📋 STAFF 6 of 6 jobs filled +1",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 3,
+  "tinyText": 6,
+  "tinyTextSample": [
+   "9px div.text-[9px].text-muted-foreground \"Level 6 · 62k a round\"",
+   "9px div.text-[9px].text-muted-foreground \"Level 6 · 31k a round\"",
+   "9px div.text-[9px].text-muted-foreground \"Level 8 · 40k a round\"",
+   "9px div.text-[9px].text-muted-foreground \"Level 8 · 20k a round\""
+  ],
+  "text10": 13
+ },
+ {
+  "t": "00:21:05",
+  "kind": "panel",
+  "label": "s1start",
+  "tile": "📋 STAFF 6 of 6 jobs filled +1.94 team s",
+  "text": "MLB Front Office Real 2026 rosters. Real tax-line pain. October does not forgive. New York Yankees 2026 · Round 1/27 Record 0-0 Strength 89 Tax room $30.8M 🏛️ OWNERSHIP Trust 63 Make October and win a series. This roster is built for it. Hub Staff Ownership gives the staff desk $11.00M each winter for fees and pay offs. Wages are paid outside the payroll the tax line reads. The pitching coach works the three starters and two relievers the sim plays, the hitting coach the eight bats, and the farm director your young men over the winter. STAFF · $11.00M TO SPEND · 189K A ROUND ON THE DESK ? 🧢 Manager · your call Barnaby Lindqvist Level 6 · 62k a round ⚾ Pitching Quimby Ravenscroft Level 6 · 31k a round 🏏 Hitting Ignatius Underhill Level 8 · 40k a round 🔎 Scouting Zebulon Pennywell Level 8 · 20k a round 🌱 Farm system Gideon Fairweather Level 8 · 20k a round 🩹 Medical Dashiell Zeller L"
+ },
+ {
+  "t": "00:21:07",
+  "kind": "audit",
+  "where": "s1start tile 6 ✍️ RE-SIGN DESK Nobody expirin",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 4,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 7
+ },
+ {
+  "t": "00:21:07",
+  "kind": "panel",
+  "label": "s1start",
+  "tile": "✍️ RE-SIGN DESK Nobody expiring Nobody i",
+  "text": "MLB Front Office Real 2026 rosters. Real tax-line pain. October does not forgive. New York Yankees 2026 · Round 1/27 Record 0-0 Strength 89 Tax room $30.8M 🏛️ OWNERSHIP Trust 63 Make October and win a series. This roster is built for it. Hub Re-sign desk Re-sign desk Nobody is out of contract this winter. Decide any time this season. Anyone you leave open is settled by your staff's own rule when the winter starts, never by a coin flip. The money is this game's own figures, not real contracts. The rules are each league's own, read in October 2026. The money is this game's own figure, not anybody's real contract. 🎙️ Nobody clips it. That is the point. Welcome to the New York Yankees front office. Opening Day of the 2026 season is here. 🏛️ The ownership mandate: Make October and win a series. This roster is built for it. Abandon franchise and restart MLB Front Office: Baseball GM Simulat"
+ },
+ {
+  "t": "00:21:08",
+  "kind": "audit",
+  "where": "s1start tile 7 🎟️ DRAFT PICKS 2 picks in 202",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 3,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 11
+ },
+ {
+  "t": "00:21:08",
+  "kind": "panel",
+  "label": "s1start",
+  "tile": "🎟️ DRAFT PICKS 2 picks in 2026 Ordinary",
+  "text": "MLB Front Office Real 2026 rosters. Real tax-line pain. October does not forgive. New York Yankees 2026 · Round 1/27 Record 0-0 Strength 89 Tax room $30.8M 🏛️ OWNERSHIP Trust 63 Make October and win a series. This roster is built for it. Hub Draft picks DRAFT CAPITAL 2 picks, 1 first Trade deadline after round 18. 18 rounds to go. 2026 (this year) 1st 2nd The league runs a draft lottery; it is not modelled, so the order is reverse standings. No Competitive Balance picks are awarded yet, so there is no pick to trade. The real draft runs twenty rounds. This game drafts two, so the ledger carries two. Draft night here is the game's own short draft: you pick first in each batch, then the other clubs go in reverse standings. 🎙️ Nobody clips it. That is the point. Welcome to the New York Yankees front office. Opening Day of the 2026 season is here. 🏛️ The ownership mandate: Make October and"
+ },
+ {
+  "t": "00:21:09",
+  "kind": "audit",
+  "where": "s1start tile 8 🔁 TRADE DESK 18 rounds to the",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 56,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 68
+ },
+ {
+  "t": "00:21:09",
+  "kind": "panel",
+  "label": "s1start",
+  "tile": "🔁 TRADE DESK 18 rounds to the deadline ",
+  "text": "MLB Front Office Real 2026 rosters. Real tax-line pain. October does not forgive. New York Yankees 2026 · Round 1/27 Record 0-0 Strength 89 Tax room $30.8M 🏛️ OWNERSHIP Trust 63 Make October and win a series. This roster is built for it. Hub Trade desk Deal with Arizona Diamondbacks (holding) Sacramento Athletics (holding) Atlanta Braves (holding) Baltimore Orioles (holding) Boston Red Sox (holding) Chicago Cubs (holding) Chicago White Sox (holding) Cincinnati Reds (holding) Cleveland Guardians (holding) Colorado Rockies (holding) Detroit Tigers (holding) Houston Astros (holding) Kansas City Royals (holding) Los Angeles Angels (holding) Los Angeles Dodgers (holding) Miami Marlins (holding) Milwaukee Brewers (holding) Minnesota Twins (holding) New York Mets (holding) Philadelphia Phillies (holding) Pittsburgh Pirates (holding) San Diego Padres (holding) Seattle Mariners (holding) San Fra"
+ },
+ {
+  "t": "00:21:10",
+  "kind": "STUCK",
+  "label": "s1a",
+  "presses": 0,
+  "disabled": [],
+  "buttons": [
+   "👔 ROSTER 26 under contract Ben Rice lea",
+   "💼 FREE AGENCY $31M of room In reach: Os",
+   "🤝 TRADES 26 to offer Your biggest chip ",
+   "🏟️ PLAY Round 1 of 27 0-0 with 27 round",
+   "📊 STANDINGS #1 in the AL Top seed as it",
+   "How the GM desk works",
+   "📋 STAFF 6 of 6 jobs filled +1.94 team s",
+   "✍️ RE-SIGN DESK Nobody expiring Nobody i",
+   "🎟️ DRAFT PICKS 2 picks in 2026 Ordinary",
+   "🔁 TRADE DESK 18 rounds to the deadline ",
+   "Abandon franchise and restart"
+  ],
+  "text": "MLB Front Office Real 2026 rosters. Real tax-line pain. October does not forgive. New York Yankees 2026 · Round 1/27 Record 0-0 Strength 89 Tax room $30.8M 🏛️ OWNERSHIP Trust 63 Make October and win a series. This roster is built for it. 👔 ROSTER 26 under contract Ben Rice leads them at 96 💼 FREE AGENCY $31M of room In reach: Osvaldo Calloway at 80 🤝 TRADES 26 to offer Your biggest chip is Ben Rice 🏟️ PLAY Round 1 of 27 0-0 with 27 rounds to play 📊 STANDINGS #1 in the AL Top seed as it stands How the GM desk works 📋 STAFF 6 of 6 jobs filled +1.94 team strength from the dugout ✍️ RE-SIGN DESK Nobody expiring Nobody is out of contract this winter 🎟️ DRAFT PICKS 2 picks in 2026 Ordinary MLB picks cannot be traded 🔁 TRADE DESK 18 rounds to the deadline Players, and cash toward a salary 🎙️ Nobody clips it. That is the point. Welcome to the New York Yankees front office. Opening Day "
+ },
+ {
+  "t": "00:21:10",
+  "kind": "season",
+  "part": "s1a",
+  "presses": 0,
+  "end": "stuck",
+  "secs": 17
+ },
+ {
+  "t": "00:21:10",
+  "kind": "save",
+  "bytes": 128086
+ },
+ {
+  "t": "00:21:13",
+  "kind": "half",
+  "text": "MLB Front Office Real 2026 rosters. Real tax-line pain. October does not forgive. This save has invalid draft information. It is still stored. Delete this save and choose a team MLB Front Office: Baseball GM Simulator Take over a real MLB club with its real 26 man roster from the last day of the 2026 regular season, every player rated off his real 2026 numbers pulled from the league's own data. Manage the payroll against the luxury tax line, DFA dead weight, sign free agents, swing trades the AI",
+  "buttons": [
+   "Delete this save and choose a team"
+  ]
+ },
+ {
+  "t": "00:21:15",
+  "kind": "draft-no-class",
+  "text": "MLB Front Office Real 2026 rosters. Real tax-line pain. October does not forgive. This save has invalid draft information. It is still stored. Delete this save and choose a team MLB Front Office: Baseball GM Simulator Take over a real MLB club with its real 26 man roster from the last day of the 2026 regular season, every player rated off his real 2026 numbers pulled from the league's own data. Manage the payroll against the luxury tax line, DFA dead weight, sign free agents, swing trades the AI",
+  "buttons": [
+   "Delete this save and choose a team"
+  ]
+ },
+ {
+  "t": "00:21:15",
+  "kind": "done",
+  "secs": 22
+ }
+]

@@ -1,0 +1,463 @@
+[
+ {
+  "t": "00:20:55",
+  "kind": "help",
+  "open": false
+ },
+ {
+  "t": "00:20:56",
+  "kind": "audit",
+  "where": "pick screen",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [],
+  "tap44": 2,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 38
+ },
+ {
+  "t": "00:20:56",
+  "kind": "pick",
+  "text": "NFL Front Office Real rosters. Real cap math. Your calls. Build a dynasty one season at a time. Take over a front office Real 2026 roster snapshot, with original simulation ratings using 2023 to 2025 performance, playing time and draft priors. Limited evidence is marked. The whole club too: men on the 53 and the practice squad (kickers, punters and long snappers sit this one out). Manage the cap, sign free agents, swing trades, survive the injury report, draft the future, and chase a dynasty acr"
+ },
+ {
+  "t": "00:20:56",
+  "kind": "club",
+  "clubs": 32,
+  "idx": 0,
+  "club": "Arizona Cardinals NFC West"
+ },
+ {
+  "t": "00:20:57",
+  "kind": "audit",
+  "where": "hub start",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 2,
+  "tinyText": 12,
+  "tinyTextSample": [
+   "9px span.shrink-0.rounded-full.border \"MEASURED\"",
+   "9px span.shrink-0.rounded-full.border \"CANDID\"",
+   "9px span.shrink-0.rounded-full.border \"BOLD\"",
+   "9px div.mt-0.5.truncate.text-[9px] \"Trey McBride leads them at 95\""
+  ],
+  "text10": 18
+ },
+ {
+  "t": "00:20:57",
+  "kind": "hub",
+  "text": "NFL Front Office Real rosters. Real cap math. Your calls. Build a dynasty one season at a time. Arizona Cardinals 2026 · Week 1/17 Record 0-0 Strength 83 Cap room $151.1M 🏛️ OWNERSHIP Trust 60 Win 7 games and show the fans a direction. 🎙️ PRESS CONFERENCE The introduction First day, full room. The Arizona Cardinals beat writers want to know what kind of front office this is going to be. Process, patience, all the safe words MEASURED Nobody clips it. That is the point Name the roster holes out loud CANDID Candor plays upstairs, usually · a real gamble Say the Super Bowl is the only bar BOLD The clip will outlive you, either way · a real gamble 👔 ROSTER 52 under contract Trey McBride leads them at 95 💼 FREE AGENCY $151M of room In reach: Roman Draycott at 81 🤝 TRADES 52 to offer Your biggest chip is Trey McBride 🏟️ THIS WEEK at Seahawks 0-0 with 17 weeks to play 📊 STANDINGS #11 in the NFC 4 places short of the cut, 17 to play 📋 STAFF 5 of 5 jobs filled +1.03 team strength from the coaches ✍️ RE-SIGN DESK 3 deals end this spring 3 still waiting on you 🎟️ DRAFT PICKS 3 picks in the 2026 draft 9 picks over 3 drafts 🔁 TRADE DESK 9 weeks to the deadline Players and picks, dead money stays behind Welcome to the Arizona Cardinals front office. The 2026 season starts now. 🏛️ The ownership mandate: Win 7 games and show the fans a direction. Abandon franchise and restart NFL Fro"
+ },
+ {
+  "t": "00:20:57",
+  "kind": "press",
+  "answered": "Process, patience, all the safe words MEASURED Nobody clips it. That is the point"
+ },
+ {
+  "t": "00:20:58",
+  "kind": "tiles",
+  "label": "s1start",
+  "tiles": [
+   "👔 ROSTER 52 under contract Trey McBride leads them at 95",
+   "💼 FREE AGENCY $151M of room In reach: Roman Draycott at 81",
+   "🤝 TRADES 52 to offer Your biggest chip is Trey McBride",
+   "🏟️ THIS WEEK at Seahawks 0-0 with 17 weeks to play",
+   "📊 STANDINGS #11 in the NFC 4 places short of the cut, 17 to play",
+   "📋 STAFF 5 of 5 jobs filled +1.03 team strength from the coaches",
+   "✍️ RE-SIGN DESK 3 deals end this spring 3 still waiting on you",
+   "🎟️ DRAFT PICKS 3 picks in the 2026 draft 9 picks over 3 drafts",
+   "🔁 TRADE DESK 9 weeks to the deadline Players and picks, dead money st"
+  ]
+ },
+ {
+  "t": "00:20:59",
+  "kind": "audit",
+  "where": "s1start tile 0 👔 ROSTER 52 under contract Tr",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 4,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 18
+ },
+ {
+  "t": "00:20:59",
+  "kind": "panel",
+  "label": "s1start",
+  "tile": "👔 ROSTER 52 under contract Trey McBride",
+  "text": "NFL Front Office Real rosters. Real cap math. Your calls. Build a dynasty one season at a time. Arizona Cardinals 2026 · Week 1/17 Record 0-0 Strength 83 Cap room $151.1M 🏛️ OWNERSHIP Trust 63 Win 7 games and show the fans a direction. Hub Roster 🎙️ Nobody clips it. That is the point. Welcome to the Arizona Cardinals front office. The 2026 season starts now. 🏛️ The ownership mandate: Win 7 games and show the fans a direction. Defense 86 · cap $150.1M of $301.2M Cap figures as of September 2026 📋 Depth chart 52 of 53 on the roster. Tap a group to see its men. QB · 3 Jacoby Brissett 78 RB · 4 Jeremiyah Love 79e WR · 7 Michael Wilson 87 TE · 3 Trey McBride 95 OL · 9 Hjalte Froholdt 82e DL · 6 Walter Nolen 86 LB · 9 Jack Gibbens 86e DB · 11 Dadrion Taylor-Demerson 91e Practice squad · 17 Off the roster, off the cap OVR is a simulation estimate. Opening evidence: 2023 to 2025. e: limited "
+ },
+ {
+  "t": "00:21:00",
+  "kind": "audit",
+  "where": "s1start tile 1 💼 FREE AGENCY $151M of room I",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.rounded-full.bg-primary.px-2.5 \"Sign\"",
+    "w": 42,
+    "h": 20
+   },
+   {
+    "el": "button.rounded-full.bg-primary.px-2.5 \"Sign\"",
+    "w": 42,
+    "h": 20
+   },
+   {
+    "el": "button.rounded-full.bg-primary.px-2.5 \"Sign\"",
+    "w": 42,
+    "h": 20
+   },
+   {
+    "el": "button.rounded-full.bg-primary.px-2.5 \"Sign\"",
+    "w": 42,
+    "h": 20
+   },
+   {
+    "el": "button.rounded-full.bg-primary.px-2.5 \"Sign\"",
+    "w": 42,
+    "h": 20
+   },
+   {
+    "el": "button.rounded-full.bg-primary.px-2.5 \"Sign\"",
+    "w": 42,
+    "h": 20
+   },
+   {
+    "el": "button.rounded-full.bg-primary.px-2.5 \"Sign\"",
+    "w": 42,
+    "h": 20
+   },
+   {
+    "el": "button.rounded-full.bg-primary.px-2.5 \"Sign\"",
+    "w": 42,
+    "h": 20
+   }
+  ],
+  "tap44": 3,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 49
+ },
+ {
+  "t": "00:21:00",
+  "kind": "panel",
+  "label": "s1start",
+  "tile": "💼 FREE AGENCY $151M of room In reach: R",
+  "text": "NFL Front Office Real rosters. Real cap math. Your calls. Build a dynasty one season at a time. Arizona Cardinals 2026 · Week 1/17 Record 0-0 Strength 83 Cap room $151.1M 🏛️ OWNERSHIP Trust 63 Win 7 games and show the fans a direction. Hub Free agency 🎙️ Nobody clips it. That is the point. Welcome to the Arizona Cardinals front office. The 2026 season starts now. 🏛️ The ownership mandate: Win 7 games and show the fans a direction. Free agents (cap room $151.1M). Cut players land here too, but a man you cut waits until next season. Roman Draycott TE · 28y · wants $5.3M 81 Sign Cooper Holloway WR · 32y · wants $5.3M 81 Sign Finn Okafor TE · 30y · wants $5.3M 81 Sign Jalen Whitfield QB · 29y · wants $7.2M 80 Sign Marcus Ashford RB · 30y · wants $2.9M 79 Sign Ezra Calloway OL · 29y · wants $1.8M 78 Sign Caden Delacroix DB · 28y · wants $1.8M 78 Sign Xavier Zimmerman DB · 28y · wants $1M 7"
+ },
+ {
+  "t": "00:21:01",
+  "kind": "audit",
+  "where": "s1start tile 2 🤝 TRADES 52 to offer Your big",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.rounded-full.border.px-2 \"Starters\"",
+    "w": 59,
+    "h": 21
+   },
+   {
+    "el": "button.rounded-full.border.px-2 \"QB\"",
+    "w": 33,
+    "h": 21
+   },
+   {
+    "el": "button.rounded-full.border.px-2 \"RB\"",
+    "w": 32,
+    "h": 21
+   },
+   {
+    "el": "button.rounded-full.border.px-2 \"WR\"",
+    "w": 35,
+    "h": 21
+   },
+   {
+    "el": "button.rounded-full.border.px-2 \"TE\"",
+    "w": 31,
+    "h": 21
+   },
+   {
+    "el": "button.rounded-full.border.px-2 \"OL\"",
+    "w": 32,
+    "h": 21
+   },
+   {
+    "el": "button.rounded-full.border.px-2 \"DL\"",
+    "w": 31,
+    "h": 21
+   },
+   {
+    "el": "button.rounded-full.border.px-2 \"LB\"",
+    "w": 31,
+    "h": 21
+   }
+  ],
+  "tap44": 19,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 49
+ },
+ {
+  "t": "00:21:01",
+  "kind": "panel",
+  "label": "s1start",
+  "tile": "🤝 TRADES 52 to offer Your biggest chip ",
+  "text": "NFL Front Office Real rosters. Real cap math. Your calls. Build a dynasty one season at a time. Arizona Cardinals 2026 · Week 1/17 Record 0-0 Strength 83 Cap room $151.1M 🏛️ OWNERSHIP Trust 63 Win 7 games and show the fans a direction. Hub Trades 🎙️ Nobody clips it. That is the point. Welcome to the Arizona Cardinals front office. The 2026 season starts now. 🏛️ The ownership mandate: Win 7 games and show the fans a direction. Trade deadline: the break after Week 9 is the last chance, and deals shut once Week 10 is played. Packages with picks are on the Trade desk box. 🔍 Trade Finder Pick one of your players and shop him. Only deals the AI genuinely accepts show up, cap checked. Starters QB RB WR TE OL DL LB DB Trey McBride (TE) 95 Dadrion Taylor-Demerson (DB) 91e Andrew Wingard (DB) 88e Michael Wilson (WR) 87 Walter Nolen (DL) 86 Jack Gibbens (LB) 86e Josh Sweat (LB) 85e Marvin Harri"
+ },
+ {
+  "t": "00:21:03",
+  "kind": "audit",
+  "where": "s1start tile 3 🏟️ THIS WEEK at Seahawks 0-0 ",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 3,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 6
+ },
+ {
+  "t": "00:21:03",
+  "kind": "panel",
+  "label": "s1start",
+  "tile": "🏟️ THIS WEEK at Seahawks 0-0 with 17 we",
+  "text": "NFL Front Office Real rosters. Real cap math. Your calls. Build a dynasty one season at a time. Arizona Cardinals 2026 · Week 1/17 Record 0-0 Strength 83 Cap room $151.1M 🏛️ OWNERSHIP Trust 63 Win 7 games and show the fans a direction. Hub This week 🎙️ Nobody clips it. That is the point. Welcome to the Arizona Cardinals front office. The 2026 season starts now. 🏛️ The ownership mandate: Win 7 games and show the fans a direction. Week 1: Arizona Cardinals at Seattle Seahawks Play Week 1 Watch Week 1 GAME DAY ? Next up: at Seahawks. Play it or watch it. Your result lands here. Abandon franchise and restart NFL Front Office: Football GM Simulator Take over an NFL franchise using a 2026 roster snapshot. New franchises use original simulation ratings from 2023 to 2025 performance, playing time and draft priors, with limited evidence marked. Manage fictional contracts under the salary cap, "
+ },
+ {
+  "t": "00:21:04",
+  "kind": "audit",
+  "where": "s1start tile 4 📊 STANDINGS #11 in the NFC 4 ",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 3,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 14
+ },
+ {
+  "t": "00:21:04",
+  "kind": "panel",
+  "label": "s1start",
+  "tile": "📊 STANDINGS #11 in the NFC 4 places sho",
+  "text": "NFL Front Office Real rosters. Real cap math. Your calls. Build a dynasty one season at a time. Arizona Cardinals 2026 · Week 1/17 Record 0-0 Strength 83 Cap room $151.1M 🏛️ OWNERSHIP Trust 63 Win 7 games and show the fans a direction. Hub Standings 🎙️ Nobody clips it. That is the point. Welcome to the Arizona Cardinals front office. The 2026 season starts now. 🏛️ The ownership mandate: Win 7 games and show the fans a direction. AFC EAST Buffalo Bills 0-0 New England Patriots 0-0 New York Jets 0-0 Miami Dolphins 0-0 AFC NORTH Baltimore Ravens 0-0 Cincinnati Bengals 0-0 Pittsburgh Steelers 0-0 Cleveland Browns 0-0 AFC SOUTH Jacksonville Jaguars 0-0 Houston Texans 0-0 Indianapolis Colts 0-0 Tennessee Titans 0-0 AFC WEST Denver Broncos 0-0 Kansas City Chiefs 0-0 Los Angeles Chargers 0-0 Las Vegas Raiders 0-0 NFC EAST Dallas Cowboys 0-0 Philadelphia Eagles 0-0 Washington Commanders 0-0 Ne"
+ },
+ {
+  "t": "00:21:05",
+  "kind": "audit",
+  "where": "s1start tile 5 📋 STAFF 5 of 5 jobs filled +1",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 3,
+  "tinyText": 5,
+  "tinyTextSample": [
+   "9px div.text-[9px].text-muted-foreground \"Level 3 · 47k a week\"",
+   "9px div.text-[9px].text-muted-foreground \"Level 5 · 27k a week\"",
+   "9px div.text-[9px].text-muted-foreground \"Level 3 · 19k a week\"",
+   "9px div.text-[9px].text-muted-foreground \"Level 3 · 9k a week\""
+  ],
+  "text10": 12
+ },
+ {
+  "t": "00:21:05",
+  "kind": "panel",
+  "label": "s1start",
+  "tile": "📋 STAFF 5 of 5 jobs filled +1.03 team s",
+  "text": "NFL Front Office Real rosters. Real cap math. Your calls. Build a dynasty one season at a time. Arizona Cardinals 2026 · Week 1/17 Record 0-0 Strength 83 Cap room $151.1M 🏛️ OWNERSHIP Trust 63 Win 7 games and show the fans a direction. Hub Staff Ownership gives the staff desk $8.00M each summer for fees and pay offs. Wages are paid outside the cap. The coordinators' points land on their side of the ball, so offense counts 72 percent and defense 28 percent, the weights this game already rates a team by. STAFF · $8.00M TO SPEND · 116K A WEEK ON THE DESK ? 🧢 Head coach · your call Fenwick Birtwhistle Level 3 · 47k a week 🎯 Offense Gideon Inglethorpe Level 5 · 27k a week 🛡️ Defense Obadiah Oglethorpe Level 3 · 19k a week 🔎 Scouting Montague Applegarth Level 3 · 9k a week 🩹 Training room Rupert Quarmby Level 5 · 14k a week 🎙️ Nobody clips it. That is the point. Welcome to the Arizona C"
+ },
+ {
+  "t": "00:21:07",
+  "kind": "audit",
+  "where": "s1start tile 6 ✍️ RE-SIGN DESK 3 deals end th",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 4,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 7
+ },
+ {
+  "t": "00:21:07",
+  "kind": "panel",
+  "label": "s1start",
+  "tile": "✍️ RE-SIGN DESK 3 deals end this spring ",
+  "text": "NFL Front Office Real rosters. Real cap math. Your calls. Build a dynasty one season at a time. Arizona Cardinals 2026 · Week 1/17 Record 0-0 Strength 83 Cap room $151.1M 🏛️ OWNERSHIP Trust 63 Win 7 games and show the fans a direction. Hub Re-sign desk Re-sign desk 3 still waiting on you. Isaac Seumalo OL 81 overall, age 32 Asks $5.3M for 2 seasons Free agent Andrew Billings DL 77 overall, age 31 Asks $1.0M for 2 seasons Free agent Gardner Minshew QB 65 overall, age 30 Asks $1.5M for 2 seasons Free agent Decide any time this season. Anyone you leave open is settled by your staff's own rule when the offseason starts, never by a coin flip. The franchise tag is still on the draft screen, and a man you tag there leaves this desk. The money is this game's own figures, not real contracts. The rules are each league's own, read in October 2026. The money is this game's own figure, not anybody's"
+ },
+ {
+  "t": "00:21:08",
+  "kind": "audit",
+  "where": "s1start tile 7 🎟️ DRAFT PICKS 3 picks in the",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 3,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 10
+ },
+ {
+  "t": "00:21:08",
+  "kind": "panel",
+  "label": "s1start",
+  "tile": "🎟️ DRAFT PICKS 3 picks in the 2026 draf",
+  "text": "NFL Front Office Real rosters. Real cap math. Your calls. Build a dynasty one season at a time. Arizona Cardinals 2026 · Week 1/17 Record 0-0 Strength 83 Cap room $151.1M 🏛️ OWNERSHIP Trust 63 Win 7 games and show the fans a direction. Hub Draft picks DRAFT CAPITAL 9 picks, 3 firsts Trade deadline after week 9. 9 weeks to go. 2026 (this year) 1st 2nd 3rd 2027 1st 2nd 3rd 2028 1st 2nd 3rd The real draft runs seven rounds. This game drafts three, so the ledger carries three. This game awards no compensatory picks, so none are in the ledger. Draft night here is the game's own short draft: you pick, then the other clubs go in reverse standings. 🎙️ Nobody clips it. That is the point. Welcome to the Arizona Cardinals front office. The 2026 season starts now. 🏛️ The ownership mandate: Win 7 games and show the fans a direction. Abandon franchise and restart NFL Front Office: Football GM Simul"
+ },
+ {
+  "t": "00:21:09",
+  "kind": "audit",
+  "where": "s1start tile 8 🔁 TRADE DESK 9 weeks to the d",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 127,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 131
+ },
+ {
+  "t": "00:21:09",
+  "kind": "panel",
+  "label": "s1start",
+  "tile": "🔁 TRADE DESK 9 weeks to the deadline Pl",
+  "text": "NFL Front Office Real rosters. Real cap math. Your calls. Build a dynasty one season at a time. Arizona Cardinals 2026 · Week 1/17 Record 0-0 Strength 83 Cap room $151.1M 🏛️ OWNERSHIP Trust 63 Win 7 games and show the fans a direction. Hub Trade desk Deal with Atlanta Falcons (holding) Baltimore Ravens (holding) Buffalo Bills (holding) Carolina Panthers (holding) Chicago Bears (holding) Cincinnati Bengals (holding) Cleveland Browns (holding) Dallas Cowboys (holding) Denver Broncos (holding) Detroit Lions (holding) Green Bay Packers (holding) Houston Texans (holding) Indianapolis Colts (holding) Jacksonville Jaguars (holding) Kansas City Chiefs (holding) Los Angeles Rams (holding) Los Angeles Chargers (holding) Las Vegas Raiders (holding) Miami Dolphins (holding) Minnesota Vikings (holding) New England Patriots (holding) New Orleans Saints (holding) New York Giants (holding) New York Jet"
+ },
+ {
+  "t": "00:21:10",
+  "kind": "STUCK",
+  "label": "s1a",
+  "presses": 0,
+  "disabled": [],
+  "buttons": [
+   "👔 ROSTER 52 under contract Trey McBride",
+   "💼 FREE AGENCY $151M of room In reach: R",
+   "🤝 TRADES 52 to offer Your biggest chip ",
+   "🏟️ THIS WEEK at Seahawks 0-0 with 17 we",
+   "📊 STANDINGS #11 in the NFC 4 places sho",
+   "📋 STAFF 5 of 5 jobs filled +1.03 team s",
+   "✍️ RE-SIGN DESK 3 deals end this spring ",
+   "🎟️ DRAFT PICKS 3 picks in the 2026 draf",
+   "🔁 TRADE DESK 9 weeks to the deadline Pl",
+   "Abandon franchise and restart"
+  ],
+  "text": "NFL Front Office Real rosters. Real cap math. Your calls. Build a dynasty one season at a time. Arizona Cardinals 2026 · Week 1/17 Record 0-0 Strength 83 Cap room $151.1M 🏛️ OWNERSHIP Trust 63 Win 7 games and show the fans a direction. 👔 ROSTER 52 under contract Trey McBride leads them at 95 💼 FREE AGENCY $151M of room In reach: Roman Draycott at 81 🤝 TRADES 52 to offer Your biggest chip is Trey McBride 🏟️ THIS WEEK at Seahawks 0-0 with 17 weeks to play 📊 STANDINGS #11 in the NFC 4 places short of the cut, 17 to play 📋 STAFF 5 of 5 jobs filled +1.03 team strength from the coaches ✍️ RE-SIGN DESK 3 deals end this spring 3 still waiting on you 🎟️ DRAFT PICKS 3 picks in the 2026 draft 9 picks over 3 drafts 🔁 TRADE DESK 9 weeks to the deadline Players and picks, dead money stays behind 🎙️ Nobody clips it. That is the point. Welcome to the Arizona Cardinals front office. The 2026 se"
+ },
+ {
+  "t": "00:21:10",
+  "kind": "season",
+  "part": "s1a",
+  "presses": 0,
+  "end": "stuck",
+  "secs": 17
+ },
+ {
+  "t": "00:21:10",
+  "kind": "save",
+  "bytes": 655322
+ },
+ {
+  "t": "00:21:13",
+  "kind": "half",
+  "text": "NFL Front Office Real rosters. Real cap math. Your calls. Build a dynasty one season at a time. We couldn't open this save. Pick a team to start a new franchise. Your old save stays here until you pick a team or delete it. Delete unusable save Take over a front office Real 2026 roster snapshot, with original simulation ratings using 2023 to 2025 performance, playing time and draft priors. Limited evidence is marked. The whole club too: men on the 53 and the practice squad (kickers, punters and l",
+  "buttons": [
+   "Delete unusable save",
+   "Arizona Cardinals NFC West",
+   "Atlanta Falcons NFC South",
+   "Baltimore Ravens AFC North",
+   "Buffalo Bills AFC East",
+   "Carolina Panthers NFC South",
+   "Chicago Bears NFC North",
+   "Cincinnati Bengals AFC North",
+   "Cleveland Browns AFC North",
+   "Dallas Cowboys NFC East"
+  ]
+ },
+ {
+  "t": "00:21:16",
+  "kind": "draft-no-class",
+  "text": "NFL Front Office Real rosters. Real cap math. Your calls. Build a dynasty one season at a time. We couldn't open this save. Pick a team to start a new franchise. Your old save stays here until you pick a team or delete it. Delete unusable save Take over a front office Real 2026 roster snapshot, with original simulation ratings using 2023 to 2025 performance, playing time and draft priors. Limited evidence is marked. The whole club too: men on the 53 and the practice squad (kickers, punters and l",
+  "buttons": [
+   "Delete unusable save",
+   "Arizona Cardinals NFC West",
+   "Atlanta Falcons NFC South",
+   "Baltimore Ravens AFC North",
+   "Buffalo Bills AFC East",
+   "Carolina Panthers NFC South",
+   "Chicago Bears NFC North",
+   "Cincinnati Bengals AFC North",
+   "Cleveland Browns AFC North",
+   "Dallas Cowboys NFC East"
+  ]
+ },
+ {
+  "t": "00:21:16",
+  "kind": "done",
+  "secs": 22
+ }
+]

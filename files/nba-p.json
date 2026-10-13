@@ -1,0 +1,519 @@
+[
+ {
+  "t": "00:20:55",
+  "kind": "help",
+  "open": false
+ },
+ {
+  "t": "00:20:56",
+  "kind": "audit",
+  "where": "pick screen",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [],
+  "tap44": 2,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 36
+ },
+ {
+  "t": "00:20:56",
+  "kind": "pick",
+  "text": "NBA Front Office Curated rosters, original ratings, simulated contracts. The play-in is waiting for your mistakes. Take over a front office Curated NBA roster snapshot with original simulation ratings. Run the cap, work the phones, survive the play-in, draft the future. Ages and contracts are simulated. Saves automatically. Opening estimates use 2024-25 and 2025-26 regular seasons. Box scores only partly measure defense and roles; missing matches use a marked game prior. Denver Nuggets West Okla"
+ },
+ {
+  "t": "00:20:56",
+  "kind": "club",
+  "clubs": 30,
+  "idx": 0,
+  "club": "Denver Nuggets West"
+ },
+ {
+  "t": "00:20:57",
+  "kind": "audit",
+  "where": "hub start",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [
+   "2026 · Round 1/20 Record 0-0 Strength 85 Cap room $-101.6M Current tax est. $140.3M 🏛️ OW"
+  ],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 2,
+  "tinyText": 12,
+  "tinyTextSample": [
+   "9px span.shrink-0.rounded-full.border \"MEASURED\"",
+   "9px span.shrink-0.rounded-full.border \"CANDID\"",
+   "9px span.shrink-0.rounded-full.border \"BOLD\"",
+   "9px div.mt-0.5.truncate.text-[9px] \"4 short of the 14 man floor. Filled on minimum dea\""
+  ],
+  "text10": 18
+ },
+ {
+  "t": "00:20:57",
+  "kind": "hub",
+  "text": "NBA Front Office Curated rosters, original ratings, simulated contracts. The play-in is waiting for your mistakes. Denver Nuggets 2026 · Round 1/20 Record 0-0 Strength 85 Cap room $-101.6M Current tax est. $140.3M 🏛️ OWNERSHIP Trust 60 Make the playoffs and win a series. This roster is built for it. 🎙️ PRESS CONFERENCE The introduction First day, full room. The Denver Nuggets beat writers want to know what kind of front office this is going to be. Process, patience, all the safe words MEASURED Nobody clips it. That is the point Name the roster holes out loud CANDID Candor plays upstairs, usually · a real gamble Say the Finals is the only bar BOLD The clip will outlive you, either way · a real gamble 👔 ROSTER 10 under contract 4 short of the 14 man floor. Filled on minimum deals at tip off. 💼 FREE AGENCY -$102M over Lamar Lockridge wants $17M, out of reach 🤝 TRADES Tax bill $140M $40M over the tax line. Shed salary or pay it. 🏟️ PLAY Round 1 of 20 0-0 with 20 rounds to play 📊 STANDINGS #3 in the West Inside the top 10 with 20 to play 📋 STAFF 5 of 5 jobs filled No edge from the bench yet ✍️ RE-SIGN DESK Nobody expiring Nobody is out of contract this summer 🎟️ DRAFT PICKS 2 picks in 2026 14 picks over 7 drafts 🔁 TRADE DESK 12 rounds to the deadline Players and picks, up to five a side Welcome to the Denver Nuggets front office. The 2026 season tips off now. 🏛️ The owner"
+ },
+ {
+  "t": "00:20:57",
+  "kind": "press",
+  "answered": "Process, patience, all the safe words MEASURED Nobody clips it. That is the point"
+ },
+ {
+  "t": "00:20:58",
+  "kind": "tiles",
+  "label": "s1start",
+  "tiles": [
+   "👔 ROSTER 10 under contract 4 short of the 14 man floor. Filled on min",
+   "💼 FREE AGENCY -$102M over Lamar Lockridge wants $17M, out of reach",
+   "🤝 TRADES Tax bill $140M $40M over the tax line. Shed salary or pay it",
+   "🏟️ PLAY Round 1 of 20 0-0 with 20 rounds to play",
+   "📊 STANDINGS #3 in the West Inside the top 10 with 20 to play",
+   "📋 STAFF 5 of 5 jobs filled No edge from the bench yet",
+   "✍️ RE-SIGN DESK Nobody expiring Nobody is out of contract this summer",
+   "🎟️ DRAFT PICKS 2 picks in 2026 14 picks over 7 drafts",
+   "🔁 TRADE DESK 12 rounds to the deadline Players and picks, up to five "
+  ]
+ },
+ {
+  "t": "00:20:59",
+  "kind": "audit",
+  "where": "s1start tile 0 👔 ROSTER 10 under contract 4 ",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [
+   "2026 · Round 1/20 Record 0-0 Strength 85 Cap room $-101.6M Current tax est. $140.3M 🏛️ OW"
+  ],
+  "tinyTap": [
+   {
+    "el": "button.rounded-full.border.border-border \"Waive, $28.4M dead\"",
+    "w": 116,
+    "h": 22
+   },
+   {
+    "el": "button.rounded-full.border.border-border \"Waive, $24.8M dead\"",
+    "w": 116,
+    "h": 22
+   },
+   {
+    "el": "button.rounded-full.border.border-border \"Waive, $18.9M dead\"",
+    "w": 114,
+    "h": 22
+   },
+   {
+    "el": "button.rounded-full.border.border-border \"Waive, $16.6M dead\"",
+    "w": 114,
+    "h": 22
+   },
+   {
+    "el": "button.rounded-full.border.border-border \"Waive, $16.6M dead\"",
+    "w": 114,
+    "h": 22
+   },
+   {
+    "el": "button.rounded-full.border.border-border \"Waive, $11.8M dead\"",
+    "w": 112,
+    "h": 22
+   },
+   {
+    "el": "button.rounded-full.border.border-border \"Waive, $8.3M dead\"",
+    "w": 110,
+    "h": 22
+   },
+   {
+    "el": "button.rounded-full.border.border-border \"Waive, $3.6M dead\"",
+    "w": 110,
+    "h": 22
+   }
+  ],
+  "tap44": 3,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 42
+ },
+ {
+  "t": "00:20:59",
+  "kind": "panel",
+  "label": "s1start",
+  "tile": "👔 ROSTER 10 under contract 4 short of t",
+  "text": "NBA Front Office Curated rosters, original ratings, simulated contracts. The play-in is waiting for your mistakes. Denver Nuggets 2026 · Round 1/20 Record 0-0 Strength 85 Cap room $-101.6M Current tax est. $140.3M 🏛️ OWNERSHIP Trust 63 Make the playoffs and win a series. This roster is built for it. Hub Roster 🎙️ Nobody clips it. That is the point. Welcome to the Denver Nuggets front office. The 2026 season tips off now. 🏛️ The ownership mandate: Make the playoffs and win a series. This roster is built for it. Payroll $266.6M of $164.961M (current) Cap figures as of September 2026 Luxury tax line $226.7M, first apron $236.4M, second apron $250.7M. Projected tax $140.3M: $39.9M over the line. Assessed at season close. Over the second apron: a trade must send out at least the salary it brings back. 10 of 15 roster spots filled, 14 needed at tip off. 4 short: the league fills the gap on "
+ },
+ {
+  "t": "00:21:00",
+  "kind": "audit",
+  "where": "s1start tile 1 💼 FREE AGENCY -$102M over Lam",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [
+   "2026 · Round 1/20 Record 0-0 Strength 85 Cap room $-101.6M Current tax est. $140.3M 🏛️ OW",
+   "is roster is built for it. Free agents (cap room $-101.6M). A man you waived waits until "
+  ],
+  "tinyTap": [
+   {
+    "el": "button.rounded-full.bg-primary.px-2.5 \"Sign\"",
+    "w": 42,
+    "h": 20
+   },
+   {
+    "el": "button.rounded-full.bg-primary.px-2.5 \"Sign\"",
+    "w": 42,
+    "h": 20
+   },
+   {
+    "el": "button.rounded-full.bg-primary.px-2.5 \"Sign\"",
+    "w": 42,
+    "h": 20
+   },
+   {
+    "el": "button.rounded-full.bg-primary.px-2.5 \"Sign\"",
+    "w": 42,
+    "h": 20
+   },
+   {
+    "el": "button.rounded-full.bg-primary.px-2.5 \"Sign\"",
+    "w": 42,
+    "h": 20
+   },
+   {
+    "el": "button.rounded-full.bg-primary.px-2.5 \"Sign\"",
+    "w": 42,
+    "h": 20
+   },
+   {
+    "el": "button.rounded-full.bg-primary.px-2.5 \"Sign\"",
+    "w": 42,
+    "h": 20
+   },
+   {
+    "el": "button.rounded-full.bg-primary.px-2.5 \"Sign\"",
+    "w": 42,
+    "h": 20
+   }
+  ],
+  "tap44": 3,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 26
+ },
+ {
+  "t": "00:21:00",
+  "kind": "panel",
+  "label": "s1start",
+  "tile": "💼 FREE AGENCY -$102M over Lamar Lockrid",
+  "text": "NBA Front Office Curated rosters, original ratings, simulated contracts. The play-in is waiting for your mistakes. Denver Nuggets 2026 · Round 1/20 Record 0-0 Strength 85 Cap room $-101.6M Current tax est. $140.3M 🏛️ OWNERSHIP Trust 63 Make the playoffs and win a series. This roster is built for it. Hub Free agency 🎙️ Nobody clips it. That is the point. Welcome to the Denver Nuggets front office. The 2026 season tips off now. 🏛️ The ownership mandate: Make the playoffs and win a series. This roster is built for it. Free agents (cap room $-101.6M). A man you waived waits until next season. Lamar Lockridge C · 33y · wants $17M 78 Sign Keon Ridgeway F · 33y · wants $12.8M 76 Sign Lamar Quinn F · 31y · wants $10.7M 75 Sign Tyrese Beaudry G · 33y · wants $10.7M 75 Sign Cole Pemberton F · 31y · wants $8.6M 74 Sign Cole Halverson G · 30y · wants $6.5M 73 Sign Zaire Halverson C · 30y · wants "
+ },
+ {
+  "t": "00:21:01",
+  "kind": "audit",
+  "where": "s1start tile 2 🤝 TRADES Tax bill $140M $40M ",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [
+   "2026 · Round 1/20 Record 0-0 Strength 85 Cap room $-101.6M Current tax est. $140.3M 🏛️ OW"
+  ],
+  "tinyTap": [
+   {
+    "el": "button.rounded-full.border.px-2 \"OKC\"",
+    "w": 40,
+    "h": 21
+   },
+   {
+    "el": "button.rounded-full.border.px-2 \"BOS\"",
+    "w": 40,
+    "h": 21
+   },
+   {
+    "el": "button.rounded-full.border.px-2 \"NYK\"",
+    "w": 40,
+    "h": 21
+   },
+   {
+    "el": "button.rounded-full.border.px-2 \"LAL\"",
+    "w": 37,
+    "h": 21
+   },
+   {
+    "el": "button.rounded-full.border.px-2 \"MIL\"",
+    "w": 36,
+    "h": 21
+   },
+   {
+    "el": "button.rounded-full.border.px-2 \"MIN\"",
+    "w": 38,
+    "h": 21
+   },
+   {
+    "el": "button.rounded-full.border.px-2 \"HOU\"",
+    "w": 40,
+    "h": 21
+   },
+   {
+    "el": "button.rounded-full.border.px-2 \"CLE\"",
+    "w": 37,
+    "h": 21
+   }
+  ],
+  "tap44": 4,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 48
+ },
+ {
+  "t": "00:21:01",
+  "kind": "panel",
+  "label": "s1start",
+  "tile": "🤝 TRADES Tax bill $140M $40M over the t",
+  "text": "NBA Front Office Curated rosters, original ratings, simulated contracts. The play-in is waiting for your mistakes. Denver Nuggets 2026 · Round 1/20 Record 0-0 Strength 85 Cap room $-101.6M Current tax est. $140.3M 🏛️ OWNERSHIP Trust 63 Make the playoffs and win a series. This roster is built for it. Hub Trades 🎙️ Nobody clips it. That is the point. Welcome to the Denver Nuggets front office. The 2026 season tips off now. 🏛️ The ownership mandate: Make the playoffs and win a series. This roster is built for it. Over the second apron ($250.7M): any trade must send out at least as much salary as it brings back. Trade deadline: the break after round 12 is the last chance, and deals shut once round 13 is played. Packages with picks are on the Trade desk box. 🔍 Trade Finder Pick one of your players and shop him. Only deals the AI genuinely accepts show up, cap checked. Nikola Jokic (C) Ope"
+ },
+ {
+  "t": "00:21:03",
+  "kind": "audit",
+  "where": "s1start tile 3 🏟️ PLAY Round 1 of 20 0-0 wit",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [
+   "2026 · Round 1/20 Record 0-0 Strength 85 Cap room $-101.6M Current tax est. $140.3M 🏛️ OW"
+  ],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 4,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 7
+ },
+ {
+  "t": "00:21:03",
+  "kind": "panel",
+  "label": "s1start",
+  "tile": "🏟️ PLAY Round 1 of 20 0-0 with 20 round",
+  "text": "NBA Front Office Curated rosters, original ratings, simulated contracts. The play-in is waiting for your mistakes. Denver Nuggets 2026 · Round 1/20 Record 0-0 Strength 85 Cap room $-101.6M Current tax est. $140.3M 🏛️ OWNERSHIP Trust 63 Make the playoffs and win a series. This roster is built for it. Hub Play 🎙️ Nobody clips it. That is the point. Welcome to the Denver Nuggets front office. The 2026 season tips off now. 🏛️ The ownership mandate: Make the playoffs and win a series. This roster is built for it. Each round simulates a stretch of games across the league. 4 short of the 14 man floor. At tip off the league fills the gap on minimum deals ($2M each), so sign who you want first. Play Round 1 The season ends with the play-in for seeds 7 to 10, then best-of-7 rounds to the Finals. Abandon franchise and restart NBA Front Office: Basketball GM Simulator Take over an NBA franchise f"
+ },
+ {
+  "t": "00:21:04",
+  "kind": "audit",
+  "where": "s1start tile 4 📊 STANDINGS #3 in the West In",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [
+   "2026 · Round 1/20 Record 0-0 Strength 85 Cap room $-101.6M Current tax est. $140.3M 🏛️ OW"
+  ],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 3,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 8
+ },
+ {
+  "t": "00:21:04",
+  "kind": "panel",
+  "label": "s1start",
+  "tile": "📊 STANDINGS #3 in the West Inside the t",
+  "text": "NBA Front Office Curated rosters, original ratings, simulated contracts. The play-in is waiting for your mistakes. Denver Nuggets 2026 · Round 1/20 Record 0-0 Strength 85 Cap room $-101.6M Current tax est. $140.3M 🏛️ OWNERSHIP Trust 63 Make the playoffs and win a series. This roster is built for it. Hub Standings 🎙️ Nobody clips it. That is the point. Welcome to the Denver Nuggets front office. The 2026 season tips off now. 🏛️ The ownership mandate: Make the playoffs and win a series. This roster is built for it. EAST 1. Boston Celtics 0-0 2. Cleveland Cavaliers 0-0 3. New York Knicks 0-0 4. Toronto Raptors 0-0 5. Atlanta Hawks 0-0 6. Charlotte Hornets 0-0 7. Philadelphia 76ers (play-in) 0-0 8. Orlando Magic (play-in) 0-0 9. Indiana Pacers (play-in) 0-0 10. Chicago Bulls (play-in) 0-0 11. Detroit Pistons 0-0 12. Miami Heat 0-0 13. Washington Wizards 0-0 14. Milwaukee Bucks 0-0 15. Bro"
+ },
+ {
+  "t": "00:21:05",
+  "kind": "audit",
+  "where": "s1start tile 5 📋 STAFF 5 of 5 jobs filled No",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [
+   "2026 · Round 1/20 Record 0-0 Strength 85 Cap room $-101.6M Current tax est. $140.3M 🏛️ OW"
+  ],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 3,
+  "tinyText": 5,
+  "tinyTextSample": [
+   "9px div.text-[9px].text-muted-foreground \"Level 1 · 26k a round\"",
+   "9px div.text-[9px].text-muted-foreground \"Level 1 · 10k a round\"",
+   "9px div.text-[9px].text-muted-foreground \"Level 1 · 5k a round\"",
+   "9px div.text-[9px].text-muted-foreground \"Level 1 · 5k a round\""
+  ],
+  "text10": 12
+ },
+ {
+  "t": "00:21:05",
+  "kind": "panel",
+  "label": "s1start",
+  "tile": "📋 STAFF 5 of 5 jobs filled No edge from",
+  "text": "NBA Front Office Curated rosters, original ratings, simulated contracts. The play-in is waiting for your mistakes. Denver Nuggets 2026 · Round 1/20 Record 0-0 Strength 85 Cap room $-101.6M Current tax est. $140.3M 🏛️ OWNERSHIP Trust 63 Make the playoffs and win a series. This roster is built for it. Hub Staff Ownership gives the staff desk $9.00M each summer for fees and pay offs. Wages are paid outside the cap. One strength number covers both ends of the floor here, so a coach's point at either end counts 50 percent. The development coach works every summer on your men with room to grow who are 23 or under today, since everyone turns a year older before the summer's growth. STAFF · $9.00M TO SPEND · 51K A ROUND ON THE DESK ? 📋 Head coach · your call Nehemiah Birtwhistle Level 1 · 26k a round 🗣️ Lead assistant Obadiah Yarborough Level 1 · 10k a round 📈 Development Percival Goodenough"
+ },
+ {
+  "t": "00:21:06",
+  "kind": "audit",
+  "where": "s1start tile 6 ✍️ RE-SIGN DESK Nobody expirin",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [
+   "2026 · Round 1/20 Record 0-0 Strength 85 Cap room $-101.6M Current tax est. $140.3M 🏛️ OW"
+  ],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 4,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 7
+ },
+ {
+  "t": "00:21:06",
+  "kind": "panel",
+  "label": "s1start",
+  "tile": "✍️ RE-SIGN DESK Nobody expiring Nobody i",
+  "text": "NBA Front Office Curated rosters, original ratings, simulated contracts. The play-in is waiting for your mistakes. Denver Nuggets 2026 · Round 1/20 Record 0-0 Strength 85 Cap room $-101.6M Current tax est. $140.3M 🏛️ OWNERSHIP Trust 63 Make the playoffs and win a series. This roster is built for it. Hub Re-sign desk Re-sign desk Nobody is out of contract this winter. Decide any time this season. Anyone you leave open is settled by your staff's own rule when the summer starts, never by a coin flip. The luxury tax still bills whatever payroll you keep. The money is this game's own figures, not real contracts. The rules are each league's own, read in October 2026. The money is this game's own figure, not anybody's real contract. 🎙️ Nobody clips it. That is the point. Welcome to the Denver Nuggets front office. The 2026 season tips off now. 🏛️ The ownership mandate: Make the playoffs and "
+ },
+ {
+  "t": "00:21:08",
+  "kind": "audit",
+  "where": "s1start tile 7 🎟️ DRAFT PICKS 2 picks in 202",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [
+   "2026 · Round 1/20 Record 0-0 Strength 85 Cap room $-101.6M Current tax est. $140.3M 🏛️ OW"
+  ],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 3,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 10
+ },
+ {
+  "t": "00:21:08",
+  "kind": "panel",
+  "label": "s1start",
+  "tile": "🎟️ DRAFT PICKS 2 picks in 2026 14 picks",
+  "text": "NBA Front Office Curated rosters, original ratings, simulated contracts. The play-in is waiting for your mistakes. Denver Nuggets 2026 · Round 1/20 Record 0-0 Strength 85 Cap room $-101.6M Current tax est. $140.3M 🏛️ OWNERSHIP Trust 63 Make the playoffs and win a series. This roster is built for it. Hub Draft picks DRAFT CAPITAL 14 picks, 7 firsts Trade deadline after round 12. 12 rounds to go. 2026 (this year) 1st 2nd 2027 1st 2nd 2028 1st 2nd 2029 1st 2nd 2030 1st 2nd 2031 1st 2nd 2032 1st 2nd The lottery table is the one the 2026 draft used. The league switched to a new lottery from the 2027 draft, and this game does not model it yet. In the second round, every club that missed the playoffs picks ahead of every playoff club here. The lottery is in the rules, but draft night here is the game's own short draft: you pick first in each batch, then the other clubs go in reverse standings."
+ },
+ {
+  "t": "00:21:09",
+  "kind": "audit",
+  "where": "s1start tile 8 🔁 TRADE DESK 12 rounds to the",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [
+   "2026 · Round 1/20 Record 0-0 Strength 85 Cap room $-101.6M Current tax est. $140.3M 🏛️ OW"
+  ],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 52,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 56
+ },
+ {
+  "t": "00:21:09",
+  "kind": "panel",
+  "label": "s1start",
+  "tile": "🔁 TRADE DESK 12 rounds to the deadline ",
+  "text": "NBA Front Office Curated rosters, original ratings, simulated contracts. The play-in is waiting for your mistakes. Denver Nuggets 2026 · Round 1/20 Record 0-0 Strength 85 Cap room $-101.6M Current tax est. $140.3M 🏛️ OWNERSHIP Trust 63 Make the playoffs and win a series. This roster is built for it. Hub Trade desk Deal with Atlanta Hawks (holding) Brooklyn Nets (holding) Boston Celtics (holding) Charlotte Hornets (holding) Chicago Bulls (holding) Cleveland Cavaliers (holding) Dallas Mavericks (holding) Detroit Pistons (holding) Golden State Warriors (holding) Houston Rockets (holding) Indiana Pacers (holding) LA Clippers (holding) Los Angeles Lakers (holding) Memphis Grizzlies (holding) Miami Heat (holding) Milwaukee Bucks (holding) Minnesota Timberwolves (holding) New Orleans Pelicans (holding) New York Knicks (holding) Oklahoma City Thunder (holding) Orlando Magic (holding) Philadelph"
+ },
+ {
+  "t": "00:21:10",
+  "kind": "STUCK",
+  "label": "s1a",
+  "presses": 0,
+  "disabled": [],
+  "buttons": [
+   "👔 ROSTER 10 under contract 4 short of t",
+   "💼 FREE AGENCY -$102M over Lamar Lockrid",
+   "🤝 TRADES Tax bill $140M $40M over the t",
+   "🏟️ PLAY Round 1 of 20 0-0 with 20 round",
+   "📊 STANDINGS #3 in the West Inside the t",
+   "📋 STAFF 5 of 5 jobs filled No edge from",
+   "✍️ RE-SIGN DESK Nobody expiring Nobody i",
+   "🎟️ DRAFT PICKS 2 picks in 2026 14 picks",
+   "🔁 TRADE DESK 12 rounds to the deadline ",
+   "Abandon franchise and restart"
+  ],
+  "text": "NBA Front Office Curated rosters, original ratings, simulated contracts. The play-in is waiting for your mistakes. Denver Nuggets 2026 · Round 1/20 Record 0-0 Strength 85 Cap room $-101.6M Current tax est. $140.3M 🏛️ OWNERSHIP Trust 63 Make the playoffs and win a series. This roster is built for it. 👔 ROSTER 10 under contract 4 short of the 14 man floor. Filled on minimum deals at tip off. 💼 FREE AGENCY -$102M over Lamar Lockridge wants $17M, out of reach 🤝 TRADES Tax bill $140M $40M over the tax line. Shed salary or pay it. 🏟️ PLAY Round 1 of 20 0-0 with 20 rounds to play 📊 STANDINGS #3 in the West Inside the top 10 with 20 to play 📋 STAFF 5 of 5 jobs filled No edge from the bench yet ✍️ RE-SIGN DESK Nobody expiring Nobody is out of contract this summer 🎟️ DRAFT PICKS 2 picks in 2026 14 picks over 7 drafts 🔁 TRADE DESK 12 rounds to the deadline Players and picks, up to five a s"
+ },
+ {
+  "t": "00:21:10",
+  "kind": "season",
+  "part": "s1a",
+  "presses": 0,
+  "end": "stuck",
+  "secs": 17
+ },
+ {
+  "t": "00:21:10",
+  "kind": "save",
+  "bytes": 121120
+ },
+ {
+  "t": "00:21:12",
+  "kind": "half",
+  "text": "NBA Front Office Curated rosters, original ratings, simulated contracts. The play-in is waiting for your mistakes. Take over a front office Curated NBA roster snapshot with original simulation ratings. Run the cap, work the phones, survive the play-in, draft the future. Ages and contracts are simulated. Saves automatically. Opening estimates use 2024-25 and 2025-26 regular seasons. Box scores only partly measure defense and roles; missing matches use a marked game prior. Denver Nuggets West Okla",
+  "buttons": [
+   "Denver Nuggets West",
+   "Oklahoma City Thunder West",
+   "Boston Celtics East",
+   "New York Knicks East",
+   "Los Angeles Lakers West",
+   "Milwaukee Bucks East",
+   "Minnesota Timberwolves West",
+   "Houston Rockets West",
+   "Cleveland Cavaliers East",
+   "Indiana Pacers East"
+  ]
+ },
+ {
+  "t": "00:21:15",
+  "kind": "draft-no-class",
+  "text": "NBA Front Office Curated rosters, original ratings, simulated contracts. The play-in is waiting for your mistakes. Take over a front office Curated NBA roster snapshot with original simulation ratings. Run the cap, work the phones, survive the play-in, draft the future. Ages and contracts are simulated. Saves automatically. Opening estimates use 2024-25 and 2025-26 regular seasons. Box scores only partly measure defense and roles; missing matches use a marked game prior. Could not restore this d",
+  "buttons": [
+   "Denver Nuggets West",
+   "Oklahoma City Thunder West",
+   "Boston Celtics East",
+   "New York Knicks East",
+   "Los Angeles Lakers West",
+   "Milwaukee Bucks East",
+   "Minnesota Timberwolves West",
+   "Houston Rockets West",
+   "Cleveland Cavaliers East",
+   "Indiana Pacers East"
+  ]
+ },
+ {
+  "t": "00:21:15",
+  "kind": "done",
+  "secs": 22
+ }
+]

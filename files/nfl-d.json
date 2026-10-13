@@ -1,0 +1,424 @@
+[
+ {
+  "t": "00:21:17",
+  "kind": "help",
+  "open": false
+ },
+ {
+  "t": "00:21:18",
+  "kind": "audit",
+  "where": "pick screen",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [],
+  "tap44": 2,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 38
+ },
+ {
+  "t": "00:21:18",
+  "kind": "pick",
+  "text": "NFL Front Office Real rosters. Real cap math. Your calls. Build a dynasty one season at a time. Take over a front office Real 2026 roster snapshot, with original simulation ratings using 2023 to 2025 performance, playing time and draft priors. Limited evidence is marked. The whole club too: men on the 53 and the practice squad (kickers, punters and long snappers sit this one out). Manage the cap, sign free agents, swing trades, survive the injury report, draft the future, and chase a dynasty acr"
+ },
+ {
+  "t": "00:21:18",
+  "kind": "club",
+  "clubs": 32,
+  "idx": 9,
+  "club": "Denver Broncos AFC West"
+ },
+ {
+  "t": "00:21:19",
+  "kind": "audit",
+  "where": "hub start",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 2,
+  "tinyText": 12,
+  "tinyTextSample": [
+   "9px span.shrink-0.rounded-full.border \"MEASURED\"",
+   "9px span.shrink-0.rounded-full.border \"CANDID\"",
+   "9px span.shrink-0.rounded-full.border \"BOLD\"",
+   "9px div.mt-0.5.truncate.text-[9px] \"Zach Allen leads them at 95\""
+  ],
+  "text10": 18
+ },
+ {
+  "t": "00:21:19",
+  "kind": "hub",
+  "text": "NFL Front Office Real rosters. Real cap math. Your calls. Build a dynasty one season at a time. Denver Broncos 2026 · Week 1/17 Record 0-0 Strength 86 Cap room $124.1M 🏛️ OWNERSHIP Trust 60 Make the playoffs and win a playoff round. This roster is built for it. 🎙️ PRESS CONFERENCE The introduction First day, full room. The Denver Broncos beat writers want to know what kind of front office this is going to be. Process, patience, all the safe words MEASURED Nobody clips it. That is the point Name the roster holes out loud CANDID Candor plays upstairs, usually · a real gamble Say the Super Bowl is the only bar BOLD The clip will outlive you, either way · a real gamble 👔 ROSTER 50 under contract Zach Allen leads them at 95 💼 FREE AGENCY $124M of room In reach: Hollis Calloway at 81 🤝 TRADES 50 to offer Your biggest chip is Zach Allen 🏟️ THIS WEEK vs Chiefs 0-0 with 17 weeks to play 📊 STANDINGS #3 in the AFC Inside the top 7 with 17 to play 📋 STAFF 5 of 5 jobs filled +2.15 team strength from the coaches ✍️ RE-SIGN DESK 2 deals end this spring 2 still waiting on you 🎟️ DRAFT PICKS 3 picks in the 2026 draft 9 picks over 3 drafts 🔁 TRADE DESK 9 weeks to the deadline Players and picks, dead money stays behind Welcome to the Denver Broncos front office. The 2026 season starts now. 🏛️ The ownership mandate: Make the playoffs and win a playoff round. This roster is built for it."
+ },
+ {
+  "t": "00:21:19",
+  "kind": "press",
+  "answered": "Process, patience, all the safe words MEASURED Nobody clips it. That is the point"
+ },
+ {
+  "t": "00:21:20",
+  "kind": "tiles",
+  "label": "s1start",
+  "tiles": [
+   "👔 ROSTER 50 under contract Zach Allen leads them at 95",
+   "💼 FREE AGENCY $124M of room In reach: Hollis Calloway at 81",
+   "🤝 TRADES 50 to offer Your biggest chip is Zach Allen",
+   "🏟️ THIS WEEK vs Chiefs 0-0 with 17 weeks to play",
+   "📊 STANDINGS #3 in the AFC Inside the top 7 with 17 to play",
+   "📋 STAFF 5 of 5 jobs filled +2.15 team strength from the coaches",
+   "✍️ RE-SIGN DESK 2 deals end this spring 2 still waiting on you",
+   "🎟️ DRAFT PICKS 3 picks in the 2026 draft 9 picks over 3 drafts",
+   "🔁 TRADE DESK 9 weeks to the deadline Players and picks, dead money st"
+  ]
+ },
+ {
+  "t": "00:21:21",
+  "kind": "audit",
+  "where": "s1start tile 0 👔 ROSTER 50 under contract Za",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 4,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 18
+ },
+ {
+  "t": "00:21:21",
+  "kind": "panel",
+  "label": "s1start",
+  "tile": "👔 ROSTER 50 under contract Zach Allen l",
+  "text": "NFL Front Office Real rosters. Real cap math. Your calls. Build a dynasty one season at a time. Denver Broncos 2026 · Week 1/17 Record 0-0 Strength 86 Cap room $124.1M 🏛️ OWNERSHIP Trust 63 Make the playoffs and win a playoff round. This roster is built for it. Hub Roster 🎙️ Nobody clips it. That is the point. Welcome to the Denver Broncos front office. The 2026 season starts now. 🏛️ The ownership mandate: Make the playoffs and win a playoff round. This roster is built for it. Defense 92 · cap $177.1M of $301.2M Cap figures as of September 2026 📋 Depth chart 50 of 53 on the roster. Tap a group to see its men. QB · 3 Bo Nix 83 RB · 3 J.K. Dobbins 82 WR · 6 Courtland Sutton 89 TE · 4 Evan Engram 72 OL · 9 Mike McGlinchey 82e DL · 7 Zach Allen 95 LB · 8 Nik Bonitto 90e DB · 10 Pat Surtain II 94 Practice squad · 17 Off the roster, off the cap OVR is a simulation estimate. Opening evidenc"
+ },
+ {
+  "t": "00:21:22",
+  "kind": "audit",
+  "where": "s1start tile 1 💼 FREE AGENCY $124M of room I",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.rounded-full.bg-primary.px-2.5 \"Sign\"",
+    "w": 42,
+    "h": 20
+   },
+   {
+    "el": "button.rounded-full.bg-primary.px-2.5 \"Sign\"",
+    "w": 42,
+    "h": 20
+   },
+   {
+    "el": "button.rounded-full.bg-primary.px-2.5 \"Sign\"",
+    "w": 42,
+    "h": 20
+   },
+   {
+    "el": "button.rounded-full.bg-primary.px-2.5 \"Sign\"",
+    "w": 42,
+    "h": 20
+   },
+   {
+    "el": "button.rounded-full.bg-primary.px-2.5 \"Sign\"",
+    "w": 42,
+    "h": 20
+   },
+   {
+    "el": "button.rounded-full.bg-primary.px-2.5 \"Sign\"",
+    "w": 42,
+    "h": 20
+   },
+   {
+    "el": "button.rounded-full.bg-primary.px-2.5 \"Sign\"",
+    "w": 42,
+    "h": 20
+   },
+   {
+    "el": "button.rounded-full.bg-primary.px-2.5 \"Sign\"",
+    "w": 42,
+    "h": 20
+   }
+  ],
+  "tap44": 3,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 49
+ },
+ {
+  "t": "00:21:22",
+  "kind": "panel",
+  "label": "s1start",
+  "tile": "💼 FREE AGENCY $124M of room In reach: H",
+  "text": "NFL Front Office Real rosters. Real cap math. Your calls. Build a dynasty one season at a time. Denver Broncos 2026 · Week 1/17 Record 0-0 Strength 86 Cap room $124.1M 🏛️ OWNERSHIP Trust 63 Make the playoffs and win a playoff round. This roster is built for it. Hub Free agency 🎙️ Nobody clips it. That is the point. Welcome to the Denver Broncos front office. The 2026 season starts now. 🏛️ The ownership mandate: Make the playoffs and win a playoff round. This roster is built for it. Free agents (cap room $124.1M). Cut players land here too, but a man you cut waits until next season. Hollis Calloway TE · 30y · wants $5.3M 81 Sign Jamari Okafor OL · 27y · wants $4.1M 80 Sign DeShawn Holloway RB · 30y · wants $4.1M 80 Sign Omar Draycott WR · 31y · wants $2.9M 79 Sign Ezra Holloway LB · 31y · wants $2.9M 79 Sign Ezra Bishop DB · 30y · wants $1.8M 78 Sign Jamari Zimmerman QB · 27y · wants $"
+ },
+ {
+  "t": "00:21:23",
+  "kind": "audit",
+  "where": "s1start tile 2 🤝 TRADES 50 to offer Your big",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.rounded-full.border.px-2 \"Starters\"",
+    "w": 59,
+    "h": 21
+   },
+   {
+    "el": "button.rounded-full.border.px-2 \"QB\"",
+    "w": 33,
+    "h": 21
+   },
+   {
+    "el": "button.rounded-full.border.px-2 \"RB\"",
+    "w": 32,
+    "h": 21
+   },
+   {
+    "el": "button.rounded-full.border.px-2 \"WR\"",
+    "w": 35,
+    "h": 21
+   },
+   {
+    "el": "button.rounded-full.border.px-2 \"TE\"",
+    "w": 31,
+    "h": 21
+   },
+   {
+    "el": "button.rounded-full.border.px-2 \"OL\"",
+    "w": 32,
+    "h": 21
+   },
+   {
+    "el": "button.rounded-full.border.px-2 \"DL\"",
+    "w": 31,
+    "h": 21
+   },
+   {
+    "el": "button.rounded-full.border.px-2 \"LB\"",
+    "w": 31,
+    "h": 21
+   }
+  ],
+  "tap44": 19,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 49
+ },
+ {
+  "t": "00:21:23",
+  "kind": "panel",
+  "label": "s1start",
+  "tile": "🤝 TRADES 50 to offer Your biggest chip ",
+  "text": "NFL Front Office Real rosters. Real cap math. Your calls. Build a dynasty one season at a time. Denver Broncos 2026 · Week 1/17 Record 0-0 Strength 86 Cap room $124.1M 🏛️ OWNERSHIP Trust 63 Make the playoffs and win a playoff round. This roster is built for it. Hub Trades 🎙️ Nobody clips it. That is the point. Welcome to the Denver Broncos front office. The 2026 season starts now. 🏛️ The ownership mandate: Make the playoffs and win a playoff round. This roster is built for it. Trade deadline: the break after Week 9 is the last chance, and deals shut once Week 10 is played. Packages with picks are on the Trade desk box. 🔍 Trade Finder Pick one of your players and shop him. Only deals the AI genuinely accepts show up, cap checked. Starters QB RB WR TE OL DL LB DB Zach Allen (DL) 95 Pat Surtain II (DB) 94 Brandon Jones (DB) 93e Malcolm Roach (DL) 91 Nik Bonitto (LB) 90e Courtland Sutton"
+ },
+ {
+  "t": "00:21:25",
+  "kind": "audit",
+  "where": "s1start tile 3 🏟️ THIS WEEK vs Chiefs 0-0 wi",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 3,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 6
+ },
+ {
+  "t": "00:21:25",
+  "kind": "panel",
+  "label": "s1start",
+  "tile": "🏟️ THIS WEEK vs Chiefs 0-0 with 17 week",
+  "text": "NFL Front Office Real rosters. Real cap math. Your calls. Build a dynasty one season at a time. Denver Broncos 2026 · Week 1/17 Record 0-0 Strength 86 Cap room $124.1M 🏛️ OWNERSHIP Trust 63 Make the playoffs and win a playoff round. This roster is built for it. Hub This week 🎙️ Nobody clips it. That is the point. Welcome to the Denver Broncos front office. The 2026 season starts now. 🏛️ The ownership mandate: Make the playoffs and win a playoff round. This roster is built for it. Week 1: Kansas City Chiefs at Denver Broncos Play Week 1 Watch Week 1 GAME DAY ? Next up: home to Chiefs. Play it or watch it. Your result lands here. Abandon franchise and restart NFL Front Office: Football GM Simulator Take over an NFL franchise using a 2026 roster snapshot. New franchises use original simulation ratings from 2023 to 2025 performance, playing time and draft priors, with limited evidence mar"
+ },
+ {
+  "t": "00:21:26",
+  "kind": "audit",
+  "where": "s1start tile 4 📊 STANDINGS #3 in the AFC Ins",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 3,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 14
+ },
+ {
+  "t": "00:21:26",
+  "kind": "panel",
+  "label": "s1start",
+  "tile": "📊 STANDINGS #3 in the AFC Inside the to",
+  "text": "NFL Front Office Real rosters. Real cap math. Your calls. Build a dynasty one season at a time. Denver Broncos 2026 · Week 1/17 Record 0-0 Strength 86 Cap room $124.1M 🏛️ OWNERSHIP Trust 63 Make the playoffs and win a playoff round. This roster is built for it. Hub Standings 🎙️ Nobody clips it. That is the point. Welcome to the Denver Broncos front office. The 2026 season starts now. 🏛️ The ownership mandate: Make the playoffs and win a playoff round. This roster is built for it. AFC EAST Buffalo Bills 0-0 New England Patriots 0-0 New York Jets 0-0 Miami Dolphins 0-0 AFC NORTH Baltimore Ravens 0-0 Cincinnati Bengals 0-0 Pittsburgh Steelers 0-0 Cleveland Browns 0-0 AFC SOUTH Jacksonville Jaguars 0-0 Houston Texans 0-0 Indianapolis Colts 0-0 Tennessee Titans 0-0 AFC WEST Denver Broncos 0-0 Kansas City Chiefs 0-0 Los Angeles Chargers 0-0 Las Vegas Raiders 0-0 NFC EAST Dallas Cowboys 0-0 "
+ },
+ {
+  "t": "00:21:28",
+  "kind": "audit",
+  "where": "s1start tile 5 📋 STAFF 5 of 5 jobs filled +2",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 3,
+  "tinyText": 5,
+  "tinyTextSample": [
+   "9px div.text-[9px].text-muted-foreground \"Level 8 · 99k a week\"",
+   "9px div.text-[9px].text-muted-foreground \"Level 7 · 35k a week\"",
+   "9px div.text-[9px].text-muted-foreground \"Level 8 · 40k a week\"",
+   "9px div.text-[9px].text-muted-foreground \"Level 7 · 18k a week\""
+  ],
+  "text10": 12
+ },
+ {
+  "t": "00:21:28",
+  "kind": "panel",
+  "label": "s1start",
+  "tile": "📋 STAFF 5 of 5 jobs filled +2.15 team s",
+  "text": "NFL Front Office Real rosters. Real cap math. Your calls. Build a dynasty one season at a time. Denver Broncos 2026 · Week 1/17 Record 0-0 Strength 86 Cap room $124.1M 🏛️ OWNERSHIP Trust 63 Make the playoffs and win a playoff round. This roster is built for it. Hub Staff Ownership gives the staff desk $8.00M each summer for fees and pay offs. Wages are paid outside the cap. The coordinators' points land on their side of the ball, so offense counts 72 percent and defense 28 percent, the weights this game already rates a team by. STAFF · $8.00M TO SPEND · 212K A WEEK ON THE DESK ? 🧢 Head coach · your call Abner Mossop Level 8 · 99k a week 🎯 Offense Ulysses Pennywell Level 7 · 35k a week 🛡️ Defense Ephraim Goodenough Level 8 · 40k a week 🔎 Scouting Horatio Zeller Level 7 · 18k a week 🩹 Training room Virgil Thistlewood Level 8 · 20k a week 🎙️ Nobody clips it. That is the point. Welcom"
+ },
+ {
+  "t": "00:21:29",
+  "kind": "audit",
+  "where": "s1start tile 6 ✍️ RE-SIGN DESK 2 deals end th",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 4,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 7
+ },
+ {
+  "t": "00:21:29",
+  "kind": "panel",
+  "label": "s1start",
+  "tile": "✍️ RE-SIGN DESK 2 deals end this spring ",
+  "text": "NFL Front Office Real rosters. Real cap math. Your calls. Build a dynasty one season at a time. Denver Broncos 2026 · Week 1/17 Record 0-0 Strength 86 Cap room $124.1M 🏛️ OWNERSHIP Trust 63 Make the playoffs and win a playoff round. This roster is built for it. Hub Re-sign desk Re-sign desk 2 still waiting on you. Justin Strnad LB 87 overall, age 30 Asks $12.1M for 2 seasons Free agent Garett Bolles OL 82 overall, age 34 Asks $5.8M for 1 season Free agent Decide any time this season. Anyone you leave open is settled by your staff's own rule when the offseason starts, never by a coin flip. The franchise tag is still on the draft screen, and a man you tag there leaves this desk. The money is this game's own figures, not real contracts. The rules are each league's own, read in October 2026. The money is this game's own figure, not anybody's real contract. 🎙️ Nobody clips it. That is the p"
+ },
+ {
+  "t": "00:21:30",
+  "kind": "audit",
+  "where": "s1start tile 7 🎟️ DRAFT PICKS 3 picks in the",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 3,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 10
+ },
+ {
+  "t": "00:21:30",
+  "kind": "panel",
+  "label": "s1start",
+  "tile": "🎟️ DRAFT PICKS 3 picks in the 2026 draf",
+  "text": "NFL Front Office Real rosters. Real cap math. Your calls. Build a dynasty one season at a time. Denver Broncos 2026 · Week 1/17 Record 0-0 Strength 86 Cap room $124.1M 🏛️ OWNERSHIP Trust 63 Make the playoffs and win a playoff round. This roster is built for it. Hub Draft picks DRAFT CAPITAL 9 picks, 3 firsts Trade deadline after week 9. 9 weeks to go. 2026 (this year) 1st 2nd 3rd 2027 1st 2nd 3rd 2028 1st 2nd 3rd The real draft runs seven rounds. This game drafts three, so the ledger carries three. This game awards no compensatory picks, so none are in the ledger. Draft night here is the game's own short draft: you pick, then the other clubs go in reverse standings. 🎙️ Nobody clips it. That is the point. Welcome to the Denver Broncos front office. The 2026 season starts now. 🏛️ The ownership mandate: Make the playoffs and win a playoff round. This roster is built for it. Abandon franc"
+ },
+ {
+  "t": "00:21:31",
+  "kind": "audit",
+  "where": "s1start tile 8 🔁 TRADE DESK 9 weeks to the d",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 124,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 128
+ },
+ {
+  "t": "00:21:31",
+  "kind": "panel",
+  "label": "s1start",
+  "tile": "🔁 TRADE DESK 9 weeks to the deadline Pl",
+  "text": "NFL Front Office Real rosters. Real cap math. Your calls. Build a dynasty one season at a time. Denver Broncos 2026 · Week 1/17 Record 0-0 Strength 86 Cap room $124.1M 🏛️ OWNERSHIP Trust 63 Make the playoffs and win a playoff round. This roster is built for it. Hub Trade desk Deal with Arizona Cardinals (holding) Atlanta Falcons (holding) Baltimore Ravens (holding) Buffalo Bills (holding) Carolina Panthers (holding) Chicago Bears (holding) Cincinnati Bengals (holding) Cleveland Browns (holding) Dallas Cowboys (holding) Detroit Lions (holding) Green Bay Packers (holding) Houston Texans (holding) Indianapolis Colts (holding) Jacksonville Jaguars (holding) Kansas City Chiefs (holding) Los Angeles Rams (holding) Los Angeles Chargers (holding) Las Vegas Raiders (holding) Miami Dolphins (holding) Minnesota Vikings (holding) New England Patriots (holding) New Orleans Saints (holding) New York "
+ },
+ {
+  "t": "00:21:32",
+  "kind": "STUCK",
+  "label": "s1a",
+  "presses": 0,
+  "disabled": [],
+  "buttons": [
+   "👔 ROSTER 50 under contract Zach Allen l",
+   "💼 FREE AGENCY $124M of room In reach: H",
+   "🤝 TRADES 50 to offer Your biggest chip ",
+   "🏟️ THIS WEEK vs Chiefs 0-0 with 17 week",
+   "📊 STANDINGS #3 in the AFC Inside the to",
+   "📋 STAFF 5 of 5 jobs filled +2.15 team s",
+   "✍️ RE-SIGN DESK 2 deals end this spring ",
+   "🎟️ DRAFT PICKS 3 picks in the 2026 draf",
+   "🔁 TRADE DESK 9 weeks to the deadline Pl",
+   "Abandon franchise and restart"
+  ],
+  "text": "NFL Front Office Real rosters. Real cap math. Your calls. Build a dynasty one season at a time. Denver Broncos 2026 · Week 1/17 Record 0-0 Strength 86 Cap room $124.1M 🏛️ OWNERSHIP Trust 63 Make the playoffs and win a playoff round. This roster is built for it. 👔 ROSTER 50 under contract Zach Allen leads them at 95 💼 FREE AGENCY $124M of room In reach: Hollis Calloway at 81 🤝 TRADES 50 to offer Your biggest chip is Zach Allen 🏟️ THIS WEEK vs Chiefs 0-0 with 17 weeks to play 📊 STANDINGS #3 in the AFC Inside the top 7 with 17 to play 📋 STAFF 5 of 5 jobs filled +2.15 team strength from the coaches ✍️ RE-SIGN DESK 2 deals end this spring 2 still waiting on you 🎟️ DRAFT PICKS 3 picks in the 2026 draft 9 picks over 3 drafts 🔁 TRADE DESK 9 weeks to the deadline Players and picks, dead money stays behind 🎙️ Nobody clips it. That is the point. Welcome to the Denver Broncos front office."
+ },
+ {
+  "t": "00:21:32",
+  "kind": "season",
+  "part": "s1a",
+  "presses": 0,
+  "end": "stuck",
+  "secs": 17
+ },
+ {
+  "t": "00:21:32",
+  "kind": "done",
+  "secs": 17
+ }
+]
