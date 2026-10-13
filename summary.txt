@@ -1,0 +1,11 @@
+build exit=0 32s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+playCmLeagueLeaders exit=0 101s | playCmLeagueLeaders: green, 5 sections at 320, 390 and 1280
+fit1 exit=0 79s | Shots and part1.json: /home/runner/work/_temp/rc-out/files/shots
+fit1-oldgrid-EXPECT-RED exit=1 44s | Shots and part1.json: /home/runner/work/_temp/rc-out/files/shots
+fit1-scrollbox-EXPECT-RED exit=1 43s | Shots and part1.json: /home/runner/work/_temp/rc-out/files/shots
+fit1-truncate-EXPECT-RED exit=1 43s | Shots and part1.json: /home/runner/work/_temp/rc-out/files/shots
+fit1-smalltap-EXPECT-RED exit=1 43s | Shots and part1.json: /home/runner/work/_temp/rc-out/files/shots
+desk exit=0 26s | playCmFinanceDesk: green. The Finances desk reads at 12px, taps at 44px, cuts nothing, keeps every figure on one line and shows what the board covers and what the kitty k
+desk-small-EXPECT-RED exit=1 27s | playCmFinanceDesk: CONTROL small FIRED (9 failures, as it must)
+desk-cut-EXPECT-RED exit=1 27s | playCmFinanceDesk: CONTROL cut FIRED (3 failures, as it must)
+desk-wrap-EXPECT-RED exit=1 27s | playCmFinanceDesk: CONTROL wrap FIRED (3 failures, as it must)

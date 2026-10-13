@@ -1,0 +1,14 @@
+# Release BC gate, lane W1: the nine pieces' served walks and controls
+#!serve
+#!playwright
+#!serial
+playCmLeagueLeaders: ENGINES=chromium node scripts/playCmLeagueLeaders.mjs
+fit1: ENGINES=chromium CM_FIT_PART=1 node scripts/playCmTablesFit.mjs
+fit1-oldgrid-EXPECT-RED: ENGINES=chromium CM_FIT_PART=1 CM_FIT_CONTROL=oldgrid node scripts/playCmTablesFit.mjs
+fit1-scrollbox-EXPECT-RED: ENGINES=chromium CM_FIT_PART=1 CM_FIT_CONTROL=scrollbox node scripts/playCmTablesFit.mjs
+fit1-truncate-EXPECT-RED: ENGINES=chromium CM_FIT_PART=1 CM_FIT_CONTROL=truncate node scripts/playCmTablesFit.mjs
+fit1-smalltap-EXPECT-RED: ENGINES=chromium CM_FIT_PART=1 CM_FIT_CONTROL=smalltap node scripts/playCmTablesFit.mjs
+desk: ENGINES=chromium mkdir -p $RC_OUT/head && RC_OUT=$RC_OUT/head node scripts/playCmFinanceDesk.mjs
+desk-small-EXPECT-RED: ENGINES=chromium mkdir -p $RC_OUT/small && RC_OUT=$RC_OUT/small CM_FINANCE_CONTROL=small node scripts/playCmFinanceDesk.mjs
+desk-cut-EXPECT-RED: ENGINES=chromium mkdir -p $RC_OUT/cut && RC_OUT=$RC_OUT/cut CM_FINANCE_CONTROL=cut node scripts/playCmFinanceDesk.mjs
+desk-wrap-EXPECT-RED: ENGINES=chromium mkdir -p $RC_OUT/wrap && RC_OUT=$RC_OUT/wrap CM_FINANCE_CONTROL=wrap node scripts/playCmFinanceDesk.mjs
