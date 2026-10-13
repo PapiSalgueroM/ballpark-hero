@@ -1,0 +1,18 @@
+simSoccerDeckFairness: node scripts/simSoccerDeckFairness.mjs
+simCareerLeagueSeasons: node scripts/simCareerLeagueSeasons.mjs
+simCareerAwardsNight: node scripts/simCareerAwardsNight.mjs
+simCareerLeagueFinish: node scripts/simCareerLeagueFinish.mjs
+simCareerSocialBrands: node scripts/simCareerSocialBrands.mjs
+simCareerStoryRole: node scripts/simCareerStoryRole.mjs
+simCareerTrophyRuns: node scripts/simCareerTrophyRuns.mjs
+simSoccerCareerDevelopment: node scripts/simSoccerCareerDevelopment.mjs
+simCareerPressMarket: node scripts/simCareerPressMarket.mjs
+simCareerTransferBrief: node scripts/simCareerTransferBrief.mjs
+simSoccerDerbyHistory: node scripts/simSoccerDerbyHistory.mjs
+simSoccerSeasonHistory: node scripts/simSoccerSeasonHistory.mjs
+simSoccerAgentReview: node scripts/simSoccerAgentReview.mjs
+simSoccerFarewell: node scripts/simSoccerFarewell.mjs
+simSoccerInternationalReturn: node scripts/simSoccerInternationalReturn.mjs
+simCareerProgramme: CI=1 node scripts/simCareerProgramme.mjs
+simPhone2: node scripts/simPhone2.mjs
+simMoney: node scripts/simMoney.mjs
