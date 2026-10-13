@@ -1,0 +1,12 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+rv-long-0: RV_ONLY=0 node .rc/x/rvcmw-long.mjs
+rv-long-1: RV_ONLY=1 node .rc/x/rvcmw-long.mjs
+rv-long-2: RV_ONLY=2 node .rc/x/rvcmw-long.mjs
+rv-long-3: RV_ONLY=3 node .rc/x/rvcmw-long.mjs
+rv-long-4: RV_ONLY=4 node .rc/x/rvcmw-long.mjs
+rv-long-5: RV_ONLY=5 node .rc/x/rvcmw-long.mjs
+simCmLedgerJourney: node scripts/simCmLedgerJourney.mjs
+simCmLedgerJourney-nokey-EXPECT-RED: CM_LEDGER_CONTROL=nokey node scripts/simCmLedgerJourney.mjs
+simCmLeagueRules: node scripts/simCmLeagueRules.mjs
+simManagerAppealIsolation: node scripts/simManagerAppealIsolation.mjs
+simClubManagerDecisions: node scripts/simClubManagerDecisions.mjs
