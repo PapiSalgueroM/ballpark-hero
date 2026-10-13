@@ -1,0 +1,5 @@
+nfHead exit=1 2s | Node.js v24.21.0
+nfMain exit=1 2s | Node.js v24.21.0
+nfPins exit=0 0s | HEAD src/lib/usCareerStatLine.ts d127a958f28ffebf
+realism exit=0 6s | ALL CAREER REALISM CHECKS PASSED
+tsc exit=0 65s | 733658ef84cdc9b8ca8ab2dd5d303e2afabc4d5d
