@@ -1,0 +1,9 @@
+simCmShootoutOrder exit=0 27s | simCmShootoutOrder: all sections passed
+ctl-unsetpath exit=1 28s | simCmShootoutOrder: 3 FAILURE(S)
+simCmCopy exit=0 20s | simCmCopy: green on this tree. Sections 1, 2, 3, 4, 5: Club Manager says what it means.
+azjoin exit=0 28s | trial join simCmShootoutOrder exit=0
+simNoRivalNames exit=0 20s | No rival product names found. 0 findings.
+simStorageWrites exit=0 3s | simStorageWrites: all green (owed: 12)
+simGmStaff exit=1 4s | GM STAFF: 40 failure(s)
+tsc exit=0 80s | 
+simHarnessAnchors exit=0 48s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
