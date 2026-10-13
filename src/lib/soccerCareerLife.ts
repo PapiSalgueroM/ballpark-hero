@@ -949,12 +949,12 @@ export function getLifeEvents(state: CareerState): RandomEvent[] {
   const courseYear = state.seasons[state.seasons.length - 1]?.year ?? 0;
   if ((state.pendingEvents ?? []).some(event => event.id === 630) || (!state.retired && flag(state, "coachingBadges") === 1
     && (typeof startedCourse !== "number" || !Number.isFinite(startedCourse) || startedCourse < courseYear))) {
-    push({ id: 630, cooldown: COOLDOWN.once, emoji: "📚", title: "The course notebook",
-      description: "Your coaching course has practical work to review. Finish a piece of work, or leave the course.",
+    push({ id: 630, cooldown: COOLDOWN.once, emoji: "📚", title: "Your coursework",
+      description: "Your coaching course has practical work to review. Skill boosts are queued for next season.",
       category: "life", choices: [
-        { label: "Review your match-analysis assignment", emoji: "📋", color: "bg-blue-600", consequence: "Passing +1 next season, Integrity +2. Course review complete",
+        { label: "Review your match-analysis assignment", emoji: "📋", color: "bg-blue-600", consequence: "Passing +1 queued, Integrity +2. Coursework reviewed",
           apply: s => { setFlag(s, "coachingBadges", 3); bump(s, "passing", 1); s.integrityBonus += 2; log(s, "📚 Reviewed the course match-analysis assignment"); return s; } },
-        { label: "Finish your youth-session plan", emoji: "🤝", color: "bg-emerald-600", consequence: "Defending +1 next season, Integrity +1. Course review complete",
+        { label: "Finish your youth-session plan", emoji: "🤝", color: "bg-emerald-600", consequence: "Defending +1 queued, Integrity +1. Coursework reviewed",
           apply: s => { setFlag(s, "coachingBadges", 3); bump(s, "defending", 1); s.integrityBonus += 1; log(s, "📚 Finished the course youth-session plan"); return s; } },
         { label: "Leave the course", emoji: "⚽", color: "bg-muted", consequence: "Morale +2. Course closed",
           apply: s => { setFlag(s, "coachingBadges", 4); s.morale = clamp(s.morale + 2, 0, 100); log(s, "⚽ Left the coaching course to focus on playing"); return s; } },

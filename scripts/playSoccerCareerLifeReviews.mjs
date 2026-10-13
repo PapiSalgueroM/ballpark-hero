@@ -404,7 +404,7 @@ try {
         `${fixture.id}: preparation changed the actual review card.`);
     }
     const offered = fixture.initial.pendingEvents[0];
-    setup(firstId === 630 ? offered.title === 'The course notebook' && JSON.stringify(offered.choices.map(choice => choice.label)) === JSON.stringify(choices)
+    setup(firstId === 630 ? offered.title === 'Your coursework' && JSON.stringify(offered.choices.map(choice => choice.label)) === JSON.stringify(choices)
       : offered.title === 'The Repayment' && offered.choices.length === 2 && offered.choices[1].label === gift, `${fixture.id}: literal title/choice contract differs.`);
     let before = fixture.initial;
     for (const step of fixture.steps) {
