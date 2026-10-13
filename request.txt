@@ -1,0 +1,18 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run --testTimeout=300000 --hookTimeout=120000
+fair0: node scripts/simSoccerDeckFairness.mjs
+fair-s1: SEED_OFFSET=1 node scripts/simSoccerDeckFairness.mjs
+prom: node scripts/simSoccerEventPromises.mjs
+cool: node scripts/simCareerLifeCooldowns.mjs
+rival: node scripts/simNoRivalNames.mjs
+anchors: node scripts/simHarnessAnchors.mjs
+storage: node scripts/simStorageWrites.mjs
+invented: node scripts/simInventedNames.mjs
+quotes: node scripts/simNoInventedQuotes.mjs
+discipline: node scripts/simSoccerDiscipline.mjs
+dilemmatruth: node scripts/simCareerDilemmaTruth.mjs
+injuryarc: node scripts/simInjuryArc.mjs
+money: node scripts/simMoney.mjs
+currency: node scripts/simSoccerCurrency.mjs
+life: node scripts/simCareerLife.mjs
+soccercareer: node scripts/simSoccerCareer.mjs
