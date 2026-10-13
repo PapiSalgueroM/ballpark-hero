@@ -23,6 +23,21 @@ assert.equal(BASE_TREE, 'df728482ceb7551f0b33c89f85f0c3f1a0d88c07');
    control fires there). The control, its fault, its undo and every assertion of it are unchanged. */
 const CONTROL_INPUT = '3ac21642326a76f4dbc1e173a2c82bddcbabfd5e';
 assert.equal(git(['rev-parse', `${CONTROL_INPUT}^{tree}`]), '6ca6f91b4338d98c0bb9b0abf905f4ef4ea765a3');
+/* Release AZ fix pass 4 (closing check finding 3): the control-input arm's own Slots run exits 1, and nobody had
+   read why. Read on a runner (rc fx4-a): its section 1 holds (20 of 20 season digests identical to the career
+   played alone, the frames the control reads), and its ONE failure is section 2's storage budget, three season 15
+   careers at 510,054 characters against 495,000: the unbounded ledger of 3ac21642, which the summer prune
+   (4e87f296, reviewer 1's MAJOR 8) bounded. The arm is now held to that reason alone, so any other red at that
+   frozen head stops the diagnostic instead of passing as "completed". Every run also tries the check on doctored
+   copies of the arm's own output (a second failure, a clean exit, section 1 broken), each of which it must refuse. */
+const CONTROL_INPUT_RED = 'simClubManagerSlots: RED, sections 2 (1 failures)';
+const CONTROL_INPUT_BUDGET = /^FAIL: three season 15 careers take \d+ characters, over the 495000 budget$/;
+const CONTROL_INPUT_SECTION_ONE = '20 of 20 season digests identical to the career played alone';
+function controlInputRedIsTheBudget(status, output) {
+  const failures = [...new Set(output.split('\n').map(line => line.trim()).filter(line => line.startsWith('FAIL:')))];
+  return status === 1 && output.includes(CONTROL_INPUT_RED) && output.includes(CONTROL_INPUT_SECTION_ONE)
+    && failures.length === 1 && CONTROL_INPUT_BUDGET.test(failures[0]);
+}
 const SLOT_IMPORT = "import { expandPackedWorldRosterState } from './qa/managerWorldRosterDigest.cjs';\n";
 const SLOT_INITIALIZER = '  const { h2h, ...rest } = s;';
 const SLOT_ADAPTER = '  const { h2h, ...rest } = expandPackedWorldRosterState(s);';
@@ -426,7 +441,8 @@ try {
       const result={arm,ref,name,status:run.status,signal:run.signal,error:run.error?{name:run.error.name,message:run.error.message}:null,
         observerRows:observed?.rows.length??0,finishedSeasons:observed?.rows.filter(row=>row.kind==='finished').length??0,
         slotSeasonFrames:observed?.rows.filter(row=>row.kind==='season').length??0,
-        stdoutSha256:sha(run.stdout??''),stderrSha256:sha(run.stderr??'')};
+        stdoutSha256:sha(run.stdout??''),stderrSha256:sha(run.stderr??''),
+        ...(arm==='control-input'?{controlInputRedIsTheBudget:controlInputRedIsTheBudget(run.status,`${run.stdout??''}\n${run.stderr??''}`)}:{})};
       results.push(result);fs.writeFileSync(path.join(OUT,'report.json'),JSON.stringify({head:HEAD,tree:TREE,base:BASE,baseTree:BASE_TREE,harnessBlobs,simSeed:process.env.SIM_SEED??null,
         scope:'diagnostic only, historical budget failures remain failures',sourceBefore:before,observerStopControl,digestExpansion,results,patches},null,2));
       console.log(`DIAGNOSTIC ${arm} ${name}: exit ${run.status}, ${result.finishedSeasons} finished size seasons, ${result.slotSeasonFrames} slot season frames`);
@@ -436,6 +452,21 @@ try {
   const after=heldSources();assert.deepEqual(after,before);
   assert.equal(results.length,5);assert(results.every(row=>row.error===null&&row.signal===null),'All diagnostic processes completed');
   for(const result of results){assert.equal(result.name==='simClubManagerSaveSize.mjs'?result.finishedSeasons:result.slotSeasonFrames,result.name==='simClubManagerSaveSize.mjs'?45:65,'All original/current fixed historical season frames retained');}
+  /* Release AZ fix pass 4: the control-input arm's exit, held to its one known reason (see CONTROL_INPUT_RED). */
+  const controlInputRuns = results.filter(row => row.arm === 'control-input');
+  assert.equal(controlInputRuns.length, 1);
+  assert.equal(controlInputRuns[0].controlInputRedIsTheBudget, true,
+    'The control-input arm (Slots at 3ac21642) fails for its one known reason, the section 2 storage budget, and nothing else');
+  const controlInputDir = path.join(OUT, 'control-input', 'simClubManagerSlots.mjs');
+  const controlInputOutput = `${fs.readFileSync(path.join(controlInputDir, 'stdout.log'), 'utf8')}\n${fs.readFileSync(path.join(controlInputDir, 'stderr.log'), 'utf8')}`;
+  assert(controlInputOutput.includes(CONTROL_INPUT_SECTION_ONE) && controlInputOutput.includes(CONTROL_INPUT_RED), 'The doctored copies below start from the real output');
+  const doctoredRefused = [
+    controlInputRedIsTheBudget(1, `${controlInputOutput}\n  FAIL: a second failure`),
+    controlInputRedIsTheBudget(0, controlInputOutput),
+    controlInputRedIsTheBudget(1, controlInputOutput.replaceAll(CONTROL_INPUT_SECTION_ONE, '19 of 20 season digests identical to the career played alone')),
+  ];
+  assert.deepEqual(doctoredRefused, [false, false, false], 'The control-input reason check refuses a second failure, a clean exit and a broken section 1');
+  console.log('DIAGNOSTIC control-input red: the section 2 storage budget alone (the ledger before the prune); a second failure, a clean exit and a broken section 1 are each refused');
   fs.writeFileSync(path.join(OUT,'report.json'),JSON.stringify({head:HEAD,tree:TREE,base:BASE,baseTree:BASE_TREE,harnessBlobs,simSeed:process.env.SIM_SEED??null,
     scope:'diagnostic only, historical budget failures remain failures',sourceBefore:before,sourceAfter:after,sourceHeld:true,observerStopControl,digestExpansion,results,patches},null,2));
   console.log('DIAGNOSTIC complete: original/current unchanged historical budgets, full raw states, storage and unfiltered action vectors retained');
