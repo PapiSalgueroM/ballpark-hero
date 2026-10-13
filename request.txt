@@ -1,0 +1,13 @@
+#!build
+#!playwright
+#!serial
+fit1: CM_FIT_PART=1 node scripts/playCmTablesFit.mjs
+fit-oldgrid: CM_FIT_PART=1 CM_FIT_CONTROL=oldgrid node scripts/playCmTablesFit.mjs
+fit-scrollbox: CM_FIT_PART=1 CM_FIT_CONTROL=scrollbox node scripts/playCmTablesFit.mjs
+fit-truncate: CM_FIT_PART=1 CM_FIT_CONTROL=truncate node scripts/playCmTablesFit.mjs
+fit-smalltap: CM_FIT_PART=1 CM_FIT_CONTROL=smalltap node scripts/playCmTablesFit.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+mutfit-sliceone: node .rc/x/mut1325.mjs sliceone && CM_FIT_PART=1 node scripts/playCmTablesFit.mjs; s=$?; git checkout -- src scripts; exit $s
+mutfit-showcount: node .rc/x/mut1325.mjs showcount && CM_FIT_PART=1 node scripts/playCmTablesFit.mjs; s=$?; git checkout -- src scripts; exit $s
+mutfit-rungtrunc: node .rc/x/mut1325.mjs rungtrunc && CM_FIT_PART=1 node scripts/playCmTablesFit.mjs; s=$?; git checkout -- src scripts; exit $s
+mutfit-editsmall: node .rc/x/mut1325.mjs editsmall && CM_FIT_PART=1 node scripts/playCmTablesFit.mjs; s=$?; git checkout -- src scripts; exit $s

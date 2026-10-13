@@ -1,0 +1,11 @@
+build exit=0 23s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+fit1 exit=0 75s | Shots and part1.json: /home/runner/work/_temp/rc-out/files/shots
+fit-oldgrid exit=1 42s | Shots and part1.json: /home/runner/work/_temp/rc-out/files/shots
+fit-scrollbox exit=1 42s | Shots and part1.json: /home/runner/work/_temp/rc-out/files/shots
+fit-truncate exit=1 42s | Shots and part1.json: /home/runner/work/_temp/rc-out/files/shots
+fit-smalltap exit=1 42s | Shots and part1.json: /home/runner/work/_temp/rc-out/files/shots
+simHarnessAnchors exit=0 26s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+mutfit-sliceone exit=0 76s | Shots and part1.json: /home/runner/work/_temp/rc-out/files/shots
+mutfit-showcount exit=0 75s | Shots and part1.json: /home/runner/work/_temp/rc-out/files/shots
+mutfit-rungtrunc exit=1 75s | Shots and part1.json: /home/runner/work/_temp/rc-out/files/shots
+mutfit-editsmall exit=1 75s | Shots and part1.json: /home/runner/work/_temp/rc-out/files/shots
