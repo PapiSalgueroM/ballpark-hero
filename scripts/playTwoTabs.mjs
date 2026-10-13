@@ -186,6 +186,16 @@ const text = async p => (await p.locator('body').innerText().catch(() => '')).re
 async function clearBanner(p) {
   await p.getByRole('button', { name: /^essential only$/i }).first().click({ timeout: 1200 }).catch(() => {});
 }
+/** A game's rules open by themselves on a first visit: closed the way a player closes them. */
+async function clearDialogs(p) {
+  for (let i = 0; i < 3; i++) {
+    const d = p.locator('[role="dialog"]:visible');
+    if (await d.count().catch(() => 0) === 0) return;
+    await p.keyboard.press('Escape').catch(() => {});
+    await p.waitForTimeout(300);
+  }
+  await p.locator('[role="dialog"]:visible button[aria-label="Close"], [role="dialog"]:visible button:has-text("Close")').first().click({ timeout: 1000 }).catch(() => {});
+}
 /** Open Club Manager the way a player does: the page, then Resume Career if the managers screen asks. */
 async function openCM(p, { resume = true } = {}) {
   await p.goto(BASE + '/club-manager', { waitUntil: 'domcontentloaded', timeout: 30000 });
@@ -281,12 +291,23 @@ async function caseNotice(A, before, quickBox, afterB, tag) {
   }
   if (escaped) fail(8, `Tab reached ${escaped} elements behind the notice`);
   if (quickBox) {
-    const x = quickBox.x + quickBox.width / 2, y = quickBox.y + quickBox.height / 2;
+    /* A point of Quick Sim's box that is not the Reload button itself (on a
+       small phone the dialog can sit right over it, and pressing Reload is a
+       reload, not a press reaching the page). */
+    const inReload = (px, py) => rb && px >= rb.x && px <= rb.x + rb.width && py >= rb.y && py <= rb.y + rb.height;
+    const pts = [[0.5, 0.5], [0.15, 0.5], [0.85, 0.5], [0.5, 0.15], [0.5, 0.85], [0.1, 0.1], [0.9, 0.9]]
+      .map(([fx, fy]) => [quickBox.x + quickBox.width * fx, quickBox.y + quickBox.height * fy]);
+    const pt = pts.find(([px, py]) => !inReload(px, py));
+    if (!pt) { note('every point of Quick Sim sits under the Reload button at this size; the click is skipped'); }
+    const [x, y] = pt ?? [-1, -1];
+    if (pt) {
     const hit = await A.evaluate(([px, py]) => !!document.elementFromPoint(px, py)?.closest('[data-testid="save-moved-notice"]'), [x, y]);
     await A.mouse.click(x, y);
     await A.waitForTimeout(800);
     if (!hit) fail(8, 'the point where Quick Sim was is not covered by the notice');
     if (say(await disk(A)) !== say(afterB)) fail(8, 'a click where Quick Sim was changed the save');
+    if (!await noticeUp(A)) fail(8, 'the notice went away after a click where Quick Sim was');
+    }
   }
   await shot(A, `${tag}-8-notice`);
   ok(`the notice: Reload ${rb ? Math.round(rb.height) : '?'} px, smallest text ${geo.min} px, no animation, Tab stayed inside ${escaped === 0}`);
@@ -332,8 +353,11 @@ async function caseHotSeat(ctx, tag) {
   const held = await disk(A);
   const B = await newPage(ctx);
   await B.goto(BASE + '/manager-hot-seat', { waitUntil: 'domcontentloaded', timeout: 30000 });
+  await B.waitForTimeout(1500);
   await clearBanner(B);
+  await clearDialogs(B);
   const offer = B.getByRole('button', { name: `See the Club Manager offer for ${HOT.club}` });
+  if (!await offer.first().isVisible().catch(() => false)) await shot(B, `${tag}-3-hot-seat-menu`);
   await offer.first().click({ timeout: 15000 }).catch(() => {});
   await B.getByRole('button', { name: 'Carry on in Club Manager' }).first().click({ timeout: 15000 }).catch(() => {});
   await B.getByRole('button', { name: /^Replace it and carry on/ }).first().click({ timeout: 8000 }).catch(() => {});
