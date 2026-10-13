@@ -1,0 +1,7 @@
+#!serve
+#!playwright
+playCollegeSeat: node scripts/playCollegeSeat.mjs
+playCollegeSeat-smalltap: SEAT_WALK_CONTROL=smalltap node scripts/playCollegeSeat.mjs
+playCorruptSaves: ONLY=/cfb-dynasty,/cbb-dynasty node scripts/playCorruptSaves.mjs
+playGames-cfb: ONLY=/cfb-dynasty node scripts/playGames.mjs
+playGames-cbb: ONLY=/cbb-dynasty node scripts/playGames.mjs

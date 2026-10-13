@@ -1,0 +1,7 @@
+  PASS  /cfb-dynasty shell: coped without the button, 0 click(s), buttons: AlabamaPrestige 95 | GeorgiaPrestige 96 | TexasPrestige 94
+  PASS  /cfb-dynasty wrongtype: coped without the button, 0 click(s), buttons: AlabamaPrestige 95 | GeorgiaPrestige 96 | TexasPrestige 94
+  PASS  /cbb-dynasty shell: coped without the button, 0 click(s), buttons: DukePrestige 95 | North CarolinaPrestige 9 | VirginiaPrestige 84
+  PASS  /cbb-dynasty wrongtype: coped without the button, 0 click(s), buttons: DukePrestige 95 | North CarolinaPrestige 9 | VirginiaPrestige 84
+
+4 broken saves over 2 long games: 0 reached the error page and needed the button, 4 were coped with by the game, 0 drew the broken save without throwing, 0 could not be judged offline, 0 trapped
+playCorruptSaves: green. No broken save traps a long game.

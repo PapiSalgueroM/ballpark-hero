@@ -1,0 +1,17 @@
+   cfb-dynasty-320: navigations after load ["http://localhost:4173/cfb-dynasty","http://localhost:4173/cfb-dynasty"]
+  FAIL [S2] cfb-dynasty-320: Back twice returns to the tabs and the tile
+   cfb-dynasty-320 first press: tile top null to null, Play top null to null, slot null to null, scrollY 0 to 0
+  FAIL [S3] cfb-dynasty-320: the first press moved the tile or the Play button
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+page.evaluate: SecurityError: Failed to read the 'localStorage' property from 'Window': Access is denied for this document.
+    at UtilityScript.evaluate (<anonymous>:372:16)
+    at UtilityScript.<anonymous> (<anonymous>:1:44)
+    at plant (/home/runner/work/ballpark-hero/ballpark-hero/scripts/playCollegeSeat.mjs:173:44)
+    at /home/runner/work/ballpark-hero/ballpark-hero/scripts/playCollegeSeat.mjs:174:11 {
+  log: []
+}
+
+Node.js v24.21.0
