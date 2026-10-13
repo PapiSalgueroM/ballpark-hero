@@ -1,0 +1,4 @@
+build exit=0 32s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+land-seed exit=1 96s | CONTROL FIRED: SOCCER_LANDING_CONTROL=seed played head on seed 1987332286 and the byte check went red
+joined-at-landing exit=0 163s | playSoccerLanding: green at 320x640, 390x844, 1280x900 (landing, toasts), HEAD ONLY
+land exit=0 400s | playSoccerLanding: green at 320x640, 390x844, 1280x900 (landing, name, bar, retire, toasts, bytes), every marked section red on the base

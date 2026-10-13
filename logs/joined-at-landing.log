@@ -1,0 +1,29 @@
+seed 1987332285; arms head; sections landing, toasts; sizes 320x640, 390x844, 1280x900
+== head 320x640
+   "Danny Okafor-Whitfield": from scrollY 1876 of 15004; first frame name heading 12 to 68, readable 0 to 556, scrollY 193; one second later name heading 12 to 68, readable 0 to 556, scrollY 193
+   "Danny Okafor-Whitfield": the club "QPR Youth" at 258 to 275, in the readable area: true
+   "Danny Okafor-Whitfield" after New Career: from scrollY 1892 of 15020; first frame name heading 12 to 68, readable 0 to 556, scrollY 193; one second later name heading 12 to 68, readable 0 to 556, scrollY 193
+   "Danny Okafor-Whitfield" after New Career: the club "Stoke City Youth" at 258 to 275, in the readable area: true
+   "Supercalifragilisticexpialidociouswinger": from scrollY 1876 of 15004; first frame name heading 12 to 68, readable 0 to 556, scrollY 193; one second later name heading 12 to 68, readable 0 to 556, scrollY 193
+   "Supercalifragilisticexpialidociouswinger": the club "QPR Youth" at 258 to 275, in the readable area: true
+   0 toast sample(s) over a drive through youth, contract_offer; toasts raised: []
+  note  head 320x640: no toast was raised at all
+== head 390x844
+   "Danny Okafor-Whitfield": from scrollY 1632 of 12671; first frame name heading 17 to 45, readable 0 to 760, scrollY 193; one second later name heading 17 to 45, readable 0 to 760, scrollY 193
+   "Danny Okafor-Whitfield": the club "QPR Youth" at 240 to 257, in the readable area: true
+   "Danny Okafor-Whitfield" after New Career: from scrollY 1632 of 12671; first frame name heading 17 to 45, readable 0 to 760, scrollY 193; one second later name heading 17 to 45, readable 0 to 760, scrollY 193
+   "Danny Okafor-Whitfield" after New Career: the club "Stoke City Youth" at 240 to 257, in the readable area: true
+   "Supercalifragilisticexpialidociouswinger": from scrollY 1632 of 12671; first frame name heading 12 to 68, readable 0 to 760, scrollY 193; one second later name heading 12 to 68, readable 0 to 760, scrollY 193
+   "Supercalifragilisticexpialidociouswinger": the club "QPR Youth" at 258 to 275, in the readable area: true
+   0 toast sample(s) over a drive through youth, contract_offer; toasts raised: []
+  note  head 390x844: no toast was raised at all
+== head 1280x900
+   "Danny Okafor-Whitfield": from scrollY 1530 of 9158; first frame name heading 23 to 55, readable 0 to 816, scrollY 101; one second later name heading 23 to 55, readable 0 to 816, scrollY 101
+   "Danny Okafor-Whitfield": the club "QPR Youth" at 221 to 236, in the readable area: true
+   "Danny Okafor-Whitfield" after New Career: from scrollY 1530 of 9158; first frame name heading 23 to 55, readable 0 to 816, scrollY 101; one second later name heading 23 to 55, readable 0 to 816, scrollY 101
+   "Danny Okafor-Whitfield" after New Career: the club "Stoke City Youth" at 221 to 236, in the readable area: true
+   "Supercalifragilisticexpialidociouswinger": from scrollY 1530 of 9158; first frame name heading 23 to 55, readable 0 to 816, scrollY 101; one second later name heading 23 to 55, readable 0 to 816, scrollY 101
+   "Supercalifragilisticexpialidociouswinger": the club "QPR Youth" at 221 to 236, in the readable area: true
+   0 toast sample(s) over a drive through youth, contract_offer; toasts raised: []
+  note  head 1280x900: no toast was raised at all
+playSoccerLanding: green at 320x640, 390x844, 1280x900 (landing, toasts), HEAD ONLY
