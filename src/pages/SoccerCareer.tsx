@@ -1089,7 +1089,9 @@ export default function SoccerCareer() {
     setSaveError(false);
     setArrivalCount(n => n + 1);
     setCareer(newCareer);
-    toast.success(`Joined ${newCareer.currentClub}!`, PAGE_TOAST);
+    /* Round 1330: no "Joined" toast. At the top of the landing view it sat over
+       the player's name (measured at 320 by playSoccerLanding), and the hub's
+       club card names the club inside that same view at every size. */
   };
 
   /* Round 1047: the stars from this season's Season Centre moments bank before

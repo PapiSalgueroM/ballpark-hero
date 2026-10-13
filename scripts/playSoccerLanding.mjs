@@ -206,22 +206,42 @@ function pageProbes() {
     }
   }).observe(document.documentElement, { childList: true, subtree: true });
   if (document.documentElement) watch(); else document.addEventListener('DOMContentLoaded', watch);
+  /* The readable area by useRevealScroll's own rule (topInset, bottomInset):
+     what is pinned where the screen's top and bottom rows are actually hit,
+     at the middle and both edges, no taller than 40 percent of the screen. A
+     pinned thing nobody can hit (pointer-events none) does not count, exactly
+     as the hook does not count it. */
   window.__readable = () => {
     const h = document.querySelector('main h1');
     if (!h) return null;
+    const vh = innerHeight;
+    const vw = innerWidth;
+    const pinned = y => {
+      const out = [];
+      for (const x of [vw * 0.5, 6, vw - 6]) for (const el of document.elementsFromPoint(x, y)) {
+        const pos = getComputedStyle(el).position;
+        if (pos !== 'fixed' && pos !== 'sticky') continue;
+        const r = el.getBoundingClientRect();
+        if (r.height === 0 || r.height > vh * 0.4) continue;
+        out.push({ el, r });
+      }
+      return out;
+    };
     let top = 0;
-    let bottom = innerHeight;
-    for (const el of document.querySelectorAll('body *')) {
-      const cs = getComputedStyle(el);
-      if (cs.position !== 'fixed' && cs.position !== 'sticky') continue;
-      if (el.closest('[data-sonner-toaster]')) continue;
-      const r = el.getBoundingClientRect();
-      if (r.height === 0 || r.width < innerWidth / 2 || r.height > innerHeight / 3) continue;
-      if (r.top <= 1 && r.bottom > 0) top = Math.max(top, r.bottom);
-      if (r.bottom >= innerHeight - 1 && r.top < innerHeight) bottom = Math.min(bottom, r.top);
-    }
+    for (const { r } of pinned(1)) if (r.top <= 2 && r.bottom > 0) top = Math.max(top, r.bottom);
+    let bottom = vh;
+    for (const { r } of pinned(vh - 2)) if (r.bottom >= vh - 2 && r.top < vh) bottom = Math.min(bottom, r.top);
     const r = h.getBoundingClientRect();
-    return { y: Math.round(scrollY), top: Math.round(r.top), bottom: Math.round(r.bottom), readTop: Math.round(top), readBottom: Math.round(bottom), inside: r.top >= top - 2 && r.bottom <= bottom + 2 };
+    let club = null;
+    try {
+      const name = JSON.parse(localStorage.getItem('soccerCareerSave'))?.currentClub;
+      if (name) {
+        const hit = [...document.querySelectorAll('main *')].filter(el => el.childElementCount === 0 && (el.textContent || '').includes(name) && el.getBoundingClientRect().height > 0)[0];
+        if (hit) { const c = hit.getBoundingClientRect(); club = { name, top: Math.round(c.top), bottom: Math.round(c.bottom), inside: c.top >= top - 2 && c.bottom <= bottom + 2 }; }
+        else club = { name, top: null, bottom: null, inside: false };
+      }
+    } catch { club = null; }
+    return { y: Math.round(scrollY), top: Math.round(r.top), bottom: Math.round(r.bottom), readTop: Math.round(top), readBottom: Math.round(bottom), inside: r.top >= top - 2 && r.bottom <= bottom + 2, club };
   };
 }
 async function newContext(w, h, seed) {
@@ -300,6 +320,10 @@ function judgeLanding(arm, size, label, m) {
   if (!m.first || !m.first.inside) rec(arm, 'landing', size, `${label}: in the first frame after Begin Career the name heading is not in the readable area (${where(m.first)})`);
   if (!m.later || !m.later.inside) rec(arm, 'landing', size, `${label}: one second after Begin Career the name heading is not in the readable area (${where(m.later)})`);
   if (m.first && m.later && m.first.y !== m.later.y) rec(arm, 'landing', size, `${label}: the page glided after the landing (scrollY ${m.first.y} in the first frame, ${m.later.y} a second later)`);
+  /* The hub names the club you joined in the landing view (the "Joined" toast is gone). */
+  const club = m.later?.club;
+  console.log(`   ${label}: the club ${club ? `"${club.name}" at ${club.top} to ${club.bottom}, in the readable area: ${club.inside}` : 'not read'}`);
+  if (!club || !club.inside) rec(arm, 'landing', size, `${label}: the club joined is not named inside the readable area of the landing view (${JSON.stringify(club)})`);
 }
 async function measureName(p) {
   return p.evaluate(() => {
@@ -464,14 +488,16 @@ async function drive(p, steps, onStep) {
   const kinds = new Set();
   let phoneDone = false;
   for (let i = 0; i < steps; i++) {
-    const step = await p.evaluate(driveOne);
+    if (!p.url().includes('/soccer-career')) { kinds.add(`left the page for ${p.url()}`); break; }
+    const step = await p.evaluate(driveOne).catch(e => ({ phase: null, pressed: null, error: String(e?.message ?? e).slice(0, 120) }));
+    if (step.error) { kinds.add(`the page went away: ${step.error.slice(0, 80)}`); break; }
     await p.waitForTimeout(900);
     if (step.phase) kinds.add(step.phase);
     if (onStep) await onStep(`step ${i + 1} (${step.phase}: ${step.pressed})`);
     if (!step.pressed) break;
     if (!phoneDone && step.phase === 'playing') {
       phoneDone = true;
-      const bought = await phonePurchase(p);
+      const bought = await phonePurchase(p).catch(e => `the phone threw: ${String(e?.message ?? e).slice(0, 80)}`);
       kinds.add(`phone: ${bought}`);
       if (onStep) await onStep(`phone (${bought})`);
     }
@@ -487,8 +513,8 @@ async function phonePurchase(p) {
   if (!app) return 'no My Life app';
   await p.waitForTimeout(500);
   const picked = await p.evaluate(async () => {
-    const inPhone = () => (document.querySelector('[data-phone-back]') || document.querySelector('[data-phone-app]'))?.closest('.fixed') ?? document.body;
-    const buttons = () => [...inPhone().querySelectorAll('button')].filter(b => b.getBoundingClientRect().height > 0 && !b.hasAttribute('data-phone-back') && !/Put phone away/.test(b.textContent || ''));
+    const inPhone = () => (document.querySelector('[data-phone-back]') || document.querySelector('[data-phone-app]'))?.closest('.fixed') ?? null;
+    const buttons = () => [...(inPhone()?.querySelectorAll('button') ?? [])].filter(b => b.getBoundingClientRect().height > 0 && !b.hasAttribute('data-phone-back') && !/Put phone away/.test(b.textContent || ''));
     const first = buttons()[0];
     if (!first) return 'no category';
     first.click();
