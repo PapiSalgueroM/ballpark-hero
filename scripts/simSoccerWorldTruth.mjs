@@ -34,7 +34,10 @@
  *      after the tick, equal the base's, and so do the world's Europe, leagues,
  *      cups and tournament, until a season's input differs. The first fields to
  *      differ are always this round's (an award, a log line, the phone's map,
- *      moves, scorer or feed, a nominee's club on the night).
+ *      moves, scorer or feed, a nominee's club on the night). Planted: the
+ *      base's month block and this tree's legacyMonthDraws, lifted from their
+ *      sources, make the same number of Math.random calls for every goal count
+ *      from 0 to 45 over 200 seeds (the guarantee loops at 30 and 35 goals).
  *   3  FEED. Over the fleet, every season that happened: no feed line holds a
  *      name from any era pool (1990 to 2032), no champion, Europe, cup,
  *      transfer or top scorer line, the honest line once, and no tournament
@@ -67,6 +70,8 @@
  *   seasonyear  every month printed with the season's starting year: section 1.
  *   nolegacy    the old lottery's draws are no longer made: section 2.
  *   extradraw   one extra draw in the world tick: section 2.
+ *   legacy30    the old lottery's 30 goal guarantee loop is no longer drawn: section 2 (planted).
+ *   legacy35    the old lottery's 35 goal guarantee loop is no longer drawn: section 2 (planted).
  *   realmoves   real men are moved between clubs again: section 3.
  *   pastchampions  a season that happened prints its champions: section 3.
  *   summer      the feed names the winner of every summer that happened again: section 3.
@@ -144,6 +149,10 @@ const CONTROLS = {
     edits: { [ENGINE]: [['  if (tournamentWinnerShown(year, eligible ? t.myResult : "")) {', '  if (true) {']] } },
   panel: { breaks: '5', note: 'the International panel names every winner again',
     edits: { [PANEL]: [['import { summerAtHomeLine, tournamentWinnerShown } from "@/lib/soccerWorldTruth";', 'import { summerAtHomeLine } from "@/lib/soccerWorldTruth";\nconst tournamentWinnerShown = (..._: unknown[]) => true;']] } },
+  legacy30: { breaks: '2', note: 'the old lottery\'s 30 goal guarantee loop is no longer drawn',
+    edits: { [ENGINE]: [['    if (goals >= 30) for (; won < 6; won += 1) total += rand(0, 9 - won);\n', '']] } },
+  legacy35: { breaks: '2', note: 'the old lottery\'s 35 goal guarantee loop is no longer drawn',
+    edits: { [ENGINE]: [['    if (goals >= 35) for (; won < 7; won += 1) total += rand(0, 9 - won);\n', '']] } },
   extradraw: { breaks: '2', note: 'the world tick makes one extra draw before Europe',
     edits: { [PHONE]: [['  const ucl = draw(notMine(topClubs, opts.playerUcl));', '  rng.next();\n  const ucl = draw(notMine(topClubs, opts.playerUcl));']] } },
 };
@@ -574,6 +583,52 @@ if (runs('2')) {
   console.log(`   ${careers.length} careers in lockstep with the base: ${steps} steps, ${seasons} seasons, ${months} month blocks and ${ticks} world ticks compared, ${worlds} world records; ${problems} careers with a count, seed or record off the base`);
   console.log(`   first fields to differ: ${[...firsts].sort((x, y) => y[1] - x[1]).slice(0, 6).map(([k, v]) => `${k} ${v}`).join('; ')}; never differed ${never}; compared until a season's input differed in ${diverged}, by ${[...ends].sort((x, y) => y[1] - x[1]).slice(0, 5).map(([k, v]) => `${k} ${v}`).join('; ')}`);
   if (months < careers.length * 2 || ticks < careers.length * 2) fail(`only ${months} month blocks and ${ticks} world ticks were compared`);
+  plantedDraws();
+}
+
+/* Planted (the review's finding 2): the fleet seldom reaches 30 or 35 goals, so the lockstep had no reliable
+   power over the old lottery's two guarantee loops (one deleted stayed green). The base's whole month block and
+   this tree's legacyMonthDraws, each lifted from its own source with its own rand, run alone under the same
+   seeded Math.random for every goal count from 0 to 45 and 200 seeds: the number of calls must be the same in
+   every case, and at 30 and 35 goals the loops must really add calls, so the case has something to hold. */
+function plantedDraws() {
+  const lf = s => s.replace(/\r\n/g, '\n');
+  const headSrc = lf(controlSources.get(ENGINE) ?? fs.readFileSync(path.join(ROOT, ENGINE), 'utf8'));
+  const baseSrc = lf(execFileSync('git', ['show', `${BASE}:${ENGINE}`], { cwd: ROOT, encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 }));
+  const cut = (src, from, to, where) => {
+    const a = src.indexOf(from), b = a < 0 ? -1 : src.indexOf(to, a + from.length);
+    if (a < 0 || b < 0 || src.indexOf(from, a + 1) >= 0) { fail(`planted draws: ${where} does not hold ${JSON.stringify(from.slice(0, 48))} once with its end after it`); return null; }
+    return src.slice(a, b);
+  };
+  const RAND = 'const rand = (min: number, max: number) => ';
+  const hRand = cut(headSrc, RAND, '\n', 'this tree\'s engine'), bRand = cut(baseSrc, RAND, '\n', 'the base engine');
+  const hDraws = cut(headSrc, '  const legacyMonthDraws = (goals: number): number => {', '\n  };\n', 'this tree\'s engine');
+  const bBlock = cut(baseSrc, '  // Awards: Player of the Month, simulate month-by-month based on goals\n', '  if (potmCount > 0) {', 'the base engine');
+  if (!hRand || !bRand || !hDraws || !bBlock) return;
+  const lift = code => new Function(`return ${esbuild.transformSync(code, { loader: 'ts' }).code}`)();
+  const head = lift(`(() => { ${hRand}\n${hDraws}\n  };\n  return legacyMonthDraws; })()`);
+  const base = lift(`(() => { ${bRand}\n  return (season: { goals: number; apps: number }) => {\n${bBlock}  }; })()`);
+  const calls = (fn, arg, seed) => {
+    const real = Math.random, r = seeded(seed);
+    let n = 0;
+    Math.random = () => { n += 1; return r(); };
+    try { fn(arg); } finally { Math.random = real; }
+    return n;
+  };
+  let cases = 0, off = 0, extra30 = 0, extra35 = 0, offEx = '';
+  for (let goals = 0; goals <= 45; goals += 1) {
+    for (let k = 0; k < 200; k += 1) {
+      const seed = 91000 + SEED_OFFSET * 10000 + goals * 200 + k;
+      const b = calls(base, { goals, apps: 30 }, seed), h = calls(head, goals, seed);
+      cases += 1;
+      if (b !== h) { off += 1; if (!offEx) offEx = `${goals} goals, seed ${seed}: base ${b} calls, this tree ${h}`; }
+      if (goals === 30) extra30 += h - 20;
+      if (goals === 35) extra35 += h - 20;
+    }
+  }
+  console.log(`   planted: the old lottery's draws lifted from both engines, ${cases} cases (0 to 45 goals, 200 seeds each): ${off} with a different number of calls; calls past the twenty plain draws at 30 goals ${extra30}, at 35 goals ${extra35}`);
+  if (off) fail(`${off} planted cases make a different number of Math.random calls than the base's month block, for example ${offEx}`);
+  if (!(extra30 > 0) || !(extra35 > 0)) fail(`the guarantee loops added ${extra30} calls at 30 goals and ${extra35} at 35, so the planted case holds nothing`);
 }
 
 /* ─── 3. the feed ──────────────────────────────────────────────────────── */
