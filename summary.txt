@@ -1,0 +1,6 @@
+vitest exit=0 3s |    Duration  1.94s (transform 353ms, setup 186ms, collect 796ms, tests 284ms, environment 1.13s, prepare 498ms)
+deck-settledoff exit=1 79s | simEventDeck: 1 failure, red sections 7 (CONTROL=settledoff fired)
+deck exit=0 98s | simEventDeck: green.
+tsc exit=0 98s | 
+anchors exit=0 41s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+deck-panelexpiry exit=1 71s | simEventDeck: 1 failure, red sections 7 (CONTROL=panelexpiry fired)
