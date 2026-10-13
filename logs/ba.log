@@ -1,0 +1,54 @@
+Prepared 9 declared font dependencies for local fulfillment.
+PASS agent review product and proof source bytes held.
+dbgAgent2: debug inserted
+DBGEVENT 320 cousin 3 Prank War Escalation 239
+DBGEVENT 320 cousin 4 The Agent Poach 265
+DBGEVENT 320 cousin 5 Party Scandal! 13
+DBG2 320 cousin 5 {"h3":[{"text":"Party Scandal!","ariaHidden":"DIV  min-h-screen bg-background text-foreground flex flex-col pb-[88px]","inert":null,"display":"block","visibility":"visible"}],"dialogs":["DIV  ","DIV dialog The Agent Poach50%: Your agent finds interest50%: Your agent goes quiet▼Amber: Your agent finds interest. Slate: Your agent goes quiet.The wheel shows the chanc"],"bodyHidden":["SPAN  aria-hidden=true inert=false ","DIV root aria-hidden=null inert=false Integrity +2. 50%: your agent works harder (Market value +€2","DIV  aria-hidden=true inert=false ","DIV radix-:ri: aria-hidden=null inert=false The Agent Poach50%: Your agent finds interest50%: Your agent","SPAN  aria-hidden=true inert=false "]}
+FAIL 320-cousin AssertionError [ERR_ASSERTION]: 320-cousin: One actual queued continuation for random_events
+DBGEVENT 320 shark 3 The Spicy Wings Interview 246
+DBGEVENT 320 shark 4 The Recovery Palace 437
+DBGEVENT 320 shark 5 Launch Your Own Podcast 68
+PASS 320-shark 157 checks
+DBGEVENT 320 super 3 The Spicy Wings Interview 246
+DBGEVENT 320 super 4 The Recovery Palace 437
+DBGEVENT 320 super 5 Launch Your Own Podcast 68
+PASS 320-super 152 checks
+DBGEVENT 320 self 3 The Spicy Wings Interview 246
+DBGEVENT 320 self 4 Launch Your Own Podcast 68
+DBGEVENT 320 self 5 Rival Provocation! 14
+PASS 320-self 152 checks
+DBGEVENT 390 cousin 3 Prank War Escalation 239
+DBGEVENT 390 cousin 4 The Agent Poach 265
+DBGEVENT 390 cousin 5 Party Scandal! 13
+DBG2 390 cousin 5 {"h3":[{"text":"Party Scandal!","ariaHidden":"DIV  min-h-screen bg-background text-foreground flex flex-col pb-[88px]","inert":null,"display":"block","visibility":"visible"}],"dialogs":["DIV  ","DIV dialog The Agent Poach50%: Your agent finds interest50%: Your agent goes quiet▼Amber: Your agent finds interest. Slate: Your agent goes quiet.The wheel shows the chanc"],"bodyHidden":["SPAN  aria-hidden=true inert=false ","DIV root aria-hidden=null inert=false Integrity +2. 50%: your agent works harder (Market value +€2","DIV  aria-hidden=true inert=false ","DIV radix-:ri: aria-hidden=null inert=false The Agent Poach50%: Your agent finds interest50%: Your agent","SPAN  aria-hidden=true inert=false "]}
+FAIL 390-cousin AssertionError [ERR_ASSERTION]: 390-cousin: One actual queued continuation for random_events
+DBGEVENT 390 shark 3 The Spicy Wings Interview 246
+DBGEVENT 390 shark 4 The Recovery Palace 437
+DBGEVENT 390 shark 5 Launch Your Own Podcast 68
+PASS 390-shark 152 checks
+DBGEVENT 390 super 3 The Spicy Wings Interview 246
+DBGEVENT 390 super 4 The Recovery Palace 437
+DBGEVENT 390 super 5 Launch Your Own Podcast 68
+PASS 390-super 152 checks
+DBGEVENT 390 self 3 The Spicy Wings Interview 246
+DBGEVENT 390 self 4 Launch Your Own Podcast 68
+DBGEVENT 390 self 5 Rival Provocation! 14
+PASS 390-self 152 checks
+DBGEVENT 1280 cousin 3 Prank War Escalation 239
+DBGEVENT 1280 cousin 4 The Agent Poach 265
+DBGEVENT 1280 cousin 5 Party Scandal! 13
+DBG2 1280 cousin 5 {"h3":[{"text":"Party Scandal!","ariaHidden":"DIV  min-h-screen bg-background text-foreground flex flex-col pb-[88px]","inert":null,"display":"block","visibility":"visible"}],"dialogs":["DIV  ","DIV dialog The Agent Poach50%: Your agent finds interest50%: Your agent goes quiet▼Amber: Your agent finds interest. Slate: Your agent goes quiet.The wheel shows the chanc"],"bodyHidden":["SPAN  aria-hidden=true inert=false ","DIV root aria-hidden=null inert=false Integrity +2. 50%: your agent works harder (Market value +€2","DIV  aria-hidden=true inert=false ","DIV radix-:ri: aria-hidden=null inert=false The Agent Poach50%: Your agent finds interest50%: Your agent","SPAN  aria-hidden=true inert=false "]}
+FAIL 1280-cousin AssertionError [ERR_ASSERTION]: 1280-cousin: One actual queued continuation for random_events
+DBGEVENT 1280 shark 3 The Spicy Wings Interview 246
+DBGEVENT 1280 shark 4 The Recovery Palace 437
+DBGEVENT 1280 shark 5 Launch Your Own Podcast 68
+PASS 1280-shark 152 checks
+DBGEVENT 1280 super 3 The Spicy Wings Interview 246
+DBGEVENT 1280 super 4 The Recovery Palace 437
+DBGEVENT 1280 super 5 Launch Your Own Podcast 68
+PASS 1280-super 152 checks
+DBGEVENT 1280 self 3 The Spicy Wings Interview 246
+DBGEVENT 1280 self 4 Launch Your Own Podcast 68
+DBGEVENT 1280 self 5 Rival Provocation! 14
+PASS 1280-self 152 checks
