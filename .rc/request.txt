@@ -1,0 +1,6 @@
+#!build
+sims1: ONLY=simAccessibility,simActivityNotCompletion,simCareerAcademy,simCareerAwardsNight,simCareerDerbies,simCareerDilemmaReach,simCareerEras,simCareerFacts,simCareerKeepPlaying,simCareerLeagueSeasons,simCareerNoDeadEnd,simCareerPositionRatings node scripts/runAllSims.mjs
+sims2: ONLY=simCareerRecordedStats,simCareerTransferBrief,simCareerTrophyRuns,simClubSquads,simCmDataOnDemand,simFlagshipWeight,simHomeFront,simLoanSpell,simManagerCareer,simNationalityFlags,simScoreShown,simSessionMarks node scripts/runAllSims.mjs
+sims3: ONLY=simSoccerAgentReview,simSoccerAgentReviewPageControl,simSoccerAwardGenerations,simSoccerCurrency,simSoccerFarewell,simSoccerFarewellPageControl,simSoccerInternationalReturn,simSoccerInternationalReturnPageControl,simSoccerVeteranTalks,simTransferBriefPageControl,simVictoryMoment,simRevealScroll node scripts/runAllSims.mjs
+simCreation: node scripts/simCreation.mjs
+prerender16: SIM_PRERENDER_CONTROL= node scripts/simPrerender.mjs 2>&1 | sed -n "/^16)/,/^17)/p"; echo "--- base"; git worktree add -q /tmp/pb c5fc5470 && ln -s "$PWD/node_modules" /tmp/pb/node_modules && cd /tmp/pb && node scripts/simPrerender.mjs 2>&1 | sed -n "/^16)/,/^17)/p"
