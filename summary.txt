@@ -1,0 +1,3 @@
+build exit=0 26s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+chunks-head exit=0 4s | !=="start"&&v){u.scrollIntoView({behavior:a,block:i,inline:"nearest"});return}u.style.scrollMarginTop=`${d+h}px`,u.scrollIntoView({behavior:a,block:"start",inline:"neares
+chunks-base exit=0 32s | !=="start"&&v){u.scrollIntoView({behavior:a,block:i,inline:"nearest"});return}u.style.scrollMarginTop=`${d+h}px`,u.scrollIntoView({behavior:a,block:"start",inline:"neares

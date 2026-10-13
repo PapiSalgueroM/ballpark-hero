@@ -1,0 +1,58 @@
+  395.09K  SoccerCareer-Aq6B7JOE.js
+  236.99K  index-IjZH87FL.js
+   65.88K  useCareerMoment-DC-UKZmm.js
+   36.69K  soccer2-Utdb7HxI.js
+   14.55K  AppearanceBuilder-BEB15XEI.js
+   10.33K  clubRivalries-DuNC-DyB.js
+    7.49K  soccerInternational-FiWGI8ks.js
+    7.24K  select-LIPwipSN.js
+    6.03K  intlNames-DiJYNZJt.js
+    4.43K  ShareButtons-CZDVyXax.js
+    3.83K  PlayerAvatar-Czn0kvAm.js
+    3.71K  GameNavbar-C_4oiPjR.js
+    3.38K  uclFormatHistory-DwuhruDw.js
+    2.95K  GameReportContext-DJa-SV8D.js
+    2.91K  FlagImg-3pr0-7SR.js
+    2.49K  soccerCareerAppearance-C4EKR5O3.js
+    2.38K  GameSeoContent-B_sbEKM6.js
+    2.38K  careerRivalryChoices-B2c2ZYXB.js
+    2.24K  badges-CVEYcYfe.js
+    1.53K  managerOffers-EoQ6k_gA.js
+    1.27K  VictoryMoment-C_tH1rZG.js
+    1.24K  careerAwardsNight-BDQnO6dK.js
+    1.21K  clubManagerUclGroups-cpyFy90b.js
+    1.08K  freeKick-BSoL5hQo.js
+    0.97K  soccerBoots-BK_dXNrV.js
+    0.94K  seoMetaPart30-C2bf-ABQ.js
+    0.80K  Celebration-DVw0Ob5E.js
+    0.80K  useRevealScroll-eS_dUlrQ.js
+    0.77K  GameHelp-BoE7DPvF.js
+    0.75K  HowToPlayPopover-CiAL20id.js
+    0.72K  confederationGroups-8jgsrX6T.js
+    0.71K  CelebrationStyles-CeDk8QOA.js
+    0.59K  Confetti-DOGmlgHj.js
+    0.49K  useGameCompletion-DHmUnQMZ.js
+    0.39K  star-IGWQfig8.js
+    0.38K  medal-DbCD-Kul.js
+    0.31K  arcade-CUT7KVjC.js
+    0.30K  copy-DwPjnnQR.js
+    0.30K  flag-BFdz225l.js
+    0.30K  circle-help-DaMn0U0D.js
+    0.26K  arrow-left-BjHueCJa.js
+    0.24K  chevron-up-Ca7OOksy.js
+    0.24K  chevron-down-B7K8Mo_B.js
+    0.20K  keyedRng-BKZQ2UGv.js
+    0.20K  soccerBootIds-BWkyFIXk.js
+    0.15K  formatNumber-CGuttX8h.js
+    0.13K  dialogA11y-BCgxbiii.js
+TOTAL /soccer-career 828.2K over 47 files
+== SaveMovedNotice-DyE5jrpt.js: 1428 bytes, 0.74K gz
+import{r as n,as as l,j as o}from"./index-IjZH87FL.js";function m({message:u,onReload:d}){const[t]=n.useState(()=>typeof document>"u"?null:document.createElement("div")),a=n.useRef(null);return n.useEffect(()=>{var i;if(!t)return;document.body.appendChild(t);const s=Array.from(document.body.children).filter(e=>e!==t&&!e.hasAttribute("inert"));s.forEach(e=>e.setAttribute("inert",""));const r=e=>e.stopImmediatePropagation();return window.addEventListener("keydown",r,!0),window.addEventListener("keyup",r,!0),(i=a.current)==null||i.focus(),()=>{window.removeEventListener("keydown",r,!0),window.removeEventListener("keyup",r,!0),s.forEach(e=>e.removeAttribute("inert")),t.remove()}},[t]),t?l.createPortal(o.jsx("div",{role:"alertdialog","aria-modal":"true","aria-labelledby":"save-moved-words","aria-describedby":"save-moved-words","data-testid":"save-moved-notice",className:"fixed inset-0 z-[1000] flex items-center justify-center bg-background/85 p-4",children:o.jsxs("div",{className:"w-full max-w-sm rounded-2xl border border-border bg-card p-5 text-center shadow-xl",children:[o.jsx("p",{id:"save-moved-words",className:"text-base font-bold text-foreground",children:u}),o.jsx("button",{ref:a,type:"button",onClick:()=>d?d():window.location.reload(),className:"mt-4 min-h-[44px] w-full rounded-xl bg-primary px-4 py-2.5 text-base font-bold text-primary-foreground",children:"Reload"})]})}),t)
+...
+"text-base font-bold text-foreground",children:u}),o.jsx("button",{ref:a,type:"button",onClick:()=>d?d():window.location.reload(),className:"mt-4 min-h-[44px] w-full rounded-xl bg-primary px-4 py-2.5 text-base font-bold text-primary-foreground",children:"Reload"})]})}),t):null}export{m as default};
+
+== useRevealScroll-eS_dUlrQ.js: 1963 bytes, 0.80K gz
+import{r as f}from"./index-IjZH87FL.js";const y=()=>typeof window<"u"&&typeof window.matchMedia=="function"&&window.matchMedia("(prefers-reduced-motion: reduce)").matches,h=12,A=160,g=.4;function E(){const o=window.innerHeight||document.documentElement.clientHeight,e=window.innerWidth||document.documentElement.clientWidth;let n=0;for(const r of[e*.5,6,e-6])for(const c of document.elementsFromPoint(r,1)){const i=getComputedStyle(c).position;if(i!=="fixed"&&i!=="sticky")continue;const t=c.getBoundingClientRect();t.height===0||t.height>o*g||t.top>2||t.bottom<=0||t.bottom>n&&(n=t.bottom)}return n}function F(){const o=window.innerHeight||document.documentElement.clientHeight,e=window.innerWidth||document.documentElement.clientWidth;let n=0;for(const r of[e*.5,6,e-6])for(const c of document.elementsFromPoint(r,o-2)){const i=getComputedStyle(c).position;if(i!=="fixed"&&i!=="sticky")continue;const t=c.getBoundingClientRect();t.height===0||t.height>o*g||t.bottom<o-2||t.top>=o||o-t.top>n&&(n=o-t.top)}return n}function B(o,e){const n=f.useRef(null),r=f.useRef(!0),c=(e==null?void 0:e.enabled)??!0,i=e==null?void 0:e.block,t=(e==null?void 0:e.skipFirst)??!0;return f.useEffect(()=>{if(!c||r.current&&(r.current=!1,t)||!n.current||typeof window>"u")return;let m=0;const w=requestAnimationFrame(()=>{m=requestAnimationFrame(()=>{const u=n.current;if(!u)return;const s=u.getBoundingClientRect();if(s
+...
+!=="start"&&v){u.scrollIntoView({behavior:a,block:i,inline:"nearest"});return}u.style.scrollMarginTop=`${d+h}px`,u.scrollIntoView({behavior:a,block:"start",inline:"nearest"})})});return()=>{cancelAnimationFrame(w),m&&cancelAnimationFrame(m)}},[o,c,i,t]),n}export{h as G,A as M,F as b,E as t,B as u};
+
