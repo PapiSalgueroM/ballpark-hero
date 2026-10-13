@@ -78,6 +78,29 @@ alike, and only there (simPhone2 biggest save 98.9 KB head, 99.6 KB base; simMon
 sections that read this round's code (simPhone2 section 6: 840 feed items, 227 transfers on the head, 245 on the
 base; simMoney section 6: 180 questions, every one answerable from the save) are green on both.
 
+## The bundler and the legacy draws (found by playSoccerCareerDepth, fixed in 7d31c5f0)
+
+The production build (Vite, Rollup's tree shaking) counts Math.random as pure, so the first version of the legacy
+draws, whose results fed nothing, was dropped from the built game: playSoccerCareerDepth saw 170 draws in the node
+and Chromium engines against 150 on the page's Next Season (r1329-i). The node harnesses cannot see this, since
+they bundle without that tree shaking. The draws now feed a sum that a branch the bundler cannot rule out reads (a
+sum of draws is never negative), the same calls in the same order; r1329-k checks the page again.
+
+## The walk (scripts/playSoccerWorldTruth.mjs, r1329-walk4 at 7d6036ba)
+
+Green at 320, 390 and 1280; WALK_CONTROL=pastfeed fired on case A at all three (3 failures). Save A was a 2012
+Liverpool striker (two month lines, August 2012 and April 2013, in the 2012 season); save B missed the 2002, 2004
+and 2006 summers; save C missed the 2030 World Cup. Pictures looked at: 390-A-feed (the honest lines, his own
+tournaments), 390-A-quiz (an own story question), 390-A-story (the two month lines with their own years),
+390-B-history ("Watched from home" on all three rows, no champion), 390-B-card and 320-B-card (no champions line,
+no Bracket tile, the third tile spanning the row), 390-C-feed (the framing line heading each season, champion lines
+under it), 390-C-bracket (the 2030 bracket opens). The history list opened and closed with scrollY and the
+document height back where they were (390: 2143 and 14952 before, 2285 and 15094 open, 2143 and 14952 closed);
+"Watched from home" is 12 px; every press measured is 44 px or more but the list's Back (32 px, owed).
+
+Final proof readings at the last head are in the closing report
+(C:/Users/antho/dukb-handoff/2026-10-10/results-g/finish-1329.md), because What's New is the round's last commit.
+
 ## Deviations from the brief's hunk list, and why
 
 - InternationalPanel.tsx gains one import line (soccerWorldTruth), which the brief's list of panel lines leaves out
