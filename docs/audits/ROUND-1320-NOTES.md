@@ -83,3 +83,12 @@ Two lenses reviewed b670c2de (results-g/review-run-1320.md and review-read-1320.
   the Play button's move against the feed's and scrollY across Not now and Take the ask.
 Left for the lead: the tilt ruling (CFB as built, CBB's title ask), the fixed slot an older dynasty carries,
 and the What's New wording on a closed market (fixed in its own last commit; see fix-1320.md).
+
+## Closing check (fix pass 2)
+
+- The opt in tile said every firing goes on through a job market or a year out, while about half of all
+  firings meet a closed market (no offer and next year shut: a new dynasty is the only way back in). Decision
+  2 asks for a high closed share to be said plainly, so the tile now reads "He grades every season. Trust at
+  zero gets you let go. A job market or a year out can keep the dynasty going, or it ends." It keeps the three
+  things the STAKES ruling names and fits the same three line clamp at 320 px. The lead can restore the old
+  sentence with that one line in AthleticDirectorCard.tsx.
