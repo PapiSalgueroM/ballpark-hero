@@ -1,0 +1,15 @@
+build exit=0 31s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+vitest exit=0 16s |       Tests  60 passed (60)
+simNoRivalNames exit=0 28s | No rival product names found. 0 findings.
+simStorageWrites exit=0 4s | simStorageWrites: all green (owed: 12)
+simEarlyReturnScope exit=0 13s | simEarlyReturnScope: all green
+simMidSeasonStart exit=0 4s | simMidSeasonStart: all green
+simCalendarCurrentDate exit=0 7s | Calendar Current date: normalized copied controls, original bytes held, owned temporary files cleaned. Native geometry/keyboard acceptance remains pending.
+simHarnessAnchors exit=0 53s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+tsc exit=0 108s | tsc exit 0
+simClubManagerCalendar exit=0 48s | simClubManagerCalendar: all green
+simClubManagerFinances exit=0 59s | simClubManagerFinances: PASS. The books add up, the projection lands, prices move the fans and the board, and the sponsor desk pays what it says.
+simDailyDeals exit=0 4s | simDailyDeals: green. 12 Hot Seat dates (5 Premier League) and 6 Deadline Day dates (3 Premier League) deal what Release AS dealt, and no daily carries the real fixture k
+simClubManagerSaveSize exit=0 44s | simClubManagerSaveSize: all sections green
+simClubManagerSlots exit=0 52s | simClubManagerSlots: all sections green
+weight exit=0 29s | sweepWeight: green. Every page is inside its budget, and the budgets came down this round.
