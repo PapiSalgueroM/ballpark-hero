@@ -1,0 +1,5 @@
+#!playwright
+w1077-head: node scripts/qa/managerWorldBrowser1077.mjs --prefetch-fonts-only && if command -v xvfb-run >/dev/null; then NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" xvfb-run -a node scripts/qa/managerWorldBrowser1077.mjs; else NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/managerWorldBrowser1077.mjs; fi
+w1077-main: R=$PWD; git worktree add -q /tmp/wm 36cc9ffe && cd /tmp/wm && ln -s "$R/node_modules" node_modules && node scripts/qa/managerWorldBrowser1077.mjs --prefetch-fonts-only && if command -v xvfb-run >/dev/null; then NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" xvfb-run -a node scripts/qa/managerWorldBrowser1077.mjs; else NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/managerWorldBrowser1077.mjs; fi
+simWritesAreSent-head: node scripts/simWritesAreSent.mjs
+simWritesAreSent-main: R=$PWD; git worktree add -q /tmp/sm 36cc9ffe && cd /tmp/sm && ln -s "$R/node_modules" node_modules && node scripts/simWritesAreSent.mjs
