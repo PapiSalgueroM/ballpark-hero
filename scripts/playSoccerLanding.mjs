@@ -506,8 +506,8 @@ async function sectionRetire(ctx, arm, size) {
 /* One step: the bar's Next Year or Next Season on the hub, otherwise the
    card's own choice (an open dialog first, then the card area), preferring the
    words that move a career on. Clicked in the page, so nothing scrolls first. */
-function driveOne(prefer = []) {
-  const ADV = [...prefer, 'Sign contract', 'Review contract', 'Join Club', 'Continue at', 'Stay at', 'Continue', 'Accept', 'Next', 'Done', 'Confirm', 'Proceed'];
+function driveOne({ prefer = [], avoid = [] } = {}) {
+  const ADV = [...prefer, 'Sign contract', 'Review contract', 'Join Club', 'Continue at', 'Stay at', 'Reject & Stay', 'Stay', 'Continue', 'Accept', 'Next', 'Done', 'Confirm', 'Proceed'];
   const TILE = /data-(press-room-open|soccer-programme-open|squad-tile|career-mentor-tile|career-records-tile|season-ambition|preseason-plan|farewell-open|trophy-category|open-|career-utility|watch-week|week-by-week)/;
   const vis = b => { const r = b.getBoundingClientRect(); return r.width > 0 && r.height > 0 && !b.disabled; };
   const text = b => (b.textContent || '').replace(/\s+/g, ' ').trim();
@@ -521,6 +521,9 @@ function driveOne(prefer = []) {
   let cands = scope.flatMap(s => [...s.querySelectorAll('button')]).filter(vis);
   if (!modal) cands = cands.filter(b => !TILE.test([...b.attributes].map(a => a.name).join(' ')) && !/^Full attributes/.test(text(b)));
   cands = cands.filter(b => !/close|help/i.test(b.getAttribute('aria-label') || '') && !/^(Close|Back)$/.test(text(b)));
+  /* A press that changed nothing three times running is skipped from then on
+     (a toggle or a details button the fallback kept picking). */
+  cands = cands.filter(b => !avoid.includes(text(b).slice(0, 40)));
   let pick = null;
   for (const a of ADV) { pick = cands.find(b => text(b).startsWith(a)); if (pick) break; }
   if (!pick) pick = cands[0] ?? null;
@@ -546,12 +549,17 @@ async function drive(p, steps, onStep, prefer = () => [], until = null) {
   let nexts = 0;
   let nextSeasons = 0;
   let done = 0;
+  const avoid = [];
+  const recent = [];
+  let lastKey = null;
+  let lastPhase = null;
+  let repeat = 0;
   for (let i = 0; i < steps; i++) {
     if (!p.url().includes('/soccer-career')) { kinds.add(`left the page for ${p.url()}`); break; }
     const want = await prefer();
     let step = null;
     for (let wait = 0; wait < 10; wait++) {
-      step = await p.evaluate(driveOne, want).catch(e => ({ phase: null, pressed: null, error: String(e?.message ?? e).slice(0, 120) }));
+      step = await p.evaluate(driveOne, { prefer: want, avoid }).catch(e => ({ phase: null, pressed: null, error: String(e?.message ?? e).slice(0, 120) }));
       if (step.error || step.pressed) break;
       await p.waitForTimeout(1000);
     }
@@ -559,6 +567,17 @@ async function drive(p, steps, onStep, prefer = () => [], until = null) {
     await p.waitForTimeout(900);
     done = i + 1;
     if (step.phase) kinds.add(step.phase);
+    if (step.phase !== lastPhase) { avoid.length = 0; lastPhase = step.phase; }
+    const key = `${step.phase}|${step.pressed}`;
+    repeat = key === lastKey ? repeat + 1 : 1;
+    lastKey = key;
+    if (repeat >= 3 && step.pressed && !/^Next (Year|Season)/.test(step.pressed)) {
+      avoid.push(step.pressed);
+      repeat = 0;
+      kinds.add(`skipped "${step.pressed}" on ${step.phase} after three presses that changed nothing`);
+    }
+    recent.push(`${step.phase}: ${step.pressed}`);
+    if (recent.length > 8) recent.shift();
     if (/^Next (Year|Season)/.test(step.pressed ?? '')) nexts += 1;
     if (/^Next Season/.test(step.pressed ?? '')) nextSeasons += 1;
     if (onStep) await onStep(`step ${i + 1} (${step.phase}: ${step.pressed})`);
@@ -573,6 +592,7 @@ async function drive(p, steps, onStep, prefer = () => [], until = null) {
     if (until && await until({ nexts, nextSeasons, phoneDone })) { kinds.add(`stopped with what it needed after ${i + 1} steps`); break; }
   }
   kinds.add(`${done} steps, ${nexts} Next Year or Next Season presses (${nextSeasons} Next Season)`);
+  if (done === steps) kinds.add(`hit the step cap; the last steps: ${recent.join(' / ')}`);
   return [...kinds];
 }
 /* One phone action: My Life, then the categories in order until one holds a
