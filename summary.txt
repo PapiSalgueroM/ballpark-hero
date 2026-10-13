@@ -1,0 +1,6 @@
+tsc exit=0 91s | 
+worldtruth-s3 exit=0 92s | simSoccerWorldTruth: OK, every section green
+worldtruth exit=0 96s | simSoccerWorldTruth: OK, every section green
+ctl-arcade exit=1 79s | FIRED: WORLD_TRUTH_CONTROL=arcade failed section 4 (2 failures; section 4: 2, section 6: 3)
+ctl-quizyear exit=1 83s | FIRED: WORLD_TRUTH_CONTROL=quizyear failed section 4 (1 failures; section 4: 1, section 6: 3)
+simPhone2 exit=1 152s | 1 FAILURES
