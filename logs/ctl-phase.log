@@ -1,0 +1,3 @@
+combinephase exit=1 mutated=1 | fails by section:  8 11. | simCareerPreDraft [control combinephase] [seed set a]: 8 FAILURE(S)
+attemptbare exit=1 mutated=1 | fails by section:  8 11. | simCareerPreDraft [control attemptbare] [seed set a]: 8 FAILURE(S)
+scoutskeys exit=1 mutated=1 | fails by section:  8 11. | simCareerPreDraft [control scoutskeys] [seed set a]: 8 FAILURE(S)

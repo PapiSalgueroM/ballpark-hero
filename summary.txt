@@ -1,0 +1,5 @@
+vitest exit=0 5s |    Duration  4.47s (transform 1.17s, setup 48ms, collect 1.78s, tests 1.77s, environment 373ms, prepare 158ms)
+pd-a exit=0 17s | simCareerPreDraft [seed set a]: ALL GREEN
+pd-c exit=0 15s | simCareerPreDraft [seed set c]: ALL GREEN
+tsc exit=0 46s | 
+ctl-phase exit=0 34s | scoutskeys exit=1 mutated=1 | fails by section:  8 11. | simCareerPreDraft [control scoutskeys] [seed set a]: 8 FAILURE(S)
