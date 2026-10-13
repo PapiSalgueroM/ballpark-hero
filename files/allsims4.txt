@@ -1,0 +1,229 @@
+Network mode: offline, loopback only, no production probe or database retries.
+Running 119 node harnesses
+  PASS  simAccessibility.mjs            0.1s
+  PASS  simAllPlayersValue.mjs         52.0s
+  PASS  simArcadePause.mjs              5.7s
+  PASS  simAussieRulesSeason.mjs       57.7s
+  PASS  simBallIqFeedback.mjs           4.8s
+  PASS  simBoardAsks.mjs               20.6s
+  PASS  simBrowserHarnessDiscovery.mjs    5.8s
+  PASS  simBuzzerPractice.mjs           6.4s
+  PASS  simCagePractice.mjs             2.9s
+  PASS  simCareerAcademy.mjs            4.2s
+  PASS  simCareerContinental.mjs       16.8s
+  PASS  simCareerDrills.mjs             1.3s
+  PASS  simCareerHall.mjs            1609.1s
+  PASS  simCareerLeagueFinish.mjs      21.0s
+  PASS  simCareerMoneyAfterRetirement.mjs    5.2s
+  PASS  simCareerPress.mjs              2.0s
+  PASS  simCareerSeasonRatings.mjs     32.4s
+  PASS  simCareerStoryRole.mjs         51.3s
+  PASS  simCbbProgramFeedback.mjs       5.9s
+  PASS  simCfbStaff.mjs                19.3s
+  PASS  simClubCaptaincy.mjs           41.8s
+  PASS  simClubManagerDeals.mjs        11.2s
+  PASS  simClubManagerFinances.mjs     66.1s
+  PASS  simClubManagerScore.mjs        94.7s
+  PASS  simClueAuctionFeedback.mjs      5.1s
+  PASS  simCmInternationals.mjs        26.5s
+  PASS  simCmOwnGoals.mjs             118.5s
+  PASS  simCmVar.mjs                  231.0s
+  PASS  simCollegeGridShipped.mjs      24.6s
+  FAIL  simConnect4ClubRecords.mjs      5.5s
+  PASS  simConquestExplore.mjs          3.3s
+  PASS  simConstructorFeedback.mjs      3.1s
+  PASS  simCup.mjs                     52.5s
+  SKIP  simDailyPoolOrder.mjs           1.5s
+        it reached no database and said so, and the database is unreachable here (offline mode blocks production; no database probe was sent)
+  PASS  simDartDraftPool.mjs           19.5s
+  PASS  simDraftNight.mjs               0.1s
+  PASS  simEra2010.mjs                 20.0s
+  PASS  simErrorBoundary.mjs            0.7s
+  PASS  simF1ConstructorGuideScore.mjs    3.9s
+  PASS  simFacilitiesPreview.mjs        5.3s
+  PASS  simFightGym.mjs                 3.2s
+  PASS  simFlagshipWeight.mjs           0.9s
+  FAIL  simFootleDaily.mjs              2.8s
+        it reported success after an offline transport block; checks needing live data did not run
+  PASS  simFreeAgency.mjs               2.0s
+  PASS  simFrontOfficeCuts.mjs         10.5s
+  PASS  simGauntletEngine.mjs           6.9s
+  PASS  simGmDesk.mjs                   0.5s
+  PASS  simGmInbox.mjs                  1.3s
+  FAIL  simGmStaff.mjs                  3.6s
+  SKIP  simGridArchive.mjs              6.2s
+        it reached no database and said so, and the database is unreachable here (offline mode blocks production; no database probe was sent)
+  PASS  simGridRarity.mjs               1.4s
+  SKIP  simHallOfChampions.mjs          0.8s
+        it reached no database and said so, and the database is unreachable here (offline mode blocks production; no database probe was sent)
+  PASS  simHelpConsentFocus.mjs         2.3s
+  PASS  simHomeCopy.mjs                 0.7s
+  PASS  simHubs.mjs                     0.3s
+  PASS  simIndexing.mjs                 0.2s
+  PASS  simJobMarket.mjs                1.1s
+  PASS  simLineupPickerFilters.mjs     10.4s
+  PASS  simListQuizFeedback.mjs         8.6s
+  PASS  simLiveScoreOwnership.mjs       2.7s
+  PASS  simLoginReturn.mjs              0.2s
+  PASS  simManagerOffers.mjs            0.2s
+  PASS  simMatchDetail.mjs              6.5s
+  PASS  simMissingNineSources.mjs       0.2s
+  PASS  simMlbDraftCapital.mjs          5.8s
+  PASS  simMlbOpeningRatingModel.mjs    1.1s
+  FAIL  simMoney.mjs                  325.1s
+  FAIL  simNascarDriver.mjs             1.6s
+  PASS  simNavbarStatsReads.mjs         1.9s
+  PASS  simNbaCourtSelection.mjs        3.4s
+  PASS  simNbaOpeningRatings.mjs        5.0s
+  PASS  simNbaRotationUi.mjs            6.4s
+  PASS  simNflCareer.mjs                1.6s
+  SKIP  simNflGridData.mjs              4.7s
+        it reached no database and said so, and the database is unreachable here (offline mode blocks production; no database probe was sent)
+  PASS  simNflTagDepth.mjs              3.0s
+  PASS  simNhlCpuRosters.mjs            0.6s
+  PASS  simNhlPlayoffFormatHistory.mjs    0.9s
+  PASS  simNoInventedQuotes.mjs        21.5s
+  PASS  simOpposition.mjs            1514.7s
+  FAIL  simPerfectSeasonWheel.mjs     113.1s
+  PASS  simPlayerBingoLoad.mjs          3.9s
+  PASS  simPollCharacter.mjs            4.4s
+  PASS  simPress.mjs                 2279.0s
+  PASS  simRankEmCircuit.mjs            5.6s
+  PASS  simRebuildLoop.mjs             36.7s
+  PASS  simRelatedGames.mjs             1.3s
+  PASS  simRoles.mjs                 1385.8s
+  FAIL  simSafari.mjs                   0.9s
+  PASS  simSearchAndDiscardFeedback.mjs    7.5s
+  PASS  simSeasonFamilySummary.mjs      4.9s
+  PASS  simSilverwareReveal.mjs         4.8s
+  PASS  simSoccerAgentReview.mjs       14.0s
+  PASS  simSoccerCareerDevelopment.mjs    5.5s
+  PASS  simSoccerCareerUcl.mjs          9.5s
+  PASS  simSoccerDiscipline.mjs        42.8s
+  PASS  simSoccerInternationalReturn.mjs    8.6s
+  PASS  simSoccerOwnGoals.mjs         125.3s
+  FAIL  simSoccerStints.mjs             5.5s
+  PASS  simSportsBingo.mjs              0.3s
+  PASS  simStaleChunk.mjs               0.1s
+  SKIP  simStockLive.mjs                1.4s
+        it reached no database and said so, and the database is unreachable here (offline mode blocks production; no database probe was sent)
+  PASS  simTeammatesRecord.mjs          0.7s
+  PASS  simTickerDepth.mjs              0.5s
+  PASS  simTraining.mjs                 3.5s
+  PASS  simTransferPathGuidance.mjs     9.1s
+  PASS  simTriviaFacts.mjs              0.2s
+  PASS  simTycoonGear.mjs               2.5s
+  PASS  simTycoonPackPace.mjs          13.9s
+  FAIL  simTycoonSeasonReview.mjs       0.5s
+  PASS  simUclLegMigration.mjs          0.5s
+  PASS  simUsBoardParity.mjs           71.6s
+  PASS  simUsCareerPractice.mjs        28.0s
+  PASS  simUsCoachCareer.mjs            3.3s
+  PASS  simUsSeasonCentre.mjs         115.6s
+  SKIP  simValueFreshness.mjs           0.7s
+        it reached no database and said so, and the database is unreachable here (offline mode blocks production; no database probe was sent)
+  FAIL  simWhodTheyBeat.mjs             0.3s
+        it reported success after an offline transport block; checks needing live data did not run
+  SKIP  simWindow2026Ligue1.mjs         4.6s
+        it reached no database and said so, and the database is unreachable here (offline mode blocks production; no database probe was sent)
+  PASS  simWorldEditor.mjs              8.2s
+  PASS  simYouthPadding.mjs            37.8s
+
+Skipping 3 browser harnesses (simDrillMotion, simResultMoment, simSeoMetaSplit). Pass --browser to include them.
+
+7 harnesses SKIPPED, not run and not counted: simDailyPoolOrder, simGridArchive, simHallOfChampions, simNflGridData, simStockLive, simValueFreshness, simWindow2026Ligue1.
+Each one reached no database and said so, and the database is unreachable here: offline mode blocks production; no database probe was sent.
+Run SIM_NETWORK=live only after production traffic is cleared. DB_PROBE changes classification in live mode, not transport permission.
+----- simConnect4ClubRecords.mjs (FAIL) -----
+   29 club labels parsed out of the shipped validator
+   92 "Played for" attribute uses across the boards, 29 distinct
+1) every board label resolves, and the map carries nothing spare
+   29/29 labels resolve, 0 spare entries
+[SIM_OFFLINE_BLOCK] database fetch https://flawuiqbvjobmkfkauhw.supabase.co
+[SIM_OFFLINE_BLOCK] database fetch https://flawuiqbvjobmkfkauhw.supabase.co
+[SIM_OFFLINE_BLOCK] database fetch https://flawuiqbvjobmkfkauhw.supabase.co
+[SIM_OFFLINE_BLOCK] database fetch https://flawuiqbvjobmkfkauhw.supabase.co
+could not read soccer_player_club_stints after id null (Offline harness blocked fetch to https://flawuiqbvjobmkfkauhw.supabase.co); refusing to run
+
+
+----- simFootleDaily.mjs (FAIL) -----
+1) The real hook, rendered: the daily target is drawn from the fetched pool
+   vitest exit 0, 2 passed (2)
+2) The live pool holds players the file does not, on every tier
+[SIM_OFFLINE_BLOCK] database fetch https://flawuiqbvjobmkfkauhw.supabase.co
+[SIM_OFFLINE_BLOCK] database fetch https://flawuiqbvjobmkfkauhw.supabase.co
+[SIM_OFFLINE_BLOCK] database fetch https://flawuiqbvjobmkfkauhw.supabase.co
+[fetchFootlePlayerPool] Obscure batch failed, using fallback
+   SKIPPED: the live pool could not be read (fetchFootlePlayerPool returned nothing), section 1 stands on its own
+
+simFootleDaily: all green
+
+
+----- simGmStaff.mjs (FAIL) -----
+  FAIL: Arsenal natural: line 5 of 81 differs
+  FAIL: Bayern Munich nines: line 5 of 63 differs
+  FAIL: PSG nines: line 5 of 74 differs
+  FAIL: AC Milan natural: line 4 of 55 differs
+  FAIL: AC Milan nines: line 4 of 70 differs
+  FAIL: Coventry City natural: line 5 of 53 differs
+  FAIL: Ipswich Town natural: line 5 of 55 differs
+  FAIL: Ipswich Town nines: line 5 of 68 differs
+  FAIL: run 26 is Clermont  natural, the fixture has Club Brugge  natural
+  FAIL: run 27 is Clermont  nines, the fixture has Club Brugge  nines
+  FAIL: run 28 is Krasnodar  natural, the fixture has Konyaspor  natural
+  FAIL: run 29 is Krasnodar  nines, the fixture has Konyaspor  nines
+
+----- simMoney.mjs (FAIL) -----
+  FAIL: biggest save is 84.3 KB
+1 FAILURES
+
+----- simNascarDriver.mjs (FAIL) -----
+    if (!rows) throw new Error(`${table}: the database did not answer after three attempts`);
+Error: nascar_drivers: the database did not answer after three attempts
+
+----- simPerfectSeasonWheel.mjs (FAIL) -----
+  FAIL [nba]: the wheel read returned nothing (database unreachable or a page failed every retry)
+  FAIL [nhl]: the wheel read returned nothing (database unreachable or a page failed every retry)
+  FAIL [mlb]: the wheel read returned nothing (database unreachable or a page failed every retry)
+  FAIL [nfl]: the wheel read returned nothing (database unreachable or a page failed every retry)
+  FAIL [nba]: no full wheel to check against (section 1 failed to read it)
+  FAIL [nhl]: no full wheel to check against (section 1 failed to read it)
+  FAIL [mlb]: no full wheel to check against (section 1 failed to read it)
+  FAIL [nfl]: no full wheel to check against (section 1 failed to read it)
+
+----- simSafari.mjs (FAIL) -----
+  FAIL: src/hooks/useTransferPathGuidance.test.ts: regex lookbehind, a parse error in Safari before 16.4
+  FAIL: src/components/club-manager/LiveSimMotion.css: hand written 100vh, which overflows under the iOS toolbar (use 100dvh)
+
+----- simSoccerStints.mjs (FAIL) -----
+0) the overlay, both function maps and the migration list are one list
+   overlay 241, grid map 241, connect4 map 241, migration list 241, expected_entries 241
+   0 mismatches across the four copies
+[SIM_OFFLINE_BLOCK] database fetch https://flawuiqbvjobmkfkauhw.supabase.co
+[SIM_OFFLINE_BLOCK] database fetch https://flawuiqbvjobmkfkauhw.supabase.co
+[SIM_OFFLINE_BLOCK] database fetch https://flawuiqbvjobmkfkauhw.supabase.co
+[SIM_OFFLINE_BLOCK] database fetch https://flawuiqbvjobmkfkauhw.supabase.co
+could not read soccer_player_club_stints after id null (Offline harness blocked fetch to https://flawuiqbvjobmkfkauhw.supabase.co); refusing to run
+
+
+----- simTycoonSeasonReview.mjs (FAIL) -----
+AssertionError [ERR_ASSERTION]: node:fs:1630
+Error: ENOENT: no such file or directory, scandir '/home/runner/work/ballpark-hero/ballpark-hero/tycoon-season-review-artifacts/asset-cache'
+
+----- simWhodTheyBeat.mjs (FAIL) -----
+[SIM_OFFLINE_BLOCK] database fetch https://flawuiqbvjobmkfkauhw.supabase.co
+   sb: SKIPPED, SUPABASE UNREACHABLE. NOT CHECKED.
+[SIM_OFFLINE_BLOCK] database fetch https://flawuiqbvjobmkfkauhw.supabase.co
+   nba: SKIPPED, SUPABASE UNREACHABLE. NOT CHECKED.
+[SIM_OFFLINE_BLOCK] database fetch https://flawuiqbvjobmkfkauhw.supabase.co
+   ws: SKIPPED, SUPABASE UNREACHABLE. NOT CHECKED.
+   cup: SKIPPED, SUPABASE UNREACHABLE. NOT CHECKED.
+   wnba: SKIPPED, SUPABASE UNREACHABLE. NOT CHECKED.
+SUPABASE UNREACHABLE FOR AT LEAST ONE POOL. THE YEAR SIMULATION DID NOT RUN.
+
+simWhodTheyBeat: green (WITH LOUD SKIPS ABOVE)
+[SIM_OFFLINE_BLOCK] database fetch https://flawuiqbvjobmkfkauhw.supabase.co
+[SIM_OFFLINE_BLOCK] database fetch https://flawuiqbvjobmkfkauhw.supabase.co
+
+
+10 harnesses not green.

@@ -1,0 +1,25 @@
+[SIM_OFFLINE_BLOCK] database fetch https://flawuiqbvjobmkfkauhw.supabase.co
+could not read soccer_player_club_stints after id null (Offline harness blocked fetch to https://flawuiqbvjobmkfkauhw.supabase.co); refusing to run
+
+
+----- simTycoonSeasonReview.mjs (FAIL) -----
+AssertionError [ERR_ASSERTION]: node:fs:1630
+Error: ENOENT: no such file or directory, scandir '/home/runner/work/ballpark-hero/ballpark-hero/tycoon-season-review-artifacts/asset-cache'
+
+----- simWhodTheyBeat.mjs (FAIL) -----
+[SIM_OFFLINE_BLOCK] database fetch https://flawuiqbvjobmkfkauhw.supabase.co
+   sb: SKIPPED, SUPABASE UNREACHABLE. NOT CHECKED.
+[SIM_OFFLINE_BLOCK] database fetch https://flawuiqbvjobmkfkauhw.supabase.co
+   nba: SKIPPED, SUPABASE UNREACHABLE. NOT CHECKED.
+[SIM_OFFLINE_BLOCK] database fetch https://flawuiqbvjobmkfkauhw.supabase.co
+   ws: SKIPPED, SUPABASE UNREACHABLE. NOT CHECKED.
+   cup: SKIPPED, SUPABASE UNREACHABLE. NOT CHECKED.
+   wnba: SKIPPED, SUPABASE UNREACHABLE. NOT CHECKED.
+SUPABASE UNREACHABLE FOR AT LEAST ONE POOL. THE YEAR SIMULATION DID NOT RUN.
+
+simWhodTheyBeat: green (WITH LOUD SKIPS ABOVE)
+[SIM_OFFLINE_BLOCK] database fetch https://flawuiqbvjobmkfkauhw.supabase.co
+[SIM_OFFLINE_BLOCK] database fetch https://flawuiqbvjobmkfkauhw.supabase.co
+
+
+10 harnesses not green.
