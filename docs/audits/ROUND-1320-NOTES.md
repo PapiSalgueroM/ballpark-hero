@@ -15,6 +15,7 @@ C:/Users/antho/dukb-handoff/2026-10-10/results-g/finish-1320.md. Step 1's number
 | 2a | the seat while he holds it, the fixture rule and four board controls | 3f07a657, a97168bd | r1320-2a, r1320-2a2, r1320-2aw |
 | 2b | the firing, the market, a job, the year out, the load rules; football one step softer | 299c15db | r1320-2b, r1320-2bw |
 | 3 | the bid, Go to or Stay put; walk stations 8 and 9 | 4c7df8a5, 126e5917 | r1320-3, r1320-3w, r1320-3w2 |
+| final | What's New (c6bc83ed), cut off fixes (1d10b788), review fixes (d41f1404) | d41f1404 | r1320-fa, r1320-fb, r1320-fw, r1320-fw2, r1320-fz |
 
 ## Decisions taken by the builder
 
