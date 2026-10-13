@@ -1,0 +1,3 @@
+wr-head exit=1 45s | simWritesAreSent: 2 failures
+wr-base exit=1 45s | simWritesAreSent: 2 failures
+base-desk exit=1 59s | playCmFinanceDesk: 328 failures

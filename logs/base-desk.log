@@ -1,0 +1,343 @@
+curl 200
+1) A fresh Liverpool career, 10 weeks by quick sim
+  ok    Liverpool, week 10 on disk, kitty 148.9m
+2) The desk at 320 by 640
+  ok    320x640: the desk opened with its top at 48px (scrollY 552 to 499)
+  FAIL: 320x640: the card [data-finance-books] is not on the desk
+  FAIL: 320x640: text under 12px, data-finance-projection: "📊 Projected to season end" at 10px
+  FAIL: 320x640: text under 12px, data-finance-projection: "week 10, 44 left" at 9px
+  FAIL: 320x640: text under 12px, data-finance-projection: "In" at 9px
+  FAIL: 320x640: text under 12px, data-finance-projection: "so far" at 9px
+  FAIL: 320x640: text under 12px, data-finance-projection: "season" at 9px
+  FAIL: 320x640: text under 12px, data-finance-projection: "Tickets · 16 certain home games left" at 10px
+  FAIL: 320x640: text under 12px, data-finance-projection: "· 16 certain home games left" at 10px
+  FAIL: 320x640: text under 12px, data-finance-projection: "£9.5m" at 10px
+  FAIL: 320x640: text under 12px, data-finance-projection: "£50.2m" at 10px
+  FAIL: 320x640: text under 12px, data-finance-projection: "Food and drink" at 10px
+  FAIL: 320x640: text under 12px, data-finance-projection: "£2.3m" at 10px
+  FAIL: 320x640: text under 12px, data-finance-projection: "£12.3m" at 10px
+  FAIL: 320x640: text under 12px, data-finance-projection: "Sponsor · no deal" at 10px
+  FAIL: 320x640: text under 12px, data-finance-projection: "· no deal" at 10px
+  FAIL: 320x640: text under 12px, data-finance-projection: "£0k" at 10px
+  FAIL: 320x640: text under 12px, data-finance-projection: "£0k" at 10px
+  FAIL: 320x640: text under 12px, data-finance-projection: "Players sold · assumes no more deals" at 10px
+  FAIL: 320x640: text under 12px, data-finance-projection: "· assumes no more deals" at 10px
+  FAIL: 320x640: text under 12px, data-finance-projection: "£0k" at 10px
+  FAIL: 320x640: text under 12px, data-finance-projection: "£0k" at 10px
+  FAIL: 320x640: text under 12px, data-finance-projection: "Income" at 10px
+  FAIL: 320x640: text under 12px, data-finance-projection: "£11.9m" at 10px
+  FAIL: 320x640: text under 12px, data-finance-projection: "£62.4m" at 10px
+  FAIL: 320x640: text under 12px, data-finance-projection: "Out" at 9px
+  FAIL: 320x640: text under 12px, data-finance-projection: "Player wages · £1.1m a week" at 10px
+  FAIL: 320x640: text under 12px, data-finance-projection: "· £1.1m a week" at 10px
+  FAIL: 320x640: text under 12px, data-finance-projection: "£10.7m" at 10px
+  FAIL: 320x640: text under 12px, data-finance-projection: "£57.8m" at 10px
+  FAIL: 320x640: text under 12px, data-finance-projection: "Staff wages · £198k a week" at 10px
+  FAIL: 320x640: text under 12px, data-finance-projection: "· £198k a week" at 10px
+  FAIL: 320x640: text under 12px, data-finance-projection: "£2m" at 10px
+  FAIL: 320x640: text under 12px, data-finance-projection: "£10.7m" at 10px
+  FAIL: 320x640: text under 12px, data-finance-projection: "Travel · 16 certain away trips left" at 10px
+  FAIL: 320x640: text under 12px, data-finance-projection: "· 16 certain away trips left" at 10px
+  FAIL: 320x640: text under 12px, data-finance-projection: "£480k" at 10px
+  FAIL: 320x640: text under 12px, data-finance-projection: "£2.4m" at 10px
+  FAIL: 320x640: text under 12px, data-finance-projection: "Players bought · assumes no more deals" at 10px
+  FAIL: 320x640: text under 12px, data-finance-projection: "· assumes no more deals" at 10px
+  FAIL: 320x640: text under 12px, data-finance-projection: "£0k" at 10px
+  FAIL: 320x640: text under 12px, data-finance-projection: "£0k" at 10px
+  FAIL: 320x640: text under 12px, data-finance-projection: "Facilities" at 10px
+  FAIL: 320x640: text under 12px, data-finance-projection: "£0k" at 10px
+  FAIL: 320x640: text under 12px, data-finance-projection: "£0k" at 10px
+  FAIL: 320x640: text under 12px, data-finance-projection: "Staff fees · hires and pay offs" at 10px
+  FAIL: 320x640: text under 12px, data-finance-projection: "· hires and pay offs" at 10px
+  FAIL: 320x640: text under 12px, data-finance-projection: "£0k" at 10px
+  FAIL: 320x640: text under 12px, data-finance-projection: "£0k" at 10px
+  FAIL: 320x640: text under 12px, data-finance-projection: "Spend" at 10px
+  FAIL: 320x640: text under 12px, data-finance-projection: "£13.2m" at 10px
+  FAIL: 320x640: text under 12px, data-finance-projection: "£70.9m" at 10px
+  FAIL: 320x640: text under 12px, data-finance-projection: "Season result" at 10px
+  FAIL: 320x640: text under 12px, data-finance-projection: "-£1.3m" at 10px
+  FAIL: 320x640: text under 12px, data-finance-projection: "-£8.5m" at 10px
+  FAIL: 320x640: text under 12px, data-finance-projection: "Tickets, food, the sponsor, deals, the builders " at 9px
+  FAIL: 320x640: text under 12px, data-pricing-desk: "🎟️ Prices" at 10px
+  FAIL: 320x640: text under 12px, data-pricing-desk: "Fans: Grumbling" at 9px
+  FAIL: 320x640: text under 12px, data-pricing-desk: "Grumbling" at 9px
+  FAIL: 320x640: text under 12px, data-pricing-desk: "🎟️ Fair prices" at 11px
+  FAIL: 320x640: text under 12px, data-pricing-desk: "Cheaper seats, fuller ground, a louder day out." at 9px
+  FAIL: 320x640: text under 12px, data-pricing-desk: "🎫 Standard" at 11px
+  FAIL: 320x640: text under 12px, data-pricing-desk: "The going rate. Nobody writes to the paper about" at 9px
+  FAIL: 320x640: text under 12px, data-pricing-desk: "💼 Premium" at 11px
+  FAIL: 320x640: text under 12px, data-pricing-desk: "More per seat, a few empty ones up in the corner" at 9px
+  FAIL: 320x640: text under 12px, data-pricing-desk: "Tickets about £38 a head. Fans are neutral. The " at 9px
+  FAIL: 320x640: text under 12px, data-pricing-desk: "🍟 Cheap food" at 11px
+  FAIL: 320x640: text under 12px, data-pricing-desk: "Pies at cost. The fans love you for it." at 9px
+  FAIL: 320x640: text under 12px, data-pricing-desk: "🥤 Standard" at 11px
+  FAIL: 320x640: text under 12px, data-pricing-desk: "Ground prices. Nobody cheers, nobody moans." at 9px
+  FAIL: 320x640: text under 12px, data-pricing-desk: "🍾 Premium" at 11px
+  FAIL: 320x640: text under 12px, data-pricing-desk: "Hospitality margins. The fans notice the bill." at 9px
+  FAIL: 320x640: text under 12px, data-pricing-desk: "Food and drink about £9.28 a head, lifted by the" at 9px
+  FAIL: 320x640: text under 12px, data-sponsor-desk: "🤝 Shirt sponsor" at 10px
+  FAIL: 320x640: text under 12px, data-sponsor-desk: "Offers on the table. The money lands in the same" at 10px
+  FAIL: 320x640: text under 12px, data-sponsor-desk: "Windmere Solar (global)" at 11px
+  FAIL: 320x640: text under 12px, data-sponsor-desk: "(global)" at 11px
+  FAIL: 320x640: text under 12px, data-sponsor-desk: "£34m/season" at 11px
+  FAIL: 320x640: text under 12px, data-sponsor-desk: "Money in the account, nothing riding on results." at 9px
+  FAIL: 320x640: text under 12px, data-sponsor-desk: "Sign with Windmere" at 11px
+  FAIL: 320x640: text under 12px, data-sponsor-desk: "Push for more" at 10px
+  FAIL: 320x640: text under 12px, data-sponsor-desk: "Verdanta Energy (global)" at 11px
+  FAIL: 320x640: text under 12px, data-sponsor-desk: "(global)" at 11px
+  FAIL: 320x640: text under 12px, data-sponsor-desk: "£24.5m/season" at 11px
+  FAIL: 320x640: text under 12px, data-sponsor-desk: "Less up front, a serious bonus if you win the le" at 9px
+  FAIL: 320x640: text under 12px, data-sponsor-desk: "Sign with Verdanta" at 11px
+  FAIL: 320x640: text under 12px, data-sponsor-desk: "Push for more" at 10px
+  FAIL: 320x640: text under 12px, data-sponsor-desk: "Quarry Lane Coffee (local)" at 11px
+  FAIL: 320x640: text under 12px, data-sponsor-desk: "(local)" at 11px
+  FAIL: 320x640: text under 12px, data-sponsor-desk: "£20.4m/season" at 11px
+  FAIL: 320x640: text under 12px, data-sponsor-desk: "The smallest cheque, locked in for four seasons," at 9px
+  FAIL: 320x640: text under 12px, data-sponsor-desk: "Sign with Quarry" at 11px
+  FAIL: 320x640: text under 12px, data-sponsor-desk: "Push for more" at 10px
+  FAIL: 320x640: text under 12px, data-sponsor-desk: "Vapour Lane (fans will hate it)" at 11px
+  FAIL: 320x640: text under 12px, data-sponsor-desk: "(fans will hate it)" at 11px
+  FAIL: 320x640: text under 12px, data-sponsor-desk: "£45.9m/season" at 11px
+  FAIL: 320x640: text under 12px, data-sponsor-desk: "The biggest cheque on the table, and the support" at 9px
+  FAIL: 320x640: text under 12px, data-sponsor-desk: "Take the money" at 11px
+  FAIL: 320x640: text under 12px, data-sponsor-desk: "Push for more" at 10px
+  FAIL: 320x640: data-sponsor-desk: button "Sign with Windmere" 28.5px tall
+  FAIL: 320x640: data-sponsor-desk: button "Push for more" 25.0px tall
+  FAIL: 320x640: data-sponsor-desk: button "Sign with Verdanta" 28.5px tall
+  FAIL: 320x640: data-sponsor-desk: button "Push for more" 25.0px tall
+  FAIL: 320x640: data-sponsor-desk: button "Sign with Quarry" 28.5px tall
+  FAIL: 320x640: data-sponsor-desk: button "Push for more" 25.0px tall
+  FAIL: 320x640: data-sponsor-desk: button "Take the money" 29.0px tall
+  FAIL: 320x640: data-sponsor-desk: button "Push for more" 29.0px tall
+  FAIL: 320x640: cut text, data-sponsor-desk: "Vapour Lane (fans will hate it)" scrollWidth 158 over clientWidth 152
+  FAIL: 320x640: the desk still prints "Season result"
+  FAIL: 320x640: no "Board covers running costs" row
+  FAIL: 320x640: no "Kitty change" row
+  320x640: 97 text holders, 14 buttons and 26 figures measured; result row at y 847 (on screen at 348)
+2) The desk at 390 by 844
+  ok    390x844: the desk opened with its top at 96px (scrollY 434 to 434)
+  FAIL: 390x844: the card [data-finance-books] is not on the desk
+  FAIL: 390x844: text under 12px, data-finance-projection: "📊 Projected to season end" at 10px
+  FAIL: 390x844: text under 12px, data-finance-projection: "week 10, 44 left" at 9px
+  FAIL: 390x844: text under 12px, data-finance-projection: "In" at 9px
+  FAIL: 390x844: text under 12px, data-finance-projection: "so far" at 9px
+  FAIL: 390x844: text under 12px, data-finance-projection: "season" at 9px
+  FAIL: 390x844: text under 12px, data-finance-projection: "Tickets · 16 certain home games left" at 10px
+  FAIL: 390x844: text under 12px, data-finance-projection: "· 16 certain home games left" at 10px
+  FAIL: 390x844: text under 12px, data-finance-projection: "£9.5m" at 10px
+  FAIL: 390x844: text under 12px, data-finance-projection: "£50.2m" at 10px
+  FAIL: 390x844: text under 12px, data-finance-projection: "Food and drink" at 10px
+  FAIL: 390x844: text under 12px, data-finance-projection: "£2.3m" at 10px
+  FAIL: 390x844: text under 12px, data-finance-projection: "£12.3m" at 10px
+  FAIL: 390x844: text under 12px, data-finance-projection: "Sponsor · no deal" at 10px
+  FAIL: 390x844: text under 12px, data-finance-projection: "· no deal" at 10px
+  FAIL: 390x844: text under 12px, data-finance-projection: "£0k" at 10px
+  FAIL: 390x844: text under 12px, data-finance-projection: "£0k" at 10px
+  FAIL: 390x844: text under 12px, data-finance-projection: "Players sold · assumes no more deals" at 10px
+  FAIL: 390x844: text under 12px, data-finance-projection: "· assumes no more deals" at 10px
+  FAIL: 390x844: text under 12px, data-finance-projection: "£0k" at 10px
+  FAIL: 390x844: text under 12px, data-finance-projection: "£0k" at 10px
+  FAIL: 390x844: text under 12px, data-finance-projection: "Income" at 10px
+  FAIL: 390x844: text under 12px, data-finance-projection: "£11.9m" at 10px
+  FAIL: 390x844: text under 12px, data-finance-projection: "£62.4m" at 10px
+  FAIL: 390x844: text under 12px, data-finance-projection: "Out" at 9px
+  FAIL: 390x844: text under 12px, data-finance-projection: "Player wages · £1.1m a week" at 10px
+  FAIL: 390x844: text under 12px, data-finance-projection: "· £1.1m a week" at 10px
+  FAIL: 390x844: text under 12px, data-finance-projection: "£10.7m" at 10px
+  FAIL: 390x844: text under 12px, data-finance-projection: "£57.8m" at 10px
+  FAIL: 390x844: text under 12px, data-finance-projection: "Staff wages · £198k a week" at 10px
+  FAIL: 390x844: text under 12px, data-finance-projection: "· £198k a week" at 10px
+  FAIL: 390x844: text under 12px, data-finance-projection: "£2m" at 10px
+  FAIL: 390x844: text under 12px, data-finance-projection: "£10.7m" at 10px
+  FAIL: 390x844: text under 12px, data-finance-projection: "Travel · 16 certain away trips left" at 10px
+  FAIL: 390x844: text under 12px, data-finance-projection: "· 16 certain away trips left" at 10px
+  FAIL: 390x844: text under 12px, data-finance-projection: "£480k" at 10px
+  FAIL: 390x844: text under 12px, data-finance-projection: "£2.4m" at 10px
+  FAIL: 390x844: text under 12px, data-finance-projection: "Players bought · assumes no more deals" at 10px
+  FAIL: 390x844: text under 12px, data-finance-projection: "· assumes no more deals" at 10px
+  FAIL: 390x844: text under 12px, data-finance-projection: "£0k" at 10px
+  FAIL: 390x844: text under 12px, data-finance-projection: "£0k" at 10px
+  FAIL: 390x844: text under 12px, data-finance-projection: "Facilities" at 10px
+  FAIL: 390x844: text under 12px, data-finance-projection: "£0k" at 10px
+  FAIL: 390x844: text under 12px, data-finance-projection: "£0k" at 10px
+  FAIL: 390x844: text under 12px, data-finance-projection: "Staff fees · hires and pay offs" at 10px
+  FAIL: 390x844: text under 12px, data-finance-projection: "· hires and pay offs" at 10px
+  FAIL: 390x844: text under 12px, data-finance-projection: "£0k" at 10px
+  FAIL: 390x844: text under 12px, data-finance-projection: "£0k" at 10px
+  FAIL: 390x844: text under 12px, data-finance-projection: "Spend" at 10px
+  FAIL: 390x844: text under 12px, data-finance-projection: "£13.2m" at 10px
+  FAIL: 390x844: text under 12px, data-finance-projection: "£70.9m" at 10px
+  FAIL: 390x844: text under 12px, data-finance-projection: "Season result" at 10px
+  FAIL: 390x844: text under 12px, data-finance-projection: "-£1.3m" at 10px
+  FAIL: 390x844: text under 12px, data-finance-projection: "-£8.5m" at 10px
+  FAIL: 390x844: text under 12px, data-finance-projection: "Tickets, food, the sponsor, deals, the builders " at 9px
+  FAIL: 390x844: text under 12px, data-pricing-desk: "🎟️ Prices" at 10px
+  FAIL: 390x844: text under 12px, data-pricing-desk: "Fans: Grumbling" at 9px
+  FAIL: 390x844: text under 12px, data-pricing-desk: "Grumbling" at 9px
+  FAIL: 390x844: text under 12px, data-pricing-desk: "🎟️ Fair prices" at 11px
+  FAIL: 390x844: text under 12px, data-pricing-desk: "Cheaper seats, fuller ground, a louder day out." at 9px
+  FAIL: 390x844: text under 12px, data-pricing-desk: "🎫 Standard" at 11px
+  FAIL: 390x844: text under 12px, data-pricing-desk: "The going rate. Nobody writes to the paper about" at 9px
+  FAIL: 390x844: text under 12px, data-pricing-desk: "💼 Premium" at 11px
+  FAIL: 390x844: text under 12px, data-pricing-desk: "More per seat, a few empty ones up in the corner" at 9px
+  FAIL: 390x844: text under 12px, data-pricing-desk: "Tickets about £38 a head. Fans are neutral. The " at 9px
+  FAIL: 390x844: text under 12px, data-pricing-desk: "🍟 Cheap food" at 11px
+  FAIL: 390x844: text under 12px, data-pricing-desk: "Pies at cost. The fans love you for it." at 9px
+  FAIL: 390x844: text under 12px, data-pricing-desk: "🥤 Standard" at 11px
+  FAIL: 390x844: text under 12px, data-pricing-desk: "Ground prices. Nobody cheers, nobody moans." at 9px
+  FAIL: 390x844: text under 12px, data-pricing-desk: "🍾 Premium" at 11px
+  FAIL: 390x844: text under 12px, data-pricing-desk: "Hospitality margins. The fans notice the bill." at 9px
+  FAIL: 390x844: text under 12px, data-pricing-desk: "Food and drink about £9.28 a head, lifted by the" at 9px
+  FAIL: 390x844: text under 12px, data-sponsor-desk: "🤝 Shirt sponsor" at 10px
+  FAIL: 390x844: text under 12px, data-sponsor-desk: "Offers on the table. The money lands in the same" at 10px
+  FAIL: 390x844: text under 12px, data-sponsor-desk: "Windmere Solar (global)" at 11px
+  FAIL: 390x844: text under 12px, data-sponsor-desk: "(global)" at 11px
+  FAIL: 390x844: text under 12px, data-sponsor-desk: "£34m/season" at 11px
+  FAIL: 390x844: text under 12px, data-sponsor-desk: "Money in the account, nothing riding on results." at 9px
+  FAIL: 390x844: text under 12px, data-sponsor-desk: "Sign with Windmere" at 11px
+  FAIL: 390x844: text under 12px, data-sponsor-desk: "Push for more" at 10px
+  FAIL: 390x844: text under 12px, data-sponsor-desk: "Verdanta Energy (global)" at 11px
+  FAIL: 390x844: text under 12px, data-sponsor-desk: "(global)" at 11px
+  FAIL: 390x844: text under 12px, data-sponsor-desk: "£24.5m/season" at 11px
+  FAIL: 390x844: text under 12px, data-sponsor-desk: "Less up front, a serious bonus if you win the le" at 9px
+  FAIL: 390x844: text under 12px, data-sponsor-desk: "Sign with Verdanta" at 11px
+  FAIL: 390x844: text under 12px, data-sponsor-desk: "Push for more" at 10px
+  FAIL: 390x844: text under 12px, data-sponsor-desk: "Quarry Lane Coffee (local)" at 11px
+  FAIL: 390x844: text under 12px, data-sponsor-desk: "(local)" at 11px
+  FAIL: 390x844: text under 12px, data-sponsor-desk: "£20.4m/season" at 11px
+  FAIL: 390x844: text under 12px, data-sponsor-desk: "The smallest cheque, locked in for four seasons," at 9px
+  FAIL: 390x844: text under 12px, data-sponsor-desk: "Sign with Quarry" at 11px
+  FAIL: 390x844: text under 12px, data-sponsor-desk: "Push for more" at 10px
+  FAIL: 390x844: text under 12px, data-sponsor-desk: "Vapour Lane (fans will hate it)" at 11px
+  FAIL: 390x844: text under 12px, data-sponsor-desk: "(fans will hate it)" at 11px
+  FAIL: 390x844: text under 12px, data-sponsor-desk: "£45.9m/season" at 11px
+  FAIL: 390x844: text under 12px, data-sponsor-desk: "The biggest cheque on the table, and the support" at 9px
+  FAIL: 390x844: text under 12px, data-sponsor-desk: "Take the money" at 11px
+  FAIL: 390x844: text under 12px, data-sponsor-desk: "Push for more" at 10px
+  FAIL: 390x844: data-sponsor-desk: button "Sign with Windmere" 28.5px tall
+  FAIL: 390x844: data-sponsor-desk: button "Push for more" 25.0px tall
+  FAIL: 390x844: data-sponsor-desk: button "Sign with Verdanta" 28.5px tall
+  FAIL: 390x844: data-sponsor-desk: button "Push for more" 25.0px tall
+  FAIL: 390x844: data-sponsor-desk: button "Sign with Quarry" 28.5px tall
+  FAIL: 390x844: data-sponsor-desk: button "Push for more" 25.0px tall
+  FAIL: 390x844: data-sponsor-desk: button "Take the money" 29.0px tall
+  FAIL: 390x844: data-sponsor-desk: button "Push for more" 29.0px tall
+  FAIL: 390x844: the desk still prints "Season result"
+  FAIL: 390x844: no "Board covers running costs" row
+  FAIL: 390x844: no "Kitty change" row
+  390x844: 97 text holders, 14 buttons and 26 figures measured; result row at y 793 (on screen at 359)
+2) The desk at 1280 by 900
+  ok    1280x900: the desk opened with its top at 229px (scrollY 317 to 317)
+  FAIL: 1280x900: the card [data-finance-books] is not on the desk
+  FAIL: 1280x900: text under 12px, data-finance-projection: "📊 Projected to season end" at 10px
+  FAIL: 1280x900: text under 12px, data-finance-projection: "week 10, 44 left" at 9px
+  FAIL: 1280x900: text under 12px, data-finance-projection: "In" at 9px
+  FAIL: 1280x900: text under 12px, data-finance-projection: "so far" at 9px
+  FAIL: 1280x900: text under 12px, data-finance-projection: "season" at 9px
+  FAIL: 1280x900: text under 12px, data-finance-projection: "Tickets · 16 certain home games left" at 10px
+  FAIL: 1280x900: text under 12px, data-finance-projection: "· 16 certain home games left" at 10px
+  FAIL: 1280x900: text under 12px, data-finance-projection: "£9.5m" at 10px
+  FAIL: 1280x900: text under 12px, data-finance-projection: "£50.2m" at 10px
+  FAIL: 1280x900: text under 12px, data-finance-projection: "Food and drink" at 10px
+  FAIL: 1280x900: text under 12px, data-finance-projection: "£2.3m" at 10px
+  FAIL: 1280x900: text under 12px, data-finance-projection: "£12.3m" at 10px
+  FAIL: 1280x900: text under 12px, data-finance-projection: "Sponsor · no deal" at 10px
+  FAIL: 1280x900: text under 12px, data-finance-projection: "· no deal" at 10px
+  FAIL: 1280x900: text under 12px, data-finance-projection: "£0k" at 10px
+  FAIL: 1280x900: text under 12px, data-finance-projection: "£0k" at 10px
+  FAIL: 1280x900: text under 12px, data-finance-projection: "Players sold · assumes no more deals" at 10px
+  FAIL: 1280x900: text under 12px, data-finance-projection: "· assumes no more deals" at 10px
+  FAIL: 1280x900: text under 12px, data-finance-projection: "£0k" at 10px
+  FAIL: 1280x900: text under 12px, data-finance-projection: "£0k" at 10px
+  FAIL: 1280x900: text under 12px, data-finance-projection: "Income" at 10px
+  FAIL: 1280x900: text under 12px, data-finance-projection: "£11.9m" at 10px
+  FAIL: 1280x900: text under 12px, data-finance-projection: "£62.4m" at 10px
+  FAIL: 1280x900: text under 12px, data-finance-projection: "Out" at 9px
+  FAIL: 1280x900: text under 12px, data-finance-projection: "Player wages · £1.1m a week" at 10px
+  FAIL: 1280x900: text under 12px, data-finance-projection: "· £1.1m a week" at 10px
+  FAIL: 1280x900: text under 12px, data-finance-projection: "£10.7m" at 10px
+  FAIL: 1280x900: text under 12px, data-finance-projection: "£57.8m" at 10px
+  FAIL: 1280x900: text under 12px, data-finance-projection: "Staff wages · £198k a week" at 10px
+  FAIL: 1280x900: text under 12px, data-finance-projection: "· £198k a week" at 10px
+  FAIL: 1280x900: text under 12px, data-finance-projection: "£2m" at 10px
+  FAIL: 1280x900: text under 12px, data-finance-projection: "£10.7m" at 10px
+  FAIL: 1280x900: text under 12px, data-finance-projection: "Travel · 16 certain away trips left" at 10px
+  FAIL: 1280x900: text under 12px, data-finance-projection: "· 16 certain away trips left" at 10px
+  FAIL: 1280x900: text under 12px, data-finance-projection: "£480k" at 10px
+  FAIL: 1280x900: text under 12px, data-finance-projection: "£2.4m" at 10px
+  FAIL: 1280x900: text under 12px, data-finance-projection: "Players bought · assumes no more deals" at 10px
+  FAIL: 1280x900: text under 12px, data-finance-projection: "· assumes no more deals" at 10px
+  FAIL: 1280x900: text under 12px, data-finance-projection: "£0k" at 10px
+  FAIL: 1280x900: text under 12px, data-finance-projection: "£0k" at 10px
+  FAIL: 1280x900: text under 12px, data-finance-projection: "Facilities" at 10px
+  FAIL: 1280x900: text under 12px, data-finance-projection: "£0k" at 10px
+  FAIL: 1280x900: text under 12px, data-finance-projection: "£0k" at 10px
+  FAIL: 1280x900: text under 12px, data-finance-projection: "Staff fees · hires and pay offs" at 10px
+  FAIL: 1280x900: text under 12px, data-finance-projection: "· hires and pay offs" at 10px
+  FAIL: 1280x900: text under 12px, data-finance-projection: "£0k" at 10px
+  FAIL: 1280x900: text under 12px, data-finance-projection: "£0k" at 10px
+  FAIL: 1280x900: text under 12px, data-finance-projection: "Spend" at 10px
+  FAIL: 1280x900: text under 12px, data-finance-projection: "£13.2m" at 10px
+  FAIL: 1280x900: text under 12px, data-finance-projection: "£70.9m" at 10px
+  FAIL: 1280x900: text under 12px, data-finance-projection: "Season result" at 10px
+  FAIL: 1280x900: text under 12px, data-finance-projection: "-£1.3m" at 10px
+  FAIL: 1280x900: text under 12px, data-finance-projection: "-£8.5m" at 10px
+  FAIL: 1280x900: text under 12px, data-finance-projection: "Tickets, food, the sponsor, deals, the builders " at 9px
+  FAIL: 1280x900: text under 12px, data-pricing-desk: "🎟️ Prices" at 10px
+  FAIL: 1280x900: text under 12px, data-pricing-desk: "Fans: Grumbling" at 9px
+  FAIL: 1280x900: text under 12px, data-pricing-desk: "Grumbling" at 9px
+  FAIL: 1280x900: text under 12px, data-pricing-desk: "🎟️ Fair prices" at 11px
+  FAIL: 1280x900: text under 12px, data-pricing-desk: "Cheaper seats, fuller ground, a louder day out." at 9px
+  FAIL: 1280x900: text under 12px, data-pricing-desk: "🎫 Standard" at 11px
+  FAIL: 1280x900: text under 12px, data-pricing-desk: "The going rate. Nobody writes to the paper about" at 9px
+  FAIL: 1280x900: text under 12px, data-pricing-desk: "💼 Premium" at 11px
+  FAIL: 1280x900: text under 12px, data-pricing-desk: "More per seat, a few empty ones up in the corner" at 9px
+  FAIL: 1280x900: text under 12px, data-pricing-desk: "Tickets about £38 a head. Fans are neutral. The " at 9px
+  FAIL: 1280x900: text under 12px, data-pricing-desk: "🍟 Cheap food" at 11px
+  FAIL: 1280x900: text under 12px, data-pricing-desk: "Pies at cost. The fans love you for it." at 9px
+  FAIL: 1280x900: text under 12px, data-pricing-desk: "🥤 Standard" at 11px
+  FAIL: 1280x900: text under 12px, data-pricing-desk: "Ground prices. Nobody cheers, nobody moans." at 9px
+  FAIL: 1280x900: text under 12px, data-pricing-desk: "🍾 Premium" at 11px
+  FAIL: 1280x900: text under 12px, data-pricing-desk: "Hospitality margins. The fans notice the bill." at 9px
+  FAIL: 1280x900: text under 12px, data-pricing-desk: "Food and drink about £9.28 a head, lifted by the" at 9px
+  FAIL: 1280x900: text under 12px, data-sponsor-desk: "🤝 Shirt sponsor" at 10px
+  FAIL: 1280x900: text under 12px, data-sponsor-desk: "Offers on the table. The money lands in the same" at 10px
+  FAIL: 1280x900: text under 12px, data-sponsor-desk: "Windmere Solar (global)" at 11px
+  FAIL: 1280x900: text under 12px, data-sponsor-desk: "(global)" at 11px
+  FAIL: 1280x900: text under 12px, data-sponsor-desk: "£34m/season" at 11px
+  FAIL: 1280x900: text under 12px, data-sponsor-desk: "Money in the account, nothing riding on results." at 9px
+  FAIL: 1280x900: text under 12px, data-sponsor-desk: "Sign with Windmere" at 11px
+  FAIL: 1280x900: text under 12px, data-sponsor-desk: "Push for more" at 10px
+  FAIL: 1280x900: text under 12px, data-sponsor-desk: "Verdanta Energy (global)" at 11px
+  FAIL: 1280x900: text under 12px, data-sponsor-desk: "(global)" at 11px
+  FAIL: 1280x900: text under 12px, data-sponsor-desk: "£24.5m/season" at 11px
+  FAIL: 1280x900: text under 12px, data-sponsor-desk: "Less up front, a serious bonus if you win the le" at 9px
+  FAIL: 1280x900: text under 12px, data-sponsor-desk: "Sign with Verdanta" at 11px
+  FAIL: 1280x900: text under 12px, data-sponsor-desk: "Push for more" at 10px
+  FAIL: 1280x900: text under 12px, data-sponsor-desk: "Quarry Lane Coffee (local)" at 11px
+  FAIL: 1280x900: text under 12px, data-sponsor-desk: "(local)" at 11px
+  FAIL: 1280x900: text under 12px, data-sponsor-desk: "£20.4m/season" at 11px
+  FAIL: 1280x900: text under 12px, data-sponsor-desk: "The smallest cheque, locked in for four seasons," at 9px
+  FAIL: 1280x900: text under 12px, data-sponsor-desk: "Sign with Quarry" at 11px
+  FAIL: 1280x900: text under 12px, data-sponsor-desk: "Push for more" at 10px
+  FAIL: 1280x900: text under 12px, data-sponsor-desk: "Vapour Lane (fans will hate it)" at 11px
+  FAIL: 1280x900: text under 12px, data-sponsor-desk: "(fans will hate it)" at 11px
+  FAIL: 1280x900: text under 12px, data-sponsor-desk: "£45.9m/season" at 11px
+  FAIL: 1280x900: text under 12px, data-sponsor-desk: "The biggest cheque on the table, and the support" at 9px
+  FAIL: 1280x900: text under 12px, data-sponsor-desk: "Take the money" at 11px
+  FAIL: 1280x900: text under 12px, data-sponsor-desk: "Push for more" at 10px
+  FAIL: 1280x900: data-sponsor-desk: button "Sign with Windmere" 28.5px tall
+  FAIL: 1280x900: data-sponsor-desk: button "Push for more" 25.0px tall
+  FAIL: 1280x900: data-sponsor-desk: button "Sign with Verdanta" 28.5px tall
+  FAIL: 1280x900: data-sponsor-desk: button "Push for more" 25.0px tall
+  FAIL: 1280x900: data-sponsor-desk: button "Sign with Quarry" 28.5px tall
+  FAIL: 1280x900: data-sponsor-desk: button "Push for more" 25.0px tall
+  FAIL: 1280x900: data-sponsor-desk: button "Take the money" 29.0px tall
+  FAIL: 1280x900: data-sponsor-desk: button "Push for more" 29.0px tall
+  FAIL: 1280x900: the desk still prints "Season result"
+  FAIL: 1280x900: no "Board covers running costs" row
+  FAIL: 1280x900: no "Kitty change" row
+  1280x900: 97 text holders, 14 buttons and 26 figures measured; result row at y 809 (on screen at 492)
+  pictures in /home/runner/work/_temp/rc-out/files/base
+
+playCmFinanceDesk: 328 failures

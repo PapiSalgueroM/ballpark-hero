@@ -1,0 +1,5 @@
+#!serial
+#!playwright
+wr-head: node_modules/.bin/vite build > /dev/null 2>&1 && node scripts/simWritesAreSent.mjs
+wr-base: mkdir -p .tbw && git archive c9c77eba | tar -x -C .tbw && ln -s $PWD/node_modules .tbw/node_modules && cd .tbw && node_modules/.bin/vite build > /dev/null 2>&1 && node scripts/simWritesAreSent.mjs
+base-desk: mkdir -p .tbase $RC_OUT/base && git archive c9c77eba | tar -x -C .tbase && cd .tbase && ../node_modules/.bin/vite build > $RC_OUT/base/build.log 2>&1 && (node ../scripts/lib/hostLikeServer.mjs dist 4193 > $RC_OUT/base/server.log 2>&1 &) && for i in $(seq 1 40); do curl -sf -o /dev/null http://127.0.0.1:4193/ && break; sleep 1; done; curl -s -o /dev/null -w "curl %{http_code}\n" http://127.0.0.1:4193/; RC_OUT=$RC_OUT/base SWEEP_BASE=http://127.0.0.1:4193 node ../scripts/playCmFinanceDesk.mjs
