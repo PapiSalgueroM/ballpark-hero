@@ -1,0 +1,7 @@
+#!serve
+#!playwright
+#!serial
+basebuild: git worktree add /tmp/base 8fea14e216fb550b4676ac29f06867234594df21 > /dev/null 2>&1; ln -s "$PWD/node_modules" /tmp/base/node_modules; (cd /tmp/base && npm run build > /tmp/basebuild.log 2>&1); s=$?; tail -3 /tmp/basebuild.log; nohup node scripts/lib/hostLikeServer.mjs /tmp/base/dist 4174 > /tmp/baseserver.log 2>&1 & sleep 3; curl -s -o /dev/null -w "base server %{http_code}\n" http://localhost:4174/club-manager; exit $s
+chunkdiff2: node .rc/x/chunkDiff2.mjs http://localhost:4174 http://localhost:4173
+weight: SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs > /tmp/w.log 2>&1; s=$?; cp /tmp/w.log "$RC_OUT/weight.log"; grep -a -E "club-manager|hot-seat|deadline-day|whats-new" /tmp/w.log | cut -c1-200; tail -1 /tmp/w.log | cut -c1-200; exit $s
+weight-base: R="$PWD"; cd /tmp/base && SWEEP_OFFLINE=1 BASE=http://localhost:4174 SWEEP_BASE=http://localhost:4174 node scripts/sweepWeight.mjs > /tmp/wb.log 2>&1; s=$?; grep -a -E "club-manager|hot-seat|deadline-day|whats-new" /tmp/wb.log | cut -c1-200; tail -1 /tmp/wb.log | cut -c1-200; exit $s

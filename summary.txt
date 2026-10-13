@@ -1,0 +1,5 @@
+build exit=0 30s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+basebuild exit=0 35s | base server 200
+chunkdiff2 exit=0 21s |   differing beyond hashed names: index.css 32.16K to 32.17K gz (+8 bytes); index.js 235.90K to 235.92K gz (+18 bytes); DeadlineDay.js 13.93K to 13.93K gz (-2 bytes); useR
+weight exit=0 27s | sweepWeight: green. Every page is inside its budget, and the budgets came down this round.
+weight-base exit=0 27s | sweepWeight: green. Every page is inside its budget, and the budgets came down this round.

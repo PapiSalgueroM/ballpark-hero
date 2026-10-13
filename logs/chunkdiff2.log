@@ -1,0 +1,6 @@
+/club-manager: 41 files on base, 41 on head; 622.4K gz to 622.2K gz
+  differing beyond hashed names: index.css 32.16K to 32.17K gz (+8 bytes); index.js 235.90K to 235.92K gz (+18 bytes); ClubManager.js 24.34K to 25.00K gz (+675 bytes); clubManager.js 252.31K to 252.31K gz (+1 bytes); clubManagerMeters.js only on base 0.98K gz; useRevealScroll.js 0.78K to 0.79K gz (+16 bytes); formatNumber.js only on head 0.15K gz
+/manager-hot-seat: 43 files on base, 43 on head; 639.7K gz to 639.7K gz
+  differing beyond hashed names: index.css 32.16K to 32.17K gz (+8 bytes); index.js 235.90K to 235.92K gz (+18 bytes); ManagerHotSeat.js 6.94K to 6.94K gz (+4 bytes); useRevealScroll.js 0.78K to 0.79K gz (+16 bytes); clubManagerMeters.js 0.98K to 0.98K gz (+0 bytes); managerHotSeat.js 6.80K to 6.80K gz (-1 bytes); clubManager.js 252.31K to 252.31K gz (+1 bytes)
+/deadline-day: 47 files on base, 47 on head; 649.8K gz to 649.9K gz
+  differing beyond hashed names: index.css 32.16K to 32.17K gz (+8 bytes); index.js 235.90K to 235.92K gz (+18 bytes); DeadlineDay.js 13.93K to 13.93K gz (-2 bytes); useRevealScroll.js 0.78K to 0.79K gz (+16 bytes); managerHotSeat.js 6.80K to 6.80K gz (-1 bytes); clubManagerMeters.js 0.98K to 0.98K gz (+0 bytes); clubManager.js 252.31K to 252.31K gz (+1 bytes)
