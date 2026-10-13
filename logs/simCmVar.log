@@ -1,0 +1,57 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
++ actual - expected
+
++ [
++   {
++     errorName: 'Error',
++     message: "ENOENT: no such file or directory, open '/home/runner/work/ballpark-hero/ballpark-hero/.sim-control/cm-var-b7INFd/original.cjs'",
++     stack: "Error: ENOENT: no such file or directory, open '/home/runner/work/ballpark-hero/ballpark-hero/.sim-control/cm-var-b7INFd/original.cjs'\n" +
++       '    at Object.readFileSync (node:fs:483:20)\n' +
++       '    at defaultLoadImpl (node:internal/modules/cjs/loader:1243:17)\n' +
++       '    at loadSource (node:internal/modules/cjs/loader:1955:20)\n' +
++       '    at Object..js (node:internal/modules/cjs/loader:2053:44)\n' +
++       '    at Module.load (node:internal/modules/cjs/loader:1651:32)\n' +
++       '    at Module._load (node:internal/modules/cjs/loader:1443:12)\n' +
++       '    at wrapModuleLoad (node:internal/modules/cjs/loader:261:19)\n' +
++       '    at Module.require (node:internal/modules/cjs/loader:1674:12)\n' +
++       '    at require (node:internal/modules/helpers:157:16)\n' +
++       '    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmVar.mjs:225:76',
++     status: 'failed',
++     title: 'asks for reviews only where the competition uses them and plays the same match everywhere else'
++   }
++ ]
+- []
+
+    at main (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmVar.mjs:711:14)
+    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmVar.mjs:727:46 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: [
+    {
+      title: 'asks for reviews only where the competition uses them and plays the same match everywhere else',
+      status: 'failed',
+      errorName: 'Error',
+      message: "ENOENT: no such file or directory, open '/home/runner/work/ballpark-hero/ballpark-hero/.sim-control/cm-var-b7INFd/original.cjs'",
+      stack: "Error: ENOENT: no such file or directory, open '/home/runner/work/ballpark-hero/ballpark-hero/.sim-control/cm-var-b7INFd/original.cjs'\n" +
+        '    at Object.readFileSync (node:fs:483:20)\n' +
+        '    at defaultLoadImpl (node:internal/modules/cjs/loader:1243:17)\n' +
+        '    at loadSource (node:internal/modules/cjs/loader:1955:20)\n' +
+        '    at Object..js (node:internal/modules/cjs/loader:2053:44)\n' +
+        '    at Module.load (node:internal/modules/cjs/loader:1651:32)\n' +
+        '    at Module._load (node:internal/modules/cjs/loader:1443:12)\n' +
+        '    at wrapModuleLoad (node:internal/modules/cjs/loader:261:19)\n' +
+        '    at Module.require (node:internal/modules/cjs/loader:1674:12)\n' +
+        '    at require (node:internal/modules/helpers:157:16)\n' +
+        '    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmVar.mjs:225:76'
+    }
+  ],
+  expected: [],
+  operator: 'deepStrictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0
