@@ -1,11 +1,12 @@
 import { describe, expect, it } from 'vitest';
 import {
-  bracketOutcome, collegeAsk, collegeBid, collegeClose, collegeMarket, collegeMarketLine, collegeNextYear,
-  collegeSeatLoad, collegeSitOut, collegeTakeJob, formerFirers, holdsSeat, isFired, lastGraded, newCollegeSeat,
-  sanitizeCollegeSeat, COLLEGE_ASK_TILT,
+  bracketOutcome, championOf, collegeAsk, collegeBid, collegeBidKey, collegeClose, collegeFeedKey, collegeMarket,
+  collegeMarketLine, collegeNextYear, collegePack, collegeSeatLoad, collegeSeatTeams, collegeSitOut, collegeTakeJob,
+  collegeTiers, formerFirers, holdsSeat, isFired, lastGraded, newCollegeSeat, sanitizeCollegeSeat, COLLEGE_ASK_TILT,
   type CollegeLeagueView, type CollegeSeatBlock,
 } from '@/lib/collegeSeat';
-import { seatNextYear, endSeatStint, type GmCareer } from '@/lib/gmSeat';
+import { seatNextYear, endSeatStint, poachBid, seatOffers, type GmCareer, type SeatStint } from '@/lib/gmSeat';
+import { keyedRng } from '@/lib/keyedRng';
 import { gradeSeason, FO_TRUST_START } from '@/lib/foOwnerMandate';
 
 /** Twenty programs: prestige falls with the letter, roster strength runs the other way for the last eight. */
@@ -115,6 +116,63 @@ describe('the market and the move', () => {
     expect(line).not.toContain(String.fromCharCode(0x2013));
     expect(line).not.toContain(String.fromCharCode(0x2014));
   });
+});
+
+/* This game's wider rule: a program that let him go never calls again, in the market or with a buyout.
+   gmSeat's own rule drops only the last program (seatOffers) and no former one (poachBid), so these cases
+   are a coach let go twice, or let go and then winning one tier below the program that let him go, with the
+   keyed draw holding the first program. Every pair is tried and the draws are keyed, so the cases are the
+   same on every run, and each test refuses to pass without meeting one. */
+describe('a program that let him go never calls again', () => {
+  for (const sport of ['cfb', 'cbb'] as const) {
+    const base = view({ sport, fieldSize: sport === 'cfb' ? 12 : 32 });
+    const tiers = collegeTiers(base);
+    const at = (myTeam: string) => closed({ ...base, myTeam, season: 2031 });
+
+    it(`${sport}: the market drops the first program that let him go when gmSeat draws it`, () => {
+      let drawnFirst = 0;
+      for (const a of base.programs) {
+        for (const b of base.programs) {
+          if (a.id === b.id) continue;
+          const v = at(b.id);
+          const career: GmCareer = { version: 1, seasonsOut: 0, stints: [
+            { team: a.id, tier: tiers.get(a.id)!, from: 2026, grades: ['title', 'overachieved', 'met', 'missed', 'badly'], ended: 'fired' },
+            { team: b.id, tier: tiers.get(b.id)!, from: 2031, grades: ['missed'], ended: 'fired' },
+          ] };
+          const m = collegeMarket({ v: 1, career, trust: 0, mandate: null }, v)!;
+          for (const o of m.offers) expect([a.id, b.id]).not.toContain(o.teamId);
+          const drawn = seatOffers(collegePack(sport), collegeSeatTeams(v), career, 2032, keyedRng(collegeFeedKey(v, career)), championOf(v, 2031));
+          if (drawn.some(o => o.teamId === a.id)) {
+            drawnFirst += 1;
+            expect(m.removed).toBe(drawn.filter(o => o.teamId === a.id).length);
+          }
+        }
+      }
+      expect(drawnFirst, 'no twice fired market drew the first program that let him go, so the rule went untested').toBeGreaterThan(0);
+    });
+
+    it(`${sport}: a buyout bid from a program that let him go is dropped, and the same bid stands without that past`, () => {
+      let dropped = 0;
+      for (const b of base.programs) {
+        if (tiers.get(b.id) === 1) continue;
+        for (let k = 1; k <= 6; k += 1) {
+          const v = at(b.id);
+          const own: SeatStint = { team: b.id, tier: tiers.get(b.id)!, from: 2032 - k, grades: [...Array(k - 1).fill('met'), 'title'] };
+          const alone: GmCareer = { version: 1, seasonsOut: 0, stints: [own] };
+          const raw = poachBid(collegePack(sport), collegeSeatTeams(v), alone, 2032, keyedRng(collegeBidKey(v, alone)), championOf(v, 2031));
+          if (!raw) continue;
+          expect(collegeBid({ v: 1, career: alone, trust: 70, mandate: null }, v)?.teamId).toBe(raw.teamId);
+          const career: GmCareer = { version: 1, seasonsOut: 0, stints: [
+            { team: raw.teamId, tier: tiers.get(raw.teamId)!, from: 2029 - k, grades: ['missed', 'badly', 'badly'], ended: 'fired' }, own,
+          ] };
+          expect(poachBid(collegePack(sport), collegeSeatTeams(v), career, 2032, keyedRng(collegeBidKey(v, career)), championOf(v, 2031))?.teamId).toBe(raw.teamId);
+          expect(collegeBid({ v: 1, career, trust: 70, mandate: null }, v)).toBeNull();
+          dropped += 1;
+        }
+      }
+      expect(dropped, 'no keyed draw bid from a program that let him go, so the rule went untested').toBeGreaterThan(0);
+    });
+  }
 });
 
 describe('the save', () => {

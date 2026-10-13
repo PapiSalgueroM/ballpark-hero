@@ -32,7 +32,10 @@
  *  S4 THE FIRING. Fired exactly when trust reaches zero; firings in both sports; after every firing the market
  *     exists in one of its three states, and closed only when collegeNextYear says shut.
  *  S5 NEVER A PROGRAM THAT LET HIM GO. No offer in any feed and no bid comes from a program that fired him.
- *     Prints what this game's wider rule removed from feeds and bids beyond seatOffers' own.
+ *     Prints what this game's wider rule removed from feeds and bids beyond seatOffers' own. The fleets
+ *     almost never meet the rule, so S5 also tries every pair of programs on keyed draws: a coach let go
+ *     twice (the market must drop the first program when gmSeat draws it) and a coach let go who then wins
+ *     one tier below that program (its bid must be dropped). Both must meet the rule at least once.
  *  S6 THE CALL FROM ABOVE. Every bid follows a season graded 'title' or 'overachieved' (the record and the
  *     oracle), comes from one tier above his program by prestige (tiers computed here), never reaches a tier
  *     1 coach and never names his own program. Prints bids per big year.
@@ -121,9 +124,9 @@ const EDITS = {
   flattrust: ['S3', 'seat', '  const grade = seatGrade(collegePack(view.sport), mandate, out);',
     "  const grade = { ...seatGrade(collegePack(view.sport), mandate, out), result: 'met' as const, trustDelta: 14 };"],
   firedends: ['S4', 'seat', '  if (holdsSeat(block) || !seasonClosed(view)) return null;', '  if (true) return null;'],
-  allowfirer: ['S5', 'seat', '  const offers = drawn.filter(o => !firers.has(o.teamId))', '  const offers = drawn.filter(o => true)',
-    'gm', '.filter(t => t.id !== last.team)', '.filter(t => true)',
-    'seat', '  if (!bid || formerFirers(block.career).has(bid.teamId)) return null;', '  if (!bid) return null;'],
+  /* the two college filters of this game's wider rule, one control each; gmSeat's own last program rule is simGmSeat's */
+  allowfirer: ['S5', 'seat', '  const offers = drawn.filter(o => !firers.has(o.teamId))', '  const offers = drawn.filter(o => true)'],
+  bidfirer: ['S5', 'seat', '  if (!bid || formerFirers(block.career).has(bid.teamId)) return null;', '  if (!bid) return null;'],
   anyseason: ['S6', 'gm', '{ title: 0.6, overachieved: 0.35 }', '{ title: 0.6, overachieved: 0.35, met: 0.35, missed: 0.35, badly: 0.35 }'],
   bidtier: ['S6', 'seat', '  return view.programs.map(p => ({ id: p.id, name: p.name, strength: p.prestige }));',
     '  return view.programs.map(p => ({ id: p.id, name: p.name, strength: p.strength }));'],
@@ -379,7 +382,7 @@ const tallyOf = sportId => (T[sportId] ??= {
   buckets: new Map(), feeds: 0, offers: 0, removed: 0, bids: 0, bidsDropped: 0, bigYears: { title: 0, overachieved: 0 },
   bidsAfter: { title: 0, overachieved: 0 }, moves: { bid: 0, market: 0 }, ended: 0,
   s8Rounds: 0, s8Closes: 0, yearOuts: 0, refusals: { 'in-seat': 0, 'season-open': 0, 'market-closed': 0 }, emptyChairs: 0,
-  careers: [],
+  careers: [], twice: { markets: 0, drawnFirst: 0, removed: 0, bidsDrawn: 0, bidsDropped: 0 },
 });
 const inc = (o, k, n = 1) => { o[k] = (o[k] ?? 0) + n; };
 const without = st => { const c = { ...st }; delete c.seat; return JSON.stringify(c); };
@@ -647,6 +650,62 @@ function marketLoop(sportId, sp, st, rng, startTier, startSeason) {
   }
 }
 
+/* ---- S5's twice fired coaches, on the real programs and a real season's rosters ----
+   The fleets almost never meet this game's wider rule: a coach let go twice whose market draws the FIRST
+   program that let him go, or a coach let go who then wins one tier below that program and draws its bid
+   (r1320-run-a: 0 removals and 0 dropped bids over three seeds). So every pair of programs is tried here, on
+   keyed draws: the same cases on every run and every seed, never a coin toss. gmSeat drops only the last
+   program from a market and no former one from a bid, so every case met here is the college rule's alone. */
+function twiceFired(sportId) {
+  const sp = SPORT[sportId];
+  const t = tallyOf(sportId).twice;
+  const pack = GM_SEAT_PACKS[sportId];
+  const st = sp.init(sp.schools[0].id, lehmer(1320));
+  const season = st.season;
+  const real = sp.B.view(st);
+  const tiers = CS.collegeTiers(real);
+  const at = myTeam => ({ ...real, myTeam, champions: [...real.champions, { season, team: sp.schools[0].id }] });
+  check = 'S5';
+  for (const A of sp.schools) {
+    for (const B of sp.schools) {
+      if (A.id === B.id) continue;
+      const view = at(B.id);
+      const career = { version: 1, seasonsOut: 0, stints: [
+        { team: A.id, tier: tiers.get(A.id), from: season - 5, grades: ['title', 'overachieved', 'met', 'missed', 'badly'], ended: 'fired' },
+        { team: B.id, tier: tiers.get(B.id), from: season, grades: ['missed'], ended: 'fired' },
+      ] };
+      const m = seatCallSafe(() => CS.collegeMarket({ v: 1, career, trust: 0, mandate: null }, view));
+      t.markets += 1;
+      if (!ok(m, () => `${sportId}: no market for a coach let go at ${A.id} and then ${B.id}`)) continue;
+      for (const o of m.offers) ok(o.teamId !== A.id && o.teamId !== B.id, () => `${sportId}: let go at ${A.id} and then ${B.id}, and ${o.teamId} called again`);
+      const drawn = SEAT.seatOffers(pack, CS.collegeSeatTeams(view), career, season + 1, K.keyedRng(CS.collegeFeedKey(view, career)), CS.championOf(view, season));
+      if (drawn.some(o => o.teamId === A.id)) {
+        t.drawnFirst += 1;
+        t.removed += m.removed;
+        ok(m.removed === 1, () => `${sportId}: gmSeat drew ${A.id}, which let him go first, and the market removed ${m.removed}`);
+      }
+    }
+  }
+  for (const B of sp.schools) {
+    if (tiers.get(B.id) === 1) continue;
+    for (let k = 1; k <= 6; k += 1) {
+      const view = at(B.id);
+      const own = { team: B.id, tier: tiers.get(B.id), from: season - k + 1, grades: [...Array(k - 1).fill('met'), 'title'] };
+      const alone = { version: 1, seasonsOut: 0, stints: [own] };
+      const raw = SEAT.poachBid(pack, CS.collegeSeatTeams(view), alone, season + 1, K.keyedRng(CS.collegeBidKey(view, alone)), CS.championOf(view, season));
+      if (!raw) continue;
+      const career = { version: 1, seasonsOut: 0, stints: [
+        { team: raw.teamId, tier: tiers.get(raw.teamId), from: season - k - 2, grades: ['missed', 'badly', 'badly'], ended: 'fired' }, own,
+      ] };
+      const again = SEAT.poachBid(pack, CS.collegeSeatTeams(view), career, season + 1, K.keyedRng(CS.collegeBidKey(view, career)), CS.championOf(view, season));
+      if (!ok(again && again.teamId === raw.teamId, () => `${sportId}: the bid's draw at ${B.id} moved with his past`)) continue;
+      t.bidsDrawn += 1;
+      const bid = seatCallSafe(() => CS.collegeBid({ v: 1, career, trust: 70, mandate: null }, view));
+      if (ok(bid === null, () => `${sportId}: ${raw.teamId} let him go and then bid for him at ${B.id}`)) t.bidsDropped += 1;
+    }
+  }
+}
+
 /* ---- S9's ladder, the same synthetic careers the base probe walked (round 1320 step a) ---- */
 function seatLadder() {
   const out = [];
@@ -688,6 +747,7 @@ for (const seed of SEEDS) {
     }
   }
 }
+for (const sportId of SPORTS) twiceFired(sportId);
 console.log(`simCollegeSeat: ${SPORTS.join(', ')} over seeds ${SEEDS.join(',')}, ${FLEET} dynasties a sport a seed, ${SEASONS} seasons, ${((Date.now() - started) / 1000).toFixed(0)} s`);
 const pct = (a, b) => (b ? `${((100 * a) / b).toFixed(1)}%` : 'n/a');
 
@@ -737,6 +797,10 @@ begin('S5', 'a program that let him go never calls again');
 for (const [s, t] of Object.entries(T)) {
   console.log(`   ${s}: ${t.feeds} feeds holding ${t.offers} offers; this game's wider rule removed ${t.removed} offers (${pct(t.removed, t.offers + t.removed)} of what seatOffers drew) and ${t.bidsDropped} bids (${pct(t.bidsDropped, t.bids + t.bidsDropped)} of the bids drawn)`);
   ok(t.feeds > 0, `${s}: no feed was read`);
+  const w = t.twice;
+  console.log(`   ${s}, twice fired over every pair of programs: ${w.markets} markets, ${w.drawnFirst} in which gmSeat drew the first program that let him go (${pct(w.drawnFirst, w.markets)}), ${w.removed} removed; ${w.bidsDrawn} bids drawn from a program that let him go, ${w.bidsDropped} dropped`);
+  ok(w.drawnFirst > 0 && w.removed === w.drawnFirst, () => `${s}: the twice fired markets never met the wider rule (${w.drawnFirst} drawn, ${w.removed} removed), so it went untested`);
+  ok(w.bidsDrawn > 0 && w.bidsDropped === w.bidsDrawn, () => `${s}: the bids from a program that let him go were not all dropped (${w.bidsDropped} of ${w.bidsDrawn})`);
 }
 
 begin('S6', 'a bid comes from one tier up after a big year');
