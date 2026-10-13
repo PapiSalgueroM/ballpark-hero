@@ -1,0 +1,69 @@
+anchor count 1
+after: 0
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [31m❯[39m src/test/useSaveFenceWatch.test.tsx [2m([22m[2m9 tests[22m[2m | [22m[31m2 failed[39m[2m)[22m[32m 36[2mms[22m[39m
+[31m   [31m×[31m useSaveFenceWatch[2m > [22ma storage event for the fence key sets moved after another tab wrote[39m[32m 19[2mms[22m[39m
+[31m     → expected false to be true // Object.is equality[39m
+   [32m✓[39m useSaveFenceWatch[2m > [22ma clear (key null) checks too[32m 3[2mms[22m[39m
+   [32m✓[39m useSaveFenceWatch[2m > [22mpageshow checks[32m 2[2mms[22m[39m
+   [32m✓[39m useSaveFenceWatch[2m > [22mbecoming visible checks, going hidden does not[32m 2[2mms[22m[39m
+   [32m✓[39m useSaveFenceWatch[2m > [22man event for any other key does nothing, the save itself included[32m 2[2mms[22m[39m
+   [32m✓[39m useSaveFenceWatch[2m > [22man absent fence key is never moved[32m 1[2mms[22m[39m
+   [32m✓[39m useSaveFenceWatch[2m > [22mwrites nothing and adopts nothing: a page that never adopted is never moved[32m 1[2mms[22m[39m
+[31m   [31m×[31m useSaveFenceWatch[2m > [22monce moved it stays moved[39m[32m 2[2mms[22m[39m
+[31m     → expected false to be true // Object.is equality[39m
+   [32m✓[39m useSaveFenceWatch[2m > [22mevery listener is gone after unmount[32m 3[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 2 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/useSaveFenceWatch.test.tsx[2m > [22museSaveFenceWatch[2m > [22ma storage event for the fence key sets moved after another tab wrote
+[31m[1mAssertionError[22m: expected false to be true // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- true[39m
+[31m+ false[39m
+
+[36m [2m❯[22m src/test/useSaveFenceWatch.test.tsx:[2m51:34[22m[39m
+    [90m 49| [39m    [34motherTabWrites[39m()[33m;[39m
+    [90m 50| [39m    [34mstorageEvent[39m([34mfence[39m())[33m;[39m
+    [90m 51| [39m    [34mexpect[39m(result[33m.[39mcurrent[33m.[39mmoved)[33m.[39m[34mtoBe[39m([35mtrue[39m)[33m;[39m
+    [90m   | [39m                                 [31m^[39m
+    [90m 52| [39m  })[33m;[39m
+    [90m 53| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/useSaveFenceWatch.test.tsx[2m > [22museSaveFenceWatch[2m > [22monce moved it stays moved
+[31m[1mAssertionError[22m: expected false to be true // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- true[39m
+[31m+ false[39m
+
+[36m [2m❯[22m src/test/useSaveFenceWatch.test.tsx:[2m126:34[22m[39m
+    [90m124| [39m    [34motherTabWrites[39m()[33m;[39m
+    [90m125| [39m    [34mstorageEvent[39m([34mfence[39m())[33m;[39m
+    [90m126| [39m    [34mexpect[39m(result[33m.[39mcurrent[33m.[39mmoved)[33m.[39m[34mtoBe[39m([35mtrue[39m)[33m;[39m
+    [90m   | [39m                                 [31m^[39m
+    [90m127| [39m    window[33m.[39mlocalStorage[33m.[39m[34mremoveItem[39m([34mfence[39m())[33m;[39m
+    [90m128| [39m    [34mstorageEvent[39m([34mfence[39m())[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m2 failed[39m[22m[2m | [22m[1m[32m7 passed[39m[22m[90m (9)[39m
+[2m   Start at [22m 18:51:04
+[2m   Duration [22m 852ms[2m (transform 51ms, setup 43ms, collect 109ms, tests 36ms, environment 264ms, prepare 99ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/useSaveFenceWatch.test.tsx,title=src/test/useSaveFenceWatch.test.tsx > useSaveFenceWatch > a storage event for the fence key sets moved after another tab wrote,line=51,column=34::AssertionError: expected false to be true // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- true%0A+ false%0A%0A ❯ src/test/useSaveFenceWatch.test.tsx:51:34%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/useSaveFenceWatch.test.tsx,title=src/test/useSaveFenceWatch.test.tsx > useSaveFenceWatch > once moved it stays moved,line=126,column=34::AssertionError: expected false to be true // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- true%0A+ false%0A%0A ❯ src/test/useSaveFenceWatch.test.tsx:126:34%0A%0A
+control exit 1

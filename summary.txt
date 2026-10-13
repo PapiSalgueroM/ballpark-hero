@@ -1,0 +1,3 @@
+ctl-nostorage exit=1 2s | control exit 1
+ctl-nounmount exit=1 1s | control exit 1
+ctl-novisible exit=1 1s | control exit 1
