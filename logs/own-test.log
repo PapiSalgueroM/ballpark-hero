@@ -1,0 +1,39 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+[90mstdout[2m | src/lib/clubManagerTrajectory.test.ts[2m > [22m[2mClub Manager save-bound player trajectories[2m > [22m[2mleaves every real season-zero source row byte-exact without adding potential
+[22m[39mTRAJECTORY original source rows held: 5113
+
+[90mstdout[2m | src/lib/clubManagerTrajectory.test.ts[2m > [22m[2mClub Manager save-bound player trajectories[2m > [22m[2mmakes both rare development turns reachable without escaping their per-season bounds
+[22m[39mTRAJECTORY zero-curve outcomes: {"players":1024,"breakouts":51,"setbacks":35,"unchanged":938}
+
+ [32m✓[39m src/lib/clubManagerOwnClubLevel.test.ts [2m([22m[2m6 tests[22m[2m)[22m[33m 2041[2mms[22m[39m
+   [33m[2m✓[22m[39m the manager's own club is read from his club, never the world roster[2m > [22mhis club strength at the summer rollover is the base read, so the free agent level and the board see it [33m 464[2mms[22m[39m
+   [33m[2m✓[22m[39m the manager's own club is read from his club, never the world roster[2m > [22mthe one club read is the world read, club for club, in today and in a past era, cold and cached [33m 784[2mms[22m[39m
+ [32m✓[39m src/lib/clubManagerWorldRoster.test.ts [2m([22m[2m96 tests[22m[2m)[22m[33m 3040[2mms[22m[39m
+   [33m[2m✓[22m[39m actual world roster continuity through manager callbacks[2m > [22mkeeps the fresh world seed and complete constructor draw vector stable across other careers and clocks [33m 518[2mms[22m[39m
+   [33m[2m✓[22m[39m actual world roster continuity through manager callbacks[2m > [22mpreserves an already higher seeded rating without raising the inherited growth ceiling [33m 329[2mms[22m[39m
+   [33m[2m✓[22m[39m actual world roster continuity through manager callbacks[2m > [22mbuys, joins another job, saves, reloads and rejoins the buyer without seller resurrection [33m 628[2mms[22m[39m
+   [33m[2m✓[22m[39m actual world roster continuity through manager callbacks[2m > [22mkeeps the permanent buyer and seller consistent after actual summer moves and aging [33m 409[2mms[22m[39m
+[90mstdout[2m | src/lib/clubManagerTrajectory.test.ts[2m > [22m[2mClub Manager save-bound player trajectories[2m > [22m[2mrespects every source age curve, rating floor and carried potential ceiling
+[22m[39mTRAJECTORY bounded player years: 122712
+
+[90mstdout[2m | src/lib/clubManagerTrajectory.test.ts[2m > [22m[2mClub Manager save-bound player trajectories[2m > [22m[2mmeasures save variety and leader changes across the complete real source pool
+[22m[39mTRAJECTORY measured real-pool outcomes: {"sourceRows":5113,"clubs":412,"seeds":[7,31,81,307,1207,2026],"years":5,"variedPlayers":5113,"changedClubLeaders":291,"drift":{"0":1803,"1":2050,"2":4104,"3":3670,"4":2705,"5":2107,"6":1478,"7":451,"8":372,"9":206,"10":115,"11":69,"12":33,"13":10,"14":1,"15":4,"16":1,"-2":1157,"-1":1339,"-4":971,"-5":852,"-6":737,"-10":496,"-9":534,"-3":1020,"-13":305,"-8":608,"-21":98,"-24":48,"-27":22,"-29":10,"-30":28,"-7":647,"-12":420,"-14":287,"-16":218,"-15":237,"-11":447,"-20":112,"-17":200,"-19":164,"-26":44,"-25":70,"-31":8,"-23":81,"-22":115,"-28":49,"-18":153,"-33":6,"-34":7,"-32":4,"-38":1,"-35":2,"-36":1,"-37":1}}
+
+[90mstdout[2m | src/lib/clubManagerTrajectory.test.ts[2m > [22m[2msave-scoped actual world projections[2m > [22m[2mmeasures actual seeded world leader changes without asserting an unmeasured frequency
+[22m[39mTRAJECTORY actual world outcomes: {"clubs":454,"seeds":[7,31,81,307,1207,2026],"years":5,"variedClubs":410,"changedLeaders":300,"generatedRows":17786,"drift":{"0":852,"1":1040,"2":2251,"3":2075,"4":1595,"5":1292,"6":908,"7":272,"8":231,"9":124,"10":78,"11":49,"12":19,"13":7,"14":1,"15":1,"16":1,"-5":209,"-2":394,"-1":529,"-4":235,"-3":311,"-6":146,"-9":44,"-8":63,"-13":13,"-7":80,"-10":27,"-12":18,"-16":2,"-14":4,"-11":17,"-22":1,"-19":2,"-17":1}}
+
+ [32m✓[39m src/lib/clubManagerTrajectory.test.ts [2m([22m[2m44 tests[22m[2m)[22m[33m 22192[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager save-bound player trajectories[2m > [22mleaves every real season-zero source row byte-exact without adding potential [33m 546[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager save-bound player trajectories[2m > [22mreplays complete outputs after serialization and arbitrary read order [33m 534[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager save-bound player trajectories[2m > [22mrespects every source age curve, rating floor and carried potential ceiling [33m 16631[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager save-bound player trajectories[2m > [22mmeasures save variety and leader changes across the complete real source pool [33m 346[2mms[22m[39m
+   [33m[2m✓[22m[39m save-scoped actual world projections[2m > [22muses the actual curve and value scale while carrying original identities and simulated ceilings [33m 526[2mms[22m[39m
+   [33m[2m✓[22m[39m save-scoped actual world projections[2m > [22mmeasures actual seeded world leader changes without asserting an unmeasured frequency [33m 2896[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m3 passed[39m[22m[90m (3)[39m
+[2m      Tests [22m [1m[32m146 passed[39m[22m[90m (146)[39m
+[2m   Start at [22m 05:13:57
+[2m   Duration [22m 25.81s[2m (transform 3.72s, setup 303ms, collect 7.18s, tests 27.27s, environment 2.38s, prepare 797ms)[22m
+

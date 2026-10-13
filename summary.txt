@@ -1,0 +1,9 @@
+own-test exit=0 27s |    Duration  25.81s (transform 3.72s, setup 303ms, collect 7.18s, tests 27.27s, environment 2.38s, prepare 797ms)
+simNoRivalNames exit=0 19s | No rival product names found. 0 findings.
+simCmLeagueRules exit=0 77s | simCmLeagueRules: all checks passed (modern, eras, pure, drop4, cupless, shapes, chunks)
+simStorageWrites exit=0 4s | simStorageWrites: all green (owed: 12)
+simHarnessAnchors exit=0 51s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+tsc exit=0 104s | 
+simClubManagerDecisions exit=0 18s | simClubManagerDecisions: 0 findings
+simManagerAppealIsolation exit=0 47s | Equivalent appeal outcomes must agree: passed for 24 original pairs and 3 separate generated-position pairs.
+simFreeAgents exit=0 76s | simFreeAgents: all sections passed

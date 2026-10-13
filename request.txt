@@ -1,0 +1,9 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simCmLeagueRules: node scripts/simCmLeagueRules.mjs
+own-test: node_modules/.bin/vitest run src/lib/clubManagerOwnClubLevel.test.ts src/lib/clubManagerWorldRoster.test.ts src/lib/clubManagerTrajectory.test.ts --testTimeout=300000 --hookTimeout=120000
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+simManagerAppealIsolation: node scripts/simManagerAppealIsolation.mjs
+simClubManagerDecisions: node scripts/simClubManagerDecisions.mjs
+simFreeAgents: node scripts/simFreeAgents.mjs
