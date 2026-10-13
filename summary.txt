@@ -1,0 +1,3 @@
+fb3 exit=1 1s | 1 harness not green.
+fb1 exit=1 3s | 2 harnesses not green.
+fb2 exit=1 63s | 1 harness not green.
