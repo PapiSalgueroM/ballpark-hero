@@ -49,8 +49,8 @@ const routine = (cards: RandomEvent[]) => cards.filter(card => card.id >= 600 &&
 
 function career(patch: Partial<CareerState> = {}): CareerState {
   const stats = { pace: 70, shooting: 70, passing: 70, dribbling: 70, defending: 70, physical: 70, reflexes: 70 };
-  const initial = E.initCareer('Routine Fixture', 'England', 'ST', '2020s', stats, 70, 2020, [CLUB], null, 90);
-  const row: SeasonRecord = { ...initial.seasons[0], year: 2026, age: 31, club: CLUB.name, clubCountry: CLUB.country,
+  const initial = E.initCareer('Routine Fixture', 'England', 'ST', '2020s', stats, 70, 2020, E.FALLBACK_CLUBS, null, 90);
+  const row: SeasonRecord = { ...initial.seasons[0], year: 2026, age: 31, club: CLUB.name, clubCountry: CLUB.country, clubTier: CLUB.tier,
     type: 'playing', apps: 12, leagueApps: 10, goals: 2, assists: 1, rating: 6.8, injury: null, injuryWeeks: 0, injurySevere: false };
   return { ...initial, age: 31, phase: 'playing', retired: false, currentClub: CLUB.name, currentClubCountry: CLUB.country,
     currentLeague: CLUB.league, currentClubTier: CLUB.tier, currentClubColor: CLUB.color, seasons: [row],
@@ -223,8 +223,8 @@ describe('Soccer Career routine saved outcomes', () => {
     expect(chosen.passing).toBe(70); expect(chosen.statBoostNextSeason.passing).toBe(1);
     const restored = E.repairCareer(copy(chosen)); restored.phase = 'playing'; restored.pendingEvents = []; restored.loan = null;
     const without = copy(restored); delete without.statBoostNextSeason.passing;
-    const actual = E.advanceProSeason(restored, [CLUB]);
-    const comparison = E.advanceProSeason(without, [CLUB]);
+    const actual = E.advanceProSeason(restored, E.FALLBACK_CLUBS);
+    const comparison = E.advanceProSeason(without, E.FALLBACK_CLUBS);
     expect(actual.seasons).toHaveLength(restored.seasons.length + 1);
     expect(actual.seasons[actual.seasons.length - 1].type).toBe('playing');
     expect(actual.passing).toBe(comparison.passing + 1);
