@@ -1,0 +1,314 @@
+[
+ {
+  "t": "00:21:50",
+  "kind": "help",
+  "open": true,
+  "text": "How to Play Manager Hot Seat Ads and analytics only run if you press Accept. Essential only keeps them off and every game works the same. Learn more Essential only Accept You walk into a real club on a bad run. The board give you 5 league games and a points target, and you either hit it or you are g"
+ },
+ {
+  "t": "00:21:51",
+  "kind": "audit",
+  "where": "menu",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [],
+  "tap44": 2,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 6
+ },
+ {
+  "t": "00:21:51",
+  "kind": "menu",
+  "text": "Manager Hot Seat Five games. One target. The board are watching. TODAY'S HOT SEAT Westerlo Belgian Pro League. Same club, same week and same target for everyone today. Take today's job FREE PLAY Any club, any time Pick a club or let us pick one. A new season every time. Pick a club Random Manager Hot Seat: Save Your Job Football Game Manager Hot Seat is the short version of Club Manager, on the same engine. Take over a real club on a bad run, read the room before every match, handle the press, and hit the board's points target in five league games before they sack you. Manager Hot Seat is the short, sharp version of Club Manager. You walk into a real club on a bad run, the board give you five league games and a points target, and you either hit it or you are sacked. It runs on the Club Manager engine, so every match, every meter and every press question is the same one the full game play"
+ },
+ {
+  "t": "00:21:52",
+  "kind": "audit",
+  "where": "club picker",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [],
+  "tap44": 3,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 6
+ },
+ {
+  "t": "00:21:52",
+  "kind": "clubs",
+  "n": 21,
+  "sample": [
+   "How to play",
+   "Arsenal",
+   "Manchester City",
+   "Liverpool",
+   "Chelsea",
+   "Manchester United",
+   "Tottenham",
+   "Newcastle",
+   "Nottingham Forest",
+   "Aston Villa",
+   "Crystal Palace",
+   "Brentford"
+  ]
+ },
+ {
+  "t": "00:21:52",
+  "kind": "start",
+  "how": "Newcastle"
+ },
+ {
+  "t": "00:21:53",
+  "kind": "audit",
+  "where": "brief",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [],
+  "tap44": 3,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 9
+ },
+ {
+  "t": "00:21:53",
+  "kind": "brief",
+  "text": "Manager Hot Seat Five games. One target. The board are watching. Back THE JOB Newcastle 5th after 14 league games, and the board want more than the last few weeks. One win and 2 defeats in the last 5. The last manager is gone and the board want an answer. The board's target 5 points from the next 5 league games. The board start on 30 out of 100. If that hits zero first, you are gone on the spot. Board 30 Under pressure Fans 60 Grumbling Dressing room 93 Up for it Take the job Took over after league week 14, 5th of 20. Leash: 5 league games. Manager Hot Seat: Save Your Job Football Game Manager Hot Seat is the short version of Club Manager, on the same engine. Take over a real club on a bad run, read the room before every match, handle the press, and hit the board's points target in five league games before they sack you. Manager Hot Seat is the short, sharp version of Club Manager. You walk into a real club on a bad run, the board give you five league games and a points target, and you either hit it or you are sacked. It runs on the Club Manager engine, so every match, every meter and every press question is the same one the full game plays. Before each match you pick a shape and a team talk, and after it the board, the fans and the dressing room all react. There is a daily, the same club and the same target for everyone, and a free play mode where you can take any club you like. How to play Manager Hot Seat, the free five game sack race Pick the daily club or your own Pick t"
+ },
+ {
+  "t": "00:21:54",
+  "kind": "audit",
+  "where": "match screen",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [],
+  "tap44": 3,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 9
+ },
+ {
+  "t": "00:21:54",
+  "kind": "matchscreen",
+  "text": "Manager Hot Seat Five games. One target. The board are watching. Menu Newcastle 0 of 5 points 5 league games left Board 30 Under pressure Fans 60 Grumbling Dressing room 93 Up for it Premier League · Round 15 Home to Coventry City Nothing between the sides. This is a game about who wants it more. Shape 🛡️ Defensive ⚖️ Balanced ⚔️ Attacking Team talk Say nothing 🧊 Calm them 🔥 Fire them up 📣 Demand more 💢 Hairdryer Kick off Manager Hot Seat: Save Your Job Football Game Manager Hot Seat is the short version of Club Manager, on the same engine. Take over a real club on a bad run, read the room before every match, handle the press, and hit the board's points target in five league games before they sack you. Manager Hot Seat is the short, sharp version of Club Manager. You walk into a real club on a bad run, the board give you five league games and a points target, and you either hit it or you are sacked. It runs on the Club Manager engine, so every match, every meter and every press question is the same one the full game plays. Before each match you pick a shape and a team talk, and after it the board, the fans and the dressing room all react. There is a daily, the same club and th",
+  "buttons": [
+   "How to play",
+   "Menu",
+   "🛡️ Defensive",
+   "⚖️ Balanced",
+   "⚔️ Attacking",
+   "Say nothing",
+   "🧊 Calm them",
+   "🔥 Fire them up",
+   "📣 Demand more",
+   "💢 Hairdryer",
+   "Kick off"
+  ]
+ },
+ {
+  "t": "00:21:54",
+  "kind": "options",
+  "talks": [
+   "How to play",
+   "Menu",
+   "🛡️ Defensive",
+   "⚖️ Balanced",
+   "⚔️ Attacking",
+   "Say nothing",
+   "🧊 Calm them",
+   "🔥 Fire them up",
+   "📣 Demand more",
+   "💢 Hairdryer",
+   "Kick off"
+  ]
+ },
+ {
+  "t": "00:21:55",
+  "kind": "result",
+  "n": 1,
+  "text": "Manager Hot Seat Five games. One target. The board are watching. Menu Newcastle 3 of 5 points 4 league games left Board 35 Under pressure Fans 65 Singing Dressing room 98 Up for it Premier League · Round 15 Newcastle 3 to 1 Coventry CityWon Board up 4.5. THE PRESS ROOM Harvey Barnes has started 0 of the last 10. Is he finished at this club? He is still my player He has to earn it back You would have to ask him Manager Hot Seat: Save Your Job Football Game Manager Hot Seat is the short version of Club Manager, on the same engine. Take over a real club on a bad run, read the room before every match, handle the press, and hit the board's points target in five league games before they sack you. Manager Hot Seat is the short, sharp version of Club Manager. You walk into a real club on a bad run, the board give you five league games and a points target, and you either hit it or you are sacked."
+ },
+ {
+  "t": "00:21:55",
+  "kind": "press",
+  "answered": "He is still my player"
+ },
+ {
+  "t": "00:21:57",
+  "kind": "options",
+  "talks": [
+   "How to play",
+   "Menu",
+   "🛡️ Defensive",
+   "⚖️ Balanced",
+   "⚔️ Attacking",
+   "Say nothing",
+   "🧊 Calm them",
+   "🔥 Fire them up",
+   "📣 Demand more",
+   "💢 Hairdryer",
+   "Kick off"
+  ]
+ },
+ {
+  "t": "00:21:58",
+  "kind": "result",
+  "n": 2,
+  "text": "Manager Hot Seat Five games. One target. The board are watching. Menu Newcastle 3 of 5 points 4 league games left Board 40 Under pressure Fans 71 Singing Dressing room 99 Up for it FA Cup · Quarter-final, does not count toward the target Newcastle 1 to 0 Nottingham ForestWon Board up 6. Next match Manager Hot Seat: Save Your Job Football Game Manager Hot Seat is the short version of Club Manager, on the same engine. Take over a real club on a bad run, read the room before every match, handle the press, and hit the board's points target in five league games before they sack you. Manager Hot Seat is the short, sharp version of Club Manager. You walk into a real club on a bad run, the board give you five league games and a points target, and you either hit it or you are sacked. It runs on the Club Manager engine, so every match, every meter and every press question is the same one the full "
+ },
+ {
+  "t": "00:22:02",
+  "kind": "help",
+  "open": false
+ },
+ {
+  "t": "00:22:04",
+  "kind": "reloadMid",
+  "before": "Manager Hot Seat Five games. One target. The board are watching. Menu Newcastle 3 of 5 points 4 league games left Board 40 Under pressure Fans 71 Singing Dressing room 99 Up for it FA Cup · Quarter-final, does not count toward the target Newcastle 1 to 0 Nottingham ForestWon Board up 6. Next match Manager Hot Seat: Save Your Job Football Game Manager Hot Seat is the short version of Club Manager, ",
+  "mid": "Manager Hot Seat Five games. One target. The board are watching. TODAY'S HOT SEAT Westerlo Belgian Pro League. Same club, same week and same target for everyone today. Take today's job FREE PLAY Any club, any time Pick a club or let us pick one. A new season every time. Pick a club Random Carry on at Newcastle Manager Hot Seat: Save Your Job Football Game Manager Hot Seat is the short version of C",
+  "resumed": "Carry on at Newcastle",
+  "after": "Manager Hot Seat Five games. One target. The board are watching. Menu Newcastle 3 of 5 points 4 league games left Board 40 Under pressure Fans 71 Singing Dressing room 99 Up for it Premier League · Round 16 Away at Leeds United They are better than you. Nobody expects anything, so there is nothing to lose. Shape 🛡️ Defensive ⚖️ Balanced ⚔️ Attacking Team talk Say nothing 🧊 Calm them 🔥 Fire them"
+ },
+ {
+  "t": "00:22:04",
+  "kind": "options",
+  "talks": [
+   "How to play",
+   "Menu",
+   "🛡️ Defensive",
+   "⚖️ Balanced",
+   "⚔️ Attacking",
+   "Say nothing",
+   "🧊 Calm them",
+   "🔥 Fire them up",
+   "📣 Demand more",
+   "💢 Hairdryer",
+   "Kick off"
+  ]
+ },
+ {
+  "t": "00:22:05",
+  "kind": "result",
+  "n": 3,
+  "text": "Manager Hot Seat Five games. One target. The board are watching. Menu Newcastle 3 of 5 points 3 league games left Board 35 Under pressure Fans 61 Grumbling Dressing room 94 Up for it Premier League · Round 16 Newcastle 0 to 3 Leeds UnitedLost Board down 4.9. Next match Manager Hot Seat: Save Your Job Football Game Manager Hot Seat is the short version of Club Manager, on the same engine. Take over a real club on a bad run, read the room before every match, handle the press, and hit the board's points target in five league games before they sack you. Manager Hot Seat is the short, sharp version of Club Manager. You walk into a real club on a bad run, the board give you five league games and a points target, and you either hit it or you are sacked. It runs on the Club Manager engine, so every match, every meter and every press question is the same one the full game plays. Before each match"
+ },
+ {
+  "t": "00:22:06",
+  "kind": "options",
+  "talks": [
+   "How to play",
+   "Menu",
+   "🛡️ Defensive",
+   "⚖️ Balanced",
+   "⚔️ Attacking",
+   "Say nothing",
+   "🧊 Calm them",
+   "🔥 Fire them up",
+   "📣 Demand more",
+   "💢 Hairdryer",
+   "Kick off"
+  ]
+ },
+ {
+  "t": "00:22:08",
+  "kind": "result",
+  "n": 4,
+  "text": "Manager Hot Seat Five games. One target. The board are watching. Menu Newcastle 3 of 5 points 2 league games left Board 30 Under pressure Fans 54 Grumbling Dressing room 89 Up for it Premier League · Round 17 Newcastle 0 to 1 ChelseaLost Board down 4.9. THE PRESS ROOM 3 defeats in your last 5. Have you lost the dressing room? These players are with me That one is on me Some of them were not at it We go again Saturday Manager Hot Seat: Save Your Job Football Game Manager Hot Seat is the short version of Club Manager, on the same engine. Take over a real club on a bad run, read the room before every match, handle the press, and hit the board's points target in five league games before they sack you. Manager Hot Seat is the short, sharp version of Club Manager. You walk into a real club on a bad run, the board give you five league games and a points target, and you either hit it or you are "
+ },
+ {
+  "t": "00:22:08",
+  "kind": "press",
+  "answered": "These players are with me"
+ },
+ {
+  "t": "00:22:09",
+  "kind": "options",
+  "talks": [
+   "How to play",
+   "Menu",
+   "🛡️ Defensive",
+   "⚖️ Balanced",
+   "⚔️ Attacking",
+   "Say nothing",
+   "🧊 Calm them",
+   "🔥 Fire them up",
+   "📣 Demand more",
+   "💢 Hairdryer",
+   "Kick off"
+  ]
+ },
+ {
+  "t": "00:22:11",
+  "kind": "result",
+  "n": 5,
+  "text": "Manager Hot Seat Five games. One target. The board are watching. NEWCASTLE SOCCER · NAILED IT 6/5 points You keep the job Target hit. The board stop looking at other managers, for now. CARRY ON IN CLUB MANAGER The job is yours, so keep it. This exact season goes across: Newcastle, 6th of 20 on 29 points after 18 league games, the same squad and the board on 34. You pick it up at the next fixture. Careful: on 34 the board still have you down as under pressure. Club Manager's board can sack you too, so the next few results still count. Not now? The offer waits on the menu until you start another run, or until tomorrow for the daily. Carry on in Club Manager 6 of 5 points from 4 league games 🟩🟥🟥🟩 W 3 to 1 v Coventry City W 1 to 0 at Nottingham Forest (FA Cup · Quarter-final) L 0 to 3 at Leeds United L 0 to 1 v Chelsea W 2 to 1 v Brentford Board 34 Under pressure Fans 60 Grumbling Dressi"
+ },
+ {
+  "t": "00:22:13",
+  "kind": "audit",
+  "where": "done",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [],
+  "tap44": 4,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 9
+ },
+ {
+  "t": "00:22:13",
+  "kind": "done-screen",
+  "matches": 5,
+  "text": "Manager Hot Seat Five games. One target. The board are watching. NEWCASTLE SOCCER · NAILED IT 6/5 points You keep the job Target hit. The board stop looking at other managers, for now. CARRY ON IN CLUB MANAGER The job is yours, so keep it. This exact season goes across: Newcastle, 6th of 20 on 29 points after 18 league games, the same squad and the board on 34. You pick it up at the next fixture. Careful: on 34 the board still have you down as under pressure. Club Manager's board can sack you too, so the next few results still count. Not now? The offer waits on the menu until you start another run, or until tomorrow for the daily. Carry on in Club Manager 6 of 5 points from 4 league games 🟩🟥🟥🟩 W 3 to 1 v Coventry City W 1 to 0 at Nottingham Forest (FA Cup · Quarter-final) L 0 to 3 at Leeds United L 0 to 1 v Chelsea W 2 to 1 v Brentford Board 34 Under pressure Fans 60 Grumbling Dressing room 97 Up for it 🪑 Manager Hot Seat Oct 13, 2026 RESULT 6 of 5 points DoUKnowBall douknowball.com/manager-hot-seat Share result Copy challenge 📋 Copy Score Card 🖼️ Save Image SHARE YOUR RESULT New club Menu Manager Hot Seat: Save Your Job Football Game Manager Hot Seat is the short version of Club Manager, on the same engine. Take over a real club on a bad run, read the room before every match, handle the press, and hit the board's points target in five league games before they sack you. Manager Hot Seat is the short, sharp version of Club Manager. You walk into a real club on a bad run, the board give you five league games and a points target, and you either hit it or you are sacked. It runs on the Club Manager engine, so every match, every meter and every press question is the same one the full game plays. Before each match you pick a shape and a team talk, and after it the boar",
+  "buttons": [
+   "How to play",
+   "Carry on in Club Manager",
+   "Share result",
+   "Copy challenge",
+   "📋 Copy Score Card",
+   "🖼️ Save Image",
+   "Share on X",
+   "Share on WhatsApp",
+   "Share on Instagram",
+   "Share via Gmail",
+   "Share via Messages",
+   "New club",
+   "Menu"
+  ]
+ },
+ {
+  "t": "00:22:17",
+  "kind": "audit",
+  "where": "club manager after carry on",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.mt-2.text-xs.text-muted-foreground \"Delete\"",
+    "w": 37,
+    "h": 16
+   }
+  ],
+  "tap44": 3,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 6
+ },
+ {
+  "t": "00:22:17",
+  "kind": "carry",
+  "url": "http://localhost:4173/club-manager",
+  "text": "DOUKNOWBALL Back Sign up to track your stats CLUB MANAGER Your managers on this device. Up to three careers, each one saved on its own. SLOT 1 · LAST PLAYED You Newcastle 2026-27 · Season 1 Week 27 of 54 · Board 34/100 🏆 0 trophies Resume CareerDelete SLOT 2 💼 Empty slot New manager SLOT 3 💼 Empty slot New manager Club Manager: Free Football Management Game A full club-management sim in your browser: 454 clubs across 27 real leagues, from the Premier League, the 2. Bundesliga, Serie B, Ligue 2, the Segunda División and the Scottish Premiership to the Saudi Pro League, MLS, Brazil, Mexico, Australia, Russia, Croatia, Denmark, Switzerland, Austria and Greece, with real players at their real market values as of August 2026 (October for the A-League Men and the Russian Premier League) and thin squads topped up with made up youth, marked as such. Manage today or in a real past season: 2020-21 with Haaland's Dortmund and Mbappé's PSG, 2015-16 with Leicester at 5000 to 1, 2010-11 with prime Messi, or 2005-06 with Ronaldinho's Barcelona. Or create your own club with its own crest and stadium. Negotiate transfers, survive bidding wars, hit the board's named objectives, and chase titles season after season. Club Manager is the site's big one: a full management sim in your browser. 454 real clubs across 27 leagues in 21 countries, from the Premier League, Serie B, Ligue 2 and the Segunda División to the Danish Superliga, the Swiss Super League, Croatia's SuperSport HNL, Brazil's Seri"
+ },
+ {
+  "t": "00:22:17",
+  "kind": "done",
+  "secs": 29
+ }
+]

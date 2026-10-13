@@ -1,0 +1,231 @@
+[
+ {
+  "t": "00:21:27",
+  "kind": "help",
+  "open": true,
+  "text": "How to Play Manager Hot Seat Ads and analytics only run if you press Accept. Essential only keeps them off and every game works the same. Learn more Essential only Accept You walk into a real club on a bad run. The board give you 5 league games and a points target, and you either hit it or you are g"
+ },
+ {
+  "t": "00:21:28",
+  "kind": "audit",
+  "where": "menu",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [],
+  "tap44": 2,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 6
+ },
+ {
+  "t": "00:21:28",
+  "kind": "menu",
+  "text": "Manager Hot Seat Five games. One target. The board are watching. TODAY'S HOT SEAT Westerlo Belgian Pro League. Same club, same week and same target for everyone today. Take today's job FREE PLAY Any club, any time Pick a club or let us pick one. A new season every time. Pick a club Random Manager Hot Seat: Save Your Job Football Game Manager Hot Seat is the short version of Club Manager, on the same engine. Take over a real club on a bad run, read the room before every match, handle the press, and hit the board's points target in five league games before they sack you. Manager Hot Seat is the short, sharp version of Club Manager. You walk into a real club on a bad run, the board give you five league games and a points target, and you either hit it or you are sacked. It runs on the Club Manager engine, so every match, every meter and every press question is the same one the full game play"
+ },
+ {
+  "t": "00:21:28",
+  "kind": "start",
+  "how": "Take today's job"
+ },
+ {
+  "t": "00:21:29",
+  "kind": "audit",
+  "where": "brief",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [],
+  "tap44": 3,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 9
+ },
+ {
+  "t": "00:21:29",
+  "kind": "brief",
+  "text": "Manager Hot Seat Five games. One target. The board are watching. Back THE JOB Westerlo 12th after 8 league games, and the board expect 7th. One win and 2 defeats in the last 5. The last manager is gone and the board want an answer. The board's target 6 points from the next 5 league games. The board start on 30 out of 100. If that hits zero first, you are gone on the spot. Board 30 Under pressure Fans 34 Turning Dressing room 70 Up for it Take the job Took over after league week 8, 12th of 18. Leash: 5 league games. Manager Hot Seat: Save Your Job Football Game Manager Hot Seat is the short version of Club Manager, on the same engine. Take over a real club on a bad run, read the room before every match, handle the press, and hit the board's points target in five league games before they sack you. Manager Hot Seat is the short, sharp version of Club Manager. You walk into a real club on a bad run, the board give you five league games and a points target, and you either hit it or you are sacked. It runs on the Club Manager engine, so every match, every meter and every press question is the same one the full game plays. Before each match you pick a shape and a team talk, and after it the board, the fans and the dressing room all react. There is a daily, the same club and the same target for everyone, and a free play mode where you can take any club you like. How to play Manager Hot Seat, the free five game sack race Pick the daily club or your own Pick today's hot seat for the sh"
+ },
+ {
+  "t": "00:21:30",
+  "kind": "audit",
+  "where": "match screen",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [],
+  "tap44": 3,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 9
+ },
+ {
+  "t": "00:21:30",
+  "kind": "matchscreen",
+  "text": "Manager Hot Seat Five games. One target. The board are watching. Menu Westerlo 0 of 6 points 5 league games left Board 30 Under pressure Fans 34 Turning Dressing room 70 Up for it Belgian Pro League · Round 9 Home to Beveren Two defeats in three, against a side you are better than. They know it and so do you. Shape 🛡️ Defensive ⚖️ Balanced ⚔️ Attacking Team talk Say nothing 🧊 Calm them 🔥 Fire them up 📣 Demand more 💢 Hairdryer Kick off Manager Hot Seat: Save Your Job Football Game Manager Hot Seat is the short version of Club Manager, on the same engine. Take over a real club on a bad run, read the room before every match, handle the press, and hit the board's points target in five league games before they sack you. Manager Hot Seat is the short, sharp version of Club Manager. You walk into a real club on a bad run, the board give you five league games and a points target, and you either hit it or you are sacked. It runs on the Club Manager engine, so every match, every meter and every press question is the same one the full game plays. Before each match you pick a shape and a team talk, and after it the board, the fans and the dressing room all react. There is a daily, the sam",
+  "buttons": [
+   "How to play",
+   "Menu",
+   "🛡️ Defensive",
+   "⚖️ Balanced",
+   "⚔️ Attacking",
+   "Say nothing",
+   "🧊 Calm them",
+   "🔥 Fire them up",
+   "📣 Demand more",
+   "💢 Hairdryer",
+   "Kick off"
+  ]
+ },
+ {
+  "t": "00:21:30",
+  "kind": "options",
+  "talks": [
+   "How to play",
+   "Menu",
+   "🛡️ Defensive",
+   "⚖️ Balanced",
+   "⚔️ Attacking",
+   "Say nothing",
+   "🧊 Calm them",
+   "🔥 Fire them up",
+   "📣 Demand more",
+   "💢 Hairdryer",
+   "Kick off"
+  ]
+ },
+ {
+  "t": "00:21:32",
+  "kind": "result",
+  "n": 1,
+  "text": "Manager Hot Seat Five games. One target. The board are watching. Menu Westerlo 3 of 6 points 4 league games left Board 33 Under pressure Fans 47 Grumbling Dressing room 77 Up for it Belgian Pro League · Round 9 Westerlo 3 to 1 BeverenWon Board up 3.3. Next match Manager Hot Seat: Save Your Job Football Game Manager Hot Seat is the short version of Club Manager, on the same engine. Take over a real club on a bad run, read the room before every match, handle the press, and hit the board's points target in five league games before they sack you. Manager Hot Seat is the short, sharp version of Club Manager. You walk into a real club on a bad run, the board give you five league games and a points target, and you either hit it or you are sacked. It runs on the Club Manager engine, so every match, every meter and every press question is the same one the full game plays. Before each match you pi"
+ },
+ {
+  "t": "00:21:32",
+  "kind": "options",
+  "talks": [
+   "How to play",
+   "Menu",
+   "🛡️ Defensive",
+   "⚖️ Balanced",
+   "⚔️ Attacking",
+   "Say nothing",
+   "🧊 Calm them",
+   "🔥 Fire them up",
+   "📣 Demand more",
+   "💢 Hairdryer",
+   "Kick off"
+  ]
+ },
+ {
+  "t": "00:21:34",
+  "kind": "result",
+  "n": 2,
+  "text": "Manager Hot Seat Five games. One target. The board are watching. Menu Westerlo 4 of 6 points 3 league games left Board 33 Under pressure Fans 50 Grumbling Dressing room 77 Up for it Belgian Pro League · Round 10 Westerlo 1 to 1 Cercle BruggeDrew Board up 0. THE PRESS ROOM Cercle Brugge on paper are a level above you. Realistically, what are you going there for? Nobody gives us a prayer, and that suits us We are going to win it We will do our jobs and see Manager Hot Seat: Save Your Job Football Game Manager Hot Seat is the short version of Club Manager, on the same engine. Take over a real club on a bad run, read the room before every match, handle the press, and hit the board's points target in five league games before they sack you. Manager Hot Seat is the short, sharp version of Club Manager. You walk into a real club on a bad run, the board give you five league games and a points tar"
+ },
+ {
+  "t": "00:21:38",
+  "kind": "help",
+  "open": false
+ },
+ {
+  "t": "00:21:39",
+  "kind": "reloadMid",
+  "before": "Manager Hot Seat Five games. One target. The board are watching. Menu Westerlo 4 of 6 points 3 league games left Board 33 Under pressure Fans 50 Grumbling Dressing room 77 Up for it Belgian Pro League · Round 10 Westerlo 1 to 1 Cercle BruggeDrew Board up 0. THE PRESS ROOM Cercle Brugge on paper are a level above you. Realistically, what are you going there for? Nobody gives us a prayer, and that s",
+  "mid": "Manager Hot Seat Five games. One target. The board are watching. TODAY'S HOT SEAT Westerlo Belgian Pro League. Same club, same week and same target for everyone today. Back to the dugout FREE PLAY Any club, any time Pick a club or let us pick one. A new season every time. Pick a club Random Manager Hot Seat: Save Your Job Football Game Manager Hot Seat is the short version of Club Manager, on the ",
+  "resumed": "Back to the dugout",
+  "after": "Manager Hot Seat Five games. One target. The board are watching. Menu Westerlo 4 of 6 points 3 league games left Board 33 Under pressure Fans 50 Grumbling Dressing room 77 Up for it Belgian Pro League · Round 11 Home to Gent They are better than you. Nobody expects anything, so there is nothing to lose. THE PRESS ROOM Cercle Brugge on paper are a level above you. Realistically, what are you going "
+ },
+ {
+  "t": "00:21:39",
+  "kind": "press",
+  "answered": "Nobody gives us a prayer, and that suits us"
+ },
+ {
+  "t": "00:21:40",
+  "kind": "options",
+  "talks": [
+   "How to play",
+   "Menu",
+   "🛡️ Defensive",
+   "⚖️ Balanced",
+   "⚔️ Attacking",
+   "Say nothing",
+   "🧊 Calm them",
+   "🔥 Fire them up",
+   "📣 Demand more",
+   "💢 Hairdryer",
+   "Kick off"
+  ]
+ },
+ {
+  "t": "00:21:42",
+  "kind": "result",
+  "n": 3,
+  "text": "Manager Hot Seat Five games. One target. The board are watching. WESTERLO SOCCER · NAILED IT 7/6 points You keep the job Target hit. The board stop looking at other managers, for now. CARRY ON IN CLUB MANAGER The job is yours, so keep it. This exact season goes across: Westerlo, 9th of 18 on 17 points after 11 league games, the same squad and the board on 37. You pick it up at the next fixture. Careful: on 37 the board still have you down as under pressure. Club Manager's board can sack you too, so the next few results still count. Not now? The offer waits on the menu until you start another run, or until tomorrow for the daily. Carry on in Club Manager 7 of 6 points from 3 league games 🟩🟨🟩 W 3 to 1 v Beveren D 1 to 1 at Cercle Brugge W 3 to 2 v Gent Board 37 Under pressure Fans 56 Grumbling Dressing room 85 Up for it 🪑 Manager Hot Seat Oct 13, 2026 RESULT 7 of 6 points DoUKnowBall d"
+ },
+ {
+  "t": "00:21:44",
+  "kind": "audit",
+  "where": "done",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [],
+  "tap44": 4,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 9
+ },
+ {
+  "t": "00:21:44",
+  "kind": "done-screen",
+  "matches": 3,
+  "text": "Manager Hot Seat Five games. One target. The board are watching. WESTERLO SOCCER · NAILED IT 7/6 points You keep the job Target hit. The board stop looking at other managers, for now. CARRY ON IN CLUB MANAGER The job is yours, so keep it. This exact season goes across: Westerlo, 9th of 18 on 17 points after 11 league games, the same squad and the board on 37. You pick it up at the next fixture. Careful: on 37 the board still have you down as under pressure. Club Manager's board can sack you too, so the next few results still count. Not now? The offer waits on the menu until you start another run, or until tomorrow for the daily. Carry on in Club Manager 7 of 6 points from 3 league games 🟩🟨🟩 W 3 to 1 v Beveren D 1 to 1 at Cercle Brugge W 3 to 2 v Gent Board 37 Under pressure Fans 56 Grumbling Dressing room 85 Up for it 🪑 Manager Hot Seat Oct 13, 2026 RESULT 7 of 6 points DoUKnowBall douknowball.com/manager-hot-seat Share result Copy challenge 📋 Copy Score Card 🖼️ Save Image SHARE YOUR RESULT New club Menu Manager Hot Seat: Save Your Job Football Game Manager Hot Seat is the short version of Club Manager, on the same engine. Take over a real club on a bad run, read the room before every match, handle the press, and hit the board's points target in five league games before they sack you. Manager Hot Seat is the short, sharp version of Club Manager. You walk into a real club on a bad run, the board give you five league games and a points target, and you either hit it or you are sacked. It runs on the Club Manager engine, so every match, every meter and every press question is the same one the full game plays. Before each match you pick a shape and a team talk, and after it the board, the fans and the dressing room all react. There is a daily, the same club and the sam",
+  "buttons": [
+   "How to play",
+   "Carry on in Club Manager",
+   "Share result",
+   "Copy challenge",
+   "📋 Copy Score Card",
+   "🖼️ Save Image",
+   "Share on X",
+   "Share on WhatsApp",
+   "Share on Instagram",
+   "Share via Gmail",
+   "Share via Messages",
+   "New club",
+   "Menu"
+  ]
+ },
+ {
+  "t": "00:21:48",
+  "kind": "audit",
+  "where": "club manager after carry on",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.mt-2.text-xs.text-muted-foreground \"Delete\"",
+    "w": 37,
+    "h": 16
+   }
+  ],
+  "tap44": 3,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 6
+ },
+ {
+  "t": "00:21:48",
+  "kind": "carry",
+  "url": "http://localhost:4173/club-manager",
+  "text": "DOUKNOWBALL Back Track stats CLUB MANAGER Your managers on this device. Up to three careers, each one saved on its own. SLOT 1 · LAST PLAYED You Westerlo 2026-27 · Season 1 Week 17 of 50 · Board 37/100 🏆 0 trophies Resume CareerDelete SLOT 2 💼 Empty slot New manager SLOT 3 💼 Empty slot New manager Club Manager: Free Football Management Game A full club-management sim in your browser: 454 clubs across 27 real leagues, from the Premier League, the 2. Bundesliga, Serie B, Ligue 2, the Segunda División and the Scottish Premiership to the Saudi Pro League, MLS, Brazil, Mexico, Australia, Russia, Croatia, Denmark, Switzerland, Austria and Greece, with real players at their real market values as of August 2026 (October for the A-League Men and the Russian Premier League) and thin squads topped up with made up youth, marked as such. Manage today or in a real past season: 2020-21 with Haaland's Dortmund and Mbappé's PSG, 2015-16 with Leicester at 5000 to 1, 2010-11 with prime Messi, or 2005-06 with Ronaldinho's Barcelona. Or create your own club with its own crest and stadium. Negotiate transfers, survive bidding wars, hit the board's named objectives, and chase titles season after season. Club Manager is the site's big one: a full management sim in your browser. 454 real clubs across 27 leagues in 21 countries, from the Premier League, Serie B, Ligue 2 and the Segunda División to the Danish Superliga, the Swiss Super League, Croatia's SuperSport HNL, Brazil's Serie A, Liga MX, the"
+ },
+ {
+  "t": "00:21:48",
+  "kind": "done",
+  "secs": 23
+ }
+]

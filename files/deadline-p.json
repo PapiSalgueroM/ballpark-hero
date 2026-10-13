@@ -1,0 +1,189 @@
+[
+ {
+  "t": "00:21:27",
+  "kind": "help",
+  "open": true,
+  "text": "How to Play Deadline Day Ads and analytics only run if you press Accept. Essential only keeps them off and every game works the same. Learn more Essential only Accept You run recruitment at a real club on the last day of the summer window. The board have picked out three or four places in the side t"
+ },
+ {
+  "t": "00:21:28",
+  "kind": "audit",
+  "where": "menu",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [],
+  "tap44": 2,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 6
+ },
+ {
+  "t": "00:21:28",
+  "kind": "menu",
+  "text": "Deadline Day Twelve hours. One budget. The window shuts at 11pm. TODAY'S DEADLINE DAY Atalanta Serie A. Same club, same needs and same budget for everyone today. Open today's window FREE PLAY Any club, any time Pick a club or let us pick one. A new set of needs every time. Pick a club Random Deadline Day: Transfer Window Football Game Deadline Day is a free football transfer game on the Club Manager engine. Run recruitment at a real club on the last day of the window, haggle with selling clubs, agree personal terms with agents and fill the board's needs before the window shuts. Deadline Day puts you in charge of recruitment at a real club on the last day of the summer transfer window. The board have picked out three or four places in the side that need an upgrade, left you a budget, and the window shuts at 11pm. It runs on the Club Manager transfer desk, so every asking price, counter, p"
+ },
+ {
+  "t": "00:21:28",
+  "kind": "start",
+  "how": "Open today's window"
+ },
+ {
+  "t": "00:21:30",
+  "kind": "audit",
+  "where": "desk",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [],
+  "tap44": 3,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 19
+ },
+ {
+  "t": "00:21:30",
+  "kind": "desk",
+  "text": "Deadline Day Twelve hours. One budget. The window shuts at 11pm. Menu Atalanta, shuts at 11pm CLOCK 11am 12 hours left BUDGET £70m of £70m NEEDS 0 of 3 filled Left Back Needs a 79 or better Starting now: Thomas Kristensen (78) Abdoul Koné 79 CB, 20, RB Leipzig On the list Desk: worth £10.4m to £13m Lucas Hernández 81 LB, 29, PSG On the list Desk: worth £14m to £17.5m Carlos Augusto 83 LB, 26, Inter Milan On the list Desk: worth £18.6m to £23.4m Centre Back Needs a 81 or better Starting now: Odilon Kossounou (80) Lucas Beraldo 81 CB, 22, PSG On the list Desk: worth £16.3m to £17.8m Charlie Cresswell 82 CB, 23, Rennes On the list Desk: worth £18.7m to £22.3m Leny Yoro 86 CB, 20, Manchester United On the list Desk: worth £39m to £42.7m Central Midfielder Needs a 81 or better Starting now: Yunus Musah (80) Ibrahim Sangaré 81 CDM, 28, Nottingham Forest On the list Desk: worth £15.9m to £16.6m Kees Smit 82 CM, 19, AZ Alkmaar On the list Desk: worth £19.5m to £22.6m Rodrigo Mora 85 CAM, 18, Roma On the list Desk: worth £27.6m to £34.3m Sell to raise money 3 offers on the table THE WIRE 11am The board have left you £70m for the day. The window shuts at 11pm. I am done, shut the window Deadline Day: Transfer Window Football Game Deadline Day is a free football transfer game on the Club Manager engine. Run recruitment at a real club on the last day of the window, haggle with selling clubs, agree personal terms with agents and fill the board's needs before the window shuts. Deadline Day puts you in charge of recruitment at a real club on the last day of the summer transfer window. The board have picked out three or four places in the side that need an upgrade, left you a budget, and the window shuts at 11pm. It runs on the Club Manager transfer desk, so every asking price, counter"
+ },
+ {
+  "t": "00:21:30",
+  "kind": "targets",
+  "n": 9
+ },
+ {
+  "t": "00:21:30",
+  "kind": "audit",
+  "where": "deal",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [],
+  "tap44": 4,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 9
+ },
+ {
+  "t": "00:21:30",
+  "kind": "deal",
+  "k": 0,
+  "text": "Deadline Day Twelve hours. One budget. The window shuts at 11pm. Menu Atalanta, shuts at 11pm CLOCK 11am 12 hours left BUDGET £70m of £70m NEEDS 0 of 3 filled Back to the desk Abdoul Koné 79 CB, age 20, at RB Leipzig. For the left back need (79 or better). On the list Your desk says he is worth £10.4m to £13m. Listed at £15m. Call RB Leipzig (free) Deadline Day: Transfer Window Football Game Deadline Day is a free football transfer game on the Club Manager engine. Run recruitment at a real club on the last day of the window, haggle with selling clubs, agree personal terms with agents and fill the board's needs before the window shuts. Deadline Day puts you in charge of recruitment at a real club on the last day of the summer transfer window. The board have picked out three or four places in the side that need an upgrade, left you a budget, and the window shuts at 11pm. It runs on the Clu"
+ },
+ {
+  "t": "00:21:31",
+  "kind": "dealstep",
+  "k": 0,
+  "did": "Call RB Leipzig (free)",
+  "text": "Deadline Day Twelve hours. One budget. The window shuts at 11pm. Menu Atalanta, shuts at 11pm CLOCK 11am 12 hours left BUDGET £70m of £70m NEEDS 0 of 3 filled Back to the desk Abdoul Koné 79 CB, age 20, at RB Leipzig. For the left back need (79 or better). In talks RB Leipzig want £16.1m. Their ask: £16.1m ●●●●● Your desk says he is worth £10.4m to £13m. Their sporting director picks up on the second ring. Everyone is for sale. HOW CLOSE YOU ARE Type a bid Your bid m Lowball £12.9m Haggle £14.5m"
+ },
+ {
+  "t": "00:21:33",
+  "kind": "dealstep",
+  "k": 0,
+  "did": "Bid £16.1m (1 hour)",
+  "text": "Deadline Day Twelve hours. One budget. The window shuts at 11pm. Menu Atalanta, shuts at 11pm CLOCK 12pm 11 hours left BUDGET £70m of £70m NEEDS 0 of 3 filled Back to the desk Abdoul Koné 79 CB, age 20, at RB Leipzig. For the left back need (79 or better). Terms Fee agreed at £16.1m. Now his agent. Fee agreed: £16.1m ●●● His agent wants 4 years at 25k a week and a £4.5m signing bonus. The bonus comes out of the same budget as the fee, and the board will not go over the wage or the length he is a"
+ },
+ {
+  "t": "00:21:34",
+  "kind": "dealstep",
+  "k": 0,
+  "did": "Offer terms (1 hour)",
+  "text": "Deadline Day Twelve hours. One budget. The window shuts at 11pm. Menu Atalanta, shuts at 11pm CLOCK 1pm 10 hours left BUDGET £49.4m of £70m NEEDS 1 of 3 filled Back to the desk Abdoul Koné 79 CB, age 20, at RB Leipzig. For the left back need (79 or better). Signed Signed: £16.1m to RB Leipzig, 4 years at 25k a week. Deadline Day: Transfer Window Football Game Deadline Day is a free football transfer game on the Club Manager engine. Run recruitment at a real club on the last day of the window, ha"
+ },
+ {
+  "t": "00:21:35",
+  "kind": "deal",
+  "k": 1,
+  "text": "Deadline Day Twelve hours. One budget. The window shuts at 11pm. Menu Atalanta, shuts at 11pm CLOCK 1pm 10 hours left BUDGET £49.4m of £70m NEEDS 1 of 3 filled Back to the desk Lucas Hernández 81 LB, age 29, at PSG. For the left back need (79 or better). On the list Your desk says he is worth £14m to £17.5m. Listed at £18.2m. Call PSG (free) Deadline Day: Transfer Window Football Game Deadline Day is a free football transfer game on the Club Manager engine. Run recruitment at a real club on the last day of the window, haggle with selling clubs, agree personal terms with agents and fill the board's needs before the window shuts. Deadline Day puts you in charge of recruitment at a real club on the last day of the summer transfer window. The board have picked out three or four places in the side that need an upgrade, left you a budget, and the window shuts at 11pm. It runs on the Club Manag"
+ },
+ {
+  "t": "00:21:36",
+  "kind": "dealstep",
+  "k": 1,
+  "did": "Call PSG (free)",
+  "text": "Deadline Day Twelve hours. One budget. The window shuts at 11pm. Menu Atalanta, shuts at 11pm CLOCK 1pm 10 hours left BUDGET £49.4m of £70m NEEDS 1 of 3 filled Back to the desk Lucas Hernández 81 LB, age 29, at PSG. For the left back need (79 or better). In talks PSG want £19.3m. Their ask: £19.3m ●●●●○ Your desk says he is worth £14m to £17.5m. They know you are interested. The price just went up. HOW CLOSE YOU ARE Type a bid Your bid m Lowball £15.4m Haggle £17.4m Meet the ask £19.3m Walk away"
+ },
+ {
+  "t": "00:21:37",
+  "kind": "dealstep",
+  "k": 1,
+  "did": "Bid £19.3m (1 hour)",
+  "text": "Deadline Day Twelve hours. One budget. The window shuts at 11pm. Menu Atalanta, shuts at 11pm CLOCK 2pm 9 hours left BUDGET £49.4m of £70m NEEDS 1 of 3 filled Back to the desk Lucas Hernández 81 LB, age 29, at PSG. For the left back need (79 or better). Terms Fee agreed at £19.3m. Now his agent. Fee agreed: £19.3m ●●● His agent wants 2 years at 35k a week and a £3.2m signing bonus. The bonus comes out of the same budget as the fee, and the board will not go over the wage or the length he is aski"
+ },
+ {
+  "t": "00:21:38",
+  "kind": "dealstep",
+  "k": 1,
+  "did": "Offer terms (1 hour)",
+  "text": "Deadline Day Twelve hours. One budget. The window shuts at 11pm. Menu Atalanta, shuts at 11pm CLOCK 3pm 8 hours left BUDGET £26.9m of £70m NEEDS 1 of 3 filled Back to the desk Lucas Hernández 81 LB, age 29, at PSG. For the left back need (79 or better). Signed Signed: £19.3m to PSG, 2 years at 35k a week. Deadline Day: Transfer Window Football Game Deadline Day is a free football transfer game on the Club Manager engine. Run recruitment at a real club on the last day of the window, haggle with s"
+ },
+ {
+  "t": "00:21:39",
+  "kind": "deal",
+  "k": 2,
+  "text": "Deadline Day Twelve hours. One budget. The window shuts at 11pm. Menu Atalanta, shuts at 11pm CLOCK 3pm 8 hours left BUDGET £26.9m of £70m NEEDS 1 of 3 filled Back to the desk Carlos Augusto 83 LB, age 26, at Inter Milan. For the left back need (79 or better). On the list Real Madrid have asked about him. Leave it an hour and they could close. Your desk says he is worth £18.6m to £23.4m. Listed at £23.1m. Call Inter Milan (free) Deadline Day: Transfer Window Football Game Deadline Day is a free football transfer game on the Club Manager engine. Run recruitment at a real club on the last day of the window, haggle with selling clubs, agree personal terms with agents and fill the board's needs before the window shuts. Deadline Day puts you in charge of recruitment at a real club on the last day of the summer transfer window. The board have picked out three or four places in the side that ne"
+ },
+ {
+  "t": "00:21:40",
+  "kind": "dealstep",
+  "k": 2,
+  "did": "Call Inter Milan (free)",
+  "text": "Deadline Day Twelve hours. One budget. The window shuts at 11pm. Menu Atalanta, shuts at 11pm CLOCK 3pm 8 hours left BUDGET £26.9m of £70m NEEDS 1 of 3 filled Back to the desk Carlos Augusto 83 LB, age 26, at Inter Milan. For the left back need (79 or better). In talks Inter Milan want £25.7m. Their ask: £25.7m ●●●●● Your desk says he is worth £18.6m to £23.4m. Real Madrid are in at £23.1m. Beat it or they close. Their sporting director picks up on the second ring. Everyone is for sale. HOW CLOS"
+ },
+ {
+  "t": "00:21:42",
+  "kind": "dealstep",
+  "k": 2,
+  "did": "Bid £24.9m (1 hour)",
+  "text": "Deadline Day Twelve hours. One budget. The window shuts at 11pm. Menu Atalanta, shuts at 11pm CLOCK 4pm 7 hours left BUDGET £26.9m of £70m NEEDS 1 of 3 filled Back to the desk Carlos Augusto 83 LB, age 26, at Inter Milan. For the left back need (79 or better). In talks They came down to £25.4m. 4 more rounds before they stop talking. Their ask: £25.4m, your last £24.9m ●●●●○ Your desk says he is worth £18.6m to £23.4m. Real Madrid are in at £26.6m. Beat it or they close. Real Madrid raised to £2"
+ },
+ {
+  "t": "00:21:43",
+  "kind": "dealstep",
+  "k": 2,
+  "did": "Bid £26.7m (1 hour)",
+  "text": "Deadline Day Twelve hours. One budget. The window shuts at 11pm. Menu Atalanta, shuts at 11pm CLOCK 5pm 6 hours left BUDGET £26.9m of £70m NEEDS 1 of 3 filled Back to the desk Carlos Augusto 83 LB, age 26, at Inter Milan. For the left back need (79 or better). Terms Brøndby IF have put an offer to his agent. Get his terms done. Fee agreed: £26.7m ●●● His agent wants 4 years at 42k a week and a £7.6m signing bonus. The bonus comes out of the same budget as the fee, and the board will not go over "
+ },
+ {
+  "t": "00:21:45",
+  "kind": "sell",
+  "did": true,
+  "text": "Deadline Day Twelve hours. One budget. The window shuts at 11pm. Menu Atalanta, shuts at 11pm CLOCK 6pm 5 hours left BUDGET £42m of £70m NEEDS 1 of 3 filled Back to the desk Offers for your bench Clubs will take these men off your hands today at a deadline day price. Every sale takes an hour and the money goes straight into the budget. Nikola Krstović ST, 82, age 25 Atlético Madrid offer £15.1m Sold Nicola Zalewski LM, 81, age 23 Monterrey offer £12m Sell (1 hour) Kamaldeen Sulemana LW, 80, age 23 Lugano offer £10.9m Sell (1 hour) Deadline Day: Transfer Window Football Game Deadline Day is a free football transfer game on the Club Manager engine. Run recruitment at a real club on the last da"
+ },
+ {
+  "t": "00:21:50",
+  "kind": "help",
+  "open": false
+ },
+ {
+  "t": "00:21:51",
+  "kind": "reloadMid",
+  "before": "Deadline Day Twelve hours. One budget. The window shuts at 11pm. Menu Atalanta, shuts at 11pm CLOCK 6pm 5 hours left BUDGET £42m of £70m NEEDS 1 of 3 filled Left Back Filled by Abdoul Koné Starting now: Thomas Kristensen (78) Abdoul Koné 79 CB, 20, RB Leipzig Signed Signed for £16.1m Lucas Hernández 81 LB, 29, PSG Signed Signed for £19.3m Carlos Augusto 83 LB, 26, Inter Milan Terms Brøndby IF in F",
+  "resumed": "Back on the phones",
+  "after": "Deadline Day Twelve hours. One budget. The window shuts at 11pm. Menu Atalanta, shuts at 11pm CLOCK 6pm 5 hours left BUDGET £42m of £70m NEEDS 1 of 3 filled Left Back Filled by Abdoul Koné Starting now: Thomas Kristensen (78) Abdoul Koné 79 CB, 20, RB Leipzig Signed Signed for £16.1m Lucas Hernández 81 LB, 29, PSG Signed Signed for £19.3m Carlos Augusto 83 LB, 26, Inter Milan Terms Brøndby IF in F"
+ },
+ {
+  "t": "00:21:55",
+  "kind": "audit",
+  "where": "result",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [],
+  "tap44": 5,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 9
+ },
+ {
+  "t": "00:21:55",
+  "kind": "result",
+  "text": "Deadline Day Twelve hours. One budget. The window shuts at 11pm. SOCCER · GOOD TRY 35/100 ⏰ grade D Grade D at Atalanta The window is shut. 1 of 3 needs filled, £42m left. NEEDS 16.7/50 VALUE 14.7/30 BUDGET 4/20 ⏰ Deadline Day 35/100 🟩🟥🟥 Left Back Abdoul Koné Centre Back not filled Central Midfielder not filled FEES AGAINST WHAT THEY WERE WORTH Abdoul Koné (79) £16.1m for a £12m player Lucas Hernández (81) £19.3m for a £16.5m player ⏰ Deadline Day Oct 13, 2026 ⏰ Deadline Day 35/100 🟩🟥🟥 RESULT D, 35/100 DoUKnowBall douknowball.com/deadline-day Share result Copy challenge 📋 Copy Score Card 🖼️ Save Image SHARE YOUR RESULT New club Back to the menu Deadline Day: Transfer Window Football Game Deadline Day is a free football transfer game on the Club Manager engine. Run recruitment at a real club on the last day of the window, haggle with selling clubs, agree personal terms with agents and fill the board's needs before the window shuts. Deadline Day puts you in charge of recruitment at a real club on the last day of the summer transfer window. The board have picked out three or four places in the side that need an upgrade, left you a budget, and the window shuts at 11pm. It runs on the Club Manager transfer desk, so every asking price, counter, patience count, valuation read, rival bid and agent's demand is the same one the full game plays. What is new is the clock: twelve hours, and every bid costs one of them. There is a daily, the same club, the same list and the same budget for everyone, and a free play mode at any club you like. How to play Deadline Day, the free transfer window game Choosing the daily club or free play Open today's window for the shared daily club, or pick any club in free play, or let the game pick one at random. Reading the board's brief Read the brief. Each need is a place in your current eleven, with who starts there now and the rating that would count as an upgrade. Under each need are two or three real players who could fill it, cheape"
+ },
+ {
+  "t": "00:21:55",
+  "kind": "done",
+  "secs": 30
+ }
+]

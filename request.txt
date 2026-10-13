@@ -1,0 +1,4 @@
+#!serve
+#!playwright
+hotseat: node .rc/x/walkShort.mjs hotseat
+deadline: node .rc/x/walkShort.mjs deadline

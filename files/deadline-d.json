@@ -1,0 +1,221 @@
+[
+ {
+  "t": "00:21:57",
+  "kind": "help",
+  "open": true,
+  "text": "How to Play Deadline Day Ads and analytics only run if you press Accept. Essential only keeps them off and every game works the same. Learn more Essential only Accept You run recruitment at a real club on the last day of the summer window. The board have picked out three or four places in the side t"
+ },
+ {
+  "t": "00:21:58",
+  "kind": "audit",
+  "where": "menu",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [],
+  "tap44": 2,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 6
+ },
+ {
+  "t": "00:21:58",
+  "kind": "menu",
+  "text": "Deadline Day Twelve hours. One budget. The window shuts at 11pm. TODAY'S DEADLINE DAY Atalanta Serie A. Same club, same needs and same budget for everyone today. Open today's window FREE PLAY Any club, any time Pick a club or let us pick one. A new set of needs every time. Pick a club Random Deadline Day: Transfer Window Football Game Deadline Day is a free football transfer game on the Club Manager engine. Run recruitment at a real club on the last day of the window, haggle with selling clubs, agree personal terms with agents and fill the board's needs before the window shuts. Deadline Day puts you in charge of recruitment at a real club on the last day of the summer transfer window. The board have picked out three or four places in the side that need an upgrade, left you a budget, and the window shuts at 11pm. It runs on the Club Manager transfer desk, so every asking price, counter, p"
+ },
+ {
+  "t": "00:21:58",
+  "kind": "audit",
+  "where": "club picker",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [],
+  "tap44": 3,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 6
+ },
+ {
+  "t": "00:21:58",
+  "kind": "clubs",
+  "n": 21,
+  "sample": [
+   "How to play",
+   "Arsenal",
+   "Manchester City",
+   "Liverpool",
+   "Chelsea",
+   "Manchester United",
+   "Tottenham",
+   "Newcastle",
+   "Nottingham Forest",
+   "Aston Villa",
+   "Crystal Palace",
+   "Brentford"
+  ]
+ },
+ {
+  "t": "00:21:58",
+  "kind": "start",
+  "how": "Newcastle"
+ },
+ {
+  "t": "00:22:00",
+  "kind": "audit",
+  "where": "desk",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [],
+  "tap44": 3,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 22
+ },
+ {
+  "t": "00:22:00",
+  "kind": "desk",
+  "text": "Deadline Day Twelve hours. One budget. The window shuts at 11pm. Menu Newcastle, shuts at 11pm CLOCK 11am 12 hours left BUDGET £102.5m of £102.5m NEEDS 0 of 4 filled Centre Back Needs a 75 or better Starting now: Fabian Schär (74) Ethan Pinnock 75 CB, 32, Coventry City On the list Desk: worth £5.6m to £6.1m Harry Maguire 77 CB, 32, Manchester United On the list Desk: worth £7.6m to £8.9m Roger Ibañez 80 CB, 27, Al-Ahli On the list Desk: worth £13.4m to £14.5m Goalkeeper Needs a 80 or better Starting now: Lukas Hornicek (79) Thibaut Courtois 80 GK, 33, Real Madrid On the list Desk: worth £13.6m to £15.3m Robin Roefs 82 GK, 22, Sunderland On the list Desk: worth £18.3m to £21.5m David Raya 84 GK, 30, Arsenal On the list Desk: worth £28.2m to £29.1m Central Midfielder Needs a 83 or better Starting now: Lewis Miley (82) Gavi 83 CM, 21, Barcelona On the list Desk: worth £21.9m to £25.4m Alex Scott 85 CM, 22, Bournemouth On the list Desk: worth £29.2m to £32.6m Can Uzun 86 CAM, 20, Eintracht Frankfurt On the list Desk: worth £36.1m to £38.7m Striker Needs a 84 or better Starting now: Matias Fernandez-Pardo (83) Endrick 84 ST, 19, Real Madrid On the list Desk: worth £27.3m to £30.1m Pio Esposito 86 ST, 20, Inter Milan On the list Desk: worth £32.7m to £41m Marcus Thuram 86 ST, 28, Inter Milan On the list Desk: worth £37.5m to £41.9m Sell to raise money 3 offers on the table THE WIRE 11am The board have left you £102.5m for the day. The window shuts at 11pm. I am done, shut the window Deadline Day: Transfer Window Football Game Deadline Day is a free football transfer game on the Club Manager engine. Run recruitment at a real club on the last day of the window, haggle with selling clubs, agree personal terms with agents and fill the board's needs before the window shuts. Deadli"
+ },
+ {
+  "t": "00:22:00",
+  "kind": "targets",
+  "n": 12
+ },
+ {
+  "t": "00:22:01",
+  "kind": "audit",
+  "where": "deal",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [],
+  "tap44": 4,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 9
+ },
+ {
+  "t": "00:22:01",
+  "kind": "deal",
+  "k": 0,
+  "text": "Deadline Day Twelve hours. One budget. The window shuts at 11pm. Menu Newcastle, shuts at 11pm CLOCK 11am 12 hours left BUDGET £102.5m of £102.5m NEEDS 0 of 4 filled Back to the desk Ethan Pinnock 75 CB, age 32, at Coventry City. For the centre back need (75 or better). On the list Your desk says he is worth £5.6m to £6.1m. Listed at £5.1m. Call Coventry City (free) Deadline Day: Transfer Window Football Game Deadline Day is a free football transfer game on the Club Manager engine. Run recruitment at a real club on the last day of the window, haggle with selling clubs, agree personal terms with agents and fill the board's needs before the window shuts. Deadline Day puts you in charge of recruitment at a real club on the last day of the summer transfer window. The board have picked out three or four places in the side that need an upgrade, left you a budget, and the window shuts at 11pm. "
+ },
+ {
+  "t": "00:22:02",
+  "kind": "dealstep",
+  "k": 0,
+  "did": "Call Coventry City (free)",
+  "text": "Deadline Day Twelve hours. One budget. The window shuts at 11pm. Menu Newcastle, shuts at 11pm CLOCK 11am 12 hours left BUDGET £102.5m of £102.5m NEEDS 0 of 4 filled Back to the desk Ethan Pinnock 75 CB, age 32, at Coventry City. For the centre back need (75 or better). In talks Coventry City want £5.8m. Their ask: £5.8m ●●●●○ Your desk says he is worth £5.6m to £6.1m. They want top money for him. HOW CLOSE YOU ARE Type a bid Your bid m Lowball £4.6m Haggle £5.2m Meet the ask £5.8m Walk away Bid"
+ },
+ {
+  "t": "00:22:03",
+  "kind": "dealstep",
+  "k": 0,
+  "did": "Bid £5.8m (1 hour)",
+  "text": "Deadline Day Twelve hours. One budget. The window shuts at 11pm. Menu Newcastle, shuts at 11pm CLOCK 12pm 11 hours left BUDGET £102.5m of £102.5m NEEDS 0 of 4 filled Back to the desk Ethan Pinnock 75 CB, age 32, at Coventry City. For the centre back need (75 or better). Terms Fee agreed at £5.8m. Now his agent. Fee agreed: £5.8m ●●● His agent wants 2 years at 12k a week and a £1.1m signing bonus. The bonus comes out of the same budget as the fee, and the board will not go over the wage or the le"
+ },
+ {
+  "t": "00:22:04",
+  "kind": "dealstep",
+  "k": 0,
+  "did": "Offer terms (1 hour)",
+  "text": "Deadline Day Twelve hours. One budget. The window shuts at 11pm. Menu Newcastle, shuts at 11pm CLOCK 1pm 10 hours left BUDGET £95.6m of £102.5m NEEDS 1 of 4 filled Back to the desk Ethan Pinnock 75 CB, age 32, at Coventry City. For the centre back need (75 or better). Signed Signed: £5.8m to Coventry City, 2 years at 12k a week. Deadline Day: Transfer Window Football Game Deadline Day is a free football transfer game on the Club Manager engine. Run recruitment at a real club on the last day of t"
+ },
+ {
+  "t": "00:22:06",
+  "kind": "deal",
+  "k": 1,
+  "text": "Deadline Day Twelve hours. One budget. The window shuts at 11pm. Menu Newcastle, shuts at 11pm CLOCK 1pm 10 hours left BUDGET £95.6m of £102.5m NEEDS 1 of 4 filled Back to the desk Harry Maguire 77 CB, age 32, at Manchester United. For the centre back need (75 or better). On the list Benfica have asked about him. Leave it an hour and they could close. Your desk says he is worth £7.6m to £8.9m. Listed at £7.5m. Call Manchester United (free) Deadline Day: Transfer Window Football Game Deadline Day is a free football transfer game on the Club Manager engine. Run recruitment at a real club on the last day of the window, haggle with selling clubs, agree personal terms with agents and fill the board's needs before the window shuts. Deadline Day puts you in charge of recruitment at a real club on the last day of the summer transfer window. The board have picked out three or four places in the s"
+ },
+ {
+  "t": "00:22:06",
+  "kind": "dealstep",
+  "k": 1,
+  "did": "Call Manchester United (free)",
+  "text": "Deadline Day Twelve hours. One budget. The window shuts at 11pm. Menu Newcastle, shuts at 11pm CLOCK 1pm 10 hours left BUDGET £95.6m of £102.5m NEEDS 1 of 4 filled Back to the desk Harry Maguire 77 CB, age 32, at Manchester United. For the centre back need (75 or better). In talks Manchester United want £7.8m. Their ask: £7.8m ●●●●● Your desk says he is worth £7.6m to £8.9m. Benfica are in at £7.7m. Beat it or they close. They want top money for him. HOW CLOSE YOU ARE Type a bid Your bid m Lowba"
+ },
+ {
+  "t": "00:22:08",
+  "kind": "dealstep",
+  "k": 1,
+  "did": "Bid £7.8m (1 hour)",
+  "text": "Deadline Day Twelve hours. One budget. The window shuts at 11pm. Menu Newcastle, shuts at 11pm CLOCK 2pm 9 hours left BUDGET £95.6m of £102.5m NEEDS 1 of 4 filled Back to the desk Harry Maguire 77 CB, age 32, at Manchester United. For the centre back need (75 or better). Terms Fee agreed at £7.8m. Now his agent. Fee agreed: £7.8m ●●● His agent wants 2 years at 16k a week and a £1.4m signing bonus. The bonus comes out of the same budget as the fee, and the board will not go over the wage or the l"
+ },
+ {
+  "t": "00:22:09",
+  "kind": "dealstep",
+  "k": 1,
+  "did": "Offer terms (1 hour)",
+  "text": "Deadline Day Twelve hours. One budget. The window shuts at 11pm. Menu Newcastle, shuts at 11pm CLOCK 3pm 8 hours left BUDGET £86.4m of £102.5m NEEDS 1 of 4 filled Back to the desk Harry Maguire 77 CB, age 32, at Manchester United. For the centre back need (75 or better). Signed Signed: £7.8m to Manchester United, 2 years at 16k a week. Deadline Day: Transfer Window Football Game Deadline Day is a free football transfer game on the Club Manager engine. Run recruitment at a real club on the last d"
+ },
+ {
+  "t": "00:22:10",
+  "kind": "deal",
+  "k": 2,
+  "text": "Deadline Day Twelve hours. One budget. The window shuts at 11pm. Menu Newcastle, shuts at 11pm CLOCK 3pm 8 hours left BUDGET £86.4m of £102.5m NEEDS 1 of 4 filled Back to the desk Roger Ibañez 80 CB, age 27, at Al-Ahli. For the centre back need (75 or better). On the list Your desk says he is worth £13.4m to £14.5m. Listed at £14.9m. Call Al-Ahli (free) Deadline Day: Transfer Window Football Game Deadline Day is a free football transfer game on the Club Manager engine. Run recruitment at a real club on the last day of the window, haggle with selling clubs, agree personal terms with agents and fill the board's needs before the window shuts. Deadline Day puts you in charge of recruitment at a real club on the last day of the summer transfer window. The board have picked out three or four places in the side that need an upgrade, left you a budget, and the window shuts at 11pm. It runs on th"
+ },
+ {
+  "t": "00:22:11",
+  "kind": "dealstep",
+  "k": 2,
+  "did": "Call Al-Ahli (free)",
+  "text": "Deadline Day Twelve hours. One budget. The window shuts at 11pm. Menu Newcastle, shuts at 11pm CLOCK 3pm 8 hours left BUDGET £86.4m of £102.5m NEEDS 1 of 4 filled Back to the desk Roger Ibañez 80 CB, age 27, at Al-Ahli. For the centre back need (75 or better). In talks Al-Ahli want £16.6m. Their ask: £16.6m ●●●●● Your desk says he is worth £13.4m to £14.5m. They want top money for him. HOW CLOSE YOU ARE Type a bid Your bid m Lowball £13.3m Haggle £14.9m Meet the ask £16.6m Walk away Bid (1 hour)"
+ },
+ {
+  "t": "00:22:12",
+  "kind": "dealstep",
+  "k": 2,
+  "did": "Bid £16.6m (1 hour)",
+  "text": "Deadline Day Twelve hours. One budget. The window shuts at 11pm. Menu Newcastle, shuts at 11pm CLOCK 4pm 7 hours left BUDGET £86.4m of £102.5m NEEDS 1 of 4 filled Back to the desk Roger Ibañez 80 CB, age 27, at Al-Ahli. For the centre back need (75 or better). Terms Fee agreed at £16.6m. Now his agent. Fee agreed: £16.6m ●●● His agent wants 4 years at 30k a week and a £5.4m signing bonus. The bonus comes out of the same budget as the fee, and the board will not go over the wage or the length he "
+ },
+ {
+  "t": "00:22:13",
+  "kind": "dealstep",
+  "k": 2,
+  "did": "Offer terms (1 hour)",
+  "text": "Deadline Day Twelve hours. One budget. The window shuts at 11pm. Menu Newcastle, shuts at 11pm CLOCK 5pm 6 hours left BUDGET £64.4m of £102.5m NEEDS 1 of 4 filled Back to the desk Roger Ibañez 80 CB, age 27, at Al-Ahli. For the centre back need (75 or better). Signed Signed: £16.6m to Al-Ahli, 4 years at 30k a week. Deadline Day: Transfer Window Football Game Deadline Day is a free football transfer game on the Club Manager engine. Run recruitment at a real club on the last day of the window, ha"
+ },
+ {
+  "t": "00:22:15",
+  "kind": "sell",
+  "did": true,
+  "text": "Deadline Day Twelve hours. One budget. The window shuts at 11pm. Menu Newcastle, shuts at 11pm CLOCK 6pm 5 hours left BUDGET £86.5m of £102.5m NEEDS 1 of 4 filled Back to the desk Offers for your bench Clubs will take these men off your hands today at a deadline day price. Every sale takes an hour and the money goes straight into the budget. Tino Livramento RB, 85, age 23 Cesena offer £22.1m Sold Yoane Wissa ST, 83, age 29 FC Nordsjælland offer £17m Sell (1 hour) Aladji Bamba CDM, 81, age 19 Palermo offer £11.8m Sell (1 hour) Deadline Day: Transfer Window Football Game Deadline Day is a free football transfer game on the Club Manager engine. Run recruitment at a real club on the last day of "
+ },
+ {
+  "t": "00:22:20",
+  "kind": "help",
+  "open": false
+ },
+ {
+  "t": "00:22:22",
+  "kind": "reloadMid",
+  "before": "Deadline Day Twelve hours. One budget. The window shuts at 11pm. Menu Newcastle, shuts at 11pm CLOCK 6pm 5 hours left BUDGET £86.5m of £102.5m NEEDS 1 of 4 filled Centre Back Filled by Ethan Pinnock Starting now: Fabian Schär (74) Ethan Pinnock 75 CB, 32, Coventry City Signed Signed for £5.8m Harry Maguire 77 CB, 32, Manchester United Signed Signed for £7.8m Roger Ibañez 80 CB, 27, Al-Ahli Signed ",
+  "resumed": null,
+  "after": "Deadline Day Twelve hours. One budget. The window shuts at 11pm. TODAY'S DEADLINE DAY Atalanta Serie A. Same club, same needs and same budget for everyone today. Open today's window FREE PLAY Any club, any time Pick a club or let us pick one. A new set of needs every time. Pick a club Random Carry on at Newcastle Deadline Day: Transfer Window Football Game Deadline Day is a free football transfer "
+ },
+ {
+  "t": "00:22:25",
+  "kind": "audit",
+  "where": "result",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [],
+  "tap44": 2,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 6
+ },
+ {
+  "t": "00:22:25",
+  "kind": "result",
+  "text": "Deadline Day Twelve hours. One budget. The window shuts at 11pm. TODAY'S DEADLINE DAY Atalanta Serie A. Same club, same needs and same budget for everyone today. Open today's window FREE PLAY Any club, any time Pick a club or let us pick one. A new set of needs every time. Pick a club Random Carry on at Newcastle Deadline Day: Transfer Window Football Game Deadline Day is a free football transfer game on the Club Manager engine. Run recruitment at a real club on the last day of the window, haggle with selling clubs, agree personal terms with agents and fill the board's needs before the window shuts. Deadline Day puts you in charge of recruitment at a real club on the last day of the summer transfer window. The board have picked out three or four places in the side that need an upgrade, left you a budget, and the window shuts at 11pm. It runs on the Club Manager transfer desk, so every asking price, counter, patience count, valuation read, rival bid and agent's demand is the same one the full game plays. What is new is the clock: twelve hours, and every bid costs one of them. There is a daily, the same club, the same list and the same budget for everyone, and a free play mode at any club you like. How to play Deadline Day, the free transfer window game Choosing the daily club or free play Open today's window for the shared daily club, or pick any club in free play, or let the game pick one at random. Reading the board's brief Read the brief. Each need is a place in your current eleven, with who starts there now and the rating that would count as an upgrade. Under each need are two or three real players who could fill it, cheapest first, each with what your recruitment desk thinks he is worth. Working a deal Tap a player to open his deal, then call his club. The call is free and their asking price comes straight back. BIDDING AT THE FEE TABLE Type a bid and watch the meter, or use the quick buttons to lowball, haggle or meet the ask. Sending it takes an hour. AGREEING"
+ },
+ {
+  "t": "00:22:25",
+  "kind": "done",
+  "secs": 30
+ }
+]
