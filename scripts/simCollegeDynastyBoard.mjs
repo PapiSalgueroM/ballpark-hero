@@ -28,7 +28,7 @@
        for "commits to". Basketball red, football green.
      COLLEGE_BOARD_CONTROL=board    the shared board's close button gains a
        word. Both sports red.
-   The rewritten file is a copy under dist/.college-control, swapped in
+   The rewritten file is a copy under dist/.college-control-<pid>, swapped in
    through vitest's NO_DOUBLE_SWAP alias; the real file is never touched.
 
    Round 1320 (the athletic director): the fixture sets aside his nodes
@@ -145,7 +145,9 @@ console.log('2) the replay: both boards match every recorded step');
     }
     const rewritten = src.replace(control.from, control.to);
     if (rewritten === src || !rewritten.includes(control.to)) { console.error('control cannot run: the rewrite changed nothing'); process.exit(1); }
-    dir = path.join(ROOT, 'dist', '.college-control');
+    /* Round 1320: a folder of this run's own. Two controls of one file run side by side (three at a time on
+       a runner) wrote one shared copy, and cfbword replayed seatoff's copy and read as dead. */
+    dir = path.join(ROOT, 'dist', `.college-control-${process.pid}`);
     fs.mkdirSync(dir, { recursive: true });
     const copy = path.join(dir, path.basename(control.file).replace(/\.(tsx?)$/, '.control.$1'));
     fs.writeFileSync(copy, rewritten);
