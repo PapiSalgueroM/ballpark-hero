@@ -1,0 +1,3 @@
+ctl-trustblock: SIM_NBA_EARNED_DRAFT_CONTROL=trustblock node scripts/simNbaEarnedDraft.mjs
+earned-ctl: SIM_NBA_EARNED_DRAFT_CONTROL=all node scripts/simNbaEarnedDraft.mjs
+earned: node scripts/simNbaEarnedDraft.mjs
