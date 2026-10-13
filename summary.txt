@@ -1,0 +1,40 @@
+pd-e exit=0 31s | simCareerPreDraft [seed set e]: ALL GREEN
+ctl-new exit=0 236s | extradraw exit=1 mutated=1 | fails by section:  8 9. | simCareerPreDraft [control extradraw] [seed set a]: 8 FAILURE(S)
+softedge-old exit=0 27s | OLDFLOORS control=softedge exit=0
+vitest-college exit=0 11s |    Duration  10.35s (transform 900ms, setup 618ms, collect 3.49s, tests 16.45s, environment 4.32s, prepare 1.20s)
+ctl-round exit=0 448s | projection exit=1 mutated=1 | fails by section:  8 13. | simCareerPreDraft [control projection] [seed set a]: 8 FAILURE(S)
+board exit=0 7s | simCollegeDynastyBoard: all green
+simCollegeSeat exit=0 296s | simCollegeSeat: all sections green (S1 to S9 and SY)
+pjloop exit=0 567s | PJLOOP prospect=0 predraft=0 total 567s
+seat-rankbyprestige-EXPECT-RED exit=1 267s | simCollegeSeat CONTROL rankbyprestige FIRED: S1 went red with 6299 failures (red: S1 (6299))
+seat-placeoff-EXPECT-RED exit=1 285s | simCollegeSeat CONTROL placeoff FIRED: S1 went red with 17202 failures (red: S1 (17202))
+seat-ccgcount-EXPECT-RED exit=1 272s | simCollegeSeat CONTROL ccgcount FIRED: S2 went red with 2669 failures (red: S2 (2669), S3 (1283), S6 (212))
+seat-flattrust-EXPECT-RED exit=1 308s | simCollegeSeat CONTROL flattrust FIRED: S3 went red with 13368 failures (red: S2 (8676), S3 (13368), S4 (2), S5 (2), S6 (2), SY (4))
+seat-firedends-EXPECT-RED exit=1 269s | simCollegeSeat CONTROL firedends FIRED: S4 went red with 204 failures (red: S4 (204), S5 (3456), SY (4))
+seat-allowfirer-EXPECT-RED exit=1 314s | simCollegeSeat CONTROL allowfirer FIRED: S5 went red with 198 failures (red: S5 (198))
+seat-bidfirer-EXPECT-RED exit=1 289s | simCollegeSeat CONTROL bidfirer FIRED: S5 went red with 229 failures (red: S5 (229))
+seat-anyseason-EXPECT-RED exit=1 229s | simCollegeSeat CONTROL anyseason FIRED: S6 went red with 3085 failures (red: S6 (3085))
+seat-bidtier-EXPECT-RED exit=1 284s | simCollegeSeat CONTROL bidtier FIRED: S6 went red with 897 failures (red: S9 (14), S6 (897))
+seat-seatdraw-EXPECT-RED exit=1 289s | simCollegeSeat CONTROL seatdraw FIRED: S7 went red with 1 failures (red: S7 (1))
+seat-seatleak-EXPECT-RED exit=1 284s | simCollegeSeat CONTROL seatleak FIRED: S8 went red with 15786 failures (red: S8 (15786))
+board-cfbword-control exit=0 6s | control "cfbword": 1 failure(s) fired as expected, the check works
+board-cbbword-control exit=0 7s | control "cbbword": 1 failure(s) fired as expected, the check works
+board-board-control exit=0 5s | control "board": 1 failure(s) fired as expected, the check works
+board-seatleak-control exit=0 7s | control "seatleak": 1 failure(s) fired as expected, the check works
+board-seatdraw-control exit=0 7s | control "seatdraw": 1 failure(s) fired as expected, the check works
+board-seatunmarked-control exit=0 7s | control "seatunmarked": 1 failure(s) fired as expected, the check works
+board-seatoff-control exit=0 7s | control "seatoff": 1 failure(s) fired as expected, the check works
+simCfbDynasty exit=0 4s | simCfbDynasty: all green
+simCfbStaff exit=0 21s | simCfbStaff: all green
+simCbbStaff exit=0 20s | simCbbStaff: all green
+seat-nextyear-EXPECT-RED exit=1 266s | simCollegeSeat CONTROL nextyear FIRED: S9 went red with 1 failures (red: S9 (1))
+simCollegeRecruiting exit=0 9s | simCollegeRecruiting: all checks green
+simCfbRecruitFilters exit=0 6s | simCfbRecruitFilters: source bytes held, only owned disposable copies removed.
+simCbbRecruitFilters exit=0 4s | simCbbRecruitFilters: seven actual-Board combination, order, reset, empty, no-write, hidden-ability, signing-ID and NIL checks passed.
+simCoachCalls exit=0 5s | simCoachCalls: 75 checks, 0 failed
+simEngineIds exit=0 1s | simEngineIds: an id minted in one page load cannot collide with one minted in another, in all six engines.
+deskhost-closedquiet-EXPECT-RED exit=1 70s | simGmDeskHost CONTROL closedquiet FIRED: check 5 went red with 2076 failures (red checks 4:2 5:2076 10:1)
+simGmSeat exit=0 90s | simGmSeat: all checks passed
+seat-yearoutskip-EXPECT-RED exit=1 291s | simCollegeSeat CONTROL yearoutskip FIRED: SY went red with 80 failures (red: SY (80))
+simCmUnseededWorld exit=0 173s | simCmUnseededWorld: green. 49 old saves with no deal and 49 with every deal play byte equal to 41faaffc (state, draws and saved bytes at every step), and 15 new careers w
+unseeded-guard-EXPECT-RED exit=1 160s | simCmUnseededWorld: CONTROL guard FIRED: with the guard out the deal fleet went red (49 saves) and the quiet fleet stayed green
