@@ -1,0 +1,13 @@
+PART 1, CSS: built dist/assets (41 file(s)), every request blocked
+CONTROL smalltap: ContractsCard.tsx changed in the bundle only
+control smalltap: 83 findings (tap 107)
+   tap at 320: desk liverpool: Release "Release, 22k x 54" is 139.2 by 28 px
+   tap at 320: desk liverpool: Release "Release, 12k x 54" is 139.2 by 28 px
+   tap at 320: desk liverpool: Release "Release, 11k x 54" is 139.2 by 28 px
+   tap at 320: desk liverpool: Release "Release, 7k x 108" is 139.2 by 28 px
+   tap at 320: desk liverpool: Release "Release, 4k x 108" is 139.2 by 28 px
+   tap at 320: desk, a release asked: Release "Cancel" is 64.8 by 28 px
+   tap at 320: desk, a release asked: Release "Release, 22k x 54" is 139.2 by 28 px
+   tap at 320: desk, a release asked: Release "Release, 12k x 54" is 139.2 by 28 px
+CONTROL smalltap FIRED: 69 tap findings at 390, first: desk liverpool: Release "Release, 46k x 108" is 147.6 by 28 px
+Shots and part1.json: /home/runner/work/_temp/rc-out/files/shots
