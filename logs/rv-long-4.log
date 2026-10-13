@@ -1,0 +1,12 @@
+moves {"buy young":20,"buy any":20,"sale":20,"release":15,"free agent":10,"job move in season":2,"summer move":6,"wilderness job":2}; ledgers read 2000; largest 33 records
+TIME Celta Vigo era2005 seed 101 season 1: 0 records; buildMarket 1 ms (stripped 1); matchday 9 ms (stripped 7)
+TIME Celta Vigo era2005 seed 101 season 5: 12 records; buildMarket 1 ms (stripped 1); matchday 10 ms (stripped 7)
+TIME Celta Vigo era2005 seed 101 season 10: 23 records; buildMarket 1 ms (stripped 1); matchday 11 ms (stripped 7)
+TIME Celta Vigo era2005 seed 202 season 1: 0 records; buildMarket 1 ms (stripped 1); matchday 11 ms (stripped 6)
+TIME Celta Vigo era2005 seed 202 season 5: 13 records; buildMarket 0 ms (stripped 0); matchday 7 ms (stripped 6)
+TIME Celta Vigo era2005 seed 202 season 10: 31 records; buildMarket 1 ms (stripped 1); matchday 14 ms (stripped 7)
+REFUSED: 0
+DUPLICATE: 0
+MISPLACED: 0
+ERROR: 0
+rvcmw-long: green, no refusal, no duplicate, nobody misplaced
