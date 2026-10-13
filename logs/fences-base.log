@@ -1,0 +1,6 @@
+simLiveScores exit=0 | simLiveScores: green. The scores on the strip are shaped honestly, read from the table, and the keys stay in the database.
+simHarnessAnchors exit=0 | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simStorageWrites exit=0 | simStorageWrites: all green (owed: 12)
+simSiteSearch exit=0 | simSiteSearch: green. Every game is findable by name, typos included, and the ranking can explain itself.
+simScoringCoverage exit=0 | simScoringCoverage: all green
+simGuideHeadings exit=0 | simGuideHeadings: green. 131 guides carry keyword h2s over h3 and h4 sections with every original sentence intact, and all 133 blocks render

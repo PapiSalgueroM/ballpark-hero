@@ -1,0 +1,6 @@
+simCompletionOnce exit=0 | simCompletionOnce: all green
+simNoDoubleRecord exit=0 | simNoDoubleRecord: all green (67 rows and checks, each recorded once across the finish, the toggles, the coaching, the reveals and the reloa
+simDailyPuzzleContract exit=0 | simDailyPuzzleContract: green. Every caller honours the contract the selection memo depends on.
+simDailySaveHardening exit=0 | simDailySaveHardening: part all green
+simWritesAreSent exit=1 | Node.js v24.21.0
+simFetchRetry exit=0 | simFetchRetry: green. A transient page failure costs a retry and the rows come back whole.

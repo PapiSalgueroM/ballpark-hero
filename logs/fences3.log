@@ -1,0 +1,6 @@
+simGoogleOnlyReturn exit=0 |    8 of 8 rendered checks pass, no dash in the round's files, and all 11 controls turned exactly their own checks red.
+simNavbarStatsReads exit=0 | Artifacts: /home/runner/work/_temp/t-fences3/navbar-stats-42rG1r
+simScoringCoverage exit=0 | simScoringCoverage: all green
+simSiteSearch exit=0 | simSiteSearch: green. Every game is findable by name, typos included, and the ranking can explain itself.
+simResultMoment exit=1 | Node.js v24.21.0
+simGuideHeadings exit=0 | simGuideHeadings: green. 131 guides carry keyword h2s over h3 and h4 sections with every original sentence intact, and all 133 blocks render

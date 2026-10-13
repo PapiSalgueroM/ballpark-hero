@@ -1,0 +1,9 @@
+earned: node scripts/simNbaEarnedDraft.mjs
+earned-ctl: SIM_NBA_EARNED_DRAFT_CONTROL=all node scripts/simNbaEarnedDraft.mjs
+draftorder-ctl0: SIM_GM_DRAFT_ORDER_CONTROL=all SIM_GM_DRAFT_ORDER_SHARD=0/3 node scripts/simGmDraftOrder.mjs
+draftorder-ctl1: SIM_GM_DRAFT_ORDER_CONTROL=all SIM_GM_DRAFT_ORDER_SHARD=1/3 node scripts/simGmDraftOrder.mjs
+draftorder-ctl2: SIM_GM_DRAFT_ORDER_CONTROL=all SIM_GM_DRAFT_ORDER_SHARD=2/3 node scripts/simGmDraftOrder.mjs
+fences1: s=0; for h in simLiveScores simNoRivalNames simInventedNames simHarnessAnchors simNoInventedQuotes simNoInventedConduct simLegalPages simSingleFooter simStorageWrites; do node scripts/$h.mjs > /tmp/f-$h.log 2>&1; e=$?; echo "$h exit=$e | $(tail -1 /tmp/f-$h.log | cut -c1-140)"; [ $e -ne 0 ] && s=1; done; exit $s
+fences2: s=0; for h in simCompletionOnce simNoDoubleRecord simDailyPuzzleContract simDailySaveHardening simWritesAreSent simFetchRetry; do node scripts/$h.mjs > /tmp/f-$h.log 2>&1; e=$?; echo "$h exit=$e | $(tail -1 /tmp/f-$h.log | cut -c1-140)"; [ $e -ne 0 ] && s=1; done; exit $s
+fences3: s=0; for h in simGoogleOnlyReturn simNavbarStatsReads simScoringCoverage simSiteSearch simResultMoment simGuideHeadings; do node scripts/$h.mjs > /tmp/f-$h.log 2>&1; e=$?; echo "$h exit=$e | $(tail -1 /tmp/f-$h.log | cut -c1-140)"; [ $e -ne 0 ] && s=1; done; exit $s
+fences-base: git worktree add -q /tmp/base 48cb9d4b && ln -s "$PWD/node_modules" /tmp/base/node_modules && cd /tmp/base && for h in simLiveScores simHarnessAnchors simStorageWrites simSiteSearch simScoringCoverage simGuideHeadings; do node scripts/$h.mjs > /tmp/fb-$h.log 2>&1; echo "$h exit=$? | $(tail -1 /tmp/fb-$h.log | cut -c1-140)"; done

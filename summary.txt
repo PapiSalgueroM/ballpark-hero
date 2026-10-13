@@ -1,0 +1,9 @@
+earned exit=0 11s | simNbaEarnedDraft: green.
+draftorder-ctl1 exit=0 134s | simGmDraftOrder controls (shard 1/3 of 40): all 13 fired, each in exactly its own sections.
+draftorder-ctl0 exit=0 153s | simGmDraftOrder controls (shard 0/3 of 40): all 14 fired, each in exactly its own sections.
+earned-ctl exit=0 182s | simNbaEarnedDraft controls: all 14 fired, each in exactly its own sections.
+fences1 exit=1 108s | simStorageWrites exit=0 | simStorageWrites: all green (owed: 12)
+draftorder-ctl2 exit=0 139s | simGmDraftOrder controls (shard 2/3 of 40): all 13 fired, each in exactly its own sections.
+fences2 exit=1 134s | simFetchRetry exit=0 | simFetchRetry: green. A transient page failure costs a retry and the rows come back whole.
+fences-base exit=0 51s | simGuideHeadings exit=0 | simGuideHeadings: green. 131 guides carry keyword h2s over h3 and h4 sections with every original sentence intact, and all 133 blocks render
+fences3 exit=1 95s | simGuideHeadings exit=0 | simGuideHeadings: green. 131 guides carry keyword h2s over h3 and h4 sections with every original sentence intact, and all 133 blocks render
