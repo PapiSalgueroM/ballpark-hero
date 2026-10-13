@@ -1,0 +1,6 @@
+mut-Z exit=0 109s | MUT Z: simCollegeSeat exit=0 vitest exit=0 => NOT CAUGHT
+mut-B exit=0 115s | MUT B: simCollegeSeat exit=0 vitest exit=1 => CAUGHT
+mut-H exit=0 113s | MUT H: simCollegeSeat exit=1 vitest exit=0 => CAUGHT
+m-noclear exit=1 8s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/components/college-dynasty/CollegeSeat.test.tsx,title=src/components/college-dynasty/CollegeSeat.test.tsx >
+mut-F exit=0 277s | MUT F: simCollegeSeat exit=1 vitest exit=1 => CAUGHT
+mut-G exit=0 239s | MUT G: simCollegeSeat exit=1 vitest exit=1 => CAUGHT

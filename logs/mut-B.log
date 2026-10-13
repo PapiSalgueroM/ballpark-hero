@@ -1,0 +1,28 @@
+MUT B: applied to src/lib/collegeSeat.ts
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+     fired within the run, by first ask tier: contend 2.9% of 34, playoffs 14.6% of 48, respect 19.6% of 168, rebuild 22.0% of 50
+     fired within the run, by starting tier: tier 1 10.7%, tier 2 12.0%, tier 3 18.7%, tier 4 28.0%
+     fired within the run, by first ask tier: title 32.4% of 37, contend 0.0% of 55, playoffs 0.7% of 144, respect 6.3% of 64
+     fired within the run, by starting tier: tier 1 16.0%, tier 2 0.0%, tier 3 1.3%, tier 4 5.3%
+   cfb, twice fired over every pair of programs: 1892 markets, 46 in which gmSeat drew the first program that let him go (2.4%), 46 removed; 119 bids drawn from a program that let him go, 119 dropped
+   cbb, twice fired over every pair of programs: 1560 markets, 52 in which gmSeat drew the first program that let him go (3.3%), 52 removed; 108 bids drawn from a program that let him go, 108 dropped
+   cfb: 28281 rounds and 4842 closes and offseasons compared byte for byte before a move or a firing
+   cbb: 23985 rounds and 5030 closes and offseasons compared byte for byte before a move or a firing
+--- sim tail:
+   cbb: 5 years out played; refused in a seat 2895, on an open season 17, with next year shut 15; chairs left empty at the program that let him go during a year out 3
+simCollegeSeat: all sections green (S1 to S9 and SY)
+[41m[1m FAIL [22m[49m src/lib/collegeSeat.test.ts[2m > [22mthe save[2m > [22mkeeps a coach who just moved: a job taken at a close starts the season after the one on record
+[31m[1mAssertionError[22m: expected null not to be null[39m
+[41m[1m FAIL [22m[49m src/components/college-dynasty/CollegeSeat.test.tsx[2m > [22mRound 1320: the athletic director on the college boards[2m > [22mcfb: Take the job moves him once and opens the new program's trail; Sit the year out plays a season without him
+[41m[1m FAIL [22m[49m src/components/college-dynasty/CollegeSeat.test.tsx[2m > [22mRound 1320: the athletic director on the college boards[2m > [22mcbb: Take the job moves him once and opens the new program's trail; Sit the year out plays a season without him
+[31m[1mAssertionError[22m: the trail after a reload does not say where he coaches now: expected null to be truthy[39m
+[32m- Expected:[39m 
+[31m+ Received:[39m 
+[41m[1m FAIL [22m[49m src/components/college-dynasty/CollegeSeat.test.tsx[2m > [22mRound 1320: a buyout bid after a big year[2m > [22mcfb: the bid shows on the recap; Go to moves him with the old stint ended as a buyout, Stay put keeps him
+[41m[1m FAIL [22m[49m src/components/college-dynasty/CollegeSeat.test.tsx[2m > [22mRound 1320: a buyout bid after a big year[2m > [22mcbb: the bid shows on the recap; Go to moves him with the old stint ended as a buyout, Stay put keeps him
+[31m[1mAssertionError[22m: the trail after a reload does not say where he coaches now: expected null to be truthy[39m
+[32m- Expected:[39m 
+[31m+ Received:[39m 
+[2m Test Files [22m [1m[31m2 failed[39m[22m[2m | [22m[1m[32m1 passed[39m[22m[90m (3)[39m
+::error file=/tmp/mut-B/src/lib/collegeSeat.test.ts,title=src/lib/collegeSeat.test.ts > the save > keeps a coach who just moved%3A a job taken at a close starts the season after the one on record,line=221,column=22::AssertionError: expected null not to be null%0A ❯ src/lib/collegeSeat.test.ts:221:22%0A%0A
+MUT B: simCollegeSeat exit=0 vitest exit=1 => CAUGHT

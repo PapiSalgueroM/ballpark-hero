@@ -1,0 +1,25 @@
+MUT F: applied to src/lib/collegeSeat.ts
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+  FAIL [S5]: cfb: let go at UCLA and then MICH, and UCLA called again
+  FAIL [S5]: cfb: gmSeat drew UCLA, which let him go first, and the market removed 0
+  FAIL [S5]: cfb: let go at UCLA and then ORE, and UCLA called again
+  FAIL [S5]: cfb: gmSeat drew UCLA, which let him go first, and the market removed 0
+  FAIL [S5]: cfb: let go at UCLA and then CLEM, and UCLA called again
+  FAIL [S5]: cfb: gmSeat drew UCLA, which let him go first, and the market removed 0
+  FAIL [S5]: (further failures in this check not printed)
+     fired within the run, by first ask tier: contend 6.3% of 112, playoffs 16.7% of 144, respect 20.1% of 478, rebuild 21.7% of 166
+     fired within the run, by starting tier: tier 1 10.7%, tier 2 17.3%, tier 3 19.6%, tier 4 24.9%
+     fired within the run, by first ask tier: title 28.9% of 90, contend 2.2% of 185, playoffs 0.5% of 443, respect 4.9% of 182
+     fired within the run, by starting tier: tier 1 13.3%, tier 2 0.0%, tier 3 0.9%, tier 4 4.0%
+   cfb, twice fired over every pair of programs: 1892 markets, 46 in which gmSeat drew the first program that let him go (2.4%), 0 removed; 119 bids drawn from a program that let him go, 119 dropped
+--- sim tail:
+   cbb: 11 years out played; refused in a seat 8800, on an open season 41, with next year shut 33; chairs left empty at the program that let him go during a year out 6
+simCollegeSeat: RED in S5 (198)
+[41m[1m FAIL [22m[49m src/lib/collegeSeat.test.ts[2m > [22ma program that let him go never calls again[2m > [22mcfb: the market drops the first program that let him go when gmSeat draws it
+[31m[1mAssertionError[22m: expected [ 'p10', 'p05' ] to not include 'p10'[39m
+[41m[1m FAIL [22m[49m src/lib/collegeSeat.test.ts[2m > [22ma program that let him go never calls again[2m > [22mcbb: the market drops the first program that let him go when gmSeat draws it
+[31m[1mAssertionError[22m: expected [ 'p12', 'p02' ] to not include 'p12'[39m
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m2 passed[39m[22m[90m (3)[39m
+::error file=/tmp/mut-F/src/lib/collegeSeat.test.ts,title=src/lib/collegeSeat.test.ts > a program that let him go never calls again > cfb%3A the market drops the first program that let him go when gmSeat draws it,line=156,column=62::AssertionError: expected [ 'p10', 'p05' ] to not include 'p10'%0A ❯ src/lib/collegeSeat.test.ts:156:62%0A%0A
+::error file=/tmp/mut-F/src/lib/collegeSeat.test.ts,title=src/lib/collegeSeat.test.ts > a program that let him go never calls again > cbb%3A the market drops the first program that let him go when gmSeat draws it,line=156,column=62::AssertionError: expected [ 'p12', 'p02' ] to not include 'p12'%0A ❯ src/lib/collegeSeat.test.ts:156:62%0A%0A
+MUT F: simCollegeSeat exit=1 vitest exit=1 => CAUGHT

@@ -1,0 +1,29 @@
+MUT G: applied to src/lib/collegeSeat.ts
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+  FAIL [S5]: cfb: OSU let him go and then bid for him at OU
+  FAIL [S5]: cfb: ALA let him go and then bid for him at OU
+  FAIL [S5]: cfb: ND let him go and then bid for him at OU
+  FAIL [S5]: cfb: LSU let him go and then bid for him at OU
+  FAIL [S5]: cfb: ALA let him go and then bid for him at OU
+  FAIL [S5]: cfb: OSU let him go and then bid for him at AUB
+  FAIL [S5]: (further failures in this check not printed)
+     fired within the run, by first ask tier: contend 6.3% of 112, playoffs 16.7% of 144, respect 20.1% of 478, rebuild 21.7% of 166
+     fired within the run, by starting tier: tier 1 10.7%, tier 2 17.3%, tier 3 19.6%, tier 4 24.9%
+     fired within the run, by first ask tier: title 28.9% of 90, contend 2.2% of 185, playoffs 0.5% of 443, respect 4.9% of 182
+     fired within the run, by starting tier: tier 1 13.3%, tier 2 0.0%, tier 3 0.9%, tier 4 4.0%
+   cfb, twice fired over every pair of programs: 1892 markets, 46 in which gmSeat drew the first program that let him go (2.4%), 46 removed; 119 bids drawn from a program that let him go, 0 dropped
+--- sim tail:
+   cbb: 11 years out played; refused in a seat 8800, on an open season 41, with next year shut 33; chairs left empty at the program that let him go during a year out 6
+simCollegeSeat: RED in S5 (229)
+[41m[1m FAIL [22m[49m src/lib/collegeSeat.test.ts[2m > [22ma program that let him go never calls again[2m > [22mcfb: a buyout bid from a program that let him go is dropped, and the same bid stands without that past
+[31m[1mAssertionError[22m: expected { teamId: 'p01', …(6) } to be null[39m
+[32m- Expected:[39m 
+[31m+ Received:[39m 
+[41m[1m FAIL [22m[49m src/lib/collegeSeat.test.ts[2m > [22ma program that let him go never calls again[2m > [22mcbb: a buyout bid from a program that let him go is dropped, and the same bid stands without that past
+[31m[1mAssertionError[22m: expected { teamId: 'p04', …(6) } to be null[39m
+[32m- Expected:[39m 
+[31m+ Received:[39m 
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m2 passed[39m[22m[90m (3)[39m
+::error file=/tmp/mut-G/src/lib/collegeSeat.test.ts,title=src/lib/collegeSeat.test.ts > a program that let him go never calls again > cfb%3A a buyout bid from a program that let him go is dropped%2C and the same bid stands without that past,line=182,column=77::AssertionError: expected { teamId: 'p01', …(6) } to be null%0A%0A- Expected: %0Anull%0A%0A+ Received: %0A{%0A  "ask": {%0A    "reqLevel": 2,%0A    "season": 2032,%0A    "text": "Defend the crown: the boosters expect another deep run in the Playoff.",%0A    "tier": "contend",%0A    "winFloor": 0,%0A  },%0A  "buyout": true,%0A  "keenness": 41,%0A  "reason": "They will pay the buyout to get the coach who just won the national title.",%0A  "teamId": "p01",%0A  "teamName": "Program 1",%0A  "tier": 1,%0A}%0A%0A ❯ src/lib/collegeSeat.test.ts:182:77%0A%0A
+::error file=/tmp/mut-G/src/lib/collegeSeat.test.ts,title=src/lib/collegeSeat.test.ts > a program that let him go never calls again > cbb%3A a buyout bid from a program that let him go is dropped%2C and the same bid stands without that past,line=182,column=77::AssertionError: expected { teamId: 'p04', …(6) } to be null%0A%0A- Expected: %0Anull%0A%0A+ Received: %0A{%0A  "ask": {%0A    "reqLevel": 2,%0A    "season": 2032,%0A    "text": "Make the national tournament and win a national tournament game. The boosters paid for this roster.",%0A    "tier": "contend",%0A    "winFloor": 0,%0A  },%0A  "buyout": true,%0A  "keenness": 41,%0A  "reason": "They will pay the buyout to get the coach who just won the national title.",%0A  "teamId": "p04",%0A  "teamName": "Program 4",%0A  "tier": 1,%0A}%0A%0A ❯ src/lib/collegeSeat.test.ts:182:77%0A%0A
+MUT G: simCollegeSeat exit=1 vitest exit=1 => CAUGHT

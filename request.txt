@@ -1,0 +1,6 @@
+mut-Z: bash .rc/x/mutrun.sh Z 1
+mut-B: bash .rc/x/mutrun.sh B 1
+mut-F: bash .rc/x/mutrun.sh F 1,2,3
+mut-G: bash .rc/x/mutrun.sh G 1,2,3
+mut-H: bash .rc/x/mutrun.sh H 1
+m-noclear: node .rc/x/mutfix.mjs noclear && node_modules/.bin/vitest run src/components/college-dynasty/CollegeSeat.test.tsx --testTimeout=300000; s=$?; git checkout -- src scripts; exit $s
