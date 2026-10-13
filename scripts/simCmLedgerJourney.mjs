@@ -16,8 +16,19 @@
  * included), a buy at the old club, ten entries, then a second season played out and rolled over in place.
  * Printed: how many ledgers were read, the records by status (owned, released, retired), and the largest ledger.
  *
- * CONTROL, must go red (exit 1, last line says FIRED):
+ * KEYS (Release AZ, the closing check's NEW-A). After the job move in the season and after each summer, every
+ * record of this world year that the ledger holds as owned by my club is carried, by its worldRosterKey, by a man
+ * of my squad or a man I loaned out. A fix pass recorded the summer's emergency signings (fillSquadGaps) as
+ * permanent moves to my club, but the key landed on a copy of the squad the new season was not built from, so the
+ * ledger held men as mine whom no man of my squad carried, and their records aged apart from them. The fleet must
+ * see at least one such signing recorded (an owned record of my club whose man has an emergency id, fa-...).
+ * Measured on a GitHub runner at 7942d4d1 (remote check fx2-c): 230 owned records of my club checked, 3 of them
+ * an emergency signing (AC Horsens, the modern era's thinnest roster, two seeds); the run is seeded, so the count
+ * is the same every run, and the nokey control turns exactly those 3 red.
+ *
+ * CONTROLS, each must go red (exit 1, last line says FIRED):
  *   CM_LEDGER_CONTROL=futureyear   the recorder writes each new record a year ahead, which its reader refuses
+ *   CM_LEDGER_CONTROL=nokey        the summer's emergency signings lose the key of their record again
  * Exit 0 green, 1 red or a control that fired, 2 could not run, 3 a control that did not fire.
  *
  *   node scripts/simCmLedgerJourney.mjs
@@ -32,9 +43,10 @@ import { build } from 'esbuild';
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.CM_LEDGER_CONTROL || '';
 const cannot = why => { console.log(`simCmLedgerJourney: cannot run: ${why}`); process.exit(2); };
-if (CONTROL && CONTROL !== 'futureyear') cannot(`unknown control ${CONTROL}`);
-const LEDGER = 'src/lib/clubManagerWorldRoster.ts';
+if (CONTROL && CONTROL !== 'futureyear' && CONTROL !== 'nokey') cannot(`unknown control ${CONTROL}`);
+const LEDGER = 'src/lib/clubManagerWorldRoster.ts', CORE = 'src/lib/clubManager.ts';
 const RECORD = '  const record: WorldRosterRecord = { key, origin: plainCopy(origin), owner, status, year,\n';
+const KEYED = '    if (emergencyFrom.size) squad = rosterCareer.squad;\n';
 const lf = s => s.split('\r\n').join('\n');
 
 let edited = false;
@@ -51,6 +63,12 @@ const plugin = {
         text = text.replace(RECORD, RECORD.replace('status, year,', 'status, year: year + 1,'));
         edited = true;
       }
+      if (CONTROL === 'nokey' && rel === CORE) {
+        const n = text.split(KEYED).length - 1;
+        if (n !== 1) cannot(`control nokey: the line is in ${CORE} ${n} times, it must be exactly once`);
+        text = text.replace(KEYED, '');
+        edited = true;
+      }
       return { contents: text, loader: path.extname(args.path).slice(1), resolveDir: path.dirname(args.path) };
     });
   },
@@ -58,7 +76,7 @@ const plugin = {
 const entry = "export * as cm from './src/lib/clubManager';\nexport * as cal from './src/lib/clubManagerCalendar';\nexport * as eras from './src/lib/clubManagerEras';\nexport * as ledger from './src/lib/clubManagerWorldRoster';\n";
 const out = await build({ stdin: { contents: entry, resolveDir: ROOT, sourcefile: 'ledger-journey.ts', loader: 'ts' },
   bundle: true, write: false, format: 'cjs', platform: 'node', target: 'node20', plugins: [plugin], logLevel: 'silent' });
-if (CONTROL && !edited) cannot('the control was to edit the ledger module and it was never loaded');
+if (CONTROL && !edited) cannot('the control was to edit a source module and it was never loaded');
 const script = new vm.Script(out.outputFiles[0].text, { filename: 'ledger-journey.cjs' });
 async function fresh() {
   const module = { exports: {} }; const store = new Map(); const NOW = 1791633600000;
@@ -126,6 +144,19 @@ async function journey(era, club, seed, acc) {
     throw new Error(`${where}: a season did not end in 220 entries`);
   };
   const count = label => { acc.moves[label] = (acc.moves[label] ?? 0) + 1; };
+  /* KEYS: every record of this world year owned by my club is carried by a man of my squad or one I loaned out. */
+  const keys = label => {
+    const held = M.ledger.readWorldRoster(s);
+    if (!held) return;
+    const year = M.cm.worldYear(s);
+    for (const r of held.records) {
+      if (r.year !== year || r.status !== 'owned' || r.owner !== s.clubName) continue;
+      acc.mine += 1;
+      if (String(r.player.id ?? '').startsWith('fa-')) acc.emergency += 1;
+      if (!s.squad.some(p => p.worldRosterKey === r.key) && !(s.loanedOut ?? []).some(l => l.player.worldRosterKey === r.key))
+        acc.fails.push(`${where} after ${label}: ${r.player.name} is owned by my club in the ledger and no man of my squad carries his key`);
+    }
+  };
   try {
     step('start', () => M.cm.startCareer(club, era));
     if (s.worldSeed === undefined) { acc.fails.push(`${where}: a new career has no world seed`); return; }
@@ -149,14 +180,16 @@ async function journey(era, club, seed, acc) {
     const target = M.cm.applyTargets(s).find(t => t.club !== s.clubName)?.club;
     if (target && step('apply', cur => M.cm.applyForJob(cur, target), 0)) {
       for (let n = 0; n < 20 && s.jobHunt?.open?.status === 'pending'; n += 1) step(`application ${n + 1}`, cur => M.cm.playNextEntry(cur, { skipHalftime: true, noCoach: true }).state, 0.6);
-      if (s.jobHunt?.open?.status === 'accepted' && step('join now', cur => M.cal.joinClubNow(cur), 0.6)) count('job move in season');
+      if (s.jobHunt?.open?.status === 'accepted' && step('join now', cur => M.cal.joinClubNow(cur), 0.6)) { count('job move in season'); keys('join now'); }
     }
     toEnd('season one');
     if (step('summer move back', cur => M.cm.startNextSeason(cur, first)) && s.clubName === first) count('summer move back');
+    keys('the first summer');
     buy('buy at the old club', p => p.position !== 'GK' && p.age < 29);
     play(10, 'season two');
     toEnd('season two');
     step('rollover', cur => M.cm.startNextSeason(cur));
+    keys('the second summer');
     const read = M.ledger.readWorldRoster(s);
     for (const r of read?.records ?? []) acc.status[r.status] = (acc.status[r.status] ?? 0) + 1;
     acc.journeys += 1;
@@ -166,7 +199,7 @@ async function journey(era, club, seed, acc) {
 const ERAS = ['now', 'era2020', 'era2015', 'era2010', 'era2005'];
 const SEEDS = [0x1ed601, 0x1ed602, 0x1ed603];
 const M0 = await fresh();
-const acc = { journeys: 0, held: 0, read: 0, largest: 0, fails: [], moves: {}, status: {} };
+const acc = { journeys: 0, held: 0, read: 0, largest: 0, fails: [], moves: {}, status: {}, mine: 0, emergency: 0 };
 const t0 = Date.now();
 for (const era of ERAS) {
   const leagues = era === 'now' ? M0.cm.REAL_LEAGUES : M0.cm.ERA_LEAGUES[era];
@@ -182,20 +215,23 @@ for (const era of ERAS) {
 console.log(`journeys: ${acc.journeys} played to the end of season two, ${Math.round((Date.now() - t0) / 1000)}s`);
 console.log(`  moves made: ${Object.entries(acc.moves).sort().map(([k, v]) => `${k} ${v}`).join(', ')}`);
 console.log(`  ledgers held at a step: ${acc.held}, read: ${acc.read}; the largest held ${acc.largest} records; records at the end by status: ${Object.entries(acc.status).sort().map(([k, v]) => `${k} ${v}`).join(', ')}`);
+console.log(`  keys: ${acc.mine} owned records of my club checked after a job move or a summer, ${acc.emergency} of them an emergency signing`);
 for (const f of acc.fails.slice(0, 10)) console.log(`  FAIL ${f}`);
 if (acc.fails.length > 10) console.log(`  ... and ${acc.fails.length - 10} more`);
 /* The fleet proves something only if it made every kind of move and saw every status. */
 const need = ['buy', 'retrain', 'sale', 'release', 'loan option', 'job move in season', 'summer move back'].filter(k => !acc.moves[k]);
 const statuses = ['owned', 'released', 'retired'].filter(k => !acc.status[k]);
+if (!acc.emergency) need.push('an emergency signing recorded as mine');
 if (!CONTROL && (need.length || statuses.length)) cannot(`the fleet never made: ${[...need, ...statuses.map(x => `a ${x} record`)].join(', ')}`);
 if (CONTROL) {
-  const fired = acc.fails.some(f => f.includes('a ledger its reader refuses'));
-  console.log(fired
-    ? `simCmLedgerJourney: CONTROL ${CONTROL} FIRED: ${acc.fails.length} journeys hold a ledger their reader refuses`
-    : `simCmLedgerJourney: CONTROL ${CONTROL} DID NOT FIRE: every ledger read`);
-  process.exit(fired ? 1 : 3);
+  const sign = CONTROL === 'nokey' ? 'no man of my squad carries his key' : 'a ledger its reader refuses';
+  const hits = acc.fails.filter(f => f.includes(sign)).length;
+  console.log(hits
+    ? `simCmLedgerJourney: CONTROL ${CONTROL} FIRED: ${hits} failure(s) of the kind "${sign}"`
+    : `simCmLedgerJourney: CONTROL ${CONTROL} DID NOT FIRE: no failure of the kind "${sign}"`);
+  process.exit(hits ? 1 : 3);
 }
 console.log(acc.fails.length === 0
-  ? `simCmLedgerJourney: green. ${acc.journeys} seeded journeys, ${acc.read} ledgers read at a step or a reload, and the reader refused none the game wrote`
+  ? `simCmLedgerJourney: green. ${acc.journeys} seeded journeys, ${acc.read} ledgers read at a step or a reload, and the reader refused none the game wrote; every owned record of my club is carried by its man`
   : `simCmLedgerJourney: ${acc.fails.length} FAILURE(S)`);
 process.exit(acc.fails.length === 0 ? 0 : 1);
