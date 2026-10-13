@@ -59,9 +59,12 @@
  *      current and no press runs on it, and the old engine calls (the old draft
  *      on the class left, two rival batches) and the desk's summer finish on a
  *      valid league without a throw.
- *   9. NEED. No rival passes a man whose read beats its choice by more than
- *      NBA_DRAFT_NEED_WEIGHT, and a rival short at a position takes it more
- *      often than one that is not, by more than the floor, at every position.
+ *   9. NEED. Every rival choice is the man the rule picks on the ENGINE'S
+ *      GRADE plus the pinned NEED_WEIGHT (2) a whole point of the engine's
+ *      need, ties to the lower id, worked out here and never through the
+ *      host; so no rival passes a man whose grade beats its choice by more
+ *      than 2; and a rival short at a position takes it more often than one
+ *      that is not, by more than the floor, at every position.
  *  10. THE SHARED HALF KNOWS NO SPORT. gmEarnedDraft.ts imports only the lift
  *      and names no sport in its code (comments stripped); neither library
  *      draws from Math.random or carries an address.
@@ -105,6 +108,7 @@
  *   nocurve      the class ignores the curve                              (6)
  *   trustblock   any block on the desk is trusted                         (8)
  *   noneed       rivals choose on their read alone                        (9)
+ *   rivalscout   rivals choose on his scout's read, not the engine's grade (9)
  *   sportname    the shared half names a sport (in memory)                (10)
  *
  * MEASURED 2026-10-12 (quick walk, fixed seeds, so the same on every run of
@@ -204,6 +208,8 @@ const CONTROLS = {
   trustblock: { expect: [8], swaps: { bind: [['  return isGmDraftNight(raw, Object.keys(league.teams), league.season) ? raw : null;', '  return raw as GmDraftNight;']] } },
   /* rivals choose on their read alone */
   noneed: { expect: [9], swaps: { bind: [['    needWeight: NBA_DRAFT_NEED_WEIGHT,', '    needWeight: 0,']] } },
+  /* every rival chooses on HIS scout's read instead of the engine's own grade (review 2026-10-12, mutation m1) */
+  rivalscout: { expect: [9], swaps: { bind: [['    read: (p, club) => (club === ctx.me ? scout(p) : p.grade),', '    read: scout,']] } },
   /* the shared half names a sport (in memory, the shape of simGmDraftOrder's mounted control) */
   sportname: { expect: [10] },
   /* the curve flattened: every band one range */
@@ -530,6 +536,11 @@ open(6);
 const WALK_SEEDS = FLEET === 'full' ? 30 : 10;
 const WALK_SEASONS = 3;
 const LOTTERIES = FLEET === 'full' ? 40000 : 10000;
+/* The need weight, PINNED here as a number and never read off the engine (review 2026-10-12: a bound read from
+   E.NBA_DRAFT_NEED_WEIGHT grew with it, so a weight of 20 stayed green). A5: need is flavour and only splits men
+   whose reads are within a few points; the engine's 2 is that number. A tuned weight is a change to this line
+   too, said in the notes. */
+const NEED_WEIGHT = 2;
 const Q = { 2: [], 3: [], 4: [], 8: [] };
 const W = { seasons: 0, drawn: 0, tieFree: 0, drafts: 0, opened: 0, moved: 0, mineMoved: 0, three: 0, none: 0, clocks: 0, steps: 0, rivalRows: 0, swaps: 0, breaks: 0, fallbacks: 0 };
 const seasonsForLotteries = [];
@@ -615,8 +626,12 @@ function checkSeason(lg, series, where) {
   if (seasonsForLotteries.length < 20) seasonsForLotteries.push({ season, chance });
 }
 
-/** Section 9's reading of one night, on a copy: every rival choice with the club's need and how far its read fell
-    short of the best man left on its own read. The copy's draws are its own, so the walk is untouched. */
+/** Section 9's reading of one night, on a copy: every rival choice with the club's need, how far its grade fell
+    short of the best grade left, and whether it is the man the rule picks. The copy's draws are its own, so the
+    walk is untouched. THE RIVAL'S READ IS WORKED OUT HERE, NEVER THROUGH THE HOST: A5 says a rival chooses on the
+    engine's own grade (`p.grade`) plus NEED_WEIGHT a whole point of need (the engine's nbaDraftNeed), ties to the
+    lower id, so the host is held against that rule and not against itself (review 2026-10-12: with the host's
+    own read on both sides, rivals choosing on his scout's read stayed green). */
 function readNeed(lg, team, desk, night, cls, level, key) {
   const l = JSON.parse(J(lg));
   const { host } = N.nbaDraftHost({ me: team, season: l.season, scoutLevel: level, rng: mulberry32(key) });
@@ -625,8 +640,11 @@ function readNeed(lg, team, desk, night, cls, level, key) {
     ...host,
     sign: (league, club, p, slot) => {
       if (club !== team) {
-        const best = Math.max(...pool.map(x => host.read(x, club)));
-        needRows.push({ need: host.need(league, club), pos: p.pos, gap: best - host.read(p, club) });
+        const need = E.nbaDraftNeed(league.teams[club]);
+        const score = x => x.grade + NEED_WEIGHT * (need[x.pos] ?? 0);
+        let want = null;
+        for (const x of pool) if (want === null || score(x) > score(want) || (score(x) === score(want) && x.id < want.id)) want = x;
+        needRows.push({ need, pos: p.pos, gap: Math.max(...pool.map(x => x.grade)) - p.grade, rule: want !== null && want.id === p.id });
       }
       pool = pool.filter(x => x !== p);
       host.sign(league, club, p, slot);
@@ -831,12 +849,15 @@ open(8);
 
 open(9);
 {
-  /* Need: a rival short at a position takes it more often than one that is not; none passes a man whose read beats
-     its choice by more than the need weight. Floors in MEASURED. */
-  const weight = E.NBA_DRAFT_NEED_WEIGHT;
+  /* Need: every rival choice is the man the rule picks on the engine's own grade (readNeed works it out without the
+     host); none passes a man whose grade beats its choice by more than the pinned weight; a rival short at a
+     position takes it more often than one that is not. Floors in MEASURED. */
+  const weight = NEED_WEIGHT;
+  const offRule = needRows.filter(r => !r.rule).length;
+  check(needRows.length > 0 && offRule === 0, `${offRule} of ${needRows.length} rival choices are not the man the rule picks on the engine's grade plus ${weight} a point of need`);
   let over = 0;
   for (const r of needRows) if (r.gap > weight + 1e-9) over += 1;
-  check(over === 0, `${over} rival choices passed a man whose read beat theirs by more than ${weight}`);
+  check(over === 0, `${over} rival choices passed a man whose grade beat theirs by more than ${weight}`);
   const lift = {};
   for (const pos of ['G', 'F', 'C']) {
     const short = needRows.filter(r => r.need[pos] > 0);
@@ -848,7 +869,7 @@ open(9);
      nothing (control noneed) the three read 4.4, -0.1 and 0.9. */
   const NEED_FLOOR = 20;
   for (const [pos, v] of Object.entries(lift)) check(v.short > 0 && v.not > 0 && v.gap > NEED_FLOOR, `${pos}: a club short there takes one ${v.gap.toFixed(1)} points more often than one that is not (${v.short} and ${v.not} choices), floor ${NEED_FLOOR}`);
-  console.log(`   ${needRows.length} rival choices; none passed a better read by more than ${weight}; taken when short vs not, in points: ${Object.entries(lift).map(([p, v]) => `${p} ${v.gap.toFixed(1)} (${v.short}/${v.not})`).join(', ')}`);
+  console.log(`   ${needRows.length} rival choices, ${needRows.length - offRule} of them the rule's man on the engine's grade; none passed a better grade by more than ${weight}; taken when short vs not, in points:${Object.entries(lift).map(([p, v]) => `${p} ${v.gap.toFixed(1)} (${v.short}/${v.not})`).join(', ')}`);
 }
 
 open(10);

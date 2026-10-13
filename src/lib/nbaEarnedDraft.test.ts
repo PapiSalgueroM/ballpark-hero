@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { NBA_ROUNDS, initNbaLeague, type NbaLeague, type SeriesResult } from './nbaFrontOffice';
-import { nbaContractsOf, nbaGamePickRules, nbaPicksOf, openNbaDesk, syncNbaPicks } from './nbaGmDesk';
+import { NBA_ROUNDS, initNbaLeague, type NbaLeague, type NbaProspect, type SeriesResult } from './nbaFrontOffice';
+import { nbaContractsOf, nbaGamePickRules, nbaPicksOf, nbaScoutRead, openNbaDesk, syncNbaPicks } from './nbaGmDesk';
 import { withGmBlock, type GmDesk } from './gmDesk';
 import { NBA_PICK_RULES, movePicks, pickKey } from './gmPicks';
 import { NBA_ROOKIE_SCALE_YEARS } from './gmContractRules';
@@ -117,6 +117,19 @@ describe('the host and the three presses', () => {
     expect(league.teams.LAL.picks).toEqual([2]);
     expect(host.consume(league, 'LAL', r2)).toBe(true);
     expect(league.teams.LAL.picks).toEqual([]);
+  });
+  it('a rival reads the engine\'s own grade; he, his staff and every card read his scout (A5)', () => {
+    const { league } = opened();
+    const level = 1;
+    const { host } = nbaDraftHost({ me: ME, season: league.season, scoutLevel: level, rng: mulberry32(1) });
+    const scout = (p: NbaProspect) => nbaScoutRead(p, ME, league.season, level);
+    const cls = nbaEarnedDraftClass(mulberry32(12), 60, new Set());
+    expect(cls.filter(p => scout(p) !== p.grade).length).toBeGreaterThan(10);
+    for (const p of cls) {
+      for (const rival of ['LAL', 'DEN', 'MIA']) expect(host.read(p, rival)).toBe(p.grade);
+      expect(host.read(p, ME)).toBe(scout(p));
+      expect(host.shown(p)).toBe(scout(p));
+    }
   });
   it('the staff press is done, and every man of his reaches the re-sign ledger with his round', () => {
     const { league, desk, night } = opened();
