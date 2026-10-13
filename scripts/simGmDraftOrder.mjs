@@ -146,6 +146,7 @@ const MOUNT_ALLOW = [
   'src/lib/gmLotteryNight.ts', 'src/lib/gmLotteryNight.test.ts',
   'src/data/gmDraftOrder/rules.ts',
   'src/components/front-office-shared/GmLotteryCard.tsx', 'src/components/front-office-shared/GmLotteryCard.test.tsx',
+  'src/lib/gmEarnedDraft.ts', 'src/lib/nbaEarnedDraft.ts',
 ];
 
 /* control -> { swaps (keyed like the harness lib's FILES), expect: the sections that must go red } */
