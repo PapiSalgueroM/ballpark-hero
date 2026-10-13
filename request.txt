@@ -1,0 +1,18 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-round: node_modules/.bin/vitest run saveFence saveMovedNotice clubManagerSlots managerHotSeatCarryOn clubManagerSave --testTimeout=300000 --hookTimeout=120000
+fleet-vs-m4: git worktree add -q /tmp/f1 f14ec63a && ln -s "$PWD/node_modules" /tmp/f1/node_modules && FENCE_BASE=/tmp/f1 node scripts/simSaveFence.mjs
+fence-squadline-EXPECT-RED: git worktree add -q /tmp/f2 f14ec63a && ln -s "$PWD/node_modules" /tmp/f2/node_modules && FENCE_BASE=/tmp/f2 SAVE_FENCE_CONTROL=squadline node scripts/simSaveFence.mjs
+fence-nofence-EXPECT-RED: SAVE_FENCE_CONTROL=nofence node scripts/simSaveFence.mjs
+appeal1081-committed: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simManagerAppealIsolation.mjs
+simClubManagerDecisions: node scripts/simClubManagerDecisions.mjs
+probe-vs-m4: git worktree add -q /tmp/pb f14ec63a && ln -s "$PWD/node_modules" /tmp/pb/node_modules && PROBE_BASE=/tmp/pb node .rc/x/probeSquad.mjs
+simClubManagerSlots: node scripts/simClubManagerSlots.mjs
+slots-dupe-EXPECT-RED: SLOTS_CONTROL=dupe node scripts/simClubManagerSlots.mjs
+simClubManagerSaveSize: node scripts/simClubManagerSaveSize.mjs
+simClubManagerSave: node scripts/simClubManagerSave.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+simSaveKeeper: node scripts/simSaveKeeper.mjs
+simCmUnseededWorld: node scripts/simCmUnseededWorld.mjs
+simManagerHotSeat: node scripts/simManagerHotSeat.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs

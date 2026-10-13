@@ -1,0 +1,18 @@
+vitest-round exit=0 13s |    Duration  12.77s (transform 4.99s, setup 837ms, collect 14.56s, tests 9.50s, environment 5.86s, prepare 1.59s)
+tsc exit=0 101s | 
+fence-nofence-EXPECT-RED exit=1 2s | CONTROL FIRED: SAVE_FENCE_CONTROL=nofence fired 1 times and section tabs went red with 12 findings
+fleet-vs-m4 exit=0 131s | simSaveFence: all green (tabs, source, fleet)
+fence-squadline-EXPECT-RED exit=1 127s | CONTROL FIRED: SAVE_FENCE_CONTROL=squadline fired 1 times and section fleet went red with 1 findings
+simClubManagerDecisions exit=0 19s | simClubManagerDecisions: 0 findings
+appeal1081-committed exit=0 51s | Equivalent appeal outcomes must agree: passed for 24 original pairs and 3 separate generated-position pairs.
+probe-vs-m4 exit=0 15s | probeSquad PART B floor 14/15: 506 of 506 same
+simClubManagerSaveSize exit=0 65s | simClubManagerSaveSize: all sections green
+simClubManagerSlots exit=0 74s | simClubManagerSlots: all sections green
+slots-dupe-EXPECT-RED exit=1 72s | CONTROL FIRED: SLOTS_CONTROL=dupe turned section 2 red through its budget check (red sections: 2, 3), as it must
+simStorageWrites exit=0 4s | simStorageWrites: all green (owed: 12)
+simSaveKeeper exit=0 6s | simSaveKeeper: all green. The keeper holds on real saves of all 21 long games.
+simClubManagerSave exit=0 14s | simClubManagerSave: all sections green
+simHarnessAnchors exit=0 56s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simNoRivalNames exit=0 16s | No rival product names found. 0 findings.
+simManagerHotSeat exit=0 80s | simManagerHotSeat: green. The target is the club's, reading the room pays, outcomes replay, a Club Manager save keeps its registrations and a survivor carries on in Club 
+simCmUnseededWorld exit=1 159s | simCmUnseededWorld: 112 FAILURE(S)
