@@ -83,6 +83,10 @@
      GM_INBOX_CONTROL=effectvariant (Round 1324) a wording that prints the
                               trust meter with a signed number; section 1
                               fails.
+     GM_INBOX_CONTROL=effectout / effectrating (Round 1324's review) a
+                              wording that prints a man out for 2 weeks, or
+                              a rating with a signed number, as choiceEffects
+                              writes them; section 1 fails.
    Each control asserts the thing it mutates exists first, and refuses to run
    otherwise.
 
@@ -96,7 +100,7 @@ import { build } from 'esbuild';
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.GM_INBOX_CONTROL || '';
 const SEED = Number(process.env.SEED || 1);
-if (CONTROL && !['quote', 'flip', 'cool', 'drift', 'never', 'random', 'shift', 'opencap', 'maxcap', 'oneshot', 'ungate', 'unclamp', 'quotevariant', 'effectvariant'].includes(CONTROL)) {
+if (CONTROL && !['quote', 'flip', 'cool', 'drift', 'never', 'random', 'shift', 'opencap', 'maxcap', 'oneshot', 'ungate', 'unclamp', 'quotevariant', 'effectvariant', 'effectout', 'effectrating'].includes(CONTROL)) {
   console.error(`GM_INBOX_CONTROL=${CONTROL} is not a control this harness knows`);
   process.exit(2);
 }
@@ -208,13 +212,19 @@ if (CONTROL === 'quote') {
     text: `${someone} told reporters: "I want a new deal before camp or I sit."`, choices: PACKS.nfl.events[0].choices });
   if (PACKS.nfl.events.length !== before + 1) { console.error('quote control changed nothing, refusing to run'); process.exit(2); }
 }
-/* Round 1324: the same line as a second wording of a real NFL card, and a
-   wording that prints an effect. Each must turn section 1 red. */
-if (CONTROL === 'quotevariant' || CONTROL === 'effectvariant') {
+/* Round 1324: the same line as a second wording of a real NFL card, and
+   wordings that print an effect (a meter, a man out for weeks, a rating).
+   Each must turn section 1 red. */
+if (['quotevariant', 'effectvariant', 'effectout', 'effectrating'].includes(CONTROL)) {
   const someone = [...REAL].find(n => /^[A-Z][a-z]+ [A-Z][a-z]+$/.test(n));
   const e = PACKS.nfl.events[0];
   if (!someone || !e || e.texts !== undefined) { console.error(`${CONTROL} control: no real name or no plain NFL card to change, refusing to run`); process.exit(2); }
-  e.texts = [CONTROL === 'quotevariant' ? `${someone} told reporters: "I want a new deal before camp or I sit."` : `Sort this out and it is ${PACKS.nfl.meters.trust} +5.`];
+  e.texts = [{
+    quotevariant: `${someone} told reporters: "I want a new deal before camp or I sit."`,
+    effectvariant: `Sort this out and it is ${PACKS.nfl.meters.trust} +5.`,
+    effectout: 'Whatever the call, the starter sits out 2 weeks.',
+    effectrating: 'Get this right and his rating +3 by the weekend.',
+  }[CONTROL]];
   if (PACKS.nfl.events[0].texts?.length !== 1) { console.error(`${CONTROL} control changed nothing, refusing to run`); process.exit(2); }
 }
 
@@ -230,6 +240,8 @@ if (CONTROL === 'quotevariant' || CONTROL === 'effectvariant') {
     const meterWords = [...Object.values(p.meters), 'Recruit interest'].map(w => w.toLowerCase());
     const printsEffect = t => {
       const low = t.toLowerCase();
+      /* choiceEffects also prints "<target> out N weeks" and "<target> rating +N". */
+      if (/\bout\s+\d+\s+weeks?\b/.test(low) || /\brating\s*[+-]\s*\d/.test(low)) return true;
       return meterWords.some(w => {
         for (let at = low.indexOf(w); at >= 0; at = low.indexOf(w, at + 1)) {
           const after = low.slice(at + w.length, at + w.length + 8);
