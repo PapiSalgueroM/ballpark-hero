@@ -44,6 +44,16 @@ function controlInputRedIsTheBudget(status, output) {
 const SLOT_IMPORT = "import { expandPackedWorldRosterState } from './qa/managerWorldRosterDigest.cjs';\n";
 const SLOT_INITIALIZER = '  const { h2h, ...rest } = s;';
 const SLOT_ADAPTER = '  const { h2h, ...rest } = expandPackedWorldRosterState(s);';
+/* Release BC's join: main's Round 1311 (on main since Release BB) moved the Slots BUDGET to 532,500 and wrote why in
+   one header paragraph. A head that carries both AZ and 1311 holds those two exact edits beside the two additions
+   above; each must stand exactly once, the paragraph is comment lines only, and both are put back to the historical
+   text before the byte for byte comparison. A head without 1311 (the control-input arm, 3ac21642) carries neither. */
+const SLOT_1311_FIRST = ' *   Round 1311 moved BUDGET to 532,500 (a GitHub runner, remote check r1311-slots, 2026-10-12). The round\n';
+const SLOT_1311_LAST = " *   the largest healthy total and 37,810 under the control's, the margins the old number was set with.\n";
+const SLOT_1311_BUDGET = [
+  "const BUDGET = 532_500; // Round 1311, the league's awards on the records: measured healthy 504,692 to 507,107; duplicated career control 570,310 (was 495,000 from Round 1052: healthy 466,396 to 470,019, control 528,801)\n",
+  'const BUDGET = 495_000; // Round 1052, 27 leagues: measured healthy 466,396 to 470,019; actual duplicated career control 528,801 (was 470,000: healthy 442,058 to 444,992, control 501,773)\n',
+];
 const harnessSource = (ref, name) => execFileSync('git', ['show', `${ref}:scripts/${name}`],
   { cwd: ROOT, encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 }).replaceAll('\r\n', '\n');
 /* Release AZ fix (reviewer 2's MAJOR 2, reviewer 4's minor 5): SaveSize section 5 made its namesake pair
@@ -72,7 +82,7 @@ const SAVESIZE_OWN_CLUB = [
 ];
 function historicalHarnessContract(name, source) {
   const historical = harnessSource(BASE, name);
-  let restored = source, representationAdapter = false, sectionFiveHandover = false, ownClubFollow = false;
+  let restored = source, representationAdapter = false, sectionFiveHandover = false, ownClubFollow = false, round1311Budget = false;
   if (source !== historical && name === 'simClubManagerSaveSize.mjs') {
     assert.equal(source.split(SAVESIZE_FIRST).length - 1, 1, 'One exact section 5 handover comment');
     assert.equal(source.split(SAVESIZE_LAST).length - 1, 1, 'One exact section 5 handover statement');
@@ -93,9 +103,21 @@ function historicalHarnessContract(name, source) {
     assert.equal(source.split(SLOT_INITIALIZER).length - 1, 0, 'The original initializer is replaced once');
     restored = source.replace(SLOT_IMPORT, '').replace(SLOT_ADAPTER, SLOT_INITIALIZER);
     representationAdapter = true;
+    if (restored.includes(SLOT_1311_BUDGET[0])) {
+      assert.equal(restored.split(SLOT_1311_BUDGET[0]).length - 1, 1, 'One exact Round 1311 budget line');
+      assert.equal(restored.split(SLOT_1311_FIRST).length - 1, 1, 'One exact Round 1311 header paragraph start');
+      assert.equal(restored.split(SLOT_1311_LAST).length - 1, 1, 'One exact Round 1311 header paragraph end');
+      const start = restored.indexOf(SLOT_1311_FIRST), end = restored.indexOf(SLOT_1311_LAST) + SLOT_1311_LAST.length;
+      const block = restored.slice(start, end);
+      assert(start < end && block.split('\n').length <= 9 && block.slice(0, -1).split('\n').every(line => line.startsWith(' *   ')),
+        'The Round 1311 paragraph is header comment lines only');
+      restored = restored.slice(0, start) + restored.slice(end);
+      restored = restored.replace(SLOT_1311_BUDGET[0], () => SLOT_1311_BUDGET[1]);
+      round1311Budget = true;
+    }
   }
   assert.equal(restored, historical, 'Removing only the exact two additions restores the entire historical source');
-  return { representationAdapter, sectionFiveHandover, ownClubFollow, measuredSha256: sha(source), restoredHistoricalSha256: sha(restored) };
+  return { representationAdapter, sectionFiveHandover, ownClubFollow, round1311Budget, measuredSha256: sha(source), restoredHistoricalSha256: sha(restored) };
 }
 const harnessBlobs = Object.fromEntries(['simClubManagerSaveSize.mjs','simClubManagerSlots.mjs'].map(name => {
   const original = git(['rev-parse', `${BASE}:scripts/${name}`]), current = git(['rev-parse', `${HEAD}:scripts/${name}`]);
