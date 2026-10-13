@@ -486,4 +486,12 @@ describe('gmInbox deck rules, the review cases', () => {
     expect(s.phoneInbox).toHaveLength(1);
     expect(seen).toEqual(['0:0:open', '1:0:open', '2:0:auto', '3:0:auto']);
   });
+
+  it('the validator refuses a subject that names a yes or no fact, which could never be dealt', () => {
+    const facts: GmInboxPack['facts'] = { man: { kind: 'num', min: 1, max: 9, per: 'week' }, hot: { kind: 'bool', p: 0.5, per: 'week' } };
+    const p = deck([card('b', { subject: { fact: 'hot' } })], { facts });
+    expect(gmPackProblems(p).join(' ')).toMatch(/yes or no fact/);
+    expect(() => seatFor(p)).toThrow(/yes or no fact/);
+    expect(gmPackProblems(deck([card('m', { subject: { fact: 'man' } })], { facts }))).toEqual([]);
+  });
 });

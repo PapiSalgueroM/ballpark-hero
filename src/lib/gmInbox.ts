@@ -275,6 +275,9 @@ export function gmPackProblems(pack: GmInboxPack): string[] {
     if (typeof sub === 'string' && !has(pack.targets, sub)) out.push(`${e.id} is about ${sub}, not a target`);
     if (sub !== undefined && typeof sub !== 'string' && !(sub && typeof sub.fact === 'string' && has(pack.facts, sub.fact))) {
       out.push(`${e.id} is about a fact the pack does not declare`);
+    } else if (sub !== undefined && typeof sub !== 'string' && pack.facts[sub.fact].kind === 'bool') {
+      /* A yes or no names nobody, so gmSubjectKey would hold the card forever. */
+      out.push(`${e.id} is about a yes or no fact, which names nobody`);
     }
   }
   return out;
