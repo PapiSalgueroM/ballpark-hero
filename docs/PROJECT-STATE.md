@@ -8,6 +8,8 @@ Second fixed7c6a47c1/run38333557281 failed one related simulation after567 brows
 
 All38 fresh7c6 originals individually reviewed,root12desktop, Browser14at390/control and Fleet12at320,with no selected-card blocker and everyphysicalhash/sizeheld. Independent native reviews close method7c372 and actualpress-policy simrepairfdbee255 with no blocker. The repair adds bounded actualanswerPress/match states and an effective compiledpresscohort omission, preserving the original36-choice requirement,effectchecker,bands/cohorts and prior RNG/clock closures. Product/core/UI/unit/browser held. Fresh full remote run remains required.
 
+Thirdfixed2f348be4/run38335230946 remainsfailedonlyDecisionscoverage:actualunmeasuredpresspolicyfoundno<35statewithin3x180,301entries/107answers. All7units/types/build/browser567/18/2/38/other17scopes/holds pass,weight/controls skipped. Full artifact11785310389/LFlog/fresh38 originals retained,inventoryverified. Narrow8f9b018c repair replays the complete already-measured browserpolicy and per-action seeds/clock/promotion/legalXI inside unchangedbounds. No productthreshold/stat assignment. Workflow moves normalDecisions+two strict controls beforebuild,17postbuildscopes+earlynormal=18unique withall15readers held. Freshcompletequalificationpending.
+
 ## Release AY LIVE, 2026-10-12 14:24 EDT: the NFL front office gets its Game Day (a tile for your game of the week and a Watch button)
 
 Claude lane (session H, publishing the release session G sent to its gate). main 21941630, deployment 04d6904d-44ec-488a-b548-a935260c6bb0, entry index-Df_rcqsU.js (was index-BniRpUTm.js, Release AX,

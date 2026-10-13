@@ -117,6 +117,45 @@ jobs:
           run-id: ${{ env.MANAGER_DECISION_DEPTH_BASELINE_RUN }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
           path: manager-decision-baseline
+      - name: Actual decision coverage before the build
+        if: env.MANAGER_DECISION_DEPTH_PHASE == 'fixed'
+        run: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simClubManagerDecisions.mjs 2>&1 | tee "$MANAGER_DECISION_DEPTH_OUT/normal-decisions.log"
+      - name: Effective graduate coverage omission control
+        if: env.MANAGER_DECISION_DEPTH_PHASE == 'fixed'
+        run: |
+          set +e
+          CM_DECISIONS_CONTROL=depthcohort NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simClubManagerDecisions.mjs 2>&1 | tee "$MANAGER_DECISION_DEPTH_OUT/control-depthcohort.log"
+          result=${PIPESTATUS[0]}
+          set -e
+          CONTROL_EXIT="$result" node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          const log = fs.readFileSync(process.env.MANAGER_DECISION_DEPTH_OUT + '/control-depthcohort.log', 'utf8');
+          assert.equal(Number(process.env.CONTROL_EXIT), 1);
+          assert(!/Unhandled (?:Errors?|Rejection)|Uncaught Exception|Failed to load|Failed to resolve import|Cannot find module|Module not found|ERR_MODULE_NOT_FOUND|SyntaxError|ReferenceError|TypeError/i.test(log));
+          assert.deepEqual(log.split('\n').filter(line => line.startsWith('FAIL ')), ['FAIL [4] only 33 of 36 card answers were walked; missing academyStepUp#0, academyStepUp#1, academyStepUp#2']);
+          assert(log.includes('simClubManagerDecisions (control depthcohort): 1 findings'));
+          assert(/Effective depthcohort source control: [a-f0-9]{64}/.test(log));
+          console.log('Effective graduate cohort omission: exactly its three answer paths lost, all other findings absent.');
+          NODE
+      - name: Effective press coverage omission control
+        if: env.MANAGER_DECISION_DEPTH_PHASE == 'fixed'
+        run: |
+          set +e
+          CM_DECISIONS_CONTROL=presscohort NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simClubManagerDecisions.mjs 2>&1 | tee "$MANAGER_DECISION_DEPTH_OUT/control-presscohort.log"
+          result=${PIPESTATUS[0]}
+          set -e
+          CONTROL_EXIT="$result" node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          const log = fs.readFileSync(process.env.MANAGER_DECISION_DEPTH_OUT + '/control-presscohort.log', 'utf8');
+          assert.equal(Number(process.env.CONTROL_EXIT), 1);
+          assert(!/Unhandled (?:Errors?|Rejection)|Uncaught Exception|Failed to load|Failed to resolve import|Cannot find module|Module not found|ERR_MODULE_NOT_FOUND|SyntaxError|ReferenceError|TypeError/i.test(log));
+          assert.deepEqual(log.split('\n').filter(line => line.startsWith('FAIL ')), ['FAIL [4] only 33 of 36 card answers were walked; missing pressPressure#0, pressPressure#1, pressPressure#2']);
+          assert(log.includes('simClubManagerDecisions (control presscohort): 1 findings'));
+          assert(/Effective presscohort source control: [a-f0-9]{64}; one unique actual binding changed; before=[a-f0-9]{64}\./.test(log));
+          console.log('Effective press cohort omission: exactly its three answer paths lost, all other findings absent.');
+          NODE
       - name: Fixed browser and build tools
         if: env.MANAGER_DECISION_DEPTH_PHASE == 'fixed'
         run: |
@@ -158,7 +197,7 @@ jobs:
       - name: Related manager and every rebuilt-site reader
         if: env.MANAGER_DECISION_DEPTH_PHASE == 'fixed'
         run: |
-          ONLY=simClubManagerDecisions,simClubManagerMeters,simNoInventedQuotes,simAdsense,simBrand,simHeadTags,simHiddenPages,simHubs,simIndexNow,simIndexing,simInternalLinks,simNoRivalNames,simPrerender,simPrerenderBoot,simRetiredRoutes,simSchema,simSitemap,simSnapshotAssets node scripts/runAllSims.mjs --browser 2>&1 | tee "$MANAGER_DECISION_DEPTH_OUT/related.log"
+          ONLY=simClubManagerMeters,simNoInventedQuotes,simAdsense,simBrand,simHeadTags,simHiddenPages,simHubs,simIndexNow,simIndexing,simInternalLinks,simNoRivalNames,simPrerender,simPrerenderBoot,simRetiredRoutes,simSchema,simSitemap,simSnapshotAssets node scripts/runAllSims.mjs --browser 2>&1 | tee "$MANAGER_DECISION_DEPTH_OUT/related.log"
       - name: Existing page download budgets
         if: env.MANAGER_DECISION_DEPTH_PHASE == 'fixed'
         run: |
@@ -170,42 +209,6 @@ jobs:
             sleep 1
           done
           BASE=http://127.0.0.1:4173 SWEEP_OFFLINE=1 NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/sweepWeight.mjs 2>&1 | tee "$MANAGER_DECISION_DEPTH_OUT/weight.log"
-      - name: Effective graduate coverage omission control
-        if: env.MANAGER_DECISION_DEPTH_PHASE == 'fixed'
-        run: |
-          set +e
-          CM_DECISIONS_CONTROL=depthcohort NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simClubManagerDecisions.mjs 2>&1 | tee "$MANAGER_DECISION_DEPTH_OUT/control-depthcohort.log"
-          result=${PIPESTATUS[0]}
-          set -e
-          CONTROL_EXIT="$result" node --input-type=module <<'NODE'
-          import fs from 'node:fs';
-          import assert from 'node:assert/strict';
-          const log = fs.readFileSync(process.env.MANAGER_DECISION_DEPTH_OUT + '/control-depthcohort.log', 'utf8');
-          assert.equal(Number(process.env.CONTROL_EXIT), 1);
-          assert(!/Unhandled (?:Errors?|Rejection)|Uncaught Exception|Failed to load|Failed to resolve import|Cannot find module|Module not found|ERR_MODULE_NOT_FOUND|SyntaxError|ReferenceError|TypeError/i.test(log));
-          assert.deepEqual(log.split('\n').filter(line => line.startsWith('FAIL ')), ['FAIL [4] only 33 of 36 card answers were walked; missing academyStepUp#0, academyStepUp#1, academyStepUp#2']);
-          assert(log.includes('simClubManagerDecisions (control depthcohort): 1 findings'));
-          assert(/Effective depthcohort source control: [a-f0-9]{64}/.test(log));
-          console.log('Effective graduate cohort omission: exactly its three answer paths lost, all other findings absent.');
-          NODE
-      - name: Effective press coverage omission control
-        if: env.MANAGER_DECISION_DEPTH_PHASE == 'fixed'
-        run: |
-          set +e
-          CM_DECISIONS_CONTROL=presscohort NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simClubManagerDecisions.mjs 2>&1 | tee "$MANAGER_DECISION_DEPTH_OUT/control-presscohort.log"
-          result=${PIPESTATUS[0]}
-          set -e
-          CONTROL_EXIT="$result" node --input-type=module <<'NODE'
-          import fs from 'node:fs';
-          import assert from 'node:assert/strict';
-          const log = fs.readFileSync(process.env.MANAGER_DECISION_DEPTH_OUT + '/control-presscohort.log', 'utf8');
-          assert.equal(Number(process.env.CONTROL_EXIT), 1);
-          assert(!/Unhandled (?:Errors?|Rejection)|Uncaught Exception|Failed to load|Failed to resolve import|Cannot find module|Module not found|ERR_MODULE_NOT_FOUND|SyntaxError|ReferenceError|TypeError/i.test(log));
-          assert.deepEqual(log.split('\n').filter(line => line.startsWith('FAIL ')), ['FAIL [4] only 33 of 36 card answers were walked; missing pressPressure#0, pressPressure#1, pressPressure#2']);
-          assert(log.includes('simClubManagerDecisions (control presscohort): 1 findings'));
-          assert(/Effective presscohort source control: [a-f0-9]{64}; one unique actual binding changed; before=[a-f0-9]{64}\./.test(log));
-          console.log('Effective press cohort omission: exactly its three answer paths lost, all other findings absent.');
-          NODE
       - name: Final source and locked-tool holds
         if: always()
         run: |

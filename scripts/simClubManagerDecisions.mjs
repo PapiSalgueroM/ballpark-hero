@@ -220,35 +220,68 @@ function runGraduateCohort(E, seed, reset, copy) {
   }
   return cohort;
 }
-/* The passive seasons never answer the press. This separate policy answers
-   real pending questions, then plays actual matches without assigning mood. */
-function runPressCohort(E, seed, reset, copy) {
-  const cohort = { careers: 0, entries: 0, answers: [], boundCareers: 3, boundEntriesPerCareer: 180, skipped: false, state: null };
+/* Replay the already measured browser policy and its fixed action seeds.
+   Promotion and the graduate lineup are legal choices that change its draws. */
+function runPressCohort(E, copy) {
+  const withSeed = (seed, action) => {
+    const previousRandom = Math.random;
+    const PreviousDate = Date;
+    let number = seed >>> 0;
+    Math.random = () => {
+      number = (number + 0x6d2b79f5) | 0;
+      let value = Math.imul(number ^ (number >>> 15), 1 | number);
+      value = (value + Math.imul(value ^ (value >>> 7), 61 | value)) ^ value;
+      return ((value ^ (value >>> 14)) >>> 0) / 4294967296;
+    };
+    const now = PreviousDate.parse('2026-10-12T16:00:00Z');
+    globalThis.Date = class extends PreviousDate {
+      constructor(...args) { super(...(args.length ? args : [now])); }
+      static now() { return now; }
+    };
+    try { return action(); } finally { Math.random = previousRandom; globalThis.Date = PreviousDate; }
+  };
+  const cohort = { careers: 0, entries: 0, promotions: 0, answers: [], boundCareers: 3, boundEntriesPerCareer: 180,
+    policy: 'browser policy: fixed 979 + clubIndex * 100; action seeds + step * 101 + 1/2/3', skipped: false, state: null };
   for (const [index, club] of ['Arsenal', 'Everton', 'Brighton'].entries()) {
-    const careerSeed = seed + index * 97;
-    reset(careerSeed);
+    const careerSeed = 979 + index * 100;
     cohort.careers++;
-    let state = E.startCareer(club);
+    let state = withSeed(careerSeed, () => E.startCareer(club));
     for (let step = 0; step < 180 && !state.sacked; step++) {
-      state = { ...state, xiIds: E.autoPickXI(state.squad, E.FORMATIONS[state.formationIndex]) };
-      const question = state.press?.pending;
-      if (question) {
-        const answer = question.options.reduce((best, option, index) => option.mood < question.options[best].mood ? index : best, 0);
-        const beforeMood = state.press.mood;
-        state = E.answerPress(state, answer);
-        cohort.answers.push({ club, season: state.season, week: state.week, kind: question.kind, index: answer,
-          label: question.options[answer].label, delta: question.options[answer].mood, beforeMood, afterMood: state.press.mood });
-        if (!state.sacked && Number.isFinite(state.press.mood) && state.press.mood < 35) {
-          return { ...cohort, club, seed: careerSeed, stage: 'after-press-answer', mood: state.press.mood, state: copy(state) };
+      state = withSeed(careerSeed + step * 101 + 1, () => {
+        let next = state;
+        const graduate = next.squad.find(player => player.academyGrad === true && (player.apps ?? 0) < 3);
+        if (!graduate) {
+          const prospect = next.academy?.prospects.find(player => player.fee <= next.budget);
+          if (prospect) {
+            const promoted = E.promoteProspect(next, prospect.id);
+            if (promoted) { next = promoted; cohort.promotions++; }
+          }
         }
+        const formation = E.FORMATIONS[next.formationIndex];
+        next = { ...next, xiIds: E.autoPickXI(next.squad, formation) };
+        const young = next.squad.find(player => player.academyGrad === true && (player.apps ?? 0) < 3 && player.injuryWeeks === 0 && player.suspendedMatches === 0);
+        if (young && !next.xiIds.includes(young.id)) {
+          const slot = formation.slots.findIndex(slot => E.fitPenalty(young, slot) === 0);
+          if (slot >= 0) { const xiIds = [...next.xiIds]; xiIds[slot] = young.id; next = { ...next, xiIds }; }
+        }
+        const question = next.press?.pending;
+        if (question) {
+          const answer = question.options.reduce((best, option, index) => option.mood < question.options[best].mood ? index : best, 0);
+          const beforeMood = next.press.mood;
+          next = E.answerPress(next, answer);
+          cohort.answers.push({ club, season: next.season, week: next.week, kind: question.kind, index: answer,
+            label: question.options[answer].label, delta: question.options[answer].mood, beforeMood, afterMood: next.press.mood });
+        }
+        return next;
+      });
+      const entry = state.calendar[state.week];
+      if (entry && E.entryInvolvesMe(state, entry) && state.week < state.calendar.length - 1 && Number.isFinite(state.press?.mood) && state.press.mood < 35) {
+        return { ...cohort, club, seed: careerSeed, step, stage: 'after-manager-policy', mood: state.press.mood, state: copy(state) };
       }
-      const result = E.playNextEntry(state, { skipHalftime: true });
+      const result = withSeed(careerSeed + step * 101 + 2, () => E.playNextEntry(state, { skipHalftime: true }));
       cohort.entries++;
       state = result.state;
-      if (result.kind === 'match' && !state.sacked && Number.isFinite(state.press?.mood) && state.press.mood < 35) {
-        return { ...cohort, club, seed: careerSeed, stage: 'after-match', mood: state.press.mood, state: copy(state) };
-      }
-      if (!state.sacked && result.kind === 'seasonOver') state = E.startNextSeason(E.finishSeason(state).state);
+      if (!state.sacked && result.kind === 'seasonOver') state = withSeed(careerSeed + step * 101 + 3, () => E.startNextSeason(E.finishSeason(state).state));
     }
   }
   return cohort;
@@ -614,7 +647,7 @@ const randomBeforePress = Math.random;
 const clockBeforePress = Date.now;
 let pressCohort = null;
 try {
-  if (D.DECK.some(card => card.id === 'pressPressure')) pressCohort = P(A, BASE_SEED + 60000, reseed, clone);
+  if (D.DECK.some(card => card.id === 'pressPressure')) pressCohort = P(A, clone);
   else if (CONTROL === 'presscohort') throw new Error('presscohort requires the actual pressPressure card');
 } finally {
   Math.random = randomBeforePress;
