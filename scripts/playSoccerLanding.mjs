@@ -197,10 +197,13 @@ function pageProbes() {
     window.__toastAudit.push({ words: (li.textContent || '').replace(/\s+/g, ' ').trim().slice(0, 80), when, box: { x: Math.round(r.left), y: Math.round(r.top), w: Math.round(r.width), h: Math.round(r.height) }, scrollY: Math.round(scrollY), hits });
   };
   const seen = new WeakSet();
+  /* Every toast the page raised, by its words, whether or not it could be sampled. */
+  window.__toastSeen = [];
   const watch = () => new MutationObserver(() => {
     for (const li of document.querySelectorAll('[data-sonner-toast]')) {
       if (seen.has(li)) continue;
       seen.add(li);
+      window.__toastSeen.push((li.textContent || '').replace(/\s+/g, ' ').trim().slice(0, 80));
       requestAnimationFrame(() => sample(li, 'first frame'));
       setTimeout(() => sample(li, 'settled'), 450);
     }
@@ -236,9 +239,19 @@ function pageProbes() {
     try {
       const name = JSON.parse(localStorage.getItem('soccerCareerSave'))?.currentClub;
       if (name) {
-        const hit = [...document.querySelectorAll('main *')].filter(el => el.childElementCount === 0 && (el.textContent || '').includes(name) && el.getBoundingClientRect().height > 0)[0];
-        if (hit) { const c = hit.getBoundingClientRect(); club = { name, top: Math.round(c.top), bottom: Math.round(c.bottom), inside: c.top >= top - 2 && c.bottom <= bottom + 2 }; }
-        else club = { name, top: null, bottom: null, inside: false };
+        /* Every text on the page that names the club; the landing view names it
+           when any one of them is inside the readable area. */
+        const places = [];
+        const walker = document.createTreeWalker(document.querySelector('main') ?? document.body, NodeFilter.SHOW_TEXT);
+        for (let t = walker.nextNode(); t; t = walker.nextNode()) {
+          if (!(t.textContent || '').includes(name)) continue;
+          const range = document.createRange();
+          range.selectNodeContents(t);
+          const c = range.getBoundingClientRect();
+          if (c.height > 0) places.push({ top: Math.round(c.top), bottom: Math.round(c.bottom), inside: c.top >= top - 2 && c.bottom <= bottom + 2 });
+        }
+        const best = places.find(p => p.inside) ?? places.sort((a, b) => Math.abs(a.top) - Math.abs(b.top))[0];
+        club = best ? { name, ...best, places: places.length } : { name, top: null, bottom: null, inside: false, places: 0 };
       }
     } catch { club = null; }
     return { y: Math.round(scrollY), top: Math.round(r.top), bottom: Math.round(r.bottom), readTop: Math.round(top), readBottom: Math.round(bottom), inside: r.top >= top - 2 && r.bottom <= bottom + 2, club };
@@ -546,7 +559,9 @@ async function sectionToasts(ctx, arm, size) {
   });
   await p.waitForTimeout(600);
   const audit = await p.evaluate(() => window.__toastAudit ?? []);
-  console.log(`   ${audit.length / 2} toast(s) audited over a drive through ${kinds.join(', ')}`);
+  const seenWords = await p.evaluate(() => window.__toastSeen ?? []);
+  console.log(`   ${audit.length} toast sample(s) over a drive through ${kinds.join(', ')}; toasts raised: ${JSON.stringify(seenWords)}`);
+  for (const w of new Set(seenWords)) if (!audit.some(t => t.words === w)) rec(arm, 'toasts', size, `"${w}" was raised but never sampled, so the audit is blind to it`);
   for (const t of audit) {
     const bad = t.hits.filter(h => h.kind === 'control' || (h.kind === 'heading' && /^Joined /.test(t.words)));
     console.log(`     "${t.words}" ${t.when} at ${t.box.x},${t.box.y} ${t.box.w}x${t.box.h} (scrollY ${t.scrollY}): ${t.hits.length ? JSON.stringify([...new Set(t.hits.map(h => `${h.kind} ${h.what}`))]) : 'nothing under it'}`);
