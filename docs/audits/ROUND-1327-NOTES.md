@@ -326,7 +326,11 @@ green: in its picker loop,
     at Palmeiras in the run review's walk; the fair deck deals the catalog's tail at its full rate, so such cards come
     up more often than under the old shuffle (about 0.61 of fair). Same class as item 2.
 16. The yearly income cards (24, 28, 30) print a flat figure that the season scales by the personality and item
-    multipliers (engine 3116): F14, money.
+    multipliers (engine 3116). Read again in the closing fixes: on 24 and 30 (and card 5's deal) that is sponsor
+    money, and the multipliers are the player's own printed perks ("sponsors pay 25% more" on The Showman, "Sponsors
+    pay 12% more" on the Media Manager), so both printed promises compose: kept. Card 28's real estate fund books its
+    return as sponsor money (`sponsorBonus`), so it rides those sponsor perks and the agent's cut: a money model
+    fault the base already had ("+€150k/year"), F14.
 17. Six files outside the brief's list carry the inverse wiring (simCareerProgramme.mjs and five scripts/qa kits):
     their node checks run the base deck, so none of them exercises the new deck; their browser oracles do.
 
@@ -360,3 +364,24 @@ kits' wiring (they hold recordings; the inverse is what keeps them).
 - simSchemaNames and simLeaderboardCaps need the live database (blocked on the runner by design).
 
 
+
+## Closing fixes (2026-10-13, after the closing check of 37fe4211)
+
+The closing check (verify-1327.md) closed every review major and handed seven items on. What was done with each:
+- Card 5 (read review m2, owed 12): FIXED. Signing no longer books year one into `totalEarnings`; control
+  `firstyear` added to simSoccerEventPromises. The inverse is regenerated (16 rows).
+- Cards 24, 28 and 30 (read review m4, owed 16): 24 and 30 judged kept (sponsor money scaled by the player's own
+  printed perks); 28 owed to F14 (a fund's return booked as sponsor money). See owed item 16.
+- seasonCentreOwnGoals.test.tsx (8974536d): kept, for the lead to rule. Dropping that commit alone brings the full
+  vitest gate back to red on this branch (proved on the runner by reverting it on the head), so it cannot simply be
+  dropped: the lead either accepts it or puts another fix for that test in its place.
+- Card 426 (run review minor 6, owed 15): not fixed. soccerCareerRealismA.ts is the other lane's file and the brief
+  keeps the realism catalog out of this round. The fair deck deals the catalog's tail at its fair rate; the old rate
+  (about 0.61 of fair) was the bug the round fixes, not a guard.
+- The column and the repeat stories (run review minor 7, owed 1 and 8): not fixed. The column is
+  soccerCareerCritic.ts (not this round's); the paper keeps no memory of last season's stories (`dismissNewspaper`
+  empties `pendingNews`), so ending repeats needs a save field, and CareerState is Release BB's.
+- Cards 32 and 36 (read review m6, owed 9): for the lead, as the brief says.
+- The six kits' inverse wiring (read review m7, owed 17): kept; they hold recordings to the base's draws, so the
+  inverse is the house way to keep them. The lead accepts the wiring or asks for re-records instead.
+- simMoney and simCreation (save size): red on the base too, not this round's; fresh readings in fix2-1327.md.
