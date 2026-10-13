@@ -1,0 +1,9 @@
+vitest-fence exit=0 28s |    Duration  26.81s (transform 8.41s, setup 1.11s, collect 18.25s, tests 33.89s, environment 8.21s, prepare 2.42s)
+vitest-pages exit=0 83s |    Duration  81.86s (transform 12.78s, setup 2.25s, collect 45.06s, tests 140.76s, environment 14.31s, prepare 3.89s)
+anchors exit=0 63s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+storage exit=0 4s | simStorageWrites: all green (owed: 12)
+rivals exit=0 16s | No rival product names found. 0 findings.
+tsc exit=0 122s | 
+sims1 exit=0 297s | All 12 harnesses green.
+creation-head exit=1 513s | 1 FAILURES
+creation-main exit=1 519s | 1 FAILURES
