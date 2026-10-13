@@ -1,0 +1,69 @@
+FAIL 320-selected page.waitForFunction: Timeout 7000ms exceeded.
+    at commit (/home/runner/work/ballpark-hero/ballpark-hero/scripts/playSoccerInternationalReturn.mjs:60:14)
+    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playSoccerInternationalReturn.mjs:96:420
+FAIL 320-not-selected page.waitForFunction: Timeout 7000ms exceeded.
+    at commit (/home/runner/work/ballpark-hero/ballpark-hero/scripts/playSoccerInternationalReturn.mjs:60:14)
+    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playSoccerInternationalReturn.mjs:96:420
+PASS 320-ban 80 checks
+FAIL 320-tournament page.waitForFunction: Timeout 7000ms exceeded.
+    at commit (/home/runner/work/ballpark-hero/ballpark-hero/scripts/playSoccerInternationalReturn.mjs:60:14)
+    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playSoccerInternationalReturn.mjs:96:420
+FAIL 390-selected page.waitForFunction: Timeout 7000ms exceeded.
+    at commit (/home/runner/work/ballpark-hero/ballpark-hero/scripts/playSoccerInternationalReturn.mjs:60:14)
+    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playSoccerInternationalReturn.mjs:96:420
+FAIL 390-not-selected page.waitForFunction: Timeout 7000ms exceeded.
+    at commit (/home/runner/work/ballpark-hero/ballpark-hero/scripts/playSoccerInternationalReturn.mjs:60:14)
+    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playSoccerInternationalReturn.mjs:96:420
+PASS 390-ban 75 checks
+FAIL 390-tournament page.waitForFunction: Timeout 7000ms exceeded.
+    at commit (/home/runner/work/ballpark-hero/ballpark-hero/scripts/playSoccerInternationalReturn.mjs:60:14)
+    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playSoccerInternationalReturn.mjs:96:420
+FAIL 1280-selected page.waitForFunction: Timeout 7000ms exceeded.
+    at commit (/home/runner/work/ballpark-hero/ballpark-hero/scripts/playSoccerInternationalReturn.mjs:60:14)
+    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playSoccerInternationalReturn.mjs:96:420
+FAIL 1280-not-selected page.waitForFunction: Timeout 7000ms exceeded.
+    at commit (/home/runner/work/ballpark-hero/ballpark-hero/scripts/playSoccerInternationalReturn.mjs:60:14)
+    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playSoccerInternationalReturn.mjs:96:420
+PASS 1280-ban 75 checks
+FAIL 1280-tournament page.waitForFunction: Timeout 7000ms exceeded.
+    at commit (/home/runner/work/ballpark-hero/ballpark-hero/scripts/playSoccerInternationalReturn.mjs:60:14)
+    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playSoccerInternationalReturn.mjs:96:420
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+9 !== 0
+
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playSoccerInternationalReturn.mjs:121:117 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: 9,
+  expected: 0,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+9 !== 0
+
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/checkSoccerInternationalReturn.mjs:23:44
+    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)
+    at async node:internal/modules/esm/loader:647:26
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: 9,
+  expected: 0,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0
