@@ -1,0 +1,11 @@
+rv-long-2 exit=0 39s | rvcmw-long: green, no refusal, no duplicate, nobody misplaced
+rv-long-0 exit=0 65s | rvcmw-long: green, no refusal, no duplicate, nobody misplaced
+rv-long-1 exit=0 73s | rvcmw-long: green, no refusal, no duplicate, nobody misplaced
+rv-long-3 exit=0 43s | rvcmw-long: green, no refusal, no duplicate, nobody misplaced
+rv-long-4 exit=0 39s | rvcmw-long: green, no refusal, no duplicate, nobody misplaced
+rv-long-5 exit=0 38s | rvcmw-long: green, no refusal, no duplicate, nobody misplaced
+vitest-world exit=0 25s |    Duration  24.64s (transform 3.07s, setup 149ms, collect 4.16s, tests 24.30s, environment 1.08s, prepare 450ms)
+simCmLeagueRules exit=1 72s | simCmLeagueRules: 6 failure(s)
+tsc exit=0 97s | 
+simCmLedgerJourney exit=0 115s | simCmLedgerJourney: green. 45 seeded journeys, 9442 ledgers read at a step or a reload, and the reader refused none the game wrote
+simCmUnseededWorld exit=0 134s | simCmUnseededWorld: green. 49 old saves with no deal and 49 with every deal play byte equal to b6eb78e7 (state, draws and saved bytes at every step), and 15 new careers w

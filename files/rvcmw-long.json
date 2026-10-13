@@ -1,0 +1,26 @@
+{
+ "refusals": [],
+ "dupes": [],
+ "misplaced": [],
+ "timings": [
+  "Eibar era2015 seed 101 season 1: 0 records; buildMarket 3 ms (stripped 1); matchday 15 ms (stripped 15)",
+  "Eibar era2015 seed 101 season 5: 19 records; buildMarket 1 ms (stripped 1); matchday 18 ms (stripped 12)",
+  "Eibar era2015 seed 101 season 10: 25 records; buildMarket 1 ms (stripped 1); matchday 25 ms (stripped 13)",
+  "Eibar era2015 seed 202 season 1: 0 records; buildMarket 1 ms (stripped 1); matchday 33 ms (stripped 13)",
+  "Eibar era2015 seed 202 season 5: 19 records; buildMarket 1 ms (stripped 1); matchday 10 ms (stripped 6)",
+  "Eibar era2015 seed 202 season 10: 29 records; buildMarket 7 ms (stripped 1); matchday 21 ms (stripped 11)"
+ ],
+ "moves": {
+  "buy young": 20,
+  "buy any": 20,
+  "sale": 20,
+  "release": 18,
+  "free agent": 15,
+  "job move in season": 2,
+  "summer move": 6,
+  "wilderness job": 2
+ },
+ "ledgers": 1948,
+ "maxRecords": 32,
+ "errors": []
+}
