@@ -1,0 +1,20 @@
+tsc exit=0 147s | 
+simCmLedgerBound exit=0 601s | simCmLedgerBound: green, all four sections held
+vitest-all exit=0 1023s |    Duration  1020.97s (transform 57.66s, setup 44.06s, collect 287.51s, tests 2190.09s, environment 310.10s, prepare 67.69s)
+simManagerWorldContinuity exit=0 1167s | Private world variation is measured, no historical fixture was re-recorded
+simCmLedgerBound-noprune-EXPECT-RED exit=1 630s | simCmLedgerBound: CONTROL noprune FIRED: section 2 red (red: 1 (4), 2 (3))
+simCmLedgerBound-madeup-EXPECT-RED exit=1 382s | simCmLedgerBound: CONTROL madeup FIRED: section 3 red
+simCmLedgerBound-release-EXPECT-RED exit=1 372s | simCmLedgerBound: CONTROL release FIRED: section 4 red
+simCmVar exit=0 170s | simCmVar normal: actual review outcomes and full prior baseline passed.
+simCmUnseededWorld exit=0 194s | simCmUnseededWorld: green. 49 old saves with no deal and 49 with every deal play byte equal to b6eb78e7 (state, draws and saved bytes at every step), and 15 new careers w
+simCmUnseededWorld-guard-EXPECT-RED exit=1 177s | simCmUnseededWorld: CONTROL guard FIRED: with the guard out the deal fleet went red (49 saves) and the quiet fleet stayed green
+simCmUnseededWorld-noinverse-EXPECT-RED exit=1 35s | simCmUnseededWorld: CONTROL noinverse FIRED: without the inverse the fresh careers differ from the base (15 of 15)
+simCmLedgerJourney exit=0 143s | simCmLedgerJourney: green. 45 seeded journeys, 9442 ledgers read at a step or a reload, and the reader refused none the game wrote
+simCmLedgerJourney-futureyear-EXPECT-RED exit=1 4s | simCmLedgerJourney: CONTROL futureyear FIRED: 45 journeys hold a ledger their reader refuses
+simClubManagerSaveSize exit=0 65s | simClubManagerSaveSize: all sections green
+simClubManagerSaveSize-s3 exit=0 67s | simClubManagerSaveSize: all sections green
+simClubManagerSaveSize-uncapped-EXPECT-RED exit=1 64s | simClubManagerSaveSize: CONTROL FIRED as it should, SAVE_SIZE_CONTROL=uncapped turned section 1 red (33 failures) and nothing else
+simCmVar-all exit=0 802s | simCmVar: 13 actual outcomes and 27 effective controls passed.
+simClubManagerSlots exit=0 67s | simClubManagerSlots: all sections green
+simCmLeagueRules exit=0 63s | simCmLeagueRules: all checks passed (modern, eras, pure, drop4, cupless, shapes, chunks)
+simCmLedgerBound-nocache-EXPECT-RED exit=1 1222s | simCmLedgerBound: CONTROL nocache FIRED: section 1 red
