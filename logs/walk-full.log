@@ -1,0 +1,10 @@
+  FAIL  D  liverpool-take-seed1: dukb-club-manager-save differs, $.worldSeed: undefined against 1839780843
+  FAIL  D  celta-skip-seed2: dukb-club-manager-save differs, $.worldSeed: undefined against 2116110603
+  FAIL  D  everton2005-newyear-seed3: dukb-club-manager-save differs, $.worldSeed: undefined against 4121131890
+  PASS  A  liverpool-season2-390: from scrollY 23345 at the review, hub header top 12 px on the first frame of season 2 (seed 21, 6 presses to the review)
+  INFO  C  s320 Liverpool calendar: a calendar day cell is 36x58 px (a seventh of the grid, 46px tall by rule)
+  INFO  C  s320 Liverpool tile Board: 100px on head, 97px on base ("0/6 done" over "Elite patience")
+  INFO  C  s320 Liverpool tile Inbox: 100px on head, 97px on base ("1 new" over "The board")
+  INFO  C  s320 Liverpool tile Calendar: 100px on head, 97px on base ("D 1-1" over "Next: Everton")
+  INFO  C  s320 Liverpool tile League: 100px on head, 97px on base ("#1" over "Form: W D W L D")
+playCmHubLanding: 3 failure(s) (A 8 pass 0 fail, B 65 pass 0 fail, C 156 pass 0 fail, D 9 pass 3 fail, E 63 pass 0 fail, F 9 pass 0 fail)
