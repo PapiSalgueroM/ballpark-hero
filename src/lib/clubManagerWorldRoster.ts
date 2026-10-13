@@ -55,7 +55,12 @@ export function plainCopy<T>(value: T): T {
   if (Array.isArray(value)) return value.map(item => plainCopy(item)) as unknown as T;
   if (value !== null && typeof value === 'object') {
     const out: Record<string, unknown> = {};
-    for (const [key, item] of Object.entries(value as Record<string, unknown>)) out[key] = plainCopy(item);
+    for (const [key, item] of Object.entries(value as Record<string, unknown>)) {
+      /* An own key named __proto__ (JSON.parse makes one, and PR224's round trip case holds it) must stay an own
+         key: a plain assignment would set the copy's prototype instead. */
+      if (key === '__proto__') Object.defineProperty(out, key, { value: plainCopy(item), writable: true, enumerable: true, configurable: true });
+      else out[key] = plainCopy(item);
+    }
     return out as T;
   }
   return value;
