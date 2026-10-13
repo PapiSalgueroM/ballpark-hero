@@ -266,3 +266,20 @@ Not fixed here, for the lead's next briefs (W1b, W2, W3):
   recording what was settled this tick is an API change for the W1b or W3 brief.
 - Minor 11: the settled line doubles when the voice is the assistant ("Your assistant: your assistant dealt with
   it"), and `gmExpiredLine`'s `pack` parameter is unused. The template is the brief's; a copy pass in W3.
+
+### The fix pass on the runners (head 69dee50e)
+
+- rc r1324-fix-final (63 lines, the step (e) request plus the new lines): tsc exit 0; vitest exit 0 (2 files, 46
+  tests); simEventDeck exit 0 at SEED 1 and SEED 2 (`simEventDeck: green.`, 92.3 s and 84.1 s: all 84 rows byte equal
+  to the recording, 638,400 reloaded states of seeds 1 to 3, every new line green); all 14 EVENT_DECK_CONTROL lines
+  exit 1 on their own section (replay 1 and 3, weightoff 3, weightkeep 3, story 4, rest 5, failopen 5, restfall 5,
+  textrng 6, expireoff 7, expirefx 7, expirefall 7, neutral 8, seasonweek 9, heavy 10); simGmInbox's whole output at
+  SEED 1, 2 and 3 equal to the base 8fea14e2 and to 36cc9ffe (gmcmp, gmcmp-main exit 0); all 16 GM_INBOX_CONTROL lines
+  exit 1 (effectout and effectrating each on "a wording prints an effect"); simCareerInbox exit 0, privatecap exit 1;
+  simHarnessAnchors, simNoRivalNames (0 findings), simStorageWrites, simNoInventedQuotes, simNoInventedConduct and
+  simInventedNames exit 0. Four rule fences red exactly as on 0b6889d6 (rc r1324-m), same last lines: simSchemaNames and
+  simLeaderboardCaps need the live database, simWritesAreSent and simResultMoment need Playwright, which that request
+  does not install. None reads gmInbox.
+- rc r1324-fix-m2 (#!serial, the reviewer's mutation rig): m0 exit 0 SURVIVED (the rig is honest: kit, simGmInbox and
+  vitest 43 green), and m2, m3, m4, m6, m7 and m8 exit 1 CAUGHT (m3 by kit section 5 and a unit test, m4 by section 7 and
+  a unit test, m7 by section 3 and a unit test, m8 now by section 5 as well as the unit test).
