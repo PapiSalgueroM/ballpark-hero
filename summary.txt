@@ -1,0 +1,8 @@
+vitest-college exit=0 12s |    Duration  10.82s (transform 1.01s, setup 675ms, collect 4.37s, tests 17.65s, environment 4.38s, prepare 1.31s)
+board exit=0 6s | simCollegeDynastyBoard: all green
+simHarnessAnchors exit=0 52s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simNoRivalNames exit=0 19s | No rival product names found. 0 findings.
+tsc exit=0 104s | 
+simNoInventedConduct exit=0 1s | simNoInventedConduct: green. A real player can score in your sim and get hurt in it. He cannot fall out with the board in it.
+simNoInventedQuotes exit=0 24s | simNoInventedQuotes: green. No real player is quoted or accused anywhere.
+simCollegeSeat exit=0 239s | simCollegeSeat: all sections green (S1 to S9 and SY)
