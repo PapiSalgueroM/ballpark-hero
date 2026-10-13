@@ -1,0 +1,8 @@
+build exit=0 26s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+tsc exit=0 48s | 
+simNoRivalNames exit=0 10s | No rival product names found. 0 findings.
+simHarnessAnchors exit=0 31s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simStorageWrites exit=0 2s | simStorageWrites: all green (owed: 12)
+simSaveKeeper exit=0 3s | simSaveKeeper: all green. The keeper holds on real saves of all 21 long games.
+basebuild exit=0 26s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+keeper-old exit=1 799s | playSaveKeeper: RED, 1 problem(s).

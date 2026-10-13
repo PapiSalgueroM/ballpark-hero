@@ -1,0 +1,10 @@
+#!build
+#!playwright
+#!serial
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+simSaveKeeper: node scripts/simSaveKeeper.mjs
+basebuild: git fetch -q origin fb8d6811 2>/dev/null; git worktree add -q --detach /tmp/base fb8d6811 && ln -s "$PWD/node_modules" /tmp/base/node_modules && (cd /tmp/base && node_modules/.bin/vite build --outDir /tmp/base-dist > /tmp/base-build.log 2>&1; tail -1 /tmp/base-build.log) && test -f /tmp/base-dist/index.html
+keeper-old: git show efb4b93994d90196dda87b706374194436954355:scripts/playSaveKeeper.mjs > scripts/playSaveKeeperOld.mjs && KEEPER_BASE_DIST=/tmp/base-dist node scripts/playSaveKeeperOld.mjs; s=$?; rm -f scripts/playSaveKeeperOld.mjs; exit $s
