@@ -98,8 +98,11 @@
  *  19 (the closing check) "Watch Week 17" on E (A with a title mandate and
  *     trust 60, the review's own save: the owner card a line taller, so the
  *     feed box the press writes above the week box leaves less than the
- *     hook's 160 px of the box readable at 390 and the reveal fires): at full
- *     time his result, the next press and the back chip are on the screen;
+ *     hook's 160 px of the box readable at 390 and the reveal fires; the
+ *     page's generator seeded per stream, the review's seed first, and the
+ *     first stream whose press MOVED the page is read, red at 390 if none
+ *     did): at full time his result, the next press and the back chip are
+ *     on the screen;
  *     then the back chip and his bye round: the next press and the box's top
  *     on the screen. Asserted at 390 by 844 (ruling 2b), printed at 320 by
  *     640 and at 1280 (point 12 holds the reveal from sm up). Its proof is
@@ -292,9 +295,9 @@ async function openWeek(page) {
   await page.waitForSelector('[data-gameday]', { timeout: 20000 });
   await page.waitForTimeout(500);
 }
-async function newPage(browser, size, reduced = false) {
+async function newPage(browser, size, reduced = false, seed = 20261307) {
   const ctx = await browser.newContext({ viewport: { width: size.w, height: size.h }, ...(reduced ? { reducedMotion: 'reduce' } : {}) });
-  await ctx.addInitScript(() => { let s = 20261307; Math.random = () => { s = (s * 16807) % 2147483647; return (s - 1) / 2147483646; }; });
+  await ctx.addInitScript(s0 => { let s = s0; Math.random = () => { s = (s * 16807) % 2147483647; return (s - 1) / 2147483646; }; }, seed);
   const page = await ctx.newPage();
   await page.route(/supabase\.co/, r => r.abort());
   const errors = [];
@@ -929,12 +932,26 @@ async function titleWatchRun(page, size, plant) {
 }
 
 /* 19 (the closing check, ruling 2b): "Watch Week 17" on E, the first press of a visit, watched to full time at 3x; then
-   the back chip and his bye round. Asserted at 390 by 844, printed at the other sizes. */
+   the back chip and his bye round. Asserted at 390 by 844, printed at the other sizes. The case is a press that MOVES
+   the page (the hook fires when the feed box the press writes pushes the box's top under its 160 px), so the page's
+   generator is seeded per stream, the review walk's own seed first (20261309: two feed lines), and the first stream
+   whose press moved the page is the one read; a run where none did is red at 390, not green by not reaching it. */
 const onScreen = (r, h) => !!r && r.top >= 0 && r.bottom <= h;
-async function week17WatchRun(page, size) {
-  await loadSave(page, FIXTURES.E);
-  const p0 = await po(page);
-  await pressAt(page, '[data-watch-week]');
+async function week17WatchRun(browser, size) {
+  let ctx = null, page = null, errors = [], p0 = null, moved = 0, stream = 0;
+  for (const seed of [20261309, 20261311, 20261313, 20261317]) {
+    stream += 1;
+    ({ ctx, page, errors } = await newPage(browser, size, false, seed));
+    await loadSave(page, FIXTURES.E);
+    p0 = await po(page);
+    const y0 = await page.evaluate(() => Math.round(window.scrollY));
+    await pressAt(page, '[data-watch-week]');
+    moved = (await page.evaluate(() => Math.round(window.scrollY))) - y0;
+    if (moved !== 0 || stream === 4) break;
+    await ctx.close();
+  }
+  if (size.w === 390) say(19, moved !== 0, `${size.w}x${size.h}, "Watch Week 17" on E: the press moved the page (stream ${stream} of 4, by ${moved} px), so the case is reached`);
+  else note(`${size.w}x${size.h}, "Watch Week 17" on E: stream ${stream} of 4, the press moved the page by ${moved} px`);
   let samples = 0;
   const t0 = Date.now();
   for (;;) {
@@ -965,6 +982,9 @@ async function week17WatchRun(page, size) {
   if (size.w === 390) say(19, q.face === 'bracket' && onScreen(qNext, size.h) && !!q.box && q.box.top >= 0 && q.box.top < size.h - MIN_LEAD, `${qLine}: the next press and the box's top on the screen`);
   else note(qLine);
   await shot(page, size, '19-bye');
+  const real = realErrors(errors);
+  say(0, real.length === 0, `${size.w}x${size.h}, point 19: no page error (${real.length ? real[0].slice(0, 160) : 'clean'})`);
+  await ctx.close();
 }
 
 /* The closing check (the review's read minor 2, the first fix pass's minor 6, never measured before): a landscape
@@ -1076,7 +1096,7 @@ async function playoffsWalk(browser, size) {
   await watchRun(page, size, plant);
   await reloadAndHelp(page, size, plant);
   await titleWatchRun(page, size, plant);
-  await week17WatchRun(page, size);
+  await week17WatchRun(browser, size);
 
   /* 16: the old button, on the morning of Week 17, goes straight to the recap as it always did */
   await loadSave(page, FIXTURES.A);
