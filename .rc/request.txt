@@ -1,0 +1,63 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/lib/gmInbox.test.ts src/components/front-office-shared/GmInboxPanel.test.tsx --testTimeout=300000 --hookTimeout=120000
+deck: node scripts/simEventDeck.mjs
+deck-replay: EVENT_DECK_CONTROL=replay node scripts/simEventDeck.mjs
+deck-weightoff: EVENT_DECK_CONTROL=weightoff node scripts/simEventDeck.mjs
+deck-story: EVENT_DECK_CONTROL=story node scripts/simEventDeck.mjs
+deck-rest: EVENT_DECK_CONTROL=rest node scripts/simEventDeck.mjs
+deck-textrng: EVENT_DECK_CONTROL=textrng node scripts/simEventDeck.mjs
+deck-seasonweek: EVENT_DECK_CONTROL=seasonweek node scripts/simEventDeck.mjs
+deck-expireoff: EVENT_DECK_CONTROL=expireoff node scripts/simEventDeck.mjs
+deck-expirefx: EVENT_DECK_CONTROL=expirefx node scripts/simEventDeck.mjs
+deck-neutral: EVENT_DECK_CONTROL=neutral node scripts/simEventDeck.mjs
+deck-heavy: EVENT_DECK_CONTROL=heavy node scripts/simEventDeck.mjs
+gmcmp: git worktree add -q .rcb 8fea14e2 && for s in 1 2 3; do SEED=$s node .rcb/scripts/simGmInbox.mjs > /tmp/b$s.txt 2>&1; SEED=$s node scripts/simGmInbox.mjs > /tmp/h$s.txt 2>&1; if diff /tmp/b$s.txt /tmp/h$s.txt > /dev/null; then echo "seed $s: every line the same as the base"; else echo "seed $s DIFFERS"; diff /tmp/b$s.txt /tmp/h$s.txt | head -20; x=1; fi; tail -1 /tmp/h$s.txt; done; exit ${x:-0}
+gm-quote: GM_INBOX_CONTROL=quote node scripts/simGmInbox.mjs
+gm-flip: GM_INBOX_CONTROL=flip node scripts/simGmInbox.mjs
+gm-cool: GM_INBOX_CONTROL=cool node scripts/simGmInbox.mjs
+gm-drift: GM_INBOX_CONTROL=drift node scripts/simGmInbox.mjs
+gm-never: GM_INBOX_CONTROL=never node scripts/simGmInbox.mjs
+gm-random: GM_INBOX_CONTROL=random node scripts/simGmInbox.mjs
+gm-shift: GM_INBOX_CONTROL=shift node scripts/simGmInbox.mjs
+gm-opencap: GM_INBOX_CONTROL=opencap node scripts/simGmInbox.mjs
+gm-maxcap: GM_INBOX_CONTROL=maxcap node scripts/simGmInbox.mjs
+gm-oneshot: GM_INBOX_CONTROL=oneshot node scripts/simGmInbox.mjs
+gm-ungate: GM_INBOX_CONTROL=ungate node scripts/simGmInbox.mjs
+gm-unclamp: GM_INBOX_CONTROL=unclamp node scripts/simGmInbox.mjs
+careerinbox: node scripts/simCareerInbox.mjs
+careerinbox-privatecap: INBOX_CONTROL=privatecap node scripts/simCareerInbox.mjs
+anchors: node scripts/simHarnessAnchors.mjs
+rivals: node scripts/simNoRivalNames.mjs
+gm-quotevariant: GM_INBOX_CONTROL=quotevariant node scripts/simGmInbox.mjs
+gm-effectvariant: GM_INBOX_CONTROL=effectvariant node scripts/simGmInbox.mjs
+fence-simLiveScores: node scripts/simLiveScores.mjs
+fence-simLegalPages: node scripts/simLegalPages.mjs
+fence-simSingleFooter: node scripts/simSingleFooter.mjs
+fence-simCompletionSlugs: node scripts/simCompletionSlugs.mjs
+fence-simCompletionOnce: node scripts/simCompletionOnce.mjs
+fence-simNoDoubleRecord: node scripts/simNoDoubleRecord.mjs
+fence-simDailyPuzzleContract: node scripts/simDailyPuzzleContract.mjs
+fence-simDailySaveHardening: node scripts/simDailySaveHardening.mjs
+fence-simWritesAreSent: node scripts/simWritesAreSent.mjs
+fence-simSchemaNames: node scripts/simSchemaNames.mjs
+fence-simFetchRetry: node scripts/simFetchRetry.mjs
+fence-simGoogleOnlyReturn: node scripts/simGoogleOnlyReturn.mjs
+fence-simReportRelay: node scripts/simReportRelay.mjs
+fence-simNavbarStatsReads: node scripts/simNavbarStatsReads.mjs
+fence-simLeaderboardCaps: node scripts/simLeaderboardCaps.mjs
+fence-simScoringCoverage: node scripts/simScoringCoverage.mjs
+fence-simSiteSearch: node scripts/simSiteSearch.mjs
+fence-simResultMoment: node scripts/simResultMoment.mjs
+fence-simGuideHeadings: node scripts/simGuideHeadings.mjs
+quotes: node scripts/simNoInventedQuotes.mjs
+conduct: node scripts/simNoInventedConduct.mjs
+names: node scripts/simInventedNames.mjs
+gmcmp-main: git worktree add -q .rcm 36cc9ffe && for s in 1 2 3; do SEED=$s node .rcm/scripts/simGmInbox.mjs > /tmp/mb$s.txt 2>&1; SEED=$s node scripts/simGmInbox.mjs > /tmp/mh$s.txt 2>&1; if diff /tmp/mb$s.txt /tmp/mh$s.txt > /dev/null; then echo "seed $s: every line the same as the base"; else echo "seed $s DIFFERS"; diff /tmp/mb$s.txt /tmp/mh$s.txt | head -20; x=1; fi; tail -1 /tmp/mh$s.txt; done; exit ${x:-0}
+deck-s2: SEED=2 node scripts/simEventDeck.mjs
+deck-weightkeep: EVENT_DECK_CONTROL=weightkeep node scripts/simEventDeck.mjs
+deck-failopen: EVENT_DECK_CONTROL=failopen node scripts/simEventDeck.mjs
+deck-restfall: EVENT_DECK_CONTROL=restfall node scripts/simEventDeck.mjs
+deck-expirefall: EVENT_DECK_CONTROL=expirefall node scripts/simEventDeck.mjs
+gm-effectout: GM_INBOX_CONTROL=effectout node scripts/simGmInbox.mjs
+gm-effectrating: GM_INBOX_CONTROL=effectrating node scripts/simGmInbox.mjs
+storage: node scripts/simStorageWrites.mjs
