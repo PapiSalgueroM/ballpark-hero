@@ -1,0 +1,9 @@
+#!serial
+m-loanclub-s1: node .rc/x/mut1327.mjs loanclub && SEED_OFFSET=1 node scripts/simSoccerDeckFairness.mjs; s=$?; git checkout -- src scripts; exit $s
+m-loanclub-s2: node .rc/x/mut1327.mjs loanclub && SEED_OFFSET=2 node scripts/simSoccerDeckFairness.mjs; s=$?; git checkout -- src scripts; exit $s
+m-loanclub-s3: node .rc/x/mut1327.mjs loanclub && SEED_OFFSET=3 node scripts/simSoccerDeckFairness.mjs; s=$?; git checkout -- src scripts; exit $s
+m-loanclub-s4: node .rc/x/mut1327.mjs loanclub && SEED_OFFSET=4 node scripts/simSoccerDeckFairness.mjs; s=$?; git checkout -- src scripts; exit $s
+creation-head: node scripts/simCreation.mjs 2>&1 | tail -25
+creation-base: git checkout c9c77ebab727b9bd624459388e33b6579538e4ca -- src && node scripts/simCreation.mjs 2>&1 | tail -25; git checkout HEAD -- src
+money-head: node scripts/simMoney.mjs 2>&1 | tail -25
+money-base: git checkout c9c77ebab727b9bd624459388e33b6579538e4ca -- src && node scripts/simMoney.mjs 2>&1 | tail -25; git checkout HEAD -- src

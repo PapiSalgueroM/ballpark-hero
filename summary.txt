@@ -1,0 +1,8 @@
+m-loanclub-s1 exit=1 45s | simSoccerDeckFairness: 1 failures in section 8
+m-loanclub-s2 exit=1 43s | simSoccerDeckFairness: 1 failures in section 8
+m-loanclub-s3 exit=1 44s | simSoccerDeckFairness: 1 failures in section 8
+m-loanclub-s4 exit=1 44s | simSoccerDeckFairness: 1 failures in section 8
+creation-head exit=0 351s | 1 FAILURES
+creation-base exit=0 361s | 1 FAILURES
+money-head exit=0 177s | 1 FAILURES
+money-base exit=0 176s | 1 FAILURES

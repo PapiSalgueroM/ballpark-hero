@@ -1,0 +1,25 @@
+6) The climb line in the legacy verdict
+   started 54, peaked 91 -> climb line +8; started 99, peaked 91 -> -16
+7) Same overall, different build, different career (300 careers each)
+   poacher    (172cm 66kg, finishing): 250 goals, 456 apps over 12.0 seasons, mean rating 7.66, goal mult 1.137, apps mult 0.984
+   target man (196cm 94kg, heading):   220 goals, 465 apps over 12.0 seasons, mean rating 7.51, goal mult 1.009, apps mult 1.028
+   goals per game 0.547 vs 0.473 (15.8% apart), career goal gap 13.6%, appearance gap 8.9 games, rating gap 0.15
+   an untouched build is exactly neutral at all 10 positions across overalls 44 to 99
+   198cm 95kg vs 168cm 62kg: heading 87 vs 72, strength 85 vs 65, acceleration 65 vs 82
+8) Allocator fuzz: 250k moves, typing and stepping mixed
+   250000 moves: 0 illegal values, 0 negative pools, 0 unspendable states, 0 overall drifts
+9) Shaping fuzz: 120k moves across every family
+   120000 moves: 0 unbalanced families, 0 out of range offsets, 0 unknown keys, 0 overall drifts
+10) Garbage physique and shape values
+   every garbage physique clamped, every unbalanced or unknown shape dropped, legal shapes kept
+11) A pre Round 131 save
+   old save played 23 pro seasons, peaked 82, retired=true, verdict GREAT, frame repaired to 180cm
+   a full career save is 73.8 KB, of which this round added 468 bytes
+  FAIL: a full career save is 73.8 KB, over the budget
+12) Create your look
+   skin tones 6 to 12, hair colours 8 to 16, hairstyles 12 to 23, beards 7 to 14, extras 8 to 16, boots 10 to 18, celebrations 10 to 19
+   4000 surprise me rolls, all legal, zero unasked for dye jobs
+13) Copy rules on everything this round wrote
+   9 files clean: no em or en dashes, no other products named in copy
+
+1 FAILURES
