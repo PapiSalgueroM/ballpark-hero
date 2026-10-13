@@ -1,0 +1,12 @@
+#!serve
+#!playwright
+#!serial
+basebuild: git worktree add /tmp/base 8fea14e216fb550b4676ac29f06867234594df21 > /dev/null 2>&1; ln -s "$PWD/node_modules" /tmp/base/node_modules; (cd /tmp/base && npm run build > /tmp/basebuild.log 2>&1); s=$?; tail -3 /tmp/basebuild.log; nohup node scripts/lib/hostLikeServer.mjs /tmp/base/dist 4174 > /tmp/baseserver.log 2>&1 & sleep 3; curl -s -o /dev/null -w "base server %{http_code}\n" http://localhost:4174/club-manager; exit $s
+walk-full: RC_OUT="$RC_OUT/full" HEAD_URL=http://localhost:4173 BASE_URL=http://localhost:4174 node scripts/playCmHubLanding.mjs > /tmp/wf.log 2>&1; s=$?; grep -c "  PASS" /tmp/wf.log; grep "  FAIL\|INFO  C  s320 Liverpool tile\|INFO  C  s390" /tmp/wf.log | cut -c1-230 | head -40; tail -1 /tmp/wf.log; exit $s
+ctl-noscroll: RC_OUT="$RC_OUT/noscroll" HUB_LANDING_CONTROL=noscroll HUB_LANDING_SECTIONS=A node scripts/playCmHubLanding.mjs > /tmp/c1.log 2>&1; s=$?; grep "  FAIL" /tmp/c1.log | cut -c1-200 | head -10; tail -1 /tmp/c1.log; exit $s
+ctl-nosticky: RC_OUT="$RC_OUT/nosticky" HUB_LANDING_CONTROL=nosticky HUB_LANDING_SECTIONS=B node scripts/playCmHubLanding.mjs > /tmp/c2.log 2>&1; s=$?; grep "  FAIL" /tmp/c2.log | cut -c1-200 | head -14; tail -1 /tmp/c2.log; exit $s
+ctl-small: RC_OUT="$RC_OUT/small" HUB_LANDING_CONTROL=small HUB_LANDING_SECTIONS=C node scripts/playCmHubLanding.mjs > /tmp/c3.log 2>&1; s=$?; grep "  FAIL" /tmp/c3.log | cut -c1-200 | head -8; tail -1 /tmp/c3.log; exit $s
+ctl-cut: RC_OUT="$RC_OUT/cut" HUB_LANDING_CONTROL=cut HUB_LANDING_SECTIONS=C node scripts/playCmHubLanding.mjs > /tmp/c4.log 2>&1; s=$?; grep "  FAIL" /tmp/c4.log | cut -c1-200 | head -8; tail -1 /tmp/c4.log; exit $s
+ctl-drift: RC_OUT="$RC_OUT/drift" HUB_LANDING_CONTROL=drift HUB_LANDING_SECTIONS=D HEAD_URL=http://localhost:4173 BASE_URL=http://localhost:4174 node scripts/playCmHubLanding.mjs > /tmp/c5.log 2>&1; s=$?; grep "  FAIL\|  PASS" /tmp/c5.log | cut -c1-220 | head -14; tail -1 /tmp/c5.log; exit $s
+ctl-unknown: HUB_LANDING_CONTROL=bogus HUB_LANDING_SECTIONS=A node scripts/playCmHubLanding.mjs; echo "exit $?"
+walk-base-AB: RC_OUT="$RC_OUT/base" HEAD_URL=http://localhost:4174 HUB_LANDING_SECTIONS=AB node scripts/playCmHubLanding.mjs > /tmp/wb.log 2>&1; s=$?; grep "  FAIL" /tmp/wb.log | cut -c1-200 | head -24; tail -1 /tmp/wb.log; exit $s

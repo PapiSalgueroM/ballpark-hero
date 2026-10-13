@@ -1,0 +1,9 @@
+  FAIL  C  s320 Liverpool hub: under 12px: tile line: "Elite patience" at 11px
+  FAIL  C  s320 Liverpool hub: under 12px: tile line: "The board" at 11px
+  FAIL  C  s320 Liverpool hub: under 12px: tile line: "Next: Everton" at 11px
+  FAIL  C  s320 Liverpool hub: under 12px: tile line: "Form: L W W L W" at 11px
+  FAIL  C  s320 Liverpool hub: under 12px: tile line: "FA Cup" at 11px
+  FAIL  C  s320 Liverpool hub: under 12px: tile line: "Florian Wirtz leads with 4" at 11px
+  FAIL  C  s320 Liverpool hub: under 12px: tile line: "Kitty change this season" at 11px
+  FAIL  C  s320 Liverpool hub: under 12px: tile line: "Stadium, training, medical, more" at 11px
+playCmHubLanding: CONTROL small FIRED, 57 C check(s) went red, first: s320 Liverpool hub: under 12px: tile line: "Elite patience" at 11px (C 108 pass 57 fail)

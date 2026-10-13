@@ -1,0 +1,15 @@
+  FAIL  B  celta-320 first row, an in page click: the day strip is wholly on screen (768 to 840 of 640)
+  FAIL  B  celta-320 last row, a real click: the day strip is wholly on screen (768 to 840 of 640)
+  FAIL  B  celta-320 last row, a real click: the tapped day is still on screen (714 px)
+  FAIL  B  celta-320 last row, a real click: the strip names the day "Mon 31 Aug"
+  FAIL  B  celta-320 a match day, a real click: the day strip is wholly on screen (768 to 918 of 640)
+  FAIL  B  liverpool-390 first row, an in page click: the day strip is wholly on screen (972 to 1044 of 844)
+  FAIL  B  liverpool-390 last row, a real click: the day strip is wholly on screen (972 to 1044 of 844)
+  FAIL  B  liverpool-390 last row, a real click: the tapped day is still on screen (918 px)
+  FAIL  B  liverpool-390 last row, a real click: the strip names the day "Mon 31 Aug"
+  FAIL  B  liverpool-390 a match day, a real click: the day strip is wholly on screen (972 to 1106 of 844)
+  FAIL  B  aberdeen-1280 first row, an in page click: the day strip is wholly on screen (949 to 1021 of 900)
+  FAIL  B  aberdeen-1280 last row, a real click: the day strip is wholly on screen (949 to 1021 of 900)
+  FAIL  B  aberdeen-1280 last row, a real click: the tapped day is still on screen (895 px)
+  FAIL  B  aberdeen-1280 last row, a real click: the strip names the day "Mon 31 Aug"
+playCmHubLanding: CONTROL nosticky FIRED, 9 B check(s) went red, first: celta-320 first row, an in page click: the day strip is wholly on screen (768 to 840 of 640) (B 48 pass 15 fail)

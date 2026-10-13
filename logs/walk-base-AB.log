@@ -1,0 +1,21 @@
+  FAIL  A  liverpool-take-390: hub header top -1630 px at scrollY 1743 on the first hub frame (screen 844 px)
+  FAIL  A  liverpool-skip-390: hub header top -1681 px at scrollY 1794 on the first hub frame (screen 844 px)
+  FAIL  A  celta-skip-320: hub header top -2005 px at scrollY 2118 on the first hub frame (screen 640 px)
+  FAIL  A  aberdeen-take-1280: hub header top -1151 px at scrollY 1276 on the first hub frame (screen 900 px)
+  FAIL  A  aberdeen-skip-1280: hub header top -1151 px at scrollY 1276 on the first hub frame (screen 900 px)
+  FAIL  A  everton2005-newyear-390: hub header top -1713 px at scrollY 1826 on the first hub frame (screen 844 px)
+  FAIL  A  liverpool-autumn-320: hub header top -2118 px at scrollY 2231 on the first hub frame (screen 640 px)
+  FAIL  A  liverpool-season2-390: the season review never came up (presses calendar, rest, tab, rest, continue, nothing, nothing, nothing, nothing, nothing, nothing, nothing, nothing, nothing, nothing
+  FAIL  B  celta-320 last row, a real click: the page moved 541 px (scrollY 643 to 1184)
+  FAIL  B  celta-320 last row, a real click: the tapped day is still on screen (-42 px)
+  FAIL  B  celta-320: the calendar's intensity buttons read Rest first, Balanced, Full training
+  FAIL  B  celta-320: the calendar says neither Rest first nor Full training
+  FAIL  B  liverpool-390 first row, an in page click: the page moved 960 px (scrollY 182 to 1142)
+  FAIL  B  liverpool-390 first row, an in page click: the tapped day is still on screen (-282 px)
+  FAIL  B  liverpool-390: the calendar's intensity buttons read Rest first, Balanced, Full training
+  FAIL  B  liverpool-390: the calendar says neither Rest first nor Full training
+  FAIL  B  aberdeen-1280 first row, an in page click: the page moved 870 px (scrollY 113 to 983)
+  FAIL  B  aberdeen-1280 first row, an in page click: the tapped day is still on screen (-282 px)
+  FAIL  B  aberdeen-1280: the calendar's intensity buttons read Rest first, Balanced, Full training
+  FAIL  B  aberdeen-1280: the calendar says neither Rest first nor Full training
+playCmHubLanding: 20 failure(s) (A 0 pass 8 fail, B 51 pass 12 fail)

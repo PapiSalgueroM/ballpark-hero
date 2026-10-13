@@ -1,0 +1,10 @@
+build exit=0 21s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+basebuild exit=0 24s | base server 200
+walk-full exit=0 216s | playCmHubLanding: green (A 8 pass 0 fail, B 63 pass 0 fail, C 156 pass 0 fail, D 12 pass 0 fail, E 52 pass 0 fail, F 9 pass 0 fail); the hub lands on the club on its firs
+ctl-noscroll exit=1 17s | playCmHubLanding: CONTROL noscroll FIRED, 8 A check(s) went red, first: liverpool-take-390: hub header top -1630 px at scrollY 1743 on the first hub frame (screen 844 px)
+ctl-nosticky exit=1 20s | playCmHubLanding: CONTROL nosticky FIRED, 9 B check(s) went red, first: celta-320 first row, an in page click: the day strip is wholly on screen (768 to 840 of 640) (B 48
+ctl-small exit=1 25s | playCmHubLanding: CONTROL small FIRED, 57 C check(s) went red, first: s320 Liverpool hub: under 12px: tile line: "Elite patience" at 11px (C 108 pass 57 fail)
+ctl-cut exit=1 24s | playCmHubLanding: CONTROL cut FIRED, 60 C check(s) went red, first: s320 Liverpool team: cut: Board wants line: "Board wants Win the Premier League" (242/40 wide, 17/17 t
+ctl-drift exit=1 128s | playCmHubLanding: CONTROL drift FIRED, 6 D check(s) went red, first: liverpool-take-seed1: dukb-club-manager-save differs, $.budget: 140.16 against 140.44 (D 6 pass 6 fai
+ctl-unknown exit=0 0s | exit 2
+walk-base-AB exit=1 74s | playCmHubLanding: 20 failure(s) (A 0 pass 8 fail, B 51 pass 12 fail)

@@ -1,0 +1,68 @@
+{
+ "landing": [],
+ "fails": [
+  {
+   "section": "B",
+   "msg": "celta-320 first row, an in page click: the day strip is wholly on screen (768 to 840 of 640)"
+  },
+  {
+   "section": "B",
+   "msg": "celta-320 last row, a real click: the day strip is wholly on screen (768 to 840 of 640)"
+  },
+  {
+   "section": "B",
+   "msg": "celta-320 last row, a real click: the tapped day is still on screen (714 px)"
+  },
+  {
+   "section": "B",
+   "msg": "celta-320 last row, a real click: the strip names the day \"Mon 31 Aug\""
+  },
+  {
+   "section": "B",
+   "msg": "celta-320 a match day, a real click: the day strip is wholly on screen (768 to 918 of 640)"
+  },
+  {
+   "section": "B",
+   "msg": "liverpool-390 first row, an in page click: the day strip is wholly on screen (972 to 1044 of 844)"
+  },
+  {
+   "section": "B",
+   "msg": "liverpool-390 last row, a real click: the day strip is wholly on screen (972 to 1044 of 844)"
+  },
+  {
+   "section": "B",
+   "msg": "liverpool-390 last row, a real click: the tapped day is still on screen (918 px)"
+  },
+  {
+   "section": "B",
+   "msg": "liverpool-390 last row, a real click: the strip names the day \"Mon 31 Aug\""
+  },
+  {
+   "section": "B",
+   "msg": "liverpool-390 a match day, a real click: the day strip is wholly on screen (972 to 1106 of 844)"
+  },
+  {
+   "section": "B",
+   "msg": "aberdeen-1280 first row, an in page click: the day strip is wholly on screen (949 to 1021 of 900)"
+  },
+  {
+   "section": "B",
+   "msg": "aberdeen-1280 last row, a real click: the day strip is wholly on screen (949 to 1021 of 900)"
+  },
+  {
+   "section": "B",
+   "msg": "aberdeen-1280 last row, a real click: the tapped day is still on screen (895 px)"
+  },
+  {
+   "section": "B",
+   "msg": "aberdeen-1280 last row, a real click: the strip names the day \"Mon 31 Aug\""
+  },
+  {
+   "section": "B",
+   "msg": "aberdeen-1280 a match day, a real click: the day strip is wholly on screen (949 to 1067 of 900)"
+  }
+ ],
+ "counts": {
+  "B": 48
+ }
+}
