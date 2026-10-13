@@ -1,0 +1,5 @@
+#!serve
+#!playwright
+land: git worktree add -q /tmp/lb c5fc5470 && ln -s "$PWD/node_modules" /tmp/lb/node_modules && (cd /tmp/lb && node_modules/.bin/vite build > /tmp/lb-build.log 2>&1) && mkdir -p $RC_OUT/land && RC_OUT=$RC_OUT/land SOCCER_LANDING_BASE_DIST=/tmp/lb/dist ENGINES=chromium node scripts/playSoccerLanding.mjs
+joined-before-drop: git worktree add -q /tmp/o 8efb9c82 && ln -s "$PWD/node_modules" /tmp/o/node_modules && (cd /tmp/o && node_modules/.bin/vite build > /tmp/o-build.log 2>&1) && (node scripts/lib/hostLikeServer.mjs /tmp/o/dist 4191 > /dev/null 2>&1 &) && sleep 3 && mkdir -p $RC_OUT/joined && RC_OUT=$RC_OUT/joined BASE=http://127.0.0.1:4191 SECTIONS=toasts SOCCER_LANDING_HEAD_ONLY=1 SOCCER_LANDING_STEPS=4 ENGINES=chromium node scripts/playSoccerLanding.mjs
+land-seed: git worktree add -q /tmp/lc c5fc5470 && ln -s "$PWD/node_modules" /tmp/lc/node_modules && (cd /tmp/lc && node_modules/.bin/vite build > /tmp/lc-build.log 2>&1) && mkdir -p $RC_OUT/seed && RC_OUT=$RC_OUT/seed SOCCER_LANDING_CONTROL=seed SOCCER_LANDING_BASE_DIST=/tmp/lc/dist ENGINES=chromium node scripts/playSoccerLanding.mjs
