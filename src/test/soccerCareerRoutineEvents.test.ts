@@ -223,8 +223,10 @@ describe('Soccer Career routine saved outcomes', () => {
     expect(chosen.passing).toBe(70); expect(chosen.statBoostNextSeason.passing).toBe(1);
     const restored = E.repairCareer(copy(chosen)); restored.phase = 'playing'; restored.pendingEvents = []; restored.loan = null;
     const without = copy(restored); delete without.statBoostNextSeason.passing;
-    const actual = E.advanceProSeason(restored, E.FALLBACK_CLUBS);
-    const comparison = E.advanceProSeason(without, E.FALLBACK_CLUBS);
+    const actualStart = E.advanceProSeason(restored, E.FALLBACK_CLUBS);
+    const comparisonStart = E.advanceProSeason(without, E.FALLBACK_CLUBS);
+    const actual = actualStart.phase === 'retirement_suggestion' ? E.declineRetirementSuggestion(actualStart, E.FALLBACK_CLUBS) : actualStart;
+    const comparison = comparisonStart.phase === 'retirement_suggestion' ? E.declineRetirementSuggestion(comparisonStart, E.FALLBACK_CLUBS) : comparisonStart;
     expect(actual.seasons).toHaveLength(restored.seasons.length + 1);
     expect(actual.seasons[actual.seasons.length - 1].type).toBe('playing');
     expect(actual.passing).toBe(comparison.passing + 1);
