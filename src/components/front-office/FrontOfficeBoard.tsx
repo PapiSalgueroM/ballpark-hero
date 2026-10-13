@@ -1661,7 +1661,7 @@ export default function FrontOfficeBoard() {
     const his = pairs ? pairs.find(p => p.homeId === myTeam || p.awayId === myTeam) ?? null : null;
     return { round: his && fmt ? fmt.ties.find(x => x.id === his.id)?.round ?? null : null, mine: !!his };
   })();
-  /* the row under the box (the back chip): drawn for the whole bracket, and through the watch of the press that
+  /* the row of the back chip (under the box from sm up, above it under sm): drawn for the whole bracket, and through the watch of the press that
      opened it, so the box never moves when its face changes or a watch ends */
   const bracketRow = bracketOpen || (!!playoffs && league.week > REGULAR_WEEKS);
   /* his game of a tie, as its place in the log (-1: none): the game told under the tie's round between its two clubs */
@@ -1677,6 +1677,28 @@ export default function FrontOfficeBoard() {
   const gameLogNow = logOpen ?? gameLogLive.current;
   /* the box's face: in the bracket, the bracket, unless a game of his is open or being watched */
   const bracketFace = bracketOpen && !hold && (boxGame === null || (boxGame !== 'last' && openAt < 0));
+  /* The row of the back chip, drawn for the whole bracket. From sm up it sits under the box and carries the reveal's
+     edge (the fix pass: on the box's own edge the chip sat under the fold at 1280). Under sm (the closing check of
+     Round 1309) it sits ABOVE the box, between the press row and the reveal's wrapper, which still starts at the box:
+     under the box the chip was under the fold after a first press at 390 by 844 (984 to 1028), and above it the chip
+     is on the screen whenever the press buttons are. Which of the two is the width the page loaded at, as the
+     reveal's element is, so a window resized across sm moves nothing. */
+  const bracketBackRow = bracketRow ? (
+    <div className="relative flex h-11 items-center justify-start" data-bracket-row>
+      {wideAtLoad && <div ref={revealRef} aria-hidden className="pointer-events-none absolute inset-x-0 bottom-0 h-px" data-reveal-edge />}
+      {bracketFace ? null : (
+        <button
+          type="button"
+          onClick={() => setBoxGame(null)}
+          disabled={!!hold}
+          data-bracket-back
+          className="inline-flex h-11 items-center gap-1 rounded-full border border-border bg-background px-4 text-xs font-bold text-foreground hover:border-primary disabled:opacity-40"
+        >
+          <ChevronLeft className="h-4 w-4" /> The bracket
+        </button>
+      )}
+    </div>
+  ) : null;
   /* the presses that open the bracket or play in it: the box then shows his game when the press logged one (a Watch
      runs it on the clock) and the bracket when it logged none (his bye, or he is out) */
   const pressPlayoffs = (asked: 'bracket' | 'round' | 'rest', watch: boolean) => {
@@ -2200,10 +2222,11 @@ export default function FrontOfficeBoard() {
             )}
           </div>
           )}
+          {!wideAtLoad && bracketBackRow}
           <div ref={wideAtLoad ? undefined : revealRef} className="space-y-3">
             {/* the board owns the tile's box: the same height while the card loads, on every face and after every press */}
             {/* Round 1309: ONE BOX, TWO FACES. In the playoffs the box shows the bracket, or his game on the tile when a
-                press logged one or he opened one ("Your game"); the row under it holds the back chip. */}
+                press logged one or he opened one ("Your game"); the row of the back chip is under it from sm up, above it under sm. */}
             <div className={cn(GM_GAME_DAY_BOX, 'overflow-hidden rounded-xl border border-border bg-background p-2')} data-gameday-box data-box-face={bracketFace ? 'bracket' : 'game'}>
               {/* from sm up, the reveal's element: the box's bottom edge, inside its border (laid ON the border it made the box scroll a pixel inside itself), with a one pixel scroll margin for the border (see the reveal) */}
               {wideAtLoad && !bracketRow && <div ref={revealRef} aria-hidden className="pointer-events-none absolute inset-x-0 bottom-0 h-px scroll-mb-px" data-reveal-edge />}
@@ -2231,24 +2254,7 @@ export default function FrontOfficeBoard() {
               />
               )}
             </div>
-            {bracketRow && (
-              <div className="relative flex h-11 items-center justify-start" data-bracket-row>
-                {/* Round 1309, the fix pass: in the bracket the reveal's edge (from sm up) is this row's bottom, so the back
-                    chip is on the screen with the box after a press (on the box's own edge it sat under the fold at 1280) */}
-                {wideAtLoad && <div ref={revealRef} aria-hidden className="pointer-events-none absolute inset-x-0 bottom-0 h-px" data-reveal-edge />}
-                {bracketFace ? null : (
-                  <button
-                    type="button"
-                    onClick={() => setBoxGame(null)}
-                    disabled={!!hold}
-                    data-bracket-back
-                    className="inline-flex h-11 items-center gap-1 rounded-full border border-border bg-background px-4 text-xs font-bold text-foreground hover:border-primary disabled:opacity-40"
-                  >
-                    <ChevronLeft className="h-4 w-4" /> The bracket
-                  </button>
-                )}
-              </div>
-            )}
+            {wideAtLoad && bracketBackRow}
           {weekResults.length > 0 && !hold && (!bracketRow) && (
             <div className="grid max-h-56 grid-cols-1 gap-1 overflow-y-auto text-left sm:grid-cols-2">
               {weekResults.map((g, i) => {
