@@ -1,0 +1,12 @@
+  FAIL bytes seed 77 step 0: head "begin" 4354 base "begin" 4400
+  FAIL bytes seed 77 step 1: head "contract_offer: Next Year" 6947 base "contract_offer: Next Year" 7079
+  FAIL bytes seed 77 step 2: head "contract_offer: Review contract" 6947 base "contract_offer: Review contract" 7079
+  FAIL bytes seed 77 step 3: head "playing: Sign contract" 6405 base "playing: Sign contract" 6544
+  FAIL bytes seed 77 step 4: head "phone: no category (scope none)" 6405 base "phone: no category (scope none)" 6544
+  FAIL bytes seed 77 step 5: head "newspaper: Next Season" 18237 base "newspaper: Next Season" 18484
+  FAIL bytes seed 77 step 6: head "season_summary: Continue to Season Summary →" 17664 base "season_summary: Continue to Season Summary →" 18229
+  FAIL bytes seed 77 step 7: head "ballon_dor: Continue →" 16340 base "ballon_dor: Continue →" 16744
+  FAIL bytes seed 77 step 8: head "social_media_action: Continue →" 14844 base "social_media_action: Continue →" 15212
+  FAIL bytes seed 77 step 9: head "social_media_action: 🏋️Post training videoShow off" 14957 base "social_media_action: 🏋️Post training videoShow off" 15264
+bytes seed 77: 0/10 steps equal; steps: begin / contract_offer: Next Year / contract_offer: Review contract / playing: Sign contract / phone: no category (scope none) / newspaper: Next Season / season_summary: Continue to Season / ballon_dor: Continue → / social_media_action: Continue → / social_media_action: 🏋️Post train
+REVIEW WALK RED: 10 finding(s)

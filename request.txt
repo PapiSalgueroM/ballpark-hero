@@ -1,0 +1,4 @@
+#!serve
+#!playwright
+bytes: git worktree add -q /tmp/base c5fc5470 && ln -s "$PWD/node_modules" /tmp/base/node_modules && (cd /tmp/base && node_modules/.bin/vite build > /tmp/base-build.log 2>&1) && mkdir -p $RC_OUT/bytes && RC_OUT=$RC_OUT/bytes PARTS=bytes BASE_DIST=/tmp/base/dist ENGINES=chromium node .rc/x/walk.mjs
+bytes-control: git worktree add -q /tmp/bc c5fc5470 && ln -s "$PWD/node_modules" /tmp/bc/node_modules && (cd /tmp/bc && node_modules/.bin/vite build > /tmp/bc-build.log 2>&1) && mkdir -p $RC_OUT/bc && sed -i "s/'4190'/'4191'/; s#127.0.0.1:4190#127.0.0.1:4191#" .rc/x/walk.mjs && RC_OUT=$RC_OUT/bc PARTS=bytes BYTES_SEEDS=77 BYTES_STEPS=8 BYTES_CONTROL=seed BASE_DIST=/tmp/bc/dist ENGINES=chromium node .rc/x/walk.mjs
