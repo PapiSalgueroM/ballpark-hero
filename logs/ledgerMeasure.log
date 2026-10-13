@@ -1,0 +1,5 @@
+MEASURE E8 nhl: 6000 paired seasons, 5418 awards in the full ones, the year mine 2908 and his 3092 (on arm a, the saved lines)
+MEASURE E8c nhl: 6000 seasons after the short 2012, 0 wrong comebacks, 0 lost years before, 0 comebacks off them
+MEASURE E8 mlb: 6000 paired seasons, 6269 awards in the full ones, the year mine 2990 and his 3010 (on arm a, the saved lines)
+MEASURE E8c mlb: 6000 seasons after the short 2020, 0 wrong comebacks, 104 lost years before, 79 comebacks off them
+simUsSeasonLedger: green. 3043 checks passed over 23 MLB and 21 NHL seasons; 7 notes for the binding rounds.

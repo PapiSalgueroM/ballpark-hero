@@ -1,0 +1,49 @@
+MLB: 23 seasons, 16 with a club off the schedule, 50 club lines (2 on 58, 32 on 161, 2 on 162, 14 on 163)
+NHL: 21 seasons in 8 alignments; lengths 82, 48, null, 56, 84
+receipts: 52, cited from 77 places, 3 marked thin and cited by nothing
+MEASURE nhl 2006 BOS want 82: whole 24.5 percent of 1147 healthy skater seasons
+MEASURE nhl 2012 BOS want 48: whole 25.7 percent of 1140 healthy skater seasons
+MEASURE nhl 2012 ATL want 48: whole 25.7 percent of 1140 healthy skater seasons
+MEASURE nhl 2019 BOS want 70: whole 24.1 percent of 1147 healthy skater seasons
+MEASURE nhl 2019 CAR want 68: whole 24.1 percent of 1147 healthy skater seasons
+MEASURE nhl 2019 ATL want 82: whole 24.1 percent of 1147 healthy skater seasons
+MEASURE nhl 2020 BOS want 56: whole 26.1 percent of 1135 healthy skater seasons
+MEASURE nhl 2025 BOS want 82: whole 25.0 percent of 1146 healthy skater seasons
+MEASURE nhl 2026 BOS want 84: whole 23.5 percent of 1146 healthy skater seasons
+MEASURE nhl 2026 UTA want 84: whole 23.5 percent of 1146 healthy skater seasons
+MEASURE nhl 2031 BOS want 84: whole 24.5 percent of 1162 healthy skater seasons
+MEASURE nhl 2040 BOS want 84: whole 24.2 percent of 1153 healthy skater seasons
+MEASURE mlb 2004: ds 2802 runs, 3 to 5 games; cs 583 runs, 7 to 9 games; ws 281 runs, 13 to 19 games; won 326 runs, 13 to 19 games
+MEASURE mlb 2011: ds 2835 runs, 3 to 5 games; cs 539 runs, 7 to 9 games; ws 293 runs, 13 to 19 games; won 330 runs, 13 to 19 games
+MEASURE mlb 2012: ds 1016 runs, 4 to 6 games; cs 544 runs, 8 to 10 games; ws 272 runs, 13 to 19 games; won 386 runs, 14 to 20 games; wcg 1808 runs, 1 to 1 games
+MEASURE mlb 2019: ds 1001 runs, 4 to 6 games; cs 530 runs, 8 to 10 games; ws 285 runs, 13 to 19 games; won 346 runs, 14 to 20 games; wcg 1803 runs, 1 to 1 games
+MEASURE mlb 2020: ds 1017 runs, 5 to 8 games; cs 525 runs, 9 to 12 games; ws 273 runs, 13 to 19 games; won 342 runs, 15 to 22 games; wcs 1886 runs, 2 to 3 games
+MEASURE mlb 2021: ds 974 runs, 4 to 6 games; cs 555 runs, 8 to 10 games; ws 276 runs, 13 to 19 games; won 329 runs, 14 to 20 games; wcg 1907 runs, 1 to 1 games
+MEASURE mlb 2022: 44.2 percent of 1894 Wild Card exits are two games; Division Series exits by games 5 to 8: 88 79 403 429
+MEASURE mlb 2026: 43.6 percent of 1932 Wild Card exits are two games; Division Series exits by games 5 to 8: 84 74 428 408
+MEASURE mlb 2033: 43.3 percent of 1854 Wild Card exits are two games; Division Series exits by games 5 to 8: 88 76 406 449
+MEASURE mlb 2004 BOS want 162: whole 11.8 percent of 1514 healthy hitter seasons
+MEASURE mlb 2004 PIT want 161: whole 11.8 percent of 1514 healthy hitter seasons
+MEASURE mlb 2005 CIN want 163: whole 11.7 percent of 1532 healthy hitter seasons
+MEASURE mlb 2008 MON want 162: whole 10.1 percent of 1522 healthy hitter seasons
+MEASURE mlb 2016 CHC want 162: whole 14.0 percent of 1533 healthy hitter seasons
+MEASURE mlb 2020 BOS want 60: whole 25.0 percent of 1528 healthy hitter seasons
+MEASURE mlb 2020 DET want 58: whole 25.0 percent of 1528 healthy hitter seasons
+MEASURE mlb 2026 NYY want 161: whole 13.2 percent of 1510 healthy hitter seasons
+MEASURE mlb 2026 BOS want 162: whole 13.2 percent of 1510 healthy hitter seasons
+MEASURE mlb 2027 NYY want 162: whole 14.2 percent of 1532 healthy hitter seasons
+MEASURE E8 nhl: 6000 paired seasons, 5418 awards in the full ones, the year mine 2908 and his 3092 (on arm a, the saved lines)
+MEASURE E8c nhl: 6000 seasons after the short 2012, 0 wrong comebacks, 0 lost years before, 0 comebacks off them
+MEASURE E8 mlb: 6000 paired seasons, 6269 awards in the full ones, the year mine 2990 and his 3010 (on arm a, the saved lines)
+MEASURE E8c mlb: 6000 seasons after the short 2020, 0 wrong comebacks, 104 lost years before, 79 comebacks off them
+
+NOTES FOR THE BINDING ROUNDS (not failures):
+  - MLB engine: it reads its season length from the ledger by year and club (Round 1226, src/lib/usSeasonShape.ts). What it still plays on the schedule's own length: 6 club seasons the ledger names that no list of the game holds under that name that year (2008, 2011, 2013, 2016, 2018, 2024: no club is mapped across a move or a rename), and a pitcher keeps the engine's 32 starts or 62 to 71 appearances and gives way only to a season too short to hold them.
+  - NHL engine: it reads its season length from the ledger by year and club (Round 1226, src/lib/usSeasonShape.ts). What it still plays on its own 82 games: the 2019-20 season of a club the ledger does not hold under the game's id (ATL, PHX of the 2006 list: that season has no single length, and no club is mapped across a move or a rename). A goalie keeps the engine's 58 to 67 starts and gives way only to a season too short to hold them.
+  - MLB engine: the games of an October are held to the ledger's rounds (Round 1226, src/lib/usSeasonShape.ts): from 2022 every run fits its rounds, the wild card of 2012 to 2019 and 2021 is one game, and no Wild Card result is written in 2004 to 2011. What it still plays by its own law, because the ledger does not hold the length: every round after the first before 2022 (MLB_THIN); a lost World Series there keeps the 13 to 19 games the engine always gave it. It models no first round bye (MLB_PLAYOFF_FORMAT.byesPerLeague): a career's club always plays the first round.
+  - NHL playoff games (the same law against four best of sevens): stage 0 saves 5 to 7 games, the real rounds hold 4 to 7: 0.0 percent cannot fit; stage 1 saves 9 to 13 games, the real rounds hold 8 to 14: 0.0 percent cannot fit; stage 2 saves 14 to 20 games, the real rounds hold 12 to 21: 0.0 percent cannot fit; stage 3 saves 18 to 26 games, the real rounds hold 16 to 28: 0.0 percent cannot fit; stage 4 saves 23 to 28 games, the real rounds hold 16 to 28: 0.0 percent cannot fit. Stages: 'Lost in Round 1', 'Lost in Round 2', 'Lost the Conference Final', 'Lost the Cup Final', 'WON THE STANLEY CUP'.
+  - NHL engine: it writes the same four results in every year. The ledger: NHL_PLAYOFF_FORMAT is two sourced from 2013-14 only; what the playoffs of 2006 to 2012 were has one source (NHL_THIN: the same sixteen clubs and four rounds, under other round names), and the tournaments of the seasons that started in 2019 and 2020 were modified. A binding round that draws a path before 2013 must source it first or draw none.
+  - MLB engine: src/lib/mlbCareerLifeB.ts writes cc.team = 'Yomiuri Giants', which is in neither MLB list of the game, and then plays MLB seasons for it. A binding round must hold such a row.
+  - The game prints "Sacramento Athletics" for ATH; both 2026 standings read for the ledger print "Athletics" with no city. CONSEQUENCE for the binding round: an id is listed only where a list's own name is the club's real name, so a present day season row that names the Athletics would carry NO id for them, and a binding that holds clubs by id would open a full view for a club the row lists as short. No such row exists today (2026 lists BAL and NYY). Fix the name or key such a row by id before the first one is written.
+
+simUsSeasonLedger: green. 3043 checks passed over 23 MLB and 21 NHL seasons; 7 notes for the binding rounds.

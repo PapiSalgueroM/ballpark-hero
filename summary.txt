@@ -1,0 +1,10 @@
+rivalVerdictswap exit=1 25s | simUsRivalSense: 43 checks, 6 failed (full size), red sections: N.F2, N.F3, M.F2, M.F3, H.F2, H.F3
+rivalPlain exit=0 26s | simUsRivalSense: 43 checks, 0 failed (full size)
+ledger exit=0 4s | simUsSeasonLedger: green. 3043 checks passed over 23 MLB and 21 NHL seasons; 7 notes for the binding rounds.
+ledgerMeasure exit=0 4s | simUsSeasonLedger: green. 3043 checks passed over 23 MLB and 21 NHL seasons; 7 notes for the binding rounds.
+ledgerFullslatemlb exit=1 4s | simUsSeasonLedger: CONTROL fullslatemlb FIRED, red at exactly E8a
+ledgerFullslatenhl exit=1 5s | simUsSeasonLedger: CONTROL fullslatenhl FIRED, red at exactly E8a
+noRival exit=0 15s | No rival product names found. 0 findings.
+storage exit=0 3s | simStorageWrites: all green (owed: 12)
+tsc exit=0 71s | 
+anchors exit=0 38s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
