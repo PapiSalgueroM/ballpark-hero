@@ -1,0 +1,8 @@
+#!serve
+#!playwright
+land-main: git worktree add -q /tmp/lm c28b078b && ln -s "$PWD/node_modules" /tmp/lm/node_modules && (cd /tmp/lm && node_modules/.bin/vite build > /tmp/lm-build.log 2>&1) && mkdir -p $RC_OUT/land && RC_OUT=$RC_OUT/land PORT=4187 BASE_PORT=4188 SECTIONS=landing,name,bar,retire SOCCER_LANDING_BASE_DIST=/tmp/lm/dist ENGINES=chromium node scripts/playSoccerLanding.mjs > "$RC_OUT/land.out" 2>&1; s=$?; grep -E "^== head|FAIL|retired:|Retire control|BLIND|base (landing|name|bar|retire)|the base arm|playSoccerLanding" "$RC_OUT/land.out" | cut -c1-240 | head -60; exit $s
+tt-all: mkdir -p $RC_OUT/tt && RC_OUT=$RC_OUT/tt ENGINES=chromium node scripts/playTwoTabs.mjs > "$RC_OUT/tt.out" 2>&1; s=$?; tail -6 "$RC_OUT/tt.out"; exit $s
+tt-nofence: mkdir -p $RC_OUT/ttn && RC_OUT=$RC_OUT/ttn TWO_TABS_CONTROL=nofence ENGINES=chromium node scripts/playTwoTabs.mjs > "$RC_OUT/ttn.out" 2>&1; s=$?; tail -3 "$RC_OUT/ttn.out"; exit $s
+mobile: ENGINES=chromium node scripts/simMobileChrome.mjs > "$RC_OUT/mobile.out" 2>&1; s=$?; tail -2 "$RC_OUT/mobile.out"; exit $s
+mobile-nowrap: SIM_MOBILE_CONTROL=nowrap ENGINES=chromium node scripts/simMobileChrome.mjs > "$RC_OUT/nowrap.out" 2>&1; s=$?; tail -2 "$RC_OUT/nowrap.out"; exit $s
+weight: SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs > /tmp/wh.log 2>&1; s=$?; grep -E "soccer-career|sweepWeight:" /tmp/wh.log | head -8; tail -2 /tmp/wh.log; exit $s

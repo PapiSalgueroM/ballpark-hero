@@ -1,0 +1,6 @@
+14) SOCCER OLD SAVE AND THE NOTICE (1280x900)
+   fence before absent, after "Next Season" 2; Two Tab Tester age 18, playing, 3 seasons, last 2022 West Ham: 32 apps, 5 goals, 6.9 to Two Tab Tester age 19, newspaper, 4 seasons, last 2023 Leverkusen: 33 apps, 8 goals, 7; a second tab stales it: true
+  ok    no jump: scrollY 120 and height 9487 before and after
+  ok    the notice: Reload 44 px, smallest text 16 px, no animation, no toast, Tab stayed inside true
+cases red: none; pictures in /home/runner/work/_temp/rc-out/files/tt
+playTwoTabs: green at 320x640, 390x844, 1280x900

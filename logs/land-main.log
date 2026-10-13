@@ -1,0 +1,42 @@
+bar save retired: phase retired, age 18
+== head 320x640
+   youth: 1 Retire control(s)
+   playing: 1 Retire control(s)
+   retired: 0 Weekly Wage tile(s)
+== head 390x844
+   youth: 1 Retire control(s)
+   playing: 1 Retire control(s)
+   retired: 0 Weekly Wage tile(s)
+== head 1280x900
+   youth: 1 Retire control(s)
+   playing: 1 Retire control(s)
+   retired: 0 Weekly Wage tile(s)
+== head 360x780 (bar only)
+== head 375x667 (bar only)
+== head 480x800 (name only)
+== head 768x1024 (name only)
+  base [bar 320x640]: retired: 18Age spans 329 to 383 on a 320 screen
+  base [bar 320x640]: retired: the AGE number is not fully on screen (346 to 366)
+   youth: 2 Retire control(s)
+  base [retire 320x640]: youth: 2 Retire controls on the hub
+   playing: 2 Retire control(s)
+  base [retire 320x640]: playing: 2 Retire controls on the hub
+   retired: 1 Weekly Wage tile(s)
+   youth: 2 Retire control(s)
+  base [retire 390x844]: youth: 2 Retire controls on the hub
+   playing: 2 Retire control(s)
+  base [retire 390x844]: playing: 2 Retire controls on the hub
+   retired: 1 Weekly Wage tile(s)
+   youth: 2 Retire control(s)
+  base [retire 1280x900]: youth: 2 Retire controls on the hub
+   playing: 2 Retire control(s)
+  base [retire 1280x900]: playing: 2 Retire controls on the hub
+   retired: 1 Weekly Wage tile(s)
+  base [bar 360x780]: retired: 18Age spans 329 to 383 on a 360 screen
+  base [bar 360x780]: retired: the AGE number is not fully on screen (346 to 366)
+  base [bar 375x667]: retired: 18Age spans 329 to 383 on a 375 screen
+  base landing: the measurement sees the bug on the base (21 finding(s))
+  base name: the measurement sees the bug on the base (9 finding(s))
+  base bar: the measurement sees the bug on the base (26 finding(s))
+  base retire: the measurement sees the bug on the base (9 finding(s))
+playSoccerLanding: green at 320x640, 390x844, 1280x900 (also bar 360x780, bar 375x667, name 480x800, name 768x1024; landing, name, bar, retire), every marked section red on the base

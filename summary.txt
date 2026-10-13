@@ -1,0 +1,7 @@
+build exit=0 31s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+land-main exit=0 359s | playSoccerLanding: green at 320x640, 390x844, 1280x900 (also bar 360x780, bar 375x667, name 480x800, name 768x1024; landing, name, bar, retire), every marked section red 
+tt-all exit=0 439s | playTwoTabs: green at 320x640, 390x844, 1280x900
+tt-nofence exit=1 502s | CONTROL FIRED: TWO_TABS_CONTROL=nofence dropped 180 writes and turned case(s) 1, 2, 3, 6, 9, 10, 11, 12, 14 red
+weight exit=0 27s | sweepWeight: green. Every page is inside its budget, and the budgets came down this round.
+mobile exit=0 207s | GREEN: 34 top bar measurements and 132 scroll stops, no overlaps, nothing off the side of the screen, controls reachable everywhere, footer never covered.
+mobile-nowrap exit=1 207s | CONTROL nowrap FIRED: the single row header crushed the player's name at 1 measured width(s)
