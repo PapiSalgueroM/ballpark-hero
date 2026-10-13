@@ -16,7 +16,7 @@ jobs:
       SIM_NETWORK: offline
       ENGINES: chromium
       CAREER_SEASON_LOCAL_ONLY: '1'
-      SOCCER_ROUTINE_PHASE: baseline
+      SOCCER_ROUTINE_PHASE: fixed
       SOCCER_ROUTINE_OUT: ${{ github.workspace }}/soccer-routine-artifacts
       FREE_KICK_FONT_CACHE: ${{ github.workspace }}/soccer-routine-artifacts/font-cache
       PRERENDER_ONLY: /soccer-career
@@ -93,10 +93,21 @@ jobs:
       - name: Actual career event browser journeys
         if: env.SOCCER_ROUTINE_PHASE == 'fixed'
         run: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playSoccerCareerRoutineEvents.mjs 2>&1 | tee "$SOCCER_ROUTINE_OUT/browser.log"
+      - name: Existing page download budgets
+        if: env.SOCCER_ROUTINE_PHASE == 'fixed'
+        run: |
+          node scripts/lib/hostLikeServer.mjs dist 4173 > "$SOCCER_ROUTINE_OUT/weight-server.log" 2>&1 &
+          weight_server_pid=$!
+          trap 'kill "$weight_server_pid" 2>/dev/null || true' EXIT
+          for attempt in 1 2 3 4 5; do
+            if curl --fail --silent http://127.0.0.1:4173/ > /dev/null; then break; fi
+            sleep 1
+          done
+          BASE=http://127.0.0.1:4173 SWEEP_OFFLINE=1 NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/sweepWeight.mjs 2>&1 | tee "$SOCCER_ROUTINE_OUT/weight.log"
       - name: Related career and every rebuilt-site reader
         if: env.SOCCER_ROUTINE_PHASE == 'fixed'
         run: |
-          ONLY=simSoccerCareerRoutineEvents,simCareerLife,simCareerLifeCooldowns,simCareerStory,simCareerProgramme,simCareerRecordedStats,simCareerSeasonTruth,simNoInventedQuotes,simAdsense,simBrand,simHeadTags,simHiddenPages,simHubs,simIndexNow,simIndexing,simInternalLinks,simNoRivalNames,simPrerender,simPrerenderBoot,simRetiredRoutes,simSchema,simSitemap,simSnapshotAssets node scripts/runAllSims.mjs --browser 2>&1 | tee "$SOCCER_ROUTINE_OUT/related.log"
+          ONLY=simCareerLife,simCareerLifeCooldowns,simCareerStory,simCareerProgramme,simCareerRecordedStats,simCareerSeasonTruth,simNoInventedQuotes,simUsCareerWeight,simAdsense,simBrand,simHeadTags,simHiddenPages,simHubs,simIndexNow,simIndexing,simInternalLinks,simNoRivalNames,simPrerender,simPrerenderBoot,simRetiredRoutes,simSchema,simSitemap,simSnapshotAssets node scripts/runAllSims.mjs --browser 2>&1 | tee "$SOCCER_ROUTINE_OUT/related.log"
       - name: Final source and package holds
         if: always()
         run: |

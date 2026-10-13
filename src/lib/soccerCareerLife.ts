@@ -1,4 +1,5 @@
 import { rollCareerChance } from "./careerChanceWheel";
+import { getSoccerRoutineEvents } from "./soccerCareerRoutineEvents";
 /* ────────────────────────────────────────────────────────────────────────────
    soccerCareerLife.ts, the life layer for Soccer Career (Round 49)
    Personalities, agents, and the expanded off-pitch event catalog (ids 200+).
@@ -158,6 +159,13 @@ export function getPriorityLifeEventIds(state: CareerState): number[] {
      the general draw it showed up in about one comeback in three, and a
      return from a long injury is not a story that should lose a raffle. */
   if (comebackDue(state) && !state.retired) ids.push(262);
+  if (!state.retired) {
+    const year = state.seasons[state.seasons.length - 1]?.year ?? 0;
+    for (const [acquisition, followup, key] of [[226, 227, "esports"], [230, 231, "cursedBoots"]] as const) {
+      const acquired = state.eventLastFired?.[String(acquisition)];
+      if (flag(state, key) === 1 && (typeof acquired !== "number" || !Number.isFinite(acquired) || acquired < year)) ids.push(followup);
+    }
+  }
   return ids;
 }
 
@@ -475,12 +483,12 @@ export function getLifeEvents(state: CareerState): RandomEvent[] {
   }
   if (flag(state, "cursedBoots") === 1) {
     push({ id: 231, cooldown: COOLDOWN.once, emoji: "✨", title: "The Curse Breaks",
-      description: "You scored a hat trick in the cursed boots. The kit man has framed them. Scientists want to study you.",
+      description: "The next season is over and you still have the same boots. You and the kit man are ready to stop blaming them for the results.",
       category: "positive", choices: [
-        { label: "Vindication", emoji: "✨", color: "bg-emerald-600", consequence: "Shooting +2 next season, followers +500k, curse officially reversed",
-          apply: s => { setFlag(s, "cursedBoots", 2); s.statBoostNextSeason = { ...s.statBoostNextSeason, shooting: (s.statBoostNextSeason.shooting || 0) + 2 }; s.socialMediaFollowers = Math.round((s.socialMediaFollowers + 0.5) * 100) / 100; s.events = [...s.events, "✨ The cursed boots delivered a hat trick. You were right all along"]; return s; } },
-        { label: "Retire the boots at their peak", emoji: "🏛️", color: "bg-muted", consequence: "Morale +4, Followers +200k, the kit man builds a small shrine",
-          apply: s => { setFlag(s, "cursedBoots", 2); s.morale = clamp(s.morale + 4, 0, 100); followers(s, 0.2); log(s, "🏛️ Retired the boots after the hat trick. The kit man lights a candle on matchdays"); return s; } },
+        { label: "Keep the boots, focus on finishing", emoji: "✨", color: "bg-emerald-600", consequence: "Shooting +2 next season, followers +500k, curse officially reversed",
+          apply: s => { setFlag(s, "cursedBoots", 2); s.statBoostNextSeason = { ...s.statBoostNextSeason, shooting: (s.statBoostNextSeason.shooting || 0) + 2 }; s.socialMediaFollowers = Math.round((s.socialMediaFollowers + 0.5) * 100) / 100; s.events = [...s.events, "✨ Kept the boots and put the focus on finishing. The superstition is over"]; return s; } },
+        { label: "Retire the boots", emoji: "🏛️", color: "bg-muted", consequence: "Morale +4, Followers +200k, the kit man builds a small shrine",
+          apply: s => { setFlag(s, "cursedBoots", 2); s.morale = clamp(s.morale + 4, 0, 100); followers(s, 0.2); log(s, "🏛️ Retired the boots at the end of the season. The kit man lights a candle on matchdays"); return s; } },
       ] });
   }
 
@@ -969,5 +977,5 @@ export function getLifeEvents(state: CareerState): RandomEvent[] {
       ] });
   }
 
-  return events;
+  return [...events, ...getSoccerRoutineEvents(state)];
 }
