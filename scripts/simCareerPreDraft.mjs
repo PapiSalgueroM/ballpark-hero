@@ -58,9 +58,32 @@
  *      the engine FUNCTIONS; that the three buttons still call them is Round
  *      993's test (src/test/usCareerProspect.test.tsx), which this round does
  *      not edit.                        Controls `gradeshift` and `extradraw`.
+ *  10. Round 1319: A PLAYED SHOWCASE DOES WHAT THE CARD PRINTS. The combine
+ *      you run: a player's own station scores (0 to 100 each) average into
+ *      the number the scouts' draw used to be, cut by the same rating and
+ *      health terms (preDraftShowcaseGradeFrom, the one cut both paths call).
+ *      On every road's state at the showcase, both approaches, station scores
+ *      from the harness's own keyed stream and 0, 50 and 100: open adds the
+ *      attempt and nothing else; the resolve changes only stock, showcase and
+ *      phase; the grade equals an independent copy in whole tenths away from
+ *      the lines and always sits between the cuts preDraftCombineCuts prints;
+ *      the stock moves by the clamped table cell; and on 200 roads a pair each
+ *      station walked from 0 to 100 by 1 (the other held at 0, 50 and 100)
+ *      never falls and flips exactly at the printed cut. The curves on a grid
+ *      are whole, inside 0 to 100, monotone and equal a copy built from
+ *      COMBINE_CURVES. And the played path's code holds no draw and no clock.
+ *      Controls `combinewords`, `combinemean`, `combinemono`, `combinecut`.
+ *  11. Round 1319: THE ENGINE GIVES NO SECOND TRY. After open no scouts'
+ *      button and no second open moves the state; a reload of an opened
+ *      attempt (the loader, with the descriptor) is byte for byte the scouts'
+ *      button for its approach, again on a second load and through the draft;
+ *      a graded state moves no more; a bad score list does nothing; the loader
+ *      drops a bad attempt or bad played scores alone and keeps good ones, and
+ *      no scouts path state ever carries either key.
+ *                                Controls `reroll`, `wayback`, `combinegone`.
  *  13. Round 1220: DRAFT NIGHT SHOWS WHAT THE ENGINE DID, AND NEVER DRAWS
- *      (src/lib/careerDraftNight.ts; the numbers 10 to 12 are kept for the
- *      combine a later round builds on this head). On every finished road:
+ *      (src/lib/careerDraftNight.ts; the numbers 10 to 12 went to the combine
+ *      of Round 1319, built on this head). On every finished road:
  *      the closing row is the SAVED pick, round and club (the saved outcome
  *      is the witness, not the order worked out again); every pick row's
  *      club is the holder in the order the harness works out itself; picks
@@ -85,9 +108,12 @@
  *      nightopen 8 pairs (216 to 228 unbacked outcomes built a night),
  *      nightdedup 8 pairs (a gap of -1 picks, a pick shown twice, picks past
  *      the closing row), nightdraw 1 (Math.random was called), projection 8
- *      pairs (pick 19 outside the quoted 21 to 27). gradeshift and extradraw:
- *      the 8 lines of section 9 and nothing else. squeeze: 24 (sections 2, 3
- *      and 9), where it used to exit 2.
+ *      pairs (pick 19 outside the quoted 21 to 27). squeeze: 24 (sections 2, 3
+ *      and 9), where it used to exit 2. extradraw: the 8 lines of section 9
+ *      and nothing else. gradeshift: the 8 lines of section 9 AND, since
+ *      Round 1319, the 8 of section 10 (16 in all), because its cut line now
+ *      lives in preDraftShowcaseGradeFrom, which the played path calls too:
+ *      that is the proof the scouts' grade and a played grade share one cut.
  *
  * Bands, measured over five seed sets (SEEDSET=a..e, 2,000 careers per sport
  * and era each, 20,000 lottery draws per era each), 2026-10-03, on the tree
@@ -189,6 +215,14 @@ const CONTROLS = {
   nightdedup: ['src/lib/careerDraftNight.ts', 'if (span <= head + tail + 1) {', 'if (span <= 0) {'],
   nightdraw: ['src/lib/careerDraftNight.ts', 'const o = preDraftOrder(desc, s.seed);', "const o = preDraftOrder(desc, s.seed + (Math.random() < 2 ? '' : 'x'));"],
   projection: ['src/lib/careerPreDraft.ts', 'return { lo: preDraftBoardRankAt(s.stock, total, 0) + off, hi: preDraftBoardRankAt(s.stock, total, 1) + off, total };', 'return { lo: preDraftBoardRankAt(s.stock, total, 0.25) + off, hi: preDraftBoardRankAt(s.stock, total, 0.75) + off, total };'],
+  /* Round 1319, sections 10 to 12 (the combine you run). */
+  combinewords: ['src/lib/careerPreDraft.ts', 'const delta = preDraftShowcaseMove(s.stock, SHOWCASE_DELTAS[combine.approach][g]);', 'const delta = preDraftShowcaseMove(s.stock, SHOWCASE_DELTAS.steady[g]);'],
+  combinemean: ['src/lib/careerPreDraft.ts', 'const g = preDraftShowcaseGradeFrom(total / (100 * scores.length), s);', 'const g = preDraftShowcaseGradeFrom(scores[0] / 100, s);'],
+  combinemono: ['src/lib/careerPreDraft.ts', 'clampMeter(100 * (c.zeroAt - ms) / (c.zeroAt - c.fullAt) - c.slip * slips)', 'clampMeter(100 * (c.zeroAt - ms) / (c.zeroAt - c.fullAt) + c.slip * slips)'],
+  combinecut: ['src/lib/careerPreDraft.ts', 'if (cuts[k] === null && reach >= at[k]) cuts[k] = total / n;', 'if (cuts[k] === null && reach >= at[k]) cuts[k] = (total + 1) / n;'],
+  reroll: ['src/lib/careerPreDraft.ts', "if (s.phase === 'showcase' && s.combine) return preDraftCombineSettle(desc, s);", "if (s.phase === 'showcase' && s.combine) delete s.combine;"],
+  wayback: ['src/lib/careerPreDraft.ts', 'if (prev.combine) return prev;', ''],
+  combinegone: ['src/lib/careerPreDraft.ts', 'return { ...prev, combine: { approach } };', 'return { ...prev };'],
 };
 if (CONTROL && !CONTROLS[CONTROL]) { console.error(`Unknown control ${CONTROL}`); process.exit(2); }
 if (CONTROL && RECORD) { console.error('A recording is never written from a mutated engine. Refusing to run.'); process.exit(2); }
@@ -606,6 +640,185 @@ console.log('\n9. The scouts path is byte equal to its recording');
     }
   }
 }
+
+/* ─── Sections 10 to 12: the combine you run (Round 1319) ─── */
+const GRADE_RANK = { D: 0, C: 1, B: 2, A: 3 };
+const PLAYED = ['allout', 'steady'];
+/** The grade a card would print from the cuts: the highest grade whose cut the mean reaches. */
+const gradeByCuts = (cuts, mean) => (cuts.A !== null && mean >= cuts.A ? 'A' : cuts.B !== null && mean >= cuts.B ? 'B' : cuts.C !== null && mean >= cuts.C ? 'C' : 'D');
+/** The harness's own copy of the curves, built from COMBINE_CURVES and nothing else. */
+const curveCopy = (kind, raw, input) => {
+  const c = M.COMBINE_CURVES[kind][input === 'keys' ? 'keys' : 'pointer'];
+  const v = kind === 'burst' ? 100 * (raw.taps - c.zeroAt) / (c.fullAt - c.zeroAt) : 100 * (c.zeroAt - raw.ms) / (c.zeroAt - c.fullAt) - c.slip * raw.slips;
+  return Math.max(0, Math.min(100, Math.round(v)));
+};
+/** One function's code, comments stripped, found by its name and its braces. */
+const engineCode = stripComments(fs.readFileSync(path.join(ROOT, 'src/lib/careerPreDraft.ts'), 'utf-8'));
+const codeOf = name => {
+  const at = engineCode.indexOf(`export function ${name}(`);
+  if (at < 0) return null;
+  let i = engineCode.indexOf('(', at), depth = 0;
+  for (; i < engineCode.length; i += 1) { if (engineCode[i] === '(') depth += 1; if (engineCode[i] === ')' && --depth === 0) break; }
+  const open = engineCode.indexOf('{', i);
+  depth = 0;
+  for (let j = open; j < engineCode.length; j += 1) { if (engineCode[j] === '{') depth += 1; if (engineCode[j] === '}' && --depth === 0) return engineCode.slice(at, j + 1); }
+  return null;
+};
+
+console.log('\n10. A played showcase does what the card prints');
+const realRandom10 = Math.random;
+Math.random = () => { throw new Error('Math.random was called'); };
+try {
+  /* (0) The played path draws nothing: its code reaches no stream, no
+     Math.random and no clock, and calls nothing that does. The settle draws
+     what the scouts' button draws because it IS that button (section 11). */
+  const pure = ['preDraftStations', 'preDraftStationScore', 'preDraftCombineOpen', 'preDraftCombineResolve', 'preDraftCombineCuts', 'preDraftShowcaseGradeFrom', 'preDraftShowcaseMove'];
+  const drawn = pure.filter(f => { const c = codeOf(f); return !c || /keyedRng|\brng\s*\(|Math\.random|Date\.now|new Date|preDraftShowcase\s*\(|preDraftShowcaseGrade\s*\(/.test(c); });
+  if (drawn.length) fail(`the played path reaches for a draw, a clock or the scouts' button, or is missing: ${drawn.join(', ')}`);
+  else ok(`${pure.length} functions of the played path hold no draw, no clock and no call to the scouts' button (code only)`);
+  /* (f) The curves on a grid: whole, inside 0 to 100, more taps never score
+     less, more time or more slips never score more, and each equals the
+     harness's own copy built from COMBINE_CURVES. */
+  {
+    const bad = [];
+    for (const input of ['pointer', 'keys']) {
+      let last = -1;
+      for (let taps = 0; taps <= 80; taps += 1) {
+        const v = M.preDraftStationScore('burst', { taps }, input);
+        if (!Number.isInteger(v) || v < 0 || v > 100 || v < last || v !== curveCopy('burst', { taps }, input)) bad.push(`${input} burst at ${taps} taps scored ${v}`);
+        last = v;
+      }
+      for (let slips = 0; slips <= 8; slips += 1) for (let ms = 0; ms <= 12000; ms += 50) {
+        const v = M.preDraftStationScore('cones', { ms, slips }, input);
+        const later = ms ? M.preDraftStationScore('cones', { ms: ms - 50, slips }, input) : 100;
+        const cleaner = slips ? M.preDraftStationScore('cones', { ms, slips: slips - 1 }, input) : 100;
+        if (!Number.isInteger(v) || v < 0 || v > 100 || v > later || v > cleaner || v !== curveCopy('cones', { ms, slips }, input)) bad.push(`${input} cones at ${ms} ms and ${slips} slips scored ${v}`);
+      }
+    }
+    if (bad.length) fail(`${bad.length} station scores off the curve, first: ${bad.slice(0, 3).join(' | ')}`);
+    else ok('station scores on the grid (taps 0 to 80; 0 to 12,000 ms by 50 and 0 to 8 slips; pointer and keys) are whole, inside 0 to 100, move the right way and equal the curves');
+  }
+  /* (a) to (e) on every road's state at the showcase. */
+  for (const d of DESCS) {
+    const rs = RUNS.get(tag(d));
+    const bad = [];
+    const note = m => { if (bad.length < 400) bad.push(m); };
+    let resolved = 0, onLine = 0, walked = 0;
+    for (let i = 0; i < rs.length; i += 1) {
+      const pre = rs[i].pre;
+      const names = M.preDraftStations(d, pre).map(st => st.name);
+      const n = names.length;
+      if (!n) { note(`road ${i}: no stations`); continue; }
+      const cuts = M.preDraftCombineCuts(pre, n);
+      const own = M.keyedRng(`combine|${SEEDSET}|${tag(d)}|${i}`);
+      const sets = [Array.from({ length: n }, () => Math.floor(own() * 101)), Array(n).fill(0), Array(n).fill(50), Array(n).fill(100)];
+      for (const approach of PLAYED) {
+        const opened = M.preDraftCombineOpen(d, pre, approach);
+        const { combine, ...rest } = opened;
+        if (JSON.stringify(rest) !== JSON.stringify(pre) || JSON.stringify(combine) !== JSON.stringify({ approach })) note(`road ${i}: open did more than add the attempt`);
+        for (const scores of sets) {
+          resolved += 1;
+          const after = M.preDraftCombineResolve(d, opened, scores);
+          const sc = after.showcase;
+          const others = x => { const { stock, showcase, phase, combine: c, ...o } = x; return JSON.stringify(o); };
+          if (!sc || 'combine' in after || after.phase !== 'draft' || others(after) !== others(pre) || JSON.stringify(Object.keys(after)) !== JSON.stringify(Object.keys(pre))) { note(`road ${i}: the resolve changed more than stock, showcase and phase`); continue; }
+          const total = scores.reduce((a, x) => a + x, 0);
+          const points10 = 10 * total / n + 20 * (pre.rating - 70) - 3 * (100 - pre.health);
+          if (points10 === 800 || points10 === 500 || points10 === 200) onLine += 1;
+          else if (sc.grade !== (points10 > 800 ? 'A' : points10 > 500 ? 'B' : points10 > 200 ? 'C' : 'D')) note(`road ${i}: ${scores.join(' and ')} at rating ${pre.rating}, health ${pre.health} graded ${sc.grade} (tenths ${points10})`);
+          if (sc.grade !== gradeByCuts(cuts, total / n)) note(`road ${i}: grade ${sc.grade} for a mean of ${total / n}, the cuts say ${gradeByCuts(cuts, total / n)} (${JSON.stringify(cuts)})`);
+          const move = M.preDraftShowcaseMove(pre.stock, M.SHOWCASE_DELTAS[approach][sc.grade]);
+          if (sc.approach !== approach || sc.stockDelta !== move || after.stock - pre.stock !== move) note(`road ${i}: ${approach} ${sc.grade} moved the stock ${after.stock - pre.stock}, the table says ${move}`);
+          if (sc.drill !== names.join(' and ') || JSON.stringify(sc.played) !== JSON.stringify(scores)) note(`road ${i}: the result does not name the stations and their scores`);
+        }
+      }
+      /* (e) WALKED, not at the ends: each station from 0 to 100 by 1 with the
+         other held at 0, 50 and 100; the grade never falls and the printed
+         cut flips exactly where the grade does. */
+      if (i < 200) {
+        const opened = M.preDraftCombineOpen(d, pre, 'allout');
+        for (let j = 0; j < n; j += 1) for (const hold of n === 1 ? [0] : [0, 50, 100]) {
+          let prevRank = -1;
+          for (let v = 0; v <= 100; v += 1) {
+            const scores = Array.from({ length: n }, (_, k) => (k === j ? v : hold));
+            const g = M.preDraftCombineResolve(d, opened, scores).showcase?.grade;
+            walked += 1;
+            if (!(g in GRADE_RANK) || GRADE_RANK[g] < prevRank) { note(`road ${i}: station ${j + 1} at ${v} (other ${hold}) fell to ${g}`); break; }
+            if (g !== gradeByCuts(cuts, scores.reduce((a, x) => a + x, 0) / n)) { note(`road ${i}: station ${j + 1} at ${v} (other ${hold}) graded ${g} where the printed cut says otherwise`); break; }
+            prevRank = GRADE_RANK[g];
+          }
+        }
+      }
+    }
+    if (bad.length) fail(`${tag(d)}: ${bad.length} played showcase(s) wrong, first: ${bad.slice(0, 3).join(' | ')}`);
+    else ok(`${tag(d)}: ${resolved} resolves add, grade and move exactly as printed (${onLine} on a line, where the card follows the function), ${walked} walked steps never fall and flip at the printed cuts`);
+  }
+} catch (e) {
+  fail(`section 10 threw: ${e.message}`);
+} finally { Math.random = realRandom10; }
+
+console.log('\n11. The engine gives no second try');
+const realRandom11 = Math.random;
+Math.random = () => { throw new Error('Math.random was called'); };
+try {
+  const J = x => JSON.stringify(x);
+  const reload = (x, desc) => M.loadPreDraft(JSON.parse(J(x)), desc);
+  for (const d of DESCS) {
+    const rs = RUNS.get(tag(d));
+    const bad = [];
+    const note = (i, m) => { if (bad.length < 400) bad.push(`road ${i}: ${m}`); };
+    let dropped = 0;
+    for (let i = 0; i < rs.length; i += 1) {
+      const { pre, shown, s: done, trail } = rs[i];
+      const n = M.preDraftStations(d, pre).length;
+      /* Nothing the scouts path made ever carries the new keys, not even as undefined. */
+      for (const x of [pre, shown, done]) if ('combine' in x || (x.showcase && 'played' in x.showcase)) note(i, 'a scouts path state carries an attempt or played scores');
+      if (M.preDraftCombineOpen(d, pre, 'skip') !== pre) note(i, 'Skip it opened an attempt');
+      for (const x of [shown, done, ...(trail.length ? [trail[0].before] : [])]) if (M.preDraftCombineOpen(d, x, 'allout') !== x) note(i, `an attempt opened at phase ${x.phase}`);
+      for (const approach of PLAYED) {
+        const opened = M.preDraftCombineOpen(d, pre, approach);
+        const scouts = M.preDraftShowcase(d, pre, approach);
+        /* (a) after open: no scouts' button and no second open moves it. */
+        for (const a3 of ['allout', 'steady', 'skip']) if (M.preDraftShowcase(d, opened, a3) !== opened) note(i, `a scouts' button (${a3}) graded an opened attempt`);
+        for (const a2 of PLAYED) if (M.preDraftCombineOpen(d, opened, a2) !== opened) note(i, 'a second open changed the attempt');
+        /* (b) THE RELOAD: the scouts' button for that approach, byte for byte, every time, and on to the draft. */
+        const loaded = reload(opened, d);
+        if (J(loaded) !== J(scouts)) { note(i, `a reload of an opened ${approach} attempt is not the scouts' button`); continue; }
+        if (J(reload(loaded, d)) !== J(scouts)) note(i, 'a second reload moved the settled state');
+        if (J(M.preDraftRunDraft(d, loaded)) !== J(M.preDraftRunDraft(d, scouts))) note(i, 'the draft after a settled attempt is not the scouts road\'s draft');
+        const settled = M.preDraftCombineSettle(d, opened);
+        if (J(settled) !== J(scouts)) note(i, 'the settle is not the scouts\' button');
+        /* (c) after the grade, nothing moves it again; a bad score list does nothing. */
+        const resolved = M.preDraftCombineResolve(d, opened, Array(n).fill(50));
+        for (const x of [resolved, settled]) {
+          if (M.preDraftCombineOpen(d, x, approach) !== x || M.preDraftCombineResolve(d, x, Array(n).fill(100)) !== x || M.preDraftCombineSettle(d, x) !== x) note(i, `a graded state (${x === resolved ? 'played' : 'settled'}) moved again`);
+        }
+        for (const wrong of [[], Array(n + 1).fill(50), Array(n).fill(50.5), Array(n).fill(-1), Array(n).fill(101), Array(n).fill(NaN)]) if (M.preDraftCombineResolve(d, opened, wrong) !== opened) note(i, `a resolve took ${J(wrong)}`);
+        /* (d) the loader drops a bad key alone, and (e) keeps a good attempt without the descriptor. */
+        if (J(reload(opened)) !== J(opened)) note(i, 'without the descriptor a well formed attempt was not kept');
+        if (i >= 200) continue;
+        const skipped = M.preDraftShowcase(d, pre, 'skip');
+        const drops = [
+          [{ ...pre, combine: 'allout' }, pre], [{ ...pre, combine: { approach: 'skip' } }, pre], [{ ...pre, combine: {} }, pre], [{ ...pre, combine: null }, pre],
+          [{ ...scouts, combine: { approach } }, scouts], [{ ...done, combine: { approach } }, done],
+          ...[[], [50, 50, 50], [101], [1.5], [-3]].map(p => [{ ...resolved, showcase: { ...resolved.showcase, played: p } }, (() => { const { played, ...sc } = resolved.showcase; return { ...resolved, showcase: sc }; })()]),
+          [{ ...skipped, showcase: { ...skipped.showcase, played: [50] } }, skipped],
+        ];
+        for (const [badBlock, clean] of drops) for (const desc of [d, undefined]) {
+          dropped += 1;
+          const got = reload(badBlock, desc);
+          if (!got || J(got) !== J(clean)) note(i, `a bad key was not dropped alone (${desc ? 'with' : 'without'} the descriptor): ${J(badBlock.combine ?? badBlock.showcase?.played)}`);
+        }
+        const drafted = M.preDraftRunDraft(d, resolved);
+        for (const good of [resolved, drafted, pre, scouts, done]) for (const desc of [d, undefined]) if (J(reload(good, desc)) !== J(good)) note(i, `a good block at phase ${good.phase} did not round trip byte for byte`);
+      }
+    }
+    if (bad.length) fail(`${tag(d)}: ${bad.length} second tries or bad loads, first: ${bad.slice(0, 3).join(' | ')}`);
+    else ok(`${tag(d)}: no button, open or resolve moves an opened or graded attempt; every reload of an opened attempt is the scouts' button for its approach, again and through the draft; ${dropped} bad keys dropped alone`);
+  }
+} catch (e) {
+  fail(`section 11 threw: ${e.message}`);
+} finally { Math.random = realRandom11; }
 
 /* ─── Section 13: the night shows what the engine did ─── */
 console.log('\n13. Draft night shows what the engine did, and never draws');

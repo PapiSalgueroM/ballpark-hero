@@ -21,7 +21,10 @@ import { nbaPreDraftDescriptor } from '@/lib/nbaCareerPreDraft';
 import { mlbPreDraftDescriptor, MLB_MINOR_LEVELS } from '@/lib/mlbCareerPreDraft';
 import { nhlPreDraftDescriptor } from '@/lib/nhlCareerPreDraft';
 /* Round 1319: the combine you run, part A (the engine). Additions only. */
-import { preDraftShowcaseGrade, preDraftShowcaseGradeFrom, preDraftStations, type PreDraftStation } from '@/lib/careerPreDraft';
+import {
+  COMBINE_CURVES, preDraftCombineCuts, preDraftCombineOpen, preDraftCombineResolve, preDraftCombineSettle,
+  preDraftShowcaseGrade, preDraftShowcaseGradeFrom, preDraftStationScore, preDraftStations, type PreDraftStation,
+} from '@/lib/careerPreDraft';
 
 const ALL: PreDraftDescriptor[] = [
   nflPreDraftDescriptor('now'), nflPreDraftDescriptor('y2005'),
@@ -390,5 +393,90 @@ describe('the stations a player can run himself', () => {
     ];
     for (const list of bad) expect(preDraftStations({ ...d, stations: () => list as PreDraftStation[] }, { pos: 'QB' })).toEqual([]);
     expect(preDraftStations({ ...d, stations: undefined }, { pos: 'QB' })).toEqual([]);
+  });
+});
+
+describe('the combine you run, the engine', () => {
+  const d = nflPreDraftDescriptor('now');
+  const at = (over: Partial<PreDraftState> = {}): PreDraftState => ({ ...preDraftStart(d, { seed: 'combine', routeId: 'power', rating: 74, pot: 90, pos: 'QB' }), phase: 'showcase', rating: 74, health: 90, stock: 50, ...over });
+  it('a station score is the curve over the raw result, whole and held to 0 to 100', () => {
+    for (const input of ['pointer', 'keys'] as const) {
+      const b = COMBINE_CURVES.burst[input];
+      const c = COMBINE_CURVES.cones[input];
+      expect(preDraftStationScore('burst', { taps: b.zeroAt }, input)).toBe(0);
+      expect(preDraftStationScore('burst', { taps: b.fullAt }, input)).toBe(100);
+      expect(preDraftStationScore('burst', { taps: (b.zeroAt + b.fullAt) / 2 }, input)).toBe(50);
+      expect(preDraftStationScore('burst', { taps: b.fullAt + 40 }, input)).toBe(100);
+      expect(preDraftStationScore('burst', { taps: 0 }, input)).toBe(0);
+      expect(preDraftStationScore('cones', { ms: c.zeroAt, slips: 0 }, input)).toBe(0);
+      expect(preDraftStationScore('cones', { ms: c.fullAt, slips: 0 }, input)).toBe(100);
+      expect(preDraftStationScore('cones', { ms: (c.zeroAt + c.fullAt) / 2, slips: 1 }, input)).toBe(50 - c.slip);
+      expect(preDraftStationScore('cones', { ms: 0, slips: 0 }, input)).toBe(100);
+      expect(preDraftStationScore('burst', { taps: NaN }, input)).toBe(0);
+      expect(preDraftStationScore('cones', { ms: NaN, slips: 0 }, input)).toBe(0);
+    }
+    /* The keys have a curve of their own: a keyboard run is not scored as a pointer run. */
+    const k = COMBINE_CURVES.cones.keys;
+    expect(preDraftStationScore('cones', { ms: k.fullAt, slips: 0 }, 'keys')).toBe(100);
+    expect(preDraftStationScore('cones', { ms: k.fullAt, slips: 0 }, 'pointer')).toBeLessThan(100);
+  });
+  it('the cuts are where the grade flips, floats included: rating 74, health 90', () => {
+    expect(preDraftCombineCuts({ rating: 74, health: 90 }, 2)).toEqual({ A: 75.5, B: 45.5, C: 15.5 });
+    expect(preDraftCombineCuts({ rating: 74, health: 90 }, 1)).toEqual({ A: 76, B: 46, C: 16 });
+    expect(preDraftCombineCuts({ rating: 40, health: 0 }, 2)).toEqual({ A: null, B: null, C: null });
+    expect(preDraftCombineCuts({ rating: 99, health: 100 }, 2)).toEqual({ A: 22.5, B: 0, C: 0 });
+    expect(preDraftCombineCuts({ rating: 74, health: 90 }, 3)).toEqual({ A: null, B: null, C: null });
+  });
+  it('open puts the attempt on the state, once, at the showcase, for all out or safe', () => {
+    const pre = at();
+    const opened = preDraftCombineOpen(d, pre, 'allout');
+    expect(opened).toEqual({ ...pre, combine: { approach: 'allout' } });
+    expect(preDraftCombineOpen(d, opened, 'steady')).toBe(opened);
+    expect(preDraftCombineOpen(d, pre, 'skip')).toBe(pre);
+    expect(preDraftCombineOpen(d, { ...pre, phase: 'draft' }, 'allout').combine).toBeUndefined();
+    expect(preDraftCombineOpen({ ...d, stations: undefined }, pre, 'allout')).toBe(pre);
+    for (const a of ['allout', 'steady', 'skip'] as const) expect(preDraftShowcase(d, opened, a)).toBe(opened);
+  });
+  it('the drills\' average takes the place of the draw, cut and moved by the same table', () => {
+    const opened = preDraftCombineOpen(d, at(), 'allout');
+    const a = preDraftCombineResolve(d, opened, [80, 71]);
+    expect(a.phase).toBe('draft');
+    expect(a.stock).toBe(60);
+    expect(a.showcase).toEqual({ approach: 'allout', drill: 'Burst test and Agility run', grade: 'A', stockDelta: 10, played: [80, 71] });
+    expect('combine' in a).toBe(false);
+    const b = preDraftCombineResolve(d, opened, [80, 70]);
+    expect([b.showcase!.grade, b.stock]).toEqual(['B', 54]);
+    const safe = preDraftCombineResolve(d, preDraftCombineOpen(d, at(), 'steady'), [0, 15]);
+    expect([safe.showcase!.grade, safe.showcase!.stockDelta, safe.stock]).toEqual(['D', -3, 47]);
+    for (const wrong of [[80], [80, 71, 3], [80.5, 71], [-1, 50], [101, 50]]) expect(preDraftCombineResolve(d, opened, wrong)).toBe(opened);
+    expect(preDraftCombineResolve(d, a, [100, 100])).toBe(a);
+    expect(preDraftCombineResolve(d, at(), [100, 100]).phase).toBe('showcase');
+  });
+  it('an attempt left early is the scouts\' button, on every load, and through the draft', () => {
+    for (const approach of ['allout', 'steady'] as const) {
+      const pre = at();
+      const opened = preDraftCombineOpen(d, pre, approach);
+      const scouts = preDraftShowcase(d, pre, approach);
+      expect(preDraftCombineSettle(d, opened)).toEqual(scouts);
+      const loaded = loadPreDraft(JSON.parse(JSON.stringify(opened)), d)!;
+      expect(JSON.stringify(loaded)).toBe(JSON.stringify(scouts));
+      expect(JSON.stringify(loadPreDraft(JSON.parse(JSON.stringify(loaded)), d))).toBe(JSON.stringify(scouts));
+      expect(JSON.stringify(preDraftRunDraft(d, loaded))).toBe(JSON.stringify(preDraftRunDraft(d, scouts)));
+      /* Without the descriptor a well formed attempt is kept as it is. */
+      expect(loadPreDraft(JSON.parse(JSON.stringify(opened)))).toEqual(opened);
+    }
+  });
+  it('the loader drops a bad attempt or bad scores alone, and keeps good ones', () => {
+    const pre = at();
+    const played = preDraftCombineResolve(d, preDraftCombineOpen(d, pre, 'allout'), [80, 71]);
+    const { played: _p, ...plain } = played.showcase!;
+    const clean = { ...played, showcase: plain };
+    expect(loadPreDraft(JSON.parse(JSON.stringify(played)), d)).toEqual(played);
+    for (const p of [[], [1, 2, 3], [101], [1.5], 'x']) expect(loadPreDraft({ ...played, showcase: { ...played.showcase, played: p } }, d)).toEqual(clean);
+    for (const c of ['allout', { approach: 'skip' }, {}, null]) expect(loadPreDraft({ ...pre, combine: c }, d)).toEqual(pre);
+    expect(loadPreDraft({ ...played, combine: { approach: 'allout' } }, d)).toEqual(played);
+    const skipped = preDraftShowcase(d, pre, 'skip');
+    expect(loadPreDraft({ ...skipped, showcase: { ...skipped.showcase, played: [50] } }, d)).toEqual(skipped);
+    expect('combine' in loadPreDraft(JSON.parse(JSON.stringify(pre)), d)!).toBe(false);
   });
 });
