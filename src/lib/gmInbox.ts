@@ -377,10 +377,13 @@ const drop = (list: GmEventDef[], hit: (x: GmEventDef) => boolean) => {
  * (rule 3), each dropping its story and subject siblings with no draw;
  * (7) each pick's wording, from a keyed draw, never `rng`; (8) the kept cap.
  * The deck's draws all come from `rng`, so the same seed deals the same
- * deck. Returns what arrived.
+ * deck. Returns what arrived. A seat that hands in `settled` gets every card
+ * step (2) settled pushed onto it, even one the kept cap then drops, so it
+ * can show gmExpiredLine for each; it changes nothing else.
  */
 export function gmInboxWeek<S extends GmInboxHost>(
   s: S, seat: GmInboxSeat<S>, beat: string, facts: GmFacts, clock: number, rng: () => number,
+  settled?: InboxMessage[],
 ): InboxMessage[] {
   const pack = seat.pack;
   const inbox: GmInboxMessage[] = [...(s.phoneInbox ?? [])];
@@ -412,6 +415,7 @@ export function gmInboxWeek<S extends GmInboxHost>(
     const n = gmNeutralIndex(m.choices);
     if (ttl !== undefined && clock - w >= ttl && n >= 0) inbox[i] = { ...m, w, answered: n, auto: true };
     else if (w !== m.w) inbox[i] = { ...m, w };
+    if (inbox[i].auto && !m.auto) settled?.push(inbox[i]);
   }
   const open = inbox.filter(m => m.answered === undefined).length;
   const want = Math.max(0, Math.min(pack.perWeek, GM_INBOX_OPEN - open));

@@ -54,11 +54,15 @@
      7) EXPIRY. FX_EXPIRE (expiries 2, 3, 4 and 6, neutral option second) on
         20 silent ten season desks: every card is settled at exactly its
         arrival plus its expiry on its neutral option with auto set, no meter
-        ever moves, the settled line names the neutral label with no dash,
-        the deck never freezes (a measured multiple of the deals the same
-        pack makes without expiry), a card whose def lost its expiry stays
-        open, and on the FALLEN drive's falling clock every card settles in
-        exactly its due week, a card across a fall counting from the fall.
+        ever moves, the settled line names the neutral label with no dash
+        and the assistant once, the deck never freezes (a measured multiple
+        of the deals the same pack makes without expiry), a card whose def
+        lost its expiry stays open, and on the FALLEN drive's falling clock
+        every card settles in exactly its due week, a card across a fall
+        counting from the fall. FX_TOLD's desks answer every plain card and
+        no expiring one: the settled list a seat hands gmInboxWeek names
+        exactly the cards each call settled, the ones the kept cap drops in
+        that same call included.
      8) NEUTRAL. Every card of every pack off NEUTRAL_BASELINE has an option
         that moves nothing, every pack on it still lacks one somewhere (the
         ratchet), gmPackProblems is empty for every pack the kit knows, and
@@ -102,6 +106,8 @@
      expireoff  the engine never settles an open card; section 7 fails.
      expirefx   the engine settles on option 0 through the answer flow;
                 section 7 fails.
+     settledoff the engine settles but never names the card in the settled
+                list a seat hands in; section 7 fails.
      neutral    FX_NEUTRAL's one neutral option on its first card is given
                 trust 1 (a data change in the kit, not the engine); section
                 8 fails.
@@ -131,7 +137,7 @@ const CONTROL = process.env.EVENT_DECK_CONTROL || '';
 const RECORD = process.env.SIM_EVENT_DECK_RECORD || '';
 const SHARD = process.env.SIM_EVENT_DECK_SHARD || '';
 const REPLAY_FILE = path.join(ROOT, 'scripts/data/gmInboxReplay.json');
-const CONTROLS = ['replay', 'weightoff', 'weightkeep', 'story', 'rest', 'failopen', 'restfall', 'expirefall', 'textrng', 'seasonweek', 'expireoff', 'expirefx', 'neutral', 'heavy'];
+const CONTROLS = ['replay', 'weightoff', 'weightkeep', 'story', 'rest', 'failopen', 'restfall', 'expirefall', 'textrng', 'seasonweek', 'expireoff', 'expirefx', 'settledoff', 'neutral', 'heavy'];
 if (CONTROL && !CONTROLS.includes(CONTROL)) { console.error(`EVENT_DECK_CONTROL=${CONTROL} is not a control this kit knows`); process.exit(2); }
 if (RECORD && (CONTROL || SHARD)) { console.error('a recording runs the whole replay with no control, refusing'); process.exit(2); }
 const red = new Set();
@@ -168,6 +174,7 @@ const ENGINE_CONTROLS = {
     'if (false) inbox[i] = m; /* expireoff control */'],
   expirefx: ['if (ttl !== undefined && clock - w >= ttl && n >= 0) inbox[i] = { ...m, w, answered: n, auto: true };',
     'if (ttl !== undefined && clock - w >= ttl) { answerInboxMessage(s, m.id, 0, seat); inbox[i] = { ...m, w, answered: 0, auto: true }; } /* expirefx control */'],
+  settledoff: ['if (inbox[i].auto && !m.auto) settled?.push(inbox[i]);', '/* settledoff control */'],
 };
 let engineSrc = null;
 if (ENGINE_CONTROLS[CONTROL]) {
@@ -794,6 +801,49 @@ const FX_EXPIRE = fxPack('fx_expire', [
   if (fall.bad.length) fail(7, `${fall.bad.length} expiry breaks on a clock that falls every ${span} weeks`);
   else ok(`on a clock that falls every ${span} weeks: ${fall.settled} cards settled on ${DRIVES.SILENT.desks} silent desks, each in exactly its due week, ${fall.crossed} of them across a fall, no meter moved`);
   if (fall.lastSeason === 0) fail(7, 'on a falling clock the deck froze: nothing dealt in the tenth season');
+  /* What the seat is told (closing check finding 2). FX_TOLD mixes two
+     expiring cards with four plain ones, and its desks answer every plain
+     card after each week and never an expiring one, so a card that was open
+     before a call stops being open in it only by expiry: the cards one call
+     settles are exactly those open before it and not open after it (still
+     there, settled, or settled and dropped by the kept cap in that same
+     call, which only ever drops an answered card, and here often drops the
+     one it just settled). The settled list handed to gmInboxWeek must name
+     exactly those, in order, each auto on its neutral option. Measured
+     2026-10-13 at seeds 1 to 10 (20 desks of ten seasons): 1,556 to 1,576
+     cards settled, 292 to 346 of them dropped in the call that settled them
+     (about one in five, which a seat reading only the desk would never
+     show), so the floors of 500 and 100 say only that it was tested. The
+     settledoff control stops the list. */
+  const FX_TOLD = fxPack('fx_told', [
+    fxHard('t4', { expires: 4 }), fxHard('t7', { expires: 7 }), fxCard('p1'), fxCard('p2'), fxCard('p3'), fxCard('p4'),
+  ], { perWeek: 2, chance: 0.6, cooldown: 2 });
+  const told = { settled: 0, dropped: 0, bad: [] };
+  const toldSeat = E.bindGmInbox(FX_TOLD, BINDING);
+  for (let d = 0; d < DRIVES.SILENT.desks; d++) {
+    const rng = keyedRng(`simEventDeck|told|${SEED}|${d}`);
+    const s = newDesk();
+    for (let clock = 0; clock < SEASONS * span; clock++) {
+      const before = openOf(s).map(m => m.id);
+      const list = [];
+      E.gmInboxWeek(s, toldSeat, 'a', {}, clock, rng, list);
+      const after = new Map((s.phoneInbox ?? []).map(m => [m.id, m]));
+      const want = before.filter(id => !after.has(id) || after.get(id).answered !== undefined);
+      const got = list.map(m => m.id);
+      if (got.join(',') !== want.join(',')) told.bad.push(`desk ${d} week ${clock}: settled ${want.join(',') || 'nothing'}, the list says ${got.join(',') || 'nothing'}`);
+      for (const m of list) {
+        if (m.auto !== true || m.answered !== 1) told.bad.push(`desk ${d} week ${clock}: ${m.id} listed with auto ${m.auto} on option ${m.answered}`);
+        if (!after.has(m.id)) told.dropped++;
+      }
+      told.settled += list.length;
+      for (const m of openOf(s)) if (!m.defId.startsWith('t')) E.answerGmInbox(s, m.id, 0, toldSeat);
+    }
+  }
+  for (const b of told.bad.slice(0, 6)) console.error(`     ${b}`);
+  const lineTold = `the settled list named ${told.settled} cards on ${DRIVES.SILENT.desks} desks, ${told.dropped} of them dropped by the kept cap in the call that settled them`;
+  if (told.bad.length) fail(7, `${told.bad.length} weeks where the settled list and the desk disagree`);
+  else if (told.settled < 500 || told.dropped < 100) fail(7, `${lineTold}: too few to have tested it`);
+  else ok(lineTold);
   /* A card whose def lost its expiry stays open: the manager answers it. */
   const s = newDesk();
   E.gmInboxWeek(s, E.bindGmInbox(FX_EXPIRE, BINDING), 'a', {}, 0, () => 0);

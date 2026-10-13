@@ -106,6 +106,11 @@ Files this round owns: src/lib/gmInbox.ts, src/lib/gmInbox.test.ts, scripts/simG
   replaced (never written into) by a copy answered on its neutral option with `auto` set. Nothing moves: it does not go
   through the answer flow. It counts as answered from step (3), so its slot is free the same week and the kept cap
   drops it first. A message whose def is gone or lost its expiry stays open; a `w` from the future is rebased.
+- Closing check finding 2: because the kept cap can drop a card in the very call that settles it (kit measurement:
+  about one settled card in five on FX_TOLD's desks), `gmInboxWeek` takes an optional last argument, `settled`, a list
+  the seat hands in, onto which step (2) pushes every card it settles (as settled, so `gmExpiredLine` reads it) before
+  the cap runs. Absent, nothing changes; present, it changes nothing else (unit test: the same desk with and without
+  the list is byte equal), and it draws nothing, so the replay cannot move.
 - Judgement call: the neutral index is read off the message's own saved choices, not the def's, because `answered`
   indexes the saved choices; on a deal they are the same array, and if a later pack edit removed the neutral option
   the message stays open (fail closed) instead of landing on a wrong option.

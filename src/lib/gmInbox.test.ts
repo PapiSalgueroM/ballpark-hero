@@ -522,4 +522,27 @@ describe('gmInbox deck rules, the closing check cases', () => {
       expect(settle(from)!.toLowerCase().split('your assistant')).toHaveLength(2);
     }
   });
+
+  it('a card the kept cap drops in the call that settles it still reaches the seat, and the list changes nothing else', () => {
+    const p = deck([card('x', { expires: 4 }), ...Array.from({ length: 12 }, (_, i) => card(`f${i}`))], { perWeek: 3, cooldown: 50 });
+    const seat = seatFor(p);
+    const run = (collect: boolean) => {
+      const s = desk();
+      const out: GmInboxMessage[][] = [];
+      for (let clock = 0; clock <= 4; clock++) {
+        const settled: GmInboxMessage[] = [];
+        gmInboxWeek(s, seat, 'a', {}, clock, () => 0, collect ? settled : undefined);
+        out.push(settled);
+        for (const m of s.phoneInbox!) if (m.answered === undefined && m.defId !== 'x') answerGmInbox(s, m.id, 0, seat);
+      }
+      return { s, out };
+    };
+    const { s, out } = run(true);
+    /* Week 4 settles x and deals three, so the cap drops x, the oldest answered. */
+    expect(s.phoneInbox!.some(m => m.defId === 'x')).toBe(false);
+    expect(out.slice(0, 4).map(a => a.length)).toEqual([0, 0, 0, 0]);
+    expect(out[4].map(m => [m.defId, m.answered, m.auto])).toEqual([['x', 0, true]]);
+    expect(gmExpiredLine(out[4][0])).toBe('📨 Ownership: your assistant dealt with it (Leave it).');
+    expect(JSON.stringify(run(false).s)).toBe(JSON.stringify(s));
+  });
 });
