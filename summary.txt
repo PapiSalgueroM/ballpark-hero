@@ -1,0 +1,8 @@
+simCmSubs exit=0 13s | simCmSubs GREEN: 44 of 44 checks green (parts ledger, rule, opponent, coach, press)
+subs-pressold exit=1 9s | control pressold FIRED: 2 of 3 checks red
+dailyDeals-print exit=0 4s | {"scripted":{"2026-10-10":{"digest":"32aae44ce6352f1d6b15","grade":"2d6cd0e428ddc1f0a056","actions":[{"t":"open","i":0},{"t":"bid","i":0,"amt":5.1},{"t":"terms","i":0,"wa
+simDailyDeals exit=1 4s | simDailyDeals: 5 FAILURE(S): Hot Seat [2026-10-27, 2026-11-14, 2027-01-19, 2027-01-30, 2027-02-06], Deadline Day []
+tsc exit=0 81s | 
+simDeadlineDay exit=0 4s | simDeadlineDay: green. The brief is real, the desk pays, the clock binds, the daily is one window a day, the budget holds, a Club Manager save keeps its registrations, ri
+simManagerHotSeat exit=0 59s | simManagerHotSeat: green. The target is the club's, reading the room pays, outcomes replay, a Club Manager save keeps its registrations and a survivor carries on in Club 
+subs-base exit=1 106s | simCmSubs RED: 7 of 10 checks green (parts legacy, three, hotseat, press)
