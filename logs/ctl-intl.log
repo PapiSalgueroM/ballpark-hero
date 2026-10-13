@@ -1,0 +1,8 @@
+CONTROL intl: one line of src/lib/clubManagerInternationals.ts rewritten, section 3 must go red
+3) the break note and the calendar line: this calendar's rule, never football's
+  FAIL: the note at week 6 with starters does not name this calendar's rule: "International break: the window runs 9 to 17 Nov, and your fixtures do not stop for it, so they went straight after your last game. Away with their countries (G"
+  FAIL: the note at week 6 with starters says /do not stop/i: "International break: the window runs 9 to 17 Nov, and your fixtures do not stop for it, so they went straight after your last game. Away with their countries (G"
+  FAIL: the note at week 6 without does not name this calendar's rule: "International break: the window runs 9 to 17 Nov, and your fixtures do not stop for it, so they went straight after your last game. Away with their countries (G"
+  FAIL: the note at week 6 without says /do not stop/i: "International break: the window runs 9 to 17 Nov, and your fixtures do not stop for it, so they went straight after your last game. Away with their countries (G"
+   4 notes and 4 calendar lines read; e.g. "International window, 21 Sep to 6 Oct (up to 4 games for each country). This calendar plays on through it: your internationals go after your last game before it and come back tired for the next one."
+simCmCopy: CONTROL intl FIRED (4 failures, as it must)

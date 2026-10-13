@@ -1,0 +1,69 @@
+CONTROL word: one line of the head's clubManager.ts rewritten in the bundle, the run must go red
+cmCopyOnly1326: base /home/runner/work/ballpark-hero/ballpark-hero/.fb3, head /home/runner/work/ballpark-hero/ballpark-hero
+  fleets A, 2 seasons a career; bare league names La Liga, Serie A, Ligue 1, Serie B, Ligue 2
+  active rewrites: article-board, article-news, drama, intl, staff
+fleet A: 13 careers
+  A Liverpool (now) [Premier League]: seasons 2, entries 96, draws 109530/109530, bytes 154951/154951 174241/174241, rewrites intl 56, staff 4 (6s)
+  FAIL: A Barcelona (now): season 1 entry 17 (week 17) differs
+      season 1 entry 17 (week 17).aiHeadlines[0]: an undeclared string
+        base: "🏆 Real Madrid lead Atlético Madrid by 2 points. Title race."
+        head: "🏆 Real Madrid lead Atlético Madrid by 2 points. Title chase."
+  A Barcelona (now) [La Liga]: seasons 0, entries 17, draws 18757/18757, bytes -, rewrites article-board 18, article-news 51, intl 9, stopped: season 1 entry 17 (week 17) (1s)
+  FAIL: A Real Madrid (now): season 1 entry 17 (week 17) differs
+      season 1 entry 17 (week 17).aiHeadlines[0]: an undeclared string
+        base: "🏆 Athletic Club lead Real Madrid by 1 point. Title race."
+        head: "🏆 Athletic Club lead Real Madrid by 1 point. Title chase."
+  A Real Madrid (now) [La Liga]: seasons 0, entries 17, draws 18540/18540, bytes -, rewrites article-board 18, staff 8, article-news 50, intl 9, drama 8, stopped: season 1 entry 17 (week 17) (1s)
+  FAIL: A Celta Vigo (now): season 1 entry 13 (week 17) differs
+      season 1 entry 13 (week 17).aiHeadlines[0]: an undeclared string
+        base: "🏆 Barcelona lead Villarreal by 1 point. Title race."
+        head: "🏆 Barcelona lead Villarreal by 1 point. Title chase."
+  A Celta Vigo (now) [La Liga]: seasons 0, entries 13, draws 17154/17154, bytes -, rewrites article-news 29, intl 7, stopped: season 1 entry 13 (week 17) (1s)
+  FAIL: A Juventus (now): season 1 entry 13 (week 17) differs
+      season 1 entry 13 (week 17).aiHeadlines[0]: an undeclared string
+        base: "🏆 Juventus lead Como by 2 points. Title race."
+        head: "🏆 Juventus lead Como by 2 points. Title chase."
+  A Juventus (now) [Serie A]: seasons 0, entries 13, draws 16883/16883, bytes -, rewrites article-board 14, article-news 29, intl 7, stopped: season 1 entry 13 (week 17) (0s)
+  FAIL: A PSG (now): season 1 entry 13 (week 13) differs
+      season 1 entry 13 (week 13).aiHeadlines[0]: an undeclared string
+        base: "🏆 PSG lead Strasbourg by 2 points. Title race."
+        head: "🏆 PSG lead Strasbourg by 2 points. Title chase."
+  A PSG (now) [Ligue 1]: seasons 0, entries 13, draws 15157/15157, bytes -, rewrites article-board 14, article-news 28, intl 4, stopped: season 1 entry 13 (week 13) (0s)
+  FAIL: A Palermo (now): season 2 entry 13 (week 17) differs
+      season 2 entry 13 (week 17).aiHeadlines[0]: an undeclared string
+        base: "🏆 Juventus lead AC Milan by 1 point. Title race."
+        head: "🏆 Juventus lead AC Milan by 1 point. Title chase."
+  A Palermo (now) [Serie B]: seasons 1, entries 55, draws 63585/63585, bytes 143985/143999, rewrites article-news 137, intl 43, stopped: season 2 entry 13 (week 17) (2s)
+  FAIL: A OB (now): season 1 entry 10 (week 15) differs
+      season 1 entry 10 (week 15).aiHeadlines[0]: an undeclared string
+        base: "🏆 FC Midtjylland lead OB by 2 points. Title race."
+        head: "🏆 FC Midtjylland lead OB by 2 points. Title chase."
+  A OB (now) [Danish Superliga]: seasons 0, entries 10, draws 17804/17804, bytes -, rewrites none, stopped: season 1 entry 10 (week 15) (0s)
+  FAIL: A Dundee (now): season 1 entry 7 (week 9) differs
+      season 1 entry 7 (week 9).aiHeadlines[0]: an undeclared string
+        base: "🏆 Rangers lead Kilmarnock by 2 points. Title race."
+        head: "🏆 Rangers lead Kilmarnock by 2 points. Title chase."
+  A Dundee (now) [Scottish Premiership]: seasons 0, entries 7, draws 11958/11958, bytes -, rewrites none, stopped: season 1 entry 7 (week 9) (0s)
+  FAIL: A West Ham (now): season 1 entry 13 (week 16) differs
+      season 1 entry 13 (week 16).aiHeadlines[0]: an undeclared string
+        base: "🏆 Southampton lead Sheffield United by 1 point. Title race."
+        head: "🏆 Southampton lead Sheffield United by 1 point. Title chase."
+  A West Ham (now) [EFL Championship]: seasons 0, entries 13, draws 14946/14946, bytes -, rewrites intl 6, stopped: season 1 entry 13 (week 16) (0s)
+  FAIL: A Everton (era2005): season 1 entry 13 (week 17) differs
+      season 1 entry 13 (week 17).aiHeadlines[0]: an undeclared string
+        base: "🏆 Manchester United lead Arsenal by goal difference alone. Title race."
+        head: "🏆 Manchester United lead Arsenal by goal difference alone. Title chase."
+  A Everton (era2005) [Premier League]: seasons 0, entries 13, draws 7813/7813, bytes -, rewrites intl 10, stopped: season 1 entry 13 (week 17) (0s)
+  FAIL: A Leicester City (era2015): season 1 entry 13 (week 17) differs
+      season 1 entry 13 (week 17).aiHeadlines[0]: an undeclared string
+        base: "🏆 Manchester United lead Liverpool by 2 points. Title race."
+        head: "🏆 Manchester United lead Liverpool by 2 points. Title chase."
+  A Leicester City (era2015) [Premier League]: seasons 0, entries 13, draws 7834/7834, bytes -, rewrites intl 9, stopped: season 1 entry 13 (week 17) (0s)
+  FAIL: A Bayern Munich (era2020): season 1 entry 13 (week 13) differs
+      season 1 entry 13 (week 13).aiHeadlines[0]: an undeclared string
+        base: "🏆 Bayern Munich lead RB Leipzig by 1 point. Title race."
+        head: "🏆 Bayern Munich lead RB Leipzig by 1 point. Title chase."
+  A Bayern Munich (era2020) [Bundesliga]: seasons 0, entries 13, draws 7823/7823, bytes -, rewrites staff 7, intl 8, stopped: season 1 entry 13 (week 13) (0s)
+rewrites fired over 13 careers: intl 168, staff 19, article-board 64, article-news 324, drama 8
+staff lines that carry the summer lapse sentence (comparisons): 0
+cmCopyOnly1326: CONTROL word FIRED (12 failures, as it must)

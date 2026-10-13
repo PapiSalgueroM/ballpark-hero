@@ -1,0 +1,51 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/lib/clubManagerInternationals.test.ts src/test/clubManagerWorldEditor.test.tsx src/test/staffScreen.test.tsx src/lib/gmStaff.test.ts src/test/clubManagerEraNationalities.test.ts src/test/cmMinuteLabel.test.ts src/test/managerScorerMarks.test.tsx --testTimeout=300000 --hookTimeout=120000
+simCmCopy: node scripts/simCmCopy.mjs
+simCmCopy-base: mkdir -p .fb0 && git archive 36cc9ffe src | tar -x -C .fb0 && CM_COPY_ROOT=$PWD/.fb0 node scripts/simCmCopy.mjs
+ctl-article: CM_COPY_CONTROL=article node scripts/simCmCopy.mjs --section=1
+ctl-drama: CM_COPY_CONTROL=drama node scripts/simCmCopy.mjs --section=2
+ctl-intl: CM_COPY_CONTROL=intl node scripts/simCmCopy.mjs --section=3
+ctl-staff: CM_COPY_CONTROL=staff node scripts/simCmCopy.mjs --section=4
+ctl-summer: CM_COPY_CONTROL=summer node scripts/simCmCopy.mjs --section=4
+ctl-walk: CM_COPY_CONTROL=walk node scripts/simCmCopy.mjs --section=4
+ctl-finance: CM_COPY_CONTROL=finance node scripts/simCmCopy.mjs --section=5
+copyonly-ABCD: mkdir -p .fb1 && git archive 36cc9ffe src | tar -x -C .fb1 && node scripts/qa/cmCopyOnly1326.mjs --base .fb1 --fleet=A,B,C,D
+copyonly-AD3: mkdir -p .fb5 && git archive 36cc9ffe src | tar -x -C .fb5 && COPY_ONLY_SEASONS=3 node scripts/qa/cmCopyOnly1326.mjs --base .fb5 --fleet=A,D
+copyonly-draw: mkdir -p .fb2 && git archive 36cc9ffe src | tar -x -C .fb2 && COPY_ONLY_CONTROL=draw node scripts/qa/cmCopyOnly1326.mjs --base .fb2 --fleet=A
+copyonly-word: mkdir -p .fb3 && git archive 36cc9ffe src | tar -x -C .fb3 && COPY_ONLY_CONTROL=word node scripts/qa/cmCopyOnly1326.mjs --base .fb3 --fleet=A
+simCmLeagueRules: node scripts/simCmLeagueRules.mjs
+simManagerAppealIsolation: node scripts/simManagerAppealIsolation.mjs
+simGmStaff: node scripts/simGmStaff.mjs
+simClubManagerStaff: node scripts/simClubManagerStaff.mjs
+simBoard: node scripts/simBoard.mjs
+simBoardObjectives: node scripts/simBoardObjectives.mjs
+simCmInternationals: node scripts/simCmInternationals.mjs
+simCmShootoutOrder: node scripts/simCmShootoutOrder.mjs
+simClubManagerFinances: node scripts/simClubManagerFinances.mjs
+simSponsors: node scripts/simSponsors.mjs
+simDailyDeals: node scripts/simDailyDeals.mjs
+simManagerHotSeat: node scripts/simManagerHotSeat.mjs
+simDeadlineDay: node scripts/simDeadlineDay.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+simLiveScores: node scripts/simLiveScores.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simInventedNames: node scripts/simInventedNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
+simNoInventedConduct: node scripts/simNoInventedConduct.mjs
+simLegalPages: node scripts/simLegalPages.mjs
+simSingleFooter: node scripts/simSingleFooter.mjs
+simCompletionSlugs: node scripts/simCompletionSlugs.mjs
+simCompletionOnce: node scripts/simCompletionOnce.mjs
+simNoDoubleRecord: node scripts/simNoDoubleRecord.mjs
+simDailyPuzzleContract: node scripts/simDailyPuzzleContract.mjs
+simDailySaveHardening: node scripts/simDailySaveHardening.mjs
+simSchemaNames: node scripts/simSchemaNames.mjs
+simFetchRetry: node scripts/simFetchRetry.mjs
+simGoogleOnlyReturn: node scripts/simGoogleOnlyReturn.mjs
+simReportRelay: node scripts/simReportRelay.mjs
+simNavbarStatsReads: node scripts/simNavbarStatsReads.mjs
+simLeaderboardCaps: node scripts/simLeaderboardCaps.mjs
+simScoringCoverage: node scripts/simScoringCoverage.mjs
+simSiteSearch: node scripts/simSiteSearch.mjs
+simGuideHeadings: node scripts/simGuideHeadings.mjs
