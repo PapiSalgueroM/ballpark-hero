@@ -1,0 +1,13 @@
+#!playwright
+simCareerTransferBrief: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerTransferBrief.mjs
+simSoccerAgentReview: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerAgentReview.mjs
+simSoccerAgentReviewPageControl: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerAgentReviewPageControl.mjs
+simTransferBriefPageControl: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simTransferBriefPageControl.mjs
+simCareerProgramme: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerProgramme.mjs
+simSoccerFarewell: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerFarewell.mjs
+simSoccerInternationalReturn: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerInternationalReturn.mjs
+anchors: node scripts/simHarnessAnchors.mjs
+rival: node scripts/simNoRivalNames.mjs
+book-weight: git worktree add -q --detach /tmp/bb-weight 48cb9d4b && ln -s "$PWD/node_modules" /tmp/bb-weight/node_modules && BOOK_BASE=/tmp/bb-weight BOOK_CONTROL=weight node scripts/simCmLeagueBook.mjs
+book-thinall: git worktree add -q --detach /tmp/bb-thinall 48cb9d4b && ln -s "$PWD/node_modules" /tmp/bb-thinall/node_modules && BOOK_BASE=/tmp/bb-thinall BOOK_CONTROL=thinall node scripts/simCmLeagueBook.mjs
+book-base: git worktree add -q --detach /tmp/bb-plain 48cb9d4b && ln -s "$PWD/node_modules" /tmp/bb-plain/node_modules && BOOK_BASE=/tmp/bb-plain node scripts/simCmLeagueBook.mjs
