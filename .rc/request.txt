@@ -1,0 +1,30 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simHalftime: node scripts/simHalftime.mjs
+halftime-deaf: SIM_HALFTIME_CONTROL=deaf node scripts/simHalftime.mjs
+simSafari: node scripts/simSafari.mjs
+safari-lookbehind: SIM_SAFARI_CONTROL=lookbehind node scripts/simSafari.mjs
+safari-testimport: SIM_SAFARI_CONTROL=testimport node scripts/simSafari.mjs
+safari-barevh: SIM_SAFARI_CONTROL=barevh node scripts/simSafari.mjs
+safari-vhafter: SIM_SAFARI_CONTROL=vhafter node scripts/simSafari.mjs
+safari-dvhcomment: SIM_SAFARI_CONTROL=dvhcomment node scripts/simSafari.mjs
+safari-customprop: SIM_SAFARI_CONTROL=customprop node scripts/simSafari.mjs
+safari-lvhafter: SIM_SAFARI_CONTROL=lvhafter node scripts/simSafari.mjs
+simActivity: node scripts/simActivityNotCompletion.mjs
+activity-career: SIM_ACTIVITY_CONTROL=career node scripts/simActivityNotCompletion.mjs
+activity-heavy: SIM_ACTIVITY_CONTROL=heavy node scripts/simActivityNotCompletion.mjs
+activity-match: SIM_ACTIVITY_CONTROL=match node scripts/simActivityNotCompletion.mjs
+activity-noping: SIM_ACTIVITY_CONTROL=noping node scripts/simActivityNotCompletion.mjs
+activity-twocalls: SIM_ACTIVITY_CONTROL=twocalls node scripts/simActivityNotCompletion.mjs
+activity-twodotted: SIM_ACTIVITY_CONTROL=twodotted node scripts/simActivityNotCompletion.mjs
+simGmXp: node scripts/simGmXp.mjs
+gmxp-claim: GMXP_CONTROL=claim node scripts/simGmXp.mjs
+gmxp-curvestep: GMXP_CONTROL=curvestep node scripts/simGmXp.mjs
+gmxp-cushiongain: GMXP_CONTROL=cushiongain node scripts/simGmXp.mjs
+gmxp-fractional: GMXP_CONTROL=fractional node scripts/simGmXp.mjs
+gmxp-gmcap: GMXP_CONTROL=gmcap node scripts/simGmXp.mjs
+gmxp-growthshape: GMXP_CONTROL=growthshape node scripts/simGmXp.mjs
+gmxp-nocap: GMXP_CONTROL=nocap node scripts/simGmXp.mjs
+gmxp-notneutral: GMXP_CONTROL=notneutral node scripts/simGmXp.mjs
+gmxp-pastceiling: GMXP_CONTROL=pastceiling node scripts/simGmXp.mjs
+gmxp-saturate: GMXP_CONTROL=saturate node scripts/simGmXp.mjs
+anchors: node scripts/simHarnessAnchors.mjs
