@@ -45,10 +45,29 @@
  *               before the last write each turn this case red (see the round's
  *               notes), and a page that never lets go turns its carry on red.
  *
+ * SOCCER CAREER (Round 1330), in a context of their own with every page seeded
+ * (A and B on different seeds) and each page's own writes of soccerCareerSave
+ * counted; the fixture is a first pro hub played by the real engine:
+ *  10 REPLACE   the hunt's MAJOR 3: A opens, B opens (A shows the notice at
+ *               once), B plays a season; A's press where Next Season was is
+ *               taken by the notice, a press forced past it writes nothing;
+ *               the save is B's byte for byte; A reloads onto B's season.
+ *  11 REVERSE   A, now the newest, plays on; B shows the notice and its forced
+ *               press writes nothing.
+ *  12 NEW CAREER a stale tab's forced New Career clears nothing; a tab on the
+ *               creation screen cannot Begin Career over one another tab began.
+ *  13 WEEK BY WEEK A has the Season Centre open, B plays on: the notice covers
+ *               the Centre and A's forced presses write nothing (A's writes to
+ *               seasonCentre:v1:soccer are printed, not judged: owed).
+ *  14 OLD SAVE  a save with no fence key opens, plays and is fenced, a second
+ *               tab stales it, and the notice passes case 8's checks plus focus
+ *               on Reload and no toast left showing.
+ *
  * NEGATIVE CONTROLS (TWO_TABS_CONTROL; each counts what it dropped and a
  * control that dropped nothing exits 2):
  *   nofence   an init script drops every write to a 'dukb-fence:' key in every
- *             page: cases 1, 2, 3, 6 and 9 go red.
+ *             page: cases 1, 2, 3, 6 and 9 go red, and the soccer cases 10, 11,
+ *             12 and 14.
  *   nolanding drops the carry on's one shot mark: case 4 goes red.
  *   nokeep    drops every write to a key holding '.broken-': case 5's backup
  *             check goes red.
@@ -63,6 +82,7 @@ import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { build } from 'esbuild';
 import pw from './lib/playwrightLoader.mjs';
+import { seedPages } from './lib/pageSeed.mjs';
 
 const { chromium } = pw;
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -74,7 +94,7 @@ const FENCE = 'dukb-fence:' + KEY;
 const OUT = process.env.RC_OUT || path.join(ROOT, 'two-tabs-artifacts');
 fs.mkdirSync(OUT, { recursive: true });
 const CONTROL = process.env.TWO_TABS_CONTROL || '';
-const CONTROLS = { nofence: [1, 2, 3, 6, 9], nolanding: [4], nokeep: [5] };
+const CONTROLS = { nofence: [1, 2, 3, 6, 9, 10, 11, 12, 14], nolanding: [4], nokeep: [5] };
 if (CONTROL && !(CONTROL in CONTROLS)) { console.error(`TWO_TABS_CONTROL=${CONTROL} is not a control here (${Object.keys(CONTROLS).join(', ')})`); process.exit(1); }
 const SIZES = (process.env.SIZES || '320x640,390x844,1280x900').split(',').map(s => s.split('x').map(Number));
 const NOTICE_WORDS = 'This career moved on in another tab. Reload to carry on.';
@@ -600,6 +620,383 @@ async function caseBack(ctx, tag) {
   }
 }
 
+/* ---------- Soccer Career (Round 1330): cases 10 to 14 ---------- */
+/* Their own context, so cases 1 to 9 meet exactly the pages they always met:
+   every page here is seeded (A and B on different seeds, so the season a stale
+   tab would play can never equal the other tab's byte for byte), and an init
+   script counts each page's own writes of the soccer save, which is what proves
+   a stale tab wrote nothing (the control's dropped fence writes are not
+   counted, they are not the save). */
+const SKEY = 'soccerCareerSave';
+const SFENCE = 'dukb-fence:' + SKEY;
+const SCENTRE = 'seasonCentre:v1:soccer';
+const SOCCER_CASES = [10, 11, 12, 13, 14];
+const SEED_A = 1330;
+const SEED_B = 1331;
+let SOCCER = null;
+/** A playing career at its first pro hub, made by the real engine (the shared careerStep policy). */
+async function soccerFixture() {
+  if (SOCCER) return SOCCER;
+  const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'twoTabsSoccer-'));
+  try {
+    const P = rel => JSON.stringify(path.join(ROOT, rel).split(path.sep).join('/'));
+    fs.writeFileSync(path.join(tmp, 'entry.mjs'), `export * as sc from ${P('src/lib/soccerCareerEngine.ts')};\n`);
+    await build({
+      entryPoints: [path.join(tmp, 'entry.mjs')], outfile: path.join(tmp, 'bundle.mjs'), bundle: true, format: 'esm', platform: 'node',
+      logLevel: 'error', absWorkingDir: ROOT, alias: { '@': path.join(ROOT, 'src') },
+      loader: { '.css': 'empty', '.png': 'empty', '.svg': 'empty', '.jpg': 'empty', '.webp': 'empty' },
+    });
+    const { sc } = await import(pathToFileURL(path.join(tmp, 'bundle.mjs')).href);
+    const { careerStep } = await import(pathToFileURL(path.join(ROOT, 'scripts', 'lib', 'careerStep.mjs')).href);
+    Math.random = seeded(1330);
+    const flat = o => ({ pace: o, shooting: o, passing: o, dribbling: o, defending: o, physical: o, reflexes: o });
+    let c = sc.initCareer('Two Tab Tester', 'England', 'ST', 'modern', flat(62), 62, 2020, sc.FALLBACK_CLUBS, null, 84);
+    const pro = s => (s.seasons || []).filter(r => r.type === 'playing').length;
+    for (let g = 0; g < 400 && !(c.phase === 'playing' && pro(c) >= 1) && !c.retired; g++) c = careerStep(sc, c, sc.FALLBACK_CLUBS);
+    if (c.phase !== 'playing') throw new Error(`the soccer fixture never reached a playing hub (phase ${c.phase})`);
+    SOCCER = JSON.stringify(c);
+  } finally {
+    Math.random = realRandom;
+    fs.rmSync(tmp, { recursive: true, force: true });
+  }
+  console.log(`soccer fixture: ${sView(SOCCER)}, ${SOCCER.length} chars`);
+  return SOCCER;
+}
+async function soccerContext(w, h) {
+  const ctx = await newContext(w, h);
+  await ctx.addInitScript(([save, centre]) => {
+    window.__scWrites = 0;
+    window.__centreWrites = 0;
+    const set = Storage.prototype.setItem;
+    const rem = Storage.prototype.removeItem;
+    Storage.prototype.setItem = function (k, v) {
+      if (k === save) window.__scWrites += 1;
+      if (k === centre) window.__centreWrites += 1;
+      return set.call(this, k, v);
+    };
+    Storage.prototype.removeItem = function (k) {
+      if (k === save) window.__scWrites += 1;
+      return rem.call(this, k);
+    };
+  }, [SKEY, SCENTRE]);
+  return ctx;
+}
+async function soccerPage(ctx, seed) {
+  const p = await newPage(ctx);
+  await seedPages(p, seed);
+  return p;
+}
+const sRaw = p => p.evaluate(k => localStorage.getItem(k), SKEY);
+const sFence = p => p.evaluate(k => localStorage.getItem(k), SFENCE);
+const scWrites = p => p.evaluate(() => (typeof window.__scWrites === 'number' ? window.__scWrites : -1));
+const centreWrites = p => p.evaluate(() => (typeof window.__centreWrites === 'number' ? window.__centreWrites : -1));
+function sView(raw) {
+  if (!raw) return 'no save';
+  try {
+    const c = JSON.parse(raw);
+    const r = (c.seasons || [])[c.seasons.length - 1];
+    return `${c.playerName} age ${c.age}, ${c.phase}, ${c.seasons.length} seasons, last ${r ? `${r.year} ${r.club}: ${r.apps} apps, ${r.goals} goals, ${r.rating}` : 'none'}`;
+  } catch { return 'unreadable'; }
+}
+const lastRow = raw => { try { const c = JSON.parse(raw); return JSON.stringify(c.seasons[c.seasons.length - 1]); } catch { return null; } };
+async function openSoccer(p) {
+  await p.goto(BASE + '/soccer-career', { waitUntil: 'domcontentloaded', timeout: 30000 });
+  await p.locator('[data-career-action-bar], input[placeholder*="player name"]').first().waitFor({ timeout: 20000 }).catch(() => {});
+  await clearBanner(p);
+  await clearDialogs(p);
+}
+const advanceBtn = p => p.locator('[data-career-action-bar] button').first();
+/** One career step as a player makes it: the bar's advance button, or the card's Continue. */
+async function stepCareer(p) {
+  const bar = advanceBtn(p);
+  if (await bar.isVisible().catch(() => false)) {
+    const label = (await bar.innerText().catch(() => '')).trim();
+    if (/^Next (Season|Year)/.test(label)) { await bar.click({ timeout: 5000 }).catch(() => {}); await p.waitForTimeout(1500); return label; }
+  }
+  const cont = p.locator('main button:visible', { hasText: /^Continue/ }).first();
+  if (await cont.isVisible().catch(() => false)) { const label = (await cont.innerText().catch(() => '')).trim(); await cont.click({ timeout: 5000 }).catch(() => {}); await p.waitForTimeout(1200); return label; }
+  return null;
+}
+/** The same step forced past anything covering it, straight at the button. */
+async function forceStep(p) {
+  const did = await p.evaluate(() => {
+    const bar = document.querySelector('[data-career-action-bar] button');
+    const cont = [...document.querySelectorAll('main button')].find(b => /^Continue/.test((b.textContent || '').trim()));
+    const target = bar || cont;
+    if (!target) return null;
+    target.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+    return (target.textContent || '').trim();
+  });
+  await p.waitForTimeout(1500);
+  return did;
+}
+async function forceClickText(p, re) {
+  const did = await p.evaluate(src => {
+    const r = new RegExp(src);
+    const b = [...document.querySelectorAll('button')].find(x => r.test((x.textContent || '').trim()));
+    if (!b) return false;
+    b.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+    return true;
+  }, re.source);
+  await p.waitForTimeout(600);
+  return did;
+}
+async function pickCombo(p, triggerText, wanted) {
+  await p.locator('[role="combobox"]', { hasText: triggerText }).first().click({ timeout: 5000 });
+  await p.waitForSelector('[role="option"]', { timeout: 8000 });
+  await p.evaluate(w => {
+    const opts = [...document.querySelectorAll('[role="option"]')];
+    const hit = opts.find(o => o.textContent.includes(w)) || opts[0];
+    hit.scrollIntoView();
+    hit.click();
+  }, wanted);
+  await p.waitForTimeout(400);
+}
+/** The creation form, filled and rolled the way a player does it, Begin Career not pressed. */
+async function fillCreation(p, name) {
+  await p.waitForSelector('input[placeholder*="player name"]', { timeout: 20000 });
+  await p.fill('input[placeholder*="player name"]', name);
+  await pickCombo(p, 'Choose nationality', 'England');
+  await pickCombo(p, 'Choose position', 'Striker');
+  await pickCombo(p, 'Choose era', 'Current era');
+  await p.getByRole('button', { name: /Generate Starting Potential/ }).click({ timeout: 5000 });
+  await p.waitForTimeout(3400);
+}
+
+async function caseSoccerReplace(ctx, tag) {
+  console.log(`10) SOCCER REPLACE, and 11) REVERSE (${tag})`);
+  const raw0 = await soccerFixture();
+  const A = await soccerPage(ctx, SEED_A);
+  await plant(A, { [SKEY]: raw0 });
+  await openSoccer(A);
+  const aLabel = (await advanceBtn(A).innerText().catch(() => '')).trim();
+  const B = await soccerPage(ctx, SEED_B);
+  await openSoccer(B);
+  const upAtOnce = await waitNotice(A, 4000);
+  const aBefore = await scWrites(A);
+  const played = await stepCareer(B);
+  const theirs = await sRaw(B);
+  await shot(B, `${tag}-10-tabB-after-season`);
+  /* The press as a player makes it, where Next Season was: the notice takes it. */
+  const pressed = await advanceBtn(A).click({ timeout: 1500 }).then(() => true).catch(() => false);
+  await A.waitForTimeout(600);
+  const forced = await forceStep(A);
+  const aAfter = await scWrites(A);
+  const onDisk = await sRaw(A);
+  await shot(A, `${tag}-10-tabA-notice`);
+  console.log(`   A opened on "${aLabel}"; B played "${played}": ${sView(theirs)}; A saw the notice at once: ${upAtOnce}; A's press went through: ${pressed}; forced "${forced}"; A's writes ${aBefore} to ${aAfter}`);
+  if (!/^Next Season/.test(aLabel)) fail(10, `tab A did not open on the hub with Next Season first (it read "${aLabel}")`);
+  if (!upAtOnce) fail(10, 'tab A never showed the notice after tab B opened the career');
+  if (!played || !theirs || theirs === raw0) fail(10, `tab B did not play a season (${played})`);
+  if (pressed) fail(10, 'the press reached Next Season behind the notice');
+  if (aAfter !== aBefore) fail(10, `REPLACE: the stale tab wrote the save ${aAfter - aBefore} time(s) after tab B played`);
+  if (onDisk !== theirs) fail(10, `REPLACE: the save on disk is not tab B's any more (${sView(onDisk)})`);
+  else ok(`B's season is on disk byte for byte after A's press and A's forced press: ${sView(theirs)}`);
+  await openSoccer(A);
+  const aNotice = await noticeUp(A);
+  const reloaded = await sRaw(A);
+  await shot(A, `${tag}-10-tabA-reloaded`);
+  if (aNotice) fail(10, 'tab A still shows the notice after its reload');
+  if (lastRow(reloaded) !== lastRow(theirs)) fail(10, `tab A reloaded onto another season: ${sView(reloaded)}`);
+  else ok(`A reloaded onto B's season with no notice: ${sView(reloaded)}`);
+  if (want(11)) {
+    /* 11 REVERSE: A is the newest tab now (its reload wrote), B is stale. */
+    const upB = await waitNotice(B, 4000);
+    const bBefore = await scWrites(B);
+    const aStep = await stepCareer(A);
+    const mine = await sRaw(A);
+    const bForced = await forceStep(B);
+    const bAfter = await scWrites(B);
+    const disk11 = await sRaw(B);
+    await shot(B, `${tag}-11-tabB-notice`);
+    console.log(`   REVERSE: B saw the notice: ${upB}; A stepped "${aStep}": ${sView(mine)}; B forced "${bForced}"; B's writes ${bBefore} to ${bAfter}`);
+    if (!upB) fail(11, 'tab B never showed the notice once tab A reloaded');
+    if (!aStep || mine === reloaded) fail(11, `tab A did not play on after its reload (${aStep})`);
+    if (bAfter !== bBefore) fail(11, `REVERSE: the stale tab B wrote the save ${bAfter - bBefore} time(s)`);
+    if (disk11 !== mine) fail(11, `REVERSE: the save on disk is not tab A's (${sView(disk11)})`);
+    else ok('B\'s forced press changed nothing: the save is A\'s');
+  }
+  await A.close();
+  await B.close();
+}
+
+async function caseSoccerNewCareer(ctx, tag) {
+  console.log(`12) NEW CAREER IN A STALE TAB (${tag})`);
+  const raw0 = await soccerFixture();
+  const A = await soccerPage(ctx, SEED_A);
+  await plant(A, { [SKEY]: raw0 });
+  await openSoccer(A);
+  const B = await soccerPage(ctx, SEED_B);
+  await openSoccer(B);
+  await stepCareer(B);
+  const theirs = await sRaw(B);
+  const up = await waitNotice(A, 4000);
+  const aBefore = await scWrites(A);
+  const opened = await forceClickText(A, /New Career$/);
+  const confirmed = await forceClickText(A, /^Delete & Start Over$/);
+  await A.waitForTimeout(800);
+  const aAfter = await scWrites(A);
+  const onDisk = await sRaw(A);
+  await shot(A, `${tag}-12-stale-new-career`);
+  console.log(`   A saw the notice: ${up}; forced New Career ${opened}, forced confirm ${confirmed}; A's writes ${aBefore} to ${aAfter}; on disk ${sView(onDisk)}`);
+  if (!up) fail(12, 'tab A never showed the notice');
+  if (!opened || !confirmed) fail(12, `the forced New Career did not find its buttons (open ${opened}, confirm ${confirmed})`);
+  if (aAfter !== aBefore || onDisk !== theirs) fail(12, `NEW CAREER: the stale tab cleared or wrote the save (${aAfter - aBefore} writes, on disk ${sView(onDisk)})`);
+  else ok('a stale New Career cleared nothing');
+  await A.close();
+  await B.close();
+  /* The creation screen: A has a player rolled and ready, B begins a career first. */
+  const C = await soccerPage(ctx, SEED_A);
+  await plant(C, {});
+  await openSoccer(C);
+  await fillCreation(C, 'Stale Creator');
+  const D = await soccerPage(ctx, SEED_B);
+  await openSoccer(D);
+  await fillCreation(D, 'Fresh Creator');
+  await D.getByRole('button', { name: /Begin Career/ }).click({ timeout: 5000 }).catch(() => {});
+  await D.waitForTimeout(1500);
+  const dSave = await sRaw(D);
+  const upC = await waitNotice(C, 4000);
+  const cBefore = await scWrites(C);
+  const begun = await forceClickText(C, /Begin Career/);
+  await C.waitForTimeout(1200);
+  const cAfter = await scWrites(C);
+  const disk12 = await sRaw(C);
+  await shot(C, `${tag}-12-stale-creation`);
+  console.log(`   creation: B began ${sView(dSave)}; A saw the notice: ${upC}; A's forced Begin Career ${begun}; A's writes ${cBefore} to ${cAfter}; on disk ${sView(disk12)}`);
+  if (!dSave) fail(12, 'tab B did not begin a career from the creation screen');
+  if (!upC) fail(12, 'the tab on the creation screen never showed the notice');
+  if (!begun) fail(12, 'the forced Begin Career found no button');
+  if (cAfter !== cBefore || disk12 !== dSave) fail(12, `CREATION: the stale tab began a career over the other one (${cAfter - cBefore} writes, on disk ${sView(disk12)})`);
+  else ok('a stale Begin Career wrote nothing');
+  await C.close();
+  await D.close();
+}
+
+async function caseSoccerWeekByWeek(ctx, tag) {
+  console.log(`13) WEEK BY WEEK IN A STALE TAB (${tag})`);
+  const raw0 = await soccerFixture();
+  const A = await soccerPage(ctx, SEED_A);
+  await plant(A, { [SKEY]: raw0 });
+  await openSoccer(A);
+  await A.locator('[data-week-by-week]').first().click({ timeout: 5000 }).catch(() => {});
+  const centre = await A.locator('[data-season-centre]').first().waitFor({ timeout: 15000 }).then(() => true).catch(() => false);
+  const aSave = await sRaw(A);
+  const B = await soccerPage(ctx, SEED_B);
+  await openSoccer(B);
+  await stepCareer(B);
+  const theirs = await sRaw(B);
+  const up = await waitNotice(A, 4000);
+  const aBefore = await scWrites(A);
+  const cBefore = await centreWrites(A);
+  const forced = await A.evaluate(() => {
+    const bs = [...document.querySelectorAll('[data-season-centre] button')].slice(0, 4);
+    for (const b of bs) b.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+    return bs.map(b => (b.textContent || '').trim().slice(0, 30));
+  });
+  await A.waitForTimeout(1500);
+  const barForced = await forceStep(A);
+  const aAfter = await scWrites(A);
+  const cAfter = await centreWrites(A);
+  const onDisk = await sRaw(A);
+  await shot(A, `${tag}-13-notice-over-centre`);
+  console.log(`   A's Season Centre open: ${centre} (${sView(aSave)}); B played on: ${sView(theirs)}; A saw the notice: ${up}; forced in the Centre ${JSON.stringify(forced)}, then "${barForced}"; A's writes of ${SKEY} ${aBefore} to ${aAfter}`);
+  note(`RECORDED, NOT JUDGED (owed): the stale tab wrote ${SCENTRE} ${cAfter - cBefore} time(s) after the other tab played on`);
+  if (!centre) note('the Season Centre did not open on Week by week (no league games in that season?), so the forced presses were made on the hub');
+  if (!up) fail(13, 'tab A never showed the notice over the Season Centre');
+  if (aAfter !== aBefore || onDisk !== theirs) fail(13, `WEEK BY WEEK: the stale tab wrote the save (${aAfter - aBefore} writes, on disk ${sView(onDisk)})`);
+  else ok('the stale Season Centre changed nothing in the save');
+  await A.close();
+  await B.close();
+}
+
+async function caseSoccerOldSave(ctx, tag) {
+  console.log(`14) SOCCER OLD SAVE AND THE NOTICE (${tag})`);
+  const raw0 = await soccerFixture();
+  const P = await soccerPage(ctx, SEED_A);
+  await plant(P, { [SKEY]: raw0 });
+  const g0 = await sFence(P);
+  await openSoccer(P);
+  const stepped = await stepCareer(P);
+  const mine = await sRaw(P);
+  const g1 = await sFence(P);
+  /* The notice's before: scrolled a little, as a player would be, with the next press marked. */
+  await P.evaluate(() => window.scrollTo(0, 120));
+  await P.waitForTimeout(400);
+  const before = await P.evaluate(() => ({ y: window.scrollY, h: document.documentElement.scrollHeight }));
+  const target = await P.evaluate(() => {
+    const bar = document.querySelector('[data-career-action-bar] button');
+    const cont = [...document.querySelectorAll('main button')].find(b => /^Continue/.test((b.textContent || '').trim()) && b.getBoundingClientRect().height > 0);
+    const el = bar && bar.getBoundingClientRect().height > 0 ? bar : cont;
+    if (!el) return null;
+    const r = el.getBoundingClientRect();
+    return { x: r.x, y: r.y, width: r.width, height: r.height, label: (el.textContent || '').trim().slice(0, 40) };
+  });
+  const B = await soccerPage(ctx, SEED_B);
+  await openSoccer(B);
+  const up = await waitNotice(P);
+  console.log(`   fence before ${g0 ?? 'absent'}, after "${stepped}" ${g1}; ${sView(raw0)} to ${sView(mine)}; a second tab stales it: ${up}`);
+  if (g0 !== null) fail(14, 'the planted old save already had a fence key');
+  if (!stepped || mine === raw0) fail(14, `the old save did not play on (${stepped})`);
+  if (!(Number(g1) >= 1)) fail(14, `no fence after the first write (${g1})`);
+  if (!up) { fail(14, 'the old save was not fenced: a second tab did not stale it'); await P.close(); await B.close(); return; }
+  const theirs = await sRaw(B);
+  await soccerNotice(P, before, target, theirs, tag);
+  await P.close();
+  await B.close();
+}
+async function soccerNotice(A, before, target, theirs, tag) {
+  const n = A.locator('[data-testid="save-moved-notice"]');
+  const after = await A.evaluate(() => ({ y: window.scrollY, h: document.documentElement.scrollHeight }));
+  if (after.y !== before.y || after.h !== before.h) fail(14, `the page moved under the notice: scrollY ${before.y} to ${after.y}, height ${before.h} to ${after.h}`);
+  else ok(`no jump: scrollY ${after.y} and height ${after.h} before and after`);
+  const words = (await n.innerText().catch(() => '')).replace(/\s+/g, ' ');
+  if (!words.includes(NOTICE_WORDS)) fail(14, `the notice reads "${words}"`);
+  const reload = n.getByRole('button', { name: 'Reload' });
+  const rb = await reload.boundingBox().catch(() => null);
+  if (!rb || rb.height < 44) fail(14, `Reload is ${rb ? rb.height : 'not'} px tall`);
+  const geo = await n.evaluate(el => {
+    const card = el.firstElementChild.getBoundingClientRect();
+    let min = 99;
+    for (const t of el.querySelectorAll('*')) if (t.childNodes.length && [...t.childNodes].some(c => c.nodeType === 3 && c.textContent.trim())) min = Math.min(min, parseFloat(getComputedStyle(t).fontSize));
+    return { left: card.left, right: card.right, top: card.top, bottom: card.bottom, vw: innerWidth, vh: innerHeight, min, anims: el.getAnimations({ subtree: true }).length, focusIn: !!document.activeElement?.closest('[data-testid="save-moved-notice"]'), focusName: (document.activeElement?.textContent || '').trim() };
+  });
+  if (geo.min < 12) fail(14, `text at ${geo.min}px in the notice`);
+  if (geo.left < 0 || geo.right > geo.vw || geo.top < 0 || geo.bottom > geo.vh) fail(14, `the dialog runs off the screen: ${JSON.stringify(geo)}`);
+  if (geo.anims) fail(14, `${geo.anims} animations on the notice`);
+  if (!geo.focusIn || geo.focusName !== 'Reload') fail(14, `focus is not on Reload when the notice shows (${geo.focusName})`);
+  await A.emulateMedia({ reducedMotion: 'reduce' });
+  const animsReduced = await n.evaluate(el => el.getAnimations({ subtree: true }).length);
+  await A.emulateMedia({ reducedMotion: null });
+  if (animsReduced) fail(14, `${animsReduced} animations under reduced motion`);
+  const toasts = await A.evaluate(() => [...document.querySelectorAll('[data-sonner-toast]')].filter(t => t.getBoundingClientRect().height > 0).map(t => (t.textContent || '').trim().slice(0, 60)));
+  if (toasts.length) fail(14, `a toast is still showing over the notice: ${JSON.stringify(toasts)}`);
+  let escaped = 0;
+  for (let i = 0; i < 6; i++) {
+    await A.keyboard.press('Tab');
+    if (!await A.evaluate(() => !document.activeElement || document.activeElement === document.body || !!document.activeElement.closest('[data-testid="save-moved-notice"]'))) escaped += 1;
+  }
+  if (escaped) fail(14, `Tab reached ${escaped} elements behind the notice`);
+  if (target) {
+    const inReload = (px, py) => rb && px >= rb.x && px <= rb.x + rb.width && py >= rb.y && py <= rb.y + rb.height;
+    const pts = [[0.5, 0.5], [0.15, 0.5], [0.85, 0.5], [0.5, 0.15], [0.5, 0.85], [0.1, 0.1], [0.9, 0.9]]
+      .map(([fx, fy]) => [target.x + target.width * fx, target.y + target.height * fy]);
+    const pt = pts.find(([px, py]) => !inReload(px, py));
+    if (!pt) note(`every point of "${target.label}" sits under the Reload button at this size; the click is skipped`);
+    else {
+      const hit = await A.evaluate(([px, py]) => !!document.elementFromPoint(px, py)?.closest('[data-testid="save-moved-notice"]'), pt);
+      const w0 = await scWrites(A);
+      await A.mouse.click(pt[0], pt[1]);
+      await A.waitForTimeout(800);
+      if (!hit) fail(14, `the point where "${target.label}" was is not covered by the notice`);
+      if (await scWrites(A) !== w0 || await sRaw(A) !== theirs) fail(14, `a click where "${target.label}" was changed the save`);
+      if (!await noticeUp(A)) fail(14, `the notice went away after a click where "${target.label}" was`);
+    }
+  } else note('no next press was on screen to aim at');
+  await shot(A, `${tag}-14-notice`);
+  ok(`the notice: Reload ${rb ? Math.round(rb.height) : '?'} px, smallest text ${geo.min} px, no animation, no toast, Tab stayed inside ${escaped === 0}`);
+}
+
 /* ---------- run ---------- */
 const ONLY_CASES = process.env.CASES ? process.env.CASES.split(',').map(Number) : null;
 const want = c => (!CONTROL || CONTROLS[CONTROL].includes(c)) && (!ONLY_CASES || ONLY_CASES.includes(c));
@@ -616,6 +1013,17 @@ try {
       if (want(6)) await casePutBack(ctx, tag);
       if (want(7)) await caseOldSave(ctx, tag);
       if (want(9)) await caseBack(ctx, tag);
+      if (SOCCER_CASES.some(want)) {
+        const sctx = await soccerContext(w, h);
+        try {
+          if (want(10) || want(11)) await caseSoccerReplace(sctx, tag);
+          if (want(12)) await caseSoccerNewCareer(sctx, tag);
+          if (want(13)) await caseSoccerWeekByWeek(sctx, tag);
+          if (want(14)) await caseSoccerOldSave(sctx, tag);
+        } finally {
+          await sctx.close();
+        }
+      }
     } catch (e) {
       fail(0, `${tag} threw: ${String(e?.message ?? e).slice(0, 300)}`);
     }
