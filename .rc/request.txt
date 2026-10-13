@@ -1,0 +1,7 @@
+#!serve
+#!playwright
+#!serial
+fonts: mkdir -p .tmp-fx/font-cache && FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only
+sim: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerAgentReview.mjs
+dbg2: node .rc/x/dbgAgent2.mjs && FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playSoccerAgentReview.mjs > $RC_OUT/dbg2.log 2>&1; s=$?; git checkout -- scripts; grep -E '^DBG|^FAIL|^PASS' $RC_OUT/dbg2.log | cut -c1-3600; exit $s
+ba: R=$PWD; X=$R/.rc/x/dbgAgent2.mjs; git worktree add -q --detach /tmp/ba a5519151 && ln -s $R/node_modules /tmp/ba/node_modules && cd /tmp/ba && node_modules/.bin/vite build > /tmp/ba-build.log 2>&1 && mkdir -p .tmp-fx/font-cache && FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerAgentReview.mjs | tail -1 && node $X && FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playSoccerAgentReview.mjs > $RC_OUT/ba.log 2>&1; s=$?; grep -E '^DBG|^FAIL|^PASS' $RC_OUT/ba.log | cut -c1-3600; exit $s
