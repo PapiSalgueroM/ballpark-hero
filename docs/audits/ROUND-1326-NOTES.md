@@ -100,3 +100,24 @@ Real Madrid 192920 to 192904, Everton 197117 and Lincoln City 197650 unchanged.
 - GmBooksPanel's "This season" is not the same misreading: gmBooks.ts books every line against the kitty (its
   header: income less costs equals the change in the kitty; result = income less spend), and the `ops` flag names
   the budget that pays, not a cover. Nothing for F18.
+
+## Fix pass after the two reviews (2026-10-13)
+Both reviews (run and read) said ship with no major. The fixer's commits, each pushed on its own:
+
+| Fix | Commit | Runner result | Exit codes | Controls |
+|---|---|---|---|---|
+| staff line says what the summer does (minors 1 and 3) | 6b29e6e9 | r1326-f1a (on 3eb19ec0) | tsc 0, vitest 0, simCmCopy 0 (base 1: 190), copyonly A,B,C,D 0, A,D three seasons 0, simCmLeagueRules 0, simManagerAppealIsolation 0, simGmStaff 1 (40, as before the fix), simClubManagerStaff 0, the dailies 0, the rule fences 0 but the two that need the database | staff 7, summer 2, walk 4, article 107, drama 57, intl 4, finance 6, copyonly draw 16 and word 12, all FIRED |
+| desk walk names a control's pictures after it (minor 2) | 3eb19ec0 | r1326-f1w | desk 0 with small 9, cut 3, wrap 3 FIRED in ONE shared RC_OUT, playSponsors 0, sweepWeight 0 (/club-manager 592.2K, /manager-hot-seat 612.0K, /deadline-day 622.1K) | |
+| the staff summer claim played through the engine | 0564554b | r1326-f2a | see the closing report | walk, summer |
+
+- The staff line. Club Manager sets no walkAtSummer, so an approach still open when the season ends lapses and
+  the man stays (gmRolloverStaff sets poach to null). tickStaff now adds "If the season ends first, the offer
+  lapses and he stays." to both approach lines once state.week plus the approach's weeks reaches the calendar's
+  length. Every calendar entry ticks once (the match path at its own week, the bye and window paths one past
+  it) and the calendar only grows, so short of that point the deadline always falls inside the season. At the
+  one tick where the paths differ (a bye week at the boundary) the sentence shows a tick early and stays true.
+- What did not move: clubManager.ts is untouched, so the Round 1081 pin stands; simCmLeagueRules is green on the
+  committed digest (no save of its fleet holds a late approach); cmCopyOnly1326 is unchanged in every count and
+  saw no lapse line (0 comparisons), so the sentence is proven by simCmCopy section 4, forced and played.
+- simGmStaff's fixture does not hold the sentence either: that harness ticks weeks 1 to 46 by hand against a 54
+  entry calendar, so no recorded approach reaches the boundary. Round 1316's retake is unchanged by this pass.
