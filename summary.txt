@@ -1,0 +1,6 @@
+ctl-arcade exit=1 85s | FIRED: WORLD_TRUTH_CONTROL=arcade failed section 4 (2 failures; section 4: 2)
+worldtruth exit=0 87s | simSoccerWorldTruth: OK, every section green
+tsc exit=0 96s | 
+vitest-unit exit=0 4s |    Duration  3.70s (transform 1.92s, setup 164ms, collect 2.82s, tests 417ms, environment 1.03s, prepare 476ms)
+simMoney-base exit=1 195s | 1 FAILURES
+simMoney exit=1 199s | 1 FAILURES
