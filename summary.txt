@@ -1,0 +1,7 @@
+tsc exit=0 62s | 
+vitest-touched exit=0 4s |       Tests  44 passed (44)
+simPlayerBingoHonours exit=0 8s | simPlayerBingoHonours PASS
+simSoccerLoanMinutes exit=0 51s | PASS simSoccerLoanMinutes: projected forced loans, complete moves and parent returns
+bingo-oldguard exit=0 1s | OLD GUARD REPRODUCED: exactly the attacking midfield case fails on d2f65f10
+chips-control exit=0 3s | CHIPS CONTROL FIRED: exactly the 2 chip cases fail on the pre fix components
+tree-clean exit=0 0s | f063c65899158a41b4a616d8031b6f9237234157

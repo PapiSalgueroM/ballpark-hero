@@ -1,0 +1,5 @@
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  src/test/gameReportPlacement.test.tsx > game report placement > gives a default page that asks no questions the sitewide chips, without Duplicate question
+ FAIL  src/test/reportDetails.test.tsx > game report chips > offers Duplicate question by default and drops it when the page passes the sitewide list
+      Tests  2 failed | 25 passed (27)
+CHIPS CONTROL FIRED: exactly the 2 chip cases fail on the pre fix components
