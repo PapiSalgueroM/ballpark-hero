@@ -6,6 +6,10 @@ import { createHash } from 'node:crypto';
 import { execFileSync } from 'node:child_process';
 import { createRequire } from 'node:module';
 import { build } from 'esbuild';
+/* Release BB: Rounds 1280 to 1282 and 1318 keep the made up Ballon d'Or rivals in a saved pool on purpose, which this
+   base pinned comparison cannot know about. Every copy compared with the base takes them out, as the history
+   harnesses do: scripts/lib/careerAwardGenerations1318.mjs. */
+import { inverseAwardGenerations, AWARD_GENERATIONS_ADDITIONS } from '../lib/careerAwardGenerations1318.mjs';
 
 export const ROOT = process.cwd();
 export const BASE = 'd69a448ce830f8312af1eea252a3ae84b13bde9c';
@@ -62,6 +66,11 @@ export async function bundleAgentReview({ original = false, patches = [], browse
           if (!relative.startsWith('src/')) return;
           const raw = original ? execFileSync('git', ['show', BASE + ':' + relative], { maxBuffer: 30 * 1024 * 1024 }) : fs.readFileSync(args.path);
           let contents = raw.toString('utf8').replaceAll('\r\n', '\n');
+          if (!original && relative === 'src/lib/soccerCareerEngine.ts') {
+            const rows = [];
+            contents = inverseAwardGenerations(relative, contents, rows);
+            assert.deepEqual(rows.map(row => row.addition), AWARD_GENERATIONS_ADDITIONS, 'Release BB: the award generations of Rounds 1280 to 1282 and 1318 are taken out of every copy compared with the base, once each in order');
+          }
           for (const patch of patches.filter(value => value.file === relative)) {
             assert.equal(contents.split(patch.from).length, 2, 'Unique actual copied anchor: ' + patch.id);
             const before = sha(contents);
