@@ -1,0 +1,12 @@
+AUDIT picker-team: 2 overlapping text pairs: "Qualify for the Europa League" x "Board wants" (29x12 at 212,863)
+AUDIT s1-summer-market: 1 overlapping text pairs: "Bukayo Saka" x "Club Manager: Free Football Management G" (75x4 at 89,1207)
+AUDIT s1-summer-bid-open: 1 overlapping text pairs: "Western Sydney Wanderers · 31y · worth £" x "62" (17x7 at 225,1562)
+AUDIT s1m1-live-sheet: 1 overlapping text pairs: "1 Hornicek" x "Dominik Szoboszlai" (6x11 at 187,145)
+AUDIT s1m1-report: 3 overlapping text pairs: "🧤 Shot saved: Jérémy Jacquet" x "45'" (15x11 at 188,1161)
+AUDIT s1m2-report: 4 overlapping text pairs: "🧤 Shot saved: Alexander Isak" x "35'" (7x11 at 188,1160)
+AUDIT s1q-quick-report: 7 overlapping text pairs: "🧤 Shot saved: Federico Chiesa" x "4'" (9x11 at 191,1113)
+AUDIT s2-summer-market: 1 overlapping text pairs: "Declan Rice" x "Club Manager: Free Football Management G" (68x4 at 89,1355)
+AUDIT s2m1-report: 6 overlapping text pairs: "🧤 Shot saved: Dominik Szoboszlai" x "21'" (15x11 at 188,1166)
+AUDIT s2m2-report: 6 overlapping text pairs: "🧤 Shot saved: Bradley Barcola" x "18'" (14x11 at 188,1204)
+AUDIT s2q-quick-report: 2 overlapping text pairs: "🧤 Shot saved: Alexis Mac Allister" x "14'" (15x11 at 188,1227)
+SEASON s390pl done: 0 findings, 0 errors, 66 shots, 286s

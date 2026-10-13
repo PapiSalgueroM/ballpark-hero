@@ -1,0 +1,10 @@
+AUDIT picker-team: 3 overlapping text pairs: "Finish in the top half" x "Board wants" (18x12 at 177,1188)
+AUDIT hub-start: 2 overlapping text pairs: "Fans hopeful · prices, sponsor, the book" x "Stadium, training, medical, dressing roo" (28x11 at 177,997)
+AUDIT s1-summer-market: 6 overlapping text pairs: "Barcelona · 18y · worth £145.9m to £194." x "94" (18x7 at 178,1072)
+AUDIT s1-summer-bid-open: 8 overlapping text pairs: "Aleksey Gritsaenko" x "63" (10x9 at 189,1361)
+AUDIT s1m1-live-kickoff: 1 overlapping text pairs: "6 Moncayola" x "10 Durán" (12x7 at 162,306)
+AUDIT s1m1-report: 2 overlapping text pairs: "🟨 Booked: Carl Starfelt" x "58'" (11x11 at 153,1294)
+AUDIT s1q-quick-report: 3 overlapping text pairs: "🟨 Booked: Javi Galán" x "22'" (5x11 at 153,1013)
+AUDIT s1-mid-Dressing room: 2 overlapping text pairs: "0 starts, 1 off the bench in last 10 · r" x "Not happy" (46x10 at 241,687)
+FIND [note] sacked :: season 1
+SEASON s320es done: 1 findings, 0 errors, 25 shots, 118s

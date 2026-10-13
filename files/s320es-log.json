@@ -1,0 +1,1209 @@
+{
+ "tag": "s320es",
+ "width": 320,
+ "height": 640,
+ "started": "2026-10-13T00:29:29.724Z",
+ "steps": [
+  {
+   "s": 0,
+   "what": "open /club-manager"
+  },
+  {
+   "s": 6,
+   "what": "era picked"
+  },
+  {
+   "s": 7,
+   "what": "nation picked"
+  },
+  {
+   "s": 10,
+   "what": "league picked"
+  },
+  {
+   "s": 13,
+   "what": "club picked"
+  },
+  {
+   "s": 18,
+   "what": "hub reached",
+   "ok": true,
+   "save": {
+    "club": "Celta Vigo",
+    "season": 1,
+    "week": 0,
+    "cal": 54,
+    "budget": 18,
+    "squad": 22,
+    "inbox": 0,
+    "form": "",
+    "results": 0,
+    "live": false,
+    "window": "summer"
+   }
+  },
+  {
+   "s": 18,
+   "what": "season 1 start"
+  },
+  {
+   "s": 19,
+   "what": "window s1-summer"
+  },
+  {
+   "s": 23,
+   "what": "live s1m1"
+  },
+  {
+   "s": 65,
+   "what": "live s1m1 done",
+   "res": {
+    "ok": true,
+    "vars": 0,
+    "goalsSeen": 0,
+    "subRowsAtBreak": 11,
+    "sub": true,
+    "benchOffered": 11,
+    "liveSub": true
+   },
+   "save": {
+    "club": "Celta Vigo",
+    "season": 1,
+    "week": 1,
+    "cal": 54,
+    "budget": 17.2,
+    "squad": 23,
+    "inbox": 0,
+    "form": "W",
+    "results": 1,
+    "live": false,
+    "window": "summer"
+   }
+  },
+  {
+   "s": 72,
+   "what": "s1 ff 0",
+   "r": "FULL TIME",
+   "sv": {
+    "club": "Celta Vigo",
+    "season": 1,
+    "week": 9,
+    "cal": 54,
+    "budget": 18.36,
+    "squad": 23,
+    "inbox": 4,
+    "form": "LLLDD",
+    "results": 7,
+    "live": false,
+    "window": null
+   }
+  },
+  {
+   "s": 78,
+   "what": "s1 ff 1",
+   "r": "FULL TIME",
+   "sv": {
+    "club": "Celta Vigo",
+    "season": 1,
+    "week": 16,
+    "cal": 54,
+    "budget": 19.38,
+    "squad": 23,
+    "inbox": 4,
+    "form": "WDLDL",
+    "results": 12,
+    "live": false,
+    "window": null
+   }
+  },
+  {
+   "s": 100,
+   "what": "s1 ff 2",
+   "r": "FULL TIME",
+   "sv": {
+    "club": "Celta Vigo",
+    "season": 1,
+    "week": 23,
+    "cal": 54,
+    "budget": 20.12,
+    "squad": 23,
+    "inbox": 7,
+    "form": "LWLLD",
+    "results": 18,
+    "live": false,
+    "window": null
+   }
+  },
+  {
+   "s": 110,
+   "what": "s1 ff 3",
+   "r": "CELTA VIGO",
+   "sv": {
+    "club": "Celta Vigo",
+    "season": 1,
+    "week": 28,
+    "cal": 54,
+    "budget": 20.88,
+    "squad": 23,
+    "inbox": 7,
+    "form": "LDWDL",
+    "results": 21,
+    "live": false,
+    "window": "january"
+   }
+  },
+  {
+   "s": 111,
+   "what": "s1 ff 4",
+   "r": "no calendar tile",
+   "sv": {
+    "club": "Celta Vigo",
+    "season": 1,
+    "week": 28,
+    "cal": 54,
+    "budget": 20.88,
+    "squad": 23,
+    "inbox": 7,
+    "form": "LDWDL",
+    "results": 21,
+    "live": false,
+    "window": "january"
+   }
+  },
+  {
+   "s": 116,
+   "what": "s1 ff 5",
+   "r": "FULL TIME",
+   "sv": {
+    "club": "Celta Vigo",
+    "season": 1,
+    "week": 42,
+    "cal": 54,
+    "budget": 22.46,
+    "squad": 23,
+    "inbox": 8,
+    "form": "LLLLL",
+    "results": 32,
+    "live": false,
+    "window": null
+   }
+  },
+  {
+   "s": 118,
+   "what": "end"
+  }
+ ],
+ "findings": [
+  {
+   "sev": "note",
+   "what": "sacked",
+   "detail": "season 1",
+   "at": "s1 ff 5"
+  }
+ ],
+ "errors": [],
+ "shots": [
+  {
+   "file": "s320es-001-picker-era.jpg",
+   "at": "open /club-manager",
+   "bytes": 17725
+  },
+  {
+   "file": "s320es-002-picker-nation.jpg",
+   "at": "era picked",
+   "bytes": 17769
+  },
+  {
+   "file": "s320es-003-picker-league.jpg",
+   "at": "nation picked",
+   "bytes": 17567
+  },
+  {
+   "file": "s320es-004-picker-team.jpg",
+   "at": "league picked",
+   "bytes": 93190
+  },
+  {
+   "file": "s320es-005-picker-confirm-bar.jpg",
+   "at": "league picked",
+   "bytes": 20148
+  },
+  {
+   "file": "s320es-006-manager-form.jpg",
+   "at": "club picked",
+   "bytes": 63400
+  },
+  {
+   "file": "s320es-007-hub-start.jpg",
+   "at": "hub reached",
+   "bytes": 125909
+  },
+  {
+   "file": "s320es-008-s1-summer-market.jpg",
+   "at": "window s1-summer",
+   "bytes": 97790
+  },
+  {
+   "file": "s320es-009-s1-summer-after-clause.jpg",
+   "at": "window s1-summer",
+   "bytes": 17268
+  },
+  {
+   "file": "s320es-010-s1-summer-bid-open.jpg",
+   "at": "window s1-summer",
+   "bytes": 78175
+  },
+  {
+   "file": "s320es-011-s1m1-live-kickoff.jpg",
+   "at": "live s1m1",
+   "bytes": 14749
+  },
+  {
+   "file": "s320es-012-s1m1-interval.jpg",
+   "at": "live s1m1",
+   "bytes": 69620
+  },
+  {
+   "file": "s320es-013-s1m1-after-sub.jpg",
+   "at": "live s1m1",
+   "bytes": 70782
+  },
+  {
+   "file": "s320es-014-s1m1-live-sheet.jpg",
+   "at": "live s1m1",
+   "bytes": 17011
+  },
+  {
+   "file": "s320es-015-s1m1-after-live-sub.jpg",
+   "at": "live s1m1",
+   "bytes": 15653
+  },
+  {
+   "file": "s320es-016-s1m1-fulltime-pitch.jpg",
+   "at": "live s1m1",
+   "bytes": 12826
+  },
+  {
+   "file": "s320es-017-s1m1-report.jpg",
+   "at": "live s1m1",
+   "bytes": 80325
+  },
+  {
+   "file": "s320es-018-s1q-quick-report.jpg",
+   "at": "live s1m1 done",
+   "bytes": 85202
+  },
+  {
+   "file": "s320es-019-s1-mid-Inbox.jpg",
+   "at": "s1 ff 1",
+   "bytes": 85863
+  },
+  {
+   "file": "s320es-020-s1-mid-Board.jpg",
+   "at": "s1 ff 1",
+   "bytes": 98731
+  },
+  {
+   "file": "s320es-021-s1-mid-Finances.jpg",
+   "at": "s1 ff 1",
+   "bytes": 93496
+  },
+  {
+   "file": "s320es-022-s1-mid-Press_room.jpg",
+   "at": "s1 ff 1",
+   "bytes": 96458
+  },
+  {
+   "file": "s320es-023-s1-mid-Dressing_room.jpg",
+   "at": "s1 ff 1",
+   "bytes": 91591
+  },
+  {
+   "file": "s320es-024-s1-ff-stuck-4.jpg",
+   "at": "s1 ff 4",
+   "bytes": 65730
+  },
+  {
+   "file": "s320es-025-s1-sacked.jpg",
+   "at": "s1 ff 5",
+   "bytes": 119943
+  }
+ ],
+ "audits": [
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [
+    "\"Manager Hot Seat\" shown 98px of 104px",
+    "\"Guess The Constructor\" shown 98px of 134px"
+   ],
+   "overlaps": [],
+   "leaks": [],
+   "tinyTaps": [],
+   "scrollY": 0,
+   "docH": 27726,
+   "label": "picker-era"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [
+    "\"Strongest sides: Real Madrid · Barcelona · Atlético Madrid · Villarreal\" shown 254px of 322px",
+    "\"Strongest sides: Girona · Mallorca · Almería · Las Palmas\" shown 254px of 267px",
+    "\"Manager Hot Seat\" shown 98px of 104px",
+    "\"Guess The Constructor\" shown 98px of 134px"
+   ],
+   "overlaps": [],
+   "leaks": [],
+   "tinyTaps": [
+    "button.inline-flex.items-center.gap-1 \"All nations\" 76x16"
+   ],
+   "scrollY": 101,
+   "docH": 27142,
+   "label": "picker-league"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [
+    "\"Win the La Liga\" shown 46px of 74px",
+    "\"Win the La Liga\" shown 46px of 74px",
+    "\"Atlético Madrid\" shown 80px of 89px",
+    "\"Win the La Liga\" shown 46px of 74px",
+    "\"Qualify for the Champions League\" shown 46px of 165px",
+    "\"Qualify for the Champions League\" shown 46px of 165px",
+    "\"Qualify for the Europa League\" shown 46px of 144px",
+    "\"Real Sociedad\" shown 80px of 83px",
+    "\"Qualify for the Europa League\" shown 46px of 144px",
+    "\"Qualify for the Conference League\" shown 46px of 167px",
+    "\"Qualify for the Conference League\" shown 46px of 167px",
+    "\"Finish in the top half\" shown 46px of 98px",
+    "\"Finish in the top half\" shown 46px of 98px",
+    "\"Deportivo La Coruña\" shown 80px of 119px",
+    "\"Finish in the top half\" shown 46px of 98px",
+    "\"Finish in the top half\" shown 46px of 98px",
+    "\"Stay up. Avoid relegation\" shown 46px of 121px",
+    "\"Racing Santander\" shown 80px of 103px",
+    "\"Stay up. Avoid relegation\" shown 46px of 121px",
+    "\"Rayo Vallecano\" shown 80px of 88px",
+    "\"Stay up. Avoid relegation\" shown 46px of 121px",
+    "\"Stay up. Avoid relegation\" shown 46px of 121px",
+    "\"Stay up. Avoid relegation\" shown 46px of 121px",
+    "\"Stay up. Avoid relegation\" shown 46px of 121px",
+    "\"Stay up. Avoid relegation\" shown 46px of 121px",
+    "\"Create your own club\" shown 88px of 123px",
+    "\"Manager Hot Seat\" shown 98px of 104px",
+    "\"Guess The Constructor\" shown 98px of 134px"
+   ],
+   "overlaps": [
+    "\"Finish in the top half\" x \"Board wants\" (18x12 at 177,1188)",
+    "\"Stay up. Avoid relegation\" x \"Board wants\" (41x12 at 177,1433)",
+    "\"Stay up. Avoid relegation\" x \"Budget\" (34x3 at 177,1685)"
+   ],
+   "leaks": [],
+   "tinyTaps": [
+    "button.inline-flex.items-center.gap-1 \"La Liga\" 77x16"
+   ],
+   "scrollY": 101,
+   "docH": 28361,
+   "label": "picker-team"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [
+    "\"Dark Brown\" shown 54px of 61px",
+    "\"Manager Hot Seat\" shown 98px of 104px",
+    "\"Guess The Constructor\" shown 98px of 134px"
+   ],
+   "overlaps": [],
+   "leaks": [],
+   "tinyTaps": [
+    "button.inline-flex.items-center.gap-1 \"Celta Vigo\" 76x16",
+    "button.rounded-md.border.border-border \"Previous skin\" 20x20",
+    "button.rounded-md.border.border-border \"Next skin\" 20x20",
+    "button.rounded-md.border.border-border \"Previous hair\" 20x20",
+    "button.rounded-md.border.border-border \"Next hair\" 20x20",
+    "button.rounded-md.border.border-border \"Previous colour\" 20x20",
+    "button.rounded-md.border.border-border \"Next colour\" 20x20",
+    "button.rounded-md.border.border-border \"Previous beard\" 20x20",
+    "button.rounded-md.border.border-border \"Next beard\" 20x20",
+    "button.rounded-md.border.border-border \"Previous outfit\" 20x20",
+    "button.rounded-md.border.border-border \"Next outfit\" 20x20",
+    "button.rounded-md.border.border-border \"Previous age\" 20x20",
+    "button.rounded-md.border.border-border \"Next age\" 20x20",
+    "button.w-5.h-5.rounded-full \"Navy\" 22x22",
+    "button.w-5.h-5.rounded-full \"Red\" 20x20",
+    "button.w-5.h-5.rounded-full \"Sky\" 20x20",
+    "button.w-5.h-5.rounded-full \"Green\" 20x20",
+    "button.w-5.h-5.rounded-full \"Claret\" 20x20",
+    "button.w-5.h-5.rounded-full \"Gold\" 20x20",
+    "button.w-5.h-5.rounded-full \"Black\" 20x20",
+    "button.w-5.h-5.rounded-full \"White\" 20x20"
+   ],
+   "scrollY": 101,
+   "docH": 28833,
+   "label": "manager-form"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [
+    "\"-£13.5m projected\" shown 114px of 125px",
+    "\"Fans hopeful · prices, sponsor, the books\" shown 114px of 176px",
+    "\"Stadium, training, medical, dressing room\" shown 114px of 178px",
+    "\"Attack, defence, keepers, scouting\" shown 114px of 149px",
+    "\"Tactics, recruitment, money, the press\" shown 114px of 163px",
+    "\"Currency, the international job, haggling\" shown 114px of 169px",
+    "\"Nobody has an opinion\" shown 114px of 160px",
+    "\"Recruitment 6/20 · 0 scouting\" shown 114px of 127px",
+    "\"Normal · Balanced\" shown 114px of 122px",
+    "\"Manager Hot Seat\" shown 98px of 104px",
+    "\"Guess The Constructor\" shown 98px of 134px"
+   ],
+   "overlaps": [
+    "\"Fans hopeful · prices, sponsor, the book\" x \"Stadium, training, medical, dressing roo\" (28x11 at 177,997)",
+    "\"Currency, the international job, hagglin\" x \"New in the job\" (21x11 at 177,1206)"
+   ],
+   "leaks": [],
+   "tinyTaps": [
+    "button.underline.underline-offset-2.hover:text-primary \"Managers\" 57x16"
+   ],
+   "scrollY": 2041,
+   "docH": 28084,
+   "label": "hub-start"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [
+    "\"Manchester City · 25y · worth £133.5m to £180.8m\" shown 103px of 219px",
+    "\"Real Madrid · 27y · worth £134.8m to £177.5m\" shown 103px of 198px",
+    "\"Barcelona · 18y · worth £145.9m to £194.9m\" shown 101px of 191px",
+    "\"Jude Bellingham\" shown 85px of 94px",
+    "\"Real Madrid · 22y · worth £110.8m to £134.8m\" shown 105px of 200px",
+    "\"Bayern Munich · 24y · worth £104.8m to £138.2m\" shown 103px of 213px",
+    "\"Barcelona · 23y · worth £118.1m to £124.4m\" shown 106px of 187px",
+    "\"Real Madrid · 25y · worth £112.4m to £131.2m\" shown 106px of 196px",
+    "\"PSG · 25y · worth £108.5m to £119.9m\" shown 105px of 167px",
+    "\"Arsenal · 24y · worth £95.7m to £98.7m\" shown 107px of 172px",
+    "\"Chelsea · 23y · worth £71.1m to £104.8m\" shown 110px of 176px",
+    "\"Arsenal · 26y · worth £89.6m to £99.9m\" shown 107px of 175px",
+    "\"Federico Valverde\" shown 87px of 103px",
+    "\"Real Madrid · 27y · worth £86.7m to £98.2m\" shown 107px of 192px",
+    "\"Liverpool · 22y · worth £75.8m to £102.8m\" shown 110px of 182px",
+    "\"Bayern Munich · 22y · worth £84.9m to £100m\" shown 108px of 200px",
+    "\"PSG · 21y · worth £79.9m to £106.7m\" shown 110px of 163px",
+    "\"Aleksandar Pavlovic\" shown 92px of 116px",
+    "\"Bayern Munich · 21y · worth £57.6m to £73.1m\" shown 112px of 197px",
+    "\"Liverpool · 26y · worth £74.6m to £90.5m\" shown 109px of 179px",
+    "\"Real Madrid · 20y · worth £70.7m to £77.7m\" shown 118px of 189px",
+    "\"PSG · 20y · worth £66.5m to £81.7m\" shown 118px of 159px",
+    "\"Dominik Szoboszlai\" shown 89px of 112px",
+    "\"Liverpool · 25y · worth £62.9m to £88.8m\" shown 109px of 180px",
+    "\"Barcelona · 22y · worth £70.3m to £81.6m\" shown 105px of 181px",
+    "\"Liverpool · 23y · worth £58.7m to £88.7m\" shown 118px of 179px",
+    "\"Atlético Madrid · 25y · worth £60.4m to £84.1m\" shown 109px of 204px",
+    "\"Khvicha Kvaratskhelia\" shown 89px of 127px",
+    "\"PSG · 24y · worth £60.2m to £80.2m\" shown 109px of 161px",
+    "\"Chelsea · 24y · worth £64.3m to £91.6m\" shown 109px of 176px",
+    "\"Ousmane Dembélé\" shown 89px of 108px",
+    "\"PSG · 28y · worth £70m to £87m\" shown 109px of 143px",
+    "\"Arsenal · 24y · worth £70.9m to £86.2m\" shown 109px of 173px",
+    "\"PSG · 27y · worth £57.3m to £67.1m\" shown 120px of 154px",
+    "\"Alexis Mac Allister\" shown 100px of 104px",
+    "\"Liverpool · 27y · worth £61.6m to £71.9m\" shown 120px of 176px",
+    "\"Antoine Semenyo\" shown 86px of 100px",
+    "\"Manchester City · 25y · worth £49.5m to £73.3m\" shown 106px of 210px",
+    "\"Aurélien Tchouaméni\" shown 86px of 120px",
+    "\"Real Madrid · 26y · worth £51.6m to £72.3m\" shown 106px of 190px"
+   ],
+   "overlaps": [
+    "\"Barcelona · 18y · worth £145.9m to £194.\" x \"94\" (18x7 at 178,1072)",
+    "\"Barcelona · 18y · worth £145.9m to £194.\" x \"£377.5m\" (24x6 at 237,1078)",
+    "\"Barcelona · 23y · worth £118.1m to £124.\" x \"92\" (17x7 at 183,1234)",
+    "\"Barcelona · 23y · worth £118.1m to £124.\" x \"£232.1m\" (18x6 at 239,1239)",
+    "\"PSG · 25y · worth £108.5m to £119.9m\" x \"92\" (17x7 at 182,1344)",
+    "\"Bukayo Saka\" x \"Club Manager: Free Football Management G\" (75x4 at 89,1381)"
+   ],
+   "leaks": [],
+   "tinyTaps": [
+    "button.underline.underline-offset-2.hover:text-primary \"Managers\" 57x16",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £178.2m\" 89x23",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £178.2m\" 89x23",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £202.5m\" 91x23",
+    "button.flex-1.px-1.5.py-0.5 \"£377.5m\" 91x20",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £141.6m\" 88x23",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £124.6m\" 90x23",
+    "button.flex-1.px-1.5.py-0.5 \"£268.5m\" 90x20",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £151.9m\" 87x23",
+    "button.flex-1.px-1.5.py-0.5 \"£232.1m\" 87x20",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £133.7m\" 87x23",
+    "button.flex-1.px-1.5.py-0.5 \"£253.9m\" 87x20",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £124.7m\" 88x23",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £107.3m\" 88x23",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £111.6m\" 85x23",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £107.3m\" 88x23",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £107.3m\" 88x23",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £111.6m\" 85x23",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £121.9m\" 87x23",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £111.6m\" 85x23",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £91.1m\" 80x23",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £89.1m\" 83x23",
+    "button.flex-1.px-1.5.py-0.5 \"£187.1m\" 83x20",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £91m\" 74x23",
+    "button.flex-1.px-1.5.py-0.5 \"£130.3m\" 74x20"
+   ],
+   "scrollY": 0,
+   "docH": 27765,
+   "label": "s1-summer-market"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [
+    "\"Aleksey Gritsaenko\" shown 92px of 110px",
+    "\"Rubin Kazan · 31y · worth £500k to £700k\" shown 112px of 182px",
+    "\"Amar Rahmanovic\" shown 92px of 105px",
+    "\"Krylia Sovetov · 32y · worth £500k to £600k\" shown 112px of 191px",
+    "\"Baltika · 30y · worth £500k to £700k\" shown 112px of 159px",
+    "\"Newcastle Jets · 34y · worth £500k to £700k\" shown 112px of 196px",
+    "\"Aleksey Sutormin\" shown 93px of 100px",
+    "\"Fakel Voronezh · 32y · worth £400k to £600k\" shown 113px of 196px",
+    "\"Wellington Phoenix · 30y · worth £400k to £500k\" shown 113px of 212px",
+    "\"Brandon Borrello\" shown 58px of 96px",
+    "\"Western Sydney Wanderers · 31y · worth £400k to £500k\" shown 78px of 249px",
+    "\"Adelaide United · 34y · worth £500k to £700k\" shown 113px of 199px",
+    "\"Dmitriy Tananeev\" shown 93px of 101px",
+    "\"Rodina Moscow · 28y · worth £400k to £500k\" shown 113px of 198px",
+    "\"Emiliano Marcondes\" shown 93px of 115px",
+    "\"Melbourne City · 31y · worth £400k to £500k\" shown 113px of 194px",
+    "\"Auckland FC · 31y · worth £400k to £600k\" shown 113px of 185px",
+    "\"Igor Leshchuk\" shown 52px of 80px",
+    "\"Dynamo Moscow · 30y · worth £400k to £600k\" shown 72px of 206px",
+    "\"Fakel Voronezh · 30y · worth £400k to £600k\" shown 113px of 197px",
+    "\"Maksim Ignatjev\" shown 58px of 93px",
+    "\"Rubin Kazan · 26y · worth £500k to £500k\" shown 78px of 183px",
+    "\"Marat Apshatsev\" shown 93px of 96px",
+    "\"Dynamo Makhachkala · 25y · worth £400k to £600k\" shown 113px of 224px",
+    "\"Nicolas Milanovic\" shown 52px of 100px",
+    "\"Western Sydney Wanderers · 24y · worth £400k to £500k\" shown 72px of 250px",
+    "\"Sam Cosgrove\" shown 52px of 84px",
+    "\"Auckland FC · 29y · worth £400k to £600k\" shown 72px of 186px",
+    "\"Soltmurad Bakaev\" shown 93px of 105px",
+    "\"Rodina Moscow · 27y · worth £400k to £500k\" shown 113px of 197px",
+    "\"Soslan Kagermazov\" shown 93px of 114px",
+    "\"Dynamo Makhachkala · 30y · worth £500k to £600k\" shown 113px of 225px",
+    "\"Vyacheslav Yakimov\" shown 93px of 118px",
+    "\"Fakel Voronezh · 28y · worth £400k to £500k\" shown 113px of 195px",
+    "\"Newcastle Jets · 31y · worth £500k to £500k\" shown 113px of 194px",
+    "\"Anthony Pantazopoulos\" shown 60px of 134px",
+    "\"Western Sydney Wanderers · 23y · worth £300k to £500k\" shown 80px of 250px",
+    "\"Apostolos Stamatelopoulos\" shown 95px of 153px",
+    "\"Macarthur FC · 27y · worth £400k to £500k\" shown 115px of 187px",
+    "\"Artem Petrov\" shown 60px of 76px"
+   ],
+   "overlaps": [
+    "\"Aleksey Gritsaenko\" x \"63\" (10x9 at 189,1361)",
+    "\"Krylia Sovetov · 32y · worth £500k to £6\" x \"63\" (18x7 at 189,1432)",
+    "\"Krylia Sovetov · 32y · worth £500k to £6\" x \"Loan £300k\" (24x6 at 229,1437)",
+    "\"Baltika · 30y · worth £500k to £700k\" x \"63\" (18x7 at 189,1491)",
+    "\"Brandon Borrello\" x \"62\" (17x9 at 155,1725)",
+    "\"Western Sydney Wanderers · 31y · worth £\" x \"62\" (17x7 at 155,1736)",
+    "\"Western Sydney Wanderers · 31y · worth £\" x \"£1m\" (5x6 at 207,1741)",
+    "\"Western Sydney Wanderers · 31y · worth £\" x \"Loan £300k\" (22x10 at 256,1736)"
+   ],
+   "leaks": [],
+   "tinyTaps": [
+    "button.underline.underline-offset-2.hover:text-primary \"Managers\" 57x16",
+    "button.px-2.py-0.5.rounded \"None\" 42x20",
+    "button.px-2.py-0.5.rounded \"£2m\" 38x20",
+    "button.px-2.py-0.5.rounded \"£5m\" 38x20",
+    "button.px-2.py-0.5.rounded \"£10m\" 42x20",
+    "button.px-2.py-0.5.rounded \"None\" 42x20",
+    "button.px-2.py-0.5.rounded \"10%\" 37x20",
+    "button.px-2.py-0.5.rounded \"20%\" 39x20",
+    "button.px-2.py-0.5.rounded \"30%\" 39x20",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £500k\" 80x23",
+    "button.flex-1.px-1.5.py-0.5 \"Loan £300k\" 80x20",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £500k\" 80x23",
+    "button.flex-1.px-1.5.py-0.5 \"Loan £300k\" 80x20",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £500k\" 80x23",
+    "button.flex-1.px-1.5.py-0.5 \"Loan £300k\" 80x20",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £500k\" 80x23",
+    "button.flex-1.px-1.5.py-0.5 \"Loan £300k\" 80x20",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £500k\" 80x23",
+    "button.flex-1.px-1.5.py-0.5 \"Loan £300k\" 80x20",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £500k\" 80x23",
+    "button.flex-1.px-1.5.py-0.5 \"Loan £300k\" 80x20",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £500k\" 115x23",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £500k\" 80x23",
+    "button.flex-1.px-1.5.py-0.5 \"Loan £300k\" 80x20",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £500k\" 80x23"
+   ],
+   "scrollY": 1189,
+   "docH": 28150,
+   "label": "s1-summer-bid-open"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [
+    "\"2 Boyomo\" shown 38px of 42px",
+    "\"3 Bretones\" shown 38px of 45px",
+    "\"6 Moncayola\" shown 38px of 53px",
+    "\"11 Budimir\" shown 38px of 46px",
+    "\"1 RaduC\" shown 38px of 43px",
+    "\"2 Rodríguez\" shown 38px of 51px",
+    "\"4 Cáceres\" shown 38px of 43px",
+    "\"9 El-Abdellaoui\" shown 38px of 65px",
+    "\"11 Swedberg\" shown 38px of 58px",
+    "\"Balance of play:\" shown 1px of 83px",
+    "\"Manager Hot Seat\" shown 98px of 104px",
+    "\"Guess The Constructor\" shown 98px of 134px"
+   ],
+   "overlaps": [
+    "\"6 Moncayola\" x \"10 Durán\" (12x7 at 162,306)"
+   ],
+   "leaks": [],
+   "tinyTaps": [],
+   "scrollY": 0,
+   "docH": 26579,
+   "label": "s1m1-live-kickoff"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [
+    "\"Manager Hot Seat\" shown 98px of 104px",
+    "\"Guess The Constructor\" shown 98px of 134px"
+   ],
+   "overlaps": [],
+   "leaks": [],
+   "tinyTaps": [],
+   "scrollY": 0,
+   "docH": 27906,
+   "label": "s1m1-interval"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [
+    "\"2 Boyomo\" shown 38px of 42px",
+    "\"3 Bretones\" shown 38px of 45px",
+    "\"6 Moncayola\" shown 38px of 53px",
+    "\"11 Budimir\" shown 38px of 46px",
+    "\"14 Bayındır\" shown 38px of 48px",
+    "\"2 Rodríguez\" shown 38px of 51px",
+    "\"4 Cáceres\" shown 38px of 43px",
+    "\"9 El-Abdellaoui\" shown 38px of 65px",
+    "\"11 Swedberg\" shown 38px of 58px",
+    "\"Balance of play:\" shown 1px of 83px",
+    "\"Manager Hot Seat\" shown 98px of 104px",
+    "\"Guess The Constructor\" shown 98px of 134px"
+   ],
+   "overlaps": [],
+   "leaks": [],
+   "tinyTaps": [],
+   "scrollY": 1214,
+   "docH": 26579,
+   "label": "s1m1-live-sheet"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [
+    "\"⚽ Goal: Pablo Durán\" shown 84px of 100px",
+    "\"🧤 Shot saved: Aimar Oroz\" shown 84px of 129px",
+    "\"🧤 Shot saved: Williot Swedberg\" shown 84px of 152px",
+    "\"🧤 Shot saved: Pablo Durán\" shown 84px of 132px",
+    "\"🔁 Sub: Altay Bayındır on for Ionuț Radu\" shown 84px of 191px",
+    "\"🔁 Sub: Aleks Brennan (Youth) on for Ilaix Moriba\" shown 84px of 235px",
+    "\"🧤 Shot saved: Aleix Febas\" shown 84px of 128px",
+    "\"🟨 Booked: Carl Starfelt\" shown 84px of 113px",
+    "\"🔁 Sub: Jonathan Dubasin on for Enzo Boyomo\" shown 84px of 227px",
+    "\"🔁 Sub: Rubén García on for Abel Bretones\" shown 84px of 205px",
+    "\"⚽ Goal: Pablo Durán\" shown 84px of 100px",
+    "\"🎯 Penalty: Pablo Durán\" shown 84px of 114px",
+    "\"⚽ Goal: Pablo Durán\" shown 68px of 100px",
+    "\"🟨 Booked: Miguel Román\" shown 84px of 124px",
+    "\"🧤 Shot saved: Jones El-Abdellaoui\" shown 84px of 168px",
+    "\"🧤 Shot saved: Jones El-Abdellaoui\" shown 84px of 168px",
+    "\"🧤 Shot saved: Ante Budimir\" shown 84px of 135px",
+    "\"Manager Hot Seat\" shown 98px of 104px",
+    "\"Guess The Constructor\" shown 98px of 134px"
+   ],
+   "overlaps": [
+    "\"🟨 Booked: Carl Starfelt\" x \"58'\" (11x11 at 153,1294)",
+    "\"🎯 Penalty: Pablo Durán\" x \"89'\" (12x11 at 153,1374)"
+   ],
+   "leaks": [],
+   "tinyTaps": [
+    "button.mt-2.inline-flex.items-center \"All player ratings\" 95x15"
+   ],
+   "scrollY": 101,
+   "docH": 28621,
+   "label": "s1m1-report"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [
+    "\"🧤 Shot saved: Williot Swedberg\" shown 84px of 152px",
+    "\"🟨 Booked: Javi Galán\" shown 84px of 107px",
+    "\"🧤 Shot saved: Pablo Durán\" shown 84px of 132px",
+    "\"🧤 Shot saved: Diego López\" shown 84px of 134px",
+    "\"🔁 Sub: Justin de Haas on for José Copete\" shown 84px of 204px",
+    "\"🔁 Sub: Sergio Carreira on for Javi Galán\" shown 84px of 196px",
+    "\"🟨 Booked: Miguel Román\" shown 84px of 124px",
+    "\"🧤 Shot saved: Jones El-Abdellaoui\" shown 84px of 168px",
+    "\"🧤 Shot saved: Hugo Duro\" shown 84px of 125px",
+    "\"🔁 Sub: Borja Iglesias on for Pablo Durán\" shown 84px of 195px",
+    "\"🧤 Shot saved: Borja Iglesias\" shown 84px of 137px",
+    "\"Kayne van Oevelen\" shown 87px of 95px",
+    "\"Manager Hot Seat\" shown 98px of 104px",
+    "\"Guess The Constructor\" shown 98px of 134px"
+   ],
+   "overlaps": [
+    "\"🟨 Booked: Javi Galán\" x \"22'\" (5x11 at 153,1013)",
+    "\"🔁 Sub: Sergio Carreira on for Javi Galá\" x \"65'\" (9x11 at 153,1112)",
+    "\"Kayne van Oevelen\" x \"7.0\" (4x12 at 255,1377)"
+   ],
+   "leaks": [],
+   "tinyTaps": [
+    "button.mt-2.inline-flex.items-center \"All player ratings\" 95x15"
+   ],
+   "scrollY": 101,
+   "docH": 28314,
+   "label": "s1q-quick-report"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [
+    "\"Manager Hot Seat\" shown 98px of 104px",
+    "\"Guess The Constructor\" shown 98px of 134px"
+   ],
+   "overlaps": [],
+   "leaks": [],
+   "tinyTaps": [
+    "button.underline.underline-offset-2.hover:text-primary \"Managers\" 57x16",
+    "button.inline-flex.items-center.gap-1 \"Club home\" 79x16"
+   ],
+   "scrollY": 499,
+   "docH": 28435,
+   "label": "s1-mid-Inbox"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [
+    "\"Blood 3 under-21 players in the league\" shown 212px of 216px",
+    "\"Manager Hot Seat\" shown 98px of 104px",
+    "\"Guess The Constructor\" shown 98px of 134px"
+   ],
+   "overlaps": [],
+   "leaks": [],
+   "tinyTaps": [
+    "button.underline.underline-offset-2.hover:text-primary \"Managers\" 57x16",
+    "button.inline-flex.items-center.gap-1 \"Club home\" 79x16"
+   ],
+   "scrollY": 499,
+   "docH": 27383,
+   "label": "s1-mid-Board"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [
+    "\"Vapour Lane (fans will hate it)\" shown 152px of 158px",
+    "\"Manager Hot Seat\" shown 98px of 104px",
+    "\"Guess The Constructor\" shown 98px of 134px"
+   ],
+   "overlaps": [],
+   "leaks": [],
+   "tinyTaps": [
+    "button.underline.underline-offset-2.hover:text-primary \"Managers\" 57x16",
+    "button.inline-flex.items-center.gap-1 \"Club home\" 79x16"
+   ],
+   "scrollY": 499,
+   "docH": 28591,
+   "label": "s1-mid-Finances"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [
+    "\"Manager Hot Seat\" shown 98px of 104px",
+    "\"Guess The Constructor\" shown 98px of 134px"
+   ],
+   "overlaps": [],
+   "leaks": [],
+   "tinyTaps": [
+    "button.underline.underline-offset-2.hover:text-primary \"Managers\" 57x16",
+    "button.inline-flex.items-center.gap-1 \"Club home\" 79x16"
+   ],
+   "scrollY": 499,
+   "docH": 27496,
+   "label": "s1-mid-Press room"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [
+    "\"0 starts, 1 off the bench in last 10 · rotation option\" shown 76px of 212px",
+    "\"0 starts, 3 off the bench in last 10 · rotation option\" shown 76px of 214px",
+    "\"0 starts, 4 off the bench in last 10 · rotation option\" shown 54px of 214px",
+    "\"ONE FOR THE FUTURE\" shown 114px of 117px",
+    "\"Manager Hot Seat\" shown 98px of 104px",
+    "\"Guess The Constructor\" shown 98px of 134px"
+   ],
+   "overlaps": [
+    "\"0 starts, 1 off the bench in last 10 · r\" x \"Not happy\" (46x10 at 241,687)",
+    "\"0 starts, 3 off the bench in last 10 · r\" x \"Not happy\" (46x10 at 241,731)"
+   ],
+   "leaks": [],
+   "tinyTaps": [
+    "button.underline.underline-offset-2.hover:text-primary \"Managers\" 57x16",
+    "button.inline-flex.items-center.gap-1 \"Club home\" 79x16"
+   ],
+   "scrollY": 499,
+   "docH": 27555,
+   "label": "s1-mid-Dressing room"
+  }
+ ],
+ "seasons": [
+  {
+   "n": 1,
+   "start": {
+    "club": "Celta Vigo",
+    "season": 1,
+    "week": 0,
+    "cal": 54,
+    "budget": 18,
+    "squad": 22,
+    "inbox": 0,
+    "form": "",
+    "results": 0,
+    "live": false,
+    "window": "summer"
+   },
+   "live": [
+    {
+     "ok": true,
+     "vars": 0,
+     "goalsSeen": 0,
+     "subRowsAtBreak": 11,
+     "sub": true,
+     "benchOffered": 11,
+     "liveSub": true,
+     "reportText": "DOUKNOWBALL\nBack\nTrack stats\nFULL TIME\nLA LIGA · ROUND 1\n🏟️ Your ground · crowd 13,354\n45+3'\nADDED TIME\n90+8'\nVICTORY\nCelta Vigo\n3 - 0\nOsasuna\nCELTA VIGO\n\n⚽ Pablo Durán 1'\n\n⚽ Pablo Durán 85'\n\n⚽ Pablo Durán 89' (P)\n\nOSASUNA\n\n-\n\n🟨 Carl Starfelt 58'\n🟨 Miguel Román 90'\n▲ Altay Bayındır ▼ Ionuț Radu 46'\n▲ Aleks Brennan (Youth) ▼ Ilaix Moriba 53'\nOSASUNA ▲ Jonathan Dubasin ▼ Enzo Boyomo 78'\nOSASUNA ▲ Rubén García ▼ Abel Bretones 79'\nCelta Vigo\nMATCH STATS\nOsasuna\n61%\nPOSSESSION\n39%\n17\nSHOTS\n7\n8\nON TARGET\n2\n2.72\nEXPECTED GOALS\n0.49\n8\nCORNERS\n4\n14\nFOULS\n9\n2\nKEEPER SAVES\n5\n2\nYELLOW CARDS\n0\n0\nRED CARDS\n0\n2\nSUBSTITUTIONS\n2\n61%\nBALANCE OF PLAY\n39%\n▲ CELTA VIGO\n▼ OSASUNA\n0'\n45'\n90'\n17 (8)\nSHOTS (ON TARGET)\n7 (2)\nCelta Vigo\nTIMELINE\nOsasuna\n0'\n⏱️ KICK OFF\n⚽ Goal: Pablo Durán\n1'\n6'\n🧤 Shot saved: Aimar Oroz\n🧤 Shot saved: Williot Swedberg\n18'\n🧤 Shot saved: Pablo Durán\n25'\n45+3'\n⏸️ HALF TIME\n🔁 Sub:"
+    }
+   ],
+   "ffs": [
+    {
+     "k": 0,
+     "r": "FULL TIME",
+     "sv": {
+      "club": "Celta Vigo",
+      "season": 1,
+      "week": 9,
+      "cal": 54,
+      "budget": 18.36,
+      "squad": 23,
+      "inbox": 4,
+      "form": "LLLDD",
+      "results": 7,
+      "live": false,
+      "window": null
+     }
+    },
+    {
+     "k": 1,
+     "r": "FULL TIME",
+     "sv": {
+      "club": "Celta Vigo",
+      "season": 1,
+      "week": 16,
+      "cal": 54,
+      "budget": 19.38,
+      "squad": 23,
+      "inbox": 4,
+      "form": "WDLDL",
+      "results": 12,
+      "live": false,
+      "window": null
+     }
+    },
+    {
+     "k": 2,
+     "r": "FULL TIME",
+     "sv": {
+      "club": "Celta Vigo",
+      "season": 1,
+      "week": 23,
+      "cal": 54,
+      "budget": 20.12,
+      "squad": 23,
+      "inbox": 7,
+      "form": "LWLLD",
+      "results": 18,
+      "live": false,
+      "window": null
+     }
+    },
+    {
+     "k": 3,
+     "r": "CELTA VIGO",
+     "sv": {
+      "club": "Celta Vigo",
+      "season": 1,
+      "week": 28,
+      "cal": 54,
+      "budget": 20.88,
+      "squad": 23,
+      "inbox": 7,
+      "form": "LDWDL",
+      "results": 21,
+      "live": false,
+      "window": "january"
+     }
+    },
+    {
+     "k": 4,
+     "r": "no calendar tile",
+     "sv": {
+      "club": "Celta Vigo",
+      "season": 1,
+      "week": 28,
+      "cal": 54,
+      "budget": 20.88,
+      "squad": 23,
+      "inbox": 7,
+      "form": "LDWDL",
+      "results": 21,
+      "live": false,
+      "window": "january"
+     }
+    },
+    {
+     "k": 5,
+     "r": "FULL TIME",
+     "sv": {
+      "club": "Celta Vigo",
+      "season": 1,
+      "week": 42,
+      "cal": 54,
+      "budget": 22.46,
+      "squad": 23,
+      "inbox": 8,
+      "form": "LLLLL",
+      "results": 32,
+      "live": false,
+      "window": null
+     }
+    }
+   ],
+   "quick": "DOUKNOWBALL\nBack\nTrack stats\nFULL TIME\nLA LIGA · ROUND 2\n🏟️ Away day · crowd 14,329\n45+3'\nADDED TIME\n90+3'\nDRAW\nValencia\n0 - 0\nCelta Vigo\n🟨 Javi Galán 22'\n🟨 Miguel Román 67'\n▲ Sergio Carreira ▼ Javi Galán 65'\n▲ Borja Iglesias ▼ Pablo Durán 81'\nVALENCIA ▲ Justin de Haas ▼ José Copete 61'\nCelta Vigo\nMATCH STATS\nValencia\n47%\nPOSSESSION\n53%\n11\nSHOTS\n5\n4\nON TARGET\n2\n0.60\nEXPECTED GOALS\n0.64\n7\nCORNERS\n0\n8\nFOULS\n8\n2\nKEEPER SAVES\n4\n2\nYELLOW CARDS\n0\n0\nRED CARDS\n0\n2\nSUBSTITUTIONS\n1\n47%\nBALANCE OF PLAY\n53%\n▲ CELTA VIGO\n▼ VALENCIA\n0'\n45'\n90'\n11 (4)\nSHOTS (ON TARGET)\n5 (2)\nCelta Vigo\nTIMELINE\nValencia\n0'\n⏱️ KICK OFF\n🧤 Shot saved: Williot Swedberg\n15'\n🟨 Booked: Javi Galán\n22'\n🧤 Shot saved: Pablo Durán\n36'\n43'\n🧤 Shot saved: Diego López\n45+3'\n⏸️ HALF TIME\n61'\n🔁 Sub: Justin de Haas on for José Copete\n🔁 Sub: Sergio Carreira on for Javi Galán\n65'\n🟨 Booked: Miguel Román\n67'\n🧤 Shot saved: Jones El",
+   "mid_Inbox": "DOUKNOWBALL\nBack\nTrack stats\nCelta Vigo\n2026-27 · Season 1\n#19 in league\n£19.4m\nManagers\nBoard\nUnder pressure\nFans\nTurning\nHome\nSquad\nTactics\nTable\nMarket\nLA LIGA · ROUND 12\nCelta Vigo vs Levante\nHome · their strength ~76 · your XI avg 75\nPlay Live\n⚡ Quick Sim\n\nPlay live to make your calls. Quick Sim handles your subs.\n\n📊 Match Centre: form, head to head, odds, team talk\nClub home\n⚖️\nDECISIONS DESK\n\nAnswer before your next match. Anything left open closes with nothing changed.\n\nWEEK 11 · THE CLUB SECRETARY\n\n🟥Aleix Febas was shown a straight red against Alavés and is banned for 1 match. The club secretary rates an appeal at 40 percent. Win and the ban is wiped. Lose and the panel makes it 2 matches. It has to go in before the next match.\n\nNo appeal went in before the next match, so the 1 match ban stood.\n\nShow closed cards (4)\nYOUR MESSAGES\n3\n\nRecent retained messages. Older messages can leave your save.\n\nPending (3)\nResolved (1)\nAll (4)\nReset filters\n\nShowing 4 of 4 retained messages.\n\nWeek 9\nYOUR ASSISTANT\n\n📩International break: the window runs 21 Sep to 6 Oct, and your fixtures do not stop for it, so they went straight after your last game. Away with their countries (Sweden: Williot Swedberg; Guinea: Ilaix Moriba; Romania: Ionuț Radu; Türkiye: Altay Bayındır). They are back for the Athletic Club game. Williot Swedberg, Ionuț Radu and Altay Bayındır started for their countries. Ilaix Moriba picked up a knock away and is out for a bit. Your assistant wants to know: start them against Athletic Club, or rest the spent ones for that one game?\n\nThat game has been and gone.\n\nWeek 6\n\n🤝Hugo Álvarez caught you in the corridor. He is down as a rotation option and he has started 0 of the last 6. He wants to know which of those two is the truth.\n\nPromise him a start\nBe straight: he is a backup\nHear him out\nWeek 5\n\n🍿One of your midfielders has started a podcast. Episode one is called Why My Manager Does Not Understand Football.\n\nMake him listen to it in front of everyone\nGo on the podcast\nWeek 1\n\n🍿Your star man got stuck in the stadium elevator for two hours and live streamed the whole thing. Record viewership.\n\nCheck on him\nClip it for the club account\nClub Manager: Free Football Management Game\n\nA full club-management sim in your browser: 454 clubs across 27 real leagues, from the Premier League, the 2. Bundesliga, Serie B, Ligue 2, the Segunda División and the Scottish Premiership to the Saudi Pro League, MLS, Brazil, Mexico, Australia, Russia, Croatia, Denma",
+   "mid_Board": "DOUKNOWBALL\nBack\nTrack stats\nCelta Vigo\n2026-27 · Season 1\n#19 in league\n£19.4m\nManagers\nBoard\nUnder pressure\nFans\nTurning\nHome\nSquad\nTactics\nTable\nMarket\nLA LIGA · ROUND 12\nCelta Vigo vs Levante\nHome · their strength ~76 · your XI avg 75\nPlay Live\n⚡ Quick Sim\n\nPlay live to make your calls. Quick Sim handles your subs.\n\n📊 Match Centre: form, head to head, odds, team talk\nClub home\nBOARD EXPECTATIONS · SMALL BUDGETS, LOW BAR: EVERY SCALP IS A STORY.\nFinish in the top half\nBehind\nWin your Copa del Rey Round of 16 tie\nDone\nFinish above Valencia\nBehind\nBank 50+ league points\nBehind\nBlood 3 under-21 players in the league\nDone\nTurn a profit in the transfer market\nBehind\n🛒 IN THE MARKET\nSign someone 21 or under rated 79 or better\nOn track\n\nA permanent signing only. He counts once he is in your squad at that age and that rating or better.\n\nHave 13 players from Spain in the squad\nOn track\n\nCounts everyone in your squad from Spain. A player you have in on loan does not count, and neither does anybody whose country we do not have on file.\n\nClub Manager: Free Football Management Game\n\nA full club-management sim in your browser: 454 clubs across 27 real leagues, from the Premier League, the 2. Bundesliga, Serie B, Ligue 2, the Segunda División and the Scottish Premiership to the Saudi Pro League, MLS, Brazil, Mexico, Australia, Russia, Croatia, Denmark, Switzerland, Austria and Greece, with real players at their real market values as of August 2026 (October for the A-League Men and the Russian Premier League) and thin squads topped up with made up youth, marked as such. Manage today or in a real past season: 2020-21 with Haaland's Dortmund and Mbappé's PSG, 2015-16 with Leicester at 5000 to 1, 2010-11 with prime Messi, or 2005-06 with Ronaldinho's Barcelona. Or create your own club with its own crest and stadium. Negotiate transfers, survive bidding wars, hit the board's named objectives, and chase titles season after season.\n\nClub Manager is the site's big one: a full management sim in your browser. 454 real clubs across 27 leagues in 21 countries, from the Premier League, Serie B, Ligue 2 and the Segunda División to the Danish Superliga, the Swiss Super League, Croatia's SuperSport HNL, Brazil's Serie A, Liga MX, the A-League Men and the Russian Premier League, over 5,000 real players with their real 2026 ages and market values, and a board that talks like a board.\n\nPick when you start too: today's game, or one of four real past seasons. 2020-21 is Haaland and Bell",
+   "mid_Finances": "DOUKNOWBALL\nBack\nTrack stats\nCelta Vigo\n2026-27 · Season 1\n#19 in league\n£19.4m\nManagers\nBoard\nUnder pressure\nFans\nTurning\nHome\nSquad\nTactics\nTable\nMarket\nLA LIGA · ROUND 12\nCelta Vigo vs Levante\nHome · their strength ~76 · your XI avg 75\nPlay Live\n⚡ Quick Sim\n\nPlay live to make your calls. Quick Sim handles your subs.\n\n📊 Match Centre: form, head to head, odds, team talk\nClub home\n📊 PROJECTED TO SEASON END\nweek 16, 38 left\nIN SO FAR SEASON\nTickets · 13 certain home games left £2m £5.5m\nFood and drink £480k £1.3m\nSponsor · no deal £0k £0k\nPlayers sold · assumes no more deals £0k £0k\nIncome £2.5m £6.8m\nOUT\nPlayer wages · £261k a week £4.2m £14.1m\nStaff wages · £101k a week £1.6m £5.5m\nTravel · 15 certain away trips left £200k £800k\nPlayers bought · assumes no more deals £1.1m £1.1m\nFacilities £0k £0k\nStaff fees · hires and pay offs £0k £0k\nSpend £7.1m £21.5m\nSeason result -£4.6m -£14.7m\n\nTickets, food, the sponsor, deals, the builders and staff fees move the transfer kitty (£19.4m now). Wages and travel are the club's running costs: the board covers them and holds you to the wage ceiling on the contracts desk, so they never leave the kitty. Counts league fixtures and the one cup or European tie already drawn. Later rounds depend on results and are left out, and so are deals you have not done.\n\n🎟️ PRICES\nFans: Turning\n🎟️ Fair prices\nCheaper seats, fuller ground, a louder day out.\n🎫 Standard\nThe going rate. Nobody writes to the paper about it.\n💼 Premium\nMore per seat, a few empty ones up in the corners.\n\nTickets about £18 a head. Fans are neutral. The board are neutral.\n\n🍟 Cheap food\nPies at cost. The fans love you for it.\n🥤 Standard\nGround prices. Nobody cheers, nobody moans.\n🍾 Premium\nHospitality margins. The fans notice the bill.\n\nFood and drink about £4.16 a head, lifted by the stadium level. Fans are neutral. The board are neutral. The mood also follows the last five results, and it moves your home crowd: 0.9x furious, 1.1x singing.\n\n🤝 SHIRT SPONSOR\n\nOffers on the table. The money lands in the same kitty as everything else, this season and every season the deal runs. Push for more and the brand comes up six percent, or walks.\n\nCopperfield Tools (global)\n£8.8m/season\n\nMoney in the account, nothing riding on results. 2 seasons.\n\nSign with Copperfield\nPush for more\nPinecrest Timber (local)\n£6.3m/season\n\nLess up front, a serious bonus if you win the league. 2 seasons. Bonus £7.9m for the title.\n\nSign with Pinecrest\nPush for more\nSolstice Motors (loc",
+   "mid_Press room": "DOUKNOWBALL\nBack\nTrack stats\nCelta Vigo\n2026-27 · Season 1\n#19 in league\n£19.4m\nManagers\nBoard\nUnder pressure\nFans\nTurning\nHome\nSquad\nTactics\nTable\nMarket\nLA LIGA · ROUND 12\nCelta Vigo vs Levante\nHome · their strength ~76 · your XI avg 75\nPlay Live\n⚡ Quick Sim\n\nPlay live to make your calls. Quick Sim handles your subs.\n\n📊 Match Centre: form, head to head, odds, team talk\nClub home\nTHE BACK PAGES\nNobody has an opinion\n0 fronted up · 2 left to the assistant\n\nThe board do not watch every match, they read about it. Keep the papers onside and a defeat gets the benefit of the doubt upstairs. Let them turn on you and the same defeat costs you more.\n\nPRESS CONFERENCE\n\nAltay Bayındır has started 0 of the last 10. Is he finished at this club?\n\nHe is still my player\nthe dressing room will love it · he will walk in ten feet tall · the board will wince\nHe has to earn it back\nthe dressing room will love it · he will read it like everyone else · the board will like hearing it · a headline\nYou would have to ask him\nthe press will not thank you\nSend your assistant\nNothing said, nothing gained. The papers make a small note of who did not turn up.\nClub Manager: Free Football Management Game\n\nA full club-management sim in your browser: 454 clubs across 27 real leagues, from the Premier League, the 2. Bundesliga, Serie B, Ligue 2, the Segunda División and the Scottish Premiership to the Saudi Pro League, MLS, Brazil, Mexico, Australia, Russia, Croatia, Denmark, Switzerland, Austria and Greece, with real players at their real market values as of August 2026 (October for the A-League Men and the Russian Premier League) and thin squads topped up with made up youth, marked as such. Manage today or in a real past season: 2020-21 with Haaland's Dortmund and Mbappé's PSG, 2015-16 with Leicester at 5000 to 1, 2010-11 with prime Messi, or 2005-06 with Ronaldinho's Barcelona. Or create your own club with its own crest and stadium. Negotiate transfers, survive bidding wars, hit the board's named objectives, and chase titles season after season.\n\nClub Manager is the site's big one: a full management sim in your browser. 454 real clubs across 27 leagues in 21 countries, from the Premier League, Serie B, Ligue 2 and the Segunda División to the Danish Superliga, the Swiss Super League, Croatia's SuperSport HNL, Brazil's Serie A, Liga MX, the A-League Men and the Russian Premier League, over 5,000 real players with their real 2026 ages and market values, and a board that talks like a board.\n",
+   "mid_Dressing room": "DOUKNOWBALL\nBack\nTrack stats\nCelta Vigo\n2026-27 · Season 1\n#19 in league\n£19.4m\nManagers\nBoard\nUnder pressure\nFans\nTurning\nHome\nSquad\nTactics\nTable\nMarket\nLA LIGA · ROUND 12\nCelta Vigo vs Levante\nHome · their strength ~76 · your XI avg 75\nPlay Live\n⚡ Quick Sim\n\nPlay live to make your calls. Quick Sim handles your subs.\n\n📊 Match Centre: form, head to head, odds, team talk\nClub home\nTHE DRESSING ROOM\n\n3 players are not getting what you told them they would.\n\nNEEDS A WORD\nGK\nAltay Bayındır\n0 starts, 1 off the bench in last 10 · rotation option\n76\nNot happy\nRW\nFerran Jutglà\n0 starts, 3 off the bench in last 10 · rotation option\n76\nNot happy\nRB\nSergio Carreira\n0 starts, 4 off the bench in last 10 · rotation option\n76\nGetting restless\n⭐\nSTAR MAN\n3 players\nPromised 88% of games\n🔥\nKEY FIRST TEAMER\n8 players\nPromised 74% of games\n🔄\nROTATION OPTION\n4 players\n2 not happy\n🧥\nBACKUP\n6 players\nPromised 12% of games\n🌱\nONE FOR THE FUTURE\n2 players\nPromised 5% of games\nClub Manager: Free Football Management Game\n\nA full club-management sim in your browser: 454 clubs across 27 real leagues, from the Premier League, the 2. Bundesliga, Serie B, Ligue 2, the Segunda División and the Scottish Premiership to the Saudi Pro League, MLS, Brazil, Mexico, Australia, Russia, Croatia, Denmark, Switzerland, Austria and Greece, with real players at their real market values as of August 2026 (October for the A-League Men and the Russian Premier League) and thin squads topped up with made up youth, marked as such. Manage today or in a real past season: 2020-21 with Haaland's Dortmund and Mbappé's PSG, 2015-16 with Leicester at 5000 to 1, 2010-11 with prime Messi, or 2005-06 with Ronaldinho's Barcelona. Or create your own club with its own crest and stadium. Negotiate transfers, survive bidding wars, hit the board's named objectives, and chase titles season after season.\n\nClub Manager is the site's big one: a full management sim in your browser. 454 real clubs across 27 leagues in 21 countries, from the Premier League, Serie B, Ligue 2 and the Segunda División to the Danish Superliga, the Swiss Super League, Croatia's SuperSport HNL, Brazil's Serie A, Liga MX, the A-League Men and the Russian Premier League, over 5,000 real players with their real 2026 ages and market values, and a board that talks like a board.\n\nPick when you start too: today's game, or one of four real past seasons. 2020-21 is Haaland and Bellingham at Dortmund, Mbappé and Neymar at PSG and Bruno Fernandes at United, ",
+   "reload": {
+    "b": {
+     "club": "Celta Vigo",
+     "season": 1,
+     "week": 16,
+     "cal": 54,
+     "budget": 19.38,
+     "squad": 23,
+     "inbox": 4,
+     "form": "WDLDL",
+     "results": 12,
+     "live": false,
+     "window": null
+    },
+    "a": {
+     "club": "Celta Vigo",
+     "season": 1,
+     "week": 16,
+     "cal": 54,
+     "budget": 19.38,
+     "squad": 23,
+     "inbox": 4,
+     "form": "WDLDL",
+     "results": 12,
+     "live": false,
+     "window": null
+    }
+   },
+   "end": "SACKED!",
+   "sackedText": "DOUKNOWBALL\nBack\nTrack stats\nSACKED!\n\nSOCCER\n·\nNOT THIS TIME\n\n🚪\nYou've been sacked\n\nThe Celta Vigo board ran out of patience in Season 1.\n\nSEASONS\n1\nWIN %\n25%\nTROPHIES\n0\n🚪 Sacked in S1 · 8W 7D 17L · 🏆×0\n🧳 OUT OF WORK\n\nYou are between jobs. Clubs will call, but the longer you sit out the quieter the phone gets.\n\n⏭️ Wait a week for the phone to ring\n\nTrophies and promotions open doors; relegations shut them. Waiting costs you standing, so the job you hold out for may not be there when you finally say yes. Somebody always needs a manager in the end.\n\nCAREER RECORD\n\nSacked before finishing a single season. Brutal.\n\n💼\nClub Manager\nOct 13, 2026\n🚪 Sacked in S1 · 8W 7D 17L · 🏆×0\nRESULT\nSacked after 1 season (0 trophies)\nDoUKnowBall\ndouknowball.com/club-manager\nShare result\nCopy challenge\n📋 Copy Score Card\n🖼️ Save Image\n\nSHARE YOUR RESULT\n\nStart New Career\nYour managers\nClub Manager: Free Football Management Game\n\nA full club-management sim in your browser: 454 clubs across 27 real leagues, from the Premier League, the 2. Bundesliga, Serie B, Ligue 2, the Segunda División and the Scottish Premiership to the Saudi Pro League, MLS, Brazil, Mexico, Australia, Russia, Croatia, Denmark, Switzerland, Austria and Greece, with real players at their real market values as of August 2026 (October for the A-League Men and the Russian Premier League) and thin squads topped up with made up youth, marked as such. Manage today or in a real past season: 2020-21 with Haaland's Dortmund and Mbappé's PSG, 2015-16 with Leicester at 5000 to 1, 2010-11 with prime Messi, or 2005-06 with Ronaldinho's Barcelona. Or create your own club with its own crest and stadium. Negotiate transfers, survive bidding wars, hit the board's named objectives, and chase titles season after season.\n\nClub Manager is the site's big one: a full management sim in your browser. 454 real clubs across 27 leagues in 21 countries, from the Premier League, Serie B, Ligue 2 and the Segunda División to the Danish Superliga, the Swiss Super League, Croatia's SuperSport HNL, Brazil's Serie A, Liga MX, the A-League Men and the Russian Premier League, over 5,000 real players with their real 2026 ages and market values, and a board that talks like a board.\n\nPick when you start too: today's game, or one of four real past seasons. 2020-21 is Haaland and Bellingham at Dortmund, Mbappé and Neymar at PSG and Bruno Fernandes at United, with that summer's big moves already made (Havertz and Werner at Chelsea, Thiago at Liverpool, Suárez at Atlético). 2015-16 is the year Leicester won it at 5000 to 1, with Vardy and Mahrez at their real pre-title values and MSN at Barcelona. 2010-11 is prime Messi and Rooney, and now Klopp's young Dortmund, Ibrahimovic's Milan and Lille's double too. 2005-06 is Ronaldinho's Ballon d'Or Barcelona with a 17 year old Messi, Mourinho's back to back Chelsea and Henry's Arsenal. All four past seasons hold all 98 clubs of their year's big five, the Premier League, La Liga, Serie A, the Bu"
+  }
+ ],
+ "elapsedS": 118,
+ "clubList": [
+  "Real Madrid 👑 Elite Squad 90 Budget £195m Board wants Win the La Liga",
+  "Barcelona 👑 Elite Squad 89 Budget £158m Board wants Win the La Liga",
+  "Atlético Madrid 🥇 Contenders Squad 85 Budget £89m Board wants Win the La Liga",
+  "Villarreal ⚔️ Challengers Squad 81 Budget £40m Board wants Qualify for the Champions League",
+  "Athletic Club ⚔️ Challengers Squad 80 Budget £36m Board wants Qualify for the Champions League",
+  "Real Betis ⚔️ Challengers Squad 80 Budget £38m Board wants Qualify for the Europa League",
+  "Real Sociedad ⚔️ Challengers Squad 80 Budget £35m Board wants Qualify for the Europa League",
+  "Sevilla 🐺 Underdogs Squad 77 Budget £19m Board wants Qualify for the Conference League",
+  "Valencia 🐺 Underdogs Squad 77 Budget £20m Board wants Qualify for the Conference League",
+  "Celta Vigo 🐺 Underdogs Squad 77 Budget £18m Board wants Finish in the top half",
+  "Espanyol 🐺 Underdogs Squad 76 Budget £15m Board wants Finish in the top half",
+  "Deportivo La Coruña 🐺 Underdogs Squad 75 Budget £14m Board wants Finish in the top half",
+  "Levante 🐺 Underdogs Squad 75 Budget £12m Board wants Finish in the top half",
+  "Getafe 🐺 Underdogs Squad 75 Budget £12m Board wants Stay up. Avoid relegation",
+  "Racing Santander 🐺 Underdogs Squad 74 Budget £10m Board wants Stay up. Avoid relegation",
+  "Rayo Vallecano 🐺 Underdogs Squad 74 Budget £11m Board wants Stay up. Avoid relegation",
+  "Osasuna 🐺 Underdogs Squad 74 Budget £10m Board wants Stay up. Avoid relegation",
+  "Elche 🐺 Underdogs Squad 73 Budget £9m Board wants Stay up. Avoid relegation",
+  "Alavés 🐺 Underdogs Squad 73 Budget £9m Board wants Stay up. Avoid relegation",
+  "Málaga 🐺 Underdogs· partial data Squad 66 Budget £8m Board wants Stay up. Avoid relegation"
+ ],
+ "s1-summer_deal": {
+  "signed": [
+   {
+    "who": "Dmitriy Chistyakov",
+    "inSquad": true,
+    "budgetBefore": 18,
+    "budgetAfter": 16.9
+   }
+  ],
+  "sold": [],
+  "bid": "DOUKNOWBALL\nBack\nTrack stats\nCelta Vigo\n2026-27 · Season 1\nSeason not started\n£16.9m\nNo matches yet\nManagers\nBoard\nSafe\nFans\nHopeful\nHome\nSquad\nTactics\nTable\nMarket\n☀️ Summer window OPEN\n4 match weeks until the deadline · offers can arrive any week · loans used 0/2\nBUDGET\n£16.9m\nNegotiating: Eldar Civic\n63\nBaltika · LB · 30y · worth £500k to £700k\nTheir ask: £500k\n●●●●●\n\n\"They want top money for him.\"\n\nADD-ONS\nNone\n£2m\n£5m\n£10m\nSELL-ON\nNone\n10%\n20%\n30%\nSWAP\nNo part exchange\nJavi Rodríguez (79, £10.8m)\nMiguel Román (79, £10.8m)\nWilliot Swedberg (79, £10.8m)\nIlaix Moriba (77, £7.5m)\nHugo Álvarez"
+ },
+ "finalKeys": [
+  "saveVersion",
+  "clubName",
+  "season",
+  "week",
+  "startYear",
+  "eraId",
+  "retiredNames",
+  "retiredLastSummer",
+  "budget",
+  "boardConfidence",
+  "sacked",
+  "squad",
+  "xiIds",
+  "formationIndex",
+  "mentality",
+  "leagueClubs",
+  "balancedFixtures",
+  "table",
+  "form",
+  "calendar",
+  "clubStrengths",
+  "transferWindow",
+  "windowWeeksLeft",
+  "aiHeadlines",
+  "goneNames",
+  "seasonSignings",
+  "cupRound",
+  "cupDraw",
+  "uclField",
+  "uclGroup",
+  "uclKoRound",
+  "uclDraw",
+  "cupBracket",
+  "world",
+  "trophies",
+  "history",
+  "careerStats",
+  "pendingSummary",
+  "boardObjectives",
+  "cupExit",
+  "uclExit",
+  "negotiation",
+  "incomingBids",
+  "coldNames",
+  "loanedOut",
+  "transferLog",
+  "resultLog",
+  "inbox",
+  "promisedStarts",
+  "pairResults",
+  "realLeagueFixtures",
+  "wageCap",
+  "freeAgents",
+  "severance",
+  "training",
+  "academy",
+  "academyGraduates",
+  "teamTalk",
+  "press",
+  "managers",
+  "boardAsksVersion",
+  "scorerRace",
+  "leagueBook",
+  "setPieces",
+  "intl",
+  "facilities",
+  "books",
+  "staff",
+  "managerXp",
+  "startOptions",
+  "clubForm",
+  "live",
+  "h2h",
+  "finance",
+  "decisions",
+  "wilderness"
+ ],
+ "finalInbox": [
+  [
+   42,
+   "International break: the window runs 22 Mar to 30 Mar, and your fixtures do not stop for it, so they"
+  ],
+  [
+   21,
+   "Ferran Jutglà put it in writing. He is down as a rotation option and he has started 0 of the last 10"
+  ],
+  [
+   20,
+   "Altay Bayındır put it in writing. He is down as a rotation option and he has started 0 of the last 1"
+  ],
+  [
+   20,
+   "International break: the window runs 9 Nov to 17 Nov, and your fixtures do not stop for it, so they "
+  ],
+  [
+   9,
+   "International break: the window runs 21 Sep to 6 Oct, and your fixtures do not stop for it, so they "
+  ],
+  [
+   6,
+   "Hugo Álvarez caught you in the corridor. He is down as a rotation option and he has started 0 of the"
+  ],
+  [
+   5,
+   "One of your midfielders has started a podcast. Episode one is called Why My Manager Does Not Underst"
+  ],
+  [
+   1,
+   "Your star man got stuck in the stadium elevator for two hours and live streamed the whole thing. Rec"
+  ]
+ ]
+}

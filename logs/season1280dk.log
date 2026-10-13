@@ -1,0 +1,8 @@
+AUDIT s1m1-report: 4 overlapping text pairs: "🧤 Penalty saved: Ondrej Sundgren (Youth" x "9'" (9x11 at 636,1025)
+AUDIT s1q-quick-report: 1 overlapping text pairs: "🧤 Shot saved: Ondrej Sundgren (Youth)" x "72'" (11x11 at 633,1074)
+AUDIT s2-summer-market: 1 overlapping text pairs: "Manchester United · 23y · worth £49.9m t" x "Match days: team sheet, Play Live or Qui" (21x11 at 320,2468)
+AUDIT s2m1-live-sheet: 1 overlapping text pairs: "7 Clem" x "7 Voskuil" (6x4 at 430,564)
+AUDIT s2m1-report: 2 overlapping text pairs: "🅰️ Alfie Weston (Youth)" x "38'" (15x11 at 633,1246)
+AUDIT s2q-quick-report: 1 overlapping text pairs: "🔁 Sub: Jamie Baptiste (Youth) on for Dm" x "65'" (15x11 at 633,1277)
+AUDIT s2-jan-bid-open: 1 overlapping text pairs: "Melbourne Victory · 28y · worth £300k to" x "Transfer windows and the staff room" (17x11 at 320,3128)
+SEASON s1280dk done: 0 findings, 0 errors, 56 shots, 228s
