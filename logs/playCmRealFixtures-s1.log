@@ -1,0 +1,10 @@
+390-real passed=false
+  AssertionError [ERR_ASSERTION]: calendar-sources: the actual content must become readable and stable after its native interaction
+      at captureVisible (file:///tmp/s1/scripts/playCmRealFixtures.mjs:170:5)
+      at async journey (file:///tmp/s1/scripts/playCmRealFixtures.mjs:207:73)
+      at async file:///tmp/s1/scripts/playCmRealFixtures.mjs:283:34
+  capture calendar-sources failed, last frame {"box":{"x":16,"y":-36,"width":358,"height":82,"top":-36,"bottom":46,"right":374},"viewport":{"width":390,"height":844,"scrollX":0,"scrollY":636,"documentWidth":390},"style":{"display":"block","visibility":"visible","opacity":"1"},"ancestors":[{"tag":"DIV","scrollTop":0,"scrollLeft":0,"overflow":"visible","display":"block","visibility":"visible","opacity":"1"},{"tag":"DIV","scrollTop":0,"scrollLeft":0,"overflow":"visible","display":"block","visibility":"visible","opacity":"1"},{"tag":"DIV","scrollTop":0,"scrollLeft":0,"overflow":"visible","display":"block","visibility":"visible","opacity":"1"},{"tag":"DIV","scrollTop":0,"scrollLeft":0,"overflow":"visible","display":"block","visibility":"visible","opacity":"1"},{"tag":"DIV","scrollTop":0,"scrollLeft":0,"overflow":"visible","display":"block","visibility":"visible","opacity":"1"},{"tag":"DIV","scrollTop":0,"scrollLeft":0,"overflow":"visible
+390-later passed=true
+1280-real passed=true
+1280-legacy passed=true
+1280-later passed=true

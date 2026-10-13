@@ -1,0 +1,9 @@
+#!build
+#!playwright
+#!serial
+fonts: mkdir -p .tmp-fx/font-cache && FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only 2>&1 | tail -3
+simCmRealFixtures: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCmRealFixtures.mjs > /tmp/sf.log 2>&1; s=$?; tail -2 /tmp/sf.log | cut -c1-300; exit $s
+playCmRealFixtures-head: FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" CM_REAL_FIXTURE_NATIVE_ARTIFACTS="/tmp/rfh" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playCmRealFixtures.mjs > /tmp/rf.log 2>&1; s=$?; node .rc/x/rfReport.mjs /tmp/rfh/report.json; exit $s
+s1build: R="$PWD"; git worktree add /tmp/s1 8ac1a47c44ad3624e8a228c3a5d12274d54fde59 > /dev/null 2>&1; ln -s "$R/node_modules" /tmp/s1/node_modules; cd /tmp/s1 && npm run build > /tmp/s1build.log 2>&1; s=$?; tail -1 /tmp/s1build.log; exit $s
+simCmRealFixtures-s1: R="$PWD"; cd /tmp/s1 && NODE_OPTIONS="--require=$R/scripts/lib/offlineTransport.cjs" node scripts/simCmRealFixtures.mjs > /tmp/sfs.log 2>&1; s=$?; tail -1 /tmp/sfs.log | cut -c1-200; exit $s
+playCmRealFixtures-s1: R="$PWD"; cd /tmp/s1 && FREE_KICK_FONT_CACHE="$R/.tmp-fx/font-cache" CM_REAL_FIXTURE_NATIVE_ARTIFACTS="/tmp/rfs" NODE_OPTIONS="--require=$R/scripts/lib/offlineTransport.cjs" node scripts/playCmRealFixtures.mjs > /tmp/rfs.log 2>&1; s=$?; node "$R/.rc/x/rfReport.mjs" /tmp/rfs/report.json; exit $s
