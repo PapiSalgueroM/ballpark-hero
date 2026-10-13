@@ -34,7 +34,7 @@
  *      order (labels by index), because an old save answers a pending card
  *      by its id and the index of the choice (applyEventChoice).
  *
- * MEASURED. On the base (8fea14e2, before this round), section 1 failed on
+ * MEASURED. On the base (8fea14e2, before this round; BASE is now main at c9c77eba, Release BB), section 1 failed on
  * the three follower claims and on the effects nobody printed; the full
  * readings are in docs/audits/ROUND-1327-NOTES.md and the header is updated
  * with each step.
@@ -61,7 +61,7 @@ import * as esbuild from 'esbuild';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 /* The tree this round was cut from. Section 3 bundles it from git. */
-const BASE = '8fea14e216fb550b4676ac29f06867234594df21';
+const BASE = 'c9c77ebab727b9bd624459388e33b6579538e4ca';
 const ENGINE = 'src/lib/soccerCareerEngine.ts';
 const CONTROL = process.env.SIM_SOCCER_EVENT_PROMISES_CONTROL || '';
 const TMP = fs.mkdtempSync(path.join(os.tmpdir(), 'r1327-promises-'));

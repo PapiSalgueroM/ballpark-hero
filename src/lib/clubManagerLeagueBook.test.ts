@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { goalWeight } from '@/lib/clubManagerGoalWeight';
 import {
   BOOK_ROWS_PER_CLUB, bookClubGoals, bookRows, bookSalt, creditAssist, creditCleanSheet, creditDeal, creditGoal,
-  creditMine, creditOwnGoal, dealAssist, dealGoals, liveBook, mineSheets, openBook, openLateBook, partialEleven, readBook, rowKey, takerOf,
+  creditMine, creditOwnGoal, dealAssist, dealGoals, dealShares, liveBook, mineSheets, openBook, openLateBook, partialEleven, readBook, rowKey, takerOf,
   type BookLineOf, type BookMan, type BookRules, type LeagueBook,
 } from '@/lib/clubManagerLeagueBook';
 
@@ -478,5 +478,33 @@ describe('partialEleven', () => {
     expect(Math.abs(g.rows - n * p)).toBeLessThan(4 * sd(n, p));
     /* And nowhere near every goal: the literal reading (all of them his) is what this rule is not. */
     expect(g.rows).toBeLessThan(n * 0.6);
+  });
+});
+
+/* Round 1311: the league leaders card prints a worked example from dealShares, never from typed numbers.
+   This holds dealShares to what dealGoals really deals for the same eleven, and shows the check can tell
+   the taker rule on from off. */
+describe('dealShares', () => {
+  it('is what dealGoals deals on average, own goals and the taker included', () => {
+    const { men, ownGoals } = dealShares(XI, RULES);
+    expect(men.reduce((s, m) => s + m.share, 0) + ownGoals).toBeCloseTo(1, 9);
+    const N = 20000;
+    const got = new Map<string, number>();
+    let og = 0;
+    let pieces = 0;
+    for (let k = 0; k < N; k += 1) {
+      const [g] = dealGoals(`shares|${k}`, 1, XI, RULES);
+      if (g.kind === 'og') { og += 1; continue; }
+      if (g.kind !== 'open') pieces += 1;
+      if (g.scorer) got.set(g.scorer.n, (got.get(g.scorer.n) ?? 0) + 1);
+    }
+    for (const m of men) expect(Math.abs((got.get(m.man.n) ?? 0) - N * m.share)).toBeLessThan(4 * sd(N, m.share));
+    expect(Math.abs(og - N * ownGoals)).toBeLessThan(4 * sd(N, ownGoals));
+    const taker = men.find(m => m.setPieces > 0);
+    expect(taker?.man).toBe(takerOf(XI));
+    expect(Math.abs(pieces - N * taker!.setPieces)).toBeLessThan(4 * sd(N, taker!.setPieces));
+    /* The same sample against the taker rule switched off: his share is told apart. */
+    const off = dealShares(XI, BY_WEIGHT).men.find(m => m.man === taker!.man)!;
+    expect(Math.abs((got.get(taker!.man.n) ?? 0) - N * off.share)).toBeGreaterThan(4 * sd(N, off.share));
   });
 });

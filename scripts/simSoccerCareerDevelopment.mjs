@@ -10,6 +10,7 @@ import { fileURLToPath } from 'node:url';
 import { build } from 'esbuild';
 import { nextTenPatches } from './lib/careerNextTenAttribution1197.mjs';
 import { veteranPayPatches } from './lib/careerVeteranPay1262.mjs';
+import { awardGenerationsPatches } from './lib/careerAwardGenerations1318.mjs';
 import { deckFairPatches } from './lib/careerDeckFair1327.mjs';
 
 export const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -179,9 +180,11 @@ if (!IMPORT_ONLY) {
      control still reaches them); every other group runs on the tree as it ships. */
   /* Release AW: the same two bundles take the veteran pay of Rounds 1262 to 1264 out as well, at its one condition in
      the contracts file (scripts/lib/careerVeteranPay1262.mjs): a career of 30 or more is offered other money on purpose. */
+  /* Round 1318: and the saved pool of made up Ballon d'Or rivals of Rounds 1280 to 1282 and 1318, its rows in order
+     (scripts/lib/careerAwardGenerations1318.mjs). */
   /* Round 1327: and Round 1327's event deck and paper first, the newest change first (scripts/lib/careerDeckFair1327.mjs):
      its keyed draws move every seeded career's Math.random from the first deck or paper on. */
-  const nextTen = [...deckFairPatches(), ...nextTenPatches(), ...veteranPayPatches()].map(patch => ({ ...patch, name: patch.id }));
+  const nextTen = [...deckFairPatches(), ...nextTenPatches(), ...veteranPayPatches(), ...awardGenerationsPatches()].map(patch => ({ ...patch, name: patch.id }));
   const neutralB = await developmentBundle({ patches: [...activePatches, ...nextTen] }), neutralOriginal = CONTROL ? await developmentBundle({ patches: nextTen }) : neutralB;
   const mentorMetadata = seeded(118500, () => B.soccer.getAllEvents(developmentFixture(B)).find(event => event.id === 6)).value;
   async function check(name, fn) {

@@ -13,8 +13,8 @@ import { NHL_TEAMS } from '@/data/conquestDataNhl';
 import { seasonSwing, swingNote, playoffDepthOf, playoffGames, clutchSwing, clutchNote } from './careerVariance';
 import { nhlSeasonScore, wonAward } from './careerAwards';
 import { US_ENGINE_SEASON, seasonLength, toSlate, fullSeasonOf } from './usSeasonShape';
-import { draftRival, judgeRivalSeason } from './careerRival';
-import type { CareerRival } from './careerRival';
+import { draftRival, judgeRivalSeason, rivalSeasonStream, rivalSeasonDraws, rivalKindOf } from './careerRival';
+import type { CareerRival, RivalSeasonPlay } from './careerRival';
 
 import type { PlayerAppearance } from './soccerCareerAppearance';
 import { getNhlLifeEventsA } from './nhlCareerLifeA';
@@ -44,7 +44,7 @@ import { receiveNhlInboxTexts } from './nhlCareerInbox';
 import type { RivalryEvent } from './careerRivalryEvents';
 import { nhlRivalryTick, nhlRivalryChoiceTick } from './nhlCareerRivalryEvents';
 import type { RivalryChoiceCard } from './careerRivalryChoices';
-import { countOf, nhlMajorAward } from './usCareerStatLine';
+import { countOf, nhlMajorAward, nhlStatLine, nhlLineAsPrinted } from './usCareerStatLine';
 import { raiseWithinPotential, ratingRaiseNote } from './careerHeadroom';
 import { applyUsCareerAnnualBenefits } from './usCareerAnnualBenefits';
 import { careerRecoveryRisk } from './usCareerRecovery';
@@ -431,7 +431,7 @@ export function nhlWorkSlate(pos: string, slate: number): number {
    drawn from it, to the season the ledger says his club played that year. */
 function gamesFor(c: NhlCareerState, rng: () => number): { games: number; note: string | null } {
   const risk = careerRecoveryRisk('nhl', c.purchased, (1 - c.archetype.durability) * 0.5 + (100 - c.health) / 250);
-  const full = c.pos === 'G' ? 58 + Math.floor(rng() * 10) : US_ENGINE_SEASON.nhl - 3 + Math.floor(rng() * 4);
+  const full = nhlFullWorkload(c.pos, rng);
   if (rng() < risk) {
     const frac = 0.45 + rng() * 0.35;
     return { games: Math.max(20, Math.round(full * frac)), note: 'Injuries bit into the season.' };
@@ -449,11 +449,14 @@ export function simNhlSeason(
      club in 2019-20. `work` is the part of it his position works through.
 
      THE SEASON IS DRAWN ON THE ENGINE'S OWN LENGTH, exactly as it always was
-     (`fullGames`, `full`), and that draw is what the awards and the rival are
-     judged on, so a short season hands out what the same season played in
-     full would have. `cut` then carries each count to the season his club
-     really played, and that is the line that is saved and shown. In a season
-     of the engine's own length `cut` changes nothing and the two are one. */
+     (`fullGames`, `full`), and that draw is what the awards are judged on, so
+     a short season hands out what the same season played in full would have.
+     `cut` then carries each count to the season his club really played, and
+     that is the line that is saved and shown. In a season of the engine's own
+     length `cut` changes nothing and the two are one. Since Round 1313 the
+     head to head is NOT read off the draw: it reads the two saved lines, his
+     and the rival's, both on this season's length (the rival's All-Star pass
+     still reads his line on the engine's own length, as the awards do). */
   const slate = seasonLength('nhl', c.year, c.team);
   const work = nhlWorkSlate(c.pos, slate);
   const cut = (n: number) => toSlate('nhl', n, work);
@@ -485,33 +488,8 @@ export function simNhlSeason(
     awards: [], teamResult: '', salary: c.salary,
   };
   if (slate !== US_ENGINE_SEASON.nhl) full.slate = slate;
-  if (c.pos === 'G') {
-    full.wins = Math.max(8, Math.round(fullGames * (0.3 + (form - 64) * 0.009) + rng() * 4));
-    full.svpct = Math.min(0.938, Math.max(0.885, Math.round((0.898 + (form - 64) * 0.0011 + rng() * 0.006) * 1000) / 1000));
-  } else {
-    const g = fullGames / US_ENGINE_SEASON.nhl;
-    const mult = c.archetype.scoringMult;
-    // Round 97: NHL_POS_PROFILE carries an offense weight (D is 0.55) that
-    // this line never used, so defencemen were finishing with a median of 20
-    // goals, roughly what a first line winger scores. Assists deliberately
-    // stay high for a defenceman, because that is how they actually produce.
-    const off = (NHL_POS_PROFILE[c.pos] ?? NHL_POS_PROFILE.C).offense;
-    full.goals = Math.min(72, Math.max(1, Math.round((4 + (form - 62) * 1.35) * mult * off * g * iceShare + rng() * 5)));
-    full.assists = Math.min(90, Math.max(2, Math.round((7 + (form - 62) * 1.5) * (c.pos === 'D' ? 1.15 : 1.05 - (mult - 1) * 0.5) * g * iceShare + rng() * 7)));
-    full.points = (full.goals ?? 0) + (full.assists ?? 0);
-  }
-  /* The line that is saved: the same season at the length his club played.
-     Goals and assists are each carried, and the points are their sum, so the
-     saved line always adds up. Rates (the save percentage) do not move. */
-  const line: NhlSeasonLine = work === US_ENGINE_SEASON.nhl ? full : { ...full, games: cut(fullGames) };
-  if (line !== full) {
-    if (full.wins !== undefined) line.wins = cut(full.wins);
-    if (full.goals !== undefined && full.assists !== undefined) {
-      line.goals = cut(full.goals);
-      line.assists = cut(full.assists);
-      line.points = line.goals + line.assists;
-    }
-  }
+  Object.assign(full, nhlStatLineFor({ form, pos: c.pos, scoringMult: c.archetype.scoringMult, games: fullGames, iceShare }, rng));
+  const line = nhlLineOnSlate(full, work);
   // Round 123: computed up here rather than down with the rest of the awards
   // because the Conn Smythe is decided inside the playoff block below and it
   // needs the same number everything else is judged on.
@@ -627,16 +605,13 @@ export function simNhlSeason(
   if (sn) notes.push(sn);
   // Round 104: the rival played his season too, on the same scale as mine,
   // so the head to head is an honest comparison rather than a vibe.
-  // Round 1226: that scale is the season on the engine's own length (`full`),
-  // which is the one his line is drawn on, whatever the year's length was.
-  // His PRINTED line is carried to the season the league really played, the
-  // way mine is, so the two lines on the card are the same season.
+  // Round 1313: on the same LINE as mine. His season is made by the functions
+  // that make mine (nhlRivalSeason), at his own position, carried to this
+  // season's slate, and the head to head reads the two SAVED lines, his and
+  // mine, through one function (nhlHeadToHeadScore). The awards and his
+  // All-Star pass still read the draw on the engine's own length (`full`).
   if (c.rival && !c.rival.retired) {
-    const myScore = c.pos === 'G' ? Math.round((full.wins ?? 0) * 1.6 + Math.max(0, ((full.svpct ?? 0.9) - 0.9) * 900)) : (full.points ?? 0);
-    const rivalNotes = slate === US_ENGINE_SEASON.nhl
-      ? judgeRivalSeason(c.rival, myScore, c.name, 'nhl', rng)
-      : judgeRivalSeason(c.rival, myScore, c.name, 'nhl', rng, undefined, n => toSlate('nhl', n, slate));
-    for (const n of rivalNotes) notes.push(n);
+    for (const n of judgeRivalSeason(c.rival, nhlHeadToHeadScore(c.pos, line), c.name, 'nhl', rng, nhlRivalSeason(c.year, { pos: c.pos, slate }))) notes.push(n);
   }
   /* Round 525: the rivalry beat, rolled right after the rival's own season,
      the same point in the loop the flagship and the NFL career roll their
@@ -651,6 +626,103 @@ export function simNhlSeason(
   else nhlRivalryChoiceTick(c);
   c.seasons.push(line);
   return { line, notes };
+}
+
+/* Round 1313: the regular season's stat block, the healthy workload and the carry to the season's real
+   length, each cut out of simNhlSeason (and gamesFor) into a pure function with not one draw and not one
+   saved byte moved, so the rival's season can be made by the same functions that make the player's. Each
+   reads its input and `rng` and nothing else; nhlStatLineFor returns only the keys that position's block
+   writes, in the order it writes them (the saved key order is part of byte equal, and simNhlSeason assigns
+   them onto `full` where the block stood). A later round that needs one season's line reads these and does
+   not cut the block a second time. */
+
+/** What nhlStatLineFor reads: `scoringMult` is the archetype's (a goalie's line reads none), `games` the
+ *  workload on the engine's own length, `iceShare` 1 for a first choice and less down the lineup. */
+export interface NhlLineInput { form: number; pos: NhlCareerPos; scoringMult: number; games: number; iceShare: number }
+/** The keys of a season line the stat block writes. */
+export type NhlStatLine = Pick<NhlSeasonLine, 'wins' | 'svpct' | 'goals' | 'assists' | 'points'>;
+
+/** One season's stat block on the engine's own length. Draws: a goalie 2, a skater 2. */
+export function nhlStatLineFor(x: NhlLineInput, rng: () => number): NhlStatLine {
+  const form = x.form;
+  const fullGames = x.games;
+  const iceShare = x.iceShare;
+  const full: NhlStatLine = {};
+  if (x.pos === 'G') {
+    full.wins = Math.max(8, Math.round(fullGames * (0.3 + (form - 64) * 0.009) + rng() * 4));
+    full.svpct = Math.min(0.938, Math.max(0.885, Math.round((0.898 + (form - 64) * 0.0011 + rng() * 0.006) * 1000) / 1000));
+  } else {
+    const g = fullGames / US_ENGINE_SEASON.nhl;
+    const mult = x.scoringMult;
+    // Round 97: NHL_POS_PROFILE carries an offense weight (D is 0.55) that
+    // this line never used, so defencemen were finishing with a median of 20
+    // goals, roughly what a first line winger scores. Assists deliberately
+    // stay high for a defenceman, because that is how they actually produce.
+    const off = (NHL_POS_PROFILE[x.pos] ?? NHL_POS_PROFILE.C).offense;
+    full.goals = Math.min(72, Math.max(1, Math.round((4 + (form - 62) * 1.35) * mult * off * g * iceShare + rng() * 5)));
+    full.assists = Math.min(90, Math.max(2, Math.round((7 + (form - 62) * 1.5) * (x.pos === 'D' ? 1.15 : 1.05 - (mult - 1) * 0.5) * g * iceShare + rng() * 7)));
+    full.points = (full.goals ?? 0) + (full.assists ?? 0);
+  }
+  return full;
+}
+
+/** The healthy workload on the engine's own season, as gamesFor draws it: 58 to 67 starts, or all but zero to
+ *  three of the games. Draws: 1. */
+export function nhlFullWorkload(pos: string, rng: () => number): number {
+  return pos === 'G' ? 58 + Math.floor(rng() * 10) : US_ENGINE_SEASON.nhl - 3 + Math.floor(rng() * 4);
+}
+
+/** The season line that is saved, out of the season on the engine's own length and the games his position
+ *  works through that year (nhlWorkSlate). In a season of the engine's own length it is `full` ITSELF, the
+ *  one object the season sim always kept. Draws nothing. */
+export function nhlLineOnSlate(full: NhlSeasonLine, work: number): NhlSeasonLine {
+  const cut = (n: number) => toSlate('nhl', n, work);
+  const fullGames = full.games;
+  /* The line that is saved: the same season at the length his club played.
+     Goals and assists are each carried, and the points are their sum, so the
+     saved line always adds up. Rates (the save percentage) do not move. */
+  const line: NhlSeasonLine = work === US_ENGINE_SEASON.nhl ? full : { ...full, games: cut(fullGames) };
+  if (line !== full) {
+    if (full.wins !== undefined) line.wins = cut(full.wins);
+    if (full.goals !== undefined && full.assists !== undefined) {
+      line.goals = cut(full.goals);
+      line.assists = cut(full.assists);
+      line.points = line.goals + line.assists;
+    }
+  }
+  return line;
+}
+
+/** Round 1313: who had the better year is the season score of exactly the parts a printed NHL line shows, the
+ *  same function for both men (a goalie is read on wins and save percentage, a skater on his points). */
+export function nhlHeadToHeadScore(pos: NhlCareerPos, line: NhlSeasonLine): number {
+  return nhlSeasonScore(pos, nhlLineAsPrinted(line, pos));
+}
+
+/**
+ * Round 1313: the NHL rival's season on the player's own line (the NFL's binding of Round 1227, in hockey's
+ * terms). Two draws of the season's stream (the law, rivalSeasonDraws), everything else from his keyed stream.
+ * His position is his own; a skater's kind (his scoring) is hashed off his name among his position's kinds, a
+ * goalie's line reads none; a healthy workload on the engine's own season, drawn by the player's own function,
+ * at full ice time; his line made by the player's own function and carried to THE PLAYER'S SLATE of that year
+ * (the season sim hands it in); his All-Star pass by the expression that decides the player's, on the full
+ * line; printed by the player's printer and scored by the one head to head function. Total: a position no
+ * table holds falls back to the player's, then to C, the stat block's own fallback.
+ */
+export function nhlRivalSeason(year: number, mine: { pos: NhlCareerPos; slate: number }): RivalSeasonPlay {
+  return (r, form, rng) => {
+    const keyed = rivalSeasonStream('nhl-rival', r, year, rng, rivalSeasonDraws('nhl', r.pos));
+    const pos = (r.pos in NHL_ARCHETYPES ? r.pos : mine.pos in NHL_ARCHETYPES ? mine.pos : 'C') as NhlCareerPos;
+    const scoringMult = pos === 'G' ? 0 : rivalKindOf('nhl-rival-kind', r, NHL_ARCHETYPES[pos]).scoringMult;
+    const games = nhlFullWorkload(pos, keyed);
+    const full: NhlSeasonLine = {
+      year, team: r.team, age: r.age, ovr: r.ovr, games, awards: [], teamResult: '', salary: 0,
+      ...nhlStatLineFor({ form, pos, scoringMult, games, iceShare: 1 }, keyed),
+    };
+    const season = nhlLineOnSlate(full, nhlWorkSlate(pos, mine.slate));
+    const allStar = wonAward(keyed, 'nhl', 'nhlAllStar', pos, nhlSeasonScore(pos, full));
+    return { line: nhlStatLine(season, pos), score: nhlHeadToHeadScore(pos, season), year, allStar };
+  };
 }
 
 export function nhlProgress(c: NhlCareerState, rng: () => number): string[] {

@@ -12,8 +12,8 @@ import { MLB_TEAMS } from '@/data/conquestDataMlb';
 import { seasonSwing, swingNote, playoffDepthOf, clutchSwing, clutchNote } from './careerVariance';
 import { US_ENGINE_SEASON, seasonLength, toSlate, fullSeasonOf, postseasonRounds, postseasonRung, playoffRunGames } from './usSeasonShape';
 import { mlbSeasonScore, wonAward } from './careerAwards';
-import { draftRival, judgeRivalSeason } from './careerRival';
-import type { CareerRival } from './careerRival';
+import { draftRival, judgeRivalSeason, rivalSeasonStream, rivalSeasonDraws, rivalKindOf } from './careerRival';
+import type { CareerRival, RivalSeasonPlay } from './careerRival';
 
 import type { PlayerAppearance } from './soccerCareerAppearance';
 import { getMlbLifeEventsA } from './mlbCareerLifeA';
@@ -43,7 +43,7 @@ import { receiveMlbInboxTexts } from './mlbCareerInbox';
 import type { RivalryEvent } from './careerRivalryEvents';
 import { mlbRivalryTick, mlbRivalryChoiceTick } from './mlbCareerRivalryEvents';
 import type { RivalryChoiceCard } from './careerRivalryChoices';
-import { countOf, mlbCareerStatBullet, mlbMajorAward, type MlbCareerSums } from './usCareerStatLine';
+import { countOf, mlbCareerStatBullet, mlbMajorAward, mlbStatLine, mlbLineAsPrinted, type MlbCareerSums } from './usCareerStatLine';
 import { raiseWithinPotential, ratingRaiseNote } from './careerHeadroom';
 import { applyUsCareerAnnualBenefits } from './usCareerAnnualBenefits';
 import { careerRecoveryRisk } from './usCareerRecovery';
@@ -478,7 +478,7 @@ function gamesFor(c: MlbCareerState, rng: () => number): { games: number; note: 
   // games, not 155. Getting this wrong once had a reliever striking out 490
   // batters in a season, which is roughly four times the real record.
   const isRp = c.pos === 'RP';
-  const full = isSp ? 32 : isRp ? 62 + Math.floor(rng() * 10) : US_ENGINE_SEASON.mlb - 7 + Math.floor(rng() * 8);
+  const full = mlbFullWorkload(c.pos, rng);
   const floorGames = isSp ? 8 : isRp ? 20 : 45;
   const risk = careerRecoveryRisk('mlb', c.purchased, (1 - c.archetype.durability) * 0.55 + (100 - c.health) / 250);
   if (rng() < risk) {
@@ -519,11 +519,14 @@ export function simMlbSeason(
      not play their schedule's length.
 
      THE SEASON IS DRAWN ON THE ENGINE'S OWN LENGTH, exactly as it always was
-     (`fullGames`, `full`), and that draw is what the awards and the rival are
-     judged on, so a short season hands out what the same season played in
-     full would have. `cut` then carries each count to the season his club
-     really played, and that is the line that is saved and shown. In a season
-     of the engine's own length `cut` changes nothing and the two are one. */
+     (`fullGames`, `full`), and that draw is what the awards are judged on, so
+     a short season hands out what the same season played in full would have.
+     `cut` then carries each count to the season his club really played, and
+     that is the line that is saved and shown. In a season of the engine's own
+     length `cut` changes nothing and the two are one. Since Round 1313 the
+     head to head is NOT read off the draw: it reads the two saved lines, his
+     and the rival's, both on this season's length (the rival's All-Star pass
+     still reads his line on the engine's own length, as the awards do). */
   const slate = seasonLength('mlb', c.year, c.team);
   const work = mlbWorkSlate(c.pos, slate);
   const cut = (n: number) => toSlate('mlb', n, work);
@@ -555,62 +558,8 @@ export function simMlbSeason(
   };
   if (slate !== US_ENGINE_SEASON.mlb) full.slate = slate;
   const prof = MLB_POS_PROFILE[c.pos] ?? MLB_POS_PROFILE.LF;
-  if (c.pos === 'SP') {
-    const gs = fullGames;
-    full.era = Math.max(1.85, Math.round((5.6 - (form - 62) * 0.075 + rng() * 0.8) * 100) / 100);
-    full.wins = Math.max(1, Math.round(gs * (0.25 + (form - 62) * 0.009) + rng() * 3));
-    full.lossesP = Math.max(0, Math.round(gs * 0.42 - (full.wins ?? 0) * 0.55 + rng() * 3));
-    full.so = Math.max(40, Math.round(gs * (3.4 + (form - 62) * 0.11) + rng() * 25));
-  } else if (c.pos === 'RP') {
-    // Round 58: relievers throw a quarter of the innings, so their line is
-    // saves, holds and a much lower ERA, with wins near zero.
-    const apps = fullGames; // already an appearance count, see gamesFor
-    full.era = Math.max(1.05, Math.round((4.9 - (form - 62) * 0.085 + rng() * 0.9) * 100) / 100);
-    // Round 97: this used to reach 149 strikeouts in a season, which no
-    // reliever in the one inning era has ever come close to (Josh Hader's
-    // 138 in 2019 is the modern high). A real reliever throws about 60
-    // innings, so the median lands near 70 and only the very best clear 120.
-    full.so = Math.max(20, Math.round(apps * (0.62 + (form - 62) * 0.031) + rng() * 12));
-    full.wins = Math.max(0, Math.round(rng() * 6));
-    full.lossesP = Math.max(0, Math.round(rng() * 5));
-    if (c.archetype.id === 'closer') {
-      full.saves = Math.min(58, Math.max(0, Math.round((14 + (form - 62) * 1.15 + rng() * 8) * (fullGames / 62))));
-      full.holds = Math.round(rng() * 4);
-    } else {
-      full.saves = Math.round(rng() * 6);
-      // Round 98: capped at 41, Joel Peralta's real single season record.
-      full.holds = Math.min(41, Math.max(0, Math.round((10 + (form - 62) * 0.7 + rng() * 8) * (fullGames / 62))));
-    }
-  } else {
-    const g = fullGames / 160;
-    // Round 97: the median season came out at .295, which in real baseball
-    // is top ten in the league. Shifted down so an average year looks
-    // average and .300 means something again.
-    full.avg = Math.min(0.365, Math.max(0.195, Math.round((0.216 + (form - 62) * 0.0028 * prof.contact + rng() * 0.022) * 1000) / 1000));
-    // Round 97: power was running about ten home runs hot at every position
-    // (the median designated hitter was a 35 homer man, which is an all star
-    // season, not a normal one).
-    full.hr = Math.min(58, Math.max(0, Math.round((4 + (form - 62) * 0.85) * prof.power * g + rng() * 6 * prof.power)));
-    // Round 97: real hitters drive in roughly two runs per home run, not
-    // two and a half. Judge hit 62 with 131 RBI, Ohtani 44 with 95. The old
-    // ratio made every designated hitter a 116 RBI man.
-    full.rbi = Math.max(10, Math.round(((full.hr ?? 0) * 1.9 + 28 + rng() * 20) * g));
-    const fast = c.archetype.id === 'burner' || c.archetype.id === 'leadoff' || c.archetype.id === 'sparkplug';
-    full.sb = Math.max(0, Math.round((fast ? 24 + rng() * 30 : rng() * 10) * prof.speed * g));
-    full.doubles = Math.max(0, Math.round((18 + (form - 62) * 0.55 + rng() * 12) * g));
-    full.obp = Math.round(((full.avg ?? 0.24) + 0.055 + rng() * 0.05) * 1000) / 1000;
-  }
-  /* The line that is saved: the same season at the length his club played.
-     Every count is carried the same way, so a starter's record stays inside
-     his starts and a hitter's runs batted in stay in step with his home runs.
-     Rates (the average, the on base, the ERA) do not move. */
-  const line: MlbSeasonLine = work === US_ENGINE_SEASON.mlb ? full : { ...full };
-  if (line !== full) {
-    for (const k of MLB_LINE_COUNTS) {
-      const v = full[k];
-      if (v !== undefined) line[k] = cut(v);
-    }
-  }
+  Object.assign(full, mlbStatLineFor({ form, pos: c.pos, kind: c.archetype.id, games: fullGames }, rng));
+  const line = mlbLineOnSlate(full, work);
 
   const strength = teamQuality + (c.ovr - 76) * 0.35;
   const playoffOdds = Math.max(0.05, Math.min(0.85, (strength - 68) / 30));
@@ -732,16 +681,13 @@ export function simMlbSeason(
   if (sn) notes.push(sn);
   // Round 104: the rival played his season too, on the same scale as mine,
   // so the head to head is an honest comparison rather than a vibe.
-  // Round 1226: that scale is the season on the engine's own length (`full`),
-  // which is the one his line is drawn on, whatever the year's length was.
-  // His PRINTED line is carried to the season the league really played, the
-  // way mine is, so the two lines on the card are the same season.
+  // Round 1313: on the same LINE as mine. His season is made by the functions
+  // that make mine (mlbRivalSeason), at his own position, carried to this
+  // season's slate, and the head to head reads the two SAVED lines, his and
+  // mine, through one function (mlbHeadToHeadScore). The awards and his
+  // All-Star pass still read the draw on the engine's own length (`full`).
   if (c.rival && !c.rival.retired) {
-    const myScore = (c.pos === 'SP' || c.pos === 'RP') ? Math.round((full.so ?? 0) * 0.12 + Math.max(0, (5.2 - (full.era ?? 5)) * 8)) : Math.round((full.hr ?? 0) * 1.6 + ((full.avg ?? 0.24) - 0.24) * 300);
-    const rivalNotes = slate === US_ENGINE_SEASON.mlb
-      ? judgeRivalSeason(c.rival, myScore, c.name, 'mlb', rng)
-      : judgeRivalSeason(c.rival, myScore, c.name, 'mlb', rng, undefined, n => toSlate('mlb', n, slate));
-    for (const n of rivalNotes) notes.push(n);
+    for (const n of judgeRivalSeason(c.rival, mlbHeadToHeadScore(c.pos, line), c.name, 'mlb', rng, mlbRivalSeason(c.year, { pos: c.pos, kind: c.archetype.id, slate }))) notes.push(n);
   }
   /* Round 525: the rivalry beat, rolled right after the rival's own season,
      the same point in the loop the flagship and the NFL career roll their
@@ -756,6 +702,134 @@ export function simMlbSeason(
   else mlbRivalryChoiceTick(c);
   c.seasons.push(line);
   return { line, notes };
+}
+
+/* Round 1313: the regular season's stat block, the healthy workload and the carry to the season's real
+   length, each cut out of simMlbSeason (and gamesFor) into a pure function with not one draw and not one
+   saved byte moved, so the rival's season can be made by the same functions that make the player's. Each
+   reads its input and `rng` and nothing else; mlbStatLineFor returns only the keys that position's block
+   writes, in the order it writes them (the saved key order is part of byte equal, and simMlbSeason assigns
+   them onto `full` where the block stood). A later round that needs one season's line reads these and does
+   not cut the block a second time. */
+
+/** What mlbStatLineFor reads: `kind` is the archetype id (only 'closer' and the three fast hitters change a
+ *  line), `games` the workload on the engine's own length. */
+export interface MlbLineInput { form: number; pos: MlbCareerPos; kind: string; games: number }
+/** The keys of a season line the stat block writes. */
+export type MlbStatLine = Pick<MlbSeasonLine, 'era' | 'wins' | 'lossesP' | 'so' | 'saves' | 'holds' | 'avg' | 'hr' | 'rbi' | 'sb' | 'doubles' | 'obp'>;
+
+/** One season's stat block on the engine's own length. Draws: a starter 4, a reliever 6, a hitter 6. */
+export function mlbStatLineFor(x: MlbLineInput, rng: () => number): MlbStatLine {
+  const form = x.form;
+  const fullGames = x.games;
+  const prof = MLB_POS_PROFILE[x.pos] ?? MLB_POS_PROFILE.LF;
+  const full: MlbStatLine = {};
+  if (x.pos === 'SP') {
+    const gs = fullGames;
+    full.era = Math.max(1.85, Math.round((5.6 - (form - 62) * 0.075 + rng() * 0.8) * 100) / 100);
+    full.wins = Math.max(1, Math.round(gs * (0.25 + (form - 62) * 0.009) + rng() * 3));
+    full.lossesP = Math.max(0, Math.round(gs * 0.42 - (full.wins ?? 0) * 0.55 + rng() * 3));
+    full.so = Math.max(40, Math.round(gs * (3.4 + (form - 62) * 0.11) + rng() * 25));
+  } else if (x.pos === 'RP') {
+    // Round 58: relievers throw a quarter of the innings, so their line is
+    // saves, holds and a much lower ERA, with wins near zero.
+    const apps = fullGames; // already an appearance count, see gamesFor
+    full.era = Math.max(1.05, Math.round((4.9 - (form - 62) * 0.085 + rng() * 0.9) * 100) / 100);
+    // Round 97: this used to reach 149 strikeouts in a season, far past a
+    // normal reliever's year (for scale, Josh Hader struck out 143 in 2018
+    // and Brad Lidge 157 in 2004). A real reliever throws about 60 innings,
+    // so the median lands near 70 and only the very best clear 120.
+    full.so = Math.max(20, Math.round(apps * (0.62 + (form - 62) * 0.031) + rng() * 12));
+    full.wins = Math.max(0, Math.round(rng() * 6));
+    full.lossesP = Math.max(0, Math.round(rng() * 5));
+    if (x.kind === 'closer') {
+      full.saves = Math.min(58, Math.max(0, Math.round((14 + (form - 62) * 1.15 + rng() * 8) * (fullGames / 62))));
+      full.holds = Math.round(rng() * 4);
+    } else {
+      full.saves = Math.round(rng() * 6);
+      // Round 98: capped at 41, Joel Peralta's real single season record.
+      full.holds = Math.min(41, Math.max(0, Math.round((10 + (form - 62) * 0.7 + rng() * 8) * (fullGames / 62))));
+    }
+  } else {
+    const g = fullGames / 160;
+    // Round 97: the median season came out at .295, which in real baseball
+    // is top ten in the league. Shifted down so an average year looks
+    // average and .300 means something again.
+    full.avg = Math.min(0.365, Math.max(0.195, Math.round((0.216 + (form - 62) * 0.0028 * prof.contact + rng() * 0.022) * 1000) / 1000));
+    // Round 97: power was running about ten home runs hot at every position
+    // (the median designated hitter was a 35 homer man, which is an all star
+    // season, not a normal one).
+    full.hr = Math.min(58, Math.max(0, Math.round((4 + (form - 62) * 0.85) * prof.power * g + rng() * 6 * prof.power)));
+    // Round 97: real hitters drive in roughly two runs per home run, not
+    // two and a half. Judge hit 62 with 131 RBI, Ohtani 44 with 95. The old
+    // ratio made every designated hitter a 116 RBI man.
+    full.rbi = Math.max(10, Math.round(((full.hr ?? 0) * 1.9 + 28 + rng() * 20) * g));
+    const fast = x.kind === 'burner' || x.kind === 'leadoff' || x.kind === 'sparkplug';
+    full.sb = Math.max(0, Math.round((fast ? 24 + rng() * 30 : rng() * 10) * prof.speed * g));
+    full.doubles = Math.max(0, Math.round((18 + (form - 62) * 0.55 + rng() * 12) * g));
+    full.obp = Math.round(((full.avg ?? 0.24) + 0.055 + rng() * 0.05) * 1000) / 1000;
+  }
+  return full;
+}
+
+/** The healthy workload on the engine's own season, as gamesFor draws it: 32 starts, 62 to 71 appearances,
+ *  or all but zero to seven of the games. Draws: a starter none, a reliever 1, a hitter 1. */
+export function mlbFullWorkload(pos: string, rng: () => number): number {
+  const isSp = pos === 'SP';
+  const isRp = pos === 'RP';
+  return isSp ? 32 : isRp ? 62 + Math.floor(rng() * 10) : US_ENGINE_SEASON.mlb - 7 + Math.floor(rng() * 8);
+}
+
+/** The season line that is saved, out of the season on the engine's own length and the games his position
+ *  works through that year (mlbWorkSlate). In a season of the engine's own length it is `full` ITSELF, the
+ *  one object the season sim always kept. Draws nothing. */
+export function mlbLineOnSlate(full: MlbSeasonLine, work: number): MlbSeasonLine {
+  const cut = (n: number) => toSlate('mlb', n, work);
+  /* The line that is saved: the same season at the length his club played.
+     Every count is carried the same way, so a starter's record stays inside
+     his starts and a hitter's runs batted in stay in step with his home runs.
+     Rates (the average, the on base, the ERA) do not move. */
+  const line: MlbSeasonLine = work === US_ENGINE_SEASON.mlb ? full : { ...full };
+  if (line !== full) {
+    for (const k of MLB_LINE_COUNTS) {
+      const v = full[k];
+      if (v !== undefined) line[k] = cut(v);
+    }
+  }
+  return line;
+}
+
+/** Round 1313: who had the better year is the season score of exactly the parts a printed MLB line shows, the
+ *  same function for both men (a starter's losses and a hitter's steals are not printed, so they are not read). */
+export function mlbHeadToHeadScore(pos: MlbCareerPos, line: MlbSeasonLine): number {
+  return mlbSeasonScore(pos, mlbLineAsPrinted(line, pos));
+}
+
+/**
+ * Round 1313: the MLB rival's season on the player's own line (the NFL's binding of Round 1227, in baseball's
+ * terms). Two draws of the season's stream (the law, rivalSeasonDraws), everything else from his keyed stream.
+ * His position is his own; his kind is hashed off his name among his position's kinds where the line reads one,
+ * EXCEPT a reliever's bullpen job, which is the player's (closer against closer); a healthy workload on the
+ * engine's own season, drawn by the player's own function; his line made by the player's own function and
+ * carried to THE PLAYER'S SLATE of that year (one season, one length: the season sim hands it in); his All-Star
+ * pass by the expression that decides the player's, on the full line; printed by the player's printer and
+ * scored by the one head to head function. Total: a position no table holds falls back to the player's, then
+ * to LF, the stat block's own fallback, so a hand edited save still plays its season.
+ */
+export function mlbRivalSeason(year: number, mine: { pos: MlbCareerPos; kind: string; slate: number }): RivalSeasonPlay {
+  return (r, form, rng) => {
+    const keyed = rivalSeasonStream('mlb-rival', r, year, rng, rivalSeasonDraws('mlb', r.pos));
+    const pos = (r.pos in MLB_ARCHETYPES ? r.pos : mine.pos in MLB_ARCHETYPES ? mine.pos : 'LF') as MlbCareerPos;
+    const kind = pos === 'RP' ? mine.kind : pos === 'SP' ? '' : rivalKindOf('mlb-rival-kind', r, MLB_ARCHETYPES[pos]).id;
+    const games = mlbFullWorkload(pos, keyed);
+    const full: MlbSeasonLine = {
+      year, team: r.team, age: r.age, ovr: r.ovr, games, awards: [], teamResult: '', salary: 0,
+      ...mlbStatLineFor({ form, pos, kind, games }, keyed),
+    };
+    const season = mlbLineOnSlate(full, mlbWorkSlate(pos, mine.slate));
+    const allStar = wonAward(keyed, 'mlb', 'mlbAllStar', pos, mlbSeasonScore(pos, full));
+    return { line: mlbStatLine(season, pos), score: mlbHeadToHeadScore(pos, season), year, allStar };
+  };
 }
 
 export function mlbProgress(c: MlbCareerState, rng: () => number): string[] {

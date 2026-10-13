@@ -536,6 +536,7 @@ const LineupBuilder = () => {
         )}
 
         <GameSeoContent
+          reportControl={<ReportQuestion gameType="build-your-xi" gameContext={{ team: currentTeam, formation }} />}
           pageHasOwnH1
           title="Build Your XI | DoUKnowBall"
           description="Build your ultimate starting eleven from players who match specific criteria. Test your football knowledge across positions, teams and eras."
@@ -560,9 +561,7 @@ const LineupBuilder = () => {
 
         <AdBanner slot="7540487748" format="horizontal" className="mt-8" />
 
-        <div className="flex justify-center mt-6">
-          <ReportQuestion gameType="build-your-xi" gameContext={{ team: currentTeam, formation }} />
-        </div>
+
         <GameNav />
 
         <LineupHowToPlay open={showRules} onOpenChange={setShowRules} />

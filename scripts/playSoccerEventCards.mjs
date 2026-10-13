@@ -3,7 +3,7 @@
  *
  * Two saves, doctored from a page where the app does not run (robots.txt on the
  * same origin), then the game is opened:
- *   cards  written by the BASE engine (8fea14e2) with cards 1, 7 and 18 on
+ *   cards  written by the BASE engine (main, c9c77eba) with cards 1, 7 and 18 on
  *          screen, the way an older save holds them; each card's title must be
  *          on screen before the first tap, each is answered by its first choice.
  *   paper  written by this engine, in the newspaper phase, holding a story
@@ -31,7 +31,7 @@ import * as esbuild from 'esbuild';
 import pw from './lib/playwrightLoader.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const BASE_SHA = '8fea14e216fb550b4676ac29f06867234594df21';
+const BASE_SHA = 'c9c77ebab727b9bd624459388e33b6579538e4ca';
 const SITE = (process.env.BASE || 'http://localhost:4173').replace(/\/$/, '');
 const OUT = path.resolve(process.env.RC_OUT || path.join(ROOT, '.tmp-fx/event-cards'));
 fs.mkdirSync(OUT, { recursive: true });

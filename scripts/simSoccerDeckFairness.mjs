@@ -96,7 +96,7 @@ import { inverseDeckFair, DECK_FAIR_ADDITIONS, DECK_FAIR_BASE_SHA256 } from './l
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 /* The tree this round was cut from. Section 7 bundles it from git. */
-const BASE = '8fea14e216fb550b4676ac29f06867234594df21';
+const BASE = 'c9c77ebab727b9bd624459388e33b6579538e4ca';
 const ENGINE = 'src/lib/soccerCareerEngine.ts';
 const CONTROL = process.env.SIM_SOCCER_DECK_FAIRNESS_CONTROL || '';
 const SEED_OFFSET = Number(process.env.SEED_OFFSET || 0) * 100000;

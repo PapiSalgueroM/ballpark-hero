@@ -145,6 +145,7 @@ const MlbHigherLower = () => {
         )}
 
         <GameSeoContent
+          reportControl={<ReportQuestion gameType="mlb-higher-lower" gameContext={{ mode }} />}
           pageHasOwnH1
           title="MLB Higher or Lower | DoUKnowBall"
           description="Two baseball legends, side by side. Which one hit more career home runs? Every 399+ HR career that finished by 2019, from Babe Ruth to David Ortiz."
@@ -164,9 +165,7 @@ const MlbHigherLower = () => {
         />
 
         <AdBanner slot="7540487748" format="horizontal" className="mt-8" />
-        <div className="flex justify-center mt-6">
-          <ReportQuestion gameType="mlb-higher-lower" gameContext={{ mode }} />
-        </div>
+
         <GameNav />
       </GameShell>
     </>

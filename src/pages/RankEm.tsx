@@ -440,6 +440,7 @@ const RankEm = () => {
         )}
 
         <GameSeoContent
+          reportControl={<ReportQuestion gameType="rank-em" gameContext={{ round: round.id }} />}
           pageHasOwnH1
           title="Rank 'Em | DoUKnowBall"
           description="A stat is named and you get five players near the top of it. Put them in the exact order, most to fewest. Every ranking is real career totals from the database, no opinions, one right answer."
@@ -458,9 +459,7 @@ const RankEm = () => {
         />
 
         <AdBanner slot="7540487748" format="horizontal" className="mt-8" />
-        <div className="flex justify-center mt-6">
-          <ReportQuestion gameType="rank-em" gameContext={{ round: round.id }} />
-        </div>
+
         <GameNav />
       </GameShell>
     </>

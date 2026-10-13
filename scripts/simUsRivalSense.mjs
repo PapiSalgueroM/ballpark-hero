@@ -57,12 +57,42 @@
               card or no card: no judged season of the fleet at QB, RB, TE or K has both men on the first team
               (the count the table already printed, judged since the review).
         N.O   the committed saves built by the code before the round (src/test/fixtures/usRivalOldSaves.json).
+   M.U, H.U  (Round 1313) the MLB and NHL hooks, mlbRivalSeason and nhlRivalSeason, on hand built rivals over
+        every position (about 400 a sport), judged wherever the tree holds them:
+        U1  exactly the two draws of the season's stream the law gives (controls drawsmlb, drawsnhl).
+        U2  his season is the player's own line function on his keyed stream (rebuilt here from the tag, his name,
+            the year and the two draws), on the healthy workload, carried to every slate of the ledgers (162, 161,
+            163, 60, 58; 82, 84, 48, 56, 68 to 71), printed by the player's printer, scored off the printed text by
+            the season score TYPED here, with wonAward's answer on the full line (oldscalemlb, oldscalenhl,
+            offshapemlb, offshapenhl, wrongposmlb, wrongposnhl, workloadmlb, workloadnhl).
+        U3  the same inputs give the same season, the rival is left untouched (impuremlb, impurenhl), and a rival
+            and a player at a position no table holds still play a season (nofallbackmlb, nofallbacknhl).
+        U4  his kind does not move with his rating or age; a reliever's rival has the player's bullpen job both
+            ways: a closer's rival never prints more than 4 holds, a setup man's never more than 6 saves (kindjob).
+        U5  the All-Star table names more than one man at every position (oneslotmlb, oneslotnhl).
+        U7  no count below zero and no printed number below zero over forms 40 to 99, the workloads a season
+            hands the line function and three streams (nofloormlb, nofloornhl).
+        U6  the call site, on the real simMlbSeason and simNhlSeason in E8's forced cells and in 1990: the whole
+            rival on the save comes back byte for byte from the TRUE facts (siteslatemlb, siteslatenhl,
+            sitekindmlb). It also prints the measuring swap of open question 1 (never judged).
+   M.F, H.F  (Round 1313, from the switch) the fleet, as N.F for the NFL: F1 every rival line in the player's own
+        shape (offshape, wrongpos); F2 both lines read back off their printed text and scored by the season score
+        TYPED here (verdictswap, oldscale, fullscoremlb); F3 the race, every cell (the sport pooled and each
+        position) held at its own typed mean within its own width of three errors over careers, RIVAL_1313
+        (verdictswap, oldscalemlb, oldscalenhl); F5 every All-Star card dealt says what the two seasons support,
+        no own card and no coin dealt (rostergate, owndealt, lastyearmlb, lastyearnhl, soldascoin), and the
+        floors F5_FLOOR_1313 (onlyhimshut); O the committed saves of usRivalOldSavesB.json (owndead,
+        retiredlinemlb, retiredlinenhl, oldtallymlb, oldtallynhl).
+   --record-old-saves-b  (Round 1313, with RIVAL_PROVE=<the round's base>) writes src/test/fixtures/
+        usRivalOldSavesB.json from MLB and NHL saves built by that commit's code.
    P1   Under RIVAL_PROVE=<commit>, with RIVAL_MOVED and RIVAL_CARDS naming the sports the step moved: the same
         fleets on both trees. In all four sports the player's season lines and counters, the seasons a beat is
         dealt in and every note that is not the rival's own are byte equal. A sport not named in RIVAL_MOVED: the
         rival's trail and every note too. A sport named: the trail differs. B is the table on the tree before.
    L    The NBA's cards word for word (the lift moved its beat onto rosterBeat).
-   P2   The same proof with every card answered, through the truth digest's own driver.
+   P2   The same proof with every card answered, through the truth digest's own driver. It also prints, never
+        judged, the balance on both trees with every card answered (mean seasons, the honours a career, final
+        morale and fanbase, my share of the head to head years): the brief's P2 row, added by the fix pass.
 
    WHAT WAS MEASURED (2026-10-10, five seeds of 1,500 careers a sport, GitHub runners)
    Before, on the base 980654fa (runner r1227-s0). My share of the head to head years:
@@ -73,9 +103,26 @@
        it could be read the verdict disagreed with the printed lines in 1.9 (QB), 2.3 (RB), 4.9 (WR), 8.7 (TE) and
        0.4 (LB) percent of judged years. Near ties 14.8, 9.3, 13.1, 10.3, 0.4, 0.0, 0.8, 13.5 percent. Careers whose
        rival retired behind me: 32.2, 0.0, 15.1, 4.3, 0.0, 0.0, 0.0, 0.2 percent.
-     MLB 41.55: SP 9.4, RP 8.3, C 26.5, 1B 60.6, 2B 29.0, 3B 56.7, SS 44.0, LF 53.8, CF 42.8, RF 56.5, DH 69.7; every
-       rival line off shape and unread (a pitcher's rival prints a batting line, a hitter's has no RBI).
-     NHL 58.03: C 64.3, LW 59.5, RW 64.2, D 39.4, G 62.7; every line off shape, a goalie's unread.
+     MLB and the NHL were measured again by Round 1313 on its own base (ecbdab63: the tree of b6eb78e7, with the
+     throwback arms y2004 and y2006 added to the fleet; runner r1313-s0a, 2026-10-12). They replace 980654fa's.
+     MLB 41.20 (by seed 40.5, 42.2, 40.4, 41.6, 41.3): SP 9.5, RP 8.3, C 25.4, 1B 61.7, 2B 29.0, 3B 56.0, SS 43.0,
+       LF 53.4, CF 42.2, RF 56.0, DH 68.9; as a healthy starter 14.0, 8.6, 39.4, 80.9, 41.9, 75.2, 58.4, 71.4, 59.0,
+       76.4, 85.5. Every rival line off shape and unread (a pitcher's rival prints a batting line, a hitter's has
+       no RBI). By job: starter 53.9, backup 21.9, hurt 21.3. By age: 33.6, 35.4, 38.5, 46.4, 54.9. By season
+       length: 162 games 41.1 (113,787 judged years), 161 games 39.4, 163 games 41.0, 60 games 50.8 (1,418), 58
+       games 61.9 (97). A reliever by his own job: closer 5.9, setup 7.9, sidearm 11.2. Near ties 2.7 (RP) to 12.1
+       (SS) percent. Careers whose rival retired behind me: SP 0.9, RP 0.1, C 9.1, 1B 67.9, 2B 14.7, 3B 56.9, SS
+       35.9, LF 54.0, CF 33.4, RF 58.7, DH 80.0. Cards over the run: the tally beats, losing 2,817 and winning
+       1,188; the own roster cards, Morale +5 197 and Morale -5 119. The error of the pooled share: 0.33 points.
+     NHL 58.03 (by seed 57.4, 57.4, 58.2, 59.3, 57.8): C 64.3, LW 59.5, RW 64.2, D 39.4, G 62.7; as a healthy starter
+       86.5, 85.6, 87.4, 55.1, 84.9 (the same to the tenth as 980654fa's). Every line off shape, a goalie's unread;
+       a skater's built in line can be read, and the verdict disagrees with the two printed lines in 0.1 (C, RW) to
+       1.1 (D) percent of judged years (my side is scored on the engine's own length). By job: starter 79.8,
+       backup 11.3, hurt 24.9. By age: 48.0, 63.7, 65.3, 68.9, 55.8. By season length: 84 games 57.5 (70,045), 82
+       games 57.0 (57,908), 68 to 71 games 64.9 to 70.2, 56 games 71.2 (3,750), 48 games 61.0 (3,750). Printed dead
+       heats: C 443, LW 435, RW 400, D 705 of about 27,800 judged years each. Careers whose rival retired behind
+       me: 72.1, 65.3, 73.3, 30.1, 70.8. Cards: the tally beats, losing 2,166 and winning 2,595; the own roster
+       cards, Morale +5 233 and Morale -5 174. The error of the pooled share: 0.29 points.
    After the NFL bind (96c3f64d, runner r1227-c1): 0 of 107,618 rival lines off shape, 0 unread, 0 judged years
      where the verdict disagrees. My share 38.94 (by seed 38.7, 40.0, 39.0, 38.1, 38.9): QB 42.9, RB 25.1, WR 35.6,
      TE 37.5, LB 34.3, CB 30.6, EDGE 38.0, K 63.7. The two arms came together (QB 43.6 modern, 42.1 in 2005
@@ -86,7 +133,30 @@
      NOTHING WAS TUNED: a running back's 25 percent and no badge at all, and a kicker's 64 percent, are what one
      line for both men leaves once the bench years only the player has and the one aging curve every rival shares
      are in (a back falls off at 28, a kicker at 39, a rival at 31). Those are the lead's levers, for all four
-     sports at once. */
+     sports at once.
+   After the MLB and NHL bind (Round 1313, 84dbe448, runner r1313-s5d1, 2026-10-12): 0 rival lines off shape, 0
+     unread, 0 judged years where the verdict disagrees, in both sports.
+     MLB 42.73 (by seed 41.9, 43.9, 42.3, 42.8, 42.8): SP 36.5, RP 61.0, C 34.1, 1B 42.8, 2B 38.5, 3B 41.5, SS 42.1,
+       LF 42.7, CF 40.9, RF 42.4, DH 47.5; as a healthy starter 67.3, 66.1, 60.8, 66.5, 63.3, 66.2, 65.1, 65.6,
+       65.8, 68.3, 69.3. The arms came together (SP 35.4 now, 37.6 in 2004 careers). By job: starter 65.9, backup
+       6.8, hurt 11.5. By age: 30.5, 38.2, 42.8, 51.6, 54.6. By season length: 162 games 42.7, 161 games 39.4, 163
+       games 41.9, 60 games 54.1 (1,418), 58 games 61.9 (97). A reliever by his own job: closer 61.8, setup 55.9,
+       sidearm 65.3. Near ties 11.1 (RF) to 17.6 (RP) percent; printed dead heats SP 53 and RP 13 of about 10,900,
+       a hitter 0 to 4. Careers whose rival retired behind me: SP 28.3, RP 69.2, C 21.3, 1B 37.1, 2B 30.6, 3B
+       36.2, SS 36.6, LF 36.3, CF 35.9, RF 38.7, DH 45.6. Cards: the tally beats, losing 2,875 and winning 1,172;
+       the roster beat, both 16, only you 180, only him 121. The error of the pooled share: 0.28 points.
+     NHL 43.45 (by seed 43.3, 42.7, 43.0, 44.6, 43.7): C 42.3, LW 39.1, RW 41.5, D 44.4, G 49.9; as a healthy
+       starter 58.2, 57.3, 57.9, 60.4, 64.4. By job: starter 59.7, backup 9.4, hurt 13.5. By age: 37.5, 45.2, 44.0,
+       50.6, 46.8. By season length: 84 games 43.3, 82 games 42.6, 68 to 71 games 46.5 to 50.4, 56 games 55.0
+       (3,750), 48 games 44.3 (3,750). A shutdown defenseman against each kind of rival 33.1 to 42.8 (the other
+       kinds 35.5 to 56.1): a race, not a formality. Printed dead heats (now "69 P" against "69 P", the rival's
+       year as it always was): C 503, LW 506, RW 514, D 679, G 179 of about 27,800 judged years each. Careers
+       whose rival retired behind me: 35.5, 28.1, 33.7, 38.5, 49.1. Cards: the tally beats, losing 3,169 and
+       winning 1,506; the roster beat, both 21, only you 211, only him 130. The error of the pooled share: 0.26.
+     The measuring swap of open question 1 (the U6 cells, the same season on both arms): the verdict of the two
+     printed lines parts from the same two lines read at a full season's pace in 35 of 1,200 MLB seasons of another
+     length (SP 2, RP 0, C 7, a hitter 1 to 6 of about 110 each) and 3 of 1,200 NHL ones (a goalie's 3 of 240; a
+     skater's points scale both sides alike, so never). NOTHING WAS TUNED here either. */
 
 import { build } from 'esbuild';
 import { execSync } from 'node:child_process';
@@ -113,7 +183,7 @@ for (const n of [...MOVED, ...CARDS]) if (!ALL.includes(n)) { console.error(`unk
 /* The sports whose rival is bound to the player's own line ON THIS TREE. A bound sport is judged (U, F1, F2);
    one that is not is measured and printed (the BEFORE table). The NBA has been bound since Round 1112 and is
    judged by scripts/simNbaAwardsSense.mjs section R; here it rides the fleet for P1 and L. */
-const BOUND = ['nfl'];
+const BOUND = ['nfl', 'mlb', 'nhl'];
 
 /* NEGATIVE CONTROLS, US_RIVAL_CONTROL=<name>. Each swaps one line of source in memory (an esbuild plugin, never
    a file), refuses to run when the anchor is not there exactly once or the swap changed nothing (exit 2, "Refusing
@@ -124,7 +194,7 @@ const CONTROLS = {
   tickdraws: { file: 'src/lib/mlbCareerRivalryEvents.ts', prove: true, needs: 'P1,P2',
     find: '  const rolled = rollRivalryEvent(p, c.rival, lastId, MLB_RIVALRY_EVENTS, rng);', put: '  rng(); const rolled = rollRivalryEvent(p, c.rival, lastId, MLB_RIVALRY_EVENTS, rng);' },
   /* N.F2: the one comparison turned round (the tally and the note go to the wrong man). */
-  verdictswap: { file: 'src/lib/careerRival.ts', needs: 'N.F2', find: '  return myScore > hisScore;', put: '  return myScore < hisScore;' },
+  verdictswap: { file: 'src/lib/careerRival.ts', needs: 'N.F2,M.F2,H.F2,M.F3,H.F3', find: '  return myScore > hisScore;', put: '  return myScore < hisScore;' },
   /* N.U2, N.F2: the rival's score put back on the formula the built in line used (yards over 60, scores doubled). */
   oldscalenfl: { file: 'src/lib/nflMyCareer.ts', needs: 'N.U2,N.F2', find: '      score: nflHeadToHeadScore(pos, season),',
     put: '      score: ((season.passYds ?? 0) + (season.rushYds ?? 0) + (season.recYds ?? 0) + (season.tackles ?? 0) * 9 + (season.fgMade ?? 0) * 30) / 60 + ((season.passTd ?? 0) + (season.rushTd ?? 0) + (season.recTd ?? 0) + (season.sacks ?? 0) + (season.picks ?? 0)) * 2,' },
@@ -155,15 +225,18 @@ const CONTROLS = {
   workload17: { file: 'src/lib/nflMyCareer.ts', needs: 'N.U2', find: '    const len = nflSeasonLength(year);', put: '    const len = NFL_RATE_GAMES;' },
   /* N.F5: the "only you" card dealt on the two ratings (both 80 or better) instead of the two seasons, as the
      beat was while it flipped a coin. */
-  rostergate: { file: 'src/lib/careerRivalryEvents.ts', needs: 'N.F5', find: '        when: (s, r) => { const f = facts(s, r); return !!f && f.mine && !f.his; },',
+  rostergate: { file: 'src/lib/careerFactBeats.ts', needs: 'N.F5,M.F5,H.F5', find: '        when: (s, r) => { const f = facts(s, r); return !!f && f.mine && !f.his; },',
     put: '        when: (s, r) => (s as { ovr?: number }).ovr! >= 80 && (r as { ovr?: number }).ovr! >= 80,' },
   /* N.F5: the two own cards supported whatever the rival's season says (the "dropped off a year after" card is
      dealt again, in a year neither made the first team). */
-  owndealt: { file: 'src/lib/careerRivalryEvents.ts', needs: 'N.F5', find: '    ? ownRosterCards<P, R>(spec.own).map(k => ({ ...k, when: (s: P, r: R) => facts(s, r) === null && k.when(s, r) }))',
+  owndealt: { file: 'src/lib/careerFactBeats.ts', needs: 'N.F5,M.F5,H.F5', find: '    ? ownRosterCards<P, R>(spec.own).map(k => ({ ...k, when: (s: P, r: R) => facts(s, r) === null && k.when(s, r) }))',
     put: '    ? ownRosterCards<P, R>(spec.own)' },
   /* N.O: the two own cards taken out (a save sitting on a card the release before dealt, "Morale +5", is paid
      nothing). */
-  owndead: { file: 'src/lib/careerRivalryEvents.ts', needs: 'N.O', find: '    ? ownRosterCards<P, R>(spec.own).map(k => ({ ...k, when: (s: P, r: R) => facts(s, r) === null && k.when(s, r) }))',
+  /* N.F5, M.F5, H.F5, the floors (Round 1313, 5d): the "only him" card of the shared roster beat never dealt (the
+     exact half stays green: nothing dealt is wrong; the floor is what sees it). Full size only. */
+  onlyhimshut: { file: 'src/lib/careerFactBeats.ts', needs: 'N.F5,M.F5,H.F5', find: '        when: (s, r) => { const f = facts(s, r); return !!f && !f.mine && f.his; },', put: '        when: () => false,' },
+  owndead: { file: 'src/lib/careerFactBeats.ts', needs: 'N.O,M.O,H.O', find: '    ? ownRosterCards<P, R>(spec.own).map(k => ({ ...k, when: (s: P, r: R) => facts(s, r) === null && k.when(s, r) }))',
     put: '    ? ownRosterCards<P, R>(spec.own).slice(0, 0)' },
   /* N.F5: the NFL tick rolls on the bare save, so the beat reads the season BEFORE the one just played (the two
      seasons are then two different years, the fact cards shut, and an own card is dealt). */
@@ -172,12 +245,88 @@ const CONTROLS = {
      after his stat line moves). */
   cutdraw: { file: 'src/lib/nflMyCareer.ts', prove: true, needs: 'P1,P2',
     find: '  const g = x.games / NFL_RATE_GAMES;', put: '  rng(); const g = x.games / NFL_RATE_GAMES;' },
+  /* P1, P2 (Round 1313): the MLB line function takes one draw more than the block it was cut from (every draw of
+     the player's after his stat line moves, in every MLB season). */
+  cutdrawmlb: { file: 'src/lib/mlbMyCareer.ts', prove: true, needs: 'P1,P2',
+    find: '  const prof = MLB_POS_PROFILE[x.pos] ?? MLB_POS_PROFILE.LF;', put: '  rng(); const prof = MLB_POS_PROFILE[x.pos] ?? MLB_POS_PROFILE.LF;' },
+  /* P1, P2 (Round 1313): the NHL line function takes one draw more than the block it was cut from. */
+  cutdrawnhl: { file: 'src/lib/nhlMyCareer.ts', prove: true, needs: 'P1,P2',
+    find: '  const iceShare = x.iceShare;', put: '  rng(); const iceShare = x.iceShare;' },
+  /* Round 1313, M.U and H.U: the two hooks of baseball and hockey, built in step 4 and called by nothing until
+     the switch. Each control swaps one line of a hook (or of what it reads) in memory. */
+  drawsmlb: { file: 'src/lib/mlbMyCareer.ts', needs: 'M.U1', find: "    const keyed = rivalSeasonStream('mlb-rival', r, year, rng, rivalSeasonDraws('mlb', r.pos));",
+    put: "    const keyed = rivalSeasonStream('mlb-rival', r, year, rng, rivalSeasonDraws('mlb', r.pos) + 1);" },
+  drawsnhl: { file: 'src/lib/nhlMyCareer.ts', needs: 'H.U1', find: "    const keyed = rivalSeasonStream('nhl-rival', r, year, rng, rivalSeasonDraws('nhl', r.pos));",
+    put: "    const keyed = rivalSeasonStream('nhl-rival', r, year, rng, rivalSeasonDraws('nhl', r.pos) + 1);" },
+  /* The rival's score put back on the built in line's formula. */
+  oldscalemlb: { file: 'src/lib/mlbMyCareer.ts', needs: 'M.U2,M.F2,M.F3', find: '    return { line: mlbStatLine(season, pos), score: mlbHeadToHeadScore(pos, season), year, allStar };',
+    put: '    return { line: mlbStatLine(season, pos), score: Math.round((season.hr ?? 0) * 1.6 + ((season.avg ?? 0.24) - 0.24) * 300), year, allStar };' },
+  oldscalenhl: { file: 'src/lib/nhlMyCareer.ts', needs: 'H.U2,H.F2,H.F3', find: '    return { line: nhlStatLine(season, pos), score: nhlHeadToHeadScore(pos, season), year, allStar };',
+    put: '    return { line: nhlStatLine(season, pos), score: (season.goals ?? 0) + (season.assists ?? 0), year, allStar };' },
+  /* The hook prints with a template of its own (the built in shapes). */
+  offshapemlb: { file: 'src/lib/mlbMyCareer.ts', needs: 'M.U2,M.F1', find: '    return { line: mlbStatLine(season, pos), score: mlbHeadToHeadScore(pos, season), year, allStar };',
+    put: '    return { line: `${season.avg ?? 0}, ${season.hr ?? 0} HR`, score: mlbHeadToHeadScore(pos, season), year, allStar };' },
+  offshapenhl: { file: 'src/lib/nhlMyCareer.ts', needs: 'H.U2,H.F1', find: '    return { line: nhlStatLine(season, pos), score: nhlHeadToHeadScore(pos, season), year, allStar };',
+    put: '    return { line: `${season.goals ?? 0}G ${season.assists ?? 0}A ${season.points ?? 0}P`, score: nhlHeadToHeadScore(pos, season), year, allStar };' },
+  /* The line made at one position whatever his own (the defect live before this round). */
+  wrongposmlb: { file: 'src/lib/mlbMyCareer.ts', needs: 'M.U2,M.F1', find: "    const pos = (r.pos in MLB_ARCHETYPES ? r.pos : mine.pos in MLB_ARCHETYPES ? mine.pos : 'LF') as MlbCareerPos;",
+    put: "    const pos = 'CF' as MlbCareerPos;" },
+  wrongposnhl: { file: 'src/lib/nhlMyCareer.ts', needs: 'H.U2,H.F1', find: "    const pos = (r.pos in NHL_ARCHETYPES ? r.pos : mine.pos in NHL_ARCHETYPES ? mine.pos : 'C') as NhlCareerPos;",
+    put: "    const pos = 'C' as NhlCareerPos;" },
+  /* The line left on the engine's own length whatever the season's slate. */
+  workloadmlb: { file: 'src/lib/mlbMyCareer.ts', needs: 'M.U2', find: '    const season = mlbLineOnSlate(full, mlbWorkSlate(pos, mine.slate));', put: '    const season = mlbLineOnSlate(full, US_ENGINE_SEASON.mlb);' },
+  workloadnhl: { file: 'src/lib/nhlMyCareer.ts', needs: 'H.U2', find: '    const season = nhlLineOnSlate(full, nhlWorkSlate(pos, mine.slate));', put: '    const season = nhlLineOnSlate(full, US_ENGINE_SEASON.nhl);' },
+  /* The hook writes on the rival it was handed. */
+  impuremlb: { file: 'src/lib/mlbMyCareer.ts', needs: 'M.U3', find: '    const games = mlbFullWorkload(pos, keyed);', put: '    const games = mlbFullWorkload(pos, keyed); (r as { lastScore?: number }).lastScore = form;' },
+  impurenhl: { file: 'src/lib/nhlMyCareer.ts', needs: 'H.U3', find: '    const games = nhlFullWorkload(pos, keyed);', put: '    const games = nhlFullWorkload(pos, keyed); (r as { lastScore?: number }).lastScore = form;' },
+  /* Correction 7: the last fallback taken out (a position no table holds then throws inside the season sim). */
+  nofallbackmlb: { file: 'src/lib/mlbMyCareer.ts', needs: 'M.U3', find: "    const pos = (r.pos in MLB_ARCHETYPES ? r.pos : mine.pos in MLB_ARCHETYPES ? mine.pos : 'LF') as MlbCareerPos;",
+    put: '    const pos = (r.pos in MLB_ARCHETYPES ? r.pos : mine.pos) as MlbCareerPos;' },
+  nofallbacknhl: { file: 'src/lib/nhlMyCareer.ts', needs: 'H.U3', find: "    const pos = (r.pos in NHL_ARCHETYPES ? r.pos : mine.pos in NHL_ARCHETYPES ? mine.pos : 'C') as NhlCareerPos;",
+    put: '    const pos = (r.pos in NHL_ARCHETYPES ? r.pos : mine.pos) as NhlCareerPos;' },
+  /* M.U4: a reliever's bullpen job hashed off his name like every other kind (a formality either way). */
+  kindjob: { file: 'src/lib/mlbMyCareer.ts', needs: 'M.U4', find: "    const kind = pos === 'RP' ? mine.kind : pos === 'SP' ? '' : rivalKindOf('mlb-rival-kind', r, MLB_ARCHETYPES[pos]).id;",
+    put: "    const kind = pos === 'SP' ? '' : rivalKindOf('mlb-rival-kind', r, MLB_ARCHETYPES[pos]).id;" },
+  /* M.U5, H.U5: the All-Star table names one man at every position (in memory). */
+  oneslotmlb: { file: 'src/lib/careerAwards.ts', needs: 'M.U5', find: '  return configFor(sport, award, pos)?.slots ?? null;', put: "  return sport === 'mlb' ? 1 : configFor(sport, award, pos)?.slots ?? null;" },
+  oneslotnhl: { file: 'src/lib/careerAwards.ts', needs: 'H.U5', find: '  return configFor(sport, award, pos)?.slots ?? null;', put: "  return sport === 'nhl' ? 1 : configFor(sport, award, pos)?.slots ?? null;" },
+  /* M.U7, H.U7: the floor at zero taken off home runs, and off goals. */
+  nofloormlb: { file: 'src/lib/mlbMyCareer.ts', needs: 'M.U7', find: '    full.hr = Math.min(58, Math.max(0, Math.round((4 + (form - 62) * 0.85) * prof.power * g + rng() * 6 * prof.power)));',
+    put: '    full.hr = Math.min(58, Math.round((4 + (form - 62) * 0.85) * prof.power * g + rng() * 6 * prof.power));' },
+  nofloornhl: { file: 'src/lib/nhlMyCareer.ts', needs: 'H.U7', find: '    full.goals = Math.min(72, Math.max(1, Math.round((4 + (form - 62) * 1.35) * mult * off * g * iceShare + rng() * 5)));',
+    put: '    full.goals = Math.min(72, Math.round((4 + (form - 62) * 1.35) * mult * off * g * iceShare + rng() * 5));' },
+  /* Round 1313, the switch. M.F5: the MLB tick rolls on the bare save, so the beat reads the season BEFORE the one
+     just played (moved here from scripts/simNbaAwardsSense.mjs, where it turned section S red). */
+  lastyearmlb: { file: 'src/lib/mlbCareerRivalryEvents.ts', needs: 'M.F5', find: '  const p = withSeasonPlayed(c, season);', put: '  const p = withSeasonPlayed(c, undefined);' },
+  /* M.F2: the player's side scored on his whole line (the award score, which reads a hitter's steals). */
+  fullscoremlb: { file: 'src/lib/mlbMyCareer.ts', needs: 'M.F2', find: "judgeRivalSeason(c.rival, mlbHeadToHeadScore(c.pos, line), c.name, 'mlb', rng,", put: "judgeRivalSeason(c.rival, mlbSeasonScore(c.pos, line), c.name, 'mlb', rng," },
+  /* M.U6: the call site hands the hook the engine's own length whatever the year's slate, or the closer's job for
+     every reliever. Only the real season sim can see either. */
+  siteslatemlb: { file: 'src/lib/mlbMyCareer.ts', needs: 'M.U6', find: 'mlbRivalSeason(c.year, { pos: c.pos, kind: c.archetype.id, slate })', put: 'mlbRivalSeason(c.year, { pos: c.pos, kind: c.archetype.id, slate: US_ENGINE_SEASON.mlb })' },
+  sitekindmlb: { file: 'src/lib/mlbMyCareer.ts', needs: 'M.U6', find: 'mlbRivalSeason(c.year, { pos: c.pos, kind: c.archetype.id, slate })', put: "mlbRivalSeason(c.year, { pos: c.pos, kind: 'closer', slate })" },
+  /* Step 5b, the NHL. H.F5: the tick rolls on the bare save (moved here from scripts/simNbaAwardsSense.mjs). */
+  lastyearnhl: { file: 'src/lib/nhlCareerRivalryEvents.ts', needs: 'H.F5', find: '  const p = withSeasonPlayed(c, season);', put: '  const p = withSeasonPlayed(c, undefined);' },
+  /* H.F5: one beat sold as a coin again (the NHL's head to head win promising "50/50 outcome"; moved here too). */
+  soldascoin: { file: 'src/lib/nhlCareerRivalryEvents.ts', needs: 'H.F5', find: '    consequence: "Fanbase +5, confidence boost",', put: '    consequence: "50/50 outcome",' },
+  /* H.U6: the call site hands the hook the engine's own length whatever the year's slate. */
+  siteslatenhl: { file: 'src/lib/nhlMyCareer.ts', needs: 'H.U6', find: 'nhlRivalSeason(c.year, { pos: c.pos, slate })', put: 'nhlRivalSeason(c.year, { pos: c.pos, slate: US_ENGINE_SEASON.nhl })' },
+  /* M.O, H.O (correction 8c): a rival who retired on an old save comes back and is judged again (his old line and
+     his tally move). The season sims guard the call, so the control lifts the guard there. */
+  retiredlinemlb: { file: 'src/lib/mlbMyCareer.ts', needs: 'M.O', find: '  if (c.rival && !c.rival.retired) {', put: '  if (c.rival) { c.rival.retired = false;' },
+  retiredlinenhl: { file: 'src/lib/nhlMyCareer.ts', needs: 'H.O', find: '  if (c.rival && !c.rival.retired) {', put: '  if (c.rival) { c.rival.retired = false;' },
+  /* M.O and H.O: an old save's head to head tally reset when its rival first plays on the player's line. */
+  oldtallymlb: { file: 'src/lib/mlbMyCareer.ts', needs: 'M.O',
+    find: "    for (const n of judgeRivalSeason(c.rival, mlbHeadToHeadScore(c.pos, line), c.name, 'mlb', rng, mlbRivalSeason(c.year, { pos: c.pos, kind: c.archetype.id, slate }))) notes.push(n);",
+    put: "    if (c.rival.lastYear === undefined) { c.rival.myYears = 0; c.rival.hisYears = 0; } for (const n of judgeRivalSeason(c.rival, mlbHeadToHeadScore(c.pos, line), c.name, 'mlb', rng, mlbRivalSeason(c.year, { pos: c.pos, kind: c.archetype.id, slate }))) notes.push(n);" },
+  oldtallynhl: { file: 'src/lib/nhlMyCareer.ts', needs: 'H.O',
+    find: "    for (const n of judgeRivalSeason(c.rival, nhlHeadToHeadScore(c.pos, line), c.name, 'nhl', rng, nhlRivalSeason(c.year, { pos: c.pos, slate }))) notes.push(n);",
+    put: "    if (c.rival.lastYear === undefined) { c.rival.myYears = 0; c.rival.hisYears = 0; } for (const n of judgeRivalSeason(c.rival, nhlHeadToHeadScore(c.pos, line), c.name, 'nhl', rng, nhlRivalSeason(c.year, { pos: c.pos, slate }))) notes.push(n);" },
   /* P1: the lifted stream keyed one character off the NBA's own key of Round 1112 (the NBA rival's whole trail
      moves, and nothing of the player's does). */
   liftkey: { file: 'src/lib/careerRival.ts', prove: true, needs: 'P1',
     find: '  let key = `${tag}|${r.name}|${year}`;', put: '  let key = `${tag}|${r.name}|${year}|`;' },
   /* L: one word of the lifted All-Star cards changed (the NBA's "both" card no longer reads as it did). */
-  liftcard: { file: 'src/lib/careerRivalryEvents.ts', prove: true, needs: 'L',
+  liftcard: { file: 'src/lib/careerFactBeats.ts', prove: true, needs: 'L',
     find: 'description: (r: { name: string }) => `The All-Star rosters are out, and you and ${r.name} are both on them.`,', put: 'description: (r: { name: string }) => `The All-Star rosters are out, and you and ${r.name} both made it.`,' },
 };
 if (CONTROL && CONTROLS[CONTROL]?.prove && !PROVE) { console.error(`control ${CONTROL} is judged against a tree before: set RIVAL_PROVE. Refusing to run.`); process.exit(2); }
@@ -205,9 +354,13 @@ const BUNDLE = {
       "export { NHL_CAREER_SPORT } from './src/lib/nhlCareerSport.ts';",
       "export { NBA_CAREER_SPORT } from './src/lib/nbaCareerSport.ts';",
       "export * as nfl from './src/lib/nflMyCareer.ts';",
+      "export * as mlb from './src/lib/mlbMyCareer.ts';",
+      "export * as nhl from './src/lib/nhlMyCareer.ts';",
+      "export * as shape from './src/lib/usSeasonShape.ts';",
       "export * as awards from './src/lib/careerAwards.ts';",
       "export * as rival from './src/lib/careerRival.ts';",
       "export * as events from './src/lib/careerRivalryEvents.ts';",
+      "export * as factBeats from './src/lib/careerFactBeats.ts';",
       "export * as nflEvents from './src/lib/nflCareerRivalryEvents.ts';",
       "export * as lines from './src/lib/usCareerStatLine.ts';",
       "export { keyedRng } from './src/lib/keyedRng.ts';",
@@ -352,8 +505,24 @@ const RB_YARDS_A_CATCH = 8;
 /** The season score of the PRINTED parts: what the screen shows decides. */
 function printedScore(M, sport, pos, parts) {
   if (sport === 'nfl') return M.awards.nflSeasonScore(pos, pos === 'RB' ? { ...parts, recYds: parts.rec * RB_YARDS_A_CATCH } : parts);
-  if (sport === 'mlb') return M.awards.mlbSeasonScore(pos, parts);
-  return M.awards.nhlSeasonScore(pos, parts);
+  if (sport === 'mlb') return MLB_SCORE(pos, parts);
+  return NHL_SCORE(pos, parts);
+}
+/* Round 1313 (the lead's ruling on M.F2): baseball's and hockey's season scores are TYPED here, the way the walk
+   types them, so the verdict is read off the screen against a rule the code under test cannot move. Their source
+   is src/lib/careerAwards.ts lines 111 to 123 (mlbSeasonScore and nhlSeasonScore, read 2026-10-12), written in
+   the same order of operations so a score agrees to the last bit. A deliberate change there is retyped here. */
+function MLB_SCORE(pos, l) {
+  return pos === 'SP'
+    ? (l.so ?? 0) / 5 + (l.wins ?? 0) * 2.2 + Math.max(0, (3.8 - (l.era ?? 5)) * 22)
+    : pos === 'RP'
+      ? (l.saves ?? 0) * 1.5 + (l.holds ?? 0) * 1.1 + (l.so ?? 0) / 4 + Math.max(0, (3.6 - (l.era ?? 5)) * 26)
+      : (l.hr ?? 0) * 1.6 + (l.rbi ?? 0) / 3 + Math.max(0, ((l.avg ?? 0.2) - 0.24) * 320) + (l.sb ?? 0) / 3;
+}
+function NHL_SCORE(pos, l) {
+  return pos === 'G'
+    ? (l.wins ?? 0) * 1.8 + Math.max(0, ((l.svpct ?? 0.9) - 0.9) * 2400)
+    : (l.points ?? 0) * (pos === 'D' ? 1.35 : 1);
 }
 
 /* ------------------------------------------------------------------ */
@@ -361,15 +530,24 @@ function printedScore(M, sport, pos, parts) {
 /* ------------------------------------------------------------------ */
 const FLEET = {
   nfl: { desc: M => M.NFL_CAREER_SPORT, pos: ['QB', 'RB', 'WR', 'TE', 'LB', 'CB', 'EDGE', 'K'], eras: ['now', 'y2005'] },
-  mlb: { desc: M => M.MLB_CAREER_SPORT, pos: ['SP', 'RP', 'C', '1B', '2B', '3B', 'SS', 'LF', 'CF', 'RF', 'DH'], eras: ['now'] },
-  nhl: { desc: M => M.NHL_CAREER_SPORT, pos: ['C', 'LW', 'RW', 'D', 'G'], eras: ['now'] },
+  /* Round 1313: baseball and hockey gained their throwback arm (every second lap a 2004 or a 2006-07 career),
+     so the 60 game year of 2020 and the 48 and 56 game hockey years are played by the fleet as well. */
+  mlb: { desc: M => M.MLB_CAREER_SPORT, pos: ['SP', 'RP', 'C', '1B', '2B', '3B', 'SS', 'LF', 'CF', 'RF', 'DH'], eras: ['now', 'y2004'] },
+  nhl: { desc: M => M.NHL_CAREER_SPORT, pos: ['C', 'LW', 'RW', 'D', 'G'], eras: ['now', 'y2006'] },
   nba: { desc: M => M.NBA_CAREER_SPORT, pos: ['PG', 'SG', 'SF', 'PF', 'C'], eras: ['now'] },
 };
 /* The roster beat of a bound sport: its id and the award word the engine writes on the player's own season. */
-const ROSTER = { nfl: { id: 206, award: 'All-Pro' } };
+const ROSTER = { nfl: { id: 206, award: 'All-Pro' }, mlb: { id: 206, award: 'All-Star' }, nhl: { id: 306, award: 'All-Star' } };
+/* Round 1313, printed only: the engine's own season length (a season line carries `slate` only when its year is
+   of another length), the two beats a sport deals off the tally (losing it, winning it: mlbCareerRivalryEvents.ts
+   and nhlCareerRivalryEvents.ts, `r.hisYears >= 3 && r.hisYears > r.myYears` and its mirror) and the roster beat
+   of a sport not yet bound (its cards are counted by what they promise). */
+const ENGINE_LEN = { mlb: 162, nhl: 82 };
+const TALLY_BEATS = { mlb: { 211: 'losing', 212: 'winning' }, nhl: { 311: 'losing', 312: 'winning' } };
+const ROSTER_ID = { nfl: 206, mlb: 206, nhl: 306 };
 const AGE_BANDS = [[0, 24, '24 and under'], [25, 27, '25 to 27'], [28, 30, '28 to 30'], [31, 33, '31 to 33'], [34, 99, '34 and over']];
 const bandOf = age => AGE_BANDS.find(([lo, hi]) => age >= lo && age <= hi)[2];
-const cell = () => ({ judged: 0, mine: 0, near: 0, off: 0, unread: 0, disagree: 0, careers: 0, retired: 0, badge: 0, honMine: 0, honHis: 0, honBoth: 0 });
+const cell = () => ({ judged: 0, mine: 0, near: 0, heat: 0, read: 0, off: 0, unread: 0, disagree: 0, careers: 0, retired: 0, badge: 0, honMine: 0, honHis: 0, honBoth: 0 });
 const tally = () => ({ judged: 0, mine: 0 });
 const bump = (o, k, mine) => { const t = (o[k] ??= tally()); t.judged += 1; if (mine) t.mine += 1; };
 const sha = () => crypto.createHash('sha256');
@@ -385,7 +563,11 @@ function playFleet(M, sport, seed, per) {
   const keep = Math.random; Math.random = rnd;
   const h = { player: sha(), dealt: sha(), notes: sha(), rival: sha(), beats: sha(), allNotes: sha() };
   const by = {}; const job = {}; const age = {}; const arm = {}; const jobPos = {};
-  const firstOff = []; const firstDisagree = [];
+  /* Round 1313, printed only: by the season's length (all positions, and by position), by kind pairing (a
+     hockey skater's kind against the kind rivalKindOf would hash for his rival; a reliever's own bullpen job),
+     and every card dealt off the tally or by the roster beat, by what it is. */
+  const len = {}; const lenPos = {}; const kind = {}; const dealtBy = {};
+  const firstOff = []; const firstDisagree = []; const coins = []; let beatsDealt = 0;
   /* One pair a career (the years he took, the years judged): the years of one career share a rating, so the
      error of a share is worked out over careers, never over years (clusterError below). */
   const pairs = [];
@@ -414,6 +596,9 @@ function playFleet(M, sport, seed, per) {
             mine: (played?.line?.awards ?? []).includes(ROSTER[sport].award), his: r?.lastAllStar === true, sameYear: r?.lastYear === played?.line?.year });
         }
         h.beats.update(JSON.stringify(beat ? [beat.id, beat.emoji, beat.title, beat.description, beat.consequence] : 0));
+        if (beat && TALLY_BEATS[sport]?.[beat.id]) dealtBy[`tally ${TALLY_BEATS[sport][beat.id]}`] = (dealtBy[`tally ${TALLY_BEATS[sport][beat.id]}`] ?? 0) + 1;
+        if (beat && ROSTER_ID[sport] === beat.id) dealtBy[`roster ${beat.consequence}`] = (dealtBy[`roster ${beat.consequence}`] ?? 0) + 1;
+        if (beat) { beatsDealt += 1; if (`${beat.description} ${beat.consequence}`.includes('50/50')) coins.push(`${beat.id} "${beat.consequence}"`); }
         if (r) h.rival.update(JSON.stringify([r.lastLine, r.lastScore, r.myYears, r.hisYears, r.rings, r.ovr, r.age, r.retired, r.lastYear ?? null, r.lastAllStar ?? null]));
         const notes = played?.notes ?? [];
         h.allNotes.update(JSON.stringify(notes));
@@ -429,6 +614,9 @@ function playFleet(M, sport, seed, per) {
           }
           if (notes.some(n => n.startsWith('\u{1FA9E}') && n.includes('Nothing in it again'))) m.near += 1;
           bump(job, jobNow, mine); bump(age, bandOf(ageNow), mine); bump(arm, `${pos} ${era}`, mine); bump(jobPos, `${pos} ${jobNow}`, mine);
+          if (ENGINE_LEN[sport]) { const games = played.line.slate ?? ENGINE_LEN[sport]; bump(len, String(games), mine); bump(lenPos, `${pos} ${games === ENGINE_LEN[sport] ? 'own' : 'other'}`, mine); if (games < ENGINE_LEN[sport] * 0.9) bump(lenPos, `${pos} short`, mine); }
+          if (sport === 'nhl' && pos !== 'G') bump(kind, `${pos} ${c.archetype.id} v ${M.rival.rivalKindOf('nhl-rival-kind', r, S.create.archetypes[pos]).id}`, mine);
+          if (sport === 'mlb' && pos === 'RP') bump(kind, `RP ${c.archetype.id}`, mine);
           const hisText = r.lastLine; const myText = S.statLine(played.line, pos);
           if (!inShape(sport, pos, hisText)) { m.off += 1; if (firstOff.length < 3) firstOff.push(`${pos}: "${hisText}"`); }
           /* A printed line that carries a number below zero, on either side (nflStatLineFor floors every count
@@ -436,6 +624,7 @@ function playFleet(M, sport, seed, per) {
           if (/(^|[ ,])-\d/.test(hisText)) { below.his += 1; if (below.first.length < 3) below.first.push(`his, ${pos}: "${hisText}"`); }
           if (/(^|[ ,])-\d/.test(myText)) { below.mine += 1; if (below.first.length < 3) below.first.push(`mine, ${pos}: "${myText}"`); }
           const his = readBack(sport, pos, hisText); const me = readBack(sport, pos, myText);
+          if (his && me) { m.read += 1; if (printedScore(M, sport, pos, me) === printedScore(M, sport, pos, his)) m.heat += 1; }
           if (!his || !me) m.unread += 1;
           else if ((printedScore(M, sport, pos, me) > printedScore(M, sport, pos, his)) !== mine) {
             m.disagree += 1;
@@ -449,11 +638,11 @@ function playFleet(M, sport, seed, per) {
       const counters = Object.fromEntries(Object.entries(c).filter(([, v]) => typeof v === 'number').sort(([a], [b]) => (a < b ? -1 : 1)));
       h.player.update(JSON.stringify({ seasons: c.seasons, counters }));
       m.careers += 1;
-      if (c.rival) pairs.push([c.rival.myYears, c.rival.myYears + c.rival.hisYears]);
+      if (c.rival) pairs.push([c.rival.myYears, c.rival.myYears + c.rival.hisYears, pos]);
       if (c.rival?.retired) { m.retired += 1; if (c.rival.myYears > c.rival.hisYears) m.badge += 1; }
     }
   } finally { Math.random = keep; }
-  return { hash: Object.fromEntries(Object.entries(h).map(([k, v]) => [k, v.digest('hex')])), by, job, age, arm, jobPos, firstOff, firstDisagree, pairs, roster, below };
+  return { hash: Object.fromEntries(Object.entries(h).map(([k, v]) => [k, v.digest('hex')])), by, job, age, arm, jobPos, len, lenPos, kind, dealtBy, firstOff, firstDisagree, pairs, roster, below, coins, beatsDealt };
 }
 /** The standard error, in percent, of a share pooled over careers (a ratio estimator's error by career). */
 function clusterError(pairs) {
@@ -465,13 +654,15 @@ function clusterError(pairs) {
 
 /** Add one seed's table into a running one. */
 function addInto(total, one) {
-  for (const group of ['by', 'job', 'age', 'arm', 'jobPos']) {
+  for (const group of ['by', 'job', 'age', 'arm', 'jobPos', 'len', 'lenPos', 'kind']) {
     total[group] ??= {};
     for (const [k, v] of Object.entries(one[group])) {
       const t = (total[group][k] ??= {});
       for (const [f, n] of Object.entries(v)) t[f] = (t[f] ?? 0) + n;
     }
   }
+  total.dealtBy ??= {};
+  for (const [k, n] of Object.entries(one.dealtBy)) total.dealtBy[k] = (total.dealtBy[k] ?? 0) + n;
   return total;
 }
 
@@ -491,6 +682,19 @@ function printTable(label, sport, total, perSeed) {
   }
   console.log(`     by job: ${['starter', 'backup', 'hurt'].map(j => `${j} ${f1(shareOf(total.job[j]))}% of ${total.job[j]?.judged ?? 0}`).join(', ')}`);
   console.log(`     by age: ${AGE_BANDS.map(([, , n]) => `${n} ${f1(shareOf(total.age[n]))}% of ${total.age[n]?.judged ?? 0}`).join(', ')}`);
+  /* Round 1313, printed only. */
+  if (ENGINE_LEN[sport]) {
+    console.log(`     by season length: ${Object.keys(total.len ?? {}).sort((a, b) => Number(b) - Number(a)).map(k => `${k} games ${f1(shareOf(total.len[k]))}% of ${total.len[k].judged}`).join(', ')}`);
+    console.log(`     by position, the engine's own length against another: ${FLEET[sport].pos.map(p => `${p} ${f1(shareOf(total.lenPos?.[`${p} own`]))} of ${total.lenPos?.[`${p} own`]?.judged ?? 0} / ${f1(shareOf(total.lenPos?.[`${p} other`]))} of ${total.lenPos?.[`${p} other`]?.judged ?? 0}`).join('; ')}`);
+    /* The fix pass of Round 1313 (review finding 3): "another" above is mostly MLB's 161 and 163 game years and
+       the NHL's 84, so the rate weight of a truly short year (open question 1) needs its own row: the years under
+       nine tenths of the engine's length (MLB 60 and 58; NHL 48, 56 and the 2019-20 club lengths), by position. */
+    console.log(`     by position, the short years alone (under nine tenths of the engine's ${ENGINE_LEN[sport]}): ${FLEET[sport].pos.map(p => `${p} ${f1(shareOf(total.lenPos?.[`${p} short`]))} of ${total.lenPos?.[`${p} short`]?.judged ?? 0}`).join('; ')}`);
+  }
+  const kinds = Object.keys(total.kind ?? {}).sort();
+  if (kinds.length) console.log(`     by kind pairing: ${kinds.map(k => `${k} ${f1(shareOf(total.kind[k]))}% of ${total.kind[k].judged}`).join('; ')}`);
+  console.log(`     printed dead heats (both lines read, the two printed scores equal): ${FLEET[sport].pos.map(p => { const m = total.by[p]; return m ? `${p} ${m.heat} of ${m.read}` : `${p} -`; }).join(', ')}`);
+  console.log(`     cards dealt over the run: ${Object.entries(total.dealtBy ?? {}).sort().map(([k, n]) => `${k} ${n}`).join(', ') || 'none counted'}`);
 }
 /** Play every seed of one sport on bundle M. */
 function runSport(M, sport) {
@@ -510,6 +714,26 @@ const ONE_PLACE = ['QB', 'RB', 'TE', 'K'];
    fixed width it is held within: three times the 0.27 points one standard error came to over careers. */
 const RIVAL_1227 = { nfl: [38.7, 40.0, 39.0, 38.1, 38.9] };
 const HELD_TOL = { nfl: 0.81 };
+/* M.F3, H.F3 (Round 1313, step 5d, the critic's correction 6): my share of the head to head years once the MLB and
+   NHL rivals play on the player's own line. Each cell (the sport pooled, and every position) is held at the five
+   seed mean measured at full size (seeds 1 to 5, 1,500 careers a sport a seed) within its OWN FIXED width: three
+   standard errors, the error worked out over careers by clusterError. Typed once from one run, never widened. The
+   fresh seeds 6 to 10 test the width recipe, not the cell: each fresh mean is read against the typed band, at
+   most one cell of a sport outside and the recipe stands; more than one and every width of that sport is retyped
+   from the ten seeds' measured spread, with the date. Never drop a cell, never widen one.
+   Typed 2026-10-12 from runner result r1313-s5d1 (rivalFull, on 84dbe448), each cell [mean, width]. The fresh
+   seeds 6 to 10 of the same request (rivalFresh), read against these bands: MLB 12 of 12 cells inside (the
+   widest gap SP, 35.04 against 36.49 within 2.70); NHL 5 of 6 inside, LW outside by 0.11 (40.86 against 39.09
+   within 1.66). At most one cell a sport outside, so the recipe stands and nothing was retyped. */
+const RIVAL_1313 = {
+  mlb: { date: '2026-10-12', all: [42.73, 0.85], SP: [36.49, 2.70], RP: [60.95, 1.93], C: [34.06, 2.63], '1B': [42.76, 2.81], '2B': [38.46, 2.82],
+    '3B': [41.47, 2.76], SS: [42.08, 2.73], LF: [42.67, 2.75], CF: [40.95, 2.76], RF: [42.42, 2.86], DH: [47.52, 2.80] },
+  nhl: { date: '2026-10-12', all: [43.45, 0.77], C: [42.34, 1.78], LW: [39.09, 1.66], RW: [41.49, 1.66], D: [44.38, 1.76], G: [49.94, 1.68] },
+};
+/* M.F5, H.F5 floors (5d): six tenths of the five seed totals of the same run (r1313-s5d1 rivalFull), rounded down;
+   "both" floored because it was dealt ten times or more in both sports. MLB only you 180, only him 121, both 16;
+   NHL 211, 130 and 21. The fresh seeds dealt MLB 167, 113, 13 and NHL 201, 168, 17: all above. */
+const F5_FLOOR_1313 = { mlb: { onlyYou: 108, onlyHim: 72, both: 9 }, nhl: { onlyYou: 126, onlyHim: 78, both: 12 } };
 /* FOR THE BUILDER OF A LATER ROUND (Round B first): on an unchanged tree the run is deterministic and N.F3 is
    exact. The day a round legitimately moves one NFL draw, the typed mean above and the new run are TWO samples:
    their difference has an error of 0.27 times root two, 0.38 points, so 0.81 is about 2.1 of those and roughly
@@ -605,6 +829,163 @@ function nflFloorGrid(M) {
   return { n, bad, total };
 }
 
+/* M.U and H.U (Round 1313): the MLB and NHL hooks on hand built rivals, the siblings of N.U. The slates are
+   every season length the ledgers hold (the step 0 table printed each of them as played). */
+const UNIT_SLATES = { mlb: [162, 161, 163, 60, 58], nhl: [82, 84, 48, 56, 68, 69, 70, 71] };
+const UNIT_YEARS = { mlb: [2005, 2020, 2026, 2031], nhl: [2012, 2019, 2020, 2026] };
+const UNIT_NAMES = ['Marcus Whitaker', 'Devon Delgado', 'Kai Okafor', 'Theo Novak', 'Cruz Halstead'];
+/** His season as the hook must make it, rebuilt here from the tag, his name, the year and the draws taken. */
+function rebuildUs(M, sport, r, pos, mine, year, form, draws) {
+  const S = FLEET[sport].desc(M); const archs = S.create.archetypes;
+  const keyed = M.keyedRng([`${sport}-rival`, r.name, year, ...draws].join('|'));
+  if (sport === 'mlb') {
+    const kind = pos === 'RP' ? mine.kind : pos === 'SP' ? '' : M.rival.rivalKindOf('mlb-rival-kind', r, archs[pos]).id;
+    const games = M.mlb.mlbFullWorkload(pos, keyed);
+    const full = { year, team: r.team, age: r.age, ovr: r.ovr, games, awards: [], teamResult: '', salary: 0, ...M.mlb.mlbStatLineFor({ form, pos, kind, games }, keyed) };
+    const season = M.mlb.mlbLineOnSlate(full, M.mlb.mlbWorkSlate(pos, mine.slate));
+    return { text: M.lines.mlbStatLine(season, pos), won: M.awards.wonAward(keyed, 'mlb', 'mlbAllStar', pos, M.awards.mlbSeasonScore(pos, full)) };
+  }
+  const scoringMult = pos === 'G' ? 0 : M.rival.rivalKindOf('nhl-rival-kind', r, archs[pos]).scoringMult;
+  const games = M.nhl.nhlFullWorkload(pos, keyed);
+  const full = { year, team: r.team, age: r.age, ovr: r.ovr, games, awards: [], teamResult: '', salary: 0, ...M.nhl.nhlStatLineFor({ form, pos, scoringMult, games, iceShare: 1 }, keyed) };
+  const season = M.nhl.nhlLineOnSlate(full, M.nhl.nhlWorkSlate(pos, mine.slate));
+  return { text: M.lines.nhlStatLine(season, pos), won: M.awards.wonAward(keyed, 'nhl', 'nhlAllStar', pos, M.awards.nhlSeasonScore(pos, full)) };
+}
+function usUnit(M, sport) {
+  const hookOf = (year, mine) => (sport === 'mlb' ? M.mlb.mlbRivalSeason(year, mine) : M.nhl.nhlRivalSeason(year, mine));
+  const S = FLEET[sport].desc(M); const archs = S.create.archetypes; const P = FLEET[sport].pos;
+  const bad = { draws: [], season: [], pure: [], total: [], kind: [], job: [], slots: [] }; const lens = new Set(); let n = 0;
+  const note = (list, text) => { if (list.length < 3) list.push(text); };
+  const per = Math.ceil(400 / P.length);
+  for (const pos of P) for (let i = 0; i < per; i += 1) {
+    const year = UNIT_YEARS[sport][i % 4]; const slate = UNIT_SLATES[sport][i % UNIT_SLATES[sport].length]; const form = 40 + ((i * 7) % 60);
+    const mine = sport === 'mlb' ? { pos, kind: archs[pos][i % archs[pos].length].id, slate } : { pos, slate };
+    const r = { name: UNIT_NAMES[i % UNIT_NAMES.length], pos, team: sport === 'mlb' ? 'NYY' : 'BOS', ovr: 80, pot: 90, age: 26, rings: 0, hisYears: 2, myYears: 3, retired: false, lastLine: 'x', lastScore: 1 };
+    const frozen = JSON.stringify(r);
+    const base = mulberry32(9100 + i * 31 + pos.length); const draws = [];
+    let out;
+    try { out = hookOf(year, mine)(r, form, () => { const v = base(); draws.push(v); return v; }); } catch (e) { note(bad.total, `${pos} ${year}: the hook threw ${e?.message ?? e}`); continue; }
+    n += 1; lens.add(slate);
+    const want = M.rival.rivalSeasonDraws(sport, pos);
+    if (draws.length !== want || want !== 2) note(bad.draws, `${pos}: took ${draws.length} draws, the law says ${want}`);
+    const re = rebuildUs(M, sport, r, pos, mine, year, form, draws.slice(0, 2));
+    const read = readBack(sport, pos, re.text); const score = read ? printedScore(M, sport, pos, read) : NaN;
+    if (out.line !== re.text || out.score !== score || out.year !== year || out.allStar !== re.won || !inShape(sport, pos, out.line)) note(bad.season, `${pos} ${year} slate ${slate} form ${form}: the hook gave "${out.line}" ${out.score} ${out.allStar}, rebuilt "${re.text}" ${score} ${re.won}`);
+    let k = 0;
+    const again = hookOf(year, mine)(r, form, () => draws[k++]);
+    if (JSON.stringify(again) !== JSON.stringify(out) || JSON.stringify(r) !== frozen) note(bad.pure, `${pos} ${year}: a second run from the same draws differs, or the rival was written`);
+    /* U4: his kind does not move with his rating or his age (the same draws and form, another rating and age). */
+    let k2 = 0;
+    const older = hookOf(year, mine)({ ...r, ovr: 64, age: 35 }, form, () => draws[k2++]);
+    if (older.line !== out.line) note(bad.kind, `${pos} ${year}: the line moved with his rating and age ("${out.line}" against "${older.line}")`);
+  }
+  /* U3, correction 7: a rival and a player both at a position no table holds still get a season and a line. */
+  try { const odd = hookOf(2026, sport === 'mlb' ? { pos: 'XX', kind: 'closer', slate: 162 } : { pos: 'XX', slate: 82 })({ name: 'Theo Novak', pos: 'XX', team: 'NYY', ovr: 80, pot: 90, age: 26, rings: 0, hisYears: 0, myYears: 0, retired: false, lastLine: 'x', lastScore: 1 }, 80, mulberry32(3));
+    if (!odd || typeof odd.line !== 'string' || !odd.line.length || !Number.isFinite(odd.score)) note(bad.total, `a position no table holds gave ${JSON.stringify(odd)}`);
+  } catch (e) { note(bad.total, `a position no table holds threw: ${e?.message ?? e}`); }
+  /* U4, baseball: a reliever's rival has the player's bullpen job, both ways. A closer's line never holds more than
+     4 holds (Math.round(rng() * 4)) and a setup man's never more than 6 saves (Math.round(rng() * 6)), exact; the
+     power is the count of seasons where the OTHER job's cap would have been broken, printed and floored. */
+  const job = { closer: 0, other: 0, power: 0 };
+  if (sport === 'mlb') for (let i = 0; i < 600; i += 1) {
+    const mineKind = ['closer', 'setup', 'sidearm'][i % 3]; const year = UNIT_YEARS.mlb[i % 4];
+    const out = hookOf(year, { pos: 'RP', kind: mineKind, slate: 162 })({ name: `${UNIT_NAMES[i % 5]} ${i}`, pos: 'RP', team: 'NYY', ovr: 85, pot: 90, age: 27, rings: 0, hisYears: 0, myYears: 0, retired: false, lastLine: 'x', lastScore: 1 }, 70 + (i % 30), mulberry32(700 + i));
+    const p = readBack('mlb', 'RP', out.line); if (!p) { note(bad.job, `RP line unread: "${out.line}"`); continue; }
+    if (mineKind === 'closer') { job.closer += 1; if (p.holds > 4) note(bad.job, `a closer's rival printed ${p.holds} holds: "${out.line}"`); if (p.saves > 6) job.power += 1; }
+    else { job.other += 1; if (p.saves > 6) note(bad.job, `a ${mineKind}'s rival printed ${p.saves} saves: "${out.line}"`); if (p.holds > 4) job.power += 1; }
+  }
+  /* U5: the All-Star table names more than one man at every position, so "both" can be true. */
+  for (const pos of P) { const slots = M.awards.awardSlots(sport, sport === 'mlb' ? 'mlbAllStar' : 'nhlAllStar', pos); if (!(slots > 1)) note(bad.slots, `${pos} ${slots}`); }
+  return { n, bad, lens: [...lens].sort((a, b) => b - a), job };
+}
+/* U6 (Round 1313, corrections 1 and 3): the call site, on the REAL season sim. The hook is handed three facts by
+   simMlbSeason and simNhlSeason (his position, the player's bullpen job, the season's slate) and every U section
+   above hands them in itself, so only this can see a call site that passes a wrong one. In E8's forced cells
+   (scripts/simUsSeasonLedger.mjs: every one a season of another length) and in 1990 (the engine's own length),
+   the season sim plays on a stream that records its draws; then judgeRivalSeason is replayed on the rival as he
+   was before the season, from each index of those draws, with the player's side scored by the exported head to
+   head function off his SAVED line and the hook built from the TRUE facts (worked out here from the state and the
+   ledger). The whole rival object on the save must come back byte for byte at some index. The power is printed
+   and floored: the seasons where the line made with the WRONG fact (the engine's own length; the other bullpen
+   job) differs from the saved one. Controls siteslatemlb, siteslatenhl, sitekindmlb. */
+const SITE_CELLS = { mlb: [[2005, 'CIN'], [2020, 'BOS'], [2020, 'DET'], [2026, 'NYY'], [1990, 'NYY']], nhl: [[2012, 'BOS'], [2019, 'CAR'], [2020, 'BOS'], [2026, 'BOS'], [1990, 'BOS']] };
+const SITE_PER = 300;
+function siteCheck(M, sport) {
+  const S = FLEET[sport].desc(M); const archs = S.create.archetypes; const P = FLEET[sport].pos; const X = sport === 'mlb' ? M.mlb : M.nhl;
+  const score = (pos, line) => (sport === 'mlb' ? X.mlbHeadToHeadScore(pos, line) : X.nhlHeadToHeadScore(pos, line));
+  const hook = (year, mine) => (sport === 'mlb' ? X.mlbRivalSeason(year, mine) : X.nhlRivalSeason(year, mine));
+  const out = { seasons: 0, matched: 0, missed: [], short: 0, powerSlate: 0, relievers: 0, powerKind: 0, swap: {} };
+  /* The measuring swap of open question 1 (printed, never judged): in each season of another length, the verdict
+     the two PRINTED lines give against the verdict of the same two lines with their counts read back at a full
+     season's pace (fullSeasonOf over the work slate; rates as printed). The same year on both arms. */
+  const RATE_PARTS = new Set(['avg', 'era', 'svpct']);
+  const workOf = (pos, slate) => ((sport === 'mlb' ? ['SP', 'RP'] : ['G']).includes(pos) ? Math.min(slate, ENGINE_LEN[sport]) : slate);
+  for (const [year, team] of SITE_CELLS[sport]) {
+    const slate = M.shape.seasonLength(sport, year, team);
+    for (let i = 0; i < SITE_PER; i += 1) {
+      const rnd = mulberry32(year * 4409 + i * 13 + 7);
+      const keep = Math.random; Math.random = rnd;
+      try {
+        const pos = P[i % P.length];
+        const c = S.startCareer('Site Check', pos, archs[pos][i % archs[pos].length], rnd, null, year < 2026 ? FLEET[sport].eras[1] : 'now');
+        if (!c.rival || c.rival.retired) continue;
+        c.team = team; c.year = year; c.health = 100; c.ovr = 74 + ((i * 7) % 23); c.pot = Math.max(c.pot, c.ovr);
+        c.rival.ovr = Math.max(55, Math.min(95, c.ovr + (i % 7) - 3)); c.rival.pot = Math.max(c.rival.pot, c.rival.ovr);
+        S.assignRole(c, 80, rnd);
+        const before = JSON.stringify(c.rival);
+        const base = mulberry32(year * 7001 + i); const draws = [];
+        const played = S.simSeason(c, 80, () => { const v = base(); draws.push(v); return v; });
+        const saved = JSON.stringify(c.rival);
+        const truth = sport === 'mlb' ? { pos, kind: c.archetype.id, slate } : { pos, slate };
+        const replay = (from, mine) => { const r = JSON.parse(before); let k = from; M.rival.judgeRivalSeason(r, score(pos, played.line), c.name, sport, () => (k < draws.length ? draws[k++] : 0.5), hook(year, mine)); return r; };
+        let at = -1;
+        for (let from = 0; from < draws.length && at < 0; from += 1) if (JSON.stringify(replay(from, truth)) === saved) at = from;
+        out.seasons += 1;
+        if (at < 0) { if (out.missed.length < 3) out.missed.push(`${pos} ${year} ${team}: no index of ${draws.length} draws gives back the saved rival ("${c.rival.lastLine}")`); continue; }
+        out.matched += 1;
+        if (slate !== ENGINE_LEN[sport]) { out.short += 1; if (replay(at, { ...truth, slate: ENGINE_LEN[sport] }).lastLine !== c.rival.lastLine) out.powerSlate += 1; }
+        if (slate !== ENGINE_LEN[sport]) {
+          const me = readBack(sport, pos, S.statLine(played.line, pos)); const his = readBack(sport, pos, c.rival.lastLine);
+          const t = (out.swap[pos] ??= { short: 0, parted: 0, unread: 0 }); t.short += 1;
+          if (!me || !his) t.unread += 1;
+          else {
+            const work = workOf(pos, slate);
+            const atPace = p => Object.fromEntries(Object.entries(p).map(([k, v]) => [k, RATE_PARTS.has(k) ? v : M.shape.fullSeasonOf(sport, v, work)]));
+            const printedSays = printedScore(M, sport, pos, me) > printedScore(M, sport, pos, his);
+            const paceSays = printedScore(M, sport, pos, atPace(me)) > printedScore(M, sport, pos, atPace(his));
+            if (printedSays !== paceSays) t.parted += 1;
+          }
+        }
+        if (sport === 'mlb' && pos === 'RP') { out.relievers += 1; if (replay(at, { ...truth, kind: truth.kind === 'closer' ? 'setup' : 'closer' }).lastLine !== c.rival.lastLine) out.powerKind += 1; }
+      } finally { Math.random = keep; }
+    }
+  }
+  return out;
+}
+
+/* U7: no count below zero out of the line function, and no number below zero in its printed text, over forms 40
+   to 99, the workloads a season can hand it (healthy, hurt, a backup's) and three streams. */
+function usFloorGrid(M, sport) {
+  const bad = []; let n = 0; let total = 0;
+  const streams = [() => () => 0, () => () => 0.999, () => mulberry32(4243)];
+  const S = FLEET[sport].desc(M); const archs = S.create.archetypes;
+  for (const pos of FLEET[sport].pos) {
+    const kinds = sport === 'mlb' ? archs[pos].map(a => a.id) : archs[pos].map(a => a.scoringMult);
+    const loads = sport === 'mlb' ? (pos === 'SP' ? [6, 8, 32] : pos === 'RP' ? [20, 62, 71] : [40, 45, 155, 162]) : (pos === 'G' ? [12, 20, 58, 67] : [20, 79, 82]);
+    for (let form = 40; form <= 99; form += 1) for (const games of loads) for (const kind of kinds) for (const [s, mk] of streams.entries()) for (const iceShare of sport === 'nhl' && pos !== 'G' ? [0.5, 1] : [1]) {
+      const stat = sport === 'mlb' ? M.mlb.mlbStatLineFor({ form, pos, kind, games }, mk()) : M.nhl.nhlStatLineFor({ form, pos, scoringMult: kind, games, iceShare }, mk());
+      const line = { year: 2026, team: 'X', age: 26, ovr: 80, games, awards: [], teamResult: '', salary: 0, ...stat };
+      const text = sport === 'mlb' ? M.lines.mlbStatLine(line, pos) : M.lines.nhlStatLine(line, pos);
+      n += 1;
+      const under = Object.entries(stat).filter(([, v]) => typeof v === 'number' && v < 0);
+      if (!under.length && !/(^|[ ,])-\d/.test(text)) continue;
+      total += 1;
+      if (bad.length < 3) bad.push(`${pos} ${kind} at form ${form}, ${games} games, stream ${s}: ${under.map(([key, v]) => `${key} ${v}`).join(', ') || 'a printed number'} ("${text}")`);
+    }
+  }
+  return { n, bad, total };
+}
+
 console.log(`simUsRivalSense: seeds ${SEEDS.join(', ')}, ${CAREERS} careers a sport a seed${FULL ? ' (full size)' : ' (SHRUNK: exact checks only)'}${CONTROL ? `, control ${CONTROL}` : ''}${PROVE ? `, proving against ${PROVE} (moved: ${MOVED.join(', ') || 'none'}; cards: ${CARDS.join(', ') || 'none'})` : ''}`);
 /* --record-old-saves (with RIVAL_PROVE=<the commit before this round>): writes src/test/fixtures/
    usRivalOldSaves.json from saves BUILT BY THAT COMMIT'S CODE, each driven the way the board drives a career
@@ -636,6 +1017,49 @@ if (process.argv.includes('--record-old-saves')) {
   const file = path.join(ROOT, 'src/test/fixtures/usRivalOldSaves.json');
   writeFileSync(file, `${JSON.stringify({ recordedFrom, recordedBy: 'RIVAL_PROVE=<commit> node scripts/simUsRivalSense.mjs --record-old-saves', what: 'NFL My Career saves built by the code of recordedFrom (before Round 1227 moved the rival onto the player\'s line). Read by src/test/usRivalOldSaves.test.ts and by section N.O of the harness. Never edit by hand.', saves }, null, 1)}\n`);
   console.log(`wrote ${path.relative(ROOT, file)} from ${recordedFrom}: ${Object.entries(saves).map(([k, c]) => `${k} (${c.pos}, ${c.seasons.length} seasons, rival "${c.rival.lastLine}" ${c.rival.myYears}-${c.rival.hisYears}${c.pendingRivalryEvent ? `, sitting on "${c.pendingRivalryEvent.title}" promising "${c.pendingRivalryEvent.consequence}"` : ''})`).join('; ')}`);
+  process.exit(0);
+}
+/* --record-old-saves-b (Round 1313, with RIVAL_PROVE=<the commit before the round>): writes
+   src/test/fixtures/usRivalOldSavesB.json (or RIVAL_OLD_SAVES_OUT) from MLB and NHL saves BUILT BY THAT COMMIT'S
+   CODE, driven the way the board drives a career and stamped with the commit: for each sport a save sitting on
+   the made card and one on the dropped card of the own roster beat; an MLB SP, an MLB RP, an MLB CF and an NHL G
+   in mid career with the old shape last line and a lopsided tally; one save a sport whose rival has retired. */
+if (process.argv.includes('--record-old-saves-b')) {
+  if (!PROVE) { console.error('--record-old-saves-b needs RIVAL_PROVE=<the commit whose code builds the saves>. Refusing to run.'); process.exit(2); }
+  const B = await bundleAt(PROVE);
+  const saves = { mlbMade: null, mlbDropped: null, nhlMade: null, nhlDropped: null, mlbSP: null, mlbRP: null, mlbCF: null, nhlG: null, mlbRetired: null, nhlRetired: null };
+  const ROSTER_ID_OF = { mlb: 206, nhl: 306 };
+  for (const sport of ['mlb', 'nhl']) {
+    const S = FLEET[sport].desc(B.mod);
+    const sitting = c => {
+      const e = c.pendingRivalryEvent; if (!e || e.id !== ROSTER_ID_OF[sport]) return;
+      const key = e.consequence === 'Morale +5' ? `${sport}Made` : e.consequence === 'Morale -5' ? `${sport}Dropped` : null;
+      if (key && !saves[key]) saves[key] = JSON.parse(JSON.stringify(c));
+    };
+    const catching = { ...S, dismissRivalryEvent: c => { sitting(c); return S.dismissRivalryEvent(c); } };
+    for (let i = 0; i < 3000 && !(saves[`${sport}Made`] && saves[`${sport}Dropped`]); i += 1) {
+      B.mod.drive.driveCareer(catching, { key: `oldB-${sport}-${i}`, pos: FLEET[sport].pos[i % FLEET[sport].pos.length], arch: i, seasons: 40 });
+    }
+    const calm = c => !c.retired && !c.pendingRivalryEvent && !c.pendingRivalryChoice && (c.suspendedSeasons ?? 0) === 0 && c.contractYears > 0;
+    for (const [key, pos] of (sport === 'mlb' ? [['mlbSP', 'SP'], ['mlbRP', 'RP'], ['mlbCF', 'CF']] : [['nhlG', 'G']])) {
+      for (let i = 0; i < 600 && !saves[key]; i += 1) {
+        const c = JSON.parse(B.mod.drive.driveCareer(S, { key: `oldB-${pos}-${i}`, pos, arch: i, seasons: 6 }).json);
+        const r = c.rival;
+        if (c.seasons.length === 6 && calm(c) && r && !r.retired && Math.abs(r.hisYears - r.myYears) >= 3 && !inShape(sport, pos, r.lastLine)) saves[key] = c;
+      }
+    }
+    for (let i = 0; i < 1500 && !saves[`${sport}Retired`]; i += 1) {
+      const pos = FLEET[sport].pos[i % FLEET[sport].pos.length];
+      const c = JSON.parse(B.mod.drive.driveCareer(S, { key: `oldB-ret-${sport}-${i}`, pos, arch: i, seasons: 20 }).json);
+      if (!c.retired && !c.pendingRivalryEvent && !c.pendingRivalryChoice && c.rival?.retired === true && !inShape(sport, pos, c.rival.lastLine)) saves[`${sport}Retired`] = c;
+    }
+  }
+  const missing = Object.entries(saves).filter(([, v]) => !v).map(([k]) => k);
+  if (missing.length) { console.error(`could not build: ${missing.join(', ')}. Nothing written.`); process.exit(1); }
+  const recordedFrom = execSync(`git rev-parse ${PROVE}`, { cwd: ROOT }).toString().trim();
+  const file = process.env.RIVAL_OLD_SAVES_OUT || path.join(ROOT, 'src/test/fixtures/usRivalOldSavesB.json');
+  writeFileSync(file, `${JSON.stringify({ recordedFrom, recordedBy: 'RIVAL_PROVE=<commit> node scripts/simUsRivalSense.mjs --record-old-saves-b', what: 'MLB and NHL My Career saves built by the code of recordedFrom (before Round 1313 moved the rival onto the player\'s line). Read by src/test/usRivalOldSavesB.test.ts and by sections M.O and H.O of the harness. Never edit by hand.', saves }, null, 1)}\n`);
+  console.log(`wrote ${file} from ${recordedFrom}: ${Object.entries(saves).map(([k, c]) => `${k} (${c.pos}, ${c.seasons.length} seasons, rival "${c.rival.lastLine}" ${c.rival.myYears}-${c.rival.hisYears}${c.rival.retired ? ', retired' : ''}${c.pendingRivalryEvent ? `, sitting on "${c.pendingRivalryEvent.title}" promising "${c.pendingRivalryEvent.consequence}"` : ''})`).join('; ')}`);
   process.exit(0);
 }
 const E = await bundleWith(edits, 'run');
@@ -711,6 +1135,10 @@ if (BOUND.includes('nfl')) {
      seasons, while one dealt card was the only red). Exact at every size; N.U6 is the check with power. */
   const bothOne = ONE_PLACE.map(p => [p, NOW.nfl.total.by[p]?.honBoth ?? 0]);
   check('N.F5', bothOne.every(([, n]) => n === 0), `no judged season of the fleet at a one place position has both men on the first team (${bothOne.map(([p, n]) => `${p} ${n}`).join(', ')})`);
+  /* Round 1313: no NFL beat of the fleet promises a coin (scripts/simNbaAwardsSense.mjs section S held this for the
+     three fleets until it was retired; M.F5 and H.F5 hold it for MLB and the NHL). */
+  { const coins = NOW.nfl.seeds.flatMap(s => s.coins); const dealt = NOW.nfl.seeds.reduce((a, s) => a + s.beatsDealt, 0);
+    check('N.F5', dealt > 0 && coins.length === 0, `${coins.length} of ${dealt} NFL beats dealt promise a "50/50 outcome"${coins.length ? `: ${coins.slice(0, 3).join(' | ')}` : ''}`); }
 
   /* Banded, at full size: the two cards a season can really deal still turn up. Measured 2026-10-10 on five
      seeds: only you 4, 8, 9, 9, 13 (43) and only him 5, 4, 8, 1, 3 (21); each floor is six tenths of the run's
@@ -746,6 +1174,114 @@ if (BOUND.includes('nfl')) {
     }
   }
   check('N.O', badOld.length === 0, `saves built by ${String(old.recordedFrom).slice(0, 8)}: a pending "Morale +5", "Morale -5" and old 221 card each pay what they printed, and a corner's and a kicker's old shape rival line becomes his position's own after one season with the tally kept${badOld.length ? `: ${badOld.join(' | ')}` : ''}`);
+}
+
+/* M.U and H.U (Round 1313): judged wherever the tree holds the two hooks (from step 4 on). */
+for (const sport of ['mlb', 'nhl']) {
+  const S = sport === 'mlb' ? 'M' : 'H';
+  if (!(sport === 'mlb' ? E.mlb.mlbRivalSeason : E.nhl.nhlRivalSeason)) { console.log(`${S}.U) no ${sport} hook on this tree: not judged`); continue; }
+  console.log(`${S}.U) the ${sport.toUpperCase()} rival's season, on hand built rivals`);
+  const u = usUnit(E, sport);
+  check(`${S}.U1`, u.bad.draws.length === 0 && u.n > 0, `the hook takes exactly the two draws the law gives (${u.n} hand built seasons)${u.bad.draws.length ? `: ${u.bad.draws.join(' | ')}` : ''}`);
+  check(`${S}.U2`, u.bad.season.length === 0 && u.lens.join() === [...UNIT_SLATES[sport]].sort((a, b) => b - a).join(), `his season is the player's own line function on his keyed stream, on the healthy workload, carried to every slate of the ledger (${u.lens.join(', ')} seen), printed by the player's printer, scored off the printed text by the typed season score, with wonAward's answer on the full line${u.bad.season.length ? `: ${u.bad.season.join(' | ')}` : ''}`);
+  check(`${S}.U3`, u.bad.pure.length === 0 && u.bad.total.length === 0, `the same rival, form, year and draws give the same season, the rival is left untouched, and a position no table holds still plays a season${[...u.bad.pure, ...u.bad.total].length ? `: ${[...u.bad.pure, ...u.bad.total].join(' | ')}` : ''}`);
+  const JOB_POWER = 100;
+  check(`${S}.U4`, u.bad.kind.length === 0 && u.bad.job.length === 0 && (sport !== 'mlb' || u.job.power >= JOB_POWER), `his kind does not move with his rating or his age${sport === 'mlb' ? `, and a reliever's rival has the player's bullpen job both ways (${u.job.closer} closers' rivals, ${u.job.other} others'; ${u.job.power} seasons the other job's cap would have broken, floor ${JOB_POWER})` : ''}${[...u.bad.kind, ...u.bad.job].length ? `: ${[...u.bad.kind, ...u.bad.job].join(' | ')}` : ''}`);
+  check(`${S}.U5`, u.bad.slots.length === 0, `the All-Star table names more than one man at every position, so "both of you" can be true and no one place rule is owed${u.bad.slots.length ? `: one or none at ${u.bad.slots.join(', ')}` : ''}`);
+  const fl = usFloorGrid(E, sport);
+  check(`${S}.U7`, fl.n > 0 && fl.total === 0, `the line function returns no count below zero and prints no number below zero (${fl.total} of ${fl.n} lines: every position and kind, forms 40 to 99, the workloads a season hands it, three streams)${fl.bad.length ? `: ${fl.bad.join(' | ')}` : ''}`);
+}
+
+/* M.F and H.F (Round 1313): baseball and hockey on the player's own line, judged where the sport is BOUND (MLB
+   from step 5a, the NHL from step 5b). U6 is the call site of correction 3, on the real season sim. */
+const ALL_STAR_SAYS = {
+  both: name => `The All-Star rosters are out, and you and ${name} are both on them.`,
+  onlyYou: name => `The All-Star rosters are out. You are on one and ${name} is not.`,
+  onlyHim: name => `The All-Star rosters are out. ${name} is on one and you are not.`,
+};
+const ALL_STAR_PROMISE = { both: 'Fanbase +3', onlyYou: 'Morale +5', onlyHim: 'Morale -5' };
+for (const sport of ['mlb', 'nhl'].filter(s => BOUND.includes(s))) {
+  const S = sport === 'mlb' ? 'M' : 'H'; const U = sport.toUpperCase();
+  console.log(`${S}.F) the ${U} rival plays the player's position on the player's own line`);
+  {
+    const st = siteCheck(E, sport);
+    const SITE_FLOOR = { seasons: 1000, slate: 100, kind: 30 };
+    const ok = st.missed.length === 0 && st.matched === st.seasons && st.seasons >= SITE_FLOOR.seasons && st.powerSlate >= SITE_FLOOR.slate && (sport !== 'mlb' || st.powerKind >= SITE_FLOOR.kind);
+    check(`${S}.U6`, ok, `through the real season sim in ${SITE_CELLS[sport].map(([y, t]) => `${y} ${t}`).join(', ')}: the rival on the save comes back byte for byte from the TRUE facts in ${st.matched} of ${st.seasons} seasons (floor ${SITE_FLOOR.seasons}); the engine's own length would have printed another line in ${st.powerSlate} of ${st.short} seasons of another length (floor ${SITE_FLOOR.slate})${sport === 'mlb' ? `; the other bullpen job in ${st.powerKind} of ${st.relievers} relievers' seasons (floor ${SITE_FLOOR.kind})` : ''}${st.missed.length ? `: ${st.missed.join(' | ')}` : ''}`);
+    const sw = Object.entries(st.swap); const swParted = sw.reduce((a, [, t]) => a + t.parted, 0); const swShort = sw.reduce((a, [, t]) => a + t.short, 0);
+    console.log(`     the measuring swap (open question 1, printed only): in ${swShort} seasons of another length the verdict of the two printed lines parts from the same two lines read at a full season's pace in ${swParted}; by position ${sw.map(([p, t]) => `${p} ${t.parted} of ${t.short}${t.unread ? ` (${t.unread} unread)` : ''}`).join(', ')}`);
+  }
+  const all = Object.values(NOW[sport].total.by).reduce((a, m) => ({ judged: a.judged + m.judged, off: a.off + m.off, unread: a.unread + m.unread, disagree: a.disagree + m.disagree }), { judged: 0, off: 0, unread: 0, disagree: 0 });
+  check(`${S}.F1`, all.judged > 0 && all.off === 0, `every rival line the fleet prints is in the player's own shape at his position (${all.off} of ${all.judged} off shape)`);
+  const under = NOW[sport].seeds.reduce((a, s) => ({ mine: a.mine + s.below.mine, his: a.his + s.below.his, first: [...a.first, ...s.below.first] }), { mine: 0, his: 0, first: [] });
+  check(`${S}.F1`, under.mine === 0 && under.his === 0, `no printed season line carries a number below zero (mine ${under.mine}, his ${under.his} of ${all.judged} judged years)${under.first.length ? `: ${under.first.slice(0, 3).join(' | ')}` : ''}`);
+  check(`${S}.F2`, all.judged > 0 && all.unread === 0 && all.disagree === 0, `the verdict on the save never disagrees with the two printed lines read back and scored by the season score typed here (${all.disagree} of ${all.judged} judged years disagree, ${all.unread} unread; by position and by length in the table above)`);
+  /* F3 (Round 1313, 5d): the race. Every cell measured and printed (the five seed mean and three cluster errors);
+     at full size each is judged against its typed mean and width (RIVAL_1313). Controls: verdictswap (every
+     cell), oldscalemlb and oldscalenhl (the sport). */
+  {
+    const cellsNow = [['all', mean(NOW[sport].perSeed), NOW[sport].error],
+      ...FLEET[sport].pos.map(p => [p, shareOf(NOW[sport].total.by[p]), clusterError(NOW[sport].seeds.flatMap(s => s.pairs.filter(x => x[2] === p)))])];
+    console.log(`     ${S}.F3 measured on seeds ${SEEDS.join(', ')} (the mean, three errors over careers): ${cellsNow.map(([k, v, e]) => `${k} ${f2(v)} ${f2(3 * e)}`).join('; ')}`);
+    const typed = RIVAL_1313[sport];
+    if (!typed) console.log(`     ${S}.F3, not typed yet: printed only`);
+    else if (!FULL) console.log(`     ${S}.F3, not judged in a shrunk run`);
+    else {
+      const out = cellsNow.filter(([k, v]) => !typed[k] || Math.abs(v - typed[k][0]) > typed[k][1]);
+      check(`${S}.F3`, out.length === 0, `my share of the head to head years, every cell held at its mean typed ${typed.date} within its own width (three errors over careers): ${cellsNow.map(([k, v]) => `${k} ${f2(v)} against ${typed[k] ? `${f2(typed[k][0])} within ${f2(typed[k][1])}` : 'nothing typed'}`).join('; ')}${out.length ? `; OUTSIDE: ${out.map(([k]) => k).join(', ')}` : ''}`);
+    }
+  }
+  /* F5, the exact half: every All-Star card dealt (beat 206 or 306) says and promises what the two seasons support,
+     none in a year neither made it, none an own card of Round 1149; and no beat of the fleet promises a coin. */
+  const cards = NOW[sport].seeds.map(s => s.roster);
+  const kindOf = x => (Object.keys(ALL_STAR_SAYS).find(k => ALL_STAR_SAYS[k](x.rival) === x.says) ?? 'other');
+  const wrong = cards.flat().filter(x => {
+    const k = kindOf(x);
+    if (k === 'other' || !x.sameYear || x.does !== ALL_STAR_PROMISE[k]) return true;
+    if (k === 'both') return !(x.mine && x.his);
+    return k === 'onlyYou' ? !(x.mine && !x.his) : !(!x.mine && x.his);
+  });
+  const count = k => cards.map(list => list.filter(x => kindOf(x) === k).length);
+  const coins = NOW[sport].seeds.flatMap(s => s.coins); const dealt = NOW[sport].seeds.reduce((a, s) => a + s.beatsDealt, 0);
+  console.log(`     the All-Star in judged seasons, by position (mine, his, both, percent): ${FLEET[sport].pos.map(p => { const m = NOW[sport].total.by[p]; return `${p} ${f2(pc(m.honMine, m.judged))} ${f2(pc(m.honHis, m.judged))} ${f2(pc(m.honBoth, m.judged))}`; }).join('; ')}`);
+  /* O (Round 1313, 5c): the committed saves built by the code before the round (src/test/fixtures/
+     usRivalOldSavesB.json, recorded by --record-old-saves-b). A card the release before dealt pays what it printed;
+     an old shape last line stays until his next season and is his position's own after it, the tally kept; a
+     rival who retired before keeps his old line and his tally for good. Controls owndead (the own cards taken
+     out), retiredlinemlb and retiredlinenhl (a retired rival judged again) and oldtallymlb, oldtallynhl (an old
+     save's tally reset). */
+  {
+    const oldB = JSON.parse(readFileSync(path.join(ROOT, 'src/test/fixtures/usRivalOldSavesB.json'), 'utf8'));
+    const D = FLEET[sport].desc(E); const clone = x => JSON.parse(JSON.stringify(x)); const cap = v => Math.max(0, Math.min(100, v));
+    const withRng = (seed, f) => { const keep = Math.random; Math.random = mulberry32(seed); try { return f(Math.random); } finally { Math.random = keep; } };
+    const play = (c0, seed) => withRng(seed, rnd => { const c1 = clone(c0); D.campBattle(c1, 80, rnd); D.simSeason(c1, 80, rnd); return c1; });
+    const badO = [];
+    for (const [key, move] of [[`${sport}Made`, 5], [`${sport}Dropped`, -5]]) {
+      const a = oldB.saves[key]; const out = withRng(5, () => D.dismissRivalryEvent(clone(a)));
+      const told = move > 0 ? 'You made the All-Star roster.' : 'You were left off the All-Star roster.';
+      if (out.state.morale !== cap(a.morale + move) || !out.lines.some(l => l.includes(told)) || out.state.pendingRivalryEvent) badO.push(`${key}: the "${a.pendingRivalryEvent?.consequence}" card paid ${out.state.morale - a.morale} and logged "${out.lines.join(' | ')}"`);
+    }
+    for (const key of Object.keys(oldB.saves).filter(k => k.startsWith(sport) && !/Made|Dropped|Retired/.test(k))) {
+      const c0 = oldB.saves[key]; const c1 = play(c0, 77); const r0 = c0.rival; const r1 = c1.rival; const season = c1.seasons[c1.seasons.length - 1];
+      if (inShape(sport, c0.pos, r0.lastLine)) badO.push(`${key}: the committed save's last line "${r0.lastLine}" is already the new shape, so it proves nothing`);
+      if (!inShape(sport, c1.pos, r1.lastLine) || r1.lastYear !== season.year || r1.myYears + r1.hisYears !== r0.myYears + r0.hisYears + 1 || r1.myYears < r0.myYears || r1.hisYears < r0.hisYears) badO.push(`${key}: after one season his line reads "${r1.lastLine}" (year ${r1.lastYear}), tally ${r0.myYears}-${r0.hisYears} to ${r1.myYears}-${r1.hisYears}`);
+    }
+    { const key = `${sport}Retired`; const c0 = oldB.saves[key]; const c1 = play(c0, 78);
+      if (!c0.rival.retired || c1.rival.lastLine !== c0.rival.lastLine || c1.rival.myYears !== c0.rival.myYears || c1.rival.hisYears !== c0.rival.hisYears) badO.push(`${key}: the retired rival now reads "${c1.rival.lastLine}" ${c1.rival.myYears}-${c1.rival.hisYears}, was "${c0.rival.lastLine}" ${c0.rival.myYears}-${c0.rival.hisYears}`); }
+    check(`${S}.O`, badO.length === 0, `saves built by ${String(oldB.recordedFrom).slice(0, 8)}: the two own cards pay what they printed, the old shape lines become the position's own after one season with the tally kept, and a retired rival keeps his old line and tally${badO.length ? `: ${badO.join(' | ')}` : ''}`);
+  }
+  check(`${S}.F5`, cards.flat().length > 0 && wrong.length === 0 && dealt > 0 && coins.length === 0, `every All-Star card dealt says and promises what the two seasons support: ${wrong.length} of ${cards.flat().length} wrong (a seed: both ${count('both').join(', ')}; only you ${count('onlyYou').join(', ')}; only him ${count('onlyHim').join(', ')}); ${coins.length} of ${dealt} beats dealt promise a "50/50 outcome"${wrong.length ? `; the first, a ${wrong[0].pos} in ${wrong[0].year}: "${wrong[0].says}" promising "${wrong[0].does}" with mine ${wrong[0].mine}, his ${wrong[0].his}` : ''}${coins.length ? `; coin: ${coins.slice(0, 3).join(' | ')}` : ''}`);
+  /* F5, the floors (Round 1313, 5d): "only you" and "only him" each dealt at least six tenths of the five seed total
+     measured at full size (F5_FLOOR_1313); "both" floored only where it was dealt ten times or more. Control
+     onlyhimshut (the "only him" card never dealt). */
+  {
+    const sum = k => count(k).reduce((a, b) => a + b, 0);
+    const got = { onlyYou: sum('onlyYou'), onlyHim: sum('onlyHim'), both: sum('both') };
+    const fl = F5_FLOOR_1313[sport];
+    if (!fl) console.log(`     ${S}.F5 floors, not typed yet: only you ${got.onlyYou}, only him ${got.onlyHim}, both ${got.both} over the run`);
+    else if (FULL) check(`${S}.F5`, Object.entries(fl).every(([k, v]) => got[k] >= v), `the cards a season deals still turn up over the run: ${Object.keys(got).map(k => `${k} ${got[k]}${fl[k] !== undefined ? ` (floor ${fl[k]})` : ' (reported)'}`).join(', ')}`);
+    else console.log(`     ${S}.F5 floors, not judged in a shrunk run: only you ${got.onlyYou}, only him ${got.onlyHim}, both ${got.both}`);
+  }
 }
 
 /* ------------------------------------------------------------------ */
@@ -801,9 +1337,21 @@ if (PROVE) {
   for (const sport of ALL) {
     const named = MOVED.includes(sport) || CARDS.includes(sport);
     let cards = 0; let choices = 0; let equal = 0; let parted = 0; let linesHeld = 0; const firstKeys = {}; let seasons = 0;
+    /* The fix pass of Round 1313 (review finding 1, the brief's P2 row): what the cards do to a career with every
+       card answered, on both trees, PRINTED AND NEVER JUDGED (no harness measures that balance with the rivalry
+       cards answered). The honour is the roster beat's award; the NBA's is the season line's allStar. */
+    const honour = ROSTER[sport]?.award ?? 'All-Star';
+    const side = { was: { seasons: 0, honours: 0, morale: 0, fanbase: 0, mine: 0, his: 0 }, now: { seasons: 0, honours: 0, morale: 0, fanbase: 0, mine: 0, his: 0 } };
+    const sideAdd = (t, json) => {
+      const c = JSON.parse(json);
+      t.seasons += c.seasons.length; t.morale += c.morale ?? 0; t.fanbase += c.fanbase ?? 0;
+      t.honours += c.seasons.filter(s => (sport === 'nba' ? !!s.allStar : (s.awards ?? []).includes(honour))).length;
+      if (c.rival) { t.mine += c.rival.myYears ?? 0; t.his += c.rival.hisYears ?? 0; }
+    };
     for (let i = 0; i < P2N; i += 1) {
       const now = driven(E, sport, i, 40); const was = driven(B.mod, sport, i, 40);
       cards += now.cards; choices += now.choices; seasons += now.seasons;
+      sideAdd(side.now, now.json); sideAdd(side.was, was.json);
       if (now.json === was.json) { equal += 1; continue; }
       if (!named || i >= P2_STEPPED) continue;
       /* The first season where anything off the rival differs, by halving (a save that has parted stays parted:
@@ -819,6 +1367,8 @@ if (PROVE) {
       if (at.a.seasons === at.b.seasons && (!before || before.a.rest === before.b.rest)) linesHeld += 1;
       for (const key of new Set([...Object.keys(at.a.c), ...Object.keys(at.b.c)])) if (JSON.stringify(at.a.c[key]) !== JSON.stringify(at.b.c[key])) firstKeys[key] = (firstKeys[key] ?? 0) + 1;
     }
+    const sideRow = t => `mean seasons ${f2(t.seasons / P2N)}, ${honour}s a career ${f2(t.honours / P2N)}, final morale ${f1(t.morale / P2N)}, final fanbase ${f1(t.fanbase / P2N)}, my share of the head to head years ${f1(pc(t.mine, t.mine + t.his))}`;
+    console.log(`     ${sport} with every card answered (printed, never judged): before ${sideRow(side.was)}; after ${sideRow(side.now)}`);
     check('P2', cards > 0 && seasons > 0, `${sport}: the drive answered ${cards} rivalry cards and ${choices} rival choices over ${seasons} seasons (more than none)`);
     if (!named) check('P2', equal === P2N, `${sport}: ${equal} of ${P2N} whole saves are byte equal`);
     else {

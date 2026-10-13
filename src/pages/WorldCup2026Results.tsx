@@ -255,7 +255,7 @@ const WorldCup2026Results = () => {
         <p>
           Every result here was checked against two independent sources before it went in: ESPN's scoreboard feed and Wikipedia's tournament pages, compared match by match, and all {WC2026_KNOCKOUT.length} knockout scores and winners agreed.
           Group positions come from the list of qualified teams and from standings worked out from every group game, and the two agreed in every group.
-          The awards were checked against Wikipedia, plus The Athletic and FOX Sports. Spot something that looks wrong anyway? The Report a bug button below lands straight in our inbox.
+          The awards were checked against Wikipedia, plus The Athletic and FOX Sports. Spot something that looks wrong anyway? The Report a problem button below lands straight in our inbox.
         </p>
       </section>
 

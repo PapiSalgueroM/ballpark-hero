@@ -655,11 +655,10 @@ const WorldXi = () => {
 
         <AdBanner slot="7540487748" format="horizontal" className="mt-8" />
 
-        <div className="flex justify-center mt-6">
-          <ReportQuestion gameType="world-xi" />
-        </div>
+
 
         <GameSeoContent
+          reportControl={<ReportQuestion gameType="world-xi" />}
           pageHasOwnH1
           title="World XI: The Build-a-XI Football Trivia Game"
           description="A formation, 11 random nations, and your football knowledge. For every country drawn you must name a real player of that nationality who fits the position, from goalkeepers to strikers. Fill all 11 slots to complete your World XI, with optional 90 and 60 second timer modes."

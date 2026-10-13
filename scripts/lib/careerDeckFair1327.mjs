@@ -14,8 +14,8 @@
  * seeded career's Math.random stream moves from the first deck or paper on, and these rows take all of it out again.
  *
  * Applied IN ORDER to the engine of this round's head they give the base's engine byte for byte:
- *   head sha256 0bc8e990eb2e845c0a8494c7f0a0cbbcd71e427411a3753276349f83672db1e4
- *   base sha256 0d9ab4a21241ca1d993fbc7a7176d3ed0de988d6cd2e6989d662c6a1307730ea   (git show 8fea14e2:src/lib/soccerCareerEngine.ts, LF)
+ *   head sha256 b19a6ceee7d92bf4c0a0faf56c25be8ab0253f1070c22ecabc645ad1daa15b15
+ *   base sha256 65ffd9d102989f30c811ac80f884cb84f0b8ca4f9f3feb8e9fdcf9c00009661c   (git show c9c77eba:src/lib/soccerCareerEngine.ts, LF)
  * so the recordings and the base pins stay as they were taken: this is an attribution, not a new recording.
  * scripts/simSoccerDeckFairness.mjs section 8 proves both values on every run.
  *
@@ -25,8 +25,8 @@
 import assert from 'node:assert/strict';
 
 export const DECK_FAIR_FILE = 'src/lib/soccerCareerEngine.ts';
-export const DECK_FAIR_HEAD_SHA256 = '0bc8e990eb2e845c0a8494c7f0a0cbbcd71e427411a3753276349f83672db1e4';
-export const DECK_FAIR_BASE_SHA256 = '0d9ab4a21241ca1d993fbc7a7176d3ed0de988d6cd2e6989d662c6a1307730ea';
+export const DECK_FAIR_HEAD_SHA256 = 'b19a6ceee7d92bf4c0a0faf56c25be8ab0253f1070c22ecabc645ad1daa15b15';
+export const DECK_FAIR_BASE_SHA256 = '65ffd9d102989f30c811ac80f884cb84f0b8ca4f9f3feb8e9fdcf9c00009661c';
 
 /* The rows, in the order they must be applied: each turns one block of this round's engine back into the base's. */
 const EDITS = [

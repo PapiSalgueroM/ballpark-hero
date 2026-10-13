@@ -148,6 +148,7 @@ const TennisHigherLower = () => {
         )}
 
         <GameSeoContent
+          reportControl={<ReportQuestion gameType="tennis-higher-lower" gameContext={{ mode }} />}
           pageHasOwnH1
           title="Tennis Higher or Lower | DoUKnowBall"
           description="Two tennis greats, side by side. Which one won more Grand Slam singles titles? Men's and women's legends in one pool, from Bill Tilden to Carlos Alcaraz."
@@ -167,9 +168,7 @@ const TennisHigherLower = () => {
         />
 
         <AdBanner slot="7540487748" format="horizontal" className="mt-8" />
-        <div className="flex justify-center mt-6">
-          <ReportQuestion gameType="tennis-higher-lower" gameContext={{ mode }} />
-        </div>
+
         <GameNav />
       </GameShell>
     </>

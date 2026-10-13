@@ -69,6 +69,10 @@ import { NEXT_TEN_WHEEL_FILE, inverseCareerNextTen } from './lib/careerNextTenAt
 /* Release AW: Rounds 1262 to 1264 pay a career of 30 or more by age and form on purpose. Both attribution
    bundles take that out of a copy of the contracts file too: scripts/lib/careerVeteranPay1262.mjs. */
 import { VETERAN_PAY_ADDITIONS, veteranPayOutPlugin } from './lib/careerVeteranPay1262.mjs';
+/* Round 1318: Rounds 1280 to 1282 and 1318 keep the made up Ballon d'Or rivals in a saved pool on purpose. The
+   guarded development bundle takes that out of its copied engine too, its rows in order; the train out bundle
+   already does, since the 1172 list it spreads starts with the same rows: scripts/lib/careerAwardGenerations1318.mjs. */
+import { AWARD_GENERATIONS_ADDITIONS, inverseAwardGenerations } from './lib/careerAwardGenerations1318.mjs';
 /* Round 1327: the event deck draws on a keyed stream and the paper picks by weight, which moves every seeded
    career from its first deck or paper on. Both historical bundles take that out first, the newest change first:
    scripts/lib/careerDeckFair1327.mjs. */
@@ -114,7 +118,7 @@ const sourceFiles = ['src/lib/soccerCareerEngine.ts', 'src/lib/soccerCareerLeagu
   'scripts/lib/careerDevelopmentAttribution1185.mjs', 'scripts/lib/careerStoryRoleAttribution1190.mjs', 'scripts/simCareerLeagueFinish.mjs'];
 const sourceHashes = () => Object.fromEntries(sourceFiles.map(file => [file,
   crypto.createHash('sha256').update(fs.readFileSync(path.join(ROOT, file))).digest('hex')]));
-const proof = { control: CONTROL, sourceBefore: sourceHashes(), sourceAfter: null, sourceHeld: false, attribution: [], storyRoleAttribution: [], nextTenAttribution: [], veteranPayAttribution: [], deckFairAttribution: [], originalSources: [], careers: [] };
+const proof = { control: CONTROL, sourceBefore: sourceHashes(), sourceAfter: null, sourceHeld: false, attribution: [], storyRoleAttribution: [], nextTenAttribution: [], veteranPayAttribution: [], awardGenerationsAttribution: [], deckFairAttribution: [], originalSources: [], careers: [] };
 
 /* A control edits a COPY. The copies live outside src/lib, so their relative
    imports are pointed back at the real files, except the engine's import of
@@ -203,8 +207,9 @@ function deckFairOut(text) {
 }
 async function attributionEngine() {
   const before = fs.readFileSync(enginePath, 'utf8').replaceAll('\r\n', '\n');
-  const attributed = inverseCareerStoryRole(inverseCareerDevelopment(deckFairOut(before), proof.attribution), proof.storyRoleAttribution);
+  const attributed = inverseCareerStoryRole(inverseCareerDevelopment(inverseAwardGenerations(ENGINE_REL, deckFairOut(before), proof.awardGenerationsAttribution), proof.attribution), proof.storyRoleAttribution);
   assert.notEqual(attributed, before, 'Historical attribution changes its copied engine');
+  assert.equal(proof.awardGenerationsAttribution.length, AWARD_GENERATIONS_ADDITIONS.length, 'The copied engine had the award generations of Rounds 1280 to 1282 and 1318 taken out, once for each row');
   const file = path.join(WORK, 'attributedEngine.ts'), entry = path.join(WORK, 'attributedEntry.mjs'), out = path.join(WORK, 'attributedBundle.mjs'), veteranOut = [];
   fs.writeFileSync(file, relocate(attributed, CONTROL === 'stream' || CONTROL === 'notitle' ? 'soccerCareerLeague' : ''));
   fs.writeFileSync(entry, `globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };\nexport * from '${file.replaceAll('\\', '/')}';\n`);
