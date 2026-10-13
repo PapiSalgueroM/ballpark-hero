@@ -1,0 +1,5 @@
+MUTATION APPLIED: arrivalEffect (2 edit(s))
+[31m   [31m×[31m useArrivalTop[2m > [22mthe move is made in the layout phase, before paint: a passive effect of the new screen already sees it[39m[32m 8[2mms[22m[39m
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+[41m[1m FAIL [22m[49m src/test/useArrivalTop.test.tsx[2m > [22museArrivalTop[2m > [22mthe move is made in the layout phase, before paint: a passive effect of the new screen already sees it
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m8 passed[39m[22m[90m (9)[39m

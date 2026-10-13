@@ -1,0 +1,5 @@
+MUTATION APPLIED: kittyIncome (1 edit(s))
+[31m   [31m×[31m kittyChange[2m > [22man income line the kitty never sees comes back out of the result, by its flag[39m[32m 7[2mms[22m[39m
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+[41m[1m FAIL [22m[49m src/test/clubManagerHubLines.test.ts[2m > [22mkittyChange[2m > [22man income line the kitty never sees comes back out of the result, by its flag
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m14 passed[39m[22m[90m (15)[39m

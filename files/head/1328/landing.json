@@ -1,0 +1,25 @@
+{
+ "landing": [],
+ "fails": [
+  {
+   "section": "E",
+   "msg": "cmOldSave1052Fixture.json edge-320: nothing on the hub shifts when the meters land late (layout shift 0.0066, strip 60px in a 52px slot)"
+  },
+  {
+   "section": "E",
+   "msg": "cmOldSave1052Fixture.json edge-390: nothing on the hub shifts when the meters land late (layout shift 0.0063, strip 60px in a 52px slot)"
+  },
+  {
+   "section": "E",
+   "msg": "cmOldSave1052Fixture.json edge-1280: nothing on the hub shifts when the meters land late (layout shift 0.0032, strip 60px in a 52px slot)"
+  },
+  {
+   "section": "E",
+   "msg": "cmOldSave1052Fixture.json plain-390: nothing on the hub shifts when the meters land late (layout shift 0.0063, strip 52px in a 52px slot)"
+  }
+ ],
+ "counts": {
+  "B": 65,
+  "E": 11
+ }
+}

@@ -1,0 +1,12 @@
+{
+ "landing": [],
+ "fails": [
+  {
+   "section": "B",
+   "msg": "banner-390: the strip rides the foot once the banner is answered (bottom 683, foot 832, banner gone)"
+  }
+ ],
+ "counts": {
+  "B": 64
+ }
+}

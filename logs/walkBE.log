@@ -1,0 +1,18 @@
+  FAIL  E  cmOldSave1052Fixture.json edge-320: nothing on the hub shifts when the meters land late (layout shift 0.0066, strip 60px in a 52px slot)
+  FAIL  E  cmOldSave1052Fixture.json edge-390: nothing on the hub shifts when the meters land late (layout shift 0.0063, strip 60px in a 52px slot)
+  FAIL  E  cmOldSave1052Fixture.json edge-1280: nothing on the hub shifts when the meters land late (layout shift 0.0032, strip 60px in a 52px slot)
+  FAIL  E  cmOldSave1052Fixture.json plain-390: nothing on the hub shifts when the meters land late (layout shift 0.0063, strip 52px in a 52px slot)
+  PASS  B  banner-390: after the banner is answered the strip's own place is below the fold, so it rides the foot (own place top 804, drawn 698, of 844)
+  PASS  B  banner-390: the strip rides the foot once the banner is answered (bottom 832, foot 832, banner gone)
+  PASS  E  cmOldSave1052Fixture.json edge-320: the meters' chunk was still loading on the first hub frame
+  PASS  E  cmOldSave1052Fixture.json edge-320: the board meter reads "Board One bad week from the sack"
+  FAIL  E  cmOldSave1052Fixture.json edge-320: nothing on the hub shifts when the meters land late (layout shift 0.0066, strip 60px in a 52px slot)
+  PASS  E  cmOldSave1052Fixture.json edge-390: the meters' chunk was still loading on the first hub frame
+  PASS  E  cmOldSave1052Fixture.json edge-390: the board meter reads "Board One bad week from the sack"
+  FAIL  E  cmOldSave1052Fixture.json edge-390: nothing on the hub shifts when the meters land late (layout shift 0.0063, strip 60px in a 52px slot)
+  PASS  E  cmOldSave1052Fixture.json edge-1280: the meters' chunk was still loading on the first hub frame
+  PASS  E  cmOldSave1052Fixture.json edge-1280: the board meter reads "Board One bad week from the sack"
+  FAIL  E  cmOldSave1052Fixture.json edge-1280: nothing on the hub shifts when the meters land late (layout shift 0.0032, strip 60px in a 52px slot)
+  PASS  E  cmOldSave1052Fixture.json plain-390: the meters' chunk was still loading on the first hub frame
+  FAIL  E  cmOldSave1052Fixture.json plain-390: nothing on the hub shifts when the meters land late (layout shift 0.0063, strip 52px in a 52px slot)
+playCmHubLanding: 4 failure(s) (B 65 pass 0 fail, E 11 pass 4 fail)
