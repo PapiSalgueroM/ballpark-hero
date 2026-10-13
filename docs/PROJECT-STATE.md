@@ -1,3 +1,7 @@
+## Codex Round1360: severe-cold Career event426 context, causal proof in progress, 2026-10-13
+
+Managed codex/soccer-career-cold-context starts at1358final42a7f7c9. H1327 owes this specific climate gate. Current professional-only guard can offer minus-twenty scenario in any country; no actual weather/winter-fixture model input exists. Proposed pending-only426 retains all already-delivered original choices and delays fresh offers until supported context exists. App unchanged before remote16-case baseline/fourfreshfault12preserves; original costs/effects/history/cooldown/catalog construction draws held. Fresh picker sort input changes are an approved eligibility delta, not global RNG equality. No geography mapping, new real data or Hcore/save/finance/RealismB/framework change. See docs/audits/soccer-career-cold-context-2026-10-13.md.
+
 ## Codex Round1358: Soccer Career saved popularity233 and truthful preview, scoped fixed proof qualified, 2026-10-13
 
 Managed codex/soccer-career-pending-popularity starts at qualified1356 docsfinal0a43994b. Root reserves only existingLife233 gate and233choice0 pure consequence-map entry after qualifiedbaseline; Hcore/page/save/finance/calendar/deck and allother app/proofs remainheld. Actualsource213choice0 popularity60to58 dropsdelivered233 effectsafterJSONreload; livefunctionfallbackworks. Intendedpending233ORoriginal60gate retains everyfresheligibility/effect/cooldown99/stamp/RNG/cap5 rule. Existing233choice0caption also omits actualPopularity4, so one mapentry will truthfullyshowboth rewards withoutrewritingsavedwords.
