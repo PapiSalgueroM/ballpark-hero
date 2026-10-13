@@ -1,0 +1,21 @@
+#!playwright
+simScoreShown: node scripts/simScoreShown.mjs
+simSoccerAgentReviewPageControl: node scripts/simSoccerAgentReviewPageControl.mjs
+simSoccerAwardGenerations: node scripts/simSoccerAwardGenerations.mjs
+simSoccerAwardReveal: node scripts/simSoccerAwardReveal.mjs
+simSoccerCareer: node scripts/simSoccerCareer.mjs
+simSoccerCareerAmbitions: node scripts/simSoccerCareerAmbitions.mjs
+simSoccerCareerLeagueWorld: node scripts/simSoccerCareerLeagueWorld.mjs
+simSoccerCareerSaveRetry: node scripts/simSoccerCareerSaveRetry.mjs
+simSoccerCareerUcl: node scripts/simSoccerCareerUcl.mjs
+simSoccerContractMoves: node scripts/simSoccerContractMoves.mjs
+simSoccerCurrency: node scripts/simSoccerCurrency.mjs
+simSoccerDiscipline: node scripts/simSoccerDiscipline.mjs
+simSoccerFarewellPageControl: node scripts/simSoccerFarewellPageControl.mjs
+simSoccerInternationalReturnPageControl: node scripts/simSoccerInternationalReturnPageControl.mjs
+simSoccerLoanBite: node scripts/simSoccerLoanBite.mjs
+simSoccerLoanMinutes: node scripts/simSoccerLoanMinutes.mjs
+simSoccerOfferReview: node scripts/simSoccerOfferReview.mjs
+simSoccerOpponentLabels: node scripts/simSoccerOpponentLabels.mjs
+simSoccerOwnGoals: node scripts/simSoccerOwnGoals.mjs
+simSoccerPracticeLifecycle: node scripts/simSoccerPracticeLifecycle.mjs
