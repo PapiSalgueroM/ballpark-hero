@@ -1,0 +1,15 @@
+#!serve
+#!playwright
+w1077: node scripts/qa/managerWorldBrowser1077.mjs --prefetch-fonts-only && if command -v xvfb-run >/dev/null; then NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" xvfb-run -a node scripts/qa/managerWorldBrowser1077.mjs; else NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/managerWorldBrowser1077.mjs; fi
+w1079: node scripts/qa/managerMatchPlans1079.mjs --prefetch-fonts-only && if command -v xvfb-run >/dev/null; then NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" xvfb-run -a node scripts/qa/managerMatchPlans1079.mjs; else NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/managerMatchPlans1079.mjs; fi
+simWritesAreSent: node scripts/simWritesAreSent.mjs
+simResultMoment: node scripts/simResultMoment.mjs
+playSaveKeeper-base: git worktree add -q /tmp/kb 8fea14e2 && ln -s "$PWD/node_modules" /tmp/kb/node_modules && (cd /tmp/kb && node_modules/.bin/vite build > /tmp/kb-build.log 2>&1) && KEEPER_BASE_DIST=/tmp/kb/dist ENGINES=chromium node scripts/playSaveKeeper.mjs
+playClubManagerSaveLeave: ENGINES=chromium node scripts/playClubManagerSaveLeave.mjs
+playClubManagerSlots: ENGINES=chromium node scripts/playClubManagerSlots.mjs
+playStorageBlocked: ENGINES=chromium node scripts/playStorageBlocked.mjs
+playHomeFold: ENGINES=chromium node scripts/playHomeFold.mjs
+playCmQuickSubs: mkdir -p cm-quick-subs-artifacts && FREE_KICK_FONT_CACHE=cm-quick-subs-artifacts/font-cache node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playCmQuickSubs.mjs
+playCmRealFixtures: ENGINES=chromium node scripts/playCmRealFixtures.mjs
+simManagerWorldBrowser: MANAGER_WORLD_BROWSER_CONTROL=all ONLY=simManagerWorldBrowser node scripts/runAllSims.mjs
+weight: ENGINES=chromium node scripts/sweepWeight.mjs
