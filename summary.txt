@@ -1,0 +1,9 @@
+og-revert exit=1 12s | ::error file=/tmp/ogrev2/src/test/seasonCentreOwnGoals.test.tsx,title=src/test/seasonCentreOwnGoals.test.tsx > Season Centre%3A own goals on the page (Round 1167%2C read 
+prom exit=0 41s | simSoccerEventPromises: all sections green
+p-firstyear exit=1 34s | CONTROL firstyear FIRED: section 1 failed (1 failures in all)
+tsc exit=0 151s | 
+fair0 exit=0 115s | simSoccerDeckFairness: all sections green
+h-storyrole exit=0 74s | simCareerStoryRole: 16 groups, 0 failed, 48 full AR pairs
+h-leagueseasons exit=0 49s | simCareerLeagueSeasons: all sections green
+k-programme exit=0 128s | Career programme:50 original/compatibility/full product season pairs with exact RNG,240 opted gameplay seasons,21 effective loaded faults,164 unchanged original chance ou
+vitest-all exit=0 799s |    Duration  797.32s (transform 46.59s, setup 31.63s, collect 209.88s, tests 1753.14s, environment 234.68s, prepare 49.47s)

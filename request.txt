@@ -1,0 +1,9 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-all: node_modules/.bin/vitest run --testTimeout=300000 --hookTimeout=120000
+og-revert: R=$PWD && git worktree add -q /tmp/ogrev2 HEAD && cd /tmp/ogrev2 && git -c user.email=rc@rc -c user.name=rc revert --no-commit 8974536d && git diff --stat HEAD && ln -s "$R/node_modules" node_modules && node_modules/.bin/vitest run src/test/seasonCentreOwnGoals.test.tsx --testTimeout=300000
+prom: node scripts/simSoccerEventPromises.mjs
+p-firstyear: SIM_SOCCER_EVENT_PROMISES_CONTROL=firstyear node scripts/simSoccerEventPromises.mjs
+fair0: node scripts/simSoccerDeckFairness.mjs
+h-storyrole: node scripts/simCareerStoryRole.mjs
+h-leagueseasons: node scripts/simCareerLeagueSeasons.mjs
+k-programme: node scripts/simCareerProgramme.mjs
