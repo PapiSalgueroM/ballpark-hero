@@ -1,0 +1,3 @@
+#!serve
+#!playwright
+desk-alone: node scripts/playCmFinanceDesk.mjs
