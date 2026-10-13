@@ -28,7 +28,8 @@
  *   bar      saves made by the engine (youth, playing, manager employed,
  *            manager out of work, pundit, owner, retired): every button and
  *            the AGE tile inside the screen, no button text cut, every button
- *            at least 44 px tall, the first button's name as on the base.
+ *            at least 44 px tall, the first button's name as on the base. Also
+ *            at 360 by 780 and 375 by 667 (EXTRA_SIZES).
  *            BASE: AGE off screen at 320 in playing.
  *   retire   one Retire control on the youth and playing hub, and it opens
  *            "Retire?"; the retired screen shows no Weekly Wage tile. BASE:
@@ -71,6 +72,14 @@ fs.mkdirSync(OUT, { recursive: true });
 const CONTROL = process.env.SOCCER_LANDING_CONTROL || '';
 if (CONTROL && CONTROL !== 'seed') { console.error(`SOCCER_LANDING_CONTROL=${CONTROL} is not a control here (seed)`); process.exit(2); }
 const SIZES = (process.env.SIZES || '320x640,390x844,1280x900').split(',').map(s => s.split('x').map(Number));
+/* Sizes one section also runs at, as section:WxH. The bar at 360 and 375, the
+   commonest phones, where a step down keyed under 360 once left AGE off the
+   screen while 320, 390 and 1280 were all green. EXTRA_SIZES= runs none. */
+const EXTRA = (process.env.EXTRA_SIZES ?? 'bar:360x780,bar:375x667').split(',').map(s => s.trim()).filter(Boolean).map(s => {
+  const [section, wh] = s.split(':');
+  const [w, h] = wh.split('x').map(Number);
+  return { section, w, h };
+});
 const ALL_SECTIONS = ['landing', 'name', 'bar', 'retire', 'toasts', 'bytes'];
 const SECTIONS = CONTROL ? ['bytes'] : (process.env.SECTIONS || ALL_SECTIONS.join(',')).split(',').map(s => s.trim()).filter(Boolean);
 const BASE_DIST = process.env.SOCCER_LANDING_BASE_DIST ? path.resolve(process.env.SOCCER_LANDING_BASE_DIST) : null;
@@ -363,7 +372,7 @@ function judgeName(arm, size, w, n) {
   if (w <= 320 && n.under.length) rec(arm, 'name', size, `"${n.text}" sits under ${JSON.stringify(n.under)}`);
   if (w >= 1280 && n.lines !== 1) rec(arm, 'name', size, `"${n.text}" takes ${n.lines} lines at ${w}`);
 }
-async function sectionLanding(ctx, arm, size, w) {
+async function sectionLanding(ctx, arm, size, w, judge = SECTIONS) {
   for (const [i, name] of NAMES.entries()) {
     const p = await ctx.newPage();
     await plant(p, URLS[arm], {});
@@ -371,15 +380,15 @@ async function sectionLanding(ctx, arm, size, w) {
     await fillCreation(p, name);
     const m = await beginAndMeasure(p);
     await shot(p, `${arm}-${size}-landing-${i}`);
-    if (SECTIONS.includes('landing')) judgeLanding(arm, size, `"${name}"`, m);
+    if (judge.includes('landing')) judgeLanding(arm, size, `"${name}"`, m);
     /* Any toast Begin Career raised, sampled where the player lands. */
     for (const t of await p.evaluate(() => window.__toastAudit ?? [])) {
       const bad = t.hits.filter(h => h.kind === 'control' || h.kind === 'heading');
       console.log(`   at landing: "${t.words}" ${t.when} at ${t.box.x},${t.box.y} ${t.box.w}x${t.box.h}: ${t.hits.length ? JSON.stringify([...new Set(t.hits.map(h => `${h.kind} ${h.what}`))]) : 'nothing under it'}`);
-      if (bad.length && SECTIONS.includes('toasts')) rec(arm, 'toasts', size, `at landing "${t.words}" (${t.when}) lies over ${JSON.stringify([...new Set(bad.map(h => `${h.kind} ${h.what}`))])}`);
+      if (bad.length && judge.includes('toasts')) rec(arm, 'toasts', size, `at landing "${t.words}" (${t.when}) lies over ${JSON.stringify([...new Set(bad.map(h => `${h.kind} ${h.what}`))])}`);
     }
-    if (SECTIONS.includes('name')) judgeName(arm, size, w, await measureName(p));
-    if (i === 0 && SECTIONS.includes('landing')) {
+    if (judge.includes('name')) judgeName(arm, size, w, await measureName(p));
+    if (i === 0 && judge.includes('landing')) {
       /* New Career, then Begin again: lands again. */
       await p.getByRole('button', { name: /New Career/ }).first().click({ timeout: 5000 }).catch(() => {});
       await p.getByRole('button', { name: 'Delete & Start Over' }).click({ timeout: 5000 }).catch(() => {});
@@ -639,6 +648,20 @@ try {
         if (SECTIONS.includes('bar')) await sectionBar(ctx, arm, size);
         if (SECTIONS.includes('retire')) await sectionRetire(ctx, arm, size);
         if (SECTIONS.includes('toasts')) await sectionToasts(ctx, arm, size);
+      } catch (e) {
+        rec(arm, 'walk', size, `threw: ${String(e?.message ?? e).split('\n')[0].slice(0, 300)}`);
+      }
+      await ctx.close();
+    }
+    for (const { section, w, h } of EXTRA) {
+      if (!SECTIONS.includes(section)) continue;
+      const size = `${w}x${h}`;
+      console.log(`== ${arm} ${size} (${section} only)`);
+      const ctx = await newContext(w, h, SEED);
+      try {
+        if (section === 'bar') await sectionBar(ctx, arm, size);
+        else if (section === 'name') await sectionLanding(ctx, arm, size, w, ['name']);
+        else throw new Error(`EXTRA_SIZES names ${section}, which runs only at SIZES`);
       } catch (e) {
         rec(arm, 'walk', size, `threw: ${String(e?.message ?? e).split('\n')[0].slice(0, 300)}`);
       }

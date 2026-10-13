@@ -4779,10 +4779,10 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
 
       {/* Action bar */}
       {/* Round 1330: every phase's bar fits a 320 screen with AGE on it. Under
-          400 px the AGE tile is narrower; under 360 px the gaps, the side
-          padding and the labels step down one size and the decorative
-          chevron goes. No label is cut or shortened and none changes its
-          name, and the bar stays one row. */}
+          400 px (so 360 and 375 too, the commonest phones) the AGE tile is
+          narrower, the gaps, the side padding and the labels step down one
+          size and the decorative chevron goes. No label is cut or shortened
+          and none changes its name, and the bar stays one row. */}
       {/* Round 86: the bar only floats when it actually has buttons to offer.
           In button-less phases it stays inline, so no orphan AGE tile ever
           hovers over the page blocking clicks. That rule is untouched.
@@ -4794,15 +4794,15 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
           phone buttons because they were parked on the footer too. */}
       <div
         data-career-action-bar={actionBarFloats ? 'floating' : 'inline'}
-        className={`flex items-center gap-3 max-[359px]:gap-2 ${actionBarFloats ? 'fixed bottom-0 left-0 right-0 z-40 bg-background/95 backdrop-blur border-t border-border px-3 max-[359px]:px-2 sm:px-4 py-3 max-w-5xl mx-auto' : ''}`}
+        className={`flex items-center gap-3 max-[399px]:gap-2 ${actionBarFloats ? 'fixed bottom-0 left-0 right-0 z-40 bg-background/95 backdrop-blur border-t border-border px-3 max-[399px]:px-2 sm:px-4 py-3 max-w-5xl mx-auto' : ''}`}
         style={actionBarFloats && footerLift ? { transform: `translateY(-${footerLift}px)` } : undefined}
       >
         {career.phase === "retired" ? (
           <div className="flex-1 flex gap-2">
-            <Button onClick={onShare} variant="outline" className="flex-1 h-12 text-sm font-bold max-[359px]:px-3 max-[359px]:text-xs">
+            <Button onClick={onShare} variant="outline" className="flex-1 h-12 text-sm font-bold max-[399px]:px-3 max-[399px]:text-xs">
               📤 Share Legacy
             </Button>
-            <Button onClick={onNewCareer} className="flex-1 h-12 text-base font-bold bg-emerald-600 hover:bg-emerald-500 text-black max-[359px]:px-3 max-[359px]:text-sm">
+            <Button onClick={onNewCareer} className="flex-1 h-12 text-base font-bold bg-emerald-600 hover:bg-emerald-500 text-black max-[399px]:px-3 max-[399px]:text-sm">
               ⚽ New Career
             </Button>
           </div>
@@ -4811,19 +4811,19 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
             {/* Round 112: when you are out of work you are not managing a
                 season, you are waiting for a phone call, and the button
                 should say which one of those is happening. */}
-            <Button onClick={onAdvanceManager} className="flex-1 h-12 text-base font-bold bg-emerald-600 hover:bg-emerald-500 text-black gap-2 max-[359px]:px-3 max-[359px]:text-sm">
-              {career.managerState?.unemployed ? "Sit Out A Season" : "Next Manager Season"} <ChevronRight className="w-5 h-5 max-[359px]:hidden" />
+            <Button onClick={onAdvanceManager} className="flex-1 h-12 text-base font-bold bg-emerald-600 hover:bg-emerald-500 text-black gap-2 max-[399px]:px-3 max-[399px]:text-sm">
+              {career.managerState?.unemployed ? "Sit Out A Season" : "Next Manager Season"} <ChevronRight className="w-5 h-5 max-[399px]:hidden" />
             </Button>
-            <Button onClick={onEndManager} variant="outline" className="h-12 text-sm font-bold max-[359px]:px-3">
+            <Button onClick={onEndManager} variant="outline" className="h-12 text-sm font-bold max-[399px]:px-3">
               {career.managerState?.unemployed ? "Walk Away" : "Retire"}
             </Button>
           </div>
         ) : career.phase === "owner_season" ? (
           <div className="flex-1 flex gap-2">
-            <Button onClick={onAdvanceOwner} className="flex-1 h-12 text-base font-bold bg-emerald-600 hover:bg-emerald-500 text-black gap-2 max-[359px]:px-3 max-[359px]:text-sm">
-              Next Owner Season <ChevronRight className="w-5 h-5 max-[359px]:hidden" />
+            <Button onClick={onAdvanceOwner} className="flex-1 h-12 text-base font-bold bg-emerald-600 hover:bg-emerald-500 text-black gap-2 max-[399px]:px-3 max-[399px]:text-sm">
+              Next Owner Season <ChevronRight className="w-5 h-5 max-[399px]:hidden" />
             </Button>
-            <Button onClick={onEndOwner} variant="outline" className="h-12 text-sm font-bold max-[359px]:px-3">Sell Club</Button>
+            <Button onClick={onEndOwner} variant="outline" className="h-12 text-sm font-bold max-[399px]:px-3">Sell Club</Button>
           </div>
         ) : showActionButton ? (
           <div className="flex-1 flex gap-2">
