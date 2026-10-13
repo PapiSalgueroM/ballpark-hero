@@ -1,0 +1,5 @@
+#!serve
+#!playwright
+weight: SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs | grep -E "soccer-career|sweepWeight:"; node .rc/x/chunks.mjs | grep -E "SoccerCareer|saveFence|useArrivalTop|TOTAL"; node scripts/simFlagshipWeight.mjs | tail -1
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+watch-unit: node_modules/.bin/vitest run src/test/useSaveFenceWatch.test.tsx src/test/soccerCareerSaveFence.test.tsx --testTimeout=300000
