@@ -1,0 +1,12 @@
+simLiveMatch: node scripts/simLiveMatch.mjs
+simHalftime: node scripts/simHalftime.mjs
+simMatchDetail: node scripts/simMatchDetail.mjs
+simCmShootoutOrder: node scripts/simCmShootoutOrder.mjs
+simCmOwnGoals: node scripts/simCmOwnGoals.mjs
+simCmStoppageTime: node scripts/simCmStoppageTime.mjs
+simExtraTime: node scripts/simExtraTime.mjs
+simTacticsEngine: node scripts/simTacticsEngine.mjs
+simEra2020: node scripts/simEra2020.mjs
+simCmLeagueBook: node scripts/simCmLeagueBook.mjs
+simCmMatchCentre: node scripts/simCmMatchCentre.mjs
+vitest: node_modules/.bin/vitest run src/lib/clubManagerSubsRule.test.ts src/test/managerScorerMarks.test.tsx src/test/cmMinuteLabel.test.ts --testTimeout=300000 --hookTimeout=120000
