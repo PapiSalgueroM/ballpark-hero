@@ -1,0 +1,15 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/test/saveFence.test.ts src/lib/clubManagerSlots.test.ts src/test/clubManagerSlots.test.tsx src/test/clubManagerSave.test.tsx src/test/clubManagerSaveSize.test.tsx src/test/clubManagerDeskCues.test.tsx src/test/clubManagerEraLoad.test.tsx src/test/clubManagerStartWait.test.tsx src/test/clubManagerVarLive.test.tsx src/test/clubManagerWorldEditor.test.tsx src/test/managerMatchPlans.test.tsx src/test/contractPreview.test.tsx src/test/managerHotSeatCarryOn.test.ts src/test/managerHotSeatCarryOnCard.test.tsx src/test/clubManagerBracketMoment.test.tsx src/test/clubManagerEraPicker.test.tsx src/test/clubManagerWorldEditorPage.test.tsx src/test/dailyMenuResume.test.tsx src/test/saveKeeper.test.ts src/test/routeErrorRecovery.test.tsx --testTimeout=300000 --hookTimeout=120000
+simSaveFence: node scripts/simSaveFence.mjs
+fence-nofence: SAVE_FENCE_CONTROL=nofence node scripts/simSaveFence.mjs
+fence-rawwrite: SAVE_FENCE_CONTROL=rawwrite node scripts/simSaveFence.mjs
+simClubManagerSlots: node scripts/simClubManagerSlots.mjs
+simManagerAppealIsolation: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simManagerAppealIsolation.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+simClubManagerSave: node scripts/simClubManagerSave.mjs
+simClubManagerSaveSize: node scripts/simClubManagerSaveSize.mjs
+simManagerHotSeat: node scripts/simManagerHotSeat.mjs
+simDailyDeals: node scripts/simDailyDeals.mjs
+simDeadlineDay: node scripts/simDeadlineDay.mjs
+simManagerMatchPlans: node scripts/simManagerMatchPlans.mjs
+simActivityNotCompletion: node scripts/simActivityNotCompletion.mjs
