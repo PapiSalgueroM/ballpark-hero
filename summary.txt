@@ -1,0 +1,2 @@
+simReportRelay-oldkinds exit=0 0s | control "oldkinds": 1 failure(s) fired in section 1 and nowhere else, the check works
+vitest-chips-print exit=0 4s |       Tests  38 passed (38)

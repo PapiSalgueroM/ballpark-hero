@@ -1,0 +1,3 @@
+NEGATIVE CONTROL ON: the per question button carries its own old four chips again
+  FAIL: the per question button does not take its chips from the shared module, so the two buttons can drift apart again
+control "oldkinds": 1 failure(s) fired in section 1 and nowhere else, the check works
