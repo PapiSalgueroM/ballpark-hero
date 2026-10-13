@@ -945,21 +945,26 @@ const MLB_OWN = 162;
    only prove the fleet reaches what is being compared. MEASURED on the tree
    this was written on (2026-10-10), 6,000 paired seasons a sport over four
    year and club cells: 5,418 NHL and 6,269 MLB awards in the full seasons
-   (floor 400); the year went to the player 4,119 times and to the rival
-   1,881 in the NHL, 1,900 and 4,100 in MLB (floors 800); every comparison
-   equal. After the short year, 6,000 seasons a sport: no comeback award off
+   (floor 400); every comparison equal. The year counts, MEASURED AGAIN on
+   arm a, the saved lines (2026-10-12, runner r1313-s7g on 00e42677,
+   US_LEDGER_MEASURE=1): the year went to the player 2,908 times and to the
+   rival 3,092 in the NHL, 2,990 and 3,010 in MLB (floors 800, so 3.6 to 3.9
+   times the floor). Before Round 1313 they were counted on arm b: 4,119 and
+   1,881 in the NHL, 1,900 and 4,100 in MLB. After the short year, 6,000 seasons a sport: no comeback award off
    a season that was no lost year; 104 hitters whose 2020 was a lost one, 79
    of them the comeback player of 2021 (floors 50 and 30). What each control
    turned red: nhlawards 1,745 seasons with other awards, mlbawards 1,340,
-   nhlgates 725, mlbgates 718, nhlhead 1,705 other verdicts, mlbhead 915,
+   nhlgates 725, mlbgates 718, nhlhead 1,705 other verdicts, mlbhead 915
+   (both retired), fullslatenhl 1,528 of 6,000 judged seasons that disagree
+   with the two printed lines (2012 BOS 612, 2019 CAR 355, 2020 BOS 516,
+   2026 BOS 45: every cell), fullslatemlb 1,389 (2005 CIN 5, 2020 BOS 689,
+   2020 DET 687, 2026 NYY 8: every cell; both at r1313-s7g),
    nhlcarry 4,401 counts, mlbcarry 2,000, nhlcomeback 381 comebacks off a
    whole 48 game season, mlbcomeback 2,979 off a whole 60 game one.
    Controls: nhlawards, mlbawards, nhlgates, mlbgates, fullslatemlb,
    fullslatenhl (E8a; mlbhead and nhlhead retired in Round 1313 with the
    inline scores they changed), nhlcarry, mlbcarry (E8b), nhlcomeback,
-   mlbcomeback (E8c). The year counts above were measured on arm b before
-   Round 1313; since then they are counted on arm a (printed by
-   US_LEDGER_MEASURE=1), against the same floors. nhltyped and mlbtyped (a
+   mlbcomeback (E8c). nhltyped and mlbtyped (a
    typed length) still need E8a: since Round 1313 it holds that every judged
    season on arm a is saved at its cell's own length, or the verdict check
    would read two full lines and compare nothing. */
