@@ -119,5 +119,10 @@ Both reviews (run and read) said ship with no major. The fixer's commits, each p
 - What did not move: clubManager.ts is untouched, so the Round 1081 pin stands; simCmLeagueRules is green on the
   committed digest (no save of its fleet holds a late approach); cmCopyOnly1326 is unchanged in every count and
   saw no lapse line (0 comparisons), so the sentence is proven by simCmCopy section 4, forced and played.
-- simGmStaff's fixture does not hold the sentence either: that harness ticks weeks 1 to 46 by hand against a 54
-  entry calendar, so no recorded approach reaches the boundary. Round 1316's retake is unchanged by this pass.
+- simGmStaff's recording does take the sentence in two lines. That harness ticks weeks 1 to 46 by hand whatever
+  the calendar, and AC Horsens' calendar is short enough that two approaches pass its end. GM_STAFF_RECORD=1 on
+  39379e55 (r1326-f2s, exit 0, "recorded 40 runs, 2539 lines", sha 74466bfb3d2bc4bf) against the builder's head
+  recording of ea84ed63 (sha cef1b60fcc6c5477): 2539 lines each, 2 differ, both in the AC Horsens nines run (lines
+  15 and 17 of 63: S0W40 and S0W46 approach ticks), equal before " | " and differing only by the lapse sentence.
+  The fixture stays untaken (main is red there); Round 1316's attribution is the builder's 136 approach lines,
+  these two among them, now carrying the lapse sentence as well, all of them this round's words.
