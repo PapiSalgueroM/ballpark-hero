@@ -1,0 +1,230 @@
+seed 1987332285; arms head, base; sections landing, name, bar, retire, toasts, bytes; sizes 320x640, 390x844, 1280x900
+bar save youth: phase youth, age 16
+bar save playing: phase playing, age 18
+bar save manager: phase manager_season, age 18, employed
+bar save pundit: phase pundit_season, age 18
+bar save owner: phase owner_season, age 18
+bar save retired: phase retired, age 18
+bar save managerOut: phase manager_season, age 18, out of work
+== head 320x640
+   "Danny Okafor-Whitfield": from scrollY 1876 of 15004; first frame name heading 12 to 68, readable 0 to 556, scrollY 193; one second later name heading 12 to 68, readable 0 to 556, scrollY 193
+   "Danny Okafor-Whitfield": the club "QPR Youth" at 258 to 275, in the readable area: true
+   name "Danny Okafor-Whitfield": 2 line(s), scrollWidth 200 of 200
+   "Danny Okafor-Whitfield" after New Career: from scrollY 1892 of 15020; first frame name heading 12 to 68, readable 0 to 556, scrollY 193; one second later name heading 12 to 68, readable 0 to 556, scrollY 193
+   "Danny Okafor-Whitfield" after New Career: the club "Stoke City Youth" at 258 to 275, in the readable area: true
+   "Supercalifragilisticexpialidociouswinger": from scrollY 1876 of 15004; first frame name heading 12 to 68, readable 0 to 556, scrollY 193; one second later name heading 12 to 68, readable 0 to 556, scrollY 193
+   "Supercalifragilisticexpialidociouswinger": the club "QPR Youth" at 258 to 275, in the readable area: true
+   name "Supercalifragilisticexpialidociouswinger": 2 line(s), scrollWidth 200 of 200
+   bar youth (floating): ["Next Year"], AGE 283 to 303
+   bar playing (floating): ["Next Season","Week by week: live the season match by match"], AGE 283 to 303
+   bar manager (floating): ["Next Manager Season","Retire"], AGE 283 to 303
+   bar pundit (floating): ["Next Season"], AGE 283 to 303
+   bar owner (floating): ["Next Owner Season","Sell Club"], AGE 283 to 303
+   bar retired (floating): ["📤 Share Legacy","⚽ New Career"], AGE 283 to 303
+   bar managerOut (floating): ["Sit Out A Season","Walk Away"], AGE 283 to 303
+   youth: 1 Retire control(s)
+   playing: 1 Retire control(s)
+   retired: 0 Weekly Wage tile(s)
+   2 toast sample(s) over a drive through youth, contract_offer, playing, phone: no category, newspaper, season_summary, ballon_dor; toasts raised: ["Signed with QPR!"]
+     "Signed with QPR!" first frame at 16,-37 288x54 (scrollY 193): nothing under it
+     "Signed with QPR!" settled at 16,16 288x54 (scrollY 193): ["heading Danny Okafor-Whitfield"]
+== head 390x844
+   "Danny Okafor-Whitfield": from scrollY 1632 of 12671; first frame name heading 17 to 45, readable 0 to 760, scrollY 193; one second later name heading 17 to 45, readable 0 to 760, scrollY 193
+   "Danny Okafor-Whitfield": the club "QPR Youth" at 240 to 257, in the readable area: true
+   name "Danny Okafor-Whitfield": 1 line(s), scrollWidth 224 of 224
+   "Danny Okafor-Whitfield" after New Career: from scrollY 1632 of 12671; first frame name heading 17 to 45, readable 0 to 760, scrollY 193; one second later name heading 17 to 45, readable 0 to 760, scrollY 193
+   "Danny Okafor-Whitfield" after New Career: the club "Stoke City Youth" at 240 to 257, in the readable area: true
+   "Supercalifragilisticexpialidociouswinger": from scrollY 1632 of 12671; first frame name heading 12 to 68, readable 0 to 760, scrollY 193; one second later name heading 12 to 68, readable 0 to 760, scrollY 193
+   "Supercalifragilisticexpialidociouswinger": the club "QPR Youth" at 258 to 275, in the readable area: true
+   name "Supercalifragilisticexpialidociouswinger": 2 line(s), scrollWidth 270 of 270
+   bar youth (floating): ["Next Year"], AGE 349 to 369
+   bar playing (floating): ["Next Season","Week by week: live the season match by match"], AGE 349 to 369
+   bar manager (floating): ["Next Manager Season","Retire"], AGE 349 to 369
+   bar pundit (floating): ["Next Season"], AGE 349 to 369
+   bar owner (floating): ["Next Owner Season","Sell Club"], AGE 349 to 369
+   bar retired (floating): ["📤 Share Legacy","⚽ New Career"], AGE 349 to 369
+   bar managerOut (floating): ["Sit Out A Season","Walk Away"], AGE 349 to 369
+   youth: 1 Retire control(s)
+   playing: 1 Retire control(s)
+   retired: 0 Weekly Wage tile(s)
+   2 toast sample(s) over a drive through youth, contract_offer, playing, phone: no category, newspaper, season_summary, ballon_dor; toasts raised: ["Signed with QPR!"]
+     "Signed with QPR!" first frame at 16,-37 358x54 (scrollY 193): nothing under it
+     "Signed with QPR!" settled at 16,16 358x54 (scrollY 193): ["heading Danny Okafor-Whitfield"]
+== head 1280x900
+   "Danny Okafor-Whitfield": from scrollY 1530 of 9158; first frame name heading 23 to 55, readable 0 to 816, scrollY 101; one second later name heading 23 to 55, readable 0 to 816, scrollY 101
+   "Danny Okafor-Whitfield": the club "QPR Youth" at 221 to 236, in the readable area: true
+   name "Danny Okafor-Whitfield": 1 line(s), scrollWidth 271 of 271
+   "Danny Okafor-Whitfield" after New Career: from scrollY 1530 of 9158; first frame name heading 23 to 55, readable 0 to 816, scrollY 101; one second later name heading 23 to 55, readable 0 to 816, scrollY 101
+   "Danny Okafor-Whitfield" after New Career: the club "Stoke City Youth" at 221 to 236, in the readable area: true
+   "Supercalifragilisticexpialidociouswinger": from scrollY 1530 of 9158; first frame name heading 23 to 55, readable 0 to 816, scrollY 101; one second later name heading 23 to 55, readable 0 to 816, scrollY 101
+   "Supercalifragilisticexpialidociouswinger": the club "QPR Youth" at 221 to 236, in the readable area: true
+   name "Supercalifragilisticexpialidociouswinger": 1 line(s), scrollWidth 466 of 466
+   bar youth (floating): ["Next Year"], AGE 1099 to 1119
+   bar playing (floating): ["Next Season","Week by week: live the season match by match"], AGE 1099 to 1119
+   bar manager (floating): ["Next Manager Season","Retire"], AGE 1099 to 1119
+   bar pundit (floating): ["Next Season"], AGE 1099 to 1119
+   bar owner (floating): ["Next Owner Season","Sell Club"], AGE 1099 to 1119
+   bar retired (floating): ["📤 Share Legacy","⚽ New Career"], AGE 1099 to 1119
+   bar managerOut (floating): ["Sit Out A Season","Walk Away"], AGE 1099 to 1119
+   youth: 1 Retire control(s)
+   playing: 1 Retire control(s)
+   retired: 0 Weekly Wage tile(s)
+   2 toast sample(s) over a drive through youth, contract_offer, playing, phone: no category, newspaper, season_summary, ballon_dor; toasts raised: ["Signed with QPR!"]
+     "Signed with QPR!" first frame at 462,-21 356x54 (scrollY 101): ["heading Danny Okafor-Whitfield"]
+     "Signed with QPR!" settled at 462,32 356x54 (scrollY 101): ["heading Danny Okafor-Whitfield"]
+== base 320x640
+   "Danny Okafor-Whitfield": from scrollY 1876 of 15004; first frame name heading -1666 to -1638, readable 0 to 556, scrollY 1876; one second later name heading -1666 to -1638, readable 0 to 556, scrollY 1876
+  base [landing 320x640]: "Danny Okafor-Whitfield": in the first frame after Begin Career the name heading is not in the readable area (name heading -1666 to -1638, readable 0 to 556, scrollY 1876)
+  base [landing 320x640]: "Danny Okafor-Whitfield": one second after Begin Career the name heading is not in the readable area (name heading -1666 to -1638, readable 0 to 556, scrollY 1876)
+   "Danny Okafor-Whitfield": the club "QPR Youth" at 44 to 59, in the readable area: true
+   at landing: "Joined QPR Youth!" first frame at 16,544 288x54: ["control Next Year","control Retire"]
+  base [toasts 320x640]: at landing "Joined QPR Youth!" (first frame) lies over ["control Next Year","control Retire"]
+   at landing: "Joined QPR Youth!" settled at 16,491 288x54: nothing under it
+   name "Danny Okafor-Whitfield": 1 line(s), scrollWidth 224 of 200
+  base [name 320x640]: "Danny Okafor-Whitfield" is cut (224 px of text in 200 px)
+   "Danny Okafor-Whitfield" after New Career: from scrollY 1892 of 15020; first frame name heading -1726 to -1698, readable 0 to 556, scrollY 1936; one second later name heading -1726 to -1698, readable 0 to 556, scrollY 1936
+  base [landing 320x640]: "Danny Okafor-Whitfield" after New Career: in the first frame after Begin Career the name heading is not in the readable area (name heading -1726 to -1698, readable 0 to 556, scrollY 1936)
+  base [landing 320x640]: "Danny Okafor-Whitfield" after New Career: one second after Begin Career the name heading is not in the readable area (name heading -1726 to -1698, readable 0 to 556, scrollY 1936)
+   "Danny Okafor-Whitfield" after New Career: the club "Stoke City Youth" at 167 to 182, in the readable area: true
+   "Supercalifragilisticexpialidociouswinger": from scrollY 1876 of 15004; first frame name heading -1666 to -1638, readable 0 to 556, scrollY 1876; one second later name heading -1666 to -1638, readable 0 to 556, scrollY 1876
+  base [landing 320x640]: "Supercalifragilisticexpialidociouswinger": in the first frame after Begin Career the name heading is not in the readable area (name heading -1666 to -1638, readable 0 to 556, scrollY 1876)
+  base [landing 320x640]: "Supercalifragilisticexpialidociouswinger": one second after Begin Career the name heading is not in the readable area (name heading -1666 to -1638, readable 0 to 556, scrollY 1876)
+   "Supercalifragilisticexpialidociouswinger": the club "QPR Youth" at 44 to 59, in the readable area: true
+   at landing: "Joined QPR Youth!" first frame at 16,544 288x54: ["control Next Year","control Retire"]
+  base [toasts 320x640]: at landing "Joined QPR Youth!" (first frame) lies over ["control Next Year","control Retire"]
+   at landing: "Joined QPR Youth!" settled at 16,491 288x54: nothing under it
+   name "Supercalifragilisticexpialidociouswinger": 1 line(s), scrollWidth 389 of 200
+  base [name 320x640]: "Supercalifragilisticexpialidociouswinger" is cut (389 px of text in 200 px)
+   bar youth (floating): ["Next Year","Retire"], AGE 271 to 291
+   bar playing (floating): ["Next Season","Retire","Week by week: live the season match by match"], AGE 324 to 344
+  base [bar 320x640]: playing: 18Age spans 307 to 361 on a 320 screen
+  base [bar 320x640]: playing: the AGE number is not fully on screen (324 to 344)
+   bar manager (floating): ["Next Manager Season","Retire"], AGE 352 to 372
+  base [bar 320x640]: manager: Retire spans 249 to 323 on a 320 screen
+  base [bar 320x640]: manager: 18Age spans 335 to 389 on a 320 screen
+  base [bar 320x640]: manager: the AGE number is not fully on screen (352 to 372)
+   bar pundit (floating): ["Next Season"], AGE 271 to 291
+   bar owner (floating): ["Next Owner Season","Sell Club"], AGE 355 to 375
+  base [bar 320x640]: owner: Sell Club spans 232 to 326 on a 320 screen
+  base [bar 320x640]: owner: 18Age spans 338 to 392 on a 320 screen
+  base [bar 320x640]: owner: the AGE number is not fully on screen (355 to 375)
+   bar retired (floating): ["📤 Share Legacy","⚽ New Career"], AGE 346 to 366
+  base [bar 320x640]: retired: 18Age spans 329 to 383 on a 320 screen
+  base [bar 320x640]: retired: the AGE number is not fully on screen (346 to 366)
+   bar managerOut (floating): ["Sit Out A Season","Walk Away"], AGE 343 to 363
+  base [bar 320x640]: managerOut: 18Age spans 326 to 380 on a 320 screen
+  base [bar 320x640]: managerOut: the AGE number is not fully on screen (343 to 363)
+   youth: 2 Retire control(s)
+  base [retire 320x640]: youth: 2 Retire controls on the hub
+   playing: 2 Retire control(s)
+  base [retire 320x640]: playing: 2 Retire controls on the hub
+   retired: 1 Weekly Wage tile(s)
+  base [retire 320x640]: the retired screen shows 1 Weekly Wage tile(s)
+   4 toast sample(s) over a drive through youth, contract_offer, playing, phone: no category, newspaper, season_summary, ballon_dor; toasts raised: ["Joined QPR Youth!","Signed with QPR!"]
+     "Joined QPR Youth!" first frame at 16,544 288x54 (scrollY 1876): ["control Next Year","control Retire"]
+  base [toasts 320x640]: "Joined QPR Youth!" (first frame) lies over ["control Next Year","control Retire"]
+     "Joined QPR Youth!" settled at 16,491 288x54 (scrollY 1876): nothing under it
+     "Signed with QPR!" first frame at 16,544 288x54 (scrollY 397): ["control Your next seasonRoles, contracts, playing time and","control Next Season","control Retire","control Week by week: live the season match by match"]
+  base [toasts 320x640]: "Signed with QPR!" (first frame) lies over ["control Your next seasonRoles, contracts, playing time and","control Next Season","control Retire","control Week by week: live the season match by match"]
+     "Signed with QPR!" settled at 16,491 288x54 (scrollY 397): ["control 🏃 Preseason planBalanced, or choose your next-sea","control Your next seasonRoles, contracts, playing time and"]
+  base [toasts 320x640]: "Signed with QPR!" (settled) lies over ["control 🏃 Preseason planBalanced, or choose your next-sea","control Your next seasonRoles, contracts, playing time and"]
+== base 390x844
+   "Danny Okafor-Whitfield": from scrollY 1632 of 12671; first frame name heading -1422 to -1394, readable 0 to 760, scrollY 1632; one second later name heading -1422 to -1394, readable 0 to 760, scrollY 1632
+  base [landing 390x844]: "Danny Okafor-Whitfield": in the first frame after Begin Career the name heading is not in the readable area (name heading -1422 to -1394, readable 0 to 760, scrollY 1632)
+  base [landing 390x844]: "Danny Okafor-Whitfield": one second after Begin Career the name heading is not in the readable area (name heading -1422 to -1394, readable 0 to 760, scrollY 1632)
+   "Danny Okafor-Whitfield": the club "QPR Youth" at 256 to 271, in the readable area: true
+   at landing: "Joined QPR Youth!" first frame at 16,748 358x54: ["control Next Year","control Retire"]
+  base [toasts 390x844]: at landing "Joined QPR Youth!" (first frame) lies over ["control Next Year","control Retire"]
+   at landing: "Joined QPR Youth!" settled at 16,695 358x54: nothing under it
+   name "Danny Okafor-Whitfield": 1 line(s), scrollWidth 224 of 224
+   "Danny Okafor-Whitfield" after New Career: from scrollY 1632 of 12671; first frame name heading -1466 to -1438, readable 0 to 760, scrollY 1676; one second later name heading -1466 to -1438, readable 0 to 760, scrollY 1676
+  base [landing 390x844]: "Danny Okafor-Whitfield" after New Career: in the first frame after Begin Career the name heading is not in the readable area (name heading -1466 to -1438, readable 0 to 760, scrollY 1676)
+  base [landing 390x844]: "Danny Okafor-Whitfield" after New Career: one second after Begin Career the name heading is not in the readable area (name heading -1466 to -1438, readable 0 to 760, scrollY 1676)
+   "Danny Okafor-Whitfield" after New Career: the club "Stoke City Youth" at 212 to 227, in the readable area: true
+   "Supercalifragilisticexpialidociouswinger": from scrollY 1632 of 12671; first frame name heading -1422 to -1394, readable 0 to 760, scrollY 1632; one second later name heading -1422 to -1394, readable 0 to 760, scrollY 1632
+  base [landing 390x844]: "Supercalifragilisticexpialidociouswinger": in the first frame after Begin Career the name heading is not in the readable area (name heading -1422 to -1394, readable 0 to 760, scrollY 1632)
+  base [landing 390x844]: "Supercalifragilisticexpialidociouswinger": one second after Begin Career the name heading is not in the readable area (name heading -1422 to -1394, readable 0 to 760, scrollY 1632)
+   "Supercalifragilisticexpialidociouswinger": the club "QPR Youth" at 256 to 271, in the readable area: true
+   at landing: "Joined QPR Youth!" first frame at 16,748 358x54: ["control Next Year","control Retire"]
+  base [toasts 390x844]: at landing "Joined QPR Youth!" (first frame) lies over ["control Next Year","control Retire"]
+   at landing: "Joined QPR Youth!" settled at 16,695 358x54: nothing under it
+   name "Supercalifragilisticexpialidociouswinger": 1 line(s), scrollWidth 389 of 270
+   bar youth (floating): ["Next Year","Retire"], AGE 341 to 361
+   bar playing (floating): ["Next Season","Retire","Week by week: live the season match by match"], AGE 341 to 361
+   bar manager (floating): ["Next Manager Season","Retire"], AGE 352 to 372
+   bar pundit (floating): ["Next Season"], AGE 341 to 361
+   bar owner (floating): ["Next Owner Season","Sell Club"], AGE 355 to 375
+  base [bar 390x844]: owner: 18Age spans 338 to 392 on a 390 screen
+   bar retired (floating): ["📤 Share Legacy","⚽ New Career"], AGE 346 to 366
+   bar managerOut (floating): ["Sit Out A Season","Walk Away"], AGE 343 to 363
+   youth: 2 Retire control(s)
+  base [retire 390x844]: youth: 2 Retire controls on the hub
+   playing: 2 Retire control(s)
+  base [retire 390x844]: playing: 2 Retire controls on the hub
+   retired: 1 Weekly Wage tile(s)
+  base [retire 390x844]: the retired screen shows 1 Weekly Wage tile(s)
+   4 toast sample(s) over a drive through youth, contract_offer, playing, phone: no category, newspaper, season_summary, ballon_dor; toasts raised: ["Joined QPR Youth!","Signed with QPR!"]
+     "Joined QPR Youth!" first frame at 16,748 358x54 (scrollY 1632): ["control Next Year","control Retire"]
+  base [toasts 390x844]: "Joined QPR Youth!" (first frame) lies over ["control Next Year","control Retire"]
+     "Joined QPR Youth!" settled at 16,695 358x54 (scrollY 1632): nothing under it
+     "Signed with QPR!" first frame at 16,748 358x54 (scrollY 397): ["control Next Season","control Display currency","control Retire"]
+  base [toasts 390x844]: "Signed with QPR!" (first frame) lies over ["control Next Season","control Display currency","control Retire"]
+     "Signed with QPR!" settled at 16,695 358x54 (scrollY 397): nothing under it
+== base 1280x900
+   "Danny Okafor-Whitfield": from scrollY 1530 of 9158; first frame name heading -1406 to -1374, readable 0 to 816, scrollY 1530; one second later name heading -1406 to -1374, readable 0 to 816, scrollY 1530
+  base [landing 1280x900]: "Danny Okafor-Whitfield": in the first frame after Begin Career the name heading is not in the readable area (name heading -1406 to -1374, readable 0 to 816, scrollY 1530)
+  base [landing 1280x900]: "Danny Okafor-Whitfield": one second after Begin Career the name heading is not in the readable area (name heading -1406 to -1374, readable 0 to 816, scrollY 1530)
+   "Danny Okafor-Whitfield": the club "QPR Youth" at -9 to 6, in the readable area: false
+  base [landing 1280x900]: "Danny Okafor-Whitfield": the club joined is not named inside the readable area of the landing view ({"name":"QPR Youth","top":-9,"bottom":6,"inside":false,"places":3})
+   at landing: "Joined QPR Youth!" first frame at 892,868 356x54: ["control Next Year","control Open your phone"]
+  base [toasts 1280x900]: at landing "Joined QPR Youth!" (first frame) lies over ["control Next Year","control Open your phone"]
+   at landing: "Joined QPR Youth!" settled at 892,815 356x54: ["control Next Year","control Open your phone"]
+  base [toasts 1280x900]: at landing "Joined QPR Youth!" (settled) lies over ["control Next Year","control Open your phone"]
+   name "Danny Okafor-Whitfield": 1 line(s), scrollWidth 271 of 271
+   "Danny Okafor-Whitfield" after New Career: from scrollY 1530 of 9158; first frame name heading -1406 to -1374, readable 0 to 816, scrollY 1530; one second later name heading -1406 to -1374, readable 0 to 816, scrollY 1530
+  base [landing 1280x900]: "Danny Okafor-Whitfield" after New Career: in the first frame after Begin Career the name heading is not in the readable area (name heading -1406 to -1374, readable 0 to 816, scrollY 1530)
+  base [landing 1280x900]: "Danny Okafor-Whitfield" after New Career: one second after Begin Career the name heading is not in the readable area (name heading -1406 to -1374, readable 0 to 816, scrollY 1530)
+   "Danny Okafor-Whitfield" after New Career: the club "Stoke City Youth" at -9 to 6, in the readable area: false
+  base [landing 1280x900]: "Danny Okafor-Whitfield" after New Career: the club joined is not named inside the readable area of the landing view ({"name":"Stoke City Youth","top":-9,"bottom":6,"inside":false,"places":3})
+   "Supercalifragilisticexpialidociouswinger": from scrollY 1530 of 9158; first frame name heading -1406 to -1374, readable 0 to 816, scrollY 1530; one second later name heading -1406 to -1374, readable 0 to 816, scrollY 1530
+  base [landing 1280x900]: "Supercalifragilisticexpialidociouswinger": in the first frame after Begin Career the name heading is not in the readable area (name heading -1406 to -1374, readable 0 to 816, scrollY 1530)
+  base [landing 1280x900]: "Supercalifragilisticexpialidociouswinger": one second after Begin Career the name heading is not in the readable area (name heading -1406 to -1374, readable 0 to 816, scrollY 1530)
+   "Supercalifragilisticexpialidociouswinger": the club "QPR Youth" at -9 to 6, in the readable area: false
+  base [landing 1280x900]: "Supercalifragilisticexpialidociouswinger": the club joined is not named inside the readable area of the landing view ({"name":"QPR Youth","top":-9,"bottom":6,"inside":false,"places":3})
+   at landing: "Joined QPR Youth!" first frame at 892,868 356x54: ["control Next Year","control Open your phone"]
+  base [toasts 1280x900]: at landing "Joined QPR Youth!" (first frame) lies over ["control Next Year","control Open your phone"]
+   at landing: "Joined QPR Youth!" settled at 892,815 356x54: ["control Next Year","control Open your phone"]
+  base [toasts 1280x900]: at landing "Joined QPR Youth!" (settled) lies over ["control Next Year","control Open your phone"]
+   name "Supercalifragilisticexpialidociouswinger": 1 line(s), scrollWidth 466 of 466
+   bar youth (floating): ["Next Year","Retire"], AGE 1099 to 1119
+   bar playing (floating): ["Next Season","Retire","Week by week: live the season match by match"], AGE 1099 to 1119
+   bar manager (floating): ["Next Manager Season","Retire"], AGE 1099 to 1119
+   bar pundit (floating): ["Next Season"], AGE 1099 to 1119
+   bar owner (floating): ["Next Owner Season","Sell Club"], AGE 1099 to 1119
+   bar retired (floating): ["📤 Share Legacy","⚽ New Career"], AGE 1099 to 1119
+   bar managerOut (floating): ["Sit Out A Season","Walk Away"], AGE 1099 to 1119
+   youth: 2 Retire control(s)
+  base [retire 1280x900]: youth: 2 Retire controls on the hub
+   playing: 2 Retire control(s)
+  base [retire 1280x900]: playing: 2 Retire controls on the hub
+   retired: 1 Weekly Wage tile(s)
+  base [retire 1280x900]: the retired screen shows 1 Weekly Wage tile(s)
+   4 toast sample(s) over a drive through youth, contract_offer, playing, phone: no category, newspaper, season_summary, ballon_dor; toasts raised: ["Joined QPR Youth!","Signed with QPR!"]
+     "Joined QPR Youth!" first frame at 892,868 356x54 (scrollY 1530): ["control Next Year","control Open your phone"]
+  base [toasts 1280x900]: "Joined QPR Youth!" (first frame) lies over ["control Next Year","control Open your phone"]
+     "Joined QPR Youth!" settled at 892,815 356x54 (scrollY 1530): ["control Next Year","control Open your phone"]
+  base [toasts 1280x900]: "Joined QPR Youth!" (settled) lies over ["control Next Year","control Open your phone"]
+     "Signed with QPR!" first frame at 892,868 356x54 (scrollY 251): ["control Week by week: live the season match by match","control Open your phone"]
+  base [toasts 1280x900]: "Signed with QPR!" (first frame) lies over ["control Week by week: live the season match by match","control Open your phone"]
+     "Signed with QPR!" settled at 892,815 356x54 (scrollY 251): ["control Week by week: live the season match by match","control Open your phone"]
+  base [toasts 1280x900]: "Signed with QPR!" (settled) lies over ["control Week by week: live the season match by match","control Open your phone"]
+== bytes (390x844)
+   base on seed 1987332285: 9 saves through youth, contract_offer, playing, phone: no category, newspaper, season_summary, ballon_dor
+   head on seed 1987332285: 9 saves through youth, contract_offer, playing, phone: no category, newspaper, season_summary, ballon_dor
+  ok    bytes: 9 saves equal to the base byte for byte, 9 steps
+  base landing: the measurement sees the bug on the base (21 finding(s))
+  base name: the measurement sees the bug on the base (2 finding(s))
+  base bar: the measurement sees the bug on the base (13 finding(s))
+  base retire: the measurement sees the bug on the base (9 finding(s))
+  base toasts: the measurement sees the bug on the base (17 finding(s))
+playSoccerLanding: green at 320x640, 390x844, 1280x900 (landing, name, bar, retire, toasts, bytes), every marked section red on the base

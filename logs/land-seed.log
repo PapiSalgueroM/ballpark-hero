@@ -1,0 +1,6 @@
+seed 1987332285; arms head, base; sections bytes; sizes 320x640, 390x844, 1280x900; CONTROL seed
+== bytes (390x844)
+   base on seed 1987332285: 9 saves through youth, contract_offer, playing, phone: no category, newspaper, season_summary, ballon_dor
+   head on seed 1987332286: 9 saves through youth, contract_offer, playing, phone: no category, newspaper, season_summary, ballon_dor
+  FAIL [bytes 390x844]: the save parts from the base at Begin Career (head e9045518d28e00c4) against Begin Career (base 1a8457964b40aa46)
+CONTROL FIRED: SOCCER_LANDING_CONTROL=seed played head on seed 1987332286 and the byte check went red

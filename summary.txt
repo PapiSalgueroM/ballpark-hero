@@ -1,0 +1,6 @@
+build exit=0 31s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+walk exit=1 248s | REVIEW WALK RED: 4 finding(s)
+land exit=0 402s | playSoccerLanding: green at 320x640, 390x844, 1280x900 (landing, name, bar, retire, toasts, bytes), every marked section red on the base
+tt-all exit=0 444s | playTwoTabs: green at 320x640, 390x844, 1280x900
+land-seed exit=1 70s | CONTROL FIRED: SOCCER_LANDING_CONTROL=seed played head on seed 1987332286 and the byte check went red
+tt-nofence exit=1 494s | CONTROL FIRED: TWO_TABS_CONTROL=nofence dropped 180 writes and turned case(s) 1, 2, 3, 6, 9, 10, 11, 12, 14 red

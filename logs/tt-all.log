@@ -1,0 +1,175 @@
+fixtures: Brighton 55840 chars, Everton 54114 chars, Hot Seat survivor Arsenal (survived, 9 actions)
+== 320x640
+1) CLOBBER, and 8) THE NOTICE (320x640)
+  ok    no jump: scrollY 120 and height 28334 before and after
+  ok    the notice: Reload 44 px, smallest text 16 px, no animation, Tab stayed inside true
+   start Brighton week 1, 1 results, last Aston Villa 1-1 | after B played three Brighton week 5, 4 results, last Coventry City 0-1 | after A left Brighton week 5, 4 results, last Coventry City 0-1 | A saw the notice: true
+  ok    A left after B played three: the save is still B's
+2) REPLAY, three times (320x640)
+   REPLAY 0: B wrote "Brighton week 1, 1 results, last Aston Villa 1-1"; A's press went through: false; on disk after A's press "Brighton week 1, 1 results, last Aston Villa 1-1", after the forced press "Brighton week 1, 1 results, last Aston Villa 1-1"
+   REPLAY 1: B wrote "Brighton week 2, 2 results, last Chelsea 0-2"; A's press went through: false; on disk after A's press "Brighton week 2, 2 results, last Chelsea 0-2", after the forced press "Brighton week 2, 2 results, last Chelsea 0-2"
+   REPLAY 2: B wrote "Brighton week 3, 3 results, last Leeds United 1-2"; A's press went through: false; on disk after A's press "Brighton week 3, 3 results, last Leeds United 1-2", after the forced press "Brighton week 3, 3 results, last Leeds United 1-2"
+3) HOT SEAT carry on beside a Club Manager tab, and 4) LANDING (320x640)
+   A held "Brighton week 1, 1 results, last Aston Villa 4-1"; B handed over "Arsenal week 26, 26 results, last Hull City 2-0" and landed on the hub; A saw it: true; after A left "Arsenal week 26, 26 results, last Hull City 2-0"
+  ok    the carry on opened Club Manager on the hub
+5) DAMAGED saves (320x640)
+   truncated: slots, then cleared (damaged line shown), 1 backup(s) holding the bytes; save none; NaN on screen: false; errors 0
+  ok    truncated: kept, 1 backup byte for byte
+   budget-text: hub; save squad 27, budget 73; NaN on screen: false; errors 0
+   budget-junk: hub; save squad 27, budget 0; NaN on screen: false; errors 0
+   budget-negative: hub; save squad 27, budget -250; NaN on screen: false; errors 0
+   week-past-end: slots, no hub; save squad 27, budget 73; NaN on screen: false; errors 0
+   squad-five: hub; save squad 16, budget 73; NaN on screen: false; errors 0
+   xi-missing: hub; save squad 27, budget 73; NaN on screen: false; errors 0
+   inbox-spam: hub; save squad 27, budget 73; NaN on screen: false; errors 0
+   unknown-club: hub; save squad 27, budget 73; NaN on screen: false; errors 0
+   board-zero: hub; save squad 27, budget 73; NaN on screen: false; errors 0
+   fitness-nan: hub; save squad 27, budget 73; NaN on screen: false; errors 0
+6) PUT BACK through the restore card beside a Club Manager tab (320x640)
+   offered: true; put back "Everton week 0, 0 results, last none"; A saw it: true; after A left "Everton week 0, 0 results, last none"
+7) OLD SAVE with no fence key (320x640)
+   fence before absent, after a week 2; Brighton week 0, 0 results, last none to Brighton week 1, 1 results, last Aston Villa 4-2; a second tab stales it: true
+9) BACK: a stale tab leaves by the browser's Back, mid Play Live and on the hub (320x640)
+  note  tab A's live match is in minute 4
+   mid Play Live: A came in by a link; B played 3: "Brighton week 3, 3 results, last Leeds United 2-2" (live none); A saw the notice: true; after A's Back (same document true) "Brighton week 3, 3 results, last Leeds United 2-2" (live none)
+  ok    A left by Back mid Play Live: the save is still B's
+   on the hub: A came in by a link; B played 3: "Brighton week 3, 3 results, last Leeds United 1-1" (live none); A saw the notice: true; after A's Back (same document true) "Brighton week 3, 3 results, last Leeds United 1-1" (live none)
+  ok    A left by Back on the hub: the save is still B's
+   then in the same document a Hot Seat carry on: the save holds "Arsenal week 26, 26 results, last Hull City 2-0"
+  ok    the same document carried a Hot Seat job on afterwards
+10) SOCCER REPLACE, and 11) REVERSE (320x640)
+soccer fixture: Two Tab Tester age 18, playing, 3 seasons, last 2022 West Ham: 32 apps, 5 goals, 6.9, 14228 chars
+   A opened on "Next Season"; B played "Next Season": Two Tab Tester age 19, newspaper, 4 seasons, last 2023 Leverkusen: 30 apps, 4 goals, 7.2; A saw the notice at once: true; A's press went through: false; forced "Next Season"; A's writes 1 to 1
+  ok    B's season is on disk byte for byte after A's press and A's forced press: Two Tab Tester age 19, newspaper, 4 seasons, last 2023 Leverkusen: 30 apps, 4 goals, 7.2
+  ok    A reloaded onto B's season with no notice: Two Tab Tester age 19, newspaper, 4 seasons, last 2023 Leverkusen: 30 apps, 4 goals, 7.2
+   REVERSE: B saw the notice: true; A stepped "Continue to Season Summary →": Two Tab Tester age 19, season_summary, 4 seasons, last 2023 Leverkusen: 30 apps, 4 goals, 7.2; B forced "Continue to Season Summary →"; B's writes 2 to 2
+  ok    B's forced press changed nothing: the save is A's
+12) NEW CAREER IN A STALE TAB (320x640)
+   A saw the notice: true; forced New Career true, forced confirm true; A's writes 1 to 1; on disk Two Tab Tester age 19, newspaper, 4 seasons, last 2023 Leverkusen: 30 apps, 4 goals, 7.2
+  ok    a stale New Career cleared nothing
+   creation: B began Fresh Creator age 16, youth, 1 seasons, last 2025 Fulham Youth: 0 apps, 0 goals, 0; A saw the notice: true; A's forced Begin Career true; A's writes 0 to 0; on disk Fresh Creator age 16, youth, 1 seasons, last 2025 Fulham Youth: 0 apps, 0 goals, 0
+  ok    a stale Begin Career wrote nothing
+13) WEEK BY WEEK IN A STALE TAB (320x640)
+   A's Season Centre open: true (Two Tab Tester age 19, newspaper, 4 seasons, last 2023 Leverkusen: 33 apps, 8 goals, 7); B played on: Two Tab Tester age 19, season_summary, 4 seasons, last 2023 Leverkusen: 33 apps, 8 goals, 7; A saw the notice: true; forced in the Centre ["?","Back to the papers","Bundesliga","DFB-Pokal"], then "Continue to Season Summary →"; A's writes of soccerCareerSave 2 to 2
+  note  RECORDED, NOT JUDGED (owed): the stale tab wrote seasonCentre:v1:soccer 0 time(s) after the other tab played on
+  ok    the stale Season Centre changed nothing in the save
+14) SOCCER OLD SAVE AND THE NOTICE (320x640)
+   fence before absent, after "Next Season" 2; Two Tab Tester age 18, playing, 3 seasons, last 2022 West Ham: 32 apps, 5 goals, 6.9 to Two Tab Tester age 19, newspaper, 4 seasons, last 2023 Leverkusen: 33 apps, 8 goals, 7; a second tab stales it: true
+  ok    no jump: scrollY 120 and height 15851 before and after
+  ok    the notice: Reload 44 px, smallest text 16 px, no animation, no toast, Tab stayed inside true
+== 390x844
+1) CLOBBER, and 8) THE NOTICE (390x844)
+  ok    no jump: scrollY 120 and height 22765 before and after
+  ok    the notice: Reload 44 px, smallest text 16 px, no animation, Tab stayed inside true
+   start Brighton week 1, 1 results, last Aston Villa 4-1 | after B played three Brighton week 5, 4 results, last Coventry City 4-2 | after A left Brighton week 5, 4 results, last Coventry City 4-2 | A saw the notice: true
+  ok    A left after B played three: the save is still B's
+2) REPLAY, three times (390x844)
+   REPLAY 0: B wrote "Brighton week 1, 1 results, last Aston Villa 0-1"; A's press went through: false; on disk after A's press "Brighton week 1, 1 results, last Aston Villa 0-1", after the forced press "Brighton week 1, 1 results, last Aston Villa 0-1"
+   REPLAY 1: B wrote "Brighton week 2, 2 results, last Chelsea 0-1"; A's press went through: false; on disk after A's press "Brighton week 2, 2 results, last Chelsea 0-1", after the forced press "Brighton week 2, 2 results, last Chelsea 0-1"
+   REPLAY 2: B wrote "Brighton week 3, 3 results, last Leeds United 2-1"; A's press went through: false; on disk after A's press "Brighton week 3, 3 results, last Leeds United 2-1", after the forced press "Brighton week 3, 3 results, last Leeds United 2-1"
+3) HOT SEAT carry on beside a Club Manager tab, and 4) LANDING (390x844)
+   A held "Brighton week 1, 1 results, last Aston Villa 2-0"; B handed over "Arsenal week 26, 26 results, last Hull City 2-0" and landed on the hub; A saw it: true; after A left "Arsenal week 26, 26 results, last Hull City 2-0"
+  ok    the carry on opened Club Manager on the hub
+5) DAMAGED saves (390x844)
+   truncated: slots, then cleared (damaged line shown), 1 backup(s) holding the bytes; save none; NaN on screen: false; errors 0
+  ok    truncated: kept, 1 backup byte for byte
+   budget-text: hub; save squad 27, budget 73; NaN on screen: false; errors 0
+   budget-junk: hub; save squad 27, budget 0; NaN on screen: false; errors 0
+   budget-negative: hub; save squad 27, budget -250; NaN on screen: false; errors 0
+   week-past-end: slots, no hub; save squad 27, budget 73; NaN on screen: false; errors 0
+   squad-five: hub; save squad 16, budget 73; NaN on screen: false; errors 0
+   xi-missing: hub; save squad 27, budget 73; NaN on screen: false; errors 0
+   inbox-spam: hub; save squad 27, budget 73; NaN on screen: false; errors 0
+   unknown-club: hub; save squad 27, budget 73; NaN on screen: false; errors 0
+   board-zero: hub; save squad 27, budget 73; NaN on screen: false; errors 0
+   fitness-nan: hub; save squad 27, budget 73; NaN on screen: false; errors 0
+6) PUT BACK through the restore card beside a Club Manager tab (390x844)
+   offered: true; put back "Everton week 0, 0 results, last none"; A saw it: true; after A left "Everton week 0, 0 results, last none"
+7) OLD SAVE with no fence key (390x844)
+   fence before absent, after a week 2; Brighton week 0, 0 results, last none to Brighton week 1, 1 results, last Aston Villa 2-1; a second tab stales it: true
+9) BACK: a stale tab leaves by the browser's Back, mid Play Live and on the hub (390x844)
+  note  tab A's live match is in minute 5
+   mid Play Live: A came in by a link; B played 3: "Brighton week 3, 3 results, last Leeds United 2-5" (live none); A saw the notice: true; after A's Back (same document true) "Brighton week 3, 3 results, last Leeds United 2-5" (live none)
+  ok    A left by Back mid Play Live: the save is still B's
+   on the hub: A came in by a link; B played 3: "Brighton week 3, 3 results, last Leeds United 2-0" (live none); A saw the notice: true; after A's Back (same document true) "Brighton week 3, 3 results, last Leeds United 2-0" (live none)
+  ok    A left by Back on the hub: the save is still B's
+   then in the same document a Hot Seat carry on: the save holds "Arsenal week 26, 26 results, last Hull City 2-0"
+  ok    the same document carried a Hot Seat job on afterwards
+10) SOCCER REPLACE, and 11) REVERSE (390x844)
+   A opened on "Next Season"; B played "Next Season": Two Tab Tester age 19, newspaper, 4 seasons, last 2023 Leverkusen: 30 apps, 4 goals, 7.2; A saw the notice at once: true; A's press went through: false; forced "Next Season"; A's writes 1 to 1
+  ok    B's season is on disk byte for byte after A's press and A's forced press: Two Tab Tester age 19, newspaper, 4 seasons, last 2023 Leverkusen: 30 apps, 4 goals, 7.2
+  ok    A reloaded onto B's season with no notice: Two Tab Tester age 19, newspaper, 4 seasons, last 2023 Leverkusen: 30 apps, 4 goals, 7.2
+   REVERSE: B saw the notice: true; A stepped "Continue to Season Summary →": Two Tab Tester age 19, season_summary, 4 seasons, last 2023 Leverkusen: 30 apps, 4 goals, 7.2; B forced "Continue to Season Summary →"; B's writes 2 to 2
+  ok    B's forced press changed nothing: the save is A's
+12) NEW CAREER IN A STALE TAB (390x844)
+   A saw the notice: true; forced New Career true, forced confirm true; A's writes 1 to 1; on disk Two Tab Tester age 19, newspaper, 4 seasons, last 2023 Leverkusen: 30 apps, 4 goals, 7.2
+  ok    a stale New Career cleared nothing
+   creation: B began Fresh Creator age 16, youth, 1 seasons, last 2025 Fulham Youth: 0 apps, 0 goals, 0; A saw the notice: true; A's forced Begin Career true; A's writes 0 to 0; on disk Fresh Creator age 16, youth, 1 seasons, last 2025 Fulham Youth: 0 apps, 0 goals, 0
+  ok    a stale Begin Career wrote nothing
+13) WEEK BY WEEK IN A STALE TAB (390x844)
+   A's Season Centre open: true (Two Tab Tester age 19, newspaper, 4 seasons, last 2023 Leverkusen: 33 apps, 8 goals, 7); B played on: Two Tab Tester age 19, season_summary, 4 seasons, last 2023 Leverkusen: 33 apps, 8 goals, 7; A saw the notice: true; forced in the Centre ["?","Back to the papers","Bundesliga","DFB-Pokal"], then "Continue to Season Summary →"; A's writes of soccerCareerSave 2 to 2
+  note  RECORDED, NOT JUDGED (owed): the stale tab wrote seasonCentre:v1:soccer 0 time(s) after the other tab played on
+  ok    the stale Season Centre changed nothing in the save
+14) SOCCER OLD SAVE AND THE NOTICE (390x844)
+   fence before absent, after "Next Season" 2; Two Tab Tester age 18, playing, 3 seasons, last 2022 West Ham: 32 apps, 5 goals, 6.9 to Two Tab Tester age 19, newspaper, 4 seasons, last 2023 Leverkusen: 33 apps, 8 goals, 7; a second tab stales it: true
+  ok    no jump: scrollY 120 and height 13601 before and after
+  ok    the notice: Reload 44 px, smallest text 16 px, no animation, no toast, Tab stayed inside true
+== 1280x900
+1) CLOBBER, and 8) THE NOTICE (1280x900)
+  ok    no jump: scrollY 120 and height 13574 before and after
+  ok    the notice: Reload 44 px, smallest text 16 px, no animation, Tab stayed inside true
+   start Brighton week 1, 1 results, last Aston Villa 1-1 | after B played three Brighton week 5, 4 results, last Coventry City 2-2 | after A left Brighton week 5, 4 results, last Coventry City 2-2 | A saw the notice: true
+  ok    A left after B played three: the save is still B's
+2) REPLAY, three times (1280x900)
+   REPLAY 0: B wrote "Brighton week 1, 1 results, last Aston Villa 3-1"; A's press went through: false; on disk after A's press "Brighton week 1, 1 results, last Aston Villa 3-1", after the forced press "Brighton week 1, 1 results, last Aston Villa 3-1"
+   REPLAY 1: B wrote "Brighton week 2, 2 results, last Chelsea 3-6"; A's press went through: false; on disk after A's press "Brighton week 2, 2 results, last Chelsea 3-6", after the forced press "Brighton week 2, 2 results, last Chelsea 3-6"
+   REPLAY 2: B wrote "Brighton week 3, 3 results, last Leeds United 0-0"; A's press went through: false; on disk after A's press "Brighton week 3, 3 results, last Leeds United 0-0", after the forced press "Brighton week 3, 3 results, last Leeds United 0-0"
+3) HOT SEAT carry on beside a Club Manager tab, and 4) LANDING (1280x900)
+   A held "Brighton week 1, 1 results, last Aston Villa 4-1"; B handed over "Arsenal week 26, 26 results, last Hull City 2-0" and landed on the hub; A saw it: true; after A left "Arsenal week 26, 26 results, last Hull City 2-0"
+  ok    the carry on opened Club Manager on the hub
+5) DAMAGED saves (1280x900)
+   truncated: slots, then cleared (damaged line shown), 1 backup(s) holding the bytes; save none; NaN on screen: false; errors 0
+  ok    truncated: kept, 1 backup byte for byte
+   budget-text: hub; save squad 27, budget 73; NaN on screen: false; errors 0
+   budget-junk: hub; save squad 27, budget 0; NaN on screen: false; errors 0
+   budget-negative: hub; save squad 27, budget -250; NaN on screen: false; errors 0
+   week-past-end: slots, no hub; save squad 27, budget 73; NaN on screen: false; errors 0
+   squad-five: hub; save squad 16, budget 73; NaN on screen: false; errors 0
+   xi-missing: hub; save squad 27, budget 73; NaN on screen: false; errors 0
+   inbox-spam: hub; save squad 27, budget 73; NaN on screen: false; errors 0
+   unknown-club: hub; save squad 27, budget 73; NaN on screen: false; errors 0
+   board-zero: hub; save squad 27, budget 73; NaN on screen: false; errors 0
+   fitness-nan: hub; save squad 27, budget 73; NaN on screen: false; errors 0
+6) PUT BACK through the restore card beside a Club Manager tab (1280x900)
+   offered: true; put back "Everton week 0, 0 results, last none"; A saw it: true; after A left "Everton week 0, 0 results, last none"
+7) OLD SAVE with no fence key (1280x900)
+   fence before absent, after a week 2; Brighton week 0, 0 results, last none to Brighton week 1, 1 results, last Aston Villa 3-2; a second tab stales it: true
+9) BACK: a stale tab leaves by the browser's Back, mid Play Live and on the hub (1280x900)
+  note  tab A's live match is in minute 4
+   mid Play Live: A came in by a link; B played 3: "Brighton week 3, 3 results, last Leeds United 1-2" (live none); A saw the notice: true; after A's Back (same document true) "Brighton week 3, 3 results, last Leeds United 1-2" (live none)
+  ok    A left by Back mid Play Live: the save is still B's
+   on the hub: A came in by a link; B played 3: "Brighton week 3, 3 results, last Leeds United 1-2" (live none); A saw the notice: true; after A's Back (same document true) "Brighton week 3, 3 results, last Leeds United 1-2" (live none)
+  ok    A left by Back on the hub: the save is still B's
+   then in the same document a Hot Seat carry on: the save holds "Arsenal week 26, 26 results, last Hull City 2-0"
+  ok    the same document carried a Hot Seat job on afterwards
+10) SOCCER REPLACE, and 11) REVERSE (1280x900)
+   A opened on "Next Season"; B played "Next Season": Two Tab Tester age 19, newspaper, 4 seasons, last 2023 Leverkusen: 30 apps, 4 goals, 7.2; A saw the notice at once: true; A's press went through: false; forced "Next Season"; A's writes 1 to 1
+  ok    B's season is on disk byte for byte after A's press and A's forced press: Two Tab Tester age 19, newspaper, 4 seasons, last 2023 Leverkusen: 30 apps, 4 goals, 7.2
+  ok    A reloaded onto B's season with no notice: Two Tab Tester age 19, newspaper, 4 seasons, last 2023 Leverkusen: 30 apps, 4 goals, 7.2
+   REVERSE: B saw the notice: true; A stepped "Continue to Season Summary →": Two Tab Tester age 19, season_summary, 4 seasons, last 2023 Leverkusen: 30 apps, 4 goals, 7.2; B forced "Continue to Season Summary →"; B's writes 2 to 2
+  ok    B's forced press changed nothing: the save is A's
+12) NEW CAREER IN A STALE TAB (1280x900)
+   A saw the notice: true; forced New Career true, forced confirm true; A's writes 1 to 1; on disk Two Tab Tester age 19, newspaper, 4 seasons, last 2023 Leverkusen: 30 apps, 4 goals, 7.2
+  ok    a stale New Career cleared nothing
+   creation: B began Fresh Creator age 16, youth, 1 seasons, last 2025 Fulham Youth: 0 apps, 0 goals, 0; A saw the notice: true; A's forced Begin Career true; A's writes 0 to 0; on disk Fresh Creator age 16, youth, 1 seasons, last 2025 Fulham Youth: 0 apps, 0 goals, 0
+  ok    a stale Begin Career wrote nothing
+13) WEEK BY WEEK IN A STALE TAB (1280x900)
+   A's Season Centre open: true (Two Tab Tester age 19, newspaper, 4 seasons, last 2023 Leverkusen: 33 apps, 8 goals, 7); B played on: Two Tab Tester age 19, season_summary, 4 seasons, last 2023 Leverkusen: 33 apps, 8 goals, 7; A saw the notice: true; forced in the Centre ["?","Back to the papers","Bundesliga","DFB-Pokal"], then "Continue to Season Summary →"; A's writes of soccerCareerSave 2 to 2
+  note  RECORDED, NOT JUDGED (owed): the stale tab wrote seasonCentre:v1:soccer 0 time(s) after the other tab played on
+  ok    the stale Season Centre changed nothing in the save
+14) SOCCER OLD SAVE AND THE NOTICE (1280x900)
+   fence before absent, after "Next Season" 2; Two Tab Tester age 18, playing, 3 seasons, last 2022 West Ham: 32 apps, 5 goals, 6.9 to Two Tab Tester age 19, newspaper, 4 seasons, last 2023 Leverkusen: 33 apps, 8 goals, 7; a second tab stales it: true
+  ok    no jump: scrollY 120 and height 9487 before and after
+  ok    the notice: Reload 44 px, smallest text 16 px, no animation, no toast, Tab stayed inside true
+cases red: none; pictures in /home/runner/work/_temp/rc-out/files/tt
+playTwoTabs: green at 320x640, 390x844, 1280x900

@@ -1,0 +1,73 @@
+fleet: 8 soccer saves from the base engine, seeds 0,1,2,3,4,5,6,7
+  seed 0 (playing, h1 "Real Save 0", first "Next Season", pressed "Next Season"): mount equal, press equal, fence 1 to 2
+  seed 1 (playing, h1 "🇪🇸Real Save 1", first "Next Season", pressed "Next Season"): mount equal, press equal, fence 1 to 2
+  seed 2 (playing, h1 "🇫🇷Real Save 2", first "Next Season", pressed "Next Season"): mount equal, press equal, fence 2 to 3
+  seed 3 (transfer_window, h1 "🇧🇷Real Save 3", first "", pressed "null"): mount equal, press equal, fence 2 to 2
+  seed 4 (playing, h1 "🇩🇪Real Save 4", first "Next Season", pressed "Next Season"): mount equal, press equal, fence 1 to 2
+  seed 5 (playing, h1 "🇦🇷Real Save 5", first "Next Season", pressed "Next Season"): mount equal, press equal, fence 2 to 3
+  seed 6 (playing, h1 "🇵🇹Real Save 6", first "Next Season", pressed "Next Season"): mount equal, press equal, fence 2 to 3
+  seed 7 (transfer_window, h1 "🇮🇹Real Save 7", first "", pressed "null"): mount equal, press equal, fence 2 to 2
+fleet: 8/8 equal after mount, 8/8 equal after a press, 8/8 fenced as wanted
+play 390x844-rm
+  landing first {"y":193,"top":17} later {"y":193,"top":17,"bottom":45}
+  step 3 (Sign contract): toast
+  step 8 (🏋️Post training videoShow off): toast
+  step 10 (🎭The ShowmanFame comes easy: ): toast
+  step 11 (🥦Full compliance for a season): toast
+  step 12 (🤝Accept lower wage, stay loya): toast
+  step 14 (Sign contract): toast
+  toast "Signed with Blackburn Rovers!" first box 16,16,358,54 under heading: Danny Okafor-Whitfield
+  toast "Signed with Blackburn Rovers!" settled box 16,16,358,54 under heading: Danny Okafor-Whitfield
+  toast "🏋️ Post training video" first box 16,16,358,54 under heading: Danny Okafor-Whitfield
+  toast "🏋️ Post training video" settled box 16,16,358,54 under heading: Danny Okafor-Whitfield
+  toast "Fame comes easy: followers grow 60% faster, sponsors pay 25% more, sca" first box 16,-57,358,73 under nothing
+  toast "Fame comes easy: followers grow 60% faster, sponsors pay 25% more, sca" settled box 16,16,358,73 under heading: Danny Okafor-Whitfield
+  toast "Physical +3 and Pace +1 next season, Morale -6" first box 16,16,358,54 under heading: Danny Okafor-Whitfield
+  toast "Physical +3 and Pace +1 next season, Morale -6" settled box 16,16,358,54 under heading: Danny Okafor-Whitfield
+  toast "Wage -15%, Morale +5" first box 16,16,358,54 under heading: Danny Okafor-Whitfield
+  toast "Wage -15%, Morale +5" settled box 16,16,358,54 under heading: Danny Okafor-Whitfield
+  toast "Signed with NEOM SC!" first box 16,16,358,54 under heading: Danny Okafor-Whitfield
+  toast "Signed with NEOM SC!" settled box 16,16,358,54 under heading: Danny Okafor-Whitfield
+  notice {"box":[0,0,390,844],"reloadH":44,"text":"This career moved on in another tab. Reload to carry on.Reload","y":0,"docH":13739,"toasts":0}
+  Retire controls on the hub after reload: 1
+play 390x844-mo
+  landing first {"y":193,"top":17} later {"y":193,"top":17,"bottom":45}
+  step 3 (Sign contract): toast
+  toast "Signed with Blackburn Rovers!" first box 16,-37,358,54 under nothing
+  toast "Signed with Blackburn Rovers!" settled box 16,16,358,54 under heading: Danny Okafor-Whitfield
+  notice {"box":[0,0,390,844],"reloadH":44,"text":"This career moved on in another tab. Reload to carry on.Reload","y":0,"docH":13330,"toasts":0}
+  FAIL 390x844-mo: could not press Reload
+  FAIL 390x844-mo: the notice is still up after Reload
+  Retire controls on the hub after reload: 0
+play 1280x900-rm
+  landing first {"y":101,"top":23} later {"y":101,"top":23,"bottom":55}
+  step 3 (Sign contract): toast
+  step 8 (🏋️Post training videoShow off): toast
+  step 10 (🎭The ShowmanFame comes easy: ): toast
+  step 11 (🥦Full compliance for a season): toast
+  step 12 (🤝Accept lower wage, stay loya): toast
+  step 14 (Sign contract): toast
+  toast "Signed with Blackburn Rovers!" first box 462,32,356,54 under heading: Danny Okafor-Whitfield
+  toast "Signed with Blackburn Rovers!" settled box 462,32,356,54 under heading: Danny Okafor-Whitfield
+  toast "🏋️ Post training video" first box 462,-21,356,54 under heading: Danny Okafor-Whitfield
+  toast "🏋️ Post training video" settled box 462,32,356,54 under heading: Danny Okafor-Whitfield
+  toast "Fame comes easy: followers grow 60% faster, sponsors pay 25% more, sca" first box 462,32,356,73 under heading: Danny Okafor-Whitfield
+  toast "Fame comes easy: followers grow 60% faster, sponsors pay 25% more, sca" settled box 462,32,356,73 under heading: Danny Okafor-Whitfield
+  toast "Physical +3 and Pace +1 next season, Morale -6" first box 462,32,356,54 under heading: Danny Okafor-Whitfield
+  toast "Physical +3 and Pace +1 next season, Morale -6" settled box 462,32,356,54 under heading: Danny Okafor-Whitfield
+  toast "Wage -15%, Morale +5" first box 462,32,356,54 under heading: Danny Okafor-Whitfield
+  toast "Wage -15%, Morale +5" settled box 462,32,356,54 under heading: Danny Okafor-Whitfield
+  toast "Signed with NEOM SC!" first box 462,32,356,54 under heading: Danny Okafor-Whitfield
+  toast "Signed with NEOM SC!" settled box 462,32,356,54 under heading: Danny Okafor-Whitfield
+  notice {"box":[0,0,1280,900],"reloadH":44,"text":"This career moved on in another tab. Reload to carry on.Reload","y":0,"docH":9619,"toasts":0}
+  Retire controls on the hub after reload: 1
+play 1280x900-mo
+  landing first {"y":101,"top":23} later {"y":101,"top":23,"bottom":55}
+  step 3 (Sign contract): toast
+  toast "Signed with Blackburn Rovers!" first box 462,-21,356,54 under heading: Danny Okafor-Whitfield
+  toast "Signed with Blackburn Rovers!" settled box 462,32,356,54 under heading: Danny Okafor-Whitfield
+  notice {"box":[0,0,1280,900],"reloadH":44,"text":"This career moved on in another tab. Reload to carry on.Reload","y":0,"docH":9315,"toasts":0}
+  FAIL 1280x900-mo: could not press Reload
+  FAIL 1280x900-mo: the notice is still up after Reload
+  Retire controls on the hub after reload: 0
+REVIEW WALK RED: 4 finding(s)
