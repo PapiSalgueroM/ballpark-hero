@@ -1,0 +1,8 @@
+pd-c exit=0 9s | simCareerPreDraft [seed set c]: ALL GREEN
+pd-a exit=0 10s | simCareerPreDraft [seed set a]: ALL GREEN
+pd-b exit=0 10s | simCareerPreDraft [seed set b]: ALL GREEN
+needles exit=0 0s | needles: 32 controls checked, 0 not exactly once
+pd-d exit=0 12s | simCareerPreDraft [seed set d]: ALL GREEN
+pd-e exit=0 13s | simCareerPreDraft [seed set e]: ALL GREEN
+vitest-head exit=0 17s |  Test Files  5 passed | 1 skipped (6)
+vitest-base exit=0 13s |  Test Files  5 passed | 1 skipped (6)
