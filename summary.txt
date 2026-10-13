@@ -1,0 +1,6 @@
+ctl-unsetpath exit=1 23s | simCmShootoutOrder: 3 FAILURE(S)
+simCmShootoutOrder exit=0 25s | simCmShootoutOrder: all sections passed
+simCmCopy exit=0 17s | simCmCopy: green on this tree. Sections 1, 2, 3, 4, 5: Club Manager says what it means.
+simGmStaff exit=1 3s | GM STAFF: 40 failure(s)
+azjoin exit=0 24s | trial join simCmShootoutOrder exit=0
+tsc exit=0 65s | 
