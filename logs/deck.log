@@ -1,0 +1,8 @@
+simEventDeck: 7 packs (nfl, nba, mlb, nhl, college, gym, afl)
+1) Replay: 7 GM packs, seeds 1, 2, 3, drives FLEET, SILENT, STUBBORN, FALLEN, 10 seasons a desk
+   84 rows, 72509 events dealt, 267577 deck draws, 296 repeat ids suffixed on FALLEN desks (22.9 s)
+   the recording: base 8fea14e2, gmInbox.ts blob 0055dbd1, drive baf7540a6deb, 84 rows
+   ok all 84 rows byte equal to the base engine's recording (desk states, ids, answer lines, deck draws, deals)
+
+runtime 22.9 s
+simEventDeck: green.

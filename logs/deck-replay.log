@@ -1,0 +1,20 @@
+simEventDeck: 7 packs (nfl, nba, mlb, nhl, college, gym, afl), CONTROL=replay
+1) Replay: 7 GM packs, seeds 1, 2, 3, drives FLEET, SILENT, STUBBORN, FALLEN, 10 seasons a desk
+   84 rows, 72521 events dealt, 340264 deck draws, 296 repeat ids suffixed on FALLEN desks (25.8 s)
+   the recording: base 8fea14e2, gmInbox.ts blob 0055dbd1, drive baf7540a6deb, 84 rows
+     nfl|1|FLEET: hash f1aa6f089d0b not c443aa155725, deck draws 11188 not 8476, deals 2783 not 2793, first desk that moved 0
+     nfl|1|SILENT: hash 1d7d3dff7540 not f4768176b0b9, deck draws 1635 not 1574, deals 60 not 60, first desk that moved 0
+     nfl|1|STUBBORN: hash d85403082cdc not f149a008fe2d, deck draws 2288 not 1693, deals 569 not 545, first desk that moved 0
+     nfl|1|FALLEN: hash cfe41d8563bd not 77803172be13, deck draws 728 not 531, deals 180 not 182, first desk that moved 0
+     nfl|2|FLEET: hash 8871e0717abc not a81402e0f7a7, deck draws 11286 not 8622, deals 2793 not 2815, first desk that moved 0
+     nfl|2|SILENT: hash e3453be6fb9a not a22ca112aec3, deck draws 1655 not 1601, deals 60 not 60, first desk that moved 1
+     nfl|2|STUBBORN: hash 8aa21901978f not 2b402024437a, deck draws 2200 not 1659, deals 536 not 534, first desk that moved 0
+     nfl|2|FALLEN: hash eafb63887f77 not 617ed95f2001, deck draws 701 not 535, deals 180 not 184, first desk that moved 0
+     nfl|3|FLEET: hash c49878c3dd9f not 89f7b691ca1a, deck draws 11463 not 8592, deals 2832 not 2824, first desk that moved 0
+     nfl|3|SILENT: hash e3a79b2a4b90 not 2278e547313f, deck draws 1621 not 1576, deals 60 not 60, first desk that moved 0
+     nfl|3|STUBBORN: hash 594d213cbfaa not bbbb4c85de09, deck draws 2272 not 1709, deals 559 not 565, first desk that moved 0
+     nfl|3|FALLEN: hash f2800c6a6323 not f739d6253a74, deck draws 749 not 552, deals 188 not 187, first desk that moved 0
+   FAIL 84 of 84 rows differ from the recording
+
+runtime 25.8 s
+simEventDeck: 1 failure, red sections 1 (CONTROL=replay fired)
