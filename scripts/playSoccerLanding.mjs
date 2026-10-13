@@ -100,7 +100,7 @@ const ARMS = (process.env.SOCCER_LANDING_ARMS || (BASE_DIST ? 'head,base' : 'hea
 if (ARMS.includes('base') && !BASE_DIST) { console.error('the base arm needs SOCCER_LANDING_BASE_DIST (a plain build of the base commit)'); process.exit(2); }
 const SEED = pageSeedOf(import.meta.url, process.env.SOCCER_LANDING_SEED);
 const NAMES = ['Danny Okafor-Whitfield', 'Supercalifragilisticexpialidociouswinger'];
-const DRIVE_STEPS = Number(process.env.SOCCER_LANDING_STEPS || 40);
+const DRIVE_STEPS = Number(process.env.SOCCER_LANDING_STEPS || 120);
 console.log(`seed ${SEED}; arms ${ARMS.join(', ')}; sections ${SECTIONS.join(', ')}; sizes ${SIZES.map(s => s.join('x')).join(', ')}${CONTROL ? `; CONTROL ${CONTROL}` : ''}`);
 if (NAMES[1].length !== 40) { console.error(`the long name is ${NAMES[1].length} characters, not 40`); process.exit(2); }
 
@@ -535,12 +535,17 @@ function driveOne(prefer = []) {
    never reached a random event, a transfer window or a third Next Season.
    prefer(): words to press first this step (a loan, an extension), so the
    drive reaches the toasts the default choices never raise. The phone is tried
-   on the first playing steps until one thing is bought. */
-async function drive(p, steps, onStep, prefer = () => []) {
+   on the first playing steps until one thing is bought. until(): the drive
+   stops once it has what its section needs (a season is twenty odd steps of
+   cards, so a fixed count either stops short or wastes minutes); the step cap
+   is the limit. The same rule on both arms stops them at the same step. */
+async function drive(p, steps, onStep, prefer = () => [], until = null) {
   const kinds = new Set();
   let phoneDone = false;
   let phoneTries = 0;
   let nexts = 0;
+  let nextSeasons = 0;
+  let done = 0;
   for (let i = 0; i < steps; i++) {
     if (!p.url().includes('/soccer-career')) { kinds.add(`left the page for ${p.url()}`); break; }
     const want = await prefer();
@@ -552,8 +557,10 @@ async function drive(p, steps, onStep, prefer = () => []) {
     }
     if (step.error) { kinds.add(`the page went away: ${step.error.slice(0, 80)}`); break; }
     await p.waitForTimeout(900);
+    done = i + 1;
     if (step.phase) kinds.add(step.phase);
     if (/^Next (Year|Season)/.test(step.pressed ?? '')) nexts += 1;
+    if (/^Next Season/.test(step.pressed ?? '')) nextSeasons += 1;
     if (onStep) await onStep(`step ${i + 1} (${step.phase}: ${step.pressed})`);
     if (!step.pressed) { kinds.add(`stopped: nothing to press on ${step.phase}`); break; }
     if (!phoneDone && phoneTries < 3 && step.phase === 'playing') {
@@ -563,8 +570,9 @@ async function drive(p, steps, onStep, prefer = () => []) {
       kinds.add(`phone: ${bought}`);
       if (onStep) await onStep(`phone (${bought})`);
     }
+    if (until && await until({ nexts, nextSeasons, phoneDone })) { kinds.add(`stopped with what it needed after ${i + 1} steps`); break; }
   }
-  kinds.add(`${nexts} Next Year or Next Season presses`);
+  kinds.add(`${done} steps, ${nexts} Next Year or Next Season presses (${nextSeasons} Next Season)`);
   return [...kinds];
 }
 /* One phone action: My Life, then the categories in order until one holds a
@@ -651,7 +659,7 @@ async function sectionToasts(ctx, arm, size) {
   const kinds = await drive(p, DRIVE_STEPS, async label => {
     await credit(label);
     if (shots < 8 && await p.locator('[data-sonner-toast]').count() > 0) { shots += 1; await shot(p, `${arm}-${size}-toast-${shots}`); }
-  }, prefer);
+  }, prefer, async () => TOAST_KINDS.filter(k => k.required).every(k => raisedAt.some(k.test)));
   await p.waitForTimeout(600);
   await credit('after the drive');
   const audit = await p.evaluate(() => window.__toastAudit ?? []);
@@ -689,7 +697,7 @@ async function bytesArm(arm, seed) {
     await p.getByRole('button', { name: /Begin Career/ }).click({ timeout: 5000 });
     await p.waitForTimeout(1200);
     trail.push({ at: 'Begin Career', sha: sha(await saveRaw(p)) });
-    kinds = await drive(p, DRIVE_STEPS, async label => { trail.push({ at: label, sha: sha(await saveRaw(p)) }); });
+    kinds = await drive(p, DRIVE_STEPS, async label => { trail.push({ at: label, sha: sha(await saveRaw(p)) }); }, () => [], async ({ nextSeasons, phoneDone }) => nextSeasons >= 3 && phoneDone && trail.some(t => t.at.includes('(random_events: ')) && trail.some(t => t.at.includes('(transfer_window: ')));
     console.log(`   ${arm} on seed ${seed}: ${trail.length} saves through ${kinds.join(', ')}`);
   } finally {
     await ctx.close();
