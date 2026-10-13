@@ -1,0 +1,15 @@
+fleet: 4 careers x seeds 0,1,2,3,4 x 2 seasons, a save, a load and a save after every entry, against FENCE_BASE /tmp/f5
+NEGATIVE CONTROL ON: SAVE_FENCE_CONTROL=repairall rewrote clubManager.ts in the fleet-head bundle
+  1938 saves on head, 0 of them in a state a load repair fires on; 0 faces equal to the base commit's (both saves' bytes and the draw count)
+  FAIL [fleet]: head and base part: Everton (today) seed 0: head "start|0297393f9683a321|62c8b94ebdde2a7e|706" base "start|0297393f9683a321|6b2386eccf6fbb76|706"
+  squeezed career: 465 saves the engine wrote with fewer than 14 men (seed:saves 0:94 1:92 2:93 3:93 4:93)
+  negative budget: saved at -2.5, opened on head at 0 with 0 draws, NOT the same JSON as the base's
+  FAIL [fleet]: a negative budget was changed on load: -2.5 opened as 0 with 0 draws
+  FAIL [fleet]: a save with a negative budget opens differently on head and base
+  FAIL [fleet]: old save 0 opens differently on head and base
+  FAIL [fleet]: old save 1 opens differently on head and base
+  FAIL [fleet]: old save 2 opens differently on head and base
+  FAIL [fleet]: old save 3 opens differently on head and base
+  old saves: 0 of 4 Club Manager saves the base engine wrote open to the same JSON on head and base
+  section fleet: 1945 checks, 7 red
+CONTROL FIRED: SAVE_FENCE_CONTROL=repairall fired 1 times and section fleet went red with 7 findings
