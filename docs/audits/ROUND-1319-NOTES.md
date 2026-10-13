@@ -225,7 +225,7 @@ harness's own closing line and exit 0.
 | Gate | Head | Base |
 |---|---|---|
 | tsc (tsconfig.app.json) | exit 0 | (Release AY's gate) |
-| vitest careerPreDraft, careerDraftNight, usCareerDraftNightBoard, usCareerProspect, usCareerSaveRetry, usBoardFixture | exit 0, 5 files passed, 1 skipped (usBoardFixture without US_BOARD_FIXTURE=replay) | `r1319-f4` |
+| vitest careerPreDraft, careerDraftNight, usCareerDraftNightBoard, usCareerProspect, usCareerSaveRetry, usBoardFixture | exit 0, 5 files passed, 1 skipped (usBoardFixture without US_BOARD_FIXTURE=replay); again on bc4114b1 (`r1319-f4`) | exit 0, 5 files passed, 1 skipped (`r1319-f4`, the base checked out on the runner) |
 | simCareerPreDraft seed sets a to e | each exit 0, ALL GREEN, 9 to 14 s | each exit 0 (`r1319-s0`) |
 | its 32 controls (the other lane's 14 in the loop, gradeshift, extradraw, the six night controls, this round's ten) | each exit 1, "mutated", in the sections the controls table names | |
 | the two pre draft steps of prospect-journey.yml, as written | pass, 215 s | pass, 84 s |
