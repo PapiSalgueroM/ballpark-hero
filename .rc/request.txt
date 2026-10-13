@@ -1,0 +1,11 @@
+#!serve
+#!playwright
+playReleaseClause: ENGINES=chromium node scripts/playReleaseClause.mjs
+playCmDataOnDemand: ENGINES=chromium node scripts/playCmDataOnDemand.mjs
+playClubManager: ENGINES=chromium node scripts/playClubManager.mjs
+simRevealScroll: ENGINES=chromium ONLY=/club-manager node scripts/simRevealScroll.mjs
+sweepGames: ENGINES=chromium ONLY=/club-manager node scripts/sweepGames.mjs
+playGames: ENGINES=chromium ONLY=/club-manager node scripts/playGames.mjs
+sweepWeight: SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs
+playCmRealFixtures: ENGINES=chromium node scripts/playCmRealFixtures.mjs
+playFirstTeamFit: ENGINES=chromium node scripts/playFirstTeamFit.mjs
