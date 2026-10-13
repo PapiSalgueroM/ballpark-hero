@@ -1,0 +1,40 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [31m❯[39m src/lib/clubManagerSubsRule.test.ts [2m([22m[2m5 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[32m 12[2mms[22m[39m
+[31m   [31m×[31m subsRuleFor[2m > [22mreads every real league id and every era league id[39m[32m 7[2mms[22m[39m
+[31m     → mlsEast: expected false to be true // Object.is equality[39m
+   [32m✓[39m subsRuleFor[2m > [22mplays three with no limit in 2005 and 2015 everywhere[32m 2[2mms[22m[39m
+   [32m✓[39m subsRuleFor[2m > [22mgives the big four five from 2020-21 and the Premier League three until 2022-23[32m 0[2mms[22m[39m
+   [32m✓[39m subsRuleFor[2m > [22mkeeps partial leagues and unknown ids at three, marked partial from 2020[32m 1[2mms[22m[39m
+   [32m✓[39m subsRuleFor[2m > [22mnames the same rows as its ledger[32m 0[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/lib/clubManagerSubsRule.test.ts[2m > [22msubsRuleFor[2m > [22mreads every real league id and every era league id
+[31m[1mAssertionError[22m: mlsEast: expected false to be true // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- true[39m
+[31m+ false[39m
+
+[36m [2m❯[22m src/lib/clubManagerSubsRule.test.ts:[2m23:27[22m[39m
+    [90m 21| [39m      [34mexpect[39m(base)[33m.[39m[34mtoBe[39m(l[33m.[39mid)[33m;[39m
+    [90m 22| [39m      const known = Object.prototype.hasOwnProperty.call(CM_SUBS_FIVE_…
+    [90m 23| [39m      [34mexpect[39m(known[33m,[39m l[33m.[39mid)[33m.[39m[34mtoBe[39m([35mtrue[39m)[33m;[39m
+    [90m   | [39m                          [31m^[39m
+    [90m 24| [39m    }
+    [90m 25| [39m    [35mfor[39m ([35mconst[39m leagues [35mof[39m [33mObject[39m[33m.[39m[34mvalues[39m([33mERA_LEAGUES[39m)) {
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m4 passed[39m[22m[90m (5)[39m
+[2m   Start at [22m 22:53:12
+[2m   Duration [22m 2.58s[2m (transform 1.42s, setup 59ms, collect 1.69s, tests 12ms, environment 372ms, prepare 162ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/clubManagerSubsRule.test.ts,title=src/lib/clubManagerSubsRule.test.ts > subsRuleFor > reads every real league id and every era league id,line=23,column=27::AssertionError: mlsEast: expected false to be true // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- true%0A+ false%0A%0A ❯ src/lib/clubManagerSubsRule.test.ts:23:27%0A%0A
