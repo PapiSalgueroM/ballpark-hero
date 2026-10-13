@@ -1,0 +1,16 @@
+# Release BB, lane V: Release BA walks, served, one at a time
+#!serve
+#!playwright
+#!serial
+fonts: mkdir -p .tmp-fx/font-cache && FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only
+assets1082: pip3 install --quiet fonttools pillow && node scripts/qa/soccerOfferAssets1082.mjs
+playGameReports: REPORT_EVIDENCE="$RC_OUT/reports" node scripts/playGameReports.mjs
+playGameReports-below: GAME_REPORT_CONTROL=below-guide REPORT_EVIDENCE="$RUNNER_TEMP/reports-below" node scripts/playGameReports.mjs
+playWorldXiReportFit: node scripts/playWorldXiReportFit.mjs
+simCareerTransferBrief-forwalk: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerTransferBrief.mjs
+playCareerTransferBrief: FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playCareerTransferBrief.mjs
+simSoccerAgentReview-forwalk: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerAgentReview.mjs
+playSoccerAgentReview: FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playSoccerAgentReview.mjs
+playSoccerOfferReview1082: SOCCER_OFFER_REVIEW_ASSET_CACHE="$PWD/soccer-offer-review-artifacts/font-cache/manifest.json" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playSoccerOfferReview1082.mjs
+simSoccerOpponentLabels-forwalk: SIM_NETWORK=offline SOCCER_OPPONENT_LABELS_OUT="$RUNNER_TEMP/ba-labels" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerOpponentLabels.mjs
+simSoccerOpponentLabels-browser: SOCCER_OPPONENT_LABELS_BROWSER=1 SOCCER_OPPONENT_LABELS_INPUT="$RUNNER_TEMP/ba-labels" SOCCER_OPPONENT_LABELS_OUT="$RUNNER_TEMP/ba-labels-b" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerOpponentLabels.mjs
