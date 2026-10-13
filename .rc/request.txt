@@ -1,0 +1,4 @@
+# Round 1311 closing check fix2, served: the three engine weight rows on the final head (the lead sets them)
+#!serve
+#!playwright
+weight: SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs
