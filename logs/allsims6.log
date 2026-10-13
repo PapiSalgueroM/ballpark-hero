@@ -1,0 +1,25 @@
+[SIM_OFFLINE_BLOCK] database fetch https://flawuiqbvjobmkfkauhw.supabase.co
+[SIM_OFFLINE_BLOCK] database fetch https://flawuiqbvjobmkfkauhw.supabase.co
+[SIM_OFFLINE_BLOCK] database fetch https://flawuiqbvjobmkfkauhw.supabase.co
+   SKIPPED, SUPABASE UNREACHABLE. NOT CHECKED. The migration was checked against its pull in section 1; run this where the host is reachable.
+4) the source: the page filters through the same module
+   the hook filters through playersUnderRule and reads puzzleUnderRule; the fetcher selects 10 columns including every rule pair
+
+simTransferPathModes: green. Under every rule the stored minimum is the search's, every hint describes a path the rule accepts, and no chain leaves the rule.
+
+
+----- simValidatePlayerRecords.mjs (FAIL) -----
+  FAIL: the map names "Real Madrid" and the table has no such club
+  FAIL: the map names "FC Barcelona" and the table has no such club
+  FAIL: the map names "Manchester City" and the table has no such club
+  FAIL: the map names "Liverpool FC" and the table has no such club
+  FAIL: the map names "Bayern Munich" and the table has no such club
+  FAIL: the map names "FC Bayern Munich" and the table has no such club
+  FAIL: the map names "Paris Saint-Germain" and the table has no such club
+  FAIL: the map names "Chelsea FC" and the table has no such club
+  FAIL: the map names "Arsenal FC" and the table has no such club
+  FAIL: the map names "Manchester United" and the table has no such club
+  FAIL: the map names "Juventus FC" and the table has no such club
+  FAIL: the map names "Juventus" and the table has no such club
+
+19 harnesses not green.
