@@ -1,0 +1,6 @@
+390x844-plain: dialog open false; {"notice":true,"bodyPE":"(unset)","reloadPE":"auto","hit":"button \"Reload\"","hitIsReload":true,"focus":"button \"Reload\"","center":[195,454]}; reloaded by one press
+390x844-help-dialog: dialog open true; {"notice":true,"bodyPE":"none","reloadPE":"none","hit":"html \"Soccer Career: Free Football C\"","hitIsReload":false,"focus":"button \"Reload\"","center":[195,454]}; reloaded by the SECOND press
+1280x900-plain: dialog open false; {"notice":true,"bodyPE":"(unset)","reloadPE":"auto","hit":"button \"Reload\"","hitIsReload":true,"focus":"button \"Reload\"","center":[640,482]}; reloaded by one press
+1280x900-help-dialog: dialog open true; {"notice":true,"bodyPE":"none","reloadPE":"none","hit":"html \"Soccer Career: Free Football C\"","hitIsReload":false,"focus":"button \"Reload\"","center":[640,482]}; reloaded by the SECOND press
+CONTROL OK: the plain arm reloads on one press at both sizes
+PROBE FOUND: Reload does not work on one press with a dialog open (reloaded by the SECOND press; reloaded by the SECOND press)

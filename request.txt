@@ -1,0 +1,3 @@
+#!serve
+#!playwright
+probe: mkdir -p $RC_OUT/probe && RC_OUT=$RC_OUT/probe ENGINES=chromium node .rc/x/probe.mjs
