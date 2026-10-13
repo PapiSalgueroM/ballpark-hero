@@ -136,3 +136,22 @@ out until the round is put back.
 - Not changed, for the lead: Watch Week 17 at 390 by 844 leaves the next press above the screen (ruling 2b's
   ground); a short landscape screen puts the box's top under the sticky header (the hook's ground); the playoff mount
   wiring is the NFL board's alone; /front-office weighs 369.3K against its 366K row.
+
+## The closing check's fixes (results-g/verify-1309.md, then results-g/fix2-1309.md)
+
+- Watch Week 17 at 390 by 844 (ruling 2b's asserted point): the press writes the feed box ABOVE the week box, which
+  moved the box 74 px down and left 126 px of it readable on the review's save, so the hook fired and top aligned the
+  box, leaving the stacked buttons above the screen until the next press. Under sm in the bracket the hook is now
+  handed `block: 'end'` (the element is still the wrapper that starts at the box; the hook honours the end only when
+  the wrapper fits, and in the bracket it does), so when it has to move the page the buttons, the chip and the box are
+  all on the screen. The regular season is as shipped. Walk point 19 (fixture E, the review's save) asserts it.
+- The back chip under sm sits ABOVE the box (between the press row and the reveal's wrapper), so it is on the screen
+  whenever the buttons are (under the box it was at 984 to 1028 of 844). From sm up it stays under the box with the
+  reveal's edge. Point 12 asserts the chip at 390 by 844.
+- A landscape phone (844 by 390) is now printed by the walk for the lead; the route mounts no sticky header
+  (App.tsx's HEADER_PATHS), so the review's premise for it was not this page's. Measured on r1309-cx-w2 (7f7d94d1),
+  after the first press of a visit: a regular week puts the box at 38 to 390 (his result 105 to 133, Play above the
+  screen); "Play Week 17" and a playoff round put the box at -18 to 334 with the back chip at 346 to 390 and his
+  result at 49 to 77 (the first button at -86). The buttons, the box and the chip (476 px) cannot all fit 390 px; the
+  bracket's end aligned span takes 18 px off the box's top. Whether the box's top or the chip wins there is the
+  lead's call.
