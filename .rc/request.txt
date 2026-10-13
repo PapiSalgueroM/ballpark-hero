@@ -1,0 +1,42 @@
+# Release BC gate, lane P4: the nine pieces' plain lines and controls
+#!playwright
+cool-sharedbatch-control: export TMPDIR=$(mktemp -d); SIM_CAREER_LIFE_COOLDOWNS_CONTROL=sharedbatch node scripts/simCareerLifeCooldowns.mjs
+cool-flood-control: export TMPDIR=$(mktemp -d); SIM_CAREER_LIFE_COOLDOWNS_CONTROL=flood node scripts/simCareerLifeCooldowns.mjs
+usSummer: export TMPDIR=$(mktemp -d); SIM_SECTIONS=1,2,3,3b,4,5,7,8,9,10,11,12 node scripts/simUsCareerSummer.mjs
+prom-breakapply-EXPECT-RED: export TMPDIR=$(mktemp -d); SIM_SOCCER_EVENT_PROMISES_CONTROL=breakapply node scripts/simSoccerEventPromises.mjs
+prom-unannounced-EXPECT-RED: export TMPDIR=$(mktemp -d); SIM_SOCCER_EVENT_PROMISES_CONTROL=unannounced node scripts/simSoccerEventPromises.mjs
+prom-reorder-EXPECT-RED: export TMPDIR=$(mktemp -d); SIM_SOCCER_EVENT_PROMISES_CONTROL=reorder node scripts/simSoccerEventPromises.mjs
+prom-firstyear-EXPECT-RED: export TMPDIR=$(mktemp -d); SIM_SOCCER_EVENT_PROMISES_CONTROL=firstyear node scripts/simSoccerEventPromises.mjs
+fair-shuffle-EXPECT-RED: export TMPDIR=$(mktemp -d); SIM_SOCCER_DECK_FAIRNESS_CONTROL=shuffle node scripts/simSoccerDeckFairness.mjs
+fair-ranking-EXPECT-RED: export TMPDIR=$(mktemp -d); SIM_SOCCER_DECK_FAIRNESS_CONTROL=ranking node scripts/simSoccerDeckFairness.mjs
+fair-globalpick-EXPECT-RED: export TMPDIR=$(mktemp -d); SIM_SOCCER_DECK_FAIRNESS_CONTROL=globalpick node scripts/simSoccerDeckFairness.mjs
+fair-keyseason-EXPECT-RED: export TMPDIR=$(mktemp -d); SIM_SOCCER_DECK_FAIRNESS_CONTROL=keyseason node scripts/simSoccerDeckFairness.mjs
+fair-newsyear-EXPECT-RED: export TMPDIR=$(mktemp -d); SIM_SOCCER_DECK_FAIRNESS_CONTROL=newsyear node scripts/simSoccerDeckFairness.mjs
+fair-nogate-EXPECT-RED: export TMPDIR=$(mktemp -d); SIM_SOCCER_DECK_FAIRNESS_CONTROL=nogate node scripts/simSoccerDeckFairness.mjs
+fair-puskas-EXPECT-RED: export TMPDIR=$(mktemp -d); SIM_SOCCER_DECK_FAIRNESS_CONTROL=puskas node scripts/simSoccerDeckFairness.mjs
+fair-loanclub-EXPECT-RED: export TMPDIR=$(mktemp -d); SIM_SOCCER_DECK_FAIRNESS_CONTROL=loanclub node scripts/simSoccerDeckFairness.mjs
+fair-unit-EXPECT-RED: export TMPDIR=$(mktemp -d); SIM_SOCCER_DECK_FAIRNESS_CONTROL=unit node scripts/simSoccerDeckFairness.mjs
+fair-poscode-EXPECT-RED: export TMPDIR=$(mktemp -d); SIM_SOCCER_DECK_FAIRNESS_CONTROL=poscode node scripts/simSoccerDeckFairness.mjs
+fair-uncapped-EXPECT-RED: export TMPDIR=$(mktemp -d); SIM_SOCCER_DECK_FAIRNESS_CONTROL=uncapped node scripts/simSoccerDeckFairness.mjs
+fair-prefix-EXPECT-RED: export TMPDIR=$(mktemp -d); SIM_SOCCER_DECK_FAIRNESS_CONTROL=prefix node scripts/simSoccerDeckFairness.mjs
+fair-olddebut-EXPECT-RED: export TMPDIR=$(mktemp -d); SIM_SOCCER_DECK_FAIRNESS_CONTROL=olddebut node scripts/simSoccerDeckFairness.mjs
+fair-injlog-EXPECT-RED: export TMPDIR=$(mktemp -d); SIM_SOCCER_DECK_FAIRNESS_CONTROL=injlog node scripts/simSoccerDeckFairness.mjs
+fair-injblow-EXPECT-RED: export TMPDIR=$(mktemp -d); SIM_SOCCER_DECK_FAIRNESS_CONTROL=injblow node scripts/simSoccerDeckFairness.mjs
+fair-outside-EXPECT-RED: export TMPDIR=$(mktemp -d); SIM_SOCCER_DECK_FAIRNESS_CONTROL=outside node scripts/simSoccerDeckFairness.mjs
+h-storyrole: export TMPDIR=$(mktemp -d); node scripts/simCareerStoryRole.mjs
+h-seasonhist: export TMPDIR=$(mktemp -d); node scripts/simSoccerSeasonHistory.mjs
+h-derby: export TMPDIR=$(mktemp -d); node scripts/simSoccerDerbyHistory.mjs
+h-trophy: export TMPDIR=$(mktemp -d); node scripts/simCareerTrophyRuns.mjs
+h-dev: export TMPDIR=$(mktemp -d); node scripts/simSoccerCareerDevelopment.mjs
+k-programme: export TMPDIR=$(mktemp -d); node scripts/simCareerProgramme.mjs
+k-pressmarket: export TMPDIR=$(mktemp -d); node scripts/simCareerPressMarket.mjs
+k-transferbrief: export TMPDIR=$(mktemp -d); node scripts/simCareerTransferBrief.mjs
+k-agentreview: export TMPDIR=$(mktemp -d); node scripts/simSoccerAgentReview.mjs
+k-farewell: export TMPDIR=$(mktemp -d); node scripts/simSoccerFarewell.mjs
+k-intreturn: export TMPDIR=$(mktemp -d); node scripts/simSoccerInternationalReturn.mjs
+currency: export TMPDIR=$(mktemp -d); node scripts/simSoccerCurrency.mjs
+vitest: export TMPDIR=$(mktemp -d); node_modules/.bin/vitest run src/test/careerPreDraft.test.tsx src/test/careerDraftNight.test.tsx src/test/usCareerDraftNightBoard.test.tsx src/test/usCareerProspect.test.tsx src/test/usCareerSaveRetry.test.tsx src/test/usBoardFixture.test.tsx --testTimeout=300000 --hookTimeout=120000
+pd-a: export TMPDIR=$(mktemp -d); SEEDSET=a node scripts/simCareerPreDraft.mjs
+pd-b: export TMPDIR=$(mktemp -d); SEEDSET=b node scripts/simCareerPreDraft.mjs
+pd-c: export TMPDIR=$(mktemp -d); SEEDSET=c node scripts/simCareerPreDraft.mjs
+pd-d: export TMPDIR=$(mktemp -d); SEEDSET=d node scripts/simCareerPreDraft.mjs
