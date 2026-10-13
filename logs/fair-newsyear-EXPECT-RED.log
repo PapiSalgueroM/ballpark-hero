@@ -1,0 +1,38 @@
+NEGATIVE CONTROL ON: the paper's key loses the year, so a career prints one story every season (section 3 must fail)
+The paper holds 44 stories, 23 of them under weight 1
+Driving the fleet: 200 ordinary, 200 elite and 100 loyal careers through the real engine
+   500 careers, 8232 playing seasons, 7440 batches, 7440 papers, 0 crashes
+1) The deck: 40,000 keyed draws, every tenth of the eligible list at its fair rate
+   save: ST, age 20, 5 rows; 85 eligible cards, 119804 picks over 40000 draws (2.995 a draw)
+   per tenth, observed over fair: 1.007, 0.992, 1.005, 0.998, 0.992, 1.011, 0.99, 0.993, 1.008, 1.003; single cards 0.924 to 1.061 (reported, not asserted)
+2) The paper: a weight 0.5 story prints at half the rate of a weight 1 story
+   4 stories eligible (weights 1 1 0.5 1); over 40000 papers the 0.5 story printed 5646 times, the weight 1 story 11610, others 22744: ratio 0.486 (sd 0.008)
+   the fleet's 7440 papers printed 19 of the 23 stories under weight 1, 3498 prints against a fair 3383.335; REDEMPTION 3 times
+   under weight 1 (weight printed/fair/qualified): Reveals Secret To Succes 0.5 177/179.005/2706; Followers After Viral Mo 0.5 1383/1387.898/6688; Booed By Own Fans After  0.7 284/300.168/768; Wants Out As Contract Ta 0.5 34/34.928/180; Out For Weeks With 0.5 8/6.367/35; Hits Out At Manager In S 0.3 13/14.334/117; Agent Demands Record Dea 0.4 44/47.302/1044; : Another Season Of Riva 0.5 39/41.61/635; M Bid For 0.7 485/446.585/3339; Available On Free Transf 0.5 89/87.672/704; 's Latest Purchase Raise 0.8 0/0/0; Match Is A Show Now 0.9 281/220.011/1070; Never Celebrates, Never  0.9 63/69.13/566; Walks Disciplinary Tight 0.9 44/41.569/196; Breaks The Scouting Apps 0.8 0/0/0; HAPPIEST MAN IN FOOTBALL 0.7 254/198.789/1989; 's Monster Contract 0.7 10/8.614/127; LEADER OF THE NATION: 0.6 173/188.829/2335; Bought Mum The House, An 0.6 0/0/0; Clean Sheets, Strikers I 0.6 17/17.182/178; Is Football's Coldest Wa 0.6 1/1.004/15; 's Money Now Works Harde 0.5 99/92.013/1409; Refuses To Read The Cale 0.5 0/0.325/6
+3) Keyed: the deck and the paper draw nothing from the global stream
+   200 saves: 0 decks drew beyond the catalog build, 0 batches moved with the stream, 0 papers chose other stories under another seed
+   eight seasons a save: the deck dealt 8 different batches on average, 0 of 100 saves under six; the paper printed one story all eight years in 80 of 80 saves with two or more stories
+  FAIL (section 3): 80 of 80 papers printed the same story eight years running: the paper's key does not move with the year
+4) Gates: a card that narrates the season fires only when the row holds it
+   card: fired / fired without its fact / batches whose row held the fact
+   1: 151/0/5994  4: 76/0/3807  7: 93/0/5994  9: 14/0/561  11: 36/0/1365  12: 9/0/482  15: 33/0/1185  17: 0/0/0  18: 11/0/247  19: 5/0/238
+   10 fixed rows asked of the engine and of this file's rules
+5) SOCIAL MEDIA SENSATION prints, and only at a million followers or more
+   printed 1383 times in 7440 papers, 0 of them under a million
+6) Every story, every position: no bare position code, no "In <lower case>" tail
+   440 stories rendered over 10 positions, 0 could not render without their facts
+   "the <nation> international": 0 stories say it of an uncapped player, 2 of a capped one
+7) Before the first paper or deck nothing moves; saves the base wrote still answer here
+   200 careers, 1146 steps compared: 200 reached a paper or deck step, 200 parted there, 200 with the season row byte equal when the paper ran (1 rows differ by the end of that step, from the draws after the paper)
+   19 old saved screens answered here (every choice of cards 1, 4, 7, 9, 11, 12, 15, 17, 18, 19, a newspaper, a transfer window)
+8) The seventh inverse gives the base's engine back byte for byte, and every change sits in this round's hunks
+  FAIL (section 8): the inverse does not apply: the weighted-paper row of Round 1327's inverse must be in src/lib/soccerCareerEngine.ts exactly once at its turn
+
+1 !== 2
+
+   head da98f5379ba4553c13bea910cfd504b72f1f217cc4503549c948626c54726015; inverse applied 8 of 16 rows
+   base 65ffd9d102989f30c811ac80f884cb84f0b8ca4f9f3feb8e9fdcf9c00009661c (module says 65ffd9d102989f30c811ac80f884cb84f0b8ca4f9f3feb8e9fdcf9c00009661c); inverse gives nothing
+   69 diff hunks against the base, each checked against 6 regions
+9) What a narrating card or story prints is what the row holds
+   18 injuries read; card 11 and INJURY BLOW rendered for 18; the fleet dealt card 11 36, 12 9, 15 33, 19 5 times and printed INJURY BLOW 8, a move story 874 times, each read against its row
+CONTROL newsyear FIRED: section 3 failed (2 failures in all)
