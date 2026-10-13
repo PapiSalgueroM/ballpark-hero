@@ -1,0 +1,49 @@
+NEGATIVE CONTROL ON: the deck shuffles with a sort on Math.random and takes the front of it again (section 1 must fail)
+The paper holds 44 stories, 23 of them under weight 1
+Driving the fleet: 200 ordinary, 200 elite and 100 loyal careers through the real engine
+   500 careers, 8253 playing seasons, 7474 batches, 7474 papers, 0 crashes
+1) The deck: 40,000 keyed draws, every tenth of the eligible list at its fair rate
+   save: ST, age 20, 5 rows; 99 eligible cards, 119804 picks over 40000 draws (2.995 a draw)
+  FAIL (section 1): tenth 1 (10 cards, ids 1 to 16) is drawn 1.625 times its fair rate
+  FAIL (section 1): tenth 2 (10 cards, ids 20 to 53) is drawn 1.117 times its fair rate
+  FAIL (section 1): tenth 4 (10 cards, ids 221 to 240) is drawn 0.838 times its fair rate
+  FAIL (section 1): tenth 5 (10 cards, ids 243 to 257) is drawn 0.873 times its fair rate
+  FAIL (section 1): tenth 6 (10 cards, ids 260 to 406) is drawn 1.339 times its fair rate
+  FAIL (section 1): tenth 8 (10 cards, ids 422 to 434) is drawn 0.842 times its fair rate
+  FAIL (section 1): tenth 9 (10 cards, ids 435 to 473) is drawn 0.682 times its fair rate
+  FAIL (section 1): tenth 10 (9 cards, ids 476 to 487) is drawn 0.7 times its fair rate
+   per tenth, observed over fair: 1.625, 1.117, 1.041, 0.838, 0.873, 1.339, 0.913, 0.842, 0.682, 0.7; single cards 0.545 to 2.991 (reported, not asserted)
+2) The paper: a weight 0.5 story prints at half the rate of a weight 1 story
+   4 stories eligible (weights 1 1 0.5 1); over 40000 papers the 0.5 story printed 5599 times, the weight 1 story 11435, others 22966: ratio 0.49 (sd 0.008)
+   the fleet's 7474 papers printed 20 of the 23 stories under weight 1, 3349 prints against a fair 3375.47; REDEMPTION 3 times
+   under weight 1 (weight printed/fair/qualified): Reveals Secret To Succes 0.5 186/181.783/2749; Followers After Viral Mo 0.5 1367/1354.27/6668; Booed By Own Fans After  0.7 323/317.335/817; Wants Out As Contract Ta 0.5 49/42.661/221; Out For Weeks With 0.5 11/7.546/41; Hits Out At Manager In S 0.3 14/13.35/116; Agent Demands Record Dea 0.4 41/46.824/1042; : Another Season Of Riva 0.5 36/38.18/611; M Bid For 0.7 412/447.527/3375; Available On Free Transf 0.5 93/84.708/692; 's Latest Purchase Raise 0.8 0/0/0; Match Is A Show Now 0.9 215/215.436/1046; Never Celebrates, Never  0.9 69/70.533/579; Walks Disciplinary Tight 0.9 47/49.306/215; Breaks The Scouting Apps 0.8 0/0/0; HAPPIEST MAN IN FOOTBALL 0.7 183/198.182/1965; 's Monster Contract 0.7 16/8.145/121; LEADER OF THE NATION: 0.6 170/186.864/2328; Bought Mum The House, An 0.6 0/0/0; Clean Sheets, Strikers I 0.6 16/21.38/204; Is Football's Coldest Wa 0.6 1/1.377/12; 's Money Now Works Harde 0.5 98/89.147/1381; Refuses To Read The Cale 0.5 2/0.914/14
+3) Keyed: the deck and the paper draw nothing from the global stream
+   200 saves: 200 decks drew beyond the catalog build, 200 batches moved with the stream, 0 papers chose other stories under another seed
+  FAIL (section 3): 200 of 200 decks drew from Math.random beyond the catalog build
+  FAIL (section 3): 200 of 200 batches changed with the stream after the catalog build
+   eight seasons a save: the deck dealt 3.03 different batches on average, 100 of 100 saves under six; the paper printed one story all eight years in 0 of 75 saves with two or more stories
+  FAIL (section 3): 100 of 100 saves dealt under six different batches over eight seasons: the deck's key does not move with the season
+4) Gates: a card that narrates the season fires only when the row holds it
+   card: fired / fired without its fact / batches whose row held the fact
+   1: 402/0/5993  4: 50/0/1981  7: 153/0/5993  9: 23/0/575  11: 59/0/1387  12: 16/0/459  15: 43/0/1185  17: 0/0/0  18: 7/0/259  19: 16/0/251
+   10 fixed rows asked of the engine and of this file's rules
+5) SOCIAL MEDIA SENSATION prints, and only at a million followers or more
+   printed 1367 times in 7474 papers, 0 of them under a million
+6) Every story, every position: no bare position code, no "In <lower case>" tail
+   440 stories rendered over 10 positions, 0 could not render without their facts
+   "the <nation> international": 0 stories say it of an uncapped player, 2 of a capped one
+7) Before the first paper or deck nothing moves; saves the base wrote still answer here
+   200 careers, 1146 steps compared: 200 reached a paper or deck step, 200 parted there, 200 with the season row byte equal when the paper ran (1 rows differ by the end of that step, from the draws after the paper)
+   19 old saved screens answered here (every choice of cards 1, 4, 7, 9, 11, 12, 15, 17, 18, 19, a newspaper, a transfer window)
+8) The seventh inverse gives the base's engine back byte for byte, and every change sits in this round's hunks
+   Round 1329's rows taken off first: 5 of 5; the seventh's head is then a7acc4f959ea243b53b2f55134554c5655cc58305ba941b2fe6351cb6f39bb77 (pinned 44f323390d962fc10fd760c593cae47b23175bab676ff4fe0a9dfb3a48bb0900)
+  FAIL (section 8): the inverse does not apply: the deck-helpers-and-gate row of Round 1327's inverse must be in src/lib/soccerCareerEngine.ts exactly once at its turn
+
+1 !== 2
+
+   head a7acc4f959ea243b53b2f55134554c5655cc58305ba941b2fe6351cb6f39bb77; inverse applied 14 of 16 rows
+   base 65ffd9d102989f30c811ac80f884cb84f0b8ca4f9f3feb8e9fdcf9c00009661c (module says 65ffd9d102989f30c811ac80f884cb84f0b8ca4f9f3feb8e9fdcf9c00009661c); inverse gives nothing
+   69 diff hunks against the base, each checked against 6 regions
+9) What a narrating card or story prints is what the row holds
+   18 injuries read; card 11 and INJURY BLOW rendered for 18; the fleet dealt card 11 59, 12 16, 15 43, 19 16 times and printed INJURY BLOW 11, a move story 863 times, each read against its row
+CONTROL shuffle FIRED: section 1 failed (12 failures in all)

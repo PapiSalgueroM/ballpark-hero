@@ -1,0 +1,153 @@
+build exit=0 33s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+tsc exit=0 152s | 
+vitest-all exit=0 165s |    Duration  164.12s (transform 12.96s, setup 7.32s, collect 74.54s, tests 313.10s, environment 51.45s, prepare 11.54s)
+worldtruth exit=0 89s | simSoccerWorldTruth: OK, every section green
+worldtruth-s5 exit=0 88s | simSoccerWorldTruth: OK, every section green
+worldtruth-s7 exit=0 90s | simSoccerWorldTruth: OK, every section green
+ctl-goalsonly exit=1 78s | FIRED: WORLD_TRUTH_CONTROL=goalsonly failed section 1 (7 failures; section 1: 7, section 2: 201, section 6: 3)
+ctl-nolegacy exit=1 127s | FIRED: WORLD_TRUTH_CONTROL=nolegacy failed section 2 (201 failures; section 2: 201, section 6: 3)
+ctl-seasonyear exit=1 153s | FIRED: WORLD_TRUTH_CONTROL=seasonyear failed section 1 (1 failures; section 1: 1, section 6: 3)
+ctl-extradraw exit=1 149s | FIRED: WORLD_TRUTH_CONTROL=extradraw failed section 2 (201 failures; section 2: 201, section 6: 2)
+ctl-legacy30 exit=1 169s | FIRED: WORLD_TRUTH_CONTROL=legacy30 failed section 2 (3 failures; section 2: 3, section 6: 3)
+ctl-legacy35 exit=1 168s | FIRED: WORLD_TRUTH_CONTROL=legacy35 failed section 2 (1 failures; section 2: 1, section 6: 3)
+ctl-boundary exit=1 176s | FIRED: WORLD_TRUTH_CONTROL=boundary failed section 0 (2 failures; section 0: 2, section 3: 2, section 4: 1)
+ctl-floor exit=1 170s | FIRED: WORLD_TRUTH_CONTROL=floor failed section 0 (1 failures; section 0: 1)
+ctl-realmoves exit=1 164s | FIRED: WORLD_TRUTH_CONTROL=realmoves failed section 3 (2 failures; section 3: 2, section 4: 1, section 6: 3)
+ctl-pastchampions exit=1 175s | FIRED: WORLD_TRUTH_CONTROL=pastchampions failed section 3 (1 failures; section 3: 1, section 6: 3)
+ctl-summer exit=1 171s | FIRED: WORLD_TRUTH_CONTROL=summer failed section 3 (1 failures; section 3: 1, section 6: 3)
+ctl-arcade exit=1 177s | FIRED: WORLD_TRUTH_CONTROL=arcade failed section 4 (2 failures; section 4: 2, section 6: 3)
+ctl-quizyear exit=1 185s | FIRED: WORLD_TRUTH_CONTROL=quizyear failed section 4 (1 failures; section 4: 1, section 6: 3)
+ctl-log exit=1 165s | FIRED: WORLD_TRUTH_CONTROL=log failed section 5 (1 failures; section 5: 1, section 6: 3)
+ctl-panel exit=1 174s | FIRED: WORLD_TRUTH_CONTROL=panel failed section 5 (6 failures; section 5: 6, section 6: 5)
+simLiveScores exit=0 1s | simLiveScores: green. The scores on the strip are shaped honestly, read from the table, and the keys stay in the database.
+simNoRivalNames exit=0 33s | No rival product names found. 0 findings.
+simInventedNames exit=0 22s | simInventedNames: green. Every invented man on this site is invented all the way down.
+ctl-outside exit=1 158s | FIRED: WORLD_TRUTH_CONTROL=outside failed section 6 (3 failures; section 2: 29, section 6: 3)
+simNoInventedQuotes exit=0 56s | simNoInventedQuotes: green. No real player is quoted or accused anywhere.
+simHarnessAnchors exit=1 100s | simHarnessAnchors: 1 failure(s)
+simNoInventedConduct exit=0 2s | simNoInventedConduct: green. A real player can score in your sim and get hurt in it. He cannot fall out with the board in it.
+simLegalPages exit=0 1s | simLegalPages: all green
+simSingleFooter exit=0 1s | simSingleFooter: green. One footer, rendered once, on every page.
+simCompletionSlugs exit=0 3s | simCompletionSlugs: green. Every recorded slug names a game the site can find.
+simCompletionOnce exit=0 12s | simCompletionOnce: all green
+simDailyPuzzleContract exit=0 1s | simDailyPuzzleContract: green. Every caller honours the contract the selection memo depends on.
+simNoDoubleRecord exit=0 55s | simNoDoubleRecord: all green (67 rows and checks, each recorded once across the finish, the toggles, the coaching, the reveals and the reloads; 115 recorders read)
+simWritesAreSent exit=1 15s | simWritesAreSent: 2 failures
+simSchemaNames exit=1 2s | SUPABASE UNREACHABLE. NOTHING WAS CHECKED.
+simFetchRetry exit=0 5s | simFetchRetry: green. A transient page failure costs a retry and the rows come back whole.
+simDailySaveHardening exit=0 184s | simDailySaveHardening: part all green
+simReportRelay exit=0 0s | simReportRelay: green. Both buttons ask the same questions, every report records whether it reached him, and the queue has a real workflow.
+simNavbarStatsReads exit=0 3s | Artifacts: /home/runner/work/_temp/t-simNavbarStatsReads/navbar-stats-I3DJQq
+simLeaderboardCaps exit=1 2s | the database refused game_score_caps?select=game,max_score&limit=2000: TypeError: fetch failed
+simGoogleOnlyReturn exit=0 127s |    8 of 8 rendered checks pass, no dash in the round's files, and all 11 controls turned exactly their own checks red.
+simScoringCoverage exit=0 0s | simScoringCoverage: all green
+simSiteSearch exit=0 5s | simSiteSearch: green. Every game is findable by name, typos included, and the ranking can explain itself.
+simGuideHeadings exit=0 3s | simGuideHeadings: green. 131 guides carry keyword h2s over h3 and h4 sections with every original sentence intact, and all 133 blocks render a clean outline.
+simResultMoment exit=0 13s | simResultMoment: green. Every live game reaches the shared result moment or is listed with what it draws instead, the pill shows exactly the score it is given, the three 
+simTrustCopy exit=0 1s | simTrustCopy: green. One disclaimer under every page and one count of the games, the registry's own.
+simStorageWrites exit=0 7s | simStorageWrites: all green (owed: 12)
+simCareerLeagueSeasons exit=0 63s | simCareerLeagueSeasons: all sections green
+simSoccerDeckFairness exit=0 144s | simSoccerDeckFairness: all sections green
+simCareerLeagueFinish exit=0 42s | simCareerLeagueFinish: green. 756 careers, 6048 seasons, 4825 in a verified league; finish and title agree, the ladder holds, the historical stream holds after documented
+simCareerAwardsNight exit=0 167s | simCareerAwardsNight: ALL 179 CHECKS PASSED
+simCareerSocialBrands exit=0 77s | ALL SOCIAL AND BRAND CHECKS PASSED
+simCareerTrophyRuns exit=0 9s | Trophy campaigns: 9 groups, 24 full AR season pairs, 192 full campaign/RNG pairs, 0 effective controls; artifacts /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/ca
+simSoccerCareerDevelopment exit=0 11s | simSoccerCareerDevelopment: 18 outcome groups, 16+16 complete baseline saves/RNG, 16 form draws, 16 played plan seasons, 7 interruption paths, 0 failed
+simCareerPressMarket exit=0 15s | Press/Market:6 outcomes,27 full original state/RNG pairs,6 effective copied source controls,18 native fixture branches.
+simCareerTransferBrief exit=0 16s | Transfer Brief:9 healthy outcome groups,60 full original state/RNG pairs,8 effective copied source controls,9 prepared native branches.
+simSoccerDerbyHistory exit=0 6s | Derby history: 11 groups,24 full main season pairs,192 full campaign/RNG pairs,0 effective controls; artifacts /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/derby
+simCareerStoryRole exit=0 92s | simCareerStoryRole: 16 groups, 0 failed, 48 full AR pairs
+simSoccerSeasonHistory exit=0 6s | Season history: 9 groups,24 full AR season pairs,192 full campaign/RNG pairs,0 effective controls; artifacts /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/season-
+simSoccerFarewell exit=0 18s | Soccer farewell:9 healthy groups,168 full original state/RNG pairs,6 effective source controls,6 prepared native branches.
+simSoccerAgentReview exit=0 22s | PASS agent review product and proof source bytes held.
+simSoccerInternationalReturn exit=0 15s | PASS international return copied production source bytes held.
+deck-shuffle exit=1 120s | CONTROL shuffle FIRED: section 1 failed (12 failures in all)
+simCareerProgramme exit=0 164s | Career programme:50 original/compatibility/full product season pairs with exact RNG,240 opted gameplay seasons,21 effective loaded faults,164 unchanged original chance ou
+deck-ranking exit=1 124s | CONTROL ranking FIRED: section 2 failed (10 failures in all)
+deck-globalpick exit=1 114s | CONTROL globalpick FIRED: section 3 failed (6 failures in all)
+deck-keyseason exit=1 111s | CONTROL keyseason FIRED: section 3 failed (2 failures in all)
+deck-newsyear exit=1 117s | CONTROL newsyear FIRED: section 3 failed (2 failures in all)
+deck-nogate exit=1 118s | CONTROL nogate FIRED: section 4 failed (256 failures in all)
+deck-puskas exit=1 115s | CONTROL puskas FIRED: section 4 failed (2 failures in all)
+deck-loanclub exit=1 116s | CONTROL loanclub FIRED: section 4 failed (2 failures in all)
+deck-unit exit=1 120s | CONTROL unit FIRED: section 5 failed (2 failures in all)
+deck-poscode exit=1 126s | CONTROL poscode FIRED: section 6 failed (11 failures in all)
+deck-uncapped exit=1 122s | CONTROL uncapped FIRED: section 6 failed (2 failures in all)
+deck-prefix exit=1 112s | CONTROL prefix FIRED: section 7 failed (203 failures in all)
+deck-olddebut exit=1 117s | CONTROL olddebut FIRED: section 7 failed (2 failures in all)
+deck-injlog exit=1 119s | CONTROL injlog FIRED: section 9 failed (47 failures in all)
+deck-injblow exit=1 120s | CONTROL injblow FIRED: section 9 failed (28 failures in all)
+deck-outside exit=1 117s | CONTROL outside FIRED: section 8 failed (67 failures in all)
+seasons-future exit=0 141s | CONTROL future: section c went red as it should (12 failures there, 12 in all)
+night-legacyreal exit=1 147s | simCareerAwardsNight: 1 FAILURES
+night-secondcopy exit=1 137s | simCareerAwardsNight: 1 FAILURES
+finish-eliteblind exit=1 35s | simCareerLeagueFinish: control eliteblind turned section 3, 5 red and nothing else. The check works.
+finish-notitle exit=1 37s | simCareerLeagueFinish: control notitle turned section 1, 4 red and nothing else. The check works.
+finish-stream exit=1 33s | simCareerLeagueFinish: control stream turned section 4 red and nothing else. The check works.
+night-speechcopy exit=1 150s | simCareerAwardsNight: 1 FAILURES
+brands-reorder exit=1 62s | 2 FAILURES
+brands-payoff exit=1 65s | 6 FAILURES
+brands-unbound exit=1 57s | 2 FAILURES
+brands-leak exit=1 64s | 4 FAILURES
+brands-cardlie exit=1 60s | 2 FAILURES
+trophy-all exit=0 32s | Trophy campaigns: 9 groups, 24 full AR season pairs, 192 full campaign/RNG pairs, 7 effective controls; artifacts /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/ca
+development-all exit=1 275s | Node.js v24.21.0
+derby-all exit=0 39s | Derby history: 11 groups,24 full main season pairs,192 full campaign/RNG pairs,10 effective controls; artifacts /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/derb
+seasonhist-all exit=0 35s | Season history: 9 groups,24 full AR season pairs,192 full campaign/RNG pairs,8 effective controls; artifacts /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/season-
+simUsCareerSummer exit=124 4200s | 6) balance: one child per sport, careers a seed nfl 12000, nba 8000, mlb 8000, nhl 2000, 3 seeds
+simPhone2 exit=1 179s | 1 FAILURES
+simEraBakeExtend exit=0 0s | simEraBakeExtend: green. The shared extend step still fails closed on every guard.
+simCareerMoments exit=0 11s | simCareerMoments: 1077 checks, 0 failed
+simAllocation exit=0 1s | ALL ALLOCATION CHECKS PASSED
+simCareerAcademy exit=0 5s | simCareerAcademy: ALL CHECKS PASSED in 4.8s
+simCareerClubPool exit=0 32s | simCareerClubPool: all sections green
+simCareerContinental exit=0 18s | simCareerContinental: all green
+simMoney exit=1 265s | 1 FAILURES
+simCareerDerbies exit=0 59s | simCareerDerbies: all 8 sections green
+simCareerDilemmaTruth exit=0 8s | simCareerDilemmaTruth: all green
+simCareerDrills exit=0 2s | simCareerDrills: green. The gap has to be timed, the ball has to be loose, the corner has to be left for early, and nobody grows past his ceiling.
+simCareerDilemmaReach exit=0 71s | simCareerDilemmaReach: all green
+simCareerEras exit=0 0s | simCareerEras: all green
+simCareerInbox exit=0 4s | simCareerInbox: green. Soccer is unchanged, and the NFL, MLB, NBA and NHL inboxes fire.
+simCareerEngaged exit=0 31s | ALL ENGAGED CAREER CHECKS PASSED
+simCareerInboxBeats exit=0 60s | simCareerInboxBeats: green. Soccer is unchanged, the NFL, NBA, MLB and NHL inboxes each run on their own calendar, and every rival choice does what it says.
+simCareerLife exit=0 36s | simCareerLife: green. Every peak is reachable, the critic has an opinion and it is about the football, and nothing about either of them is on the save.
+simCareerMoneyAfterRetirement exit=0 6s | All good: the money app keeps running for the whole retirement tail.
+simCareerNoDeadEnd exit=0 0s | simCareerNoDeadEnd: green. A convicted career is still a career, and a stranded save comes back.
+simCareerParity exit=0 17s | simCareerParity: green. One money app, one fan rule, one rival shape, one badge case, in all five careers.
+simCareerPositionRatings exit=0 123s | all sections green: defenders and holding midfielders are rated on their defending
+simCareerRecordedStats exit=0 6s | simCareerRecordedStats: 8 actual outcomes passed.
+simCareerRivalryEvents exit=0 10s | simCareerRivalryEvents: green. Soccer is unchanged, the NFL, MLB, NBA and NHL beats fire, and the rival is never a real player.
+simCareerSeasonRatings exit=0 27s | simCareerSeasonRatings: green. 140 careers, 2505 played rows stamped true, 2505 ratings read back, 16 of 16 streams unmoved, 12 old saves honest, 2505 stat rows from real
+simCareerStory exit=0 35s | simCareerStory: GREEN, 96 careers keep every season's lines in order, draw nothing and stay inside the size bands
+simCareerTraining exit=0 15s | simCareerTraining: all five sections green (2245687 checks)
+simClubCaptaincy exit=0 51s | simClubCaptaincy: green. The armband is earned, counted, and never travels.
+storyrole-all exit=0 1325s | simCareerStoryRole: 16 healthy groups, 17 effective copied controls caught;12 complete AR careers and48 neutral pairs held
+simClubSquads exit=0 6s | simClubSquads: green. The squad is the real one, you are in the right place in it, and the game never noticed.
+simClubManagerNewLeagues exit=0 166s | simClubManagerNewLeagues: all checks passed
+simCmDataOnDemand exit=0 14s | simCmDataOnDemand: green. No page downloads data it never reads, and a past season brings its own.
+simClubVerdict exit=0 26s | simClubVerdict: green. The club has an opinion, it is earned, and it costs something.
+simHomeFront exit=0 1s | simHomeFront: green. The home front shows real games, real saves and a sport you can tell apart without colour.
+simCareerLeagueWorld exit=0 675s | simCareerLeagueWorld: all sections green (674.9 s)
+simInjuryArc exit=0 100s | simInjuryArc: green. Three roads back, and every one of them costs something real.
+simLoanSpell exit=0 7s | simLoanSpell: green. The bench has a door now, and the door does not lie.
+simManagerEpilogue exit=0 1s | simManagerEpilogue: green. The dugout season is a table, and the table cannot lie.
+simPhone exit=0 5s | ALL PHONE CHECKS PASSED
+simManagerCareer exit=0 13s | ALL MANAGER CAREER CHECKS PASSED
+simPotential exit=0 7s | ALL POTENTIAL CHECKS PASSED
+simSaveKeeper exit=0 7s | simSaveKeeper: all green. The keeper holds on real saves of all 21 long games.
+simRevealMoments exit=1 12s | simRevealMoments: 1 FAILURE(S)
+simSoccerAgentReviewPageControl exit=0 23s | PASS actual page/component source held and exact evidence retained.
+simScoreShown exit=0 32s | simScoreShown: all sections green
+simSoccerAwardReveal exit=0 32s | simSoccerAwardReveal: 8 outcome assertions green, 5 effective copied defects caught
+simSoccerCareer exit=0 6s | PASS: no crashes, no snubs, homegrown path live
+simSoccerCareerAmbitions exit=0 3s | simSoccerCareerAmbitions: all 16 paired careers, exact target results, future rewards once and seven actual interruption paths passed
+simSoccerCareerLeagueWorld exit=0 116s | simSoccerCareerLeagueWorld: seventeen outcome tests and two engine career tests green, all twelve effective negative controls caught
+simSoccerCareerSaveRetry exit=0 15s | simSoccerCareerSaveRetry: 8 actual outcomes passed.
+simSoccerCareerUcl exit=0 10s | simSoccerCareerUcl: all green
+simSoccerContractMoves exit=0 3s | simSoccerContractMoves: all full-save contract and club-move checks passed
+simSoccerCurrency exit=0 9s | simSoccerCurrency: green. The money reads in your currency and the game underneath it never noticed.
+simSoccerDiscipline exit=0 44s | simSoccerDiscipline: 11 outcome assertions green, 9 effective copied defects caught
+simSoccerFarewellPageControl exit=0 38s | PASS farewell copied source held and complete evidence retained.
+simSoccerInternationalReturnPageControl exit=0 27s | PASS actual page/component source held and exact evidence retained.
+simCreation exit=1 603s | 1 FAILURES

@@ -1,0 +1,186 @@
+#!build
+#!playwright
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-all: node_modules/.bin/vitest run $(git grep -l -E "soccerCareerEngine|soccerPhone|soccerArcade|InternationalPanel|soccerWorldTruth" -- 'src/test/*.test.ts' 'src/test/*.test.tsx') --testTimeout=300000 --hookTimeout=120000
+simUsCareerSummer: node scripts/simUsCareerSummer.mjs
+worldtruth: node scripts/simSoccerWorldTruth.mjs
+worldtruth-s5: SEED_OFFSET=5 node scripts/simSoccerWorldTruth.mjs
+worldtruth-s7: SEED_OFFSET=7 node scripts/simSoccerWorldTruth.mjs
+ctl-goalsonly: WORLD_TRUTH_CONTROL=goalsonly node scripts/simSoccerWorldTruth.mjs
+ctl-seasonyear: WORLD_TRUTH_CONTROL=seasonyear node scripts/simSoccerWorldTruth.mjs
+ctl-nolegacy: WORLD_TRUTH_CONTROL=nolegacy node scripts/simSoccerWorldTruth.mjs
+ctl-extradraw: WORLD_TRUTH_CONTROL=extradraw node scripts/simSoccerWorldTruth.mjs
+ctl-legacy30: WORLD_TRUTH_CONTROL=legacy30 node scripts/simSoccerWorldTruth.mjs
+ctl-legacy35: WORLD_TRUTH_CONTROL=legacy35 node scripts/simSoccerWorldTruth.mjs
+ctl-boundary: WORLD_TRUTH_CONTROL=boundary node scripts/simSoccerWorldTruth.mjs
+ctl-floor: WORLD_TRUTH_CONTROL=floor node scripts/simSoccerWorldTruth.mjs
+ctl-realmoves: WORLD_TRUTH_CONTROL=realmoves node scripts/simSoccerWorldTruth.mjs
+ctl-pastchampions: WORLD_TRUTH_CONTROL=pastchampions node scripts/simSoccerWorldTruth.mjs
+ctl-summer: WORLD_TRUTH_CONTROL=summer node scripts/simSoccerWorldTruth.mjs
+ctl-arcade: WORLD_TRUTH_CONTROL=arcade node scripts/simSoccerWorldTruth.mjs
+ctl-quizyear: WORLD_TRUTH_CONTROL=quizyear node scripts/simSoccerWorldTruth.mjs
+ctl-log: WORLD_TRUTH_CONTROL=log node scripts/simSoccerWorldTruth.mjs
+ctl-panel: WORLD_TRUTH_CONTROL=panel node scripts/simSoccerWorldTruth.mjs
+ctl-outside: WORLD_TRUTH_CONTROL=outside node scripts/simSoccerWorldTruth.mjs
+simLiveScores: node scripts/simLiveScores.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simInventedNames: node scripts/simInventedNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
+simNoInventedConduct: node scripts/simNoInventedConduct.mjs
+simLegalPages: node scripts/simLegalPages.mjs
+simSingleFooter: node scripts/simSingleFooter.mjs
+simCompletionSlugs: node scripts/simCompletionSlugs.mjs
+simCompletionOnce: node scripts/simCompletionOnce.mjs
+simNoDoubleRecord: node scripts/simNoDoubleRecord.mjs
+simDailyPuzzleContract: node scripts/simDailyPuzzleContract.mjs
+simDailySaveHardening: node scripts/simDailySaveHardening.mjs
+simWritesAreSent: node scripts/simWritesAreSent.mjs
+simSchemaNames: node scripts/simSchemaNames.mjs
+simFetchRetry: node scripts/simFetchRetry.mjs
+simGoogleOnlyReturn: node scripts/simGoogleOnlyReturn.mjs
+simReportRelay: node scripts/simReportRelay.mjs
+simNavbarStatsReads: node scripts/simNavbarStatsReads.mjs
+simLeaderboardCaps: node scripts/simLeaderboardCaps.mjs
+simScoringCoverage: node scripts/simScoringCoverage.mjs
+simSiteSearch: node scripts/simSiteSearch.mjs
+simResultMoment: node scripts/simResultMoment.mjs
+simGuideHeadings: node scripts/simGuideHeadings.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+simTrustCopy: node scripts/simTrustCopy.mjs
+simSoccerDeckFairness: node scripts/simSoccerDeckFairness.mjs
+simCareerLeagueSeasons: node scripts/simCareerLeagueSeasons.mjs
+simCareerAwardsNight: node scripts/simCareerAwardsNight.mjs
+simCareerLeagueFinish: node scripts/simCareerLeagueFinish.mjs
+simCareerSocialBrands: node scripts/simCareerSocialBrands.mjs
+simCareerStoryRole: node scripts/simCareerStoryRole.mjs
+simCareerTrophyRuns: node scripts/simCareerTrophyRuns.mjs
+simSoccerCareerDevelopment: node scripts/simSoccerCareerDevelopment.mjs
+simCareerPressMarket: node scripts/simCareerPressMarket.mjs
+simCareerTransferBrief: node scripts/simCareerTransferBrief.mjs
+simSoccerDerbyHistory: node scripts/simSoccerDerbyHistory.mjs
+simSoccerSeasonHistory: node scripts/simSoccerSeasonHistory.mjs
+simSoccerAgentReview: node scripts/simSoccerAgentReview.mjs
+simSoccerFarewell: node scripts/simSoccerFarewell.mjs
+simSoccerInternationalReturn: node scripts/simSoccerInternationalReturn.mjs
+simCareerProgramme: CI=1 node scripts/simCareerProgramme.mjs
+deck-shuffle: SIM_SOCCER_DECK_FAIRNESS_CONTROL=shuffle node scripts/simSoccerDeckFairness.mjs
+deck-ranking: SIM_SOCCER_DECK_FAIRNESS_CONTROL=ranking node scripts/simSoccerDeckFairness.mjs
+deck-globalpick: SIM_SOCCER_DECK_FAIRNESS_CONTROL=globalpick node scripts/simSoccerDeckFairness.mjs
+deck-keyseason: SIM_SOCCER_DECK_FAIRNESS_CONTROL=keyseason node scripts/simSoccerDeckFairness.mjs
+deck-newsyear: SIM_SOCCER_DECK_FAIRNESS_CONTROL=newsyear node scripts/simSoccerDeckFairness.mjs
+deck-nogate: SIM_SOCCER_DECK_FAIRNESS_CONTROL=nogate node scripts/simSoccerDeckFairness.mjs
+deck-puskas: SIM_SOCCER_DECK_FAIRNESS_CONTROL=puskas node scripts/simSoccerDeckFairness.mjs
+deck-loanclub: SIM_SOCCER_DECK_FAIRNESS_CONTROL=loanclub node scripts/simSoccerDeckFairness.mjs
+deck-unit: SIM_SOCCER_DECK_FAIRNESS_CONTROL=unit node scripts/simSoccerDeckFairness.mjs
+deck-poscode: SIM_SOCCER_DECK_FAIRNESS_CONTROL=poscode node scripts/simSoccerDeckFairness.mjs
+deck-uncapped: SIM_SOCCER_DECK_FAIRNESS_CONTROL=uncapped node scripts/simSoccerDeckFairness.mjs
+deck-prefix: SIM_SOCCER_DECK_FAIRNESS_CONTROL=prefix node scripts/simSoccerDeckFairness.mjs
+deck-olddebut: SIM_SOCCER_DECK_FAIRNESS_CONTROL=olddebut node scripts/simSoccerDeckFairness.mjs
+deck-injlog: SIM_SOCCER_DECK_FAIRNESS_CONTROL=injlog node scripts/simSoccerDeckFairness.mjs
+deck-injblow: SIM_SOCCER_DECK_FAIRNESS_CONTROL=injblow node scripts/simSoccerDeckFairness.mjs
+deck-outside: SIM_SOCCER_DECK_FAIRNESS_CONTROL=outside node scripts/simSoccerDeckFairness.mjs
+seasons-future: SIM_LEAGUE_SEASONS_CONTROL=future node scripts/simCareerLeagueSeasons.mjs
+night-legacyreal: SIM_AWARDS_NIGHT_CONTROL=legacyreal node scripts/simCareerAwardsNight.mjs
+night-secondcopy: SIM_AWARDS_NIGHT_CONTROL=secondcopy node scripts/simCareerAwardsNight.mjs
+night-speechcopy: SIM_AWARDS_NIGHT_CONTROL=speechcopy node scripts/simCareerAwardsNight.mjs
+finish-eliteblind: SIM_LEAGUE_FINISH_CONTROL=eliteblind node scripts/simCareerLeagueFinish.mjs
+finish-notitle: SIM_LEAGUE_FINISH_CONTROL=notitle node scripts/simCareerLeagueFinish.mjs
+finish-stream: SIM_LEAGUE_FINISH_CONTROL=stream node scripts/simCareerLeagueFinish.mjs
+brands-reorder: SOCIAL_BRANDS_CONTROL=reorder node scripts/simCareerSocialBrands.mjs
+brands-payoff: SOCIAL_BRANDS_CONTROL=payoff node scripts/simCareerSocialBrands.mjs
+brands-unbound: SOCIAL_BRANDS_CONTROL=unbound node scripts/simCareerSocialBrands.mjs
+brands-leak: SOCIAL_BRANDS_CONTROL=leak node scripts/simCareerSocialBrands.mjs
+brands-cardlie: SOCIAL_BRANDS_CONTROL=cardlie node scripts/simCareerSocialBrands.mjs
+storyrole-all: CAREER_STORY_ROLE_CONTROL=all node scripts/simCareerStoryRole.mjs
+trophy-all: CAREER_TROPHY_RUNS_CONTROL=all node scripts/simCareerTrophyRuns.mjs
+development-all: CAREER_DEVELOPMENT_CONTROL=all node scripts/simSoccerCareerDevelopment.mjs
+derby-all: DERBY_HISTORY_CONTROL=all node scripts/simSoccerDerbyHistory.mjs
+seasonhist-all: SEASON_HISTORY_CONTROL=all node scripts/simSoccerSeasonHistory.mjs
+simPhone2: node scripts/simPhone2.mjs
+simMoney: node scripts/simMoney.mjs
+simEraBakeExtend: node scripts/simEraBakeExtend.mjs
+simCareerMoments: node scripts/simCareerMoments.mjs
+simAllocation: node scripts/simAllocation.mjs
+simCareerAcademy: node scripts/simCareerAcademy.mjs
+simCareerClubPool: node scripts/simCareerClubPool.mjs
+simCareerContinental: node scripts/simCareerContinental.mjs
+simCareerDerbies: node scripts/simCareerDerbies.mjs
+simCareerDilemmaReach: node scripts/simCareerDilemmaReach.mjs
+simCareerDilemmaTruth: node scripts/simCareerDilemmaTruth.mjs
+simCareerDrills: node scripts/simCareerDrills.mjs
+simCareerEngaged: node scripts/simCareerEngaged.mjs
+simCareerEras: node scripts/simCareerEras.mjs
+simCareerInbox: node scripts/simCareerInbox.mjs
+simCareerInboxBeats: node scripts/simCareerInboxBeats.mjs
+simCareerLeagueWorld: node scripts/simCareerLeagueWorld.mjs
+simCareerLife: node scripts/simCareerLife.mjs
+simCareerMoneyAfterRetirement: node scripts/simCareerMoneyAfterRetirement.mjs
+simCareerNoDeadEnd: node scripts/simCareerNoDeadEnd.mjs
+simCareerParity: node scripts/simCareerParity.mjs
+simCareerPositionRatings: node scripts/simCareerPositionRatings.mjs
+simCareerRecordedStats: node scripts/simCareerRecordedStats.mjs
+simCareerRivalryEvents: node scripts/simCareerRivalryEvents.mjs
+simCareerSeasonRatings: node scripts/simCareerSeasonRatings.mjs
+simCareerStory: node scripts/simCareerStory.mjs
+simCareerTraining: node scripts/simCareerTraining.mjs
+simClubCaptaincy: node scripts/simClubCaptaincy.mjs
+simClubManagerNewLeagues: node scripts/simClubManagerNewLeagues.mjs
+simClubSquads: node scripts/simClubSquads.mjs
+simClubVerdict: node scripts/simClubVerdict.mjs
+simCmDataOnDemand: node scripts/simCmDataOnDemand.mjs
+simCreation: node scripts/simCreation.mjs
+simHomeFront: node scripts/simHomeFront.mjs
+simInjuryArc: node scripts/simInjuryArc.mjs
+simLoanSpell: node scripts/simLoanSpell.mjs
+simManagerCareer: node scripts/simManagerCareer.mjs
+simManagerEpilogue: node scripts/simManagerEpilogue.mjs
+simPhone: node scripts/simPhone.mjs
+simPotential: node scripts/simPotential.mjs
+simRevealMoments: node scripts/simRevealMoments.mjs
+simSaveKeeper: node scripts/simSaveKeeper.mjs
+simScoreShown: node scripts/simScoreShown.mjs
+simSoccerAgentReviewPageControl: node scripts/simSoccerAgentReviewPageControl.mjs
+simSoccerAwardGenerations: node scripts/simSoccerAwardGenerations.mjs
+simSoccerAwardReveal: node scripts/simSoccerAwardReveal.mjs
+simSoccerCareer: node scripts/simSoccerCareer.mjs
+simSoccerCareerAmbitions: node scripts/simSoccerCareerAmbitions.mjs
+simSoccerCareerLeagueWorld: node scripts/simSoccerCareerLeagueWorld.mjs
+simSoccerCareerSaveRetry: node scripts/simSoccerCareerSaveRetry.mjs
+simSoccerCareerUcl: node scripts/simSoccerCareerUcl.mjs
+simSoccerContractMoves: node scripts/simSoccerContractMoves.mjs
+simSoccerCurrency: node scripts/simSoccerCurrency.mjs
+simSoccerDiscipline: node scripts/simSoccerDiscipline.mjs
+simSoccerFarewellPageControl: node scripts/simSoccerFarewellPageControl.mjs
+simSoccerInternationalReturnPageControl: node scripts/simSoccerInternationalReturnPageControl.mjs
+simSoccerLoanBite: node scripts/simSoccerLoanBite.mjs
+simSoccerLoanMinutes: node scripts/simSoccerLoanMinutes.mjs
+simSoccerOfferReview: node scripts/simSoccerOfferReview.mjs
+simSoccerOpponentLabels: node scripts/simSoccerOpponentLabels.mjs
+simSoccerOwnGoals: node scripts/simSoccerOwnGoals.mjs
+simSoccerPracticeLifecycle: node scripts/simSoccerPracticeLifecycle.mjs
+simSoccerVeteranOffers: node scripts/simSoccerVeteranOffers.mjs
+simSoccerVeteranTalks: node scripts/simSoccerVeteranTalks.mjs
+simThroughBallDrill: node scripts/simThroughBallDrill.mjs
+simTraining: node scripts/simTraining.mjs
+simTransferBriefPageControl: node scripts/simTransferBriefPageControl.mjs
+simAwards: node scripts/simAwards.mjs
+simBallonDorFairness: node scripts/simBallonDorFairness.mjs
+simBallonDorTruth: node scripts/simBallonDorTruth.mjs
+simSoccerEventPromises: node scripts/simSoccerEventPromises.mjs
+cooldowns-s0: node scripts/simCareerLifeCooldowns.mjs
+cooldowns-s1: SEED_OFFSET=1 node scripts/simCareerLifeCooldowns.mjs
+cooldowns-s2: SEED_OFFSET=2 node scripts/simCareerLifeCooldowns.mjs
+cooldowns-s3: SEED_OFFSET=3 node scripts/simCareerLifeCooldowns.mjs
+cooldowns-s4: SEED_OFFSET=4 node scripts/simCareerLifeCooldowns.mjs
+cooldowns-nocooldown: SIM_CAREER_LIFE_COOLDOWNS_CONTROL=nocooldown node scripts/simCareerLifeCooldowns.mjs
+cooldowns-sharedbatch: SIM_CAREER_LIFE_COOLDOWNS_CONTROL=sharedbatch node scripts/simCareerLifeCooldowns.mjs
+cooldowns-keynostory: SIM_CAREER_LIFE_COOLDOWNS_CONTROL=keynostory node scripts/simCareerLifeCooldowns.mjs
+simCareerCleanSheets: node scripts/simCareerCleanSheets.mjs
+simCareerDomesticCup: node scripts/simCareerDomesticCup.mjs
+simCareerFacts: node scripts/simCareerFacts.mjs
+simCareerKeepPlaying: node scripts/simCareerKeepPlaying.mjs
+simInternational: node scripts/simInternational.mjs
+simStartingXi: node scripts/simStartingXi.mjs
+simCareerSquad: node scripts/simCareerSquad.mjs
+simSeasonCentreNeutral: node scripts/simSeasonCentreNeutral.mjs

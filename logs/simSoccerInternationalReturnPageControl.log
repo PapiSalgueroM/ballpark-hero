@@ -1,0 +1,5 @@
+PASS page actual healthy baseline:10 cases.
+CONTROL FIRED page-double-callback:2 actual invocation assertions,8 unrelated cases pass.
+PASS component actual healthy baseline:21 cases.
+CONTROL FIRED component-double-confirm:1 actual invocation assertions,20 unrelated cases pass.
+PASS actual page/component source held and exact evidence retained.
