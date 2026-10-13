@@ -1,0 +1,986 @@
+[
+ {
+  "sport": "nba",
+  "name": "name-number",
+  "errs": [
+   "TypeError: (e || \"x\").split is not a function",
+   "A page failed to render: TypeError: (e || \"x\").split is not a function"
+  ],
+  "seen": {
+   "h1": [
+    "This page broke"
+   ],
+   "buttons": [
+    "Try this page again",
+    "Start a fresh game",
+    "Cookie choices",
+    "Light mode",
+    "Sound: off",
+    "Report a bug"
+   ],
+   "hasMain": false,
+   "text": "Skip to main content\n😬\nThis page broke\n\nSomething in this game went wrong and it stopped drawing. It is our fault, not anything you did.\n\nIf you had a save going, it is still on this device. It is kept in your browser, and nothing here has touched it.\n\nBack to the games\nTry this page again\nStart a fresh game\n\nIf trying again keeps breaking, you can start a fresh game. Your old save gets moved aside to a backup in this browser, not deleted, and the game offers to put it back next time you open it. Each game keeps its three newest backups.\n\nTelling us what you were doing helps a lot. The report",
+   "bad": null
+  },
+  "shot": "hostile-nba-390-name-number.jpg",
+  "canRecover": false,
+  "after": "{\"c\":{\"name\":5,\"pos\":\"PG\",\"archetype\":{\"id\":\"pointgod\",\"label\":\"Point God\",\"desc"
+ },
+ {
+  "sport": "nba",
+  "name": "seasons-string",
+  "errs": [
+   "TypeError: e.reduce is not a function",
+   "A page failed to render: TypeError: e.reduce is not a function"
+  ],
+  "seen": {
+   "h1": [
+    "This page broke"
+   ],
+   "buttons": [
+    "Try this page again",
+    "Start a fresh game",
+    "Cookie choices",
+    "Light mode",
+    "Sound: off",
+    "Report a bug"
+   ],
+   "hasMain": false,
+   "text": "Skip to main content\n😬\nThis page broke\n\nSomething in this game went wrong and it stopped drawing. It is our fault, not anything you did.\n\nIf you had a save going, it is still on this device. It is kept in your browser, and nothing here has touched it.\n\nBack to the games\nTry this page again\nStart a fresh game\n\nIf trying again keeps breaking, you can start a fresh game. Your old save gets moved aside to a backup in this browser, not deleted, and the game offers to put it back next time you open it. Each game keeps its three newest backups.\n\nTelling us what you were doing helps a lot. The report",
+   "bad": null
+  },
+  "shot": "hostile-nba-390-seasons-string.jpg",
+  "canRecover": false,
+  "after": "{\"c\":{\"name\":\"Hostile Test\",\"pos\":\"PG\",\"archetype\":{\"id\":\"pointgod\",\"label\":\"Poi"
+ },
+ {
+  "sport": "nba",
+  "name": "year-text",
+  "errs": [],
+  "seen": {
+   "h1": [
+    "NBA My Career",
+    "NBA My Career: Basketball Career Simulator",
+    "How to play NBA My Career, a free NBA basketball career sim"
+   ],
+   "buttons": [
+    "Back",
+    "Track stats",
+    "Play the soon season",
+    "Plan your season",
+    "Start practice",
+    "📊 MY PLAYER OVR 74 The fans down at 35",
+    "💰 THE BANK $0.3M $2.5M a year, 4 years left",
+    "📜 CAREER LOG No seasons yet Play one and it goes on the books",
+    "🏆 TROPHY CASE Empty Nothing in it. Go and win something",
+    "📰 NEWS Quiet week Nobody is writing about you yet",
+    "📱 INBOX 2 unread Somebody is waiting on a reply",
+    "Cookie choices"
+   ],
+   "hasMain": true,
+   "text": "Skip to main content\nDOUKNOWBALL\nBack\nTrack stats\nNBA My Career\n\nDraft night to jersey retirement. Every summer bends the career.\n\nHostile Test · PG\nChicago Bulls\nsoon · age 20\nOVR 74\n$2.5M x4\n⭐ Starting five\nPlay the soon season\n📺 No week by week this season: the game has no verified length for the real soon-NaN season.\n\nCareer so far: 0 rings · 0 MVPs · 0 All-NBA · 0 career points\n\nYour season programme\n\nChoose how to approach the season. Your usual routine stays available.\n\nPlan your season\nPractice gym\n\nPlay a drill. Earn up to +2 OVR for camp.\n\n74OVR\n\nCeiling 98\n\nStart practice\n\nOne bank",
+   "bad": "as no verified length for the real soon-NaN season."
+  },
+  "shot": "hostile-nba-390-year-text.jpg",
+  "canRecover": false,
+  "after": "{\"c\":{\"name\":\"Hostile Test\",\"pos\":\"PG\",\"archetype\":{\"id\":\"pointgod\",\"label\":\"Poi"
+ },
+ {
+  "sport": "nba",
+  "name": "salary-missing",
+  "errs": [],
+  "seen": {
+   "h1": [
+    "NBA My Career",
+    "NBA My Career: Basketball Career Simulator",
+    "How to play NBA My Career, a free NBA basketball career sim"
+   ],
+   "buttons": [
+    "Back",
+    "Track stats",
+    "Play the 2026 season",
+    "📺 Week by week",
+    "Plan your season",
+    "Start practice",
+    "📊 MY PLAYER OVR 74 The fans down at 35",
+    "💰 THE BANK $0.3M $NaNM a year, 4 years left",
+    "📜 CAREER LOG No seasons yet Play one and it goes on the books",
+    "🏆 TROPHY CASE Empty Nothing in it. Go and win something",
+    "📰 NEWS Quiet week Nobody is writing about you yet",
+    "📱 INBOX 2 unread Somebody is waiting on a reply"
+   ],
+   "hasMain": true,
+   "text": "Skip to main content\nDOUKNOWBALL\nBack\nTrack stats\nNBA My Career\n\nDraft night to jersey retirement. Every summer bends the career.\n\nHostile Test · PG\nChicago Bulls\n2026 · age 20\nOVR 74\n$M x4\n⭐ Starting five\nPlay the 2026 season\n📺 Week by week\n\nCareer so far: 0 rings · 0 MVPs · 0 All-NBA · 0 career points\n\nYour season programme\n\nChoose how to approach the season. Your usual routine stays available.\n\nPlan your season\nPractice gym\n\nPlay a drill. Earn up to +2 OVR for camp.\n\n74OVR\n\nCeiling 98\n\nStart practice\n\nOne banked session each season. Your ceiling still applies.\n\n📊\nMY PLAYER\nOVR 74\nThe fans",
+   "bad": "$NaNM a year, 4 years left"
+  },
+  "shot": "hostile-nba-390-salary-missing.jpg",
+  "canRecover": false,
+  "after": "{\"c\":{\"name\":\"Hostile Test\",\"pos\":\"PG\",\"archetype\":{\"id\":\"pointgod\",\"label\":\"Poi"
+ },
+ {
+  "sport": "nba",
+  "name": "networth-huge",
+  "errs": [],
+  "seen": {
+   "h1": [
+    "NBA My Career",
+    "NBA My Career: Basketball Career Simulator",
+    "How to play NBA My Career, a free NBA basketball career sim"
+   ],
+   "buttons": [
+    "Back",
+    "Track stats",
+    "Play the 2026 season",
+    "📺 Week by week",
+    "Plan your season",
+    "Start practice",
+    "📊 MY PLAYER OVR 74 The fans down at 35",
+    "💰 THE BANK $1000000000000000M -$3M a year, 4 years left",
+    "📜 CAREER LOG No seasons yet Play one and it goes on the books",
+    "🏆 TROPHY CASE Empty Nothing in it. Go and win something",
+    "📰 NEWS Quiet week Nobody is writing about you yet",
+    "📱 INBOX 2 unread Somebody is waiting on a reply"
+   ],
+   "hasMain": true,
+   "text": "Skip to main content\nDOUKNOWBALL\nBack\nTrack stats\nNBA My Career\n\nDraft night to jersey retirement. Every summer bends the career.\n\nHostile Test · PG\nChicago Bulls\n2026 · age 20\nOVR 74\n$-3M x4\n⭐ Starting five\nPlay the 2026 season\n📺 Week by week\n\nCareer so far: 0 rings · 0 MVPs · 0 All-NBA · 0 career points\n\nYour season programme\n\nChoose how to approach the season. Your usual routine stays available.\n\nPlan your season\nPractice gym\n\nPlay a drill. Earn up to +2 OVR for camp.\n\n74OVR\n\nCeiling 98\n\nStart practice\n\nOne banked session each season. Your ceiling still applies.\n\n📊\nMY PLAYER\nOVR 74\nThe fa",
+   "bad": null
+  },
+  "shot": "hostile-nba-390-networth-huge.jpg",
+  "canRecover": false,
+  "after": "{\"c\":{\"name\":\"Hostile Test\",\"pos\":\"PG\",\"archetype\":{\"id\":\"pointgod\",\"label\":\"Poi"
+ },
+ {
+  "sport": "nba",
+  "name": "phase-event-nosummer",
+  "errs": [],
+  "seen": {
+   "h1": [
+    "NBA My Career",
+    "NBA My Career: Basketball Career Simulator",
+    "How to play NBA My Career, a free NBA basketball career sim"
+   ],
+   "buttons": [
+    "Back",
+    "Track stats",
+    "Play the 2026 season",
+    "📺 Week by week",
+    "Plan your season",
+    "Start practice",
+    "📊 MY PLAYER OVR 74 The fans down at 35",
+    "💰 THE BANK $0.3M $2.5M a year, 4 years left",
+    "📜 CAREER LOG No seasons yet Play one and it goes on the books",
+    "🏆 TROPHY CASE Empty Nothing in it. Go and win something",
+    "📰 NEWS Quiet week Nobody is writing about you yet",
+    "📱 INBOX 2 unread Somebody is waiting on a reply"
+   ],
+   "hasMain": true,
+   "text": "Skip to main content\nDOUKNOWBALL\nBack\nTrack stats\nNBA My Career\n\nDraft night to jersey retirement. Every summer bends the career.\n\nHostile Test · PG\nChicago Bulls\n2026 · age 20\nOVR 74\n$2.5M x4\n⭐ Starting five\nPlay the 2026 season\n📺 Week by week\n\nCareer so far: 0 rings · 0 MVPs · 0 All-NBA · 0 career points\n\nYour season programme\n\nChoose how to approach the season. Your usual routine stays available.\n\nPlan your season\nPractice gym\n\nPlay a drill. Earn up to +2 OVR for camp.\n\n74OVR\n\nCeiling 98\n\nStart practice\n\nOne banked session each season. Your ceiling still applies.\n\n📊\nMY PLAYER\nOVR 74\nThe f",
+   "bad": null
+  },
+  "shot": "hostile-nba-390-phase-event-nosummer.jpg",
+  "canRecover": false,
+  "after": "{\"c\":{\"name\":\"Hostile Test\",\"pos\":\"PG\",\"archetype\":{\"id\":\"pointgod\",\"label\":\"Poi"
+ },
+ {
+  "sport": "nba",
+  "name": "appearance-null",
+  "errs": [],
+  "seen": {
+   "h1": [
+    "NBA My Career",
+    "NBA My Career: Basketball Career Simulator",
+    "How to play NBA My Career, a free NBA basketball career sim"
+   ],
+   "buttons": [
+    "Back",
+    "Track stats",
+    "Play the 2026 season",
+    "📺 Week by week",
+    "Plan your season",
+    "Start practice",
+    "📊 MY PLAYER OVR 74 The fans down at 35",
+    "💰 THE BANK $0.3M $2.5M a year, 4 years left",
+    "📜 CAREER LOG No seasons yet Play one and it goes on the books",
+    "🏆 TROPHY CASE Empty Nothing in it. Go and win something",
+    "📰 NEWS Quiet week Nobody is writing about you yet",
+    "📱 INBOX 2 unread Somebody is waiting on a reply"
+   ],
+   "hasMain": true,
+   "text": "Skip to main content\nDOUKNOWBALL\nBack\nTrack stats\nNBA My Career\n\nDraft night to jersey retirement. Every summer bends the career.\n\nHostile Test · PG\nChicago Bulls\n2026 · age 20\nOVR 74\n$2.5M x4\n⭐ Starting five\nPlay the 2026 season\n📺 Week by week\n\nCareer so far: 0 rings · 0 MVPs · 0 All-NBA · 0 career points\n\nYour season programme\n\nChoose how to approach the season. Your usual routine stays available.\n\nPlan your season\nPractice gym\n\nPlay a drill. Earn up to +2 OVR for camp.\n\n74OVR\n\nCeiling 98\n\nStart practice\n\nOne banked session each season. Your ceiling still applies.\n\n📊\nMY PLAYER\nOVR 74\nThe f",
+   "bad": null
+  },
+  "shot": "hostile-nba-390-appearance-null.jpg",
+  "canRecover": false,
+  "after": "{\"c\":{\"name\":\"Hostile Test\",\"pos\":\"PG\",\"archetype\":{\"id\":\"pointgod\",\"label\":\"Poi"
+ },
+ {
+  "sport": "nba",
+  "name": "team-unknown",
+  "errs": [],
+  "seen": {
+   "h1": [
+    "NBA My Career",
+    "NBA My Career: Basketball Career Simulator",
+    "How to play NBA My Career, a free NBA basketball career sim"
+   ],
+   "buttons": [
+    "Back",
+    "Track stats",
+    "Play the 2026 season",
+    "📺 Week by week",
+    "Plan your season",
+    "Start practice",
+    "📊 MY PLAYER OVR 74 The fans down at 35",
+    "💰 THE BANK $0.3M $2.5M a year, 4 years left",
+    "📜 CAREER LOG No seasons yet Play one and it goes on the books",
+    "🏆 TROPHY CASE Empty Nothing in it. Go and win something",
+    "📰 NEWS Quiet week Nobody is writing about you yet",
+    "📱 INBOX 2 unread Somebody is waiting on a reply"
+   ],
+   "hasMain": true,
+   "text": "Skip to main content\nDOUKNOWBALL\nBack\nTrack stats\nNBA My Career\n\nDraft night to jersey retirement. Every summer bends the career.\n\nHostile Test · PG\nZZZ\n2026 · age 20\nOVR 74\n$2.5M x4\n⭐ Starting five\nPlay the 2026 season\n📺 Week by week\n\nCareer so far: 0 rings · 0 MVPs · 0 All-NBA · 0 career points\n\nYour season programme\n\nChoose how to approach the season. Your usual routine stays available.\n\nPlan your season\nPractice gym\n\nPlay a drill. Earn up to +2 OVR for camp.\n\n74OVR\n\nCeiling 98\n\nStart practice\n\nOne banked session each season. Your ceiling still applies.\n\n📊\nMY PLAYER\nOVR 74\nThe fans down a",
+   "bad": null
+  },
+  "shot": "hostile-nba-390-team-unknown.jpg",
+  "canRecover": false,
+  "after": "{\"c\":{\"name\":\"Hostile Test\",\"pos\":\"PG\",\"archetype\":{\"id\":\"pointgod\",\"label\":\"Poi"
+ },
+ {
+  "sport": "nfl",
+  "name": "name-number",
+  "errs": [
+   "TypeError: (e || \"x\").split is not a function",
+   "A page failed to render: TypeError: (e || \"x\").split is not a function"
+  ],
+  "seen": {
+   "h1": [
+    "This page broke"
+   ],
+   "buttons": [
+    "Try this page again",
+    "Start a fresh game",
+    "Cookie choices",
+    "Light mode",
+    "Sound: off",
+    "Report a bug"
+   ],
+   "hasMain": false,
+   "text": "Skip to main content\n😬\nThis page broke\n\nSomething in this game went wrong and it stopped drawing. It is our fault, not anything you did.\n\nIf you had a save going, it is still on this device. It is kept in your browser, and nothing here has touched it.\n\nBack to the games\nTry this page again\nStart a fresh game\n\nIf trying again keeps breaking, you can start a fresh game. Your old save gets moved aside to a backup in this browser, not deleted, and the game offers to put it back next time you open it. Each game keeps its three newest backups.\n\nTelling us what you were doing helps a lot. The report",
+   "bad": null
+  },
+  "shot": "hostile-nfl-390-name-number.jpg",
+  "canRecover": false,
+  "after": "{\"c\":{\"name\":5,\"pos\":\"QB\",\"archetype\":{\"id\":\"cannon\",\"label\":\"Cannon Arm\",\"desc\""
+ },
+ {
+  "sport": "nfl",
+  "name": "seasons-string",
+  "errs": [
+   "TypeError: e.reduce is not a function",
+   "A page failed to render: TypeError: e.reduce is not a function"
+  ],
+  "seen": {
+   "h1": [
+    "This page broke"
+   ],
+   "buttons": [
+    "Try this page again",
+    "Start a fresh game",
+    "Cookie choices",
+    "Light mode",
+    "Sound: off",
+    "Report a bug"
+   ],
+   "hasMain": false,
+   "text": "Skip to main content\n😬\nThis page broke\n\nSomething in this game went wrong and it stopped drawing. It is our fault, not anything you did.\n\nIf you had a save going, it is still on this device. It is kept in your browser, and nothing here has touched it.\n\nBack to the games\nTry this page again\nStart a fresh game\n\nIf trying again keeps breaking, you can start a fresh game. Your old save gets moved aside to a backup in this browser, not deleted, and the game offers to put it back next time you open it. Each game keeps its three newest backups.\n\nTelling us what you were doing helps a lot. The report",
+   "bad": null
+  },
+  "shot": "hostile-nfl-390-seasons-string.jpg",
+  "canRecover": false,
+  "after": "{\"c\":{\"name\":\"Hostile Test\",\"pos\":\"QB\",\"archetype\":{\"id\":\"cannon\",\"label\":\"Canno"
+ },
+ {
+  "sport": "nfl",
+  "name": "year-text",
+  "errs": [],
+  "seen": {
+   "h1": [
+    "NFL My Career",
+    "NFL My Career: Football Career Simulator",
+    "How to play NFL My Career, a free online NFL career simulation game"
+   ],
+   "buttons": [
+    "Back",
+    "Track stats",
+    "Play the soon season",
+    "Plan your season",
+    "Start practice",
+    "📊 MY PLAYER OVR 70 The fans down at 35",
+    "💰 THE BANK $0.1M $3M a year, 4 years left",
+    "📜 CAREER LOG No seasons yet Play one and it goes on the books",
+    "🏆 TROPHY CASE Empty Nothing in it. Go and win something",
+    "📰 NEWS Quiet week Nobody is writing about you yet",
+    "📱 INBOX 1 unread Somebody is waiting on a reply",
+    "Cookie choices"
+   ],
+   "hasMain": true,
+   "text": "Skip to main content\nDOUKNOWBALL\nBack\nTrack stats\nNFL My Career\n\nDraft night to retirement speech. Every choice bends the career.\n\nHostile Test · QB\nCleveland Browns\nsoon · age 22\nOVR 70\n$3M x4\n🪑 Backup\nPlay the soon season\n📺 No week by week this season: the game has no verified length for the real soon season.\n\nCareer so far: 0 rings · 0 MVPs · 0 All-Pros · 0 pass yds\n\nYour season programme\n\nChoose how to approach the season. Your usual routine stays available.\n\nPlan your season\nPractice field\n\nPlay a drill. Earn up to +2 OVR for camp.\n\n70OVR\n\nCeiling 91\n\nStart practice\n\nOne banked session ",
+   "bad": null
+  },
+  "shot": "hostile-nfl-390-year-text.jpg",
+  "canRecover": false,
+  "after": "{\"c\":{\"name\":\"Hostile Test\",\"pos\":\"QB\",\"archetype\":{\"id\":\"cannon\",\"label\":\"Canno"
+ },
+ {
+  "sport": "nfl",
+  "name": "salary-missing",
+  "errs": [],
+  "seen": {
+   "h1": [
+    "NFL My Career",
+    "NFL My Career: Football Career Simulator",
+    "How to play NFL My Career, a free online NFL career simulation game"
+   ],
+   "buttons": [
+    "Back",
+    "Track stats",
+    "Play the 2026 season",
+    "📺 Week by week",
+    "Plan your season",
+    "Start practice",
+    "📊 MY PLAYER OVR 70 The fans down at 35",
+    "💰 THE BANK $0.1M $NaNM a year, 4 years left",
+    "📜 CAREER LOG No seasons yet Play one and it goes on the books",
+    "🏆 TROPHY CASE Empty Nothing in it. Go and win something",
+    "📰 NEWS Quiet week Nobody is writing about you yet",
+    "📱 INBOX 1 unread Somebody is waiting on a reply"
+   ],
+   "hasMain": true,
+   "text": "Skip to main content\nDOUKNOWBALL\nBack\nTrack stats\nNFL My Career\n\nDraft night to retirement speech. Every choice bends the career.\n\nHostile Test · QB\nCleveland Browns\n2026 · age 22\nOVR 70\n$M x4\n🪑 Backup\nPlay the 2026 season\n📺 Week by week\n\nCareer so far: 0 rings · 0 MVPs · 0 All-Pros · 0 pass yds\n\nYour season programme\n\nChoose how to approach the season. Your usual routine stays available.\n\nPlan your season\nPractice field\n\nPlay a drill. Earn up to +2 OVR for camp.\n\n70OVR\n\nCeiling 91\n\nStart practice\n\nOne banked session each season. Your ceiling still applies.\n\n📊\nMY PLAYER\nOVR 70\nThe fans down",
+   "bad": "$NaNM a year, 4 years left"
+  },
+  "shot": "hostile-nfl-390-salary-missing.jpg",
+  "canRecover": false,
+  "after": "{\"c\":{\"name\":\"Hostile Test\",\"pos\":\"QB\",\"archetype\":{\"id\":\"cannon\",\"label\":\"Canno"
+ },
+ {
+  "sport": "nfl",
+  "name": "networth-huge",
+  "errs": [],
+  "seen": {
+   "h1": [
+    "NFL My Career",
+    "NFL My Career: Football Career Simulator",
+    "How to play NFL My Career, a free online NFL career simulation game"
+   ],
+   "buttons": [
+    "Back",
+    "Track stats",
+    "Play the 2026 season",
+    "📺 Week by week",
+    "Plan your season",
+    "Start practice",
+    "📊 MY PLAYER OVR 70 The fans down at 35",
+    "💰 THE BANK $1000000000000000M -$3M a year, 4 years left",
+    "📜 CAREER LOG No seasons yet Play one and it goes on the books",
+    "🏆 TROPHY CASE Empty Nothing in it. Go and win something",
+    "📰 NEWS Quiet week Nobody is writing about you yet",
+    "📱 INBOX 1 unread Somebody is waiting on a reply"
+   ],
+   "hasMain": true,
+   "text": "Skip to main content\nDOUKNOWBALL\nBack\nTrack stats\nNFL My Career\n\nDraft night to retirement speech. Every choice bends the career.\n\nHostile Test · QB\nCleveland Browns\n2026 · age 22\nOVR 70\n$-3M x4\n🪑 Backup\nPlay the 2026 season\n📺 Week by week\n\nCareer so far: 0 rings · 0 MVPs · 0 All-Pros · 0 pass yds\n\nYour season programme\n\nChoose how to approach the season. Your usual routine stays available.\n\nPlan your season\nPractice field\n\nPlay a drill. Earn up to +2 OVR for camp.\n\n70OVR\n\nCeiling 91\n\nStart practice\n\nOne banked session each season. Your ceiling still applies.\n\n📊\nMY PLAYER\nOVR 70\nThe fans do",
+   "bad": null
+  },
+  "shot": "hostile-nfl-390-networth-huge.jpg",
+  "canRecover": false,
+  "after": "{\"c\":{\"name\":\"Hostile Test\",\"pos\":\"QB\",\"archetype\":{\"id\":\"cannon\",\"label\":\"Canno"
+ },
+ {
+  "sport": "nfl",
+  "name": "phase-event-nosummer",
+  "errs": [],
+  "seen": {
+   "h1": [
+    "NFL My Career",
+    "NFL My Career: Football Career Simulator",
+    "How to play NFL My Career, a free online NFL career simulation game"
+   ],
+   "buttons": [
+    "Back",
+    "Track stats",
+    "Play the 2026 season",
+    "📺 Week by week",
+    "Plan your season",
+    "Start practice",
+    "📊 MY PLAYER OVR 70 The fans down at 35",
+    "💰 THE BANK $0.1M $3M a year, 4 years left",
+    "📜 CAREER LOG No seasons yet Play one and it goes on the books",
+    "🏆 TROPHY CASE Empty Nothing in it. Go and win something",
+    "📰 NEWS Quiet week Nobody is writing about you yet",
+    "📱 INBOX 1 unread Somebody is waiting on a reply"
+   ],
+   "hasMain": true,
+   "text": "Skip to main content\nDOUKNOWBALL\nBack\nTrack stats\nNFL My Career\n\nDraft night to retirement speech. Every choice bends the career.\n\nHostile Test · QB\nCleveland Browns\n2026 · age 22\nOVR 70\n$3M x4\n🪑 Backup\nPlay the 2026 season\n📺 Week by week\n\nCareer so far: 0 rings · 0 MVPs · 0 All-Pros · 0 pass yds\n\nYour season programme\n\nChoose how to approach the season. Your usual routine stays available.\n\nPlan your season\nPractice field\n\nPlay a drill. Earn up to +2 OVR for camp.\n\n70OVR\n\nCeiling 91\n\nStart practice\n\nOne banked session each season. Your ceiling still applies.\n\n📊\nMY PLAYER\nOVR 70\nThe fans dow",
+   "bad": null
+  },
+  "shot": "hostile-nfl-390-phase-event-nosummer.jpg",
+  "canRecover": false,
+  "after": "{\"c\":{\"name\":\"Hostile Test\",\"pos\":\"QB\",\"archetype\":{\"id\":\"cannon\",\"label\":\"Canno"
+ },
+ {
+  "sport": "nfl",
+  "name": "appearance-null",
+  "errs": [],
+  "seen": {
+   "h1": [
+    "NFL My Career",
+    "NFL My Career: Football Career Simulator",
+    "How to play NFL My Career, a free online NFL career simulation game"
+   ],
+   "buttons": [
+    "Back",
+    "Track stats",
+    "Play the 2026 season",
+    "📺 Week by week",
+    "Plan your season",
+    "Start practice",
+    "📊 MY PLAYER OVR 70 The fans down at 35",
+    "💰 THE BANK $0.1M $3M a year, 4 years left",
+    "📜 CAREER LOG No seasons yet Play one and it goes on the books",
+    "🏆 TROPHY CASE Empty Nothing in it. Go and win something",
+    "📰 NEWS Quiet week Nobody is writing about you yet",
+    "📱 INBOX 1 unread Somebody is waiting on a reply"
+   ],
+   "hasMain": true,
+   "text": "Skip to main content\nDOUKNOWBALL\nBack\nTrack stats\nNFL My Career\n\nDraft night to retirement speech. Every choice bends the career.\n\nHostile Test · QB\nCleveland Browns\n2026 · age 22\nOVR 70\n$3M x4\n🪑 Backup\nPlay the 2026 season\n📺 Week by week\n\nCareer so far: 0 rings · 0 MVPs · 0 All-Pros · 0 pass yds\n\nYour season programme\n\nChoose how to approach the season. Your usual routine stays available.\n\nPlan your season\nPractice field\n\nPlay a drill. Earn up to +2 OVR for camp.\n\n70OVR\n\nCeiling 91\n\nStart practice\n\nOne banked session each season. Your ceiling still applies.\n\n📊\nMY PLAYER\nOVR 70\nThe fans dow",
+   "bad": null
+  },
+  "shot": "hostile-nfl-390-appearance-null.jpg",
+  "canRecover": false,
+  "after": "{\"c\":{\"name\":\"Hostile Test\",\"pos\":\"QB\",\"archetype\":{\"id\":\"cannon\",\"label\":\"Canno"
+ },
+ {
+  "sport": "nfl",
+  "name": "team-unknown",
+  "errs": [],
+  "seen": {
+   "h1": [
+    "NFL My Career",
+    "NFL My Career: Football Career Simulator",
+    "How to play NFL My Career, a free online NFL career simulation game"
+   ],
+   "buttons": [
+    "Back",
+    "Track stats",
+    "Play the 2026 season",
+    "📺 Week by week",
+    "Plan your season",
+    "Start practice",
+    "📊 MY PLAYER OVR 70 The fans down at 35",
+    "💰 THE BANK $0.1M $3M a year, 4 years left",
+    "📜 CAREER LOG No seasons yet Play one and it goes on the books",
+    "🏆 TROPHY CASE Empty Nothing in it. Go and win something",
+    "📰 NEWS Quiet week Nobody is writing about you yet",
+    "📱 INBOX 1 unread Somebody is waiting on a reply"
+   ],
+   "hasMain": true,
+   "text": "Skip to main content\nDOUKNOWBALL\nBack\nTrack stats\nNFL My Career\n\nDraft night to retirement speech. Every choice bends the career.\n\nHostile Test · QB\nZZZ\n2026 · age 22\nOVR 70\n$3M x4\n🪑 Backup\nPlay the 2026 season\n📺 Week by week\n\nCareer so far: 0 rings · 0 MVPs · 0 All-Pros · 0 pass yds\n\nYour season programme\n\nChoose how to approach the season. Your usual routine stays available.\n\nPlan your season\nPractice field\n\nPlay a drill. Earn up to +2 OVR for camp.\n\n70OVR\n\nCeiling 91\n\nStart practice\n\nOne banked session each season. Your ceiling still applies.\n\n📊\nMY PLAYER\nOVR 70\nThe fans down at 35\n💰\nTH",
+   "bad": null
+  },
+  "shot": "hostile-nfl-390-team-unknown.jpg",
+  "canRecover": false,
+  "after": "{\"c\":{\"name\":\"Hostile Test\",\"pos\":\"QB\",\"archetype\":{\"id\":\"cannon\",\"label\":\"Canno"
+ },
+ {
+  "sport": "mlb",
+  "name": "name-number",
+  "errs": [
+   "TypeError: (e || \"x\").split is not a function",
+   "A page failed to render: TypeError: (e || \"x\").split is not a function"
+  ],
+  "seen": {
+   "h1": [
+    "This page broke"
+   ],
+   "buttons": [
+    "Try this page again",
+    "Start a fresh game",
+    "Cookie choices",
+    "Light mode",
+    "Sound: off",
+    "Report a bug"
+   ],
+   "hasMain": false,
+   "text": "Skip to main content\n😬\nThis page broke\n\nSomething in this game went wrong and it stopped drawing. It is our fault, not anything you did.\n\nIf you had a save going, it is still on this device. It is kept in your browser, and nothing here has touched it.\n\nBack to the games\nTry this page again\nStart a fresh game\n\nIf trying again keeps breaking, you can start a fresh game. Your old save gets moved aside to a backup in this browser, not deleted, and the game offers to put it back next time you open it. Each game keeps its three newest backups.\n\nTelling us what you were doing helps a lot. The report",
+   "bad": null
+  },
+  "shot": "hostile-mlb-390-name-number.jpg",
+  "canRecover": false,
+  "after": "{\"c\":{\"name\":5,\"pos\":\"CF\",\"archetype\":{\"id\":\"fivetool\",\"label\":\"Five-Tool Freak\""
+ },
+ {
+  "sport": "mlb",
+  "name": "seasons-string",
+  "errs": [
+   "TypeError: e.reduce is not a function",
+   "A page failed to render: TypeError: e.reduce is not a function"
+  ],
+  "seen": {
+   "h1": [
+    "This page broke"
+   ],
+   "buttons": [
+    "Try this page again",
+    "Start a fresh game",
+    "Cookie choices",
+    "Light mode",
+    "Sound: off",
+    "Report a bug"
+   ],
+   "hasMain": false,
+   "text": "Skip to main content\n😬\nThis page broke\n\nSomething in this game went wrong and it stopped drawing. It is our fault, not anything you did.\n\nIf you had a save going, it is still on this device. It is kept in your browser, and nothing here has touched it.\n\nBack to the games\nTry this page again\nStart a fresh game\n\nIf trying again keeps breaking, you can start a fresh game. Your old save gets moved aside to a backup in this browser, not deleted, and the game offers to put it back next time you open it. Each game keeps its three newest backups.\n\nTelling us what you were doing helps a lot. The report",
+   "bad": null
+  },
+  "shot": "hostile-mlb-390-seasons-string.jpg",
+  "canRecover": false,
+  "after": "{\"c\":{\"name\":\"Hostile Test\",\"pos\":\"CF\",\"archetype\":{\"id\":\"fivetool\",\"label\":\"Fiv"
+ },
+ {
+  "sport": "mlb",
+  "name": "year-text",
+  "errs": [],
+  "seen": {
+   "h1": [
+    "MLB My Career",
+    "MLB My Career: Baseball Career Simulator",
+    "How to play MLB My Career, a free baseball career simulation game"
+   ],
+   "buttons": [
+    "Back",
+    "Track stats",
+    "Play the soon season",
+    "Plan your season",
+    "Start practice",
+    "📊 MY PLAYER OVR 67 The fans down at 30",
+    "💰 THE BANK $0.4M $0.8M a year, 6 years left",
+    "📜 CAREER LOG No seasons yet Play one and it goes on the books",
+    "🏆 TROPHY CASE Empty Nothing in it. Go and win something",
+    "📰 NEWS Quiet week Nobody is writing about you yet",
+    "📱 INBOX 1 unread Somebody is waiting on a reply",
+    "Cookie choices"
+   ],
+   "hasMain": true,
+   "text": "Skip to main content\nDOUKNOWBALL\nBack\nTrack stats\nMLB My Career\n\nDraft day to the farewell tour. Every offseason bends the career.\n\nHostile Test · CF\nCincinnati Reds\nsoon · age 21\nOVR 67\n$0.8M x6\n🪑 Bench bat\nPlay the soon season\n📺 No week by week this season: the game has no verified length for the real soon season.\n\nCareer so far: 0 rings · 0 MVPs · 0 All-Star · 0 career home runs\n\nYour season programme\n\nChoose how to approach the season. Your usual routine stays available.\n\nPlan your season\nTraining diamond\n\nPlay a drill. Earn up to +2 OVR for camp.\n\n67OVR\n\nCeiling 95\n\nStart practice\n\nOne ",
+   "bad": null
+  },
+  "shot": "hostile-mlb-390-year-text.jpg",
+  "canRecover": false,
+  "after": "{\"c\":{\"name\":\"Hostile Test\",\"pos\":\"CF\",\"archetype\":{\"id\":\"fivetool\",\"label\":\"Fiv"
+ },
+ {
+  "sport": "mlb",
+  "name": "salary-missing",
+  "errs": [],
+  "seen": {
+   "h1": [
+    "MLB My Career",
+    "MLB My Career: Baseball Career Simulator",
+    "How to play MLB My Career, a free baseball career simulation game"
+   ],
+   "buttons": [
+    "Back",
+    "Track stats",
+    "Play the 2026 season",
+    "📺 Week by week",
+    "Plan your season",
+    "Start practice",
+    "📊 MY PLAYER OVR 67 The fans down at 30",
+    "💰 THE BANK $0.4M $NaNM a year, 6 years left",
+    "📜 CAREER LOG No seasons yet Play one and it goes on the books",
+    "🏆 TROPHY CASE Empty Nothing in it. Go and win something",
+    "📰 NEWS Quiet week Nobody is writing about you yet",
+    "📱 INBOX 1 unread Somebody is waiting on a reply"
+   ],
+   "hasMain": true,
+   "text": "Skip to main content\nDOUKNOWBALL\nBack\nTrack stats\nMLB My Career\n\nDraft day to the farewell tour. Every offseason bends the career.\n\nHostile Test · CF\nCincinnati Reds\n2026 · age 21\nOVR 67\n$M x6\n🪑 Bench bat\nPlay the 2026 season\n📺 Week by week\n\nCareer so far: 0 rings · 0 MVPs · 0 All-Star · 0 career home runs\n\nYour season programme\n\nChoose how to approach the season. Your usual routine stays available.\n\nPlan your season\nTraining diamond\n\nPlay a drill. Earn up to +2 OVR for camp.\n\n67OVR\n\nCeiling 95\n\nStart practice\n\nOne banked session each season. Your ceiling still applies.\n\n📊\nMY PLAYER\nOVR 67\n",
+   "bad": "$NaNM a year, 6 years left"
+  },
+  "shot": "hostile-mlb-390-salary-missing.jpg",
+  "canRecover": false,
+  "after": "{\"c\":{\"name\":\"Hostile Test\",\"pos\":\"CF\",\"archetype\":{\"id\":\"fivetool\",\"label\":\"Fiv"
+ },
+ {
+  "sport": "mlb",
+  "name": "networth-huge",
+  "errs": [],
+  "seen": {
+   "h1": [
+    "MLB My Career",
+    "MLB My Career: Baseball Career Simulator",
+    "How to play MLB My Career, a free baseball career simulation game"
+   ],
+   "buttons": [
+    "Back",
+    "Track stats",
+    "Play the 2026 season",
+    "📺 Week by week",
+    "Plan your season",
+    "Start practice",
+    "📊 MY PLAYER OVR 67 The fans down at 30",
+    "💰 THE BANK $1000000000000000M -$3M a year, 6 years left",
+    "📜 CAREER LOG No seasons yet Play one and it goes on the books",
+    "🏆 TROPHY CASE Empty Nothing in it. Go and win something",
+    "📰 NEWS Quiet week Nobody is writing about you yet",
+    "📱 INBOX 1 unread Somebody is waiting on a reply"
+   ],
+   "hasMain": true,
+   "text": "Skip to main content\nDOUKNOWBALL\nBack\nTrack stats\nMLB My Career\n\nDraft day to the farewell tour. Every offseason bends the career.\n\nHostile Test · CF\nCincinnati Reds\n2026 · age 21\nOVR 67\n$-3M x6\n🪑 Bench bat\nPlay the 2026 season\n📺 Week by week\n\nCareer so far: 0 rings · 0 MVPs · 0 All-Star · 0 career home runs\n\nYour season programme\n\nChoose how to approach the season. Your usual routine stays available.\n\nPlan your season\nTraining diamond\n\nPlay a drill. Earn up to +2 OVR for camp.\n\n67OVR\n\nCeiling 95\n\nStart practice\n\nOne banked session each season. Your ceiling still applies.\n\n📊\nMY PLAYER\nOVR 6",
+   "bad": null
+  },
+  "shot": "hostile-mlb-390-networth-huge.jpg",
+  "canRecover": false,
+  "after": "{\"c\":{\"name\":\"Hostile Test\",\"pos\":\"CF\",\"archetype\":{\"id\":\"fivetool\",\"label\":\"Fiv"
+ },
+ {
+  "sport": "mlb",
+  "name": "phase-event-nosummer",
+  "errs": [],
+  "seen": {
+   "h1": [
+    "MLB My Career",
+    "MLB My Career: Baseball Career Simulator",
+    "How to play MLB My Career, a free baseball career simulation game"
+   ],
+   "buttons": [
+    "Back",
+    "Track stats",
+    "Play the 2026 season",
+    "📺 Week by week",
+    "Plan your season",
+    "Start practice",
+    "📊 MY PLAYER OVR 67 The fans down at 30",
+    "💰 THE BANK $0.4M $0.8M a year, 6 years left",
+    "📜 CAREER LOG No seasons yet Play one and it goes on the books",
+    "🏆 TROPHY CASE Empty Nothing in it. Go and win something",
+    "📰 NEWS Quiet week Nobody is writing about you yet",
+    "📱 INBOX 1 unread Somebody is waiting on a reply"
+   ],
+   "hasMain": true,
+   "text": "Skip to main content\nDOUKNOWBALL\nBack\nTrack stats\nMLB My Career\n\nDraft day to the farewell tour. Every offseason bends the career.\n\nHostile Test · CF\nCincinnati Reds\n2026 · age 21\nOVR 67\n$0.8M x6\n🪑 Bench bat\nPlay the 2026 season\n📺 Week by week\n\nCareer so far: 0 rings · 0 MVPs · 0 All-Star · 0 career home runs\n\nYour season programme\n\nChoose how to approach the season. Your usual routine stays available.\n\nPlan your season\nTraining diamond\n\nPlay a drill. Earn up to +2 OVR for camp.\n\n67OVR\n\nCeiling 95\n\nStart practice\n\nOne banked session each season. Your ceiling still applies.\n\n📊\nMY PLAYER\nOVR ",
+   "bad": null
+  },
+  "shot": "hostile-mlb-390-phase-event-nosummer.jpg",
+  "canRecover": false,
+  "after": "{\"c\":{\"name\":\"Hostile Test\",\"pos\":\"CF\",\"archetype\":{\"id\":\"fivetool\",\"label\":\"Fiv"
+ },
+ {
+  "sport": "mlb",
+  "name": "appearance-null",
+  "errs": [],
+  "seen": {
+   "h1": [
+    "MLB My Career",
+    "MLB My Career: Baseball Career Simulator",
+    "How to play MLB My Career, a free baseball career simulation game"
+   ],
+   "buttons": [
+    "Back",
+    "Track stats",
+    "Play the 2026 season",
+    "📺 Week by week",
+    "Plan your season",
+    "Start practice",
+    "📊 MY PLAYER OVR 67 The fans down at 30",
+    "💰 THE BANK $0.4M $0.8M a year, 6 years left",
+    "📜 CAREER LOG No seasons yet Play one and it goes on the books",
+    "🏆 TROPHY CASE Empty Nothing in it. Go and win something",
+    "📰 NEWS Quiet week Nobody is writing about you yet",
+    "📱 INBOX 1 unread Somebody is waiting on a reply"
+   ],
+   "hasMain": true,
+   "text": "Skip to main content\nDOUKNOWBALL\nBack\nTrack stats\nMLB My Career\n\nDraft day to the farewell tour. Every offseason bends the career.\n\nHostile Test · CF\nCincinnati Reds\n2026 · age 21\nOVR 67\n$0.8M x6\n🪑 Bench bat\nPlay the 2026 season\n📺 Week by week\n\nCareer so far: 0 rings · 0 MVPs · 0 All-Star · 0 career home runs\n\nYour season programme\n\nChoose how to approach the season. Your usual routine stays available.\n\nPlan your season\nTraining diamond\n\nPlay a drill. Earn up to +2 OVR for camp.\n\n67OVR\n\nCeiling 95\n\nStart practice\n\nOne banked session each season. Your ceiling still applies.\n\n📊\nMY PLAYER\nOVR ",
+   "bad": null
+  },
+  "shot": "hostile-mlb-390-appearance-null.jpg",
+  "canRecover": false,
+  "after": "{\"c\":{\"name\":\"Hostile Test\",\"pos\":\"CF\",\"archetype\":{\"id\":\"fivetool\",\"label\":\"Fiv"
+ },
+ {
+  "sport": "mlb",
+  "name": "team-unknown",
+  "errs": [],
+  "seen": {
+   "h1": [
+    "MLB My Career",
+    "MLB My Career: Baseball Career Simulator",
+    "How to play MLB My Career, a free baseball career simulation game"
+   ],
+   "buttons": [
+    "Back",
+    "Track stats",
+    "Play the 2026 season",
+    "Plan your season",
+    "Start practice",
+    "📊 MY PLAYER OVR 67 The fans down at 30",
+    "💰 THE BANK $0.4M $0.8M a year, 6 years left",
+    "📜 CAREER LOG No seasons yet Play one and it goes on the books",
+    "🏆 TROPHY CASE Empty Nothing in it. Go and win something",
+    "📰 NEWS Quiet week Nobody is writing about you yet",
+    "📱 INBOX 1 unread Somebody is waiting on a reply",
+    "Cookie choices"
+   ],
+   "hasMain": true,
+   "text": "Skip to main content\nDOUKNOWBALL\nBack\nTrack stats\nMLB My Career\n\nDraft day to the farewell tour. Every offseason bends the career.\n\nHostile Test · CF\nZZZ\n2026 · age 21\nOVR 67\n$0.8M x6\n🪑 Bench bat\nPlay the 2026 season\n📺 No week by week this season: the game holds no league schedule for your club.\n\nCareer so far: 0 rings · 0 MVPs · 0 All-Star · 0 career home runs\n\nYour season programme\n\nChoose how to approach the season. Your usual routine stays available.\n\nPlan your season\nTraining diamond\n\nPlay a drill. Earn up to +2 OVR for camp.\n\n67OVR\n\nCeiling 95\n\nStart practice\n\nOne banked session each s",
+   "bad": null
+  },
+  "shot": "hostile-mlb-390-team-unknown.jpg",
+  "canRecover": false,
+  "after": "{\"c\":{\"name\":\"Hostile Test\",\"pos\":\"CF\",\"archetype\":{\"id\":\"fivetool\",\"label\":\"Fiv"
+ },
+ {
+  "sport": "nhl",
+  "name": "name-number",
+  "errs": [
+   "TypeError: (e || \"x\").split is not a function",
+   "A page failed to render: TypeError: (e || \"x\").split is not a function"
+  ],
+  "seen": {
+   "h1": [
+    "This page broke"
+   ],
+   "buttons": [
+    "Try this page again",
+    "Start a fresh game",
+    "Cookie choices",
+    "Light mode",
+    "Sound: off",
+    "Report a bug"
+   ],
+   "hasMain": false,
+   "text": "Skip to main content\n😬\nThis page broke\n\nSomething in this game went wrong and it stopped drawing. It is our fault, not anything you did.\n\nIf you had a save going, it is still on this device. It is kept in your browser, and nothing here has touched it.\n\nBack to the games\nTry this page again\nStart a fresh game\n\nIf trying again keeps breaking, you can start a fresh game. Your old save gets moved aside to a backup in this browser, not deleted, and the game offers to put it back next time you open it. Each game keeps its three newest backups.\n\nTelling us what you were doing helps a lot. The report",
+   "bad": null
+  },
+  "shot": "hostile-nhl-390-name-number.jpg",
+  "canRecover": false,
+  "after": "{\"c\":{\"name\":5,\"pos\":\"C\",\"archetype\":{\"id\":\"generational\",\"label\":\"Generational "
+ },
+ {
+  "sport": "nhl",
+  "name": "seasons-string",
+  "errs": [
+   "TypeError: e.reduce is not a function",
+   "A page failed to render: TypeError: e.reduce is not a function"
+  ],
+  "seen": {
+   "h1": [
+    "This page broke"
+   ],
+   "buttons": [
+    "Try this page again",
+    "Start a fresh game",
+    "Cookie choices",
+    "Light mode",
+    "Sound: off",
+    "Report a bug"
+   ],
+   "hasMain": false,
+   "text": "Skip to main content\n😬\nThis page broke\n\nSomething in this game went wrong and it stopped drawing. It is our fault, not anything you did.\n\nIf you had a save going, it is still on this device. It is kept in your browser, and nothing here has touched it.\n\nBack to the games\nTry this page again\nStart a fresh game\n\nIf trying again keeps breaking, you can start a fresh game. Your old save gets moved aside to a backup in this browser, not deleted, and the game offers to put it back next time you open it. Each game keeps its three newest backups.\n\nTelling us what you were doing helps a lot. The report",
+   "bad": null
+  },
+  "shot": "hostile-nhl-390-seasons-string.jpg",
+  "canRecover": false,
+  "after": "{\"c\":{\"name\":\"Hostile Test\",\"pos\":\"C\",\"archetype\":{\"id\":\"generational\",\"label\":\""
+ },
+ {
+  "sport": "nhl",
+  "name": "year-text",
+  "errs": [],
+  "seen": {
+   "h1": [
+    "NHL My Career",
+    "NHL My Career: Hockey Career Simulator",
+    "How to play NHL My Career, a free hockey career simulation game"
+   ],
+   "buttons": [
+    "Back",
+    "Track stats",
+    "Play the soon season",
+    "Plan your season",
+    "Start practice",
+    "📊 MY PLAYER OVR 71 The fans down at 32",
+    "💰 THE BANK $0.5M $0.9M a year, 3 years left",
+    "📜 CAREER LOG No seasons yet Play one and it goes on the books",
+    "🏆 TROPHY CASE Empty Nothing in it. Go and win something",
+    "📰 NEWS Quiet week Nobody is writing about you yet",
+    "📱 INBOX 1 unread Somebody is waiting on a reply",
+    "Cookie choices"
+   ],
+   "hasMain": true,
+   "text": "Skip to main content\nDOUKNOWBALL\nBack\nTrack stats\nNHL My Career\n\nDraft day to the farewell tour. Every offseason bends the career.\n\nHostile Test · C\nEdmonton Oilers\nsoon · age 19\nOVR 71\n$0.9M x3\n🪑 Fourth line\nPlay the soon season\n\nCareer so far: 0 Cups · 0 Harts · 0 All-Star · 0 career points\n\nYour season programme\n\nChoose how to approach the season. Your usual routine stays available.\n\nPlan your season\nPractice rink\n\nPlay a drill. Earn up to +2 OVR for camp.\n\n71OVR\n\nCeiling 93\n\nStart practice\n\nOne banked session each season. Your ceiling still applies.\n\n📊\nMY PLAYER\nOVR 71\nThe fans down at 3",
+   "bad": null
+  },
+  "shot": "hostile-nhl-390-year-text.jpg",
+  "canRecover": false,
+  "after": "{\"c\":{\"name\":\"Hostile Test\",\"pos\":\"C\",\"archetype\":{\"id\":\"generational\",\"label\":\""
+ },
+ {
+  "sport": "nhl",
+  "name": "salary-missing",
+  "errs": [],
+  "seen": {
+   "h1": [
+    "NHL My Career",
+    "NHL My Career: Hockey Career Simulator",
+    "How to play NHL My Career, a free hockey career simulation game"
+   ],
+   "buttons": [
+    "Back",
+    "Track stats",
+    "Play the 2026 season",
+    "Plan your season",
+    "Start practice",
+    "📊 MY PLAYER OVR 71 The fans down at 32",
+    "💰 THE BANK $0.5M $NaNM a year, 3 years left",
+    "📜 CAREER LOG No seasons yet Play one and it goes on the books",
+    "🏆 TROPHY CASE Empty Nothing in it. Go and win something",
+    "📰 NEWS Quiet week Nobody is writing about you yet",
+    "📱 INBOX 1 unread Somebody is waiting on a reply",
+    "Cookie choices"
+   ],
+   "hasMain": true,
+   "text": "Skip to main content\nDOUKNOWBALL\nBack\nTrack stats\nNHL My Career\n\nDraft day to the farewell tour. Every offseason bends the career.\n\nHostile Test · C\nEdmonton Oilers\n2026 · age 19\nOVR 71\n$M x3\n🪑 Fourth line\nPlay the 2026 season\n\nCareer so far: 0 Cups · 0 Harts · 0 All-Star · 0 career points\n\nYour season programme\n\nChoose how to approach the season. Your usual routine stays available.\n\nPlan your season\nPractice rink\n\nPlay a drill. Earn up to +2 OVR for camp.\n\n71OVR\n\nCeiling 93\n\nStart practice\n\nOne banked session each season. Your ceiling still applies.\n\n📊\nMY PLAYER\nOVR 71\nThe fans down at 32\n\ud83d",
+   "bad": "$NaNM a year, 3 years left"
+  },
+  "shot": "hostile-nhl-390-salary-missing.jpg",
+  "canRecover": false,
+  "after": "{\"c\":{\"name\":\"Hostile Test\",\"pos\":\"C\",\"archetype\":{\"id\":\"generational\",\"label\":\""
+ },
+ {
+  "sport": "nhl",
+  "name": "networth-huge",
+  "errs": [],
+  "seen": {
+   "h1": [
+    "NHL My Career",
+    "NHL My Career: Hockey Career Simulator",
+    "How to play NHL My Career, a free hockey career simulation game"
+   ],
+   "buttons": [
+    "Back",
+    "Track stats",
+    "Play the 2026 season",
+    "Plan your season",
+    "Start practice",
+    "📊 MY PLAYER OVR 71 The fans down at 32",
+    "💰 THE BANK $1000000000000000M -$3M a year, 3 years left",
+    "📜 CAREER LOG No seasons yet Play one and it goes on the books",
+    "🏆 TROPHY CASE Empty Nothing in it. Go and win something",
+    "📰 NEWS Quiet week Nobody is writing about you yet",
+    "📱 INBOX 1 unread Somebody is waiting on a reply",
+    "Cookie choices"
+   ],
+   "hasMain": true,
+   "text": "Skip to main content\nDOUKNOWBALL\nBack\nTrack stats\nNHL My Career\n\nDraft day to the farewell tour. Every offseason bends the career.\n\nHostile Test · C\nEdmonton Oilers\n2026 · age 19\nOVR 71\n$-3M x3\n🪑 Fourth line\nPlay the 2026 season\n\nCareer so far: 0 Cups · 0 Harts · 0 All-Star · 0 career points\n\nYour season programme\n\nChoose how to approach the season. Your usual routine stays available.\n\nPlan your season\nPractice rink\n\nPlay a drill. Earn up to +2 OVR for camp.\n\n71OVR\n\nCeiling 93\n\nStart practice\n\nOne banked session each season. Your ceiling still applies.\n\n📊\nMY PLAYER\nOVR 71\nThe fans down at 32",
+   "bad": null
+  },
+  "shot": "hostile-nhl-390-networth-huge.jpg",
+  "canRecover": false,
+  "after": "{\"c\":{\"name\":\"Hostile Test\",\"pos\":\"C\",\"archetype\":{\"id\":\"generational\",\"label\":\""
+ },
+ {
+  "sport": "nhl",
+  "name": "phase-event-nosummer",
+  "errs": [],
+  "seen": {
+   "h1": [
+    "NHL My Career",
+    "NHL My Career: Hockey Career Simulator",
+    "How to play NHL My Career, a free hockey career simulation game"
+   ],
+   "buttons": [
+    "Back",
+    "Track stats",
+    "Play the 2026 season",
+    "Plan your season",
+    "Start practice",
+    "📊 MY PLAYER OVR 71 The fans down at 32",
+    "💰 THE BANK $0.5M $0.9M a year, 3 years left",
+    "📜 CAREER LOG No seasons yet Play one and it goes on the books",
+    "🏆 TROPHY CASE Empty Nothing in it. Go and win something",
+    "📰 NEWS Quiet week Nobody is writing about you yet",
+    "📱 INBOX 1 unread Somebody is waiting on a reply",
+    "Cookie choices"
+   ],
+   "hasMain": true,
+   "text": "Skip to main content\nDOUKNOWBALL\nBack\nTrack stats\nNHL My Career\n\nDraft day to the farewell tour. Every offseason bends the career.\n\nHostile Test · C\nEdmonton Oilers\n2026 · age 19\nOVR 71\n$0.9M x3\n🪑 Fourth line\nPlay the 2026 season\n\nCareer so far: 0 Cups · 0 Harts · 0 All-Star · 0 career points\n\nYour season programme\n\nChoose how to approach the season. Your usual routine stays available.\n\nPlan your season\nPractice rink\n\nPlay a drill. Earn up to +2 OVR for camp.\n\n71OVR\n\nCeiling 93\n\nStart practice\n\nOne banked session each season. Your ceiling still applies.\n\n📊\nMY PLAYER\nOVR 71\nThe fans down at 3",
+   "bad": null
+  },
+  "shot": "hostile-nhl-390-phase-event-nosummer.jpg",
+  "canRecover": false,
+  "after": "{\"c\":{\"name\":\"Hostile Test\",\"pos\":\"C\",\"archetype\":{\"id\":\"generational\",\"label\":\""
+ },
+ {
+  "sport": "nhl",
+  "name": "appearance-null",
+  "errs": [],
+  "seen": {
+   "h1": [
+    "NHL My Career",
+    "NHL My Career: Hockey Career Simulator",
+    "How to play NHL My Career, a free hockey career simulation game"
+   ],
+   "buttons": [
+    "Back",
+    "Track stats",
+    "Play the 2026 season",
+    "Plan your season",
+    "Start practice",
+    "📊 MY PLAYER OVR 71 The fans down at 32",
+    "💰 THE BANK $0.5M $0.9M a year, 3 years left",
+    "📜 CAREER LOG No seasons yet Play one and it goes on the books",
+    "🏆 TROPHY CASE Empty Nothing in it. Go and win something",
+    "📰 NEWS Quiet week Nobody is writing about you yet",
+    "📱 INBOX 1 unread Somebody is waiting on a reply",
+    "Cookie choices"
+   ],
+   "hasMain": true,
+   "text": "Skip to main content\nDOUKNOWBALL\nBack\nTrack stats\nNHL My Career\n\nDraft day to the farewell tour. Every offseason bends the career.\n\nHostile Test · C\nEdmonton Oilers\n2026 · age 19\nOVR 71\n$0.9M x3\n🪑 Fourth line\nPlay the 2026 season\n\nCareer so far: 0 Cups · 0 Harts · 0 All-Star · 0 career points\n\nYour season programme\n\nChoose how to approach the season. Your usual routine stays available.\n\nPlan your season\nPractice rink\n\nPlay a drill. Earn up to +2 OVR for camp.\n\n71OVR\n\nCeiling 93\n\nStart practice\n\nOne banked session each season. Your ceiling still applies.\n\n📊\nMY PLAYER\nOVR 71\nThe fans down at 3",
+   "bad": null
+  },
+  "shot": "hostile-nhl-390-appearance-null.jpg",
+  "canRecover": false,
+  "after": "{\"c\":{\"name\":\"Hostile Test\",\"pos\":\"C\",\"archetype\":{\"id\":\"generational\",\"label\":\""
+ },
+ {
+  "sport": "nhl",
+  "name": "team-unknown",
+  "errs": [],
+  "seen": {
+   "h1": [
+    "NHL My Career",
+    "NHL My Career: Hockey Career Simulator",
+    "How to play NHL My Career, a free hockey career simulation game"
+   ],
+   "buttons": [
+    "Back",
+    "Track stats",
+    "Play the 2026 season",
+    "Plan your season",
+    "Start practice",
+    "📊 MY PLAYER OVR 71 The fans down at 32",
+    "💰 THE BANK $0.5M $0.9M a year, 3 years left",
+    "📜 CAREER LOG No seasons yet Play one and it goes on the books",
+    "🏆 TROPHY CASE Empty Nothing in it. Go and win something",
+    "📰 NEWS Quiet week Nobody is writing about you yet",
+    "📱 INBOX 1 unread Somebody is waiting on a reply",
+    "Cookie choices"
+   ],
+   "hasMain": true,
+   "text": "Skip to main content\nDOUKNOWBALL\nBack\nTrack stats\nNHL My Career\n\nDraft day to the farewell tour. Every offseason bends the career.\n\nHostile Test · C\nZZZ\n2026 · age 19\nOVR 71\n$0.9M x3\n🪑 Fourth line\nPlay the 2026 season\n\nCareer so far: 0 Cups · 0 Harts · 0 All-Star · 0 career points\n\nYour season programme\n\nChoose how to approach the season. Your usual routine stays available.\n\nPlan your season\nPractice rink\n\nPlay a drill. Earn up to +2 OVR for camp.\n\n71OVR\n\nCeiling 93\n\nStart practice\n\nOne banked session each season. Your ceiling still applies.\n\n📊\nMY PLAYER\nOVR 71\nThe fans down at 32\n💰\nTHE BAN",
+   "bad": null
+  },
+  "shot": "hostile-nhl-390-team-unknown.jpg",
+  "canRecover": false,
+  "after": "{\"c\":{\"name\":\"Hostile Test\",\"pos\":\"C\",\"archetype\":{\"id\":\"generational\",\"label\":\""
+ }
+]

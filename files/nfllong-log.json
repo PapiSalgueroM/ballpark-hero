@@ -1,0 +1,4442 @@
+{
+ "tag": "nfllong",
+ "SPORT": "nfl",
+ "W": 390,
+ "H": 844,
+ "SEED": 5202,
+ "POS": "RB",
+ "steps": [
+  {
+   "t": 6,
+   "act": "enter the draft",
+   "text": "Enter the draft",
+   "scroll": [
+    644,
+    1098,
+    1098
+   ]
+  },
+  {
+   "t": 39,
+   "act": "play season 1",
+   "text": "Play the 2026 season",
+   "scroll": [
+    1093,
+    135,
+    135
+   ]
+  },
+  {
+   "t": 44,
+   "act": "continue",
+   "text": "Continue",
+   "scroll": [
+    135,
+    135,
+    135
+   ]
+  },
+  {
+   "t": 46,
+   "act": "rivalry option",
+   "text": "🤝 Co-host and split the bill Fanbase +10, Net worth -$1M, K",
+   "scroll": [
+    135,
+    135,
+    135
+   ]
+  },
+  {
+   "t": 49,
+   "act": "continue",
+   "text": "Continue",
+   "scroll": [
+    135,
+    135,
+    135
+   ]
+  },
+  {
+   "t": 50,
+   "act": "event option 2",
+   "text": "Do both and take every rep in camp Everything, body cost",
+   "scroll": [
+    135,
+    135,
+    135
+   ]
+  },
+  {
+   "t": 51,
+   "act": "decision continue",
+   "text": "Continue",
+   "scroll": [
+    135,
+    135,
+    135
+   ]
+  },
+  {
+   "t": 51,
+   "act": "event option 0",
+   "text": "Buy in and stay fresh Health +8, fanbase -3",
+   "scroll": [
+    135,
+    135,
+    135
+   ]
+  },
+  {
+   "t": 52,
+   "act": "decision continue",
+   "text": "Continue",
+   "scroll": [
+    135,
+    135,
+    135
+   ]
+  },
+  {
+   "t": 52,
+   "act": "event option 0",
+   "text": "Become the best cover man in the building Fanbase +4, health",
+   "scroll": [
+    135,
+    135,
+    135
+   ]
+  },
+  {
+   "t": 53,
+   "act": "decision continue",
+   "text": "Continue",
+   "scroll": [
+    135,
+    135,
+    135
+   ]
+  },
+  {
+   "t": 83,
+   "act": "play season 2",
+   "text": "Play the 2027 season",
+   "scroll": [
+    135,
+    135,
+    135
+   ]
+  },
+  {
+   "t": 89,
+   "act": "continue",
+   "text": "Continue",
+   "scroll": [
+    135,
+    135,
+    135
+   ]
+  },
+  {
+   "t": 93,
+   "act": "continue",
+   "text": "Continue",
+   "scroll": [
+    135,
+    135,
+    135
+   ]
+  },
+  {
+   "t": 95,
+   "act": "event option 0",
+   "text": "Answer with three paragraphs Fanbase up, bulletin board",
+   "scroll": [
+    135,
+    135,
+    135
+   ]
+  },
+  {
+   "t": 95,
+   "act": "decision continue",
+   "text": "Continue",
+   "scroll": [
+    135,
+    135,
+    135
+   ]
+  },
+  {
+   "t": 96,
+   "act": "event option 1",
+   "text": "Real job, under a real agency Supervised, safer",
+   "scroll": [
+    135,
+    135,
+    135
+   ]
+  },
+  {
+   "t": 96,
+   "act": "decision continue",
+   "text": "Continue",
+   "scroll": [
+    135,
+    135,
+    135
+   ]
+  },
+  {
+   "t": 97,
+   "act": "event option 2",
+   "text": "Stay out of it No change",
+   "scroll": [
+    135,
+    135,
+    135
+   ]
+  },
+  {
+   "t": 97,
+   "act": "decision continue",
+   "text": "Continue",
+   "scroll": [
+    135,
+    135,
+    135
+   ]
+  },
+  {
+   "t": 128,
+   "act": "play season 3",
+   "text": "Play the 2028 season",
+   "scroll": [
+    135,
+    135,
+    135
+   ]
+  },
+  {
+   "t": 133,
+   "act": "continue",
+   "text": "Continue",
+   "scroll": [
+    135,
+    135,
+    135
+   ]
+  },
+  {
+   "t": 134,
+   "act": "event option 1",
+   "text": "Ask to be the safety valve on every play Rating up, wear up",
+   "scroll": [
+    135,
+    135,
+    135
+   ]
+  },
+  {
+   "t": 134,
+   "act": "decision continue",
+   "text": "Continue",
+   "scroll": [
+    135,
+    135,
+    135
+   ]
+  },
+  {
+   "t": 135,
+   "act": "event option 2",
+   "text": "Keep your head down, it is a business Morale -2",
+   "scroll": [
+    135,
+    135,
+    135
+   ]
+  },
+  {
+   "t": 135,
+   "act": "decision continue",
+   "text": "Continue",
+   "scroll": [
+    135,
+    135,
+    135
+   ]
+  },
+  {
+   "t": 136,
+   "act": "event option 0",
+   "text": "Sign all 25,000 Wrist money",
+   "scroll": [
+    135,
+    135,
+    135
+   ]
+  },
+  {
+   "t": 137,
+   "act": "decision continue",
+   "text": "Continue",
+   "scroll": [
+    135,
+    135,
+    135
+   ]
+  },
+  {
+   "t": 167,
+   "act": "play season 4",
+   "text": "Play the 2029 season",
+   "scroll": [
+    135,
+    135,
+    135
+   ]
+  },
+  {
+   "t": 168,
+   "act": "extension push",
+   "text": "Ask for more, once",
+   "scroll": [
+    135,
+    135,
+    135
+   ]
+  },
+  {
+   "t": 170,
+   "act": "wheel spin",
+   "text": "Spin",
+   "scroll": [
+    135,
+    135,
+    135
+   ]
+  },
+  {
+   "t": 174,
+   "act": "wheel continue",
+   "text": "Continue to the offers",
+   "scroll": [
+    135,
+    135,
+    135
+   ]
+  },
+  {
+   "t": 175,
+   "act": "extension sign",
+   "text": "Sign it: 4 more years at $11.4M",
+   "scroll": [
+    135,
+    135,
+    135
+   ]
+  },
+  {
+   "t": 179,
+   "act": "back from Inbox",
+   "text": "Hub",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 210,
+   "act": "play season 5",
+   "text": "Play the 2029 season",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 215,
+   "act": "continue",
+   "text": "Continue",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 216,
+   "act": "event option 2",
+   "text": "Say no and help another way Money kept, awkward",
+   "scroll": [
+    185,
+    185,
+    0
+   ]
+  },
+  {
+   "t": 217,
+   "act": "decision continue",
+   "text": "Continue",
+   "scroll": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "t": 217,
+   "act": "event option 1",
+   "text": "Buy one and actually run it One store, real work",
+   "scroll": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "t": 218,
+   "act": "decision continue",
+   "text": "Continue",
+   "scroll": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "t": 218,
+   "act": "event option 1",
+   "text": "Skip the voluntary part, report for minicamp Health +6, mora",
+   "scroll": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "t": 219,
+   "act": "decision continue",
+   "text": "Continue",
+   "scroll": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "t": 249,
+   "act": "play season 6",
+   "text": "Play the 2030 season",
+   "scroll": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "t": 254,
+   "act": "continue",
+   "text": "Continue",
+   "scroll": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "t": 256,
+   "act": "event option 0",
+   "text": "Do it, rhyme and all Money, mild mockery",
+   "scroll": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "t": 256,
+   "act": "decision continue",
+   "text": "Continue",
+   "scroll": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "t": 257,
+   "act": "event option 0",
+   "text": "Become the best cover man in the building Fanbase +4, health",
+   "scroll": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "t": 257,
+   "act": "decision continue",
+   "text": "Continue",
+   "scroll": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "t": 258,
+   "act": "event option 2",
+   "text": "Complain to the beat writers Fanbase +4, morale -6",
+   "scroll": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "t": 258,
+   "act": "decision continue",
+   "text": "Continue",
+   "scroll": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "t": 289,
+   "act": "play season 7",
+   "text": "Play the 2031 season",
+   "scroll": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "t": 294,
+   "act": "continue",
+   "text": "Continue",
+   "scroll": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "t": 296,
+   "act": "rivalry option",
+   "text": "🕊️ Shake it off on camera Fanbase +5, Karma +5, the feud co",
+   "scroll": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "t": 299,
+   "act": "continue",
+   "text": "Continue",
+   "scroll": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "t": 300,
+   "act": "event option 0",
+   "text": "Sign with the giant Fame, small money",
+   "scroll": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "t": 300,
+   "act": "decision continue",
+   "text": "Continue",
+   "scroll": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "t": 301,
+   "act": "event option 0",
+   "text": "Have the surgery now Health +14, morale -4",
+   "scroll": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "t": 302,
+   "act": "decision continue",
+   "text": "Continue",
+   "scroll": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "t": 302,
+   "act": "event option 1",
+   "text": "Tell the truth: he is not ready yet Morale -2",
+   "scroll": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "t": 303,
+   "act": "decision continue",
+   "text": "Continue",
+   "scroll": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "t": 333,
+   "act": "play season 8",
+   "text": "Play the 2032 season",
+   "scroll": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "t": 337,
+   "act": "continue",
+   "text": "Continue",
+   "scroll": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "t": 342,
+   "act": "continue",
+   "text": "Continue",
+   "scroll": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "t": 343,
+   "act": "event option 2",
+   "text": "Sell taquito merch Monetize the myth",
+   "scroll": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "t": 343,
+   "act": "decision continue",
+   "text": "Continue",
+   "scroll": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "t": 344,
+   "act": "event option 0",
+   "text": "Call him that night Morale +4",
+   "scroll": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "t": 345,
+   "act": "decision continue",
+   "text": "Continue",
+   "scroll": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "t": 348,
+   "act": "back from Inbox",
+   "text": "Hub",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 379,
+   "act": "play season 9",
+   "text": "Play the 2033 season",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 381,
+   "act": "play the year out",
+   "text": "Play the year out",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 385,
+   "act": "continue",
+   "text": "Continue",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 390,
+   "act": "continue",
+   "text": "Continue",
+   "scroll": [
+    185,
+    185,
+    185
+   ]
+  },
+  {
+   "t": 391,
+   "act": "event option 1",
+   "text": "Back nine barefoot with a speaker Viral, unserious",
+   "scroll": [
+    185,
+    185,
+    0
+   ]
+  },
+  {
+   "t": 391,
+   "act": "decision continue",
+   "text": "Continue",
+   "scroll": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "t": 392,
+   "act": "event option 1",
+   "text": "Skip the voluntary part, report for minicamp Health +6, mora",
+   "scroll": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "t": 393,
+   "act": "decision continue",
+   "text": "Continue",
+   "scroll": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "t": 393,
+   "act": "event option 2",
+   "text": "Ask the front office for the plan Morale -3",
+   "scroll": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "t": 394,
+   "act": "decision continue",
+   "text": "Continue",
+   "scroll": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "t": 424,
+   "act": "play season 10",
+   "text": "Play the 2034 season",
+   "scroll": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "t": 427,
+   "act": "fa push",
+   "text": "Push for more",
+   "scroll": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "t": 429,
+   "act": "wheel spin",
+   "text": "Spin",
+   "scroll": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "t": 433,
+   "act": "wheel continue",
+   "text": "Continue to the offers",
+   "scroll": [
+    0,
+    0,
+    14
+   ]
+  },
+  {
+   "t": 433,
+   "act": "MISSING fa sign"
+  },
+  {
+   "t": 433,
+   "act": "MISSING fa sign"
+  },
+  {
+   "t": 433,
+   "act": "MISSING fa sign"
+  },
+  {
+   "t": 433,
+   "act": "MISSING fa sign"
+  },
+  {
+   "t": 433,
+   "act": "MISSING fa sign"
+  },
+  {
+   "t": 433,
+   "act": "MISSING fa sign"
+  },
+  {
+   "t": 433,
+   "act": "MISSING fa sign"
+  },
+  {
+   "t": 433,
+   "act": "MISSING fa sign"
+  },
+  {
+   "t": 433,
+   "act": "MISSING fa sign"
+  },
+  {
+   "t": 433,
+   "act": "MISSING fa sign"
+  },
+  {
+   "t": 433,
+   "act": "MISSING fa sign"
+  },
+  {
+   "t": 433,
+   "act": "MISSING fa sign"
+  },
+  {
+   "t": 433,
+   "act": "MISSING fa sign"
+  },
+  {
+   "t": 433,
+   "act": "MISSING fa sign"
+  },
+  {
+   "t": 433,
+   "act": "MISSING fa sign"
+  },
+  {
+   "t": 433,
+   "act": "MISSING fa sign"
+  },
+  {
+   "t": 433,
+   "act": "MISSING fa sign"
+  },
+  {
+   "t": 433,
+   "act": "MISSING fa sign"
+  },
+  {
+   "t": 433,
+   "act": "MISSING fa sign"
+  },
+  {
+   "t": 433,
+   "act": "MISSING fa sign"
+  },
+  {
+   "t": 433,
+   "act": "MISSING fa sign"
+  },
+  {
+   "t": 433,
+   "act": "MISSING fa sign"
+  },
+  {
+   "t": 433,
+   "act": "MISSING fa sign"
+  },
+  {
+   "t": 433,
+   "act": "MISSING fa sign"
+  },
+  {
+   "t": 433,
+   "act": "MISSING fa sign"
+  },
+  {
+   "t": 433,
+   "act": "MISSING fa sign"
+  },
+  {
+   "t": 433,
+   "act": "MISSING fa sign"
+  },
+  {
+   "t": 433,
+   "act": "MISSING fa sign"
+  },
+  {
+   "t": 433,
+   "act": "MISSING fa sign"
+  },
+  {
+   "t": 433,
+   "act": "MISSING fa sign"
+  },
+  {
+   "t": 433,
+   "act": "MISSING fa sign"
+  },
+  {
+   "t": 433,
+   "act": "MISSING fa sign"
+  },
+  {
+   "t": 433,
+   "act": "MISSING fa sign"
+  },
+  {
+   "t": 433,
+   "act": "MISSING fa sign"
+  },
+  {
+   "t": 433,
+   "act": "MISSING fa sign"
+  },
+  {
+   "t": 433,
+   "act": "MISSING fa sign"
+  },
+  {
+   "t": 434,
+   "act": "MISSING fa sign"
+  },
+  {
+   "t": 434,
+   "act": "MISSING fa sign"
+  },
+  {
+   "t": 434,
+   "act": "MISSING fa sign"
+  },
+  {
+   "t": 434,
+   "act": "MISSING fa sign"
+  },
+  {
+   "t": 434,
+   "act": "MISSING fa sign"
+  },
+  {
+   "t": 434,
+   "act": "MISSING fa sign"
+  },
+  {
+   "t": 434,
+   "act": "MISSING fa sign"
+  },
+  {
+   "t": 434,
+   "act": "MISSING fa sign"
+  },
+  {
+   "t": 434,
+   "act": "MISSING fa sign"
+  },
+  {
+   "t": 434,
+   "act": "MISSING fa sign"
+  },
+  {
+   "t": 434,
+   "act": "MISSING fa sign"
+  },
+  {
+   "t": 434,
+   "act": "MISSING fa sign"
+  },
+  {
+   "t": 434,
+   "act": "MISSING fa sign"
+  },
+  {
+   "t": 434,
+   "act": "MISSING fa sign"
+  },
+  {
+   "t": 434,
+   "act": "MISSING fa sign"
+  },
+  {
+   "t": 434,
+   "act": "MISSING fa sign"
+  },
+  {
+   "t": 434,
+   "act": "MISSING fa sign"
+  },
+  {
+   "t": 434,
+   "act": "MISSING fa sign"
+  },
+  {
+   "t": 434,
+   "act": "MISSING fa sign"
+  },
+  {
+   "t": 434,
+   "act": "MISSING fa sign"
+  }
+ ],
+ "audits": [
+  {
+   "overX": 0,
+   "scrollY": 0,
+   "docH": 12858,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 12,
+   "where": "first visit help",
+   "t": 4
+  },
+  {
+   "overX": 0,
+   "scrollY": 0,
+   "docH": 12858,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 11,
+   "where": "create",
+   "t": 5
+  },
+  {
+   "overX": 0,
+   "scrollY": 1098,
+   "docH": 12635,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "🎓 With pick 82, the Minnesota Vikings select Maximilian Okonkwo-Smith [149<315]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 4,
+   "where": "hub draft",
+   "t": 9
+  },
+  {
+   "overX": 0,
+   "scrollY": 135,
+   "docH": 11933,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 1,
+   "where": "continue card s1",
+   "t": 44
+  },
+  {
+   "overX": 0,
+   "scrollY": 135,
+   "docH": 11999,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 3,
+   "where": "rivalry choice s1",
+   "t": 45
+  },
+  {
+   "overX": 0,
+   "scrollY": 135,
+   "docH": 11992,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 1,
+   "where": "continue card s1",
+   "t": 49
+  },
+  {
+   "overX": 0,
+   "scrollY": 135,
+   "docH": 12277,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "💛 One day, one field, two hundred kids. You and Quinn Vasquez split t [149<460]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 9,
+   "where": "event s1",
+   "t": 50
+  },
+  {
+   "overX": 0,
+   "scrollY": 135,
+   "docH": 11876,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 1,
+   "where": "outcome s1",
+   "t": 50
+  },
+  {
+   "overX": 0,
+   "scrollY": 135,
+   "docH": 12293,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "Two position rooms, two playbooks, zero days off. Rating +2 to 73, mor [149<378]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 9,
+   "where": "event s1",
+   "t": 51
+  },
+  {
+   "overX": 0,
+   "scrollY": 135,
+   "docH": 11788,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 1,
+   "where": "outcome s1",
+   "t": 51
+  },
+  {
+   "overX": 0,
+   "scrollY": 135,
+   "docH": 12529,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "You were the first one down the field all year. The crowd started chee [149<514]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 5,
+   "where": "hub s1",
+   "t": 53
+  },
+  {
+   "overX": 0,
+   "scrollY": 135,
+   "docH": 11884,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 1,
+   "where": "continue card s2",
+   "t": 88
+  },
+  {
+   "overX": 0,
+   "scrollY": 135,
+   "docH": 11869,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 1,
+   "where": "continue card s2",
+   "t": 93
+  },
+  {
+   "overX": 0,
+   "scrollY": 135,
+   "docH": 12277,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 9,
+   "where": "event s2",
+   "t": 94
+  },
+  {
+   "overX": 0,
+   "scrollY": 135,
+   "docH": 12261,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "You typed for eleven minutes and posted it at 1am. Fanbase +9, morale  [149<497]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 9,
+   "where": "event s2",
+   "t": 95
+  },
+  {
+   "overX": 0,
+   "scrollY": 135,
+   "docH": 12529,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "You said it was above your pay grade. The coach wrote something down a [149<400]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 5,
+   "where": "hub s2",
+   "t": 97
+  },
+  {
+   "overX": 0,
+   "scrollY": 135,
+   "docH": 11916,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 1,
+   "where": "continue card s3",
+   "t": 132
+  },
+  {
+   "overX": 0,
+   "scrollY": 135,
+   "docH": 12277,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "🪑 Another camp, another year behind the starter. The gap is closing. [149<296]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 9,
+   "where": "event s3",
+   "t": 133
+  },
+  {
+   "overX": 0,
+   "scrollY": 135,
+   "docH": 12277,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "You added an hour to every day and burned the candle from both ends. R [149<468]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 9,
+   "where": "event s3",
+   "t": 134
+  },
+  {
+   "overX": 0,
+   "scrollY": 135,
+   "docH": 12545,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "3M and eleven weeks of signing through movies, flights and one funeral [149<401]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 5,
+   "where": "hub s3",
+   "t": 137
+  },
+  {
+   "overX": 0,
+   "scrollY": 135,
+   "docH": 12537,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "3M and eleven weeks of signing through movies, flights and one funeral [149<401]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 3,
+   "where": "extension s4",
+   "t": 168
+  },
+  {
+   "overX": 0,
+   "scrollY": 135,
+   "docH": 12340,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "3M and eleven weeks of signing through movies, flights and one funeral [149<401]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 6,
+   "where": "wheel s4",
+   "t": 169
+  },
+  {
+   "overX": 0,
+   "scrollY": 135,
+   "docH": 12479,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "3M and eleven weeks of signing through movies, flights and one funeral [149<401]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 5,
+   "where": "extension s4",
+   "t": 174
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11723,
+   "bad": [],
+   "trunc": [
+    "The whole street put your number up in their windows. The kids made a  [302<548]",
+    "A few guys are visiting the children's hospital on the off Tuesday. To [302<621]",
+    "Proud of you. Remember who you were on the scout team. Stay hungry, an [302<666]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 4,
+   "where": "tile Inbox s4",
+   "t": 176
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11977,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 1,
+   "where": "continue card s5",
+   "t": 215
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 12277,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "🪑 Another camp, another year behind the starter. The gap is closing. [149<296]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 9,
+   "where": "event s5",
+   "t": 216
+  },
+  {
+   "overX": 0,
+   "scrollY": 0,
+   "docH": 12261,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "You said no, then got him a job with your trainer that paid him proper [149<532]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 7,
+   "where": "event s5",
+   "t": 217
+  },
+  {
+   "overX": 0,
+   "scrollY": 0,
+   "docH": 11851,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 1,
+   "where": "continue card s6",
+   "t": 254
+  },
+  {
+   "overX": 0,
+   "scrollY": 0,
+   "docH": 12277,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "🪑 Another camp, another year behind the starter. The gap is closing. [149<296]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 5,
+   "where": "event s6",
+   "t": 255
+  },
+  {
+   "overX": 0,
+   "scrollY": 0,
+   "docH": 12234,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "Every person in that city can still do the jingle. 0.35M earned, fanba [149<362]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 6,
+   "where": "event s6",
+   "t": 256
+  },
+  {
+   "overX": 0,
+   "scrollY": 0,
+   "docH": 12545,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "The quote ran everywhere. The fans took your side and the running back [149<476]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 4,
+   "where": "hub s6",
+   "t": 258
+  },
+  {
+   "overX": 0,
+   "scrollY": 0,
+   "docH": 11884,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 1,
+   "where": "continue card s7",
+   "t": 293
+  },
+  {
+   "overX": 0,
+   "scrollY": 0,
+   "docH": 12032,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 3,
+   "where": "rivalry choice s7",
+   "t": 294
+  },
+  {
+   "overX": 0,
+   "scrollY": 0,
+   "docH": 11992,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 1,
+   "where": "continue card s7",
+   "t": 298
+  },
+  {
+   "overX": 0,
+   "scrollY": 0,
+   "docH": 12293,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "🕊️ You shook it off on camera and called Quinn Vasquez a good player. [149<512]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 5,
+   "where": "event s7",
+   "t": 299
+  },
+  {
+   "overX": 0,
+   "scrollY": 0,
+   "docH": 12250,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "Three stripes, one commercial with a rapper, 0.9M a year. Fanbase +11. [149<305]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 6,
+   "where": "event s7",
+   "t": 300
+  },
+  {
+   "overX": 0,
+   "scrollY": 0,
+   "docH": 11786,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 1,
+   "where": "continue card s8",
+   "t": 336
+  },
+  {
+   "overX": 0,
+   "scrollY": 0,
+   "docH": 11888,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 1,
+   "where": "continue card s8",
+   "t": 341
+  },
+  {
+   "overX": 0,
+   "scrollY": 0,
+   "docH": 12277,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 5,
+   "where": "event s8",
+   "t": 342
+  },
+  {
+   "overX": 0,
+   "scrollY": 0,
+   "docH": 12277,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "0.6M in shirts with a taquito on them. Fanbase +12, and the gas statio [149<447]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 5,
+   "where": "event s8",
+   "t": 343
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11779,
+   "bad": [],
+   "trunc": [
+    "Playoff checks just cleared. The equipment guys and trainers make a fr [302<667]",
+    "The whole street put your number up in their windows. The kids made a  [302<548]",
+    "A few guys are visiting the children's hospital on the off Tuesday. To [302<621]",
+    "Proud of you. Remember who you were on the scout team. Stay hungry, an [302<666]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 5,
+   "where": "tile Inbox s8",
+   "t": 346
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11786,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 1,
+   "where": "continue card s9",
+   "t": 384
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 11869,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 1,
+   "where": "continue card s9",
+   "t": 389
+  },
+  {
+   "overX": 0,
+   "scrollY": 185,
+   "docH": 12261,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 9,
+   "where": "event s9",
+   "t": 390
+  },
+  {
+   "overX": 0,
+   "scrollY": 0,
+   "docH": 12313,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "A 20k fine from the tournament and the best eleven seconds of internet [149<450]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 5,
+   "where": "event s9",
+   "t": 391
+  },
+  {
+   "overX": 0,
+   "scrollY": 0,
+   "docH": 12597,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "You got a very polite answer that did not contain an answer. Morale -3 [149<300]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 4,
+   "where": "hub s9",
+   "t": 394
+  },
+  {
+   "overX": 0,
+   "scrollY": 0,
+   "docH": 12816,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "You got a very polite answer that did not contain an answer. Morale -3 [149<300]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 3,
+   "where": "fa s10",
+   "t": 425
+  },
+  {
+   "overX": 0,
+   "scrollY": 0,
+   "docH": 12455,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "You got a very polite answer that did not contain an answer. Morale -3 [149<300]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 5,
+   "where": "fa compare s10",
+   "t": 426
+  },
+  {
+   "overX": 0,
+   "scrollY": 0,
+   "docH": 12816,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "You got a very polite answer that did not contain an answer. Morale -3 [149<300]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 3,
+   "where": "fa s10",
+   "t": 427
+  },
+  {
+   "overX": 0,
+   "scrollY": 0,
+   "docH": 12340,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "You got a very polite answer that did not contain an answer. Morale -3 [149<300]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 4,
+   "where": "wheel s10",
+   "t": 428
+  },
+  {
+   "overX": 0,
+   "scrollY": 14,
+   "docH": 12871,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "You got a very polite answer that did not contain an answer. Morale -3 [149<300]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 3,
+   "where": "fa s10",
+   "t": 433
+  },
+  {
+   "overX": 0,
+   "scrollY": 14,
+   "docH": 12871,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "You got a very polite answer that did not contain an answer. Morale -3 [149<300]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 3,
+   "where": "fa s10",
+   "t": 433
+  },
+  {
+   "overX": 0,
+   "scrollY": 14,
+   "docH": 12871,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "You got a very polite answer that did not contain an answer. Morale -3 [149<300]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 3,
+   "where": "fa s10",
+   "t": 433
+  },
+  {
+   "overX": 0,
+   "scrollY": 14,
+   "docH": 12871,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "You got a very polite answer that did not contain an answer. Morale -3 [149<300]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 3,
+   "where": "fa s10",
+   "t": 433
+  },
+  {
+   "overX": 0,
+   "scrollY": 14,
+   "docH": 12871,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "You got a very polite answer that did not contain an answer. Morale -3 [149<300]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 3,
+   "where": "fa s10",
+   "t": 433
+  },
+  {
+   "overX": 0,
+   "scrollY": 14,
+   "docH": 12871,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "You got a very polite answer that did not contain an answer. Morale -3 [149<300]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 3,
+   "where": "fa s10",
+   "t": 433
+  },
+  {
+   "overX": 0,
+   "scrollY": 14,
+   "docH": 12871,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "You got a very polite answer that did not contain an answer. Morale -3 [149<300]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 3,
+   "where": "fa s10",
+   "t": 433
+  },
+  {
+   "overX": 0,
+   "scrollY": 14,
+   "docH": 12871,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "You got a very polite answer that did not contain an answer. Morale -3 [149<300]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 3,
+   "where": "fa s10",
+   "t": 433
+  },
+  {
+   "overX": 0,
+   "scrollY": 14,
+   "docH": 12871,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "You got a very polite answer that did not contain an answer. Morale -3 [149<300]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 3,
+   "where": "fa s10",
+   "t": 433
+  },
+  {
+   "overX": 0,
+   "scrollY": 14,
+   "docH": 12871,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "You got a very polite answer that did not contain an answer. Morale -3 [149<300]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 3,
+   "where": "fa s10",
+   "t": 433
+  },
+  {
+   "overX": 0,
+   "scrollY": 14,
+   "docH": 12871,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "You got a very polite answer that did not contain an answer. Morale -3 [149<300]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 3,
+   "where": "fa s10",
+   "t": 433
+  },
+  {
+   "overX": 0,
+   "scrollY": 14,
+   "docH": 12871,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "You got a very polite answer that did not contain an answer. Morale -3 [149<300]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 3,
+   "where": "fa s10",
+   "t": 433
+  },
+  {
+   "overX": 0,
+   "scrollY": 14,
+   "docH": 12871,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "You got a very polite answer that did not contain an answer. Morale -3 [149<300]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 3,
+   "where": "fa s10",
+   "t": 433
+  },
+  {
+   "overX": 0,
+   "scrollY": 14,
+   "docH": 12871,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "You got a very polite answer that did not contain an answer. Morale -3 [149<300]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 3,
+   "where": "fa s10",
+   "t": 433
+  },
+  {
+   "overX": 0,
+   "scrollY": 14,
+   "docH": 12871,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "You got a very polite answer that did not contain an answer. Morale -3 [149<300]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 3,
+   "where": "fa s10",
+   "t": 433
+  },
+  {
+   "overX": 0,
+   "scrollY": 14,
+   "docH": 12871,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "You got a very polite answer that did not contain an answer. Morale -3 [149<300]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 3,
+   "where": "fa s10",
+   "t": 433
+  },
+  {
+   "overX": 0,
+   "scrollY": 14,
+   "docH": 12871,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "You got a very polite answer that did not contain an answer. Morale -3 [149<300]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 3,
+   "where": "fa s10",
+   "t": 433
+  },
+  {
+   "overX": 0,
+   "scrollY": 14,
+   "docH": 12871,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "You got a very polite answer that did not contain an answer. Morale -3 [149<300]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 3,
+   "where": "fa s10",
+   "t": 433
+  },
+  {
+   "overX": 0,
+   "scrollY": 14,
+   "docH": 12871,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "You got a very polite answer that did not contain an answer. Morale -3 [149<300]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 3,
+   "where": "fa s10",
+   "t": 433
+  },
+  {
+   "overX": 0,
+   "scrollY": 14,
+   "docH": 12871,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "You got a very polite answer that did not contain an answer. Morale -3 [149<300]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 3,
+   "where": "fa s10",
+   "t": 433
+  },
+  {
+   "overX": 0,
+   "scrollY": 14,
+   "docH": 12871,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "You got a very polite answer that did not contain an answer. Morale -3 [149<300]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 3,
+   "where": "fa s10",
+   "t": 433
+  },
+  {
+   "overX": 0,
+   "scrollY": 14,
+   "docH": 12871,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "You got a very polite answer that did not contain an answer. Morale -3 [149<300]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 3,
+   "where": "fa s10",
+   "t": 433
+  },
+  {
+   "overX": 0,
+   "scrollY": 14,
+   "docH": 12871,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "You got a very polite answer that did not contain an answer. Morale -3 [149<300]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 3,
+   "where": "fa s10",
+   "t": 433
+  },
+  {
+   "overX": 0,
+   "scrollY": 14,
+   "docH": 12871,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "You got a very polite answer that did not contain an answer. Morale -3 [149<300]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 3,
+   "where": "fa s10",
+   "t": 433
+  },
+  {
+   "overX": 0,
+   "scrollY": 14,
+   "docH": 12871,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "You got a very polite answer that did not contain an answer. Morale -3 [149<300]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 3,
+   "where": "fa s10",
+   "t": 433
+  },
+  {
+   "overX": 0,
+   "scrollY": 14,
+   "docH": 12871,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "You got a very polite answer that did not contain an answer. Morale -3 [149<300]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 3,
+   "where": "fa s10",
+   "t": 433
+  },
+  {
+   "overX": 0,
+   "scrollY": 14,
+   "docH": 12871,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "You got a very polite answer that did not contain an answer. Morale -3 [149<300]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 3,
+   "where": "fa s10",
+   "t": 433
+  },
+  {
+   "overX": 0,
+   "scrollY": 14,
+   "docH": 12871,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "You got a very polite answer that did not contain an answer. Morale -3 [149<300]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 3,
+   "where": "fa s10",
+   "t": 433
+  },
+  {
+   "overX": 0,
+   "scrollY": 14,
+   "docH": 12871,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "You got a very polite answer that did not contain an answer. Morale -3 [149<300]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 3,
+   "where": "fa s10",
+   "t": 433
+  },
+  {
+   "overX": 0,
+   "scrollY": 14,
+   "docH": 12871,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "You got a very polite answer that did not contain an answer. Morale -3 [149<300]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 3,
+   "where": "fa s10",
+   "t": 433
+  },
+  {
+   "overX": 0,
+   "scrollY": 14,
+   "docH": 12871,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "You got a very polite answer that did not contain an answer. Morale -3 [149<300]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 3,
+   "where": "fa s10",
+   "t": 433
+  },
+  {
+   "overX": 0,
+   "scrollY": 14,
+   "docH": 12871,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "You got a very polite answer that did not contain an answer. Morale -3 [149<300]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 3,
+   "where": "fa s10",
+   "t": 433
+  },
+  {
+   "overX": 0,
+   "scrollY": 14,
+   "docH": 12871,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "You got a very polite answer that did not contain an answer. Morale -3 [149<300]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 3,
+   "where": "fa s10",
+   "t": 433
+  },
+  {
+   "overX": 0,
+   "scrollY": 14,
+   "docH": 12871,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "You got a very polite answer that did not contain an answer. Morale -3 [149<300]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 3,
+   "where": "fa s10",
+   "t": 433
+  },
+  {
+   "overX": 0,
+   "scrollY": 14,
+   "docH": 12871,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "You got a very polite answer that did not contain an answer. Morale -3 [149<300]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 3,
+   "where": "fa s10",
+   "t": 433
+  },
+  {
+   "overX": 0,
+   "scrollY": 14,
+   "docH": 12871,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "You got a very polite answer that did not contain an answer. Morale -3 [149<300]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 3,
+   "where": "fa s10",
+   "t": 433
+  },
+  {
+   "overX": 0,
+   "scrollY": 14,
+   "docH": 12871,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "You got a very polite answer that did not contain an answer. Morale -3 [149<300]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 3,
+   "where": "fa s10",
+   "t": 433
+  },
+  {
+   "overX": 0,
+   "scrollY": 14,
+   "docH": 12871,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "You got a very polite answer that did not contain an answer. Morale -3 [149<300]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 3,
+   "where": "fa s10",
+   "t": 434
+  },
+  {
+   "overX": 0,
+   "scrollY": 14,
+   "docH": 12871,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "You got a very polite answer that did not contain an answer. Morale -3 [149<300]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 3,
+   "where": "fa s10",
+   "t": 434
+  },
+  {
+   "overX": 0,
+   "scrollY": 14,
+   "docH": 12871,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "You got a very polite answer that did not contain an answer. Morale -3 [149<300]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 3,
+   "where": "fa s10",
+   "t": 434
+  },
+  {
+   "overX": 0,
+   "scrollY": 14,
+   "docH": 12871,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "You got a very polite answer that did not contain an answer. Morale -3 [149<300]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 3,
+   "where": "fa s10",
+   "t": 434
+  },
+  {
+   "overX": 0,
+   "scrollY": 14,
+   "docH": 12871,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "You got a very polite answer that did not contain an answer. Morale -3 [149<300]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 3,
+   "where": "fa s10",
+   "t": 434
+  },
+  {
+   "overX": 0,
+   "scrollY": 14,
+   "docH": 12871,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "You got a very polite answer that did not contain an answer. Morale -3 [149<300]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 3,
+   "where": "fa s10",
+   "t": 434
+  },
+  {
+   "overX": 0,
+   "scrollY": 14,
+   "docH": 12871,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "You got a very polite answer that did not contain an answer. Morale -3 [149<300]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 3,
+   "where": "fa s10",
+   "t": 434
+  },
+  {
+   "overX": 0,
+   "scrollY": 14,
+   "docH": 12871,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "You got a very polite answer that did not contain an answer. Morale -3 [149<300]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 3,
+   "where": "fa s10",
+   "t": 434
+  },
+  {
+   "overX": 0,
+   "scrollY": 14,
+   "docH": 12871,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "You got a very polite answer that did not contain an answer. Morale -3 [149<300]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 3,
+   "where": "fa s10",
+   "t": 434
+  },
+  {
+   "overX": 0,
+   "scrollY": 14,
+   "docH": 12871,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "You got a very polite answer that did not contain an answer. Morale -3 [149<300]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 3,
+   "where": "fa s10",
+   "t": 434
+  },
+  {
+   "overX": 0,
+   "scrollY": 14,
+   "docH": 12871,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "You got a very polite answer that did not contain an answer. Morale -3 [149<300]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 3,
+   "where": "fa s10",
+   "t": 434
+  },
+  {
+   "overX": 0,
+   "scrollY": 14,
+   "docH": 12871,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "You got a very polite answer that did not contain an answer. Morale -3 [149<300]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 3,
+   "where": "fa s10",
+   "t": 434
+  },
+  {
+   "overX": 0,
+   "scrollY": 14,
+   "docH": 12871,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "You got a very polite answer that did not contain an answer. Morale -3 [149<300]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 3,
+   "where": "fa s10",
+   "t": 434
+  },
+  {
+   "overX": 0,
+   "scrollY": 14,
+   "docH": 12871,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "You got a very polite answer that did not contain an answer. Morale -3 [149<300]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 3,
+   "where": "fa s10",
+   "t": 434
+  },
+  {
+   "overX": 0,
+   "scrollY": 14,
+   "docH": 12871,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "You got a very polite answer that did not contain an answer. Morale -3 [149<300]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 3,
+   "where": "fa s10",
+   "t": 434
+  },
+  {
+   "overX": 0,
+   "scrollY": 14,
+   "docH": 12871,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "You got a very polite answer that did not contain an answer. Morale -3 [149<300]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 3,
+   "where": "fa s10",
+   "t": 434
+  },
+  {
+   "overX": 0,
+   "scrollY": 14,
+   "docH": 12871,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "You got a very polite answer that did not contain an answer. Morale -3 [149<300]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 3,
+   "where": "fa s10",
+   "t": 434
+  },
+  {
+   "overX": 0,
+   "scrollY": 14,
+   "docH": 12871,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "You got a very polite answer that did not contain an answer. Morale -3 [149<300]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 3,
+   "where": "fa s10",
+   "t": 434
+  },
+  {
+   "overX": 0,
+   "scrollY": 14,
+   "docH": 12871,
+   "bad": [],
+   "trunc": [
+    "Nothing in it. Go and win something [149<152]",
+    "You got a very polite answer that did not contain an answer. Morale -3 [149<300]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 3,
+   "where": "fa s10",
+   "t": 434
+  }
+ ],
+ "errors": [
+  {
+   "t": "warning",
+   "at": 0,
+   "text": "Warning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}."
+  }
+ ],
+ "pageErrors": [],
+ "failedRequests": [],
+ "events": [
+  {
+   "tag": "s1",
+   "rivalryChoice": "🪞 RIVALRY: YOUR CALL\n\n💛\n\nTRUCE FOR ONE DAY\n\nQuinn Vasquez's foundation asks you to co-host a free youth camp. Same field, same whistle, one day only. A photo of you two coaching side by side would be everywhere.\n\nMaximilian Okonkwo-Smith\n71\nVS\nQuinn Vasquez\n68\n🤝 Co-host and split the bill\nFanbase +10, Net worth -$1M, Karma +8, the feud cools\n😉 Show up and talk trash all day\nFanbase +12, the feud heats up\n💸 Send a check, skip it\nNet worth -$1M, Karma +3"
+  },
+  {
+   "tag": "s1",
+   "id": "lifeA_position_switch",
+   "text": "OFFSEASON, CARD 1 OF 3\n\nThey want to move you\n\nThey want you in the slot full time and off the between the tackles work. Your knees would like a word with your pride.\n\nTake the switch and master it\nSnaps up, pride down\nRefuse, you are a running back\nIdentity, fewer snaps\nDo both and take every rep in camp\nEverything, body cost",
+   "opts": [
+    "Take the switch and master it Snaps up, pride down",
+    "Refuse, you are a running back Identity, fewer snaps",
+    "Do both and take every rep in camp Everything, body cost"
+   ],
+   "chose": 2,
+   "delta": {
+    "ovr": [
+     71,
+     73
+    ],
+    "salary": [
+     1.7,
+     1.7
+    ],
+    "team": [
+     "MIN",
+     "MIN"
+    ]
+   }
+  },
+  {
+   "tag": "s1",
+   "id": "lifeC_rb_committee",
+   "text": "OFFSEASON, CARD 2 OF 3\n\nThe committee backfield\n\nThe coaches are splitting the carries this year. Fresh legs in December, they say. Fewer touches in September, you hear. Nobody in a committee leads the league in anything.\n\nBuy in and stay fresh\nHealth +8, fanbase -3\nAsk for the goal line work\nMorale +4, health -3\nComplain to the beat writers\nFanbase +4, morale -6",
+   "opts": [
+    "Buy in and stay fresh Health +8, fanbase -3",
+    "Ask for the goal line work Morale +4, health -3",
+    "Complain to the beat writers Fanbase +4, morale -6"
+   ],
+   "chose": 0,
+   "delta": {
+    "ovr": [
+     73,
+     73
+    ],
+    "salary": [
+     1.7,
+     1.7
+    ],
+    "team": [
+     "MIN",
+     "MIN"
+    ]
+   }
+  },
+  {
+   "tag": "s1",
+   "id": "lifeC_kick_coverage",
+   "text": "OFFSEASON, CARD 3 OF 3\n\nThe fastest way onto the field\n\nThe special teams coach has a spot on the coverage unit and he says it is the fastest way for a backup to get a jersey on Sunday. It is also a full speed collision, every time.\n\nBecome the best cover man in the building\nFanbase +4, health -4\nWait for snaps at your own position\nHealth +1, morale -2",
+   "opts": [
+    "Become the best cover man in the building Fanbase +4, health -4",
+    "Wait for snaps at your own position Health +1, morale -2"
+   ],
+   "chose": 0,
+   "delta": {
+    "ovr": [
+     73,
+     73
+    ],
+    "salary": [
+     1.7,
+     1.7
+    ],
+    "team": [
+     "MIN",
+     "MIN"
+    ]
+   }
+  },
+  {
+   "tag": "s2",
+   "id": "lifeB_divisionTrashTalk",
+   "text": "OFFSEASON, CARD 1 OF 3\n\nHe did a whole podcast about you\n\nA division rival spent forty minutes explaining that you are a system guy who runs excellent routes at the team buffet.\n\nAnswer with three paragraphs\nFanbase up, bulletin board\nSay nothing, then go get 140\nQuiet violence\nMail him a signed jersey\nPetty legend",
+   "opts": [
+    "Answer with three paragraphs Fanbase up, bulletin board",
+    "Say nothing, then go get 140 Quiet violence",
+    "Mail him a signed jersey Petty legend"
+   ],
+   "chose": 0,
+   "delta": {
+    "ovr": [
+     74,
+     74
+    ],
+    "salary": [
+     1.7,
+     1.7
+    ],
+    "team": [
+     "MIN",
+     "MIN"
+    ]
+   }
+  },
+  {
+   "tag": "s2",
+   "id": "lifeB_siblingManager",
+   "text": "OFFSEASON, CARD 2 OF 3\n\nYour brother has business cards now\n\nThey say MANAGER in a font he chose himself. He has already told two brands he speaks for you.\n\nHire him, full trust\nFamily on payroll\nReal job, under a real agency\nSupervised, safer\nSay no, buy him a truck\nA no with a bow",
+   "opts": [
+    "Hire him, full trust Family on payroll",
+    "Real job, under a real agency Supervised, safer",
+    "Say no, buy him a truck A no with a bow"
+   ],
+   "chose": 1,
+   "delta": {
+    "ovr": [
+     74,
+     74
+    ],
+    "salary": [
+     1.7,
+     1.7
+    ],
+    "team": [
+     "MIN",
+     "MIN"
+    ]
+   }
+  },
+  {
+   "tag": "s2",
+   "id": "lifeC_ps_elevation",
+   "text": "OFFSEASON, CARD 3 OF 3\n\nUp on Saturday, down on Monday\n\nThe team keeps calling the same practice squad kid up for game day and sending him back down the morning after. The rules only allow that so many times before they have to sign him for real or stop. The last one was last week. A coach asks what you think of him.\n\nVouch for him, loudly\nCoin flip: morale +7 or morale -3\nTell the truth: he is not ready yet\nMorale -2\nStay out of it\nNo change",
+   "opts": [
+    "Vouch for him, loudly Coin flip: morale +7 or morale -3",
+    "Tell the truth: he is not ready yet Morale -2",
+    "Stay out of it No change"
+   ],
+   "chose": 2,
+   "delta": {
+    "ovr": [
+     74,
+     74
+    ],
+    "salary": [
+     1.7,
+     1.7
+    ],
+    "team": [
+     "MIN",
+     "MIN"
+    ]
+   }
+  },
+  {
+   "tag": "s3",
+   "id": "lifeA_qb_room",
+   "text": "OFFSEASON, CARD 1 OF 3\n\nNew quarterback, new everything\n\nThe guy who made your career is gone. The new one is 23, throws it 60 yards on a rope, and has no idea where you like the ball.\n\nLive in the facility with the new kid\nChemistry and respect\nAsk to be the safety valve on every play\nRating up, wear up\nSay the honest thing on camera\nFans up, building tense",
+   "opts": [
+    "Live in the facility with the new kid Chemistry and respect",
+    "Ask to be the safety valve on every play Rating up, wear up",
+    "Say the honest thing on camera Fans up, building tense"
+   ],
+   "chose": 1,
+   "delta": {
+    "ovr": [
+     76,
+     78
+    ],
+    "salary": [
+     1.7,
+     1.7
+    ],
+    "team": [
+     "MIN",
+     "MIN"
+    ]
+   }
+  },
+  {
+   "tag": "s3",
+   "id": "lifeC_final_cuts",
+   "text": "OFFSEASON, CARD 2 OF 3\n\nCutdown day\n\nThe roster has to be down to the limit by the end of the day, and the guy who drove you to the facility every morning of camp is on the wrong side of the number.\n\nCall him that night\nMorale +4\nTell the coaches they got it wrong\nCoin flip: morale +5 or morale -4\nKeep your head down, it is a business\nMorale -2",
+   "opts": [
+    "Call him that night Morale +4",
+    "Tell the coaches they got it wrong Coin flip: morale +5 or morale -4",
+    "Keep your head down, it is a business Morale -2"
+   ],
+   "chose": 2,
+   "delta": {
+    "ovr": [
+     78,
+     78
+    ],
+    "salary": [
+     1.7,
+     1.7
+    ],
+    "team": [
+     "MIN",
+     "MIN"
+    ]
+   }
+  },
+  {
+   "tag": "s3",
+   "id": "lifeB_tradingCards",
+   "text": "OFFSEASON, CARD 3 OF 3\n\n25,000 autographs in eleven weeks\n\nA card company has the contract drawn up. Your wrist is already suspicious of this arrangement.\n\nSign all 25,000\nWrist money\nSign 5,000 and price them like art\nScarcity play\nLaunch your own card brand\nOwn the print run",
+   "opts": [
+    "Sign all 25,000 Wrist money",
+    "Sign 5,000 and price them like art Scarcity play",
+    "Launch your own card brand Own the print run"
+   ],
+   "chose": 0,
+   "delta": {
+    "ovr": [
+     78,
+     78
+    ],
+    "salary": [
+     1.7,
+     1.7
+    ],
+    "team": [
+     "MIN",
+     "MIN"
+    ]
+   }
+  },
+  {
+   "tag": "s4",
+   "extension": "Minnesota Vikings\nLUKEWARM\n\n$11.4M\n\nA YEAR\n\n4\n\nYEARS\n\n-19%\n\nVS MARKET\n\nIt is an offer. It is not a compliment.\n\nBefore you push: Raise accepted 0% · Held 70% · Withdrawn 30%\n\nSign it: 4 more years at $11.4M\nAsk for more, once"
+  },
+  {
+   "tag": "s4",
+   "extension": "Minnesota Vikings\nLUKEWARM\n\n$11.4M\n\nA YEAR\n\n4\n\nYEARS\n\n-19%\n\nVS MARKET\n\nIt is an offer. It is not a compliment.\n\nSign it: 4 more years at $11.4M\nYou have made your case"
+  },
+  {
+   "tag": "s5",
+   "id": "lifeA_teammate_loan",
+   "text": "OFFSEASON, CARD 1 OF 3\n\nThe loan\n\nA backup you came up with needs 250,000 for something he will not fully explain. He has never asked you for anything in six years. His hands are shaking.\n\nGive it to him and call it a gift\nMoney gone, room love\nLend it with an actual written agreement\nBusiness, some tension\nSay no and help another way\nMoney kept, awkward",
+   "opts": [
+    "Give it to him and call it a gift Money gone, room love",
+    "Lend it with an actual written agreement Business, some tension",
+    "Say no and help another way Money kept, awkward"
+   ],
+   "chose": 2,
+   "delta": {
+    "ovr": [
+     80,
+     80
+    ],
+    "salary": [
+     11.4,
+     11.4
+    ],
+    "team": [
+     "MIN",
+     "MIN"
+    ]
+   }
+  },
+  {
+   "tag": "s5",
+   "id": "lifeB_restaurantFranchise",
+   "text": "OFFSEASON, CARD 2 OF 3\n\nWings at scale\n\nA franchise group wants you as a multi unit owner. The pitch deck says athlete equity nine separate times.\n\nThree locations, 2.4M\nWings at scale\nBuy one and actually run it\nOne store, real work\nLet your cousin run the register\nCash business, obviously",
+   "opts": [
+    "Three locations, 2.4M Wings at scale",
+    "Buy one and actually run it One store, real work",
+    "Let your cousin run the register Cash business, obviously"
+   ],
+   "chose": 1,
+   "delta": {
+    "ovr": [
+     80,
+     80
+    ],
+    "salary": [
+     11.4,
+     11.4
+    ],
+    "team": [
+     "MIN",
+     "MIN"
+    ]
+   }
+  },
+  {
+   "tag": "s5",
+   "id": "lifeC_voluntary_spring",
+   "text": "OFFSEASON, CARD 3 OF 3\n\nVoluntary means voluntary\n\nThe spring workouts are voluntary. It says so in the labor deal. The minicamp at the end of them is not, and skipping that one costs real money. Your trainer back home wants you with him until camp.\n\nShow up for all of it\nMorale +5, health -2\nSkip the voluntary part, report for minicamp\nHealth +6, morale -3\nSkip all of it and pay the fines\nHealth +6, morale -6, net worth -0.1M",
+   "opts": [
+    "Show up for all of it Morale +5, health -2",
+    "Skip the voluntary part, report for minicamp Health +6, morale -3",
+    "Skip all of it and pay the fines Health +6, morale -6, net worth -0.1M"
+   ],
+   "chose": 1,
+   "delta": {
+    "ovr": [
+     80,
+     80
+    ],
+    "salary": [
+     11.4,
+     11.4
+    ],
+    "team": [
+     "MIN",
+     "MIN"
+    ]
+   }
+  },
+  {
+   "tag": "s6",
+   "id": "lifeA_car_dealership",
+   "text": "OFFSEASON, CARD 1 OF 3\n\nThe car commercial\n\nA dealership out on the highway wants you in a 30 second spot saying a slogan that rhymes with your last name. It will run 400 times a week during the local news.\n\nDo it, rhyme and all\nMoney, mild mockery\nDo it, but write your own line\nLess money, dignity\nPass, you can afford to\nClean brand",
+   "opts": [
+    "Do it, rhyme and all Money, mild mockery",
+    "Do it, but write your own line Less money, dignity",
+    "Pass, you can afford to Clean brand"
+   ],
+   "chose": 0,
+   "delta": {
+    "ovr": [
+     82,
+     82
+    ],
+    "salary": [
+     11.4,
+     11.4
+    ],
+    "team": [
+     "MIN",
+     "MIN"
+    ]
+   }
+  },
+  {
+   "tag": "s6",
+   "id": "lifeC_kick_coverage",
+   "text": "OFFSEASON, CARD 2 OF 3\n\nThe fastest way onto the field\n\nThe special teams coach has a spot on the coverage unit and he says it is the fastest way for a backup to get a jersey on Sunday. It is also a full speed collision, every time.\n\nBecome the best cover man in the building\nFanbase +4, health -4\nWait for snaps at your own position\nHealth +3, morale -2",
+   "opts": [
+    "Become the best cover man in the building Fanbase +4, health -4",
+    "Wait for snaps at your own position Health +3, morale -2"
+   ],
+   "chose": 0,
+   "delta": {
+    "ovr": [
+     82,
+     82
+    ],
+    "salary": [
+     11.4,
+     11.4
+    ],
+    "team": [
+     "MIN",
+     "MIN"
+    ]
+   }
+  },
+  {
+   "tag": "s6",
+   "id": "lifeC_rb_committee",
+   "text": "OFFSEASON, CARD 3 OF 3\n\nThe committee backfield\n\nThe coaches are splitting the carries this year. Fresh legs in December, they say. Fewer touches in September, you hear. Nobody in a committee leads the league in anything.\n\nBuy in and stay fresh\nHealth +8, fanbase -3\nAsk for the goal line work\nMorale +4, health -3\nComplain to the beat writers\nFanbase +4, morale -6",
+   "opts": [
+    "Buy in and stay fresh Health +8, fanbase -3",
+    "Ask for the goal line work Morale +4, health -3",
+    "Complain to the beat writers Fanbase +4, morale -6"
+   ],
+   "chose": 2,
+   "delta": {
+    "ovr": [
+     82,
+     82
+    ],
+    "salary": [
+     11.4,
+     11.4
+    ],
+    "team": [
+     "MIN",
+     "MIN"
+    ]
+   }
+  },
+  {
+   "tag": "s7",
+   "rivalryChoice": "🪞 RIVALRY: YOUR CALL\n\n🦵\n\nTHE LATE HIT\n\nQuinn Vasquez drilled you a full second after the whistle on Sunday. The flag flew, the fine is coming, and your sideline wants payback the next time you two meet.\n\nMaximilian Okonkwo-Smith\n82\nVS\nQuinn Vasquez\n74\n😈 Settle it next time\nThe feud heats up, otherwise Morale +8\n30% chance you're the one who draws the flag: Morale -5, Fanbase -5, Net worth -$100k\n🕊️ Shake it off on camera\nFanbase +5, Karma +5, the feud cools\n🎞️ Say nothing, watch the film\nMorale +6, the feud heats up"
+  },
+  {
+   "tag": "s7",
+   "id": "lifeA_cleat_deal",
+   "text": "OFFSEASON, CARD 1 OF 3\n\nThe shoe meeting\n\nTwo brands, two very different rooms. The giant offers a small check and a huge logo. The challenger offers real money now and a signature model in three years if you hit.\n\nSign with the giant\nFame, small money\nSign with the challenger\nMoney and upside\nStay free and wear whatever feels best\nNo bag, best feet",
+   "opts": [
+    "Sign with the giant Fame, small money",
+    "Sign with the challenger Money and upside",
+    "Stay free and wear whatever feels best No bag, best feet"
+   ],
+   "chose": 0,
+   "delta": {
+    "ovr": [
+     82,
+     82
+    ],
+    "salary": [
+     11.4,
+     11.4
+    ],
+    "team": [
+     "MIN",
+     "MIN"
+    ]
+   }
+  },
+  {
+   "tag": "s7",
+   "id": "lifeC_injured_reserve",
+   "text": "OFFSEASON, CARD 2 OF 3\n\nInjured reserve, with a way back\n\nThe joint you played on all last season needs surgery, and the trainers want it done now, while there is time to heal before camp. Put it off and the next bad week puts you on injured reserve. Players come back from that list now, but only after a stretch of games in a sweatsuit.\n\nHave the surgery now\nHealth +14, morale -4\nPut it off and play through it\nHealth -8, fanbase +4",
+   "opts": [
+    "Have the surgery now Health +14, morale -4",
+    "Put it off and play through it Health -8, fanbase +4"
+   ],
+   "chose": 0,
+   "delta": {
+    "ovr": [
+     82,
+     82
+    ],
+    "salary": [
+     11.4,
+     11.4
+    ],
+    "team": [
+     "MIN",
+     "MIN"
+    ]
+   }
+  },
+  {
+   "tag": "s7",
+   "id": "lifeC_ps_elevation",
+   "text": "OFFSEASON, CARD 3 OF 3\n\nUp on Saturday, down on Monday\n\nThe team keeps calling the same practice squad kid up for game day and sending him back down the morning after. The rules only allow that so many times before they have to sign him for real or stop. The last one was last week. A coach asks what you think of him.\n\nVouch for him, loudly\nCoin flip: morale +7 or morale -3\nTell the truth: he is not ready yet\nMorale -2\nStay out of it\nNo change",
+   "opts": [
+    "Vouch for him, loudly Coin flip: morale +7 or morale -3",
+    "Tell the truth: he is not ready yet Morale -2",
+    "Stay out of it No change"
+   ],
+   "chose": 1,
+   "delta": {
+    "ovr": [
+     82,
+     82
+    ],
+    "salary": [
+     11.4,
+     11.4
+    ],
+    "team": [
+     "MIN",
+     "MIN"
+    ]
+   }
+  },
+  {
+   "tag": "s8",
+   "id": "lifeB_taquitoRitual",
+   "text": "OFFSEASON, CARD 1 OF 2\n\nThe gas station taquito\n\nYou ate one before a three touchdown game. Now nine grown men require the taquito. The team nutritionist has stopped attending meetings.\n\nCommit fully to the taquito\nRitual over nutrition\nHave the chef make a clean replica\nScience wins\nSell taquito merch\nMonetize the myth",
+   "opts": [
+    "Commit fully to the taquito Ritual over nutrition",
+    "Have the chef make a clean replica Science wins",
+    "Sell taquito merch Monetize the myth"
+   ],
+   "chose": 2,
+   "delta": {
+    "ovr": [
+     80,
+     80
+    ],
+    "salary": [
+     11.4,
+     11.4
+    ],
+    "team": [
+     "MIN",
+     "MIN"
+    ]
+   }
+  },
+  {
+   "tag": "s8",
+   "id": "lifeC_final_cuts",
+   "text": "OFFSEASON, CARD 2 OF 2\n\nCutdown day\n\nThe roster has to be down to the limit by the end of the day, and the guy who drove you to the facility every morning of camp is on the wrong side of the number.\n\nCall him that night\nMorale +4\nTell the coaches they got it wrong\nCoin flip: morale +5 or morale -4\nKeep your head down, it is a business\nMorale -2",
+   "opts": [
+    "Call him that night Morale +4",
+    "Tell the coaches they got it wrong Coin flip: morale +5 or morale -4",
+    "Keep your head down, it is a business Morale -2"
+   ],
+   "chose": 0,
+   "delta": {
+    "ovr": [
+     80,
+     80
+    ],
+    "salary": [
+     11.4,
+     11.4
+    ],
+    "team": [
+     "MIN",
+     "MIN"
+    ]
+   }
+  },
+  {
+   "tag": "s9",
+   "declined": [
+    "Play the year out"
+   ]
+  },
+  {
+   "tag": "s9",
+   "id": "lifeB_celebGolf",
+   "text": "OFFSEASON, CARD 1 OF 3\n\nThe Saturday celebrity group\n\nYou, an actor, a country singer, and a man who owns 400 car washes. Cameras on every hole.\n\nPlay it straight, win the thing\nTrophy for charity\nBack nine barefoot with a speaker\nViral, unserious\nSkip it and train\nRating over rounds",
+   "opts": [
+    "Play it straight, win the thing Trophy for charity",
+    "Back nine barefoot with a speaker Viral, unserious",
+    "Skip it and train Rating over rounds"
+   ],
+   "chose": 1,
+   "delta": {
+    "ovr": [
+     81,
+     81
+    ],
+    "salary": [
+     11.4,
+     11.4
+    ],
+    "team": [
+     "MIN",
+     "MIN"
+    ]
+   }
+  },
+  {
+   "tag": "s9",
+   "id": "lifeC_voluntary_spring",
+   "text": "OFFSEASON, CARD 2 OF 3\n\nVoluntary means voluntary\n\nThe spring workouts are voluntary. It says so in the labor deal. The minicamp at the end of them is not, and skipping that one costs real money. Your trainer back home wants you with him until camp.\n\nShow up for all of it\nMorale +5, health -2\nSkip the voluntary part, report for minicamp\nHealth +6, morale -3\nSkip all of it and pay the fines\nHealth +6, morale -6, net worth -0.1M",
+   "opts": [
+    "Show up for all of it Morale +5, health -2",
+    "Skip the voluntary part, report for minicamp Health +6, morale -3",
+    "Skip all of it and pay the fines Health +6, morale -6, net worth -0.1M"
+   ],
+   "chose": 1,
+   "delta": {
+    "ovr": [
+     81,
+     81
+    ],
+    "salary": [
+     11.4,
+     11.4
+    ],
+    "team": [
+     "MIN",
+     "MIN"
+    ]
+   }
+  },
+  {
+   "tag": "s9",
+   "id": "lifeC_your_replacement",
+   "text": "OFFSEASON, CARD 3 OF 3\n\nThey drafted your replacement\n\nThe team just used a draft pick on a kid who plays your position. Nobody in the building will say why. Everybody in the building knows why.\n\nTeach him everything you know\nMorale +5\nMake him earn every rep\nCoin flip: morale +5 or morale -5\nAsk the front office for the plan\nMorale -3",
+   "opts": [
+    "Teach him everything you know Morale +5",
+    "Make him earn every rep Coin flip: morale +5 or morale -5",
+    "Ask the front office for the plan Morale -3"
+   ],
+   "chose": 2,
+   "delta": {
+    "ovr": [
+     81,
+     81
+    ],
+    "salary": [
+     11.4,
+     11.4
+    ],
+    "team": [
+     "MIN",
+     "MIN"
+    ]
+   }
+  },
+  {
+   "tag": "s10",
+   "freeAgency": "Compare offers\n\n🖊️ Free agency\n\nYour deal is up. Every franchise below is a real destination with its own money, length and roster. You can push any offer for more, once. Push too hard and an offer can disappear, but your own franchise never walks away. Your offers and each spent push survive reload. A wheel reveals the saved negotiation, never another attempt. For example, a 30% chance fills 30 of 100 equal parts; it does not promise a raise.\n\nReal interest, real numbers. Choose the next chapter.\n\nMinnesota VikingsYour team\n\n🎯 Playoff push\n$16.1M x 1 yr\n$16.1M total\nRoster 77\n\n\"They drafted the story. They want the ending too.\"\n\nBefore you push: Raise accepted 15% · Held 85% · Withdrawn 0%\n\nSign\nPush for more\n\nSan Francisco 49ers\n\n🧱 Rebuild\n$20.6M x 2 yrs\n$41.2M total\nRoster 68\n\n\"Year one of a rebuild, and the keys are yours.\"\n\nBefore you push: Raise accepted 15% · Held 42.5% · Withdrawn 42.5%\n\nSign\nPush for more\n\nPhiladelphia Eagles\n\n🎯 Playoff push\n$18.6M x 1 yr\n$18.6M total\nRoster 80\n\n\"A bigger role and a real shot, their words.\"\n\nBefore you push: Raise accepted 15% · Held 42.5% · Withdrawn 42.5%\n\nSign\nPush for more"
+  },
+  {
+   "tag": "s10",
+   "freeAgency": "Compare offers\n\n🖊️ Free agency\n\nYour deal is up. Every franchise below is a real destination with its own money, length and roster. You can push any offer for more, once. Push too hard and an offer can disappear, but your own franchise never walks away. Your offers and each spent push survive reload. A wheel reveals the saved negotiation, never another attempt. For example, a 30% chance fills 30 of 100 equal parts; it does not promise a raise.\n\nReal interest, real numbers. Choose the next chapter.\n\nMinnesota VikingsYour team\n\n🎯 Playoff push\n$16.1M x 1 yr\n$16.1M total\nRoster 77\n\n\"They drafted the story. They want the ending too.\"\n\nBefore you push: Raise accepted 15% · Held 85% · Withdrawn 0%\n\nSign\nPush for more\n\nSan Francisco 49ers\n\n🧱 Rebuild\n$20.6M x 2 yrs\n$41.2M total\nRoster 68\n\n\"Year one of a rebuild, and the keys are yours.\"\n\nBefore you push: Raise accepted 15% · Held 42.5% · Withdrawn 42.5%\n\nSign\nPush for more\n\nPhiladelphia Eagles\n\n🎯 Playoff push\n$18.6M x 1 yr\n$18.6M total\nRoster 80\n\n\"A bigger role and a real shot, their words.\"\n\nBefore you push: Raise accepted 15% · Held 42.5% · Withdrawn 42.5%\n\nSign\nPush for more"
+  },
+  {
+   "tag": "s10",
+   "freeAgency": "Compare offers\n\n🖊️ Free agency\n\nYour deal is up. Every franchise below is a real destination with its own money, length and roster. You can push any offer for more, once. Push too hard and an offer can disappear, but your own franchise never walks away. Your offers and each spent push survive reload. A wheel reveals the saved negotiation, never another attempt. For example, a 30% chance fills 30 of 100 equal parts; it does not promise a raise.\n\nReal interest, real numbers. Choose the next chapter.\n\nMinnesota Vikings did not blink. The number is the number.\n\nMinnesota VikingsYour team\n\n🎯 Playoff push\n$16.1M x 1 yr\n$16.1M total\nRoster 77\n\n\"They drafted the story. They want the ending too.\"\n\nOffer held. The terms did not change.\n\nSign\nTalks done\n\nSan Francisco 49ers\n\n🧱 Rebuild\n$20.6M x 2 yrs\n$41.2M total\nRoster 68\n\n\"Year one of a rebuild, and the keys are yours.\"\n\nBefore you push: Raise accepted 15% · Held 42.5% · Withdrawn 42.5%\n\nSign\nPush for more\n\nPhiladelphia Eagles\n\n🎯 Playoff push\n$18.6M x 1 yr\n$18.6M total\nRoster 80\n\n\"A bigger role and a real shot, their words.\"\n\nBefore you push: Raise accepted 15% · Held 42.5% · Withdrawn 42.5%\n\nSign\nPush for more"
+  },
+  {
+   "tag": "s10",
+   "freeAgency": "Compare offers\n\n🖊️ Free agency\n\nYour deal is up. Every franchise below is a real destination with its own money, length and roster. You can push any offer for more, once. Push too hard and an offer can disappear, but your own franchise never walks away. Your offers and each spent push survive reload. A wheel reveals the saved negotiation, never another attempt. For example, a 30% chance fills 30 of 100 equal parts; it does not promise a raise.\n\nReal interest, real numbers. Choose the next chapter.\n\nMinnesota Vikings did not blink. The number is the number.\n\nMinnesota VikingsYour team\n\n🎯 Playoff push\n$16.1M x 1 yr\n$16.1M total\nRoster 77\n\n\"They drafted the story. They want the ending too.\"\n\nOffer held. The terms did not change.\n\nSign\nTalks done\n\nSan Francisco 49ers\n\n🧱 Rebuild\n$20.6M x 2 yrs\n$41.2M total\nRoster 68\n\n\"Year one of a rebuild, and the keys are yours.\"\n\nBefore you push: Raise accepted 15% · Held 42.5% · Withdrawn 42.5%\n\nSign\nPush for more\n\nPhiladelphia Eagles\n\n🎯 Playoff push\n$18.6M x 1 yr\n$18.6M total\nRoster 80\n\n\"A bigger role and a real shot, their words.\"\n\nBefore you push: Raise accepted 15% · Held 42.5% · Withdrawn 42.5%\n\nSign\nPush for more"
+  },
+  {
+   "tag": "s10",
+   "freeAgency": "Compare offers\n\n🖊️ Free agency\n\nYour deal is up. Every franchise below is a real destination with its own money, length and roster. You can push any offer for more, once. Push too hard and an offer can disappear, but your own franchise never walks away. Your offers and each spent push survive reload. A wheel reveals the saved negotiation, never another attempt. For example, a 30% chance fills 30 of 100 equal parts; it does not promise a raise.\n\nReal interest, real numbers. Choose the next chapter.\n\nMinnesota Vikings did not blink. The number is the number.\n\nMinnesota VikingsYour team\n\n🎯 Playoff push\n$16.1M x 1 yr\n$16.1M total\nRoster 77\n\n\"They drafted the story. They want the ending too.\"\n\nOffer held. The terms did not change.\n\nSign\nTalks done\n\nSan Francisco 49ers\n\n🧱 Rebuild\n$20.6M x 2 yrs\n$41.2M total\nRoster 68\n\n\"Year one of a rebuild, and the keys are yours.\"\n\nBefore you push: Raise accepted 15% · Held 42.5% · Withdrawn 42.5%\n\nSign\nPush for more\n\nPhiladelphia Eagles\n\n🎯 Playoff push\n$18.6M x 1 yr\n$18.6M total\nRoster 80\n\n\"A bigger role and a real shot, their words.\"\n\nBefore you push: Raise accepted 15% · Held 42.5% · Withdrawn 42.5%\n\nSign\nPush for more"
+  },
+  {
+   "tag": "s10",
+   "freeAgency": "Compare offers\n\n🖊️ Free agency\n\nYour deal is up. Every franchise below is a real destination with its own money, length and roster. You can push any offer for more, once. Push too hard and an offer can disappear, but your own franchise never walks away. Your offers and each spent push survive reload. A wheel reveals the saved negotiation, never another attempt. For example, a 30% chance fills 30 of 100 equal parts; it does not promise a raise.\n\nReal interest, real numbers. Choose the next chapter.\n\nMinnesota Vikings did not blink. The number is the number.\n\nMinnesota VikingsYour team\n\n🎯 Playoff push\n$16.1M x 1 yr\n$16.1M total\nRoster 77\n\n\"They drafted the story. They want the ending too.\"\n\nOffer held. The terms did not change.\n\nSign\nTalks done\n\nSan Francisco 49ers\n\n🧱 Rebuild\n$20.6M x 2 yrs\n$41.2M total\nRoster 68\n\n\"Year one of a rebuild, and the keys are yours.\"\n\nBefore you push: Raise accepted 15% · Held 42.5% · Withdrawn 42.5%\n\nSign\nPush for more\n\nPhiladelphia Eagles\n\n🎯 Playoff push\n$18.6M x 1 yr\n$18.6M total\nRoster 80\n\n\"A bigger role and a real shot, their words.\"\n\nBefore you push: Raise accepted 15% · Held 42.5% · Withdrawn 42.5%\n\nSign\nPush for more"
+  },
+  {
+   "tag": "s10",
+   "freeAgency": "Compare offers\n\n🖊️ Free agency\n\nYour deal is up. Every franchise below is a real destination with its own money, length and roster. You can push any offer for more, once. Push too hard and an offer can disappear, but your own franchise never walks away. Your offers and each spent push survive reload. A wheel reveals the saved negotiation, never another attempt. For example, a 30% chance fills 30 of 100 equal parts; it does not promise a raise.\n\nReal interest, real numbers. Choose the next chapter.\n\nMinnesota Vikings did not blink. The number is the number.\n\nMinnesota VikingsYour team\n\n🎯 Playoff push\n$16.1M x 1 yr\n$16.1M total\nRoster 77\n\n\"They drafted the story. They want the ending too.\"\n\nOffer held. The terms did not change.\n\nSign\nTalks done\n\nSan Francisco 49ers\n\n🧱 Rebuild\n$20.6M x 2 yrs\n$41.2M total\nRoster 68\n\n\"Year one of a rebuild, and the keys are yours.\"\n\nBefore you push: Raise accepted 15% · Held 42.5% · Withdrawn 42.5%\n\nSign\nPush for more\n\nPhiladelphia Eagles\n\n🎯 Playoff push\n$18.6M x 1 yr\n$18.6M total\nRoster 80\n\n\"A bigger role and a real shot, their words.\"\n\nBefore you push: Raise accepted 15% · Held 42.5% · Withdrawn 42.5%\n\nSign\nPush for more"
+  },
+  {
+   "tag": "s10",
+   "freeAgency": "Compare offers\n\n🖊️ Free agency\n\nYour deal is up. Every franchise below is a real destination with its own money, length and roster. You can push any offer for more, once. Push too hard and an offer can disappear, but your own franchise never walks away. Your offers and each spent push survive reload. A wheel reveals the saved negotiation, never another attempt. For example, a 30% chance fills 30 of 100 equal parts; it does not promise a raise.\n\nReal interest, real numbers. Choose the next chapter.\n\nMinnesota Vikings did not blink. The number is the number.\n\nMinnesota VikingsYour team\n\n🎯 Playoff push\n$16.1M x 1 yr\n$16.1M total\nRoster 77\n\n\"They drafted the story. They want the ending too.\"\n\nOffer held. The terms did not change.\n\nSign\nTalks done\n\nSan Francisco 49ers\n\n🧱 Rebuild\n$20.6M x 2 yrs\n$41.2M total\nRoster 68\n\n\"Year one of a rebuild, and the keys are yours.\"\n\nBefore you push: Raise accepted 15% · Held 42.5% · Withdrawn 42.5%\n\nSign\nPush for more\n\nPhiladelphia Eagles\n\n🎯 Playoff push\n$18.6M x 1 yr\n$18.6M total\nRoster 80\n\n\"A bigger role and a real shot, their words.\"\n\nBefore you push: Raise accepted 15% · Held 42.5% · Withdrawn 42.5%\n\nSign\nPush for more"
+  },
+  {
+   "tag": "s10",
+   "freeAgency": "Compare offers\n\n🖊️ Free agency\n\nYour deal is up. Every franchise below is a real destination with its own money, length and roster. You can push any offer for more, once. Push too hard and an offer can disappear, but your own franchise never walks away. Your offers and each spent push survive reload. A wheel reveals the saved negotiation, never another attempt. For example, a 30% chance fills 30 of 100 equal parts; it does not promise a raise.\n\nReal interest, real numbers. Choose the next chapter.\n\nMinnesota Vikings did not blink. The number is the number.\n\nMinnesota VikingsYour team\n\n🎯 Playoff push\n$16.1M x 1 yr\n$16.1M total\nRoster 77\n\n\"They drafted the story. They want the ending too.\"\n\nOffer held. The terms did not change.\n\nSign\nTalks done\n\nSan Francisco 49ers\n\n🧱 Rebuild\n$20.6M x 2 yrs\n$41.2M total\nRoster 68\n\n\"Year one of a rebuild, and the keys are yours.\"\n\nBefore you push: Raise accepted 15% · Held 42.5% · Withdrawn 42.5%\n\nSign\nPush for more\n\nPhiladelphia Eagles\n\n🎯 Playoff push\n$18.6M x 1 yr\n$18.6M total\nRoster 80\n\n\"A bigger role and a real shot, their words.\"\n\nBefore you push: Raise accepted 15% · Held 42.5% · Withdrawn 42.5%\n\nSign\nPush for more"
+  },
+  {
+   "tag": "s10",
+   "freeAgency": "Compare offers\n\n🖊️ Free agency\n\nYour deal is up. Every franchise below is a real destination with its own money, length and roster. You can push any offer for more, once. Push too hard and an offer can disappear, but your own franchise never walks away. Your offers and each spent push survive reload. A wheel reveals the saved negotiation, never another attempt. For example, a 30% chance fills 30 of 100 equal parts; it does not promise a raise.\n\nReal interest, real numbers. Choose the next chapter.\n\nMinnesota Vikings did not blink. The number is the number.\n\nMinnesota VikingsYour team\n\n🎯 Playoff push\n$16.1M x 1 yr\n$16.1M total\nRoster 77\n\n\"They drafted the story. They want the ending too.\"\n\nOffer held. The terms did not change.\n\nSign\nTalks done\n\nSan Francisco 49ers\n\n🧱 Rebuild\n$20.6M x 2 yrs\n$41.2M total\nRoster 68\n\n\"Year one of a rebuild, and the keys are yours.\"\n\nBefore you push: Raise accepted 15% · Held 42.5% · Withdrawn 42.5%\n\nSign\nPush for more\n\nPhiladelphia Eagles\n\n🎯 Playoff push\n$18.6M x 1 yr\n$18.6M total\nRoster 80\n\n\"A bigger role and a real shot, their words.\"\n\nBefore you push: Raise accepted 15% · Held 42.5% · Withdrawn 42.5%\n\nSign\nPush for more"
+  },
+  {
+   "tag": "s10",
+   "freeAgency": "Compare offers\n\n🖊️ Free agency\n\nYour deal is up. Every franchise below is a real destination with its own money, length and roster. You can push any offer for more, once. Push too hard and an offer can disappear, but your own franchise never walks away. Your offers and each spent push survive reload. A wheel reveals the saved negotiation, never another attempt. For example, a 30% chance fills 30 of 100 equal parts; it does not promise a raise.\n\nReal interest, real numbers. Choose the next chapter.\n\nMinnesota Vikings did not blink. The number is the number.\n\nMinnesota VikingsYour team\n\n🎯 Playoff push\n$16.1M x 1 yr\n$16.1M total\nRoster 77\n\n\"They drafted the story. They want the ending too.\"\n\nOffer held. The terms did not change.\n\nSign\nTalks done\n\nSan Francisco 49ers\n\n🧱 Rebuild\n$20.6M x 2 yrs\n$41.2M total\nRoster 68\n\n\"Year one of a rebuild, and the keys are yours.\"\n\nBefore you push: Raise accepted 15% · Held 42.5% · Withdrawn 42.5%\n\nSign\nPush for more\n\nPhiladelphia Eagles\n\n🎯 Playoff push\n$18.6M x 1 yr\n$18.6M total\nRoster 80\n\n\"A bigger role and a real shot, their words.\"\n\nBefore you push: Raise accepted 15% · Held 42.5% · Withdrawn 42.5%\n\nSign\nPush for more"
+  },
+  {
+   "tag": "s10",
+   "freeAgency": "Compare offers\n\n🖊️ Free agency\n\nYour deal is up. Every franchise below is a real destination with its own money, length and roster. You can push any offer for more, once. Push too hard and an offer can disappear, but your own franchise never walks away. Your offers and each spent push survive reload. A wheel reveals the saved negotiation, never another attempt. For example, a 30% chance fills 30 of 100 equal parts; it does not promise a raise.\n\nReal interest, real numbers. Choose the next chapter.\n\nMinnesota Vikings did not blink. The number is the number.\n\nMinnesota VikingsYour team\n\n🎯 Playoff push\n$16.1M x 1 yr\n$16.1M total\nRoster 77\n\n\"They drafted the story. They want the ending too.\"\n\nOffer held. The terms did not change.\n\nSign\nTalks done\n\nSan Francisco 49ers\n\n🧱 Rebuild\n$20.6M x 2 yrs\n$41.2M total\nRoster 68\n\n\"Year one of a rebuild, and the keys are yours.\"\n\nBefore you push: Raise accepted 15% · Held 42.5% · Withdrawn 42.5%\n\nSign\nPush for more\n\nPhiladelphia Eagles\n\n🎯 Playoff push\n$18.6M x 1 yr\n$18.6M total\nRoster 80\n\n\"A bigger role and a real shot, their words.\"\n\nBefore you push: Raise accepted 15% · Held 42.5% · Withdrawn 42.5%\n\nSign\nPush for more"
+  },
+  {
+   "tag": "s10",
+   "freeAgency": "Compare offers\n\n🖊️ Free agency\n\nYour deal is up. Every franchise below is a real destination with its own money, length and roster. You can push any offer for more, once. Push too hard and an offer can disappear, but your own franchise never walks away. Your offers and each spent push survive reload. A wheel reveals the saved negotiation, never another attempt. For example, a 30% chance fills 30 of 100 equal parts; it does not promise a raise.\n\nReal interest, real numbers. Choose the next chapter.\n\nMinnesota Vikings did not blink. The number is the number.\n\nMinnesota VikingsYour team\n\n🎯 Playoff push\n$16.1M x 1 yr\n$16.1M total\nRoster 77\n\n\"They drafted the story. They want the ending too.\"\n\nOffer held. The terms did not change.\n\nSign\nTalks done\n\nSan Francisco 49ers\n\n🧱 Rebuild\n$20.6M x 2 yrs\n$41.2M total\nRoster 68\n\n\"Year one of a rebuild, and the keys are yours.\"\n\nBefore you push: Raise accepted 15% · Held 42.5% · Withdrawn 42.5%\n\nSign\nPush for more\n\nPhiladelphia Eagles\n\n🎯 Playoff push\n$18.6M x 1 yr\n$18.6M total\nRoster 80\n\n\"A bigger role and a real shot, their words.\"\n\nBefore you push: Raise accepted 15% · Held 42.5% · Withdrawn 42.5%\n\nSign\nPush for more"
+  },
+  {
+   "tag": "s10",
+   "freeAgency": "Compare offers\n\n🖊️ Free agency\n\nYour deal is up. Every franchise below is a real destination with its own money, length and roster. You can push any offer for more, once. Push too hard and an offer can disappear, but your own franchise never walks away. Your offers and each spent push survive reload. A wheel reveals the saved negotiation, never another attempt. For example, a 30% chance fills 30 of 100 equal parts; it does not promise a raise.\n\nReal interest, real numbers. Choose the next chapter.\n\nMinnesota Vikings did not blink. The number is the number.\n\nMinnesota VikingsYour team\n\n🎯 Playoff push\n$16.1M x 1 yr\n$16.1M total\nRoster 77\n\n\"They drafted the story. They want the ending too.\"\n\nOffer held. The terms did not change.\n\nSign\nTalks done\n\nSan Francisco 49ers\n\n🧱 Rebuild\n$20.6M x 2 yrs\n$41.2M total\nRoster 68\n\n\"Year one of a rebuild, and the keys are yours.\"\n\nBefore you push: Raise accepted 15% · Held 42.5% · Withdrawn 42.5%\n\nSign\nPush for more\n\nPhiladelphia Eagles\n\n🎯 Playoff push\n$18.6M x 1 yr\n$18.6M total\nRoster 80\n\n\"A bigger role and a real shot, their words.\"\n\nBefore you push: Raise accepted 15% · Held 42.5% · Withdrawn 42.5%\n\nSign\nPush for more"
+  },
+  {
+   "tag": "s10",
+   "freeAgency": "Compare offers\n\n🖊️ Free agency\n\nYour deal is up. Every franchise below is a real destination with its own money, length and roster. You can push any offer for more, once. Push too hard and an offer can disappear, but your own franchise never walks away. Your offers and each spent push survive reload. A wheel reveals the saved negotiation, never another attempt. For example, a 30% chance fills 30 of 100 equal parts; it does not promise a raise.\n\nReal interest, real numbers. Choose the next chapter.\n\nMinnesota Vikings did not blink. The number is the number.\n\nMinnesota VikingsYour team\n\n🎯 Playoff push\n$16.1M x 1 yr\n$16.1M total\nRoster 77\n\n\"They drafted the story. They want the ending too.\"\n\nOffer held. The terms did not change.\n\nSign\nTalks done\n\nSan Francisco 49ers\n\n🧱 Rebuild\n$20.6M x 2 yrs\n$41.2M total\nRoster 68\n\n\"Year one of a rebuild, and the keys are yours.\"\n\nBefore you push: Raise accepted 15% · Held 42.5% · Withdrawn 42.5%\n\nSign\nPush for more\n\nPhiladelphia Eagles\n\n🎯 Playoff push\n$18.6M x 1 yr\n$18.6M total\nRoster 80\n\n\"A bigger role and a real shot, their words.\"\n\nBefore you push: Raise accepted 15% · Held 42.5% · Withdrawn 42.5%\n\nSign\nPush for more"
+  },
+  {
+   "tag": "s10",
+   "freeAgency": "Compare offers\n\n🖊️ Free agency\n\nYour deal is up. Every franchise below is a real destination with its own money, length and roster. You can push any offer for more, once. Push too hard and an offer can disappear, but your own franchise never walks away. Your offers and each spent push survive reload. A wheel reveals the saved negotiation, never another attempt. For example, a 30% chance fills 30 of 100 equal parts; it does not promise a raise.\n\nReal interest, real numbers. Choose the next chapter.\n\nMinnesota Vikings did not blink. The number is the number.\n\nMinnesota VikingsYour team\n\n🎯 Playoff push\n$16.1M x 1 yr\n$16.1M total\nRoster 77\n\n\"They drafted the story. They want the ending too.\"\n\nOffer held. The terms did not change.\n\nSign\nTalks done\n\nSan Francisco 49ers\n\n🧱 Rebuild\n$20.6M x 2 yrs\n$41.2M total\nRoster 68\n\n\"Year one of a rebuild, and the keys are yours.\"\n\nBefore you push: Raise accepted 15% · Held 42.5% · Withdrawn 42.5%\n\nSign\nPush for more\n\nPhiladelphia Eagles\n\n🎯 Playoff push\n$18.6M x 1 yr\n$18.6M total\nRoster 80\n\n\"A bigger role and a real shot, their words.\"\n\nBefore you push: Raise accepted 15% · Held 42.5% · Withdrawn 42.5%\n\nSign\nPush for more"
+  },
+  {
+   "tag": "s10",
+   "freeAgency": "Compare offers\n\n🖊️ Free agency\n\nYour deal is up. Every franchise below is a real destination with its own money, length and roster. You can push any offer for more, once. Push too hard and an offer can disappear, but your own franchise never walks away. Your offers and each spent push survive reload. A wheel reveals the saved negotiation, never another attempt. For example, a 30% chance fills 30 of 100 equal parts; it does not promise a raise.\n\nReal interest, real numbers. Choose the next chapter.\n\nMinnesota Vikings did not blink. The number is the number.\n\nMinnesota VikingsYour team\n\n🎯 Playoff push\n$16.1M x 1 yr\n$16.1M total\nRoster 77\n\n\"They drafted the story. They want the ending too.\"\n\nOffer held. The terms did not change.\n\nSign\nTalks done\n\nSan Francisco 49ers\n\n🧱 Rebuild\n$20.6M x 2 yrs\n$41.2M total\nRoster 68\n\n\"Year one of a rebuild, and the keys are yours.\"\n\nBefore you push: Raise accepted 15% · Held 42.5% · Withdrawn 42.5%\n\nSign\nPush for more\n\nPhiladelphia Eagles\n\n🎯 Playoff push\n$18.6M x 1 yr\n$18.6M total\nRoster 80\n\n\"A bigger role and a real shot, their words.\"\n\nBefore you push: Raise accepted 15% · Held 42.5% · Withdrawn 42.5%\n\nSign\nPush for more"
+  },
+  {
+   "tag": "s10",
+   "freeAgency": "Compare offers\n\n🖊️ Free agency\n\nYour deal is up. Every franchise below is a real destination with its own money, length and roster. You can push any offer for more, once. Push too hard and an offer can disappear, but your own franchise never walks away. Your offers and each spent push survive reload. A wheel reveals the saved negotiation, never another attempt. For example, a 30% chance fills 30 of 100 equal parts; it does not promise a raise.\n\nReal interest, real numbers. Choose the next chapter.\n\nMinnesota Vikings did not blink. The number is the number.\n\nMinnesota VikingsYour team\n\n🎯 Playoff push\n$16.1M x 1 yr\n$16.1M total\nRoster 77\n\n\"They drafted the story. They want the ending too.\"\n\nOffer held. The terms did not change.\n\nSign\nTalks done\n\nSan Francisco 49ers\n\n🧱 Rebuild\n$20.6M x 2 yrs\n$41.2M total\nRoster 68\n\n\"Year one of a rebuild, and the keys are yours.\"\n\nBefore you push: Raise accepted 15% · Held 42.5% · Withdrawn 42.5%\n\nSign\nPush for more\n\nPhiladelphia Eagles\n\n🎯 Playoff push\n$18.6M x 1 yr\n$18.6M total\nRoster 80\n\n\"A bigger role and a real shot, their words.\"\n\nBefore you push: Raise accepted 15% · Held 42.5% · Withdrawn 42.5%\n\nSign\nPush for more"
+  },
+  {
+   "tag": "s10",
+   "freeAgency": "Compare offers\n\n🖊️ Free agency\n\nYour deal is up. Every franchise below is a real destination with its own money, length and roster. You can push any offer for more, once. Push too hard and an offer can disappear, but your own franchise never walks away. Your offers and each spent push survive reload. A wheel reveals the saved negotiation, never another attempt. For example, a 30% chance fills 30 of 100 equal parts; it does not promise a raise.\n\nReal interest, real numbers. Choose the next chapter.\n\nMinnesota Vikings did not blink. The number is the number.\n\nMinnesota VikingsYour team\n\n🎯 Playoff push\n$16.1M x 1 yr\n$16.1M total\nRoster 77\n\n\"They drafted the story. They want the ending too.\"\n\nOffer held. The terms did not change.\n\nSign\nTalks done\n\nSan Francisco 49ers\n\n🧱 Rebuild\n$20.6M x 2 yrs\n$41.2M total\nRoster 68\n\n\"Year one of a rebuild, and the keys are yours.\"\n\nBefore you push: Raise accepted 15% · Held 42.5% · Withdrawn 42.5%\n\nSign\nPush for more\n\nPhiladelphia Eagles\n\n🎯 Playoff push\n$18.6M x 1 yr\n$18.6M total\nRoster 80\n\n\"A bigger role and a real shot, their words.\"\n\nBefore you push: Raise accepted 15% · Held 42.5% · Withdrawn 42.5%\n\nSign\nPush for more"
+  },
+  {
+   "tag": "s10",
+   "freeAgency": "Compare offers\n\n🖊️ Free agency\n\nYour deal is up. Every franchise below is a real destination with its own money, length and roster. You can push any offer for more, once. Push too hard and an offer can disappear, but your own franchise never walks away. Your offers and each spent push survive reload. A wheel reveals the saved negotiation, never another attempt. For example, a 30% chance fills 30 of 100 equal parts; it does not promise a raise.\n\nReal interest, real numbers. Choose the next chapter.\n\nMinnesota Vikings did not blink. The number is the number.\n\nMinnesota VikingsYour team\n\n🎯 Playoff push\n$16.1M x 1 yr\n$16.1M total\nRoster 77\n\n\"They drafted the story. They want the ending too.\"\n\nOffer held. The terms did not change.\n\nSign\nTalks done\n\nSan Francisco 49ers\n\n🧱 Rebuild\n$20.6M x 2 yrs\n$41.2M total\nRoster 68\n\n\"Year one of a rebuild, and the keys are yours.\"\n\nBefore you push: Raise accepted 15% · Held 42.5% · Withdrawn 42.5%\n\nSign\nPush for more\n\nPhiladelphia Eagles\n\n🎯 Playoff push\n$18.6M x 1 yr\n$18.6M total\nRoster 80\n\n\"A bigger role and a real shot, their words.\"\n\nBefore you push: Raise accepted 15% · Held 42.5% · Withdrawn 42.5%\n\nSign\nPush for more"
+  },
+  {
+   "tag": "s10",
+   "freeAgency": "Compare offers\n\n🖊️ Free agency\n\nYour deal is up. Every franchise below is a real destination with its own money, length and roster. You can push any offer for more, once. Push too hard and an offer can disappear, but your own franchise never walks away. Your offers and each spent push survive reload. A wheel reveals the saved negotiation, never another attempt. For example, a 30% chance fills 30 of 100 equal parts; it does not promise a raise.\n\nReal interest, real numbers. Choose the next chapter.\n\nMinnesota Vikings did not blink. The number is the number.\n\nMinnesota VikingsYour team\n\n🎯 Playoff push\n$16.1M x 1 yr\n$16.1M total\nRoster 77\n\n\"They drafted the story. They want the ending too.\"\n\nOffer held. The terms did not change.\n\nSign\nTalks done\n\nSan Francisco 49ers\n\n🧱 Rebuild\n$20.6M x 2 yrs\n$41.2M total\nRoster 68\n\n\"Year one of a rebuild, and the keys are yours.\"\n\nBefore you push: Raise accepted 15% · Held 42.5% · Withdrawn 42.5%\n\nSign\nPush for more\n\nPhiladelphia Eagles\n\n🎯 Playoff push\n$18.6M x 1 yr\n$18.6M total\nRoster 80\n\n\"A bigger role and a real shot, their words.\"\n\nBefore you push: Raise accepted 15% · Held 42.5% · Withdrawn 42.5%\n\nSign\nPush for more"
+  },
+  {
+   "tag": "s10",
+   "freeAgency": "Compare offers\n\n🖊️ Free agency\n\nYour deal is up. Every franchise below is a real destination with its own money, length and roster. You can push any offer for more, once. Push too hard and an offer can disappear, but your own franchise never walks away. Your offers and each spent push survive reload. A wheel reveals the saved negotiation, never another attempt. For example, a 30% chance fills 30 of 100 equal parts; it does not promise a raise.\n\nReal interest, real numbers. Choose the next chapter.\n\nMinnesota Vikings did not blink. The number is the number.\n\nMinnesota VikingsYour team\n\n🎯 Playoff push\n$16.1M x 1 yr\n$16.1M total\nRoster 77\n\n\"They drafted the story. They want the ending too.\"\n\nOffer held. The terms did not change.\n\nSign\nTalks done\n\nSan Francisco 49ers\n\n🧱 Rebuild\n$20.6M x 2 yrs\n$41.2M total\nRoster 68\n\n\"Year one of a rebuild, and the keys are yours.\"\n\nBefore you push: Raise accepted 15% · Held 42.5% · Withdrawn 42.5%\n\nSign\nPush for more\n\nPhiladelphia Eagles\n\n🎯 Playoff push\n$18.6M x 1 yr\n$18.6M total\nRoster 80\n\n\"A bigger role and a real shot, their words.\"\n\nBefore you push: Raise accepted 15% · Held 42.5% · Withdrawn 42.5%\n\nSign\nPush for more"
+  },
+  {
+   "tag": "s10",
+   "freeAgency": "Compare offers\n\n🖊️ Free agency\n\nYour deal is up. Every franchise below is a real destination with its own money, length and roster. You can push any offer for more, once. Push too hard and an offer can disappear, but your own franchise never walks away. Your offers and each spent push survive reload. A wheel reveals the saved negotiation, never another attempt. For example, a 30% chance fills 30 of 100 equal parts; it does not promise a raise.\n\nReal interest, real numbers. Choose the next chapter.\n\nMinnesota Vikings did not blink. The number is the number.\n\nMinnesota VikingsYour team\n\n🎯 Playoff push\n$16.1M x 1 yr\n$16.1M total\nRoster 77\n\n\"They drafted the story. They want the ending too.\"\n\nOffer held. The terms did not change.\n\nSign\nTalks done\n\nSan Francisco 49ers\n\n🧱 Rebuild\n$20.6M x 2 yrs\n$41.2M total\nRoster 68\n\n\"Year one of a rebuild, and the keys are yours.\"\n\nBefore you push: Raise accepted 15% · Held 42.5% · Withdrawn 42.5%\n\nSign\nPush for more\n\nPhiladelphia Eagles\n\n🎯 Playoff push\n$18.6M x 1 yr\n$18.6M total\nRoster 80\n\n\"A bigger role and a real shot, their words.\"\n\nBefore you push: Raise accepted 15% · Held 42.5% · Withdrawn 42.5%\n\nSign\nPush for more"
+  },
+  {
+   "tag": "s10",
+   "freeAgency": "Compare offers\n\n🖊️ Free agency\n\nYour deal is up. Every franchise below is a real destination with its own money, length and roster. You can push any offer for more, once. Push too hard and an offer can disappear, but your own franchise never walks away. Your offers and each spent push survive reload. A wheel reveals the saved negotiation, never another attempt. For example, a 30% chance fills 30 of 100 equal parts; it does not promise a raise.\n\nReal interest, real numbers. Choose the next chapter.\n\nMinnesota Vikings did not blink. The number is the number.\n\nMinnesota VikingsYour team\n\n🎯 Playoff push\n$16.1M x 1 yr\n$16.1M total\nRoster 77\n\n\"They drafted the story. They want the ending too.\"\n\nOffer held. The terms did not change.\n\nSign\nTalks done\n\nSan Francisco 49ers\n\n🧱 Rebuild\n$20.6M x 2 yrs\n$41.2M total\nRoster 68\n\n\"Year one of a rebuild, and the keys are yours.\"\n\nBefore you push: Raise accepted 15% · Held 42.5% · Withdrawn 42.5%\n\nSign\nPush for more\n\nPhiladelphia Eagles\n\n🎯 Playoff push\n$18.6M x 1 yr\n$18.6M total\nRoster 80\n\n\"A bigger role and a real shot, their words.\"\n\nBefore you push: Raise accepted 15% · Held 42.5% · Withdrawn 42.5%\n\nSign\nPush for more"
+  },
+  {
+   "tag": "s10",
+   "freeAgency": "Compare offers\n\n🖊️ Free agency\n\nYour deal is up. Every franchise below is a real destination with its own money, length and roster. You can push any offer for more, once. Push too hard and an offer can disappear, but your own franchise never walks away. Your offers and each spent push survive reload. A wheel reveals the saved negotiation, never another attempt. For example, a 30% chance fills 30 of 100 equal parts; it does not promise a raise.\n\nReal interest, real numbers. Choose the next chapter.\n\nMinnesota Vikings did not blink. The number is the number.\n\nMinnesota VikingsYour team\n\n🎯 Playoff push\n$16.1M x 1 yr\n$16.1M total\nRoster 77\n\n\"They drafted the story. They want the ending too.\"\n\nOffer held. The terms did not change.\n\nSign\nTalks done\n\nSan Francisco 49ers\n\n🧱 Rebuild\n$20.6M x 2 yrs\n$41.2M total\nRoster 68\n\n\"Year one of a rebuild, and the keys are yours.\"\n\nBefore you push: Raise accepted 15% · Held 42.5% · Withdrawn 42.5%\n\nSign\nPush for more\n\nPhiladelphia Eagles\n\n🎯 Playoff push\n$18.6M x 1 yr\n$18.6M total\nRoster 80\n\n\"A bigger role and a real shot, their words.\"\n\nBefore you push: Raise accepted 15% · Held 42.5% · Withdrawn 42.5%\n\nSign\nPush for more"
+  },
+  {
+   "tag": "s10",
+   "freeAgency": "Compare offers\n\n🖊️ Free agency\n\nYour deal is up. Every franchise below is a real destination with its own money, length and roster. You can push any offer for more, once. Push too hard and an offer can disappear, but your own franchise never walks away. Your offers and each spent push survive reload. A wheel reveals the saved negotiation, never another attempt. For example, a 30% chance fills 30 of 100 equal parts; it does not promise a raise.\n\nReal interest, real numbers. Choose the next chapter.\n\nMinnesota Vikings did not blink. The number is the number.\n\nMinnesota VikingsYour team\n\n🎯 Playoff push\n$16.1M x 1 yr\n$16.1M total\nRoster 77\n\n\"They drafted the story. They want the ending too.\"\n\nOffer held. The terms did not change.\n\nSign\nTalks done\n\nSan Francisco 49ers\n\n🧱 Rebuild\n$20.6M x 2 yrs\n$41.2M total\nRoster 68\n\n\"Year one of a rebuild, and the keys are yours.\"\n\nBefore you push: Raise accepted 15% · Held 42.5% · Withdrawn 42.5%\n\nSign\nPush for more\n\nPhiladelphia Eagles\n\n🎯 Playoff push\n$18.6M x 1 yr\n$18.6M total\nRoster 80\n\n\"A bigger role and a real shot, their words.\"\n\nBefore you push: Raise accepted 15% · Held 42.5% · Withdrawn 42.5%\n\nSign\nPush for more"
+  },
+  {
+   "tag": "s10",
+   "freeAgency": "Compare offers\n\n🖊️ Free agency\n\nYour deal is up. Every franchise below is a real destination with its own money, length and roster. You can push any offer for more, once. Push too hard and an offer can disappear, but your own franchise never walks away. Your offers and each spent push survive reload. A wheel reveals the saved negotiation, never another attempt. For example, a 30% chance fills 30 of 100 equal parts; it does not promise a raise.\n\nReal interest, real numbers. Choose the next chapter.\n\nMinnesota Vikings did not blink. The number is the number.\n\nMinnesota VikingsYour team\n\n🎯 Playoff push\n$16.1M x 1 yr\n$16.1M total\nRoster 77\n\n\"They drafted the story. They want the ending too.\"\n\nOffer held. The terms did not change.\n\nSign\nTalks done\n\nSan Francisco 49ers\n\n🧱 Rebuild\n$20.6M x 2 yrs\n$41.2M total\nRoster 68\n\n\"Year one of a rebuild, and the keys are yours.\"\n\nBefore you push: Raise accepted 15% · Held 42.5% · Withdrawn 42.5%\n\nSign\nPush for more\n\nPhiladelphia Eagles\n\n🎯 Playoff push\n$18.6M x 1 yr\n$18.6M total\nRoster 80\n\n\"A bigger role and a real shot, their words.\"\n\nBefore you push: Raise accepted 15% · Held 42.5% · Withdrawn 42.5%\n\nSign\nPush for more"
+  },
+  {
+   "tag": "s10",
+   "freeAgency": "Compare offers\n\n🖊️ Free agency\n\nYour deal is up. Every franchise below is a real destination with its own money, length and roster. You can push any offer for more, once. Push too hard and an offer can disappear, but your own franchise never walks away. Your offers and each spent push survive reload. A wheel reveals the saved negotiation, never another attempt. For example, a 30% chance fills 30 of 100 equal parts; it does not promise a raise.\n\nReal interest, real numbers. Choose the next chapter.\n\nMinnesota Vikings did not blink. The number is the number.\n\nMinnesota VikingsYour team\n\n🎯 Playoff push\n$16.1M x 1 yr\n$16.1M total\nRoster 77\n\n\"They drafted the story. They want the ending too.\"\n\nOffer held. The terms did not change.\n\nSign\nTalks done\n\nSan Francisco 49ers\n\n🧱 Rebuild\n$20.6M x 2 yrs\n$41.2M total\nRoster 68\n\n\"Year one of a rebuild, and the keys are yours.\"\n\nBefore you push: Raise accepted 15% · Held 42.5% · Withdrawn 42.5%\n\nSign\nPush for more\n\nPhiladelphia Eagles\n\n🎯 Playoff push\n$18.6M x 1 yr\n$18.6M total\nRoster 80\n\n\"A bigger role and a real shot, their words.\"\n\nBefore you push: Raise accepted 15% · Held 42.5% · Withdrawn 42.5%\n\nSign\nPush for more"
+  },
+  {
+   "tag": "s10",
+   "freeAgency": "Compare offers\n\n🖊️ Free agency\n\nYour deal is up. Every franchise below is a real destination with its own money, length and roster. You can push any offer for more, once. Push too hard and an offer can disappear, but your own franchise never walks away. Your offers and each spent push survive reload. A wheel reveals the saved negotiation, never another attempt. For example, a 30% chance fills 30 of 100 equal parts; it does not promise a raise.\n\nReal interest, real numbers. Choose the next chapter.\n\nMinnesota Vikings did not blink. The number is the number.\n\nMinnesota VikingsYour team\n\n🎯 Playoff push\n$16.1M x 1 yr\n$16.1M total\nRoster 77\n\n\"They drafted the story. They want the ending too.\"\n\nOffer held. The terms did not change.\n\nSign\nTalks done\n\nSan Francisco 49ers\n\n🧱 Rebuild\n$20.6M x 2 yrs\n$41.2M total\nRoster 68\n\n\"Year one of a rebuild, and the keys are yours.\"\n\nBefore you push: Raise accepted 15% · Held 42.5% · Withdrawn 42.5%\n\nSign\nPush for more\n\nPhiladelphia Eagles\n\n🎯 Playoff push\n$18.6M x 1 yr\n$18.6M total\nRoster 80\n\n\"A bigger role and a real shot, their words.\"\n\nBefore you push: Raise accepted 15% · Held 42.5% · Withdrawn 42.5%\n\nSign\nPush for more"
+  },
+  {
+   "tag": "s10",
+   "freeAgency": "Compare offers\n\n🖊️ Free agency\n\nYour deal is up. Every franchise below is a real destination with its own money, length and roster. You can push any offer for more, once. Push too hard and an offer can disappear, but your own franchise never walks away. Your offers and each spent push survive reload. A wheel reveals the saved negotiation, never another attempt. For example, a 30% chance fills 30 of 100 equal parts; it does not promise a raise.\n\nReal interest, real numbers. Choose the next chapter.\n\nMinnesota Vikings did not blink. The number is the number.\n\nMinnesota VikingsYour team\n\n🎯 Playoff push\n$16.1M x 1 yr\n$16.1M total\nRoster 77\n\n\"They drafted the story. They want the ending too.\"\n\nOffer held. The terms did not change.\n\nSign\nTalks done\n\nSan Francisco 49ers\n\n🧱 Rebuild\n$20.6M x 2 yrs\n$41.2M total\nRoster 68\n\n\"Year one of a rebuild, and the keys are yours.\"\n\nBefore you push: Raise accepted 15% · Held 42.5% · Withdrawn 42.5%\n\nSign\nPush for more\n\nPhiladelphia Eagles\n\n🎯 Playoff push\n$18.6M x 1 yr\n$18.6M total\nRoster 80\n\n\"A bigger role and a real shot, their words.\"\n\nBefore you push: Raise accepted 15% · Held 42.5% · Withdrawn 42.5%\n\nSign\nPush for more"
+  },
+  {
+   "tag": "s10",
+   "freeAgency": "Compare offers\n\n🖊️ Free agency\n\nYour deal is up. Every franchise below is a real destination with its own money, length and roster. You can push any offer for more, once. Push too hard and an offer can disappear, but your own franchise never walks away. Your offers and each spent push survive reload. A wheel reveals the saved negotiation, never another attempt. For example, a 30% chance fills 30 of 100 equal parts; it does not promise a raise.\n\nReal interest, real numbers. Choose the next chapter.\n\nMinnesota Vikings did not blink. The number is the number.\n\nMinnesota VikingsYour team\n\n🎯 Playoff push\n$16.1M x 1 yr\n$16.1M total\nRoster 77\n\n\"They drafted the story. They want the ending too.\"\n\nOffer held. The terms did not change.\n\nSign\nTalks done\n\nSan Francisco 49ers\n\n🧱 Rebuild\n$20.6M x 2 yrs\n$41.2M total\nRoster 68\n\n\"Year one of a rebuild, and the keys are yours.\"\n\nBefore you push: Raise accepted 15% · Held 42.5% · Withdrawn 42.5%\n\nSign\nPush for more\n\nPhiladelphia Eagles\n\n🎯 Playoff push\n$18.6M x 1 yr\n$18.6M total\nRoster 80\n\n\"A bigger role and a real shot, their words.\"\n\nBefore you push: Raise accepted 15% · Held 42.5% · Withdrawn 42.5%\n\nSign\nPush for more"
+  },
+  {
+   "tag": "s10",
+   "freeAgency": "Compare offers\n\n🖊️ Free agency\n\nYour deal is up. Every franchise below is a real destination with its own money, length and roster. You can push any offer for more, once. Push too hard and an offer can disappear, but your own franchise never walks away. Your offers and each spent push survive reload. A wheel reveals the saved negotiation, never another attempt. For example, a 30% chance fills 30 of 100 equal parts; it does not promise a raise.\n\nReal interest, real numbers. Choose the next chapter.\n\nMinnesota Vikings did not blink. The number is the number.\n\nMinnesota VikingsYour team\n\n🎯 Playoff push\n$16.1M x 1 yr\n$16.1M total\nRoster 77\n\n\"They drafted the story. They want the ending too.\"\n\nOffer held. The terms did not change.\n\nSign\nTalks done\n\nSan Francisco 49ers\n\n🧱 Rebuild\n$20.6M x 2 yrs\n$41.2M total\nRoster 68\n\n\"Year one of a rebuild, and the keys are yours.\"\n\nBefore you push: Raise accepted 15% · Held 42.5% · Withdrawn 42.5%\n\nSign\nPush for more\n\nPhiladelphia Eagles\n\n🎯 Playoff push\n$18.6M x 1 yr\n$18.6M total\nRoster 80\n\n\"A bigger role and a real shot, their words.\"\n\nBefore you push: Raise accepted 15% · Held 42.5% · Withdrawn 42.5%\n\nSign\nPush for more"
+  },
+  {
+   "tag": "s10",
+   "freeAgency": "Compare offers\n\n🖊️ Free agency\n\nYour deal is up. Every franchise below is a real destination with its own money, length and roster. You can push any offer for more, once. Push too hard and an offer can disappear, but your own franchise never walks away. Your offers and each spent push survive reload. A wheel reveals the saved negotiation, never another attempt. For example, a 30% chance fills 30 of 100 equal parts; it does not promise a raise.\n\nReal interest, real numbers. Choose the next chapter.\n\nMinnesota Vikings did not blink. The number is the number.\n\nMinnesota VikingsYour team\n\n🎯 Playoff push\n$16.1M x 1 yr\n$16.1M total\nRoster 77\n\n\"They drafted the story. They want the ending too.\"\n\nOffer held. The terms did not change.\n\nSign\nTalks done\n\nSan Francisco 49ers\n\n🧱 Rebuild\n$20.6M x 2 yrs\n$41.2M total\nRoster 68\n\n\"Year one of a rebuild, and the keys are yours.\"\n\nBefore you push: Raise accepted 15% · Held 42.5% · Withdrawn 42.5%\n\nSign\nPush for more\n\nPhiladelphia Eagles\n\n🎯 Playoff push\n$18.6M x 1 yr\n$18.6M total\nRoster 80\n\n\"A bigger role and a real shot, their words.\"\n\nBefore you push: Raise accepted 15% · Held 42.5% · Withdrawn 42.5%\n\nSign\nPush for more"
+  },
+  {
+   "tag": "s10",
+   "freeAgency": "Compare offers\n\n🖊️ Free agency\n\nYour deal is up. Every franchise below is a real destination with its own money, length and roster. You can push any offer for more, once. Push too hard and an offer can disappear, but your own franchise never walks away. Your offers and each spent push survive reload. A wheel reveals the saved negotiation, never another attempt. For example, a 30% chance fills 30 of 100 equal parts; it does not promise a raise.\n\nReal interest, real numbers. Choose the next chapter.\n\nMinnesota Vikings did not blink. The number is the number.\n\nMinnesota VikingsYour team\n\n🎯 Playoff push\n$16.1M x 1 yr\n$16.1M total\nRoster 77\n\n\"They drafted the story. They want the ending too.\"\n\nOffer held. The terms did not change.\n\nSign\nTalks done\n\nSan Francisco 49ers\n\n🧱 Rebuild\n$20.6M x 2 yrs\n$41.2M total\nRoster 68\n\n\"Year one of a rebuild, and the keys are yours.\"\n\nBefore you push: Raise accepted 15% · Held 42.5% · Withdrawn 42.5%\n\nSign\nPush for more\n\nPhiladelphia Eagles\n\n🎯 Playoff push\n$18.6M x 1 yr\n$18.6M total\nRoster 80\n\n\"A bigger role and a real shot, their words.\"\n\nBefore you push: Raise accepted 15% · Held 42.5% · Withdrawn 42.5%\n\nSign\nPush for more"
+  },
+  {
+   "tag": "s10",
+   "freeAgency": "Compare offers\n\n🖊️ Free agency\n\nYour deal is up. Every franchise below is a real destination with its own money, length and roster. You can push any offer for more, once. Push too hard and an offer can disappear, but your own franchise never walks away. Your offers and each spent push survive reload. A wheel reveals the saved negotiation, never another attempt. For example, a 30% chance fills 30 of 100 equal parts; it does not promise a raise.\n\nReal interest, real numbers. Choose the next chapter.\n\nMinnesota Vikings did not blink. The number is the number.\n\nMinnesota VikingsYour team\n\n🎯 Playoff push\n$16.1M x 1 yr\n$16.1M total\nRoster 77\n\n\"They drafted the story. They want the ending too.\"\n\nOffer held. The terms did not change.\n\nSign\nTalks done\n\nSan Francisco 49ers\n\n🧱 Rebuild\n$20.6M x 2 yrs\n$41.2M total\nRoster 68\n\n\"Year one of a rebuild, and the keys are yours.\"\n\nBefore you push: Raise accepted 15% · Held 42.5% · Withdrawn 42.5%\n\nSign\nPush for more\n\nPhiladelphia Eagles\n\n🎯 Playoff push\n$18.6M x 1 yr\n$18.6M total\nRoster 80\n\n\"A bigger role and a real shot, their words.\"\n\nBefore you push: Raise accepted 15% · Held 42.5% · Withdrawn 42.5%\n\nSign\nPush for more"
+  },
+  {
+   "tag": "s10",
+   "freeAgency": "Compare offers\n\n🖊️ Free agency\n\nYour deal is up. Every franchise below is a real destination with its own money, length and roster. You can push any offer for more, once. Push too hard and an offer can disappear, but your own franchise never walks away. Your offers and each spent push survive reload. A wheel reveals the saved negotiation, never another attempt. For example, a 30% chance fills 30 of 100 equal parts; it does not promise a raise.\n\nReal interest, real numbers. Choose the next chapter.\n\nMinnesota Vikings did not blink. The number is the number.\n\nMinnesota VikingsYour team\n\n🎯 Playoff push\n$16.1M x 1 yr\n$16.1M total\nRoster 77\n\n\"They drafted the story. They want the ending too.\"\n\nOffer held. The terms did not change.\n\nSign\nTalks done\n\nSan Francisco 49ers\n\n🧱 Rebuild\n$20.6M x 2 yrs\n$41.2M total\nRoster 68\n\n\"Year one of a rebuild, and the keys are yours.\"\n\nBefore you push: Raise accepted 15% · Held 42.5% · Withdrawn 42.5%\n\nSign\nPush for more\n\nPhiladelphia Eagles\n\n🎯 Playoff push\n$18.6M x 1 yr\n$18.6M total\nRoster 80\n\n\"A bigger role and a real shot, their words.\"\n\nBefore you push: Raise accepted 15% · Held 42.5% · Withdrawn 42.5%\n\nSign\nPush for more"
+  },
+  {
+   "tag": "s10",
+   "freeAgency": "Compare offers\n\n🖊️ Free agency\n\nYour deal is up. Every franchise below is a real destination with its own money, length and roster. You can push any offer for more, once. Push too hard and an offer can disappear, but your own franchise never walks away. Your offers and each spent push survive reload. A wheel reveals the saved negotiation, never another attempt. For example, a 30% chance fills 30 of 100 equal parts; it does not promise a raise.\n\nReal interest, real numbers. Choose the next chapter.\n\nMinnesota Vikings did not blink. The number is the number.\n\nMinnesota VikingsYour team\n\n🎯 Playoff push\n$16.1M x 1 yr\n$16.1M total\nRoster 77\n\n\"They drafted the story. They want the ending too.\"\n\nOffer held. The terms did not change.\n\nSign\nTalks done\n\nSan Francisco 49ers\n\n🧱 Rebuild\n$20.6M x 2 yrs\n$41.2M total\nRoster 68\n\n\"Year one of a rebuild, and the keys are yours.\"\n\nBefore you push: Raise accepted 15% · Held 42.5% · Withdrawn 42.5%\n\nSign\nPush for more\n\nPhiladelphia Eagles\n\n🎯 Playoff push\n$18.6M x 1 yr\n$18.6M total\nRoster 80\n\n\"A bigger role and a real shot, their words.\"\n\nBefore you push: Raise accepted 15% · Held 42.5% · Withdrawn 42.5%\n\nSign\nPush for more"
+  },
+  {
+   "tag": "s10",
+   "freeAgency": "Compare offers\n\n🖊️ Free agency\n\nYour deal is up. Every franchise below is a real destination with its own money, length and roster. You can push any offer for more, once. Push too hard and an offer can disappear, but your own franchise never walks away. Your offers and each spent push survive reload. A wheel reveals the saved negotiation, never another attempt. For example, a 30% chance fills 30 of 100 equal parts; it does not promise a raise.\n\nReal interest, real numbers. Choose the next chapter.\n\nMinnesota Vikings did not blink. The number is the number.\n\nMinnesota VikingsYour team\n\n🎯 Playoff push\n$16.1M x 1 yr\n$16.1M total\nRoster 77\n\n\"They drafted the story. They want the ending too.\"\n\nOffer held. The terms did not change.\n\nSign\nTalks done\n\nSan Francisco 49ers\n\n🧱 Rebuild\n$20.6M x 2 yrs\n$41.2M total\nRoster 68\n\n\"Year one of a rebuild, and the keys are yours.\"\n\nBefore you push: Raise accepted 15% · Held 42.5% · Withdrawn 42.5%\n\nSign\nPush for more\n\nPhiladelphia Eagles\n\n🎯 Playoff push\n$18.6M x 1 yr\n$18.6M total\nRoster 80\n\n\"A bigger role and a real shot, their words.\"\n\nBefore you push: Raise accepted 15% · Held 42.5% · Withdrawn 42.5%\n\nSign\nPush for more"
+  },
+  {
+   "tag": "s10",
+   "freeAgency": "Compare offers\n\n🖊️ Free agency\n\nYour deal is up. Every franchise below is a real destination with its own money, length and roster. You can push any offer for more, once. Push too hard and an offer can disappear, but your own franchise never walks away. Your offers and each spent push survive reload. A wheel reveals the saved negotiation, never another attempt. For example, a 30% chance fills 30 of 100 equal parts; it does not promise a raise.\n\nReal interest, real numbers. Choose the next chapter.\n\nMinnesota Vikings did not blink. The number is the number.\n\nMinnesota VikingsYour team\n\n🎯 Playoff push\n$16.1M x 1 yr\n$16.1M total\nRoster 77\n\n\"They drafted the story. They want the ending too.\"\n\nOffer held. The terms did not change.\n\nSign\nTalks done\n\nSan Francisco 49ers\n\n🧱 Rebuild\n$20.6M x 2 yrs\n$41.2M total\nRoster 68\n\n\"Year one of a rebuild, and the keys are yours.\"\n\nBefore you push: Raise accepted 15% · Held 42.5% · Withdrawn 42.5%\n\nSign\nPush for more\n\nPhiladelphia Eagles\n\n🎯 Playoff push\n$18.6M x 1 yr\n$18.6M total\nRoster 80\n\n\"A bigger role and a real shot, their words.\"\n\nBefore you push: Raise accepted 15% · Held 42.5% · Withdrawn 42.5%\n\nSign\nPush for more"
+  },
+  {
+   "tag": "s10",
+   "freeAgency": "Compare offers\n\n🖊️ Free agency\n\nYour deal is up. Every franchise below is a real destination with its own money, length and roster. You can push any offer for more, once. Push too hard and an offer can disappear, but your own franchise never walks away. Your offers and each spent push survive reload. A wheel reveals the saved negotiation, never another attempt. For example, a 30% chance fills 30 of 100 equal parts; it does not promise a raise.\n\nReal interest, real numbers. Choose the next chapter.\n\nMinnesota Vikings did not blink. The number is the number.\n\nMinnesota VikingsYour team\n\n🎯 Playoff push\n$16.1M x 1 yr\n$16.1M total\nRoster 77\n\n\"They drafted the story. They want the ending too.\"\n\nOffer held. The terms did not change.\n\nSign\nTalks done\n\nSan Francisco 49ers\n\n🧱 Rebuild\n$20.6M x 2 yrs\n$41.2M total\nRoster 68\n\n\"Year one of a rebuild, and the keys are yours.\"\n\nBefore you push: Raise accepted 15% · Held 42.5% · Withdrawn 42.5%\n\nSign\nPush for more\n\nPhiladelphia Eagles\n\n🎯 Playoff push\n$18.6M x 1 yr\n$18.6M total\nRoster 80\n\n\"A bigger role and a real shot, their words.\"\n\nBefore you push: Raise accepted 15% · Held 42.5% · Withdrawn 42.5%\n\nSign\nPush for more"
+  },
+  {
+   "tag": "s10",
+   "freeAgency": "Compare offers\n\n🖊️ Free agency\n\nYour deal is up. Every franchise below is a real destination with its own money, length and roster. You can push any offer for more, once. Push too hard and an offer can disappear, but your own franchise never walks away. Your offers and each spent push survive reload. A wheel reveals the saved negotiation, never another attempt. For example, a 30% chance fills 30 of 100 equal parts; it does not promise a raise.\n\nReal interest, real numbers. Choose the next chapter.\n\nMinnesota Vikings did not blink. The number is the number.\n\nMinnesota VikingsYour team\n\n🎯 Playoff push\n$16.1M x 1 yr\n$16.1M total\nRoster 77\n\n\"They drafted the story. They want the ending too.\"\n\nOffer held. The terms did not change.\n\nSign\nTalks done\n\nSan Francisco 49ers\n\n🧱 Rebuild\n$20.6M x 2 yrs\n$41.2M total\nRoster 68\n\n\"Year one of a rebuild, and the keys are yours.\"\n\nBefore you push: Raise accepted 15% · Held 42.5% · Withdrawn 42.5%\n\nSign\nPush for more\n\nPhiladelphia Eagles\n\n🎯 Playoff push\n$18.6M x 1 yr\n$18.6M total\nRoster 80\n\n\"A bigger role and a real shot, their words.\"\n\nBefore you push: Raise accepted 15% · Held 42.5% · Withdrawn 42.5%\n\nSign\nPush for more"
+  },
+  {
+   "tag": "s10",
+   "freeAgency": "Compare offers\n\n🖊️ Free agency\n\nYour deal is up. Every franchise below is a real destination with its own money, length and roster. You can push any offer for more, once. Push too hard and an offer can disappear, but your own franchise never walks away. Your offers and each spent push survive reload. A wheel reveals the saved negotiation, never another attempt. For example, a 30% chance fills 30 of 100 equal parts; it does not promise a raise.\n\nReal interest, real numbers. Choose the next chapter.\n\nMinnesota Vikings did not blink. The number is the number.\n\nMinnesota VikingsYour team\n\n🎯 Playoff push\n$16.1M x 1 yr\n$16.1M total\nRoster 77\n\n\"They drafted the story. They want the ending too.\"\n\nOffer held. The terms did not change.\n\nSign\nTalks done\n\nSan Francisco 49ers\n\n🧱 Rebuild\n$20.6M x 2 yrs\n$41.2M total\nRoster 68\n\n\"Year one of a rebuild, and the keys are yours.\"\n\nBefore you push: Raise accepted 15% · Held 42.5% · Withdrawn 42.5%\n\nSign\nPush for more\n\nPhiladelphia Eagles\n\n🎯 Playoff push\n$18.6M x 1 yr\n$18.6M total\nRoster 80\n\n\"A bigger role and a real shot, their words.\"\n\nBefore you push: Raise accepted 15% · Held 42.5% · Withdrawn 42.5%\n\nSign\nPush for more"
+  },
+  {
+   "tag": "s10",
+   "freeAgency": "Compare offers\n\n🖊️ Free agency\n\nYour deal is up. Every franchise below is a real destination with its own money, length and roster. You can push any offer for more, once. Push too hard and an offer can disappear, but your own franchise never walks away. Your offers and each spent push survive reload. A wheel reveals the saved negotiation, never another attempt. For example, a 30% chance fills 30 of 100 equal parts; it does not promise a raise.\n\nReal interest, real numbers. Choose the next chapter.\n\nMinnesota Vikings did not blink. The number is the number.\n\nMinnesota VikingsYour team\n\n🎯 Playoff push\n$16.1M x 1 yr\n$16.1M total\nRoster 77\n\n\"They drafted the story. They want the ending too.\"\n\nOffer held. The terms did not change.\n\nSign\nTalks done\n\nSan Francisco 49ers\n\n🧱 Rebuild\n$20.6M x 2 yrs\n$41.2M total\nRoster 68\n\n\"Year one of a rebuild, and the keys are yours.\"\n\nBefore you push: Raise accepted 15% · Held 42.5% · Withdrawn 42.5%\n\nSign\nPush for more\n\nPhiladelphia Eagles\n\n🎯 Playoff push\n$18.6M x 1 yr\n$18.6M total\nRoster 80\n\n\"A bigger role and a real shot, their words.\"\n\nBefore you push: Raise accepted 15% · Held 42.5% · Withdrawn 42.5%\n\nSign\nPush for more"
+  },
+  {
+   "tag": "s10",
+   "freeAgency": "Compare offers\n\n🖊️ Free agency\n\nYour deal is up. Every franchise below is a real destination with its own money, length and roster. You can push any offer for more, once. Push too hard and an offer can disappear, but your own franchise never walks away. Your offers and each spent push survive reload. A wheel reveals the saved negotiation, never another attempt. For example, a 30% chance fills 30 of 100 equal parts; it does not promise a raise.\n\nReal interest, real numbers. Choose the next chapter.\n\nMinnesota Vikings did not blink. The number is the number.\n\nMinnesota VikingsYour team\n\n🎯 Playoff push\n$16.1M x 1 yr\n$16.1M total\nRoster 77\n\n\"They drafted the story. They want the ending too.\"\n\nOffer held. The terms did not change.\n\nSign\nTalks done\n\nSan Francisco 49ers\n\n🧱 Rebuild\n$20.6M x 2 yrs\n$41.2M total\nRoster 68\n\n\"Year one of a rebuild, and the keys are yours.\"\n\nBefore you push: Raise accepted 15% · Held 42.5% · Withdrawn 42.5%\n\nSign\nPush for more\n\nPhiladelphia Eagles\n\n🎯 Playoff push\n$18.6M x 1 yr\n$18.6M total\nRoster 80\n\n\"A bigger role and a real shot, their words.\"\n\nBefore you push: Raise accepted 15% · Held 42.5% · Withdrawn 42.5%\n\nSign\nPush for more"
+  },
+  {
+   "tag": "s10",
+   "freeAgency": "Compare offers\n\n🖊️ Free agency\n\nYour deal is up. Every franchise below is a real destination with its own money, length and roster. You can push any offer for more, once. Push too hard and an offer can disappear, but your own franchise never walks away. Your offers and each spent push survive reload. A wheel reveals the saved negotiation, never another attempt. For example, a 30% chance fills 30 of 100 equal parts; it does not promise a raise.\n\nReal interest, real numbers. Choose the next chapter.\n\nMinnesota Vikings did not blink. The number is the number.\n\nMinnesota VikingsYour team\n\n🎯 Playoff push\n$16.1M x 1 yr\n$16.1M total\nRoster 77\n\n\"They drafted the story. They want the ending too.\"\n\nOffer held. The terms did not change.\n\nSign\nTalks done\n\nSan Francisco 49ers\n\n🧱 Rebuild\n$20.6M x 2 yrs\n$41.2M total\nRoster 68\n\n\"Year one of a rebuild, and the keys are yours.\"\n\nBefore you push: Raise accepted 15% · Held 42.5% · Withdrawn 42.5%\n\nSign\nPush for more\n\nPhiladelphia Eagles\n\n🎯 Playoff push\n$18.6M x 1 yr\n$18.6M total\nRoster 80\n\n\"A bigger role and a real shot, their words.\"\n\nBefore you push: Raise accepted 15% · Held 42.5% · Withdrawn 42.5%\n\nSign\nPush for more"
+  },
+  {
+   "tag": "s10",
+   "freeAgency": "Compare offers\n\n🖊️ Free agency\n\nYour deal is up. Every franchise below is a real destination with its own money, length and roster. You can push any offer for more, once. Push too hard and an offer can disappear, but your own franchise never walks away. Your offers and each spent push survive reload. A wheel reveals the saved negotiation, never another attempt. For example, a 30% chance fills 30 of 100 equal parts; it does not promise a raise.\n\nReal interest, real numbers. Choose the next chapter.\n\nMinnesota Vikings did not blink. The number is the number.\n\nMinnesota VikingsYour team\n\n🎯 Playoff push\n$16.1M x 1 yr\n$16.1M total\nRoster 77\n\n\"They drafted the story. They want the ending too.\"\n\nOffer held. The terms did not change.\n\nSign\nTalks done\n\nSan Francisco 49ers\n\n🧱 Rebuild\n$20.6M x 2 yrs\n$41.2M total\nRoster 68\n\n\"Year one of a rebuild, and the keys are yours.\"\n\nBefore you push: Raise accepted 15% · Held 42.5% · Withdrawn 42.5%\n\nSign\nPush for more\n\nPhiladelphia Eagles\n\n🎯 Playoff push\n$18.6M x 1 yr\n$18.6M total\nRoster 80\n\n\"A bigger role and a real shot, their words.\"\n\nBefore you push: Raise accepted 15% · Held 42.5% · Withdrawn 42.5%\n\nSign\nPush for more"
+  },
+  {
+   "tag": "s10",
+   "freeAgency": "Compare offers\n\n🖊️ Free agency\n\nYour deal is up. Every franchise below is a real destination with its own money, length and roster. You can push any offer for more, once. Push too hard and an offer can disappear, but your own franchise never walks away. Your offers and each spent push survive reload. A wheel reveals the saved negotiation, never another attempt. For example, a 30% chance fills 30 of 100 equal parts; it does not promise a raise.\n\nReal interest, real numbers. Choose the next chapter.\n\nMinnesota Vikings did not blink. The number is the number.\n\nMinnesota VikingsYour team\n\n🎯 Playoff push\n$16.1M x 1 yr\n$16.1M total\nRoster 77\n\n\"They drafted the story. They want the ending too.\"\n\nOffer held. The terms did not change.\n\nSign\nTalks done\n\nSan Francisco 49ers\n\n🧱 Rebuild\n$20.6M x 2 yrs\n$41.2M total\nRoster 68\n\n\"Year one of a rebuild, and the keys are yours.\"\n\nBefore you push: Raise accepted 15% · Held 42.5% · Withdrawn 42.5%\n\nSign\nPush for more\n\nPhiladelphia Eagles\n\n🎯 Playoff push\n$18.6M x 1 yr\n$18.6M total\nRoster 80\n\n\"A bigger role and a real shot, their words.\"\n\nBefore you push: Raise accepted 15% · Held 42.5% · Withdrawn 42.5%\n\nSign\nPush for more"
+  },
+  {
+   "tag": "s10",
+   "freeAgency": "Compare offers\n\n🖊️ Free agency\n\nYour deal is up. Every franchise below is a real destination with its own money, length and roster. You can push any offer for more, once. Push too hard and an offer can disappear, but your own franchise never walks away. Your offers and each spent push survive reload. A wheel reveals the saved negotiation, never another attempt. For example, a 30% chance fills 30 of 100 equal parts; it does not promise a raise.\n\nReal interest, real numbers. Choose the next chapter.\n\nMinnesota Vikings did not blink. The number is the number.\n\nMinnesota VikingsYour team\n\n🎯 Playoff push\n$16.1M x 1 yr\n$16.1M total\nRoster 77\n\n\"They drafted the story. They want the ending too.\"\n\nOffer held. The terms did not change.\n\nSign\nTalks done\n\nSan Francisco 49ers\n\n🧱 Rebuild\n$20.6M x 2 yrs\n$41.2M total\nRoster 68\n\n\"Year one of a rebuild, and the keys are yours.\"\n\nBefore you push: Raise accepted 15% · Held 42.5% · Withdrawn 42.5%\n\nSign\nPush for more\n\nPhiladelphia Eagles\n\n🎯 Playoff push\n$18.6M x 1 yr\n$18.6M total\nRoster 80\n\n\"A bigger role and a real shot, their words.\"\n\nBefore you push: Raise accepted 15% · Held 42.5% · Withdrawn 42.5%\n\nSign\nPush for more"
+  },
+  {
+   "tag": "s10",
+   "freeAgency": "Compare offers\n\n🖊️ Free agency\n\nYour deal is up. Every franchise below is a real destination with its own money, length and roster. You can push any offer for more, once. Push too hard and an offer can disappear, but your own franchise never walks away. Your offers and each spent push survive reload. A wheel reveals the saved negotiation, never another attempt. For example, a 30% chance fills 30 of 100 equal parts; it does not promise a raise.\n\nReal interest, real numbers. Choose the next chapter.\n\nMinnesota Vikings did not blink. The number is the number.\n\nMinnesota VikingsYour team\n\n🎯 Playoff push\n$16.1M x 1 yr\n$16.1M total\nRoster 77\n\n\"They drafted the story. They want the ending too.\"\n\nOffer held. The terms did not change.\n\nSign\nTalks done\n\nSan Francisco 49ers\n\n🧱 Rebuild\n$20.6M x 2 yrs\n$41.2M total\nRoster 68\n\n\"Year one of a rebuild, and the keys are yours.\"\n\nBefore you push: Raise accepted 15% · Held 42.5% · Withdrawn 42.5%\n\nSign\nPush for more\n\nPhiladelphia Eagles\n\n🎯 Playoff push\n$18.6M x 1 yr\n$18.6M total\nRoster 80\n\n\"A bigger role and a real shot, their words.\"\n\nBefore you push: Raise accepted 15% · Held 42.5% · Withdrawn 42.5%\n\nSign\nPush for more"
+  },
+  {
+   "tag": "s10",
+   "freeAgency": "Compare offers\n\n🖊️ Free agency\n\nYour deal is up. Every franchise below is a real destination with its own money, length and roster. You can push any offer for more, once. Push too hard and an offer can disappear, but your own franchise never walks away. Your offers and each spent push survive reload. A wheel reveals the saved negotiation, never another attempt. For example, a 30% chance fills 30 of 100 equal parts; it does not promise a raise.\n\nReal interest, real numbers. Choose the next chapter.\n\nMinnesota Vikings did not blink. The number is the number.\n\nMinnesota VikingsYour team\n\n🎯 Playoff push\n$16.1M x 1 yr\n$16.1M total\nRoster 77\n\n\"They drafted the story. They want the ending too.\"\n\nOffer held. The terms did not change.\n\nSign\nTalks done\n\nSan Francisco 49ers\n\n🧱 Rebuild\n$20.6M x 2 yrs\n$41.2M total\nRoster 68\n\n\"Year one of a rebuild, and the keys are yours.\"\n\nBefore you push: Raise accepted 15% · Held 42.5% · Withdrawn 42.5%\n\nSign\nPush for more\n\nPhiladelphia Eagles\n\n🎯 Playoff push\n$18.6M x 1 yr\n$18.6M total\nRoster 80\n\n\"A bigger role and a real shot, their words.\"\n\nBefore you push: Raise accepted 15% · Held 42.5% · Withdrawn 42.5%\n\nSign\nPush for more"
+  },
+  {
+   "tag": "s10",
+   "freeAgency": "Compare offers\n\n🖊️ Free agency\n\nYour deal is up. Every franchise below is a real destination with its own money, length and roster. You can push any offer for more, once. Push too hard and an offer can disappear, but your own franchise never walks away. Your offers and each spent push survive reload. A wheel reveals the saved negotiation, never another attempt. For example, a 30% chance fills 30 of 100 equal parts; it does not promise a raise.\n\nReal interest, real numbers. Choose the next chapter.\n\nMinnesota Vikings did not blink. The number is the number.\n\nMinnesota VikingsYour team\n\n🎯 Playoff push\n$16.1M x 1 yr\n$16.1M total\nRoster 77\n\n\"They drafted the story. They want the ending too.\"\n\nOffer held. The terms did not change.\n\nSign\nTalks done\n\nSan Francisco 49ers\n\n🧱 Rebuild\n$20.6M x 2 yrs\n$41.2M total\nRoster 68\n\n\"Year one of a rebuild, and the keys are yours.\"\n\nBefore you push: Raise accepted 15% · Held 42.5% · Withdrawn 42.5%\n\nSign\nPush for more\n\nPhiladelphia Eagles\n\n🎯 Playoff push\n$18.6M x 1 yr\n$18.6M total\nRoster 80\n\n\"A bigger role and a real shot, their words.\"\n\nBefore you push: Raise accepted 15% · Held 42.5% · Withdrawn 42.5%\n\nSign\nPush for more"
+  },
+  {
+   "tag": "s10",
+   "freeAgency": "Compare offers\n\n🖊️ Free agency\n\nYour deal is up. Every franchise below is a real destination with its own money, length and roster. You can push any offer for more, once. Push too hard and an offer can disappear, but your own franchise never walks away. Your offers and each spent push survive reload. A wheel reveals the saved negotiation, never another attempt. For example, a 30% chance fills 30 of 100 equal parts; it does not promise a raise.\n\nReal interest, real numbers. Choose the next chapter.\n\nMinnesota Vikings did not blink. The number is the number.\n\nMinnesota VikingsYour team\n\n🎯 Playoff push\n$16.1M x 1 yr\n$16.1M total\nRoster 77\n\n\"They drafted the story. They want the ending too.\"\n\nOffer held. The terms did not change.\n\nSign\nTalks done\n\nSan Francisco 49ers\n\n🧱 Rebuild\n$20.6M x 2 yrs\n$41.2M total\nRoster 68\n\n\"Year one of a rebuild, and the keys are yours.\"\n\nBefore you push: Raise accepted 15% · Held 42.5% · Withdrawn 42.5%\n\nSign\nPush for more\n\nPhiladelphia Eagles\n\n🎯 Playoff push\n$18.6M x 1 yr\n$18.6M total\nRoster 80\n\n\"A bigger role and a real shot, their words.\"\n\nBefore you push: Raise accepted 15% · Held 42.5% · Withdrawn 42.5%\n\nSign\nPush for more"
+  },
+  {
+   "tag": "s10",
+   "freeAgency": "Compare offers\n\n🖊️ Free agency\n\nYour deal is up. Every franchise below is a real destination with its own money, length and roster. You can push any offer for more, once. Push too hard and an offer can disappear, but your own franchise never walks away. Your offers and each spent push survive reload. A wheel reveals the saved negotiation, never another attempt. For example, a 30% chance fills 30 of 100 equal parts; it does not promise a raise.\n\nReal interest, real numbers. Choose the next chapter.\n\nMinnesota Vikings did not blink. The number is the number.\n\nMinnesota VikingsYour team\n\n🎯 Playoff push\n$16.1M x 1 yr\n$16.1M total\nRoster 77\n\n\"They drafted the story. They want the ending too.\"\n\nOffer held. The terms did not change.\n\nSign\nTalks done\n\nSan Francisco 49ers\n\n🧱 Rebuild\n$20.6M x 2 yrs\n$41.2M total\nRoster 68\n\n\"Year one of a rebuild, and the keys are yours.\"\n\nBefore you push: Raise accepted 15% · Held 42.5% · Withdrawn 42.5%\n\nSign\nPush for more\n\nPhiladelphia Eagles\n\n🎯 Playoff push\n$18.6M x 1 yr\n$18.6M total\nRoster 80\n\n\"A bigger role and a real shot, their words.\"\n\nBefore you push: Raise accepted 15% · Held 42.5% · Withdrawn 42.5%\n\nSign\nPush for more"
+  },
+  {
+   "tag": "s10",
+   "freeAgency": "Compare offers\n\n🖊️ Free agency\n\nYour deal is up. Every franchise below is a real destination with its own money, length and roster. You can push any offer for more, once. Push too hard and an offer can disappear, but your own franchise never walks away. Your offers and each spent push survive reload. A wheel reveals the saved negotiation, never another attempt. For example, a 30% chance fills 30 of 100 equal parts; it does not promise a raise.\n\nReal interest, real numbers. Choose the next chapter.\n\nMinnesota Vikings did not blink. The number is the number.\n\nMinnesota VikingsYour team\n\n🎯 Playoff push\n$16.1M x 1 yr\n$16.1M total\nRoster 77\n\n\"They drafted the story. They want the ending too.\"\n\nOffer held. The terms did not change.\n\nSign\nTalks done\n\nSan Francisco 49ers\n\n🧱 Rebuild\n$20.6M x 2 yrs\n$41.2M total\nRoster 68\n\n\"Year one of a rebuild, and the keys are yours.\"\n\nBefore you push: Raise accepted 15% · Held 42.5% · Withdrawn 42.5%\n\nSign\nPush for more\n\nPhiladelphia Eagles\n\n🎯 Playoff push\n$18.6M x 1 yr\n$18.6M total\nRoster 80\n\n\"A bigger role and a real shot, their words.\"\n\nBefore you push: Raise accepted 15% · Held 42.5% · Withdrawn 42.5%\n\nSign\nPush for more"
+  },
+  {
+   "tag": "s10",
+   "freeAgency": "Compare offers\n\n🖊️ Free agency\n\nYour deal is up. Every franchise below is a real destination with its own money, length and roster. You can push any offer for more, once. Push too hard and an offer can disappear, but your own franchise never walks away. Your offers and each spent push survive reload. A wheel reveals the saved negotiation, never another attempt. For example, a 30% chance fills 30 of 100 equal parts; it does not promise a raise.\n\nReal interest, real numbers. Choose the next chapter.\n\nMinnesota Vikings did not blink. The number is the number.\n\nMinnesota VikingsYour team\n\n🎯 Playoff push\n$16.1M x 1 yr\n$16.1M total\nRoster 77\n\n\"They drafted the story. They want the ending too.\"\n\nOffer held. The terms did not change.\n\nSign\nTalks done\n\nSan Francisco 49ers\n\n🧱 Rebuild\n$20.6M x 2 yrs\n$41.2M total\nRoster 68\n\n\"Year one of a rebuild, and the keys are yours.\"\n\nBefore you push: Raise accepted 15% · Held 42.5% · Withdrawn 42.5%\n\nSign\nPush for more\n\nPhiladelphia Eagles\n\n🎯 Playoff push\n$18.6M x 1 yr\n$18.6M total\nRoster 80\n\n\"A bigger role and a real shot, their words.\"\n\nBefore you push: Raise accepted 15% · Held 42.5% · Withdrawn 42.5%\n\nSign\nPush for more"
+  },
+  {
+   "tag": "s10",
+   "freeAgency": "Compare offers\n\n🖊️ Free agency\n\nYour deal is up. Every franchise below is a real destination with its own money, length and roster. You can push any offer for more, once. Push too hard and an offer can disappear, but your own franchise never walks away. Your offers and each spent push survive reload. A wheel reveals the saved negotiation, never another attempt. For example, a 30% chance fills 30 of 100 equal parts; it does not promise a raise.\n\nReal interest, real numbers. Choose the next chapter.\n\nMinnesota Vikings did not blink. The number is the number.\n\nMinnesota VikingsYour team\n\n🎯 Playoff push\n$16.1M x 1 yr\n$16.1M total\nRoster 77\n\n\"They drafted the story. They want the ending too.\"\n\nOffer held. The terms did not change.\n\nSign\nTalks done\n\nSan Francisco 49ers\n\n🧱 Rebuild\n$20.6M x 2 yrs\n$41.2M total\nRoster 68\n\n\"Year one of a rebuild, and the keys are yours.\"\n\nBefore you push: Raise accepted 15% · Held 42.5% · Withdrawn 42.5%\n\nSign\nPush for more\n\nPhiladelphia Eagles\n\n🎯 Playoff push\n$18.6M x 1 yr\n$18.6M total\nRoster 80\n\n\"A bigger role and a real shot, their words.\"\n\nBefore you push: Raise accepted 15% · Held 42.5% · Withdrawn 42.5%\n\nSign\nPush for more"
+  },
+  {
+   "tag": "s10",
+   "freeAgency": "Compare offers\n\n🖊️ Free agency\n\nYour deal is up. Every franchise below is a real destination with its own money, length and roster. You can push any offer for more, once. Push too hard and an offer can disappear, but your own franchise never walks away. Your offers and each spent push survive reload. A wheel reveals the saved negotiation, never another attempt. For example, a 30% chance fills 30 of 100 equal parts; it does not promise a raise.\n\nReal interest, real numbers. Choose the next chapter.\n\nMinnesota Vikings did not blink. The number is the number.\n\nMinnesota VikingsYour team\n\n🎯 Playoff push\n$16.1M x 1 yr\n$16.1M total\nRoster 77\n\n\"They drafted the story. They want the ending too.\"\n\nOffer held. The terms did not change.\n\nSign\nTalks done\n\nSan Francisco 49ers\n\n🧱 Rebuild\n$20.6M x 2 yrs\n$41.2M total\nRoster 68\n\n\"Year one of a rebuild, and the keys are yours.\"\n\nBefore you push: Raise accepted 15% · Held 42.5% · Withdrawn 42.5%\n\nSign\nPush for more\n\nPhiladelphia Eagles\n\n🎯 Playoff push\n$18.6M x 1 yr\n$18.6M total\nRoster 80\n\n\"A bigger role and a real shot, their words.\"\n\nBefore you push: Raise accepted 15% · Held 42.5% · Withdrawn 42.5%\n\nSign\nPush for more"
+  },
+  {
+   "tag": "s10",
+   "freeAgency": "Compare offers\n\n🖊️ Free agency\n\nYour deal is up. Every franchise below is a real destination with its own money, length and roster. You can push any offer for more, once. Push too hard and an offer can disappear, but your own franchise never walks away. Your offers and each spent push survive reload. A wheel reveals the saved negotiation, never another attempt. For example, a 30% chance fills 30 of 100 equal parts; it does not promise a raise.\n\nReal interest, real numbers. Choose the next chapter.\n\nMinnesota Vikings did not blink. The number is the number.\n\nMinnesota VikingsYour team\n\n🎯 Playoff push\n$16.1M x 1 yr\n$16.1M total\nRoster 77\n\n\"They drafted the story. They want the ending too.\"\n\nOffer held. The terms did not change.\n\nSign\nTalks done\n\nSan Francisco 49ers\n\n🧱 Rebuild\n$20.6M x 2 yrs\n$41.2M total\nRoster 68\n\n\"Year one of a rebuild, and the keys are yours.\"\n\nBefore you push: Raise accepted 15% · Held 42.5% · Withdrawn 42.5%\n\nSign\nPush for more\n\nPhiladelphia Eagles\n\n🎯 Playoff push\n$18.6M x 1 yr\n$18.6M total\nRoster 80\n\n\"A bigger role and a real shot, their words.\"\n\nBefore you push: Raise accepted 15% · Held 42.5% · Withdrawn 42.5%\n\nSign\nPush for more"
+  }
+ ],
+ "outcomes": [
+  {
+   "tag": "s1",
+   "txt": "YOUR DECISION\n\nThey want to move you\n\nYou chose: Do both and take every rep in camp\n\nOVR\n71 → \nto\n73\n+2\nHealth\n100 → \nto\n91\n-9\nMorale\n65 → \nto\n67\n+2\nContinue"
+  },
+  {
+   "tag": "s1",
+   "txt": "YOUR DECISION\n\nThe committee backfield\n\nYou chose: Buy in and stay fresh\n\nHealth\n91 → \nto\n99\n+8\nFanbase\n43 → \nto\n40\n-3\nContinue"
+  },
+  {
+   "tag": "s1",
+   "txt": "YOUR DECISION\n\nThe fastest way onto the field\n\nYou chose: Become the best cover man in the building\n\nHealth\n99 → \nto\n95\n-4\nFanbase\n40 → \nto\n44\n+4\nContinue"
+  },
+  {
+   "tag": "s2",
+   "txt": "YOUR DECISION\n\nHe did a whole podcast about you\n\nYou chose: Answer with three paragraphs\n\nMorale\n71 → \nto\n68\n-3\nFanbase\n42 → \nto\n51\n+9\nContinue"
+  },
+  {
+   "tag": "s2",
+   "txt": "YOUR DECISION\n\nYour brother has business cards now\n\nYou chose: Real job, under a real agency\n\nMorale\n68 → \nto\n74\n+6\nCash\n$0.8M → \nto\n$0.5M\n-$0.3M\nContinue"
+  },
+  {
+   "tag": "s2",
+   "txt": "YOUR DECISION\n\nUp on Saturday, down on Monday\n\nYou chose: Stay out of it\n\nNo rating, money, team or status changes to show.\n\nContinue"
+  },
+  {
+   "tag": "s3",
+   "txt": "YOUR DECISION\n\nNew quarterback, new everything\n\nYou chose: Ask to be the safety valve on every play\n\nOVR\n76 → \nto\n78\n+2\nHealth\n95 → \nto\n91\n-4\nMorale\n70 → \nto\n68\n-2\nContinue"
+  },
+  {
+   "tag": "s3",
+   "txt": "YOUR DECISION\n\nCutdown day\n\nYou chose: Keep your head down, it is a business\n\nMorale\n68 → \nto\n66\n-2\nContinue"
+  },
+  {
+   "tag": "s3",
+   "txt": "YOUR DECISION\n\n25,000 autographs in eleven weeks\n\nYou chose: Sign all 25,000\n\nHealth\n91 → \nto\n88\n-3\nMorale\n66 → \nto\n61\n-5\nCareer earnings\n$5.1M → \nto\n$8.1M\n+$3M\nCash\n$1.3M → \nto\n$4.3M\n+$3M\nContinue"
+  },
+  {
+   "tag": "s5",
+   "txt": "YOUR DECISION\n\nThe loan\n\nYou chose: Say no and help another way\n\nMorale\n56 → \nto\n54\n-2\nContinue"
+  },
+  {
+   "tag": "s5",
+   "txt": "YOUR DECISION\n\nWings at scale\n\nYou chose: Buy one and actually run it\n\nMorale\n54 → \nto\n49\n-5\nCash\n$9.4M → \nto\n$9.9M\n+$0.5M\nContinue"
+  },
+  {
+   "tag": "s5",
+   "txt": "YOUR DECISION\n\nVoluntary means voluntary\n\nYou chose: Skip the voluntary part, report for minicamp\n\nHealth\n82 → \nto\n88\n+6\nMorale\n49 → \nto\n46\n-3\nContinue"
+  },
+  {
+   "tag": "s6",
+   "txt": "YOUR DECISION\n\nThe car commercial\n\nYou chose: Do it, rhyme and all\n\nMorale\n41 → \nto\n39\n-2\nFanbase\n48 → \nto\n54\n+6\nCareer earnings\n$30.9M → \nto\n$31.3M\n+$0.4M\nCash\n$15M → \nto\n$15.4M\n+$0.4M\nContinue"
+  },
+  {
+   "tag": "s6",
+   "txt": "YOUR DECISION\n\nThe fastest way onto the field\n\nYou chose: Become the best cover man in the building\n\nHealth\n88 → \nto\n84\n-4\nFanbase\n54 → \nto\n58\n+4\nContinue"
+  },
+  {
+   "tag": "s6",
+   "txt": "YOUR DECISION\n\nThe committee backfield\n\nYou chose: Complain to the beat writers\n\nMorale\n39 → \nto\n33\n-6\nFanbase\n58 → \nto\n62\n+4\nContinue"
+  },
+  {
+   "tag": "s7",
+   "txt": "YOUR DECISION\n\nThe shoe meeting\n\nYou chose: Sign with the giant\n\nFanbase\n67 → \nto\n78\n+11\nCareer earnings\n$42.7M → \nto\n$43.6M\n+$0.9M\nCash\n$20.5M → \nto\n$21.4M\n+$0.9M\nContinue"
+  },
+  {
+   "tag": "s7",
+   "txt": "YOUR DECISION\n\nInjured reserve, with a way back\n\nYou chose: Have the surgery now\n\nHealth\n78 → \nto\n92\n+14\nMorale\n44 → \nto\n40\n-4\nContinue"
+  },
+  {
+   "tag": "s7",
+   "txt": "YOUR DECISION\n\nUp on Saturday, down on Monday\n\nYou chose: Tell the truth: he is not ready yet\n\nMorale\n40 → \nto\n38\n-2\nContinue"
+  },
+  {
+   "tag": "s8",
+   "txt": "YOUR DECISION\n\nThe gas station taquito\n\nYou chose: Sell taquito merch\n\nHealth\n92 → \nto\n90\n-2\nFanbase\n81 → \nto\n93\n+12\nCareer earnings\n$55M → \nto\n$55.6M\n+$0.6M\nCash\n$26.5M → \nto\n$27.1M\n+$0.6M\nContinue"
+  },
+  {
+   "tag": "s8",
+   "txt": "YOUR DECISION\n\nCutdown day\n\nYou chose: Call him that night\n\nMorale\n37 → \nto\n41\n+4\nContinue"
+  },
+  {
+   "tag": "s9",
+   "txt": "YOUR DECISION\n\nThe Saturday celebrity group\n\nYou chose: Back nine barefoot with a speaker\n\nMorale\n47 → \nto\n55\n+8\nContinue"
+  },
+  {
+   "tag": "s9",
+   "txt": "YOUR DECISION\n\nVoluntary means voluntary\n\nYou chose: Skip the voluntary part, report for minicamp\n\nHealth\n90 → \nto\n96\n+6\nMorale\n55 → \nto\n52\n-3\nContinue"
+  },
+  {
+   "tag": "s9",
+   "txt": "YOUR DECISION\n\nThey drafted your replacement\n\nYou chose: Ask the front office for the plan\n\nMorale\n52 → \nto\n49\n-3\nContinue"
+  }
+ ],
+ "curtains": [
+  {
+   "tag": "s1",
+   "n": 1,
+   "txt": "THE 2026 SEASON\n\nMinnesota Vikings · age 22 · RB\n\nLost in the Wild Card round\n\n332 rush yds, 3 TD, 11 rec\n\n🪑 Another camp, another year behind the starter. The gap is closing.\n\n🪑 A backup season: 8 games of real action.\n\n📊 Playoffs: 1 game, 7 rush yds, 0 TD.\n\n😬 You were not the same player in January and everyone saw it.\n\n🪞 Quinn Vasquez went 553 rush yds, 3 TD, 21 rec and had the better year of the two of you. Head to head 0-1.\n\nContinue"
+  },
+  {
+   "tag": "s1",
+   "n": 2,
+   "txt": "🪞 RIVALRY: YOUR CALL\n\n💛\n\nTRUCE FOR ONE DAY\n\nQuinn Vasquez's foundation asks you to co-host a free youth camp. Same field, same whistle, one day only. A photo of you two coaching side by side would be everywhere.\n\nMaximilian Okonkwo-Smith\n71\nVS\nQuinn Vasquez\n68\n\nYOU CHOSE: 🤝 CO-HOST AND SPLIT THE BILL\n\n💛 One day, one field, two hundred kids. You and Quinn Vasquez split the bill and the feud took the day off.\n\nContinue"
+  },
+  {
+   "tag": "s2",
+   "n": 1,
+   "txt": "THE 2027 SEASON\n\nMinnesota Vikings · age 23 · RB\n\nLost in the Wild Card round\n\n447 rush yds, 3 TD, 19 rec\n\n🪑 Another camp, another year behind the starter. The gap is closing.\n\n🪑 A backup season: 10 games of real action.\n\n📊 Playoffs: 1 game, 21 rush yds, 0 TD.\n\n🪞 Quinn Vasquez went 814 rush yds, 7 TD, 33 rec and had the better year of the two of you. Head to head 0-2.\n\nContinue"
+  },
+  {
+   "tag": "s2",
+   "n": 2,
+   "txt": "🪞 RIVALRY\n\n📈\n\nSurpassed Your Rival!\n\nFor the first time, your rating (73) has pulled ahead of Quinn Vasquez's (69).\n\nMorale +10\n\nMaximilian Okonkwo-Smith\n74\nVS\nQuinn Vasquez\n69\nContinue"
+  },
+  {
+   "tag": "s3",
+   "n": 1,
+   "txt": "THE 2028 SEASON\n\nMinnesota Vikings · age 24 · RB\n\nLost in the Wild Card round\n\n751 rush yds, 7 TD, 24 rec\n\n🪑 Another camp, another year behind the starter. The gap is closing.\n\n🪑 A backup season: 9 games of real action.\n\n📊 Playoffs: 1 game, 73 rush yds, 1 TD.\n\n🔥 Every read was right. Career year.\n\n🪞 Quinn Vasquez went 962 rush yds, 5 TD, 29 rec and had the better year of the two of you. Head to head 0-3.\n\nContinue"
+  },
+  {
+   "tag": "s5",
+   "n": 1,
+   "txt": "THE 2029 SEASON\n\nMinnesota Vikings · age 25 · RB\n\nLost the Conference Championship\n\n633 rush yds, 5 TD, 20 rec\n\n🪑 Another camp, another year behind the starter. The gap is closing.\n\n🚑 Missed 3 games hurt.\n\n🪑 A backup season: 6 games of real action.\n\n📊 Playoffs: 3 games, 236 rush yds, 2 TD.\n\n🔥 Every read was right. Career year.\n\n🪞 Quinn Vasquez went 900 rush yds, 8 TD, 36 rec and had the better year of the two of you. Head to head 0-4.\n\nContinue"
+  },
+  {
+   "tag": "s6",
+   "n": 1,
+   "txt": "THE 2030 SEASON\n\nMinnesota Vikings · age 26 · RB\n\nMissed the playoffs\n\n691 rush yds, 6 TD, 24 rec\n\n🪑 Another camp, another year behind the starter. The gap is closing.\n\n🪑 A backup season: 9 games of real action.\n\n🪞 Quinn Vasquez went 813 rush yds, 7 TD, 32 rec and had the better year of the two of you. Head to head 0-5.\n\nContinue"
+  },
+  {
+   "tag": "s7",
+   "n": 1,
+   "txt": "THE 2031 SEASON\n\nMinnesota Vikings · age 27 · RB\n\nLost in the Divisional round\n\n780 rush yds, 6 TD, 27 rec\n\n🚀 You won the camp battle. The huddle is yours now.\n\n🚑 Missed 7 games hurt.\n\n📊 Playoffs: 2 games, 168 rush yds, 1 TD.\n\n🪞 Quinn Vasquez went 834 rush yds, 8 TD, 27 rec and had the better year of the two of you. Head to head 0-6.\n\nContinue"
+  },
+  {
+   "tag": "s7",
+   "n": 2,
+   "txt": "🪞 RIVALRY: YOUR CALL\n\n🦵\n\nTHE LATE HIT\n\nQuinn Vasquez drilled you a full second after the whistle on Sunday. The flag flew, the fine is coming, and your sideline wants payback the next time you two meet.\n\nMaximilian Okonkwo-Smith\n82\nVS\nQuinn Vasquez\n74\n\nYOU CHOSE: 🕊️ SHAKE IT OFF ON CAMERA\n\n🕊️ You shook it off on camera and called Quinn Vasquez a good player. The grown up in the room, and the fans noticed.\n\nContinue"
+  },
+  {
+   "tag": "s8",
+   "n": 1,
+   "txt": "THE 2032 SEASON\n\nMinnesota Vikings · age 28 · RB\n\nLost in the Wild Card round\n\n1,394 rush yds, 11 TD, 46 rec\n\n📊 Playoffs: 1 game, 80 rush yds, 1 TD.\n\n🪞 Quinn Vasquez went 914 rush yds, 10 TD, 37 rec. You had the better year. Head to head 1-6.\n\nContinue"
+  },
+  {
+   "tag": "s8",
+   "n": 2,
+   "txt": "🪞 RIVALRY\n\n🤬\n\nSideline Scuffle\n\nCameras catch you and Quinn Vasquez jawing at midfield after the whistle. It is the only clip anybody is talking about Monday.\n\nRivalry intensifies, Fanbase +3\n\nMaximilian Okonkwo-Smith\n80\nVS\nQuinn Vasquez\n74\nContinue"
+  },
+  {
+   "tag": "s9",
+   "n": 1,
+   "txt": "THE 2033 SEASON\n\nMinnesota Vikings · age 29 · RB\n\nLost in the Wild Card round\n\n1,325 rush yds, 12 TD, 39 rec\n\n📊 Playoffs: 1 game, 61 rush yds, 0 TD.\n\n🪞 Quinn Vasquez went 635 rush yds, 4 TD, 31 rec. You had the better year. Head to head 2-6.\n\nContinue"
+  },
+  {
+   "tag": "s9",
+   "n": 2,
+   "txt": "🪞 RIVALRY\n\n🎬\n\nThe Documentary\n\nA streaming service wants to film a season long documentary on you and Quinn Vasquez.\n\nNet worth +2M, Fanbase +8\n\nMaximilian Okonkwo-Smith\n81\nVS\nQuinn Vasquez\n75\nContinue"
+  }
+ ],
+ "hub": [
+  {
+   "at": "drafted",
+   "save": {
+    "phase": "season",
+    "seasons": 0,
+    "year": 2026,
+    "age": 22,
+    "ovr": 69,
+    "team": "MIN",
+    "salary": 1.7,
+    "cy": 4,
+    "morale": 70,
+    "fanbase": 35,
+    "health": 100,
+    "net": 0.1,
+    "summer": null,
+    "last": null
+   },
+   "chips": [
+    "Maximilian Okonkwo-Smith · RB",
+    "Minnesota Vikings",
+    "2026 · age 22",
+    "OVR 69",
+    "$1.7M x4",
+    "🪑 Backup"
+   ],
+   "play": "Play the 2026 season",
+   "so": "Career so far: 0 rings · 0 MVPs · 0 All-Pros · 0 rush yds",
+   "last": null,
+   "tiles": [
+    "📊 MY PLAYER OVR 69 The fans down at 35",
+    "💰 THE BANK $0.1M $1.7M a year, 4 years left",
+    "📜 CAREER LOG No seasons yet Play one and it goes on the books",
+    "🏆 TROPHY CASE Empty Nothing in it. Go and win something",
+    "📰 NEWS 3 headlines 🎓 With pick 82, the Minnesota Vikings select Maximilian Okonkwo-Smith.",
+    "📱 INBOX 1 unread Somebody is waiting on a reply"
+   ]
+  },
+  {
+   "at": "after s1",
+   "outcome": "hub",
+   "save": {
+    "phase": "season",
+    "seasons": 1,
+    "year": 2027,
+    "age": 23,
+    "ovr": 73,
+    "team": "MIN",
+    "salary": 1.7,
+    "cy": 3,
+    "morale": 67,
+    "fanbase": 44,
+    "health": 95,
+    "net": 0,
+    "summer": null,
+    "last": {
+     "year": 2026,
+     "team": "MIN",
+     "age": 22,
+     "ovr": 69,
+     "games": 8,
+     "awards": [],
+     "teamResult": "Lost in the Wild Card round",
+     "salary": 1.7,
+     "rushYds": 332,
+     "rushTd": 3,
+     "rec": 11,
+     "recYds": 75,
+     "poGames": 1,
+     "poLine": "7 rush yds, 0 TD"
+    }
+   },
+   "chips": [
+    "Maximilian Okonkwo-Smith · RB",
+    "Minnesota Vikings",
+    "2027 · age 23",
+    "OVR 73",
+    "$1.7M x3",
+    "🪑 Backup"
+   ],
+   "play": "Play the 2027 season",
+   "so": "Career so far: 0 rings · 0 MVPs · 0 All-Pros · 332 rush yds",
+   "last": "Last season: 332 rush yds, 3 TD, 11 rec · Lost in the Wild Card round",
+   "tiles": [
+    "📊 MY PLAYER OVR 73 RB, age 23, 0 rings",
+    "💰 THE BANK $0M $1.7M a year, 3 years left",
+    "📜 CAREER LOG 1 season 332 rush yds, 3 TD, 11 rec",
+    "🏆 TROPHY CASE Empty Nothing in it. Go and win something",
+    "📰 NEWS 6 headlines You were the first one down the field all year. The crowd started cheering for a tackle on a kickoff. Fanbase +4, health -4.",
+    "📱 INBOX 3 unread Somebody is waiting on a reply"
+   ]
+  },
+  {
+   "at": "after s2",
+   "outcome": "hub",
+   "save": {
+    "phase": "season",
+    "seasons": 2,
+    "year": 2028,
+    "age": 24,
+    "ovr": 74,
+    "team": "MIN",
+    "salary": 1.7,
+    "cy": 2,
+    "morale": 74,
+    "fanbase": 51,
+    "health": 95,
+    "net": 0.5,
+    "summer": null,
+    "last": {
+     "year": 2027,
+     "team": "MIN",
+     "age": 23,
+     "ovr": 73,
+     "games": 10,
+     "awards": [],
+     "teamResult": "Lost in the Wild Card round",
+     "salary": 1.7,
+     "rushYds": 447,
+     "rushTd": 3,
+     "rec": 19,
+     "recYds": 174,
+     "poGames": 1,
+     "poLine": "21 rush yds, 0 TD"
+    }
+   },
+   "chips": [
+    "Maximilian Okonkwo-Smith · RB",
+    "Minnesota Vikings",
+    "2028 · age 24",
+    "OVR 74",
+    "$1.7M x2",
+    "🪑 Backup"
+   ],
+   "play": "Play the 2028 season",
+   "so": "Career so far: 0 rings · 0 MVPs · 0 All-Pros · 779 rush yds",
+   "last": "Last season: 447 rush yds, 3 TD, 19 rec · Lost in the Wild Card round",
+   "tiles": [
+    "📊 MY PLAYER OVR 74 RB, age 24, 0 rings",
+    "💰 THE BANK $0.5M $1.7M a year, 2 years left",
+    "📜 CAREER LOG 2 seasons 447 rush yds, 3 TD, 19 rec",
+    "🏆 TROPHY CASE Empty Nothing in it. Go and win something",
+    "📰 NEWS 6 headlines You said it was above your pay grade. The coach wrote something down anyway. No change.",
+    "📱 INBOX 3 unread Somebody is waiting on a reply"
+   ]
+  },
+  {
+   "at": "after s3",
+   "outcome": "hub",
+   "save": {
+    "phase": "season",
+    "seasons": 3,
+    "year": 2029,
+    "age": 25,
+    "ovr": 78,
+    "team": "MIN",
+    "salary": 1.7,
+    "cy": 1,
+    "morale": 61,
+    "fanbase": 49,
+    "health": 88,
+    "net": 4.3,
+    "summer": null,
+    "last": {
+     "year": 2028,
+     "team": "MIN",
+     "age": 24,
+     "ovr": 74,
+     "games": 9,
+     "awards": [],
+     "teamResult": "Lost in the Wild Card round",
+     "salary": 1.7,
+     "rushYds": 751,
+     "rushTd": 7,
+     "rec": 24,
+     "recYds": 169,
+     "poGames": 1,
+     "poLine": "73 rush yds, 1 TD"
+    }
+   },
+   "chips": [
+    "Maximilian Okonkwo-Smith · RB",
+    "Minnesota Vikings",
+    "2029 · age 25",
+    "OVR 78",
+    "$1.7M x1",
+    "🪑 Backup"
+   ],
+   "play": "Play the 2029 season",
+   "so": "Career so far: 0 rings · 0 MVPs · 0 All-Pros · 1,530 rush yds",
+   "last": "Last season: 751 rush yds, 7 TD, 24 rec · Lost in the Wild Card round",
+   "tiles": [
+    "📊 MY PLAYER OVR 78 RB, age 25, 0 rings",
+    "💰 THE BANK $4.3M $1.7M a year, final year of the deal",
+    "📜 CAREER LOG 3 seasons 751 rush yds, 7 TD, 24 rec",
+    "🏆 TROPHY CASE Empty Nothing in it. Go and win something",
+    "📰 NEWS 6 headlines 3M and eleven weeks of signing through movies, flights and one funeral. Health -3, morale -5.",
+    "📱 INBOX 3 unread Somebody is waiting on a reply"
+   ]
+  },
+  {
+   "at": "after s4",
+   "outcome": "hub",
+   "save": {
+    "phase": "season",
+    "seasons": 3,
+    "year": 2029,
+    "age": 25,
+    "ovr": 78,
+    "team": "MIN",
+    "salary": 11.4,
+    "cy": 5,
+    "morale": 61,
+    "fanbase": 49,
+    "health": 88,
+    "net": 4.3,
+    "summer": null,
+    "last": {
+     "year": 2028,
+     "team": "MIN",
+     "age": 24,
+     "ovr": 74,
+     "games": 9,
+     "awards": [],
+     "teamResult": "Lost in the Wild Card round",
+     "salary": 1.7,
+     "rushYds": 751,
+     "rushTd": 7,
+     "rec": 24,
+     "recYds": 169,
+     "poGames": 1,
+     "poLine": "73 rush yds, 1 TD"
+    }
+   },
+   "chips": [
+    "Maximilian Okonkwo-Smith · RB",
+    "Minnesota Vikings",
+    "2029 · age 25",
+    "OVR 78",
+    "$11.4M x5",
+    "🪑 Backup"
+   ],
+   "play": "Play the 2029 season",
+   "so": "Career so far: 0 rings · 0 MVPs · 0 All-Pros · 1,530 rush yds",
+   "last": "Last season: 751 rush yds, 7 TD, 24 rec · Lost in the Wild Card round",
+   "tiles": [
+    "📊 MY PLAYER OVR 78 RB, age 25, 0 rings",
+    "💰 THE BANK $4.3M $11M a year, 5 years left",
+    "📜 CAREER LOG 3 seasons 751 rush yds, 7 TD, 24 rec",
+    "🏆 TROPHY CASE Empty Nothing in it. Go and win something",
+    "📰 NEWS 6 headlines 🖊️ Extension signed: 4 more years at $11.4M a year.",
+    "📱 INBOX 3 unread Somebody is waiting on a reply"
+   ]
+  },
+  {
+   "at": "after s5",
+   "outcome": "hub",
+   "save": {
+    "phase": "season",
+    "seasons": 4,
+    "year": 2030,
+    "age": 26,
+    "ovr": 80,
+    "team": "MIN",
+    "salary": 11.4,
+    "cy": 4,
+    "morale": 46,
+    "fanbase": 50,
+    "health": 88,
+    "net": 9.9,
+    "summer": null,
+    "last": {
+     "year": 2029,
+     "team": "MIN",
+     "age": 25,
+     "ovr": 78,
+     "games": 6,
+     "awards": [],
+     "teamResult": "Lost the Conference Championship",
+     "salary": 11.4,
+     "rushYds": 633,
+     "rushTd": 5,
+     "rec": 20,
+     "recYds": 180,
+     "poGames": 3,
+     "poLine": "236 rush yds, 2 TD"
+    }
+   },
+   "chips": [
+    "Maximilian Okonkwo-Smith · RB",
+    "Minnesota Vikings",
+    "2030 · age 26",
+    "OVR 80",
+    "$11.4M x4",
+    "🪑 Backup"
+   ],
+   "play": "Play the 2030 season",
+   "so": "Career so far: 0 rings · 0 MVPs · 0 All-Pros · 2,163 rush yds",
+   "last": "Last season: 633 rush yds, 5 TD, 20 rec · Lost the Conference Championship",
+   "tiles": [
+    "📊 MY PLAYER OVR 80 RB, age 26, 0 rings",
+    "💰 THE BANK $9.9M $11M a year, 4 years left",
+    "📜 CAREER LOG 4 seasons 633 rush yds, 5 TD, 20 rec",
+    "🏆 TROPHY CASE Empty Nothing in it. Go and win something",
+    "📰 NEWS 6 headlines You trained at home and showed up the day you had to. Within the rules, and a little outside the mood of the building. Morale -3, health +6.",
+    "📱 INBOX 3 unread Somebody is waiting on a reply"
+   ]
+  },
+  {
+   "at": "after s6",
+   "outcome": "hub",
+   "save": {
+    "phase": "season",
+    "seasons": 5,
+    "year": 2031,
+    "age": 27,
+    "ovr": 82,
+    "team": "MIN",
+    "salary": 11.4,
+    "cy": 3,
+    "morale": 33,
+    "fanbase": 62,
+    "health": 84,
+    "net": 15.4,
+    "summer": null,
+    "last": {
+     "year": 2030,
+     "team": "MIN",
+     "age": 26,
+     "ovr": 80,
+     "games": 9,
+     "awards": [],
+     "teamResult": "Missed the playoffs",
+     "salary": 11.4,
+     "rushYds": 691,
+     "rushTd": 6,
+     "rec": 24,
+     "recYds": 169
+    }
+   },
+   "chips": [
+    "Maximilian Okonkwo-Smith · RB",
+    "Minnesota Vikings",
+    "2031 · age 27",
+    "OVR 82",
+    "$11.4M x3",
+    "🪑 Backup"
+   ],
+   "play": "Play the 2031 season",
+   "so": "Career so far: 0 rings · 0 MVPs · 0 All-Pros · 2,854 rush yds",
+   "last": "Last season: 691 rush yds, 6 TD, 24 rec · Missed the playoffs",
+   "tiles": [
+    "📊 MY PLAYER OVR 82 Morale down at 33",
+    "💰 THE BANK $15M $11M a year, 3 years left",
+    "📜 CAREER LOG 5 seasons 691 rush yds, 6 TD, 24 rec",
+    "🏆 TROPHY CASE Empty Nothing in it. Go and win something",
+    "📰 NEWS 6 headlines The quote ran everywhere. The fans took your side and the running backs room did not. Morale -6, fanbase +4.",
+    "📱 INBOX 3 unread Somebody is waiting on a reply"
+   ]
+  },
+  {
+   "at": "after s7",
+   "outcome": "hub",
+   "save": {
+    "phase": "season",
+    "seasons": 6,
+    "year": 2032,
+    "age": 28,
+    "ovr": 82,
+    "team": "MIN",
+    "salary": 11.4,
+    "cy": 2,
+    "morale": 38,
+    "fanbase": 78,
+    "health": 92,
+    "net": 21.4,
+    "summer": null,
+    "last": {
+     "year": 2031,
+     "team": "MIN",
+     "age": 27,
+     "ovr": 82,
+     "games": 10,
+     "awards": [],
+     "teamResult": "Lost in the Divisional round",
+     "salary": 11.4,
+     "rushYds": 780,
+     "rushTd": 6,
+     "rec": 27,
+     "recYds": 250,
+     "poGames": 2,
+     "poLine": "168 rush yds, 1 TD"
+    }
+   },
+   "chips": [
+    "Maximilian Okonkwo-Smith · RB",
+    "Minnesota Vikings",
+    "2032 · age 28",
+    "OVR 82",
+    "$11.4M x2",
+    "⭐ Starter"
+   ],
+   "play": "Play the 2032 season",
+   "so": "Career so far: 0 rings · 0 MVPs · 0 All-Pros · 3,634 rush yds",
+   "last": "Last season: 780 rush yds, 6 TD, 27 rec · Lost in the Divisional round",
+   "tiles": [
+    "📊 MY PLAYER OVR 82 RB, age 28, 0 rings",
+    "💰 THE BANK $21M $11M a year, 2 years left",
+    "📜 CAREER LOG 6 seasons 780 rush yds, 6 TD, 27 rec",
+    "🏆 TROPHY CASE Empty Nothing in it. Go and win something",
+    "📰 NEWS 6 headlines You said it kindly and you said it straight. It still felt bad. Morale -2.",
+    "📱 INBOX 3 unread Somebody is waiting on a reply"
+   ]
+  },
+  {
+   "at": "after s8",
+   "outcome": "hub",
+   "save": {
+    "phase": "season",
+    "seasons": 7,
+    "year": 2033,
+    "age": 29,
+    "ovr": 80,
+    "team": "MIN",
+    "salary": 11.4,
+    "cy": 1,
+    "morale": 41,
+    "fanbase": 93,
+    "health": 90,
+    "net": 27.1,
+    "summer": null,
+    "last": {
+     "year": 2032,
+     "team": "MIN",
+     "age": 28,
+     "ovr": 82,
+     "games": 17,
+     "awards": [],
+     "teamResult": "Lost in the Wild Card round",
+     "salary": 11.4,
+     "rushYds": 1394,
+     "rushTd": 11,
+     "rec": 46,
+     "recYds": 386,
+     "poGames": 1,
+     "poLine": "80 rush yds, 1 TD"
+    }
+   },
+   "chips": [
+    "Maximilian Okonkwo-Smith · RB",
+    "Minnesota Vikings",
+    "2033 · age 29",
+    "OVR 80",
+    "$11.4M x1",
+    "⭐ Starter"
+   ],
+   "play": "Play the 2033 season",
+   "so": "Career so far: 0 rings · 0 MVPs · 0 All-Pros · 5,028 rush yds",
+   "last": "Last season: 1,394 rush yds, 11 TD, 46 rec · Lost in the Wild Card round",
+   "tiles": [
+    "📊 MY PLAYER OVR 80 RB, age 29, 0 rings",
+    "💰 THE BANK $27M $11M a year, final year of the deal",
+    "📜 CAREER LOG 7 seasons 1,394 rush yds, 11 TD, 46 rec",
+    "🏆 TROPHY CASE Empty Nothing in it. Go and win something",
+    "📰 NEWS 5 headlines You talked for an hour about nothing. He will catch on somewhere. You told him so and you meant it. Morale +4.",
+    "📱 INBOX 3 unread Somebody is waiting on a reply"
+   ]
+  },
+  {
+   "at": "after s9",
+   "outcome": "hub",
+   "save": {
+    "phase": "season",
+    "seasons": 8,
+    "year": 2034,
+    "age": 30,
+    "ovr": 81,
+    "team": "MIN",
+    "salary": 11.4,
+    "cy": 0,
+    "morale": 49,
+    "fanbase": 100,
+    "health": 96,
+    "net": 34.1,
+    "summer": null,
+    "last": {
+     "year": 2033,
+     "team": "MIN",
+     "age": 29,
+     "ovr": 80,
+     "games": 17,
+     "awards": [],
+     "teamResult": "Lost in the Wild Card round",
+     "salary": 11.4,
+     "rushYds": 1325,
+     "rushTd": 12,
+     "rec": 39,
+     "recYds": 331,
+     "poGames": 1,
+     "poLine": "61 rush yds, 0 TD"
+    }
+   },
+   "chips": [
+    "Maximilian Okonkwo-Smith · RB",
+    "Minnesota Vikings",
+    "2034 · age 30",
+    "OVR 81",
+    "$11.4M x0",
+    "⭐ Starter"
+   ],
+   "play": "Play the 2034 season",
+   "so": "Career so far: 0 rings · 0 MVPs · 0 All-Pros · 6,353 rush yds",
+   "last": "Last season: 1,325 rush yds, 12 TD, 39 rec · Lost in the Wild Card round",
+   "tiles": [
+    "📊 MY PLAYER OVR 81 RB, age 30, 0 rings",
+    "💰 THE BANK $34M $11M a year, final year of the deal",
+    "📜 CAREER LOG 8 seasons 1,325 rush yds, 12 TD, 39 rec",
+    "🏆 TROPHY CASE Empty Nothing in it. Go and win something",
+    "📰 NEWS 6 headlines You got a very polite answer that did not contain an answer. Morale -3.",
+    "📱 INBOX 3 unread Somebody is waiting on a reply"
+   ]
+  },
+  {
+   "at": "after s10",
+   "outcome": "loop",
+   "save": {
+    "phase": "freeagency",
+    "seasons": 8,
+    "year": 2034,
+    "age": 30,
+    "ovr": 81,
+    "team": "MIN",
+    "salary": 11.4,
+    "cy": 0,
+    "morale": 49,
+    "fanbase": 100,
+    "health": 96,
+    "net": 34.1,
+    "summer": null,
+    "last": {
+     "year": 2033,
+     "team": "MIN",
+     "age": 29,
+     "ovr": 80,
+     "games": 17,
+     "awards": [],
+     "teamResult": "Lost in the Wild Card round",
+     "salary": 11.4,
+     "rushYds": 1325,
+     "rushTd": 12,
+     "rec": 39,
+     "recYds": 331,
+     "poGames": 1,
+     "poLine": "61 rush yds, 0 TD"
+    }
+   },
+   "chips": [
+    "Maximilian Okonkwo-Smith · RB",
+    "Minnesota Vikings",
+    "2034 · age 30",
+    "OVR 81",
+    "$11.4M x0",
+    "⭐ Starter",
+    "Your team"
+   ],
+   "play": null,
+   "so": null,
+   "last": null,
+   "tiles": [
+    "📊 MY PLAYER OVR 81 RB, age 30, 0 rings",
+    "💰 THE BANK $34M $11M a year, final year of the deal",
+    "📜 CAREER LOG 8 seasons 1,325 rush yds, 12 TD, 39 rec",
+    "🏆 TROPHY CASE Empty Nothing in it. Go and win something",
+    "📰 NEWS 6 headlines You got a very polite answer that did not contain an answer. Morale -3.",
+    "📱 INBOX 3 unread Somebody is waiting on a reply"
+   ]
+  }
+ ],
+ "tiles": [
+  {
+   "tag": "s4",
+   "word": "Inbox",
+   "shot": "nfllong-24-tile-inbox-s4.jpg",
+   "text": "Hub\n📱 Inbox\n🏠\nNeighbor\n🏟️ Playoffs, 2026\nThe whole street put your number up in their windows. The kids made a banner and want you to sign it.\n🏥\nTeam community office\n🛋️ Bye week, 2026\nA few guys are visiting the children's hospital on the off Tuesday. Totally optional, no cameras unless you want them.\n🎓\nCollege coach\n🎓 Draft night, 2026\nProud of you. Remember who you were on the scout team. Stay hungry, and come back and talk to the young guys sometime.",
+   "backOk": true,
+   "scroll": [
+    135,
+    185,
+    185
+   ],
+   "focus": "Skip to main content DOUKNOWBALL Back Tr"
+  },
+  {
+   "tag": "s8",
+   "word": "Inbox",
+   "shot": "nfllong-35-tile-inbox-s8.jpg",
+   "text": "Hub\n📱 Inbox\n💼\nAgent\n🏟️ Playoffs, 2029\nPlayoff checks just cleared. The equipment guys and trainers make a fraction of what you do. Want to do something for them?\n🏠\nNeighbor\n🏟️ Playoffs, 2026\nThe whole street put your number up in their windows. The kids made a banner and want you to sign it.\n🏥\nTeam community office\n🛋️ Bye week, 2026\nA few guys are visiting the children's hospital on the off Tuesday. Totally optional, no cameras unless you want them.\n🎓\nCollege coach\n🎓 Draft night, 2026\nProud of you. Remember who you were on the scout team. Stay hungry, and come back and talk to the young guys sometime.",
+   "backOk": true,
+   "scroll": [
+    0,
+    185,
+    185
+   ],
+   "focus": "Skip to main content DOUKNOWBALL Back Tr"
+  }
+ ],
+ "centre": [],
+ "stuck": [
+  {
+   "tag": "s1",
+   "texts": [],
+   "dialog": [],
+   "toast": []
+  },
+  {
+   "tag": "s2",
+   "texts": [],
+   "dialog": [],
+   "toast": []
+  },
+  {
+   "tag": "s2",
+   "texts": [],
+   "dialog": [],
+   "toast": []
+  },
+  {
+   "tag": "s3",
+   "texts": [],
+   "dialog": [],
+   "toast": []
+  },
+  {
+   "tag": "s5",
+   "texts": [],
+   "dialog": [],
+   "toast": []
+  },
+  {
+   "tag": "s6",
+   "texts": [],
+   "dialog": [],
+   "toast": []
+  },
+  {
+   "tag": "s7",
+   "texts": [],
+   "dialog": [],
+   "toast": []
+  },
+  {
+   "tag": "s8",
+   "texts": [],
+   "dialog": [],
+   "toast": []
+  },
+  {
+   "tag": "s9",
+   "texts": [],
+   "dialog": [],
+   "toast": []
+  },
+  {
+   "tag": "s9",
+   "texts": [],
+   "dialog": [],
+   "toast": []
+  }
+ ],
+ "notes": [
+  "pushed ext s4",
+  "compared s10",
+  "pushed fa s10"
+ ],
+ "shots": [
+  "nfllong-01-first-visit.jpg",
+  "nfllong-02-create.jpg",
+  "nfllong-03-create-filled.jpg",
+  "nfllong-04-hub-draft.jpg",
+  "nfllong-05-hub-draft-full.jpg",
+  "nfllong-06-stuck-s1-0.jpg",
+  "nfllong-07-continue-s1-1.jpg",
+  "nfllong-08-rivalry-choice-s1.jpg",
+  "nfllong-09-continue-s1-2.jpg",
+  "nfllong-10-event-s1-1.jpg",
+  "nfllong-11-outcome-s1.jpg",
+  "nfllong-12-event-s1-2.jpg",
+  "nfllong-13-outcome-s1.jpg",
+  "nfllong-14-hub-s1.jpg",
+  "nfllong-15-stuck-s2-0.jpg",
+  "nfllong-16-stuck-s2-2.jpg",
+  "nfllong-17-hub-s2.jpg",
+  "nfllong-18-stuck-s3-0.jpg",
+  "nfllong-19-hub-s3.jpg",
+  "nfllong-20-extension-s4.jpg",
+  "nfllong-21-wheel-s4.jpg",
+  "nfllong-22-wheel-result-s4.jpg",
+  "nfllong-23-extension-s4.jpg",
+  "nfllong-24-tile-inbox-s4.jpg",
+  "nfllong-25-inbox-open.jpg",
+  "nfllong-26-inbox-open.jpg",
+  "nfllong-27-stuck-s5-0.jpg",
+  "nfllong-28-continue-s5-1.jpg",
+  "nfllong-29-event-s5-1.jpg",
+  "nfllong-30-event-s5-2.jpg",
+  "nfllong-31-stuck-s6-0.jpg",
+  "nfllong-32-hub-s6.jpg",
+  "nfllong-33-stuck-s7-0.jpg",
+  "nfllong-34-stuck-s8-1.jpg",
+  "nfllong-35-tile-inbox-s8.jpg",
+  "nfllong-36-inbox-open.jpg",
+  "nfllong-37-inbox-open.jpg",
+  "nfllong-38-decline-s9.jpg",
+  "nfllong-39-stuck-s9-1.jpg",
+  "nfllong-40-stuck-s9-3.jpg"
+ ],
+ "draft": {},
+ "reload": [],
+ "inbox": [
+  {
+   "rows": 3
+  },
+  {
+   "body": "Hub\n📱 Inbox\n← Back to inbox\n\n🏠 NEIGHBOR\n\n🏟️ Playoffs, 2026\n\nThe whole street put your number up in their windows. The kids made a banner and want you to sign it.\n\nStop by and sign itSend signed photos",
+   "answered": "Stop by and sign it"
+  },
+  {
+   "body": "Hub\n📱 Inbox\n← Back to inbox\n\n🏠 NEIGHBOR\n\n🏟️ Playoffs, 2026\n\nThe whole street put your number up in their windows. The kids made a banner and want you to sign it.\n\nYou replied: Stop by and sign it",
+   "answered": false
+  },
+  {
+   "rows": 4
+  },
+  {
+   "body": "Hub\n📱 Inbox\n← Back to inbox\n\n💼 AGENT\n\n🏟️ Playoffs, 2029\n\nPlayoff checks just cleared. The equipment guys and trainers make a fraction of what you do. Want to do something for them?\n\nSplit a bonus with the staffBuy them dinnerKeep it",
+   "answered": "Split a bonus with the staff"
+  },
+  {
+   "body": "Hub\n📱 Inbox\n← Back to inbox\n\n💼 AGENT\n\n🏟️ Playoffs, 2029\n\nPlayoff checks just cleared. The equipment guys and trainers make a fraction of what you do. Want to do something for them?\n\nYou replied: Split a bonus with the staff",
+   "answered": false
+  }
+ ],
+ "practice": [],
+ "edge": [],
+ "programme": [],
+ "firstVisit": {
+  "popover": false,
+  "dialog": [
+   "How to play\nThe steps\nCreate your player"
+  ],
+  "buttons": [
+   "🏈 2026 The league as it is today. Full money, every current franchise",
+   "⏪ 2005 throwback The 2005 league: the Raiders in Oakland, the Chargers",
+   "QB",
+   "RB",
+   "WR",
+   "TE",
+   "LB",
+   "CB",
+   "EDGE",
+   "K",
+   "🎲 Surprise me",
+   "🧑 Skin",
+   "💇 Hair",
+   "🧔 Beard",
+   "👟 Cleats",
+   "💍 Extras",
+   "🎉 Celebration",
+   "Porcelain",
+   "Ivory",
+   "Fair"
+  ],
+  "helpText": "How to play\nThe steps\nCreate your player: name, one of 8 positions (QB, RB, WR, TE, LB, CB, EDGE, K), and an archetype like Cannon Arm, Island Corner, Speed Bender or Ice in December that sets ceiling and durability.\nPick your league: today's NFL, or the 2005 throwback with the Raiders in Oakland, the Chargers in San Diego and the Rams in St. Louis.\nBuild your look: skin tone, hair, beard, accessories and a signature celebration, or hit Surprise me.\nEnter the draft. Your hidden rating decides the slot, and a real team calls your name.\nCheck the depth chart. Top twelve picks open as starters; everyone else fights the incumbent in camp, every single summer, and backup seasons are spot duty until you take the job.\nPlay each season with one tap: yards, touchdowns, awards, how far the team went.\nOpen Career Log and pick a year to review its saved overview, regular season and postseason. Changes compare with the previous saved season; older missing values say Not recorded. Back to seasons returns to the year tiles, and Review seasons is available after retirement.\nWhen the deal expires, work a real free agency window: competing offers from named teams with their own money, length and roster quality, and one push for more on any of them.\nMake up to three offseason calls, one card at a time: train skills or body, fix the knee or play through it, take the envelope or report it. Only the first card of a summer can move your rating, and a card you just saw rests for a while before it comes back (press moments follow your season, so those can come right back).\nAfter a normal offseason choice, the result shows the actual changes. Expand it for any extra changes, then Continue opens the next card, or takes you back to your career after the last one, without applying the choice again.\nOpen the Bank between seasons. Savings pays 2.5% a season and never loses, five things you can put money into each have a price that moves every season whether you look or not (a fund, flats back home, two shares and a coin that halves as often as it doubles), the statement keeps your last 12 moves, and the card school in the locker room is one sitting a season on odds that are printed before you sit in.\nSpend the money in 7 aisles: home, rides, investments, body, flex, family, and a shady aisle that only appears once you have something to hide.\nRead the News box. The paper writes up every season in your own position's stat, the SocialGram shows followers read off your fanbase with three fan comments under the latest post, and the rival's card keeps the head to head against the player drafted the same year as you.\nFrom 30, a falling rating brings the retirement talk: stop now, play one more year, or announce a farewell season. Then the legacy verdict, and the Hall of Fame wait one ballot at a time.\nCollect badges in the Trophy Case: 25 of them, from a first ring and Rookie of the Year to 10,000 passing yards, a 20 sack season and $100M to your name, each lit the moment the facts o",
+  "closedByEscape": true
+ },
+ "create": [
+  "*🏈 2026 The league as it is today. Full money, every current",
+  "⏪ 2005 throwback The 2005 league: the Raiders in Oakland, th",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "*Bellcow Volume monster, wears down",
+  "Satellite Back Catches everything, shares the room",
+  "The Hammer Short yardage god"
+ ],
+ "wbw": {
+  "visible": true,
+  "held": null
+ },
+ "final": {
+  "save": {
+   "phase": "freeagency",
+   "seasons": 8,
+   "year": 2034,
+   "age": 30,
+   "ovr": 81,
+   "team": "MIN",
+   "salary": 11.4,
+   "cy": 0,
+   "morale": 49,
+   "fanbase": 100,
+   "health": 96,
+   "net": 34.1,
+   "summer": null,
+   "last": {
+    "year": 2033,
+    "team": "MIN",
+    "age": 29,
+    "ovr": 80,
+    "games": 17,
+    "awards": [],
+    "teamResult": "Lost in the Wild Card round",
+    "salary": 11.4,
+    "rushYds": 1325,
+    "rushTd": 12,
+    "rec": 39,
+    "recYds": 331,
+    "poGames": 1,
+    "poLine": "61 rush yds, 0 TD"
+   }
+  },
+  "chips": {
+   "chips": [
+    "Maximilian Okonkwo-Smith · RB",
+    "Minnesota Vikings",
+    "2034 · age 30",
+    "OVR 81",
+    "$11.4M x0",
+    "⭐ Starter",
+    "Your team"
+   ],
+   "play": null,
+   "so": null,
+   "last": null,
+   "tiles": [
+    "📊 MY PLAYER OVR 81 RB, age 30, 0 rings",
+    "💰 THE BANK $34M $11M a year, final year of the deal",
+    "📜 CAREER LOG 8 seasons 1,325 rush yds, 12 TD, 39 rec",
+    "🏆 TROPHY CASE Empty Nothing in it. Go and win something",
+    "📰 NEWS 6 headlines You got a very polite answer that did not contain an answer. Morale -3.",
+    "📱 INBOX 3 unread Somebody is waiting on a reply"
+   ]
+  },
+  "secs": 434
+ }
+}

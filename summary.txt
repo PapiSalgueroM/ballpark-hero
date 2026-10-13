@@ -1,0 +1,6 @@
+build exit=0 31s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+hostile390 exit=0 138s | nhl team-unknown: errors 0; heading ["NHL My Career","NHL My Career: Hockey Career Simulator","How to play NHL My Career, a free hockey career simulation game"]; buttons 
+nfllong exit=0 435s | [434s] CONSOLE warning Warning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+nhllong exit=0 178s | [177s] CONSOLE warning Warning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+nbalong exit=0 671s | [670s] CONSOLE warning Warning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+mlblong exit=0 605s | [605s] CONSOLE warning Warning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.

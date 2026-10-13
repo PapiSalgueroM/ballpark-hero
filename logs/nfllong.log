@@ -1,0 +1,36 @@
+[0s] walk nfllong: http://localhost:4173/nfl-my-career at 390x844
+[9s] AUDIT hub draft trunc: Nothing in it. Go and win something [149<152]
+[9s] AUDIT hub draft trunc: 🎓 With pick 82, the Minnesota Vikings select Maximilian Okonkwo-Smith [149<315]
+[50s] AUDIT event s1 trunc: 💛 One day, one field, two hundred kids. You and Quinn Vasquez split t [149<460]
+[51s] AUDIT event s1 trunc: Two position rooms, two playbooks, zero days off. Rating +2 to 73, mor [149<378]
+[53s] season 1: hub, seasons on save 0 -> 1, year 2027, age 23, ovr 73, team MIN, $1.7M x3, last {"year":2026,"team":"MIN","age":22,"ovr":69,"games":8,"awards":[],"teamResult":"Lost in the Wild Card round","salary":1.7,"rushYds":332,"rushTd":3,"rec":11,"rec
+[53s] AUDIT hub s1 trunc: You were the first one down the field all year. The crowd started chee [149<514]
+[95s] AUDIT event s2 trunc: You typed for eleven minutes and posted it at 1am. Fanbase +9, morale  [149<497]
+[97s] season 2: hub, seasons on save 1 -> 2, year 2028, age 24, ovr 74, team MIN, $1.7M x2, last {"year":2027,"team":"MIN","age":23,"ovr":73,"games":10,"awards":[],"teamResult":"Lost in the Wild Card round","salary":1.7,"rushYds":447,"rushTd":3,"rec":19,"re
+[97s] AUDIT hub s2 trunc: You said it was above your pay grade. The coach wrote something down a [149<400]
+[133s] AUDIT event s3 trunc: 🪑 Another camp, another year behind the starter. The gap is closing. [149<296]
+[134s] AUDIT event s3 trunc: You added an hour to every day and burned the candle from both ends. R [149<468]
+[137s] season 3: hub, seasons on save 2 -> 3, year 2029, age 25, ovr 78, team MIN, $1.7M x1, last {"year":2028,"team":"MIN","age":24,"ovr":74,"games":9,"awards":[],"teamResult":"Lost in the Wild Card round","salary":1.7,"rushYds":751,"rushTd":7,"rec":24,"rec
+[137s] AUDIT hub s3 trunc: 3M and eleven weeks of signing through movies, flights and one funeral [149<401]
+[175s] season 4: hub, seasons on save 3 -> 3, year 2029, age 25, ovr 78, team MIN, $11.4M x5, last {"year":2028,"team":"MIN","age":24,"ovr":74,"games":9,"awards":[],"teamResult":"Lost in the Wild Card round","salary":1.7,"rushYds":751,"rushTd":7,"rec":24,"rec
+[176s] AUDIT tile Inbox s4 trunc: The whole street put your number up in their windows. The kids made a  [302<548]
+[176s] AUDIT tile Inbox s4 trunc: A few guys are visiting the children's hospital on the off Tuesday. To [302<621]
+[176s] AUDIT tile Inbox s4 trunc: Proud of you. Remember who you were on the scout team. Stay hungry, an [302<666]
+[217s] AUDIT event s5 trunc: You said no, then got him a job with your trainer that paid him proper [149<532]
+[219s] season 5: hub, seasons on save 3 -> 4, year 2030, age 26, ovr 80, team MIN, $11.4M x4, last {"year":2029,"team":"MIN","age":25,"ovr":78,"games":6,"awards":[],"teamResult":"Lost the Conference Championship","salary":11.4,"rushYds":633,"rushTd":5,"rec":2
+[256s] AUDIT event s6 trunc: Every person in that city can still do the jingle. 0.35M earned, fanba [149<362]
+[258s] season 6: hub, seasons on save 4 -> 5, year 2031, age 27, ovr 82, team MIN, $11.4M x3, last {"year":2030,"team":"MIN","age":26,"ovr":80,"games":9,"awards":[],"teamResult":"Missed the playoffs","salary":11.4,"rushYds":691,"rushTd":6,"rec":24,"recYds":16
+[258s] AUDIT hub s6 trunc: The quote ran everywhere. The fans took your side and the running back [149<476]
+[299s] AUDIT event s7 trunc: 🕊️ You shook it off on camera and called Quinn Vasquez a good player. [149<512]
+[300s] AUDIT event s7 trunc: Three stripes, one commercial with a rapper, 0.9M a year. Fanbase +11. [149<305]
+[303s] season 7: hub, seasons on save 5 -> 6, year 2032, age 28, ovr 82, team MIN, $11.4M x2, last {"year":2031,"team":"MIN","age":27,"ovr":82,"games":10,"awards":[],"teamResult":"Lost in the Divisional round","salary":11.4,"rushYds":780,"rushTd":6,"rec":27,"
+[343s] AUDIT event s8 trunc: 0.6M in shirts with a taquito on them. Fanbase +12, and the gas statio [149<447]
+[345s] season 8: hub, seasons on save 6 -> 7, year 2033, age 29, ovr 80, team MIN, $11.4M x1, last {"year":2032,"team":"MIN","age":28,"ovr":82,"games":17,"awards":[],"teamResult":"Lost in the Wild Card round","salary":11.4,"rushYds":1394,"rushTd":11,"rec":46,
+[346s] AUDIT tile Inbox s8 trunc: Playoff checks just cleared. The equipment guys and trainers make a fr [302<667]
+[391s] AUDIT event s9 trunc: A 20k fine from the tournament and the best eleven seconds of internet [149<450]
+[394s] season 9: hub, seasons on save 7 -> 8, year 2034, age 30, ovr 81, team MIN, $11.4M x0, last {"year":2033,"team":"MIN","age":29,"ovr":80,"games":17,"awards":[],"teamResult":"Lost in the Wild Card round","salary":11.4,"rushYds":1325,"rushTd":12,"rec":39,
+[394s] AUDIT hub s9 trunc: You got a very polite answer that did not contain an answer. Morale -3 [149<300]
+[434s] season 10: loop, seasons on save 8 -> 8, year 2034, age 30, ovr 81, team MIN, $11.4M x0, last {"year":2033,"team":"MIN","age":29,"ovr":80,"games":17,"awards":[],"teamResult":"Lost in the Wild Card round","salary":11.4,"rushYds":1325,"rushTd":12,"rec":39,
+[434s] DONE nfllong: seasons 8, events 86, curtains 13, page errors 0, console 1, stuck 10, shots 40
+[434s] event titles: They want to move you x1 | The committee backfield x2 | The fastest way onto the field x2 | He did a whole podcast about you x1 | Your brother has business cards now x1 | Up on Saturday, down on Monday x2 | New quarterback, new everything x1 | Cutdown day x2 | 25,000 autographs in eleven weeks x1 | The loan x1 | Wings at scale x1 | Voluntary means voluntary x2 | The car commercial x1 | The shoe meeting x1 | Injured reserve, with a way back x1 | The gas station taquito x1 | The Saturday celebrity group x1 | They drafted your replacement x1
+[434s] CONSOLE warning Warning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.

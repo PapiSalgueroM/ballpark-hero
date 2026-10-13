@@ -1,0 +1,56 @@
+[0s] walk mlblong: http://localhost:4173/mlb-my-career at 390x844
+[4s] AUDIT first visit help small: SP 55x28
+[4s] AUDIT first visit help small: RP 55x28
+[4s] AUDIT first visit help small: C 55x28
+[4s] AUDIT first visit help small: 1B 55x28
+[4s] AUDIT first visit help small: 2B 55x28
+[4s] AUDIT first visit help small: 3B 55x28
+[4s] AUDIT first visit help small: SS 55x28
+[4s] AUDIT first visit help small: LF 55x28
+[4s] AUDIT first visit help small: CF 55x28
+[4s] AUDIT first visit help small: RF 55x28
+[4s] AUDIT first visit help small: DH 55x28
+[22s] AUDIT hub draft trunc: Nothing in it. Go and win something [149<152]
+[22s] AUDIT hub draft trunc: With pick 437, the San Francisco Giants select Maximilian Okonkwo-Smit [149<318]
+[63s] AUDIT event s1 trunc: 😉 The clinic turned into a trash talk show between you and Cole Kowal [149<445]
+[64s] season 1: hub, seasons on save 0 -> 1, year 2029, age 23, ovr 77, team SFG, $0.8M x5, last {"year":2028,"team":"SFG","age":22,"ovr":76,"games":83,"awards":[],"teamResult":"Missed October","salary":0.8,"avg":0.293,"hr":21,"rbi":41,"sb":1,"doubles":20,"
+[64s] AUDIT hub s1 trunc: You fixed that one and opened another. The scouts found it by May. Rat [149<403]
+[106s] season 2: hub, seasons on save 1 -> 2, year 2030, age 24, ovr 79, team SFG, $0.8M x4, last {"year":2029,"team":"SFG","age":23,"ovr":77,"games":74,"awards":[],"teamResult":"Lost the Wild Card series","salary":0.8,"avg":0.285,"hr":13,"rbi":31,"sb":0,"do
+[106s] AUDIT hub s2 trunc: 30k for a private session in which she told you to ask for more money. [149<471]
+[146s] AUDIT event s3 trunc: 🔥 You screenshotted Cole Kowalski's contract and made it your lock sc [149<328]
+[147s] season 3: hub, seasons on save 2 -> 3, year 2031, age 25, ovr 81, team SFG, $0.8M x3, last {"year":2030,"team":"SFG","age":24,"ovr":79,"games":155,"awards":[],"teamResult":"Missed October","salary":0.8,"avg":0.302,"hr":31,"rbi":93,"sb":0,"doubles":38,
+[147s] AUDIT hub s3 trunc: 🎙️ Nobody remembers it tomorrow. [149<151]
+[188s] AUDIT event s4 trunc: 📣 Your face went up on every board in the ballpark. Paid for it yours [149<324]
+[189s] AUDIT event s4 trunc: Health +10. Spring training in the best shape of your life. [149<241]
+[190s] season 4: hub, seasons on save 3 -> 4, year 2032, age 26, ovr 83, team SFG, $0.8M x2, last {"year":2031,"team":"SFG","age":25,"ovr":81,"games":159,"awards":["All-Star"],"teamResult":"Lost the Division Series","salary":0.8,"avg":0.291,"hr":37,"rbi":117
+[191s] AUDIT tile Inbox s4 trunc: CONGRATULATIONS! You've won 2 MILLION DOLLARS. Just send your account  [302<622]
+[191s] AUDIT tile Inbox s4 trunc: Your name is all over the trade rumor accounts this week lol. You sayi [302<472]
+[191s] AUDIT tile Inbox s4 trunc: Watched you on TV last night. Still remember you at 14 refusing to lea [302<594]
+[236s] season 5: hub, seasons on save 4 -> 5, year 2033, age 27, ovr 85, team SFG, $0.8M x1, last {"year":2032,"team":"SFG","age":26,"ovr":83,"games":155,"awards":["Gold Glove"],"teamResult":"Lost the World Series","salary":0.8,"avg":0.303,"hr":38,"rbi":101,
+[268s] AUDIT extension s6 trunc: You told a camera that a bug does not hit a curveball. Rating +1 to 85 [149<453]
+[275s] season 6: hub, seasons on save 5 -> 5, year 2033, age 27, ovr 85, team SFG, $26.6M x6, last {"year":2032,"team":"SFG","age":26,"ovr":83,"games":155,"awards":["Gold Glove"],"teamResult":"Lost the World Series","salary":0.8,"avg":0.303,"hr":38,"rbi":101,
+[275s] AUDIT hub s6 trunc: 🖊️ Extension signed: 5 more years at $26.6M a year. [149<226]
+[316s] AUDIT event s7 trunc: Nine getaway day afternoons off across the summer. Health +11, fanbase [149<394]
+[318s] season 7: hub, seasons on save 5 -> 6, year 2034, age 28, ovr 85, team SFG, $26.6M x5, last {"year":2033,"team":"SFG","age":27,"ovr":85,"games":67,"awards":[],"teamResult":"Missed October","salary":26.6,"avg":0.31,"hr":17,"rbi":30,"sb":1,"doubles":19,"
+[359s] AUDIT event s8 trunc: 🤝 You and Cole Kowalski told minor league bus stories for an hour. Be [149<452]
+[360s] AUDIT event s8 trunc: One more glove in the bag and a real case to be in the lineup more. Mo [149<335]
+[362s] season 8: hub, seasons on save 6 -> 7, year 2035, age 29, ovr 85, team SFG, $26.6M x4, last {"year":2034,"team":"SFG","age":28,"ovr":85,"games":73,"awards":[],"teamResult":"Missed October","salary":26.6,"avg":0.31,"hr":21,"rbi":40,"sb":0,"doubles":17,"
+[363s] AUDIT tile Inbox s8 trunc: Watching you in October from a motel in the Dominican winter league. S [302<669]
+[402s] AUDIT event s9 trunc: 🪑 Another spring on the bench. The gap is closing. [149<222]
+[403s] AUDIT event s9 trunc: Every person in that city can still do the line, including your teamma [149<516]
+[405s] season 9: hub, seasons on save 7 -> 8, year 2036, age 30, ovr 85, team SFG, $26.6M x3, last {"year":2035,"team":"SFG","age":29,"ovr":85,"games":81,"awards":[],"teamResult":"Lost the Championship Series","salary":26.6,"avg":0.303,"hr":19,"rbi":37,"sb":2
+[405s] AUDIT hub s9 trunc: Your agent made a few calls and the club heard about every one of them [149<412]
+[443s] AUDIT event s10 trunc: They argued about defensive positioning for an hour and you learned tw [149<410]
+[445s] season 10: hub, seasons on save 8 -> 9, year 2037, age 31, ovr 85, team SFG, $26.6M x2, last {"year":2036,"team":"SFG","age":30,"ovr":85,"games":82,"awards":[],"teamResult":"Lost the Division Series","salary":26.6,"avg":0.291,"hr":15,"rbi":36,"sb":1,"do
+[487s] AUDIT event s11 trunc: 0.8M of connected suites and zero sleep across three cities. Morale +9 [149<613]
+[488s] season 11: hub, seasons on save 9 -> 10, year 2038, age 32, ovr 85, team SFG, $26.6M x1, last {"year":2037,"team":"SFG","age":31,"ovr":85,"games":161,"awards":[],"teamResult":"Lost the Division Series","salary":26.6,"avg":0.291,"hr":34,"rbi":101,"sb":3,"
+[526s] season 12: hub, seasons on save 10 -> 10, year 2038, age 32, ovr 85, team SFG, $26.4M x3, last {"year":2037,"team":"SFG","age":31,"ovr":85,"games":161,"awards":[],"teamResult":"Lost the Division Series","salary":26.6,"avg":0.291,"hr":34,"rbi":101,"sb":3,"
+[526s] AUDIT hub s12 trunc: 🖊️ Extension signed: 2 more years at $26.4M a year. [149<226]
+[527s] AUDIT tile Inbox s12 trunc: hey. long time. any chance of two tickets for Game 3? no pressure [302<349]
+[565s] AUDIT event s13 trunc: 📊 Postseason: 2 games, 2 for 8 (.250), 0 HR. [149<199]
+[567s] AUDIT event s13 trunc: Your lawyer stripped the illegal clauses and the number fell to 1.8M.  [149<333]
+[569s] season 13: hub, seasons on save 10 -> 11, year 2039, age 33, ovr 85, team SFG, $26.4M x2, last {"year":2038,"team":"SFG","age":32,"ovr":85,"games":159,"awards":[],"teamResult":"Lost the Wild Card series","salary":26.4,"avg":0.291,"hr":34,"rbi":106,"sb":2,
+[605s] season 14: stuck, seasons on save 11 -> 12, year 2040, age 34, ovr 85, team SFG, $26.4M x1, last {"year":2039,"team":"SFG","age":33,"ovr":85,"games":161,"awards":[],"teamResult":"Lost the Division Series","salary":26.4,"avg":0.285,"hr":29,"rbi":96,"sb":0,"d
+[605s] DONE mlblong: seasons 12, events 31, curtains 20, page errors 0, console 1, stuck 13, shots 40
+[605s] event titles: The league has a book on you now x1 | The owner hired a psychic x1 | The accountability scrum x1 | Winter plan x4 | The 40,000 dollar ask x2 | The rally cockroach x1 | August, 104 degrees, day game x1 | The MRI you did not want x2 | Learn another position x1 | Three errors in a week x2 | Out of options x1 | The mattress commercial x1 | They want you somewhere else x1 | The manager who hates the iPad x1 | Cold off the bench in the ninth x1 | The due date lands in the middle of a ten game trip x1 | The sportsbook wants your face x1
+[605s] CONSOLE warning Warning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.

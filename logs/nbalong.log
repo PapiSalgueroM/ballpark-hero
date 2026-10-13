@@ -1,0 +1,46 @@
+[1s] walk nbalong: http://localhost:4173/nba-my-career at 390x844
+[24s] AUDIT hub draft trunc: Nothing in it. Go and win something [149<152]
+[24s] AUDIT hub draft trunc: With pick 21, the New York Knicks select Maximilian Okonkwo-Smith. [149<293]
+[67s] season 1: hub, seasons on save 0 -> 1, year 2027, age 22, ovr 84, team NYK, $2.5M x3, last {"year":2026,"team":"NYK","age":21,"ovr":82,"games":79,"ppg":16.7,"rpg":4.9,"apg":3.4,"awards":["Rookie of the Year","All-Rookie Team"],"teamResult":"Missed the
+[67s] AUDIT hub s1 trunc: He told you to make one first. It got quiet, it got repeated, and it g [149<398]
+[109s] AUDIT event s2 trunc: You watched every fourth quarter possession of your season alone and f [149<522]
+[110s] season 2: hub, seasons on save 1 -> 2, year 2028, age 23, ovr 88, team NYK, $2.5M x2, last {"year":2027,"team":"NYK","age":22,"ovr":84,"games":79,"ppg":15.7,"rpg":4.9,"apg":3,"awards":[],"teamResult":"Lost in the first round","salary":2.5,"mpg":29.1,"
+[110s] AUDIT hub s2 trunc: A wind down email at 11:40pm on a Friday and 2M gone. Morale -9, and h [149<429]
+[151s] season 3: hub, seasons on save 2 -> 3, year 2029, age 24, ovr 89, team NYK, $2.5M x1, last {"year":2028,"team":"NYK","age":23,"ovr":88,"games":79,"ppg":18.2,"rpg":6,"apg":4,"awards":[],"teamResult":"Missed the playoffs","salary":2.5,"mpg":31.4,"spg":1
+[151s] AUDIT hub s3 trunc: 🎙️ It LANDED. The clip runs all week and the city is yours (+8 fanbas [149<307]
+[189s] season 4: hub, seasons on save 3 -> 3, year 2029, age 24, ovr 89, team NYK, $51.8M x5, last {"year":2028,"team":"NYK","age":23,"ovr":88,"games":79,"ppg":18.2,"rpg":6,"apg":4,"awards":[],"teamResult":"Missed the playoffs","salary":2.5,"mpg":31.4,"spg":1
+[190s] AUDIT tile Inbox s4 trunc: A brand wants you in their shoes for summer league. Courtside cameras, [302<507]
+[190s] AUDIT tile Inbox s4 trunc: Don't play summer league like it's the Finals. Learn the coverages, st [302<548]
+[190s] AUDIT tile Inbox s4 trunc: I cried the whole time they read your name. Your little cousins still  [302<691]
+[233s] AUDIT event s5 trunc: 📣 Your face went up on every screen in the arena. Paid for it yoursel [149<316]
+[234s] season 5: hub, seasons on save 3 -> 4, year 2030, age 25, ovr 90, team NYK, $51.8M x4, last {"year":2029,"team":"NYK","age":24,"ovr":89,"games":79,"ppg":18.9,"rpg":5.5,"apg":3.8,"awards":[],"teamResult":"Missed the playoffs","salary":51.8,"mpg":30.7,"s
+[274s] AUDIT event s6 trunc: 🎞️ Not a word. You watched the play on loop and circled the next game [149<414]
+[275s] AUDIT event s6 trunc: One rule, no screens after midnight, and you found 80 minutes a night  [149<511]
+[276s] season 6: hub, seasons on save 4 -> 5, year 2031, age 26, ovr 91, team NYK, $51.8M x3, last {"year":2030,"team":"NYK","age":25,"ovr":90,"games":78,"ppg":23.4,"rpg":6.8,"apg":5.1,"awards":[],"teamResult":"Missed the playoffs","salary":51.8,"mpg":32.9,"s
+[276s] AUDIT hub s6 trunc: Four shows, one documentary and 8M in revenue in three years. Fanbase  [149<386]
+[312s] season 7: hub, seasons on save 5 -> 6, year 2032, age 27, ovr 93, team NYK, $51.8M x2, last {"year":2031,"team":"NYK","age":26,"ovr":91,"games":81,"ppg":28.5,"rpg":7.3,"apg":5.5,"awards":[],"teamResult":"Missed the playoffs","salary":51.8,"mpg":34.7,"s
+[350s] AUDIT event s8 trunc: A 2.2M house and a set of keys in a gas station gift bag. She cried in [149<544]
+[351s] season 8: hub, seasons on save 6 -> 7, year 2033, age 28, ovr 93, team NYK, $51.8M x1, last {"year":2032,"team":"NYK","age":27,"ovr":93,"games":69,"ppg":30.9,"rpg":8,"apg":5.7,"awards":["All-Star","All-NBA","Scoring Champion"],"teamResult":"Lost the Co
+[352s] AUDIT tile Inbox s8 trunc: Media day tomorrow. They'll ask about your goals for the year. Safe an [302<551]
+[386s] AUDIT extension s9 trunc: 📱 Replied to Team PR: Safe answer. [149<158]
+[393s] season 9: hub, seasons on save 7 -> 7, year 2033, age 28, ovr 93, team NYK, $72.2M x5, last {"year":2032,"team":"NYK","age":27,"ovr":93,"games":69,"ppg":30.9,"rpg":8,"apg":5.7,"awards":["All-Star","All-NBA","Scoring Champion"],"teamResult":"Lost the Co
+[393s] AUDIT hub s9 trunc: 🖊️ Extension signed: 4 more years at $72.2M a year. [149<225]
+[431s] AUDIT event s10 trunc: 0.16M on a block of condos and one enormous Sunday dinner. Two aunts w [149<493]
+[433s] season 10: hub, seasons on save 7 -> 8, year 2034, age 29, ovr 93, team NYK, $72.2M x4, last {"year":2033,"team":"NYK","age":28,"ovr":93,"games":79,"ppg":25.2,"rpg":7.4,"apg":5.6,"awards":[],"teamResult":"Lost in the first round","salary":72.2,"mpg":34.
+[470s] AUDIT event s11 trunc: You jumped over a car and a mascot and the building lost its mind. Fan [149<614]
+[472s] season 11: hub, seasons on save 8 -> 9, year 2035, age 30, ovr 93, team NYK, $72.2M x3, last {"year":2034,"team":"NYK","age":29,"ovr":93,"games":79,"ppg":35.4,"rpg":8.5,"apg":7.2,"awards":["All-Star","All-NBA","Scoring Champion"],"teamResult":"Missed th
+[509s] AUDIT event s12 trunc: 60k for flights, courtside and a jersey with a name that is now legall [149<463]
+[511s] season 12: hub, seasons on save 9 -> 10, year 2036, age 31, ovr 93, team NYK, $72.2M x2, last {"year":2035,"team":"NYK","age":30,"ovr":93,"games":54,"ppg":29.8,"rpg":8.7,"apg":6.1,"awards":[],"teamResult":"Missed the playoffs","salary":72.2,"mpg":36.2,"s
+[511s] AUDIT hub s12 trunc: You bought the building so his rent could never move again. Net worth  [149<462]
+[512s] AUDIT tile Inbox s12 trunc: We'd love you on the morning show before Game 1. Ten minutes, fire the [302<424]
+[558s] AUDIT event s13 trunc: 90k for four seats in section 108 that now sit empty every night. Mora [149<373]
+[560s] season 13: hub, seasons on save 10 -> 11, year 2037, age 32, ovr 93, team NYK, $72.2M x1, last {"year":2036,"team":"NYK","age":31,"ovr":93,"games":82,"ppg":28.1,"rpg":7.7,"apg":5.8,"awards":["All-Star","All-NBA"],"teamResult":"Lost in the first round","sa
+[591s] AUDIT extension s14 trunc: 20k a year in food and vet bills for an animal that is not legally any [149<459]
+[598s] season 14: hub, seasons on save 11 -> 11, year 2037, age 32, ovr 93, team NYK, $68.5M x3, last {"year":2036,"team":"NYK","age":31,"ovr":93,"games":82,"ppg":28.1,"rpg":7.7,"apg":5.8,"awards":["All-Star","All-NBA"],"teamResult":"Lost in the first round","sa
+[636s] AUDIT event s15 trunc: Three and a half million a year, guaranteed, whatever the shoe does. F [149<351]
+[638s] season 15: hub, seasons on save 11 -> 12, year 2038, age 33, ovr 93, team NYK, $68.5M x2, last {"year":2037,"team":"NYK","age":32,"ovr":93,"games":81,"ppg":27.7,"rpg":7.2,"apg":5.5,"awards":["All-Star","All-NBA"],"teamResult":"Lost in the first round","sa
+[638s] AUDIT hub s15 trunc: Ten locations in four years and 5.2M back to you. Fanbase +8, morale + [149<457]
+[670s] season 16: stuck, seasons on save 12 -> 13, year 2039, age 34, ovr 89, team NYK, $68.5M x1, last {"year":2038,"team":"NYK","age":33,"ovr":93,"games":74,"ppg":30.1,"rpg":8.2,"apg":5.4,"awards":["All-Star","All-NBA"],"teamResult":"Missed the playoffs","salary
+[670s] DONE nbalong: seasons 13, events 33, curtains 18, page errors 0, console 1, stuck 13, shots 40
+[670s] event titles: He will not throw you the ball x1 | You did not play the fourth x1 | A 26 year old in a 900 dollar hoodie x1 | The accountability scrum x1 | She keeps saying the word closer x1 | The sleep guy has bad news x1 | Your podcast did 11 million downloads on a laptop mic x1 | He wants you to bring the ball up x1 | Somebody never pays rent again x1 | Your rest night is the national TV game x1 | Thirty one relatives, one guest house x1 | Your name on a gym full of kids x1 | The coach who benched you got a new job x1 | All Star weekend is a circus x1 | Room 308 x1 | Your brother has business cards now x1 | A man in Ohio legally changed his name to yours x1 | They painted you on a wall x1 | The shop on the corner x1 | Nine years of the same three jokes x1 | The knee and the games count x1 | There is a raccoon above the film room x1 | The signature shoe meeting x1 | The celebrity game wants you as a
+[670s] CONSOLE warning Warning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.

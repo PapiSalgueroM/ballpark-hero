@@ -1,0 +1,14 @@
+[0s] walk nhllong: http://localhost:4173/nhl-my-career at 390x844
+[8s] AUDIT hub draft trunc: Nothing in it. Go and win something [149<152]
+[8s] AUDIT hub draft trunc: 🎓 With pick 43, the Tampa Bay Lightning select Maximilian Okonkwo-Smi [149<329]
+[50s] AUDIT event s1 trunc: Nobody has ever fixed your stride before and nobody starts now. You sk [149<496]
+[52s] season 1: hub, seasons on save 0 -> 1, year 2027, age 19, ovr 71, team TBL, $0.9M x2, last {"year":2026,"team":"TBL","age":18,"ovr":70,"games":81,"awards":[],"teamResult":"Missed the playoffs","salary":0.9,"slate":84,"goals":10,"assists":15,"points":2
+[52s] AUDIT hub s1 trunc: You sat and waited like a pro. The goal stood and the building got twi [149<447]
+[94s] season 2: hub, seasons on save 1 -> 2, year 2028, age 20, ovr 73, team TBL, $0.9M x1, last {"year":2027,"team":"TBL","age":19,"ovr":71,"games":84,"awards":[],"teamResult":"Missed the playoffs","salary":0.9,"slate":84,"goals":14,"assists":19,"points":3
+[94s] AUDIT hub s2 trunc: 🎙️ It backfired. The clip runs all week for the wrong reasons (-8 fan [149<314]
+[136s] season 3: hub, seasons on save 2 -> 3, year 2029, age 21, ovr 74, team TBL, $0.9M x0, last {"year":2028,"team":"TBL","age":20,"ovr":73,"games":81,"awards":[],"teamResult":"Lost in Round 1","salary":0.9,"slate":84,"goals":20,"assists":18,"points":38,"p
+[136s] AUDIT hub s3 trunc: Two games in a suit, a lot of ice on the hand, and you came back with  [149<522]
+[177s] season 4: loop, seasons on save 3 -> 3, year 2029, age 21, ovr 74, team TBL, $0.9M x0, last {"year":2028,"team":"TBL","age":20,"ovr":73,"games":81,"awards":[],"teamResult":"Lost in Round 1","salary":0.9,"slate":84,"goals":20,"assists":18,"points":38,"p
+[177s] DONE nhllong: seasons 3, events 63, curtains 6, page errors 0, console 1, stuck 6, shots 40
+[177s] event titles: Rebuilding the stride x1 | Your goal is under review x1 | The accountability scrum x1 | Playoff run, broken hand x1
+[177s] CONSOLE warning Warning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
