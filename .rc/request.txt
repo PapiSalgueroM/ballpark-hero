@@ -1,0 +1,5 @@
+#!serve
+#!playwright
+k390: TAG=k390 W=390 H=844 SEED=606 SENIOR=30 LATE=1 POS=Striker NAT=Brazil ERA="Current era" EXPLORE=hub EXPLORE_EVERY=6 RELOADS=150 MAXMIN=19 SHOTMAX=70 node .rc/x/scwalk.mjs
+m390: TAG=m390 W=390 H=844 SEED=707 SENIOR=5 POS="Defensive Mid" NAT=Scotland ERA="Late 90s" EXPLORE=hub,train EXPLORE_EVERY=2 RELOADS=25,60 MAXMIN=18 SHOTMAX=80 node .rc/x/scwalk.mjs
+n320: TAG=n320 W=320 H=640 SEED=808 SENIOR=2 POS=Goalkeeper NAT=Germany ERA="Early 2010s" EXPLORE=hub,phone,train RELOADS=10 MAXMIN=16 SHOTMAX=90 node .rc/x/scwalk.mjs
