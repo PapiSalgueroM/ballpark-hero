@@ -1,0 +1,7 @@
+9ad82c4f9 rc request fx4-books for 356186c9c8f0102529488f1b2b0f3e027648d6fb
+3
+      1   FAIL: Real Madrid s0w2: the same man is listed twice
+      1   FAIL: Everton s0w2: the same man is listed twice
+      1   FAIL: Coventry City s0w2: the same man is listed twice
+
+simBooks: 51 failures

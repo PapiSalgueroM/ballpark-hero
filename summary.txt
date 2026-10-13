@@ -1,0 +1,5 @@
+books-base exit=0 11s | simBooks: green. Every number these games show agrees with every other number they show.
+books-head exit=1 13s | simBooks: 51 failures
+books-69cb exit=1 14s | simBooks: 51 failures
+books-main exit=0 9s | simBooks: green. Every number these games show agrees with every other number they show.
+books-3ac2 exit=1 27s | simBooks: 51 failures

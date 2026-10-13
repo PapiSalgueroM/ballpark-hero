@@ -1,0 +1,7 @@
+69cb5fc8d Release AZ fix: simCmLeagueRules' header records fix pass 3's retake of the digest
+3
+      1   FAIL: Real Madrid s0w2: the same man is listed twice
+      1   FAIL: Everton s0w2: the same man is listed twice
+      1   FAIL: Coventry City s0w2: the same man is listed twice
+
+simBooks: 51 failures
