@@ -17,7 +17,7 @@ push; the closing report is C:/Users/antho/dukb-handoff/2026-10-10/results-g/fin
 - ClubManager.tsx: the "?" is 44 by 44 and sits 8px further into its corner; the header's first row keeps
   px-12; the season pill and the mid season badge at 12px; the badge says "the games before you arrived were
   simulated" (never the word run-in); Managers, Club home and both meter buttons 44px; the meters' lazy slot
-  holds 52px; HubTile's value and line wrap, the line at 12px; five long lines shortened; the Inbox, League,
+  holds 52px (60px for a board on the edge, flow-root since the fix pass); HubTile's value and line wrap, the line at 12px; five long lines shortened; the Inbox, League,
   Finances and Manager tiles read from src/lib/clubManagerHubLines.ts; the team step's Board wants line wraps
   whole at 12px.
 - src/lib/clubManagerHubLines.ts (new, pure): inboxTile, recordLine, leagueTileValue, kittyChange.
@@ -44,7 +44,10 @@ push; the closing report is C:/Users/antho/dukb-handoff/2026-10-10/results-g/fin
   same case: 390-real, captureVisible 'calendar-sources'. The harness focuses the last calendar day (Chrome centres
   it) and then the first source link and asks for the whole coverage note on screen; with the hub now opening at
   its top, the calendar panel opens about 470px down and the note's top line ends 36px above the screen. A harness
-  fix for its owner, not a defect of the screen; this round may not edit that harness.
+  fix for its owner, not a defect of the screen. The fix pass applied the one line (scroll the note into view
+  before the capture) in its own commit, 7d34f0ee, for the lead to keep or revert.
+- The useArrivalTop unit control of decision 3.3 (rc1328-s1c): with the readable test commented out in a scratch
+  copy, exit 1, exactly "a top that is already readable moves nothing" failed and the other 6 passed.
 
 - rc1328-f2 and rc1328-f3: every sim, fence and walk of decision 8 green on the head except: simSchemaNames and
   simLeaderboardCaps (they read the live database, which the runner blocks), simWritesAreSent (it cannot drive Guess
@@ -54,6 +57,24 @@ push; the closing report is C:/Users/antho/dukb-handoff/2026-10-10/results-g/fin
 - simDailyDeals identical to the base line for line; simClubManagerSlots equal but for its timings;
   simClubManagerSaveSize sections 1 to 3 identical, section 4 unseeded in its vitest file so its byte counts move
   run to run on any build.
+
+## Fix pass (2026-10-13, after the two adversarial reviews)
+- The day strip drops back to the foot when the cookie banner is answered (an observer of the body's consent mark
+  works its offset out again); walk section B answers the banner with a day picked; control `stale` (08f4e076).
+- kittyChange also reads the kitty flag on income lines (no number changes today); unit cases for week 1 and for a
+  desk card named before a message (afa99135). The arrival unit file proves the layout phase with a passive effect
+  witness, and lands a tall root that starts above the screen (bb5d1387).
+- The Finances tile reads "Kitty change, projected"; What's New says the kitty is "on course" (f8ec3f31).
+- The meters' slot: with the chunk held back 1.5 s every resume shifted the hub 8px (the strip's top margin
+  collapsed out of the slot; 0.0063 at 390 on a plain board) and a board on the edge wraps to a 60px strip at 320,
+  390 and 1280. The slot is flow-root and holds 60px for that board, 52px otherwise (21d00882 the walk, 940e0824).
+- Mutations, each red on the unit files (fx1328-a): useEffect for useLayoutEffect, && to ||, week <= 1, message
+  before desk card, every spend line summed, income flags ignored. A build of a7202a82 fails exactly the new strip
+  check (bottom 683 against a foot of 832 at 390).
+- Owed once Release BB is on main: the git merge-tree proof for playClubManager.mjs line 532 again, and a rerun of
+  playNationJob, which BB fixes (Round 1314: 0cc1de05, c9697c2b) and which reads the Manager tile this round changed.
+- Owed to the release: this round goes live with Round 1326 or after it (the Finances tile prints the Kitty change
+  while the desk it opens still prints Season result until 1326's desk row is live).
 
 ## Owed (decision 2d), not this round
 - ManagerForm.tsx says "It is a simulated run-in, not the real one" for an Autumn or New year takeover; and
