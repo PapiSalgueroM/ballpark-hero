@@ -1,0 +1,7 @@
+MUTATION APPLIED: recordSwap (1 edit(s))
+[31m   [31m×[31m recordLine[2m > [22mprints W D L the way the Manager panel does[39m[32m 4[2mms[22m[39m
+[31m   [31m×[31m recordLine[2m > [22man old save without a field reads 0, never undefined[39m[32m 1[2mms[22m[39m
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 2 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+[41m[1m FAIL [22m[49m src/test/clubManagerHubLines.test.ts[2m > [22mrecordLine[2m > [22mprints W D L the way the Manager panel does
+[41m[1m FAIL [22m[49m src/test/clubManagerHubLines.test.ts[2m > [22mrecordLine[2m > [22man old save without a field reads 0, never undefined
+[2m      Tests [22m [1m[31m2 failed[39m[22m[2m | [22m[1m[32m11 passed[39m[22m[90m (13)[39m

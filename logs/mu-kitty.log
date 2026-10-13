@@ -1,0 +1,5 @@
+MUTATION APPLIED: kitty (1 edit(s))
+[31m   [31m×[31m kittyChange[2m > [22mRound 1326's worked example: income 64.8, spend 72.4, the board covers 71.3, the kitty moves +63.7[39m[32m 12[2mms[22m[39m
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+[41m[1m FAIL [22m[49m src/test/clubManagerHubLines.test.ts[2m > [22mkittyChange[2m > [22mRound 1326's worked example: income 64.8, spend 72.4, the board covers 71.3, the kitty moves +63.7
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m12 passed[39m[22m[90m (13)[39m

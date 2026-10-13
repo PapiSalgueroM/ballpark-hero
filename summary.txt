@@ -1,0 +1,13 @@
+vitest exit=0 14s |       Tests  42 passed (42)
+simNoRivalNames exit=0 12s | No rival product names found. 0 findings.
+simEarlyReturnScope exit=0 9s | simEarlyReturnScope: all green
+simMidSeasonStart exit=0 3s | simMidSeasonStart: all green
+simHarnessAnchors exit=0 40s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+mu-arrivalOr exit=1 2s |       Tests  1 failed | 6 passed (7)
+simCalendarCurrentDate exit=0 5s | Calendar Current date: normalized copied controls, original bytes held, owned temporary files cleaned. Native geometry/keyboard acceptance remains pending.
+mu-arrivalEffect exit=0 2s |       Tests  7 passed (7)
+mu-kitty exit=1 3s |       Tests  1 failed | 12 passed (13)
+mu-inboxOrder exit=0 4s |       Tests  13 passed (13)
+mu-league1 exit=0 3s |       Tests  13 passed (13)
+mu-recordSwap exit=1 3s |       Tests  2 failed | 11 passed (13)
+tsc exit=0 64s | tsc exit 0
