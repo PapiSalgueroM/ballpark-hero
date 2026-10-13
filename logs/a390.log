@@ -1,0 +1,7 @@
+[11s] created England/Striker (ST)/Current era (2025 start) -> youth age 16 at Everton Youth
+[39s] reload (step 9 in contract_offer): same=true phase contract_offer->contract_offer
+[95s] reload (step 23 in contract_offer): same=true phase contract_offer->contract_offer
+[155s] reload (step 41 in contract_offer): same=true phase contract_offer->contract_offer
+[214s] reload (final): same=true phase contract_offer->contract_offer
+[214s] done: {"phase":"contract_offer","age":17,"senior":0,"club":"Everton Youth","ovr":60,"steps":58,"secs":212} shots=15 audits=8 errors=9 pageErrors=0 stuck=4 traps=0
+WALK a390 FINISHED

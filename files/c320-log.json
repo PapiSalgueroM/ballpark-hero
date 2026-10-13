@@ -1,0 +1,1639 @@
+{
+ "tag": "c320",
+ "W": 320,
+ "H": 640,
+ "SEED": 5,
+ "POS": "Central Mid",
+ "NAT": "Nigeria",
+ "ERA": "Early 90s",
+ "steps": [
+  {
+   "step": 1,
+   "phase": "youth",
+   "age": 16,
+   "senior": 0,
+   "club": "Enyimba Youth",
+   "ovr": 52,
+   "action": "Next Season",
+   "options": [],
+   "next": "contract_offer"
+  },
+  {
+   "step": 2,
+   "phase": "contract_offer",
+   "age": 17,
+   "senior": 0,
+   "club": "Enyimba Youth",
+   "ovr": 56,
+   "action": "Review contract",
+   "options": [
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Full attributes 180 cm · 75 kg · every n"
+   ],
+   "modal": false,
+   "next": "contract_offer"
+  },
+  {
+   "step": 3,
+   "phase": "contract_offer",
+   "age": 17,
+   "senior": 0,
+   "club": "Enyimba Youth",
+   "ovr": 56,
+   "action": "Review contract",
+   "options": [
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Full attributes 180 cm · 75 kg · every n"
+   ],
+   "modal": false,
+   "next": "contract_offer"
+  },
+  {
+   "step": 4,
+   "phase": "contract_offer",
+   "age": 17,
+   "senior": 0,
+   "club": "Enyimba Youth",
+   "ovr": 56,
+   "action": "Review contract",
+   "options": [
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Full attributes 180 cm · 75 kg · every n"
+   ],
+   "modal": false,
+   "next": "contract_offer"
+  },
+  {
+   "step": 5,
+   "phase": "contract_offer",
+   "age": 17,
+   "senior": 0,
+   "club": "Enyimba Youth",
+   "ovr": 56,
+   "action": "Review contract",
+   "options": [
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Full attributes 180 cm · 75 kg · every n"
+   ],
+   "modal": false,
+   "next": "contract_offer"
+  },
+  {
+   "step": 6,
+   "phase": "contract_offer",
+   "age": 17,
+   "senior": 0,
+   "club": "Enyimba Youth",
+   "ovr": 56,
+   "action": "Review contract",
+   "options": [
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Full attributes 180 cm · 75 kg · every n"
+   ],
+   "modal": false,
+   "next": "contract_offer"
+  },
+  {
+   "step": 7,
+   "phase": "contract_offer",
+   "age": 17,
+   "senior": 0,
+   "club": "Enyimba Youth",
+   "ovr": 56,
+   "action": "Review contract",
+   "options": [
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Full attributes 180 cm · 75 kg · every n"
+   ],
+   "modal": false,
+   "next": "contract_offer"
+  },
+  {
+   "step": 8,
+   "phase": "contract_offer",
+   "age": 17,
+   "senior": 0,
+   "club": "Enyimba Youth",
+   "ovr": 56,
+   "action": "Review contract",
+   "options": [
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Full attributes 180 cm · 75 kg · every n"
+   ],
+   "modal": false,
+   "next": "contract_offer"
+  },
+  {
+   "step": 9,
+   "phase": "contract_offer",
+   "age": 17,
+   "senior": 0,
+   "club": "Enyimba Youth",
+   "ovr": 56,
+   "action": "Review contract",
+   "options": [
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Full attributes 180 cm · 75 kg · every n"
+   ],
+   "modal": false,
+   "next": "contract_offer"
+  },
+  {
+   "step": 10,
+   "phase": "contract_offer",
+   "age": 17,
+   "senior": 0,
+   "club": "Enyimba Youth",
+   "ovr": 56,
+   "action": "Review contract",
+   "options": [
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Full attributes 180 cm · 75 kg · every n"
+   ],
+   "modal": false,
+   "next": "contract_offer"
+  },
+  {
+   "step": 11,
+   "phase": "contract_offer",
+   "age": 17,
+   "senior": 0,
+   "club": "Enyimba Youth",
+   "ovr": 56,
+   "action": "Review contract",
+   "options": [
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Full attributes 180 cm · 75 kg · every n"
+   ],
+   "modal": false,
+   "next": "contract_offer"
+  },
+  {
+   "step": 12,
+   "phase": "contract_offer",
+   "age": 17,
+   "senior": 0,
+   "club": "Enyimba Youth",
+   "ovr": 56,
+   "action": "Review contract",
+   "options": [
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Full attributes 180 cm · 75 kg · every n"
+   ],
+   "modal": false,
+   "next": "contract_offer"
+  },
+  {
+   "step": 13,
+   "phase": "contract_offer",
+   "age": 17,
+   "senior": 0,
+   "club": "Enyimba Youth",
+   "ovr": 56,
+   "action": "Review contract",
+   "options": [
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Full attributes 180 cm · 75 kg · every n"
+   ],
+   "modal": false,
+   "next": "contract_offer"
+  },
+  {
+   "step": 14,
+   "phase": "contract_offer",
+   "age": 17,
+   "senior": 0,
+   "club": "Enyimba Youth",
+   "ovr": 56,
+   "action": "Full attributes 180 cm · 75 kg · every number under the six",
+   "options": [
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Full attributes 180 cm · 75 kg · every n"
+   ],
+   "modal": false,
+   "next": "contract_offer"
+  },
+  {
+   "step": 15,
+   "phase": "contract_offer",
+   "age": 17,
+   "senior": 0,
+   "club": "Enyimba Youth",
+   "ovr": 56,
+   "action": "← Back",
+   "options": [
+    "← Back",
+    "Back to your career"
+   ],
+   "modal": false,
+   "next": "contract_offer"
+  },
+  {
+   "step": 16,
+   "phase": "contract_offer",
+   "age": 17,
+   "senior": 0,
+   "club": "Enyimba Youth",
+   "ovr": 56,
+   "action": "Review contract",
+   "options": [
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Full attributes 180 cm · 75 kg · every n"
+   ],
+   "modal": false,
+   "next": "contract_offer"
+  },
+  {
+   "step": 17,
+   "phase": "contract_offer",
+   "age": 17,
+   "senior": 0,
+   "club": "Enyimba Youth",
+   "ovr": 56,
+   "action": "Review contract",
+   "options": [
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Full attributes 180 cm · 75 kg · every n"
+   ],
+   "modal": false,
+   "next": "contract_offer"
+  },
+  {
+   "step": 18,
+   "phase": "contract_offer",
+   "age": 17,
+   "senior": 0,
+   "club": "Enyimba Youth",
+   "ovr": 56,
+   "action": "Review contract",
+   "options": [
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Full attributes 180 cm · 75 kg · every n"
+   ],
+   "modal": false,
+   "next": "contract_offer"
+  },
+  {
+   "step": 19,
+   "phase": "contract_offer",
+   "age": 17,
+   "senior": 0,
+   "club": "Enyimba Youth",
+   "ovr": 56,
+   "action": "Full attributes 180 cm · 75 kg · every number under the six",
+   "options": [
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Full attributes 180 cm · 75 kg · every n"
+   ],
+   "modal": false,
+   "next": "contract_offer"
+  },
+  {
+   "step": 20,
+   "phase": "contract_offer",
+   "age": 17,
+   "senior": 0,
+   "club": "Enyimba Youth",
+   "ovr": 56,
+   "action": "Back to your career",
+   "options": [
+    "← Back",
+    "Back to your career"
+   ],
+   "modal": false,
+   "next": "contract_offer"
+  },
+  {
+   "step": 21,
+   "phase": "contract_offer",
+   "age": 17,
+   "senior": 0,
+   "club": "Enyimba Youth",
+   "ovr": 56,
+   "action": "Full attributes 180 cm · 75 kg · every number under the six",
+   "options": [
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Full attributes 180 cm · 75 kg · every n"
+   ],
+   "modal": false,
+   "next": "contract_offer"
+  },
+  {
+   "step": 22,
+   "phase": "contract_offer",
+   "age": 17,
+   "senior": 0,
+   "club": "Enyimba Youth",
+   "ovr": 56,
+   "action": "Back to your career",
+   "options": [
+    "← Back",
+    "Back to your career"
+   ],
+   "modal": false,
+   "next": "contract_offer"
+  },
+  {
+   "step": 23,
+   "phase": "contract_offer",
+   "age": 17,
+   "senior": 0,
+   "club": "Enyimba Youth",
+   "ovr": 56,
+   "action": "Review contract",
+   "options": [
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Full attributes 180 cm · 75 kg · every n"
+   ],
+   "modal": false,
+   "next": "contract_offer"
+  },
+  {
+   "step": 24,
+   "phase": "contract_offer",
+   "age": 17,
+   "senior": 0,
+   "club": "Enyimba Youth",
+   "ovr": 56,
+   "action": "Review contract",
+   "options": [
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Full attributes 180 cm · 75 kg · every n"
+   ],
+   "modal": false,
+   "next": "contract_offer"
+  },
+  {
+   "step": 25,
+   "phase": "contract_offer",
+   "age": 17,
+   "senior": 0,
+   "club": "Enyimba Youth",
+   "ovr": 56,
+   "action": "Review contract",
+   "options": [
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Full attributes 180 cm · 75 kg · every n"
+   ],
+   "modal": false,
+   "next": "contract_offer"
+  },
+  {
+   "step": 26,
+   "phase": "contract_offer",
+   "age": 17,
+   "senior": 0,
+   "club": "Enyimba Youth",
+   "ovr": 56,
+   "action": "Review contract",
+   "options": [
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Full attributes 180 cm · 75 kg · every n"
+   ],
+   "modal": false,
+   "next": "contract_offer"
+  },
+  {
+   "step": 27,
+   "phase": "contract_offer",
+   "age": 17,
+   "senior": 0,
+   "club": "Enyimba Youth",
+   "ovr": 56,
+   "action": "Review contract",
+   "options": [
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Full attributes 180 cm · 75 kg · every n"
+   ],
+   "modal": false,
+   "next": "contract_offer"
+  },
+  {
+   "step": 28,
+   "phase": "contract_offer",
+   "age": 17,
+   "senior": 0,
+   "club": "Enyimba Youth",
+   "ovr": 56,
+   "action": "Review contract",
+   "options": [
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Full attributes 180 cm · 75 kg · every n"
+   ],
+   "modal": false,
+   "next": "contract_offer"
+  },
+  {
+   "step": 29,
+   "phase": "contract_offer",
+   "age": 17,
+   "senior": 0,
+   "club": "Enyimba Youth",
+   "ovr": 56,
+   "action": "Review contract",
+   "options": [
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Full attributes 180 cm · 75 kg · every n"
+   ],
+   "modal": false,
+   "next": "contract_offer"
+  },
+  {
+   "step": 30,
+   "phase": "contract_offer",
+   "age": 17,
+   "senior": 0,
+   "club": "Enyimba Youth",
+   "ovr": 56,
+   "action": "Review contract",
+   "options": [
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Full attributes 180 cm · 75 kg · every n"
+   ],
+   "modal": false,
+   "next": "contract_offer"
+  },
+  {
+   "step": 31,
+   "phase": "contract_offer",
+   "age": 17,
+   "senior": 0,
+   "club": "Enyimba Youth",
+   "ovr": 56,
+   "action": "Review contract",
+   "options": [
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Full attributes 180 cm · 75 kg · every n"
+   ],
+   "modal": false,
+   "next": "contract_offer"
+  },
+  {
+   "step": 32,
+   "phase": "contract_offer",
+   "age": 17,
+   "senior": 0,
+   "club": "Enyimba Youth",
+   "ovr": 56,
+   "action": "Review contract",
+   "options": [
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Full attributes 180 cm · 75 kg · every n"
+   ],
+   "modal": false,
+   "next": "contract_offer"
+  },
+  {
+   "step": 33,
+   "phase": "contract_offer",
+   "age": 17,
+   "senior": 0,
+   "club": "Enyimba Youth",
+   "ovr": 56,
+   "action": "Full attributes 180 cm · 75 kg · every number under the six",
+   "options": [
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Full attributes 180 cm · 75 kg · every n"
+   ],
+   "modal": false,
+   "next": "contract_offer"
+  },
+  {
+   "step": 34,
+   "phase": "contract_offer",
+   "age": 17,
+   "senior": 0,
+   "club": "Enyimba Youth",
+   "ovr": 56,
+   "action": "← Back",
+   "options": [
+    "← Back",
+    "Back to your career"
+   ],
+   "modal": false,
+   "next": "contract_offer"
+  },
+  {
+   "step": 35,
+   "phase": "contract_offer",
+   "age": 17,
+   "senior": 0,
+   "club": "Enyimba Youth",
+   "ovr": 56,
+   "action": "Review contract",
+   "options": [
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Full attributes 180 cm · 75 kg · every n"
+   ],
+   "modal": false,
+   "next": "contract_offer"
+  },
+  {
+   "step": 36,
+   "phase": "contract_offer",
+   "age": 17,
+   "senior": 0,
+   "club": "Enyimba Youth",
+   "ovr": 56,
+   "action": "Review contract",
+   "options": [
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Full attributes 180 cm · 75 kg · every n"
+   ],
+   "modal": false,
+   "next": "contract_offer"
+  },
+  {
+   "step": 37,
+   "phase": "contract_offer",
+   "age": 17,
+   "senior": 0,
+   "club": "Enyimba Youth",
+   "ovr": 56,
+   "action": "Review contract",
+   "options": [
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Full attributes 180 cm · 75 kg · every n"
+   ],
+   "modal": false,
+   "next": "contract_offer"
+  },
+  {
+   "step": 38,
+   "phase": "contract_offer",
+   "age": 17,
+   "senior": 0,
+   "club": "Enyimba Youth",
+   "ovr": 56,
+   "action": "Review contract",
+   "options": [
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Full attributes 180 cm · 75 kg · every n"
+   ],
+   "modal": false,
+   "next": "contract_offer"
+  },
+  {
+   "step": 39,
+   "phase": "contract_offer",
+   "age": 17,
+   "senior": 0,
+   "club": "Enyimba Youth",
+   "ovr": 56,
+   "action": "Review contract",
+   "options": [
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Full attributes 180 cm · 75 kg · every n"
+   ],
+   "modal": false,
+   "next": "contract_offer"
+  },
+  {
+   "step": 40,
+   "phase": "contract_offer",
+   "age": 17,
+   "senior": 0,
+   "club": "Enyimba Youth",
+   "ovr": 56,
+   "action": "Review contract",
+   "options": [
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Full attributes 180 cm · 75 kg · every n"
+   ],
+   "modal": false,
+   "next": "contract_offer"
+  },
+  {
+   "step": 41,
+   "phase": "contract_offer",
+   "age": 17,
+   "senior": 0,
+   "club": "Enyimba Youth",
+   "ovr": 56,
+   "action": "Full attributes 180 cm · 75 kg · every number under the six",
+   "options": [
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Full attributes 180 cm · 75 kg · every n"
+   ],
+   "modal": false,
+   "next": "contract_offer"
+  },
+  {
+   "step": 42,
+   "phase": "contract_offer",
+   "age": 17,
+   "senior": 0,
+   "club": "Enyimba Youth",
+   "ovr": 56,
+   "action": "← Back",
+   "options": [
+    "← Back",
+    "Back to your career"
+   ],
+   "modal": false,
+   "next": "contract_offer"
+  },
+  {
+   "step": 43,
+   "phase": "contract_offer",
+   "age": 17,
+   "senior": 0,
+   "club": "Enyimba Youth",
+   "ovr": 56,
+   "action": "Review contract",
+   "options": [
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Full attributes 180 cm · 75 kg · every n"
+   ],
+   "modal": false,
+   "next": "contract_offer"
+  },
+  {
+   "step": 44,
+   "phase": "contract_offer",
+   "age": 17,
+   "senior": 0,
+   "club": "Enyimba Youth",
+   "ovr": 56,
+   "action": "Review contract",
+   "options": [
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Full attributes 180 cm · 75 kg · every n"
+   ],
+   "modal": false,
+   "next": "contract_offer"
+  },
+  {
+   "step": 45,
+   "phase": "contract_offer",
+   "age": 17,
+   "senior": 0,
+   "club": "Enyimba Youth",
+   "ovr": 56,
+   "action": "Review contract",
+   "options": [
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Full attributes 180 cm · 75 kg · every n"
+   ],
+   "modal": false,
+   "next": "contract_offer"
+  },
+  {
+   "step": 46,
+   "phase": "contract_offer",
+   "age": 17,
+   "senior": 0,
+   "club": "Enyimba Youth",
+   "ovr": 56,
+   "action": "Review contract",
+   "options": [
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Full attributes 180 cm · 75 kg · every n"
+   ],
+   "modal": false,
+   "next": "contract_offer"
+  },
+  {
+   "step": 47,
+   "phase": "contract_offer",
+   "age": 17,
+   "senior": 0,
+   "club": "Enyimba Youth",
+   "ovr": 56,
+   "action": "Review contract",
+   "options": [
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Full attributes 180 cm · 75 kg · every n"
+   ],
+   "modal": false,
+   "next": "contract_offer"
+  },
+  {
+   "step": 48,
+   "phase": "contract_offer",
+   "age": 17,
+   "senior": 0,
+   "club": "Enyimba Youth",
+   "ovr": 56,
+   "action": "Review contract",
+   "options": [
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Full attributes 180 cm · 75 kg · every n"
+   ],
+   "modal": false,
+   "next": "contract_offer"
+  },
+  {
+   "step": 49,
+   "phase": "contract_offer",
+   "age": 17,
+   "senior": 0,
+   "club": "Enyimba Youth",
+   "ovr": 56,
+   "action": "Review contract",
+   "options": [
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Full attributes 180 cm · 75 kg · every n"
+   ],
+   "modal": false,
+   "next": "contract_offer"
+  },
+  {
+   "step": 50,
+   "phase": "contract_offer",
+   "age": 17,
+   "senior": 0,
+   "club": "Enyimba Youth",
+   "ovr": 56,
+   "action": "Review contract",
+   "options": [
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Full attributes 180 cm · 75 kg · every n"
+   ],
+   "modal": false,
+   "next": "contract_offer"
+  },
+  {
+   "step": 51,
+   "phase": "contract_offer",
+   "age": 17,
+   "senior": 0,
+   "club": "Enyimba Youth",
+   "ovr": 56,
+   "action": "Review contract",
+   "options": [
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Full attributes 180 cm · 75 kg · every n"
+   ],
+   "modal": false,
+   "next": "contract_offer"
+  },
+  {
+   "step": 52,
+   "phase": "contract_offer",
+   "age": 17,
+   "senior": 0,
+   "club": "Enyimba Youth",
+   "ovr": 56,
+   "action": "Review contract",
+   "options": [
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Full attributes 180 cm · 75 kg · every n"
+   ],
+   "modal": false,
+   "next": "contract_offer"
+  },
+  {
+   "step": 53,
+   "phase": "contract_offer",
+   "age": 17,
+   "senior": 0,
+   "club": "Enyimba Youth",
+   "ovr": 56,
+   "action": "Review contract",
+   "options": [
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Full attributes 180 cm · 75 kg · every n"
+   ],
+   "modal": false,
+   "next": "contract_offer"
+  },
+  {
+   "step": 54,
+   "phase": "contract_offer",
+   "age": 17,
+   "senior": 0,
+   "club": "Enyimba Youth",
+   "ovr": 56,
+   "action": "Review contract",
+   "options": [
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Full attributes 180 cm · 75 kg · every n"
+   ],
+   "modal": false,
+   "next": "contract_offer"
+  },
+  {
+   "step": 55,
+   "phase": "contract_offer",
+   "age": 17,
+   "senior": 0,
+   "club": "Enyimba Youth",
+   "ovr": 56,
+   "action": "Review contract",
+   "options": [
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Full attributes 180 cm · 75 kg · every n"
+   ],
+   "modal": false,
+   "next": "contract_offer"
+  },
+  {
+   "step": 56,
+   "phase": "contract_offer",
+   "age": 17,
+   "senior": 0,
+   "club": "Enyimba Youth",
+   "ovr": 56,
+   "action": "Review contract",
+   "options": [
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Full attributes 180 cm · 75 kg · every n"
+   ],
+   "modal": false,
+   "next": "contract_offer"
+  },
+  {
+   "step": 57,
+   "phase": "contract_offer",
+   "age": 17,
+   "senior": 0,
+   "club": "Enyimba Youth",
+   "ovr": 56,
+   "action": "Review contract",
+   "options": [
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Full attributes 180 cm · 75 kg · every n"
+   ],
+   "modal": false,
+   "next": "contract_offer"
+  },
+  {
+   "step": 58,
+   "phase": "contract_offer",
+   "age": 17,
+   "senior": 0,
+   "club": "Enyimba Youth",
+   "ovr": 56,
+   "action": "Review contract",
+   "options": [
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Full attributes 180 cm · 75 kg · every n"
+   ],
+   "modal": false,
+   "next": "contract_offer"
+  }
+ ],
+ "audits": [
+  {
+   "label": "phase contract_offer #2",
+   "step": 2,
+   "vw": 320,
+   "sw": 320,
+   "overflow": false,
+   "bad": [],
+   "off": [],
+   "trunc": [],
+   "small": [],
+   "covered": [
+    {
+     "text": "Review contract",
+     "by": "Review contract\n\nRed Star Belgrade\n\nCurr",
+     "byCls": "fixed left-[50%] top-[50%] z-50 translate-x-[-50%]"
+    },
+    {
+     "text": "Review contract",
+     "by": "Current deal\nFirst senior contract. No c",
+     "byCls": "grid grid-cols-2 gap-3 rounded-lg border border-bo"
+    },
+    {
+     "text": "Review contract",
+     "by": "Review contract\n\nRed Star Belgrade\n\nCurr",
+     "byCls": "fixed left-[50%] top-[50%] z-50 translate-x-[-50%]"
+    },
+    {
+     "text": "Your next season\nRoles, contracts, playi",
+     "by": "DIV",
+     "byCls": "fixed inset-0 z-50 bg-black/80 data-[state=open]:a"
+    }
+   ],
+   "boundary": false
+  },
+  {
+   "label": "after reload",
+   "step": 5,
+   "vw": 320,
+   "sw": 320,
+   "overflow": false,
+   "bad": [],
+   "off": [],
+   "trunc": [
+    {
+     "text": "Drill ready",
+     "w": 1,
+     "need": 70,
+     "ell": "clip"
+    },
+    {
+     "text": "unread",
+     "w": 1,
+     "need": 38,
+     "ell": "clip"
+    },
+    {
+     "text": "Danny Okafor-Whitfield",
+     "w": 200,
+     "need": 224,
+     "ell": "ellipsis"
+    }
+   ],
+   "small": [],
+   "covered": [],
+   "boundary": false
+  },
+  {
+   "label": "after reload",
+   "step": 58,
+   "vw": 320,
+   "sw": 320,
+   "overflow": false,
+   "bad": [],
+   "off": [],
+   "trunc": [
+    {
+     "text": "Drill ready",
+     "w": 1,
+     "need": 70,
+     "ell": "clip"
+    },
+    {
+     "text": "unread",
+     "w": 1,
+     "need": 38,
+     "ell": "clip"
+    },
+    {
+     "text": "Danny Okafor-Whitfield",
+     "w": 200,
+     "need": 224,
+     "ell": "ellipsis"
+    }
+   ],
+   "small": [],
+   "covered": [],
+   "boundary": false
+  },
+  {
+   "label": "final",
+   "step": 58,
+   "vw": 320,
+   "sw": 320,
+   "overflow": false,
+   "bad": [],
+   "off": [],
+   "trunc": [
+    {
+     "text": "Drill ready",
+     "w": 1,
+     "need": 70,
+     "ell": "clip"
+    },
+    {
+     "text": "unread",
+     "w": 1,
+     "need": 38,
+     "ell": "clip"
+    },
+    {
+     "text": "Danny Okafor-Whitfield",
+     "w": 200,
+     "need": 224,
+     "ell": "ellipsis"
+    }
+   ],
+   "small": [],
+   "covered": [],
+   "boundary": false
+  }
+ ],
+ "explore": [],
+ "reloads": [
+  {
+   "why": "step 6 in contract_offer",
+   "step": 5,
+   "same": true,
+   "phaseBefore": "contract_offer",
+   "phaseAfter": "contract_offer",
+   "lenBefore": 6756,
+   "lenAfter": 6756,
+   "shot": "c320-008-reload-contract_offer.jpg",
+   "audit": {
+    "vw": 320,
+    "sw": 320,
+    "overflow": false,
+    "bad": [],
+    "off": [],
+    "trunc": [
+     {
+      "text": "Drill ready",
+      "w": 1,
+      "need": 70,
+      "ell": "clip"
+     },
+     {
+      "text": "unread",
+      "w": 1,
+      "need": 38,
+      "ell": "clip"
+     },
+     {
+      "text": "Danny Okafor-Whitfield",
+      "w": 200,
+      "need": 224,
+      "ell": "ellipsis"
+     }
+    ],
+    "small": [],
+    "covered": [],
+    "boundary": false
+   },
+   "uiPhaseText": "🏋️ Training Drill ready 📱 Phone 3 unread Danny Okafor-Whitfield CM · Age 17 · Nigeria 🚪 Retire 🔄 New Career 56 OVR POT 80 €0k Net Worth €500/wk Wage €0.8M Value CAREER TIMELINE A 16y Enyimba Youth"
+  },
+  {
+   "why": "final",
+   "step": 58,
+   "same": true,
+   "phaseBefore": "contract_offer",
+   "phaseAfter": "contract_offer",
+   "lenBefore": 6756,
+   "lenAfter": 6756,
+   "shot": "c320-011-reload-contract_offer.jpg",
+   "audit": {
+    "vw": 320,
+    "sw": 320,
+    "overflow": false,
+    "bad": [],
+    "off": [],
+    "trunc": [
+     {
+      "text": "Drill ready",
+      "w": 1,
+      "need": 70,
+      "ell": "clip"
+     },
+     {
+      "text": "unread",
+      "w": 1,
+      "need": 38,
+      "ell": "clip"
+     },
+     {
+      "text": "Danny Okafor-Whitfield",
+      "w": 200,
+      "need": 224,
+      "ell": "ellipsis"
+     }
+    ],
+    "small": [],
+    "covered": [],
+    "boundary": false
+   },
+   "uiPhaseText": "🏋️ Training Drill ready 📱 Phone 3 unread Danny Okafor-Whitfield CM · Age 17 · Nigeria 🚪 Retire 🔄 New Career 56 OVR POT 80 €0k Net Worth €500/wk Wage €0.8M Value CAREER TIMELINE A 16y Enyimba Youth"
+  }
+ ],
+ "errors": [
+  {
+   "t": "error",
+   "at": 0,
+   "text": "Failed to load resource: net::ERR_FAILED"
+  },
+  {
+   "t": "error",
+   "at": 0,
+   "text": "Failed to load resource: net::ERR_FAILED"
+  },
+  {
+   "t": "error",
+   "at": 5,
+   "text": "Failed to load resource: net::ERR_FAILED"
+  },
+  {
+   "t": "error",
+   "at": 32,
+   "text": "Failed to load resource: net::ERR_FAILED"
+  },
+  {
+   "t": "error",
+   "at": 52,
+   "text": "Failed to load resource: net::ERR_FAILED"
+  },
+  {
+   "t": "error",
+   "at": 58,
+   "text": "Failed to load resource: net::ERR_FAILED"
+  }
+ ],
+ "pageErrors": [],
+ "failedRequests": [],
+ "events": [],
+ "stuck": [
+  {
+   "step": 32,
+   "phase": "contract_offer",
+   "shot": "c320-009-STUCK-contract_offer.jpg",
+   "options": [
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Full attributes 180 cm · 75 kg · every n"
+   ]
+  },
+  {
+   "step": 52,
+   "phase": "contract_offer",
+   "shot": "c320-010-STUCK-contract_offer.jpg",
+   "options": [
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Full attributes 180 cm · 75 kg · every n"
+   ]
+  },
+  {
+   "step": 58,
+   "phase": "contract_offer",
+   "fatal": true
+  }
+ ],
+ "notes": [
+  {
+   "kind": "season-press",
+   "pre": {
+    "age": 16,
+    "ovr": 52,
+    "nw": 0,
+    "wage": 500,
+    "val": 0.1,
+    "club": "Enyimba Youth",
+    "years": 2
+   },
+   "post": {
+    "phase": "contract_offer",
+    "age": 17,
+    "ovr": 56,
+    "nw": 0,
+    "wage": 500,
+    "val": 0.8,
+    "club": "Enyimba Youth",
+    "years": 2
+   }
+  },
+  {
+   "step": 2,
+   "kind": "click-failed",
+   "text": "Review contract",
+   "why": "contract_offer",
+   "err": "TimeoutError: locator.click: Timeout 3500ms exceeded. Call log:   - waiting for locator('[data-qa-idx=\"2\"]').first()"
+  },
+  {
+   "step": 4,
+   "kind": "click-failed",
+   "text": "Review contract",
+   "why": "contract_offer",
+   "err": "TimeoutError: locator.click: Timeout 3500ms exceeded. Call log:   - waiting for locator('[data-qa-idx=\"0\"]').first()"
+  },
+  {
+   "step": 6,
+   "kind": "click-failed",
+   "text": "Review contract",
+   "why": "contract_offer",
+   "err": "TimeoutError: locator.click: Timeout 3500ms exceeded. Call log:   - waiting for locator('[data-qa-idx=\"0\"]').first()"
+  },
+  {
+   "step": 7,
+   "kind": "click-failed",
+   "text": "Review contract",
+   "why": "contract_offer",
+   "err": "TimeoutError: locator.click: Timeout 3500ms exceeded. Call log:   - waiting for locator('[data-qa-idx=\"2\"]').first()"
+  },
+  {
+   "step": 8,
+   "kind": "click-failed",
+   "text": "Review contract",
+   "why": "contract_offer",
+   "err": "TimeoutError: locator.click: Timeout 3500ms exceeded. Call log:   - waiting for locator('[data-qa-idx=\"0\"]').first()"
+  },
+  {
+   "step": 10,
+   "kind": "click-failed",
+   "text": "Review contract",
+   "why": "contract_offer",
+   "err": "TimeoutError: locator.click: Timeout 3500ms exceeded. Call log:   - waiting for locator('[data-qa-idx=\"1\"]').first()"
+  },
+  {
+   "step": 11,
+   "kind": "escape-unstick",
+   "phase": "contract_offer"
+  },
+  {
+   "step": 11,
+   "kind": "click-failed",
+   "text": "Review contract",
+   "why": "contract_offer",
+   "err": "TimeoutError: locator.click: Timeout 3500ms exceeded. Call log:   - waiting for locator('[data-qa-idx=\"0\"]').first()"
+  },
+  {
+   "step": 12,
+   "kind": "click-failed",
+   "text": "Review contract",
+   "why": "contract_offer",
+   "err": "TimeoutError: locator.click: Timeout 3500ms exceeded. Call log:   - waiting for locator('[data-qa-idx=\"0\"]').first()"
+  },
+  {
+   "step": 13,
+   "kind": "click-failed",
+   "text": "Full attributes 180 cm · 75 kg · every number under the six",
+   "why": "contract_offer",
+   "err": "TimeoutError: locator.click: Timeout 3500ms exceeded. Call log:   - waiting for locator('[data-qa-idx=\"5\"]').first()"
+  },
+  {
+   "step": 16,
+   "kind": "click-failed",
+   "text": "Review contract",
+   "why": "contract_offer",
+   "err": "TimeoutError: locator.click: Timeout 3500ms exceeded. Call log:   - waiting for locator('[data-qa-idx=\"3\"]').first()"
+  },
+  {
+   "step": 18,
+   "kind": "click-failed",
+   "text": "Full attributes 180 cm · 75 kg · every number under the six",
+   "why": "contract_offer",
+   "err": "TimeoutError: locator.click: Timeout 3500ms exceeded. Call log:   - waiting for locator('[data-qa-idx=\"5\"]').first()"
+  },
+  {
+   "step": 23,
+   "kind": "click-failed",
+   "text": "Review contract",
+   "why": "contract_offer",
+   "err": "TimeoutError: locator.click: Timeout 3500ms exceeded. Call log:   - waiting for locator('[data-qa-idx=\"0\"]').first()"
+  },
+  {
+   "step": 24,
+   "kind": "click-failed",
+   "text": "Review contract",
+   "why": "contract_offer",
+   "err": "TimeoutError: locator.click: Timeout 3500ms exceeded. Call log:   - waiting for locator('[data-qa-idx=\"0\"]').first()"
+  },
+  {
+   "step": 25,
+   "kind": "click-failed",
+   "text": "Review contract",
+   "why": "contract_offer",
+   "err": "TimeoutError: locator.click: Timeout 3500ms exceeded. Call log:   - waiting for locator('[data-qa-idx=\"2\"]').first()"
+  },
+  {
+   "step": 27,
+   "kind": "escape-unstick",
+   "phase": "contract_offer"
+  },
+  {
+   "step": 28,
+   "kind": "click-failed",
+   "text": "Review contract",
+   "why": "contract_offer",
+   "err": "TimeoutError: locator.click: Timeout 3500ms exceeded. Call log:   - waiting for locator('[data-qa-idx=\"2\"]').first()"
+  },
+  {
+   "step": 29,
+   "kind": "click-failed",
+   "text": "Review contract",
+   "why": "contract_offer",
+   "err": "TimeoutError: locator.click: Timeout 3500ms exceeded. Call log:   - waiting for locator('[data-qa-idx=\"1\"]').first()"
+  },
+  {
+   "step": 30,
+   "kind": "click-failed",
+   "text": "Review contract",
+   "why": "contract_offer",
+   "err": "TimeoutError: locator.click: Timeout 3500ms exceeded. Call log:   - waiting for locator('[data-qa-idx=\"3\"]').first()"
+  },
+  {
+   "step": 31,
+   "kind": "click-failed",
+   "text": "Review contract",
+   "why": "contract_offer",
+   "err": "TimeoutError: locator.click: Timeout 3500ms exceeded. Call log:   - waiting for locator('[data-qa-idx=\"0\"]').first()"
+  },
+  {
+   "step": 35,
+   "kind": "click-failed",
+   "text": "Review contract",
+   "why": "contract_offer",
+   "err": "TimeoutError: locator.click: Timeout 3500ms exceeded. Call log:   - waiting for locator('[data-qa-idx=\"0\"]').first()"
+  },
+  {
+   "step": 37,
+   "kind": "click-failed",
+   "text": "Review contract",
+   "why": "contract_offer",
+   "err": "TimeoutError: locator.click: Timeout 3500ms exceeded. Call log:   - waiting for locator('[data-qa-idx=\"3\"]').first()"
+  },
+  {
+   "step": 38,
+   "kind": "click-failed",
+   "text": "Review contract",
+   "why": "contract_offer",
+   "err": "TimeoutError: locator.click: Timeout 3500ms exceeded. Call log:   - waiting for locator('[data-qa-idx=\"3\"]').first()"
+  },
+  {
+   "step": 39,
+   "kind": "escape-unstick",
+   "phase": "contract_offer"
+  },
+  {
+   "step": 40,
+   "kind": "click-failed",
+   "text": "Full attributes 180 cm · 75 kg · every number under the six",
+   "why": "contract_offer",
+   "err": "TimeoutError: locator.click: Timeout 3500ms exceeded. Call log:   - waiting for locator('[data-qa-idx=\"5\"]').first()"
+  },
+  {
+   "step": 43,
+   "kind": "click-failed",
+   "text": "Review contract",
+   "why": "contract_offer",
+   "err": "TimeoutError: locator.click: Timeout 3500ms exceeded. Call log:   - waiting for locator('[data-qa-idx=\"0\"]').first()"
+  },
+  {
+   "step": 45,
+   "kind": "click-failed",
+   "text": "Review contract",
+   "why": "contract_offer",
+   "err": "TimeoutError: locator.click: Timeout 3500ms exceeded. Call log:   - waiting for locator('[data-qa-idx=\"2\"]').first()"
+  },
+  {
+   "step": 46,
+   "kind": "click-failed",
+   "text": "Review contract",
+   "why": "contract_offer",
+   "err": "TimeoutError: locator.click: Timeout 3500ms exceeded. Call log:   - waiting for locator('[data-qa-idx=\"0\"]').first()"
+  },
+  {
+   "step": 47,
+   "kind": "escape-unstick",
+   "phase": "contract_offer"
+  },
+  {
+   "step": 47,
+   "kind": "click-failed",
+   "text": "Review contract",
+   "why": "contract_offer",
+   "err": "TimeoutError: locator.click: Timeout 3500ms exceeded. Call log:   - waiting for locator('[data-qa-idx=\"0\"]').first()"
+  },
+  {
+   "step": 48,
+   "kind": "click-failed",
+   "text": "Review contract",
+   "why": "contract_offer",
+   "err": "TimeoutError: locator.click: Timeout 3500ms exceeded. Call log:   - waiting for locator('[data-qa-idx=\"0\"]').first()"
+  },
+  {
+   "step": 49,
+   "kind": "click-failed",
+   "text": "Review contract",
+   "why": "contract_offer",
+   "err": "TimeoutError: locator.click: Timeout 3500ms exceeded. Call log:   - waiting for locator('[data-qa-idx=\"1\"]').first()"
+  },
+  {
+   "step": 50,
+   "kind": "click-failed",
+   "text": "Review contract",
+   "why": "contract_offer",
+   "err": "TimeoutError: locator.click: Timeout 3500ms exceeded. Call log:   - waiting for locator('[data-qa-idx=\"0\"]').first()"
+  },
+  {
+   "step": 51,
+   "kind": "click-failed",
+   "text": "Review contract",
+   "why": "contract_offer",
+   "err": "TimeoutError: locator.click: Timeout 3500ms exceeded. Call log:   - waiting for locator('[data-qa-idx=\"0\"]').first()"
+  },
+  {
+   "step": 53,
+   "kind": "click-failed",
+   "text": "Review contract",
+   "why": "contract_offer",
+   "err": "TimeoutError: locator.click: Timeout 3500ms exceeded. Call log:   - waiting for locator('[data-qa-idx=\"0\"]').first()"
+  },
+  {
+   "step": 54,
+   "kind": "click-failed",
+   "text": "Review contract",
+   "why": "contract_offer",
+   "err": "TimeoutError: locator.click: Timeout 3500ms exceeded. Call log:   - waiting for locator('[data-qa-idx=\"0\"]').first()"
+  },
+  {
+   "step": 55,
+   "kind": "click-failed",
+   "text": "Review contract",
+   "why": "contract_offer",
+   "err": "TimeoutError: locator.click: Timeout 3500ms exceeded. Call log:   - waiting for locator('[data-qa-idx=\"0\"]').first()"
+  },
+  {
+   "step": 56,
+   "kind": "click-failed",
+   "text": "Review contract",
+   "why": "contract_offer",
+   "err": "TimeoutError: locator.click: Timeout 3500ms exceeded. Call log:   - waiting for locator('[data-qa-idx=\"3\"]').first()"
+  },
+  {
+   "step": 57,
+   "kind": "click-failed",
+   "text": "Review contract",
+   "why": "contract_offer",
+   "err": "TimeoutError: locator.click: Timeout 3500ms exceeded. Call log:   - waiting for locator('[data-qa-idx=\"0\"]').first()"
+  }
+ ],
+ "shots": [
+  "c320-001-create-empty.jpg",
+  "c320-002-create-rolled.jpg",
+  "c320-003-create-rolled-full.jpg",
+  "c320-004-ph-youth-1.jpg",
+  "c320-005-ph-contract_offer-1.jpg",
+  "c320-006-ph-contract_offer-2.jpg",
+  "c320-007-ph-contract_offer-3.jpg",
+  "c320-008-reload-contract_offer.jpg",
+  "c320-009-STUCK-contract_offer.jpg",
+  "c320-010-STUCK-contract_offer.jpg",
+  "c320-011-reload-contract_offer.jpg",
+  "c320-012-final-hub-full.jpg"
+ ],
+ "scroll": [],
+ "created": {
+  "nat": "Nigeria🇳🇬",
+  "pos": "Central Mid (CM)",
+  "era": "Early 90s (1990 start)",
+  "phase": "youth",
+  "age": 16,
+  "club": "Enyimba Youth",
+  "ovr": 52,
+  "pot": 80
+ },
+ "final": {
+  "phase": "contract_offer",
+  "age": 17,
+  "senior": 0,
+  "club": "Enyimba Youth",
+  "ovr": 56,
+  "steps": 58,
+  "secs": 193
+ }
+}

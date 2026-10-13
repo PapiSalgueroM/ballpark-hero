@@ -1,0 +1,6 @@
+[11s] created Brazil🇧🇷/Goalkeeper (GK)/Late 2000s (2005 start) -> youth age 16 at Cruzeiro Youth
+[51s] reload (step 15 in contract_offer): same=true phase contract_offer->contract_offer
+[114s] reload (step 33 in contract_offer): same=true phase contract_offer->contract_offer
+[316s] reload (final): same=true phase contract_offer->contract_offer
+[317s] done: {"phase":"contract_offer","age":17,"senior":0,"club":"Cruzeiro Youth","ovr":64,"steps":93,"secs":314} shots=13 audits=7 errors=7 pageErrors=0 stuck=3 traps=0
+WALK b1280 FINISHED

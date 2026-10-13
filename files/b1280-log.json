@@ -1,0 +1,2583 @@
+{
+ "tag": "b1280",
+ "W": 1280,
+ "H": 900,
+ "SEED": 29,
+ "POS": "Goalkeeper",
+ "NAT": "Brazil",
+ "ERA": "Late 2000s",
+ "steps": [
+  {
+   "step": 1,
+   "phase": "youth",
+   "age": 16,
+   "senior": 0,
+   "club": "Cruzeiro Youth",
+   "ovr": 54,
+   "action": "Next Season",
+   "options": [],
+   "next": "contract_offer"
+  },
+  {
+   "step": 2,
+   "phase": "contract_offer",
+   "age": 17,
+   "senior": 0,
+   "club": "Cruzeiro Youth",
+   "ovr": 64,
+   "action": "Review contract",
+   "options": [
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Full attributes 190 cm · 84 kg · every n"
+   ],
+   "modal": false,
+   "next": "contract_offer"
+  },
+  {
+   "step": 3,
+   "phase": "contract_offer",
+   "age": 17,
+   "senior": 0,
+   "club": "Cruzeiro Youth",
+   "ovr": 64,
+   "action": "Review contract",
+   "options": [
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Full attributes 190 cm · 84 kg · every n"
+   ],
+   "modal": false,
+   "next": "contract_offer"
+  },
+  {
+   "step": 4,
+   "phase": "contract_offer",
+   "age": 17,
+   "senior": 0,
+   "club": "Cruzeiro Youth",
+   "ovr": 64,
+   "action": "Review contract",
+   "options": [
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Full attributes 190 cm · 84 kg · every n"
+   ],
+   "modal": false,
+   "next": "contract_offer"
+  },
+  {
+   "step": 5,
+   "phase": "contract_offer",
+   "age": 17,
+   "senior": 0,
+   "club": "Cruzeiro Youth",
+   "ovr": 64,
+   "action": "Review contract",
+   "options": [
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Full attributes 190 cm · 84 kg · every n"
+   ],
+   "modal": false,
+   "next": "contract_offer"
+  },
+  {
+   "step": 6,
+   "phase": "contract_offer",
+   "age": 17,
+   "senior": 0,
+   "club": "Cruzeiro Youth",
+   "ovr": 64,
+   "action": "Review contract",
+   "options": [
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Full attributes 190 cm · 84 kg · every n"
+   ],
+   "modal": false,
+   "next": "contract_offer"
+  },
+  {
+   "step": 7,
+   "phase": "contract_offer",
+   "age": 17,
+   "senior": 0,
+   "club": "Cruzeiro Youth",
+   "ovr": 64,
+   "action": "Review contract",
+   "options": [
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Full attributes 190 cm · 84 kg · every n"
+   ],
+   "modal": false,
+   "next": "contract_offer"
+  },
+  {
+   "step": 8,
+   "phase": "contract_offer",
+   "age": 17,
+   "senior": 0,
+   "club": "Cruzeiro Youth",
+   "ovr": 64,
+   "action": "Review contract",
+   "options": [
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Full attributes 190 cm · 84 kg · every n"
+   ],
+   "modal": false,
+   "next": "contract_offer"
+  },
+  {
+   "step": 9,
+   "phase": "contract_offer",
+   "age": 17,
+   "senior": 0,
+   "club": "Cruzeiro Youth",
+   "ovr": 64,
+   "action": "Review contract",
+   "options": [
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Full attributes 190 cm · 84 kg · every n"
+   ],
+   "modal": false,
+   "next": "contract_offer"
+  },
+  {
+   "step": 10,
+   "phase": "contract_offer",
+   "age": 17,
+   "senior": 0,
+   "club": "Cruzeiro Youth",
+   "ovr": 64,
+   "action": "Full attributes 190 cm · 84 kg · every number under the six",
+   "options": [
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Full attributes 190 cm · 84 kg · every n"
+   ],
+   "modal": false,
+   "next": "contract_offer"
+  },
+  {
+   "step": 11,
+   "phase": "contract_offer",
+   "age": 17,
+   "senior": 0,
+   "club": "Cruzeiro Youth",
+   "ovr": 64,
+   "action": "← Back",
+   "options": [
+    "← Back",
+    "Back to your career"
+   ],
+   "modal": false,
+   "next": "contract_offer"
+  },
+  {
+   "step": 12,
+   "phase": "contract_offer",
+   "age": 17,
+   "senior": 0,
+   "club": "Cruzeiro Youth",
+   "ovr": 64,
+   "action": "Review contract",
+   "options": [
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Full attributes 190 cm · 84 kg · every n"
+   ],
+   "modal": false,
+   "next": "contract_offer"
+  },
+  {
+   "step": 13,
+   "phase": "contract_offer",
+   "age": 17,
+   "senior": 0,
+   "club": "Cruzeiro Youth",
+   "ovr": 64,
+   "action": "Review contract",
+   "options": [
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Full attributes 190 cm · 84 kg · every n"
+   ],
+   "modal": false,
+   "next": "contract_offer"
+  },
+  {
+   "step": 14,
+   "phase": "contract_offer",
+   "age": 17,
+   "senior": 0,
+   "club": "Cruzeiro Youth",
+   "ovr": 64,
+   "action": "Review contract",
+   "options": [
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Full attributes 190 cm · 84 kg · every n"
+   ],
+   "modal": false,
+   "next": "contract_offer"
+  },
+  {
+   "step": 15,
+   "phase": "contract_offer",
+   "age": 17,
+   "senior": 0,
+   "club": "Cruzeiro Youth",
+   "ovr": 64,
+   "action": "Full attributes 190 cm · 84 kg · every number under the six",
+   "options": [
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Full attributes 190 cm · 84 kg · every n"
+   ],
+   "modal": false,
+   "next": "contract_offer"
+  },
+  {
+   "step": 16,
+   "phase": "contract_offer",
+   "age": 17,
+   "senior": 0,
+   "club": "Cruzeiro Youth",
+   "ovr": 64,
+   "action": "← Back",
+   "options": [
+    "← Back",
+    "Back to your career"
+   ],
+   "modal": false,
+   "next": "contract_offer"
+  },
+  {
+   "step": 17,
+   "phase": "contract_offer",
+   "age": 17,
+   "senior": 0,
+   "club": "Cruzeiro Youth",
+   "ovr": 64,
+   "action": "Review contract",
+   "options": [
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Full attributes 190 cm · 84 kg · every n"
+   ],
+   "modal": false,
+   "next": "contract_offer"
+  },
+  {
+   "step": 18,
+   "phase": "contract_offer",
+   "age": 17,
+   "senior": 0,
+   "club": "Cruzeiro Youth",
+   "ovr": 64,
+   "action": "Review contract",
+   "options": [
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Full attributes 190 cm · 84 kg · every n"
+   ],
+   "modal": false,
+   "next": "contract_offer"
+  },
+  {
+   "step": 19,
+   "phase": "contract_offer",
+   "age": 17,
+   "senior": 0,
+   "club": "Cruzeiro Youth",
+   "ovr": 64,
+   "action": "Review contract",
+   "options": [
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Full attributes 190 cm · 84 kg · every n"
+   ],
+   "modal": false,
+   "next": "contract_offer"
+  },
+  {
+   "step": 20,
+   "phase": "contract_offer",
+   "age": 17,
+   "senior": 0,
+   "club": "Cruzeiro Youth",
+   "ovr": 64,
+   "action": "Review contract",
+   "options": [
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Full attributes 190 cm · 84 kg · every n"
+   ],
+   "modal": false,
+   "next": "contract_offer"
+  },
+  {
+   "step": 21,
+   "phase": "contract_offer",
+   "age": 17,
+   "senior": 0,
+   "club": "Cruzeiro Youth",
+   "ovr": 64,
+   "action": "Review contract",
+   "options": [
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Full attributes 190 cm · 84 kg · every n"
+   ],
+   "modal": false,
+   "next": "contract_offer"
+  },
+  {
+   "step": 22,
+   "phase": "contract_offer",
+   "age": 17,
+   "senior": 0,
+   "club": "Cruzeiro Youth",
+   "ovr": 64,
+   "action": "Review contract",
+   "options": [
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Full attributes 190 cm · 84 kg · every n"
+   ],
+   "modal": false,
+   "next": "contract_offer"
+  },
+  {
+   "step": 23,
+   "phase": "contract_offer",
+   "age": 17,
+   "senior": 0,
+   "club": "Cruzeiro Youth",
+   "ovr": 64,
+   "action": "Review contract",
+   "options": [
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Full attributes 190 cm · 84 kg · every n"
+   ],
+   "modal": false,
+   "next": "contract_offer"
+  },
+  {
+   "step": 24,
+   "phase": "contract_offer",
+   "age": 17,
+   "senior": 0,
+   "club": "Cruzeiro Youth",
+   "ovr": 64,
+   "action": "Review contract",
+   "options": [
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Full attributes 190 cm · 84 kg · every n"
+   ],
+   "modal": false,
+   "next": "contract_offer"
+  },
+  {
+   "step": 25,
+   "phase": "contract_offer",
+   "age": 17,
+   "senior": 0,
+   "club": "Cruzeiro Youth",
+   "ovr": 64,
+   "action": "Review contract",
+   "options": [
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Full attributes 190 cm · 84 kg · every n"
+   ],
+   "modal": false,
+   "next": "contract_offer"
+  },
+  {
+   "step": 26,
+   "phase": "contract_offer",
+   "age": 17,
+   "senior": 0,
+   "club": "Cruzeiro Youth",
+   "ovr": 64,
+   "action": "Review contract",
+   "options": [
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Full attributes 190 cm · 84 kg · every n"
+   ],
+   "modal": false,
+   "next": "contract_offer"
+  },
+  {
+   "step": 27,
+   "phase": "contract_offer",
+   "age": 17,
+   "senior": 0,
+   "club": "Cruzeiro Youth",
+   "ovr": 64,
+   "action": "Review contract",
+   "options": [
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Full attributes 190 cm · 84 kg · every n"
+   ],
+   "modal": false,
+   "next": "contract_offer"
+  },
+  {
+   "step": 28,
+   "phase": "contract_offer",
+   "age": 17,
+   "senior": 0,
+   "club": "Cruzeiro Youth",
+   "ovr": 64,
+   "action": "Review contract",
+   "options": [
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Full attributes 190 cm · 84 kg · every n"
+   ],
+   "modal": false,
+   "next": "contract_offer"
+  },
+  {
+   "step": 29,
+   "phase": "contract_offer",
+   "age": 17,
+   "senior": 0,
+   "club": "Cruzeiro Youth",
+   "ovr": 64,
+   "action": "Review contract",
+   "options": [
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Full attributes 190 cm · 84 kg · every n"
+   ],
+   "modal": false,
+   "next": "contract_offer"
+  },
+  {
+   "step": 30,
+   "phase": "contract_offer",
+   "age": 17,
+   "senior": 0,
+   "club": "Cruzeiro Youth",
+   "ovr": 64,
+   "action": "Full attributes 190 cm · 84 kg · every number under the six",
+   "options": [
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Full attributes 190 cm · 84 kg · every n"
+   ],
+   "modal": false,
+   "next": "contract_offer"
+  },
+  {
+   "step": 31,
+   "phase": "contract_offer",
+   "age": 17,
+   "senior": 0,
+   "club": "Cruzeiro Youth",
+   "ovr": 64,
+   "action": "← Back",
+   "options": [
+    "← Back",
+    "Back to your career"
+   ],
+   "modal": false,
+   "next": "contract_offer"
+  },
+  {
+   "step": 32,
+   "phase": "contract_offer",
+   "age": 17,
+   "senior": 0,
+   "club": "Cruzeiro Youth",
+   "ovr": 64,
+   "action": "Review contract",
+   "options": [
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Full attributes 190 cm · 84 kg · every n"
+   ],
+   "modal": false,
+   "next": "contract_offer"
+  },
+  {
+   "step": 33,
+   "phase": "contract_offer",
+   "age": 17,
+   "senior": 0,
+   "club": "Cruzeiro Youth",
+   "ovr": 64,
+   "action": "Review contract",
+   "options": [
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Full attributes 190 cm · 84 kg · every n"
+   ],
+   "modal": false,
+   "next": "contract_offer"
+  },
+  {
+   "step": 34,
+   "phase": "contract_offer",
+   "age": 17,
+   "senior": 0,
+   "club": "Cruzeiro Youth",
+   "ovr": 64,
+   "action": "Review contract",
+   "options": [
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Full attributes 190 cm · 84 kg · every n"
+   ],
+   "modal": false,
+   "next": "contract_offer"
+  },
+  {
+   "step": 35,
+   "phase": "contract_offer",
+   "age": 17,
+   "senior": 0,
+   "club": "Cruzeiro Youth",
+   "ovr": 64,
+   "action": "Review contract",
+   "options": [
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Full attributes 190 cm · 84 kg · every n"
+   ],
+   "modal": false,
+   "next": "contract_offer"
+  },
+  {
+   "step": 36,
+   "phase": "contract_offer",
+   "age": 17,
+   "senior": 0,
+   "club": "Cruzeiro Youth",
+   "ovr": 64,
+   "action": "Review contract",
+   "options": [
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Full attributes 190 cm · 84 kg · every n"
+   ],
+   "modal": false,
+   "next": "contract_offer"
+  },
+  {
+   "step": 37,
+   "phase": "contract_offer",
+   "age": 17,
+   "senior": 0,
+   "club": "Cruzeiro Youth",
+   "ovr": 64,
+   "action": "Review contract",
+   "options": [
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Full attributes 190 cm · 84 kg · every n"
+   ],
+   "modal": false,
+   "next": "contract_offer"
+  },
+  {
+   "step": 38,
+   "phase": "contract_offer",
+   "age": 17,
+   "senior": 0,
+   "club": "Cruzeiro Youth",
+   "ovr": 64,
+   "action": "Full attributes 190 cm · 84 kg · every number under the six",
+   "options": [
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Full attributes 190 cm · 84 kg · every n"
+   ],
+   "modal": false,
+   "next": "contract_offer"
+  },
+  {
+   "step": 39,
+   "phase": "contract_offer",
+   "age": 17,
+   "senior": 0,
+   "club": "Cruzeiro Youth",
+   "ovr": 64,
+   "action": "Back to your career",
+   "options": [
+    "← Back",
+    "Back to your career"
+   ],
+   "modal": false,
+   "next": "contract_offer"
+  },
+  {
+   "step": 40,
+   "phase": "contract_offer",
+   "age": 17,
+   "senior": 0,
+   "club": "Cruzeiro Youth",
+   "ovr": 64,
+   "action": "Review contract",
+   "options": [
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Full attributes 190 cm · 84 kg · every n"
+   ],
+   "modal": false,
+   "next": "contract_offer"
+  },
+  {
+   "step": 41,
+   "phase": "contract_offer",
+   "age": 17,
+   "senior": 0,
+   "club": "Cruzeiro Youth",
+   "ovr": 64,
+   "action": "Review contract",
+   "options": [
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Full attributes 190 cm · 84 kg · every n"
+   ],
+   "modal": false,
+   "next": "contract_offer"
+  },
+  {
+   "step": 42,
+   "phase": "contract_offer",
+   "age": 17,
+   "senior": 0,
+   "club": "Cruzeiro Youth",
+   "ovr": 64,
+   "action": "Review contract",
+   "options": [
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Full attributes 190 cm · 84 kg · every n"
+   ],
+   "modal": false,
+   "next": "contract_offer"
+  },
+  {
+   "step": 43,
+   "phase": "contract_offer",
+   "age": 17,
+   "senior": 0,
+   "club": "Cruzeiro Youth",
+   "ovr": 64,
+   "action": "Full attributes 190 cm · 84 kg · every number under the six",
+   "options": [
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Full attributes 190 cm · 84 kg · every n"
+   ],
+   "modal": false,
+   "next": "contract_offer"
+  },
+  {
+   "step": 44,
+   "phase": "contract_offer",
+   "age": 17,
+   "senior": 0,
+   "club": "Cruzeiro Youth",
+   "ovr": 64,
+   "action": "← Back",
+   "options": [
+    "← Back",
+    "Back to your career"
+   ],
+   "modal": false,
+   "next": "contract_offer"
+  },
+  {
+   "step": 45,
+   "phase": "contract_offer",
+   "age": 17,
+   "senior": 0,
+   "club": "Cruzeiro Youth",
+   "ovr": 64,
+   "action": "Review contract",
+   "options": [
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Full attributes 190 cm · 84 kg · every n"
+   ],
+   "modal": false,
+   "next": "contract_offer"
+  },
+  {
+   "step": 46,
+   "phase": "contract_offer",
+   "age": 17,
+   "senior": 0,
+   "club": "Cruzeiro Youth",
+   "ovr": 64,
+   "action": "Review contract",
+   "options": [
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Full attributes 190 cm · 84 kg · every n"
+   ],
+   "modal": false,
+   "next": "contract_offer"
+  },
+  {
+   "step": 47,
+   "phase": "contract_offer",
+   "age": 17,
+   "senior": 0,
+   "club": "Cruzeiro Youth",
+   "ovr": 64,
+   "action": "Full attributes 190 cm · 84 kg · every number under the six",
+   "options": [
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Full attributes 190 cm · 84 kg · every n"
+   ],
+   "modal": false,
+   "next": "contract_offer"
+  },
+  {
+   "step": 48,
+   "phase": "contract_offer",
+   "age": 17,
+   "senior": 0,
+   "club": "Cruzeiro Youth",
+   "ovr": 64,
+   "action": "← Back",
+   "options": [
+    "← Back",
+    "Back to your career"
+   ],
+   "modal": false,
+   "next": "contract_offer"
+  },
+  {
+   "step": 49,
+   "phase": "contract_offer",
+   "age": 17,
+   "senior": 0,
+   "club": "Cruzeiro Youth",
+   "ovr": 64,
+   "action": "Review contract",
+   "options": [
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Full attributes 190 cm · 84 kg · every n"
+   ],
+   "modal": false,
+   "next": "contract_offer"
+  },
+  {
+   "step": 50,
+   "phase": "contract_offer",
+   "age": 17,
+   "senior": 0,
+   "club": "Cruzeiro Youth",
+   "ovr": 64,
+   "action": "Review contract",
+   "options": [
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Full attributes 190 cm · 84 kg · every n"
+   ],
+   "modal": false,
+   "next": "contract_offer"
+  },
+  {
+   "step": 51,
+   "phase": "contract_offer",
+   "age": 17,
+   "senior": 0,
+   "club": "Cruzeiro Youth",
+   "ovr": 64,
+   "action": "Review contract",
+   "options": [
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Full attributes 190 cm · 84 kg · every n"
+   ],
+   "modal": false,
+   "next": "contract_offer"
+  },
+  {
+   "step": 52,
+   "phase": "contract_offer",
+   "age": 17,
+   "senior": 0,
+   "club": "Cruzeiro Youth",
+   "ovr": 64,
+   "action": "Review contract",
+   "options": [
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Full attributes 190 cm · 84 kg · every n"
+   ],
+   "modal": false,
+   "next": "contract_offer"
+  },
+  {
+   "step": 53,
+   "phase": "contract_offer",
+   "age": 17,
+   "senior": 0,
+   "club": "Cruzeiro Youth",
+   "ovr": 64,
+   "action": "Review contract",
+   "options": [
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Full attributes 190 cm · 84 kg · every n"
+   ],
+   "modal": false,
+   "next": "contract_offer"
+  },
+  {
+   "step": 54,
+   "phase": "contract_offer",
+   "age": 17,
+   "senior": 0,
+   "club": "Cruzeiro Youth",
+   "ovr": 64,
+   "action": "Review contract",
+   "options": [
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Full attributes 190 cm · 84 kg · every n"
+   ],
+   "modal": false,
+   "next": "contract_offer"
+  },
+  {
+   "step": 55,
+   "phase": "contract_offer",
+   "age": 17,
+   "senior": 0,
+   "club": "Cruzeiro Youth",
+   "ovr": 64,
+   "action": "Review contract",
+   "options": [
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Full attributes 190 cm · 84 kg · every n"
+   ],
+   "modal": false,
+   "next": "contract_offer"
+  },
+  {
+   "step": 56,
+   "phase": "contract_offer",
+   "age": 17,
+   "senior": 0,
+   "club": "Cruzeiro Youth",
+   "ovr": 64,
+   "action": "Full attributes 190 cm · 84 kg · every number under the six",
+   "options": [
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Full attributes 190 cm · 84 kg · every n"
+   ],
+   "modal": false,
+   "next": "contract_offer"
+  },
+  {
+   "step": 57,
+   "phase": "contract_offer",
+   "age": 17,
+   "senior": 0,
+   "club": "Cruzeiro Youth",
+   "ovr": 64,
+   "action": "← Back",
+   "options": [
+    "← Back",
+    "Back to your career"
+   ],
+   "modal": false,
+   "next": "contract_offer"
+  },
+  {
+   "step": 58,
+   "phase": "contract_offer",
+   "age": 17,
+   "senior": 0,
+   "club": "Cruzeiro Youth",
+   "ovr": 64,
+   "action": "Full attributes 190 cm · 84 kg · every number under the six",
+   "options": [
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Full attributes 190 cm · 84 kg · every n"
+   ],
+   "modal": false,
+   "next": "contract_offer"
+  },
+  {
+   "step": 59,
+   "phase": "contract_offer",
+   "age": 17,
+   "senior": 0,
+   "club": "Cruzeiro Youth",
+   "ovr": 64,
+   "action": "← Back",
+   "options": [
+    "← Back",
+    "Back to your career"
+   ],
+   "modal": false,
+   "next": "contract_offer"
+  },
+  {
+   "step": 60,
+   "phase": "contract_offer",
+   "age": 17,
+   "senior": 0,
+   "club": "Cruzeiro Youth",
+   "ovr": 64,
+   "action": "Review contract",
+   "options": [
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Full attributes 190 cm · 84 kg · every n"
+   ],
+   "modal": false,
+   "next": "contract_offer"
+  },
+  {
+   "step": 61,
+   "phase": "contract_offer",
+   "age": 17,
+   "senior": 0,
+   "club": "Cruzeiro Youth",
+   "ovr": 64,
+   "action": "Full attributes 190 cm · 84 kg · every number under the six",
+   "options": [
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Full attributes 190 cm · 84 kg · every n"
+   ],
+   "modal": false,
+   "next": "contract_offer"
+  },
+  {
+   "step": 62,
+   "phase": "contract_offer",
+   "age": 17,
+   "senior": 0,
+   "club": "Cruzeiro Youth",
+   "ovr": 64,
+   "action": "Back to your career",
+   "options": [
+    "← Back",
+    "Back to your career"
+   ],
+   "modal": false,
+   "next": "contract_offer"
+  },
+  {
+   "step": 63,
+   "phase": "contract_offer",
+   "age": 17,
+   "senior": 0,
+   "club": "Cruzeiro Youth",
+   "ovr": 64,
+   "action": "Review contract",
+   "options": [
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Full attributes 190 cm · 84 kg · every n"
+   ],
+   "modal": false,
+   "next": "contract_offer"
+  },
+  {
+   "step": 64,
+   "phase": "contract_offer",
+   "age": 17,
+   "senior": 0,
+   "club": "Cruzeiro Youth",
+   "ovr": 64,
+   "action": "Review contract",
+   "options": [
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Full attributes 190 cm · 84 kg · every n"
+   ],
+   "modal": false,
+   "next": "contract_offer"
+  },
+  {
+   "step": 65,
+   "phase": "contract_offer",
+   "age": 17,
+   "senior": 0,
+   "club": "Cruzeiro Youth",
+   "ovr": 64,
+   "action": "Review contract",
+   "options": [
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Full attributes 190 cm · 84 kg · every n"
+   ],
+   "modal": false,
+   "next": "contract_offer"
+  },
+  {
+   "step": 66,
+   "phase": "contract_offer",
+   "age": 17,
+   "senior": 0,
+   "club": "Cruzeiro Youth",
+   "ovr": 64,
+   "action": "Review contract",
+   "options": [
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Full attributes 190 cm · 84 kg · every n"
+   ],
+   "modal": false,
+   "next": "contract_offer"
+  },
+  {
+   "step": 67,
+   "phase": "contract_offer",
+   "age": 17,
+   "senior": 0,
+   "club": "Cruzeiro Youth",
+   "ovr": 64,
+   "action": "Review contract",
+   "options": [
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Full attributes 190 cm · 84 kg · every n"
+   ],
+   "modal": false,
+   "next": "contract_offer"
+  },
+  {
+   "step": 68,
+   "phase": "contract_offer",
+   "age": 17,
+   "senior": 0,
+   "club": "Cruzeiro Youth",
+   "ovr": 64,
+   "action": "Review contract",
+   "options": [
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Full attributes 190 cm · 84 kg · every n"
+   ],
+   "modal": false,
+   "next": "contract_offer"
+  },
+  {
+   "step": 69,
+   "phase": "contract_offer",
+   "age": 17,
+   "senior": 0,
+   "club": "Cruzeiro Youth",
+   "ovr": 64,
+   "action": "Review contract",
+   "options": [
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Full attributes 190 cm · 84 kg · every n"
+   ],
+   "modal": false,
+   "next": "contract_offer"
+  },
+  {
+   "step": 70,
+   "phase": "contract_offer",
+   "age": 17,
+   "senior": 0,
+   "club": "Cruzeiro Youth",
+   "ovr": 64,
+   "action": "Review contract",
+   "options": [
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Full attributes 190 cm · 84 kg · every n"
+   ],
+   "modal": false,
+   "next": "contract_offer"
+  },
+  {
+   "step": 71,
+   "phase": "contract_offer",
+   "age": 17,
+   "senior": 0,
+   "club": "Cruzeiro Youth",
+   "ovr": 64,
+   "action": "Full attributes 190 cm · 84 kg · every number under the six",
+   "options": [
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Full attributes 190 cm · 84 kg · every n"
+   ],
+   "modal": false,
+   "next": "contract_offer"
+  },
+  {
+   "step": 72,
+   "phase": "contract_offer",
+   "age": 17,
+   "senior": 0,
+   "club": "Cruzeiro Youth",
+   "ovr": 64,
+   "action": "Back to your career",
+   "options": [
+    "← Back",
+    "Back to your career"
+   ],
+   "modal": false,
+   "next": "contract_offer"
+  },
+  {
+   "step": 73,
+   "phase": "contract_offer",
+   "age": 17,
+   "senior": 0,
+   "club": "Cruzeiro Youth",
+   "ovr": 64,
+   "action": "Review contract",
+   "options": [
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Full attributes 190 cm · 84 kg · every n"
+   ],
+   "modal": false,
+   "next": "contract_offer"
+  },
+  {
+   "step": 74,
+   "phase": "contract_offer",
+   "age": 17,
+   "senior": 0,
+   "club": "Cruzeiro Youth",
+   "ovr": 64,
+   "action": "Review contract",
+   "options": [
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Full attributes 190 cm · 84 kg · every n"
+   ],
+   "modal": false,
+   "next": "contract_offer"
+  },
+  {
+   "step": 75,
+   "phase": "contract_offer",
+   "age": 17,
+   "senior": 0,
+   "club": "Cruzeiro Youth",
+   "ovr": 64,
+   "action": "Review contract",
+   "options": [
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Full attributes 190 cm · 84 kg · every n"
+   ],
+   "modal": false,
+   "next": "contract_offer"
+  },
+  {
+   "step": 76,
+   "phase": "contract_offer",
+   "age": 17,
+   "senior": 0,
+   "club": "Cruzeiro Youth",
+   "ovr": 64,
+   "action": "Full attributes 190 cm · 84 kg · every number under the six",
+   "options": [
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Full attributes 190 cm · 84 kg · every n"
+   ],
+   "modal": false,
+   "next": "contract_offer"
+  },
+  {
+   "step": 77,
+   "phase": "contract_offer",
+   "age": 17,
+   "senior": 0,
+   "club": "Cruzeiro Youth",
+   "ovr": 64,
+   "action": "Back to your career",
+   "options": [
+    "← Back",
+    "Back to your career"
+   ],
+   "modal": false,
+   "next": "contract_offer"
+  },
+  {
+   "step": 78,
+   "phase": "contract_offer",
+   "age": 17,
+   "senior": 0,
+   "club": "Cruzeiro Youth",
+   "ovr": 64,
+   "action": "Review contract",
+   "options": [
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Full attributes 190 cm · 84 kg · every n"
+   ],
+   "modal": false,
+   "next": "contract_offer"
+  },
+  {
+   "step": 79,
+   "phase": "contract_offer",
+   "age": 17,
+   "senior": 0,
+   "club": "Cruzeiro Youth",
+   "ovr": 64,
+   "action": "Review contract",
+   "options": [
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Full attributes 190 cm · 84 kg · every n"
+   ],
+   "modal": false,
+   "next": "contract_offer"
+  },
+  {
+   "step": 80,
+   "phase": "contract_offer",
+   "age": 17,
+   "senior": 0,
+   "club": "Cruzeiro Youth",
+   "ovr": 64,
+   "action": "Review contract",
+   "options": [
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Full attributes 190 cm · 84 kg · every n"
+   ],
+   "modal": false,
+   "next": "contract_offer"
+  },
+  {
+   "step": 81,
+   "phase": "contract_offer",
+   "age": 17,
+   "senior": 0,
+   "club": "Cruzeiro Youth",
+   "ovr": 64,
+   "action": "Review contract",
+   "options": [
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Full attributes 190 cm · 84 kg · every n"
+   ],
+   "modal": false,
+   "next": "contract_offer"
+  },
+  {
+   "step": 82,
+   "phase": "contract_offer",
+   "age": 17,
+   "senior": 0,
+   "club": "Cruzeiro Youth",
+   "ovr": 64,
+   "action": "Review contract",
+   "options": [
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Full attributes 190 cm · 84 kg · every n"
+   ],
+   "modal": false,
+   "next": "contract_offer"
+  },
+  {
+   "step": 83,
+   "phase": "contract_offer",
+   "age": 17,
+   "senior": 0,
+   "club": "Cruzeiro Youth",
+   "ovr": 64,
+   "action": "Review contract",
+   "options": [
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Full attributes 190 cm · 84 kg · every n"
+   ],
+   "modal": false,
+   "next": "contract_offer"
+  },
+  {
+   "step": 84,
+   "phase": "contract_offer",
+   "age": 17,
+   "senior": 0,
+   "club": "Cruzeiro Youth",
+   "ovr": 64,
+   "action": "Review contract",
+   "options": [
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Full attributes 190 cm · 84 kg · every n"
+   ],
+   "modal": false,
+   "next": "contract_offer"
+  },
+  {
+   "step": 85,
+   "phase": "contract_offer",
+   "age": 17,
+   "senior": 0,
+   "club": "Cruzeiro Youth",
+   "ovr": 64,
+   "action": "Review contract",
+   "options": [
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Full attributes 190 cm · 84 kg · every n"
+   ],
+   "modal": false,
+   "next": "contract_offer"
+  },
+  {
+   "step": 86,
+   "phase": "contract_offer",
+   "age": 17,
+   "senior": 0,
+   "club": "Cruzeiro Youth",
+   "ovr": 64,
+   "action": "Review contract",
+   "options": [
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Full attributes 190 cm · 84 kg · every n"
+   ],
+   "modal": false,
+   "next": "contract_offer"
+  },
+  {
+   "step": 87,
+   "phase": "contract_offer",
+   "age": 17,
+   "senior": 0,
+   "club": "Cruzeiro Youth",
+   "ovr": 64,
+   "action": "Review contract",
+   "options": [
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Full attributes 190 cm · 84 kg · every n"
+   ],
+   "modal": false,
+   "next": "contract_offer"
+  },
+  {
+   "step": 88,
+   "phase": "contract_offer",
+   "age": 17,
+   "senior": 0,
+   "club": "Cruzeiro Youth",
+   "ovr": 64,
+   "action": "Review contract",
+   "options": [
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Full attributes 190 cm · 84 kg · every n"
+   ],
+   "modal": false,
+   "next": "contract_offer"
+  },
+  {
+   "step": 89,
+   "phase": "contract_offer",
+   "age": 17,
+   "senior": 0,
+   "club": "Cruzeiro Youth",
+   "ovr": 64,
+   "action": "Review contract",
+   "options": [
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Full attributes 190 cm · 84 kg · every n"
+   ],
+   "modal": false,
+   "next": "contract_offer"
+  },
+  {
+   "step": 90,
+   "phase": "contract_offer",
+   "age": 17,
+   "senior": 0,
+   "club": "Cruzeiro Youth",
+   "ovr": 64,
+   "action": "Review contract",
+   "options": [
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Full attributes 190 cm · 84 kg · every n"
+   ],
+   "modal": false,
+   "next": "contract_offer"
+  },
+  {
+   "step": 91,
+   "phase": "contract_offer",
+   "age": 17,
+   "senior": 0,
+   "club": "Cruzeiro Youth",
+   "ovr": 64,
+   "action": "Review contract",
+   "options": [
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Full attributes 190 cm · 84 kg · every n"
+   ],
+   "modal": false,
+   "next": "contract_offer"
+  },
+  {
+   "step": 92,
+   "phase": "contract_offer",
+   "age": 17,
+   "senior": 0,
+   "club": "Cruzeiro Youth",
+   "ovr": 64,
+   "action": "Review contract",
+   "options": [
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Full attributes 190 cm · 84 kg · every n"
+   ],
+   "modal": false,
+   "next": "contract_offer"
+  },
+  {
+   "step": 93,
+   "phase": "contract_offer",
+   "age": 17,
+   "senior": 0,
+   "club": "Cruzeiro Youth",
+   "ovr": 64,
+   "action": "Review contract",
+   "options": [
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Full attributes 190 cm · 84 kg · every n"
+   ],
+   "modal": false,
+   "next": "contract_offer"
+  }
+ ],
+ "audits": [
+  {
+   "label": "phase youth #1",
+   "step": 0,
+   "vw": 1280,
+   "sw": 1280,
+   "overflow": false,
+   "bad": [],
+   "off": [],
+   "trunc": [
+    {
+     "text": "Drill ready",
+     "w": 1,
+     "need": 120,
+     "ell": "clip"
+    },
+    {
+     "text": "unread",
+     "w": 1,
+     "need": 38,
+     "ell": "clip"
+    }
+   ],
+   "small": [],
+   "covered": [
+    {
+     "text": "📱\n2\nunread",
+     "by": "Joined Cruzeiro Youth!",
+     "byCls": "group toast group-[.toaster]:bg-background group-["
+    },
+    {
+     "text": "Retire",
+     "by": "Joined Cruzeiro Youth!",
+     "byCls": "group toast group-[.toaster]:bg-background group-["
+    }
+   ],
+   "boundary": false
+  },
+  {
+   "label": "phase contract_offer #1",
+   "step": 1,
+   "vw": 1280,
+   "sw": 1280,
+   "overflow": false,
+   "bad": [],
+   "off": [],
+   "trunc": [
+    {
+     "text": "Drill ready",
+     "w": 1,
+     "need": 120,
+     "ell": "clip"
+    },
+    {
+     "text": "unread",
+     "w": 1,
+     "need": 38,
+     "ell": "clip"
+    }
+   ],
+   "small": [],
+   "covered": [
+    {
+     "text": "📱\n3\nunread",
+     "by": "Joined Cruzeiro Youth!",
+     "byCls": "group toast group-[.toaster]:bg-background group-["
+    }
+   ],
+   "boundary": false
+  },
+  {
+   "label": "phase contract_offer #2",
+   "step": 2,
+   "vw": 1280,
+   "sw": 1280,
+   "overflow": false,
+   "bad": [],
+   "off": [],
+   "trunc": [
+    {
+     "text": "Drill ready",
+     "w": 1,
+     "need": 120,
+     "ell": "clip"
+    },
+    {
+     "text": "unread",
+     "w": 1,
+     "need": 38,
+     "ell": "clip"
+    },
+    {
+     "text": "Aerial Command",
+     "w": 88,
+     "need": 95,
+     "ell": "ellipsis"
+    },
+    {
+     "text": "Reading The Penalty 50",
+     "w": 88,
+     "need": 102,
+     "ell": "ellipsis"
+    },
+    {
+     "text": "Sweeping Speed",
+     "w": 88,
+     "need": 95,
+     "ell": "ellipsis"
+    }
+   ],
+   "small": [],
+   "covered": [
+    {
+     "text": "🏋️\nDrill ready",
+     "by": "DIV",
+     "byCls": "fixed inset-0 z-50 bg-black/80 data-[state=open]:a"
+    },
+    {
+     "text": "📱\n3\nunread",
+     "by": "DIV",
+     "byCls": "fixed inset-0 z-50 bg-black/80 data-[state=open]:a"
+    },
+    {
+     "text": "Review contract",
+     "by": "DIV",
+     "byCls": "fixed inset-0 z-50 bg-black/80 data-[state=open]:a"
+    },
+    {
+     "text": "Review contract",
+     "by": "DIV",
+     "byCls": "fixed inset-0 z-50 bg-black/80 data-[state=open]:a"
+    },
+    {
+     "text": "Review contract",
+     "by": "3-year contract",
+     "byCls": "block"
+    },
+    {
+     "text": "Your next season\nRoles, contracts, playi",
+     "by": "Squad data unavailable for this club and",
+     "byCls": ""
+    }
+   ],
+   "boundary": false
+  },
+  {
+   "label": "after reload",
+   "step": 14,
+   "vw": 1280,
+   "sw": 1280,
+   "overflow": false,
+   "bad": [],
+   "off": [],
+   "trunc": [
+    {
+     "text": "Drill ready",
+     "w": 1,
+     "need": 120,
+     "ell": "clip"
+    },
+    {
+     "text": "unread",
+     "w": 1,
+     "need": 38,
+     "ell": "clip"
+    }
+   ],
+   "small": [],
+   "covered": [],
+   "boundary": false
+  },
+  {
+   "label": "after reload",
+   "step": 32,
+   "vw": 1280,
+   "sw": 1280,
+   "overflow": false,
+   "bad": [],
+   "off": [],
+   "trunc": [
+    {
+     "text": "Drill ready",
+     "w": 1,
+     "need": 120,
+     "ell": "clip"
+    },
+    {
+     "text": "unread",
+     "w": 1,
+     "need": 38,
+     "ell": "clip"
+    }
+   ],
+   "small": [],
+   "covered": [],
+   "boundary": false
+  },
+  {
+   "label": "after reload",
+   "step": 93,
+   "vw": 1280,
+   "sw": 1280,
+   "overflow": false,
+   "bad": [],
+   "off": [],
+   "trunc": [
+    {
+     "text": "Drill ready",
+     "w": 1,
+     "need": 120,
+     "ell": "clip"
+    },
+    {
+     "text": "unread",
+     "w": 1,
+     "need": 38,
+     "ell": "clip"
+    }
+   ],
+   "small": [],
+   "covered": [],
+   "boundary": false
+  },
+  {
+   "label": "final",
+   "step": 93,
+   "vw": 1280,
+   "sw": 1280,
+   "overflow": false,
+   "bad": [],
+   "off": [],
+   "trunc": [
+    {
+     "text": "Drill ready",
+     "w": 1,
+     "need": 120,
+     "ell": "clip"
+    },
+    {
+     "text": "unread",
+     "w": 1,
+     "need": 38,
+     "ell": "clip"
+    }
+   ],
+   "small": [],
+   "covered": [],
+   "boundary": false
+  }
+ ],
+ "explore": [],
+ "reloads": [
+  {
+   "why": "step 15 in contract_offer",
+   "step": 14,
+   "same": true,
+   "phaseBefore": "contract_offer",
+   "phaseAfter": "contract_offer",
+   "lenBefore": 6893,
+   "lenAfter": 6893,
+   "shot": "b1280-008-reload-contract_offer.jpg",
+   "audit": {
+    "vw": 1280,
+    "sw": 1280,
+    "overflow": false,
+    "bad": [],
+    "off": [],
+    "trunc": [
+     {
+      "text": "Drill ready",
+      "w": 1,
+      "need": 120,
+      "ell": "clip"
+     },
+     {
+      "text": "unread",
+      "w": 1,
+      "need": 38,
+      "ell": "clip"
+     }
+    ],
+    "small": [],
+    "covered": [],
+    "boundary": false
+   },
+   "uiPhaseText": "🏋️ Drill ready 📱 3 unread Danny Okafor-Whitfield GK · Age 17 · Brazil 🚪 Retire 🔄 New Career 64 OVR POT 77 €0k Net Worth €500/wk Wage €2M Value CAREER TIMELINE A 16y Cruzeiro Youth Youth Academy A "
+  },
+  {
+   "why": "step 33 in contract_offer",
+   "step": 32,
+   "same": true,
+   "phaseBefore": "contract_offer",
+   "phaseAfter": "contract_offer",
+   "lenBefore": 6893,
+   "lenAfter": 6893,
+   "shot": "b1280-010-reload-contract_offer.jpg",
+   "audit": {
+    "vw": 1280,
+    "sw": 1280,
+    "overflow": false,
+    "bad": [],
+    "off": [],
+    "trunc": [
+     {
+      "text": "Drill ready",
+      "w": 1,
+      "need": 120,
+      "ell": "clip"
+     },
+     {
+      "text": "unread",
+      "w": 1,
+      "need": 38,
+      "ell": "clip"
+     }
+    ],
+    "small": [],
+    "covered": [],
+    "boundary": false
+   },
+   "uiPhaseText": "🏋️ Drill ready 📱 3 unread Danny Okafor-Whitfield GK · Age 17 · Brazil 🚪 Retire 🔄 New Career 64 OVR POT 77 €0k Net Worth €500/wk Wage €2M Value CAREER TIMELINE A 16y Cruzeiro Youth Youth Academy A "
+  },
+  {
+   "why": "final",
+   "step": 93,
+   "same": true,
+   "phaseBefore": "contract_offer",
+   "phaseAfter": "contract_offer",
+   "lenBefore": 6893,
+   "lenAfter": 6893,
+   "shot": "b1280-012-reload-contract_offer.jpg",
+   "audit": {
+    "vw": 1280,
+    "sw": 1280,
+    "overflow": false,
+    "bad": [],
+    "off": [],
+    "trunc": [
+     {
+      "text": "Drill ready",
+      "w": 1,
+      "need": 120,
+      "ell": "clip"
+     },
+     {
+      "text": "unread",
+      "w": 1,
+      "need": 38,
+      "ell": "clip"
+     }
+    ],
+    "small": [],
+    "covered": [],
+    "boundary": false
+   },
+   "uiPhaseText": "🏋️ Drill ready 📱 3 unread Danny Okafor-Whitfield GK · Age 17 · Brazil 🚪 Retire 🔄 New Career 64 OVR POT 77 €0k Net Worth €500/wk Wage €2M Value CAREER TIMELINE A 16y Cruzeiro Youth Youth Academy A "
+  }
+ ],
+ "errors": [
+  {
+   "t": "error",
+   "at": 0,
+   "text": "Failed to load resource: net::ERR_FAILED"
+  },
+  {
+   "t": "error",
+   "at": 0,
+   "text": "Failed to load resource: net::ERR_FAILED"
+  },
+  {
+   "t": "error",
+   "at": 14,
+   "text": "Failed to load resource: net::ERR_FAILED"
+  },
+  {
+   "t": "error",
+   "at": 26,
+   "text": "Failed to load resource: net::ERR_FAILED"
+  },
+  {
+   "t": "error",
+   "at": 32,
+   "text": "Failed to load resource: net::ERR_FAILED"
+  },
+  {
+   "t": "error",
+   "at": 87,
+   "text": "Failed to load resource: net::ERR_FAILED"
+  },
+  {
+   "t": "error",
+   "at": 93,
+   "text": "Failed to load resource: net::ERR_FAILED"
+  }
+ ],
+ "pageErrors": [],
+ "failedRequests": [],
+ "events": [],
+ "stuck": [
+  {
+   "step": 26,
+   "phase": "contract_offer",
+   "shot": "b1280-009-STUCK-contract_offer.jpg",
+   "options": [
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Full attributes 190 cm · 84 kg · every n"
+   ]
+  },
+  {
+   "step": 87,
+   "phase": "contract_offer",
+   "shot": "b1280-011-STUCK-contract_offer.jpg",
+   "options": [
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Review contract",
+    "Full attributes 190 cm · 84 kg · every n"
+   ]
+  },
+  {
+   "step": 93,
+   "phase": "contract_offer",
+   "fatal": true
+  }
+ ],
+ "notes": [
+  {
+   "kind": "season-press",
+   "pre": {
+    "age": 16,
+    "ovr": 54,
+    "nw": 0,
+    "wage": 500,
+    "val": 0.1,
+    "club": "Cruzeiro Youth",
+    "years": 2
+   },
+   "post": {
+    "phase": "contract_offer",
+    "age": 17,
+    "ovr": 64,
+    "nw": 0,
+    "wage": 500,
+    "val": 1.5,
+    "club": "Cruzeiro Youth",
+    "years": 2
+   }
+  },
+  {
+   "step": 2,
+   "kind": "click-failed",
+   "text": "Review contract",
+   "why": "contract_offer",
+   "err": "TimeoutError: locator.click: Timeout 3500ms exceeded. Call log:   - waiting for locator('[data-qa-idx=\"1\"]').first()"
+  },
+  {
+   "step": 3,
+   "kind": "click-failed",
+   "text": "Review contract",
+   "why": "contract_offer",
+   "err": "TimeoutError: locator.click: Timeout 3500ms exceeded. Call log:   - waiting for locator('[data-qa-idx=\"3\"]').first()"
+  },
+  {
+   "step": 4,
+   "kind": "click-failed",
+   "text": "Review contract",
+   "why": "contract_offer",
+   "err": "TimeoutError: locator.click: Timeout 3500ms exceeded. Call log:   - waiting for locator('[data-qa-idx=\"1\"]').first()"
+  },
+  {
+   "step": 6,
+   "kind": "escape-unstick",
+   "phase": "contract_offer"
+  },
+  {
+   "step": 7,
+   "kind": "click-failed",
+   "text": "Review contract",
+   "why": "contract_offer",
+   "err": "TimeoutError: locator.click: Timeout 3500ms exceeded. Call log:   - waiting for locator('[data-qa-idx=\"0\"]').first()"
+  },
+  {
+   "step": 9,
+   "kind": "click-failed",
+   "text": "Full attributes 190 cm · 84 kg · every number under the six",
+   "why": "contract_offer",
+   "err": "TimeoutError: locator.click: Timeout 3500ms exceeded. Call log:   - waiting for locator('[data-qa-idx=\"5\"]').first()"
+  },
+  {
+   "step": 12,
+   "kind": "click-failed",
+   "text": "Review contract",
+   "why": "contract_offer",
+   "err": "TimeoutError: locator.click: Timeout 3500ms exceeded. Call log:   - waiting for locator('[data-qa-idx=\"1\"]').first()"
+  },
+  {
+   "step": 13,
+   "kind": "click-failed",
+   "text": "Review contract",
+   "why": "contract_offer",
+   "err": "TimeoutError: locator.click: Timeout 3500ms exceeded. Call log:   - waiting for locator('[data-qa-idx=\"0\"]').first()"
+  },
+  {
+   "step": 17,
+   "kind": "click-failed",
+   "text": "Review contract",
+   "why": "contract_offer",
+   "err": "TimeoutError: locator.click: Timeout 3500ms exceeded. Call log:   - waiting for locator('[data-qa-idx=\"0\"]').first()"
+  },
+  {
+   "step": 18,
+   "kind": "click-failed",
+   "text": "Review contract",
+   "why": "contract_offer",
+   "err": "TimeoutError: locator.click: Timeout 3500ms exceeded. Call log:   - waiting for locator('[data-qa-idx=\"2\"]').first()"
+  },
+  {
+   "step": 19,
+   "kind": "click-failed",
+   "text": "Review contract",
+   "why": "contract_offer",
+   "err": "TimeoutError: locator.click: Timeout 3500ms exceeded. Call log:   - waiting for locator('[data-qa-idx=\"0\"]').first()"
+  },
+  {
+   "step": 20,
+   "kind": "click-failed",
+   "text": "Review contract",
+   "why": "contract_offer",
+   "err": "TimeoutError: locator.click: Timeout 3500ms exceeded. Call log:   - waiting for locator('[data-qa-idx=\"0\"]').first()"
+  },
+  {
+   "step": 21,
+   "kind": "escape-unstick",
+   "phase": "contract_offer"
+  },
+  {
+   "step": 21,
+   "kind": "click-failed",
+   "text": "Review contract",
+   "why": "contract_offer",
+   "err": "TimeoutError: locator.click: Timeout 3500ms exceeded. Call log:   - waiting for locator('[data-qa-idx=\"0\"]').first()"
+  },
+  {
+   "step": 22,
+   "kind": "click-failed",
+   "text": "Review contract",
+   "why": "contract_offer",
+   "err": "TimeoutError: locator.click: Timeout 3500ms exceeded. Call log:   - waiting for locator('[data-qa-idx=\"1\"]').first()"
+  },
+  {
+   "step": 23,
+   "kind": "click-failed",
+   "text": "Review contract",
+   "why": "contract_offer",
+   "err": "TimeoutError: locator.click: Timeout 3500ms exceeded. Call log:   - waiting for locator('[data-qa-idx=\"0\"]').first()"
+  },
+  {
+   "step": 24,
+   "kind": "click-failed",
+   "text": "Review contract",
+   "why": "contract_offer",
+   "err": "TimeoutError: locator.click: Timeout 3500ms exceeded. Call log:   - waiting for locator('[data-qa-idx=\"0\"]').first()"
+  },
+  {
+   "step": 25,
+   "kind": "click-failed",
+   "text": "Review contract",
+   "why": "contract_offer",
+   "err": "TimeoutError: locator.click: Timeout 3500ms exceeded. Call log:   - waiting for locator('[data-qa-idx=\"3\"]').first()"
+  },
+  {
+   "step": 27,
+   "kind": "click-failed",
+   "text": "Review contract",
+   "why": "contract_offer",
+   "err": "TimeoutError: locator.click: Timeout 3500ms exceeded. Call log:   - waiting for locator('[data-qa-idx=\"1\"]').first()"
+  },
+  {
+   "step": 28,
+   "kind": "click-failed",
+   "text": "Review contract",
+   "why": "contract_offer",
+   "err": "TimeoutError: locator.click: Timeout 3500ms exceeded. Call log:   - waiting for locator('[data-qa-idx=\"0\"]').first()"
+  },
+  {
+   "step": 29,
+   "kind": "click-failed",
+   "text": "Full attributes 190 cm · 84 kg · every number under the six",
+   "why": "contract_offer",
+   "err": "TimeoutError: locator.click: Timeout 3500ms exceeded. Call log:   - waiting for locator('[data-qa-idx=\"5\"]').first()"
+  },
+  {
+   "step": 33,
+   "kind": "click-failed",
+   "text": "Review contract",
+   "why": "contract_offer",
+   "err": "TimeoutError: locator.click: Timeout 3500ms exceeded. Call log:   - waiting for locator('[data-qa-idx=\"0\"]').first()"
+  },
+  {
+   "step": 35,
+   "kind": "click-failed",
+   "text": "Review contract",
+   "why": "contract_offer",
+   "err": "TimeoutError: locator.click: Timeout 3500ms exceeded. Call log:   - waiting for locator('[data-qa-idx=\"2\"]').first()"
+  },
+  {
+   "step": 36,
+   "kind": "escape-unstick",
+   "phase": "contract_offer"
+  },
+  {
+   "step": 36,
+   "kind": "click-failed",
+   "text": "Review contract",
+   "why": "contract_offer",
+   "err": "TimeoutError: locator.click: Timeout 3500ms exceeded. Call log:   - waiting for locator('[data-qa-idx=\"2\"]').first()"
+  },
+  {
+   "step": 37,
+   "kind": "click-failed",
+   "text": "Full attributes 190 cm · 84 kg · every number under the six",
+   "why": "contract_offer",
+   "err": "TimeoutError: locator.click: Timeout 3500ms exceeded. Call log:   - waiting for locator('[data-qa-idx=\"5\"]').first()"
+  },
+  {
+   "step": 40,
+   "kind": "click-failed",
+   "text": "Review contract",
+   "why": "contract_offer",
+   "err": "TimeoutError: locator.click: Timeout 3500ms exceeded. Call log:   - waiting for locator('[data-qa-idx=\"0\"]').first()"
+  },
+  {
+   "step": 42,
+   "kind": "click-failed",
+   "text": "Full attributes 190 cm · 84 kg · every number under the six",
+   "why": "contract_offer",
+   "err": "TimeoutError: locator.click: Timeout 3500ms exceeded. Call log:   - waiting for locator('[data-qa-idx=\"5\"]').first()"
+  },
+  {
+   "step": 45,
+   "kind": "click-failed",
+   "text": "Review contract",
+   "why": "contract_offer",
+   "err": "TimeoutError: locator.click: Timeout 3500ms exceeded. Call log:   - waiting for locator('[data-qa-idx=\"0\"]').first()"
+  },
+  {
+   "step": 46,
+   "kind": "click-failed",
+   "text": "Full attributes 190 cm · 84 kg · every number under the six",
+   "why": "contract_offer",
+   "err": "TimeoutError: locator.click: Timeout 3500ms exceeded. Call log:   - waiting for locator('[data-qa-idx=\"5\"]').first()"
+  },
+  {
+   "step": 49,
+   "kind": "click-failed",
+   "text": "Review contract",
+   "why": "contract_offer",
+   "err": "TimeoutError: locator.click: Timeout 3500ms exceeded. Call log:   - waiting for locator('[data-qa-idx=\"3\"]').first()"
+  },
+  {
+   "step": 50,
+   "kind": "click-failed",
+   "text": "Review contract",
+   "why": "contract_offer",
+   "err": "TimeoutError: locator.click: Timeout 3500ms exceeded. Call log:   - waiting for locator('[data-qa-idx=\"0\"]').first()"
+  },
+  {
+   "step": 51,
+   "kind": "click-failed",
+   "text": "Review contract",
+   "why": "contract_offer",
+   "err": "TimeoutError: locator.click: Timeout 3500ms exceeded. Call log:   - waiting for locator('[data-qa-idx=\"1\"]').first()"
+  },
+  {
+   "step": 52,
+   "kind": "click-failed",
+   "text": "Review contract",
+   "why": "contract_offer",
+   "err": "TimeoutError: locator.click: Timeout 3500ms exceeded. Call log:   - waiting for locator('[data-qa-idx=\"0\"]').first()"
+  },
+  {
+   "step": 53,
+   "kind": "escape-unstick",
+   "phase": "contract_offer"
+  },
+  {
+   "step": 53,
+   "kind": "click-failed",
+   "text": "Review contract",
+   "why": "contract_offer",
+   "err": "TimeoutError: locator.click: Timeout 3500ms exceeded. Call log:   - waiting for locator('[data-qa-idx=\"3\"]').first()"
+  },
+  {
+   "step": 54,
+   "kind": "click-failed",
+   "text": "Review contract",
+   "why": "contract_offer",
+   "err": "TimeoutError: locator.click: Timeout 3500ms exceeded. Call log:   - waiting for locator('[data-qa-idx=\"3\"]').first()"
+  },
+  {
+   "step": 55,
+   "kind": "click-failed",
+   "text": "Full attributes 190 cm · 84 kg · every number under the six",
+   "why": "contract_offer",
+   "err": "TimeoutError: locator.click: Timeout 3500ms exceeded. Call log:   - waiting for locator('[data-qa-idx=\"5\"]').first()"
+  },
+  {
+   "step": 60,
+   "kind": "click-failed",
+   "text": "Full attributes 190 cm · 84 kg · every number under the six",
+   "why": "contract_offer",
+   "err": "TimeoutError: locator.click: Timeout 3500ms exceeded. Call log:   - waiting for locator('[data-qa-idx=\"5\"]').first()"
+  },
+  {
+   "step": 63,
+   "kind": "click-failed",
+   "text": "Review contract",
+   "why": "contract_offer",
+   "err": "TimeoutError: locator.click: Timeout 3500ms exceeded. Call log:   - waiting for locator('[data-qa-idx=\"3\"]').first()"
+  },
+  {
+   "step": 64,
+   "kind": "click-failed",
+   "text": "Review contract",
+   "why": "contract_offer",
+   "err": "TimeoutError: locator.click: Timeout 3500ms exceeded. Call log:   - waiting for locator('[data-qa-idx=\"0\"]').first()"
+  },
+  {
+   "step": 65,
+   "kind": "click-failed",
+   "text": "Review contract",
+   "why": "contract_offer",
+   "err": "TimeoutError: locator.click: Timeout 3500ms exceeded. Call log:   - waiting for locator('[data-qa-idx=\"2\"]').first()"
+  },
+  {
+   "step": 66,
+   "kind": "click-failed",
+   "text": "Review contract",
+   "why": "contract_offer",
+   "err": "TimeoutError: locator.click: Timeout 3500ms exceeded. Call log:   - waiting for locator('[data-qa-idx=\"1\"]').first()"
+  },
+  {
+   "step": 67,
+   "kind": "escape-unstick",
+   "phase": "contract_offer"
+  },
+  {
+   "step": 67,
+   "kind": "click-failed",
+   "text": "Review contract",
+   "why": "contract_offer",
+   "err": "TimeoutError: locator.click: Timeout 3500ms exceeded. Call log:   - waiting for locator('[data-qa-idx=\"0\"]').first()"
+  },
+  {
+   "step": 68,
+   "kind": "click-failed",
+   "text": "Review contract",
+   "why": "contract_offer",
+   "err": "TimeoutError: locator.click: Timeout 3500ms exceeded. Call log:   - waiting for locator('[data-qa-idx=\"0\"]').first()"
+  },
+  {
+   "step": 69,
+   "kind": "click-failed",
+   "text": "Review contract",
+   "why": "contract_offer",
+   "err": "TimeoutError: locator.click: Timeout 3500ms exceeded. Call log:   - waiting for locator('[data-qa-idx=\"0\"]').first()"
+  },
+  {
+   "step": 70,
+   "kind": "click-failed",
+   "text": "Full attributes 190 cm · 84 kg · every number under the six",
+   "why": "contract_offer",
+   "err": "TimeoutError: locator.click: Timeout 3500ms exceeded. Call log:   - waiting for locator('[data-qa-idx=\"5\"]').first()"
+  },
+  {
+   "step": 73,
+   "kind": "click-failed",
+   "text": "Review contract",
+   "why": "contract_offer",
+   "err": "TimeoutError: locator.click: Timeout 3500ms exceeded. Call log:   - waiting for locator('[data-qa-idx=\"0\"]').first()"
+  },
+  {
+   "step": 74,
+   "kind": "click-failed",
+   "text": "Review contract",
+   "why": "contract_offer",
+   "err": "TimeoutError: locator.click: Timeout 3500ms exceeded. Call log:   - waiting for locator('[data-qa-idx=\"2\"]').first()"
+  },
+  {
+   "step": 75,
+   "kind": "click-failed",
+   "text": "Full attributes 190 cm · 84 kg · every number under the six",
+   "why": "contract_offer",
+   "err": "TimeoutError: locator.click: Timeout 3500ms exceeded. Call log:   - waiting for locator('[data-qa-idx=\"5\"]').first()"
+  },
+  {
+   "step": 78,
+   "kind": "click-failed",
+   "text": "Review contract",
+   "why": "contract_offer",
+   "err": "TimeoutError: locator.click: Timeout 3500ms exceeded. Call log:   - waiting for locator('[data-qa-idx=\"1\"]').first()"
+  },
+  {
+   "step": 79,
+   "kind": "click-failed",
+   "text": "Review contract",
+   "why": "contract_offer",
+   "err": "TimeoutError: locator.click: Timeout 3500ms exceeded. Call log:   - waiting for locator('[data-qa-idx=\"0\"]').first()"
+  },
+  {
+   "step": 80,
+   "kind": "click-failed",
+   "text": "Review contract",
+   "why": "contract_offer",
+   "err": "TimeoutError: locator.click: Timeout 3500ms exceeded. Call log:   - waiting for locator('[data-qa-idx=\"3\"]').first()"
+  },
+  {
+   "step": 81,
+   "kind": "click-failed",
+   "text": "Review contract",
+   "why": "contract_offer",
+   "err": "TimeoutError: locator.click: Timeout 3500ms exceeded. Call log:   - waiting for locator('[data-qa-idx=\"0\"]').first()"
+  },
+  {
+   "step": 82,
+   "kind": "escape-unstick",
+   "phase": "contract_offer"
+  },
+  {
+   "step": 82,
+   "kind": "click-failed",
+   "text": "Review contract",
+   "why": "contract_offer",
+   "err": "TimeoutError: locator.click: Timeout 3500ms exceeded. Call log:   - waiting for locator('[data-qa-idx=\"3\"]').first()"
+  },
+  {
+   "step": 83,
+   "kind": "click-failed",
+   "text": "Review contract",
+   "why": "contract_offer",
+   "err": "TimeoutError: locator.click: Timeout 3500ms exceeded. Call log:   - waiting for locator('[data-qa-idx=\"3\"]').first()"
+  },
+  {
+   "step": 84,
+   "kind": "click-failed",
+   "text": "Review contract",
+   "why": "contract_offer",
+   "err": "TimeoutError: locator.click: Timeout 3500ms exceeded. Call log:   - waiting for locator('[data-qa-idx=\"0\"]').first()"
+  },
+  {
+   "step": 85,
+   "kind": "click-failed",
+   "text": "Review contract",
+   "why": "contract_offer",
+   "err": "TimeoutError: locator.click: Timeout 3500ms exceeded. Call log:   - waiting for locator('[data-qa-idx=\"0\"]').first()"
+  },
+  {
+   "step": 86,
+   "kind": "click-failed",
+   "text": "Review contract",
+   "why": "contract_offer",
+   "err": "TimeoutError: locator.click: Timeout 3500ms exceeded. Call log:   - waiting for locator('[data-qa-idx=\"0\"]').first()"
+  },
+  {
+   "step": 88,
+   "kind": "click-failed",
+   "text": "Review contract",
+   "why": "contract_offer",
+   "err": "TimeoutError: locator.click: Timeout 3500ms exceeded. Call log:   - waiting for locator('[data-qa-idx=\"0\"]').first()"
+  },
+  {
+   "step": 89,
+   "kind": "click-failed",
+   "text": "Review contract",
+   "why": "contract_offer",
+   "err": "TimeoutError: locator.click: Timeout 3500ms exceeded. Call log:   - waiting for locator('[data-qa-idx=\"2\"]').first()"
+  },
+  {
+   "step": 90,
+   "kind": "click-failed",
+   "text": "Review contract",
+   "why": "contract_offer",
+   "err": "TimeoutError: locator.click: Timeout 3500ms exceeded. Call log:   - waiting for locator('[data-qa-idx=\"2\"]').first()"
+  },
+  {
+   "step": 91,
+   "kind": "click-failed",
+   "text": "Review contract",
+   "why": "contract_offer",
+   "err": "TimeoutError: locator.click: Timeout 3500ms exceeded. Call log:   - waiting for locator('[data-qa-idx=\"0\"]').first()"
+  },
+  {
+   "step": 92,
+   "kind": "click-failed",
+   "text": "Review contract",
+   "why": "contract_offer",
+   "err": "TimeoutError: locator.click: Timeout 3500ms exceeded. Call log:   - waiting for locator('[data-qa-idx=\"0\"]').first()"
+  }
+ ],
+ "shots": [
+  "b1280-001-create-empty.jpg",
+  "b1280-002-create-rolled.jpg",
+  "b1280-003-create-rolled-full.jpg",
+  "b1280-004-ph-youth-1.jpg",
+  "b1280-005-ph-contract_offer-1.jpg",
+  "b1280-006-ph-contract_offer-2.jpg",
+  "b1280-007-ph-contract_offer-3.jpg",
+  "b1280-008-reload-contract_offer.jpg",
+  "b1280-009-STUCK-contract_offer.jpg",
+  "b1280-010-reload-contract_offer.jpg",
+  "b1280-011-STUCK-contract_offer.jpg",
+  "b1280-012-reload-contract_offer.jpg",
+  "b1280-013-final-hub-full.jpg"
+ ],
+ "scroll": [],
+ "created": {
+  "nat": "Brazil🇧🇷",
+  "pos": "Goalkeeper (GK)",
+  "era": "Late 2000s (2005 start)",
+  "phase": "youth",
+  "age": 16,
+  "club": "Cruzeiro Youth",
+  "ovr": 54,
+  "pot": 77
+ },
+ "final": {
+  "phase": "contract_offer",
+  "age": 17,
+  "senior": 0,
+  "club": "Cruzeiro Youth",
+  "ovr": 64,
+  "steps": 93,
+  "secs": 314
+ }
+}

@@ -1,0 +1,5 @@
+[11s] created Nigeria🇳🇬/Central Mid (CM)/Early 90s (1990 start) -> youth age 16 at Enyimba Youth
+[26s] reload (step 6 in contract_offer): same=true phase contract_offer->contract_offer
+[196s] reload (final): same=true phase contract_offer->contract_offer
+[196s] done: {"phase":"contract_offer","age":17,"senior":0,"club":"Enyimba Youth","ovr":56,"steps":58,"secs":193} shots=12 audits=4 errors=6 pageErrors=0 stuck=3 traps=0
+WALK c320 FINISHED
