@@ -106,17 +106,38 @@
  *            the same ten, no shirt), and of every roster that does not it is the harness's own reading,
  *            man for man and shirt for shirt in order. And (iii) now fails when there is no variance to
  *            judge a share on, instead of passing unasked
- *   boards   Round 1306, the pure reader (src/lib/clubManagerLeagueBoards.ts; nothing in src calls it
- *            yet, the harness builds its input from the save): (i) at every season's end of the fleet
+ *   boards   Round 1306, the pure reader (src/lib/clubManagerLeagueBoards.ts; the harness builds its
+ *            input from the save) and, since Round 1311, the engine's own door to it (leagueBoardsOf): its
+ *            input is the harness's, field for field, its share, round and keepers are the reader's, and it
+ *            is null exactly where the book is unreadable or does not add up. (i) at every season's end of the fleet
  *            the book fits the table and is whole; (ii) each of the three boards, its top ten and its
  *            whole order, is the harness's own reading of the rule typed here once more, my best man is
  *            where that order puts him, and no board holds a man on nought, a man twice, a rival row
  *            under a name of my squad or, on Clean sheets, anybody but a keeper; (iii) the fleet once
  *            more with every reader called before every entry: the whole save but the book and the count
  *            of draws are the watched fleet's, and the save is the same text before and after the
- *            readers; (iv) the module's source, comments stripped, holds no Math.random, Date.now, new
- *            Date or localeCompare; and printed for the lead: the share and the keepers on record a
+ *            readers (leagueBoardsOf among them); (iv) the module's source and the two cards'
+ *            (LeagueLeadersCard.tsx and SeasonHonoursCard.tsx), comments stripped, hold no Math.random,
+ *            Date.now, new Date or localeCompare; and printed for the lead: the share and the keepers on record a
  *            league, each board's leader, and the three boards of three leagues after a full season
+ *   awards   Round 1311, the season's honours, by the harness's own reading of the rule (a whole book with
+ *            at least AWARD_FLOOR_RULED in 100 rival goals on record decides): (i) on every season's end of
+ *            the fleet, and of a late arm (two careers whose book is taken off ten entries in), a season the
+ *            book decides has the Goals board's first as its golden boot and the first of each board in its
+ *            awards with the share on record, the same awards on the season's record; any other season has
+ *            no awards and the old race's golden boot; (iii) with BOOK_BASE, on a season the book does not
+ *            decide the WHOLE summary and record are the base commit's, on one it decides all of them but
+ *            the four moved fields (goldenBoot, playerOfSeason, ballonDor, awards); step 5: the team of the
+ *            season is a keeper, four defenders, four midfielders and two forwards by the harness's own
+ *            lines, nobody twice, every man on a row or in my squad; (ii) a seven season career holds the
+ *            winners on seven records and the team on the newest five only; (v) the back four's mean men of
+ *            one club under BACK_FOUR_LINE (on a fleet of at least BACK_FOUR_MIN_TEAMS); and printed, a league:
+ *            the shares at the season's end, how many the book decided, how often one of mine won the boot.
+ *            The stream face leaves those four fields and each record's awards out, and nothing else.
+ *   facts    Round 1311, the fleet's top scorers beside the real leagues' (scripts/data/cmLeagueBookFacts.json,
+ *            USED figures only, read by the harness's own reading of that file's rule): printed by season
+ *            length, and one band bound on 38 match seasons, judged on the full fleet only (see the section; it cannot tell the taker rule
+ *            on from off)
  * Outside section stream "the reference engines" are the engine with the book out and, with BOOK_BASE,
  * the base commit; each pair is played on two FRESH copies of the bundles asked the same things in the
  * same order, because the engine numbers its youth players, press questions and messages as it goes.
@@ -187,7 +208,9 @@
  *   hotseatbook3  the Hot Seat's match drops it                      -> dailies
  *   (redeal and hurtentry above still hold what they held: the load opens no book; the match week's
  *   guard, now reached with the repair off, never throws on an entry with no rows map)
- *   readerdraw    the reader draws from Math.random once a board     -> boards (iii) and (iv)
+ *   readerdraw    the reader draws from Math.random once a board     -> boards (iii) and (iv) (stream with
+ *                                                                        it since Round 1311: the engine reads
+ *                                                                        leaders at a season's end)
  *   readerwrite   the reader turns the book's list of my clean sheets round in place -> boards (iii)
  *   The six of the fix pass of Round 1306, each for a check that pass added (a control may name the words
  *   its failures must hold, so red for another reason is not that control firing):
@@ -209,6 +232,25 @@
  * The second fix pass of Round 1306 added one:
  *   novar         the match is never told which reviews to play, so the arm with the video referee on
  *                 sees none                                          -> law, the floor of that arm
+ * Round 1311 added three:
+ *   awardlate     the awards are read from a late book                -> awards (oldsave with it: every late
+ *                                                                        book save of oldsave then takes its
+ *                                                                        golden boot from the book)
+ *   awardthin     the awards are read from a book under the floor     -> awards (oldsave with it: a carried
+ *                                                                        save that closes under the floor is
+ *                                                                        then given awards)
+ *   bookleak      every goal of a side to its taker                    -> facts (shapes and thin with it: the
+ *                                                                        deal no longer follows the weight); it
+ *                                                                        plays the full fleet whatever BOOK_FLEET
+ *                                                                        says, the only one judged
+ *   teamsheets    the back four picked on clean sheets plus goals plus assists -> awards (v); it plays the
+ *                                                                        full fleet whatever BOOK_FLEET says, the
+ *                                                                        only one judged
+ *   nocap         the team of the season is never let go               -> awards (ii)
+ * Round 1311 derived two red lists again (remote check r1311-f1b): dropmine leaves no book that adds up, so
+ * no season is decided by it, no team is named and no 38 match season reaches section facts (awards and facts
+ * go red with it); twoman leaves a third of every side's goals unnamed, so every league falls under the
+ * awards floor and section awards has no team to judge (awards goes red with it).
  * dropmine and byeweek break the first law, so section boards (i) goes red with them as well, and since
  * the repair of Round 1306 so does oldsave (iv): a law broken in one entry is mended at the top of the next
  * by a late book, which is exactly a book reopened in a healthy fleet. In the entry that reopens it the
@@ -224,12 +266,18 @@
  *
  *   node scripts/simCmLeagueBook.mjs                      the default (small) fleet
  *   BOOK_FLEET=full node scripts/simCmLeagueBook.mjs      the whole fleet (the round's remote check)
+ *   BOOK_CONTROL=<name> ...                               one control; bookleak and teamsheets always play
+ *                                                         the whole fleet (their sections judge no other)
  *   BOOK_BASE=<a worktree of the base commit> ...         adds the base commit as a reference
  *   BOOK_MEASURE=1 ...                                    also prints the boards with CM_BOOK_TAKER false
  *   BOOK_MEASURE=leagues ...                              Round 1306: plays MEASURE_SEEDS (2) careers of one
  *                                                         season in every league of every era and prints, a
  *                                                         league, the share of rival goals on record and the
  *                                                         best rival total under each rule; gates nothing
+ *   BOOK_MEASURE=floor ...                                Round 1311: MEASURE_SEEDS careers of one season in
+ *                                                         every league and prints, a league, the share on
+ *                                                         record at the season's end, who settled the golden
+ *                                                         boot and how often one of mine won it; gates nothing
  *   SEEDSET=n                                             another set of seeds
  * Offline: bundles the engine from src, reads no network and no database.
  */
@@ -244,7 +292,6 @@ import { build } from 'esbuild';
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const BASE = process.env.BOOK_BASE ? path.resolve(process.env.BOOK_BASE) : null;
 const CONTROL = process.env.BOOK_CONTROL || '';
-const FULL = process.env.BOOK_FLEET === 'full';
 const SEEDSET = Number(process.env.SEEDSET ?? 0);
 const SEASONS = Number(process.env.SEASONS ?? 2);
 const T0 = Date.now();
@@ -253,6 +300,10 @@ const cannot = why => { console.error(`simCmLeagueBook: cannot run: ${why}`); pr
 const ENGINE = 'src/lib/clubManager.ts';
 const BOOK = 'src/lib/clubManagerLeagueBook.ts';
 const BOARDS = 'src/lib/clubManagerLeagueBoards.ts';
+/** Round 1311: the league leaders card, read by section boards (iv) only. */
+const LEADERS_CARD = 'src/components/club-manager/LeagueLeadersCard.tsx';
+/** Round 1311 step 5: the season's honours card, read by section boards (iv) beside it. */
+const HONOURS_CARD = 'src/components/club-manager/SeasonHonoursCard.tsx';
 const WEIGHT = 'src/lib/clubManagerGoalWeight.ts';
 const HOT = 'src/lib/managerHotSeat.ts';
 const DEADLINE = 'src/lib/deadlineDay.ts';
@@ -279,6 +330,11 @@ const HOT_CALL = who => `playNextEntry(${who}, { skipHalftime: true, noCoach: tr
 const HOT_CALL_BOOKED = who => `playNextEntry(${who}, { skipHalftime: true, noCoach: true })`;
 /* The line of noteBookSide that picks a club's eleven (null for a club that cannot field a named one). */
 const SIDE_XI = '  const xi = pickOppSquad(roster)?.xi ?? null;';
+/* Round 1311: the line of the reader module that says whether the book decides the awards. */
+const DECIDES = '  return bookIsWhole(input.book) && bookShare(input.book, input.clubs).share >= AWARD_FLOOR;';
+/* Round 1311: the order the team of the season's back four is picked in, and the control's other reading. */
+const TEAM_DEF_ORDER = "  const defs = pick('DEF', TEAM_LINES.DEF, (a, b) => deeds(b) - deeds(a) || (clubSheets.get(b.club) ?? 0) - (clubSheets.get(a.club) ?? 0) || a.place - b.place || b.rating - a.rating || text(a.name, b.name) || text(a.club, b.club));";
+const TEAM_DEF_SHEETS = "  const defs = pick('DEF', TEAM_LINES.DEF, (a, b) => (b.sheets + deeds(b)) - (a.sheets + deeds(a)) || a.place - b.place || b.rating - a.rating || text(a.name, b.name) || text(a.club, b.club));";
 /* The line of the reader module that hands a board back (leaders). */
 const LEADERS_RETURN = '  return order.slice(0, Math.max(0, limit)).map(m => boardMan(m, kind));';
 /* The line of noteBookMine that credits a report's line and decides whether its assist is dealt. */
@@ -295,9 +351,9 @@ const TWO_MAN = ": ((men, roll) => { const two = men.filter(m => !['CB', 'LB', '
  *  that go red with it for the same reason and are allowed to (the law is checked in four sections, and the
  *  weight table is what the deal is judged against) } */
 const CONTROLS = {
-  weight: { patch: [{ file: WEIGHT, from: "pos === 'ST' || pos === 'CF' ? 5 :", to: "pos === 'ST' || pos === 'CF' ? 8 :" }], red: 'stream', needs: 'base', also: ['shapes', 'thin'] },
-  mathrandom: { patch: [{ file: BOOK, from: '    const scorerRoll = rng();', to: '    const scorerRoll = Math.random();' }], red: 'stream', also: ['oldsave', 'dailies'] },
-  dropmine: { patch: [{ file: ENGINE, from: NOTE_MINE, to: '' }], red: 'law', also: ['names', 'oldsave', 'doors', 'thin', 'boards', 'shapes'] },
+  weight: { patch: [{ file: WEIGHT, from: "pos === 'ST' || pos === 'CF' ? 5 :", to: "pos === 'ST' || pos === 'CF' ? 8 :" }], red: 'stream', needs: 'base', also: ['shapes', 'thin', 'awards'] },
+  mathrandom: { patch: [{ file: BOOK, from: '    const scorerRoll = rng();', to: '    const scorerRoll = Math.random();' }], red: 'stream', also: ['oldsave', 'dailies', 'awards'] },
+  dropmine: { patch: [{ file: ENGINE, from: NOTE_MINE, to: '' }], red: 'law', also: ['names', 'oldsave', 'doors', 'thin', 'boards', 'shapes', 'awards', 'facts'] },
   byeweek: { patch: [{ file: ENGINE, from: NOTE_BYE, to: '' }], red: 'law', also: ['shapes', 'thin', 'boards', 'oldsave'] },
   cleanside: { patch: [{ file: ENGINE, from: '  if (against === 0) creditCleanSheet(book, club, bookKeeper(xi), bookBacks(xi));', to: '  if (goals === 0) creditCleanSheet(book, club, bookKeeper(xi), bookBacks(xi));' }], red: 'law' },
   bought: { patch: [{ file: ENGINE, from: '  const notTheirs = mySquadNames(state);', to: '  const notTheirs = NO_NAMES;' }], red: 'names' },
@@ -306,7 +362,7 @@ const CONTROLS = {
   offbyone: { patch: [{ file: ENGINE, from: '  const lines = oppScorers.slice(0, oppGoals);', to: '  const lines = oppScorers.slice(0, Math.max(0, oppGoals - 1));' }], red: 'names' },
   penassistmine: { patch: [{ file: ENGINE, from: MINE_GATE, to: '    if (!creditGoal(book, opp, man) || !man) return;' }], red: 'names', also: ['shapes'] },
   assistbench: { patch: [{ file: ENGINE, from: '    const assist = dealAssist(`${key}|${i}`, man, there, rules);', to: '    const assist = dealAssist(`${key}|${i}`, man, theirs, rules);' }], red: 'names' },
-  twoman: { patch: [{ file: BOOK, from: SCORER_PICK, to: TWO_MAN }, { file: BOOK, from: '  const taker = rules.taker ? takerOf(outfield) : null;', to: '  const taker = null;' }], red: 'shapes', also: ['thin'] },
+  twoman: { patch: [{ file: BOOK, from: SCORER_PICK, to: TWO_MAN }, { file: BOOK, from: '  const taker = rules.taker ? takerOf(outfield) : null;', to: '  const taker = null;' }], red: 'shapes', also: ['thin', 'awards'] },
   flat: { patch: [{ file: BOOK, from: SCORER_PICK, to: ': pickWeighted(outfield, () => 1, scorerRoll);' }], red: 'shapes', also: ['thin'] },
   penassist: { patch: [{ file: BOOK, from: "assistFrom(rng, kind === 'open' ? scorer : null, outfield, rules);", to: "assistFrom(rng, kind === 'og' ? null : scorer, outfield, rules);" }], red: 'shapes' },
   noog: { patch: [{ file: BOOK, from: ": ownGoalTagged(`${key}|${i}|og`, rules.ownGoalOneIn) ? 'og' : 'open';", to: ": 'open';" }], red: 'shapes' },
@@ -327,7 +383,17 @@ const CONTROLS = {
   hotseatbook1: { patch: [{ file: HOT, from: HOT_CALL('run.state'), to: HOT_CALL_BOOKED('run.state') }], red: 'dailies' },
   hotseatbook2: { patch: [{ file: HOT, from: HOT_CALL('s'), to: HOT_CALL_BOOKED('s') }], red: 'dailies' },
   hotseatbook3: { patch: [{ file: HOT, from: HOT_CALL('ready'), to: HOT_CALL_BOOKED('ready') }], red: 'dailies' },
-  readerdraw: { patch: [{ file: BOARDS, from: LEADERS_RETURN, to: `  void Math.random();\n${LEADERS_RETURN}` }], red: 'boards' },
+  /* Round 1311: the awards are read from a late book, or from a book under the floor. awardlate moves the
+     golden boot of every late book save of section oldsave too, which judges it against the old race. */
+  /* Round 1311 step 4: every goal of a side to its taker, a leak the band of section facts must catch. */
+  bookleak: { patch: [{ file: BOOK, from: "      : kind !== 'open' && taker ? taker", to: '      : taker ? taker' }], red: 'facts', also: ['shapes', 'thin'], fleet: 'full' },
+  awardlate: { patch: [{ file: BOARDS, from: DECIDES, to: '  return bookShare(input.book, input.clubs).share >= AWARD_FLOOR;' }], red: 'awards', also: ['oldsave'], mentions: ['a late book'] },
+  awardthin: { patch: [{ file: BOARDS, from: DECIDES, to: '  return bookIsWhole(input.book);' }], red: 'awards', also: ['oldsave'], mentions: ['under the floor'] },
+  teamsheets: { patch: [{ file: BOARDS, from: TEAM_DEF_ORDER, to: TEAM_DEF_SHEETS }], red: 'awards', mentions: ['back four'], fleet: 'full' },
+  nocap: { patch: [{ file: ENGINE, from: '  state.history = keepTeams(state.history);', to: '' }], red: 'awards', mentions: ['team on'] },
+  /* Since Round 1311 the engine itself reads leaders at a season's end (goldenBootTable and finishSeason, on a
+     season the book decides), so a draw in it moves the match stream as well: derived on r1311-s2b and r1311-s4. */
+  readerdraw: { patch: [{ file: BOARDS, from: LEADERS_RETURN, to: `  void Math.random();\n${LEADERS_RETURN}` }], red: 'boards', also: ['stream'] },
   readerwrite: { patch: [{ file: BOARDS, from: LEADERS_RETURN, to: `  input.book.my.reverse();\n${LEADERS_RETURN}` }], red: 'boards' },
   thinall: { patch: [{ file: ENGINE, from: SIDE_XI, to: '  const xi = null as OppXiLine[] | null; void pickOppSquad;' }], red: 'thin', needs: 'base' },
   thinbacks: { patch: [{ file: ENGINE, from: THIN_BACKS, to: 'const thinBacks = (outfield: readonly BookMan[]): BookMan[] => [...outfield];' }], red: 'thin', mentions: ['neither a keeper nor of the back line'] },
@@ -340,6 +406,11 @@ const CONTROLS = {
 };
 if (CONTROL && !Object.hasOwn(CONTROLS, CONTROL)) cannot(`unknown control "${CONTROL}"`);
 if (CONTROL && CONTROLS[CONTROL].needs === 'base' && !BASE) cannot(`control ${CONTROL} is judged against the base commit: set BOOK_BASE`);
+/* A control whose section is judged only on the full fleet (bookleak: FACTS_MIN_SEASONS; teamsheets:
+   BACK_FOUR_MIN_TEAMS) plays the full fleet whatever BOOK_FLEET says. On the default fleet it could only end
+   "DID NOT FIRE" (exit 3), which a gate's plain control line read as a broken control (the closing check of
+   Round 1311). The first line printed names the fleet played. */
+const FULL = process.env.BOOK_FLEET === 'full' || (CONTROL !== '' && CONTROLS[CONTROL].fleet === 'full');
 
 /* The fleet: [club, era]. The clubs cover the league sizes (20, 18, 24 and 15) and both pair ledger cases.
    The last one is there for its league's ODD number of clubs: fifteen clubs means a week I do not play in
@@ -585,6 +656,9 @@ async function engine(label, root, patches = []) {
  *            and its line says so since this pass (it read "did not fire" on r1306-f2b before that).
  * After the pass the harness holds 42 controls. Wall time on a runner: default fleet 52 to 56 seconds (72
  * with BOOK_BASE), full fleet 127 to 138 (178 with BOOK_BASE).
+ *   Round 1311 (decision 3, the critic's advice 21 (iii)): every carried save is finished at its season's
+ *            end; its closing share is printed with what it was given, and the awards must follow the floor
+ *            by the harness's own reading (decidesByHand). That is why awardthin may take oldsave with it.
  */
 /** The gate of section shapes (ii): see MEASURED above. */
 const PURPOSE_FLOOR = 1.5;
@@ -610,9 +684,48 @@ function seeded(seed) {
   return draw;
 }
 
-/** The whole save but the book, as text: what "the engine's stream did not move" is judged on. */
-const withoutBook = s => JSON.stringify(s, (k, v) => (k === 'leagueBook' ? undefined : v));
+/** The whole save but the book, as text: what "the engine's stream did not move" is judged on. Since Round
+ *  1311 the honours a season's end reads from the book are left out with it, and nothing else: the four
+ *  moved fields of the summary (goldenBoot, playerOfSeason, ballonDor, awards) and the awards of each
+ *  season's record. Section awards holds those, and holds the WHOLE summary and record to the base commit
+ *  on every season the book does not decide. */
+const MOVED = ['goldenBoot', 'playerOfSeason', 'ballonDor', 'awards'];
+const withoutBook = s => JSON.stringify(s, (k, v) => {
+  if (k === 'leagueBook') return undefined;
+  if (k === 'pendingSummary' && v && typeof v === 'object') { const o = { ...v }; for (const m of MOVED) delete o[m]; return o; }
+  if (k === 'history' && Array.isArray(v)) return v.map(h => { if (!h || typeof h !== 'object') return h; const { awards, ...rest } = h; void awards; return rest; });
+  return v;
+});
 const sha = text => createHash('sha256').update(text).digest('hex').slice(0, 24);
+
+/* Round 1311: THE AWARDS RULE, typed here on purpose (the module's AWARD_FLOOR and bookDecides are what is
+   judged): a whole book (no r0) with at least this many in 100 rival goals on record (a named row or an own
+   goal; the goals a late book was opened with left out). */
+const AWARD_FLOOR_RULED = 73;
+/* Round 1311 step 5: the back four's line, MEASURED (remote check r1311-s5m, head 5090d373, full fleets of
+   seed sets 0 to 4, 42 or 43 teams each): the rule reads 1.43 1.42 1.60 1.42 1.52 men of one club, the control
+   teamsheets (clean sheets plus goals plus assists) 2.93 2.74 2.88 2.77 2.83. The ranges are 1.14 apart, so the
+   line is bound, midway between 1.60 and 2.74. It is judged only on a fleet of at least BACK_FOUR_MIN_TEAMS
+   teams: the default fleet holds eight, where one team moves the mean by an eighth and a healthy run could
+   cross the line by chance; there it is printed. So the control teamsheets runs on the full fleet. */
+const BACK_FOUR_LINE = 2.17;
+const BACK_FOUR_MIN_TEAMS = 20;
+function shareByHand(s, book) {
+  let on = 0;
+  let u = 0;
+  for (const club of s.leagueClubs.filter(c => c !== s.clubName)) {
+    const e = book.c[club];
+    if (!e) continue;
+    for (const row of Object.values(e.m)) on += row[0];
+    on += e.og;
+    u += e.u;
+  }
+  u = Math.max(0, u - (book.u0 ?? 0));
+  return on + u ? Math.floor(100 * on / (on + u)) : 100;
+}
+function decidesByHand(s, book) {
+  return book.r0 === undefined && shareByHand(s, book) >= AWARD_FLOOR_RULED;
+}
 
 /* ---------- the rule, typed out here once more ON PURPOSE ---------- */
 /* The harness judges "the deal follows the weight" against its OWN copy of the table and the shares, never
@@ -778,6 +891,7 @@ function playCareer(mod, club, eraId, seed, hooks = {}, seasons = SEASONS) {
       hooks.seasonEnd?.(s, season);
       if (hooks.stopAfterSeason?.(season)) break;
       const fin = cm.finishSeason(s);
+      hooks.finished?.(s, fin, season);
       s = cm.startNextSeason(fin.state);
       faces.push(`${sha(withoutBook(s))}|${draw.calls()}`);
       hooks.opened?.(s, season + 1);
@@ -790,7 +904,7 @@ function playCareer(mod, club, eraId, seed, hooks = {}, seasons = SEASONS) {
 }
 
 /* ---------- the sections ---------- */
-const SECTIONS = ['stream', 'law', 'names', 'shapes', 'oldsave', 'doors', 'dailies', 'thin', 'boards'];
+const SECTIONS = ['stream', 'law', 'names', 'shapes', 'oldsave', 'doors', 'dailies', 'thin', 'boards', 'awards', 'facts'];
 const red = new Map(SECTIONS.map(s => [s, []]));
 const checked = new Map(SECTIONS.map(s => [s, 0]));
 const fail = (section, message) => { red.get(section).push(message); };
@@ -1341,6 +1455,55 @@ function readLeagueSeason(mod, s) {
   return { league: cm.careerLeagueOf(s).id, clubs: s.leagueClubs.length, rows, og, u, late, misfit, rivalTop, raceTop, myTop, thin, gaps, bytes: JSON.stringify(s.leagueBook).length, saveBytes: JSON.stringify(s).length };
 }
 
+/**
+ * Round 1311, BOOK_MEASURE=floor: the awards floor in every league of every era, on the engine as committed.
+ * MEASURE_SEEDS careers a league (default 2), one season each, judged at its end: the share on record, who
+ * settled the golden boot (the book, or the old race under the floor or on a late book), and how often one of
+ * MY men won it, beside how often he would have on the book's board and on the old race. Gates nothing.
+ */
+async function measureFloor(mod) {
+  const seeds = Number(process.env.MEASURE_SEEDS ?? 2);
+  const { cm } = mod;
+  const only = (process.env.MEASURE_ONLY ?? '').split(',').filter(Boolean);
+  const leagues = [...cm.REAL_LEAGUES.map(l => ['now', l]), ...Object.entries(cm.ERA_LEAGUES).flatMap(([era, ls]) => ls.map(l => [era, l]))]
+    .filter(([, l]) => !only.length || only.includes(l.id));
+  console.log(`simCmLeagueBook: MEASURE floor: ${leagues.length} leagues of every era, ${seeds} careers each, one season, the floor at ${mod.boards.AWARD_FLOOR} (the harness reads it as ${AWARD_FLOOR_RULED})`);
+  const rows = [];
+  leagues.forEach(([era, league], li) => {
+    const club = league.clubs[0];
+    const xs = [];
+    for (let k = 0; k < seeds; k++) {
+      const seed = (0x1311 + li * 257 + k * 31) >>> 0;
+      try {
+        playCareer(mod, club, era, seed, {
+          finished(before, fin) {
+            const book = cm.leagueBookOf(before);
+            const lb = cm.leagueBoardsOf(before);
+            const bookTop = lb ? mod.boards.leaders(lb.input, 'goals', 1)[0] : null;
+            const raceTop = cm.goldenBootTable(before, 1, null)[0];
+            xs.push({
+              share: book ? shareByHand(before, book) : null, decided: Boolean(book && lb && decidesByHand(before, book)), late: Boolean(book && book.r0 !== undefined),
+              by: cm.bookAwardsState(before, lb).by, won: fin.summary.goldenBoot?.club === before.clubName, bookMine: Boolean(bookTop?.mine), raceMine: Boolean(raceTop?.mine),
+            });
+          },
+        }, 1);
+      } catch (e) { xs.push({ error: String(e?.message ?? e).slice(0, 100) }); }
+    }
+    const ok = xs.filter(x => !x.error);
+    const row = { era, league: league.id, n: ok.length, shares: ok.map(x => x.share), decided: ok.filter(x => x.decided).length, by: ok.map(x => x.by), won: ok.filter(x => x.won).length, bookMine: ok.filter(x => x.bookMine).length, raceMine: ok.filter(x => x.raceMine).length, errors: xs.length - ok.length };
+    rows.push(row);
+    console.log(`floor ${era.padEnd(7)} ${league.id.padEnd(14)} on record ${row.shares.join(' ')}; settled by ${row.by.join(' ')}; decided by the book ${row.decided} of ${row.n}; one of mine won the boot ${row.won} of ${row.n} (on the book's board ${row.bookMine}, on the old race ${row.raceMine})${row.errors ? `; ${row.errors} careers did not finish` : ''}`);
+  });
+  const under = rows.filter(r => r.decided < r.n);
+  const all = rows.reduce((a, r) => ({ n: a.n + r.n, won: a.won + r.won, book: a.book + r.bookMine, race: a.race + r.raceMine }), { n: 0, won: 0, book: 0, race: 0 });
+  const sub = xs => xs.reduce((a, r) => ({ n: a.n + r.n, won: a.won + r.won, book: a.book + r.bookMine, race: a.race + r.raceMine }), { n: 0, won: 0, book: 0, race: 0 });
+  const u = sub(under);
+  const o = sub(rows.filter(r => r.decided === r.n));
+  console.log(`floor ${rows.length} leagues, ${all.n} careers: ${rows.filter(r => r.decided === r.n).length} leagues decided by the book in every career, ${rows.filter(r => r.decided === 0).length} in none, ${rows.filter(r => r.decided > 0 && r.decided < r.n).length} split`);
+  console.log(`floor one of mine won the boot: ${all.won} of ${all.n} careers in all; where the book never or not always decides ${u.won} of ${u.n} (the book's board would give ${u.book}, the old race ${u.race}); where it always decides ${o.won} of ${o.n} (old race ${o.race})`);
+  console.log(`simCmLeagueBook: MEASURE floor done, nothing gated (${Math.round((Date.now() - T0) / 1000)}s)`);
+}
+
 async function measureLeagues(arms) {
   const seeds = Number(process.env.MEASURE_SEEDS ?? 2);
   const { cm } = arms[0][1];
@@ -1417,6 +1580,11 @@ if (!candidate.boards) cannot('the league boards module is not in this tree');
 for (const pos of ['GK', 'CB', 'LB', 'RB', 'LWB', 'RWB', 'CDM', 'CM', 'CAM', 'LM', 'RM', 'LW', 'RW', 'CF', 'ST']) {
   if (candidate.cm.groupOf(pos) !== lineOf(pos)) cannot(`the harness reads ${pos} as ${lineOf(pos)}, the engine as ${candidate.cm.groupOf(pos)}`);
 }
+if (process.env.BOOK_MEASURE === 'floor') {
+  if (CONTROL) cannot('the measuring mode runs with no control');
+  await measureFloor(candidate);
+  process.exit(0);
+}
 if (process.env.BOOK_MEASURE === 'leagues') {
   if (CONTROL) cannot('the measuring mode runs with no control');
   let literal;
@@ -1434,12 +1602,17 @@ const acc = newAcc();
 /* A save from the middle of a season, kept for the purchase probe of section names. */
 const midSaves = [];
 let tCand = Date.now();
-const candFaces = fleet.map((f, i) => playCareer(candidate, f.club, f.era, f.seed, watcher(candidate, `${f.club} (${f.era}, seed ${f.seed})`, acc, {
-  onEntry(after, r, season) {
-    if (season !== 0 || i >= 4 || after.week < 22 || after.sacked || midSaves.some(m => m.f === f)) return;
-    midSaves.push({ f, state: JSON.parse(JSON.stringify(after)) });
-  },
-})));
+const awardEnds = new Map();
+const awardStats = [];
+const candFaces = fleet.map((f, i) => playCareer(candidate, f.club, f.era, f.seed, {
+  ...watcher(candidate, `${f.club} (${f.era}, seed ${f.seed})`, acc, {
+    onEntry(after, r, season) {
+      if (season !== 0 || i >= 4 || after.week < 22 || after.sacked || midSaves.some(m => m.f === f)) return;
+      midSaves.push({ f, state: JSON.parse(JSON.stringify(after)) });
+    },
+  }),
+  finished: (before, fin, season) => judgeAwards(candidate, `${f.club} (${f.era}, seed ${f.seed})`, before, fin, season),
+}));
 tCand = Date.now() - tCand;
 /* THE FLEET IS WHAT IT SAYS, or the run says so and judges nothing: a data update that moves one of these
    clubs into another league must not quietly drop the arm it was picked for (the boards are only printed). */
@@ -1503,11 +1676,14 @@ const compareFaces = (name, faces) => {
 let base = null;
 /* Round 1306, thin (iv): the base commit's book entries at each season's end, by career and season. */
 const baseEnds = new Map();
+/* Round 1311, section awards (iii): the base commit's summary and record at each season's end. */
+const baseAwardEnds = new Map();
 if (BASE) {
   try { base = await engine('base', BASE); } catch (e) { cannot(`the base tree at ${BASE} did not build: ${String(e?.message ?? e)}`); }
   const n = fleet.length * SEASONS * 2;
   console.log(`stream  ${compareFaces('base', fleet.map(f => playCareer(base, f.club, f.era, f.seed, {
     seasonEnd(s, season) { baseEnds.set(`${f.club} (${f.era}, seed ${f.seed})|${season}`, JSON.parse(JSON.stringify(s.leagueBook?.c ?? null))); },
+    finished(before, fin, season) { baseAwardEnds.set(`${f.club} (${f.era}, seed ${f.seed})|${season}`, { summary: JSON.stringify(fin.summary), record: JSON.stringify(fin.state.history.find(h => h.season === before.season) ?? null) }); },
   })))} of ${n} faces equal to the source of the base commit`);
 } else {
   console.log('stream  base arm NOT RUN: set BOOK_BASE to a worktree of the base commit');
@@ -1701,9 +1877,11 @@ function boardsByHand(s, input) {
 /** Every reader of the module, called once on one save. */
 function readEverything(mod, s) {
   const input = boardInputOf(mod, s);
-  if (!input) return null;
+  /* Round 1311: the engine's one door, asked on the same save. */
+  const door = mod.cm.leagueBoardsOf ? mod.cm.leagueBoardsOf(s) : undefined;
+  if (!input) return door ? { doorWithoutBook: true } : null;
   const { boards } = mod;
-  const out = { fits: boards.bookFits(input.book, input.clubs), whole: boards.bookIsWhole(input.book), share: boards.bookShare(input.book, input.clubs), keepers: boards.keepersOnRecord(input.clubs), input };
+  const out = { fits: boards.bookFits(input.book, input.clubs), whole: boards.bookIsWhole(input.book), share: boards.bookShare(input.book, input.clubs), keepers: boards.keepersOnRecord(input.clubs), input, door };
   for (const kind of BOARD_KINDS) { out[kind] = boards.leaders(input, kind); out[`${kind}Mine`] = boards.bestOfMine(input, kind); }
   return out;
 }
@@ -1716,6 +1894,20 @@ function readEverything(mod, s) {
     const got = readEverything(candidate, s);
     tick('boards');
     if (!got) { fail('boards', `${where}: no readable book to build the boards from`); continue; }
+    if (got.doorWithoutBook) { fail('boards', `${where}: leagueBoardsOf answered on a save the careful reader refuses`); continue; }
+    /* Round 1311: the engine's door is the harness's input, field for field, and says what the reader says. */
+    tick('boards', 5);
+    if (got.door === undefined) fail('boards', `${where}: the engine has no leagueBoardsOf`);
+    else if ((got.door === null) !== !got.fits) fail('boards', `${where}: leagueBoardsOf is ${got.door === null ? 'null' : 'not null'} on a book that ${got.fits ? 'fits' : 'does not fit'}`);
+    else if (got.door) {
+      const plain = x => JSON.stringify({ book: x.book, clubs: x.clubs, mine: x.mine, myClub: x.myClub, myPlace: x.myPlace });
+      if (plain(got.door.input) !== plain(got.input)) fail('boards', `${where}: leagueBoardsOf hands the reader another input than the save's`);
+      if (got.door.share !== got.share.share || got.door.from !== (got.input.book.r0 ?? null) || JSON.stringify(got.door.keepers) !== JSON.stringify(got.keepers)) fail('boards', `${where}: leagueBoardsOf says share ${got.door.share}, from ${got.door.from}, keepers ${JSON.stringify(got.door.keepers)}; the reader says ${got.share.share}, ${got.input.book.r0 ?? null}, ${JSON.stringify(got.keepers)}`);
+      const lines = s.squad.length ? candidate.book.bookRows(got.input.book) : [];
+      const offRating = lines.find(r => got.door.input.ratingOf(r.club, r.name, r.pos) !== got.input.ratingOf(r.club, r.name, r.pos));
+      if (offRating) fail('boards', `${where}: leagueBoardsOf rates ${offRating.name} (${offRating.club}) otherwise than his roster does`);
+      if (got.door.input.lineOf !== candidate.cm.groupOf) fail('boards', `${where}: leagueBoardsOf does not hand in the engine's own grouping`);
+    }
     /* (i) every career of the fleet started its season with a book: at the season's end it is WHOLE AND FITS. */
     tick('boards');
     if (!got.fits || !got.whole) fail('boards', `${where}: the book ${got.fits ? 'fits the table' : 'does not add up to the table'} and is ${got.whole ? 'whole' : 'a late book'}`);
@@ -1765,13 +1957,13 @@ function readEverything(mod, s) {
   }
   /* (iv) the reader draws nothing and reads no clock or locale: its source as the control layer hands it,
      comments stripped. */
-  {
-    let text = fs.readFileSync(path.join(ROOT, BOARDS), 'utf8').replace(/\r\n/g, '\n');
-    for (const p of (CONTROL ? CONTROLS[CONTROL].patch : []).filter(x => x.file === BOARDS)) text = text.split(p.from).join(p.to);
+  for (const file of [BOARDS, LEADERS_CARD, HONOURS_CARD].filter(x => fs.existsSync(path.join(ROOT, x)))) {
+    let text = fs.readFileSync(path.join(ROOT, file), 'utf8').replace(/\r\n/g, '\n');
+    for (const p of (CONTROL ? CONTROLS[CONTROL].patch : []).filter(x => x.file === file)) text = text.split(p.from).join(p.to);
     const code = text.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '');
     for (const banned of ['Math.random', 'Date.now', 'new Date', 'localeCompare']) {
       tick('boards');
-      if (code.includes(banned)) fail('boards', `${BOARDS} holds ${banned}: the reader draws nothing, reads no clock and compares names as plain text`);
+      if (code.includes(banned)) fail('boards', `${file} holds ${banned}: the reader and the card draw nothing, read no clock and compare names as plain text`);
     }
   }
   /* (vi) printed for the lead, never gated. */
@@ -1786,6 +1978,236 @@ function readEverything(mod, s) {
     console.log(`          Top scorers: ${line(got.goals)}`);
     console.log(`          Assists: ${line(got.assists.slice(0, 5))}`);
     console.log(`          Clean sheets: ${line(got.sheets.slice(0, 5))}`);
+  }
+}
+
+/* ---------- section awards (Round 1311): the season's honours from the book, and only where it decides ---------- */
+/**
+ * One season's end, judged by the harness's own reading of the rule (decidesByHand). (i) On a season the book
+ * decides, the summary's golden boot is the Goals board's first and its awards are the first of each board
+ * with the share on record; the season's record keeps the same awards. On any other season (a late book, no
+ * book that adds up, a share under the floor) nothing new is written and the golden boot is the old race's.
+ */
+function judgeAwards(mod, label, before, fin, season) {
+  const { cm, boards } = mod;
+  const where = `${label} at the end of season ${season + 1}`;
+  const book = cm.leagueBookOf(before);
+  const lb = cm.leagueBoardsOf(before);
+  const share = book ? shareByHand(before, book) : null;
+  const decided = Boolean(book && lb && decidesByHand(before, book));
+  const { summary } = fin;
+  const record = fin.state.history.find(h => h.season === before.season) ?? null;
+  tick('awards', 3);
+  if (decided) {
+    const first = kind => boards.leaders(lb.input, kind, 1)[0] ?? null;
+    const g = first('goals');
+    const boot = g ? { name: g.name, club: g.club, goals: g.n } : null;
+    if (JSON.stringify(summary.goldenBoot ?? null) !== JSON.stringify(boot)) fail('awards', `${where}: the summary's golden boot ${JSON.stringify(summary.goldenBoot)} is not the Goals board's first ${JSON.stringify(boot)}`);
+    const want = { cov: share };
+    for (const [key, kind] of [['boot', 'goals'], ['ast', 'assists'], ['glove', 'sheets']]) {
+      const m = first(kind);
+      if (m) want[key] = [m.name, m.club, m.n, (m.gen ? 1 : 0) + (m.mine ? 2 : 0)];
+    }
+    /* Round 1311 step 5: the team of the season, by the module, held to its shape here. */
+    const xi = boards.teamOfSeason(lb.input);
+    if (xi) {
+      want.xi = xi;
+      tick('awards', 3);
+      const lines = xi.map(m => lineOf(m[2]));
+      const shape = ['GK', 'DEF', 'DEF', 'DEF', 'DEF', 'MID', 'MID', 'MID', 'MID', 'ATT', 'ATT'];
+      if (JSON.stringify(lines) !== JSON.stringify(shape)) fail('awards', `${where}: the team of the season is not a keeper, four defenders, four midfielders and two forwards: ${lines.join(' ')}`);
+      if (new Set(xi.map(m => `${m[0]}|${m[1]}|${m[2]}`)).size !== 11) fail('awards', `${where}: a man is twice in the team of the season`);
+      const myNames = new Set(before.squad.map(p => p.name));
+      const rowKeys = new Set(mod.book.bookRows(book).map(r => `${r.name}|${r.club}|${r.pos}`));
+      const stray = xi.find(m => ((m[3] & 2) ? !myNames.has(m[0]) : !rowKeys.has(`${m[0]}|${m[1]}|${m[2]}`)));
+      if (stray) fail('awards', `${where}: ${stray[0]} (${stray[1]}) is in the team of the season with no row in the book and not in my squad`);
+      /* (v) the back four: how many of one club. */
+      const counts = new Map();
+      for (const m of xi.slice(1, 5)) counts.set(m[1], (counts.get(m[1]) ?? 0) + 1);
+      acc.backFours = acc.backFours ?? [];
+      acc.backFours.push(Math.max(...counts.values()));
+    } else acc.noTeam = (acc.noTeam ?? 0) + 1;
+    if (JSON.stringify(summary.awards ?? null) !== JSON.stringify(want)) fail('awards', `${where}: the summary's awards ${JSON.stringify(summary.awards)} are not the first of each board with the share on record ${JSON.stringify(want)}`);
+    if (JSON.stringify(record?.awards ?? null) !== JSON.stringify(want)) fail('awards', `${where}: the season's record keeps ${JSON.stringify(record?.awards)}, not the summary's awards`);
+  } else {
+    const why = !book || !lb ? 'no book that adds up' : book.r0 !== undefined ? 'a late book' : `under the floor: ${share} in 100 on record`;
+    if ('awards' in summary || (record && 'awards' in record)) fail('awards', `${where}: awards were written on a season the book does not decide (${why})`);
+    const race = cm.goldenBootTable(before, 1, null)[0] ?? null;
+    const boot = race && race.goals > 0 ? { name: race.name, club: race.club, goals: race.goals } : null;
+    if (JSON.stringify(summary.goldenBoot ?? null) !== JSON.stringify(boot)) fail('awards', `${where}: the summary's golden boot ${JSON.stringify(summary.goldenBoot)} is not the old race's ${JSON.stringify(boot)} (${why})`);
+  }
+  awardEnds.set(`${label}|${season}`, { decided, summary: JSON.stringify(summary), record: JSON.stringify(record) });
+  const myRow = before.table.find(r => r.club === before.clubName);
+  awardStats.push({
+    league: cm.careerLeagueOf(before).id, share, decided, late: Boolean(book && book.r0 !== undefined), mineBoot: summary.goldenBoot?.club === before.clubName,
+    whole: Boolean(book && book.r0 === undefined), top: lb ? (boards.leaders(lb.input, 'goals', 1)[0]?.n ?? 0) : null, len: myRow ? myRow.w + myRow.d + myRow.l : 0,
+  });
+}
+{
+  /* (i) on a LATE book: two careers of the fleet whose book is taken off the save ten entries in, so the next
+     entry opens a late one; their season's end is judged like every other. */
+  let lateEnds = 0;
+  const lateMod = await candidate.again();
+  for (const f of fleet.slice(0, 2)) {
+    let n = 0;
+    playCareer(lateMod, f.club, f.era, (f.seed ^ 0x1311) >>> 0, {
+      entry(b, after) { n += 1; if (n === 10) delete after.leagueBook; },
+      finished(before, fin, season) { if (before.leagueBook?.r0 !== undefined) lateEnds += 1; judgeAwards(lateMod,`${f.club} (${f.era}, a late book)`, before, fin, season); },
+    }, 1);
+  }
+  tick('awards');
+  if (!lateEnds) fail('awards', 'the late arm never ended a season on a late book: the rule for a late book was not tried');
+  /* (v) THE BACK FOUR (step 5): over every season the book decided, the mean number of men of one club in the
+     team's back four. Round 1229 read 1.7 under this rule and 2.9 to 3.2 under "clean sheets plus goals plus
+     assists" (the control teamsheets). BACK_FOUR_LINE is midway between the two measured ranges (header). */
+  {
+    const xs = acc.backFours ?? [];
+    tick('awards');
+    if (xs.length < 4) fail('awards', `only ${xs.length} teams of the season to judge the back four on`);
+    else if (xs.length >= BACK_FOUR_MIN_TEAMS && mean(xs) > BACK_FOUR_LINE) fail('awards', `the back four holds ${fmt(mean(xs), 2)} men of one club on average over ${xs.length} teams, over the line of ${BACK_FOUR_LINE}`);
+    console.log(`awards  back four: ${fmt(mean(xs), 2)} men of one club on average over ${xs.length} teams of the season (line ${BACK_FOUR_LINE}, ${xs.length >= BACK_FOUR_MIN_TEAMS ? 'judged' : `printed only: under ${BACK_FOUR_MIN_TEAMS} teams`}); ${acc.noTeam ?? 0} seasons the book decided had no team`);
+  }
+  /* (ii) A SEVEN SEASON CAREER: the three winners on all seven records, the team on the newest five only, every
+     record the same after a JSON round trip. One club of the fleet, on a fresh copy. */
+  {
+    const seven = await candidate.again();
+    const f = fleet[0];
+    let records = null;
+    playCareer(seven, f.club, f.era, (f.seed ^ 0x7777) >>> 0, { finished(before, fin, season) { if (season === 6) records = fin.state.history; } }, 7);
+    tick('awards', 3);
+    if (!records) fail('awards', `${f.club}: the seven season career did not reach its seventh season's end`);
+    else {
+      const withAwards = records.filter(h => h.awards).sort((a, b) => b.season - a.season);
+      const teams = withAwards.filter(h => h.awards.xi).map(h => h.season);
+      const newest = withAwards.slice(0, 5).map(h => h.season);
+      if (withAwards.length < 7) fail('awards', `${f.club}: ${withAwards.length} of 7 records hold awards`);
+      if (teams.some(s => !newest.includes(s))) fail('awards', `${f.club}: a team on season ${teams.find(s => !newest.includes(s))}, older than the newest five records with awards`);
+      if (JSON.stringify(JSON.parse(JSON.stringify(records))) !== JSON.stringify(records)) fail('awards', `${f.club}: the records do not survive a JSON round trip`);
+      console.log(`awards  seven seasons of ${f.club}: awards on ${withAwards.length} records, a team on ${teams.length} (seasons ${teams.join(', ')})`);
+    }
+  }
+  /* (iii) WHAT WAS NOT MEANT TO CHANGE (needs BOOK_BASE): on a season the book does not decide, the WHOLE
+     summary and record are the base commit's; on one it decides, all of them but the four moved fields. */
+  let same = 0;
+  let compared = 0;
+  if (base) {
+    for (const [key, c] of awardEnds) {
+      const b = baseAwardEnds.get(key);
+      if (!b) continue;
+      compared += 1;
+      tick('awards', 2);
+      const strip = json => JSON.stringify(json === 'null' ? null : (() => { const o = JSON.parse(json); for (const m of MOVED) delete o[m]; return o; })());
+      const sumA = c.decided ? strip(c.summary) : c.summary;
+      const sumB = c.decided ? strip(b.summary) : b.summary;
+      const recA = c.decided ? strip(c.record) : c.record;
+      const recB = c.decided ? strip(b.record) : b.record;
+      if (sumA !== sumB) fail('awards', `${key}: the summary ${c.decided ? 'but its four moved fields ' : ''}differs from the base commit's${c.decided ? '' : ' on a season the book does not decide'}`);
+      else if (recA !== recB) fail('awards', `${key}: the season's record ${c.decided ? 'but its awards ' : ''}differs from the base commit's`);
+      else same += 1;
+    }
+    tick('awards');
+    if (!compared) fail('awards', 'no season end was compared with the base commit');
+  }
+  const decidedN = awardStats.filter(x => x.decided).length;
+  console.log(`awards  ${checked.get('awards')} checks over ${awardStats.length} season ends: ${decidedN} decided by the book, ${awardStats.filter(x => !x.decided && !x.late).length} under the floor or with no book, ${awardStats.filter(x => x.late).length} on a late book (${lateEnds} from the late arm)`);
+  console.log(base ? `        ${same} of ${compared} season ends equal to the base commit (the whole summary and record where the book does not decide, all but the four moved fields where it does)` : '        awards (iii) NOT RUN: set BOOK_BASE to a worktree of the base commit');
+  const byLeague = new Map();
+  for (const x of awardStats) { const l = byLeague.get(x.league) ?? []; l.push(x); byLeague.set(x.league, l); }
+  for (const [league, xs] of byLeague) console.log(`        ${league.padEnd(12)} ${xs.length} season ends: on record ${xs.map(x => x.share).join(' ')}, decided by the book ${xs.filter(x => x.decided).length}, one of mine won the boot ${xs.filter(x => x.mineBoot).length}`);
+}
+
+/* ---------- section facts (Round 1311 step 4): the fleet's top scorers beside the real leagues' ---------- */
+/**
+ * The real figures come from scripts/data/cmLeagueBookFacts.json (Round 1310), USED figures only, read here by
+ * the harness's OWN reading of that file's rule (typed again on purpose, the way this harness types its weight
+ * table): a figure is USED when two publishers on two different hosts print it and agree exactly, and a
+ * season's length (the matches a club played) is USED the same way from the format rows (a span row says
+ * nothing of 2019-20). Nothing under src reads the file (its own fence, scripts/simCmLeagueBookFacts.mjs,
+ * holds that, and the receipt, and the two sources).
+ * PRINTED: by season length, the fleet's mean top scorer beside each real league's mean of the same length,
+ * and the gap in the fleet's own standard errors. BOUND, the one band with measured room: the fleet's mean
+ * top scorer over its 38 match seasons lies between the lowest and the highest real 38 match league mean, each
+ * edge widened by three of the fleet's own standard errors (its winners' deviation over the root of its
+ * seasons). THIS BAND CANNOT TELL THE TAKER RULE ON FROM OFF: Round 1229 measured the taker off at 23.5 to
+ * 24.8, astride the lower edge. It catches a leak (control bookleak: every goal of a side to its taker) and
+ * nothing finer; do not cite it for the taker.
+ * WHERE IT IS JUDGED (the fixer of review-read-1311 m1): only on a fleet of at least FACTS_MIN_SEASONS 38 match
+ * seasons, the way the back four's line is. Measured on remote check r1311-f1a (head 8676802b): the five
+ * default fleets hold 4 or 5 such seasons, with the error estimated from those same seasons, and sat 4.2 3.9
+ * 3.8 5.0 5.8 standard errors over the low edge and 3.8 8.6 4.9 3.2 1.8 under the high one (seed sets 0 to 4),
+ * so seed set 4 was a coin toss away from red; the five full fleets hold 24 25 25 26 23 and sat 5.7 6.1 5.6
+ * 6.2 5.9 over the low edge and 6.4 6.8 7.0 6.0 5.1 under the high one. On a default fleet the band is
+ * printed; a full fleet that plays fewer than FACTS_MIN_SEASONS is red. So the control bookleak runs on the
+ * full fleet.
+ */
+const FACTS_MIN_SEASONS = 20;
+function realTopScorers() {
+  const facts = JSON.parse(fs.readFileSync(path.join(ROOT, 'scripts/data/cmLeagueBookFacts.json'), 'utf8'));
+  const host = url => new URL(url).host.toLowerCase().replace(/^www\./, '');
+  const seasonsOf = s => {
+    let m = /^(\d{4})-(\d{2})$/.exec(s ?? '');
+    if (m) return [s];
+    m = /^(\d{4})-(\d{2}) to (\d{4})-(\d{2})$/.exec(s ?? '');
+    if (!m) return [];
+    const out = [];
+    for (let y = Number(m[1]); y <= Number(m[3]); y += 1) out.push(`${y}-${String((y + 1) % 100).padStart(2, '0')}`);
+    return out;
+  };
+  const used = rs => {
+    if (!rs?.length) return null;
+    const values = new Set(rs.map(r => r.value));
+    return values.size === 1 && new Set(rs.map(r => r.row.publisher)).size >= 2 && new Set(rs.map(r => host(r.row.url))).size >= 2 ? rs[0].value : null;
+  };
+  const goals = new Map();
+  const lengths = new Map();
+  const add = (map, k, v) => map.set(k, [...(map.get(k) ?? []), v]);
+  for (const row of facts.rows) {
+    const fig = row.figures ?? {};
+    const seasons = seasonsOf(row.season);
+    if (typeof fig.topScorerGoals === 'number' && seasons.length === 1) add(goals, `${row.competition}|${row.season}`, { row, value: fig.topScorerGoals });
+    if (fig.curtailed === true || Number.isInteger(fig.matchesPerClub) || Number.isInteger(fig.clubs)) {
+      const value = fig.curtailed === true ? 'curtailed' : Number.isInteger(fig.matchesPerClub) ? fig.matchesPerClub : 2 * (fig.clubs - 1);
+      for (const s of seasons) if (!(seasons.length > 1 && s === '2019-20')) add(lengths, `${row.competition}|${s}`, { row, value });
+    }
+  }
+  const out = [];
+  for (const [k, rs] of goals) {
+    const g = used(rs);
+    const len = used(lengths.get(k));
+    if (g !== null && Number.isInteger(len)) out.push({ league: k.split('|')[0], season: k.split('|')[1], goals: g, len });
+  }
+  return out;
+}
+{
+  const real = realTopScorers();
+  const byLen = new Map();
+  for (const r of real) { const m = byLen.get(r.len) ?? new Map(); m.set(r.league, [...(m.get(r.league) ?? []), r.goals]); byLen.set(r.len, m); }
+  const fleetSeasons = awardStats.filter(x => x.whole && x.top !== null);
+  const sdOf = xs => { const m = mean(xs); return Math.sqrt(xs.reduce((a, x) => a + (x - m) ** 2, 0) / Math.max(1, xs.length - 1)); };
+  tick('facts');
+  if (!real.length) fail('facts', 'no USED top scorer figure in scripts/data/cmLeagueBookFacts.json');
+  for (const [len, leagues] of [...byLen.entries()].sort((a, b) => b[0] - a[0])) {
+    const fleet = fleetSeasons.filter(x => x.len === len).map(x => x.top);
+    const se = fleet.length > 1 ? sdOf(fleet) / Math.sqrt(fleet.length) : null;
+    const line = [...leagues.entries()].map(([league, xs]) => `${league} ${fmt(mean(xs))} (${xs.length})${se ? `, gap ${fmt((mean(fleet) - mean(xs)) / se, 1)} standard errors` : ''}`).join('; ');
+    console.log(`facts   ${len} match seasons: the fleet's top scorer ${fleet.length ? `${fmt(mean(fleet))} over ${fleet.length} seasons (standard error ${fmt(se ?? 0, 2)})` : 'not played'}; the real leagues: ${line}`);
+  }
+  /* THE BAND, on 38 match seasons. */
+  const real38 = byLen.get(38);
+  const fleet38 = fleetSeasons.filter(x => x.len === 38).map(x => x.top);
+  tick('facts');
+  if (!real38 || real38.size < 2) fail('facts', 'fewer than two real leagues with USED 38 match seasons: the band has no edges');
+  else if (fleet38.length < 2) fail('facts', `the fleet played ${fleet38.length} season of 38 matches: the band cannot be judged`);
+  else {
+    const means = [...real38.values()].map(xs => mean(xs));
+    const se = sdOf(fleet38) / Math.sqrt(fleet38.length);
+    const lo = Math.min(...means) - 3 * se;
+    const hi = Math.max(...means) + 3 * se;
+    const m = mean(fleet38);
+    const judged = fleet38.length >= FACTS_MIN_SEASONS;
+    console.log(`facts   the band on 38 match seasons: ${fmt(lo, 2)} to ${fmt(hi, 2)} (real league means ${fmt(Math.min(...means))} to ${fmt(Math.max(...means))}, widened by three standard errors of ${fmt(se, 2)}); the fleet ${fmt(m, 2)} over ${fleet38.length} seasons, ${fmt((m - lo) / se, 1)} standard errors over the low edge and ${fmt((hi - m) / se, 1)} under the high one${judged ? '' : `, printed and not judged (under ${FACTS_MIN_SEASONS} seasons; the full fleet judges it)`}`);
+    if (FULL && !judged) fail('facts', `the full fleet played only ${fleet38.length} seasons of 38 matches, under the ${FACTS_MIN_SEASONS} the band is judged on`);
+    if (judged && (m < lo || m > hi)) fail('facts', `the fleet's mean top scorer over its 38 match seasons is ${fmt(m, 2)}, outside the band ${fmt(lo, 2)} to ${fmt(hi, 2)} the real leagues give`);
   }
 }
 
@@ -1910,8 +2332,13 @@ function onStream(seed, fn) {
       if (r.kind === 'seasonOver') break;
     }
     const board = JSON.stringify(mod.cm.goldenBootTable(s, 12));
+    /* Round 1311: does the book decide this season (by the harness's own reading of the rule)? Then the
+       board and the boot must be the book's Goals board, and the reference engines' old race is not asked. */
+    const ownBook = mod.cm.leagueBoardsOf ? mod.cm.leagueBoardsOf(s) : null;
+    const decided = Boolean(ownBook && decidesByHand(s, ownBook.input.book));
+    const bookBoard = decided ? JSON.stringify(mod.boards.leaders(ownBook.input, 'goals', 12).map(m => [m.name, m.club, m.n])) : null;
     const fin = mod.cm.finishSeason(s);
-    return { faces, bookAtLoad, late, wantLate: Boolean(want?.next && !want.whole), board, boot: JSON.stringify(fin.summary.goldenBoot ?? null), next: mod.cm.startNextSeason(fin.state) };
+    return { faces, bookAtLoad, late, wantLate: Boolean(want?.next && !want.whole), board, boot: JSON.stringify(fin.summary.goldenBoot ?? null), decided, bookBoard, next: mod.cm.startNextSeason(fin.state) };
   });
   const saves = [
     { name: 'the committed save of Round 1052 (Sevilla)', raw: fs.readFileSync(path.join(ROOT, 'scripts/data/cmOldSave1052Fixture.json'), 'utf8'), viaLoad: true, seed: 0x7001 },
@@ -1967,8 +2394,15 @@ function onStream(seed, fn) {
       tick('oldsave', a.faces.length);
       if (a.faces.length !== b.faces.length || firstOff >= 0) fail('oldsave', `${save.name}: the save but its book differs from the ${refName} engine's from entry ${firstOff} of ${a.faces.length}`);
       tick('oldsave', 2);
-      if (a.board !== b.board) fail('oldsave', `${save.name}: the golden boot board differs from the ${refName} engine's (a late book feeds no race)`);
-      if (a.boot !== b.boot) fail('oldsave', `${save.name}: the summary's golden boot differs from the ${refName} engine's`);
+      if (a.decided) {
+        /* Round 1311: a season the book decides (the parked save opens a whole book): the board is the book's. */
+        const top = JSON.parse(a.bookBoard)[0] ?? null;
+        if (JSON.stringify(JSON.parse(a.board).map(e => [e.name, e.club, e.goals])) !== a.bookBoard) fail('oldsave', `${save.name}: on a season the book decides the golden boot board is not the book's Goals board`);
+        if (a.boot !== JSON.stringify(top ? { name: top[0], club: top[1], goals: top[2] } : null)) fail('oldsave', `${save.name}: on a season the book decides the summary's golden boot is not the Goals board's first`);
+      } else {
+        if (a.board !== b.board) fail('oldsave', `${save.name}: the golden boot board differs from the ${refName} engine's (a late book feeds no race)`);
+        if (a.boot !== b.boot) fail('oldsave', `${save.name}: the summary's golden boot differs from the ${refName} engine's`);
+      }
       if (first) {
         tick('oldsave', 2);
         if (save.parked && a.late) fail('oldsave', `${save.name}: no league match had been played and the season was kept on a late book`);
@@ -2089,6 +2523,8 @@ function onStream(seed, fn) {
      here: two copies of the engine number their youth players, press questions and messages apart. */
   let carried = 0;
   let carriedThin = 0;
+  /** Round 1311 (decision 3, the critic's advice 21 (iii)): each carried save's closing share and what it was given. */
+  const closings = [];
   /** A season in play as `mod` writes it: a fresh copy of the engine starts `club` and plays `entries`
    *  entries on a seeded stream with the clock fixed. */
   const bookSaveBy = async (mod, club, entries, seed) => {
@@ -2115,15 +2551,35 @@ function onStream(seed, fn) {
         let late = 0;
         let guard = 0;
         let end = taken;
+        let ended = false;
         while (s.week < s.calendar.length && guard++ < 220) {
           const r = on.cm.playNextEntry(s, { skipHalftime: true });
           s = r.state;
           const book = lawNow(on, s, name, `entry ${guard}`, 'oldsave');
           if (book) end = book;
           if (!book || !boards.bookIsWhole(book)) late += 1;
-          if (r.kind === 'seasonOver') break;
+          if (r.kind === 'seasonOver') { ended = true; break; }
         }
         if (late) fail('oldsave', `${name}: ${late} of ${guard} entries ended on a late book or none: a whole book of the season in play was reopened`);
+        /* The last entry of a season leaves week at the calendar's length; seasonOver comes only from a call past it. */
+        if (s.week >= s.calendar.length) ended = true;
+        /* Round 1311: a save that was in play when the book shipped (thin clubs unnamed for its first
+           entries, yet whole by the rule) closes on the share it has on record, and the awards follow the
+           floor by the harness's own reading of the rule: given at or over it, withheld under it. */
+        tick('oldsave');
+        if (!ended) fail('oldsave', `${name}: the season never ended, so its awards were never judged`);
+        else {
+          const closing = on.cm.leagueBookOf(s);
+          const fin = on.cm.finishSeason(s);
+          const share = closing ? shareByHand(s, closing) : null;
+          const decided = Boolean(closing && decidesByHand(s, closing));
+          const got = fin.summary.awards ?? null;
+          tick('oldsave', 2);
+          if (decided !== Boolean(got)) fail('oldsave', `${name}: closed on record ${share} in 100 (${decided ? 'at or over' : 'under'} the floor of ${AWARD_FLOOR_RULED}) and was ${got ? '' : 'not '}given awards from the book`);
+          if (got && got.cov !== share) fail('oldsave', `${name}: its awards keep ${got.cov} in 100 on record, the book closed on ${share}`);
+          const boot = fin.summary.goldenBoot;
+          closings.push(`${name.split(',')[0]} closed on record ${share} in 100: ${got ? `awards from the book (top scorer ${got.boot?.[0]} ${got.boot?.[2]}, team ${got.xi ? 'of 11' : 'none'})` : `no awards from the book, the golden boot from the old race (${boot ? `${boot.name} ${boot.goals}` : 'nobody'})`}`);
+        }
         carried += 1;
         if (bare.length) {
           carriedThin += 1;
@@ -2179,6 +2635,7 @@ function onStream(seed, fn) {
   console.log(base
     ? `        (vi) the tree BOOK_BASE names writes the committed saves byte for byte: ${sameAsCommitted.join(', ')}`
     : '        oldsave (vi) from a base tree NOT RUN (the committed saves were): set BOOK_BASE to a worktree of the base commit');
+  for (const c of closings) console.log(`        (vi) ${c}`);
 }
 
 /* ---------- section doors: the two ways into a season that is already running ---------- */

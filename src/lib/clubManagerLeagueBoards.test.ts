@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { creditMine, openBook, openLateBook, readBook, type BookLineOf, type LeagueBook } from '@/lib/clubManagerLeagueBook';
 import {
-  BOARD_ROWS, bestOfMine, bookFits, bookIsWhole, bookShare, keepersOnRecord, leaders,
+  AWARD_FLOOR, BOARD_ROWS, BOOK_FULL_SHARE, TEAM_LINES, TEAMS_KEPT, bestOfMine, seasonAwards, teamOfSeason, bookDecides, bookFits, bookIsWhole, bookShare, keepersOnRecord, leaders,
   type BoardClub, type BoardInput, type BoardMine,
 } from '@/lib/clubManagerLeagueBoards';
 
@@ -16,8 +16,8 @@ import {
  *  - when a save with no book is given a whole book and when a late one (section oldsave (i), the
  *    goalless save; control goallesswhole). The reviewer's third mutation (a whole book whenever no goal
  *    has been scored) left both green as well.
- * And the share under which a board carries the honest line is not pinned here: the number is not ruled
- * yet (see the note above BOARD_ROWS in the module). */
+ * Round 1311: the two numbers the lead ruled (the honest line at 95, the floor for awards at 73) are
+ * pinned at the bottom of this file. */
 const STAMP = 'league|test';
 const LINE: BookLineOf = pos => (pos === 'GK' ? 'GK' : ['CB', 'LB', 'RB', 'LWB', 'RWB'].includes(pos) ? 'DEF' : ['CDM', 'CM', 'CAM', 'LM', 'RM'].includes(pos) ? 'MID' : 'ATT');
 
@@ -143,5 +143,91 @@ describe('the boards', () => {
     bookShare(b, CLUBS);
     keepersOnRecord(CLUBS);
     expect(JSON.stringify({ b, CLUBS, MINE })).toBe(before);
+  });
+});
+
+/* Round 1311: the lead's two rulings, held here so a change to either is a change somebody meant. */
+describe('the ruled numbers', () => {
+  it('draws the honest line under 95 in 100 on record and reads awards from a book at 73 or more', () => {
+    expect(BOOK_FULL_SHARE).toBe(95);
+    expect(AWARD_FLOOR).toBe(73);
+    expect(AWARD_FLOOR).toBeLessThan(BOOK_FULL_SHARE);
+  });
+
+  /* The floor's edge, held exactly: no season of any fleet has closed on 73, so without this line a `>`
+   * for the `>=` passed every gate (review r1311-run-m, mutation floorgt). One rival club, a whole book. */
+  it('a whole book on exactly 73 in 100 decides the awards, on 72 it does not, and a late book never does', () => {
+    const at = (named: number, late = false): BoardInput => {
+      const b = late ? { ...openBook(STAMP), r0: 3, b: [], u0: 0 } : openBook(STAMP);
+      b.c.Alpha = { m: { 'Striker A|ST': [named, 0, 0, 0] }, og: 0, u: 100 - named };
+      return { book: b, clubs: [{ club: 'Alpha', gf: 100, place: 1, keeperOnRecord: false }], mine: [], myClub: 'Mine FC', myPlace: 2, ratingOf: () => 0, lineOf: LINE };
+    };
+    expect(bookShare(at(AWARD_FLOOR).book, at(AWARD_FLOOR).clubs).share).toBe(AWARD_FLOOR);
+    expect(bookDecides(at(AWARD_FLOOR))).toBe(true);
+    expect(bookShare(at(AWARD_FLOOR - 1).book, at(AWARD_FLOOR - 1).clubs).share).toBe(AWARD_FLOOR - 1);
+    expect(bookDecides(at(AWARD_FLOOR - 1))).toBe(false);
+    expect(bookDecides(at(100, true))).toBe(false);
+  });
+});
+
+/* Round 1311 step 5: the team of the season, line by line. Another made up league: roles and made up names only. */
+describe('the team of the season', () => {
+  const RATING: Record<string, number> = { 'N Back One': 75, 'N Back Two': 77, 'N Mid One': 70, 'S Mid One': 82, 'N Mid Two': 71, 'S Mid Two': 71, 'S Mid Three': 72 };
+  const TEAM_CLUBS: BoardClub[] = [
+    { club: 'North', gf: 49, place: 1, keeperOnRecord: true },
+    { club: 'South', gf: 44, place: 2, keeperOnRecord: true },
+  ];
+  const TEAM_MINE: BoardMine[] = [
+    { id: 'm-mid', name: 'My Mid', pos: 'CM', rating: 80, apps: 30, goals: 3, assists: 0 },
+    { id: 'm-bench', name: 'My Bench', pos: 'ST', rating: 90, apps: 0, goals: 0, assists: 0 },
+  ];
+  function teamBook(): LeagueBook {
+    const b = openBook('league|team');
+    b.c.North = { m: {
+      'N Keeper|GK': [0, 0, 14, 0], 'N Back One|CB': [3, 1, 14, 0], 'N Back Two|LB': [1, 3, 14, 0], 'N Back Three|RB': [0, 1, 14, 0],
+      'N Mid One|CM': [6, 8, 0, 0], 'N Mid Two|CDM': [1, 2, 0, 0], 'N Striker|ST': [20, 4, 0, 0],
+    }, og: 0, u: 0 };
+    b.c.South = { m: {
+      'S Keeper|GK': [0, 0, 14, 0], 'S Keeper Two|GK': [0, 0, 3, 0], 'S Back One|CB': [2, 2, 9, 0], 'S Back Two|RWB': [0, 1, 9, 0],
+      'S Mid One|CAM': [5, 9, 0, 0], 'S Mid Two|CM': [2, 1, 0, 0], 'S Mid Three|LM': [2, 1, 0, 0], 'S Winger|LW': [11, 6, 0, 1], 'S Striker|CF': [9, 2, 0, 0],
+    }, og: 0, u: 0 };
+    return b;
+  }
+  const teamInput = (b: LeagueBook = teamBook()): BoardInput => ({ book: b, clubs: TEAM_CLUBS, mine: TEAM_MINE, myClub: 'Mine FC', myPlace: 3, ratingOf: (_club, name) => RATING[name] ?? 60, lineOf: LINE });
+
+  it('picks a keeper, four defenders, four midfielders and two forwards by the rule, ties and all', () => {
+    const xi = teamOfSeason(teamInput())!;
+    expect(xi.map(m => m[0])).toEqual([
+      /* the keeper: 14 apiece, North is higher in the table */
+      'N Keeper',
+      /* four on four goals plus assists: South's keepers kept 17, North's 14; level clubs go on rating; then one on one, South's sheets again */
+      'S Back One', 'N Back Two', 'N Back One', 'S Back Two',
+      /* fourteen apiece go on rating; then three apiece on rating (a fifth on three, level on 71, is left out) */
+      'S Mid One', 'N Mid One', 'My Mid', 'S Mid Three',
+      'N Striker', 'S Winger',
+    ]);
+    expect(xi.find(m => m[0] === 'My Mid')![3]).toBe(2);
+    expect(xi.find(m => m[0] === 'S Winger')![3]).toBe(1);
+    expect(xi.map(m => LINE(m[2]))).toEqual(['GK', 'DEF', 'DEF', 'DEF', 'DEF', 'MID', 'MID', 'MID', 'MID', 'ATT', 'ATT']);
+  });
+
+  it('names no team when a line cannot be filled, and never pads one', () => {
+    const b = teamBook();
+    delete b.c.North.m['N Back Three|RB'];
+    delete b.c.South.m['S Back Two|RWB'];
+    expect(teamOfSeason(teamInput(b))).toBeNull();
+    const c = teamBook();
+    /* No keeper kept a clean sheet: no team either. */
+    for (const club of Object.values(c.c)) for (const [k, row] of Object.entries(club.m)) if (k.endsWith('|GK')) row[2] = 0;
+    expect(teamOfSeason(teamInput(c))).toBeNull();
+  });
+
+  it('carries the team in the season\'s awards, and the awards survive a JSON round trip', () => {
+    const aw = seasonAwards(teamInput())!;
+    expect(aw.xi).toEqual(teamOfSeason(teamInput()));
+    expect(aw.cov).toBe(100);
+    expect(JSON.parse(JSON.stringify(aw))).toEqual(aw);
+    expect(TEAM_LINES).toEqual({ DEF: 4, MID: 4, ATT: 2 });
+    expect(TEAMS_KEPT).toBe(5);
   });
 });
