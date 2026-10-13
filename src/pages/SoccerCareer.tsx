@@ -4082,13 +4082,15 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
         <div className="flex items-center gap-2 ml-auto">
           {/* Round 159: his note, "the retire and new career buttons on my
               career are way too small". Real buttons now: bordered, readable,
-              44px tall on touch, still quiet enough not to fight the OVR. */}
+              44px tall on touch, still quiet enough not to fight the OVR.
+              Round 1330: h-11, the 44px this promised (h-10 was 40), now
+              that this Retire is the only one on the hub. */}
           {career.phase !== "retired" && career.phase !== "retirement_ceremony" && career.phase !== "post_retirement" && (
-            <Button onClick={() => setShowRetireConfirm(true)} variant="outline" className="text-xs font-bold px-3 h-10 border-border text-muted-foreground hover:text-red-400 hover:border-red-400/60">
+            <Button onClick={() => setShowRetireConfirm(true)} variant="outline" className="text-xs font-bold px-3 h-11 border-border text-muted-foreground hover:text-red-400 hover:border-red-400/60">
               🚪 Retire
             </Button>
           )}
-          <Button onClick={onNewCareer} variant="outline" className="text-xs font-bold px-3 h-10 border-border text-muted-foreground hover:text-red-400 hover:border-red-400/60">
+          <Button onClick={onNewCareer} variant="outline" className="text-xs font-bold px-3 h-11 border-border text-muted-foreground hover:text-red-400 hover:border-red-400/60">
             🔄 New Career
           </Button>
           <div className="text-center">

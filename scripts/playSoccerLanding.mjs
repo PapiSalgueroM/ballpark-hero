@@ -32,8 +32,9 @@
  *            at 360 by 780 and 375 by 667 (EXTRA_SIZES).
  *            BASE: AGE off screen at 320 in playing.
  *   retire   one Retire control on the youth and playing hub, and it opens
- *            "Retire?"; the retired screen shows no Weekly Wage tile. BASE:
- *            two Retire controls, and the tile.
+ *            "Retire?"; the header's Retire and New Career at least 44 px
+ *            tall; the retired screen shows no Weekly Wage tile. BASE:
+ *            two Retire controls, header buttons 40 px tall, and the tile.
  *   toasts   every page toast raised by Begin Career, a driven career (event
  *            cards, transfer windows, contract and personality cards) and a
  *            phone purchase: at its first visible frame and once settled, a
@@ -484,6 +485,15 @@ async function sectionRetire(ctx, arm, size) {
     const n = await retires.count();
     console.log(`   ${kind}: ${n} Retire control(s)`);
     if (n !== 1) rec(arm, 'retire', size, `${kind}: ${n} Retire controls on the hub`);
+    /* The header's Retire is the hub's only one now, so it and New Career
+       beside it must be the 44 px their Round 159 comment promises. The base
+       arm prints 40 here, which is this check firing on the old h-10. */
+    for (const name of ['🚪 Retire', '🔄 New Career']) {
+      const b = p.getByRole('button', { name, exact: true }).first();
+      const hgt = await b.evaluate(el => el.getBoundingClientRect().height).catch(() => null);
+      console.log(`   ${kind}: "${name}" is ${hgt == null ? 'missing' : `${Math.round(hgt * 10) / 10} px`} tall`);
+      if (hgt == null || hgt < 43.5) rec(arm, 'retire', size, `${kind}: the header's "${name}" is ${hgt == null ? 'missing' : `${Math.round(hgt)} px tall, under 44`}`);
+    }
     if (n >= 1) {
       await retires.first().click({ timeout: 5000 }).catch(() => {});
       const asked = await p.getByText('Retire?', { exact: false }).first().isVisible({ timeout: 3000 }).catch(() => false);
