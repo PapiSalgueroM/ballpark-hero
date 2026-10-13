@@ -1,0 +1,37 @@
+[0s] walk nfl1280: http://localhost:4173/nfl-my-career at 1280x900
+[4s] AUDIT first visit help trunc: Close [1<43]
+[8s] AUDIT prospect help trunc: Your career starts here. [1<179]
+[10s] AUDIT prospect season trunc: Scouts are watching. [1<163]
+[14s] AUDIT prospect showcase trunc: One last look. [1<103]
+[15s] AUDIT prospect draft day trunc: You have done the work. [1<189]
+[17s] AUDIT draft night live trunc: Draft night. [1<88]
+[22s] AUDIT draft night end trunc: This is your moment. [1<159]
+[22s] AUDIT draft night end trunc: Round 1, pick 22, 22 overall. New York Giants take you. [1<424]
+[24s] AUDIT hub draft trunc: With pick 22, the New York Giants select Maximilian Okonkwo-Smith. [182<293]
+[36s] AUDIT tile Inbox s0 trunc: I cried the whole time they said your name. Your little cousins haven' [584<616]
+[71s] AUDIT centre kickoff s1 bad: 0-0
+[78s] AUDIT centre final s1 bad: 1-0
+[84s] AUDIT centre final s1 bad: Away 1-0
+[88s] centre s1: games watched 2, first card 1s, 17s, closed true
+[97s] AUDIT outcome s1 trunc: to [1<13]
+[97s] season 1: hub, seasons on save 0 -> 1, year 2027, ovr 81, team NYG
+[98s] AUDIT hub s1 trunc: House, car, and a monthly transfer that means she gave her notice afte [182<550]
+[107s] AUDIT bank shop small: 🏡 Home 151x29
+[107s] AUDIT bank shop small: 🏎️ Rides 151x29
+[107s] AUDIT bank shop small: 📈 Invest 151x29
+[107s] AUDIT bank shop small: 💪 Body 151x29
+[107s] AUDIT bank shop small: 💎 Flex 151x29
+[107s] AUDIT bank shop small: ❤️ Family 151x29
+[107s] AUDIT bank shop small: $1.2M 57x29
+[107s] AUDIT bank shop small: $3.5M 59x29
+[107s] AUDIT bank shop small: $6M 48x29
+[107s] AUDIT bank shop small: $14M 53x29
+[107s] AUDIT bank shop small: $4M 48x29
+[107s] AUDIT bank shop small: $2.5M 59x29
+[115s] AUDIT tile Inbox s1 trunc: Never miss you on Sundays now that I've got the package. Hip's too bad [584<726]
+[115s] AUDIT tile Inbox s1 trunc: I'm playing the other team's star all week on scout team. Want me to g [584<594]
+[120s] AUDIT practice menu trunc: 📱 Replied to Grandpa: Visit with your jersey. Karma up. [182<240]
+[229s] season 2: hub, seasons on save 1 -> 1, year 2027, ovr 81, team NYG
+[255s] centre again: games watched 2, first card 0s, 17s, closed true
+[256s] DONE nfl1280: seasons 1, events 1, curtains 2, page errors 0, console 1, stuck 1, shots 63
+[256s] CONSOLE warning Warning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.

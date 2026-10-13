@@ -1,0 +1,47 @@
+[0s] walk mlb1280: http://localhost:4173/mlb-my-career at 1280x900
+[4s] AUDIT first visit help trunc: Close [1<43]
+[4s] AUDIT first visit help small: SP 70x28
+[4s] AUDIT first visit help small: RP 70x28
+[4s] AUDIT first visit help small: C 70x28
+[4s] AUDIT first visit help small: 1B 70x28
+[4s] AUDIT first visit help small: 2B 70x28
+[4s] AUDIT first visit help small: 3B 70x28
+[4s] AUDIT first visit help small: SS 70x28
+[4s] AUDIT first visit help small: LF 70x28
+[4s] AUDIT first visit help small: CF 70x28
+[4s] AUDIT first visit help small: RF 70x28
+[4s] AUDIT first visit help small: DH 70x28
+[8s] AUDIT prospect help trunc: Your career starts here. [1<179]
+[10s] AUDIT prospect season trunc: Scouts are watching. [1<163]
+[15s] AUDIT prospect showcase trunc: One last look. [1<103]
+[15s] AUDIT prospect draft day trunc: You have done the work. [1<189]
+[17s] AUDIT draft night live trunc: Draft night. [1<88]
+[22s] AUDIT draft night end trunc: This is your moment. [1<159]
+[22s] AUDIT draft night end trunc: Round 7, pick 27, 207 overall. New York Yankees take you. [1<446]
+[24s] AUDIT hub draft trunc: With pick 207, the New York Yankees select Maximilian Okonkwo-Smith. [182<306]
+[70s] AUDIT centre kickoff s1 bad: 0-0
+[77s] AUDIT centre final s1 bad: Away 0-0
+[85s] AUDIT centre review s1 bad: W 1-0
+[87s] centre s1: games watched 2, first card 1s, 17s, closed true
+[96s] AUDIT outcome s1 trunc: to [1<13]
+[96s] AUDIT event s1 trunc: You skipped the hometown tour and spent the winter in the weight room. [182<617]
+[97s] season 1: hub, seasons on save 0 -> 1, year 2030, ovr 87, team NYY
+[97s] AUDIT hub s1 trunc: Smart, safe, and the closer got the next out anyway. Morale +1. [182<270]
+[104s] AUDIT bank shop small: 🏡 Home 151x29
+[104s] AUDIT bank shop small: 🏎️ Rides 151x29
+[104s] AUDIT bank shop small: 📈 Invest 151x29
+[104s] AUDIT bank shop small: 💪 Body 151x29
+[104s] AUDIT bank shop small: 💎 Flex 151x29
+[104s] AUDIT bank shop small: ❤️ Family 151x29
+[104s] AUDIT bank shop small: $1.5M 57x29
+[104s] AUDIT bank shop small: $4.5M 59x29
+[104s] AUDIT bank shop small: $8M 48x29
+[104s] AUDIT bank shop small: $20M 55x29
+[104s] AUDIT bank shop small: $5M 48x29
+[104s] AUDIT bank shop small: $2M 48x29
+[112s] AUDIT tile Inbox s1 trunc: Haven't heard from you in a while sweetheart. Everything okay out on t [584<591]
+[112s] AUDIT tile Inbox s1 trunc: Watched you on TV last night. Still remember you at 14 refusing to lea [584<594]
+[189s] season 2: hub, seasons on save 1 -> 1, year 2030, ovr 87, team NYY
+[215s] centre again: games watched 2, first card 0s, 17s, closed true
+[216s] DONE mlb1280: seasons 1, events 2, curtains 2, page errors 0, console 1, stuck 1, shots 64
+[216s] CONSOLE warning Warning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.

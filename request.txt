@@ -1,0 +1,6 @@
+#!serve
+#!playwright
+nba1280: SPORT=nba W=1280 H=900 SEED=2101 POS=PG SEASONS=2 MAXMIN=17 TAG=nba1280 node .rc/x/uswalk.mjs
+nfl1280: SPORT=nfl W=1280 H=900 SEED=2202 POS=QB SEASONS=2 MAXMIN=17 TAG=nfl1280 node .rc/x/uswalk.mjs
+mlb1280: SPORT=mlb W=1280 H=900 SEED=2303 POS=CF SEASONS=2 MAXMIN=17 TAG=mlb1280 node .rc/x/uswalk.mjs
+nhl1280: SPORT=nhl W=1280 H=900 SEED=2404 POS=D SEASONS=2 MAXMIN=17 TAG=nhl1280 node .rc/x/uswalk.mjs
