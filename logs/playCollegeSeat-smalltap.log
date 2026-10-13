@@ -1,0 +1,71 @@
+   cfb-dynasty-320: navigations after load ["http://localhost:4173/cfb-dynasty","http://localhost:4173/cfb-dynasty"]
+  FAIL [S2] cfb-dynasty-320 station 2 card: seat buttons under 44 px: Back 24.0px |  28.0px
+  FAIL [S2] cfb-dynasty-320 station 2 rules: seat buttons under 44 px: Back 24.0px
+   cfb-dynasty-320 first press: tile top 307 to 307, slot 92 to 92, tabs under it 415 to 415, Play top 778 to 666 (the round's feed above it changes length, as it always has), scrollY 601 to 738
+  FAIL [S3] cfb-dynasty-320 station 3 offer: seat buttons under 44 px: Take the ask 26.0px | Not now 26.0px
+   cfb-dynasty-320 older save: slot 144 / 144 / 92, Play top 660 / 660 / 608
+  FAIL [S3] cfb-dynasty-320: the slot changed height between its states
+  FAIL [S3] cfb-dynasty-320: Not now or Take the ask moved the Play button
+  FAIL [S5] cfb-dynasty-320 station 5: seat buttons under 44 px: See who calls 28.0px
+  FAIL [S6] cfb-dynasty-320 station 6: seat buttons under 44 px: Take the job 28.0px | Sit the year out 30.0px | Start a new dynasty 30.0px
+  FAIL [S8] cfb-dynasty-320 station 8: seat buttons under 44 px: Go to Oregon 28.0px | Stay put 30.0px
+   cfb-dynasty-390: navigations after load ["http://localhost:4173/cfb-dynasty","http://localhost:4173/cfb-dynasty"]
+  FAIL [S2] cfb-dynasty-390 station 2 card: seat buttons under 44 px: Back 24.0px |  28.0px
+  FAIL [S2] cfb-dynasty-390 station 2 rules: seat buttons under 44 px: Back 24.0px
+   cfb-dynasty-390 first press: tile top 273 to 273, slot 92 to 92, tabs under it 381 to 381, Play top 712 to 616 (the round's feed above it changes length, as it always has), scrollY 539 to 539
+  FAIL [S3] cfb-dynasty-390 station 3 offer: seat buttons under 44 px: Take the ask 26.0px | Not now 26.0px
+   cfb-dynasty-390 older save: slot 144 / 144 / 92, Play top 610 / 610 / 558
+  FAIL [S3] cfb-dynasty-390: the slot changed height between its states
+  FAIL [S3] cfb-dynasty-390: Not now or Take the ask moved the Play button
+  FAIL [S5] cfb-dynasty-390 station 5: seat buttons under 44 px: See who calls 28.0px
+  FAIL [S6] cfb-dynasty-390 station 6: seat buttons under 44 px: Take the job 28.0px | Sit the year out 30.0px | Start a new dynasty 30.0px
+  FAIL [S8] cfb-dynasty-390 station 8: seat buttons under 44 px: Go to Oregon 28.0px | Stay put 30.0px
+   cfb-dynasty-1280: navigations after load ["http://localhost:4173/cfb-dynasty","http://localhost:4173/cfb-dynasty"]
+  FAIL [S2] cfb-dynasty-1280 station 2 card: seat buttons under 44 px: Back 24.0px |  28.0px
+  FAIL [S2] cfb-dynasty-1280 station 2 rules: seat buttons under 44 px: Back 24.0px
+   cfb-dynasty-1280 first press: tile top 219 to 219, slot 76 to 76, tabs under it 311 to 311, Play top 558 to 510 (the round's feed above it changes length, as it always has), scrollY 177 to 177
+  FAIL [S3] cfb-dynasty-1280 station 3 offer: seat buttons under 44 px: Take the ask 26.0px | Not now 26.0px
+   cfb-dynasty-1280 older save: slot 144 / 144 / 76, Play top 520 / 520 / 452
+  FAIL [S3] cfb-dynasty-1280: the slot changed height between its states
+  FAIL [S3] cfb-dynasty-1280: Not now or Take the ask moved the Play button
+  FAIL [S6] cfb-dynasty-1280 station 6: seat buttons under 44 px: Take the job 28.0px | Sit the year out 30.0px | Start a new dynasty 30.0px
+  FAIL [S8] cfb-dynasty-1280 station 8: seat buttons under 44 px: Go to Oregon 30.0px | Stay put 30.0px
+   cbb-dynasty-320: navigations after load ["http://localhost:4173/cbb-dynasty","http://localhost:4173/cbb-dynasty"]
+  FAIL [S2] cbb-dynasty-320 station 2 card: seat buttons under 44 px: Back 24.0px |  28.0px
+  FAIL [S2] cbb-dynasty-320 station 2 rules: seat buttons under 44 px: Back 24.0px
+   cbb-dynasty-320 first press: tile top 257 to 257, slot 92 to 92, tabs under it 365 to 365, Play top 708 to 612 (the round's feed above it changes length, as it always has), scrollY 531 to 684
+  FAIL [S3] cbb-dynasty-320 station 3 offer: seat buttons under 44 px: Take the ask 26.0px | Not now 26.0px
+   cbb-dynasty-320 older save: slot 144 / 144 / 92, Play top 590 / 590 / 538
+  FAIL [S3] cbb-dynasty-320: the slot changed height between its states
+  FAIL [S3] cbb-dynasty-320: Not now or Take the ask moved the Play button
+  FAIL [S5] cbb-dynasty-320 station 5: seat buttons under 44 px: See who calls 28.0px
+  FAIL [S6] cbb-dynasty-320 station 6: seat buttons under 44 px: Sit the year out 30.0px | Start a new dynasty 30.0px
+  FAIL [S8] cbb-dynasty-320 station 8: seat buttons under 44 px: Go to Gonzaga 28.0px | Stay put 30.0px
+   cbb-dynasty-390: navigations after load ["http://localhost:4173/cbb-dynasty","http://localhost:4173/cbb-dynasty"]
+  FAIL [S2] cbb-dynasty-390 station 2 card: seat buttons under 44 px: Back 24.0px |  28.0px
+  FAIL [S2] cbb-dynasty-390 station 2 rules: seat buttons under 44 px: Back 24.0px
+   cbb-dynasty-390 first press: tile top 257 to 257, slot 92 to 92, tabs under it 365 to 365, Play top 660 to 596 (the round's feed above it changes length, as it always has), scrollY 507 to 507
+  FAIL [S3] cbb-dynasty-390 station 3 offer: seat buttons under 44 px: Take the ask 26.0px | Not now 26.0px
+   cbb-dynasty-390 older save: slot 144 / 144 / 92, Play top 574 / 574 / 522
+  FAIL [S3] cbb-dynasty-390: the slot changed height between its states
+  FAIL [S3] cbb-dynasty-390: Not now or Take the ask moved the Play button
+  FAIL [S5] cbb-dynasty-390 station 5: seat buttons under 44 px: See who calls 28.0px
+  FAIL [S6] cbb-dynasty-390 station 6: seat buttons under 44 px: Sit the year out 30.0px | Start a new dynasty 30.0px
+  FAIL [S8] cbb-dynasty-390 station 8: seat buttons under 44 px: Go to Gonzaga 28.0px | Stay put 30.0px
+   cbb-dynasty-1280: navigations after load ["http://localhost:4173/cbb-dynasty","http://localhost:4173/cbb-dynasty"]
+  FAIL [S2] cbb-dynasty-1280 station 2 card: seat buttons under 44 px: Back 24.0px |  28.0px
+  FAIL [S2] cbb-dynasty-1280 station 2 rules: seat buttons under 44 px: Back 24.0px
+   cbb-dynasty-1280 first press: tile top 219 to 219, slot 76 to 76, tabs under it 311 to 311, Play top 522 to 506 (the round's feed above it changes length, as it always has), scrollY 145 to 145
+  FAIL [S3] cbb-dynasty-1280 station 3 offer: seat buttons under 44 px: Take the ask 26.0px | Not now 26.0px
+   cbb-dynasty-1280 older save: slot 144 / 144 / 76, Play top 500 / 500 / 432
+  FAIL [S3] cbb-dynasty-1280: the slot changed height between its states
+  FAIL [S3] cbb-dynasty-1280: Not now or Take the ask moved the Play button
+  FAIL [S6] cbb-dynasty-1280 station 6: seat buttons under 44 px: Sit the year out 30.0px | Start a new dynasty 30.0px
+  FAIL [S8] cbb-dynasty-1280 station 8: seat buttons under 44 px: Go to Gonzaga 30.0px | Stay put 30.0px
+   /cfb-dynasty reduced motion: {"opacity":"1","transform":"none","running":0}
+   /cbb-dynasty reduced motion: {"opacity":"1","transform":"none","running":0}
+   /cfb-dynasty reduced motion, fired recap: [{"o":"1","t":"none","v":"visible","r":0},{"o":"1","t":"none","v":"visible","r":0},{"o":"1","t":"none","v":"visible","r":0},{"o":"1","t":"none","v":"visible","r":0}]
+   /cfb-dynasty reduced motion, market: [{"o":"1","t":"none","v":"visible","r":0},{"o":"1","t":"none","v":"visible","r":0},{"o":"1","t":"none","v":"visible","r":0}]
+   /cbb-dynasty reduced motion, fired recap: [{"o":"1","t":"none","v":"visible","r":0},{"o":"1","t":"none","v":"visible","r":0},{"o":"1","t":"none","v":"visible","r":0},{"o":"1","t":"none","v":"visible","r":0}]
+   /cbb-dynasty reduced motion, market: [{"o":"1","t":"none","v":"visible","r":0}]
+playCollegeSeat CONTROL smalltap FIRED: the 44 px check went red (red: S2 (12), S3 (18), S5 (4), S6 (6), S8 (6))
