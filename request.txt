@@ -1,0 +1,1 @@
+probe: node .rc/x/probeOwnGoals.mjs && node_modules/.bin/vitest run src/test/zzProbeOwnGoals.test.tsx --testTimeout=300000 --hookTimeout=240000 2>&1 | grep -E "PROBE|Tests " | head -8
