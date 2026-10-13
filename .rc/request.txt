@@ -1,0 +1,8 @@
+simCareerProgramme: node scripts/simCareerProgramme.mjs
+simSoccerVeteranOffers: node scripts/simSoccerVeteranOffers.mjs
+simSoccerVeteranTalks: node scripts/simSoccerVeteranTalks.mjs
+simCareerPressMarket: node scripts/simCareerPressMarket.mjs
+simCareerTransferBrief: node scripts/simCareerTransferBrief.mjs
+simSoccerAgentReview: node scripts/simSoccerAgentReview.mjs
+simSoccerFarewell: node scripts/simSoccerFarewell.mjs
+simSoccerInternationalReturn: node scripts/simSoccerInternationalReturn.mjs
