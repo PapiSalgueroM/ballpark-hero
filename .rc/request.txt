@@ -1,0 +1,7 @@
+#!serve
+#!playwright
+hostile390: W=390 H=844 node .rc/x/hostile.mjs
+nfllong: SPORT=nfl W=390 H=844 SEED=5202 POS=RB ROAD=0 CENTRE=0 FAST=1 SEASONS=25 MAXMIN=16 SHOTMAX=40 TAG=nfllong node .rc/x/uswalk3.mjs
+nbalong: SPORT=nba W=390 H=844 SEED=5101 POS=SF CENTRE=0 FAST=1 DECLINE=1 SEASONS=25 MAXMIN=16 SHOTMAX=40 TAG=nbalong node .rc/x/uswalk3.mjs
+mlblong: SPORT=mlb W=390 H=844 SEED=5303 POS=1B CENTRE=0 FAST=1 DECLINE=1 SEASONS=25 MAXMIN=16 SHOTMAX=40 TAG=mlblong node .rc/x/uswalk3.mjs
+nhllong: SPORT=nhl W=390 H=844 SEED=5404 POS=LW ROAD=0 CENTRE=0 FAST=1 SEASONS=25 MAXMIN=16 SHOTMAX=40 TAG=nhllong node .rc/x/uswalk3.mjs
