@@ -1,0 +1,4 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+worldtruth: node scripts/simSoccerWorldTruth.mjs
+ctl-summer: WORLD_TRUTH_CONTROL=summer node scripts/simSoccerWorldTruth.mjs
+simPhone2: node scripts/simPhone2.mjs
