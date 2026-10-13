@@ -1,0 +1,6 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-seat: node_modules/.bin/vitest run src/components/college-dynasty src/components/cfb-dynasty src/components/cbb-dynasty src/lib/collegeSeat.test.ts --testTimeout=300000 --hookTimeout=120000
+simCollegeDynastyBoard: node scripts/simCollegeDynastyBoard.mjs
+simCollegeSeat: node scripts/simCollegeSeat.mjs
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
