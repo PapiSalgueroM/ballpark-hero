@@ -56,6 +56,12 @@
  *      newspaper and one in a transfer window load here (JSON, repairCareer)
  *      and every choice answers without a throw, keeps the ledger's shape and
  *      adds no save field; an old card 17 records the debut year and age.
+ *   8  THE INVERSE. scripts/lib/careerDeckFair1327.mjs applied in order to
+ *      this engine gives the base's engine byte for byte (sha256 printed and
+ *      asserted), and every hunk of the diff against the base sits inside
+ *      the regions the brief gives this round (the imports, the dilemma
+ *      comment, pickN, generateNewsArticles, the 40 inline cards, the new
+ *      helpers and generateRandomEvents).
  *
  * MEASURED: see docs/audits/ROUND-1327-NOTES.md, updated every step.
  *
@@ -70,6 +76,7 @@
  *   poscode    the paper prints the raw position code: section 6.
  *   prefix     one extra Math.random call in the youth year: section 7.
  *   olddebut   an old card 17 no longer records the debut: section 7.
+ *   outside    one constant of the transfer market changes: section 8.
  *
  * Run: node scripts/simSoccerDeckFairness.mjs [careers]   (default 200, so 500)
  *      SEED_OFFSET=1 node scripts/simSoccerDeckFairness.mjs   another draw
@@ -80,9 +87,11 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
-import { execFileSync } from 'node:child_process';
+import { execFileSync, spawnSync } from 'node:child_process';
+import { createHash } from 'node:crypto';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import * as esbuild from 'esbuild';
+import { inverseDeckFair, DECK_FAIR_ADDITIONS, DECK_FAIR_BASE_SHA256 } from './lib/careerDeckFair1327.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 /* The tree this round was cut from. Section 7 bundles it from git. */
@@ -128,6 +137,8 @@ const CONTROLS = {
     edits: [[YOUTH, YOUTH.replace('\n', '\n  Math.random();\n')]] },
   olddebut: { breaks: '7', note: 'an old card 17 answered from a save no longer records the debut',
     edits: [['s.intStats = { ...s.intStats, debutYear: eventSeasonIndex(s), debutAge: s.age }; ', '']] },
+  outside: { breaks: '8', note: 'one constant of the transfer market changes, outside this round\'s hunks',
+    edits: [['export const LEAGUE_DRAW_CAP = 5;', 'export const LEAGUE_DRAW_CAP = 6;']] },
 };
 if (CONTROL && !CONTROLS[CONTROL]) { console.error(`SIM_SOCCER_DECK_FAIRNESS_CONTROL=${CONTROL} is not a control this harness knows`); process.exit(1); }
 let controlSource = null;
@@ -485,7 +496,7 @@ const paperCase = () => {
   if (!has(HALF) || !has(ONE)) fail('the two stories this section reads are gone from the table');
   let half = 0, one = 0, other = 0;
   for (let t = 0; t < TRIALS; t += 1) {
-    const out = E.__r1327News({ ...s, playerName: `Paper ${t}` }, season, 50, 200);
+    const out = E.__r1327News({ ...s, playerName: `Paper ${t + SEED_OFFSET}` }, season, 50, 200);
     const story = out.filter(a => !a.headline.startsWith('THE COLUMN'));
     if (story.length !== 1) { fail(`a paper with the column printed ${story.length} stories, not 1`); break; }
     if (story[0].headline.includes(HALF)) half += 1; else if (story[0].headline.includes(ONE)) one += 1; else other += 1;
@@ -724,6 +735,49 @@ console.log('7) Before the first paper or deck nothing moves; saves the base wro
     catch (err) { fail(`a ${name} the base wrote throws here: ${err.message}`); }
   }
   console.log(`   ${answered} old saved screens answered here (every choice of cards ${GATED.join(', ')}, a newspaper, a transfer window)`);
+}
+
+/* ─── 8. the inverse, and where the round edits the engine ─────────────── */
+
+SECTION = '8';
+console.log('8) The seventh inverse gives the base\'s engine back byte for byte, and every change sits in this round\'s hunks');
+{
+  const sha = t => createHash('sha256').update(t).digest('hex');
+  const baseText = execFileSync('git', ['show', `${BASE}:${ENGINE}`], { cwd: ROOT, encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 }).replace(/\r\n/g, '\n');
+  const headText = ENGINE_SOURCE;
+  const receipt = [];
+  let back = null;
+  try { back = inverseDeckFair(ENGINE, headText, receipt); } catch (err) { fail(`the inverse does not apply: ${err.message}`); }
+  console.log(`   head ${sha(headText)}; inverse applied ${receipt.length} of ${DECK_FAIR_ADDITIONS.length} rows`);
+  console.log(`   base ${sha(baseText)} (module says ${DECK_FAIR_BASE_SHA256}); inverse gives ${back === null ? 'nothing' : sha(back)}`);
+  if (sha(baseText) !== DECK_FAIR_BASE_SHA256) fail('the base this harness reads is not the base the inverse was written for');
+  if (back !== null && sha(back) !== sha(baseText)) fail('the inverse applied to this engine does not give the base\'s engine byte for byte');
+  /* the hunks: each must sit in one of decision 1's regions of the head file */
+  const lines = headText.split('\n');
+  const lineOf = (needle, from = 0) => { const i = lines.findIndex((l, k) => k >= from && l.includes(needle)); return i < 0 ? -1 : i + 1; };
+  const regions = [
+    ['the imports', 1, lineOf('export interface ClubData {')],
+    ['the dilemma comment', lineOf('function tryTriggerMoralDilemma('), lineOf('const second = MORAL_DILEMMAS.find(d => d.id === "mafia_second_ask");')],
+    ['pickN', lineOf('export function pickAcrossLeagues('), lineOf('/* ─── Club helpers ─── */')],
+    ['generateNewsArticles', lineOf('function generateNewsArticles('), lineOf('/* ─── Dismiss newspaper ─── */')],
+    ['the 40 inline cards', lineOf('export function getAllEvents('), lineOf('    ...getExtraEvents(state),')],
+    ['the helpers and generateRandomEvents', lineOf('export function isEventOnCooldown('), lineOf('/* ─── UCL Simulation ─── */')],
+  ];
+  if (regions.some(r => r[1] < 1 || r[2] <= r[1])) fail(`a region of decision 1 was not found in the head: ${regions.map(r => `${r[0]} ${r[1]} to ${r[2]}`).join('; ')}`);
+  const dir = fs.mkdtempSync(path.join(TMP, 'hunks-'));
+  fs.writeFileSync(path.join(dir, 'base.ts'), baseText);
+  fs.writeFileSync(path.join(dir, 'head.ts'), headText);
+  const diff = spawnSync('git', ['diff', '--no-index', '-U0', '--no-color', path.join(dir, 'base.ts'), path.join(dir, 'head.ts')], { encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 }).stdout || '';
+  let hunks = 0;
+  for (const m of diff.matchAll(/^@@ -\d+(?:,\d+)? \+(\d+)(?:,(\d+))? @@/gm)) {
+    hunks += 1;
+    const start = Number(m[1]), count = m[2] === undefined ? 1 : Number(m[2]);
+    const last = count === 0 ? start : start + count - 1;
+    const home = regions.find(r => start >= r[1] && last <= r[2]);
+    if (!home) fail(`the engine changes at head lines ${start} to ${last}, outside every hunk this round may edit`);
+  }
+  console.log(`   ${hunks} diff hunks against the base, each checked against ${regions.length} regions`);
+  if (hunks === 0 && !CONTROL) fail('no diff hunks against the base: this harness is reading the base');
 }
 
 /* ─── verdict ──────────────────────────────────────────────────────────── */
