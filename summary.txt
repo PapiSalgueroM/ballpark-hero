@@ -1,0 +1,6 @@
+build exit=0 35s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+fit1-scrollbox-EXPECT-RED exit=1 46s | Shots and part1.json: /home/runner/work/_temp/rc-out/files/shots
+fit1-oldgrid-EXPECT-RED exit=1 47s | Shots and part1.json: /home/runner/work/_temp/rc-out/files/shots
+fit1 exit=0 82s | Shots and part1.json: /home/runner/work/_temp/rc-out/files/shots
+fit1-truncate-EXPECT-RED exit=1 45s | Shots and part1.json: /home/runner/work/_temp/rc-out/files/shots
+fit1-smalltap-EXPECT-RED exit=1 45s | Shots and part1.json: /home/runner/work/_temp/rc-out/files/shots
