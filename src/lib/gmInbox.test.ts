@@ -8,6 +8,7 @@ import { GM_INBOX_PACKS } from '@/data/gmInbox';
 import { keyedRng } from './keyedRng';
 import { gmNeutralIndex, gmPackProblems, gmSubjectKey } from './gmInbox';
 import type { GmEventDef } from './gmInbox';
+import { onCooldown } from './careerEventDeck';
 
 interface Desk extends GmInboxHost {
   trust: number; fans: number; cash: number; year: number; recruit: number;
@@ -336,5 +337,46 @@ describe('gmInbox deck rules', () => {
     expect(gmNeutralIndex([c({ karma: 2 }), c({}), c({ cash: 1 })])).toBe(1);
     expect(gmNeutralIndex([c({ out: { who: 'star', weeks: 0 } })])).toBe(0);
     expect(gmNeutralIndex([c({ morale: 1 }), c({ recruit: 2 }), c({ rating: { who: 'star', delta: 1 } })])).toBe(-1);
+  });
+
+  it('a wording is picked with no deck draw, and the same key reads the same words', () => {
+    const e = card('w', { texts: ['Second.', 'Third.'] });
+    const words = (key: string, clock: number) => {
+      const r = stream([0, 0]);
+      const seat = { ...seatFor(deck([e])), keyOf: () => key };
+      const [m] = gmInboxWeek(desk(), seat, 'a', {}, clock, r.f);
+      expect(r.calls()).toBe(2);
+      return m.text;
+    };
+    const seen = new Set<string>();
+    for (let clock = 0; clock < 40; clock++) {
+      const t = words('save-1', clock);
+      expect(words('save-1', clock)).toBe(t);
+      seen.add(t);
+    }
+    expect([...seen].sort()).toEqual(['Second.', 'Third.', 'w.']);
+    const run = (key: string) => Array.from({ length: 40 }, (_, c) => words(key, c));
+    expect(run('save-1')).not.toEqual(run('save-2'));
+  });
+
+  it('the season clock holds a card out exactly while careerEventDeck does', () => {
+    const p = deck([card('a1'), card('a2', { cooldown: 1 }), card('a3', { story: 'arc', cooldown: 3 }), card('a4', { story: 'arc' })],
+      { clock: 'season', cooldown: 2 });
+    for (let season = 0; season < 12; season++) {
+      for (const at of [undefined, 0, 3, 5, 8, 11]) {
+        const ledger: Record<string, number> = at === undefined ? {} : { a1: at, a2: at, 'story:arc': at };
+        const want = p.events.filter(e => !onCooldown(ledger, e, season, p.cooldown)).map(e => e.id);
+        expect(gmEligible(p, 'a', {}, [], ledger, season).map(e => e.id)).toEqual(want);
+      }
+    }
+    /* The two clocks differ by one on purpose: back after 2 weeks, or sits out 2 seasons. */
+    expect(gmEligible({ ...p, clock: undefined }, 'a', {}, [], { a1: 0 }, 2).map(e => e.id)).toContain('a1');
+    expect(gmEligible(p, 'a', {}, [], { a1: 0 }, 2).map(e => e.id)).not.toContain('a1');
+    expect(gmEligible(p, 'a', {}, [], { a1: 0 }, 3).map(e => e.id)).toContain('a1');
+  });
+
+  it('the validator names an empty wording and a clock that is neither', () => {
+    expect(gmPackProblems(deck([card('t', { texts: ['Fine.', ''] })])).join(' ')).toMatch(/empty wording/);
+    expect(gmPackProblems(deck([card('t')], { clock: 'month' as 'week' })).join(' ')).toMatch(/neither week nor season/);
   });
 });

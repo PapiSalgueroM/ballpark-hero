@@ -60,3 +60,38 @@ Files this round owns: src/lib/gmInbox.ts, src/lib/gmInbox.test.ts, scripts/simG
   1.00 with 8,151 story breaks; FX_SUBJECT 13,343 subject cards, book never above 5 entries, the rest control 26,968
   breaks.
 - Engine size: 17,298 bytes LF (17,663 CRLF, the brief's measure) before; 23,124 LF (23,603 CRLF) after (b).
+
+### Step (b) proof on a runner (rc r1324-b, head aa199fc1)
+
+- tsc exit 0 (97 s); vitest of gmInbox.test.ts and GmInboxPanel.test.tsx exit 0, 2 files, 35 tests passed.
+- simEventDeck exit 0 (48.2 s), `simEventDeck: green.`; controls: replay exit 1 (red sections 1, 3; section 3's equal
+  weight rows are compared with the recording too), weightoff exit 1 (red section 3), story exit 1 (red section 4), rest
+  exit 1 (red section 5). Every control's closing line says it fired; none aborted.
+- simGmInbox at SEED 1, 2 and 3 on the head printed every line the same as on the base 8fea14e2 (`gmcmp`, a worktree
+  of the base on the runner, `diff` of the whole output), each `simGmInbox: green.`; its twelve controls each exit 1
+  with a closing failure line (quote 3, flip 2, cool 8, drift 1, never 1, random 1, shift 1, opencap 1, maxcap 3,
+  oneshot 2, ungate 1, unclamp 1 failures).
+- simCareerInbox exit 0, its privatecap control exit 1; simHarnessAnchors, simNoRivalNames, simNoInventedQuotes,
+  simNoInventedConduct and simInventedNames exit 0.
+
+## Step (c): keyOf, texts and the season clock
+
+- `keyOf` (3.3.4) is an optional field of the binding, passed to the seat as is; absent reads as ''.
+- `texts` (3.3.5): wording 0 is `text`, `texts` add 1 to n; the pick is one value of `keyedRng` on
+  `<save key>|<card id>|<year>|<clock>` times (1 + n), floored, so the deck's rng is never touched. The picked words
+  are saved whole in `text` (today's shape, immune to a later edit of a variant list, advice 26). gmInbox imports
+  keyedRng directly; careerInbox already imports it, so the module graph gains nothing by it, and the only new module
+  in gmInbox's graph is careerEventDeck.ts (decision 6).
+- `clock: 'season'` (3.3.7): the cooldown test is careerEventDeck's `onCooldown(last, card, season, pack.cooldown)`
+  (held while season minus last is at most the cooldown); the week clock keeps gmInbox's own comparison, so the two
+  clocks differ by one on purpose. Everything else counts in the pack's own ticks; `perWeek` means per tick (its
+  comment says so).
+- gmPackProblems also names an empty wording and a clock that is neither week nor season.
+- simGmInbox section 1 scans every wording like a text (quote marks, first person, placeholders, real names, conduct)
+  and fails any wording, text included, that prints a meter word next to a signed number. New controls
+  `quotevariant` (the brief's) and `effectvariant` (added so the effect check has a control of its own). The string
+  floor is unchanged: no GM pack has wordings, so the count stays 389.
+- Measured (kit, seeds 1 to 10): FX_TEXTS wording ratios to an even share 0.915 to 1.053, band 0.865 to 1.1;
+  with and without wordings the same 15,517 deals and 60,001 deck draws at seed 1; another key reads other words on
+  6,483 weeks of the same deal. FX_SEASON: 3,336 of 12,000 cards held out, zero disagreements with onCooldown.
+  Controls on this PC (shard afl): textrng red section 6, seasonweek red section 9 (864 disagreements).

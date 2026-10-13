@@ -41,6 +41,15 @@
         400 weeks: no subject inside its rest or twice in a week, the rest
         book never holds a finished rest or more than one window's deals;
         subjectRest 0 deals exactly as no subjects.
+     6) TEXTS. FX_TEXTS (cards of 2 and 4 wordings): the same deals and deck
+        draws with and without wordings, the same key reads the same words,
+        another key other words with the same deal, and every wording comes
+        up at a measured share of its card's deals.
+     9) SEASON CLOCK. FX_SEASON over 2,000 random ledgers and seasons: the
+        season deck holds out exactly what careerEventDeck's onCooldown holds
+        out (and onCooldown its own written rule); a cooldown of N is back
+        after exactly N weeks on the week clock and sits out N seasons on the
+        season clock.
 
    No board binds gmInbox yet (the importers are its own test, the packs, the
    panel and two harnesses), so every drive here is a synthetic desk: each
@@ -55,6 +64,9 @@
      weightoff  the draw ignores weights; section 3 fails.
      story      the book key ignores the story; section 4 fails.
      rest       the subject rest test always passes; section 5 fails.
+     textrng    the wording drawn from the deck's rng; section 6 fails (and 1
+                would, if a recorded pack had wordings).
+     seasonweek the season pack uses the week comparison; section 9 fails.
 
    Run: node scripts/simEventDeck.mjs
         SIM_EVENT_DECK_SHARD=nfl runs one seat's rows of section 1 only. */
@@ -73,7 +85,7 @@ const CONTROL = process.env.EVENT_DECK_CONTROL || '';
 const RECORD = process.env.SIM_EVENT_DECK_RECORD || '';
 const SHARD = process.env.SIM_EVENT_DECK_SHARD || '';
 const REPLAY_FILE = path.join(ROOT, 'scripts/data/gmInboxReplay.json');
-const CONTROLS = ['replay', 'weightoff', 'story', 'rest'];
+const CONTROLS = ['replay', 'weightoff', 'story', 'rest', 'textrng', 'seasonweek'];
 if (CONTROL && !CONTROLS.includes(CONTROL)) { console.error(`EVENT_DECK_CONTROL=${CONTROL} is not a control this kit knows`); process.exit(2); }
 if (RECORD && (CONTROL || SHARD)) { console.error('a recording runs the whole replay with no control, refusing'); process.exit(2); }
 const red = new Set();
@@ -99,6 +111,9 @@ const ENGINE_CONTROLS = {
   weightoff: ['const wt = (e: GmEventDef): number => e.weight ?? 1;', 'const wt = (e: GmEventDef): number => 1; /* weightoff control */'],
   story: ['const bookKey = (e: GmEventDef): string => ledgerKey(e);', 'const bookKey = (e: GmEventDef): string => e.id; /* story control */'],
   rest: ['if (r !== undefined && clock - r < restFor) return false;', '/* rest control */'],
+  textrng: ["const pick = alt > 0 ? Math.floor(keyedRng(`${seat.keyOf?.(s) ?? ''}|${e.id}|${year}|${clock}`)() * (1 + alt)) : 0;",
+    'const pick = alt > 0 ? Math.floor(rng() * (1 + alt)) : 0; /* textrng control */'],
+  seasonweek: ["if (pack.clock === 'season') return !onCooldown(last, e, clock, pack.cooldown);", '/* seasonweek control */'],
 };
 let engineSrc = null;
 if (ENGINE_CONTROLS[CONTROL]) {
@@ -117,6 +132,7 @@ const BUNDLE = path.join(tmpDir, 'bundle.mjs');
 fs.writeFileSync(ENTRY, [
   `export * as engine from '${R}/${ENGINE_REL}';`,
   `export { keyedRng } from '${R}/src/lib/keyedRng.ts';`,
+  `export { onCooldown } from '${R}/src/lib/careerEventDeck.ts';`,
   ...PACK_INDEXES.map(([rel, name], i) => `export { ${name} as packs${i} } from '${R}/${rel}';`),
 ].join('\n'));
 /* A control swaps the engine's source in memory, never on disk. */
@@ -502,6 +518,105 @@ console.log('5) Subject rest: no subject inside its rest or twice in a week, the
   else if ('gmInboxRest' in zero.s) fail(5, 'a pack with subjectRest 0 wrote a rest book');
   else ok(`subjectRest 0 deals exactly as no subjects (${zero.log.reduce((n, w) => n + w.got.length, 0)} deals, ${zero.calls()} draws) and writes no book`);
   if (gmStates > 0 && gmGrew === 0) ok(`no GM desk gained gmInboxRest over section 2's ${gmStates} states`);
+}
+
+/* ═══ 6. TEXTS: wordings move no deal, and a key reads the same words ═══ */
+
+console.log('6) Texts: wordings move no deal and no draw, every wording comes up at its share, a key reads the same words');
+{
+  /* The variant counts this section was measured on: 2 and 4 wordings. */
+  const FX_TEXTS = fxPack('fx_texts', [
+    fxCard('pair', { texts: ['The pair matter is back on the desk.'] }),
+    fxCard('quad', { texts: ['Word on the quad matter has come round again.', 'The quad matter needs an answer.', 'The quad matter is on the agenda once more.'] }),
+    fxCard('plain'),
+  ], { chance: 0.5, cooldown: 2 });
+  const PLAIN = { ...FX_TEXTS, events: FX_TEXTS.events.map(({ texts, ...e }) => e) };
+  const TICKS = 20000;
+  const go = (pack, seed, key) => fxRun(pack, `texts|${seed}`, TICKS, { bind: { keyOf: () => key } });
+  const ids = r => r.log.map(w => w.got.map(m => m.id).join(',')).join('|');
+  const words = r => r.log.map(w => w.got.map(m => m.text).join(',')).join('|');
+  const ratios = r => {
+    const out = [];
+    for (const e of FX_TEXTS.events.filter(x => x.texts)) {
+      const all = [e.text, ...e.texts];
+      const got = r.log.flatMap(w => w.got).filter(m => m.defId === e.id);
+      for (const t of all) out.push({ id: e.id, t, ratio: got.filter(m => m.text === t).length / got.length * all.length, n: got.length });
+    }
+    return out;
+  };
+  const a = go(FX_TEXTS, SEED, 'save-A');
+  const plain = go(PLAIN, SEED, 'save-A');
+  if (ids(a) !== ids(plain) || a.calls() !== plain.calls()) fail(6, 'adding wordings moved the deal or the deck draws');
+  else ok(`with and without wordings: the same ${a.log.reduce((n, w) => n + w.got.length, 0)} deals and ${a.calls()} deck draws`);
+  if (words(go(FX_TEXTS, SEED, 'save-A')) !== words(a)) fail(6, 'the same key, card, year and clock read different words');
+  const b = go(FX_TEXTS, SEED, 'save-B');
+  const differ = a.log.filter((w, i) => w.got.map(m => m.text).join() !== b.log[i].got.map(m => m.text).join()).length;
+  if (ids(a) !== ids(b)) fail(6, 'another save key moved the deal');
+  else if (differ === 0) fail(6, 'two save keys read the same words every week: the key is not reaching the wording');
+  else ok(`the same key reads the same words; another key reads other words on ${differ} weeks with the same deal`);
+  /* Each wording's share over its card's deals, as a ratio to the even share
+     (1 is exactly even). Measured 2026-10-13 at seeds 1 to 10 over all six
+     wordings: 0.915 to 1.053 (about 5,000 deals a card a seed). The band is
+     that range widened by about two standard deviations of the four wording
+     card (0.024) a side. */
+  const RATIO = [0.865, 1.1];
+  const rs = ratios(a);
+  const off = rs.filter(r => r.ratio < RATIO[0] || r.ratio > RATIO[1] || r.ratio === 0);
+  for (const r of off) console.error(`     ${r.id} "${r.t.slice(0, 40)}": ${r.ratio.toFixed(3)} of an even share over ${r.n} deals`);
+  if (rs.length !== 6) fail(6, `expected 6 wordings to measure, found ${rs.length}`);
+  if (off.length) fail(6, `${off.length} wordings outside ${RATIO[0]} to ${RATIO[1]} of an even share`);
+  else ok(`every one of the ${rs.length} wordings came up, each at ${Math.min(...rs.map(r => r.ratio)).toFixed(3)} to ${Math.max(...rs.map(r => r.ratio)).toFixed(3)} of an even share (band ${RATIO[0]} to ${RATIO[1]})`);
+  if (MEASURE) {
+    const all = TEN.flatMap(sd => ratios(go(FX_TEXTS, sd, 'save-A')).map(r => r.ratio));
+    console.log(`   measure: wording ratios at seeds 1 to 10: ${Math.min(...all).toFixed(3)} to ${Math.max(...all).toFixed(3)}`);
+  }
+  const withTexts = Object.entries(ALL_PACKS).filter(([, p]) => p.events.some(e => e.texts)).map(([k, p]) => `${k} (${p.events.filter(e => e.texts).map(e => e.texts.length + 1).join(', ')} wordings)`);
+  console.log(`   packs the kit knows that use texts: ${withTexts.length ? withTexts.join('; ') : 'none yet'}`);
+}
+
+/* ═══ 9. SEASON CLOCK: careerEventDeck's rule, and the week rule kept ═══ */
+
+console.log('9) Season clock: a card is held out exactly as careerEventDeck holds it; the week clock is back after exactly N');
+{
+  const FX_SEASON = fxPack('fx_season', [
+    fxCard('s0', { cooldown: 0 }), fxCard('s1', { cooldown: 1 }), fxCard('s3', { cooldown: 3 }), fxCard('sd'),
+    fxCard('arcA', { story: 'arc', cooldown: 4 }), fxCard('arcB', { story: 'arc' }),
+  ], { clock: 'season', cooldown: 2 });
+  const rng = keyedRng(`simEventDeck|season|${SEED}`);
+  const keys = ['s0', 's1', 's3', 'sd', 'story:arc'];
+  let checks = 0;
+  let held = 0;
+  let apart = 0;
+  let unlike = 0;
+  for (let t = 0; t < 2000; t++) {
+    const season = Math.floor(rng() * 20);
+    const ledger = {};
+    for (const k of keys) if (rng() < 0.7) ledger[k] = season - 8 + Math.floor(rng() * 10);
+    const got = new Set(E.gmEligible(FX_SEASON, 'a', {}, [], ledger, season).map(e => e.id));
+    for (const e of FX_SEASON.events) {
+      const deck = B.onCooldown(ledger, e, season, FX_SEASON.cooldown);
+      const at = ledger[e.story ? `story:${e.story}` : e.id];
+      const literal = at !== undefined && season - at <= (e.cooldown ?? FX_SEASON.cooldown);
+      checks++;
+      if (deck) held++;
+      if (got.has(e.id) === deck) apart++;
+      if (deck !== literal) unlike++;
+    }
+  }
+  if (held < checks / 10) fail(9, `only ${held} of ${checks} cards held out: the ledgers are too thin to test anything`);
+  if (unlike) fail(9, `careerEventDeck's onCooldown disagreed with its own written rule ${unlike} times`);
+  if (apart) fail(9, `the season deck and careerEventDeck disagreed on ${apart} of ${checks} cards`);
+  else ok(`2,000 random ledgers and seasons: the season deck held out exactly what careerEventDeck holds out (${held} of ${checks} cards)`);
+  const dealtAt = (pack, key, ticks) => fxRun(pack, key, ticks).log.filter(w => w.got.length).map(w => w.clock).join(',');
+  const wrong = [];
+  for (const N of [1, 2, 3, 5]) {
+    const week = dealtAt(fxPack('fx_week', [fxCard('w', { cooldown: N })], { cooldown: N }), `week|${N}`, 3 * N + 1);
+    if (week !== [0, N, 2 * N, 3 * N].join(',')) wrong.push(`week clock, cooldown ${N}: dealt at ${week}`);
+    const seas = dealtAt(fxPack('fx_seasons', [fxCard('w', { cooldown: N })], { cooldown: N, clock: 'season' }), `seasons|${N}`, 3 * (N + 1) + 1);
+    if (seas !== [0, N + 1, 2 * N + 2, 3 * N + 3].join(',')) wrong.push(`season clock, cooldown ${N}: dealt at ${seas}`);
+  }
+  if (wrong.length) fail(9, wrong.join('; '));
+  else ok('a cooldown of N is back after exactly N weeks on the week clock and sits out exactly N seasons on the season clock');
 }
 
 /* ═══ end ═══ */
