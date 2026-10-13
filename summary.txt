@@ -1,0 +1,6 @@
+tsc exit=0 55s | 
+c-awardthin exit=1 46s | simCmLeagueBook: CONTROL awardthin FIRED: section awards went red (4 failures), with oldsave as it must and no other section did (46s)
+c-bookleak-plain exit=1 109s | simCmLeagueBook: CONTROL bookleak FIRED: section facts went red (1 failures), with shapes, thin as it must and no other section did (109s)
+c-teamsheets-plain exit=1 112s | simCmLeagueBook: CONTROL teamsheets FIRED: section awards went red (1 failures) and no other section did (112s)
+anchors exit=0 28s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+book-plain exit=0 40s | simCmLeagueBook: green, 11 sections, 5 careers x 2 seasons (40s)
