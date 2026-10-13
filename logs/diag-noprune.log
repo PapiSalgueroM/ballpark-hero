@@ -1,0 +1,17 @@
+fxmut: the rollover prune taken out
+DIAGNOSTIC observer stop control: one effective after-stop frame, full undo and source bytes held
+DIAGNOSTIC original simClubManagerSaveSize.mjs: exit 0, 45 finished size seasons, 0 slot season frames
+DIAGNOSTIC original simClubManagerSlots.mjs: exit 0, 0 finished size seasons, 65 slot season frames
+DIAGNOSTIC current simClubManagerSaveSize.mjs: exit 0, 45 finished size seasons, 0 slot season frames
+DIAGNOSTIC current simClubManagerSlots.mjs: exit 1, 0 finished size seasons, 65 slot season frames
+DIAGNOSTIC decoded Slots: twenty complete pairs, effective missing-decode rejection and full undo
+DIAGNOSTIC complete: original/current unchanged historical budgets, full raw states, storage and unfiltered action vectors retained
+healthy: total 20, same 20
+fault: total 20, same 5
+current slots season frames: 65 ledger representations: {"absent":12,"packed":183}
+   Everton s14 packed n118 | Everton s14 packed n118 | Everton s15 packed n127
+   Lincoln City s14 packed n125 | Lincoln City s14 packed n125 | Lincoln City s15 packed n132
+   Barcelona s14 packed n117 | Barcelona s14 packed n117 | Barcelona s15 packed n125
+   Everton s15 packed n127 | Everton s15 packed n127 | Everton s16 packed n136
+   Lincoln City s15 packed n132 | Lincoln City s15 packed n132 | Lincoln City s16 packed n142
+   Barcelona s15 packed n125 | Barcelona s15 packed n125 | Barcelona s16 packed n140

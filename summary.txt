@@ -1,0 +1,2 @@
+diag-head exit=1 207s |    Barcelona s15 packed n5 | Barcelona s15 packed n5 | Barcelona s16 packed n3
+diag-noprune exit=0 230s |    Barcelona s15 packed n125 | Barcelona s15 packed n125 | Barcelona s16 packed n140

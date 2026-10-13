@@ -1,0 +1,40 @@
+DIAGNOSTIC observer stop control: one effective after-stop frame, full undo and source bytes held
+DIAGNOSTIC original simClubManagerSaveSize.mjs: exit 0, 45 finished size seasons, 0 slot season frames
+DIAGNOSTIC original simClubManagerSlots.mjs: exit 0, 0 finished size seasons, 65 slot season frames
+DIAGNOSTIC current simClubManagerSaveSize.mjs: exit 0, 45 finished size seasons, 0 slot season frames
+DIAGNOSTIC current simClubManagerSlots.mjs: exit 0, 0 finished size seasons, 65 slot season frames
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
++ actual - expected
+
++ []
+- [
+-   'decoded-slot-replay'
+- ]
+
+    at digestExpansionControl (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/managerWorldSizeDiagnostic.mjs:330:10)
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/managerWorldSizeDiagnostic.mjs:426:21
+    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)
+    at async node:internal/modules/esm/loader:647:26
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: [],
+  expected: [ 'decoded-slot-replay' ],
+  operator: 'deepStrictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0
+healthy: total 20, same 20
+fault: total 20, same 20
+current slots season frames: 65 ledger representations: {"absent":12,"packed":183}
+   Everton s14 packed n3 | Everton s14 packed n3 | Everton s15 packed n4
+   Lincoln City s14 packed n5 | Lincoln City s14 packed n5 | Lincoln City s15 packed n5
+   Barcelona s14 packed n6 | Barcelona s14 packed n6 | Barcelona s15 packed n5
+   Everton s15 packed n4 | Everton s15 packed n4 | Everton s16 packed n4
+   Lincoln City s15 packed n5 | Lincoln City s15 packed n5 | Lincoln City s16 packed n3
+   Barcelona s15 packed n5 | Barcelona s15 packed n5 | Barcelona s16 packed n3
