@@ -687,7 +687,7 @@ if (runs('4')) {
   if (!(h.rate >= b.rate)) fail(`the quiz is ready in ${r2(h.rate)} of seasons against ${r2(b.rate)} on the base`);
   /* Old saves: careers the base drove to its 2028 world, which still holds real men's moves and a real top
      scorer, read by this tree's quiz (through JSON, the way a save loads). */
-  let olds = 0, realMovesHeld = 0, asked = 0, realAsked = 0, playedOn = 0, threw = 0, phoneFields = 0, movedLeft = 0;
+  let olds = 0, realMovesHeld = 0, asked = 0, realAsked = 0, playedOn = 0, threw = 0, phoneFields = 0, movedLeft = 0, tickless = 0;
   for (let i = 0; i < 40; i += 1) {
     const c = { seed: 70000 + SEED_OFFSET * 100 + i, start: 2021, pos: POSITIONS[i % 10], nation: NATIONS[i % 10], ovr: 60 + (i % 12), pot: 85 };
     const real = Math.random;
@@ -710,9 +710,15 @@ if (runs('4')) {
     Math.random = seeded(c.seed + 7);
     try {
       let t = old;
-      const n0 = t.seasons.length;
-      for (let guard = 0; guard < 80 && t.seasons.length === n0 && !t.retired; guard += 1) { const nx = step(HEAD.engine, t, c.seed); if (!nx) break; t = nx; }
-      if (t.seasons.length > n0) {
+      const n0 = t.seasons.length, y0 = t.phone.world.year;
+      /* Play on until the world has ticked, not just one season: a season that ends in a long injury returns
+         before worldSeasonTick (its one caller in the engine), so its world stays at 2028 with the base's moves
+         still in phone.clubs, and nothing reads them until the next tick re seats every real man. Judging after
+         one season made this check a coin toss (the review's finding 1: red at seed offsets 5 to 9, every time
+         from one career whose played-on season was an injury year). */
+      for (let guard = 0; guard < 240 && !(t.phone.world?.year > y0) && !t.retired; guard += 1) { const nx = step(HEAD.engine, t, c.seed); if (!nx) break; t = nx; }
+      if (t.seasons.length > n0 + 1 && t.phone.world?.year > y0) tickless += 1;
+      if (t.phone.world?.year > y0) {
         playedOn += 1;
         if (Object.keys(t.phone).sort().join() !== Object.keys(s.phone).sort().join()) phoneFields += 1;
         const y = t.phone.world?.year;
@@ -721,9 +727,9 @@ if (runs('4')) {
     } catch (e) { threw += 1; if (threw === 1) console.error(`   an old save threw here: ${e.message}`); }
     finally { Math.random = again; }
   }
-  console.log(`   old saves: ${olds} base careers at their 2028 world (${realMovesHeld} holding a real man's move or tally) asked ${asked} questions here, ${realAsked} about a real man; ${playedOn} played a season on here, ${threw} threw, ${phoneFields} grew a phone field, ${movedLeft} real men left off their era club`);
+  console.log(`   old saves: ${olds} base careers at their 2028 world (${realMovesHeld} holding a real man's move or tally) asked ${asked} questions here, ${realAsked} about a real man; ${playedOn} played on here until their world ticked (${tickless} of them through a season with no tick first), ${threw} threw, ${phoneFields} grew a phone field, ${movedLeft} real men left off their era club`);
   if (threw || phoneFields || movedLeft) fail(`old saves on this tree: ${threw} threw, ${phoneFields} grew a phone field, ${movedLeft} real men stayed at a club the sim sent them to`);
-  if (playedOn < 20) fail(`only ${playedOn} old saves played a season on here`);
+  if (playedOn < 20) fail(`only ${playedOn} old saves played on here until their world ticked`);
   if (olds < 20 || realMovesHeld < 10) fail(`only ${olds} old 2028 saves (${realMovesHeld} with real moves) were read`);
   if (realAsked) fail(`${realAsked} questions from an old 2028 world asked about a real man's move or goals`);
 }
