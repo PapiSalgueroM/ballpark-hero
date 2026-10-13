@@ -39,6 +39,19 @@
       and the effect cannot drift apart.
    6. Nothing here calls Math.random. Same seed, same deck.
 
+   Round 1324 adds what a deck of hundreds of cards needs, each an optional
+   field, so a pack without them deals exactly what it dealt before
+   (scripts/simEventDeck.mjs replays the seven GM packs byte for byte):
+   a weight (a share of the draw, never a rank), a story (cards of one story
+   share one cooldown stamp, careerEventDeck's ledger key, and never land in
+   one week), and a subject with the pack's subjectRest (no one man is the
+   subject twice inside the rest), wordings (texts, picked by a keyed draw,
+   never the deck's), and a season clock (a between seasons deck counts its
+   cooldowns in seasons, careerEventDeck's rule), and expiry (a card left
+   open too long is settled on its neutral option, moving nothing, so a busy
+   desk never freezes the deck). gmPackProblems is the one place every pack
+   check lives; bindGmInbox refuses a pack with any.
+
    A seat delivers through gmInboxWeek, never through careerInbox's own
    receive or deliver: those know nothing of conditions or cooldowns and
    would deal the whole pack. The seat satisfies InboxSport so the answer
@@ -52,6 +65,8 @@
 
 import { answerInboxMessage } from './careerInbox';
 import type { InboxBeat, InboxChoiceDef, InboxHost, InboxMessage, InboxMessageDef, InboxSport } from './careerInbox';
+import { ledgerKey, onCooldown } from './careerEventDeck';
+import { keyedRng } from './keyedRng';
 
 /** Club Manager's caps: a list of eight, three left open at most. */
 export const GM_INBOX_MAX = 8;
@@ -96,6 +111,26 @@ export interface GmEventDef extends Omit<InboxMessageDef, 'phase' | 'choices' | 
   cooldown?: number;
   /** Chance it arrives on an eligible week. Defaults to the pack's. */
   chance?: number;
+  /** Its share of the draw among the cards that came up. Absent reads as 1. */
+  weight?: number;
+  /** Cards sharing a story share one cooldown stamp and one one shot. */
+  story?: string;
+  /** Who it is about: a key of the pack's targets, or a fact whose value
+   *  is the man. A fact with no value this week holds the card back. */
+  subject?: string | { fact: string };
+  /** More wordings of the same card: text is wording 0, these are 1 to n.
+   *  The words only, never an option or a number. */
+  texts?: string[];
+  /** Ticks it may sit open before the desk's staff settle it on its neutral
+   *  option, moving nothing. Needs a neutral option. */
+  expires?: number;
+}
+
+/** A delivered message. Only a card that expires carries w (the tick it
+ *  arrived) and, once settled for you, auto. */
+export interface GmInboxMessage extends InboxMessage {
+  w?: number;
+  auto?: true;
 }
 
 /** Words for the meters, so the card reads in the seat's own language. */
@@ -114,9 +149,18 @@ export interface GmInboxPack {
   meters: GmMeters;
   /** Budget money: '$' and 'M' print -1.5 as -$1.5M. */
   money: { prefix: string; suffix: string };
+  /** New cards a tick: a week, or a season on the season clock. */
   perWeek: number;
   cooldown: number;
   chance: number;
+  /** 'season': the seat calls once a season with the season as its clock,
+   *  and a card sits out `cooldown` seasons (careerEventDeck's onCooldown).
+   *  Absent is 'week': a card is back after `cooldown` weeks. */
+  clock?: 'week' | 'season';
+  /** A fact (a position) the kit reports reach by. The engine never reads it. */
+  reachBy?: string;
+  /** Ticks a subject rests after a card about him. Absent or 0: no rest. */
+  subjectRest?: number;
   events: GmEventDef[];
 }
 
@@ -126,6 +170,9 @@ export interface GmInboxPack {
  *  event id to the week clock it last arrived on. All optional on a save. */
 export interface GmInboxHost extends InboxHost {
   gmInboxLast?: Record<string, number>;
+  /** Subject to the tick a card about him was dealt, only while resting.
+   *  Written only by a pack with a subjectRest. */
+  gmInboxRest?: Record<string, number>;
 }
 
 /** careerInbox's InboxSport bound to a desk, plus the three desk effects. */
@@ -134,9 +181,13 @@ export interface GmInboxSeat<S extends GmInboxHost> extends InboxSport<S> {
   setOut: (s: S, who: string, weeks: number) => void;
   addRating: (s: S, who: string, delta: number) => void;
   addRecruit: (s: S, delta: number) => void;
+  keyOf?: (s: S) => string;
 }
 
 export interface GmInboxBinding<S extends GmInboxHost> {
+  /** The save's own key (a career, a slot and club), read by the wording
+   *  pick. Absent reads as ''. */
+  keyOf?: (s: S) => string;
   /** Owner trust, 0 to 100. */
   moodOf: (s: S) => number;
   setMood: (s: S, v: number) => void;
@@ -175,6 +226,8 @@ export function bindGmInbox<S extends GmInboxHost>(pack: GmInboxPack, b: GmInbox
   const missing = (['out', 'rating', 'recruit'] as const).filter(k =>
     used[k] && !(k === 'out' ? b.setOut : k === 'rating' ? b.addRating : b.addRecruit));
   if (missing.length > 0) throw new Error(`gmInbox: the ${pack.seat} pack moves ${missing.join(', ')} and the seat cannot`);
+  const problems = gmPackProblems(pack);
+  if (problems.length > 0) throw new Error(`gmInbox: the ${pack.seat} pack: ${problems[0]}`);
   const none = () => undefined;
   return {
     pack,
@@ -191,7 +244,43 @@ export function bindGmInbox<S extends GmInboxHost>(pack: GmInboxPack, b: GmInbox
     setOut: b.setOut ?? none,
     addRating: b.addRating ?? none,
     addRecruit: b.addRecruit ?? none,
+    keyOf: b.keyOf,
   };
+}
+
+/** The first option that moves nothing at all, or -1. */
+export function gmNeutralIndex(choices: readonly GmChoiceDef[]): number {
+  return choices.findIndex(c => !c.karma && !c.popularity && !c.cash && !c.morale
+    && !(c.out && c.out.weeks > 0) && !(c.rating && c.rating.delta) && !c.recruit);
+}
+
+const has = (o: object, k: string) => Object.prototype.hasOwnProperty.call(o, k);
+
+/** Every problem a pack has, in one place: bindGmInbox refuses the first,
+ *  the kit lists them all. W1b adds its effect registry check here. */
+export function gmPackProblems(pack: GmInboxPack): string[] {
+  const out: string[] = [];
+  const whole = (v: unknown, min: number) => typeof v === 'number' && Number.isInteger(v) && v >= min;
+  if (pack.subjectRest !== undefined && !whole(pack.subjectRest, 0)) out.push(`subjectRest ${pack.subjectRest} is not a whole number`);
+  if (pack.clock !== undefined && pack.clock !== 'week' && pack.clock !== 'season') out.push(`clock ${pack.clock} is neither week nor season`);
+  if (pack.reachBy !== undefined && !has(pack.facts, pack.reachBy)) out.push(`reachBy ${pack.reachBy} is not a declared fact`);
+  for (const e of pack.events) {
+    if (e.expires !== undefined && !whole(e.expires, 1)) out.push(`${e.id} expires after ${e.expires}`);
+    else if (e.expires !== undefined && gmNeutralIndex(e.choices) < 0) out.push(`${e.id} expires with no option that moves nothing`);
+    if (e.texts !== undefined && !(Array.isArray(e.texts) && e.texts.every(t => typeof t === 'string' && t.length > 0))) out.push(`${e.id} has an empty wording`);
+    const w = e.weight;
+    if (w !== undefined && !(typeof w === 'number' && Number.isFinite(w) && w > 0)) out.push(`${e.id} has weight ${w}`);
+    if (e.story !== undefined && !(typeof e.story === 'string' && e.story.length > 0)) out.push(`${e.id} has an empty story`);
+    const sub = e.subject;
+    if (typeof sub === 'string' && !has(pack.targets, sub)) out.push(`${e.id} is about ${sub}, not a target`);
+    if (sub !== undefined && typeof sub !== 'string' && !(sub && typeof sub.fact === 'string' && has(pack.facts, sub.fact))) {
+      out.push(`${e.id} is about a fact the pack does not declare`);
+    } else if (sub !== undefined && typeof sub !== 'string' && pack.facts[sub.fact].kind === 'bool') {
+      /* A yes or no names nobody, so gmSubjectKey would hold the card forever. */
+      out.push(`${e.id} is about a yes or no fact, which names nobody`);
+    }
+  }
+  return out;
 }
 
 /* ─── rule 1: conditions over plain facts ────────────────────────────────── */
@@ -213,36 +302,91 @@ export function gmCondHolds(c: GmCond, facts: GmFacts): boolean {
   }
 }
 
+/** The cooldown book's key: the story, or the card's own id. */
+const bookKey = (e: GmEventDef): string => ledgerKey(e);
+
+/** The rest book's key for a card's subject this week ('role:' or 'id:'),
+ *  undefined when it has none, null when its fact has no value (held). */
+export function gmSubjectKey(e: GmEventDef, facts: GmFacts): string | null | undefined {
+  const sub = e.subject;
+  if (sub === undefined) return undefined;
+  if (typeof sub === 'string') return `role:${sub}`;
+  const v = facts[sub.fact];
+  return (typeof v === 'string' && v !== '') || (typeof v === 'number' && Number.isFinite(v)) ? `id:${v}` : null;
+}
+
 /** The events that may arrive this week, in pack order (rules 1 and 2). */
 export function gmEligible(
   pack: GmInboxPack, beat: string, facts: GmFacts, usedIds: readonly string[],
-  last: Readonly<Record<string, number>>, clock: number,
+  last: Readonly<Record<string, number>>, clock: number, rest?: Readonly<Record<string, number>>,
 ): GmEventDef[] {
   const used = new Set(usedIds);
+  const restFor = pack.subjectRest ?? 0;
+  const cooled = (e: GmEventDef) => {
+    if (pack.clock === 'season') return !onCooldown(last, e, clock, pack.cooldown);
+    const at = last[bookKey(e)];
+    return at === undefined || clock - at >= (e.cooldown ?? pack.cooldown);
+  };
   return pack.events.filter(e => {
     if (e.beat !== beat) return false;
     if (!(e.when ?? []).every(c => gmCondHolds(c, facts))) return false;
+    const sk = gmSubjectKey(e, facts);
+    if (sk === null) return false;
+    const r = sk === undefined || restFor <= 0 ? undefined : rest?.[sk];
+    if (r !== undefined && clock - r < restFor) return false;
+    /* A story's one shot is once for the story, and waits out its stamp. */
+    if (e.story) return !(e.oneShot && used.has(bookKey(e))) && cooled(e);
     if (e.oneShot) return !used.has(e.id);
-    const at = last[e.id];
-    return at === undefined || clock - at >= (e.cooldown ?? pack.cooldown);
+    return cooled(e);
   });
 }
+
+const wt = (e: GmEventDef): number => e.weight ?? 1;
+
+/** One card out of those that came up, one draw either way. Equal weights
+ *  take the uniform line the deck has always used, to the draw; otherwise
+ *  the draw lands on the running sum of the weights. */
+function gmTake(came: GmEventDef[], rng: () => number): GmEventDef {
+  if (came.every(x => wt(x) === wt(came[0]))) {
+    const e = came.splice(Math.floor(rng() * came.length), 1)[0];
+    return e;
+  }
+  const u = rng() * came.reduce((n, x) => n + wt(x), 0);
+  let i = 0;
+  let run = wt(came[0]);
+  while (i < came.length - 1 && u >= run) { i++; run += wt(came[i]); }
+  return came.splice(i, 1)[0];
+}
+
+const drop = (list: GmEventDef[], hit: (x: GmEventDef) => boolean) => {
+  for (let i = list.length - 1; i >= 0; i--) if (hit(list[i])) list.splice(i, 1);
+};
 
 /* ─── the week ───────────────────────────────────────────────────────────── */
 
 /**
- * One week of the deck. `beat` is where the seat's year stands, `facts` the
- * plain facts of the moment, `clock` the save's own week counter (it only
- * ever goes up). Every eligible event rolls its chance in pack order, then up
- * to `perWeek` of those that came up are drawn at random, never past
- * GM_INBOX_OPEN unanswered (rule 3). The draws all come from `rng`, so the
- * same seed deals the same deck. Returns what arrived.
+ * One week of the deck (one tick: a season, on a season clock). `beat` is
+ * where the seat's year stands, `facts` the plain facts of the moment,
+ * `clock` the save's own tick counter, which a seat may hand in falling (the
+ * week of its season), so the books are rebased. The steps, in this order:
+ * (1) rebase the cooldown book and the rest book from the future, pruning
+ * the rest book; (2) settle the expired cards; (3) count the open ones and
+ * `want`; (4) the eligible events (beat, conditions, subject rest, story,
+ * one shots, cooldowns); (5) one chance roll per eligible event in pack
+ * order; (6) up to `perWeek` picks, never past GM_INBOX_OPEN unanswered
+ * (rule 3), each dropping its story and subject siblings with no draw;
+ * (7) each pick's wording, from a keyed draw, never `rng`; (8) the kept cap.
+ * The deck's draws all come from `rng`, so the same seed deals the same
+ * deck. Returns what arrived. A seat that hands in `settled` gets every card
+ * step (2) settled pushed onto it, even one the kept cap then drops, so it
+ * can show gmExpiredLine for each; it changes nothing else.
  */
 export function gmInboxWeek<S extends GmInboxHost>(
   s: S, seat: GmInboxSeat<S>, beat: string, facts: GmFacts, clock: number, rng: () => number,
+  settled?: InboxMessage[],
 ): InboxMessage[] {
   const pack = seat.pack;
-  const inbox = [...(s.phoneInbox ?? [])];
+  const inbox: GmInboxMessage[] = [...(s.phoneInbox ?? [])];
   const used = [...(s.phoneUsedIds ?? [])];
   const last = { ...(s.gmInboxLast ?? {}) };
   /* The clock only ever rises. A seat that hands in one that fell (a week of
@@ -250,25 +394,63 @@ export function gmInboxWeek<S extends GmInboxHost>(
      future, which would keep their events away for good: read them as
      arriving now, so each waits one cooldown and comes back. */
   for (const [id, at] of Object.entries(last)) if (at > clock) last[id] = clock;
+  /* The rest book is rebased the same way and born pruned: an entry whose
+     rest is over goes. Only a pack with a subjectRest reads or writes it. */
+  const restFor = pack.subjectRest ?? 0;
+  let rest: Record<string, number> | undefined;
+  if (restFor > 0 && s.gmInboxRest) {
+    rest = {};
+    for (const [k, at] of Object.entries(s.gmInboxRest)) if (clock - Math.min(at, clock) < restFor) rest[k] = Math.min(at, clock);
+  }
+  /* Expiry: a card left open its `expires` ticks is settled on its neutral
+     option and nothing moves (not through the answer flow, whose clamp could
+     move a meter). It counts as answered from here on, so its slot is free
+     this week. A card whose def is gone or no longer expires stays open, and
+     a tick from the future is rebased like the book. */
+  for (let i = 0; i < inbox.length; i++) {
+    const m = inbox[i];
+    if (m.answered !== undefined || m.w === undefined) continue;
+    const w = Math.min(m.w, clock);
+    const ttl = pack.events.find(e => e.id === m.defId)?.expires;
+    const n = gmNeutralIndex(m.choices);
+    if (ttl !== undefined && clock - w >= ttl && n >= 0) inbox[i] = { ...m, w, answered: n, auto: true };
+    else if (w !== m.w) inbox[i] = { ...m, w };
+    if (inbox[i].auto && !m.auto) settled?.push(inbox[i]);
+  }
   const open = inbox.filter(m => m.answered === undefined).length;
   const want = Math.max(0, Math.min(pack.perWeek, GM_INBOX_OPEN - open));
-  const came = gmEligible(pack, beat, facts, used, last, clock).filter(e => rng() < (e.chance ?? pack.chance));
+  const came = gmEligible(pack, beat, facts, used, last, clock, rest).filter(e => rng() < (e.chance ?? pack.chance));
   const year = seat.yearOf(s);
   const fresh: InboxMessage[] = [];
   while (fresh.length < want && came.length > 0) {
-    const e = came.splice(Math.floor(rng() * came.length), 1)[0];
+    const e = gmTake(came, rng);
+    /* Never two of one story, or two about one resting subject, in a week.
+       Neither draws anything. */
+    if (e.story) drop(came, x => bookKey(x) === bookKey(e));
+    const sk = restFor > 0 ? gmSubjectKey(e, facts) : undefined;
+    if (sk) {
+      rest = rest ?? {};
+      rest[sk] = clock;
+      drop(came, x => gmSubjectKey(x, facts) === sk);
+    }
     /* A fallen clock could repeat a week, and two messages with one id would
        leave the second unanswerable, so a repeat gets a suffix. */
     let id = `${e.id}-${year}-w${clock}`;
     for (let n = 2; inbox.some(m => m.id === id); n++) id = `${e.id}-${year}-w${clock}-${n}`;
-    const msg: InboxMessage = {
-      id, defId: e.id, from: e.from, emoji: e.emoji, text: e.text,
+    /* The wording: a keyed draw on the save key, card, year and clock, never
+       the deck's rng, so adding wordings never moves which cards are dealt.
+       The picked words are saved whole. */
+    const alt = e.texts?.length ?? 0;
+    const pick = alt > 0 ? Math.floor(keyedRng(`${seat.keyOf?.(s) ?? ''}|${e.id}|${year}|${clock}`)() * (1 + alt)) : 0;
+    const msg: GmInboxMessage = {
+      id, defId: e.id, from: e.from, emoji: e.emoji, text: pick > 0 ? e.texts![pick - 1] : e.text,
       year, choices: e.choices, beat: e.beat,
     };
+    if (e.expires !== undefined) msg.w = clock;
     inbox.push(msg);
     fresh.push(msg);
-    if (e.oneShot) used.push(e.id);
-    last[e.id] = clock;
+    if (e.oneShot) used.push(e.story ? bookKey(e) : e.id);
+    last[bookKey(e)] = clock;
   }
   /* Rule 4: oldest answered drops first. Rule 3 keeps the open ones under
      the cap, so this always lands at GM_INBOX_MAX or below. */
@@ -280,6 +462,7 @@ export function gmInboxWeek<S extends GmInboxHost>(
   s.phoneInbox = inbox;
   s.phoneUsedIds = used;
   s.gmInboxLast = last;
+  if (rest !== undefined) s.gmInboxRest = rest;
   return fresh;
 }
 
@@ -334,6 +517,19 @@ export function answerGmInbox<S extends GmInboxHost>(
   return `📨 ${msg.from}: ${c.label}.${fx.length ? ` ${fx.join(', ')}.` : ''}`;
 }
 
+/** The line a seat shows for a card the staff settled, null for any other.
+ *  The voice and the label are read off the saved message, so a later edit
+ *  of the pack never rewrites a line already on a desk. A card the assistant
+ *  sent names the assistant once, not twice. */
+export function gmExpiredLine(msg: InboxMessage): string | null {
+  const m = msg as GmInboxMessage;
+  const c = m.auto && m.answered !== undefined ? m.choices[m.answered] : undefined;
+  if (!c) return null;
+  return /^your assistant\b/i.test(m.from.trim())
+    ? `📨 ${m.from} dealt with it (${c.label}).`
+    : `📨 ${m.from}: your assistant dealt with it (${c.label}).`;
+}
+
 /** Open decisions sitting on the desk. */
 export function gmInboxOpen(s: GmInboxHost): number {
   return (s.phoneInbox ?? []).filter(m => m.answered === undefined).length;
@@ -343,11 +539,14 @@ export function gmInboxOpen(s: GmInboxHost): number {
 
 const isMsg = (m: unknown): m is InboxMessage => {
   const o = m as InboxMessage;
+  const g = m as GmInboxMessage;
   return !!o && typeof o === 'object' && typeof o.id === 'string' && typeof o.defId === 'string'
     && typeof o.from === 'string' && typeof o.text === 'string' && typeof o.year === 'number'
     && Array.isArray(o.choices) && o.choices.length > 0
     && o.choices.every(c => !!c && typeof c.label === 'string' && typeof c.karma === 'number' && Number.isFinite(c.karma))
-    && (o.answered === undefined || (Number.isInteger(o.answered) && o.answered >= 0 && o.answered < o.choices.length));
+    && (o.answered === undefined || (Number.isInteger(o.answered) && o.answered >= 0 && o.answered < o.choices.length))
+    && (g.w === undefined || (typeof g.w === 'number' && Number.isFinite(g.w)))
+    && (g.auto === undefined || (g.auto === true && o.answered !== undefined));
 };
 
 /**
@@ -358,8 +557,9 @@ const isMsg = (m: unknown): m is InboxMessage => {
 export function repairGmInbox<S extends GmInboxHost>(s: S): S {
   if (s.phoneInbox !== undefined && !(Array.isArray(s.phoneInbox) && s.phoneInbox.every(isMsg))) s.phoneInbox = [];
   if (s.phoneUsedIds !== undefined && !(Array.isArray(s.phoneUsedIds) && s.phoneUsedIds.every(x => typeof x === 'string'))) s.phoneUsedIds = [];
-  const last = s.gmInboxLast as unknown;
-  if (last !== undefined && !(last && typeof last === 'object' && !Array.isArray(last)
-    && Object.values(last as Record<string, unknown>).every(v => typeof v === 'number' && Number.isFinite(v)))) s.gmInboxLast = {};
+  const isBook = (b: unknown) => !!b && typeof b === 'object' && !Array.isArray(b)
+    && Object.values(b as Record<string, unknown>).every(v => typeof v === 'number' && Number.isFinite(v));
+  if (s.gmInboxLast !== undefined && !isBook(s.gmInboxLast)) s.gmInboxLast = {};
+  if (s.gmInboxRest !== undefined && !isBook(s.gmInboxRest)) delete s.gmInboxRest;
   return s;
 }

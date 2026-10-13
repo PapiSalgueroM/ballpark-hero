@@ -6,6 +6,9 @@ import {
 import type { GmInboxHost, GmInboxPack } from './gmInbox';
 import { GM_INBOX_PACKS } from '@/data/gmInbox';
 import { keyedRng } from './keyedRng';
+import { gmExpiredLine, gmNeutralIndex, gmPackProblems, gmSubjectKey } from './gmInbox';
+import type { GmEventDef, GmInboxMessage } from './gmInbox';
+import { onCooldown } from './careerEventDeck';
 
 interface Desk extends GmInboxHost {
   trust: number; fans: number; cash: number; year: number; recruit: number;
@@ -220,5 +223,326 @@ describe('gmInbox packs', () => {
       expect(c.popularity).toBeUndefined();
     }
     expect(p.events.filter(e => e.oneShot).length).toBeGreaterThan(0);
+  });
+});
+
+/* Round 1324: the rules a deck of hundreds of cards needs. */
+describe('gmInbox deck rules', () => {
+  const card = (id: string, extra: Partial<GmEventDef> = {}): GmEventDef => ({
+    id, beat: 'a', from: 'Ownership', emoji: 'x', text: `${id}.`,
+    choices: [{ label: 'Leave it', reply: 'Fine.', karma: 0 }, { label: 'Push', reply: 'Push.', karma: 2 }], ...extra,
+  });
+  const deck = (events: GmEventDef[], extra: Partial<GmInboxPack> = {}): GmInboxPack => ({
+    ...TOY, calendar: [{ id: 'a', label: 'A', emoji: 'A' }], span: { a: 10 },
+    facts: { man: { kind: 'num', min: 1, max: 9, per: 'week' } }, perWeek: 1, cooldown: 0, chance: 1, events, ...extra,
+  });
+  /* A stream that hands out the given values in turn and counts the draws. */
+  const stream = (vals: number[]) => { let i = 0; const f = () => vals[i++]; return { f, calls: () => i }; };
+
+  it('equal weights pick what the uniform line picks, for the same draws', () => {
+    for (const w of [undefined, 1, 2.5]) {
+      for (const u of [0, 0.2, 0.5, 0.74, 0.99]) {
+        const evs = ['p', 'q', 'r', 's'].map(id => card(id, w === undefined ? {} : { weight: w }));
+        const r = stream([0, 0, 0, 0, u]);
+        const [m] = gmInboxWeek(desk(), seatFor(deck(evs)), 'a', {}, 0, r.f);
+        expect(m.defId).toBe(evs[Math.floor(u * 4)].id);
+        expect(r.calls()).toBe(5);
+      }
+    }
+  });
+
+  it('a weighted pick takes one draw and lands on the running sum', () => {
+    const evs = [card('light', { weight: 1 }), card('heavy', { weight: 3 })];
+    for (const [u, want] of [[0.2, 'light'], [0.249, 'light'], [0.25, 'heavy'], [0.99, 'heavy']] as const) {
+      const r = stream([0, 0, u]);
+      const [m] = gmInboxWeek(desk(), seatFor(deck(evs)), 'a', {}, 0, r.f);
+      expect(m.defId).toBe(want);
+      expect(r.calls()).toBe(3);
+    }
+  });
+
+  it('cards of one story share one stamp and never land in one week', () => {
+    const p = deck([card('f1', { story: 'feud' }), card('f2', { story: 'feud' }), card('solo')], { perWeek: 3, cooldown: 5 });
+    const s = desk();
+    const got = gmInboxWeek(s, seatFor(p), 'a', {}, 0, () => 0).map(m => m.defId);
+    expect(got.filter(id => id.startsWith('f'))).toHaveLength(1);
+    expect(got).toContain('solo');
+    expect(s.gmInboxLast).toEqual({ 'story:feud': 0, solo: 0 });
+    for (let clock = 1; clock < 5; clock++) expect(gmEligible(p, 'a', {}, [], s.gmInboxLast!, clock).map(e => e.id)).toEqual([]);
+    expect(gmEligible(p, 'a', {}, [], s.gmInboxLast!, 5).map(e => e.id)).toEqual(['f1', 'f2', 'solo']);
+  });
+
+  it('a one shot story is used once for the whole story', () => {
+    const p = deck([card('x1', { story: 'exit', oneShot: true }), card('x2', { story: 'exit', oneShot: true })]);
+    const s = desk();
+    gmInboxWeek(s, seatFor(p), 'a', {}, 0, () => 0);
+    expect(s.phoneUsedIds).toEqual(['story:exit']);
+    expect(gmEligible(p, 'a', {}, s.phoneUsedIds!, s.gmInboxLast!, 50)).toEqual([]);
+  });
+
+  it('a role subject and a fact subject rest, and a missing fact holds the card', () => {
+    const p = deck([card('r1', { subject: 'star' }), card('r2', { subject: 'star' }), card('f1', { subject: { fact: 'man' } })],
+      { perWeek: 3, subjectRest: 4 });
+    const s = desk();
+    const got = gmInboxWeek(s, seatFor(p), 'a', { man: 7 }, 0, () => 0).map(m => m.defId);
+    expect(got.filter(id => id.startsWith('r'))).toHaveLength(1);
+    expect(got).toContain('f1');
+    expect(s.gmInboxRest).toEqual({ 'role:star': 0, 'id:7': 0 });
+    expect(gmEligible(p, 'a', { man: 7 }, [], {}, 3, s.gmInboxRest).map(e => e.id)).toEqual([]);
+    expect(gmEligible(p, 'a', { man: 8 }, [], {}, 3, s.gmInboxRest).map(e => e.id)).toEqual(['f1']);
+    expect(gmEligible(p, 'a', { man: 7 }, [], {}, 4, s.gmInboxRest).map(e => e.id)).toEqual(['r1', 'r2', 'f1']);
+    expect(gmEligible(p, 'a', {}, [], {}, 4, s.gmInboxRest).map(e => e.id)).toEqual(['r1', 'r2']);
+    expect(gmSubjectKey(card('b', { subject: { fact: 'man' } }), { man: true })).toBeNull();
+  });
+
+  it('the rest book is born pruned, and a pack with no rest never writes one', () => {
+    const p = deck([card('r1', { subject: 'star' })], { subjectRest: 4 });
+    const s = desk();
+    const seat = seatFor(p);
+    gmInboxWeek(s, seat, 'a', {}, 0, () => 0);
+    answerGmInbox(s, s.phoneInbox![0].id, 0, seat);
+    gmInboxWeek(s, seat, 'z', {}, 3, () => 0);
+    expect(s.gmInboxRest).toEqual({ 'role:star': 0 });
+    gmInboxWeek(s, seat, 'z', {}, 4, () => 0);
+    expect(s.gmInboxRest).toEqual({});
+    const plain = desk();
+    gmInboxWeek(plain, seatFor(deck([card('r1', { subject: 'star' })])), 'a', {}, 0, () => 0);
+    expect('gmInboxRest' in plain).toBe(false);
+  });
+
+  it('a bad rest book is dropped alone', () => {
+    const s = { ...desk(), gmInboxRest: 'junk' as unknown as Record<string, number> };
+    gmInboxWeek(s, seatFor(TOY), 'b', {}, 0, () => 0);
+    repairGmInbox(s);
+    expect('gmInboxRest' in s).toBe(false);
+    expect(s.phoneInbox).toHaveLength(1);
+  });
+
+  it('every pack check lives in gmPackProblems, and bind refuses a broken pack', () => {
+    for (const p of Object.values(GM_INBOX_PACKS)) expect(gmPackProblems(p)).toEqual([]);
+    const broken: [Partial<GmEventDef>, RegExp][] = [
+      [{ weight: 0 }, /weight 0/], [{ weight: NaN }, /weight NaN/], [{ story: '' }, /empty story/],
+      [{ subject: 'nobody' }, /nobody, not a target/], [{ subject: { fact: 'nope' } }, /does not declare/],
+    ];
+    for (const [extra, re] of broken) {
+      const p = deck([card('bad', extra)]);
+      expect(gmPackProblems(p).join(' ')).toMatch(re);
+      expect(() => seatFor(p)).toThrow(re);
+    }
+    expect(gmPackProblems(deck([card('ok')], { subjectRest: 1.5 }))).toHaveLength(1);
+  });
+
+  it('the neutral option is the first that moves nothing', () => {
+    const c = (o: Partial<GmEventDef['choices'][number]>) => ({ label: 'x', reply: 'x', karma: 0, ...o });
+    expect(gmNeutralIndex([c({ karma: 2 }), c({}), c({ cash: 1 })])).toBe(1);
+    expect(gmNeutralIndex([c({ out: { who: 'star', weeks: 0 } })])).toBe(0);
+    expect(gmNeutralIndex([c({ morale: 1 }), c({ recruit: 2 }), c({ rating: { who: 'star', delta: 1 } })])).toBe(-1);
+  });
+
+  it('a wording is picked with no deck draw, and the same key reads the same words', () => {
+    const e = card('w', { texts: ['Second.', 'Third.'] });
+    const words = (key: string, clock: number) => {
+      const r = stream([0, 0]);
+      const seat = { ...seatFor(deck([e])), keyOf: () => key };
+      const [m] = gmInboxWeek(desk(), seat, 'a', {}, clock, r.f);
+      expect(r.calls()).toBe(2);
+      return m.text;
+    };
+    const seen = new Set<string>();
+    for (let clock = 0; clock < 40; clock++) {
+      const t = words('save-1', clock);
+      expect(words('save-1', clock)).toBe(t);
+      seen.add(t);
+    }
+    expect([...seen].sort()).toEqual(['Second.', 'Third.', 'w.']);
+    const run = (key: string) => Array.from({ length: 40 }, (_, c) => words(key, c));
+    expect(run('save-1')).not.toEqual(run('save-2'));
+  });
+
+  it('the season clock holds a card out exactly while careerEventDeck does', () => {
+    const p = deck([card('a1'), card('a2', { cooldown: 1 }), card('a3', { story: 'arc', cooldown: 3 }), card('a4', { story: 'arc' })],
+      { clock: 'season', cooldown: 2 });
+    for (let season = 0; season < 12; season++) {
+      for (const at of [undefined, 0, 3, 5, 8, 11]) {
+        const ledger: Record<string, number> = at === undefined ? {} : { a1: at, a2: at, 'story:arc': at };
+        const want = p.events.filter(e => !onCooldown(ledger, e, season, p.cooldown)).map(e => e.id);
+        expect(gmEligible(p, 'a', {}, [], ledger, season).map(e => e.id)).toEqual(want);
+      }
+    }
+    /* The two clocks differ by one on purpose: back after 2 weeks, or sits out 2 seasons. */
+    expect(gmEligible({ ...p, clock: undefined }, 'a', {}, [], { a1: 0 }, 2).map(e => e.id)).toContain('a1');
+    expect(gmEligible(p, 'a', {}, [], { a1: 0 }, 2).map(e => e.id)).not.toContain('a1');
+    expect(gmEligible(p, 'a', {}, [], { a1: 0 }, 3).map(e => e.id)).toContain('a1');
+  });
+
+  it('the validator names an empty wording and a clock that is neither', () => {
+    expect(gmPackProblems(deck([card('t', { texts: ['Fine.', ''] })])).join(' ')).toMatch(/empty wording/);
+    expect(gmPackProblems(deck([card('t')], { clock: 'month' as 'week' })).join(' ')).toMatch(/neither week nor season/);
+    expect(gmPackProblems(deck([card('t')], { reachBy: 'position' })).join(' ')).toMatch(/reachBy position is not a declared fact/);
+    expect(gmPackProblems(deck([card('t')], { reachBy: 'man' }))).toEqual([]);
+  });
+
+  it('a card left open is settled on its neutral option at exactly w plus expires, and nothing moves', () => {
+    const e = card('x', { expires: 3, choices: [{ label: 'Push', reply: 'Push.', karma: 2 }, { label: 'Leave it', reply: 'Fine.', karma: 0 }] });
+    const p = deck([e], { cooldown: 50 });
+    const s = desk();
+    const seat = seatFor(p);
+    const [m] = gmInboxWeek(s, seat, 'a', {}, 5, () => 0) as GmInboxMessage[];
+    expect(m.w).toBe(5);
+    const before = JSON.stringify([s.trust, s.fans, s.cash, s.morale, s.recruit, s.out, s.rating]);
+    gmInboxWeek(s, seat, 'a', {}, 7, () => 0);
+    expect(s.phoneInbox![0].answered).toBeUndefined();
+    gmInboxWeek(s, seat, 'a', {}, 8, () => 0);
+    const settled = s.phoneInbox![0] as GmInboxMessage;
+    expect([settled.answered, settled.auto]).toEqual([1, true]);
+    expect(JSON.stringify([s.trust, s.fans, s.cash, s.morale, s.recruit, s.out, s.rating])).toBe(before);
+    expect(gmExpiredLine(settled)).toBe('📨 Ownership: your assistant dealt with it (Leave it).');
+    expect(gmExpiredLine(m)).toBeNull();
+    expect(answerGmInbox(s, settled.id, 0, seat)).toBeNull();
+  });
+
+  it('a card whose def lost its expiry stays open, and a plain card carries no tick', () => {
+    const e = card('x', { expires: 2 });
+    const s = desk();
+    gmInboxWeek(s, seatFor(deck([e], { cooldown: 50 })), 'a', {}, 0, () => 0);
+    gmInboxWeek(s, seatFor(deck([card('x')], { cooldown: 50 })), 'a', {}, 9, () => 0);
+    expect(s.phoneInbox![0].answered).toBeUndefined();
+    const plain = desk();
+    gmInboxWeek(plain, seatFor(TOY), 'b', {}, 0, () => 0);
+    expect('w' in plain.phoneInbox![0]).toBe(false);
+  });
+
+  it('a bad tick or a bad auto bends the message, and the inbox resets alone', () => {
+    const s = desk();
+    gmInboxWeek(s, seatFor(deck([card('x', { expires: 2 })])), 'a', {}, 0, () => 0);
+    const keep = JSON.stringify(s.phoneInbox);
+    expect(JSON.stringify(repairGmInbox(JSON.parse(JSON.stringify(s))).phoneInbox)).toBe(keep);
+    for (const bent of [{ w: 'soon' }, { w: Infinity }, { auto: 1 }, { auto: true }]) {
+      const b = { ...s, phoneInbox: s.phoneInbox!.map(m => ({ ...m, ...bent })) as unknown as Desk['phoneInbox'] };
+      repairGmInbox(b);
+      expect(b.phoneInbox).toEqual([]);
+      expect(b.gmInboxLast).toEqual({ x: 0 });
+    }
+  });
+
+  it('the validator refuses an expiry that is not a whole tick, or one with nothing neutral to settle on', () => {
+    expect(gmPackProblems(deck([card('x', { expires: 0 })])).join(' ')).toMatch(/expires after 0/);
+    expect(gmPackProblems(deck([card('x', { expires: 1.5 })])).join(' ')).toMatch(/expires after 1.5/);
+    const hard = card('x', { expires: 2, choices: [{ label: 'Push', reply: 'Push.', karma: 2 }] });
+    expect(() => seatFor(deck([hard]))).toThrow(/no option that moves nothing/);
+  });
+});
+
+/* Round 1324's review: the cases no earlier test reached (more than one
+   weighted card a week, and the two new books on a clock that falls). */
+describe('gmInbox deck rules, the review cases', () => {
+  const card = (id: string, extra: Partial<GmEventDef> = {}): GmEventDef => ({
+    id, beat: 'a', from: 'Ownership', emoji: 'x', text: `${id}.`,
+    choices: [{ label: 'Leave it', reply: 'Fine.', karma: 0 }, { label: 'Push', reply: 'Push.', karma: 2 }], ...extra,
+  });
+  const deck = (events: GmEventDef[], extra: Partial<GmInboxPack> = {}): GmInboxPack => ({
+    ...TOY, calendar: [{ id: 'a', label: 'A', emoji: 'A' }], span: { a: 10 },
+    facts: { man: { kind: 'num', min: 1, max: 9, per: 'week' } }, perWeek: 1, cooldown: 0, chance: 1, events, ...extra,
+  });
+
+  it('a weighted draw of two a week takes the picked card out, so no card lands twice', () => {
+    const p = deck([card('w1', { weight: 1 }), card('w3', { weight: 3 }), card('w2', { weight: 2 })], { perWeek: 2 });
+    const seat = seatFor(p);
+    const s = desk();
+    const rng = keyedRng('gmInbox.test|weight two a week');
+    for (let clock = 0; clock < 200; clock++) {
+      const got = gmInboxWeek(s, seat, 'a', {}, clock, rng).map(m => m.defId);
+      expect(got).toHaveLength(2);
+      expect(new Set(got).size).toBe(2);
+      for (const m of s.phoneInbox!) if (m.answered === undefined) answerGmInbox(s, m.id, 0, seat);
+    }
+    /* A high draw lands on the last card, then on the heavier of the two left. */
+    expect(gmInboxWeek(desk(), seat, 'a', {}, 0, () => 0.99).map(m => m.defId)).toEqual(['w2', 'w3']);
+  });
+
+  it('on a clock that falls, the rest book is rebased like the cooldown book', () => {
+    const seat = seatFor(deck([card('r1', { subject: 'star' })], { subjectRest: 4 }));
+    const s = desk();
+    const dealt: string[] = [];
+    for (let season = 0; season < 2; season++) {
+      for (let clock = 0; clock < 10; clock++) {
+        for (const m of gmInboxWeek(s, seat, 'a', {}, clock, () => 0)) { dealt.push(`${season}:${clock}`); answerGmInbox(s, m.id, 0, seat); }
+        if (season === 1 && clock === 0) expect(s.gmInboxRest).toEqual({ 'role:star': 0 });
+      }
+    }
+    expect(dealt).toEqual(['0:0', '0:4', '0:8', '1:4', '1:8']);
+  });
+
+  it('on a clock that falls, an open expiring card counts its weeks from the fall', () => {
+    const seat = seatFor(deck([card('x', { expires: 2 })], { cooldown: 100 }));
+    const s = desk();
+    gmInboxWeek(s, seat, 'a', {}, 9, () => 0);
+    const seen: string[] = [];
+    for (let clock = 0; clock < 4; clock++) {
+      gmInboxWeek(s, seat, 'a', {}, clock, () => 0);
+      const m = s.phoneInbox![0] as GmInboxMessage;
+      seen.push(`${clock}:${m.w}:${m.answered === undefined ? 'open' : m.auto ? 'auto' : 'answered'}`);
+    }
+    expect(s.phoneInbox).toHaveLength(1);
+    expect(seen).toEqual(['0:0:open', '1:0:open', '2:0:auto', '3:0:auto']);
+  });
+
+  it('the validator refuses a subject that names a yes or no fact, which could never be dealt', () => {
+    const facts: GmInboxPack['facts'] = { man: { kind: 'num', min: 1, max: 9, per: 'week' }, hot: { kind: 'bool', p: 0.5, per: 'week' } };
+    const p = deck([card('b', { subject: { fact: 'hot' } })], { facts });
+    expect(gmPackProblems(p).join(' ')).toMatch(/yes or no fact/);
+    expect(() => seatFor(p)).toThrow(/yes or no fact/);
+    expect(gmPackProblems(deck([card('m', { subject: { fact: 'man' } })], { facts }))).toEqual([]);
+  });
+});
+
+/* Round 1324's closing check: what a seat needs to say a card was settled. */
+describe('gmInbox deck rules, the closing check cases', () => {
+  const card = (id: string, extra: Partial<GmEventDef> = {}): GmEventDef => ({
+    id, beat: 'a', from: 'Ownership', emoji: 'x', text: `${id}.`,
+    choices: [{ label: 'Leave it', reply: 'Fine.', karma: 0 }, { label: 'Push', reply: 'Push.', karma: 2 }], ...extra,
+  });
+  const deck = (events: GmEventDef[], extra: Partial<GmInboxPack> = {}): GmInboxPack => ({
+    ...TOY, calendar: [{ id: 'a', label: 'A', emoji: 'A' }], span: { a: 10 },
+    facts: { man: { kind: 'num', min: 1, max: 9, per: 'week' } }, perWeek: 1, cooldown: 0, chance: 1, events, ...extra,
+  });
+
+  it('a card the assistant sent names the assistant once in its settled line', () => {
+    const settle = (from: string) => {
+      const s = desk();
+      const seat = seatFor(deck([card('x', { from, expires: 1 })], { cooldown: 50 }));
+      gmInboxWeek(s, seat, 'a', {}, 0, () => 0);
+      gmInboxWeek(s, seat, 'a', {}, 1, () => 0);
+      return gmExpiredLine(s.phoneInbox![0]);
+    };
+    expect(settle('Your assistant')).toBe('📨 Your assistant dealt with it (Leave it).');
+    expect(settle('Your assistant GM')).toBe('📨 Your assistant GM dealt with it (Leave it).');
+    expect(settle('The board')).toBe('📨 The board: your assistant dealt with it (Leave it).');
+    for (const from of ['Your assistant', 'Your assistant GM', 'The board']) {
+      expect(settle(from)!.toLowerCase().split('your assistant')).toHaveLength(2);
+    }
+  });
+
+  it('a card the kept cap drops in the call that settles it still reaches the seat, and the list changes nothing else', () => {
+    const p = deck([card('x', { expires: 4 }), ...Array.from({ length: 12 }, (_, i) => card(`f${i}`))], { perWeek: 3, cooldown: 50 });
+    const seat = seatFor(p);
+    const run = (collect: boolean) => {
+      const s = desk();
+      const out: GmInboxMessage[][] = [];
+      for (let clock = 0; clock <= 4; clock++) {
+        const settled: GmInboxMessage[] = [];
+        gmInboxWeek(s, seat, 'a', {}, clock, () => 0, collect ? settled : undefined);
+        out.push(settled);
+        for (const m of s.phoneInbox!) if (m.answered === undefined && m.defId !== 'x') answerGmInbox(s, m.id, 0, seat);
+      }
+      return { s, out };
+    };
+    const { s, out } = run(true);
+    /* Week 4 settles x and deals three, so the cap drops x, the oldest answered. */
+    expect(s.phoneInbox!.some(m => m.defId === 'x')).toBe(false);
+    expect(out.slice(0, 4).map(a => a.length)).toEqual([0, 0, 0, 0]);
+    expect(out[4].map(m => [m.defId, m.answered, m.auto])).toEqual([['x', 0, true]]);
+    expect(gmExpiredLine(out[4][0])).toBe('📨 Ownership: your assistant dealt with it (Leave it).');
+    expect(JSON.stringify(run(false).s)).toBe(JSON.stringify(s));
   });
 });
