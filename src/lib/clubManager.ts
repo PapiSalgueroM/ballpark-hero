@@ -53,7 +53,7 @@ import {
   bookFits, bookSalt, creditAssist, creditCleanSheet, creditDeal, creditGoal, creditMine, creditOwnGoal, dealAssist, dealGoals,
   liveBook, openBook, openLateBook, partialEleven, readBook, type BookMan, type BookRules, type LeagueBook,
 } from '@/lib/clubManagerLeagueBook';
-import { compactWorldRoster, recordWorldRosterTransfer, snapshotWorldRosterClub, worldRosterClub, worldRosterView } from '@/lib/clubManagerWorldRoster';
+import { compactWorldRoster, plainCopy, recordWorldRosterTransfer, snapshotWorldRosterClub, worldRosterClub, worldRosterView } from '@/lib/clubManagerWorldRoster';
 import type { WorldRosterState } from '@/lib/clubManagerWorldRoster';
 import { players as RAW_POOL } from '@/data/players';
 // Round 70: real 2026 rosters for every club in the big five leagues, baked
@@ -266,12 +266,6 @@ const NO_NAMES: ReadonlySet<string> = new Set();
 export function mySquadNames(state: CareerState): Set<string> {
   return new Set(state.squad.map(p => p.name));
 }
-
-/* Release AZ fix (reviewer 1, minor 1): structuredClone needs Safari 15.4, Chrome 98 and Firefox 94, and vite builds
-   for older browsers than that with no polyfill, so on those the first deal of a seeded career threw. Everything
-   copied here is plain save data, so the house copy is equal (it drops only keys whose value is undefined, which
-   the save drops anyway). */
-const plainCopy = <T>(value: T): T => JSON.parse(JSON.stringify(value)) as T;
 
 /** The held seed is optional, so an old save keeps the original projected world. */
 export function worldSeedOf(career: CareerState): number | undefined {

@@ -47,9 +47,19 @@ const count = (value: unknown): value is number => Number.isSafeInteger(value) &
 const object = (value: unknown): value is Record<string, unknown> => !!value && typeof value === 'object' && !Array.isArray(value);
 /* Release AZ fix (reviewer 1, minor 1): structuredClone needs Safari 15.4, Chrome 98 and Firefox 94, and vite builds
    for older browsers than that with no polyfill, so on those the first deal of a seeded career threw. Everything
-   copied here is plain save data, so the house copy is equal (it drops only keys whose value is undefined, which
-   the save drops anyway). */
-const plainCopy = <T>(value: T): T => JSON.parse(JSON.stringify(value)) as T;
+   the ledger copies is plain save data (objects, arrays, strings, numbers, booleans, null), so this copy is equal to
+   structuredClone there, a key whose value is undefined included: a JSON round trip drops those keys, and
+   simManagerWorldContinuity holds a bought man to every field he had (onLoan: undefined among them). The engine and
+   the calendar use this one. */
+export function plainCopy<T>(value: T): T {
+  if (Array.isArray(value)) return value.map(item => plainCopy(item)) as unknown as T;
+  if (value !== null && typeof value === 'object') {
+    const out: Record<string, unknown> = {};
+    for (const [key, item] of Object.entries(value as Record<string, unknown>)) out[key] = plainCopy(item);
+    return out as T;
+  }
+  return value;
+}
 function yearOf(career: CareerState): number | null {
   const start = career.startYear === undefined ? 2026 : career.startYear;
   if (!count(start) || !count(career.season) || career.season < 1) return null;
