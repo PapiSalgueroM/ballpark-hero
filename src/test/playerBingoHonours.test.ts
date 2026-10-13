@@ -293,6 +293,7 @@ describe('Player Bingo retained Vitinha identities and title seasons', () => {
     ['missing position', { position: null }],
     ['unknown position', { position: 'Unknown' }],
     ['forward position', { position: 'Centre-Forward' }],
+    ['attacking midfield position', { position: 'Attacking Midfield' }],
   ] as const)('rejects a namesake history row with %s', async (_name, change) => {
     const current = retainedRows.find(row => row.id === 177617)!;
     const data = await load(retainedRows, [{ ...current, ...change }]);

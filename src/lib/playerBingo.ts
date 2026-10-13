@@ -272,8 +272,10 @@ function matchesBingoHistory(ref: BingoPlayer, row: HistoryRow): boolean {
   // The Portuguese midfielder and forward share this name and birth year.
   const nationality = primaryNationality(ref.nationality);
   if (!nationality || nationality !== primaryNationality(row.nationality ?? '')) return false;
+  // Release BA: "Attacking Midfield" is the forward's listed second position, so a row
+  // reading it could be either man. It names no role, and the row credits nobody.
   const role = (position: string): 'MID' | 'FWD' | null =>
-    /midfield/i.test(position) ? 'MID' : /wing|striker|forward|attack/i.test(position) ? 'FWD' : null;
+    /attacking midfield/i.test(position) ? null : /midfield/i.test(position) ? 'MID' : /wing|striker|forward|attack/i.test(position) ? 'FWD' : null;
   const referenceRole = role(ref.position);
   return referenceRole !== null && referenceRole === role(row.position ?? '');
 }

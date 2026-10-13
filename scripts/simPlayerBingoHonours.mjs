@@ -21,8 +21,8 @@ const testFile = path.join(root, 'src/test/playerBingoHonours.test.ts');
 const heldLib = readFileSync(libFile);
 const heldTest = readFileSync(testFile);
 const source = heldLib.toString('utf8').replaceAll('\r\n', '\n');
-assert.equal(hash(Buffer.from(source)), '77407F612623BAADFF5A4C35AE3D94DAAEE8572934091B29B98D8A46817FAECF');
-assert.equal(hash(heldTest), '2821DD98A4A2DDA81CA25A78916DB911C9E4141BF87180BEA85F29ECCF457E63');
+assert.equal(hash(Buffer.from(source)), '9195E9890C28CDB8A46D52F7150A21F459A4B4AFDE4B3EF23AA887CA8F543450');
+assert.equal(hash(heldTest), '0AE18AE01A012509200926DB6F66BA115C81AF718FD07B308299DFE21EB4EB72');
 writeFileSync(path.join(out, 'source.raw.ts'), heldLib);
 writeFileSync(path.join(out, 'source.LF.ts'), source);
 writeFileSync(path.join(out, 'test.raw.ts'), heldTest);
@@ -42,6 +42,11 @@ const controls = [
     'rejects a namesake history row with missing position',
     'rejects a namesake history row with unknown position',
     'rejects a namesake history row with forward position',
+    'rejects a namesake history row with attacking midfield position',
+  ] },
+  // Release BA closing check: the forward's second position must not read as the midfielder's role.
+  { id: 'merge-attacking-midfield', anchor: "    /attacking midfield/i.test(position) ? null : /midfield/i.test(position) ? 'MID' : /wing|striker|forward|attack/i.test(position) ? 'FWD' : null;", replacement: "    /midfield/i.test(position) ? 'MID' : /wing|striker|forward|attack/i.test(position) ? 'FWD' : null;", failures: [
+    'rejects a namesake history row with attacking midfield position',
   ] },
 ];
 const temporary = [];
@@ -76,10 +81,10 @@ function run(id, copiedSource, expectedFailures) {
   retained.rows = actual.testResults.flatMap(file => file.assertionResults); save();
   assert.equal(Number(actual.numUnhandledErrors ?? 0), 0);
   assert.equal(actual.numPendingTests, 0);
-  assert.equal(retained.rows.length, 10);
-  assert.equal(actual.numTotalTests, 10);
+  assert.equal(retained.rows.length, 11);
+  assert.equal(actual.numTotalTests, 11);
   assert.equal(actual.numFailedTests, expectedFailures.length);
-  assert.equal(actual.numPassedTests, 10 - expectedFailures.length);
+  assert.equal(actual.numPassedTests, 11 - expectedFailures.length);
   assert.equal(result.status, expectedFailures.length ? 1 : 0);
   assert.deepEqual(retained.rows.filter(row => row.status === 'failed').map(row => row.title).sort(), [...expectedFailures].sort());
   for (const row of retained.rows) assert.equal(row.status, expectedFailures.includes(row.title) ? 'failed' : 'passed', row.fullName);
@@ -144,12 +149,13 @@ try {
   assert.deepEqual(readFileSync(libFile), heldLib);
   assert.deepEqual(readFileSync(testFile), heldTest);
   report.status = 'pass'; save();
-  console.log('simPlayerBingoHonours: actual loader healthy10 and complete whole-undo10 pass.');
-  console.log('simPlayerBingoHonours: remove2026 rejects exactly2 retained title cases,8 unrelated cases pass.');
-  console.log('simPlayerBingoHonours: remove window arrivals rejects exactly1 summer 2026 arrival case,9 unrelated cases pass.');
-  console.log('simPlayerBingoHonours: remove identity rejects exactly7 histories,3 unrelated cases pass.');
+  console.log('simPlayerBingoHonours: actual loader healthy11 and complete whole-undo11 pass.');
+  console.log('simPlayerBingoHonours: remove2026 rejects exactly2 retained title cases,9 unrelated cases pass.');
+  console.log('simPlayerBingoHonours: remove window arrivals rejects exactly1 summer 2026 arrival case,10 unrelated cases pass.');
+  console.log('simPlayerBingoHonours: remove identity rejects exactly8 histories,3 unrelated cases pass.');
+  console.log('simPlayerBingoHonours: merge attacking midfield rejects exactly1 namesake case,10 unrelated cases pass.');
   console.log(`simPlayerBingoHonours: window fence ${report.fence.arrivals.length} overlay arrivals into a 2026 winner (${report.fence.winners2026.join(', ')}) all listed; drop-one control missed exactly ${report.fence.dropControl.missing.join(', ')}, add-one control stale exactly ${report.fence.addControl.stale.join(', ')}.`);
-  console.log('simPlayerBingoHonours: full source/test bytes, all three unique source mutations and complete reversals retained.');
+  console.log('simPlayerBingoHonours: full source/test bytes, all four unique source mutations and complete reversals retained.');
   console.log('simPlayerBingoHonours PASS');
 } catch (error) {
   report.status = 'fail';
