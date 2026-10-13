@@ -1,0 +1,3 @@
+#!serial
+offerReview: node scripts/simSoccerOfferReview.mjs
+phone2Base: git worktree add -f /tmp/pb 8fea14e216fb550b4676ac29f06867234594df21 >/dev/null 2>&1; ln -sfn "$PWD/node_modules" /tmp/pb/node_modules; cd /tmp/pb && node scripts/simPhone2.mjs 2>&1 | grep -E "biggest save|FAIL|PASS" | head -5
