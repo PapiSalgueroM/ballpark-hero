@@ -1,0 +1,15 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simCmCopy: node scripts/simCmCopy.mjs
+simCmCopy-base: mkdir -p .fc0 && git archive 36cc9ffe src | tar -x -C .fc0 && CM_COPY_ROOT=$PWD/.fc0 node scripts/simCmCopy.mjs
+ctl-article: CM_COPY_CONTROL=article node scripts/simCmCopy.mjs --section=1
+ctl-drama: CM_COPY_CONTROL=drama node scripts/simCmCopy.mjs --section=2
+ctl-intl: CM_COPY_CONTROL=intl node scripts/simCmCopy.mjs --section=3
+ctl-staff: CM_COPY_CONTROL=staff node scripts/simCmCopy.mjs --section=4
+ctl-summer: CM_COPY_CONTROL=summer node scripts/simCmCopy.mjs --section=4
+ctl-walk: CM_COPY_CONTROL=walk node scripts/simCmCopy.mjs --section=4
+ctl-finance: CM_COPY_CONTROL=finance node scripts/simCmCopy.mjs --section=5
+ctl-bogus: CM_COPY_CONTROL=nosuch node scripts/simCmCopy.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+simClubManagerStaff: node scripts/simClubManagerStaff.mjs
