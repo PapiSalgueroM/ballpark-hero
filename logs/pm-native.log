@@ -1,0 +1,26 @@
+PASS 390-mlb-my-career-extension 42 checks
+PASS 390-mlb-my-career-freeagency 50 checks
+PASS 390-mlb-my-career-decline 21 checks
+PASS 390-nhl-my-career-extension 42 checks
+PASS 390-nhl-my-career-freeagency 50 checks
+PASS 390-nhl-my-career-decline 21 checks
+PASS 1280-soccer-career-calm 24 checks
+PASS 1280-soccer-career-accountable 24 checks
+PASS 1280-soccer-career-met 34 checks
+PASS 1280-soccer-career-missed 34 checks
+PASS 1280-soccer-career-moved 28 checks
+PASS 1280-soccer-career-excused 34 checks
+PASS 1280-nfl-my-career-extension 42 checks
+PASS 1280-nfl-my-career-freeagency 50 checks
+PASS 1280-nfl-my-career-decline 21 checks
+PASS 1280-nba-my-career-extension 42 checks
+PASS 1280-nba-my-career-freeagency 50 checks
+PASS 1280-nba-my-career-decline 21 checks
+PASS 1280-mlb-my-career-extension 42 checks
+PASS 1280-mlb-my-career-freeagency 50 checks
+PASS 1280-mlb-my-career-decline 21 checks
+PASS 1280-nhl-my-career-extension 42 checks
+PASS 1280-nhl-my-career-freeagency 50 checks
+PASS 1280-nhl-my-career-decline 21 checks
+Press/Market native 1899 checks,54 journeys,3 effective observation detectors,0 failures.
+Native: 1899 checks,54 journeys,225 whole-save pairs,252 raw reloads,147 engine RNG pairs,93 PNGs,186 layouts,30 exact restorations,3 copied detectors.
