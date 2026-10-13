@@ -1,0 +1,7 @@
+build exit=0 32s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+basebuild exit=0 40s | base server 200
+vitest exit=0 12s |    Duration  11.20s (transform 3.98s, setup 469ms, collect 10.65s, tests 12.06s, environment 3.99s, prepare 1.02s)
+tsc exit=0 77s | tsc exit 0
+weight exit=0 29s | sweepWeight: green. Every page is inside its budget, and the budgets came down this round.
+chunkdiff exit=0 20s | /tmp/base/dist/assets/useRevealScroll-jWrVVZsp.js
+walk-head exit=0 275s | playCmHubLanding: green (A 8 pass 0 fail, B 63 pass 0 fail, C 156 pass 0 fail, D 12 pass 0 fail, E 52 pass 0 fail, F 9 pass 0 fail); the hub lands on the club on its firs

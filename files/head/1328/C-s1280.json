@@ -1,0 +1,536 @@
+{
+ "head": {
+  "era": {
+   "small": 25,
+   "font": [],
+   "controls": [],
+   "sizes": [],
+   "cut": [],
+   "overlaps": 0,
+   "overlapWords": [],
+   "sideways": false,
+   "cellSize": null,
+   "control": ""
+  },
+  "nation": {
+   "small": 56,
+   "font": [],
+   "controls": [],
+   "sizes": [],
+   "cut": [],
+   "overlaps": 0,
+   "overlapWords": [],
+   "sideways": false,
+   "cellSize": null,
+   "control": ""
+  },
+  "league": {
+   "small": 17,
+   "font": [],
+   "controls": [],
+   "sizes": [],
+   "cut": [],
+   "overlaps": 0,
+   "overlapWords": [],
+   "sideways": false,
+   "cellSize": null,
+   "control": ""
+  },
+  "team": {
+   "small": 97,
+   "font": [],
+   "controls": [],
+   "sizes": [],
+   "cut": [],
+   "overlaps": 0,
+   "overlapWords": [],
+   "sideways": false,
+   "cellSize": null,
+   "control": ""
+  },
+  "dugout": {
+   "small": 86,
+   "font": [],
+   "controls": [],
+   "sizes": [],
+   "cut": [],
+   "overlaps": 0,
+   "overlapWords": [],
+   "sideways": false,
+   "cellSize": null,
+   "control": ""
+  },
+  "hub": {
+   "small": 28,
+   "font": [],
+   "controls": [],
+   "sizes": [
+    "help button 44x44",
+    "Managers button 59x44",
+    "meter button 188x44",
+    "meter button 188x44"
+   ],
+   "cut": [],
+   "overlaps": 0,
+   "overlapWords": [],
+   "sideways": false,
+   "cellSize": null,
+   "control": "",
+   "cls": 0
+  },
+  "tiles": {
+   "Board": {
+    "value": "2/8 done",
+    "sub": "Underdogs patience",
+    "h": 100,
+    "valueLines": 1,
+    "subLines": 1
+   },
+   "Inbox": {
+    "value": "1 new",
+    "sub": "The head coach",
+    "h": 100,
+    "valueLines": 1,
+    "subLines": 1
+   },
+   "Calendar": {
+    "value": "D 0-0",
+    "sub": "See the schedule",
+    "h": 100,
+    "valueLines": 1,
+    "subLines": 1
+   },
+   "League": {
+    "value": "#8",
+    "sub": "Form: W W W W D",
+    "h": 100,
+    "valueLines": 1,
+    "subLines": 1
+   },
+   "Cups": {
+    "value": "Still alive",
+    "sub": "Copa del Rey",
+    "h": 100,
+    "valueLines": 1,
+    "subLines": 1
+   },
+   "Stats": {
+    "value": "26 goals",
+    "sub": "Pablo Durán leads with 6",
+    "h": 100,
+    "valueLines": 1,
+    "subLines": 1
+   },
+   "Finances": {
+    "value": "+£7m",
+    "sub": "Kitty change this season",
+    "h": 100,
+    "valueLines": 1,
+    "subLines": 1
+   },
+   "Facilities": {
+    "value": "Level 3 · 2 · 2 · 2",
+    "sub": "Stadium, training, medical, more",
+    "h": 100,
+    "valueLines": 1,
+    "subLines": 1
+   },
+   "Staff": {
+    "value": "Level 3 · 3 · 2 · 3",
+    "sub": "Attack, defence, keepers, scouts",
+    "h": 100,
+    "valueLines": 1,
+    "subLines": 1
+   },
+   "Skills": {
+    "value": "Level 1",
+    "sub": "Seven skill trees to grow",
+    "h": 100,
+    "valueLines": 1,
+    "subLines": 1
+   },
+   "Options": {
+    "value": "£ · Normal",
+    "sub": "Currency, nation job, haggling",
+    "h": 100,
+    "valueLines": 1,
+    "subLines": 1
+   },
+   "Manager": {
+    "value": "10W 4D 7L",
+    "sub": "48% win rate",
+    "h": 100,
+    "valueLines": 1,
+    "subLines": 1
+   },
+   "Treatment": {
+    "value": "All fit",
+    "sub": "No injuries or bans",
+    "h": 100,
+    "valueLines": 1,
+    "subLines": 1
+   },
+   "Rival watch": {
+    "value": "Valencia",
+    "sub": "They sit #15",
+    "h": 100,
+    "valueLines": 1,
+    "subLines": 1
+   },
+   "Press room": {
+    "value": "They want a word",
+    "sub": "One question, one tap",
+    "h": 100,
+    "valueLines": 1,
+    "subLines": 1
+   },
+   "Dressing room": {
+    "value": "3 unhappy",
+    "sub": "Altay Bayındır",
+    "h": 100,
+    "valueLines": 1,
+    "subLines": 1
+   },
+   "Academy": {
+    "value": "Nobody yet",
+    "sub": "Recruitment 6/20 · 0 scouting",
+    "h": 100,
+    "valueLines": 1,
+    "subLines": 1
+   },
+   "Training": {
+    "value": "Normal · Balanced",
+    "sub": "11 players still improving",
+    "h": 100,
+    "valueLines": 1,
+    "subLines": 1
+   },
+   "Market": {
+    "value": "Window shut",
+    "sub": "Latest transfers inside",
+    "h": 100,
+    "valueLines": 1,
+    "subLines": 1
+   }
+  },
+  "calendar": {
+   "small": 94,
+   "font": [],
+   "controls": [],
+   "sizes": [
+    "previous month 44x44",
+    "next month 44x44",
+    "Sim to 134x44",
+    "intensity button 275x66",
+    "intensity button 275x66",
+    "intensity button 275x66",
+    "Club home 83x44"
+   ],
+   "cut": [],
+   "overlaps": 0,
+   "overlapWords": [],
+   "sideways": false,
+   "cellSize": "118x46",
+   "control": ""
+  },
+  "training": {
+   "small": 51,
+   "font": [],
+   "controls": [],
+   "sizes": [
+    "Club home 83x44"
+   ],
+   "cut": [],
+   "overlaps": 0,
+   "overlapWords": [],
+   "sideways": false,
+   "cellSize": null,
+   "control": ""
+  },
+  "errors": []
+ },
+ "base": {
+  "era": {
+   "small": 25,
+   "font": [],
+   "controls": [],
+   "sizes": [],
+   "cut": [],
+   "overlaps": 0,
+   "overlapWords": [],
+   "sideways": false,
+   "cellSize": null,
+   "control": ""
+  },
+  "nation": {
+   "small": 56,
+   "font": [],
+   "controls": [],
+   "sizes": [],
+   "cut": [],
+   "overlaps": 0,
+   "overlapWords": [],
+   "sideways": false,
+   "cellSize": null,
+   "control": ""
+  },
+  "league": {
+   "small": 17,
+   "font": [],
+   "controls": [],
+   "sizes": [],
+   "cut": [],
+   "overlaps": 0,
+   "overlapWords": [],
+   "sideways": false,
+   "cellSize": null,
+   "control": ""
+  },
+  "team": {
+   "small": 137,
+   "font": [],
+   "controls": [],
+   "sizes": [],
+   "cut": [],
+   "overlaps": 0,
+   "overlapWords": [],
+   "sideways": false,
+   "cellSize": null,
+   "control": ""
+  },
+  "dugout": {
+   "small": 86,
+   "font": [],
+   "controls": [],
+   "sizes": [],
+   "cut": [],
+   "overlaps": 0,
+   "overlapWords": [],
+   "sideways": false,
+   "cellSize": null,
+   "control": ""
+  },
+  "hub": {
+   "small": 53,
+   "font": [
+    "meter words: \"Board\" at 9px",
+    "meter words: \"Safe\" at 9px",
+    "meter words: \"Fans\" at 9px",
+    "meter words: \"Turning\" at 9px"
+   ],
+   "controls": [
+    "help button is 40.0 by 40.0 px",
+    "Managers button is 58.9 by 16.0 px",
+    "meter button is 188.0 by 33.5 px",
+    "meter button is 188.0 by 33.5 px"
+   ],
+   "sizes": [
+    "help button 40x40",
+    "Managers button 59x16",
+    "meter button 188x34",
+    "meter button 188x34"
+   ],
+   "cut": [],
+   "overlaps": 0,
+   "overlapWords": [],
+   "sideways": false,
+   "cellSize": null,
+   "control": "",
+   "cls": 0
+  },
+  "tiles": {
+   "Board": {
+    "value": "1 behind",
+    "sub": "Underdogs patience",
+    "h": 97,
+    "valueLines": 1,
+    "subLines": 1
+   },
+   "Inbox": {
+    "value": "1 new",
+    "sub": "No messages yet",
+    "h": 97,
+    "valueLines": 1,
+    "subLines": 1
+   },
+   "Calendar": {
+    "value": "D 0-0",
+    "sub": "See the schedule",
+    "h": 97,
+    "valueLines": 1,
+    "subLines": 1
+   },
+   "League": {
+    "value": "#12",
+    "sub": "Form: L L L D D",
+    "h": 97,
+    "valueLines": 1,
+    "subLines": 1
+   },
+   "Cups": {
+    "value": "Knocked out",
+    "sub": "Copa del Rey",
+    "h": 97,
+    "valueLines": 1,
+    "subLines": 1
+   },
+   "Stats": {
+    "value": "29 goals",
+    "sub": "Pablo Durán leads with 8",
+    "h": 97,
+    "valueLines": 1,
+    "subLines": 1
+   },
+   "Finances": {
+    "value": "-£13.2m projected",
+    "sub": "Fans turning · prices, sponsor, the books",
+    "h": 97,
+    "valueLines": 1,
+    "subLines": 1
+   },
+   "Facilities": {
+    "value": "Level 3 · 2 · 2 · 2",
+    "sub": "Stadium, training, medical, dressing room",
+    "h": 97,
+    "valueLines": 1,
+    "subLines": 1
+   },
+   "Staff": {
+    "value": "Level 3 · 3 · 2 · 3",
+    "sub": "Attack, defence, keepers, scouting",
+    "h": 97,
+    "valueLines": 1,
+    "subLines": 1
+   },
+   "Skills": {
+    "value": "Level 1",
+    "sub": "Tactics, recruitment, money, the press",
+    "h": 97,
+    "valueLines": 1,
+    "subLines": 1
+   },
+   "Options": {
+    "value": "£ · Normal",
+    "sub": "Currency, the international job, haggling",
+    "h": 97,
+    "valueLines": 1,
+    "subLines": 1
+   },
+   "Manager": {
+    "value": "8W 9L",
+    "sub": "38% win rate",
+    "h": 97,
+    "valueLines": 1,
+    "subLines": 1
+   },
+   "Treatment": {
+    "value": "1 out",
+    "sub": "Miguel Román",
+    "h": 97,
+    "valueLines": 1,
+    "subLines": 1
+   },
+   "Rival watch": {
+    "value": "Valencia",
+    "sub": "They sit #17",
+    "h": 97,
+    "valueLines": 1,
+    "subLines": 1
+   },
+   "Press room": {
+    "value": "They want a word",
+    "sub": "One question, one tap",
+    "h": 97,
+    "valueLines": 1,
+    "subLines": 1
+   },
+   "Dressing room": {
+    "value": "1 wants out",
+    "sub": "Altay Bayındır",
+    "h": 97,
+    "valueLines": 1,
+    "subLines": 1
+   },
+   "Academy": {
+    "value": "Nobody yet",
+    "sub": "Recruitment 6/20 · 0 scouting",
+    "h": 97,
+    "valueLines": 1,
+    "subLines": 1
+   },
+   "Training": {
+    "value": "Normal · Balanced",
+    "sub": "11 players still improving",
+    "h": 97,
+    "valueLines": 1,
+    "subLines": 1
+   },
+   "Market": {
+    "value": "Window shut",
+    "sub": "Latest transfers inside",
+    "h": 97,
+    "valueLines": 1,
+    "subLines": 1
+   }
+  },
+  "calendar": {
+   "small": 111,
+   "font": [
+    "day strip: \"Sat 9 Jan\" at 11px",
+    "day strip: \"⚽ vs Valencia · La Liga · Round 20\" at 11px",
+    "day strip: \"🔓 The January window is open. Deadline \" at 10px",
+    "day strip: \"Sim to Sat 9 Jan\" at 11px",
+    "day strip: \"no match on the way, then stops at the w\" at 9px",
+    "intensity buttons: \"Rest first\" at 10px",
+    "intensity buttons: \"Two light sessions. Freshest legs on Sat\" at 8px",
+    "intensity buttons: \"Balanced\" at 10px",
+    "intensity buttons: \"Train one day, rest the next. The defaul\" at 8px",
+    "intensity buttons: \"Full training\" at 10px",
+    "intensity buttons: \"On the grass every weekday. Fastest grow\" at 8px"
+   ],
+   "controls": [
+    "previous month is 32.0 by 24.0 px",
+    "next month is 32.0 by 24.0 px",
+    "Sim to is 124.9 by 30.5 px",
+    "Club home is 82.8 by 16.0 px"
+   ],
+   "sizes": [
+    "previous month 32x24",
+    "next month 32x24",
+    "Sim to 125x31",
+    "intensity button 275x55",
+    "intensity button 275x55",
+    "intensity button 275x55",
+    "Club home 83x16"
+   ],
+   "cut": [],
+   "overlaps": 0,
+   "overlapWords": [],
+   "sideways": false,
+   "cellSize": "118x46",
+   "control": ""
+  },
+  "training": {
+   "small": 61,
+   "font": [
+    "intensity label: \"Light\" at 10px",
+    "intensity label: \"Normal\" at 10px",
+    "intensity label: \"Double\" at 10px",
+    "intensity line: \"The safe middle. Steady development, nor\" at 9px"
+   ],
+   "controls": [
+    "Club home is 82.8 by 16.0 px"
+   ],
+   "sizes": [
+    "Club home 83x16"
+   ],
+   "cut": [],
+   "overlaps": 0,
+   "overlapWords": [],
+   "sideways": false,
+   "cellSize": null,
+   "control": ""
+  },
+  "errors": []
+ }
+}
