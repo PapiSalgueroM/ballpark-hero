@@ -1,0 +1,6 @@
+#!serve
+#!playwright
+#!serial
+basebuild: git worktree add /tmp/b1325 8fea14e2 >/dev/null 2>&1; ln -sfn $PWD/node_modules /tmp/b1325/node_modules && cd /tmp/b1325 && npm run build > /tmp/b1325-build.log 2>&1; s=$?; tail -2 /tmp/b1325-build.log; exit $s
+fit: node scripts/lib/hostLikeServer.mjs /tmp/b1325/dist 4174 > /tmp/b1325-serve.log 2>&1 & SP=$!; sleep 2; CM_FIT_BASE_URL=http://localhost:4174 CM_FIT_BASE_DIST=/tmp/b1325/dist node scripts/playCmTablesFit.mjs; s=$?; kill $SP; exit $s
+weights: node scripts/lib/hostLikeServer.mjs /tmp/b1325/dist 4174 > /dev/null 2>&1 & SP=$!; sleep 2; echo BASE BUILD; (cd /tmp/b1325 && BASE=http://localhost:4174 SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs | grep -E "gz over"); echo CHUNKS; node .rc/x/chunkdiff.mjs /tmp/b1325/dist dist | tail -1; echo THIS TREE; SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs; s=$?; kill $SP; exit $s
