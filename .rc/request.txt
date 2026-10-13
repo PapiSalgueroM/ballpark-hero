@@ -1,0 +1,6 @@
+#!serve
+#!playwright
+nba390: SPORT=nba W=390 H=844 SEED=1101 POS=SG SEASONS=2 MAXMIN=17 TAG=nba390 node .rc/x/uswalk.mjs
+nfl390: SPORT=nfl W=390 H=844 SEED=1202 POS=WR SEASONS=2 MAXMIN=17 TAG=nfl390 node .rc/x/uswalk.mjs
+mlb390: SPORT=mlb W=390 H=844 SEED=1303 POS=SS SEASONS=2 MAXMIN=17 TAG=mlb390 node .rc/x/uswalk.mjs
+nhl390: SPORT=nhl W=390 H=844 SEED=1404 POS=C SEASONS=2 MAXMIN=17 TAG=nhl390 node .rc/x/uswalk.mjs
