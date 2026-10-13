@@ -1,0 +1,55 @@
+NEGATIVE CONTROL ON: bidfirer; section S5 must go red
+  FAIL [S5]: cfb: OSU let him go and then bid for him at OU
+  FAIL [S5]: cfb: ALA let him go and then bid for him at OU
+  FAIL [S5]: cfb: ND let him go and then bid for him at OU
+  FAIL [S5]: cfb: LSU let him go and then bid for him at OU
+  FAIL [S5]: cfb: ALA let him go and then bid for him at OU
+  FAIL [S5]: cfb: OSU let him go and then bid for him at AUB
+  FAIL [S5]: (further failures in this check not printed)
+simCollegeSeat: cfb, cbb over seeds 1, 300 dynasties a sport a seed, 10 seasons, 96 s
+S1) the ask is the roster's, in the pack's words
+   cfb: 2857 season starts, 2790 against the oracle, 67 first seasons kept the offer's ask, 2511 with a roster rank other than the prestige rank; his place checked against the engine's ranking 5714 times
+   cbb: 2912 season starts, 2852 against the oracle, 60 first seasons kept the offer's ask, 2667 with a roster rank other than the prestige rank; his place checked against the engine's ranking 5824 times
+S2) the outcome is the engine's, and the grade is gradeSeason's
+   cfb: 2857 graded seasons. Grade shares by ask tier:
+     contend    190  title 12.1%, overachieved 7.4%, met 40.5%, missed 25.8%, badly 14.2%
+     playoffs   862  title 1.3%, overachieved 26.7%, met 21.7%, missed 50.3%, badly 0.0%
+     respect   1585  title 0.1%, overachieved 19.8%, met 58.2%, missed 10.3%, badly 11.5%
+     rebuild    220  title 0.0%, overachieved 16.8%, met 49.1%, missed 19.1%, badly 15.0%
+     fired within the run, by first ask tier: contend 2.9% of 34, playoffs 14.6% of 48, respect 19.6% of 168, rebuild 22.0% of 50
+     fired within the run, by starting tier: tier 1 10.7%, tier 2 12.0%, tier 3 18.7%, tier 4 28.0%
+     first feeds already closed, by starting tier: tier 1 1 of 9, tier 2 0 of 9, tier 3 7 of 16, tier 4 12 of 21
+   cbb: 2912 graded seasons. Grade shares by ask tier:
+     title      204  title 18.6%, overachieved 0.0%, met 0.0%, missed 18.6%, badly 62.7%
+     contend   1013  title 2.6%, overachieved 2.7%, met 82.8%, missed 11.9%, badly 0.0%
+     playoffs  1598  title 0.1%, overachieved 41.1%, met 57.0%, missed 1.9%, badly 0.0%
+     respect     97  title 0.0%, overachieved 27.8%, met 0.0%, missed 2.1%, badly 70.1%
+     fired within the run, by first ask tier: title 32.4% of 37, contend 0.0% of 55, playoffs 0.7% of 144, respect 6.3% of 64
+     fired within the run, by starting tier: tier 1 16.0%, tier 2 0.0%, tier 3 1.3%, tier 4 5.3%
+     first feeds already closed, by starting tier: tier 1 7 of 12, tier 2 0 of 0, tier 3 0 of 1, tier 4 3 of 4
+S3) trust moves by gradeSeason, never rising with the shortfall
+   cfb: floor:4:0 n108 move 14; floor:4:1 n42 move -16; floor:4:2 n21 move -28; floor:4:3 n10 move -28; floor:4:4 n2 move -28; floor:5:0 n922 move 14; floor:5:1 n164 move -16; floor:5:2 n114 move -28; floor:5:3 n48 move -28; floor:5:4 n21 move -28; floor:in n351 move 22; post:-1 n218 move 22; post:-2 n26 move 22; post:0 n264 move 14; post:1 n483 move -16; post:2 n27 move -28; title n36 move 40
+   cbb: floor:9:2 n2 move -16; floor:9:3 n7 move -28; floor:9:4 n61 move -28; floor:in n27 move 22; post:-1 n681 move 22; post:-2 n2 move 22; post:0 n1750 move 14; post:1 n189 move -16; post:2 n123 move -28; post:3 n5 move -28; title n65 move 40
+S4) a firing at zero trust opens a market, never the end
+   cfb: 55 firings, 22 jobs taken off the market, 16 years out, 31 dynasties that met a closed market
+   cbb: 17 firings, 4 jobs taken off the market, 5 years out, 13 dynasties that met a closed market
+S5) a program that let him go never calls again
+   cfb: 71 feeds holding 24 offers; this game's wider rule removed 0 offers (0.0% of what seatOffers drew) and 0 bids (0.0% of the bids drawn)
+   cfb, twice fired over every pair of programs: 1892 markets, 46 in which gmSeat drew the first program that let him go (2.4%), 46 removed; 119 bids drawn from a program that let him go, 0 dropped
+   cbb: 22 feeds holding 4 offers; this game's wider rule removed 0 offers (0.0% of what seatOffers drew) and 0 bids (0.0% of the bids drawn)
+   cbb, twice fired over every pair of programs: 1560 markets, 52 in which gmSeat drew the first program that let him go (3.3%), 52 removed; 108 bids drawn from a program that let him go, 0 dropped
+S6) a bid comes from one tier up after a big year
+   cfb: 154 bids; after a title 4 of 36 (11.1%), after beating the ask 150 of 595 (25.2%); 51 taken (even dynasties go, odd ones stay)
+   cbb: 200 bids; after a title 8 of 65 (12.3%), after beating the ask 192 of 710 (27.0%); 63 taken (even dynasties go, odd ones stay)
+S7) keyed, never random
+   33586 seat calls under a Math.random that throws; 0 drew from it
+S8) the seat watches: the same games with it and without it
+   cfb: 28281 rounds and 4842 closes and offseasons compared byte for byte before a move or a firing
+   cbb: 23985 rounds and 5030 closes and offseasons compared byte for byte before a move or a firing
+S9) one rule for next year
+   ladder of 40320 careers: hostNextYear e3b0c4481b69e5a822e4f8bb953bcb35481fd2a9, seatNextYear e3b0c4481b69e5a822e4f8bb953bcb35481fd2a9, the base printed e3b0c4481b69e5a822e4f8bb953bcb35481fd2a9
+   collegeNextYear checked against seatNextYear over 40920 careers (600 from the fleets)
+SY) the year out
+   cfb: 16 years out played; refused in a seat 2802, on an open season 55, with next year shut 38; chairs left empty at the program that let him go during a year out 3
+   cbb: 5 years out played; refused in a seat 2895, on an open season 17, with next year shut 15; chairs left empty at the program that let him go during a year out 3
+simCollegeSeat CONTROL bidfirer FIRED: S5 went red with 229 failures (red: S5 (229))

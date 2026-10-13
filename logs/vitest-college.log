@@ -1,0 +1,65 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/lib/collegeSeat.test.ts [2m([22m[2m16 tests[22m[2m)[22m[33m 429[2mms[22m[39m
+ [32m✓[39m src/components/college-dynasty/collegeDynastyFixture.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[33m 5930[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 912: both college dynasty boards hold their recorded behaviour[2m > [22mcfb: every step matches the fixture [33m 3543[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 912: both college dynasty boards hold their recorded behaviour[2m > [22mcbb: every step matches the fixture [33m 2382[2mms[22m[39m
+ [31m❯[39m src/components/college-dynasty/CollegeSeat.test.tsx [2m([22m[2m18 tests[22m[2m | [22m[31m2 failed[39m[2m)[22m[33m 26414[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1320: the athletic director on the college boards[2m > [22mcfb: a new dynasty starts with him, the tile carries the ask, and the card opens and closes [33m 507[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1320: the athletic director on the college boards[2m > [22mcfb: the live line follows the record, and the recap grades the year and moves trust [33m 382[2mms[22m[39m
+   [32m✓[39m Round 1320: the athletic director on the college boards[2m > [22mcfb: an older dynasty is offered him at the first press; Not now writes nothing, Take the ask writes the block[32m 129[2mms[22m[39m
+   [32m✓[39m Round 1320: the athletic director on the college boards[2m > [22mcfb: a block that does not check out loads as an old save, never a crash[32m 223[2mms[22m[39m
+   [32m✓[39m Round 1320: the athletic director on the college boards[2m > [22mcfb: trust at zero is a firing, the recap says so, and See who calls opens the same market after a reload[32m 112[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1320: the athletic director on the college boards[2m > [22mcfb: Take the job moves him once and opens the new program's trail; Sit the year out plays a season without him [33m 305[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1320: the athletic director on the college boards[2m > [22mcfb: a closed market offers only a new dynasty, and hostile market saves load somewhere sane [33m 431[2mms[22m[39m
+   [32m✓[39m Round 1320: the athletic director on the college boards[2m > [22mcbb: a new dynasty starts with him, the tile carries the ask, and the card opens and closes[32m 67[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1320: the athletic director on the college boards[2m > [22mcbb: the live line follows the record, and the recap grades the year and moves trust [33m 315[2mms[22m[39m
+   [32m✓[39m Round 1320: the athletic director on the college boards[2m > [22mcbb: an older dynasty is offered him at the first press; Not now writes nothing, Take the ask writes the block[32m 66[2mms[22m[39m
+   [32m✓[39m Round 1320: the athletic director on the college boards[2m > [22mcbb: a block that does not check out loads as an old save, never a crash[32m 205[2mms[22m[39m
+   [32m✓[39m Round 1320: the athletic director on the college boards[2m > [22mcbb: trust at zero is a firing, the recap says so, and See who calls opens the same market after a reload[32m 204[2mms[22m[39m
+   [32m✓[39m Round 1320: the athletic director on the college boards[2m > [22mcbb: Take the job moves him once and opens the new program's trail; Sit the year out plays a season without him[32m 147[2mms[22m[39m
+   [32m✓[39m Round 1320: the athletic director on the college boards[2m > [22mcbb: a closed market offers only a new dynasty, and hostile market saves load somewhere sane[32m 224[2mms[22m[39m
+   [32m✓[39m Round 1320: a buyout bid after a big year[2m > [22mcfb: the bid shows on the recap; Go to moves him with the old stint ended as a buyout, Stay put keeps him[32m 167[2mms[22m[39m
+[31m   [31m×[31m Round 1320: a buyout bid after a big year[2m > [22mcfb: a second dynasty in one mount takes its own bid, though its key matches the first one's[39m[33m 12512[2mms[22m[39m
+[31m     → cfb: no second dynasty drew a bid over 80 seeds[39m
+   [32m✓[39m Round 1320: a buyout bid after a big year[2m > [22mcbb: the bid shows on the recap; Go to moves him with the old stint ended as a buyout, Stay put keeps him[32m 121[2mms[22m[39m
+[31m   [31m×[31m Round 1320: a buyout bid after a big year[2m > [22mcbb: a second dynasty in one mount takes its own bid, though its key matches the first one's[39m[33m 10293[2mms[22m[39m
+[31m     → cbb: no second dynasty drew a bid over 80 seeds[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 2 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/components/college-dynasty/CollegeSeat.test.tsx[2m > [22mRound 1320: a buyout bid after a big year[2m > [22mcfb: a second dynasty in one mount takes its own bid, though its key matches the first one's
+[31m[1mError[22m: cfb: no second dynasty drew a bid over 80 seeds[39m
+[36m [2m❯[22m src/components/college-dynasty/CollegeSeat.test.tsx:[2m398:13[22m[39m
+    [90m396| [39m        fireEvent[33m.[39m[34mclick[39m(m[33m.[39m[34mbutton[39m([32m'Fire yourself and start over'[39m))[33m;[39m
+    [90m397| [39m      }
+    [90m398| [39m      throw new Error(`${sport.name}: no second dynasty drew a bid ove…
+    [90m   | [39m            [31m^[39m
+    [90m399| [39m    }[33m,[39m [34m120000[39m)[33m;[39m
+    [90m400| [39m  }
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/components/college-dynasty/CollegeSeat.test.tsx[2m > [22mRound 1320: a buyout bid after a big year[2m > [22mcbb: a second dynasty in one mount takes its own bid, though its key matches the first one's
+[31m[1mError[22m: cbb: no second dynasty drew a bid over 80 seeds[39m
+[36m [2m❯[22m src/components/college-dynasty/CollegeSeat.test.tsx:[2m398:13[22m[39m
+    [90m396| [39m        fireEvent[33m.[39m[34mclick[39m(m[33m.[39m[34mbutton[39m([32m'Fire yourself and start over'[39m))[33m;[39m
+    [90m397| [39m      }
+    [90m398| [39m      throw new Error(`${sport.name}: no second dynasty drew a bid ove…
+    [90m   | [39m            [31m^[39m
+    [90m399| [39m    }[33m,[39m [34m120000[39m)[33m;[39m
+    [90m400| [39m  }
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m2 passed[39m[22m[90m (3)[39m
+[2m      Tests [22m [1m[31m2 failed[39m[22m[2m | [22m[1m[32m36 passed[39m[22m[90m (38)[39m
+[2m   Start at [22m 02:47:21
+[2m   Duration [22m 29.85s[2m (transform 1.18s, setup 518ms, collect 3.04s, tests 32.77s, environment 2.55s, prepare 1.46s)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/components/college-dynasty/CollegeSeat.test.tsx,title=src/components/college-dynasty/CollegeSeat.test.tsx > Round 1320%3A a buyout bid after a big year > cfb%3A a second dynasty in one mount takes its own bid%2C though its key matches the first one's,line=398,column=13::Error: cfb: no second dynasty drew a bid over 80 seeds%0A ❯ src/components/college-dynasty/CollegeSeat.test.tsx:398:13%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/components/college-dynasty/CollegeSeat.test.tsx,title=src/components/college-dynasty/CollegeSeat.test.tsx > Round 1320%3A a buyout bid after a big year > cbb%3A a second dynasty in one mount takes its own bid%2C though its key matches the first one's,line=398,column=13::Error: cbb: no second dynasty drew a bid over 80 seeds%0A ❯ src/components/college-dynasty/CollegeSeat.test.tsx:398:13%0A%0A

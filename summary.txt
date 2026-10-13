@@ -1,0 +1,8 @@
+vitest-default exit=1 29s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/components/college-dynasty/CollegeSeat.test.tsx,title=src/components/college-dynasty/CollegeSeat.test.tsx >
+vitest-college exit=1 30s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/components/college-dynasty/CollegeSeat.test.tsx,title=src/components/college-dynasty/CollegeSeat.test.tsx >
+anchors exit=0 0s | simCollegeSeat anchors: 16 rewrites of 13 controls and 3 variants checked, 0 cannot run
+tsc exit=0 101s | 
+c-allowfirer exit=1 106s | simCollegeSeat CONTROL allowfirer FIRED: S5 went red with 198 failures (red: S5 (198))
+c-bidfirer exit=1 97s | simCollegeSeat CONTROL bidfirer FIRED: S5 went red with 229 failures (red: S5 (229))
+c-placeoff exit=1 77s | simCollegeSeat CONTROL placeoff FIRED: S1 went red with 5714 failures (red: S1 (5714))
+simCollegeSeat exit=0 249s | simCollegeSeat: all sections green (S1 to S9 and SY)
