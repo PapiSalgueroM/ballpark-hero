@@ -1,0 +1,76 @@
+saves: A Walk 1329001 at Liverpool, world 2012, 2 month lines; B Walk 1329100, the World Cup 2006 won by England (his result ""); C Walk 1329200, the World Cup 2030 won by England
+[SIM_OFFLINE_BLOCK] external browser route continue https://fonts.googleapis.com
+  FAIL: 320 A: the feed of a season that happened names Wayne Rooney
+[SIM_OFFLINE_BLOCK] external browser route continue https://fonts.googleapis.com
+[SIM_OFFLINE_BLOCK] external browser route continue https://flagcdn.com
+  FAIL: 320 A story: page.waitForFunction: Timeout 30000ms exceeded.
+[SIM_OFFLINE_BLOCK] external browser route continue https://fonts.googleapis.com
+[SIM_OFFLINE_BLOCK] external browser route continue https://flagcdn.com
+  FAIL: 320 B history: page.waitForFunction: Timeout 30000ms exceeded.
+[SIM_OFFLINE_BLOCK] external browser route continue https://fonts.googleapis.com
+[SIM_OFFLINE_BLOCK] external browser route continue https://flagcdn.com
+  FAIL: 320 B card: a 2006 he did not qualify for names its champion
+[SIM_OFFLINE_BLOCK] external browser route continue https://fonts.googleapis.com
+[SIM_OFFLINE_BLOCK] external browser route continue https://flagcdn.com
+[SIM_OFFLINE_BLOCK] external browser route continue https://fonts.googleapis.com
+[SIM_OFFLINE_BLOCK] external browser route continue https://flagcdn.com
+[SIM_OFFLINE_BLOCK] external browser route continue https://flagcdn.com
+[SIM_OFFLINE_BLOCK] external browser route continue https://flagcdn.com
+[SIM_OFFLINE_BLOCK] external browser route continue https://flagcdn.com
+[SIM_OFFLINE_BLOCK] external browser route continue https://flagcdn.com
+[SIM_OFFLINE_BLOCK] external browser route continue https://flagcdn.com
+[SIM_OFFLINE_BLOCK] external browser route continue https://flagcdn.com
+[SIM_OFFLINE_BLOCK] external browser route continue https://flagcdn.com
+  FAIL: 320 C feed and bracket: page.waitForFunction: Timeout 30000ms exceeded.
+[SIM_OFFLINE_BLOCK] external browser route continue https://fonts.googleapis.com
+[SIM_OFFLINE_BLOCK] external browser route continue https://flagcdn.com
+  FAIL: 390 A: the feed of a season that happened names Wayne Rooney
+[SIM_OFFLINE_BLOCK] external browser route continue https://fonts.googleapis.com
+[SIM_OFFLINE_BLOCK] external browser route continue https://flagcdn.com
+  FAIL: 390 A story: page.waitForFunction: Timeout 30000ms exceeded.
+[SIM_OFFLINE_BLOCK] external browser route continue https://fonts.googleapis.com
+[SIM_OFFLINE_BLOCK] external browser route continue https://flagcdn.com
+  FAIL: 390 B history: page.waitForFunction: Timeout 30000ms exceeded.
+[SIM_OFFLINE_BLOCK] external browser route continue https://fonts.googleapis.com
+[SIM_OFFLINE_BLOCK] external browser route continue https://flagcdn.com
+  FAIL: 390 B card: a 2006 he did not qualify for names its champion
+[SIM_OFFLINE_BLOCK] external browser route continue https://fonts.googleapis.com
+[SIM_OFFLINE_BLOCK] external browser route continue https://flagcdn.com
+[SIM_OFFLINE_BLOCK] external browser route continue https://fonts.googleapis.com
+[SIM_OFFLINE_BLOCK] external browser route continue https://flagcdn.com
+[SIM_OFFLINE_BLOCK] external browser route continue https://flagcdn.com
+[SIM_OFFLINE_BLOCK] external browser route continue https://flagcdn.com
+[SIM_OFFLINE_BLOCK] external browser route continue https://flagcdn.com
+[SIM_OFFLINE_BLOCK] external browser route continue https://flagcdn.com
+[SIM_OFFLINE_BLOCK] external browser route continue https://flagcdn.com
+[SIM_OFFLINE_BLOCK] external browser route continue https://flagcdn.com
+[SIM_OFFLINE_BLOCK] external browser route continue https://flagcdn.com
+  FAIL: 390 C feed and bracket: page.waitForFunction: Timeout 30000ms exceeded.
+[SIM_OFFLINE_BLOCK] external browser route continue https://fonts.googleapis.com
+[SIM_OFFLINE_BLOCK] external browser route continue https://flagcdn.com
+  FAIL: 1280 A: the feed of a season that happened names Wayne Rooney
+[SIM_OFFLINE_BLOCK] external browser route continue https://fonts.googleapis.com
+[SIM_OFFLINE_BLOCK] external browser route continue https://flagcdn.com
+  FAIL: 1280 A story: page.waitForFunction: Timeout 30000ms exceeded.
+[SIM_OFFLINE_BLOCK] external browser route continue https://fonts.googleapis.com
+[SIM_OFFLINE_BLOCK] external browser route continue https://flagcdn.com
+  FAIL: 1280 B history: page.waitForFunction: Timeout 30000ms exceeded.
+[SIM_OFFLINE_BLOCK] external browser route continue https://fonts.googleapis.com
+[SIM_OFFLINE_BLOCK] external browser route continue https://flagcdn.com
+  FAIL: 1280 B card: a 2006 he did not qualify for names its champion
+[SIM_OFFLINE_BLOCK] external browser route continue https://fonts.googleapis.com
+[SIM_OFFLINE_BLOCK] external browser route continue https://flagcdn.com
+[SIM_OFFLINE_BLOCK] external browser route continue https://fonts.googleapis.com
+[SIM_OFFLINE_BLOCK] external browser route continue https://flagcdn.com
+[SIM_OFFLINE_BLOCK] external browser route continue https://flagcdn.com
+[SIM_OFFLINE_BLOCK] external browser route continue https://flagcdn.com
+[SIM_OFFLINE_BLOCK] external browser route continue https://flagcdn.com
+[SIM_OFFLINE_BLOCK] external browser route continue https://flagcdn.com
+[SIM_OFFLINE_BLOCK] external browser route continue https://flagcdn.com
+[SIM_OFFLINE_BLOCK] external browser route continue https://flagcdn.com
+[SIM_OFFLINE_BLOCK] external browser route continue https://flagcdn.com
+  FAIL: 1280 C feed and bracket: page.waitForFunction: Timeout 30000ms exceeded.
+320: A feed ok; A quiz ok; A story broke; B history broke; B card tiles qualifying/squad/matches widths 127/127/260 of 260; B card ok; C feed and bracket broke
+390: A feed ok; A quiz ok; A story broke; B history broke; B card tiles qualifying/squad/matches widths 162/162/330 of 330; B card ok; C feed and bracket broke
+1280: A feed ok; A quiz ok; A story broke; B history broke; B card tiles qualifying/squad/matches widths 339/339/684 of 684; B card ok; C feed and bracket broke
+FIRED: WALK_CONTROL=pastfeed (15 failures)
