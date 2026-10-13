@@ -296,6 +296,29 @@ It starts only after the lead's two rulings above. From the critic (its numbers)
   nothing on screen or on disk".
 - Advice 10, the real names: the parallel data guardian job (two sources read in full per name and
   era); Round B swaps in what the audit backs by then, through `stations` only (names are in no digest).
+  The critic's advice 10 in full, as it recorded what it could read on 2026-10-12 (a fetched page is
+  "read"; a search result is not). Round B and the data job start from this, not from a summary:
+  - NBA, now, "Lane agility" and "Max vertical": topendsports.com/sport/basketball/testing-draft-results-2024.htm
+    ("Lane Agility Drill", "Vertical Jump - max", from official NBA documents) and cbssports.com 2023-05-17,
+    2023-nba-draft-combine-measurements-results-purdues-zach-edey-stands-tall-with-victor-wembanyama-in-france
+    ("LANE AGILITY TIME", "MAX VERTICAL LEAP"). Two. nba.com's 2026 overview calls the test "pro lane drill"
+    (search result, and the earlier critic read it), so the audit row should say the name is the common one
+    through 2024, not the league's 2026 label.
+  - NBA, 2003: topendsports.com/sport/basketball/testing-draft-results-2003.htm ("Lane Agility Drill",
+    "Vertical Jump - max", "based on official league documents"). One; plain names unless a second is read.
+  - NFL, 2005, "40 yard dash": topendsports.com/sport/gridiron/nfl-draft-results-2005.htm ("Fastest 40 Yard
+    Times", citing ESPN Draft Tracker) and cbssports.com 2017-02-23,
+    look-aaron-rodgers-dubs-his-nfl-combine-40-yard-dash-time-fakenews ("a 4.71 40-yard dash at the 2005
+    #NFLCombine"). Two.
+  - NFL, "Position drills": philadelphiaeagles.com 2010-02-26, combine-preview-ot-and-te-drills-3565838
+    ("position-specific drills where NFL personnel can evaluate prospects"). One, and from neither era.
+    behindthesteelcurtain.com (2014) refused the fetch; pff.com and acmepackingcompany.com 2026 schedules (search
+    results only) describe on field drills by position group. NOT YET for both eras.
+  - MLB: mlb.com refused the fetch again (406). Search results only: mlb.com's 2025 combine preview (batting
+    practice, infield and outfield drills, bullpen sessions) and Perfect Game schedules (a 60 yard dash at its
+    showcases). Nothing I read describes what a 2004 pre draft showcase ran, so that era needs its own reading.
+    NOT YET; plain names.
+  - NHL, now, "Bike test" and "Pro agility": the audit row 65 stands (two sources, read 2026-10-03).
 - Advice 11: `desc` is rebuilt every render, so memoize the stations on (sport, eraId, pos) before they
   reach the dialog, and never list them in an effect's dependencies (a host effect keyed on them would
   reset a station mid run).
