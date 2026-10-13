@@ -1,0 +1,45 @@
+NEGATIVE CONTROL ON: one extra Math.random call in every youth year, before any paper or deck (section 7 must fail)
+The paper holds 44 stories, 23 of them under weight 1
+Driving the fleet: 200 ordinary, 200 elite and 100 loyal careers through the real engine
+   500 careers, 8200 playing seasons, 7453 batches, 7453 papers, 0 crashes
+1) The deck: 40,000 keyed draws, every tenth of the eligible list at its fair rate
+   save: ST, age 20, 5 rows; 83 eligible cards, 119804 picks over 40000 draws (2.995 a draw)
+   per tenth, observed over fair: 1.009, 0.99, 1.006, 0.998, 0.993, 1.011, 0.985, 0.996, 1.01, 1.004; single cards 0.926 to 1.06 (reported, not asserted)
+2) The paper: a weight 0.5 story prints at half the rate of a weight 1 story
+   3 stories eligible (weights 1 0.5 1); over 40000 papers the 0.5 story printed 7994 times, the weight 1 story 15978, others 16028: ratio 0.5 (sd 0.007)
+   the fleet's 7453 papers printed 18 of the 23 stories under weight 1, 3404 prints against a fair 3390.649; REDEMPTION 1 times
+   under weight 1 (weight printed/fair/qualified): Reveals Secret To Succes 0.5 188/184.989/2772; Followers After Viral Mo 0.5 1383/1378.412/6692; Booed By Own Fans After  0.7 308/289.782/764; Wants Out As Contract Ta 0.5 38/30.467/164; Out For Weeks With 0.5 9/9.056/50; Hits Out At Manager In S 0.3 10/10.942/101; Agent Demands Record Dea 0.4 48/45.574/999; : Another Season Of Riva 0.5 44/40.043/646; M Bid For 0.7 455/453.9/3366; Available On Free Transf 0.5 97/87.78/689; 's Latest Purchase Raise 0.8 0/0/0; Match Is A Show Now 0.9 222/229.193/1144; Never Celebrates, Never  0.9 58/65.919/533; Walks Disciplinary Tight 0.9 51/49.642/206; Breaks The Scouting Apps 0.8 0/0/0; HAPPIEST MAN IN FOOTBALL 0.7 208/212.656/2133; 's Monster Contract 0.7 8/10.055/146; LEADER OF THE NATION: 0.6 161/181.045/2266; Bought Mum The House, An 0.6 0/0/0; Clean Sheets, Strikers I 0.6 17/18.564/197; Is Football's Coldest Wa 0.6 0/0.689/8; 's Money Now Works Harde 0.5 99/91.753/1401; Refuses To Read The Cale 0.5 0/0.186/3
+3) Keyed: the deck and the paper draw nothing from the global stream
+   200 saves: 0 decks drew beyond the catalog build, 0 batches moved with the stream, 0 papers chose other stories under another seed
+4) Gates: a card that narrates the season fires only when the row holds it
+   card: fired / fired without its fact / batches whose row held the fact
+   1: 155/0/5985  4: 79/0/3772  7: 86/0/5985  9: 14/0/586  11: 49/0/1449  12: 10/0/470  15: 37/0/1216  17: 0/0/0  18: 10/0/247  19: 11/0/227
+5) SOCIAL MEDIA SENSATION prints, and only at a million followers or more
+   printed 1383 times in 7453 papers, 0 of them under a million
+6) Every story, every position: no bare position code, no "In <lower case>" tail
+   440 stories rendered over 10 positions, 0 could not render without their facts
+7) Before the first paper or deck nothing moves; saves the base wrote still answer here
+  FAIL (section 7): career 70000: the saves part at step 1 (youth), which runs neither the paper nor the deck
+  FAIL (section 7): career 70001: the saves part at step 1 (youth), which runs neither the paper nor the deck
+  FAIL (section 7): career 70002: the saves part at step 1 (youth), which runs neither the paper nor the deck
+  FAIL (section 7): career 70003: the saves part at step 1 (youth), which runs neither the paper nor the deck
+  FAIL (section 7): career 70004: the saves part at step 1 (youth), which runs neither the paper nor the deck
+  FAIL (section 7): career 70005: the saves part at step 1 (youth), which runs neither the paper nor the deck
+  FAIL (section 7): career 70006: the saves part at step 1 (youth), which runs neither the paper nor the deck
+  FAIL (section 7): career 70007: the saves part at step 1 (youth), which runs neither the paper nor the deck
+  FAIL (section 7): career 70008: the saves part at step 1 (youth), which runs neither the paper nor the deck
+  FAIL (section 7): career 70009: the saves part at step 1 (youth), which runs neither the paper nor the deck
+  FAIL (section 7): career 70010: the saves part at step 1 (youth), which runs neither the paper nor the deck
+  FAIL (section 7): career 70011: the saves part at step 1 (youth), which runs neither the paper nor the deck
+  FAIL (section 7): career 70012: the saves part at step 1 (youth), which runs neither the paper nor the deck
+  FAIL (section 7): career 70013: the saves part at step 1 (youth), which runs neither the paper nor the deck
+  FAIL (section 7): ... further failures in this section counted, not printed
+   200 careers, 200 steps compared: 0 reached a paper or deck step, 200 parted there, 0 with the season row byte equal when the paper ran (0 rows differ by the end of that step, from the draws after the paper)
+   19 old saved screens answered here (every choice of cards 1, 4, 7, 9, 11, 12, 15, 17, 18, 19, a newspaper, a transfer window)
+8) The seventh inverse gives the base's engine back byte for byte, and every change sits in this round's hunks
+   head 17fc5e558f7bbd7bcafeeb14723f1a8318d1dc8306ac0a94fb2b5736fd8ebc47; inverse applied 18 of 18 rows
+   base 65ffd9d102989f30c811ac80f884cb84f0b8ca4f9f3feb8e9fdcf9c00009661c (module says 65ffd9d102989f30c811ac80f884cb84f0b8ca4f9f3feb8e9fdcf9c00009661c); inverse gives 027f92130cab8b8712652c825b4294942dd295cfa2fb3beb86d72cd39b62fc4f
+  FAIL (section 8): the inverse applied to this engine does not give the base's engine byte for byte
+  FAIL (section 8): the engine changes at head lines 4913 to 4913, outside every hunk this round may edit
+   65 diff hunks against the base, each checked against 6 regions
+CONTROL prefix FIRED: section 7 failed (203 failures in all)
