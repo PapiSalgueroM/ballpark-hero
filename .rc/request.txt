@@ -1,0 +1,6 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+worldtruth: node scripts/simSoccerWorldTruth.mjs
+worldtruth-s3: SEED_OFFSET=3 node scripts/simSoccerWorldTruth.mjs
+ctl-quizyear: WORLD_TRUTH_CONTROL=quizyear node scripts/simSoccerWorldTruth.mjs
+ctl-arcade: WORLD_TRUTH_CONTROL=arcade node scripts/simSoccerWorldTruth.mjs
+simPhone2: node scripts/simPhone2.mjs
