@@ -187,14 +187,18 @@ fires.
 
 ## The seventh inverse (design 3.4 (h)) and decision 3 (i)
 
-`scripts/lib/careerDeckFair1327.mjs`: 18 rows (`imports`, `dilemma-comment`, `pickn`, `position-words`,
-`best-in-the-world`, `interview-and-sensation`, `injury-story`, `bid-and-move-stories`, `academy-story`,
-`weighted-paper`, `cards-1-to-6`, `cards-7-to-10`, `cards-11-to-16`, `cards-17-to-22`, `cards-23-to-29`,
-`cards-30-to-40`, `deck-helpers-and-gate`, `keyed-pick`), applied in order, each required exactly once at its turn.
-Applied to the head's engine they give the base's engine byte for byte: base sha256
-`0d9ab4a21241ca1d993fbc7a7176d3ed0de988d6cd2e6989d662c6a1307730ea`; head sha256 (d50c85d4)
-`0bc8e990eb2e...` (the full value is in the module header). simSoccerDeckFairness section 8 asserts it on every run
-and checks all 64 diff hunks against the six regions of decision 1 (the imports, the dilemma comment, pickN,
+`scripts/lib/careerDeckFair1327.mjs`: 17 rows since the review fixes of 2026-10-13 (`imports`, `dilemma-comment`,
+`pickn`, `position-words`, `best-in-the-world-and-rumour`, `interview-to-injury-stories`, `bid-and-move-stories`,
+`academy-story`, `weighted-paper`, `cards-1-to-6`, `cards-7-to-10`, `cards-11-to-16`, `cards-17-to-22`,
+`cards-23-to-29`, `cards-30-to-40`, `deck-helpers-and-gate`, `keyed-pick`; the two paper stories the fixes reworded
+joined their neighbours' blocks), applied in order, each required exactly once at its turn. Applied to the head's
+engine they give the base's (c9c77eba, Release BB) engine byte for byte: base sha256
+`65ffd9d102989f30c811ac80f884cb84f0b8ca4f9f3feb8e9fdcf9c00009661c`; head sha256
+`d4086c9bb824e30afdf54f56b87874be341b5b4a46e1e342f2a5968bca2fe802`. Regenerate after any engine edit with
+`node .tmp-fx/regen.mjs` in the r1327 worktree (untracked; it runs gen-inverse2.mjs and write-module.mjs from the
+same folder and names the rows by what they hold).
+simSoccerDeckFairness section 8 asserts it on every run
+and checks all 66 diff hunks against the six regions of decision 1 (the imports, the dilemma comment, pickN,
 generateNewsArticles, the 40 inline cards, the helpers and generateRandomEvents). Control `outside` (one market
 constant changed in a copy) breaks both the sha256 and the region check.
 
@@ -309,10 +313,45 @@ green: in its picker loop,
 11. feeDescription (engine 4343) has no caller left; delete it in the next round that owns that hunk.
 12. Card 5's deal pays its first year on signing and the brand pays every year after, so year one is paid twice
     (F14, money).
-13. seasonCentreOwnGoals.test.tsx needs its bounded step past (above) before this branch can merge green.
-14. The paper's weighted draw reads 0.48 to 0.493 of the weight 1 rate over five seeds where 0.5 is fair (each run
-    1 to 2.5 sd low, the five together about 3 sd): inside its band, worth a look at keyedRng's first draw over
-    near identical keys if it persists.
+13. seasonCentreOwnGoals.test.tsx needs its bounded step past (above) before this branch can merge green. Done in
+    the review fixes (8974536d), for the lead to rule on: the file is Round 1167's.
+14. The paper's weighted draw reads 0.48 to 0.493 of the weight 1 rate over five seeds where 0.5 is fair. Probed in
+    the review fixes: noise, not bias (see the review fixes section).
+15. Card 426 "Minus Twenty" (soccerCareerRealismA.ts 396, the other lane's file) has no climate gate and was dealt
+    at Palmeiras in the run review's walk; the fair deck deals the catalog's tail at its full rate, so such cards come
+    up more often than under the old shuffle (about 0.61 of fair). Same class as item 2.
+16. The yearly income cards (24, 28, 30) print a flat figure that the season scales by the personality and item
+    multipliers (engine 3116): F14, money.
+17. Six files outside the brief's list carry the inverse wiring (simCareerProgramme.mjs and five scripts/qa kits):
+    their node checks run the base deck, so none of them exercises the new deck; their browser oracles do.
+
+## Review fixes (2026-10-13)
+
+Two adversarial reviews of 874d777f (review-run-1327.md, review-read-1327.md in
+C:/Users/antho/dukb-handoff/2026-10-10/results-g) found five majors and fifteen minors. Fixed, each its own commit:
+- Card 11's first choice logs the row's injury ("Took time to recover from an MCL sprain: Pace -2"), not a serious
+  hamstring; INJURY BLOW and card 11 say "an MCL sprain", "an ACL rupture", "an Achilles tendon rupture", and
+  "bruised ribs" with no article ("have left their mark" on card 11's face).
+- "Booed By Own Fans" (woken) and the transfer rumour say "international" only with a cap, else the position word.
+- Card 7 needs row.year >= 2008: the Puskas Award was first given in 2009, for a 2008/09 goal (topendsports.com's
+  Puskas Award page and puskas.com's page on Cristiano Ronaldo, its first winner, both cited by the read review).
+- Card 15 reads half the division's league games, 2 x (size - 1), when the row holds the size; 38 otherwise.
+- Card 9's lost appeal keeps the printed 3-match ban (it drew 2 to 4).
+- seasonCentreOwnGoals.test.tsx steps past up to three centre bar screens (assertions unchanged).
+- What's New scoped to the 40 classic cards; the claim "anything a choice changes is printed on it" is gone.
+- simSoccerDeckFairness: fixed rows in section 4 (Puskas years, a loan club he left, division sizes), the keys'
+  season in section 3, section 6 reads "the <nation> international", new section 9 reads the faces. New controls:
+  uncapped (6), puskas and loanclub (4), keyseason and newsyear (3), injlog and injblow (9).
+Readings on df435b31 (r1327-fx1, seed 0): section 3, eight seasons a save, 8 different batches on average and 0 of
+100 saves under six; the paper printed one story all eight years in 1 of 80 saves; section 4 fired/wrong 1: 147/0,
+4: 73/0, 7: 92/0, 9: 17/0, 11: 32/0, 12: 9/0, 15: 33/0, 17: 0/0, 18: 11/0, 19: 7/0; section 9, 18 injuries rendered,
+the fleet dealt card 11 32 times, 12 9, 15 33, 19 7, printed INJURY BLOW 10 times and a move story 860 times.
+The paper's low ratio, probed with keyedRng's own code: the five offsets share one key family at one year, whose
+draws sit low (0.488, 0.481, 0.501, 0.502, 0.486 over the same family); at three other years the same family reads
+0.4984, 0.5024, 0.5048; 0.4993 over twenty runs; the first output is flat over 20 bins. Noise, not bias.
+Not fixed, with the reason: card 5's double first year and the income multipliers (F14 owns money); card 426's
+climate (the other lane's file); the column and repeat stories (owed 1 and 8); cards 32 and 36 (the lead); the six
+kits' wiring (they hold recordings; the inverse is what keeps them).
 - simSchemaNames and simLeaderboardCaps need the live database (blocked on the runner by design).
 
 
