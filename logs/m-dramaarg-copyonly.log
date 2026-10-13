@@ -1,0 +1,61 @@
+mut dramaarg: APPLIED to src/lib/clubManager.ts
+cmCopyOnly1326: base /home/runner/work/ballpark-hero/ballpark-hero/.rm1, head /home/runner/work/ballpark-hero/ballpark-hero
+  fleets A, 2 seasons a career; bare league names La Liga, Serie A, Ligue 1, Serie B, Ligue 2
+  active rewrites: article-board, article-news, drama, intl, staff
+fleet A: 13 careers
+  FAIL: A Liverpool (now): season 1 entry 25 (week 31) differs
+      season 1 entry 25 (week 31).inbox[1].text: an undeclared string
+        base: "One of your keepers and one of your defenders got matching tattoos to celebrate a win. Neither remembers deciding this."
+        head: "One of your keepers and another of the senior lads got matching tattoos to celebrate a win. Neither remembers deciding this."
+  A Liverpool (now) [Premier League]: seasons 0, entries 25, draws 31041/31041, bytes -, rewrites intl 25, stopped: season 1 entry 25 (week 31) (1s)
+  FAIL: A Barcelona (now): season 2 entry 24 (week 24) differs
+      season 2 entry 24 (week 24).inbox[0].text: an undeclared string
+        base: "One of your defenders keeps changing the dressing room playlist thirty seconds into every song and one of your forwards has hidden the speaker."
+        head: "One of your defenders keeps changing the dressing room playlist thirty seconds into every song and another of the senior lads has hidden the speaker."
+  A Barcelona (now) [La Liga]: seasons 1, entries 77, draws 80201/80201, bytes 165567/165652, rewrites article-board 82, article-news 209, intl 61, staff 17, stopped: season 2 entry 24 (week 24) (2s)
+  FAIL: A Real Madrid (now): season 1 entry 1 (week 1) differs
+      season 1 entry 1 (week 1).inbox[0].text: an undeclared string
+        base: "One of your forwards says his personal chef was poached by one of your keepers and now they are not speaking."
+        head: "One of your forwards says his personal chef was poached by another of the senior lads and now they are not speaking."
+  A Real Madrid (now) [La Liga]: seasons 0, entries 1, draws 2140/2140, bytes -, rewrites article-board 2, staff 1, stopped: season 1 entry 1 (week 1) (0s)
+  FAIL: A Celta Vigo (now): season 1 entry 31 (week 41) differs
+      season 1 entry 31 (week 41).inbox[0].text: an undeclared string
+        base: "Your star man and one of your midfielders got matching tattoos to celebrate a win. Neither remembers deciding this."
+        head: "Your star man and another of the senior lads got matching tattoos to celebrate a win. Neither remembers deciding this."
+  A Celta Vigo (now) [La Liga]: seasons 0, entries 31, draws 39158/39158, bytes -, rewrites article-news 68, intl 19, stopped: season 1 entry 31 (week 41) (1s)
+  FAIL: A Juventus (now): season 2 entry 5 (week 5) differs
+      season 2 entry 5 (week 5).inbox[0].text: an undeclared string
+        base: "One of your defenders is selling his own brand of protein cereal in the players lounge. one of your midfielders reckons it tastes like drywall."
+        head: "One of your defenders is selling his own brand of protein cereal in the players lounge. Another of the senior lads reckons it tastes like drywall."
+  A Juventus (now) [Serie A]: seasons 1, entries 49, draws 59208/59208, bytes 155287/155297, rewrites article-board 61, article-news 94, intl 41, staff 2, stopped: season 2 entry 5 (week 5) (1s)
+  FAIL: A PSG (now): season 1 entry 17 (week 17) differs
+      season 1 entry 17 (week 17).inbox[0].text: an undeclared string
+        base: "One of your forwards keeps changing the dressing room playlist thirty seconds into every song and one of your defenders has hidden the speaker."
+        head: "One of your forwards keeps changing the dressing room playlist thirty seconds into every song and another of the senior lads has hidden the speaker."
+  A PSG (now) [Ligue 1]: seasons 0, entries 17, draws 20342/20342, bytes -, rewrites article-board 18, article-news 46, intl 8, stopped: season 1 entry 17 (week 17) (0s)
+  FAIL: A Palermo (now): season 1 entry 6 (week 7) differs
+      season 1 entry 6 (week 7).inbox[0].text: an undeclared string
+        base: "One of your midfielders says his personal chef was poached by one of your keepers and now they are not speaking."
+        head: "One of your midfielders says his personal chef was poached by another of the senior lads and now they are not speaking."
+  A Palermo (now) [Serie B]: seasons 0, entries 6, draws 7653/7653, bytes -, rewrites article-news 4, stopped: season 1 entry 6 (week 7) (0s)
+  A OB (now) [Danish Superliga]: seasons 2, entries 51, draws 84135/84135, bytes 133724/133724 147365/147365, rewrites article-board 2 (1s)
+  FAIL: A Dundee (now): season 2 entry 2 (week 2) differs
+      season 2 entry 2 (week 2).inbox[0].text: an undeclared string
+        base: "One of your forwards and one of your midfielders got matching tattoos to celebrate a win. Neither remembers deciding this."
+        head: "One of your forwards and another of the senior lads got matching tattoos to celebrate a win. Neither remembers deciding this."
+  A Dundee (now) [Scottish Premiership]: seasons 1, entries 27, draws 46281/46281, bytes 136887/136887, rewrites none, stopped: season 2 entry 2 (week 2) (0s)
+  A West Ham (now) [EFL Championship]: seasons 2, entries 92, draws 105329/105329, bytes 155066/155066 161121/161121, rewrites intl 42 (2s)
+  FAIL: A Everton (era2005): season 1 entry 19 (week 26) differs
+      season 1 entry 19 (week 26).inbox[0].text: an undeclared string
+        base: "One of your midfielders keeps changing the dressing room playlist thirty seconds into every song and one of your defenders has hidden the speaker."
+        head: "One of your midfielders keeps changing the dressing room playlist thirty seconds into every song and another of the senior lads has hidden the speaker."
+  A Everton (era2005) [Premier League]: seasons 0, entries 19, draws 11467/11467, bytes -, rewrites intl 17, stopped: season 1 entry 19 (week 26) (0s)
+  A Leicester City (era2015) [Premier League]: seasons 1, entries 63, draws 34745/34745, bytes 93960/93982, rewrites intl 65, stopped: sacked at season 2 entry 22 (week 29) (1s)
+  FAIL: A Bayern Munich (era2020): season 1 entry 24 (week 24) differs
+      season 1 entry 24 (week 24).inbox[0].text: an undeclared string
+        base: "One of your keepers keeps changing the dressing room playlist thirty seconds into every song and one of your defenders has hidden the speaker."
+        head: "One of your keepers keeps changing the dressing room playlist thirty seconds into every song and another of the senior lads has hidden the speaker."
+  A Bayern Munich (era2020) [Bundesliga]: seasons 0, entries 24, draws 13610/13610, bytes -, rewrites staff 7, intl 27, stopped: season 1 entry 24 (week 24) (0s)
+rewrites fired over 13 careers: intl 305, article-board 165, article-news 421, staff 27
+  FAIL: rewrite drama is active on the head and fired zero times over fleets A: widen the fleet (COPY_ONLY_SEASONS), never pick seeds
+cmCopyOnly1326: RED, 11 failures

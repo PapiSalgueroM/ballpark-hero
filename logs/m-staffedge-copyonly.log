@@ -1,0 +1,15 @@
+mut staffedge: APPLIED to src/lib/clubManagerStaff.ts
+cmCopyOnly1326: base /home/runner/work/ballpark-hero/ballpark-hero/.rm2, head /home/runner/work/ballpark-hero/ballpark-hero
+  fleets D, 2 seasons a career; bare league names La Liga, Serie A, Ligue 1, Serie B, Ligue 2
+  active rewrites: article-board, article-news, drama, intl, staff
+fleet D: 3 careers
+  D Arsenal (every man on level 9) [Premier League]: seasons 2, entries 96, draws 109482/109482, bytes 166490/166490 163567/163644, rewrites intl 68, drama 15, staff 23 (3s)
+  D Liverpool (every man on level 9) [Premier League]: seasons 0, entries 25, draws 30618/30618, bytes -, rewrites intl 18, stopped: sacked at season 1 entry 25 (week 31) (1s)
+  FAIL: D Brentford (every man on level 9): season 2 entry 30 (week 30) differs
+      season 2 entry 30 (week 30).aiHeadlines[1]: an undeclared string
+        base: "🎯 Brighton have come in for Bram Ilving. Match them or lose him: 0 matches left this season."
+        head: "🎯 Brighton have come in for Bram Ilving, your attack coach. Match their offer on the Staff desk within 2 weeks or he goes. You can match 0 more offers this season."
+  D Brentford (every man on level 9) [Premier League]: seasons 1, entries 72, draws 82077/82077, bytes 155722/155740, rewrites staff 28, intl 51, article-board 10, stopped: season 2 entry 30 (week 30) (2s)
+rewrites fired over 3 careers: intl 137, drama 15, staff 51, article-board 10
+  FAIL: rewrite article-news is active on the head and fired zero times over fleets D: widen the fleet (COPY_ONLY_SEASONS), never pick seeds
+cmCopyOnly1326: RED, 2 failures

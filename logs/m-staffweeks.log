@@ -1,0 +1,15 @@
+mut staffweeks: APPLIED to src/lib/clubManagerStaff.ts
+4) the staff approach: offers counted, the weeks given
+  FAIL: with 2 left the line reads
+      "🛡️ Leeds United have come in for Matteus Drenthe, your defence coach. Match their offer on the Staff desk within 1 week or he goes. You can match 2 more offers this season."
+    want
+      "🛡️ Leeds United have come in for Matteus Drenthe, your defence coach. Match their offer on the Staff desk within 2 weeks or he goes. You can match 2 more offers this season."
+  FAIL: with 1 left the line reads
+      "🛡️ Leeds United have come in for Matteus Drenthe, your defence coach. Match their offer on the Staff desk within 1 week or he goes. You can match 1 more offer this season."
+    want
+      "🛡️ Leeds United have come in for Matteus Drenthe, your defence coach. Match their offer on the Staff desk within 2 weeks or he goes. You can match 1 more offer this season."
+  FAIL: with 0 left the line reads
+      "🛡️ Leeds United have come in for Matteus Drenthe, your defence coach. You have matched all the offers you can this season, so he goes in 1 week unless you let him go sooner."
+    want
+      "🛡️ Leeds United have come in for Matteus Drenthe, your defence coach. You have matched all the offers you can this season, so he goes in 2 weeks unless you let him go sooner."
+simCmCopy: RED on this tree, 3 failures

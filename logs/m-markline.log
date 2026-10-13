@@ -1,0 +1,8 @@
+mut markline: APPLIED to src/lib/clubManagerInternationals.ts
+3) the break note and the calendar line: this calendar's rule, never football's
+  FAIL: the calendar line says /do not stop/i: "International window, 21 Sep to 6 Oct (up to 4 games for each country). Your fixtures do not stop for it: your internationals go after your last game before it and come back tired for the next one."
+  FAIL: the calendar line says /do not stop/i: "International window, 21 Sep to 6 Oct. Your fixtures do not stop for it: your internationals go after your last game before it and come back tired for the next one. These dates are approximate."
+  FAIL: the calendar line does not name this calendar's rule: "International window, 21 Sep to 6 Oct (up to 4 games for each country). Your fixtures do not stop for it: your internationals go after your last game before it and come back tired for the next one."
+  FAIL: the calendar line does not name this calendar's rule: "International window, 21 Sep to 6 Oct. Your fixtures do not stop for it: your internationals go after your last game before it and come back tired for the next one. These dates are approximate."
+   4 notes and 4 calendar lines read; e.g. "International window, 21 Sep to 6 Oct (up to 4 games for each country). Your fixtures do not stop for it: your internationals go after your last game before it and come back tired for the next one."
+simCmCopy: RED on this tree, 4 failures

@@ -1,0 +1,15 @@
+m-promo exit=1 3s | simCmCopy: RED on this tree, 6 failures
+m-dramag exit=1 1s | simCmCopy: RED on this tree, 57 failures
+m-coverproj exit=1 1s | simCmCopy: RED on this tree, 7 failures
+m-staffedge exit=1 1s | simCmCopy: RED on this tree, 1 failures
+m-kittyzero exit=1 1s | simCmCopy: RED on this tree, 1 failures
+m-markline exit=1 1s | simCmCopy: RED on this tree, 4 failures
+m-matchcentre exit=1 2s | simCmCopy: RED on this tree, 1 failures
+m-staffweeks exit=1 1s | simCmCopy: RED on this tree, 3 failures
+m-coverflip exit=1 1s | simCmCopy: RED on this tree, 6 failures
+m-dramaarg-copyonly exit=1 10s | cmCopyOnly1326: RED, 11 failures
+m-dramaarg-simcopy exit=1 3s | simCmCopy: RED on this tree, 1 failures
+m-staffedge-copyonly exit=1 6s | cmCopyOnly1326: RED, 2 failures
+m-staffweeks-copyonly exit=1 3s | cmCopyOnly1326: RED, 5 failures
+m-promotarget-copyonly exit=1 53s | cmCopyOnly1326: RED, 2 failures
+m-clean exit=0 0s | clean-check-done

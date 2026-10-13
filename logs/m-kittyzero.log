@@ -1,0 +1,7 @@
+mut kittyzero: APPLIED to src/components/club-manager/FinancesScreen.tsx
+5) the money card: what the board covers and what that leaves the kitty
+   Liverpool, week 18: income £64.1m, spend £70.9m, board covers +£70.9m, kitty change +£64.1m (so far +£26.2m)
+   the same week with a 400m signing: income £64.1m, spend £470.9m, board covers +£70.9m, kitty change -£335.9m (so far -£373.8m)
+  FAIL: a fresh career, week 0: the kitty change £0k is red
+   a fresh career, week 0: income £63.4m, spend £70.8m, board covers +£70.8m, kitty change +£63.4m (so far £0k)
+simCmCopy: RED on this tree, 1 failures
