@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { NBA_ROUNDS, initNbaLeague, type NbaLeague, type NbaProspect, type SeriesResult } from './nbaFrontOffice';
+import { NBA_ROUNDS, initNbaLeague, nbaProspectToPlayer, type NbaLeague, type NbaProspect, type SeriesResult } from './nbaFrontOffice';
 import { nbaContractsOf, nbaGamePickRules, nbaPicksOf, nbaScoutRead, openNbaDesk, syncNbaPicks } from './nbaGmDesk';
 import { withGmBlock, type GmDesk } from './gmDesk';
 import { NBA_PICK_RULES, movePicks, pickKey } from './gmPicks';
@@ -146,6 +146,10 @@ describe('the host and the three presses', () => {
     expect(rounds.map(r => r.how)).toEqual(['draft', 'draft']);
     expect(rounds.map(r => r.round).sort()).toEqual([1, 2]);
     expect(rookies.find(p => ledger.men[p.id].round === 1)!.years).toBe(NBA_ROOKIE_SCALE_YEARS + 1);
+    /* His second round man keeps the plain draft deal, never the first round scale (review 2026-10-12, mutation m3). */
+    const plain = nbaProspectToPlayer(cls[cls.length - 1], mulberry32(1)).years;
+    expect(plain).not.toBe(NBA_ROOKIE_SCALE_YEARS + 1);
+    expect(rookies.find(p => ledger.men[p.id].round === 2)!.years).toBe(plain);
   });
   it('a GM with no pick is done on Continue; a GM whose last slot is the last pick is done by it', () => {
     const a = opened();
