@@ -55,7 +55,7 @@ const say = (ok, what) => {
 /** Every rule a seat node must keep, measured on the page. */
 async function seatChecks(page, label) {
   const r = await page.evaluate(() => {
-    const out = { roots: 0, small: [], short: [], over: [], wide: [] };
+    const out = { roots: 0, small: [], short: [], over: [], wide: [], minTap: null };
     const W = document.documentElement.clientWidth;
     for (const root of document.querySelectorAll('[data-college-seat]')) {
       out.roots += 1;
@@ -66,6 +66,7 @@ async function seatChecks(page, label) {
         if (own && parseFloat(getComputedStyle(el).fontSize) < 12) out.small.push(`${el.tagName} ${el.textContent.trim().slice(0, 30)}`);
       }
       for (const b of [...(root.tagName === 'BUTTON' ? [root] : []), ...root.querySelectorAll('button')]) {
+        out.minTap = Math.min(out.minTap ?? 999, Math.round(b.getBoundingClientRect().height * 10) / 10);
         if (b.getBoundingClientRect().height < 44 - 0.5) out.short.push(`${b.textContent.trim().slice(0, 30)} ${b.getBoundingClientRect().height.toFixed(1)}px`);
       }
       for (const sib of [root.previousElementSibling, root.nextElementSibling]) {
@@ -81,6 +82,7 @@ async function seatChecks(page, label) {
   if (r.short.length) shortFails += 1;
   say(r.over.length === 0, `${label}: a seat node sits over its neighbour: ${r.over.join(', ')}`);
   say(r.wide.length === 0, `${label}: a seat node runs past the page edge: ${r.wide.join(', ')}`);
+  console.log(`   ${label}: ${r.roots} seat nodes, smallest seat button ${r.minTap ?? 'none'} px`);
   return r;
 }
 
