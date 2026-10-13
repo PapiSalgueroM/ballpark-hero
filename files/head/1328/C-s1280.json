@@ -1,0 +1,272 @@
+{
+ "head": {
+  "era": {
+   "small": 25,
+   "font": [],
+   "controls": [],
+   "sizes": [],
+   "cut": [],
+   "overlaps": 0,
+   "overlapWords": [],
+   "sideways": false,
+   "cellSize": null,
+   "control": ""
+  },
+  "nation": {
+   "small": 56,
+   "font": [],
+   "controls": [],
+   "sizes": [],
+   "cut": [],
+   "overlaps": 0,
+   "overlapWords": [],
+   "sideways": false,
+   "cellSize": null,
+   "control": ""
+  },
+  "league": {
+   "small": 17,
+   "font": [],
+   "controls": [],
+   "sizes": [],
+   "cut": [],
+   "overlaps": 0,
+   "overlapWords": [],
+   "sideways": false,
+   "cellSize": null,
+   "control": ""
+  },
+  "team": {
+   "small": 137,
+   "font": [],
+   "controls": [],
+   "sizes": [],
+   "cut": [],
+   "overlaps": 0,
+   "overlapWords": [],
+   "sideways": false,
+   "cellSize": null,
+   "control": ""
+  },
+  "dugout": {
+   "small": 86,
+   "font": [],
+   "controls": [],
+   "sizes": [],
+   "cut": [],
+   "overlaps": 0,
+   "overlapWords": [],
+   "sideways": false,
+   "cellSize": null,
+   "control": ""
+  },
+  "hub": {
+   "small": 47,
+   "font": [],
+   "controls": [],
+   "sizes": [
+    "help button 44x44",
+    "Managers button 59x44",
+    "meter button 188x44",
+    "meter button 188x44"
+   ],
+   "cut": [],
+   "overlaps": 1,
+   "overlapWords": [
+    "🗓️ Took over mid season · the"
+   ],
+   "sideways": false,
+   "cellSize": null,
+   "control": "",
+   "cls": 0
+  },
+  "calendar": {
+   "small": 94,
+   "font": [],
+   "controls": [],
+   "sizes": [
+    "previous month 44x44",
+    "next month 44x44",
+    "Sim to 134x44",
+    "intensity button 275x66",
+    "intensity button 275x66",
+    "intensity button 275x66",
+    "Club home 83x44"
+   ],
+   "cut": [],
+   "overlaps": 1,
+   "overlapWords": [
+    "🗓️ Took over mid season · the"
+   ],
+   "sideways": false,
+   "cellSize": "118x46",
+   "control": ""
+  },
+  "training": {
+   "small": 51,
+   "font": [],
+   "controls": [],
+   "sizes": [
+    "Club home 83x44"
+   ],
+   "cut": [],
+   "overlaps": 1,
+   "overlapWords": [
+    "🗓️ Took over mid season · the"
+   ],
+   "sideways": false,
+   "cellSize": null,
+   "control": ""
+  },
+  "errors": []
+ },
+ "base": {
+  "era": {
+   "small": 25,
+   "font": [],
+   "controls": [],
+   "sizes": [],
+   "cut": [],
+   "overlaps": 0,
+   "overlapWords": [],
+   "sideways": false,
+   "cellSize": null,
+   "control": ""
+  },
+  "nation": {
+   "small": 56,
+   "font": [],
+   "controls": [],
+   "sizes": [],
+   "cut": [],
+   "overlaps": 0,
+   "overlapWords": [],
+   "sideways": false,
+   "cellSize": null,
+   "control": ""
+  },
+  "league": {
+   "small": 17,
+   "font": [],
+   "controls": [],
+   "sizes": [],
+   "cut": [],
+   "overlaps": 0,
+   "overlapWords": [],
+   "sideways": false,
+   "cellSize": null,
+   "control": ""
+  },
+  "team": {
+   "small": 137,
+   "font": [],
+   "controls": [],
+   "sizes": [],
+   "cut": [],
+   "overlaps": 0,
+   "overlapWords": [],
+   "sideways": false,
+   "cellSize": null,
+   "control": ""
+  },
+  "dugout": {
+   "small": 86,
+   "font": [],
+   "controls": [],
+   "sizes": [],
+   "cut": [],
+   "overlaps": 0,
+   "overlapWords": [],
+   "sideways": false,
+   "cellSize": null,
+   "control": ""
+  },
+  "hub": {
+   "small": 53,
+   "font": [
+    "meter words: \"Board\" at 9px",
+    "meter words: \"Safe\" at 9px",
+    "meter words: \"Fans\" at 9px",
+    "meter words: \"Turning\" at 9px"
+   ],
+   "controls": [
+    "help button is 40.0 by 40.0 px",
+    "Managers button is 58.9 by 16.0 px",
+    "meter button is 188.0 by 33.5 px",
+    "meter button is 188.0 by 33.5 px"
+   ],
+   "sizes": [
+    "help button 40x40",
+    "Managers button 59x16",
+    "meter button 188x34",
+    "meter button 188x34"
+   ],
+   "cut": [],
+   "overlaps": 0,
+   "overlapWords": [],
+   "sideways": false,
+   "cellSize": null,
+   "control": "",
+   "cls": 0
+  },
+  "calendar": {
+   "small": 111,
+   "font": [
+    "day strip: \"Sat 9 Jan\" at 11px",
+    "day strip: \"⚽ vs Valencia · La Liga · Round 20\" at 11px",
+    "day strip: \"🔓 The January window is open. Deadline \" at 10px",
+    "day strip: \"Sim to Sat 9 Jan\" at 11px",
+    "day strip: \"no match on the way, then stops at the w\" at 9px",
+    "intensity buttons: \"Rest first\" at 10px",
+    "intensity buttons: \"Two light sessions. Freshest legs on Sat\" at 8px",
+    "intensity buttons: \"Balanced\" at 10px",
+    "intensity buttons: \"Train one day, rest the next. The defaul\" at 8px",
+    "intensity buttons: \"Full training\" at 10px",
+    "intensity buttons: \"On the grass every weekday. Fastest grow\" at 8px"
+   ],
+   "controls": [
+    "previous month is 32.0 by 24.0 px",
+    "next month is 32.0 by 24.0 px",
+    "Sim to is 124.9 by 30.5 px",
+    "Club home is 82.8 by 16.0 px"
+   ],
+   "sizes": [
+    "previous month 32x24",
+    "next month 32x24",
+    "Sim to 125x31",
+    "intensity button 275x55",
+    "intensity button 275x55",
+    "intensity button 275x55",
+    "Club home 83x16"
+   ],
+   "cut": [],
+   "overlaps": 0,
+   "overlapWords": [],
+   "sideways": false,
+   "cellSize": "118x46",
+   "control": ""
+  },
+  "training": {
+   "small": 61,
+   "font": [
+    "intensity label: \"Light\" at 10px",
+    "intensity label: \"Normal\" at 10px",
+    "intensity label: \"Double\" at 10px",
+    "intensity line: \"The safe middle. Steady development, nor\" at 9px"
+   ],
+   "controls": [
+    "Club home is 82.8 by 16.0 px"
+   ],
+   "sizes": [
+    "Club home 83x16"
+   ],
+   "cut": [],
+   "overlaps": 0,
+   "overlapWords": [],
+   "sideways": false,
+   "cellSize": null,
+   "control": ""
+  },
+  "errors": []
+ }
+}

@@ -1,0 +1,13 @@
+#!serve
+#!playwright
+basebuild: git worktree add /tmp/base 8fea14e216fb550b4676ac29f06867234594df21 > /dev/null 2>&1; ln -s "$PWD/node_modules" /tmp/base/node_modules; (cd /tmp/base && npm run build > /tmp/basebuild.log 2>&1); s=$?; tail -3 /tmp/basebuild.log; nohup node scripts/lib/hostLikeServer.mjs /tmp/base/dist 4174 > /tmp/baseserver.log 2>&1 & sleep 3; curl -s -o /dev/null -w "base server %{http_code}\n" http://localhost:4174/club-manager; exit $s
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json; s=$?; echo "tsc exit $s"; exit $s
+walk-head: for i in $(seq 1 180); do curl -s -o /dev/null http://localhost:4174/club-manager && break; sleep 5; done; RC_OUT="$RC_OUT/head" HEAD_URL=http://localhost:4173 BASE_URL=http://localhost:4174 node scripts/playCmHubLanding.mjs
+walk-base-B: for i in $(seq 1 180); do curl -s -o /dev/null http://localhost:4174/club-manager && break; sleep 5; done; RC_OUT="$RC_OUT/base" HEAD_URL=http://localhost:4174 HUB_LANDING_SECTIONS=B node scripts/playCmHubLanding.mjs
+control-nosticky: RC_OUT="$RC_OUT/nosticky" HUB_LANDING_CONTROL=nosticky HUB_LANDING_SECTIONS=B node scripts/playCmHubLanding.mjs
+vitest: node_modules/.bin/vitest run src/test/useArrivalTop.test.tsx src/test/calendarCurrentDate.test.tsx src/test/clubManagerEraPicker.test.tsx src/test/clubManagerSave.test.tsx src/test/clubManagerSaveSize.test.tsx src/test/clubManagerWorldEditorPage.test.tsx --testTimeout=300000 --hookTimeout=120000
+simMidSeasonStart: node scripts/simMidSeasonStart.mjs
+simEarlyReturnScope: node scripts/simEarlyReturnScope.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+playClubManagerSlots: node scripts/playClubManagerSlots.mjs
+simRevealScroll: node scripts/simRevealScroll.mjs

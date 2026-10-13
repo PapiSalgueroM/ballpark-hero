@@ -1,0 +1,56 @@
+{
+ "landing": [],
+ "fails": [
+  {
+   "section": "B",
+   "msg": "celta-320 last row, a real click: the page moved 541 px (scrollY 643 to 1184)"
+  },
+  {
+   "section": "B",
+   "msg": "celta-320 last row, a real click: the tapped day is still on screen (-42 px)"
+  },
+  {
+   "section": "B",
+   "msg": "celta-320: the calendar's intensity buttons read Rest first, Balanced, Full training"
+  },
+  {
+   "section": "B",
+   "msg": "celta-320: the calendar says neither Rest first nor Full training"
+  },
+  {
+   "section": "B",
+   "msg": "liverpool-390 first row, an in page click: the page moved 960 px (scrollY 182 to 1142)"
+  },
+  {
+   "section": "B",
+   "msg": "liverpool-390 first row, an in page click: the tapped day is still on screen (-282 px)"
+  },
+  {
+   "section": "B",
+   "msg": "liverpool-390: the calendar's intensity buttons read Rest first, Balanced, Full training"
+  },
+  {
+   "section": "B",
+   "msg": "liverpool-390: the calendar says neither Rest first nor Full training"
+  },
+  {
+   "section": "B",
+   "msg": "aberdeen-1280 first row, an in page click: the page moved 870 px (scrollY 113 to 983)"
+  },
+  {
+   "section": "B",
+   "msg": "aberdeen-1280 first row, an in page click: the tapped day is still on screen (-282 px)"
+  },
+  {
+   "section": "B",
+   "msg": "aberdeen-1280: the calendar's intensity buttons read Rest first, Balanced, Full training"
+  },
+  {
+   "section": "B",
+   "msg": "aberdeen-1280: the calendar says neither Rest first nor Full training"
+  }
+ ],
+ "counts": {
+  "B": 51
+ }
+}

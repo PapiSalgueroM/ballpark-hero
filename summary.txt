@@ -1,0 +1,12 @@
+build exit=0 31s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+basebuild exit=0 43s | base server 200
+walk-base-B exit=1 22s | playCmHubLanding: 12 failure(s) (B 51 pass 12 fail)
+tsc exit=0 81s | tsc exit 0
+control-nosticky exit=1 22s | playCmHubLanding: CONTROL nosticky FIRED, section B went red on 13 check(s) (B 50 pass 13 fail)
+vitest exit=0 8s |    Duration  8.19s (transform 3.09s, setup 363ms, collect 7.17s, tests 10.19s, environment 3.25s, prepare 1.00s)
+simMidSeasonStart exit=0 3s | simMidSeasonStart: all green
+simEarlyReturnScope exit=0 16s | simEarlyReturnScope: all green
+playClubManagerSlots exit=0 11s | playClubManagerSlots: green
+simHarnessAnchors exit=0 45s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+walk-head exit=1 299s | playCmHubLanding: 9 failure(s) (A 7 pass 1 fail, B 63 pass 0 fail, C 76 pass 8 fail, D 12 pass 0 fail, E 4 pass 0 fail, F 9 pass 0 fail)
+simRevealScroll exit=0 214s | Green. 53 presses measured, nothing dragged the page down on content that was already readable, no panel lost its top, and 4 presses proved the feature still does its job
