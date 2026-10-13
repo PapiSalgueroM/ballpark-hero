@@ -144,7 +144,7 @@ export const CELEBRATIONS: (AppearanceOption & { emoji: string; line: string })[
   { id: "shush", label: "The Shush", emoji: "🤫", line: "shush the away end with one finger. They deserved it" },
   { id: "heart_hands", label: "Heart Hands", emoji: "🫶", line: "make a heart to the family section" },
   { id: "robot", label: "The Robot", emoji: "🤖", line: "hit a crisp robot that goes straight to every highlight reel" },
-  { id: "cradle", label: "Baby Cradle", emoji: "👶", line: "rock the baby cradle for the newest member of the family" },
+  { id: "cradle", label: "Baby Cradle", emoji: "👶", line: "rock an imaginary baby cradle" },
   { id: "binoculars", label: "Binoculars", emoji: "🔭", line: "scan the crowd through pretend binoculars looking for the doubters" },
   { id: "phone_call", label: "Phone Call", emoji: "📞", line: "pick up an imaginary phone. Sorry, the GOAT line is busy" },
   { id: "sleeper", label: "The Sleeper", emoji: "😴", line: "lie down for a nap on the grass. Too easy" },

@@ -5,6 +5,9 @@ import NflBoard from '@/components/front-office/FrontOfficeBoard';
 import NhlBoard from '@/components/nhl-front-office/NhlFrontOfficeBoard';
 import { initLeague, generateDraftClass, runPlayoffs, REGULAR_WEEKS } from '@/lib/frontOffice';
 import { initNhlLeague, nhlDraftClass, runNhlFoPlayoffs, nhlContributors, NHL_FO_ROUNDS } from '@/lib/nhlFrontOffice';
+/* Round 1309: a save in the NFL playoffs holds its bracket */
+import { NFL_POSTSEASON } from '@/lib/frontOfficePostseason';
+import { openBracket } from '@/lib/gmBracket';
 
 vi.mock('@/integrations/supabase/client', () => ({ supabase: {}, SUPABASE_URL: 'https://fixture.invalid', SUPABASE_PUBLISHABLE_KEY: 'fixture-public-key' }));
 vi.mock('@/contexts/AuthContext', () => ({ useAuth: () => ({ user: null, profile: null, refreshProfile: vi.fn() }) }));
@@ -108,6 +111,15 @@ for (const c of cases) describe(`${c.sport} actual save recovery`, () => {
     expect(view.queryByRole('alert')).toBeNull(); expect(localStorage.getItem(c.key)).toBe(raw); expect(writes).not.toHaveBeenCalled();
   });
 
+  /* Round 1309: Week 18 is the playoffs, and a hub save there holds its bracket */
+  const inBracket = (s: Saved) => { s.league.week = 18; s.playoffs = openBracket(NFL_POSTSEASON.formatFor(s.league.season)!, s.league.season, NFL_POSTSEASON.seeds(s.league)); };
+  if (c.sport === 'NFL') it('restores a save in its playoffs with its bracket, without rewriting storage', () => {
+    const saved = save(c.sport, c.team); inBracket(saved);
+    const raw = JSON.stringify(saved), { view, writes, removes } = mount(raw);
+    expect(view.queryByRole('alert')).toBeNull(); expect(view.getByRole('button', { name: /^👔\s*Roster/ })).toBeVisible();
+    expect(localStorage.getItem(c.key)).toBe(raw); expect(writes).not.toHaveBeenCalled(); expect(removes).not.toHaveBeenCalled();
+  });
+
   const corrupt: [string, (saved: Saved) => void][] = [
     ['zero period', s => { s.league[c.period] = 0; }],
     ['fractional period', s => { s.league[c.period] = 2.5; }],
@@ -122,6 +134,7 @@ for (const c of cases) describe(`${c.sport} actual save recovery`, () => {
     ['missing schedule', s => { delete s.league.schedule; }],
     ['missing schedule week', s => { s.league.schedule[3] = null; }],
     ['unplayable eighteenth hub week', s => { s.league.week = 18; }],
+    ['an eighteenth hub week with a bracket whose season already has a champion', s => { inBracket(s); s.league.champions.push({ season: s.league.season, team: c.team }); }],
   );
   else corrupt.push(['out of range round', s => { s.league.round = 21; }]);
   for (const [name, damage] of corrupt) it(`rejects ${name} before render and deletes only this save on request`, () => {

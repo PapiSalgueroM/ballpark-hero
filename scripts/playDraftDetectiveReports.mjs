@@ -146,9 +146,44 @@ async function walk(width, height) {
     record.help = { phase: 'focus readiness' };
     try {
       await dialog.waitFor({ state: 'visible', timeout: 2000 });
-      await page.waitForFunction(panel => panel.isConnected && panel.contains(document.activeElement), await dialog.elementHandle({ timeout: 2000 }), { timeout: 2000 });
+      record.help.phase = 'opening animation readiness';
+      record.help.openingAnimations = await dialog.evaluate(async panel => {
+        const finite = panel.getAnimations({ subtree: true }).filter(animation => {
+          const timing = animation.effect?.getComputedTiming();
+          return timing && Number.isFinite(timing.endTime) && animation.playState !== 'finished';
+        });
+        const observed = finite.map(animation => ({ name: animation.animationName ?? null, playState: animation.playState,
+          currentTime: typeof animation.currentTime === 'number' ? animation.currentTime : null, timing: animation.effect.getComputedTiming() }));
+        await Promise.all(finite.map(animation => animation.finished));
+        return observed;
+      });
+      await page.waitForFunction(panel => panel.isConnected && panel.getAttribute('data-state') === 'open'
+        && panel.contains(document.activeElement) && document.body.style.pointerEvents === 'none'
+        && getComputedStyle(panel).pointerEvents === 'auto', await dialog.elementHandle({ timeout: 2000 }), { timeout: 2000 });
+      record.help.preEscape = await dialog.evaluate(panel => ({ state: panel.getAttribute('data-state'), focused: panel.contains(document.activeElement),
+        bodyPointerEvents: document.body.style.pointerEvents, panelPointerEvents: getComputedStyle(panel).pointerEvents,
+        active: document.activeElement?.outerHTML ?? null, animations: panel.getAnimations({ subtree: true }).map(animation => ({ playState: animation.playState, timing: animation.effect?.getComputedTiming() ?? null })) }));
+      await page.evaluate(() => {
+        window.__draftHelpEscapeEvents = [];
+        window.__draftHelpEscapeListener = event => {
+          if (event.key !== 'Escape') return;
+          const row = { key: event.key, isTrusted: event.isTrusted, eventPhase: event.eventPhase, timeStamp: event.timeStamp,
+            target: event.target instanceof Element ? event.target.outerHTML : null, defaultPreventedAtCapture: event.defaultPrevented, defaultPreventedAfter: null };
+          window.__draftHelpEscapeEvents.push(row);
+          queueMicrotask(() => { row.defaultPreventedAfter = event.defaultPrevented; });
+        };
+        window.addEventListener('keydown', window.__draftHelpEscapeListener, true);
+      });
       record.help.phase = 'Escape restoration';
-      await page.keyboard.press('Escape');
+      try { await page.keyboard.press('Escape'); }
+      finally {
+        record.help.escapeEvents = await page.evaluate(() => {
+          window.removeEventListener('keydown', window.__draftHelpEscapeListener, true);
+          const rows = window.__draftHelpEscapeEvents;
+          delete window.__draftHelpEscapeListener; delete window.__draftHelpEscapeEvents;
+          return rows;
+        });
+      }
       await dialog.waitFor({ state: 'hidden', timeout: 2000 });
       await page.waitForFunction(button => button.isConnected && document.activeElement === button, helpTrigger, { timeout: 2000 });
       check(await helpTrigger.evaluate(button => document.activeElement === button), `${tag}: Escape returns native help focus`);
@@ -160,9 +195,9 @@ async function walk(width, height) {
         dialogs: Array.from(document.querySelectorAll('[role="dialog"]')).map(panel => ({ state: panel.getAttribute('data-state'), focused: panel.contains(document.activeElement), text: panel.textContent.slice(0, 300) })) }));
       throw error;
     }
-    await page.getByRole('button', { name: 'Report', exact: true }).click();
+    await page.locator('[data-seo-content] > [data-no-prerender]').getByRole('button', { name: 'Report a problem', exact: true }).click();
     await page.getByRole('button', { name: 'Other', exact: true }).click();
-    await page.getByRole('textbox', { name: 'Describe what is wrong with this question' }).fill('Fictional offline fixture report');
+    await page.getByRole('textbox', { name: 'Describe the problem' }).fill('Fictional offline fixture report');
     await page.getByRole('button', { name: 'Submit Report', exact: true }).click();
     await page.getByText('Thanks for reporting!', { exact: true }).waitFor();
     const report = reports.at(-1);

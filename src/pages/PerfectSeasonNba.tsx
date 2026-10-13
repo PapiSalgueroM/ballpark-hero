@@ -6,7 +6,6 @@ import { GameNav } from '@/components/game/GameNav';
 import { GameNavbar } from '@/components/game/GameNavbar';
 import { GameHelp } from '@/components/game/GameHelp';
 import AdBanner from '@/components/ads/AdBanner';
-import ReportQuestion from '@/components/game/ReportQuestion';
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
 import {
@@ -812,12 +811,20 @@ const PerfectSeasonNba = () => {
 
         <AdBanner slot="7540487748" format="horizontal" className="mt-8" />
 
-        <div className="flex justify-center mt-6">
-          <ReportQuestion gameType="perfect-season-nba" />
-        </div>
-
         <GameSeoContent
           pageHasOwnH1
+          reportGameContext={{
+            phase, mode, puzzleDate: todayStr,
+            decade: decade?.id ?? null,
+            theme: dailyTheme?.id ?? null,
+            spins, rerolls,
+            squad: squad?.squadId ?? null,
+            selected: selected?.playerId ?? null,
+            picks: NBA_SLOTS.map(slot => [slot.key, picks[slot.key]?.playerId ?? null]),
+            openSlots,
+            result: sim ? [sim.wins, sim.losses, sim.overall, revealed, poSeed] : null,
+            lockedResult: lockedAttempt ? [lockedAttempt.sim.wins, lockedAttempt.sim.losses, lockedAttempt.overall] : null,
+          }}
           title="82-0 NBA Perfect Season Challenge"
           description="Draft across every era of NBA history. The wheel decides which team and season you draft from, one player per spin, no repeats. Then the sim decides your fate over 82 games."
           howToPlay={[

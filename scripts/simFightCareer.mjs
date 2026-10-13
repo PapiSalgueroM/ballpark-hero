@@ -472,6 +472,30 @@ fs.writeFileSync(ENTRY, [
 execSync(`"${findEsbuild()}" "${ENTRY}" --bundle --format=esm --platform=node --outfile="${BUNDLE}"`, { stdio: 'pipe' });
 const { fc, fl, ff, fi, fr, fm } = await import(pathToFileURL(BUNDLE).href);
 
+/* Round 1313, FIGHT_PROVE=<commit>: every file this harness copies is read at that commit (git show, in
+   memory), written into a second temp tree the same way and bundled; the two bundle texts are compared with
+   the two folder names taken out. Equal text is byte equality of every fight career on every seed. It is the
+   proof that moving the fact beat builders out of careerRivalryEvents.ts (no fight file calls one, so the
+   bundler drops them) changed nothing the fight careers run. Judged only with no control on. */
+if (process.env.FIGHT_PROVE) {
+  const at = process.env.FIGHT_PROVE;
+  if (CONTROL) { console.log('   FAIL FIGHT_PROVE runs with no control on (a control edits one tree and not the other)'); process.exit(2); }
+  console.log(`0) FIGHT_PROVE: the bundle of this tree against the same files at ${at}`);
+  const show = rel => execSync(`git show ${at}:${rel}`, { cwd: ROOT, maxBuffer: 1 << 26 }).toString().replaceAll('\r\n', '\n');
+  const TMP2 = fs.mkdtempSync(path.join(os.tmpdir(), 'fightcareer-at-'));
+  fs.writeFileSync(path.join(TMP2, 'fightCareer.ts'), local(show('src/lib/fightCareer.ts')));
+  fs.writeFileSync(path.join(TMP2, 'careerEngine.ts'), show('src/lib/careerEngine.ts'));
+  for (const name of LIFE_FILES) fs.writeFileSync(path.join(TMP2, `${name}.ts`), local(show(`src/lib/${name}.ts`)));
+  fs.writeFileSync(path.join(TMP2, 'entry.ts'), fs.readFileSync(ENTRY, 'utf8'));
+  const BUNDLE2 = path.join(TMP2, 'bundle.mjs');
+  execSync(`"${findEsbuild()}" "${path.join(TMP2, 'entry.ts')}" --bundle --format=esm --platform=node --outfile="${BUNDLE2}"`, { stdio: 'pipe' });
+  const textOf = (file, dir) => fs.readFileSync(file, 'utf8').replaceAll('\r\n', '\n').split(path.basename(dir)).join('<tree>');
+  const a = textOf(BUNDLE, TMP); const b = textOf(BUNDLE2, TMP2);
+  const differing = [SRC, ENGINE, ...LIFE_FILES.map(n => path.join(TMP, `${n}.ts`))].filter(f => fs.readFileSync(f, 'utf8').replaceAll('\r\n', '\n') !== fs.readFileSync(path.join(TMP2, path.basename(f)), 'utf8').replaceAll('\r\n', '\n')).map(f => path.basename(f));
+  if (a === b) ok(`the fight bundle is the same text at ${at} and here (${a.length} characters; source files that differ between the two trees: ${differing.join(', ') || 'none'})`);
+  else fail(`the fight bundle at ${at} differs from this tree's (${a.length} against ${b.length} characters; source files that differ: ${differing.join(', ') || 'none'}): hash seeded careers on both before calling the move clean`);
+}
+
 /* ── a deterministic stream, so every number below is reproducible ── */
 function rngFrom(seed) {
   let a = seed >>> 0;

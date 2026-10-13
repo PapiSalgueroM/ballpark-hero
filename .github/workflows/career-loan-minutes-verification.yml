@@ -1,0 +1,256 @@
+name: Career loan minutes verification
+on:
+  push:
+    branches: [codex/career-loan-minutes]
+permissions:
+  contents: read
+concurrency:
+  group: career-loan-minutes-${{ github.sha }}
+  cancel-in-progress: false
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    defaults:
+      run:
+        shell: bash
+    env:
+      SIM_NETWORK: offline
+      ENGINES: chromium
+      TZ: UTC
+      SEO_SPLIT_BASE_REF: HEAD
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24.21.0'
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Complete exact current and baseline source archives
+        run: |
+          mkdir -p career-loan-minutes-artifacts/helpers
+          test "$(git rev-parse HEAD)" = "${{ github.sha }}"
+          test "$(git rev-parse 'aa564f16019b9e821981d5c4e3e0262312c73b62^{tree}')" = e3e5332ddf95b79802c82487a03df3c0aca32e75
+          git diff --name-status aa564f16019b9e821981d5c4e3e0262312c73b62 HEAD > career-loan-minutes-artifacts/changed-source.txt
+          node --input-type=module - <<'JS'
+          import fs from 'node:fs';import assert from 'node:assert/strict';import {execFileSync} from 'node:child_process';
+          const base='aa564f16019b9e821981d5c4e3e0262312c73b62',allowed=['src/lib/soccerCareerEngine.ts','src/lib/soccerCareerAppearance.ts','scripts/simSoccerLoanMinutes.mjs','.github/workflows/career-loan-minutes-verification.yml','scripts/playSoccerCareerFamily.mjs','scripts/simSoccerContractMoves.mjs','docs/ROUND1283.md','docs/PROJECT-STATE.md','docs/WORKBOARD.md'],changed=execFileSync('git',['diff','--name-only','-z',base,'HEAD']).toString().split('\0').filter(Boolean);
+          fs.writeFileSync('career-loan-minutes-artifacts/source-scope.json',JSON.stringify({base,allowed,changed},null,2));for(const file of changed)assert(allowed.includes(file),'undeclared change '+file);
+          for(const file of ['package.json','package-lock.json','scripts/runAllSims.mjs','scripts/lib/offlineTransport.cjs',...['simLoanSpell','simClubVerdict','simContracts','simContractPreview','simSoccerCareerSaveRetry','simSoccerCareerSaveRecovery','simSeasonFamilySummary','simSeasonVerdict'].map(name=>'scripts/'+name+'.mjs')])assert.equal(execFileSync('git',['rev-parse','HEAD:'+file]).toString(),execFileSync('git',['rev-parse',base+':'+file]).toString(),file+' complete baseline hold');
+          const relatedRepairs=[
+           {"file":"scripts/playSoccerCareerFamily.mjs","from":"    await context.route(/supabase\\.co/, route => route.abort());","to":"    // Recorded-save fixture isolation keeps requests on the existing local host.\n    await context.route('**/*', route => new URL(route.request().url()).origin === new URL(BASE).origin ? route.continue() : route.abort());"},
+           {"file":"scripts/simSoccerContractMoves.mjs","from":"assert.equal(B.contracts.soccerExtensionQuote(cameo).weeklyWage, 100000, 'an excellent cameo cannot earn a veteran raise');","to":"assert.equal(B.contracts.soccerExtensionQuote(cameo).weeklyWage, 100000, 'an excellent cameo cannot earn a veteran raise');\nconsole.log('ok   excellent two-appearance veteran cameo keeps the existing 100000 weekly wage');"}
+          ];
+          const occurrences=(source,needle)=>source.split(needle).length-1;for(const repair of relatedRepairs){const original=execFileSync('git',['show',base+':'+repair.file]).toString(),actual=execFileSync('git',['show','HEAD:'+repair.file]).toString();assert.equal(occurrences(original,repair.from),1,repair.file+' unique baseline repair anchor');assert.equal(occurrences(actual,repair.to),1,repair.file+' unique actual repair anchor');assert.equal(actual,original.replace(repair.from,repair.to),repair.file+' entire baseline forward');assert.equal(actual.replace(repair.to,repair.from),original,repair.file+' entire baseline undo');fs.writeFileSync('career-loan-minutes-artifacts/related-source-repair-bindings.json',JSON.stringify(relatedRepairs.map(row=>({file:row.file,from:row.from,to:row.to})),null,2));}
+          for(const file of allowed.slice(0,6))assert(execFileSync('git',['cat-file','-s','HEAD:'+file]).toString().trim()>0,file+' committed source is nonempty');
+          JS
+          git rev-parse HEAD > career-loan-minutes-artifacts/source-head.txt
+          git rev-parse 'HEAD^{tree}' > career-loan-minutes-artifacts/source-tree.txt
+          git -c core.autocrlf=false archive --format=zip --output=career-loan-minutes-artifacts/source.zip HEAD
+          git ls-tree -r HEAD > career-loan-minutes-artifacts/source-inventory.txt
+          git -c core.autocrlf=false archive --format=zip --output=career-loan-minutes-artifacts/base-source.zip aa564f16019b9e821981d5c4e3e0262312c73b62
+          git ls-tree -r aa564f16019b9e821981d5c4e3e0262312c73b62 > career-loan-minutes-artifacts/base-source-inventory.txt
+          sha256sum career-loan-minutes-artifacts/source.zip career-loan-minutes-artifacts/base-source.zip > career-loan-minutes-artifacts/source-archive-sha256.txt
+          sha256sum package.json package-lock.json > career-loan-minutes-artifacts/packages-before.txt
+          cat > career-loan-minutes-artifacts/helpers/dependencies.mjs <<'JS'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const lock=JSON.parse(fs.readFileSync('package-lock.json','utf8')),installed=[],omitted=[];
+          const fits=(rules,value)=>!rules||(!rules.some(x=>x==='!'+value)&&(rules.every(x=>x.startsWith('!'))||rules.includes(value)));
+          for(const [directory,expected]of Object.entries(lock.packages)){
+           if(!directory.startsWith('node_modules/')||!expected.version)continue;
+           const name=expected.name??directory.split('node_modules/').at(-1),file=directory+'/package.json';
+           if(!fs.existsSync(file)){assert.equal(expected.optional,true,directory+' required dependency missing');assert((expected.os&&!fits(expected.os,process.platform))||(expected.cpu&&!fits(expected.cpu,process.arch)),directory+' omission requires an actual OS or CPU reason');omitted.push({directory,name,version:expected.version,optional:true,os:expected.os??null,cpu:expected.cpu??null});continue;}
+           const actual=JSON.parse(fs.readFileSync(file,'utf8'));assert.equal(actual.name,name,directory+' locked name');assert.equal(actual.version,expected.version,directory);installed.push({directory,name:actual.name,version:actual.version});
+          }
+          fs.writeFileSync(process.env.DEPENDENCY_OUT,JSON.stringify({platform:process.platform,arch:process.arch,installed,omitted},null,2));assert.equal(installed.length,521);assert.equal(omitted.length,78);assert.equal(installed.length+omitted.length,599);
+          console.log('PASS complete locked census: 521 installed and 78 platform-qualified optional omissions');
+          JS
+          cat > career-loan-minutes-artifacts/helpers/observe-runner.mjs <<'JS'
+          import fs from 'node:fs';import path from 'node:path';import cp from 'node:child_process';import {syncBuiltinESMExports} from 'node:module';import {pathToFileURL} from 'node:url';import {createHash} from 'node:crypto';
+          const out=path.resolve(process.env.LOAN_RUNNER_DIR),names=fs.readdirSync('scripts').filter(x=>/^(sim|play|sweep)[A-Za-z0-9]*\.mjs$/.test(x)&&x!=='runAllSims.mjs').sort(),selected=(process.env.ONLY||'').split(',').filter(Boolean),expected=selected.length?names.filter(x=>selected.includes(x.replace(/\.mjs$/,''))):names;
+          const hash=b=>createHash('sha256').update(b).digest('hex'),nativeSpawn=cp.spawn,children=[];fs.mkdirSync(path.join(out,'children'),{recursive:true});
+          const discovery=names.map(file=>({file,bytes:fs.statSync('scripts/'+file).size,sha256:hash(fs.readFileSync('scripts/'+file))}));fs.writeFileSync(path.join(out,'discovery.json'),JSON.stringify({network:process.env.SIM_NETWORK,browser:process.argv.includes('--browser'),selected,expected,discovery,runnerSha256:hash(fs.readFileSync('scripts/runAllSims.mjs'))},null,2));
+          cp.spawn=function(command,args,options){
+           const child=nativeSpawn.call(this,command,args,options),file=path.basename(args?.[0]??'');
+           if(command===process.execPath&&path.dirname(path.resolve(args?.[0]??''))===path.resolve('scripts')&&names.includes(file)){
+            const base=path.join(out,'children',String(children.length).padStart(4,'0')+'-'+file),row={file,sourceSha256:discovery.find(row=>row.file===file).sha256,startedAt:Date.now(),closedAt:null,args,cwd:options?.cwd??null,environment:Object.fromEntries(['SIM_NETWORK','ENGINES','TZ','NODE_OPTIONS','BASE','SWEEP_BASE','PORT','ONLY','SOCCER_LOAN_MINUTES_OUT','SHOTS'].map(key=>[key,options?.env?.[key]??null])),stdout:base+'.stdout.log',stderr:base+'.stderr.log',stdoutBytes:0,stderrBytes:0,chunks:[],exitCode:null,signal:null};children.push(row);fs.writeFileSync(row.stdout,'');fs.writeFileSync(row.stderr,'');
+            child.stdout.on('data',data=>{row.chunks.push({stream:'stdout',start:row.stdoutBytes,bytes:data.length});fs.appendFileSync(row.stdout,data);row.stdoutBytes+=data.length;});child.stderr.on('data',data=>{row.chunks.push({stream:'stderr',start:row.stderrBytes,bytes:data.length});fs.appendFileSync(row.stderr,data);row.stderrBytes+=data.length;});child.on('close',(code,signal)=>{row.exitCode=code;row.signal=signal;row.closedAt=Date.now();});
+           }return child;
+          };syncBuiltinESMExports();process.on('exit',code=>fs.writeFileSync(path.join(out,'process.json'),JSON.stringify({runnerExit:code,children},null,2)));await import(pathToFileURL(path.resolve('scripts/runAllSims.mjs')).href);
+          JS
+          cat > career-loan-minutes-artifacts/helpers/check-runner.mjs <<'JS'
+          import fs from 'node:fs';import path from 'node:path';import assert from 'node:assert/strict';import {createHash} from 'node:crypto';
+          const out=path.resolve(process.env.LOAN_RUNNER_DIR),discovery=JSON.parse(fs.readFileSync(path.join(out,'discovery.json'),'utf8')),processes=JSON.parse(fs.readFileSync(path.join(out,'process.json'),'utf8')),text=fs.readFileSync(path.join(out,'runner.log'),'utf8'),classifications=[...text.matchAll(/^\s+(PASS|FAIL|EMPTY|SKIP)\s+([A-Za-z0-9]+\.mjs)\s+[0-9.]+s\s*$/gm)].map(m=>({verdict:m[1],file:m[2]})),omissions=[];
+          const hash=b=>createHash('sha256').update(b).digest('hex');for(const row of processes.children){const offsets={stdout:0,stderr:0};for(const key of ['stdout','stderr'])assert.equal(fs.statSync(row[key]).size,row[key+'Bytes']);for(const chunk of row.chunks){assert(['stdout','stderr'].includes(chunk.stream));assert.equal(chunk.start,offsets[chunk.stream]);assert(Number.isInteger(chunk.bytes)&&chunk.bytes>0);offsets[chunk.stream]+=chunk.bytes;}assert.equal(offsets.stdout,row.stdoutBytes);assert.equal(offsets.stderr,row.stderrBytes);const output=fs.readFileSync(row.stdout,'utf8')+'\n'+fs.readFileSync(row.stderr,'utf8');omissions.push({file:row.file,lines:output.split('\n').filter(line=>/\bskip(?:ped|ping)?\b|\bnot (?:run|checked)\b|\blive.only\b/i.test(line)),stdoutSha256:hash(fs.readFileSync(row.stdout)),stderrSha256:hash(fs.readFileSync(row.stderr))});}
+          const failures=classifications.filter(x=>x.verdict!=='PASS');fs.writeFileSync(path.join(out,'scope.json'),JSON.stringify({expected:discovery.expected,actual:processes.children.map(x=>x.file),classifications,failures,internalOmissions:omissions,qualification:'Internal omissions are retained and receive no live or database coverage credit.'},null,2));
+          assert(discovery.selected.length>0,'focused workflow requires an explicit selected scope');assert.deepEqual([...discovery.expected].sort(),discovery.selected.map(name=>name+'.mjs').sort(),'every explicitly selected harness exists');assert.equal(discovery.network,'offline');assert.equal(discovery.browser,true);assert.equal(hash(fs.readFileSync('scripts/runAllSims.mjs')),discovery.runnerSha256);assert.deepEqual(processes.children.map(x=>x.file).sort(),[...discovery.expected].sort());assert.deepEqual(classifications.map(x=>x.file).sort(),[...discovery.expected].sort());assert.equal(failures.length,0,'FAIL, EMPTY and SKIP remain unwaived');assert.equal(processes.runnerExit,0);for(const row of processes.children){assert.equal(row.sourceSha256,discovery.discovery.find(source=>source.file===row.file).sha256);assert.equal(row.exitCode,0,row.file);assert.equal(row.signal,null,row.file);}
+          console.log('PASS exact unchanged runner coverage: '+classifications.length+' named results, no FAIL, EMPTY or SKIP');
+          JS
+          cat > career-loan-minutes-artifacts/helpers/generated.mjs <<'JS'
+          import fs from 'node:fs';import path from 'node:path';import assert from 'node:assert/strict';import {createHash} from 'node:crypto';
+          const hash=b=>createHash('sha256').update(b).digest('hex');function rows(root){if(!fs.existsSync(root))return[];const stat=fs.lstatSync(root);assert(!stat.isSymbolicLink(),'symlink '+root);if(stat.isFile())return[{file:root,bytes:stat.size,sha256:hash(fs.readFileSync(root))}];assert(stat.isDirectory(),root);return fs.readdirSync(root).sort().flatMap(name=>rows(path.join(root,name)));}
+          if(process.argv.includes('--derived')){const stage=process.argv.at(-1),roots=['index.html','src/data/searchKeywords.json','src/data/seoMetaParts'];for(const root of roots)assert(fs.existsSync(root),'required derived source '+root);const derived=roots.flatMap(root=>rows(root));fs.writeFileSync('career-loan-minutes-artifacts/derived-source-'+stage+'.json',JSON.stringify(derived,null,2));console.log('PASS complete derived source inventory: '+derived.length+' leaves');process.exit(0);}
+          const current={public:rows('public'),lastmod:rows('scripts/data/lastmod.json'),dist:rows('dist')},file='career-loan-minutes-artifacts/generated-body-inventory.json';if(process.argv.includes('--check'))assert.deepEqual(current,JSON.parse(fs.readFileSync(file,'utf8')));else fs.writeFileSync(file,JSON.stringify(current,null,2));console.log('PASS complete generated body inventory: '+current.public.length+' public files, '+current.dist.length+' dist files');
+          JS
+          sha256sum career-loan-minutes-artifacts/helpers/*.mjs > career-loan-minutes-artifacts/helper-source-sha256.txt
+          node career-loan-minutes-artifacts/helpers/generated.mjs --derived before
+      - name: Locked packages and existing remote build tools
+        run: |
+          npm ci
+          DEPENDENCY_OUT=career-loan-minutes-artifacts/dependencies-before.json node career-loan-minutes-artifacts/helpers/dependencies.mjs
+          npm install --no-save playwright@1.64.0
+          npx playwright install --with-deps chromium
+          python -m pip install fonttools pillow
+          sha256sum package.json package-lock.json > career-loan-minutes-artifacts/packages-after-setup.txt
+          cmp career-loan-minutes-artifacts/packages-before.txt career-loan-minutes-artifacts/packages-after-setup.txt
+          DEPENDENCY_OUT=career-loan-minutes-artifacts/dependencies-after-setup.json node career-loan-minutes-artifacts/helpers/dependencies.mjs
+          cmp career-loan-minutes-artifacts/dependencies-before.json career-loan-minutes-artifacts/dependencies-after-setup.json
+          node --input-type=module - <<'JS'
+          import fs from 'node:fs';import assert from 'node:assert/strict';assert.equal(JSON.parse(fs.readFileSync('node_modules/playwright/package.json','utf8')).version,'1.64.0');console.log('PASS existing pinned Playwright 1.64.0');
+          JS
+          git diff --exit-code HEAD -- . > career-loan-minutes-artifacts/setup-source-held.log
+          node career-loan-minutes-artifacts/helpers/generated.mjs --derived after-setup
+          cmp career-loan-minutes-artifacts/derived-source-before.json career-loan-minutes-artifacts/derived-source-after-setup.json
+      - name: Actual app type gate
+        run: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee career-loan-minutes-artifacts/types.log
+      - name: Full production SEO build
+        id: build
+        run: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" npm run build:seo 2>&1 | tee career-loan-minutes-artifacts/build.log
+      - name: Complete build output retention
+        if: ${{ !cancelled() }}
+        run: |
+          failed=0
+          node career-loan-minutes-artifacts/helpers/generated.mjs || failed=1
+          node career-loan-minutes-artifacts/helpers/generated.mjs --derived post-build || failed=1
+          cmp career-loan-minutes-artifacts/derived-source-before.json career-loan-minutes-artifacts/derived-source-post-build.json || failed=1
+          git diff --binary HEAD -- public scripts/data/lastmod.json > career-loan-minutes-artifacts/generated-public.patch || failed=1
+          tar -czf career-loan-minutes-artifacts/generated-public-and-lastmod.tar.gz public scripts/data/lastmod.json || failed=1
+          if [ -d dist ]; then tar -czf career-loan-minutes-artifacts/dist.tar.gz dist || failed=1; fi
+          sha256sum career-loan-minutes-artifacts/*.tar.gz > career-loan-minutes-artifacts/generated-archive-sha256.txt || failed=1
+          git diff --exit-code HEAD -- . ':!public/**' ':!scripts/data/lastmod.json' > career-loan-minutes-artifacts/post-build-source-held.log || failed=1
+          exit "$failed"
+      - name: Actual loan boundaries placement lifecycle and copied-source control
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          failed=0
+          LOAN_RUNNER_DIR=career-loan-minutes-artifacts/method-runner SOCCER_LOAN_MINUTES_OUT=career-loan-minutes-artifacts/proof ONLY=simSoccerLoanMinutes NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node career-loan-minutes-artifacts/helpers/observe-runner.mjs --browser 2>&1 | tee career-loan-minutes-artifacts/loan-minutes.log || failed=1
+          cp career-loan-minutes-artifacts/loan-minutes.log career-loan-minutes-artifacts/method-runner/runner.log
+          LOAN_RUNNER_DIR=career-loan-minutes-artifacts/method-runner node career-loan-minutes-artifacts/helpers/check-runner.mjs || failed=1
+          node --input-type=module - <<'JS' || failed=1
+          import fs from 'node:fs';import assert from 'node:assert/strict';import {execFileSync} from 'node:child_process';import {gunzipSync} from 'node:zlib';import {createHash} from 'node:crypto';
+          const r=JSON.parse(fs.readFileSync('career-loan-minutes-artifacts/proof/report.json','utf8'));assert.equal(r.status,'pass');assert.equal(r.head,execFileSync('git',['rev-parse','HEAD']).toString().trim());assert.equal(r.tree,execFileSync('git',['rev-parse','HEAD^{tree}']).toString().trim());assert.equal(r.base,'aa564f16019b9e821981d5c4e3e0262312c73b62');
+          const root='career-loan-minutes-artifacts/proof/',objects=JSON.parse(fs.readFileSync(root+'objects.json','utf8')),hash=b=>createHash('sha256').update(b).digest('hex');function readObject(id){const record=objects[id];assert(record,'complete object '+id);assert.equal(record.codec,'gzip-json-utf8');assert.equal(record.path,'objects/'+id+'.json.gz');const packed=fs.readFileSync(root+record.path);assert.equal(packed.length,record.bytes);assert.equal(hash(packed),record.sha256);const raw=gunzipSync(packed);assert.equal(raw.length,record.rawBytes);assert.equal(hash(raw),record.rawSha256);assert.equal(record.rawSha256,id);return JSON.parse(raw);}
+          const names=['original','current','remove-filter','undo'];assert.deepEqual(Object.keys(r.arms),names);assert.deepEqual(Object.keys(r.bundles),names);assert.equal(r.population.cases,160);assert.equal(r.population.core,96);assert.equal(r.population.additional,64);assert.equal(r.population.naturalCareers,0);assert.deepEqual(r.failures,[]);assert.equal(r.summary.actualArms,4);assert.equal(r.summary.completeCases,640);
+          const subjects=readObject(r.subjects),ids=subjects.map(row=>row.descriptor.id);assert.equal(subjects.length,160);assert.equal(new Set(ids).size,160);const arms={};for(const name of names){const arm=r.arms[name];assert.equal(arm.count,160);assert.deepEqual(arm.errors,[]);arms[name]=readObject(arm.rows);assert.equal(arms[name].length,160);assert.deepEqual(arms[name].map(row=>row.id),ids);for(const row of arms[name])assert.equal(row.error,null,row.id);}
+          assert.equal(r.controls.length,1);const control=r.controls[0],intended=readObject(control.intended),actual=readObject(control.actual);assert.equal(control.id,'remove-filter');assert.equal(control.effective,true);assert(actual.length>0);assert.deepEqual(actual,intended);assert.equal(control.failures,actual.length);assert.deepEqual([...new Set(actual.map(row=>row.group))].sort(),['automatic-minutes','eligible-offers','empty-market']);assert.deepEqual([control.fullOriginal,control.fullFault,control.fullHealthy,control.fullUndo],['original','remove-filter','current','undo'].map(name=>r.arms[name].rows));assert.deepEqual(arms['remove-filter'],arms.original);assert.deepEqual(arms.undo,arms.current);
+          assert.equal(r.summary.healthyForcedOffers,arms.current.filter(row=>row.windowFact.forced).reduce((sum,row)=>sum+row.offerFacts.length,0));assert.equal(r.summary.healthyEmptyListings,arms.current.filter(row=>row.windowFact.forced&&row.eligible===0).length);assert.equal(r.summary.actualLoanReturns,arms.current.filter(row=>row.lifecycle?.returned).length);assert.equal(r.summary.retainedFrames,names.reduce((sum,name)=>sum+arms[name].reduce((total,row)=>total+row.frames.length,0),0));assert.equal(r.summary.sourceControlFindings,actual.length);assert.deepEqual(readObject(r.sameInputAcknowledgements).map(row=>row.id),ids);assert.deepEqual(readObject(r.sameInputSeasons).map(row=>row.id),arms.current.filter(row=>row.lifecycle).map(row=>row.id));
+          const {pathToFileURL}=await import('node:url');
+          const transport=r.comparisonTransport,source=transport.source,methodPath='scripts/simSoccerLoanMinutes.mjs',methodBytes=fs.readFileSync(methodPath),methodLF=Buffer.from(methodBytes.toString().replaceAll('\r\n','\n')),methodURL=pathToFileURL(process.cwd()+'/'+methodPath).href;
+          function sourceBody(ref){assert(ref&&typeof ref.path==='string');const bytes=fs.readFileSync(root+ref.path);assert.equal(bytes.length,ref.bytes);assert.equal(hash(bytes),ref.sha256);return bytes;}
+          assert.equal(methodLF.length,50034);assert.equal(hash(methodLF),'2e3cec9c9b7eb432a1b9d42ecb632761c7024dd7501e2b726fd52284f7e9d044','whole reviewed final V4 method LF source');
+          assert.equal(source.raw.path,'comparison/method.raw.mjs');assert.equal(source.lf.path,'comparison/method.lf.mjs');assert.deepEqual(sourceBody(source.raw),methodBytes);assert.deepEqual(sourceBody(source.lf),methodLF);assert.equal(source.frameLimit,10);
+          const sourceLines=methodLF.toString().split('\n');function site(line,token){const indices=sourceLines.flatMap((value,index)=>value===line?[index]:[]);assert.equal(indices.length,1,'complete unique actual method caller source line');const column=line.indexOf(token);assert(column>=0);return `${methodURL}:${indices[0]+1}:${column+1}`;}
+          const replaySite=site('      const currentSeason = forwardSeason(B.current, clone(input), first.seed, currentFrames);','forwardSeason('),recordedSite=site('    if (working.loan) { const season = forwardSeason(B, working, d.seed + 1000, frames); row.lifecycle = season.fact; working = season.state; }','forwardSeason('),armLine='    armRows[id] = subjectRows.map(row => runCase(B[id], row));',runCaseSite=site(armLine,'runCase('),mapSite=site(armLine,'map('),processFrame='    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)';
+          assert.deepEqual(source.sites,{replay:replaySite,recorded:recordedSite,runCaseSite,mapSite});assert.deepEqual(source.replayRoute,[`    at ${replaySite}`,processFrame]);assert.deepEqual(source.recordedRoute,[`    at runCase (${recordedSite})`,`    at ${runCaseSite}`,'    at Array.map (<anonymous>)',`    at ${mapSite}`,processFrame]);
+          const coordinate=text=>text.replace(/:\d+:\d+/g,':<line>:<column>');
+          function callerShape(replay,recorded){
+            assert.equal(typeof replay,'string');assert.equal(typeof recorded,'string');if(coordinate(replay)===coordinate(recorded))return {mode:'coordinates-only',findings:[]};
+            const left=replay.split('\n'),right=recorded.split('\n'),boundary=rows=>rows.flatMap((line,index)=>line.startsWith(`    at forwardSeason (${methodURL}:`)?[index]:[]),lb=boundary(left),rb=boundary(right);
+            if(lb.length!==1||rb.length!==1)return {mode:'declared-progression-routes',findings:['progression-boundary']};
+            const prefixReplay=left.slice(0,lb[0]+1),prefixRecorded=right.slice(0,rb[0]+1),suffixReplay=left.slice(lb[0]+1),suffixRecorded=right.slice(rb[0]+1),expectedReplay=source.replayRoute.slice(0,Math.max(0,source.frameLimit-(prefixReplay.length-1))),expectedRecorded=source.recordedRoute.slice(0,Math.max(0,source.frameLimit-(prefixRecorded.length-1))),findings=[];
+            if(prefixReplay.join('\n')!==prefixRecorded.join('\n'))findings.push('progression-engine-prefix');if(suffixReplay.join('\n')!==expectedReplay.join('\n')||suffixRecorded.join('\n')!==expectedRecorded.join('\n'))findings.push('progression-harness-route');
+            return {mode:'declared-progression-routes',findings,prefixReplay,prefixRecorded,suffixReplay,suffixRecorded,expectedReplay,expectedRecorded};
+          }
+          function verifyCaller(row,replay,recorded,findings){
+            assert.equal(readObject(row.replay),replay);assert.equal(readObject(row.recorded),recorded);const expected=callerShape(replay,recorded);assert.equal(row.mode,expected.mode);assert.deepEqual(expected.findings,findings);assert.deepEqual(row.findings,findings);
+            for(const key of ['prefixReplay','prefixRecorded','suffixReplay','suffixRecorded','expectedReplay','expectedRecorded'])if(key in expected)assert.deepEqual(readObject(row[key]),expected[key]);else assert.equal(key in row,false,'no unexplained caller segment '+key);
+          }
+          const seasons=readObject(r.sameInputSeasons),pairs=readObject(transport.comparisons);assert.equal(pairs.length,112);assert.deepEqual(pairs.map(pair=>pair.id),seasons.map(row=>row.id));let firstWitness=null;
+          for(let pairIndex=0;pairIndex<pairs.length;pairIndex++){
+            const pair=pairs[pairIndex],season=seasons[pairIndex],originalRow=arms.current.find(row=>row.id===pair.id),start=originalRow.frames.findIndex(frame=>frame.method==='advanceProSeason');assert(start>=0);const replayFrames=readObject(pair.replayFrames),recordedFrames=readObject(pair.recordedFrames);assert.deepEqual(replayFrames,season.current.frames);assert.deepEqual(recordedFrames,originalRow.frames.slice(start));assert.equal(pair.status,'pass');assert.equal(pair.replayCount,replayFrames.length);assert.equal(pair.recordedCount,recordedFrames.length);assert.equal(replayFrames.length,recordedFrames.length);assert.equal(pair.frames.length,replayFrames.length);
+            for(let frameIndex=0;frameIndex<pair.frames.length;frameIndex++){
+              const frame=pair.frames[frameIndex],left=readObject(frame.replay),right=readObject(frame.recorded);assert.equal(frame.frameIndex,frameIndex);assert.equal(frame.status,'pass');assert.deepEqual(left,replayFrames[frameIndex]);assert.deepEqual(right,recordedFrames[frameIndex]);assert.deepEqual(frame.tapes.map(tape=>tape.kind),['draws','fullTape']);
+              for(const tape of frame.tapes){
+                assert.equal(tape.status,'pass');assert.equal(tape.replay,left[tape.kind]);assert.equal(tape.recorded,right[tape.kind]);const a=readObject(tape.replay),b=readObject(tape.recorded),callers=readObject(tape.callers);assert.equal(tape.replayCount,a.length);assert.equal(tape.recordedCount,b.length);assert.equal(a.length,b.length);assert.equal(callers.length,a.length);
+                for(let index=0;index<callers.length;index++){const row=callers[index];assert.equal(row.index,index);assert.equal(row.status,'pass');assert.deepEqual(readObject(row.replayItem),a[index]);assert.deepEqual(readObject(row.recordedItem),b[index]);verifyCaller(row,a[index].caller,b[index].caller,[]);const av={...a[index]},bv={...b[index]};delete av.caller;delete bv.caller;assert.deepEqual(av,bv,'complete actual per-cursor non-caller values');if(row.mode==='declared-progression-routes'&&!firstWitness)firstWitness={replay:a[index].caller,recorded:b[index].caller};}
+                delete left[tape.kind];delete right[tape.kind];
+              }
+              assert.deepEqual(readObject(left.continuation),readObject(right.continuation));delete left.continuation;delete right.continuation;assert.deepEqual(left,right,'complete non-tape frame including callback and undefined ledgers');
+            }
+          }
+          assert(firstWitness,'actual changed progression route witness');const comparisonIDs=['comparison-host-primitive','comparison-engine-prefix','comparison-missing-boundary','comparison-harness-route'],comparisonFindings=[['primitive-value'],['progression-engine-prefix'],['progression-boundary'],['progression-harness-route']];assert.deepEqual(r.comparisonControls.map(control=>control.id),comparisonIDs);
+          for(let index=0;index<r.comparisonControls.length;index++){
+            const control=r.comparisonControls[index];assert.equal(control.status,'pass');assert.equal(control.effective,true);assert.deepEqual(control.findings,comparisonFindings[index]);assert.notEqual(control.fault,control.healthy);assert.equal(control.undo,control.healthy);const healthy=readObject(control.healthy),fault=readObject(control.fault);assert.deepEqual(readObject(control.undo),healthy);
+            if(index===0){assert.equal(control.originalVM,control.healthy);assert.deepEqual(readObject(control.originalVM),healthy);assert.deepEqual(healthy,arms.current.find(row=>row.offerFacts.length).offerFacts);assert.deepEqual(control.prototypeFacts,{originalArray:true,originalHostPrototype:false,copiedArray:true,copiedHostPrototype:true});assert.equal(readObject(control.detectorError).name,'AssertionError');const expected=structuredClone(healthy);expected[0].projection.min+=1;assert.deepEqual(fault,expected,'exact actual copied primitive change');}
+            else{assert.deepEqual(healthy,firstWitness);assert.deepEqual(callerShape(healthy.replay,healthy.recorded).findings,[]);assert.equal(fault.recorded,healthy.recorded);verifyCaller(readObject(control.observed),fault.replay,fault.recorded,comparisonFindings[index]);const line=index===1?healthy.replay.split('\n').find(value=>value.includes('(loan-actual-engine.cjs:')):index===2?healthy.replay.split('\n').find(value=>value.startsWith(`    at forwardSeason (${methodURL}:`)):source.replayRoute[0],changed=index===1?line.replace('    at ','    at copied_'):index===2?line.replace('forwardSeason','copied_forwardSeason'):line.replace('    at ','    at copied_boundary ');assert.equal(healthy.replay.split(line).length-1,1);assert.equal(fault.replay,healthy.replay.replace(line,changed));assert.equal(fault.replay.split(changed).length-1,1);assert.equal(fault.replay.replace(changed,line),healthy.replay);}
+          }
+          const text=fs.readFileSync('career-loan-minutes-artifacts/method-runner/children/0000-simSoccerLoanMinutes.mjs.stdout.log','utf8');assert(text.split('\n').includes('PASS simSoccerLoanMinutes: projected forced loans, complete moves and parent returns'));
+          JS
+          exit "$failed"
+      - name: Early complete artifact cap
+        if: ${{ !cancelled() }}
+        run: |
+          du -sb career-loan-minutes-artifacts > career-loan-minutes-artifacts/early-artifact-size.log
+          test "$(du -sb career-loan-minutes-artifacts | cut -f1)" -lt 500000000
+      - name: Retain complete early evidence
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: career-loan-minutes-early-${{ github.run_id }}-${{ github.run_attempt }}
+          path: career-loan-minutes-artifacts/
+          include-hidden-files: true
+          retention-days: 5
+          if-no-files-found: error
+      - name: Preserved loan contract verdict save and family assertions with fixture and output repairs
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          failed=0
+          LOAN_RUNNER_DIR=career-loan-minutes-artifacts/related SHOTS=career-loan-minutes-artifacts/family-browser ONLY=simLoanSpell,simClubVerdict,simContracts,simContractPreview,simSoccerContractMoves,simSoccerCareerSaveRetry,simSoccerCareerSaveRecovery,simSeasonFamilySummary,simSeasonVerdict,playSoccerCareerFamily NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node career-loan-minutes-artifacts/helpers/observe-runner.mjs --browser 2>&1 | tee career-loan-minutes-artifacts/related.log || failed=1
+          cp career-loan-minutes-artifacts/related.log career-loan-minutes-artifacts/related/runner.log
+          LOAN_RUNNER_DIR=career-loan-minutes-artifacts/related node career-loan-minutes-artifacts/helpers/check-runner.mjs || failed=1
+          exit "$failed"
+      - name: All fifteen rebuilt output readers
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          failed=0
+          LOAN_RUNNER_DIR=career-loan-minutes-artifacts/readers ONLY=simAdsense,simBrand,simHeadTags,simHiddenPages,simHubs,simIndexNow,simIndexing,simInternalLinks,simNoRivalNames,simPrerender,simPrerenderBoot,simRetiredRoutes,simSchema,simSitemap,simSnapshotAssets NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node career-loan-minutes-artifacts/helpers/observe-runner.mjs --browser 2>&1 | tee career-loan-minutes-artifacts/readers.log || failed=1
+          cp career-loan-minutes-artifacts/readers.log career-loan-minutes-artifacts/readers/runner.log
+          LOAN_RUNNER_DIR=career-loan-minutes-artifacts/readers node career-loan-minutes-artifacts/helpers/check-runner.mjs || failed=1
+          exit "$failed"
+      - name: Final complete source package census generated and cap holds
+        if: ${{ !cancelled() }}
+        run: |
+          failed=0
+          git diff --exit-code HEAD -- . ':!public/**' ':!scripts/data/lastmod.json' > career-loan-minutes-artifacts/source-held.log || failed=1
+          git ls-files --others --exclude-standard -- src scripts .github/workflows > career-loan-minutes-artifacts/unexpected-source-files.txt
+          test ! -s career-loan-minutes-artifacts/unexpected-source-files.txt || failed=1
+          sha256sum package.json package-lock.json > career-loan-minutes-artifacts/packages-final.txt
+          cmp career-loan-minutes-artifacts/packages-before.txt career-loan-minutes-artifacts/packages-final.txt || failed=1
+          DEPENDENCY_OUT=career-loan-minutes-artifacts/dependencies-final.json node career-loan-minutes-artifacts/helpers/dependencies.mjs || failed=1
+          cmp career-loan-minutes-artifacts/dependencies-before.json career-loan-minutes-artifacts/dependencies-final.json || failed=1
+          sha256sum --check career-loan-minutes-artifacts/helper-source-sha256.txt || failed=1
+          node career-loan-minutes-artifacts/helpers/generated.mjs --derived final || failed=1
+          cmp career-loan-minutes-artifacts/derived-source-before.json career-loan-minutes-artifacts/derived-source-final.json || failed=1
+          if [ -f career-loan-minutes-artifacts/generated-body-inventory.json ]; then node career-loan-minutes-artifacts/helpers/generated.mjs --check || failed=1; fi
+          if [ -f career-loan-minutes-artifacts/generated-archive-sha256.txt ]; then sha256sum --check career-loan-minutes-artifacts/generated-archive-sha256.txt || failed=1; fi
+          node --input-type=module - <<'JS' || failed=1
+          import fs from 'node:fs';import assert from 'node:assert/strict';assert.equal(JSON.parse(fs.readFileSync('node_modules/playwright/package.json','utf8')).version,'1.64.0');console.log('PASS final actual Playwright 1.64.0');
+          JS
+          du -sb career-loan-minutes-artifacts > career-loan-minutes-artifacts/artifact-size.log
+          find career-loan-minutes-artifacts -type f ! -name artifact-member-sha256.txt -print0 | sort -z | xargs -0 sha256sum > career-loan-minutes-artifacts/artifact-member-sha256.txt
+          test "$(du -sb career-loan-minutes-artifacts | cut -f1)" -lt 500000000 || failed=1
+          exit "$failed"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: career-loan-minutes-final-${{ github.run_id }}-${{ github.run_attempt }}
+          path: career-loan-minutes-artifacts/
+          include-hidden-files: true
+          retention-days: 5
+          if-no-files-found: error

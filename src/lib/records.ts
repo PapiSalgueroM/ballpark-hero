@@ -63,7 +63,7 @@ export const FORMAT_PAGES: FormatPage[] = [
 
 /** Round 649: the sourcing paragraph, shared by /records and every section page. */
 export const RECORD_SOURCING =
-  'Each table was verified against at least two independent sources, and the checks run on every build: winner lists are audited answer by answer, split titles and vacated seasons are pinned so they can never quietly change, and a blank cell means the detail was never verified rather than papered over. Spot something that looks wrong anyway? The Report a bug button below lands straight in our inbox.';
+  'Each table was verified against at least two independent sources, and the checks run on every build: winner lists are audited answer by answer, split titles and vacated seasons are pinned so they can never quietly change, and a blank cell means the detail was never verified rather than papered over. Spot something that looks wrong anyway? The Report a problem button below lands straight in our inbox.';
 
 export interface RecordSection {
   key: string;

@@ -24,11 +24,13 @@ interface Props {
   onAnswer: (index: 0 | 1 | 2) => void;
   /** Seconds before the first line rises. Default 0. */
   delay?: number;
+  /** Round 1309: the answers wait (a board shuts them while a game is watched). Default false. */
+  shut?: boolean;
 }
 
 const REGISTERS = ['Measured', 'Candid', 'Bold'] as const;
 
-export function GmPressCard({ presser, onAnswer, delay = 0 }: Props) {
+export function GmPressCard({ presser, onAnswer, delay = 0, shut = false }: Props) {
   /* The heading, title and body take three beats; the answers then land on
      the kit's stagger, offset by where this card's run starts. */
   const at = (s: number) => `${(delay + s).toFixed(2)}s`;
@@ -47,8 +49,9 @@ export function GmPressCard({ presser, onAnswer, delay = 0 }: Props) {
             <div key={opt.label} className="cm-rise" style={{ animationDelay: answerDelay(i) }}>
               <button
                 onClick={() => onAnswer(i as 0 | 1 | 2)}
+                disabled={shut || undefined}
                 className={cn(
-                  'w-full rounded-xl border px-3 py-2 text-left transition-all hover:scale-[1.01]',
+                  'w-full rounded-xl border px-3 py-2 text-left transition-all hover:scale-[1.01] disabled:opacity-40',
                   i === 2 ? 'border-destructive/40 bg-destructive/5 hover:border-destructive/70'
                     : i === 1 ? 'border-gold/40 bg-gold/5 hover:border-gold/70'
                     : 'border-border bg-background hover:border-primary/60',

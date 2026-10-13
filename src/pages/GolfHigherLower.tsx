@@ -147,6 +147,7 @@ const GolfHigherLower = () => {
         )}
 
         <GameSeoContent
+          reportControl={<ReportQuestion gameType="golf-higher-lower" gameContext={{ mode }} />}
           pageHasOwnH1
           title="Golf Higher or Lower | DoUKnowBall"
           description="Two major champions, side by side. Which one won more majors? From Old Tom Morris to Scottie Scheffler, the whole history of championship golf is in the pool."
@@ -166,9 +167,7 @@ const GolfHigherLower = () => {
         />
 
         <AdBanner slot="7540487748" format="horizontal" className="mt-8" />
-        <div className="flex justify-center mt-6">
-          <ReportQuestion gameType="golf-higher-lower" gameContext={{ mode }} />
-        </div>
+
         <GameNav />
       </GameShell>
     </>

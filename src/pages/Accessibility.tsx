@@ -62,7 +62,7 @@ const Accessibility = () => {
 
         <div>
           <h2 className="text-lg font-semibold text-foreground mb-2">Something in your way? Tell us</h2>
-          <p>If anything on this site is hard or impossible for you to use, that is a bug and we want it reported like one. Use the Report a bug button in the footer of any page, or email <a href="mailto:douknowball1@gmail.com" className="underline hover:text-foreground transition-colors">douknowball1@gmail.com</a> with the page and what got in the way. Reports go straight to the person who fixes things, and accessibility reports go to the front of the queue.</p>
+          <p>If anything on this site is hard or impossible for you to use, that is a bug and we want it reported like one. Use the Report a problem button in the footer of any page, or email <a href="mailto:douknowball1@gmail.com" className="underline hover:text-foreground transition-colors">douknowball1@gmail.com</a> with the page and what got in the way. Reports go straight to the person who fixes things, and accessibility reports go to the front of the queue.</p>
         </div>
       </section>
     </main>

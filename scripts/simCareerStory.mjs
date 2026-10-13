@@ -129,6 +129,25 @@
    lowest seed and a quarter over the highest: cup games 1,050 to 1,950,
    division 380 to 710, ten divisions 3,350 to 5,650. Means only.
 
+   THE POOL, a fifth part (Round 1318, 2026-10-12). Rounds 1280 to 1282 keep
+   the made up Ballon d'Or rivals in the save (generatedBallonPool, written
+   at every ballot from 2028), and these careers start in 2020, so every one
+   writes it. Left in the rest it pushed the rest mean to 50,010, over the
+   50,000 it has held since before the train (remote check r1318-read-story:
+   48,229, 50,235, 51,171 and 50,405 a seed, against main's 44,048, 45,853,
+   46,753 and 46,123). Taken out of the rest, the rest is main's to the byte
+   (r1318-read-attrib: 44,048, 45,853, 46,753, 46,123, mean 45,694), so the
+   rest keeps its band and its numbers, and the pool gets its own.
+   MEASURED on a CI runner (remote check r1318-fix-a, head 9e4052ca), pool
+   bytes a career, every career here holding one: 4,158, 4,360, 4,395 and
+   4,259 on the four default seeds, 4,293 over the run; the rest 44,048,
+   45,853, 46,753 and 46,123, main's to the byte. The band has the shape the
+   other parts have, about a quarter under the lowest seed and a quarter over
+   the highest: 3,100 to 5,500 bytes a career. Mean only.
+   CONTROL =poolcopy writes a second copy of the pool's entries into the
+   pool at every generated call (it draws nothing): the pool mean goes to
+   8,547 (r1318-fix-a), and it fails check 5 and nothing else.
+
    Run: node scripts/simCareerStory.mjs [careersPerSeed]
    Reads no network: fetch is replaced with a thrower before the engine loads. */
 import { build } from "esbuild";
@@ -147,6 +166,7 @@ const SEEDS = (process.env.CAREER_STORY_SEEDS || "9741,19741,29741,39741").split
 const RESET = "s.age += 1; s.story = archiveSeasonStory(s); s.events = [];";
 const WORLD_FILTER = ".filter(m => m.from === snapshot.league);";
 const CUP_COPY = "if (uclResult.qualified) season.clubCupRun = JSON.parse(JSON.stringify(s.lastUCLResult)) as UCLResult;";
+const POOL_WRITE = "    state.generatedBallonPool = pool;";
 const MUTATIONS = {
   reset: { anchor: RESET, count: 2, apply: src => { const i = src.lastIndexOf(RESET); return src.slice(0, i) + "s.age += 1; s.events = [];" + src.slice(i + RESET.length); } },
   cap: { anchor: "export const STORY_LINES_PER_SEASON = 40;", count: 1, apply: src => src.replace("export const STORY_LINES_PER_SEASON = 40;", "export const STORY_LINES_PER_SEASON = 5;") },
@@ -158,8 +178,10 @@ const MUTATIONS = {
   worldmoves: { file: "world", anchor: WORLD_FILTER, count: 1, apply: src => src.replace(WORLD_FILTER, ";") },
   /* Release AQ: a season's continental cup games written on its row twice */
   cuptwice: { anchor: CUP_COPY, count: 1, apply: src => src.replace(CUP_COPY, CUP_COPY + " if (season.clubCupRun) (season.clubCupRun as unknown as Record<string, unknown>).again = JSON.parse(JSON.stringify(s.lastUCLResult));") },
+  /* Round 1318: the saved pool of made up Ballon d'Or rivals carries a second copy of its entries */
+  poolcopy: { anchor: POOL_WRITE, count: 1, apply: src => src.replace(POOL_WRITE, POOL_WRITE + " (pool as unknown as Record<string, unknown>).again = JSON.parse(JSON.stringify(pool.entries));") },
 };
-const EXPECT_FAIL = { reset: "completeness", cap: "completeness", draw: "draws", wipe: "log", worldmoves: "parts", cuptwice: "parts" };
+const EXPECT_FAIL = { reset: "completeness", cap: "completeness", draw: "draws", wipe: "log", worldmoves: "parts", cuptwice: "parts", poolcopy: "parts" };
 if (CONTROL && !MUTATIONS[CONTROL]) { console.error(`unknown CAREER_STORY_CONTROL ${CONTROL}`); process.exit(2); }
 
 const original = fs.readFileSync(ENGINE, "utf8");
@@ -299,6 +321,8 @@ const PART_BANDS = {
   cupBytesPerSeason: [1050, 1950],
   divisionBytesPerSeason: [380, 710],
   tenDivisionsBytesMean: [3350, 5650],
+  /* Round 1318: the saved pool of made up Ballon d'Or rivals (THE POOL in the header) */
+  poolBytesMean: [3100, 5500],
 };
 /* Seasons a career that must stand behind a part's mean (measured 4.8 to 7.2
    with cup games, 5.6 to 7.3 with a division). */
@@ -315,12 +339,13 @@ function saveParts(s) {
     cup: cupRows.reduce((n, r) => n + bytesOf(r.clubCupRun), 0), cupRows: cupRows.length,
     division: divisionRows.reduce((n, r) => n + bytesOf(r.leagueWorld), 0), divisionRows: divisionRows.length,
     ten: bytesOf(s.leagueWorld),
-    rest: bytesOf({ ...s, leagueWorld: undefined, seasons: s.seasons.map(r => ({ ...r, clubCupRun: undefined, leagueWorld: undefined })) }),
+    pool: bytesOf(s.generatedBallonPool),
+    rest: bytesOf({ ...s, leagueWorld: undefined, generatedBallonPool: undefined, seasons: s.seasons.map(r => ({ ...r, clubCupRun: undefined, leagueWorld: undefined })) }),
   };
 }
 
 const fails = { completeness: [], draws: [], size: [], log: [], parts: [] };
-const part = { cup: 0, cupRows: 0, division: 0, divisionRows: 0, ten: 0, rest: 0 };
+const part = { cup: 0, cupRows: 0, division: 0, divisionRows: 0, ten: 0, pool: 0, rest: 0 };
 const partBySeed = { ...part };
 let loans = 0, transfers = 0;
 let careers = 0, seasonsKept = 0, linesKept = 0, linesWritten = 0, liveLines = 0, cut = 0;
@@ -359,7 +384,7 @@ for (const seed of SEEDS) {
   const n = careers - bySeed.careers, sb = storyBytes - bySeed.storyBytes, ss = seasonsKept - bySeed.seasons, vb = saveBytes - bySeed.saveBytes;
   console.log(`seed ${seed}: ${n} careers, story ${(sb / Math.max(1, ss)).toFixed(0)} bytes a season, ${(ss / Math.max(1, n)).toFixed(1)} seasons a career, save mean ${(vb / Math.max(1, n)).toFixed(0)} bytes`);
   const d = Object.fromEntries(Object.keys(part).map(k => [k, part[k] - partBySeed[k]]));
-  console.log(`seed ${seed} parts: rest mean ${(d.rest / Math.max(1, n)).toFixed(0)} bytes, cup games ${(d.cup / Math.max(1, d.cupRows)).toFixed(0)} bytes a season over ${d.cupRows} seasons, division ${(d.division / Math.max(1, d.divisionRows)).toFixed(0)} bytes a season over ${d.divisionRows} seasons, ten divisions mean ${(d.ten / Math.max(1, n)).toFixed(0)} bytes`);
+  console.log(`seed ${seed} parts: rest mean ${(d.rest / Math.max(1, n)).toFixed(0)} bytes, cup games ${(d.cup / Math.max(1, d.cupRows)).toFixed(0)} bytes a season over ${d.cupRows} seasons, division ${(d.division / Math.max(1, d.divisionRows)).toFixed(0)} bytes a season over ${d.divisionRows} seasons, ten divisions mean ${(d.ten / Math.max(1, n)).toFixed(0)} bytes, award pool mean ${(d.pool / Math.max(1, n)).toFixed(0)} bytes`);
   Object.assign(bySeed, { careers, storyBytes, seasons: seasonsKept, saveBytes });
   Object.assign(partBySeed, part);
 }
@@ -376,6 +401,7 @@ const partMeans = {
   cupBytesPerSeason: part.cup / Math.max(1, part.cupRows),
   divisionBytesPerSeason: part.division / Math.max(1, part.divisionRows),
   tenDivisionsBytesMean: part.ten / Math.max(1, careers),
+  poolBytesMean: part.pool / Math.max(1, careers),
 };
 for (const [name, value] of Object.entries(partMeans)) {
   if (value < PART_BANDS[name][0] || value > PART_BANDS[name][1]) fails.parts.push(`${name} ${value.toFixed(0)} outside ${PART_BANDS[name]}`);
@@ -388,7 +414,7 @@ console.log(`moves the log check saw: ${transfers} signings, ${loans} loans`);
 console.log(`careers ${careers} (${SEEDS.length} seeds x ${PER_SEED}), story seasons ${seasonsKept}, lines written ${linesWritten}, kept in the story ${linesKept} plus ${liveLines} live`);
 console.log(`baseline before Round 974: a finished career could read ${liveLines} of ${linesWritten} lines (${(100 * liveLines / Math.max(1, linesWritten)).toFixed(1)}%); now ${linesKept + liveLines} (${(100 * (linesKept + liveLines) / Math.max(1, linesWritten)).toFixed(1)}%)`);
 console.log(`size: story ${perSeason.toFixed(0)} bytes a season, save mean ${meanSave.toFixed(0)} bytes, median ${saves[Math.floor(saves.length / 2)]}`);
-console.log(`parts: rest mean ${partMeans.restBytesMean.toFixed(0)} bytes (the save before the train's parts), cup games ${partMeans.cupBytesPerSeason.toFixed(0)} bytes a season over ${part.cupRows} seasons, division ${partMeans.divisionBytesPerSeason.toFixed(0)} bytes a season over ${part.divisionRows} seasons, ten divisions mean ${partMeans.tenDivisionsBytesMean.toFixed(0)} bytes`);
+console.log(`parts: rest mean ${partMeans.restBytesMean.toFixed(0)} bytes (the save before the train's parts), cup games ${partMeans.cupBytesPerSeason.toFixed(0)} bytes a season over ${part.cupRows} seasons, division ${partMeans.divisionBytesPerSeason.toFixed(0)} bytes a season over ${part.divisionRows} seasons, ten divisions mean ${partMeans.tenDivisionsBytesMean.toFixed(0)} bytes, award pool mean ${partMeans.poolBytesMean.toFixed(0)} bytes`);
 for (const [name, list] of Object.entries(fails)) {
   console.log(`check ${name}: ${list.length === 0 ? "ok" : `FAIL (${list.length})`}`);
   for (const f of list.slice(0, 5)) console.log(`  ${f}`);

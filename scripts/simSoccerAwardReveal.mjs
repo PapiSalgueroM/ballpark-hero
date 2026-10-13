@@ -47,8 +47,10 @@ try {
     'resultVisible && isWinner && confetti && <Confetti', 'resultVisible && isWinner && <Confetti', 'reveals the ranked');
   fault('src/lib/soccerCareerEngine.ts', '@/lib/soccerCareerEngine',
     'const generation = Math.min(5, Math.max(0, year - 2027));', 'const generation = year <= 2032 ? 0 : 5;', 'puts known names');
+  /* Round 1318: since Rounds 1280 to 1282 a primary nominee is taken from the saved pool of generated rivals, so the
+     defect is aimed at that call: a new person drawn every year, past the pool. */
   fault('src/lib/soccerCareerEngine.ts', '@/lib/soccerCareerEngine',
-    'generateContender(usedNames, 9900 + i)', 'generateContender(usedNames, (year - 2024) * 100 + i)', 'keeps future contender');
+    'generatedContender("primary", i, 9900 + i)', 'generateContender(usedNames, (year - 2024) * 100 + i)', 'keeps future contender');
   console.log('simSoccerAwardReveal: 8 outcome assertions green, 5 effective copied defects caught');
 } finally {
   for (const copy of copies) if (fs.existsSync(copy)) fs.unlinkSync(copy);

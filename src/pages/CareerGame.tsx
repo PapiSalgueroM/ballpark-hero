@@ -288,6 +288,7 @@ const CareerGame = () => {
         )}
 
         <GameSeoContent
+          reportControl={<ReportQuestion gameType="career" gameContext={{ targetPlayer: targetPlayer?.name }} />}
           pageHasOwnH1
           title="Soccer Career Quiz | DoUKnowBall"
           description="Guess the mystery sports player from their career history. Each clue reveals a team they played for. The fewer clues you need, the higher your score."
@@ -309,9 +310,7 @@ const CareerGame = () => {
 
         <AdBanner slot="7540487748" format="horizontal" className="mt-8" />
 
-        <div className="flex justify-center mt-6">
-          <ReportQuestion gameType="career" gameContext={{ targetPlayer: targetPlayer?.name }} />
-        </div>
+
         <GameNav />
       </GameShell>
     </>
