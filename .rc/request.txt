@@ -1,0 +1,14 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/test/careerPreDraft.test.tsx src/test/careerDraftNight.test.tsx src/test/usCareerDraftNightBoard.test.tsx src/test/usCareerProspect.test.tsx src/test/usCareerSaveRetry.test.tsx src/test/usBoardFixture.test.tsx --testTimeout=300000 --hookTimeout=120000
+pd-a: SEEDSET=a node scripts/simCareerPreDraft.mjs
+pd-b: SEEDSET=b node scripts/simCareerPreDraft.mjs
+pd-c: SEEDSET=c node scripts/simCareerPreDraft.mjs
+pd-d: SEEDSET=d node scripts/simCareerPreDraft.mjs
+pd-e: SEEDSET=e node scripts/simCareerPreDraft.mjs
+ctl-new: bash .rc/x/ctl.sh $RC_OUT/ctl combinephase attemptbare combineloose scoutskeys combinedraw mathrandom gradeshift extradraw
+ctl-round: bash .rc/x/ctl.sh $RC_OUT/ctl combinewords combinemean combinemono combinecut reroll wayback combinegone flathands curveflip keyscurve nightoffbyone nightlottery nightopen nightdedup nightdraw projection
+pjloop: bash .rc/x/pjloop.sh
+seasonCentre: node scripts/simUsSeasonCentre.mjs
+anchors: node scripts/simHarnessAnchors.mjs
+rivals: node scripts/simNoRivalNames.mjs
+storage: node scripts/simStorageWrites.mjs
