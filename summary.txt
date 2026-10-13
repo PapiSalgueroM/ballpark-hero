@@ -1,0 +1,6 @@
+build exit=0 22s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+playCollegeSeat exit=0 236s | playCollegeSeat: all stations green at 320, 390 and 1280 on both routes
+smalltap exit=1 237s | playCollegeSeat CONTROL smalltap FIRED: the 44 px check went red (red: S2 (12), S3 (18), S5 (4), S6 (6), S8 (6))
+was-head exit=1 13s | simWritesAreSent: 2 failures
+walk exit=0 254s | walk1320: clean
+was-base exit=1 36s | simWritesAreSent: 2 failures
