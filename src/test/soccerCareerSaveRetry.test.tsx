@@ -129,7 +129,7 @@ describe('Soccer Career failed write recovery', () => {
     expect(m.view.container.textContent).toContain('Write Tester'); expect(m.view.queryByText('Create Your Player')).toBeNull();
     expect(localStorage.getItem(KEY)).toBe(m.raw); expect(localStorage.getItem(OTHER)).toBe('untouched progress');
     expect(m.attempts).toHaveLength(1); expect(m.removes).not.toHaveBeenCalledWith(KEY); expect(localStorage.getItem(FENCE)).toBeNull();
-    expect(toast.error).toHaveBeenCalledExactlyOnceWith(notice); expect(recordCompletion).not.toHaveBeenCalled();
+    expect(toast.error).toHaveBeenCalledExactlyOnceWith(notice, expect.objectContaining({ position: 'top-center' })); expect(recordCompletion).not.toHaveBeenCalled();
     act(() => { vi.advanceTimersByTime(30000); }); assertWarning(m.view); expect(m.attempts).toHaveLength(1);
   });
   it('keeps repeated refused retries visible without replaying progress or repeating the toast', () => {
