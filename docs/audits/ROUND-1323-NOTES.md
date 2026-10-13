@@ -73,6 +73,11 @@ player on the picker with no word) and the first half of gm POLISH 24 (Hot Seat'
 - playSaveKeeper with a build of origin/main as KEEPER_BASE_DIST: journey K reports exactly one added key,
   `dukb-fence:dukb-club-manager-save`, which is this round's key by design (green again once on main); its five
   loss control FAILs need a build from before Round 1219. With KEEPER_NO_BASE=1 it is green.
+- The whole runAllSims does not fit a remote check (712 harnesses against a 70 minute command cap). Every sim
+  that reads a file this round touched (135) was run instead: by name above, and 104 through runAllSims ONLY lists
+  (r1323-sims0, -sims1, -sims2): all green except simGmCalendar, simGmDealTableFixture, simGmStaff and
+  simCmQuickSubs (EMPTY), which are red identically on the base 8fea14e2 (r1323-cmp1), and simSoccerConquest
+  (live database). simBracketMoment, red there for want of Playwright, is green in r1323-cmp1.
 - Full report: C:/Users/antho/dukb-handoff/2026-10-10/results-g/finish-1323.md.
 
 ## Owed to the lead
