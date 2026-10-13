@@ -692,7 +692,10 @@ console.log('6) The repair, on saves that really carry the duplicate the pre 634
 /* ================================================================== */
 section = 6;
 {
-  const base = startCareer('Real Madrid');
+  /* Release AZ fix pass 4: a save the pre 634 engine wrote is a save from before Round 1250's world seed, so the
+     duplicate is rebuilt on one. Since the lead's ruling a seeded career's market lists nobody at my own club,
+     where the pre 634 market listed him, so on a seeded save it could not be rebuilt at all. */
+  const { worldSeed: _preReleaseSeed, ...base } = startCareer('Real Madrid');
   const him = base.squad.find(p => !p.isYouth && p.rating < 80 && p.age < 27 && canLeaveSquad(base, p));
   const out = him ? loanOutPlayer(base, him.id, 'Sevilla', 1) : null;
   /* The pre 634 market: the same world with the loan record out of sight,
@@ -872,7 +875,10 @@ section = 8;
   /* A man out on loan, and his card from the pre 634 market. */
   const lent = A.squad.find(p => !p.isYouth && p.rating < 80 && canLeaveSquad(A, p));
   const away = lent ? loanOutPlayer(fresh(), lent.id, 'Sevilla', 1) : null;
-  const awayCard = away ? buildMarket({ ...away, loanedOut: [] }).find(m => m.name === lent.name) : null;
+  /* Release AZ fix pass 4: the pre 634 market is read on the same save as it was before Round 1250 (no world seed,
+     no ledger), because a seeded career's market lists nobody at my own club since the lead's ruling. */
+  const preRelease = away ? (({ worldSeed: _seed, worldRoster: _ledger, ...rest }) => rest)(away) : null;
+  const awayCard = preRelease ? buildMarket({ ...preRelease, loanedOut: [] }).find(m => m.name === lent.name) : null;
   const coldName = cards[1].name;
   const states = [
     ['open window', A, []],

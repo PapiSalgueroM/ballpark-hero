@@ -49,9 +49,27 @@ const harnessSource = (ref, name) => execFileSync('git', ['show', `${ref}:script
    rest must be the historical source byte for byte, exactly as the Slots adapter below is. */
 const SAVESIZE_FIRST = '    /* Release AZ fix (reviewer 2, MAJOR 2): the pair is a fact of the projected world';
 const SAVESIZE_LAST = '    if (season === 3 && s) { s = JSON.parse(JSON.stringify(s)); delete s.worldSeed; delete s.worldRoster; for (const p of s.squad) { delete p.worldRosterKey; delete p.worldRosterSince; } }\n';
+/* Release AZ fix pass 4 (closing check finding 2, the lead's ruling): a seeded career's market lists nobody at my
+   own club, so SaveSize sections 6 and 8 rebuild the pre 634 market (which listed a man of mine at my own club) on
+   a save from before the release. Two more exact replacements, each a comment and its statements, put back to the
+   historical line before the byte for byte comparison; each must stand exactly once. */
+const SAVESIZE_OWN_CLUB = [
+  [[
+    "  /* Release AZ fix pass 4: a save the pre 634 engine wrote is a save from before Round 1250's world seed, so the",
+    "     duplicate is rebuilt on one. Since the lead's ruling a seeded career's market lists nobody at my own club,",
+    '     where the pre 634 market listed him, so on a seeded save it could not be rebuilt at all. */',
+    "  const { worldSeed: _preReleaseSeed, ...base } = startCareer('Real Madrid');",
+  ].join('\n') + '\n', "  const base = startCareer('Real Madrid');\n"],
+  [[
+    '  /* Release AZ fix pass 4: the pre 634 market is read on the same save as it was before Round 1250 (no world seed,',
+    "     no ledger), because a seeded career's market lists nobody at my own club since the lead's ruling. */",
+    '  const preRelease = away ? (({ worldSeed: _seed, worldRoster: _ledger, ...rest }) => rest)(away) : null;',
+    '  const awayCard = preRelease ? buildMarket({ ...preRelease, loanedOut: [] }).find(m => m.name === lent.name) : null;',
+  ].join('\n') + '\n', '  const awayCard = away ? buildMarket({ ...away, loanedOut: [] }).find(m => m.name === lent.name) : null;\n'],
+];
 function historicalHarnessContract(name, source) {
   const historical = harnessSource(BASE, name);
-  let restored = source, representationAdapter = false, sectionFiveHandover = false;
+  let restored = source, representationAdapter = false, sectionFiveHandover = false, ownClubFollow = false;
   if (source !== historical && name === 'simClubManagerSaveSize.mjs') {
     assert.equal(source.split(SAVESIZE_FIRST).length - 1, 1, 'One exact section 5 handover comment');
     assert.equal(source.split(SAVESIZE_LAST).length - 1, 1, 'One exact section 5 handover statement');
@@ -60,6 +78,11 @@ function historicalHarnessContract(name, source) {
     assert(start < end && comment.trimEnd().endsWith('*/') && comment.split('*/').length === 2 && block.split('\n').length <= 8, 'The section 5 addition is one comment and one statement');
     restored = source.slice(0, start) + source.slice(end);
     sectionFiveHandover = true;
+    for (const [now, then] of SAVESIZE_OWN_CLUB) {
+      assert.equal(restored.split(now).length - 1, 1, 'One exact own club follow in SaveSize sections 6 and 8');
+      restored = restored.replace(now, () => then);
+    }
+    ownClubFollow = true;
   } else if (source !== historical) {
     assert.equal(name, 'simClubManagerSlots.mjs', 'SaveSize remains the exact historical Git source');
     assert.equal(source.split(SLOT_IMPORT).length - 1, 1, 'One exact independent decoder import');
@@ -69,7 +92,7 @@ function historicalHarnessContract(name, source) {
     representationAdapter = true;
   }
   assert.equal(restored, historical, 'Removing only the exact two additions restores the entire historical source');
-  return { representationAdapter, sectionFiveHandover, measuredSha256: sha(source), restoredHistoricalSha256: sha(restored) };
+  return { representationAdapter, sectionFiveHandover, ownClubFollow, measuredSha256: sha(source), restoredHistoricalSha256: sha(restored) };
 }
 const harnessBlobs = Object.fromEntries(['simClubManagerSaveSize.mjs','simClubManagerSlots.mjs'].map(name => {
   const original = git(['rev-parse', `${BASE}:scripts/${name}`]), current = git(['rev-parse', `${HEAD}:scripts/${name}`]);
