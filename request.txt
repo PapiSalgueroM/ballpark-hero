@@ -1,0 +1,9 @@
+# Release BC gate, lane P7: Release AZ's controls the step requests did not carry (finish-AZ section 11, fix-AZ, fix2-AZ)
+#!playwright
+bound-noprune-EXPECT-RED: export TMPDIR=$(mktemp -d); CM_LEDGER_BOUND_CONTROL=noprune node scripts/simCmLedgerBound.mjs
+bound-madeup-EXPECT-RED: export TMPDIR=$(mktemp -d); CM_LEDGER_BOUND_CONTROL=madeup node scripts/simCmLedgerBound.mjs
+bound-release-EXPECT-RED: export TMPDIR=$(mktemp -d); CM_LEDGER_BOUND_CONTROL=release node scripts/simCmLedgerBound.mjs
+ledgerjourney-futureyear-EXPECT-RED: export TMPDIR=$(mktemp -d); CM_LEDGER_CONTROL=futureyear node scripts/simCmLedgerJourney.mjs
+ledgerjourney-nokey-EXPECT-RED: export TMPDIR=$(mktemp -d); CM_LEDGER_CONTROL=nokey node scripts/simCmLedgerJourney.mjs
+dailydeals-seed-EXPECT-RED: export TMPDIR=$(mktemp -d); DAILY_DEALS_CONTROL=seed node scripts/simDailyDeals.mjs
+dailydeals-seeddeadline-EXPECT-RED: export TMPDIR=$(mktemp -d); DAILY_DEALS_CONTROL=seeddeadline node scripts/simDailyDeals.mjs
