@@ -220,10 +220,11 @@ async function advance(page, how) {
     const rest = page.locator('button', { hasText: 'Rest of season' });
     if (await has(rest)) { await rest.first().click(); return 'rest'; }
     if (await has(home)) await home.first().click();
-    const cal = page.locator('button:has(div.uppercase)', { hasText: 'Calendar' });
-    if (await has(cal)) { await cal.first().click(); return 'calendar'; }
+    if (await clickTile(page, 'Calendar')) return 'calendar';
   }
   if (await has(home)) { await home.first().click(); return 'home'; }
+  const tab = page.getByRole('tab', { name: /^Home$/ });
+  if (await has(tab) && (await tab.first().getAttribute('aria-selected')) !== 'true') { await tab.first().click(); return 'tab'; }
   return 'nothing';
 }
 
@@ -242,6 +243,7 @@ if (SECTIONS.has('A')) {
     }
     if (word !== 'review') {
       fail('A', `${s.id}: the season review never came up (${steps.slice(-8).join(', ')})`);
+      await shot(page, `A-${s.id}-noreview`);
     } else {
       await page.evaluate(() => { window.__hubFirst = null; window.scrollTo(0, document.documentElement.scrollHeight); });
       await page.waitForTimeout(300);
@@ -260,16 +262,129 @@ if (SECTIONS.has('A')) {
   await ctx.close();
 }
 
+/* ---------------- B. Calendar ---------------- */
+const stripBox = page => page.evaluate(() => {
+  const s = document.querySelector('[data-testid="cm-calendar-day"]');
+  if (!s) return null;
+  const r = s.getBoundingClientRect();
+  const banner = document.querySelector('[role="region"][aria-label="Cookie choices"]');
+  const b = banner && getComputedStyle(banner).position === 'fixed' ? banner.getBoundingClientRect() : null;
+  return { top: r.top, bottom: r.bottom, text: s.innerText, vh: innerHeight, bannerTop: b ? b.top : null };
+});
+const cellBox = (page, label) => page.evaluate(l => {
+  const b = [...document.querySelectorAll('[data-testid="cm-calendar-grid"] > button')].find(x => x.getAttribute('aria-label') === l);
+  if (!b) return null;
+  const r = b.getBoundingClientRect();
+  return { top: r.top, bottom: r.bottom, x: r.left + r.width / 2, y: r.top + r.height / 2 };
+}, label);
+async function calendarTaps(page, tag, { banner = false } = {}) {
+  await page.locator('[data-testid="cm-calendar-grid"]').waitFor({ timeout: 15000 });
+  await page.evaluate(() => {
+    const g = document.querySelector('[data-testid="cm-calendar-grid"]');
+    window.scrollTo(0, window.scrollY + g.getBoundingClientRect().top - 60);
+  });
+  await page.waitForTimeout(300);
+  const labels = await page.evaluate(() => {
+    const cells = [...document.querySelectorAll('[data-testid="cm-calendar-grid"] > button')];
+    const match = cells.find(b => /: (vs|at|v) /.test(b.getAttribute('aria-label') ?? ''));
+    return { first: cells[0]?.getAttribute('aria-label'), last: cells[cells.length - 1]?.getAttribute('aria-label'), match: match?.getAttribute('aria-label') ?? null };
+  });
+  const plan = [['first row, an in page click', labels.first, 'dom'], ['last row, a real click', labels.last, 'mouse'], ['a match day, a real click', labels.match, 'locator']].filter(p => p[1]);
+  for (const [what, label, how] of plan) {
+    const before = await page.evaluate(() => window.scrollY);
+    const cell = await cellBox(page, label);
+    if (how === 'dom') await page.evaluate(l => [...document.querySelectorAll('[data-testid="cm-calendar-grid"] > button')].find(b => b.getAttribute('aria-label') === l)?.click(), label);
+    else if (how === 'mouse') await page.mouse.click(cell.x, cell.y);
+    else await page.locator(`[data-testid="cm-calendar-grid"] > button[aria-label="${label.replace(/"/g, '\\"')}"]`).click();
+    await page.waitForTimeout(500);
+    const after = await page.evaluate(() => window.scrollY);
+    const strip = await stripBox(page);
+    const cellAfter = await cellBox(page, label);
+    const day = label.split(':')[0];
+    check('B', Math.round(after - before) === 0, `${tag} ${what}: the page moved ${Math.round(after - before)} px (scrollY ${Math.round(before)} to ${Math.round(after)})`);
+    check('B', !!strip && strip.top >= -1 && strip.bottom <= strip.vh + 1, `${tag} ${what}: the day strip is wholly on screen (${strip ? `${Math.round(strip.top)} to ${Math.round(strip.bottom)} of ${strip.vh}` : 'no strip'})`);
+    check('B', !!cellAfter && cellAfter.top >= -1 && cellAfter.bottom <= (strip?.vh ?? 0) + 1, `${tag} ${what}: the tapped day is still on screen (${cellAfter ? Math.round(cellAfter.top) : '?'} px)`);
+    check('B', !!strip && strip.text.includes(day), `${tag} ${what}: the strip names the day "${day}"`);
+    if (banner) check('B', !!strip && strip.bannerTop !== null && strip.bottom <= strip.bannerTop + 1, `${tag} ${what}: the strip clears the cookie banner (strip bottom ${strip ? Math.round(strip.bottom) : '?'}, banner top ${strip?.bannerTop === null ? 'none' : Math.round(strip?.bannerTop ?? 0)})`);
+  }
+}
+const OLD_NAMES = /Rest first|Full training/;
+async function intensityNames(page, heading) {
+  return page.evaluate(h => {
+    const head = [...document.querySelectorAll('div.uppercase')].find(d => d.textContent.includes(h));
+    const card = head ? head.parentElement : null;
+    return card ? [...card.querySelectorAll('.grid > button')].map(b => b.innerText.trim().split('\n').filter(Boolean).find(t => !/^\p{Extended_Pictographic}/u.test(t)) ?? '') : [];
+  }, heading);
+}
+if (SECTIONS.has('B')) {
+  console.log('B. Calendar: day taps move nothing, one name for one setting');
+  const runs = [
+    { id: 'celta-320', size: 's320', era: '2026-27', nation: 'Spain', league: 'La Liga', club: 'Celta Vigo', take: false },
+    { id: 'liverpool-390', size: 's390', era: '2026-27', nation: 'England', league: 'Premier League', club: 'Liverpool', take: false },
+    { id: 'aberdeen-1280', size: 's1280', era: '2026-27', nation: 'Scotland', league: 'Scottish Premiership', club: 'Aberdeen', take: false },
+  ];
+  for (const r of runs) {
+    const { ctx, page, errors } = await openPage(HEAD, SIZE[r.size]);
+    try {
+      if (CONTROL === 'nosticky') await ctx.addInitScript(() => document.addEventListener('DOMContentLoaded', () => {
+        const st = document.createElement('style');
+        st.textContent = '[data-testid="cm-calendar-day"] { position: static !important; }';
+        document.head.appendChild(st);
+      }));
+      await startCareer(page, HEAD, r);
+      await clickTile(page, 'Calendar');
+      await calendarTaps(page, r.id);
+      await shot(page, `B-${r.id}-calendar`);
+      const cal = await intensityNames(page, 'Between matches');
+      const calText = await page.locator('body').innerText();
+      check('B', cal.join(',') === 'Light,Normal,Double', `${r.id}: the calendar's intensity buttons read ${cal.join(', ')}`);
+      check('B', !OLD_NAMES.test(calText), `${r.id}: the calendar says neither Rest first nor Full training`);
+      await page.locator('button', { hasText: 'Club home' }).first().click();
+      await clickTile(page, 'Training');
+      await page.waitForTimeout(600);
+      const tr = await intensityNames(page, 'How hard you work them');
+      const trText = await page.locator('body').innerText();
+      check('B', tr.join(',') === 'Light,Normal,Double', `${r.id}: the training panel's intensity buttons read ${tr.join(', ')}`);
+      check('B', !OLD_NAMES.test(trText), `${r.id}: the training panel says neither Rest first nor Full training`);
+      if (errors.length) fail('B', `${r.id}: page error ${errors[0].slice(0, 160)}`);
+    } catch (e) {
+      fail('B', `${r.id}: ${String(e).split('\n')[0].slice(0, 200)}`);
+      await shot(page, `B-${r.id}-stuck`);
+    }
+    await ctx.close();
+  }
+  /* The cookie banner left up: the strip rides above it, never under it. */
+  const { ctx, page } = await openPage(HEAD, SIZE.s390, { consent: false });
+  try {
+    await page.goto(`${HEAD}/club-manager`, { waitUntil: 'domcontentloaded' });
+    await page.locator('[role="region"][aria-label="Cookie choices"]').waitFor({ timeout: 15000 });
+    const press = async loc => { await loc.first().waitFor({ timeout: 15000 }); await loc.first().evaluate(b => b.click()); await page.waitForTimeout(500); };
+    await press(page.locator('button', { hasText: '2026-27' }));
+    await press(page.locator('button', { hasText: 'England' }));
+    await press(page.locator('button', { hasText: 'Premier League' }));
+    await press(page.locator('button', { hasText: 'Board wants' }).filter({ hasText: 'Liverpool' }));
+    await press(page.locator('div.fixed button', { hasText: 'Take the job' }));
+    await press(page.getByRole('button', { name: /^Skip: just manage$/ }));
+    await page.waitForFunction(() => window.__hubFirst !== null, null, { timeout: 120000 });
+    await clickTile(page, 'Calendar');
+    await calendarTaps(page, 'banner-390', { banner: true });
+    await shot(page, 'B-banner-390');
+  } catch (e) {
+    fail('B', `banner-390: ${String(e).split('\n')[0].slice(0, 200)}`);
+  }
+  await ctx.close();
+}
+
 /* ---------------- D. Must not move ---------------- */
-const tileTitles = page => page.evaluate(() => [...document.querySelectorAll('button')]
+function tileTitles(page) { return page.evaluate(() => [...document.querySelectorAll('button')]
   .map(b => b.querySelector(':scope > div.uppercase'))
   .filter(Boolean)
-  .map(d => d.textContent.trim()));
-const clickTile = (page, title) => page.evaluate(t => {
+  .map(d => d.textContent.trim())); }
+function clickTile(page, title) { return page.evaluate(t => {
   const b = [...document.querySelectorAll('button')].find(x => x.querySelector(':scope > div.uppercase')?.textContent.trim() === t);
   if (b) b.click();
   return !!b;
-}, title);
+}, title); }
 async function backHome(page) {
   const vis = async loc => (await loc.count()) > 0 && await loc.first().isVisible().catch(() => false);
   const home = page.locator('button', { hasText: 'Club home' });
