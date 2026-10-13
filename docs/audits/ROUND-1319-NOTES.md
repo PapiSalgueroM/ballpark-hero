@@ -112,17 +112,17 @@ then the grade is worked out from today's descriptor on every load, exactly as a
 would be. Any later round that renames `desc.drills` (which re-deals the scouts path's drill draw and so
 its grade stream) moves the grade of an attempt left sitting at the showcase, and must name that case.
 
-## Controls, measured on runners (`r1319-s3a`, `r1319-s3b`, seed set a)
+## Controls, measured on runners on the final head (`r1319-f1` at e430dba6, seed set a)
 
 | Control | What it breaks | Exit, FAILURE(S), sections red |
 |---|---|---|
-| combinewords | the resolve reads the safe table | 1, 8, section 10 |
+| combinewords | the resolve reads the safe table | 1, 10, sections 10 and 12 |
 | combinemean | u from the first station only | 1, 7, section 10 (every pair with two stations) |
-| combinemono | a slip adds points | 1, 1, section 10 (the grid) |
+| combinemono | a slip adds points | 1, 2, sections 10 (the grid) and 12 |
 | combinecut | the cuts one step high | 1, 8, section 10 |
 | reroll | the loader drops the attempt instead of settling it | 1, 8, section 11 |
 | wayback | the guard in preDraftShowcase removed | 1, 8, section 11 |
-| combinegone | open returns a copy without the key | 1, 16, sections 10 and 11 |
+| combinegone | open returns a copy without the key | 1, 18, sections 10, 11 and 12 |
 | flathands | the resolve uses 0.5 for the hands' mean | 1, 10, sections 10 and 12 |
 | curveflip | the burst curve reversed | 1, 2, sections 10 and 12 |
 | keyscurve | the keys curve read as the pointer one | 1, 2, sections 10 and 12 (the keyboard median +3 to +6.5) |
@@ -215,6 +215,54 @@ Picks per stock point at the fleet median (seed set a): nfl:now 3.5, nfl:y2005 3
   receipts; playDraftNight.mjs; qa/career993.mjs; qa/usCareerSaveRecovery1084.mjs; simCareerPreDraft;
   simNflTruth; simUsCareerProspect; careerDraftNight.test; careerPreDraft.test;
   usCareerDraftNightBoard.test; usCareerProspect.test; usCareerSaveRetry.test.
+
+## Gates on the final head (e430dba6, the code head; later commits are comments and notes)
+
+Remote checks `r1319-f1` (the head, a served build), `r1319-f2` (the head's walks) and `r1319-f3` (the
+base 48cb9d4b checked out on the same kind of runner, for the same closing lines). Green means the
+harness's own closing line and exit 0.
+
+| Gate | Head | Base |
+|---|---|---|
+| tsc (tsconfig.app.json) | exit 0 | (Release AY's gate) |
+| vitest careerPreDraft, careerDraftNight, usCareerDraftNightBoard, usCareerProspect, usCareerSaveRetry, usBoardFixture | exit 0, 5 files passed, 1 skipped (usBoardFixture without US_BOARD_FIXTURE=replay) | `r1319-f4` |
+| simCareerPreDraft seed sets a to e | each exit 0, ALL GREEN, 9 to 14 s | each exit 0 (`r1319-s0`) |
+| its 32 controls (the other lane's 14 in the loop, gradeshift, extradraw, the six night controls, this round's ten) | each exit 1, "mutated", in the sections the controls table names | |
+| the two pre draft steps of prospect-journey.yml, as written | pass, 215 s | pass, 84 s |
+| simUsCareerProspect, 36 outcomes, 15 controls | pass (in the loop) | pass |
+| simUsBoardParity | exit 0, "green. Four sports replayed click for click, save for save and screen for screen." | the same line, exit 0 |
+| simNflTruth | exit 0, the same closing line as the base | exit 0 |
+| simUsSeasonCentre (default) | exit 0, "158 checks, 0 failed" | |
+| simUsSeasonCentre receipts law, lay, seam (compare) | exit 3 each, "NOT COMPARED": nbaCareerPreDraft.ts and nflCareerPreDraft.ts moved under the digests. Receipts in no gate, never re-recorded | exit 0 each, "11 digests, 0 moved" |
+| playDraftNight | exit 0, "ALL GREEN, 49 nights walked" | the same line, exit 0 |
+| usCareerSaveRecovery1084 (CI, xvfb, offline transport) | exit 0; report complete, 12 cases, 4 deletions, 9 controls, 0 forwarded writes | the same, exit 0 |
+| simHarnessAnchors | exit 0, green | |
+| simNoRivalNames | exit 0, 0 findings | |
+| sweepWeight | exit 0, green; /nfl-my-career 484K (483.6K) against its 485K row | green, 483K (483.4K) |
+
+Weight, the four routes on a served build, the way sweepWeight's section 1 measures (gzipped):
+
+| Route | Base 48cb9d4b | After step 2 (42ebbd0e) | Head e430dba6 |
+|---|---|---|---|
+| /nfl-my-career | 483.4K, 47 files | 483.5K | 483.6K (row 485K, 1.4K left) |
+| /nba-my-career | 568.9K, 48 files | 569.0K | 569.1K |
+| /mlb-my-career | 556.8K, 48 files | 556.9K | 557.0K |
+| /nhl-my-career | 559.3K, 48 files | 559.4K | 559.5K |
+
+The engine and the descriptors ride in the shared chunk usCareerSeasonReview on all four (147.6K on the
+base). The round adds about 0.2K to each route. No budget row was touched.
+
+## What a later session must not trust
+
+- The leaver and the two thumb lines of section 12 are PRINTED, not asserted: a green run says nothing
+  about them. Read the "for the lead" lines.
+- The bands of section 12 are for the curves as they stand. A change to COMBINE_CURVES or to BOTS means
+  re-measuring all five seed sets and rewriting the header's numbers.
+- The guard and the loader's settle run in the product but are inert until Round B lets a player open
+  an attempt; nothing a player does today can reach them.
+- The plain station names are placeholders until the data guardian job's audit rows: only the NHL `now`
+  pair is a real test's name (audit row 65).
+
 
 ## Owed to Round B (by number, in full)
 

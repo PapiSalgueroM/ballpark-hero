@@ -225,13 +225,14 @@ const ok = m => console.log('  ok: ' + m);
      flatlater     s4: pick 2 |z| 136.4 and 146.2 while pick 1 stays green.
      loadershallow s8: the two broken season line cases load.
    Round 1319, measured on seed set a, 2026-10-12, each exit 1:
-     combinewords  s10: 8 pairs (an all out grade moved by the safe table).
+     combinewords  s10 and s12: 10 (an all out grade moved by the safe table;
+                   the hands' all out rows then miss their bands).
      combinemean   s10: 7 pairs (every pair with two stations; the 2006 NHL runs one).
-     combinemono   s10: the grid (a slip adds points).
+     combinemono   s10 and s12: 2 (a slip adds points: the grid, and the bands).
      combinecut    s10: 8 pairs (a mean on the cut graded above the printed line).
      reroll        s11: 8 pairs (a reload hands the choice back).
      wayback       s11: 8 pairs (a scouts' button grades an opened attempt).
-     combinegone   s10 and s11: 16 (nothing on the save before the stations).
+     combinegone   s10, s11 and s12: 18 (nothing on the save before the stations).
      flathands     s10 and s12: 10 (the expert's gap collapses, the means tie).
      curveflip     s10 and s12: 2 (the grid, and the order breaks).
      keyscurve     s10 and s12: 2 (the grid, and the keyboard median gains +3 to +6.5).
