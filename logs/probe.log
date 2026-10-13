@@ -1,0 +1,8 @@
+PART A: the squad floor through the engine's own functions
+  Everton: loaned in 2, squad 22; loaned out down to 14; after breakLoan: squad 12, budget 64.4. Saved squad 12. Loaded on HEAD: 16 men, 20 draws. On BASE: 12 men, 0 draws. HEAD added: Zane Miclea (Youth) (CB, 17, youth), Ondrej Dubois (Youth) (CM, 17, youth), Hugo Calvet (Youth) (ST, 17, youth), Soren Weston (Youth) (RW, 17, youth)
+  Brighton: loaned in 2, squad 29; loaned out down to 14; after breakLoan: squad 12, budget 91.9. Saved squad 12. Loaded on HEAD: 16 men, 20 draws. On BASE: 12 men, 0 draws. HEAD added: Zane Miclea (Youth) (GK, 17, youth), Ondrej Dubois (Youth) (CM, 17, youth), Hugo Calvet (Youth) (CDM, 17, youth), Soren Weston (Youth) (ST, 17, youth)
+  Fulham: loaned in 2, squad 26; loaned out down to 14; after breakLoan: squad 12, budget 67.2. Saved squad 12. Loaded on HEAD: 16 men, 20 draws. On BASE: 12 men, 0 draws. HEAD added: Zane Miclea (Youth) (CM, 17, youth), Ondrej Dubois (Youth) (ST, 17, youth), Hugo Calvet (Youth) (RW, 17, youth), Soren Weston (Youth) (LW, 17, youth)
+PART A: 3 of 3 engine-written saves changed on load by the squad repair
+PART B: old saves (BASE engine, manager squeezes the squad at each window) load the same on HEAD and BASE
+PART B: 506 saves, 506 with a squad under 14, 0 open to the same JSON and draw count on HEAD and BASE. First difference: Everton seed 0 week 1: draws head 15 base 0, json equal false
+probeSquad: done (partA changed 3, partB 506 differ)

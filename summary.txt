@@ -1,0 +1,12 @@
+probe exit=1 10s | probeSquad: done (partA changed 3, partB 506 differ)
+mut-nomoved-sim exit=1 2s | simSaveFence: RED, 9 findings
+mut-nomoved-vt exit=1 3s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/saveFence.test.ts,title=src/test/saveFence.test.ts > saveFence > 9. the clobber%3A the old tab never w
+mut-pluszero-sim exit=1 2s | simSaveFence: RED, 11 findings
+mut-pluszero-vt exit=1 3s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/saveFence.test.ts,title=src/test/saveFence.test.ts > saveFence > 9. the clobber%3A the old tab never w
+mut-adoptzero-sim exit=1 2s | simSaveFence: RED, 3 findings
+mut-adoptzero-vt exit=1 3s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/saveFence.test.ts,title=src/test/saveFence.test.ts > saveFence > 9. the clobber%3A the old tab never w
+mut-squadle14-fleet exit=0 54s | simSaveFence: all green (fleet)
+mut-squadle14-save exit=0 9s | simClubManagerSave: all sections green
+mut-budgetneg-fleet exit=0 55s | simSaveFence: all green (fleet)
+mut-budgetneg-save exit=0 9s | simClubManagerSave: all sections green
+clean exit=0 0s | tree-clean-check-done

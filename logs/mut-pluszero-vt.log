@@ -1,0 +1,242 @@
+MUTATION pluszero APPLIED to src/lib/saveFence.ts
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [31m❯[39m src/test/saveFence.test.ts [2m([22m[2m11 tests[22m[2m | [22m[31m9 failed[39m[2m)[22m[32m 25[2mms[22m[39m
+   [32m✓[39m saveFence[2m > [22mnames its key apart from every game save[32m 3[2mms[22m[39m
+[31m   [31m×[31m saveFence[2m > [22m1. adopt then write moves the generation and stays current[39m[32m 11[2mms[22m[39m
+[31m     → expected '0' to be '1' // Object.is equality[39m
+[31m   [31m×[31m saveFence[2m > [22m2. another tab writing makes this one stale and its write touches nothing[39m[32m 3[2mms[22m[39m
+[31m     → expected false to be true // Object.is equality[39m
+[31m   [31m×[31m saveFence[2m > [22m3. a page that never adopted claims: writes always, holds nothing[39m[32m 1[2mms[22m[39m
+[31m     → expected '7' to be '8' // Object.is equality[39m
+[31m   [31m×[31m saveFence[2m > [22m4. an absent fence key is never a move[39m[32m 1[2mms[22m[39m
+[31m     → expected '0' to be '3' // Object.is equality[39m
+[31m   [31m×[31m saveFence[2m > [22m5. an unreadable fence value is never a move and is written over[39m[32m 1[2mms[22m[39m
+[31m     → expected '0' to be '1' // Object.is equality[39m
+   [32m✓[39m saveFence[2m > [22m6. a refused fence write never stops the save, and the page stays current[32m 0[2mms[22m[39m
+[31m   [31m×[31m saveFence[2m > [22m7. a save refused after the fence moved: failed, the fence put back, nobody stale[39m[32m 1[2mms[22m[39m
+[31m     → expected '0' to be '1' // Object.is equality[39m
+[31m   [31m×[31m saveFence[2m > [22m7b. a refused save whose fence cannot be put back leaves this page current[39m[32m 1[2mms[22m[39m
+[31m     → expected '4' to be '5' // Object.is equality[39m
+[31m   [31m×[31m saveFence[2m > [22m8. release: the page holds nothing and claims again[39m[32m 1[2mms[22m[39m
+[31m     → expected false to be true // Object.is equality[39m
+[31m   [31m×[31m saveFence[2m > [22m9. the clobber: the old tab never writes its week 5 over week 9[39m[32m 1[2mms[22m[39m
+[31m     → expected false to be true // Object.is equality[39m
+ [31m❯[39m src/lib/clubManagerSlots.test.ts [2m([22m[2m14 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[32m 227[2mms[22m[39m
+   [32m✓[39m an old save, from before slots[2m > [22mis slot 1, and reading the slots writes nothing[32m 47[2mms[22m[39m
+   [32m✓[39m switching[2m > [22mparks the outgoing career lean and brings the incoming one to SAVE_KEY[32m 33[2mms[22m[39m
+   [32m✓[39m switching[2m > [22mparks the career held in memory when it is handed in[32m 14[2mms[22m[39m
+   [32m✓[39m switching[2m > [22mkeeps an unreadable save byte for byte when it is parked[32m 0[2mms[22m[39m
+   [32m✓[39m a store that refuses the write[2m > [22mnever loses the outgoing career when the park is refused[32m 24[2mms[22m[39m
+   [32m✓[39m a store that refuses the write[2m > [22mrolls the park and the index back when SAVE_KEY is refused[32m 24[2mms[22m[39m
+   [32m✓[39m deleting and reading[2m > [22mdeletes one slot and leaves the others[32m 16[2mms[22m[39m
+   [32m✓[39m deleting and reading[2m > [22mreads the manager, the era and the trophies without opening the save[32m 10[2mms[22m[39m
+   [32m✓[39m deleting and reading[2m > [22mreads a save loadCareer would refuse as unreadable, never as a career[32m 26[2mms[22m[39m
+   [32m✓[39m deleting and reading[2m > [22mlabels the world season with the engine's own rule[32m 11[2mms[22m[39m
+   [32m✓[39m deleting and reading[2m > [22mignores an index that names no slot[32m 0[2mms[22m[39m
+   [32m✓[39m Round 1323: the carry on lands on the hub, once, in this tab[2m > [22ma mark is taken once and is never in localStorage[32m 0[2mms[22m[39m
+   [32m✓[39m Round 1323: the carry on lands on the hub, once, in this tab[2m > [22ma session store that refuses the mark lands on the managers screen, and never throws[32m 1[2mms[22m[39m
+[31m   [31m×[31m Round 1323: the swap and the delete go through the save fence[2m > [22ma swap and a delete of the active career each move the generation[39m[32m 17[2mms[22m[39m
+[31m     → expected +0 to be 1 // Object.is equality[39m
+
+[31m⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 10 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/lib/clubManagerSlots.test.ts[2m > [22mRound 1323: the swap and the delete go through the save fence[2m > [22ma swap and a delete of the active career each move the generation
+[31m[1mAssertionError[22m: expected +0 to be 1 // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- 1[39m
+[31m+ 0[39m
+
+[36m [2m❯[22m src/lib/clubManagerSlots.test.ts:[2m189:19[22m[39m
+    [90m187| [39m    [35mconst[39m g0 [33m=[39m [34mgen[39m()[33m;[39m
+    [90m188| [39m    [34mexpect[39m([34mswitchSlot[39m([34m2[39m))[33m.[39m[34mtoBe[39m([35mtrue[39m)[33m;[39m
+    [90m189| [39m    [34mexpect[39m([34mgen[39m())[33m.[39m[34mtoBe[39m(g0 [33m+[39m [34m1[39m)[33m;[39m
+    [90m   | [39m                  [31m^[39m
+    [90m190| [39m    localStorage.setItem(SAVE_KEY, JSON.stringify(career('Lincoln City…
+    [90m191| [39m    [34mdeleteSlot[39m([34m2[39m)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/10]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/saveFence.test.ts[2m > [22msaveFence[2m > [22m1. adopt then write moves the generation and stays current
+[31m[1mAssertionError[22m: expected '0' to be '1' // Object.is equality[39m
+
+Expected: [32m"1"[39m
+Received: [31m"0"[39m
+
+[36m [2m❯[22m src/test/saveFence.test.ts:[2m48:30[22m[39m
+    [90m 46| [39m    a[33m.[39m[34madopt[39m([33mKEY[39m)[33m;[39m
+    [90m 47| [39m    [34mexpect[39m(a[33m.[39m[34mwrite[39m([33mKEY[39m[33m,[39m [34msaveTo[39m(s[33m,[39m [32m'w1'[39m)))[33m.[39m[34mtoBe[39m([32m'written'[39m)[33m;[39m
+    [90m 48| [39m    [34mexpect[39m(s[33m.[39m[34mgetItem[39m([33mFENCE[39m))[33m.[39m[34mtoBe[39m([32m'1'[39m)[33m;[39m
+    [90m   | [39m                             [31m^[39m
+    [90m 49| [39m    [34mexpect[39m(a[33m.[39m[34mwrite[39m([33mKEY[39m[33m,[39m [34msaveTo[39m(s[33m,[39m [32m'w2'[39m)))[33m.[39m[34mtoBe[39m([32m'written'[39m)[33m;[39m
+    [90m 50| [39m    [34mexpect[39m(s[33m.[39m[34mgetItem[39m([33mFENCE[39m))[33m.[39m[34mtoBe[39m([32m'2'[39m)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/10]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/saveFence.test.ts[2m > [22msaveFence[2m > [22m2. another tab writing makes this one stale and its write touches nothing
+[31m[1mAssertionError[22m: expected false to be true // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- true[39m
+[31m+ false[39m
+
+[36m [2m❯[22m src/test/saveFence.test.ts:[2m62:26[22m[39m
+    [90m 60| [39m    b[33m.[39m[34madopt[39m([33mKEY[39m)[33m;[39m
+    [90m 61| [39m    [34mexpect[39m(b[33m.[39m[34mwrite[39m([33mKEY[39m[33m,[39m [34msaveTo[39m(s[33m,[39m [32m'B'[39m)))[33m.[39m[34mtoBe[39m([32m'written'[39m)[33m;[39m
+    [90m 62| [39m    [34mexpect[39m(a[33m.[39m[34mmoved[39m([33mKEY[39m))[33m.[39m[34mtoBe[39m([35mtrue[39m)[33m;[39m
+    [90m   | [39m                         [31m^[39m
+    [90m 63| [39m    [34mexpect[39m(b[33m.[39m[34mmoved[39m([33mKEY[39m))[33m.[39m[34mtoBe[39m([35mfalse[39m)[33m;[39m
+    [90m 64| [39m    [35mlet[39m ran [33m=[39m [34m0[39m[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/10]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/saveFence.test.ts[2m > [22msaveFence[2m > [22m3. a page that never adopted claims: writes always, holds nothing
+[31m[1mAssertionError[22m: expected '7' to be '8' // Object.is equality[39m
+
+Expected: [32m"8"[39m
+Received: [31m"7"[39m
+
+[36m [2m❯[22m src/test/saveFence.test.ts:[2m80:30[22m[39m
+    [90m 78| [39m    [34mexpect[39m(claimer[33m.[39m[34mmoved[39m([33mKEY[39m))[33m.[39m[34mtoBe[39m([35mfalse[39m)[33m;[39m
+    [90m 79| [39m    [34mexpect[39m(claimer[33m.[39m[34mwrite[39m([33mKEY[39m[33m,[39m [34msaveTo[39m(s[33m,[39m [32m'C'[39m)))[33m.[39m[34mtoBe[39m([32m'written'[39m)[33m;[39m
+    [90m 80| [39m    [34mexpect[39m(s[33m.[39m[34mgetItem[39m([33mFENCE[39m))[33m.[39m[34mtoBe[39m([32m'8'[39m)[33m;[39m
+    [90m   | [39m                             [31m^[39m
+    [90m 81| [39m    [34mexpect[39m(claimer[33m.[39m[34mmoved[39m([33mKEY[39m))[33m.[39m[34mtoBe[39m([35mfalse[39m)[33m;[39m
+    [90m 82| [39m    s[33m.[39m[34msetItem[39m([33mFENCE[39m[33m,[39m [32m'20'[39m)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/10]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/saveFence.test.ts[2m > [22msaveFence[2m > [22m4. an absent fence key is never a move
+[31m[1mAssertionError[22m: expected '0' to be '3' // Object.is equality[39m
+
+Expected: [32m"3"[39m
+Received: [31m"0"[39m
+
+[36m [2m❯[22m src/test/saveFence.test.ts:[2m98:30[22m[39m
+    [90m 96| [39m    [34mexpect[39m(a[33m.[39m[34mmoved[39m([33mKEY[39m))[33m.[39m[34mtoBe[39m([35mfalse[39m)[33m;[39m
+    [90m 97| [39m    [34mexpect[39m(a[33m.[39m[34mwrite[39m([33mKEY[39m[33m,[39m [34msaveTo[39m(s[33m,[39m [32m'z'[39m)))[33m.[39m[34mtoBe[39m([32m'written'[39m)[33m;[39m
+    [90m 98| [39m    [34mexpect[39m(s[33m.[39m[34mgetItem[39m([33mFENCE[39m))[33m.[39m[34mtoBe[39m([32m'3'[39m)[33m;[39m
+    [90m   | [39m                             [31m^[39m
+    [90m 99| [39m    [34mexpect[39m(a[33m.[39m[34mmoved[39m([33mKEY[39m))[33m.[39m[34mtoBe[39m([35mfalse[39m)[33m;[39m
+    [90m100| [39m  })[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/10]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/saveFence.test.ts[2m > [22msaveFence[2m > [22m5. an unreadable fence value is never a move and is written over
+[31m[1mAssertionError[22m: expected '0' to be '1' // Object.is equality[39m
+
+Expected: [32m"1"[39m
+Received: [31m"0"[39m
+
+[36m [2m❯[22m src/test/saveFence.test.ts:[2m110:32[22m[39m
+    [90m108| [39m      [34mexpect[39m(a[33m.[39m[34mmoved[39m([33mKEY[39m))[33m.[39m[34mtoBe[39m([35mfalse[39m)[33m;[39m
+    [90m109| [39m      [34mexpect[39m(a[33m.[39m[34mwrite[39m([33mKEY[39m[33m,[39m [34msaveTo[39m(s[33m,[39m [32m'ok'[39m)))[33m.[39m[34mtoBe[39m([32m'written'[39m)[33m;[39m
+    [90m110| [39m      [34mexpect[39m(s[33m.[39m[34mgetItem[39m([33mFENCE[39m))[33m.[39m[34mtoBe[39m([32m'1'[39m)[33m;[39m
+    [90m   | [39m                               [31m^[39m
+    [90m111| [39m    }
+    [90m112| [39m  })[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/10]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/saveFence.test.ts[2m > [22msaveFence[2m > [22m7. a save refused after the fence moved: failed, the fence put back, nobody stale
+[31m[1mAssertionError[22m: expected '0' to be '1' // Object.is equality[39m
+
+Expected: [32m"1"[39m
+Received: [31m"0"[39m
+
+[36m [2m❯[22m src/test/saveFence.test.ts:[2m148:30[22m[39m
+    [90m146| [39m    s[33m.[39mrefuse [33m=[39m () [33m=>[39m [35mfalse[39m[33m;[39m
+    [90m147| [39m    [34mexpect[39m(a[33m.[39m[34mwrite[39m([33mKEY[39m[33m,[39m [34msaveTo[39m(s[33m,[39m [32m'A2'[39m)))[33m.[39m[34mtoBe[39m([32m'written'[39m)[33m;[39m
+    [90m148| [39m    [34mexpect[39m(s[33m.[39m[34mgetItem[39m([33mFENCE[39m))[33m.[39m[34mtoBe[39m([32m'1'[39m)[33m;[39m
+    [90m   | [39m                             [31m^[39m
+    [90m149| [39m    s[33m.[39mrefuse [33m=[39m k [33m=>[39m k [33m===[39m [33mKEY[39m[33m;[39m
+    [90m150| [39m    [34mexpect[39m(a[33m.[39m[34mwrite[39m([33mKEY[39m[33m,[39m [34msaveTo[39m(s[33m,[39m [32m'A3'[39m)))[33m.[39m[34mtoBe[39m([32m'failed'[39m)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/10]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/saveFence.test.ts[2m > [22msaveFence[2m > [22m7b. a refused save whose fence cannot be put back leaves this page current
+[31m[1mAssertionError[22m: expected '4' to be '5' // Object.is equality[39m
+
+Expected: [32m"5"[39m
+Received: [31m"4"[39m
+
+[36m [2m❯[22m src/test/saveFence.test.ts:[2m171:30[22m[39m
+    [90m169| [39m    b[33m.[39m[34madopt[39m([33mKEY[39m)[33m;[39m
+    [90m170| [39m    [34mexpect[39m(a[33m.[39m[34mwrite[39m([33mKEY[39m[33m,[39m [34msaveTo[39m(s[33m,[39m [32m'A'[39m)))[33m.[39m[34mtoBe[39m([32m'failed'[39m)[33m;[39m
+    [90m171| [39m    [34mexpect[39m(s[33m.[39m[34mgetItem[39m([33mFENCE[39m))[33m.[39m[34mtoBe[39m([32m'5'[39m)[33m;[39m
+    [90m   | [39m                             [31m^[39m
+    [90m172| [39m    [34mexpect[39m(a[33m.[39m[34mmoved[39m([33mKEY[39m))[33m.[39m[34mtoBe[39m([35mfalse[39m)[33m;[39m
+    [90m173| [39m    [34mexpect[39m(b[33m.[39m[34mmoved[39m([33mKEY[39m))[33m.[39m[34mtoBe[39m([35mtrue[39m)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[8/10]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/saveFence.test.ts[2m > [22msaveFence[2m > [22m8. release: the page holds nothing and claims again
+[31m[1mAssertionError[22m: expected false to be true // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- true[39m
+[31m+ false[39m
+
+[36m [2m❯[22m src/test/saveFence.test.ts:[2m183:26[22m[39m
+    [90m181| [39m    b[33m.[39m[34madopt[39m([33mKEY[39m)[33m;[39m
+    [90m182| [39m    b[33m.[39m[34mwrite[39m([33mKEY[39m[33m,[39m [34msaveTo[39m(s[33m,[39m [32m'B'[39m))[33m;[39m
+    [90m183| [39m    [34mexpect[39m(a[33m.[39m[34mmoved[39m([33mKEY[39m))[33m.[39m[34mtoBe[39m([35mtrue[39m)[33m;[39m
+    [90m   | [39m                         [31m^[39m
+    [90m184| [39m    a[33m.[39m[34mrelease[39m([33mKEY[39m)[33m;[39m
+    [90m185| [39m    [34mexpect[39m(a[33m.[39m[34mmoved[39m([33mKEY[39m))[33m.[39m[34mtoBe[39m([35mfalse[39m)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[9/10]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/saveFence.test.ts[2m > [22msaveFence[2m > [22m9. the clobber: the old tab never writes its week 5 over week 9
+[31m[1mAssertionError[22m: expected false to be true // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- true[39m
+[31m+ false[39m
+
+[36m [2m❯[22m src/test/saveFence.test.ts:[2m199:29[22m[39m
+    [90m197| [39m    tabB[33m.[39m[34mwrite[39m([33mKEY[39m[33m,[39m [34msaveTo[39m(s[33m,[39m [32m'week5'[39m))[33m;[39m
+    [90m198| [39m    for (const w of ['week6', 'week7', 'week9']) expect(tabB.write(KEY…
+    [90m199| [39m    [34mexpect[39m(tabA[33m.[39m[34mmoved[39m([33mKEY[39m))[33m.[39m[34mtoBe[39m([35mtrue[39m)[33m;[39m
+    [90m   | [39m                            [31m^[39m
+    [90m200| [39m    [34mexpect[39m(tabA[33m.[39m[34mwrite[39m([33mKEY[39m[33m,[39m [34msaveTo[39m(s[33m,[39m [32m'week5'[39m)))[33m.[39m[34mtoBe[39m([32m'moved'[39m)[33m;[39m
+    [90m201| [39m    [34mexpect[39m(s[33m.[39m[34mgetItem[39m([33mKEY[39m))[33m.[39m[34mtoBe[39m([32m'week9'[39m)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[10/10]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m2 failed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[31m10 failed[39m[22m[2m | [22m[1m[32m15 passed[39m[22m[90m (25)[39m
+[2m   Start at [22m 10:23:19
+[2m   Duration [22m 2.60s[2m (transform 1.34s, setup 121ms, collect 1.60s, tests 251ms, environment 704ms, prepare 289ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/clubManagerSlots.test.ts,title=src/lib/clubManagerSlots.test.ts > Round 1323%3A the swap and the delete go through the save fence > a swap and a delete of the active career each move the generation,line=189,column=19::AssertionError: expected +0 to be 1 // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- 1%0A+ 0%0A%0A ❯ src/lib/clubManagerSlots.test.ts:189:19%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/saveFence.test.ts,title=src/test/saveFence.test.ts > saveFence > 1. adopt then write moves the generation and stays current,line=48,column=30::AssertionError: expected '0' to be '1' // Object.is equality%0A%0AExpected: "1"%0AReceived: "0"%0A%0A ❯ src/test/saveFence.test.ts:48:30%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/saveFence.test.ts,title=src/test/saveFence.test.ts > saveFence > 2. another tab writing makes this one stale and its write touches nothing,line=62,column=26::AssertionError: expected false to be true // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- true%0A+ false%0A%0A ❯ src/test/saveFence.test.ts:62:26%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/saveFence.test.ts,title=src/test/saveFence.test.ts > saveFence > 3. a page that never adopted claims%3A writes always%2C holds nothing,line=80,column=30::AssertionError: expected '7' to be '8' // Object.is equality%0A%0AExpected: "8"%0AReceived: "7"%0A%0A ❯ src/test/saveFence.test.ts:80:30%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/saveFence.test.ts,title=src/test/saveFence.test.ts > saveFence > 4. an absent fence key is never a move,line=98,column=30::AssertionError: expected '0' to be '3' // Object.is equality%0A%0AExpected: "3"%0AReceived: "0"%0A%0A ❯ src/test/saveFence.test.ts:98:30%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/saveFence.test.ts,title=src/test/saveFence.test.ts > saveFence > 5. an unreadable fence value is never a move and is written over,line=110,column=32::AssertionError: expected '0' to be '1' // Object.is equality%0A%0AExpected: "1"%0AReceived: "0"%0A%0A ❯ src/test/saveFence.test.ts:110:32%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/saveFence.test.ts,title=src/test/saveFence.test.ts > saveFence > 7. a save refused after the fence moved%3A failed%2C the fence put back%2C nobody stale,line=148,column=30::AssertionError: expected '0' to be '1' // Object.is equality%0A%0AExpected: "1"%0AReceived: "0"%0A%0A ❯ src/test/saveFence.test.ts:148:30%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/saveFence.test.ts,title=src/test/saveFence.test.ts > saveFence > 7b. a refused save whose fence cannot be put back leaves this page current,line=171,column=30::AssertionError: expected '4' to be '5' // Object.is equality%0A%0AExpected: "5"%0AReceived: "4"%0A%0A ❯ src/test/saveFence.test.ts:171:30%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/saveFence.test.ts,title=src/test/saveFence.test.ts > saveFence > 8. release%3A the page holds nothing and claims again,line=183,column=26::AssertionError: expected false to be true // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- true%0A+ false%0A%0A ❯ src/test/saveFence.test.ts:183:26%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/saveFence.test.ts,title=src/test/saveFence.test.ts > saveFence > 9. the clobber%3A the old tab never writes its week 5 over week 9,line=199,column=29::AssertionError: expected false to be true // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- true%0A+ false%0A%0A ❯ src/test/saveFence.test.ts:199:29%0A%0A

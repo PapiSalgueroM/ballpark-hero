@@ -1,0 +1,64 @@
+MUTATION adoptzero APPLIED to src/lib/saveFence.ts
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [31m❯[39m src/test/saveFence.test.ts [2m([22m[2m11 tests[22m[2m | [22m[31m2 failed[39m[2m)[22m[32m 15[2mms[22m[39m
+   [32m✓[39m saveFence[2m > [22mnames its key apart from every game save[32m 2[2mms[22m[39m
+   [32m✓[39m saveFence[2m > [22m1. adopt then write moves the generation and stays current[32m 1[2mms[22m[39m
+   [32m✓[39m saveFence[2m > [22m2. another tab writing makes this one stale and its write touches nothing[32m 0[2mms[22m[39m
+   [32m✓[39m saveFence[2m > [22m3. a page that never adopted claims: writes always, holds nothing[32m 0[2mms[22m[39m
+   [32m✓[39m saveFence[2m > [22m4. an absent fence key is never a move[32m 0[2mms[22m[39m
+   [32m✓[39m saveFence[2m > [22m5. an unreadable fence value is never a move and is written over[32m 1[2mms[22m[39m
+   [32m✓[39m saveFence[2m > [22m6. a refused fence write never stops the save, and the page stays current[32m 0[2mms[22m[39m
+   [32m✓[39m saveFence[2m > [22m7. a save refused after the fence moved: failed, the fence put back, nobody stale[32m 0[2mms[22m[39m
+[31m   [31m×[31m saveFence[2m > [22m7b. a refused save whose fence cannot be put back leaves this page current[39m[32m 7[2mms[22m[39m
+[31m     → expected 'moved' to be 'failed' // Object.is equality[39m
+   [32m✓[39m saveFence[2m > [22m8. release: the page holds nothing and claims again[32m 0[2mms[22m[39m
+[31m   [31m×[31m saveFence[2m > [22m9. the clobber: the old tab never writes its week 5 over week 9[39m[32m 1[2mms[22m[39m
+[31m     → expected 'moved' to be 'written' // Object.is equality[39m
+ [32m✓[39m src/lib/clubManagerSlots.test.ts [2m([22m[2m14 tests[22m[2m)[22m[32m 226[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 2 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/saveFence.test.ts[2m > [22msaveFence[2m > [22m7b. a refused save whose fence cannot be put back leaves this page current
+[31m[1mAssertionError[22m: expected 'moved' to be 'failed' // Object.is equality[39m
+
+Expected: [32m"[7mfail[27med"[39m
+Received: [31m"[7mmov[27med"[39m
+
+[36m [2m❯[22m src/test/saveFence.test.ts:[2m170:42[22m[39m
+    [90m168| [39m    b[33m.[39m[34mrelease[39m([33mKEY[39m)[33m;[39m
+    [90m169| [39m    b[33m.[39m[34madopt[39m([33mKEY[39m)[33m;[39m
+    [90m170| [39m    [34mexpect[39m(a[33m.[39m[34mwrite[39m([33mKEY[39m[33m,[39m [34msaveTo[39m(s[33m,[39m [32m'A'[39m)))[33m.[39m[34mtoBe[39m([32m'failed'[39m)[33m;[39m
+    [90m   | [39m                                         [31m^[39m
+    [90m171| [39m    [34mexpect[39m(s[33m.[39m[34mgetItem[39m([33mFENCE[39m))[33m.[39m[34mtoBe[39m([32m'5'[39m)[33m;[39m
+    [90m172| [39m    [34mexpect[39m(a[33m.[39m[34mmoved[39m([33mKEY[39m))[33m.[39m[34mtoBe[39m([35mfalse[39m)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/saveFence.test.ts[2m > [22msaveFence[2m > [22m9. the clobber: the old tab never writes its week 5 over week 9
+[31m[1mAssertionError[22m: expected 'moved' to be 'written' // Object.is equality[39m
+
+Expected: [32m"written"[39m
+Received: [31m"moved"[39m
+
+[36m [2m❯[22m src/test/saveFence.test.ts:[2m198:88[22m[39m
+    [90m196| [39m    tabB[33m.[39m[34madopt[39m([33mKEY[39m)[33m;[39m
+    [90m197| [39m    tabB[33m.[39m[34mwrite[39m([33mKEY[39m[33m,[39m [34msaveTo[39m(s[33m,[39m [32m'week5'[39m))[33m;[39m
+    [90m198| [39m    for (const w of ['week6', 'week7', 'week9']) expect(tabB.write(KEY…
+    [90m   | [39m                                                                                       [31m^[39m
+    [90m199| [39m    [34mexpect[39m(tabA[33m.[39m[34mmoved[39m([33mKEY[39m))[33m.[39m[34mtoBe[39m([35mtrue[39m)[33m;[39m
+    [90m200| [39m    [34mexpect[39m(tabA[33m.[39m[34mwrite[39m([33mKEY[39m[33m,[39m [34msaveTo[39m(s[33m,[39m [32m'week5'[39m)))[33m.[39m[34mtoBe[39m([32m'moved'[39m)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m1 passed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[31m2 failed[39m[22m[2m | [22m[1m[32m23 passed[39m[22m[90m (25)[39m
+[2m   Start at [22m 10:23:25
+[2m   Duration [22m 2.54s[2m (transform 1.33s, setup 104ms, collect 1.58s, tests 241ms, environment 683ms, prepare 274ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/saveFence.test.ts,title=src/test/saveFence.test.ts > saveFence > 7b. a refused save whose fence cannot be put back leaves this page current,line=170,column=42::AssertionError: expected 'moved' to be 'failed' // Object.is equality%0A%0AExpected: "failed"%0AReceived: "moved"%0A%0A ❯ src/test/saveFence.test.ts:170:42%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/saveFence.test.ts,title=src/test/saveFence.test.ts > saveFence > 9. the clobber%3A the old tab never writes its week 5 over week 9,line=198,column=88::AssertionError: expected 'moved' to be 'written' // Object.is equality%0A%0AExpected: "written"%0AReceived: "moved"%0A%0A ❯ src/test/saveFence.test.ts:198:88%0A%0A

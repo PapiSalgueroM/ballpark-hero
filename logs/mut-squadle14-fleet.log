@@ -1,0 +1,6 @@
+MUTATION squadle14 APPLIED to src/lib/clubManager.ts
+fleet: 3 careers x seeds 0,1,2,3,4 x 2 seasons, a save, a load and a save after every entry, against FENCE_BASE /tmp/g1
+  1458 saves on head, 0 of them in a state a load repair fires on; 1458 faces equal to the base commit's (both saves' bytes and the draw count)
+  old saves: 4 of 4 Club Manager saves the base engine wrote open to the same JSON on head and base
+  section fleet: 1463 checks, 0 red
+simSaveFence: all green (fleet)

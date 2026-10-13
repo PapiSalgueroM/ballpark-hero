@@ -1,0 +1,17 @@
+MUTATION adoptzero APPLIED to src/lib/saveFence.ts
+tabs: two tabs on one career, and a Hot Seat handover beside one
+  B1 start: Brighton week 1, 1 meetings, last Aston Villa 2-3
+     after B played three: Brighton week 1, 1 meetings, last Aston Villa 2-3
+     after A left: Brighton week 1, 1 meetings, last Aston Villa 2-3 (A saw the move: false, its leave write landed: true)
+  FAIL [tabs]: B1: tab B played three matches and the save did not move
+  FAIL [tabs]: B1: tab A never saw that tab B had played on
+  FAIL [tabs]: B1: tab A's leave write landed over tab B's career
+  REPLAY 0: B wrote "Brighton week 1, 1 meetings, last Aston Villa 2-3", stale A played "Brighton week 2, 2 meetings, last Chelsea 0-4", on disk after A: "Brighton week 1, 1 meetings, last Aston Villa 2-3" (A refused 3 times)
+  REPLAY 1: B wrote "Brighton week 1, 1 meetings, last Aston Villa 2-3", stale A played "Brighton week 2, 2 meetings, last Chelsea 0-4", on disk after A: "Brighton week 1, 1 meetings, last Aston Villa 2-3" (A refused 3 times)
+  REPLAY 2: B wrote "Brighton week 1, 1 meetings, last Aston Villa 2-3", stale A played "Brighton week 2, 2 meetings, last Chelsea 0-3", on disk after A: "Brighton week 1, 1 meetings, last Aston Villa 2-3" (A refused 3 times)
+  HOT SEAT: Arsenal handed over (saved): "Arsenal week 26, 26 meetings, last Hull City 2-0"; tab A saw it: true; after A left: "Arsenal week 26, 26 meetings, last Hull City 2-0"
+source: every call in src that writes the Club Manager save is fenced or allowed
+  96 files write storage; 6 writes of the save inside saveFence.write, 4 on the allowed list (3 entries, each still there)
+  section tabs: 14 checks, 3 red
+  section source: 10 checks, 0 red
+simSaveFence: RED, 3 findings
