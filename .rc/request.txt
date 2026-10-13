@@ -1,0 +1,4 @@
+#!build
+#!serial
+basebuild: git worktree add /tmp/b1325 8fea14e2 >/dev/null 2>&1; ln -sfn $PWD/node_modules /tmp/b1325/node_modules && cd /tmp/b1325 && npm run build > /tmp/b1325-build.log 2>&1; s=$?; tail -2 /tmp/b1325-build.log; exit $s
+chunks: node .rc/x/review-run-chunks.mjs /tmp/b1325/dist dist
