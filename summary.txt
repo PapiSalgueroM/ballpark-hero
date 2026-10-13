@@ -1,0 +1,7 @@
+twoTabs exit=0 237s | playTwoTabs: green at 320x640, 390x844, 1280x900
+twoTabs-nofence exit=1 204s | CONTROL FIRED: TWO_TABS_CONTROL=nofence dropped 81 writes and turned case(s) 1, 2, 3, 6 red
+twoTabs-nolanding exit=1 21s | CONTROL FIRED: TWO_TABS_CONTROL=nolanding dropped 3 writes and turned case(s) 4 red
+twoTabs-nokeep exit=1 76s | CONTROL FIRED: TWO_TABS_CONTROL=nokeep dropped 6 writes and turned case(s) 5 red
+bm-noadopt exit=1 127s | playTwoTabs: RED, 13 findings
+bm-releasefirst exit=0 98s | playTwoTabs: green at 390x844
+bm-listenkey exit=1 128s | playTwoTabs: RED, 7 findings

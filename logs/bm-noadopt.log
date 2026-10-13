@@ -1,0 +1,44 @@
+MUTATION noadopt APPLIED to src/hooks/useClubManager.ts
+fixtures: Brighton 55818 chars, Everton 54091 chars, Hot Seat survivor Arsenal (survived, 9 actions)
+== 390x844
+1) CLOBBER, and 8) THE NOTICE (390x844)
+   start Brighton week 1, 1 results, last Aston Villa 2-2 | after B played three Brighton week 5, 4 results, last Coventry City 3-3 | after A left Brighton week 1, 1 results, last Aston Villa 2-2 | A saw the notice: false
+  FAIL [case 1]: tab A never showed the notice after tab B opened the career and played on
+  FAIL [case 1]: CLOBBER: tab A's leave took the save from "Brighton week 5, 4 results, last Coventry City 3-3" to "Brighton week 1, 1 results, last Aston Villa 2-2"
+2) REPLAY, three times (390x844)
+   REPLAY 0: B wrote "Brighton week 1, 1 results, last Aston Villa 1-2"; A's press went through: true; on disk after A's press "Brighton week 1, 1 results, last Aston Villa 2-2", after the forced press "Brighton week 1, 1 results, last Aston Villa 2-2"
+  FAIL [case 2]: REPLAY 0: the press reached Quick Sim behind the notice
+  FAIL [case 2]: REPLAY 0: the stale tab changed the save from "Brighton week 1, 1 results, last Aston Villa 1-2" to "Brighton week 1, 1 results, last Aston Villa 2-2"
+   REPLAY 1: B wrote "Brighton week 2, 2 results, last Chelsea 2-0"; A's press went through: true; on disk after A's press "Brighton week 2, 2 results, last Chelsea 2-1", after the forced press "Brighton week 2, 2 results, last Chelsea 2-1"
+  FAIL [case 2]: REPLAY 1: the press reached Quick Sim behind the notice
+  FAIL [case 2]: REPLAY 1: the stale tab changed the save from "Brighton week 2, 2 results, last Chelsea 2-0" to "Brighton week 2, 2 results, last Chelsea 2-1"
+   REPLAY 2: B wrote "Brighton week 3, 3 results, last Leeds United 1-1"; A's press went through: true; on disk after A's press "Brighton week 3, 3 results, last Leeds United 0-1", after the forced press "Brighton week 3, 3 results, last Leeds United 0-1"
+  FAIL [case 2]: REPLAY 2: the press reached Quick Sim behind the notice
+  FAIL [case 2]: REPLAY 2: the stale tab changed the save from "Brighton week 3, 3 results, last Leeds United 1-1" to "Brighton week 3, 3 results, last Leeds United 0-1"
+3) HOT SEAT carry on beside a Club Manager tab, and 4) LANDING (390x844)
+   A held "Brighton week 1, 1 results, last Aston Villa 1-0"; B handed over "Arsenal week 26, 26 results, last Hull City 2-0" and landed on the hub; A saw it: false; after A left "Brighton week 1, 1 results, last Aston Villa 1-0"
+  FAIL [case 3]: tab A never showed the notice after the handover
+  FAIL [case 3]: tab A's leave write put "Brighton week 1, 1 results, last Aston Villa 1-0" over the handover "Arsenal week 26, 26 results, last Hull City 2-0"
+  ok    the carry on opened Club Manager on the hub
+5) DAMAGED saves (390x844)
+   truncated: slots, then cleared (damaged line shown), 1 backup(s) holding the bytes; save none; NaN on screen: false; errors 0
+  ok    truncated: kept, 1 backup byte for byte
+   budget-text: hub; save squad 27, budget 73; NaN on screen: false; errors 0
+   budget-junk: hub; save squad 27, budget 0; NaN on screen: false; errors 0
+   budget-negative: hub; save squad 27, budget -250; NaN on screen: false; errors 0
+   week-past-end: slots, no hub; save squad 27, budget 73; NaN on screen: false; errors 0
+   squad-five: hub; save squad 16, budget 73; NaN on screen: false; errors 0
+   xi-missing: hub; save squad 27, budget 73; NaN on screen: false; errors 0
+   inbox-spam: hub; save squad 27, budget 73; NaN on screen: false; errors 0
+   unknown-club: hub; save squad 27, budget 73; NaN on screen: false; errors 0
+   board-zero: hub; save squad 27, budget 73; NaN on screen: false; errors 0
+   fitness-nan: hub; save squad 27, budget 73; NaN on screen: false; errors 0
+6) PUT BACK through the restore card beside a Club Manager tab (390x844)
+   offered: true; put back "Everton week 0, 0 results, last none"; A saw it: false; after A left "Brighton week 1, 1 results, last Aston Villa 0-0"
+  FAIL [case 6]: tab A never showed the notice after the put back
+  FAIL [case 6]: tab A's leave write put "Brighton week 1, 1 results, last Aston Villa 0-0" over the put back "Everton week 0, 0 results, last none"
+7) OLD SAVE with no fence key (390x844)
+   fence before absent, after a week 2; Brighton week 0, 0 results, last none to Brighton week 1, 1 results, last Aston Villa 0-0; a second tab stales it: false
+  FAIL [case 7]: the old save was not fenced: a second tab did not stale it
+cases red: 1, 2, 3, 6, 7; pictures in /home/runner/work/_temp/rc-out/files
+playTwoTabs: RED, 13 findings
