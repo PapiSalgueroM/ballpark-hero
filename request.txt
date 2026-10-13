@@ -1,0 +1,8 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/test/careerPreDraft.test.tsx --testTimeout=300000 --hookTimeout=120000
+pd-a: SEEDSET=a node scripts/simCareerPreDraft.mjs
+pd-b: SEEDSET=b node scripts/simCareerPreDraft.mjs
+pd-c: SEEDSET=c node scripts/simCareerPreDraft.mjs
+pd-d: SEEDSET=d node scripts/simCareerPreDraft.mjs
+pd-e: SEEDSET=e node scripts/simCareerPreDraft.mjs
+ctl-12: bash .rc/x/ctl.sh $RC_OUT/ctl flathands curveflip keyscurve

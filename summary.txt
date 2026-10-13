@@ -1,0 +1,8 @@
+vitest exit=0 6s |    Duration  5.16s (transform 1.52s, setup 73ms, collect 2.02s, tests 1.91s, environment 401ms, prepare 261ms)
+pd-a exit=0 15s | simCareerPreDraft [seed set a]: ALL GREEN
+pd-b exit=0 14s | simCareerPreDraft [seed set b]: ALL GREEN
+pd-c exit=0 14s | simCareerPreDraft [seed set c]: ALL GREEN
+pd-d exit=0 13s | simCareerPreDraft [seed set d]: ALL GREEN
+pd-e exit=0 13s | simCareerPreDraft [seed set e]: ALL GREEN
+ctl-12 exit=0 30s | keyscurve exit=1 mutated=1 | fails by section:  1 10. 1 12. | simCareerPreDraft [control keyscurve] [seed set a]: 2 FAILURE(S)
+tsc exit=0 67s | 
