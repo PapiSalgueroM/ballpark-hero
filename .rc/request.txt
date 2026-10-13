@@ -1,0 +1,8 @@
+#!serve
+#!playwright
+playClubManagerSaveLeave: ENGINES=chromium node scripts/playClubManagerSaveLeave.mjs
+playClubManagerSlots: ENGINES=chromium node scripts/playClubManagerSlots.mjs
+w1079: node scripts/qa/managerMatchPlans1079.mjs --prefetch-fonts-only && if command -v xvfb-run >/dev/null; then NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" xvfb-run -a node scripts/qa/managerMatchPlans1079.mjs; else NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/managerMatchPlans1079.mjs; fi
+playSaveKeeper: ENGINES=chromium node scripts/playSaveKeeper.mjs
+playStorageBlocked: ENGINES=chromium node scripts/playStorageBlocked.mjs
+playCmQuickSubs: ENGINES=chromium node scripts/playCmQuickSubs.mjs
