@@ -129,7 +129,7 @@ describe('saveFence', () => {
     expect(thrower.write(KEY, () => true)).toBe('written');
   });
 
-  it('7. a save refused after the fence moved: failed, others stale, this page not', () => {
+  it('7. a save refused after the fence moved: failed, the fence put back, nobody stale', () => {
     const s = new FakeStore();
     const a = createSaveFence(s);
     const b = createSaveFence(s);
@@ -140,7 +140,35 @@ describe('saveFence', () => {
     expect(a.write(KEY, saveTo(s, 'A'))).toBe('failed');
     expect(a.write(KEY, () => { throw new Error('quota'); })).toBe('failed');
     expect(s.getItem(KEY)).toBe('before');
-    expect(s.getItem(FENCE)).toBe('2');
+    expect(s.getItem(FENCE)).toBe(null);
+    expect(a.moved(KEY)).toBe(false);
+    expect(b.moved(KEY)).toBe(false);
+    s.refuse = () => false;
+    expect(a.write(KEY, saveTo(s, 'A2'))).toBe('written');
+    expect(s.getItem(FENCE)).toBe('1');
+    s.refuse = k => k === KEY;
+    expect(a.write(KEY, saveTo(s, 'A3'))).toBe('failed');
+    expect(s.getItem(FENCE)).toBe('1');
+    expect(b.moved(KEY)).toBe(true);
+    expect(a.moved(KEY)).toBe(false);
+  });
+
+  it('7b. a refused save whose fence cannot be put back leaves this page current', () => {
+    const s = new FakeStore();
+    const a = createSaveFence(s);
+    const b = createSaveFence(s);
+    a.adopt(KEY);
+    b.adopt(KEY);
+    let fenceWrites = 0;
+    s.refuse = k => k === KEY || (k === FENCE && ++fenceWrites > 1);
+    s.setItem(FENCE, '4');
+    fenceWrites = 0;
+    a.release(KEY);
+    a.adopt(KEY);
+    b.release(KEY);
+    b.adopt(KEY);
+    expect(a.write(KEY, saveTo(s, 'A'))).toBe('failed');
+    expect(s.getItem(FENCE)).toBe('5');
     expect(a.moved(KEY)).toBe(false);
     expect(b.moved(KEY)).toBe(true);
   });

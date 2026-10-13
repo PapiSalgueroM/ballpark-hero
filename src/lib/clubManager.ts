@@ -20463,22 +20463,32 @@ export function leanCareer(state: CareerState): CareerState {
  * the lean shape, and false comes back only when that is refused as well, so
  * the hook can put it on screen. Same career in, same bytes out, so writing
  * twice is harmless.
+ *
+ * Round 1323: and through the save fence (src/lib/saveFence.ts), so a tab
+ * whose career another tab has played on since writes nothing at all, at a
+ * press or at page leave, and false comes back. Every writer of the career
+ * reaches it here: the hook, the slot swap's own write in clubManagerSlots.ts,
+ * and Hot Seat's carry on, which holds nothing and so writes as a claim. The
+ * import sits here, beside its only callers in this file.
  */
 export function saveCareer(career: CareerState): boolean {
   const full = trimCareer(career);
-  try {
-    localStorage.setItem(SAVE_KEY, JSON.stringify(full));
-    return true;
-  } catch {
-    /* quota, or a blocked store: once more, lean */
-  }
-  try {
-    localStorage.setItem(SAVE_KEY, JSON.stringify(leanCareer(full)));
-    return true;
-  } catch {
-    return false;
-  }
+  return saveFence.write(SAVE_KEY, () => {
+    try {
+      localStorage.setItem(SAVE_KEY, JSON.stringify(full));
+      return true;
+    } catch {
+      /* quota, or a blocked store: once more, lean */
+    }
+    try {
+      localStorage.setItem(SAVE_KEY, JSON.stringify(leanCareer(full)));
+      return true;
+    } catch {
+      return false;
+    }
+  }) === 'written';
 }
+import { saveFence } from './saveFence';
 
 /**
  * Round 832: which era the saved career plays in, read without opening it, so
@@ -20679,11 +20689,16 @@ export function clearCareer(): void {
   registerCustomClub(null);
   // Round 310: the deleted save's promotions go with it.
   registerLeagueOverrides(null);
-  try {
-    localStorage.removeItem(SAVE_KEY);
-  } catch {
-    /* ignore */
-  }
+  /* Round 1323: fenced too, so a stale tab cannot clear a career another tab
+     has played on since. */
+  saveFence.write(SAVE_KEY, () => {
+    try {
+      localStorage.removeItem(SAVE_KEY);
+      return true;
+    } catch {
+      return false;
+    }
+  });
 }
 
 

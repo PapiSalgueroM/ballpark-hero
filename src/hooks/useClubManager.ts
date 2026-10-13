@@ -121,6 +121,10 @@ function startFixtureKey(clubName: string, eraId: string): string | null {
 /** Round 1225 review: a new career held back while its league's fixture list is out. */
 type StartHold = { key: string; begin: () => void; settle: () => void; over: boolean; timer: ReturnType<typeof setTimeout> | null };
 
+/* Round 1323: the save fence, imported here beside the hook that uses it. */
+import { saveFence } from '@/lib/saveFence';
+import { SAVE_KEY } from '@/lib/clubManager';
+
 export function useClubManager() {
   const [phase, setPhase] = useState<CMPhase>('boot');
   const [career, setCareer] = useState<CareerState | null>(null);
@@ -162,11 +166,26 @@ export function useClubManager() {
   const ownSlot = useRef(1);
   const holdsActiveSlot = useCallback(() => activeSlot() === ownSlot.current, []);
 
+  /* Round 1323: one tab wins (src/lib/saveFence.ts). True once another tab
+     has written this career since this page read it: every write this page
+     tries is refused by saveCareer from then on, and the page covers itself
+     with a notice that asks for a reload. Never saveFailed for it, because
+     the browser is fine; the career is just newer somewhere else. */
+  const [saveMoved, setSaveMoved] = useState(false);
+  const movedOn = useCallback((): boolean => {
+    const moved = saveFence.moved(SAVE_KEY);
+    if (moved) setSaveMoved(true);
+    return moved;
+  }, []);
+
   // Boot: look for a saved career and offer to resume it.
   useEffect(() => {
     let alive = true;
     const open = () => {
       ownSlot.current = activeSlot();
+      /* Round 1323: BEFORE the save is read, so a write that lands between
+         the two reads leaves this page stale, never the other tab. */
+      saveFence.adopt(SAVE_KEY);
       const saved = loadCareer();
       const views = readSlots();
       setSlots(views);
@@ -229,6 +248,13 @@ export function useClubManager() {
      the page shows a plain banner while it is true. */
   const [saveFailed, setSaveFailed] = useState(false);
   const note = useCallback((ok: boolean) => setSaveFailed(!ok), []);
+  /* Round 1323: the write, reported: a refusal because another tab moved the
+     career on raises the notice and leaves saveFailed as it was. */
+  const persist = useCallback((c: CareerState): boolean => {
+    const ok = saveCareer(c);
+    if (ok || !movedOn()) note(ok);
+    return ok;
+  }, [note, movedOn]);
   /* Round 634 review: why the last press on the transfer desk did nothing, in
      the engine's own words (doorRefusal, loanOutRefusal), or null when it went
      through. A refused press used to be a dead button. */
@@ -252,8 +278,8 @@ export function useClubManager() {
       setPhase('resume');
       return;
     }
-    note(saveCareer(career));
-  }, [career, note, holdsActiveSlot]);
+    persist(career);
+  }, [career, persist, holdsActiveSlot]);
 
   /* ---------- Round 567: and persist it when the page goes away ---------- */
 
@@ -293,7 +319,10 @@ export function useClubManager() {
     /* Round 928 review: and never once another tab has switched managers
        (holdsActiveSlot): closing this page must not write its career over
        the one that tab switched in. */
-    const write = () => { const c = careerRef.current; if (c && holdsActiveSlot()) note(saveCareer(c)); };
+    /* Round 1323: and never once another tab has played this career on since
+       (the fence inside saveCareer refuses it), which is the clobber that
+       wiped three matches when an old tab was closed. */
+    const write = () => { const c = careerRef.current; if (c && holdsActiveSlot()) persist(c); };
     const onHidden = () => { if (document.visibilityState === 'hidden') write(); };
     window.addEventListener('pagehide', write);
     document.addEventListener('visibilitychange', onHidden);
@@ -305,6 +334,8 @@ export function useClubManager() {
          career it is holding costs one localStorage write and closes the gap
          between a commit and the passive effect that would have saved it. */
       write();
+      /* Round 1323: the last write is done, so this page holds nothing now. */
+      saveFence.release(SAVE_KEY);
     };
   }, []);
 
@@ -351,6 +382,8 @@ export function useClubManager() {
      swap parks what SAVE_KEY really holds (that tab's career) under the slot
      it really belongs to. */
   const leaveActive = useCallback((slot: number): boolean => {
+    /* Round 1323: a stale page swaps nothing; the notice says why. */
+    if (movedOn()) return false;
     const out = holdsActiveSlot() ? careerRef.current : null;
     if (out) saveCareer(out);
     if (!switchSlot(slot, out)) {
@@ -368,7 +401,7 @@ export function useClubManager() {
     /* Review: the transfer desk's last refusal was about the outgoing club. */
     setDeskNote(null);
     return true;
-  }, [holdsActiveSlot]);
+  }, [holdsActiveSlot, movedOn]);
 
   /* Review: once another tab has switched managers, the career this page
      holds sits parked in its slot as of its last write, so the copy in memory
@@ -447,13 +480,13 @@ export function useClubManager() {
   /** Back to the slots screen from inside a career, or from an era whose
    *  squads would not load (review: that screen had no way back). */
   const showSlots = useCallback(() => {
-    if (careerRef.current && holdsActiveSlot()) saveCareer(careerRef.current);
+    if (careerRef.current && holdsActiveSlot() && !saveCareer(careerRef.current)) movedOn();
     letGoIfStale();
     setBootError(null);
     setSlots(readSlots());
     setSlotNote(null);
     setPhase('resume');
-  }, [holdsActiveSlot, letGoIfStale]);
+  }, [holdsActiveSlot, letGoIfStale, movedOn]);
 
   /* Retire at the season's end, or Start New Career once sacked. Before
      Round 928 both wiped the career in one tap; the review found they still
@@ -1163,7 +1196,7 @@ export function useClubManager() {
 
   return {
     simToWeek,
-    saveFailed, deskNote, clearDeskNote: () => setDeskNote(null),
+    saveFailed, saveMoved, deskNote, clearDeskNote: () => setDeskNote(null),
     bootError, bootNoun, retryBoot,
     startWait, retryStart, startWithoutList,
     slots, slotNote, openSlot, newInSlot, removeSlot, showSlots,

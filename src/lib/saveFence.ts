@@ -28,7 +28,15 @@
  * - The fence write never stops the save. If the browser refuses it, the save
  *   is still attempted and this page keeps its old generation, which is still
  *   the stored one. If the fence write lands and the save is then refused,
- *   other tabs go stale over the same bytes: a reload, nothing lost.
+ *   the fence is put back as it was, so a refused write changes no byte; if
+ *   even that is refused, other tabs go stale over the same bytes: a reload,
+ *   nothing lost.
+ * - The page's own fence works over window.localStorage, so a page in a
+ *   browser (or a jsdom test) is fenced and a node sim with no window is not:
+ *   there the fence has no store and every write goes straight through,
+ *   byte for byte as before this round. scripts/simSaveFence.mjs plants a
+ *   window to model two tabs; the sims that pin the store's exact keys
+ *   (simClubManagerSlots section 4 holds a single key) stay as they were.
  *
  * It is NOT a lock. localStorage has no compare and swap, so two tabs writing
  * in the same millisecond can both pass the check. The window is one storage
@@ -102,29 +110,44 @@ export function createSaveFence(source: FenceStore | (() => FenceStore | null | 
       if (moved(saveKey)) return 'moved';
       const mine = held.get(saveKey);
       const next = Math.max(mine ?? 0, stored(saveKey) ?? 0) + 1;
+      const s = store();
+      let before: string | null = null;
       let fenced = false;
       try {
-        const s = store();
         if (s) {
+          before = s.getItem(fenceKeyOf(saveKey));
           s.setItem(fenceKeyOf(saveKey), String(next));
           fenced = true;
         }
       } catch {
         /* refused: the career matters more, so the save is still attempted */
       }
-      if (fenced && mine !== undefined) held.set(saveKey, next);
       let ok = false;
       try {
         ok = doWrite() === true;
       } catch {
         ok = false;
       }
+      /* A refused save changed nothing, so the fence goes back to what it was
+         and no other tab is made stale over the same bytes. If even that is
+         refused, the fence stays moved and this page holds the new number. */
+      let at = fenced ? next : mine;
+      if (fenced && !ok && s) {
+        try {
+          if (before === null) s.removeItem(fenceKeyOf(saveKey));
+          else s.setItem(fenceKeyOf(saveKey), before);
+          at = mine;
+        } catch {
+          /* left moved: a reload in the other tab, nothing lost */
+        }
+      }
+      if (mine !== undefined && at !== undefined) held.set(saveKey, at);
       return ok ? 'written' : 'failed';
     },
   };
 }
 
-/** The page's own fence over the browser's storage (globalThis, so a sim's planted store is used too). */
+/** The page's own fence over the browser's storage; none in a node sim with no window. */
 export const saveFence: SaveFence = createSaveFence(
-  () => (globalThis as { localStorage?: FenceStore }).localStorage ?? null,
+  () => (typeof window === 'undefined' ? null : window.localStorage),
 );
