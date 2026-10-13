@@ -1,0 +1,4 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+trustCopy: node scripts/simTrustCopy.mjs
+noRival: node scripts/simNoRivalNames.mjs
+guideHeadings: node scripts/simGuideHeadings.mjs
