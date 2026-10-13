@@ -1,0 +1,1707 @@
+PASS [uncopied AR parity]
+PASS [attribution boundaries]
+PASS [uncopied full AR baseline]
+PASS [candidate full AR baseline]
+PASS [candidate AR parity]
+PASS [role event]
+PASS [role selection]
+PASS [role scope]
+PASS [role recorded year]
+PASS [role interruptions]
+PASS [role moves and retirement]
+PASS [role squad display]
+PASS [milestone saved tally]
+PASS [milestone protected news]
+PASS [milestone engine news]
+PASS [source held]
+simCareerStoryRole: 16 groups, 0 failed, 48 full AR pairs
+PASS [uncopied AR parity]
+PASS [attribution boundaries]
+PASS [uncopied full AR baseline]
+PASS [role event]
+PASS [role scope]
+PASS [role recorded year]
+PASS [role interruptions]
+PASS [role moves and retirement]
+PASS [role squad display]
+PASS [milestone saved tally]
+PASS [milestone protected news]
+PASS [milestone engine news]
+PASS [source held]
+simCareerStoryRole: 16 groups, 3 failed, 48 full AR pairs
+FAIL [candidate full AR baseline] AssertionError: all twelve controlled-attributed complete AR careers retain every saved frame and draw
++ actual - expected
+
++ [
++   '119101:draws',
++   '119101:full-frames',
++   '119102:draws',
++   '119102:full-frames',
++   '119103:draws',
++   '119103:full-frames',
++   '119104:draws',
++   '119104:full-frames',
++   '119105:draws',
++   '119105:full-frames',
++   '119106:draws',
++   '119106:full-frames',
++   '119107:draws',
++   '119107:full-frames',
++   '119108:draws',
++   '119108:full-frames',
++   '119109:draws',
++   '119109:full-frames',
++   '119110:draws',
++   '119110:full-frames',
++   '119111:draws',
++   '119111:full-frames',
++   '119112:draws',
++   '119112:full-frames'
++ ]
+- []
+
+FAIL [candidate AR parity] AssertionError: candidate-attributed entire saved values and global draw vectors match AR
++ actual - expected
+
++ [
++   '119001:appearance:state',
++   '119001:appearance:draws',
++   '119001:season:state',
++   '119001:season:draws',
++   '119002:appearance:state',
++   '119002:appearance:draws',
++   '119002:season:state',
++   '119003:appearance:state',
++   '119003:appearance:draws',
++   '119003:season:state',
++   '119003:season:draws',
++   '119004:appearance:state',
++   '119004:appearance:draws',
++   '119004:season:state',
++   '119005:appearance:state',
++   '119005:appearance:draws',
++   '119005:season:state',
++   '119005:season:draws',
++   '119006:appearance:state',
++   '119006:appearance:draws',
++   '119006:season:state',
++   '119006:season:draws',
++   '119007:appearance:state',
++   '119007:appearance:draws',
++   '119007:season:state',
++   '119008:appearance:state',
++   '119008:appearance:draws',
++   '119008:season:state',
++   '119008:season:draws',
++   '119009:appearance:state',
++   '119009:appearance:draws',
++   '119009:season:state',
++   '119009:season:draws',
++   '119010:appearance:state',
++   '119010:appearance:draws',
++   '119010:season:state',
++   '119010:season:draws',
++   '119011:appearance:state',
++   '119011:appearance:draws',
++   '119011:season:state',
++   '119011:season:draws',
++   '119012:appearance:state',
++   '119012:appearance:draws',
++   '119012:season:state',
++   '119012:season:draws'
++ ]
+- []
+
+FAIL [role selection] AssertionError: phone and four-game role combine before the 38 cap and frozen-out availability
+
+3 !== 2
+
+PASS [uncopied AR parity]
+PASS [attribution boundaries]
+PASS [uncopied full AR baseline]
+PASS [candidate full AR baseline]
+PASS [candidate AR parity]
+PASS [role event]
+PASS [role selection]
+PASS [role recorded year]
+PASS [role interruptions]
+PASS [role moves and retirement]
+PASS [role squad display]
+PASS [milestone saved tally]
+PASS [milestone protected news]
+PASS [milestone engine news]
+PASS [source held]
+simCareerStoryRole: 16 groups, 1 failed, 48 full AR pairs
+FAIL [role scope] AssertionError: a forged completed role on a foreign, youth or unavailable row is rejected
++ actual - expected
+
++ {
++   club: 'Twente',
++   outcome: 'served',
++   plannedReduction: 4,
++   year: 2029
++ }
+- null
+
+PASS [uncopied AR parity]
+PASS [attribution boundaries]
+PASS [uncopied full AR baseline]
+PASS [candidate full AR baseline]
+PASS [candidate AR parity]
+PASS [role event]
+PASS [role selection]
+PASS [role scope]
+PASS [role recorded year]
+PASS [role interruptions]
+PASS [role moves and retirement]
+PASS [role squad display]
+PASS [milestone saved tally]
+PASS [milestone engine news]
+PASS [source held]
+simCareerStoryRole: 16 groups, 1 failed, 48 full AR pairs
+FAIL [milestone protected news] AssertionError: unrecorded row cannot invent a newspaper milestone
++ actual - expected
+... Skipped lines
+
+  [
+    {
+      body: 'Original saved article body',
+      headline: 'Saved critic column',
+      newspaper: 'Saved Paper',
+...
+    {
++     body: '2029/30: World ere scored 12 club goals, taking their saved senior club tally from 95 to 107.',
++     headline: 'World ere Reaches 100 Senior Club Goals',
+-     body: 'Original saved article body',
+-     headline: 'World ere Silences Critics With Stunning Performance',
+      newspaper: 'Saved Paper',
++     type: 'milestone'
+-     type: 'positive'
+    }
+  ]
+
+PASS [uncopied AR parity]
+PASS [attribution boundaries]
+PASS [uncopied full AR baseline]
+PASS [candidate full AR baseline]
+PASS [candidate AR parity]
+PASS [role event]
+PASS [role selection]
+PASS [role scope]
+PASS [role recorded year]
+PASS [role interruptions]
+PASS [role moves and retirement]
+PASS [role squad display]
+PASS [milestone protected news]
+PASS [milestone engine news]
+PASS [source held]
+simCareerStoryRole: 16 groups, 1 failed, 48 full AR pairs
+FAIL [milestone saved tally] AssertionError: missing, ambiguous, invalid and already-passed history makes no new crossing
++ actual - expected
+
++ {
++   previous: 300,
++   threshold: 300,
++   total: 300
++ }
+- null
+
+PASS [uncopied AR parity]
+PASS [attribution boundaries]
+PASS [uncopied full AR baseline]
+PASS [candidate full AR baseline]
+PASS [candidate AR parity]
+PASS [role event]
+PASS [role selection]
+PASS [role scope]
+PASS [role recorded year]
+PASS [role interruptions]
+PASS [role moves and retirement]
+PASS [role squad display]
+PASS [milestone saved tally]
+PASS [milestone protected news]
+PASS [source held]
+simCareerStoryRole: 16 groups, 1 failed, 48 full AR pairs
+FAIL [milestone engine news] AssertionError: all128 actual old eligibility draws make no invented club record or100th senior-goal claim
++ actual - expected
+
++ [
++   {
++     article: {
++       body: 'There were tears of joy as World ere reached the magical 100-goal mark for their career. The Twente star celebrated with teammates and fans in an unforgettable moment.',
++       headline: 'World ere Scores 100th Career Goal In Emotional Moment',
++       newspaper: 'The Global Game',
++       type: 'milestone'
++     },
++     seed: 119951
++   },
++   {
++     article: {
++       body: 'There were tears of joy as World ere reached the magical 100-goal mark for their career. The Twente star celebrated with teammates and fans in an unforgettable moment.',
++       headline: 'World ere Scores 100th Career Goal In Emotional Moment',
++       newspaper: 'Football Weekly',
++       type: 'milestone'
++     },
++     seed: 119952
++   },
++   {
++     article: {
++       body: 'There were tears of joy as World ere reached the magical 100-goal mark for their career. The Twente star celebrated with teammates and fans in an unforgettable moment.',
++       headline: 'World ere Scores 100th Career Goal In Emotional Moment',
++       newspaper: 'The Daily Sport',
++       type: 'milestone'
++     },
++     seed: 119953
++   },
++   {
++     article: {
++       body: 'There were tears of joy as World ere reached the magical 100-goal mark for their career. The Twente star celebrated with teammates and fans in an unforgettable moment.',
++       headline: 'World ere Scores 100th Career Goal In Emotional Moment',
++       newspaper: '90+4 Magazine',
++       type: 'milestone'
++     },
++     seed: 119954
++   },
++   {
++     article: {
++       body: 'With 100 career goals to their name, World ere has written themselves into the history books. An emotional moment at Twente as teammates and fans celebrate the milestone.',
++       headline: 'World ere Breaks Club Record For Goals',
++       newspaper: 'Tackle Weekly',
++       type: 'milestone'
++     },
++     seed: 119955
++   },
++   {
++     article: {
++       body: 'With 100 career goals to their name, World ere has written themselves into the history books. An emotional moment at Twente as teammates and fans celebrate the milestone.',
++       headline: 'World ere Breaks Club Record For Goals',
++       newspaper: 'Tackle Weekly',
++       type: 'milestone'
++     },
++     seed: 119956
++   },
++   {
++     article: {
++       body: 'With 100 career goals to their name, World ere has written themselves into the history books. An emotional moment at Twente as teammates and fans celebrate the milestone.',
++       headline: 'World ere Breaks Club Record For Goals',
++       newspaper: '90+4 Magazine',
++       type: 'milestone'
++     },
++     seed: 119957
++   },
++   {
++     article: {
++       body: 'There were tears of joy as World ere reached the magical 100-goal mark for their career. The Twente star celebrated with teammates and fans in an unforgettable moment.',
++       headline: 'World ere Scores 100th Career Goal In Emotional Moment',
++       newspaper: '90+4 Magazine',
++       type: 'milestone'
++     },
++     seed: 119958
++   },
++   {
++     article: {
++       body: 'There were tears of joy as World ere reached the magical 100-goal mark for their career. The Twente star celebrated with teammates and fans in an unforgettable moment.',
++       headline: 'World ere Scores 100th Career Goal In Emotional Moment',
++       newspaper: 'Soccer Times',
++       type: 'milestone'
++     },
++     seed: 119959
++   },
++   {
++     article: {
++       body: 'With 100 career goals to their name, World ere has written themselves into the history books. An emotional moment at Twente as teammates and fans celebrate the milestone.',
++       headline: 'World ere Breaks Club Record For Goals',
++       newspaper: 'The Sunday Volley',
++       type: 'milestone'
++     },
++     seed: 119960
++   },
++   {
++     article: {
++       body: 'With 100 career goals to their name, World ere has written themselves into the history books. An emotional moment at Twente as teammates and fans celebrate the milestone.',
++       headline: 'World ere Breaks Club Record For Goals',
++       newspaper: 'The Global Game',
++       type: 'milestone'
++     },
++     seed: 119961
++   },
++   {
++     article: {
++       body: 'With 100 career goals to their name, World ere has written themselves into the history books. An emotional moment at Twente as teammates and fans celebrate the milestone.',
++       headline: 'World ere Breaks Club Record For Goals',
++       newspaper: 'Football Weekly',
++       type: 'milestone'
++     },
++     seed: 119962
++   },
++   {
++     article: {
++       body: 'There were tears of joy as World ere reached the magical 100-goal mark for their career. The Twente star celebrated with teammates and fans in an unforgettable moment.',
++       headline: 'World ere Scores 100th Career Goal In Emotional Moment',
++       newspaper: 'The Global Game',
++       type: 'milestone'
++     },
++     seed: 119963
++   },
++   {
++     article: {
++       body: 'There were tears of joy as World ere reached the magical 100-goal mark for their career. The Twente star celebrated with teammates and fans in an unforgettable moment.',
++       headline: 'World ere Scores 100th Career Goal In Emotional Moment',
++       newspaper: 'The Global Game',
++       type: 'milestone'
++     },
++     seed: 119964
++   },
++   {
++     article: {
++       body: 'There were tears of joy as World ere reached the magical 100-goal mark for their career. The Twente star celebrated with teammates and fans in an unforgettable moment.',
++       headline: 'World ere Scores 100th Career Goal In Emotional Moment',
++       newspaper: 'The Sunday Volley',
++       type: 'milestone'
++     },
++     seed: 119965
++   },
++   {
++     article: {
++       body: 'There were tears of joy as World ere reached the magical 100-goal mark for their career. The Twente star celebrated with teammates and fans in an unforgettable moment.',
++       headline: 'World ere Scores 100th Career Goal In Emotional Moment',
++       newspaper: 'Soccer Times',
++       type: 'milestone'
++     },
++     seed: 119966
++   },
++   {
++     article: {
++       body: 'With 100 career goals to their name, World ere has written themselves into the history books. An emotional moment at Twente as teammates and fans celebrate the milestone.',
++       headline: 'World ere Breaks Club Record For Goals',
++       newspaper: '90+4 Magazine',
++       type: 'milestone'
++     },
++     seed: 119967
++   },
++   {
++     article: {
++       body: 'There were tears of joy as World ere reached the magical 100-goal mark for their career. The Twente star celebrated with teammates and fans in an unforgettable moment.',
++       headline: 'World ere Scores 100th Career Goal In Emotional Moment',
++       newspaper: '90+4 Magazine',
++       type: 'milestone'
++     },
++     seed: 119968
++   },
++   {
++     article: {
++       body: 'There were tears of joy as World ere reached the magical 100-goal mark for their career. The Twente star celebrated with teammates and fans in an unforgettable moment.',
++       headline: 'World ere Scores 100th Career Goal In Emotional Moment',
++       newspaper: 'The Daily Sport',
++       type: 'milestone'
++     },
++     seed: 119969
++   },
++   {
++     article: {
++       body: 'There were tears of joy as World ere reached the magical 100-goal mark for their career. The Twente star celebrated with teammates and fans in an unforgettable moment.',
++       headline: 'World ere Scores 100th Career Goal In Emotional Moment',
++       newspaper: 'The Beautiful Game Report',
++       type: 'milestone'
++     },
++     seed: 119970
++   },
++   {
++     article: {
++       body: 'With 100 career goals to their name, World ere has written themselves into the history books. An emotional moment at Twente as teammates and fans celebrate the milestone.',
++       headline: 'World ere Breaks Club Record For Goals',
++       newspaper: 'The Sunday Volley',
++       type: 'milestone'
++     },
++     seed: 119971
++   },
++   {
++     article: {
++       body: 'With 100 career goals to their name, World ere has written themselves into the history books. An emotional moment at Twente as teammates and fans celebrate the milestone.',
++       headline: 'World ere Breaks Club Record For Goals',
++       newspaper: 'Football Weekly',
++       type: 'milestone'
++     },
++     seed: 119972
++   },
++   {
++     article: {
++       body: 'There were tears of joy as World ere reached the magical 100-goal mark for their career. The Twente star celebrated with teammates and fans in an unforgettable moment.',
++       headline: 'World ere Scores 100th Career Goal In Emotional Moment',
++       newspaper: 'Soccer Times',
++       type: 'milestone'
++     },
++     seed: 119973
++   },
++   {
++     article: {
++       body: 'With 100 career goals to their name, World ere has written themselves into the history books. An emotional moment at Twente as teammates and fans celebrate the milestone.',
++       headline: 'World ere Breaks Club Record For Goals',
++       newspaper: 'The Daily Sport',
++       type: 'milestone'
++     },
++     seed: 119974
++   },
++   {
++     article: {
++       body: 'With 100 career goals to their name, World ere has written themselves into the history books. An emotional moment at Twente as teammates and fans celebrate the milestone.',
++       headline: 'World ere Breaks Club Record For Goals',
++       newspaper: 'The Daily Nutmeg',
++       type: 'milestone'
++     },
++     seed: 119975
++   },
++   {
++     article: {
++       body: 'There were tears of joy as World ere reached the magical 100-goal mark for their career. The Twente star celebrated with teammates and fans in an unforgettable moment.',
++       headline: 'World ere Scores 100th Career Goal In Emotional Moment',
++       newspaper: 'The Daily Sport',
++       type: 'milestone'
++     },
++     seed: 119976
++   },
++   {
++     article: {
++       body: 'With 100 career goals to their name, World ere has written themselves into the history books. An emotional moment at Twente as teammates and fans celebrate the milestone.',
++       headline: 'World ere Breaks Club Record For Goals',
++       newspaper: '90+4 Magazine',
++       type: 'milestone'
++     },
++     seed: 119977
++   },
++   {
++     article: {
++       body: 'With 100 career goals to their name, World ere has written themselves into the history books. An emotional moment at Twente as teammates and fans celebrate the milestone.',
++       headline: 'World ere Breaks Club Record For Goals',
++       newspaper: 'Soccer Times',
++       type: 'milestone'
++     },
++     seed: 119978
++   },
++   {
++     article: {
++       body: 'There were tears of joy as World ere reached the magical 100-goal mark for their career. The Twente star celebrated with teammates and fans in an unforgettable moment.',
++       headline: 'World ere Scores 100th Career Goal In Emotional Moment',
++       newspaper: '90+4 Magazine',
++       type: 'milestone'
++     },
++     seed: 119979
++   },
++   {
++     article: {
++       body: 'There were tears of joy as World ere reached the magical 100-goal mark for their career. The Twente star celebrated with teammates and fans in an unforgettable moment.',
++       headline: 'World ere Scores 100th Career Goal In Emotional Moment',
++       newspaper: 'The Daily Sport',
++       type: 'milestone'
++     },
++     seed: 119980
++   },
++   {
++     article: {
++       body: 'There were tears of joy as World ere reached the magical 100-goal mark for their career. The Twente star celebrated with teammates and fans in an unforgettable moment.',
++       headline: 'World ere Scores 100th Career Goal In Emotional Moment',
++       newspaper: 'The Global Game',
++       type: 'milestone'
++     },
++     seed: 119981
++   },
++   {
++     article: {
++       body: 'There were tears of joy as World ere reached the magical 100-goal mark for their career. The Twente star celebrated with teammates and fans in an unforgettable moment.',
++       headline: 'World ere Scores 100th Career Goal In Emotional Moment',
++       newspaper: 'Football Weekly',
++       type: 'milestone'
++     },
++     seed: 119982
++   },
++   {
++     article: {
++       body: 'With 100 career goals to their name, World ere has written themselves into the history books. An emotional moment at Twente as teammates and fans celebrate the milestone.',
++       headline: 'World ere Breaks Club Record For Goals',
++       newspaper: 'Football Weekly',
++       type: 'milestone'
++     },
++     seed: 119983
++   },
++   {
++     article: {
++       body: 'There were tears of joy as World ere reached the magical 100-goal mark for their career. The Twente star celebrated with teammates and fans in an unforgettable moment.',
++       headline: 'World ere Scores 100th Career Goal In Emotional Moment',
++       newspaper: 'Soccer Times',
++       type: 'milestone'
++     },
++     seed: 119984
++   },
++   {
++     article: {
++       body: 'There were tears of joy as World ere reached the magical 100-goal mark for their career. The Twente star celebrated with teammates and fans in an unforgettable moment.',
++       headline: 'World ere Scores 100th Career Goal In Emotional Moment',
++       newspaper: 'The Daily Nutmeg',
++       type: 'milestone'
++     },
++     seed: 119985
++   },
++   {
++     article: {
++       body: 'With 100 career goals to their name, World ere has written themselves into the history books. An emotional moment at Twente as teammates and fans celebrate the milestone.',
++       headline: 'World ere Breaks Club Record For Goals',
++       newspaper: 'The Daily Sport',
++       type: 'milestone'
++     },
++     seed: 119986
++   },
++   {
++     article: {
++       body: 'With 100 career goals to their name, World ere has written themselves into the history books. An emotional moment at Twente as teammates and fans celebrate the milestone.',
++       headline: 'World ere Breaks Club Record For Goals',
++       newspaper: 'El Golazo',
++       type: 'milestone'
++     },
++     seed: 119987
++   },
++   {
++     article: {
++       body: 'With 100 career goals to their name, World ere has written themselves into the history books. An emotional moment at Twente as teammates and fans celebrate the milestone.',
++       headline: 'World ere Breaks Club Record For Goals',
++       newspaper: 'The Sunday Volley',
++       type: 'milestone'
++     },
++     seed: 119988
++   },
++   {
++     article: {
++       body: 'There were tears of joy as World ere reached the magical 100-goal mark for their career. The Twente star celebrated with teammates and fans in an unforgettable moment.',
++       headline: 'World ere Scores 100th Career Goal In Emotional Moment',
++       newspaper: '90+4 Magazine',
++       type: 'milestone'
++     },
++     seed: 119989
++   },
++   {
++     article: {
++       body: 'There were tears of joy as World ere reached the magical 100-goal mark for their career. The Twente star celebrated with teammates and fans in an unforgettable moment.',
++       headline: 'World ere Scores 100th Career Goal In Emotional Moment',
++       newspaper: 'The Sunday Volley',
++       type: 'milestone'
++     },
++     seed: 119990
++   },
++   {
++     article: {
++       body: 'With 100 career goals to their name, World ere has written themselves into the history books. An emotional moment at Twente as teammates and fans celebrate the milestone.',
++       headline: 'World ere Breaks Club Record For Goals',
++       newspaper: '90+4 Magazine',
++       type: 'milestone'
++     },
++     seed: 119991
++   },
++   {
++     article: {
++       body: 'With 100 career goals to their name, World ere has written themselves into the history books. An emotional moment at Twente as teammates and fans celebrate the milestone.',
++       headline: 'World ere Breaks Club Record For Goals',
++       newspaper: 'The Global Game',
++       type: 'milestone'
++     },
++     seed: 119992
++   },
++   {
++     article: {
++       body: 'There were tears of joy as World ere reached the magical 100-goal mark for their career. The Twente star celebrated with teammates and fans in an unforgettable moment.',
++       headline: 'World ere Scores 100th Career Goal In Emotional Moment',
++       newspaper: 'The Global Game',
++       type: 'milestone'
++     },
++     seed: 119993
++   },
++   {
++     article: {
++       body: 'With 100 career goals to their name, World ere has written themselves into the history books. An emotional moment at Twente as teammates and fans celebrate the milestone.',
++       headline: 'World ere Breaks Club Record For Goals',
++       newspaper: 'The Global Game',
++       type: 'milestone'
++     },
++     seed: 119994
++   },
++   {
++     article: {
++       body: 'There were tears of joy as World ere reached the magical 100-goal mark for their career. The Twente star celebrated with teammates and fans in an unforgettable moment.',
++       headline: 'World ere Scores 100th Career Goal In Emotional Moment',
++       newspaper: 'Football Weekly',
++       type: 'milestone'
++     },
++     seed: 119995
++   },
++   {
++     article: {
++       body: 'With 100 career goals to their name, World ere has written themselves into the history books. An emotional moment at Twente as teammates and fans celebrate the milestone.',
++       headline: 'World ere Breaks Club Record For Goals',
++       newspaper: 'The Global Game',
++       type: 'milestone'
++     },
++     seed: 119996
++   },
++   {
++     article: {
++       body: 'There were tears of joy as World ere reached the magical 100-goal mark for their career. The Twente star celebrated with teammates and fans in an unforgettable moment.',
++       headline: 'World ere Scores 100th Career Goal In Emotional Moment',
++       newspaper: 'El Golazo',
++       type: 'milestone'
++     },
++     seed: 119997
++   },
++   {
++     article: {
++       body: 'There were tears of joy as World ere reached the magical 100-goal mark for their career. The Twente star celebrated with teammates and fans in an unforgettable moment.',
++       headline: 'World ere Scores 100th Career Goal In Emotional Moment',
++       newspaper: 'Soccer Times',
++       type: 'milestone'
++     },
++     seed: 119998
++   },
++   {
++     article: {
++       body: 'With 100 career goals to their name, World ere has written themselves into the history books. An emotional moment at Twente as teammates and fans celebrate the milestone.',
++       headline: 'World ere Breaks Club Record For Goals',
++       newspaper: '90+4 Magazine',
++       type: 'milestone'
++     },
++     seed: 119999
++   },
++   {
++     article: {
++       body: 'There were tears of joy as World ere reached the magical 100-goal mark for their career. The Twente star celebrated with teammates and fans in an unforgettable moment.',
++       headline: 'World ere Scores 100th Career Goal In Emotional Moment',
++       newspaper: '90+4 Magazine',
++       type: 'milestone'
++     },
++     seed: 120000
++   },
++   {
++     article: {
++       body: 'There were tears of joy as World ere reached the magical 100-goal mark for their career. The Twente star celebrated with teammates and fans in an unforgettable moment.',
++       headline: 'World ere Scores 100th Career Goal In Emotional Moment',
++       newspaper: 'The Daily Sport',
++       type: 'milestone'
++     },
++     seed: 120001
++   },
++   {
++     article: {
++       body: 'With 100 career goals to their name, World ere has written themselves into the history books. An emotional moment at Twente as teammates and fans celebrate the milestone.',
++       headline: 'World ere Breaks Club Record For Goals',
++       newspaper: '90+4 Magazine',
++       type: 'milestone'
++     },
++     seed: 120002
++   },
++   {
++     article: {
++       body: 'There were tears of joy as World ere reached the magical 100-goal mark for their career. The Twente star celebrated with teammates and fans in an unforgettable moment.',
++       headline: 'World ere Scores 100th Career Goal In Emotional Moment',
++       newspaper: 'The Beautiful Game Report',
++       type: 'milestone'
++     },
++     seed: 120003
++   },
++   {
++     article: {
++       body: 'There were tears of joy as World ere reached the magical 100-goal mark for their career. The Twente star celebrated with teammates and fans in an unforgettable moment.',
++       headline: 'World ere Scores 100th Career Goal In Emotional Moment',
++       newspaper: 'Soccer Times',
++       type: 'milestone'
++     },
++     seed: 120004
++   },
++   {
++     article: {
++       body: 'With 100 career goals to their name, World ere has written themselves into the history books. An emotional moment at Twente as teammates and fans celebrate the milestone.',
++       headline: 'World ere Breaks Club Record For Goals',
++       newspaper: 'The Global Game',
++       type: 'milestone'
++     },
++     seed: 120005
++   },
++   {
++     article: {
++       body: 'With 100 career goals to their name, World ere has written themselves into the history books. An emotional moment at Twente as teammates and fans celebrate the milestone.',
++       headline: 'World ere Breaks Club Record For Goals',
++       newspaper: 'The Beautiful Game Report',
++       type: 'milestone'
++     },
++     seed: 120006
++   },
++   {
++     article: {
++       body: 'With 100 career goals to their name, World ere has written themselves into the history books. An emotional moment at Twente as teammates and fans celebrate the milestone.',
++       headline: 'World ere Breaks Club Record For Goals',
++       newspaper: 'Soccer Times',
++       type: 'milestone'
++     },
++     seed: 120007
++   },
++   {
++     article: {
++       body: 'With 100 career goals to their name, World ere has written themselves into the history books. An emotional moment at Twente as teammates and fans celebrate the milestone.',
++       headline: 'World ere Breaks Club Record For Goals',
++       newspaper: 'The Daily Nutmeg',
++       type: 'milestone'
++     },
++     seed: 120008
++   },
++   {
++     article: {
++       body: 'There were tears of joy as World ere reached the magical 100-goal mark for their career. The Twente star celebrated with teammates and fans in an unforgettable moment.',
++       headline: 'World ere Scores 100th Career Goal In Emotional Moment',
++       newspaper: 'Football Weekly',
++       type: 'milestone'
++     },
++     seed: 120009
++   },
++   {
++     article: {
++       body: 'There were tears of joy as World ere reached the magical 100-goal mark for their career. The Twente star celebrated with teammates and fans in an unforgettable moment.',
++       headline: 'World ere Scores 100th Career Goal In Emotional Moment',
++       newspaper: 'Soccer Times',
++       type: 'milestone'
++     },
++     seed: 120010
++   },
++   {
++     article: {
++       body: 'There were tears of joy as World ere reached the magical 100-goal mark for their career. The Twente star celebrated with teammates and fans in an unforgettable moment.',
++       headline: 'World ere Scores 100th Career Goal In Emotional Moment',
++       newspaper: 'The Global Game',
++       type: 'milestone'
++     },
++     seed: 120011
++   },
++   {
++     article: {
++       body: 'There were tears of joy as World ere reached the magical 100-goal mark for their career. The Twente star celebrated with teammates and fans in an unforgettable moment.',
++       headline: 'World ere Scores 100th Career Goal In Emotional Moment',
++       newspaper: 'The Beautiful Game Report',
++       type: 'milestone'
++     },
++     seed: 120012
++   },
++   {
++     article: {
++       body: 'With 100 career goals to their name, World ere has written themselves into the history books. An emotional moment at Twente as teammates and fans celebrate the milestone.',
++       headline: 'World ere Breaks Club Record For Goals',
++       newspaper: 'The Daily Sport',
++       type: 'milestone'
++     },
++     seed: 120013
++   },
++   {
++     article: {
++       body: 'There were tears of joy as World ere reached the magical 100-goal mark for their career. The Twente star celebrated with teammates and fans in an unforgettable moment.',
++       headline: 'World ere Scores 100th Career Goal In Emotional Moment',
++       newspaper: 'El Golazo',
++       type: 'milestone'
++     },
++     seed: 120014
++   },
++   {
++     article: {
++       body: 'With 100 career goals to their name, World ere has written themselves into the history books. An emotional moment at Twente as teammates and fans celebrate the milestone.',
++       headline: 'World ere Breaks Club Record For Goals',
++       newspaper: 'The Beautiful Game Report',
++       type: 'milestone'
++     },
++     seed: 120015
++   },
++   {
++     article: {
++       body: 'With 100 career goals to their name, World ere has written themselves into the history books. An emotional moment at Twente as teammates and fans celebrate the milestone.',
++       headline: 'World ere Breaks Club Record For Goals',
++       newspaper: 'The Sunday Volley',
++       type: 'milestone'
++     },
++     seed: 120016
++   },
++   {
++     article: {
++       body: 'With 100 career goals to their name, World ere has written themselves into the history books. An emotional moment at Twente as teammates and fans celebrate the milestone.',
++       headline: 'World ere Breaks Club Record For Goals',
++       newspaper: 'The Sunday Volley',
++       type: 'milestone'
++     },
++     seed: 120017
++   },
++   {
++     article: {
++       body: 'With 100 career goals to their name, World ere has written themselves into the history books. An emotional moment at Twente as teammates and fans celebrate the milestone.',
++       headline: 'World ere Breaks Club Record For Goals',
++       newspaper: 'Tackle Weekly',
++       type: 'milestone'
++     },
++     seed: 120018
++   },
++   {
++     article: {
++       body: 'With 100 career goals to their name, World ere has written themselves into the history books. An emotional moment at Twente as teammates and fans celebrate the milestone.',
++       headline: 'World ere Breaks Club Record For Goals',
++       newspaper: 'The Global Game',
++       type: 'milestone'
++     },
++     seed: 120019
++   },
++   {
++     article: {
++       body: 'There were tears of joy as World ere reached the magical 100-goal mark for their career. The Twente star celebrated with teammates and fans in an unforgettable moment.',
++       headline: 'World ere Scores 100th Career Goal In Emotional Moment',
++       newspaper: 'The Beautiful Game Report',
++       type: 'milestone'
++     },
++     seed: 120020
++   },
++   {
++     article: {
++       body: 'With 100 career goals to their name, World ere has written themselves into the history books. An emotional moment at Twente as teammates and fans celebrate the milestone.',
++       headline: 'World ere Breaks Club Record For Goals',
++       newspaper: 'El Golazo',
++       type: 'milestone'
++     },
++     seed: 120021
++   },
++   {
++     article: {
++       body: 'There were tears of joy as World ere reached the magical 100-goal mark for their career. The Twente star celebrated with teammates and fans in an unforgettable moment.',
++       headline: 'World ere Scores 100th Career Goal In Emotional Moment',
++       newspaper: 'The Daily Sport',
++       type: 'milestone'
++     },
++     seed: 120022
++   },
++   {
++     article: {
++       body: 'There were tears of joy as World ere reached the magical 100-goal mark for their career. The Twente star celebrated with teammates and fans in an unforgettable moment.',
++       headline: 'World ere Scores 100th Career Goal In Emotional Moment',
++       newspaper: 'El Golazo',
++       type: 'milestone'
++     },
++     seed: 120023
++   },
++   {
++     article: {
++       body: 'There were tears of joy as World ere reached the magical 100-goal mark for their career. The Twente star celebrated with teammates and fans in an unforgettable moment.',
++       headline: 'World ere Scores 100th Career Goal In Emotional Moment',
++       newspaper: 'The Daily Sport',
++       type: 'milestone'
++     },
++     seed: 120024
++   },
++   {
++     article: {
++       body: 'With 100 career goals to their name, World ere has written themselves into the history books. An emotional moment at Twente as teammates and fans celebrate the milestone.',
++       headline: 'World ere Breaks Club Record For Goals',
++       newspaper: 'The Beautiful Game Report',
++       type: 'milestone'
++     },
++     seed: 120025
++   },
++   {
++     article: {
++       body: 'With 100 career goals to their name, World ere has written themselves into the history books. An emotional moment at Twente as teammates and fans celebrate the milestone.',
++       headline: 'World ere Breaks Club Record For Goals',
++       newspaper: 'Football Weekly',
++       type: 'milestone'
++     },
++     seed: 120026
++   },
++   {
++     article: {
++       body: 'There were tears of joy as World ere reached the magical 100-goal mark for their career. The Twente star celebrated with teammates and fans in an unforgettable moment.',
++       headline: 'World ere Scores 100th Career Goal In Emotional Moment',
++       newspaper: 'The Daily Nutmeg',
++       type: 'milestone'
++     },
++     seed: 120027
++   },
++   {
++     article: {
++       body: 'With 100 career goals to their name, World ere has written themselves into the history books. An emotional moment at Twente as teammates and fans celebrate the milestone.',
++       headline: 'World ere Breaks Club Record For Goals',
++       newspaper: 'The Daily Sport',
++       type: 'milestone'
++     },
++     seed: 120028
++   },
++   {
++     article: {
++       body: 'There were tears of joy as World ere reached the magical 100-goal mark for their career. The Twente star celebrated with teammates and fans in an unforgettable moment.',
++       headline: 'World ere Scores 100th Career Goal In Emotional Moment',
++       newspaper: 'The Daily Sport',
++       type: 'milestone'
++     },
++     seed: 120029
++   },
++   {
++     article: {
++       body: 'There were tears of joy as World ere reached the magical 100-goal mark for their career. The Twente star celebrated with teammates and fans in an unforgettable moment.',
++       headline: 'World ere Scores 100th Career Goal In Emotional Moment',
++       newspaper: 'The Global Game',
++       type: 'milestone'
++     },
++     seed: 120030
++   },
++   {
++     article: {
++       body: 'With 100 career goals to their name, World ere has written themselves into the history books. An emotional moment at Twente as teammates and fans celebrate the milestone.',
++       headline: 'World ere Breaks Club Record For Goals',
++       newspaper: 'El Golazo',
++       type: 'milestone'
++     },
++     seed: 120031
++   },
++   {
++     article: {
++       body: 'There were tears of joy as World ere reached the magical 100-goal mark for their career. The Twente star celebrated with teammates and fans in an unforgettable moment.',
++       headline: 'World ere Scores 100th Career Goal In Emotional Moment',
++       newspaper: 'The Sunday Volley',
++       type: 'milestone'
++     },
++     seed: 120032
++   },
++   {
++     article: {
++       body: 'With 100 career goals to their name, World ere has written themselves into the history books. An emotional moment at Twente as teammates and fans celebrate the milestone.',
++       headline: 'World ere Breaks Club Record For Goals',
++       newspaper: 'The Daily Nutmeg',
++       type: 'milestone'
++     },
++     seed: 120033
++   },
++   {
++     article: {
++       body: 'With 100 career goals to their name, World ere has written themselves into the history books. An emotional moment at Twente as teammates and fans celebrate the milestone.',
++       headline: 'World ere Breaks Club Record For Goals',
++       newspaper: 'El Golazo',
++       type: 'milestone'
++     },
++     seed: 120034
++   },
++   {
++     article: {
++       body: 'There were tears of joy as World ere reached the magical 100-goal mark for their career. The Twente star celebrated with teammates and fans in an unforgettable moment.',
++       headline: 'World ere Scores 100th Career Goal In Emotional Moment',
++       newspaper: '90+4 Magazine',
++       type: 'milestone'
++     },
++     seed: 120035
++   },
++   {
++     article: {
++       body: 'With 100 career goals to their name, World ere has written themselves into the history books. An emotional moment at Twente as teammates and fans celebrate the milestone.',
++       headline: 'World ere Breaks Club Record For Goals',
++       newspaper: 'Football Weekly',
++       type: 'milestone'
++     },
++     seed: 120036
++   },
++   {
++     article: {
++       body: 'With 100 career goals to their name, World ere has written themselves into the history books. An emotional moment at Twente as teammates and fans celebrate the milestone.',
++       headline: 'World ere Breaks Club Record For Goals',
++       newspaper: 'Football Weekly',
++       type: 'milestone'
++     },
++     seed: 120037
++   },
++   {
++     article: {
++       body: 'There were tears of joy as World ere reached the magical 100-goal mark for their career. The Twente star celebrated with teammates and fans in an unforgettable moment.',
++       headline: 'World ere Scores 100th Career Goal In Emotional Moment',
++       newspaper: '90+4 Magazine',
++       type: 'milestone'
++     },
++     seed: 120038
++   },
++   {
++     article: {
++       body: 'With 100 career goals to their name, World ere has written themselves into the history books. An emotional moment at Twente as teammates and fans celebrate the milestone.',
++       headline: 'World ere Breaks Club Record For Goals',
++       newspaper: 'The Daily Sport',
++       type: 'milestone'
++     },
++     seed: 120039
++   },
++   {
++     article: {
++       body: 'With 100 career goals to their name, World ere has written themselves into the history books. An emotional moment at Twente as teammates and fans celebrate the milestone.',
++       headline: 'World ere Breaks Club Record For Goals',
++       newspaper: 'The Sunday Volley',
++       type: 'milestone'
++     },
++     seed: 120040
++   },
++   {
++     article: {
++       body: 'With 100 career goals to their name, World ere has written themselves into the history books. An emotional moment at Twente as teammates and fans celebrate the milestone.',
++       headline: 'World ere Breaks Club Record For Goals',
++       newspaper: 'The Beautiful Game Report',
++       type: 'milestone'
++     },
++     seed: 120041
++   },
++   {
++     article: {
++       body: 'With 100 career goals to their name, World ere has written themselves into the history books. An emotional moment at Twente as teammates and fans celebrate the milestone.',
++       headline: 'World ere Breaks Club Record For Goals',
++       newspaper: 'El Golazo',
++       type: 'milestone'
++     },
++     seed: 120042
++   },
++   {
++     article: {
++       body: 'With 100 career goals to their name, World ere has written themselves into the history books. An emotional moment at Twente as teammates and fans celebrate the milestone.',
++       headline: 'World ere Breaks Club Record For Goals',
++       newspaper: 'The Daily Nutmeg',
++       type: 'milestone'
++     },
++     seed: 120043
++   },
++   {
++     article: {
++       body: 'There were tears of joy as World ere reached the magical 100-goal mark for their career. The Twente star celebrated with teammates and fans in an unforgettable moment.',
++       headline: 'World ere Scores 100th Career Goal In Emotional Moment',
++       newspaper: 'The Daily Nutmeg',
++       type: 'milestone'
++     },
++     seed: 120044
++   },
++   {
++     article: {
++       body: 'With 100 career goals to their name, World ere has written themselves into the history books. An emotional moment at Twente as teammates and fans celebrate the milestone.',
++       headline: 'World ere Breaks Club Record For Goals',
++       newspaper: 'The Global Game',
++       type: 'milestone'
++     },
++     seed: 120045
++   },
++   {
++     article: {
++       body: 'There were tears of joy as World ere reached the magical 100-goal mark for their career. The Twente star celebrated with teammates and fans in an unforgettable moment.',
++       headline: 'World ere Scores 100th Career Goal In Emotional Moment',
++       newspaper: 'The Beautiful Game Report',
++       type: 'milestone'
++     },
++     seed: 120046
++   },
++   {
++     article: {
++       body: 'With 100 career goals to their name, World ere has written themselves into the history books. An emotional moment at Twente as teammates and fans celebrate the milestone.',
++       headline: 'World ere Breaks Club Record For Goals',
++       newspaper: 'The Daily Nutmeg',
++       type: 'milestone'
++     },
++     seed: 120047
++   },
++   {
++     article: {
++       body: 'There were tears of joy as World ere reached the magical 100-goal mark for their career. The Twente star celebrated with teammates and fans in an unforgettable moment.',
++       headline: 'World ere Scores 100th Career Goal In Emotional Moment',
++       newspaper: 'The Daily Nutmeg',
++       type: 'milestone'
++     },
++     seed: 120048
++   },
++   {
++     article: {
++       body: 'With 100 career goals to their name, World ere has written themselves into the history books. An emotional moment at Twente as teammates and fans celebrate the milestone.',
++       headline: 'World ere Breaks Club Record For Goals',
++       newspaper: 'The Daily Nutmeg',
++       type: 'milestone'
++     },
++     seed: 120049
++   },
++   {
++     article: {
++       body: 'There were tears of joy as World ere reached the magical 100-goal mark for their career. The Twente star celebrated with teammates and fans in an unforgettable moment.',
++       headline: 'World ere Scores 100th Career Goal In Emotional Moment',
++       newspaper: 'The Beautiful Game Report',
++       type: 'milestone'
++     },
++     seed: 120050
++   },
++   {
++     article: {
++       body: 'There were tears of joy as World ere reached the magical 100-goal mark for their career. The Twente star celebrated with teammates and fans in an unforgettable moment.',
++       headline: 'World ere Scores 100th Career Goal In Emotional Moment',
++       newspaper: 'The Sunday Volley',
++       type: 'milestone'
++     },
++     seed: 120051
++   },
++   {
++     article: {
++       body: 'With 100 career goals to their name, World ere has written themselves into the history books. An emotional moment at Twente as teammates and fans celebrate the milestone.',
++       headline: 'World ere Breaks Club Record For Goals',
++       newspaper: 'Football Weekly',
++       type: 'milestone'
++     },
++     seed: 120052
++   },
++   {
++     article: {
++       body: 'With 100 career goals to their name, World ere has written themselves into the history books. An emotional moment at Twente as teammates and fans celebrate the milestone.',
++       headline: 'World ere Breaks Club Record For Goals',
++       newspaper: 'The Beautiful Game Report',
++       type: 'milestone'
++     },
++     seed: 120053
++   },
++   {
++     article: {
++       body: 'There were tears of joy as World ere reached the magical 100-goal mark for their career. The Twente star celebrated with teammates and fans in an unforgettable moment.',
++       headline: 'World ere Scores 100th Career Goal In Emotional Moment',
++       newspaper: 'Soccer Times',
++       type: 'milestone'
++     },
++     seed: 120054
++   },
++   {
++     article: {
++       body: 'There were tears of joy as World ere reached the magical 100-goal mark for their career. The Twente star celebrated with teammates and fans in an unforgettable moment.',
++       headline: 'World ere Scores 100th Career Goal In Emotional Moment',
++       newspaper: 'Tackle Weekly',
++       type: 'milestone'
++     },
++     seed: 120055
++   },
++   {
++     article: {
++       body: 'With 100 career goals to their name, World ere has written themselves into the history books. An emotional moment at Twente as teammates and fans celebrate the milestone.',
++       headline: 'World ere Breaks Club Record For Goals',
++       newspaper: 'Football Weekly',
++       type: 'milestone'
++     },
++     seed: 120056
++   },
++   {
++     article: {
++       body: 'With 100 career goals to their name, World ere has written themselves into the history books. An emotional moment at Twente as teammates and fans celebrate the milestone.',
++       headline: 'World ere Breaks Club Record For Goals',
++       newspaper: 'The Daily Sport',
++       type: 'milestone'
++     },
++     seed: 120057
++   },
++   {
++     article: {
++       body: 'There were tears of joy as World ere reached the magical 100-goal mark for their career. The Twente star celebrated with teammates and fans in an unforgettable moment.',
++       headline: 'World ere Scores 100th Career Goal In Emotional Moment',
++       newspaper: '90+4 Magazine',
++       type: 'milestone'
++     },
++     seed: 120058
++   },
++   {
++     article: {
++       body: 'There were tears of joy as World ere reached the magical 100-goal mark for their career. The Twente star celebrated with teammates and fans in an unforgettable moment.',
++       headline: 'World ere Scores 100th Career Goal In Emotional Moment',
++       newspaper: 'Tackle Weekly',
++       type: 'milestone'
++     },
++     seed: 120059
++   },
++   {
++     article: {
++       body: 'With 100 career goals to their name, World ere has written themselves into the history books. An emotional moment at Twente as teammates and fans celebrate the milestone.',
++       headline: 'World ere Breaks Club Record For Goals',
++       newspaper: 'Tackle Weekly',
++       type: 'milestone'
++     },
++     seed: 120060
++   },
++   {
++     article: {
++       body: 'With 100 career goals to their name, World ere has written themselves into the history books. An emotional moment at Twente as teammates and fans celebrate the milestone.',
++       headline: 'World ere Breaks Club Record For Goals',
++       newspaper: 'The Global Game',
++       type: 'milestone'
++     },
++     seed: 120061
++   },
++   {
++     article: {
++       body: 'With 100 career goals to their name, World ere has written themselves into the history books. An emotional moment at Twente as teammates and fans celebrate the milestone.',
++       headline: 'World ere Breaks Club Record For Goals',
++       newspaper: 'The Daily Sport',
++       type: 'milestone'
++     },
++     seed: 120062
++   },
++   {
++     article: {
++       body: 'There were tears of joy as World ere reached the magical 100-goal mark for their career. The Twente star celebrated with teammates and fans in an unforgettable moment.',
++       headline: 'World ere Scores 100th Career Goal In Emotional Moment',
++       newspaper: '90+4 Magazine',
++       type: 'milestone'
++     },
++     seed: 120063
++   },
++   {
++     article: {
++       body: 'With 100 career goals to their name, World ere has written themselves into the history books. An emotional moment at Twente as teammates and fans celebrate the milestone.',
++       headline: 'World ere Breaks Club Record For Goals',
++       newspaper: 'Tackle Weekly',
++       type: 'milestone'
++     },
++     seed: 120064
++   },
++   {
++     article: {
++       body: 'There were tears of joy as World ere reached the magical 100-goal mark for their career. The Twente star celebrated with teammates and fans in an unforgettable moment.',
++       headline: 'World ere Scores 100th Career Goal In Emotional Moment',
++       newspaper: 'The Sunday Volley',
++       type: 'milestone'
++     },
++     seed: 120065
++   },
++   {
++     article: {
++       body: 'With 100 career goals to their name, World ere has written themselves into the history books. An emotional moment at Twente as teammates and fans celebrate the milestone.',
++       headline: 'World ere Breaks Club Record For Goals',
++       newspaper: 'El Golazo',
++       type: 'milestone'
++     },
++     seed: 120066
++   },
++   {
++     article: {
++       body: 'There were tears of joy as World ere reached the magical 100-goal mark for their career. The Twente star celebrated with teammates and fans in an unforgettable moment.',
++       headline: 'World ere Scores 100th Career Goal In Emotional Moment',
++       newspaper: 'Soccer Times',
++       type: 'milestone'
++     },
++     seed: 120067
++   },
++   {
++     article: {
++       body: 'There were tears of joy as World ere reached the magical 100-goal mark for their career. The Twente star celebrated with teammates and fans in an unforgettable moment.',
++       headline: 'World ere Scores 100th Career Goal In Emotional Moment',
++       newspaper: 'The Daily Nutmeg',
++       type: 'milestone'
++     },
++     seed: 120068
++   },
++   {
++     article: {
++       body: 'With 100 career goals to their name, World ere has written themselves into the history books. An emotional moment at Twente as teammates and fans celebrate the milestone.',
++       headline: 'World ere Breaks Club Record For Goals',
++       newspaper: 'The Daily Sport',
++       type: 'milestone'
++     },
++     seed: 120069
++   },
++   {
++     article: {
++       body: 'With 100 career goals to their name, World ere has written themselves into the history books. An emotional moment at Twente as teammates and fans celebrate the milestone.',
++       headline: 'World ere Breaks Club Record For Goals',
++       newspaper: 'Tackle Weekly',
++       type: 'milestone'
++     },
++     seed: 120070
++   },
++   {
++     article: {
++       body: 'There were tears of joy as World ere reached the magical 100-goal mark for their career. The Twente star celebrated with teammates and fans in an unforgettable moment.',
++       headline: 'World ere Scores 100th Career Goal In Emotional Moment',
++       newspaper: '90+4 Magazine',
++       type: 'milestone'
++     },
++     seed: 120071
++   },
++   {
++     article: {
++       body: 'There were tears of joy as World ere reached the magical 100-goal mark for their career. The Twente star celebrated with teammates and fans in an unforgettable moment.',
++       headline: 'World ere Scores 100th Career Goal In Emotional Moment',
++       newspaper: 'Tackle Weekly',
++       type: 'milestone'
++     },
++     seed: 120072
++   },
++   {
++     article: {
++       body: 'With 100 career goals to their name, World ere has written themselves into the history books. An emotional moment at Twente as teammates and fans celebrate the milestone.',
++       headline: 'World ere Breaks Club Record For Goals',
++       newspaper: 'The Sunday Volley',
++       type: 'milestone'
++     },
++     seed: 120073
++   },
++   {
++     article: {
++       body: 'There were tears of joy as World ere reached the magical 100-goal mark for their career. The Twente star celebrated with teammates and fans in an unforgettable moment.',
++       headline: 'World ere Scores 100th Career Goal In Emotional Moment',
++       newspaper: 'The Sunday Volley',
++       type: 'milestone'
++     },
++     seed: 120074
++   },
++   {
++     article: {
++       body: 'There were tears of joy as World ere reached the magical 100-goal mark for their career. The Twente star celebrated with teammates and fans in an unforgettable moment.',
++       headline: 'World ere Scores 100th Career Goal In Emotional Moment',
++       newspaper: 'The Global Game',
++       type: 'milestone'
++     },
++     seed: 120075
++   },
++   {
++     article: {
++       body: 'There were tears of joy as World ere reached the magical 100-goal mark for their career. The Twente star celebrated with teammates and fans in an unforgettable moment.',
++       headline: 'World ere Scores 100th Career Goal In Emotional Moment',
++       newspaper: 'El Golazo',
++       type: 'milestone'
++     },
++     seed: 120076
++   },
++   {
++     article: {
++       body: 'There were tears of joy as World ere reached the magical 100-goal mark for their career. The Twente star celebrated with teammates and fans in an unforgettable moment.',
++       headline: 'World ere Scores 100th Career Goal In Emotional Moment',
++       newspaper: 'The Sunday Volley',
++       type: 'milestone'
++     },
++     seed: 120077
++   },
++   {
++     article: {
++       body: 'With 100 career goals to their name, World ere has written themselves into the history books. An emotional moment at Twente as teammates and fans celebrate the milestone.',
++       headline: 'World ere Breaks Club Record For Goals',
++       newspaper: 'Soccer Times',
++       type: 'milestone'
++     },
++     seed: 120078
++   }
++ ]
+- []
+
+PASS [uncopied AR parity]
+PASS [attribution boundaries]
+PASS [uncopied full AR baseline]
+PASS [candidate full AR baseline]
+PASS [candidate AR parity]
+PASS [role selection]
+PASS [role scope]
+PASS [role recorded year]
+PASS [role interruptions]
+PASS [role moves and retirement]
+PASS [role squad display]
+PASS [milestone saved tally]
+PASS [milestone protected news]
+PASS [milestone engine news]
+PASS [source held]
+simCareerStoryRole: 16 groups, 1 failed, 48 full AR pairs
+FAIL [role event] AssertionError: actual accepted event equals the old full action plus only its recorded role and truthful log
++ actual - expected
+... Skipped lines
+
+  {
+    draws: [
+      0.9422409755643457,
+      0.5423998916521668,
+      0.2441149444784969,
+...
+      purchasedItems: [],
+-     reducedRole: {
+-       club: 'Twente',
+-       year: 2029
+-     },
+      reflexes: 77,
+      retired: false,
+      retirementSuggested: false,
+      rival: {
+        age: 20,
+
+PASS [uncopied AR parity]
+PASS [attribution boundaries]
+PASS [uncopied full AR baseline]
+PASS [candidate full AR baseline]
+PASS [candidate AR parity]
+PASS [role event]
+PASS [role scope]
+PASS [role recorded year]
+PASS [role interruptions]
+PASS [role moves and retirement]
+PASS [role squad display]
+PASS [milestone saved tally]
+PASS [milestone protected news]
+PASS [milestone engine news]
+PASS [source held]
+simCareerStoryRole: 16 groups, 1 failed, 48 full AR pairs
+FAIL [role selection] AssertionError: phone and four-game role combine before the 38 cap and frozen-out availability
+
+3 !== 2
+
+PASS [uncopied AR parity]
+PASS [attribution boundaries]
+PASS [uncopied full AR baseline]
+PASS [candidate full AR baseline]
+PASS [candidate AR parity]
+PASS [role event]
+PASS [role selection]
+PASS [role recorded year]
+PASS [role interruptions]
+PASS [role moves and retirement]
+PASS [role squad display]
+PASS [milestone saved tally]
+PASS [milestone protected news]
+PASS [milestone engine news]
+PASS [source held]
+simCareerStoryRole: 16 groups, 1 failed, 48 full AR pairs
+FAIL [role scope] AssertionError: year plan is neutral
+
+-4 !== 0
+
+PASS [uncopied AR parity]
+PASS [attribution boundaries]
+PASS [uncopied full AR baseline]
+PASS [candidate full AR baseline]
+PASS [candidate AR parity]
+PASS [role event]
+PASS [role selection]
+PASS [role recorded year]
+PASS [role interruptions]
+PASS [role moves and retirement]
+PASS [role squad display]
+PASS [milestone saved tally]
+PASS [milestone protected news]
+PASS [milestone engine news]
+PASS [source held]
+simCareerStoryRole: 16 groups, 1 failed, 48 full AR pairs
+FAIL [role scope] AssertionError: foreign plan is neutral
+
+-4 !== 0
+
+PASS [uncopied AR parity]
+PASS [attribution boundaries]
+PASS [uncopied full AR baseline]
+PASS [candidate full AR baseline]
+PASS [candidate AR parity]
+PASS [role event]
+PASS [role selection]
+PASS [role scope]
+PASS [role squad display]
+PASS [milestone saved tally]
+PASS [milestone protected news]
+PASS [milestone engine news]
+PASS [source held]
+simCareerStoryRole: 16 groups, 3 failed, 48 full AR pairs
+FAIL [role recorded year] AssertionError: actual recorded year consumes the optional plan
++ actual - expected
+
++ {
++   club: 'Twente',
++   year: 2029
++ }
+- undefined
+
+FAIL [role interruptions] AssertionError: interrupted year clears the plan
++ actual - expected
+
++ {
++   club: 'Twente',
++   year: 2029
++ }
+- undefined
+
+FAIL [role moves and retirement] AssertionError: move immediately cancels old-manager role
++ actual - expected
+
++ {
++   club: 'Twente',
++   year: 2029
++ }
+- undefined
+
+PASS [uncopied AR parity]
+PASS [attribution boundaries]
+PASS [uncopied full AR baseline]
+PASS [candidate full AR baseline]
+PASS [candidate AR parity]
+PASS [role event]
+PASS [role selection]
+PASS [role scope]
+PASS [role squad display]
+PASS [milestone saved tally]
+PASS [milestone protected news]
+PASS [milestone engine news]
+PASS [source held]
+simCareerStoryRole: 16 groups, 3 failed, 48 full AR pairs
+FAIL [role recorded year] AssertionError: actual recorded year consumes the optional plan
++ actual - expected
+
++ {
++   club: 'Twente',
++   year: 2029
++ }
+- undefined
+
+FAIL [role interruptions] AssertionError: interrupted year clears the plan
++ actual - expected
+
++ {
++   club: 'Twente',
++   year: 2029
++ }
+- undefined
+
+FAIL [role moves and retirement] AssertionError: actual retirement resume consumes only its recorded year
++ actual - expected
+
++ {
++   club: 'Twente',
++   year: 2029
++ }
+- undefined
+
+PASS [uncopied AR parity]
+PASS [attribution boundaries]
+PASS [uncopied full AR baseline]
+PASS [candidate full AR baseline]
+PASS [candidate AR parity]
+PASS [role event]
+PASS [role selection]
+PASS [role scope]
+PASS [role recorded year]
+PASS [role moves and retirement]
+PASS [role squad display]
+PASS [milestone saved tally]
+PASS [milestone protected news]
+PASS [milestone engine news]
+PASS [source held]
+simCareerStoryRole: 16 groups, 1 failed, 48 full AR pairs
+FAIL [role interruptions] AssertionError: no completed-play claim for a year unavailable
++ actual - expected
+
++ 'served'
+- 'interrupted'
+
+PASS [uncopied AR parity]
+PASS [attribution boundaries]
+PASS [uncopied full AR baseline]
+PASS [candidate full AR baseline]
+PASS [candidate AR parity]
+PASS [role event]
+PASS [role selection]
+PASS [role scope]
+PASS [role recorded year]
+PASS [role interruptions]
+PASS [role moves and retirement]
+PASS [milestone saved tally]
+PASS [milestone protected news]
+PASS [milestone engine news]
+PASS [source held]
+simCareerStoryRole: 16 groups, 1 failed, 48 full AR pairs
+FAIL [role squad display] AssertionError: display reads the held four-game reduction
+
+13 !== 9
+
+PASS [uncopied AR parity]
+PASS [attribution boundaries]
+PASS [uncopied full AR baseline]
+PASS [candidate full AR baseline]
+PASS [candidate AR parity]
+PASS [role event]
+PASS [role selection]
+PASS [role scope]
+PASS [role recorded year]
+PASS [role interruptions]
+PASS [role moves and retirement]
+PASS [milestone saved tally]
+PASS [milestone protected news]
+PASS [milestone engine news]
+PASS [source held]
+simCareerStoryRole: 16 groups, 1 failed, 48 full AR pairs
+FAIL [role squad display] AssertionError: actual range respects role and existing bounds
++ actual - expected
+
++ 'The plan is about 8 to 18 league games.'
+- 'The plan is about 4 to 14 league games.'
+
+PASS [uncopied AR parity]
+PASS [attribution boundaries]
+PASS [uncopied full AR baseline]
+PASS [candidate full AR baseline]
+PASS [candidate AR parity]
+PASS [role event]
+PASS [role selection]
+PASS [role scope]
+PASS [role recorded year]
+PASS [role interruptions]
+PASS [role moves and retirement]
+PASS [role squad display]
+PASS [milestone protected news]
+PASS [source held]
+simCareerStoryRole: 16 groups, 2 failed, 48 full AR pairs
+FAIL [milestone saved tally] AssertionError: senior saved crossing excludes academy, jobs, absent and future years
++ actual - expected
+
++ null
+- {
+-   previous: 95,
+-   threshold: 100,
+-   total: 107
+- }
+
+FAIL [milestone engine news] AssertionError: bounded actual weighted engine news must surface the saved senior crossing
+PASS [uncopied AR parity]
+PASS [attribution boundaries]
+PASS [uncopied full AR baseline]
+PASS [candidate full AR baseline]
+PASS [candidate AR parity]
+PASS [role event]
+PASS [role selection]
+PASS [role scope]
+PASS [role recorded year]
+PASS [role interruptions]
+PASS [role moves and retirement]
+PASS [role squad display]
+PASS [milestone saved tally]
+PASS [milestone engine news]
+PASS [source held]
+simCareerStoryRole: 16 groups, 1 failed, 48 full AR pairs
+FAIL [milestone protected news] AssertionError: full critic and key-story pair kept by identity
++ actual - expected
+... Skipped lines
+
+  [
+    {
+      body: 'Original saved article body',
+      headline: 'Saved critic column',
+      newspaper: 'Saved Paper',
+...
+    {
++     body: '2029/30: World ere scored 12 club goals, taking their saved senior club tally from 95 to 107.',
++     headline: 'World ere Reaches 100 Senior Club Goals',
+-     body: 'Original saved article body',
+-     headline: 'Won an award',
+      newspaper: 'Saved Paper',
++     type: 'milestone'
+-     type: 'positive'
+    }
+  ]
+
+PASS [uncopied AR parity]
+PASS [attribution boundaries]
+PASS [uncopied full AR baseline]
+PASS [candidate full AR baseline]
+PASS [candidate AR parity]
+PASS [role event]
+PASS [role selection]
+PASS [role scope]
+PASS [role recorded year]
+PASS [role interruptions]
+PASS [role moves and retirement]
+PASS [role squad display]
+PASS [milestone saved tally]
+PASS [milestone protected news]
+PASS [source held]
+simCareerStoryRole: 16 groups, 1 failed, 48 full AR pairs
+FAIL [milestone engine news] AssertionError: bounded actual weighted engine news must surface the saved senior crossing
+simCareerStoryRole: 16 healthy groups, 17 effective copied controls caught;12 complete AR careers and48 neutral pairs held
