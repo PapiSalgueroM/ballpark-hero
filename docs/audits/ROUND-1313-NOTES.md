@@ -262,14 +262,16 @@ print), ca8e5a0e (the rule sentences' wording, docs only). No src file moved, so
   counts read back at full pace), with the measuring swap's numbers in the header of scripts/simUsRivalSense.mjs;
   whether a defenseman's kind should follow the player (Q2; the kind pairing table is printed); the dead heat.
 - Found by the read review, data first, both older than this round:
-  (a) DONE in fix pass 2 (b2f1a5e0, comment and note text only, both files in one commit): "Josh Hader's 138
-  in 2019 is the modern high" was false. The Round 97 comment inside mlbStatLineFor now says Hader's 143 in
-  2018 was the most in the National League since Brad Lidge's 157 in 2004, and scripts/simCareerRealism.mjs
-  (its comment above the MLB checks and the RP note) says the relief record is Dick Radatz's 181 in 1964 over
-  157 innings (it said "about 137" and "anything near 150 has never happened") and that its RP ceiling of 143
-  is Hader's 2018, not the record. Sources: reviewingthebrew.com, cbs58.com and cbssports.com (Hader 143);
-  sabr.org's Lidge biography and brewcrewball.com (Lidge 157); sabr.org's game account of October 4, 1964 and
-  baseballhall.org's card corner (Radatz 181 over 157 innings). No check value moved. Left in that same
+  (a) DONE in fix pass 2 (b2f1a5e0, narrowed by b1ca0d73; comment and note text only, both files together):
+  "Josh Hader's 138 in 2019 is the modern high" was false. The Round 97 comment inside mlbStatLineFor now
+  gives, for scale, Hader's 143 in 2018 and Brad Lidge's 157 in 2004, and scripts/simCareerRealism.mjs (its
+  comment above the MLB checks and the RP note) says the relief record is Dick Radatz's 181 in 1964 over 157
+  innings (it said "about 137" and "anything near 150 has never happened") and that its RP ceiling of 143 is
+  Hader's 2018, not the record. Sources, two each: reviewingthebrew.com and cbs58.com (Hader 143 in 81.1
+  innings); sabr.org's Lidge biography and reviewingthebrew.com (Lidge 157); sabr.org's game account of
+  October 4, 1964 and baseballhall.org's card corner (Radatz 181 over 157 innings; SABR says it is still the
+  record). "The most in the National League since Lidge" had one source only, so it is not claimed. No check
+  value moved. Left in that same
   comment of simCareerRealism.mjs and not checked here: "Nolan Ryan again for wins is 27", which reads
   garbled (owed to whoever next touches that file).
   (b) wonAward has no year (careerAwards.ts line 600), so the player and now the rival can be All-Stars, and
