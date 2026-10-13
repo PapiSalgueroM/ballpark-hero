@@ -1,0 +1,20 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+worldtruth: node scripts/simSoccerWorldTruth.mjs
+worldtruth-s1: SEED_OFFSET=1 node scripts/simSoccerWorldTruth.mjs
+worldtruth-s2: SEED_OFFSET=2 node scripts/simSoccerWorldTruth.mjs
+worldtruth-s3: SEED_OFFSET=3 node scripts/simSoccerWorldTruth.mjs
+worldtruth-s4: SEED_OFFSET=4 node scripts/simSoccerWorldTruth.mjs
+ctl-realmoves: WORLD_TRUTH_CONTROL=realmoves node scripts/simSoccerWorldTruth.mjs
+ctl-pastchampions: WORLD_TRUTH_CONTROL=pastchampions node scripts/simSoccerWorldTruth.mjs
+ctl-summer: WORLD_TRUTH_CONTROL=summer node scripts/simSoccerWorldTruth.mjs
+simPhone2: node scripts/simPhone2.mjs
+simPhone2-base: git worktree add -q /tmp/base1329 c5fc5470b3e377f22d6d538f459b9f5310b08dd0 && ln -s "$PWD/node_modules" /tmp/base1329/node_modules && cd /tmp/base1329 && node scripts/simPhone2.mjs
+simBallonDorTruth: node scripts/simBallonDorTruth.mjs
+simCareerCleanSheets: node scripts/simCareerCleanSheets.mjs
+simCareerDomesticCup: node scripts/simCareerDomesticCup.mjs
+simCareerSquad: node scripts/simCareerSquad.mjs
+simEraBakeExtend: node scripts/simEraBakeExtend.mjs
+simInventedNames: node scripts/simInventedNames.mjs
+simSeasonCentreNeutral: node scripts/simSeasonCentreNeutral.mjs
+simCareerLeagueSeasons: node scripts/simCareerLeagueSeasons.mjs
+vitest-phone: node_modules/.bin/vitest run src/test/phonePanelFocus.test.tsx src/test/soccerWorldTruth.test.ts --testTimeout=300000 --hookTimeout=120000
