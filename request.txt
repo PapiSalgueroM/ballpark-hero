@@ -1,0 +1,9 @@
+cool0: node scripts/simCareerLifeCooldowns.mjs
+cool1: SEED_OFFSET=1 node scripts/simCareerLifeCooldowns.mjs
+cool2: SEED_OFFSET=2 node scripts/simCareerLifeCooldowns.mjs
+cool3: SEED_OFFSET=3 node scripts/simCareerLifeCooldowns.mjs
+cool4: SEED_OFFSET=4 node scripts/simCareerLifeCooldowns.mjs
+cool-nocooldown: SIM_CAREER_LIFE_COOLDOWNS_CONTROL=nocooldown node scripts/simCareerLifeCooldowns.mjs
+cool-sharedbatch: SIM_CAREER_LIFE_COOLDOWNS_CONTROL=sharedbatch node scripts/simCareerLifeCooldowns.mjs
+cool-flood: SIM_CAREER_LIFE_COOLDOWNS_CONTROL=flood node scripts/simCareerLifeCooldowns.mjs
+usSummer: node scripts/simUsCareerSummer.mjs

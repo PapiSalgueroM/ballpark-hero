@@ -1,0 +1,9 @@
+cool2 exit=0 55s | simCareerLifeCooldowns: green. No event repeats inside its cooldown, every new event fires, the rate held, and the catalog has two real choices everywhere.
+cool0 exit=0 57s | simCareerLifeCooldowns: green. No event repeats inside its cooldown, every new event fires, the rate held, and the catalog has two real choices everywhere.
+cool1 exit=0 62s | simCareerLifeCooldowns: green. No event repeats inside its cooldown, every new event fires, the rate held, and the catalog has two real choices everywhere.
+cool3 exit=0 54s | simCareerLifeCooldowns: green. No event repeats inside its cooldown, every new event fires, the rate held, and the catalog has two real choices everywhere.
+cool-nocooldown exit=0 54s | CONTROL FIRED: section 2 failed with the defect back in, as it should, and nothing else did.
+cool4 exit=0 64s | simCareerLifeCooldowns: green. No event repeats inside its cooldown, every new event fires, the rate held, and the catalog has two real choices everywhere.
+cool-sharedbatch exit=0 58s | CONTROL FIRED: section 2 failed with the defect back in, as it should, and nothing else did.
+cool-flood exit=0 58s | CONTROL FIRED: section 4 failed with the defect back in, as it should, and nothing else did.
+usSummer exit=124 4200s | 6) balance: one child per sport, careers a seed nfl 12000, nba 8000, mlb 8000, nhl 2000, 3 seeds
