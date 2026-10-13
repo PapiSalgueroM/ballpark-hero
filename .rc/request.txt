@@ -1,0 +1,21 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+earned: node scripts/simNbaEarnedDraft.mjs
+vitest: node_modules/.bin/vitest run src/lib/gmEarnedDraft.test.ts src/lib/nbaEarnedDraft.test.ts --testTimeout=300000 --hookTimeout=120000
+ctl-touchseason: SIM_NBA_EARNED_DRAFT_CONTROL=touchseason node scripts/simNbaEarnedDraft.mjs
+ctl-flatodds: SIM_NBA_EARNED_DRAFT_CONTROL=flatodds node scripts/simNbaEarnedDraft.mjs
+ctl-playinmade: SIM_NBA_EARNED_DRAFT_CONTROL=playinmade node scripts/simNbaEarnedDraft.mjs
+ctl-gmfirst: SIM_NBA_EARNED_DRAFT_CONTROL=gmfirst node scripts/simNbaEarnedDraft.mjs
+ctl-origholder: SIM_NBA_EARNED_DRAFT_CONTROL=origholder node scripts/simNbaEarnedDraft.mjs
+ctl-shortclass: SIM_NBA_EARNED_DRAFT_CONTROL=shortclass node scripts/simNbaEarnedDraft.mjs
+ctl-shownread: SIM_NBA_EARNED_DRAFT_CONTROL=shownread node scripts/simNbaEarnedDraft.mjs
+ctl-redraw: SIM_NBA_EARNED_DRAFT_CONTROL=redraw node scripts/simNbaEarnedDraft.mjs
+ctl-fatclass: SIM_NBA_EARNED_DRAFT_CONTROL=fatclass node scripts/simNbaEarnedDraft.mjs
+ctl-flatclass: SIM_NBA_EARNED_DRAFT_CONTROL=flatclass node scripts/simNbaEarnedDraft.mjs
+ctl-nocurve: SIM_NBA_EARNED_DRAFT_CONTROL=nocurve node scripts/simNbaEarnedDraft.mjs
+ctl-trustblock: SIM_NBA_EARNED_DRAFT_CONTROL=trustblock node scripts/simNbaEarnedDraft.mjs
+ctl-noneed: SIM_NBA_EARNED_DRAFT_CONTROL=noneed node scripts/simNbaEarnedDraft.mjs
+ctl-sportname: SIM_NBA_EARNED_DRAFT_CONTROL=sportname node scripts/simNbaEarnedDraft.mjs
+earned-all: SIM_NBA_EARNED_DRAFT_CONTROL=all node scripts/simNbaEarnedDraft.mjs
+capital: node scripts/simNbaDraftCapital.mjs
+nbadesk: node scripts/simNbaGmDesk.mjs
+draftorder: node scripts/simGmDraftOrder.mjs
