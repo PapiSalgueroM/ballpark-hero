@@ -1,0 +1,12 @@
+#!serve
+#!playwright
+desk: mkdir -p $RC_OUT/head && RC_OUT=$RC_OUT/head node scripts/playCmFinanceDesk.mjs
+desk-small: mkdir -p $RC_OUT/small && RC_OUT=$RC_OUT/small CM_FINANCE_CONTROL=small node scripts/playCmFinanceDesk.mjs
+desk-cut: mkdir -p $RC_OUT/cut && RC_OUT=$RC_OUT/cut CM_FINANCE_CONTROL=cut node scripts/playCmFinanceDesk.mjs
+desk-wrap: mkdir -p $RC_OUT/wrap && RC_OUT=$RC_OUT/wrap CM_FINANCE_CONTROL=wrap node scripts/playCmFinanceDesk.mjs
+simCmCopy: node scripts/simCmCopy.mjs
+simCmCopy-finance: CM_COPY_CONTROL=finance node scripts/simCmCopy.mjs --section=5
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+sweepWeight: SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs
+base-desk: mkdir -p .tbase $RC_OUT/base && git archive c9c77eba | tar -x -C .tbase && cd .tbase && ../node_modules/.bin/vite build > $RC_OUT/base/build.log 2>&1 && ls dist | head -3 && (node ../scripts/lib/hostLikeServer.mjs dist 4190 > $RC_OUT/base/server.log 2>&1 &) && for i in $(seq 1 40); do curl -sf -o /dev/null http://127.0.0.1:4190/ && break; sleep 1; done; RC_OUT=$RC_OUT/base SWEEP_BASE=http://127.0.0.1:4190 node ../scripts/playCmFinanceDesk.mjs
+prev-desk: mkdir -p .tprev $RC_OUT/prev && git archive 559a0c62 | tar -x -C .tprev && cd .tprev && ../node_modules/.bin/vite build > $RC_OUT/prev/build.log 2>&1 && (node ../scripts/lib/hostLikeServer.mjs dist 4191 > $RC_OUT/prev/server.log 2>&1 &) && for i in $(seq 1 40); do curl -sf -o /dev/null http://127.0.0.1:4191/ && break; sleep 1; done; RC_OUT=$RC_OUT/prev SWEEP_BASE=http://127.0.0.1:4191 node ../scripts/playCmFinanceDesk.mjs
