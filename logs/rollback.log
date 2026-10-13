@@ -1,0 +1,24 @@
+base built
+== cfb-dynasty
+   branch saves: mid round 4; fired phase recap; moved recruit at IOWA
+   base loads mid: buttons [Back | Sign up to track your statsTrack stats | Roster | Play | Schedule | Top 25 | Conferences | Fire yourself and start over | Cookie choices | Light mode | Sound: off | Report a bug]
+   base plays on from mid: pressed true, phase season, season 2026 round 5 at ALA, seat kept true
+   branch loads it back: seat nodes [tile], buttons [Back | Sign up to track your statsTrack stats | Roster | Play | Schedule | Top 25 | Conferences | Fire yourself and start over | Cookie choices | Light mode | S]
+   base loads fired: buttons [Back | Sign up to track your statsTrack stats | Hit the recruiting trail | Share result | Copy challenge | 📋 Copy Score Card | 🖼️ Save Image | Cookie choices | Light mode | Sound: off | Report a bug]
+   base plays on from fired: pressed true, phase season, season 2027 round 2 at ALA, seat kept true
+   branch loads it back: seat nodes [passed], buttons [Back | Sign up to track your statsTrack stats | Roster | Play | Schedule | Top 25 | Conferences | Fire yourself and start over | Cookie choices | Light mode | S]
+   base loads moved: buttons [Back | Sign up to track your statsTrack stats | Reset filters | Let go | Shop | Let go | Shop | Close the class, run it back | Cookie choices | Light mode | Sound: off | Report a bug]
+   base plays on from moved: pressed true, phase season, season 2027 round 2 at IOWA, seat kept true
+   branch loads it back: seat nodes [tile], buttons [Back | Sign up to track your statsTrack stats | Roster | Play | Schedule | Top 25 | Conferences | Fire yourself and start over | Cookie choices | Light mode | S]
+== cbb-dynasty
+   branch saves: mid round 4; fired phase recap; moved recruit at UCLA
+   base loads mid: buttons [Back | Sign up to track your statsTrack stats | Roster | Play | Schedule | Top 25 | Leagues | Fire yourself and start over | Cookie choices | Light mode | Sound: off | Report a bug]
+   base plays on from mid: pressed true, phase season, season 2026 round 5 at UK, seat kept true
+   branch loads it back: seat nodes [tile], buttons [Back | Sign up to track your statsTrack stats | Roster | Play | Schedule | Top 25 | Leagues | Fire yourself and start over | Cookie choices | Light mode | Sound]
+   base loads fired: buttons [Back | Sign up to track your statsTrack stats | Hit the recruiting trail | Share result | Copy challenge | 📋 Copy Score Card | 🖼️ Save Image | Cookie choices | Light mode | Sound: off | Report a bug]
+   base plays on from fired: pressed true, phase season, season 2027 round 2 at UK, seat kept true
+   branch loads it back: seat nodes [passed], buttons [Back | Sign up to track your statsTrack stats | Roster | Play | Schedule | Top 25 | Leagues | Fire yourself and start over | Cookie choices | Light mode | Sound]
+   base loads moved: buttons [Back | Sign up to track your statsTrack stats | Reset filters | Let go | Shop | Let go | Shop | Close the class, run it back | Cookie choices | Light mode | Sound: off | Report a bug]
+   base plays on from moved: pressed true, phase season, season 2027 round 2 at UCLA, seat kept true
+   branch loads it back: seat nodes [tile], buttons [Back | Sign up to track your statsTrack stats | Roster | Play | Schedule | Top 25 | Leagues | Fire yourself and start over | Cookie choices | Light mode | Sound]
+rb1320: clean
