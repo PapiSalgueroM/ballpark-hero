@@ -1,0 +1,3 @@
+pd-a exit=0 19s | simCareerPreDraft [seed set a]: ALL GREEN
+vitest exit=0 5s |    Duration  3.81s (transform 967ms, setup 57ms, collect 1.33s, tests 1.68s, environment 322ms, prepare 138ms)
+mE exit=0 50s | MUTRESULT mE CAUGHT harness-a=1 harness-c=1 vitest=1 prospect=0

@@ -1,0 +1,4 @@
+#!serial
+pd-a: SEEDSET=a node scripts/simCareerPreDraft.mjs
+vitest: node_modules/.bin/vitest run src/test/careerPreDraft.test.tsx --testTimeout=300000 --hookTimeout=120000
+mE: node .rc/x/rvmut.mjs mE && bash .rc/x/rvmutrun.sh mE; s=$?; git checkout -- src scripts; exit $s

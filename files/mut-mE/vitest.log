@@ -1,0 +1,72 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [31m❯[39m src/test/careerPreDraft.test.tsx [2m([22m[2m37 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[33m 1701[2mms[22m[39m
+   [32m✓[39m the descriptors carry the verified rules[2m > [22mrounds per sport and era[32m 2[2mms[22m[39m
+   [32m✓[39m the descriptors carry the verified rules[2m > [22mthe NBA lottery is the non playoff teams, sixteen make the playoffs[32m 1[2mms[22m[39m
+   [32m✓[39m the descriptors carry the verified rules[2m > [22mstraight from high school is a 2003-04 road only[32m 0[2mms[22m[39m
+   [32m✓[39m the descriptors carry the verified rules[2m > [22mno other sport has a lottery here, and every route is one to three seasons[32m 1[2mms[22m[39m
+   [32m✓[39m the pick decides the team[2m > [22ma drafted player joins the team that holds his pick, in every sport and era[32m 45[2mms[22m[39m
+   [32m✓[39m the pick decides the team[2m > [22mthe order has rounds times teams picks and every round holds every team once[32m 1[2mms[22m[39m
+   [32m✓[39m the pick decides the team[2m > [22mthe same seed replays the same road, another seed does not[32m 1[2mms[22m[39m
+   [32m✓[39m the pick decides the team[2m > [22mthe age at the draft is the route start age plus its seasons[32m 1[2mms[22m[39m
+   [32m✓[39m cards print what they apply[2m > [22mevery option, from every card, on a mid and an edge state[32m 15[2mms[22m[39m
+   [32m✓[39m cards print what they apply[2m > [22mskipping the showcase costs exactly what it says[32m 0[2mms[22m[39m
+   [32m✓[39m cards print what they apply[2m > [22mgoing all out never moves the stock less than playing it safe on the same drill[32m 1[2mms[22m[39m
+   [32m✓[39m growth, money and the seasons after the draft[2m > [22mno step ever lifts the rating past the ceiling[32m 12[2mms[22m[39m
+   [32m✓[39m growth, money and the seasons after the draft[2m > [22mMLB quotes a slot only for the verified picks of the modern draft[32m 0[2mms[22m[39m
+   [32m✓[39m growth, money and the seasons after the draft[2m > [22mMLB plays one to three minor league seasons climbing to Triple-A; NHL one to three back on its route[32m 6[2mms[22m[39m
+   [32m✓[39m growth, money and the seasons after the draft[2m > [22man undrafted MLB player starts in A ball, as his line says[32m 1[2mms[22m[39m
+   [32m✓[39m growth, money and the seasons after the draft[2m > [22mMLB and NHL lines are rates, never a games or innings count[32m 27[2mms[22m[39m
+   [32m✓[39m growth, money and the seasons after the draft[2m > [22mthe NHL combine names no on ice drill[32m 0[2mms[22m[39m
+   [32m✓[39m growth, money and the seasons after the draft[2m > [22mNHL development seasons stay on the route[32m 0[2mms[22m[39m
+   [32m✓[39m the save block[2m > [22ma finished block round trips[32m 1[2mms[22m[39m
+   [32m✓[39m the save block[2m > [22ma save from before Round 914 has no block and reads as none[32m 0[2mms[22m[39m
+   [32m✓[39m the save block[2m > [22ma corrupt block resets that block alone[32m 0[2mms[22m[39m
+   [32m✓[39m the save block[2m > [22ma block the cards cannot draw resets, down to the elements[32m 2[2mms[22m[39m
+   [32m✓[39m the save block[2m > [22mwith the descriptor: another sport, era or route resets, a card no longer dealt is dropped[32m 61[2mms[22m[39m
+   [32m✓[39m the save block[2m > [22mmeters out of range come back clamped[32m 0[2mms[22m[39m
+   [32m✓[39m the cards on screen[2m > [22mthe season card prints each option with the numbers the choice applies[32m 34[2mms[22m[39m
+   [32m✓[39m the cards on screen[2m > [22mthe showcase prints the table it applies, and the result names the pick holder[32m 10[2mms[22m[39m
+   [33m[2m✓[22m[39m the showcase grade, lifted[2m > [22mthe scouts path hands the lifted cut its one draw, float for float [33m 1452[2mms[22m[39m
+   [32m✓[39m the stations a player can run himself[2m > [22mone or two a position, in order, burst and cones only, every name plain or the NHL pair the audit backs[32m 7[2mms[22m[39m
+   [32m✓[39m the stations a player can run himself[2m > [22ma pitcher and the 2006 NHL run one station[32m 1[2mms[22m[39m
+   [32m✓[39m the stations a player can run himself[2m > [22manything but one or two good stations is none[32m 0[2mms[22m[39m
+   [32m✓[39m the combine you run, the engine[2m > [22ma station score is the curve over the raw result, whole and held to 0 to 100[32m 1[2mms[22m[39m
+   [32m✓[39m the combine you run, the engine[2m > [22mthe cuts are where the grade flips, floats included: rating 74, health 90[32m 1[2mms[22m[39m
+   [32m✓[39m the combine you run, the engine[2m > [22mopen puts the attempt on the state, once, at the showcase, for all out or safe[32m 0[2mms[22m[39m
+   [32m✓[39m the combine you run, the engine[2m > [22mthe drills' average takes the place of the draw, cut and moved by the same table[32m 1[2mms[22m[39m
+   [32m✓[39m the combine you run, the engine[2m > [22man attempt left early is the scouts' button, on every load, and through the draft[32m 1[2mms[22m[39m
+   [32m✓[39m the combine you run, the engine[2m > [22mthe loader drops a bad attempt or bad scores alone, and keeps good ones[32m 1[2mms[22m[39m
+[31m   [31m×[31m the combine you run, the engine[2m > [22man attempt on a block at a season or a card is dropped, with and without the descriptor[39m[32m 9[2mms[22m[39m
+[31m     → expected true to be false // Object.is equality[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/careerPreDraft.test.tsx[2m > [22mthe combine you run, the engine[2m > [22man attempt on a block at a season or a card is dropped, with and without the descriptor
+[31m[1mAssertionError[22m: expected true to be false // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- false[39m
+[31m+ true[39m
+
+[36m [2m❯[22m src/test/careerPreDraft.test.tsx:[2m504:32[22m[39m
+    [90m502| [39m    for (const s of early) for (const approach of ['allout', 'steady']…
+    [90m503| [39m      const got = loadPreDraft(JSON.parse(JSON.stringify({ ...s, combi…
+    [90m504| [39m      [34mexpect[39m([32m'combine'[39m [35min[39m got)[33m.[39m[34mtoBe[39m([35mfalse[39m)[33m;[39m
+    [90m   | [39m                               [31m^[39m
+    [90m505| [39m      [34mexpect[39m([33mJSON[39m[33m.[39m[34mstringify[39m(got))[33m.[39m[34mtoBe[39m([33mJSON[39m[33m.[39m[34mstringify[39m(s))[33m;[39m
+    [90m506| [39m    }
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m36 passed[39m[22m[90m (37)[39m
+[2m   Start at [22m 01:49:32
+[2m   Duration [22m 3.75s[2m (transform 900ms, setup 52ms, collect 1.29s, tests 1.70s, environment 294ms, prepare 143ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/careerPreDraft.test.tsx,title=src/test/careerPreDraft.test.tsx > the combine you run%2C the engine > an attempt on a block at a season or a card is dropped%2C with and without the descriptor,line=504,column=32::AssertionError: expected true to be false // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- false%0A+ true%0A%0A ❯ src/test/careerPreDraft.test.tsx:504:32%0A%0A
