@@ -1,5 +1,6 @@
 /* Actual saved Soccer Career pending morale, remote CI only.
- * Actual picker order is held. Selected old captions come from the held parent.
+ * Controlled legal picker inputs replay through the unchanged actual picker.
+ * Picker order is held. Selected old captions come from the held parent.
  * Recorded resolver inputs do not replace a choice, queue or outcome.
  */
 import './lib/offlineTransport.cjs';
@@ -31,9 +32,10 @@ assert(!fs.existsSync(REPORT), 'Refuse to overwrite an existing browser report.'
 const report = {
   status: 'running', phase: 'fixed', sourceHead: execFileSync('git', ['rev-parse', 'HEAD'], { cwd: ROOT, encoding: 'utf8' }).trim(),
   checks: 0, failures: 0, setupFailures: 0, cases: [], controls: [], inventory: [], issues: [],
-  sourceHeld: false, toolsHeld: false, installedHeld: false, fixturesHeld: false, distHeld: false, parentHeld: false,
+  sourceHeld: false, toolsHeld: false, installedHeld: false, fixturesHeld: false, distHeld: false, parentHeld: false, pickerHeld: false,
   limits: ['Signed out, local saved outcomes only; no backend completion is credited.',
     'Initial profile and season facts are prepared. Actual picker delivery is model proof, not a fully played UI career.',
+    'Fixture picker inputs are controlled legal values replayed through unchanged source. No random rate, seeded search or natural fixture frequency is claimed.',
     'Selected old captions are overlaid from held parent factories; the complete actual picker batch and order are retained.',
     'Current previews have independent literal oracles. Rendering never rewrites saved old captions.',
     'The complete recorded draw vector is installed only at each actual click. It is a disclosed input, not a seeded stream.',
@@ -57,6 +59,9 @@ const PROFILES = [{ width: 320, height: 568 }, { width: 390, height: 844 }, { wi
 const PARENT = '7a0ae6ba2523719e854a054fec72b27673557982';
 const CHAINS = ['223-choice0-222-choice0', '223-choice0-222-choice1', '223-choice1-222-choice0', '223-choice1-222-choice1'];
 const SCENARIOS = [...CHAINS, '221-choice0', '223-choice1'];
+const PICKER_KIND = 'actual-picker-controlled-input-replay-legacy-caption-overlay';
+const PICKER_ANCHOR = '  const shuffled = [...eligible].sort(() => Math.random() - 0.5);';
+const PICKER_OBSERVER = '  const shuffled = [...eligible].sort((a, b) => {\n    if (typeof globalThis.__SC_MORALE_PICKER_COMPARISON === "function") globalThis.__SC_MORALE_PICKER_COMPARISON(a.id, b.id);\n    return Math.random() - 0.5;\n  });';
 const fields = ['pace', 'shooting', 'passing', 'dribbling', 'defending', 'physical', 'reflexes'];
 const CURRENT = {
   '221:0': 'Followers +1M, Popularity +4, the people love a bad singer',
@@ -130,6 +135,7 @@ let toolsBefore = [];
 let installedBefore = [];
 let fixtureHash;
 let parentFiles = [];
+let pickerFiles = [];
 let now;
 let fontHash;
 let server;
@@ -257,10 +263,10 @@ async function reload(walk, row, name) {
   row.reloads.push({ stage: name, before, after, equal: before === after, beforeSha256: sha(before ?? ''), afterSha256: sha(after ?? '') });
   check(before === after, `${row.id}: ${name} changed literal saved bytes.`, row);
 }
-async function runCase(base, profile, fixture, variant = 'natural') {
+async function runCase(base, profile, fixture, variant = 'played') {
   const row = { id: profile.width + '-' + fixture.id + '-' + variant, fixture: fixture.id, width: profile.width, provenance: fixture.provenance,
     checks: 0, issues: [], errors: [], assetErrors: [], transport: [], diagnostics: [], shots: [], stages: [], reloads: [], layouts: [] };
-  (variant === 'natural' ? report.cases : report.controls).push(row);
+  (variant === 'played' ? report.cases : report.controls).push(row);
   let walk;
   try {
     walk = await open(base, profile, fixture, row);
@@ -298,7 +304,7 @@ async function runCase(base, profile, fixture, variant = 'natural') {
       check(await walk.raw() === beforeRaw, row.id + ': rendering changed literal saved bytes.', row);
       row.stages.push({ stage: 'offered', eventId: event.id, choiceIndex: step.choiceIndex, title: event.title, choices: rendered,
         savedConsequence: event.choices[step.choiceIndex].consequence, displayedConsequence: displayed, raw: beforeRaw });
-      if (variant === 'natural') await capture(walk, row, index === 0 ? 'precursor-preview-after-pending-reload' : '222-preview-after-precursor-reload', card);
+      if (variant === 'played') await capture(walk, row, index === 0 ? 'precursor-preview-after-pending-reload' : '222-preview-after-precursor-reload', card);
       if (variant === 'omit-choice' && index === 1) {
         row.detected = savedOutcomeIssues(before, await walk.raw(), step);
         const required = ['complete-saved-state', 'expected-state-hash', 'literal-morale', 'literal-queued-physical',
@@ -431,14 +437,54 @@ try {
     parentFiles.push({ file: relative, filename, bytes: fs.statSync(filename).size, sha256: fileHash(filename) });
   }
   report.parentReceipts = parentFiles.map(({ filename, ...receipt }) => receipt);
+  const pickerObserver = fixtures.source.pickerObserver;
+  setup(pickerObserver?.kind === 'read-only-sort-comparisons' && pickerObserver.file === 'src/lib/soccerCareerEngine.ts'
+    && pickerObserver.anchor === PICKER_ANCHOR && pickerObserver.replacement === PICKER_OBSERVER,
+    'Only the independently declared read-only comparison observer may produce the fixture inputs.');
+  const normalSourcePath = 'fixed/source.json', normalSourceFile = path.join(ARTIFACTS, normalSourcePath);
+  const normalSource = JSON.parse(fs.readFileSync(normalSourceFile, 'utf8'));
+  setup(normalSource.arm === 'fixed' && normalSource.sourceHead === report.sourceHead && normalSource.exitCode === 0
+    && normalSource.processError === null && normalSource.processSignal === null && normalSource.actualSourceEdits.length === 0
+    && normalSource.methodError === undefined
+    && JSON.stringify(normalSource.pickerObserver) === JSON.stringify(pickerObserver),
+    'The held normal model must record completed plain units and the same separate copied observer.');
+  const plainCompile = normalSource.compiled.filter(entry => entry.file === 'engine.mjs');
+  const observerCompile = normalSource.compiled.filter(entry => entry.file === 'engine-picker-observed.mjs');
+  const engineBinding = normalSource.sourceReceipts.filter(entry => entry.file === 'src/lib/soccerCareerEngine.ts');
+  setup(normalSource.compiled.length === 6 && plainCompile.length === 1 && observerCompile.length === 1
+    && plainCompile[0].sha256 === pickerObserver.plainCompiledSha256 && observerCompile[0].sha256 === pickerObserver.compiledSha256
+    && engineBinding.length === 1 && engineBinding[0].beforeSha256 === fixtures.source.engineSha256
+    && engineBinding[0].afterSha256 === fixtures.source.engineSha256,
+    'Normal source and compiled receipts must bind the unchanged plain picker separately from its observed copy.');
+  for (const [field, digest, relative] of [
+    ['originalSourcePath', 'originalSha256', 'fixed/soccerCareerEngine.picker-original.ts'],
+    ['observedSourcePath', 'observedSha256', 'fixed/soccerCareerEngine.picker-observed.ts'],
+    ['compiledPath', 'compiledSha256', 'fixed/engine-picker-observed.mjs'],
+    ['plainCompiledPath', 'plainCompiledSha256', 'fixed/engine.mjs']]) {
+    setup(pickerObserver[field] === relative, field + ': retained picker witness location differs.');
+    const filename = path.join(ARTIFACTS, relative);
+    setup(fileHash(filename) === pickerObserver[digest], relative + ': physical picker witness hash differs.');
+    pickerFiles.push({ file: relative, filename, bytes: fs.statSync(filename).size, sha256: fileHash(filename) });
+  }
+  pickerFiles.push({ file: normalSourcePath, filename: normalSourceFile, bytes: fs.statSync(normalSourceFile).size, sha256: fileHash(normalSourceFile) });
+  const originalPicker = fs.readFileSync(path.join(ARTIFACTS, pickerObserver.originalSourcePath), 'utf8');
+  const observedPicker = fs.readFileSync(path.join(ARTIFACTS, pickerObserver.observedSourcePath), 'utf8');
+  setup(pickerObserver.originalSha256 === fixtures.source.engineSha256
+    && originalPicker === fs.readFileSync(path.join(ROOT, pickerObserver.file), 'utf8')
+    && originalPicker.split(PICKER_ANCHOR).length === 2 && observedPicker.split(PICKER_OBSERVER).length === 2
+    && originalPicker.replace(PICKER_ANCHOR, PICKER_OBSERVER) === observedPicker
+    && observedPicker.replace(PICKER_OBSERVER, PICKER_ANCHOR) === originalPicker
+    && pickerObserver.originalSha256 !== pickerObserver.observedSha256,
+    'The one effective read-only insertion must invert to every unchanged actual engine byte.');
+  report.pickerReceipts = pickerFiles.map(({ filename, ...receipt }) => receipt);
   setup(new Set(fixtures.scenarios.map(fixture => fixture.id)).size === 6
     && JSON.stringify(fixtures.scenarios.map(fixture => fixture.id).sort()) === JSON.stringify([...SCENARIOS].sort()),
     'Fixture IDs must cover all four actual223-to222 branches and both additional current previews.');
   for (const fixture of fixtures.scenarios) {
     const chain = CHAINS.includes(fixture.id), provenance = fixture.provenance;
     setup(Array.isArray(fixture.steps) && fixture.steps.length === (chain ? 2 : 1), fixture.id + ': exact owned step count differs.');
-    setup(provenance?.kind === 'actual-picker-legacy-caption-overlay' && Array.isArray(provenance.preparedFields)
-      && provenance.preparedFields.length > 0, fixture.id + ': actual picker and prepared-context disclosure are required.');
+    setup(provenance?.kind === PICKER_KIND && Array.isArray(provenance.preparedFields)
+      && provenance.preparedFields.length > 0, fixture.id + ': controlled actual-picker replay and prepared-context disclosure are required.');
     setup(fixture.initial.phase === 'random_events' && !fixture.initial.retired && fixture.initial.morale === 60
       && fixture.initial.personality === 'professor' && fixture.initial.agentId === 'self'
       && fixture.initial.pendingEvents.length > fixture.steps.length
@@ -446,13 +492,52 @@ try {
       fixture.id + ': actual delivered order, valid profile, initial morale or real continuation differs.');
     setup(stateHash(fixture.initial) === fixture.initialSha256
       && stateHash(provenance.actualPickerBatch) === provenance.actualPickerBatchSha256, fixture.id + ': complete initial or picker hash differs.');
+    const witness = provenance.pickerWitness, targets = fixture.steps.map(step => step.eventId);
     setup(provenance.playerName === fixture.initial.playerName && provenance.context.playerName === fixture.initial.playerName
       && provenance.context.morale === 60 && provenance.context.phase === 'social_media_action'
       && provenance.context.pendingEvents.length === 0 && provenance.context.socialMediaActionUsedThisSeason === true
-      && Number.isInteger(provenance.trial) && provenance.trial >= 0 && provenance.trial < 16384
-      && Number.isInteger(provenance.pickerSeed) && provenance.pickerDrawCount === provenance.pickerDraws.length
-      && provenance.pickerDraws.length > 0 && provenance.pickerDraws.every(value => Number.isFinite(value) && value >= 0 && value < 1),
-      fixture.id + ': actual picker context, identity, finite trial or draw receipt differs.');
+      && provenance.trial === undefined && provenance.pickerSeed === undefined
+      && witness?.name === (chain ? '223-then-222' : targets[0] === 221 ? '221-preview' : '223-preview')
+      && JSON.stringify(witness.targets) === JSON.stringify(targets) && witness.contextSha256 === stateHash(provenance.context)
+      && Array.isArray(witness.initializationDraws) && witness.initializationDraws.length > 0
+      && witness.initializationDraws.every(value => value === 0.9),
+      fixture.id + ': disclosed prepared identity, context or controlled-input witness differs.');
+    const inputs = witness.input;
+    setup(inputs?.mode === 'controlled-sort-vector' && Number.isInteger(inputs.drawCount) && inputs.drawCount > 0
+      && Array.isArray(inputs.draws) && inputs.draws.length === inputs.drawCount
+      && inputs.draws.every(value => [0.01, 0.99, 0.5].includes(value))
+      && Array.isArray(witness.comparisons) && witness.comparisons.length > 0,
+      fixture.id + ': complete legal controlled picker vector and actual comparison receipts are required.');
+    const comparisonOrdinals = new Set();
+    const rank = id => targets.includes(id) ? targets.indexOf(id) : targets.length + id;
+    for (const [index, comparison] of witness.comparisons.entries()) {
+      const expectedValue = rank(comparison.a) < rank(comparison.b) ? 0.01 : rank(comparison.a) > rank(comparison.b) ? 0.99 : 0.5;
+      setup(Number.isInteger(comparison.a) && Number.isInteger(comparison.b) && Number.isInteger(comparison.ordinal)
+        && comparison.ordinal >= 1 && comparison.ordinal <= inputs.drawCount && !comparisonOrdinals.has(comparison.ordinal)
+        && (index === 0 || comparison.ordinal > witness.comparisons[index - 1].ordinal)
+        && comparison.aRank === rank(comparison.a) && comparison.bRank === rank(comparison.b)
+        && comparison.value === expectedValue && inputs.draws[comparison.ordinal - 1] === expectedValue,
+        fixture.id + ': actual comparison IDs, ranks, legal value or original draw ordinal differs.');
+      comparisonOrdinals.add(comparison.ordinal);
+    }
+    setup(inputs.draws.every((value, index) => comparisonOrdinals.has(index + 1) || value === 0.99),
+      fixture.id + ': every unobserved catalog, count or other picker draw must retain the disclosed 0.99 input.');
+    setup(witness.observed && witness.replay && witness.observed.rawBatch && witness.replay.rawBatch
+      && witness.observed.rawBatch.phase === 'random_events' && witness.replay.rawBatch.phase === 'random_events'
+      && witness.replay.consumed === inputs.drawCount
+      && JSON.stringify(witness.observed.draws) === JSON.stringify(inputs.draws)
+      && JSON.stringify(witness.replay.draws) === JSON.stringify(inputs.draws)
+      && stateHash(witness.observed.batch) === witness.observed.batchSha256
+      && stateHash(witness.replay.batch) === witness.replay.batchSha256
+      && JSON.stringify(witness.observed.rawBatch) === JSON.stringify(witness.replay.rawBatch)
+      && JSON.stringify(witness.observed.batch) === JSON.stringify(witness.replay.batch)
+      && JSON.stringify(witness.replay.batch) === JSON.stringify(provenance.actualPickerBatch)
+      && witness.replay.batchSha256 === provenance.actualPickerBatchSha256,
+      fixture.id + ': unchanged plain replay must consume all inputs and reproduce every raw/canonical picked field and stamp.');
+    for (const event of provenance.actualPickerBatch.pendingEvents) setup(
+      provenance.actualPickerBatch.eventLastFired?.[event.story ? 'story:' + event.story : String(event.id)]
+        === provenance.actualPickerBatch.seasons[provenance.actualPickerBatch.seasons.length - 1].year,
+      fixture.id + ': unchanged replay did not stamp an actual picked card.');
     const overlaid = JSON.parse(JSON.stringify(provenance.actualPickerBatch));
     const expectedOverlays = fixture.steps.filter(step => LEGACY[keyOf(step)]);
     setup(Array.isArray(provenance.legacyCaptions) && provenance.legacyCaptions.length === expectedOverlays.length,
@@ -501,6 +586,10 @@ try {
       before = step.expected;
     }
   }
+  setup(new Set(fixtures.scenarios.map(fixture => fixture.provenance.pickerWitness.name)).size === 3
+    && fixtures.scenarios.filter(fixture => CHAINS.includes(fixture.id)).every(fixture =>
+      JSON.stringify(fixture.provenance.pickerWitness) === JSON.stringify(fixtures.scenarios[0].provenance.pickerWitness)),
+    'Exactly three complete controlled picker witnesses are required, with one identical actual chain batch for all four branches.');
   const installedRows = JSON.parse(fs.readFileSync(path.join(ARTIFACTS, 'installed.json'), 'utf8'));
   setup(installedRows.length === 521, 'Exactly 521 previously bound locked installed versions are required.');
   installedBefore = installedRows.map(row => {
@@ -533,15 +622,15 @@ try {
   await runCase(base, PROFILES[1], controlFixture, 'omit-choice');
   await runCase(base, PROFILES[1], controlFixture, 'delete-save');
   check(report.cases.length === 14 && report.controls.length === 2 && report.inventory.length === 54,
-    'Final counts differ from fourteen natural journeys, two effective controls and fifty-four original PNGs.');
+    'Final counts differ from fourteen played journeys, two effective controls and fifty-four original PNGs.');
   check(report.cases.every(row => {
     const steps = fixtures.scenarios.find(fixture => fixture.id === row.fixture).steps.length;
     return row.stages.filter(stage => stage.stage === 'answered').length === steps
       && row.reloads.length === steps + 2 && row.shots.length === steps * 2;
-  }), 'Every natural journey needs each actual answer, initial/intermediate/two resolved literal reloads and original captures.');
+  }), 'Every played journey needs each actual answer, initial/intermediate/two resolved literal reloads and original captures.');
   check(report.cases.reduce((sum, row) => sum + row.stages.filter(stage => stage.stage === 'answered').length, 0) === 26,
-    'Exactly twenty-six natural actual choices are required.');
-  check(report.cases.reduce((sum, row) => sum + row.reloads.length, 0) === 54, 'Exactly fifty-four literal natural reloads are required.');
+    'Exactly twenty-six played actual choices are required.');
+  check(report.cases.reduce((sum, row) => sum + row.reloads.length, 0) === 54, 'Exactly fifty-four literal played reloads are required.');
   const previews = new Set(report.cases.flatMap(row => row.stages.filter(stage => stage.stage === 'offered')
     .flatMap(stage => stage.choices.filter(choice => LEGACY[stage.eventId + ':' + choice.index]).map(choice => stage.eventId + ':' + choice.index))));
   check(previews.size === 3, 'All three independent current previews must render from actual old selected captions.');
@@ -558,11 +647,12 @@ try {
   report.toolsHeld = toolsBefore.length === 3 && toolsBefore.every(tool => fileHash(tool.file) === tool.sha256);
   report.installedHeld = installedBefore.length === 521 && installedBefore.every(row => fileHash(path.join(ROOT, row.path, 'package.json')) === row.sha256);
   report.parentHeld = parentFiles.length === 3 && parentFiles.every(file => fileHash(file.filename) === file.sha256);
+  report.pickerHeld = pickerFiles.length === 5 && pickerFiles.every(file => fileHash(file.filename) === file.sha256);
   report.fixturesHeld = !!fixtureHash && fileHash(FIXTURE) === fixtureHash;
   report.distHeld = distBefore.length > 0 && JSON.stringify(listFiles(path.join(ROOT, 'dist'))) === JSON.stringify(distBefore);
   report.fontsHeld = !!fontHash && fileHash(path.join(cache, 'manifest.json')) === fontHash && report.fonts.every(entry => fileHash(path.join(cache, entry.file)) === entry.sha256);
-  for (const name of ['sourceHeld', 'toolsHeld', 'installedHeld', 'fixturesHeld', 'distHeld', 'fontsHeld', 'parentHeld']) check(report[name], name + ': proof inputs changed or were never qualified.');
-  report.summary = { natural: report.cases.length, controls: report.controls.length, checks: report.checks, originals: report.inventory.length,
+  for (const name of ['sourceHeld', 'toolsHeld', 'installedHeld', 'fixturesHeld', 'distHeld', 'fontsHeld', 'parentHeld', 'pickerHeld']) check(report[name], name + ': proof inputs changed or were never qualified.');
+  report.summary = { played: report.cases.length, controls: report.controls.length, checks: report.checks, originals: report.inventory.length,
     answeredSteps: report.cases.reduce((sum, row) => sum + row.stages.filter(stage => stage.stage === 'answered').length, 0),
     reloads: report.cases.reduce((sum, row) => sum + row.reloads.length, 0),
     externalAborts: [...report.cases, ...report.controls].reduce((sum, row) => sum + row.transport.filter(request => request.action === 'abort').length, 0),
@@ -571,13 +661,15 @@ try {
     failures: report.failures, setupFailures: report.setupFailures, installedVersions: installedBefore.length,
     caseChecks: report.cases.reduce((sum, row) => sum + row.checks, 0),
     controlChecks: report.controls.reduce((sum, row) => sum + row.checks, 0),
-    actualPickerOverlays: report.cases.filter(row => row.provenance.kind === 'actual-picker-legacy-caption-overlay').length,
+    controlledPickerReplays: report.cases.filter(row => row.provenance.kind === PICKER_KIND).length,
+    controlledPickerBatches: new Set(report.cases.map(row => row.provenance.pickerWitness.name)).size,
+    legacyCaptionOverlays: report.cases.reduce((sum, row) => sum + row.provenance.legacyCaptions.length, 0),
     uniqueScenarios: new Set(report.cases.map(row => row.fixture)).size,
     uniquePlayedChoices: new Set(report.cases.flatMap(row => row.stages.filter(stage => stage.stage === 'answered').map(keyOf))).size };
   report.status = report.failures || report.setupFailures ? 'failed' : 'passed';
   write();
   console.log('Soccer pending-morale browser: ' + report.status + '; ' + report.checks + ' checks, ' + report.cases.length
-    + ' natural cases, ' + report.controls.length + ' controls, ' + report.inventory.length + ' originals, '
+    + ' played cases, ' + report.controls.length + ' controls, ' + report.inventory.length + ' originals, '
     + report.failures + ' failures, ' + report.setupFailures + ' setup failures.');
   process.exitCode = report.status === 'passed' ? 0 : 1;
 }

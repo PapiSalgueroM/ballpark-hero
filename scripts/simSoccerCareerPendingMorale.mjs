@@ -85,10 +85,6 @@ function receipt(extra = {}) {
     parentAppHashes, parentLifeSha256: sha(parentLife), parentCaptionsSha256: sha(parentCaptions), sourceReceipts, actualSourceEdits: anchors, ...outcome }, null, 2) + '\n');
   return sourceReceipts;
 }
-function seeded(seed) {
-  return () => { seed |= 0; seed = seed + 0x6d2b79f5 | 0; let value = Math.imul(seed ^ seed >>> 15, 1 | seed);
-    value = value + Math.imul(value ^ value >>> 7, 61 | value) ^ value; return ((value ^ value >>> 14) >>> 0) / 4294967296; };
-}
 function random(input, action) {
   const previous = Math.random, draws = [];
   Math.random = () => { const value = typeof input === 'number' ? input : input(); draws.push(value); return value; };
@@ -105,11 +101,36 @@ async function browserFixtures() {
     const S = await import(pathToFileURL(path.join(tmp, 'save.mjs')).href), C = await import(pathToFileURL(path.join(tmp, 'contracts.mjs')).href);
     const oldLife = await import(pathToFileURL(path.join(tmp, 'parent-life.mjs')).href), copy = value => JSON.parse(JSON.stringify(value));
     const year = state => E.eventSeasonIndex(state), clamp = value => Math.max(0, Math.min(100, value));
-    const progress = { status: 'acquiring', acquisitions: [], scenarios: [] };
+    const progress = { status: 'controlled-picker-inputs', acquisitions: [], scenarios: [] };
     const saveProgress = () => fs.writeFileSync(path.join(retained, 'fixture-progress.json'), JSON.stringify(progress, null, 2) + '\n');
     saveProgress();
     function canonical(state) { const loaded = E.repairCareer(copy(state));
       assert(S.isSoccerCareerSave(loaded), 'Complete fixture must pass actual route save validation'); return copy(loaded); }
+    const anchor = '  const shuffled = [...eligible].sort(() => Math.random() - 0.5);';
+    const replacement = '  const shuffled = [...eligible].sort((a, b) => {\n    if (typeof globalThis.__SC_MORALE_PICKER_COMPARISON === "function") globalThis.__SC_MORALE_PICKER_COMPARISON(a.id, b.id);\n    return Math.random() - 0.5;\n  });';
+    const original = sources.get(ENGINE);
+    assert.equal(original.split(anchor).length - 1, 1, 'Picker observer needs one actual sort anchor');
+    const observed = original.replace(anchor, replacement);
+    assert.notEqual(observed, original, 'Picker observer must change its copied source');
+    assert.equal(observed.split(replacement).length - 1, 1, 'Copied observer inverse must be unique');
+    assert.equal(observed.replace(replacement, anchor), original, 'Removing the read-only observer restores every original engine byte');
+    const pickerObserver = { kind: 'read-only-sort-comparisons', file: 'src/lib/soccerCareerEngine.ts', anchor, replacement,
+      originalSourcePath: 'fixed/soccerCareerEngine.picker-original.ts', observedSourcePath: 'fixed/soccerCareerEngine.picker-observed.ts',
+      originalSha256: sha(original), observedSha256: sha(observed), compiledPath: 'fixed/engine-picker-observed.mjs',
+      plainCompiledPath: 'fixed/engine.mjs', plainCompiledSha256: sha(fs.readFileSync(path.join(tmp, 'engine.mjs'))) };
+    fs.writeFileSync(path.join(retained, 'soccerCareerEngine.picker-original.ts'), original);
+    fs.writeFileSync(path.join(retained, 'soccerCareerEngine.picker-observed.ts'), observed);
+    receipt({ pickerObserver });
+    const esbuild = await import('esbuild'), observedCompiled = path.join(tmp, 'engine-picker-observed.mjs');
+    await esbuild.build({ entryPoints: [ENGINE], outfile: observedCompiled, bundle: true, format: 'esm', platform: 'node',
+      logLevel: 'error', alias: { '@': path.join(ROOT, 'src') }, plugins: [{ name: 'pending-morale-picker-observer', setup(build) {
+        build.onLoad({ filter: /\.ts$/ }, args => path.resolve(args.path) === ENGINE
+          ? { contents: observed, loader: 'ts', resolveDir: path.dirname(ENGINE) } : undefined);
+      } }] });
+    fs.copyFileSync(observedCompiled, path.join(retained, 'engine-picker-observed.mjs'));
+    pickerObserver.compiledSha256 = sha(fs.readFileSync(observedCompiled));
+    receipt({ pickerObserver, compiled: [...outcome.compiled, { file: 'engine-picker-observed.mjs', sha256: pickerObserver.compiledSha256 }] });
+    const observedEngine = await import(pathToFileURL(observedCompiled).href);
     const current = {
       '221:0': 'Followers +1M, Popularity +4, the people love a bad singer',
       '222:0': 'Legendary commitment: Morale +6, Physical -1 next season',
@@ -118,11 +139,11 @@ async function browserFixtures() {
       '223:1': 'Diplomacy: Morale +3, Integrity +1, whales on Wednesdays',
     };
     const legacyKeys = new Set(['221:0', '222:1', '223:1']);
-    function prepared(name, trial, seed) {
+    function prepared(name) {
       const stats = { pace: 70, shooting: 70, passing: 70, dribbling: 70, defending: 70, physical: 70, reflexes: 70 };
-      const base = random(seeded(seed), () => E.initCareer(`Pending Morale ${name} Trial ${trial}`, 'England', 'CM', '2020s',
-        stats, 70, 2020, E.FALLBACK_CLUBS, null, 90)).result, club = E.FALLBACK_CLUBS[0];
-      return canonical({ ...base, age: 23, phase: 'social_media_action', retired: false, personality: 'professor', agentId: 'self',
+      const initialized = random(0.9, () => E.initCareer(`Pending Morale ${name}`, 'England', 'CM', '2020s',
+        stats, 70, 2020, E.FALLBACK_CLUBS, null, 90)), base = initialized.result, club = E.FALLBACK_CLUBS[0];
+      const context = canonical({ ...base, age: 23, phase: 'social_media_action', retired: false, personality: 'professor', agentId: 'self',
         currentClub: club.name, currentClubCountry: club.country, currentClubTier: club.tier, currentClubColor: club.color,
         currentLeague: club.league, contractYearsLeft: 4, weeklyWage: 10000, netWorth: 10, morale: 60,
         popularity: 40, socialMediaFollowers: 1, integrityBonus: 5, sponsorBonus: 0.2, marketValue: 4,
@@ -130,28 +151,58 @@ async function browserFixtures() {
           type: 'playing', apps: 24, leagueApps: 20, goals: 4, assists: 6, rating: 7, injury: null, injuryWeeks: 0, injurySevere: false }],
         lifeFlags: {}, eventLastFired: {}, pendingEvents: [], seriousInjuries: [], socialMediaActionUsedThisSeason: true,
         statBoostNextSeason: { physical: 2, reflexes: 3 }, events: ['Prepared fictional saved morale context'] });
+      return { context, initializationDraws: initialized.draws };
     }
-    function acquire(name, firstIds, salt) {
-      const search = { name, firstIds, maxTrials: 16384, seedBase: 135600000 + salt * 16384, attempted: 0, acquired: null };
-      progress.acquisitions.push(search);
-      for (let trial = 0; trial < 16384; trial++) {
-        const seed = 135600000 + salt * 16384 + trial, context = prepared(name, trial, seed), held = JSON.stringify(context);
-        const picked = random(seeded(seed), () => E.dismissSocialMediaPhase(context, E.FALLBACK_CLUBS)), batch = canonical(picked.result);
-        search.attempted = trial + 1;
-        assert.equal(JSON.stringify(context), held, 'Actual picker must hold its context input');
-        if (batch.phase === 'random_events' && batch.pendingEvents.length > firstIds.length &&
-          firstIds.every((id, index) => batch.pendingEvents[index]?.id === id)) {
-          assert.equal(new Set(batch.pendingEvents.map(card => E.eventLedgerKey(card))).size, batch.pendingEvents.length);
-          for (const card of batch.pendingEvents) assert.equal(batch.eventLastFired[E.eventLedgerKey(card)], year(batch));
-          search.acquired = { context, batch, trial, seed, draws: picked.draws, batchSha256: sha(JSON.stringify(batch)) };
-          saveProgress(); return search.acquired;
-        }
-        if (trial === 16383) search.lastAttempt = { context, batch, trial, seed, draws: picked.draws };
-      }
+    function acquire(name, targets) {
+      const { context, initializationDraws } = prepared(name), held = JSON.stringify(context), inputs = [], comparisons = [];
+      const witness = { name, targets, contextSha256: sha(held), initializationDraws,
+        input: { mode: 'controlled-sort-vector', draws: inputs, drawCount: 0 }, comparisons, observed: null, replay: null };
+      progress.acquisitions.push({ context, witness }); saveProgress();
+      const rank = id => targets.includes(id) ? targets.indexOf(id) : targets.length + id;
+      let comparison = null;
+      assert.equal(globalThis.__SC_MORALE_PICKER_COMPARISON, undefined, 'No picker receiver may exist before the copied observation');
+      globalThis.__SC_MORALE_PICKER_COMPARISON = (a, b) => {
+        comparison = { a, b, ordinal: inputs.length + 1 }; comparisons.push(comparison);
+      };
+      let picked;
+      try {
+        picked = random(() => {
+          let value = 0.99;
+          if (comparison) { comparison.aRank = rank(comparison.a); comparison.bRank = rank(comparison.b);
+            value = comparison.aRank < comparison.bRank ? 0.01 : comparison.aRank > comparison.bRank ? 0.99 : 0.5;
+            comparison.value = value; comparison = null; }
+          inputs.push(value); return value;
+        }, () => observedEngine.dismissSocialMediaPhase(context, E.FALLBACK_CLUBS));
+      } finally { delete globalThis.__SC_MORALE_PICKER_COMPARISON; witness.input.drawCount = inputs.length; saveProgress(); }
+      witness.observed = { rawBatch: copy(picked.result), draws: picked.draws }; saveProgress();
+      const observedBatch = canonical(picked.result);
+      Object.assign(witness.observed, { batch: observedBatch, batchSha256: sha(JSON.stringify(observedBatch)) });
       saveProgress();
-      assert.fail(`Actual ${name} picker must deliver [${firstIds.join(',')}] with a nonterminal continuation within 16384 disclosed identity and seed trials`);
+      assert.equal(JSON.stringify(context), held, 'Observed copied picker must hold the complete context input');
+      assert.equal(comparison, null, 'Every observed comparator must consume its next original draw');
+      assert(comparisons.length > 0, 'The effective copied observer must capture actual sort comparisons');
+      assert.deepEqual(picked.draws, inputs, 'Observed picker must consume exactly the disclosed complete input vector');
+      assert(comparisons.every((row, index) => Number.isInteger(row.a) && Number.isInteger(row.b) && Number.isInteger(row.ordinal)
+        && row.ordinal >= 1 && row.ordinal <= inputs.length && inputs[row.ordinal - 1] === row.value
+        && (index === 0 || row.ordinal > comparisons[index - 1].ordinal)), 'Every comparison must bind actual IDs to its distinct ordered input ordinal');
+      const replayContext = copy(context); let consumed = 0;
+      assert.equal(globalThis.__SC_MORALE_PICKER_COMPARISON, undefined, 'The actual unmodified replay must have no observer receiver');
+      const replay = random(() => { assert(consumed < inputs.length, 'The actual unmodified picker cannot consume an unlisted draw'); return inputs[consumed++]; },
+        () => E.dismissSocialMediaPhase(replayContext, E.FALLBACK_CLUBS));
+      witness.replay = { rawBatch: copy(replay.result), draws: replay.draws, consumed }; saveProgress();
+      const batch = canonical(replay.result);
+      Object.assign(witness.replay, { batch, batchSha256: sha(JSON.stringify(batch)) }); saveProgress();
+      assert.equal(JSON.stringify(replayContext), held, 'Unmodified actual picker must hold the complete replay context');
+      assert.equal(consumed, inputs.length, 'Unmodified actual picker must consume every recorded input exactly once');
+      assert.deepEqual(replay.draws, picked.draws, 'Unmodified replay must preserve every observed input value and ordinal');
+      assert.deepEqual(batch, witness.observed.batch, 'Unmodified replay must reproduce the whole observed repaired batch and stamps');
+      assert(batch.phase === 'random_events' && batch.pendingEvents.length > targets.length
+        && targets.every((id, index) => batch.pendingEvents[index]?.id === id), 'Actual unmodified replay must deliver the target prefix and a real continuation');
+      assert.equal(new Set(batch.pendingEvents.map(card => E.eventLedgerKey(card))).size, batch.pendingEvents.length);
+      for (const card of batch.pendingEvents) assert.equal(batch.eventLastFired[E.eventLedgerKey(card)], year(batch));
+      return { context, batch, draws: replay.draws, witness };
     }
-    const chain = acquire('223-then-222', [223, 222], 1), karaoke = acquire('221-preview', [221], 2), aux = acquire('223-preview', [223], 3);
+    const chain = acquire('223-then-222', [223, 222]), karaoke = acquire('221-preview', [221]), aux = acquire('223-preview', [223]);
     const specs = [
       { id: '223-choice0-222-choice0', acquired: chain, actions: [[223, 0], [222, 0]] },
       { id: '223-choice0-222-choice1', acquired: chain, actions: [[223, 0], [222, 1]] },
@@ -212,19 +263,19 @@ async function browserFixtures() {
           resolve: { mode: 'vector', drawCount: values.length, draws: values }, expected, expectedSha256: sha(JSON.stringify(expected)), reloadAfter: true });
         before = expected;
       }
-      deliveries.push({ scenarioId: spec.id, trial: spec.acquired.trial, playerName: initial.playerName, seed: spec.acquired.seed,
+      deliveries.push({ scenarioId: spec.id, playerName: initial.playerName, pickerInputMode: 'controlled-sort-vector',
         pickerDrawCount: spec.acquired.draws.length, resolverDrawCounts: steps.map(step => step.resolve.drawCount),
         queue: initial.pendingEvents.map(card => card.id), actualPickerBatchSha256: sha(batchBytes), answers: steps.length });
       scenarios.push({ id: spec.id, initial, initialSha256: sha(JSON.stringify(initial)), provenance: {
-        kind: 'actual-picker-legacy-caption-overlay', preparedFields: [
-          'Fictional identity varies per trial; age23, supported club, senior row/year/apps24, money, morale60, other meters and persona/agent are prepared context.',
+        kind: 'actual-picker-controlled-input-replay-legacy-caption-overlay', preparedFields: [
+          'Fictional identity, age23, supported club, senior row/year/apps24, money, morale60, other meters and persona/agent are prepared context.',
           'Social-media-used prepares the existing actual picker entry. This is not a complete played career.',
+          'A copied read-only comparator observer chooses legal controlled picker inputs. The whole vector is replayed through the unmodified actual picker with no receiver.',
           'The actual picker supplies every card, stamp and order. No queue reorder, extra sentinel or prepared fallback is added.',
           'Only selected saved captions are overlaid from the actual held parent factory. Labels, effects and all other picked fields stay held.',
           'Original high rejecting catalog values are recorded resolver inputs. These deterministic choices have no added effect draw.',
-        ], context: spec.acquired.context, actualPickerBatch, actualPickerBatchSha256: sha(batchBytes), trial: spec.acquired.trial,
-        playerName: initial.playerName, pickerSeed: spec.acquired.seed, pickerDrawCount: spec.acquired.draws.length,
-        pickerDraws: spec.acquired.draws, legacyCaptions: overlays }, steps });
+        ], context: spec.acquired.context, actualPickerBatch, actualPickerBatchSha256: sha(batchBytes), pickerWitness: spec.acquired.witness,
+        playerName: initial.playerName, pickerDrawCount: spec.acquired.draws.length, pickerDraws: spec.acquired.draws, legacyCaptions: overlays }, steps });
       assert.equal(JSON.stringify(actualPickerBatch), batchBytes, 'Actual picker batch cannot be changed by overlays or answers');
     }
     const fixtures = { schemaVersion: 1, saveKey: 'soccerCareerSave', clock, source: { head: sourceHead, parentAppRef: PARENT,
@@ -233,7 +284,7 @@ async function browserFixtures() {
       consequencesSha256: sha(sources.get(CAPTIONS)), saveSha256: sha(sources.get(SAVE)), parentLifeSha256: sha(parentLife),
       parentCaptionsSha256: sha(parentCaptions), parentLifeCompiledSha256: parentCompiledSha256,
       parentLifeSourcePath: 'fixed/soccerCareerLife.parent.ts', parentCaptionsSourcePath: 'fixed/soccerCareerLifeConsequences.parent.ts',
-      parentLifeCompiledPath: 'fixed/parent-life.mjs' }, scenarios };
+      parentLifeCompiledPath: 'fixed/parent-life.mjs', pickerObserver }, scenarios };
     const bytes = JSON.stringify(fixtures, null, 2) + '\n', file = path.join(OUT, 'browser-fixtures.json');
     assert(!fs.existsSync(file), 'Refuse to replace existing browser fixtures'); fs.writeFileSync(file, bytes);
     fs.writeFileSync(path.join(retained, 'delivery.json'), JSON.stringify(deliveries, null, 2) + '\n');
@@ -306,9 +357,9 @@ try {
   console.log(`Actual physical unit files: 1; ${cases.length} exact completed outcomes.`);
   console.log(`Actual unit outcomes: ${report.numPassedTests} passed; ${failed.length} exact intended faults; pending 0.`);
   console.log(`Pending morale and previews: all ${NAMES.length} literal names completed; child exit ${result.status}; file message empty.`);
-  console.log(`Actual app source copies: no normal or baseline mutation; ${compiled.length} compiled leaves retained.`);
+  console.log(`Actual app source copies: no normal or baseline mutation; ${compiled.length} original compiled leaves retained${fixtures ? '; one additional read-only picker observer' : ''}.`);
   console.log(`Source receipts held: ${receipts.length}; ${parentAppHashes.length} parent bindings; complete raw JSON/log and actual source copies retained; setup markers absent.`);
-  if (fixtures) console.log(`Actual picker fixtures: ${fixtures.deliveries.length}/6 scenarios; 3 natural batches; 10 actual answers; disclosed old-caption overlays; sha256=${fixtures.sha256}.`);
+  if (fixtures) console.log(`Actual picker fixtures: ${fixtures.deliveries.length}/6 scenarios; 3 controlled input replays through the unmodified picker; 10 actual answers; disclosed old-caption overlays; sha256=${fixtures.sha256}.`);
   console.log(`simSoccerCareerPendingMorale ${RED ? 'expected baseline red' : CONTROL || 'normal'}: green. Exact source and outcome guards passed.`);
 } catch (error) { receipt({ methodError: error?.stack || String(error) }); throw error;
 } finally { fs.rmSync(tmp, { recursive: true, force: true }); }
