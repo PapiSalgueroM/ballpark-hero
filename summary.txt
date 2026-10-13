@@ -1,0 +1,9 @@
+promises exit=1 25s | simSoccerEventPromises: 41 failures in section 1
+fairness exit=1 78s | simSoccerDeckFairness: 84 failures in section 4, 5, 6, 7
+tsc exit=0 97s | 
+fair-shuffle exit=1 78s | CONTROL shuffle FIRED: section 1 failed (96 failures in all)
+fair-ranking exit=1 73s | CONTROL ranking FIRED: section 2 failed (92 failures in all)
+fair-unit exit=1 0s | control cannot run: src/lib/soccerCareerEngine.ts holds the unit control's text 0 times, it must be exactly once
+fair-globalpick exit=1 70s | CONTROL globalpick FIRED: section 3 failed (89 failures in all)
+fair-prefix exit=1 66s | CONTROL prefix FIRED: section 7 failed (284 failures in all)
+fair-seed1 exit=1 54s | simSoccerDeckFairness: 85 failures in section 4, 5, 6, 7
