@@ -1,0 +1,4 @@
+MEASURED seed 0: 2133 seasons, 214762 goals, 30588 excluded; eligible {"us":106306,"them":77868,"onPitchThem":48600,"offPitchThem":6365,"missedThem":22903}; tags {"opponent":1643,"teammate":1148,"you":83}; role draws [83,75,53,60,68,86,73,73,66,61,73]
+MEASURED exposure: 2817 tagged matches/80110, 1575 tagged seasons/2133, 79 self seasons/2133; 10772/16924 distinct changed mixtures
+CHECKS by name: {"ambient-rng":29744,"input-immutable":29744,"metadata-inverse":29744,"eligibility":39992,"beneficiary":39992,"self-pitch":39992,"local-policy":2992346,"repeat-json":29744,"ledger-reader":5,"insertion-stability":2,"moment-stability":1590600,"old-save":4266,"ledger-roundtrip":10665,"ledger-immutable":10665,"career-immutable":2133,"population-complete":120,"measured-denominators":1}
+simSoccerOwnGoals: 4849755 checks, 0 failed
