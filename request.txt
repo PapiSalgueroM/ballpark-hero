@@ -1,0 +1,14 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/lib/clubManagerInternationals.test.ts src/test/clubManagerWorldEditor.test.tsx src/test/staffScreen.test.tsx src/lib/gmStaff.test.ts src/test/clubManagerEraNationalities.test.ts src/test/cmMinuteLabel.test.ts src/test/managerScorerMarks.test.tsx --testTimeout=300000 --hookTimeout=120000
+simCmCopy: node scripts/simCmCopy.mjs
+simCmCopy-base: mkdir -p .tb0 && git archive c9c77eba src | tar -x -C .tb0 && CM_COPY_ROOT=$PWD/.tb0 node scripts/simCmCopy.mjs
+simCmCopy-article: CM_COPY_CONTROL=article node scripts/simCmCopy.mjs --section=1
+simCmCopy-drama: CM_COPY_CONTROL=drama node scripts/simCmCopy.mjs --section=2
+simCmCopy-intl: CM_COPY_CONTROL=intl node scripts/simCmCopy.mjs --section=3
+simCmCopy-staff: CM_COPY_CONTROL=staff node scripts/simCmCopy.mjs --section=4
+simCmCopy-finance: CM_COPY_CONTROL=finance node scripts/simCmCopy.mjs --section=5
+copyonly-A: mkdir -p .tb1 && git archive c9c77eba src | tar -x -C .tb1 && node scripts/qa/cmCopyOnly1326.mjs --base .tb1 --fleet=A
+simCmLeagueRules: node scripts/simCmLeagueRules.mjs
+simDailyDeals: node scripts/simDailyDeals.mjs
+simDailyDeals-bind: DAILY_DEALS_CONTROL=bind node scripts/simDailyDeals.mjs
+simDailyDeals-binddeadline: DAILY_DEALS_CONTROL=binddeadline node scripts/simDailyDeals.mjs

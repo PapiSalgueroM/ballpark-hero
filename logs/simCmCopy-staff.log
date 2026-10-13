@@ -1,0 +1,14 @@
+CONTROL staff: one line of src/lib/clubManagerStaff.ts rewritten, section 4 must go red
+4) the staff approach: offers counted, the weeks given
+  FAIL: with 2 left the line still counts matches: "🛡️ Leeds United have come in for Matteus Drenthe. Match them or lose him: 2 matches left this season."
+  FAIL: with 2 left the line reads
+      "🛡️ Leeds United have come in for Matteus Drenthe. Match them or lose him: 2 matches left this season."
+    want
+      "🛡️ Leeds United have come in for Matteus Drenthe, your defence coach. Match their offer on the Staff desk within 2 weeks or he goes. You can match 2 more offers this season."
+  FAIL: with 1 left the line still counts matches: "🛡️ Leeds United have come in for Matteus Drenthe. Match them or lose him: 1 match left this season."
+  FAIL: with 1 left the line reads
+      "🛡️ Leeds United have come in for Matteus Drenthe. Match them or lose him: 1 match left this season."
+    want
+      "🛡️ Leeds United have come in for Matteus Drenthe, your defence coach. Match their offer on the Staff desk within 2 weeks or he goes. You can match 1 more offer this season."
+   0 left: "🛡️ Leeds United have come in for Matteus Drenthe, your defence coach. You have matched all the offers you can this season, so he goes in 2 weeks unless you let him go sooner."
+simCmCopy: CONTROL staff FIRED (4 failures, as it must)
