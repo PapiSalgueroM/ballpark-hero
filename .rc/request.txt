@@ -1,0 +1,7 @@
+#!serve
+#!playwright
+walk: git worktree add -q /tmp/base c5fc5470 && ln -s "$PWD/node_modules" /tmp/base/node_modules && (cd /tmp/base && node_modules/.bin/vite build > /tmp/base-build.log 2>&1) && mkdir -p $RC_OUT/walk && RC_OUT=$RC_OUT/walk BASE_DIST=/tmp/base/dist BASE_ROOT=/tmp/base ENGINES=chromium node .rc/x/walk.mjs
+land: git worktree add -q /tmp/lb c5fc5470 && ln -s "$PWD/node_modules" /tmp/lb/node_modules && (cd /tmp/lb && node_modules/.bin/vite build > /tmp/lb-build.log 2>&1) && mkdir -p $RC_OUT/land && RC_OUT=$RC_OUT/land SOCCER_LANDING_BASE_DIST=/tmp/lb/dist ENGINES=chromium node scripts/playSoccerLanding.mjs
+tt-all: mkdir -p $RC_OUT/tt && RC_OUT=$RC_OUT/tt ENGINES=chromium node scripts/playTwoTabs.mjs
+tt-nofence: mkdir -p $RC_OUT/ttn && RC_OUT=$RC_OUT/ttn TWO_TABS_CONTROL=nofence ENGINES=chromium node scripts/playTwoTabs.mjs
+land-seed: git worktree add -q /tmp/lc c5fc5470 && ln -s "$PWD/node_modules" /tmp/lc/node_modules && (cd /tmp/lc && node_modules/.bin/vite build > /tmp/lc-build.log 2>&1) && mkdir -p $RC_OUT/seed && RC_OUT=$RC_OUT/seed PORT=4185 BASE_PORT=4186 SOCCER_LANDING_CONTROL=seed SOCCER_LANDING_BASE_DIST=/tmp/lc/dist ENGINES=chromium node scripts/playSoccerLanding.mjs
