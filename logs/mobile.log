@@ -1,0 +1,3 @@
+  132 of 132 scroll stops had the controls on screen and hit testable. 7 of them had the footer showing at the same time with zero pixels of overlap.
+
+GREEN: 34 top bar measurements and 132 scroll stops, no overlaps, nothing off the side of the screen, controls reachable everywhere, footer never covered.

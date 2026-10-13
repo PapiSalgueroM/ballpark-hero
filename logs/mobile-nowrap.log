@@ -1,0 +1,3 @@
+  - action bar @320: the player's own name is not whole on the career header (shows "Playtest", crushed onto 8 lines)
+  - action bar @320: the player's own name is not whole on the career header (shows "Playtest", crushed onto 8 lines)
+CONTROL nowrap FIRED: the single row header crushed the player's name at 1 measured width(s)
