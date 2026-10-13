@@ -375,13 +375,26 @@ function monthAudit(recs) {
     if (r.type !== 'playing' || !(r.apps > 0)) continue;
     if (r.rating >= 8.0) { bins.great[0] += 1; bins.great[1] += r.potm; }
     if (r.rating >= 7.0 && r.rating < 7.5) { bins.fair[0] += 1; bins.fair[1] += r.potm > 0 ? 1 : 0; }
-    if (r.rating >= 7.5 && r.rating < 8.5) { const g = (bins.groups[r.group] ||= [0, 0]); g[0] += 1; g[1] += r.potm; }
+    if (r.rating >= 7.5 && r.rating < 8.5) {
+      const k = Math.min(9, Math.floor(Math.round((r.rating - 7.5) * 100) / 10));
+      const g = (bins.groups[r.group] ||= Array.from({ length: 10 }, () => [0, 0])); g[k][0] += 1; g[k][1] += r.potm;
+      const all = (bins.groups.ALL ||= Array.from({ length: 10 }, () => [0, 0])); all[k][0] += 1; all[k][1] += r.potm;
+    }
   }
   a.great = bins.great[0] ? bins.great[1] / bins.great[0] : NaN;
   a.fairAny = bins.fair[0] ? bins.fair[1] / bins.fair[0] : NaN;
-  const all = Object.values(bins.groups).reduce((s, g) => [s[0] + g[0], s[1] + g[1]], [0, 0]);
-  a.groupAll = all[0] ? all[1] / all[0] : NaN;
-  a.groups = Object.fromEntries(['GK', 'DEF', 'MID', 'ATT'].map(g => [g, bins.groups[g] ? { n: bins.groups[g][0], mean: bins.groups[g][1] / bins.groups[g][0] } : { n: 0, mean: NaN }]));
+  /* At equal season rating: each group's mean in every 0.1 stratum of 7.5 to 8.5, weighted by the whole
+     fleet's mix of strata, so a group whose seasons sit higher in the band is not credited for that. */
+  const allS = bins.groups.ALL || Array.from({ length: 10 }, () => [0, 0]);
+  const allN = allS.reduce((s, x) => s + x[0], 0);
+  a.groupAll = allN ? allS.reduce((s, x) => s + x[1], 0) / allN : NaN;
+  a.groups = Object.fromEntries(['GK', 'DEF', 'MID', 'ATT'].map(g => {
+    const S = bins.groups[g];
+    if (!S) return [g, { n: 0, mean: NaN }];
+    let w = 0, m = 0;
+    for (let k = 0; k < 10; k += 1) if (S[k][0] > 0) { w += allS[k][0]; m += allS[k][0] * (S[k][1] / S[k][0]); }
+    return [g, { n: S.reduce((s, x) => s + x[0], 0), mean: w ? m / w : NaN }];
+  }));
   a.counts = { great: bins.great[0], fair: bins.fair[0] };
   return a;
 }
@@ -403,7 +416,7 @@ console.log('1) Player of the Month reads the month\'s football, with the true y
   for (const k of ['GK', 'DEF', 'MID', 'ATT']) {
     const x = h.groups[k];
     if (x.n < GROUP_MIN_SEASONS) { fail(`only ${x.n} ${k} seasons rated 7.5 to 8.5, too few to compare (lengthen the fleet)`); continue; }
-    if (!(Math.abs(x.mean / h.groupAll - 1) <= GROUP_BAND)) fail(`${k} wins ${r2(x.mean)} months a season at 7.5 to 8.5 against ${r2(h.groupAll)} for all four groups, outside ${GROUP_BAND * 100} percent`);
+    if (!(Math.abs(x.mean / h.groupAll - 1) <= GROUP_BAND)) fail(`${k} wins ${r2(x.mean)} months a season at 7.5 to 8.5 (rating for rating) against ${r2(h.groupAll)} for all four groups, outside ${GROUP_BAND * 100} percent`);
   }
   /* Planted: 10,000 identities of a 0 goal keeper rated 6.0 with plenty of clean sheets. */
   let planted = 0;
