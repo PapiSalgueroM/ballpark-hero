@@ -1,0 +1,14 @@
+vitest exit=0 31s |    Duration  29.12s (transform 5.40s, setup 575ms, collect 15.66s, tests 46.43s, environment 4.62s, prepare 1.25s)
+pd-a exit=0 40s | simCareerPreDraft [seed set a]: ALL GREEN
+pd-b exit=0 28s | simCareerPreDraft [seed set b]: ALL GREEN
+pd-c exit=0 25s | simCareerPreDraft [seed set c]: ALL GREEN
+pd-d exit=0 30s | simCareerPreDraft [seed set d]: ALL GREEN
+pd-e exit=0 28s | simCareerPreDraft [seed set e]: ALL GREEN
+tsc exit=0 107s | 
+ctl-new exit=0 225s | extradraw exit=1 mutated=1 | fails by section:  8 9. | simCareerPreDraft [control extradraw] [seed set a]: 8 FAILURE(S)
+seasonCentre exit=0 127s | simUsSeasonCentre: 158 checks, 0 failed
+anchors exit=0 49s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+rivals exit=0 20s | No rival product names found. 0 findings.
+storage exit=0 4s | simStorageWrites: all green (owed: 12)
+ctl-round exit=0 436s | projection exit=1 mutated=1 | fails by section:  8 13. | simCareerPreDraft [control projection] [seed set a]: 8 FAILURE(S)
+pjloop exit=0 496s | PJLOOP prospect=0 predraft=0 total 496s
