@@ -32,9 +32,11 @@ import {
   applyCollegeClose, applyCollegeMove, collegeSeatFirstPress, collegeSeatOnLoad, collegeYearOut, optInCollegeSeat, startCollegeSeat,
   type CollegeSeatBinding,
 } from '@/lib/collegeSeatBind';
-import { collegeCanSitOut, collegeMarket, collegeRecapView, collegeTakeJob, holdsSeat, type CollegeSeatBlock } from '@/lib/collegeSeat';
 import {
-  SeatCard, SeatFiredRecap, SeatMarket, SeatPickLine, SeatRecapLine, SeatSeeWhoCalls, SeatSlot,
+  collegeBid, collegeBidView, collegeCanSitOut, collegeMarket, collegeRecapView, collegeTakeJob, holdsSeat, type CollegeSeatBlock,
+} from '@/lib/collegeSeat';
+import {
+  SeatBid, SeatCard, SeatFiredRecap, SeatMarket, SeatPickLine, SeatRecapLine, SeatSeeWhoCalls, SeatSlot,
 } from '@/components/college-dynasty/AthleticDirectorCard';
 
 /** Round 1320: 'market' is a screen and never saved (the save stays on the recap it opened from). */
@@ -376,6 +378,17 @@ export default function CollegeDynastyBoard<
     applyCollegeMove(state, move);
     openRecruiting(state);
   };
+  /* Round 1320: a buyout bid after a big year. Go moves him (the held seat closes as 'poached') and opens
+     the new program's trail; Stay put is the trail at the program he has. Read off today's bid, never the screen. */
+  const goToBid = (teamId: string) => {
+    if (!st || !sport.seat || !st.seat || marketActed.current === `bid:${marketKey(st)}`) return;
+    const state: S = JSON.parse(JSON.stringify(st));
+    const move = collegeTakeJob(state.seat!, sport.seat.view(state), teamId, 'bid');
+    if (!move) return;
+    marketActed.current = `bid:${marketKey(st)}`;
+    applyCollegeMove(state, move);
+    openRecruiting(state);
+  };
   const sitYearOut = () => {
     if (!st || !sport.seat || marketActed.current === marketKey(st)) return;
     const res = collegeYearOut(st, sport.seat, sport, Math.random);
@@ -483,6 +496,8 @@ export default function CollegeDynastyBoard<
     const isChamp = sport.championOf(recap) === st.myTeam;
     const { RecapBody } = sport;
     const seatRecap = sport.seat && st.seat ? collegeRecapView(st.seat, sport.seat.view(st)) : null;
+    const seatBidOffer = seatRecap && !seatRecap.fired ? collegeBid(st.seat!, sport.seat!.view(st)) : null;
+    const seatBid = seatBidOffer ? collegeBidView(seatBidOffer, sport.seat!.view(st)) : null;
     /* Round 530: the season curtain. Pure presentation over the postseason
        the engine already ran: the champion slams in, your own line rises,
        the award lands after the champion, then the title game and the ledger
@@ -499,6 +514,7 @@ export default function CollegeDynastyBoard<
           {seatRecap && (seatRecap.fired
             ? <SeatFiredRecap verdict={seatRecap.verdict} line={collegeMarket(st.seat!, sport.seat!.view(st))?.line ?? ''} />
             : <SeatRecapLine verdict={seatRecap.verdict} trust={seatRecap.trust} hot={seatRecap.hot} />)}
+          {seatBid && <SeatBid bid={seatBid} onGo={() => goToBid(seatBid.teamId)} onStay={startRecruiting} />}
           <div className="cm-rise mt-3 flex items-center justify-center gap-3 text-sm" style={{ animationDelay: '0.9s' }}>
             <span className="rounded-full border border-border bg-background px-3 py-1.5">{sport.recapTitles} <b className="text-gold">{st.myTitles}</b></span>
             <span className="rounded-full border border-border bg-background px-3 py-1.5">Seasons <b className="text-primary">{st.seasonsPlayed}</b></span>

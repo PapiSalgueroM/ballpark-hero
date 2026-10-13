@@ -12,11 +12,11 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import { cleanup, fireEvent, render } from '@testing-library/react';
 import CfbDynastyBoard from '@/components/cfb-dynasty/CfbDynastyBoard';
 import CbbDynastyBoard from '@/components/cbb-dynasty/CbbDynastyBoard';
-import { initCfb, CFB_SCHOOLS } from '@/lib/cfbDynasty';
-import { initCbb, CBB_SCHOOLS } from '@/lib/cbbDynasty';
+import { initCfb, CFB_SCHOOLS, CFB_ROUNDS, simCfbRound, runCfbPostseason, heismanRace } from '@/lib/cfbDynasty';
+import { initCbb, CBB_SCHOOLS, CBB_ROUNDS, simCbbRound, runMarch, poyRace } from '@/lib/cbbDynasty';
 import { cfbSeatBinding } from '@/lib/cfbSeatBind';
 import { cbbSeatBinding } from '@/lib/cbbSeatBind';
-import { collegeTileView, newCollegeSeat } from '@/lib/collegeSeat';
+import { collegeBid, collegeTileView, newCollegeSeat } from '@/lib/collegeSeat';
 import { GM_SEAT_PACKS } from '@/data/gmSeat/packs';
 
 vi.mock('@/hooks/useGameCompletion', () => ({ useGameCompletion: () => {} }));
@@ -260,3 +260,70 @@ describe('Round 1320: the athletic director on the college boards', () => {
 function again0(sport: Sport) {
   return JSON.parse(localStorage.getItem(sport.key) ?? 'null');
 }
+
+/* ---- Round 1320 step 3: the call from above ---- */
+
+/** A whole season played through the engine at a second tier program, its recap held, and a record whose
+    newest grade is a title this season; the first `from` whose keyed draw bids is kept. */
+function bidSave(sport: Sport) {
+  const schools = (sport.name === 'cfb' ? CFB_SCHOOLS : CBB_SCHOOLS).slice();
+  const ranked = schools.sort((a, b) => b.prestige - a.prestige || a.id.localeCompare(b.id));
+  const tier2 = ranked[Math.floor(ranked.length * 0.375)].id;
+  const rng = lehmer(31);
+  const st = sport.init(tier2, rng, { depth: true });
+  let recap: unknown;
+  if (sport.name === 'cfb') {
+    for (let r = 1; r <= CFB_ROUNDS; r += 1) { simCfbRound(st, rng); if (r < CFB_ROUNDS) st.round += 1; }
+    const post = runCfbPostseason(st, rng);
+    const heisman = heismanRace(st, rng);
+    st.natties.push({ season: st.season, team: post.champion });
+    recap = { ccgs: post.ccgs, bracket: post.bracket, champion: post.champion, heisman };
+  } else {
+    for (let r = 1; r <= CBB_ROUNDS; r += 1) { simCbbRound(st, rng); if (r < CBB_ROUNDS) st.round += 1; }
+    const result = runMarch(st, rng);
+    const poy = poyRace(st, rng);
+    st.titles.push({ season: st.season, team: result.champion });
+    recap = { result, poy };
+  }
+  const view = sport.binding.view(st);
+  for (let k = 1; k <= 12; k += 1) {
+    const seat = newCollegeSeat(view);
+    seat.trust = 80;
+    seat.career.stints[0] = { team: tier2, tier: 2, from: st.season - k + 1, grades: [...Array(k - 1).fill('met'), 'title'] };
+    const bid = collegeBid(seat, view);
+    if (bid) {
+      st.seat = seat;
+      return { save: { st, phase: 'recap', recruits: null, portal: null, [sport.name === 'cfb' ? 'postseason' : 'march']: recap }, bid };
+    }
+  }
+  throw new Error(`${sport.name}: no keyed draw bid over twelve records`);
+}
+
+describe('Round 1320: a buyout bid after a big year', () => {
+  afterEach(() => { cleanup(); vi.restoreAllMocks(); localStorage.clear(); });
+  for (const sport of SPORTS) {
+    it(`${sport.name}: the bid shows on the recap; Go to moves him with the old stint ended as a buyout, Stay put keeps him`, () => {
+      vi.spyOn(Math, 'random').mockImplementation(lehmer(1327));
+      const { save, bid } = bidSave(sport);
+      const m = mount(sport, save);
+      const node = m.q('[data-college-seat="bid"]')!;
+      expect(node).toBeTruthy();
+      expect(txt(node)).toContain(bid.teamName);
+      expect(txt(node)).toContain(bid.ask.text);
+      fireEvent.click(m.button(`Go to ${bid.teamName}`));
+      const after = m.saved();
+      expect(after.phase).toBe('recruit');
+      expect(after.st.myTeam).toBe(bid.teamId);
+      expect(after.st.seat.career.stints.length).toBe(2);
+      expect(after.st.seat.career.stints[0].ended).toBe('poached');
+      expect(after.st.seat.trust).toBe(60);
+      cleanup();
+      const stay = mount(sport, save);
+      fireEvent.click(stay.button('Stay put'));
+      const kept = stay.saved();
+      expect(kept.phase).toBe('recruit');
+      expect(kept.st.myTeam).toBe(save.st.myTeam);
+      expect(kept.st.seat.career.stints.length).toBe(1);
+    });
+  }
+});

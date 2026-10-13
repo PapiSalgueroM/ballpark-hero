@@ -35,7 +35,7 @@
    (the athletic director, the boosters), nothing is a quote, nobody is real. */
 
 import {
-  careerTotals, currentStint, endSeatStint, fillSeatWords, leagueTiers, newGmCareer, poachBid, BADLY_FIRED_CEILING,
+  careerTotals, currentStint, endSeatStint, fillSeatWords, leagueTiers, newGmCareer, poachBid, BADLY_FIRED_CEILING, POACH_CHANCE,
   recordSeatSeason, sanitizeGmCareer, seatGrade, seatMandate, seatNextYear, seatOffers, sitOutYear, startSeatStint,
   type GmCareer, type GmSeatPack, type SeatNextYear, type SeatOffer, type SeatTeam,
 } from './gmSeat';
@@ -520,6 +520,7 @@ export function collegeSeatRules(view: CollegeLeagueView): { rules: string[]; ex
     'Trust at zero and you are let go. The dynasty does not end there: the phone rings with the jobs you have earned, or nobody calls and you can sit a year out while the country plays on. If the phone stops for good, a new dynasty is the way back in.',
     `Let go straight after a season nowhere near the ask and no program above the ${['', 'top', 'second', 'third', 'bottom'][BADLY_FIRED_CEILING]} tier will call. A program that let you go never calls again. Those are this game's rules.`,
     'Sit a year out and the program that let you go plays the season with nobody in your chair, so a coordinator it loses that offseason stays unreplaced until the next one.',
+    `A big year gets noticed. Win ${pack.words.title} at a program below the top tier and a program one tier up pays your buyout to bring you over ${Math.round((POACH_CHANCE.title ?? 0) * 100)} times in 100; beat the ask and it happens ${Math.round((POACH_CHANCE.overachieved ?? 0) * 100)} times in 100. Go, or stay put. That is this game's rule, not a claim about how real schools hire.`,
   ];
   const t1 = applyMandateResult(FO_TRUST_START, { result: 'missed', verdict: '', trustDelta: short }).trust;
   const t2 = applyMandateResult(t1, { result: 'badly', verdict: '', trustDelta: far });
@@ -530,4 +531,10 @@ export function collegeSeatRules(view: CollegeLeagueView): { rules: string[]; ex
     `Do it again and trust hits ${t3.trust}${t3.fired ? ': you are let go, and the job market opens' : ''}.`,
   ];
   return { rules, example };
+}
+
+/** The recap's bid, as the card shows it: who, how high, the ask he would take on and why they called. */
+export function collegeBidView(bid: SeatOffer, view: CollegeLeagueView): { teamId: string; name: string; tier: ClubTier; prestige: number; ask: string; reason: string } {
+  const p = view.programs.find(x => x.id === bid.teamId);
+  return { teamId: bid.teamId, name: bid.teamName, tier: bid.tier, prestige: p?.prestige ?? 0, ask: bid.ask.text, reason: bid.reason };
 }

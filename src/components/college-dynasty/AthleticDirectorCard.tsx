@@ -242,3 +242,26 @@ export function SeatMarket({ block, view, market, canSit, onTake, onSit, onNew }
     </div>
   );
 }
+
+/** A buyout bid on the recap after a big year: who, how high, the ask, why, and the two answers. "Go to"
+    rises gated: it moves a job, so it can never be pressed before it shows. */
+export function SeatBid({ bid, onGo, onStay }: {
+  bid: { teamId: string; name: string; tier: number; prestige: number; ask: string; reason: string };
+  onGo: () => void; onStay: () => void;
+}) {
+  return (
+    <div data-college-seat="bid" className="cm-rise mt-3 rounded-xl border border-gold/50 bg-background px-3 py-2 text-left text-sm" style={{ animationDelay: '0.8s' }}>
+      <p className="text-xs font-bold uppercase tracking-wider text-gold">A program one tier up is calling</p>
+      <p className="mt-1 font-display text-base font-bold text-foreground">{bid.name}</p>
+      <p className="text-xs text-muted-foreground">{TIER_WORDS[bid.tier]} program, prestige {bid.prestige}</p>
+      <p className="mt-1 text-xs text-foreground">{bid.reason}</p>
+      <p className="mt-1 text-xs text-muted-foreground">Their ask for your first season: {bid.ask}</p>
+      <span className="mt-2 flex flex-col gap-2 sm:flex-row">
+        <span className="cm-rise-gated flex flex-1" style={{ animationDelay: '1.1s' }}>
+          <button type="button" onClick={onGo} className={cn(TAP, 'w-full rounded-full bg-primary px-4 text-sm font-bold text-primary-foreground hover:opacity-90')}>Go to {bid.name}</button>
+        </span>
+        <button type="button" onClick={onStay} className={cn(TAP, 'flex-1 rounded-full border border-border bg-card px-4 text-sm font-semibold text-foreground hover:border-primary/60')}>Stay put</button>
+      </span>
+    </div>
+  );
+}

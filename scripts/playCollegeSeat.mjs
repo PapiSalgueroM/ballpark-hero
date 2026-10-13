@@ -13,6 +13,8 @@
  *  5 trust at zero: the fired recap, "See who calls" in place of the trail button;
  *  6 the market, and a reload reading the same market;
  *  7 "Take the job": the new program's recruiting trail, the record two stints long.
+ *  8 a buyout bid on the recap of a second tier program after a title, and "Stay put" (the same trail);
+ *  9 "Go to <program>": the new program's trail, the old stint ended as a buyout.
  *  Under reduced motion the fired title, "See who calls" and the market land on their last frame too.
  * At every station: no seat element sits over another element, none runs past the page's right edge, no seat
  * text is under 12 px, and every seat button is at least 44 px tall.
@@ -154,8 +156,11 @@ for (const { route, key, school } of ROUTES) {
     say(await page.locator('[data-college-seat="rules"]').count() === 1, `${tag}: the "?" opens the rules over the card`);
     await seatChecks(page, `${tag} station 2 rules`);
     await shot(page, `${tag}-2-rules`);
-    await clickText(page, /Back$/);
-    await clickText(page, /Back$/);
+    /* scoped to the card: the site navbar carries a Back button of its own, which leaves the page */
+    await page.locator('[data-college-seat="rules"] button:has-text("Back")').click();
+    await page.waitForTimeout(300);
+    await page.locator('[data-college-seat="card"] button:has-text("Back")').click();
+    await page.waitForTimeout(300);
     say(await page.locator('[data-college-seat="card"]').count() === 0 && await page.locator('[data-college-seat="tile"]').count() === 1, `${tag}: Back twice returns to the tabs and the tile`);
 
     where = 'S3';
@@ -239,6 +244,57 @@ for (const { route, key, school } of ROUTES) {
       say(after7.phase === 'recruit' && after7.st.myTeam !== before7.st.myTeam && after7.st.seat.career.stints.length === 2, `${tag}: Take the job opens the new program's trail`);
       say((await page.locator('body').innerText()).includes(`The ${after7.st.season + 1} class`), `${tag}: the trail is the new program's class`);
       await shot(page, `${tag}-7-new-trail`);
+    }
+
+    /* Stations 8 and 9: a second tier program played to its recap, then its record made a title this season;
+       the first record whose keyed draw bids is kept (the board decides, the walk only looks). */
+    where = 'S8';
+    await page.evaluate(k => localStorage.removeItem(k), key);
+    await page.reload({ waitUntil: 'networkidle' });
+    await page.waitForSelector('[data-college-seat="pick"]', { timeout: 15000 }).catch(() => {});
+    const tier2 = await page.evaluate(() => {
+      const picks = [...document.querySelectorAll('button')].map(b => /^(.*)Prestige (\d+)$/.exec(b.textContent.trim())).filter(Boolean).map(m => ({ name: m[1], p: Number(m[2]) }));
+      picks.sort((a, b) => b.p - a.p);
+      return picks[Math.floor(picks.length * 0.375)]?.name ?? null;
+    });
+    say(!!tier2 && await clickText(page, new RegExp(`^${tier2}Prestige`)), `${tag}: picked a second tier program (${tier2})`);
+    await page.waitForTimeout(500);
+    await clickText(page, /^Play$/);
+    for (let i = 0; i < 30 && await page.locator('[data-college-seat="recap"]').count() === 0; i += 1) {
+      if (!await clickText(page, PLAY)) break;
+      await page.waitForTimeout(120);
+    }
+    const graded = JSON.parse(await page.evaluate(k => localStorage.getItem(k), key));
+    let bidSave = null;
+    for (let k = 1; k <= 12 && !bidSave; k += 1) {
+      const s = JSON.parse(JSON.stringify(graded));
+      s.st.seat.trust = 80;
+      s.st.seat.career.stints[0] = { team: s.st.myTeam, tier: 2, from: s.st.season - k + 1, grades: [...Array(k - 1).fill('met'), 'title'] };
+      await page.evaluate(([kk, v]) => localStorage.setItem(kk, v), [key, JSON.stringify(s)]);
+      await page.reload({ waitUntil: 'networkidle' });
+      await page.waitForTimeout(1300);
+      if (await page.locator('[data-college-seat="bid"]').count() === 1) bidSave = s;
+    }
+    if (say(!!bidSave, `${tag}: no record drew a bid in twelve tries`)) {
+      await control(page);
+      await page.waitForTimeout(900);
+      await seatChecks(page, `${tag} station 8`);
+      await shot(page, `${tag}-8-bid`);
+      await clickText(page, /^Stay put$/);
+      await page.waitForTimeout(700);
+      const stayed = JSON.parse(await page.evaluate(k => localStorage.getItem(k), key));
+      say(stayed.phase === 'recruit' && stayed.st.myTeam === bidSave.st.myTeam && stayed.st.seat.career.stints.length === 1, `${tag}: Stay put opens the trail at the same program`);
+
+      where = 'S9';
+      await page.evaluate(([kk, v]) => localStorage.setItem(kk, v), [key, JSON.stringify(bidSave)]);
+      await page.reload({ waitUntil: 'networkidle' });
+      await page.waitForTimeout(1600);
+      await control(page);
+      const went = await clickText(page, /^Go to /);
+      await page.waitForTimeout(700);
+      const moved = JSON.parse(await page.evaluate(k => localStorage.getItem(k), key));
+      say(went && moved.phase === 'recruit' && moved.st.myTeam !== bidSave.st.myTeam && moved.st.seat.career.stints[0].ended === 'poached', `${tag}: Go to moves him and closes the old stint as a buyout`);
+      await shot(page, `${tag}-9-went`);
     }
     where = 'errors';
     say(errors.length === 0, `${tag}: page errors ${errors.slice(0, 2).join(' | ')}`);
