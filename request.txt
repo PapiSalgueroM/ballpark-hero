@@ -1,0 +1,2 @@
+#!build
+allsims: node scripts/runAllSims.mjs > /tmp/all.txt 2>&1; s=$?; cp /tmp/all.txt "$RC_OUT/allsims.txt"; grep -E "FAIL|fail|red" /tmp/all.txt | tail -40; tail -5 /tmp/all.txt; exit $s
