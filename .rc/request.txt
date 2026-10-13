@@ -1,0 +1,4 @@
+nfHead: git rev-parse HEAD && echo "CI=$CI" && node scripts/qa/numberFormatting1085Parity.mjs
+nfMain: R=$PWD && git worktree add --detach /tmp/nfmain 48cb9d4b >/dev/null 2>&1 && cd /tmp/nfmain && ln -s "$R/node_modules" node_modules && git rev-parse HEAD && node scripts/qa/numberFormatting1085Parity.mjs
+nfPins: for c in 59e808d3 48cb9d4b HEAD; do for f in src/test/usBoardFixture.test.tsx scripts/data/usBoardFixture.json src/lib/usCareerStatLine.ts; do echo "$c $f $(git show $c:$f | sha256sum | cut -c1-16)"; done; done
+tsc: git rev-parse HEAD && node_modules/.bin/tsc --noEmit -p tsconfig.app.json
