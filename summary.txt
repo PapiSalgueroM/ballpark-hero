@@ -1,0 +1,4 @@
+sims2 exit=0 102s | All 12 harnesses green.
+sims1 exit=0 319s | All 12 harnesses green.
+simCreation exit=1 428s | 1 FAILURES
+sims3 exit=1 979s | 1 harness not green.

@@ -1,0 +1,21 @@
+Network mode: offline, loopback only, no production probe or database retries.
+Running 10 node harnesses
+  PASS  simSoccerAgentReview.mjs       31.4s
+  PASS  simSoccerAgentReviewPageControl.mjs   57.7s
+  PASS  simSoccerAwardGenerations.mjs  978.1s
+  PASS  simSoccerCurrency.mjs          19.6s
+  PASS  simSoccerFarewell.mjs          17.3s
+  PASS  simSoccerFarewellPageControl.mjs   65.6s
+  PASS  simSoccerInternationalReturn.mjs   15.8s
+  PASS  simSoccerInternationalReturnPageControl.mjs   46.7s
+  PASS  simSoccerVeteranTalks.mjs     128.4s
+  EMPTY simTransferBriefPageControl.mjs   24.3s
+        printed 1 line, so its checks did not run
+
+Skipping 2 browser harnesses (simRevealScroll, simVictoryMoment). Pass --browser to include them.
+
+----- simTransferBriefPageControl.mjs (EMPTY) -----
+CONTROL FIRED captured-rapid-request:2 actual equality failures,4 unrelated page cases pass,6 healthy baseline cases.
+
+
+1 harness not green.
