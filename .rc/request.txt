@@ -1,0 +1,5 @@
+#!serve
+#!playwright
+weight: ENGINES=chromium node scripts/sweepWeight.mjs
+twoTabs: ENGINES=chromium node scripts/playTwoTabs.mjs
+playCmQuickSubs: mkdir -p cm-quick-subs-artifacts && FREE_KICK_FONT_CACHE=cm-quick-subs-artifacts/font-cache node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playCmQuickSubs.mjs
