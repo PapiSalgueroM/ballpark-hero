@@ -1,0 +1,54 @@
+{
+ "steps": [],
+ "start": {
+  "save": {
+   "nw": 2,
+   "items": [],
+   "props": [],
+   "yearly": 0,
+   "money": {
+    "vault": 14.34
+   }
+  },
+  "hub": "€2.00M"
+ },
+ "shopHome": "2018 · age 24 💔 22 📶 🔋 ‹ Home 🛒 My Life €1.9M to spend 0 things owned 🏠 Where you live 17 left to buy 🏎️ What you drive 12 left to buy ⚡ Your football 13 left to buy ✨ Day to day 10 left to buy ❤️ Family and giving 16 left to buy 💎 Pure flex 15 left to buy 💼 Businesses 17 left to buy Put phone away",
+ "shots": [
+  "shop390-01-shop-home.jpg",
+  "shop390-02-shop-property.jpg",
+  "shop390-03-shop-after-buy.jpg",
+  "shop390-04-hub-after-buy.jpg"
+ ],
+ "cat": "🏠\nWhere you live\n17 left to buy",
+ "catText": "2018 · age 24 💔 22 📶 🔋 ‹ My Life 🏠 Where you live 🏢 Rent Apartment Basic city apartment, €2k/month then €24k a year, every year Hire 🏙️ City Apartment Buy a stylish city apartment, €800k €800k 🏠 Luxury House Buy a luxury house, €3M €3M 🏰 Mansion Buy a sprawling mansion, €8M 🔒 needs €5.00M to your name €8M 🏝️ Private Island Buy your own private island, €25M 🔒 needs €20.0M to your name €25M 🏟️ Buy Your Boyhood Club Buy the club where it all started, €60M ⚡ Legacy landmark, popularity +20 🔒 needs €50.0M to your name €60M 🎓 Hometown Academy Build a youth academy back home, €10M ⚡ Legacy +, popularity +10 🔒 needs €8.00M to your name €10M 🖼️ Museum of You A museum about your own ca",
+ "before": {
+  "nw": 2,
+  "items": [],
+  "props": [],
+  "yearly": 0,
+  "money": {
+   "vault": 14.34
+  }
+ },
+ "buy": {
+  "text": "🏠 Luxury House Buy a luxury house, €3M €3M",
+  "disabled": false,
+  "label": "€3M"
+ },
+ "after": {
+  "nw": -1,
+  "items": [
+   "luxury_house"
+  ],
+  "props": [
+   "Luxury House"
+  ],
+  "yearly": 0,
+  "money": {
+   "vault": 14.34
+  }
+ },
+ "afterText": "2018 · age 24 💔 22 📶 🔋 ‹ My Life 🏠 Where you live 🏢 Rent Apartment Basic city apartment, €2k/month then €24k a year, every year Hire 🏙️ City Apartment Buy a stylish city apartment, €800k 🔒 needs €500k to your name €800k 🏠 Luxury House OWNED Buy a luxury house, €3M 🏰 Mansion Buy a sprawling mansion, €8M 🔒 needs €5.00M to your name €8M 🏝️ Private Island Buy your own private island, €25M 🔒 needs €20.0M to your name €25M 🏟️ Buy Your Boyhood Club Buy the club where it all started, €60M ⚡ Legacy landmark, popularity +20 🔒 needs €50.0M to your name €60M 🎓 Hometown Academy Build a youth academy back home, €10M ⚡ Legacy +, popularity +10 🔒 needs €8.00M to your name €10M 🖼️ Museum of ",
+ "hubAfter": "-€1.00M",
+ "errs": []
+}

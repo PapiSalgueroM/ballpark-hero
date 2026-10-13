@@ -1,0 +1,45 @@
+{
+ "start": {
+  "save": {
+   "nw": 40,
+   "items": [],
+   "props": [],
+   "yearly": 0,
+   "money": {
+    "vault": 14.34
+   }
+  },
+  "hub": "€40.0M"
+ },
+ "cat": "🏠\nWhere you live\n17 left to buy",
+ "before": {
+  "nw": 40,
+  "items": [],
+  "props": [],
+  "yearly": 0,
+  "money": {
+   "vault": 14.34
+  }
+ },
+ "buy": {
+  "text": "🏠 Luxury House Buy a luxury house, €3M €3M",
+  "disabled": false,
+  "label": "€3M"
+ },
+ "after": {
+  "nw": 37,
+  "items": [
+   "luxury_house"
+  ],
+  "props": [
+   "Luxury House"
+  ],
+  "yearly": 0,
+  "money": {
+   "vault": 14.34
+  }
+ },
+ "hubAfter": "€37.0M",
+ "errs": []
+}
+SHOPWALK DONE

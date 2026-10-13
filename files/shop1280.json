@@ -1,0 +1,54 @@
+{
+ "steps": [],
+ "start": {
+  "save": {
+   "nw": 40,
+   "items": [],
+   "props": [],
+   "yearly": 0,
+   "money": {
+    "vault": 14.34
+   }
+  },
+  "hub": "€40.0M"
+ },
+ "shopHome": "2018 · age 24 💔 22 📶 🔋 ‹ Home 🛒 My Life €39.9M to spend 0 things owned 🏠 Where you live 17 left to buy 🏎️ What you drive 12 left to buy ⚡ Your football 13 left to buy ✨ Day to day 10 left to buy ❤️ Family and giving 16 left to buy 💎 Pure flex 15 left to buy 💼 Businesses 17 left to buy Put phone away",
+ "shots": [
+  "shop1280-01-shop-home.jpg",
+  "shop1280-02-shop-property.jpg",
+  "shop1280-03-shop-after-buy.jpg",
+  "shop1280-04-hub-after-buy.jpg"
+ ],
+ "cat": "🏠\nWhere you live\n17 left to buy",
+ "catText": "2018 · age 24 💔 22 📶 🔋 ‹ My Life 🏠 Where you live 🏢 Rent Apartment Basic city apartment, €2k/month then €24k a year, every year Hire 🏙️ City Apartment Buy a stylish city apartment, €800k €800k 🏠 Luxury House Buy a luxury house, €3M €3M 🏰 Mansion Buy a sprawling mansion, €8M €8M 🏝️ Private Island Buy your own private island, €25M €25M 🏟️ Buy Your Boyhood Club Buy the club where it all started, €60M ⚡ Legacy landmark, popularity +20 🔒 needs €50.0M to your name €60M 🎓 Hometown Academy Build a youth academy back home, €10M ⚡ Legacy +, popularity +10 €10M 🖼️ Museum of You A museum about your own career, €12M ⚡ Popularity +8, peak ego €12M 🗿 Buy Your Rival's Boyhood Club The pettiest",
+ "before": {
+  "nw": 40,
+  "items": [],
+  "props": [],
+  "yearly": 0,
+  "money": {
+   "vault": 14.34
+  }
+ },
+ "buy": {
+  "text": "🏠 Luxury House Buy a luxury house, €3M €3M",
+  "disabled": false,
+  "label": "€3M"
+ },
+ "after": {
+  "nw": 37,
+  "items": [
+   "luxury_house"
+  ],
+  "props": [
+   "Luxury House"
+  ],
+  "yearly": 0,
+  "money": {
+   "vault": 14.34
+  }
+ },
+ "afterText": "2018 · age 24 💔 22 📶 🔋 ‹ My Life 🏠 Where you live 🏢 Rent Apartment Basic city apartment, €2k/month then €24k a year, every year Hire 🏙️ City Apartment Buy a stylish city apartment, €800k €800k 🏠 Luxury House OWNED Buy a luxury house, €3M 🏰 Mansion Buy a sprawling mansion, €8M €8M 🏝️ Private Island Buy your own private island, €25M €25M 🏟️ Buy Your Boyhood Club Buy the club where it all started, €60M ⚡ Legacy landmark, popularity +20 🔒 needs €50.0M to your name €60M 🎓 Hometown Academy Build a youth academy back home, €10M ⚡ Legacy +, popularity +10 €10M 🖼️ Museum of You A museum about your own career, €12M ⚡ Popularity +8, peak ego €12M 🗿 Buy Your Rival's Boyhood Club The pettie",
+ "hubAfter": "€37.0M",
+ "errs": []
+}

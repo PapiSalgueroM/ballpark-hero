@@ -1,0 +1,4 @@
+#!serve
+#!playwright
+shop390: TAG=shop390 W=390 H=844 NW=2 INJECT=.rc/x/seed-mid.json node .rc/x/shopwalk.mjs
+shop1280: TAG=shop1280 W=1280 H=900 NW=40 INJECT=.rc/x/seed-mid.json node .rc/x/shopwalk.mjs
