@@ -1,0 +1,174 @@
+{
+ "W1-live": {
+  "into": "link",
+  "played": 3,
+  "sameDoc": true,
+  "notice": true,
+  "afterB": "week 3, 3 results, last Leeds United 1-1, live minute null, fence 6",
+  "afterBack": "week 3, 3 results, last Leeds United 1-1, live minute null, fence 6",
+  "kept": true
+ },
+ "W2-hub": {
+  "into": "link",
+  "played": 3,
+  "sameDoc": true,
+  "notice": true,
+  "afterB": "week 3, 3 results, last Leeds United 1-2, live minute null, fence 5",
+  "afterBack": "week 3, 3 results, last Leeds United 1-2, live minute null, fence 5",
+  "kept": true
+ },
+ "W3-390x844-motion": {
+  "m": {
+   "card": [
+    16,
+    347,
+    358,
+    150
+   ],
+   "reloadH": 44,
+   "inView": true,
+   "minFont": 16,
+   "anims": 2,
+   "focusIn": true,
+   "name": "save-moved-words",
+   "scrollY": 120,
+   "docH": 22584
+  },
+  "before": {
+   "scrollY": 120,
+   "docH": 22584
+  },
+  "landed": "slots",
+  "bStale": true,
+  "escapeKeepsNotice": true
+ },
+ "W3-390x844-rm": {
+  "m": {
+   "card": [
+    16,
+    347,
+    358,
+    150
+   ],
+   "reloadH": 44,
+   "inView": true,
+   "minFont": 16,
+   "anims": 0,
+   "focusIn": true,
+   "name": "save-moved-words",
+   "scrollY": 120,
+   "docH": 22584
+  },
+  "before": {
+   "scrollY": 120,
+   "docH": 22584
+  },
+  "landed": "slots",
+  "bStale": true,
+  "escapeKeepsNotice": true
+ },
+ "W3-1280x900-motion": {
+  "m": {
+   "card": [
+    448,
+    375,
+    384,
+    150
+   ],
+   "reloadH": 44,
+   "inView": true,
+   "minFont": 16,
+   "anims": 2,
+   "focusIn": true,
+   "name": "save-moved-words",
+   "scrollY": 120,
+   "docH": 13514
+  },
+  "before": {
+   "scrollY": 120,
+   "docH": 13514
+  },
+  "landed": "slots",
+  "bStale": true,
+  "escapeKeepsNotice": true
+ },
+ "W3-1280x900-rm": {
+  "m": {
+   "card": [
+    448,
+    375,
+    384,
+    150
+   ],
+   "reloadH": 44,
+   "inView": true,
+   "minFont": 16,
+   "anims": 0,
+   "focusIn": true,
+   "name": "save-moved-words",
+   "scrollY": 120,
+   "docH": 13514
+  },
+  "before": {
+   "scrollY": 120,
+   "docH": 13514
+  },
+  "landed": "slots",
+  "bStale": true,
+  "escapeKeepsNotice": true
+ },
+ "W4-390x844": {
+  "slots": true,
+  "line": "You can clear it and start a new manager here. A copy is kept on this device.",
+  "boxes": [
+   [
+    "Clear it",
+    44
+   ],
+   [
+    "Keep",
+    44
+   ],
+   [
+    "New manager",
+    44
+   ],
+   [
+    "New manager",
+    44
+   ]
+  ],
+  "kept": [
+   true
+  ],
+  "helpText": "🗂️ One tab at a time. Each career has one save, so if Club Manager is open in two tabs, the newest tab is the one that plays. The older tab stops saving and puts up a notice asking you to reload, so it can never write an old week over what you played in the other one, or play a match again that is already done. Reloading a tab makes it the newest. Example: you are on week 5 in one tab, open Club Manager again in a second tab and play three matches there. Go back to the first tab and it says the career moved on in another tab. Tap Reload and your managers screen comes back with the career at the second tab's week, all three results in. Tap Resume Career and carry on from there.",
+  "entry": "Club Manager: one tab at a time, and nothing you played gets lost. With Club Manager open in two tabs, only the newest one plays now. The older tab stops saving and asks you to reload, so closing it can no longer put an old week back over the matches you played in the other tab, and it can no longer play a finished match again and change its result. A save that cannot be read now stays on your managers screen and says so, and clearing it keeps a copy on this device that the game offers to put back. And carrying a Manager Hot Seat job on into Club Manager now opens straight on your club."
+ },
+ "W4-1280x900": {
+  "slots": true,
+  "line": "You can clear it and start a new manager here. A copy is kept on this device.",
+  "boxes": [
+   [
+    "Clear it",
+    44
+   ],
+   [
+    "Keep",
+    44
+   ],
+   [
+    "New manager",
+    44
+   ],
+   [
+    "New manager",
+    44
+   ]
+  ],
+  "kept": [
+   true
+  ],
+  "helpText": "🗂️ One tab at a time. Each career has one save, so if Club Manager is open in two tabs, the newest tab is the one that plays. The older tab stops saving and puts up a notice asking you to reload, so it can never write an old week over what you played in the other one, or play a match again that is already done. Reloading a tab makes it the newest. Example: you are on week 5 in one tab, open Club Manager again in a second tab and play three matches there. Go back to the first tab and it says the career moved on in another tab. Tap Reload and your managers screen comes back with the career at the second tab's week, all three results in. Tap Resume Career and carry on from there.",
+  "entry": "Club Manager: one tab at a time, and nothing you played gets lost. With Club Manager open in two tabs, only the newest one plays now. The older tab stops saving and asks you to reload, so closing it can no longer put an old week back over the matches you played in the other tab, and it can no longer play a finished match again and change its result. A save that cannot be read now stays on your managers screen and says so, and clearing it keeps a copy on this device that the game offers to put back. And carrying a Manager Hot Seat job on into Club Manager now opens straight on your club."
+ }
+}
