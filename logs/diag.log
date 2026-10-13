@@ -1,0 +1,9 @@
+DIAGNOSTIC observer stop control: one effective after-stop frame, full undo and source bytes held
+DIAGNOSTIC original simClubManagerSaveSize.mjs: exit 0, 45 finished size seasons, 0 slot season frames
+DIAGNOSTIC original simClubManagerSlots.mjs: exit 0, 0 finished size seasons, 65 slot season frames
+DIAGNOSTIC current simClubManagerSaveSize.mjs: exit 0, 45 finished size seasons, 0 slot season frames
+DIAGNOSTIC current simClubManagerSlots.mjs: exit 0, 0 finished size seasons, 65 slot season frames
+DIAGNOSTIC control-input simClubManagerSlots.mjs: exit 1, 0 finished size seasons, 65 slot season frames
+DIAGNOSTIC digest control on 3ac21642326a76f4dbc1e173a2c82bddcbabfd5e: healthy 20 of 20 pairs equal, missing decode 5, undo 20
+DIAGNOSTIC decoded Slots: twenty complete pairs, effective missing-decode rejection and full undo
+DIAGNOSTIC complete: original/current unchanged historical budgets, full raw states, storage and unfiltered action vectors retained

@@ -1,0 +1,86 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [31m❯[39m src/lib/clubManagerOwnClubLevel.test.ts [2m([22m[2m6 tests[22m[2m | [22m[31m4 failed[39m[2m)[22m[33m 732[2mms[22m[39m
+[31m   [31m×[31m the manager's own club is read from his club, never the world roster[2m > [22mhis club screen average is the base read in season one, however many men he released[39m[32m 65[2mms[22m[39m
+[31m     → expected 79.8 to be 83.2 // Object.is equality[39m
+[31m   [31m×[31m the manager's own club is read from his club, never the world roster[2m > [22mhis club strength at the summer rollover is the base read, so the free agent level and the board see it[39m[32m 142[2mms[22m[39m
+[31m     → expected 80.9 to be close to 84.8, received difference is 3.8999999999999915, but expected 5e-7[39m
+[31m   [31m×[31m the manager's own club is read from his club, never the world roster[2m > [22mthe club he leaves in the summer is another club at once, read off the world roster[39m[32m 52[2mms[22m[39m
+[31m     → expected 89.6 to be close to 89.5, received difference is 0.09999999999999432, but expected 5e-7[39m
+   [33m[2m✓[22m[39m the manager's own club is read from his club, never the world roster[2m > [22mthe one club read is the world read, club for club, in today and in a past era, cold and cached [33m 356[2mms[22m[39m
+   [32m✓[39m the manager's own club is read from his club, never the world roster[2m > [22ma job taken mid season (the door joinClubNow opens) reads the club he left off the world roster[32m 40[2mms[22m[39m
+[31m   [31m×[31m the manager's own club is read from his club, never the world roster[2m > [22mthe club he joins mid season is his from that day, read as the base, though the career handed over names the old one[39m[32m 75[2mms[22m[39m
+[31m     → expected 89.6 to be close to 89.5, received difference is 0.09999999999999432, but expected 5e-7[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 4 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/lib/clubManagerOwnClubLevel.test.ts[2m > [22mthe manager's own club is read from his club, never the world roster[2m > [22mhis club screen average is the base read in season one, however many men he released
+[31m[1mAssertionError[22m: expected 79.8 to be 83.2 // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- 83.2[39m
+[31m+ 79.8[39m
+
+[36m [2m❯[22m src/lib/clubManagerOwnClubLevel.test.ts:[2m52:44[22m[39m
+    [90m 50| [39m    /* The ledger really took them off: read off the world roster his …
+    [90m 51| [39m    [34mexpect[39m(base [33m-[39m [34mxi[39m([34mworldRosterFor[39m(s[33m,[39m [32m'Everton'[39m)))[33m.[39m[34mtoBeGreaterThan[39m([34m1[39m)[33m;[39m
+    [90m 52| [39m    [34mexpect[39m([34mworldRosterXIAvg[39m(s[33m,[39m [32m'Everton'[39m))[33m.[39m[34mtoBe[39m(base)[33m;[39m
+    [90m   | [39m                                           [31m^[39m
+    [90m 53| [39m  })[33m;[39m
+    [90m 54| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/4]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/lib/clubManagerOwnClubLevel.test.ts[2m > [22mthe manager's own club is read from his club, never the world roster[2m > [22mhis club strength at the summer rollover is the base read, so the free agent level and the board see it
+[31m[1mAssertionError[22m: expected 80.9 to be close to 84.8, received difference is 3.8999999999999915, but expected 5e-7[39m
+[36m [2m❯[22m src/lib/clubManagerOwnClubLevel.test.ts:[2m62:40[22m[39m
+    [90m 60| [39m    expect(base - xi(worldRosterFor(next, 'Everton'))).toBeGreaterThan…
+    [90m 61| [39m    /* Every draw is 0.6 here, so the strength jitter ri(-2, 2) is exa…
+    [90m 62| [39m    [34mexpect[39m(next[33m.[39mclubStrengths[33m.[39m[33mEverton[39m)[33m.[39m[34mtoBeCloseTo[39m(base [33m+[39m [34m1[39m[33m,[39m [34m6[39m)[33m;[39m
+    [90m   | [39m                                       [31m^[39m
+    [90m 63| [39m    [34mexpect[39m([34mworldRosterXIAvg[39m(next[33m,[39m [32m'Everton'[39m))[33m.[39m[34mtoBe[39m(base)[33m;[39m
+    [90m 64| [39m  })[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/4]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/lib/clubManagerOwnClubLevel.test.ts[2m > [22mthe manager's own club is read from his club, never the world roster[2m > [22mthe club he leaves in the summer is another club at once, read off the world roster
+[31m[1mAssertionError[22m: expected 89.6 to be close to 89.5, received difference is 0.09999999999999432, but expected 5e-7[39m
+[36m [2m❯[22m src/lib/clubManagerOwnClubLevel.test.ts:[2m73:43[22m[39m
+    [90m 71| [39m    expect(projectedXIAvg('Everton', yearsOn(moved), moved.eraId)! - l…
+    [90m 72| [39m    [34mexpect[39m(moved[33m.[39mclubStrengths[33m.[39m[33mEverton[39m)[33m.[39m[34mtoBeCloseTo[39m(ledger [33m+[39m [34m1[39m[33m,[39m [34m6[39m)[33m;[39m
+    [90m 73| [39m    expect(moved.clubStrengths.Liverpool).toBeCloseTo(projectedXIAvg('…
+    [90m   | [39m                                          [31m^[39m
+    [90m 74| [39m  })[33m;[39m
+    [90m 75| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/4]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/lib/clubManagerOwnClubLevel.test.ts[2m > [22mthe manager's own club is read from his club, never the world roster[2m > [22mthe club he joins mid season is his from that day, read as the base, though the career handed over names the old one
+[31m[1mAssertionError[22m: expected 89.6 to be close to 89.5, received difference is 0.09999999999999432, but expected 5e-7[39m
+[36m [2m❯[22m src/lib/clubManagerOwnClubLevel.test.ts:[2m113:43[22m[39m
+    [90m111| [39m    const base = projectedXIAvg('Liverpool', yearsOn(fresh), fresh.era…
+    [90m112| [39m    [34mexpect[39m([34mxi[39m([34mworldRosterFor[39m(fresh[33m,[39m [32m'Liverpool'[39m)))[33m.[39mnot[33m.[39m[34mtoBe[39m(base)[33m;[39m
+    [90m113| [39m    [34mexpect[39m(fresh[33m.[39mclubStrengths[33m.[39m[33mLiverpool[39m)[33m.[39m[34mtoBeCloseTo[39m(base [33m+[39m [34m1[39m[33m,[39m [34m6[39m)[33m;[39m
+    [90m   | [39m                                          [31m^[39m
+    [90m114| [39m    [34mexpect[39m([34mworldRosterXIAvg[39m(fresh[33m,[39m [32m'Liverpool'[39m))[33m.[39m[34mtoBe[39m(base)[33m;[39m
+    [90m115| [39m  })[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/4]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m4 failed[39m[22m[2m | [22m[1m[32m2 passed[39m[22m[90m (6)[39m
+[2m   Start at [22m 05:44:14
+[2m   Duration [22m 3.10s[2m (transform 1.44s, setup 54ms, collect 1.61s, tests 732ms, environment 304ms, prepare 122ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/clubManagerOwnClubLevel.test.ts,title=src/lib/clubManagerOwnClubLevel.test.ts > the manager's own club is read from his club%2C never the world roster > his club screen average is the base read in season one%2C however many men he released,line=52,column=44::AssertionError: expected 79.8 to be 83.2 // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- 83.2%0A+ 79.8%0A%0A ❯ src/lib/clubManagerOwnClubLevel.test.ts:52:44%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/clubManagerOwnClubLevel.test.ts,title=src/lib/clubManagerOwnClubLevel.test.ts > the manager's own club is read from his club%2C never the world roster > his club strength at the summer rollover is the base read%2C so the free agent level and the board see it,line=62,column=40::AssertionError: expected 80.9 to be close to 84.8, received difference is 3.8999999999999915, but expected 5e-7%0A ❯ src/lib/clubManagerOwnClubLevel.test.ts:62:40%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/clubManagerOwnClubLevel.test.ts,title=src/lib/clubManagerOwnClubLevel.test.ts > the manager's own club is read from his club%2C never the world roster > the club he leaves in the summer is another club at once%2C read off the world roster,line=73,column=43::AssertionError: expected 89.6 to be close to 89.5, received difference is 0.09999999999999432, but expected 5e-7%0A ❯ src/lib/clubManagerOwnClubLevel.test.ts:73:43%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/clubManagerOwnClubLevel.test.ts,title=src/lib/clubManagerOwnClubLevel.test.ts > the manager's own club is read from his club%2C never the world roster > the club he joins mid season is his from that day%2C read as the base%2C though the career handed over names the old one,line=113,column=43::AssertionError: expected 89.6 to be close to 89.5, received difference is 0.09999999999999432, but expected 5e-7%0A ❯ src/lib/clubManagerOwnClubLevel.test.ts:113:43%0A%0A

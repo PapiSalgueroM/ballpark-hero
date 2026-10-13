@@ -1,0 +1,3 @@
+diag exit=0 419s | DIAGNOSTIC complete: original/current unchanged historical budgets, full raw states, storage and unfiltered action vectors retained
+own-test-head exit=0 3s |    Duration  3.13s (transform 1.45s, setup 53ms, collect 1.63s, tests 726ms, environment 305ms, prepare 146ms)
+own-test-pre-EXPECT-RED exit=1 4s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/clubManagerOwnClubLevel.test.ts,title=src/lib/clubManagerOwnClubLevel.test.ts > the manager's own club 
