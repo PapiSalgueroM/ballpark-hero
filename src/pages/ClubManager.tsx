@@ -40,6 +40,7 @@ import { withWorldEdit, worldEditMoves, realLeagueIdOf } from '@/lib/clubManager
 import type { WorldEdit } from '@/lib/clubManagerWorldEdit';
 import { levelFor, pointsFree, xpOf, MAX_LEVEL } from '@/lib/clubManagerXp';
 import { useRevealScroll } from '@/hooks/useRevealScroll';
+import { useArrivalTop } from '@/hooks/useArrivalTop';
 
 const ClubManagerTreatmentPanel = lazy(() => import('@/components/club-manager/ClubManagerTreatmentPanel'));
 const ClubManagerBoardPanel = lazy(() => import('@/components/club-manager/ClubManagerBoardPanel'));
@@ -150,6 +151,10 @@ const ClubManager = () => {
   // what you were waiting for after pressing Play, so they pull themselves into
   // view rather than rendering below where your thumb just was.
   const revealRef = useRevealScroll<HTMLDivElement>(`${g.phase}:${g.career?.week ?? 0}`);
+  /* Round 1328: every entry into the hub (a new job, a Resume, a new season)
+     opens the club's home screen at its top before the first paint, instead of
+     at the scroll offset the screen before it left behind. */
+  const hubTopRef = useArrivalTop<HTMLDivElement>(g.phase === 'hub' && g.career ? 'hub' : null);
   // Round 70: the nation -> league -> team picker. Each step change pulls the
   // new step into view (skipFirst so landing on the page stays put).
   // Round 72: nations can hold more than one league (England, the USA).
@@ -933,7 +938,7 @@ const ClubManager = () => {
   }
 
   return shell(
-    <div>
+    <div ref={hubTopRef} data-cm-hub>
       {/* Header */}
       <header className="mb-4">
         <div className="flex items-center justify-center gap-2 mb-1 flex-wrap">

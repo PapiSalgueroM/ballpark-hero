@@ -120,7 +120,7 @@ const prefersReducedMotion = () =>
 
 /* Breathing room under the header. Small on purpose: it is there so a card's
    top border is not welded to the bar above it, not to create a margin. */
-const GAP = 12;
+export const GAP = 12;
 
 /* How much of the new thing has to be showing before "it appeared" is true.
    160px on an 844px phone is roughly a card heading and two or three lines,
@@ -131,7 +131,7 @@ const GAP = 12;
    put the Soccer Career panel 11px from the threshold, so an overlay one line
    taller would have started scrolling on every press again and the whole bug
    would have come back through a number nobody would think to look at. */
-const MIN_LEAD = 160;
+export const MIN_LEAD = 160;
 
 /* A header is a strip. Anything taller than this is a full screen overlay or a
    dialog, and treating a dialog as a header would push the aim point half way
@@ -139,7 +139,7 @@ const MIN_LEAD = 160;
 const MAX_BAR = 0.4;
 
 /** Bottom edge of whatever is pinned across the top of the viewport, in px. */
-function topInset(): number {
+export function topInset(): number {
   const vh = window.innerHeight || document.documentElement.clientHeight;
   const vw = window.innerWidth || document.documentElement.clientWidth;
   let inset = 0;
@@ -157,7 +157,7 @@ function topInset(): number {
 }
 
 /** Height of whatever is pinned across the bottom of the viewport, in px. */
-function bottomInset(): number {
+export function bottomInset(): number {
   const vh = window.innerHeight || document.documentElement.clientHeight;
   const vw = window.innerWidth || document.documentElement.clientWidth;
   let inset = 0;
