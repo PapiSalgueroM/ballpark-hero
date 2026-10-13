@@ -1,0 +1,14 @@
+build exit=0 30s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+earned exit=0 22s | simNbaEarnedDraft: green.
+vitest exit=0 24s |    Duration  23.12s (transform 4.56s, setup 1.91s, collect 16.04s, tests 26.66s, environment 13.71s, prepare 3.15s)
+nbadesk exit=0 35s | simNbaGmDesk: all seven checks passed (10 seeds x 10 seasons)
+tsc exit=0 98s | 
+capital-ctl exit=0 70s | zeroBudget exit=0 "failedIndices":[19]
+draftorder exit=0 12s | simGmDraftOrder: green. 603185 checks over 10 sections: the order is the league's, the lottery is drawn once on its own stream and saved, and nothing mounts the lift yet.
+earned-ctl exit=1 242s | simNbaEarnedDraft controls: 1 of 19 DID NOT FIRE as expected.
+singles exit=0 89s | simStorageWrites exit=0 | simStorageWrites: all green (owed: 12)
+diffproof exit=0 0s | diffproof-ok
+readers1 exit=0 153s | simNbaOpeningRatings exit=0 | NBA opening:normalized CRLF bindings, raw holds and owned-copy cleanup passed. These offline cases do not prove historic
+readers2 exit=0 108s | simSaveKeeper exit=0 | simSaveKeeper: all green. The keeper holds on real saves of all 21 long games.
+draftorder-all exit=0 437s | simGmDraftOrder controls: all 40 fired, each in exactly its own sections.
+nbadesk-ctl exit=0 600s | dayonestature exit=0 simNbaGmDesk: control dayonestature fired (87 failures, as it should)
