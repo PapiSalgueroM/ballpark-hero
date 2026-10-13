@@ -1,0 +1,9 @@
+simTrustCopy exit=0 0s | simTrustCopy: green. One disclaimer under every page and one count of the games, the registry's own.
+simAccessibility exit=0 0s | simAccessibility: all green
+simStorageWrites exit=0 3s | simStorageWrites: all green (owed: 12)
+simInventedNames exit=0 8s | simInventedNames: green. Every invented man on this site is invented all the way down.
+simNoInventedQuotes exit=0 21s | simNoInventedQuotes: green. No real player is quoted or accused anywhere.
+simNumberFormatting exit=0 155s | Number formatting: passed. Evidence at /home/runner/work/ballpark-hero/ballpark-hero/number-formatting-artifacts/outcomes
+simClubManagerSaveSize exit=0 40s | simClubManagerSaveSize: all sections green
+simEras exit=0 703s | ALL ERA AND AGEING CHECKS PASSED
+simRoles exit=0 975s | ALL ROLE CHECKS PASSED

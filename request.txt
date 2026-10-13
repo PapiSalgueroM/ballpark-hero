@@ -1,0 +1,9 @@
+simEras: node scripts/simEras.mjs
+simRoles: node scripts/simRoles.mjs
+simTrustCopy: node scripts/simTrustCopy.mjs
+simAccessibility: node scripts/simAccessibility.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+simInventedNames: node scripts/simInventedNames.mjs
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
+simNumberFormatting: node scripts/simNumberFormatting.mjs
+simClubManagerSaveSize: node scripts/simClubManagerSaveSize.mjs
