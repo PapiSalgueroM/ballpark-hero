@@ -319,7 +319,7 @@ async function phone(base, profile) {
     if (PHASE === 'baseline' || CONTROL) {
       row.premature = down.validatorRequests.length === 1 && down.validatorRequests[0].body.playerName === point.name && down.input?.value === point.name && down.input.disabled && !down.list;
       check(row.premature, row.id + ': expected owned premature submission was not observed.', row); if (row.premature) report.prematureSelections++;
-      await capture(walk, row, 'premature-submission-before-release', walk.page.getByRole('combobox'));
+      await capture(walk, row, 'premature-submission-before-release', walk.page.getByRole('combobox').locator('..'));
       await dragEnd(walk, row, point); walk.release(); await accepted(walk, row, point.name, 'premature-outcome-after-release');
       if (!CONTROL) {
         await walk.context.close(); walk = await open(base, profile, row);
@@ -354,7 +354,7 @@ async function other(base, kind) {
     walk = await open(base, profile, row); const input = walk.page.getByRole('combobox'); await input.fill(QUERY);
     await walk.page.getByRole('option').nth(7).waitFor(); await settle(walk.page); const before = await stage(walk, row, 'ready-canonical-options');
     setup(before.input.value === QUERY && before.options.length === 8 && before.options.every((item, index) => item.name === ROWS[index].player_name)
-      && walk.stub.searches.length >= 2 && row.validatorRequests.length === 0 && before.pageText.includes('Guess 1 of 3'), row.id + ': actual Missing XI query/puzzle must be ready without any played guess.');
+      && walk.stub.searches.length >= 2 && row.validatorRequests.length === 0 && before.missing.guessLabel === 'Guess 1 of 3', row.id + ': actual Missing XI query/puzzle must be ready without any played guess.');
     const name = ROWS[0].player_name, target = await option(walk, name);
     const lock = walk.page.getByRole('button', { name: 'Lock in guess', exact: true }); check(await lock.isDisabled(), row.id + ': Lock must start disabled.', row);
     await input.focus();
@@ -363,7 +363,7 @@ async function other(base, kind) {
     await poll(() => input.inputValue(), value => value === name, row.id + ': actual activation did not choose the exact name.');
     await settle(walk.page); const chosen = await stage(walk, row, 'actual-selection-without-lock');
     check(chosen.missing.raw === before.missing.raw && chosen.missing.key === before.missing.key && !chosen.list && await lock.isEnabled()
-      && row.validatorRequests.length === 0 && chosen.pageText.includes('Guess 1 of 3'), row.id + ': selecting a name also spent a guess or called a validator.', row);
+      && row.validatorRequests.length === 0 && chosen.missing.guessLabel === 'Guess 1 of 3', row.id + ': selecting a name also spent a guess or called a validator.', row);
     if (!mobile) check(await input.evaluate(element => document.activeElement === element), row.id + ': desktop selection lost persistent input focus.', row);
     if (mobile) {
       check(chosen.events.some(e => e.type === 'pointerdown' && e.trusted && e.pointerType === 'touch' && e.option === name), row.id + ': Missing XI selection needs a real native finger contact.', row);
@@ -372,7 +372,7 @@ async function other(base, kind) {
       row.stages.push({ stage: 'explicit-next-lock-saved-one-wrong-guess', ...locked });
       const payload = JSON.parse(locked.missing.raw); const expected = { v: 1, date: '2026-10-13', puzzleIndex: 0, guesses: [{ t: 'miss', name }], gameStatus: 'playing' };
       check(locked.missing.raw === JSON.stringify(expected) && same(payload, expected) && row.validatorRequests.length === 0
-        && locked.pageText.includes('Guess 2 of 3'), row.id + ': explicit Lock must write exactly one actual wrong action and no other saved fields.', row);
+        && locked.missing.guessLabel === 'Guess 2 of 3', row.id + ': explicit Lock must write exactly one actual wrong action and no other saved fields.', row);
       await capture(walk, row, 'explicit-lock-one-guess', walk.page.getByText('Already tried: ' + name, { exact: true }));
     } else await capture(walk, row, 'desktop-exact-selection-focus-held', input);
   } catch (error) { report.setupFailures++; row.errors.push(String(error)); row.stages.push({ stage: 'failure-observation', ...(walk ? await snapshot(walk).catch(() => ({})) : {}) }); }
