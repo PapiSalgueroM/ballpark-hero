@@ -291,7 +291,7 @@ async function runCase(base, profile, fixture, variant = 'played') {
     if (variant === 'delete-save') {
       const removed = await walk.page.evaluate(key => { const raw = localStorage.getItem(key); localStorage.removeItem(key); return { raw, after: localStorage.getItem(key) }; }, KEY);
       check(removed.raw === afterRaw && removed.after === null && JSON.parse(removed.raw).lastEventId === 631, row.id + ': deletion did not remove the actual resolved save.', row);
-      await walk.page.reload({ waitUntil: 'domcontentloaded' }); await walk.ready(); const lost = await walk.raw(); row.detected = outcomeIssues(before, lost, step);
+      await walk.page.reload({ waitUntil: 'domcontentloaded' }); await walk.page.getByRole('heading', { name: 'Create Your Player', exact: true }).waitFor(); await walk.page.evaluate(() => document.fonts.ready); const lost = await walk.raw(); row.detected = outcomeIssues(before, lost, step);
       check(JSON.stringify(row.detected) === JSON.stringify(['saved-career-missing']), row.id + ': deleted actual save did not fail its restoration detector.', row);
       const creator = walk.page.getByRole('heading', { name: 'Create Your Player', exact: true }).locator('..'); await creator.waitFor();
       row.stages.push({ stage: 'deleted-save-reload', removedRaw: removed.raw, rawAfter: lost }); await capture(walk, row, 'detected-resolved-save-deletion', creator); return;
