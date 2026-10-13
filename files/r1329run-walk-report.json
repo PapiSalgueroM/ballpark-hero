@@ -1,0 +1,129 @@
+{
+  "site": "http://localhost:4173",
+  "facts": {
+    "OLD": {
+      "seed": 5500,
+      "year": 2011,
+      "club": "Man United",
+      "feedRealNames": [
+        "Zlatan Ibrahimović",
+        "Arjen Robben",
+        "Manuel Neuer",
+        "Yaya Touré",
+        "Eden Hazard"
+      ]
+    },
+    "P26": {
+      "seed": 5600,
+      "year": 2026,
+      "wc": "World Cup",
+      "champion": "England",
+      "mine": "",
+      "feed": [
+        "🔄 Xavi Silva has left Coritiba for Panathinaikos.",
+        "📰 2024-25 really happened, so this feed won't make up what went on around you.",
+        "📰 2025-26 really happened, so this feed won't make up what went on around you.",
+        "🔄 Xavi Silva has left Panathinaikos for Slaven Belupo.",
+        "⭐ Liverpool are champions of Europe.",
+        "🏆 Liverpool win the Premier League.",
+        "🏆 Barcelona win La Liga.",
+        "🔮 Your world's 2026-27, as it played out:"
+      ]
+    },
+    "P10": {
+      "seed": 5700,
+      "champion": "Spain",
+      "mine": "Round of 16"
+    }
+  },
+  "runs": [
+    {
+      "tag": "390-rm",
+      "steps": [
+        "old-feed ok",
+        "phases newspaper>season_summary>ballon_dor>world_cup>world_cup>social_media_action>social_media_action>moral_dilemma>moral_dilemma>random_events>random_events>random_events>random_events>random_events>random_events>transfer_window",
+        "played 2012: 2 new feed lines, 1 month lines, 1 month awards",
+        "honest line at screen line 6",
+        "old-play ok",
+        "p26 feed: framing at 6, 3 champion lines",
+        "p26-feed ok",
+        "p26 last tile \"🏆World Cup 2026Watched from home\" heights 64/64",
+        "p26 history scroll 2270/14364 -> 2270/14364",
+        "p26-intl ok",
+        "p10 card tiles qualifying/squad/bracket/matches",
+        "p10-card ok",
+        "p10 last tile \"🏆World Cup 2010Spain won it\"",
+        "p10-bracket ok"
+      ]
+    },
+    {
+      "tag": "390-mo",
+      "steps": [
+        "old-feed ok",
+        "phases newspaper>season_summary>ballon_dor>world_cup>world_cup>social_media_action>social_media_action>moral_dilemma>moral_dilemma>random_events>random_events>random_events>random_events>random_events>random_events>random_events>transfer_window",
+        "played 2012: 2 new feed lines, 3 month lines, 3 month awards",
+        "honest line at screen line 6",
+        "old-play ok",
+        "p26 feed: framing at 6, 3 champion lines",
+        "p26-feed ok",
+        "p26 last tile \"🏆World Cup 2026Watched from home\" heights 64/64",
+        "p26 history scroll 2270/14364 -> 2270/14364",
+        "p26-intl ok",
+        "p10 card tiles qualifying/squad/bracket/matches",
+        "p10-card ok",
+        "p10 last tile \"🏆World Cup 2010Spain won it\"",
+        "p10-bracket ok"
+      ]
+    },
+    {
+      "tag": "1280-rm",
+      "steps": [
+        "old-feed ok",
+        "phases newspaper>season_summary>ballon_dor>world_cup>world_cup>social_media_action>social_media_action>random_events>random_events>random_events>random_events>random_events>random_events>transfer_window",
+        "played 2012: 2 new feed lines, 1 month lines, 1 month awards",
+        "honest line at screen line 6",
+        "old-play ok",
+        "p26 feed: framing at 6, 3 champion lines",
+        "p26-feed ok",
+        "p26 last tile \"🏆World Cup 2026Watched from home\" heights 64/64",
+        "p26 history scroll 1874/10142 -> 1874/10142",
+        "p26-intl ok",
+        "p10 card tiles qualifying/squad/bracket/matches",
+        "p10-card ok",
+        "p10 last tile \"🏆World Cup 2010Spain won it\"",
+        "p10-bracket ok"
+      ]
+    },
+    {
+      "tag": "1280-mo",
+      "steps": [
+        "old-feed ok",
+        "phases newspaper>season_summary>ballon_dor>world_cup>rivalry_event>social_media_action>social_media_action>moral_dilemma>moral_dilemma>moral_dilemma>moral_dilemma>moral_dilemma>random_events>random_events>random_events>random_events>random_events>random_events>random_events>transfer_window",
+        "played 2012: 2 new feed lines, 3 month lines, 3 month awards",
+        "honest line at screen line 6",
+        "old-play ok",
+        "p26 feed: framing at 6, 3 champion lines",
+        "p26-feed ok",
+        "p26 last tile \"🏆World Cup 2026Watched from home\" heights 64/64",
+        "p26 history scroll 1874/10142 -> 1874/10142",
+        "p26-intl ok",
+        "p10 card tiles qualifying/squad/bracket/matches",
+        "p10-card ok",
+        "p10 last tile \"🏆World Cup 2010Spain won it\"",
+        "p10-bracket ok"
+      ]
+    }
+  ],
+  "failures": [
+    "390-rm old-play: new feed lines for 2012 claim things: 🌍 England win the European Championship.",
+    "390-mo old-play: new feed lines for 2012 claim things: 🌍 England win the European Championship.",
+    "1280-rm old-play: new feed lines for 2012 claim things: 🌍 England win the European Championship.",
+    "1280-mo old-play: new feed lines for 2012 claim things: 🌍 Netherlands win the European Championship."
+  ],
+  "notes": [
+    "390-rm OLD (base save, 2011): the feed as saved names 5 real men (Zlatan Ibrahimović, Arjen Robben, Manuel Neuer, Yaya Touré), accepted by the brief",
+    "390-mo OLD (base save, 2011): the feed as saved names 5 real men (Zlatan Ibrahimović, Arjen Robben, Manuel Neuer, Yaya Touré), accepted by the brief",
+    "1280-rm OLD (base save, 2011): the feed as saved names 5 real men (Zlatan Ibrahimović, Arjen Robben, Manuel Neuer, Yaya Touré), accepted by the brief",
+    "1280-mo OLD (base save, 2011): the feed as saved names 5 real men (Zlatan Ibrahimović, Arjen Robben, Manuel Neuer, Yaya Touré), accepted by the brief"
+  ]
+}
