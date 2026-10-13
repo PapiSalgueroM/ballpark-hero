@@ -154,3 +154,45 @@ Files this round owns: src/lib/gmInbox.ts, src/lib/gmInbox.test.ts, scripts/simG
   move). Everything else on that head: vitest exit 0 (42 tests), simEventDeck exit 0, every deck control red on its
   own section (expireoff and expirefx section 7, neutral section 8), simGmInbox equal to the base at seeds 1 to 3, all
   fourteen of its controls red, simCareerInbox green and privatecap red, the five legal fences green.
+
+## Final proof on head 94cd6535
+
+### Decision 6, the weight (rc r1324-w: #!serve, #!playwright, #!serial)
+
+- `build` (vite build of the head) exit 0; `distgrep-head`: 512 JS chunks, 0 carry the engine's bind error text
+  "pack moves"; `basebuild` (vite build of 8fea14e2 in a worktree on the runner) exit 0, 0 chunks carry it.
+- `weight-head` and `weight-base` (sweepWeight, SWEEP_OFFLINE=1, the head's dist on 4173 and the base's on 4174) both
+  exit 0 with `sweepWeight: green.`, and the three rows read the same on both: /club-manager 589K gz over 39 files
+  (588.8K to the tenth), /soccer-career 823K over 45 files (822.9K), /front-office 364K over 36 files (364.2K).
+- Engine bytes: src/lib/gmInbox.ts 17,663 CRLF (17,298 LF) before, 27,911 CRLF (27,363 LF) after; minified 4,479 to
+  7,907, gzipped 1,921 to 3,216 (esbuild transform of the module alone). That is what W3 carries in its lazy chunk.
+
+### Adversarial review and QA pass (by the builder; no reviewer agent was available to this run)
+
+- The engine was read end to end against the brief's order of work and every rule of 3.3. Found and fixed: the type
+  gate's two errors (step d). Hunted and found sound: equal weights mixing absent and 1 take the uniform line; a
+  role key and an id key never collide; a hostile rest book (array, string, NaN entries) is pruned to nothing by the
+  week and dropped by the repair; a hostile `w` or `auto` bends the message and resets the inbox alone; an expiring
+  card whose def is gone stays open; nothing in gmInbox.ts matches simCareerInbox's single home patterns except the
+  allowed drop oldest answered line; no dash anywhere in the round's files.
+- Open, not defects of this round: a pack option whose karma is NaN would move trust to NaN through the answer flow
+  (the validator does not check karma; W1b's effect registry is the place).
+
+### The gates (rc r1324-e, 54 lines on head 94cd6535)
+
+- tsc exit 0 (90 s, empty output); vitest of gmInbox.test.ts and GmInboxPanel.test.tsx exit 0, 42 tests passed.
+- simEventDeck exit 0 in 56.2 s, `simEventDeck: green.`; its ten controls each exit 1 with a fired closing line on
+  their own section: replay (1, 3), weightoff (3), story (4), rest (5), textrng (6), expireoff (7), expirefx (7),
+  neutral (8), seasonweek (9), heavy (10).
+- simGmInbox at SEED 1, 2 and 3 printed every line the same as the base (`gmcmp`, 3 of 3); all fourteen of its controls
+  exit 1 (the twelve old ones, quotevariant, effectvariant).
+- simCareerInbox exit 0, privatecap exit 1; simHarnessAnchors, simNoRivalNames, simNoInventedQuotes,
+  simNoInventedConduct, simInventedNames exit 0.
+- The 24 rule fences: 20 exit 0. simSchemaNames ("SUPABASE UNREACHABLE. NOTHING WAS CHECKED.") and simLeaderboardCaps
+  ("fetch failed" on game_score_caps) read the live database, which the runner cannot reach by design: not run in
+  effect, and neither reads gmInbox. simWritesAreSent and simResultMoment exit 1 on ERR_MODULE_NOT_FOUND for Playwright
+  (that request had no #!playwright line); rerun with Playwright as rc r1324-e2.
+- rc r1324-e2 (#!serve, #!playwright, head 94cd6535): simResultMoment exit 0 (green); simWritesAreSent exit 1, "the
+  harness could not drive Guess the Nation to a finish: TimeoutError: locator.click". rc r1324-e3 (#!build,
+  #!playwright, #!serial) ran it on the head and on a build of the base 8fea14e2 on the same runner: both exit 1 with
+  the same first failing line, so the red is the runner's (Guess the Nation cannot be driven there), not this round's.
