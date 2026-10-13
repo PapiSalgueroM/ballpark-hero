@@ -1,0 +1,5 @@
+writesSent exit=1 1s | simWritesAreSent: 1 failure
+resultMoment exit=0 10s | simResultMoment: green. Every live game reaches the shared result moment or is listed with what it draws instead, the pill shows exactly the score it is given, the three 
+promises exit=0 25s | simSoccerEventPromises: all sections green
+anchors exit=1 48s | simHarnessAnchors: 1 failure(s)
+fairness exit=0 51s | simSoccerDeckFairness: all sections green
