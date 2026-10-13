@@ -1,0 +1,5 @@
+MUTATION m4 APPLIED to src/lib/gmEarnedDraft.ts
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+[41m[1m FAIL [22m[49m src/lib/gmEarnedDraft.test.ts[2m > [22mthe heading, from the slots[2m > [22mthe clock line is his alone: the whole heading before Continue, on his clock and after the last pick
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m23 passed[39m[22m[90m (24)[39m
+m4 CAUGHT: harness 0, vitest 1

@@ -1,0 +1,9 @@
+MUTATION m7 APPLIED to src/lib/nbaFrontOffice.ts
+  FAIL [6]: class 0: today's man Tarik Okonkwo (78) is not in the earned class as drawn
+  FAIL [6]: class 1: today's man Trey Kingman (77) is not in the earned class as drawn
+  FAIL [6]: class 2: today's man Dashawn Whitmore (78) is not in the earned class as drawn
+  FAIL [6]: class 3: today's man Marcus Beaudry (73) is not in the earned class as drawn
+  FAIL [6]: class 4: today's man Trey Quinn (79) is not in the earned class as drawn
+  FAIL [6]: class 5: today's man Zaire Okonkwo (73) is not in the earned class as drawn
+[2m      Tests [22m [1m[32m24 passed[39m[22m[90m (24)[39m
+m7 CAUGHT: harness 1, vitest 0

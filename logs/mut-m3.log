@@ -1,0 +1,5 @@
+MUTATION m3 APPLIED to src/lib/nbaEarnedDraft.ts
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+[41m[1m FAIL [22m[49m src/lib/nbaEarnedDraft.test.ts[2m > [22mthe host and the three presses[2m > [22mthe staff press is done, and every man of his reaches the re-sign ledger with his round
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m23 passed[39m[22m[90m (24)[39m
+m3 CAUGHT: harness 0, vitest 1
