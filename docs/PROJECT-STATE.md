@@ -1,3 +1,7 @@
+## Codex Round1359: shared autocomplete mobile scrolling, causal proof in progress, 2026-10-13
+
+Managed codex/autocomplete-touch-scroll from live36cc9ffe. Root owns the shared component and narrow old-test14 timing method, helper new20-case unit/source proof, Browser native real dropdown gestures. App unchanged until remote baseline proves six owned early-selection faults with fourteen preserves and actual native scrolling cause. Then minimum completed-click fix, source controls/full suite/search guards/build/all15readers/unchangedbudgets/actualMissingXIexplicitLock and original screenshots. No H core lease overlap or local runtime. See docs/audits/player-autocomplete-touch-scroll-2026-10-13.md.
+
 ## Release BB LIVE, 2026-10-13 04:39 EDT: the NFL playoffs one round at a time, Club Manager's league leaders and awards, Ballon d'Or rivals who stay, a club loan that only goes where you will play, Report a problem on every game, the MLB and NHL rival on your own line
 
 Claude lane (session H). main c9c77eba, deployment f3407b80-12d4-452a-a813-0ac5631ae4a9, entry index-DaI30mwt.js (was index-Df_rcqsU.js, Release AY,
