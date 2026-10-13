@@ -50,7 +50,9 @@ Files this round owns: src/lib/gmInbox.ts, src/lib/gmInbox.test.ts, scripts/simG
 - `subject` and `subjectRest` (3.3.3): keys `role:<target>` and `id:<value>`; a fact subject with no usable value
   (missing, boolean, empty string, not finite) holds the card back. The rest book `gmInboxRest` is written only by a
   pack whose subjectRest is above 0, only once such a card is dealt, and is rebased and pruned at the top of every week.
-  With subjectRest 0 the subjects are inert (no hold, no sibling removal, no book). `repairGmInbox` drops a bad book
+  With subjectRest 0 the rest is inert (no rest hold, no sibling removal, no book), but a fact subject with no usable
+  value still holds its card at any rest (fail closed, 3.3.3; kit section 5 states it on weeks without the fact, a
+  correction from the review). `repairGmInbox` drops a bad book
   alone (the field is deleted, so a desk reads as never having had one).
 - `gmPackProblems` (3.3.8) lists every problem (bad weight, empty story, a role subject not in targets, an undeclared
   fact subject, a subjectRest that is not a whole number); `bindGmInbox` throws on the first, after its existing

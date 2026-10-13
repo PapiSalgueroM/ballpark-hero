@@ -41,7 +41,9 @@
      5) SUBJECT REST. FX_SUBJECT (role and fact subjects) over 50 desks of
         400 weeks: no subject inside its rest or twice in a week, the rest
         book never holds a finished rest or more than one window's deals;
-        subjectRest 0 deals exactly as no subjects; on a clock that falls
+        subjectRest 0 deals exactly as no subjects while every fact is
+        there, and still holds a card whose fact is missing (fail closed),
+        which the same pack without subjects deals; on a clock that falls
         every 20 weeks the book is rebased (never ahead of the clock) and a
         lone card about the captain comes back every season.
      6) TEXTS. FX_TEXTS (cards of 2 and 4 wordings): the same deals and deck
@@ -87,6 +89,8 @@
                 two a week pack can deal one card twice; section 3 fails.
      story      the book key ignores the story; section 4 fails.
      rest       the subject rest test always passes; section 5 fails.
+     failopen   a card about a fact with no value is no longer held; section
+                5 fails.
      restfall   the rest book keeps an entry from the future when the clock
                 falls; section 5 fails.
      expirefall an open card's arrival week is not rebased when the clock
@@ -124,7 +128,7 @@ const CONTROL = process.env.EVENT_DECK_CONTROL || '';
 const RECORD = process.env.SIM_EVENT_DECK_RECORD || '';
 const SHARD = process.env.SIM_EVENT_DECK_SHARD || '';
 const REPLAY_FILE = path.join(ROOT, 'scripts/data/gmInboxReplay.json');
-const CONTROLS = ['replay', 'weightoff', 'weightkeep', 'story', 'rest', 'restfall', 'expirefall', 'textrng', 'seasonweek', 'expireoff', 'expirefx', 'neutral', 'heavy'];
+const CONTROLS = ['replay', 'weightoff', 'weightkeep', 'story', 'rest', 'failopen', 'restfall', 'expirefall', 'textrng', 'seasonweek', 'expireoff', 'expirefx', 'neutral', 'heavy'];
 if (CONTROL && !CONTROLS.includes(CONTROL)) { console.error(`EVENT_DECK_CONTROL=${CONTROL} is not a control this kit knows`); process.exit(2); }
 if (RECORD && (CONTROL || SHARD)) { console.error('a recording runs the whole replay with no control, refusing'); process.exit(2); }
 const red = new Set();
@@ -151,6 +155,7 @@ const ENGINE_CONTROLS = {
   weightkeep: ['return came.splice(i, 1)[0];', 'return came[i]; /* weightkeep control */'],
   story: ['const bookKey = (e: GmEventDef): string => ledgerKey(e);', 'const bookKey = (e: GmEventDef): string => e.id; /* story control */'],
   rest: ['if (r !== undefined && clock - r < restFor) return false;', '/* rest control */'],
+  failopen: ['if (sk === null) return false;', '/* failopen control */'],
   restfall: ['if (clock - Math.min(at, clock) < restFor) rest[k] = Math.min(at, clock);', 'if (clock - at < restFor) rest[k] = at; /* restfall control */'],
   expirefall: ['const w = Math.min(m.w, clock);', 'const w = m.w; /* expirefall control */'],
   textrng: ["const pick = alt > 0 ? Math.floor(keyedRng(`${seat.keyOf?.(s) ?? ''}|${e.id}|${year}|${clock}`)() * (1 + alt)) : 0;",
@@ -572,13 +577,23 @@ console.log('5) Subject rest: no subject inside its rest or twice in a week, the
   if (dealt < 1000) fail(5, `only ${dealt} subject cards dealt: nothing was tested`);
   if (bad.length) fail(5, `${bad.length} subject rest breaks`);
   else ok(`${dealt} subject cards over 50 desks of 400 weeks, none inside its rest or twice in a week, the book never above ${peak} entries`);
-  /* With subjectRest 0 the subjects are inert: the same deal as no subjects. */
+  /* With subjectRest 0 and every fact there, the subjects are inert: the same
+     deal as no subjects. A fact subject with no value still holds its card
+     at any rest (fail closed), stated just below on weeks without the fact. */
   const zero = fxRun({ ...FX_SUBJECT, subjectRest: 0 }, `subject|${SEED}|zero`, 400, { facts });
   const none = fxRun({ ...FX_SUBJECT, subjectRest: 0, events: FX_SUBJECT.events.map(({ subject, ...e }) => e) }, `subject|${SEED}|zero`, 400, { facts });
   const ids = r => r.log.map(w => w.got.map(m => m.id).join(',')).join('|');
   if (ids(zero) !== ids(none) || zero.calls() !== none.calls()) fail(5, 'subjectRest 0 dealt differently from the same pack without subjects');
   else if ('gmInboxRest' in zero.s) fail(5, 'a pack with subjectRest 0 wrote a rest book');
   else ok(`subjectRest 0 deals exactly as no subjects (${zero.log.reduce((n, w) => n + w.got.length, 0)} deals, ${zero.calls()} draws) and writes no book`);
+  const gappy = (clock, rng) => (rng() < 0.25 ? {} : facts(clock, rng));
+  const factCards = new Set(FX_SUBJECT.events.filter(e => e.subject && typeof e.subject !== 'string').map(e => e.id));
+  const onGap = r => r.log.filter(w => !('man' in w.facts) && w.got.some(m => factCards.has(m.defId))).length;
+  const zeroGap = onGap(fxRun({ ...FX_SUBJECT, subjectRest: 0 }, `subject|${SEED}|gap`, 400, { facts: gappy }));
+  const noneGap = onGap(fxRun({ ...FX_SUBJECT, subjectRest: 0, events: FX_SUBJECT.events.map(({ subject, ...e }) => e) }, `subject|${SEED}|gap`, 400, { facts: gappy }));
+  if (zeroGap > 0) fail(5, `at subjectRest 0 a card about a missing fact was dealt on ${zeroGap} weeks: it must be held (fail closed)`);
+  else if (noneGap === 0) fail(5, 'without subjects no fact card was dealt on a week without the fact: the comparison tested nothing');
+  else ok(`at subjectRest 0 a card about a missing fact is still held (fail closed): dealt on no week without the fact, where the same pack without subjects dealt one on ${noneGap}`);
   if (gmStates > 0 && gmGrew === 0) ok(`no GM desk gained gmInboxRest over section 2's ${gmStates} states`);
   /* On a clock that falls (a seat handing in the week of its season) the rest
      book is rebased like the cooldown book: an entry from the future reads
