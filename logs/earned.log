@@ -1,0 +1,10 @@
+1) what must not move: the season before the draft, and the desk off fixture
+   1a: 30 seasons to the draft, desk on, every club the user once: league, desk and 315516 draws held to the base 48cb9d4b
+   1b: git diff --quiet 48cb9d4b -- 4 files: exit 0
+6) the class: today's twelve, then the curve, slots plus four, never over 70
+   1500 classes of 64 for 60 slots: today's twelve found in every one, 78000 men after them held to the curve rating by rating (worst 1.63 standard errors, band 4.5)
+   mean true rating by ten slots: 82.98, 77.87, 74.83, 72.67, 70.95, 69.24, 67.55; steps 5.11, 3.04, 2.16, 1.72, 1.70, 1.70
+   section 1: green
+   section 6: green
+   2 sections ran (1, 6), 211747 checks
+simNbaEarnedDraft: green.

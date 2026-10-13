@@ -1,0 +1,5 @@
+vitest-new exit=0 3s |    Duration  2.45s (transform 837ms, setup 159ms, collect 1.18s, tests 267ms, environment 1.19s, prepare 596ms)
+draftorder exit=0 13s | simGmDraftOrder: green. 603185 checks over 10 sections: the order is the league's, the lottery is drawn once on its own stream and saved, and nothing mounts the lift yet.
+draftorder-mounted exit=1 12s | simGmDraftOrder: CONTROL mounted FIRED. Red by section 9: 1; every other section green.
+earned exit=0 3s | simNbaEarnedDraft: green.
+tsc exit=0 69s | 
