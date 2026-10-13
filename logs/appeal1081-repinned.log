@@ -1,0 +1,12 @@
+src/lib/clubManager.ts: 90e85b6a4e569f4db3671947e85c86099e31625e25fd718f544f9a3d657a579f -> dae4c5551211745d563e30f5b634ea162a2e7f31ac59698e8f1e478038dbf662
+src/lib/clubManagerSlots.ts: 953c366dbe5e56163c81ca2185a60625da9279e4de98f9e39cd0b1cb199fe051 -> 953c366dbe5e56163c81ca2185a60625da9279e4de98f9e39cd0b1cb199fe051 (same)
+scripts/simClubManagerSlots.mjs: 3ceab1cb422cf3ca15d41403de42811a76723086b9858e12322bfa25a5b950b0 -> c7bd98184deee1ea953591942da3ec08d1a1495f8f15b821a94610637f59f31f
+scripts/simClubManagerDecisions.mjs: fc0214ae9511c16188af0f437bd4cc7d0c0092a3b4cf9cebc2f8fb42a82a4231 -> fc0214ae9511c16188af0f437bd4cc7d0c0092a3b4cf9cebc2f8fb42a82a4231 (same)
+Appeal characterization integrity passed: 24 complete actual pairs.
+Existing-card compatibility: 6 save/load and empty-slot round trips, every appeal option.
+Effective copied controls: mislink, effect, story, verdict; independent baseline passed in each.
+Historical baseline: 6 preserved differing pairs, separate from current product parity.
+Compatibility: 13 outcome groups, 16 effective mapped controls.
+Whole-source holds: 3489 exact files; 24 executed bundles retained.
+Product correctness: true; differing pairs: 0.
+Equivalent appeal outcomes must agree: passed for 24 original pairs and 3 separate generated-position pairs.
