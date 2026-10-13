@@ -1,0 +1,1 @@
+anchors exit=1 30s | simHarnessAnchors: 1 failure(s)
