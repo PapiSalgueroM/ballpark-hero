@@ -1,0 +1,10 @@
+pd-a exit=0 21s | simCareerPreDraft [seed set a]: ALL GREEN
+vitest exit=1 29s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/careerPreDraft.test.tsx,title=src/test/careerPreDraft.test.tsx > the combine you run%2C the engine > a
+pd-b exit=0 14s | simCareerPreDraft [seed set b]: ALL GREEN
+pd-c exit=0 13s | simCareerPreDraft [seed set c]: ALL GREEN
+pd-d exit=0 14s | simCareerPreDraft [seed set d]: ALL GREEN
+pd-e exit=0 12s | simCareerPreDraft [seed set e]: ALL GREEN
+tsc exit=0 100s | 
+ctl-night exit=0 85s | projection exit=1 mutated=1 | fails by section:  8 13. | simCareerPreDraft [control projection] [seed set a]: 8 FAILURE(S)
+ctl-new exit=0 103s | extradraw exit=1 mutated=1 | fails by section:  8 9. | simCareerPreDraft [control extradraw] [seed set a]: 8 FAILURE(S)
+pjloop exit=0 216s | PJLOOP prospect=0 predraft=0 total 216s
