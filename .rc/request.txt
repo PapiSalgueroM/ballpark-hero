@@ -1,0 +1,10 @@
+#!serve
+#!playwright
+walk: ENGINES=chromium node scripts/playFrontOfficeGameDay.mjs
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simResultMoment: node scripts/simResultMoment.mjs
+simWritesAreSent: node scripts/simWritesAreSent.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+ctl-check: node scripts/controlFrontOfficeBoard.mjs check
