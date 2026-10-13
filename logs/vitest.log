@@ -1,0 +1,44 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+[90mstderr[2m | src/test/managerMatchPlans.test.tsx[2m > [22m[2mClub Manager saved match plans[2m > [22m[2mshows the worked example and current assignments then restores focus when the plan tile closes
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+ [32m✓[39m src/test/managerMatchPlans.test.tsx [2m([22m[2m13 tests[22m[2m)[22m[33m 2494[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager saved match plans[2m > [22msaves applies and reloads the actual mounted tactics atomically through the real hook [33m 451[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager saved match plans[2m > [22mkeeps three named slots independent and replaces or deletes only the selected saved setup [33m 311[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager saved match plans[2m > [22mshows the worked example and current assignments then restores focus when the plan tile closes [33m 607[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerDeskCues.test.tsx [2m([22m[2m14 tests[22m[2m)[22m[33m 3039[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager desk cues: contracts[2m > [22ma plain renewal says who and the terms the save now holds, on the slam, once [33m 663[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager desk cues: contracts[2m > [22ma refused press and a save that moved some other way say nothing [33m 334[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager desk cues: contracts[2m > [22mwhile the cookie banner is unanswered the line sits above it, and drops back once it is answered [33m 399[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerBracketMoment.test.tsx [2m([22m[2m9 tests[22m[2m)[22m[33m 639[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerSlots.test.tsx [2m([22m[2m12 tests[22m[2m)[22m[33m 2183[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: three manager slots[2m > [22mthe screen asks before it deletes, and every tile says what it holds [33m 332[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager slots: a parked era career[2m > [22mopens through the era boot, squads first [33m 381[2mms[22m[39m
+ [32m✓[39m src/lib/clubManagerSlots.test.ts [2m([22m[2m14 tests[22m[2m)[22m[33m 497[2mms[22m[39m
+ [32m✓[39m src/test/saveFence.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 8[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerWorldEditor.test.tsx [2m([22m[2m13 tests[22m[2m)[22m[33m 685[2mms[22m[39m
+   [33m[2m✓[22m[39m WorldEditorScreen[2m > [22mmoves a club in two taps, says what happened, lists it and resets [33m 342[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerStartWait.test.tsx [2m([22m[2m5 tests[22m[2m)[22m[33m 570[2mms[22m[39m
+[90mstdout[2m | src/test/clubManagerVarLive.test.tsx[2m > [22m[2mClub Manager: VAR lit, goals only (the lit rule)[2m > [22m[2ma Quick Sim is the engine asked for the goal kind, on matches where every kind staged would show a penalty by review
+[22m[39mclubManagerVarLive, lit: Quick Sim, 8 matches, 7 chosen where every kind staged shows a penalty by review, 0 goal review rows
+
+[90mstdout[2m | src/test/clubManagerVarLive.test.tsx[2m > [22m[2mClub Manager: VAR lit, goals only (the lit rule)[2m > [22m[2mthe fast forward is the engine run asked for the goal kind, on a run that differs both from no reviews and from every kind
+[22m[39mclubManagerVarLive, lit: fast forward on seed 26300, to week 6
+
+ [32m✓[39m src/test/clubManagerVarLive.test.tsx [2m([22m[2m8 tests[22m[2m | [22m[33m3 skipped[39m[2m)[22m[33m 11518[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: VAR lit, goals only (the lit rule)[2m > [22ma Quick Sim is the engine asked for the goal kind, on matches where every kind staged would show a penalty by review [33m 10934[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: VAR lit, goals only (the lit rule)[2m > [22mthe fast forward is the engine run asked for the goal kind, on a run that differs both from no reviews and from every kind [33m 428[2mms[22m[39m
+ [32m✓[39m src/test/managerHotSeatCarryOnCard.test.tsx [2m([22m[2m6 tests[22m[2m)[22m[33m 1561[2mms[22m[39m
+   [33m[2m✓[22m[39m Manager Hot Seat: the offer waits on the menu[2m > [22ma finished free run that kept the job reopens on its verdict with the offer [33m 401[2mms[22m[39m
+ [32m✓[39m src/test/dailyMenuResume.test.tsx [2m([22m[2m3 tests[22m[2m)[22m[33m 1296[2mms[22m[39m
+   [33m[2m✓[22m[39m Manager Hot Seat: Menu and back keeps the job[2m > [22mreopens the daily on the next match, not on the brief, and the store keeps the match [33m 986[2mms[22m[39m
+ [32m✓[39m src/test/saveMovedNotice.test.tsx [2m([22m[2m3 tests[22m[2m)[22m[32m 181[2mms[22m[39m
+ [32m✓[39m src/test/managerHotSeatCarryOn.test.ts [2m([22m[2m10 tests[22m[2m)[22m[33m 547[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m13 passed[39m[22m[90m (13)[39m
+[2m      Tests [22m [1m[32m118 passed[39m[22m[2m | [22m[33m3 skipped[39m[90m (121)[39m
+[2m   Start at [22m 06:34:13
+[2m   Duration [22m 17.17s[2m (transform 3.14s, setup 920ms, collect 12.35s, tests 25.22s, environment 6.83s, prepare 1.92s)[22m
+

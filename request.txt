@@ -1,0 +1,25 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/test/saveFence.test.ts src/test/saveMovedNotice.test.tsx src/lib/clubManagerSlots.test.ts src/test/clubManagerSlots.test.tsx src/test/managerHotSeatCarryOn.test.ts src/test/managerHotSeatCarryOnCard.test.tsx src/test/dailyMenuResume.test.tsx src/test/clubManagerBracketMoment.test.tsx src/test/managerMatchPlans.test.tsx src/test/clubManagerDeskCues.test.tsx src/test/clubManagerStartWait.test.tsx src/test/clubManagerVarLive.test.tsx src/test/clubManagerWorldEditor.test.tsx --testTimeout=300000 --hookTimeout=120000
+simManagerHotSeat: node scripts/simManagerHotSeat.mjs
+simDailyDeals: node scripts/simDailyDeals.mjs
+simDeadlineDay: node scripts/simDeadlineDay.mjs
+simManagerAppealIsolation: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simManagerAppealIsolation.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+simGuideHeadings: node scripts/simGuideHeadings.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simPrerender: node scripts/simPrerender.mjs
+simCmLeagueRules: node scripts/simCmLeagueRules.mjs
+simLiveSimMotion: node scripts/simLiveSimMotion.mjs
+simSessionMarks: node scripts/simSessionMarks.mjs
+simAcademy: node scripts/simAcademy.mjs
+simClubManagerScore: node scripts/simClubManagerScore.mjs
+simCmVarLedger: node scripts/simCmVarLedger.mjs
+simPress: node scripts/simPress.mjs
+simRoles: node scripts/simRoles.mjs
+simClubManagerALeague: node scripts/simClubManagerALeague.mjs
+simClubManagerBudget: node scripts/simClubManagerBudget.mjs
+simClubManagerMeters: node scripts/simClubManagerMeters.mjs
+simCmLeagueFixtures: node scripts/simCmLeagueFixtures.mjs
+simEras: node scripts/simEras.mjs
+simWilderness: node scripts/simWilderness.mjs
