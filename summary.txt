@@ -1,0 +1,8 @@
+nomark exit=1 24s | CONTROL nomark FIRED: 30 cases red (section 1: 10, section 2: 10, section 3: 10), none elsewhere
+simCmTablesTruth exit=0 28s | simCmTablesTruth: every case green
+markall exit=1 26s | CONTROL markall FIRED: 21 cases red (section 1: 7, section 2: 7, section 3: 7), none elsewhere
+defeatraw exit=1 28s | CONTROL defeatraw FIRED: 7 cases red (section 4: 7), none elsewhere
+basered exit=1 18s | grep: write error: Broken pipe
+drawinrender exit=1 23s | CONTROL drawinrender FIRED: 10 cases red (section 5: 10), none elsewhere
+vitest-units exit=0 9s |    Duration  8.81s (transform 3.93s, setup 398ms, collect 10.31s, tests 6.97s, environment 2.66s, prepare 902ms)
+tsc exit=0 96s | 

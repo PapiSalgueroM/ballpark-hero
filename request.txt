@@ -1,0 +1,8 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simCmTablesTruth: node scripts/simCmTablesTruth.mjs
+nomark: CM_TABLES_TRUTH_CONTROL=nomark node scripts/simCmTablesTruth.mjs
+markall: CM_TABLES_TRUTH_CONTROL=markall node scripts/simCmTablesTruth.mjs
+defeatraw: CM_TABLES_TRUTH_CONTROL=defeatraw node scripts/simCmTablesTruth.mjs
+drawinrender: CM_TABLES_TRUTH_CONTROL=drawinrender node scripts/simCmTablesTruth.mjs
+basered: B=$PWD/.sim-control/b1325 && mkdir -p $B && for f in SquadScreen ContractsCard RolesScreen ClubManagerCareerPanel; do git show 8fea14e2:src/components/club-manager/$f.tsx > $B/$f.tsx; done && NO_DOUBLE_SWAP="{\"@/components/club-manager/SquadScreen\":\"$B/SquadScreen.tsx\",\"@/components/club-manager/ContractsCard\":\"$B/ContractsCard.tsx\",\"@/components/club-manager/RolesScreen\":\"$B/RolesScreen.tsx\",\"@/components/club-manager/ClubManagerCareerPanel\":\"$B/ClubManagerCareerPanel.tsx\"}" node_modules/.bin/vitest run src/test/cmTablesTruth.test.tsx --testTimeout=300000 --hookTimeout=300000 --reporter=verbose 2>&1 | grep -E "✓|×|FAIL|Tests |AssertionError" | head -90; exit ${PIPESTATUS[0]}
+vitest-units: node_modules/.bin/vitest run src/test/contractPreview.test.tsx src/test/clubManagerDeskCues.test.tsx src/test/rolesBrokenPromises.test.tsx src/test/clubManagerManagerFace.test.tsx src/test/numberFormatting.test.tsx --testTimeout=300000 --hookTimeout=120000
