@@ -925,9 +925,12 @@ async function caseSoccerOldSave(ctx, tag) {
   await P.waitForTimeout(400);
   const before = await P.evaluate(() => ({ y: window.scrollY, h: document.documentElement.scrollHeight }));
   const target = await P.evaluate(() => {
+    /* The next press on screen: the bar's first button, else the card's
+       Continue, else any button of the page, as long as it is in view. */
+    const inView = b => { const r = b.getBoundingClientRect(); return r.height > 0 && r.top >= 0 && r.bottom <= innerHeight && r.left >= 0 && r.right <= innerWidth; };
     const bar = document.querySelector('[data-career-action-bar] button');
-    const cont = [...document.querySelectorAll('main button')].find(b => /^Continue/.test((b.textContent || '').trim()) && b.getBoundingClientRect().height > 0);
-    const el = bar && bar.getBoundingClientRect().height > 0 ? bar : cont;
+    const main = [...document.querySelectorAll('main button')].filter(inView);
+    const el = (bar && inView(bar) ? bar : null) ?? main.find(b => /^Continue/.test((b.textContent || '').trim())) ?? main[0];
     if (!el) return null;
     const r = el.getBoundingClientRect();
     return { x: r.x, y: r.y, width: r.width, height: r.height, label: (el.textContent || '').trim().slice(0, 40) };
