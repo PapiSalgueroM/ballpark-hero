@@ -1,0 +1,8 @@
+deals-rulesall exit=1 5s | simDailyDeals: CONTROL rulesall FIRED: red on [2026-10-10, 2026-10-11, 2026-10-12, 2026-10-13, 2026-10-14, 2026-10-15, 2026-10-16] and nowhere else
+simDailyDeals exit=0 5s | simDailyDeals: green. 12 Hot Seat dates (5 Premier League) and 6 Deadline Day dates (3 Premier League) deal what Release AS dealt, no daily carries the real fixture key, 
+deals-rulesstale exit=1 4s | simDailyDeals: CONTROL rulesstale FIRED: red on [2026-10-10, 2026-10-12, 2026-10-13, 2026-10-14, 2026-10-15, cutover] and nowhere else
+era-subsrow exit=1 21s | simEra2020: 1 failure(s).
+simGuideHeadings exit=0 1s | simGuideHeadings: green. 131 guides carry keyword h2s over h3 and h4 sections with every original sentence intact, and all 133 blocks render a clean outline.
+simEra2020 exit=0 38s | simEra2020: green. 2020-21 is real, sealed, and plays like 2020-21.
+tsc exit=0 80s | 
+subs-base exit=0 148s | simCmSubs GREEN: 10 of 10 checks green (parts legacy, three, hotseat, press)

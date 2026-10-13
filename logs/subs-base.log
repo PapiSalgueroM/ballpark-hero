@@ -1,0 +1,14 @@
+ok   [legacy] 40 careers, every save byte and every draw equal to SUBS_BASE
+ok   [three] 20 careers, every save byte and every draw equal to SUBS_BASE
+ok   [hotseat] the cutover 2026-10-24 falls after the 30 dates (2026-09-24 to 2026-10-23)
+ok   [hotseat] every daily before the cutover plays the base rules (0 of 30 unmarked)
+ok   [hotseat] every daily before the cutover replays exactly as on SUBS_BASE
+ok   [hotseat] a free run saved without the stamp replays exactly as on SUBS_BASE
+ok   [hotseat] the career carried on to Club Manager carries no matchRules
+ok   [press] every bigGame or derby question asked at a whistle names the next fixture's opponent (0 of 11 wrong)
+   question kinds at the whistle, head: {"bid":12,"dropped":29,"bigGame":8,"boardHeat":2,"slump":10,"request":13,"roll":3,"derby":3}
+   question kinds at the whistle, base: {"bid":10,"dropped":39,"slump":7,"request":13,"bigGame":3,"roll":3,"derby":4}
+   2026-10-12 daily at Westerlo: "Cercle Brugge on paper are a level above you. Realistically, what are you going there for?"; the stamped free run on its seed: "Gent on paper are a level above you. Realistically, what are you going there for?"
+ok   [press] the 2026-10-12 daily still asks about Cercle Brugge (it is dated before the rules)
+ok   [press] a stamped free run on the same seed asks about Gent after Cercle Brugge
+simCmSubs GREEN: 10 of 10 checks green (parts legacy, three, hotseat, press)
