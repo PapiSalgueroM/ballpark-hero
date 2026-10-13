@@ -147,6 +147,19 @@ describe('WorldEditorScreen', () => {
     fireEvent.click(view.getByText('Reset'));
     expect(edit).toBeNull();
   });
+  it('says La Liga without an article after a swap into it (Round 1326)', () => {
+    let edit: WorldEdit | null = null;
+    const onChange = (e: WorldEdit | null) => { edit = e; };
+    const view = render(<WorldEditorScreen edit={null} onChange={onChange} onBack={noop} onDone={noop} />);
+    fireEvent.click(view.getByLabelText('Move Celtic'));
+    fireEvent.change(view.getByLabelText('League to swap into'), { target: { value: 'laliga' } });
+    fireEvent.click(view.getByLabelText('Swap Celtic with Barcelona'));
+    expect(edit).toEqual(swapClubs(null, 'Celtic', 'Barcelona'));
+    view.rerender(<WorldEditorScreen edit={edit} onChange={onChange} onBack={noop} onDone={noop} />);
+    const said = view.getByRole('status').textContent ?? '';
+    expect(said).toContain('Celtic now plays in La Liga, and Barcelona in the Scottish Premiership');
+    expect(said).not.toContain('the La Liga');
+  });
   it('lets a move be cancelled before the second tap', () => {
     let calls = 0;
     const view = render(<WorldEditorScreen edit={null} onChange={() => { calls += 1; }} onBack={noop} onDone={noop} />);

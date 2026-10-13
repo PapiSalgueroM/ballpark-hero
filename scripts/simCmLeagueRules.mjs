@@ -464,6 +464,24 @@
       engine's fix taken out the committed file is green whole. Written on
       the same runner (line write-digest, 57 lines changed), then run green
       whole there.
+      Round 1326 (2026-10-13) re-took modern, eras and pure for words and
+      nothing else (a copy round: Win La Liga, Serie A and Ligue 1 by
+      toLeague, the weekly news lines that name a league, the drama line's
+      sentence capitals, the break note's clause, the staff approach line).
+      Attribution on a GitHub runner at ea84ed63 (remote check r1326-s5a),
+      three legs. Leg A, the base c9c77eba under CM_RULES_ROOT: the file as
+      it stood, green whole. Leg B, the tree itself: 26 of 27 modern saves
+      (all but now|saudi), 20 of 20 era saves and 17 of 48 pure entries
+      moved, 130 hashes, in start, whole, objectives, summary, wholeNext,
+      objectivesNext, s2_whole and s2_objectives, and in pure only demand
+      and objectives of the five modern and twelve era leagues toLeague
+      leaves bare; table, results, world, cup, europe, trophies,
+      promotions, europeNext, calendarNext and cupDrawNext held everywhere.
+      Leg C, scripts/qa/cmCopyOnly1326.mjs fleet B (these same 47 saves on
+      the base and the head in lockstep, every entry compared): equal draws
+      and every differing string one of the round's declared rewrites
+      (now|saudi none). Written with --part=modern,eras,pure --write on the
+      tree itself, then run green whole.
    2. DIGEST, ERAS (hard). The same for every league of every historic era,
       one career each.
    3. DIGEST, PURE (hard). For every modern and era league: the drop count,

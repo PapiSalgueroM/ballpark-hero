@@ -128,7 +128,9 @@ describe('who goes', () => {
 
   it('never claims the men are away for the whole window, and counts games only on confirmed dates', () => {
     const msg = breakMessage({ windowId: '2026-nov', atWeek: 6, label: '9 to 17 Nov', backWeek: 7, backOpponent: 'Everton', called: callUpsFor(s, { id: '2026-nov', matches: 2 }) });
-    expect(msg?.text).toContain('your fixtures do not stop for it');
+    /* Round 1326: the words name this calendar's rule, never football's. */
+    expect(msg?.text).toContain('the calendar here keeps your fixtures going through it');
+    expect(msg?.text).not.toContain('do not stop');
     const w = intlWindowsFor(2026)[0];
     const confirmed = intlMarkLine({ window: w, key: 0, label: '21 Sep to 6 Oct', partial: false, done: false });
     expect(confirmed).toContain('up to 4 games for each country');

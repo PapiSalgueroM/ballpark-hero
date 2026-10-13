@@ -131,7 +131,12 @@ console.log('1) The demand ladder over all playable clubs');
 
     // Every top five league must speak the full ladder the owner listed.
     if (EURO_SLOTS[league.id] && ['premier', 'laliga', 'seriea', 'bundesliga', 'ligue1'].includes(league.id)) {
-      for (const want of ['Win the', 'Champions League', 'Europa League', 'Conference League']) {
+      /* Round 1326: the title band is matched whole, as the engine's own toLeague says the league
+         ("Win La Liga", "Win Serie A", "Win Ligue 1", "Win the Premier League"). This read
+         'Win the' before that round, which only La Liga, Serie A and Ligue 1 boards ever got wrong. */
+      const title = `Win ${cm.toLeague(league.name)}`.replace(/\d+/g, 'N');
+      if (!bands.includes(title)) fail(`${league.name} has no "${title}" band`);
+      for (const want of ['Champions League', 'Europa League', 'Conference League']) {
         if (!bands.some(b => b.includes(want))) fail(`${league.name} has no "${want}" band`);
       }
     }

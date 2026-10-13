@@ -9616,7 +9616,18 @@ function otherDescriptor(p: CMPlayer, taken: string): string {
   return p.isYouth ? 'one of the academy lads' : 'another of the senior lads';
 }
 
-const DRAMA_POOL: { text: string; options: { label: string; effect: MessageEffect }[] }[] = [
+/**
+ * Round 1326: a drama line with its two descriptors filled in, every sentence
+ * opening on a capital ("...in the players lounge. One of your defenders
+ * reckons..."): the first letter and any lower case letter after a full stop,
+ * a question mark or an exclamation mark and a space. Pure; draws nothing.
+ */
+export function dramaText(template: string, d1: string, d2: string): string {
+  const text = template.replace('{P}', d1).replace('{Q}', d2);
+  return text.replace(/(^|[.?!] )([a-z])/g, (_m, lead: string, c: string) => lead + c.toUpperCase());
+}
+
+export const DRAMA_POOL: { text: string; options: { label: string; effect: MessageEffect }[] }[] = [
   { text: '{P} got caught selling his match worn boots on eBay. Buy it now, no returns.', options: [{ label: 'Fine him', effect: 'fine' }, { label: 'Buy a pair yourself', effect: 'laugh' }] },
   { text: '{P} showed up to training in a full chrome wrap on his car with his own face printed on the hood.', options: [{ label: 'Fine him for the parking spot he took', effect: 'fine' }, { label: 'Respect it, honestly', effect: 'laugh' }] },
   { text: '{P} has started a podcast. Episode one is called Why My Manager Does Not Understand Football.', options: [{ label: 'Make him listen to it in front of everyone', effect: 'fine' }, { label: 'Go on the podcast', effect: 'support' }] },
@@ -9800,14 +9811,11 @@ function generatePlayerMessage(state: CareerState, xi: CMPlayer[], won: boolean,
      on somebody, but it is metadata now: InboxCard renders text and nothing
      else, so no roster name reaches the screen through this branch. */
   const d1 = squadDescriptor(p1);
-  const text = drama.text
-    .replace('{P}', d1)
-    .replace('{Q}', otherDescriptor(p2, d1));
   pushMessage(state, {
     playerName: p1.name,
     playerId: p1.id,
     kind: 'drama',
-    text: text.charAt(0).toUpperCase() + text.slice(1),
+    text: dramaText(drama.text, d1, otherDescriptor(p2, d1)),
     options: drama.options,
   });
 }
@@ -11214,7 +11222,7 @@ export function generateWeeklyNews(state: CareerState): void {
     } else if (gap <= 2 && stage > 0.25) {
       pushHeadline(state, `\u{1F3C6} ${leader.club} lead ${second.club} by ${gap === 0 ? 'goal difference alone' : `${gap} ${gap === 1 ? 'point' : 'points'}`}. Title race.`);
     } else {
-      pushHeadline(state, `\u{1F4CA} ${leader.club} top the ${league.name} on ${leader.pts} points after ${played} rounds.`);
+      pushHeadline(state, `\u{1F4CA} ${leader.club} top ${toLeague(league.name)} on ${leader.pts} points after ${played} rounds.`);
     }
     return;
   }
@@ -11237,7 +11245,7 @@ export function generateWeeklyNews(state: CareerState): void {
   const byGf = [...table].sort((a, b) => b.gf - a.gf)[0];
   const byGa = [...table].sort((a, b) => a.ga - b.ga)[0];
   if (played % 2 === 0 && byGf.gf > 0) {
-    pushHeadline(state, `\u{26BD} ${byGf.club} have the sharpest attack in the ${league.name}: ${byGf.gf} scored in ${played} rounds.`);
+    pushHeadline(state, `\u{26BD} ${byGf.club} have the sharpest attack in ${toLeague(league.name)}: ${byGf.gf} scored in ${played} rounds.`);
   } else if (byGa.ga >= 0) {
     pushHeadline(state, `\u{1F9F1} Nobody is harder to score on than ${byGa.club}: ${byGa.ga} conceded all season.`);
   }
@@ -13379,7 +13387,7 @@ function leagueDemand(rank: number, tier: number, size: number, league: LeagueDe
   // placed side plays the Bundesliga's sixteenth: each row's playoff rung.)
   if (rules.ladder === 'promotion') {
     // The single biggest club in the division is not aiming for second.
-    if (rank <= 1) return { target: 1, label: `Win the ${league.name}` };
+    if (rank <= 1) return { target: 1, label: `Win ${toLeague(league.name)}` };
     if (rank <= 2 || (rank <= 4 && tier <= 2)) {
       // A club this big in this division exists to leave it immediately.
       return { target: 2, label: `Win automatic promotion` };
@@ -13391,7 +13399,7 @@ function leagueDemand(rank: number, tier: number, size: number, league: LeagueDe
 
   // MLS: no relegation exists, so no board can honestly threaten it.
   if (rules.ladder === 'playoffs') {
-    if (rank <= 2) return { target: 1, label: `Win the ${league.name}` };
+    if (rank <= 2) return { target: 1, label: `Win ${toLeague(league.name)}` };
     if (rules.playoff && rank <= rules.playoff.rankUpTo) return { target: rules.playoff.target, label: rules.playoff.label };
     return { target: size - (rules.floorFromBottom ?? 4), label: `Finish mid-table or better` };
   }
@@ -13401,7 +13409,9 @@ function leagueDemand(rank: number, tier: number, size: number, league: LeagueDe
   // measured XI gap catches the club that is title-class inside its own
   // league even when its absolute rating is modest (Sporting CP, Feyenoord).
   if (demandsTitle(rank, tier, titleGap, clubName, eraId)) {
-    return { target: 1, label: `Win the ${league.name}` };
+    /* Round 1326: the league takes its article by toLeague's rule ("Win La
+       Liga", "Win Serie A", "Win the Premier League"). */
+    return { target: 1, label: `Win ${toLeague(league.name)}` };
   }
 
   const slots = rules.europe;

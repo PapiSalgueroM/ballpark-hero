@@ -65,8 +65,10 @@
  * the last of yours before the window opens. Club Manager's fixture list does
  * not stop for a window (moving every date would move the January window and
  * the season's end with it), so the copy gives the window's real dates as the
- * window's and never claims your men are away for all of it. Your assistant
- * names who went in the inbox and asks whether to start them in the match
+ * window's and never claims your men are away for all of it. The words name
+ * that as this calendar's rule, never as what real football does (Round
+ * 1326). Your assistant names who went in the inbox and asks whether to
+ * start them in the match
  * they come back for, or rest them for that one game. A rest is written into
  * your picked eleven (applyRest), so the tactics screen shows the side that
  * will play, the rested men sit on the bench, and putting one back in the
@@ -417,7 +419,7 @@ export function breakMessage(brk: IntlBreak): IntlMessage | null {
      window before a ball is kicked, so the men went from preseason. */
   const when = brk.atWeek === 0
     ? 'and it starts before your first game of the season, so they went from preseason'
-    : 'and your fixtures do not stop for it, so they went straight after your last game';
+    : 'and the calendar here keeps your fixtures going through it, so they went straight after your last game';
   const back = brk.backOpponent ? `the ${brk.backOpponent} game` : 'the next game';
   const hurtLine = hurt.length
     ? ` ${listNames(hurt.map(c => c.name))} picked up a knock away and ${hurt.length === 1 ? 'is' : 'are'} out for a bit.`
@@ -437,7 +439,8 @@ export function breakMessage(brk: IntlBreak): IntlMessage | null {
     playerName: 'Your assistant',
     playerId: '',
     /* The window's dates are the window's, never the time the men are away:
-       the fixture list plays on through a window, so the note says so. */
+       this game's fixture list plays on through a window, so the note says
+       so, as this calendar's rule and never as football's (Round 1326). */
     text: `International break: the window runs ${brk.label}, ${when}. Away with their countries (${who}). They are back for ${back}.${fit.length ? playedLine : ''}${longHaul}${hurtLine}${ask}`,
     options: fit.length
       ? [
@@ -679,13 +682,14 @@ export function intlMarks(state: CareerState): IntlMark[] {
  * only for a window whose dates are confirmed: the others use the
  * window pattern as a structure, and nothing sources their match counts.
  * Your fixtures here play on through a window, so the line never says the
- * men are away for its whole length.
+ * men are away for its whole length. Round 1326: the words name it as this
+ * calendar's rule, never as football's.
  */
 export function intlMarkLine(mark: IntlMark): string {
   const games = mark.partial ? '' : ` (up to ${mark.window.matches} games for each country)`;
   const when = mark.done
     ? 'Played.'
-    : 'Your fixtures do not stop for it: your internationals go after your last game before it and come back tired for the next one.';
+    : 'This calendar plays on through it: your internationals go after your last game before it and come back tired for the next one.';
   const dates = mark.partial ? ' These dates are approximate.' : '';
   return `International window, ${mark.label}${games}. ${when}${dates}`;
 }
