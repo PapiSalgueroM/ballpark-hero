@@ -13,7 +13,7 @@ Branch `r1326-cm-copy`, base origin/main `c9c77eba` (Release BB). Every check be
 | 6 money card | cd5f2ee2, notes 399920d5 | r1326-s6a, s6b, s6c, s6d, s6w | tsc 0, vitest 0, simCmCopy 0, base 1 (184), copyonly A 0, simCmLeagueRules 0, simDailyDeals 0; reader reds as on the base except two (below) | article 107, drama 57, intl 4, staff 4, finance 6, bind, binddeadline all FIRED | weight 592.1, 611.9, 622.0 |
 | readers that read the old words | 9da86941 | r1326-s7b | simBoardObjectives 0 (base 1: 3), simCmShootoutOrder 0 | unsetpath 1 FIRED, news draw mutation 1 FIRED | |
 | 7 the floor | 559a0c62, 82983f97 | r1326-s7a, s7c | tsc 0, vitest 0, simCmCopy 0, simClubManagerFinances 0, simSponsors 0, playSponsors 0, playCmFinanceDesk 0, simNoRivalNames 0, simHarnessAnchors 0, copyonly A 0 | desk small 9, cut 3, wrap 3 FIRED; finance 6 FIRED | weight 592.1, 611.9, 622.0 |
-| 8 the close | What's New 81083982, merge 71d0ee8d | (see the closing report) | | | |
+| 8 the close | What's New 81083982, merge 71d0ee8d (36cc9ffe, docs only), proof on 8e54b6f6 | r1326-s8a, s8b, s8c, s8d, s8w; pictures r1326-p5 | tsc 0, vitest 0, simCmCopy 0 (base 1: 184), copyonly A,B,C,D 0 (67 careers, draws equal; intl 4623, staff 286, article-board 893, article-news 3794, drama 219), simCmLeagueRules 0, every walk 0 but the three red on the base; readers s8b 41 of 43, s8c 51 of 54, s8d 43 of 46 at 0, every red equal to the base or the live database or the attributed simGmStaff | article 107, drama 57, intl 4, staff 4, finance 6, draw 16, word 12, bind, binddeadline, desk small 9, cut 3, wrap 3 all FIRED | weight 592.1, 611.9, 622.0; save bytes 192904, 197117, 197650 |
 
 ## Red on the base c9c77eba before any edit (r1326-s0a to s0w), with the first failing line
 - the live database, which the runner blocks: simWindow2026Bundesliga, simSchemaNames, simSoccerConquest,
@@ -75,11 +75,28 @@ buttons and 28 figures at each of 320 by 640, 390 by 844 and 1280 by 900. Its pi
 signed cover and kitty figures breaking after the plus sign at 320 and 390; the walk now checks every figure of the
 table sits on one line, and run against a build of 559a0c62 it reports exactly those 6 failures (r1326-s7c
 prev-desk). The four signed cells are whitespace-nowrap since 82983f97.
-Where the projection rows sit on a 390 by 844 phone with the desk just opened: the kitty row at document y 899,
-465 px down the screen, desk top at 96 px (head). Opening scrolls nothing at 390 and 1280; at 320 the reveal moves
-the page 53 px so the desk's top sits under the header at 48 px.
+Where the projection's bottom row sits on a 390 by 844 phone with the desk just opened, desk top at 96 px on both
+trees: the base's "Season result" at document y 793, 359 px down the screen (r1326-s7e base-desk); the head's
+"Kitty change" at document y 884, 450 px down, one row lower for the cover row above it (r1326-s7c, after the
+figures went to one line; 899 and 465 on 559a0c62). Opening scrolls nothing at 390 and 1280; at 320 the reveal moves
+the page 53 px so the desk's top sits under the header at 48 px, the same on the base.
 Lazy chunks (gzip, build log): FinancesScreen 3.41 to 3.72 kB, MatchCentre 2.28 to 2.29 kB, WorldEditorScreen 2.35
 to 2.36 kB. Route rows: /club-manager 592.0 to 592.1K, /manager-hot-seat 611.7 to 611.9K, /deadline-day 621.8 to
-622.0K (r1326-s0w against r1326-s7c).
-Save bytes at season 15 (simClubManagerSaveSize, r1326-s0a against r1326-s6b): Real Madrid 192920 to 192904,
-Everton 197117 and Lincoln City 197650 unchanged.
+622.0K (r1326-s0w against r1326-s7c, and again in r1326-s8w on 8e54b6f6).
+Save bytes at season 15 (simClubManagerSaveSize, r1326-s0a against r1326-s6b, and again in r1326-s8b on 8e54b6f6):
+Real Madrid 192920 to 192904, Everton 197117 and Lincoln City 197650 unchanged.
+
+## The close (step 8) and the siblings
+- The step 8 proof ran on 8e54b6f6 (the code of every step plus the merge of 36cc9ffe, which is docs only, so the
+  code base is still c9c77eba): r1326-s8a, s8b, s8c, s8d, s8w. Results in the table above and in the closing
+  report.
+- Pictures from the builder's own walk (r1326-p5, head and a base build at 320, 390 and 1280): the La Liga club
+  list and Barcelona's card ("Board wants Win La Liga", base "Win the La Liga"), the Board panel ("Win La Liga",
+  "Win the Copa del Rey"), the calendar on the first window day (head "This calendar plays on through it", base
+  "Your fixtures do not stop for it"), the inbox note after the window, the desk late in the season. Not pictured:
+  a staff approach (every man set to level 9 and proven landed, none came in 27 weeks; simCmCopy section 4 and
+  fleet D's 286 staff rewrites prove the words) and the Match Centre league line (it prints only for an opponent
+  from another league).
+- GmBooksPanel's "This season" is not the same misreading: gmBooks.ts books every line against the kitty (its
+  header: income less costs equals the change in the kitty; result = income less spend), and the `ops` flag names
+  the budget that pays, not a cover. Nothing for F18.
