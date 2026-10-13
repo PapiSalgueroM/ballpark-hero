@@ -1,0 +1,4 @@
+derbyHistory exit=0 4s | Derby history: 11 groups,24 full main season pairs,192 full campaign/RNG pairs,0 effective controls; artifacts /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/derby
+seasonHistory exit=0 4s | Season history: 9 groups,24 full AR season pairs,192 full campaign/RNG pairs,0 effective controls; artifacts /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/season-
+vitest exit=0 3s |    Duration  2.42s (transform 1.17s, setup 151ms, collect 2.74s, tests 52ms, environment 905ms, prepare 342ms)
+awards exit=0 68s | simCareerAwardsNight: ALL 179 CHECKS PASSED
