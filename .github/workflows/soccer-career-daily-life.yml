@@ -1,0 +1,120 @@
+name: Soccer Career everyday decisions
+
+on:
+  push:
+    branches: [codex/soccer-career-daily-life]
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 100
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      ENGINES: chromium
+      CAREER_SEASON_LOCAL_ONLY: '1'
+      SOCCER_ROUTINE_PHASE: baseline
+      SOCCER_ROUTINE_OUT: ${{ github.workspace }}/soccer-routine-artifacts
+      FREE_KICK_FONT_CACHE: ${{ github.workspace }}/soccer-routine-artifacts/font-cache
+      PRERENDER_ONLY: /soccer-career
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Block production database transport
+        run: echo '127.0.0.1 flawuiqbvjobmkfkauhw.supabase.co' | sudo tee -a /etc/hosts
+      - name: Bind source and locked tools
+        run: |
+          mkdir -p "$SOCCER_ROUTINE_OUT"
+          git rev-parse HEAD > "$SOCCER_ROUTINE_OUT/source-head.txt"
+          git status --porcelain --untracked-files=no > "$SOCCER_ROUTINE_OUT/source-before.txt"
+          test ! -s "$SOCCER_ROUTINE_OUT/source-before.txt"
+          if test "$SOCCER_ROUTINE_PHASE" = baseline; then
+            git diff --exit-code 48cb9d4bbe8d8f4922113326d9db5d120dcb0b09 -- src/lib/soccerCareerEngine.ts src/lib/soccerCareerLife.ts src/lib/soccerCareerSave.ts src/pages/SoccerCareer.tsx
+          fi
+          sha256sum package.json package-lock.json bun.lock > "$SOCCER_ROUTINE_OUT/package-hashes.txt"
+          sha256sum src/lib/soccerCareerEngine.ts src/lib/soccerCareerLife.ts src/lib/soccerCareerSave.ts src/lib/careerEventDeck.ts src/lib/careerChanceWheel.ts src/pages/SoccerCareer.tsx src/test/soccerCareerRoutineEvents.test.ts src/test/soccerCareerLifeFollowups.test.ts scripts/simSoccerCareerRoutineEvents.mjs .github/workflows/soccer-career-daily-life.yml > "$SOCCER_ROUTINE_OUT/source-hashes.txt"
+          if test "$SOCCER_ROUTINE_PHASE" = fixed; then
+            sha256sum src/lib/soccerCareerRoutineEvents.ts scripts/playSoccerCareerRoutineEvents.mjs >> "$SOCCER_ROUTINE_OUT/source-hashes.txt"
+          fi
+          npm ci
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          const lock = JSON.parse(fs.readFileSync('package-lock.json'));
+          const installed = Object.entries(lock.packages).filter(([p]) => p.startsWith('node_modules/') && fs.existsSync(p + '/package.json')).map(([p, entry]) => {
+            const version = JSON.parse(fs.readFileSync(p + '/package.json')).version;
+            assert.equal(version, entry.version, p);
+            return { path: p, version };
+          });
+          assert(installed.length > 0);
+          fs.writeFileSync(process.env.SOCCER_ROUTINE_OUT + '/installed.json', JSON.stringify(installed, null, 2));
+          console.log(`Bound ${installed.length} installed locked versions.`);
+          NODE
+      - name: Application type gate
+        run: node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee "$SOCCER_ROUTINE_OUT/types.log"
+      - name: Actual routine and promised followup outcomes
+        run: |
+          if test "$SOCCER_ROUTINE_PHASE" = baseline; then
+            SC_ROUTINE_EXPECT_RED=1 NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerCareerRoutineEvents.mjs 2>&1 | tee "$SOCCER_ROUTINE_OUT/baseline.log"
+          else
+            NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerCareerRoutineEvents.mjs 2>&1 | tee "$SOCCER_ROUTINE_OUT/fixed.log"
+            for control in missing priority effect; do
+              SC_ROUTINE_CONTROL="$control" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerCareerRoutineEvents.mjs 2>&1 | tee "$SOCCER_ROUTINE_OUT/control-$control.log"
+            done
+          fi
+      - name: Fixed browser and build tools
+        if: env.SOCCER_ROUTINE_PHASE == 'fixed'
+        run: |
+          npm install --prefix "$RUNNER_TEMP/soccer-routine-browser" --no-save --package-lock=false playwright
+          ln -s "$RUNNER_TEMP/soccer-routine-browser/node_modules/playwright" node_modules/playwright
+          ln -s "$RUNNER_TEMP/soccer-routine-browser/node_modules/playwright-core" node_modules/playwright-core
+          node "$RUNNER_TEMP/soccer-routine-browser/node_modules/playwright/cli.js" install --with-deps chromium
+          python -m pip install fonttools pillow
+          node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only 2>&1 | tee "$SOCCER_ROUTINE_OUT/fonts.log"
+          sha256sum --check "$SOCCER_ROUTINE_OUT/package-hashes.txt"
+      - name: Complete application build with career snapshot
+        if: env.SOCCER_ROUTINE_PHASE == 'fixed'
+        run: |
+          npm run build:seo 2>&1 | tee "$SOCCER_ROUTINE_OUT/build.log"
+          cp scripts/data/lastmod.json "$SOCCER_ROUTINE_OUT/build-lastmod.json"
+          git diff -- scripts/data/lastmod.json > "$SOCCER_ROUTINE_OUT/build-lastmod.diff"
+      - name: Actual career event browser journeys
+        if: env.SOCCER_ROUTINE_PHASE == 'fixed'
+        run: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playSoccerCareerRoutineEvents.mjs 2>&1 | tee "$SOCCER_ROUTINE_OUT/browser.log"
+      - name: Related career and every rebuilt-site reader
+        if: env.SOCCER_ROUTINE_PHASE == 'fixed'
+        run: |
+          ONLY=simSoccerCareerRoutineEvents,simCareerLife,simCareerLifeCooldowns,simCareerStory,simCareerProgramme,simCareerRecordedStats,simCareerSeasonTruth,simNoInventedQuotes,simAdsense,simBrand,simHeadTags,simHiddenPages,simHubs,simIndexNow,simIndexing,simInternalLinks,simNoRivalNames,simPrerender,simPrerenderBoot,simRetiredRoutes,simSchema,simSitemap,simSnapshotAssets node scripts/runAllSims.mjs --browser 2>&1 | tee "$SOCCER_ROUTINE_OUT/related.log"
+      - name: Final source and package holds
+        if: always()
+        run: |
+          sha256sum --check "$SOCCER_ROUTINE_OUT/source-hashes.txt"
+          sha256sum --check "$SOCCER_ROUTINE_OUT/package-hashes.txt"
+          git diff --exit-code -- src scripts ':!scripts/data/lastmod.json' package.json package-lock.json bun.lock .github/workflows
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          const installed = JSON.parse(fs.readFileSync(process.env.SOCCER_ROUTINE_OUT + '/installed.json'));
+          for (const row of installed) assert.equal(JSON.parse(fs.readFileSync(row.path + '/package.json')).version, row.version, row.path);
+          console.log(`Held ${installed.length} installed locked versions.`);
+          NODE
+      - name: Retain complete evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: soccer-routine-${{ github.run_id }}
+          path: soccer-routine-artifacts/
+          retention-days: 14
+          if-no-files-found: error
