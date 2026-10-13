@@ -1,0 +1,2 @@
+promises exit=1 9s | simSoccerEventPromises: 41 failures in section 1
+fairness exit=1 39s | simSoccerDeckFairness: 107 failures in section 1, 2, 3, 4, 5, 6, 7

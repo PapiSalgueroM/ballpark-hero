@@ -1,0 +1,2 @@
+promises: node scripts/simSoccerEventPromises.mjs
+fairness: node scripts/simSoccerDeckFairness.mjs

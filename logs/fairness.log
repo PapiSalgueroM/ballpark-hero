@@ -1,0 +1,103 @@
+The paper holds 44 stories, 23 of them under weight 1
+Driving the fleet: 200 ordinary, 200 elite and 100 loyal careers through the real engine
+   500 careers, 8226 playing seasons, 7463 batches, 7463 papers, 0 crashes
+1) The deck: 40,000 keyed draws, every tenth of the eligible list at its fair rate
+   save: ST, age 20, 5 rows; 91 eligible cards, 119877 picks over 40000 draws (2.997 a draw)
+  FAIL (section 1): tenth 1 (10 cards, ids 1 to 14) is drawn 1.598 times its fair rate
+  FAIL (section 1): tenth 2 (9 cards, ids 15 to 41) is drawn 1.11 times its fair rate
+  FAIL (section 1): tenth 5 (9 cards, ids 229 to 248) is drawn 0.852 times its fair rate
+  FAIL (section 1): tenth 6 (9 cards, ids 252 to 400) is drawn 1.336 times its fair rate
+  FAIL (section 1): tenth 8 (9 cards, ids 414 to 431) is drawn 0.777 times its fair rate
+  FAIL (section 1): tenth 9 (9 cards, ids 432 to 476) is drawn 0.775 times its fair rate
+  FAIL (section 1): tenth 10 (9 cards, ids 477 to 492) is drawn 0.654 times its fair rate
+   per tenth, observed over fair: 1.598, 1.11, 0.978, 0.935, 0.852, 1.336, 0.919, 0.777, 0.775, 0.654; single cards 0.545 to 2.904 (reported, not asserted)
+2) The paper: a weight 0.5 story prints at half the rate of a weight 1 story
+   4 stories eligible (weights 1 1 0.5 1); over 40000 papers the 0.5 story printed 0 times, the weight 1 story 15478, others 24522: ratio 0 (sd 0)
+  FAIL (section 2): the weight 0.5 story prints at 0 of the weight 1 story's rate, outside 0.4 to 0.6
+   the fleet's 7463 papers printed 10 of the 23 stories under weight 1; REDEMPTION 10 times
+   under weight 1: Reveals Secret To Success In 0.5:0; Followers After Viral Moment 0.5:0; Booed By Own Fans After Anot 0.7:136; Wants Out As Contract Talks  0.5:26; Could Miss Months With Serio 0.5:0; Hits Out At Manager In Shock 0.3:7; Agent Demands Record Deal 0.4:0; : Another Season Of Rivalry 0.5:0; M Bid For 0.7:70; Available On Free Transfer 0.5:6; 's Latest Purchase Raises Ey 0.8:0; Match Is A Show Now 0.9:57; Never Celebrates, Never Blin 0.9:1; Walks Disciplinary Tightrope 0.9:17; Breaks The Scouting Apps 0.8:0; HAPPIEST MAN IN FOOTBALL: Th 0.7:10; 's Monster Contract 0.7:0; LEADER OF THE NATION: 0.6:0; Bought Mum The House, And Th 0.6:0; Clean Sheets, Strikers In Th 0.6:3; Is Football's Coldest War 0.6:0; 's Money Now Works Harder Th 0.5:0; Refuses To Read The Calendar 0.5:0
+  FAIL (section 2): the story "Reveals Secret To Success In Exclusive Interview: 'I Never Stopped Believing'" (weight 0.5) never printed in the fleet
+  FAIL (section 2): the story "Followers After Viral Moment" (weight 0.5) never printed in the fleet
+  FAIL (section 2): the story "Could Miss Months With Serious" (weight 0.5) never printed in the fleet
+  FAIL (section 2): the story "Agent Demands Record Deal" (weight 0.4) never printed in the fleet
+  FAIL (section 2): the story ": Another Season Of Rivalry" (weight 0.5) never printed in the fleet
+  FAIL (section 2): the story "'s Latest Purchase Raises Eyebrows" (weight 0.8) never printed in the fleet
+  FAIL (section 2): the story "Breaks The Scouting Apps" (weight 0.8) never printed in the fleet
+  FAIL (section 2): the story "'s Monster Contract" (weight 0.7) never printed in the fleet
+  FAIL (section 2): the story "LEADER OF THE NATION:" (weight 0.6) never printed in the fleet
+  FAIL (section 2): the story "Bought Mum The House, And The Video Broke The Internet" (weight 0.6) never printed in the fleet
+  FAIL (section 2): the story "Is Football's Coldest War" (weight 0.6) never printed in the fleet
+  FAIL (section 2): the story "'s Money Now Works Harder Than" (weight 0.5) never printed in the fleet
+  FAIL (section 2): the story "Refuses To Read The Calendar" (weight 0.5) never printed in the fleet
+3) Keyed: the deck and the paper draw nothing from the global stream
+   200 saves: 200 decks drew beyond the catalog build, 200 batches moved with the stream, 15 papers chose other stories under another seed
+  FAIL (section 3): 200 of 200 decks drew from Math.random beyond the catalog build
+  FAIL (section 3): 200 of 200 batches changed with the stream after the catalog build
+  FAIL (section 3): 15 of 200 papers chose different stories under a different seed
+4) Gates: a card that narrates the season fires only when the row holds it
+   card: fired / fired without its fact / batches whose row held the fact
+   1: 464/97/5971  4: 242/118/3717  7: 192/35/5971  9: 247/228/551  11: 165/135/1410  12: 202/189/453  15: 222/186/1311  17: 11/11/0  18: 152/146/256  19: 120/117/241
+  FAIL (section 4): card 1 fired 97 times in a season whose row does not hold its fact
+  FAIL (section 4): card 4 fired 118 times in a season whose row does not hold its fact
+  FAIL (section 4): card 7 fired 35 times in a season whose row does not hold its fact
+  FAIL (section 4): card 9 fired 228 times in a season whose row does not hold its fact
+  FAIL (section 4): card 11 fired 135 times in a season whose row does not hold its fact
+  FAIL (section 4): card 12 fired 189 times in a season whose row does not hold its fact
+  FAIL (section 4): card 15 fired 186 times in a season whose row does not hold its fact
+  FAIL (section 4): card 17 fired 11 times in a season whose row does not hold its fact
+  FAIL (section 4): card 17 fired 11 times: the engine's own call up tells that story
+  FAIL (section 4): card 18 fired 146 times in a season whose row does not hold its fact
+  FAIL (section 4): card 19 fired 117 times in a season whose row does not hold its fact
+5) SOCIAL MEDIA SENSATION prints, and only at a million followers or more
+   printed 0 times in 7463 papers, 0 of them under a million
+  FAIL (section 5): the sensation story never printed in the fleet
+6) Every story, every position: no bare position code, no "In <lower case>" tail
+  FAIL (section 6): GK: "Is Sim 0 The Best GK In The World Right Now?" prints the code GK
+  FAIL (section 6): GK: "Sim 0 Reveals Secret To Success In Exclusive Interview: 'I Never Stopped Believing'" prints the code GK
+  FAIL (section 6): GK: "INJURY BLOW: Sim 0 Could Miss Months With Serious Groin Injury" prints the code GK
+  FAIL (section 6): GK: "HAS SIM 0 LOST IT? Former Star Struggles At Burnley" prints the code GK
+  FAIL (section 6): GK: "DONE DEAL: Sim 0 Signs For Burnley In Blockbuster deal" prints the code GK
+  FAIL (section 6): GK: "CENTURION: Sim 0 Earns 100th International Cap" prints the code GK
+  FAIL (section 6): GK: "ONE OF OUR OWN: Sim 0 Is Burnley's Greatest Homegrown Story" prints the code GK
+  FAIL (section 6): CB: "Is Sim 0 The Best CB In The World Right Now?" prints the code CB
+  FAIL (section 6): CB: "Sim 0 Reveals Secret To Success In Exclusive Interview: 'I Never Stopped Believing'" prints the code CB
+  FAIL (section 6): CB: "INJURY BLOW: Sim 0 Could Miss Months With Serious Groin Injury" prints the code CB
+  FAIL (section 6): CB: "HAS SIM 0 LOST IT? Former Star Struggles At Burnley" prints the code CB
+  FAIL (section 6): CB: "DONE DEAL: Sim 0 Signs For Burnley In Big money move" prints the code CB
+  FAIL (section 6): CB: "CENTURION: Sim 0 Earns 100th International Cap" prints the code CB
+  FAIL (section 6): CB: "ONE OF OUR OWN: Sim 0 Is Burnley's Greatest Homegrown Story" prints the code CB
+  FAIL (section 6): LB: "Is Sim 0 The Best LB In The World Right Now?" prints the code LB
+  FAIL (section 6): LB: "Sim 0 Reveals Secret To Success In Exclusive Interview: 'I Never Stopped Believing'" prints the code LB
+  FAIL (section 6): LB: "INJURY BLOW: Sim 0 Could Miss Months With Serious Knee Ligament Damage" prints the code LB
+  FAIL (section 6): LB: "HAS SIM 0 LOST IT? Former Star Struggles At Burnley" prints the code LB
+  FAIL (section 6): LB: "DONE DEAL: Sim 0 Signs For Burnley In Huge transfer" prints the code LB
+  FAIL (section 6): LB: "CENTURION: Sim 0 Earns 100th International Cap" prints the code LB
+  FAIL (section 6): LB: "ONE OF OUR OWN: Sim 0 Is Burnley's Greatest Homegrown Story" prints the code LB
+  FAIL (section 6): RB: "Is Sim 0 The Best RB In The World Right Now?" prints the code RB
+  FAIL (section 6): RB: "Sim 0 Reveals Secret To Success In Exclusive Interview: 'I Never Stopped Believing'" prints the code RB
+  FAIL (section 6): RB: "INJURY BLOW: Sim 0 Could Miss Months With Serious Hamstring Tear" prints the code RB
+  FAIL (section 6): RB: "HAS SIM 0 LOST IT? Former Star Struggles At Burnley" prints the code RB
+  FAIL (section 6): RB: "DONE DEAL: Sim 0 Signs For Burnley In Blockbuster deal" prints the code RB
+  FAIL (section 6): RB: "CENTURION: Sim 0 Earns 100th International Cap" prints the code RB
+  FAIL (section 6): RB: "ONE OF OUR OWN: Sim 0 Is Burnley's Greatest Homegrown Story" prints the code RB
+  FAIL (section 6): CDM: "Is Sim 0 The Best CDM In The World Right Now?" prints the code CDM
+  FAIL (section 6): CDM: "Sim 0 Reveals Secret To Success In Exclusive Interview: 'I Never Stopped Believing'" prints the code CDM
+  FAIL (section 6): CDM: "INJURY BLOW: Sim 0 Could Miss Months With Serious Ankle Fracture" prints the code CDM
+  FAIL (section 6): CDM: "HAS SIM 0 LOST IT? Former Star Struggles At Burnley" prints the code CDM
+  FAIL (section 6): CDM: "DONE DEAL: Sim 0 Signs For Burnley In Huge transfer" prints the code CDM
+  FAIL (section 6): CDM: "CENTURION: Sim 0 Earns 100th International Cap" prints the code CDM
+  FAIL (section 6): CDM: "ONE OF OUR OWN: Sim 0 Is Burnley's Greatest Homegrown Story" prints the code CDM
+  FAIL (section 6): CM: "Is Sim 0 The Best CM In The World Right Now?" prints the code CM
+  FAIL (section 6): CM: "Sim 0 Reveals Secret To Success In Exclusive Interview: 'I Never Stopped Believing'" prints the code CM
+  FAIL (section 6): CM: "INJURY BLOW: Sim 0 Could Miss Months With Serious Hamstring Tear" prints the code CM
+  FAIL (section 6): CM: "HAS SIM 0 LOST IT? Former Star Struggles At Burnley" prints the code CM
+  FAIL (section 6): CM: "DONE DEAL: Sim 0 Signs For Burnley In Huge transfer" prints the code CM
+  FAIL (section 6): CM: "CENTURION: Sim 0 Earns 100th International Cap" prints the code CM
+  FAIL (section 6): CM: "ONE OF OUR OWN: Sim 0 Is Burnley's Greatest Homegrown Story" prints the code CM
+  FAIL (section 6): CAM: "Is Sim 0 The Best CAM In The World Right Now?" prints the code CAM
+  FAIL (section 6): CAM: "Sim 0 Reveals Secret To Success In Exclusive Interview: 'I Never Stopped Believing'" prints the code CAM
+   440 stories rendered over 10 positions, 0 could not render without their facts
+7) Before the first paper or deck nothing moves; saves the base wrote still answer here
+   200 careers, 16000 steps compared: 200 reached a paper or deck step, 0 parted there, 0 with the new row byte equal
+   19 old saved screens answered here (every choice of cards 1, 4, 7, 9, 11, 12, 15, 17, 18, 19, a newspaper, a transfer window)
+simSoccerDeckFairness: 107 failures in section 1, 2, 3, 4, 5, 6, 7
