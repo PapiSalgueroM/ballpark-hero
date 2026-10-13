@@ -1200,14 +1200,16 @@ const ClubManager = () => {
               <HubTile
                 icon="💰" title="Finances"
                 value={(() => {
-                  /* Round 1328: what the kitty will really do this season (the
-                     result plus the running costs the board covers), by Round
-                     1326's rule for the Finances desk, not the red loss the
-                     board never asks the kitty to pay. */
+                  /* Round 1328: what the kitty is on course to do this season
+                     (the result plus the running costs the board covers), by
+                     Round 1326's rule for the Finances desk, not the red loss
+                     the board never asks the kitty to pay. It is the desk's
+                     projection (no more deals, only the cup ties drawn), so
+                     the line says so. */
                   const k = kittyChange(projectFinances(c)).projected;
                   return `${k < 0 ? '-' : '+'}${money(Math.abs(k), c)}`;
                 })()}
-                sub="Kitty change this season"
+                sub="Kitty change, projected"
                 onClick={() => setHubPanel('finance')}
               />
               <HubTile
