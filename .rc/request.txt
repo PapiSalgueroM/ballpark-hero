@@ -1,0 +1,7 @@
+# Round 1311 verify2 (bounded closing check on d7d7d15a): type gate, the two full fleet controls on plain lines, a default fleet control, the plain harness, the anchors fence
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+c-bookleak-plain: BOOK_CONTROL=bookleak node scripts/simCmLeagueBook.mjs
+c-teamsheets-plain: BOOK_CONTROL=teamsheets node scripts/simCmLeagueBook.mjs
+c-awardthin: BOOK_CONTROL=awardthin node scripts/simCmLeagueBook.mjs
+book-plain: node scripts/simCmLeagueBook.mjs
+anchors: node scripts/simHarnessAnchors.mjs
