@@ -1,0 +1,8 @@
+prog1318 exit=1 4s | Node.js v24.21.0
+progHead exit=1 2s | Node.js v24.21.0
+briefBA exit=0 10s | Transfer Brief:9 healthy outcome groups,60 full original state/RNG pairs,8 effective copied source controls,9 prepared native branches.
+agentBA exit=0 15s | PASS agent review product and proof source bytes held.
+briefHead exit=1 2s | Node.js v24.21.0
+agentHead exit=1 2s | Node.js v24.21.0
+progBA exit=0 84s | Career programme:50 original/compatibility/full product season pairs with exact RNG,240 opted gameplay seasons,21 effective loaded faults,164 unchanged original chance ou
+progMain exit=0 85s | Career programme:50 original/compatibility/full product season pairs with exact RNG,240 opted gameplay seasons,21 effective loaded faults,164 unchanged original chance ou
