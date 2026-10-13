@@ -25,7 +25,7 @@
  *     head sha256 9b6bb4f82528546cb3a0aead7e43b6f2f31388c308a9e799656b66a99e3786cd
  *     base sha256 bc8301f8b1405f6e4c037d6a04f13551fa8751031bdf4aa351fab378d02fd3d8
  *   src/components/soccer-career/InternationalPanel.tsx
- *     head sha256 05d8f7d7e2b1fcbc2d4d35191ed61718c882f8359f78500548d5309b6060227c
+ *     head sha256 872a55fb5a772279f263611b040afcbfb25dcecdcf6cc5586794370e487c993b
  *     base sha256 df3dd4e16e8a046a6928c832068a2e92f3ecbf15504eeb32fcbf598d59b66bb7
  * (base: git show c5fc5470:<file>, origin/release-bc-gate when the round started), so the recordings
  * and the base pins stay as they were taken: this is an attribution, not a new recording.
@@ -52,7 +52,7 @@ export const WORLD_TRUTH_SHA256 = {
     "base": "bc8301f8b1405f6e4c037d6a04f13551fa8751031bdf4aa351fab378d02fd3d8"
   },
   "src/components/soccer-career/InternationalPanel.tsx": {
-    "head": "05d8f7d7e2b1fcbc2d4d35191ed61718c882f8359f78500548d5309b6060227c",
+    "head": "872a55fb5a772279f263611b040afcbfb25dcecdcf6cc5586794370e487c993b",
     "base": "df3dd4e16e8a046a6928c832068a2e92f3ecbf15504eeb32fcbf598d59b66bb7"
   }
 };
@@ -140,7 +140,7 @@ const EDITS = [
     from: "    </p>\n  ) : null;\n",
     to: "    </p>\n  );\n" },
   { name: "panel-6", file: "src/components/soccer-career/InternationalPanel.tsx",
-    from: "\n      <div className=\"grid grid-cols-2 gap-1.5 [&>*:last-child:nth-child(odd)]:col-span-2\">\n        {tiles.map(tile => (",
+    from: "\n      <div className={`grid grid-cols-2 gap-1.5${tiles.length % 2 === 1 ? \" [&>*:last-child]:col-span-2\" : \"\"}`}>\n        {tiles.map(tile => (",
     to: "\n      <div className=\"grid grid-cols-2 gap-1.5\">\n        {tiles.map(tile => (" },
   { name: "panel-7", file: "src/components/soccer-career/InternationalPanel.tsx",
     from: "              <div className=\"flex items-start justify-between gap-2\">\n                {tournamentWinnerShown(h.year, h.myResult) ? (\n                  <span className=\"flex flex-1 items-center gap-1 min-w-0\">\n                    <FlagImg name={h.champion} size={13} />\n                    <span className=\"min-w-0 break-words\">{h.champion}</span>\n                  </span>\n                ) : (\n                  <span className=\"flex-1 min-w-0 text-xs text-muted-foreground\">Watched from home</span>\n                )}\n                <span className=\"shrink-0\"><ResultPill result={h.myResult} /></span>",

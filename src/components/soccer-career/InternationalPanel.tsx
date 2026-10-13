@@ -495,7 +495,7 @@ export function TournamentCard({
         </div>
       )}
 
-      <div className="grid grid-cols-2 gap-1.5 [&>*:last-child:nth-child(odd)]:col-span-2">
+      <div className={`grid grid-cols-2 gap-1.5${tiles.length % 2 === 1 ? " [&>*:last-child]:col-span-2" : ""}`}>
         {tiles.map(tile => (
           /* Round 926: the entrance sits on this wrapper, not the button, so
              the button's hover still works once the animation has filled. It

@@ -53,7 +53,7 @@ describe('the card', () => {
     expect(container.querySelector('[data-intl-tile="bracket"]')).toBeNull();
     const tiles = container.querySelectorAll('[data-intl-tile]');
     expect(tiles.length).toBe(3);
-    expect(tiles[0].parentElement!.className).toContain('[&>*:last-child:nth-child(odd)]:col-span-2');
+    expect(tiles[0].parentElement!.className).toContain('[&>*:last-child]:col-span-2');
   });
 
   it('names the winner and offers the bracket for finals he played, and for a summer still to come', () => {

@@ -798,7 +798,7 @@ const REGIONS = {
     ['        {screen === "bracket" && tournamentWinnerShown(t.year, t.myResult) && (', '            <h3 className="text-sm font-black uppercase tracking-wide">The Bracket</h3>'],
     ['    /* Round 1329: the whole edition\'s bracket names who won it', '    { key: "matches", emoji: "⚽", label: "Your Games", sub: `${t.playerApps} apps` },'],
     ['  /* Round 1329: who won a summer that really happened is the world\'s fact, so', '\n  return (\n    <div\n      ref={cardRef}'],
-    ['      <div className="grid grid-cols-2 gap-1.5 [&>*:last-child:nth-child(odd)]:col-span-2">', '        {tiles.map(tile => ('],
+    ['      <div className={`grid grid-cols-2 gap-1.5${tiles.length % 2 === 1 ? " [&>*:last-child]:col-span-2" : ""}`}>', '        {tiles.map(tile => ('],
     ['                {tournamentWinnerShown(h.year, h.myResult) ? (', '                <span className="shrink-0"><ResultPill result={h.myResult} /></span>'],
     ['  /* Round 1329: the last edition\'s bracket and winner follow the card\'s rule. */', '    return (\n      <div ref={revealRef} className="space-y-2">\n        <div className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">\n          {last.name} {last.year}'],
     ['        onClick={() => setOpen(lastShown ? "bracket" : "history")}', '        className="bg-muted/20 hover:bg-muted/40 border border-border rounded-lg p-2 text-left transition-colors min-w-0"\n      >\n        <div className="text-base leading-none">🏆</div>'],
