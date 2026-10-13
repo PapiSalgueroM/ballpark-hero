@@ -284,6 +284,7 @@ const splitClauses = text => text.split(/,\s+|\s+but\s+|\.\s+/).map(p => p.trim(
 const FIELD = {
   'Leadership role': { moves: ['isClubCaptain', 'isLeader'], ok: (b, a) => a.isClubCaptain && a.isLeader },
   'Property added': { moves: ['properties'], ok: (b, a) => a.properties === b.properties + 1 },
+  'Fund added to your investments': { moves: ['investments'], ok: (b, a) => a.investments === b.investments + 1 },
   'International career begins': { moves: ['internationalCareer', 'debutYear', 'debutAge'], ok: (b, a) => a.internationalCareer === true },
   'International career ends': { moves: ['internationalCareer', 'intRetired'], ok: (b, a) => a.internationalCareer === false && a.intRetired === true },
   'now in a relationship': { moves: ['hasRelationship'], ok: (b, a) => a.hasRelationship === true },

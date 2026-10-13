@@ -346,29 +346,34 @@ function driveFleetCareer(M, seed, mode) {
 
 /* ─── the paper's stories, read off the engine's source ────────────────── */
 
-/* Each story's weight and the longest fixed run of its headline, which is how
-   a printed headline is traced back to its story. */
+/* Each story's weight and the longest fixed run of each headline it can
+   print (a story may choose between headlines), which is how a printed
+   headline is traced back to its story. A story starts at a line that opens
+   with "{ weight:"; its headlines are the template strings between its first
+   mention of a headline and its body. */
 function parseTemplates(source) {
   const start = source.indexOf('const templates: Template[] = [');
   const end = source.indexOf('\n  ];', start);
   assert.ok(start > 0 && end > start, 'the paper\'s story table was not found in the engine');
-  const body = source.slice(start, end);
-  const out = [];
-  for (const m of body.matchAll(/\{ weight: ([\d.]+), check:[\s\S]*?headline: `((?:[^`\\]|\\.)*)`/g)) {
-    const parts = m[2].split(/\$\{[^}]*\}/).map(p => p.trim()).filter(Boolean);
-    const fragment = parts.sort((a, b) => b.length - a.length)[0] || '';
-    out.push({ weight: Number(m[1]), fragment, headline: m[2] });
-  }
-  return out;
+  const chunks = source.slice(start, end).split(/\n {4}(?=\{ weight: )/).slice(1);
+  return chunks.map(chunk => {
+    const weight = Number(chunk.match(/^\{ weight: ([\d.]+),/)[1]);
+    const from = chunk.search(/headline/), to = chunk.indexOf('body:', from);
+    const region = from >= 0 ? chunk.slice(from, to > from ? to : undefined) : '';
+    const headlines = [...region.matchAll(/`((?:[^`\\]|\\.)*)`/g)].map(m => m[1]);
+    const fragments = headlines.map(h => h.split(/\$\{[^}]*\}/).map(p => p.trim()).filter(Boolean).sort((a, b) => b.length - a.length)[0] || '');
+    return { weight, fragments, fragment: fragments[0] || '', headline: headlines.join(' | ') };
+  });
 }
 const ENGINE_SOURCE = (controlSource ?? fs.readFileSync(path.join(ROOT, ENGINE), 'utf8')).replace(/\r\n/g, '\n');
 const TEMPLATES = parseTemplates(ENGINE_SOURCE);
-const storyOf = headline => TEMPLATES.findIndex(t => t.fragment && headline.includes(t.fragment));
+const storyOf = headline => TEMPLATES.findIndex(t => t.fragments.some(f => f && headline.includes(f)));
 const lightTemplates = TEMPLATES.filter(t => t.weight < 1);
 console.log(`The paper holds ${TEMPLATES.length} stories, ${lightTemplates.length} of them under weight 1`);
 {
-  const frags = TEMPLATES.map(t => t.fragment);
-  frags.forEach((f, i) => frags.forEach((g, j) => { if (i !== j && f && g && g.includes(f)) throw new Error(`story fragments collide: "${f}" inside "${g}"`); }));
+  const frags = TEMPLATES.flatMap(t => t.fragments);
+  if (TEMPLATES.some(t => !t.fragments.length || t.fragments.some(f => !f))) throw new Error('a story in the table has no headline this harness can read');
+  frags.forEach((f, i) => frags.forEach((g, j) => { if (i !== j && g.includes(f)) throw new Error(`story fragments collide: "${f}" inside "${g}"`); }));
 }
 assert.equal(E.projectLeagueApps(99, 1, '', 0).max, FULL_SEASON, 'the top of the league appearance band moved: re-read FULL_SEASON');
 
