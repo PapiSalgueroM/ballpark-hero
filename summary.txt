@@ -1,0 +1,5 @@
+base-setup exit=0 23s | BASE BUILT 48cb9d4bb
+draftNight-base exit=0 208s | playDraftNight: ALL GREEN, 49 nights walked
+recovery-base exit=0 130s | RECOVERY REPORT complete=true cases=12 deletions=4 controls=9 forwardedWrites=0: PASS
+parity-base exit=0 29s | simUsBoardParity: green. Four sports replayed click for click, save for save and screen for screen.
+nflTruth-base exit=0 30s | simNflTruth: green. Seasons are their real length, awards survive a 16 game schedule, rookies are paid their slot, kickers go in round four or later, sacks come in halves
