@@ -1,0 +1,853 @@
+[
+ {
+  "t": "00:21:01",
+  "kind": "help",
+  "open": false
+ },
+ {
+  "t": "00:21:01",
+  "kind": "audit",
+  "where": "pick",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [],
+  "tap44": 1,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 55
+ },
+ {
+  "t": "00:21:01",
+  "kind": "school",
+  "count": 44,
+  "idx": 20,
+  "school": "Iowa Prestige 82"
+ },
+ {
+  "t": "00:21:02",
+  "kind": "audit",
+  "where": "hub",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Fire yourself and start over\"",
+    "w": 160,
+    "h": 17
+   }
+  ],
+  "tap44": 6,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 20
+ },
+ {
+  "t": "00:21:02",
+  "kind": "hub",
+  "text": "CFB Dynasty Real schools. Fictional stars. The portal never sleeps and neither do you. Iowa 2026 · Week 1/12 Record 0-0 (0-0) Rank #24 Strength 73 Roster Play Schedule Top 25 Conferences Welcome to Iowa. The 2026 season kicks off with a 12-game slate, a conference title to defend, and a 12-team Playoff waiting in December. 📋 Your staff: Garrison Coldwell runs the offense (62), Garrison Brannigan the defense (73). 🔥 Week 12 is rivalry week: Iowa State, the in-state game (both in Iowa). Iowa two-deep, prestige 82 Offense 70.9 OC Garrison Coldwell, 62 (-1.0) Defense 74.8 DC Garrison Brannigan, 73 (+0.4) Kingston Delgado DL · SR · ⭐⭐⭐⭐ 80 Knox Tatum DB · SR · ⭐⭐⭐⭐ 76 Beau Crowder OL · JR · ⭐⭐⭐ 75 Malachi Winslow RB · SR · ⭐⭐⭐ 74 Colt Maddox DB · JR · ⭐⭐⭐ 74 Cade Tatum QB · SO · ⭐⭐⭐ 73 Bryce Broussard WR · SO · ⭐⭐⭐⭐ 73 Beau Huxley LB · SO · ⭐⭐ 72 Landry Rucker WR · JR · ⭐⭐ 71 Zeke Winslow DL · FR · ⭐⭐ 70 Bryce Maddox TE · FR · ⭐⭐ 69 Bryce Ledoux OL · FR · ⭐⭐⭐ 68 Fire yourself and start over CFB Dynasty: College Football Program Sim Take over one of 44 real programs in the post-realignment landscape: the loaded SEC and Big Ten, the ACC and Big 12 cores, and a Group of Five path for giant killers. Every player is a generated recruit with a class year, so rosters actually churn: freshmen develop, seniors graduate, elite juniors declare early, and the transfer portal giveth and taketh"
+ },
+ {
+  "t": "00:21:03",
+  "kind": "audit",
+  "where": "s1 tab roster",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Fire yourself and start over\"",
+    "w": 160,
+    "h": 17
+   }
+  ],
+  "tap44": 6,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 20
+ },
+ {
+  "t": "00:21:03",
+  "kind": "tab",
+  "label": "s1",
+  "name": "roster",
+  "text": "CFB Dynasty Real schools. Fictional stars. The portal never sleeps and neither do you. Iowa 2026 · Week 1/12 Record 0-0 (0-0) Rank #24 Strength 73 Roster Play Schedule Top 25 Conferences Welcome to Iowa. The 2026 season kicks off with a 12-game slate, a conference title to defend, and a 12-team Playoff waiting in December. 📋 Your staff: Garrison Coldwell runs the offense (62), Garrison Brannigan the defense (73). 🔥 Week 12 is rivalry week: Iowa State, the in-state game (both in Iowa). Iowa two-deep, prestige 82 Offense 70.9 OC Garrison Coldwell, 62 (-1.0) Defense 74.8 DC Garrison Brannigan, 73 (+0.4) Kingston Delgado DL · SR · ⭐⭐⭐⭐ 80 Knox Tatum DB · SR · ⭐⭐⭐⭐ 76 Beau Crowder OL · JR · ⭐⭐⭐ 75 Malachi Winslow RB · SR · ⭐⭐⭐ 74 Colt Maddox DB · JR · ⭐⭐⭐ 74 Cade Tatum QB · SO · ⭐⭐⭐ 73 Bryce Broussard WR · SO · ⭐⭐⭐⭐ 73 Beau Huxley LB · SO · ⭐⭐ 72 Landry Rucker WR · JR · ⭐⭐ 71 Zeke Winslow D"
+ },
+ {
+  "t": "00:21:04",
+  "kind": "audit",
+  "where": "s1 tab schedule",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Fire yourself and start over\"",
+    "w": 160,
+    "h": 17
+   }
+  ],
+  "tap44": 6,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 8
+ },
+ {
+  "t": "00:21:04",
+  "kind": "tab",
+  "label": "s1",
+  "name": "schedule",
+  "text": "CFB Dynasty Real schools. Fictional stars. The portal never sleeps and neither do you. Iowa 2026 · Week 1/12 Record 0-0 (0-0) Rank #24 Strength 73 Roster Play Schedule Top 25 Conferences Welcome to Iowa. The 2026 season kicks off with a 12-game slate, a conference title to defend, and a 12-team Playoff waiting in December. 📋 Your staff: Garrison Coldwell runs the offense (62), Garrison Brannigan the defense (73). 🔥 Week 12 is rivalry week: Iowa State, the in-state game (both in Iowa). IOWA 2026 SCHEDULE Strength of schedule shows up after week 1 Up next: week 1, opponent drawn on game day. Week 12: Iowa State, the in-state game (both in Iowa). Same record at the end? The tougher schedule plus the better team ranks higher, and the Playoff's at-large spots come off that ranking. Fire yourself and start over CFB Dynasty: College Football Program Sim Take over one of 44 real programs in th"
+ },
+ {
+  "t": "00:21:05",
+  "kind": "audit",
+  "where": "s1 tab top25",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Fire yourself and start over\"",
+    "w": 160,
+    "h": 17
+   }
+  ],
+  "tap44": 6,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 8
+ },
+ {
+  "t": "00:21:05",
+  "kind": "tab",
+  "label": "s1",
+  "name": "top25",
+  "text": "CFB Dynasty Real schools. Fictional stars. The portal never sleeps and neither do you. Iowa 2026 · Week 1/12 Record 0-0 (0-0) Rank #24 Strength 73 Roster Play Schedule Top 25 Conferences Welcome to Iowa. The 2026 season kicks off with a 12-game slate, a conference title to defend, and a 12-team Playoff waiting in December. 📋 Your staff: Garrison Coldwell runs the offense (62), Garrison Brannigan the defense (73). 🔥 Week 12 is rivalry week: Iowa State, the in-state game (both in Iowa). THE TOP 25 1. Georgia • 0-0 2. Ohio State • 0-0 3. Alabama • 0-0 4. Texas • 0-0 5. Oregon • 0-0 6. LSU • 0-0 7. Michigan • 0-0 8. Penn State • 0-0 9. Notre Dame • 0-0 10. Clemson • 0-0 11. Tennessee • 0-0 12. Oklahoma • 0-0 13. Florida 0-0 14. Ole Miss 0-0 15. Miami 0-0 16. Texas A&M 0-0 17. USC 0-0 18. Florida State 0-0 19. Washington 0-0 20. Auburn 0-0 21. SMU 0-0 22. Missouri 0-0 23. Utah 0-0 24. Iowa "
+ },
+ {
+  "t": "00:21:05",
+  "kind": "audit",
+  "where": "s1 tab standings",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Fire yourself and start over\"",
+    "w": 160,
+    "h": 17
+   }
+  ],
+  "tap44": 6,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 12
+ },
+ {
+  "t": "00:21:05",
+  "kind": "tab",
+  "label": "s1",
+  "name": "standings",
+  "text": "CFB Dynasty Real schools. Fictional stars. The portal never sleeps and neither do you. Iowa 2026 · Week 1/12 Record 0-0 (0-0) Rank #24 Strength 73 Roster Play Schedule Top 25 Conferences Welcome to Iowa. The 2026 season kicks off with a 12-game slate, a conference title to defend, and a 12-team Playoff waiting in December. 📋 Your staff: Garrison Coldwell runs the offense (62), Garrison Brannigan the defense (73). 🔥 Week 12 is rivalry week: Iowa State, the in-state game (both in Iowa). SEC 1. Georgia (CCG) 0-0 2. Alabama (CCG) 0-0 3. Texas 0-0 4. LSU 0-0 5. Tennessee 0-0 6. Oklahoma 0-0 7. Florida 0-0 8. Ole Miss 0-0 9. Texas A&M 0-0 10. Auburn 0-0 11. Missouri 0-0 12. South Carolina 0-0 BIG TEN 1. Ohio State (CCG) 0-0 2. Oregon (CCG) 0-0 3. Michigan 0-0 4. Penn State 0-0 5. USC 0-0 6. Washington 0-0 7. Iowa 0-0 8. Wisconsin 0-0 9. Nebraska 0-0 10. Indiana 0-0 11. UCLA 0-0 12. Michigan "
+ },
+ {
+  "t": "00:21:07",
+  "kind": "audit",
+  "where": "s1a press 1 Play Week 1",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Fire yourself and start over\"",
+    "w": 160,
+    "h": 17
+   }
+  ],
+  "tap44": 7,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:21:07",
+  "kind": "week",
+  "label": "s1a",
+  "pressed": "Play Week 1",
+  "text": "CFB Dynasty Real schools. Fictional stars. The portal never sleeps and neither do you. Iowa 2026 · Week 2/12 Record 0-1 (0-0) Rank #39 Strength 73 Roster Play Schedule Top 25 Conferences ❌ Week 1: lost to Arizona State 20-30. Weeks 1-4 are the non-conference gauntlet, 5-11 decide the conference race, and week 12 is rivalry week. 🔥 Week 12 is rivalry week: Iowa State, the in-state game (both in Iowa). Play Week 2 Five conference champs auto-qualify; twelve teams, straight seeding, byes for the top four. AROUND THE COUNTRY Alabama beat North Carolina 34-7 Georgia beat Utah 56-7 Texas beat Miami 29-23 Oklahoma beat UCLA 33-11 LSU beat Colorado 39-8 Penn State beat Tennessee 26-17 Auburn beat U"
+ },
+ {
+  "t": "00:21:07",
+  "kind": "audit",
+  "where": "s1a press 2 Play Week 2",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Fire yourself and start over\"",
+    "w": 160,
+    "h": 17
+   }
+  ],
+  "tap44": 7,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:21:08",
+  "kind": "audit",
+  "where": "s1a press 3 Play Week 3",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Fire yourself and start over\"",
+    "w": 160,
+    "h": 17
+   }
+  ],
+  "tap44": 7,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:21:09",
+  "kind": "audit",
+  "where": "s1a press 4 Play Week 4",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Fire yourself and start over\"",
+    "w": 160,
+    "h": 17
+   }
+  ],
+  "tap44": 7,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:21:10",
+  "kind": "audit",
+  "where": "s1a press 5 Play Week 5",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Fire yourself and start over\"",
+    "w": 160,
+    "h": 17
+   }
+  ],
+  "tap44": 7,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:21:10",
+  "kind": "audit",
+  "where": "s1a press 6 Play Week 6",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Fire yourself and start over\"",
+    "w": 160,
+    "h": 17
+   }
+  ],
+  "tap44": 7,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:21:10",
+  "kind": "week",
+  "label": "s1a",
+  "pressed": "Play Week 6",
+  "text": "CFB Dynasty Real schools. Fictional stars. The portal never sleeps and neither do you. Iowa 2026 · Week 7/12 Record 1-5 (1-1) Rank #34 Strength 73 Roster Play Schedule Top 25 Conferences ✅ Week 6: beat USC 41-23 (conference). Weeks 1-4 are the non-conference gauntlet, 5-11 decide the conference race, and week 12 is rivalry week. 🔥 Week 12 is rivalry week: Iowa State, the in-state game (both in Iowa). Play Week 7 Five conference champs auto-qualify; twelve teams, straight seeding, byes for the top four. AROUND THE COUNTRY Alabama beat Florida 47-11 Georgia beat South Carolina 48-18 Texas beat Ole Miss 50-23 Oklahoma beat Missouri 56-23 LSU beat Auburn 34-20 Tennessee beat Texas A&M 56-25 Ore"
+ },
+ {
+  "t": "00:21:11",
+  "kind": "audit",
+  "where": "s1a press 7 Play Week 7",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Fire yourself and start over\"",
+    "w": 160,
+    "h": 17
+   }
+  ],
+  "tap44": 7,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:21:12",
+  "kind": "audit",
+  "where": "s1a press 8 Play Week 8",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Fire yourself and start over\"",
+    "w": 160,
+    "h": 17
+   }
+  ],
+  "tap44": 7,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:21:12",
+  "kind": "season",
+  "part": "s1a",
+  "n": 8,
+  "end": "paused"
+ },
+ {
+  "t": "00:21:13",
+  "kind": "audit",
+  "where": "s1mid tab roster",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Fire yourself and start over\"",
+    "w": 160,
+    "h": 17
+   }
+  ],
+  "tap44": 6,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:21:13",
+  "kind": "tab",
+  "label": "s1mid",
+  "name": "roster",
+  "text": "CFB Dynasty Real schools. Fictional stars. The portal never sleeps and neither do you. Iowa 2026 · Week 9/12 Record 1-7 (1-3) Rank #41 Strength 73 Roster Play Schedule Top 25 Conferences ❌ Week 8: lost to Oregon 4-26 (conference). Iowa two-deep, prestige 82 Offense 70.9 OC Garrison Coldwell, 62 (-1.0) Defense 74.8 DC Garrison Brannigan, 73 (+0.4) Kingston Delgado DL · SR · ⭐⭐⭐⭐ 80 Knox Tatum DB · SR · ⭐⭐⭐⭐ 76 Beau Crowder OL · JR · ⭐⭐⭐ 75 Malachi Winslow RB · SR · ⭐⭐⭐ 74 Colt Maddox DB · JR · ⭐⭐⭐ 74 Cade Tatum QB · SO · ⭐⭐⭐ 73 Bryce Broussard WR · SO · ⭐⭐⭐⭐ 73 Beau Huxley LB · SO · ⭐⭐ 72 Landry Rucker WR · JR · ⭐⭐ 71 Zeke Winslow DL · FR · ⭐⭐ 70 Bryce Maddox TE · FR · ⭐⭐ 69 Bryce Ledoux OL · FR · ⭐⭐⭐ 68 Fire yourself and start over CFB Dynasty: College Football Program Sim Take over one of 44 real programs in the post-realignment landscape: the loaded SEC and Big Ten, the ACC and Big 12 "
+ },
+ {
+  "t": "00:21:13",
+  "kind": "audit",
+  "where": "s1mid tab schedule",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Fire yourself and start over\"",
+    "w": 160,
+    "h": 17
+   }
+  ],
+  "tap44": 6,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:21:13",
+  "kind": "tab",
+  "label": "s1mid",
+  "name": "schedule",
+  "text": "CFB Dynasty Real schools. Fictional stars. The portal never sleeps and neither do you. Iowa 2026 · Week 9/12 Record 1-7 (1-3) Rank #41 Strength 73 Roster Play Schedule Top 25 Conferences ❌ Week 8: lost to Oregon 4-26 (conference). IOWA 2026 SCHEDULE Strength of schedule 81.6, #3 of 44 W1 vs Arizona State (non-conf) L 20-30 W2 vs Iowa State (non-conf) L 24-39 W3 at Texas A&M (non-conf) L 13-38 W4 at Georgia (non-conf) L 14-48 W5 at Ohio State L 13-32 W6 at USC W 41-23 W7 at Oregon L 20-42 W8 at Oregon L 4-26 Up next: week 9, opponent drawn on game day. Week 12: Iowa State, the in-state game (both in Iowa). Same record at the end? The tougher schedule plus the better team ranks higher, and the Playoff's at-large spots come off that ranking. Fire yourself and start over CFB Dynasty: College Football Program Sim Take over one of 44 real programs in the post-realignment landscape: the loaded "
+ },
+ {
+  "t": "00:21:14",
+  "kind": "audit",
+  "where": "s1mid tab top25",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Fire yourself and start over\"",
+    "w": 160,
+    "h": 17
+   }
+  ],
+  "tap44": 6,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:21:14",
+  "kind": "tab",
+  "label": "s1mid",
+  "name": "top25",
+  "text": "CFB Dynasty Real schools. Fictional stars. The portal never sleeps and neither do you. Iowa 2026 · Week 9/12 Record 1-7 (1-3) Rank #41 Strength 73 Roster Play Schedule Top 25 Conferences ❌ Week 8: lost to Oregon 4-26 (conference). THE TOP 25 1. Alabama • 8-0SOS #14 2. Georgia • 8-0SOS #25 3. Oregon • 8-0SOS #30 4. Ohio State • 7-1SOS #12 5. Notre Dame • 7-1SOS #27 6. Michigan • 6-2SOS #7 7. LSU • 6-2SOS #8 8. Penn State • 6-2SOS #19 9. Tennessee • 6-2SOS #29 10. Oklahoma • 6-2SOS #24 11. Clemson • 6-2SOS #36 12. Washington • 6-2SOS #15 13. USC 6-2SOS #17 14. Auburn 6-2SOS #33 15. Boise State 6-2SOS #44 16. Texas 5-3SOS #10 17. Ole Miss 4-4SOS #23 18. Texas A&M 4-4SOS #18 19. Florida State 4-4SOS #16 20. Louisville 4-4SOS #9 21. Missouri 4-4SOS #35 22. Kansas State 4-4SOS #31 23. Colorado 4-4SOS #32 24. Arizona State 4-4SOS #42 25. Miami 3-5SOS #2 • the twelve in the Playoff picture right"
+ },
+ {
+  "t": "00:21:15",
+  "kind": "audit",
+  "where": "s1mid tab standings",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Fire yourself and start over\"",
+    "w": 160,
+    "h": 17
+   }
+  ],
+  "tap44": 6,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:21:15",
+  "kind": "tab",
+  "label": "s1mid",
+  "name": "standings",
+  "text": "CFB Dynasty Real schools. Fictional stars. The portal never sleeps and neither do you. Iowa 2026 · Week 9/12 Record 1-7 (1-3) Rank #41 Strength 73 Roster Play Schedule Top 25 Conferences ❌ Week 8: lost to Oregon 4-26 (conference). SEC 1. Georgia (CCG) 4-0 2. Alabama (CCG) 4-0 3. Tennessee 3-1 4. Oklahoma 3-1 5. Auburn 3-1 6. Texas 3-1 7. LSU 2-2 8. Texas A&M 2-2 9. Ole Miss 0-4 10. Missouri 0-4 11. Florida 0-4 12. South Carolina 0-4 BIG TEN 1. Oregon (CCG) 4-0 2. Ohio State (CCG) 3-1 3. Michigan 3-1 4. Penn State 3-1 5. Washington 3-1 6. USC 2-2 7. Indiana 2-2 8. Michigan State 2-2 9. UCLA 1-3 10. Iowa 1-3 11. Wisconsin 0-4 12. Nebraska 0-4 ACC 1. Notre Dame (CCG) 4-0 2. Clemson (CCG) 3-1 3. Louisville 3-2 4. Miami 2-2 5. SMU 2-3 6. Florida State 1-3 7. North Carolina 1-3 8. Virginia Tech 1-3 BIG 12 1. Kansas State (CCG) 3-1 2. Colorado (CCG) 3-1 3. TCU 3-2 4. Arizona State 2-2 5. Utah 2"
+ },
+ {
+  "t": "00:21:16",
+  "kind": "audit",
+  "where": "s1b press 1 Play Week 9",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Fire yourself and start over\"",
+    "w": 160,
+    "h": 17
+   }
+  ],
+  "tap44": 7,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:21:16",
+  "kind": "week",
+  "label": "s1b",
+  "pressed": "Play Week 9",
+  "text": "CFB Dynasty Real schools. Fictional stars. The portal never sleeps and neither do you. Iowa 2026 · Week 10/12 Record 1-8 (1-4) Rank #41 Strength 73 Roster Play Schedule Top 25 Conferences ❌ Week 9: lost to Michigan 19-33 (conference). Weeks 1-4 are the non-conference gauntlet, 5-11 decide the conference race, and week 12 is rivalry week. 🔥 Week 12 is rivalry week: Iowa State, the in-state game (both in Iowa). Play Week 10 Five conference champs auto-qualify; twelve teams, straight seeding, byes for the top four. AROUND THE COUNTRY Alabama beat Florida 41-5 Texas A&M beat Georgia 43-23 Texas beat Auburn 37-14 LSU beat Oklahoma 47-15 Tennessee beat South Carolina 32-13 Ole Miss beat Missouri "
+ },
+ {
+  "t": "00:21:17",
+  "kind": "audit",
+  "where": "s1b press 2 Play Week 10",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Fire yourself and start over\"",
+    "w": 160,
+    "h": 17
+   }
+  ],
+  "tap44": 7,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:21:18",
+  "kind": "audit",
+  "where": "s1b press 3 Play Week 11",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Fire yourself and start over\"",
+    "w": 160,
+    "h": 17
+   }
+  ],
+  "tap44": 7,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:21:21",
+  "kind": "week",
+  "label": "s1b",
+  "pressed": "Final week + the Playoff",
+  "text": "CFB Dynasty Real schools. Fictional stars. The portal never sleeps and neither do you. Alabama win the 2026 natty Your Iowa finished 3-9. 🏆 Heisman: Cade Winslow (QB, Alabama) Title game: Alabama beat Ohio State 28-15 SEC Championship: Georgia 48-6 B1G Championship: Ohio State 38-24 ACC Championship: Clemson 53-23 B12 Championship: Kansas State 51-4 G5 Championship: Memphis 32-10 CFP First Round: Oregon beat Memphis 40-4 CFP First Round: Tennessee beat Kansas State 40-12 CFP First Round: Michigan beat Penn State 51-9 CFP First Round: LSU beat Boise State 40-15 CFP Quarterfinal: Georgia beat LSU 32-9 CFP Quarterfinal: Ohio State beat Michigan 41-17 CFP Quarterfinal: Tennessee beat Clemson 38"
+ },
+ {
+  "t": "00:21:21",
+  "kind": "season",
+  "part": "s1b",
+  "n": 4,
+  "end": "recap",
+  "secs": 22
+ },
+ {
+  "t": "00:21:25",
+  "kind": "audit",
+  "where": "recap",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [],
+  "tap44": 3,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 6
+ },
+ {
+  "t": "00:21:25",
+  "kind": "recap",
+  "text": "CFB Dynasty Real schools. Fictional stars. The portal never sleeps and neither do you. Alabama win the 2026 natty Your Iowa finished 3-9. 🏆 Heisman: Cade Winslow (QB, Alabama) Title game: Alabama beat Ohio State 28-15 SEC Championship: Georgia 48-6 B1G Championship: Ohio State 38-24 ACC Championship: Clemson 53-23 B12 Championship: Kansas State 51-4 G5 Championship: Memphis 32-10 CFP First Round: Oregon beat Memphis 40-4 CFP First Round: Tennessee beat Kansas State 40-12 CFP First Round: Michigan beat Penn State 51-9 CFP First Round: LSU beat Boise State 40-15 CFP Quarterfinal: Georgia beat LSU 32-9 CFP Quarterfinal: Ohio State beat Michigan 41-17 CFP Quarterfinal: Tennessee beat Clemson 38-16 CFP Quarterfinal: Alabama beat Oregon 37-3 CFP Semifinal: Alabama beat Georgia 49-19 CFP Semifinal: Ohio State beat Tennessee 27-22 Natties 0 Seasons 1 Hit the recruiting trail 🏟️ CFB Dynasty Oct 13, 2026 RESULT 0 natties in 1 seasons DoUKnowBall douknowball.com/cfb-dynasty Share result Copy challenge 📋 Copy Score Card 🖼️ Save Image SHARE YOUR RESULT CFB Dynasty: College Football Program Sim Take over one of 44 real programs in the post-realignment landscape: the loaded SEC and Big Ten, the ACC and Big 12 cores, and a Group of Five path for giant killers. Every player is a generated recruit with a class year, so rosters actually churn: freshmen develop, seniors graduate, elite juniors declare early, and the transfer portal giveth and taketh. Recruit with an NIL budget that grows with prestige and winning, sweat scouting error on high school grades, chase conference championships, and fight through the real 12-team College Football Playoff with byes for the top four seeds. Win Heismans, stack natties, build the dynasty. CFB Dynasty hands you a real college football program and "
+ },
+ {
+  "t": "00:21:28",
+  "kind": "recapReload",
+  "trail": true,
+  "text": "CFB Dynasty Real schools. Fictional stars. The portal never sleeps and neither do you. Alabama win the 2026 natty Your Iowa finished 3-9. 🏆 Heisman: Cade Winslow (QB, Alabama) Title game: Alabama beat Ohio State 28-15 SEC Championship: Georgia 48-6 B1G Championship: Ohio State 38-24 ACC Championship: Clemson 53-23 B12 Championship: Kansas State 51-4 G5 Championship: Memphis 32-10 CFP First Round:"
+ },
+ {
+  "t": "00:21:29",
+  "kind": "audit",
+  "where": "recruit",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.rounded-full.border.border-border \"Let go\"",
+    "w": 48,
+    "h": 22
+   },
+   {
+    "el": "button.rounded-full.border.border-primary \"Shop\"",
+    "w": 43,
+    "h": 22
+   },
+   {
+    "el": "button.rounded-full.border.border-border \"Let go\"",
+    "w": 48,
+    "h": 22
+   },
+   {
+    "el": "button.rounded-full.border.border-primary \"Shop\"",
+    "w": 43,
+    "h": 22
+   }
+  ],
+  "tap44": 2,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 70
+ },
+ {
+  "t": "00:21:29",
+  "kind": "recruit",
+  "text": "CFB Dynasty Real schools. Fictional stars. The portal never sleeps and neither do you. The 2027 class NIL budget: 66 points. High school grades carry scouting error; portal players have real tape. Position All positions QB RB WR TE OL DL LB DB K Minimum stars Any stars 2+ stars 3+ stars 4+ stars 5+ stars Reset filters 💰 Program budget 83: the staff take 17, 66 left for NIL. Land your class, sort your coordinators, then run it back. 🔥 Beating Iowa State is worth 8 more budget points on the trail. COACHING STAFF · PAY 17 A SEASON Paid from the same pot as NIL. A coordinator moves his side of the ball by up to 3 points either way. OFFENSIVE COORDINATOR Garrison Coldwell rated 62 · -1.0 offense · paid 7 Let go Shop DEFENSIVE COORDINATOR Garrison Brannigan rated 73 · +0.4 defense · paid 10 Let go Shop HIGH SCHOOL BOARD Showing 18 of 18 high school recruits ⭐⭐⭐⭐⭐ Zeke Hollins OL · scouted 83 · asks 45 NIL Sign ⭐⭐⭐⭐⭐ Rex Crowder WR · scouted 75 · asks 45 NIL Sign ⭐⭐⭐⭐ Beau Broussard TE · scouted 78 · asks 36 NIL Sign ⭐⭐⭐⭐ Beau Granger TE · scouted 76 · asks 43 NIL Sign ⭐⭐⭐⭐ Knox McCrae DB · scouted 76 · asks 40 NIL Sign ⭐⭐⭐⭐ Kingston Callahan LB · scouted 73 · asks 38 NIL Sign ⭐⭐⭐ Xavier Broussard WR · scouted 75 · asks 29 NIL Sign ⭐⭐⭐ Marcus Ledoux DB · scouted 74 · asks 28 NIL Sign ⭐⭐⭐ Jaylen Okafor DL · scouted 73 · asks 30 NIL Sign ⭐⭐⭐ Bryce Whitfield DB · scouted 70 · asks 28 NIL Sign ⭐⭐⭐ Tyce Granger RB · scouted 67 · asks 29 NIL Sign ⭐⭐⭐ Tyce Broussard DL · scouted 67 · ask"
+ },
+ {
+  "t": "00:21:30",
+  "kind": "signed",
+  "did": "⭐⭐⭐⭐⭐ Zeke Hollins OL · scouted 83 · asks 45 NIL Sign"
+ },
+ {
+  "t": "00:21:30",
+  "kind": "signed",
+  "did": "⭐⭐⭐⭐⭐ Rex Crowder WR · scouted 75 · asks 45 NIL Sign"
+ },
+ {
+  "t": "00:21:31",
+  "kind": "signed",
+  "did": "⭐⭐⭐⭐⭐ Rex Crowder WR · scouted 75 · asks 45 NIL Sign"
+ },
+ {
+  "t": "00:21:32",
+  "kind": "signed",
+  "did": "⭐⭐⭐⭐⭐ Rex Crowder WR · scouted 75 · asks 45 NIL Sign"
+ },
+ {
+  "t": "00:21:32",
+  "kind": "portal",
+  "did": "Marcus McCrae QB · 3⭐ · rated 71 · asks 13 NIL Sign"
+ },
+ {
+  "t": "00:21:33",
+  "kind": "hire",
+  "did": "Booker Oakhurst rated 86 · +1.9 · asks 14 Hire"
+ },
+ {
+  "t": "00:21:33",
+  "kind": "audit",
+  "where": "recruit after",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.rounded-full.border.border-border \"Let go\"",
+    "w": 48,
+    "h": 22
+   },
+   {
+    "el": "button.rounded-full.border.border-primary \"Close\"",
+    "w": 46,
+    "h": 22
+   },
+   {
+    "el": "button.rounded-full.border.border-border \"Let go\"",
+    "w": 48,
+    "h": 22
+   },
+   {
+    "el": "button.rounded-full.border.border-primary \"Shop\"",
+    "w": 43,
+    "h": 22
+   }
+  ],
+  "tap44": 4,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 70
+ },
+ {
+  "t": "00:21:33",
+  "kind": "recruitAfter",
+  "text": "CFB Dynasty Real schools. Fictional stars. The portal never sleeps and neither do you. The 2027 class NIL budget: 1 points. High school grades carry scouting error; portal players have real tape. Position All positions QB RB WR TE OL DL LB DB K Minimum stars Any stars 2+ stars 3+ stars 4+ stars 5+ stars Reset filters 🤝 Booker Oakhurst (86) is your new OC, Garrison Coldwell is out. Budget left: 1. 🖊️ Marcus McCrae (3⭐ QB) signs with Iowa. NIL left: 8. ❌ Not enough NIL for Rex Crowder (asks 45). ❌ Not enough NIL for Rex Crowder (asks 45). COACHING STAFF · PAY 24 A SEASON Paid from the same pot as NIL. A coordinator moves his side of the ball by up to 3 points either way. OFFENSIVE COORDINATOR Booker Oakhurst rated 86 · +1.9 offense · paid 14 Let go Close Lyle Halvorsen rated 66 · -0.5 · asks 8 Hire Thaddeus Featherstone rated 48 · -2.6 · asks 4 Hire DEFENSIVE COORDINATOR Garrison Brannigan rated 73 · +0.4 defense · paid 10 Let go Shop HIGH SCHOOL BOARD Showing 17 of 17 high school recruits ⭐⭐⭐⭐⭐ Rex Crowder WR · scouted 75 · asks 45 NIL Sign ⭐⭐⭐⭐ Beau Broussard TE · scouted 78 · asks 36 NIL Sign ⭐⭐⭐⭐ Beau Granger TE · scouted 76 · asks 43 NIL Sign ⭐⭐⭐⭐ Knox McCrae DB · scouted 76 ·"
+ },
+ {
+  "t": "00:21:35",
+  "kind": "audit",
+  "where": "s2 hub",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Fire yourself and start over\"",
+    "w": 160,
+    "h": 17
+   }
+  ],
+  "tap44": 6,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 20
+ },
+ {
+  "t": "00:21:35",
+  "kind": "s2hub",
+  "text": "CFB Dynasty Real schools. Fictional stars. The portal never sleeps and neither do you. Iowa 2027 · Week 1/12 Record 0-0 (0-0) Rank #20 Strength 77 Roster Play Schedule Top 25 Conferences 🎓 Malachi Winslow (RB) graduates. 🎓 Kingston Delgado (DL) graduates. 🎓 Knox Tatum (DB) graduates. Iowa two-deep, prestige 82 Offense 78.1 OC Booker Oakhurst, 86 (+1.9) Defense 74.4 DC Garrison Brannigan, 73 (+0.4) Zeke Hollins OL · SO · ⭐⭐⭐⭐⭐ 91 Cade Tatum QB · JR · ⭐⭐⭐ 77 Beau Crowder OL · SR · ⭐⭐⭐ 76 Bryce Broussard WR · JR · ⭐⭐⭐⭐ 75 Colt Maddox DB · SR · ⭐⭐⭐ 75 Marcus McCrae QB · JR · ⭐⭐⭐ 75 Beau Huxley LB · JR · ⭐⭐ 74 Tyce Tatum RB · FR · ⭐⭐ 73.2 Landry Rucker WR · SR · ⭐⭐ 73 Bryce Maddox TE · SO · ⭐⭐ 73 Zeke Winslow DL · SO · ⭐⭐ 73 Bryce Ledoux OL · SO · ⭐⭐⭐ 72 Fire yourself and start over CFB Dynasty: College Football Program Sim Take over one of 44 real programs in the post-realignment landscape: the loaded SEC and Big Ten, the ACC and Big 12 cores, and a Group of Five path for giant killers. Every player is a generated recruit with a class year, so rosters actually churn: freshmen develop, seniors graduate, elite juniors declare early, and the transfer portal giveth and taketh. Recruit with an NIL budget that grows with prestige and winning, sweat scouting error on high school grades, chase conference championships, and fight through the real 12-team College Football Playoff with byes for the top four seeds. Win Heismans, stack natties, build the dynasty. CFB Dynasty hands you a re"
+ },
+ {
+  "t": "00:21:36",
+  "kind": "audit",
+  "where": "s2 tab roster",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Fire yourself and start over\"",
+    "w": 160,
+    "h": 17
+   }
+  ],
+  "tap44": 6,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:21:36",
+  "kind": "tab",
+  "label": "s2",
+  "name": "roster",
+  "text": "CFB Dynasty Real schools. Fictional stars. The portal never sleeps and neither do you. Iowa 2027 · Week 1/12 Record 0-0 (0-0) Rank #20 Strength 77 Roster Play Schedule Top 25 Conferences 🎓 Malachi Winslow (RB) graduates. 🎓 Kingston Delgado (DL) graduates. 🎓 Knox Tatum (DB) graduates. Iowa two-deep, prestige 82 Offense 78.1 OC Booker Oakhurst, 86 (+1.9) Defense 74.4 DC Garrison Brannigan, 73 (+0.4) Zeke Hollins OL · SO · ⭐⭐⭐⭐⭐ 91 Cade Tatum QB · JR · ⭐⭐⭐ 77 Beau Crowder OL · SR · ⭐⭐⭐ 76 Bryce Broussard WR · JR · ⭐⭐⭐⭐ 75 Colt Maddox DB · SR · ⭐⭐⭐ 75 Marcus McCrae QB · JR · ⭐⭐⭐ 75 Beau Huxley LB · JR · ⭐⭐ 74 Tyce Tatum RB · FR · ⭐⭐ 73.2 Landry Rucker WR · SR · ⭐⭐ 73 Bryce Maddox TE · SO · ⭐⭐ 73 Zeke Winslow DL · SO · ⭐⭐ 73 Bryce Ledoux OL · SO · ⭐⭐⭐ 72 Fire yourself and start over CFB Dynasty: College Football Program Sim Take over one of 44 real programs in the post-realignment landscap"
+ },
+ {
+  "t": "00:21:37",
+  "kind": "audit",
+  "where": "s2 tab schedule",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Fire yourself and start over\"",
+    "w": 160,
+    "h": 17
+   }
+  ],
+  "tap44": 6,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:21:37",
+  "kind": "tab",
+  "label": "s2",
+  "name": "schedule",
+  "text": "CFB Dynasty Real schools. Fictional stars. The portal never sleeps and neither do you. Iowa 2027 · Week 1/12 Record 0-0 (0-0) Rank #20 Strength 77 Roster Play Schedule Top 25 Conferences 🎓 Malachi Winslow (RB) graduates. 🎓 Kingston Delgado (DL) graduates. 🎓 Knox Tatum (DB) graduates. IOWA 2027 SCHEDULE Strength of schedule shows up after week 1 Up next: week 1, opponent drawn on game day. Week 12: Iowa State, the in-state game (both in Iowa). Same record at the end? The tougher schedule plus the better team ranks higher, and the Playoff's at-large spots come off that ranking. Fire yourself and start over CFB Dynasty: College Football Program Sim Take over one of 44 real programs in the post-realignment landscape: the loaded SEC and Big Ten, the ACC and Big 12 cores, and a Group of Five path for giant killers. Every player is a generated recruit with a class year, so rosters actually c"
+ },
+ {
+  "t": "00:21:38",
+  "kind": "audit",
+  "where": "s2 tab top25",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Fire yourself and start over\"",
+    "w": 160,
+    "h": 17
+   }
+  ],
+  "tap44": 6,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:21:38",
+  "kind": "tab",
+  "label": "s2",
+  "name": "top25",
+  "text": "CFB Dynasty Real schools. Fictional stars. The portal never sleeps and neither do you. Iowa 2027 · Week 1/12 Record 0-0 (0-0) Rank #20 Strength 77 Roster Play Schedule Top 25 Conferences 🎓 Malachi Winslow (RB) graduates. 🎓 Kingston Delgado (DL) graduates. 🎓 Knox Tatum (DB) graduates. THE TOP 25 1. Georgia • 0-0 2. Alabama • 0-0 3. Ohio State • 0-0 4. Texas • 0-0 5. Notre Dame • 0-0 6. Oregon • 0-0 7. Michigan • 0-0 8. Tennessee • 0-0 9. Penn State • 0-0 10. LSU • 0-0 11. Clemson • 0-0 12. Oklahoma • 0-0 13. Ole Miss 0-0 14. USC 0-0 15. Miami 0-0 16. Texas A&M 0-0 17. Florida 0-0 18. Washington 0-0 19. Florida State 0-0 20. Iowa 0-0 21. Missouri 0-0 22. Auburn 0-0 23. Wisconsin 0-0 24. Nebraska 0-0 25. South Carolina 0-0 • the twelve in the Playoff picture right now Fire yourself and start over CFB Dynasty: College Football Program Sim Take over one of 44 real programs in the post-real"
+ },
+ {
+  "t": "00:21:38",
+  "kind": "audit",
+  "where": "s2 tab standings",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Fire yourself and start over\"",
+    "w": 160,
+    "h": 17
+   }
+  ],
+  "tap44": 6,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:21:38",
+  "kind": "tab",
+  "label": "s2",
+  "name": "standings",
+  "text": "CFB Dynasty Real schools. Fictional stars. The portal never sleeps and neither do you. Iowa 2027 · Week 1/12 Record 0-0 (0-0) Rank #20 Strength 77 Roster Play Schedule Top 25 Conferences 🎓 Malachi Winslow (RB) graduates. 🎓 Kingston Delgado (DL) graduates. 🎓 Knox Tatum (DB) graduates. SEC 1. Georgia (CCG) 0-0 2. Alabama (CCG) 0-0 3. Texas 0-0 4. Tennessee 0-0 5. LSU 0-0 6. Oklahoma 0-0 7. Ole Miss 0-0 8. Texas A&M 0-0 9. Florida 0-0 10. Missouri 0-0 11. Auburn 0-0 12. South Carolina 0-0 BIG TEN 1. Ohio State (CCG) 0-0 2. Oregon (CCG) 0-0 3. Michigan 0-0 4. Penn State 0-0 5. USC 0-0 6. Washington 0-0 7. Iowa 0-0 8. Wisconsin 0-0 9. Nebraska 0-0 10. Indiana 0-0 11. UCLA 0-0 12. Michigan State 0-0 ACC 1. Notre Dame (CCG) 0-0 2. Clemson (CCG) 0-0 3. Miami 0-0 4. Florida State 0-0 5. SMU 0-0 6. Louisville 0-0 7. North Carolina 0-0 8. Virginia Tech 0-0 BIG 12 1. Utah (CCG) 0-0 2. Colorado (C"
+ },
+ {
+  "t": "00:21:40",
+  "kind": "audit",
+  "where": "s2 press 1 Play Week 1",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Fire yourself and start over\"",
+    "w": 160,
+    "h": 17
+   }
+  ],
+  "tap44": 7,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:21:40",
+  "kind": "week",
+  "label": "s2",
+  "pressed": "Play Week 1",
+  "text": "CFB Dynasty Real schools. Fictional stars. The portal never sleeps and neither do you. Iowa 2027 · Week 2/12 Record 0-1 (0-0) Rank #27 Strength 77 Roster Play Schedule Top 25 Conferences ❌ Week 1: lost to Clemson 4-41. Weeks 1-4 are the non-conference gauntlet, 5-11 decide the conference race, and week 12 is rivalry week. 🔥 Week 12 is rivalry week: Iowa State, the in-state game (both in Iowa). Play Week 2 Five conference champs auto-qualify; twelve teams, straight seeding, byes for the top four. AROUND THE COUNTRY Alabama beat Memphis 44-11 Georgia beat Arizona State 35-3 Texas beat Miami 55-5 Oklahoma beat SMU 39-15 Michigan beat LSU 51-6 Tennessee beat Indiana 48-21 Auburn beat Tulane 47-"
+ },
+ {
+  "t": "00:21:40",
+  "kind": "audit",
+  "where": "s2 press 2 Play Week 2",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Fire yourself and start over\"",
+    "w": 160,
+    "h": 17
+   }
+  ],
+  "tap44": 7,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:21:41",
+  "kind": "audit",
+  "where": "s2 press 3 Play Week 3",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Fire yourself and start over\"",
+    "w": 160,
+    "h": 17
+   }
+  ],
+  "tap44": 7,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:21:41",
+  "kind": "season",
+  "part": "s2",
+  "n": 3,
+  "end": "paused"
+ },
+ {
+  "t": "00:21:44",
+  "kind": "reload",
+  "before": "CFB Dynasty Real schools. Fictional stars. The portal never sleeps and neither do you. Iowa 2027 · Week 4/12 Record 1-2 (0-0) Rank #25 Strength 77 Roster Play Schedule Top 25 Conferences ❌ Week 3: lost to Kansas State 18-43. Weeks 1-4 are the non-conference gauntlet, 5-11 decide the conference race,",
+  "after": "CFB Dynasty Real schools. Fictional stars. The portal never sleeps and neither do you. Iowa 2027 · Week 4/12 Record 1-2 (0-0) Rank #25 Strength 77 Roster Play Schedule Top 25 Conferences Iowa two-deep, prestige 82 Offense 78.1 OC Booker Oakhurst, 86 (+1.9) Defense 74.4 DC Garrison Brannigan, 73 (+0."
+ },
+ {
+  "t": "00:21:44",
+  "kind": "done",
+  "secs": 45
+ }
+]

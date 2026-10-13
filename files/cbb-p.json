@@ -1,0 +1,719 @@
+[
+ {
+  "t": "00:20:10",
+  "kind": "help",
+  "open": false
+ },
+ {
+  "t": "00:20:11",
+  "kind": "audit",
+  "where": "pick",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [],
+  "tap44": 1,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 52
+ },
+ {
+  "t": "00:20:11",
+  "kind": "school",
+  "count": 40,
+  "idx": 0,
+  "school": "Duke Prestige 95"
+ },
+ {
+  "t": "00:20:12",
+  "kind": "audit",
+  "where": "hub",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Fire yourself and start over\"",
+    "w": 160,
+    "h": 17
+   }
+  ],
+  "tap44": 6,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 16
+ },
+ {
+  "t": "00:20:12",
+  "kind": "hub",
+  "text": "CBB Dynasty Survive March. That is the whole job description. Duke 2026-27 · Round 1/10 Record 0-0 Rank #1 Strength 90 Roster Play Schedule Top 25 Leagues Welcome to Duke. Twenty games, a conference tournament, and one shot at surviving March. 📋 Your bench: Lyle Durrance runs the offense (76), Wendell Brannigan the defense (76). 🔥 Round 10's league night is rivalry night: North Carolina, the in-state game (both in North Carolina). Duke rotation, prestige 95 Offense 90.2 Lyle Durrance, 76 (+0.7) Defense 90.2 Wendell Brannigan, 76 (+0.7) Duncan Holloway SF · FR · ⭐⭐⭐⭐⭐ 91 Marcus Calloway PF · FR · ⭐⭐⭐⭐⭐ 91 Miles Dupree C · FR · ⭐⭐⭐⭐⭐ 90 Ace Pryor SG · SR · ⭐⭐ 89 Jett Abernathy SG · JR · ⭐⭐⭐⭐ 89 Jett Fenwick PF · SR · ⭐⭐⭐ 89 Silas Thurman PG · JR · ⭐⭐⭐⭐ 88 Silas Overton SF · FR · ⭐⭐ 87 Fire yourself and start over CBB Dynasty: College Basketball Program Sim Take over one of 40 real programs across six leagues, from the blue bloods to a Mid-Major bucket built for Cinderella stories. Every player is a generated recruit with a class year: elite freshmen are one-and-done, seniors graduate, stars leave early, and the transfer portal reshapes your rotation every spring. Recruit with an NIL budget that grows with prestige and wins, sweat the scouting error on high school grades, fight through your conference tournament, and then survive a 32-team single-elimination March where six tour"
+ },
+ {
+  "t": "00:20:13",
+  "kind": "audit",
+  "where": "s1 tab roster",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Fire yourself and start over\"",
+    "w": 160,
+    "h": 17
+   }
+  ],
+  "tap44": 6,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 16
+ },
+ {
+  "t": "00:20:13",
+  "kind": "tab",
+  "label": "s1",
+  "name": "roster",
+  "text": "CBB Dynasty Survive March. That is the whole job description. Duke 2026-27 · Round 1/10 Record 0-0 Rank #1 Strength 90 Roster Play Schedule Top 25 Leagues Welcome to Duke. Twenty games, a conference tournament, and one shot at surviving March. 📋 Your bench: Lyle Durrance runs the offense (76), Wendell Brannigan the defense (76). 🔥 Round 10's league night is rivalry night: North Carolina, the in-state game (both in North Carolina). Duke rotation, prestige 95 Offense 90.2 Lyle Durrance, 76 (+0.7) Defense 90.2 Wendell Brannigan, 76 (+0.7) Duncan Holloway SF · FR · ⭐⭐⭐⭐⭐ 91 Marcus Calloway PF · FR · ⭐⭐⭐⭐⭐ 91 Miles Dupree C · FR · ⭐⭐⭐⭐⭐ 90 Ace Pryor SG · SR · ⭐⭐ 89 Jett Abernathy SG · JR · ⭐⭐⭐⭐ 89 Jett Fenwick PF · SR · ⭐⭐⭐ 89 Silas Thurman PG · JR · ⭐⭐⭐⭐ 88 Silas Overton SF · FR · ⭐⭐ 87 Fire yourself and start over CBB Dynasty: College Basketball Program Sim Take over one of 40 real progra"
+ },
+ {
+  "t": "00:20:14",
+  "kind": "audit",
+  "where": "s1 tab schedule",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Fire yourself and start over\"",
+    "w": 160,
+    "h": 17
+   }
+  ],
+  "tap44": 6,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 8
+ },
+ {
+  "t": "00:20:14",
+  "kind": "tab",
+  "label": "s1",
+  "name": "schedule",
+  "text": "CBB Dynasty Survive March. That is the whole job description. Duke 2026-27 · Round 1/10 Record 0-0 Rank #1 Strength 90 Roster Play Schedule Top 25 Leagues Welcome to Duke. Twenty games, a conference tournament, and one shot at surviving March. 📋 Your bench: Lyle Durrance runs the offense (76), Wendell Brannigan the defense (76). 🔥 Round 10's league night is rivalry night: North Carolina, the in-state game (both in North Carolina). DUKE 2026-27 SCHEDULE Strength of schedule shows up after round 1 Up next: round 1, opponents drawn on game night. Round 10: North Carolina, the in-state game (both in North Carolina). The committee weighs who you played the same as how good you look, so a tough schedule can carry a bubble team into March. Fire yourself and start over CBB Dynasty: College Basketball Program Sim Take over one of 40 real programs across six leagues, from the blue bloods to a Mi"
+ },
+ {
+  "t": "00:20:15",
+  "kind": "audit",
+  "where": "s1 tab top25",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Fire yourself and start over\"",
+    "w": 160,
+    "h": 17
+   }
+  ],
+  "tap44": 6,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 8
+ },
+ {
+  "t": "00:20:15",
+  "kind": "tab",
+  "label": "s1",
+  "name": "top25",
+  "text": "CBB Dynasty Survive March. That is the whole job description. Duke 2026-27 · Round 1/10 Record 0-0 Rank #1 Strength 90 Roster Play Schedule Top 25 Leagues Welcome to Duke. Twenty games, a conference tournament, and one shot at surviving March. 📋 Your bench: Lyle Durrance runs the offense (76), Wendell Brannigan the defense (76). 🔥 Round 10's league night is rivalry night: North Carolina, the in-state game (both in North Carolina). THE TOP 25 1. Duke 0-0 2. Kentucky 0-0 3. Kansas 0-0 4. UConn 0-0 5. North Carolina 0-0 6. Houston 0-0 7. Auburn 0-0 8. Gonzaga 0-0 9. Florida 0-0 10. Purdue 0-0 11. Alabama 0-0 12. Michigan State 0-0 13. UCLA 0-0 14. Arizona 0-0 15. Tennessee 0-0 16. Villanova 0-0 17. Baylor 0-0 18. Iowa State 0-0 19. Marquette 0-0 20. Texas Tech 0-0 21. Michigan 0-0 22. Indiana 0-0 23. Creighton 0-0 24. Illinois 0-0 25. Arkansas 0-0 Record rules the committee room, then the"
+ },
+ {
+  "t": "00:20:15",
+  "kind": "audit",
+  "where": "s1 tab standings",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Fire yourself and start over\"",
+    "w": 160,
+    "h": 17
+   }
+  ],
+  "tap44": 6,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 13
+ },
+ {
+  "t": "00:20:15",
+  "kind": "tab",
+  "label": "s1",
+  "name": "standings",
+  "text": "CBB Dynasty Survive March. That is the whole job description. Duke 2026-27 · Round 1/10 Record 0-0 Rank #1 Strength 90 Roster Play Schedule Top 25 Leagues Welcome to Duke. Twenty games, a conference tournament, and one shot at surviving March. 📋 Your bench: Lyle Durrance runs the offense (76), Wendell Brannigan the defense (76). 🔥 Round 10's league night is rivalry night: North Carolina, the in-state game (both in North Carolina). ACC 1. Duke • 0-0 2. North Carolina • 0-0 3. Louisville • 0-0 4. Virginia • 0-0 5. Syracuse 0-0 6. NC State 0-0 SEC 1. Kentucky • 0-0 2. Auburn • 0-0 3. Florida • 0-0 4. Alabama • 0-0 5. Tennessee 0-0 6. Arkansas 0-0 7. Texas A&M 0-0 BIG TEN 1. Purdue • 0-0 2. Michigan State • 0-0 3. UCLA • 0-0 4. Michigan • 0-0 5. Indiana 0-0 6. Illinois 0-0 7. Wisconsin 0-0 BIG 12 1. Kansas • 0-0 2. Houston • 0-0 3. Arizona • 0-0 4. Baylor • 0-0 5. Iowa State 0-0 6. Texas T"
+ },
+ {
+  "t": "00:20:17",
+  "kind": "audit",
+  "where": "s1a press 1 Play Round 1",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Fire yourself and start over\"",
+    "w": 160,
+    "h": 17
+   }
+  ],
+  "tap44": 7,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:20:17",
+  "kind": "week",
+  "label": "s1a",
+  "pressed": "Play Round 1",
+  "text": "CBB Dynasty Survive March. That is the whole job description. Duke 2026-27 · Round 2/10 Record 2-0 Rank #8 Strength 90 Roster Play Schedule Top 25 Leagues ✅ Beat Syracuse 72-62. ✅ Beat Texas A&M 92-70. Every round is two games: a league night and a cross-country test. 🔥 Round 10's league night is rivalry night: North Carolina, the in-state game (both in North Carolina). Play Round 2 Six conference tournament champs auto-bid; 32 teams, single elimination, no second chances. AROUND THE COUNTRY Duke beat Syracuse 72-62 North Carolina beat NC State 80-73 Virginia beat Louisville 88-54 Kentucky beat Florida 74-71 Auburn beat Texas A&M 96-48 Alabama beat Tennessee 74-54 Purdue beat Arkansas 86-59"
+ },
+ {
+  "t": "00:20:18",
+  "kind": "audit",
+  "where": "s1a press 2 Play Round 2",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Fire yourself and start over\"",
+    "w": 160,
+    "h": 17
+   }
+  ],
+  "tap44": 7,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:20:18",
+  "kind": "audit",
+  "where": "s1a press 3 Play Round 3",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Fire yourself and start over\"",
+    "w": 160,
+    "h": 17
+   }
+  ],
+  "tap44": 7,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:20:19",
+  "kind": "audit",
+  "where": "s1a press 4 Play Round 4",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Fire yourself and start over\"",
+    "w": 160,
+    "h": 17
+   }
+  ],
+  "tap44": 7,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:20:20",
+  "kind": "audit",
+  "where": "s1a press 5 Play Round 5",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Fire yourself and start over\"",
+    "w": 160,
+    "h": 17
+   }
+  ],
+  "tap44": 7,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:20:21",
+  "kind": "audit",
+  "where": "s1a press 6 Play Round 6",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Fire yourself and start over\"",
+    "w": 160,
+    "h": 17
+   }
+  ],
+  "tap44": 7,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:20:21",
+  "kind": "week",
+  "label": "s1a",
+  "pressed": "Play Round 6",
+  "text": "CBB Dynasty Survive March. That is the whole job description. Duke 2026-27 · Round 7/10 Record 11-1 Rank #3 Strength 90 Roster Play Schedule Top 25 Leagues ✅ Beat North Carolina 77-69. ✅ Beat Wisconsin 93-61. Every round is two games: a league night and a cross-country test. 🔥 Round 10's league night is rivalry night: North Carolina, the in-state game (both in North Carolina). Play Round 7 Six conference tournament champs auto-bid; 32 teams, single elimination, no second chances. AROUND THE COUNTRY Duke beat North Carolina 77-69 NC State beat Virginia 76-71 Louisville beat Syracuse 82-67 Kentucky beat Arkansas 77-62 Auburn beat Florida 71-57 Alabama beat Texas A&M 87-62 Purdue beat Tennesse"
+ },
+ {
+  "t": "00:20:21",
+  "kind": "audit",
+  "where": "s1a press 7 Play Round 7",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Fire yourself and start over\"",
+    "w": 160,
+    "h": 17
+   }
+  ],
+  "tap44": 7,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:20:22",
+  "kind": "audit",
+  "where": "s1a press 8 Play Round 8",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Fire yourself and start over\"",
+    "w": 160,
+    "h": 17
+   }
+  ],
+  "tap44": 7,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:20:23",
+  "kind": "audit",
+  "where": "s1a press 9 Play Round 9",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Fire yourself and start over\"",
+    "w": 160,
+    "h": 17
+   }
+  ],
+  "tap44": 7,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:20:26",
+  "kind": "week",
+  "label": "s1a",
+  "pressed": "Final round + March",
+  "text": "CBB Dynasty Survive March. That is the whole job description. Kansas cut down the nets Your Duke: 17-3. Out in the Elite Eight. 🧊 Rivalry night: lost to North Carolina 71-78. Morale -0.8 into March, and 4 fewer budget points on the trail. 🏆 National Player of the Year: DeAndre Quarles (SF, UConn) Title game: (1) Kansas vs (2) Kentucky, Kansas win 83-68 Sweet 16: (1) Kansas vs (23) Illinois, Kansas advance Sweet 16: (2) Kentucky vs (21) Marquette, Kentucky advance Sweet 16: (3) UConn vs (18) Michigan, UConn advance Sweet 16: (4) Houston vs (16) Villanova, Houston advance Sweet 16: (5) North Carolina vs (14) Michigan State, North Carolina advance Sweet 16: (6) Duke vs (13) Iowa State, Duke a"
+ },
+ {
+  "t": "00:20:26",
+  "kind": "season",
+  "part": "s1a",
+  "n": 10,
+  "end": "recap"
+ },
+ {
+  "t": "00:20:30",
+  "kind": "audit",
+  "where": "recap",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [],
+  "tap44": 4,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 6
+ },
+ {
+  "t": "00:20:30",
+  "kind": "recap",
+  "text": "CBB Dynasty Survive March. That is the whole job description. Kansas cut down the nets Your Duke: 17-3. Out in the Elite Eight. 🧊 Rivalry night: lost to North Carolina 71-78. Morale -0.8 into March, and 4 fewer budget points on the trail. 🏆 National Player of the Year: DeAndre Quarles (SF, UConn) Title game: (1) Kansas vs (2) Kentucky, Kansas win 83-68 Sweet 16: (1) Kansas vs (23) Illinois, Kansas advance Sweet 16: (2) Kentucky vs (21) Marquette, Kentucky advance Sweet 16: (3) UConn vs (18) Michigan, UConn advance Sweet 16: (4) Houston vs (16) Villanova, Houston advance Sweet 16: (5) North Carolina vs (14) Michigan State, North Carolina advance Sweet 16: (6) Duke vs (13) Iowa State, Duke advance Sweet 16: (7) Auburn vs (11) Alabama, Alabama advance Sweet 16: (8) Purdue vs (9) Gonzaga, Purdue advance Elite Eight: (1) Kansas vs (11) Alabama, Kansas advance Elite Eight: (2) Kentucky vs (8) Purdue, Kentucky advance Elite Eight: (3) UConn vs (6) Duke, UConn advance Elite Eight: (4) Houston vs (5) North Carolina, North Carolina advance Final Four: (1) Kansas vs (5) North Carolina, Kansas advance Final Four: (2) Kentucky vs (3) UConn, Kentucky advance National Championship: (1) Kansas vs (2) Kentucky, Kansas advance Titles 0 Seasons 1 Hit the recruiting trail 🏀 CBB Dynasty Oct 13, 2026 RESULT 0 titles in 1 seasons DoUKnowBall douknowball.com/cbb-dynasty Share result Copy challenge 📋 Copy Score Card 🖼️ Save Image SHARE YOUR RESULT CBB Dynasty: College Basketball Program Sim Take over one of 40 real programs across six leagues, from the blue bloods to a Mid-Major bucket built for Cinderella stories. Every player is a generated recruit with a class year: elite freshmen are one-and-done, seniors graduate, stars leave early, and the transfer portal reshapes your rotation every"
+ },
+ {
+  "t": "00:20:33",
+  "kind": "recapReload",
+  "trail": true,
+  "text": "CBB Dynasty Survive March. That is the whole job description. Kansas cut down the nets Your Duke: 17-3. Out in the Elite Eight. 🧊 Rivalry night: lost to North Carolina 71-78. Morale -0.8 into March, and 4 fewer budget points on the trail. 🏆 National Player of the Year: DeAndre Quarles (SF, UConn) Title game: (1) Kansas vs (2) Kentucky, Kansas win 83-68 Sweet 16: (1) Kansas vs (23) Illinois, Kans"
+ },
+ {
+  "t": "00:20:34",
+  "kind": "audit",
+  "where": "recruit",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.rounded-full.border.border-border \"Let go\"",
+    "w": 48,
+    "h": 22
+   },
+   {
+    "el": "button.rounded-full.border.border-primary \"Shop\"",
+    "w": 43,
+    "h": 22
+   },
+   {
+    "el": "button.rounded-full.border.border-border \"Let go\"",
+    "w": 48,
+    "h": 22
+   },
+   {
+    "el": "button.rounded-full.border.border-primary \"Shop\"",
+    "w": 43,
+    "h": 22
+   }
+  ],
+  "tap44": 2,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 60
+ },
+ {
+  "t": "00:20:34",
+  "kind": "recruit",
+  "text": "CBB Dynasty Survive March. That is the whole job description. The 2027 class NIL budget: 88 points. High school grades carry scouting error; portal players have real tape. Beware: sign a superstar freshman and he may be one-and-done. Position All positions PG SG SF PF C Minimum stars Any stars 2+ stars 3+ stars 4+ stars 5+ stars Reset filters 💰 Program budget 110: your assistants take 22, 88 left for NIL. Replace the departed, sort your bench staff, run it back. 🧊 Losing to North Carolina costs 4 budget points on the trail. ASSISTANT COACHES · PAY 22 A SEASON Paid from the same pot as NIL. An assistant moves his end of the floor by up to 3 points either way. OFFENSIVE ASSISTANT Lyle Durrance rated 76 · +0.7 offense · paid 11 Let go Shop DEFENSIVE ASSISTANT Wendell Brannigan rated 76 · +0.7 defense · paid 11 Let go Shop HIGH SCHOOL BOARD Showing 14 of 14 high school recruits ⭐⭐⭐⭐ Miles Fenwick PF · scouted 84 · asks 34 NIL Sign ⭐⭐⭐⭐ Quincy Sessoms SF · scouted 83 · asks 38 NIL Sign ⭐⭐⭐⭐ Boogie Bright SF · scouted 83 · asks 38 NIL Sign ⭐⭐⭐⭐ Boogie Northcutt SF · scouted 82 · asks 38 NIL Sign ⭐⭐⭐⭐ Silas Kingsley SG · scouted 80 · asks 37 NIL Sign ⭐⭐⭐⭐ Miles Overton SG · scouted 79 · asks 38 NIL Sign ⭐⭐⭐⭐ Jett Grimes SF · scouted 73 · asks 38 NIL Sign ⭐⭐⭐ Miles Ivey PF · scouted 79 · asks 30 NIL Sign ⭐⭐⭐ Quincy Thurman C · scouted 78 · asks 30 NIL Sign ⭐⭐⭐ Jalen Kingsley SF · scouted 78 · asks 28 NIL Sign ⭐⭐⭐ Kellan Mabrey C · scouted 70 · asks 25 NIL Sign ⭐⭐ Kellan Sessoms SF "
+ },
+ {
+  "t": "00:20:35",
+  "kind": "signed",
+  "did": "⭐⭐⭐⭐ Miles Fenwick PF · scouted 84 · asks 34 NIL Sign"
+ },
+ {
+  "t": "00:20:35",
+  "kind": "signed",
+  "did": "⭐⭐⭐⭐ Quincy Sessoms SF · scouted 83 · asks 38 NIL Sign"
+ },
+ {
+  "t": "00:20:36",
+  "kind": "signed",
+  "did": "⭐⭐⭐⭐ Boogie Bright SF · scouted 83 · asks 38 NIL Sign"
+ },
+ {
+  "t": "00:20:37",
+  "kind": "signed",
+  "did": "⭐⭐⭐⭐ Boogie Bright SF · scouted 83 · asks 38 NIL Sign"
+ },
+ {
+  "t": "00:20:37",
+  "kind": "portal",
+  "did": "⭐⭐⭐ Trey Holloway PF · rated 76 · asks 16 NIL Sign"
+ },
+ {
+  "t": "00:20:39",
+  "kind": "hire",
+  "did": "Hollis Pellham rated 87 · +2.0 · asks 14 Hire"
+ },
+ {
+  "t": "00:20:39",
+  "kind": "audit",
+  "where": "recruit after",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.rounded-full.border.border-border \"Let go\"",
+    "w": 48,
+    "h": 22
+   },
+   {
+    "el": "button.rounded-full.border.border-primary \"Close\"",
+    "w": 46,
+    "h": 22
+   },
+   {
+    "el": "button.rounded-full.border.border-border \"Let go\"",
+    "w": 48,
+    "h": 22
+   },
+   {
+    "el": "button.rounded-full.border.border-primary \"Shop\"",
+    "w": 43,
+    "h": 22
+   }
+  ],
+  "tap44": 5,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 60
+ },
+ {
+  "t": "00:20:39",
+  "kind": "recruitAfter",
+  "text": "CBB Dynasty Survive March. That is the whole job description. The 2027 class NIL budget: 0 points. High school grades carry scouting error; portal players have real tape. Beware: sign a superstar freshman and he may be one-and-done. Position All positions PG SG SF PF C Minimum stars Any stars 2+ stars 3+ stars 4+ stars 5+ stars Reset filters ❌ Not enough budget for Hollis Pellham: he costs 3 more than the chair does now, you have 0. 🖊️ Trey Holloway (3⭐ PF) commits to Duke. NIL left: 0. ❌ Not enough NIL for Boogie Bright (asks 38). ❌ Not enough NIL for Boogie Bright (asks 38). ASSISTANT COACHES · PAY 22 A SEASON Paid from the same pot as NIL. An assistant moves his end of the floor by up to 3 points either way. OFFENSIVE ASSISTANT Lyle Durrance rated 76 · +0.7 offense · paid 11 Let go Close Hollis Pellham rated 87 · +2.0 · asks 14 Hire Wendell Featherstone rated 83 · +1.6 · asks 13 Hire Thaddeus Coldwell rated 71 · +0.1 · asks 10 Hire DEFENSIVE ASSISTANT Wendell Brannigan rated 76 · +0.7 defense · paid 11 Let go Shop HIGH SCHOOL BOARD Showing 12 of 12 high school recruits ⭐⭐⭐⭐ Boogie Bright SF · scouted 83 · asks 38 NIL Sign ⭐⭐⭐⭐ Boogie Northcutt SF · scouted 82 · asks 38 NIL Sign"
+ },
+ {
+  "t": "00:20:40",
+  "kind": "audit",
+  "where": "s2 hub",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Fire yourself and start over\"",
+    "w": 160,
+    "h": 17
+   }
+  ],
+  "tap44": 6,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 16
+ },
+ {
+  "t": "00:20:40",
+  "kind": "s2hub",
+  "text": "CBB Dynasty Survive March. That is the whole job description. Duke 2027-28 · Round 1/10 Record 0-0 Rank #3 Strength 91 Roster Play Schedule Top 25 Leagues 👋 Ace Pryor (SG) graduates. 🎓 One-and-done: Marcus Calloway (PF, 91) is off to the pros after one season. 🎓 One-and-done: Miles Dupree (C, 90) is off to the pros after one season. 👋 Jett Fenwick (PF) graduates. Duke rotation, prestige 95 Offense 90.6 Lyle Durrance, 76 (+0.7) Defense 90.6 Wendell Brannigan, 76 (+0.7) Duncan Holloway SF · SO · ⭐⭐⭐⭐⭐ 95 Jett Abernathy SG · SR · ⭐⭐⭐⭐ 92 Silas Overton SF · SO · ⭐⭐ 91 Quincy Kingsley C · FR · ⭐⭐⭐⭐⭐ 90.5 Silas Thurman PG · SR · ⭐⭐⭐⭐ 90 Miles Fenwick PF · SO · ⭐⭐⭐⭐ 87 Quincy Sessoms SF · SO · ⭐⭐⭐⭐ 87 Trey Holloway PF · JR · ⭐⭐⭐ 79 Fire yourself and start over CBB Dynasty: College Basketball Program Sim Take over one of 40 real programs across six leagues, from the blue bloods to a Mid-Major bucket built for Cinderella stories. Every player is a generated recruit with a class year: elite freshmen are one-and-done, seniors graduate, stars leave early, and the transfer portal reshapes your rotation every spring. Recruit with an NIL budget that grows with prestige and wins, sweat the scouting error on high school grades, fight through your conference tournament, and then survive a 32-team single-elimination March where six tournament champions auto-qualify and one bad night ends everything. National Player of the Year races, Cinderella tracking and title counts across unlimited sea"
+ },
+ {
+  "t": "00:20:41",
+  "kind": "audit",
+  "where": "s2 tab roster",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Fire yourself and start over\"",
+    "w": 160,
+    "h": 17
+   }
+  ],
+  "tap44": 6,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:20:41",
+  "kind": "tab",
+  "label": "s2",
+  "name": "roster",
+  "text": "CBB Dynasty Survive March. That is the whole job description. Duke 2027-28 · Round 1/10 Record 0-0 Rank #3 Strength 91 Roster Play Schedule Top 25 Leagues 👋 Ace Pryor (SG) graduates. 🎓 One-and-done: Marcus Calloway (PF, 91) is off to the pros after one season. 🎓 One-and-done: Miles Dupree (C, 90) is off to the pros after one season. 👋 Jett Fenwick (PF) graduates. Duke rotation, prestige 95 Offense 90.6 Lyle Durrance, 76 (+0.7) Defense 90.6 Wendell Brannigan, 76 (+0.7) Duncan Holloway SF · SO · ⭐⭐⭐⭐⭐ 95 Jett Abernathy SG · SR · ⭐⭐⭐⭐ 92 Silas Overton SF · SO · ⭐⭐ 91 Quincy Kingsley C · FR · ⭐⭐⭐⭐⭐ 90.5 Silas Thurman PG · SR · ⭐⭐⭐⭐ 90 Miles Fenwick PF · SO · ⭐⭐⭐⭐ 87 Quincy Sessoms SF · SO · ⭐⭐⭐⭐ 87 Trey Holloway PF · JR · ⭐⭐⭐ 79 Fire yourself and start over CBB Dynasty: College Basketball Program Sim Take over one of 40 real programs across six leagues, from the blue bloods to a Mid-Majo"
+ },
+ {
+  "t": "00:20:42",
+  "kind": "audit",
+  "where": "s2 tab schedule",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Fire yourself and start over\"",
+    "w": 160,
+    "h": 17
+   }
+  ],
+  "tap44": 6,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:20:42",
+  "kind": "tab",
+  "label": "s2",
+  "name": "schedule",
+  "text": "CBB Dynasty Survive March. That is the whole job description. Duke 2027-28 · Round 1/10 Record 0-0 Rank #3 Strength 91 Roster Play Schedule Top 25 Leagues 👋 Ace Pryor (SG) graduates. 🎓 One-and-done: Marcus Calloway (PF, 91) is off to the pros after one season. 🎓 One-and-done: Miles Dupree (C, 90) is off to the pros after one season. 👋 Jett Fenwick (PF) graduates. DUKE 2027-28 SCHEDULE Strength of schedule shows up after round 1 Up next: round 1, opponents drawn on game night. Round 10: North Carolina, the in-state game (both in North Carolina). The committee weighs who you played the same as how good you look, so a tough schedule can carry a bubble team into March. Fire yourself and start over CBB Dynasty: College Basketball Program Sim Take over one of 40 real programs across six leagues, from the blue bloods to a Mid-Major bucket built for Cinderella stories. Every player is a gene"
+ },
+ {
+  "t": "00:20:43",
+  "kind": "audit",
+  "where": "s2 tab top25",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Fire yourself and start over\"",
+    "w": 160,
+    "h": 17
+   }
+  ],
+  "tap44": 6,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:20:43",
+  "kind": "tab",
+  "label": "s2",
+  "name": "top25",
+  "text": "CBB Dynasty Survive March. That is the whole job description. Duke 2027-28 · Round 1/10 Record 0-0 Rank #3 Strength 91 Roster Play Schedule Top 25 Leagues 👋 Ace Pryor (SG) graduates. 🎓 One-and-done: Marcus Calloway (PF, 91) is off to the pros after one season. 🎓 One-and-done: Miles Dupree (C, 90) is off to the pros after one season. 👋 Jett Fenwick (PF) graduates. THE TOP 25 1. Kansas 0-0 2. North Carolina 0-0 3. Duke 0-0 4. UConn 0-0 5. Kentucky 0-0 6. Houston 0-0 7. Florida 0-0 8. Gonzaga 0-0 9. Auburn 0-0 10. Purdue 0-0 11. Alabama 0-0 12. Tennessee 0-0 13. Arizona 0-0 14. UCLA 0-0 15. Michigan State 0-0 16. Iowa State 0-0 17. Baylor 0-0 18. Villanova 0-0 19. Marquette 0-0 20. Texas Tech 0-0 21. Arkansas 0-0 22. Louisville 0-0 23. St. John's 0-0 24. Virginia 0-0 25. Indiana 0-0 Record rules the committee room, then the eye test and the schedule, weighed the same. Fire yourself and "
+ },
+ {
+  "t": "00:20:43",
+  "kind": "audit",
+  "where": "s2 tab standings",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Fire yourself and start over\"",
+    "w": 160,
+    "h": 17
+   }
+  ],
+  "tap44": 6,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:20:43",
+  "kind": "tab",
+  "label": "s2",
+  "name": "standings",
+  "text": "CBB Dynasty Survive March. That is the whole job description. Duke 2027-28 · Round 1/10 Record 0-0 Rank #3 Strength 91 Roster Play Schedule Top 25 Leagues 👋 Ace Pryor (SG) graduates. 🎓 One-and-done: Marcus Calloway (PF, 91) is off to the pros after one season. 🎓 One-and-done: Miles Dupree (C, 90) is off to the pros after one season. 👋 Jett Fenwick (PF) graduates. ACC 1. North Carolina • 0-0 2. Duke • 0-0 3. Louisville • 0-0 4. Virginia • 0-0 5. NC State 0-0 6. Syracuse 0-0 SEC 1. Kentucky • 0-0 2. Florida • 0-0 3. Auburn • 0-0 4. Alabama • 0-0 5. Tennessee 0-0 6. Arkansas 0-0 7. Texas A&M 0-0 BIG TEN 1. Purdue • 0-0 2. UCLA • 0-0 3. Michigan State • 0-0 4. Indiana • 0-0 5. Michigan 0-0 6. Illinois 0-0 7. Wisconsin 0-0 BIG 12 1. Kansas • 0-0 2. Houston • 0-0 3. Arizona • 0-0 4. Iowa State • 0-0 5. Baylor 0-0 6. Texas Tech 0-0 7. BYU 0-0 BIG EAST 1. UConn • 0-0 2. Villanova • 0-0 3. Ma"
+ },
+ {
+  "t": "00:20:45",
+  "kind": "audit",
+  "where": "s2 press 1 Play Round 1",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Fire yourself and start over\"",
+    "w": 160,
+    "h": 17
+   }
+  ],
+  "tap44": 7,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:20:45",
+  "kind": "week",
+  "label": "s2",
+  "pressed": "Play Round 1",
+  "text": "CBB Dynasty Survive March. That is the whole job description. Duke 2027-28 · Round 2/10 Record 2-0 Rank #14 Strength 91 Roster Play Schedule Top 25 Leagues ✅ Beat Syracuse 93-57. ✅ Beat Dayton 76-53. Every round is two games: a league night and a cross-country test. 🔥 Round 10's league night is rivalry night: North Carolina, the in-state game (both in North Carolina). Play Round 2 Six conference tournament champs auto-bid; 32 teams, single elimination, no second chances. AROUND THE COUNTRY Duke beat Syracuse 93-57 North Carolina beat Virginia 70-67 Louisville beat NC State 79-67 Kentucky beat Alabama 78-61 Auburn beat Tennessee 85-69 Florida beat Arkansas 72-70 Purdue beat Texas A&M 93-60 M"
+ },
+ {
+  "t": "00:20:45",
+  "kind": "audit",
+  "where": "s2 press 2 Play Round 2",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Fire yourself and start over\"",
+    "w": 160,
+    "h": 17
+   }
+  ],
+  "tap44": 7,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:20:46",
+  "kind": "audit",
+  "where": "s2 press 3 Play Round 3",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Fire yourself and start over\"",
+    "w": 160,
+    "h": 17
+   }
+  ],
+  "tap44": 7,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:20:46",
+  "kind": "season",
+  "part": "s2",
+  "n": 3,
+  "end": "paused"
+ },
+ {
+  "t": "00:20:49",
+  "kind": "reload",
+  "before": "CBB Dynasty Survive March. That is the whole job description. Duke 2027-28 · Round 4/10 Record 5-1 Rank #5 Strength 91 Roster Play Schedule Top 25 Leagues ✅ Beat North Carolina 91-70. ✅ Beat Illinois 78-55. Every round is two games: a league night and a cross-country test. 🔥 Round 10's league night",
+  "after": "CBB Dynasty Survive March. That is the whole job description. Duke 2027-28 · Round 4/10 Record 5-1 Rank #5 Strength 91 Roster Play Schedule Top 25 Leagues Duke rotation, prestige 95 Offense 90.6 Lyle Durrance, 76 (+0.7) Defense 90.6 Wendell Brannigan, 76 (+0.7) Duncan Holloway SF · SO · ⭐⭐⭐⭐⭐ 95 Jet"
+ },
+ {
+  "t": "00:20:49",
+  "kind": "save",
+  "bytes": 47251
+ },
+ {
+  "t": "00:20:51",
+  "kind": "half",
+  "text": "CBB Dynasty Survive March. That is the whole job description. Pick your program 40 real programs, six leagues, one bracket. Recruit with NIL, survive the one-and-done era, win your conference tournament, then live or die in a 32-team single-elimination March. Cinderella is real and she is coming. Saves automatically. ACC Duke Prestige 95 North Carolina Prestige 93 Virginia Prestige 84 Louisville P"
+ },
+ {
+  "t": "00:20:54",
+  "kind": "recruit-null",
+  "text": "CBB Dynasty Survive March. That is the whole job description. Duke 2027-28 · Round 4/10 Record 5-1 Rank #5 Strength 91 Roster Play Schedule Top 25 Leagues Duke rotation, prestige 95 Offense 90.6 Lyle Durrance, 76 (+0.7) Defense 90.6 Wendell Brannigan, 76 (+0.7) Duncan Holloway SF · SO · ⭐⭐⭐⭐⭐ 95 Jett Abernathy SG · SR · ⭐⭐⭐⭐ 92 Silas Overton SF · SO · ⭐⭐ 91 Quincy Kingsley C · FR · ⭐⭐⭐⭐⭐ 90.5 Sila",
+  "buttons": [
+   "Roster",
+   "Play",
+   "Schedule",
+   "Top 25",
+   "Leagues",
+   "Fire yourself and start over"
+  ]
+ },
+ {
+  "t": "00:20:54",
+  "kind": "done",
+  "secs": 45
+ }
+]

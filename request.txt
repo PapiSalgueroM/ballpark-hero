@@ -1,0 +1,5 @@
+#!serve
+#!playwright
+nhl: node .rc/x/walkFo.mjs nhl
+cfb: node .rc/x/walkDyn.mjs cfb
+cbb: node .rc/x/walkDyn.mjs cbb

@@ -1,0 +1,424 @@
+[
+ {
+  "t": "00:20:32",
+  "kind": "help",
+  "open": false
+ },
+ {
+  "t": "00:20:32",
+  "kind": "audit",
+  "where": "pick screen",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [],
+  "tap44": 2,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 38
+ },
+ {
+  "t": "00:20:32",
+  "kind": "pick",
+  "text": "NHL Front Office A roster snapshot. Original simulation ratings. Sixteen teams, one Cup. Take over an NHL front office A curated roster snapshot with original simulation ratings. Work under the hard cap, chase points over an 80 game season, then the divisional bracket: sixteen teams, four best-of-7 rounds, one Cup. Saves automatically. Boston Bruins Eastern Buffalo Sabres Eastern Detroit Red Wings Eastern Florida Panthers Eastern Montreal Canadiens Eastern Ottawa Senators Eastern Tampa Bay Light"
+ },
+ {
+  "t": "00:20:32",
+  "kind": "club",
+  "clubs": 32,
+  "idx": 9,
+  "club": "Columbus Blue Jackets Eastern"
+ },
+ {
+  "t": "00:20:34",
+  "kind": "audit",
+  "where": "hub start",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 2,
+  "tinyText": 12,
+  "tinyTextSample": [
+   "9px span.shrink-0.rounded-full.border \"MEASURED\"",
+   "9px span.shrink-0.rounded-full.border \"CANDID\"",
+   "9px span.shrink-0.rounded-full.border \"BOLD\"",
+   "9px div.mt-0.5.truncate.text-[9px] \"Zach Werenski leads them at 91\""
+  ],
+  "text10": 18
+ },
+ {
+  "t": "00:20:34",
+  "kind": "hub",
+  "text": "NHL Front Office A roster snapshot. Original simulation ratings. Sixteen teams, one Cup. Columbus Blue Jackets 2026-27 · Round 1/20 Record 0-0-0 · 0 pts Strength 86 Cap space $16M 🏛️ OWNERSHIP Trust 60 Make the playoffs and win a series. This roster is built for it. 🎙️ PRESS CONFERENCE The introduction First day, full room. The Columbus Blue Jackets beat writers want to know what kind of front office this is going to be. Process, patience, all the safe words MEASURED Nobody clips it. That is the point Name the roster holes out loud CANDID Candor plays upstairs, usually · a real gamble Say the Stanley Cup is the only bar BOLD The clip will outlive you, either way · a real gamble 👔 ROSTER 13 under contract Zach Werenski leads them at 91 💼 FREE AGENCY $16M of room In reach: Aleks Ostberg at 80 🤝 TRADES 13 to offer Your biggest chip is Zach Werenski 🏟️ PLAY Round 1 of 20 0-0 with 20 rounds to play 📊 STANDINGS #3 in the East Inside the top 8 with 20 to play 📋 STAFF 5 of 5 jobs filled +1.73 team strength from the bench ✍️ RE-SIGN DESK Nobody expiring Nobody is out of contract this summer 🎟️ DRAFT PICKS 2 picks in 2026 6 picks over 3 drafts 🔁 TRADE DESK 15 rounds to the deadline Players, picks and retained salary Welcome to the Columbus Blue Jackets front office. The 2026-27 season drops the puck now. 🏛️ The ownership mandate: Make the playoffs and win a series. This roster"
+ },
+ {
+  "t": "00:20:34",
+  "kind": "press",
+  "answered": "Process, patience, all the safe words MEASURED Nobody clips it. That is the point"
+ },
+ {
+  "t": "00:20:34",
+  "kind": "tiles",
+  "label": "s1start",
+  "tiles": [
+   "👔 ROSTER 13 under contract Zach Werenski leads them at 91",
+   "💼 FREE AGENCY $16M of room In reach: Aleks Ostberg at 80",
+   "🤝 TRADES 13 to offer Your biggest chip is Zach Werenski",
+   "🏟️ PLAY Round 1 of 20 0-0 with 20 rounds to play",
+   "📊 STANDINGS #3 in the East Inside the top 8 with 20 to play",
+   "📋 STAFF 5 of 5 jobs filled +1.73 team strength from the bench",
+   "✍️ RE-SIGN DESK Nobody expiring Nobody is out of contract this summer",
+   "🎟️ DRAFT PICKS 2 picks in 2026 6 picks over 3 drafts",
+   "🔁 TRADE DESK 15 rounds to the deadline Players, picks and retained sa"
+  ]
+ },
+ {
+  "t": "00:20:35",
+  "kind": "audit",
+  "where": "s1start tile 0 👔 ROSTER 13 under contract Za",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 3,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 47
+ },
+ {
+  "t": "00:20:35",
+  "kind": "panel",
+  "label": "s1start",
+  "tile": "👔 ROSTER 13 under contract Zach Werensk",
+  "text": "NHL Front Office A roster snapshot. Original simulation ratings. Sixteen teams, one Cup. Columbus Blue Jackets 2026-27 · Round 1/20 Record 0-0-0 · 0 pts Strength 86 Cap space $16M 🏛️ OWNERSHIP Trust 63 Make the playoffs and win a series. This roster is built for it. Hub Roster 🎙️ Nobody clips it. That is the point. Welcome to the Columbus Blue Jackets front office. The 2026-27 season drops the puck now. 🏛️ The ownership mandate: Make the playoffs and win a series. This roster is built for it. Choose simulation contributors Cap hit $88M of the $104M ceiling Cap figures as of September 2026 OVR, potential and contracts are simulation values. The player list stays at its roster snapshot. Opening estimates use 2024-25 and 2025-26 regular-season inputs: forwards measure offensive production, defensemen use offense and usage proxies, and goalies use save-rate proxies. The e marker means lim"
+ },
+ {
+  "t": "00:20:37",
+  "kind": "audit",
+  "where": "s1start tile 1 💼 FREE AGENCY $16M of room In",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.rounded-full.bg-primary.px-2.5 \"Sign\"",
+    "w": 42,
+    "h": 20
+   },
+   {
+    "el": "button.rounded-full.bg-primary.px-2.5 \"Sign\"",
+    "w": 42,
+    "h": 20
+   },
+   {
+    "el": "button.rounded-full.bg-primary.px-2.5 \"Sign\"",
+    "w": 42,
+    "h": 20
+   },
+   {
+    "el": "button.rounded-full.bg-primary.px-2.5 \"Sign\"",
+    "w": 42,
+    "h": 20
+   },
+   {
+    "el": "button.rounded-full.bg-primary.px-2.5 \"Sign\"",
+    "w": 42,
+    "h": 20
+   },
+   {
+    "el": "button.rounded-full.bg-primary.px-2.5 \"Sign\"",
+    "w": 42,
+    "h": 20
+   },
+   {
+    "el": "button.rounded-full.bg-primary.px-2.5 \"Sign\"",
+    "w": 42,
+    "h": 20
+   },
+   {
+    "el": "button.rounded-full.bg-primary.px-2.5 \"Sign\"",
+    "w": 42,
+    "h": 20
+   }
+  ],
+  "tap44": 3,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 26
+ },
+ {
+  "t": "00:20:37",
+  "kind": "panel",
+  "label": "s1start",
+  "tile": "💼 FREE AGENCY $16M of room In reach: Al",
+  "text": "NHL Front Office A roster snapshot. Original simulation ratings. Sixteen teams, one Cup. Columbus Blue Jackets 2026-27 · Round 1/20 Record 0-0-0 · 0 pts Strength 86 Cap space $16M 🏛️ OWNERSHIP Trust 63 Make the playoffs and win a series. This roster is built for it. Hub Free agency 🎙️ Nobody clips it. That is the point. Welcome to the Columbus Blue Jackets front office. The 2026-27 season drops the puck now. 🏛️ The ownership mandate: Make the playoffs and win a series. This roster is built for it. Free agents (cap space $16M). A man you waived waits until next season. Aleks Ostberg C · 27y · wants $5.1M 80 Sign Torsten Ahlberg W · 29y · wants $4M 78 Sign Nikita Ahlberg C · 29y · wants $2.9M 76 Sign Liam Sjodin D · 27y · wants $2.9M 76 Sign Wilhelm Forsell D · 27y · wants $2.4M 75 Sign Casper Byfield G · 28y · wants $2.4M 75 Sign Torsten Kovac W · 32y · wants $1.9M 74 Sign Ilya Palmgre"
+ },
+ {
+  "t": "00:20:38",
+  "kind": "audit",
+  "where": "s1start tile 2 🤝 TRADES 13 to offer Your big",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.rounded-full.border.px-2 \"BOS\"",
+    "w": 40,
+    "h": 21
+   },
+   {
+    "el": "button.rounded-full.border.px-2 \"BUF\"",
+    "w": 38,
+    "h": 21
+   },
+   {
+    "el": "button.rounded-full.border.px-2 \"DET\"",
+    "w": 38,
+    "h": 21
+   },
+   {
+    "el": "button.rounded-full.border.px-2 \"FLA\"",
+    "w": 37,
+    "h": 21
+   },
+   {
+    "el": "button.rounded-full.border.px-2 \"MTL\"",
+    "w": 40,
+    "h": 21
+   },
+   {
+    "el": "button.rounded-full.border.px-2 \"OTT\"",
+    "w": 40,
+    "h": 21
+   },
+   {
+    "el": "button.rounded-full.border.px-2 \"TBL\"",
+    "w": 38,
+    "h": 21
+   },
+   {
+    "el": "button.rounded-full.border.px-2 \"TOR\"",
+    "w": 40,
+    "h": 21
+   }
+  ],
+  "tap44": 4,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 52
+ },
+ {
+  "t": "00:20:38",
+  "kind": "panel",
+  "label": "s1start",
+  "tile": "🤝 TRADES 13 to offer Your biggest chip ",
+  "text": "NHL Front Office A roster snapshot. Original simulation ratings. Sixteen teams, one Cup. Columbus Blue Jackets 2026-27 · Round 1/20 Record 0-0-0 · 0 pts Strength 86 Cap space $16M 🏛️ OWNERSHIP Trust 63 Make the playoffs and win a series. This roster is built for it. Hub Trades 🎙️ Nobody clips it. That is the point. Welcome to the Columbus Blue Jackets front office. The 2026-27 season drops the puck now. 🏛️ The ownership mandate: Make the playoffs and win a series. This roster is built for it. Trade deadline: the break after round 15 is the last chance, and deals shut once round 16 is played. Packages with picks and retained salary are on the Trade desk box. 🔍 Trade Finder Pick one of your players and shop him. Only deals the AI genuinely accepts show up, cap checked. Zach Werenski (D) Opening estimate 91: offense and usage proxy. Limited opening evidence. 91e Kirill Marchenko (W) Ope"
+ },
+ {
+  "t": "00:20:39",
+  "kind": "audit",
+  "where": "s1start tile 3 🏟️ PLAY Round 1 of 20 0-0 wit",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 4,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 7
+ },
+ {
+  "t": "00:20:39",
+  "kind": "panel",
+  "label": "s1start",
+  "tile": "🏟️ PLAY Round 1 of 20 0-0 with 20 round",
+  "text": "NHL Front Office A roster snapshot. Original simulation ratings. Sixteen teams, one Cup. Columbus Blue Jackets 2026-27 · Round 1/20 Record 0-0-0 · 0 pts Strength 86 Cap space $16M 🏛️ OWNERSHIP Trust 63 Make the playoffs and win a series. This roster is built for it. Hub Play 🎙️ Nobody clips it. That is the point. Welcome to the Columbus Blue Jackets front office. The 2026-27 season drops the puck now. 🏛️ The ownership mandate: Make the playoffs and win a series. This roster is built for it. Each round simulates a stretch of games across the league. OT losses still earn a point. Play Round 1 Top three per division plus two wild cards per conference make the divisional bracket. Every round is best-of-7. Abandon franchise and restart NHL Front Office: Hockey GM Simulator Take over an NHL franchise from a curated roster snapshot. New games use original estimates from 2024-25 and 2025-26 r"
+ },
+ {
+  "t": "00:20:40",
+  "kind": "audit",
+  "where": "s1start tile 4 📊 STANDINGS #3 in the East In",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 3,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 11
+ },
+ {
+  "t": "00:20:40",
+  "kind": "panel",
+  "label": "s1start",
+  "tile": "📊 STANDINGS #3 in the East Inside the t",
+  "text": "NHL Front Office A roster snapshot. Original simulation ratings. Sixteen teams, one Cup. Columbus Blue Jackets 2026-27 · Round 1/20 Record 0-0-0 · 0 pts Strength 86 Cap space $16M 🏛️ OWNERSHIP Trust 63 Make the playoffs and win a series. This roster is built for it. Hub Standings 🎙️ Nobody clips it. That is the point. Welcome to the Columbus Blue Jackets front office. The 2026-27 season drops the puck now. 🏛️ The ownership mandate: Make the playoffs and win a series. This roster is built for it. ATLANTIC 1. Tampa Bay Lightning 0-0-0 · 0 2. Toronto Maple Leafs 0-0-0 · 0 3. Montreal Canadiens 0-0-0 · 0 4. Detroit Red Wings 0-0-0 · 0 5. Ottawa Senators 0-0-0 · 0 6. Florida Panthers 0-0-0 · 0 7. Buffalo Sabres 0-0-0 · 0 8. Boston Bruins 0-0-0 · 0 METROPOLITAN 1. Washington Capitals 0-0-0 · 0 2. Columbus Blue Jackets 0-0-0 · 0 3. New York Rangers 0-0-0 · 0 4. Philadelphia Flyers 0-0-0 · 0 "
+ },
+ {
+  "t": "00:20:42",
+  "kind": "audit",
+  "where": "s1start tile 5 📋 STAFF 5 of 5 jobs filled +1",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 3,
+  "tinyText": 5,
+  "tinyTextSample": [
+   "9px div.text-[9px].text-muted-foreground \"Level 8 · 99k a round\"",
+   "9px div.text-[9px].text-muted-foreground \"Level 8 · 40k a round\"",
+   "9px div.text-[9px].text-muted-foreground \"Level 6 · 16k a round\"",
+   "9px div.text-[9px].text-muted-foreground \"Level 7 · 18k a round\""
+  ],
+  "text10": 12
+ },
+ {
+  "t": "00:20:42",
+  "kind": "panel",
+  "label": "s1start",
+  "tile": "📋 STAFF 5 of 5 jobs filled +1.73 team s",
+  "text": "NHL Front Office A roster snapshot. Original simulation ratings. Sixteen teams, one Cup. Columbus Blue Jackets 2026-27 · Round 1/20 Record 0-0-0 · 0 pts Strength 86 Cap space $16M 🏛️ OWNERSHIP Trust 63 Make the playoffs and win a series. This roster is built for it. Hub Staff Ownership gives the staff desk $8.00M each summer for fees and pay offs. Wages are paid outside the cap. The special teams assistant counts at 20 percent, because this game has no power play of its own. STAFF · $8.00M TO SPEND · 193K A ROUND ON THE DESK ? 📋 Head coach · your call Horatio Stanhope Level 8 · 99k a round ⚡ Special teams Wilbur Entwistle Level 8 · 40k a round 🥅 Goalies Ulysses Quarmby Level 6 · 16k a round 🔎 Scouting Gideon Goodenough Level 7 · 18k a round 🩹 Medical Quimby Wetherby Level 8 · 20k a round 🎙️ Nobody clips it. That is the point. Welcome to the Columbus Blue Jackets front office. The 2"
+ },
+ {
+  "t": "00:20:43",
+  "kind": "audit",
+  "where": "s1start tile 6 ✍️ RE-SIGN DESK Nobody expirin",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 4,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 7
+ },
+ {
+  "t": "00:20:43",
+  "kind": "panel",
+  "label": "s1start",
+  "tile": "✍️ RE-SIGN DESK Nobody expiring Nobody i",
+  "text": "NHL Front Office A roster snapshot. Original simulation ratings. Sixteen teams, one Cup. Columbus Blue Jackets 2026-27 · Round 1/20 Record 0-0-0 · 0 pts Strength 86 Cap space $16M 🏛️ OWNERSHIP Trust 63 Make the playoffs and win a series. This roster is built for it. Hub Re-sign desk Re-sign desk Nobody is out of contract this winter. Decide any time this season. Anyone you leave open is settled by your staff's own rule when the summer starts, never by a coin flip. The money is this game's own figures, not real contracts. The rules are each league's own, read in October 2026. The money is this game's own figure, not anybody's real contract. 🎙️ Nobody clips it. That is the point. Welcome to the Columbus Blue Jackets front office. The 2026-27 season drops the puck now. 🏛️ The ownership mandate: Make the playoffs and win a series. This roster is built for it. Abandon franchise and restart"
+ },
+ {
+  "t": "00:20:44",
+  "kind": "audit",
+  "where": "s1start tile 7 🎟️ DRAFT PICKS 2 picks in 202",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 3,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 10
+ },
+ {
+  "t": "00:20:44",
+  "kind": "panel",
+  "label": "s1start",
+  "tile": "🎟️ DRAFT PICKS 2 picks in 2026 6 picks ",
+  "text": "NHL Front Office A roster snapshot. Original simulation ratings. Sixteen teams, one Cup. Columbus Blue Jackets 2026-27 · Round 1/20 Record 0-0-0 · 0 pts Strength 86 Cap space $16M 🏛️ OWNERSHIP Trust 63 Make the playoffs and win a series. This roster is built for it. Hub Draft picks DRAFT CAPITAL 6 picks, 3 firsts Trade deadline after round 15. 15 rounds to go. 2026 (this year) 1st 2nd 2027 1st 2nd 2028 1st 2nd The limit of two lottery wins in five years is not modelled. The real draft runs seven rounds. This game drafts two, so the ledger carries two. The lottery is in the rules, but draft night here is the game's own short draft: you pick first in each batch, then the other clubs go in reverse standings. 🎙️ Nobody clips it. That is the point. Welcome to the Columbus Blue Jackets front office. The 2026-27 season drops the puck now. 🏛️ The ownership mandate: Make the playoffs and win a"
+ },
+ {
+  "t": "00:20:46",
+  "kind": "audit",
+  "where": "s1start tile 8 🔁 TRADE DESK 15 rounds to the",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 42,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 46
+ },
+ {
+  "t": "00:20:46",
+  "kind": "panel",
+  "label": "s1start",
+  "tile": "🔁 TRADE DESK 15 rounds to the deadline ",
+  "text": "NHL Front Office A roster snapshot. Original simulation ratings. Sixteen teams, one Cup. Columbus Blue Jackets 2026-27 · Round 1/20 Record 0-0-0 · 0 pts Strength 86 Cap space $16M 🏛️ OWNERSHIP Trust 63 Make the playoffs and win a series. This roster is built for it. Hub Trade desk Deal with Anaheim Ducks (holding) Boston Bruins (holding) Buffalo Sabres (holding) Carolina Hurricanes (holding) Calgary Flames (holding) Chicago Blackhawks (holding) Colorado Avalanche (holding) Dallas Stars (holding) Detroit Red Wings (holding) Edmonton Oilers (holding) Florida Panthers (holding) Los Angeles Kings (holding) Minnesota Wild (holding) Montreal Canadiens (holding) New Jersey Devils (holding) Nashville Predators (holding) New York Islanders (holding) New York Rangers (holding) Ottawa Senators (holding) Philadelphia Flyers (holding) Pittsburgh Penguins (holding) Seattle Kraken (holding) San Jose S"
+ },
+ {
+  "t": "00:20:46",
+  "kind": "STUCK",
+  "label": "s1a",
+  "presses": 0,
+  "disabled": [],
+  "buttons": [
+   "👔 ROSTER 13 under contract Zach Werensk",
+   "💼 FREE AGENCY $16M of room In reach: Al",
+   "🤝 TRADES 13 to offer Your biggest chip ",
+   "🏟️ PLAY Round 1 of 20 0-0 with 20 round",
+   "📊 STANDINGS #3 in the East Inside the t",
+   "📋 STAFF 5 of 5 jobs filled +1.73 team s",
+   "✍️ RE-SIGN DESK Nobody expiring Nobody i",
+   "🎟️ DRAFT PICKS 2 picks in 2026 6 picks ",
+   "🔁 TRADE DESK 15 rounds to the deadline ",
+   "Abandon franchise and restart"
+  ],
+  "text": "NHL Front Office A roster snapshot. Original simulation ratings. Sixteen teams, one Cup. Columbus Blue Jackets 2026-27 · Round 1/20 Record 0-0-0 · 0 pts Strength 86 Cap space $16M 🏛️ OWNERSHIP Trust 63 Make the playoffs and win a series. This roster is built for it. 👔 ROSTER 13 under contract Zach Werenski leads them at 91 💼 FREE AGENCY $16M of room In reach: Aleks Ostberg at 80 🤝 TRADES 13 to offer Your biggest chip is Zach Werenski 🏟️ PLAY Round 1 of 20 0-0 with 20 rounds to play 📊 STANDINGS #3 in the East Inside the top 8 with 20 to play 📋 STAFF 5 of 5 jobs filled +1.73 team strength from the bench ✍️ RE-SIGN DESK Nobody expiring Nobody is out of contract this summer 🎟️ DRAFT PICKS 2 picks in 2026 6 picks over 3 drafts 🔁 TRADE DESK 15 rounds to the deadline Players, picks and retained salary 🎙️ Nobody clips it. That is the point. Welcome to the Columbus Blue Jackets front of"
+ },
+ {
+  "t": "00:20:47",
+  "kind": "season",
+  "part": "s1a",
+  "presses": 0,
+  "end": "stuck",
+  "secs": 16
+ },
+ {
+  "t": "00:20:47",
+  "kind": "done",
+  "secs": 16
+ }
+]

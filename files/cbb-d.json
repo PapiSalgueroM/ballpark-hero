@@ -1,0 +1,696 @@
+[
+ {
+  "t": "00:20:56",
+  "kind": "help",
+  "open": false
+ },
+ {
+  "t": "00:20:56",
+  "kind": "audit",
+  "where": "pick",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [],
+  "tap44": 1,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 52
+ },
+ {
+  "t": "00:20:56",
+  "kind": "school",
+  "count": 40,
+  "idx": 20,
+  "school": "Kansas Prestige 94"
+ },
+ {
+  "t": "00:20:57",
+  "kind": "audit",
+  "where": "hub",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Fire yourself and start over\"",
+    "w": 160,
+    "h": 17
+   }
+  ],
+  "tap44": 6,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 16
+ },
+ {
+  "t": "00:20:57",
+  "kind": "hub",
+  "text": "CBB Dynasty Survive March. That is the whole job description. Kansas 2026-27 · Round 1/10 Record 0-0 Rank #3 Strength 89 Roster Play Schedule Top 25 Leagues Welcome to Kansas. Twenty games, a conference tournament, and one shot at surviving March. 📋 Your bench: Delano Halvorsen runs the offense (90), Delano Quillen the defense (81). 🔥 Round 10's league night is rivalry night: Arizona, a pairing the game made (no series history on file). Kansas rotation, prestige 94 Offense 89.5 Delano Halvorsen, 90 (+2.4) Defense 88.5 Delano Quillen, 81 (+1.3) Cooper Jasper C · JR · ⭐⭐⭐ 90 Quincy Overton SF · SO · ⭐⭐⭐⭐⭐ 89 DeAndre Lockhart PF · JR · ⭐⭐⭐ 88 Reed Jasper PF · JR · ⭐⭐⭐⭐ 88 Trey Northcutt SG · SO · ⭐⭐⭐⭐⭐ 87 DeAndre Holloway PG · SO · ⭐⭐ 85 Jett Dupree SF · JR · ⭐⭐ 83 Ace Calloway SG · SO · ⭐⭐ 82 Fire yourself and start over CBB Dynasty: College Basketball Program Sim Take over one of 40 real programs across six leagues, from the blue bloods to a Mid-Major bucket built for Cinderella stories. Every player is a generated recruit with a class year: elite freshmen are one-and-done, seniors graduate, stars leave early, and the transfer portal reshapes your rotation every spring. Recruit with an NIL budget that grows with prestige and wins, sweat the scouting error on high school grades, fight through your conference tournament, and then survive a 32-team single-elimination March where "
+ },
+ {
+  "t": "00:20:58",
+  "kind": "audit",
+  "where": "s1 tab roster",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Fire yourself and start over\"",
+    "w": 160,
+    "h": 17
+   }
+  ],
+  "tap44": 6,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 16
+ },
+ {
+  "t": "00:20:58",
+  "kind": "tab",
+  "label": "s1",
+  "name": "roster",
+  "text": "CBB Dynasty Survive March. That is the whole job description. Kansas 2026-27 · Round 1/10 Record 0-0 Rank #3 Strength 89 Roster Play Schedule Top 25 Leagues Welcome to Kansas. Twenty games, a conference tournament, and one shot at surviving March. 📋 Your bench: Delano Halvorsen runs the offense (90), Delano Quillen the defense (81). 🔥 Round 10's league night is rivalry night: Arizona, a pairing the game made (no series history on file). Kansas rotation, prestige 94 Offense 89.5 Delano Halvorsen, 90 (+2.4) Defense 88.5 Delano Quillen, 81 (+1.3) Cooper Jasper C · JR · ⭐⭐⭐ 90 Quincy Overton SF · SO · ⭐⭐⭐⭐⭐ 89 DeAndre Lockhart PF · JR · ⭐⭐⭐ 88 Reed Jasper PF · JR · ⭐⭐⭐⭐ 88 Trey Northcutt SG · SO · ⭐⭐⭐⭐⭐ 87 DeAndre Holloway PG · SO · ⭐⭐ 85 Jett Dupree SF · JR · ⭐⭐ 83 Ace Calloway SG · SO · ⭐⭐ 82 Fire yourself and start over CBB Dynasty: College Basketball Program Sim Take over one of 40 rea"
+ },
+ {
+  "t": "00:20:59",
+  "kind": "audit",
+  "where": "s1 tab schedule",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Fire yourself and start over\"",
+    "w": 160,
+    "h": 17
+   }
+  ],
+  "tap44": 6,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 8
+ },
+ {
+  "t": "00:20:59",
+  "kind": "tab",
+  "label": "s1",
+  "name": "schedule",
+  "text": "CBB Dynasty Survive March. That is the whole job description. Kansas 2026-27 · Round 1/10 Record 0-0 Rank #3 Strength 89 Roster Play Schedule Top 25 Leagues Welcome to Kansas. Twenty games, a conference tournament, and one shot at surviving March. 📋 Your bench: Delano Halvorsen runs the offense (90), Delano Quillen the defense (81). 🔥 Round 10's league night is rivalry night: Arizona, a pairing the game made (no series history on file). KANSAS 2026-27 SCHEDULE Strength of schedule shows up after round 1 Up next: round 1, opponents drawn on game night. Round 10: Arizona, a pairing the game made (no series history on file). The committee weighs who you played the same as how good you look, so a tough schedule can carry a bubble team into March. Fire yourself and start over CBB Dynasty: College Basketball Program Sim Take over one of 40 real programs across six leagues, from the blue bloo"
+ },
+ {
+  "t": "00:21:00",
+  "kind": "audit",
+  "where": "s1 tab top25",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Fire yourself and start over\"",
+    "w": 160,
+    "h": 17
+   }
+  ],
+  "tap44": 6,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 8
+ },
+ {
+  "t": "00:21:00",
+  "kind": "tab",
+  "label": "s1",
+  "name": "top25",
+  "text": "CBB Dynasty Survive March. That is the whole job description. Kansas 2026-27 · Round 1/10 Record 0-0 Rank #3 Strength 89 Roster Play Schedule Top 25 Leagues Welcome to Kansas. Twenty games, a conference tournament, and one shot at surviving March. 📋 Your bench: Delano Halvorsen runs the offense (90), Delano Quillen the defense (81). 🔥 Round 10's league night is rivalry night: Arizona, a pairing the game made (no series history on file). THE TOP 25 1. Duke 0-0 2. UConn 0-0 3. Kansas 0-0 4. Kentucky 0-0 5. North Carolina 0-0 6. Houston 0-0 7. Auburn 0-0 8. Florida 0-0 9. Gonzaga 0-0 10. Purdue 0-0 11. Alabama 0-0 12. Baylor 0-0 13. Tennessee 0-0 14. Arizona 0-0 15. Michigan State 0-0 16. Iowa State 0-0 17. UCLA 0-0 18. Villanova 0-0 19. Marquette 0-0 20. Illinois 0-0 21. Creighton 0-0 22. St. John's 0-0 23. Virginia 0-0 24. Arkansas 0-0 25. Texas Tech 0-0 Record rules the committee room,"
+ },
+ {
+  "t": "00:21:00",
+  "kind": "audit",
+  "where": "s1 tab standings",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Fire yourself and start over\"",
+    "w": 160,
+    "h": 17
+   }
+  ],
+  "tap44": 6,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 13
+ },
+ {
+  "t": "00:21:00",
+  "kind": "tab",
+  "label": "s1",
+  "name": "standings",
+  "text": "CBB Dynasty Survive March. That is the whole job description. Kansas 2026-27 · Round 1/10 Record 0-0 Rank #3 Strength 89 Roster Play Schedule Top 25 Leagues Welcome to Kansas. Twenty games, a conference tournament, and one shot at surviving March. 📋 Your bench: Delano Halvorsen runs the offense (90), Delano Quillen the defense (81). 🔥 Round 10's league night is rivalry night: Arizona, a pairing the game made (no series history on file). ACC 1. Duke • 0-0 2. North Carolina • 0-0 3. Virginia • 0-0 4. Louisville • 0-0 5. Syracuse 0-0 6. NC State 0-0 SEC 1. Kentucky • 0-0 2. Auburn • 0-0 3. Florida • 0-0 4. Alabama • 0-0 5. Tennessee 0-0 6. Arkansas 0-0 7. Texas A&M 0-0 BIG TEN 1. Purdue • 0-0 2. Michigan State • 0-0 3. UCLA • 0-0 4. Illinois • 0-0 5. Indiana 0-0 6. Michigan 0-0 7. Wisconsin 0-0 BIG 12 1. Kansas • 0-0 2. Houston • 0-0 3. Baylor • 0-0 4. Arizona • 0-0 5. Iowa State 0-0 6. T"
+ },
+ {
+  "t": "00:21:02",
+  "kind": "audit",
+  "where": "s1a press 1 Play Round 1",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Fire yourself and start over\"",
+    "w": 160,
+    "h": 17
+   }
+  ],
+  "tap44": 7,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:21:02",
+  "kind": "week",
+  "label": "s1a",
+  "pressed": "Play Round 1",
+  "text": "CBB Dynasty Survive March. That is the whole job description. Kansas 2026-27 · Round 2/10 Record 2-0 Rank #3 Strength 89 Roster Play Schedule Top 25 Leagues ✅ Beat Arizona 82-61. ✅ Beat Arkansas 82-64. Every round is two games: a league night and a cross-country test. 🔥 Round 10's league night is rivalry night: Arizona, a pairing the game made (no series history on file). Play Round 2 Six conference tournament champs auto-bid; 32 teams, single elimination, no second chances. AROUND THE COUNTRY Duke beat Louisville 87-53 North Carolina beat Syracuse 81-61 NC State beat Virginia 92-69 Kentucky beat Auburn 70-67 Florida beat Arkansas 82-59 Alabama beat Texas A&M 75-60 Purdue beat Tennessee 90-"
+ },
+ {
+  "t": "00:21:02",
+  "kind": "audit",
+  "where": "s1a press 2 Play Round 2",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Fire yourself and start over\"",
+    "w": 160,
+    "h": 17
+   }
+  ],
+  "tap44": 7,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:21:03",
+  "kind": "audit",
+  "where": "s1a press 3 Play Round 3",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Fire yourself and start over\"",
+    "w": 160,
+    "h": 17
+   }
+  ],
+  "tap44": 7,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:21:04",
+  "kind": "audit",
+  "where": "s1a press 4 Play Round 4",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Fire yourself and start over\"",
+    "w": 160,
+    "h": 17
+   }
+  ],
+  "tap44": 7,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:21:05",
+  "kind": "audit",
+  "where": "s1a press 5 Play Round 5",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Fire yourself and start over\"",
+    "w": 160,
+    "h": 17
+   }
+  ],
+  "tap44": 7,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:21:05",
+  "kind": "audit",
+  "where": "s1a press 6 Play Round 6",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Fire yourself and start over\"",
+    "w": 160,
+    "h": 17
+   }
+  ],
+  "tap44": 7,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:21:05",
+  "kind": "week",
+  "label": "s1a",
+  "pressed": "Play Round 6",
+  "text": "CBB Dynasty Survive March. That is the whole job description. Kansas 2026-27 · Round 7/10 Record 11-1 Rank #1 Strength 89 Roster Play Schedule Top 25 Leagues ✅ Beat Baylor 93-67. ❌ Lost to Duke 57-85. Every round is two games: a league night and a cross-country test. 🔥 Round 10's league night is rivalry night: Arizona, a pairing the game made (no series history on file). Play Round 7 Six conference tournament champs auto-bid; 32 teams, single elimination, no second chances. AROUND THE COUNTRY Duke beat NC State 87-62 North Carolina beat Syracuse 85-67 Virginia beat Louisville 74-71 Kentucky beat Alabama 96-61 Auburn beat Texas A&M 71-63 Florida beat Arkansas 74-61 Tennessee beat Purdue 81-5"
+ },
+ {
+  "t": "00:21:06",
+  "kind": "audit",
+  "where": "s1a press 7 Play Round 7",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Fire yourself and start over\"",
+    "w": 160,
+    "h": 17
+   }
+  ],
+  "tap44": 7,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:21:07",
+  "kind": "audit",
+  "where": "s1a press 8 Play Round 8",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Fire yourself and start over\"",
+    "w": 160,
+    "h": 17
+   }
+  ],
+  "tap44": 7,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:21:08",
+  "kind": "audit",
+  "where": "s1a press 9 Play Round 9",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Fire yourself and start over\"",
+    "w": 160,
+    "h": 17
+   }
+  ],
+  "tap44": 7,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:21:11",
+  "kind": "week",
+  "label": "s1a",
+  "pressed": "Final round + March",
+  "text": "CBB Dynasty Survive March. That is the whole job description. Duke cut down the nets Your Kansas: 19-1. Out in the Final Four. 🔥 Rivalry night: beat Arizona 71-70. Morale +0.5 into March, and 3 more budget points on the trail. 🏆 National Player of the Year: Cooper Jasper (C, Kansas) Title game: (3) Kentucky vs (5) Duke, Duke win 70-59 Sweet 16: (1) Houston vs (19) Iowa State, Houston advance Sweet 16: (2) Kansas vs (18) Arizona, Kansas advance Sweet 16: (3) Kentucky vs (16) UCLA, Kentucky advance Sweet 16: (4) North Carolina vs (13) Baylor, North Carolina advance Sweet 16: (5) Duke vs (12) Alabama, Duke advance Sweet 16: (6) UConn vs (11) Florida, UConn advance Sweet 16: (7) Auburn vs (10)"
+ },
+ {
+  "t": "00:21:11",
+  "kind": "season",
+  "part": "s1a",
+  "n": 10,
+  "end": "recap"
+ },
+ {
+  "t": "00:21:15",
+  "kind": "audit",
+  "where": "recap",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [],
+  "tap44": 3,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 6
+ },
+ {
+  "t": "00:21:15",
+  "kind": "recap",
+  "text": "CBB Dynasty Survive March. That is the whole job description. Duke cut down the nets Your Kansas: 19-1. Out in the Final Four. 🔥 Rivalry night: beat Arizona 71-70. Morale +0.5 into March, and 3 more budget points on the trail. 🏆 National Player of the Year: Cooper Jasper (C, Kansas) Title game: (3) Kentucky vs (5) Duke, Duke win 70-59 Sweet 16: (1) Houston vs (19) Iowa State, Houston advance Sweet 16: (2) Kansas vs (18) Arizona, Kansas advance Sweet 16: (3) Kentucky vs (16) UCLA, Kentucky advance Sweet 16: (4) North Carolina vs (13) Baylor, North Carolina advance Sweet 16: (5) Duke vs (12) Alabama, Duke advance Sweet 16: (6) UConn vs (11) Florida, UConn advance Sweet 16: (7) Auburn vs (10) Michigan State, Auburn advance Sweet 16: (8) Gonzaga vs (9) Purdue, Purdue advance Elite Eight: (1) Houston vs (9) Purdue, Houston advance Elite Eight: (2) Kansas vs (7) Auburn, Kansas advance Elite Eight: (3) Kentucky vs (6) UConn, Kentucky advance Elite Eight: (4) North Carolina vs (5) Duke, Duke advance Final Four: (1) Houston vs (5) Duke, Duke advance Final Four: (2) Kansas vs (3) Kentucky, Kentucky advance National Championship: (3) Kentucky vs (5) Duke, Duke advance Titles 0 Seasons 1 Hit the recruiting trail 🏀 CBB Dynasty Oct 13, 2026 RESULT 0 titles in 1 seasons DoUKnowBall douknowball.com/cbb-dynasty Share result Copy challenge 📋 Copy Score Card 🖼️ Save Image SHARE YOUR RESULT CBB Dynasty: College Basketball Program Sim Take over one of 40 real programs across six leagues, from the blue bloods to a Mid-Major bucket built for Cinderella stories. Every player is a generated recruit with a class year: elite freshmen are one-and-done, seniors graduate, stars leave early, and the transfer portal reshapes your rotation every spring. Recruit with an NIL budget that grows with p"
+ },
+ {
+  "t": "00:21:18",
+  "kind": "recapReload",
+  "trail": true,
+  "text": "CBB Dynasty Survive March. That is the whole job description. Duke cut down the nets Your Kansas: 19-1. Out in the Final Four. 🔥 Rivalry night: beat Arizona 71-70. Morale +0.5 into March, and 3 more budget points on the trail. 🏆 National Player of the Year: Cooper Jasper (C, Kansas) Title game: (3) Kentucky vs (5) Duke, Duke win 70-59 Sweet 16: (1) Houston vs (19) Iowa State, Houston advance Swe"
+ },
+ {
+  "t": "00:21:19",
+  "kind": "audit",
+  "where": "recruit",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.rounded-full.border.border-border \"Let go\"",
+    "w": 48,
+    "h": 22
+   },
+   {
+    "el": "button.rounded-full.border.border-primary \"Shop\"",
+    "w": 43,
+    "h": 22
+   },
+   {
+    "el": "button.rounded-full.border.border-border \"Let go\"",
+    "w": 48,
+    "h": 22
+   },
+   {
+    "el": "button.rounded-full.border.border-primary \"Shop\"",
+    "w": 43,
+    "h": 22
+   }
+  ],
+  "tap44": 2,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 60
+ },
+ {
+  "t": "00:21:19",
+  "kind": "recruit",
+  "text": "CBB Dynasty Survive March. That is the whole job description. The 2027 class NIL budget: 91 points. High school grades carry scouting error; portal players have real tape. Beware: sign a superstar freshman and he may be one-and-done. Position All positions PG SG SF PF C Minimum stars Any stars 2+ stars 3+ stars 4+ stars 5+ stars Reset filters 💰 Program budget 118: your assistants take 27, 91 left for NIL. Replace the departed, sort your bench staff, run it back. 🔥 Beating Arizona is worth 3 more budget points on the trail. ASSISTANT COACHES · PAY 27 A SEASON Paid from the same pot as NIL. An assistant moves his end of the floor by up to 3 points either way. OFFENSIVE ASSISTANT Delano Halvorsen rated 90 · +2.4 offense · paid 15 Let go Shop DEFENSIVE ASSISTANT Delano Quillen rated 81 · +1.3 defense · paid 12 Let go Shop HIGH SCHOOL BOARD Showing 14 of 14 high school recruits ⭐⭐⭐⭐⭐ Vance Grimes SG · scouted 91 · asks 46 NIL Sign ⭐⭐⭐⭐⭐ Boogie Kingsley C · scouted 85 · asks 40 NIL Sign ⭐⭐⭐⭐⭐ Vance Calloway PF · scouted 84 · asks 43 NIL Sign ⭐⭐⭐⭐ Tre Abernathy PF · scouted 85 · asks 38 NIL Sign ⭐⭐⭐⭐ Tre Lockhart C · scouted 84 · asks 33 NIL Sign ⭐⭐⭐⭐ Silas Mabrey SG · scouted 81 · asks 33 NIL Sign ⭐⭐⭐⭐ Zion Eastwood SG · scouted 80 · asks 36 NIL Sign ⭐⭐⭐ Jett Northcutt SF · scouted 74 · asks 25 NIL Sign ⭐⭐⭐ Ty Sessoms C · scouted 72 · asks 28 NIL Sign ⭐⭐⭐ DeAndre Abernathy C · scouted 71 · asks 24 NIL Sign ⭐⭐⭐ Marcus Quarles PF · scouted 71 · asks 27 NIL Sign ⭐⭐ Duncan Sessoms SF"
+ },
+ {
+  "t": "00:21:20",
+  "kind": "signed",
+  "did": "⭐⭐⭐⭐⭐ Vance Grimes SG · scouted 91 · asks 46 NIL Sign"
+ },
+ {
+  "t": "00:21:20",
+  "kind": "signed",
+  "did": "⭐⭐⭐⭐⭐ Boogie Kingsley C · scouted 85 · asks 40 NIL Sign"
+ },
+ {
+  "t": "00:21:21",
+  "kind": "signed",
+  "did": "⭐⭐⭐⭐⭐ Vance Calloway PF · scouted 84 · asks 43 NIL Sign"
+ },
+ {
+  "t": "00:21:22",
+  "kind": "signed",
+  "did": "⭐⭐⭐⭐⭐ Vance Calloway PF · scouted 84 · asks 43 NIL Sign"
+ },
+ {
+  "t": "00:21:22",
+  "kind": "portal",
+  "did": "⭐⭐⭐ Reed Sessoms PG · rated 74 · asks 13 NIL Sign"
+ },
+ {
+  "t": "00:21:23",
+  "kind": "hire",
+  "did": "Garrison Pettibone rated 89 · +2.3 · asks 14 Hire"
+ },
+ {
+  "t": "00:21:23",
+  "kind": "audit",
+  "where": "recruit after",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.rounded-full.border.border-border \"Let go\"",
+    "w": 48,
+    "h": 22
+   },
+   {
+    "el": "button.rounded-full.border.border-primary \"Close\"",
+    "w": 46,
+    "h": 22
+   },
+   {
+    "el": "button.rounded-full.border.border-border \"Let go\"",
+    "w": 48,
+    "h": 22
+   },
+   {
+    "el": "button.rounded-full.border.border-primary \"Shop\"",
+    "w": 43,
+    "h": 22
+   }
+  ],
+  "tap44": 4,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 60
+ },
+ {
+  "t": "00:21:23",
+  "kind": "recruitAfter",
+  "text": "CBB Dynasty Survive March. That is the whole job description. The 2027 class NIL budget: 6 points. High school grades carry scouting error; portal players have real tape. Beware: sign a superstar freshman and he may be one-and-done. Position All positions PG SG SF PF C Minimum stars Any stars 2+ stars 3+ stars 4+ stars 5+ stars Reset filters 🤝 Garrison Pettibone (89) is your new offensive assistant, Delano Halvorsen is out. Budget left: 6. ❌ Not enough NIL for Reed Sessoms (asks 13). ❌ Not enough NIL for Vance Calloway (asks 43). ❌ Not enough NIL for Vance Calloway (asks 43). ASSISTANT COACHES · PAY 26 A SEASON Paid from the same pot as NIL. An assistant moves his end of the floor by up to 3 points either way. OFFENSIVE ASSISTANT Garrison Pettibone rated 89 · +2.3 offense · paid 14 Let go Close Sterling Pettibone rated 80 · +1.2 · asks 12 Hire Lyle Ashcombe rated 71 · +0.1 · asks 10 Hire DEFENSIVE ASSISTANT Delano Quillen rated 81 · +1.3 defense · paid 12 Let go Shop HIGH SCHOOL BOARD Showing 12 of 12 high school recruits ⭐⭐⭐⭐⭐ Vance Calloway PF · scouted 84 · asks 43 NIL Sign ⭐⭐⭐⭐ Tre Abernathy PF · scouted 85 · asks 38 NIL Sign ⭐⭐⭐⭐ Tre Lockhart C · scouted 84 · asks 33 NIL Sign"
+ },
+ {
+  "t": "00:21:25",
+  "kind": "audit",
+  "where": "s2 hub",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Fire yourself and start over\"",
+    "w": 160,
+    "h": 17
+   }
+  ],
+  "tap44": 6,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 16
+ },
+ {
+  "t": "00:21:25",
+  "kind": "s2hub",
+  "text": "CBB Dynasty Survive March. That is the whole job description. Kansas 2027-28 · Round 1/10 Record 0-0 Rank #4 Strength 91 Roster Play Schedule Top 25 Leagues 🏀 Cooper Jasper (C, 90) declares for the draft. 🎓 One-and-done: Vance Grimes (SG, 88) is off to the pros after one season. 🎓 One-and-done: Boogie Kingsley (C, 88) is off to the pros after one season. Kansas rotation, prestige 94 Offense 91.8 Garrison Pettibone, 89 (+2.3) Defense 90.8 Delano Quillen, 81 (+1.3) Quincy Overton SF · JR · ⭐⭐⭐⭐⭐ 92 DeAndre Lockhart PF · SR · ⭐⭐⭐ 91 Trey Northcutt SG · JR · ⭐⭐⭐⭐⭐ 90 Reed Jasper PF · SR · ⭐⭐⭐⭐ 90 DeAndre Holloway PG · JR · ⭐⭐ 89 Boogie Kingsley C · FR · ⭐⭐⭐ 87.1 Jett Dupree SF · SR · ⭐⭐ 87 Ace Calloway SG · JR · ⭐⭐ 86 Fire yourself and start over CBB Dynasty: College Basketball Program Sim Take over one of 40 real programs across six leagues, from the blue bloods to a Mid-Major bucket built for Cinderella stories. Every player is a generated recruit with a class year: elite freshmen are one-and-done, seniors graduate, stars leave early, and the transfer portal reshapes your rotation every spring. Recruit with an NIL budget that grows with prestige and wins, sweat the scouting error on high school grades, fight through your conference tournament, and then survive a 32-team single-elimination March where six tournament champions auto-qualify and one bad night ends everything. National Player of the Year races, Cinderella tracking and title counts across unlimited seasons. CBB Dy"
+ },
+ {
+  "t": "00:21:26",
+  "kind": "audit",
+  "where": "s2 tab roster",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Fire yourself and start over\"",
+    "w": 160,
+    "h": 17
+   }
+  ],
+  "tap44": 6,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:21:26",
+  "kind": "tab",
+  "label": "s2",
+  "name": "roster",
+  "text": "CBB Dynasty Survive March. That is the whole job description. Kansas 2027-28 · Round 1/10 Record 0-0 Rank #4 Strength 91 Roster Play Schedule Top 25 Leagues 🏀 Cooper Jasper (C, 90) declares for the draft. 🎓 One-and-done: Vance Grimes (SG, 88) is off to the pros after one season. 🎓 One-and-done: Boogie Kingsley (C, 88) is off to the pros after one season. Kansas rotation, prestige 94 Offense 91.8 Garrison Pettibone, 89 (+2.3) Defense 90.8 Delano Quillen, 81 (+1.3) Quincy Overton SF · JR · ⭐⭐⭐⭐⭐ 92 DeAndre Lockhart PF · SR · ⭐⭐⭐ 91 Trey Northcutt SG · JR · ⭐⭐⭐⭐⭐ 90 Reed Jasper PF · SR · ⭐⭐⭐⭐ 90 DeAndre Holloway PG · JR · ⭐⭐ 89 Boogie Kingsley C · FR · ⭐⭐⭐ 87.1 Jett Dupree SF · SR · ⭐⭐ 87 Ace Calloway SG · JR · ⭐⭐ 86 Fire yourself and start over CBB Dynasty: College Basketball Program Sim Take over one of 40 real programs across six leagues, from the blue bloods to a Mid-Major bucket bui"
+ },
+ {
+  "t": "00:21:27",
+  "kind": "audit",
+  "where": "s2 tab schedule",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Fire yourself and start over\"",
+    "w": 160,
+    "h": 17
+   }
+  ],
+  "tap44": 6,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:21:27",
+  "kind": "tab",
+  "label": "s2",
+  "name": "schedule",
+  "text": "CBB Dynasty Survive March. That is the whole job description. Kansas 2027-28 · Round 1/10 Record 0-0 Rank #4 Strength 91 Roster Play Schedule Top 25 Leagues 🏀 Cooper Jasper (C, 90) declares for the draft. 🎓 One-and-done: Vance Grimes (SG, 88) is off to the pros after one season. 🎓 One-and-done: Boogie Kingsley (C, 88) is off to the pros after one season. KANSAS 2027-28 SCHEDULE Strength of schedule shows up after round 1 Up next: round 1, opponents drawn on game night. Round 10: Arizona, a pairing the game made (no series history on file). The committee weighs who you played the same as how good you look, so a tough schedule can carry a bubble team into March. Fire yourself and start over CBB Dynasty: College Basketball Program Sim Take over one of 40 real programs across six leagues, from the blue bloods to a Mid-Major bucket built for Cinderella stories. Every player is a generated "
+ },
+ {
+  "t": "00:21:28",
+  "kind": "audit",
+  "where": "s2 tab top25",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Fire yourself and start over\"",
+    "w": 160,
+    "h": 17
+   }
+  ],
+  "tap44": 6,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:21:28",
+  "kind": "tab",
+  "label": "s2",
+  "name": "top25",
+  "text": "CBB Dynasty Survive March. That is the whole job description. Kansas 2027-28 · Round 1/10 Record 0-0 Rank #4 Strength 91 Roster Play Schedule Top 25 Leagues 🏀 Cooper Jasper (C, 90) declares for the draft. 🎓 One-and-done: Vance Grimes (SG, 88) is off to the pros after one season. 🎓 One-and-done: Boogie Kingsley (C, 88) is off to the pros after one season. THE TOP 25 1. UConn 0-0 2. North Carolina 0-0 3. Duke 0-0 4. Kansas 0-0 5. Kentucky 0-0 6. Houston 0-0 7. Auburn 0-0 8. Florida 0-0 9. Alabama 0-0 10. Michigan State 0-0 11. Gonzaga 0-0 12. Arizona 0-0 13. Tennessee 0-0 14. Purdue 0-0 15. Iowa State 0-0 16. Baylor 0-0 17. UCLA 0-0 18. Villanova 0-0 19. Marquette 0-0 20. Creighton 0-0 21. Illinois 0-0 22. Texas Tech 0-0 23. Louisville 0-0 24. Virginia 0-0 25. Michigan 0-0 Record rules the committee room, then the eye test and the schedule, weighed the same. Fire yourself and start over"
+ },
+ {
+  "t": "00:21:28",
+  "kind": "audit",
+  "where": "s2 tab standings",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Fire yourself and start over\"",
+    "w": 160,
+    "h": 17
+   }
+  ],
+  "tap44": 6,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:21:28",
+  "kind": "tab",
+  "label": "s2",
+  "name": "standings",
+  "text": "CBB Dynasty Survive March. That is the whole job description. Kansas 2027-28 · Round 1/10 Record 0-0 Rank #4 Strength 91 Roster Play Schedule Top 25 Leagues 🏀 Cooper Jasper (C, 90) declares for the draft. 🎓 One-and-done: Vance Grimes (SG, 88) is off to the pros after one season. 🎓 One-and-done: Boogie Kingsley (C, 88) is off to the pros after one season. ACC 1. North Carolina • 0-0 2. Duke • 0-0 3. Louisville • 0-0 4. Virginia • 0-0 5. Syracuse 0-0 6. NC State 0-0 SEC 1. Kentucky • 0-0 2. Auburn • 0-0 3. Florida • 0-0 4. Alabama • 0-0 5. Tennessee 0-0 6. Arkansas 0-0 7. Texas A&M 0-0 BIG TEN 1. Michigan State • 0-0 2. Purdue • 0-0 3. UCLA • 0-0 4. Illinois • 0-0 5. Michigan 0-0 6. Indiana 0-0 7. Wisconsin 0-0 BIG 12 1. Kansas • 0-0 2. Houston • 0-0 3. Arizona • 0-0 4. Iowa State • 0-0 5. Baylor 0-0 6. Texas Tech 0-0 7. BYU 0-0 BIG EAST 1. UConn • 0-0 2. Villanova • 0-0 3. Marquette • "
+ },
+ {
+  "t": "00:21:30",
+  "kind": "audit",
+  "where": "s2 press 1 Play Round 1",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Fire yourself and start over\"",
+    "w": 160,
+    "h": 17
+   }
+  ],
+  "tap44": 7,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:21:30",
+  "kind": "week",
+  "label": "s2",
+  "pressed": "Play Round 1",
+  "text": "CBB Dynasty Survive March. That is the whole job description. Kansas 2027-28 · Round 2/10 Record 2-0 Rank #5 Strength 91 Roster Play Schedule Top 25 Leagues ✅ Beat Baylor 72-65. ✅ Beat Dayton 93-71. Every round is two games: a league night and a cross-country test. 🔥 Round 10's league night is rivalry night: Arizona, a pairing the game made (no series history on file). Play Round 2 Six conference tournament champs auto-bid; 32 teams, single elimination, no second chances. AROUND THE COUNTRY Duke beat Louisville 85-62 North Carolina beat Syracuse 91-60 Virginia beat NC State 78-71 Kentucky beat Florida 87-56 Auburn beat Texas A&M 93-67 Alabama beat Tennessee 67-56 Purdue beat Arkansas 73-63 "
+ },
+ {
+  "t": "00:21:30",
+  "kind": "audit",
+  "where": "s2 press 2 Play Round 2",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Fire yourself and start over\"",
+    "w": 160,
+    "h": 17
+   }
+  ],
+  "tap44": 7,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:21:31",
+  "kind": "audit",
+  "where": "s2 press 3 Play Round 3",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Fire yourself and start over\"",
+    "w": 160,
+    "h": 17
+   }
+  ],
+  "tap44": 7,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:21:31",
+  "kind": "season",
+  "part": "s2",
+  "n": 3,
+  "end": "paused"
+ },
+ {
+  "t": "00:21:34",
+  "kind": "reload",
+  "before": "CBB Dynasty Survive March. That is the whole job description. Kansas 2027-28 · Round 4/10 Record 5-1 Rank #2 Strength 91 Roster Play Schedule Top 25 Leagues ✅ Beat Arizona 82-55. ❌ Lost to Virginia 57-80. Every round is two games: a league night and a cross-country test. 🔥 Round 10's league night i",
+  "after": "CBB Dynasty Survive March. That is the whole job description. Kansas 2027-28 · Round 4/10 Record 5-1 Rank #2 Strength 91 Roster Play Schedule Top 25 Leagues Kansas rotation, prestige 94 Offense 91.8 Garrison Pettibone, 89 (+2.3) Defense 90.8 Delano Quillen, 81 (+1.3) Quincy Overton SF · JR · ⭐⭐⭐⭐⭐ 9"
+ },
+ {
+  "t": "00:21:34",
+  "kind": "done",
+  "secs": 40
+ }
+]
