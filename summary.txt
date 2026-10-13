@@ -1,0 +1,7 @@
+build exit=0 27s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+truncate exit=1 68s | Node.js v24.21.0
+oldgrid exit=1 68s | Node.js v24.21.0
+scrollbox exit=1 68s | Node.js v24.21.0
+simCmTablesTruth exit=0 16s | simCmTablesTruth: every case green
+tsc exit=0 52s | 
+smalltap exit=1 68s | Node.js v24.21.0

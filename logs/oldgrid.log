@@ -1,0 +1,20 @@
+PART 1, CSS: built dist/assets (41 file(s)), every request blocked
+CONTROL oldgrid: SquadScreen.tsx changed in the bundle only
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+page.waitForSelector: Timeout 60000ms exceeded.
+Call log:
+  - waiting for locator('[data-fit-screen="card"]') to be visible
+
+    at show (/home/runner/work/ballpark-hero/ballpark-hero/scripts/playCmTablesFit.mjs:355:20)
+    at async partOne (/home/runner/work/ballpark-hero/ballpark-hero/scripts/playCmTablesFit.mjs:515:9)
+    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playCmTablesFit.mjs:570:20 {
+  log: [
+    `  - waiting for locator('[data-fit-screen="card"]') to be visible`
+  ],
+  name: 'TimeoutError'
+}
+
+Node.js v24.21.0
