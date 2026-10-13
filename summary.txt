@@ -1,0 +1,1 @@
+m-noclear exit=1 3s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/components/college-dynasty/CollegeSeat.test.tsx,title=src/components/college-dynasty/CollegeSeat.test.tsx >

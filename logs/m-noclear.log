@@ -1,0 +1,55 @@
+MUT noclear applied
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [31m❯[39m src/components/college-dynasty/CollegeSeat.test.tsx [2m([22m[2m18 tests[22m[2m | [22m[31m2 failed[39m[2m)[22m[33m 1701[2mms[22m[39m
+   [32m✓[39m Round 1320: the athletic director on the college boards[2m > [22mcfb: a new dynasty starts with him, the tile carries the ask, and the card opens and closes[32m 75[2mms[22m[39m
+   [32m✓[39m Round 1320: the athletic director on the college boards[2m > [22mcfb: the live line follows the record, and the recap grades the year and moves trust[32m 87[2mms[22m[39m
+   [32m✓[39m Round 1320: the athletic director on the college boards[2m > [22mcfb: an older dynasty is offered him at the first press; Not now writes nothing, Take the ask writes the block[32m 27[2mms[22m[39m
+   [32m✓[39m Round 1320: the athletic director on the college boards[2m > [22mcfb: a block that does not check out loads as an old save, never a crash[32m 50[2mms[22m[39m
+   [32m✓[39m Round 1320: the athletic director on the college boards[2m > [22mcfb: trust at zero is a firing, the recap says so, and See who calls opens the same market after a reload[32m 29[2mms[22m[39m
+   [32m✓[39m Round 1320: the athletic director on the college boards[2m > [22mcfb: Take the job moves him once and opens the new program's trail; Sit the year out plays a season without him[32m 76[2mms[22m[39m
+   [32m✓[39m Round 1320: the athletic director on the college boards[2m > [22mcfb: a closed market offers only a new dynasty, and hostile market saves load somewhere sane[32m 81[2mms[22m[39m
+   [32m✓[39m Round 1320: the athletic director on the college boards[2m > [22mcbb: a new dynasty starts with him, the tile carries the ask, and the card opens and closes[32m 15[2mms[22m[39m
+   [32m✓[39m Round 1320: the athletic director on the college boards[2m > [22mcbb: the live line follows the record, and the recap grades the year and moves trust[32m 63[2mms[22m[39m
+   [32m✓[39m Round 1320: the athletic director on the college boards[2m > [22mcbb: an older dynasty is offered him at the first press; Not now writes nothing, Take the ask writes the block[32m 16[2mms[22m[39m
+   [32m✓[39m Round 1320: the athletic director on the college boards[2m > [22mcbb: a block that does not check out loads as an old save, never a crash[32m 31[2mms[22m[39m
+   [32m✓[39m Round 1320: the athletic director on the college boards[2m > [22mcbb: trust at zero is a firing, the recap says so, and See who calls opens the same market after a reload[32m 45[2mms[22m[39m
+   [32m✓[39m Round 1320: the athletic director on the college boards[2m > [22mcbb: Take the job moves him once and opens the new program's trail; Sit the year out plays a season without him[32m 38[2mms[22m[39m
+   [32m✓[39m Round 1320: the athletic director on the college boards[2m > [22mcbb: a closed market offers only a new dynasty, and hostile market saves load somewhere sane[32m 56[2mms[22m[39m
+   [32m✓[39m Round 1320: a buyout bid after a big year[2m > [22mcfb: the bid shows on the recap; Go to moves him with the old stint ended as a buyout, Stay put keeps him[32m 47[2mms[22m[39m
+[31m   [31m×[31m Round 1320: a buyout bid after a big year[2m > [22mcfb: a second dynasty in one mount takes its own bid, though its key matches the first one's[39m[33m 870[2mms[22m[39m
+[31m     → expected 'recap' to be 'recruit' // Object.is equality[39m
+   [32m✓[39m Round 1320: a buyout bid after a big year[2m > [22mcbb: the bid shows on the recap; Go to moves him with the old stint ended as a buyout, Stay put keeps him[32m 36[2mms[22m[39m
+[31m   [31m×[31m Round 1320: a buyout bid after a big year[2m > [22mcbb: a second dynasty in one mount takes its own bid, though its key matches the first one's[39m[32m 55[2mms[22m[39m
+[31m     → expected 'recap' to be 'recruit' // Object.is equality[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 2 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/components/college-dynasty/CollegeSeat.test.tsx[2m > [22mRound 1320: a buyout bid after a big year[2m > [22mcfb: a second dynasty in one mount takes its own bid, though its key matches the first one's
+[41m[1m FAIL [22m[49m src/components/college-dynasty/CollegeSeat.test.tsx[2m > [22mRound 1320: a buyout bid after a big year[2m > [22mcbb: a second dynasty in one mount takes its own bid, though its key matches the first one's
+[31m[1mAssertionError[22m: expected 'recap' to be 'recruit' // Object.is equality[39m
+
+Expected: [32m"rec[7mruit[27m"[39m
+Received: [31m"rec[7map[27m"[39m
+
+[36m [2m❯[22m src/components/college-dynasty/CollegeSeat.test.tsx:[2m411:31[22m[39m
+    [90m409| [39m          fireEvent[33m.[39m[34mclick[39m(m[33m.[39m[34mbutton[39m([32m`Go to [39m[36m${[39moffer[33m.[39mteamName[36m}[39m[32m`[39m))[33m;[39m
+    [90m410| [39m          [35mconst[39m after [33m=[39m m[33m.[39m[34msaved[39m()[33m;[39m
+    [90m411| [39m          [34mexpect[39m(after[33m.[39mphase)[33m.[39m[34mtoBe[39m([32m'recruit'[39m)[33m;[39m
+    [90m   | [39m                              [31m^[39m
+    [90m412| [39m          [34mexpect[39m(after[33m.[39mst[33m.[39mmyTeam)[33m.[39m[34mtoBe[39m(offer[33m.[39mteamId)[33m;[39m
+    [90m413| [39m          [34mexpect[39m(after[33m.[39mst[33m.[39mseat[33m.[39mcareer[33m.[39mstints[33m.[39mlength)[33m.[39m[34mtoBe[39m([34m2[39m)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m2 failed[39m[22m[2m | [22m[1m[32m16 passed[39m[22m[90m (18)[39m
+[2m   Start at [22m 02:56:12
+[2m   Duration [22m 2.59s[2m (transform 201ms, setup 32ms, collect 346ms, tests 1.70s, environment 189ms, prepare 117ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/components/college-dynasty/CollegeSeat.test.tsx,title=src/components/college-dynasty/CollegeSeat.test.tsx > Round 1320%3A a buyout bid after a big year > cfb%3A a second dynasty in one mount takes its own bid%2C though its key matches the first one's,line=411,column=31::AssertionError: expected 'recap' to be 'recruit' // Object.is equality%0A%0AExpected: "recruit"%0AReceived: "recap"%0A%0A ❯ src/components/college-dynasty/CollegeSeat.test.tsx:411:31%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/components/college-dynasty/CollegeSeat.test.tsx,title=src/components/college-dynasty/CollegeSeat.test.tsx > Round 1320%3A a buyout bid after a big year > cbb%3A a second dynasty in one mount takes its own bid%2C though its key matches the first one's,line=411,column=31::AssertionError: expected 'recap' to be 'recruit' // Object.is equality%0A%0AExpected: "recruit"%0AReceived: "recap"%0A%0A ❯ src/components/college-dynasty/CollegeSeat.test.tsx:411:31%0A%0A

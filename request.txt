@@ -1,0 +1,2 @@
+#!serial
+m-noclear: node .rc/x/mut.mjs noclear && node_modules/.bin/vitest run src/components/college-dynasty/CollegeSeat.test.tsx --testTimeout=300000; s=$?; git checkout -- src scripts; exit $s
