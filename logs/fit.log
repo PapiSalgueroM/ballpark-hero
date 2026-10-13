@@ -1,0 +1,41 @@
+PART 1, CSS: built dist/assets (41 file(s)), every request blocked
+PART 1 BASE (8fea14e2, expected red: the findings this round closes): 346 findings (cut 125, tap 252, deskclip 20, motion 2)
+   cut at 320: squad liverpool: "Florian Wirtz" is cut (76 of 29 px wide)
+   cut at 320: squad liverpool: "Alexander Isak" is cut (89 of 29 px wide)
+   cut at 320: squad liverpool: "Dominik Szoboszlai" is cut (116 of 29 px wide)
+   cut at 320: squad liverpool: "Hugo Ekitiké" is cut (75 of 55 px wide)
+   cut at 320: squad liverpool: "Alexis Mac Allister" is cut (109 of 55 px wide)
+   cut at 320: squad liverpool: "Ryan Gravenberch" is cut (111 of 29 px wide)
+   cut at 320: squad liverpool: "Bradley Barcola" is cut (95 of 29 px wide)
+   cut at 320: squad liverpool: "Cody Gakpo" is cut (73 of 55 px wide)
+   tap at 320: squad: sort picker "RatingCeilingFormAgeWageYears leftWorthF" is 89 by 32 px
+   tap at 320: squad: sort direction "" is 32 by 32 px
+   tap at 320: desk liverpool: Release "Release, 46k x 108" is 126.3 by 27 px
+   tap at 320: desk liverpool: Release "Release, 43k x 108" is 126.3 by 27 px
+   tap at 320: desk liverpool: Release "Release, 40k x 108" is 126.3 by 27 px
+   tap at 320: desk liverpool: Release "Release, 37k x 108" is 126.3 by 27 px
+   tap at 320: desk liverpool: Release "Release, 36k x 108" is 126.3 by 27 px
+   tap at 320: desk liverpool: Release "Release, 33k x 108" is 126.3 by 27 px
+   deskclip at 320: desk liverpool: a contract row is cut by a 256 px box that scrolls inside the card (LBMilos Kerkez22y · on 44k a week · fina)
+   deskclip at 320: desk liverpool: the free agent list shows fewer than three whole rows (256 px box)
+   deskclip at 320: desk liverpool, every list shown: a contract row is cut by a 256 px box that scrolls inside the card (LBMilos Kerkez22y · on 44k a week · fina)
+   deskclip at 320: desk liverpool, every list shown: the free agent list shows fewer than three whole rows (256 px box)
+   deskclip at 320: desk liverpoolAllFinal: a contract row is cut by a 256 px box that scrolls inside the card (CAMFlorian Wirtz22y · on 91k a week · fi)
+   deskclip at 320: desk liverpoolAllFinal: the free agent list shows fewer than three whole rows (256 px box)
+   deskclip at 320: desk liverpoolAllFinal, every list shown: a contract row is cut by a 256 px box that scrolls inside the card (CAMFlorian Wirtz22y · on 91k a week · fi)
+   deskclip at 320: desk liverpoolAllFinal, every list shown: the free agent list shows fewer than three whole rows (256 px box)
+   motion at 390: room: a rung tile lifts -2px or animates under reduced motion
+   motion at 390: desk: the wage bar animates its width under reduced motion
+file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playCmTablesFit.mjs:360
+          throw new Error(`${which} at ${w}: the ${screen} screen for ${career} never drew. Page errors: ${errors.join(' | ') || 'none'}. ${String(e).slice(0, 120)}`);
+                ^
+
+Error: head at 320: the help screen for liverpool never drew. Page errors: none. TimeoutError: page.waitForSelector: Timeout 20000ms exceeded.
+Call log:
+  - waiting for locator('[data-fit-screen="help"
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playCmTablesFit.mjs:360:17
+    at async show (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playCmTablesFit.mjs:359:9)
+    at async partOne (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playCmTablesFit.mjs:531:9)
+    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playCmTablesFit.mjs:585:20
+
+Node.js v24.21.0
