@@ -1,0 +1,6 @@
+#!playwright
+anchors: node scripts/simHarnessAnchors.mjs
+writesSent: node scripts/simWritesAreSent.mjs
+resultMoment: node scripts/simResultMoment.mjs
+promises: node scripts/simSoccerEventPromises.mjs
+fairness: node scripts/simSoccerDeckFairness.mjs
