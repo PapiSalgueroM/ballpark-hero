@@ -1,0 +1,18 @@
+#!serve
+#!playwright
+walk: node scripts/playSoccerEventCards.mjs
+sweep: SWEEP_OFFLINE=1 ENGINES=chromium node scripts/sweepWeight.mjs 2>&1 | grep -E "soccer-career|sweepWeight"
+measure: RUNS=3 node scripts/measureRouteWeight.mjs head
+flagship: node scripts/simFlagshipWeight.mjs
+engaged: node scripts/simCareerEngaged.mjs
+dilemmareach: node scripts/simCareerDilemmaReach.mjs
+rivalry: node scripts/simCareerRivalryEvents.mjs
+captaincy: node scripts/simClubCaptaincy.mjs
+international: node scripts/simInternational.mjs
+facts: node scripts/simCareerFacts.mjs
+keepplaying: node scripts/simCareerKeepPlaying.mjs
+nodeadend: node scripts/simCareerNoDeadEnd.mjs
+inbox: node scripts/simCareerInbox.mjs
+inboxbeats: node scripts/simCareerInboxBeats.mjs
+loanspell: node scripts/simLoanSpell.mjs
+offerreview: node scripts/simSoccerOfferReview.mjs

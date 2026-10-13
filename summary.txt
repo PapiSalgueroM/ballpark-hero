@@ -1,0 +1,17 @@
+build exit=0 21s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+walk exit=0 28s | playSoccerEventCards: green over 6 runs (known small lines: text-[10px], text-[11px])
+sweep exit=0 29s | sweepWeight: green. Every page is inside its budget, and the budgets came down this round.
+flagship exit=0 0s | simFlagshipWeight: green. The flagship carries its own game and nobody else's.
+engaged exit=0 17s | ALL ENGAGED CAREER CHECKS PASSED
+rivalry exit=0 5s | simCareerRivalryEvents: green. Soccer is unchanged, the NFL, MLB, NBA and NHL beats fire, and the rival is never a real player.
+measure exit=0 55s | head     /soccer-career   total  2893K  js  2661K  reqs  49  FCP    696ms  playable  18054ms  (3 runs, median; styled nodes 154)
+international exit=0 14s | ALL INTERNATIONAL CHECKS PASSED
+dilemmareach exit=0 43s | simCareerDilemmaReach: all green
+facts exit=0 6s | simCareerFacts: all sections green
+captaincy exit=0 23s | simClubCaptaincy: green. The armband is earned, counted, and never travels.
+nodeadend exit=0 0s | simCareerNoDeadEnd: green. A convicted career is still a career, and a stranded save comes back.
+inbox exit=0 2s | simCareerInbox: green. Soccer is unchanged, and the NFL, MLB, NBA and NHL inboxes fire.
+loanspell exit=0 4s | simLoanSpell: green. The bench has a door now, and the door does not lie.
+offerreview exit=0 12s | Soccer offer review: passed.
+inboxbeats exit=0 42s | simCareerInboxBeats: green. Soccer is unchanged, the NFL, NBA, MLB and NHL inboxes each run on their own calendar, and every rival choice does what it says.
+keepplaying exit=0 51s | simCareerKeepPlaying: 1455 checks, 0 failures
