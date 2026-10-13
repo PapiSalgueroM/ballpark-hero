@@ -1,3 +1,27 @@
+## Proposed maintenance: retire shipped AZ candidate workflows (pending H integration)
+
+H's BC For Codex item1 requests retirement or updating of the three original Manager world candidate drivers.
+This isolated codex/retire-az-proofs proposal on accepted082fc277 deletes only:
+- .github/workflows/manager-world-continuity.yml
+- .github/workflows/manager-world-browser.yml
+- .github/workflows/manager-world-size-diagnostic.yml
+
+App, scripts, tests, helpers, diagnostic contracts/assertions, packages, public, Supabase and all other workflows stay held.
+Qualified H18:25 BC live proof, c28b078b runner evidence, isolated timing reruns and c5534342 plainpublish20/20 are reused.
+No new runtime, CI, merged-main or live acceptance. H reconciles this pending prefix at normal integration.
+Automatic PR/manual/branch candidate jobs, dependency/source archives, cache preflight, types/build/SEO,
+focused units, continuity/control arms, era oracles, regressions, native browser journeys, readers/anchors,
+source/package holds, diagnostic budgets, caps and uploads explicitly retire with these three drivers.
+Their distinct inline consumers of 135 unit results, full compressed continuity evidence, fault maps and
+oracle fault/restoration receipts also retire. Installed dependency inventories retire with the diagnostic driver.
+No YAML-inline application mutation launcher or bespoke generator comparison exists; copied controls launch
+through retained scripts, and ordinary SEO generation retires as driver orchestration.
+Underlying scripts/assertions and original definitions/artifacts remain available, without equivalent automatic coverage implied.
+Original full blobs on082fc277: continuity6629e2a71d8be81e4e7eab6b837e3b8f4460d8cd,
+browser289d605d753bb17d75490a3bd488ccc405b52d2d, diagnostic1dbdf38717e215ae8861cf2b979c514830965bf0.
+The diagnostic's underlying contract remains held, including BC's original Slots532500/SaveSize203000 budgets.
+PR254 stays frozen and queued separately. All previous state text remains preserved below.
+
 ## Release BC LIVE, 2026-10-13 18:23 EDT: one tab can no longer wipe a Club Manager save, Club Manager's world remembers your deals, its tables, copy and hub fixed, Soccer Career's events drawn fairly, the shared event deck, the college athletic director
 
 Claude lane (session H). main c5534342, deployment 3cf3a2d7-244e-41ce-8c27-a89cebafcfe6, entry index-BFkO1jyo.js (was index-DaI30mwt.js, Release BB,
