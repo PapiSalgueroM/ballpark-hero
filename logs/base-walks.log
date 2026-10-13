@@ -1,0 +1,9 @@
+390x844: Node/Chromium/actual RNG calls 170/170/170, sort draws 0/0/0, full runtime differences 0
+1280x900: Node/Chromium/actual RNG calls 170/170/170, sort draws 0/0/0, full runtime differences 0
+playSoccerCareerDepth: 80 checks, 0 failed
+
+46 broken saves over 21 long games: 17 reached the error page and needed the button, 29 were coped with by the game, 0 drew the broken save without throwing, 0 could not be judged offline, 1 trapped
+playCorruptSaves: 1 broken save(s) trap the player: /hall-of-champions all
+  FAIL: no guess was ever submitted, so this section proved nothing about the write
+
+simWritesAreSent: 2 failures
