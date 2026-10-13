@@ -1,0 +1,13 @@
+build exit=0 20s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+simRevealScroll exit=0 214s | Green. 53 presses measured, nothing dragged the page down on content that was already readable, no panel lost its top, and 5 presses proved the feature still does its job
+playCollegeSeat-smalltap exit=1 221s | playCollegeSeat CONTROL smalltap FIRED: the 44 px check went red (red: S2 (12), S3 (18), S5 (4), S6 (6), S8 (6))
+playCollegeSeat exit=0 221s | playCollegeSeat: all stations green at 320, 390 and 1280 on both routes
+playCorruptSaves exit=0 7s | playCorruptSaves: green. No broken save traps a long game.
+playReducedMotion exit=0 45s | playReducedMotion: green. Motion stops for a visitor who asked for less, content stays visible, every Round 530 route lands its reveals on the final frame, and everyone e
+playGames-cfb exit=0 46s | Played 1 games. 0 findings, 0 the harness could not drive.
+playGames-cbb exit=0 46s | Played 1 games. 0 findings, 0 the harness could not drive.
+sweepWeight exit=0 25s | sweepWeight: green. Every page is inside its budget, and the budgets came down this round.
+weigh exit=0 5s | weigh done
+simInternalLinks exit=0 0s | simInternalLinks: green. Every page can be reached, and every page leads somewhere.
+simMobileChrome exit=0 201s | GREEN: 34 top bar measurements and 117 scroll stops, no overlaps, nothing off the side of the screen, controls reachable everywhere, footer never covered.
+sweepGames exit=0 871s | Swept 183 routes across 1 engines and 3 viewports (549 checks). 0 findings.

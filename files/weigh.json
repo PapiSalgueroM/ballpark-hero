@@ -1,0 +1,404 @@
+{
+ "/cfb-dynasty": {
+  "k": 302.5,
+  "files": 30,
+  "list": [
+   {
+    "f": "index-DehxloWM.js",
+    "gz": 241591
+   },
+   {
+    "f": "CollegeDynastyBoard-Cq7BTQwm.js",
+    "gz": 18765
+   },
+   {
+    "f": "college-B_XqEHQm.js",
+    "gz": 11814
+   },
+   {
+    "f": "CfbDynasty-CrvaqmGH.js",
+    "gz": 9332
+   },
+   {
+    "f": "ShareButtons-CZgHecxO.js",
+    "gz": 4533
+   },
+   {
+    "f": "GameNavbar-DJ3SyxDw.js",
+    "gz": 3795
+   },
+   {
+    "f": "badges-GPDL7lU1.js",
+    "gz": 2291
+   },
+   {
+    "f": "GameSeoContent-Q2n5Co4D.js",
+    "gz": 2283
+   },
+   {
+    "f": "foOwnerMandate-sz0dPzzM.js",
+    "gz": 1846
+   },
+   {
+    "f": "GameNav-DTMhJAAk.js",
+    "gz": 1720
+   },
+   {
+    "f": "guideShape-DtSxXVus.js",
+    "gz": 1688
+   },
+   {
+    "f": "managerOffers-EoQ6k_gA.js",
+    "gz": 1569
+   },
+   {
+    "f": "Celebration-DxkpdDWs.js",
+    "gz": 821
+   },
+   {
+    "f": "useRevealScroll-CdPn7wcg.js",
+    "gz": 796
+   },
+   {
+    "f": "GameHelp-CpfKtzjx.js",
+    "gz": 784
+   },
+   {
+    "f": "HowToPlayPopover-UC-9m26M.js",
+    "gz": 770
+   },
+   {
+    "f": "CelebrationStyles-BEUXAspv.js",
+    "gz": 723
+   },
+   {
+    "f": "seoMetaPart06-N4xfX3Sj.js",
+    "gz": 579
+   },
+   {
+    "f": "useGameCompletion-B8e9e-jm.js",
+    "gz": 494
+   },
+   {
+    "f": "star-DV4vnxmV.js",
+    "gz": 403
+   },
+   {
+    "f": "medal-DPSBxPr7.js",
+    "gz": 387
+   },
+   {
+    "f": "crown-CTs8-i_y.js",
+    "gz": 361
+   },
+   {
+    "f": "graduation-cap-Dzxix3sW.js",
+    "gz": 348
+   },
+   {
+    "f": "entityIds-L4Nd6Y8C.js",
+    "gz": 335
+   },
+   {
+    "f": "users-vDjKtW-W.js",
+    "gz": 326
+   },
+   {
+    "f": "copy-hinDs8_A.js",
+    "gz": 307
+   },
+   {
+    "f": "circle-help-ljSXI5Di.js",
+    "gz": 303
+   },
+   {
+    "f": "rotate-ccw-DW3khn5U.js",
+    "gz": 285
+   },
+   {
+    "f": "arrow-left-dy9AHOoH.js",
+    "gz": 265
+   },
+   {
+    "f": "keyedRng-BKZQ2UGv.js",
+    "gz": 209
+   }
+  ]
+ },
+ "/cbb-dynasty": {
+  "k": 302.8,
+  "files": 30,
+  "list": [
+   {
+    "f": "index-DehxloWM.js",
+    "gz": 241591
+   },
+   {
+    "f": "CollegeDynastyBoard-Cq7BTQwm.js",
+    "gz": 18765
+   },
+   {
+    "f": "college-B_XqEHQm.js",
+    "gz": 11814
+   },
+   {
+    "f": "CbbDynasty-B1MnC1dV.js",
+    "gz": 9308
+   },
+   {
+    "f": "ShareButtons-CZgHecxO.js",
+    "gz": 4533
+   },
+   {
+    "f": "GameNavbar-DJ3SyxDw.js",
+    "gz": 3795
+   },
+   {
+    "f": "badges-GPDL7lU1.js",
+    "gz": 2291
+   },
+   {
+    "f": "GameSeoContent-Q2n5Co4D.js",
+    "gz": 2283
+   },
+   {
+    "f": "foOwnerMandate-sz0dPzzM.js",
+    "gz": 1846
+   },
+   {
+    "f": "GameNav-DTMhJAAk.js",
+    "gz": 1720
+   },
+   {
+    "f": "guideShape-DtSxXVus.js",
+    "gz": 1688
+   },
+   {
+    "f": "managerOffers-EoQ6k_gA.js",
+    "gz": 1569
+   },
+   {
+    "f": "seoMetaPart26-BXx6PSW7.js",
+    "gz": 897
+   },
+   {
+    "f": "Celebration-DxkpdDWs.js",
+    "gz": 821
+   },
+   {
+    "f": "useRevealScroll-CdPn7wcg.js",
+    "gz": 796
+   },
+   {
+    "f": "GameHelp-CpfKtzjx.js",
+    "gz": 784
+   },
+   {
+    "f": "HowToPlayPopover-UC-9m26M.js",
+    "gz": 770
+   },
+   {
+    "f": "CelebrationStyles-BEUXAspv.js",
+    "gz": 723
+   },
+   {
+    "f": "useGameCompletion-B8e9e-jm.js",
+    "gz": 494
+   },
+   {
+    "f": "star-DV4vnxmV.js",
+    "gz": 403
+   },
+   {
+    "f": "medal-DPSBxPr7.js",
+    "gz": 387
+   },
+   {
+    "f": "crown-CTs8-i_y.js",
+    "gz": 361
+   },
+   {
+    "f": "graduation-cap-Dzxix3sW.js",
+    "gz": 348
+   },
+   {
+    "f": "entityIds-L4Nd6Y8C.js",
+    "gz": 335
+   },
+   {
+    "f": "users-vDjKtW-W.js",
+    "gz": 326
+   },
+   {
+    "f": "copy-hinDs8_A.js",
+    "gz": 307
+   },
+   {
+    "f": "circle-help-ljSXI5Di.js",
+    "gz": 303
+   },
+   {
+    "f": "rotate-ccw-DW3khn5U.js",
+    "gz": 285
+   },
+   {
+    "f": "arrow-left-dy9AHOoH.js",
+    "gz": 265
+   },
+   {
+    "f": "keyedRng-BKZQ2UGv.js",
+    "gz": 209
+   }
+  ]
+ },
+ "/front-office": {
+  "k": 364.5,
+  "files": 36,
+  "list": [
+   {
+    "f": "index-DehxloWM.js",
+    "gz": 241591
+   },
+   {
+    "f": "GmTradeBuilder-dxrq6Ukj.js",
+    "gz": 33786
+   },
+   {
+    "f": "FrontOffice-By0mG91J.js",
+    "gz": 31899
+   },
+   {
+    "f": "football-D30clyNH.js",
+    "gz": 22738
+   },
+   {
+    "f": "frontOfficePlayers-BMdaeFxZ.js",
+    "gz": 8246
+   },
+   {
+    "f": "ShareButtons-CZgHecxO.js",
+    "gz": 4533
+   },
+   {
+    "f": "gmStaff-CQgWbtVe.js",
+    "gz": 3898
+   },
+   {
+    "f": "GameNavbar-DJ3SyxDw.js",
+    "gz": 3795
+   },
+   {
+    "f": "badges-GPDL7lU1.js",
+    "gz": 2291
+   },
+   {
+    "f": "GameSeoContent-Q2n5Co4D.js",
+    "gz": 2283
+   },
+   {
+    "f": "foOwnerMandate-sz0dPzzM.js",
+    "gz": 1846
+   },
+   {
+    "f": "GameNav-DTMhJAAk.js",
+    "gz": 1720
+   },
+   {
+    "f": "guideShape-DtSxXVus.js",
+    "gz": 1688
+   },
+   {
+    "f": "DraftNightCard-DFkPfFWU.js",
+    "gz": 1660
+   },
+   {
+    "f": "frontOfficeSave-DokBHTSA.js",
+    "gz": 1065
+   },
+   {
+    "f": "Celebration-DxkpdDWs.js",
+    "gz": 821
+   },
+   {
+    "f": "useRevealScroll-CdPn7wcg.js",
+    "gz": 796
+   },
+   {
+    "f": "GameHelp-CpfKtzjx.js",
+    "gz": 784
+   },
+   {
+    "f": "HowToPlayPopover-UC-9m26M.js",
+    "gz": 770
+   },
+   {
+    "f": "CelebrationStyles-BEUXAspv.js",
+    "gz": 723
+   },
+   {
+    "f": "seoMetaPart28-g2Jhz3O3.js",
+    "gz": 672
+   },
+   {
+    "f": "HubTiles-gaxzrsPK.js",
+    "gz": 599
+   },
+   {
+    "f": "usCareerReveal-BW47Ke0-.js",
+    "gz": 584
+   },
+   {
+    "f": "useGameCompletion-B8e9e-jm.js",
+    "gz": 494
+   },
+   {
+    "f": "gmDealTable-DYyD4N4_.js",
+    "gz": 436
+   },
+   {
+    "f": "star-DV4vnxmV.js",
+    "gz": 403
+   },
+   {
+    "f": "medal-DPSBxPr7.js",
+    "gz": 387
+   },
+   {
+    "f": "crown-CTs8-i_y.js",
+    "gz": 361
+   },
+   {
+    "f": "nflScore-B7Uc3qH4.js",
+    "gz": 344
+   },
+   {
+    "f": "entityIds-L4Nd6Y8C.js",
+    "gz": 335
+   },
+   {
+    "f": "copy-hinDs8_A.js",
+    "gz": 307
+   },
+   {
+    "f": "circle-help-ljSXI5Di.js",
+    "gz": 303
+   },
+   {
+    "f": "briefcase-CTM09i42.js",
+    "gz": 297
+   },
+   {
+    "f": "rotate-ccw-DW3khn5U.js",
+    "gz": 285
+   },
+   {
+    "f": "arrow-left-dy9AHOoH.js",
+    "gz": 265
+   },
+   {
+    "f": "keyedRng-BKZQ2UGv.js",
+    "gz": 209
+   }
+  ]
+ }
+}
