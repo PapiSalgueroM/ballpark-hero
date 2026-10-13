@@ -109,6 +109,7 @@
  *   trustblock   any block on the desk is trusted                         (8)
  *   noneed       rivals choose on their read alone                        (9)
  *   rivalscout   rivals choose on his scout's read, not the engine's grade (9)
+ *   bigneed      the engine's need weight 20 instead of 2                 (9)
  *   sportname    the shared half names a sport (in memory)                (10)
  *
  * MEASURED 2026-10-12 (quick walk, fixed seeds, so the same on every run of
@@ -210,6 +211,8 @@ const CONTROLS = {
   noneed: { expect: [9], swaps: { bind: [['    needWeight: NBA_DRAFT_NEED_WEIGHT,', '    needWeight: 0,']] } },
   /* every rival chooses on HIS scout's read instead of the engine's own grade (review 2026-10-12, mutation m1) */
   rivalscout: { expect: [9], swaps: { bind: [['    read: (p, club) => (club === ctx.me ? scout(p) : p.grade),', '    read: scout,']] } },
+  /* the need weight ten times the size A5 calls small (review 2026-10-12, mutation m5) */
+  bigneed: { expect: [9], swaps: { engine: [['export const NBA_DRAFT_NEED_WEIGHT = 2;', 'export const NBA_DRAFT_NEED_WEIGHT = 20;']] } },
   /* the shared half names a sport (in memory, the shape of simGmDraftOrder's mounted control) */
   sportname: { expect: [10] },
   /* the curve flattened: every band one range */
@@ -853,6 +856,7 @@ open(9);
      host); none passes a man whose grade beats its choice by more than the pinned weight; a rival short at a
      position takes it more often than one that is not. Floors in MEASURED. */
   const weight = NEED_WEIGHT;
+  check(E.NBA_DRAFT_NEED_WEIGHT === weight, `the engine's NBA_DRAFT_NEED_WEIGHT is ${E.NBA_DRAFT_NEED_WEIGHT}, the number this harness pins is ${weight} (A5: need only splits reads within a few points)`);
   const offRule = needRows.filter(r => !r.rule).length;
   check(needRows.length > 0 && offRule === 0, `${offRule} of ${needRows.length} rival choices are not the man the rule picks on the engine's grade plus ${weight} a point of need`);
   let over = 0;
