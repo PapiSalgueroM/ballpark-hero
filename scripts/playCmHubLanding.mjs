@@ -836,11 +836,14 @@ const bySection = s => fails.filter(f => f.section === s).length;
 const summary = [...SECTIONS].map(s => `${s} ${counts[s] ?? 0} pass ${bySection(s)} fail`).join(', ');
 if (CONTROL) {
   const target = { noscroll: 'A', nosticky: 'B', small: 'C', cut: 'C', drift: 'D' }[CONTROL];
-  const fired = bySection(target);
-  console.log(fired
-    ? `playCmHubLanding: CONTROL ${CONTROL} FIRED, section ${target} went red on ${fired} check(s) (${summary})`
-    : `playCmHubLanding: CONTROL ${CONTROL} DID NOT FIRE, section ${target} stayed green (${summary})`);
-  process.exit(fired ? 1 : 3);
+  /* The check each control aims at, by the words of its FAIL line, so a red
+     from anything else in the section is not taken for the control firing. */
+  const aim = { noscroll: /hub header top/, nosticky: /day strip is wholly on screen/, small: /tile line: .* at 11px/, cut: /cut: Board wants line/, drift: /differs|Math.random draws/ }[CONTROL];
+  const hits = fails.filter(f => f.section === target && aim.test(f.msg));
+  console.log(hits.length
+    ? `playCmHubLanding: CONTROL ${CONTROL} FIRED, ${hits.length} ${target} check(s) went red, first: ${hits[0].msg.slice(0, 140)} (${summary})`
+    : `playCmHubLanding: CONTROL ${CONTROL} DID NOT FIRE, its ${target} check stayed green (${summary})`);
+  process.exit(hits.length ? 1 : 3);
 }
 console.log(fails.length
   ? `playCmHubLanding: ${fails.length} failure(s) (${summary})`
