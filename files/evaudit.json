@@ -1,0 +1,477 @@
+{
+ "count": 137,
+ "checked": {
+  "claims": 433,
+  "kept": 423
+ },
+ "rows": [
+  {
+   "id": 1,
+   "title": "Late Winner!",
+   "choice": "Celebrate wildly",
+   "claim": "Social media +50k",
+   "consequence": "Popularity +10, Social media +50k",
+   "runs": 30,
+   "seen": 0,
+   "deferred": false,
+   "err": null
+  },
+  {
+   "id": 5,
+   "title": "Sponsorship Deal!",
+   "choice": "Sign with Vortex",
+   "claim": "+€2M/year income",
+   "consequence": "+€2M/year income",
+   "runs": 30,
+   "seen": 0,
+   "deferred": false,
+   "err": null
+  },
+  {
+   "id": 5,
+   "title": "Sponsorship Deal!",
+   "choice": "Sign with Kinetiq",
+   "claim": "+€1.5M/year income",
+   "consequence": "+€1.5M/year income",
+   "runs": 30,
+   "seen": 0,
+   "deferred": false,
+   "err": null
+  },
+  {
+   "id": 7,
+   "title": "Puskas Nominee!",
+   "choice": "Take a bow",
+   "claim": "Social media +100k",
+   "consequence": "Social media +100k, Market value +€4M",
+   "runs": 30,
+   "seen": 0,
+   "deferred": false,
+   "err": null
+  },
+  {
+   "id": 10,
+   "title": "False Doping Accusation",
+   "choice": "Speak out publicly",
+   "claim": "Market value -€1M but popularity +5",
+   "consequence": "Market value -€1M but popularity +5",
+   "runs": 30,
+   "seen": 0,
+   "deferred": false,
+   "err": null
+  },
+  {
+   "id": 10,
+   "title": "False Doping Accusation",
+   "choice": "Stay silent, let lawyers handle it",
+   "claim": "Market value -€2M",
+   "consequence": "Market value -€2M",
+   "runs": 30,
+   "seen": 0,
+   "deferred": false,
+   "err": null
+  },
+  {
+   "id": 18,
+   "title": "International Debut Goal!",
+   "choice": "Celebrate for the nation",
+   "claim": "Social media +75k",
+   "consequence": "Social media +75k, Popularity +10",
+   "runs": 30,
+   "seen": 0,
+   "deferred": false,
+   "err": null
+  },
+  {
+   "id": 405,
+   "title": "Live, Unfiltered, Unfortunate",
+   "choice": "Total media silence for a month",
+   "claim": "All stats +2 next season",
+   "consequence": "All stats +2 next season, Popularity -2, nothing to quote",
+   "runs": 30,
+   "seen": 0,
+   "deferred": true,
+   "err": null
+  },
+  {
+   "id": 434,
+   "title": "Ten Thousand Replies, All Of Them Read",
+   "choice": "Delete the apps for the whole season",
+   "claim": "All stats +2 next season",
+   "consequence": "All stats +2 next season, Morale +8, followers -300k",
+   "runs": 30,
+   "seen": 0,
+   "deferred": true,
+   "err": null
+  },
+  {
+   "id": 472,
+   "title": "They Want You Closer To Home",
+   "choice": "Sign for a club within an hour of home",
+   "claim": "Market value -€4M",
+   "consequence": "Market value -€4M, wage -10%, Morale +12, Integrity +6",
+   "runs": 30,
+   "seen": 0,
+   "deferred": false,
+   "err": null
+  }
+ ],
+ "unmapped": [
+  [
+   "3-match ban next season",
+   1
+  ],
+  [
+   "result in 3",
+   1
+  ],
+  [
+   "4 fewer planned league games next season at this club",
+   1
+  ],
+  [
+   "50/50: believed or more backlash",
+   1
+  ],
+  [
+   "-5 with manager",
+   1
+  ],
+  [
+   "Motivation boost: all stats",
+   1
+  ],
+  [
+   "50% chance manager explains",
+   1
+  ],
+  [
+   "50% chance: Wage",
+   1
+  ],
+  [
+   "Respect",
+   1
+  ],
+  [
+   "Random:",
+   1
+  ],
+  [
+   "Could 10x or lose everything",
+   1
+  ],
+  [
+   "Steady returns:",
+   1
+  ],
+  [
+   "Income",
+   1
+  ],
+  [
+   "Legacy",
+   5
+  ],
+  [
+   "Cost €2M",
+   1
+  ],
+  [
+   "-5% net worth",
+   2
+  ],
+  [
+   "Child",
+   1
+  ],
+  [
+   "50%: cleared",
+   1
+  ],
+  [
+   "50%: confirmed + public scandal",
+   1
+  ],
+  [
+   "50%: blows over",
+   1
+  ],
+  [
+   "50%: Popularity",
+   1
+  ],
+  [
+   "-8% net worth",
+   1
+  ],
+  [
+   "40%: win",
+   1
+  ],
+  [
+   "60%:",
+   1
+  ],
+  [
+   "50%: board backs you",
+   1
+  ],
+  [
+   "50%: board backs him",
+   1
+  ],
+  [
+   "55%: win €0.4M",
+   1
+  ],
+  [
+   "45%: lose €0.8M",
+   1
+  ],
+  [
+   "50%: better agent",
+   1
+  ],
+  [
+   "50%: representation chaos",
+   1
+  ],
+  [
+   "50%: wage",
+   1
+  ],
+  [
+   "50%: fined + fan backlash",
+   1
+  ],
+  [
+   "70%: fine",
+   1
+  ],
+  [
+   "30%: aggravate it (Physical",
+   1
+  ],
+  [
+   "50%: manager respects it",
+   1
+  ],
+  [
+   "50%: benched briefly",
+   1
+  ],
+  [
+   "Fame comes easy: followers grow 60% faster",
+   1
+  ],
+  [
+   "sponsors pay 25% more",
+   1
+  ],
+  [
+   "A luxury barber voucher:",
+   1
+  ],
+  [
+   "50%: find them (Morale",
+   1
+  ],
+  [
+   "Legendary commitment: Morale",
+   1
+  ],
+  [
+   "Your playlist unites the squad: Morale",
+   1
+  ],
+  [
+   "Diplomacy: Morale",
+   1
+  ],
+  [
+   "70%: win",
+   1
+  ],
+  [
+   "+400k followers. 30%: lose to a person in a giant bird suit",
+   1
+  ],
+  [
+   "50%: Physical",
+   1
+  ],
+  [
+   "Sensible: Morale",
+   1
+  ],
+  [
+   "slightly awkward: Morale",
+   1
+  ],
+  [
+   "Integrity",
+   46
+  ],
+  [
+   "50/50 you leave with a relationship",
+   1
+  ],
+  [
+   "Sponsorship income",
+   1
+  ],
+  [
+   "25%: it 3x somehow. 75%: the napkin was the whole plan",
+   1
+  ],
+  [
+   "blames you anyway (Morale",
+   1
+  ],
+  [
+   "50%: you score",
+   1
+  ],
+  [
+   "he brings it up every Christmas (Morale",
+   1
+  ],
+  [
+   "politely. Integrity",
+   1
+  ],
+  [
+   "Sponsorship",
+   2
+  ],
+  [
+   "50%: a real fraud",
+   1
+  ],
+  [
+   "refunded in full (Morale",
+   1
+  ],
+  [
+   "65%: you were fine (Morale",
+   1
+  ],
+  [
+   "Two weeks out: Morale",
+   1
+  ],
+  [
+   "60%: it settles (Morale",
+   1
+  ],
+  [
+   "70%: fine (Morale",
+   1
+  ],
+  [
+   "50%: the room loses it (Morale",
+   1
+  ],
+  [
+   "every other €20 gift now looks worse",
+   1
+  ],
+  [
+   "25%: he scrapes it on the gate",
+   1
+  ],
+  [
+   "needs lifts for a month (Morale",
+   1
+  ],
+  [
+   "50%: the best camp in years (Morale",
+   1
+  ],
+  [
+   "€4M dirty",
+   1
+  ],
+  [
+   "Heat",
+   3
+  ],
+  [
+   "€2M dirty",
+   1
+  ],
+  [
+   "€3M dirty",
+   1
+  ],
+  [
+   "sponsor income",
+   2
+  ],
+  [
+   "then 60%: win €1M",
+   1
+  ],
+  [
+   "Sponsor income",
+   2
+  ],
+  [
+   "20% chance of a real injury",
+   1
+  ],
+  [
+   "45% it works",
+   1
+  ],
+  [
+   "returns €1.2M",
+   1
+  ],
+  [
+   "otherwise it closes in 18 months",
+   1
+  ],
+  [
+   "it leaks eventually: Popularity",
+   1
+  ],
+  [
+   "Save €0.5M in agent fees",
+   1
+  ],
+  [
+   "next wage 8% worse",
+   1
+  ],
+  [
+   "but Passing",
+   1
+  ],
+  [
+   "30% you tweak a hamstring (Pace",
+   1
+  ],
+  [
+   "25% Terry throws you (Physical",
+   1
+  ],
+  [
+   "Sponsor pulls €0.6M a year",
+   1
+  ],
+  [
+   "12% he wins",
+   1
+  ],
+  [
+   "it costs you €0.2M",
+   1
+  ],
+  [
+   "Signing bonus",
+   1
+  ]
+ ]
+}

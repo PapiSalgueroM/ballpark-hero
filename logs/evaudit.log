@@ -1,0 +1,15 @@
+catalog: 137 events, 324 choices
+claims checked: 433, kept at least once in 30 tries: 423, never kept: 10
+  NOT KEPT  #1 "Late Winner!" / "Celebrate wildly": claims "Social media +50k" (card: Popularity +10, Social media +50k)
+  NOT KEPT  #5 "Sponsorship Deal!" / "Sign with Vortex": claims "+€2M/year income" (card: +€2M/year income)
+  NOT KEPT  #5 "Sponsorship Deal!" / "Sign with Kinetiq": claims "+€1.5M/year income" (card: +€1.5M/year income)
+  NOT KEPT  #7 "Puskas Nominee!" / "Take a bow": claims "Social media +100k" (card: Social media +100k, Market value +€4M)
+  NOT KEPT  #10 "False Doping Accusation" / "Speak out publicly": claims "Market value -€1M but popularity +5" (card: Market value -€1M but popularity +5)
+  NOT KEPT  #10 "False Doping Accusation" / "Stay silent, let lawyers handle it": claims "Market value -€2M" (card: Market value -€2M)
+  NOT KEPT  #18 "International Debut Goal!" / "Celebrate for the nation": claims "Social media +75k" (card: Social media +75k, Popularity +10)
+  NOT KEPT  #405 "Live, Unfiltered, Unfortunate" / "Total media silence for a month": claims "All stats +2 next season" (card: All stats +2 next season, Popularity -2, nothing to quote) [deferred wording]
+  NOT KEPT  #434 "Ten Thousand Replies, All Of Them Read" / "Delete the apps for the whole season": claims "All stats +2 next season" (card: All stats +2 next season, Morale +8, followers -300k) [deferred wording]
+  NOT KEPT  #472 "They Want You Closer To Home" / "Sign for a club within an hour of home": claims "Market value -€4M" (card: Market value -€4M, wage -10%, Morale +12, Integrity +6)
+unmapped claim names (not checked): Integrity x46 | Legacy x5 | Heat x3 | -5% net worth x2 | Sponsorship x2 | sponsor income x2 | Sponsor income x2 | 3-match ban next season x1 | result in 3 x1 | 4 fewer planned league games next season at this club x1 | 50/50: believed or more backlash x1 | -5 with manager x1 | Motivation boost: all stats x1 | 50% chance manager explains x1 | 50% chance: Wage x1 | Respect x1 | Random: x1 | Could 10x or lose everything x1 | Steady returns: x1 | Income x1 | Cost €2M x1 | Child x1 | 50%: cleared x1 | 50%: confirmed + public scandal x1 | 50%: blows over x1
+shuffle bias over 137 items, first 4 picks, 40000 trials: catalog first tenth x1.58, middle x1.07, last tenth x0.61, max item x3.10, min item x0.46
+EVAUDIT DONE
