@@ -16,7 +16,7 @@ import { initCfb, CFB_SCHOOLS, CFB_ROUNDS, simCfbRound, runCfbPostseason, heisma
 import { initCbb, CBB_SCHOOLS, CBB_ROUNDS, simCbbRound, runMarch, poyRace } from '@/lib/cbbDynasty';
 import { cfbSeatBinding } from '@/lib/cfbSeatBind';
 import { cbbSeatBinding } from '@/lib/cbbSeatBind';
-import { collegeBid, collegeTileView, newCollegeSeat } from '@/lib/collegeSeat';
+import { collegeBid, collegeTiers, collegeTileView, newCollegeSeat } from '@/lib/collegeSeat';
 import { GM_SEAT_PACKS } from '@/data/gmSeat/packs';
 
 vi.mock('@/hooks/useGameCompletion', () => ({ useGameCompletion: () => {} }));
@@ -382,9 +382,21 @@ describe('Round 1320: a buyout bid after a big year', () => {
       expect(m.saved().st.myTeam).toBe(bid.teamId);
       fireEvent.click(m.button('Close the class, run it back'));
       fireEvent.click(m.button('Fire yourself and start over'));
-      const name = sport.binding.view(save.st).programs.find((p: { id: string; name: string }) => p.id === save.st.myTeam).name;
-      for (let seed = 1; seed <= 80; seed += 1) {
-        rnd.mockImplementation(lehmer(5000 + seed));
+      /* A bid's draw is keyed on his stint, so a program's first season bids or not by its grade alone: only the
+         programs whose keyed draw bids after a big first season can show the second dynasty's bid. */
+      const schools = sport.name === 'cfb' ? CFB_SCHOOLS : CBB_SCHOOLS;
+      const st0 = sport.init(schools[0].id, lehmer(1));
+      const v0 = sport.binding.view(st0);
+      const candidates = schools.filter(s => {
+        const tier = collegeTiers(v0).get(s.id)!;
+        const shut = { ...v0, myTeam: s.id, champions: [...v0.champions, { season: st0.season, team: s.id }] };
+        return tier > 1 && (['overachieved', 'title'] as const).some(g => collegeBid({ v: 1, trust: 70, mandate: null,
+          career: { version: 1, seasonsOut: 0, stints: [{ team: s.id, tier, from: st0.season, grades: [g] }] } }, shut));
+      });
+      expect(candidates.length, 'no program bids after a big first season').toBeGreaterThan(0);
+      for (let seed = 1; seed <= 120; seed += 1) {
+        rnd.mockImplementation(lehmer(5000 + seed * 7919));
+        const name = candidates[(seed - 1) % candidates.length].name;
         const pick = m.buttons().find(b => txt(b).startsWith(`${name}Prestige`));
         expect(pick, `no pick button for ${name}`).toBeTruthy();
         fireEvent.click(pick!);
@@ -399,14 +411,14 @@ describe('Round 1320: a buyout bid after a big year', () => {
           expect(after.phase).toBe('recruit');
           expect(after.st.myTeam).toBe(offer.teamId);
           expect(after.st.seat.career.stints.length).toBe(2);
-          console.log(`${sport.name}: the second dynasty's bid came at seed ${5000 + seed}`);
+          console.log(`${sport.name}: the second dynasty's bid came on try ${seed} at ${name}, of ${candidates.length} programs that can bid`);
           return;
         }
         fireEvent.click(m.button('Hit the recruiting trail'));
         fireEvent.click(m.button('Close the class, run it back'));
         fireEvent.click(m.button('Fire yourself and start over'));
       }
-      throw new Error(`${sport.name}: no second dynasty drew a bid over 80 seeds`);
+      throw new Error(`${sport.name}: no second dynasty drew a bid over 120 seeds`);
     }, 120000);
   }
 });
