@@ -1,0 +1,13 @@
+fleet: git worktree add -q /tmp/base1 8fea14e2 && ln -s "$PWD/node_modules" /tmp/base1/node_modules && FENCE_BASE=/tmp/base1 SAVE_FENCE_SECTIONS=fleet node scripts/simSaveFence.mjs
+fleet-loaddraw: git worktree add -q /tmp/base2 8fea14e2 && ln -s "$PWD/node_modules" /tmp/base2/node_modules && FENCE_BASE=/tmp/base2 SAVE_FENCE_CONTROL=loaddraw SAVE_FENCE_SEEDS=0 node scripts/simSaveFence.mjs
+fleet-repairall: git worktree add -q /tmp/base3 8fea14e2 && ln -s "$PWD/node_modules" /tmp/base3/node_modules && FENCE_BASE=/tmp/base3 SAVE_FENCE_CONTROL=repairall SAVE_FENCE_SEEDS=0 node scripts/simSaveFence.mjs
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/test/saveFence.test.ts src/test/saveMovedNotice.test.tsx src/lib/clubManagerSlots.test.ts src/test/clubManagerSlots.test.tsx src/test/clubManagerSave.test.tsx src/test/clubManagerSaveSize.test.tsx src/test/clubManagerEraLoad.test.tsx src/test/contractPreview.test.tsx src/test/managerHotSeatCarryOn.test.ts src/test/managerHotSeatCarryOnCard.test.tsx src/test/managerMatchPlans.test.tsx src/test/clubManagerEraPicker.test.tsx src/test/clubManagerWorldEditorPage.test.tsx src/test/saveKeeper.test.ts src/test/routeErrorRecovery.test.tsx --testTimeout=300000 --hookTimeout=120000
+simSaveFence: node scripts/simSaveFence.mjs
+simClubManagerSlots: node scripts/simClubManagerSlots.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+simManagerAppealIsolation: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simManagerAppealIsolation.mjs
+simClubManagerSave: node scripts/simClubManagerSave.mjs
+simSaveKeeper: node scripts/simSaveKeeper.mjs
+simErrorBoundary: node scripts/simErrorBoundary.mjs
+book-stream: git worktree add -q /tmp/base4 8fea14e2 && ln -s "$PWD/node_modules" /tmp/base4/node_modules && BOOK_BASE=/tmp/base4 node scripts/simCmLeagueBook.mjs
