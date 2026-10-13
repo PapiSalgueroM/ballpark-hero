@@ -1,0 +1,8 @@
+m-varledger exit=0 1s | simCmVarLedger: all 691 checks passed.
+m-cm exit=0 37s | ALL CLUB MANAGER SIMS PASSED
+m-rules exit=0 67s | simCmLeagueRules: all checks passed (modern, eras, pure, drop4, cupless, shapes, chunks)
+m-boardasks exit=0 40s | simBoardAsks: green. Every ask a board makes can be met, and nobody real is quoted.
+m-deals exit=0 18s | simClubManagerDeals: green. The desk reads, the table binds, and nobody signs on a handshake.
+m-fa exit=1 103s | simFreeAgents: 1 failure(s)
+m-journey exit=0 97s | simCmLedgerJourney: green. 45 seeded journeys, 9442 ledgers read at a step or a reload, and the reader refused none the game wrote; every owned record of my club is carri
+m-e5 exit=0 603s | PROBE perRunFrozen [83.92,76.5,82.92,81.67,80.83,79.5,80.08,83.83,77.5,84.33,83.42,85.17,82.42,79.58,80.67,84.33,82.83,81.17,81.42,78.33,78.33,82.75,82.17,79.58,79.83,79.

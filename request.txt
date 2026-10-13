@@ -1,0 +1,8 @@
+m-rules: R=$PWD; W=/tmp/w-m-rules; git worktree add -q $W HEAD && ln -s $R/node_modules $W/node_modules && node .rc/x/mutMarket.mjs $W && cd $W && node scripts/simCmLeagueRules.mjs
+m-fa: R=$PWD; W=/tmp/w-m-fa; git worktree add -q $W HEAD && ln -s $R/node_modules $W/node_modules && node .rc/x/mutMarket.mjs $W && cd $W && node scripts/simFreeAgents.mjs
+m-varledger: R=$PWD; W=/tmp/w-m-varledger; git worktree add -q $W HEAD && ln -s $R/node_modules $W/node_modules && node .rc/x/mutMarket.mjs $W && cd $W && node scripts/simCmVarLedger.mjs
+m-cm: R=$PWD; W=/tmp/w-m-cm; git worktree add -q $W HEAD && ln -s $R/node_modules $W/node_modules && node .rc/x/mutMarket.mjs $W && cd $W && node scripts/simClubManager.mjs
+m-boardasks: R=$PWD; W=/tmp/w-m-boardasks; git worktree add -q $W HEAD && ln -s $R/node_modules $W/node_modules && node .rc/x/mutMarket.mjs $W && cd $W && node scripts/simBoardAsks.mjs
+m-journey: R=$PWD; W=/tmp/w-m-journey; git worktree add -q $W HEAD && ln -s $R/node_modules $W/node_modules && node .rc/x/mutMarket.mjs $W && cd $W && node scripts/simCmLedgerJourney.mjs
+m-deals: R=$PWD; W=/tmp/w-m-deals; git worktree add -q $W HEAD && ln -s $R/node_modules $W/node_modules && node .rc/x/mutMarket.mjs $W && cd $W && node scripts/simClubManagerDeals.mjs
+m-e5: R=$PWD; W=/tmp/w-m-e5; git worktree add -q $W HEAD && ln -s $R/node_modules $W/node_modules && node .rc/x/mutMarket.mjs $W && cd $W && SEED_BASE=9000 node $R/.rc/x/eras5probe.mjs
