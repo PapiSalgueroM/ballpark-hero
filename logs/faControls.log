@@ -1,0 +1,3 @@
+FA_CONTROL=cardrelease exit=1 | simFreeAgents: 1 failure(s)
+FA_CONTROL=cardsign exit=1 | simFreeAgents: 1 failure(s)
+FA_CONTROL=onetap exit=1 | simFreeAgents: 1 failure(s)

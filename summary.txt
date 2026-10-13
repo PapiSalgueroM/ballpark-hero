@@ -1,0 +1,15 @@
+simSquadRows exit=0 2s | simSquadRows: all green
+squadControls exit=0 14s | SQUAD_ROWS_CONTROL=allopen exit=1 | simSquadRows control allopen: RED ON ITS OWN CHECK, as it should be
+simFreeAgents exit=0 13s | simFreeAgents: all sections passed
+simContractPreview-all exit=0 17s | Contract preview cleanup: owned copies/reports removed; production component, engine and test bytes stayed identical.
+simClubManagerDeskCues exit=0 4s | simClubManagerDeskCues: green
+deskCuesPlural exit=0 4s | simClubManagerDeskCues: green
+simReleaseClause exit=0 1s | simReleaseClause: green. The exit door is real, priced, hunted, and honestly escapable only at full wage.
+faControls exit=0 36s | FA_CONTROL=onetap exit=1 | simFreeAgents: 1 failure(s)
+simTransfers exit=0 50s | ALL TRANSFER CHECKS PASSED
+simEras exit=0 659s | ALL ERA AND AGEING CHECKS PASSED
+simAcademy exit=0 209s | ALL ACADEMY CHECKS PASSED
+simWilderness exit=0 1s | simWilderness: green. The sack is the start of something now, and the phone always rings in the end.
+simRoles exit=0 937s | ALL ROLE CHECKS PASSED
+simNumberFormatting exit=0 108s | Number formatting: passed. Evidence at /home/runner/work/ballpark-hero/ballpark-hero/number-formatting-artifacts/outcomes
+simPress exit=0 1359s | ALL PRESS AND TEAM TALK CHECKS PASSED

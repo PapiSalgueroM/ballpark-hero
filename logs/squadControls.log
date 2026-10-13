@@ -1,0 +1,8 @@
+SQUAD_ROWS_CONTROL=truth exit=1 | simSquadRows control truth: RED ON ITS OWN CHECK, as it should be (sections 1d, 1e also read the planted defect, see the header)
+SQUAD_ROWS_CONTROL=centred exit=1 | simSquadRows control centred: RED ON ITS OWN CHECK, as it should be
+SQUAD_ROWS_CONTROL=flatscout exit=1 | simSquadRows control flatscout: RED ON ITS OWN CHECK, as it should be
+SQUAD_ROWS_CONTROL=sorttruth exit=1 | simSquadRows control sorttruth: RED ON ITS OWN CHECK, as it should be (section 4 also read the planted defect, see the header)
+SQUAD_ROWS_CONTROL=nowage exit=1 | simSquadRows control nowage: RED ON ITS OWN CHECK, as it should be (section 6 also read the planted defect, see the header)
+SQUAD_ROWS_CONTROL=rawpot exit=1 | simSquadRows control rawpot: RED ON ITS OWN CHECK, as it should be
+SQUAD_ROWS_CONTROL=deaf exit=1 | simSquadRows control deaf: RED ON ITS OWN CHECK, as it should be
+SQUAD_ROWS_CONTROL=allopen exit=1 | simSquadRows control allopen: RED ON ITS OWN CHECK, as it should be
