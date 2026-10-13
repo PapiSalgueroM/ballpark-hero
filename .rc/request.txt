@@ -1,0 +1,3 @@
+#!serve
+#!playwright
+qa: node .rc/x/qa1325.mjs
