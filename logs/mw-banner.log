@@ -1,0 +1,4 @@
+MUTATION APPLIED: banner (1 edit(s))
+  FAIL  B  banner-390 a match day, a real click: the strip clears the cookie banner (strip bottom 707, banner top 695)
+62
+playCmHubLanding: 1 failure(s) (B 62 pass 1 fail)

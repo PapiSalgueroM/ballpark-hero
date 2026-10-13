@@ -1,0 +1,10 @@
+MUTATION APPLIED: inboxOrder (2 edit(s))
+  PASS  C  s320 Liverpool: the Inbox tile wraps to 1 and 1 line(s), 100px tall ("1 new" over "The board")
+  PASS  C  s320 Liverpool: the Inbox tile says "1 new" over "The board", and the panel holds something
+  PASS  C  s320 Liverpool: the Inbox tile's count reads "1 new"
+  PASS  C  s390 Liverpool: the Inbox tile wraps to 1 and 1 line(s), 100px tall ("All quiet" over "No messages yet")
+  PASS  C  s390 Liverpool: the Inbox tile says "All quiet" over "No messages yet", and the panel is empty
+  PASS  C  s390 Liverpool: the Inbox tile's count reads "All quiet"
+  PASS  C  s1280 Celta Vigo: the Inbox tile wraps to 1 and 1 line(s), 100px tall ("1 new" over "The head coach")
+  PASS  C  s1280 Celta Vigo: the Inbox tile says "1 new" over "The head coach", and the panel holds something
+playCmHubLanding: green (C 111 pass 0 fail, E 52 pass 0 fail); the hub lands on the club on its first frame

@@ -1,0 +1,14 @@
+MUTATION APPLIED: arrivalEffect (2 edit(s))
+  PASS  A  liverpool-take-390: hub header top 12 px at scrollY 101 on the first hub frame (screen 844 px)
+  PASS  A  liverpool-skip-390: hub header top 12 px at scrollY 101 on the first hub frame (screen 844 px)
+  PASS  A  celta-skip-320: hub header top 12 px at scrollY 101 on the first hub frame (screen 640 px)
+  PASS  A  aberdeen-take-1280: hub header top 12 px at scrollY 113 on the first hub frame (screen 900 px)
+  PASS  A  aberdeen-skip-1280: hub header top 12 px at scrollY 113 on the first hub frame (screen 900 px)
+  PASS  A  everton2005-newyear-390: hub header top 12 px at scrollY 101 on the first hub frame (screen 844 px)
+  PASS  A  liverpool-autumn-320: hub header top 12 px at scrollY 101 on the first hub frame (screen 640 px)
+  FAIL  A  liverpool-season2-390: the season review never came up (presses calendar, rest, continue, nothing, nothing, nothing, nothing, nothing, nothing, nothing, nothing, nothing, nothing, nothing, 
+  PASS  E  cmOldSave1052Fixture.json: the hub header is on screen on the first frame after Resume (top 113 px)
+  PASS  E  cmOldSave1052Fixture.json: the hub draws 1186 characters and none of undefined, NaN, [object Object], Infinity
+  PASS  E  cmSecondTierOldSaveFixture.json: the hub header is on screen on the first frame after Resume (top 113 px)
+  PASS  E  cmSecondTierOldSaveFixture.json: the hub draws 1175 characters and none of undefined, NaN, [object Object], Infinity
+playCmHubLanding: 1 failure(s) (A 7 pass 1 fail, E 4 pass 0 fail)

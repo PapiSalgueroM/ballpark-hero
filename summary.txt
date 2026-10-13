@@ -1,0 +1,7 @@
+mw-arrivalOr exit=1 75s | playCmHubLanding: 1 failure(s) (A 7 pass 1 fail)
+mw-arrivalEffect exit=1 112s | playCmHubLanding: 1 failure(s) (A 7 pass 1 fail, E 4 pass 0 fail)
+mw-hubKey exit=1 115s | playCmHubLanding: 1 failure(s) (A 7 pass 1 fail, E 4 pass 0 fail)
+mw-banner exit=1 51s | playCmHubLanding: 1 failure(s) (B 62 pass 1 fail)
+mw-league1 exit=0 76s | playCmHubLanding: green (C 111 pass 0 fail, E 52 pass 0 fail); the hub lands on the club on its first frame
+mw-inboxOrder exit=0 77s | playCmHubLanding: green (C 111 pass 0 fail, E 52 pass 0 fail); the hub lands on the club on its first frame
+mw-kitty exit=0 78s | playCmHubLanding: green (C 109 pass 0 fail, E 52 pass 0 fail); the hub lands on the club on its first frame

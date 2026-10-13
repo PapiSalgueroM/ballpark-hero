@@ -1,0 +1,10 @@
+MUTATION APPLIED: kitty (1 edit(s))
+  PASS  C  s320 Liverpool: the Finances tile wraps to 1 and 2 line(s), 136px tall ("+£62.3m" over "Kitty change this season")
+  PASS  C  s320 Liverpool: the Finances tile's +£62.3m is the kitty change of the desk's own lines (result -£8.8m plus wages £57.8m, staff £10.9m, travel £2.3m = 62.20)
+  PASS  C  s390 Liverpool: the Finances tile wraps to 1 and 1 line(s), 116px tall ("+£63.4m" over "Kitty change this season")
+  PASS  C  s390 Liverpool: the Finances tile's +£63.4m is the kitty change of the desk's own lines (result -£7.4m plus wages £57.8m, staff £10.7m, travel £2.3m = 63.40)
+  PASS  C  s1280 Celta Vigo: the Finances tile wraps to 1 and 1 line(s), 100px tall ("+£7.1m" over "Kitty change this season")
+  PASS  C  s1280 Celta Vigo: the Finances tile's +£7.1m is the kitty change of the desk's own lines (result -£13.4m plus wages £14.1m, staff £5.6m, travel £760k = 7.06)
+  PASS  E  cmOldSave1052Fixture.json at 390: the Finances tile wraps to 1 and 1 line(s), 116px tall ("+£6.6m" over "Kitty change this season")
+  PASS  E  cmOldSave1052Fixture.json at 390: the Finances tile's +£6.6m is the kitty change of the desk's own lines (result -£13.1m plus wages £13.7m, staff £5.2m, travel £760k = 6.56)
+playCmHubLanding: green (C 109 pass 0 fail, E 52 pass 0 fail); the hub lands on the club on its first frame

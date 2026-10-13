@@ -1,0 +1,12 @@
+{
+ "landing": [],
+ "fails": [
+  {
+   "section": "B",
+   "msg": "banner-390 a match day, a real click: the strip clears the cookie banner (strip bottom 707, banner top 695)"
+  }
+ ],
+ "counts": {
+  "B": 62
+ }
+}

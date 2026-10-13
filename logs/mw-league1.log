@@ -1,0 +1,10 @@
+MUTATION APPLIED: league1 (1 edit(s))
+  PASS  C  s320 Liverpool: the League tile wraps to 1 and 1 line(s), 100px tall ("#7" over "Form: L L D W L")
+  INFO  C  s320 Liverpool tile League: 100px on head ("#7" over "Form: L L D W L")
+  PASS  C  s390 Liverpool: the League tile wraps to 1 and 1 line(s), 100px tall ("Not started" over "Premier League")
+  PASS  C  s390 Liverpool: at week 0 the League tile reads "Not started", not a rank, under "Season not started"
+  INFO  C  s390 Liverpool tile League: 100px on head ("Not started" over "Premier League")
+  PASS  C  s1280 Celta Vigo: the League tile wraps to 1 and 1 line(s), 100px tall ("#8" over "Form: L L D W L")
+  INFO  C  s1280 Celta Vigo tile League: 100px on head ("#8" over "Form: L L D W L")
+  PASS  E  cmOldSave1052Fixture.json at 390: the League tile wraps to 1 and 1 line(s), 100px tall ("#7" over "Form: L W D D D")
+playCmHubLanding: green (C 111 pass 0 fail, E 52 pass 0 fail); the hub lands on the club on its first frame
