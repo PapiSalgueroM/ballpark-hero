@@ -1,0 +1,1731 @@
+{
+ "tag": "s1280lei",
+ "width": 1280,
+ "height": 900,
+ "started": "2026-10-13T00:30:41.562Z",
+ "steps": [
+  {
+   "s": 0,
+   "what": "open /club-manager"
+  },
+  {
+   "s": 6,
+   "what": "era picked"
+  },
+  {
+   "s": 7,
+   "what": "nation picked"
+  },
+  {
+   "s": 10,
+   "what": "league picked"
+  },
+  {
+   "s": 13,
+   "what": "club picked"
+  },
+  {
+   "s": 19,
+   "what": "hub reached",
+   "ok": true,
+   "save": {
+    "club": "Leicester City",
+    "season": 1,
+    "week": 28,
+    "cal": 56,
+    "budget": 21.36,
+    "squad": 24,
+    "inbox": 0,
+    "form": "WWDWL",
+    "results": 21,
+    "live": false,
+    "window": "january"
+   }
+  },
+  {
+   "s": 19,
+   "what": "season 1 start"
+  },
+  {
+   "s": 20,
+   "what": "window s1-summer"
+  },
+  {
+   "s": 24,
+   "what": "live s1m1"
+  },
+  {
+   "s": 69,
+   "what": "live s1m1 done",
+   "res": {
+    "ok": true,
+    "vars": 0,
+    "goalsSeen": 2,
+    "subRowsAtBreak": 11,
+    "sub": true,
+    "sheet": "did not open"
+   },
+   "save": {
+    "club": "Leicester City",
+    "season": 1,
+    "week": 29,
+    "cal": 56,
+    "budget": 20.45,
+    "squad": 25,
+    "inbox": 1,
+    "form": "WDWLL",
+    "results": 22,
+    "live": false,
+    "window": "january"
+   }
+  },
+  {
+   "s": 76,
+   "what": "s1 ff 0",
+   "r": "FULL TIME",
+   "sv": {
+    "club": "Leicester City",
+    "season": 1,
+    "week": 39,
+    "cal": 56,
+    "budget": 22.06,
+    "squad": 25,
+    "inbox": 3,
+    "form": "WLDWL",
+    "results": 28,
+    "live": false,
+    "window": null
+   }
+  },
+  {
+   "s": 82,
+   "what": "s1 ff 1",
+   "r": "FULL TIME",
+   "sv": {
+    "club": "Leicester City",
+    "season": 1,
+    "week": 46,
+    "cal": 56,
+    "budget": 24.46,
+    "squad": 25,
+    "inbox": 4,
+    "form": "WLLDW",
+    "results": 34,
+    "live": false,
+    "window": null
+   }
+  },
+  {
+   "s": 105,
+   "what": "s1 ff 2",
+   "r": "FULL TIME",
+   "sv": {
+    "club": "Leicester City",
+    "season": 1,
+    "week": 53,
+    "cal": 56,
+    "budget": 25.58,
+    "squad": 25,
+    "inbox": 4,
+    "form": "WDWWD",
+    "results": 40,
+    "live": false,
+    "window": null
+   }
+  },
+  {
+   "s": 111,
+   "what": "s1 ff 3",
+   "r": "FULL TIME",
+   "sv": {
+    "club": "Leicester City",
+    "season": 1,
+    "week": 56,
+    "cal": 56,
+    "budget": 26.12,
+    "squad": 25,
+    "inbox": 4,
+    "form": "WWDLW",
+    "results": 42,
+    "live": false,
+    "window": null
+   }
+  },
+  {
+   "s": 112,
+   "what": "season 1 review"
+  },
+  {
+   "s": 131,
+   "what": "season 2 start"
+  },
+  {
+   "s": 132,
+   "what": "window s2-summer"
+  },
+  {
+   "s": 136,
+   "what": "live s2m1"
+  },
+  {
+   "s": 177,
+   "what": "live s2m1 done",
+   "res": {
+    "ok": true,
+    "vars": 0,
+    "goalsSeen": 0,
+    "subRowsAtBreak": 11,
+    "sub": true,
+    "benchOffered": 12,
+    "liveSub": true
+   },
+   "save": {
+    "club": "Leicester City",
+    "season": 2,
+    "week": 1,
+    "cal": 56,
+    "budget": 65.69,
+    "squad": 24,
+    "inbox": 0,
+    "form": "L",
+    "results": 1,
+    "live": false,
+    "window": "summer"
+   }
+  },
+  {
+   "s": 184,
+   "what": "s2 ff 0",
+   "r": "FULL TIME",
+   "sv": {
+    "club": "Leicester City",
+    "season": 2,
+    "week": 9,
+    "cal": 56,
+    "budget": 67.6,
+    "squad": 24,
+    "inbox": 4,
+    "form": "LWWDW",
+    "results": 7,
+    "live": false,
+    "window": null
+   }
+  },
+  {
+   "s": 190,
+   "what": "s2 ff 1",
+   "r": "FULL TIME",
+   "sv": {
+    "club": "Leicester City",
+    "season": 2,
+    "week": 16,
+    "cal": 56,
+    "budget": 69.75,
+    "squad": 24,
+    "inbox": 5,
+    "form": "WLDWL",
+    "results": 12,
+    "live": false,
+    "window": null
+   }
+  },
+  {
+   "s": 213,
+   "what": "s2 ff 2",
+   "r": "FULL TIME",
+   "sv": {
+    "club": "Leicester City",
+    "season": 2,
+    "week": 23,
+    "cal": 56,
+    "budget": 71,
+    "squad": 24,
+    "inbox": 6,
+    "form": "LWLLL",
+    "results": 18,
+    "live": false,
+    "window": null
+   }
+  },
+  {
+   "s": 223,
+   "what": "s2 ff 3",
+   "r": "LEICESTER CITY",
+   "sv": {
+    "club": "Leicester City",
+    "season": 2,
+    "week": 28,
+    "cal": 56,
+    "budget": 72.27,
+    "squad": 24,
+    "inbox": 7,
+    "form": "LLDDW",
+    "results": 21,
+    "live": false,
+    "window": "january"
+   }
+  },
+  {
+   "s": 223,
+   "what": "s2 ff 4",
+   "r": "no calendar tile",
+   "sv": {
+    "club": "Leicester City",
+    "season": 2,
+    "week": 28,
+    "cal": 56,
+    "budget": 72.27,
+    "squad": 24,
+    "inbox": 7,
+    "form": "LLDDW",
+    "results": 21,
+    "live": false,
+    "window": "january"
+   }
+  },
+  {
+   "s": 228,
+   "what": "s2 ff 5",
+   "r": "FULL TIME",
+   "sv": {
+    "club": "Leicester City",
+    "season": 2,
+    "week": 56,
+    "cal": 56,
+    "budget": 77.76,
+    "squad": 24,
+    "inbox": 8,
+    "form": "WLWDW",
+    "results": 40,
+    "live": false,
+    "window": null
+   }
+  },
+  {
+   "s": 230,
+   "what": "season 2 review"
+  },
+  {
+   "s": 232,
+   "what": "end"
+  }
+ ],
+ "findings": [],
+ "errors": [],
+ "shots": [
+  {
+   "file": "s1280lei-001-picker-era.jpg",
+   "at": "open /club-manager",
+   "bytes": 44873
+  },
+  {
+   "file": "s1280lei-002-picker-nation.jpg",
+   "at": "era picked",
+   "bytes": 44252
+  },
+  {
+   "file": "s1280lei-003-picker-league.jpg",
+   "at": "nation picked",
+   "bytes": 53869
+  },
+  {
+   "file": "s1280lei-004-picker-team.jpg",
+   "at": "league picked",
+   "bytes": 195028
+  },
+  {
+   "file": "s1280lei-005-picker-confirm-bar.jpg",
+   "at": "league picked",
+   "bytes": 49177
+  },
+  {
+   "file": "s1280lei-006-manager-form.jpg",
+   "at": "club picked",
+   "bytes": 125899
+  },
+  {
+   "file": "s1280lei-007-manager-form-filled.jpg",
+   "at": "club picked",
+   "bytes": 125720
+  },
+  {
+   "file": "s1280lei-008-hub-start.jpg",
+   "at": "hub reached",
+   "bytes": 264229
+  },
+  {
+   "file": "s1280lei-009-s1-summer-market.jpg",
+   "at": "window s1-summer",
+   "bytes": 185161
+  },
+  {
+   "file": "s1280lei-010-s1-summer-after-clause.jpg",
+   "at": "window s1-summer",
+   "bytes": 42962
+  },
+  {
+   "file": "s1280lei-011-s1-summer-bid-open.jpg",
+   "at": "window s1-summer",
+   "bytes": 148291
+  },
+  {
+   "file": "s1280lei-012-s1m1-live-kickoff.jpg",
+   "at": "live s1m1",
+   "bytes": 30809
+  },
+  {
+   "file": "s1280lei-013-s1m1-interval.jpg",
+   "at": "live s1m1",
+   "bytes": 130323
+  },
+  {
+   "file": "s1280lei-014-s1m1-after-sub.jpg",
+   "at": "live s1m1",
+   "bytes": 131769
+  },
+  {
+   "file": "s1280lei-015-s1m1-fulltime-pitch.jpg",
+   "at": "live s1m1",
+   "bytes": 28391
+  },
+  {
+   "file": "s1280lei-016-s1m1-report.jpg",
+   "at": "live s1m1",
+   "bytes": 155130
+  },
+  {
+   "file": "s1280lei-017-s1q-quick-report.jpg",
+   "at": "live s1m1 done",
+   "bytes": 146632
+  },
+  {
+   "file": "s1280lei-018-s1-mid-Inbox.jpg",
+   "at": "s1 ff 1",
+   "bytes": 175381
+  },
+  {
+   "file": "s1280lei-019-s1-mid-Board.jpg",
+   "at": "s1 ff 1",
+   "bytes": 184654
+  },
+  {
+   "file": "s1280lei-020-s1-mid-Finances.jpg",
+   "at": "s1 ff 1",
+   "bytes": 174673
+  },
+  {
+   "file": "s1280lei-021-s1-mid-Press_room.jpg",
+   "at": "s1 ff 1",
+   "bytes": 192358
+  },
+  {
+   "file": "s1280lei-022-s1-mid-Dressing_room.jpg",
+   "at": "s1 ff 1",
+   "bytes": 175448
+  },
+  {
+   "file": "s1280lei-023-s1-review-top.jpg",
+   "at": "season 1 review",
+   "bytes": 32004
+  },
+  {
+   "file": "s1280lei-024-s1-review-full.jpg",
+   "at": "season 1 review",
+   "bytes": 382387
+  },
+  {
+   "file": "s1280lei-025-s2-preseason.jpg",
+   "at": "season 1 review",
+   "bytes": 252249
+  },
+  {
+   "file": "s1280lei-026-s2-pre-Inbox.jpg",
+   "at": "season 1 review",
+   "bytes": 189367
+  },
+  {
+   "file": "s1280lei-027-s2-pre-Board.jpg",
+   "at": "season 1 review",
+   "bytes": 182232
+  },
+  {
+   "file": "s1280lei-028-s2-pre-Finances.jpg",
+   "at": "season 1 review",
+   "bytes": 171035
+  },
+  {
+   "file": "s1280lei-029-s2-pre-Academy.jpg",
+   "at": "season 1 review",
+   "bytes": 176064
+  },
+  {
+   "file": "s1280lei-030-s2-pre-Staff.jpg",
+   "at": "season 1 review",
+   "bytes": 184493
+  },
+  {
+   "file": "s1280lei-031-s2-pre-squad.jpg",
+   "at": "season 1 review",
+   "bytes": 223240
+  },
+  {
+   "file": "s1280lei-032-s2-summer-market.jpg",
+   "at": "window s2-summer",
+   "bytes": 183695
+  },
+  {
+   "file": "s1280lei-033-s2-summer-after-clause.jpg",
+   "at": "window s2-summer",
+   "bytes": 47272
+  },
+  {
+   "file": "s1280lei-034-s2-summer-bid-open.jpg",
+   "at": "window s2-summer",
+   "bytes": 148095
+  },
+  {
+   "file": "s1280lei-035-s2m1-live-kickoff.jpg",
+   "at": "live s2m1",
+   "bytes": 30117
+  },
+  {
+   "file": "s1280lei-036-s2m1-interval.jpg",
+   "at": "live s2m1",
+   "bytes": 129826
+  },
+  {
+   "file": "s1280lei-037-s2m1-after-sub.jpg",
+   "at": "live s2m1",
+   "bytes": 131595
+  },
+  {
+   "file": "s1280lei-038-s2m1-live-sheet.jpg",
+   "at": "live s2m1",
+   "bytes": 32389
+  },
+  {
+   "file": "s1280lei-039-s2m1-after-live-sub.jpg",
+   "at": "live s2m1",
+   "bytes": 32340
+  },
+  {
+   "file": "s1280lei-040-s2m1-fulltime-pitch.jpg",
+   "at": "live s2m1",
+   "bytes": 27748
+  },
+  {
+   "file": "s1280lei-041-s2m1-report.jpg",
+   "at": "live s2m1",
+   "bytes": 147915
+  },
+  {
+   "file": "s1280lei-042-s2q-quick-report.jpg",
+   "at": "live s2m1 done",
+   "bytes": 152389
+  },
+  {
+   "file": "s1280lei-043-s2-mid-Inbox.jpg",
+   "at": "s2 ff 1",
+   "bytes": 170633
+  },
+  {
+   "file": "s1280lei-044-s2-mid-Board.jpg",
+   "at": "s2 ff 1",
+   "bytes": 183740
+  },
+  {
+   "file": "s1280lei-045-s2-mid-Finances.jpg",
+   "at": "s2 ff 1",
+   "bytes": 173964
+  },
+  {
+   "file": "s1280lei-046-s2-mid-Press_room.jpg",
+   "at": "s2 ff 1",
+   "bytes": 183313
+  },
+  {
+   "file": "s1280lei-047-s2-mid-Dressing_room.jpg",
+   "at": "s2 ff 1",
+   "bytes": 174447
+  },
+  {
+   "file": "s1280lei-048-s2-ff-stuck-4.jpg",
+   "at": "s2 ff 4",
+   "bytes": 136908
+  },
+  {
+   "file": "s1280lei-049-s2-review-top.jpg",
+   "at": "season 2 review",
+   "bytes": 31318
+  },
+  {
+   "file": "s1280lei-050-s2-review-full.jpg",
+   "at": "season 2 review",
+   "bytes": 382123
+  }
+ ],
+ "audits": [
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [],
+   "overlaps": [],
+   "leaks": [],
+   "tinyTaps": [],
+   "scrollY": 0,
+   "docH": 13092,
+   "label": "picker-era"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [],
+   "overlaps": [],
+   "leaks": [],
+   "tinyTaps": [
+    "button.inline-flex.items-center.gap-1 \"All nations\" 76x16"
+   ],
+   "scrollY": 0,
+   "docH": 12715,
+   "label": "picker-league"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [],
+   "overlaps": [],
+   "leaks": [],
+   "tinyTaps": [
+    "button.inline-flex.items-center.gap-1 \"Premier League\" 127x16"
+   ],
+   "scrollY": 0,
+   "docH": 13504,
+   "label": "picker-team"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [],
+   "overlaps": [],
+   "leaks": [],
+   "tinyTaps": [
+    "button.inline-flex.items-center.gap-1 \"Leicester City\" 97x16",
+    "button.rounded-md.border.border-border \"Previous skin\" 20x20",
+    "button.rounded-md.border.border-border \"Next skin\" 20x20",
+    "button.rounded-md.border.border-border \"Previous hair\" 20x20",
+    "button.rounded-md.border.border-border \"Next hair\" 20x20",
+    "button.rounded-md.border.border-border \"Previous colour\" 20x20",
+    "button.rounded-md.border.border-border \"Next colour\" 20x20",
+    "button.rounded-md.border.border-border \"Previous beard\" 20x20",
+    "button.rounded-md.border.border-border \"Next beard\" 20x20",
+    "button.rounded-md.border.border-border \"Previous outfit\" 20x20",
+    "button.rounded-md.border.border-border \"Next outfit\" 20x20",
+    "button.rounded-md.border.border-border \"Previous age\" 20x20",
+    "button.rounded-md.border.border-border \"Next age\" 20x20",
+    "button.w-5.h-5.rounded-full \"Navy\" 22x22",
+    "button.w-5.h-5.rounded-full \"Red\" 20x20",
+    "button.w-5.h-5.rounded-full \"Sky\" 20x20",
+    "button.w-5.h-5.rounded-full \"Green\" 20x20",
+    "button.w-5.h-5.rounded-full \"Claret\" 20x20",
+    "button.w-5.h-5.rounded-full \"Gold\" 20x20",
+    "button.w-5.h-5.rounded-full \"Black\" 20x20",
+    "button.w-5.h-5.rounded-full \"White\" 20x20"
+   ],
+   "scrollY": 90,
+   "docH": 13972,
+   "label": "manager-form"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [],
+   "overlaps": [],
+   "leaks": [],
+   "tinyTaps": [
+    "button.underline.underline-offset-2.hover:text-primary \"Managers\" 57x16",
+    "button.mt-2.text-[11px].font-bold \"📊 Match Centre: form, head to head, odds, team talk\" 290x17"
+   ],
+   "scrollY": 1306,
+   "docH": 13518,
+   "label": "hub-start"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [],
+   "overlaps": [],
+   "leaks": [],
+   "tinyTaps": [
+    "button.underline.underline-offset-2.hover:text-primary \"Managers\" 57x16",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £107.3m\" 88x23",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £107.3m\" 88x23",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £80.1m\" 83x23",
+    "button.flex-1.px-1.5.py-0.5 \"£128.9m\" 83x20",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £101.3m\" 87x23",
+    "button.flex-1.px-1.5.py-0.5 \"£121.5m\" 87x20",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £71m\" 73x23",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £80.6m\" 87x23",
+    "button.flex-1.px-1.5.py-0.5 \"£122.6m\" 87x20",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £66.9m\" 87x23",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £57.8m\" 84x23",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £71.3m\" 82x23",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £62.7m\" 84x23",
+    "button.flex-1.px-1.5.py-0.5 \"£126m\" 84x20",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £48.7m\" 85x23",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £61m\" 74x23",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £48.7m\" 85x23",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £55.4m\" 85x23",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £53.7m\" 83x23",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £44.6m\" 87x23",
+    "button.flex-1.px-1.5.py-0.5 \"£81.8m\" 87x20",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £46m\" 77x23",
+    "button.flex-1.px-1.5.py-0.5 \"£74.3m\" 77x20",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £44.6m\" 87x23"
+   ],
+   "scrollY": 0,
+   "docH": 13368,
+   "label": "s1-summer-market"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [],
+   "overlaps": [],
+   "leaks": [],
+   "tinyTaps": [
+    "button.underline.underline-offset-2.hover:text-primary \"Managers\" 57x16",
+    "button.px-2.py-0.5.rounded \"None\" 42x20",
+    "button.px-2.py-0.5.rounded \"£2m\" 38x20",
+    "button.px-2.py-0.5.rounded \"£5m\" 38x20",
+    "button.px-2.py-0.5.rounded \"£10m\" 42x20",
+    "button.px-2.py-0.5.rounded \"None\" 42x20",
+    "button.px-2.py-0.5.rounded \"10%\" 37x20",
+    "button.px-2.py-0.5.rounded \"20%\" 39x20",
+    "button.px-2.py-0.5.rounded \"30%\" 39x20",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £700k\" 80x23",
+    "button.flex-1.px-1.5.py-0.5 \"Loan £300k\" 80x20",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £700k\" 80x23",
+    "button.flex-1.px-1.5.py-0.5 \"Loan £300k\" 80x20",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £700k\" 80x23",
+    "button.flex-1.px-1.5.py-0.5 \"Loan £300k\" 80x20",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £700k\" 80x23",
+    "button.flex-1.px-1.5.py-0.5 \"Loan £300k\" 80x20",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £700k\" 124x23",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £700k\" 80x23",
+    "button.flex-1.px-1.5.py-0.5 \"Loan £300k\" 80x20",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £700k\" 80x23",
+    "button.flex-1.px-1.5.py-0.5 \"Loan £300k\" 80x20",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £700k\" 80x23",
+    "button.flex-1.px-1.5.py-0.5 \"Loan £300k\" 80x20",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £700k\" 117x23"
+   ],
+   "scrollY": 11,
+   "docH": 13718,
+   "label": "s1-summer-bid-open"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [
+    "\"8 Fernandinho\" shown 52px of 59px",
+    "\"1 Schmeichel\" shown 52px of 56px",
+    "\"3 Benalouane\" shown 52px of 56px"
+   ],
+   "overlaps": [],
+   "leaks": [],
+   "tinyTaps": [],
+   "scrollY": 11,
+   "docH": 12392,
+   "label": "s1m1-live-kickoff"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [],
+   "overlaps": [],
+   "leaks": [],
+   "tinyTaps": [],
+   "scrollY": 11,
+   "docH": 13626,
+   "label": "s1m1-interval"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [
+    "\"🔁 Sub: Kofi Keane (Youth) on for Kasper Schmeichel\" shown 164px of 257px",
+    "\"🔁 Sub: Aleksandar Kolarov on for Raheem Sterling\" shown 164px of 244px",
+    "\"Manchester United\" shown 86px of 100px"
+   ],
+   "overlaps": [
+    "\"🔁 Sub: Kofi Keane (Youth) on for Kasper\" x \"46'\" (15x11 at 633,1201)"
+   ],
+   "leaks": [],
+   "tinyTaps": [
+    "button.mt-2.inline-flex.items-center \"All player ratings\" 95x15"
+   ],
+   "scrollY": 113,
+   "docH": 14096,
+   "label": "s1m1-report"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [
+    "\"⚽ Goal: Andrej Kramaric 🅰️ Leonardo Ulloa\" shown 164px of 211px",
+    "\"🔁 Sub: N'Golo Kanté on for Andrej Kramaric\" shown 164px of 215px",
+    "\"⚽ Goal: Shinji Okazaki 🅰️ Yohan Benalouane\" shown 164px of 221px",
+    "\"🔁 Sub: Ayoze Pérez on for Paul Dummett\" shown 164px of 201px",
+    "\"🔁 Sub: Yoan Gouffran on for Florian Thauvin\" shown 164px of 217px",
+    "\"⚽ Goal: Liam Moore 🅰️ Leonardo Ulloa\" shown 164px of 189px",
+    "\"Manchester United\" shown 84px of 100px"
+   ],
+   "overlaps": [
+    "\"🅰️ Leonardo Ulloa\" x \"90+6'\" (13x11 at 627,1481)",
+    "\"Manchester United\" x \"0-0\" (7x14 at 521,1951)"
+   ],
+   "leaks": [],
+   "tinyTaps": [
+    "button.mt-2.inline-flex.items-center \"All player ratings\" 95x15"
+   ],
+   "scrollY": 14,
+   "docH": 14276,
+   "label": "s1q-quick-report"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [],
+   "overlaps": [],
+   "leaks": [],
+   "tinyTaps": [
+    "button.underline.underline-offset-2.hover:text-primary \"Managers\" 57x16",
+    "button.mt-2.text-[11px].font-bold \"📊 Match Centre: form, head to head, odds, team talk\" 290x17",
+    "button.inline-flex.items-center.gap-1 \"Club home\" 79x16"
+   ],
+   "scrollY": 0,
+   "docH": 13715,
+   "label": "s1-mid-Inbox"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [],
+   "overlaps": [],
+   "leaks": [],
+   "tinyTaps": [
+    "button.underline.underline-offset-2.hover:text-primary \"Managers\" 57x16",
+    "button.mt-2.text-[11px].font-bold \"📊 Match Centre: form, head to head, odds, team talk\" 290x17",
+    "button.inline-flex.items-center.gap-1 \"Club home\" 79x16"
+   ],
+   "scrollY": 0,
+   "docH": 13095,
+   "label": "s1-mid-Board"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [],
+   "overlaps": [],
+   "leaks": [],
+   "tinyTaps": [
+    "button.underline.underline-offset-2.hover:text-primary \"Managers\" 57x16",
+    "button.mt-2.text-[11px].font-bold \"📊 Match Centre: form, head to head, odds, team talk\" 290x17",
+    "button.inline-flex.items-center.gap-1 \"Club home\" 79x16"
+   ],
+   "scrollY": 0,
+   "docH": 13983,
+   "label": "s1-mid-Finances"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [],
+   "overlaps": [],
+   "leaks": [],
+   "tinyTaps": [
+    "button.underline.underline-offset-2.hover:text-primary \"Managers\" 57x16",
+    "button.mt-2.text-[11px].font-bold \"📊 Match Centre: form, head to head, odds, team talk\" 290x17",
+    "button.inline-flex.items-center.gap-1 \"Club home\" 79x16"
+   ],
+   "scrollY": 498,
+   "docH": 12922,
+   "label": "s1-mid-Press room"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [],
+   "overlaps": [],
+   "leaks": [],
+   "tinyTaps": [
+    "button.underline.underline-offset-2.hover:text-primary \"Managers\" 57x16",
+    "button.mt-2.text-[11px].font-bold \"📊 Match Centre: form, head to head, odds, team talk\" 290x17",
+    "button.inline-flex.items-center.gap-1 \"Club home\" 79x16"
+   ],
+   "scrollY": 498,
+   "docH": 13291,
+   "label": "s1-mid-Dressing room"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [],
+   "overlaps": [],
+   "leaks": [],
+   "tinyTaps": [
+    "button.text-xs.text-muted-foreground.hover:text-primary \"Start a new manager (this career stays saved)\" 261x16",
+    "button.mt-4.text-xs.text-muted-foreground \"Your managers\" 86x16"
+   ],
+   "scrollY": 113,
+   "docH": 13804,
+   "label": "s1-review"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [],
+   "overlaps": [],
+   "leaks": [],
+   "tinyTaps": [
+    "button.underline.underline-offset-2.hover:text-primary \"Managers\" 57x16",
+    "button.mt-2.text-[11px].font-bold \"📊 Match Centre: form, head to head, odds, team talk\" 290x17",
+    "button.inline-flex.items-center.gap-1 \"Club home\" 79x16"
+   ],
+   "scrollY": 852,
+   "docH": 13616,
+   "label": "s2-preseason"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [],
+   "overlaps": [],
+   "leaks": [],
+   "tinyTaps": [
+    "button.underline.underline-offset-2.hover:text-primary \"Managers\" 57x16",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £104.8m\" 91x23",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £137m\" 78x23",
+    "button.flex-1.px-1.5.py-0.5 \"£164.4m\" 78x20",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £48.9m\" 87x23",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £94.1m\" 83x23",
+    "button.flex-1.px-1.5.py-0.5 \"£151.3m\" 83x20",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £76.6m\" 86x23",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £88.1m\" 83x23",
+    "button.flex-1.px-1.5.py-0.5 \"£152.2m\" 83x20",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £79.3m\" 85x23",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £64.4m\" 87x23",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £71.8m\" 83x23",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £49.3m\" 86x23",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £55.3m\" 84x23",
+    "button.flex-1.px-1.5.py-0.5 \"£105.1m\" 84x20",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £64.7m\" 85x23",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £62.9m\" 86x23",
+    "button.flex-1.px-1.5.py-0.5 \"£84m\" 86x20",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £49.2m\" 86x23",
+    "button.flex-1.px-1.5.py-0.5 \"£90.3m\" 86x20",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £49.2m\" 86x23",
+    "button.flex-1.px-1.5.py-0.5 \"£108.6m\" 86x20",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £46.5m\" 86x23",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £44.6m\" 87x23"
+   ],
+   "scrollY": 0,
+   "docH": 13384,
+   "label": "s2-summer-market"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [],
+   "overlaps": [],
+   "leaks": [],
+   "tinyTaps": [
+    "button.underline.underline-offset-2.hover:text-primary \"Managers\" 57x16",
+    "button.px-2.py-0.5.rounded \"None\" 42x20",
+    "button.px-2.py-0.5.rounded \"£2m\" 38x20",
+    "button.px-2.py-0.5.rounded \"£5m\" 38x20",
+    "button.px-2.py-0.5.rounded \"£10m\" 42x20",
+    "button.px-2.py-0.5.rounded \"None\" 42x20",
+    "button.px-2.py-0.5.rounded \"10%\" 37x20",
+    "button.px-2.py-0.5.rounded \"20%\" 39x20",
+    "button.px-2.py-0.5.rounded \"30%\" 39x20",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £500k\" 80x23",
+    "button.flex-1.px-1.5.py-0.5 \"Loan £300k\" 80x20",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £500k\" 80x23",
+    "button.flex-1.px-1.5.py-0.5 \"Loan £300k\" 80x20",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £500k\" 80x23",
+    "button.flex-1.px-1.5.py-0.5 \"Loan £300k\" 80x20",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £500k\" 115x23",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £500k\" 115x23",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £500k\" 80x23",
+    "button.flex-1.px-1.5.py-0.5 \"Loan £300k\" 80x20",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £500k\" 80x23",
+    "button.flex-1.px-1.5.py-0.5 \"Loan £300k\" 80x20",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £500k\" 115x23",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £500k\" 80x23",
+    "button.flex-1.px-1.5.py-0.5 \"Loan £300k\" 80x20",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £500k\" 80x23"
+   ],
+   "scrollY": 907,
+   "docH": 13734,
+   "label": "s2-summer-bid-open"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [
+    "\"1 Schmeichel\" shown 52px of 56px",
+    "\"2 Benalouane\" shown 52px of 56px"
+   ],
+   "overlaps": [],
+   "leaks": [],
+   "tinyTaps": [],
+   "scrollY": 0,
+   "docH": 12392,
+   "label": "s2m1-live-kickoff"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [],
+   "overlaps": [],
+   "leaks": [],
+   "tinyTaps": [],
+   "scrollY": 0,
+   "docH": 13626,
+   "label": "s2m1-interval"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [
+    "\"2 Benalouane\" shown 52px of 56px"
+   ],
+   "overlaps": [
+    "\"1 Robles\" x \"Booked:\" (6x11 at 404,141)",
+    "\"1 Robles\" x \"Leighton Baines\" (17x11 at 424,141)"
+   ],
+   "leaks": [],
+   "tinyTaps": [],
+   "scrollY": 785,
+   "docH": 12392,
+   "label": "s2m1-live-sheet"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [
+    "\"🔁 Sub: Kofi Keane (Youth) on for Kasper Schmeichel\" shown 164px of 257px",
+    "\"🔁 Sub: Gökhan Inler on for Andrej Kramaric\" shown 164px of 212px",
+    "\"🔁 Sub: Phil Jagielka on for Leighton Baines\" shown 164px of 208px",
+    "\"🔁 Sub: Steven Pienaar on for Ross Barkley\" shown 164px of 207px",
+    "\"Manchester United\" shown 84px of 100px"
+   ],
+   "overlaps": [
+    "\"🔁 Sub: Kofi Keane (Youth) on for Kasper\" x \"46'\" (15x11 at 633,1165)"
+   ],
+   "leaks": [],
+   "tinyTaps": [
+    "button.mt-2.inline-flex.items-center \"All player ratings\" 95x15"
+   ],
+   "scrollY": 113,
+   "docH": 14243,
+   "label": "s2m1-report"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [
+    "\"🧤 Shot saved: Stéphane Sessègnon\" shown 164px of 174px",
+    "\"🔁 Sub: David Nugent on for Jamie Vardy\" shown 164px of 199px",
+    "\"🔁 Sub: Callum McManaman on for Brown Ideye\" shown 164px of 233px",
+    "\"🔁 Sub: Ritchie De Laet on for Archimede Morleo\" shown 164px of 233px",
+    "\"🧤 Shot saved: Erik Sokolov\" shown 113px of 131px",
+    "\"Manchester United\" shown 86px of 100px"
+   ],
+   "overlaps": [
+    "\"🔁 Sub: David Nugent on for Jamie Vardy\" x \"61'\" (15x11 at 633,1278)",
+    "\"🧤 Shot saved: Erik Sokolov\" x \"MADE UP\" (9x10 at 788,1379)",
+    "\"Manchester United\" x \"1-1\" (5x14 at 523,1933)"
+   ],
+   "leaks": [],
+   "tinyTaps": [
+    "button.mt-2.inline-flex.items-center \"All player ratings\" 95x15"
+   ],
+   "scrollY": 14,
+   "docH": 14194,
+   "label": "s2q-quick-report"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [],
+   "overlaps": [],
+   "leaks": [],
+   "tinyTaps": [
+    "button.underline.underline-offset-2.hover:text-primary \"Managers\" 57x16",
+    "button.mt-2.text-[11px].font-bold \"📊 Match Centre: form, head to head, odds, team talk\" 290x17",
+    "button.inline-flex.items-center.gap-1 \"Club home\" 79x16"
+   ],
+   "scrollY": 0,
+   "docH": 13854,
+   "label": "s2-mid-Inbox"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [],
+   "overlaps": [],
+   "leaks": [],
+   "tinyTaps": [
+    "button.underline.underline-offset-2.hover:text-primary \"Managers\" 57x16",
+    "button.mt-2.text-[11px].font-bold \"📊 Match Centre: form, head to head, odds, team talk\" 290x17",
+    "button.inline-flex.items-center.gap-1 \"Club home\" 79x16"
+   ],
+   "scrollY": 0,
+   "docH": 13095,
+   "label": "s2-mid-Board"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [],
+   "overlaps": [],
+   "leaks": [],
+   "tinyTaps": [
+    "button.underline.underline-offset-2.hover:text-primary \"Managers\" 57x16",
+    "button.mt-2.text-[11px].font-bold \"📊 Match Centre: form, head to head, odds, team talk\" 290x17",
+    "button.inline-flex.items-center.gap-1 \"Club home\" 79x16"
+   ],
+   "scrollY": 0,
+   "docH": 13983,
+   "label": "s2-mid-Finances"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [],
+   "overlaps": [],
+   "leaks": [],
+   "tinyTaps": [
+    "button.underline.underline-offset-2.hover:text-primary \"Managers\" 57x16",
+    "button.mt-2.text-[11px].font-bold \"📊 Match Centre: form, head to head, odds, team talk\" 290x17",
+    "button.inline-flex.items-center.gap-1 \"Club home\" 79x16"
+   ],
+   "scrollY": 498,
+   "docH": 13174,
+   "label": "s2-mid-Press room"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [],
+   "overlaps": [],
+   "leaks": [],
+   "tinyTaps": [
+    "button.underline.underline-offset-2.hover:text-primary \"Managers\" 57x16",
+    "button.mt-2.text-[11px].font-bold \"📊 Match Centre: form, head to head, odds, team talk\" 290x17",
+    "button.inline-flex.items-center.gap-1 \"Club home\" 79x16"
+   ],
+   "scrollY": 498,
+   "docH": 13336,
+   "label": "s2-mid-Dressing room"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [],
+   "overlaps": [],
+   "leaks": [],
+   "tinyTaps": [
+    "button.text-xs.text-muted-foreground.hover:text-primary \"Start a new manager (this career stays saved)\" 261x16",
+    "button.mt-4.text-xs.text-muted-foreground \"Your managers\" 86x16"
+   ],
+   "scrollY": 113,
+   "docH": 13758,
+   "label": "s2-review"
+  }
+ ],
+ "seasons": [
+  {
+   "n": 1,
+   "start": {
+    "club": "Leicester City",
+    "season": 1,
+    "week": 28,
+    "cal": 56,
+    "budget": 21.36,
+    "squad": 24,
+    "inbox": 0,
+    "form": "WWDWL",
+    "results": 21,
+    "live": false,
+    "window": "january"
+   },
+   "live": [
+    {
+     "ok": true,
+     "vars": 0,
+     "goalsSeen": 2,
+     "subRowsAtBreak": 11,
+     "sub": true,
+     "sheet": "did not open",
+     "reportText": "DOUKNOWBALL\nBack\nSign up to track your stats\nFULL TIME\nPREMIER LEAGUE · ROUND 20\n🏟️ Your ground · crowd 29,137\n45+4'\nADDED TIME\n90+2'\nDEFEAT\nLeicester City\n0 - 2\nManchester City\nLEICESTER CITY\n\n-\n\nMANCHESTER CITY\n\n⚽ Vincent Kompany 41'\n\n⚽ Sergio Agüero 45+2'\n\n🟨 Yohan Benalouane 26'\n▲ Kofi Keane (Youth) ▼ Kasper Schmeichel 46'\nMC ▲ Aleksandar Kolarov ▼ Raheem Sterling 75'\nLeicester City\nMATCH STATS\nManchester City\n44%\nPOSSESSION\n56%\n7\nSHOTS\n15\n3\nON TARGET\n7\n0.62\nEXPECTED GOALS\n2.27\n4\nCORNERS\n9\n10\nFOULS\n7\n5\nKEEPER SAVES\n3\n1\nYELLOW CARDS\n0\n0\nRED CARDS\n0\n1\nSUBSTITUTIONS\n1\n44%\nBALANCE OF PLAY\n56%\n▲ LEICESTER CITY\n▼ MANCHESTER CITY\n0'\n45'\n90'\n7 (3)\nSHOTS (ON TARGET)\n15 (7)\nLeicester City\nTIMELINE\nManchester City\n0'\n⏱️ KICK OFF\n🧤 Shot saved: Leonardo Ulloa\n3'\n🧤 Shot saved: Gökhan Inler\n23'\n25'\n🧤 Shot saved: Kevin De Bruyne\n🟨 Booked: Yohan Benalouane\n26'\n32'\n🧤 Shot saved: David Silva\n36'\n"
+    }
+   ],
+   "ffs": [
+    {
+     "k": 0,
+     "r": "FULL TIME",
+     "sv": {
+      "club": "Leicester City",
+      "season": 1,
+      "week": 39,
+      "cal": 56,
+      "budget": 22.06,
+      "squad": 25,
+      "inbox": 3,
+      "form": "WLDWL",
+      "results": 28,
+      "live": false,
+      "window": null
+     }
+    },
+    {
+     "k": 1,
+     "r": "FULL TIME",
+     "sv": {
+      "club": "Leicester City",
+      "season": 1,
+      "week": 46,
+      "cal": 56,
+      "budget": 24.46,
+      "squad": 25,
+      "inbox": 4,
+      "form": "WLLDW",
+      "results": 34,
+      "live": false,
+      "window": null
+     }
+    },
+    {
+     "k": 2,
+     "r": "FULL TIME",
+     "sv": {
+      "club": "Leicester City",
+      "season": 1,
+      "week": 53,
+      "cal": 56,
+      "budget": 25.58,
+      "squad": 25,
+      "inbox": 4,
+      "form": "WDWWD",
+      "results": 40,
+      "live": false,
+      "window": null
+     }
+    },
+    {
+     "k": 3,
+     "r": "FULL TIME",
+     "sv": {
+      "club": "Leicester City",
+      "season": 1,
+      "week": 56,
+      "cal": 56,
+      "budget": 26.12,
+      "squad": 25,
+      "inbox": 4,
+      "form": "WWDLW",
+      "results": 42,
+      "live": false,
+      "window": null
+     }
+    }
+   ],
+   "quick": "DOUKNOWBALL\nBack\nSign up to track your stats\nFULL TIME\nPREMIER LEAGUE · ROUND 21\n🏟️ Away day · crowd 21,485\n45+4'\nADDED TIME\n90+8'\nVICTORY\nNewcastle\n1 - 3\nLeicester City\nLEICESTER CITY\n\n⚽ Andrej Kramaric 18' · 🅰️ Leonardo Ulloa\n\n⚽ Shinji Okazaki 74' · 🅰️ Yohan Benalouane\n\n⚽ Liam Moore 90+6' · 🅰️ Leonardo Ulloa\n\nNEWCASTLE\n\n⚽ Cheik Tioté 45+4'\n\n🟨 Liam Moore 79'\n▲ N'Golo Kanté ▼ Andrej Kramaric 61'\nNEWCASTLE 🟨 Paul Dummett 73'\nNEWCASTLE ▲ Ayoze Pérez ▼ Paul Dummett 83'\nNEWCASTLE ▲ Yoan Gouffran ▼ Florian Thauvin 88'\nLeicester City\nMATCH STATS\nNewcastle\n49%\nPOSSESSION\n51%\n17\nSHOTS\n10\n8\nON TARGET\n4\n2.05\nEXPECTED GOALS\n1.08\n7\nCORNERS\n5\n13\nFOULS\n8\n3\nKEEPER SAVES\n5\n1\nYELLOW CARDS\n1\n0\nRED CARDS\n0\n1\nSUBSTITUTIONS\n2\n49%\nBALANCE OF PLAY\n51%\n▲ LEICESTER CITY\n▼ NEWCASTLE\n0'\n45'\n90'\n17 (8)\nSHOTS (ON TARGET)\n10 (4)\nLeicester City\nTIMELINE\nNewcastle\n0'\n⏱️ KICK OFF\n🧤 Shot saved: Liam Moore\n14'\n⚽ Go",
+   "mid_Inbox": "DOUKNOWBALL\nBack\nSign up to track your stats\nLeicester City\n2015-16 · Season 1\n🗓️ Took over mid season · run-in simulated\n#9 in league\n£24.5m\nManagers\nBoard\nSafe\nFans\nSinging\nHome\nSquad\nTactics\nTable\nMarket\nPREMIER LEAGUE · ROUND 32\nLeicester City vs Bournemouth\nAway · their strength ~67 · your XI avg 74\nPlay Live\n⚡ Quick Sim\n\nPlay live to make your calls. Quick Sim handles your subs.\n\n📊 Match Centre: form, head to head, odds, team talk\nClub home\n⚖️\nDECISIONS DESK\n\nAnswer before your next match. Anything left open closes with nothing changed.\n\nWEEK 40 · THE BOARD\n\n🗂️The board have £200k spare this quarter and want to know where you want it. They will put it in the transfer pot if you ask, and they would read holding it back as a careful manager.\n\nNobody answered before the next match, so nothing changed.\n\nShow closed cards (5)\nYOUR MESSAGES\n3\n\nRecent retained messages. Older messages can leave your save.\n\nPending (3)\nResolved (1)\nAll (4)\nReset filters\n\nShowing 4 of 4 retained messages.\n\nWeek 44\nYOUR ASSISTANT\n\n📩International break: the window runs 21 Mar to 29 Mar, and your fixtures do not stop for it, so they went straight after your last game. Away with their countries (Algeria: Riyad Mahrez; Croatia: Andrej Kramaric; Japan: Shinji Okazaki; Ghana: Jeffrey Schlupp; Tunisia: Yohan Benalouane; Wales: Andy King and Tom Lawrence; New Zealand: Chris Wood; Jamaica: Liam Moore). They are back for the West Ham game. Riyad Mahrez, Andrej Kramaric, Jeffrey Schlupp, Chris Wood, Liam Moore and Tom Lawrence started for their countries, the rest mostly watched from the bench. The long trips hurt most. Your assistant wants to know: start them against West Ham, or rest the spent ones for that one game?\n\nThat game has been and gone.\n\nWeek 32\n\n🤝Andy King caught you in the corridor. He is down as a rotation option and he has started 0 of the last 10. He wants to know which of those two is the truth.\n\nPromise him a start\nBe straight: he is a backup\nHear him out\nWeek 30\n\n😤Jamie Vardy pulled you aside after training. The short version: he wants to start on Saturday.\n\nPromise him a start\nEarn it in training\nHear him out\nWeek 28\n\n😤N'Golo Kanté has asked for a meeting about his place in the side. He is training well and he does not think the teamsheet reflects it.\n\nPromise him a start\nEarn it in training\nHear him out\nClub Manager: Free Football Management Game\n\nA full club-management sim in your browser: 454 clubs across 27 real leagues, from the Premier League, the 2. Bun",
+   "mid_Board": "DOUKNOWBALL\nBack\nSign up to track your stats\nLeicester City\n2015-16 · Season 1\n🗓️ Took over mid season · run-in simulated\n#9 in league\n£24.5m\nManagers\nBoard\nSafe\nFans\nSinging\nHome\nSquad\nTactics\nTable\nMarket\nPREMIER LEAGUE · ROUND 32\nLeicester City vs Bournemouth\nAway · their strength ~67 · your XI avg 74\nPlay Live\n⚡ Quick Sim\n\nPlay live to make your calls. Quick Sim handles your subs.\n\n📊 Match Centre: form, head to head, odds, team talk\nClub home\nBOARD EXPECTATIONS · SMALL BUDGETS, LOW BAR: EVERY SCALP IS A STORY.\nStay up. Avoid relegation\nOn track\nReach the FA Cup semi-finals\nDone\nFinish above Aston Villa\nOn track\nBank 40+ league points\nDone\nBlood 2 under-21 players in the league\nDone\nTurn a profit in the transfer market\nBehind\n🛒 IN THE MARKET\nSign someone 21 or under rated 77 or better\nBehind\n\nA permanent signing only. He counts once he is in your squad at that age and that rating or better.\n\nHave 7 players from England in the squad\nBehind\n\nCounts everyone in your squad from England. A player you have in on loan does not count, and neither does anybody whose country we do not have on file.\n\nClub Manager: Free Football Management Game\n\nA full club-management sim in your browser: 454 clubs across 27 real leagues, from the Premier League, the 2. Bundesliga, Serie B, Ligue 2, the Segunda División and the Scottish Premiership to the Saudi Pro League, MLS, Brazil, Mexico, Australia, Russia, Croatia, Denmark, Switzerland, Austria and Greece, with real players at their real market values as of August 2026 (October for the A-League Men and the Russian Premier League) and thin squads topped up with made up youth, marked as such. Manage today or in a real past season: 2020-21 with Haaland's Dortmund and Mbappé's PSG, 2015-16 with Leicester at 5000 to 1, 2010-11 with prime Messi, or 2005-06 with Ronaldinho's Barcelona. Or create your own club with its own crest and stadium. Negotiate transfers, survive bidding wars, hit the board's named objectives, and chase titles season after season.\n\nClub Manager is the site's big one: a full management sim in your browser. 454 real clubs across 27 leagues in 21 countries, from the Premier League, Serie B, Ligue 2 and the Segunda División to the Danish Superliga, the Swiss Super League, Croatia's SuperSport HNL, Brazil's Serie A, Liga MX, the A-League Men and the Russian Premier League, over 5,000 real players with their real 2026 ages and market values, and a board that talks like a board.\n\nPick when you start too: today's g",
+   "mid_Finances": "DOUKNOWBALL\nBack\nSign up to track your stats\nLeicester City\n2015-16 · Season 1\n🗓️ Took over mid season · run-in simulated\n#9 in league\n£24.5m\nManagers\nBoard\nSafe\nFans\nSinging\nHome\nSquad\nTactics\nTable\nMarket\nPREMIER LEAGUE · ROUND 32\nLeicester City vs Bournemouth\nAway · their strength ~67 · your XI avg 74\nPlay Live\n⚡ Quick Sim\n\nPlay live to make your calls. Quick Sim handles your subs.\n\n📊 Match Centre: form, head to head, odds, team talk\nClub home\n📊 PROJECTED TO SEASON END\nweek 46, 10 left\nIN SO FAR SEASON\nTickets · 3 certain home games left £9.7m £11.2m\nFood and drink £2.4m £2.7m\nSponsor · no deal £0k £0k\nPlayers sold · assumes no more deals £0k £0k\nIncome £12m £13.9m\nOUT\nPlayer wages · £221k a week £10.1m £12.3m\nStaff wages · £90k a week £4.1m £5m\nTravel · 4 certain away trips left £720k £900k\nPlayers bought · assumes no more deals £1.6m £1.6m\nFacilities £0k £0k\nStaff fees · hires and pay offs £0k £0k\nSpend £16.5m £19.8m\nSeason result -£4.5m -£5.9m\n\nTickets, food, the sponsor, deals, the builders and staff fees move the transfer kitty (£24.5m now). Wages and travel are the club's running costs: the board covers them and holds you to the wage ceiling on the contracts desk, so they never leave the kitty. Counts league fixtures and the one cup or European tie already drawn. Later rounds depend on results and are left out, and so are deals you have not done.\n\n🎟️ PRICES\nFans: Singing\n🎟️ Fair prices\nCheaper seats, fuller ground, a louder day out.\n🎫 Standard\nThe going rate. Nobody writes to the paper about it.\n💼 Premium\nMore per seat, a few empty ones up in the corners.\n\nTickets about £18 a head. Fans are neutral. The board are neutral.\n\n🍟 Cheap food\nPies at cost. The fans love you for it.\n🥤 Standard\nGround prices. Nobody cheers, nobody moans.\n🍾 Premium\nHospitality margins. The fans notice the bill.\n\nFood and drink about £4.46 a head, lifted by the stadium level. Fans are neutral. The board are neutral. The mood also follows the last five results, and it moves your home crowd: 0.9x furious, 1.1x singing.\n\n🤝 SHIRT SPONSOR\n\nOffers on the table. The money lands in the same kitty as everything else, this season and every season the deal runs. Push for more and the brand comes up six percent, or walks.\n\nIronvale Steel (global)\n£9.5m/season\n\nMoney in the account, nothing riding on results. 2 seasons.\n\nSign with Ironvale\nPush for more\nCopperfield Tools (local)\n£6.8m/season\n\nLess up front, a serious bonus if you win the league. 2 seasons. Bonus £8.6m for the ",
+   "mid_Press room": "DOUKNOWBALL\nBack\nSign up to track your stats\nLeicester City\n2015-16 · Season 1\n🗓️ Took over mid season · run-in simulated\n#9 in league\n£24.5m\nManagers\nBoard\nSafe\nFans\nSinging\nHome\nSquad\nTactics\nTable\nMarket\nPREMIER LEAGUE · ROUND 32\nLeicester City vs Bournemouth\nAway · their strength ~67 · your XI avg 74\nPlay Live\n⚡ Quick Sim\n\nPlay live to make your calls. Quick Sim handles your subs.\n\n📊 Match Centre: form, head to head, odds, team talk\nClub home\nTHE BACK PAGES\nNobody has an opinion\n0 fronted up · 7 left to the assistant\n\nThe board do not watch every match, they read about it. Keep the papers onside and a defeat gets the benefit of the doubt upstairs. Let them turn on you and the same defeat costs you more.\n\nNothing on the desk. The press only come when there is something to ask about.\n\nClub Manager: Free Football Management Game\n\nA full club-management sim in your browser: 454 clubs across 27 real leagues, from the Premier League, the 2. Bundesliga, Serie B, Ligue 2, the Segunda División and the Scottish Premiership to the Saudi Pro League, MLS, Brazil, Mexico, Australia, Russia, Croatia, Denmark, Switzerland, Austria and Greece, with real players at their real market values as of August 2026 (October for the A-League Men and the Russian Premier League) and thin squads topped up with made up youth, marked as such. Manage today or in a real past season: 2020-21 with Haaland's Dortmund and Mbappé's PSG, 2015-16 with Leicester at 5000 to 1, 2010-11 with prime Messi, or 2005-06 with Ronaldinho's Barcelona. Or create your own club with its own crest and stadium. Negotiate transfers, survive bidding wars, hit the board's named objectives, and chase titles season after season.\n\nClub Manager is the site's big one: a full management sim in your browser. 454 real clubs across 27 leagues in 21 countries, from the Premier League, Serie B, Ligue 2 and the Segunda División to the Danish Superliga, the Swiss Super League, Croatia's SuperSport HNL, Brazil's Serie A, Liga MX, the A-League Men and the Russian Premier League, over 5,000 real players with their real 2026 ages and market values, and a board that talks like a board.\n\nPick when you start too: today's game, or one of four real past seasons. 2020-21 is Haaland and Bellingham at Dortmund, Mbappé and Neymar at PSG and Bruno Fernandes at United, with that summer's big moves already made (Havertz and Werner at Chelsea, Thiago at Liverpool, Suárez at Atlético). 2015-16 is the year Leicester won it at 5000 to 1, with",
+   "mid_Dressing room": "DOUKNOWBALL\nBack\nSign up to track your stats\nLeicester City\n2015-16 · Season 1\n🗓️ Took over mid season · run-in simulated\n#9 in league\n£24.5m\nManagers\nBoard\nSafe\nFans\nSinging\nHome\nSquad\nTactics\nTable\nMarket\nPREMIER LEAGUE · ROUND 32\nLeicester City vs Bournemouth\nAway · their strength ~67 · your XI avg 74\nPlay Live\n⚡ Quick Sim\n\nPlay live to make your calls. Quick Sim handles your subs.\n\n📊 Match Centre: form, head to head, odds, team talk\nClub home\nTHE DRESSING ROOM\n\n2 players are not getting what you told them they would.\n\nNEEDS A WORD\nST\nDavid Nugent\n0 starts, 2 off the bench in last 10 · rotation option\n72\nNot happy\nCM\nAndy King\n0 starts, 2 off the bench in last 10 · rotation option\n70\nGetting restless\n⭐\nSTAR MAN\n3 players\nPromised 88% of games\n🔥\nKEY FIRST TEAMER\n8 players\nPromised 74% of games\n🔄\nROTATION OPTION\n4 players\n1 not happy\n🧥\nBACKUP\n9 players\nPromised 12% of games\n🌱\nONE FOR THE FUTURE\n1 player\nPromised 5% of games\nClub Manager: Free Football Management Game\n\nA full club-management sim in your browser: 454 clubs across 27 real leagues, from the Premier League, the 2. Bundesliga, Serie B, Ligue 2, the Segunda División and the Scottish Premiership to the Saudi Pro League, MLS, Brazil, Mexico, Australia, Russia, Croatia, Denmark, Switzerland, Austria and Greece, with real players at their real market values as of August 2026 (October for the A-League Men and the Russian Premier League) and thin squads topped up with made up youth, marked as such. Manage today or in a real past season: 2020-21 with Haaland's Dortmund and Mbappé's PSG, 2015-16 with Leicester at 5000 to 1, 2010-11 with prime Messi, or 2005-06 with Ronaldinho's Barcelona. Or create your own club with its own crest and stadium. Negotiate transfers, survive bidding wars, hit the board's named objectives, and chase titles season after season.\n\nClub Manager is the site's big one: a full management sim in your browser. 454 real clubs across 27 leagues in 21 countries, from the Premier League, Serie B, Ligue 2 and the Segunda División to the Danish Superliga, the Swiss Super League, Croatia's SuperSport HNL, Brazil's Serie A, Liga MX, the A-League Men and the Russian Premier League, over 5,000 real players with their real 2026 ages and market values, and a board that talks like a board.\n\nPick when you start too: today's game, or one of four real past seasons. 2020-21 is Haaland and Bellingham at Dortmund, Mbappé and Neymar at PSG and Bruno Fernandes at United, with that summer's big mov",
+   "reload": {
+    "b": {
+     "club": "Leicester City",
+     "season": 1,
+     "week": 46,
+     "cal": 56,
+     "budget": 24.46,
+     "squad": 25,
+     "inbox": 4,
+     "form": "WLLDW",
+     "results": 34,
+     "live": false,
+     "window": null
+    },
+    "a": {
+     "club": "Leicester City",
+     "season": 1,
+     "week": 46,
+     "cal": 56,
+     "budget": 24.46,
+     "squad": 25,
+     "inbox": 4,
+     "form": "WLLDW",
+     "results": 34,
+     "live": false,
+     "window": null
+    }
+   },
+   "end": "SEASON 1 COMPLETE",
+   "review": "DOUKNOWBALL\nBack\nSign up to track your stats\nSEASON 1 COMPLETE\n\nLeicester City · finished #7 with 58 pts\n\nSOCCER\n·\nNAILED IT\n\n🏆\nBoard verdict: A\n\n16W 10D 12L · GF 54 GA 50\n\nThe board is thrilled. Statues have been commissioned.\n\nFINISH\n#7\nPOINTS\n58\nSEASON SCORE\n55\n🏟️ S1 · #7 · 58pts · 🏆\n\nChampions:\nManchester City\n\nYou won the FA Cup!\n\n⚽\nTop scorer: Riyad Mahrez (12 goals)\n\n🎯\nMost assists: Leonardo Ulloa (12)\n\n👟\nGolden boot:\nEden Hazard\n(Chelsea, 27 goals)\n\n🎖️\nPlayer of the season:\nWayne Rooney\n(Manchester United)\n\n🌍\nBallon d'Or:\nEden Hazard\n(Chelsea)\n\nSEASON SCORE 55 OF 130\n\nLeague form 24 · Cup run 13 · Board 18\n\nBOARD OBJECTIVES\n\n✓ Stay up. Avoid relegation\n\n✓ Reach the FA Cup semi-finals\n\n✓ Finish above Aston Villa\n\n✓ Bank 40+ league points\n\n✓ Blood 2 under-21 players in the league\n\n✗ Turn a profit in the transfer market\n\n✗ Sign someone 21 or under rated 77 or better\n\n✗ Have 7 players from England in the squad\n\nTRANSFER BUSINESS\n\n🟢 IN Archimede Morleo (£1.6m)\n\n💼\nClub Manager\nOct 13, 2026\n🏟️ S1 · #7 · 58pts · 🏆\nRESULT\n#7 (58 pts, 1 trophies)\nDoUKnowBall\ndouknowball.com/club-manager\nShare result\nCopy challenge\n📋 Copy Score Card\n🖼️ Save Image\n\nSHARE YOUR RESULT\n\nContinue to Season 2\n📞 JOB OFFERS ON THE TABLE\nArsenal want you as manager\n👑 Elite club · Premier League · £53m budget · the board wants: Win the Premier League\n\nAccepting an offer moves you there for Season 2.\n\nStart a new manager (this career stays saved)\nYour managers\nClub Manager: Free Football Management Game\n\nA full club-management sim in your browser: 454 clubs across 27 real leagues, from the Premier League, the 2. Bundesliga, Serie B, Ligue 2, the Segunda División and the Scottish Premiership to the Saudi Pro League, MLS, Brazil, Mexico, Australia, Russia, Croatia, Denmark, Switzerland, Austria and Greece, with real players at their real market values as of August 2026 (October for the A-League Men and the Russian Premier League) and thin squads topped up with made up youth, marked as such. Manage today or in a real past season: 2020-21 with Haaland's Dortmund and Mbappé's PSG, 2015-16 with Leicester at 5000 to 1, 2010-11 with prime Messi, or 2005-06 with Ronaldinho's Barcelona. Or create your own club with its own crest and stadium. Negotiate transfers, survive bidding wars, hit the board's named objectives, and chase titles season after season.\n\nClub Manager is the site's big one: a full management sim in your browser. 454 real clubs across 27 leagues in 21 countries, from the Premier League, Serie B, Ligue 2 and the Segunda División to the Danish Superliga, the Swiss Super League, Croatia's SuperSport HNL, Brazil's Serie A, Liga MX, the A-League Men and the Russian Premier League, over 5,000 real players with their real 2026 ages and market values, and a board that talks like a board.\n\nPick when you start too: today's game, or one of four real past seasons. 2020-21 is Haaland and Bellingham at Dortmund, Mbappé and Neymar at PSG and Bruno Fernandes at United, with that summer's big moves already made (Havertz and Werner at Chelsea, Thiago at Liverpool, Suárez at Atlético). 2015-16 is the year Leicester won it at 5000 to 1, with Vardy and Mahrez at their real pre-title values and MSN at Barcelona. 2010-11 is prime Messi and Rooney, and now Klopp's young Dortmund, Ibrahimovic's Milan and Lille's double too. 2005-06 is Ronaldinho's Ballon d'Or Barcelona with a 17 year old Messi, Mourinho's back to back Chelsea and Henry's Arsenal. All four past seasons hold all 98 clubs of their year's big five, the Premier League, La Liga, Serie A, the Bundesliga and Ligue 1 (in 2015-16 Juventus mid five-in-a-row, Lewandowski at Bayern, Ibrahimovic and Di Maria at PSG; in 2005-06 the Juventus of Buffon, Cannavaro, Nedved and Ibrahimovic, Ballack's Bayern and Juninho's Lyon); every one carries hundreds of real players at their real ages and values from that year. Or found a club of your own: name it, design the crest, name the stadium, choose the money, and build it up by signing real players.\n\nHow to play Club Manager, a free online football management game\nPick an era, a nation and a real club\nPick your era (today, 2020-21, 2015-16, 2010-11 or 2005-06), then your nation, your league, and your club. Every tile quotes what that board will actually demand.\nOR FOUND A CLUB OF YOUR OWN\nOr tap Create your own club: your name, your crest (shape, pattern, colors, initials), your stadium, and one of three budgets. Your club takes the league place of the division's weakest side.\nOR MOVE CLUBS BETWEEN LEAGUES WITH THE WORLD EDITOR\nIn today's world, the World editor tile on the nation step lets you rebuild the map before you pick: tap a club, then tap the club in another league it swaps with. Every move is a swap, so every league keeps its real size, its fixtures and its places, and you can make as many as you like, from one club to a whole super league.\nExample: swap Celtic with Brentford and take Celtic. You play a full Premier League season and the FA Cup, Brentford play in Scotland, and both boards judge their club against its new league, so Brentford are asked to win the Scottish Premiership and Celtic are asked to stay up. Your first season's Europe goes to the clubs who really qualified last season, wherever they play now; after that your edited tables decide it, and the edited leagues promote and relegate like any other. Reset puts the real world back.\nMatch days: team sheet, Play Live or Quick Sim\nBefore each match set formation, mentality and your starting XI, or use auto pick, and give a team talk when it matters.\nPlay the match one of two ways: Play Live puts it on the pitch with the dressing room at the break, and Quick Sim goes straight to the report with the coach making your subs. Then read the report, answer the press, and manage the dressing room between games.\nA live match moves: both teams hold their shape around the ball, and goals play out on the pitch before the score changes. Pause it, change the speed or ski",
+   "endSave": {
+    "club": "Leicester City",
+    "season": 1,
+    "week": 56,
+    "cal": 56,
+    "budget": 26.12,
+    "squad": 25,
+    "inbox": 4,
+    "form": "WWDLW",
+    "results": 42,
+    "live": false,
+    "window": null
+   },
+   "inboxDump": [
+    [
+     44,
+     "International break: the window runs 21 Mar to 29 Mar, and your fixtures do not stop for it, so they"
+    ],
+    [
+     32,
+     "Andy King caught you in the corridor. He is down as a rotation option and he has started 0 of the la"
+    ],
+    [
+     30,
+     "Jamie Vardy pulled you aside after training. The short version: he wants to start on Saturday."
+    ],
+    [
+     28,
+     "N'Golo Kanté has asked for a meeting about his place in the side. He is training well and he does no"
+    ]
+   ]
+  },
+  {
+   "n": 2,
+   "start": {
+    "club": "Leicester City",
+    "season": 2,
+    "week": 0,
+    "cal": 56,
+    "budget": 66.1,
+    "squad": 23,
+    "inbox": 0,
+    "form": "",
+    "results": 0,
+    "live": false,
+    "window": "summer"
+   },
+   "live": [
+    {
+     "ok": true,
+     "vars": 0,
+     "goalsSeen": 0,
+     "subRowsAtBreak": 11,
+     "sub": true,
+     "benchOffered": 12,
+     "liveSub": true,
+     "reportText": "DOUKNOWBALL\nBack\nSign up to track your stats\nFULL TIME\nPREMIER LEAGUE · ROUND 1\n🏟️ Your ground · crowd 30,790\n45+2'\nADDED TIME\n90+8'\nDEFEAT\nLeicester City\n0 - 1\nEverton\nLEICESTER CITY\n\n-\n\nEVERTON\n\n⚽ Romelu Lukaku 90+4'\n\n🟨 Liam Moore 48'\n🩹 Yohan Benalouane 79' (3w)\n▲ Kofi Keane (Youth) ▼ Kasper Schmeichel 46'\n▲ Gökhan Inler ▼ Andrej Kramaric 55'\nEVERTON 🟨 Leighton Baines 53'\nEVERTON ▲ Phil Jagielka ▼ Leighton Baines 56'\nEVERTON ▲ Steven Pienaar ▼ Ross Barkley 57'\nLeicester City\nMATCH STATS\nEverton\n50%\nPOSSESSION\n50%\n9\nSHOTS\n11\n3\nON TARGET\n5\n0.67\nEXPECTED GOALS\n1.02\n6\nCORNERS\n5\n12\nFOULS\n11\n4\nKEEPER SAVES\n3\n1\nYELLOW CARDS\n1\n0\nRED CARDS\n0\n2\nSUBSTITUTIONS\n2\n50%\nBALANCE OF PLAY\n50%\n▲ LEICESTER CITY\n▼ EVERTON\n0'\n45'\n90'\n9 (3)\nSHOTS (ON TARGET)\n11 (5)\nLeicester City\nTIMELINE\nEverton\n0'\n⏱️ KICK OFF\n1'\n🧤 Shot saved: Romelu Lukaku\n🧤 Shot saved: Leonardo Ulloa\n32'\n🧤 Shot saved: Riyad Mahrez\n3"
+    }
+   ],
+   "ffs": [
+    {
+     "k": 0,
+     "r": "FULL TIME",
+     "sv": {
+      "club": "Leicester City",
+      "season": 2,
+      "week": 9,
+      "cal": 56,
+      "budget": 67.6,
+      "squad": 24,
+      "inbox": 4,
+      "form": "LWWDW",
+      "results": 7,
+      "live": false,
+      "window": null
+     }
+    },
+    {
+     "k": 1,
+     "r": "FULL TIME",
+     "sv": {
+      "club": "Leicester City",
+      "season": 2,
+      "week": 16,
+      "cal": 56,
+      "budget": 69.75,
+      "squad": 24,
+      "inbox": 5,
+      "form": "WLDWL",
+      "results": 12,
+      "live": false,
+      "window": null
+     }
+    },
+    {
+     "k": 2,
+     "r": "FULL TIME",
+     "sv": {
+      "club": "Leicester City",
+      "season": 2,
+      "week": 23,
+      "cal": 56,
+      "budget": 71,
+      "squad": 24,
+      "inbox": 6,
+      "form": "LWLLL",
+      "results": 18,
+      "live": false,
+      "window": null
+     }
+    },
+    {
+     "k": 3,
+     "r": "LEICESTER CITY",
+     "sv": {
+      "club": "Leicester City",
+      "season": 2,
+      "week": 28,
+      "cal": 56,
+      "budget": 72.27,
+      "squad": 24,
+      "inbox": 7,
+      "form": "LLDDW",
+      "results": 21,
+      "live": false,
+      "window": "january"
+     }
+    },
+    {
+     "k": 4,
+     "r": "no calendar tile",
+     "sv": {
+      "club": "Leicester City",
+      "season": 2,
+      "week": 28,
+      "cal": 56,
+      "budget": 72.27,
+      "squad": 24,
+      "inbox": 7,
+      "form": "LLDDW",
+      "results": 21,
+      "live": false,
+      "window": "january"
+     }
+    },
+    {
+     "k": 5,
+     "r": "FULL TIME",
+     "sv": {
+      "club": "Leicester City",
+      "season": 2,
+      "week": 56,
+      "cal": 56,
+      "budget": 77.76,
+      "squad": 24,
+      "inbox": 8,
+      "form": "WLWDW",
+      "results": 40,
+      "live": false,
+      "window": null
+     }
+    }
+   ],
+   "quick": "DOUKNOWBALL\nBack\nSign up to track your stats\nFULL TIME\nPREMIER LEAGUE · ROUND 2\n🏟️ Away day · crowd 27,117\n45+2'\nADDED TIME\n90+6'\nDEFEAT\nWest Brom\n1 - 0\nLeicester City\nLEICESTER CITY\n\n-\n\nWEST BROM\n\n⚽ Saido Berahino 57'\n\n🟨 Archimede Morleo 32'\n🟨 Jamie Vardy 61'\n🟨 Riyad Mahrez 66'\n▲ David Nugent ▼ Jamie Vardy 61'\n▲ Ritchie De Laet ▼ Archimede Morleo 78'\nWB 🟨 Stéphane Sessègnon 85'\nWB ▲ Callum McManaman ▼ Brown Ideye 77'\nLeicester City\nMATCH STATS\nWest Brom\n47%\nPOSSESSION\n53%\n9\nSHOTS\n12\n4\nON TARGET\n5\n0.97\nEXPECTED GOALS\n1.26\n3\nCORNERS\n7\n11\nFOULS\n8\n4\nKEEPER SAVES\n4\n3\nYELLOW CARDS\n1\n0\nRED CARDS\n0\n2\nSUBSTITUTIONS\n1\n47%\nBALANCE OF PLAY\n53%\n▲ LEICESTER CITY\n▼ WEST BROM\n0'\n45'\n90'\n9 (4)\nSHOTS (ON TARGET)\n12 (5)\nLeicester City\nTIMELINE\nWest Brom\n0'\n⏱️ KICK OFF\n2'\n🧤 Shot saved: James Morrison\n3'\n🧤 Shot saved: Stéphane Sessègnon\n🟨 Booked: Archimede Morleo\n32'\n🧤 Shot saved: Riyad Mahrez\n40'\n",
+   "mid_Inbox": "DOUKNOWBALL\nBack\nSign up to track your stats\nLeicester City\n2016-17 · Season 2\n#11 in league\n£69.8m\n🏆×1\nManagers\nBoard\nSafe\nFans\nGrumbling\nHome\nSquad\nTactics\nTable\nMarket\nPREMIER LEAGUE · ROUND 12\nLeicester City vs Arsenal\nHome · their strength ~84 · your XI avg 73\nPlay Live\n⚡ Quick Sim\n\nPlay live to make your calls. Quick Sim handles your subs.\n\n📊 Match Centre: form, head to head, odds, team talk\nClub home\n⚖️\nDECISIONS DESK\n\nAnswer before your next match. Anything left open closes with nothing changed.\n\nWEEK 6 · THE BOARD\n\n🗂️The board want you at an investors dinner on Thursday. A paper has asked for a long sit down interview the same evening.\n\nNobody answered before the next match, so nothing changed.\n\nShow closed cards (1)\nYOUR MESSAGES\n3\n\nRecent retained messages. Older messages can leave your save.\n\nPending (3)\nResolved (2)\nAll (5)\nReset filters\n\nShowing 4 of 5 retained messages.\n\nWeek 12\nYOUR ASSISTANT\n\n📩International break: the window runs 10 Oct to 18 Oct, and your fixtures do not stop for it, so they went straight after your last game. Away with their countries (Algeria: Riyad Mahrez; Croatia: Andrej Kramaric; Argentina: Leonardo Ulloa; Switzerland: Gökhan Inler; Japan: Shinji Okazaki; Denmark: Kasper Schmeichel; Tunisia: Yohan Benalouane; New Zealand: Chris Wood; Wales: Andy King and Tom Lawrence; Jamaica: Liam Moore). They are back for the Sunderland game. Riyad Mahrez, Shinji Okazaki, Kasper Schmeichel, Yohan Benalouane, Chris Wood, Andy King, Liam Moore and Tom Lawrence started for their countries, the rest mostly watched from the bench. The long trips hurt most. Your assistant wants to know: start them against Sunderland, or rest the spent ones for that one game?\n\nThat game has been and gone.\n\nWeek 5\nYOUR ASSISTANT\n\n📩International break: the window runs 5 Sep to 13 Sep, and your fixtures do not stop for it, so they went straight after your last game. Away with their countries (Algeria: Riyad Mahrez; Croatia: Andrej Kramaric; Argentina: Leonardo Ulloa; Switzerland: Gökhan Inler; Japan: Shinji Okazaki; Denmark: Kasper Schmeichel; Tunisia: Yohan Benalouane; New Zealand: Chris Wood; Wales: Andy King and Tom Lawrence; Jamaica: Liam Moore). They are back for the Norwich City game. Riyad Mahrez, Andrej Kramaric, Gökhan Inler, Shinji Okazaki, Kasper Schmeichel, Yohan Benalouane, Chris Wood and Tom Lawrence started for their countries, the rest mostly watched from the bench. The long trips hurt most. Your assistant wants to know: start them again",
+   "mid_Board": "DOUKNOWBALL\nBack\nSign up to track your stats\nLeicester City\n2016-17 · Season 2\n#11 in league\n£69.8m\n🏆×1\nManagers\nBoard\nSafe\nFans\nGrumbling\nHome\nSquad\nTactics\nTable\nMarket\nPREMIER LEAGUE · ROUND 12\nLeicester City vs Arsenal\nHome · their strength ~84 · your XI avg 73\nPlay Live\n⚡ Quick Sim\n\nPlay live to make your calls. Quick Sim handles your subs.\n\n📊 Match Centre: form, head to head, odds, team talk\nClub home\nBOARD EXPECTATIONS · SMALL BUDGETS, LOW BAR: EVERY SCALP IS A STORY.\nStay up. Avoid relegation\nOn track\nReach the FA Cup semi-finals\nOn track\nFinish above Aston Villa\nOn track\nBank 40+ league points\nOn track\nBlood 2 under-21 players in the league\nOn track\nTurn a profit in the transfer market\nBehind\n🛒 IN THE MARKET\nHave 7 players from England in the squad\nOn track\n\nCounts everyone in your squad from England. A player you have in on loan does not count, and neither does anybody whose country we do not have on file.\n\nHave 5 players aged 30 or over in the squad\nDone\n\nCounts everyone in your squad aged 30 or over. A player you have in on loan does not count.\n\nClub Manager: Free Football Management Game\n\nA full club-management sim in your browser: 454 clubs across 27 real leagues, from the Premier League, the 2. Bundesliga, Serie B, Ligue 2, the Segunda División and the Scottish Premiership to the Saudi Pro League, MLS, Brazil, Mexico, Australia, Russia, Croatia, Denmark, Switzerland, Austria and Greece, with real players at their real market values as of August 2026 (October for the A-League Men and the Russian Premier League) and thin squads topped up with made up youth, marked as such. Manage today or in a real past season: 2020-21 with Haaland's Dortmund and Mbappé's PSG, 2015-16 with Leicester at 5000 to 1, 2010-11 with prime Messi, or 2005-06 with Ronaldinho's Barcelona. Or create your own club with its own crest and stadium. Negotiate transfers, survive bidding wars, hit the board's named objectives, and chase titles season after season.\n\nClub Manager is the site's big one: a full management sim in your browser. 454 real clubs across 27 leagues in 21 countries, from the Premier League, Serie B, Ligue 2 and the Segunda División to the Danish Superliga, the Swiss Super League, Croatia's SuperSport HNL, Brazil's Serie A, Liga MX, the A-League Men and the Russian Premier League, over 5,000 real players with their real 2026 ages and market values, and a board that talks like a board.\n\nPick when you start too: today's game, or one of four real past season",
+   "mid_Finances": "DOUKNOWBALL\nBack\nSign up to track your stats\nLeicester City\n2016-17 · Season 2\n#11 in league\n£69.8m\n🏆×1\nManagers\nBoard\nSafe\nFans\nGrumbling\nHome\nSquad\nTactics\nTable\nMarket\nPREMIER LEAGUE · ROUND 12\nLeicester City vs Arsenal\nHome · their strength ~84 · your XI avg 73\nPlay Live\n⚡ Quick Sim\n\nPlay live to make your calls. Quick Sim handles your subs.\n\n📊 Match Centre: form, head to head, odds, team talk\nClub home\n📊 PROJECTED TO SEASON END\nweek 16, 40 left\nIN SO FAR SEASON\nTickets · 13 certain home games left £3.8m £10.5m\nFood and drink £950k £2.6m\nSponsor · no deal £0k £0k\nPlayers sold · assumes no more deals £0k £0k\nIncome £4.8m £13.1m\nOUT\nPlayer wages · £207k a week £3.3m £11.6m\nStaff wages · £91k a week £1.5m £5.1m\nTravel · 15 certain away trips left £230k £910k\nPlayers bought · assumes no more deals £1.1m £1.1m\nFacilities £0k £0k\nStaff fees · hires and pay offs £0k £0k\nSpend £6.1m £18.7m\nSeason result -£1.4m -£5.6m\n\nTickets, food, the sponsor, deals, the builders and staff fees move the transfer kitty (£69.8m now). Wages and travel are the club's running costs: the board covers them and holds you to the wage ceiling on the contracts desk, so they never leave the kitty. Counts league fixtures and the one cup or European tie already drawn. Later rounds depend on results and are left out, and so are deals you have not done.\n\n🎟️ PRICES\nFans: Grumbling\n🎟️ Fair prices\nCheaper seats, fuller ground, a louder day out.\n🎫 Standard\nThe going rate. Nobody writes to the paper about it.\n💼 Premium\nMore per seat, a few empty ones up in the corners.\n\nTickets about £18 a head. Fans are neutral. The board are neutral.\n\n🍟 Cheap food\nPies at cost. The fans love you for it.\n🥤 Standard\nGround prices. Nobody cheers, nobody moans.\n🍾 Premium\nHospitality margins. The fans notice the bill.\n\nFood and drink about £4.46 a head, lifted by the stadium level. Fans are neutral. The board are neutral. The mood also follows the last five results, and it moves your home crowd: 0.9x furious, 1.1x singing.\n\n🤝 SHIRT SPONSOR\n\nOffers on the table. The money lands in the same kitty as everything else, this season and every season the deal runs. Push for more and the brand comes up six percent, or walks.\n\nNorthgate Insurance (global)\n£9.9m/season\n\nMoney in the account, nothing riding on results. 2 seasons.\n\nSign with Northgate\nPush for more\nMeridian Freight (local)\n£7.1m/season\n\nLess up front, a serious bonus if you win the league. 2 seasons. Bonus £8.9m for the title.\n\nSign with Meridian\nPus",
+   "mid_Press room": "DOUKNOWBALL\nBack\nSign up to track your stats\nLeicester City\n2016-17 · Season 2\n#11 in league\n£69.8m\n🏆×1\nManagers\nBoard\nSafe\nFans\nGrumbling\nHome\nSquad\nTactics\nTable\nMarket\nPREMIER LEAGUE · ROUND 12\nLeicester City vs Arsenal\nHome · their strength ~84 · your XI avg 73\nPlay Live\n⚡ Quick Sim\n\nPlay live to make your calls. Quick Sim handles your subs.\n\n📊 Match Centre: form, head to head, odds, team talk\nClub home\nTHE BACK PAGES\nNobody has an opinion\n0 fronted up · 10 left to the assistant\n\nThe board do not watch every match, they read about it. Keep the papers onside and a defeat gets the benefit of the doubt upstairs. Let them turn on you and the same defeat costs you more.\n\nPRESS CONFERENCE\n\nGökhan Inler has started 2 of the last 10. Is he finished at this club?\n\nHe is still my player\nthe dressing room will love it · he will walk in ten feet tall · the board will wince\nHe has to earn it back\nthe dressing room will love it · he will read it like everyone else · the board will like hearing it · a headline\nYou would have to ask him\nthe press will not thank you\nSend your assistant\nNothing said, nothing gained. The papers make a small note of who did not turn up.\nClub Manager: Free Football Management Game\n\nA full club-management sim in your browser: 454 clubs across 27 real leagues, from the Premier League, the 2. Bundesliga, Serie B, Ligue 2, the Segunda División and the Scottish Premiership to the Saudi Pro League, MLS, Brazil, Mexico, Australia, Russia, Croatia, Denmark, Switzerland, Austria and Greece, with real players at their real market values as of August 2026 (October for the A-League Men and the Russian Premier League) and thin squads topped up with made up youth, marked as such. Manage today or in a real past season: 2020-21 with Haaland's Dortmund and Mbappé's PSG, 2015-16 with Leicester at 5000 to 1, 2010-11 with prime Messi, or 2005-06 with Ronaldinho's Barcelona. Or create your own club with its own crest and stadium. Negotiate transfers, survive bidding wars, hit the board's named objectives, and chase titles season after season.\n\nClub Manager is the site's big one: a full management sim in your browser. 454 real clubs across 27 leagues in 21 countries, from the Premier League, Serie B, Ligue 2 and the Segunda División to the Danish Superliga, the Swiss Super League, Croatia's SuperSport HNL, Brazil's Serie A, Liga MX, the A-League Men and the Russian Premier League, over 5,000 real players with their real 2026 ages and market values, and a boar",
+   "mid_Dressing room": "DOUKNOWBALL\nBack\nSign up to track your stats\nLeicester City\n2016-17 · Season 2\n#11 in league\n£69.8m\n🏆×1\nManagers\nBoard\nSafe\nFans\nGrumbling\nHome\nSquad\nTactics\nTable\nMarket\nPREMIER LEAGUE · ROUND 12\nLeicester City vs Arsenal\nHome · their strength ~84 · your XI avg 73\nPlay Live\n⚡ Quick Sim\n\nPlay live to make your calls. Quick Sim handles your subs.\n\n📊 Match Centre: form, head to head, odds, team talk\nClub home\nTHE DRESSING ROOM\n\n3 players are not getting what you told them they would.\n\nNEEDS A WORD\nCDM\nGökhan Inler\n1 start, 3 off the bench in last 10 · star man\n76\nFurious\nRW\nAnthony Knockaert\n0 starts, 3 off the bench in last 10 · key first teamer\n70\nFurious\nCM\nAndy King\n0 starts in last 10 · rotation option\n70\nNot happy\n⭐\nSTAR MAN\n3 players\n1 not happy\n🔥\nKEY FIRST TEAMER\n7 players\n1 not happy\n🔄\nROTATION OPTION\n4 players\n1 not happy\n🧥\nBACKUP\n9 players\nPromised 12% of games\n🌱\nONE FOR THE FUTURE\n1 player\nPromised 5% of games\nClub Manager: Free Football Management Game\n\nA full club-management sim in your browser: 454 clubs across 27 real leagues, from the Premier League, the 2. Bundesliga, Serie B, Ligue 2, the Segunda División and the Scottish Premiership to the Saudi Pro League, MLS, Brazil, Mexico, Australia, Russia, Croatia, Denmark, Switzerland, Austria and Greece, with real players at their real market values as of August 2026 (October for the A-League Men and the Russian Premier League) and thin squads topped up with made up youth, marked as such. Manage today or in a real past season: 2020-21 with Haaland's Dortmund and Mbappé's PSG, 2015-16 with Leicester at 5000 to 1, 2010-11 with prime Messi, or 2005-06 with Ronaldinho's Barcelona. Or create your own club with its own crest and stadium. Negotiate transfers, survive bidding wars, hit the board's named objectives, and chase titles season after season.\n\nClub Manager is the site's big one: a full management sim in your browser. 454 real clubs across 27 leagues in 21 countries, from the Premier League, Serie B, Ligue 2 and the Segunda División to the Danish Superliga, the Swiss Super League, Croatia's SuperSport HNL, Brazil's Serie A, Liga MX, the A-League Men and the Russian Premier League, over 5,000 real players with their real 2026 ages and market values, and a board that talks like a board.\n\nPick when you start too: today's game, or one of four real past seasons. 2020-21 is Haaland and Bellingham at Dortmund, Mbappé and Neymar at PSG and Bruno Fernandes at United, with that summer's big moves al",
+   "reload": {
+    "b": {
+     "club": "Leicester City",
+     "season": 2,
+     "week": 16,
+     "cal": 56,
+     "budget": 69.75,
+     "squad": 24,
+     "inbox": 5,
+     "form": "WLDWL",
+     "results": 12,
+     "live": false,
+     "window": null
+    },
+    "a": {
+     "club": "Leicester City",
+     "season": 2,
+     "week": 16,
+     "cal": 56,
+     "budget": 69.75,
+     "squad": 24,
+     "inbox": 5,
+     "form": "WLDWL",
+     "results": 12,
+     "live": false,
+     "window": null
+    }
+   },
+   "end": "SEASON 2 COMPLETE",
+   "review": "DOUKNOWBALL\nBack\nSign up to track your stats\nSEASON 2 COMPLETE\n\nLeicester City · finished #11 with 50 pts\n\nSOCCER\n·\nNAILED IT\n\n⚽\nBoard verdict: A\n\n14W 8D 16L · GF 44 GA 56\n\nThe board is thrilled. Statues have been commissioned.\n\nFINISH\n#11\nPOINTS\n50\nSEASON SCORE\n50\n🏟️ S2 · #11 · 50pts · -\n\nChampions:\nChelsea\n\n⚽\nTop scorer: Riyad Mahrez (12 goals)\n\n🎯\nMost assists: Leonardo Ulloa (8)\n\n👟\nGolden boot:\nEden Hazard\n(Chelsea, 40 goals)\n\n🎖️\nPlayer of the season:\nEden Hazard\n(Chelsea)\n\n🌍\nBallon d'Or:\nEden Hazard\n(Chelsea)\n\nSEASON SCORE 50 OF 130\n\nLeague form 21 · Cup run 5 · Board 24\n\nBOARD OBJECTIVES\n\n✓ Stay up. Avoid relegation\n\n✗ Reach the FA Cup semi-finals\n\n✓ Finish above Aston Villa\n\n✓ Bank 40+ league points\n\n✗ Blood 2 under-21 players in the league\n\n✗ Turn a profit in the transfer market\n\n✗ Have 7 players from England in the squad\n\n✓ Have 5 players aged 30 or over in the squad\n\nTRANSFER BUSINESS\n\n🟢 IN Franck Béria (£1.1m)\n\n💼\nClub Manager\nOct 13, 2026\n🏟️ S2 · #11 · 50pts · -\nRESULT\n#11 (50 pts, 0 trophies)\nDoUKnowBall\ndouknowball.com/club-manager\nShare result\nCopy challenge\n📋 Copy Score Card\n🖼️ Save Image\n\nSHARE YOUR RESULT\n\nContinue to Season 3\n📞 JOB OFFERS ON THE TABLE\nValencia want you as manager\n🥇 Contenders club · La Liga (abroad) · £35m budget · the board wants: Win the La Liga\n\nAccepting an offer moves you there for Season 3.\n\nStart a new manager (this career stays saved)\nYour managers\nClub Manager: Free Football Management Game\n\nA full club-management sim in your browser: 454 clubs across 27 real leagues, from the Premier League, the 2. Bundesliga, Serie B, Ligue 2, the Segunda División and the Scottish Premiership to the Saudi Pro League, MLS, Brazil, Mexico, Australia, Russia, Croatia, Denmark, Switzerland, Austria and Greece, with real players at their real market values as of August 2026 (October for the A-League Men and the Russian Premier League) and thin squads topped up with made up youth, marked as such. Manage today or in a real past season: 2020-21 with Haaland's Dortmund and Mbappé's PSG, 2015-16 with Leicester at 5000 to 1, 2010-11 with prime Messi, or 2005-06 with Ronaldinho's Barcelona. Or create your own club with its own crest and stadium. Negotiate transfers, survive bidding wars, hit the board's named objectives, and chase titles season after season.\n\nClub Manager is the site's big one: a full management sim in your browser. 454 real clubs across 27 leagues in 21 countries, from the Premier League, Serie B, Ligue 2 and the Segunda División to the Danish Superliga, the Swiss Super League, Croatia's SuperSport HNL, Brazil's Serie A, Liga MX, the A-League Men and the Russian Premier League, over 5,000 real players with their real 2026 ages and market values, and a board that talks like a board.\n\nPick when you start too: today's game, or one of four real past seasons. 2020-21 is Haaland and Bellingham at Dortmund, Mbappé and Neymar at PSG and Bruno Fernandes at United, with that summer's big moves already made (Havertz and Werner at Chelsea, Thiago at Liverpool, Suárez at Atlético). 2015-16 is the year Leicester won it at 5000 to 1, with Vardy and Mahrez at their real pre-title values and MSN at Barcelona. 2010-11 is prime Messi and Rooney, and now Klopp's young Dortmund, Ibrahimovic's Milan and Lille's double too. 2005-06 is Ronaldinho's Ballon d'Or Barcelona with a 17 year old Messi, Mourinho's back to back Chelsea and Henry's Arsenal. All four past seasons hold all 98 clubs of their year's big five, the Premier League, La Liga, Serie A, the Bundesliga and Ligue 1 (in 2015-16 Juventus mid five-in-a-row, Lewandowski at Bayern, Ibrahimovic and Di Maria at PSG; in 2005-06 the Juventus of Buffon, Cannavaro, Nedved and Ibrahimovic, Ballack's Bayern and Juninho's Lyon); every one carries hundreds of real players at their real ages and values from that year. Or found a club of your own: name it, design the crest, name the stadium, choose the money, and build it up by signing real players.\n\nHow to play Club Manager, a free online football management game\nPick an era, a nation and a real club\nPick your era (today, 2020-21, 2015-16, 2010-11 or 2005-06), then your nation, your league, and your club. Every tile quotes what that board will actually demand.\nOR FOUND A CLUB OF YOUR OWN\nOr tap Create your own club: your name, your crest (shape, pattern, colors, initials), your stadium, and one of three budgets. Your club takes the league place of the division's weakest side.\nOR MOVE CLUBS BETWEEN LEAGUES WITH THE WORLD EDITOR\nIn today's world, the World editor tile on the nation step lets you rebuild the map before you pick: tap a club, then tap the club in another league it swaps with. Every move is a swap, so every league keeps its real size, its fixtures and its places, and you can make as many as you like, from one club to a whole super league.\nExample: swap Celtic with Brentford and take Celtic. You play a full Premier League season and the FA Cup, Brentford play in Scotland, and both boards judge their club against its new league, so Brentford are asked to win the Scottish Premiership and Celtic are asked to stay up. Your first season's Europe goes to the clubs who really qualified last season, wherever they play now; after that your edited tables decide it, and the edited leagues promote and relegate like any other. Reset puts the real world back.\nMatch days: team sheet, Play Live or Quick Sim\nBefore each match set formation, mentality and your starting XI, or use auto pick, and give a team talk when it matters.\nPlay the match one of two ways: Play Live puts it on the pitch with the dressing room at the break, and Quick Sim goes straight to the report with the coach making your subs. Then read the report, answer the press, and manage the dressing room between games.\nA live match moves: both teams hold their shape around the ball, and goals play out on the pitch before the score changes. Pause it, change the speed or skip to the whistle, and tap one of your player",
+   "endSave": {
+    "club": "Leicester City",
+    "season": 2,
+    "week": 56,
+    "cal": 56,
+    "budget": 77.76,
+    "squad": 24,
+    "inbox": 8,
+    "form": "WLWDW",
+    "results": 40,
+    "live": false,
+    "window": null
+   },
+   "inboxDump": [
+    [
+     43,
+     "David Nugent put it in writing. He is down as a rotation option and he has started 0 of the last 10,"
+    ],
+    [
+     43,
+     "International break: the window runs 20 Mar to 28 Mar, and your fixtures do not stop for it, so they"
+    ],
+    [
+     35,
+     "Anthony Knockaert put it in writing. He is down as a key first teamer and he has started 0 of the la"
+    ],
+    [
+     30,
+     "Gökhan Inler put it in writing. He is down as a star man and he has started 3 of the last 10, so he "
+    ],
+    [
+     24,
+     "Andy King put it in writing. He is down as a rotation option and he has started 0 of the last 10, so"
+    ],
+    [
+     20,
+     "International break: the window runs 14 Nov to 22 Nov, and your fixtures do not stop for it, so they"
+    ],
+    [
+     12,
+     "International break: the window runs 10 Oct to 18 Oct, and your fixtures do not stop for it, so they"
+    ],
+    [
+     5,
+     "International break: the window runs 5 Sep to 13 Sep, and your fixtures do not stop for it, so they "
+    ]
+   ]
+  }
+ ],
+ "elapsedS": 232,
+ "clubList": [
+  "Chelsea 👑 Elite Squad 87 Budget £71m Board wants Win the Premier League",
+  "Manchester City 👑 Elite Squad 87 Budget £64m Board wants Win the Premier League",
+  "Manchester United 👑 Elite Squad 84 Budget £55m Board wants Win the Premier League",
+  "Arsenal 👑 Elite Squad 84 Budget £53m Board wants Win the Premier League",
+  "Liverpool 🥇 Contenders Squad 82 Budget £48m Board wants Qualify for the Champions League",
+  "Tottenham 🥇 Contenders Squad 82 Budget £45m Board wants Qualify for the Europa League",
+  "Everton 🥇 Contenders Squad 79 Budget £26m Board wants Qualify for the Europa League",
+  "Southampton ⚔️ Challengers Squad 78 Budget £21m Board wants Finish in the top half",
+  "West Ham ⚔️ Challengers Squad 77 Budget £21m Board wants Finish in the top half",
+  "Newcastle ⚔️ Challengers Squad 77 Budget £19m Board wants Finish in the top half",
+  "Swansea City ⚔️ Challengers Squad 77 Budget £19m Board wants Finish in the top half",
+  "Stoke City ⚔️ Challengers Squad 77 Budget £19m Board wants Finish in the top half",
+  "Aston Villa ⚔️ Challengers Squad 75 Budget £17m Board wants Finish in the top half",
+  "Leicester City ⚔️ Challengers Squad 75 Budget £14m Board wants Stay up. Avoid relegation",
+  "Sunderland ⚔️ Challengers Squad 75 Budget £12m Board wants Stay up. Avoid relegation",
+  "Crystal Palace ⚔️ Challengers Squad 75 Budget £13m Board wants Stay up. Avoid relegation",
+  "West Brom ⚔️ Challengers Squad 73 Budget £11m Board wants Stay up. Avoid relegation",
+  "Watford 🐺 Underdogs Squad 73 Budget £9m Board wants Stay up. Avoid relegation",
+  "Norwich City 🐺 Underdogs Squad 72 Budget £8m Board wants Stay up. Avoid relegation",
+  "Bournemouth 🐺 Underdogs Squad 69 Budget £8m Board wants Stay up. Avoid relegation"
+ ],
+ "s1-summer_deal": {
+  "signed": [
+   {
+    "who": "Archimede Morleo",
+    "inSquad": true,
+    "budgetBefore": 21.36,
+    "budgetAfter": 19.8
+   }
+  ],
+  "sold": [],
+  "bid": "DOUKNOWBALL\nBack\nSign up to track your stats\nLeicester City\n2015-16 · Season 1\n🗓️ Took over mid season · run-in simulated\n#6 in league\n£19.8m\nManagers\nBoard\nSafe\nFans\nSinging\nHome\nSquad\nTactics\nTable\nMarket\n❄️ January window OPEN\n3 match weeks until the deadline · offers can arrive any week · loans used 0/2\nBUDGET\n£19.8m\nNegotiating: Boaz Myhill\n64\nWest Brom · GK · 32y · worth £800k to £900k\nTheir ask: £700k\n●●●●○\n\n\"The selling club says he is not for sale... at the right price he is.\"\n\nADD-ONS\nNone\n£2m\n£5m\n£10m\nSELL-ON\nNone\n10%\n20%\n30%\nSWAP\nNo part exchange\nRiyad Mahrez (78, £8.1m)\nGökhan In"
+ },
+ "s2_pre_Inbox": "DOUKNOWBALL\nBack\nSign up to track your stats\nLeicester City\n2016-17 · Season 2\nSeason not started\n£66.1m\nNo matches yet\n🏆×1\nManagers\nBoard\nSafe\nFans\nHopeful\nHome\nSquad\nTactics\nTable\nMarket\n☀️ Transfer window open. Tap to do business before your next match\nPREMIER LEAGUE · ROUND 1\nLeicester City vs Everton\nHome · their strength ~81 · your XI avg 73\nPlay Live\n⚡ Quick Sim\n\nPlay live to make your calls. Quick Sim handles your subs.\n\n📊 Match Centre: form, head to head, odds, team talk\nClub home\n\nNobody has texted you yet. Play some matches, the drama finds you.\n\nClub Manager: Free Football Management Game\n\nA full club-management sim in your browser: 454 clubs across 27 real leagues, from the Premier League, the 2. Bundesliga, Serie B, Ligue 2, the Segunda División and the Scottish Premiership to the Saudi Pro League, MLS, Brazil, Mexico, Australia, Russia, Croatia, Denmark, Switzerland, Austria and Greece, with real players at their real market values as of August 2026 (October for the A-League Men and the Russian Premier League) and thin squads topped up with made up youth, marked as such. Manage today or in a real past season: 2020-21 with Haaland's Dortmund and Mbappé's PSG, 2015-16 with Leicester at 5000 to 1, 2010-11 with prime Messi, or 2005-06 with Ronaldinho's Barcelona. Or create your own club with its own crest and stadium. Negotiate transfers, survive bidding wars, hit the board's named objectives, and chase titles season after season.\n\nClub Manager is the site's big one: a full management sim in your browser. 454 real clubs across 27 leagues in 21 countries, from the Premier League, Serie B, Ligue 2 and the Segunda División to the Danish Superliga, the Swiss Super League, Croatia's SuperSport HNL, Brazil's Serie A, Liga MX, the A-League Men and the Russian Premier League, over 5,000 real players with their real 2026 ages and market values, and a board that talks like a board.\n\nPick when you start too: today's game, or one of four real past seasons. 2020-21 is Haaland and Bellingham at Dortmund, Mbappé and Neymar at PSG and Bruno Fernandes at United, with that summer's big moves already made (Havertz and Werner at Chelsea, Thiago at Liverpool, Suárez at Atlético). 2015-16 is the year Leicester won it at 5000 to 1, with Vardy and Mahrez at their real pre-title values and MSN at Barcelona. 2010-11 is prime Messi and Rooney, and now Klopp's young Dortmund, Ibrahimovic's Milan and Lille's double too. 2005-06 is Ronaldinho's Ballon d'Or Barcelona with a",
+ "s2_pre_Board": "DOUKNOWBALL\nBack\nSign up to track your stats\nLeicester City\n2016-17 · Season 2\nSeason not started\n£66.1m\nNo matches yet\n🏆×1\nManagers\nBoard\nSafe\nFans\nHopeful\nHome\nSquad\nTactics\nTable\nMarket\n☀️ Transfer window open. Tap to do business before your next match\nPREMIER LEAGUE · ROUND 1\nLeicester City vs Everton\nHome · their strength ~81 · your XI avg 73\nPlay Live\n⚡ Quick Sim\n\nPlay live to make your calls. Quick Sim handles your subs.\n\n📊 Match Centre: form, head to head, odds, team talk\nClub home\nBOARD EXPECTATIONS · SMALL BUDGETS, LOW BAR: EVERY SCALP IS A STORY.\nStay up. Avoid relegation\nOn track\nReach the FA Cup semi-finals\nOn track\nFinish above Aston Villa\nBehind\nBank 40+ league points\nOn track\nBlood 2 under-21 players in the league\nOn track\nTurn a profit in the transfer market\nOn track\n🛒 IN THE MARKET\nHave 7 players from England in the squad\nOn track\n\nCounts everyone in your squad from England. A player you have in on loan does not count, and neither does anybody whose country we do not have on file.\n\nHave 5 players aged 30 or over in the squad\nOn track\n\nCounts everyone in your squad aged 30 or over. A player you have in on loan does not count.\n\nClub Manager: Free Football Management Game\n\nA full club-management sim in your browser: 454 clubs across 27 real leagues, from the Premier League, the 2. Bundesliga, Serie B, Ligue 2, the Segunda División and the Scottish Premiership to the Saudi Pro League, MLS, Brazil, Mexico, Australia, Russia, Croatia, Denmark, Switzerland, Austria and Greece, with real players at their real market values as of August 2026 (October for the A-League Men and the Russian Premier League) and thin squads topped up with made up youth, marked as such. Manage today or in a real past season: 2020-21 with Haaland's Dortmund and Mbappé's PSG, 2015-16 with Leicester at 5000 to 1, 2010-11 with prime Messi, or 2005-06 with Ronaldinho's Barcelona. Or create your own club with its own crest and stadium. Negotiate transfers, survive bidding wars, hit the board's named objectives, and chase titles season after season.\n\nClub Manager is the site's big one: a full management sim in your browser. 454 real clubs across 27 leagues in 21 countries, from the Premier League, Serie B, Ligue 2 and the Segunda División to the Danish Superliga, the Swiss Super League, Croatia's SuperSport HNL, Brazil's Serie A, Liga MX, the A-League Men and the Russian Premier League, over 5,000 real players with their real 2026 ages and market values, and a board that tal",
+ "s2_pre_Finances": "DOUKNOWBALL\nBack\nSign up to track your stats\nLeicester City\n2016-17 · Season 2\nSeason not started\n£66.1m\nNo matches yet\n🏆×1\nManagers\nBoard\nSafe\nFans\nHopeful\nHome\nSquad\nTactics\nTable\nMarket\n☀️ Transfer window open. Tap to do business before your next match\nPREMIER LEAGUE · ROUND 1\nLeicester City vs Everton\nHome · their strength ~81 · your XI avg 73\nPlay Live\n⚡ Quick Sim\n\nPlay live to make your calls. Quick Sim handles your subs.\n\n📊 Match Centre: form, head to head, odds, team talk\nClub home\n📊 PROJECTED TO SEASON END\nweek 0, 56 left\nIN SO FAR SEASON\nTickets · 20 certain home games left £0k £10.3m\nFood and drink £0k £2.6m\nSponsor · no deal £0k £0k\nPlayers sold · assumes no more deals £0k £0k\nIncome £0k £12.9m\nOUT\nPlayer wages · £205k a week £0k £11.5m\nStaff wages · £91k a week £0k £5.1m\nTravel · 19 certain away trips left £0k £860k\nPlayers bought · assumes no more deals £0k £0k\nFacilities £0k £0k\nStaff fees · hires and pay offs £0k £0k\nSpend £0k £17.4m\nSeason result £0k -£4.6m\n\nTickets, food, the sponsor, deals, the builders and staff fees move the transfer kitty (£66.1m now). Wages and travel are the club's running costs: the board covers them and holds you to the wage ceiling on the contracts desk, so they never leave the kitty. Counts league fixtures and the one cup or European tie already drawn. Later rounds depend on results and are left out, and so are deals you have not done.\n\n🎟️ PRICES\nFans: Hopeful\n🎟️ Fair prices\nCheaper seats, fuller ground, a louder day out.\n🎫 Standard\nThe going rate. Nobody writes to the paper about it.\n💼 Premium\nMore per seat, a few empty ones up in the corners.\n\nTickets about £18 a head. Fans are neutral. The board are neutral.\n\n🍟 Cheap food\nPies at cost. The fans love you for it.\n🥤 Standard\nGround prices. Nobody cheers, nobody moans.\n🍾 Premium\nHospitality margins. The fans notice the bill.\n\nFood and drink about £4.46 a head, lifted by the stadium level. Fans are neutral. The board are neutral. The mood also follows the last five results, and it moves your home crowd: 0.9x furious, 1.1x singing.\n\n🤝 SHIRT SPONSOR\n\nOffers on the table. The money lands in the same kitty as everything else, this season and every season the deal runs. Push for more and the brand comes up six percent, or walks.\n\nNorthgate Insurance (global)\n£9.9m/season\n\nMoney in the account, nothing riding on results. 2 seasons.\n\nSign with Northgate\nPush for more\nMeridian Freight (local)\n£7.1m/season\n\nLess up front, a serious bonus if you win the league. 2",
+ "s2_pre_Academy": "DOUKNOWBALL\nBack\nSign up to track your stats\nLeicester City\n2016-17 · Season 2\nSeason not started\n£66.1m\nNo matches yet\n🏆×1\nManagers\nBoard\nSafe\nFans\nHopeful\nHome\nSquad\nTactics\nTable\nMarket\n☀️ Transfer window open. Tap to do business before your next match\nPREMIER LEAGUE · ROUND 1\nLeicester City vs Everton\nHome · their strength ~81 · your XI avg 73\nPlay Live\n⚡ Quick Sim\n\nPlay live to make your calls. Quick Sim handles your subs.\n\n📊 Match Centre: form, head to head, odds, team talk\nClub home\nTHE SETUP · £66.1M TO SPEND\n🔍 Youth recruitment\n7/20\nUpgrade £10m\n\nHow far up the queue you are for the best local kids. Drives intake quality and how many turn up.\n\n🧢 Coaching staff\n7/20\nUpgrade £10m\n\nBetter coaches develop EVERY player faster, not just the teenagers, and sharpen your scouting reports.\n\n🏟️ Academy building\n7/20\nUpgrade £10m\n\nThe youth building itself. Lifts intake quality and helps everyone squeeze more out of the week.\n\nSCOUTING NETWORK · 0/3 ON THE ROAD\n\nNobody is out looking for you. Send someone and reports start landing while the season runs.\n\nAVAILABLE\nFreddie Duffy\nContacts ★★★★★ · Judgement ★★★☆☆\n£5m base\nIvan Radic\nContacts ★★★★☆ · Judgement ★★★☆☆\n£4m base\nDuncan Salvatore\nContacts ★★★★☆ · Judgement ★★★★☆\n£5m base\nON THE BOOKS · 1/12\nPosition\nAll positions\nCM\nAge\nAll ages\n18\nReset filters\n\nShowing 1 of 1 prospects\n\nCM\n🏠 Hugo Marchetti (18)\nNow 41 · scout says he tops out 61 to 66 · One for the reserves\nFree\nSign him\nLet go\n\nThe head of youth is not promising you anything. The setup is not good enough yet.\n\nClub Manager: Free Football Management Game\n\nA full club-management sim in your browser: 454 clubs across 27 real leagues, from the Premier League, the 2. Bundesliga, Serie B, Ligue 2, the Segunda División and the Scottish Premiership to the Saudi Pro League, MLS, Brazil, Mexico, Australia, Russia, Croatia, Denmark, Switzerland, Austria and Greece, with real players at their real market values as of August 2026 (October for the A-League Men and the Russian Premier League) and thin squads topped up with made up youth, marked as such. Manage today or in a real past season: 2020-21 with Haaland's Dortmund and Mbappé's PSG, 2015-16 with Leicester at 5000 to 1, 2010-11 with prime Messi, or 2005-06 with Ronaldinho's Barcelona. Or create your own club with its own crest and stadium. Negotiate transfers, survive bidding wars, hit the board's named objectives, and chase titles season after season.\n\nClub Manager is the site's big one: a full mana",
+ "s2_pre_Staff": "DOUKNOWBALL\nBack\nSign up to track your stats\nLeicester City\n2016-17 · Season 2\nSeason not started\n£66.1m\nNo matches yet\n🏆×1\nManagers\nBoard\nSafe\nFans\nHopeful\nHome\nSquad\nTactics\nTable\nMarket\n☀️ Transfer window open. Tap to do business before your next match\nPREMIER LEAGUE · ROUND 1\nLeicester City vs Everton\nHome · their strength ~81 · your XI avg 73\nPlay Live\n⚡ Quick Sim\n\nPlay live to make your calls. Quick Sim handles your subs.\n\n📊 Match Centre: form, head to head, odds, team talk\nClub home\n🧑‍🏫 STAFF · £66.1M TO SPEND · 39K A WEEK ON THE FOUR\n🎯 Idris Eeckhout\nAttack coach · level 4/10, can reach 6 · 9k a week (era wages)\nPay off £230k\n\nThe forwards grow 3.3% faster where there is room. Midfield gets half of it.\n\n🛡️ Bram Drenthe\nDefence coach · level 5/10, can reach 6 · 10k a week (era wages)\nPay off £260k\n\nThe back line grows 4.4% faster where there is room. Midfield gets half of it.\n\n🧤 Hendrik Rasmusson\nGoalkeeping coach · level 5/10, can reach 6 · 10k a week (era wages)\nPay off £260k\n\nKeepers grow 4.4% faster where there is room.\n\n🔎 Emrys Bertelsen\nLead scout · level 5/10, can reach 7 · 10k a week (era wages)\nPay off £260k\n\nBoys found on the road top out up to 3 higher.\n\nEvery one of them is a lift on the game you already play, and a level 1 man does nothing at all, the same as an empty chair. The forwards and the number ten are the attack coach's, the back line and the holding midfielder the defence coach's, the keepers their own man's, and the middle of the park splits the two. Wages are a running cost the board covers; fees and pay offs come out of the kitty. They belong to the club, so a new job starts on the new club's staff.\n\nClub Manager: Free Football Management Game\n\nA full club-management sim in your browser: 454 clubs across 27 real leagues, from the Premier League, the 2. Bundesliga, Serie B, Ligue 2, the Segunda División and the Scottish Premiership to the Saudi Pro League, MLS, Brazil, Mexico, Australia, Russia, Croatia, Denmark, Switzerland, Austria and Greece, with real players at their real market values as of August 2026 (October for the A-League Men and the Russian Premier League) and thin squads topped up with made up youth, marked as such. Manage today or in a real past season: 2020-21 with Haaland's Dortmund and Mbappé's PSG, 2015-16 with Leicester at 5000 to 1, 2010-11 with prime Messi, or 2005-06 with Ronaldinho's Barcelona. Or create your own club with its own crest and stadium. Negotiate transfers, survive bidding wars, h",
+ "s2_pre_squad": "PLAYER (23 IN SQUAD)\nPOS\nPLAYER\nAGE\nOVR\nPOT\nFORM\nWAGE\nDEAL\nWORTH\nFIT\nMOOD\nRW\nRiyad Mahrez\nXI\n⭐ Star man\n0 apps · 0g 0a\n24\n81\n81-86\n-\n18k\n2y\n£14m\n🙂\nCAM\nAndrej Kramaric\nXI\n⭐ Star man\n0 apps · 0g 0a\n24\n77\n78-83\n-\n14k\n2y\n£7.4m\n🙂\nST\nLeonardo Ulloa\nXI\n🔥 Key first teamer\n0 apps · 0g 0a\n29\n77\n77-79\n-\n14k\n3y\n£7.4m\n🙂\nCDM\nN'Golo Kanté\nXI\n🔄 Rotation option\n0 apps · 0g 0a\n24\n77\n77-82\n-\n13k\n1y\n£2.9m\n🙂\nCDM\nGökhan Inler\nC\n⭐ Star man\n0 apps · 0g 0a\n31\n76\n76-78\n-\n17k\n1y\n£2.4m\n🙂\nST\nShinji Okazaki\nXI\n🔥 Key first teamer\n0 apps · 0g 0a\n29\n76\n76-78\n-\n14k\n3y\n£6.1m\n🙂\nST\nJamie Vardy\nXI\n🔄 Rotation option\n0 apps · 0g 0a\n28\n74\n74-76\n-\n11k\n2y\n£4.1m\n🙂\nGK\nKasper Schmeichel\nXI\n🔥 Key first teamer\n0 apps · 0g 0a\n29\n73\n73-75\n-\n9k\n1y\n£1.5m\n🙂\nCB\nYohan Benalouane\nXI\n🔥 Key first teamer\n0 apps · 0g 0a\n28\n73\n73-76\n-\n8k\n1y\n£1.5m\n🙂\nST\nDavid Nugent\n🔄 Rotation option\n0 apps · 0g 0a\n30\n72\n72-74\n-\n8k\n3y\n£2.7m\n🙂\nST\nChris Wood\n🧥 Backup\n0 apps · 0g 0a\n24\n71\n73-78\n-\n7k\n2y\n£2.5m\n🙂\nCM\nMatty James\n🧥 Backup\n0 apps · 0g 0a\n24\n71\n74-79\n-\n7k\n1y\n£1.1m\n🙂\nCB\nRobert Huth\nXI\n🔥 Key first teamer\n0 apps · 0g 0a\n31\n71\n71-73\n-\n9k\n3y\n£2m\n🙂\nCM\nAndy King\n🔄 Rotation option\n0 apps · 0g 0a\n27\n70\n70-72\n-\n7k\n1y\n£900k\n🙂\nRW\nAnthony Knockaert\n🔥 Key first teamer\n0 apps · 0g 0a\n24\n70\n73-78\n-\n7k\n3y\n£2.1m\n🙂\nCM\nDanny Drinkwater\n🧥 Backup\n0 apps · 0g 0a\n25\n70\n71-76\n-\n7k\n3y\n£2.1m\n🙂\nCB\nLiam Moore\nXI\n🔥 Key first teamer\n0 apps · 0g 0a\n22\n70\n75-80\n-\n7k\n1y\n£900k\n🙂\nRB\nRitchie De Laet\n🧥 Backup\n0 apps · 0g 0a\n27\n70\n70-73\n-\n7k\n1y\n£900k\n🙂\nRB\nDanny Simpson\n🧥 Backup\n0 apps · 0g 0a\n28\n68\n68-70\n-\n5k\n1y\n£600k\n🙂\nRM\nMarc Albrighton\n🧥 Backup\n0 apps · 0g 0a\n26\n68\n68-71\n-\n5k\n3y\n£1.4m\n🙂\nCAM\nTom Lawrence\n🧥 Backup\n0 apps · 0g 0a\n21\n65\n71-78\n-\n3k\n1y\n£400k\n🙂\nLB\nArchimede Morleo\nXI\n🧥 Backup\n0 apps · 0g 0a\n32\n62\n62-64\n-\n3k\n1y\n£300k\n🙂\nGK\nKofi Keane (Youth)\n🌱 One for the future\n0 apps · 0g 0a\n19\n59\n59-66\n-\n5k\n3y\n£500k\n🙂\n\nTap a player for the full picture. The ceiling is the scouts' read, never the real number, and a better lead scout narrows it.\n\n📝 CONTRACTS\n205k of 279k a week\n⏳ FINAL YEAR (11)\nCDM\nN'Golo Kanté\n24y · on 13k a week · final year\n77\nRenew · 20k/w · £3.6m\n\n4 years at 20k a week. £3.6m to sign.\n\nNo release clause.\n\nLeaves £62.5m in the transfer kitty.\n\nWage bill: 212k of 279k a week.\n\n+Clause · 18k/w · exit £4.4m\n\n4 years at 18k a week. £3.2m to sign.\n\nExit clause £4.4m. Any club can pay it.\n\nLeaves £62.9m in the transfer kitty.\n\nWage bill: 210k of 279k a week.\n\nCDM\nGökhan Inler\n31y · on 17k a week · final year\n76\nRenew · 16k/w · £1.4m\n\n2 years at 16k a week. £1.4m to sign.\n\nNo release clause.\n\nLeaves £64.7m in the transfer kitty.\n\nWage bill: 204k of 279k a week.\n\n+Clause · 14k/w · exit £3.6m\n\n2 years at 14k a week. £1.3m to sign.\n\nExit clause £3.6m. Any club can pay it.\n\nLeaves £64.8m in the transfer kitty.\n\nWage bill: 202k of 279k a week.\n\nGK\nKasper Schmeichel\n29y · on 9k a week · final year\n73\nRenew · 12k/w · £1.1m\n\n2 years at 12k a week. £1.1m to sign.\n\nNo release clause.\n\nLeaves £65m in the transfer kitty.\n\nWage bill: 208k of 279k a week.\n\n+Clause · 11k/w · exit £2.3m\n\n2 years at 11k a week. £1m to sign.\n\nExit clause £2.3m. Any club can pay it.\n\nLeaves £65.1m in the transfer kitty.\n\nWage bill: 207k of 279k a week.\n\nCB\nYohan Benalouane\n28y · on 8k a week · final year\n73\nRenew · 12k/w · £2.2m\n\n4 years at 12k a week. £2.2m to sign.\n\nNo release clause.\n\nLeaves £63.9m in the transfer kitty.\n\nWage bill: 209k of 279k a week.\n\n+Clause · 11k/w · exit £2.3m\n\n4 years at 11k a week. £2m to sign.\n\nExit ",
+ "s2-summer_deal": {
+  "signed": [
+   {
+    "who": "Franck Béria",
+    "inSquad": true,
+    "budgetBefore": 66.1,
+    "budgetAfter": 65
+   }
+  ],
+  "sold": [],
+  "bid": "DOUKNOWBALL\nBack\nSign up to track your stats\nLeicester City\n2016-17 · Season 2\nSeason not started\n£65m\nNo matches yet\n🏆×1\nManagers\nBoard\nSafe\nFans\nHopeful\nHome\nSquad\nTactics\nTable\nMarket\n☀️ Summer window OPEN\n4 match weeks until the deadline · offers can arrive any week · loans used 0/2\nBUDGET\n£65m\nNegotiating: Duda\n66\nMálaga · LW · 35y · worth £300k to £300k\nTheir ask: £600k\n●●●●○\n\n\"Their sporting director picks up on the second ring. Everyone is for sale.\"\n\nADD-ONS\nNone\n£2m\n£5m\n£10m\nSELL-ON\nNone\n10%\n20%\n30%\nSWAP\nNo part exchange\nRiyad Mahrez (81, £14m)\nAndrej Kramaric (77, £7.4m)\nLeonardo U"
+ },
+ "finalKeys": [
+  "saveVersion",
+  "clubName",
+  "season",
+  "week",
+  "startYear",
+  "eraId",
+  "retiredNames",
+  "retiredLastSummer",
+  "budget",
+  "boardConfidence",
+  "sacked",
+  "squad",
+  "xiIds",
+  "formationIndex",
+  "mentality",
+  "leagueClubs",
+  "balancedFixtures",
+  "table",
+  "form",
+  "calendar",
+  "clubStrengths",
+  "transferWindow",
+  "windowWeeksLeft",
+  "aiHeadlines",
+  "goneNames",
+  "seasonSignings",
+  "cupRound",
+  "cupDraw",
+  "uclGroup",
+  "uclKoRound",
+  "uclDraw",
+  "cupBracket",
+  "world",
+  "trophies",
+  "history",
+  "careerStats",
+  "pendingSummary",
+  "boardObjectives",
+  "cupExit",
+  "uclExit",
+  "negotiation",
+  "incomingBids",
+  "coldNames",
+  "loanedOut",
+  "transferLog",
+  "resultLog",
+  "inbox",
+  "promisedStarts",
+  "pairResults",
+  "wageCap",
+  "freeAgents",
+  "severance",
+  "training",
+  "academy",
+  "academyGraduates",
+  "teamTalk",
+  "press",
+  "managers",
+  "boardAsksVersion",
+  "scorerRace",
+  "leagueBook",
+  "setPieces",
+  "intl",
+  "facilities",
+  "books",
+  "staff",
+  "managerXp",
+  "startOptions",
+  "clubForm",
+  "live",
+  "h2h",
+  "finance",
+  "approach",
+  "pendingMove",
+  "wilderness",
+  "manager",
+  "midSeasonStart",
+  "handover",
+  "pendingAddOns",
+  "decisions",
+  "pendingVacancies"
+ ],
+ "finalInbox": [
+  [
+   43,
+   "David Nugent put it in writing. He is down as a rotation option and he has started 0 of the last 10,"
+  ],
+  [
+   43,
+   "International break: the window runs 20 Mar to 28 Mar, and your fixtures do not stop for it, so they"
+  ],
+  [
+   35,
+   "Anthony Knockaert put it in writing. He is down as a key first teamer and he has started 0 of the la"
+  ],
+  [
+   30,
+   "Gökhan Inler put it in writing. He is down as a star man and he has started 3 of the last 10, so he "
+  ],
+  [
+   24,
+   "Andy King put it in writing. He is down as a rotation option and he has started 0 of the last 10, so"
+  ],
+  [
+   20,
+   "International break: the window runs 14 Nov to 22 Nov, and your fixtures do not stop for it, so they"
+  ],
+  [
+   12,
+   "International break: the window runs 10 Oct to 18 Oct, and your fixtures do not stop for it, so they"
+  ],
+  [
+   5,
+   "International break: the window runs 5 Sep to 13 Sep, and your fixtures do not stop for it, so they "
+  ]
+ ]
+}

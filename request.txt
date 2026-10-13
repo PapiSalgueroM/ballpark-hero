@@ -1,0 +1,5 @@
+#!serve
+#!playwright
+hostile390: TAG=h390 W=390 H=844 node .rc/x/walkHostile.mjs
+tour320: TAG=t320 W=320 H=640 NATION=/Spain/ LEAGUE=0 CLUB=first FUZZ=0 MINUTES=25 node .rc/x/walkTour.mjs
+season1280lei: TAG=s1280lei W=1280 H=900 ERA=/2015-16/ NATION=/England/ LEAGUE=/Premier/ CLUB=/Leicester/ ENTRY="New year" NAME="Dan Pryce" SEASONS=2 LIVE=1 MINUTES=45 node .rc/x/walkSeason.mjs

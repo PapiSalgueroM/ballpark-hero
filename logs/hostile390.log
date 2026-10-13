@@ -1,0 +1,25 @@
+AUDIT picker-team: 2 overlapping text pairs: "Qualify for the Europa League" x "Board wants" (29x12 at 212,863)
+AUDIT base-quick-report: 4 overlapping text pairs: "🧤 Shot saved: Georginio Rutter" x "32'" (13x11 at 188,1083)
+TWO TABS {"wk0":1,"wkAfterTab2":2,"tab1Fixture":"PREMIER LEAGUE · ROUND 2 Brighton vs Chelsea Away · their strength ~86 · your XI avg 83 Play Live ⚡ Quick Sim Play live to make your calls. Quick Sim handles yo","after":{"club":"Brighton","season":1,"week":2,"cal":54,"budget":74.43,"squad":27,"inbox":1,"form":"LD","results":2,"live":false,"window":"summer"},"resultLog":["{\"week\":0,\"comp\":\"Premier League · Round 1\",\"opp\":\"Aston Villa\",\"home\":true,\"score\":\"0-1\",\"res\":\"L\",\"competition\":\"league\"}","{\"week\":1,\"comp\":\"Premier League · Round 2\",\"opp\":\"Chelsea\",\"home\":false,\
+BACK {"urlIn":"http://localhost:4173/club-manager","urlBack":"about:blank","after":{"club":"Brighton","season":1,"week":2,"cal":54,"budget":74.43,"squad":27,"inbox":1,"form":"LD","results":2,"live":true,"window":"summer"},"h1":"BRIGHTON","resumeBtn":1}
+AUDIT case-truncated-quick-report: 4 overlapping text pairs: "🅰️ Yankuba Minteh" x "21'" (15x11 at 188,1113)
+CASE truncated: hub=true resume=true h1=BRIGHTON errors=0 
+AUDIT case-budget-nan-quick-report: 6 overlapping text pairs: "🧤 Shot saved: Georginio Rutter" x "17'" (13x11 at 188,1119)
+CASE budget-nan: hub=true resume=true h1=BRIGHTON errors=0 
+AUDIT case-budget-negative-quick-report: 7 overlapping text pairs: "🧤 Shot saved: Kaoru Mitoma" x "35'" (4x11 at 188,1045)
+CASE budget-negative: hub=true resume=true h1=BRIGHTON errors=0 
+AUDIT case-week-past-end-quick-report: 4 overlapping text pairs: "⚽ Goal: Malick Fofana" x "(P)" (8x12 at 324,1159)
+CASE week-past-end: hub=true resume=true h1=BRIGHTON errors=0 
+AUDIT case-squad-five-quick-report: 2 overlapping text pairs: "🧤 Shot saved: Georginio Rutter" x "45+1'" (19x11 at 182,1163)
+CASE squad-five: hub=true resume=true h1=BRIGHTON errors=0 
+AUDIT case-xi-missing-quick-report: 5 overlapping text pairs: "🧤 Shot saved: Jack Hinshelwood" x "13'" (15x11 at 188,1247)
+CASE xi-missing: hub=true resume=true h1=BRIGHTON errors=0 
+AUDIT case-inbox-spam-quick-report: 5 overlapping text pairs: "🔁 Sub: Lewis Dunk on for Yankuba Minteh" x "46'" (15x11 at 188,1314)
+CASE inbox-spam: hub=true resume=true h1=BRIGHTON errors=0 
+AUDIT case-unknown-club-quick-report: 2 overlapping text pairs: "⚽ Goal: Enzo Fernández" x "(P)" (16x12 at 324,1228)
+CASE unknown-club: hub=true resume=true h1=BRIGHTON errors=0 
+AUDIT case-old-version-quick-report: 4 overlapping text pairs: "🧤 Shot saved: Yankuba Minteh" x "2'" (9x11 at 191,1059)
+CASE old-version: hub=true resume=true h1=BRIGHTON errors=0 
+AUDIT case-good-again-quick-report: 6 overlapping text pairs: "🧤 Shot saved: Yankuba Minteh" x "2'" (9x11 at 191,1190)
+CASE good-again: hub=true resume=true h1=BRIGHTON errors=0 
+HOSTILE h390 done: 0 findings, 0 errors, 177s

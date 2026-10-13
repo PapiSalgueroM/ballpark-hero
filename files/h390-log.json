@@ -1,0 +1,1294 @@
+{
+ "tag": "h390",
+ "width": 390,
+ "height": 844,
+ "started": "2026-10-13T00:30:41.388Z",
+ "steps": [
+  {
+   "s": 1,
+   "what": "open /club-manager"
+  },
+  {
+   "s": 6,
+   "what": "era picked"
+  },
+  {
+   "s": 7,
+   "what": "nation picked"
+  },
+  {
+   "s": 11,
+   "what": "league picked"
+  },
+  {
+   "s": 13,
+   "what": "club picked"
+  },
+  {
+   "s": 18,
+   "what": "hub reached",
+   "ok": true,
+   "save": {
+    "club": "Brighton",
+    "season": 1,
+    "week": 0,
+    "cal": 54,
+    "budget": 73,
+    "squad": 27,
+    "inbox": 0,
+    "form": "",
+    "results": 0,
+    "live": false,
+    "window": "summer"
+   }
+  },
+  {
+   "s": 22,
+   "what": "two tabs"
+  },
+  {
+   "s": 35,
+   "what": "back button mid match"
+  },
+  {
+   "s": 46,
+   "what": "case truncated"
+  },
+  {
+   "s": 59,
+   "what": "case budget-nan"
+  },
+  {
+   "s": 72,
+   "what": "case budget-negative"
+  },
+  {
+   "s": 85,
+   "what": "case week-past-end"
+  },
+  {
+   "s": 98,
+   "what": "case squad-five"
+  },
+  {
+   "s": 111,
+   "what": "case xi-missing"
+  },
+  {
+   "s": 125,
+   "what": "case inbox-spam"
+  },
+  {
+   "s": 138,
+   "what": "case unknown-club"
+  },
+  {
+   "s": 151,
+   "what": "case old-version"
+  },
+  {
+   "s": 164,
+   "what": "case good-again"
+  },
+  {
+   "s": 177,
+   "what": "end"
+  }
+ ],
+ "findings": [],
+ "errors": [],
+ "shots": [
+  {
+   "file": "h390-001-picker-era.jpg",
+   "at": "open /club-manager",
+   "bytes": 27363
+  },
+  {
+   "file": "h390-002-picker-nation.jpg",
+   "at": "era picked",
+   "bytes": 23231
+  },
+  {
+   "file": "h390-003-picker-league.jpg",
+   "at": "nation picked",
+   "bytes": 27533
+  },
+  {
+   "file": "h390-004-picker-team.jpg",
+   "at": "league picked",
+   "bytes": 113851
+  },
+  {
+   "file": "h390-005-picker-confirm-bar.jpg",
+   "at": "league picked",
+   "bytes": 30021
+  },
+  {
+   "file": "h390-006-manager-form.jpg",
+   "at": "club picked",
+   "bytes": 72125
+  },
+  {
+   "file": "h390-007-base-quick-report.jpg",
+   "at": "hub reached",
+   "bytes": 100497
+  },
+  {
+   "file": "h390-008-two-tabs-tab1-report.jpg",
+   "at": "two tabs",
+   "bytes": 54186
+  },
+  {
+   "file": "h390-009-after-back-in-match.jpg",
+   "at": "back button mid match",
+   "bytes": 2745
+  },
+  {
+   "file": "h390-010-after-forward.jpg",
+   "at": "back button mid match",
+   "bytes": 68297
+  },
+  {
+   "file": "h390-011-case-truncated.jpg",
+   "at": "case truncated",
+   "bytes": 87627
+  },
+  {
+   "file": "h390-012-case-truncated-quick-report.jpg",
+   "at": "case truncated",
+   "bytes": 98853
+  },
+  {
+   "file": "h390-013-case-truncated-after.jpg",
+   "at": "case truncated",
+   "bytes": 30419
+  },
+  {
+   "file": "h390-014-case-budget-nan.jpg",
+   "at": "case budget-nan",
+   "bytes": 86343
+  },
+  {
+   "file": "h390-015-case-budget-nan-quick-report.jpg",
+   "at": "case budget-nan",
+   "bytes": 96760
+  },
+  {
+   "file": "h390-016-case-budget-nan-after.jpg",
+   "at": "case budget-nan",
+   "bytes": 34861
+  },
+  {
+   "file": "h390-017-case-budget-negative.jpg",
+   "at": "case budget-negative",
+   "bytes": 86332
+  },
+  {
+   "file": "h390-018-case-budget-negative-quick-report.jpg",
+   "at": "case budget-negative",
+   "bytes": 101364
+  },
+  {
+   "file": "h390-019-case-budget-negative-after.jpg",
+   "at": "case budget-negative",
+   "bytes": 30423
+  },
+  {
+   "file": "h390-020-case-week-past-end.jpg",
+   "at": "case week-past-end",
+   "bytes": 86514
+  },
+  {
+   "file": "h390-021-case-week-past-end-quick-report.jpg",
+   "at": "case week-past-end",
+   "bytes": 100858
+  },
+  {
+   "file": "h390-022-case-week-past-end-after.jpg",
+   "at": "case week-past-end",
+   "bytes": 32299
+  },
+  {
+   "file": "h390-023-case-squad-five.jpg",
+   "at": "case squad-five",
+   "bytes": 86886
+  },
+  {
+   "file": "h390-024-case-squad-five-quick-report.jpg",
+   "at": "case squad-five",
+   "bytes": 102314
+  },
+  {
+   "file": "h390-025-case-squad-five-after.jpg",
+   "at": "case squad-five",
+   "bytes": 31195
+  },
+  {
+   "file": "h390-026-case-xi-missing.jpg",
+   "at": "case xi-missing",
+   "bytes": 86977
+  },
+  {
+   "file": "h390-027-case-xi-missing-quick-report.jpg",
+   "at": "case xi-missing",
+   "bytes": 101656
+  },
+  {
+   "file": "h390-028-case-xi-missing-after.jpg",
+   "at": "case xi-missing",
+   "bytes": 38058
+  },
+  {
+   "file": "h390-029-case-inbox-spam.jpg",
+   "at": "case inbox-spam",
+   "bytes": 86372
+  },
+  {
+   "file": "h390-030-case-inbox-spam-quick-report.jpg",
+   "at": "case inbox-spam",
+   "bytes": 92938
+  },
+  {
+   "file": "h390-031-case-inbox-spam-after.jpg",
+   "at": "case inbox-spam",
+   "bytes": 37521
+  },
+  {
+   "file": "h390-032-case-unknown-club.jpg",
+   "at": "case unknown-club",
+   "bytes": 86797
+  },
+  {
+   "file": "h390-033-case-unknown-club-quick-report.jpg",
+   "at": "case unknown-club",
+   "bytes": 98597
+  },
+  {
+   "file": "h390-034-case-unknown-club-after.jpg",
+   "at": "case unknown-club",
+   "bytes": 32565
+  },
+  {
+   "file": "h390-035-case-old-version.jpg",
+   "at": "case old-version",
+   "bytes": 86357
+  },
+  {
+   "file": "h390-036-case-old-version-quick-report.jpg",
+   "at": "case old-version",
+   "bytes": 99455
+  },
+  {
+   "file": "h390-037-case-old-version-after.jpg",
+   "at": "case old-version",
+   "bytes": 32299
+  },
+  {
+   "file": "h390-038-case-good-again.jpg",
+   "at": "case good-again",
+   "bytes": 86534
+  },
+  {
+   "file": "h390-039-case-good-again-quick-report.jpg",
+   "at": "case good-again",
+   "bytes": 94920
+  },
+  {
+   "file": "h390-040-case-good-again-after.jpg",
+   "at": "case good-again",
+   "bytes": 37074
+  }
+ ],
+ "audits": [
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [],
+   "overlaps": [],
+   "leaks": [],
+   "tinyTaps": [],
+   "scrollY": 0,
+   "docH": 22080,
+   "label": "picker-era"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [],
+   "overlaps": [],
+   "leaks": [],
+   "tinyTaps": [
+    "button.inline-flex.items-center.gap-1 \"All nations\" 76x16"
+   ],
+   "scrollY": 0,
+   "docH": 21599,
+   "label": "picker-league"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [
+    "\"Win the Premier League\" shown 81px of 115px",
+    "\"Win the Premier League\" shown 81px of 115px",
+    "\"Win the Premier League\" shown 81px of 115px",
+    "\"Win the Premier League\" shown 81px of 115px",
+    "\"Win the Premier League\" shown 81px of 115px",
+    "\"Qualify for the Champions League\" shown 81px of 165px",
+    "\"Qualify for the Europa League\" shown 81px of 144px",
+    "\"Qualify for the Europa League\" shown 81px of 144px",
+    "\"Qualify for the Conference League\" shown 81px of 167px",
+    "\"Qualify for the Conference League\" shown 81px of 167px",
+    "\"Finish in the top half\" shown 81px of 98px",
+    "\"Finish in the top half\" shown 81px of 98px",
+    "\"Finish in the top half\" shown 81px of 98px",
+    "\"Stay up. Avoid relegation\" shown 81px of 121px",
+    "\"Stay up. Avoid relegation\" shown 81px of 121px",
+    "\"Stay up. Avoid relegation\" shown 81px of 121px",
+    "\"Stay up. Avoid relegation\" shown 81px of 121px",
+    "\"Stay up. Avoid relegation\" shown 81px of 121px",
+    "\"Stay up. Avoid relegation\" shown 81px of 121px",
+    "\"Stay up. Avoid relegation\" shown 81px of 121px"
+   ],
+   "overlaps": [
+    "\"Qualify for the Europa League\" x \"Board wants\" (29x12 at 212,863)",
+    "\"Qualify for the Conference League\" x \"Board wants\" (52x12 at 212,986)"
+   ],
+   "leaks": [],
+   "tinyTaps": [
+    "button.inline-flex.items-center.gap-1 \"Premier League\" 127x16"
+   ],
+   "scrollY": 0,
+   "docH": 22791,
+   "label": "picker-team"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [],
+   "overlaps": [],
+   "leaks": [],
+   "tinyTaps": [
+    "button.inline-flex.items-center.gap-1 \"Brighton\" 66x16",
+    "button.rounded-md.border.border-border \"Previous skin\" 20x20",
+    "button.rounded-md.border.border-border \"Next skin\" 20x20",
+    "button.rounded-md.border.border-border \"Previous hair\" 20x20",
+    "button.rounded-md.border.border-border \"Next hair\" 20x20",
+    "button.rounded-md.border.border-border \"Previous colour\" 20x20",
+    "button.rounded-md.border.border-border \"Next colour\" 20x20",
+    "button.rounded-md.border.border-border \"Previous beard\" 20x20",
+    "button.rounded-md.border.border-border \"Next beard\" 20x20",
+    "button.rounded-md.border.border-border \"Previous outfit\" 20x20",
+    "button.rounded-md.border.border-border \"Next outfit\" 20x20",
+    "button.rounded-md.border.border-border \"Previous age\" 20x20",
+    "button.rounded-md.border.border-border \"Next age\" 20x20",
+    "button.w-5.h-5.rounded-full \"Navy\" 22x22",
+    "button.w-5.h-5.rounded-full \"Red\" 20x20",
+    "button.w-5.h-5.rounded-full \"Sky\" 20x20",
+    "button.w-5.h-5.rounded-full \"Green\" 20x20",
+    "button.w-5.h-5.rounded-full \"Claret\" 20x20",
+    "button.w-5.h-5.rounded-full \"Gold\" 20x20",
+    "button.w-5.h-5.rounded-full \"Black\" 20x20",
+    "button.w-5.h-5.rounded-full \"White\" 20x20"
+   ],
+   "scrollY": 101,
+   "docH": 23172,
+   "label": "manager-form"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [
+    "\"🧤 Shot saved: Alejandro Garnacho\" shown 119px of 169px",
+    "\"🧤 Shot saved: Nicolas Jackson\" shown 119px of 152px",
+    "\"🧤 Shot saved: Georginio Rutter\" shown 119px of 150px",
+    "\"🧤 Shot saved: Kaoru Mitoma\" shown 119px of 141px",
+    "\"🟨 Booked: Amadou Onana\" shown 119px of 132px",
+    "\"🟨 Booked: Luka Vuskovic\" shown 119px of 126px",
+    "\"🧤 Shot saved: Kaoru Mitoma\" shown 119px of 141px",
+    "\"🧤 Shot saved: João Gomes\" shown 119px of 134px",
+    "\"🔁 Sub: Matteo Ruggeri on for Ian Maatsen\" shown 119px of 205px",
+    "\"🎯 Penalty: Nicolas Jackson\" shown 119px of 134px",
+    "\"⚽ Goal: Nicolas Jackson\" shown 103px of 124px",
+    "\"🧤 Shot saved: Pau Torres\" shown 119px of 125px",
+    "\"🟨 Booked: Olivier Boscagli\" shown 119px of 130px"
+   ],
+   "overlaps": [
+    "\"🧤 Shot saved: Georginio Rutter\" x \"32'\" (13x11 at 188,1083)",
+    "\"🧤 Shot saved: Kaoru Mitoma\" x \"40'\" (4x11 at 188,1123)",
+    "\"🧤 Shot saved: Kaoru Mitoma\" x \"55'\" (4x11 at 188,1222)",
+    "\"⚽ Goal: Nicolas Jackson\" x \"(P)\" (16x12 at 324,1302)"
+   ],
+   "leaks": [],
+   "tinyTaps": [
+    "button.mt-2.inline-flex.items-center \"All player ratings\" 95x15"
+   ],
+   "scrollY": 42,
+   "docH": 22964,
+   "label": "base-quick-report"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [
+    "\"⚽ Goal: Ferdi Kadıoğlu 🅰️ Yankuba Minteh\" shown 119px of 206px",
+    "\"🧤 Shot saved: Pascal Struijk\" shown 119px of 136px",
+    "\"🧤 Shot saved: Matt O'Riley\" shown 119px of 131px",
+    "\"🧤 Shot saved: Joe Rodon\" shown 119px of 125px",
+    "\"🧤 Shot saved: Jean-Mattéo Bahoya\" shown 119px of 176px",
+    "\"🔁 Sub: Dominic Calvert-Lewin on for Anton Stach\" shown 119px of 240px",
+    "\"⚽ Goal: Dominic Calvert-Lewin\" shown 119px of 155px",
+    "\"🧤 Shot saved: Jean-Mattéo Bahoya\" shown 119px of 176px",
+    "\"🔁 Sub: Noah Okafor on for Jean-Mattéo Bahoya\" shown 119px of 238px",
+    "\"🔁 Sub: Chema Andrés on for Diego Gómez\" shown 119px of 209px",
+    "\"🧤 Shot saved: Dominic Calvert-Lewin\" shown 119px of 182px",
+    "\"🟨 Booked: Kaoru Mitoma\" shown 119px of 124px",
+    "\"🔁 Sub: Ilia Gruev on for Sean Longstaff\" shown 119px of 192px",
+    "\"🧤 Shot saved: Chema Andrés\" shown 119px of 145px",
+    "\"🔁 Sub: Mats Wieffer on for Ferdi Kadıoğlu\" shown 119px of 204px",
+    "\"🧤 Shot saved: Noah Okafor\" shown 119px of 136px"
+   ],
+   "overlaps": [
+    "\"🅰️ Yankuba Minteh\" x \"21'\" (15x11 at 188,1113)",
+    "\"🔁 Sub: Chema Andrés on for Diego Gómez\" x \"66'\" (8x11 at 195,1313)",
+    "\"🧤 Shot saved: Chema Andrés\" x \"78'\" (8x11 at 188,1393)",
+    "\"🔁 Sub: Mats Wieffer on for Ferdi Kadıoğ\" x \"80'\" (15x11 at 188,1413)"
+   ],
+   "leaks": [],
+   "tinyTaps": [
+    "button.mt-2.inline-flex.items-center \"All player ratings\" 95x15"
+   ],
+   "scrollY": 0,
+   "docH": 23054,
+   "label": "case-truncated-quick-report"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [
+    "\"Fans turning · prices, sponsor, the books\" shown 149px of 174px",
+    "\"Stadium, training, medical, dressing room\" shown 149px of 178px",
+    "\"Tactics, recruitment, money, the press\" shown 149px of 163px",
+    "\"Currency, the international job, haggling\" shown 149px of 169px"
+   ],
+   "overlaps": [],
+   "leaks": [],
+   "tinyTaps": [
+    "button.underline.underline-offset-2.hover:text-primary \"Managers\" 57x16",
+    "button.mt-2.text-[11px].font-bold \"📊 Match Centre: form, head to head, odds, team talk\" 290x17"
+   ],
+   "scrollY": 1361,
+   "docH": 22572,
+   "label": "case-truncated"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [
+    "\"🧤 Shot saved: Georginio Rutter\" shown 119px of 150px",
+    "\"⚽ Goal: Kaoru Mitoma 🅰️ Pascal Struijk\" shown 119px of 190px",
+    "\"🧤 Shot saved: Jack Rudoni\" shown 119px of 132px",
+    "\"🧤 Shot saved: Ephron Mason-Clark\" shown 119px of 172px",
+    "\"🧤 Shot saved: Georginio Rutter\" shown 119px of 150px",
+    "\"⚽ Goal: Ephron Mason-Clark\" shown 119px of 142px",
+    "\"🧤 Penalty saved: Yann Gboho\" shown 119px of 146px",
+    "\"⚽ Goal: Yankuba Minteh 🅰️ Georginio Rutter\" shown 119px of 214px",
+    "\"🧤 Shot saved: Sidiki Chérif\" shown 119px of 129px",
+    "\"🧤 Shot saved: Yankuba Minteh\" shown 119px of 150px",
+    "\"🟨 Booked: Ethan Pinnock\" shown 119px of 124px",
+    "\"🔁 Sub: Frank Onyeka on for Ephron Mason-Clark\" shown 119px of 239px",
+    "\"🧤 Shot saved: Yann Gboho\" shown 119px of 132px",
+    "\"🧤 Shot saved: Victor Torp\" shown 119px of 126px",
+    "\"🔁 Sub: Josh Eccles on for Victor Torp\" shown 119px of 183px",
+    "\"🧤 Shot saved: Olivier Boscagli\" shown 119px of 147px",
+    "\"🔁 Sub: Loum Tchaouna on for Yann Gboho\" shown 119px of 209px",
+    "\"🟨 Booked: Jack Hinshelwood\" shown 119px of 143px"
+   ],
+   "overlaps": [
+    "\"🧤 Shot saved: Georginio Rutter\" x \"17'\" (13x11 at 188,1119)",
+    "\"🧤 Shot saved: Georginio Rutter\" x \"29'\" (13x11 at 188,1199)",
+    "\"🅰️ Georginio Rutter\" x \"45+4'\" (21x11 at 188,1299)",
+    "\"🧤 Shot saved: Yankuba Minteh\" x \"53'\" (13x11 at 188,1359)",
+    "\"🧤 Shot saved: Olivier Boscagli\" x \"86'\" (10x11 at 188,1519)",
+    "\"🟨 Booked: Jack Hinshelwood\" x \"90+5'\" (12x11 at 182,1559)"
+   ],
+   "leaks": [],
+   "tinyTaps": [
+    "button.mt-2.inline-flex.items-center \"All player ratings\" 95x15"
+   ],
+   "scrollY": 0,
+   "docH": 23200,
+   "label": "case-budget-nan-quick-report"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [
+    "\"Fans turning · prices, sponsor, the books\" shown 149px of 174px",
+    "\"Stadium, training, medical, dressing room\" shown 149px of 178px",
+    "\"Tactics, recruitment, money, the press\" shown 149px of 163px",
+    "\"Currency, the international job, haggling\" shown 149px of 169px"
+   ],
+   "overlaps": [],
+   "leaks": [],
+   "tinyTaps": [
+    "button.underline.underline-offset-2.hover:text-primary \"Managers\" 57x16",
+    "button.mt-2.text-[11px].font-bold \"📊 Match Centre: form, head to head, odds, team talk\" 290x17"
+   ],
+   "scrollY": 1507,
+   "docH": 22502,
+   "label": "case-budget-nan"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [
+    "\"🧤 Shot saved: William Saliba\" shown 119px of 138px",
+    "\"🟨 Booked: Luka Vuskovic\" shown 119px of 126px",
+    "\"🧤 Shot saved: Kaoru Mitoma\" shown 119px of 141px",
+    "\"🧤 Shot saved: Viktor Gyökeres\" shown 119px of 149px",
+    "\"🧤 Shot saved: Yasin Ayari\" shown 119px of 126px",
+    "\"🧤 Shot saved: Martin Ødegaard\" shown 119px of 155px",
+    "\"🧤 Shot saved: Pascal Struijk\" shown 119px of 136px",
+    "\"🧤 Shot saved: Yankuba Minteh\" shown 119px of 150px",
+    "\"🧤 Shot saved: Yankuba Minteh\" shown 119px of 150px",
+    "\"🎯 Penalty: Georginio Rutter\" shown 119px of 132px",
+    "\"⚽ Goal: Georginio Rutter\" shown 103px of 123px",
+    "\"🔁 Sub: Matt O'Riley on for Diego Gómez\" shown 119px of 195px",
+    "\"🧤 Shot saved: Georginio Rutter\" shown 119px of 150px",
+    "\"⚽ Goal: Viktor Gyökeres\" shown 119px of 122px",
+    "\"🔁 Sub: Charalampos Kostoulas on for Georginio Rutter\" shown 119px of 262px",
+    "\"🧤 Shot saved: Martín Zubimendi\" shown 119px of 156px",
+    "\"🧤 Shot saved: Kaoru Mitoma\" shown 119px of 141px"
+   ],
+   "overlaps": [
+    "\"🧤 Shot saved: Kaoru Mitoma\" x \"35'\" (4x11 at 188,1045)",
+    "\"🧤 Shot saved: Yankuba Minteh\" x \"47'\" (13x11 at 188,1165)",
+    "\"🧤 Shot saved: Yankuba Minteh\" x \"48'\" (13x11 at 188,1185)",
+    "\"⚽ Goal: Georginio Rutter\" x \"(P)\" (16x12 at 153,1224)",
+    "\"🧤 Shot saved: Georginio Rutter\" x \"70'\" (13x11 at 188,1265)",
+    "\"🔁 Sub: Charalampos Kostoulas on for Geo\" x \"75'\" (14x11 at 188,1305)",
+    "\"🧤 Shot saved: Kaoru Mitoma\" x \"90+3'\" (10x11 at 182,1345)"
+   ],
+   "leaks": [],
+   "tinyTaps": [
+    "button.mt-2.inline-flex.items-center \"All player ratings\" 95x15"
+   ],
+   "scrollY": 60,
+   "docH": 22986,
+   "label": "case-budget-negative-quick-report"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [
+    "\"Fans turning · prices, sponsor, the books\" shown 149px of 174px",
+    "\"Stadium, training, medical, dressing room\" shown 149px of 178px",
+    "\"Tactics, recruitment, money, the press\" shown 149px of 163px",
+    "\"Currency, the international job, haggling\" shown 149px of 169px"
+   ],
+   "overlaps": [],
+   "leaks": [],
+   "tinyTaps": [
+    "button.underline.underline-offset-2.hover:text-primary \"Managers\" 57x16",
+    "button.mt-2.text-[11px].font-bold \"📊 Match Centre: form, head to head, odds, team talk\" 290x17"
+   ],
+   "scrollY": 1293,
+   "docH": 22502,
+   "label": "case-budget-negative"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [
+    "\"🧤 Shot saved: Diego Gómez\" shown 119px of 138px",
+    "\"🧤 Shot saved: Enzo Le Fée\" shown 119px of 134px",
+    "\"🧤 Shot saved: Kaoru Mitoma\" shown 119px of 141px",
+    "\"🎯 Penalty: Malick Fofana\" shown 119px of 123px",
+    "\"⚽ Goal: Malick Fofana\" shown 103px of 111px",
+    "\"⚽ Goal: Georginio Rutter\" shown 119px of 123px",
+    "\"🧤 Shot saved: Brian Brobbey\" shown 119px of 143px",
+    "\"🧤 Shot saved: Trai Hume\" shown 119px of 122px",
+    "\"🔁 Sub: Chema Andrés on for Diego Gómez\" shown 119px of 209px",
+    "\"🟨 Booked: Jack Hinshelwood\" shown 119px of 143px",
+    "\"🔁 Sub: Chemsdine Talbi on for Brian Brobbey\" shown 119px of 220px",
+    "\"🔁 Sub: Evan Ferguson on for Georginio Rutter\" shown 119px of 222px",
+    "\"🟥 Sent off: Pascal Struijk\" shown 119px of 126px"
+   ],
+   "overlaps": [
+    "\"⚽ Goal: Malick Fofana\" x \"(P)\" (8x12 at 324,1159)",
+    "\"🔁 Sub: Chema Andrés on for Diego Gómez\" x \"65'\" (8x11 at 195,1279)",
+    "\"🟨 Booked: Jack Hinshelwood\" x \"72'\" (6x11 at 188,1299)",
+    "\"🔁 Sub: Evan Ferguson on for Georginio R\" x \"80'\" (7x11 at 196,1339)"
+   ],
+   "leaks": [],
+   "tinyTaps": [
+    "button.mt-2.inline-flex.items-center \"All player ratings\" 95x15"
+   ],
+   "scrollY": 60,
+   "docH": 23059,
+   "label": "case-week-past-end-quick-report"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [
+    "\"Fans turning · prices, sponsor, the books\" shown 149px of 174px",
+    "\"Stadium, training, medical, dressing room\" shown 149px of 178px",
+    "\"Tactics, recruitment, money, the press\" shown 149px of 163px",
+    "\"Currency, the international job, haggling\" shown 149px of 169px",
+    "\"Nobody has an opinion\" shown 149px of 160px"
+   ],
+   "overlaps": [],
+   "leaks": [],
+   "tinyTaps": [
+    "button.underline.underline-offset-2.hover:text-primary \"Managers\" 57x16",
+    "button.mt-2.text-[11px].font-bold \"📊 Match Centre: form, head to head, odds, team talk\" 290x17"
+   ],
+   "scrollY": 1366,
+   "docH": 22502,
+   "label": "case-week-past-end"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [
+    "\"🧤 Shot saved: Yasin Ayari\" shown 119px of 126px",
+    "\"🧤 Shot saved: Anan Khalaili\" shown 119px of 135px",
+    "\"🧤 Shot saved: Jørgen Strand Larsen\" shown 119px of 178px",
+    "\"🟨 Booked: Olivier Boscagli\" shown 119px of 130px",
+    "\"🧤 Shot saved: Georginio Rutter\" shown 119px of 150px",
+    "\"🟨 Booked: Tyrick Mitchell\" shown 119px of 124px",
+    "\"🧤 Shot saved: Jack Hinshelwood\" shown 119px of 160px",
+    "\"🔁 Sub: Jean-Philippe Mateta on for Daichi Kamada\" shown 119px of 247px",
+    "\"🟨 Booked: Ferdi Kadıoğlu\" shown 119px of 125px",
+    "\"🧤 Shot saved: Jean-Philippe Mateta\" shown 119px of 175px"
+   ],
+   "overlaps": [
+    "\"🧤 Shot saved: Georginio Rutter\" x \"45+1'\" (19x11 at 182,1163)",
+    "\"🧤 Shot saved: Jack Hinshelwood\" x \"62'\" (15x11 at 188,1262)"
+   ],
+   "leaks": [],
+   "tinyTaps": [
+    "button.mt-2.inline-flex.items-center \"All player ratings\" 95x15"
+   ],
+   "scrollY": 60,
+   "docH": 22944,
+   "label": "case-squad-five-quick-report"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [
+    "\"Fans turning · prices, sponsor, the books\" shown 149px of 174px",
+    "\"Stadium, training, medical, dressing room\" shown 149px of 178px",
+    "\"Tactics, recruitment, money, the press\" shown 149px of 163px",
+    "\"Currency, the international job, haggling\" shown 149px of 169px"
+   ],
+   "overlaps": [],
+   "leaks": [],
+   "tinyTaps": [
+    "button.underline.underline-offset-2.hover:text-primary \"Managers\" 57x16",
+    "button.mt-2.text-[11px].font-bold \"📊 Match Centre: form, head to head, odds, team talk\" 290x17",
+    "button.mt-2.block.mx-auto \"🥅 Shootout order: not set, tap to pick your takers\" 271x17"
+   ],
+   "scrollY": 1251,
+   "docH": 22526,
+   "label": "case-squad-five"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [
+    "\"Manchester United\" shown 109px of 130px",
+    "\"🧤 Shot saved: Matheus Cunha\" shown 119px of 149px",
+    "\"🧤 Shot saved: Yasin Ayari\" shown 119px of 126px",
+    "\"🟨 Booked: Kaoru Mitoma\" shown 119px of 124px",
+    "\"🟨 Booked: Andrey Santos\" shown 119px of 127px",
+    "\"🧤 Shot saved: Jack Hinshelwood\" shown 119px of 160px",
+    "\"⚽ Goal: Bruno Fernandes\" shown 119px of 125px",
+    "\"🧤 Shot saved: Bruno Fernandes\" shown 119px of 157px",
+    "\"🟥 Sent off: Ferdi Kadıoğlu\" shown 119px of 128px",
+    "\"🔁 Sub: Chema Andrés on for Diego Gómez\" shown 119px of 209px",
+    "\"🔁 Sub: Lewis Dunk on for Yankuba Minteh\" shown 119px of 204px",
+    "\"🔁 Sub: Youri Tielemans on for Carlos Baleba\" shown 119px of 215px",
+    "\"🔁 Sub: Mason Mount on for Andrey Santos\" shown 119px of 209px",
+    "\"🧤 Shot saved: Luka Vuskovic\" shown 119px of 143px",
+    "\"🧤 Shot saved: Matheus Cunha\" shown 119px of 149px",
+    "\"🩹 Injured: Olivier Boscagli\" shown 119px of 127px",
+    "\"🔁 Sub: Adam Webster on for Olivier Boscagli\" shown 119px of 217px"
+   ],
+   "overlaps": [
+    "\"🧤 Shot saved: Jack Hinshelwood\" x \"13'\" (15x11 at 188,1247)",
+    "\"🔁 Sub: Chema Andrés on for Diego Gómez\" x \"46'\" (8x11 at 195,1367)",
+    "\"🔁 Sub: Lewis Dunk on for Yankuba Minteh\" x \"46'\" (15x11 at 188,1387)",
+    "\"🧤 Shot saved: Luka Vuskovic\" x \"76'\" (6x11 at 188,1487)",
+    "\"🔁 Sub: Adam Webster on for Olivier Bosc\" x \"77'\" (9x11 at 194,1547)"
+   ],
+   "leaks": [],
+   "tinyTaps": [
+    "button.mt-2.inline-flex.items-center \"All player ratings\" 95x15"
+   ],
+   "scrollY": 85,
+   "docH": 23033,
+   "label": "case-xi-missing-quick-report"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [
+    "\"Fans turning · prices, sponsor, the books\" shown 149px of 174px",
+    "\"Stadium, training, medical, dressing room\" shown 149px of 178px",
+    "\"Tactics, recruitment, money, the press\" shown 149px of 163px",
+    "\"Currency, the international job, haggling\" shown 149px of 169px"
+   ],
+   "overlaps": [],
+   "leaks": [],
+   "tinyTaps": [
+    "button.underline.underline-offset-2.hover:text-primary \"Managers\" 57x16",
+    "button.mt-2.text-[11px].font-bold \"📊 Match Centre: form, head to head, odds, team talk\" 290x17"
+   ],
+   "scrollY": 1595,
+   "docH": 22502,
+   "label": "case-xi-missing"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [
+    "\"🧤 Shot saved: Florian Wirtz\" shown 119px of 134px",
+    "\"🟨 Booked: Conor Bradley\" shown 119px of 126px",
+    "\"🧤 Shot saved: Milos Kerkez\" shown 119px of 135px",
+    "\"🧤 Shot saved: Diego Gómez\" shown 119px of 138px",
+    "\"🩹 Injured: Luka Vuskovic\" shown 119px of 123px",
+    "\"🔁 Sub: Lewis Dunk on for Yankuba Minteh\" shown 119px of 204px",
+    "\"🔁 Sub: Femi Azeez on for Kaoru Mitoma\" shown 119px of 198px",
+    "\"🔁 Sub: Mats Wieffer on for Luka Vuskovic\" shown 119px of 205px",
+    "\"🧤 Shot saved: Hugo Ekitiké\" shown 119px of 131px",
+    "\"🔁 Sub: Trey Nyoni on for Alexis Mac Allister\" shown 119px of 211px",
+    "\"🧤 Shot saved: Hugo Ekitiké\" shown 119px of 131px",
+    "\"⚽ Goal: Georginio Rutter 🅰️ Femi Azeez\" shown 119px of 198px",
+    "\"🔁 Sub: Bradley Barcola on for Ryan Gravenberch\" shown 119px of 241px",
+    "\"🔁 Sub: Cody Gakpo on for Conor Bradley\" shown 119px of 201px",
+    "\"🧤 Shot saved: Georginio Rutter\" shown 119px of 150px",
+    "\"🧤 Shot saved: Dominik Szoboszlai\" shown 119px of 165px",
+    "\"🟨 Booked: Jack Hinshelwood\" shown 119px of 143px"
+   ],
+   "overlaps": [
+    "\"🔁 Sub: Lewis Dunk on for Yankuba Minteh\" x \"46'\" (15x11 at 188,1314)",
+    "\"🔁 Sub: Mats Wieffer on for Luka Vuskovi\" x \"46'\" (15x11 at 188,1354)",
+    "\"🅰️ Femi Azeez\" x \"68'\" (12x11 at 191,1434)",
+    "\"🧤 Shot saved: Georginio Rutter\" x \"75'\" (13x11 at 188,1494)",
+    "\"🟨 Booked: Jack Hinshelwood\" x \"80'\" (6x11 at 188,1534)"
+   ],
+   "leaks": [],
+   "tinyTaps": [
+    "button.mt-2.inline-flex.items-center \"All player ratings\" 95x15"
+   ],
+   "scrollY": 60,
+   "docH": 23258,
+   "label": "case-inbox-spam-quick-report"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [
+    "\"Fans turning · prices, sponsor, the books\" shown 149px of 174px",
+    "\"Stadium, training, medical, dressing room\" shown 149px of 178px",
+    "\"Tactics, recruitment, money, the press\" shown 149px of 163px",
+    "\"Currency, the international job, haggling\" shown 149px of 169px"
+   ],
+   "overlaps": [],
+   "leaks": [],
+   "tinyTaps": [
+    "button.underline.underline-offset-2.hover:text-primary \"Managers\" 57x16",
+    "button.mt-2.text-[11px].font-bold \"📊 Match Centre: form, head to head, odds, team talk\" 290x17"
+   ],
+   "scrollY": 1565,
+   "docH": 22502,
+   "label": "case-inbox-spam"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [
+    "\"Manchester City\" shown 109px of 112px",
+    "\"🧤 Shot saved: Phil Foden\" shown 119px of 123px",
+    "\"🧤 Shot saved: Phil Foden\" shown 119px of 123px",
+    "\"🧤 Shot saved: Erling Haaland\" shown 119px of 142px",
+    "\"🎯 Penalty: Enzo Fernández\" shown 119px of 135px",
+    "\"⚽ Goal: Enzo Fernández\" shown 103px of 120px",
+    "\"🔁 Sub: Costinha on for Mats Wieffer\" shown 119px of 177px",
+    "\"⚽ Goal: Antoine Semenyo\" shown 119px of 128px",
+    "\"🔁 Sub: Matt O'Riley on for Yasin Ayari\" shown 119px of 183px",
+    "\"🧤 Shot saved: Jack Hinshelwood\" shown 119px of 160px",
+    "\"🟨 Booked: Erling Haaland\" shown 119px of 125px",
+    "\"🔁 Sub: Matheus Nunes on for Phil Foden\" shown 119px of 198px",
+    "\"🧤 Shot saved: Rayan Cherki\" shown 119px of 137px",
+    "\"🧤 Shot saved: Erling Haaland\" shown 119px of 142px"
+   ],
+   "overlaps": [
+    "\"⚽ Goal: Enzo Fernández\" x \"(P)\" (16x12 at 324,1228)",
+    "\"🧤 Shot saved: Jack Hinshelwood\" x \"65'\" (15x11 at 188,1368)"
+   ],
+   "leaks": [],
+   "tinyTaps": [
+    "button.mt-2.inline-flex.items-center \"All player ratings\" 95x15"
+   ],
+   "scrollY": 60,
+   "docH": 23090,
+   "label": "case-unknown-club-quick-report"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [
+    "\"Fans turning · prices, sponsor, the books\" shown 149px of 174px",
+    "\"Stadium, training, medical, dressing room\" shown 149px of 178px",
+    "\"Tactics, recruitment, money, the press\" shown 149px of 163px",
+    "\"Currency, the international job, haggling\" shown 149px of 169px"
+   ],
+   "overlaps": [],
+   "leaks": [],
+   "tinyTaps": [
+    "button.underline.underline-offset-2.hover:text-primary \"Managers\" 57x16",
+    "button.mt-2.text-[11px].font-bold \"📊 Match Centre: form, head to head, odds, team talk\" 290x17"
+   ],
+   "scrollY": 1397,
+   "docH": 22502,
+   "label": "case-unknown-club"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [
+    "\"🧤 Shot saved: Yankuba Minteh\" shown 119px of 150px",
+    "\"⚽ Goal: Yankuba Minteh 🅰️ Ferdi Kadıoğlu\" shown 119px of 206px",
+    "\"🟨 Booked: Sepp van den Berg\" shown 119px of 149px",
+    "\"🧤 Shot saved: Yankuba Minteh\" shown 119px of 150px",
+    "\"🧤 Shot saved: Nathan Collins\" shown 119px of 142px",
+    "\"🧤 Shot saved: Yasin Ayari\" shown 119px of 126px",
+    "\"🧤 Shot saved: Michael Kayode\" shown 119px of 151px",
+    "\"🧤 Shot saved: Keane Lewis-Potter\" shown 119px of 168px",
+    "\"🧤 Shot saved: Georginio Rutter\" shown 119px of 150px",
+    "\"🟨 Booked: Yegor Yarmolyuk\" shown 119px of 138px",
+    "\"🔁 Sub: Kevin Schade on for Mamadou Sangaré\" shown 119px of 231px",
+    "\"🟨 Booked: Olivier Boscagli\" shown 119px of 130px",
+    "\"🟥 Sent off: Pascal Struijk\" shown 119px of 126px",
+    "\"🧤 Shot saved: Igor Thiago\" shown 119px of 128px"
+   ],
+   "overlaps": [
+    "\"🧤 Shot saved: Yankuba Minteh\" x \"2'\" (9x11 at 191,1059)",
+    "\"🅰️ Ferdi Kadıoğlu\" x \"13'\" (15x11 at 188,1099)",
+    "\"🧤 Shot saved: Yankuba Minteh\" x \"24'\" (13x11 at 188,1139)",
+    "\"🧤 Shot saved: Georginio Rutter\" x \"51'\" (13x11 at 188,1259)"
+   ],
+   "leaks": [],
+   "tinyTaps": [
+    "button.mt-2.inline-flex.items-center \"All player ratings\" 95x15"
+   ],
+   "scrollY": 60,
+   "docH": 23059,
+   "label": "case-old-version-quick-report"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [
+    "\"Fans grumbling · prices, sponsor, the books\" shown 149px of 188px",
+    "\"Stadium, training, medical, dressing room\" shown 149px of 178px",
+    "\"Tactics, recruitment, money, the press\" shown 149px of 163px",
+    "\"Currency, the international job, haggling\" shown 149px of 169px",
+    "\"Nobody has an opinion\" shown 149px of 160px"
+   ],
+   "overlaps": [],
+   "leaks": [],
+   "tinyTaps": [
+    "button.underline.underline-offset-2.hover:text-primary \"Managers\" 57x16",
+    "button.mt-2.text-[11px].font-bold \"📊 Match Centre: form, head to head, odds, team talk\" 290x17"
+   ],
+   "scrollY": 1366,
+   "docH": 22502,
+   "label": "case-old-version"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [
+    "\"🧤 Shot saved: Yankuba Minteh\" shown 119px of 150px",
+    "\"🧤 Shot saved: Robinio Vaz\" shown 119px of 129px",
+    "\"🧤 Shot saved: Kaoru Mitoma\" shown 119px of 141px",
+    "\"🟨 Booked: Jack Hinshelwood\" shown 119px of 143px",
+    "\"⚽ Goal: Diego Gómez 🅰️ Yasin Ayari\" shown 119px of 177px",
+    "\"🟨 Booked: Brooke Norton-Cuffy\" shown 119px of 159px",
+    "\"⚽ Goal: Georginio Rutter\" shown 119px of 123px",
+    "\"🧤 Shot saved: Yankuba Minteh\" shown 119px of 150px",
+    "\"🧤 Shot saved: Kaoru Mitoma\" shown 119px of 141px",
+    "\"🔁 Sub: Matt O'Riley on for Jack Hinshelwood\" shown 119px of 217px",
+    "\"🔁 Sub: Ilyas Ansah on for Brooke Norton-Cuffy\" shown 119px of 231px",
+    "\"🧤 Shot saved: Matt O'Riley\" shown 119px of 131px",
+    "\"🎯 Penalty: Georginio Rutter\" shown 119px of 132px",
+    "\"⚽ Goal: Georginio Rutter\" shown 103px of 123px",
+    "\"🔁 Sub: Lewis Dunk on for Olivier Boscagli\" shown 119px of 201px",
+    "\"🟨 Booked: Jens Hjertø-Dahl\" shown 119px of 137px",
+    "\"🧤 Shot saved: Hidemasa Morita\" shown 119px of 154px",
+    "\"🔁 Sub: Joe Gelhardt on for Tim Iroegbunam\" shown 119px of 213px"
+   ],
+   "overlaps": [
+    "\"🧤 Shot saved: Yankuba Minteh\" x \"2'\" (9x11 at 191,1190)",
+    "\"🟨 Booked: Jack Hinshelwood\" x \"17'\" (6x11 at 188,1250)",
+    "\"🧤 Shot saved: Yankuba Minteh\" x \"45+2'\" (19x11 at 182,1330)",
+    "\"🧤 Shot saved: Kaoru Mitoma\" x \"46'\" (4x11 at 188,1369)",
+    "\"🔁 Sub: Matt O'Riley on for Jack Hinshel\" x \"58'\" (15x11 at 188,1409)",
+    "\"⚽ Goal: Georginio Rutter\" x \"(P)\" (16x12 at 153,1529)"
+   ],
+   "leaks": [],
+   "tinyTaps": [
+    "button.mt-2.inline-flex.items-center \"All player ratings\" 95x15"
+   ],
+   "scrollY": 60,
+   "docH": 23251,
+   "label": "case-good-again-quick-report"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [
+    "\"Fans grumbling · prices, sponsor, the books\" shown 149px of 188px",
+    "\"Stadium, training, medical, dressing room\" shown 149px of 178px",
+    "\"Tactics, recruitment, money, the press\" shown 149px of 163px",
+    "\"Currency, the international job, haggling\" shown 149px of 169px"
+   ],
+   "overlaps": [],
+   "leaks": [],
+   "tinyTaps": [
+    "button.underline.underline-offset-2.hover:text-primary \"Managers\" 57x16",
+    "button.mt-2.text-[11px].font-bold \"📊 Match Centre: form, head to head, odds, team talk\" 290x17"
+   ],
+   "scrollY": 1558,
+   "docH": 22502,
+   "label": "case-good-again"
+  }
+ ],
+ "cases": [
+  {
+   "label": "truncated",
+   "hadResume": true,
+   "hub": true,
+   "h1": "BRIGHTON",
+   "text": "DOUKNOWBALL\nBack\nTrack stats\nBrighton\n2026-27 · Season 1\n#16 in league\n£74.4m\nManagers\nBoard\nUnder pressure\nFans\nTurning\nHome\nSquad\nTactics\nTable\nMarket\n☀️ Transfer window open. Tap to do business before your next match\nPREMIER LEAGUE · ROUND 3\nBrighton vs Leeds United\nHome · their strength ~83 · your XI avg 83\nResume match\n⚡ Quick Sim\n\nPlay live to make your calls. Quick Sim handles your subs.\n\n📋\nBOARD\n2 behind\nContenders patience\n📩\nINBOX\n1 new\nRafa Cardoso, agent\n📅\nCALENDAR\nD 0-0\nNext: Leed",
+   "played": "DOUKNOWBALL\nBack\nTrack stats\nFULL TIME\nPREMIER LEAGUE · ROUND 3\n🏟️ Your ground · crowd 40,391\n45+3'\nADDED TIME\n90+4'\nDRAW\nBrighton\n1 - 1\nLeeds United\nBRIGHTON\n\n⚽ Ferdi Kadıoğlu 21' · 🅰️ Yankuba Minteh\n\nLEEDS UNITED\n\n⚽ Dominic Calvert-Lewin 62'\n\n🟨 Kaoru Mitoma 74'\n▲ Chema Andrés ▼ Diego Gómez 66'\n",
+   "errors": [],
+   "saveAfter": {
+    "club": "Brighton",
+    "season": 1,
+    "week": 3,
+    "cal": 54,
+    "budget": 75.94,
+    "squad": 27,
+    "inbox": 2,
+    "form": "LDD",
+    "results": 3,
+    "live": false,
+    "window": "summer"
+   }
+  },
+  {
+   "label": "budget-nan",
+   "hadResume": true,
+   "hub": true,
+   "h1": "BRIGHTON",
+   "text": "DOUKNOWBALL\nBack\nTrack stats\nBrighton\n2026-27 · Season 1\n#16 in league\n£75.9m\nManagers\nBoard\nUnder pressure\nFans\nTurning\nHome\nSquad\nTactics\nTable\nMarket\n☀️ Transfer window open. Tap to do business before your next match\nPREMIER LEAGUE · ROUND 4\nBrighton vs Coventry City\nAway · their strength ~80 · your XI avg 83\nPlay Live\n⚡ Quick Sim\n\nPlay live to make your calls. Quick Sim handles your subs.\n\n📊 Match Centre: form, head to head, odds, team talk\n📋\nBOARD\n2 behind\nContenders patience\n📩\nINBOX\n2 n",
+   "played": "DOUKNOWBALL\nBack\nTrack stats\nFULL TIME\nPREMIER LEAGUE · ROUND 4\n🏟️ Away day · crowd 34,746\n45+5'\nADDED TIME\n90+8'\nDEFEAT\nCoventry City\n4 - 2\nBrighton\nBRIGHTON\n\n⚽ Kaoru Mitoma 20' · 🅰️ Pascal Struijk\n\n⚽ Yankuba Minteh 45+4' · 🅰️ Georginio Rutter\n\nCOVENTRY CITY\n\n⚽ Sidiki Chérif 42'\n\n⚽ Ephron Mason-",
+   "errors": [],
+   "saveAfter": {
+    "club": "Brighton",
+    "season": 1,
+    "week": 5,
+    "cal": 54,
+    "budget": 75.94,
+    "squad": 27,
+    "inbox": 3,
+    "form": "LDDL",
+    "results": 4,
+    "live": false,
+    "window": null
+   }
+  },
+  {
+   "label": "budget-negative",
+   "hadResume": true,
+   "hub": true,
+   "h1": "BRIGHTON",
+   "text": "DOUKNOWBALL\nBack\nTrack stats\nBrighton\n2026-27 · Season 1\n#19 in league\n£75.9m\nManagers\nBoard\nUnder pressure\nFans\nTurning\nHome\nSquad\nTactics\nTable\nMarket\nPREMIER LEAGUE · ROUND 5\nBrighton vs Arsenal\nHome · their strength ~91 · your XI avg 83\nPlay Live\n⚡ Quick Sim\n\nPlay live to make your calls. Quick Sim handles your subs.\n\n📊 Match Centre: form, head to head, odds, team talk\n📋\nBOARD\n3 behind\nContenders patience\n📩\nINBOX\n3 new\nYour assistant\n📅\nCALENDAR\nL 2-4\nNext: Arsenal\n🏆\nLEAGUE\n#19\nForm: L D",
+   "played": "DOUKNOWBALL\nBack\nTrack stats\nFULL TIME\nPREMIER LEAGUE · ROUND 5\n🏟️ Your ground · crowd 44,403\n45+3'\nADDED TIME\n90+6'\nDEFEAT\nBrighton\n1 - 2\nArsenal\nBRIGHTON\n\n⚽ Georginio Rutter 59' (P)\n\nARSENAL\n\n⚽ Viktor Gyökeres 73'\n\n⚽ Declan Rice 90+4'\n\n🟨 Luka Vuskovic 32'\n▲ Matt O'Riley ▼ Diego Gómez 63'\n▲ Chara",
+   "errors": [],
+   "saveAfter": {
+    "club": "Brighton",
+    "season": 1,
+    "week": 6,
+    "cal": 54,
+    "budget": 77.6,
+    "squad": 27,
+    "inbox": 3,
+    "form": "LDDLL",
+    "results": 5,
+    "live": false,
+    "window": null
+   }
+  },
+  {
+   "label": "week-past-end",
+   "hadResume": true,
+   "hub": true,
+   "h1": "BRIGHTON",
+   "text": "DOUKNOWBALL\nBack\nTrack stats\nBrighton\n2026-27 · Season 1\n#19 in league\n£77.6m\nManagers\nBoard\nUnder pressure\nFans\nTurning\nHome\nSquad\nTactics\nTable\nMarket\nPREMIER LEAGUE · ROUND 6\nBrighton vs Sunderland\nAway · their strength ~81 · your XI avg 83\nPlay Live\n⚡ Quick Sim\n\nPlay live to make your calls. Quick Sim handles your subs.\n\n📊 Match Centre: form, head to head, odds, team talk\n📋\nBOARD\n3 behind\nContenders patience\n📩\nINBOX\n3 new\nYour assistant\n📅\nCALENDAR\nL 1-2\nNext: Sunderland\n🏆\nLEAGUE\n#19\nFor",
+   "played": "DOUKNOWBALL\nBack\nTrack stats\nFULL TIME\nPREMIER LEAGUE · ROUND 6\n🏟️ Away day · crowd 28,358\n45+5'\nADDED TIME\n90+4'\nDRAW\nSunderland\n2 - 2\nBrighton\nBRIGHTON\n\n⚽ Georginio Rutter 28'\n\n⚽ Yankuba Minteh 44'\n\nSUNDERLAND\n\n⚽ Nordi Mukiele 6'\n\n⚽ Malick Fofana 12' (P)\n\n🟨 Jack Hinshelwood 72'\n🟥 Pascal Struijk",
+   "errors": [],
+   "saveAfter": {
+    "club": "Brighton",
+    "season": 1,
+    "week": 7,
+    "cal": 54,
+    "budget": 77.6,
+    "squad": 27,
+    "inbox": 3,
+    "form": "DDLLD",
+    "results": 6,
+    "live": false,
+    "window": null
+   }
+  },
+  {
+   "label": "squad-five",
+   "hadResume": true,
+   "hub": true,
+   "h1": "BRIGHTON",
+   "text": "DOUKNOWBALL\nBack\nTrack stats\nBrighton\n2026-27 · Season 1\n#19 in league\n£77.6m\nManagers\nBoard\nUnder pressure\nFans\nTurning\nHome\nSquad\nTactics\nTable\nMarket\nPREMIER LEAGUE · ROUND 7\nBrighton vs Crystal Palace\nHome · their strength ~84 · your XI avg 83\nPlay Live\n⚡ Quick Sim\n\nPlay live to make your calls. Quick Sim handles your subs.\n\n📊 Match Centre: form, head to head, odds, team talk\n📋\nBOARD\n3 behind\nContenders patience\n📩\nINBOX\n4 new\nRed card appeal\n📅\nCALENDAR\nD 2-2\nNext: Crystal Palace\n🏆\nLEAGU",
+   "played": "DOUKNOWBALL\nBack\nTrack stats\nFULL TIME\nPREMIER LEAGUE · ROUND 7\n🏟️ Your ground · crowd 43,303\n45+4'\nADDED TIME\n90+8'\nVICTORY\nBrighton\n1 - 0\nCrystal Palace\nBRIGHTON\n\n⚽ Kaoru Mitoma 15'\n\nCRYSTAL PALACE\n\n-\n\n🟨 Olivier Boscagli 36'\n🟨 Diego Gómez 51'\n🟨 Ferdi Kadıoğlu 83'\nCP 🟨 Ismaïla Sarr 18'\nCP 🟨 A",
+   "errors": [],
+   "saveAfter": {
+    "club": "Brighton",
+    "season": 1,
+    "week": 9,
+    "cal": 54,
+    "budget": 79.21,
+    "squad": 27,
+    "inbox": 4,
+    "form": "DLLDW",
+    "results": 7,
+    "live": false,
+    "window": null
+   }
+  },
+  {
+   "label": "xi-missing",
+   "hadResume": true,
+   "hub": true,
+   "h1": "BRIGHTON",
+   "text": "DOUKNOWBALL\nBack\nTrack stats\nBrighton\n2026-27 · Season 1\n#17 in league\n£79.2m\nManagers\nBoard\nUnder pressure\nFans\nTurning\nHome\nSquad\nTactics\nTable\nMarket\nFA CUP · ROUND OF 16\nBrighton vs Manchester United\nHome · their strength ~85 · your XI avg 83\nPlay Live\n⚡ Quick Sim\n\nPlay live to make your calls. Quick Sim handles your subs.\n\n📊 Match Centre: form, head to head, odds, team talk\n🥅 Shootout order: not set, tap to pick your takers\n📋\nBOARD\n3 behind\nContenders patience\n📩\nINBOX\n5 new\nYour assista",
+   "played": "DOUKNOWBALL\nBack\nTrack stats\nFULL TIME\nFA CUP · ROUND OF 16\n🏟️ Your ground · crowd 38,903\n45+5'\nADDED TIME\n90+5'\nDEFEAT\nBrighton\n1 - 2\nManchester United\nBRIGHTON\n\n⚽ Yankuba Minteh 40'\n\nMANCHESTER UNITED\n\n⚽ Bruno Fernandes 41'\n\n⚽ Carlos Baleba 51'\n\n🟨 Kaoru Mitoma 8'\n🟥 Ferdi Kadıoğlu 44'\n🩹 Olivier",
+   "errors": [],
+   "saveAfter": {
+    "club": "Brighton",
+    "season": 1,
+    "week": 10,
+    "cal": 54,
+    "budget": 80.66,
+    "squad": 27,
+    "inbox": 4,
+    "form": "LLDWL",
+    "results": 8,
+    "live": false,
+    "window": null
+   }
+  },
+  {
+   "label": "inbox-spam",
+   "hadResume": true,
+   "hub": true,
+   "h1": "BRIGHTON",
+   "text": "DOUKNOWBALL\nBack\nTrack stats\nBrighton\n2026-27 · Season 1\n#17 in league\n£80.7m\nManagers\nBoard\nUnder pressure\nFans\nTurning\nHome\nSquad\nTactics\nTable\nMarket\nPREMIER LEAGUE · ROUND 8\nBrighton vs Liverpool\nAway · their strength ~90 · your XI avg 83\nPlay Live\n⚡ Quick Sim\n\nPlay live to make your calls. Quick Sim handles your subs.\n\n📊 Match Centre: form, head to head, odds, team talk\n📋\nBOARD\n4 behind\nContenders patience\n📩\nINBOX\n4 new\nRed card appeal\n📅\nCALENDAR\nL 1-2\nNext: Liverpool\n🏆\nLEAGUE\n#17\nForm",
+   "played": "DOUKNOWBALL\nBack\nTrack stats\nFULL TIME\nPREMIER LEAGUE · ROUND 8\n🏟️ Away day · crowd 75,927\n45+2'\nADDED TIME\n90+7'\nDRAW\nLiverpool\n1 - 1\nBrighton\nBRIGHTON\n\n⚽ Georginio Rutter 68' · 🅰️ Femi Azeez\n\nLIVERPOOL\n\n⚽ Florian Wirtz 90'\n\n🟨 Jack Hinshelwood 80'\n🩹 Luka Vuskovic 46' (3w)\n▲ Lewis Dunk ▼ Yankuba",
+   "errors": [],
+   "saveAfter": {
+    "club": "Brighton",
+    "season": 1,
+    "week": 11,
+    "cal": 54,
+    "budget": 80.66,
+    "squad": 27,
+    "inbox": 4,
+    "form": "LDWLD",
+    "results": 9,
+    "live": false,
+    "window": null
+   }
+  },
+  {
+   "label": "unknown-club",
+   "hadResume": true,
+   "hub": true,
+   "h1": "BRIGHTON",
+   "text": "DOUKNOWBALL\nBack\nTrack stats\nBrighton\n2026-27 · Season 1\n#19 in league\n£80.7m\nManagers\nBoard\nUnder pressure\nFans\nTurning\nHome\nSquad\nTactics\nTable\nMarket\nPREMIER LEAGUE · ROUND 9\nBrighton vs Manchester City\nAway · their strength ~90 · your XI avg 83\nPlay Live\n⚡ Quick Sim\n\nPlay live to make your calls. Quick Sim handles your subs.\n\n📊 Match Centre: form, head to head, odds, team talk\n📋\nBOARD\n4 behind\nContenders patience\n📩\nINBOX\n4 new\nYour assistant\n📅\nCALENDAR\nD 1-1\nNext: Manchester City\n🏆\nLEAG",
+   "played": "DOUKNOWBALL\nBack\nTrack stats\nFULL TIME\nPREMIER LEAGUE · ROUND 9\n🏟️ Away day · crowd 66,853\n45+4'\nADDED TIME\n90+7'\nDEFEAT\nManchester City\n4 - 0\nBrighton\nBRIGHTON\n\n-\n\nMANCHESTER CITY\n\n⚽ Phil Foden 37'\n\n⚽ Enzo Fernández 45+2' (P)\n\n⚽ Antoine Semenyo 53'\n\n⚽ Marc Guéhi 90+6'\n\n🟨 Pascal Struijk 55'\n▲ Cost",
+   "errors": [],
+   "saveAfter": {
+    "club": "Brighton",
+    "season": 1,
+    "week": 12,
+    "cal": 54,
+    "budget": 80.66,
+    "squad": 27,
+    "inbox": 4,
+    "form": "DWLDL",
+    "results": 10,
+    "live": false,
+    "window": null
+   }
+  },
+  {
+   "label": "old-version",
+   "hadResume": true,
+   "hub": true,
+   "h1": "BRIGHTON",
+   "text": "DOUKNOWBALL\nBack\nTrack stats\nBrighton\n2026-27 · Season 1\n#19 in league\n£80.7m\nManagers\nBoard\nUnder pressure\nFans\nTurning\nHome\nSquad\nTactics\nTable\nMarket\nPREMIER LEAGUE · ROUND 10\nBrighton vs Brentford\nHome · their strength ~82 · your XI avg 83\nPlay Live\n⚡ Quick Sim\n\nPlay live to make your calls. Quick Sim handles your subs.\n\n📊 Match Centre: form, head to head, odds, team talk\n📋\nBOARD\n4 behind\nContenders patience\n📩\nINBOX\n3 new\nYour assistant\n📅\nCALENDAR\nL 0-4\nNext: Brentford\n🏆\nLEAGUE\n#19\nForm",
+   "played": "DOUKNOWBALL\nBack\nTrack stats\nFULL TIME\nPREMIER LEAGUE · ROUND 10\n🏟️ Your ground · crowd 48,358\n45+4'\nADDED TIME\n90+5'\nVICTORY\nBrighton\n1 - 0\nBrentford\nBRIGHTON\n\n⚽ Yankuba Minteh 13' · 🅰️ Ferdi Kadıoğlu\n\nBRENTFORD\n\n-\n\n🟨 Pascal Struijk 3'\n🟨 Olivier Boscagli 75'\n🟥 Pascal Struijk 87'\nBRENTFORD 🟨 S",
+   "errors": [],
+   "saveAfter": {
+    "club": "Brighton",
+    "season": 1,
+    "week": 14,
+    "cal": 54,
+    "budget": 82.46,
+    "squad": 27,
+    "inbox": 4,
+    "form": "WLDLW",
+    "results": 11,
+    "live": false,
+    "window": null
+   }
+  },
+  {
+   "label": "good-again",
+   "hadResume": true,
+   "hub": true,
+   "h1": "BRIGHTON",
+   "text": "DOUKNOWBALL\nBack\nTrack stats\nBrighton\n2026-27 · Season 1\n#15 in league\n£82.5m\nManagers\nBoard\nUnder pressure\nFans\nGrumbling\nHome\nSquad\nTactics\nTable\nMarket\nPREMIER LEAGUE · ROUND 11\nBrighton vs Hull City\nAway · their strength ~78 · your XI avg 83\nPlay Live\n⚡ Quick Sim\n\nPlay live to make your calls. Quick Sim handles your subs.\n\n📊 Match Centre: form, head to head, odds, team talk\n📋\nBOARD\n4 behind\nContenders patience\n📩\nINBOX\n3 new\nYour assistant\n📅\nCALENDAR\nW 1-0\nNext: Hull City\n🏆\nLEAGUE\n#15\nFo",
+   "played": "DOUKNOWBALL\nBack\nTrack stats\nFULL TIME\nPREMIER LEAGUE · ROUND 11\n🏟️ Away day · crowd 32,573\n45+5'\nADDED TIME\n90+7'\nVICTORY\nHull City\n2 - 4\nBrighton\nBRIGHTON\n\n⚽ Diego Gómez 21' · 🅰️ Yasin Ayari\n\n⚽ Georginio Rutter 41'\n\n⚽ Yankuba Minteh 47'\n\n⚽ Georginio Rutter 77' (P)\n\nHULL CITY\n\n⚽ Ilyas Ansah 74' (",
+   "errors": [],
+   "saveAfter": {
+    "club": "Brighton",
+    "season": 1,
+    "week": 15,
+    "cal": 54,
+    "budget": 82.46,
+    "squad": 27,
+    "inbox": 4,
+    "form": "LDLWW",
+    "results": 12,
+    "live": false,
+    "window": null
+   }
+  }
+ ],
+ "elapsedS": 177,
+ "clubList": [
+  "Arsenal 👑 Elite Squad 89 Budget £167m Board wants Win the Premier League",
+  "Manchester City 👑 Elite Squad 89 Budget £160m Board wants Win the Premier League",
+  "Liverpool 👑 Elite Squad 88 Budget £137m Board wants Win the Premier League",
+  "Chelsea 👑 Elite Squad 88 Budget £131m Board wants Win the Premier League",
+  "Manchester United 🥇 Contenders Squad 87 Budget £118m Board wants Win the Premier League",
+  "Tottenham 🥇 Contenders Squad 86 Budget £114m Board wants Qualify for the Champions League",
+  "Newcastle 🥇 Contenders Squad 84 Budget £69m Board wants Qualify for the Europa League",
+  "Nottingham Forest 🥇 Contenders Squad 84 Budget £70m Board wants Qualify for the Europa League",
+  "Aston Villa 🥇 Contenders Squad 84 Budget £73m Board wants Qualify for the Conference League",
+  "Crystal Palace 🥇 Contenders Squad 84 Budget £76m Board wants Qualify for the Conference League",
+  "Brentford 🥇 Contenders Squad 84 Budget £69m Board wants Finish in the top half",
+  "Bournemouth 🥇 Contenders Squad 83 Budget £68m Board wants Finish in the top half",
+  "Brighton 🥇 Contenders Squad 83 Budget £73m Board wants Finish in the top half",
+  "Everton 🥇 Contenders Squad 83 Budget £54m Board wants Stay up. Avoid relegation",
+  "Fulham ⚔️ Challengers Squad 83 Budget £54m Board wants Stay up. Avoid relegation",
+  "Sunderland ⚔️ Challengers Squad 82 Budget £50m Board wants Stay up. Avoid relegation",
+  "Leeds United ⚔️ Challengers Squad 82 Budget £48m Board wants Stay up. Avoid relegation",
+  "Ipswich Town ⚔️ Challengers Squad 80 Budget £43m Board wants Stay up. Avoid relegation",
+  "Coventry City ⚔️ Challengers Squad 79 Budget £32m Board wants Stay up. Avoid relegation",
+  "Hull City ⚔️ Challengers Squad 79 Budget £27m Board wants Stay up. Avoid relegation"
+ ],
+ "good": "{\"saveVersion\":3,\"clubName\":\"Brighton\",\"season\":1,\"week\":2,\"startYear\":2026,\"eraId\":\"now\",\"retiredNames\":[],\"retiredLastSummer\":[],\"budget\":74.43,\"boardConfidence\":54,\"sacked\":false,\"squad\":[{\"id\":\"p-luka-vuskovic\",\"name\":\"Luka Vuskovic\",\"position\":\"CB\",\"rating\":87,\"age\":18,\"fitness\":71,\"morale\":65.4,\"injuryWeeks\":0,\"suspendedMatches\":0,\"isYouth\":false,\"seasonGoals\":0,\"seasonAssists\":0,\"value\":48.8,\"wage\":59,\"contractYears\":2,\"potential\":94,\"role\":\"star\",\"lastTen\":[1,1],\"apps\":2,\"ratingSum\":12.8,\"cleanSheets\":1,\"comp\":{\"league\":{\"apps\":2,\"goals\":0,\"assists\":0,\"yellows\":1,\"reds\":0,\"ratingSum\":12.8}},\"seasonYellows\":1},{\"id\":\"p-bart-verbruggen\",\"name\":\"Bart Verbruggen\",\"position\":\"GK\",\"rating\":85,\"age\":23,\"fitness\":71,\"morale\":64.8,\"injuryWeeks\":0,\"suspendedMatches\":0,\"isYouth\":false,\"seasonGoals\":0,\"seasonAssists\":0,\"value\":32.3,\"wage\":44,\"contractYears\":3,\"potential\":86,\"role\":\"star\",\"lastTen\":[1,1],\"apps\":2,\"ratingSum\":12.4,\"cleanSheets\":1,\"comp\":{\"league\":{\"apps\":2,\"goals\":0,\"assists\":0,\"yellows\":0,\"reds\":0,\"ratingSum\":12.4}}},{\"id\":\"p-yankuba-minteh\",\"name\":\"Yankuba Minteh\",\"position\":\"RW\",\"rating\":85,\"age\":21,\"fitness\":74,\"morale\":65.4,\"injuryWeeks\":0,\"suspendedMatches\":0,\"isYouth\":false,\"seasonGoals\":0,\"seasonAssists\":0,\"value\":32.3,\"wage\":44,\"contractYears\":3,\"potential\":91,\"role\":\"star\",\"lastTen\":[1,1],\"apps\":2,\"ratingSum\":11.5,\"cleanSheets\":0,\"comp\":{\"league\":{\"apps\":2,\"goals\":0,\"assists\":0,\"yellows\":0,\"reds\":0,\"ratingSum\":11.5}}},{\"id\":\"p-ferdi-kadioglu\",\"name\":\"Ferdi Kadıoğlu\",\"position\":\"LB\",\"rating\":83,\"age\":26,\"fitness\":75,\"morale\":64.8,\"injuryWeeks\":0,\"suspendedMatches\":0,\"isYouth\":false,\"seasonGoals\":0,\"seasonAssists\":0,\"value\":24,\"wage\":35,\"contractYears\":1,\"potential\":85,\"role\":\"key\",\"lastTen\":[1,1],\"apps\":2,\"ratingSum\":11.9,\"cleanSheets\":1,\"comp\":{\"league\":{\"apps\":2,\"goals\":0,\"assists\":0,\"yellows\":1,\"reds\":0,\"ratingSum\":11.9}},\"seasonYellows\":1},{\"id\":\"p-georginio-rutter\",\"name\":\"Georginio Rutter\",\"position\":\"ST\",\"rating\":83,\"age\":23,\"fitness\":77,\"morale\":64.8,\"injuryWeeks\":0,\"suspendedMatches\":0,\"isYouth\":false,\"seasonGoals\":0,\"seasonAssists\":0,\"value\":24,\"wage\":35,\"contractYears\":4,\"potential\":86,\"role\":\"key\",\"lastTen\":[1,1],\"apps\":2,\"ratingSum\":11.9,\"cleanSheets\":0,\"comp\":{\"league\":{\"apps\":2,\"goals\":0,\"assists\":0,\"yellows\":0,\"reds\":0,\"ratingSum\":11.9}}},{\"id\":\"p-yasin-ayari\",\"name\":\"Yasin Ayari\",\"position\":\"CM\",\"rating\":83,\"age\":22,\"fitness\":72,\"morale\":64.8,\"injuryWeeks\":2,\"suspendedMatches\":0,\"isYouth\":false,\"seasonGoals\":0,\"seasonAssists\":0,\"value\":24,\"wage\":35,\"contractYears\":1,\"potential\":89,\"role\":\"key\",\"lastTen\":[1,1],\"apps\":2,\"ratingSum\":11.9,\"cleanSheets\":0,\"comp\":{\"league\":{\"apps\":2,\"goals\":0,\"assists\":0,\"yellows\":0,\"reds\":0,\"ratingSum\":11.9}}},{\"id\":\"p-jack-hinshelwood\",\"name\":\"Jack Hinshelwood\",\"position\":\"CDM\",\"rating\":83,\"age\":20,\"fitness\":73,\"morale\":64.8,\"injuryWeeks\":0,\"suspendedMatches\":0,\"isYouth\":false,\"seasonGoals\":0,\"seasonAssists\":0,\"value\":22.7,\"wage\":34,\"contractYears\":2,\"potential\":90,\"role\":\"key\",\"lastTen\":[1,1],\"apps\":2,\"ratingSum\":12.1,\"cleanSheets\":0,\"comp\":{\"league\":{\"apps\":2,\"goals\":0,\"assists\":0,\"yellows\":0,\"reds\":0,\"ratingSum\":12.1}}},{\"id\":\"p-charalampos-kostoulas\",\"name\":\"Charalampos Kostoulas\",\"position\":\"ST\",\"rating\":82,\"age\":18,\"fitness\":100,\"morale\":63.8,\"injuryWeeks\":0,\"suspendedMatches\":0,\"isYouth\":false,\"seasonGoals\":0,\"seasonAssists\":0,\"value\":20.3,\"wage\":31,\"contractYears\":3,\"potential\":91,\"role\":\"rotation\",\"lastTen\":[0,0]},{\"id\":\"p-diego-gomez\",\"name\":\"Diego Gómez\",\"position\":\"CM\",\"rating\":82,\"age\":22,\"fitness\":71,\"morale\":65.4,\"injuryWeeks\":0,\"suspendedMatches\":0,\"isYouth\":false,\"seasonGoals\":0,\"seasonAssists\":0,\"value\":20.3,\"wage\":31,\"contractYears\":3,\"potential\":86,\"role\":\"key\",\"lastTen\":[1,1],\"apps\":2,\"ratingSum\":12,\"cleanSheets\":0,\"comp\":{\"league\":{\"apps\":2,\"goals\":0,\"assists\":0,\"yellows\":0,\"reds\":0,\"ratingSum\":12}}},{\"id\":\"p-evan-ferguson\",\"name\":\"Evan Ferguson\",\"position\":\"ST\",\"rating\":82,\"age\":21,\"fitness\":100,\"morale\":63.8,\"injuryWeeks\":0,\"suspendedMatches\":0,\"isYouth\":false,\"seasonGoals\":0,\"seasonAssists\":0,\"value\":20.3,\"wage\":31,\"contractYears\":4,\"potential\":95,\"role\":\"rotation\",\"lastTen\":[0,0]},{\"id\":\"p-kaoru-mitoma\",\"name\":\"Kaoru Mitoma\",\"position\":\"LW\",\"rating\":82,\"age\":28,\"fitness\":73,\"morale\":67.4,\"injuryWeeks\":0,\"suspendedMatches\":0,\"isYouth\":false,\"seasonGoals\":0,\"seasonAssists\":0,\"value\":20.3,\"wage\":31,\"contractYears\":4,\"potential\":82,\"role\":\"key\",\"lastTen\":[1,1],\"apps\":2,\"ratingSum\":12.5,\"cleanSheets\":0,\"comp\":{\"league\":{\"apps\":2,\"goals\":0,\"assists\":0,\"yellows\":0,\"reds\":0,\"ratingSum\":12.5}}},{\"id\":\"p-mats-wieffer\",\"name\":\"Mats Wieffer\",\"position\":\"RB\",\"rating\":82,\"age\":26,\"fitness\":100,\"morale\":63.8,\"injuryWeeks\":0,\"suspendedMatches\":0,\"isYouth\":false,\"seasonGoals\":0,\"seasonAssists\":0,\"value\":20.3,\"wage\":31,\"contractYears\":4,\"potential\":83,\"role\":\"rotation\",\"lastTen\":[0,0]},{\"id\":\"p-maxim-de-cuyper\",\"name\":\"Maxim De Cuyper\",\"position\":\"LB\",\"rating\":82,\"age\":25,\"fitness\":76,\"morale\":63.8,\"injuryWeeks\":0,\"suspendedMatches\":0,\"isYouth\":false,\"seasonGoals\":0,\"seasonAssists\":0,\"value\":18,\"wage\":29,\"contractYears\":2,\"potential\":85,\"role\":\"rotation\",\"lastTen\":[0,0.26],\"apps\":1,\"ratingSum\":6.5,\"cleanSheets\":1,\"comp\":{\"league\":{\"apps\":1,\"goals\":0,\"assists\":0,\"yellows\":0,\"reds\":0,\"ratingSum\":6.5}}},{\"id\":\"p-pascal-struijk\",\"name\":\"Pascal Struijk\",\"position\":\"CB\",\"rating\":82,\"age\":26,\"fitness\":78,\"morale\":65.4,\"injuryWeeks\":0,\"suspendedMatches\":0,\"isYouth\":false,\"seasonGoals\":0,\"seasonAssists\":0,\"value\":18,\"wage\":29,\"contractYears\":3,\"potential\":82,\"role\":\"key\",\"lastTen\":[1,1],\"apps\":2,\"ratingSum\":11.7,\"cleanSheets\":1,\"comp\":{\"league\":{\"apps\":2,\"goals\":0,\"assists\":0,\"yellows\":1,\"reds\":0,\"ratingSum\":11.7}},\"seasonYellows\":1},{\"id\":\"p-matt-o-riley\",\"name\":\"Matt O'Riley\",\"position\":\"CM\",\"rating\":81,\"age\":25,\"fitness\":77,\"morale\":63.8,\"injuryWeeks\":0,\"suspendedMatches\":0,\"isYouth\":false,\"seasonGoals\":0,\"seasonAssists\":0,\"value\":16.5,\"wage\":27,\"contractYears\":2,\"potential\":83,\"role\":\"backup\",\"lastTen\":[0,0.43],\"apps\":1,\"ratingSum\":6.3,\"cleanSheets\":0,\"comp\":{\"league\":{\"apps\":1,\"goals\":0,\"assists\":0,\"yellows\":0,\"reds\":0,\"ratingSum\":6.3}}},{\"id\":\"p-stefanos-tzimas\",\"name\":\"Stefanos Tzimas\",\"position\":\"ST\",\"rating\":81,\"age\":19,\"fitness\":100,\"morale\":63.8,\"injuryWeeks\":0,\"suspendedMatches\":0,\"isYouth\":false,\"seasonGoals\":0,\"seasonAssists\":0,\"value\":16.5,\"wage\":27,\"contractYears\":2,\"potential\":92,\"role\":\"prospect\",\"lastTen\":[0,0]},{\"id\":\"p-chema-andres\",\"name\":\"Chema Andrés\",\"position\":\"CDM\",\"rating\":81,\"age\":20,\"fitness\":100,\"morale\":63.8,\"injuryWeeks\":0,\"suspendedMatches\":0,\"isYouth\":false,\"seasonGoals\":0,\"seasonAssists\":0,\"value\":16.2,\"wage\":27,\"contractYears\":2,\"potential\":88,\"role\":\"backup\",\"lastTen\":[0,0]},{\"id\":\"p-promise-david\",\"name\":\"Promise David\",\"position\":\"ST\",\"rating\":80,\"age\":24,\"fitness\":100,\"morale\":63.8,\"injuryWeeks\":0,\"suspendedMatches\":0,\"isYouth\":false,\"seasonGoals\":0,\"seasonAssists\":0,\"value\":13.5,\"wage\":23,\"contractYears\":4,\"potential\":83,\"role\":\"backup\",\"lastTen\":[0,0]},{\"id\":\"p-olivier-boscagli\",\"name\":\"Olivier Boscagli\",\"position\":\"CB\",\"rating\":79,\"age\":28,\"fitness\":76,\"morale\":66,\"injuryWeeks\":0,\"suspendedMatches\":0,\"isYouth\":false,\"seasonGoals\":0,\"seasonAssists\":0,\"value\":12,\"wage\":22,\"contractYears\":1,\"potential\":80,\"role\":\"key\",\"lastTen\":[1,1],\"apps\":2,\"ratingSum\":12.3,\"cleanSheets\":1,\"comp\":{\"league\":{\"apps\":2,\"goals\":0,\"assists\":0,\"yellows\":1,\"reds\":0,\"ratingSum\":12.3}},\"seasonYellows\":1},{\"id\":\"p-ibrahim-osman\",\"name\":\"Ibrahim Osman\",\"position\":\"LW\",\"rating\":76,\"age\":21,\"fitness\":100,\"morale\":63.8,\"injuryWeeks\":0,\"suspendedMatches\":0,\"isYouth\":false,\"seasonGoals\":0,\"seasonAssists\":0,\"value\":6.8,\"wage\":14,\"contractYears\":3,\"potential\":78,\"role\":\"backup\",\"lastTen\":[0,0]},{\"id\":\"p-jaouen-hadjam\",\"name\":\"Jaouen Hadjam\",\"position\":\"LB\",\"rating\":76,\"age\":22,\"fitness\":100,\"morale\":63.8,\"injuryWeeks\":0,\"suspendedMatches\":0,\"isYouth\":false,\"seasonGoals\":0,\"seasonAssists\":0,\"value\":6.8,\"wage\":14,\"contractYears\":2,\"potential\":79,\"role\":\"backup\",\"lastTen\":[0,0]},{\"id\":\"p-lewis-dunk\",\"name\":\"Lewis Dunk\",\"position\":\"CB\",\"rating\":76,\"age\":34,\"fitness\":100,\"morale\":63.8,\"injuryWeeks\":0,\"suspendedMatches\":0,\"isYouth\":false,\"seasonGoals\":0,\"seasonAssists\":0,\"value\":6.4,\"wage\":14,\"contractYears\":3,\"potential\":76,\"role\":\"backup\",\"lastTen\":[0,0]},{\"id\":\"p-costinha\",\"name\":\"Costinha\",\"position\":\"RB\",\"rating\":74,\"age\":25,\"fitness\":100,\"morale\":63.8,\"injuryWeeks\":0,\"suspendedMatches\":0,\"isYouth\":false,\"seasonGoals\":0,\"seasonAssists\":0,\"value\":4.5,\"wage\":11,\"contractYears\":4,\"potential\":75,\"role\":\"backup\",\"lastTen\":[0,0]},{\"id\":\"p-adam-webster\",\"name\":\"Adam Webster\",\"position\":\"CB\",\"rating\":73,\"age\":30,\"fitness\":100,\"morale\":63.8,\"injuryWeeks\":0,\"suspendedMatches\":0,\"isYouth\":false,\"seasonGoals\":0,\"seasonAssists\":0,\"value\":3.8,\"wage\":9,\"contractYears\":2,\"potential\":73,\"role\":\"backup\",\"lastTen\":[0,0]},{\"id\":\"p-femi-azeez\",\"name\":\"Femi Azeez\",\"position\":\"RM\",\"rating\":73,\"age\":24,\"fitness\":100,\"morale\":63.8,\"injuryWeeks\":0,\"suspendedMatches\":0,\"isYouth\":false,\"seasonGoals\":0,\"seasonAssists\":0,\"value\":3.8,\"wage\":9,\"contractYears\":1,\"potential\":75,\"role\":\"backup\",\"lastTen\":[0,0]},{\"id\":\"p-pascal-gross\",\"name\":\"Pascal Groß\",\"position\":\"CM\",\"rating\":72,\"age\":34,\"fitness\":100,\"morale\":63.8,\"injuryWeeks\":0,\"suspendedMatches\":0,\"isYouth\":false,\"seasonGoals\":0,\"seasonAssists\":0,\"value\":3,\"wage\":8,\"contractYears\":4,\"potential\":72,\"role\":\"backup\",\"lastTen\":[0,0]},{\"id\":\"youth-mv5y3cmw-1-388\",\"name\":\"Felix Ravenhill (Youth)\",\"position\":\"GK\",\"rating\":63,\"age\":19,\"fitness\":100,\"morale\":65.8,\"injuryWeeks\":0,\"suspendedMatches\":0,\"isYouth\":true,\"seasonGoals\":0,\"seasonAssists\":0,\"wage\":9,\"value\":0.8,\"contractYears\":4,\"potential\":78,\"role\":\"prospect\",\"lastTen\":[0,0]}],\"xiIds\":[\"p-bart-verbruggen\",\"p-luka-vuskovic\",\"p-pascal-struijk\",\"p-olivier-boscagli\",\"p-ferdi-kadioglu\",\"p-yasin-ayari\",\"p-jack-hinshelwood\",\"p-diego-gomez\",\"p-yankuba-minteh\",\"p-georginio-rutter\",\"p-kaoru-mitoma\"],\"formationIndex\":0,\"mentality\":\"balanced\",\"leagueClubs\":[\"Manchester United\",\"Hull City\",\"Newcastle\",\"Nottingham Forest\",\"Everton\",\"Crystal Palace\",\"Ipswich Town\",\"Chelsea\",\"Aston Villa\",\"Bournemouth\",\"Brentford\",\"Brighton\",\"Liverpool\",\"Leeds United\",\"Arsenal\",\"Coventry City\",\"Fulham\",\"Manchester City\",\"Sunderland\",\"Tottenham\"],\"balancedFixtures\":true,\"table\":[{\"club\":\"Manchester United\",\"w\":1,\"d\":1,\"l\":0,\"gf\":1,\"ga\":0,\"pts\":4},{\"club\":\"Hull City\",\"w\":1,\"d\":0,\"l\":1,\"gf\":3,\"ga\":3,\"pts\":3},{\"club\":\"Newcastle\",\"w\":0,\"d\":0,\"l\":2,\"gf\":2,\"ga\":5,\"pts\":0},{\"club\":\"Nottingham Forest\",\"w\":1,\"d\":0,\"l\":1,\"gf\":6,\"ga\":3,\"pts\":3},{\"club\":\"Everton\",\"w\":0,\"d\":1,\"l\":1,\"gf\":4,\"ga\":5,\"pts\":1},{\"club\":\"Crystal Palace\",\"w\":1,\"d\":0,\"l\":1,\"gf\":3,\"ga\":3,\"pts\":3},{\"club\":\"Ipswich Town\",\"w\":1,\"d\":1,\"l\":0,\"gf\":2,\"ga\":1,\"pts\":4},{\"club\":\"Chelsea\",\"w\":0,\"d\":1,\"l\":1,\"gf\":0,\"ga\":2,\"pts\":1},{\"club\":\"Aston Villa\",\"w\":1,\"d\":1,\"l\":0,\"gf\":2,\"ga\":1,\"pts\":4},{\"club\":\"Bournemouth\",\"w\":0,\"d\":1,\"l\":1,\"gf\":4,\"ga\":5,\"pts\":1},{\"club\":\"Brentford\",\"w\":1,\"d\":0,\"l\":1,\"gf\":1,\"ga\":1,\"pts\":3},{\"club\":\"Brighton\",\"w\":0,\"d\":1,\"l\":1,\"gf\":0,\"ga\":1,\"pts\":1},{\"club\":\"Liverpool\",\"w\":2,\"d\":0,\"l\":0,\"gf\":4,\"ga\":1,\"pts\":6},{\"club\":\"Leeds United\",\"w\":1,\"d\":0,\"l\":1,\"gf\":2,\"ga\":5,\"pts\":3},{\"club\":\"Arsenal\",\"w\":1,\"d\":1,\"l\":0,\"gf\":3,\"ga\":2,\"pts\":4},{\"club\":\"Coventry City\",\"w\":0,\"d\":0,\"l\":2,\"gf\":3,\"ga\":5,\"pts\":0},{\"club\":\"Fulham\",\"w\":2,\"d\":0,\"l\":0,\"gf\":4,\"ga\":0,\"pts\":6},{\"club\":\"Manchester City\",\"w\":2,\"d\":0,\"l\":0,\"gf\":4,\"ga\":2,\"pts\":6},{\"club\":\"Sunderland\",\"w\":0,\"d\":0,\"l\":2,\"gf\":1,\"ga\":4,\"pts\":0},{\"club\":\"Tottenham\",\"w\":1,\"d\":0,\"l\":1,\"gf\":3,\"ga\":3,\"pts\":3}],\"form\":[\"L\",\"D\"],\"calendar\":[{\"type\":\"league\",\"round\":0},{\"type\":\"league\",\"round\":1},{\"type\":\"league\",\"round\":2},{\"type\":\"uclGroup\",\"round\":0},{\"type\":\"league\",\"round\":3},{\"type\":\"league\",\"round\":4},{\"type\":\"league\",\"round\":5},{\"type\":\"uclGroup\",\"round\":1},{\"type\":\"league\",\"round\":6},{\"type\":\"cup\",\"round\":0,\"cupRound\":\"R16\"},{\"type\":\"league\",\"round\":7},{\"type\":\"league\",\"round\":8},{\"type\":\"uclGroup\",\"round\":2},{\"type\":\"league\",\"round\":9},{\"type\":\"league\",\"round\":10},{\"type\":\"uclGroup\",\"round\":3},{\"type\":\"league\",\"round\":11},{\"type\":\"league\",\"round\":12},{\"type\":\"uclGroup\",\"round\":4},{\"type\":\"league\",\"round\":13},{\"type\":\"league\",\"round\":14},{\"type\":\"cup\",\"round\":0,\"cupRound\":\"QF\"},{\"type\":\"league\",\"round\":15},{\"type\":\"uclGroup\",\"round\":5},{\"type\":\"league\",\"round\":16},{\"type\":\"league\",\"round\":17},{\"type\":\"league\",\"round\":18},{\"type\":\"window\",\"round\":0},{\"type\":\"league\",\"round\":19},{\"type\":\"league\",\"round\":20},{\"type\":\"league\",\"round\":21},{\"type\":\"league\",\"round\":22},{\"type\":\"uclKo\",\"round\":0,\"uclRound\":\"QF\",\"uclLeg\":1},{\"type\":\"league\",\"round\":23},{\"type\":\"uclKo\",\"round\":0,\"uclRound\":\"QF\",\"uclLeg\":2},{\"type\":\"league\",\"round\":24},{\"type\":\"league\",\"round\":25},{\"type\":\"league\",\"round\":26},{\"type\":\"cup\",\"round\":0,\"cupRound\":\"SF\"},{\"type\":\"league\",\"round\":27},{\"type\":\"league\",\"round\":28},{\"type\":\"league\",\"round\":29},{\"type\":\"uclKo\",\"round\":0,\"uclRound\":\"SF\",\"uclLeg\":1},{\"type\":\"league\",\"round\":30},{\"type\":\"uclKo\",\"round\":0,\"uclRound\":\"SF\",\"uclLeg\":2},{\"type\":\"league\",\"round\":31},{\"type\":\"league\",\"round\":32},{\"type\":\"league\",\"round\":33},{\"type\":\"cup\",\"round\":0,\"cupRound\":\"F\"},{\"type\":\"league\",\"round\":34},{\"type\":\"league\",\"round\":35},{\"type\":\"uclKo\",\"round\":0,\"uclRound\":\"F\"},{\"type\":\"league\",\"round\":36},{\"type\":\"league\",\"round\":37}],\"clubStrengths\":{\"Arsenal\":90.7,\"Aston Villa\":83.7,\"Bournemouth\":84.4,\"Brentford\":81.5,\"Brighton\":85.4,\"Chelsea\":85.5,\"Coventry City\":80.1,\"Crystal Palace\":83.6,\"Everton\":82.2,\"Fulham\":84.5,\"Hull City\":77.6,\"Ipswich Town\":81.4,\"Leeds United\":82.5,\"Liverpool\":90.3,\"Manchester City\":89.5,\"Manchester United\":84.5,\"Newcastle\":84.1,\"Nottingham Forest\":81.8,\"Sunderland\":81.2,\"Tottenham\":85.8,\"Birmingham City\":73.5,\"Blackburn Rovers\":64.2,\"Bolton Wanderers\":62.5,\"Bristol City\":72,\"Burnley\":77,\"Cardiff City\":61.5,\"Charlton Athletic\":68.5,\"Derby County\":74.7,\"Lincoln City\":62.7,\"Middlesbrough\":77.8,\"Millwall\":73.7,\"Norwich City\":74,\"Portsmouth\":65.8,\"Preston North End\":67.6,\"QPR\":72.7,\"Sheffield United\":77.5,\"Southampton\":76.6,\"Stoke City\":72.9,\"Swansea City\":72.8,\"Watford\":71.8,\"West Brom\":70.2,\"West Ham\":79.3,\"Wolves\":77.1,\"Wrexham\":75.3,\"Alavés\":71.1,\"Athletic Club\":81.3,\"Atlético Madrid\":87.4,\"Barcelona\":88.9,\"Real Betis\":81,\"Celta Vigo\":76.7,\"Deportivo La Coruña\":75.4,\"Elche\":73.2,\"Espanyol\":76.3,\"Getafe\":75.8,\"Levante\":77.3,\"Málaga\":64.1,\"Osasuna\":73.6,\"Racing Santander\":75.9,\"Rayo Vallecano\":71.7,\"Real Madrid\":91.6,\"Real Sociedad\":78.8,\"Sevilla\":78.1,\"Valencia\":76,\"Villarreal\":81.5,\"Atalanta\":83.2,\"Bologna\":78.4,\"Cagliari\":73.6,\"Como\":83.4,\"Fiorentina\":80,\"Frosinone\":71.7,\"Genoa\":78.9,\"Inter Milan\":84.5,\"Juventus\":85.3,\"Lazio\":79.5,\"Lecce\":72.5,\"AC Milan\":84.9,\"Monza\":74.5,\"Napoli\":83.5,\"Parma\":76.8,\"Roma\":84.5,\"Sassuolo\":79,\"Torino\":76.5,\"Udinese\":74.8,\"Venezia\":75.9,\"Augsburg\":75.2,\"Bayer Leverkusen\":80.9,\"Bayern Munich\":88.6,\"Borussia Dortmund\":83.4,\"Gladbach\":75.1,\"Eintracht Frankfurt\":81.8,\"Freiburg\":78.3,\"Hamburg\":77.3,\"Hoffenheim\":81.3,\"Köln\":77.1,\"Mainz\":74.3,\"RB Leipzig\":84.2,\"Schalke 04\":71.2,\"Elversberg\":68,\"Paderborn\":71.4,\"Stuttgart\":82.6,\"Union Berlin\":74.5,\"Werder Bremen\":76,\"Angers\":74.2,\"Auxerre\":74.4,\"Brest\":73.3,\"Le Havre\":72.1,\"Le Mans\":60.7,\"Lens\":77.4,\"Lille\":79.1,\"Lorient\":76.3,\"Lyon\":80.4,\"Marseille\":77.2,\"Monaco\":81.6,\"Nice\":77.6,\"Paris FC\":72.5,\"PSG\":89.9,\"Rennes\":77.5,\"Strasbourg\":79.7,\"Toulouse\":74.1,\"Troyes\":64.6,\"Ajax\":78.5,\"AZ Alkmaar\":76.9,\"ADO Den Haag\":64,\"Cambuur\":65,\"Excelsior\":60.4,\"Feyenoord\":80.2,\"Fortuna Sittard\":61,\"Go Ahead Eagles\":62.5,\"Groningen\":66.2,\"Heerenveen\":70.6,\"NEC Nijmegen\":69.7,\"PEC Zwolle\":67.2,\"PSV\":77.5,\"Sparta Rotterdam\":68.1,\"Telstar\":61.8,\"Twente\":72.8,\"Utrecht\":74.7,\"Willem II\":62.9,\"Abha\":60.4,\"Al-Ahli\":81,\"Al-Diriyah\":63.7,\"Al-Ettifaq\":65.4,\"Al-Faisaly\":65,\"Al-Fateh\":61.5,\"Al-Fayha\":59.8,\"Al-Hazem\":63.5,\"Al-Hilal\":81.8,\"Al-Ittihad\":73.8,\"Al-Khaleej\":62.900000000000006,\"Al-Kholood\":61.9,\"Al-Nassr\":74.7,\"Al-Qadsiah\":78.4,\"Al-Riyadh\":60.3,\"Al-Shabab\":69.1,\"Al-Taawoun\":66.4,\"NEOM SC\":75.4,\"Atlanta United\":71.1,\"Charlotte FC\":69.4,\"Chicago Fire\":69.5,\"FC Cincinnati\":69.4,\"Columbus Crew\":69.1,\"D.C. United\":64.5,\"Inter Miami\":73,\"CF Montréal\":66.9,\"Nashville SC\":65.5,\"New England Revolution\":69.2,\"New York City FC\":70.2,\"New York Red Bulls\":69.2,\"Orlando City\":68.9,\"Philadelphia Union\":67.2,\"Toronto FC\":69.6,\"Austin FC\":67.8,\"Colorado Rapids\":69,\"FC Dallas\":66.6,\"Houston Dynamo\":71.3,\"LA Galaxy\":65.5,\"LAFC\":69.1,\"Minnesota United\":69.4,\"Portland Timbers\":72.4,\"Real Salt Lake\":64.3,\"San Diego FC\":66.3,\"San Jose Earthquakes\":67.7,\"Seattle Sounders\":68.6,\"Sporting Kansas City\":66.1,\"St. Louis City\":65.2,\"Vancouver Whitecaps\":72.4,\"Porto\":83.6,\"Benfica\":80,\"Sporting CP\":78.7,\"Braga\":78.9,\"Vitória Guimarães\":66.9,\"Famalicão\":70.7,\"Rio Ave\":70.5,\"Casa Pia\":65,\"Estoril\":67.5,\"Moreirense\":65.5,\"Arouca\":64,\"Gil Vicente\":65.2,\"Santa Clara\":65,\"Nacional\":61.3,\"Estrela Amadora\":63.2,\"Alverca\":65.7,\"Marítimo\":63,\"Académico de Viseu\":60,\"Celtic\":76,\"Rangers\":76.5,\"Aberdeen\":61.4,\"Hearts\":64.4,\"Hibernian\":65.3,\"Dundee United\":62.7,\"Dundee\":60.4,\"Motherwell\":63.2,\"St Mirren\":66,\"Kilmarnock\":62.6,\"Falkirk\":62.7,\"St Johnstone\":59.7,\"Galatasaray\":80.4,\"Fenerbahçe\":83.1,\"Beşiktaş\":80.9,\"Trabzonspor\":79.4,\"Başakşehir\":75.6,\"Samsunspor\":72.9,\"Eyüpspor\":63.6,\"Göztepe\":71.9,\"Kasımpaşa\":66.2,\"Alanyaspor\":68.4,\"Konyaspor\":65.5,\"Gaziantep FK\":63.5,\"Gençlerbirliği\":63.8,\"Kocaelispor\":61.7,\"Rizespor\":68.3,\"Erzurumspor\":60.1,\"Amedspor\":62,\"Çorum FK\":63.3,\"Wolfsburg\":76.4,\"Heidenheim\":70.5,\"St. Pauli\":71.3,\"Bochum\":62.1,\"Hertha BSC\":67.2,\"Magdeburg\":66,\"Kaiserslautern\":67.1,\"Holstein Kiel\":66.5,\"Hannover 96\":62.400000000000006,\"Dynamo Dresden\":62.9,\"Braunschweig\":60.3,\"Greuther Fürth\":62.7,\"Nürnberg\":67.6,\"Darmstadt\":61.7,\"Arminia Bielefeld\":62.8,\"Karlsruhe\":64.2,\"Osnabrück\":60,\"Energie Cottbus\":61,\"Club Brugge\":79.5,\"Union Saint-Gilloise\":74.7,\"Anderlecht\":70.7,\"Genk\":72.4,\"Gent\":69.7,\"Antwerp\":68.5,\"Standard Liège\":66.5,\"Mechelen\":65.1,\"Charleroi\":63.5,\"Westerlo\":68.9,\"Sint-Truiden\":65.5,\"OH Leuven\":60.5,\"Cercle Brugge\":69.6,\"La Louvière\":61.7,\"Zulte Waregem\":62.5,\"Beveren\":59.4,\"Kortrijk\":61.4,\"Lommel\":62,\"RB Salzburg\":76.2,\"Sturm Graz\":67.9,\"Rapid Wien\":69.5,\"LASK\":66.5,\"Wolfsberger AC\":60.8,\"Austria Wien\":63,\"Grazer AK\":59.7,\"Hartberg\":63.8,\"Ried\":60.1,\"Altach\":62,\"WSG Tirol\":62.4,\"Austria Lustenau\":61,\"Olympiacos\":73.6,\"Panathinaikos\":75,\"AEK Athens\":73.2,\"PAOK\":75.9,\"Aris\":68,\"Asteras Tripolis\":64,\"Atromitos\":67,\"Iraklis\":63,\"Kalamata\":60,\"Kifisia\":62,\"Levadiakos\":63,\"OFI\":59.3,\"Panetolikos\":61.7,\"Volos\":60.6,\"FC Copenhagen\":74.5,\"FC Midtjylland\":74.1,\"Brøndby IF\":67.5,\"AGF\":66.5,\"FC Nordsjælland\":65,\"Viborg FF\":65.3,\"Randers FC\":61.7,\"OB\":60.4,\"Silkeborg IF\":58.7,\"Lyngby\":61.5,\"AC Horsens\":60,\"SønderjyskE\":60,\"Basel\":72.5,\"Young Boys\":72.7,\"Thun\":64,\"St. Gallen\":67.4,\"Lugano\":66.2,\"Servette\":62.9,\"Luzern\":64.7,\"Lausanne-Sport\":64.4,\"FC Zürich\":60.3,\"Grasshopper\":63.9,\"Sion\":61.7,\"Vaduz\":58.4,\"Dinamo Zagreb\":69.3,\"Hajduk Split\":70,\"Rijeka\":67.2,\"Osijek\":60.8,\"Varaždin\":66,\"Slaven Belupo\":63.5,\"Istra 1961\":63,\"Lokomotiva Zagreb\":65,\"Gorica\":66,\"Rudeš\":62,\"Flamengo\":76.8,\"Palmeiras\":79.8,\"Athletico Paranaense\":66.6,\"Fluminense\":74.4,\"Bahia\":73.5,\"Cruzeiro\":79.8,\"Atlético Mineiro\":73.3,\"Santos\":74,\"Coritiba\":64.9,\"Red Bull Bragantino\":73.5,\"São Paulo\":74.4,\"Botafogo\":75.2,\"Vitória\":69.5,\"Corinthians\":75,\"Mirassol\":65.5,\"Vasco da Gama\":76.9,\"Grêmio\":74.6,\"Internacional\":70.6,\"Remo\":59.7,\"Chapecoense\":63,\"América\":73.3,\"Guadalajara\":72.6,\"Cruz Azul\":73.8,\"Monterrey\":70.8,\"Tigres UANL\":74.2,\"Toluca\":71.9,\"Pumas UNAM\":71.5,\"Pachuca\":68.2,\"León\":67.5,\"Santos Laguna\":62.6,\"Atlas\":63.5,\"Necaxa\":69,\"Puebla\":61.1,\"Querétaro\":61,\"Tijuana\":63.400000000000006,\"FC Juárez\":65.7,\"Atlético San Luis\":67.3,\"Atlante\":62,\"Adelaide United\":62.9,\"Auckland FC\":59.2,\"Brisbane Roar\":61.3,\"Central Coast Mariners\":59.5,\"Macarthur FC\":58.1,\"Melbourne City\":62.5,\"Melbourne Victory\":60.1,\"Newcastle Jets\":62.4,\"Perth Glory\":59.1,\"Sydney FC\":62.5,\"Wellington Phoenix\":59,\"Western Sydney Wanderers\":62,\"Cremonese\":66.3,\"Verona\":72.5,\"Pisa\":73.5,\"Avellino\":63.9,\"Carrarese\":63.6,\"Catanzaro\":61.3,\"Cesena\":64.3,\"Empoli\":60,\"Entella\":60.5,\"Juve Stabia\":62,\"Mantova\":62.9,\"Modena\":58.7,\"Padova\":62.5,\"Palermo\":68,\"Sampdoria\":65.5,\"Südtirol\":65,\"Vicenza\":60.5,\"Arezzo\":63,\"Benevento\":61.1,\"Ascoli\":62.4,\"Metz\":68.5,\"Nantes\":74.7,\"Saint-Étienne\":69.9,\"Red Star FC\":59.7,\"Reims\":68.2,\"Montpellier\":66.2,\"Nancy\":59.7,\"Annecy\":62.4,\"Sochaux\":59,\"Dijon\":60,\"Pau\":61,\"Guingamp\":62.7,\"Dunkerque\":59.7,\"Grenoble\":60,\"Rodez\":59,\"Clermont\":58.7,\"Boulogne\":59.4,\"Laval\":61,\"Real Oviedo\":60.7,\"Girona\":70.2,\"Mallorca\":69,\"Eibar\":61.1,\"Castellón\":59.5,\"Almería\":63.5,\"Burgos\":59.7,\"Sabadell\":62,\"Sporting Gijón\":64.7,\"Granada\":61,\"Las Palmas\":65,\"Tenerife\":62,\"Leganés\":65.2,\"Valladolid\":60.1,\"Córdoba\":62,\"Eldense\":61,\"Cádiz\":59.6,\"FC Andorra\":59,\"Ceuta\":60,\"Albacete\":60.7,\"Zenit\":76.5,\"Krasnodar\":76,\"Spartak Moscow\":75.7,\"CSKA Moscow\":72.6,\"Lokomotiv Moscow\":73.5,\"Rubin Kazan\":72.2,\"Dynamo Moscow\":76.5,\"Rostov\":67,\"Akhmat Grozny\":67.5,\"Krylia Sovetov\":66.5,\"Baltika\":69.4,\"Orenburg\":67.6,\"Akron Tolyatti\":65,\"Dynamo Makhachkala\":65.5,\"Rodina Moscow\":66.3,\"Fakel Voronezh\":64.5},\"transferWindow\":\"summer\",\"windowWeeksLeft\":2,\"aiHeadlines\":[\"Arsenal sign Kenan Yıldız from Juventus for £71m.\",\"Crystal Palace sign Sandro Tonali from Tottenham for £72m.\",\"Real Madrid sign Michael Olise from Bayern Munich for £123m.\",\"Arsenal sign Rodri from Barcelona for £85m.\",\"💰 The window's biggest deal so far: Michael Olise to Real Madrid for £123m.\"],\"goneNames\":[\"Kenan Yıldız\",\"Sandro Tonali\",\"Michael Olise\",\"Rodri\"],\"seasonSignings\":[],\"cupRound\":\"R16\",\"cupDraw\":{\"R16\":\"Manchester United\"},\"uclField\":[\"Arsenal\",\"Manchester City\",\"Manchester United\",\"Aston Villa\",\"Barcelona\",\"Real Madrid\",\"Villarreal\",\"Atlético Madrid\",\"Inter Milan\",\"Napoli\",\"Roma\",\"Como\",\"Bayern Munich\",\"Borussia Dortmund\",\"RB Leipzig\",\"Stuttgart\",\"PSG\",\"Lens\",\"Lille\",\"PSV\",\"Feyenoord\",\"Porto\",\"Sporting CP\",\"Celtic\",\"Galatasaray\",\"Club Brugge\",\"LASK\",\"AEK Athens\",\"AGF\",\"Thun\",\"Dinamo Zagreb\",\"Hoffenheim\"],\"uclGroup\":null,\"uclKoRound\":null,\"uclDraw\":{},\"cupBracket\":[{\"round\":\"R16\",\"slot\":0,\"home\":\"Brighton\",\"away\":\"Manchester United\",\"homeGoals\":null,\"awayGoals\":null,\"winner\":null,\"mine\":true},{\"round\":\"R16\",\"slot\":1,\"home\":\"Liverpool\",\"away\":\"Ipswich Town\",\"homeGoals\":null,\"awayGoals\":null,\"winner\":null,\"mine\":false},{\"round\":\"R16\",\"slot\":2,\"home\":\"Fulham\",\"away\":\"Bournemouth\",\"homeGoals\":null,\"awayGoals\":null,\"winner\":null,\"mine\":false},{\"round\":\"R16\",\"slot\":3,\"home\":\"Arsenal\",\"away\":\"Sunderland\",\"homeGoals\":null,\"awayGoals\":null,\"winner\":null,\"mine\":false},{\"round\":\"R16\",\"slot\":4,\"home\":\"Watford\",\"away\":\"Coventry City\",\"homeGoals\":null,\"awayGoals\":null,\"winner\":null,\"mine\":false},{\"round\":\"R16\",\"slot\":5,\"home\":\"Leeds United\",\"away\":\"Brentford\",\"homeGoals\":null,\"awayGoals\":null,\"winner\":null,\"mine\":false},{\"round\":\"R16\",\"slot\":6,\"home\":\"Newcastle\",\"away\":\"Manchester City\",\"homeGoals\":null,\"awayGoals\":null,\"winner\":null,\"mine\":false},{\"round\":\"R16\",\"slot\":7,\"home\":\"Chelsea\",\"away\":\"Middlesbrough\",\"homeGoals\":null,\"awayGoals\":null,\"winner\":null,\"mine\":false}],\"world\":{\"championship\":{\"round\":4,\"table\":[{\"club\":\"Birmingham City\",\"w\":3,\"d\":0,\"l\":1,\"gf\":10,\"ga\":5,\"pts\":9},{\"club\":\"Blackburn Rovers\",\"w\":1,\"d\":0,\"l\":3,\"gf\":4,\"ga\":6,\"pts\":3},{\"club\":\"Bolton Wanderers\",\"w\":0,\"d\":2,\"l\":2,\"gf\":3,\"ga\":11,\"pts\":2},{\"club\":\"Bristol City\",\"w\":3,\"d\":0,\"l\":1,\"gf\":7,\"ga\":4,\"pts\":9},{\"club\":\"Burnley\",\"w\":1,\"d\":2,\"l\":1,\"gf\":4,\"ga\":3,\"pts\":5},{\"club\":\"Cardiff City\",\"w\":0,\"d\":0,\"l\":4,\"gf\":2,\"ga\":8,\"pts\":0},{\"club\":\"Charlton Athletic\",\"w\":1,\"d\":1,\"l\":2,\"gf\":1,\"ga\":3,\"pts\":4},{\"club\":\"Derby County\",\"w\":2,\"d\":1,\"l\":1,\"gf\":6,\"ga\":5,\"pts\":7},{\"club\":\"Lincoln City\",\"w\":0,\"d\":0,\"l\":4,\"gf\":3,\"ga\":10,\"pts\":0},{\"club\":\"Middlesbrough\",\"w\":1,\"d\":2,\"l\":1,\"gf\":7,\"ga\":6,\"pts\":5},{\"club\":\"Millwall\",\"w\":1,\"d\":0,\"l\":3,\"gf\":6,\"ga\":15,\"pts\":3},{\"club\":\"Norwich City\",\"w\":1,\"d\":2,\"l\":1,\"gf\":9,\"ga\":8,\"pts\":5},{\"club\":\"Portsmouth\",\"w\":0,\"d\":1,\"l\":3,\"gf\":3,\"ga\":10,\"pts\":1},{\"club\":\"Preston North End\",\"w\":2,\"d\":0,\"l\":2,\"gf\":7,\"ga\":4,\"pts\":6},{\"club\":\"QPR\",\"w\":1,\"d\":1,\"l\":2,\"gf\":3,\"ga\":5,\"pts\":4},{\"club\":\"Sheffield United\",\"w\":3,\"d\":1,\"l\":0,\"gf\":11,\"ga\":4,\"pts\":10},{\"club\":\"Southampton\",\"w\":2,\"d\":2,\"l\":0,\"gf\":6,\"ga\":4,\"pts\":8},{\"club\":\"Stoke City\",\"w\":3,\"d\":0,\"l\":1,\"gf\":10,\"ga\":4,\"pts\":9},{\"club\":\"Swansea City\",\"w\":1,\"d\":1,\"l\":2,\"gf\":9,\"ga\":11,\"pts\":4},{\"club\":\"Watford\",\"w\":2,\"d\":2,\"l\":0,\"gf\":7,\"ga\":2,\"pts\":8},{\"club\":\"West Brom\",\"w\":1,\"d\":1,\"l\":2,\"gf\":6,\"ga\":6,\"pts\":4},{\"club\":\"West Ham\",\"w\":4,\"d\":0,\"l\":0,\"gf\":8,\"ga\":2,\"pts\":12},{\"club\":\"Wolves\",\"w\":4,\"d\":0,\"l\":0,\"gf\":10,\"ga\":4,\"pts\":12},{\"club\":\"Wrexham\",\"w\":1,\"d\":1,\"l\":2,\"gf\":4,\"ga\":6,\"pts\":4}]},\"laliga\":{\"round\":3,\"table\":[{\"club\":\"Alavés\",\"w\":1,\"d\":0,\"l\":2,\"gf\":2,\"ga\":4,\"pts\":3},{\"club\":\"Athletic Club\",\"w\":3,\"d\":0,\"l\":0,\"gf\":6,\"ga\":1,\"pts\":9},{\"club\":\"Atlético Madrid\",\"w\":1,\"d\":0,\"l\":2,\"gf\":5,\"ga\":4,\"pts\":3},{\"club\":\"Barcelona\",\"w\":2,\"d\":0,\"l\":1,\"gf\":4,\"ga\":3,\"pts\":6},{\"club\":\"Real Betis\",\"w\":1,\"d\":0,\"l\":2,\"gf\":3,\"ga\":10,\"pts\":3},{\"club\":\"Celta Vigo\",\"w\":1,\"d\":1,\"l\":1,\"gf\":1,\"ga\":2,\"pts\":4},{\"club\":\"Deportivo La Coruña\",\"w\":1,\"d\":1,\"l\":1,\"gf\":4,\"ga\":6,\"pts\":4},{\"club\":\"Elche\",\"w\":1,\"d\":2,\"l\":0,\"gf\":4,\"ga\":1,\"pts\":5},{\"club\":\"Espanyol\",\"w\":2,\"d\":0,\"l\":1,\"gf\":5,\"ga\":2,\"pts\":6},{\"club\":\"Getafe\",\"w\":0,\"d\":0,\"l\":3,\"gf\":1,\"ga\":5,\"pts\":0},{\"club\":\"Levante\",\"w\":1,\"d\":2,\"l\":0,\"gf\":6,\"ga\":4,\"pts\":5},{\"club\":\"Málaga\",\"w\":0,\"d\":1,\"l\":2,\"gf\":4,\"ga\":8,\"pts\":1},{\"club\":\"Osasuna\",\"w\":2,\"d\":0,\"l\":1,\"gf\":4,\"ga\":4,\"pts\":6},{\"club\":\"Racing Santander\",\"w\":0,\"d\":2,\"l\":1,\"gf\":3,\"ga\":5,\"pts\":2},{\"club\":\"Rayo Vallecano\",\"w\":1,\"d\":1,\"l\":1,\"gf\":2,\"ga\":2,\"pts\":4},{\"club\":\"Real Madrid\",\"w\":3,\"d\":0,\"l\":0,\"gf\":11,\"ga\":0,\"pts\":9},{\"club\":\"Real Sociedad\",\"w\":1,\"d\":1,\"l\":1,\"gf\":3,\"ga\":2,\"pts\":4},{\"club\":\"Sevilla\",\"w\":1,\"d\":0,\"l\":2,\"gf\":4,\"ga\":7,\"pts\":3},{\"club\":\"Valencia\",\"w\":0,\"d\":1,\"l\":2,\"gf\":0,\"ga\":3,\"pts\":1},{\"club\":\"Villarreal\",\"w\":2,\"d\":0,\"l\":1,\"gf\":4,\"ga\":3,\"pts\":6}]},\"seriea\":{\"round\":3,\"table\":[{\"club\":\"Atalanta\",\"w\":3,\"d\":0,\"l\":0,\"gf\":7,\"ga\":1,\"pts\":9},{\"club\":\"Bologna\",\"w\":1,\"d\":1,\"l\":1,\"gf\":3,\"ga\":3,\"pts\":4},{\"club\":\"Cagliari\",\"w\":1,\"d\":0,\"l\":2,\"gf\":2,\"ga\":7,\"pts\":3},{\"club\":\"Como\",\"w\":1,\"d\":2,\"l\":0,\"gf\":6,\"ga\":3,\"pts\":5},{\"club\":\"Fiorentina\",\"w\":2,\"d\":0,\"l\":1,\"gf\":5,\"ga\":3,\"pts\":6},{\"club\":\"Frosinone\",\"w\":0,\"d\":1,\"l\":2,\"gf\":0,\"ga\":3,\"pts\":1},{\"club\":\"Genoa\",\"w\":0,\"d\":0,\"l\":3,\"gf\":3,\"ga\":11,\"pts\":0},{\"club\":\"Inter Milan\",\"w\":1,\"d\":1,\"l\":1,\"gf\":3,\"ga\":4,\"pts\":4},{\"club\":\"Juventus\",\"w\":1,\"d\":1,\"l\":1,\"gf\":5,\"ga\":4,\"pts\":4},{\"club\":\"Lazio\",\"w\":2,\"d\":0,\"l\":1,\"gf\":6,\"ga\":2,\"pts\":6},{\"club\":\"Lecce\",\"w\":0,\"d\":0,\"l\":3,\"gf\":1,\"ga\":8,\"pts\":0},{\"club\":\"AC Milan\",\"w\":3,\"d\":0,\"l\":0,\"gf\":6,\"ga\":0,\"pts\":9},{\"club\":\"Monza\",\"w\":1,\"d\":1,\"l\":1,\"gf\":1,\"ga\":3,\"pts\":4},{\"club\":\"Napoli\",\"w\":2,\"d\":1,\"l\":0,\"gf\":8,\"ga\":3,\"pts\":7},{\"club\":\"Parma\",\"w\":2,\"d\":0,\"l\":1,\"gf\":6,\"ga\":4,\"pts\":6},{\"club\":\"Roma\",\"w\":1,\"d\":0,\"l\":2,\"gf\":6,\"ga\":7,\"pts\":3},{\"club\":\"Sassuolo\",\"w\":1,\"d\":0,\"l\":2,\"gf\":3,\"ga\":5,\"pts\":3},{\"club\":\"Torino\",\"w\":2,\"d\":0,\"l\":1,\"gf\":5,\"ga\":4,\"pts\":6},{\"club\":\"Udinese\",\"w\":0,\"d\":2,\"l\":1,\"gf\":2,\"ga\":3,\"pts\":2},{\"club\":\"Venezia\",\"w\":1,\"d\":0,\"l\":2,\"gf\":3,\"ga\":3,\"pts\":3}]},\"bundesliga\":{\"round\":3,\"table\":[{\"club\":\"Augsburg\",\"w\":1,\"d\":0,\"l\":2,\"gf\":4,\"ga\":7,\"pts\":3},{\"club\":\"Bayer Leverkusen\",\"w\":1,\"d\":1,\"l\":1,\"gf\":4,\"ga\":4,\"pts\":4},{\"club\":\"Bayern Munich\",\"w\":3,\"d\":0,\"l\":0,\"gf\":13,\"ga\":5,\"pts\":9},{\"club\":\"Borussia Dortmund\",\"w\":3,\"d\":0,\"l\":0,\"gf\":10,\"ga\":4,\"pts\":9},{\"club\":\"Gladbach\",\"w\":2,\"d\":0,\"l\":1,\"gf\":6,\"ga\":5,\"pts\":6},{\"club\":\"Eintracht Frankfurt\",\"w\":1,\"d\":1,\"l\":1,\"gf\":8,\"ga\":2,\"pts\":4},{\"club\":\"Freiburg\",\"w\":0,\"d\":1,\"l\":2,\"gf\":0,\"ga\":4,\"pts\":1},{\"club\":\"Hamburg\",\"w\":2,\"d\":0,\"l\":1,\"gf\":4,\"ga\":2,\"pts\":6},{\"club\":\"Hoffenheim\",\"w\":2,\"d\":0,\"l\":1,\"gf\":9,\"ga\":3,\"pts\":6},{\"club\":\"Köln\",\"w\":1,\"d\":1,\"l\":1,\"gf\":3,\"ga\":8,\"pts\":4},{\"club\":\"Mainz\",\"w\":0,\"d\":0,\"l\":3,\"gf\":0,\"ga\":6,\"pts\":0},{\"club\":\"RB Leipzig\",\"w\":3,\"d\":0,\"l\":0,\"gf\":7,\"ga\":1,\"pts\":9},{\"club\":\"Schalke 04\",\"w\":0,\"d\":1,\"l\":2,\"gf\":1,\"ga\":10,\"pts\":1},{\"club\":\"Elversberg\",\"w\":0,\"d\":1,\"l\":2,\"gf\":2,\"ga\":4,\"pts\":1},{\"club\":\"Paderborn\",\"w\":1,\"d\":1,\"l\":1,\"gf\":4,\"ga\":3,\"pts\":4},{\"club\":\"Stuttgart\",\"w\":2,\"d\":0,\"l\":1,\"gf\":6,\"ga\":4,\"pts\":6},{\"club\":\"Union Berlin\",\"w\":1,\"d\":1,\"l\":1,\"gf\":1,\"ga\":4,\"pts\":4},{\"club\":\"Werder Bremen\",\"w\":0,\"d\":0,\"l\":3,\"gf\":3,\"ga\":9,\"pts\":0}]},\"ligue1\":{\"round\":3,\"table\":[{\"club\":\"Angers\",\"w\":1,\"d\":0,\"l\":2,\"gf\":4,\"ga\":4,\"pts\":3},{\"club\":\"Auxerre\",\"w\":2,\"d\":1,\"l\":0,\"gf\":3,\"ga\":0,\"pts\":7},{\"club\":\"Brest\",\"w\":0,\"d\":1,\"l\":2,\"gf\":1,\"ga\":4,\"pts\":1},{\"club\":\"Le Havre\",\"w\":1,\"d\":1,\"l\":1,\"gf\":2,\"ga\":3,\"pts\":4},{\"club\":\"Le Mans\",\"w\":0,\"d\":0,\"l\":3,\"gf\":0,\"ga\":9,\"pts\":0},{\"club\":\"Lens\",\"w\":0,\"d\":1,\"l\":2,\"gf\":1,\"ga\":4,\"pts\":1},{\"club\":\"Lille\",\"w\":2,\"d\":0,\"l\":1,\"gf\":9,\"ga\":6,\"pts\":6},{\"club\":\"Lorient\",\"w\":1,\"d\":0,\"l\":2,\"gf\":6,\"ga\":5,\"pts\":3},{\"club\":\"Lyon\",\"w\":0,\"d\":2,\"l\":1,\"gf\":2,\"ga\":3,\"pts\":2},{\"club\":\"Marseille\",\"w\":0,\"d\":2,\"l\":1,\"gf\":2,\"ga\":3,\"pts\":2},{\"club\":\"Monaco\",\"w\":2,\"d\":0,\"l\":1,\"gf\":2,\"ga\":1,\"pts\":6},{\"club\":\"Nice\",\"w\":2,\"d\":0,\"l\":1,\"gf\":5,\"ga\":5,\"pts\":6},{\"club\":\"Paris FC\",\"w\":1,\"d\":2,\"l\":0,\"gf\":4,\"ga\":3,\"pts\":5},{\"club\":\"PSG\",\"w\":2,\"d\":1,\"l\":0,\"gf\":5,\"ga\":1,\"pts\":7},{\"club\":\"Rennes\",\"w\":1,\"d\":0,\"l\":2,\"gf\":4,\"ga\":6,\"pts\":3},{\"club\":\"Strasbourg\",\"w\":2,\"d\":0,\"l\":1,\"gf\":6,\"ga\":4,\"pts\":6},{\"club\":\"Toulouse\",\"w\":1,\"d\":2,\"l\":0,\"gf\":2,\"ga\":1,\"pts\":5},{\"club\":\"Troyes\",\"w\":2,\"d\":1,\"l\":0,\"gf\":7,\"ga\":3,\"pts\":7}]},\"eredivisie\":{\"round\":3,\"table\":[{\"club\":\"Ajax\",\"w\":3,\"d\":0,\"l\":0,\"gf\":10,\"ga\":0,\"pts\":9},{\"club\":\"AZ Alkmaar\",\"w\":2,\"d\":0,\"l\":1,\"gf\":4,\"ga\":4,\"pts\":6},{\"club\":\"ADO Den Haag\",\"w\":0,\"d\":2,\"l\":1,\"gf\":4,\"ga\":7,\"pts\":2},{\"club\":\"Cambuur\",\"w\":0,\"d\":0,\"l\":3,\"gf\":0,\"ga\":4,\"pts\":0},{\"club\":\"Excelsior\",\"w\":1,\"d\":0,\"l\":2,\"gf\":3,\"ga\":4,\"pts\":3},{\"club\":\"Feyenoord\",\"w\":3,\"d\":0,\"l\":0,\"gf\":7,\"ga\":2,\"pts\":9},{\"club\":\"Fortuna Sittard\",\"w\":0,\"d\":0,\"l\":3,\"gf\":4,\"ga\":10,\"pts\":0},{\"club\":\"Go Ahead Eagles\",\"w\":0,\"d\":2,\"l\":1,\"gf\":5,\"ga\":6,\"pts\":2},{\"club\":\"Groningen\",\"w\":1,\"d\":0,\"l\":2,\"gf\":4,\"ga\":4,\"pts\":3},{\"club\":\"Heerenveen\",\"w\":1,\"d\":1,\"l\":1,\"gf\":1,\"ga\":1,\"pts\":4},{\"club\":\"NEC Nijmegen\",\"w\":1,\"d\":1,\"l\":1,\"gf\":3,\"ga\":3,\"pts\":4},{\"club\":\"PEC Zwolle\",\"w\":3,\"d\":0,\"l\":0,\"gf\":5,\"ga\":2,\"pts\":9},{\"club\":\"PSV\",\"w\":1,\"d\":1,\"l\":1,\"gf\":3,\"ga\":4,\"pts\":4},{\"club\":\"Sparta Rotterdam\",\"w\":2,\"d\":0,\"l\":1,\"gf\":6,\"ga\":5,\"pts\":6},{\"club\":\"Telstar\",\"w\":1,\"d\":1,\"l\":1,\"gf\":3,\"ga\":4,\"pts\":4},{\"club\":\"Twente\",\"w\":2,\"d\":1,\"l\":0,\"gf\":7,\"ga\":3,\"pts\":7},{\"club\":\"Utrecht\",\"w\":1,\"d\":0,\"l\":2,\"gf\":5,\"ga\":5,\"pts\":3},{\"club\":\"Willem II\",\"w\":0,\"d\":1,\"l\":2,\"gf\":4,\"ga\":10,\"pts\":1}]},\"saudi\":{\"round\":3,\"table\":[{\"club\":\"Abha\",\"w\":2,\"d\":0,\"l\":1,\"gf\":4,\"ga\":5,\"pts\":6},{\"club\":\"Al-Ahli\",\"w\":2,\"d\":0,\"l\":1,\"gf\":7,\"ga\":3,\"pts\":6},{\"club\":\"Al-Diriyah\",\"w\":1,\"d\":0,\"l\":2,\"gf\":5,\"ga\":6,\"pts\":3},{\"club\":\"Al-Ettifaq\",\"w\":2,\"d\":0,\"l\":1,\"gf\":3,\"ga\":1,\"pts\":6},{\"club\":\"Al-Faisaly\",\"w\":1,\"d\":0,\"l\":2,\"gf\":3,\"ga\":9,\"pts\":3},{\"club\":\"Al-Fateh\",\"w\":0,\"d\":0,\"l\":3,\"gf\":1,\"ga\":10,\"pts\":0},{\"club\":\"Al-Fayha\",\"w\":2,\"d\":0,\"l\":1,\"gf\":3,\"ga\":3,\"pts\":6},{\"club\":\"Al-Hazem\",\"w\":1,\"d\":1,\"l\":1,\"gf\":3,\"ga\":6,\"pts\":4},{\"club\":\"Al-Hilal\",\"w\":2,\"d\":1,\"l\":0,\"gf\":6,\"ga\":2,\"pts\":7},{\"club\":\"Al-Ittihad\",\"w\":0,\"d\":1,\"l\":2,\"gf\":2,\"ga\":6,\"pts\":1},{\"club\":\"Al-Khaleej\",\"w\":0,\"d\":2,\"l\":1,\"gf\":1,\"ga\":2,\"pts\":2},{\"club\":\"Al-Kholood\",\"w\":1,\"d\":1,\"l\":1,\"gf\":3,\"ga\":3,\"pts\":4},{\"club\":\"Al-Nassr\",\"w\":3,\"d\":0,\"l\":0,\"gf\":9,\"ga\":1,\"pts\":9},{\"club\":\"Al-Qadsiah\",\"w\":1,\"d\":1,\"l\":1,\"gf\":3,\"ga\":3,\"pts\":4},{\"club\":\"Al-Riyadh\",\"w\":1,\"d\":1,\"l\":1,\"gf\":4,\"ga\":3,\"pts\":4},{\"club\":\"Al-Shabab\",\"w\":1,\"d\":0,\"l\":2,\"gf\":7,\"ga\":3,\"pts\":3},{\"club\":\"Al-Taawoun\",\"w\":2,\"d\":0,\"l\":1,\"gf\":7,\"ga\":4,\"pts\":6},{\"club\":\"NEOM SC\",\"w\":1,\"d\":0,\"l\":2,\"gf\":3,\"ga\":4,\"pts\":3}]},\"mlsEast\":{\"round\":2,\"table\":[{\"club\":\"Atlanta United\",\"w\":0,\"d\":0,\"l\":1,\"gf\":1,\"ga\":2,\"pts\":0},{\"club\":\"Charlotte FC\",\"w\":1,\"d\":0,\"l\":1,\"gf\":2,\"ga\":3,\"pts\":3},{\"club\":\"Chicago Fire\",\"w\":0,\"d\":1,\"l\":0,\"gf\":1,\"ga\":1,\"pts\":1},{\"club\":\"FC Cincinnati\",\"w\":1,\"d\":1,\"l\":0,\"gf\":3,\"ga\":2,\"pts\":4},{\"club\":\"Columbus Crew\",\"w\":2,\"d\":0,\"l\":0,\"gf\":3,\"ga\":0,\"pts\":6},{\"club\":\"D.C. United\",\"w\":0,\"d\":1,\"l\":1,\"gf\":2,\"ga\":4,\"pts\":1},{\"club\":\"Inter Miami\",\"w\":2,\"d\":0,\"l\":0,\"gf\":4,\"ga\":2,\"pts\":6},{\"club\":\"CF Montréal\",\"w\":1,\"d\":1,\"l\":0,\"gf\":2,\"ga\":1,\"pts\":4},{\"club\":\"Nashville SC\",\"w\":0,\"d\":1,\"l\":1,\"gf\":1,\"ga\":2,\"pts\":1},{\"club\":\"New England Revolution\",\"w\":0,\"d\":1,\"l\":1,\"gf\":2,\"ga\":3,\"pts\":1},{\"club\":\"New York City FC\",\"w\":1,\"d\":1,\"l\":0,\"gf\":4,\"ga\":2,\"pts\":4},{\"club\":\"New York Red Bulls\",\"w\":0,\"d\":0,\"l\":2,\"gf\":1,\"ga\":4,\"pts\":0},{\"club\":\"Orlando City\",\"w\":0,\"d\":1,\"l\":1,\"gf\":1,\"ga\":2,\"pts\":1},{\"club\":\"Philadelphia Union\",\"w\":0,\"d\":1,\"l\":1,\"gf\":1,\"ga\":2,\"pts\":1},{\"club\":\"Toronto FC\",\"w\":1,\"d\":1,\"l\":0,\"gf\":4,\"ga\":2,\"pts\":4}]},\"mlsWest\":{\"round\":2,\"table\":[{\"club\":\"Austin FC\",\"w\":0,\"d\":1,\"l\":0,\"gf\":2,\"ga\":2,\"pts\":1},{\"club\":\"Colorado Rapids\",\"w\":1,\"d\":1,\"l\":0,\"gf\":4,\"ga\":3,\"pts\":4},{\"club\":\"FC Dallas\",\"w\":1,\"d\":0,\"l\":0,\"gf\":1,\"ga\":0,\"pts\":3},{\"club\":\"Houston Dynamo\",\"w\":0,\"d\":1,\"l\":1,\"gf\":0,\"ga\":5,\"pts\":1},{\"club\":\"LA Galaxy\",\"w\":1,\"d\":0,\"l\":1,\"gf\":3,\"ga\":2,\"pts\":3},{\"club\":\"LAFC\",\"w\":0,\"d\":2,\"l\":0,\"gf\":0,\"ga\":0,\"pts\":2},{\"club\":\"Minnesota United\",\"w\":1,\"d\":0,\"l\":1,\"gf\":3,\"ga\":4,\"pts\":3},{\"club\":\"Portland Timbers\",\"w\":0,\"d\":2,\"l\":0,\"gf\":1,\"ga\":1,\"pts\":2},{\"club\":\"Real Salt Lake\",\"w\":1,\"d\":1,\"l\":0,\"gf\":2,\"ga\":0,\"pts\":4},{\"club\":\"San Diego FC\",\"w\":0,\"d\":0,\"l\":2,\"gf\":1,\"ga\":4,\"pts\":0},{\"club\":\"San Jose Earthquakes\",\"w\":0,\"d\":2,\"l\":0,\"gf\":1,\"ga\":1,\"pts\":2},{\"club\":\"Seattle Sounders\",\"w\":2,\"d\":0,\"l\":0,\"gf\":5,\"ga\":2,\"pts\":6},{\"club\":\"Sporting Kansas City\",\"w\":0,\"d\":2,\"l\":0,\"gf\":0,\"ga\":0,\"pts\":2},{\"club\":\"St. Louis City\",\"w\":0,\"d\":0,\"l\":2,\"gf\":0,\"ga\":3,\"pts\":0},{\"club\":\"Vancouver Whitecaps\",\"w\":1,\"d\":0,\"l\":1,\"gf\":6,\"ga\":2,\"pts\":3}]},\"primeira\":{\"round\":3,\"table\":[{\"club\":\"Porto\",\"w\":1,\"d\":0,\"l\":2,\"gf\":2,\"ga\":4,\"pts\":3},{\"club\":\"Benfica\",\"w\":3,\"d\":0,\"l\":0,\"gf\":9,\"ga\":0,\"pts\":9},{\"club\":\"Sporting CP\",\"w\":3,\"d\":0,\"l\":0,\"gf\":6,\"ga\":1,\"pts\":9},{\"club\":\"Braga\",\"w\":2,\"d\":0,\"l\":1,\"gf\":5,\"ga\":4,\"pts\":6},{\"club\":\"Vitória Guimarães\",\"w\":1,\"d\":2,\"l\":0,\"gf\":5,\"ga\":1,\"pts\":5},{\"club\":\"Famalicão\",\"w\":1,\"d\":2,\"l\":0,\"gf\":4,\"ga\":2,\"pts\":5},{\"club\":\"Rio Ave\",\"w\":1,\"d\":2,\"l\":0,\"gf\":4,\"ga\":3,\"pts\":5},{\"club\":\"Casa Pia\",\"w\":2,\"d\":1,\"l\":0,\"gf\":2,\"ga\":0,\"pts\":7},{\"club\":\"Estoril\",\"w\":2,\"d\":1,\"l\":0,\"gf\":6,\"ga\":2,\"pts\":7},{\"club\":\"Moreirense\",\"w\":0,\"d\":1,\"l\":2,\"gf\":0,\"ga\":4,\"pts\":1},{\"club\":\"Arouca\",\"w\":2,\"d\":1,\"l\":0,\"gf\":2,\"ga\":0,\"pts\":7},{\"club\":\"Gil Vicente\",\"w\":0,\"d\":1,\"l\":2,\"gf\":1,\"ga\":3,\"pts\":1},{\"club\":\"Santa Clara\",\"w\":0,\"d\":1,\"l\":2,\"gf\":0,\"ga\":3,\"pts\":1},{\"club\":\"Nacional\",\"w\":0,\"d\":2,\"l\":1,\"gf\":4,\"ga\":5,\"pts\":2},{\"club\":\"Estrela Amadora\",\"w\":0,\"d\":1,\"l\":2,\"gf\":2,\"ga\":5,\"pts\":1},{\"club\":\"Alverca\",\"w\":0,\"d\":2,\"l\":1,\"gf\":2,\"ga\":3,\"pts\":2},{\"club\":\"Marítimo\",\"w\":0,\"d\":1,\"l\":2,\"gf\":1,\"ga\":7,\"pts\":1},{\"club\":\"Académico de Viseu\",\"w\":0,\"d\":0,\"l\":3,\"gf\":0,\"ga\":8,\"pts\":0}]},\"scottish\":{\"round\":2,\"table\":[{\"club\":\"Celtic\",\"w\":1,\"d\":1,\"l\":0,\"gf\":4,\"ga\":2,\"pts\":4},{\"club\":\"Rangers\",\"w\":0,\"d\":1,\"l\":1,\"gf\":2,\"ga\":3,\"pts\":1},{\"club\":\"Aberdeen\",\"w\":1,\"d\":1,\"l\":0,\"gf\":4,\"ga\":2,\"pts\":4},{\"club\":\"Hearts\",\"w\":1,\"d\":1,\"l\":0,\"gf\":1,\"ga\":0,\"pts\":4},{\"club\":\"Hibernian\",\"w\":2,\"d\":0,\"l\":0,\"gf\":6,\"ga\":1,\"pts\":6},{\"club\":\"Dundee United\",\"w\":1,\"d\":0,\"l\":1,\"gf\":2,\"ga\":2,\"pts\":3},{\"club\":\"Dundee\",\"w\":0,\"d\":0,\"l\":2,\"gf\":2,\"ga\":4,\"pts\":0},{\"club\":\"Motherwell\",\"w\":1,\"d\":0,\"l\":1,\"gf\":3,\"ga\":5,\"pts\":3},{\"club\":\"St Mirren\",\"w\":1,\"d\":1,\"l\":0,\"gf\":1,\"ga\":0,\"pts\":4},{\"club\":\"Kilmarnock\",\"w\":0,\"d\":1,\"l\":1,\"gf\":1,\"ga\":3,\"pts\":1},{\"club\":\"Falkirk\",\"w\":1,\"d\":0,\"l\":1,\"gf\":1,\"ga\":1,\"pts\":3},{\"club\":\"St Johnstone\",\"w\":0,\"d\":0,\"l\":2,\"gf\":1,\"ga\":5,\"pts\":0}]},\"superlig\":{\"round\":3,\"table\":[{\"club\":\"Galatasaray\",\"w\":1,\"d\":1,\"l\":1,\"gf\":3,\"ga\":3,\"pts\":4},{\"club\":\"Fenerbahçe\",\"w\":2,\"d\":1,\"l\":0,\"gf\":4,\"ga\":2,\"pts\":7},{\"club\":\"Beşiktaş\",\"w\":3,\"d\":0,\"l\":0,\"gf\":5,\"ga\":1,\"pts\":9},{\"club\":\"Trabzonspor\",\"w\":2,\"d\":0,\"l\":1,\"gf\":7,\"ga\":1,\"pts\":6},{\"club\":\"Başakşehir\",\"w\":2,\"d\":1,\"l\":0,\"gf\":6,\"ga\":1,\"pts\":7},{\"club\":\"Samsunspor\",\"w\":2,\"d\":0,\"l\":1,\"gf\":5,\"ga\":2,\"pts\":6},{\"club\":\"Eyüpspor\",\"w\":1,\"d\":2,\"l\":0,\"gf\":4,\"ga\":3,\"pts\":5},{\"club\":\"Göztepe\",\"w\":1,\"d\":0,\"l\":2,\"gf\":2,\"ga\":4,\"pts\":3},{\"club\":\"Kasımpaşa\",\"w\":1,\"d\":2,\"l\":0,\"gf\":4,\"ga\":1,\"pts\":5},{\"club\":\"Alanyaspor\",\"w\":2,\"d\":1,\"l\":0,\"gf\":5,\"ga\":2,\"pts\":7},{\"club\":\"Konyaspor\",\"w\":2,\"d\":0,\"l\":1,\"gf\":4,\"ga\":4,\"pts\":6},{\"club\":\"Gaziantep FK\",\"w\":0,\"d\":1,\"l\":2,\"gf\":1,\"ga\":5,\"pts\":1},{\"club\":\"Gençlerbirliği\",\"w\":0,\"d\":0,\"l\":3,\"gf\":1,\"ga\":6,\"pts\":0},{\"club\":\"Kocaelispor\",\"w\":0,\"d\":2,\"l\":1,\"gf\":4,\"ga\":5,\"pts\":2},{\"club\":\"Rizespor\",\"w\":2,\"d\":0,\"l\":1,\"gf\":3,\"ga\":5,\"pts\":6},{\"club\":\"Erzurumspor\",\"w\":0,\"d\":1,\"l\":2,\"gf\":1,\"ga\":3,\"pts\":1},{\"club\":\"Amedspor\",\"w\":0,\"d\":0,\"l\":3,\"gf\":1,\"ga\":5,\"pts\":0},{\"club\":\"Çorum FK\",\"w\":0,\"d\":0,\"l\":3,\"gf\":0,\"ga\":7,\"pts\":0}]},\"bundesliga2\":{\"round\":3,\"table\":[{\"club\":\"Wolfsburg\",\"w\":2,\"d\":0,\"l\":1,\"gf\":3,\"ga\":2,\"pts\":6},{\"club\":\"Heidenheim\",\"w\":0,\"d\":1,\"l\":2,\"gf\":1,\"ga\":3,\"pts\":1},{\"club\":\"St. Pauli\",\"w\":2,\"d\":0,\"l\":1,\"gf\":5,\"ga\":3,\"pts\":6},{\"club\":\"Bochum\",\"w\":1,\"d\":2,\"l\":0,\"gf\":4,\"ga\":2,\"pts\":5},{\"club\":\"Hertha BSC\",\"w\":0,\"d\":1,\"l\":2,\"gf\":0,\"ga\":2,\"pts\":1},{\"club\":\"Magdeburg\",\"w\":1,\"d\":1,\"l\":1,\"gf\":5,\"ga\":5,\"pts\":4},{\"club\":\"Kaiserslautern\",\"w\":2,\"d\":0,\"l\":1,\"gf\":10,\"ga\":2,\"pts\":6},{\"club\":\"Holstein Kiel\",\"w\":1,\"d\":1,\"l\":1,\"gf\":3,\"ga\":2,\"pts\":4},{\"club\":\"Hannover 96\",\"w\":1,\"d\":1,\"l\":1,\"gf\":5,\"ga\":3,\"pts\":4},{\"club\":\"Dynamo Dresden\",\"w\":1,\"d\":1,\"l\":1,\"gf\":5,\"ga\":4,\"pts\":4},{\"club\":\"Braunschweig\",\"w\":1,\"d\":1,\"l\":1,\"gf\":3,\"ga\":4,\"pts\":4},{\"club\":\"Greuther Fürth\",\"w\":2,\"d\":0,\"l\":1,\"gf\":4,\"ga\":5,\"pts\":6},{\"club\":\"Nürnberg\",\"w\":1,\"d\":1,\"l\":1,\"gf\":3,\"ga\":3,\"pts\":4},{\"club\":\"Darmstadt\",\"w\":1,\"d\":0,\"l\":2,\"gf\":1,\"ga\":8,\"pts\":3},{\"club\":\"Arminia Bielefeld\",\"w\":0,\"d\":0,\"l\":3,\"gf\":3,\"ga\":9,\"pts\":0},{\"club\":\"Karlsruhe\",\"w\":2,\"d\":1,\"l\":0,\"gf\":3,\"ga\":1,\"pts\":7},{\"club\":\"Osnabrück\",\"w\":2,\"d\":1,\"l\":0,\"gf\":4,\"ga\":2,\"pts\":7},{\"club\":\"Energie Cottbus\",\"w\":1,\"d\":0,\"l\":2,\"gf\":3,\"ga\":5,\"pts\":3}]},\"proleague\":{\"round\":3,\"table\":[{\"club\":\"Club Brugge\",\"w\":2,\"d\":0,\"l\":1,\"gf\":6,\"ga\":1,\"pts\":6},{\"club\":\"Union Saint-Gilloise\",\"w\":1,\"d\":1,\"l\":1,\"gf\":5,\"ga\":4,\"pts\":4},{\"club\":\"Anderlecht\",\"w\":1,\"d\":1,\"l\":1,\"gf\":2,\"ga\":2,\"pts\":4},{\"club\":\"Genk\",\"w\":2,\"d\":1,\"l\":0,\"gf\":8,\"ga\":1,\"pts\":7},{\"club\":\"Gent\",\"w\":2,\"d\":1,\"l\":0,\"gf\":6,\"ga\":3,\"pts\":7},{\"club\":\"Antwerp\",\"w\":1,\"d\":0,\"l\":2,\"gf\":5,\"ga\":6,\"pts\":3},{\"club\":\"Standard Liège\",\"w\":2,\"d\":1,\"l\":0,\"gf\":5,\"ga\":1,\"pts\":7},{\"club\":\"Mechelen\",\"w\":0,\"d\":2,\"l\":1,\"gf\":2,\"ga\":3,\"pts\":2},{\"club\":\"Charleroi\",\"w\":3,\"d\":0,\"l\":0,\"gf\":4,\"ga\":1,\"pts\":9},{\"club\":\"Westerlo\",\"w\":0,\"d\":1,\"l\":2,\"gf\":2,\"ga\":6,\"pts\":1},{\"club\":\"Sint-Truiden\",\"w\":2,\"d\":1,\"l\":0,\"gf\":3,\"ga\":1,\"pts\":7},{\"club\":\"OH Leuven\",\"w\":0,\"d\":1,\"l\":2,\"gf\":1,\"ga\":3,\"pts\":1},{\"club\":\"Cercle Brugge\",\"w\":2,\"d\":1,\"l\":0,\"gf\":6,\"ga\":2,\"pts\":7},{\"club\":\"La Louvière\",\"w\":0,\"d\":0,\"l\":3,\"gf\":1,\"ga\":5,\"pts\":0},{\"club\":\"Zulte Waregem\",\"w\":1,\"d\":1,\"l\":1,\"gf\":4,\"ga\":7,\"pts\":4},{\"club\":\"Beveren\",\"w\":0,\"d\":2,\"l\":1,\"gf\":1,\"ga\":4,\"pts\":2},{\"club\":\"Kortrijk\",\"w\":0,\"d\":0,\"l\":3,\"gf\":3,\"ga\":10,\"pts\":0},{\"club\":\"Lommel\",\"w\":1,\"d\":0,\"l\":2,\"gf\":4,\"ga\":8,\"pts\":3}]},\"austria\":{\"round\":2,\"table\":[{\"club\":\"RB Salzburg\",\"w\":1,\"d\":0,\"l\":1,\"gf\":1,\"ga\":1,\"pts\":3},{\"club\":\"Sturm Graz\",\"w\":1,\"d\":0,\"l\":1,\"gf\":1,\"ga\":1,\"pts\":3},{\"club\":\"Rapid Wien\",\"w\":2,\"d\":0,\"l\":0,\"gf\":6,\"ga\":3,\"pts\":6},{\"club\":\"LASK\",\"w\":1,\"d\":1,\"l\":0,\"gf\":2,\"ga\":1,\"pts\":4},{\"club\":\"Wolfsberger AC\",\"w\":0,\"d\":1,\"l\":1,\"gf\":0,\"ga\":1,\"pts\":1},{\"club\":\"Austria Wien\",\"w\":1,\"d\":0,\"l\":1,\"gf\":3,\"ga\":3,\"pts\":3},{\"club\":\"Grazer AK\",\"w\":0,\"d\":0,\"l\":2,\"gf\":3,\"ga\":7,\"pts\":0},{\"club\":\"Hartberg\",\"w\":1,\"d\":1,\"l\":0,\"gf\":4,\"ga\":1,\"pts\":4},{\"club\":\"Ried\",\"w\":1,\"d\":0,\"l\":1,\"gf\":1,\"ga\":1,\"pts\":3},{\"club\":\"Altach\",\"w\":1,\"d\":0,\"l\":1,\"gf\":2,\"ga\":3,\"pts\":3},{\"club\":\"WSG Tirol\",\"w\":1,\"d\":1,\"l\":0,\"gf\":2,\"ga\":1,\"pts\":4},{\"club\":\"Austria Lustenau\",\"w\":0,\"d\":0,\"l\":2,\"gf\":2,\"ga\":4,\"pts\":0}]},\"greece\":{\"round\":2,\"table\":[{\"club\":\"Olympiacos\",\"w\":1,\"d\":0,\"l\":1,\"gf\":2,\"ga\":2,\"pts\":3},{\"club\":\"Panathinaikos\",\"w\":2,\"d\":0,\"l\":0,\"gf\":4,\"ga\":2,\"pts\":6},{\"club\":\"AEK Athens\",\"w\":2,\"d\":0,\"l\":0,\"gf\":2,\"ga\":0,\"pts\":6},{\"club\":\"PAOK\",\"w\":2,\"d\":0,\"l\":0,\"gf\":5,\"ga\":1,\"pts\":6},{\"club\":\"Aris\",\"w\":2,\"d\":0,\"l\":0,\"gf\":7,\"ga\":2,\"pts\":6},{\"club\":\"Asteras Tripolis\",\"w\":2,\"d\":0,\"l\":0,\"gf\":3,\"ga\":1,\"pts\":6},{\"club\":\"Atromitos\",\"w\":0,\"d\":2,\"l\":0,\"gf\":2,\"ga\":2,\"pts\":2},{\"club\":\"Iraklis\",\"w\":1,\"d\":1,\"l\":0,\"gf\":3,\"ga\":1,\"pts\":4},{\"club\":\"Kalamata\",\"w\":0,\"d\":0,\"l\":2,\"gf\":0,\"ga\":3,\"pts\":0},{\"club\":\"Kifisia\",\"w\":0,\"d\":1,\"l\":1,\"gf\":2,\"ga\":6,\"pts\":1},{\"club\":\"Levadiakos\",\"w\":0,\"d\":0,\"l\":2,\"gf\":2,\"ga\":4,\"pts\":0},{\"club\":\"OFI\",\"w\":0,\"d\":0,\"l\":2,\"gf\":1,\"ga\":3,\"pts\":0},{\"club\":\"Panetolikos\",\"w\":0,\"d\":0,\"l\":2,\"gf\":1,\"ga\":5,\"pts\":0},{\"club\":\"Volos\",\"w\":0,\"d\":0,\"l\":2,\"gf\":0,\"ga\":2,\"pts\":0}]},\"denmark\":{\"round\":2,\"table\":[{\"club\":\"FC Copenhagen\",\"w\":1,\"d\":1,\"l\":0,\"gf\":3,\"ga\":2,\"pts\":4},{\"club\":\"FC Midtjylland\",\"w\":1,\"d\":0,\"l\":1,\"gf\":6,\"ga\":3,\"pts\":3},{\"club\":\"Brøndby IF\",\"w\":2,\"d\":0,\"l\":0,\"gf\":5,\"ga\":0,\"pts\":6},{\"club\":\"AGF\",\"w\":2,\"d\":0,\"l\":0,\"gf\":6,\"ga\":1,\"pts\":6},{\"club\":\"FC Nordsjælland\",\"w\":2,\"d\":0,\"l\":0,\"gf\":5,\"ga\":0,\"pts\":6},{\"club\":\"Viborg FF\",\"w\":1,\"d\":1,\"l\":0,\"gf\":3,\"ga\":1,\"pts\":4},{\"club\":\"Randers FC\",\"w\":1,\"d\":0,\"l\":1,\"gf\":2,\"ga\":3,\"pts\":3},{\"club\":\"OB\",\"w\":0,\"d\":0,\"l\":2,\"gf\":0,\"ga\":5,\"pts\":0},{\"club\":\"Silkeborg IF\",\"w\":0,\"d\":1,\"l\":1,\"gf\":0,\"ga\":4,\"pts\":1},{\"club\":\"Lyngby\",\"w\":0,\"d\":0,\"l\":2,\"gf\":0,\"ga\":4,\"pts\":0},{\"club\":\"AC Horsens\",\"w\":0,\"d\":0,\"l\":2,\"gf\":1,\"ga\":6,\"pts\":0},{\"club\":\"SønderjyskE\",\"w\":0,\"d\":1,\"l\":1,\"gf\":0,\"ga\":2,\"pts\":1}]},\"switzerland\":{\"round\":2,\"table\":[{\"club\":\"Basel\",\"w\":2,\"d\":0,\"l\":0,\"gf\":7,\"ga\":3,\"pts\":6},{\"club\":\"Young Boys\",\"w\":1,\"d\":0,\"l\":1,\"gf\":5,\"ga\":4,\"pts\":3},{\"club\":\"Thun\",\"w\":0,\"d\":1,\"l\":1,\"gf\":1,\"ga\":2,\"pts\":1},{\"club\":\"St. Gallen\",\"w\":1,\"d\":1,\"l\":0,\"gf\":1,\"ga\":0,\"pts\":4},{\"club\":\"Lugano\",\"w\":1,\"d\":0,\"l\":1,\"gf\":1,\"ga\":3,\"pts\":3},{\"club\":\"Servette\",\"w\":1,\"d\":0,\"l\":1,\"gf\":3,\"ga\":4,\"pts\":3},{\"club\":\"Luzern\",\"w\":1,\"d\":0,\"l\":1,\"gf\":3,\"ga\":3,\"pts\":3},{\"club\":\"Lausanne-Sport\",\"w\":0,\"d\":0,\"l\":2,\"gf\":1,\"ga\":3,\"pts\":0},{\"club\":\"FC Zürich\",\"w\":1,\"d\":0,\"l\":1,\"gf\":3,\"ga\":2,\"pts\":3},{\"club\":\"Grasshopper\",\"w\":1,\"d\":1,\"l\":0,\"gf\":4,\"ga\":1,\"pts\":4},{\"club\":\"Sion\",\"w\":0,\"d\":1,\"l\":1,\"gf\":0,\"ga\":2,\"pts\":1},{\"club\":\"Vaduz\",\"w\":1,\"d\":0,\"l\":1,\"gf\":1,\"ga\":3,\"pts\":3}]},\"croatia\":{\"round\":1,\"table\":[{\"club\":\"Dinamo Zagreb\",\"w\":1,\"d\":0,\"l\":0,\"gf\":3,\"ga\":0,\"pts\":3},{\"club\":\"Hajduk Split\",\"w\":1,\"d\":0,\"l\":0,\"gf\":1,\"ga\":0,\"pts\":3},{\"club\":\"Rijeka\",\"w\":1,\"d\":0,\"l\":0,\"gf\":2,\"ga\":1,\"pts\":3},{\"club\":\"Osijek\",\"w\":1,\"d\":0,\"l\":0,\"gf\":1,\"ga\":0,\"pts\":3},{\"club\":\"Varaždin\",\"w\":0,\"d\":1,\"l\":0,\"gf\":0,\"ga\":0,\"pts\":1},{\"club\":\"Slaven Belupo\",\"w\":0,\"d\":1,\"l\":0,\"gf\":0,\"ga\":0,\"pts\":1},{\"club\":\"Istra 1961\",\"w\":0,\"d\":0,\"l\":1,\"gf\":0,\"ga\":1,\"pts\":0},{\"club\":\"Lokomotiva Zagreb\",\"w\":0,\"d\":0,\"l\":1,\"gf\":1,\"ga\":2,\"pts\":0},{\"club\":\"Gorica\",\"w\":0,\"d\":0,\"l\":1,\"gf\":0,\"ga\":1,\"pts\":0},{\"club\":\"Rudeš\",\"w\":0,\"d\":0,\"l\":1,\"gf\":0,\"ga\":3,\"pts\":0}]},\"brasileirao\":{\"round\":3,\"table\":[{\"club\":\"Flamengo\",\"w\":2,\"d\":0,\"l\":1,\"gf\":8,\"ga\":1,\"pts\":6},{\"club\":\"Palmeiras\",\"w\":2,\"d\":0,\"l\":1,\"gf\":3,\"ga\":1,\"pts\":6},{\"club\":\"Athletico Paranaense\",\"w\":1,\"d\":0,\"l\":2,\"gf\":3,\"ga\":6,\"pts\":3},{\"club\":\"Fluminense\",\"w\":2,\"d\":0,\"l\":1,\"gf\":5,\"ga\":6,\"pts\":6},{\"club\":\"Bahia\",\"w\":2,\"d\":1,\"l\":0,\"gf\":6,\"ga\":2,\"pts\":7},{\"club\":\"Cruzeiro\",\"w\":2,\"d\":0,\"l\":1,\"gf\":5,\"ga\":3,\"pts\":6},{\"club\":\"Atlético Mineiro\",\"w\":2,\"d\":0,\"l\":1,\"gf\":4,\"ga\":3,\"pts\":6},{\"club\":\"Santos\",\"w\":2,\"d\":1,\"l\":0,\"gf\":8,\"ga\":5,\"pts\":7},{\"club\":\"Coritiba\",\"w\":0,\"d\":1,\"l\":2,\"gf\":1,\"ga\":6,\"pts\":1},{\"club\":\"Red Bull Bragantino\",\"w\":2,\"d\":0,\"l\":1,\"gf\":4,\"ga\":2,\"pts\":6},{\"club\":\"São Paulo\",\"w\":1,\"d\":0,\"l\":2,\"gf\":5,\"ga\":6,\"pts\":3},{\"club\":\"Botafogo\",\"w\":1,\"d\":1,\"l\":1,\"gf\":5,\"ga\":5,\"pts\":4},{\"club\":\"Vitória\",\"w\":1,\"d\":1,\"l\":1,\"gf\":4,\"ga\":4,\"pts\":4},{\"club\":\"Corinthians\",\"w\":3,\"d\":0,\"l\":0,\"gf\":7,\"ga\":2,\"pts\":9},{\"club\":\"Mirassol\",\"w\":0,\"d\":1,\"l\":2,\"gf\":1,\"ga\":3,\"pts\":1},{\"club\":\"Vasco da Gama\",\"w\":0,\"d\":2,\"l\":1,\"gf\":0,\"ga\":1,\"pts\":2},{\"club\":\"Grêmio\",\"w\":2,\"d\":0,\"l\":1,\"gf\":10,\"ga\":7,\"pts\":6},{\"club\":\"Internacional\",\"w\":0,\"d\":0,\"l\":3,\"gf\":2,\"ga\":7,\"pts\":0},{\"club\":\"Remo\",\"w\":0,\"d\":0,\"l\":3,\"gf\":1,\"ga\":7,\"pts\":0},{\"club\":\"Chapecoense\",\"w\":1,\"d\":0,\"l\":2,\"gf\":4,\"ga\":9,\"pts\":3}]},\"ligamx\":{\"round\":3,\"table\":[{\"club\":\"América\",\"w\":2,\"d\":0,\"l\":1,\"gf\":6,\"ga\":4,\"pts\":6},{\"club\":\"Guadalajara\",\"w\":2,\"d\":0,\"l\":1,\"gf\":4,\"ga\":3,\"pts\":6},{\"club\":\"Cruz Azul\",\"w\":1,\"d\":2,\"l\":0,\"gf\":3,\"ga\":2,\"pts\":5},{\"club\":\"Monterrey\",\"w\":1,\"d\":0,\"l\":2,\"gf\":4,\"ga\":3,\"pts\":3},{\"club\":\"Tigres UANL\",\"w\":3,\"d\":0,\"l\":0,\"gf\":6,\"ga\":2,\"pts\":9},{\"club\":\"Toluca\",\"w\":3,\"d\":0,\"l\":0,\"gf\":12,\"ga\":2,\"pts\":9},{\"club\":\"Pumas UNAM\",\"w\":1,\"d\":0,\"l\":2,\"gf\":2,\"ga\":4,\"pts\":3},{\"club\":\"Pachuca\",\"w\":2,\"d\":1,\"l\":0,\"gf\":5,\"ga\":2,\"pts\":7},{\"club\":\"León\",\"w\":1,\"d\":1,\"l\":1,\"gf\":2,\"ga\":1,\"pts\":4},{\"club\":\"Santos Laguna\",\"w\":2,\"d\":1,\"l\":0,\"gf\":5,\"ga\":2,\"pts\":7},{\"club\":\"Atlas\",\"w\":0,\"d\":1,\"l\":2,\"gf\":3,\"ga\":5,\"pts\":1},{\"club\":\"Necaxa\",\"w\":2,\"d\":0,\"l\":1,\"gf\":4,\"ga\":3,\"pts\":6},{\"club\":\"Puebla\",\"w\":0,\"d\":0,\"l\":3,\"gf\":2,\"ga\":10,\"pts\":0},{\"club\":\"Querétaro\",\"w\":1,\"d\":0,\"l\":2,\"gf\":3,\"ga\":6,\"pts\":3},{\"club\":\"Tijuana\",\"w\":0,\"d\":0,\"l\":3,\"gf\":4,\"ga\":10,\"pts\":0},{\"club\":\"FC Juárez\",\"w\":1,\"d\":1,\"l\":1,\"gf\":4,\"ga\":3,\"pts\":4},{\"club\":\"Atlético San Luis\",\"w\":1,\"d\":0,\"l\":2,\"gf\":1,\"ga\":5,\"pts\":3},{\"club\":\"Atlante\",\"w\":0,\"d\":1,\"l\":2,\"gf\":0,\"ga\":3,\"pts\":1}]},\"aleague\":{\"round\":2,\"table\":[{\"club\":\"Adelaide United\",\"w\":1,\"d\":0,\"l\":1,\"gf\":3,\"ga\":2,\"pts\":3},{\"club\":\"Auckland FC\",\"w\":1,\"d\":0,\"l\":1,\"gf\":2,\"ga\":3,\"pts\":3},{\"club\":\"Brisbane Roar\",\"w\":0,\"d\":1,\"l\":1,\"gf\":1,\"ga\":3,\"pts\":1},{\"club\":\"Central Coast Mariners\",\"w\":0,\"d\":0,\"l\":2,\"gf\":0,\"ga\":2,\"pts\":0},{\"club\":\"Macarthur FC\",\"w\":0,\"d\":1,\"l\":1,\"gf\":1,\"ga\":2,\"pts\":1},{\"club\":\"Melbourne City\",\"w\":1,\"d\":0,\"l\":1,\"gf\":3,\"ga\":2,\"pts\":3},{\"club\":\"Melbourne Victory\",\"w\":1,\"d\":0,\"l\":1,\"gf\":2,\"ga\":3,\"pts\":3},{\"club\":\"Newcastle Jets\",\"w\":1,\"d\":0,\"l\":1,\"gf\":2,\"ga\":2,\"pts\":3},{\"club\":\"Perth Glory\",\"w\":2,\"d\":0,\"l\":0,\"gf\":3,\"ga\":1,\"pts\":6},{\"club\":\"Sydney FC\",\"w\":1,\"d\":1,\"l\":0,\"gf\":3,\"ga\":1,\"pts\":4},{\"club\":\"Wellington Phoenix\",\"w\":2,\"d\":0,\"l\":0,\"gf\":3,\"ga\":0,\"pts\":6},{\"club\":\"Western Sydney Wanderers\",\"w\":0,\"d\":1,\"l\":1,\"gf\":1,\"ga\":3,\"pts\":1}]},\"serieb\":{\"round\":3,\"table\":[{\"club\":\"Cremonese\",\"w\":0,\"d\":1,\"l\":2,\"gf\":1,\"ga\":5,\"pts\":1},{\"club\":\"Verona\",\"w\":1,\"d\":1,\"l\":1,\"gf\":2,\"ga\":1,\"pts\":4},{\"club\":\"Pisa\",\"w\":3,\"d\":0,\"l\":0,\"gf\":7,\"ga\":0,\"pts\":9},{\"club\":\"Avellino\",\"w\":0,\"d\":1,\"l\":2,\"gf\":0,\"ga\":3,\"pts\":1},{\"club\":\"Carrarese\",\"w\":0,\"d\":0,\"l\":3,\"gf\":3,\"ga\":7,\"pts\":0},{\"club\":\"Catanzaro\",\"w\":1,\"d\":0,\"l\":2,\"gf\":3,\"ga\":6,\"pts\":3},{\"club\":\"Cesena\",\"w\":1,\"d\":1,\"l\":1,\"gf\":4,\"ga\":5,\"pts\":4},{\"club\":\"Empoli\",\"w\":1,\"d\":2,\"l\":0,\"gf\":3,\"ga\":2,\"pts\":5},{\"club\":\"Entella\",\"w\":2,\"d\":0,\"l\":1,\"gf\":3,\"ga\":2,\"pts\":6},{\"club\":\"Juve Stabia\",\"w\":2,\"d\":1,\"l\":0,\"gf\":9,\"ga\":3,\"pts\":7},{\"club\":\"Mantova\",\"w\":1,\"d\":1,\"l\":1,\"gf\":3,\"ga\":5,\"pts\":4},{\"club\":\"Modena\",\"w\":1,\"d\":0,\"l\":2,\"gf\":2,\"ga\":4,\"pts\":3},{\"club\":\"Padova\",\"w\":0,\"d\":2,\"l\":1,\"gf\":4,\"ga\":6,\"pts\":2},{\"club\":\"Palermo\",\"w\":1,\"d\":2,\"l\":0,\"gf\":4,\"ga\":2,\"pts\":5},{\"club\":\"Sampdoria\",\"w\":1,\"d\":1,\"l\":1,\"gf\":4,\"ga\":4,\"pts\":4},{\"club\":\"Südtirol\",\"w\":2,\"d\":0,\"l\":1,\"gf\":5,\"ga\":3,\"pts\":6},{\"club\":\"Vicenza\",\"w\":1,\"d\":1,\"l\":1,\"gf\":2,\"ga\":1,\"pts\":4},{\"club\":\"Arezzo\",\"w\":1,\"d\":0,\"l\":2,\"gf\":2,\"ga\":2,\"pts\":3},{\"club\":\"Benevento\",\"w\":2,\"d\":0,\"l\":1,\"gf\":3,\"ga\":2,\"pts\":6},{\"club\":\"Ascoli\",\"w\":2,\"d\":0,\"l\":1,\"gf\":6,\"ga\":7,\"pts\":6}]},\"ligue2\":{\"round\":3,\"table\":[{\"club\":\"Metz\",\"w\":1,\"d\":2,\"l\":0,\"gf\":2,\"ga\":0,\"pts\":5},{\"club\":\"Nantes\",\"w\":0,\"d\":2,\"l\":1,\"gf\":3,\"ga\":5,\"pts\":2},{\"club\":\"Saint-Étienne\",\"w\":1,\"d\":2,\"l\":0,\"gf\":4,\"ga\":1,\"pts\":5},{\"club\":\"Red Star FC\",\"w\":1,\"d\":1,\"l\":1,\"gf\":7,\"ga\":7,\"pts\":4},{\"club\":\"Reims\",\"w\":2,\"d\":0,\"l\":1,\"gf\":6,\"ga\":2,\"pts\":6},{\"club\":\"Montpellier\",\"w\":2,\"d\":0,\"l\":1,\"gf\":5,\"ga\":5,\"pts\":6},{\"club\":\"Nancy\",\"w\":1,\"d\":1,\"l\":1,\"gf\":3,\"ga\":6,\"pts\":4},{\"club\":\"Annecy\",\"w\":1,\"d\":1,\"l\":1,\"gf\":4,\"ga\":5,\"pts\":4},{\"club\":\"Sochaux\",\"w\":2,\"d\":0,\"l\":1,\"gf\":5,\"ga\":2,\"pts\":6},{\"club\":\"Dijon\",\"w\":1,\"d\":0,\"l\":2,\"gf\":3,\"ga\":8,\"pts\":3},{\"club\":\"Pau\",\"w\":2,\"d\":0,\"l\":1,\"gf\":5,\"ga\":2,\"pts\":6},{\"club\":\"Guingamp\",\"w\":1,\"d\":1,\"l\":1,\"gf\":2,\"ga\":3,\"pts\":4},{\"club\":\"Dunkerque\",\"w\":2,\"d\":0,\"l\":1,\"gf\":8,\"ga\":4,\"pts\":6},{\"club\":\"Grenoble\",\"w\":1,\"d\":0,\"l\":2,\"gf\":5,\"ga\":6,\"pts\":3},{\"club\":\"Rodez\",\"w\":0,\"d\":1,\"l\":2,\"gf\":4,\"ga\":7,\"pts\":1},{\"club\":\"Clermont\",\"w\":1,\"d\":0,\"l\":2,\"gf\":3,\"ga\":6,\"pts\":3},{\"club\":\"Boulogne\",\"w\":1,\"d\":1,\"l\":1,\"gf\":4,\"ga\":3,\"pts\":4},{\"club\":\"Laval\",\"w\":0,\"d\":2,\"l\":1,\"gf\":1,\"ga\":2,\"pts\":2}]},\"segunda\":{\"round\":3,\"table\":[{\"club\":\"Real Oviedo\",\"w\":1,\"d\":0,\"l\":2,\"gf\":5,\"ga\":6,\"pts\":3},{\"club\":\"Girona\",\"w\":2,\"d\":1,\"l\":0,\"gf\":7,\"ga\":2,\"pts\":7},{\"club\":\"Mallorca\",\"w\":2,\"d\":1,\"l\":0,\"gf\":5,\"ga\":2,\"pts\":7},{\"club\":\"Eibar\",\"w\":0,\"d\":2,\"l\":1,\"gf\":3,\"ga\":7,\"pts\":2},{\"club\":\"Castellón\",\"w\":1,\"d\":0,\"l\":2,\"gf\":5,\"ga\":3,\"pts\":3},{\"club\":\"Almería\",\"w\":0,\"d\":0,\"l\":3,\"gf\":2,\"ga\":7,\"pts\":0},{\"club\":\"Burgos\",\"w\":1,\"d\":1,\"l\":1,\"gf\":7,\"ga\":6,\"pts\":4},{\"club\":\"Sabadell\",\"w\":0,\"d\":1,\"l\":2,\"gf\":4,\"ga\":6,\"pts\":1},{\"club\":\"Sporting Gijón\",\"w\":1,\"d\":1,\"l\":1,\"gf\":4,\"ga\":5,\"pts\":4},{\"club\":\"Granada\",\"w\":0,\"d\":1,\"l\":2,\"gf\":1,\"ga\":7,\"pts\":1},{\"club\":\"Las Palmas\",\"w\":2,\"d\":0,\"l\":1,\"gf\":10,\"ga\":3,\"pts\":6},{\"club\":\"Tenerife\",\"w\":1,\"d\":1,\"l\":1,\"gf\":3,\"ga\":2,\"pts\":4},{\"club\":\"Leganés\",\"w\":2,\"d\":1,\"l\":0,\"gf\":4,\"ga\":2,\"pts\":7},{\"club\":\"Valladolid\",\"w\":1,\"d\":0,\"l\":2,\"gf\":4,\"ga\":9,\"pts\":3},{\"club\":\"Córdoba\",\"w\":2,\"d\":1,\"l\":0,\"gf\":6,\"ga\":2,\"pts\":7},{\"club\":\"Eldense\",\"w\":1,\"d\":1,\"l\":1,\"gf\":5,\"ga\":5,\"pts\":4},{\"club\":\"Cádiz\",\"w\":2,\"d\":1,\"l\":0,\"gf\":5,\"ga\":2,\"pts\":7},{\"club\":\"FC Andorra\",\"w\":2,\"d\":0,\"l\":1,\"gf\":5,\"ga\":4,\"pts\":6},{\"club\":\"Ceuta\",\"w\":1,\"d\":2,\"l\":0,\"gf\":5,\"ga\":4,\"pts\":5},{\"club\":\"Albacete\",\"w\":0,\"d\":1,\"l\":2,\"gf\":3,\"ga\":9,\"pts\":1}]},\"russia\":{\"round\":2,\"table\":[{\"club\":\"Zenit\",\"w\":0,\"d\":1,\"l\":1,\"gf\":1,\"ga\":2,\"pts\":1},{\"club\":\"Krasnodar\",\"w\":2,\"d\":0,\"l\":0,\"gf\":4,\"ga\":1,\"pts\":6},{\"club\":\"Spartak Moscow\",\"w\":0,\"d\":2,\"l\":0,\"gf\":0,\"ga\":0,\"pts\":2},{\"club\":\"CSKA Moscow\",\"w\":2,\"d\":0,\"l\":0,\"gf\":5,\"ga\":1,\"pts\":6},{\"club\":\"Lokomotiv Moscow\",\"w\":1,\"d\":1,\"l\":0,\"gf\":3,\"ga\":1,\"pts\":4},{\"club\":\"Rubin Kazan\",\"w\":0,\"d\":2,\"l\":0,\"gf\":2,\"ga\":2,\"pts\":2},{\"club\":\"Dynamo Moscow\",\"w\":0,\"d\":0,\"l\":2,\"gf\":0,\"ga\":4,\"pts\":0},{\"club\":\"Rostov\",\"w\":0,\"d\":0,\"l\":2,\"gf\":1,\"ga\":4,\"pts\":0},{\"club\":\"Akhmat Grozny\",\"w\":2,\"d\":0,\"l\":0,\"gf\":3,\"ga\":1,\"pts\":6},{\"club\":\"Krylia Sovetov\",\"w\":1,\"d\":0,\"l\":1,\"gf\":1,\"ga\":1,\"pts\":3},{\"club\":\"Baltika\",\"w\":1,\"d\":1,\"l\":0,\"gf\":4,\"ga\":2,\"pts\":4},{\"club\":\"Orenburg\",\"w\":1,\"d\":0,\"l\":1,\"gf\":3,\"ga\":2,\"pts\":3},{\"club\":\"Akron Tolyatti\",\"w\":0,\"d\":1,\"l\":1,\"gf\":1,\"ga\":3,\"pts\":1},{\"club\":\"Dynamo Makhachkala\",\"w\":0,\"d\":2,\"l\":0,\"gf\":1,\"ga\":1,\"pts\":2},{\"club\":\"Rodina Moscow\",\"w\":0,\"d\":0,\"l\":2,\"gf\":0,\"ga\":4,\"pts\":0},{\"club\":\"Fakel Voronezh\",\"w\":0,\"d\":2,\"l\":0,\"gf\":0,\"ga\":0,\"pts\":2}]}},\"trophies\":[],\"history\":[],\"careerStats\":{\"played\":2,\"wins\":0,\"draws\":1,\"losses\":1,\"clubsManaged\":[\"Brighton\"],\"biggestDefeat\":{\"opp\":\"Aston Villa\",\"score\":\"1-0\"}},\"pendingSummary\":null,\"boardObjectives\":[{\"id\":\"league\",\"target\":10,\"label\":\"Finish in the top half\"},{\"id\":\"cup\",\"target\":3,\"label\":\"Reach the FA Cup final\"},{\"id\":\"rival\",\"target\":0,\"rivalName\":\"Crystal Palace\",\"label\":\"Finish above Crystal Palace\"},{\"id\":\"defence\",\"target\":40,\"label\":\"Concede fewer than 40 league goals\"},{\"id\":\"natQuota\",\"target\":5,\"country\":\"England\",\"label\":\"Have 5 players from England in the squad\"},{\"id\":\"veterans\",\"target\":4,\"minAge\":30,\"label\":\"Have 4 players aged 30 or over in the squad\"}],\"cupExit\":null,\"uclExit\":null,\"negotiation\":null,\"incomingBids\":[],\"coldNames\":[],\"loanedOut\":[],\"transferLog\":[{\"name\":\"Kenan Yıldız\",\"from\":\"Juventus\",\"to\":\"Arsenal\",\"fee\":71,\"season\":1,\"week\":0},{\"name\":\"Sandro Tonali\",\"from\":\"Tottenham\",\"to\":\"Crystal Palace\",\"fee\":72,\"season\":1,\"week\":0},{\"name\":\"Michael Olise\",\"from\":\"Bayern Munich\",\"to\":\"Real Madrid\",\"fee\":123,\"season\":1,\"week\":0},{\"name\":\"Rodri\",\"from\":\"Barcelona\",\"to\":\"Arsenal\",\"fee\":85,\"season\":1,\"week\":0}],\"resultLog\":[{\"week\":0,\"comp\":\"Premier League · Round 1\",\"opp\":\"Aston Villa\",\"home\":true,\"score\":\"0-1\",\"res\":\"L\",\"competition\":\"league\"},{\"week\":1,\"comp\":\"Premier League · Round 2\",\"opp\":\"Chelsea\",\"home\":false,\"score\":\"0-0\",\"res\":\"D\",\"competition\":\"league\"}],\"inbox\":[{\"playerName\":\"Ferdi Kadıoğlu\",\"from\":\"Rafa Cardoso, agent\",\"playerId\":\"p-ferdi-kadioglu\",\"kind\":\"agent\",\"text\":\"An agent has been in touch about Ferdi Kadıoğlu, who is 26 and has a year left. The desk prices a new deal at £8.3m up front on 46k a week for 4 years. Say nothing and he can talk to anyone in the summer.\",\"options\":[{\"label\":\"Sign him up for £8.3m\",\"effect\":\"renewDeal\"},{\"label\":\"Let it run\",\"effect\":\"letItRun\"}],\"id\":\"msg-1-0-1\",\"week\":0}],\"promisedStarts\":[],\"pairResults\":{\"laliga\":{\"Alavés|Villarreal\":[0,1],\"Athletic Club|Valencia\":[1,0],\"Atlético Madrid|Sevilla\":[3,0],\"Barcelona|Real Sociedad\":[1,0],\"Real Betis|Real Madrid\":[0,5],\"Celta Vigo|Rayo Vallecano\":[1,0],\"Deportivo La Coruña|Racing Santander\":[1,1],\"Elche|Osasuna\":[3,0],\"Espanyol|Málaga\":[3,1],\"Getafe|Levante\":[0,2],\"Athletic Club|Alavés\":[2,0],\"Villarreal|Atlético Madrid\":[2,1],\"Valencia|Barcelona\":[0,2],\"Sevilla|Real Betis\":[4,1],\"Real Sociedad|Celta Vigo\":[2,0],\"Real Madrid|Deportivo La Coruña\":[5,0],\"Rayo Vallecano|Elche\":[0,0],\"Racing Santander|Espanyol\":[0,2],\"Osasuna|Getafe\":[1,0],\"Málaga|Levante\":[2,2],\"Alavés|Atlético Madrid\":[2,1],\"Barcelona|Athletic Club\":[1,3],\"Real Betis|Villarreal\":[2,1],\"Celta Vigo|Valencia\":[0,0],\"Deportivo La Coruña|Sevilla\":[3,0],\"Elche|Real Sociedad\":[1,1],\"Espanyol|Real Madrid\":[0,1],\"Getafe|Rayo Vallecano\":[1,2],\"Levante|Racing Santander\":[2,2],\"Málaga|Osasuna\":[1,3]},\"seriea\":{\"Atalanta|Venezia\":[2,0],\"Bologna|Udinese\":[2,1],\"Cagliari|Torino\":[1,0],\"Como|Sassuolo\":[4,1],\"Fiorentina|Roma\":[2,0],\"Frosinone|Parma\":[0,1],\"Genoa|Napoli\":[0,4],\"Inter Milan|Monza\":[0,0],\"Juventus|AC Milan\":[0,1],\"Lazio|Lecce\":[4,0],\"Bologna|Atalanta\":[0,1],\"Venezia|Cagliari\":[3,0],\"Udinese|Como\":[1,1],\"Torino|Fiorentina\":[3,2],\"Sassuolo|Frosinone\":[2,0],\"Roma|Genoa\":[5,2],\"Parma|Inter Milan\":[4,2],\"Napoli|Juventus\":[2,2],\"Monza|Lazio\":[1,0],\"AC Milan|Lecce\":[2,0],\"Atalanta|Cagliari\":[4,1],\"Como|Bologna\":[1,1],\"Fiorentina|Venezia\":[1,0],\"Frosinone|Udinese\":[0,0],\"Genoa|Torino\":[1,2],\"Inter Milan|Sassuolo\":[1,0],\"Juventus|Roma\":[3,1],\"Lazio|Parma\":[2,1],\"Lecce|Napoli\":[1,2],\"AC Milan|Monza\":[3,0]},\"bundesliga\":{\"Augsburg|Werder Bremen\":[2,1],\"Bayer Leverkusen|Union Berlin\":[0,0],\"Bayern Munich|Stuttgart\":[3,1],\"Borussia Dortmund|Paderborn\":[2,1],\"Gladbach|Elversberg\":[3,2],\"Eintracht Frankfurt|Schalke 04\":[7,0],\"Freiburg|RB Leipzig\":[0,2],\"Hamburg|Mainz\":[2,0],\"Hoffenheim|Köln\":[7,1],\"Bayer Leverkusen|Augsburg\":[1,0],\"Werder Bremen|Bayern Munich\":[2,5],\"Union Berlin|Borussia Dortmund\":[0,4],\"Stuttgart|Gladbach\":[3,1],\"Paderborn|Eintracht Frankfurt\":[1,1],\"Elversberg|Freiburg\":[0,0],\"Schalke 04|Hamburg\":[0,2],\"RB Leipzig|Hoffenheim\":[2,1],\"Mainz|Köln\":[0,1],\"Augsburg|Bayern Munich\":[2,5],\"Borussia Dortmund|Bayer Leverkusen\":[4,3],\"Gladbach|Werder Bremen\":[2,0],\"Eintracht Frankfurt|Union Berlin\":[0,1],\"Freiburg|Stuttgart\":[0,2],\"Hamburg|Paderborn\":[0,2],\"Hoffenheim|Elversberg\":[1,0],\"Köln|Schalke 04\":[1,1],\"Mainz|RB Leipzig\":[0,3]},\"ligue1\":{\"Angers|Troyes\":[2,3],\"Auxerre|Toulouse\":[0,0],\"Brest|Strasbourg\":[0,1],\"Le Havre|Rennes\":[2,1],\"Le Mans|PSG\":[0,3],\"Lens|Paris FC\":[0,0],\"Lille|Nice\":[5,3],\"Lorient|Monaco\":[0,1],\"Lyon|Marseille\":[1,1],\"Auxerre|Angers\":[1,0],\"Troyes|Brest\":[1,1],\"Toulouse|Le Havre\":[0,0],\"Strasbourg|Le Mans\":[3,0],\"Rennes|Lens\":[2,0],\"PSG|Lille\":[1,0],\"Paris FC|Lorient\":[3,2],\"Nice|Lyon\":[1,0],\"Monaco|Marseille\":[1,0],\"Angers|Brest\":[2,0],\"Le Havre|Auxerre\":[0,2],\"Le Mans|Troyes\":[0,3],\"Lens|Toulouse\":[1,2],\"Lille|Strasbourg\":[4,2],\"Lorient|Rennes\":[4,1],\"Lyon|PSG\":[1,1],\"Marseille|Paris FC\":[1,1],\"Monaco|Nice\":[0,1]},\"premier\":{\"Arsenal|Coventry City\":[2,1],\"Hull City|Manchester United\":[0,1],\"Everton|Crystal Palace\":[1,2],\"Ipswich Town|Sunderland\":[2,1],\"Nottingham Forest|Leeds United\":[5,1],\"Brentford|Tottenham\":[1,0],\"Brighton|Aston Villa\":[0,1],\"Manchester City|Bournemouth\":[2,1],\"Newcastle|Liverpool\":[0,2],\"Fulham|Chelsea\":[2,0],\"Aston Villa|Arsenal\":[1,1],\"Bournemouth|Everton\":[3,3],\"Chelsea|Brighton\":[0,0],\"Coventry City|Hull City\":[2,3],\"Crystal Palace|Manchester City\":[1,2],\"Leeds United|Brentford\":[1,0],\"Liverpool|Nottingham Forest\":[2,1],\"Manchester United|Ipswich Town\":[0,0],\"Sunderland|Fulham\":[0,2],\"Tottenham|Newcastle\":[3,2]}},\"realLeagueFixtures\":\"premier-2026-27-v1\",\"wageCap\":820,\"freeAgents\":[{\"name\":\"Jasper Ubeda\",\"position\":\"GK\",\"age\":28,\"rating\":65,\"value\":0.2,\"wage\":10,\"generated\":true,\"since\":1,\"reason\":\"unattached\"},{\"name\":\"Noel Ramires\",\"position\":\"LB\",\"age\":28,\"rating\":65,\"value\":0.2,\"wage\":10,\"generated\":true,\"since\":1,\"reason\":\"unattached\"},{\"name\":\"Rian Balogun\",\"position\":\"LM\",\"age\":33,\"rating\":61,\"value\":0.2,\"wage\":3,\"generated\":true,\"since\":1,\"reason\":\"unattached\"},{\"name\":\"Armel Maes\",\"position\":\"ST\",\"age\":26,\"rating\":62,\"value\":0.2,\"wage\":8,\"generated\":true,\"since\":1,\"reason\":\"unattached\"},{\"name\":\"Jaden Coelho\",\"position\":\"CB\",\"age\":32,\"rating\":59,\"value\":0.2,\"wage\":2,\"generated\":true,\"since\":1,\"reason\":\"unattached\"},{\"name\":\"Zoran Guerrero\",\"position\":\"CAM\",\"age\":25,\"rating\":59,\"value\":0.2,\"wage\":7,\"generated\":true,\"since\":1,\"reason\":\"unattached\"},{\"name\":\"Dani Parejo\",\"position\":\"CM\",\"age\":37,\"rating\":65,\"value\":0.8,\"since\":1,\"reason\":\"unattached\"},{\"name\":\"Dele Alli\",\"position\":\"CAM\",\"age\":30,\"rating\":65,\"value\":0.8,\"since\":1,\"reason\":\"unattached\"},{\"name\":\"Sergio Ramos\",\"position\":\"CB\",\"age\":40,\"rating\":63,\"value\":0.7,\"since\":1,\"reason\":\"unattached\"},{\"name\":\"Edinson Cavani\",\"position\":\"ST\",\"age\":39,\"rating\":60,\"value\":0.4,\"since\":1,\"reason\":\"unattached\"},{\"name\":\"Tiemoué Bakayoko\",\"position\":\"CDM\",\"age\":32,\"rating\":60,\"value\":0.4,\"since\":1,\"reason\":\"unattached\"},{\"name\":\"Wissam Ben Yedder\",\"position\":\"ST\",\"age\":36,\"rating\":60,\"value\":0.4,\"since\":1,\"reason\":\"unattached\"},{\"name\":\"Willian\",\"position\":\"LW\",\"age\":38,\"rating\":59,\"value\":0.3,\"since\":1,\"reason\":\"unattached\"}],\"severance\":[],\"training\":{\"intensity\":\"normal\",\"focus\":\"balanced\"},\"academy\":{\"recruitment\":11,\"coaching\":13,\"facilities\":11,\"scouts\":[],\"candidates\":[{\"id\":\"sc-mv5y3cn4-8282\",\"name\":\"Kenny Barros\",\"judgement\":1,\"network\":4,\"fee\":3,\"regionId\":\"\",\"regionName\":\"\",\"regionFlag\":\"\",\"weeksLeft\":0,\"found\":0},{\"id\":\"sc-mv5y3cn4-2977\",\"name\":\"Pierre Vialli\",\"judgement\":1,\"network\":1,\"fee\":1,\"regionId\":\"\",\"regionName\":\"\",\"regionFlag\":\"\",\"weeksLeft\":0,\"found\":0},{\"id\":\"sc-mv5y3cn4-8329\",\"name\":\"Aleks Barros\",\"judgement\":2,\"network\":3,\"fee\":3,\"regionId\":\"\",\"regionName\":\"\",\"regionFlag\":\"\",\"weeksLeft\":0,\"found\":0}],\"prospects\":[],\"lastIntakeSeason\":0},\"academyGraduates\":0,\"teamTalk\":null,\"press\":{\"mood\":50,\"pending\":{\"kind\":\"bigGame\",\"text\":\"Chelsea on paper are a level above you. Realistically, what are you going there for?\",\"options\":[{\"label\":\"Nobody gives us a prayer, and that suits us\",\"squad\":1.25,\"subject\":0,\"board\":0.1,\"mood\":2,\"sharpen\":0.9,\"line\":\"Underdogs and happy about it. Exactly the week your squad needed.\"},{\"label\":\"We are going to win it\",\"squad\":0.85,\"subject\":0,\"board\":0.8,\"mood\":3,\"fire\":2.8,\"promise\":true,\"line\":\"A big call in front of a big audience. They have seen it too.\"},{\"label\":\"We will do our jobs and see\",\"squad\":0,\"subject\":0,\"board\":0.35,\"mood\":-1.5,\"line\":\"Dull, safe and forgotten by Friday teatime. The board like a man who promises nothing.\"}],\"id\":\"pq-1-1-1\"},\"lastWeek\":1,\"answered\":0,\"ducked\":0,\"nextFire\":0,\"nextSharpen\":0,\"promised\":false,\"lastTone\":null,\"toneRun\":0},\"managers\":{\"Arsenal\":{\"name\":\"Youri Sagna\",\"since\":1},\"Aston Villa\":{\"name\":\"Salim Wagner\",\"since\":1},\"Bournemouth\":{\"name\":\"Zoran Idrissi\",\"since\":1},\"Brentford\":{\"name\":\"Ionut Fernandes\",\"since\":1},\"Chelsea\":{\"name\":\"Ari Vidal\",\"since\":1},\"Coventry City\":{\"name\":\"Goran Fernandes\",\"since\":1},\"Crystal Palace\":{\"name\":\"Goran Mucci\",\"since\":1},\"Everton\":{\"name\":\"Elias Navarro\",\"since\":1},\"Fulham\":{\"name\":\"Caio Aguirre\",\"since\":1},\"Hull City\":{\"name\":\"Alfie Gallardo\",\"since\":1},\"Ipswich Town\":{\"name\":\"Tadeo Falk\",\"since\":1},\"Leeds United\":{\"name\":\"Amadou Arslan\",\"since\":1},\"Liverpool\":{\"name\":\"Zeke Trevisan\",\"since\":1},\"Manchester City\":{\"name\":\"Felipe Karlsson\",\"since\":1},\"Manchester United\":{\"name\":\"Asier Nielsen\",\"since\":1},\"Newcastle\":{\"name\":\"Wout Martel\",\"since\":1},\"Nottingham Forest\":{\"name\":\"Jaden Machado\",\"since\":1},\"Sunderland\":{\"name\":\"Felipe Lampe\",\"since\":1},\"Tottenham\":{\"name\":\"Ivo Colombo\",\"since\":1}},\"boardAsksVersion\":1,\"scorerRace\":[{\"name\":\"Bryan Mbeumo\",\"club\":\"Manchester United\",\"goals\":1},{\"name\":\"Matheus Cunha\",\"club\":\"Manchester United\",\"goals\":0},{\"name\":\"Christos Mouzakitis\",\"club\":\"Hull City\",\"goals\":1},{\"name\":\"Robinio Vaz\",\"club\":\"Hull City\",\"goals\":2},{\"name\":\"Anthony Elanga\",\"club\":\"Newcastle\",\"goals\":1},{\"name\":\"Bazoumana Touré\",\"club\":\"Newcastle\",\"goals\":0},{\"name\":\"Morgan Gibbs-White\",\"club\":\"Nottingham Forest\",\"goals\":4},{\"name\":\"Dan Ndoye\",\"club\":\"Nottingham Forest\",\"goals\":1},{\"name\":\"James Garner\",\"club\":\"Everton\",\"goals\":1},{\"name\":\"Brennan Johnson\",\"club\":\"Everton\",\"goals\":1},{\"name\":\"Adam Wharton\",\"club\":\"Crystal Palace\",\"goals\":1},{\"name\":\"Jørgen Strand Larsen\",\"club\":\"Crystal Palace\",\"goals\":1},{\"name\":\"Exequiel Palacios\",\"club\":\"Ipswich Town\",\"goals\":0},{\"name\":\"Abdul Fatawu\",\"club\":\"Ipswich Town\",\"goals\":1},{\"name\":\"Cole Palmer\",\"club\":\"Chelsea\",\"goals\":0},{\"name\":\"Moisés Caicedo\",\"club\":\"Chelsea\",\"goals\":0},{\"name\":\"Amadou Onana\",\"club\":\"Aston Villa\",\"goals\":0},{\"name\":\"Boubacar Kamara\",\"club\":\"Aston Villa\",\"goals\":0},{\"name\":\"Alex Scott\",\"club\":\"Bournemouth\",\"goals\":2},{\"name\":\"Junior Kroupi\",\"club\":\"Bournemouth\",\"goals\":0},{\"name\":\"Igor Thiago\",\"club\":\"Brentford\",\"goals\":1},{\"name\":\"Dango Ouattara\",\"club\":\"Brentford\",\"goals\":0},{\"name\":\"Florian Wirtz\",\"club\":\"Liverpool\",\"goals\":0},{\"name\":\"Alexander Isak\",\"club\":\"Liverpool\",\"goals\":0},{\"name\":\"Ethan Ampadu\",\"club\":\"Leeds United\",\"goals\":0},{\"name\":\"Anton Stach\",\"club\":\"Leeds United\",\"goals\":0},{\"name\":\"Bukayo Saka\",\"club\":\"Arsenal\",\"goals\":2},{\"name\":\"Declan Rice\",\"club\":\"Arsenal\",\"goals\":1},{\"name\":\"Jack Rudoni\",\"club\":\"Coventry City\",\"goals\":1},{\"name\":\"Sidiki Chérif\",\"club\":\"Coventry City\",\"goals\":1},{\"name\":\"Hugo Larsson\",\"club\":\"Fulham\",\"goals\":3},{\"name\":\"Gonzalo García\",\"club\":\"Fulham\",\"goals\":1},{\"name\":\"Erling Haaland\",\"club\":\"Manchester City\",\"goals\":2},{\"name\":\"Enzo Fernández\",\"club\":\"Manchester City\",\"goals\":1},{\"name\":\"Habib Diarra\",\"club\":\"Sunderland\",\"goals\":0},{\"name\":\"Malick Fofana\",\"club\":\"Sunderland\",\"goals\":0},{\"name\":\"Sandro Tonali\",\"club\":\"Tottenham\",\"goals\":2},{\"name\":\"Omar Marmoush\",\"club\":\"Tottenham\",\"goals\":0}],\"leagueBook\":{\"s\":\"premier|1e1mkek\",\"c\":{\"Arsenal\":{\"m\":{\"Jurriën Timber|RB\":[1,0,0,0],\"Viktor Gyökeres|ST\":[1,1,0,0],\"Martin Ødegaard|CAM\":[1,0,0,0],\"Bukayo Saka|RW\":[0,1,0,0]},\"og\":0,\"u\":0},\"Coventry City\":{\"m\":{\"Ephron Mason-Clark|LM\":[1,0,0,0],\"Sidiki Chérif|ST\":[0,1,0,0],\"Gustavo Hamer|CM\":[1,0,0,0],\"Milan van Ewijk|RB\":[1,0,0,0],\"Victor Torp|CM\":[0,1,0,0]},\"og\":0,\"u\":0},\"Manchester United\":{\"m\":{\"Matheus Cunha|ST\":[1,0,0,0],\"Bryan Mbeumo|RW\":[0,1,0,0],\"Senne Lammens|GK\":[0,0,2,0],\"Leny Yoro|CB\":[0,0,2,0],\"Lisandro Martínez|CB\":[0,0,2,0],\"Matthijs de Ligt|CB\":[0,0,2,0],\"Patrick Dorgu|LB\":[0,0,2,0]},\"og\":0,\"u\":0},\"Everton\":{\"m\":{\"Thierno Barry|ST\":[2,2,0,0],\"Jarrad Branthwaite|CB\":[0,1,0,0],\"Brennan Johnson|RW\":[1,0,0,0],\"Merlin Röhl|CAM\":[1,0,0,0]},\"og\":0,\"u\":0},\"Crystal Palace\":{\"m\":{\"Jørgen Strand Larsen|ST\":[1,0,0,0],\"Ismaïla Sarr|RW\":[1,1,0,0],\"Daichi Kamada|CAM\":[1,0,0,0]},\"og\":0,\"u\":0},\"Ipswich Town\":{\"m\":{\"Anis Mehmeti|CAM\":[1,0,0,0],\"Abdoul Ouattara|RB\":[1,0,1,0],\"Exequiel Palacios|CM\":[0,1,0,0],\"Kjell Scherpen|GK\":[0,0,1,0],\"Leif Davis|LB\":[0,0,1,0],\"Dara O'Shea|CB\":[0,0,1,0],\"Jacob Greaves|CB\":[0,0,1,0]},\"og\":0,\"u\":0},\"Sunderland\":{\"m\":{\"Brian Brobbey|ST\":[1,0,0,0],\"Trai Hume|RB\":[0,1,0,0]},\"og\":0,\"u\":0},\"Nottingham Forest\":{\"m\":{\"Liam Delap|ST\":[3,1,0,0],\"Dan Ndoye|RW\":[0,2,0,0],\"James McAtee|CAM\":[1,1,0,0],\"Morgan Gibbs-White|CAM\":[2,0,0,0]},\"og\":0,\"u\":0},\"Leeds United\":{\"m\":{\"Harry Wilson|RW\":[2,0,0,0],\"James Trafford|GK\":[0,0,1,0],\"Gabriel Gudmundsson|LB\":[0,0,1,0],\"Tarik Muharemović|CB\":[0,0,1,0],\"Jaka Bijol|CB\":[0,0,1,0],\"Joe Rodon|CB\":[0,0,1,0]},\"og\":0,\"u\":0},\"Brentford\":{\"m\":{\"Michael Kayode|RB\":[1,0,1,0],\"Mikkel Damsgaard|CAM\":[0,1,0,0],\"Caoimhín Kelleher|GK\":[0,0,1,0],\"Sepp van den Berg|CB\":[0,0,1,0],\"Nathan Collins|CB\":[0,0,1,0],\"El Hadji Malick Diouf|LB\":[0,0,1,0]},\"og\":0,\"u\":0},\"Aston Villa\":{\"m\":{\"Nicolas Jackson|ST\":[1,1,0,0],\"Zion Suzuki|GK\":[0,0,1,0],\"Ian Maatsen|LB\":[0,0,1,0],\"Aaron Wan-Bissaka|RB\":[0,0,1,0],\"Matty Cash|RB\":[0,0,1,0],\"Pau Torres|CB\":[0,0,1,0],\"Alejandro Garnacho|LW\":[1,0,0,0]},\"og\":0,\"u\":0},\"Manchester City\":{\"m\":{\"Nico O'Reilly|LB\":[1,0,0,0],\"Phil Foden|CAM\":[0,2,0,0],\"Antoine Semenyo|RW\":[2,1,0,0],\"Rúben Dias|CB\":[0,1,0,0],\"Josko Gvardiol|CB\":[1,0,0,0]},\"og\":0,\"u\":0},\"Bournemouth\":{\"m\":{\"Junior Kroupi|ST\":[2,0,0,0],\"Tyler Adams|CDM\":[1,0,0,0],\"Justin Kluivert|CAM\":[0,1,0,0],\"Rayan|RW\":[1,0,0,0],\"António Silva|CB\":[0,1,0,0]},\"og\":0,\"u\":0},\"Liverpool\":{\"m\":{\"Milos Kerkez|LB\":[1,0,1,0],\"Alexander Isak|ST\":[2,0,0,0],\"Giorgi Mamardashvili|GK\":[0,0,1,0],\"Jérémy Jacquet|CB\":[0,0,1,0],\"Jeremie Frimpong|RB\":[0,0,1,0],\"Conor Bradley|RB\":[0,1,1,0],\"Hugo Ekitiké|ST\":[1,0,0,0]},\"og\":0,\"u\":0},\"Fulham\":{\"m\":{\"Emile Smith Rowe|CAM\":[1,1,0,0],\"Gonzalo García|ST\":[1,0,0,0],\"Bernd Leno|GK\":[0,0,2,0],\"Calvin Bassey|CB\":[0,0,2,0],\"Antonee Robinson|LB\":[0,0,2,0],\"Joachim Andersen|CB\":[0,0,2,0],\"Ryan Sessegnon|LB\":[0,0,2,0],\"Sander Berge|CDM\":[2,0,0,0]},\"og\":0,\"u\":0},\"Chelsea\":{\"m\":{\"Emiliano Martínez|GK\":[0,0,1,0],\"Reece James|RB\":[0,0,1,0],\"Levi Colwill|CB\":[0,0,1,0],\"Maxence Lacroix|CB\":[0,0,1,0],\"Jorrel Hato|LB\":[0,0,1,0]},\"og\":0,\"u\":0},\"Hull City\":{\"m\":{\"Tim Iroegbunam|CM\":[1,1,0,0],\"Christos Mouzakitis|CM\":[0,1,0,0],\"Mohamed-Ali Cho|RW\":[1,0,0,0],\"Nobel Mendy|CB\":[1,0,0,0]},\"og\":0,\"u\":0},\"Tottenham\":{\"m\":{\"Sandro Tonali|CDM\":[1,0,0,0],\"Omar Marmoush|ST\":[2,1,0,0]},\"og\":0,\"u\":0},\"Newcastle\":{\"m\":{\"Aladji Bamba|CDM\":[1,1,0,0],\"Tino Livramento|RB\":[0,1,0,0],\"Joelinton|CM\":[1,0,0,0]},\"og\":0,\"u\":0}},\"my\":[[\"p-bart-verbruggen\",1],[\"p-luka-vuskovic\",1],[\"p-pascal-struijk\",1],[\"p-olivier-boscagli\",1],[\"p-ferdi-kadioglu\",1],[\"p-maxim-de-cuyper\",1]]},\"setPieces\":{\"captain\":\"p-kaoru-mitoma\",\"cornersLeft\":\"p-yankuba-minteh\",\"cornersRight\":\"p-kaoru-mitoma\",\"freeKicks\":\"p-yankuba-minteh\",\"penalties\":\"p-georginio-rutter\"},\"intl\":{\"season\":1,\"fired\":[]},\"facilities\":{\"v\":1,\"stadium\":7,\"trainingGround\":6,\"medical\":6,\"dressingRoom\":6,\"seasonSpend\":0},\"books\":{\"v\":1,\"concessionTier\":1,\"fanMood\":49.4,\"season\":{\"weeks\":2,\"homeGames\":1,\"awayTrips\":1,\"tickets\":1.15,\"concessions\":0.28,\"sponsor\":0,\"playerWages\":1.426,\"staffWages\":0.334,\"travel\":0.09},\"lastSeason\":null,\"pushed\":{},\"walked\":[]},\"staff\":{\"v\":1,\"attack\":{\"id\":\"st-11exxq7\",\"name\":\"Gethin Eeckhout\",\"level\":5,\"potential\":7,\"wage\":14,\"since\":1,\"academy\":false},\"defence\":{\"id\":\"st-1cifs47\",\"name\":\"Nedim Grimsby\",\"level\":6,\"potential\":6,\"wage\":16,\"since\":1,\"academy\":false},\"goalkeeping\":{\"id\":\"st-1e88kip\",\"name\":\"Caspar Bertelsen\",\"level\":7,\"potential\":7,\"wage\":18,\"since\":1,\"academy\":false},\"scout\":{\"id\":\"st-u3od7o\",\"name\":\"Alaric Rasmusson\",\"level\":6,\"potential\":8,\"wage\":16,\"since\":1,\"academy\":false},\"poach\":null,\"matchesLeft\":2,\"hires\":0,\"seasonSpend\":0},\"managerXp\":{\"v\":1,\"xp\":0,\"points\":{\"tactics\":0,\"recruitment\":0,\"negotiation\":0,\"youth\":0,\"manManagement\":0,\"finance\":0,\"media\":0}},\"startOptions\":{\"v\":1,\"currency\":\"GBP\",\"nationJobs\":true,\"strictness\":3},\"clubForm\":{\"Birmingham City\":[\"W\",\"W\",\"W\",\"L\"],\"Wrexham\":[\"L\",\"D\",\"L\",\"W\"],\"Blackburn Rovers\":[\"L\",\"L\",\"L\",\"W\"],\"Wolves\":[\"W\",\"W\",\"W\",\"W\"],\"Bolton Wanderers\":[\"L\",\"D\",\"L\",\"D\"],\"West Ham\":[\"W\",\"W\",\"W\",\"W\"],\"Bristol City\":[\"W\",\"L\",\"W\",\"W\"],\"West Brom\":[\"L\",\"W\",\"L\",\"D\"],\"Burnley\":[\"D\",\"L\",\"W\",\"D\"],\"Watford\":[\"D\",\"D\",\"W\",\"W\"],\"Cardiff City\":[\"L\",\"L\",\"L\",\"L\"],\"Swansea City\":[\"W\",\"L\",\"L\",\"D\"],\"Charlton Athletic\":[\"W\",\"D\",\"L\",\"L\"],\"Stoke City\":[\"L\",\"W\",\"W\",\"W\"],\"Derby County\":[\"D\",\"W\",\"W\",\"L\"],\"Southampton\":[\"D\",\"D\",\"W\",\"W\"],\"Lincoln City\":[\"L\",\"L\",\"L\",\"L\"],\"Sheffield United\":[\"W\",\"W\",\"W\",\"D\"],\"Middlesbrough\":[\"L\",\"D\",\"W\",\"D\"],\"QPR\":[\"W\",\"L\",\"L\",\"D\"],\"Millwall\":[\"W\",\"L\",\"L\",\"L\"],\"Preston North End\":[\"L\",\"W\",\"W\",\"L\"],\"Norwich City\":[\"D\",\"W\",\"L\",\"D\"],\"Portsmouth\":[\"D\",\"L\",\"L\",\"L\"],\"Alavés\":[\"L\",\"L\",\"W\"],\"Villarreal\":[\"W\",\"W\",\"L\"],\"Athletic Club\":[\"W\",\"W\",\"W\"],\"Valencia\":[\"L\",\"L\",\"D\"],\"Atlético Madrid\":[\"W\",\"L\",\"L\"],\"Sevilla\":[\"L\",\"W\",\"L\"],\"Barcelona\":[\"W\",\"W\",\"L\"],\"Real Sociedad\":[\"L\",\"W\",\"D\"],\"Real Betis\":[\"L\",\"L\",\"W\"],\"Real Madrid\":[\"W\",\"W\",\"W\"],\"Celta Vigo\":[\"W\",\"L\",\"D\"],\"Rayo Vallecano\":[\"L\",\"D\",\"W\"],\"Deportivo La Coruña\":[\"D\",\"L\",\"W\"],\"Racing Santander\":[\"D\",\"L\",\"D\"],\"Elche\":[\"W\",\"D\",\"D\"],\"Osasuna\":[\"L\",\"W\",\"W\"],\"Espanyol\":[\"W\",\"W\",\"L\"],\"Málaga\":[\"L\",\"D\",\"L\"],\"Getafe\":[\"L\",\"L\",\"L\"],\"Levante\":[\"W\",\"D\",\"D\"],\"Atalanta\":[\"W\",\"W\",\"W\"],\"Venezia\":[\"L\",\"W\",\"L\"],\"Bologna\":[\"W\",\"L\",\"D\"],\"Udinese\":[\"L\",\"D\",\"D\"],\"Cagliari\":[\"W\",\"L\",\"L\"],\"Torino\":[\"L\",\"W\",\"W\"],\"Como\":[\"W\",\"D\",\"D\"],\"Sassuolo\":[\"L\",\"W\",\"L\"],\"Fiorentina\":[\"W\",\"L\",\"W\"],\"Roma\":[\"L\",\"W\",\"L\"],\"Frosinone\":[\"L\",\"L\",\"D\"],\"Parma\":[\"W\",\"W\",\"L\"],\"Genoa\":[\"L\",\"L\",\"L\"],\"Napoli\":[\"W\",\"D\",\"W\"],\"Inter Milan\":[\"D\",\"L\",\"W\"],\"Monza\":[\"D\",\"W\",\"L\"],\"Juventus\":[\"L\",\"D\",\"W\"],\"AC Milan\":[\"W\",\"W\",\"W\"],\"Lazio\":[\"W\",\"L\",\"W\"],\"Lecce\":[\"L\",\"L\",\"L\"],\"Augsburg\":[\"W\",\"L\",\"L\"],\"Werder Bremen\":[\"L\",\"L\",\"L\"],\"Bayer Leverkusen\":[\"D\",\"W\",\"L\"],\"Union Berlin\":[\"D\",\"L\",\"W\"],\"Bayern Munich\":[\"W\",\"W\",\"W\"],\"Stuttgart\":[\"L\",\"W\",\"W\"],\"Borussia Dortmund\":[\"W\",\"W\",\"W\"],\"Paderborn\":[\"L\",\"D\",\"W\"],\"Gladbach\":[\"W\",\"L\",\"W\"],\"Elversberg\":[\"L\",\"D\",\"L\"],\"Eintracht Frankfurt\":[\"W\",\"D\",\"L\"],\"Schalke 04\":[\"L\",\"L\",\"D\"],\"Freiburg\":[\"L\",\"D\",\"L\"],\"RB Leipzig\":[\"W\",\"W\",\"W\"],\"Hamburg\":[\"W\",\"W\",\"L\"],\"Mainz\":[\"L\",\"L\",\"L\"],\"Hoffenheim\":[\"W\",\"L\",\"W\"],\"Köln\":[\"L\",\"W\",\"D\"],\"Angers\":[\"L\",\"L\",\"W\"],\"Troyes\":[\"W\",\"D\",\"W\"],\"Auxerre\":[\"D\",\"W\",\"W\"],\"Toulouse\":[\"D\",\"D\",\"W\"],\"Brest\":[\"L\",\"D\",\"L\"],\"Strasbourg\":[\"W\",\"W\",\"L\"],\"Le Havre\":[\"W\",\"D\",\"L\"],\"Rennes\":[\"L\",\"W\",\"L\"],\"Le Mans\":[\"L\",\"L\",\"L\"],\"PSG\":[\"W\",\"W\",\"D\"],\"Lens\":[\"D\",\"L\",\"L\"],\"Paris FC\":[\"D\",\"W\",\"D\"],\"Lille\":[\"W\",\"L\",\"W\"],\"Nice\":[\"L\",\"W\",\"W\"],\"Lorient\":[\"L\",\"L\",\"W\"],\"Monaco\":[\"W\",\"W\",\"L\"],\"Lyon\":[\"D\",\"L\",\"D\"],\"Marseille\":[\"D\",\"L\",\"D\"],\"Ajax\":[\"W\",\"W\",\"W\"],\"Willem II\":[\"L\",\"D\",\"L\"],\"AZ Alkmaar\":[\"W\",\"L\",\"W\"],\"Utrecht\":[\"L\",\"W\",\"L\"],\"ADO Den Haag\":[\"D\",\"D\",\"L\"],\"Twente\":[\"D\",\"W\",\"W\"],\"Cambuur\":[\"L\",\"L\",\"L\"],\"Telstar\":[\"W\",\"L\",\"D\"],\"Excelsior\":[\"L\",\"L\",\"W\"],\"Sparta Rotterdam\":[\"W\",\"W\",\"L\"],\"Feyenoord\":[\"W\",\"W\",\"W\"],\"PSV\":[\"L\",\"D\",\"W\"],\"Fortuna Sittard\":[\"L\",\"L\",\"L\"],\"PEC Zwolle\":[\"W\",\"W\",\"W\"],\"Go Ahead Eagles\":[\"L\",\"D\",\"D\"],\"NEC Nijmegen\":[\"W\",\"D\",\"L\"],\"Groningen\":[\"L\",\"L\",\"W\"],\"Heerenveen\":[\"W\",\"D\",\"L\"],\"Abha\":[\"W\",\"L\",\"W\"],\"NEOM SC\":[\"L\",\"W\",\"L\"],\"Al-Ahli\":[\"W\",\"W\",\"L\"],\"Al-Taawoun\":[\"L\",\"W\",\"W\"],\"Al-Diriyah\":[\"W\",\"L\",\"L\"],\"Al-Shabab\":[\"L\",\"W\",\"L\"],\"Al-Ettifaq\":[\"W\",\"L\",\"W\"],\"Al-Riyadh\":[\"L\",\"W\",\"D\"],\"Al-Faisaly\":[\"L\",\"L\",\"W\"],\"Al-Qadsiah\":[\"W\",\"L\",\"D\"],\"Al-Fateh\":[\"L\",\"L\",\"L\"],\"Al-Nassr\":[\"W\",\"W\",\"W\"],\"Al-Fayha\":[\"L\",\"W\",\"W\"],\"Al-Kholood\":[\"W\",\"L\",\"D\"],\"Al-Hazem\":[\"W\",\"L\",\"D\"],\"Al-Khaleej\":[\"L\",\"D\",\"D\"],\"Al-Hilal\":[\"W\",\"W\",\"D\"],\"Al-Ittihad\":[\"L\",\"D\",\"L\"],\"Charlotte FC\":[\"L\",\"W\"],\"Toronto FC\":[\"W\",\"D\"],\"Chicago Fire\":[\"D\"],\"Philadelphia Union\":[\"D\",\"L\"],\"FC Cincinnati\":[\"W\",\"D\"],\"Orlando City\":[\"L\",\"D\"],\"Columbus Crew\":[\"W\",\"W\"],\"New York Red Bulls\":[\"L\",\"L\"],\"D.C. United\":[\"L\",\"D\"],\"New York City FC\":[\"W\",\"D\"],\"Inter Miami\":[\"W\",\"W\"],\"New England Revolution\":[\"L\",\"D\"],\"CF Montréal\":[\"W\",\"D\"],\"Nashville SC\":[\"L\",\"D\"],\"Colorado Rapids\":[\"W\",\"D\"],\"Vancouver Whitecaps\":[\"L\",\"W\"],\"FC Dallas\":[\"W\"],\"St. Louis City\":[\"L\",\"L\"],\"Houston Dynamo\":[\"D\",\"L\"],\"Sporting Kansas City\":[\"D\",\"D\"],\"LA Galaxy\":[\"L\",\"W\"],\"Seattle Sounders\":[\"W\",\"W\"],\"LAFC\":[\"D\",\"D\"],\"San Jose Earthquakes\":[\"D\",\"D\"],\"Minnesota United\":[\"W\",\"L\"],\"San Diego FC\":[\"L\",\"L\"],\"Portland Timbers\":[\"D\",\"D\"],\"Real Salt Lake\":[\"D\",\"W\"],\"Porto\":[\"W\",\"L\",\"L\"],\"Académico de Viseu\":[\"L\",\"L\",\"L\"],\"Benfica\":[\"W\",\"W\",\"W\"],\"Marítimo\":[\"L\",\"L\",\"D\"],\"Sporting CP\":[\"W\",\"W\",\"W\"],\"Alverca\":[\"L\",\"D\",\"D\"],\"Braga\":[\"W\",\"W\",\"L\"],\"Estrela Amadora\":[\"L\",\"D\",\"L\"],\"Vitória Guimarães\":[\"D\",\"D\",\"W\"],\"Nacional\":[\"D\",\"L\",\"D\"],\"Famalicão\":[\"W\",\"D\",\"D\"],\"Santa Clara\":[\"L\",\"L\",\"D\"],\"Rio Ave\":[\"D\",\"W\",\"D\"],\"Gil Vicente\":[\"D\",\"L\",\"L\"],\"Casa Pia\":[\"D\",\"W\",\"W\"],\"Arouca\":[\"D\",\"W\",\"W\"],\"Estoril\":[\"W\",\"W\",\"D\"],\"Moreirense\":[\"L\",\"L\",\"D\"],\"Celtic\":[\"W\",\"D\"],\"St Johnstone\":[\"L\",\"L\"],\"Rangers\":[\"L\",\"D\"],\"Falkirk\":[\"W\",\"L\"],\"Aberdeen\":[\"D\",\"W\"],\"Kilmarnock\":[\"D\",\"L\"],\"Hearts\":[\"D\",\"W\"],\"St Mirren\":[\"D\",\"W\"],\"Hibernian\":[\"W\",\"W\"],\"Motherwell\":[\"L\",\"W\"],\"Dundee United\":[\"W\",\"L\"],\"Dundee\":[\"L\",\"L\"],\"Galatasaray\":[\"W\",\"D\",\"L\"],\"Çorum FK\":[\"L\",\"L\",\"L\"],\"Fenerbahçe\":[\"W\",\"D\",\"W\"],\"Amedspor\":[\"L\",\"L\",\"L\"],\"Beşiktaş\":[\"W\",\"W\",\"W\"],\"Erzurumspor\":[\"L\",\"D\",\"L\"],\"Trabzonspor\":[\"W\",\"W\",\"L\"],\"Rizespor\":[\"L\",\"W\",\"W\"],\"Başakşehir\":[\"W\",\"D\",\"W\"],\"Kocaelispor\":[\"L\",\"D\",\"D\"],\"Samsunspor\":[\"W\",\"L\",\"W\"],\"Gençlerbirliği\":[\"L\",\"L\",\"L\"],\"Eyüpspor\":[\"D\",\"D\",\"W\"],\"Gaziantep FK\":[\"D\",\"L\",\"L\"],\"Göztepe\":[\"L\",\"W\",\"L\"],\"Konyaspor\":[\"W\",\"L\",\"W\"],\"Kasımpaşa\":[\"D\",\"W\",\"D\"],\"Alanyaspor\":[\"D\",\"W\",\"W\"],\"Wolfsburg\":[\"W\",\"W\",\"L\"],\"Energie Cottbus\":[\"L\",\"L\",\"W\"],\"Heidenheim\":[\"L\",\"L\",\"D\"],\"Osnabrück\":[\"W\",\"D\",\"W\"],\"St. Pauli\":[\"L\",\"W\",\"W\"],\"Karlsruhe\":[\"W\",\"D\",\"W\"],\"Bochum\":[\"W\",\"D\",\"D\"],\"Arminia Bielefeld\":[\"L\",\"L\",\"L\"],\"Hertha BSC\":[\"L\",\"D\",\"L\"],\"Darmstadt\":[\"W\",\"L\",\"L\"],\"Magdeburg\":[\"D\",\"W\",\"L\"],\"Nürnberg\":[\"D\",\"W\",\"L\"],\"Kaiserslautern\":[\"W\",\"W\",\"L\"],\"Greuther Fürth\":[\"L\",\"W\",\"W\"],\"Holstein Kiel\":[\"D\",\"L\",\"W\"],\"Braunschweig\":[\"D\",\"W\",\"L\"],\"Hannover 96\":[\"D\",\"L\",\"W\"],\"Dynamo Dresden\":[\"D\",\"L\",\"W\"],\"Club Brugge\":[\"W\",\"W\",\"L\"],\"Lommel\":[\"L\",\"W\",\"L\"],\"Union Saint-Gilloise\":[\"W\",\"L\",\"D\"],\"Kortrijk\":[\"L\",\"L\",\"L\"],\"Anderlecht\":[\"D\",\"L\",\"W\"],\"Beveren\":[\"D\",\"D\",\"L\"],\"Genk\":[\"W\",\"W\",\"D\"],\"Zulte Waregem\":[\"L\",\"W\",\"D\"],\"Gent\":[\"W\",\"D\",\"W\"],\"La Louvière\":[\"L\",\"L\",\"L\"],\"Antwerp\":[\"L\",\"L\",\"W\"],\"Cercle Brugge\":[\"W\",\"D\",\"W\"],\"Standard Liège\":[\"D\",\"W\",\"W\"],\"OH Leuven\":[\"D\",\"L\",\"L\"],\"Mechelen\":[\"L\",\"D\",\"D\"],\"Sint-Truiden\":[\"W\",\"D\",\"W\"],\"Charleroi\":[\"W\",\"W\",\"W\"],\"Westerlo\":[\"L\",\"D\",\"L\"],\"RB Salzburg\":[\"W\",\"L\"],\"Austria Lustenau\":[\"L\",\"L\"],\"Sturm Graz\":[\"L\",\"W\"],\"WSG Tirol\":[\"W\",\"D\"],\"Rapid Wien\":[\"W\",\"W\"],\"Altach\":[\"L\",\"W\"],\"LASK\":[\"W\",\"D\"],\"Ried\":[\"L\",\"W\"],\"Wolfsberger AC\":[\"D\",\"L\"],\"Hartberg\":[\"D\",\"W\"],\"Austria Wien\":[\"W\",\"L\"],\"Grazer AK\":[\"L\",\"L\"],\"Olympiacos\":[\"W\",\"L\"],\"Volos\":[\"L\",\"L\"],\"Panathinaikos\":[\"W\",\"W\"],\"Panetolikos\":[\"L\",\"L\"],\"AEK Athens\":[\"W\",\"W\"],\"OFI\":[\"L\",\"L\"],\"PAOK\":[\"W\",\"W\"],\"Levadiakos\":[\"L\",\"L\"],\"Aris\":[\"W\",\"W\"],\"Kifisia\":[\"L\",\"D\"],\"Asteras Tripolis\":[\"W\",\"W\"],\"Kalamata\":[\"L\",\"L\"],\"Atromitos\":[\"D\",\"D\"],\"Iraklis\":[\"D\",\"W\"],\"FC Copenhagen\":[\"D\",\"W\"],\"SønderjyskE\":[\"D\",\"L\"],\"FC Midtjylland\":[\"W\",\"L\"],\"AC Horsens\":[\"L\",\"L\"],\"Brøndby IF\":[\"W\",\"W\"],\"Lyngby\":[\"L\",\"L\"],\"AGF\":[\"W\",\"W\"],\"Silkeborg IF\":[\"L\",\"D\"],\"FC Nordsjælland\":[\"W\",\"W\"],\"OB\":[\"L\",\"L\"],\"Viborg FF\":[\"W\",\"D\"],\"Randers FC\":[\"L\",\"W\"],\"Basel\":[\"W\",\"W\"],\"Vaduz\":[\"L\",\"W\"],\"Young Boys\":[\"W\",\"L\"],\"Sion\":[\"L\",\"D\"],\"Thun\":[\"D\",\"L\"],\"Grasshopper\":[\"D\",\"W\"],\"St. Gallen\":[\"W\",\"D\"],\"FC Zürich\":[\"L\",\"W\"],\"Lugano\":[\"W\",\"L\"],\"Lausanne-Sport\":[\"L\",\"L\"],\"Servette\":[\"W\",\"L\"],\"Luzern\":[\"L\",\"W\"],\"Flamengo\":[\"W\",\"L\",\"W\"],\"Chapecoense\":[\"L\",\"W\",\"L\"],\"Palmeiras\":[\"W\",\"W\",\"L\"],\"Remo\":[\"L\",\"L\",\"L\"],\"Athletico Paranaense\":[\"W\",\"L\",\"L\"],\"Internacional\":[\"L\",\"L\",\"L\"],\"Fluminense\":[\"L\",\"W\",\"W\"],\"Grêmio\":[\"W\",\"W\",\"L\"],\"Bahia\":[\"D\",\"W\",\"W\"],\"Vasco da Gama\":[\"D\",\"L\",\"D\"],\"Cruzeiro\":[\"W\",\"L\",\"W\"],\"Mirassol\":[\"L\",\"D\",\"L\"],\"Atlético Mineiro\":[\"L\",\"W\",\"W\"],\"Corinthians\":[\"W\",\"W\",\"W\"],\"Santos\":[\"W\",\"D\",\"W\"],\"Vitória\":[\"L\",\"W\",\"D\"],\"Coritiba\":[\"L\",\"L\",\"D\"],\"Botafogo\":[\"W\",\"L\",\"D\"],\"Red Bull Bragantino\":[\"W\",\"L\",\"W\"],\"São Paulo\":[\"L\",\"W\",\"L\"],\"América\":[\"W\",\"W\",\"L\"],\"Atlante\":[\"L\",\"D\",\"L\"],\"Guadalajara\":[\"W\",\"L\",\"W\"],\"Atlético San Luis\":[\"L\",\"W\",\"L\"],\"Cruz Azul\":[\"D\",\"D\",\"W\"],\"FC Juárez\":[\"D\",\"L\",\"W\"],\"Monterrey\":[\"W\",\"L\",\"L\"],\"Tijuana\":[\"L\",\"L\",\"L\"],\"Tigres UANL\":[\"W\",\"W\",\"W\"],\"Querétaro\":[\"L\",\"W\",\"L\"],\"Toluca\":[\"W\",\"W\",\"W\"],\"Puebla\":[\"L\",\"L\",\"L\"],\"Pumas UNAM\":[\"W\",\"L\",\"L\"],\"Necaxa\":[\"L\",\"W\",\"W\"],\"Pachuca\":[\"D\",\"W\",\"W\"],\"Atlas\":[\"D\",\"L\",\"L\"],\"León\":[\"D\",\"L\",\"W\"],\"Santos Laguna\":[\"D\",\"W\",\"W\"],\"Adelaide United\":[\"W\",\"L\"],\"Western Sydney Wanderers\":[\"L\",\"D\"],\"Auckland FC\":[\"L\",\"W\"],\"Wellington Phoenix\":[\"W\",\"W\"],\"Brisbane Roar\":[\"L\",\"D\"],\"Sydney FC\":[\"W\",\"D\"],\"Central Coast Mariners\":[\"L\",\"L\"],\"Perth Glory\":[\"W\",\"W\"],\"Macarthur FC\":[\"L\",\"D\"],\"Newcastle Jets\":[\"W\",\"L\"],\"Melbourne City\":[\"W\",\"L\"],\"Melbourne Victory\":[\"L\",\"W\"],\"Cremonese\":[\"L\",\"D\",\"L\"],\"Ascoli\":[\"W\",\"L\",\"W\"],\"Verona\":[\"L\",\"D\",\"W\"],\"Benevento\":[\"W\",\"W\",\"L\"],\"Pisa\":[\"W\",\"W\",\"W\"],\"Arezzo\":[\"L\",\"W\",\"L\"],\"Avellino\":[\"D\",\"L\",\"L\"],\"Vicenza\":[\"D\",\"W\",\"L\"],\"Carrarese\":[\"L\",\"L\",\"L\"],\"Südtirol\":[\"W\",\"W\",\"L\"],\"Catanzaro\":[\"L\",\"L\",\"W\"],\"Sampdoria\":[\"W\",\"D\",\"L\"],\"Cesena\":[\"D\",\"L\",\"W\"],\"Palermo\":[\"D\",\"W\",\"D\"],\"Empoli\":[\"D\",\"D\",\"W\"],\"Padova\":[\"D\",\"D\",\"L\"],\"Entella\":[\"W\",\"L\",\"W\"],\"Modena\":[\"L\",\"L\",\"W\"],\"Juve Stabia\":[\"W\",\"D\",\"W\"],\"Mantova\":[\"L\",\"W\",\"D\"],\"Metz\":[\"D\",\"W\",\"D\"],\"Laval\":[\"D\",\"D\",\"L\"],\"Nantes\":[\"D\",\"L\",\"D\"],\"Boulogne\":[\"D\",\"W\",\"L\"],\"Saint-Étienne\":[\"W\",\"D\",\"D\"],\"Clermont\":[\"L\",\"W\",\"L\"],\"Red Star FC\":[\"W\",\"L\",\"D\"],\"Rodez\":[\"L\",\"L\",\"D\"],\"Reims\":[\"W\",\"L\",\"W\"],\"Grenoble\":[\"L\",\"W\",\"L\"],\"Montpellier\":[\"L\",\"W\",\"W\"],\"Dunkerque\":[\"W\",\"W\",\"L\"],\"Nancy\":[\"D\",\"L\",\"W\"],\"Guingamp\":[\"D\",\"W\",\"L\"],\"Annecy\":[\"W\",\"L\",\"D\"],\"Pau\":[\"L\",\"W\",\"W\"],\"Sochaux\":[\"W\",\"L\",\"W\"],\"Dijon\":[\"L\",\"L\",\"W\"],\"Real Oviedo\":[\"W\",\"L\",\"L\"],\"Albacete\":[\"L\",\"D\",\"L\"],\"Girona\":[\"D\",\"W\",\"W\"],\"Ceuta\":[\"D\",\"D\",\"W\"],\"Mallorca\":[\"W\",\"D\",\"W\"],\"FC Andorra\":[\"L\",\"W\",\"W\"],\"Eibar\":[\"D\",\"D\",\"L\"],\"Cádiz\":[\"D\",\"W\",\"W\"],\"Castellón\":[\"L\",\"L\",\"W\"],\"Eldense\":[\"W\",\"D\",\"L\"],\"Almería\":[\"L\",\"L\",\"L\"],\"Córdoba\":[\"W\",\"D\",\"W\"],\"Burgos\":[\"W\",\"D\",\"L\"],\"Valladolid\":[\"L\",\"W\",\"L\"],\"Sabadell\":[\"L\",\"D\",\"L\"],\"Leganés\":[\"W\",\"D\",\"W\"],\"Sporting Gijón\":[\"D\",\"L\",\"W\"],\"Tenerife\":[\"D\",\"W\",\"L\"],\"Granada\":[\"L\",\"D\",\"L\"],\"Las Palmas\":[\"W\",\"L\",\"W\"],\"Zenit\":[\"D\",\"L\"],\"Fakel Voronezh\":[\"D\",\"D\"],\"Krasnodar\":[\"W\",\"W\"],\"Rodina Moscow\":[\"L\",\"L\"],\"Spartak Moscow\":[\"D\",\"D\"],\"Dynamo Makhachkala\":[\"D\",\"D\"],\"CSKA Moscow\":[\"W\",\"W\"],\"Akron Tolyatti\":[\"L\",\"D\"],\"Lokomotiv Moscow\":[\"W\",\"D\"],\"Orenburg\":[\"L\",\"W\"],\"Rubin Kazan\":[\"D\",\"D\"],\"Baltika\":[\"D\",\"W\"],\"Dynamo Moscow\":[\"L\",\"L\"],\"Krylia Sovetov\":[\"W\",\"L\"],\"Rostov\":[\"L\",\"L\"],\"Akhmat Grozny\":[\"W\",\"W\"],\"Arsenal\":[\"W\",\"D\"],\"Coventry City\":[\"L\",\"L\"],\"Hull City\":[\"L\",\"W\"],\"Manchester United\":[\"W\",\"D\"],\"Everton\":[\"L\",\"D\"],\"Crystal Palace\":[\"W\",\"L\"],\"Ipswich Town\":[\"W\",\"D\"],\"Sunderland\":[\"L\",\"L\"],\"Nottingham Forest\":[\"W\",\"L\"],\"Leeds United\":[\"L\",\"W\"],\"Brentford\":[\"W\",\"L\"],\"Tottenham\":[\"L\",\"W\"],\"Manchester City\":[\"W\",\"W\"],\"Bournemouth\":[\"L\",\"D\"],\"Newcastle\":[\"L\",\"L\"],\"Liverpool\":[\"W\",\"W\"],\"Fulham\":[\"W\",\"W\"],\"Chelsea\":[\"L\",\"D\"],\"Brighton\":[\"L\",\"D\"],\"Aston Villa\":[\"W\",\"D\"],\"Atlanta United\":[\"L\"],\"Austin FC\":[\"D\"],\"Dinamo Zagreb\":[\"W\"],\"Rudeš\":[\"L\"],\"Hajduk Split\":[\"W\"],\"Gorica\":[\"L\"],\"Rijeka\":[\"W\"],\"Lokomotiva Zagreb\":[\"L\"],\"Osijek\":[\"W\"],\"Istra 1961\":[\"L\"],\"Varaždin\":[\"D\"],\"Slaven Belupo\":[\"D\"]},\"live\":{\"varReviews\":true,\"varKinds\":[\"goal\"],\"week\":2,\"myGoals\":1,\"oppGoals\":0,\"startXi\":[\"p-bart-verbruggen\",\"p-luka-vuskovic\",\"p-pascal-struijk\",\"p-olivier-boscagli\",\"p-ferdi-kadioglu\",\"p-jack-hinshelwood\",\"p-diego-gomez\",\"p-matt-o-riley\",\"p-yankuba-minteh\",\"p-georginio-rutter\",\"p-kaoru-mitoma\"],\"onPitch\":[\"p-bart-verbruggen\",\"p-luka-vuskovic\",\"p-pascal-struijk\",\"p-olivier-boscagli\",\"p-ferdi-kadioglu\",\"p-jack-hinshelwood\",\"p-diego-gomez\",\"p-matt-o-riley\",\"p-yankuba-minteh\",\"p-georginio-rutter\",\"p-kaoru-mitoma\"],\"subsUsed\":0,\"mentality\":\"balanced\",\"opponent\":\"Leeds United\",\"compLabel\":\"Premier League · Round 3\",\"home\":true,\"read\":\"In front, and deservedly so. The question is whether to protect it or bury them.\",\"talk\":null,\"lamMine\":0.7377999999999998,\"lamOpp\":0.5922000000000003,\"h1My\":[{\"id\":\"p-ferdi-kadioglu\",\"name\":\"Ferdi Kadıoğlu\",\"minute\":21}],\"h1Opp\":[],\"oppXi\":[{\"n\":\"James Trafford\",\"p\":\"GK\",\"r\":82},{\"n\":\"Gabriel Gudmundsson\",\"p\":\"LB\",\"r\":81},{\"n\":\"Tarik Muharemović\",\"p\":\"CB\",\"r\":81},{\"n\":\"Jaka Bijol\",\"p\":\"CB\",\"r\":80},{\"n\":\"Joe Rodon\",\"p\":\"CB\",\"r\":79},{\"n\":\"Ethan Ampadu\",\"p\":\"CDM\",\"r\":83},{\"n\":\"Anton Stach\",\"p\":\"CDM\",\"r\":83},{\"n\":\"Brenden Aaronson\",\"p\":\"CAM\",\"r\":80},{\"n\":\"Sean Longstaff\",\"p\":\"CM\",\"r\":80},{\"n\":\"Harry Wilson\",\"p\":\"RW\",\"r\":82},{\"n\":\"Jean-Mattéo Bahoya\",\"p\":\"LW\",\"r\":82}],\"oppBench\":[{\"n\":\"Michael Zetterer\",\"p\":\"GK\",\"r\":73},{\"n\":\"James Justin\",\"p\":\"RB\",\"r\":78},{\"n\":\"Jayden Bogle\",\"p\":\"RB\",\"r\":78},{\"n\":\"Ilia Gruev\",\"p\":\"CDM\",\"r\":78},{\"n\":\"Ao Tanaka\",\"p\":\"CM\",\"r\":77},{\"n\":\"Dominic Calvert-Lewin\",\"p\":\"ST\",\"r\":82},{\"n\":\"Noah Okafor\",\"p\":\"LW\",\"r\":80}],\"oppFormationIndex\":1,\"h1Play\":[{\"minute\":1,\"side\":\"opp\",\"kind\":\"throwin\",\"who\":\"Joe Rodon\"},{\"minute\":2,\"side\":\"me\",\"kind\":\"foul\",\"who\":\"Olivier Boscagli\"},{\"minute\":3,\"side\":\"me\",\"kind\":\"foul\",\"who\":\"Olivier Boscagli\"},{\"minute\":3,\"side\":\"me\",\"kind\":\"corner\",\"who\":\"Yankuba Minteh\",\"flank\":\"left\"},{\"minute\":3,\"side\":\"opp\",\"kind\":\"corner\",\"who\":\"Jean-Mattéo Bahoya\",\"flank\":\"left\"},{\"minute\":5,\"side\":\"me\",\"kind\":\"shot\",\"who\":\"Olivier Boscagli\",\"on\":false,\"xg\":0.08},{\"minute\":7,\"side\":\"opp\",\"kind\":\"throwin\",\"who\":\"Joe Rodon\"},{\"minute\":8,\"side\":\"opp\",\"kind\":\"foul\",\"who\":\"Anton Stach\"},{\"minute\":12,\"side\":\"me\",\"kind\":\"throwin\",\"who\":\"Olivier Boscagli\"},{\"minute\":12,\"side\":\"me\",\"kind\":\"foul\",\"who\":\"Ferdi Kadıoğlu\"},{\"minute\":13,\"side\":\"opp\",\"kind\":\"foul\",\"who\":\"Joe Rodon\"},{\"minute\":13,\"side\":\"me\",\"kind\":\"corner\",\"who\":\"Kaoru Mitoma\",\"flank\":\"right\"},{\"minute\":14,\"side\":\"me\",\"kind\":\"throwin\",\"who\":\"Luka Vuskovic\"},{\"minute\":14,\"side\":\"me\",\"kind\":\"shot\",\"who\":\"Matt O'Riley\",\"on\":false,\"xg\":0.08},{\"minute\":15,\"side\":\"me\",\"kind\":\"foul\",\"who\":\"Jack Hinshelwood\"},{\"minute\":16,\"side\":\"me\",\"kind\":\"shot\",\"who\":\"Yankuba Minteh\",\"on\":false,\"xg\":0.08},{\"minute\":17,\"side\":\"opp\",\"kind\":\"foul\",\"who\":\"Jaka Bijol\"},{\"minute\":18,\"side\":\"opp\",\"kind\":\"throwin\",\"who\":\"Jaka Bijol\"},{\"minute\":20,\"side\":\"opp\",\"kind\":\"corner\",\"who\":\"Gabriel Gudmundsson\",\"flank\":\"right\"},{\"minute\":21,\"side\":\"me\",\"kind\":\"shot\",\"who\":\"Ferdi Kadıoğlu\",\"on\":true,\"goal\":true,\"xg\":0.24},{\"minute\":23,\"side\":\"me\",\"kind\":\"throwin\",\"who\":\"Pascal Struijk\"},{\"minute\":27,\"side\":\"me\",\"kind\":\"corner\",\"who\":\"Yankuba Minteh\",\"flank\":\"left\"},{\"minute\":33,\"side\":\"me\",\"kind\":\"shot\",\"who\":\"Pascal Struijk\",\"on\":true,\"xg\":0.12},{\"minute\":33,\"side\":\"me\",\"kind\":\"shot\",\"who\":\"Luka Vuskovic\",\"on\":false,\"xg\":0.08},{\"minute\":34,\"side\":\"me\",\"kind\":\"throwin\",\"who\":\"Pascal Struijk\"},{\"minute\":34,\"side\":\"opp\",\"kind\":\"throwin\",\"who\":\"Jaka Bijol\"},{\"minute\":35,\"side\":\"opp\",\"kind\":\"corner\",\"who\":\"Gabriel Gudmundsson\",\"flank\":\"left\"},{\"minute\":37,\"side\":\"me\",\"kind\":\"foul\",\"who\":\"Luka Vuskovic\"},{\"minute\":37,\"side\":\"me\",\"kind\":\"shot\",\"who\":\"Matt O'Riley\",\"on\":true,\"xg\":0.12},{\"minute\":37,\"side\":\"opp\",\"kind\":\"shot\",\"who\":\"Harry Wilson\",\"on\":false,\"xg\":0.05},{\"minute\":38,\"side\":\"me\",\"kind\":\"foul\",\"who\":\"Yankuba Minteh\"},{\"minute\":38,\"side\":\"opp\",\"kind\":\"shot\",\"who\":\"Harry Wilson\",\"on\":false,\"xg\":0.05},{\"minute\":39,\"side\":\"opp\",\"kind\":\"throwin\",\"who\":\"Gabriel Gudmundsson\"},{\"minute\":40,\"side\":\"opp\",\"kind\":\"throwin\",\"who\":\"Tarik Muharemović\"},{\"minute\":40,\"side\":\"opp\",\"kind\":\"shot\",\"who\":\"Joe Rodon\",\"on\":true,\"xg\":0.07},{\"minute\":41,\"side\":\"me\",\"kind\":\"corner\",\"who\":\"Kaoru Mitoma\",\"flank\":\"right\"},{\"minute\":44,\"side\":\"me\",\"kind\":\"throwin\",\"who\":\"Ferdi Kadıoğlu\"},{\"minute\":44,\"side\":\"me\",\"kind\":\"corner\",\"who\":\"Yankuba Minteh\",\"flank\":\"left\"}],\"h1Cards\":[],\"h1OppCards\":[],\"h1Injuries\":[],\"h1Segs\":[{\"from\":0,\"to\":45,\"lamMine\":0.7377999999999998,\"lamOpp\":0.5922000000000003}],\"h2Drawn\":false,\"subs\":[],\"shapeChanges\":[],\"minute\":2,\"formationIndex\":0,\"duties\":[null,null,null,null,null,null,null,null,null,null,null],\"possNoise\":[-3,-3],\"oppSubs\":[],\"added\":{\"h1\":3},\"possH1\":50},\"h2h\":[{\"opp\":\"Aston Villa\",\"res\":\"L\",\"score\":\"0-1\",\"season\":1,\"comp\":\"league\",\"home\":true},{\"opp\":\"Chelsea\",\"res\":\"D\",\"score\":\"0-0\",\"season\":1,\"comp\":\"league\",\"home\":false}],\"finance\":{\"ticketTier\":1,\"groundUpgrades\":0,\"seasonGate\":1.43,\"lastGate\":1.43}}",
+ "goodSize": 71049,
+ "allKeys": [
+  "cookie-consent",
+  "dukb-theme",
+  "dukb-play-diary-v1",
+  "dukb-guest-handle",
+  "dukb-streaks-v1",
+  "dukb-club-manager-save",
+  "dukb-local-completions"
+ ],
+ "twoTabs": {
+  "wk0": 1,
+  "wkAfterTab2": 2,
+  "tab1Fixture": "PREMIER LEAGUE · ROUND 2 Brighton vs Chelsea Away · their strength ~86 · your XI avg 83 Play Live ⚡ Quick Sim Play live to make your calls. Quick Sim handles yo",
+  "after": {
+   "club": "Brighton",
+   "season": 1,
+   "week": 2,
+   "cal": 54,
+   "budget": 74.43,
+   "squad": 27,
+   "inbox": 1,
+   "form": "LD",
+   "results": 2,
+   "live": false,
+   "window": "summer"
+  },
+  "resultLog": [
+   "{\"week\":0,\"comp\":\"Premier League · Round 1\",\"opp\":\"Aston Villa\",\"home\":true,\"score\":\"0-1\",\"res\":\"L\",\"competition\":\"league\"}",
+   "{\"week\":1,\"comp\":\"Premier League · Round 2\",\"opp\":\"Chelsea\",\"home\":false,\"score\":\"0-0\",\"res\":\"D\",\"competition\":\"league\"}"
+  ]
+ },
+ "back": {
+  "urlIn": "http://localhost:4173/club-manager",
+  "urlBack": "about:blank",
+  "after": {
+   "club": "Brighton",
+   "season": 1,
+   "week": 2,
+   "cal": 54,
+   "budget": 74.43,
+   "squad": 27,
+   "inbox": 1,
+   "form": "LD",
+   "results": 2,
+   "live": true,
+   "window": "summer"
+  },
+  "h1": "BRIGHTON",
+  "resumeBtn": 1
+ }
+}

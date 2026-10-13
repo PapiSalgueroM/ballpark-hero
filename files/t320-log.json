@@ -1,0 +1,1983 @@
+{
+ "tag": "t320",
+ "width": 320,
+ "height": 640,
+ "started": "2026-10-13T00:30:41.443Z",
+ "steps": [
+  {
+   "s": 1,
+   "what": "open /club-manager"
+  },
+  {
+   "s": 6,
+   "what": "era picked"
+  },
+  {
+   "s": 7,
+   "what": "nation picked"
+  },
+  {
+   "s": 11,
+   "what": "league picked"
+  },
+  {
+   "s": 13,
+   "what": "club picked"
+  },
+  {
+   "s": 18,
+   "what": "hub reached",
+   "ok": true,
+   "save": {
+    "club": "Real Madrid",
+    "season": 1,
+    "week": 0,
+    "cal": 54,
+    "budget": 195,
+    "squad": 26,
+    "inbox": 0,
+    "form": "",
+    "results": 0,
+    "live": false,
+    "window": "summer"
+   }
+  },
+  {
+   "s": 18,
+   "what": "tab Squad"
+  },
+  {
+   "s": 21,
+   "what": "tab Tactics"
+  },
+  {
+   "s": 23,
+   "what": "tab Table"
+  },
+  {
+   "s": 26,
+   "what": "tab Market"
+  },
+  {
+   "s": 29,
+   "what": "tile Board"
+  },
+  {
+   "tileScroll": "Board",
+   "y0": 0,
+   "y1": 601
+  },
+  {
+   "s": 31,
+   "what": "tile Inbox"
+  },
+  {
+   "tileScroll": "Inbox",
+   "y0": 0,
+   "y1": 601
+  },
+  {
+   "s": 34,
+   "what": "tile Calendar"
+  },
+  {
+   "tileScroll": "Calendar",
+   "y0": 0,
+   "y1": 445
+  },
+  {
+   "s": 36,
+   "what": "tile League"
+  },
+  {
+   "tileScroll": "League",
+   "y0": 0,
+   "y1": 445
+  },
+  {
+   "s": 38,
+   "what": "tile Cups"
+  },
+  {
+   "tileScroll": "Cups",
+   "y0": 0,
+   "y1": 550
+  },
+  {
+   "s": 41,
+   "what": "tile Stats"
+  },
+  {
+   "tileScroll": "Stats",
+   "y0": 0,
+   "y1": 550
+  },
+  {
+   "s": 43,
+   "what": "tile Finances"
+  },
+  {
+   "tileScroll": "Finances",
+   "y0": 0,
+   "y1": 601
+  },
+  {
+   "s": 45,
+   "what": "tile Facilities"
+  },
+  {
+   "tileScroll": "Facilities",
+   "y0": 0,
+   "y1": 601
+  },
+  {
+   "s": 48,
+   "what": "tile Staff"
+  },
+  {
+   "tileScroll": "Staff",
+   "y0": 0,
+   "y1": 601
+  },
+  {
+   "s": 50,
+   "what": "tile Skills"
+  },
+  {
+   "tileScroll": "Skills",
+   "y0": 0,
+   "y1": 601
+  },
+  {
+   "s": 53,
+   "what": "tile Options"
+  },
+  {
+   "tileScroll": "Options",
+   "y0": 0,
+   "y1": 601
+  },
+  {
+   "s": 55,
+   "what": "tile Manager"
+  },
+  {
+   "tileScroll": "Manager",
+   "y0": 0,
+   "y1": 601
+  },
+  {
+   "s": 58,
+   "what": "tile Treatment"
+  },
+  {
+   "tileScroll": "Treatment",
+   "y0": 0,
+   "y1": 601
+  },
+  {
+   "s": 60,
+   "what": "tile Rival watch"
+  },
+  {
+   "tileScroll": "Rival watch",
+   "y0": 0,
+   "y1": 101
+  },
+  {
+   "s": 61,
+   "what": "live m1"
+  },
+  {
+   "s": 61,
+   "what": "reload test"
+  },
+  {
+   "s": 71,
+   "what": "ff month 0",
+   "r": "FULL TIME",
+   "save": {
+    "club": "Real Madrid",
+    "season": 1,
+    "week": 6,
+    "cal": 54,
+    "budget": 206.62,
+    "squad": 26,
+    "inbox": 2,
+    "form": "WWWWW",
+    "results": 6,
+    "live": false,
+    "window": null
+   }
+  },
+  {
+   "s": 78,
+   "what": "ff month 1",
+   "r": "FULL TIME",
+   "save": {
+    "club": "Real Madrid",
+    "season": 1,
+    "week": 14,
+    "cal": 54,
+    "budget": 218.93,
+    "squad": 26,
+    "inbox": 4,
+    "form": "WLDWD",
+    "results": 14,
+    "live": false,
+    "window": null
+   }
+  },
+  {
+   "s": 84,
+   "what": "ff month 2",
+   "r": "FULL TIME",
+   "save": {
+    "club": "Real Madrid",
+    "season": 1,
+    "week": 21,
+    "cal": 54,
+    "budget": 229.37,
+    "squad": 26,
+    "inbox": 5,
+    "form": "WWWWW",
+    "results": 21,
+    "live": false,
+    "window": null
+   }
+  },
+  {
+   "s": 86,
+   "what": "mid tile Board"
+  },
+  {
+   "s": 89,
+   "what": "mid tile Inbox"
+  },
+  {
+   "s": 91,
+   "what": "mid tile Calendar"
+  },
+  {
+   "s": 93,
+   "what": "mid tile League"
+  },
+  {
+   "s": 95,
+   "what": "mid tile Cups"
+  },
+  {
+   "s": 97,
+   "what": "mid tile Stats"
+  },
+  {
+   "s": 99,
+   "what": "mid tile Finances"
+  },
+  {
+   "s": 101,
+   "what": "mid tile Facilities"
+  },
+  {
+   "s": 104,
+   "what": "mid tile Staff"
+  },
+  {
+   "s": 106,
+   "what": "mid tile Skills"
+  },
+  {
+   "s": 108,
+   "what": "mid tile Options"
+  },
+  {
+   "s": 110,
+   "what": "mid tile Manager"
+  },
+  {
+   "s": 112,
+   "what": "mid tile Treatment"
+  },
+  {
+   "s": 115,
+   "what": "mid tile Rival watch"
+  },
+  {
+   "s": 238,
+   "what": "end"
+  }
+ ],
+ "findings": [],
+ "errors": [],
+ "shots": [
+  {
+   "file": "t320-001-picker-era.jpg",
+   "at": "open /club-manager",
+   "bytes": 17725
+  },
+  {
+   "file": "t320-002-picker-nation.jpg",
+   "at": "era picked",
+   "bytes": 17769
+  },
+  {
+   "file": "t320-003-picker-league.jpg",
+   "at": "nation picked",
+   "bytes": 17566
+  },
+  {
+   "file": "t320-004-picker-team.jpg",
+   "at": "league picked",
+   "bytes": 93190
+  },
+  {
+   "file": "t320-005-picker-confirm-bar.jpg",
+   "at": "league picked",
+   "bytes": 19656
+  },
+  {
+   "file": "t320-006-manager-form.jpg",
+   "at": "club picked",
+   "bytes": 63416
+  },
+  {
+   "file": "t320-007-hub-top.jpg",
+   "at": "hub reached",
+   "bytes": 22859
+  },
+  {
+   "file": "t320-008-hub-full.jpg",
+   "at": "hub reached",
+   "bytes": 126820
+  },
+  {
+   "file": "t320-009-tab-Squad.jpg",
+   "at": "tab Squad",
+   "bytes": 101852
+  },
+  {
+   "file": "t320-010-tab-Squad-after.jpg",
+   "at": "tab Squad",
+   "bytes": 62043
+  },
+  {
+   "file": "t320-011-tab-Tactics.jpg",
+   "at": "tab Tactics",
+   "bytes": 106233
+  },
+  {
+   "file": "t320-012-tab-Tactics-after.jpg",
+   "at": "tab Tactics",
+   "bytes": 64145
+  },
+  {
+   "file": "t320-013-tab-Table.jpg",
+   "at": "tab Table",
+   "bytes": 110265
+  },
+  {
+   "file": "t320-014-tab-Table-after.jpg",
+   "at": "tab Table",
+   "bytes": 68595
+  },
+  {
+   "file": "t320-015-tab-Market.jpg",
+   "at": "tab Market",
+   "bytes": 117781
+  },
+  {
+   "file": "t320-016-tab-Market-after.jpg",
+   "at": "tab Market",
+   "bytes": 75350
+  },
+  {
+   "file": "t320-017-tile-Board.jpg",
+   "at": "tile Board",
+   "bytes": 18926
+  },
+  {
+   "file": "t320-018-tile-Board-full.jpg",
+   "at": "tile Board",
+   "bytes": 117165
+  },
+  {
+   "file": "t320-019-tile-Inbox.jpg",
+   "at": "tile Inbox",
+   "bytes": 20201
+  },
+  {
+   "file": "t320-020-tile-Inbox-full.jpg",
+   "at": "tile Inbox",
+   "bytes": 115323
+  },
+  {
+   "file": "t320-021-tile-Calendar.jpg",
+   "at": "tile Calendar",
+   "bytes": 15181
+  },
+  {
+   "file": "t320-022-tile-Calendar-full.jpg",
+   "at": "tile Calendar",
+   "bytes": 106717
+  },
+  {
+   "file": "t320-023-tile-League.jpg",
+   "at": "tile League",
+   "bytes": 15203
+  },
+  {
+   "file": "t320-024-tile-League-full.jpg",
+   "at": "tile League",
+   "bytes": 110697
+  },
+  {
+   "file": "t320-025-tile-Cups.jpg",
+   "at": "tile Cups",
+   "bytes": 12173
+  },
+  {
+   "file": "t320-026-tile-Cups-full.jpg",
+   "at": "tile Cups",
+   "bytes": 98291
+  },
+  {
+   "file": "t320-027-tile-Stats.jpg",
+   "at": "tile Stats",
+   "bytes": 15742
+  },
+  {
+   "file": "t320-028-tile-Stats-full.jpg",
+   "at": "tile Stats",
+   "bytes": 108574
+  },
+  {
+   "file": "t320-029-tile-Finances.jpg",
+   "at": "tile Finances",
+   "bytes": 19749
+  },
+  {
+   "file": "t320-030-tile-Finances-full.jpg",
+   "at": "tile Finances",
+   "bytes": 112929
+  },
+  {
+   "file": "t320-031-tile-Facilities.jpg",
+   "at": "tile Facilities",
+   "bytes": 21076
+  },
+  {
+   "file": "t320-032-tile-Facilities-full.jpg",
+   "at": "tile Facilities",
+   "bytes": 119943
+  },
+  {
+   "file": "t320-033-tile-Staff.jpg",
+   "at": "tile Staff",
+   "bytes": 20265
+  },
+  {
+   "file": "t320-034-tile-Staff-full.jpg",
+   "at": "tile Staff",
+   "bytes": 119264
+  },
+  {
+   "file": "t320-035-tile-Skills.jpg",
+   "at": "tile Skills",
+   "bytes": 14948
+  },
+  {
+   "file": "t320-036-tile-Skills-full.jpg",
+   "at": "tile Skills",
+   "bytes": 106692
+  },
+  {
+   "file": "t320-037-tile-Options.jpg",
+   "at": "tile Options",
+   "bytes": 15729
+  },
+  {
+   "file": "t320-038-tile-Options-full.jpg",
+   "at": "tile Options",
+   "bytes": 114253
+  },
+  {
+   "file": "t320-039-tile-Manager.jpg",
+   "at": "tile Manager",
+   "bytes": 17278
+  },
+  {
+   "file": "t320-040-tile-Manager-full.jpg",
+   "at": "tile Manager",
+   "bytes": 114646
+  },
+  {
+   "file": "t320-041-tile-Treatment.jpg",
+   "at": "tile Treatment",
+   "bytes": 20358
+  },
+  {
+   "file": "t320-042-tile-Treatment-full.jpg",
+   "at": "tile Treatment",
+   "bytes": 115869
+  },
+  {
+   "file": "t320-043-tile-Rival_watch.jpg",
+   "at": "tile Rival watch",
+   "bytes": 14563
+  },
+  {
+   "file": "t320-044-tile-Rival_watch-full.jpg",
+   "at": "tile Rival watch",
+   "bytes": 106363
+  },
+  {
+   "file": "t320-045-after-reload.jpg",
+   "at": "reload test",
+   "bytes": 12511
+  },
+  {
+   "file": "t320-046-slots.jpg",
+   "at": "reload test",
+   "bytes": 67635
+  },
+  {
+   "file": "t320-047-ff-month-0.jpg",
+   "at": "ff month 0",
+   "bytes": 75193
+  },
+  {
+   "file": "t320-048-ff-month-1.jpg",
+   "at": "ff month 1",
+   "bytes": 73468
+  },
+  {
+   "file": "t320-049-ff-month-2.jpg",
+   "at": "ff month 2",
+   "bytes": 73414
+  },
+  {
+   "file": "t320-050-mid-Board.jpg",
+   "at": "mid tile Board",
+   "bytes": 98388
+  },
+  {
+   "file": "t320-051-mid-Inbox.jpg",
+   "at": "mid tile Inbox",
+   "bytes": 89553
+  },
+  {
+   "file": "t320-052-mid-Calendar.jpg",
+   "at": "mid tile Calendar",
+   "bytes": 83654
+  },
+  {
+   "file": "t320-053-mid-League.jpg",
+   "at": "mid tile League",
+   "bytes": 95632
+  },
+  {
+   "file": "t320-054-mid-Cups.jpg",
+   "at": "mid tile Cups",
+   "bytes": 72251
+  },
+  {
+   "file": "t320-055-mid-Stats.jpg",
+   "at": "mid tile Stats",
+   "bytes": 87491
+  },
+  {
+   "file": "t320-056-mid-Finances.jpg",
+   "at": "mid tile Finances",
+   "bytes": 93260
+  },
+  {
+   "file": "t320-057-mid-Facilities.jpg",
+   "at": "mid tile Facilities",
+   "bytes": 99311
+  },
+  {
+   "file": "t320-058-mid-Staff.jpg",
+   "at": "mid tile Staff",
+   "bytes": 97679
+  },
+  {
+   "file": "t320-059-mid-Skills.jpg",
+   "at": "mid tile Skills",
+   "bytes": 85504
+  },
+  {
+   "file": "t320-060-mid-Options.jpg",
+   "at": "mid tile Options",
+   "bytes": 94996
+  },
+  {
+   "file": "t320-061-mid-Manager.jpg",
+   "at": "mid tile Manager",
+   "bytes": 94314
+  },
+  {
+   "file": "t320-062-mid-Treatment.jpg",
+   "at": "mid tile Treatment",
+   "bytes": 97519
+  },
+  {
+   "file": "t320-063-mid-Rival_watch.jpg",
+   "at": "mid tile Rival watch",
+   "bytes": 84737
+  },
+  {
+   "file": "t320-064-mid-tab-Squad.jpg",
+   "at": "mid tile Rival watch",
+   "bytes": 105517
+  },
+  {
+   "file": "t320-065-mid-tab-Table.jpg",
+   "at": "mid tile Rival watch",
+   "bytes": 105517
+  }
+ ],
+ "audits": [
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [
+    "\"Manager Hot Seat\" shown 98px of 104px",
+    "\"Guess The Constructor\" shown 98px of 134px"
+   ],
+   "overlaps": [],
+   "leaks": [],
+   "tinyTaps": [],
+   "scrollY": 0,
+   "docH": 27726,
+   "label": "picker-era"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [
+    "\"Strongest sides: Real Madrid · Barcelona · Atlético Madrid · Villarreal\" shown 254px of 322px",
+    "\"Strongest sides: Girona · Mallorca · Almería · Las Palmas\" shown 254px of 267px",
+    "\"Manager Hot Seat\" shown 98px of 104px",
+    "\"Guess The Constructor\" shown 98px of 134px"
+   ],
+   "overlaps": [],
+   "leaks": [],
+   "tinyTaps": [
+    "button.inline-flex.items-center.gap-1 \"All nations\" 76x16"
+   ],
+   "scrollY": 101,
+   "docH": 27142,
+   "label": "picker-league"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [
+    "\"Win the La Liga\" shown 46px of 74px",
+    "\"Win the La Liga\" shown 46px of 74px",
+    "\"Atlético Madrid\" shown 80px of 89px",
+    "\"Win the La Liga\" shown 46px of 74px",
+    "\"Qualify for the Champions League\" shown 46px of 165px",
+    "\"Qualify for the Champions League\" shown 46px of 165px",
+    "\"Qualify for the Europa League\" shown 46px of 144px",
+    "\"Real Sociedad\" shown 80px of 83px",
+    "\"Qualify for the Europa League\" shown 46px of 144px",
+    "\"Qualify for the Conference League\" shown 46px of 167px",
+    "\"Qualify for the Conference League\" shown 46px of 167px",
+    "\"Finish in the top half\" shown 46px of 98px",
+    "\"Finish in the top half\" shown 46px of 98px",
+    "\"Deportivo La Coruña\" shown 80px of 119px",
+    "\"Finish in the top half\" shown 46px of 98px",
+    "\"Finish in the top half\" shown 46px of 98px",
+    "\"Stay up. Avoid relegation\" shown 46px of 121px",
+    "\"Racing Santander\" shown 80px of 103px",
+    "\"Stay up. Avoid relegation\" shown 46px of 121px",
+    "\"Rayo Vallecano\" shown 80px of 88px",
+    "\"Stay up. Avoid relegation\" shown 46px of 121px",
+    "\"Stay up. Avoid relegation\" shown 46px of 121px",
+    "\"Stay up. Avoid relegation\" shown 46px of 121px",
+    "\"Stay up. Avoid relegation\" shown 46px of 121px",
+    "\"Stay up. Avoid relegation\" shown 46px of 121px",
+    "\"Create your own club\" shown 88px of 123px",
+    "\"Manager Hot Seat\" shown 98px of 104px",
+    "\"Guess The Constructor\" shown 98px of 134px"
+   ],
+   "overlaps": [
+    "\"Finish in the top half\" x \"Board wants\" (18x12 at 177,1188)",
+    "\"Stay up. Avoid relegation\" x \"Board wants\" (41x12 at 177,1433)",
+    "\"Stay up. Avoid relegation\" x \"Budget\" (34x3 at 177,1685)"
+   ],
+   "leaks": [],
+   "tinyTaps": [
+    "button.inline-flex.items-center.gap-1 \"La Liga\" 77x16"
+   ],
+   "scrollY": 101,
+   "docH": 28361,
+   "label": "picker-team"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [
+    "\"Dark Brown\" shown 54px of 61px",
+    "\"Manager Hot Seat\" shown 98px of 104px",
+    "\"Guess The Constructor\" shown 98px of 134px"
+   ],
+   "overlaps": [],
+   "leaks": [],
+   "tinyTaps": [
+    "button.inline-flex.items-center.gap-1 \"Real Madrid\" 86x16",
+    "button.rounded-md.border.border-border \"Previous skin\" 20x20",
+    "button.rounded-md.border.border-border \"Next skin\" 20x20",
+    "button.rounded-md.border.border-border \"Previous hair\" 20x20",
+    "button.rounded-md.border.border-border \"Next hair\" 20x20",
+    "button.rounded-md.border.border-border \"Previous colour\" 20x20",
+    "button.rounded-md.border.border-border \"Next colour\" 20x20",
+    "button.rounded-md.border.border-border \"Previous beard\" 20x20",
+    "button.rounded-md.border.border-border \"Next beard\" 20x20",
+    "button.rounded-md.border.border-border \"Previous outfit\" 20x20",
+    "button.rounded-md.border.border-border \"Next outfit\" 20x20",
+    "button.rounded-md.border.border-border \"Previous age\" 20x20",
+    "button.rounded-md.border.border-border \"Next age\" 20x20",
+    "button.w-5.h-5.rounded-full \"Navy\" 22x22",
+    "button.w-5.h-5.rounded-full \"Red\" 20x20",
+    "button.w-5.h-5.rounded-full \"Sky\" 20x20",
+    "button.w-5.h-5.rounded-full \"Green\" 20x20",
+    "button.w-5.h-5.rounded-full \"Claret\" 20x20",
+    "button.w-5.h-5.rounded-full \"Gold\" 20x20",
+    "button.w-5.h-5.rounded-full \"Black\" 20x20",
+    "button.w-5.h-5.rounded-full \"White\" 20x20"
+   ],
+   "scrollY": 101,
+   "docH": 28833,
+   "label": "manager-form"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [
+    "\"-£15.6m projected\" shown 114px of 125px",
+    "\"Fans hopeful · prices, sponsor, the books\" shown 114px of 176px",
+    "\"Stadium, training, medical, dressing room\" shown 114px of 178px",
+    "\"Attack, defence, keepers, scouting\" shown 114px of 149px",
+    "\"Tactics, recruitment, money, the press\" shown 114px of 163px",
+    "\"Currency, the international job, haggling\" shown 114px of 169px",
+    "\"Nobody has an opinion\" shown 114px of 160px",
+    "\"Recruitment 12/20 · 0 scouting\" shown 114px of 130px",
+    "\"Normal · Balanced\" shown 114px of 122px",
+    "\"Manager Hot Seat\" shown 98px of 104px",
+    "\"Guess The Constructor\" shown 98px of 134px"
+   ],
+   "overlaps": [
+    "\"Fans hopeful · prices, sponsor, the book\" x \"Stadium, training, medical, dressing roo\" (28x11 at 177,997)",
+    "\"Currency, the international job, hagglin\" x \"New in the job\" (21x11 at 177,1206)"
+   ],
+   "leaks": [],
+   "tinyTaps": [
+    "button.underline.underline-offset-2.hover:text-primary \"Managers\" 57x16"
+   ],
+   "scrollY": 2041,
+   "docH": 28084,
+   "label": "hub"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [
+    "\"Kylian Mbappé\" shown 8px of 84px",
+    "\"Jude Bellingham\" shown 31px of 94px",
+    "\"Vinicius Junior\" shown 31px of 83px",
+    "\"Federico Valverde\" shown 31px of 103px",
+    "\"Arda Güler\" shown 31px of 61px",
+    "\"Aurélien Tchouaméni\" shown 57px of 120px",
+    "\"Yan Diomande\" shown 57px of 82px",
+    "\"Dean Huijsen\" shown 31px of 75px",
+    "\"Trent Alexander-Arnold\" shown 57px of 134px",
+    "\"Álvaro Carreras\" shown 31px of 91px",
+    "\"Eduardo Camavinga\" shown 57px of 115px",
+    "\"Ibrahima Konaté\" shown 31px of 93px",
+    "\"Marc Cucurella\" shown 57px of 88px",
+    "\"Rodrygo\" shown 31px of 48px",
+    "\"Brahim Díaz\" shown 57px of 70px",
+    "\"Bernardo Silva\" shown 57px of 84px",
+    "\"Denzel Dumfries\" shown 57px of 95px",
+    "\"Éder Militão\" shown 31px of 67px",
+    "\"Raúl Asencio\" shown 57px of 73px",
+    "\"Thiago Pitarch\" shown 57px of 83px",
+    "\"Thibaut Courtois\" shown 31px of 94px",
+    "\"Andriy Lunin\" shown 57px of 71px",
+    "\"Antonio Rüdiger\" shown 57px of 90px",
+    "\"Jorge Cestero\" shown 57px of 81px",
+    "\"Daniel Carvajal\" shown 57px of 87px",
+    "\"Lucas Tamm\" shown 70px of 73px",
+    "\"Samir Bardhi\" shown 70px of 74px",
+    "\"Nico Magnusson\" shown 70px of 94px",
+    "\"Remi Monteiro\" shown 68px of 83px",
+    "\"Manager Hot Seat\" shown 98px of 104px",
+    "\"Guess The Constructor\" shown 98px of 134px"
+   ],
+   "overlaps": [
+    "\"Arda Güler\" x \"XI\" (10x11 at 134,549)",
+    "\"Aurélien Tchouaméni\" x \"90-92\" (30x6 at 175,600)",
+    "\"Eduardo Camavinga\" x \"88-92\" (30x6 at 175,823)",
+    "\"Rodrygo\" x \"XI\" (6x11 at 134,949)",
+    "\"Éder Militão\" x \"XI\" (10x11 at 134,1172)",
+    "\"CDM\" x \"Let a deal run out and he leaves in the \" (23x4 at 36,1936)",
+    "\"No release clause.\" x \"LW, 67 rated, 33, no club\" (6x7 at 42,2530)",
+    "\"Leaves in the transfer kitty.\" x \"Ibrahima Konaté\" (38x11 at 38,2546)",
+    "\"Leaves in the transfer kitty.\" x \"6k a week for 2 years, £500k to sign, no\" (38x4 at 38,2546)",
+    "\"£180.4m\" x \"Ibrahima Konaté\" (43x11 at 76,2546)",
+    "\"£180.4m\" x \"6k a week for 2 years, £500k to sign, no\" (5x4 at 90,2546)",
+    "\"Exit clause £32m. Any club can pay it.\" x \"Sign · 6k/w · 2y · £500k\" (105x5 at 172,2537)",
+    "\"86 rated, 52k a week, 2 years left\" x \"Nico Magnusson\" (13x4 at 29,2520)",
+    "\"86 rated, 52k a week, 2 years left\" x \"LW, 67 rated, 33, no club\" (13x6 at 29,2526)",
+    "\"Ibrahima Konaté\" x \"6k a week for 2 years, £500k to sign, no\" (6x9 at 29,2542)"
+   ],
+   "leaks": [],
+   "tinyTaps": [
+    "button.underline.underline-offset-2.hover:text-primary \"Managers\" 57x16"
+   ],
+   "scrollY": 0,
+   "docH": 28971,
+   "label": "tab-Squad"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [
+    "\"SHOOTOUT ORDER 0/11 not set, one draw decides it\" shown 238px of 272px",
+    "\"Manager Hot Seat\" shown 98px of 104px",
+    "\"Guess The Constructor\" shown 98px of 134px"
+   ],
+   "overlaps": [],
+   "leaks": [],
+   "tinyTaps": [
+    "button.underline.underline-offset-2.hover:text-primary \"Managers\" 57x16",
+    "button.inline-flex.items-center.gap-1 \"Auto Pick\" 73x16",
+    "button.cm-chip.absolute.z-[15] \"duty\" 25x15",
+    "button.cm-chip.absolute.z-[15] \"duty\" 25x15",
+    "button.cm-chip.absolute.z-[15] \"duty\" 25x15",
+    "button.cm-chip.absolute.z-[15] \"duty\" 25x15",
+    "button.cm-chip.absolute.z-[15] \"duty\" 25x15",
+    "button.cm-chip.absolute.z-[15] \"duty\" 25x15",
+    "button.cm-chip.absolute.z-[15] \"duty\" 25x15",
+    "button.cm-chip.absolute.z-[15] \"duty\" 25x15",
+    "button.cm-chip.absolute.z-[15] \"duty\" 25x15",
+    "button.cm-chip.absolute.z-[15] \"duty\" 25x15",
+    "button.cm-chip.absolute.z-[15] \"duty\" 25x15"
+   ],
+   "scrollY": 0,
+   "docH": 27764,
+   "label": "tab-Tactics"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [
+    "\"Manager Hot Seat\" shown 98px of 104px",
+    "\"Guess The Constructor\" shown 98px of 134px"
+   ],
+   "overlaps": [],
+   "leaks": [],
+   "tinyTaps": [
+    "button.underline.underline-offset-2.hover:text-primary \"Managers\" 57x16"
+   ],
+   "scrollY": 0,
+   "docH": 27620,
+   "label": "tab-Table"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [
+    "\"Manchester City · 25y · worth £155.2m to £166.5m\" shown 103px of 216px",
+    "\"Barcelona · 18y · worth £158.2m to £169.9m\" shown 101px of 190px",
+    "\"Bayern Munich · 24y · worth £111.3m to £119.3m\" shown 103px of 208px",
+    "\"Barcelona · 23y · worth £120.7m to £122.2m\" shown 106px of 188px",
+    "\"PSG · 25y · worth £112.2m to £114.9m\" shown 105px of 164px",
+    "\"Arsenal · 24y · worth £97.1m to £97.8m\" shown 107px of 168px",
+    "\"Chelsea · 23y · worth £84.9m to £93m\" shown 110px of 169px",
+    "\"Arsenal · 26y · worth £95.6m to £98.1m\" shown 107px of 171px",
+    "\"Liverpool · 22y · worth £86.1m to £92.5m\" shown 110px of 176px",
+    "\"Bayern Munich · 22y · worth £94.5m to £98.1m\" shown 108px of 201px",
+    "\"PSG · 21y · worth £87m to £93.5m\" shown 110px of 150px",
+    "\"Aleksandar Pavlovic\" shown 92px of 116px",
+    "\"Bayern Munich · 21y · worth £69.3m to £73m\" shown 112px of 194px",
+    "\"Liverpool · 26y · worth £79.5m to £83.3m\" shown 109px of 180px",
+    "\"PSG · 20y · worth £71.3m to £74.9m\" shown 118px of 158px",
+    "\"Dominik Szoboszlai\" shown 89px of 112px",
+    "\"Liverpool · 25y · worth £76.7m to £82.9m\" shown 109px of 178px",
+    "\"Enzo Fernández\" shown 89px of 92px",
+    "\"Manchester City · 24y · worth £70.7m to £74m\" shown 109px of 200px",
+    "\"Barcelona · 22y · worth £78.4m to £81.1m\" shown 105px of 178px",
+    "\"Liverpool · 23y · worth £69.4m to £76.6m\" shown 118px of 181px",
+    "\"Atlético Madrid · 25y · worth £69.8m to £75.5m\" shown 109px of 204px",
+    "\"Khvicha Kvaratskhelia\" shown 89px of 127px",
+    "\"PSG · 24y · worth £69.8m to £74.6m\" shown 109px of 161px",
+    "\"Chelsea · 24y · worth £77m to £83.5m\" shown 109px of 166px",
+    "\"Ousmane Dembélé\" shown 89px of 108px",
+    "\"PSG · 28y · worth £78.4m to £82.4m\" shown 109px of 161px",
+    "\"Arsenal · 24y · worth £72.3m to £76m\" shown 109px of 163px",
+    "\"PSG · 27y · worth £62.8m to £65.1m\" shown 120px of 157px",
+    "\"Alexis Mac Allister\" shown 100px of 104px",
+    "\"Liverpool · 27y · worth £63.8m to £66.3m\" shown 120px of 181px",
+    "\"Antoine Semenyo\" shown 86px of 100px",
+    "\"Manchester City · 25y · worth £58.1m to £63.8m\" shown 106px of 208px",
+    "\"Bruno Guimarães\" shown 86px of 99px",
+    "\"Arsenal · 28y · worth £59.3m to £63.6m\" shown 106px of 174px",
+    "\"Manchester United · 26y · worth £63.9m to £68m\" shown 120px of 215px",
+    "\"Chelsea · 18y · worth £61.5m to £65.2m\" shown 106px of 172px",
+    "\"Arsenal · 28y · worth £59.2m to £63.2m\" shown 106px of 172px",
+    "\"Chelsea · 24y · worth £57.5m to £63.3m\" shown 106px of 174px",
+    "\"Juventus · 20y · worth £60.4m to £63.3m\" shown 117px of 182px"
+   ],
+   "overlaps": [
+    "\"Barcelona · 18y · worth £158.2m to £169.\" x \"94\" (18x7 at 178,954)",
+    "\"Barcelona · 18y · worth £158.2m to £169.\" x \"£377.5m\" (23x6 at 237,959)",
+    "\"Barcelona · 23y · worth £120.7m to £122.\" x \"92\" (17x7 at 183,1073)",
+    "\"Barcelona · 23y · worth £120.7m to £122.\" x \"£232.1m\" (19x6 at 239,1078)",
+    "\"PSG · 25y · worth £112.2m to £114.9m\" x \"92\" (17x7 at 182,1124)",
+    "\"Arsenal · 26y · worth £95.6m to £98.1m\" x \"91\" (15x7 at 184,1251)",
+    "\"Liverpool · 22y · worth £86.1m to £92.5m\" x \"91\" (15x7 at 187,1294)"
+   ],
+   "leaks": [],
+   "tinyTaps": [
+    "button.underline.underline-offset-2.hover:text-primary \"Managers\" 57x16",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £178.2m\" 89x23",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £202.5m\" 91x23",
+    "button.flex-1.px-1.5.py-0.5 \"£377.5m\" 91x20",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £124.6m\" 90x23",
+    "button.flex-1.px-1.5.py-0.5 \"£268.5m\" 90x20",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £151.9m\" 87x23",
+    "button.flex-1.px-1.5.py-0.5 \"£232.1m\" 87x20",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £124.7m\" 88x23",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £107.3m\" 88x23",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £111.6m\" 85x23",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £107.3m\" 88x23",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £111.6m\" 85x23",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £121.9m\" 87x23",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £111.6m\" 85x23",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £91.1m\" 80x23",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £89.1m\" 83x23",
+    "button.flex-1.px-1.5.py-0.5 \"£187.1m\" 83x20",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £91m\" 74x23",
+    "button.flex-1.px-1.5.py-0.5 \"£180.5m\" 74x20",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £89.1m\" 83x23",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £80.1m\" 83x23",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £101.3m\" 87x23",
+    "button.flex-1.px-1.5.py-0.5 \"£199.3m\" 87x20",
+    "button.px-2.5.py-1.rounded-lg \"Talk · £91m\" 74x23"
+   ],
+   "scrollY": 0,
+   "docH": 27689,
+   "label": "tab-Market"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [
+    "\"Reach the Champions League semi-finals\" shown 199px of 235px",
+    "\"Concede fewer than 34 league goals\" shown 199px of 207px",
+    "\"Win the La Liga and Copa del Rey double\" shown 205px of 230px",
+    "\"Manager Hot Seat\" shown 98px of 104px",
+    "\"Guess The Constructor\" shown 98px of 134px"
+   ],
+   "overlaps": [
+    "\"Reach the Champions League semi-finals\" x \"On track\" (19x11 at 245,768)",
+    "\"Win the La Liga and Copa del Rey double\" x \"Behind\" (8x11 at 251,844)"
+   ],
+   "leaks": [],
+   "tinyTaps": [
+    "button.underline.underline-offset-2.hover:text-primary \"Managers\" 57x16",
+    "button.inline-flex.items-center.gap-1 \"Club home\" 79x16"
+   ],
+   "scrollY": 601,
+   "docH": 27500,
+   "label": "tile-Board"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [
+    "\"Manager Hot Seat\" shown 98px of 104px",
+    "\"Guess The Constructor\" shown 98px of 134px"
+   ],
+   "overlaps": [],
+   "leaks": [],
+   "tinyTaps": [
+    "button.underline.underline-offset-2.hover:text-primary \"Managers\" 57x16",
+    "button.inline-flex.items-center.gap-1 \"Club home\" 79x16"
+   ],
+   "scrollY": 601,
+   "docH": 27163,
+   "label": "tile-Inbox"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [
+    "\"vs Lens\" shown 36px of 40px",
+    "\"Manager Hot Seat\" shown 98px of 104px",
+    "\"Guess The Constructor\" shown 98px of 134px"
+   ],
+   "overlaps": [],
+   "leaks": [],
+   "tinyTaps": [
+    "button.underline.underline-offset-2.hover:text-primary \"Managers\" 57x16",
+    "button.inline-flex.items-center.gap-1 \"Club home\" 79x16",
+    "a.underline \"Maxifoot\" 50x15"
+   ],
+   "scrollY": 445,
+   "docH": 28294,
+   "label": "tile-Calendar"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [
+    "\"Manager Hot Seat\" shown 98px of 104px",
+    "\"Guess The Constructor\" shown 98px of 134px"
+   ],
+   "overlaps": [],
+   "leaks": [],
+   "tinyTaps": [
+    "button.underline.underline-offset-2.hover:text-primary \"Managers\" 57x16"
+   ],
+   "scrollY": 445,
+   "docH": 27620,
+   "label": "tile-League"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [
+    "\"Manager Hot Seat\" shown 98px of 104px",
+    "\"Guess The Constructor\" shown 98px of 134px"
+   ],
+   "overlaps": [],
+   "leaks": [],
+   "tinyTaps": [
+    "button.underline.underline-offset-2.hover:text-primary \"Managers\" 57x16",
+    "button.inline-flex.items-center.gap-1 \"Club home\" 79x16"
+   ],
+   "scrollY": 550,
+   "docH": 28515,
+   "label": "tile-Cups"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [
+    "\"Álvaro Carreras LB\" shown 65px of 105px",
+    "\"Andriy Lunin GK\" shown 65px of 87px",
+    "\"Antonio Rüdiger CB\" shown 65px of 106px",
+    "\"Arda Güler CAM\" shown 65px of 85px",
+    "\"Aurélien Tchouaméni CDM\" shown 65px of 145px",
+    "\"Bernardo Silva CAM\" shown 65px of 108px",
+    "\"Brahim Díaz RW\" shown 65px of 88px",
+    "\"Daniel Carvajal RB\" shown 65px of 102px",
+    "\"Dean Huijsen CB\" shown 65px of 91px",
+    "\"Denzel Dumfries RB\" shown 65px of 110px",
+    "\"Éder Militão CB\" shown 65px of 83px",
+    "\"Eduardo Camavinga CM\" shown 65px of 133px",
+    "\"Federico Valverde CM\" shown 65px of 121px",
+    "\"Ibrahima Konaté CB\" shown 65px of 109px",
+    "\"Jorge Cestero CM\" shown 65px of 99px",
+    "\"Jude Bellingham CAM\" shown 65px of 118px",
+    "\"Kylian Mbappé ST\" shown 65px of 99px",
+    "\"Marc Cucurella LB\" shown 65px of 102px",
+    "\"Raúl Asencio CB\" shown 65px of 89px",
+    "\"Thiago Pitarch CM\" shown 65px of 101px",
+    "\"Thibaut Courtois GK\" shown 65px of 110px",
+    "\"Trent Alexander-Arnold RB\" shown 65px of 149px",
+    "\"Vinicius Junior LW\" shown 65px of 100px",
+    "\"Yan Diomande LW\" shown 65px of 99px",
+    "\"Manager Hot Seat\" shown 98px of 104px",
+    "\"Guess The Constructor\" shown 98px of 134px"
+   ],
+   "overlaps": [
+    "\"Álvaro Carreras\" x \"0\" (8x15 at 110,932)",
+    "\"Antonio Rüdiger\" x \"0\" (8x15 at 110,984)",
+    "\"Aurélien Tchouaméni\" x \"0\" (8x15 at 110,1036)",
+    "\"Daniel Carvajal\" x \"0\" (6x15 at 110,1114)",
+    "\"Denzel Dumfries\" x \"0\" (8x15 at 110,1166)",
+    "\"Eduardo Camavinga\" x \"0\" (8x15 at 110,1218)",
+    "\"Federico Valverde\" x \"0\" (8x15 at 110,1270)",
+    "\"Ibrahima Konaté\" x \"0\" (8x15 at 110,1296)",
+    "\"Jude Bellingham\" x \"0\" (8x15 at 110,1348)",
+    "\"Marc Cucurella\" x \"0\" (7x15 at 110,1400)",
+    "\"Thibaut Courtois\" x \"0\" (8x15 at 110,1504)",
+    "\"Trent Alexander-Arnold\" x \"0\" (8x15 at 110,1530)"
+   ],
+   "leaks": [],
+   "tinyTaps": [
+    "button.underline.underline-offset-2.hover:text-primary \"Managers\" 57x16",
+    "button.inline-flex.items-center.gap-1 \"Club home\" 79x16",
+    "button.text-center.font-bold.uppercase \"APPS\" 32x15",
+    "button.text-center.font-bold.uppercase \"G\" 26x15",
+    "button.text-center.font-bold.uppercase \"A\" 26x15",
+    "button.text-center.font-bold.uppercase \"Y/R\" 26x15",
+    "button.text-center.font-bold.uppercase \"AVG\" 38x15"
+   ],
+   "scrollY": 550,
+   "docH": 28050,
+   "label": "tile-Stats"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [
+    "\"Pellmoor Credit (fans will hate it)\" shown 162px of 175px",
+    "\"Manager Hot Seat\" shown 98px of 104px",
+    "\"Guess The Constructor\" shown 98px of 134px"
+   ],
+   "overlaps": [],
+   "leaks": [],
+   "tinyTaps": [
+    "button.underline.underline-offset-2.hover:text-primary \"Managers\" 57x16",
+    "button.inline-flex.items-center.gap-1 \"Club home\" 79x16"
+   ],
+   "scrollY": 601,
+   "docH": 28704,
+   "label": "tile-Finances"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [
+    "\"Manager Hot Seat\" shown 98px of 104px",
+    "\"Guess The Constructor\" shown 98px of 134px"
+   ],
+   "overlaps": [],
+   "leaks": [],
+   "tinyTaps": [
+    "button.underline.underline-offset-2.hover:text-primary \"Managers\" 57x16",
+    "button.inline-flex.items-center.gap-1 \"Club home\" 79x16"
+   ],
+   "scrollY": 601,
+   "docH": 27864,
+   "label": "tile-Facilities"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [
+    "\"Manager Hot Seat\" shown 98px of 104px",
+    "\"Guess The Constructor\" shown 98px of 134px"
+   ],
+   "overlaps": [],
+   "leaks": [],
+   "tinyTaps": [
+    "button.underline.underline-offset-2.hover:text-primary \"Managers\" 57x16",
+    "button.inline-flex.items-center.gap-1 \"Club home\" 79x16"
+   ],
+   "scrollY": 601,
+   "docH": 27649,
+   "label": "tile-Staff"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [
+    "\"Manager Hot Seat\" shown 98px of 104px",
+    "\"Guess The Constructor\" shown 98px of 134px"
+   ],
+   "overlaps": [],
+   "leaks": [],
+   "tinyTaps": [
+    "button.underline.underline-offset-2.hover:text-primary \"Managers\" 57x16",
+    "button.inline-flex.items-center.gap-1 \"Club home\" 79x16"
+   ],
+   "scrollY": 601,
+   "docH": 28135,
+   "label": "tile-Skills"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [
+    "\"Manager Hot Seat\" shown 98px of 104px",
+    "\"Guess The Constructor\" shown 98px of 134px"
+   ],
+   "overlaps": [],
+   "leaks": [],
+   "tinyTaps": [
+    "button.underline.underline-offset-2.hover:text-primary \"Managers\" 57x16",
+    "button.inline-flex.items-center.gap-1 \"Club home\" 79x16"
+   ],
+   "scrollY": 601,
+   "docH": 27578,
+   "label": "tile-Options"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [
+    "\"Manager Hot Seat\" shown 98px of 104px",
+    "\"Guess The Constructor\" shown 98px of 134px"
+   ],
+   "overlaps": [],
+   "leaks": [],
+   "tinyTaps": [
+    "button.underline.underline-offset-2.hover:text-primary \"Managers\" 57x16",
+    "button.inline-flex.items-center.gap-1 \"Club home\" 79x16"
+   ],
+   "scrollY": 601,
+   "docH": 27353,
+   "label": "tile-Manager"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [
+    "\"Manager Hot Seat\" shown 98px of 104px",
+    "\"Guess The Constructor\" shown 98px of 134px"
+   ],
+   "overlaps": [],
+   "leaks": [],
+   "tinyTaps": [
+    "button.underline.underline-offset-2.hover:text-primary \"Managers\" 57x16",
+    "button.inline-flex.items-center.gap-1 \"Club home\" 79x16"
+   ],
+   "scrollY": 601,
+   "docH": 27162,
+   "label": "tile-Treatment"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [
+    "\"Manager Hot Seat\" shown 98px of 104px",
+    "\"Guess The Constructor\" shown 98px of 134px"
+   ],
+   "overlaps": [],
+   "leaks": [],
+   "tinyTaps": [
+    "button.inline-flex.items-center.gap-1 \"Back\" 47x16"
+   ],
+   "scrollY": 101,
+   "docH": 27873,
+   "label": "tile-Rival watch"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [
+    "\"Manager Hot Seat\" shown 98px of 104px",
+    "\"Guess The Constructor\" shown 98px of 134px"
+   ],
+   "overlaps": [],
+   "leaks": [],
+   "tinyTaps": [
+    "button.mt-2.text-xs.text-muted-foreground \"Delete\" 37x16"
+   ],
+   "scrollY": 0,
+   "docH": 27358,
+   "label": "slots"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [
+    "\"Real Madrid\" shown 74px of 81px",
+    "\"Rayo Vallecano\" shown 74px of 104px",
+    "\"🧤 Shot saved: Kylian Mbappé\" shown 84px of 145px",
+    "\"🧤 Shot saved: Ibrahima Konaté\" shown 84px of 153px",
+    "\"🧤 Shot saved: Marash Kumbulla\" shown 84px of 157px",
+    "\"🟨 Booked: Marash Kumbulla\" shown 84px of 140px",
+    "\"⚽ Goal: Kylian Mbappé 🅰️ Vinicius Junior\" shown 84px of 201px",
+    "\"🧤 Shot saved: Jude Bellingham\" shown 84px of 153px",
+    "\"⚽ Goal, free kick: Jude Bellingham\" shown 84px of 171px",
+    "\"🟨 Booked: Vinicius Junior\" shown 84px of 126px",
+    "\"🧤 Shot saved: Éder Militão\" shown 84px of 129px",
+    "\"🔁 Sub: Yan Diomande on for Vinicius Junior\" shown 84px of 212px",
+    "\"⚽ Goal: Kylian Mbappé 🅰️ Federico Valverde\" shown 84px of 219px",
+    "\"🔁 Sub: Antonio Rüdiger on for Ibrahima Konaté\" shown 84px of 228px",
+    "\"🧤 Shot saved: Jude Bellingham\" shown 84px of 153px",
+    "\"🟨 Booked: Federico Valverde\" shown 84px of 144px",
+    "\"⚽ Goal: Dean Huijsen 🅰️ Álvaro Carreras\" shown 84px of 200px",
+    "\"Manager Hot Seat\" shown 98px of 104px",
+    "\"Guess The Constructor\" shown 98px of 134px"
+   ],
+   "overlaps": [
+    "\"⚽ Goal: Kylian Mbappé\" x \"39'\" (12x11 at 153,1282)",
+    "\"⚽ Goal, free kick: Jude Bellingham\" x \"53'\" (15x11 at 153,1341)",
+    "\"🔁 Sub: Yan Diomande on for Vinicius Jun\" x \"64'\" (6x11 at 153,1401)",
+    "\"⚽ Goal: Kylian Mbappé\" x \"67'\" (12x11 at 153,1421)",
+    "\"🔁 Sub: Antonio Rüdiger on for Ibrahima \" x \"75'\" (12x11 at 153,1441)",
+    "\"⚽ Goal: Dean Huijsen\" x \"90+7'\" (10x11 at 147,1501)"
+   ],
+   "leaks": [],
+   "tinyTaps": [
+    "button.mt-2.inline-flex.items-center \"All player ratings\" 95x15"
+   ],
+   "scrollY": 101,
+   "docH": 28603,
+   "label": "ff-report-0"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [
+    "\"Real Madrid\" shown 74px of 81px",
+    "\"🟨 Booked: Eric García\" shown 84px of 109px",
+    "\"🟨 Booked: Jude Bellingham\" shown 84px of 136px",
+    "\"🎯 Penalty: Fermín López\" shown 84px of 122px",
+    "\"🧤 Penalty saved: Fermín López\" shown 84px of 154px",
+    "\"🧤 Shot saved: Vinicius Junior\" shown 84px of 143px",
+    "\"🧤 Shot saved: Alejandro Balde\" shown 84px of 149px",
+    "\"🔁 Sub: Andriy Lunin on for Thibaut Courtois\" shown 84px of 211px",
+    "\"🟨 Booked: Álvaro Carreras\" shown 84px of 133px",
+    "\"🟥 Sent off: Kylian Mbappé\" shown 84px of 130px",
+    "\"🧤 Shot saved: Arda Güler\" shown 84px of 125px",
+    "\"🔁 Sub: Aurélien Tchouaméni on for Jude Bellingham\" shown 84px of 253px",
+    "\"🧤 Shot saved: Lamine Yamal\" shown 84px of 141px",
+    "\"🟨 Booked: Ibrahima Konaté\" shown 84px of 136px",
+    "\"🟨 Booked: Jules Koundé\" shown 84px of 122px",
+    "\"🧤 Shot saved: Arda Güler\" shown 84px of 125px",
+    "\"🔁 Sub: Anthony Gordon on for Raphinha\" shown 84px of 196px",
+    "\"🔁 Sub: Gerard Martín on for Jules Koundé\" shown 84px of 205px",
+    "\"Manager Hot Seat\" shown 98px of 104px",
+    "\"Guess The Constructor\" shown 98px of 134px"
+   ],
+   "overlaps": [
+    "\"🔁 Sub: Aurélien Tchouaméni on for Jude \" x \"59'\" (15x11 at 153,1389)"
+   ],
+   "leaks": [],
+   "tinyTaps": [
+    "button.mt-2.inline-flex.items-center \"All player ratings\" 95x15"
+   ],
+   "scrollY": 101,
+   "docH": 28673,
+   "label": "ff-report-1"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [
+    "\"Athletic Club\" shown 74px of 88px",
+    "\"Real Madrid\" shown 74px of 81px",
+    "\"🧤 Shot saved: Yan Diomande\" shown 84px of 143px",
+    "\"🧤 Shot saved: Yan Diomande\" shown 84px of 143px",
+    "\"🧤 Shot saved: Aurélien Tchouaméni\" shown 84px of 174px",
+    "\"🧤 Shot saved: Iñaki Williams\" shown 84px of 137px",
+    "\"⚽ Goal: Kylian Mbappé 🅰️ Dean Huijsen\" shown 84px of 194px",
+    "\"🔁 Sub: Thiago Pitarch on for Federico Valverde\" shown 84px of 229px",
+    "\"🔁 Sub: Brahim Díaz on for Vinicius Junior\" shown 84px of 201px",
+    "\"🟥 Sent off: Yan Diomande\" shown 84px of 127px",
+    "\"🟨 Booked: Dani Vivian\" shown 84px of 110px",
+    "\"🧤 Shot saved: Dani Vivian\" shown 84px of 127px",
+    "\"🧤 Shot saved: Brahim Díaz\" shown 84px of 132px",
+    "\"🧤 Shot saved: Mikel Jauregizar\" shown 84px of 153px",
+    "\"🎯 Penalty: Kylian Mbappé\" shown 84px of 127px",
+    "\"⚽ Goal: Kylian Mbappé\" shown 68px of 114px",
+    "\"⚽ Goal: Aitor Paredes\" shown 84px of 108px",
+    "\"🔁 Sub: Alejandro Rego on for Peio Canales\" shown 84px of 207px",
+    "\"🟨 Booked: Dean Huijsen\" shown 84px of 119px",
+    "\"🔁 Sub: Selton Sánchez on for Beñat Prados\" shown 84px of 212px",
+    "\"🧤 Shot saved: Arda Güler\" shown 84px of 125px",
+    "\"🧤 Shot saved: Éder Militão\" shown 84px of 129px",
+    "\"⚽ Goal: Ibrahima Konaté 🅰️ Kylian Mbappé\" shown 84px of 211px",
+    "\"Manager Hot Seat\" shown 98px of 104px",
+    "\"Guess The Constructor\" shown 98px of 134px"
+   ],
+   "overlaps": [
+    "\"⚽ Goal: Kylian Mbappé\" x \"32'\" (12x11 at 153,1259)",
+    "\"🔁 Sub: Thiago Pitarch on for Federico V\" x \"46'\" (5x11 at 153,1299)",
+    "\"🟨 Booked: Dean Huijsen\" x \"75'\" (15x11 at 153,1558)",
+    "\"⚽ Goal: Ibrahima Konaté\" x \"90+1'\" (26x11 at 147,1638)"
+   ],
+   "leaks": [],
+   "tinyTaps": [
+    "button.mt-2.inline-flex.items-center \"All player ratings\" 95x15"
+   ],
+   "scrollY": 101,
+   "docH": 28819,
+   "label": "ff-report-2"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [
+    "\"Reach the Champions League semi-finals\" shown 199px of 235px",
+    "\"Concede fewer than 34 league goals\" shown 199px of 207px",
+    "\"Win the La Liga and Copa del Rey double\" shown 199px of 230px",
+    "\"Manager Hot Seat\" shown 98px of 104px",
+    "\"Guess The Constructor\" shown 98px of 134px"
+   ],
+   "overlaps": [
+    "\"Reach the Champions League semi-finals\" x \"On track\" (19x11 at 245,707)",
+    "\"Win the La Liga and Copa del Rey double\" x \"On track\" (14x11 at 245,783)"
+   ],
+   "leaks": [],
+   "tinyTaps": [
+    "button.underline.underline-offset-2.hover:text-primary \"Managers\" 57x16",
+    "button.inline-flex.items-center.gap-1 \"Club home\" 79x16"
+   ],
+   "scrollY": 540,
+   "docH": 27439,
+   "label": "mid-Board"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [
+    "\"Manager Hot Seat\" shown 98px of 104px",
+    "\"Guess The Constructor\" shown 98px of 134px"
+   ],
+   "overlaps": [],
+   "leaks": [],
+   "tinyTaps": [
+    "button.underline.underline-offset-2.hover:text-primary \"Managers\" 57x16",
+    "button.inline-flex.items-center.gap-1 \"Club home\" 79x16"
+   ],
+   "scrollY": 540,
+   "docH": 29094,
+   "label": "mid-Inbox"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [
+    "\"International window, 9 Nov to 17 Nov\" shown 174px of 199px",
+    "\"Manager Hot Seat\" shown 98px of 104px",
+    "\"Guess The Constructor\" shown 98px of 134px"
+   ],
+   "overlaps": [],
+   "leaks": [],
+   "tinyTaps": [
+    "button.underline.underline-offset-2.hover:text-primary \"Managers\" 57x16",
+    "button.inline-flex.items-center.gap-1 \"Club home\" 79x16",
+    "a.underline \"Maxifoot\" 50x15"
+   ],
+   "scrollY": 384,
+   "docH": 28302,
+   "label": "mid-Calendar"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [
+    "\"Manager Hot Seat\" shown 98px of 104px",
+    "\"Guess The Constructor\" shown 98px of 134px"
+   ],
+   "overlaps": [],
+   "leaks": [],
+   "tinyTaps": [
+    "button.underline.underline-offset-2.hover:text-primary \"Managers\" 57x16"
+   ],
+   "scrollY": 384,
+   "docH": 27608,
+   "label": "mid-League"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [
+    "\"Manager Hot Seat\" shown 98px of 104px",
+    "\"Guess The Constructor\" shown 98px of 134px"
+   ],
+   "overlaps": [],
+   "leaks": [],
+   "tinyTaps": [
+    "button.underline.underline-offset-2.hover:text-primary \"Managers\" 57x16",
+    "button.inline-flex.items-center.gap-1 \"Club home\" 79x16"
+   ],
+   "scrollY": 489,
+   "docH": 28754,
+   "label": "mid-Cups"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [
+    "\"Pablo Barrios\" shown 73px of 76px",
+    "\"Kylian Mbappé\" shown 79px of 88px",
+    "\"Real Madrid · carrying the La Liga leaders\" shown 178px of 199px",
+    "\"Kylian Mbappé ST\" shown 65px of 99px",
+    "\"Vinicius Junior LW\" shown 65px of 100px",
+    "\"Jude Bellingham CAM\" shown 65px of 118px",
+    "\"Arda Güler CAM\" shown 65px of 85px",
+    "\"Federico Valverde CM\" shown 65px of 121px",
+    "\"Brahim Díaz RW\" shown 65px of 88px",
+    "\"Dean Huijsen CB\" shown 65px of 91px",
+    "\"Ibrahima Konaté CB\" shown 65px of 109px",
+    "\"Álvaro Carreras LB\" shown 65px of 105px",
+    "\"Andriy Lunin GK\" shown 65px of 87px",
+    "\"Antonio Rüdiger CB\" shown 65px of 106px",
+    "\"Aurélien Tchouaméni CDM\" shown 65px of 145px",
+    "\"Bernardo Silva CAM\" shown 65px of 108px",
+    "\"Daniel Carvajal RB\" shown 65px of 102px",
+    "\"Denzel Dumfries RB\" shown 65px of 110px",
+    "\"Éder Militão CB\" shown 65px of 83px",
+    "\"Eduardo Camavinga CM\" shown 65px of 133px",
+    "\"Jorge Cestero CM\" shown 65px of 99px",
+    "\"Marc Cucurella LB\" shown 65px of 102px",
+    "\"Raúl Asencio CB\" shown 65px of 89px",
+    "\"Thiago Pitarch CM\" shown 65px of 101px",
+    "\"Thibaut Courtois GK\" shown 65px of 110px",
+    "\"Trent Alexander-Arnold RB\" shown 65px of 149px",
+    "\"Yan Diomande LW\" shown 65px of 99px",
+    "\"Manager Hot Seat\" shown 98px of 104px",
+    "\"Guess The Constructor\" shown 98px of 134px"
+   ],
+   "overlaps": [
+    "\"Kylian Mbappé\" x \"20\" (6x15 at 107,1408)",
+    "\"Vinicius Junior\" x \"21\" (4x15 at 108,1434)",
+    "\"Jude Bellingham\" x \"20\" (15x15 at 107,1460)",
+    "\"Federico Valverde\" x \"21\" (12x15 at 108,1512)",
+    "\"Ibrahima Konaté\" x \"21\" (12x15 at 108,1616)",
+    "\"Álvaro Carreras\" x \"21\" (12x15 at 108,1642)",
+    "\"Antonio Rüdiger\" x \"3\" (7x15 at 111,1694)",
+    "\"Aurélien Tchouaméni\" x \"8\" (7x15 at 111,1720)",
+    "\"Aurélien Tchouaméni\" x \"0\" (6x15 at 143,1720)",
+    "\"Daniel Carvajal\" x \"0\" (6x15 at 110,1772)",
+    "\"Denzel Dumfries\" x \"1\" (5x15 at 112,1798)",
+    "\"Eduardo Camavinga\" x \"4\" (8x15 at 110,1850)",
+    "\"Marc Cucurella\" x \"3\" (6x15 at 111,1928)",
+    "\"Thibaut Courtois\" x \"21\" (12x15 at 108,2006)",
+    "\"Trent Alexander-Arnold\" x \"3\" (7x15 at 111,2032)"
+   ],
+   "leaks": [],
+   "tinyTaps": [
+    "button.underline.underline-offset-2.hover:text-primary \"Managers\" 57x16",
+    "button.inline-flex.items-center.gap-1 \"Club home\" 79x16",
+    "button.text-center.font-bold.uppercase \"APPS\" 32x15",
+    "button.text-center.font-bold.uppercase \"G\" 26x15",
+    "button.text-center.font-bold.uppercase \"A\" 26x15",
+    "button.text-center.font-bold.uppercase \"Y/R\" 26x15",
+    "button.text-center.font-bold.uppercase \"AVG\" 38x15"
+   ],
+   "scrollY": 489,
+   "docH": 28526,
+   "label": "mid-Stats"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [
+    "\"Pellmoor Credit (fans will hate it)\" shown 162px of 175px",
+    "\"Manager Hot Seat\" shown 98px of 104px",
+    "\"Guess The Constructor\" shown 98px of 134px"
+   ],
+   "overlaps": [],
+   "leaks": [],
+   "tinyTaps": [
+    "button.underline.underline-offset-2.hover:text-primary \"Managers\" 57x16",
+    "button.inline-flex.items-center.gap-1 \"Club home\" 79x16"
+   ],
+   "scrollY": 540,
+   "docH": 28632,
+   "label": "mid-Finances"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [
+    "\"Manager Hot Seat\" shown 98px of 104px",
+    "\"Guess The Constructor\" shown 98px of 134px"
+   ],
+   "overlaps": [],
+   "leaks": [],
+   "tinyTaps": [
+    "button.underline.underline-offset-2.hover:text-primary \"Managers\" 57x16",
+    "button.inline-flex.items-center.gap-1 \"Club home\" 79x16"
+   ],
+   "scrollY": 540,
+   "docH": 27803,
+   "label": "mid-Facilities"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [
+    "\"Manager Hot Seat\" shown 98px of 104px",
+    "\"Guess The Constructor\" shown 98px of 134px"
+   ],
+   "overlaps": [],
+   "leaks": [],
+   "tinyTaps": [
+    "button.underline.underline-offset-2.hover:text-primary \"Managers\" 57x16",
+    "button.inline-flex.items-center.gap-1 \"Club home\" 79x16"
+   ],
+   "scrollY": 540,
+   "docH": 27566,
+   "label": "mid-Staff"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [
+    "\"Manager Hot Seat\" shown 98px of 104px",
+    "\"Guess The Constructor\" shown 98px of 134px"
+   ],
+   "overlaps": [],
+   "leaks": [],
+   "tinyTaps": [
+    "button.underline.underline-offset-2.hover:text-primary \"Managers\" 57x16",
+    "button.inline-flex.items-center.gap-1 \"Club home\" 79x16"
+   ],
+   "scrollY": 540,
+   "docH": 28074,
+   "label": "mid-Skills"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [
+    "\"Manager Hot Seat\" shown 98px of 104px",
+    "\"Guess The Constructor\" shown 98px of 134px"
+   ],
+   "overlaps": [],
+   "leaks": [],
+   "tinyTaps": [
+    "button.underline.underline-offset-2.hover:text-primary \"Managers\" 57x16",
+    "button.inline-flex.items-center.gap-1 \"Club home\" 79x16"
+   ],
+   "scrollY": 540,
+   "docH": 27517,
+   "label": "mid-Options"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [
+    "\"Manager Hot Seat\" shown 98px of 104px",
+    "\"Guess The Constructor\" shown 98px of 134px"
+   ],
+   "overlaps": [],
+   "leaks": [],
+   "tinyTaps": [
+    "button.underline.underline-offset-2.hover:text-primary \"Managers\" 57x16",
+    "button.inline-flex.items-center.gap-1 \"Club home\" 79x16"
+   ],
+   "scrollY": 540,
+   "docH": 27294,
+   "label": "mid-Manager"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [
+    "\"Manager Hot Seat\" shown 98px of 104px",
+    "\"Guess The Constructor\" shown 98px of 134px"
+   ],
+   "overlaps": [],
+   "leaks": [],
+   "tinyTaps": [
+    "button.underline.underline-offset-2.hover:text-primary \"Managers\" 57x16",
+    "button.inline-flex.items-center.gap-1 \"Club home\" 79x16"
+   ],
+   "scrollY": 540,
+   "docH": 27092,
+   "label": "mid-Treatment"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [
+    "\"Manager Hot Seat\" shown 98px of 104px",
+    "\"Guess The Constructor\" shown 98px of 134px"
+   ],
+   "overlaps": [],
+   "leaks": [],
+   "tinyTaps": [
+    "button.inline-flex.items-center.gap-1 \"Back\" 47x16"
+   ],
+   "scrollY": 101,
+   "docH": 27901,
+   "label": "mid-Rival watch"
+  }
+ ],
+ "elapsedS": 238,
+ "clubList": [
+  "Real Madrid 👑 Elite Squad 90 Budget £195m Board wants Win the La Liga",
+  "Barcelona 👑 Elite Squad 89 Budget £158m Board wants Win the La Liga",
+  "Atlético Madrid 🥇 Contenders Squad 85 Budget £89m Board wants Win the La Liga",
+  "Villarreal ⚔️ Challengers Squad 81 Budget £40m Board wants Qualify for the Champions League",
+  "Athletic Club ⚔️ Challengers Squad 80 Budget £36m Board wants Qualify for the Champions League",
+  "Real Betis ⚔️ Challengers Squad 80 Budget £38m Board wants Qualify for the Europa League",
+  "Real Sociedad ⚔️ Challengers Squad 80 Budget £35m Board wants Qualify for the Europa League",
+  "Sevilla 🐺 Underdogs Squad 77 Budget £19m Board wants Qualify for the Conference League",
+  "Valencia 🐺 Underdogs Squad 77 Budget £20m Board wants Qualify for the Conference League",
+  "Celta Vigo 🐺 Underdogs Squad 77 Budget £18m Board wants Finish in the top half",
+  "Espanyol 🐺 Underdogs Squad 76 Budget £15m Board wants Finish in the top half",
+  "Deportivo La Coruña 🐺 Underdogs Squad 75 Budget £14m Board wants Finish in the top half",
+  "Levante 🐺 Underdogs Squad 75 Budget £12m Board wants Finish in the top half",
+  "Getafe 🐺 Underdogs Squad 75 Budget £12m Board wants Stay up. Avoid relegation",
+  "Racing Santander 🐺 Underdogs Squad 74 Budget £10m Board wants Stay up. Avoid relegation",
+  "Rayo Vallecano 🐺 Underdogs Squad 74 Budget £11m Board wants Stay up. Avoid relegation",
+  "Osasuna 🐺 Underdogs Squad 74 Budget £10m Board wants Stay up. Avoid relegation",
+  "Elche 🐺 Underdogs Squad 73 Budget £9m Board wants Stay up. Avoid relegation",
+  "Alavés 🐺 Underdogs Squad 73 Budget £9m Board wants Stay up. Avoid relegation",
+  "Málaga 🐺 Underdogs· partial data Squad 66 Budget £8m Board wants Stay up. Avoid relegation"
+ ],
+ "startSave": {
+  "club": "Real Madrid",
+  "season": 1,
+  "week": 0,
+  "cal": 54,
+  "budget": 195,
+  "squad": 26,
+  "inbox": 0,
+  "form": "",
+  "results": 0,
+  "live": false,
+  "window": "summer"
+ },
+ "hubText": "DOUKNOWBALL\nBack\nTrack stats\nReal Madrid\n2026-27 · Season 1\nSeason not started\n£195m\nNo matches yet\nManagers\nBoard\nSafe\nFans\nHopeful\nHome\nSquad\nTactics\nTable\nMarket\n☀️ Transfer window open. Tap to do business before your next match\nLA LIGA · ROUND 1\nReal Madrid vs Real Sociedad\nHome · their strength ~82 · your XI avg 88\nPlay Live\n⚡ Quick Sim\n\nPlay live to make your calls. Quick Sim handles your subs.\n\n📊 Match Centre: form, head to head, odds, team talk\n📋\nBOARD\n3 behind\nElite patience\n📩\nINBOX\nAll quiet\nNo messages yet\n📅\nCALENDAR\nSeason start\nNext: Real Sociedad\n🏆\nLEAGUE\n#16\nLa Liga\n🏅\nCUPS\nStill alive\nUCL alive too\n📊\nSTATS\n0 goals\nGoals, assists, ratings\n💰\nFINANCES\n-£15.6m projected\nFans hopeful · prices, sponsor, the books\n🏗️\nFACILITIES\nLevel 10 · 9 · 9 · 9\nStadium, training, medical, dressing room\n🧑‍🏫\nSTAFF\nLevel 9 · 8 · 8 · 8\nAttack, defence, keepers, scouting\n🎖️\nSKILLS\nLevel 1\nTactics, recruitment, money, the press\n⚙️\nOPTIONS\n£ · Normal\nCurrency, the international job, haggling\n🧢\nMANAGER\n0W 0L\nNew in the job\n🏥\nTREATMENT\nAll fit\nNo injuries or bans\n🕵️\nRIVAL WATCH\nBarcelona\nThey sit #4\n🎙️\nPRESS ROOM\nNobody has an opinion\n0 fronted up this career\n🤝\nDRESSING ROOM\nWord kept\nSet everyone a role\n🎓\nACADEMY\nNobody yet\nRecruitment 12/20 · 0 scouting\n🏋️\nTRAINING\nNormal · Balanced\n11 players still improving\n🛒\nMARKET\nWindow OPEN\nLatest transfers inside\nClub Manager: Free Football Management Game\n\nA full club-management sim in your browser: 454 clubs across 27 real leagues, from the Premier League, the 2. Bundesliga, Serie B, Ligue 2, the Segunda División and the Scottish Premiership to the Saudi Pro League, MLS, Brazil, Mexico, Australia, Russia, Croatia, Denmark, Switzerland, Austria and Greece, with real players at their real market values as of August 2026 (October for the A-League Men and the Russian Premier League) and thin squads topped up with made up youth, marked as such. Manage today or in a real past season: 2020-21 with Haaland's Dortmund and Mbappé's PSG, 2015-16 with Leicester at 5000 to 1, 2010-11 with prime Messi, or 2005-06 with Ronaldinho's Barcelona. Or create your own club with its own crest and stadium. Negotiate transfers, survive bidding wars, hit the board's named objectives, and chase titles season after season.\n\nClub Manager is the site's big one: a full management sim in your browser. 454 real clubs across 27 leagues in 21 countries, from the Premier League, Serie B, Ligue 2 and the Segunda División to the Danish Superliga, the Swiss Super League, Croatia's SuperSport HNL, Brazil's Serie A, Liga MX, the A-League Men and the Russian Premier League, over 5,000 real players with their real 2026 ages and market values, and a board that talks like a board.\n\nPick when you start too: today's game, or one of four real past seasons. 2020-21 is Haaland and Bellingham at Dortmund, Mbappé and Neymar at PSG and Bruno Fernandes at United, with that summer's big moves already made (Havertz and Werner at Chelsea, Thiago at Liverpool, Suárez at Atlético). 2015-16 is the year Leicester won it at 5000 to 1, with Vardy and Mahrez at their real pre-title values and MSN at Barcelona. 2010-11 is prime Messi and Rooney, and now Klopp's young Dortmund, Ibrahimovic's Milan and Lille's double too. 2005-06 is Ronaldinho's Ballon d'Or Barcelona with a 17 year old Messi, Mourinho's back to back Chelsea and Henry's Arsenal. All four past seasons hold all 98 clubs of their year's big five, the Premier League, La Liga, Serie A, the Bundesliga and Ligue 1 (in 2015-16 Juventus mid five-in-a-row, Lewandowski at Bayern, Ibrahimovic and Di Maria at PSG; in 2005-06 the Juventus of Buffon, Cannavaro, Nedved and Ibrahimovic, Ballack's Bayern and Juninho's Lyon); every one carries hundreds of real players at their real ages and values from that year. Or found a club of your own: name it, design the crest, name the stadium, choose the money, and build it up by signing real players.\n\nHow to play Club Manager, a free online football ma",
+ "tab_Squad": "PLAYER (26 IN SQUAD)\nRating\nCeiling\nForm\nAge\nWage\nYears left\nWorth\nFitness\nMorale\nPosition\nName\nST\nKylian Mbappé\nXI\nC\n27y\n⭐\nfit 100\n94-96\n94\n🙂\nCAM\nJude Bellingham\nXI\n22y\n⭐\nfit 100\n94-98\n92\n🙂\nLW\nVinicius Junior\nXI\n25y\n⭐\nfit 100\n93-97\n92\n🙂\nCM\nFederico Valverde\nXI\n27y\n🔥\nfit 100\n91-93\n91\n🙂\nCAM\nArda Güler\nXI\n20y\n🔥\nfit 100\n90-94\n90\n🙂\nCDM\nAurélien Tchouaméni\n26y\n🔄\nfit 100\n90-92\n89\n🙂\nLW\nYan Diomande\n19y\n🔄\nfit 100\n90-95\n89\n🙂\nCB\nDean Huijsen\nXI\n20y\n🔥\nfit 100\n91-96\n88\n🙂\nRB\nTrent Alexander-Arnold\n27y\n🔄\nfit 100\n90-92\n88\n🙂\nLB\nÁlvaro Carreras\nXI\n22y\n🔥\nfit 100\n89-93\n87\n🙂\nCM\nEduardo Camavinga\n23y\n🔄\nfit 100\n88-92\n86\n🙂\nCB\nIbrahima Konaté\nXI\n26y\n🔥\nfit 100\n86-88\n86\n🙂\nLB\nMarc Cucurella\n27y\n🧥\nfit 100\n86-88\n86\n🙂\nRW\nRodrygo\nXI\n24y\n🔥\nfit 100\n89-93\n86\n🙂\nRW\nBrahim Díaz\n26y\n🧥\nfit 100\n84-86\n84\n🙂\nST\nEndrick\n19y\n🌱\nfit 100\n91-96\n84\n🙂\nCAM\nBernardo Silva\n31y\n🧥\nfit 100\n83-85\n83\n🙂\nRB\nDenzel Dumfries\n29y\n🧥\nfit 100\n82-84\n82\n🙂\nCB\nÉder Militão\nXI\n27y\n🔥\nfit 100\n83-85\n82\n🙂\nCB\nRaúl Asencio\n22y\n🧥\nfit 100\n87-91\n82\n🙂\nCM\nThiago Pitarch\n18y\n🌱\nfit 100\n91-96\n81\n🙂\nGK\nThibaut Courtois\nXI\n33y\n🔥\nfit 100\n80-82\n80\n🙂\nGK\nAndriy Lunin\n26y\n🧥\nfit 100\n79-81\n79\n🙂\nCB\nAntonio Rüdiger\n32y\n🧥\nfit 100\n77-79\n77\n🙂\nCM\nJorge Cestero\n19y\n🌱\nfit 100\n86-91\n76\n🙂\nRB\nDaniel Carvajal\n33y\n🧥\nfit 100\n74-76\n74\n🙂\n\nTap a player for the full picture. The ceiling is the scouts' read, never the real number, and a better lead scout narrows it.\n\n📝 CONTRACTS\n1385k of 1593k a week\n⏳ FINAL YEAR (5)\nCM\nFederico Valverde\n27y · on 97k a week · final year\n91\nRenew · 126k/w · £22.7m\n\n4 years at 126k a week. £22.7m to sign.\n\nNo release clause.\n\nLeaves £172.3m in the transfer kitty.\n\nWage bill: 1414k of 1593k a week.\n\n+Clause · 111k/w · exit £59.3m\n\n4 years at 111k a week. £20m to sign.\n\nExit clause £59.3m. Any club can pay it.\n\nLeaves £175m in the transfer kitty.\n\nWage bill: 1399k of 1593k a week.\n\nCDM\nAurélien Tchouaméni\n26y · on 69k a week · final year\n89\nRenew · 90k/w · £16.2m\n\n4 years at 90k a week. £16.2m to sign.\n\nNo release clause.\n\nLeaves £178.8m in the transfer kitty.\n\nWage bill: 1406k of 1593k a week.\n\n+Clause · 79k/w · exit £36.9m\n\n4 years at 79k a week. £14.2m to sign.\n\nExit clause £36.9m. Any club can pay it.\n\nLeaves £180.8m in the transfer kitty.\n\nWage bill: 1395k of 1593k a week.\n\nCB\nDean Huijsen\n20y · on 62k a week · final year\n88\nRenew · 71k/w · £12.8m\n\n4 years at 71k a week. £12.8m to sign.\n\nNo release clause.\n\nLeaves £182.2m in the transfer kitty.\n\nWage bill: 1394k of 1593k a week.\n\n+Clause · 62k/w · exit £32m\n\n4 years at 62k a week. £11.2m to sign.\n\nExit clause £32m. Any club can pay it.\n\nLeaves £183.8m in the transfer kitty.\n\nWage bill: 1385k of 1593k a week.\n\nRB\nTrent Alexander-Arnold\n27y · on 62k a week · final year\n88\nRenew · 81k/w · £14.6m\n\n4 years at 81k a week. £14.6m to sign.\n\nNo release clause.\n\nLeaves £180.4m in the transfer kitty.\n\nWage bill: 1404k of 1593k a week.\n\n+Clause · 71k/w · exit £32m\n\n4 years at 71k a week. £12.8m to sign.\n\nExit clause £32m. Any club can pa",
+ "tab_Tactics": "FORMATION\nBACK THREE\n3-5-2\n3-4-3\n3-4-2-1\n3-5-2 high wing backs\nBACK FOUR\n4-3-3\n4-4-2\n4-2-3-1\n4-1-2-1-2\n4-5-1\n4-4-1-1\n4-3-3 holding\n4-2-2-2\n4-1-4-1\n4-3-1-2\n4-2-3-1 wide\nBACK FIVE\n5-3-2\n5-4-1\nMENTALITY\n🛡️\nDefensive\n⚖️\nBalanced\n⚔️\nAttacking\nSTARTING XI · AVG 88\nAuto Pick\nSTANDARD LINE\nduty\nduty\nduty\nduty\nduty\nduty\nduty\nduty\nduty\nduty\nduty\n80\nCourtois\n88\nHuijsen\n86\nKonaté\n82\nMilitão\n87\nCarreras\n92\nBellingham\n91\nValverde\n90\nGüler\n86\nRodrygo\n94\nC\nMbappé\n92\nJunior\n\nDrag a player onto another to swap them. Tap a spot to pick someone else, or a bench man below then a spot.\n\nMatch plans 0/3\nBENCH 15\nSET PIECES 5/5 captain Mbappé\nSHOOTOUT ORDER 0/11 not set, one draw decides it",
+ "tab_Table": "La Liga\n\n20 clubs · Your league\n\nBrowse leagues\nLA LIGA · PRE-SEASON, ALPHABETICAL ORDER\n#\nCLUB\nW\nD\nL\nGF-GA\nGD\nPTS\n\nTap any club to scout their full squad.\n\n·\nAlavés\n0\n0\n0\n0-0\n0\n0\n·\nAthletic Club\n0\n0\n0\n0-0\n0\n0\n·\nAtlético Madrid\n0\n0\n0\n0-0\n0\n0\n·\nBarcelona\n0\n0\n0\n0-0\n0\n0\n·\nCelta Vigo\n0\n0\n0\n0-0\n0\n0\n·\nDeportivo La Coruña\n0\n0\n0\n0-0\n0\n0\n·\nElche\n0\n0\n0\n0-0\n0\n0\n·\nEspanyol\n0\n0\n0\n0-0\n0\n0\n·\nGetafe\n0\n0\n0\n0-0\n0\n0\n·\nLevante\n0\n0\n0\n0-0\n0\n0\n·\nMálaga\n0\n0\n0\n0-0\n0\n0\n·\nOsasuna\n0\n0\n0\n0-0\n0\n0\n·\nRacing Santander\n0\n0\n0\n0-0\n0\n0\n·\nRayo Vallecano\n0\n0\n0\n0-0\n0\n0\n·\nReal Betis\n0\n0\n0\n0-0\n0\n0\n⭐\nReal Madrid\n0\n0\n0\n0-0\n0\n0\n·\nReal Sociedad\n0\n0\n0\n0-0\n0\n0\n·\nSevilla\n0\n0\n0\n0-0\n0\n0\n·\nValencia\n0\n0\n0\n0-0\n0\n0\n·\nVillarreal\n0\n0\n0\n0-0\n0\n0\n\nNo games yet, so the order means nothing. Positions appear with the first round.",
+ "tab_Market": "☀️ Summer window OPEN\n4 match weeks until the deadline · offers can arrive any week · loans used 0/2\nBUDGET\n£195m\nAROUND THE LEAGUE\n\n📰 Atlético Madrid sign Willian Pacho from PSG for £60m.\n\n📰 Barcelona sign Alphonso Davies from Bayern Munich for £46m.\n\n📰 RB Leipzig sign Can Uzun from Eintracht Frankfurt for £44m.\n\n📰 💰 The window's biggest deal so far: Willian Pacho to Atlético Madrid for £60m.\n\nBuy\nSell\nLatest\nALL\nGK\nDEF\nMID\nATT\nExact position…\nGK\nCB\nLB\nRB\nLWB\nRWB\nCDM\nCM\nCAM\nLM\nRM\nLW\nRW\nST\nCF\nAny age\nU21\nU24\nU28\n29 plus\nAny price\nUnder 10m\nUnder 25m\nUnder 60m\nAny league\n2. Bundesliga\nA-League Men\nAustrian Bundesliga\nBelgian Pro League\nBrasileirão Série A\nBundesliga\nDanish Superliga\nEFL Championship\nEredivisie\nLa Liga\nLiga MX\nLigue 1\nLigue 2\nMLS Eastern Conference\nMLS Western Conference\nPremier League\nPrimeira Liga\nRussian Premier League\nSaudi Pro League\nScottish Premiership\nSegunda División\nSerie A\nSerie B\nSuper League Greece\nSuperSport HNL\nSwiss Super League\nSüper Lig\nAny nation\nSpain (321)\nEngland (302)\nFrance (287)\nRussia (275)\nGermany (253)\nItaly (207)\nNetherlands (151)\nPortugal (143)\nBelgium (121)\nDenmark (111)\nSwitzerland (81)\nTürkiye (75)\nCroatia (71)\nAustria (67)\nSweden (62)\nSerbia (56)\nNorway (55)\nScotland (48)\nPoland (47)\nIreland (45)\nGreece (38)\nBosnia-Herzegovina (29)\nCzech Republic (25)\nWales (24)\nAlbania (23)\nKosovo (19)\nRomania (18)\nIceland (17)\nSlovakia (17)\nUkraine (17)\nFinland (14)\nHungary (14)\nSlovenia (13)\nGeorgia (12)\nIsrael (11)\nBulgaria (10)\nMontenegro (8)\nNorthern Ireland (8)\nBelarus (6)\nKazakhstan (6)\nArmenia (5)\nLuxembourg (5)\nMalta (5)\nNorth Macedonia (5)\nEstonia (1)\nLatvia (1)\nLithuania (1)\nMoldova (1)\nBrazil (346)\nArgentina (164)\nColombia (67)\nUruguay (67)\nEcuador (25)\nParaguay (23)\nChile (19)\nVenezuela (12)\nPeru (4)\nBolivia (2)\nMexico (115)\nUnited States (113)\nCanada (27)\nSuriname (11)\nJamaica (9)\nHaiti (6)\nPanama (6)\nCosta Rica (4)\nCuracao (4)\nHonduras (4)\nDominican Republic (2)\nEl Salvador (2)\nGuadeloupe (2)\nGuyana (2)\nMartinique (2)\nGuatemala (1)\nTrinidad and Tobago (1)\nMorocco (69)\nCote d'Ivoire (66)\nSenegal (56)\nNigeria (47)\nGhana (41)\nAlgeria (30)\nMali (29)\nCameroon (27)\nDR Congo (25)\nTunisia (12)\nAngola (11)\nGuinea (11)\nBurkina Faso (10)\nCape Verde (10)\nThe Gambia (7)\nGabon (5)\nGuinea-Bissau (5)\nTogo (5)\nZambia (5)\nEgypt (4)\nComoros (3)\nCongo (3)\nMauritania (3)\nSouth Africa (3)\nZimbabwe (3)\nBenin (2)\nBurundi (2)\nMozambique (2)\nNiger (2)\nSierra Leone (2)\nCentral African Republic (1)\nChad (1)\nEquatorial Guinea (1)\nKenya (1)\nMadagascar (1)\nSouthern Sudan (1)\nTanzania (1)\nAustralia (222)\nJapan (64)\nKorea, South (15)\nSaudi Arabia (10)\nIndonesia (9)\nUzbekistan (5)\nIraq (3)\nIran (2)\nJordan (1)\nLebanon (1)\nPalestine (1)\nPhilippines (1)\nTajikistan (1)\nTurkmenistan (1)\nYemen (1)\nNew Zealand (43)\nNew Caledonia (1)\nVanuatu (1)\nBest first\nPriciest first\nYoungest first\nCheapest first\nST\nErling Haaland\nManchester City · 25y · worth £155.2m to £166.5m\n94\nTalk · £178.2m\nRW\nLamine Yamal\nBarcelona · 18y · worth £158.2m to £",
+ "tileText": {
+  "Board": "DOUKNOWBALL\nBack\nTrack stats\nReal Madrid\n2026-27 · Season 1\nSeason not started\n£195m\nNo matches yet\nManagers\nBoard\nSafe\nFans\nHopeful\nHome\nSquad\nTactics\nTable\nMarket\n☀️ Transfer window open. Tap to do business before your next match\nLA LIGA · ROUND 1\nReal Madrid vs Real Sociedad\nHome · their strength ~82 · your XI avg 88\nPlay Live\n⚡ Quick Sim\n\nPlay live to make your calls. Quick Sim handles your subs.\n\n📊 Match Centre: form, head to head, odds, team talk\nClub home\nBOARD EXPECTATIONS · HUGE BUDGETS, ZERO PATIENCE: ANYTHING SHORT OF THE TITLE IS A CRISIS.\nWin the La Liga\nBehind\nWin the Copa del Rey\nOn track\nReach the Champions League semi-finals\nOn track\nFinish above Barcelona\nBehind\nConcede fewer than 34 league goals\nOn track\nWin the La Liga and Copa del Rey double\nBehind\n🛒 IN THE MARKET\nHave 8 players from Spain in the squad\nOn track\n\nCounts everyone in your squad from Spain. A player you have in on loan does not count, and neither does anybody whose country we do not have on file.\n\nHave 5 players aged 30 or over in the squad\nOn track\n\nCounts everyone in your squad aged 30 or over. A player you have in on loan does not count.\n\nClub Manager: Free Football Management Game\n\nA full club-management sim in your browser: 454 clubs across 27 real leagues, from the Premier League, the 2. Bundesliga, Serie B, Ligue 2, the Segunda División and the Scottish Premiership to the Saudi Pro League, MLS, Brazil, Mexico, Australia, Russia, Croatia, Denmark, Switzerland, Austria and Greece, with real players at their real market values as of August 2026 (October for the A-League Men and the Russian Premier League) and thin squads topped up with made up youth, marked as such. Manage today or in a real past season: 2020-21 with Haaland's Dortmund and Mbappé's PSG, 2015-16 with Leicester at 5000 to 1, 2010-11 with prime Messi, or 2005-06 with Ronaldinho's Barcelona. Or create your own club with its own crest and stadium. Negotiate transfers, survive bidding wars, hit the board's named objectives, and chase titles season after season.\n\nClub Manager is the site's big one: a full management sim in your browser. 454 real clubs across 27 leagues in 21 countries, from the Premier League, Serie B, Ligue 2 and the Segunda División to the Danish Superliga, the Swiss Super League, Croatia's SuperSport HNL, Brazil's Serie A, Liga MX, the A-League Men and the Russian Premier League, over 5,000 real players with their real 2026 ages and market values, and a board that talks like a board.\n\nPick when you start too: today's game, or one of four real past seasons. 2020-21 is Haaland and Bellingham at Dortmund, Mbappé and Neymar at PSG and Bruno Fernandes at United, with that summer's big moves already made (Havertz and Werner at Chelsea, Thiago at Liverpool, Suárez at Atlético). 2015-16 is the year Leicester won it at 5000 to 1, with Vardy and Mahrez at their real pre-title values and MSN at Barcelona. 2010-11 is prime Messi and Rooney, and now Klopp's young Dortmund, Ibrahimovic's Milan and Lille's double too. 2005-06 is Ronaldinho's Ballon d'Or Barcelona with a 17 year old Messi, Mourinho's back to back Chelsea and Henry's Arsenal. All four past seasons hold all 98 clubs of their year's big five, the Premier League, La Liga, Serie A, the Bundesliga and Ligue 1 (in 2015-16 Juventus mid five-in-a-row, Lewandowski at Bayern, Ibrahimovic and Di Maria at PSG; in 2005-06 the Juventus of Buffon, Cannavaro, Nedved and Ibrahimovic, Ballack's Bayern and Juninho's Lyon); every one car",
+  "Inbox": "DOUKNOWBALL\nBack\nTrack stats\nReal Madrid\n2026-27 · Season 1\nSeason not started\n£195m\nNo matches yet\nManagers\nBoard\nSafe\nFans\nHopeful\nHome\nSquad\nTactics\nTable\nMarket\n☀️ Transfer window open. Tap to do business before your next match\nLA LIGA · ROUND 1\nReal Madrid vs Real Sociedad\nHome · their strength ~82 · your XI avg 88\nPlay Live\n⚡ Quick Sim\n\nPlay live to make your calls. Quick Sim handles your subs.\n\n📊 Match Centre: form, head to head, odds, team talk\nClub home\n\nNobody has texted you yet. Play some matches, the drama finds you.\n\nClub Manager: Free Football Management Game\n\nA full club-management sim in your browser: 454 clubs across 27 real leagues, from the Premier League, the 2. Bundesliga, Serie B, Ligue 2, the Segunda División and the Scottish Premiership to the Saudi Pro League, MLS, Brazil, Mexico, Australia, Russia, Croatia, Denmark, Switzerland, Austria and Greece, with real players at their real market values as of August 2026 (October for the A-League Men and the Russian Premier League) and thin squads topped up with made up youth, marked as such. Manage today or in a real past season: 2020-21 with Haaland's Dortmund and Mbappé's PSG, 2015-16 with Leicester at 5000 to 1, 2010-11 with prime Messi, or 2005-06 with Ronaldinho's Barcelona. Or create your own club with its own crest and stadium. Negotiate transfers, survive bidding wars, hit the board's named objectives, and chase titles season after season.\n\nClub Manager is the site's big one: a full management sim in your browser. 454 real clubs across 27 leagues in 21 countries, from the Premier League, Serie B, Ligue 2 and the Segunda División to the Danish Superliga, the Swiss Super League, Croatia's SuperSport HNL, Brazil's Serie A, Liga MX, the A-League Men and the Russian Premier League, over 5,000 real players with their real 2026 ages and market values, and a board that talks like a board.\n\nPick when you start too: today's game, or one of four real past seasons. 2020-21 is Haaland and Bellingham at Dortmund, Mbappé and Neymar at PSG and Bruno Fernandes at United, with that summer's big moves already made (Havertz and Werner at Chelsea, Thiago at Liverpool, Suárez at Atlético). 2015-16 is the year Leicester won it at 5000 to 1, with Vardy and Mahrez at their real pre-title values and MSN at Barcelona. 2010-11 is prime Messi and Rooney, and now Klopp's young Dortmund, Ibrahimovic's Milan and Lille's double too. 2005-06 is Ronaldinho's Ballon d'Or Barcelona with a 17 year old Messi, Mourinho's back to back Chelsea and Henry's Arsenal. All four past seasons hold all 98 clubs of their year's big five, the Premier League, La Liga, Serie A, the Bundesliga and Ligue 1 (in 2015-16 Juventus mid five-in-a-row, Lewandowski at Bayern, Ibrahimovic and Di Maria at PSG; in 2005-06 the Juventus of Buffon, Cannavaro, Nedved and Ibrahimovic, Ballack's Bayern and Juninho's Lyon); every one carries hundreds of real players at their real ages and values from that year. Or found a club of your own: name it, design the crest, name the stadium, choose the money, and build it up by signing real players.\n\nHow to play Club Manager, a free online football management game\nPick an era, a nation and a real club\nPick your era (today, 2020-21, 2015-16, 2010-11 or 2005-06), then your nation, your league, and your club. Every tile quotes what that board will actually demand.\nOR FOUND A CLUB OF YOUR OWN\nOr tap Create your own club: your name, your crest (shape, pattern, colors, initials), your stadium, and",
+  "Calendar": "DOUKNOWBALL\nBack\nTrack stats\nReal Madrid\n2026-27 · Season 1\nSeason not started\n£195m\nNo matches yet\nManagers\nBoard\nSafe\nFans\nHopeful\nHome\nSquad\nTactics\nTable\nMarket\n☀️ Transfer window open. Tap to do business before your next match\nLA LIGA · ROUND 1\nReal Madrid vs Real Sociedad\nHome · their strength ~82 · your XI avg 88\nPlay Live\n⚡ Quick Sim\n\nPlay live to make your calls. Quick Sim handles your subs.\n\n📊 Match Centre: form, head to head, odds, team talk\nClub home\n\nReal 2026/27 La Liga opponent order and home/away venues. Calendar dates and results are simulated. The order is the list as it stood on 10 October 2026. Sources: Fixture Download / Maxifoot\n\nAugust 2026\nCurrent date\nS\nM\nT\nW\nT\nF\nS\n1\n2\n3\n4\n5\n6\n7\n8\n⚽\nv RSO\n9\n10\n11\n12\n13\n14\n15\n⚽\n@ ESP\n16\n17\n18\n19\n20\n21\n22\n⚽\nv MÁL\n23\n24\n25\n26\n⭐\nv LEN\n🔒\n27\n28\n29\n⚽\n@ RBE\n30\n31\nSat 8 Aug\n⚽\nvs Real Sociedad\nLa Liga\nSat 15 Aug\n⚽\nat Espanyol\nLa Liga\nSat 22 Aug\n⚽\nvs Málaga\nLa Liga\nWed 26 Aug\n⭐\nvs Lens\n🔒 deadline\nChampions League\nSat 29 Aug\n⚽\nat Real Betis\nLa Liga\n⚽ league match day\n🏅 cup\n⭐ Europe\ntraining\n🔓 window opens\n🔒 deadline day\n🌍 international window opens\n window open\nfaded: a round you reach by winning the one before\nSeason: August 2026 to May 2027\n🏋️ BETWEEN MATCHES\nRest first\nTwo light sessions. Freshest legs on Saturday, slowest growth.\nBalanced\nTrain one day, rest the next. The default rhythm.\nFull training\nOn the grass every weekday. Fastest growth, tired legs and knocks.\n\nSame engine as the training screen (Normal intensity): this picks how hard the week is worked, and the cones above show it.\n\nFAST FORWARD\nNext match\nSat 8 Aug\nAbout a month\nSat 5 Sep\nTo the window\nSat 2 Jan\nRest of season\nSat 15 May\n\nEach one is a tap on the day shown, so it runs exactly what tapping that day runs. Every run stops early for the January window, the season review, the sack and a club's approach, because those need you. The last match simmed shows its full report.\n\nClub Manager: Free Football Management Game\n\nA full club-management sim in your browser: 454 clubs across 27 real leagues, from the Premier League, the 2. Bundesliga, Serie B, Ligue 2, the Segunda División and the Scottish Premiership to the Saudi Pro League, MLS, Brazil, Mexico, Australia, Russia, Croatia, Denmark, Switzerland, Austria and Greece, with real players at their real market values as of August 2026 (October for the A-League Men and the Russian Premier League) and thin squads topped up with made up youth, marked as such. Manage today or in a real past season: 2020-21 with Haaland's Dortmund and Mbappé's PSG, 2015-16 with Leicester at 5000 to 1, 2010-11 with prime Messi, or 2005-06 with Ronaldinho's Barcelona. Or create your own club with its own crest and stadium. Negotiate transfers, survive bidding wars, hit the board's named objectives, and chase titles season after season.\n\nClub Manager is the site's big one: a full management sim in your browser. 454 real clubs across 27 leagues in 21 countries, from the Premier League, Serie B, Ligue 2 and the Segunda División to the Danish Superliga, the Swiss Super League, Croatia's SuperSport HNL, Brazil's Serie A, Liga MX, the A-League Men and the Russian Premier League, over 5,000 real players with their real 2026 ages and market values, and a board that talks like a board.\n\nPick when you start too: today's game, or one of four real past seasons. 2020-21 is Haaland and Bellingham at Dortmund, Mbappé and Neymar at PSG and Bruno Fernandes at United, with that summer's big moves already ",
+  "League": "DOUKNOWBALL\nBack\nTrack stats\nReal Madrid\n2026-27 · Season 1\nSeason not started\n£195m\nNo matches yet\nManagers\nBoard\nSafe\nFans\nHopeful\nHome\nSquad\nTactics\nTable\nMarket\nLa Liga\n\n20 clubs · Your league\n\nBrowse leagues\nLA LIGA · PRE-SEASON, ALPHABETICAL ORDER\n#\nCLUB\nW\nD\nL\nGF-GA\nGD\nPTS\n\nTap any club to scout their full squad.\n\n·\nAlavés\n0\n0\n0\n0-0\n0\n0\n·\nAthletic Club\n0\n0\n0\n0-0\n0\n0\n·\nAtlético Madrid\n0\n0\n0\n0-0\n0\n0\n·\nBarcelona\n0\n0\n0\n0-0\n0\n0\n·\nCelta Vigo\n0\n0\n0\n0-0\n0\n0\n·\nDeportivo La Coruña\n0\n0\n0\n0-0\n0\n0\n·\nElche\n0\n0\n0\n0-0\n0\n0\n·\nEspanyol\n0\n0\n0\n0-0\n0\n0\n·\nGetafe\n0\n0\n0\n0-0\n0\n0\n·\nLevante\n0\n0\n0\n0-0\n0\n0\n·\nMálaga\n0\n0\n0\n0-0\n0\n0\n·\nOsasuna\n0\n0\n0\n0-0\n0\n0\n·\nRacing Santander\n0\n0\n0\n0-0\n0\n0\n·\nRayo Vallecano\n0\n0\n0\n0-0\n0\n0\n·\nReal Betis\n0\n0\n0\n0-0\n0\n0\n⭐\nReal Madrid\n0\n0\n0\n0-0\n0\n0\n·\nReal Sociedad\n0\n0\n0\n0-0\n0\n0\n·\nSevilla\n0\n0\n0\n0-0\n0\n0\n·\nValencia\n0\n0\n0\n0-0\n0\n0\n·\nVillarreal\n0\n0\n0\n0-0\n0\n0\n\nNo games yet, so the order means nothing. Positions appear with the first round.\n\nClub Manager: Free Football Management Game\n\nA full club-management sim in your browser: 454 clubs across 27 real leagues, from the Premier League, the 2. Bundesliga, Serie B, Ligue 2, the Segunda División and the Scottish Premiership to the Saudi Pro League, MLS, Brazil, Mexico, Australia, Russia, Croatia, Denmark, Switzerland, Austria and Greece, with real players at their real market values as of August 2026 (October for the A-League Men and the Russian Premier League) and thin squads topped up with made up youth, marked as such. Manage today or in a real past season: 2020-21 with Haaland's Dortmund and Mbappé's PSG, 2015-16 with Leicester at 5000 to 1, 2010-11 with prime Messi, or 2005-06 with Ronaldinho's Barcelona. Or create your own club with its own crest and stadium. Negotiate transfers, survive bidding wars, hit the board's named objectives, and chase titles season after season.\n\nClub Manager is the site's big one: a full management sim in your browser. 454 real clubs across 27 leagues in 21 countries, from the Premier League, Serie B, Ligue 2 and the Segunda División to the Danish Superliga, the Swiss Super League, Croatia's SuperSport HNL, Brazil's Serie A, Liga MX, the A-League Men and the Russian Premier League, over 5,000 real players with their real 2026 ages and market values, and a board that talks like a board.\n\nPick when you start too: today's game, or one of four real past seasons. 2020-21 is Haaland and Bellingham at Dortmund, Mbappé and Neymar at PSG and Bruno Fernandes at United, with that summer's big moves already made (Havertz and Werner at Chelsea, Thiago at Liverpool, Suárez at Atlético). 2015-16 is the year Leicester won it at 5000 to 1, with Vardy and Mahrez at their real pre-title values and MSN at Barcelona. 2010-11 is prime Messi and Rooney, and now Klopp's young Dortmund, Ibrahimovic's Milan and Lille's double too. 2005-06 is Ronaldinho's Ballon d'Or Barcelona with a 17 year old Messi, Mourinho's back to back Chelsea and Henry's Arsenal. All four past seasons hold all 98 clubs of their year's big five, the Premier League, La Liga, Serie A, the Bundesliga and Ligue 1 (in 2015-16 Juventus mid five-in-a-row, Lewandowski at Bayern, Ibrahimovic and Di Maria at PSG; in 2005-06 the Juventus of Buffon, Cannavaro, Nedved and Ibrahimovic, Ballack's Bayern and Juninho's Lyon); every one carries hundreds of real players at their real ages and values from that year. Or found a club of your own: name it, design the crest, name the stadium, choose the money, and build it up by signing real ",
+  "Cups": "DOUKNOWBALL\nBack\nTrack stats\nReal Madrid\n2026-27 · Season 1\nSeason not started\n£195m\nNo matches yet\nManagers\nBoard\nSafe\nFans\nHopeful\nHome\nSquad\nTactics\nTable\nMarket\n☀️ Transfer window open. Tap to do business before your next match\nLA LIGA · ROUND 1\nReal Madrid vs Real Sociedad\nHome · their strength ~82 · your XI avg 88\nPlay Live\n⚡ Quick Sim\n\nPlay live to make your calls. Quick Sim handles your subs.\n\n📊 Match Centre: form, head to head, odds, team talk\nClub home\n🏅 COPA DEL REY\n🏅 Copa del Rey: still alive. Next up, the Round of 16 against Tenerife.\n🏅 COPA DEL REY BRACKET\nROUND OF 16\nReal Madrid\nTenerife\nValencia\nOsasuna\nVillarreal\nAthletic Club\nDeportivo La Coruña\nReal Sociedad\nAlavés\nCelta Vigo\nBurgos\nMálaga\nSevilla\nSporting Gijón\nLevante\nReal Betis\nQUARTER-FINALS\nWaiting on the round before.\nSEMI-FINALS\nWaiting on the round before.\nFINAL\nWaiting on the round before.\n\nSixteen clubs from across the country, every tie played.\n\n⭐ CHAMPIONS LEAGUE\n⭐ Group A\nGroup B\nGroup C\nGroup D\nGroup E\nGroup F\nGroup G\nGroup H\n⭐ UCL GROUP A · MD0/6 · YOURS\n#\nCLUB\nW\nD\nL\nGF-GA\nGD\nPTS\n\nTap any club to scout their full squad.\n\n·\nAGF\n0\n0\n0\n0-0\n0\n0\n·\nBorussia Dortmund\n0\n0\n0\n0-0\n0\n0\n·\nLens\n0\n0\n0\n0-0\n0\n0\n⭐\nReal Madrid\n0\n0\n0\n0-0\n0\n0\nPROJECTED QUARTER-FINALS\nAGF\nv\nBayern Munich\nAEK Athens\nv\nComo\nArsenal\nv\nClub Brugge\nCeltic\nv\nFeyenoord\n\nIf the groups ended right now. Nobody has kicked a ball, so this is just the draw order.\n\nThe real competition's format, season by season, and what this era plays\n\nClub Manager: Free Football Management Game\n\nA full club-management sim in your browser: 454 clubs across 27 real leagues, from the Premier League, the 2. Bundesliga, Serie B, Ligue 2, the Segunda División and the Scottish Premiership to the Saudi Pro League, MLS, Brazil, Mexico, Australia, Russia, Croatia, Denmark, Switzerland, Austria and Greece, with real players at their real market values as of August 2026 (October for the A-League Men and the Russian Premier League) and thin squads topped up with made up youth, marked as such. Manage today or in a real past season: 2020-21 with Haaland's Dortmund and Mbappé's PSG, 2015-16 with Leicester at 5000 to 1, 2010-11 with prime Messi, or 2005-06 with Ronaldinho's Barcelona. Or create your own club with its own crest and stadium. Negotiate transfers, survive bidding wars, hit the board's named objectives, and chase titles season after season.\n\nClub Manager is the site's big one: a full management sim in your browser. 454 real clubs across 27 leagues in 21 countries, from the Premier League, Serie B, Ligue 2 and the Segunda División to the Danish Superliga, the Swiss Super League, Croatia's SuperSport HNL, Brazil's Serie A, Liga MX, the A-League Men and the Russian Premier League, over 5,000 real players with their real 2026 ages and market values, and a board that talks like a board.\n\nPick when you start too: today's game, or one of four real past seasons. 2020-21 is Haaland and Bellingham at Dortmund, Mbappé and Neymar at PSG and Bruno Fernandes at United, with that summer's big moves already made (Havertz and Werner at Chelsea, Thiago at Liverpool, Suárez at Atlético). 2015-16 is the year Leicester won it at 5000 to 1, with Vardy and Mahrez at their real pre-title values and MSN at Barcelona. 2010-11 is prime Messi and Rooney, and now Klopp's young Dortmund, Ibrahimovic's Milan and Lille's double too. 2005-06 is Ronaldinho's Ballon d'Or Barcelona with a 17 year old Messi, Mourinho's back to back Chelsea and Henry's Arse",
+  "Stats": "DOUKNOWBALL\nBack\nTrack stats\nReal Madrid\n2026-27 · Season 1\nSeason not started\n£195m\nNo matches yet\nManagers\nBoard\nSafe\nFans\nHopeful\nHome\nSquad\nTactics\nTable\nMarket\n☀️ Transfer window open. Tap to do business before your next match\nLA LIGA · ROUND 1\nReal Madrid vs Real Sociedad\nHome · their strength ~82 · your XI avg 88\nPlay Live\n⚡ Quick Sim\n\nPlay live to make your calls. Quick Sim handles your subs.\n\n📊 Match Centre: form, head to head, odds, team talk\nClub home\nAll comps\nLeague\nCopa del Rey\nEurope\n🏅 AWARD RACES\n\nThe golden boot, the player of the season and the world award watch all start counting with the first league goals.\n\n📊 REAL MADRID · ALL COMPETITIONS\n\nNo matches in this competition yet this season.\n\nEVERY PLAYER · TAP A COLUMN TO SORT\nPLAYER\nAPPS\nG\nA\nY/R\nCS\nAVG\nÁlvaro Carreras LB\n0\n0\n0\n0\n0\n·\nAndriy Lunin GK\n0\n0\n0\n0\n0\n·\nAntonio Rüdiger CB\n0\n0\n0\n0\n0\n·\nArda Güler CAM\n0\n0\n0\n0\n0\n·\nAurélien Tchouaméni CDM\n0\n0\n0\n0\n0\n·\nBernardo Silva CAM\n0\n0\n0\n0\n0\n·\nBrahim Díaz RW\n0\n0\n0\n0\n0\n·\nDaniel Carvajal RB\n0\n0\n0\n0\n0\n·\nDean Huijsen CB\n0\n0\n0\n0\n0\n·\nDenzel Dumfries RB\n0\n0\n0\n0\n0\n·\nÉder Militão CB\n0\n0\n0\n0\n0\n·\nEduardo Camavinga CM\n0\n0\n0\n0\n0\n·\nEndrick ST\n0\n0\n0\n0\n0\n·\nFederico Valverde CM\n0\n0\n0\n0\n0\n·\nIbrahima Konaté CB\n0\n0\n0\n0\n0\n·\nJorge Cestero CM\n0\n0\n0\n0\n0\n·\nJude Bellingham CAM\n0\n0\n0\n0\n0\n·\nKylian Mbappé ST\n0\n0\n0\n0\n0\n·\nMarc Cucurella LB\n0\n0\n0\n0\n0\n·\nRaúl Asencio CB\n0\n0\n0\n0\n0\n·\nRodrygo RW\n0\n0\n0\n0\n0\n·\nThiago Pitarch CM\n0\n0\n0\n0\n0\n·\nThibaut Courtois GK\n0\n0\n0\n0\n0\n·\nTrent Alexander-Arnold RB\n0\n0\n0\n0\n0\n·\nVinicius Junior LW\n0\n0\n0\n0\n0\n·\nYan Diomande LW\n0\n0\n0\n0\n0\n·\nClub Manager: Free Football Management Game\n\nA full club-management sim in your browser: 454 clubs across 27 real leagues, from the Premier League, the 2. Bundesliga, Serie B, Ligue 2, the Segunda División and the Scottish Premiership to the Saudi Pro League, MLS, Brazil, Mexico, Australia, Russia, Croatia, Denmark, Switzerland, Austria and Greece, with real players at their real market values as of August 2026 (October for the A-League Men and the Russian Premier League) and thin squads topped up with made up youth, marked as such. Manage today or in a real past season: 2020-21 with Haaland's Dortmund and Mbappé's PSG, 2015-16 with Leicester at 5000 to 1, 2010-11 with prime Messi, or 2005-06 with Ronaldinho's Barcelona. Or create your own club with its own crest and stadium. Negotiate transfers, survive bidding wars, hit the board's named objectives, and chase titles season after season.\n\nClub Manager is the site's big one: a full management sim in your browser. 454 real clubs across 27 leagues in 21 countries, from the Premier League, Serie B, Ligue 2 and the Segunda División to the Danish Superliga, the Swiss Super League, Croatia's SuperSport HNL, Brazil's Serie A, Liga MX, the A-League Men and the Russian Premier League, over 5,000 real players with their real 2026 ages and market values, and a board that talks like a board.\n\nPick when you start too: today's game, or one of four real past seasons. 2020-21 is Haaland and Bellingham at Dortmund, Mbappé and Neymar at PSG and Bruno Fernandes at United, with that summer's big moves already made (Havertz and Werner at Chelsea, Thiago at Liverpool, Suárez at Atlético). 2015-16 is the year Leicester won it at 5000 to 1, with Vardy and Mahrez at their real pre-title values and MSN at Barcelona. 2010-11 is prime Messi and Rooney, and now Klopp's young Dortmund, Ibrahimovic's Milan and Lille's double too. 2005-06 is Ronaldinho's Ballon d'Or Barcelona with a 1",
+  "Finances": "DOUKNOWBALL\nBack\nTrack stats\nReal Madrid\n2026-27 · Season 1\nSeason not started\n£195m\nNo matches yet\nManagers\nBoard\nSafe\nFans\nHopeful\nHome\nSquad\nTactics\nTable\nMarket\n☀️ Transfer window open. Tap to do business before your next match\nLA LIGA · ROUND 1\nReal Madrid vs Real Sociedad\nHome · their strength ~82 · your XI avg 88\nPlay Live\n⚡ Quick Sim\n\nPlay live to make your calls. Quick Sim handles your subs.\n\n📊 Match Centre: form, head to head, odds, team talk\nClub home\n📊 PROJECTED TO SEASON END\nweek 0, 54 left\nIN SO FAR SEASON\nTickets · 23 certain home games left £0k £58.6m\nFood and drink £0k £14.6m\nSponsor · no deal £0k £0k\nPlayers sold · assumes no more deals £0k £0k\nIncome £0k £73.1m\nOUT\nPlayer wages · £1.4m a week £0k £74.8m\nStaff wages · £199k a week £0k £10.8m\nTravel · 22 certain away trips left £0k £3.2m\nPlayers bought · assumes no more deals £0k £0k\nFacilities £0k £0k\nStaff fees · hires and pay offs £0k £0k\nSpend £0k £88.7m\nSeason result £0k -£15.6m\n\nTickets, food, the sponsor, deals, the builders and staff fees move the transfer kitty (£195m now). Wages and travel are the club's running costs: the board covers them and holds you to the wage ceiling on the contracts desk, so they never leave the kitty. Counts league fixtures and the one cup or European tie already drawn. Later rounds depend on results and are left out, and so are deals you have not done.\n\n🎟️ PRICES\nFans: Hopeful\n🎟️ Fair prices\nCheaper seats, fuller ground, a louder day out.\n🎫 Standard\nThe going rate. Nobody writes to the paper about it.\n💼 Premium\nMore per seat, a few empty ones up in the corners.\n\nTickets about £38 a head. Fans are neutral. The board are neutral.\n\n🍟 Cheap food\nPies at cost. The fans love you for it.\n🥤 Standard\nGround prices. Nobody cheers, nobody moans.\n🍾 Premium\nHospitality margins. The fans notice the bill.\n\nFood and drink about £9.44 a head, lifted by the stadium level. Fans are neutral. The board are neutral. The mood also follows the last five results, and it moves your home crowd: 0.9x furious, 1.1x singing.\n\n🤝 SHIRT SPONSOR\n\nOffers on the table. The money lands in the same kitty as everything else, this season and every season the deal runs. Push for more and the brand comes up six percent, or walks.\n\nAmberline Rail (global)\n£45.9m/season\n\nMoney in the account, nothing riding on results. 2 seasons.\n\nSign with Amberline\nPush for more\nEmberton Textiles (global)\n£33m/season\n\nLess up front, a serious bonus if you win the league. 2 seasons. Bonus £41.3m for the title.\n\nSign with Emberton\nPush for more\nKestrel Air (local)\n£27.5m/season\n\nThe smallest cheque, locked in for four seasons, with a little for a top half finish. 4 seasons. Bonus £11.5m for a top half finish.\n\nSign with Kestrel\nPush for more\nPellmoor Credit (fans will hate it)\n£62m/season\n\nThe biggest cheque on the table, and the supporters will hate the shirt. 2 seasons, no bonus. Costs the fans 6 mood the day you sign and 8 off their target every week after, and buys a point with the board.\n\nTake the money\nPush for more\n💰 THE BOOKS\n£195m\nTransfer kitty\n£0k\nMatchday money this season\n-\nLast home gate\n\nEvery home crowd pays the kitty: attendance times about £47.44 a head, tickets plus food and drink at your prices. Scouts, the academy, the facilities and the staff desk spend from the same kitty in their own tabs. What you have left in August rolls into next season on top of the board's new cheque, up to one more season's worth of it.\n\nClub Manager: Free Football Management Game\n\nA f",
+  "Facilities": "DOUKNOWBALL\nBack\nTrack stats\nReal Madrid\n2026-27 · Season 1\nSeason not started\n£195m\nNo matches yet\nManagers\nBoard\nSafe\nFans\nHopeful\nHome\nSquad\nTactics\nTable\nMarket\n☀️ Transfer window open. Tap to do business before your next match\nLA LIGA · ROUND 1\nReal Madrid vs Real Sociedad\nHome · their strength ~82 · your XI avg 88\nPlay Live\n⚡ Quick Sim\n\nPlay live to make your calls. Quick Sim handles your subs.\n\n📊 Match Centre: form, head to head, odds, team talk\nClub home\n🏗️ FACILITIES · £195M TO SPEND\n🏟️ Stadium\n10/10\nMaxed\n\nNow: Food and drink money 18% up a head.\n\nMaximum level reached.\n\n🏃 Training ground\n9/10\nUpgrade £75m\n\nNow: Growth 10.4% faster for anyone with room to grow. As regulars, 3 players would be growing as fast as anyone can, so they would get less of the lift.\n\nNext, level 10: Growth 11.7% faster for anyone with room to grow. As regulars, 3 players would be growing as fast as anyone can, so they would get less of the lift.\n\nLeaves £120m in the transfer kitty.\n\n🩺 Medical\n9/10\nUpgrade £60m\n\nNow: Injury spells written 32% shorter, never under a week.\n\nNext, level 10: Injury spells written 36% shorter, never under a week.\n\nLeaves £135m in the transfer kitty.\n\n🚿 Dressing room\n9/10\nUpgrade £45m\n\nNow: Unhappy players climb 0.6 morale a week, up to 70.\n\nNext, level 10: Unhappy players climb 0.7 morale a week, up to 70.\n\nLeaves £150m in the transfer kitty.\n\nPaid from the transfer kitty. Big clubs start high and small clubs near the bottom, and every level is a lift on the game you already play: at level 1 a facility does nothing at all. They belong to the club, so a new job starts on the new club's.\n\nClub Manager: Free Football Management Game\n\nA full club-management sim in your browser: 454 clubs across 27 real leagues, from the Premier League, the 2. Bundesliga, Serie B, Ligue 2, the Segunda División and the Scottish Premiership to the Saudi Pro League, MLS, Brazil, Mexico, Australia, Russia, Croatia, Denmark, Switzerland, Austria and Greece, with real players at their real market values as of August 2026 (October for the A-League Men and the Russian Premier League) and thin squads topped up with made up youth, marked as such. Manage today or in a real past season: 2020-21 with Haaland's Dortmund and Mbappé's PSG, 2015-16 with Leicester at 5000 to 1, 2010-11 with prime Messi, or 2005-06 with Ronaldinho's Barcelona. Or create your own club with its own crest and stadium. Negotiate transfers, survive bidding wars, hit the board's named objectives, and chase titles season after season.\n\nClub Manager is the site's big one: a full management sim in your browser. 454 real clubs across 27 leagues in 21 countries, from the Premier League, Serie B, Ligue 2 and the Segunda División to the Danish Superliga, the Swiss Super League, Croatia's SuperSport HNL, Brazil's Serie A, Liga MX, the A-League Men and the Russian Premier League, over 5,000 real players with their real 2026 ages and market values, and a board that talks like a board.\n\nPick when you start too: today's game, or one of four real past seasons. 2020-21 is Haaland and Bellingham at Dortmund, Mbappé and Neymar at PSG and Bruno Fernandes at United, with that summer's big moves already made (Havertz and Werner at Chelsea, Thiago at Liverpool, Suárez at Atlético). 2015-16 is the year Leicester won it at 5000 to 1, with Vardy and Mahrez at their real pre-title values and MSN at Barcelona. 2010-11 is prime Messi and Rooney, and now Klopp's young Dortmund, Ibrahimovic's Milan and Lille",
+  "Staff": "DOUKNOWBALL\nBack\nTrack stats\nReal Madrid\n2026-27 · Season 1\nSeason not started\n£195m\nNo matches yet\nManagers\nBoard\nSafe\nFans\nHopeful\nHome\nSquad\nTactics\nTable\nMarket\n☀️ Transfer window open. Tap to do business before your next match\nLA LIGA · ROUND 1\nReal Madrid vs Real Sociedad\nHome · their strength ~82 · your XI avg 88\nPlay Live\n⚡ Quick Sim\n\nPlay live to make your calls. Quick Sim handles your subs.\n\n📊 Match Centre: form, head to head, odds, team talk\nClub home\n🧑‍🏫 STAFF · £195M TO SPEND · 82K A WEEK ON THE FOUR\n🎯 Kaspars Kettleby\nAttack coach · level 9/10, can reach 10 · 22k a week\nPay off £570k\n\nThe forwards grow 8.8% faster where there is room. Midfield gets half of it. As regulars, 3 of his players would be growing as fast as anyone can, so they would get less of the lift.\n\n🛡️ Torvald Merrion\nDefence coach · level 8/10, can reach 9 · 20k a week\nPay off £520k\n\nThe back line grows 7.7% faster where there is room. Midfield gets half of it. As regulars, 2 of his players would be growing as fast as anyone can, so they would get less of the lift.\n\n🧤 Hendrik Hollander\nGoalkeeping coach · level 8/10, can reach 9 · 20k a week\nPay off £520k\n\nKeepers grow 7.7% faster where there is room.\n\n🔎 Caspar Praeger\nLead scout · level 8/10, can reach 9 · 20k a week\nPay off £520k\n\nBoys found on the road top out up to 5 higher.\n\nEvery one of them is a lift on the game you already play, and a level 1 man does nothing at all, the same as an empty chair. The forwards and the number ten are the attack coach's, the back line and the holding midfielder the defence coach's, the keepers their own man's, and the middle of the park splits the two. Wages are a running cost the board covers; fees and pay offs come out of the kitty. They belong to the club, so a new job starts on the new club's staff.\n\nClub Manager: Free Football Management Game\n\nA full club-management sim in your browser: 454 clubs across 27 real leagues, from the Premier League, the 2. Bundesliga, Serie B, Ligue 2, the Segunda División and the Scottish Premiership to the Saudi Pro League, MLS, Brazil, Mexico, Australia, Russia, Croatia, Denmark, Switzerland, Austria and Greece, with real players at their real market values as of August 2026 (October for the A-League Men and the Russian Premier League) and thin squads topped up with made up youth, marked as such. Manage today or in a real past season: 2020-21 with Haaland's Dortmund and Mbappé's PSG, 2015-16 with Leicester at 5000 to 1, 2010-11 with prime Messi, or 2005-06 with Ronaldinho's Barcelona. Or create your own club with its own crest and stadium. Negotiate transfers, survive bidding wars, hit the board's named objectives, and chase titles season after season.\n\nClub Manager is the site's big one: a full management sim in your browser. 454 real clubs across 27 leagues in 21 countries, from the Premier League, Serie B, Ligue 2 and the Segunda División to the Danish Superliga, the Swiss Super League, Croatia's SuperSport HNL, Brazil's Serie A, Liga MX, the A-League Men and the Russian Premier League, over 5,000 real players with their real 2026 ages and market values, and a board that talks like a board.\n\nPick when you start too: today's game, or one of four real past seasons. 2020-21 is Haaland and Bellingham at Dortmund, Mbappé and Neymar at PSG and Bruno Fernandes at United, with that summer's big moves already made (Havertz and Werner at Chelsea, Thiago at Liverpool, Suárez at Atlético). 2015-16 is the year Leicester won it at 5000 t",
+  "Skills": "DOUKNOWBALL\nBack\nTrack stats\nReal Madrid\n2026-27 · Season 1\nSeason not started\n£195m\nNo matches yet\nManagers\nBoard\nSafe\nFans\nHopeful\nHome\nSquad\nTactics\nTable\nMarket\n☀️ Transfer window open. Tap to do business before your next match\nLA LIGA · ROUND 1\nReal Madrid vs Real Sociedad\nHome · their strength ~82 · your XI avg 88\nPlay Live\n⚡ Quick Sim\n\nPlay live to make your calls. Quick Sim handles your subs.\n\n📊 Match Centre: form, head to head, odds, team talk\nClub home\n🎖️ Manager level 1\n0 XP\n400 XP to level 2, which is one more point.\n0 of 35 points spent\n\nYou earn XP for wins, trophies, board objectives, bringing a boy through the academy, going deep in Europe, finishing above what the board asked for, and a summer that sold more than it bought. Points are yours for good: nothing here can be taken back.\n\n📋 Tactics\n○○○○○\n\nYour duties get more out of the men carrying them.\n\nOnly pays once you set duties on the Tactics screen. With none set it does nothing at all.\n\nSpend a point (0/5)\n🔍 Recruitment\n○○○○○\n\nYour read on what a player is worth gets tighter.\n\nShows up on the valuation the transfer desk gives you.\n\nSpend a point (0/5)\n🤝 Negotiation\n○○○○○\n\nSellers open nearer what the player is actually worth.\n\nOnly pays while you are actually haggling for somebody.\n\nSpend a point (0/5)\n🎓 Youth\n○○○○○\n\nThe academy finds better boys and reads them more accurately.\n\nShows up in the academy intake report.\n\nSpend a point (0/5)\n🗣 Man Management\n○○○○○\n\nA promise you break costs you less of the dressing room.\n\nOnly pays when a promise goes wrong. Keep them all and it never comes up.\n\nSpend a point (0/5)\n💰 Finance\n○○○○○\n\nEvery matchday brings a little more through the gate.\n\nPays on every home gate, whatever else you do.\n\nSpend a point (0/5)\n🎤 Media\n○○○○○\n\nNot fronting up to the press costs you less of the room.\n\nOnly pays on a week you skip the press or let the question go stale.\n\nSpend a point (0/5)\nClub Manager: Free Football Management Game\n\nA full club-management sim in your browser: 454 clubs across 27 real leagues, from the Premier League, the 2. Bundesliga, Serie B, Ligue 2, the Segunda División and the Scottish Premiership to the Saudi Pro League, MLS, Brazil, Mexico, Australia, Russia, Croatia, Denmark, Switzerland, Austria and Greece, with real players at their real market values as of August 2026 (October for the A-League Men and the Russian Premier League) and thin squads topped up with made up youth, marked as such. Manage today or in a real past season: 2020-21 with Haaland's Dortmund and Mbappé's PSG, 2015-16 with Leicester at 5000 to 1, 2010-11 with prime Messi, or 2005-06 with Ronaldinho's Barcelona. Or create your own club with its own crest and stadium. Negotiate transfers, survive bidding wars, hit the board's named objectives, and chase titles season after season.\n\nClub Manager is the site's big one: a full management sim in your browser. 454 real clubs across 27 leagues in 21 countries, from the Premier League, Serie B, Ligue 2 and the Segunda División to the Danish Superliga, the Swiss Super League, Croatia's SuperSport HNL, Brazil's Serie A, Liga MX, the A-League Men and the Russian Premier League, over 5,000 real players with their real 2026 ages and market values, and a board that talks like a board.\n\nPick when you start too: today's game, or one of four real past seasons. 2020-21 is Haaland and Bellingham at Dortmund, Mbappé and Neymar at PSG and Bruno Fernandes at United, with that summer's big moves already made (Havertz",
+  "Options": "DOUKNOWBALL\nBack\nTrack stats\nReal Madrid\n2026-27 · Season 1\nSeason not started\n£195m\nNo matches yet\nManagers\nBoard\nSafe\nFans\nHopeful\nHome\nSquad\nTactics\nTable\nMarket\n☀️ Transfer window open. Tap to do business before your next match\nLA LIGA · ROUND 1\nReal Madrid vs Real Sociedad\nHome · their strength ~82 · your XI avg 88\nPlay Live\n⚡ Quick Sim\n\nPlay live to make your calls. Quick Sim handles your subs.\n\n📊 Match Centre: form, head to head, odds, team talk\nClub home\n💱 Display currency\n£ Pounds\n€ Euros\n$ Dollars\nR$ Reais\n¥ Yen\n\nThis changes the symbol, not the amounts. The game does not convert between currencies, because a rate typed in here would be out of date within days and there is nothing on the site verifying one.\n\n🌐 International job offers\nOn\nOff\n\nYour country can call once your name is big enough. The tournament runs in the summer and club football is unchanged.\n\n🤝 Negotiation strictness\nNormal\n1\n2\n3\n4\n5\n\nThe game as it plays by default.\n\nThis changes the seller's opening price. Firm and Ruthless can give you less time to negotiate. Easier settings never add patience. Repeating one lowball runs him out of patience at every setting, which is the decision the transfer desk is built around and is not something a slider is allowed to switch off.\n\nClub Manager: Free Football Management Game\n\nA full club-management sim in your browser: 454 clubs across 27 real leagues, from the Premier League, the 2. Bundesliga, Serie B, Ligue 2, the Segunda División and the Scottish Premiership to the Saudi Pro League, MLS, Brazil, Mexico, Australia, Russia, Croatia, Denmark, Switzerland, Austria and Greece, with real players at their real market values as of August 2026 (October for the A-League Men and the Russian Premier League) and thin squads topped up with made up youth, marked as such. Manage today or in a real past season: 2020-21 with Haaland's Dortmund and Mbappé's PSG, 2015-16 with Leicester at 5000 to 1, 2010-11 with prime Messi, or 2005-06 with Ronaldinho's Barcelona. Or create your own club with its own crest and stadium. Negotiate transfers, survive bidding wars, hit the board's named objectives, and chase titles season after season.\n\nClub Manager is the site's big one: a full management sim in your browser. 454 real clubs across 27 leagues in 21 countries, from the Premier League, Serie B, Ligue 2 and the Segunda División to the Danish Superliga, the Swiss Super League, Croatia's SuperSport HNL, Brazil's Serie A, Liga MX, the A-League Men and the Russian Premier League, over 5,000 real players with their real 2026 ages and market values, and a board that talks like a board.\n\nPick when you start too: today's game, or one of four real past seasons. 2020-21 is Haaland and Bellingham at Dortmund, Mbappé and Neymar at PSG and Bruno Fernandes at United, with that summer's big moves already made (Havertz and Werner at Chelsea, Thiago at Liverpool, Suárez at Atlético). 2015-16 is the year Leicester won it at 5000 to 1, with Vardy and Mahrez at their real pre-title values and MSN at Barcelona. 2010-11 is prime Messi and Rooney, and now Klopp's young Dortmund, Ibrahimovic's Milan and Lille's double too. 2005-06 is Ronaldinho's Ballon d'Or Barcelona with a 17 year old Messi, Mourinho's back to back Chelsea and Henry's Arsenal. All four past seasons hold all 98 clubs of their year's big five, the Premier League, La Liga, Serie A, the Bundesliga and Ligue 1 (in 2015-16 Juventus mid five-in-a-row, Lewandowski at Bayern, Ibrahimovic and Di Maria a",
+  "Manager": "DOUKNOWBALL\nBack\nTrack stats\nReal Madrid\n2026-27 · Season 1\nSeason not started\n£195m\nNo matches yet\nManagers\nBoard\nSafe\nFans\nHopeful\nHome\nSquad\nTactics\nTable\nMarket\n☀️ Transfer window open. Tap to do business before your next match\nLA LIGA · ROUND 1\nReal Madrid vs Real Sociedad\nHome · their strength ~82 · your XI avg 88\nPlay Live\n⚡ Quick Sim\n\nPlay live to make your calls. Quick Sim handles your subs.\n\n📊 Match Centre: form, head to head, odds, team talk\nClub home\n📨 APPLY FOR A JOB\nFancy a move? Write to a club.\n3 of 3 left this season. They answer in two to five match days.\n💼 MANAGER CAREER\nName your manager\n0W 0D 0L\nRecord\n0%\nWin rate\n0\nTrophies\n\nTake charge of your first match and the numbers start here.\n\nClub Manager: Free Football Management Game\n\nA full club-management sim in your browser: 454 clubs across 27 real leagues, from the Premier League, the 2. Bundesliga, Serie B, Ligue 2, the Segunda División and the Scottish Premiership to the Saudi Pro League, MLS, Brazil, Mexico, Australia, Russia, Croatia, Denmark, Switzerland, Austria and Greece, with real players at their real market values as of August 2026 (October for the A-League Men and the Russian Premier League) and thin squads topped up with made up youth, marked as such. Manage today or in a real past season: 2020-21 with Haaland's Dortmund and Mbappé's PSG, 2015-16 with Leicester at 5000 to 1, 2010-11 with prime Messi, or 2005-06 with Ronaldinho's Barcelona. Or create your own club with its own crest and stadium. Negotiate transfers, survive bidding wars, hit the board's named objectives, and chase titles season after season.\n\nClub Manager is the site's big one: a full management sim in your browser. 454 real clubs across 27 leagues in 21 countries, from the Premier League, Serie B, Ligue 2 and the Segunda División to the Danish Superliga, the Swiss Super League, Croatia's SuperSport HNL, Brazil's Serie A, Liga MX, the A-League Men and the Russian Premier League, over 5,000 real players with their real 2026 ages and market values, and a board that talks like a board.\n\nPick when you start too: today's game, or one of four real past seasons. 2020-21 is Haaland and Bellingham at Dortmund, Mbappé and Neymar at PSG and Bruno Fernandes at United, with that summer's big moves already made (Havertz and Werner at Chelsea, Thiago at Liverpool, Suárez at Atlético). 2015-16 is the year Leicester won it at 5000 to 1, with Vardy and Mahrez at their real pre-title values and MSN at Barcelona. 2010-11 is prime Messi and Rooney, and now Klopp's young Dortmund, Ibrahimovic's Milan and Lille's double too. 2005-06 is Ronaldinho's Ballon d'Or Barcelona with a 17 year old Messi, Mourinho's back to back Chelsea and Henry's Arsenal. All four past seasons hold all 98 clubs of their year's big five, the Premier League, La Liga, Serie A, the Bundesliga and Ligue 1 (in 2015-16 Juventus mid five-in-a-row, Lewandowski at Bayern, Ibrahimovic and Di Maria at PSG; in 2005-06 the Juventus of Buffon, Cannavaro, Nedved and Ibrahimovic, Ballack's Bayern and Juninho's Lyon); every one carries hundreds of real players at their real ages and values from that year. Or found a club of your own: name it, design the crest, name the stadium, choose the money, and build it up by signing real players.\n\nHow to play Club Manager, a free online football management game\nPick an era, a nation and a real club\nPick your era (today, 2020-21, 2015-16, 2010-11 or 2005-06), then your nation, your league, and your club. Every ",
+  "Treatment": "DOUKNOWBALL\nBack\nTrack stats\nReal Madrid\n2026-27 · Season 1\nSeason not started\n£195m\nNo matches yet\nManagers\nBoard\nSafe\nFans\nHopeful\nHome\nSquad\nTactics\nTable\nMarket\n☀️ Transfer window open. Tap to do business before your next match\nLA LIGA · ROUND 1\nReal Madrid vs Real Sociedad\nHome · their strength ~82 · your XI avg 88\nPlay Live\n⚡ Quick Sim\n\nPlay live to make your calls. Quick Sim handles your subs.\n\n📊 Match Centre: form, head to head, odds, team talk\nClub home\nTREATMENT ROOM\n\nEveryone is fit and available. Enjoy it while it lasts.\n\nClub Manager: Free Football Management Game\n\nA full club-management sim in your browser: 454 clubs across 27 real leagues, from the Premier League, the 2. Bundesliga, Serie B, Ligue 2, the Segunda División and the Scottish Premiership to the Saudi Pro League, MLS, Brazil, Mexico, Australia, Russia, Croatia, Denmark, Switzerland, Austria and Greece, with real players at their real market values as of August 2026 (October for the A-League Men and the Russian Premier League) and thin squads topped up with made up youth, marked as such. Manage today or in a real past season: 2020-21 with Haaland's Dortmund and Mbappé's PSG, 2015-16 with Leicester at 5000 to 1, 2010-11 with prime Messi, or 2005-06 with Ronaldinho's Barcelona. Or create your own club with its own crest and stadium. Negotiate transfers, survive bidding wars, hit the board's named objectives, and chase titles season after season.\n\nClub Manager is the site's big one: a full management sim in your browser. 454 real clubs across 27 leagues in 21 countries, from the Premier League, Serie B, Ligue 2 and the Segunda División to the Danish Superliga, the Swiss Super League, Croatia's SuperSport HNL, Brazil's Serie A, Liga MX, the A-League Men and the Russian Premier League, over 5,000 real players with their real 2026 ages and market values, and a board that talks like a board.\n\nPick when you start too: today's game, or one of four real past seasons. 2020-21 is Haaland and Bellingham at Dortmund, Mbappé and Neymar at PSG and Bruno Fernandes at United, with that summer's big moves already made (Havertz and Werner at Chelsea, Thiago at Liverpool, Suárez at Atlético). 2015-16 is the year Leicester won it at 5000 to 1, with Vardy and Mahrez at their real pre-title values and MSN at Barcelona. 2010-11 is prime Messi and Rooney, and now Klopp's young Dortmund, Ibrahimovic's Milan and Lille's double too. 2005-06 is Ronaldinho's Ballon d'Or Barcelona with a 17 year old Messi, Mourinho's back to back Chelsea and Henry's Arsenal. All four past seasons hold all 98 clubs of their year's big five, the Premier League, La Liga, Serie A, the Bundesliga and Ligue 1 (in 2015-16 Juventus mid five-in-a-row, Lewandowski at Bayern, Ibrahimovic and Di Maria at PSG; in 2005-06 the Juventus of Buffon, Cannavaro, Nedved and Ibrahimovic, Ballack's Bayern and Juninho's Lyon); every one carries hundreds of real players at their real ages and values from that year. Or found a club of your own: name it, design the crest, name the stadium, choose the money, and build it up by signing real players.\n\nHow to play Club Manager, a free online football management game\nPick an era, a nation and a real club\nPick your era (today, 2020-21, 2015-16, 2010-11 or 2005-06), then your nation, your league, and your club. Every tile quotes what that board will actually demand.\nOR FOUND A CLUB OF YOUR OWN\nOr tap Create your own club: your name, your crest (shape, pattern, colors, initials), your stadium,",
+  "Rival watch": "DOUKNOWBALL\nBack\nTrack stats\nBack\nBarcelona\nLa Liga · 👑 Elite\nDugout: Keanu Halilovic since S1\n89\nBest XI\n£990m\nSquad value\n#4\nPosition\n0-0-0\nW-D-L\n0 scored\n0 conceded\n0 points\nBoard wants: win the La Liga · transfer budget around £158m\nSQUAD (24 ON THE BOOKS)\nWORTH · OVR\nRW\nLamine Yamal\n18y\n£162m\n94\nCM\nPedri\n23y\n£121.5m\n92\nCAM\nFermín López\n22y\n£81m\n90\nCDM\nRodri\n29y\n£67.5m\n89\nCB\nPau Cubarsí\n18y\n£64.5m\n89\nLW\nRaphinha\n29y\n£64.5m\n89\nRB\nJules Koundé\n27y\n£52.5m\n88\nLW\nAnthony Gordon\n24y\n£48.8m\n87\nCAM\nDani Olmo\n27y\n£48.8m\n87\nLB\nAlejandro Balde\n22y\n£44.3m\n87\nRW\nKarim Adeyemi\n23y\n£40.5m\n86\nCM\nFrenkie de Jong\n28y\n£36.8m\n86\nGK\nJoan García\n24y\n£32.3m\n85\nCB\nEric García\n24y\n£28.5m\n84\nCM\nGavi\n21y\n£24m\n83\nLB\nGerard Martín\n23y\n£20.3m\n82\nST\nGabriel Jesus\n28y\n£16.5m\n81\nRW\nRoony Bardghji\n20y\n£12m\n79\nCB\nAndreas Christensen\n29y\n£7.5m\n77\nRB\nJoão Cancelo\n31y\n£7.5m\n77\nRB\nXavi Espart\n18y\n£3.8m\n73\nGK\nDominik Livakovic\n30y\n£3m\n72\nCAM\nJuan Hernández\n18y\n£1.5m\n68\nGK\nWojciech Szczęsny\n36y\n£700k\n63\nClub Manager: Free Football Management Game\n\nA full club-management sim in your browser: 454 clubs across 27 real leagues, from the Premier League, the 2. Bundesliga, Serie B, Ligue 2, the Segunda División and the Scottish Premiership to the Saudi Pro League, MLS, Brazil, Mexico, Australia, Russia, Croatia, Denmark, Switzerland, Austria and Greece, with real players at their real market values as of August 2026 (October for the A-League Men and the Russian Premier League) and thin squads topped up with made up youth, marked as such. Manage today or in a real past season: 2020-21 with Haaland's Dortmund and Mbappé's PSG, 2015-16 with Leicester at 5000 to 1, 2010-11 with prime Messi, or 2005-06 with Ronaldinho's Barcelona. Or create your own club with its own crest and stadium. Negotiate transfers, survive bidding wars, hit the board's named objectives, and chase titles season after season.\n\nClub Manager is the site's big one: a full management sim in your browser. 454 real clubs across 27 leagues in 21 countries, from the Premier League, Serie B, Ligue 2 and the Segunda División to the Danish Superliga, the Swiss Super League, Croatia's SuperSport HNL, Brazil's Serie A, Liga MX, the A-League Men and the Russian Premier League, over 5,000 real players with their real 2026 ages and market values, and a board that talks like a board.\n\nPick when you start too: today's game, or one of four real past seasons. 2020-21 is Haaland and Bellingham at Dortmund, Mbappé and Neymar at PSG and Bruno Fernandes at United, with that summer's big moves already made (Havertz and Werner at Chelsea, Thiago at Liverpool, Suárez at Atlético). 2015-16 is the year Leicester won it at 5000 to 1, with Vardy and Mahrez at their real pre-title values and MSN at Barcelona. 2010-11 is prime Messi and Rooney, and now Klopp's young Dortmund, Ibrahimovic's Milan and Lille's double too. 2005-06 is Ronaldinho's Ballon d'Or Barcelona with a 17 year old Messi, Mourinho's back to back Chelsea and Henry's Arsenal. All four past seasons hold all 98 clubs of their year's big five, the Premier League, La Liga, Serie A, the Bundesliga and Ligue 1 (in 2015-16 Juventus mid five-in-a-row, Lewandowski at Bayern, Ibrahimovic and Di Maria at PSG; in 2005-06 the Juventus of Buffon, Cannavaro, Nedved and Ibrahimovic, Ballack's Bayern and Juninho's Lyon); every one carries hundreds of real players at their real ages and values from that year. Or found a club of your own: name it, design the crest, name the stadium, choose the m"
+ },
+ "tileValues": {
+  "Board": "📋 BOARD 3 behind Elite patience",
+  "Inbox": "📩 INBOX All quiet No messages yet",
+  "Calendar": "📅 CALENDAR Season start Next: Real Sociedad",
+  "League": "🏆 LEAGUE #16 La Liga",
+  "Cups": "🏅 CUPS Still alive UCL alive too",
+  "Stats": "📊 STATS 0 goals Goals, assists, ratings",
+  "Finances": "💰 FINANCES -£15.6m projected Fans hopeful · prices, sponsor, the books",
+  "Facilities": "🏗️ FACILITIES Level 10 · 9 · 9 · 9 Stadium, training, medical, dressing room",
+  "Staff": "🧑‍🏫 STAFF Level 9 · 8 · 8 · 8 Attack, defence, keepers, scouting",
+  "Skills": "🎖️ SKILLS Level 1 Tactics, recruitment, money, the press",
+  "Options": "⚙️ OPTIONS £ · Normal Currency, the international job, haggling",
+  "Manager": "🧢 MANAGER 0W 0L New in the job",
+  "Treatment": "🏥 TREATMENT All fit No injuries or bans",
+  "Rival watch": "🕵️ RIVAL WATCH Barcelona They sit #4",
+  "Press room": "ABSENT",
+  "Dressing room": "ABSENT",
+  "Academy": "ABSENT",
+  "Training": "ABSENT",
+  "Market": "ABSENT",
+  "Cabinet": "ABSENT"
+ },
+ "m1": {
+  "ok": false,
+  "why": "no play live",
+  "reportText": ""
+ },
+ "m2": "false",
+ "reload": {
+  "before": {
+   "club": "Real Madrid",
+   "season": 1,
+   "week": 0,
+   "cal": 54,
+   "budget": 195,
+   "squad": 26,
+   "inbox": 0,
+   "form": "",
+   "results": 0,
+   "live": false,
+   "window": "summer"
+  },
+  "after": {
+   "club": "Real Madrid",
+   "season": 1,
+   "week": 0,
+   "cal": 54,
+   "budget": 195,
+   "squad": 26,
+   "inbox": 0,
+   "form": "",
+   "results": 0,
+   "live": false,
+   "window": "summer"
+  }
+ },
+ "midTileText": {
+  "Board": "DOUKNOWBALL\nBack\nTrack stats\nReal Madrid\n2026-27 · Season 1\n#1 in league\n£229.4m\nManagers\nBoard\nSafe\nFans\nSinging\nHome\nSquad\nTactics\nTable\nMarket\nCOPA DEL REY · QUARTER-FINAL\nReal Madrid vs Valencia\nAway · their strength ~78 · your XI avg 88\nPlay Live\n⚡ Quick Sim\n\nPlay live to make your calls. Quick Sim handles your subs.\n\n📊 Match Centre: form, head to head, odds, team talk\n🥅 Shootout order: not set, tap to pick your takers\nClub home\nBOARD EXPECTATIONS · HUGE BUDGETS, ZERO PATIENCE: ANYTHING SHORT OF THE TITLE IS A CRISIS.\nWin the La Liga\nOn track\nWin the Copa del Rey\nOn track\nReach the Champions League semi-finals\nOn track\nFinish above Barcelona\nOn track\nConcede fewer than 34 league goals\nOn track\nWin the La Liga and Copa del Rey double\nOn track\n🛒 IN THE MARKET\nHave 8 players from Spain in the squad\nOn track\n\nCounts everyone in your squad from Spain. A player you have in on loan does not count, and neither does anybody whose country we do not have on file.\n\nHave 5 players aged 30 or over in the squad\nOn track\n\nCounts everyone in your squad aged 30 or over. A player you have in on loan does not count.\n\nClub Manager: Free Football Management Game\n\nA full club-management sim in your browser: 454 clubs across 27 real leagues, from the Premier League, the 2. Bundesliga, Serie B, Ligue 2, the Segunda División and the Scottish Premiership to the Saudi Pro League, MLS, Brazil, Mexico, Australia, Russia, Croatia, Denmark, Switzerland, Austria and Greece, with real players at their real market values as of August 2026 (October for the A-League Men and the Russian Premier League) and thin squads topped up with made up youth, marked as such. Manage today or in a real past season: 2020-21 with Haaland's Dortmund and Mbappé's PSG, 2015-16 with Leicester at 5000 to 1, 2010-11 with prime Messi, or 2005-06 with Ronaldinho's Barcelona. Or create your own club with its own crest and stadium. Negotiate transfers, survive bidding wars, hit the board's named objectives, and chase titles season after season.\n\nClub Manager is the site's big one: a full management sim in your browser. 454 real clubs across 27 leagues in 21 countries, from the Premier League, Serie B, Ligue 2 and the Segunda División to the Danish Superliga, the Swiss Super League, Croatia's SuperSport HNL, Brazil's Serie A, Liga MX, the A-League Men and the Russian Premier League, over 5,000 real players with their real 2026 ages and market values, and a board that talks like a board.\n\nPick when you start too: today's game, or one of four real past seasons. 2020-21 is Haaland and Bellingham at Dortmund, Mbappé and Neymar at PSG and Bruno Fernandes at United, with that summer's big moves already made (Havertz and Werner at Chelsea, Thiago at Liverpool, Suárez at Atlético). 2015-16 is the year Leicester won it at 5000 to 1, with Vardy and Mahrez at their real pre-title values and MSN at Barcelona. 2010-11 is prime Messi and Rooney, and now Klopp's young Dortmund, Ibrahimovic's Milan and Lille's double too. 2005-06 is Ronaldinho's Ballon d'Or Barcelona with a 17 year old Messi, Mourinho's back to back Chelsea and Henry's Arsenal. All four past seasons hold all 98 clubs of their year's big five, the Premier League, La Liga, Serie A, the Bundesliga and Ligue 1 (in 2015-16 Juventus mid five-in-a-row, Lewandowski at Bayern, Ibrahimovic and Di Maria at PSG; in 2005-06 the Juventus of Buffon, Cannavaro, Nedved and Ibrahimovic, Ballack's Bayern and Juninho's Lyon); every one carries hundreds of real ",
+  "Inbox": "DOUKNOWBALL\nBack\nTrack stats\nReal Madrid\n2026-27 · Season 1\n#1 in league\n£229.4m\nManagers\nBoard\nSafe\nFans\nSinging\nHome\nSquad\nTactics\nTable\nMarket\nCOPA DEL REY · QUARTER-FINAL\nReal Madrid vs Valencia\nAway · their strength ~78 · your XI avg 88\nPlay Live\n⚡ Quick Sim\n\nPlay live to make your calls. Quick Sim handles your subs.\n\n📊 Match Centre: form, head to head, odds, team talk\n🥅 Shootout order: not set, tap to pick your takers\nClub home\n⚖️\nDECISIONS DESK\n1\n\nAnswer before your next match. Anything left open closes with nothing changed.\n\nWEEK 20 · THE CLUB SECRETARY\n\n🟥Yan Diomande was shown a straight red against Athletic Club and is banned for 1 match. The club secretary rates an appeal at 40 percent. Win and the ban is wiped. Lose and the panel makes it 2 matches. It has to go in before the next match.\n\n40%\nAppeal (40% to wipe the ban, or it becomes 2 matches)\nAccept the ban (1 match, nothing changes)\nShow closed cards (5)\nYOUR MESSAGES\n3\n\nRecent retained messages. Older messages can leave your save.\n\nPending (3)\nResolved (2)\nAll (5)\nReset filters\n\nShowing 4 of 5 retained messages.\n\nWeek 20\nYOUR ASSISTANT\n\n📩International break: the window runs 9 Nov to 17 Nov, and your fixtures do not stop for it, so they went straight after your last game. Away with their countries (France: Kylian Mbappé, Aurélien Tchouaméni, Eduardo Camavinga and Ibrahima Konaté; Brazil: Vinicius Junior, Rodrygo and Endrick; England: Jude Bellingham and Trent Alexander-Arnold; Uruguay: Federico Valverde; Türkiye: Arda Güler; Cote d'Ivoire: Yan Diomande; Spain: Dean Huijsen, Álvaro Carreras and Marc Cucurella; Morocco: Brahim Díaz; Portugal: Bernardo Silva; Netherlands: Denzel Dumfries; Ukraine: Andriy Lunin). They are back for the Athletic Club game. Vinicius Junior, Federico Valverde, Arda Güler, Yan Diomande, Álvaro Carreras, Eduardo Camavinga, Marc Cucurella and Andriy Lunin started for their countries, the rest mostly watched from the bench. The long trips hurt most. Rodrygo picked up a knock away and is out for a bit. Your assistant wants to know: start them against Athletic Club, or rest the spent ones for that one game?\n\nThat game has been and gone.\n\nWeek 9\nYOUR ASSISTANT\n\n📩International break: the window runs 21 Sep to 6 Oct, and your fixtures do not stop for it, so they went straight after your last game. Away with their countries (France: Kylian Mbappé, Aurélien Tchouaméni, Eduardo Camavinga and Ibrahima Konaté; Brazil: Vinicius Junior, Rodrygo and Endrick; England: Jude Bellingham and Trent Alexander-Arnold; Uruguay: Federico Valverde; Türkiye: Arda Güler; Cote d'Ivoire: Yan Diomande; Spain: Dean Huijsen, Álvaro Carreras and Marc Cucurella; Morocco: Brahim Díaz; Portugal: Bernardo Silva; Netherlands: Denzel Dumfries; Ukraine: Andriy Lunin). They are back for the Tenerife game. Kylian Mbappé, Vinicius Junior, Jude Bellingham, Federico Valverde, Arda Güler, Aurélien Tchouaméni, Yan Diomande, Álvaro Carreras, Rodrygo, Bernardo Silva and Andriy Lunin started for their countries, the rest mostly watched from the bench. The long trips hurt most. Your assistant wants to know: start them against Tenerife, or rest the spent ones for that one game?\n\nThat game has been and gone.\n\nWeek 6\n\n🍿One of your midfielders is selling his own brand of protein cereal in the players lounge. one of your defenders reckons it tastes like drywall.\n\nShut the stand down\nInvest early\nWeek 1\nTAYE DIALLO, LOCAL PAPER\n\n🎙️A reporter from the local paper is running a piece on whether this ",
+  "Calendar": "DOUKNOWBALL\nBack\nTrack stats\nReal Madrid\n2026-27 · Season 1\n#1 in league\n£229.4m\nManagers\nBoard\nSafe\nFans\nSinging\nHome\nSquad\nTactics\nTable\nMarket\nCOPA DEL REY · QUARTER-FINAL\nReal Madrid vs Valencia\nAway · their strength ~78 · your XI avg 88\nPlay Live\n⚡ Quick Sim\n\nPlay live to make your calls. Quick Sim handles your subs.\n\n📊 Match Centre: form, head to head, odds, team talk\n🥅 Shootout order: not set, tap to pick your takers\nClub home\n\nReal 2026/27 La Liga opponent order and home/away venues. Calendar dates and results are simulated. The order is the list as it stood on 10 October 2026. Sources: Fixture Download / Maxifoot\n\nNovember 2026\nCurrent date\nS\nM\nT\nW\nT\nF\nS\n1\n2\n3\n4\n⭐\nW 3-0\n5\n6\n7\n⚽\nW 3-0\n8\n9\n🌍\n10\n11\n12\n13\n14\n⚽\nW 3-1\n15\n16\n17\n18\n🏅\n@ VAL\n19\n20\n21\n⚽\nv OSA\n22\n23\n24\n25\n⭐\n@ AGF\n26\n27\n28\n⚽\n@ DLC\n29\n30\nWed 4 Nov\n⭐\nvs Borussia Dortmund\nW 3-0\nSat 7 Nov\n⚽\nvs Alavés\nW 3-0\nMon 9 Nov\n🌍\nInternational window, 9 Nov to 17 Nov\nSat 14 Nov\n⚽\nat Athletic Club\nW 3-1\nWed 18 Nov\n🏅\nat Valencia\nCopa del Rey\nSat 21 Nov\n⚽\nvs Osasuna\nLa Liga\nWed 25 Nov\n⭐\nat AGF\nChampions League\nSat 28 Nov\n⚽\nat Deportivo La Coruña\nLa Liga\n⚽ league match day\n🏅 cup\n⭐ Europe\ntraining\n🔓 window opens\n🔒 deadline day\n🌍 international window opens\n window open\nfaded: a round you reach by winning the one before\nSeason: August 2026 to May 2027\n🏋️ BETWEEN MATCHES\nRest first\nTwo light sessions. Freshest legs on Saturday, slowest growth.\nBalanced\nTrain one day, rest the next. The default rhythm.\nFull training\nOn the grass every weekday. Fastest growth, tired legs and knocks.\n\nSame engine as the training screen (Normal intensity): this picks how hard the week is worked, and the cones above show it.\n\nFAST FORWARD\nNext match\nWed 18 Nov\nAbout a month\nWed 16 Dec\nTo the window\nSat 2 Jan\nRest of season\nSat 15 May\n\nEach one is a tap on the day shown, so it runs exactly what tapping that day runs. Every run stops early for the January window, the season review, the sack and a club's approach, because those need you. The last match simmed shows its full report.\n\nClub Manager: Free Football Management Game\n\nA full club-management sim in your browser: 454 clubs across 27 real leagues, from the Premier League, the 2. Bundesliga, Serie B, Ligue 2, the Segunda División and the Scottish Premiership to the Saudi Pro League, MLS, Brazil, Mexico, Australia, Russia, Croatia, Denmark, Switzerland, Austria and Greece, with real players at their real market values as of August 2026 (October for the A-League Men and the Russian Premier League) and thin squads topped up with made up youth, marked as such. Manage today or in a real past season: 2020-21 with Haaland's Dortmund and Mbappé's PSG, 2015-16 with Leicester at 5000 to 1, 2010-11 with prime Messi, or 2005-06 with Ronaldinho's Barcelona. Or create your own club with its own crest and stadium. Negotiate transfers, survive bidding wars, hit the board's named objectives, and chase titles season after season.\n\nClub Manager is the site's big one: a full management sim in your browser. 454 real clubs across 27 leagues in 21 countries, from the Premier League, Serie B, Ligue 2 and the Segunda División to the Danish Superliga, the Swiss Super League, Croatia's SuperSport HNL, Brazil's Serie A, Liga MX, the A-League Men and the Russian Premier League, over 5,000 real players with their real 2026 ages and market values, and a board that talks like a board.\n\nPick when you start too: today's game, or one of four real past seasons. 2020-21 is Haaland and Belling",
+  "League": "DOUKNOWBALL\nBack\nTrack stats\nReal Madrid\n2026-27 · Season 1\n#1 in league\n£229.4m\nManagers\nBoard\nSafe\nFans\nSinging\nHome\nSquad\nTactics\nTable\nMarket\nLa Liga\n\n20 clubs · Your league\n\nBrowse leagues\nLA LIGA · ROUND 15 OF 38\n#\nCLUB\nW\nD\nL\nGF-GA\nGD\nPTS\n\nTap any club to scout their full squad.\n\n1\nReal Madrid\n11\n3\n1\n35-6\n+29\n36\n2\nBarcelona\n10\n3\n2\n20-7\n+13\n33\n3\nAtlético Madrid\n9\n4\n2\n29-15\n+14\n31\n4\nVillarreal\n9\n1\n5\n31-19\n+12\n28\n5\nAlavés\n8\n2\n5\n24-21\n+3\n26\n6\nDeportivo La Coruña\n7\n4\n4\n19-15\n+4\n25\n7\nReal Sociedad\n8\n1\n6\n24-23\n+1\n25\n8\nAthletic Club\n7\n2\n6\n33-25\n+8\n23\n9\nSevilla\n7\n2\n6\n26-20\n+6\n23\n10\nValencia\n6\n5\n4\n21-16\n+5\n23\n11\nReal Betis\n6\n3\n6\n21-22\n-1\n21\n12\nRayo Vallecano\n5\n5\n5\n21-26\n-5\n20\n13\nRacing Santander\n4\n5\n6\n21-20\n+1\n17\n14\nCelta Vigo\n4\n4\n7\n17-23\n-6\n16\n15\nGetafe\n4\n4\n7\n14-27\n-13\n16\n16\nLevante\n4\n3\n8\n16-27\n-11\n15\n17\nMálaga\n4\n3\n8\n13-27\n-14\n15\n18\nEspanyol\n2\n5\n8\n21-31\n-10\n11\n19\nOsasuna\n2\n3\n10\n15-23\n-8\n9\n20\nElche\n1\n2\n12\n11-39\n-28\n5\n\nLevel on points splits on head to head (points, then goal difference, between the clubs) once every game between them has been played, then overall goal difference, then goals scored. 4 level groups have games still to play between them, so they split on goal difference for now.\n\nClub Manager: Free Football Management Game\n\nA full club-management sim in your browser: 454 clubs across 27 real leagues, from the Premier League, the 2. Bundesliga, Serie B, Ligue 2, the Segunda División and the Scottish Premiership to the Saudi Pro League, MLS, Brazil, Mexico, Australia, Russia, Croatia, Denmark, Switzerland, Austria and Greece, with real players at their real market values as of August 2026 (October for the A-League Men and the Russian Premier League) and thin squads topped up with made up youth, marked as such. Manage today or in a real past season: 2020-21 with Haaland's Dortmund and Mbappé's PSG, 2015-16 with Leicester at 5000 to 1, 2010-11 with prime Messi, or 2005-06 with Ronaldinho's Barcelona. Or create your own club with its own crest and stadium. Negotiate transfers, survive bidding wars, hit the board's named objectives, and chase titles season after season.\n\nClub Manager is the site's big one: a full management sim in your browser. 454 real clubs across 27 leagues in 21 countries, from the Premier League, Serie B, Ligue 2 and the Segunda División to the Danish Superliga, the Swiss Super League, Croatia's SuperSport HNL, Brazil's Serie A, Liga MX, the A-League Men and the Russian Premier League, over 5,000 real players with their real 2026 ages and market values, and a board that talks like a board.\n\nPick when you start too: today's game, or one of four real past seasons. 2020-21 is Haaland and Bellingham at Dortmund, Mbappé and Neymar at PSG and Bruno Fernandes at United, with that summer's big moves already made (Havertz and Werner at Chelsea, Thiago at Liverpool, Suárez at Atlético). 2015-16 is the year Leicester won it at 5000 to 1, with Vardy and Mahrez at their real pre-title values and MSN at Barcelona. 2010-11 is prime Messi and Rooney, and now Klopp's young Dortmund, Ibrahimovic's Milan and Lille's double too. 2005-06 is Ronaldinho's Ballon d'Or Barcelona with a 17 year old Messi, Mourinho's back to back Chelsea and Henry's Arsenal. All four past seasons hold all 98 clubs of their year's big five, the Premier League, La Liga, Serie A, the Bundesliga and Ligue 1 (in 2015-16 Juventus mid five-in-a-row, Lewandowski at Bayern, Ibrahimovic and Di Maria at PSG; in 2005-06 the Juventus of Buffon, Cannavaro, Nedved and ",
+  "Cups": "DOUKNOWBALL\nBack\nTrack stats\nReal Madrid\n2026-27 · Season 1\n#1 in league\n£229.4m\nManagers\nBoard\nSafe\nFans\nSinging\nHome\nSquad\nTactics\nTable\nMarket\nCOPA DEL REY · QUARTER-FINAL\nReal Madrid vs Valencia\nAway · their strength ~78 · your XI avg 88\nPlay Live\n⚡ Quick Sim\n\nPlay live to make your calls. Quick Sim handles your subs.\n\n📊 Match Centre: form, head to head, odds, team talk\n🥅 Shootout order: not set, tap to pick your takers\nClub home\n🏅 COPA DEL REY\n🏅 Copa del Rey: still alive. Next up, the quarter-final against Valencia.\n🏅 COPA DEL REY BRACKET\nROUND OF 16\nReal Madrid\n3\nTenerife\n1\nValencia\n2\nOsasuna\n1\nVillarreal\n4\nAthletic Club\n1\nDeportivo La Coruña\n0\nReal Sociedad\n0\nLevel after 90. Real Sociedad win on penalties.\nAlavés\n2\nCelta Vigo\n1\nBurgos\n1\nMálaga\n1\nGiant killing. Level after 90. Burgos win on penalties.\nSevilla\n1\nSporting Gijón\n0\nLevante\n0\nReal Betis\n1\nQUARTER-FINALS\nReal Madrid\nValencia\nVillarreal\nReal Sociedad\nAlavés\nBurgos\nSevilla\nReal Betis\nSEMI-FINALS\nWaiting on the round before.\nFINAL\nWaiting on the round before.\n\nSixteen clubs from across the country, every tie played. 1 giant killing so far.\n\n⭐ CHAMPIONS LEAGUE\n⭐ Group A\nGroup B\nGroup C\nGroup D\nGroup E\nGroup F\nGroup G\nGroup H\n⭐ UCL GROUP A · MD5/6 · YOURS\n#\nCLUB\nW\nD\nL\nGF-GA\nGD\nPTS\n\nTap any club to scout their full squad.\n\n1\nReal Madrid\n5\n0\n0\n9-1\n+8\n15\n2\nBorussia Dortmund\n2\n0\n3\n4-6\n-2\n6\n3\nLens\n1\n2\n2\n4-6\n-2\n5\n4\nAGF\n0\n2\n3\n1-5\n-4\n2\n\nLevel on points splits on goal difference, then goals scored.\n\nPROJECTED QUARTER-FINALS\nReal Madrid\nv\nBayern Munich\nAtlético Madrid\nv\nComo\nArsenal\nv\nVillarreal\nManchester City\nv\nLille\n\nIf the groups ended today: everyone currently in a qualifying place, winners drawn against runners-up where the groups send both through. This locks in after matchday 6.\n\nThe real competition's format, season by season, and what this era plays\n\nClub Manager: Free Football Management Game\n\nA full club-management sim in your browser: 454 clubs across 27 real leagues, from the Premier League, the 2. Bundesliga, Serie B, Ligue 2, the Segunda División and the Scottish Premiership to the Saudi Pro League, MLS, Brazil, Mexico, Australia, Russia, Croatia, Denmark, Switzerland, Austria and Greece, with real players at their real market values as of August 2026 (October for the A-League Men and the Russian Premier League) and thin squads topped up with made up youth, marked as such. Manage today or in a real past season: 2020-21 with Haaland's Dortmund and Mbappé's PSG, 2015-16 with Leicester at 5000 to 1, 2010-11 with prime Messi, or 2005-06 with Ronaldinho's Barcelona. Or create your own club with its own crest and stadium. Negotiate transfers, survive bidding wars, hit the board's named objectives, and chase titles season after season.\n\nClub Manager is the site's big one: a full management sim in your browser. 454 real clubs across 27 leagues in 21 countries, from the Premier League, Serie B, Ligue 2 and the Segunda División to the Danish Superliga, the Swiss Super League, Croatia's SuperSport HNL, Brazil's Serie A, Liga MX, the A-League Men and the Russian Premier League, over 5,000 real players with their real 2026 ages and market values, and a board that talks like a board.\n\nPick when you start too: today's game, or one of four real past seasons. 2020-21 is Haaland and Bellingham at Dortmund, Mbappé and Neymar at PSG and Bruno Fernandes at United, with that summer's big moves already made (Havertz and Werner at Chelsea, Thiago at Liverpool, Suárez at Atlético). 2015-1",
+  "Stats": "DOUKNOWBALL\nBack\nTrack stats\nReal Madrid\n2026-27 · Season 1\n#1 in league\n£229.4m\nManagers\nBoard\nSafe\nFans\nSinging\nHome\nSquad\nTactics\nTable\nMarket\nCOPA DEL REY · QUARTER-FINAL\nReal Madrid vs Valencia\nAway · their strength ~78 · your XI avg 88\nPlay Live\n⚡ Quick Sim\n\nPlay live to make your calls. Quick Sim handles your subs.\n\n📊 Match Centre: form, head to head, odds, team talk\n🥅 Shootout order: not set, tap to pick your takers\nClub home\nAll comps\nLeague\nCopa del Rey\nEurope\n🏅 AWARD RACES\n👟 GOLDEN BOOT\n1\nAlberto Moleiro\nVillarreal\n14\n2\nYoussouf Fofana\nSevilla\n12\n3\nMikel Jauregizar\nAthletic Club\n11\n4\nNico Williams\nAthletic Club\n11\n5\nPablo Barrios\nAtlético Madrid\n11\n6\nYassir Zabiri\nRacing Santander\n11\n7\nAntonio Blanco\nAlavés\n10\n8\nAntony\nReal Betis\n10\n🎖️ PLAYER OF THE SEASON WATCH\nAlberto Moleiro\nVillarreal\n14 gls · form score 16.5\nPablo Barrios\nAtlético Madrid\n11 gls · form score 13.8\nKylian Mbappé\nReal Madrid\n10 gls · form score 13.5\n\nOne formula for everyone: goals plus a lift for playing high in the table.\n\n🌍 BALLON D'OR WATCH\nAlberto Moleiro\nVillarreal · 14 league goals\nYoussouf Fofana\nSevilla · 12 league goals\nMikel Jauregizar\nAthletic Club · 11 league goals\nKylian Mbappé\nReal Madrid · carrying the La Liga leaders\n\nSettled at the end of the season, when Europe has a winner and the leagues have champions.\n\n📊 REAL MADRID · ALL COMPETITIONS\n21\nPlayed\n17W 3D 1L\nRecord\n47\nScored\n8\nConceded\n+39\nDiff\n⚽ TOP SCORER\nKylian Mbappé\n13 goals\n🅰️ MOST ASSISTS\nKylian Mbappé\n9 assists\n⭐ BEST RATED\nKylian Mbappé\n7.63 avg, 20 apps\n🟨 MOST CARDED\nArda Güler\n3Y 2R\nEVERY PLAYER · TAP A COLUMN TO SORT\nPLAYER\nAPPS\nG\nA\nY/R\nCS\nAVG\nKylian Mbappé ST\n20\n13\n9\n1/1\n0\n7.63\nVinicius Junior LW\n21\n11\n2\n2\n0\n7.32\nJude Bellingham CAM\n20\n6\n3\n3/1\n0\n7.28\nArda Güler CAM\n18\n5\n3\n3/2\n0\n7.21\nFederico Valverde CM\n21\n4\n7\n4\n0\n7.10\nRodrygo RW\n20\n4\n0\n0\n0\n6.93\nBrahim Díaz RW\n7\n1\n0\n0\n0\n6.70\nDean Huijsen CB\n21\n1\n3\n3\n14\n7.46\nIbrahima Konaté CB\n21\n1\n0\n4\n14\n7.28\nÁlvaro Carreras LB\n21\n0\n1\n7\n14\n7.17\nAndriy Lunin GK\n3\n0\n0\n0\n2\n7.10\nAntonio Rüdiger CB\n3\n0\n1\n0\n2\n7.33\nAurélien Tchouaméni CDM\n8\n0\n0\n0\n0\n6.59\nBernardo Silva CAM\n0\n0\n0\n0\n0\n·\nDaniel Carvajal RB\n0\n0\n0\n0\n0\n·\nDenzel Dumfries RB\n1\n0\n0\n0\n0\n6.50\nÉder Militão CB\n19\n0\n2\n5\n13\n7.42\nEduardo Camavinga CM\n4\n0\n1\n0\n0\n7.20\nEndrick ST\n1\n0\n0\n0\n0\n6.80\nJorge Cestero CM\n0\n0\n0\n0\n0\n·\nMarc Cucurella LB\n3\n0\n0\n0\n2\n7.50\nRaúl Asencio CB\n7\n0\n0\n1\n6\n7.10\nThiago Pitarch CM\n2\n0\n0\n0\n0\n7.20\nThibaut Courtois GK\n21\n0\n0\n0\n14\n7.14\nTrent Alexander-Arnold RB\n3\n0\n0\n0\n3\n7.57\nYan Diomande LW\n8\n0\n0\n0/1\n0\n6.89\nClub Manager: Free Football Management Game\n\nA full club-management sim in your browser: 454 clubs across 27 real leagues, from the Premier League, the 2. Bundesliga, Serie B, Ligue 2, the Segunda División and the Scottish Premiership to the Saudi Pro League, MLS, Brazil, Mexico, Australia, Russia, Croatia, Denmark, Switzerland, Austria and Greece, with real players at their real market values as of August 2026 (October for the A-League Men and the Russian Premier League) and thin squads topped up with made up youth, marked as such. Manage today or in a real past season: 2020-21 with Haaland's Dortmund and Mbappé's PSG, 2015-16 with Leicester at 5000 to 1, 2010-11 with prime Messi, or 2005-06 with Ronaldinho's Barcelona. Or create your own club with its own crest and stadium. Negotiate transfers, survive bidding wars, hit the board's named objectives, and chase titles season after season.\n\nClub Manager is the site's big one: a full management sim in your browser. 454 real ",
+  "Finances": "DOUKNOWBALL\nBack\nTrack stats\nReal Madrid\n2026-27 · Season 1\n#1 in league\n£229.4m\nManagers\nBoard\nSafe\nFans\nSinging\nHome\nSquad\nTactics\nTable\nMarket\nCOPA DEL REY · QUARTER-FINAL\nReal Madrid vs Valencia\nAway · their strength ~78 · your XI avg 88\nPlay Live\n⚡ Quick Sim\n\nPlay live to make your calls. Quick Sim handles your subs.\n\n📊 Match Centre: form, head to head, odds, team talk\n🥅 Shootout order: not set, tap to pick your takers\nClub home\n📊 PROJECTED TO SEASON END\nweek 21, 33 left\nIN SO FAR SEASON\nTickets · 12 certain home games left £27.6m £58.5m\nFood and drink £6.8m £14.5m\nSponsor · no deal £0k £0k\nPlayers sold · assumes no more deals £0k £0k\nIncome £34.4m £73.1m\nOUT\nPlayer wages · £1.4m a week £29.1m £74.8m\nStaff wages · £179k a week £3.8m £9.7m\nTravel · 13 certain away trips left £1.6m £3.3m\nPlayers bought · assumes no more deals £0k £0k\nFacilities £0k £0k\nStaff fees · hires and pay offs £0k £0k\nSpend £34.5m £87.8m\nSeason result -£100k -£14.8m\n\nTickets, food, the sponsor, deals, the builders and staff fees move the transfer kitty (£229.4m now). Wages and travel are the club's running costs: the board covers them and holds you to the wage ceiling on the contracts desk, so they never leave the kitty. Counts league fixtures and the one cup or European tie already drawn. Later rounds depend on results and are left out, and so are deals you have not done.\n\n🎟️ PRICES\nFans: Singing\n🎟️ Fair prices\nCheaper seats, fuller ground, a louder day out.\n🎫 Standard\nThe going rate. Nobody writes to the paper about it.\n💼 Premium\nMore per seat, a few empty ones up in the corners.\n\nTickets about £38 a head. Fans are neutral. The board are neutral.\n\n🍟 Cheap food\nPies at cost. The fans love you for it.\n🥤 Standard\nGround prices. Nobody cheers, nobody moans.\n🍾 Premium\nHospitality margins. The fans notice the bill.\n\nFood and drink about £9.44 a head, lifted by the stadium level. Fans are neutral. The board are neutral. The mood also follows the last five results, and it moves your home crowd: 0.9x furious, 1.1x singing.\n\n🤝 SHIRT SPONSOR\n\nOffers on the table. The money lands in the same kitty as everything else, this season and every season the deal runs. Push for more and the brand comes up six percent, or walks.\n\nAmberline Rail (global)\n£45.9m/season\n\nMoney in the account, nothing riding on results. 2 seasons.\n\nSign with Amberline\nPush for more\nEmberton Textiles (global)\n£33m/season\n\nLess up front, a serious bonus if you win the league. 2 seasons. Bonus £41.3m for the title.\n\nSign with Emberton\nPush for more\nKestrel Air (local)\n£27.5m/season\n\nThe smallest cheque, locked in for four seasons, with a little for a top half finish. 4 seasons. Bonus £11.5m for a top half finish.\n\nSign with Kestrel\nPush for more\nPellmoor Credit (fans will hate it)\n£62m/season\n\nThe biggest cheque on the table, and the supporters will hate the shirt. 2 seasons, no bonus. Costs the fans 6 mood the day you sign and 8 off their target every week after, and buys a point with the board.\n\nTake the money\nPush for more\n💰 THE BOOKS\n£229.4m\nTransfer kitty\n£34.4m\nMatchday money this season\n£3.6m\nLast home gate\n\nEvery home crowd pays the kitty: attendance times about £47.44 a head, tickets plus food and drink at your prices. Scouts, the academy, the facilities and the staff desk spend from the same kitty in their own tabs. What you have left in August rolls into next season on top of the board's new cheque, up to one more season's worth of it.\n\nClub Manager: Free Football Management Game\n",
+  "Facilities": "DOUKNOWBALL\nBack\nTrack stats\nReal Madrid\n2026-27 · Season 1\n#1 in league\n£229.4m\nManagers\nBoard\nSafe\nFans\nSinging\nHome\nSquad\nTactics\nTable\nMarket\nCOPA DEL REY · QUARTER-FINAL\nReal Madrid vs Valencia\nAway · their strength ~78 · your XI avg 88\nPlay Live\n⚡ Quick Sim\n\nPlay live to make your calls. Quick Sim handles your subs.\n\n📊 Match Centre: form, head to head, odds, team talk\n🥅 Shootout order: not set, tap to pick your takers\nClub home\n🏗️ FACILITIES · £229.4M TO SPEND\n🏟️ Stadium\n10/10\nMaxed\n\nNow: Food and drink money 18% up a head.\n\nMaximum level reached.\n\n🏃 Training ground\n9/10\nUpgrade £75m\n\nNow: Growth 10.4% faster for anyone with room to grow. As regulars, 3 players would be growing as fast as anyone can, so they would get less of the lift.\n\nNext, level 10: Growth 11.7% faster for anyone with room to grow. As regulars, 3 players would be growing as fast as anyone can, so they would get less of the lift.\n\nLeaves £154.4m in the transfer kitty.\n\n🩺 Medical\n9/10\nUpgrade £60m\n\nNow: Injury spells written 32% shorter, never under a week.\n\nNext, level 10: Injury spells written 36% shorter, never under a week.\n\nLeaves £169.4m in the transfer kitty.\n\n🚿 Dressing room\n9/10\nUpgrade £45m\n\nNow: Unhappy players climb 0.6 morale a week, up to 70.\n\nNext, level 10: Unhappy players climb 0.7 morale a week, up to 70.\n\nLeaves £184.4m in the transfer kitty.\n\nPaid from the transfer kitty. Big clubs start high and small clubs near the bottom, and every level is a lift on the game you already play: at level 1 a facility does nothing at all. They belong to the club, so a new job starts on the new club's.\n\nClub Manager: Free Football Management Game\n\nA full club-management sim in your browser: 454 clubs across 27 real leagues, from the Premier League, the 2. Bundesliga, Serie B, Ligue 2, the Segunda División and the Scottish Premiership to the Saudi Pro League, MLS, Brazil, Mexico, Australia, Russia, Croatia, Denmark, Switzerland, Austria and Greece, with real players at their real market values as of August 2026 (October for the A-League Men and the Russian Premier League) and thin squads topped up with made up youth, marked as such. Manage today or in a real past season: 2020-21 with Haaland's Dortmund and Mbappé's PSG, 2015-16 with Leicester at 5000 to 1, 2010-11 with prime Messi, or 2005-06 with Ronaldinho's Barcelona. Or create your own club with its own crest and stadium. Negotiate transfers, survive bidding wars, hit the board's named objectives, and chase titles season after season.\n\nClub Manager is the site's big one: a full management sim in your browser. 454 real clubs across 27 leagues in 21 countries, from the Premier League, Serie B, Ligue 2 and the Segunda División to the Danish Superliga, the Swiss Super League, Croatia's SuperSport HNL, Brazil's Serie A, Liga MX, the A-League Men and the Russian Premier League, over 5,000 real players with their real 2026 ages and market values, and a board that talks like a board.\n\nPick when you start too: today's game, or one of four real past seasons. 2020-21 is Haaland and Bellingham at Dortmund, Mbappé and Neymar at PSG and Bruno Fernandes at United, with that summer's big moves already made (Havertz and Werner at Chelsea, Thiago at Liverpool, Suárez at Atlético). 2015-16 is the year Leicester won it at 5000 to 1, with Vardy and Mahrez at their real pre-title values and MSN at Barcelona. 2010-11 is prime Messi and Rooney, and now Klopp's young Dortmund, Ibrahimovic's Milan and Lille's double too. 2005-",
+  "Staff": "DOUKNOWBALL\nBack\nTrack stats\nReal Madrid\n2026-27 · Season 1\n#1 in league\n£229.4m\nManagers\nBoard\nSafe\nFans\nSinging\nHome\nSquad\nTactics\nTable\nMarket\nCOPA DEL REY · QUARTER-FINAL\nReal Madrid vs Valencia\nAway · their strength ~78 · your XI avg 88\nPlay Live\n⚡ Quick Sim\n\nPlay live to make your calls. Quick Sim handles your subs.\n\n📊 Match Centre: form, head to head, odds, team talk\n🥅 Shootout order: not set, tap to pick your takers\nClub home\n🧑‍🏫 STAFF · £229.4M TO SPEND · 62K A WEEK ON THE FOUR\n🎯 Kaspars Kettleby\nAttack coach · level 9/10, can reach 10 · 22k a week\nPay off £570k\n\nThe forwards grow 8.8% faster where there is room. Midfield gets half of it. As regulars, 3 of his players would be growing as fast as anyone can, so they would get less of the lift.\n\n🛡️\n🛡️ Defence coach: nobody\nWorks the back line and the holding midfielder. Same lift, same ceiling.\nFind one\n\nNobody in the job. Nothing lost, nothing gained.\n\n🧤 Hendrik Hollander\nGoalkeeping coach · level 8/10, can reach 9 · 20k a week\nPay off £520k\n\nKeepers grow 7.7% faster where there is room.\n\n🔎 Caspar Praeger\nLead scout · level 8/10, can reach 9 · 20k a week\nPay off £520k\n\nBoys found on the road top out up to 5 higher.\n\nEvery one of them is a lift on the game you already play, and a level 1 man does nothing at all, the same as an empty chair. The forwards and the number ten are the attack coach's, the back line and the holding midfielder the defence coach's, the keepers their own man's, and the middle of the park splits the two. Wages are a running cost the board covers; fees and pay offs come out of the kitty. They belong to the club, so a new job starts on the new club's staff.\n\nClub Manager: Free Football Management Game\n\nA full club-management sim in your browser: 454 clubs across 27 real leagues, from the Premier League, the 2. Bundesliga, Serie B, Ligue 2, the Segunda División and the Scottish Premiership to the Saudi Pro League, MLS, Brazil, Mexico, Australia, Russia, Croatia, Denmark, Switzerland, Austria and Greece, with real players at their real market values as of August 2026 (October for the A-League Men and the Russian Premier League) and thin squads topped up with made up youth, marked as such. Manage today or in a real past season: 2020-21 with Haaland's Dortmund and Mbappé's PSG, 2015-16 with Leicester at 5000 to 1, 2010-11 with prime Messi, or 2005-06 with Ronaldinho's Barcelona. Or create your own club with its own crest and stadium. Negotiate transfers, survive bidding wars, hit the board's named objectives, and chase titles season after season.\n\nClub Manager is the site's big one: a full management sim in your browser. 454 real clubs across 27 leagues in 21 countries, from the Premier League, Serie B, Ligue 2 and the Segunda División to the Danish Superliga, the Swiss Super League, Croatia's SuperSport HNL, Brazil's Serie A, Liga MX, the A-League Men and the Russian Premier League, over 5,000 real players with their real 2026 ages and market values, and a board that talks like a board.\n\nPick when you start too: today's game, or one of four real past seasons. 2020-21 is Haaland and Bellingham at Dortmund, Mbappé and Neymar at PSG and Bruno Fernandes at United, with that summer's big moves already made (Havertz and Werner at Chelsea, Thiago at Liverpool, Suárez at Atlético). 2015-16 is the year Leicester won it at 5000 to 1, with Vardy and Mahrez at their real pre-title values and MSN at Barcelona. 2010-11 is prime Messi and Rooney, and now Klopp's young ",
+  "Skills": "DOUKNOWBALL\nBack\nTrack stats\nReal Madrid\n2026-27 · Season 1\n#1 in league\n£229.4m\nManagers\nBoard\nSafe\nFans\nSinging\nHome\nSquad\nTactics\nTable\nMarket\nCOPA DEL REY · QUARTER-FINAL\nReal Madrid vs Valencia\nAway · their strength ~78 · your XI avg 88\nPlay Live\n⚡ Quick Sim\n\nPlay live to make your calls. Quick Sim handles your subs.\n\n📊 Match Centre: form, head to head, odds, team talk\n🥅 Shootout order: not set, tap to pick your takers\nClub home\n🎖️ Manager level 1\n0 XP\n400 XP to level 2, which is one more point.\n0 of 35 points spent\n\nYou earn XP for wins, trophies, board objectives, bringing a boy through the academy, going deep in Europe, finishing above what the board asked for, and a summer that sold more than it bought. Points are yours for good: nothing here can be taken back.\n\n📋 Tactics\n○○○○○\n\nYour duties get more out of the men carrying them.\n\nOnly pays once you set duties on the Tactics screen. With none set it does nothing at all.\n\nSpend a point (0/5)\n🔍 Recruitment\n○○○○○\n\nYour read on what a player is worth gets tighter.\n\nShows up on the valuation the transfer desk gives you.\n\nSpend a point (0/5)\n🤝 Negotiation\n○○○○○\n\nSellers open nearer what the player is actually worth.\n\nOnly pays while you are actually haggling for somebody.\n\nSpend a point (0/5)\n🎓 Youth\n○○○○○\n\nThe academy finds better boys and reads them more accurately.\n\nShows up in the academy intake report.\n\nSpend a point (0/5)\n🗣 Man Management\n○○○○○\n\nA promise you break costs you less of the dressing room.\n\nOnly pays when a promise goes wrong. Keep them all and it never comes up.\n\nSpend a point (0/5)\n💰 Finance\n○○○○○\n\nEvery matchday brings a little more through the gate.\n\nPays on every home gate, whatever else you do.\n\nSpend a point (0/5)\n🎤 Media\n○○○○○\n\nNot fronting up to the press costs you less of the room.\n\nOnly pays on a week you skip the press or let the question go stale.\n\nSpend a point (0/5)\nClub Manager: Free Football Management Game\n\nA full club-management sim in your browser: 454 clubs across 27 real leagues, from the Premier League, the 2. Bundesliga, Serie B, Ligue 2, the Segunda División and the Scottish Premiership to the Saudi Pro League, MLS, Brazil, Mexico, Australia, Russia, Croatia, Denmark, Switzerland, Austria and Greece, with real players at their real market values as of August 2026 (October for the A-League Men and the Russian Premier League) and thin squads topped up with made up youth, marked as such. Manage today or in a real past season: 2020-21 with Haaland's Dortmund and Mbappé's PSG, 2015-16 with Leicester at 5000 to 1, 2010-11 with prime Messi, or 2005-06 with Ronaldinho's Barcelona. Or create your own club with its own crest and stadium. Negotiate transfers, survive bidding wars, hit the board's named objectives, and chase titles season after season.\n\nClub Manager is the site's big one: a full management sim in your browser. 454 real clubs across 27 leagues in 21 countries, from the Premier League, Serie B, Ligue 2 and the Segunda División to the Danish Superliga, the Swiss Super League, Croatia's SuperSport HNL, Brazil's Serie A, Liga MX, the A-League Men and the Russian Premier League, over 5,000 real players with their real 2026 ages and market values, and a board that talks like a board.\n\nPick when you start too: today's game, or one of four real past seasons. 2020-21 is Haaland and Bellingham at Dortmund, Mbappé and Neymar at PSG and Bruno Fernandes at United, with that summer's big moves already made (Havertz and Werner at Chelsea, Thia",
+  "Options": "DOUKNOWBALL\nBack\nTrack stats\nReal Madrid\n2026-27 · Season 1\n#1 in league\n£229.4m\nManagers\nBoard\nSafe\nFans\nSinging\nHome\nSquad\nTactics\nTable\nMarket\nCOPA DEL REY · QUARTER-FINAL\nReal Madrid vs Valencia\nAway · their strength ~78 · your XI avg 88\nPlay Live\n⚡ Quick Sim\n\nPlay live to make your calls. Quick Sim handles your subs.\n\n📊 Match Centre: form, head to head, odds, team talk\n🥅 Shootout order: not set, tap to pick your takers\nClub home\n💱 Display currency\n£ Pounds\n€ Euros\n$ Dollars\nR$ Reais\n¥ Yen\n\nThis changes the symbol, not the amounts. The game does not convert between currencies, because a rate typed in here would be out of date within days and there is nothing on the site verifying one.\n\n🌐 International job offers\nOn\nOff\n\nYour country can call once your name is big enough. The tournament runs in the summer and club football is unchanged.\n\n🤝 Negotiation strictness\nNormal\n1\n2\n3\n4\n5\n\nThe game as it plays by default.\n\nThis changes the seller's opening price. Firm and Ruthless can give you less time to negotiate. Easier settings never add patience. Repeating one lowball runs him out of patience at every setting, which is the decision the transfer desk is built around and is not something a slider is allowed to switch off.\n\nClub Manager: Free Football Management Game\n\nA full club-management sim in your browser: 454 clubs across 27 real leagues, from the Premier League, the 2. Bundesliga, Serie B, Ligue 2, the Segunda División and the Scottish Premiership to the Saudi Pro League, MLS, Brazil, Mexico, Australia, Russia, Croatia, Denmark, Switzerland, Austria and Greece, with real players at their real market values as of August 2026 (October for the A-League Men and the Russian Premier League) and thin squads topped up with made up youth, marked as such. Manage today or in a real past season: 2020-21 with Haaland's Dortmund and Mbappé's PSG, 2015-16 with Leicester at 5000 to 1, 2010-11 with prime Messi, or 2005-06 with Ronaldinho's Barcelona. Or create your own club with its own crest and stadium. Negotiate transfers, survive bidding wars, hit the board's named objectives, and chase titles season after season.\n\nClub Manager is the site's big one: a full management sim in your browser. 454 real clubs across 27 leagues in 21 countries, from the Premier League, Serie B, Ligue 2 and the Segunda División to the Danish Superliga, the Swiss Super League, Croatia's SuperSport HNL, Brazil's Serie A, Liga MX, the A-League Men and the Russian Premier League, over 5,000 real players with their real 2026 ages and market values, and a board that talks like a board.\n\nPick when you start too: today's game, or one of four real past seasons. 2020-21 is Haaland and Bellingham at Dortmund, Mbappé and Neymar at PSG and Bruno Fernandes at United, with that summer's big moves already made (Havertz and Werner at Chelsea, Thiago at Liverpool, Suárez at Atlético). 2015-16 is the year Leicester won it at 5000 to 1, with Vardy and Mahrez at their real pre-title values and MSN at Barcelona. 2010-11 is prime Messi and Rooney, and now Klopp's young Dortmund, Ibrahimovic's Milan and Lille's double too. 2005-06 is Ronaldinho's Ballon d'Or Barcelona with a 17 year old Messi, Mourinho's back to back Chelsea and Henry's Arsenal. All four past seasons hold all 98 clubs of their year's big five, the Premier League, La Liga, Serie A, the Bundesliga and Ligue 1 (in 2015-16 Juventus mid five-in-a-row, Lewandowski at Bayern, Ibrahimovic and Di Maria at PSG; in 2005-06 the Juvent",
+  "Manager": "DOUKNOWBALL\nBack\nTrack stats\nReal Madrid\n2026-27 · Season 1\n#1 in league\n£229.4m\nManagers\nBoard\nSafe\nFans\nSinging\nHome\nSquad\nTactics\nTable\nMarket\nCOPA DEL REY · QUARTER-FINAL\nReal Madrid vs Valencia\nAway · their strength ~78 · your XI avg 88\nPlay Live\n⚡ Quick Sim\n\nPlay live to make your calls. Quick Sim handles your subs.\n\n📊 Match Centre: form, head to head, odds, team talk\n🥅 Shootout order: not set, tap to pick your takers\nClub home\n📨 APPLY FOR A JOB\nFancy a move? Write to a club.\n3 of 3 left this season. They answer in two to five match days.\n💼 MANAGER CAREER\nName your manager\n17W 3D 1L\nRecord\n81%\nWin rate\n0\nTrophies\n\n🎉 Biggest win: 5-0 vs Málaga\n\n💀 Worst defeat: 2-1 vs Villarreal\n\nClub Manager: Free Football Management Game\n\nA full club-management sim in your browser: 454 clubs across 27 real leagues, from the Premier League, the 2. Bundesliga, Serie B, Ligue 2, the Segunda División and the Scottish Premiership to the Saudi Pro League, MLS, Brazil, Mexico, Australia, Russia, Croatia, Denmark, Switzerland, Austria and Greece, with real players at their real market values as of August 2026 (October for the A-League Men and the Russian Premier League) and thin squads topped up with made up youth, marked as such. Manage today or in a real past season: 2020-21 with Haaland's Dortmund and Mbappé's PSG, 2015-16 with Leicester at 5000 to 1, 2010-11 with prime Messi, or 2005-06 with Ronaldinho's Barcelona. Or create your own club with its own crest and stadium. Negotiate transfers, survive bidding wars, hit the board's named objectives, and chase titles season after season.\n\nClub Manager is the site's big one: a full management sim in your browser. 454 real clubs across 27 leagues in 21 countries, from the Premier League, Serie B, Ligue 2 and the Segunda División to the Danish Superliga, the Swiss Super League, Croatia's SuperSport HNL, Brazil's Serie A, Liga MX, the A-League Men and the Russian Premier League, over 5,000 real players with their real 2026 ages and market values, and a board that talks like a board.\n\nPick when you start too: today's game, or one of four real past seasons. 2020-21 is Haaland and Bellingham at Dortmund, Mbappé and Neymar at PSG and Bruno Fernandes at United, with that summer's big moves already made (Havertz and Werner at Chelsea, Thiago at Liverpool, Suárez at Atlético). 2015-16 is the year Leicester won it at 5000 to 1, with Vardy and Mahrez at their real pre-title values and MSN at Barcelona. 2010-11 is prime Messi and Rooney, and now Klopp's young Dortmund, Ibrahimovic's Milan and Lille's double too. 2005-06 is Ronaldinho's Ballon d'Or Barcelona with a 17 year old Messi, Mourinho's back to back Chelsea and Henry's Arsenal. All four past seasons hold all 98 clubs of their year's big five, the Premier League, La Liga, Serie A, the Bundesliga and Ligue 1 (in 2015-16 Juventus mid five-in-a-row, Lewandowski at Bayern, Ibrahimovic and Di Maria at PSG; in 2005-06 the Juventus of Buffon, Cannavaro, Nedved and Ibrahimovic, Ballack's Bayern and Juninho's Lyon); every one carries hundreds of real players at their real ages and values from that year. Or found a club of your own: name it, design the crest, name the stadium, choose the money, and build it up by signing real players.\n\nHow to play Club Manager, a free online football management game\nPick an era, a nation and a real club\nPick your era (today, 2020-21, 2015-16, 2010-11 or 2005-06), then your nation, your league, and your club. Every tile quotes what tha",
+  "Treatment": "DOUKNOWBALL\nBack\nTrack stats\nReal Madrid\n2026-27 · Season 1\n#1 in league\n£229.4m\nManagers\nBoard\nSafe\nFans\nSinging\nHome\nSquad\nTactics\nTable\nMarket\nCOPA DEL REY · QUARTER-FINAL\nReal Madrid vs Valencia\nAway · their strength ~78 · your XI avg 88\nPlay Live\n⚡ Quick Sim\n\nPlay live to make your calls. Quick Sim handles your subs.\n\n📊 Match Centre: form, head to head, odds, team talk\n🥅 Shootout order: not set, tap to pick your takers\nClub home\nTREATMENT ROOM\n🟥 Jude Bellingham (1)\n🟥 Yan Diomande (1)\nClub Manager: Free Football Management Game\n\nA full club-management sim in your browser: 454 clubs across 27 real leagues, from the Premier League, the 2. Bundesliga, Serie B, Ligue 2, the Segunda División and the Scottish Premiership to the Saudi Pro League, MLS, Brazil, Mexico, Australia, Russia, Croatia, Denmark, Switzerland, Austria and Greece, with real players at their real market values as of August 2026 (October for the A-League Men and the Russian Premier League) and thin squads topped up with made up youth, marked as such. Manage today or in a real past season: 2020-21 with Haaland's Dortmund and Mbappé's PSG, 2015-16 with Leicester at 5000 to 1, 2010-11 with prime Messi, or 2005-06 with Ronaldinho's Barcelona. Or create your own club with its own crest and stadium. Negotiate transfers, survive bidding wars, hit the board's named objectives, and chase titles season after season.\n\nClub Manager is the site's big one: a full management sim in your browser. 454 real clubs across 27 leagues in 21 countries, from the Premier League, Serie B, Ligue 2 and the Segunda División to the Danish Superliga, the Swiss Super League, Croatia's SuperSport HNL, Brazil's Serie A, Liga MX, the A-League Men and the Russian Premier League, over 5,000 real players with their real 2026 ages and market values, and a board that talks like a board.\n\nPick when you start too: today's game, or one of four real past seasons. 2020-21 is Haaland and Bellingham at Dortmund, Mbappé and Neymar at PSG and Bruno Fernandes at United, with that summer's big moves already made (Havertz and Werner at Chelsea, Thiago at Liverpool, Suárez at Atlético). 2015-16 is the year Leicester won it at 5000 to 1, with Vardy and Mahrez at their real pre-title values and MSN at Barcelona. 2010-11 is prime Messi and Rooney, and now Klopp's young Dortmund, Ibrahimovic's Milan and Lille's double too. 2005-06 is Ronaldinho's Ballon d'Or Barcelona with a 17 year old Messi, Mourinho's back to back Chelsea and Henry's Arsenal. All four past seasons hold all 98 clubs of their year's big five, the Premier League, La Liga, Serie A, the Bundesliga and Ligue 1 (in 2015-16 Juventus mid five-in-a-row, Lewandowski at Bayern, Ibrahimovic and Di Maria at PSG; in 2005-06 the Juventus of Buffon, Cannavaro, Nedved and Ibrahimovic, Ballack's Bayern and Juninho's Lyon); every one carries hundreds of real players at their real ages and values from that year. Or found a club of your own: name it, design the crest, name the stadium, choose the money, and build it up by signing real players.\n\nHow to play Club Manager, a free online football management game\nPick an era, a nation and a real club\nPick your era (today, 2020-21, 2015-16, 2010-11 or 2005-06), then your nation, your league, and your club. Every tile quotes what that board will actually demand.\nOR FOUND A CLUB OF YOUR OWN\nOr tap Create your own club: your name, your crest (shape, pattern, colors, initials), your stadium, and one of three budgets. Your club takes ",
+  "Rival watch": "DOUKNOWBALL\nBack\nTrack stats\nBack\nBarcelona\nLa Liga · 👑 Elite\nDugout: Keanu Halilovic since S1\n89\nBest XI\n£990m\nSquad value\n#2\nPosition\n10-3-2\nW-D-L\n20 scored\n7 conceded\n33 points\nBoard wants: win the La Liga · transfer budget around £158m\nSQUAD (24 ON THE BOOKS)\nWORTH · OVR\nRW\nLamine Yamal\n18y\n£162m\n94\nCM\nPedri\n23y\n£121.5m\n92\nCAM\nFermín López\n22y\n£81m\n90\nCDM\nRodri\n29y\n£67.5m\n89\nCB\nPau Cubarsí\n18y\n£64.5m\n89\nLW\nRaphinha\n29y\n£64.5m\n89\nRB\nJules Koundé\n27y\n£52.5m\n88\nLW\nAnthony Gordon\n24y\n£48.8m\n87\nCAM\nDani Olmo\n27y\n£48.8m\n87\nLB\nAlejandro Balde\n22y\n£44.3m\n87\nRW\nKarim Adeyemi\n23y\n£40.5m\n86\nCM\nFrenkie de Jong\n28y\n£36.8m\n86\nGK\nJoan García\n24y\n£32.3m\n85\nCB\nEric García\n24y\n£28.5m\n84\nCM\nGavi\n21y\n£24m\n83\nLB\nGerard Martín\n23y\n£20.3m\n82\nST\nGabriel Jesus\n28y\n£16.5m\n81\nRW\nRoony Bardghji\n20y\n£12m\n79\nCB\nAndreas Christensen\n29y\n£7.5m\n77\nRB\nJoão Cancelo\n31y\n£7.5m\n77\nRB\nXavi Espart\n18y\n£3.8m\n73\nGK\nDominik Livakovic\n30y\n£3m\n72\nCAM\nJuan Hernández\n18y\n£1.5m\n68\nGK\nWojciech Szczęsny\n36y\n£700k\n63\nClub Manager: Free Football Management Game\n\nA full club-management sim in your browser: 454 clubs across 27 real leagues, from the Premier League, the 2. Bundesliga, Serie B, Ligue 2, the Segunda División and the Scottish Premiership to the Saudi Pro League, MLS, Brazil, Mexico, Australia, Russia, Croatia, Denmark, Switzerland, Austria and Greece, with real players at their real market values as of August 2026 (October for the A-League Men and the Russian Premier League) and thin squads topped up with made up youth, marked as such. Manage today or in a real past season: 2020-21 with Haaland's Dortmund and Mbappé's PSG, 2015-16 with Leicester at 5000 to 1, 2010-11 with prime Messi, or 2005-06 with Ronaldinho's Barcelona. Or create your own club with its own crest and stadium. Negotiate transfers, survive bidding wars, hit the board's named objectives, and chase titles season after season.\n\nClub Manager is the site's big one: a full management sim in your browser. 454 real clubs across 27 leagues in 21 countries, from the Premier League, Serie B, Ligue 2 and the Segunda División to the Danish Superliga, the Swiss Super League, Croatia's SuperSport HNL, Brazil's Serie A, Liga MX, the A-League Men and the Russian Premier League, over 5,000 real players with their real 2026 ages and market values, and a board that talks like a board.\n\nPick when you start too: today's game, or one of four real past seasons. 2020-21 is Haaland and Bellingham at Dortmund, Mbappé and Neymar at PSG and Bruno Fernandes at United, with that summer's big moves already made (Havertz and Werner at Chelsea, Thiago at Liverpool, Suárez at Atlético). 2015-16 is the year Leicester won it at 5000 to 1, with Vardy and Mahrez at their real pre-title values and MSN at Barcelona. 2010-11 is prime Messi and Rooney, and now Klopp's young Dortmund, Ibrahimovic's Milan and Lille's double too. 2005-06 is Ronaldinho's Ballon d'Or Barcelona with a 17 year old Messi, Mourinho's back to back Chelsea and Henry's Arsenal. All four past seasons hold all 98 clubs of their year's big five, the Premier League, La Liga, Serie A, the Bundesliga and Ligue 1 (in 2015-16 Juventus mid five-in-a-row, Lewandowski at Bayern, Ibrahimovic and Di Maria at PSG; in 2005-06 the Juventus of Buffon, Cannavaro, Nedved and Ibrahimovic, Ballack's Bayern and Juninho's Lyon); every one carries hundreds of real players at their real ages and values from that year. Or found a club of your own: name it, design the crest, name the stadium, choose th"
+ },
+ "midtab_Squad": "",
+ "midtab_Table": "",
+ "endSave": {
+  "club": "Real Madrid",
+  "season": 1,
+  "week": 21,
+  "cal": 54,
+  "budget": 229.37,
+  "squad": 26,
+  "inbox": 5,
+  "form": "WWWWW",
+  "results": 21,
+  "live": false,
+  "window": null
+ },
+ "inboxDump": [
+  [
+   20,
+   "Your assistant",
+   "International break: the window runs 9 Nov to 17 Nov, and your fixtures do not stop for it"
+  ],
+  [
+   9,
+   "Your assistant",
+   "International break: the window runs 21 Sep to 6 Oct, and your fixtures do not stop for it"
+  ],
+  [
+   6,
+   "",
+   "One of your midfielders is selling his own brand of protein cereal in the players lounge. "
+  ],
+  [
+   1,
+   "Taye Diallo, local paper",
+   "A reporter from the local paper is running a piece on whether this squad is good enough fo"
+  ],
+  [
+   1,
+   "",
+   "One of your midfielders challenged a fan who criticized him to a race. The fan won. It is "
+  ]
+ ],
+ "newsDump": [],
+ "saveKeys": [
+  "saveVersion",
+  "clubName",
+  "season",
+  "week",
+  "startYear",
+  "eraId",
+  "retiredNames",
+  "retiredLastSummer",
+  "budget",
+  "boardConfidence",
+  "sacked",
+  "squad",
+  "xiIds",
+  "formationIndex",
+  "mentality",
+  "leagueClubs",
+  "balancedFixtures",
+  "table",
+  "form",
+  "calendar",
+  "clubStrengths",
+  "transferWindow",
+  "windowWeeksLeft",
+  "aiHeadlines",
+  "goneNames",
+  "seasonSignings",
+  "cupRound",
+  "cupDraw",
+  "uclField",
+  "uclGroup",
+  "uclKoRound",
+  "uclDraw",
+  "cupBracket",
+  "world",
+  "trophies",
+  "history",
+  "careerStats",
+  "pendingSummary",
+  "boardObjectives",
+  "cupExit",
+  "uclExit",
+  "negotiation",
+  "incomingBids",
+  "coldNames",
+  "loanedOut",
+  "transferLog",
+  "resultLog",
+  "inbox",
+  "promisedStarts",
+  "pairResults",
+  "realLeagueFixtures",
+  "wageCap",
+  "freeAgents",
+  "severance",
+  "training",
+  "academy",
+  "academyGraduates",
+  "teamTalk",
+  "press",
+  "managers",
+  "boardAsksVersion",
+  "uclWorld",
+  "scorerRace",
+  "leagueBook",
+  "setPieces",
+  "intl",
+  "facilities",
+  "books",
+  "staff",
+  "managerXp",
+  "startOptions",
+  "clubForm",
+  "live",
+  "h2h",
+  "decisions",
+  "finance"
+ ]
+}

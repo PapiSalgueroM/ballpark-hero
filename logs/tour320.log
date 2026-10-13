@@ -1,0 +1,12 @@
+AUDIT picker-team: 3 overlapping text pairs: "Finish in the top half" x "Board wants" (18x12 at 177,1188)
+AUDIT hub: 2 overlapping text pairs: "Fans hopeful · prices, sponsor, the book" x "Stadium, training, medical, dressing roo" (28x11 at 177,997)
+AUDIT tab-Squad: 15 overlapping text pairs: "Arda Güler" x "XI" (10x11 at 134,549)
+AUDIT tab-Market: 7 overlapping text pairs: "Barcelona · 18y · worth £158.2m to £169." x "94" (18x7 at 178,954)
+AUDIT tile-Board: 2 overlapping text pairs: "Reach the Champions League semi-finals" x "On track" (19x11 at 245,768)
+AUDIT tile-Stats: 12 overlapping text pairs: "Álvaro Carreras" x "0" (8x15 at 110,932)
+AUDIT ff-report-0: 6 overlapping text pairs: "⚽ Goal: Kylian Mbappé" x "39'" (12x11 at 153,1282)
+AUDIT ff-report-1: 1 overlapping text pairs: "🔁 Sub: Aurélien Tchouaméni on for Jude " x "59'" (15x11 at 153,1389)
+AUDIT ff-report-2: 4 overlapping text pairs: "⚽ Goal: Kylian Mbappé" x "32'" (12x11 at 153,1259)
+AUDIT mid-Board: 2 overlapping text pairs: "Reach the Champions League semi-finals" x "On track" (19x11 at 245,707)
+AUDIT mid-Stats: 15 overlapping text pairs: "Kylian Mbappé" x "20" (6x15 at 107,1408)
+TOUR t320 done: 0 findings, 0 errors, 65 shots, 238s
