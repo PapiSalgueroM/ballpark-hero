@@ -109,7 +109,7 @@
  *   fatclass     the curve is the old class's 70 to 87                    (6)
  *   flatclass    the curve flattened to one range                         (6)
  *   nocurve      the class ignores the curve                              (6)
- *   trustblock   any block on the desk is trusted                         (8)
+ *   trustblock   any block on the desk is trusted                         (3, 8)
  *   noneed       rivals choose on their read alone                        (9)
  *   rivalscout   rivals choose on his scout's read, not the engine's grade (9)
  *   bigneed      the engine's need weight 20 instead of 2                 (9)
@@ -217,8 +217,10 @@ const CONTROLS = {
     '  return buildDraftOrder(season, rules, nbaGamePickRules(), `${key ?? draftSeasonKey(season, rules.id)}|${Math.random()}`);']] } },
   /* a second open over a night in progress draws a fresh night (review 2026-10-12, the reopen probe) */
   reopen: { expect: [4], swaps: { bind: [['  if (current) return { desk, night: current };', '  if (current && !current) return { desk, night: current };']] } },
-  /* any block on the desk is trusted */
-  trustblock: { expect: [8], swaps: { bind: [['  return isGmDraftNight(raw, Object.keys(league.teams), league.season) ? raw : null;', '  return raw as GmDraftNight;']] } },
+  /* any block on the desk is trusted. Red in 3 as well since the fix pass: opening answers the night already on the
+     desk (nbaDraftNightOf first), so a validator that trusts any block hands the next season last season's spent
+     night, and section 3 sees its slots disagree with the ledger and the order */
+  trustblock: { expect: [3, 8], swaps: { bind: [['  return isGmDraftNight(raw, Object.keys(league.teams), league.season) ? raw : null;', '  return raw as GmDraftNight;']] } },
   /* rivals choose on their read alone */
   noneed: { expect: [9], swaps: { bind: [['    needWeight: NBA_DRAFT_NEED_WEIGHT,', '    needWeight: 0,']] } },
   /* every rival chooses on HIS scout's read instead of the engine's own grade (review 2026-10-12, mutation m1) */
