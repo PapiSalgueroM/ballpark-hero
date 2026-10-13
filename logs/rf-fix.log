@@ -1,0 +1,8 @@
+PATCH APPLIED: scripts/playCmRealFixturesRv.mjs
+playCmRealFixtures: 2 viewports, 6 real/legacy/later-season calendar and actual Quick Sim journeys, 18 neutral real-opening results, 2 effective controls; full saved states and source bytes held.
+390-real passed=true
+390-legacy passed=true
+390-later passed=true
+1280-real passed=true
+1280-legacy passed=true
+1280-later passed=true

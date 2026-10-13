@@ -1,0 +1,15 @@
+  NOTE  head-390 banner up, last day tapped: {"top":573,"bottom":673,"vh":844,"inlineBottom":"161px","sticky":"sticky","covered":[]}
+  NOTE  head-390 banner answered, grid top at 120: {"top":414,"bottom":514,"vh":844,"inlineBottom":"161px","sticky":"sticky","covered":[]}
+  FLAG  head-390: the strip rides 330 px above the foot of the screen with no banner there, over 0 day cells ()
+  NOTE  head-390 after one more tap: {"top":414,"bottom":486,"vh":844,"inlineBottom":"","sticky":"sticky","covered":[]}
+  NOTE  head-320 banner up, last day tapped: {"top":357,"bottom":459,"vh":640,"inlineBottom":"181px","sticky":"sticky","covered":["Sun 2 Aug","Mon 3 Aug","Tue 4 Aug","Wed 5 Aug","Thu 6 Aug","Fri 7 Aug","Sat 8 Aug","Sun 9 Aug","Mon 10 Aug","Tue 11 Aug","Wed 12 Aug","Thu 13 Aug","Fri 14 Aug","Sat 15 Aug","Sun 16 Aug","Mon 17 Aug","Tue 18 Aug","Wed 19 Aug","Thu 20 Aug","Fri 21 Aug","Sat 22 Aug"]}
+  NOTE  head-320 banner answered, grid top at 120: {"top":357,"bottom":459,"vh":640,"inlineBottom":"181px","sticky":"sticky","covered":["Sun 30 Aug","Mon 31 Aug"]}
+  FLAG  head-320: the strip rides 181 px above the foot of the screen with no banner there, over 2 day cells (Sun 30 Aug, Mon 31 Aug)
+  NOTE  head-320 after one more tap: {"top":414,"bottom":486,"vh":640,"inlineBottom":"","sticky":"sticky","covered":[]}
+  NOTE  base-390 banner up, last day tapped: {"top":553,"bottom":640,"vh":844,"inlineBottom":"","sticky":"static","covered":[]}
+  NOTE  base-390 banner answered, grid top at 120: {"top":414,"bottom":501,"vh":844,"inlineBottom":"","sticky":"static","covered":[]}
+  NOTE  base-390 after one more tap: {"top":414,"bottom":486,"vh":844,"inlineBottom":"","sticky":"static","covered":[]}
+  NOTE  base-320 banner up, last day tapped: {"top":12,"bottom":100,"vh":640,"inlineBottom":"","sticky":"static","covered":[]}
+  NOTE  base-320 banner answered, grid top at 120: {"top":414,"bottom":502,"vh":640,"inlineBottom":"","sticky":"static","covered":[]}
+  NOTE  base-320 after one more tap: {"top":414,"bottom":486,"vh":640,"inlineBottom":"","sticky":"static","covered":[]}
+rvbanner: 2 flag(s)

@@ -1,0 +1,10 @@
+#!serve
+#!playwright
+#!serial
+basebuild: git worktree add /tmp/base 8fea14e216fb550b4676ac29f06867234594df21 > /dev/null 2>&1; ln -s "$PWD/node_modules" /tmp/base/node_modules; (cd /tmp/base && npm run build > /tmp/basebuild.log 2>&1); s=$?; tail -2 /tmp/basebuild.log; nohup node scripts/lib/hostLikeServer.mjs /tmp/base/dist 4174 > /tmp/baseserver.log 2>&1 & sleep 3; curl -s -o /dev/null -w "base server %{http_code}\n" http://localhost:4174/club-manager; exit $s
+rvbanner: RC_OUT="$RC_OUT/banner" BASE_URL=http://localhost:4174 node .rc/x/rvbanner.mjs > /tmp/bn.log 2>&1; s=$?; cut -c1-600 /tmp/bn.log; exit $s
+rvlist: RC_OUT="$RC_OUT/list" BASE_URL=http://localhost:4174 node .rc/x/rvlist.mjs > /tmp/ls.log 2>&1; s=$?; cut -c1-400 /tmp/ls.log; exit $s
+fonts: mkdir -p .tmp-fx/font-cache && FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only 2>&1 | tail -2
+simCmRealFixtures: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCmRealFixtures.mjs > /tmp/sf.log 2>&1; s=$?; tail -2 /tmp/sf.log | cut -c1-300; exit $s
+rf-head: FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" CM_REAL_FIXTURE_NATIVE_ARTIFACTS=/tmp/rf1 NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playCmRealFixtures.mjs > /tmp/rf1.log 2>&1; s=$?; tail -4 /tmp/rf1.log | cut -c1-300; [ -f /tmp/rf1/report.json ] && node .rc/x/rfReport.mjs /tmp/rf1/report.json | cut -c1-400 | head -16; exit $s
+rf-fix: node .rc/x/rvrf.mjs || exit 9; FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" CM_REAL_FIXTURE_NATIVE_ARTIFACTS=/tmp/rf2 NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playCmRealFixturesRv.mjs > /tmp/rf2.log 2>&1; s=$?; tail -4 /tmp/rf2.log | cut -c1-300; [ -f /tmp/rf2/report.json ] && node .rc/x/rfReport.mjs /tmp/rf2/report.json | cut -c1-400 | head -16; exit $s

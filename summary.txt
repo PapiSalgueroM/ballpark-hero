@@ -1,0 +1,8 @@
+build exit=0 30s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+basebuild exit=0 34s | base server 200
+rvbanner exit=1 33s | rvbanner: 2 flag(s)
+rvlist exit=0 31s | rvlist: 8 taps measured
+fonts exit=0 3s | Prepared 9 declared font dependencies for local fulfillment.
+simCmRealFixtures exit=0 3s | simCmRealFixtures normal premier: 10 outcome groups passed on 20 clubs, 38 matchdays and 380 fixtures, BASE GROUPS NOT RUN.
+rf-head exit=1 18s | 1280-later passed=true
+rf-fix exit=0 22s | 1280-later passed=true

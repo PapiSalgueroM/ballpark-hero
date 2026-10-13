@@ -1,0 +1,9 @@
+  NOTE  head-390 list row 2 of 4 (strip before: no): scrollY 932 to 932, the row's top 403 to 545 (moved 142 px under the thumb), strip [318,452] of 844
+  NOTE  head-390 list row 3 of 4 (strip before: no): scrollY 1113 to 1113, the row's top 403 to 403 (moved 0 px under the thumb), strip [137,271] of 844
+  NOTE  head-320 list row 2 of 4 (strip before: no): scrollY 1063 to 1063, the row's top 302 to 478 (moved 176 px under the thumb), strip [217,385] of 640
+  NOTE  head-320 list row 3 of 4 (strip before: no): scrollY 1278 to 1278, the row's top 302 to 302 (moved 0 px under the thumb), strip [2,170] of 640
+  NOTE  base-390 list row 2 of 4 (strip before: no): scrollY 835 to 835, the row's top 404 to 531 (moved 127 px under the thumb), strip [319,438] of 844
+  NOTE  base-390 list row 3 of 4 (strip before: no): scrollY 1002 to 1002, the row's top 403 to 403 (moved 0 px under the thumb), strip [152,271] of 844
+  NOTE  base-320 list row 2 of 4 (strip before: no): scrollY 967 to 967, the row's top 301 to 445 (moved 144 px under the thumb), strip [216,352] of 640
+  NOTE  base-320 list row 3 of 4 (strip before: no): scrollY 1150 to 1150, the row's top 301 to 285 (moved -16 px under the thumb), strip [33,153] of 640
+rvlist: 8 taps measured
