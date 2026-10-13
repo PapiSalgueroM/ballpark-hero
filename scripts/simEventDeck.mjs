@@ -64,7 +64,10 @@
         exactly the cards each call settled, the ones the kept cap drops in
         that same call included. And a fence: a pack index holding an
         expiring card fails until the component it names (PACK_INDEXES'
-        third field) calls gmExpiredLine.
+        third field) calls gmExpiredLine. That fence is the NECESSARY half;
+        the SUFFICIENT half is Round 1332's render test
+        (src/components/front-office-shared/GmInboxPanel.test.tsx: an opened
+        card the staff settled shows gmExpiredLine and never "You replied").
      8) NEUTRAL. Every card of every pack off NEUTRAL_BASELINE has an option
         that moves nothing, every pack on it still lacks one somewhere (the
         ratchet), gmPackProblems is empty for every pack the kit knows, and
@@ -111,8 +114,10 @@
      settledoff the engine settles but never names the card in the settled
                 list a seat hands in; section 7 fails.
      panelexpiry one GM card is given an expiry in the panel fence's own
-                copy (a data change in the kit); section 7 fails, because
-                GmInboxPanel never calls gmExpiredLine.
+                copy (a data change in the kit) AND, since Round 1332 made
+                GmInboxPanel call gmExpiredLine, that call is stripped from
+                the fence's copy of the component's code (in memory); section
+                7 fails.
      neutral    FX_NEUTRAL's one neutral option on its first card is given
                 trust 1 (a data change in the kit, not the engine); section
                 8 fails.
@@ -876,7 +881,14 @@ const FX_EXPIRE = fxPack('fx_expire', [
     const expiring = Object.entries(packs).flatMap(([k, p]) => p.events.filter(e => e.expires !== undefined).map(e => `${k}/${e.id}`));
     if (CONTROL === 'panelexpiry' && i === 0 && expiring.length === 0) { console.error('panelexpiry control changed nothing, refusing to run'); process.exit(2); }
     if (!shows || !fs.existsSync(path.join(ROOT, shows))) { fail(7, `${rel} names no component that shows its cards`); return; }
-    const calls = code(shows).includes('gmExpiredLine(');
+    /* Round 1332: GmInboxPanel calls gmExpiredLine now, so the control also
+       strips that call from this check's own copy of the code (in memory). */
+    let shown = code(shows);
+    if (CONTROL === 'panelexpiry' && i === 0) {
+      if (!shown.includes('gmExpiredLine(')) { console.error(`panelexpiry control: ${shows} has no gmExpiredLine call to strip, refusing to run`); process.exit(2); }
+      shown = shown.replaceAll('gmExpiredLine(', 'panelExpiryControl(');
+    }
+    const calls = shown.includes('gmExpiredLine(');
     if (expiring.length && !calls) fail(7, `${rel} holds ${expiring.length} expiring card${expiring.length === 1 ? '' : 's'} (${expiring.slice(0, 3).join(', ')}) and ${shows} never calls gmExpiredLine, so a settled card would read as the manager's reply`);
     else ok(`${rel}: ${expiring.length} expiring cards, ${shows} ${calls ? 'calls' : 'does not call'} gmExpiredLine${expiring.length ? '' : ' (it must before any of its cards expires)'}`);
   });
