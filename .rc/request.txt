@@ -1,0 +1,11 @@
+#!serial
+wt-head: node .rc/x/rv1324wt.mjs
+wt-m7: node .rc/x/rv1324mut.mjs M7 || exit 2; node .rc/x/rv1324wt.mjs; s=$?; git checkout -- src scripts; exit $s
+seed11: SEED=11 node scripts/simEventDeck.mjs
+seed12: SEED=12 node scripts/simEventDeck.mjs
+seed13: SEED=13 node scripts/simEventDeck.mjs
+seed14: SEED=14 node scripts/simEventDeck.mjs
+seed15: SEED=15 node scripts/simEventDeck.mjs
+seed16: SEED=16 node scripts/simEventDeck.mjs
+seed17: SEED=17 node scripts/simEventDeck.mjs
+seed18: SEED=18 node scripts/simEventDeck.mjs
