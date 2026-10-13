@@ -1,0 +1,5 @@
+#!serve
+#!playwright
+#!serial
+w1077: node scripts/qa/managerWorldBrowser1077.mjs --prefetch-fonts-only && if command -v xvfb-run >/dev/null; then NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" xvfb-run -a node scripts/qa/managerWorldBrowser1077.mjs; else NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/managerWorldBrowser1077.mjs; fi
+w1079: node scripts/qa/managerMatchPlans1079.mjs --prefetch-fonts-only && if command -v xvfb-run >/dev/null; then NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" xvfb-run -a node scripts/qa/managerMatchPlans1079.mjs; else NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/managerMatchPlans1079.mjs; fi

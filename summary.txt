@@ -1,0 +1,3 @@
+build exit=0 31s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+w1077 exit=1 16s | Node.js v24.21.0
+w1079 exit=0 70s | PASS manager match plans native: 3 actual hook journeys, 12 effective restored DOM faults, independent engine previews and kickoff, reload and club isolation.
