@@ -1,0 +1,24 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+fair0: node scripts/simSoccerDeckFairness.mjs
+prom: node scripts/simSoccerEventPromises.mjs
+cool: node scripts/simCareerLifeCooldowns.mjs
+fair-s7: SEED_OFFSET=7 node scripts/simSoccerDeckFairness.mjs
+fair-n400-s9: SEED_OFFSET=9 node scripts/simSoccerDeckFairness.mjs 400
+vitest3: node_modules/.bin/vitest run src/test/soccerEventDeckIntegrity.test.ts src/test/eventChoiceAfterReload.test.ts src/test/seasonCentreOwnGoals.test.tsx --testTimeout=300000 --hookTimeout=120000
+c-shuffle: SIM_SOCCER_DECK_FAIRNESS_CONTROL=shuffle node scripts/simSoccerDeckFairness.mjs
+c-ranking: SIM_SOCCER_DECK_FAIRNESS_CONTROL=ranking node scripts/simSoccerDeckFairness.mjs
+c-globalpick: SIM_SOCCER_DECK_FAIRNESS_CONTROL=globalpick node scripts/simSoccerDeckFairness.mjs
+c-nogate: SIM_SOCCER_DECK_FAIRNESS_CONTROL=nogate node scripts/simSoccerDeckFairness.mjs
+c-unit: SIM_SOCCER_DECK_FAIRNESS_CONTROL=unit node scripts/simSoccerDeckFairness.mjs
+c-poscode: SIM_SOCCER_DECK_FAIRNESS_CONTROL=poscode node scripts/simSoccerDeckFairness.mjs
+c-prefix: SIM_SOCCER_DECK_FAIRNESS_CONTROL=prefix node scripts/simSoccerDeckFairness.mjs
+c-olddebut: SIM_SOCCER_DECK_FAIRNESS_CONTROL=olddebut node scripts/simSoccerDeckFairness.mjs
+c-outside: SIM_SOCCER_DECK_FAIRNESS_CONTROL=outside node scripts/simSoccerDeckFairness.mjs
+p-breakapply: SIM_SOCCER_EVENT_PROMISES_CONTROL=breakapply node scripts/simSoccerEventPromises.mjs
+p-unannounced: SIM_SOCCER_EVENT_PROMISES_CONTROL=unannounced node scripts/simSoccerEventPromises.mjs
+p-reorder: SIM_SOCCER_EVENT_PROMISES_CONTROL=reorder node scripts/simSoccerEventPromises.mjs
+k-nocooldown: SIM_CAREER_LIFE_COOLDOWNS_CONTROL=nocooldown node scripts/simCareerLifeCooldowns.mjs
+k-sharedbatch: SIM_CAREER_LIFE_COOLDOWNS_CONTROL=sharedbatch node scripts/simCareerLifeCooldowns.mjs
+k-flood: SIM_CAREER_LIFE_COOLDOWNS_CONTROL=flood node scripts/simCareerLifeCooldowns.mjs
+anchors: node scripts/simHarnessAnchors.mjs
+rival: node scripts/simNoRivalNames.mjs
