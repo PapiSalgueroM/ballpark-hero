@@ -1,0 +1,16 @@
+#!serial
+m-promo: node .rc/x/mut.mjs promo && node scripts/simCmCopy.mjs --section=1; s=$?; git checkout -- src scripts; exit $s
+m-dramag: node .rc/x/mut.mjs dramag && node scripts/simCmCopy.mjs --section=2; s=$?; git checkout -- src scripts; exit $s
+m-coverproj: node .rc/x/mut.mjs coverproj && node scripts/simCmCopy.mjs --section=5; s=$?; git checkout -- src scripts; exit $s
+m-staffedge: node .rc/x/mut.mjs staffedge && node scripts/simCmCopy.mjs --section=4; s=$?; git checkout -- src scripts; exit $s
+m-kittyzero: node .rc/x/mut.mjs kittyzero && node scripts/simCmCopy.mjs --section=5; s=$?; git checkout -- src scripts; exit $s
+m-markline: node .rc/x/mut.mjs markline && node scripts/simCmCopy.mjs --section=3; s=$?; git checkout -- src scripts; exit $s
+m-matchcentre: node .rc/x/mut.mjs matchcentre && node scripts/simCmCopy.mjs --section=1; s=$?; git checkout -- src scripts; exit $s
+m-staffweeks: node .rc/x/mut.mjs staffweeks && node scripts/simCmCopy.mjs --section=4; s=$?; git checkout -- src scripts; exit $s
+m-coverflip: node .rc/x/mut.mjs coverflip && node scripts/simCmCopy.mjs --section=5; s=$?; git checkout -- src scripts; exit $s
+m-dramaarg-copyonly: mkdir -p .rm1 && git archive 36cc9ffe src | tar -x -C .rm1 && node .rc/x/mut.mjs dramaarg && node scripts/qa/cmCopyOnly1326.mjs --base .rm1 --fleet=A; s=$?; git checkout -- src scripts; exit $s
+m-dramaarg-simcopy: node .rc/x/mut.mjs dramaarg && node scripts/simCmCopy.mjs; s=$?; git checkout -- src scripts; exit $s
+m-staffedge-copyonly: mkdir -p .rm2 && git archive 36cc9ffe src | tar -x -C .rm2 && node .rc/x/mut.mjs staffedge && node scripts/qa/cmCopyOnly1326.mjs --base .rm2 --fleet=D; s=$?; git checkout -- src scripts; exit $s
+m-staffweeks-copyonly: mkdir -p .rm3 && git archive 36cc9ffe src | tar -x -C .rm3 && node .rc/x/mut.mjs staffweeks && node scripts/qa/cmCopyOnly1326.mjs --base .rm3 --fleet=D; s=$?; git checkout -- src scripts; exit $s
+m-promotarget-copyonly: mkdir -p .rm4 && git archive 36cc9ffe src | tar -x -C .rm4 && node .rc/x/mut.mjs promotarget && node scripts/qa/cmCopyOnly1326.mjs --base .rm4 --fleet=A,B; s=$?; git checkout -- src scripts; exit $s
+m-clean: git status --short src scripts | head -5; echo clean-check-done
