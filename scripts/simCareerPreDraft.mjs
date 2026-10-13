@@ -86,6 +86,8 @@
  *      and without the descriptor; an attempt put on any season or card
  *      state is dropped alone, with and without it.
  *                                Controls `reroll`, `wayback`, `combinegone`.
+ *      Sections 10, 11 and 12 check each pair in its own try, so a throw
+ *      names its pair and every other pair is still checked.
  *  12. Round 1319: WHAT HANDS ARE WORTH, MEASURED AGAINST THE SCOUTS' DRAW.
  *      For every road and approach the scouts' EXACT expected move (the four
  *      intervals of u the rating and health cut, times the table), then five
@@ -739,7 +741,7 @@ try {
   /* (f) The curves on a grid: whole, inside 0 to 100, more taps never score
      less, more time or more slips never score more, and each equals the
      harness's own copy built from COMBINE_CURVES. */
-  {
+  try {
     const bad = [];
     for (const input of ['pointer', 'keys']) {
       let last = -1;
@@ -757,9 +759,10 @@ try {
     }
     if (bad.length) fail(`${bad.length} station scores off the curve, first: ${bad.slice(0, 3).join(' | ')}`);
     else ok('station scores on the grid (taps 0 to 80; 0 to 12,000 ms by 50 and 0 to 8 slips; pointer and keys) are whole, inside 0 to 100, move the right way and equal the curves');
-  }
-  /* (a) to (e) on every road's state at the showcase. */
-  for (const d of DESCS) {
+  } catch (e) { fail(`section 10 (f) threw: ${e.message}`); }
+  /* (a) to (e) on every road's state at the showcase, one pair at a time,
+     each in its own try (a throw names its pair and spares the others). */
+  const pair10 = d => {
     const rs = RUNS.get(tag(d));
     const bad = [];
     const note = m => { if (bad.length < 400) bad.push(m); };
@@ -812,6 +815,9 @@ try {
     }
     if (bad.length) fail(`${tag(d)}: ${bad.length} played showcase(s) wrong, first: ${bad.slice(0, 3).join(' | ')}`);
     else ok(`${tag(d)}: ${resolved} resolves add, grade and move exactly as printed (${onLine} on a line, where the card follows the function), ${walked} walked steps never fall and flip at the printed cuts`);
+  };
+  for (const d of DESCS) {
+    try { pair10(d); } catch (e) { fail(`section 10 threw on ${tag(d)}: ${e.message}`); }
   }
 } catch (e) {
   fail(`section 10 threw: ${e.message}`);
@@ -823,7 +829,9 @@ Math.random = () => { throw new Error('Math.random was called'); };
 try {
   const J = x => JSON.stringify(x);
   const reload = (x, desc) => M.loadPreDraft(JSON.parse(J(x)), desc);
-  for (const d of DESCS) {
+  /* One pair at a time, each in its own try, so a throw on one road names
+     its pair and leaves every other pair checked. */
+  const pair11 = d => {
     const rs = RUNS.get(tag(d));
     const bad = [];
     const note = (i, m) => { if (bad.length < 400) bad.push(`road ${i}: ${m}`); };
@@ -899,6 +907,9 @@ try {
     if (!droppedAt.season || !droppedAt.choice) note('all', `the drop cases never reached a season (${droppedAt.season}) or a card (${droppedAt.choice})`);
     if (bad.length) fail(`${tag(d)}: ${bad.length} second tries or bad loads, first: ${bad.slice(0, 3).join(' | ')}`);
     else ok(`${tag(d)}: no button, open or resolve moves an opened or graded attempt; every reload of an opened attempt is the scouts' button for its approach, again and through the draft; ${trips} old and good blocks round trip with and without the descriptor on every road at every phase; ${dropped} bad keys dropped alone (${droppedAt.season} attempts at a season and ${droppedAt.choice} at a card)`);
+  };
+  for (const d of DESCS) {
+    try { pair11(d); } catch (e) { fail(`section 11 threw on ${tag(d)}: ${e.message}`); }
   }
 } catch (e) {
   fail(`section 11 threw: ${e.message}`);
@@ -956,7 +967,9 @@ try {
   const f2 = x => (x >= 0 ? '+' : '') + x.toFixed(2);
   const ARMS = [...Object.keys(BOTS), 'slow', 'fast', 'leaveP', 'leaveK'];
   const MEASURED = [];
-  for (const d of DESCS) {
+  /* One pair at a time, each in its own try: a throw names its pair, and the
+     bands below are still read over every pair that measured. */
+  const pair12 = d => {
     const rs = RUNS.get(tag(d));
     const acc = {};
     const add = (arm, a, third, gap, move, grade, sub) => {
@@ -1012,6 +1025,9 @@ try {
       if (d.sport === 'mlb') console.log(`      pitchers (one station) median ${f2(g('median', `${a}|pitchers`))}, keys ${f2(g('keys', `${a}|pitchers`))}; hitters median ${f2(g('median', `${a}|hitters`))}, keys ${f2(g('keys', `${a}|hitters`))}`);
       MEASURED.push({ pair: tag(d), a, novice: g('novice', a), median: g('median', a), keys: g('keys', a), thumbs: g('thumbs', a), expert: g('expert', a), leaveP: g('leaveP', a), leaveK: g('leaveK', a), order: [mv('novice', a), mv('median', a), mv('expert', a)] });
     }
+  };
+  for (const d of DESCS) {
+    try { pair12(d); } catch (e) { fail(`section 12 threw on ${tag(d)}: ${e.message}`); }
   }
   /* The assertions. Bands from five seed sets (see the header), never on a
      max, never "not significant". The leaver and the two thumbs are printed
