@@ -18,7 +18,7 @@ jobs:
       CAREER_SEASON_LOCAL_ONLY: '1'
       CAREER_POPULARITY_PHASE: fixed
       CAREER_COLD_PHASE: fixed
-      CAREER_DOCUMENTARY_PHASE: baseline
+      CAREER_DOCUMENTARY_PHASE: fixed
       CAREER_DOCUMENTARY_OUT: ${{ github.workspace }}/career-documentary-artifacts
       CAREER_COLD_OUT: ${{ github.workspace }}/career-documentary-artifacts/prior-cold
       CAREER_POPULARITY_OUT: ${{ github.workspace }}/career-documentary-artifacts/prior-popularity
@@ -53,7 +53,7 @@ jobs:
           git rev-parse HEAD > "$CAREER_POPULARITY_OUT/source-head.txt"
           git status --porcelain --untracked-files=no > "$CAREER_POPULARITY_OUT/source-before.txt"
           test ! -s "$CAREER_POPULARITY_OUT/source-before.txt"
-          git diff --exit-code 527ca178f6b3a0be194b7aeac09d412db49088d4 -- src scripts package.json package-lock.json bun.lock ':!src/lib/soccerCareerLife.ts' ':!src/test/soccerCareerDocumentaryReview.test.ts' ':!scripts/simSoccerCareerDocumentaryReview.mjs' ':!scripts/playSoccerCareerDocumentaryReview.mjs'
+          git diff --exit-code 527ca178f6b3a0be194b7aeac09d412db49088d4 -- src scripts package.json package-lock.json bun.lock ':!src/lib/soccerCareerLife.ts' ':!src/test/soccerCareerDocumentaryReview.test.ts' ':!scripts/simSoccerCareerDocumentaryReview.mjs' ':!scripts/playSoccerCareerDocumentaryReview.mjs' ':!scripts/simSoccerCareerColdContext.mjs' ':!scripts/qa/qualifySoccerCareerDocumentaryBinding.mjs' ':!scripts/simCareerLifeCooldowns.mjs'
           if test "$CAREER_DOCUMENTARY_PHASE" = baseline; then
             git diff --exit-code 527ca178f6b3a0be194b7aeac09d412db49088d4 -- src/lib/soccerCareerLife.ts
           fi
@@ -102,6 +102,9 @@ jobs:
             NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerCareerColdContext.mjs 2>&1 | tee "$CAREER_COLD_OUT/fixed.log"
             SC_COLD_CONTEXT_CONTROL=original NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerCareerColdContext.mjs 2>&1 | tee "$CAREER_COLD_OUT/control-original.log"
           fi
+      - name: Exact documentary addition remains the only Cold dependency exception
+        if: env.CAREER_DOCUMENTARY_PHASE == 'fixed'
+        run: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/qualifySoccerCareerDocumentaryBinding.mjs 2>&1 | tee "$CAREER_DOCUMENTARY_OUT/binding-controls.log"
       - name: Ordinary unit entry without retained-module environment
         if: env.CAREER_DOCUMENTARY_PHASE == 'fixed'
         run: env -u SC_COLD_ENGINE -u SC_COLD_REALISM -u SC_COLD_SAVE -u SC_COLD_PARENT_REALISM NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node_modules/.bin/vitest run src/test/soccerCareerColdContext.test.ts --reporter=json --outputFile="$CAREER_COLD_OUT/standalone-unit.json" 2>&1 | tee "$CAREER_COLD_OUT/standalone-unit.log"
@@ -183,6 +186,12 @@ jobs:
         if: env.CAREER_DOCUMENTARY_PHASE == 'fixed'
         run: |
           ONLY=simCreation,simAllocation,simFlagshipWeight,simCareerLife,simCareerLifeCooldowns,simCareerStory,simCareerProgramme,simCareerRecordedStats,simCareerSeasonTruth,simNoInventedQuotes,simUsCareerWeight,simAdsense,simBrand,simHeadTags,simHiddenPages,simHubs,simIndexNow,simIndexing,simInternalLinks,simNoRivalNames,simPrerender,simPrerenderBoot,simRetiredRoutes,simSchema,simSitemap,simSnapshotAssets node scripts/runAllSims.mjs --browser 2>&1 | tee "$CAREER_POPULARITY_OUT/related.log"
+      - name: Existing cooldown and story guard remains effective
+        if: always() && env.CAREER_DOCUMENTARY_PHASE == 'fixed'
+        run: |
+          for control in dupetitle nostory; do
+            SIM_CAREER_LIFE_COOLDOWNS_CONTROL="$control" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerLifeCooldowns.mjs 2>&1 | tee "$CAREER_DOCUMENTARY_OUT/cooldown-control-$control.log"
+          done
       - name: Effective original-bug control for the Programme reward comparison
         if: always() && env.CAREER_DOCUMENTARY_PHASE == 'fixed'
         run: |

@@ -167,7 +167,7 @@ export function getPriorityLifeEventIds(state: CareerState): number[] {
   if (comebackDue(state) && !state.retired) ids.push(262);
   if (!state.retired) {
     const year = state.seasons[state.seasons.length - 1]?.year ?? 0;
-    for (const [acquisition, followup, key] of [[226, 227, "esports"], [230, 231, "cursedBoots"], [236, 237, "teammateLoan"], [270, 630, "coachingBadges"]] as const) {
+    for (const [acquisition, followup, key] of [[226, 227, "esports"], [230, 231, "cursedBoots"], [236, 237, "teammateLoan"], [270, 630, "coachingBadges"], [408, 631, "rDocCrew"]] as const) {
       const acquired = state.eventLastFired?.[String(acquisition)];
       if (flag(state, key) === 1 && (typeof acquired !== "number" || !Number.isFinite(acquired) || acquired < year)) ids.push(followup);
     }
@@ -964,6 +964,20 @@ export function getLifeEvents(state: CareerState): RandomEvent[] {
           apply: s => { setFlag(s, "coachingBadges", 3); bump(s, "defending", 1); s.integrityBonus += 1; log(s, "📚 Finished the course youth-session plan"); return s; } },
         { label: "Leave the course", emoji: "⚽", color: "bg-muted", consequence: "Morale +2. Course closed",
           apply: s => { setFlag(s, "coachingBadges", 4); s.morale = clamp(s.morale + 2, 0, 100); log(s, "⚽ Left the coaching course to focus on playing"); return s; } },
+      ] });
+  }
+
+  const documentaryYear = state.seasons[state.seasons.length - 1]?.year ?? 0;
+  const documentaryDeal = state.eventLastFired?.["408"];
+  if ((state.pendingEvents ?? []).some(event => event.id === 631) || (!state.retired && flag(state, "rDocCrew") === 1
+    && (typeof documentaryDeal !== "number" || !Number.isFinite(documentaryDeal) || documentaryDeal < documentaryYear))) {
+    push({ id: 631, cooldown: COOLDOWN.family, emoji: "🎬", title: "Your documentary review",
+      description: "The production team has sent footage and promotional copy to review. You can check details or ask to keep family scenes out of the promotion.",
+      category: "life", choices: [
+        { label: "Check the facts", emoji: "📋", color: "bg-blue-600", consequence: "Integrity +2, Morale -1. Documentary reviewed",
+          apply: s => { setFlag(s, "rDocCrew", 2); s.integrityBonus += 2; s.morale = clamp(s.morale - 1, 0, 100); log(s, "🎬 Checked the facts in the documentary footage and promotional copy"); return s; } },
+        { label: "Ask to keep family scenes out of the promotion", emoji: "🏠", color: "bg-emerald-600", consequence: "Morale +2, Popularity -1. Documentary reviewed",
+          apply: s => { setFlag(s, "rDocCrew", 3); s.morale = clamp(s.morale + 2, 0, 100); s.popularity = clamp(s.popularity - 1, 0, 100); log(s, "🎬 Asked the production team to keep family scenes out of the promotion"); return s; } },
       ] });
   }
 

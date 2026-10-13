@@ -993,6 +993,8 @@ const REVIEWED = new Map([
   ['232:311', 'a statue vote, against the vote broker\'s receipts'],
   ['208:46', 'your agent leaking fake transfer interest, against nightclub photos'],
   ['214:436', 'an opponent stamping on your boot in the tunnel, against your own nerves in the tunnel'],
+  ['631:32', 'reviewing footage and promotion after recorded408 full access, against the separate offer to let a crew film a season'],
+  ['631:442', 'checking documentary facts and requesting family privacy, against buying a poorly reviewed car and its repair bills'],
 ]);
 
 SECTION = '5b';

@@ -62,10 +62,52 @@ function git(args) {
 }
 const sourceHead = git(['rev-parse', 'HEAD']).trim(), parentRealism = git(['show', `${PARENT}:src/lib/soccerCareerRealismA.ts`]);
 fs.writeFileSync(path.join(retained, 'soccerCareerRealismA.parent.ts'), parentRealism);
+const DOCUMENTARY_START = '  const documentaryYear = state.seasons[state.seasons.length - 1]?.year ?? 0;';
+const DOCUMENTARY_END = '  if (state.age >= 31 && !flag(state, "screenTest")) {';
+const DOCUMENTARY_PAIR = ', [408, 631, "rDocCrew"]';
+const DOCUMENTARY_BODY = `  const documentaryYear = state.seasons[state.seasons.length - 1]?.year ?? 0;
+  const documentaryDeal = state.eventLastFired?.["408"];
+  if ((state.pendingEvents ?? []).some(event => event.id === 631) || (!state.retired && flag(state, "rDocCrew") === 1
+    && (typeof documentaryDeal !== "number" || !Number.isFinite(documentaryDeal) || documentaryDeal < documentaryYear))) {
+    push({ id: 631, cooldown: COOLDOWN.family, emoji: "🎬", title: "Your documentary review",
+      description: "The production team has sent footage and promotional copy to review. You can check details or ask to keep family scenes out of the promotion.",
+      category: "life", choices: [
+        { label: "Check the facts", emoji: "📋", color: "bg-blue-600", consequence: "Integrity +2, Morale -1. Documentary reviewed",
+          apply: s => { setFlag(s, "rDocCrew", 2); s.integrityBonus += 2; s.morale = clamp(s.morale - 1, 0, 100); log(s, "🎬 Checked the facts in the documentary footage and promotional copy"); return s; } },
+        { label: "Ask to keep family scenes out of the promotion", emoji: "🏠", color: "bg-emerald-600", consequence: "Morale +2, Popularity -1. Documentary reviewed",
+          apply: s => { setFlag(s, "rDocCrew", 3); s.morale = clamp(s.morale + 2, 0, 100); s.popularity = clamp(s.popularity - 1, 0, 100); log(s, "🎬 Asked the production team to keep family scenes out of the promotion"); return s; } },
+      ] });
+  }
+
+`;
+let documentaryLifeBinding = null;
 const parentAppHashes = appFiles.map(file => {
   const name = path.relative(ROOT, file).replaceAll('\\', '/'), before = git(['show', `${PARENT}:${name}`]);
   const row = { file: name, parentSha256: sha(before), candidateSha256: sha(sources.get(file)) };
-  if (RED || file !== REALISM) assert.equal(row.candidateSha256, row.parentSha256, 'Only fixed RealismA may differ from the held parent app');
+  if (!RED && file === LIFE && sources.get(file) !== before) {
+    const current = sources.get(file);
+    assert.equal(sha(DOCUMENTARY_BODY), '19bb3ddee53fd77604308a60ce5b9560811861969c1c6d3f50e360b82f8627ad');
+    assert.equal(sha(DOCUMENTARY_PAIR), '2b342062e29a7a8c046c0515758c439728d09eb940a9603e99f2548eba3160b4');
+    for (const anchor of [DOCUMENTARY_START, DOCUMENTARY_END, DOCUMENTARY_BODY, DOCUMENTARY_PAIR])
+      assert.equal(current.split(anchor).length - 1, 1, 'Only one exact recorded documentary addition may bind the old Cold proof');
+    const start = current.indexOf(DOCUMENTARY_START), end = current.indexOf(DOCUMENTARY_END);
+    assert(start < end); assert.equal(current.slice(start, end), DOCUMENTARY_BODY, 'The complete known documentary body must match its actual insertion boundaries');
+    let inverse = current; const removals = [];
+    for (const [kind, anchor] of [['body', DOCUMENTARY_BODY], ['priority-pair', DOCUMENTARY_PAIR]]) {
+      assert.equal(inverse.split(anchor).length - 1, 1); const offset = inverse.indexOf(anchor), held = inverse;
+      inverse = inverse.slice(0, offset) + inverse.slice(offset + anchor.length);
+      assert.equal(inverse.slice(0, offset) + anchor + inverse.slice(offset), held, 'Reinserting the exact recorded span restores every preceding source byte');
+      removals.push({ kind, anchor, offset, removedSha256: sha(anchor), beforeSha256: sha(held), afterSha256: sha(inverse) });
+    }
+    fs.writeFileSync(path.join(retained, 'soccerCareerLife.documentary-body.ts'), DOCUMENTARY_BODY);
+    fs.writeFileSync(path.join(retained, 'soccerCareerLife.parent-equivalent.ts'), inverse);
+    documentaryLifeBinding = { kind: 'exact-documentary-addition-inverse', start, end, removals,
+      candidateSha256: row.candidateSha256, parentSha256: row.parentSha256, inverseSha256: sha(inverse),
+      bodyPath: 'soccerCareerLife.documentary-body.ts', inversePath: 'soccerCareerLife.parent-equivalent.ts' };
+    fs.writeFileSync(path.join(retained, 'documentary-life-binding.json'), JSON.stringify(documentaryLifeBinding, null, 2) + '\n');
+    assert.equal(inverse, before, 'Removing only the full631 body and unique priority pair must restore the whole held42a Life source');
+    row.parentEquivalentSha256 = sha(inverse);
+  } else if (RED || file !== REALISM) assert.equal(row.candidateSha256, row.parentSha256, 'Only fixed RealismA may differ from the held parent app');
   return row;
 });
 function receipt(extra = {}) {
@@ -73,7 +115,7 @@ function receipt(extra = {}) {
   const sourceReceipts = [...sources].map(([file, before]) => ({ file: path.relative(ROOT, file).replaceAll('\\', '/'),
     beforeSha256: sha(before), afterSha256: sha(fs.readFileSync(file, 'utf8')) }));
   fs.writeFileSync(path.join(retained, 'source.json'), JSON.stringify({ arm, sourceHead, parentAppRef: PARENT,
-    parentAppHashes, parentRealismSha256: sha(parentRealism), sourceReceipts, actualSourceEdits: anchors, ...outcome }, null, 2) + '\n');
+    parentAppHashes, parentRealismSha256: sha(parentRealism), documentaryLifeBinding, sourceReceipts, actualSourceEdits: anchors, ...outcome }, null, 2) + '\n');
   return sourceReceipts;
 }
 function random(input, action) {
