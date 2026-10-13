@@ -1,0 +1,8 @@
+inventedNames: node scripts/simInventedNames.mjs
+noQuotes: node scripts/simNoInventedQuotes.mjs
+noConduct: node scripts/simNoInventedConduct.mjs
+storageWrites: node scripts/simStorageWrites.mjs
+trustCopy: node scripts/simTrustCopy.mjs
+guideHeadings: node scripts/simGuideHeadings.mjs
+siteSearch: node scripts/simSiteSearch.mjs
+vitest-engine: node_modules/.bin/vitest run src/test/soccerMoneyLineGrouped.test.ts src/test/eventChoiceAfterReload.test.ts src/test/soccerEventDeckIntegrity.test.ts --testTimeout=300000
