@@ -1,0 +1,8 @@
+#!serve
+#!playwright
+playCollegeSeat: node scripts/playCollegeSeat.mjs
+playCollegeSeat-smalltap: SEAT_WALK_CONTROL=smalltap node scripts/playCollegeSeat.mjs
+simCollegeDynastyBoard: node scripts/simCollegeDynastyBoard.mjs
+board-seatunmarked: COLLEGE_BOARD_CONTROL=seatunmarked node scripts/simCollegeDynastyBoard.mjs
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-seat: node_modules/.bin/vitest run src/components/college-dynasty --testTimeout=300000 --hookTimeout=120000
