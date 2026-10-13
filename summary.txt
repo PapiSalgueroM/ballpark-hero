@@ -1,0 +1,3 @@
+vitest-college exit=0 11s |    Duration  9.93s (transform 1.12s, setup 589ms, collect 2.60s, tests 12.95s, environment 2.22s, prepare 1.07s)
+vitest-default exit=0 11s |    Duration  9.95s (transform 716ms, setup 171ms, collect 1.63s, tests 7.04s, environment 1.96s, prepare 758ms)
+tsc exit=0 67s | 
