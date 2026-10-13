@@ -16,7 +16,7 @@ jobs:
       SIM_NETWORK: offline
       ENGINES: chromium
       CAREER_SEASON_LOCAL_ONLY: '1'
-      CAREER_REWARDS_PHASE: baseline
+      CAREER_REWARDS_PHASE: fixed
       CAREER_REWARDS_OUT: ${{ github.workspace }}/career-rewards-artifacts
       CAREER_PENDING_PHASE: fixed
       CAREER_PENDING_OUT: ${{ github.workspace }}/career-rewards-artifacts/prior-pending

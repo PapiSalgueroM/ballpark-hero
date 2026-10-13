@@ -99,7 +99,12 @@ function literal(before: CareerState, after: CareerState, spec: Spec, choice: nu
     const wheel = effect.wheel, hit = roll < wheel.chance; apply(hit ? wheel.hitEffect : wheel.missEffect);
     expected.chanceWheel = { title: wheel.title, chance: wheel.chance, roll, hit: wheel.hit, miss: wheel.miss, result: hit, seen: false };
     if ((spec.id === 210 && hit) || (spec.id === 218 && !hit)) expected.pace = Math.max(20, Math.min(99, expected.pace - 1));
-    if (spec.id === 218 && hit) expected.statBoostNextSeason = { pace: 1, shooting: 1, passing: 1, dribbling: 1, defending: 1, physical: 1 };
+    if (spec.id === 218 && hit) expected.statBoostNextSeason = {
+      ...before.statBoostNextSeason, pace: (before.statBoostNextSeason.pace ?? 0) + 1,
+      shooting: (before.statBoostNextSeason.shooting ?? 0) + 1, passing: (before.statBoostNextSeason.passing ?? 0) + 1,
+      dribbling: (before.statBoostNextSeason.dribbling ?? 0) + 1, defending: (before.statBoostNextSeason.defending ?? 0) + 1,
+      physical: (before.statBoostNextSeason.physical ?? 0) + 1, reflexes: (before.statBoostNextSeason.reflexes ?? 0) + 1,
+    };
   }
   expected.lastEventId = spec.id; expected.pendingEvents = expected.pendingEvents.slice(1); expected.phase = 'random_events';
   expected.overall = E.calcOverall(expected, expected.position);
