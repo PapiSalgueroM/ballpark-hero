@@ -1,0 +1,9 @@
+build exit=0 32s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+w-m3 exit=1 91s | sweepWeight: 3 failures
+w-m2 exit=1 92s | sweepWeight: 3 failures
+w-main exit=0 92s | sweepWeight: green. Every page is inside its budget, and the budgets came down this round.
+w-m4 exit=1 89s | sweepWeight: 3 failures
+w-m6 exit=1 91s | sweepWeight: 3 failures
+w-m7 exit=1 91s | sweepWeight: 3 failures
+w-m8 exit=1 71s | sweepWeight: 3 failures
+w-m9 exit=1 71s | sweepWeight: 3 failures

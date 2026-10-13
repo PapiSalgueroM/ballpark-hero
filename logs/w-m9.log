@@ -1,0 +1,17 @@
+served 396478b14f14c2aa7fad3e10edad39866c5dd8a1  on 4189: 200
+weight at 396478b14: exit 1
+   /                   243K gz over   3 files (budget 244K, 243.2K to the tenth)
+   /club-manager       602K gz over  41 files (budget 593K, 602.2K to the tenth)
+   /soccer-career      828K gz over  47 files (budget 829K, 828.2K to the tenth)
+   /stadium-tycoon     302K gz over  24 files (budget 303K, 302.0K to the tenth)
+   /wonderkid-factory  276K gz over  20 files (budget 277K, 275.8K to the tenth)
+   /minefield          294K gz over  21 files (budget 295K, 293.7K to the tenth)
+   /footle             352K gz over  39 files (budget 354K, 352.2K to the tenth)
+   /nfl-my-career      486K gz over  48 files (budget 488K, 486.3K to the tenth)
+   /front-office       372K gz over  38 files (budget 374K, 372.5K to the tenth)
+   /soccer-grid        317K gz over  35 files (budget 319K, 317.3K to the tenth)
+   /leaderboard        251K gz over   9 files (budget 266K, 251.3K to the tenth)
+   /manager-hot-seat   621K gz over  44 files (budget 613K, 620.6K to the tenth)
+   /deadline-day       631K gz over  47 files (budget 623K, 630.6K to the tenth)
+   /transfer-path      378K gz over  39 files (budget 379K, 377.8K to the tenth)
+sweepWeight: 3 failures
