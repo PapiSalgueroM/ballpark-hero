@@ -1,0 +1,16 @@
+#!serial
+m-keyseason-fair: node .rc/x/mut1327.mjs keyseason && node scripts/simSoccerDeckFairness.mjs; s=$?; git checkout -- src scripts; exit $s
+m-keyseason-cool: node .rc/x/mut1327.mjs keyseason && node scripts/simCareerLifeCooldowns.mjs; s=$?; git checkout -- src scripts; exit $s
+m-keyseason-vt: node .rc/x/mut1327.mjs keyseason && node_modules/.bin/vitest run src/test/soccerEventDeckIntegrity.test.ts --testTimeout=300000; s=$?; git checkout -- src scripts; exit $s
+m-newsyear-fair: node .rc/x/mut1327.mjs newsyear && node scripts/simSoccerDeckFairness.mjs; s=$?; git checkout -- src scripts; exit $s
+m-newsyear-vt: node .rc/x/mut1327.mjs newsyear && node_modules/.bin/vitest run src/test/soccerEventDeckIntegrity.test.ts --testTimeout=300000; s=$?; git checkout -- src scripts; exit $s
+m-loanclub-fair: node .rc/x/mut1327.mjs loanclub && node scripts/simSoccerDeckFairness.mjs; s=$?; git checkout -- src scripts; exit $s
+m-loanclub-fair400: node .rc/x/mut1327.mjs loanclub && node scripts/simSoccerDeckFairness.mjs 400; s=$?; git checkout -- src scripts; exit $s
+m-boostwipe-prom: node .rc/x/mut1327.mjs boostwipe && node scripts/simSoccerEventPromises.mjs; s=$?; git checkout -- src scripts; exit $s
+m-injname-fair: node .rc/x/mut1327.mjs injname && node scripts/simSoccerDeckFairness.mjs; s=$?; git checkout -- src scripts; exit $s
+m-injname-prom: node .rc/x/mut1327.mjs injname && node scripts/simSoccerEventPromises.mjs; s=$?; git checkout -- src scripts; exit $s
+m-injname-vt: node .rc/x/mut1327.mjs injname && node_modules/.bin/vitest run src/test/soccerEventDeckIntegrity.test.ts --testTimeout=300000; s=$?; git checkout -- src scripts; exit $s
+m-potmyear-fair: node .rc/x/mut1327.mjs potmyear && node scripts/simSoccerDeckFairness.mjs; s=$?; git checkout -- src scripts; exit $s
+m-potmyear-vt: node .rc/x/mut1327.mjs potmyear && node_modules/.bin/vitest run src/test/soccerEventDeckIntegrity.test.ts --testTimeout=300000; s=$?; git checkout -- src scripts; exit $s
+m-injblow-fair: node .rc/x/mut1327.mjs injblow && node scripts/simSoccerDeckFairness.mjs; s=$?; git checkout -- src scripts; exit $s
+m-walkoff-fair: node .rc/x/mut1327.mjs walkoff && node scripts/simSoccerDeckFairness.mjs; s=$?; git checkout -- src scripts; exit $s
