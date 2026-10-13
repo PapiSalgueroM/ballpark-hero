@@ -48,6 +48,10 @@
  *                                copy of clubManagerSlots.ts: source goes red.
  *   SAVE_FENCE_CONTROL=rawsoccer (Round 1330) a raw SAVE_KEY setItem planted in an
  *                                in memory copy of SoccerCareer.tsx: source red.
+ *   SAVE_FENCE_CONTROL=adoptlate (Round 1330) the page's adopt moved below its
+ *                                read of the save, in memory: source red (the
+ *                                adopt must be the first statement of the
+ *                                restoredSave initialiser, before any getItem).
  *   SAVE_FENCE_CONTROL=loaddraw  one Math.random call inside loadCareer: the
  *                                draw count parts from the base, fleet red.
  *   SAVE_FENCE_CONTROL=repairall the budget repair runs on every load: the
@@ -67,6 +71,8 @@
  * 4 of 4. Round 1330 (r1330-sc-landing): source also finds the Soccer Career
  * save written 3 times inside saveFence.write and 4 times on its allowed list
  * (3 entries); rawsoccer fired once and turned source red with 1 finding.
+ * The adopt order check (fix round, on this PC, source only): 18 checks, 0 red;
+ * adoptlate fired once and turned source red with 1 finding.
  * Every check is an exact equality, so there is no band to set.
  * Nothing here reads dist or the network.
  * Run: [FENCE_BASE=<worktree of the base commit>] [SAVE_FENCE_SECTIONS=tabs,source,fleet] node scripts/simSaveFence.mjs
@@ -83,7 +89,7 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const SAVE_KEY = 'dukb-club-manager-save';
 const FENCE_KEY = 'dukb-fence:dukb-club-manager-save';
 const CONTROL = process.env.SAVE_FENCE_CONTROL || '';
-const CONTROLS = { nofence: 'tabs', rawwrite: 'source', rawsoccer: 'source', loaddraw: 'fleet', repairall: 'fleet', squadline: 'fleet', budgetneg: 'fleet' };
+const CONTROLS = { nofence: 'tabs', rawwrite: 'source', rawsoccer: 'source', adoptlate: 'source', loaddraw: 'fleet', repairall: 'fleet', squadline: 'fleet', budgetneg: 'fleet' };
 if (CONTROL && !(CONTROL in CONTROLS)) { console.error(`SAVE_FENCE_CONTROL=${CONTROL} is not a control here (${Object.keys(CONTROLS).join(', ')})`); process.exit(1); }
 if (CONTROLS[CONTROL] === 'fleet' && !process.env.FENCE_BASE) { console.error(`control cannot run: SAVE_FENCE_CONTROL=${CONTROL} is judged against the base commit, set FENCE_BASE`); process.exit(1); }
 const WANT = (process.env.SAVE_FENCE_SECTIONS || (CONTROL ? CONTROLS[CONTROL] : 'tabs,source,fleet')).split(',').map(s => s.trim()).filter(Boolean);
@@ -320,6 +326,42 @@ const SOCCER_ALLOWED = [
 const SOCCER_RAW_FILE = 'src/pages/SoccerCareer.tsx';
 const SOCCER_RAW_ANCHOR = '  const handleBeginCareer = () => {\n';
 const SOCCER_RAW_PLANT = "    try { localStorage.setItem(SAVE_KEY, '{}'); } catch { /* planted */ }\n";
+/* Round 1330 review (mutation M6 survived): the page adopts the generation
+   BEFORE it reads the save, so a write another tab lands between the two
+   leaves this page stale, never the other one. Read from the code (the AST),
+   never the comments: the restoredSave useState initialiser's first statement
+   is saveFence.adopt(SAVE_KEY), every getItem in it comes after, and the page
+   adopts nowhere else. adoptlate moves the adopt below the read. */
+const SOCCER_ADOPT = '    saveFence.adopt(SAVE_KEY);\n';
+const SOCCER_READ = '    let saved: string | null;\n    try { saved = localStorage.getItem(SAVE_KEY); } catch { return { career: null, invalid: false }; }\n';
+function checkSoccerAdopt(text, rel) {
+  tick('source');
+  const sf = ts.createSourceFile(rel, text, ts.ScriptTarget.Latest, true, ts.ScriptKind.TSX);
+  let init = null;
+  const adopts = [];
+  const visit = n => {
+    if (ts.isVariableDeclaration(n) && ts.isArrayBindingPattern(n.name) && n.name.elements.length
+      && !ts.isOmittedExpression(n.name.elements[0]) && n.name.elements[0].name.getText(sf) === 'restoredSave'
+      && n.initializer && ts.isCallExpression(n.initializer) && n.initializer.expression.getText(sf) === 'useState') init = n.initializer.arguments[0] ?? null;
+    if (ts.isCallExpression(n) && n.expression.getText(sf) === 'saveFence.adopt') adopts.push(n);
+    ts.forEachChild(n, visit);
+  };
+  visit(sf);
+  if (!init || !(ts.isArrowFunction(init) || ts.isFunctionExpression(init)) || !ts.isBlock(init.body)) {
+    fail('source', `${rel}: no restoredSave useState initialiser with a body, so the adopt before the read cannot be checked`);
+    return;
+  }
+  const first = init.body.statements[0];
+  const firstText = first ? first.getText(sf) : '(empty)';
+  const reads = [];
+  const findReads = n => { if (ts.isCallExpression(n) && ts.isPropertyAccessExpression(n.expression) && n.expression.name.text === 'getItem') reads.push(n); ts.forEachChild(n, findReads); };
+  findReads(init.body);
+  if (firstText !== 'saveFence.adopt(SAVE_KEY);') fail('source', `${rel}: the restoredSave initialiser starts with "${firstText.split('\n')[0].slice(0, 80)}", not saveFence.adopt(SAVE_KEY); (adopt before the read)`);
+  else if (!reads.length) fail('source', `${rel}: the restoredSave initialiser reads no save, so the order cannot be checked`);
+  else if (reads.some(r => r.getStart(sf) < first.getEnd())) fail('source', `${rel}: a getItem in the restoredSave initialiser runs before the adopt`);
+  if (adopts.length !== 1) fail('source', `${rel}: saveFence.adopt is called ${adopts.length} times; the page adopts once, in the restoredSave initialiser`);
+  console.log(`  Soccer Career: the restoredSave initialiser starts with ${firstText}; ${reads.length} read(s) after it; ${adopts.length} adopt call(s) in the page`);
+}
 function walkSrc(dir, out = []) {
   for (const e of fs.readdirSync(dir, { withFileTypes: true })) {
     const p = path.join(dir, e.name);
@@ -349,6 +391,12 @@ function sectionSource() {
       text = text.replace(SOCCER_RAW_ANCHOR, SOCCER_RAW_ANCHOR + SOCCER_RAW_PLANT);
       fired += 1;
     }
+    if (CONTROL === 'adoptlate' && rel === SOCCER_RAW_FILE) {
+      once(text, SOCCER_ADOPT + SOCCER_READ, rel);
+      text = text.replace(SOCCER_ADOPT + SOCCER_READ, SOCCER_READ + SOCCER_ADOPT);
+      fired += 1;
+    }
+    if (rel === SOCCER_RAW_FILE) checkSoccerAdopt(text, rel);
     if (!/\.(setItem|removeItem)\(/.test(text)) continue;
     scanned += 1;
     const sf = ts.createSourceFile(file, text, ts.ScriptTarget.Latest, true, rel.endsWith('.tsx') ? ts.ScriptKind.TSX : ts.ScriptKind.TS);
