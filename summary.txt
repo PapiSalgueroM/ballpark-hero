@@ -1,0 +1,5 @@
+build exit=0 26s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+distgrep-head exit=0 0s | head: 0 chunks carry the bind error text
+basebuild exit=0 26s | base: 0 chunks carry the bind error text
+weight-head exit=0 27s | sweepWeight: green. Every page is inside its budget, and the budgets came down this round.
+weight-base exit=0 29s | sweepWeight: green. Every page is inside its budget, and the budgets came down this round.
