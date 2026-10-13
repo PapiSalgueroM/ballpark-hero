@@ -24,6 +24,11 @@
  * the page before it applies, or the run refuses with exit 2):
  *   CM_FINANCE_CONTROL=small  the cover row at 11 px: the font check FIRES naming it
  *   CM_FINANCE_CONTROL=cut    the kitty label held to 40 px with nowrap: the cut check FIRES
+ *   CM_FINANCE_CONTROL=wrap   the season kitty figure squeezed to 1 px wide: the one line check FIRES
+ * The one line check is the walk's own first finding: on 559a0c62 the signed
+ * figures of the cover and kitty rows broke after their plus sign at 320 and
+ * at 390 ("+" over "£13.2m"), which no cut check sees because nothing is cut.
+ * Every figure in the projection table must sit on one line.
  * Exit 0 green, 1 red or a control that FIRED, 2 could not run, 3 a control that did not fire.
  *
  * The database and the ad hosts are blocked for the whole walk (production is
@@ -50,12 +55,12 @@ const SIZES = [[320, 640], [390, 844], [1280, 900]];
 const WEEKS = 10;
 const CARDS = ['data-finance-projection', 'data-pricing-desk', 'data-sponsor-desk', 'data-finance-books'];
 
-if (CONTROL && !['small', 'cut'].includes(CONTROL)) {
-  console.log(`playCmFinanceDesk: unknown CM_FINANCE_CONTROL "${CONTROL}" (small or cut). NOTHING WAS CHECKED.`);
+if (CONTROL && !['small', 'cut', 'wrap'].includes(CONTROL)) {
+  console.log(`playCmFinanceDesk: unknown CM_FINANCE_CONTROL "${CONTROL}" (small, cut or wrap). NOTHING WAS CHECKED.`);
   process.exit(2);
 }
 
-const found = { font: [], tall: [], cut: [], other: [] };
+const found = { font: [], tall: [], cut: [], wrap: [], other: [] };
 let failures = 0;
 const fail = (kind, m) => { failures += 1; found[kind].push(m); console.log('  FAIL: ' + m); };
 const ok = m => console.log('  ok    ' + m);
@@ -173,11 +178,14 @@ async function openDesk(w, h) {
 
 /* ---------- 3. the controls, by page style ---------- */
 async function applyControl() {
-  const target = CONTROL === 'small' ? '[data-projection-total="cover"] td' : '[data-projection-total="kitty"] td:first-child';
+  const target = CONTROL === 'small' ? '[data-projection-total="cover"] td'
+    : CONTROL === 'cut' ? '[data-projection-total="kitty"] td:first-child' : '[data-projection-total="kitty"] td:last-child';
   if (await page.locator(target).count().catch(() => 0) === 0) refuse(`control ${CONTROL}: its target ${target} is not on the page`);
   const css = CONTROL === 'small'
     ? `${target} { font-size: 11px !important; }`
-    : `${target} { display: block !important; width: 40px !important; max-width: 40px !important; white-space: nowrap !important; overflow: hidden !important; }`;
+    : CONTROL === 'cut'
+      ? `${target} { display: block !important; width: 40px !important; max-width: 40px !important; white-space: nowrap !important; overflow: hidden !important; }`
+      : `${target} { white-space: normal !important; width: 1px !important; max-width: 1px !important; }`;
   await page.addStyleTag({ content: css });
   await page.waitForTimeout(200);
 }
@@ -185,7 +193,7 @@ async function applyControl() {
 /* ---------- 4. the measurements, on the rectangles ---------- */
 async function measure(w, h) {
   const r = await page.evaluate(cards => {
-    const out = { font: [], tall: [], cut: [], overlap: [], missing: [], texts: 0, buttons: 0 };
+    const out = { font: [], tall: [], cut: [], wrap: [], overlap: [], missing: [], texts: 0, buttons: 0, figures: 0 };
     const snip = el => (el.textContent || '').replace(/\s+/g, ' ').trim().slice(0, 48);
     const els = cards.map(a => document.querySelector(`[${a}]`));
     cards.forEach((a, i) => { if (!els[i]) out.missing.push(a); });
@@ -213,6 +221,13 @@ async function measure(w, h) {
         if (el.scrollWidth > el.clientWidth + 1) out.cut.push(`${cards[i]}: "${snip(el)}" scrollWidth ${el.scrollWidth} over clientWidth ${el.clientWidth}`);
       }
     });
+    for (const td of document.querySelectorAll('[data-finance-projection] td.tabular-nums')) {
+      out.figures += 1;
+      const range = document.createRange();
+      range.selectNodeContents(td);
+      const lines = new Set([...range.getClientRects()].filter(b => b.width > 0).map(b => Math.round(b.top)));
+      if (lines.size > 1) out.wrap.push(`"${snip(td)}" in the ${td.closest('tr')?.getAttribute('data-projection-total') || td.closest('tr')?.getAttribute('data-projection-line') || 'table'} row breaks over ${lines.size} lines`);
+    }
     for (let i = 1; i < els.length; i++) {
       if (!els[i - 1] || !els[i]) continue;
       const a = els[i - 1].getBoundingClientRect(), b = els[i].getBoundingClientRect();
@@ -238,6 +253,7 @@ async function measure(w, h) {
   for (const m of r.font) fail('font', `${at}: text under 12px, ${m}`);
   for (const m of r.tall) fail('tall', `${at}: ${m}`);
   for (const m of r.cut) fail('cut', `${at}: cut text, ${m}`);
+  for (const m of r.wrap) fail('wrap', `${at}: a figure off one line, ${m}`);
   for (const m of r.overlap) fail('other', `${at}: cards overlap, ${m}`);
   if (r.side > 2) fail('other', `${at}: the page scrolls sideways by ${r.side}px`);
   if (r.seasonResult) fail('other', `${at}: the desk still prints "Season result"`);
@@ -252,7 +268,7 @@ async function measure(w, h) {
   }
   if (r.anims !== 0) fail('other', `${at}: ${r.anims} animation(s) running on the desk under reduced motion`);
   const k = r.kitty || r.result;
-  console.log(`  ${at}: ${r.texts} text holders, ${r.buttons} buttons measured; ${r.kitty ? 'kitty' : 'result'} row at y ${k ? k.y : '?'} (on screen at ${k ? k.vy : '?'})` +
+  console.log(`  ${at}: ${r.texts} text holders, ${r.buttons} buttons and ${r.figures} figures measured; ${r.kitty ? 'kitty' : 'result'} row at y ${k ? k.y : '?'} (on screen at ${k ? k.vy : '?'})` +
     (r.kitty ? `, reads ${r.kitty.cells.map(c => c.text).join(' | ')}; cover ${r.cover ? r.cover.cells.map(c => c.text).join(' | ') : '?'}` : ''));
   await page.screenshot({ path: path.join(OUT, `finance-view-${w}.png`) }).catch(() => {});
   await page.locator('[data-finance-projection]').first().locator('..').screenshot({ path: path.join(OUT, `finance-desk-${w}.png`) }).catch(() => {});
@@ -292,7 +308,8 @@ console.log('');
 if (CONTROL) {
   const fired = CONTROL === 'small'
     ? found.font.some(m => /Board covers running costs/.test(m))
-    : found.cut.some(m => /Kitty change/.test(m));
+    : CONTROL === 'cut' ? found.cut.some(m => /Kitty change/.test(m))
+      : found.wrap.some(m => /in the kitty row/.test(m));
   if (fired) {
     console.log(`playCmFinanceDesk: CONTROL ${CONTROL} FIRED (${failures} failures, as it must)`);
     process.exit(1);
@@ -304,4 +321,4 @@ if (failures > 0) {
   console.log(`playCmFinanceDesk: ${failures} failure${failures === 1 ? '' : 's'}`);
   process.exit(1);
 }
-console.log('playCmFinanceDesk: green. The Finances desk reads at 12px, taps at 44px, cuts nothing and shows what the board covers and what the kitty keeps, at 320, 390 and 1280.');
+console.log('playCmFinanceDesk: green. The Finances desk reads at 12px, taps at 44px, cuts nothing, keeps every figure on one line and shows what the board covers and what the kitty keeps, at 320, 390 and 1280.');

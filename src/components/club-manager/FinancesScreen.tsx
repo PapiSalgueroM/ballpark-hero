@@ -113,13 +113,13 @@ export function FinancesScreen({ career: c, onTickets, onConcessions, onSponsor,
             </tr>
             <tr className="border-t border-border" data-projection-total="cover">
               <td className="py-0.5 text-muted-foreground">Board covers running costs</td>
-              <td className="py-0.5 text-right tabular-nums text-muted-foreground">{signed(k.coverActual)}</td>
-              <td className="py-0.5 pl-2 text-right tabular-nums text-muted-foreground">{signed(k.coverProjected)}</td>
+              <td className="py-0.5 text-right tabular-nums whitespace-nowrap text-muted-foreground">{signed(k.coverActual)}</td>
+              <td className="py-0.5 pl-2 text-right tabular-nums whitespace-nowrap text-muted-foreground">{signed(k.coverProjected)}</td>
             </tr>
             <tr className="border-t border-border" data-projection-total="kitty">
               <td className="py-0.5 font-bold text-foreground">Kitty change</td>
-              <td className={cn('py-0.5 text-right tabular-nums', k.kittyActual < 0 ? 'text-red-400' : 'text-emerald-400')}>{signed(k.kittyActual)}</td>
-              <td className={cn('py-0.5 pl-2 text-right tabular-nums font-bold', k.kittyProjected < 0 ? 'text-red-400' : 'text-emerald-400')}>{signed(k.kittyProjected)}</td>
+              <td className={cn('py-0.5 text-right tabular-nums whitespace-nowrap', k.kittyActual < 0 ? 'text-red-400' : 'text-emerald-400')}>{signed(k.kittyActual)}</td>
+              <td className={cn('py-0.5 pl-2 text-right tabular-nums whitespace-nowrap font-bold', k.kittyProjected < 0 ? 'text-red-400' : 'text-emerald-400')}>{signed(k.kittyProjected)}</td>
             </tr>
           </tbody>
         </table>
