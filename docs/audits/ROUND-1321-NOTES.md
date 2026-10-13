@@ -17,7 +17,8 @@ Nothing in `src` calls the new code but its own tests. No screen, no copy, no Wh
 - `src/lib/nbaFrontOffice.ts`: added lines only (0 removed, runner `r1321-b1` line `diffproof`):
   `NBA_EARNED_CLASS_CURVE` (13 to 30 at 72 to 80, 31 to 45 at 69 to 76, 46 to 70 at 66 to 72, the draft's
   starting shape, untuned), `nbaEarnedDraftClass`, `NBA_DRAFT_NEED_WEIGHT` (2), `nbaDraftNeed`,
-  `nbaConsumeDraftRound`. No anchor of simNbaDraftCapital is repeated.
+  `nbaConsumeDraftRound`, and since the fix pass `nbaEarnedClassSize` (the class size rule, one place, read by the
+  class and by the help). No anchor of simNbaDraftCapital is repeated.
 - `src/lib/gmEarnedDraft.ts` (new, sport neutral): `earnedContinue`, `earnedPick`, `earnedByStaff` over any
   `GmDraftHost`, each answering `done` exactly when no slot is left; `earnedDraftHeading` (lines from the slots and
   a `labelOf`); `lotteryRangeLine` (the worked example from the saved field and draws); `lotteryChancesLine`;
@@ -26,8 +27,11 @@ Nothing in `src` calls the new code but its own tests. No screen, no copy, no Wh
 - `src/lib/nbaEarnedDraft.ts` (new, the NBA's half): `NBA_DRAFT_BLOCK = 'draft'`, `nbaDraftSeason`,
   `nbaDraftOrder`, `nbaDraftNightOf`, `openNbaDraftNight`, `nbaDraftHost`, `nbaDraftContinue`, `nbaDraftPick`,
   `nbaDraftByStaff`, `nbaDraftRun`, `nbaDraftLabel`, `nbaDraftHeading`, `nbaDraftHelp`, plus re-exports for part
-  B's board (`nbaEarnedDraftClass`, `lotteryNight`, `lotteryNightRule`, `ordinal`, `slotsLeftFor`, the types).
-- `src/lib/gmEarnedDraft.test.ts` (9 tests) and `src/lib/nbaEarnedDraft.test.ts` (11 tests).
+  B's board (`nbaEarnedDraftClass`, `draftRulesFor`, `lotteryNight`, `lotteryNightRule`, `ordinal`,
+  `slotsLeftFor`, the types, `GmDraftOrderRules` and `GmLotteryRules` among them). `openNbaDraftNight` answers a
+  night already open for the season as it stands (fix pass).
+- `src/lib/gmEarnedDraft.test.ts` (10 tests) and `src/lib/nbaEarnedDraft.test.ts` (14 tests); both reach the lift,
+  the pick ledger of gmPicks included, only through gmEarnedDraft's re-exports (`movePicks`, `newLedger`, `pickKey`).
 - `scripts/simNbaEarnedDraft.mjs` (new) and `scripts/data/nbaEarnedDraftFixture.json` (recorded from `48cb9d4b`).
 - `scripts/simGmDraftOrder.mjs`: the two libraries added to `MOUNT_ALLOW`, nothing else.
 - `src/lib/nbaGmDesk.ts`: UNCHANGED (correction 11). The block key lives in nbaEarnedDraft.ts.
@@ -70,6 +74,37 @@ runner (73 s on the owner's PC): a shard of three sets about 170 s.
    12, CPU clubs will waive more. A line in $M (or a count of CPU waivers) is needed instead.
 3. S1, S2 and S3 resolve easily on 12 sets (the per set sd is far under a third of each margin).
 
+## Fix pass, 2026-10-12 evening (two adversarial reviews of d4755bcb: the run lens and the read lens)
+
+Every finding was fixed, each in its own commit. Report: `dukb-handoff/2026-10-10/results-g/fix-1321.md`.
+
+1. MAJOR, rivals choose on the engine's grade, now held. Section 9 used to read the best man and the gap through
+   `host.read` itself, so `read: scout` for rivals (the run lens's mutation m1) stayed green. Section 9 now works
+   out every rival choice without the host: the engine's grade plus the pinned weight (2) a whole point of the
+   engine's `nbaDraftNeed`, ties to the lower id, and holds the host's choice to it (1,754 of 1,754 on the quick
+   walk). Control `rivalscout` (m1); a unit test holds `host.read` for rivals and for him, and `host.shown`.
+2. The weight is pinned in the harness (`NEED_WEIGHT = 2`), checked against the engine's constant; control
+   `bigneed` (the engine's weight at 20, m5).
+3. The heading tests hold the whole heading with `toEqual`, so the clock line is his alone (m4).
+4. His second round man is held to the plain draft deal, never the first round scale (m3).
+5. `openNbaDraftNight` over a night already open for the season answers it as it stands and writes nothing (it
+   used to hand back a fresh night with made 0 over spent markers). Unit test; section 4 opens again after Continue
+   in every draft; control `reopen`. The unit tests that move picks now move them before the night opens.
+   PART B's board still sets its guard before it opens (correction 12); this only makes a second open harmless.
+6. Section 1b PRINTS whether the four desk off files moved since the base and is no longer a failing check, as
+   brief 3.4 asks ("printed, not re-proven here"). As a check it would go red by construction in PART B (which edits
+   nbaGmDesk.ts and simNbaGmDesk.mjs) and on any clone without 48cb9d4b. The proof of decision 3 (a) is the gate's
+   own `git diff --quiet 48cb9d4b -- ...` line (`diffproof`) and simNbaGmDesk check 1.
+7. The help reads the class size from `nbaEarnedClassSize` instead of retyping the rule; control `shortclass` moved
+   with the rule to its new line; a unit test holds the help's number to the class drawn.
+8. `draftRulesFor`, `GmDraftOrderRules` and `GmLotteryRules` come through nbaEarnedDraft.ts, so PART B's board can
+   hand the lottery card its rules without naming the rules file (which the LIFT regex matches).
+9. Controls for checks that had none: `elevenhead` (section 6's today's twelve, m7) and `foreignimport` (section
+   10's import allowlist). Section 4's JSON round trip and swapped table get none on purpose: nothing outside the
+   lift can make either fail today (the harness header says so); they stay as tripwires for PART B.
+10. Both test files reach `movePicks`, `newLedger` and `pickKey` through gmEarnedDraft's re-exports and the lottery
+   table through the NBA desk's `nbaGamePickRules`, never gmPicks itself (advice 17's letter, not only its purpose).
+
 ## Gates on runners (each a `git show origin/rc-results/<name>:logs/<label>.log`)
 
 - `r1321-a1` on eca5bd25: simNbaEarnedDraft quick exit 0, all controls exit 0 (1 of 1), 8 fleet shards exit 0.
@@ -97,6 +132,20 @@ runner (73 s on the owner's PC): a shard of three sets about 170 s.
   on both ("could not drive Guess the Nation to a finish: locator.click timeout", then "no guess was ever
   submitted"). Not this round's.
 - origin/main was still 48cb9d4b at the end of this run (no Release BB yet), so nothing was merged.
+- FIX PASS, `r1321-fix-a` on 2d488765: tsc 0, the two test files 0, simNbaEarnedDraft 0, controls rivalscout
+  (section 9, 2), bigneed (9, 3), reopen (4, 30) and noneed (9, 4) each exit 1 FIRED.
+- FIX PASS, `r1321-fix-b` on 267cd6a6 (#!serve): build 0; tsc 0; vitest 21 files, 218 tests 0; simNbaEarnedDraft
+  0; simNbaGmDesk 0 and its 18 controls fired; simNbaDraftCapital and its 21 controls exit 0 with their own failed
+  indices; simGmDraftOrder 0 and all 40 controls fired; simGmPicks, simDraftNight, simEngineIds, simInventedNames,
+  simHarnessAnchors, simNoRivalNames (0 findings) and simStorageWrites 0; diffproof ok; the 23 reader harnesses 0.
+  Its all controls line exited 1: trustblock went red in sections 3 and 8, not 8 alone (below).
+- FIX PASS, `r1321-fix-c` on 267cd6a6 (#!serial): the run lens's mutations, each applied and restored in its own
+  line, all CAUGHT: m1 (section 9 and the host read test), m3 (the staff press test), m4 (the clock line test), m5
+  (section 9, 3 failures), m7 (section 6); the tree clean and the harness green after them.
+- FIX PASS, `r1321-fix-d` on 3568f30f: control trustblock FIRED in 3 and 8 (284 and 100); all 19 controls fired,
+  each in exactly its own sections; simNbaEarnedDraft 0. Why 3 now: opening asks nbaDraftNightOf first, so a
+  validator that trusts any block hands season 2 the spent night of season 1 (its order disagrees with the season).
+- FIX PASS FINAL: see `dukb-handoff/2026-10-10/results-g/fix-1321.md` for the closing head's request.
 
 ## Weight (decision 6)
 

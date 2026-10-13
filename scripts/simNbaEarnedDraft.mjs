@@ -123,7 +123,8 @@
  * part B, which is the first to give a press a reason to read either.
  *
  * MEASURED 2026-10-12 (quick walk, fixed seeds, so the same on every run of
- * this commit), failures each control put in its sections on this PC:
+ * this commit), failures each control put in its sections, on the builder's
+ * PC and again after the fix pass on runners r1321-fix-b and r1321-fix-d:
  *   1   30 seasons, 315,516 draws held to 48cb9d4b; touchseason 41.
  *   2   30 seasons, a lottery on every one, none free of level records (real
  *       fields rarely are); 280 club shares over 20 seasons, the worst 3.26
@@ -131,16 +132,20 @@
  *   3   30 drafts, 1,800 picks, 150 picks moved first (16 his), a club with
  *       three or more and a club with none in all 30, on the clock 46 times,
  *       561 rival rows; gmfirst 60, origholder 192, shortclass 30, shownread
- *       545, playinmade 32.
- *   4   30 nights, 10 tables swapped; redraw 30, playinmade 1.
+ *       545, playinmade 32, trustblock 284.
+ *   4   30 nights, 30 opened again after Continue, 10 tables swapped; redraw
+ *       30, reopen 30, playinmade 1.
  *   6   1,500 classes of 64, worst 1.63 standard errors from the curve, steps
  *       by ten slots 5.11, 3.04, 2.16, 1.72, 1.70, 1.70 (floor 1.19); fatclass
- *       3, flatclass 3, nocurve 22, shortclass 1,519.
+ *       3, flatclass 3, nocurve 22, shortclass 1,519, elevenhead 1,501.
  *   8   50 broken blocks, 50 finished the old way; trustblock 100, playinmade 1.
- *   9   1,754 rival choices, none past a better read by more than 2; taken
- *       when short vs not, G 31.7, F 29.3, C 29.6 points (floor 20); noneed
- *       4.4, -0.1, 0.9 (3 failures), playinmade 3.
- *  10   sportname 1.
+ *   9   1,754 rival choices, all 1,754 the rule's man on the engine's grade,
+ *       none past a better grade by more than 2; taken when short vs not, G
+ *       31.7, F 29.3, C 29.6 points (floor 20); noneed 4 (504 off the rule,
+ *       the three lifts 4.4, -0.1, 0.9), rivalscout 2 (1,462 off the rule,
+ *       1,131 past 2), bigneed 3 (the constant, 653 off the rule, 440 past 2),
+ *       playinmade 4.
+ *  10   sportname 1, foreignimport 1.
  *   7   the OLD arm on 12 sets, two runs: see docs/audits/ROUND-1321-NOTES.md.
  */
 import './lib/seedRandom.mjs';
