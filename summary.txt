@@ -1,0 +1,10 @@
+saveRecovery-all exit=0 34s | Soccer Career save recovery cleanup: temporary copies and reports removed; production page and reader bytes stayed identical.
+fence-rawsoccer exit=1 2s | CONTROL FIRED: SAVE_FENCE_CONTROL=rawsoccer fired 1 times and section source went red with 1 findings
+fence-rawwrite exit=1 2s | CONTROL FIRED: SAVE_FENCE_CONTROL=rawwrite fired 1 times and section source went red with 1 findings
+fence-nofence exit=1 2s | CONTROL FIRED: SAVE_FENCE_CONTROL=nofence fired 1 times and section tabs went red with 12 findings
+mutfence exit=1 8s | CONTROL FIRED: the raw write turned the fence test red (vitest exit 1)
+simStorageWrites exit=1 4s | simStorageWrites: 1 failed (owed: 12)
+simHarnessAnchors exit=0 61s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simSaveKeeper exit=0 6s | simSaveKeeper: all green. The keeper holds on real saves of all 21 long games.
+saveFence-base exit=0 132s | simSaveFence: all green (tabs, source, fleet)
+saveRetry-all exit=0 134s | simSoccerCareerSaveRetry all: 8 actual outcomes and 16 effective faults passed.

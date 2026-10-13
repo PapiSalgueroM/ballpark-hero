@@ -1,0 +1,10 @@
+saveRetry-all: SOCCER_CAREER_SAVE_RETRY_CONTROL=all node scripts/simSoccerCareerSaveRetry.mjs
+saveRecovery-all: SOCCER_CAREER_SAVE_CONTROL=all node scripts/simSoccerCareerSaveRecovery.mjs
+saveFence-base: git worktree add -q /tmp/base1 c5fc5470 && ln -s "$PWD/node_modules" /tmp/base1/node_modules && FENCE_BASE=/tmp/base1 node scripts/simSaveFence.mjs
+fence-rawsoccer: SAVE_FENCE_CONTROL=rawsoccer node scripts/simSaveFence.mjs
+fence-rawwrite: SAVE_FENCE_CONTROL=rawwrite node scripts/simSaveFence.mjs
+fence-nofence: SAVE_FENCE_CONTROL=nofence node scripts/simSaveFence.mjs
+mutfence: node .rc/x/mutfence.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simSaveKeeper: node scripts/simSaveKeeper.mjs
