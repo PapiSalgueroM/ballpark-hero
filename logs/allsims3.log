@@ -1,0 +1,25 @@
+
+----- simRunnerTransport.mjs (FAIL) -----
+AssertionError [ERR_ASSERTION]: Actual browser probe must finish with outcomes:
+Error [ERR_MODULE_NOT_FOUND]: Cannot find package 'playwright' imported from /home/runner/work/ballpark-hero/ballpark-hero/scripts/lib/offlineTransportProbe.mjs
+
+----- simSoccerCareerAmbitions.mjs (EMPTY) -----
+ok   personal-best targets, ten-game rating eligibility, binding, consumption, transfer/loan cancellation and one earned point
+ok   16 exact old saves/RNG and 16 paired opt-in seasons, achieved 14, missed 2, interrupted 0
+simSoccerCareerAmbitions: all 16 paired careers, exact target results, future rewards once and seven actual interruption paths passed
+
+
+----- simSoccerStintNameFold.mjs (FAIL) -----
+   folds lifted from both functions, 4/4 probes agree
+[SIM_OFFLINE_BLOCK] database fetch https://flawuiqbvjobmkfkauhw.supabase.co
+[SIM_OFFLINE_BLOCK] database fetch https://flawuiqbvjobmkfkauhw.supabase.co
+[SIM_OFFLINE_BLOCK] database fetch https://flawuiqbvjobmkfkauhw.supabase.co
+[SIM_OFFLINE_BLOCK] database fetch https://flawuiqbvjobmkfkauhw.supabase.co
+could not read the table (Offline harness blocked fetch to https://flawuiqbvjobmkfkauhw.supabase.co); refusing to run
+
+
+----- simUnboundedSelects.mjs (FAIL) -----
+  const error = new Error(`Offline harness blocked ${via} to ${origin}`);
+Error: Offline harness blocked fetch to https://flawuiqbvjobmkfkauhw.supabase.co
+
+19 harnesses not green.
