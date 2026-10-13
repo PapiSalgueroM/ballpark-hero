@@ -1,0 +1,58 @@
+B: the four committed old saves resumed on this build
+   note everton-320: 20 rows opened, 20 read as real, 0 as made up
+   note everton-320 desk scroller 320 px: 4 whole of 17 rows
+   note everton-320 desk scroller 320 px: 3 whole of 13 rows
+   note everton-320 desk: no Show the other on the final year list
+   note everton-320 room: a hovered rung tile has transform matrix(1, 0, 0, 1, 0, 0) (reduced true)
+   note everton-320 room player: 1 label(s), "Jarrad Branthwaite CB · 23y · rated 86 · this game's wage 48k a week Happy enough 10 start"
+   note everton-320 career card: "💀 Worst defeat: 1-5 vs Newcastle"
+   note everton-1280: 20 rows opened, 20 read as real, 0 as made up
+   note everton-1280 desk scroller 320 px: 6 whole of 17 rows
+   note everton-1280 desk scroller 320 px: 6 whole of 13 rows
+   note everton-1280 desk: no Show the other on the final year list
+   note everton-1280 room: a hovered rung tile has transform matrix(1, 0, 0, 1, 0, -2) (reduced false)
+   note everton-1280 room player: 1 label(s), "Jarrad Branthwaite CB · 23y · rated 86 · this game's wage 48k a week Happy enough 10 start"
+   note everton-1280 career card: "💀 Worst defeat: 1-5 vs Newcastle"
+   note hertha-320: 16 rows opened, 6 read as real, 10 as made up
+   note hertha-320 desk scroller 320 px: 4 whole of 5 rows
+   note hertha-320 desk scroller 320 px: 3 whole of 13 rows
+   note hertha-320 desk: "Show the other 3 in their final year" with 3 rows shown, 6 after; scrollY 7061 to 7061; first new row 316 where the button was 316
+   note hertha-320 room: a hovered rung tile has transform matrix(1, 0, 0, 1, 0, 0) (reduced true)
+   note hertha-320 room player: 1 label(s), "Tjark Ernst GK · 22y · rated 72 · this game's wage 8k a week Happy enough 10 starts in his"
+   note hertha-320 career card: "💀 Worst defeat: 2-3 vs Nürnberg"
+   note hertha-1280: 16 rows opened, 6 read as real, 10 as made up
+   note hertha-1280 desk scroller 264 px: 5 whole of 5 rows
+   note hertha-1280 desk scroller 320 px: 6 whole of 13 rows
+   note hertha-1280 desk: "Show the other 3 in their final year" with 3 rows shown, 6 after; scrollY 3621 to 3621; first new row 646 where the button was 646
+   note hertha-1280 room: a hovered rung tile has transform matrix(1, 0, 0, 1, 0, -2) (reduced false)
+   note hertha-1280 room player: 1 label(s), "Tjark Ernst GK · 22y · rated 72 · this game's wage 8k a week Happy enough 10 starts in his"
+   note hertha-1280 career card: "💀 Worst defeat: 2-3 vs Nürnberg"
+   note sevilla-320: 20 rows opened, 18 read as real, 2 as made up
+   note sevilla-320 desk scroller 320 px: 4 whole of 18 rows
+   note sevilla-320 desk scroller 320 px: 4 whole of 13 rows
+   note sevilla-320 desk: no Show the other on the final year list
+   note sevilla-320 room: a hovered rung tile has transform matrix(1, 0, 0, 1, 0, 0) (reduced true)
+   note sevilla-320 room player: 1 label(s), "Youssouf Fofana CDM · 26y · rated 82 · this game's wage 30k a week Happy enough 10 starts "
+   note sevilla-320 career card: "💀 Worst defeat: 0-3 vs Atlético Madrid"
+   note sevilla-1280: 20 rows opened, 18 read as real, 2 as made up
+   note sevilla-1280 desk scroller 320 px: 6 whole of 18 rows
+   note sevilla-1280 desk scroller 320 px: 6 whole of 13 rows
+   note sevilla-1280 desk: no Show the other on the final year list
+   note sevilla-1280 room: a hovered rung tile has transform matrix(1, 0, 0, 1, 0, -2) (reduced false)
+   note sevilla-1280 room player: 1 label(s), "Youssouf Fofana CDM · 26y · rated 82 · this game's wage 30k a week Happy enough 10 starts "
+   note sevilla-1280 career card: "💀 Worst defeat: 0-3 vs Atlético Madrid"
+   note valencia-320: 22 rows opened, 22 read as real, 0 as made up
+   note valencia-320 desk scroller 320 px: 4 whole of 22 rows
+   note valencia-320 desk scroller 320 px: 3 whole of 13 rows
+   note valencia-320 desk: no Show the other on the final year list
+   note valencia-320 room: a hovered rung tile has transform matrix(1, 0, 0, 1, 0, 0) (reduced true)
+   note valencia-320 room player: 1 label(s), "Javi Guerra CM · 22y · rated 82 · this game's wage 31k a week Happy enough 10 starts in hi"
+   note valencia-320 career card: "💀 Worst defeat: 0-3 vs Real Madrid"
+   note valencia-1280: 22 rows opened, 22 read as real, 0 as made up
+   note valencia-1280 desk scroller 320 px: 6 whole of 22 rows
+   note valencia-1280 desk scroller 320 px: 6 whole of 13 rows
+   note valencia-1280 desk: no Show the other on the final year list
+   note valencia-1280 room: a hovered rung tile has transform matrix(1, 0, 0, 1, 0, -2) (reduced false)
+   note valencia-1280 room player: 1 label(s), "Javi Guerra CM · 22y · rated 82 · this game's wage 31k a week Happy enough 10 starts in hi"
+   note valencia-1280 career card: "💀 Worst defeat: 0-3 vs Real Madrid"
+WALK1325: green, no findings

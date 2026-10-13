@@ -1,0 +1,5 @@
+build exit=0 25s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+walkA exit=0 253s | WALK1325: green, no findings
+walkB exit=0 105s | WALK1325: green, no findings
+basebuild exit=0 26s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+walkC exit=0 167s | WALK1325: green, no findings

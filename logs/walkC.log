@@ -1,0 +1,10 @@
+C: saves made by the base build (http://localhost:4174) loaded on both builds, read only presses, byte equal
+   note C: the base build played Liverpool 4 Quick Sims, save 86117 chars
+   note C: the base build played Dundee 2 Quick Sims, save 73037 chars
+   C base-made Liverpool: steps base ok,ok,ok,ok,ok,ok,ok,ok head ok,ok,ok,ok,ok,ok,ok,ok; draws 7 and 7; save 86117 and 86117 chars, byte equal; loaded save unchanged
+   C base-made Dundee: steps base ok,ok,ok,ok,ok,ok,ok,ok head ok,ok,ok,ok,ok,ok,ok,ok; draws 7 and 7; save 73037 and 73037 chars, byte equal; loaded save unchanged
+   C everton: steps base ok,ok,ok,ok,ok,ok,ok,ok head ok,ok,ok,ok,ok,ok,ok,ok; draws 7 and 7; save 105859 and 105859 chars, byte equal; loaded save unchanged
+   C hertha: steps base ok,ok,ok,ok,ok,ok,ok,ok head ok,ok,ok,ok,ok,ok,ok,ok; draws 7 and 7; save 97174 and 97174 chars, byte equal; loaded save unchanged
+   C sevilla: steps base ok,ok,ok,ok,ok,ok,ok,ok head ok,ok,ok,ok,ok,ok,ok,ok; draws 7 and 7; save 135088 and 135088 chars, byte equal; loaded save unchanged
+   C valencia: steps base ok,ok,ok,ok,ok,ok,ok,ok head ok,ok,ok,ok,ok,ok,ok,ok; draws 7 and 7; save 129093 and 129093 chars, byte equal; loaded save unchanged
+WALK1325: green, no findings
