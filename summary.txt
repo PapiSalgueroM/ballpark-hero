@@ -1,0 +1,7 @@
+vitest-own exit=0 7s |    Duration  5.74s (transform 2.88s, setup 251ms, collect 5.83s, tests 1.84s, environment 1.22s, prepare 538ms)
+screen-pre-EXPECT-RED exit=1 8s | ::error file=/tmp/w-pre/src/test/clubDetailOwnClub.test.tsx,title=src/test/clubDetailOwnClub.test.tsx > the club screen reads my own club from my squad > in a seeded care
+simNoRivalNames exit=0 18s | No rival product names found. 0 findings.
+simHarnessAnchors exit=0 56s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simStorageWrites exit=0 3s | simStorageWrites: all green (owed: 12)
+tsc exit=0 94s | 
+diag exit=0 447s | DIAGNOSTIC complete: original/current unchanged historical budgets, full raw states, storage and unfiltered action vectors retained
