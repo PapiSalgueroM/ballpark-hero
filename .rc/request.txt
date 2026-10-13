@@ -1,0 +1,5 @@
+#!build
+#!playwright
+anchors: node scripts/simHarnessAnchors.mjs
+smalltap: CM_FIT_PART=1 CM_FIT_CONTROL=smalltap node scripts/playCmTablesFit.mjs
+fences: s=0; for h in simLiveScores simNoRivalNames simInventedNames simHarnessAnchors simNoInventedQuotes simNoInventedConduct simLegalPages simSingleFooter simCompletionSlugs simCompletionOnce simNoDoubleRecord simDailyPuzzleContract simDailySaveHardening simWritesAreSent simSchemaNames simFetchRetry simGoogleOnlyReturn simReportRelay simNavbarStatsReads simLeaderboardCaps simScoringCoverage simSiteSearch simResultMoment simGuideHeadings; do node scripts/$h.mjs > /tmp/f-$h.log 2>&1; e=$?; echo "FENCE $h exit=$e | $(tail -1 /tmp/f-$h.log | cut -c1-160)"; [ $e -ne 0 ] && s=1; done; exit $s
