@@ -184,10 +184,9 @@ async function bundle(tag, { ref = null, control = null } = {}) {
     b.onLoad({ filter: /\.(ts|tsx)$/ }, args => {
       const rel = path.relative(ROOT, args.path).split(path.sep).join('/');
       if (!rel.startsWith('src/')) return undefined;
-      let source = ref
+      let source = (ref
         ? execFileSync('git', ['show', `${ref}:${rel}`], { cwd: ROOT, encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 })
-        : fs.readFileSync(args.path, 'utf8');
-      source = source.replace(/\r\n/g, '\n');
+        : fs.readFileSync(args.path, 'utf8')).replace(/\r\n/g, '\n');
       if (control && rel === ENGINE) { source = control; hits += 1; }
       if (rel === ENGINE) source = mark(source);
       return { contents: source, loader: rel.endsWith('.tsx') ? 'tsx' : 'ts', resolveDir: path.dirname(args.path) };
