@@ -1,0 +1,5 @@
+#!build
+#!playwright
+#!serial
+writes-head: node scripts/simWritesAreSent.mjs 2>&1 | grep -E "FAIL|fail|green|failures" | head -12; node scripts/simWritesAreSent.mjs > /dev/null 2>&1
+writes-base: git worktree add -q /tmp/base 48cb9d4b && ln -s "$PWD/node_modules" /tmp/base/node_modules && cd /tmp/base && node_modules/.bin/vite build > /tmp/vb.log 2>&1 && node scripts/simWritesAreSent.mjs 2>&1 | grep -E "FAIL|fail|green|failures" | head -12
