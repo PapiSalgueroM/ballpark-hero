@@ -1,0 +1,10 @@
+#!serve
+#!playwright
+w-main: bash .rc/x/wt.sh 36cc9ffe7e13ed1c1e5f994b6a3998c8e3206e2c 4181
+w-m2: bash .rc/x/wt.sh 79b08e00de42ae5c76715189df938909b17ccf8d 4182
+w-m3: bash .rc/x/wt.sh 7073ed740450ab312b6e0dd2c58dd9410705b43b 4183
+w-m4: bash .rc/x/wt.sh f14ec63ad576e2794f7e8226d2411c4856772abe 4184
+w-m6: bash .rc/x/wt.sh fd36709ea1dfe4ab0c0dcb32e69777c82f2adc79 4186
+w-m7: bash .rc/x/wt.sh b1d3ca3780b03c58571f489674ba042ac2a3b303 4187
+w-m8: bash .rc/x/wt.sh 209bda69a1680f03eea421d33335c11474b96605 4188
+w-m9: bash .rc/x/wt.sh 396478b14f14c2aa7fad3e10edad39866c5dd8a1 4189
