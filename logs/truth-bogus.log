@@ -1,0 +1,1 @@
+FAIL: CM_TABLES_TRUTH_CONTROL=bogus is not a control this harness knows (nomark, markall, defeatraw, drawinrender)

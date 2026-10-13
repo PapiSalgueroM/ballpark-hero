@@ -1,0 +1,12 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simCmTablesTruth: node scripts/simCmTablesTruth.mjs
+truth-nomark: CM_TABLES_TRUTH_CONTROL=nomark node scripts/simCmTablesTruth.mjs
+truth-markall: CM_TABLES_TRUTH_CONTROL=markall node scripts/simCmTablesTruth.mjs
+truth-defeatraw: CM_TABLES_TRUTH_CONTROL=defeatraw node scripts/simCmTablesTruth.mjs
+truth-drawinrender: CM_TABLES_TRUTH_CONTROL=drawinrender node scripts/simCmTablesTruth.mjs
+truth-bogus: CM_TABLES_TRUTH_CONTROL=bogus node scripts/simCmTablesTruth.mjs
+simSquadRows: node scripts/simSquadRows.mjs
+simContractPreview-all: CONTRACT_PREVIEW_CONTROL=all node scripts/simContractPreview.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simFreeAgents: node scripts/simFreeAgents.mjs
+simClubManagerDeskCues: node scripts/simClubManagerDeskCues.mjs

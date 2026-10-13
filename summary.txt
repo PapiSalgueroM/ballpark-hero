@@ -1,0 +1,12 @@
+truth-nomark exit=1 17s | CONTROL nomark FIRED: 30 cases red (section 1: 10, section 2: 10, section 3: 10), none elsewhere
+simCmTablesTruth exit=0 20s | simCmTablesTruth: every case green
+truth-markall exit=1 18s | CONTROL markall FIRED: 21 cases red (section 1: 7, section 2: 7, section 3: 7), none elsewhere
+truth-defeatraw exit=1 19s | CONTROL defeatraw FIRED: 7 cases red (section 4: 7), none elsewhere
+truth-bogus exit=2 0s | FAIL: CM_TABLES_TRUTH_CONTROL=bogus is not a control this harness knows (nomark, markall, defeatraw, drawinrender)
+simSquadRows exit=0 2s | simSquadRows: all green
+truth-drawinrender exit=1 18s | CONTROL drawinrender FIRED: 10 cases red (section 5: 10), none elsewhere
+simContractPreview-all exit=0 21s | Contract preview cleanup: owned copies/reports removed; production component, engine and test bytes stayed identical.
+simNoRivalNames exit=0 15s | No rival product names found. 0 findings.
+tsc exit=0 76s | 
+simClubManagerDeskCues exit=0 5s | simClubManagerDeskCues: green
+simFreeAgents exit=0 15s | simFreeAgents: all sections passed
