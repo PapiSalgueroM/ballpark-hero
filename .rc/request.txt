@@ -1,0 +1,4 @@
+#!serial
+diff: node .rc/x/rv1324diff.mjs
+diff-ctl: node .rc/x/rv1324mut.mjs M9 || exit 2; node .rc/x/rv1324diff.mjs; s=$?; git checkout -- src scripts; git status --short src | head -3; exit $s
+diff-big: RV_DESKS=400 RV_WEEKS=400 node .rc/x/rv1324diff.mjs
