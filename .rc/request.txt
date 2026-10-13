@@ -1,0 +1,6 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-all: node_modules/.bin/vitest run --testTimeout=300000 --hookTimeout=120000
+og-head: node_modules/.bin/vitest run src/test/seasonCentreOwnGoals.test.tsx --testTimeout=300000
+vitest3: node_modules/.bin/vitest run src/test/soccerEventDeckIntegrity.test.ts src/test/eventChoiceAfterReload.test.ts src/test/seasonCentreOwnGoals.test.tsx --testTimeout=300000 --hookTimeout=120000
+fair0: node scripts/simSoccerDeckFairness.mjs
+prom: node scripts/simSoccerEventPromises.mjs
