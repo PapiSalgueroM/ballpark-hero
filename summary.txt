@@ -1,0 +1,12 @@
+promises exit=0 13s | simSoccerEventPromises: all sections green
+fairness exit=0 38s | simSoccerDeckFairness: all sections green
+fair1 exit=0 40s | simSoccerDeckFairness: all sections green
+tsc exit=0 55s | 
+fair2 exit=0 38s | simSoccerDeckFairness: all sections green
+fair3 exit=0 33s | simSoccerDeckFairness: all sections green
+fair4 exit=0 39s | simSoccerDeckFairness: all sections green
+cool0 exit=0 35s | simCareerLifeCooldowns: green. No event repeats inside its cooldown, every new event fires, the rate held, and the catalog has two real choices everywhere.
+cool-nocooldown exit=0 30s | CONTROL FIRED: section 2 failed with the defect back in, as it should, and nothing else did.
+cool-sharedbatch exit=0 34s | CONTROL FIRED: section 2 failed with the defect back in, as it should, and nothing else did.
+cool-flood exit=0 32s | CONTROL FIRED: section 4 failed with the defect back in, as it should, and nothing else did.
+usSummer exit=0 105s | simUsCareerSummer: green. Sections 1, 2, 3, 3b, 4, 5, 7, 8, 9, 10, 11, 12 held over 400 careers a sport.

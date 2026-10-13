@@ -1,0 +1,12 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+promises: node scripts/simSoccerEventPromises.mjs
+fairness: node scripts/simSoccerDeckFairness.mjs
+fair1: SEED_OFFSET=1 node scripts/simSoccerDeckFairness.mjs
+fair2: SEED_OFFSET=2 node scripts/simSoccerDeckFairness.mjs
+fair3: SEED_OFFSET=3 node scripts/simSoccerDeckFairness.mjs
+fair4: SEED_OFFSET=4 node scripts/simSoccerDeckFairness.mjs
+cool0: node scripts/simCareerLifeCooldowns.mjs
+cool-nocooldown: SIM_CAREER_LIFE_COOLDOWNS_CONTROL=nocooldown node scripts/simCareerLifeCooldowns.mjs
+cool-sharedbatch: SIM_CAREER_LIFE_COOLDOWNS_CONTROL=sharedbatch node scripts/simCareerLifeCooldowns.mjs
+cool-flood: SIM_CAREER_LIFE_COOLDOWNS_CONTROL=flood node scripts/simCareerLifeCooldowns.mjs
+usSummer: SIM_SECTIONS=1,2,3,3b,4,5,7,8,9,10,11,12 node scripts/simUsCareerSummer.mjs
