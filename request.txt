@@ -1,0 +1,5 @@
+#!serve
+#!playwright
+weight: SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs
+flagship: node scripts/simFlagshipWeight.mjs
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
