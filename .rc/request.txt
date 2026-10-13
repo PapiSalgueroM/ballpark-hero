@@ -1,0 +1,8 @@
+subs-base: git worktree add -f /tmp/sb1 dec9075b >/dev/null 2>&1; SUBS_BASE=/tmp/sb1 node scripts/simCmSubs.mjs --part=legacy,three,hotseat,press
+simDailyDeals: node scripts/simDailyDeals.mjs
+deals-rulesall: DAILY_DEALS_CONTROL=rulesall node scripts/simDailyDeals.mjs
+deals-rulesstale: DAILY_DEALS_CONTROL=rulesstale node scripts/simDailyDeals.mjs
+simEra2020: node scripts/simEra2020.mjs
+era-subsrow: SIM_ERA2020_CONTROL=subsrow node scripts/simEra2020.mjs
+simGuideHeadings: node scripts/simGuideHeadings.mjs
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
