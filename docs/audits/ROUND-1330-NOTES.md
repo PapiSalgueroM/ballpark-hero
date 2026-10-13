@@ -48,3 +48,19 @@ Chunks against the base (r1330-s6c): SoccerCareer 395.09K to 395.68K (+0.59K: th
 the lazy notice, the help rule, the bar classes); the base's shared clubManagerUclGroups chunk (1.21K) is now named
 saveFence and weighs 1.61K (+0.40K, the fence module joins it); useArrivalTop is new to this page (+0.40K). The
 help rule was shortened and the watch hook given one listener (8929241c): 0.03K. No budget row was edited.
+
+## Final proof (runner results, head 65caaecf to 73ca8cd9)
+- Type gate 0; vitest 9 files 187 tests and 20 files 230 tests (r1330-f-vitest). Watch hook controls fired
+  (r1330-f-ctl); the fence test's raw write control fired (r1330-f-node mutfence).
+- simSoccerCareerSaveRetry all, simSoccerCareerSaveRecovery all, simSaveFence with FENCE_BASE c5fc5470 (1933 faces
+  equal), rawsoccer, rawwrite and nofence fired, simStorageWrites, simHarnessAnchors, simSaveKeeper, simNoRivalNames
+  green (r1330-f-node).
+- playSoccerLanding green with every marked section red on the base; seed control fired (r1330-f-land).
+- playTwoTabs all 14 cases green; nofence, nolanding, nokeep fired; playSaveKeeper by the gate's recipe green and
+  naming both fence keys; extrakey and extrafence fired (r1330-f-w3).
+- qa 1078, hub grid 1089, offer review 1082, season centre, event cards, agent review, farewell, international return,
+  career programme, press and market, reduced motion, home fold, CM hub landing, storage blocked green (r1330-f-w1,
+  f-w1b, f-w1c, f-w2, f-w2b). The 40 sims that read the page: 39 green, simTransferBriefPageControl EMPTY as on base.
+- Red on head and base alike: simCreation (save size), playSoccerCareer check 6, playSoccerResultsLayout (engine pin),
+  playCorruptSaves (/hall-of-champions), simRevealScroll (offline block), and four rule fences that need the database.
+- Weight: 829.6K against 829 (over, for the lead). Full report: dukb-handoff/2026-10-10/results-g/finish-1330.md.
