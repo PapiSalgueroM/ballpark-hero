@@ -1,0 +1,12 @@
+build exit=0 29s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+storyRoleWalk exit=1 0s | Node.js v24.21.0
+trophyWalk exit=1 1s | Node.js v24.21.0
+depth exit=0 18s | playSoccerCareerDepth: 80 checks, 0 failed
+walkCards exit=0 32s | playSoccerEventCards: green over 6 runs (known small lines: text-[10px], text-[11px])
+contracts exit=0 33s | playSoccerCareerContracts: 201 checks, 0 failed
+reducedMotion exit=0 53s | playReducedMotion: green. Motion stops for a visitor who asked for less, content stays visible, every Round 530 route lands its reveals on the final frame, and everyone e
+seasonCentre exit=0 120s | playSeasonCentre: 41 checks, 0 failed
+intlReturnWalk exit=1 1s | Node.js v24.21.0
+intlReturn exit=1 2s | Node.js v24.21.0
+corrupt exit=0 144s | playCorruptSaves: green. No broken save traps a long game.
+soccerCareer exit=1 480s |   - 6. no console or page errors across the walk: Failed to load resource: net::ERR_CONNECTION_REFUSED | Failed to load resource: net::ERR_CONNECTION_REFUSED | Failed to 
