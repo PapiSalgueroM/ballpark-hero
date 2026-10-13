@@ -245,7 +245,15 @@ const ok = m => console.log('  ok: ' + m);
      flathands     s10 and s12: 10 (the expert's gap collapses, the means tie).
      curveflip     s10 and s12: 2 (the grid, and the order breaks).
      keyscurve     s10 and s12: 2 (the grid, and the keyboard median gains +3 to +6.5).
-     gradeshift    s9 and s10: 16 (one cut, two paths); extradraw s9 only: 8. */
+     gradeshift    s9 and s10: 16 (one cut, two paths); extradraw s9 only: 8.
+   Round 1319 review fixes, measured on seed set a, 2026-10-12 (r1319-x2), each exit 1:
+     combinephase  s11: 8 pairs (an attempt on a season or card block kept).
+     attemptbare   s11: 8 pairs (without the descriptor a good attempt dropped).
+     combineloose  s11: 8 pairs (a resolve took 50.5 and -1).
+     scoutskeys    s11: 8 pairs (a scouts path state carries `played`).
+     combinedraw   s10: 1 (the code read finds the clock in preDraftStationScore).
+     mathrandom    now 18: s5 2, s9 8 and s11 8 (one per pair since each pair
+                   runs in its own try; it was 11, with one s11 line). */
 const CONTROLS = {
   randomteam: ['src/lib/careerPreDraft.ts', 'const team = pick ? order[pick - 1] : teams[Math.floor(rng() * teams.length)];', 'const team = teams[Math.floor(rng() * teams.length)];'],
   flatstock: ['src/lib/careerPreDraft.ts', 'const z = (100 - clampMeter(stock)) / 100;', 'const z = 0.5 + 0 * stock;'],

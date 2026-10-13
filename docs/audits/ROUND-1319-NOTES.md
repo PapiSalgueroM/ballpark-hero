@@ -21,6 +21,30 @@ the settle in the loader are new code that runs on every load but is INERT, beca
 | 2 | the stations data: PreDraftStation, `stations` on the four descriptors, preDraftStations, vitest | 42ebbd0e | `r1319-s2` | tsc 0; a to e ALL GREEN; vitest 66 passed; the loop passes; weight +0.1K on each route |
 | 3a | the engine (curves, open, resolve, settle, cuts, the guard, the loader) and harness sections 10 and 11, seven controls, the engine vitest | dd31f2f9 | `r1319-s3a` | tsc 0; a to e ALL GREEN; every control exit 1 in its sections (table below); the loop passes in 216 s; vitest exit 1 on a test of mine that read the keys curve the wrong way round, fixed in 626996f8 |
 | 3b | harness section 12 and controls flathands, curveflip, keyscurve; the bands | 626996f8 | `r1319-s3b` | tsc 0; a to e ALL GREEN; vitest careerPreDraft green; the three controls exit 1 in sections 10 and 12. BOTH STOP CONDITIONS OF THE BRIEF FIRE: see "For the lead" |
+| R | the two reviews' fixes, harness, vitest and notes only (no engine or descriptor change): see "Review fixes" | 3e09e9d1 to the head | `r1319-x1`, `r1319-x2`, `r1319-x2b`, final in `results-g/fix-1319.md` | below |
+
+## Review fixes (2026-10-12, after review-run-1319 and review-read-1319)
+
+No file under src/lib changed, so section 9's 80 digests and the scouts' path cannot move.
+- 3e09e9d1, the read review's MAJOR (decision 3b) and the run review's mE: section 11(d) round trips
+  every road (2,000 a pair, not 200) at every phase (the start, every season and every card, the
+  showcase, the scouts' result, the draft, the played block and its draft) with and without the
+  descriptor, and drops an attempt put on any season or card state (never vacuous: it fails if either
+  phase is never reached). On seed set a that is 49,536 to 60,000 round trips and 36,672 to 57,600 drop
+  cases a pair (`r1319-x1`). The vitest adds the same drop case (37 tests). Mutation mE, replayed with
+  the run review's own script: CAUGHT, harness a and c exit 1 (section 11, 8 pairs), vitest exit 1.
+- f7be2fb5, the run review's minor 2: sections 10, 11 and 12 check each pair in its own try.
+- 78d9bcb9, the header's squeeze count: 32 in sections 2, 3, 9 and 13.
+- 32ddb05b, the control plugin refuses a needle that is not exactly once.
+- eaa7eff4, five new controls (table below) for the checks that had none: 10(0), 11(c), 11(d) at a
+  season or card, 11(e), and the "no scouts path state carries either key" line.
+- ec5256df, the critic's advice 10 copied in full under the Owed list.
+- NOT FIXED, recorded for the lead: the scouts' drill is drawn from the sport's whole list whatever the
+  position (a center fielder graded on a "Bullpen session"), careerPreDraft.ts line 500 on this head,
+  line 470 on the base. It is pre-existing and decision 1 forbids touching `desc.drills` or the draw here.
+- The section 12 floors for the expert and the novice are half their measured extremes: measured and
+  stated, but wide (only `flathands` reaches them). Recorded by the read review, not changed.
+
 
 ## For the lead: two rulings owed before Round B (step 3 stopped here, as the brief orders)
 
@@ -102,7 +126,11 @@ ruling is baked into a green line. If the lead re-anchors, whoever does it re-me
 - INERT IN THE PRODUCT. Nothing a player can press opens an attempt yet (no screen calls open), so the
   guard never fires and the loader never meets a `combine` on a real save. Both run on every load and
   showcase press, and change nothing for any state the site can make today (sections 9 and 11, and the
-  other lane's 36 outcomes, prove it).
+  other lane's 36 outcomes, prove it). Until the review fixes, section 11(d) proved the old block round
+  trip on 200 of each pair's 2,000 roads and at phases showcase, draft and done only, and these notes did
+  not say so; since the review fix (3e09e9d1) it runs on every road at every phase (the start, every
+  season and every card, the showcase, the scouts' result, the draft, and the played block and its
+  draft, with and without the descriptor), and drops an attempt put on any season or card block.
 
 ## The reload rule and critic correction 2 (in the loader's comment too)
 
@@ -129,11 +157,24 @@ its grade stream) moves the grade of an attempt left sitting at the showcase, an
 | gradeshift | the A line at 0.79 | 1, 16, sections 9 AND 10 (correction 1: one cut, two paths) |
 | extradraw | one extra draw before the grade | 1, 8, section 9 only |
 | nightoffbyone, nightlottery, nightopen, nightdedup, nightdraw, projection | Round 1220's six | each 1, section 13 only (8, 2, 8, 8, 1, 8) |
+| combinephase (review fix) | the loader keeps an attempt at any phase whose showcase is empty (the run review's mutation mE) | 1, 8, section 11 (`r1319-x2`, eaa7eff4) |
+| attemptbare (review fix) | the loader keeps an attempt only with the descriptor | 1, 8, section 11 |
+| combineloose (review fix) | the resolve takes any score under 101 | 1, 8, section 11 (it took 50.5 and -1) |
+| scoutskeys (review fix) | the scouts' button puts `played: undefined` on its result (JSON hides it from section 9) | 1, 8, section 11 |
+| combinedraw (review fix) | the station score reads the clock, behaviour unchanged | 1, 1, section 10 (the code read) |
+
+Review fixes (`r1319-x2`, eaa7eff4, seed set a): every one of the 37 controls exits 1 with "mutated" and
+the same counts and sections as above and as the run review's r1319-run-h, except `mathrandom`, now 18
+(sections 5: 2, 9: 8, 11: 8) because sections 10 to 12 check each pair in its own try. The control
+plugin now refuses a needle that is not exactly once (`r1319-x2b` label dupe: a second copy appended to
+the engine, then `keyscurve`: exit 2, "the needle is in src/lib/careerPreDraft.ts 2 times, not exactly
+once. Refusing to run.").
 
 The other lane's 14 (the loop of prospect-journey.yml, run as written in `r1319-s3a`): every one exits 1
 with "control X: mutated" and "FAILURE(S)". Three now count more failures than on the base, each for a
 real reason in a new section, never hidden: `mathrandom` 11 (was 10; section 11 runs preDraftRunDraft
-with Math.random made to throw), `cardwords` 24 (was 16; the mutated choice leaves the stock past the
+with Math.random made to throw; 18 since the review fix that runs each pair in its own try, one
+section 11 line a pair), `cardwords` 24 (was 16; the mutated choice leaves the stock past the
 meter, the loader clamps it, so a reload of an opened attempt is not that button's bytes: section 11),
 `ceiling` 24 (was 16; the mutated growth passes the ceiling, the loader refuses a block with the rating
 over the potential, so the reload is null: section 11). The loop took 216 s on the runner (84 s on the
