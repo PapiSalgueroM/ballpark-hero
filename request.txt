@@ -1,0 +1,28 @@
+# Release BB, lane P: every new plain harness line of the nine pieces
+#!playwright
+simCmLeagueBookFacts: node scripts/simCmLeagueBookFacts.mjs
+simAwardRaces: node scripts/simAwardRaces.mjs
+simSafari: node scripts/simSafari.mjs
+simActivityNotCompletion: node scripts/simActivityNotCompletion.mjs
+simGmXp: node scripts/simGmXp.mjs
+simSoccerLoanMinutes: SOCCER_LOAN_MINUTES_OUT="$RUNNER_TEMP/ba-loan" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerLoanMinutes.mjs
+simPlayerBingoHonours: node scripts/simPlayerBingoHonours.mjs
+simReportContext: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simReportContext.mjs
+simErrorBoundary: node scripts/simErrorBoundary.mjs
+simSoccerCareerSaveRecovery: node scripts/simSoccerCareerSaveRecovery.mjs
+simSoccerLoanBite: node scripts/simSoccerLoanBite.mjs
+simCareerTransferBrief: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerTransferBrief.mjs
+simSoccerAgentReview: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerAgentReview.mjs
+simSoccerAgentReviewPageControl: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerAgentReviewPageControl.mjs
+simTransferBriefPageControl: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simTransferBriefPageControl.mjs
+simPlayerBingoLoad: node scripts/simPlayerBingoLoad.mjs
+simPlayerBingoLineFeedback: node scripts/simPlayerBingoLineFeedback.mjs
+simLineupRecordPositions: LINEUP_RECORD_POSITIONS_OUT="$RUNNER_TEMP/ba-lineup" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simLineupRecordPositions.mjs
+simSoccerOpponentLabels: SIM_NETWORK=offline SOCCER_OPPONENT_LABELS_OUT="$RUNNER_TEMP/ba-labels" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerOpponentLabels.mjs
+simSoccerAwardGenerations: SOCCER_AWARD_GENERATIONS_OUT=$RUNNER_TEMP/sag node scripts/simSoccerAwardGenerations.mjs
+simFrontOfficeSaveRecovery: node scripts/simFrontOfficeSaveRecovery.mjs
+simNhlCareer: node scripts/simNhlCareer.mjs
+simMlbCareer: node scripts/simMlbCareer.mjs
+simFightCareer: node scripts/simFightCareer.mjs
+vitest-pieces: node_modules/.bin/vitest run src/lib/gmPostseason.test.ts src/lib/frontOfficePostseason.test.ts src/lib/gmBracketView.test.ts src/components/front-office-shared/GmBracketCard.test.tsx src/test/gmBracketLedger.test.ts src/test/usRivalLine.test.ts src/test/usRivalOldSavesB.test.ts src/test/usSeasonSlate.test.ts --testTimeout=300000 --hookTimeout=120000
+vitest-digest: node_modules/.bin/vitest run src/test/usCareerTruthDigest.test.ts --testTimeout=1200000 --hookTimeout=120000
