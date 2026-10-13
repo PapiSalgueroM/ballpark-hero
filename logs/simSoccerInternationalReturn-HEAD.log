@@ -1,0 +1,5 @@
+pool mentions: 2
+AssertionError [ERR_ASSERTION]: Entire original inactive state and exact draw vector
+
+Node.js v24.21.0
+attr3 HEAD simSoccerInternationalReturn exit=1

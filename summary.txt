@@ -1,0 +1,12 @@
+simSoccerInternationalReturn-HEAD exit=1 2s | attr3 HEAD simSoccerInternationalReturn exit=1
+simSoccerInternationalReturn-12f7e041 exit=1 3s | attr3 12f7e041 simSoccerInternationalReturn exit=1
+simSoccerFarewell-12f7e041 exit=1 3s | attr3 12f7e041 simSoccerFarewell exit=1
+simSoccerFarewell-HEAD exit=1 2s | attr3 HEAD simSoccerFarewell exit=1
+simSoccerInternationalReturn-a5519151 exit=0 10s | attr3 a5519151 simSoccerInternationalReturn exit=0
+simCareerPressMarket-12f7e041 exit=1 4s | attr3 12f7e041 simCareerPressMarket exit=1
+simSoccerFarewell-a5519151 exit=0 12s | attr3 a5519151 simSoccerFarewell exit=0
+simCareerPressMarket-HEAD exit=1 3s | attr3 HEAD simCareerPressMarket exit=1
+simCareerPressMarket-a5519151 exit=0 9s | attr3 a5519151 simCareerPressMarket exit=0
+train1178-main exit=1 11s | attr3 8fea14e2 simCareerSocialBrands exit=1
+train1178-ba exit=1 9s | attr3 a5519151 simCareerSocialBrands exit=1
+train1178-1318 exit=1 8s | attr3 12f7e041 simCareerSocialBrands exit=1
