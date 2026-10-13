@@ -22,6 +22,7 @@ import { generatedLeagueCountClauses, generatedLeagueMonthClause } from '@/data/
 import { FACILITY_IDS, facilitiesOf } from '@/lib/clubManagerFacilities';
 import { projectFinances } from '@/lib/clubManagerFinances';
 import { inboxTile, kittyChange, leagueTileValue, recordLine } from '@/lib/clubManagerHubLines';
+import { BOARD_EDGE, boardMeter } from '@/lib/clubManagerMeters';
 import { STAFF_POST_IDS, STAFF_POST_INFO, staffOf } from '@/lib/clubManagerStaff';
 import { deskOf } from '@/lib/clubManagerDecisions';
 import type { NationDef, CupRound, CustomClubSpec, ManagerSpec } from '@/lib/clubManager';
@@ -1002,9 +1003,13 @@ const ClubManager = () => {
         {/* Round 465: the board and the fans, on every tab, words by default
             and the number on tap. */}
         {/* Round 1328: the strip is a lazy chunk, so its slot holds the drawn
-            height (8px of margin over a 44px meter) while it loads, and the
-            hub does not shift when it lands. */}
-        <div className="min-h-[52px]"><ScreenLoading compact><MetersStrip career={c} /></ScreenLoading></div>
+            height while it loads, and the hub does not shift when it lands:
+            8px of margin over a 44px meter. flow-root keeps that margin inside
+            the slot; without it the margin escaped when the strip landed and
+            pushed the hub down 8px. The board's last band ("One bad week from
+            the sack") wraps to two lines at 320, 390 and 1280, which makes the
+            strip 60px, so the slot holds 60 then. */}
+        <div className={cn('flow-root', boardMeter(c).value > 0 && boardMeter(c).value < BOARD_EDGE ? 'min-h-[60px]' : 'min-h-[52px]')}><ScreenLoading compact><MetersStrip career={c} /></ScreenLoading></div>
       </header>
 
       <Tabs value={g.activeTab} onValueChange={(v) => g.setActiveTab(v as HubTab)}>
