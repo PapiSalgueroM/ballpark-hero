@@ -1,0 +1,11 @@
+c-rankbyprestige: SIM_COLLEGE_SEAT_CONTROL=rankbyprestige SIM_COLLEGE_SEAT_SEEDS=1 node scripts/simCollegeSeat.mjs
+c-ccgcount: SIM_COLLEGE_SEAT_CONTROL=ccgcount SIM_COLLEGE_SEAT_SEEDS=1 node scripts/simCollegeSeat.mjs
+c-flattrust: SIM_COLLEGE_SEAT_CONTROL=flattrust SIM_COLLEGE_SEAT_SEEDS=1 node scripts/simCollegeSeat.mjs
+c-firedends: SIM_COLLEGE_SEAT_CONTROL=firedends SIM_COLLEGE_SEAT_SEEDS=1 node scripts/simCollegeSeat.mjs
+c-allowfirer: SIM_COLLEGE_SEAT_CONTROL=allowfirer node scripts/simCollegeSeat.mjs
+c-anyseason: SIM_COLLEGE_SEAT_CONTROL=anyseason SIM_COLLEGE_SEAT_SEEDS=1 node scripts/simCollegeSeat.mjs
+c-bidtier: SIM_COLLEGE_SEAT_CONTROL=bidtier SIM_COLLEGE_SEAT_SEEDS=1 node scripts/simCollegeSeat.mjs
+c-seatdraw: SIM_COLLEGE_SEAT_CONTROL=seatdraw SIM_COLLEGE_SEAT_SEEDS=1 node scripts/simCollegeSeat.mjs
+c-seatleak: SIM_COLLEGE_SEAT_CONTROL=seatleak SIM_COLLEGE_SEAT_SEEDS=1 node scripts/simCollegeSeat.mjs
+c-nextyear: SIM_COLLEGE_SEAT_CONTROL=nextyear SIM_COLLEGE_SEAT_SEEDS=1 node scripts/simCollegeSeat.mjs
+c-yearoutskip: SIM_COLLEGE_SEAT_CONTROL=yearoutskip SIM_COLLEGE_SEAT_SEEDS=1 node scripts/simCollegeSeat.mjs
