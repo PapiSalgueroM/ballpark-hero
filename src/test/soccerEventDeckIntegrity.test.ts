@@ -59,6 +59,12 @@ describe('cards that narrate the season need the row to hold it', () => {
     expect(cardFitsSeason(7, career([row({ goals: 0 })]))).toBe(false);
     expect(cardFitsSeason(7, career([row({ goals: 1 })]))).toBe(true);
   });
+  it('7 needs a season the Puskas Award existed for (first given in 2009, for 2008/09)', () => {
+    expect(cardFitsSeason(7, career([row({ year: 2005, goals: 6 })]))).toBe(false);
+    expect(cardFitsSeason(7, career([row({ year: 2007, goals: 6 })]))).toBe(false);
+    expect(cardFitsSeason(7, career([row({ year: 2008, goals: 6 })]))).toBe(true);
+    expect(cardFitsSeason(1, career([row({ year: 2005, goals: 6 })]))).toBe(true);
+  });
   it('4 needs a Player of the Month award in the row\'s year', () => {
     expect(cardFitsSeason(4, career([row()], { awards: [] }))).toBe(false);
     expect(cardFitsSeason(4, career([row()], { awards: [{ year: 2025, name: 'Player of the Month', emoji: '🏆' }] }))).toBe(false);

@@ -6725,7 +6725,10 @@ export function cardFitsSeason(id: number, state: CareerState): boolean {
   const row = state.seasons[state.seasons.length - 1];
   if (!row || row.type !== "playing") return false;
   switch (id) {
-    case 1: case 7: return row.goals > 0;
+    case 1: return row.goals > 0;
+    /* the Puskas Award was first given in 2009, for a goal of the 2008/09 season, so an era career's earlier seasons
+       never hold a nominated goal (topendsports.com puskas-award page; puskas.com, Cristiano Ronaldo, the first winner) */
+    case 7: return row.goals > 0 && row.year >= 2008;
     case 4: return (state.awards ?? []).some(a => a.name === "Player of the Month" && a.year === row.year);
     case 9: return row.redCards > 0;
     case 11: return typeof row.injury === "string" && row.injury.length > 0;

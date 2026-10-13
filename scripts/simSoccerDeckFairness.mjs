@@ -43,7 +43,9 @@
  *   4  GATES. Over the fleet (simCareerLifeCooldowns' drive, 500 careers),
  *      every batch holding a card that narrates the season sits in a season
  *      whose last row holds that fact, read here by this file's own rules;
- *      each of those cards but 17 fires; 17 never fires.
+ *      each of those cards but 17 fires; 17 never fires. Fixed rows the
+ *      fleet cannot be relied on to reach are asked of the engine and of
+ *      these rules directly: a season before the Puskas Award.
  *   5  SENSATION. The headline prints in the fleet, and only at a million
  *      followers or more (the figure it prints ends in M).
  *   6  WORDING. Every story the paper can print, rendered for every position:
@@ -74,6 +76,7 @@
  *   ranking    the paper keeps only its top weight again: section 2.
  *   globalpick the deck and the paper draw from Math.random: section 3.
  *   nogate     the row gate line out of the deck's filter: section 4.
+ *   puskas     card 7 forgets the award's first season: section 4 (fixed rows).
  *   unit       the sensation check back to 1000000: section 5.
  *   poscode    the paper prints the raw position code: section 6.
  *   uncapped   the booed story calls an uncapped player an international: section 6.
@@ -132,6 +135,8 @@ const CONTROLS = {
       ['  const rng = keyedRng(`${soccerDeckIdentity(s)}|${season.year}|news`);', '  const rng = Math.random;']] },
   nogate: { breaks: '4', note: 'the deck no longer asks whether a card fits the season just played',
     edits: [['    if (!cardFitsSeason(e.id, state)) return false;\n', '']] },
+  puskas: { breaks: '4', note: 'card 7 deals a Puskas nominated goal in any season with goals, before the award existed too',
+    edits: [['    case 7: return row.goals > 0 && row.year >= 2008;', '    case 7: return row.goals > 0;']] },
   unit: { breaks: '5', note: 'the sensation story needs 1000000 on a field held in millions again',
     edits: [['check: () => s.socialMediaFollowers >= 1,', 'check: () => s.socialMediaFollowers >= 1000000,']] },
   poscode: { breaks: '6', note: 'the paper prints the raw position code',
@@ -252,7 +257,8 @@ function factsOf(M, s) {
   return {
     1: g(row?.goals > 0),
     4: g((s.awards || []).some(a => a.name === 'Player of the Month' && a.year === row?.year)),
-    7: g(row?.goals > 0),
+    /* the Puskas Award was first given in 2009, for a goal of the 2008/09 season */
+    7: g(row?.goals > 0 && row.year >= 2008),
     9: g(row?.redCards > 0),
     11: g(typeof row?.injury === 'string' && row.injury.length > 0),
     12: g(row?.club === s.currentClub && Number.isFinite(row?.leagueFinish) && Number.isFinite(row?.leagueSize) && row.leagueFinish * 3 > row.leagueSize * 2),
@@ -584,6 +590,24 @@ console.log('4) Gates: a card that narrates the season fires only when the row h
     if (id === 17 && fired.get(id) > 0) fail(`card 17 fired ${fired.get(id)} times: the engine's own call up tells that story`);
     if (id !== 17 && fired.get(id) === 0) fail(`card ${id} never fired in ${fleet.length} careers: its words are dead`);
   }
+  /* Fixed rows the fleet cannot be relied on to reach (review 2026-10-13): its careers start in 2020, so no season
+     before the Puskas Award exists, and a row at a club he has since left turns up only now and then (dropping that
+     rule went unseen at four seed offsets of five). Each row is asked of the engine and of this file's own rules. */
+  const FIXTURES = [
+    ['7, goals in 2005/06, before the Puskas Award existed', 7, { year: 2005, goals: 4 }, false],
+    ['7, goals in 2008/09, the first season it covered', 7, { year: 2008, goals: 4 }, true],
+  ];
+  let asked = 0;
+  for (const [what, id, over, want] of FIXTURES) {
+    const s = copy(midOf);
+    const last = s.seasons.length - 1;
+    s.seasons[last] = { ...s.seasons[last], type: 'playing', club: s.currentClub, ...over };
+    const engineSays = E.cardFitsSeason(id, s), rulesSay = factsOf(E, s)[id];
+    asked += 1;
+    if (engineSays !== want) fail(`card ${id} (${what}): the engine says ${engineSays ? 'deal it' : 'do not'}, the row says ${want ? 'deal it' : 'do not'}`);
+    if (rulesSay !== want) fail(`card ${id} (${what}): this file's own rules say ${rulesSay}, not ${want}`);
+  }
+  console.log(`   ${asked} fixed rows asked of the engine and of this file's rules`);
 }
 
 /* ─── 5. the sensation story ───────────────────────────────────────────── */
