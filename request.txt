@@ -1,0 +1,12 @@
+#!serial
+#!playwright
+probeB16: git worktree add -q /tmp/pb 8fea14e2 && ln -s "$PWD/node_modules" /tmp/pb/node_modules && PROBE_BASE=/tmp/pb PROBE_FLOOR=16 node .rc/x/probeSquad.mjs
+merge: R=$PWD; git fetch -q origin main && git worktree add -q /tmp/m HEAD && cd /tmp/m && ln -s "$R/node_modules" node_modules && (git -c user.email=r@x -c user.name=r merge --no-edit origin/main; rc=$?; echo "plain merge exit $rc"; echo CONFLICTS:; git diff --name-only --diff-filter=U; [ $rc -ne 0 ] && git merge --abort; true) && git -c user.email=r@x -c user.name=r merge --no-edit -X ours origin/main > /dev/null && echo "MERGED with -X ours at $(git rev-parse --short HEAD) over origin/main $(git rev-parse --short origin/main)"
+m-tsc: cd /tmp/m && node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+m-vitest: cd /tmp/m && node_modules/.bin/vitest run src/test/saveFence.test.ts src/test/saveMovedNotice.test.tsx src/lib/clubManagerSlots.test.ts src/test/clubManagerSlots.test.tsx src/test/managerHotSeatCarryOn src/test/clubManagerSave --testTimeout=300000 --hookTimeout=120000
+m-fleet: R=$PWD; git worktree add -q /tmp/mb origin/main && ln -s "$R/node_modules" /tmp/mb/node_modules && cd /tmp/m && FENCE_BASE=/tmp/mb node scripts/simSaveFence.mjs
+m-book: cd /tmp/m && BOOK_BASE=/tmp/mb SEEDSET=0 node scripts/simCmLeagueBook.mjs
+m-slots: cd /tmp/m && node scripts/simClubManagerSlots.mjs
+m-appeal: cd /tmp/m && NODE_OPTIONS="--require=/tmp/m/scripts/lib/offlineTransport.cjs" node scripts/simManagerAppealIsolation.mjs
+m-storage: cd /tmp/m && node scripts/simStorageWrites.mjs
+m-weight-walk: cd /tmp/m && npm run build > /tmp/mbuild.log 2>&1 && { node scripts/lib/hostLikeServer.mjs dist 4175 > /dev/null 2>&1 & } && sleep 4 && BASE=http://localhost:4175 SWEEP_BASE=http://localhost:4175 ENGINES=chromium node scripts/sweepWeight.mjs; s1=$?; BASE=http://localhost:4175 ENGINES=chromium SIZES=390x844 node scripts/playTwoTabs.mjs; s2=$?; echo "sweepWeight exit $s1, playTwoTabs exit $s2"; exit $((s1 + s2))

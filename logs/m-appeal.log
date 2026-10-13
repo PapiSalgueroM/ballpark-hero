@@ -1,0 +1,22 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Historical engine and original assertion hold: src/lib/clubManager.ts
++ actual - expected
+
++ 'eb7b7cc6a37c0a03d9df38843cda9af1ecd0f5f3b8c1ad3f655c993b2c91ed74'
+- '85e0e596fff2220a03c8d7f4a253dd8a2f45b58f7d4485f138e6dcc67bf76fb8'
+
+    at characterize (file:///tmp/m/scripts/simManagerAppealIsolation.mjs:142:83)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async file:///tmp/m/scripts/simManagerAppealIsolation.mjs:275:33 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 'eb7b7cc6a37c0a03d9df38843cda9af1ecd0f5f3b8c1ad3f655c993b2c91ed74',
+  expected: '85e0e596fff2220a03c8d7f4a253dd8a2f45b58f7d4485f138e6dcc67bf76fb8',
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0

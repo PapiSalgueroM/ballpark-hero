@@ -1,0 +1,12 @@
+Auto-merging scripts/fixtures/managerAppealIsolation1081/manifest.json
+CONFLICT (content): Merge conflict in scripts/fixtures/managerAppealIsolation1081/manifest.json
+Auto-merging src/components/club-manager/ClubManagerHelp.tsx
+Auto-merging src/lib/clubManager.ts
+Auto-merging src/pages/WhatsNew.tsx
+CONFLICT (content): Merge conflict in src/pages/WhatsNew.tsx
+Automatic merge failed; fix conflicts and then commit the result.
+plain merge exit 1
+CONFLICTS:
+scripts/fixtures/managerAppealIsolation1081/manifest.json
+src/pages/WhatsNew.tsx
+MERGED with -X ours at 944e27635 over origin/main 36cc9ffe7

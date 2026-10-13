@@ -1,0 +1,17 @@
+tabs: two tabs on one career, and a Hot Seat handover beside one
+  B1 start: Brighton week 1, 1 meetings, last Aston Villa 2-3
+     after B played three: Brighton week 5, 4 meetings, last Coventry City 2-0
+     after A left: Brighton week 5, 4 meetings, last Coventry City 2-0 (A saw the move: true, its leave write landed: false)
+  REPLAY 0: B wrote "Brighton week 6, 5 meetings, last Arsenal 3-0", stale A played "Brighton week 6, 5 meetings, last Arsenal 0-2", on disk after A: "Brighton week 6, 5 meetings, last Arsenal 3-0" (A refused 2 times)
+  REPLAY 1: B wrote "Brighton week 7, 6 meetings, last Sunderland 3-2", stale A played "Brighton week 7, 6 meetings, last Sunderland 0-1", on disk after A: "Brighton week 7, 6 meetings, last Sunderland 3-2" (A refused 2 times)
+  REPLAY 2: B wrote "Brighton week 9, 7 meetings, last Crystal Palace 2-0", stale A played "Brighton week 9, 7 meetings, last Crystal Palace 0-1", on disk after A: "Brighton week 9, 7 meetings, last Crystal Palace 2-0" (A refused 2 times)
+  HOT SEAT: Arsenal handed over (saved): "Arsenal week 26, 26 meetings, last Hull City 2-0"; tab A saw it: true; after A left: "Arsenal week 26, 26 meetings, last Hull City 2-0"
+source: every call in src that writes the Club Manager save is fenced or allowed
+  96 files write storage; 6 writes of the save inside saveFence.write, 4 on the allowed list (3 entries, each still there)
+fleet: 3 careers x seeds 0,1,2,3,4 x 2 seasons, a save, a load and a save after every entry, against FENCE_BASE /tmp/mb
+  1458 saves on head, 0 of them in a state a load repair fires on; 1458 faces equal to the base commit's (both saves' bytes and the draw count)
+  old saves: 4 of 4 Club Manager saves the base engine wrote open to the same JSON on head and base
+  section tabs: 14 checks, 0 red
+  section source: 10 checks, 0 red
+  section fleet: 1463 checks, 0 red
+simSaveFence: all green (tabs, source, fleet)
