@@ -1,0 +1,9 @@
+simCareerLife: node scripts/simCareerLife.mjs
+simSoccerCareer: node scripts/simSoccerCareer.mjs
+simCareerEngaged: node scripts/simCareerEngaged.mjs
+simCareerDilemmaReach: node scripts/simCareerDilemmaReach.mjs
+simCareerDilemmaTruth: node scripts/simCareerDilemmaTruth.mjs
+simCareerRivalryEvents: node scripts/simCareerRivalryEvents.mjs
+simClubCaptaincy: node scripts/simClubCaptaincy.mjs
+simInjuryArc: node scripts/simInjuryArc.mjs
+simInternational: node scripts/simInternational.mjs
