@@ -101,8 +101,10 @@ console.log('\nMLB');
   // Bonds 73 HR (2001), Hack Wilson 191 RBI (1930), Hugh Duffy .440 (1894),
   // Rickey Henderson 130 SB (1982), Nolan Ryan 383 K (1973), Francisco
   // Rodriguez 62 saves (2008), Nolan Ryan again for wins is 27 (Denny
-  // McLain 31, 1968). Relief pitcher single season strikeout high is about
-  // 137 (Dick Radatz, 1964); anything near 150 has never happened.
+  // McLain 31, 1968). The relief pitcher single season strikeout record is
+  // 181 (Dick Radatz, 1964, over 157 innings); Brad Lidge struck out 157 in
+  // 2004 and Josh Hader 143 in 2018, so the reliever ceiling below is
+  // Hader's 2018 rather than the record.
   for (const pos of ['C', '1B', '2B', '3B', 'SS', 'LF', 'CF', 'RF', 'DH']) {
     // The designated hitter is a pure slugger, so he gets his own band.
     const power = ['1B', '3B', 'LF', 'RF'].includes(pos);
@@ -114,7 +116,7 @@ console.log('\nMLB');
   check('MLB', 'SP', 'so', acc.SP.so ?? [], { ceiling: 383, medLo: 90, medHi: 230, spread: 1.6 });
   check('MLB', 'SP', 'wins', acc.SP.wins ?? [], { ceiling: 31, medLo: 5, medHi: 18 });
   check('MLB', 'SP', 'era', acc.SP.era ?? [], { ceiling: 12, medLo: 2.4, medHi: 5.2 });
-  check('MLB', 'RP', 'so', acc.RP.so ?? [], { ceiling: 143, medLo: 35, medHi: 85, note: "Dick Radatz threw 157 relief innings in 1964; in the one inning era Josh Hader's 138 in 2019 is the high" });
+  check('MLB', 'RP', 'so', acc.RP.so ?? [], { ceiling: 143, medLo: 35, medHi: 85, note: "Josh Hader's 143 in 2018; Brad Lidge struck out 157 in 2004, and the record, Dick Radatz's 181 in 1964, came over 157 relief innings" });
   check('MLB', 'RP', 'saves', acc.RP.saves ?? [], { ceiling: 62, medLo: 0, medHi: 40 });
   check('MLB', 'RP', 'holds', acc.RP.holds ?? [], { ceiling: 41, medLo: 0, medHi: 28 });
 }

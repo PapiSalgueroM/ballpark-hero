@@ -7,9 +7,18 @@
 // usage: git show <old commit>:scripts/data/usBoardFixture.json > old.json
 //        node scripts/qa/compareUsBoardFixture.mjs old.json scripts/data/usBoardFixture.json
 //        (the recording Release AX replaced is the one of 934c29d9; it closes with ATTRIBUTION HOLDS or with STOPs)
-if (process.argv.length < 4) { console.error('usage: node scripts/qa/compareUsBoardFixture.mjs <old.json> <new.json>'); process.exit(2); }
+// Round 1313 added a second mode, for a round that moves the RIVAL of named sports and nothing else:
+//        node scripts/qa/compareUsBoardFixture.mjs --rival mlb,nhl old.json new.json
+//        The sports not named must be byte equal, section for section. In a named sport the path's first step whose
+//        saved career differs must differ ONLY under c.rival or the pending rivalry card (every step before it is
+//        byte equal by construction), and it prints where the click path parts if it does and the counts before
+//        and after (clicks, seasons, screen steps, rival beats, rival choices, fixed saves moved, screen walks moved).
+//        It closes with RIVAL ATTRIBUTION HOLDS or with STOPs. The default mode above is unchanged.
+const RIVAL = process.argv[2] === '--rival' ? String(process.argv[3] ?? '').split(',').filter(Boolean) : null;
+const FILES = RIVAL ? process.argv.slice(4) : process.argv.slice(2);
+if (FILES.length < 2 || (RIVAL && !RIVAL.length)) { console.error('usage: node scripts/qa/compareUsBoardFixture.mjs [--rival <sport,sport>] <old.json> <new.json>'); process.exit(2); }
 import fs from 'node:fs';
-const [oldF, newF] = process.argv.slice(2).map(f => JSON.parse(fs.readFileSync(f, 'utf8')));
+const [oldF, newF] = FILES.slice(0, 2).map(f => JSON.parse(fs.readFileSync(f, 'utf8')));
 const WHEEL = 'market wheel: ';
 const TALK = new Set(['extension', 'freeagency']);
 const J = JSON.stringify;
@@ -64,6 +73,50 @@ function compareWalk(where, a, b) {
   return res;
 }
 const line = r => `${r.where}: ${r.old} -> ${r.new} steps, ${r.wheel} wheel steps, first talk at ${r.firstTalk}, prefix ${r.prefixEqual ? 'equal' : 'DIFFERS'}, aligned identical ${r.identical}, differing ${r.old - r.identical} (inside a talk ${r.talkSteps}, talk on the save ${r.withTalkField}, save only ${r.saveOnly}, markup outside a talk ${r.markupOutsideTalk.length}), wheel steps move [${[...r.wheelFields].join(', ')}], phase pairs [${[...r.phases].join(' ')}]`;
+
+if (RIVAL) { rivalMode(); process.exit(stops ? 1 : 0); }
+
+/* Round 1313: the rival mode (see the header). */
+function rivalMode() {
+  const ONLY = new Set(['c.rival', 'c.pendingRivalryEvent']);
+  const unknown = RIVAL.filter(s => !(s in newF.sports));
+  if (unknown.length) stop(`--rival names ${unknown.join(', ')}, which the new recording does not hold`);
+  const counts = s => ({ clicks: s.path.length, seasons: s.coverage.seasons, screenSteps: Object.values(s.screens).reduce((n, w) => n + w.length, 0),
+    rivalBeats: s.coverage.rivalryBeat, rivalChoices: s.coverage.rivalryChoice });
+  for (const slug of Object.keys(oldF.sports)) {
+    const a = oldF.sports[slug], b = newF.sports[slug];
+    console.log(`== ${slug}${RIVAL.includes(slug) ? ' (named: its rival moves)' : ''}`);
+    if (!b) { stop(`${slug}: the new recording has no section`); continue; }
+    if (!RIVAL.includes(slug)) {
+      if (J(a) === J(b)) console.log('   byte equal, section for section');
+      else stop(`${slug}: not named, and its section differs (${['path', 'saves', 'screens', 'coverage', 'ssrCreate'].filter(k => J(a[k]) !== J(b[k])).join(', ')})`);
+      continue;
+    }
+    const firstStep = a.path.findIndex((st, i) => J(st) !== J(b.path[i]));
+    const parts = a.path.findIndex((st, i) => !b.path[i] || st.a !== b.path[i].a);
+    const runA = running(a.path), runB = running(b.path);
+    const firstSave = runA.findIndex((ra, i) => { const rb = runB[i]; return !rb || [...new Set([...Object.keys(ra), ...Object.keys(rb)])].some(k => ra[k] !== rb[k]); });
+    if (firstStep < 0 && a.path.length === b.path.length) console.log('   path byte equal');
+    else console.log(`   path: first differing step ${firstStep} ("${a.path[firstStep]?.a}", ${a.path[firstStep]?.n} seasons; ${['s', 'm', 't', 'p', 'd'].filter(k => J(a.path[firstStep]?.[k]) !== J(b.path[firstStep]?.[k])).join(', ')} differ)`);
+    if (firstSave >= 0) {
+      const ra = runA[firstSave], rb = runB[firstSave] ?? {};
+      const fields = [...new Set([...Object.keys(ra), ...Object.keys(rb)])].filter(k => ra[k] !== rb[k]);
+      console.log(`   the first step whose saved career differs: ${firstSave} (after "${a.path[firstSave].a}"), fields [${fields.join(', ')}]`);
+      const off = fields.filter(k => !ONLY.has(k));
+      if (off.length) stop(`${slug}: the first saved career that differs differs off the rival, in [${off.join(', ')}]`);
+      if (firstStep >= 0 && firstStep < firstSave && a.path[firstStep].s !== b.path[firstStep].s) stop(`${slug}: step ${firstStep} has another save hash before any field differs`);
+    } else console.log('   no saved career differs on the path');
+    console.log(parts < 0 && a.path.length === b.path.length ? '   the click path does not part' : `   the click path parts at step ${parts < 0 ? Math.min(a.path.length, b.path.length) : parts}: old "${a.path[parts]?.a}", new "${b.path[parts]?.a}"`);
+    if (firstSave >= 0 && parts >= 0 && parts < firstSave) stop(`${slug}: the click path parts at ${parts}, before any saved career differs (${firstSave})`);
+    const moved = Object.keys(a.saves).filter(n => a.saves[n] !== b.saves[n]);
+    const walks = Object.keys(a.screens).filter(n => J(a.screens[n]) !== J(b.screens[n]));
+    const ca = counts(a), cb = counts(b);
+    console.log(`   counts old -> new: ${Object.keys(ca).map(k => `${k} ${ca[k]} -> ${cb[k]}`).join(', ')}; fixed saves moved ${moved.length} of ${Object.keys(a.saves).length} [${moved.join(', ')}]; screen walks moved ${walks.length} of ${Object.keys(a.screens).length}`);
+    const gone = Object.keys(a.saves).filter(n => !(n in b.saves));
+    if (gone.length) stop(`${slug}: fixed saves gone from the new recording: ${gone.join(', ')}`);
+  }
+  console.log(stops ? `RIVAL ATTRIBUTION: ${stops} STOP(S)` : `RIVAL ATTRIBUTION HOLDS: the sports not named are byte equal, and in ${RIVAL.join(' and ')} the first saved career that differs differs only under c.rival or the pending rivalry card`);
+}
 
 for (const slug of Object.keys(oldF.sports)) {
   const a = oldF.sports[slug], b = newF.sports[slug];
