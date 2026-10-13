@@ -1,0 +1,8 @@
+eras-dropman-EXPECT-RED exit=1 2s | 2 FAILURES
+eras-unflag-EXPECT-RED exit=1 2s | 1 FAILURES
+eras-twoclubs-EXPECT-RED exit=1 1s | 1 FAILURES
+eras5-9000 exit=0 826s | PROBE perRunFrozen [83.92,76.5,82.92,81.67,80.83,79.5,80.08,83.83,77.5,84.33,83.42,85.17,82.42,79.58,80.67,84.33,82.83,81.17,81.42,78.33,78.33,82.75,82.17,79.58,79.83,79.
+eras-champgap-EXPECT-RED exit=1 879s | CONTROL champgap FIRED: 480 seasons raised, the champion's gap 21.4 against the band of 5.0, still football
+simEras exit=0 1376s | ALL ERA AND AGEING CHECKS PASSED
+eras5-19000 exit=0 746s | PROBE perRunFrozen [78.92,82.67,79.75,82.83,81.5,84.75,82.25,81.33,79.58,84.08,82.83,88.25,82.5,80.25,81.5,80.58,82.33,79,78.75,78.33,81.33,78.5,79.42,87.25,82.42,84,78.5
+eras5-29000 exit=0 770s | PROBE perRunFrozen [78.17,76,80.42,81.08,74.58,78.17,84.17,79.92,82.25,85,81.33,77.17,91.25,82.75,83.67,83.75,76.75,77.58,80.08,77.25,82.5,76.67,81.42,84.42,80.42,80.42,8

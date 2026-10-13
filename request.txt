@@ -1,0 +1,8 @@
+simEras: node scripts/simEras.mjs > /tmp/e.log 2>&1; s=$?; grep -E 'FAIL|gap:|ticking clock|frozen clock' /tmp/e.log | cut -c1-200; tail -1 /tmp/e.log; exit $s
+eras-champgap-EXPECT-RED: SIM_ERAS_CONTROL=champgap node scripts/simEras.mjs > /tmp/c.log 2>&1; s=$?; grep -E 'FAIL|gap:|ticking clock|frozen clock|CONTROL' /tmp/c.log | cut -c1-200; tail -1 /tmp/c.log; exit $s
+eras-dropman-EXPECT-RED: SIM_ERAS_CONTROL=dropman node scripts/simEras.mjs
+eras-unflag-EXPECT-RED: SIM_ERAS_CONTROL=unflag node scripts/simEras.mjs
+eras-twoclubs-EXPECT-RED: SIM_ERAS_CONTROL=twoclubs node scripts/simEras.mjs
+eras5-9000: SEED_BASE=9000 RUNS=40 SEASONS=12 node .rc/x/eras5probe.mjs
+eras5-19000: SEED_BASE=19000 RUNS=40 SEASONS=12 node .rc/x/eras5probe.mjs
+eras5-29000: SEED_BASE=29000 RUNS=40 SEASONS=12 node .rc/x/eras5probe.mjs

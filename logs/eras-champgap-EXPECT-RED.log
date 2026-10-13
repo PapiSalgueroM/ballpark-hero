@@ -1,0 +1,9 @@
+5) Balance did not move: ticking clock against a frozen one
+   frozen clock : 2.62 goals a game, champion on 81.4 pts, me on 57.4 pts finishing 10.3
+   ticking clock: 2.63 goals a game, champion on 102.8 pts, me on 57.4 pts finishing 11.4
+   gap: 0.01 goals a game, 21.4 champion points, 0.0 of my points
+  FAIL: the champion's points moved by 21.4 (band 5.0)
+   CONTROL champgap FIRED: 480 seasons raised, the champion's gap 21.4 against the band of 5.0, still football
+1 FAILURES
+CONTROL champgap FIRED: 480 seasons raised, the champion's gap 21.4 against the band of 5.0, still football
+CONTROL champgap FIRED: 480 seasons raised, the champion's gap 21.4 against the band of 5.0, still football
