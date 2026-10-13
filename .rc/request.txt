@@ -1,0 +1,3 @@
+simSoccerLoanBite: node scripts/simSoccerLoanBite.mjs
+simSoccerLoanBite-strict26: SOCCER_LOAN_BITE_CONTROL=strict26 node scripts/simSoccerLoanBite.mjs > /tmp/lbs.log 2>&1; s=$?; grep -E "^t2:|FAIL|control" /tmp/lbs.log; grep -q 'control "strict26" fired: checks 3, 5 failed as expected' /tmp/lbs.log && [ $s -eq 0 ]
+simSoccerLoanBite-nofilter: SOCCER_LOAN_BITE_CONTROL=nofilter node scripts/simSoccerLoanBite.mjs > /tmp/lbn.log 2>&1; s=$?; grep -E "^t2:|FAIL|control" /tmp/lbn.log; grep -q 'control "nofilter" fired: checks 2, 4, 5 failed as expected' /tmp/lbn.log && [ $s -eq 0 ]
