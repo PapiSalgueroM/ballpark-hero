@@ -1,0 +1,1 @@
+proveAll: RIVAL_PROVE=48cb9d4b RIVAL_MOVED=mlb,nhl RIVAL_CARDS=mlb,nhl node scripts/simUsRivalSense.mjs
