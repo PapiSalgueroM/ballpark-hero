@@ -1,0 +1,6 @@
+size-head exit=1 68s | simClubManagerSaveSize: 3 failures in sections 6, 8
+slots-noown exit=0 70s | simClubManagerSlots: all sections green
+slots-head exit=0 71s | simClubManagerSlots: all sections green
+size-noown exit=0 67s | simClubManagerSaveSize: all sections green
+rules-noown exit=0 67s | simCmLeagueRules: all checks passed (modern, eras, pure, drop4, cupless, shapes, chunks)
+slots-69cb exit=0 71s | simClubManagerSlots: all sections green
