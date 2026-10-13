@@ -1,0 +1,7 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+probe: git worktree add -q /tmp/pb 8fea14e2 && ln -s "$PWD/node_modules" /tmp/pb/node_modules && PROBE_BASE=/tmp/pb node .rc/x/probeSquad.mjs
+fleet: git worktree add -q /tmp/f1 36cc9ffe && ln -s "$PWD/node_modules" /tmp/f1/node_modules && FENCE_BASE=/tmp/f1 node scripts/simSaveFence.mjs
+c-squadline: git worktree add -q /tmp/f2 36cc9ffe && ln -s "$PWD/node_modules" /tmp/f2/node_modules && FENCE_BASE=/tmp/f2 SAVE_FENCE_CONTROL=squadline node scripts/simSaveFence.mjs
+c-nofence: SAVE_FENCE_CONTROL=nofence node scripts/simSaveFence.mjs
+appeal: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simManagerAppealIsolation.mjs
+vitest-round: node_modules/.bin/vitest run saveFence saveMovedNotice clubManagerSlots managerHotSeatCarryOn clubManagerSave --testTimeout=300000 --hookTimeout=120000
