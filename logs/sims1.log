@@ -1,0 +1,74 @@
+Network mode: offline, loopback only, no production probe or database retries.
+Running 38 node harnesses
+  PASS  simCmInternationals.mjs        23.8s
+  PASS  simCmLeaguePhase.mjs           26.1s
+  PASS  simCmMatchCentre.mjs            3.5s
+  PASS  simCmOwnGoals.mjs              56.3s
+  PASS  simCmQuickLegs.mjs             50.1s
+  EMPTY simCmQuickSubs.mjs              1.2s
+        printed 1 line, so its checks did not run
+  PASS  simCmShootoutOrder.mjs         23.1s
+  PASS  simCmStoppageTime.mjs          24.3s
+  PASS  simCmVar.mjs                  144.4s
+  PASS  simContractPreview.mjs          4.8s
+  PASS  simContracts.mjs               17.6s
+  PASS  simCreateClub.mjs               8.3s
+  PASS  simCup.mjs                     39.5s
+  PASS  simCustomClubValues.mjs        82.3s
+  PASS  simDailyClubPool.mjs            3.2s
+  PASS  simDealDepth.mjs               21.8s
+  PASS  simEarlyReturnScope.mjs        10.6s
+  PASS  simEra2005.mjs                 13.6s
+  PASS  simEra2010.mjs                 16.2s
+  PASS  simEra2015.mjs                 12.2s
+  PASS  simEra2020.mjs                 15.9s
+  PASS  simEraWorldTables.mjs           1.9s
+  PASS  simExtraTime.mjs               76.1s
+  PASS  simFinance.mjs                  7.7s
+  PASS  simFixtureBalance.mjs           2.3s
+  PASS  simFlagshipWeight.mjs           0.7s
+  PASS  simFootleLeagues.mjs            0.1s
+  PASS  simFreeAgents.mjs              15.2s
+  PASS  simGmBooks.mjs                  1.5s
+  FAIL  simGmCalendar.mjs               1.0s
+  FAIL  simGmDealTableFixture.mjs       0.7s
+  FAIL  simGmStaff.mjs                  3.1s
+  PASS  simHalftime.mjs               355.8s
+  PASS  simHeadlines.mjs                3.2s
+  PASS  simHomeFront.mjs                0.6s
+  PASS  simIntlFormatHistory.mjs        1.9s
+  PASS  simJobMarket.mjs                0.6s
+  PASS  simLiveMatch.mjs                4.1s
+
+----- simCmQuickSubs.mjs (EMPTY) -----
+simCmQuickSubs normal: real coaching outcomes and independent unmanaged baseline passed.
+
+
+----- simGmCalendar.mjs (FAIL) -----
+  FAIL: Everton seasonDays: hash 158dee139333cccc41abdbfc != recorded 4f6e77bb426d72edb25d0123; first lines now ["{\"worldYear\":2026,\"entryDates\":[{\"y\":2026,\"m\":8,\"d\":8},{\"y\":2026,\"m\":8,\"d\":15},{\"y\":2026,\"m\":8,\"d\":22},{\"y\":2026,\"m\":8,\"d\":26},{\"y\":2026,\"m\":8,\"d\":29},{\"y\":2026,\ recorded ["{\"worldYear\":2026,\"entryDates\":[{\"y\":2026,\"m\":8,\"d\":8},{\"y\":2026,\"m\":8,\"d\":15},{\"y\":2026,\"m\":8,\"d\":22},{\"y\":2026,\"m\":8,\"d\":26},{\"y\":2026,\"m\":8,\"d\":29},{\"y\":2026,\
+  FAIL: Everton monthGrid: hash 998eed009784b43682c66dfd != recorded 191228a15047c811f0735e7a; first lines now ["2026-8 light [null,null,null,null,null,null,{\"date\":{\"y\":2026,\"m\":8,\"d\":1},\"key\":20260801,\"weekIdx\":null,\"kind\":\"rest\",\"windowOpen\":false,\"isToday\":false,\"past\":true},{\"date\" recorded ["2026-8 light [null,null,null,null,null,null,{\"date\":{\"y\":2026,\"m\":8,\"d\":1},\"key\":20260801,\"weekIdx\":null,\"kind\":\"rest\",\"windowOpen\":false,\"isToday\":false,\"past\":true},{\"date\"
+  FAIL: Augsburg seasonDays: hash 29e2211231b009dd2c13593e != recorded d004198f9594eff7c0c3edf6; first lines now ["{\"worldYear\":2026,\"entryDates\":[{\"y\":2026,\"m\":8,\"d\":8},{\"y\":2026,\"m\":8,\"d\":15},{\"y\":2026,\"m\":8,\"d\":22},{\"y\":2026,\"m\":8,\"d\":26},{\"y\":2026,\"m\":8,\"d\":29},{\"y\":2026,\ recorded ["{\"worldYear\":2026,\"entryDates\":[{\"y\":2026,\"m\":8,\"d\":8},{\"y\":2026,\"m\":8,\"d\":15},{\"y\":2026,\"m\":8,\"d\":22},{\"y\":2026,\"m\":8,\"d\":26},{\"y\":2026,\"m\":8,\"d\":29},{\"y\":2026,\
+  FAIL: Augsburg monthGrid: hash 486aafe84bae636d46f7d710 != recorded ecebc393e3df7ebcd664c12a; first lines now ["2026-8 light [null,null,null,null,null,null,{\"date\":{\"y\":2026,\"m\":8,\"d\":1},\"key\":20260801,\"weekIdx\":null,\"kind\":\"rest\",\"windowOpen\":false,\"isToday\":false,\"past\":true},{\"date\" recorded ["2026-8 light [null,null,null,null,null,null,{\"date\":{\"y\":2026,\"m\":8,\"d\":1},\"key\":20260801,\"weekIdx\":null,\"kind\":\"rest\",\"windowOpen\":false,\"isToday\":false,\"past\":true},{\"date\"
+  FAIL: Norwich City seasonDays: hash 60f96d2fd871650b92af5ea0 != recorded 2e65e78a8e253e2db78b214a; first lines now ["{\"worldYear\":2026,\"entryDates\":[{\"y\":2026,\"m\":8,\"d\":8},{\"y\":2026,\"m\":8,\"d\":15},{\"y\":2026,\"m\":8,\"d\":22},{\"y\":2026,\"m\":8,\"d\":26},{\"y\":2026,\"m\":8,\"d\":29},{\"y\":2026,\ recorded ["{\"worldYear\":2026,\"entryDates\":[{\"y\":2026,\"m\":8,\"d\":8},{\"y\":2026,\"m\":8,\"d\":15},{\"y\":2026,\"m\":8,\"d\":22},{\"y\":2026,\"m\":8,\"d\":26},{\"y\":2026,\"m\":8,\"d\":29},{\"y\":2026,\
+  FAIL: Norwich City monthGrid: hash 6921469a250cd670b7984977 != recorded 6ce8f2f8c3734c582c00f4b1; first lines now ["2026-8 light [null,null,null,null,null,null,{\"date\":{\"y\":2026,\"m\":8,\"d\":1},\"key\":20260801,\"weekIdx\":null,\"kind\":\"rest\",\"windowOpen\":false,\"isToday\":false,\"past\":true},{\"date\" recorded ["2026-8 light [null,null,null,null,null,null,{\"date\":{\"y\":2026,\"m\":8,\"d\":1},\"key\":20260801,\"weekIdx\":null,\"kind\":\"rest\",\"windowOpen\":false,\"isToday\":false,\"past\":true},{\"date\"
+
+----- simGmDealTableFixture.mjs (FAIL) -----
+  FAIL: section B no longer replays (720 lines recorded, 720 now)
+  FAIL: section C no longer replays (101 lines recorded, 126 now)
+simGmDealTableFixture: FAIL, 2 section(s) differ from the recording
+
+----- simGmStaff.mjs (FAIL) -----
+  FAIL: Arsenal natural: line 5 of 81 differs
+  FAIL: Bayern Munich nines: line 5 of 63 differs
+  FAIL: PSG nines: line 5 of 74 differs
+  FAIL: AC Milan natural: line 4 of 55 differs
+  FAIL: AC Milan nines: line 4 of 70 differs
+  FAIL: Coventry City natural: line 5 of 53 differs
+  FAIL: Ipswich Town natural: line 5 of 55 differs
+  FAIL: Ipswich Town nines: line 5 of 68 differs
+  FAIL: run 26 is Clermont  natural, the fixture has Club Brugge  natural
+  FAIL: run 27 is Clermont  nines, the fixture has Club Brugge  nines
+  FAIL: run 28 is Krasnodar  natural, the fixture has Konyaspor  natural
+  FAIL: run 29 is Krasnodar  nines, the fixture has Konyaspor  nines
+
+4 harnesses not green.
