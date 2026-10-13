@@ -49,8 +49,9 @@
  * twice. Section 1 now fails on any name that is at a club of the bake and
  * at a club outside it at once (0 today; control twoclubs).
  *
- * Three negative controls, SIM_ERAS_CONTROL=dropman|unflag|twoclubs (see the
- * block where they are defined). A control run plays no seasons.
+ * Four negative controls, SIM_ERAS_CONTROL=dropman|unflag|twoclubs|champgap (see
+ * the block where they are defined). A control run plays no seasons, except
+ * champgap, which plays section 5 alone.
  *
  * Run: node scripts/simEras.mjs
  */
@@ -129,12 +130,21 @@ const fx = (v, n = 2) => Number(v).toFixed(n);
                1's "at a club of the bake and at a club outside it at once"
                must fail, and it is the only line of section 1 that can:
                the world still matches itself and the count still adds up,
-               which is how the reviewer's mutation passed. */
+               which is how the reviewer's mutation passed.
+     champgap  (Release BC's join, the lead's AZ ruling 1) a gross gap in section
+               5: in the ticking arm only, the strongest club of the league other
+               than mine gets 10 more strength at the start of every season (the
+               living world handing one rival a far better squad every summer).
+               This control plays section 5 and nothing else of sections 2 to 5
+               and 8, and must end with "CONTROL champgap FIRED", section 5's
+               champion band red and no other section 5 line. */
 const CONTROL = process.env.SIM_ERAS_CONTROL ?? '';
-if (CONTROL && !['dropman', 'unflag', 'twoclubs'].includes(CONTROL)) { console.error(`unknown control ${CONTROL}`); process.exit(2); }
+if (CONTROL && !['dropman', 'unflag', 'twoclubs', 'champgap'].includes(CONTROL)) { console.error(`unknown control ${CONTROL}`); process.exit(2); }
 const controlRefuse = why => { console.error(`CONTROL ${CONTROL} did not apply: ${why}`); process.exit(2); };
 const SKIPPED = '   (a control run plays no seasons: section skipped)';
 let controlSaid = false;
+let champGapFired = false;
+let champGapVerdict = '';
 if (CONTROL === 'twoclubs') {
   const outsideClubs = Object.keys(REAL).filter(c => !(c in BAKED));
   let hit = null;
@@ -507,7 +517,7 @@ if (CONTROL) console.log(SKIPPED); else {
 /* ================================================================== */
 console.log('5) Balance did not move: ticking clock against a frozen one');
 /* ================================================================== */
-if (CONTROL) console.log(SKIPPED); else {
+if (CONTROL && CONTROL !== 'champgap') console.log(SKIPPED); else {
   /* The do nothing arm pins the world year back to the roster year at every
      rollover, so yearsOn stays zero and every AI club, the whole transfer
      market and every opponent squad behave exactly as they did before this
@@ -515,7 +525,28 @@ if (CONTROL) console.log(SKIPPED); else {
      moves between the arms is the clock and not the dice. */
   const RUNS = 40;
   const SEASONS = 12;
+  /* The champion's band, set by Release BC's join under the lead's AZ ruling 1 (never by feel). Release AZ's world
+     seed (Round 1250) makes the ticking arm's champion about 1.3 points stronger on every seed base (fix2-AZ.md
+     section 3), so the old band of 4 sat about one standard error over the expected seeded gap and was a coin toss.
+     Measured on the merged tree (AZ with Round 1311 and the rest of main, d84d8328), runner result rBCg-m1e,
+     section 5's own loop (.tmp-fx eras5probe, 40 careers x 12 seasons an arm, Everton) at ten seed bases:
+       9000 3.95 | 19000 3.35 | 29000 3.98 | 39000 2.81 | 49000 3.67 | 59000 2.82 | 69000 2.52 | 79000 2.83 |
+       89000 3.46 | 99000 2.42 (the frozen arm 81.16 to 82.24 at every base).
+     Mean 3.18, per seed standard deviation 0.58 (n minus 1), so mean plus three sd is 4.91, rounded up to 5.0.
+     The base this file plays (9000) reads 3.95. Control champgap must land clearly outside it. */
+  const CHAMP_BAND = 5.0;
   const arms = {};
+  /* Control champgap (see the controls block): the ticking arm's strongest rival gets 10 more strength at the
+     start of every season. It refuses (exit 2) on a save with no rival strength to raise. */
+  let champGapRaised = 0;
+  const champGap = st => {
+    const inLeague = new Set((st.table ?? []).map(r => r.club));
+    const rivals = Object.entries(st.clubStrengths ?? {}).filter(([club]) => club !== st.clubName && (!inLeague.size || inLeague.has(club)));
+    if (!rivals.length) controlRefuse('the save has no rival club strength in its league to raise');
+    const [top, value] = rivals.reduce((a, b) => (b[1] > a[1] ? b : a));
+    champGapRaised += 1;
+    return { ...st, clubStrengths: { ...st.clubStrengths, [top]: value + 10 } };
+  };
   for (const frozen of [true, false]) {
     const gpg = [];
     const champPts = [];
@@ -525,6 +556,7 @@ if (CONTROL) console.log(SKIPPED); else {
       setSeed(9000 + run);
       let s = startCareer('Everton');
       for (let y = 0; y < SEASONS; y++) {
+        if (CONTROL === 'champgap' && !frozen) s = champGap(s);
         const { state, summary } = playSeason(s, { renew: true });
         const table = sortedTable(state.table);
         const games = table.reduce((a, r) => a + r.w + r.d + r.l, 0) / 2;
@@ -565,14 +597,24 @@ if (CONTROL) console.log(SKIPPED); else {
      Round 125 lesson: pick them off measured headroom, not off a number that
      sounds strict enough to be impressive. */
   if (Math.abs(t.gpg - f.gpg) > 0.12) fail(`goals a game moved by ${fx(Math.abs(t.gpg - f.gpg))}`);
-  if (Math.abs(t.champPts - f.champPts) > 4) fail(`the champion's points moved by ${fx(Math.abs(t.champPts - f.champPts), 1)}`);
+  const champGapNow = Math.abs(t.champPts - f.champPts);
+  const champBandRed = champGapNow > CHAMP_BAND;
+  if (champBandRed) fail(`the champion's points moved by ${fx(champGapNow, 1)} (band ${fx(CHAMP_BAND, 1)})`);
   if (Math.abs(t.myPts - f.myPts) > 7) fail(`my points moved by ${fx(Math.abs(t.myPts - f.myPts), 1)}`);
   if (Math.abs(t.myPos - f.myPos) > 2.5) fail(`my finishing position moved by ${fx(Math.abs(t.myPos - f.myPos), 1)}`);
   // And the absolute numbers still have to look like football, because two
   // arms agreeing on nonsense is still nonsense.
+  let notFootball = 0;
   for (const [name, a] of Object.entries(arms)) {
-    if (a.gpg < 2 || a.gpg > 3.6) fail(`${name}: ${fx(a.gpg)} goals a game is not football`);
-    if (a.champPts < 60 || a.champPts > 105) fail(`${name}: a champion on ${fx(a.champPts, 1)} points is not football`);
+    if (a.gpg < 2 || a.gpg > 3.6) { notFootball += 1; fail(`${name}: ${fx(a.gpg)} goals a game is not football`); }
+    if (a.champPts < 60 || a.champPts > 105) { notFootball += 1; fail(`${name}: a champion on ${fx(a.champPts, 1)} points is not football`); }
+  }
+  if (CONTROL === 'champgap') {
+    champGapFired = champBandRed && notFootball === 0 && champGapRaised === RUNS * SEASONS;
+    champGapVerdict = champGapFired
+      ? `CONTROL champgap FIRED: ${champGapRaised} seasons raised, the champion's gap ${fx(champGapNow, 1)} against the band of ${fx(CHAMP_BAND, 1)}, still football`
+      : `CONTROL champgap DID NOT FIRE: band red ${champBandRed}, not football ${notFootball}, seasons raised ${champGapRaised} of ${RUNS * SEASONS}`;
+    console.log(`   ${champGapVerdict}`);
   }
 }
 
@@ -862,4 +904,5 @@ console.log('9) Copy check');
 }
 
 console.log(failures === 0 ? '\nALL ERA AND AGEING CHECKS PASSED' : `\n${failures} FAILURES`);
+if (CONTROL === 'champgap') { console.log(champGapVerdict || 'CONTROL champgap DID NOT FIRE: section 5 never judged it'); process.exit(champGapFired ? 1 : 3); }
 process.exit(failures === 0 ? 0 : 1);
