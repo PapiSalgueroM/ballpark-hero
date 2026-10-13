@@ -1,0 +1,37 @@
+fleet: 400 careers a tree (seed offset 1, 5 seeds), 7110 seasons on this tree in 23 s, 7100 on the base
+1) Player of the Month reads the month's football, with the true year
+   this tree: 2441 months over 6710 seasons; rated 8.0+ 2.64 a season (658), 7.0 to 7.5 any 0.03 (1656); at 7.5 to 8.5 all 1.1: GK 0.94 (237), DEF 1.12 (341), MID 1.02 (249), ATT 1.18 (612)
+   base:      5218 months over 6700 seasons; rated 8.0+ 2.08 a season (623), 7.0 to 7.5 any 0.49 (1556); at 7.5 to 8.5 all 1.22: GK 0.42 (261), DEF 0.56 (358), MID 0.7 (246), ATT 2.06 (633)
+   under the floor and still won: 0 here, 953 on the base; 0 goal keepers rated 6.0 or less who won: 0 of 39 here, 6 of 37 on the base
+   month lines with the wrong year: 0 here, 2665 on the base; seasons whose lines and awards disagree: 0 here, 0 on the base
+   planted: a 0 goal keeper rated 6.0 over 10,000 identities won 0 months
+2) The month award and the world tick leave the season's draws where they were
+   200 careers in lockstep with the base: 5055 steps, 749 seasons, 531 month blocks and 531 world ticks compared, 4643 world records; 0 careers with a count, seed or record off the base
+   first fields to differ: events pendingBallonDor phone.feed phone.world phone.clubs 71; events awards pendingBallonDor phone.feed phone.world phone.clubs 69; pendingBallonDor phone.feed phone.world phone.clubs 39; events phone.feed phone.world phone.clubs 7; events awards phone.feed phone.world phone.clubs 5; events 5; never differed 0; compared until a season's input differed in 200, by pendingEvents eventLastFired 191; seasons pendingSummary pendingBallonDor 9
+3) The phone's world says nothing it cannot stand behind
+   this tree: 6080 seasons (4321 happened, 1759 to come), 17129 lines, 5244 champion lines in seasons to come, 2258 moves of generated men
+              real names in a past season 0, past champions, transfers or scorers 0, a missed summer's winner 0, moves of real men 0, real top scorers 0, real men off their era club 0, lines off the record 0
+   base:      6057 seasons, 45968 lines; real names in a past season 17015, past champions, transfers or scorers 29824, a missed summer's winner 1023, moves of real men 31732, real top scorers 10557, real men off their era club 63743, lines off the record 0
+   lines naming the player or his club: 62 here (the feed names his club: "🔄 Davor Bernard has left Juventus for Shakhtar Donetsk."), 295 on the base (the feed names his club: "🔄 DONE DEAL. George Weah joins Marseille from PSG. Fee around 95m.")
+4) The phone's quiz asks about the world only where the world is the game's own
+   this tree: three questions in 6709 of 6710 seasons (1); world questions about a season that happened 0, about a real man 0, answers not in the save 0, world questions asked 2001
+   base:      three questions in 6696 of 6700 seasons (1); world questions about a season that happened 7468, about a real man 4649, answers not in the save 0
+   old saves: 40 base careers at their 2028 world (40 holding a real man's move or tally) asked 120 questions here, 0 about a real man
+5) The season log and the International panel name a winner only where the rule allows
+   this tree: 3150 summers; winner lines missing where they belong 0, printed for a summer he missed 0; kept for finals he played 1068, kept for a summer to come 689, held back 1023
+   base:      3137 summers; printed for a summer he missed that happened 1026
+   a past summer he missed: champions line false, bracket tile false, last tile winner false (base true, true, true)
+   a past summer he played: champions line true, bracket tile true, last tile winner true (base true, true, true)
+   a summer to come he missed: champions line true, bracket tile true, last tile winner true (base true, true, true)
+   an old save's history, a missed 2010 last: champions line false, bracket tile false, last tile winner false (base true, true, true)
+6) The eighth inverse gives the base's four files back, and every change sits in this round's hunks
+   src/lib/soccerCareerEngine.ts: head 9476149816e8dfdb (pinned 9476149816e8dfdb), inverse 44f323390d962fc1, base 44f323390d962fc1 (pinned 44f323390d962fc1)
+     5 hunks against the base, in 3 regions
+   src/lib/soccerPhone.ts: head 8867992a7548521d (pinned 8867992a7548521d), inverse 43c30266828c0d6e, base 43c30266828c0d6e (pinned 43c30266828c0d6e)
+     11 hunks against the base, in 3 regions
+   src/lib/soccerArcade.ts: head 9b6bb4f82528546c (pinned 9b6bb4f82528546c), inverse bc8301f8b1405f6e, base bc8301f8b1405f6e (pinned bc8301f8b1405f6e)
+     5 hunks against the base, in 2 regions
+   src/components/soccer-career/InternationalPanel.tsx: head 05d8f7d7e2b1fcbc (pinned 05d8f7d7e2b1fcbc), inverse df3dd4e16e8a046a, base df3dd4e16e8a046a (pinned df3dd4e16e8a046a)
+     10 hunks against the base, in 9 regions
+   rows applied: 31 of 31
+simSoccerWorldTruth: OK, every section green

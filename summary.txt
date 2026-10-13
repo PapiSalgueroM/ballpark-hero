@@ -1,0 +1,7 @@
+simCareerLeagueSeasons exit=0 18s | simCareerLeagueSeasons: all sections green
+simSoccerDeckFairness exit=0 42s | simSoccerDeckFairness: all sections green
+worldtruth-s1 exit=0 58s | simSoccerWorldTruth: OK, every section green
+worldtruth-s2 exit=0 55s | simSoccerWorldTruth: OK, every section green
+worldtruth-s3 exit=0 49s | simSoccerWorldTruth: OK, every section green
+simCareerLeagueSeasons-base exit=0 20s | simCareerLeagueSeasons: all sections green
+worldtruth-s4 exit=0 44s | simSoccerWorldTruth: OK, every section green
