@@ -1,0 +1,3 @@
+journey-key: node .rc/x/journeyKey.mjs
+journey-key-nokey-EXPECT-RED: CM_LEDGER_CONTROL=nokey node .rc/x/journeyKey.mjs
+journey-key-futureyear-EXPECT-RED: CM_LEDGER_CONTROL=futureyear node .rc/x/journeyKey.mjs
