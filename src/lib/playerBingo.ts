@@ -470,10 +470,16 @@ async function fetchWorldCupSets(signal: AbortSignal): Promise<{ all: Set<string
     for (const r of data ?? []) {
       const key = normalizeName(r.player_name ?? '');
       if (!key) continue;
-      all.add(key);
+      const keys = [key];
+      if (key === 'andy robertson' && normalizeName(r.nationality ?? '') === 'scotland') {
+        keys.push('andrew robertson');
+      }
       const year = Number(r.world_cup_year);
-      if (year === 2022) y2022.add(key);
-      if (WORLD_CUP_WINNERS_2010_2026[year] === (r.nationality ?? '').trim()) winners.add(key);
+      for (const nameKey of keys) {
+        all.add(nameKey);
+        if (year === 2022) y2022.add(nameKey);
+        if (WORLD_CUP_WINNERS_2010_2026[year] === (r.nationality ?? '').trim()) winners.add(nameKey);
+      }
     }
     if (!data || data.length < WC_PAGE) break;
     from += WC_PAGE;

@@ -15,7 +15,7 @@ jobs:
       CI: '1'
       SIM_NETWORK: offline
       ENGINES: chromium
-      PLAYER_BINGO_WC_PHASE: baseline
+      PLAYER_BINGO_WC_PHASE: fixed
       PLAYER_BINGO_WC_OUT: ${{ github.workspace }}/bingo-world-cup-artifacts
       FREE_KICK_FONT_CACHE: ${{ github.workspace }}/bingo-world-cup-artifacts/font-cache
       PRERENDER_ONLY: /player-bingo
