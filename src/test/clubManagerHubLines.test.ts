@@ -29,6 +29,9 @@ describe('inboxTile', () => {
   it('an open appeal is named as one, ahead of any other card', () => {
     expect(tile([message()], [situation(), appeal()])).toMatchObject({ value: '3 new', sub: 'Red card appeal' });
   });
+  it('an open desk card is named before an open message, as the panel puts the desk first', () => {
+    expect(tile([message({ from: 'Your agent', playerName: 'X' })], [situation()])).toMatchObject({ value: '2 new', sub: 'The head coach' });
+  });
   it('with the desk answered, the first open message names its sender', () => {
     const t = tile([message({ resolved: 'done', playerName: 'Old News' }), message({ from: 'Your agent', playerName: 'X' })], [situation({ resolved: 'Done.' })]);
     expect(t).toMatchObject({ value: '1 new', sub: 'Your agent' });
@@ -61,6 +64,7 @@ describe('leagueTileValue', () => {
     expect(leagueTileValue(0, 0)).not.toMatch(/#/);
   });
   it('after week 0 it is the position', () => {
+    expect(leagueTileValue(1, 5)).toBe('#5');
     expect(leagueTileValue(3, 5)).toBe('#5');
     expect(leagueTileValue(3, 0)).toBe('#-');
   });
@@ -72,13 +76,18 @@ describe('kittyChange', () => {
     const p = {
       resultActual: -1.2,
       resultProjected: Math.round((64.8 - 72.4) * 100) / 100,
+      income: [line('tickets', 10, 30, true), line('sponsor', 5, 34.8, true)],
       spend: [line('playerWages', 20, 60.1, false), line('staffWages', 3, 9.2, false), line('travel', 0.5, 2, false), line('transferOut', 1.1, 1.1, true)],
     } as unknown as FinanceProjection;
     expect(kittyChange(p)).toEqual({ actual: 22.3, projected: 63.7 });
   });
   it('reads the kitty flag, never a line id: a new running cost lands on the board side by itself', () => {
-    const p = { resultActual: 0, resultProjected: -10, spend: [line('somethingNew', 1, 4, false), line('playerWages', 0, 0, true)] } as unknown as FinanceProjection;
+    const p = { resultActual: 0, resultProjected: -10, income: [], spend: [line('somethingNew', 1, 4, false), line('playerWages', 0, 0, true)] } as unknown as FinanceProjection;
     expect(kittyChange(p).projected).toBe(-6);
+  });
+  it('an income line the kitty never sees comes back out of the result, by its flag', () => {
+    const p = { resultActual: 2, resultProjected: 10, income: [line('tickets', 6, 9, true), line('somethingNew', 2, 3, false)], spend: [line('playerWages', 1, 4, false)] } as unknown as FinanceProjection;
+    expect(kittyChange(p)).toEqual({ actual: 1, projected: 11 });
   });
 });
 

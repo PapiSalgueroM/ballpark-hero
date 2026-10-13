@@ -57,18 +57,26 @@ export function leagueTileValue(week: number, position: number | null | undefine
 /**
  * What the season does to the transfer kitty, actual and projected, by Round
  * 1326's rule: the season's result plus the running costs the board covers,
- * which are exactly the spend lines whose own `kitty` flag is false (read off
- * the flag, never off line ids, so a new line lands on the right side by
- * itself). Worked example: income 64.8, spend 72.4, so a result of -7.6; the
- * board covers 71.3 of running costs; the kitty changes by +63.7.
+ * which are exactly the spend lines whose own `kitty` flag is false. The flag
+ * says whether a line moves the kitty, so an income line with the flag false
+ * is money the kitty never sees and comes back out of the result the same
+ * way (every income line moves the kitty today). Read off the flags, never
+ * off line ids, so a new line on either side lands right by itself.
+ * Worked example: income 64.8, spend 72.4, so a result of -7.6; the board
+ * covers 71.3 of running costs; the kitty changes by +63.7.
  */
-export function kittyChange(p: Pick<FinanceProjection, 'resultActual' | 'resultProjected' | 'spend'>): { actual: number; projected: number } {
+export function kittyChange(p: Pick<FinanceProjection, 'resultActual' | 'resultProjected' | 'income' | 'spend'>): { actual: number; projected: number } {
   let coverActual = 0;
   let coverProjected = 0;
   for (const line of p.spend) {
     if (line.kitty) continue;
     coverActual += line.actual;
     coverProjected += line.projected;
+  }
+  for (const line of p.income) {
+    if (line.kitty) continue;
+    coverActual -= line.actual;
+    coverProjected -= line.projected;
   }
   const round2 = (n: number) => Math.round(n * 100) / 100;
   return { actual: round2(p.resultActual + coverActual), projected: round2(p.resultProjected + coverProjected) };
