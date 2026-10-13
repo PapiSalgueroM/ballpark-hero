@@ -1,0 +1,26 @@
+{
+ "refusals": [],
+ "dupes": [],
+ "misplaced": [],
+ "timings": [
+  "Real Madrid now seed 101 season 1: 0 records; buildMarket 4 ms (stripped 2); matchday 22 ms (stripped 20)",
+  "Real Madrid now seed 101 season 5: 23 records; buildMarket 344 ms (stripped 2); matchday 35 ms (stripped 11)",
+  "Real Madrid now seed 101 season 10: 55 records; buildMarket 1152 ms (stripped 2); matchday 57 ms (stripped 11)",
+  "Real Madrid now seed 202 season 1: 0 records; buildMarket 3 ms (stripped 3); matchday 18 ms (stripped 15)",
+  "Real Madrid now seed 202 season 5: 24 records; buildMarket 529 ms (stripped 2); matchday 36 ms (stripped 11)",
+  "Real Madrid now seed 202 season 10: 54 records; buildMarket 1278 ms (stripped 3); matchday 99 ms (stripped 19)"
+ ],
+ "moves": {
+  "buy young": 20,
+  "buy any": 20,
+  "sale": 20,
+  "release": 16,
+  "free agent": 12,
+  "job move in season": 2,
+  "summer move": 6,
+  "wilderness job": 2
+ },
+ "ledgers": 2150,
+ "maxRecords": 60,
+ "errors": []
+}

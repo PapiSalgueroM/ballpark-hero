@@ -1,0 +1,25 @@
+moves {"buy young":20,"buy any":20,"sale":20,"release":19,"free agent":12,"job move in season":2,"summer move":6,"wilderness job":2}; ledgers read 2044; largest 40 records
+TIME Everton now seed 101 season 1: 0 records; buildMarket 5 ms (stripped 3); matchday 23 ms (stripped 19)
+TIME Everton now seed 101 season 5: 15 records; buildMarket 3 ms (stripped 3); matchday 22 ms (stripped 18)
+TIME Everton now seed 101 season 10: 34 records; buildMarket 2 ms (stripped 2); matchday 17 ms (stripped 13)
+TIME Everton now seed 202 season 1: 0 records; buildMarket 2 ms (stripped 2); matchday 21 ms (stripped 11)
+TIME Everton now seed 202 season 5: 15 records; buildMarket 2 ms (stripped 2); matchday 16 ms (stripped 12)
+TIME Everton now seed 202 season 10: 37 records; buildMarket 3 ms (stripped 3); matchday 18 ms (stripped 15)
+REFUSED: 0
+DUPLICATE: 0
+MISPLACED: 0
+ERROR: 0
+rvcmw-long: green, no refusal, no duplicate, nobody misplaced
+moves {"buy young":20,"buy any":20,"sale":20,"release":16,"free agent":13,"job move in season":2,"summer move":6,"wilderness job":2}; ledgers read 2160; largest 36 records
+TIME Real Madrid now seed 101 season 1: 0 records; buildMarket 3 ms (stripped 1); matchday 15 ms (stripped 12)
+TIME Real Madrid now seed 101 season 5: 18 records; buildMarket 3 ms (stripped 3); matchday 22 ms (stripped 17)
+TIME Real Madrid now seed 101 season 10: 31 records; buildMarket 2 ms (stripped 2); matchday 16 ms (stripped 11)
+TIME Real Madrid now seed 202 season 1: 0 records; buildMarket 2 ms (stripped 2); matchday 22 ms (stripped 11)
+TIME Real Madrid now seed 202 season 5: 19 records; buildMarket 2 ms (stripped 2); matchday 13 ms (stripped 10)
+TIME Real Madrid now seed 202 season 10: 33 records; buildMarket 2 ms (stripped 2); matchday 15 ms (stripped 11)
+REFUSED: 0
+DUPLICATE: 0
+MISPLACED: 0
+ERROR: 0
+rvcmw-long: green, no refusal, no duplicate, nobody misplaced
+at 55000a93: RV_ONLY=0 exit 0, RV_ONLY=1 exit 0
