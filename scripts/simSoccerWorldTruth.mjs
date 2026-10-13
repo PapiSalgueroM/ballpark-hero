@@ -116,8 +116,9 @@ import { inverseWorldTruth, worldTruthReceiptProblem, WORLD_TRUTH_SHA256, WORLD_
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const require = createRequire(path.join(ROOT, 'package.json'));
 const esbuild = require('esbuild');
-/* The tree this round was cut from (origin/release-bc-gate, Release BC's join). */
-const BASE = 'c5fc5470b3e377f22d6d538f459b9f5310b08dd0';
+/* The base this round last merged: origin/main with Release BC live (082fc277). The four files are byte for byte
+   c5fc5470's, the tree the round was cut from (origin/release-bc-gate), so every pin and row is unchanged. */
+const BASE = '082fc2774c8aa9f919c14efa33bfc3fbfc599597';
 const CONTROL = process.env.WORLD_TRUTH_CONTROL || '';
 const SEED_OFFSET = Number(process.env.SEED_OFFSET || 0);
 const SEEDS = Math.max(1, Number(process.argv[2] || 5));

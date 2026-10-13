@@ -27,7 +27,8 @@
  *   src/components/soccer-career/InternationalPanel.tsx
  *     head sha256 5c39697167844a7dc3329e580cd9a984c3dc51412a4556a880e63897bce69ea9
  *     base sha256 df3dd4e16e8a046a6928c832068a2e92f3ecbf15504eeb32fcbf598d59b66bb7
- * (base: git show c5fc5470:<file>, origin/release-bc-gate when the round started), so the recordings
+ * (base: git show 082fc277:<file>, origin/main with Release BC, whose four files are c5fc5470's byte for byte;
+ * c5fc5470 is origin/release-bc-gate when the round started), so the recordings
  * and the base pins stay as they were taken: this is an attribution, not a new recording.
  * scripts/simSoccerWorldTruth.mjs section 6 proves every value on every run.
  *
@@ -37,7 +38,7 @@
  */
 import assert from 'node:assert/strict';
 
-export const WORLD_TRUTH_BASE = 'c5fc5470b3e377f22d6d538f459b9f5310b08dd0';
+export const WORLD_TRUTH_BASE = '082fc2774c8aa9f919c14efa33bfc3fbfc599597';
 export const WORLD_TRUTH_SHA256 = {
   "src/lib/soccerCareerEngine.ts": {
     "head": "1a1c05feb120de043944ef45ec0880ed53e38f6b324e28889de2064fddd623ef",

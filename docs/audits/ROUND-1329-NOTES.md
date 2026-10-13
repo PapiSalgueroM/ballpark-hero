@@ -8,6 +8,11 @@ origin/release-bc-gate c5fc5470b3e377f22d6d538f459b9f5310b08dd0 (Release BC's jo
 Release BC commit when the round started on 2026-10-13). Blobs on the base: soccerCareerEngine.ts 7bcaad3c,
 soccerPhone.ts d5c9f014, soccerArcade.ts bf52d2bc, InternationalPanel.tsx d64af844.
 
+Last merged base: origin/main 082fc2774c8aa9f919c14efa33bfc3fbfc599597 (Release BC live), merged at 1a14674d. The
+four blobs there are the same four as on c5fc5470 (7bcaad3c, d5c9f014, bf52d2bc, d64af844), and main touched none
+of this round's files, so the inverse's rows and sha256 pins are unchanged; BASE in simSoccerWorldTruth.mjs and
+WORLD_TRUTH_BASE in careerWorldTruth1329.mjs now name 082fc277.
+
 ## The boundary and its sources (src/lib/soccerWorldTruth.ts, read 2026-10-13)
 
 LAST_PLAYED_SEASON = 2025 (season Y is Y/Y+1):
