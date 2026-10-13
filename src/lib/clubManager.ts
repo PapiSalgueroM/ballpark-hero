@@ -8725,8 +8725,9 @@ function xiMood(state: CareerState, xi: CMPlayer[]): number {
  * except on an exact tie, and it errs the safe way, because the only thing that
  * reads this rather than the raw number is the read line and the harness.
  */
-export function matchEdge(career: CareerState): number | null {
-  const fx = nextFixture(career);
+export function matchEdge(career: CareerState, fixture?: NextFixtureInfo): number | null {
+  /* Round 1331: the press at the whistle hands in the fixture it is asking about. */
+  const fx = fixture ?? nextFixture(career);
   if (fx.kind !== 'match') return null;
   const xi = effectiveXIWithSlots(career);
   const venue = fx.home === true ? 3 : fx.home === false ? -1.5 : 0;
@@ -8890,8 +8891,10 @@ const PRESS_SILENCE = 'Nothing on the desk. The press only come when there is so
  * a question that fires every single week whatever the state of the club is the
  * thing that turns this into a chore.
  */
-function buildPressQuestion(state: CareerState): PressQuestion | null {
-  const fx = nextFixture(state);
+function buildPressQuestion(state: CareerState, fromWeek?: number): PressQuestion | null {
+  /* Round 1331: asked at the whistle, the question is about the match AFTER the one just played
+     (fromWeek), never the one that has just finished. Without it, the old read. */
+  const fx = fromWeek === undefined ? nextFixture(state) : nextFixtureFrom(state, fromWeek);
   const opponent = fx.kind === 'match' ? fx.opponent : null;
   const senior = state.squad.filter(p => !p.onLoan && !p.isYouth);
   const mk = (q: Omit<PressQuestion, 'id'>): PressQuestion => {
@@ -9070,7 +9073,7 @@ function buildPressQuestion(state: CareerState): PressQuestion | null {
 
   /* 8. Anything big enough to be worth asking about. */
   if (opponent && fx.kind === 'match') {
-    const edge = matchEdge(state);
+    const edge = matchEdge(state, fromWeek === undefined ? undefined : fx);
     if (edge !== null && edge - EDGE_LEVEL <= -6) {
       return mk({
         kind: 'bigGame',
@@ -9100,7 +9103,7 @@ function buildPressQuestion(state: CareerState): PressQuestion | null {
  * Roll a question onto the desk, if there is one worth asking and they have not
  * had you in front of a microphone too recently.
  */
-function maybeAskPress(state: CareerState): void {
+function maybeAskPress(state: CareerState, fromWeek?: number): void {
   const press = state.press;
   if (!press) return;
   /* A story has a shelf life. A question nobody ever answered stops being a
@@ -9120,7 +9123,7 @@ function maybeAskPress(state: CareerState): void {
     return;
   }
   if (state.week - press.lastWeek < PRESS_GAP) return;
-  const q = buildPressQuestion(state);
+  const q = buildPressQuestion(state, fromWeek);
   if (!q) return;
   press.pending = q;
   press.lastWeek = state.week;
@@ -17340,7 +17343,9 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
   // Round 141: the news feed reads the week's table and says something true.
   generateWeeklyNews(state);
   // Round 135: and the room fills up again, once there is something to ask.
-  maybeAskPress(state);
+  /* Round 1331: about the next match, not the one just played (state.week is still this match's week
+     here); a Hot Seat day on the base rules keeps the old read. */
+  maybeAskPress(state, state.matchRules === 'base' ? undefined : live.week + 1);
   // Round 168: and sometimes, when you are flying, the phone rings.
   const approachLine = maybeApproach(state);
   if (approachLine) events.push(approachLine);
@@ -18999,7 +19004,13 @@ export function resumeMatch(career: CareerState): PlayResult {
 
 /** Preview of the next thing on the calendar that involves my club. */
 export function nextFixture(career: CareerState): NextFixtureInfo {
-  for (let w = career.week; w < career.calendar.length; w++) {
+  return nextFixtureFrom(career, career.week);
+}
+
+/** Round 1331: the next fixture from a given calendar week on, the loop nextFixture always ran from the
+ *  career's own week. The press asked at the whistle reads it from the week after the match just played. */
+export function nextFixtureFrom(career: CareerState, fromWeek: number): NextFixtureInfo {
+  for (let w = fromWeek; w < career.calendar.length; w++) {
     const entry = career.calendar[w];
     if (entry.type === 'window') return { kind: 'window' };
     const fx = fixtureFor(career, entry);
@@ -21045,6 +21056,8 @@ export function loadCareer(): CareerState | null {
        callers' !! and flip a season's venues, so it is dropped, which keeps
        the old list, the safe side for a save already in play. */
     if (parsed && parsed.balancedFixtures !== undefined && parsed.balancedFixtures !== true) delete parsed.balancedFixtures;
+    /* Round 1331: the base match rules are Manager Hot Seat's alone; no Club Manager save plays them. */
+    if (parsed && 'matchRules' in parsed) delete parsed.matchRules;
     if (
       !parsed ||
       parsed.saveVersion !== SAVE_VERSION ||

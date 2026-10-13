@@ -16,6 +16,21 @@
      coach     over the same fleet, the quick sim coach never passes the rule, writes no stoppage mark
                under three, and keeps a change and a stoppage back with every change he makes for legs;
                prints his mean changes a match under each rule (no real world average is claimed).
+     press     over a quick sim fleet, every bigGame or derby question asked at a whistle names the next
+               fixture's opponent (a second meeting with the same club is allowed); the 2026-10-12 Hot Seat
+               daily at Westerlo still asks about Cercle Brugge (it is dated before the rules), and a stamped
+               free run on its seed asks about Gent. Prints the count of each question kind, and the base's
+               beside it when SUBS_BASE is set.
+   With SUBS_BASE=<a checkout of the commit this branch started from> three more run (the default then):
+     legacy    Everton 2005-06, Barcelona 2015-16 and Liverpool 2026-27 (quick sims with the coach and with
+               noCoach) and two Hot Seat style careers, seeds 0 to SUBS_LEGACY_SEEDS-1, SUBS_LEGACY_SEASONS
+               seasons, matchRules 'base' on the head side only: every save byte (that key taken off) and
+               the count of draws equal to the base engine's.
+     three     the 2005-06 and 2015-16 careers on the current rules, the press read put back to the old
+               week in memory: equal to the base byte for byte (the rule table changes nothing in three).
+     hotseat   the 30 dailies before HOT_SEAT_RULES_FROM (2026-09-24 on) play the base rules and replay
+               exactly as on the base; a free run saved without the stamp too; the career carried on to
+               Club Manager carries no matchRules.
 
    Controls (SUBS_CONTROL=<name>), each asserting its anchor is present first and printing how many
    checks it turned red; a control that fires nothing is a failed run:
@@ -25,11 +40,16 @@
      htstop     half time counts as a stoppage: rule red.
      opproom    the other dugout's room back to MAX_HALFTIME_SUBS less the changes made: opponent red.
      coachall   the coach keeps nothing back (his three keep back lines opened): coach red.
+     pressold   the press at the whistle reads the match just played again: press red.
+     legacyleak matchRuleOf ignores matchRules: legacy red (needs SUBS_BASE).
+     pressnew   the base rules' press reads the next week too: legacy red (needs SUBS_BASE).
+     nodate     rulesOf ignores HOT_SEAT_RULES_FROM: hotseat red on every date (needs SUBS_BASE).
 
    Exit 0 green, 1 red or a control fired, 2 could not run, 3 a control did not fire. */
 import './lib/offlineTransport.cjs';
 import { mkdtemp, readFile, writeFile } from 'node:fs/promises';
 import { createRequire } from 'node:module';
+import { createHash } from 'node:crypto';
 import { build } from 'esbuild';
 import os from 'node:os';
 import path from 'node:path';
@@ -40,7 +60,10 @@ const ENGINE = 'src/lib/clubManager.ts';
 const LEDGER = 'scripts/data/cmSubsRuleSources.json';
 const CONTROL = process.env.SUBS_CONTROL ?? '';
 const partArg = process.argv.find(a => a.startsWith('--part='));
-const ALL_PARTS = ['ledger', 'rule', 'opponent', 'coach'];
+const HS_FILE = 'src/lib/managerHotSeat.ts';
+/* The base arm's sections run only with SUBS_BASE, a checkout of the commit this branch started from. */
+const BASE_PARTS = ['legacy', 'three', 'hotseat'];
+const ALL_PARTS = ['ledger', 'rule', 'opponent', 'coach', 'press', ...(process.env.SUBS_BASE ? BASE_PARTS : [])];
 /** The engine sections past rule register here as they are defined below. */
 const SECTIONS = {};
 
@@ -49,6 +72,10 @@ const CONTROLS = {
   oldcap: { part: 'rule', from: '  return subsRuleFor(subsLeagueBase(careerLeagueOf(career).id), worldYear(career));', to: '  return { subs: MAX_SUBS, stops: null, partial: false };' },
   nostops: { part: 'rule', from: '    if (inPlay && !sharesStop(live, m, p) && stopsUsed(live) >= rule!.stops!) return null;', to: '' },
   htstop: { part: 'rule', from: '  if (!live.h2Drawn && minute >= 46) return true;', to: '  if (false) return true;' },
+  legacyleak: { part: 'legacy', from: "  if (career.matchRules === 'base') return { subs: MAX_SUBS, stops: null, partial: false };", to: '' },
+  pressnew: { part: 'legacy', from: "  maybeAskPress(state, state.matchRules === 'base' ? undefined : live.week + 1);", to: '  maybeAskPress(state, live.week + 1);' },
+  pressold: { part: 'press', from: "  maybeAskPress(state, state.matchRules === 'base' ? undefined : live.week + 1);", to: '  maybeAskPress(state);' },
+  nodate: { part: 'hotseat', file: HS_FILE, from: "  if (setup.daily) return setup.daily < HOT_SEAT_RULES_FROM ? 'base' : undefined;", to: '  if (setup.daily) return undefined;' },
   opproom: { part: 'opponent', from: '  const room = rule.subs - made.length;', to: '  const room = MAX_HALFTIME_SUBS - made.length;' },
   coachall: { part: 'coach', patches: [
     ['    if (live.subsUsed >= rule.subs - 1 || (live.minute ?? 0) > at || benchFor(state).length < 2) return false;',
@@ -61,11 +88,14 @@ const CONTROLS = {
 if (CONTROL && !CONTROLS[CONTROL]) { console.log(`unknown control ${CONTROL}`); process.exit(2); }
 const PARTS = CONTROL ? [CONTROLS[CONTROL].part] : partArg ? partArg.slice(7).split(',') : ALL_PARTS;
 
+/** Every draw any seeded call made, so two engines can be held to the same count. */
+export const DRAWS = { n: 0 };
 export function withSeed(seed, fn) {
   const previous = Math.random, previousNow = Date.now;
   Date.now = () => 1791302400000;
   let a = seed >>> 0;
   Math.random = () => {
+    DRAWS.n += 1;
     a = (a + 0x6d2b79f5) | 0;
     let t = Math.imul(a ^ (a >>> 15), 1 | a);
     t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
@@ -81,12 +111,26 @@ function check(part, name, ok, detail = '') {
 }
 
 const require = createRequire(import.meta.url);
-async function bundleEngine(text, name, folder) {
+/** Manager Hot Seat, bundled with each engine (the engine module is the key). */
+const HS = new Map();
+/** The engine (src/lib/clubManager.ts as `text`) bundled with Manager Hot Seat beside it. `srcRoot` is the
+ *  src tree everything else comes from (SUBS_BASE's for the base arm); `hsText` a patched Hot Seat file. */
+async function bundleEngine(text, name, folder, { srcRoot = path.join(root, 'src'), hsText = null } = {}) {
   const target = path.join(folder, `${name}.ts`);
   const output = path.join(folder, `${name}.cjs`);
+  const entry = path.join(folder, `${name}-entry.ts`);
   await writeFile(target, text);
-  await build({ entryPoints: [target], bundle: true, platform: 'node', format: 'cjs', outfile: output, logLevel: 'silent', alias: { '@/lib/clubManager': target, '@': path.join(root, 'src') } });
-  return require(output);
+  const alias = { '@/lib/clubManager': target, '@': srcRoot };
+  if (hsText !== null) {
+    const hsFile = path.join(folder, `${name}-hs.ts`);
+    await writeFile(hsFile, hsText);
+    alias['@/lib/managerHotSeat'] = hsFile;
+  }
+  await writeFile(entry, "export * as cm from '@/lib/clubManager';\nexport * as hs from '@/lib/managerHotSeat';\n");
+  await build({ entryPoints: [entry], bundle: true, platform: 'node', format: 'cjs', outfile: output, logLevel: 'silent', alias, nodePaths: [path.join(root, 'node_modules')] });
+  const mod = require(output);
+  HS.set(mod.cm, mod.hs);
+  return mod.cm;
 }
 async function bundleRule(folder) {
   const output = path.join(folder, 'rule.cjs');
@@ -287,17 +331,155 @@ function coachSection(cm) {
 SECTIONS.opponent = opponentSection;
 SECTIONS.coach = coachSection;
 
+/* ---------------- the base arm (sections legacy, three, hotseat) ---------------- */
+const SUBS_BASE = process.env.SUBS_BASE ?? '';
+const LEGACY_SEEDS = Number(process.env.SUBS_LEGACY_SEEDS ?? 5);
+const LEGACY_SEASONS = Number(process.env.SUBS_LEGACY_SEASONS ?? 2);
+const strip = s => { const c = JSON.parse(JSON.stringify(s)); delete c.matchRules; return c; };
+const hashOf = v => createHash('sha256').update(JSON.stringify(v)).digest('hex').slice(0, 16);
+const QUICK = { coach: { skipHalftime: true }, noCoach: { skipHalftime: true, noCoach: true } };
+const HOT_STYLE = { skipHalftime: true, noCoach: true, noBook: true };
+/** A career played LEGACY_SEASONS seasons on one engine: the hash of its end state (matchRules taken off)
+ *  and the draws it took. `base` sets matchRules 'base' after every call (a season roll may drop it). */
+function playSeasons(cm, { club, era, seed, opts, base }) {
+  DRAWS.n = 0;
+  let s = withSeed(seed, () => (era ? cm.startCareer(club, era) : cm.startCareer(club)));
+  const setBase = () => { if (base) s.matchRules = 'base'; };
+  setBase();
+  for (let season = 0; season < LEGACY_SEASONS; season++) {
+    for (let i = 0; i < 140; i++) {
+      const r = withSeed(seed * 7919 + season * 997 + i + 1, () => cm.playNextEntry(s, opts));
+      s = r.state;
+      setBase();
+      if (r.kind === 'seasonOver') break;
+    }
+    if (season + 1 < LEGACY_SEASONS) { s = withSeed(seed * 31 + season + 5, () => cm.startNextSeason(cm.finishSeason(s).state)); setBase(); }
+  }
+  return { hash: hashOf(strip(s)), draws: DRAWS.n, at: `season ${s.season} week ${s.week}` };
+}
+function compareArms(P, label, head, base, runs) {
+  let bad = 0, first = '';
+  for (const r of runs) {
+    const h = playSeasons(head, { ...r, base: label === 'legacy' });
+    const b = playSeasons(base, { ...r, base: false });
+    if (h.hash !== b.hash || h.draws !== b.draws) { bad += 1; first ||= `${r.club} ${r.era ?? 'now'} seed ${r.seed} ${r.mode}: head ${h.hash} ${h.draws} draws, base ${b.hash} ${b.draws} draws (${h.at})`; }
+  }
+  check(P, `${runs.length} careers, every save byte and every draw equal to SUBS_BASE`, bad === 0 && runs.length > 0, bad ? `${bad} differ; first ${first}` : '');
+}
+function legacySection(cm, { base }) {
+  const runs = [];
+  for (let seed = 0; seed < LEGACY_SEEDS; seed++) {
+    for (const [club, era] of [['Everton', 'era2005'], ['Barcelona', 'era2015'], ['Liverpool', null]]) {
+      for (const mode of Object.keys(QUICK)) runs.push({ club, era, seed, mode, opts: QUICK[mode] });
+    }
+    for (const club of ['Westerlo', 'Nottingham Forest']) runs.push({ club, era: null, seed, mode: 'hotseat', opts: HOT_STYLE });
+  }
+  compareArms('legacy', 'legacy', cm, base, runs);
+}
+function threeSection(cm, { base, threeHead }) {
+  const runs = [];
+  for (let seed = 0; seed < LEGACY_SEEDS; seed++) {
+    for (const [club, era] of [['Everton', 'era2005'], ['Barcelona', 'era2015']]) {
+      for (const mode of Object.keys(QUICK)) runs.push({ club, era, seed, mode, opts: QUICK[mode] });
+    }
+  }
+  compareArms('three', 'three', threeHead, base, runs);
+}
+
+/* Section press: every bigGame or derby question asked at a whistle names the next fixture's opponent. */
+const PRESS_MATCHES = Number(process.env.SUBS_PRESS_MATCHES ?? 30);
+function pressFleet(cm, onAsk) {
+  const kinds = {};
+  for (let k = 0; k < SEEDS; k++) {
+    for (const [club, era] of [['Liverpool', null], ['Everton', null], ['Barcelona', null], ['Everton', 'era2005'], ['Burnley', null]]) {
+      let s = withSeed(8300 + 41 * k, () => (era ? cm.startCareer(club, era) : cm.startCareer(club)));
+      for (let i = 0, played = 0; played < PRESS_MATCHES && i < PRESS_MATCHES * 3; i++) {
+        const before = s.press?.pending ?? null;
+        const week = s.week;
+        const last = cm.nextFixture(s);
+        const r = withSeed(8300 + 41 * k + 1000 * i, () => cm.playNextEntry(s, { skipHalftime: true }));
+        if (r.kind === 'seasonOver') break;
+        s = r.state;
+        if (r.kind !== 'match') continue;
+        played += 1;
+        const q = s.press?.pending ?? null;
+        if (!q || q === before || s.press.lastWeek !== week) continue;
+        kinds[q.kind] = (kinds[q.kind] ?? 0) + 1;
+        if (onAsk && (q.kind === 'bigGame' || q.kind === 'derby')) onAsk(q, cm.nextFixtureFrom ? cm.nextFixtureFrom(s, s.week) : null, last);
+      }
+    }
+  }
+  return kinds;
+}
+function pressSection(cm, { base }) {
+  const P = 'press';
+  let asked = 0, wrong = 0, first = '';
+  const kinds = pressFleet(cm, (q, next, last) => {
+    asked += 1;
+    const lastOpp = last?.kind === 'match' ? last.opponent : null;
+    const nextOpp = next?.kind === 'match' ? next.opponent : null;
+    const ok = nextOpp !== null && q.text.includes(nextOpp) && (nextOpp === lastOpp || !lastOpp || !q.text.includes(lastOpp));
+    if (!ok) { wrong += 1; first ||= `${q.kind}: "${q.text}" with ${lastOpp} just played and ${nextOpp} next`; }
+  });
+  check(P, 'every bigGame or derby question asked at a whistle names the next fixture\'s opponent', asked > 0 && wrong === 0, `${wrong} of ${asked} wrong${first ? `; first ${first}` : ''}`);
+  console.log(`   question kinds at the whistle, head: ${JSON.stringify(kinds)}`);
+  if (base) console.log(`   question kinds at the whistle, base: ${JSON.stringify(pressFleet(base, null))}`);
+  const hs = HS.get(cm);
+  const daily = withSeed(1, () => hs.dailyHotSeat('2026-10-12'));
+  const acts = [{ t: 'match', m: 'balanced', talk: null }, { t: 'match', m: 'balanced', talk: null }];
+  const dayRun = withSeed(2, () => hs.replayHotSeat({ club: daily.club, seed: daily.seed, daily: daily.daily }, acts));
+  const freeRun = withSeed(3, () => hs.replayHotSeat({ club: daily.club, seed: daily.seed, rules: 1331 }, acts));
+  const dayQ = dayRun.state.press?.pending?.text ?? '(none)', freeQ = freeRun.state.press?.pending?.text ?? '(none)';
+  console.log(`   2026-10-12 daily at ${daily.club}: "${dayQ}"; the stamped free run on its seed: "${freeQ}"`);
+  check(P, 'the 2026-10-12 daily still asks about Cercle Brugge (it is dated before the rules)', daily.club === 'Westerlo' && dayQ.includes('Cercle Brugge'));
+  check(P, 'a stamped free run on the same seed asks about Gent after Cercle Brugge', freeQ.includes('Gent') && !freeQ.includes('Cercle Brugge'));
+}
+
+/* Section hotseat: the 30 dailies before the cutover and an unstamped free run replay exactly as on SUBS_BASE. */
+function hotseatSection(cm, { base }) {
+  const P = 'hotseat';
+  const hs = HS.get(cm), hb = HS.get(base);
+  const SCRIPT = Array.from({ length: 6 }, () => ({ t: 'match', m: 'balanced', talk: null }));
+  const from = hs.HOT_SEAT_RULES_FROM;
+  const dates = [];
+  for (let d = new Date(Date.UTC(2026, 8, 24)); dates.length < 30; d.setUTCDate(d.getUTCDate() + 1)) dates.push(d.toISOString().slice(0, 10));
+  let bad = 0, unmarked = 0, first = '';
+  for (const date of dates) {
+    const sh = hs.dailyHotSeat(date), sb = hb.dailyHotSeat(date);
+    const h = withSeed(11, () => hs.replayHotSeat({ club: sh.club, seed: sh.seed, daily: sh.daily }, SCRIPT));
+    const b = withSeed(11, () => hb.replayHotSeat({ club: sb.club, seed: sb.seed, daily: sb.daily }, SCRIPT));
+    if (date < from && h.state.matchRules !== 'base') unmarked += 1;
+    const same = sh.club === sb.club && hashOf(strip(h.state)) === hashOf(strip(b.state)) && h.points === b.points && JSON.stringify(h.log) === JSON.stringify(b.log);
+    if (!same) { bad += 1; first ||= `${date} ${sh.club}`; }
+  }
+  check(P, `the cutover ${from} falls after the 30 dates (${dates[0]} to ${dates.at(-1)})`, dates.at(-1) < from);
+  check(P, 'every daily before the cutover plays the base rules', unmarked === 0, `${unmarked} of 30 unmarked`);
+  check(P, 'every daily before the cutover replays exactly as on SUBS_BASE', bad === 0, bad ? `${bad} differ, first ${first}` : '');
+  const free = { club: 'Westerlo', seed: 424242 };
+  const fh = withSeed(12, () => hs.replayHotSeat(free, SCRIPT)), fb = withSeed(12, () => hb.replayHotSeat(free, SCRIPT));
+  check(P, 'a free run saved without the stamp replays exactly as on SUBS_BASE', hashOf(strip(fh.state)) === hashOf(strip(fb.state)) && fh.points === fb.points);
+  const carried = hs.handoverState(fh);
+  check(P, 'the career carried on to Club Manager carries no matchRules', !('matchRules' in carried));
+}
+SECTIONS.legacy = legacySection;
+SECTIONS.three = threeSection;
+SECTIONS.press = pressSection;
+SECTIONS.hotseat = hotseatSection;
+
 /* ---------------- main ---------------- */
 async function main() {
   const folder = await mkdtemp(path.join(os.tmpdir(), 'simCmSubs-'));
   const source = await readFile(path.join(root, ENGINE), 'utf8');
   const ledger = JSON.parse(await readFile(path.join(root, LEDGER), 'utf8'));
   let text = source;
+  const hsSource = await readFile(path.join(root, HS_FILE), 'utf8');
+  let hsText = hsSource;
   const spec = CONTROLS[CONTROL];
   for (const [from, to] of spec?.patches ?? (spec?.from !== undefined ? [[spec.from, spec.to]] : [])) {
-    const n = text.split(from).length - 1;
-    if (n !== 1) { console.log(`control ${CONTROL}: its anchor is in the engine ${n} times, not once; could not run`); process.exit(2); }
-    text = text.replace(from, to);
+    const inHs = spec.file === HS_FILE;
+    const n = (inHs ? hsText : text).split(from).length - 1;
+    if (n !== 1) { console.log(`control ${CONTROL}: its anchor is in ${spec.file ?? ENGINE} ${n} times, not once; could not run`); process.exit(2); }
+    if (inHs) hsText = hsText.replace(from, to); else text = text.replace(from, to);
   }
   if (CONTROL === 'onesource') {
     const fact = ledger.rows.find(r => r.league === 'premier')?.facts?.[0];
@@ -305,7 +487,24 @@ async function main() {
     fact.sources = fact.sources.slice(0, 1);
   }
   const needsEngine = PARTS.some(p => p !== 'ledger');
-  const cm = needsEngine ? await bundleEngine(text, CONTROL || 'head', folder) : null;
+  const cm = needsEngine ? await bundleEngine(text, CONTROL || 'head', folder, { hsText: hsText === hsSource ? null : hsText }) : null;
+  const ctx = { folder, source, text, base: null, threeHead: null };
+  if (PARTS.some(p => BASE_PARTS.includes(p))) {
+    if (!SUBS_BASE) { console.log('the base arm needs SUBS_BASE, a checkout of the base commit; could not run'); process.exit(2); }
+    const baseText = await readFile(path.join(SUBS_BASE, ENGINE), 'utf8');
+    ctx.base = await bundleEngine(baseText, 'base', folder, { srcRoot: path.join(SUBS_BASE, 'src') });
+    await ctx.base.ensureAllEraRosters();
+  } else if (SUBS_BASE && PARTS.includes('press')) {
+    ctx.base = await bundleEngine(await readFile(path.join(SUBS_BASE, ENGINE), 'utf8'), 'base', folder, { srcRoot: path.join(SUBS_BASE, 'src') });
+    await ctx.base.ensureAllEraRosters();
+  }
+  if (PARTS.includes('three')) {
+    /* Section three: the current rules with the press read put back to the old week, so only the rule table can differ. */
+    const pressLine = "  maybeAskPress(state, state.matchRules === 'base' ? undefined : live.week + 1);";
+    if (text.split(pressLine).length - 1 !== 1) { console.log('section three: the press line is not in the engine once; could not run'); process.exit(2); }
+    ctx.threeHead = await bundleEngine(text.replace(pressLine, '  maybeAskPress(state);'), 'three', folder, { hsText: hsText === hsSource ? null : hsText });
+    await ctx.threeHead.ensureAllEraRosters();
+  }
   /* The past seasons' squads load on demand in the game; every era this file plays is loaded first. */
   if (cm) await cm.ensureAllEraRosters();
   globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {}, clear: () => {} };
@@ -313,7 +512,7 @@ async function main() {
   for (const part of PARTS) {
     if (part === 'ledger') ledgerSection(ledger, rule);
     else if (part === 'rule') ruleSection(cm);
-    else if (SECTIONS[part]) await SECTIONS[part](cm, { folder, source, text });
+    else if (SECTIONS[part]) await SECTIONS[part](cm, ctx);
     else { console.log(`unknown part ${part}`); process.exit(2); }
   }
   const red = results.filter(r => !r.ok);
