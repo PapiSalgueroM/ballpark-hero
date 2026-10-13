@@ -1,0 +1,4 @@
+simLiveSim exit=0 1s | simLiveSim: all green
+simMatchScreen exit=0 6s | simMatchScreen: PASS. One match, two ways through it, and a report that names both clubs, shows the clock it ran to, splits the ball two ways and draws a graph that moves
+motion-whistle exit=1 10s | simLiveSimMotion: control whistle turned "the ninetieth minute asks the latest save" red on an assertion (2 failed), as it must.
+simLiveSimMotion exit=0 49s | simLiveSimMotion: green. 55 tests passed (the viewer on real feeds, the pitch part's rules on 200 half feeds and on feeds made by hand, the goal sequence, match mode), an

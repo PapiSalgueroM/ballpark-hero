@@ -1,0 +1,4 @@
+simLiveSimMotion: node scripts/simLiveSimMotion.mjs
+motion-whistle: LIVE_MOTION_CONTROL=whistle node scripts/simLiveSimMotion.mjs
+simLiveSim: node scripts/simLiveSim.mjs
+simMatchScreen: node scripts/simMatchScreen.mjs
