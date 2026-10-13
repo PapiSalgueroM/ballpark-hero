@@ -23,19 +23,22 @@ player on the picker with no word) and the first half of gm POLISH 24 (Hot Seat'
   inside the fence keep the names `saveCareer` and `switchSlot`, so `simStorageWrites` section 7 follows them to
   every caller that keeps the answer exactly as before (no list entry was changed).
 - The hook: adopt at boot before `loadCareer`; a refused write because the career moved sets `saveMoved` (never
-  `saveFailed`); the leave write is refused by the fence; unmount writes last, then releases; a new effect in EVERY
+  `saveFailed`); the leave write is refused by the fence; unmount writes last, then releases (a stale page only once its
+  unmount is over, see the review fixes below); a new effect in EVERY
   phase listens for storage events on the fence key, `pageshow` and the tab turning visible. Round 928's
   `holdsActiveSlot` layer stays.
 - NEW `src/components/SaveMovedNotice.tsx`, generic: a fixed alertdialog portalled to body, everything else inert,
-  focus on Reload, no animation. Mounted in ClubManager.tsx in one hunk after the save failed banner, with the
+  focus on Reload, no animation, no key reaching a window listener behind it, named by its words. Mounted lazily in
+  ClubManager.tsx in one hunk after the save failed banner (the lazy line beside 49), with the
   words "This career moved on in another tab. Reload to carry on."
 - Damaged saves: the boot lands on the managers screen when a slot is unreadable; the tile says it can be cleared
   and a copy is kept; Clear sets the bytes aside through `setAsideSave` before `clearCareer` (no room: nothing is
   cleared and the screen says so). loadCareer repairs a budget that is not a finite number (a number spelled as
-  text keeps its value, anything else is 0), a squad under 14 (`ensureSquadCoverage`, then `ensureRoles`) and XI
+  text keeps its value, anything else is 0), a squad under 11, too few to name an eleven (`ensureSquadCoverage`, then `ensureRoles`) and XI
   ids that name nobody (only those slots, by `autoPickXI` over the unused men).
 - A NEGATIVE budget is NOT repaired: `startNextSeason` clamps one with `Math.max(0, career.budget)` (19939 on
-  the base) and `realCapForBudget` with `Math.max(0, budget)`, so the engine itself expects a negative. The
+  the base) and `realCapForBudget` with `Math.max(0, budget)`, so the engine itself expects a negative (the fixer
+  found no debit of today that can write one: every one checks the kitty first; an older or hand edited save can). The
   "£0k" display it gives is for the lead to rule into F2 or F3.
 - Carry on landing: `markLandOnHub` (src/lib/clubManagerLanding.ts, sessionStorage, one shot) is written by CarryOnCard
   just before the page changes; the boot takes it and opens the career on its hub.
@@ -86,3 +89,25 @@ player on the picker with no word) and the first half of gm POLISH 24 (Hot Seat'
   the second of 1323 and 1326 to merge retakes them again (both edit clubManager.ts).
 - `src/test/clubManagerSlots.test.tsx` had one assertion on the old confirm words ("no undo"), which this round makes
   false by brief; it now reads the new words. One line.
+
+## Review fixes (2026-10-13, after review-run-1323 and review-read-1323)
+
+- MAJOR, the stale tab's Back mid Play Live (both reviews): the hook released the fence at unmount, then the live
+  viewer's own unmount write (Round 543's onMark) ran as a claim and put the stale career back over three matches.
+  A page another tab has moved on now stays held through its unmount and lets go in a microtask, unless a page has
+  adopted the save since (so a same document Hot Seat carry on afterwards still lands). playTwoTabs case 9 walks it
+  (in by a link, Back mid Play Live and on the hub, then a carry on in that document). Proven by mutation on
+  r1323-fx1: the old unconditional release clobbers ("week 0, 0 results, live minute 23"), a release before the last
+  write clobbers on the hub too, and a page that never lets go refuses the later carry on; the head is green
+  (r1323-fx2 walk9 at 320, 390 and 1280).
+- MAJOR, the squad repair on an engine written squad: the line moved from under 14 to under 11. The engine writes 12
+  (two loans in, loans out to the floor of 14, both loans broken). simSaveFence's fleet plays that squeeze (465
+  saves under 14 men, every seed reaching it, all loaded byte for byte as the base does), with control squadline.
+- MAJOR, weight: the notice is a lazy chunk (about 0.75K gzipped on its own); on a failed fetch the page reloads the
+  site's way (reloadToRetryChunk), offline it stays put. Measured on the merged head: see fix-1323.md.
+- Minors: a negative budget pin in the fleet (control budgetneg); the notice's accessible name and the key stop; the
+  VAR line in ClubManagerHelp.tsx put back; the help example now says Reload opens the managers screen; the
+  simSaveFence header carries its numbers.
+- Merged origin/main 36cc9ffe (Release BB): What's New keeps both entries; the appeal manifest took main's pins and
+  the two hashes this round moves were retaken in commits of their own after the runner proof.
+- Full report: C:/Users/antho/dukb-handoff/2026-10-10/results-g/fix-1323.md.
