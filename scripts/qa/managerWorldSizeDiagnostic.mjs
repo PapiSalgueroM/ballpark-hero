@@ -29,7 +29,10 @@ assert.equal(git(['rev-parse', `${CONTROL_INPUT}^{tree}`]), '6ca6f91b4338d98c0bb
    careers at 510,054 characters against 495,000: the unbounded ledger of 3ac21642, which the summer prune
    (4e87f296, reviewer 1's MAJOR 8) bounded. The arm is now held to that reason alone, so any other red at that
    frozen head stops the diagnostic instead of passing as "completed". Every run also tries the check on doctored
-   copies of the arm's own output (a second failure, a clean exit, section 1 broken), each of which it must refuse. */
+   copies of the arm's own output (a second failure, a clean exit, section 1 broken), each of which it must refuse.
+   Release BC's join (the lead's AZ ruling 4): this arm, like BASE above, reads its commit with git show, so it rests
+   on 3ac21642 staying in the history of every head that runs it. Release AZ reaches main by a merge commit, never by
+   a squash or a rebase; a head without 3ac21642 in its history stops at the tree assertion above, it does not pass. */
 const CONTROL_INPUT_RED = 'simClubManagerSlots: RED, sections 2 (1 failures)';
 const CONTROL_INPUT_BUDGET = /^FAIL: three season 15 careers take \d+ characters, over the 495000 budget$/;
 const CONTROL_INPUT_SECTION_ONE = '20 of 20 season digests identical to the career played alone';
