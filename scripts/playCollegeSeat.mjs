@@ -55,7 +55,7 @@ const say = (ok, what) => {
 /** Every rule a seat node must keep, measured on the page. */
 async function seatChecks(page, label) {
   const r = await page.evaluate(() => {
-    const out = { roots: 0, small: [], short: [], over: [], wide: [], minTap: null };
+    const out = { roots: 0, small: [], short: [], over: [], wide: [], cut: [], minTap: null };
     const W = document.documentElement.clientWidth;
     for (const root of document.querySelectorAll('[data-college-seat]')) {
       out.roots += 1;
@@ -64,6 +64,10 @@ async function seatChecks(page, label) {
       for (const el of [root, ...root.querySelectorAll('*')]) {
         const own = [...el.childNodes].some(n => n.nodeType === 3 && n.textContent.trim());
         if (own && parseFloat(getComputedStyle(el).fontSize) < 12) out.small.push(`${el.tagName} ${el.textContent.trim().slice(0, 30)}`);
+        /* cut off: a clamped or truncated line whose text does not fit its box */
+        const cs = getComputedStyle(el);
+        const clamped = cs.webkitLineClamp && cs.webkitLineClamp !== 'none' || cs.textOverflow === 'ellipsis';
+        if (own && clamped && (el.scrollHeight > el.clientHeight + 1 || el.scrollWidth > el.clientWidth + 1)) out.cut.push(`${el.textContent.trim().slice(0, 40)}`);
       }
       for (const b of [...(root.tagName === 'BUTTON' ? [root] : []), ...root.querySelectorAll('button')]) {
         out.minTap = Math.min(out.minTap ?? 999, Math.round(b.getBoundingClientRect().height * 10) / 10);
@@ -82,6 +86,7 @@ async function seatChecks(page, label) {
   if (r.short.length) shortFails += 1;
   say(r.over.length === 0, `${label}: a seat node sits over its neighbour: ${r.over.join(', ')}`);
   say(r.wide.length === 0, `${label}: a seat node runs past the page edge: ${r.wide.join(', ')}`);
+  say(r.cut.length === 0, `${label}: seat text cut off: ${r.cut.slice(0, 3).join(' | ')}`);
   console.log(`   ${label}: ${r.roots} seat nodes, smallest seat button ${r.minTap ?? 'none'} px`);
   return r;
 }
@@ -153,6 +158,22 @@ for (const { route, key, school } of ROUTES) {
     say(await page.locator('[data-college-seat="tile"]').count() === 1, `${tag}: a new dynasty's first screen carries the tile`);
     await seatChecks(page, `${tag} station 1`);
     await shot(page, `${tag}-1-tile`);
+    /* The worst row: the longest ask either pack writes (basketball's 'contend', 99 characters) on the tile. */
+    {
+      const worst = JSON.parse(startSave);
+      worst.st.seat.mandate.text = 'Make the national tournament and win a national tournament game. The boosters paid for this roster.';
+      await page.evaluate(([k, v]) => localStorage.setItem(k, v), [key, JSON.stringify(worst)]);
+      await page.reload({ waitUntil: 'networkidle' });
+      await page.waitForTimeout(700);
+      await control(page);
+      say(await page.locator('[data-college-seat="tile"]').count() === 1, `${tag}: the tile with the longest ask`);
+      await seatChecks(page, `${tag} station 1, the longest ask`);
+      await shot(page, `${tag}-1-longest-ask`);
+      await page.evaluate(([k, v]) => localStorage.setItem(k, v), [key, startSave]);
+      await page.reload({ waitUntil: 'networkidle' });
+      await page.waitForTimeout(700);
+      await control(page);
+    }
 
     where = 'S2';
     await page.locator('[data-college-seat="tile"]').click();

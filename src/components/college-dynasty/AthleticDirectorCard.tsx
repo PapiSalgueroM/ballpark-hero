@@ -57,8 +57,8 @@ export function SeatSlot({ block, view, offer, onOpen, onTake, onPass }: {
           <span className={tile.trust <= 25 ? 'text-destructive' : 'text-foreground'}>Trust {tile.trust}</span>
         </span>
         <TrustBar trust={tile.trust} />
-        <span className="line-clamp-2 text-xs text-foreground">{tile.ask}</span>
-        <span className={cn('truncate text-xs', tile.onTrack ? 'text-primary' : 'text-amber-300')}>{tile.line}</span>
+        <span className="line-clamp-3 text-xs text-foreground">{tile.ask}</span>
+        <span className={cn('line-clamp-2 text-xs', tile.onTrack ? 'text-primary' : 'text-amber-300')}>{tile.line}</span>
       </button>
     );
   }
@@ -127,8 +127,8 @@ export function SeatCard({ block, view, onBack }: { block: CollegeSeatBlock; vie
       <p className="mt-4 text-xs font-bold uppercase tracking-wider text-muted-foreground">Your record</p>
       <div className="mt-1 max-h-40 space-y-1 overflow-y-auto">
         {rows.map((s, i) => (
-          <p key={`${s.team}:${s.since}:${i}`} className="flex items-center justify-between gap-2 rounded-lg border border-border/60 bg-background px-2.5 py-1.5 text-xs">
-            <span className="min-w-0 truncate font-semibold text-foreground">{s.name}, since {s.since}</span>
+          <p key={`${s.team}:${s.since}:${i}`} className="flex flex-wrap items-center justify-between gap-x-2 rounded-lg border border-border/60 bg-background px-2.5 py-1.5 text-xs">
+            <span className="font-semibold text-foreground">{s.name}, since {s.since}</span>
             <span className="shrink-0 text-muted-foreground">
               {s.seasons} {s.seasons === 1 ? 'season' : 'seasons'}, {s.titles} {s.titles === 1 ? 'title' : 'titles'}{s.ended ? `, ${s.ended}` : ''}
             </span>
@@ -232,8 +232,8 @@ export function SeatMarket({ block, view, market, canSit, onTake, onSit, onNew }
         <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Your record</p>
         <div className="mt-1 max-h-40 space-y-1 overflow-y-auto">
           {rows.map((s, i) => (
-            <p key={`${s.team}:${s.since}:${i}`} className="flex items-center justify-between gap-2 rounded-lg border border-border/60 bg-background px-2.5 py-1.5 text-xs">
-              <span className="min-w-0 truncate font-semibold text-foreground">{s.name}, since {s.since}</span>
+            <p key={`${s.team}:${s.since}:${i}`} className="flex flex-wrap items-center justify-between gap-x-2 rounded-lg border border-border/60 bg-background px-2.5 py-1.5 text-xs">
+              <span className="font-semibold text-foreground">{s.name}, since {s.since}</span>
               <span className="shrink-0 text-muted-foreground">{s.seasons} {s.seasons === 1 ? 'season' : 'seasons'}, {s.titles} {s.titles === 1 ? 'title' : 'titles'}{s.ended ? `, ${s.ended}` : ''}</span>
             </p>
           ))}
