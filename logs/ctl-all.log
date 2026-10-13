@@ -1,0 +1,60 @@
+control seedoff (the seed handed to the standing line is an index and not a seed (one too good, and a top seed reads 0th)): vitest exit 1; 1 red, 68 green of 69
+control noplayoffs (the bracket is not saved): vitest exit 1; 17 red, 52 green of 69
+control abandonbracket (the bracket is cleared neither by Abandon nor by a new franchise (two keys, one lock)): vitest exit 1; 1 red, 68 green of 69
+control rebuiltkeeps (a bracket started again keeps the log of the one that is gone): vitest exit 1; 1 red, 68 green of 69
+control champopen (a hub save past the last week with nothing to play opens): vitest exit 1; 2 red, 67 green of 69
+control bracketnoedges (the bracket is played without the desk's edges (the winners may stand; the told scores may not)): vitest exit 1; 2 red, 67 green of 69
+control restround ("Sim the rest" plays one round): vitest exit 1; 13 red, 56 green of 69
+control weekeighteen (the chip reads Week 18/17 in the playoffs): vitest exit 1; 4 red, 65 green of 69
+control playofftrades (trades stay open in the playoffs with the desk off): vitest exit 1; 1 red, 68 green of 69
+control roundspoils (while he watches a playoff game the page reads the bracket AFTER the press): vitest exit 1; 1 red, 68 green of 69
+control holdround (a playoff press is never held (the hold asks only for the next week)): vitest exit 1; 3 red, 66 green of 69
+control recapnow (the recap is drawn while he watches the title game): vitest exit 1; 2 red, 67 green of 69
+control bracketgrid (the league grid is drawn in the bracket): vitest exit 1; 1 red, 68 green of 69
+control tiegame ("Your game" opens his last game and not the game of that tie): vitest exit 1; 1 red, 68 green of 69
+control trustspoils (the owner card shows the trust the title game's press graded while he watches it): vitest exit 1; 1 red, 68 green of 69
+control pressspoils (the press card shows the room the title game's press called while he watches it): vitest exit 1; 1 red, 68 green of 69
+control tiewhere ("Your game" opens the first game between the two clubs, whatever its round (the review's mutant)): vitest exit 1; 1 red, 68 green of 69
+control hurtweeks (a man hurt on "Play Week 17" is out a count of weeks in the feed, though nobody heals in the bracket): vitest exit 1; 1 red, 68 green of 69
+control donenow (the finish is recorded at the title game's press while he watches it): vitest exit 1; 1 red, 68 green of 69
+control nolog: FIRED. Every test it names is red and every test it spares is green.
+control abandonkeeps: FIRED. Every test it names is red and every test it spares is green.
+control summerkeeps: FIRED. Every test it names is red and every test it spares is green.
+control refusesave: FIRED. Every test it names is red and every test it spares is green.
+control trustlog: FIRED. Every test it names is red and every test it spares is green.
+control rawback: FIRED. Every test it names is red and every test it spares is green.
+control weekengine: FIRED. Every test it names is red and every test it spares is green.
+control enginescores: FIRED. Every test it names is red and every test it spares is green.
+control keyseason: FIRED. Every test it names is red and every test it spares is green.
+control tellnoedges: FIRED. Every test it names is red and every test it spares is green.
+control noedges: FIRED. Every test it names is red and every test it spares is green.
+control playoffnoedges: FIRED. Every test it names is red and every test it spares is green.
+control playoffkey: FIRED. Every test it names is red and every test it spares is green.
+control noseason: FIRED. Every test it names is red and every test it spares is green.
+control closetwice: FIRED. Every test it names is red and every test it spares is green.
+control titles: FIRED. Every test it names is red and every test it spares is green.
+control recordspoils: FIRED. Every test it names is red and every test it spares is green.
+control gridspoils: FIRED. Every test it names is red and every test it spares is green.
+control holdkept: FIRED. Every test it names is red and every test it spares is green.
+control tilenolog: FIRED. Every test it names is red and every test it spares is green.
+control pacespoils: FIRED. Every test it names is red and every test it spares is green.
+control seedoff: FIRED. Every test it names is red and every test it spares is green.
+control noplayoffs: FIRED. Every test it names is red and every test it spares is green.
+control abandonbracket: FIRED. Every test it names is red and every test it spares is green.
+control rebuiltkeeps: FIRED. Every test it names is red and every test it spares is green.
+control champopen: FIRED. Every test it names is red and every test it spares is green.
+control bracketnoedges: FIRED. Every test it names is red and every test it spares is green.
+control restround: FIRED. Every test it names is red and every test it spares is green.
+control weekeighteen: FIRED. Every test it names is red and every test it spares is green.
+control playofftrades: FIRED. Every test it names is red and every test it spares is green.
+control roundspoils: FIRED. Every test it names is red and every test it spares is green.
+control holdround: FIRED. Every test it names is red and every test it spares is green.
+control recapnow: FIRED. Every test it names is red and every test it spares is green.
+control bracketgrid: FIRED. Every test it names is red and every test it spares is green.
+control tiegame: FIRED. Every test it names is red and every test it spares is green.
+control trustspoils: FIRED. Every test it names is red and every test it spares is green.
+control pressspoils: FIRED. Every test it names is red and every test it spares is green.
+control tiewhere: FIRED. Every test it names is red and every test it spares is green.
+control hurtweeks: FIRED. Every test it names is red and every test it spares is green.
+control donenow: FIRED. Every test it names is red and every test it spares is green.
+controlFrontOfficeBoard: 40 of 40 control(s) fired, the board tests can fail for each named reason.

@@ -1,0 +1,4 @@
+  FAIL  [12] 390x844, "Play Week 17", the first press of a visit: the back chip from 984 to 1028 of 844: on the screen with the buttons
+  FAIL  [12] 390x844, a playoff round, the first press of a visit: the back chip from 999 to 1043 of 844: on the screen with the buttons
+  FAIL  [19] 390x844, "Watch Week 17" on E at full time (24 samples on the clock; the week box from 435 before the press to 378, the box from 644 to 535): his result from 602 to 630, the next press from 427 to 471, the back chip from 947 to 991: all on the screen
+playFrontOfficeGameDay: 381 checks, 3 failed

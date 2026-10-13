@@ -1,0 +1,420 @@
+
+=== 320 by 640 ===
+  PASS  [1] 320: the tile's box is 400 px high and where it was before its card landed (400 then 400, top 501 then 501)
+  PASS  [1] 320: before a press the tile shows the next game, with Play Week 1 and Watch Week 1 open
+  PASS  [1] 320: the card's chunk was asked for only when the box opened (39 scripts before it, 0 of them with the tile's marker; 6 after, 1 with it)
+  PASS  [8] 320, the next game: nothing in the tile's box is taller or wider than its frame or leaves the box (7 elements read)
+  PASS  [8] 320, the next game: no text in the tile is under 12 px
+  PASS  [8] 320, the next game: every button of the week box is at least 44 px high (3 buttons)
+  PASS  [2] 320: after Play Week 1 the tile shows the saved final of his game (LARI 6, SEA 24; the save holds LARI 6, SEA 24)
+  PASS  [2] 320: the line score adds up to the final (0 3 0 3 6 and 14 0 7 3 24)
+  PASS  [2] 320: sixteen scores sit under the tile, the box is the size it was and the page has no sideways scroll (320 of 320)
+  PASS  [2] 320: the press did not take the tile out of view: scrollY 603 to 603, the tile's top at 415 of 640, 225 px of it showing
+  PASS  [2] 320: where he stands is the engine's own seeding of the saved league ("NFC: outside the 7 seeds as it stands."; the save seeds him outside the seven)
+  ....  320: measured after Play: the tile's top 501 before and 415 after, the Play button's top 307, the grid's first row at 827, the story 150 px in a frame of 150
+  PASS  [8] 320, the result after Play: nothing in the tile's box is taller or wider than its frame or leaves the box (50 elements read)
+  PASS  [8] 320, the result after Play: the story has room to be read (150 px of it in a frame of 150)
+  PASS  [8] 320, the result after Play: no text in the tile is under 12 px
+  PASS  [8] 320, the result after Play: every button of the week box is at least 44 px high (5 buttons)
+  PASS  [8] 320, 3-watch-1x, the clock running: nothing in the tile's box is taller or wider than its frame or leaves the box (19 elements read)
+  PASS  [8] 320, 3-watch-1x, the clock running: no text in the tile is under 12 px
+  PASS  [8] 320, 3-watch-1x, the clock running: every button of the week box is at least 44 px high (6 buttons)
+  PASS  [3] 320, 3-watch-1x: until full time the whole page held nothing of the result (73 samples, 16.6 s, the bug ended on 31-28 of 31-28)
+  PASS  [3] 320, 3-watch-1x: at full time the tile shows the saved final (WARI 31, SEA 28) and the page has moved on (2026 · Week 3/17, Record 1-1)
+  PASS  [3] 320, 3-watch-1x: the press saved the week once and the watch saved nothing (the save at full time is the string the press wrote, 653373 bytes)
+  PASS  [3] 320, 3-watch-1x: full time is a reveal: scrolled to the top of the page in the middle of the watch the tile was out of view (its top at 1018 of 640, scrollY 0; out of view: true), and at full time the page brought it back: scrollY 1006, its top at 12 of 640, 400 px showing
+  PASS  [3] 320, 3-watch-1x: at full time the owner card's pace is the saved league's ("1 wins keeps the mandate on pace."; the card ends "ow the fans a direction.📈 1 wins keeps the mandate on pace.")
+  PASS  [3] 320, 3-watch-1x: where he stands is the engine's own seeding of the saved league ("NFC: outside the 7 seeds as it stands."; the save seeds him outside the seven)
+  PASS  [8] 320, 3-watch-1x, full time: nothing in the tile's box is taller or wider than its frame or leaves the box (53 elements read)
+  PASS  [8] 320, 3-watch-1x, full time: the story has room to be read (150 px of it in a frame of 150)
+  PASS  [8] 320, 3-watch-1x, full time: no text in the tile is under 12 px
+  PASS  [8] 320, 3-watch-1x, full time: every button of the week box is at least 44 px high (6 buttons)
+  PASS  [8] 320, 4-results, the clock running: nothing in the tile's box is taller or wider than its frame or leaves the box (19 elements read)
+  PASS  [8] 320, 4-results, the clock running: no text in the tile is under 12 px
+  PASS  [8] 320, 4-results, the clock running: every button of the week box is at least 44 px high (6 buttons)
+  PASS  [4] 320, 4-results: until full time the whole page held nothing of the result (2 samples, 1.4 s, the bug ended on 0-0 of 24-35)
+  PASS  [4] 320, 4-results: at full time the tile shows the saved final (WARI 35, SF 24) and the page has moved on (2026 · Week 4/17, Record 2-1)
+  PASS  [4] 320, 4-results: the press saved the week once and the watch saved nothing (the save at full time is the string the press wrote, 653493 bytes)
+  PASS  [4] 320, 4-results: the tile stayed in view and the same size: scrollY 1006 to 705, its top at 403 of 640, 237 px showing
+  PASS  [4] 320, 4-results: at full time the owner card's pace is the saved league's ("2 wins keeps the mandate on pace."; the card ends "ow the fans a direction.📈 2 wins keeps the mandate on pace.")
+  PASS  [4] 320, 4-results: where he stands is the engine's own seeding of the saved league ("NFC: 6th seed of 7 as it stands."; the save seeds him 6)
+  PASS  [8] 320, 4-results, full time: nothing in the tile's box is taller or wider than its frame or leaves the box (60 elements read)
+  PASS  [8] 320, 4-results, full time: the story has room to be read (150 px of it in a frame of 150)
+  PASS  [8] 320, 4-results, full time: no text in the tile is under 12 px
+  PASS  [8] 320, 4-results, full time: every button of the week box is at least 44 px high (7 buttons)
+  PASS  [4] 320: a reload in the middle of a watch shows the result (LARI 17, SF 34) with no clock, and the save is the string the press wrote (week 5, 4 games logged)
+  PASS  [8] 320, the result after a reload: nothing in the tile's box is taller or wider than its frame or leaves the box (63 elements read)
+  PASS  [8] 320, the result after a reload: the story has room to be read (150 px of it in a frame of 150)
+  PASS  [8] 320, the result after a reload: no text in the tile is under 12 px
+  PASS  [8] 320, the result after a reload: every button of the week box is at least 44 px high (8 buttons)
+  PASS  [6] 320: the "?" is drawn over the whole week box and not inside the tile, with the law's words and a worked example (the sheet is 592 px high, 2 px narrower and 2 px shorter than the box's own frame; in the box's host: true; inside the tile: false)
+  PASS  [6] 320: opening the "?" over a week box whose top was readable did not move the page (the box's top at 62 of 640, readable: true; scrollY 407 before and 407 with the sheet open)
+  PASS  [6] 320: the "?" closes, opens again and closes
+  PASS  [7] 320: the first chip opens Week 1 on the same box (Wk 1 · at SEA: LARI 6, SEA 24; the box did not move)
+  PASS  [8] 320, an earlier game opened from a chip: nothing in the tile's box is taller or wider than its frame or leaves the box (59 elements read)
+  PASS  [8] 320, an earlier game opened from a chip: the story has room to be read (150 px of it in a frame of 150)
+  PASS  [8] 320, an earlier game opened from a chip: no text in the tile is under 12 px
+  PASS  [8] 320, an earlier game opened from a chip: every button of the week box is at least 44 px high (8 buttons)
+  PASS  [7] 320: a save with no log shows the next game, plays on, and its chips start at that week (w5)
+  PASS  [8] 320, the result on a save that began with no log: nothing in the tile's box is taller or wider than its frame or leaves the box (54 elements read)
+  PASS  [8] 320, the result on a save that began with no log: the story has room to be read (150 px of it in a frame of 150)
+  PASS  [8] 320, the result on a save that began with no log: no text in the tile is under 12 px
+  PASS  [8] 320, the result on a save that began with no log: every button of the week box is at least 44 px high (5 buttons)
+  PASS  [0] 320: no page error on the walk (clean)
+
+=== 390 by 844 ===
+  PASS  [1] 390: the tile's box is 400 px high and where it was before its card landed (400 then 400, top 956 then 956)
+  PASS  [1] 390: before a press the tile shows the next game, with Play Week 1 and Watch Week 1 open
+  PASS  [1] 390: the card's chunk was asked for only when the box opened (39 scripts before it, 0 of them with the tile's marker; 6 after, 1 with it)
+  PASS  [8] 390, the next game: nothing in the tile's box is taller or wider than its frame or leaves the box (7 elements read)
+  PASS  [8] 390, the next game: no text in the tile is under 12 px
+  PASS  [8] 390, the next game: every button of the week box is at least 44 px high (3 buttons)
+  PASS  [2] 390: after Play Week 1 the tile shows the saved final of his game (LARI 6, SEA 24; the save holds LARI 6, SEA 24)
+  PASS  [2] 390: the line score adds up to the final (0 3 0 3 6 and 14 0 7 3 24)
+  PASS  [2] 390: sixteen scores sit under the tile, the box is the size it was and the page has no sideways scroll (390 of 390)
+  PASS  [2] 390: the press did not take the tile out of view: scrollY 26 to 474, the tile's top at 422 of 844, 400 px of it showing
+  PASS  [2] 390: where he stands is the engine's own seeding of the saved league ("NFC: outside the 7 seeds as it stands."; the save seeds him outside the seven)
+  ....  390: measured after Play: the tile's top 956 before and 422 after, the Play button's top 314, the grid's first row at 834, the story 150 px in a frame of 150
+  PASS  [8] 390, the result after Play: nothing in the tile's box is taller or wider than its frame or leaves the box (50 elements read)
+  PASS  [8] 390, the result after Play: the story has room to be read (150 px of it in a frame of 150)
+  PASS  [8] 390, the result after Play: no text in the tile is under 12 px
+  PASS  [8] 390, the result after Play: every button of the week box is at least 44 px high (5 buttons)
+  PASS  [8] 390, 3-watch-3x, the clock running: nothing in the tile's box is taller or wider than its frame or leaves the box (19 elements read)
+  PASS  [8] 390, 3-watch-3x, the clock running: no text in the tile is under 12 px
+  PASS  [8] 390, 3-watch-3x, the clock running: every button of the week box is at least 44 px high (6 buttons)
+  PASS  [3] 390, 3-watch-3x: until full time the whole page held nothing of the result (26 samples, 7.1 s, the bug ended on 31-28 of 31-28)
+  PASS  [3] 390, 3-watch-3x: at full time the tile shows the saved final (WARI 31, SEA 28) and the page has moved on (2026 · Week 3/17, Record 1-1)
+  PASS  [3] 390, 3-watch-3x: the press saved the week once and the watch saved nothing (the save at full time is the string the press wrote, 653373 bytes)
+  PASS  [3] 390, 3-watch-3x: full time is a reveal: scrolled to the top of the page in the middle of the watch the tile was out of view (its top at 896 of 844, scrollY 0; out of view: true), and at full time the page brought it back: scrollY 904, its top at 12 of 844, 400 px showing
+  PASS  [3] 390, 3-watch-3x: at full time the owner card's pace is the saved league's ("1 wins keeps the mandate on pace."; the card ends "ow the fans a direction.📈 1 wins keeps the mandate on pace.")
+  PASS  [3] 390, 3-watch-3x: where he stands is the engine's own seeding of the saved league ("NFC: outside the 7 seeds as it stands."; the save seeds him outside the seven)
+  PASS  [8] 390, 3-watch-3x, full time: nothing in the tile's box is taller or wider than its frame or leaves the box (53 elements read)
+  PASS  [8] 390, 3-watch-3x, full time: the story has room to be read (150 px of it in a frame of 150)
+  PASS  [8] 390, 3-watch-3x, full time: no text in the tile is under 12 px
+  PASS  [8] 390, 3-watch-3x, full time: every button of the week box is at least 44 px high (6 buttons)
+  PASS  [8] 390, 4-results, the clock running: nothing in the tile's box is taller or wider than its frame or leaves the box (19 elements read)
+  PASS  [8] 390, 4-results, the clock running: no text in the tile is under 12 px
+  PASS  [8] 390, 4-results, the clock running: every button of the week box is at least 44 px high (6 buttons)
+  PASS  [4] 390, 4-results: until full time the whole page held nothing of the result (2 samples, 1.4 s, the bug ended on 0-7 of 24-35)
+  PASS  [4] 390, 4-results: at full time the tile shows the saved final (WARI 35, SF 24) and the page has moved on (2026 · Week 4/17, Record 2-1)
+  PASS  [4] 390, 4-results: the press saved the week once and the watch saved nothing (the save at full time is the string the press wrote, 653493 bytes)
+  PASS  [4] 390, 4-results: the tile stayed in view and the same size: scrollY 904 to 950, its top at 56 of 844, 400 px showing
+  PASS  [4] 390, 4-results: at full time the owner card's pace is the saved league's ("2 wins keeps the mandate on pace."; the card ends "ow the fans a direction.📈 2 wins keeps the mandate on pace.")
+  PASS  [4] 390, 4-results: where he stands is the engine's own seeding of the saved league ("NFC: 6th seed of 7 as it stands."; the save seeds him 6)
+  PASS  [8] 390, 4-results, full time: nothing in the tile's box is taller or wider than its frame or leaves the box (60 elements read)
+  PASS  [8] 390, 4-results, full time: the story has room to be read (150 px of it in a frame of 150)
+  PASS  [8] 390, 4-results, full time: no text in the tile is under 12 px
+  PASS  [8] 390, 4-results, full time: every button of the week box is at least 44 px high (7 buttons)
+  PASS  [4] 390: a reload in the middle of a watch shows the result (LARI 17, SF 34) with no clock, and the save is the string the press wrote (week 5, 4 games logged)
+  PASS  [8] 390, the result after a reload: nothing in the tile's box is taller or wider than its frame or leaves the box (63 elements read)
+  PASS  [8] 390, the result after a reload: the story has room to be read (150 px of it in a frame of 150)
+  PASS  [8] 390, the result after a reload: no text in the tile is under 12 px
+  PASS  [8] 390, the result after a reload: every button of the week box is at least 44 px high (8 buttons)
+  PASS  [6] 390: the "?" is drawn over the whole week box and not inside the tile, with the law's words and a worked example (the sheet is 592 px high, 2 px narrower and 2 px shorter than the box's own frame; in the box's host: true; inside the tile: false)
+  PASS  [6] 390: opening the "?" over a week box whose top was readable did not move the page (the box's top at 435 of 844, readable: true; scrollY 0 before and 0 with the sheet open)
+  PASS  [6] 390: the "?" closes, opens again and closes
+  PASS  [7] 390: the first chip opens Week 1 on the same box (Wk 1 · at SEA: LARI 6, SEA 24; the box did not move)
+  PASS  [8] 390, an earlier game opened from a chip: nothing in the tile's box is taller or wider than its frame or leaves the box (59 elements read)
+  PASS  [8] 390, an earlier game opened from a chip: the story has room to be read (150 px of it in a frame of 150)
+  PASS  [8] 390, an earlier game opened from a chip: no text in the tile is under 12 px
+  PASS  [8] 390, an earlier game opened from a chip: every button of the week box is at least 44 px high (8 buttons)
+  PASS  [7] 390: a save with no log shows the next game, plays on, and its chips start at that week (w5)
+  PASS  [8] 390, the result on a save that began with no log: nothing in the tile's box is taller or wider than its frame or leaves the box (54 elements read)
+  PASS  [8] 390, the result on a save that began with no log: the story has room to be read (150 px of it in a frame of 150)
+  PASS  [8] 390, the result on a save that began with no log: no text in the tile is under 12 px
+  PASS  [8] 390, the result on a save that began with no log: every button of the week box is at least 44 px high (5 buttons)
+  PASS  [0] 390: no page error on the walk (clean)
+
+=== 1280 by 800 ===
+  PASS  [1] 1280: the tile's box is 352 px high and where it was before its card landed (352 then 352, top 828 then 828)
+  PASS  [1] 1280: before a press the tile shows the next game, with Play Week 1 and Watch Week 1 open
+  PASS  [1] 1280: the card's chunk was asked for only when the box opened (39 scripts before it, 0 of them with the tile's marker; 6 after, 1 with it)
+  PASS  [8] 1280, the next game: nothing in the tile's box is taller or wider than its frame or leaves the box (8 elements read)
+  PASS  [8] 1280, the next game: no text in the tile is under 12 px
+  PASS  [8] 1280, the next game: every button of the week box is at least 44 px high (3 buttons)
+  PASS  [2] 1280: after Play Week 1 the tile shows the saved final of his game (LARI 6, SEA 24; the save holds LARI 6, SEA 24)
+  PASS  [2] 1280: the line score adds up to the final (0 3 0 3 6 and 14 0 7 3 24)
+  PASS  [2] 1280: sixteen scores sit under the tile, the box is the size it was and the page has no sideways scroll (1280 of 1280)
+  PASS  [2] 1280: the press did not take the tile out of view: scrollY 1 to 327, the tile's top at 448 of 800, 352 px of it showing
+  PASS  [2] 1280: where he stands is the engine's own seeding of the saved league ("NFC: outside the 7 seeds as it stands."; the save seeds him outside the seven)
+  ....  1280: measured after Play: the tile's top 828 before and 448 after, the Play button's top 392, the grid's first row at 812, the story 102 px in a frame of 102
+  PASS  [8] 1280, the result after Play: nothing in the tile's box is taller or wider than its frame or leaves the box (51 elements read)
+  PASS  [8] 1280, the result after Play: the story has room to be read (102 px of it in a frame of 102)
+  PASS  [8] 1280, the result after Play: no text in the tile is under 12 px
+  PASS  [8] 1280, the result after Play: every button of the week box is at least 44 px high (5 buttons)
+  PASS  [8] 1280, 3-watch-3x, the clock running: nothing in the tile's box is taller or wider than its frame or leaves the box (20 elements read)
+  PASS  [8] 1280, 3-watch-3x, the clock running: no text in the tile is under 12 px
+  PASS  [8] 1280, 3-watch-3x, the clock running: every button of the week box is at least 44 px high (6 buttons)
+  PASS  [3] 1280, 3-watch-3x: until full time the whole page held nothing of the result (26 samples, 7.1 s, the bug ended on 31-28 of 31-28)
+  PASS  [3] 1280, 3-watch-3x: at full time the tile shows the saved final (WARI 31, SEA 28) and the page has moved on (2026 · Week 3/17, Record 1-1)
+  PASS  [3] 1280, 3-watch-3x: the press saved the week once and the watch saved nothing (the save at full time is the string the press wrote, 653373 bytes)
+  PASS  [3] 1280, 3-watch-3x: full time is a reveal: scrolled to the top of the page in the middle of the watch the tile was out of view (its top at 775 of 800, scrollY 0; out of view: true), and at full time the page brought it back: scrollY 327, its top at 448 of 800, 352 px showing
+  PASS  [3] 1280, 3-watch-3x: at full time the owner card's pace is the saved league's ("1 wins keeps the mandate on pace."; the card ends "ow the fans a direction.📈 1 wins keeps the mandate on pace.")
+  PASS  [3] 1280, 3-watch-3x: where he stands is the engine's own seeding of the saved league ("NFC: outside the 7 seeds as it stands."; the save seeds him outside the seven)
+  PASS  [8] 1280, 3-watch-3x, full time: nothing in the tile's box is taller or wider than its frame or leaves the box (54 elements read)
+  PASS  [8] 1280, 3-watch-3x, full time: the story has room to be read (102 px of it in a frame of 102)
+  PASS  [8] 1280, 3-watch-3x, full time: no text in the tile is under 12 px
+  PASS  [8] 1280, 3-watch-3x, full time: every button of the week box is at least 44 px high (6 buttons)
+  PASS  [8] 1280, 4-results, the clock running: nothing in the tile's box is taller or wider than its frame or leaves the box (20 elements read)
+  PASS  [8] 1280, 4-results, the clock running: no text in the tile is under 12 px
+  PASS  [8] 1280, 4-results, the clock running: every button of the week box is at least 44 px high (6 buttons)
+  PASS  [4] 1280, 4-results: until full time the whole page held nothing of the result (2 samples, 1.4 s, the bug ended on 0-7 of 24-35)
+  PASS  [4] 1280, 4-results: at full time the tile shows the saved final (WARI 35, SF 24) and the page has moved on (2026 · Week 4/17, Record 2-1)
+  PASS  [4] 1280, 4-results: the press saved the week once and the watch saved nothing (the save at full time is the string the press wrote, 653493 bytes)
+  PASS  [4] 1280, 4-results: the tile stayed in view and the same size: scrollY 327 to 417, its top at 448 of 800, 352 px showing
+  PASS  [4] 1280, 4-results: at full time the owner card's pace is the saved league's ("2 wins keeps the mandate on pace."; the card ends "ow the fans a direction.📈 2 wins keeps the mandate on pace.")
+  PASS  [4] 1280, 4-results: where he stands is the engine's own seeding of the saved league ("NFC: 6th seed of 7 as it stands."; the save seeds him 6)
+  PASS  [8] 1280, 4-results, full time: nothing in the tile's box is taller or wider than its frame or leaves the box (61 elements read)
+  PASS  [8] 1280, 4-results, full time: the story has room to be read (102 px of it in a frame of 102)
+  PASS  [8] 1280, 4-results, full time: no text in the tile is under 12 px
+  PASS  [8] 1280, 4-results, full time: every button of the week box is at least 44 px high (7 buttons)
+  PASS  [4] 1280: a reload in the middle of a watch shows the result (LARI 17, SF 34) with no clock, and the save is the string the press wrote (week 5, 4 games logged)
+  PASS  [8] 1280, the result after a reload: nothing in the tile's box is taller or wider than its frame or leaves the box (64 elements read)
+  PASS  [8] 1280, the result after a reload: the story has room to be read (102 px of it in a frame of 102)
+  PASS  [8] 1280, the result after a reload: no text in the tile is under 12 px
+  PASS  [8] 1280, the result after a reload: every button of the week box is at least 44 px high (8 buttons)
+  PASS  [6] 1280: the "?" is drawn over the whole week box and not inside the tile, with the law's words and a worked example (the sheet is 472 px high, 2 px narrower and 2 px shorter than the box's own frame; in the box's host: true; inside the tile: false)
+  PASS  [6] 1280: opening the "?" over a week box whose top was readable did not move the page (the box's top at 381 of 800, readable: true; scrollY 0 before and 0 with the sheet open)
+  PASS  [6] 1280: the "?" closes, opens again and closes
+  PASS  [7] 1280: the first chip opens Week 1 on the same box (Wk 1 · at SEA: LARI 6, SEA 24; the box did not move)
+  PASS  [8] 1280, an earlier game opened from a chip: nothing in the tile's box is taller or wider than its frame or leaves the box (60 elements read)
+  PASS  [8] 1280, an earlier game opened from a chip: the story has room to be read (102 px of it in a frame of 102)
+  PASS  [8] 1280, an earlier game opened from a chip: no text in the tile is under 12 px
+  PASS  [8] 1280, an earlier game opened from a chip: every button of the week box is at least 44 px high (8 buttons)
+  PASS  [7] 1280: a save with no log shows the next game, plays on, and its chips start at that week (w5)
+  PASS  [8] 1280, the result on a save that began with no log: nothing in the tile's box is taller or wider than its frame or leaves the box (55 elements read)
+  PASS  [8] 1280, the result on a save that began with no log: the story has room to be read (102 px of it in a frame of 102)
+  PASS  [8] 1280, the result on a save that began with no log: no text in the tile is under 12 px
+  PASS  [8] 1280, the result on a save that began with no log: every button of the week box is at least 44 px high (5 buttons)
+  PASS  [0] 1280: no page error on the walk (clean)
+
+=== 390 by 844, reduced motion ===
+  PASS  [5] 390, reduced motion: Watch shows the result at once (LARI 6, SEA 24), with no clock at any of 8 readings
+  PASS  [8] 390, reduced motion, the result: nothing in the tile's box is taller or wider than its frame or leaves the box (49 elements read)
+  PASS  [8] 390, reduced motion, the result: the story has room to be read (150 px of it in a frame of 150)
+  PASS  [8] 390, reduced motion, the result: no text in the tile is under 12 px
+  PASS  [8] 390, reduced motion, the result: every button of the week box is at least 44 px high (4 buttons)
+  PASS  [0] 390, reduced motion: no page error (clean)
+
+=== 390 by 844, the owner card's pace and his seed ===
+  PASS  [9] 390: with an ask of six wins the owner card prints his wins from Week 2 on ("1 wins keeps the mandate on pace."; the card ends "ct on schedule upstairs.📈 1 wins keeps the mandate on pace.")
+  PASS  [8] 390, 9-pace-1, the clock running: nothing in the tile's box is taller or wider than its frame or leaves the box (19 elements read)
+  PASS  [8] 390, 9-pace-1, the clock running: no text in the tile is under 12 px
+  PASS  [8] 390, 9-pace-1, the clock running: every button of the week box is at least 44 px high (6 buttons)
+  PASS  [9] 390, 9-pace-1: until full time the whole page held nothing of the result (2 samples, 1.4 s, the bug ended on 0-0 of 17-20)
+  PASS  [9] 390, 9-pace-1: at full time the tile shows the saved final (LARI 17, SEA 20) and the page has moved on (2026 · Week 3/17, Record 1-1)
+  PASS  [9] 390, 9-pace-1: the press saved the week once and the watch saved nothing (the save at full time is the string the press wrote, 653396 bytes)
+  PASS  [9] 390, 9-pace-1: the tile stayed in view and the same size: scrollY 0 to 474, its top at 227 of 844, 400 px showing
+  PASS  [9] 390, 9-pace-1: at full time the owner card's pace is the saved league's ("1 wins keeps the mandate on pace."; the card ends "ct on schedule upstairs.📈 1 wins keeps the mandate on pace.")
+  PASS  [9] 390, 9-pace-1: where he stands is the engine's own seeding of the saved league ("NFC: outside the 7 seeds as it stands."; the save seeds him outside the seven)
+  PASS  [8] 390, 9-pace-1, full time: nothing in the tile's box is taller or wider than its frame or leaves the box (57 elements read)
+  PASS  [8] 390, 9-pace-1, full time: the story has room to be read (150 px of it in a frame of 150)
+  PASS  [8] 390, 9-pace-1, full time: no text in the tile is under 12 px
+  PASS  [8] 390, 9-pace-1, full time: every button of the week box is at least 44 px high (6 buttons)
+  PASS  [8] 390, 9-pace-2, the clock running: nothing in the tile's box is taller or wider than its frame or leaves the box (19 elements read)
+  PASS  [8] 390, 9-pace-2, the clock running: no text in the tile is under 12 px
+  PASS  [8] 390, 9-pace-2, the clock running: every button of the week box is at least 44 px high (6 buttons)
+  PASS  [9] 390, 9-pace-2: until full time the whole page held nothing of the result (2 samples, 1.4 s, the bug ended on 0-0 of 20-21)
+  PASS  [9] 390, 9-pace-2: at full time the tile shows the saved final (WARI 21, SF 20) and the page has moved on (2026 · Week 4/17, Record 2-1)
+  PASS  [9] 390, 9-pace-2: the press saved the week once and the watch saved nothing (the save at full time is the string the press wrote, 653516 bytes)
+  PASS  [9] 390, 9-pace-2: the tile stayed in view and the same size: scrollY 474 to 400, its top at 227 of 844, 400 px showing
+  PASS  [9] 390, 9-pace-2: at full time the owner card's pace is the saved league's ("2 wins keeps the mandate on pace."; the card ends "ct on schedule upstairs.📈 2 wins keeps the mandate on pace.")
+  PASS  [9] 390, 9-pace-2: where he stands is the engine's own seeding of the saved league ("NFC: 7th seed of 7 as it stands."; the save seeds him 7)
+  PASS  [8] 390, 9-pace-2, full time: nothing in the tile's box is taller or wider than its frame or leaves the box (56 elements read)
+  PASS  [8] 390, 9-pace-2, full time: the story has room to be read (150 px of it in a frame of 150)
+  PASS  [8] 390, 9-pace-2, full time: no text in the tile is under 12 px
+  PASS  [8] 390, 9-pace-2, full time: every button of the week box is at least 44 px high (7 buttons)
+  PASS  [9] 390: the pace line moved at full time in 1 of 2 watched week(s), so held back it was the result and not a line compared with itself
+  PASS  [10] 390: on the club that topped the AFC (BUF) the standing line is his seed in the saved league, counted from 1, after each of 3 presses, 3 of them with a seed (AFC: 1st seed of 7 as it stands. / AFC: 5th seed of 7 as it stands. / AFC: 1st seed of 7 as it stands.)
+  PASS  [8] 390, the result on a club that holds a seed: nothing in the tile's box is taller or wider than its frame or leaves the box (56 elements read)
+  PASS  [8] 390, the result on a club that holds a seed: the story has room to be read (150 px of it in a frame of 150)
+  PASS  [8] 390, the result on a club that holds a seed: no text in the tile is under 12 px
+  PASS  [8] 390, the result on a club that holds a seed: every button of the week box is at least 44 px high (7 buttons)
+  PASS  [0] 390, the owner card and the seed: no page error (clean)
+
+=== 320 by 640, the playoffs ===
+  PASS  [11] 320: Week 17 has its three buttons in order (Play Week 17 | Watch Week 17 | Play the final week + playoffs)
+  PASS  [11] 320: each is at least 44 px high and none overflows (44, 44, 44; the page 320 of 320 wide)
+  PASS  [8] 320, Week 17: nothing in the tile's box is taller or wider than its frame or leaves the box (99 elements read)
+  PASS  [8] 320, Week 17: the story has room to be read (150 px of it in a frame of 150)
+  PASS  [8] 320, Week 17: no text in the tile is under 12 px
+  PASS  [8] 320, Week 17: every button of the week box is at least 44 px high (21 buttons)
+  PASS  [12] 320: "Play Week 17" opens the bracket (week 18, a bracket on the save: true) and the chip reads "2026 · Playoffs"
+  PASS  [12] 320: the box shows his Week 17 game (Wk 17 · at HOU: WARI 41, HOU 17) with the back chip under it, and no league grid
+  ....  320x640, "Play Week 17", the first press of a visit: the first button's top at -96, the box from 12 to 412 of 640
+  ....  320x640, "Play Week 17", the first press of a visit: the back chip from 424 to 468 of 640
+  PASS  [8] 320, his Week 17 game in the bracket: nothing in the tile's box is taller or wider than its frame or leaves the box (101 elements read)
+  PASS  [8] 320, his Week 17 game in the bracket: the story has room to be read (172 px of it in a frame of 172)
+  PASS  [8] 320, his Week 17 game in the bracket: no text in the tile is under 12 px
+  PASS  [8] 320, his Week 17 game in the bracket: every button of the week box is at least 44 px high (22 buttons)
+  PASS  [13] 320: with the desk off a trade in the bracket is refused with the playoffs' line
+  PASS  [14] 320: the back chip shows the bracket, and the bracket says he has the bye ("You have the bye.")
+  PASS  [8] 320, the bracket, his bye: nothing in the tile's box is taller or wider than its frame or leaves the box (78 elements read)
+  PASS  [8] 320, the bracket, his bye: no text in the tile is under 12 px
+  PASS  [8] 320, the bracket, his bye: every button of the week box is at least 44 px high (7 buttons)
+  PASS  [14] 320: round 1: no game of his, the bracket on the box ("Next: the NFC Divisional, against Rams.")
+  PASS  [14] 320: round 1: the box did not move under its row (12 px before the first press, 12 now)
+  PASS  [8] 320, round 1, bracket: nothing in the tile's box is taller or wider than its frame or leaves the box (56 elements read)
+  PASS  [8] 320, round 1, bracket: no text in the tile is under 12 px
+  PASS  [8] 320, round 1, bracket: every button of the week box is at least 44 px high (8 buttons)
+  PASS  [14] 320: round 2: his game on the box (NFC Divisional · vs LA: WARI 42, LA 6)
+  PASS  [14] 320: round 2: the box did not move under its row (12 px before the first press, 12 now)
+  ....  320x640, round 2: his result from 505 to 533, the next press from 278 to 322
+  PASS  [8] 320, round 2, game: nothing in the tile's box is taller or wider than its frame or leaves the box (104 elements read)
+  PASS  [8] 320, round 2, game: the story has room to be read (172 px of it in a frame of 172)
+  PASS  [8] 320, round 2, game: no text in the tile is under 12 px
+  PASS  [8] 320, round 2, game: every button of the week box is at least 44 px high (24 buttons)
+  PASS  [14] 320: round 3: his game on the box (NFC Championship · vs DET: WARI 23, DET 10)
+  PASS  [14] 320: round 3: the box did not move under its row (12 px before the first press, 12 now)
+  ....  320x640, round 3: his result from 505 to 533, the next press from 278 to 322
+  PASS  [8] 320, round 3, game: nothing in the tile's box is taller or wider than its frame or leaves the box (107 elements read)
+  PASS  [8] 320, round 3, game: the story has room to be read (172 px of it in a frame of 172)
+  PASS  [8] 320, round 3, game: no text in the tile is under 12 px
+  PASS  [8] 320, round 3, game: every button of the week box is at least 44 px high (25 buttons)
+  PASS  [14] 320: the title run ends on the recap with his title (the bracket (next), his game (NFC Divisional · vs LA), his game (NFC Championship · vs DET), the recap; champion ARI, his club ARI)
+  ....  320x640, a playoff round, the first press of a visit: the first button's top at -96, the box from 12 to 412 of 640
+  ....  320x640, a playoff round, the first press of a visit: the back chip from 424 to 468 of 640
+  ....  320x640, his Divisional game: his result from 79 to 107, the next press from -96 to -52
+  PASS  [14] 320: beaten in the Divisional round, the bracket says so ("Out in the AFC Divisional.")
+  PASS  [14] 320: "Sim the rest of the playoffs" reaches the recap
+  PASS  [8] 320, a playoff game on the clock: nothing in the tile's box is taller or wider than its frame or leaves the box (19 elements read)
+  PASS  [8] 320, a playoff game on the clock: no text in the tile is under 12 px
+  PASS  [8] 320, a playoff game on the clock: every button of the week box is at least 44 px high (8 buttons)
+  PASS  [14] 320: a watched playoff game: until full time the page held nothing of the result (24 samples)
+  PASS  [14] 320: at full time his final is on the box (WBUF 34, IND 31), the page has moved on ("Play the AFC Divisional") and the watch saved nothing
+  PASS  [15] 320: a reload in the middle of the bracket shows the same bracket and plays nothing (save error screen: false)
+  PASS  [17] 320: the bracket's "?" opens, closes, opens again and closes
+  PASS  [18] 320: the title game watched (stream 1 of 4; the save closed at the press: won, trust 60 to 100): until full time the press card ("") and the owner card held, no answer open (24 samples)
+  PASS  [18] 320: at full time the recap comes with the room the result called ("🎙️ Press conferenceThe podiumConfetti still on th")
+  ....  320x640, "Watch Week 17" on E at full time (24 samples on the clock; the week box from 484 before the press to -165, the box from 713 to 12): his result from 79 to 107, the next press from -96 to -52, the back chip from 424 to 468
+  ....  320x640, then his bye round (the box's face: bracket, "Next: the NFC Divisional, against Rams."): the next press from 278 to 322, the box's top at 438
+  PASS  [16] 320: "Play the final week + playoffs" goes straight to the recap (phase recap, champion ARI)
+  PASS  [0] 320, the playoffs: no page error (clean)
+
+=== 390 by 844, the playoffs ===
+  PASS  [11] 390: Week 17 has its three buttons in order (Play Week 17 | Watch Week 17 | Play the final week + playoffs)
+  PASS  [11] 390: each is at least 44 px high and none overflows (44, 44, 44; the page 390 of 390 wide)
+  PASS  [8] 390, Week 17: nothing in the tile's box is taller or wider than its frame or leaves the box (99 elements read)
+  PASS  [8] 390, Week 17: the story has room to be read (150 px of it in a frame of 150)
+  PASS  [8] 390, Week 17: no text in the tile is under 12 px
+  PASS  [8] 390, Week 17: every button of the week box is at least 44 px high (21 buttons)
+  PASS  [12] 390: "Play Week 17" opens the bracket (week 18, a bracket on the save: true) and the chip reads "2026 · Playoffs"
+  PASS  [12] 390: the box shows his Week 17 game (Wk 17 · at HOU: WARI 41, HOU 17) with the back chip under it, and no league grid
+  ....  390x844, "Play Week 17", the first press of a visit: the first button's top at 464, the box from 572 to 972 of 844
+  FAIL  [12] 390x844, "Play Week 17", the first press of a visit: the back chip from 984 to 1028 of 844: on the screen with the buttons
+  PASS  [8] 390, his Week 17 game in the bracket: nothing in the tile's box is taller or wider than its frame or leaves the box (101 elements read)
+  PASS  [8] 390, his Week 17 game in the bracket: the story has room to be read (172 px of it in a frame of 172)
+  PASS  [8] 390, his Week 17 game in the bracket: no text in the tile is under 12 px
+  PASS  [8] 390, his Week 17 game in the bracket: every button of the week box is at least 44 px high (22 buttons)
+  PASS  [13] 390: with the desk off a trade in the bracket is refused with the playoffs' line
+  PASS  [14] 390: the back chip shows the bracket, and the bracket says he has the bye ("You have the bye.")
+  PASS  [8] 390, the bracket, his bye: nothing in the tile's box is taller or wider than its frame or leaves the box (78 elements read)
+  PASS  [8] 390, the bracket, his bye: no text in the tile is under 12 px
+  PASS  [8] 390, the bracket, his bye: every button of the week box is at least 44 px high (7 buttons)
+  PASS  [14] 390: round 1: no game of his, the bracket on the box ("Next: the NFC Divisional, against Rams.")
+  PASS  [14] 390: round 1: the box did not move under its row (12 px before the first press, 12 now)
+  PASS  [8] 390, round 1, bracket: nothing in the tile's box is taller or wider than its frame or leaves the box (56 elements read)
+  PASS  [8] 390, round 1, bracket: no text in the tile is under 12 px
+  PASS  [8] 390, round 1, bracket: every button of the week box is at least 44 px high (8 buttons)
+  PASS  [14] 390: round 2: his game on the box (NFC Divisional · vs LA: WARI 42, LA 6)
+  PASS  [14] 390: round 2: the box did not move under its row (12 px before the first press, 12 now)
+  PASS  [14] 390x844, round 2: his result from 627 to 655, the next press from 400 to 444: both on the screen
+  PASS  [8] 390, round 2, game: nothing in the tile's box is taller or wider than its frame or leaves the box (104 elements read)
+  PASS  [8] 390, round 2, game: the story has room to be read (172 px of it in a frame of 172)
+  PASS  [8] 390, round 2, game: no text in the tile is under 12 px
+  PASS  [8] 390, round 2, game: every button of the week box is at least 44 px high (24 buttons)
+  PASS  [14] 390: round 3: his game on the box (NFC Championship · vs DET: WARI 23, DET 10)
+  PASS  [14] 390: round 3: the box did not move under its row (12 px before the first press, 12 now)
+  PASS  [14] 390x844, round 3: his result from 627 to 655, the next press from 400 to 444: both on the screen
+  PASS  [8] 390, round 3, game: nothing in the tile's box is taller or wider than its frame or leaves the box (107 elements read)
+  PASS  [8] 390, round 3, game: the story has room to be read (172 px of it in a frame of 172)
+  PASS  [8] 390, round 3, game: no text in the tile is under 12 px
+  PASS  [8] 390, round 3, game: every button of the week box is at least 44 px high (25 buttons)
+  PASS  [14] 390: the title run ends on the recap with his title (the bracket (next), his game (NFC Divisional · vs LA), his game (NFC Championship · vs DET), the recap; champion ARI, his club ARI)
+  ....  390x844, a playoff round, the first press of a visit: the first button's top at 479, the box from 587 to 987 of 844
+  FAIL  [12] 390x844, a playoff round, the first press of a visit: the back chip from 999 to 1043 of 844: on the screen with the buttons
+  PASS  [14] 390x844, his Divisional game: his result from 654 to 682, the next press from 479 to 523: both on the screen
+  PASS  [14] 390: beaten in the Divisional round, the bracket says so ("Out in the AFC Divisional.")
+  PASS  [14] 390: "Sim the rest of the playoffs" reaches the recap
+  PASS  [8] 390, a playoff game on the clock: nothing in the tile's box is taller or wider than its frame or leaves the box (19 elements read)
+  PASS  [8] 390, a playoff game on the clock: no text in the tile is under 12 px
+  PASS  [8] 390, a playoff game on the clock: every button of the week box is at least 44 px high (8 buttons)
+  PASS  [14] 390: a watched playoff game: until full time the page held nothing of the result (24 samples)
+  PASS  [14] 390: at full time his final is on the box (WBUF 34, IND 31), the page has moved on ("Play the AFC Divisional") and the watch saved nothing
+  PASS  [15] 390: a reload in the middle of the bracket shows the same bracket and plays nothing (save error screen: false)
+  PASS  [17] 390: the bracket's "?" opens, closes, opens again and closes
+  PASS  [18] 390: the title game watched (stream 1 of 4; the save closed at the press: won, trust 60 to 100): until full time the press card ("") and the owner card held, no answer open (24 samples)
+  PASS  [18] 390: at full time the recap comes with the room the result called ("🎙️ Press conferenceThe podiumConfetti still on th")
+  FAIL  [19] 390x844, "Watch Week 17" on E at full time (24 samples on the clock; the week box from 435 before the press to 378, the box from 644 to 535): his result from 602 to 630, the next press from 427 to 471, the back chip from 947 to 991: all on the screen
+  PASS  [19] 390x844, then his bye round (the box's face: bracket, "Next: the NFC Divisional, against Rams."): the next press from 400 to 444, the box's top at 560: the next press and the box's top on the screen
+  PASS  [16] 390: "Play the final week + playoffs" goes straight to the recap (phase recap, champion ARI)
+  PASS  [0] 390, the playoffs: no page error (clean)
+
+=== 1280 by 800, the playoffs ===
+  PASS  [11] 1280: Week 17 has its three buttons in order (Play Week 17 | Watch Week 17 | Play the final week + playoffs)
+  PASS  [11] 1280: each is at least 44 px high and none overflows (56, 56, 56; the page 1280 of 1280 wide)
+  PASS  [8] 1280, Week 17: nothing in the tile's box is taller or wider than its frame or leaves the box (100 elements read)
+  PASS  [8] 1280, Week 17: the story has room to be read (102 px of it in a frame of 102)
+  PASS  [8] 1280, Week 17: no text in the tile is under 12 px
+  PASS  [8] 1280, Week 17: every button of the week box is at least 44 px high (21 buttons)
+  PASS  [12] 1280: "Play Week 17" opens the bracket (week 18, a bracket on the save: true) and the chip reads "2026 · Playoffs"
+  PASS  [12] 1280: the box shows his Week 17 game (Wk 17 · at HOU: WARI 41, HOU 17) with the back chip under it, and no league grid
+  PASS  [12] 1280x800, "Play Week 17", the first press of a visit: the first button's top at 324, the box from 392 to 744 of 800: the buttons and the whole box are on the screen
+  PASS  [12] 1280x800, "Play Week 17", the first press of a visit: the back chip from 756 to 800 of 800: on the screen with the box
+  PASS  [8] 1280, his Week 17 game in the bracket: nothing in the tile's box is taller or wider than its frame or leaves the box (101 elements read)
+  PASS  [8] 1280, his Week 17 game in the bracket: the story has room to be read (124 px of it in a frame of 124)
+  PASS  [8] 1280, his Week 17 game in the bracket: no text in the tile is under 12 px
+  PASS  [8] 1280, his Week 17 game in the bracket: every button of the week box is at least 44 px high (22 buttons)
+  PASS  [12] 1280: a window resized across sm and back scrolled nothing (scrollY 0, then 0 at 390 wide, then 0)
+  PASS  [13] 1280: with the desk off a trade in the bracket is refused with the playoffs' line
+  PASS  [14] 1280: the back chip shows the bracket, and the bracket says he has the bye ("You have the bye.")
+  PASS  [8] 1280, the bracket, his bye: nothing in the tile's box is taller or wider than its frame or leaves the box (78 elements read)
+  PASS  [8] 1280, the bracket, his bye: no text in the tile is under 12 px
+  PASS  [8] 1280, the bracket, his bye: every button of the week box is at least 44 px high (7 buttons)
+  PASS  [14] 1280: round 1: no game of his, the bracket on the box ("Next: the NFC Divisional, against Rams.")
+  PASS  [14] 1280: round 1: the box did not move under its row (12 px before the first press, 12 now)
+  PASS  [8] 1280, round 1, bracket: nothing in the tile's box is taller or wider than its frame or leaves the box (56 elements read)
+  PASS  [8] 1280, round 1, bracket: no text in the tile is under 12 px
+  PASS  [8] 1280, round 1, bracket: every button of the week box is at least 44 px high (8 buttons)
+  PASS  [14] 1280: round 2: his game on the box (NFC Divisional · vs LA: WARI 42, LA 6)
+  PASS  [14] 1280: round 2: the box did not move under its row (12 px before the first press, 12 now)
+  ....  1280x800, round 2: his result from 135 to 163, the next press from 0 to 56
+  PASS  [8] 1280, round 2, game: nothing in the tile's box is taller or wider than its frame or leaves the box (104 elements read)
+  PASS  [8] 1280, round 2, game: the story has room to be read (124 px of it in a frame of 124)
+  PASS  [8] 1280, round 2, game: no text in the tile is under 12 px
+  PASS  [8] 1280, round 2, game: every button of the week box is at least 44 px high (24 buttons)
+  PASS  [14] 1280: round 3: his game on the box (NFC Championship · vs DET: WARI 23, DET 10)
+  PASS  [14] 1280: round 3: the box did not move under its row (12 px before the first press, 12 now)
+  ....  1280x800, round 3: his result from 135 to 163, the next press from 0 to 56
+  PASS  [8] 1280, round 3, game: nothing in the tile's box is taller or wider than its frame or leaves the box (107 elements read)
+  PASS  [8] 1280, round 3, game: the story has room to be read (124 px of it in a frame of 124)
+  PASS  [8] 1280, round 3, game: no text in the tile is under 12 px
+  PASS  [8] 1280, round 3, game: every button of the week box is at least 44 px high (25 buttons)
+  PASS  [14] 1280: the title run ends on the recap with his title (the bracket (next), his game (NFC Divisional · vs LA), his game (NFC Championship · vs DET), the recap; champion ARI, his club ARI)
+  PASS  [12] 1280x800, a playoff round, the first press of a visit: the first button's top at 324, the box from 392 to 744 of 800: the buttons and the whole box are on the screen
+  PASS  [12] 1280x800, a playoff round, the first press of a visit: the back chip from 756 to 800 of 800: on the screen with the box
+  ....  1280x800, his Divisional game: his result from 459 to 487, the next press from 324 to 380
+  PASS  [14] 1280: beaten in the Divisional round, the bracket says so ("Out in the AFC Divisional.")
+  PASS  [14] 1280: "Sim the rest of the playoffs" reaches the recap
+  PASS  [8] 1280, a playoff game on the clock: nothing in the tile's box is taller or wider than its frame or leaves the box (19 elements read)
+  PASS  [8] 1280, a playoff game on the clock: no text in the tile is under 12 px
+  PASS  [8] 1280, a playoff game on the clock: every button of the week box is at least 44 px high (8 buttons)
+  PASS  [14] 1280: a watched playoff game: until full time the page held nothing of the result (24 samples)
+  PASS  [14] 1280: at full time his final is on the box (WBUF 34, IND 31), the page has moved on ("Play the AFC Divisional") and the watch saved nothing
+  PASS  [15] 1280: a reload in the middle of the bracket shows the same bracket and plays nothing (save error screen: false)
+  PASS  [17] 1280: the bracket's "?" opens, closes, opens again and closes
+  PASS  [18] 1280: the title game watched (stream 1 of 4; the save closed at the press: won, trust 60 to 100): until full time the press card ("") and the owner card held, no answer open (24 samples)
+  PASS  [18] 1280: at full time the recap comes with the room the result called ("🎙️ Press conferenceThe podiumConfetti still on th")
+  ....  1280x800, "Watch Week 17" on E at full time (24 samples on the clock; the week box from 381 before the press to 255, the box from 498 to 372): his result from 439 to 467, the next press from 304 to 360, the back chip from 736 to 780
+  ....  1280x800, then his bye round (the box's face: bracket, "Next: the NFC Divisional, against Rams."): the next press from 304 to 360, the box's top at 372
+  PASS  [16] 1280: "Play the final week + playoffs" goes straight to the recap (phase recap, champion ARI)
+  PASS  [0] 1280, the playoffs: no page error (clean)
+
+=== 1280 by 900, the reveal ===
+  PASS  [12] 1280x900, "Play Week 17", the first press of a visit: the first button's top at 410, the box from 478 to 830 of 900: the buttons and the whole box are on the screen
+  PASS  [12] 1280x900, "Play Week 17", the first press of a visit: the back chip from 842 to 886 of 900: on the screen with the box
+  PASS  [12] 1280x900, a playoff round, the first press of a visit: the first button's top at 410, the box from 478 to 830 of 900: the buttons and the whole box are on the screen
+  PASS  [12] 1280x900, a playoff round, the first press of a visit: the back chip from 842 to 886 of 900: on the screen with the box
+  PASS  [0] 1280x900, the reveal: no page error (clean)
+
+playFrontOfficeGameDay: 381 checks, 3 failed

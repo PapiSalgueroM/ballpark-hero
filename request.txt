@@ -1,0 +1,8 @@
+#!serve
+#!playwright
+#!serial
+ctl-all: node scripts/controlFrontOfficeBoard.mjs all > $RC_OUT/ctl-all.log 2>&1; s=$?; grep -E "^control |controlFrontOfficeBoard:" $RC_OUT/ctl-all.log | cut -c1-200 | tail -60; exit $s
+ctl-blank: node scripts/controlFrontOfficeBoard.mjs blank
+walk-bracketjump: FO_GAMEDAY_WALK_CONTROL=bracketjump ENGINES=chromium node scripts/playFrontOfficeGameDay.mjs
+walk-revealdown: node .rc/x/mut-revealdown.mjs && npm run build > /tmp/rd-build.log 2>&1 && FO_GAMEDAY_WALK_CONTROL=revealdown ENGINES=chromium node scripts/playFrontOfficeGameDay.mjs; s=$?; git checkout -- src; exit $s
+walk-oldboard: git show c3091532:src/components/front-office/FrontOfficeBoard.tsx > src/components/front-office/FrontOfficeBoard.tsx && npm run build > /tmp/ob-build.log 2>&1 && ENGINES=chromium node scripts/playFrontOfficeGameDay.mjs > $RC_OUT/oldboard.log 2>&1; s=$?; grep -E "FAIL|checks," $RC_OUT/oldboard.log | cut -c1-300 | tail -20; git checkout -- src; exit $s
