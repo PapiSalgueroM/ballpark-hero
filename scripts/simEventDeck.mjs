@@ -84,6 +84,19 @@
         the section. A report line, not a gate: cards reached per value of a
         pack's reachBy fact (a keeper meets keeper work); W2 makes it a gate.
 
+   Round 1332 (W1b) adds the rules every event pack needs, each an optional
+   field a GM pack does not carry, so section 1 holds them to the recording:
+     11) REGISTRY. FX_REGISTRY (a fixture registry of four keys: a 0 to 100
+        board meter, a money key, a one man form meter, a suspension in
+        weeks) on a pack whose cards use all four and the built ins: every
+        option of every card answered on a fresh desk, every key read back
+        with `read`, every built in meter compared: the printed words name
+        exactly what moved, by exactly the printed amount; the button and the
+        answer line carry those words; a second answer moves nothing; the
+        neutral index is the option whose every effect is zero; an answer
+        whose key the seat lost is refused; a key with no words prints raw;
+        bind refuses each registry breakage.
+
    No board binds gmInbox yet (the importers are its own test, the packs, the
    panel and two harnesses), so every drive here is a synthetic desk: each
    fact drawn from the range its own pack declares, per season or per week.
@@ -124,6 +137,13 @@
      heavy      the NFL's top card loses its cooldown and weighs 50 (in
                 memory); section 10 fails. The brief's weight alone changed
                 nothing (see section 10).
+     fxsilent   choiceEffects prints no registered key; section 11 fails.
+     fxdrop     answerGmInbox applies no registered key; section 11 fails.
+     fxunbound  gmPackProblems no longer flags an unregistered key; section
+                11 fails.
+     fxneutral  gmNeutralIndex ignores fx, so an option that moves only a
+                registered key reads as neutral (and an expiring card could
+                be settled on it); section 11 fails.
 
    Runtime about 85 to 100 s on a runner, three requests at a time (section 2
    reloads all 84 rows since the review's fix pass; it was 40 s with seed 1
@@ -147,7 +167,8 @@ const CONTROL = process.env.EVENT_DECK_CONTROL || '';
 const RECORD = process.env.SIM_EVENT_DECK_RECORD || '';
 const SHARD = process.env.SIM_EVENT_DECK_SHARD || '';
 const REPLAY_FILE = path.join(ROOT, 'scripts/data/gmInboxReplay.json');
-const CONTROLS = ['replay', 'weightoff', 'weightkeep', 'story', 'rest', 'failopen', 'restfall', 'expirefall', 'textrng', 'seasonweek', 'expireoff', 'expirefx', 'settledoff', 'panelexpiry', 'neutral', 'heavy'];
+const CONTROLS = ['replay', 'weightoff', 'weightkeep', 'story', 'rest', 'failopen', 'restfall', 'expirefall', 'textrng', 'seasonweek', 'expireoff', 'expirefx', 'settledoff', 'panelexpiry', 'neutral', 'heavy',
+  'fxsilent', 'fxdrop', 'fxunbound', 'fxneutral'];
 if (CONTROL && !CONTROLS.includes(CONTROL)) { console.error(`EVENT_DECK_CONTROL=${CONTROL} is not a control this kit knows`); process.exit(2); }
 if (RECORD && (CONTROL || SHARD)) { console.error('a recording runs the whole replay with no control, refusing'); process.exit(2); }
 const red = new Set();
@@ -188,6 +209,11 @@ const ENGINE_CONTROLS = {
   expirefx: ['if (ttl !== undefined && clock - w >= ttl && n >= 0) inbox[i] = { ...m, w, answered: n, auto: true };',
     'if (ttl !== undefined && clock - w >= ttl) { answerInboxMessage(s, m.id, 0, seat); inbox[i] = { ...m, w, answered: 0, auto: true }; } /* expirefx control */'],
   settledoff: ['if (inbox[i].auto && !m.auto) settled?.push(inbox[i]);', '/* settledoff control */'],
+  /* Round 1332's, appended. */
+  fxsilent: ['    out.push(`${man}${def.label} ${amount}`);', '    /* fxsilent control */'],
+  fxdrop: ['    if (v) reg[k].apply(s, v, who);', '    /* fxdrop control */'],
+  fxunbound: ['if (!def) { out.push(`${e.id}: "${c.label}" moves ${k}, which the seat has not registered`); continue; }', 'if (!def) continue; /* fxunbound control */'],
+  fxneutral: ['    && !gmFxMoves(c));', '    ); /* fxneutral control */'],
 };
 let engineSrc = null;
 if (ENGINE_CONTROLS[CONTROL]) {
@@ -1041,6 +1067,123 @@ console.log('10) Share and reach: every card of every pack reached over 1,000 se
   /* Advice 22: reachable cards per value of a pack's reach fact (a keeper
      meets keeper work). A report here; W2's packs make it a gate. */
   console.log(`   reach by position: ${reach.length ? reach.join('; ') : 'no pack the kit knows names a reachBy fact yet'}`);
+}
+
+/* ═══ 11. REGISTRY: the words name exactly what the answer moves (Round 1332) ═══ */
+
+console.log('11) Registry: every option prints exactly the keys it moves, by exactly the amounts, and bind refuses each breakage');
+const signedK = v => (v > 0 ? `+${v}` : `${v}`);
+/* A fixture registry over the fixture desk: a 0 to 100 board meter, a money
+   key, a one man form meter and a suspension in weeks. */
+const FX_REGISTRY_DEF = {
+  board: { label: 'Board confidence', apply: (s, v) => { s.board = clamp100((s.board ?? 50) + v); }, read: s => s.board ?? 50 },
+  fund: { label: 'Transfer kitty', fmt: 'money', apply: (s, v) => { s.fund = Math.round(((s.fund ?? 0) + v) * 1000) / 1000; }, read: s => s.fund ?? 0 },
+  form: { label: 'form', who: true, apply: (s, v, who) => { s.form = { ...(s.form ?? {}), [who]: ((s.form ?? {})[who] ?? 0) + v }; }, read: (s, who) => (s.form ?? {})[who] ?? 0 },
+  ban: { label: 'suspended', fmt: 'weeks', who: true, apply: (s, v, who) => { s.ban = { ...(s.ban ?? {}), [who]: ((s.ban ?? {})[who] ?? 0) + v }; }, read: (s, who) => (s.ban ?? {})[who] ?? 0 },
+};
+const fxCh = (label, extra = {}) => ({ label, reply: `${label}.`, karma: 0, ...extra });
+const FX_REGISTRY = fxPack('fx_registry', [
+  fxCard('r1', { choices: [fxCh('Back the plan', { karma: 2, fx: { board: 3 } }), fxCh('Hold off')] }),
+  fxCard('r2', { choices: [fxCh('Sign the extension', { cash: -2, fx: { fund: -1.5 } }), fxCh('Wait', { fx: { board: 0 } })] }),
+  fxCard('r3', { choices: [
+    fxCh('Drop him', { morale: -1, fx: { form: { who: 'striker', v: -2 }, ban: { who: 'striker', v: 2 } } }),
+    fxCh('Back him', { popularity: 1, fx: { form: { who: 'striker', v: 1 } } }), fxCh('Say nothing')] }),
+  fxCard('r4', { choices: [
+    fxCh('Rest him', { out: { who: 'keeper', weeks: 1 }, rating: { who: 'keeper', delta: 1 }, fx: { ban: { who: 'keeper', v: 1 } } }),
+    fxCh('Play him', { fx: { form: { who: 'captain', v: 0 } } })] }),
+  fxCard('r5', { choices: [fxCh('Fine him', { fx: { fund: 0.5 } }), fxCh('Let it go')] }),
+  fxCard('r6', { choices: [fxCh('Call the family', { recruit: 2, fx: { board: -1 } }), fxCh('Skip it')] }),
+]);
+{
+  const pack = FX_REGISTRY;
+  const T = Object.keys(pack.targets);
+  /* Everything a desk holds that an option could move, read the slow way. */
+  const snap = s => {
+    const o = { trust: s.trust, fans: s.fans, cash: s.cash, morale: s.morale, recruit: s.recruit };
+    for (const w of T) { o[`out:${w}`] = s.out[w] ?? 0; o[`rating:${w}`] = s.rating[w] ?? 0; }
+    for (const [k, d] of Object.entries(FX_REGISTRY_DEF)) {
+      if (d.who) for (const w of T) o[`${k}:${w}`] = d.read(s, w); else o[k] = d.read(s);
+    }
+    return o;
+  };
+  const money = v => `${v > 0 ? '+' : '-'}${pack.money.prefix}${Math.abs(v)}${pack.money.suffix}`;
+  const weeks = v => `${v} week${v === 1 ? '' : 's'}`;
+  /* The words for what really moved, written here from the two snapshots,
+     never from the option. */
+  const movedWords = (a, b) => {
+    const out = [];
+    const d = k => Math.round((b[k] - a[k]) * 1000) / 1000;
+    const m = pack.meters;
+    if (d('trust')) out.push(`${m.trust} ${signedK(d('trust'))}`);
+    if (d('fans')) out.push(`${m.fans} ${signedK(d('fans'))}`);
+    if (d('cash')) out.push(`${m.money} ${money(d('cash'))}`);
+    if (d('morale')) out.push(`${m.morale} ${signedK(d('morale'))}`);
+    for (const w of T) if (d(`out:${w}`)) out.push(`${pack.targets[w]} out ${weeks(d(`out:${w}`))}`);
+    for (const w of T) if (d(`rating:${w}`)) out.push(`${pack.targets[w]} rating ${signedK(d(`rating:${w}`))}`);
+    if (d('recruit')) out.push(`Recruit interest ${signedK(d('recruit'))}`);
+    for (const [k, def] of Object.entries(FX_REGISTRY_DEF)) {
+      const fmt = v => (def.fmt === 'money' ? money(v) : def.fmt === 'weeks' ? weeks(v) : signedK(v));
+      if (def.who) { for (const w of T) if (d(`${k}:${w}`)) out.push(`${pack.targets[w]} ${def.label} ${fmt(d(`${k}:${w}`))}`); }
+      else if (d(k)) out.push(`${def.label} ${fmt(d(k))}`);
+    }
+    return out;
+  };
+  const seat = E.bindGmInbox(pack, { ...BINDING, fx: FX_REGISTRY_DEF });
+  const bad = [];
+  let answered = 0;
+  for (const e of pack.events) {
+    e.choices.forEach((c, i) => {
+      const s = newDesk();
+      s.phoneInbox = [{ id: 'm', defId: e.id, from: e.from, emoji: e.emoji, text: e.text, year: 2030, choices: e.choices, beat: e.beat }];
+      const a = snap(s);
+      const line = E.answerGmInbox(s, 'm', i, seat);
+      const b = snap(s);
+      const words = E.choiceEffects(c, pack, FX_REGISTRY_DEF);
+      const moved = movedWords(a, b);
+      answered++;
+      if (line === null) { bad.push(`${e.id} option ${i}: the answer was refused`); return; }
+      if ([...words].sort().join('|') !== [...moved].sort().join('|')) bad.push(`${e.id} "${c.label}": prints [${words.join(', ')}], moved [${moved.join(', ')}]`);
+      const want = `📨 ${e.from}: ${c.label}.${words.length ? ` ${words.join(', ')}.` : ''}`;
+      if (line !== want) bad.push(`${e.id} "${c.label}": the answer line reads "${line}"`);
+      if (E.gmChoiceLabel(c, pack, FX_REGISTRY_DEF) !== (words.length ? `${c.label} · ${words.join(', ')}` : c.label)) bad.push(`${e.id} "${c.label}": the button does not carry the words`);
+      const again = E.answerGmInbox(s, 'm', i, seat);
+      if (again !== null || JSON.stringify(snap(s)) !== JSON.stringify(b)) bad.push(`${e.id} "${c.label}": a second answer moved something`);
+    });
+    /* The neutral option, worked out here: every built in and every fx zero. */
+    const want = e.choices.findIndex(c => !c.karma && !c.popularity && !c.cash && !c.morale && !(c.out?.weeks > 0) && !c.rating?.delta && !c.recruit
+      && Object.values(c.fx ?? {}).every(v => (typeof v === 'number' ? v : v.v) === 0));
+    if (E.gmNeutralIndex(e.choices) !== want) bad.push(`${e.id}: gmNeutralIndex says ${E.gmNeutralIndex(e.choices)}, the option that moves nothing is ${want}`);
+  }
+  const r5 = pack.events.find(e => e.id === 'r5');
+  if (E.gmNeutralIndex(r5.choices) !== 1) bad.push(`r5: "Fine him" moves only a registered key and still read as neutral`);
+  for (const b of bad.slice(0, 8)) console.error(`     ${b}`);
+  if (answered < 12) fail(11, `only ${answered} options answered: nothing was tested`);
+  if (bad.length) fail(11, `${bad.length} registry breaks over ${answered} answered options`);
+  else ok(`${answered} options over ${pack.events.length} cards: each printed exactly the keys it moved, by exactly the amounts, the button and the answer line agree, a second answer moved nothing, every neutral index right (r5's fx only option is not neutral)`);
+  /* The answer fails closed on a key the seat lost. */
+  const s = newDesk();
+  const e1 = pack.events[0];
+  s.phoneInbox = [{ id: 'm', defId: e1.id, from: e1.from, emoji: e1.emoji, text: e1.text, year: 2030, choices: e1.choices, beat: e1.beat }];
+  const a = JSON.stringify(s);
+  const refused = E.answerGmInbox(s, 'm', 0, { ...seat, fx: {} });
+  if (refused !== null || JSON.stringify(s) !== a) fail(11, 'an answer whose key the seat never registered still moved something');
+  else ok('an answer whose key the seat never registered is refused and moves nothing');
+  /* A key with no words prints its own name: the label never hides it. */
+  const raw = E.gmChoiceLabel(fxCh('Do it', { fx: { mystery: 2, form: { who: 'keeper', v: -1 } } }), pack, {});
+  if (raw !== 'Do it · mystery +2, Your keeper form -1') fail(11, `a label with unregistered keys reads "${raw}"`);
+  else ok(`a label with unregistered keys prints them raw: ${raw}`);
+  const breaks = [
+    ['an unregistered key', fxPack('fx_break', [fxCard('b', { choices: [fxCh('Act', { fx: { nope: 1 } }), fxCh('Leave')] })]), FX_REGISTRY_DEF, /not registered/],
+    ['a built in name registered', FX_REGISTRY, { ...FX_REGISTRY_DEF, morale: FX_REGISTRY_DEF.board }, /built in/],
+    ['a man on a plain key', fxPack('fx_break', [fxCard('b', { choices: [fxCh('Act', { fx: { board: { who: 'captain', v: 1 } } }), fxCh('Leave')] })]), FX_REGISTRY_DEF, /names nobody/],
+    ['a bare number on a key that names a man', fxPack('fx_break', [fxCard('b', { choices: [fxCh('Act', { fx: { form: 2 } }), fxCh('Leave')] })]), FX_REGISTRY_DEF, /bare number/],
+    ['a man off the targets', fxPack('fx_break', [fxCard('b', { choices: [fxCh('Act', { fx: { form: { who: 'coach', v: 1 } } }), fxCh('Leave')] })]), FX_REGISTRY_DEF, /not a target/],
+    ['a value that is not a number', fxPack('fx_break', [fxCard('b', { choices: [fxCh('Act', { fx: { board: Number.NaN } }), fxCh('Leave')] })]), FX_REGISTRY_DEF, /finite/],
+    ['a key with no registry at all', FX_REGISTRY, undefined, /not registered/],
+  ];
+  const held = breaks.filter(([, p, reg, re]) => { try { E.bindGmInbox(p, { ...BINDING, fx: reg }); return false; } catch (err) { return re.test(String(err.message)); } });
+  if (held.length !== breaks.length) fail(11, `bind refused only ${held.length} of ${breaks.length} broken packs (${breaks.filter(b => !held.includes(b)).map(b => b[0]).join(', ')})`);
+  else ok(`bind refuses ${breaks.map(b => b[0]).join(', ')}`);
 }
 
 /* ═══ end ═══ */

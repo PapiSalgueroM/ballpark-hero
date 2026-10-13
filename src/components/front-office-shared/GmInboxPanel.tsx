@@ -14,23 +14,26 @@
    Round 1332: a card the desk's staff settled (it expired) opens on
    gmExpiredLine, read off the message as saved, never on "You replied". The
    full desk line says the staff may deal with a card only when an open card
-   can expire. */
+   can expire. A seat with registered effects passes `fx` (its registry), so
+   every option prints those too, in the registry's own words. */
 import { useMemo } from 'react';
 import { InboxPanel } from '@/components/us-career/InboxPanel';
 import { gmChoiceLabel, gmExpiredLine, GM_INBOX_OPEN } from '@/lib/gmInbox';
-import type { GmChoiceDef, GmInboxPack } from '@/lib/gmInbox';
+import type { GmChoiceDef, GmFxWords, GmInboxPack } from '@/lib/gmInbox';
 import type { InboxMessage } from '@/lib/careerInbox';
 
-export function GmInboxPanel({ pack, messages, onAnswer, seen }: {
+export function GmInboxPanel({ pack, messages, onAnswer, seen, fx }: {
   pack: GmInboxPack;
   messages: InboxMessage[];
   onAnswer: (msgId: string, choiceIdx: number) => void;
   seen: Set<string>;
+  /** The seat's effect registry (only its words are read here). */
+  fx?: Readonly<Record<string, GmFxWords>>;
 }) {
   const shown = useMemo(() => [...messages].reverse().map(m => ({
     ...m,
-    choices: m.choices.map(c => ({ ...c, label: gmChoiceLabel(c as GmChoiceDef, pack) })),
-  })), [messages, pack]);
+    choices: m.choices.map(c => ({ ...c, label: gmChoiceLabel(c as GmChoiceDef, pack, fx) })),
+  })), [messages, pack, fx]);
   /* The settled line reads the message as saved, not the relabelled copy,
      so it names the option's own label. */
   const byId = useMemo(() => new Map(messages.map(m => [m.id, m])), [messages]);

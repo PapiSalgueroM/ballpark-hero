@@ -76,4 +76,13 @@ describe('GmInboxPanel', () => {
     expect(line).toContain(' Nothing new lands until you answer one, or your assistant deals with one for you.');
     expect(line.split('Nothing new lands').length).toBe(2);
   });
+
+  it('an option with a registered effect prints it in the registry words handed in as fx', () => {
+    const fxChoices = [{ ...def.choices[0], fx: { board: 2 } }, ...def.choices.slice(1)];
+    const m = { ...msg('f'), choices: fxChoices };
+    const fx = { board: { label: 'Board confidence' } };
+    render(<GmInboxPanel pack={pack} messages={[m]} onAnswer={() => undefined} seen={new Set()} fx={fx} />);
+    fireEvent.click(document.querySelector('[data-inbox-row="f"]')!);
+    expect(screen.getByText('Sit him · Owner trust +1, Your franchise player out 2 weeks, Board confidence +2').tagName).toBe('BUTTON');
+  });
 });

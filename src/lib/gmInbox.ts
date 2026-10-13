@@ -88,6 +88,11 @@ export type GmFactSpec =
   | { kind: 'num'; min: number; max: number; per: 'season' | 'week' }
   | { kind: 'bool'; p: number; per: 'season' | 'week' };
 
+/** A registered effect's value on an option (Round 1332): a plain number
+ *  for a key that names no one, `{ who, v }` (who a key of the pack's
+ *  targets) for one that names a man. */
+export type GmFxValue = number | { who: string; v: number };
+
 /** One answer. karma is owner trust, popularity is fans, cash is budget. */
 export interface GmChoiceDef extends InboxChoiceDef {
   /** One man, named by role, misses this many weeks. */
@@ -96,7 +101,43 @@ export interface GmChoiceDef extends InboxChoiceDef {
   rating?: { who: string; delta: number };
   /** A recruit's interest in your program moves by this much. */
   recruit?: number;
+  /** Round 1332: what else it moves, each key one the seat registered. */
+  fx?: Record<string, GmFxValue>;
 }
+
+/* ─── Round 1332: the seat effect registry ───────────────────────────────────
+
+   The seven built in effects (trust, fans, budget, the room, out, rating,
+   recruit) are what a GM desk moves. A seat that moves more (board
+   confidence, a club suspension) registers each key once: its words and
+   how it lands. The button's words and the answer read the same entry, so
+   a card can never print a promise it does not keep, and `read` is how a
+   harness proves it. */
+
+/** What choiceEffects needs of a registered effect: its words. */
+export interface GmFxWords {
+  label: string;
+  /** 'signed' (the default) prints +3, 'money' as the budget prints,
+   *  'weeks' as "2 weeks". */
+  fmt?: 'signed' | 'money' | 'weeks';
+  /** The key names a man: its values are `{ who, v }`. */
+  who?: true;
+}
+export interface GmFxDef<S> extends GmFxWords {
+  apply: (s: S, v: number, who?: string) => void;
+  read: (s: S, who?: string) => number;
+}
+export type GmFxRegistry<S> = Record<string, GmFxDef<S>>;
+
+/** The built in effects: no registry key may take one of these names. */
+export const GM_BUILT_IN_FX: readonly string[] = ['karma', 'popularity', 'cash', 'morale', 'out', 'rating', 'recruit'];
+
+/** One fx value as its man (if any) and its amount. */
+const fxParts = (raw: GmFxValue): { who?: string; v: number } =>
+  (typeof raw === 'number' ? { v: raw } : { who: raw?.who, v: raw?.v });
+
+/** Whether an option moves anything through a registered key. */
+const gmFxMoves = (c: GmChoiceDef): boolean => Object.values(c.fx ?? {}).some(raw => fxParts(raw).v !== 0);
 
 /** One event in a pack. The phase and age gates of a player's phone mean
  *  nothing at a desk, so a pack leaves them out and gmPool fills them in. */
@@ -182,6 +223,8 @@ export interface GmInboxSeat<S extends GmInboxHost> extends InboxSport<S> {
   addRating: (s: S, who: string, delta: number) => void;
   addRecruit: (s: S, delta: number) => void;
   keyOf?: (s: S) => string;
+  /** Round 1332: the seat's registered effects. Absent reads as none. */
+  fx?: GmFxRegistry<S>;
 }
 
 export interface GmInboxBinding<S extends GmInboxHost> {
@@ -199,6 +242,8 @@ export interface GmInboxBinding<S extends GmInboxHost> {
   setOut?: (s: S, who: string, weeks: number) => void;
   addRating?: (s: S, who: string, delta: number) => void;
   addRecruit?: (s: S, delta: number) => void;
+  /** Round 1332: every key a pack's `fx` moves, declared once. */
+  fx?: GmFxRegistry<S>;
 }
 
 /** The pack as careerInbox's pool: every event with the phase gate open. */
@@ -226,7 +271,7 @@ export function bindGmInbox<S extends GmInboxHost>(pack: GmInboxPack, b: GmInbox
   const missing = (['out', 'rating', 'recruit'] as const).filter(k =>
     used[k] && !(k === 'out' ? b.setOut : k === 'rating' ? b.addRating : b.addRecruit));
   if (missing.length > 0) throw new Error(`gmInbox: the ${pack.seat} pack moves ${missing.join(', ')} and the seat cannot`);
-  const problems = gmPackProblems(pack);
+  const problems = gmPackProblems(pack, b.fx);
   if (problems.length > 0) throw new Error(`gmInbox: the ${pack.seat} pack: ${problems[0]}`);
   const none = () => undefined;
   return {
@@ -245,21 +290,31 @@ export function bindGmInbox<S extends GmInboxHost>(pack: GmInboxPack, b: GmInbox
     addRating: b.addRating ?? none,
     addRecruit: b.addRecruit ?? none,
     keyOf: b.keyOf,
+    fx: b.fx ?? {},
   };
 }
 
-/** The first option that moves nothing at all, or -1. */
+/** The first option that moves nothing at all, or -1. Since Round 1332 a
+ *  registered effect counts: an option is neutral only when every one of
+ *  its fx values is zero or absent. */
 export function gmNeutralIndex(choices: readonly GmChoiceDef[]): number {
   return choices.findIndex(c => !c.karma && !c.popularity && !c.cash && !c.morale
-    && !(c.out && c.out.weeks > 0) && !(c.rating && c.rating.delta) && !c.recruit);
+    && !(c.out && c.out.weeks > 0) && !(c.rating && c.rating.delta) && !c.recruit
+    && !gmFxMoves(c));
 }
 
 const has = (o: object, k: string) => Object.prototype.hasOwnProperty.call(o, k);
 
 /** Every problem a pack has, in one place: bindGmInbox refuses the first,
- *  the kit lists them all. W1b adds its effect registry check here. */
-export function gmPackProblems(pack: GmInboxPack): string[] {
+ *  the kit lists them all. Round 1332's effect registry check is the
+ *  `fx` loop: a key the registry does not hold (with no registry, every
+ *  key), a registry key named like a built in, a man given to a plain key
+ *  or a bare number to a key that names one, a man off the targets, and a
+ *  value that is not a finite number. */
+export function gmPackProblems(pack: GmInboxPack, fx?: Readonly<Record<string, GmFxWords>>): string[] {
   const out: string[] = [];
+  const reg = fx ?? {};
+  for (const k of Object.keys(reg)) if (GM_BUILT_IN_FX.includes(k)) out.push(`the seat registers ${k}, the name of a built in effect`);
   const whole = (v: unknown, min: number) => typeof v === 'number' && Number.isInteger(v) && v >= min;
   if (pack.subjectRest !== undefined && !whole(pack.subjectRest, 0)) out.push(`subjectRest ${pack.subjectRest} is not a whole number`);
   if (pack.clock !== undefined && pack.clock !== 'week' && pack.clock !== 'season') out.push(`clock ${pack.clock} is neither week nor season`);
@@ -278,6 +333,17 @@ export function gmPackProblems(pack: GmInboxPack): string[] {
     } else if (sub !== undefined && typeof sub !== 'string' && pack.facts[sub.fact].kind === 'bool') {
       /* A yes or no names nobody, so gmSubjectKey would hold the card forever. */
       out.push(`${e.id} is about a yes or no fact, which names nobody`);
+    }
+    for (const c of e.choices) {
+      for (const [k, raw] of Object.entries(c.fx ?? {})) {
+        const def = has(reg, k) ? reg[k] : undefined;
+        if (!def) { out.push(`${e.id}: "${c.label}" moves ${k}, which the seat has not registered`); continue; }
+        const { who, v } = fxParts(raw);
+        if (!(typeof v === 'number' && Number.isFinite(v))) out.push(`${e.id}: "${c.label}" moves ${k} by ${v}, not a finite number`);
+        if (def.who && typeof raw === 'number') out.push(`${e.id}: ${k} names a man and "${c.label}" gives it a bare number`);
+        if (!def.who && typeof raw !== 'number') out.push(`${e.id}: ${k} names nobody and "${c.label}" gives it a man`);
+        if (typeof raw !== 'number' && !(typeof who === 'string' && has(pack.targets, who))) out.push(`${e.id}: "${c.label}" moves ${k} for ${who}, not a target`);
+      }
     }
   }
   return out;
@@ -475,8 +541,11 @@ export function gmSeasonWeeks(pack: GmInboxPack): string[] {
 
 const signed = (v: number) => (v > 0 ? `+${v}` : `${v}`);
 
-/** Every effect an option moves, in the seat's own words. Zero is left out. */
-export function choiceEffects(c: GmChoiceDef, pack: GmInboxPack): string[] {
+/** Every effect an option moves, in the seat's own words. Zero is left out.
+ *  Round 1332: then one entry per nonzero registered key, in the option's
+ *  key order, from the registry's words; a key with no entry prints its own
+ *  name and value, so a label can never hide an effect. */
+export function choiceEffects(c: GmChoiceDef, pack: GmInboxPack, fx?: Readonly<Record<string, GmFxWords>>): string[] {
   const m = pack.meters;
   const out: string[] = [];
   if (c.karma) out.push(`${m.trust} ${signed(c.karma)}`);
@@ -486,13 +555,23 @@ export function choiceEffects(c: GmChoiceDef, pack: GmInboxPack): string[] {
   if (c.out && c.out.weeks > 0) out.push(`${pack.targets[c.out.who] ?? c.out.who} out ${c.out.weeks} week${c.out.weeks === 1 ? '' : 's'}`);
   if (c.rating && c.rating.delta) out.push(`${pack.targets[c.rating.who] ?? c.rating.who} rating ${signed(c.rating.delta)}`);
   if (c.recruit) out.push(`${m.recruit ?? 'Recruit interest'} ${signed(c.recruit)}`);
+  for (const [k, raw] of Object.entries(c.fx ?? {})) {
+    const { who, v } = fxParts(raw);
+    if (!v) continue;
+    const def = fx && has(fx, k) ? fx[k] : undefined;
+    const man = who === undefined ? '' : `${pack.targets[who] ?? who} `;
+    if (!def) { out.push(`${man}${k} ${signed(v)}`); continue; }
+    const amount = def.fmt === 'money' ? `${v > 0 ? '+' : '-'}${pack.money.prefix}${Math.abs(v)}${pack.money.suffix}`
+      : def.fmt === 'weeks' ? `${v} week${v === 1 ? '' : 's'}` : signed(v);
+    out.push(`${man}${def.label} ${amount}`);
+  }
   return out;
 }
 
 /** The option's words with its effects after them, as the button reads. */
-export function gmChoiceLabel(c: GmChoiceDef, pack: GmInboxPack): string {
-  const fx = choiceEffects(c, pack);
-  return fx.length ? `${c.label} · ${fx.join(', ')}` : c.label;
+export function gmChoiceLabel(c: GmChoiceDef, pack: GmInboxPack, fx?: Readonly<Record<string, GmFxWords>>): string {
+  const fx2 = choiceEffects(c, pack, fx);
+  return fx2.length ? `${c.label} · ${fx2.join(', ')}` : c.label;
 }
 
 /* ─── the answer ─────────────────────────────────────────────────────────── */
@@ -509,11 +588,19 @@ export function answerGmInbox<S extends GmInboxHost>(
   if (!msg || msg.answered !== undefined) return null;
   const c = msg.choices[choiceIdx] as GmChoiceDef | undefined;
   if (!c) return null;
+  /* Round 1332: an effect the seat never registered could not land, so
+     the answer fails closed and nothing moves. */
+  const reg = seat.fx ?? {};
+  if (c.fx && Object.keys(c.fx).some(k => !has(reg, k))) return null;
   if (answerInboxMessage(s, msgId, choiceIdx, seat) === null) return null;
   if (c.out && c.out.weeks > 0) seat.setOut(s, c.out.who, c.out.weeks);
   if (c.rating && c.rating.delta) seat.addRating(s, c.rating.who, c.rating.delta);
   if (c.recruit) seat.addRecruit(s, c.recruit);
-  const fx = choiceEffects(c, seat.pack);
+  for (const [k, raw] of Object.entries(c.fx ?? {})) {
+    const { who, v } = fxParts(raw);
+    if (v) reg[k].apply(s, v, who);
+  }
+  const fx = choiceEffects(c, seat.pack, reg);
   return `📨 ${msg.from}: ${c.label}.${fx.length ? ` ${fx.join(', ')}.` : ''}`;
 }
 

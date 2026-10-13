@@ -9,6 +9,8 @@ import { keyedRng } from './keyedRng';
 import { gmExpiredLine, gmNeutralIndex, gmPackProblems, gmSubjectKey } from './gmInbox';
 import type { GmEventDef, GmInboxMessage } from './gmInbox';
 import { onCooldown } from './careerEventDeck';
+import { gmChoiceLabel } from './gmInbox';
+import type { GmChoiceDef, GmFxRegistry, GmInboxBinding } from './gmInbox';
 
 interface Desk extends GmInboxHost {
   trust: number; fans: number; cash: number; year: number; recruit: number;
@@ -544,5 +546,84 @@ describe('gmInbox deck rules, the closing check cases', () => {
     expect(out[4].map(m => [m.defId, m.answered, m.auto])).toEqual([['x', 0, true]]);
     expect(gmExpiredLine(out[4][0])).toBe('📨 Ownership: your assistant dealt with it (Leave it).');
     expect(JSON.stringify(run(false).s)).toBe(JSON.stringify(s));
+  });
+});
+
+/* ─── Round 1332: the effect registry ────────────────────────────────────── */
+
+interface FxDesk extends Desk { board: number; form: Record<string, number> }
+const fxDesk = (): FxDesk => ({ ...desk(), board: 50, form: {} });
+const FX_REG: GmFxRegistry<FxDesk> = {
+  board: { label: 'Board confidence', apply: (s, v) => { s.board = clamp(s.board + v); }, read: s => s.board },
+  kitty: { label: 'Kitty', fmt: 'money', apply: (s, v) => { s.cash += v; }, read: s => s.cash },
+  form: { label: 'form', who: true, apply: (s, v, who) => { s.form[who!] = (s.form[who!] ?? 0) + v; }, read: (s, who) => s.form[who!] ?? 0 },
+  ban: { label: 'suspended', fmt: 'weeks', who: true, apply: (s, v, who) => { s.out[who!] = (s.out[who!] ?? 0) + v; }, read: (s, who) => s.out[who!] ?? 0 },
+};
+const FX_TOY: GmInboxPack = {
+  ...TOY, seat: 'fxtoy',
+  events: [
+    { id: 'fx1', beat: 'a', from: 'The board', emoji: 'x', text: 'A call.', choices: [
+      { label: 'Back it', reply: 'Backed.', karma: 1, fx: { board: 3, kitty: -2, form: { who: 'star', v: 2 }, ban: { who: 'star', v: 1 } } },
+      { label: 'Fine him', reply: 'Fined.', karma: 0, fx: { kitty: 0.5 } },
+      { label: 'Leave it', reply: 'Left.', karma: 0, fx: { board: 0 } },
+    ] },
+  ],
+};
+const fxBind = (reg: GmFxRegistry<FxDesk> | undefined): GmInboxBinding<FxDesk> => ({
+  moodOf: s => s.trust, setMood: (s, v) => { s.trust = v; },
+  addPopularity: (s, d) => { s.fans = clamp(s.fans + d); }, addCash: (s, a) => { s.cash += a; },
+  yearOf: s => s.year, fx: reg,
+});
+const fxSeat = (reg: GmFxRegistry<FxDesk> | undefined) => bindGmInbox<FxDesk>(FX_TOY, fxBind(reg));
+const fxMsg = (s: FxDesk) => {
+  const e = FX_TOY.events[0];
+  s.phoneInbox = [{ id: 'm', defId: e.id, from: e.from, emoji: e.emoji, text: e.text, year: 2026, choices: e.choices, beat: e.beat }];
+};
+
+describe('gmInbox Round 1332: the effect registry', () => {
+  it('the words name every registered key in its own format, after the built ins', () => {
+    const [back, fine, leave] = FX_TOY.events[0].choices;
+    expect(choiceEffects(back, FX_TOY, FX_REG)).toEqual(['Trust +1', 'Board confidence +3', 'Kitty -$2M', 'Your star form +2', 'Your star suspended 1 week']);
+    expect(gmChoiceLabel(fine, FX_TOY, FX_REG)).toBe('Fine him · Kitty +$0.5M');
+    expect(gmChoiceLabel(leave, FX_TOY, FX_REG)).toBe('Leave it');
+    /* With no words for a key, the key itself prints: nothing is hidden. */
+    expect(choiceEffects(back, FX_TOY)).toEqual(['Trust +1', 'board +3', 'kitty -2', 'Your star form +2', 'Your star ban +1']);
+  });
+
+  it('the answer moves exactly what the words say, once', () => {
+    const s = fxDesk();
+    fxMsg(s);
+    const line = answerGmInbox(s, 'm', 0, fxSeat(FX_REG));
+    expect(line).toBe('📨 The board: Back it. Trust +1, Board confidence +3, Kitty -$2M, Your star form +2, Your star suspended 1 week.');
+    expect([s.trust, s.board, s.cash, s.form.star, s.out.star]).toEqual([51, 53, 8, 2, 1]);
+    expect(answerGmInbox(s, 'm', 0, fxSeat(FX_REG))).toBeNull();
+    expect([s.trust, s.board, s.cash, s.form.star, s.out.star]).toEqual([51, 53, 8, 2, 1]);
+  });
+
+  it('an answer whose key the seat never registered fails closed and moves nothing', () => {
+    const s = fxDesk();
+    fxMsg(s);
+    const before = JSON.stringify(s);
+    const seat = { ...fxSeat(FX_REG), fx: { board: FX_REG.board } };
+    expect(answerGmInbox(s, 'm', 0, seat)).toBeNull();
+    expect(JSON.stringify(s)).toBe(before);
+  });
+
+  it('an option is neutral only when every fx value is zero or absent', () => {
+    expect(gmNeutralIndex(FX_TOY.events[0].choices)).toBe(2);
+    expect(gmNeutralIndex([{ label: 'Fine him', reply: 'x', karma: 0, fx: { kitty: 0.5 } }])).toBe(-1);
+    expect(gmNeutralIndex([{ label: 'Nothing', reply: 'x', karma: 0, fx: { kitty: 0, form: { who: 'star', v: 0 } } }])).toBe(0);
+  });
+
+  it('bind refuses every registry breakage', () => {
+    const withChoice = (fx: GmChoiceDef['fx']): GmInboxPack => ({ ...FX_TOY, events: [{ ...FX_TOY.events[0], choices: [{ label: 'Act', reply: 'x', karma: 0, fx }] }] });
+    expect(() => fxSeat(undefined)).toThrow(/not registered/);
+    expect(() => bindGmInbox<FxDesk>(withChoice({ nope: 1 }), fxBind(FX_REG))).toThrow(/not registered/);
+    expect(() => fxSeat({ ...FX_REG, morale: FX_REG.board })).toThrow(/built in/);
+    expect(gmPackProblems(withChoice({ board: { who: 'star', v: 1 } }), FX_REG).join()).toMatch(/names nobody/);
+    expect(gmPackProblems(withChoice({ form: 2 }), FX_REG).join()).toMatch(/bare number/);
+    expect(gmPackProblems(withChoice({ form: { who: 'coach', v: 1 } }), FX_REG).join()).toMatch(/not a target/);
+    expect(gmPackProblems(withChoice({ board: Number.POSITIVE_INFINITY }), FX_REG).join()).toMatch(/finite/);
+    expect(gmPackProblems(FX_TOY, FX_REG)).toEqual([]);
   });
 });
