@@ -1,0 +1,6 @@
+  FAIL  [12] 390x844, "Play Week 17", the first press of a visit: the back chip from 984 to 1028 of 844: on the screen with the buttons
+  FAIL  [12] 390x844, a playoff round, the first press of a visit: the back chip from 999 to 1043 of 844: on the screen with the buttons
+  PASS  [19] 390x844, "Watch Week 17" on E: the press moved the page (stream 1 of 4, by 330 px), so the case is reached
+  PASS  [19] 390x844, "Watch Week 17" on E at full time (24 samples on the clock; the week box from 435 before the press to 159, the box from 644 to 316): his result from 383 to 411, the next press from 208 to 252, the back chip from 728 to 772: all on the screen
+  PASS  [19] 390x844, then his bye round (the box's face: bracket, "Next: the NFC Divisional, against 49ers."): the next press from 208 to 252, the box's top at 368: the next press and the box's top on the screen
+playFrontOfficeGameDay: 386 checks, 2 failed

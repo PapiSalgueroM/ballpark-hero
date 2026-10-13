@@ -1,0 +1,4 @@
+build exit=0 31s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+walk-oldboard exit=1 337s | playFrontOfficeGameDay: 386 checks, 3 failed
+walk-fix7only exit=1 335s | playFrontOfficeGameDay: 386 checks, 2 failed
+walk-revealdown exit=1 349s | control revealdown: RED AT THE NAMED CHECK (point 12) and nowhere else
