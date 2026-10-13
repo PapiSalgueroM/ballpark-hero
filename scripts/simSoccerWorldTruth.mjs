@@ -336,6 +336,8 @@ function drive(B, c) {
       Math.random = seeded(7);
       try { recs.push(recordOf(B, s, row, c)); } finally { Math.random = mine; }
     }
+    /* the finished save's size, for a reading beside the base's (the feed is emptied the same way on both) */
+    recs.size = JSON.stringify(s).length;
   } finally { Math.random = real; }
   return recs;
 }
@@ -372,6 +374,10 @@ const headRecs = needFleet ? FLEET.map(c => drive(HEAD, c)) : [];
 const t1 = Date.now();
 const baseRecs = needFleet ? FLEET.map(c => drive(BASEB, c)) : [];
 const flatHead = headRecs.flat(), flatBase = baseRecs.flat();
+if (needFleet) {
+  const kb = recs => { const v = recs.map(r => r.size).filter(Number.isFinite).sort((a, b) => a - b); return v.length ? `mean ${(v.reduce((a, b) => a + b, 0) / v.length / 1024).toFixed(1)} KB, median ${(v[v.length >> 1] / 1024).toFixed(1)} KB` : 'none'; };
+  console.log(`finished saves: this tree ${kb(headRecs)}, the base ${kb(baseRecs)} (a reading, not a check)`);
+}
 console.log(`fleet: ${FLEET.length} careers a tree (seed offset ${SEED_OFFSET}, ${SEEDS} seeds), ${flatHead.length} seasons on this tree in ${Math.round((t1 - t0) / 1000)} s, ${flatBase.length} on the base`);
 
 /* ─── 1. months ────────────────────────────────────────────────────────── */
