@@ -1,0 +1,23 @@
+#!serve
+#!playwright
+simCareerStory: node scripts/simCareerStory.mjs
+simCareerTraining: node scripts/simCareerTraining.mjs
+simClubManagerNewLeagues: node scripts/simClubManagerNewLeagues.mjs
+simClubSquads: node scripts/simClubSquads.mjs
+simClubVerdict: node scripts/simClubVerdict.mjs
+simCmDataOnDemand: node scripts/simCmDataOnDemand.mjs
+simCmLeagueBook: node scripts/simCmLeagueBook.mjs
+simCmOwnGoals: node scripts/simCmOwnGoals.mjs
+simCmQuickLegs: node scripts/simCmQuickLegs.mjs
+simFightCareer: node scripts/simFightCareer.mjs
+simGmDeskHost: node scripts/simGmDeskHost.mjs
+simGmDraftOrder: node scripts/simGmDraftOrder.mjs
+simGmGameDay: node scripts/simGmGameDay.mjs
+simGmInbox: node scripts/simGmInbox.mjs
+simHomeFront: node scripts/simHomeFront.mjs
+simLiveSimMotion: node scripts/simLiveSimMotion.mjs
+simManagerCareer: node scripts/simManagerCareer.mjs
+simManagerEpilogue: node scripts/simManagerEpilogue.mjs
+simNbaAwardsSense: node scripts/simNbaAwardsSense.mjs
+simPhone: node scripts/simPhone.mjs
+simPhone2: node scripts/simPhone2.mjs
