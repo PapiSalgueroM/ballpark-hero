@@ -316,3 +316,19 @@ Left by the fix pass, then raised to majors by the closing check (see the next s
 - rc r1324-fix-m2 (#!serial, the reviewer's mutation rig): m0 exit 0 SURVIVED (the rig is honest: kit, simGmInbox and
   vitest 43 green), and m2, m3, m4, m6, m7 and m8 exit 1 CAUGHT (m3 by kit section 5 and a unit test, m4 by section 7 and
   a unit test, m7 by section 3 and a unit test, m8 now by section 5 as well as the unit test).
+
+### The second fix pass on the runners (head ab76401b)
+
+- rc r1324-fix2-a (head 3009cf89): tsc exit 0; vitest exit 0 (2 files, 48 tests); simEventDeck exit 0 (`simEventDeck:
+  green.`); settledoff, expireoff and expirefx exit 1, each on section 7 alone.
+- rc r1324-fix2-final (65 lines, the first fix pass's 63 plus settledoff and panelexpiry): tsc exit 0; vitest exit 0
+  (2 files, 48 tests); simEventDeck exit 0 at SEED 1 (97.3 s, all 84 rows byte equal to the recording, the settled list
+  1,559 cards with 341 dropped in the settling call, the panel fence holding at 0 expiring GM cards) and SEED 2 (1,556
+  and 346); all 16 EVENT_DECK_CONTROL lines exit 1 on their own section (replay 1 and 3, weightoff 3, weightkeep 3,
+  story 4, rest 5, failopen 5, restfall 5, textrng 6, expireoff 7, expirefx 7, expirefall 7, settledoff 7, panelexpiry
+  7, neutral 8, seasonweek 9, heavy 10; panelexpiry names nfl/nfl_holdout); simGmInbox's output at SEED 1, 2 and 3 equal
+  to the base 8fea14e2 and to 36cc9ffe; all 16 GM_INBOX_CONTROL lines exit 1; simCareerInbox exit 0, privatecap exit 1;
+  simHarnessAnchors, simNoRivalNames (0 findings), simStorageWrites, simNoInventedQuotes, simNoInventedConduct and
+  simInventedNames exit 0. The same four rule fences red with the same last lines as on rc r1324-fix-final
+  (simSchemaNames and simLeaderboardCaps need the live database; simWritesAreSent and simResultMoment cannot find
+  Playwright, which the request does not install). None reads gmInbox.

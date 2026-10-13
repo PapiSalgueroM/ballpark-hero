@@ -120,7 +120,7 @@
                 memory); section 10 fails. The brief's weight alone changed
                 nothing (see section 10).
 
-   Runtime about 85 to 95 s on a runner, three requests at a time (section 2
+   Runtime about 85 to 100 s on a runner, three requests at a time (section 2
    reloads all 84 rows since the review's fix pass; it was 40 s with seed 1
    alone), so SIM_EVENT_DECK_SHARD is not needed yet; SIM_EVENT_DECK_MEASURE=1 adds the
    seeds 1 to 10 measurements (about a minute more).
