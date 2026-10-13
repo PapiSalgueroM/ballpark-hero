@@ -1,0 +1,6 @@
+og-head exit=0 11s |    Duration  10.11s (transform 3.47s, setup 132ms, collect 4.48s, tests 3.56s, environment 810ms, prepare 420ms)
+vitest3 exit=0 13s |    Duration  11.96s (transform 5.25s, setup 1.71s, collect 12.92s, tests 3.43s, environment 3.68s, prepare 980ms)
+fair0 exit=0 113s | simSoccerDeckFairness: all sections green
+tsc exit=0 152s | 
+prom exit=0 32s | simSoccerEventPromises: all sections green
+vitest-all exit=0 728s |    Duration  726.74s (transform 41.73s, setup 29.39s, collect 191.12s, tests 1594.82s, environment 217.15s, prepare 45.09s)
