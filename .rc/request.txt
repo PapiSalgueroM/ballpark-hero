@@ -1,0 +1,4 @@
+#!serve
+#!playwright
+fx1280: TAG=fx1280 W=1280 H=900 CLUB="Aston Villa" node .rc/x/walkEffects.mjs
+fx390: TAG=fx390 W=390 H=844 CLUB=Brentford node .rc/x/walkEffects.mjs
