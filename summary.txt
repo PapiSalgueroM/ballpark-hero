@@ -1,0 +1,15 @@
+build exit=0 28s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+basebuild exit=0 30s | base server 200
+walk-full exit=1 273s | playCmHubLanding: 1 failure(s) (A 7 pass 1 fail, B 65 pass 0 fail, C 156 pass 0 fail, D 12 pass 0 fail, E 63 pass 0 fail, F 9 pass 0 fail)
+ctl-noscroll exit=1 19s | playCmHubLanding: CONTROL noscroll FIRED, 8 A check(s) went red, first: liverpool-take-390: hub header top -1630 px at scrollY 1743 on the first hub frame (screen 844 px)
+ctl-nosticky exit=1 21s | playCmHubLanding: CONTROL nosticky FIRED, 9 B check(s) went red, first: celta-320 first row, an in page click: the day strip is wholly on screen (573 to 645 of 640) (B 52
+ctl-stale exit=1 21s | playCmHubLanding: CONTROL stale FIRED, 1 B check(s) went red, first: banner-390: the strip rides the foot once the banner is answered (bottom 683, foot 832, banner gone) 
+ctl-small exit=1 25s | playCmHubLanding: CONTROL small FIRED, 57 C check(s) went red, first: s320 Liverpool hub: under 12px: tile line: "Elite patience" at 11px (C 108 pass 57 fail)
+ctl-cut exit=1 26s | playCmHubLanding: CONTROL cut FIRED, 60 C check(s) went red, first: s320 Liverpool team: cut: Board wants line: "Board wants Win the Premier League" (242/40 wide, 17/17 t
+ctl-drift exit=1 131s | playCmHubLanding: CONTROL drift FIRED, 6 D check(s) went red, first: liverpool-take-seed1: dukb-club-manager-save differs, $.budget: 140.16 against 140.44 (D 6 pass 6 fai
+fonts exit=0 0s | Prepared 9 declared font dependencies for local fulfillment.
+simCmRealFixtures exit=0 2s | simCmRealFixtures normal premier: 10 outcome groups passed on 20 clubs, 38 matchdays and 380 fixtures, BASE GROUPS NOT RUN.
+playCmRealFixtures-1 exit=0 19s | playCmRealFixtures: 2 viewports, 6 real/legacy/later-season calendar and actual Quick Sim journeys, 18 neutral real-opening results, 2 effective controls; full saved stat
+playCmRealFixtures-2 exit=0 19s | playCmRealFixtures: 2 viewports, 6 real/legacy/later-season calendar and actual Quick Sim journeys, 18 neutral real-opening results, 2 effective controls; full saved stat
+playClubManager exit=0 287s | Played Club Manager through its own screens. 0 findings.
+simRevealScroll exit=0 213s | Green. 53 presses measured, nothing dragged the page down on content that was already readable, no panel lost its top, and 4 presses proved the feature still does its job

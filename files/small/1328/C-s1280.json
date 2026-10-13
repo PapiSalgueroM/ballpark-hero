@@ -1,0 +1,273 @@
+{
+ "head": {
+  "era": {
+   "small": 25,
+   "font": [],
+   "controls": [],
+   "sizes": [],
+   "cut": [],
+   "overlaps": 0,
+   "overlapWords": [],
+   "sideways": false,
+   "cellSize": null,
+   "control": "small"
+  },
+  "nation": {
+   "small": 56,
+   "font": [],
+   "controls": [],
+   "sizes": [],
+   "cut": [],
+   "overlaps": 0,
+   "overlapWords": [],
+   "sideways": false,
+   "cellSize": null,
+   "control": "small"
+  },
+  "league": {
+   "small": 17,
+   "font": [],
+   "controls": [],
+   "sizes": [],
+   "cut": [],
+   "overlaps": 0,
+   "overlapWords": [],
+   "sideways": false,
+   "cellSize": null,
+   "control": "small"
+  },
+  "team": {
+   "small": 97,
+   "font": [],
+   "controls": [],
+   "sizes": [],
+   "cut": [],
+   "overlaps": 0,
+   "overlapWords": [],
+   "sideways": false,
+   "cellSize": null,
+   "control": "small"
+  },
+  "dugout": {
+   "small": 86,
+   "font": [],
+   "controls": [],
+   "sizes": [],
+   "cut": [],
+   "overlaps": 0,
+   "overlapWords": [],
+   "sideways": false,
+   "cellSize": null,
+   "control": "small"
+  },
+  "hub": {
+   "small": 47,
+   "font": [
+    "tile line: \"Underdogs patience\" at 11px",
+    "tile line: \"The head coach\" at 11px",
+    "tile line: \"See the schedule\" at 11px",
+    "tile line: \"Form: L D L D L\" at 11px",
+    "tile line: \"Copa del Rey\" at 11px",
+    "tile line: \"Pablo Durán leads with 11\" at 11px",
+    "tile line: \"Kitty change, projected\" at 11px",
+    "tile line: \"Stadium, training, medical, more\" at 11px",
+    "tile line: \"Attack, defence, keepers, scouts\" at 11px",
+    "tile line: \"Seven skill trees to grow\" at 11px",
+    "tile line: \"Currency, nation job, haggling\" at 11px",
+    "tile line: \"33% win rate\" at 11px",
+    "tile line: \"No injuries or bans\" at 11px",
+    "tile line: \"They sit #6\" at 11px",
+    "tile line: \"One question, one tap\" at 11px",
+    "tile line: \"Ferran Jutglà\" at 11px",
+    "tile line: \"Recruitment 5/20 · 0 scouting\" at 11px",
+    "tile line: \"11 players still improving\" at 11px",
+    "tile line: \"Latest transfers inside\" at 11px"
+   ],
+   "controls": [],
+   "sizes": [
+    "help button 44x44",
+    "Managers button 59x44",
+    "meter button 188x44",
+    "meter button 188x44"
+   ],
+   "cut": [],
+   "overlaps": 0,
+   "overlapWords": [],
+   "sideways": false,
+   "cellSize": null,
+   "control": "small",
+   "cls": 0
+  },
+  "tiles": {
+   "Board": {
+    "value": "3 behind",
+    "sub": "Underdogs patience",
+    "h": 98,
+    "valueLines": 1,
+    "subLines": 1
+   },
+   "Inbox": {
+    "value": "1 new",
+    "sub": "The head coach",
+    "h": 98,
+    "valueLines": 1,
+    "subLines": 1
+   },
+   "Calendar": {
+    "value": "L 2-3",
+    "sub": "See the schedule",
+    "h": 98,
+    "valueLines": 1,
+    "subLines": 1
+   },
+   "League": {
+    "value": "#16",
+    "sub": "Form: L D L D L",
+    "h": 98,
+    "valueLines": 1,
+    "subLines": 1
+   },
+   "Cups": {
+    "value": "Knocked out",
+    "sub": "Copa del Rey",
+    "h": 98,
+    "valueLines": 1,
+    "subLines": 1
+   },
+   "Stats": {
+    "value": "21 goals",
+    "sub": "Pablo Durán leads with 11",
+    "h": 98,
+    "valueLines": 1,
+    "subLines": 1
+   },
+   "Finances": {
+    "value": "+£6.7m",
+    "sub": "Kitty change, projected",
+    "h": 98,
+    "valueLines": 1,
+    "subLines": 1
+   },
+   "Facilities": {
+    "value": "Level 3 · 2 · 2 · 2",
+    "sub": "Stadium, training, medical, more",
+    "h": 98,
+    "valueLines": 1,
+    "subLines": 1
+   },
+   "Staff": {
+    "value": "Level 3 · 3 · 2 · 3",
+    "sub": "Attack, defence, keepers, scouts",
+    "h": 98,
+    "valueLines": 1,
+    "subLines": 1
+   },
+   "Skills": {
+    "value": "Level 1",
+    "sub": "Seven skill trees to grow",
+    "h": 98,
+    "valueLines": 1,
+    "subLines": 1
+   },
+   "Options": {
+    "value": "£ · Normal",
+    "sub": "Currency, nation job, haggling",
+    "h": 98,
+    "valueLines": 1,
+    "subLines": 1
+   },
+   "Manager": {
+    "value": "7W 3D 11L",
+    "sub": "33% win rate",
+    "h": 98,
+    "valueLines": 1,
+    "subLines": 1
+   },
+   "Treatment": {
+    "value": "All fit",
+    "sub": "No injuries or bans",
+    "h": 98,
+    "valueLines": 1,
+    "subLines": 1
+   },
+   "Rival watch": {
+    "value": "Valencia",
+    "sub": "They sit #6",
+    "h": 98,
+    "valueLines": 1,
+    "subLines": 1
+   },
+   "Press room": {
+    "value": "They want a word",
+    "sub": "One question, one tap",
+    "h": 98,
+    "valueLines": 1,
+    "subLines": 1
+   },
+   "Dressing room": {
+    "value": "1 wants out",
+    "sub": "Ferran Jutglà",
+    "h": 98,
+    "valueLines": 1,
+    "subLines": 1
+   },
+   "Academy": {
+    "value": "Nobody yet",
+    "sub": "Recruitment 5/20 · 0 scouting",
+    "h": 98,
+    "valueLines": 1,
+    "subLines": 1
+   },
+   "Training": {
+    "value": "Normal · Balanced",
+    "sub": "11 players still improving",
+    "h": 98,
+    "valueLines": 1,
+    "subLines": 1
+   },
+   "Market": {
+    "value": "Window shut",
+    "sub": "Latest transfers inside",
+    "h": 98,
+    "valueLines": 1,
+    "subLines": 1
+   }
+  },
+  "calendar": {
+   "small": 94,
+   "font": [],
+   "controls": [],
+   "sizes": [
+    "previous month 44x44",
+    "next month 44x44",
+    "Sim to 134x44",
+    "intensity button 275x66",
+    "intensity button 275x66",
+    "intensity button 275x66",
+    "Club home 83x44"
+   ],
+   "cut": [],
+   "overlaps": 0,
+   "overlapWords": [],
+   "sideways": false,
+   "cellSize": "118x46",
+   "control": "small"
+  },
+  "training": {
+   "small": 51,
+   "font": [],
+   "controls": [],
+   "sizes": [
+    "Club home 83x44"
+   ],
+   "cut": [],
+   "overlaps": 0,
+   "overlapWords": [],
+   "sideways": false,
+   "cellSize": null,
+   "control": "small"
+  },
+  "errors": []
+ },
+ "base": null
+}
