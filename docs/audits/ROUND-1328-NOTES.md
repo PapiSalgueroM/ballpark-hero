@@ -33,6 +33,28 @@ push; the closing report is C:/Users/antho/dukb-handoff/2026-10-10/results-g/fin
 - playCmHubLanding on base: A red on all seven starts (scrollY 1743, 1794, 2118, 1276, 1276, 1826, 2231 on the
   first hub frame), B red (the page moved on day taps, the old names).
 
+## Head results (final head 3c2f34cb unless named)
+- rc1328-f1: tsc 0, vitest 0 (7 files), playCmHubLanding with the base build 0: A 8, B 63, C 156, D 12, E 52, F 9
+  checks green. D: the saves byte equal and the draws equal on all three careers (4762, 4672, 14150).
+- rc1328-f4: the five controls fired (noscroll 8 A, nosticky 9 B, small 57 C, cut 60 C, drift 6 D), each exit 1 with
+  FIRED in its last line; the walk on the base build red (A 0 of 8, B 12 fails).
+- rc1328-f5: weight /club-manager 588.7K (base 588.8K), /manager-hot-seat 606.1K (606.1K), /deadline-day 616.3K
+  (616.2K). The engine chunk's code is identical once hashed names are blanked; its export alias table moved.
+- playCmRealFixtures: red on the head 3 of 3 (and at step 1 alone, 8ac1a47c), green on the base 3 of 3, always the
+  same case: 390-real, captureVisible 'calendar-sources'. The harness focuses the last calendar day (Chrome centres
+  it) and then the first source link and asks for the whole coverage note on screen; with the hub now opening at
+  its top, the calendar panel opens about 470px down and the note's top line ends 36px above the screen. A harness
+  fix for its owner, not a defect of the screen; this round may not edit that harness.
+
+- rc1328-f2 and rc1328-f3: every sim, fence and walk of decision 8 green on the head except: simSchemaNames and
+  simLeaderboardCaps (they read the live database, which the runner blocks), simWritesAreSent (it cannot drive Guess
+  the Nation to a finish offline; see the closing report for its base run), playNationJob (red on the base the same
+  way: its text=Premier League press hits the page subtitle), playCmRealFixtures (above). playCmVar went red once in
+  a crowded run and was green twice alone on the head and once on the base (rc1328-var).
+- simDailyDeals identical to the base line for line; simClubManagerSlots equal but for its timings;
+  simClubManagerSaveSize sections 1 to 3 identical, section 4 unseeded in its vitest file so its byte counts move
+  run to run on any build.
+
 ## Owed (decision 2d), not this round
 - ManagerForm.tsx says "It is a simulated run-in, not the real one" for an Autumn or New year takeover; and
   simMidSeasonStart line 220 anchors on it.
