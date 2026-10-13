@@ -1,0 +1,23 @@
+1) Soccer Career replays the pre-lift fixture byte for byte
+   Round 1172 attribution: exact copied new-generation, newspaper and ceremony changes restored for the old fixture; current outcomes still checked in sections 2 to 7 and simSoccerAwardReveal
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: the imports row of Round 1327's inverse must be in src/lib/soccerCareerEngine.ts exactly once at its turn
+
+1 !== 2
+
+    at inverseDeckFair (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/lib/careerDeckFair1327.mjs:97:12)
+    at attributedAwardsBundle (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCareerAwardsNight.mjs:450:37)
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCareerAwardsNight.mjs:609:99
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 1,
+  expected: 2,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0

@@ -1,0 +1,13 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+worldtruth: node scripts/simSoccerWorldTruth.mjs
+ctl-log: WORLD_TRUTH_CONTROL=log node scripts/simSoccerWorldTruth.mjs
+ctl-panel: WORLD_TRUTH_CONTROL=panel node scripts/simSoccerWorldTruth.mjs
+vitest-panel: node_modules/.bin/vitest run src/test/internationalPanelTruth.test.tsx src/test/tournamentCardMoment.test.tsx src/test/careerMomentKitLift.test.tsx src/test/soccerCareerDebutLegacy.test.tsx src/test/soccerWorldTruth.test.ts --testTimeout=300000 --hookTimeout=120000
+simInternational: node scripts/simInternational.mjs
+simCareerMoments: node scripts/simCareerMoments.mjs
+simStartingXi: node scripts/simStartingXi.mjs
+simUsCareerSummer: node scripts/simUsCareerSummer.mjs
+simCareerFacts: node scripts/simCareerFacts.mjs
+simCareerKeepPlaying: node scripts/simCareerKeepPlaying.mjs
+simSoccerInternationalReturn: node scripts/simSoccerInternationalReturn.mjs
+simCareerAwardsNight: node scripts/simCareerAwardsNight.mjs
