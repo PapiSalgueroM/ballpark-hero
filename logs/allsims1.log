@@ -1,0 +1,25 @@
+
+--- 6. the World Cup awards: the migration, the record, the live table ---
+   PENDING: supabase/migrations/20260930120000_round_708_soccer_awards_world_cup.sql and its record rows are not shipped. The three awards stay on the DO NOT USE list until they are.
+
+--- 7. national_team_squads: names only, name shaped, and the migration read ---
+   PENDING: supabase/migrations/20260930121000_round_708_national_team_squads_realign.sql is not shipped. Readers take player_name only, which is what makes the table safe today.
+[SIM_OFFLINE_BLOCK] database fetch https://flawuiqbvjobmkfkauhw.supabase.co
+   SKIPPED, SUPABASE UNREACHABLE. THE TABLE WAS NOT CHECKED.
+
+AT LEAST ONE SECTION DID NOT RUN (4, 5, 6, 7). Re-run from a sandbox that reaches Supabase before trusting it.
+simSoccerAwardsShape: sections 1, 2, 3 green; sections 4, 5, 6, 7 did not run. The live tables were NOT checked.
+
+
+----- simSoccerGridLabels.mjs (FAIL) -----
+  FAIL: could not read soccer_player_club_stints
+  const error = new Error(`Offline harness blocked ${via} to ${origin}`);
+Error: Offline harness blocked fetch to https://flawuiqbvjobmkfkauhw.supabase.co
+
+----- simValidatorCache.mjs (FAIL) -----
+  FAIL: 3 cell(s) had no reusable attribute facts. Either the function stopped consulting the cache, or these probe cells are stale because the boards changed.
+  FAIL: the same cell asked twice did not come back from cache the second time, so answers are being paid for repeatedly
+  FAIL: live edge did not return the verified cache hit for Virgil van Dijk at Active Player (as of 2025-26) x Played for Liverpool: no response
+  FAIL: could not check classic-8 candidates against player_market_values: Offline harness blocked fetch to https://flawuiqbvjobmkfkauhw.supabase.co
+
+14 harnesses not green.

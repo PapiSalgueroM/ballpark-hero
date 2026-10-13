@@ -1,0 +1,261 @@
+Network mode: offline, loopback only, no production probe or database retries.
+Running 119 node harnesses
+  FAIL  simAdminAccess.mjs              1.6s
+  EMPTY simALeagueSquads.mjs            0.1s
+        printed 2 lines, so its checks did not run
+  FAIL  simAnswerFromRecords.mjs       23.2s
+  PASS  simAussieRulesLeagueBoard.mjs    5.4s
+  PASS  simAwardRaces.mjs              10.2s
+  PASS  simBallonDorTruth.mjs           4.1s
+  PASS  simBoxingShowForecast.mjs      78.3s
+  PASS  simBuzzerBeater.mjs             1.7s
+  PASS  simCageClash.mjs                2.0s
+  PASS  simCageStrikeMotion.mjs         1.8s
+  PASS  simCareerBanking.mjs            2.4s
+  PASS  simCareerDilemmaReach.mjs      70.0s
+  PASS  simCareerEras.mjs               0.4s
+  PASS  simCareerInboxBeats.mjs        61.0s
+  PASS  simCareerLife.mjs              31.4s
+  PASS  simCareerPositionRatings.mjs  133.7s
+  PASS  simCareerRealism.mjs            8.5s
+  PASS  simCareerSocialBrands.mjs      37.6s
+  PASS  simCareerTrophyRuns.mjs         3.8s
+  PASS  simCbbStaff.mjs                20.9s
+  PASS  simChainTimelineMotion.mjs      3.3s
+  PASS  simClubManagerBudget.mjs      152.3s
+  PASS  simClubManagerEraMidSeason.mjs    8.8s
+  PASS  simClubManagerNewLeagues.mjs  161.3s
+  PASS  simClubManagerStart.mjs         2.5s
+  PASS  simCmApplications.mjs          93.0s
+  PASS  simCmLeaguePhase.mjs           31.9s
+  PASS  simCmRealFixtures.mjs           4.8s
+  PASS  simCollegeDynastyBoard.mjs      6.0s
+  PASS  simColleges.mjs                 0.1s
+  PASS  simConnectionsShake.mjs         2.8s
+  PASS  simConquestNbaArcade.mjs        4.4s
+  PASS  simContracts.mjs               23.0s
+  PASS  simDailyClubPool.mjs            5.3s
+  PASS  simDailyReload.mjs             51.6s
+  PASS  simDeadlineDay.mjs              6.0s
+  PASS  simDraftShowdown.mjs            0.2s
+  PASS  simEmojiGuessFeedback.mjs       6.6s
+  PASS  simEraBakeExtend.mjs            0.1s
+  PASS  simExtensionResponseMotion.mjs    3.0s
+  PASS  simF1DriverSearchNavigation.mjs    3.0s
+  PASS  simFirstTeamPage.mjs           32.0s
+  PASS  simFootleAtomicPool.mjs         2.4s
+  PASS  simFootlePractice995.mjs       10.3s
+  PASS  simFreeKick.mjs                 0.3s
+  PASS  simFrontOfficeSchedule.mjs     16.5s
+  FAIL  simGmCalendar.mjs               1.3s
+  PASS  simGmFacilities.mjs             0.2s
+  PASS  simGmPress.mjs                  0.1s
+  PASS  simGolfMajors.mjs               0.1s
+  FAIL  simGridCells.mjs               92.7s
+        it reported success after an offline transport block; checks needing live data did not run
+  PASS  simGuessTheNationFeedback.mjs    6.0s
+  PASS  simHeadTags.mjs                 0.2s
+  PASS  simHigherLower.mjs              0.1s
+  PASS  simHomeSearchRecovery.mjs      70.2s
+  FAIL  simIdleTimers.mjs               2.2s
+        it reported success after an offline transport block; checks needing live data did not run
+  PASS  simInternational.mjs           24.0s
+  PASS  simLeaderboardEligibility.mjs    2.7s
+  PASS  simLineupRecordPositions.mjs    3.7s
+  PASS  simLiveHarnessRetry.mjs         0.2s
+  PASS  simLiveSimCelebration.mjs       2.3s
+  PASS  simManagerEpilogue.mjs          1.0s
+  PASS  simManagerXp.mjs               74.5s
+  PASS  simMissingElevenSources.mjs     0.3s
+  SKIP  simMissingXiReach.mjs           0.4s
+        it reached no database and said so, and the database is unreachable here (offline mode blocks production; no database probe was sent)
+  SKIP  simMlbGridPool.mjs              0.1s
+        it reached no database and said so, and the database is unreachable here (offline mode blocks production; no database probe was sent)
+  PASS  simMmaBoutRecap.mjs             2.6s
+  PASS  simMysteryBoxMotion.mjs         3.6s
+  PASS  simNationalPools.mjs            0.2s
+  PASS  simNbaCareerPathFacts.mjs       0.7s
+  FAIL  simNbaLineupSearch.mjs          0.2s
+  PASS  simNbaRatingEvidence.mjs        3.8s
+  PASS  simNbaStatLinePicker.mjs       23.4s
+  PASS  simNflFullRosters.mjs          19.5s
+  PASS  simNflPlayoffFormatHistory.mjs    0.6s
+  PASS  simNhlCareerPathFacts.mjs       1.7s
+  PASS  simNhlOpeningRatingInputs.mjs    1.8s
+  EMPTY simNhlWaiverReceipt.mjs         2.2s
+        printed 3 lines, so its checks did not run
+  SKIP  simNoZeroFacts.mjs              0.2s
+        it reached no database and said so, and the database is unreachable here (offline mode blocks production; no database probe was sent)
+  PASS  simOwnerMandateMotion.mjs       2.8s
+  PASS  simPhonePanelFocus.mjs          6.3s
+  PASS  simPlayerSearchFailure.mjs      3.1s
+  PASS  simPuckDetectiveFeedback.mjs    5.9s
+  PASS  simRarityPoolRecovery.mjs       1.8s
+  FAIL  simRecordBooks.mjs              7.4s
+  FAIL  simReportRelay.mjs              0.2s
+        it reported success after an offline transport block; checks needing live data did not run
+  PASS  simRetirementToManager.mjs      0.2s
+  EMPTY simRugbyLeagueReview.mjs        8.2s
+        printed 1 line, so its checks did not run
+  SKIP  simSchemaNames.mjs              1.0s
+        it reached no database and said so, and the database is unreachable here (offline mode blocks production; no database probe was sent)
+  PASS  simSeasonCentreMotion.mjs      14.6s
+  PASS  simSeasonReveal.mjs             0.4s
+  PASS  simSiteSearch.mjs               2.1s
+  FAIL  simSoccerAwardsShape.mjs       46.5s
+        it reported success after an offline transport block; checks needing live data did not run
+  PASS  simSoccerCareerRecords.mjs      7.5s
+  PASS  simSoccerContractMoves.mjs      1.6s
+  FAIL  simSoccerGridLabels.mjs         6.1s
+  PASS  simSoccerLineupPicker.mjs       6.8s
+  PASS  simSoccerSeasonCompetitions.mjs    1.0s
+  PASS  simSound.mjs                    3.5s
+  PASS  simSquadRows.mjs                2.2s
+  PASS  simStatsCentre.mjs              3.0s
+  PASS  simStreakHistory.mjs            0.2s
+  PASS  simThreePointContest.mjs        4.8s
+  PASS  simTradeFinder.mjs              6.8s
+  SKIP  simTransferOverlay.mjs          4.6s
+        it reached no database and said so, and the database is unreachable here (offline mode blocks production; no database probe was sent)
+  PASS  simTransferPathRepeat.mjs       2.1s
+  PASS  simTycoonAway.mjs               4.5s
+  PASS  simTycoonHelp.mjs              24.4s
+  PASS  simTycoonPitchRunner.mjs        0.4s
+  PASS  simTycoonTicketPolicy.mjs       6.5s
+  PASS  simUclSeasonOne.mjs            16.6s
+  PASS  simUsCareerBank.mjs           155.0s
+  PASS  simUsCareerSaveRetry.mjs      121.6s
+  PASS  simUsPlanSeason.mjs             2.3s
+  FAIL  simValidatorCache.mjs          12.7s
+  PASS  simWc2026ResultsPage.mjs        0.2s
+  SKIP  simWindow2026Bundesliga.mjs     4.6s
+        it reached no database and said so, and the database is unreachable here (offline mode blocks production; no database probe was sent)
+  PASS  simWonderkid.mjs                0.2s
+  PASS  simWorldXiReport.mjs            1.6s
+
+Skipping 3 browser harnesses (simFaqSchema, simPrerenderBoot, simSetPiecePresentation). Pass --browser to include them.
+
+6 harnesses SKIPPED, not run and not counted: simMissingXiReach, simMlbGridPool, simNoZeroFacts, simSchemaNames, simTransferOverlay, simWindow2026Bundesliga.
+Each one reached no database and said so, and the database is unreachable here: offline mode blocks production; no database probe was sent.
+Run SIM_NETWORK=live only after production traffic is cleared. DB_PROBE changes classification in live mode, not transport permission.
+----- simAdminAccess.mjs (FAIL) -----
+  const error = new Error(`Offline harness blocked ${via} to ${origin}`);
+Error: Offline harness blocked fetch to https://flawuiqbvjobmkfkauhw.supabase.co
+
+----- simALeagueSquads.mjs (EMPTY) -----
+  12 clubs, 312 rows, birth date 95.2 percent, group 99.4, minutes on two hosts 71.2
+simALeagueSquads: green. Twelve clubs, every row on two hosts, every value two sourced or null, counts honest.
+
+
+----- simAnswerFromRecords.mjs (FAIL) -----
+FAIL  482  Haaland at Man City settled from records  -> THE FUNCTION DID NOT ANSWER after 3 tries, s
+FAIL  482  Messi for Argentina settled from records  -> THE FUNCTION DID NOT ANSWER after 3 tries, s
+FAIL  483  Barcelona pool is only FC Barcelona
+FAIL  484  no squad name still holds "( captain )"  -> 0 annotated
+FAIL  484  the captaincy survived as a column  -> 0 sampled
+FAIL  486  Jokic answerable  -> THE FUNCTION DID NOT ANSWER after 3 tries, so this is the service and not the data
+FAIL  486  Doncic answerable  -> THE FUNCTION DID NOT ANSWER after 3 tries, so this is the service and not the data
+FAIL  487  Andreescu is a known champion  -> THE FUNCTION DID NOT ANSWER after 3 tries, so this is the service and not the data
+FAIL  487  Tom Brady still refused  -> THE FUNCTION DID NOT ANSWER after 3 tries, so 
+FAIL  488  Hamlin has a racing span  -> THE FUNCTION DID NOT ANSWER after 3 tries, so 
+FAIL  488  eras that do not meet still refused  -> refused
+FAIL  489  PSG is answerable  -> THE FUNCTION DID NOT ANSWER after 3 trie
+
+----- simGmCalendar.mjs (FAIL) -----
+  FAIL: Everton seasonDays: hash 158dee139333cccc41abdbfc != recorded 4f6e77bb426d72edb25d0123; first lines now ["{\"worldYear\":2026,\"entryDates\":[{\"y\":2026,\"m\":8,\"d\":8},{\"y\":2026,\"m\":8,\"d\":15},{\"y\":2026,\"m\":8,\"d\":22},{\"y\":2026,\"m\":8,\"d\":26},{\"y\":2026,\"m\":8,\"d\":29},{\"y\":2026,\ recorded ["{\"worldYear\":2026,\"entryDates\":[{\"y\":2026,\"m\":8,\"d\":8},{\"y\":2026,\"m\":8,\"d\":15},{\"y\":2026,\"m\":8,\"d\":22},{\"y\":2026,\"m\":8,\"d\":26},{\"y\":2026,\"m\":8,\"d\":29},{\"y\":2026,\
+  FAIL: Everton monthGrid: hash 998eed009784b43682c66dfd != recorded 191228a15047c811f0735e7a; first lines now ["2026-8 light [null,null,null,null,null,null,{\"date\":{\"y\":2026,\"m\":8,\"d\":1},\"key\":20260801,\"weekIdx\":null,\"kind\":\"rest\",\"windowOpen\":false,\"isToday\":false,\"past\":true},{\"date\" recorded ["2026-8 light [null,null,null,null,null,null,{\"date\":{\"y\":2026,\"m\":8,\"d\":1},\"key\":20260801,\"weekIdx\":null,\"kind\":\"rest\",\"windowOpen\":false,\"isToday\":false,\"past\":true},{\"date\"
+  FAIL: Augsburg seasonDays: hash 29e2211231b009dd2c13593e != recorded d004198f9594eff7c0c3edf6; first lines now ["{\"worldYear\":2026,\"entryDates\":[{\"y\":2026,\"m\":8,\"d\":8},{\"y\":2026,\"m\":8,\"d\":15},{\"y\":2026,\"m\":8,\"d\":22},{\"y\":2026,\"m\":8,\"d\":26},{\"y\":2026,\"m\":8,\"d\":29},{\"y\":2026,\ recorded ["{\"worldYear\":2026,\"entryDates\":[{\"y\":2026,\"m\":8,\"d\":8},{\"y\":2026,\"m\":8,\"d\":15},{\"y\":2026,\"m\":8,\"d\":22},{\"y\":2026,\"m\":8,\"d\":26},{\"y\":2026,\"m\":8,\"d\":29},{\"y\":2026,\
+  FAIL: Augsburg monthGrid: hash 486aafe84bae636d46f7d710 != recorded ecebc393e3df7ebcd664c12a; first lines now ["2026-8 light [null,null,null,null,null,null,{\"date\":{\"y\":2026,\"m\":8,\"d\":1},\"key\":20260801,\"weekIdx\":null,\"kind\":\"rest\",\"windowOpen\":false,\"isToday\":false,\"past\":true},{\"date\" recorded ["2026-8 light [null,null,null,null,null,null,{\"date\":{\"y\":2026,\"m\":8,\"d\":1},\"key\":20260801,\"weekIdx\":null,\"kind\":\"rest\",\"windowOpen\":false,\"isToday\":false,\"past\":true},{\"date\"
+  FAIL: Norwich City seasonDays: hash 60f96d2fd871650b92af5ea0 != recorded 2e65e78a8e253e2db78b214a; first lines now ["{\"worldYear\":2026,\"entryDates\":[{\"y\":2026,\"m\":8,\"d\":8},{\"y\":2026,\"m\":8,\"d\":15},{\"y\":2026,\"m\":8,\"d\":22},{\"y\":2026,\"m\":8,\"d\":26},{\"y\":2026,\"m\":8,\"d\":29},{\"y\":2026,\ recorded ["{\"worldYear\":2026,\"entryDates\":[{\"y\":2026,\"m\":8,\"d\":8},{\"y\":2026,\"m\":8,\"d\":15},{\"y\":2026,\"m\":8,\"d\":22},{\"y\":2026,\"m\":8,\"d\":26},{\"y\":2026,\"m\":8,\"d\":29},{\"y\":2026,\
+  FAIL: Norwich City monthGrid: hash 6921469a250cd670b7984977 != recorded 6ce8f2f8c3734c582c00f4b1; first lines now ["2026-8 light [null,null,null,null,null,null,{\"date\":{\"y\":2026,\"m\":8,\"d\":1},\"key\":20260801,\"weekIdx\":null,\"kind\":\"rest\",\"windowOpen\":false,\"isToday\":false,\"past\":true},{\"date\" recorded ["2026-8 light [null,null,null,null,null,null,{\"date\":{\"y\":2026,\"m\":8,\"d\":1},\"key\":20260801,\"weekIdx\":null,\"kind\":\"rest\",\"windowOpen\":false,\"isToday\":false,\"past\":true},{\"date\"
+
+----- simGridCells.mjs (FAIL) -----
+[SIM_OFFLINE_BLOCK] database fetch https://flawuiqbvjobmkfkauhw.supabase.co
+   NBA: SKIPPED, SUPABASE UNREACHABLE FROM THIS SANDBOX. The pairing check DID NOT RUN for this sport.
+[SIM_OFFLINE_BLOCK] database fetch https://flawuiqbvjobmkfkauhw.supabase.co
+[SIM_OFFLINE_BLOCK] database fetch https://flawuiqbvjobmkfkauhw.supabase.co
+[SIM_OFFLINE_BLOCK] database fetch https://flawuiqbvjobmkfkauhw.supabase.co
+   NHL: SKIPPED, SUPABASE UNREACHABLE FROM THIS SANDBOX. The pairing check DID NOT RUN for this sport.
+[SIM_OFFLINE_BLOCK] database fetch https://flawuiqbvjobmkfkauhw.supabase.co
+[SIM_OFFLINE_BLOCK] database fetch https://flawuiqbvjobmkfkauhw.supabase.co
+[SIM_OFFLINE_BLOCK] database fetch https://flawuiqbvjobmkfkauhw.supabase.co
+   MLB: SKIPPED, SUPABASE UNREACHABLE FROM THIS SANDBOX. The pairing check DID NOT RUN for this sport.
+   AT LEAST ONE SPORT WAS NOT CHECKED. Re-run from a sandbox that can reach Supabase before trusting the pools.
+
+simGridCells: green. No board this builder can deal contains a cell without an answer.
+
+
+----- simIdleTimers.mjs (FAIL) -----
+A) behaviour: tap three times, unmount, every floater timer cleared
+   Vitest exit 0, 2 of 2 passed, unhandled errors none
+B) source: no floater timer started without useOwnedTimeouts
+   1614 source files read, 0 raw floater timers
+
+simIdleTimers: green. Every idle game floater timer is owned by its page and dies with it.
+
+
+----- simNbaLineupSearch.mjs (FAIL) -----
+  FAIL: typing "LeBron James" on a Los Angeles Lakers slot returns nothing usable, and that is the only way to fill the slot
+  FAIL: typing "Stephen Curry" on a Golden State Warriors slot returns nothing usable, and that is the only way to fill the slot
+  FAIL: typing "Kobe Bryant" on a Los Angeles Lakers slot returns nothing usable, and that is the only way to fill the slot
+  FAIL: typing "Giannis Antetokounmpo" on a Milwaukee Bucks slot returns nothing usable, and that is the only way to fill the slot
+  FAIL: on a Golden State Warriors slot, "Curry" does not offer seth or stephen: nothing
+  FAIL: on a Los Angeles Lakers slot, "James" does not offer lebron or bronny: nothing
+
+----- simNhlWaiverReceipt.mjs (EMPTY) -----
+NHL waiver normal: 8/8 passed, 0 exact outcome rejections, all eight executed.
+NHL waiver receipt: /home/runner/work/_temp/t-allsims1/dukb-nhl970-proof-BcV1sU
+NHL waiver: exact copied targets, CRLF-safe controls, owned cleanup and offline transport verified.
+
+
+----- simRecordBooks.mjs (FAIL) -----
+  FAIL: no section could be compared, so this section is not really testing anything
+
+----- simReportRelay.mjs (FAIL) -----
+4) the live table carries the column
+[SIM_OFFLINE_BLOCK] database fetch https://flawuiqbvjobmkfkauhw.supabase.co
+   SKIPPED: the table could not be reached (Offline harness blocked fetch to https://flawuiqbvjobmkfkauhw.supabase.co), so the live column check did not run.
+5) the triage workflow, run: the spec statuses, every status move, the counts on every chip
+   7 statuses and 4 priorities, the same as spec section 123
+   all 49 status moves keep resolved and resolved_at true, with and without the new columns
+   every status offered reads back as itself after a save (7 with the columns, 2 before the migration)
+   36 chip counts (9 filters by 4 game choices) match the cards and the hand count
+6) the migration and the module agree, and the public insert path can only take the defaults
+   the insert policy keeps all 4 committed clauses and pins 6 admin columns to their defaults; no other policy is touched
+   7 statuses, 4 priorities and both length caps match the module; the backfill is there; no grant, trigger or function
+
+simReportRelay: green. Both buttons ask the same questions, every report records whether it reached him, and the queue has a real workflow.
+
+
+----- simRugbyLeagueReview.mjs (EMPTY) -----
+simRugbyLeagueReview normal: 10 passed, 0 intended failures, 0 intentional skips; 8 source inputs held.
+
+
+----- simSoccerAwardsShape.mjs (FAIL) -----
+--- 5. the verified awards against the record ---
+   SKIPPED, SUPABASE UNREACHABLE. THE TABLE WAS NOT CHECKED.
+
+--- 6. the World Cup awards: the migration, the record, the live table ---
+   PENDING: supabase/migrations/20260930120000_round_708_soccer_awards_world_cup.sql and its record rows are not shipped. The three awards stay on the DO NOT USE list until they are.
+
+--- 7. national_team_squads: names only, name shaped, and the migration read ---
+   PENDING: supabase/migrations/20260930121000_round_708_national_team_squads_realign.sql is not shipped. Readers take player_name only, which is what makes the table safe today.
+[SIM_OFFLINE_BLOCK] database fetch https://flawuiqbvjobmkfkauhw.supabase.co
+   SKIPPED, SUPABASE UNREACHABLE. THE TABLE WAS NOT CHECKED.
+
+AT LEAST ONE SECTION DID NOT RUN (4, 5, 6, 7). Re-run from a sandbox that reaches Supabase before trusting it.
+simSoccerAwardsShape: sections 1, 2, 3 green; sections 4, 5, 6, 7 did not run. The live tables were NOT checked.
+
+
+----- simSoccerGridLabels.mjs (FAIL) -----
+  FAIL: could not read soccer_player_club_stints
+  const error = new Error(`Offline harness blocked ${via} to ${origin}`);
+Error: Offline harness blocked fetch to https://flawuiqbvjobmkfkauhw.supabase.co
+
+----- simValidatorCache.mjs (FAIL) -----
+  FAIL: 3 cell(s) had no reusable attribute facts. Either the function stopped consulting the cache, or these probe cells are stale because the boards changed.
+  FAIL: the same cell asked twice did not come back from cache the second time, so answers are being paid for repeatedly
+  FAIL: live edge did not return the verified cache hit for Virgil van Dijk at Active Player (as of 2025-26) x Played for Liverpool: no response
+  FAIL: could not check classic-8 candidates against player_market_values: Offline harness blocked fetch to https://flawuiqbvjobmkfkauhw.supabase.co
+
+14 harnesses not green.
