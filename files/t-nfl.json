@@ -1,0 +1,80 @@
+[
+ {
+  "t": "00:52:37",
+  "kind": "help",
+  "open": false
+ },
+ {
+  "t": "00:52:55",
+  "kind": "audit",
+  "where": "after watch",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 3,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 6
+ },
+ {
+  "t": "00:53:13",
+  "kind": "where",
+  "label": "draft done, before Continue",
+  "scrollY": 620,
+  "innerHeight": 844,
+  "docHeight": 9633,
+  "h1Top": -507,
+  "chip": null,
+  "chipTop": null,
+  "chipInView": false
+ },
+ {
+  "t": "00:53:14",
+  "kind": "where",
+  "label": "season 2 hub, after Continue",
+  "scrollY": 620,
+  "innerHeight": 844,
+  "docHeight": 9817,
+  "h1Top": -507,
+  "chip": "2027 · Week 1/17",
+  "chipTop": -423,
+  "chipInView": false
+ },
+ {
+  "t": "00:53:17",
+  "kind": "cut",
+  "k": 0,
+  "armed": "Cut, $0.5M dead",
+  "done": true,
+  "text": "games and show the fans a direction. Hub Roster ✂️ You are carrying 54, 1 over the limit of 53. Cut one man on the Roster box before Week 1. 📥 Drafted Amari Braddock (LB), true rating 81 vs scouted 85. 📋 The re-sign desk: 2 kept, 1 gone. 📋 You left 3 deals open, so your staff settled them by its "
+ },
+ {
+  "t": "00:53:20",
+  "kind": "cut",
+  "k": 1,
+  "armed": "Cut, $0.5M dead",
+  "done": true,
+  "text": "games and show the fans a direction. Hub Roster ✂️ You are carrying 54, 1 over the limit of 53. Cut one man on the Roster box before Week 1. 📥 Drafted Amari Braddock (LB), true rating 81 vs scouted 85. 📋 The re-sign desk: 2 kept, 1 gone. 📋 You left 3 deals open, so your staff settled them by its "
+ },
+ {
+  "t": "00:53:23",
+  "kind": "cut",
+  "k": 2,
+  "armed": "Cut, $0.5M dead",
+  "done": true,
+  "text": "games and show the fans a direction. Hub Roster ✂️ You are carrying 54, 1 over the limit of 53. Cut one man on the Roster box before Week 1. 📥 Drafted Amari Braddock (LB), true rating 81 vs scouted 85. 📋 The re-sign desk: 2 kept, 1 gone. 📋 You left 3 deals open, so your staff settled them by its "
+ },
+ {
+  "t": "00:53:24",
+  "kind": "season2",
+  "played": "Play Week 1",
+  "text": "NFL Front Office Real rosters. Real cap math. Your calls. Build a dynasty one season at a time. Arizona Cardinals 2027 · Week 2/17 Record 1-0 Strength 83 Cap room $142.6M 🏛️ OWNERSHIP Trust 77 Win 7 games and show the fans a direction. 📈 1 wins keeps the mandate on pace. Hub This week 🚑 Will Johnson is out 1 week. 🚑 Isaiah Adams is out 2 weeks. Week 2: Arizona Cardinals at Seattle Seahawks Pla"
+ }
+]

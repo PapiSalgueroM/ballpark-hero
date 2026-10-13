@@ -1,0 +1,30 @@
+[
+ {
+  "t": "00:52:57",
+  "kind": "help",
+  "open": false
+ },
+ {
+  "t": "00:53:03",
+  "kind": "back",
+  "url": "http://localhost:4173/",
+  "text": "DoUKnowBall 130+ free games across every sport. All playable without an account. Pin a game to keep it on Home. Main event Soccer NBA NHL NFL MLB College Career sim Soccer Career Create your look, sig"
+ },
+ {
+  "t": "00:53:06",
+  "kind": "forward",
+  "url": "http://localhost:4173/front-office",
+  "same": true,
+  "before": "NFL Front Office Real rosters. Real cap math. Your calls. Build a dynasty one season at a time. Arizona Cardinals 2026 · Week 3/17 Record 0-2 Strength 83 Cap room $151.1M 🏛️ OWNERSHIP Trust 63 Win 7 games and show the fans a direction. 📈 0 wins keeps the man",
+  "after": "NFL Front Office Real rosters. Real cap math. Your calls. Build a dynasty one season at a time. Arizona Cardinals 2026 · Week 3/17 Record 0-2 Strength 83 Cap room $151.1M 🏛️ OWNERSHIP Trust 63 Win 7 games and show the fans a direction. 📈 0 wins keeps the man"
+ },
+ {
+  "t": "00:53:13",
+  "kind": "twoTabs",
+  "tab2Opened": "NFL Front Office Real rosters. Real cap math. Your calls. Build a dynasty one season at a time. Arizona Cardinals 2026 · Week 3/17 Record 0-2 Strength 83 Cap room $151.1M 🏛️ OWNERSHIP Trust 63 Win 7 games and show the fans a direction. 📈 0 wins keeps the man",
+  "tab1AfterPlay": "NFL Front Office Real rosters. Real cap math. Your calls. Build a dynasty one season at a time. Arizona Cardinals 2026 · Week 4/17 Record 1-2 Strength 83 Cap room $151.1M 🏛️ OWNERSHIP Trust 63 Win 7 games and show the fans a direction. 📈 1 wins keeps the man",
+  "tab2Pressed": "Play Week 3",
+  "tab2After": "NFL Front Office Real rosters. Real cap math. Your calls. Build a dynasty one season at a time. Arizona Cardinals 2026 · Week 4/17 Record 0-3 Strength 83 Cap room $151.1M 🏛️ OWNERSHIP Trust 63 Win 7 games and show the fans a direction. 📉 0 wins is behind the",
+  "tab1Reloaded": "NFL Front Office Real rosters. Real cap math. Your calls. Build a dynasty one season at a time. Arizona Cardinals 2026 · Week 4/17 Record 0-3 Strength 83 Cap room $151.1M 🏛️ OWNERSHIP Trust 63 Win 7 games and show the fans a direction. 📉 0 wins is behind the"
+ }
+]

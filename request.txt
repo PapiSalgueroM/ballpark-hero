@@ -1,0 +1,6 @@
+#!serve
+#!playwright
+t-nfl: node .rc/x/walkT.mjs nfl
+t-cfb: node .rc/x/walkT.mjs cfb
+t-cm: node .rc/x/walkT.mjs cm
+t-back: node .rc/x/walkT.mjs back
