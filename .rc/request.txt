@@ -1,0 +1,42 @@
+# Release BC gate, lane P3: the nine pieces' plain lines and controls
+#!playwright
+deck-weightoff-EXPECT-RED: export TMPDIR=$(mktemp -d); EVENT_DECK_CONTROL=weightoff node scripts/simEventDeck.mjs
+deck-weightkeep-EXPECT-RED: export TMPDIR=$(mktemp -d); EVENT_DECK_CONTROL=weightkeep node scripts/simEventDeck.mjs
+deck-story-EXPECT-RED: export TMPDIR=$(mktemp -d); EVENT_DECK_CONTROL=story node scripts/simEventDeck.mjs
+deck-rest-EXPECT-RED: export TMPDIR=$(mktemp -d); EVENT_DECK_CONTROL=rest node scripts/simEventDeck.mjs
+deck-failopen-EXPECT-RED: export TMPDIR=$(mktemp -d); EVENT_DECK_CONTROL=failopen node scripts/simEventDeck.mjs
+deck-restfall-EXPECT-RED: export TMPDIR=$(mktemp -d); EVENT_DECK_CONTROL=restfall node scripts/simEventDeck.mjs
+deck-expirefall-EXPECT-RED: export TMPDIR=$(mktemp -d); EVENT_DECK_CONTROL=expirefall node scripts/simEventDeck.mjs
+deck-textrng-EXPECT-RED: export TMPDIR=$(mktemp -d); EVENT_DECK_CONTROL=textrng node scripts/simEventDeck.mjs
+deck-seasonweek-EXPECT-RED: export TMPDIR=$(mktemp -d); EVENT_DECK_CONTROL=seasonweek node scripts/simEventDeck.mjs
+deck-expireoff-EXPECT-RED: export TMPDIR=$(mktemp -d); EVENT_DECK_CONTROL=expireoff node scripts/simEventDeck.mjs
+deck-expirefx-EXPECT-RED: export TMPDIR=$(mktemp -d); EVENT_DECK_CONTROL=expirefx node scripts/simEventDeck.mjs
+deck-settledoff-EXPECT-RED: export TMPDIR=$(mktemp -d); EVENT_DECK_CONTROL=settledoff node scripts/simEventDeck.mjs
+deck-panelexpiry-EXPECT-RED: export TMPDIR=$(mktemp -d); EVENT_DECK_CONTROL=panelexpiry node scripts/simEventDeck.mjs
+deck-neutral-EXPECT-RED: export TMPDIR=$(mktemp -d); EVENT_DECK_CONTROL=neutral node scripts/simEventDeck.mjs
+deck-heavy-EXPECT-RED: export TMPDIR=$(mktemp -d); EVENT_DECK_CONTROL=heavy node scripts/simEventDeck.mjs
+simGmInbox: export TMPDIR=$(mktemp -d); node scripts/simGmInbox.mjs
+gminbox-quote-EXPECT-RED: export TMPDIR=$(mktemp -d); GM_INBOX_CONTROL=quote node scripts/simGmInbox.mjs
+gminbox-flip-EXPECT-RED: export TMPDIR=$(mktemp -d); GM_INBOX_CONTROL=flip node scripts/simGmInbox.mjs
+gminbox-cool-EXPECT-RED: export TMPDIR=$(mktemp -d); GM_INBOX_CONTROL=cool node scripts/simGmInbox.mjs
+gminbox-drift-EXPECT-RED: export TMPDIR=$(mktemp -d); GM_INBOX_CONTROL=drift node scripts/simGmInbox.mjs
+gminbox-never-EXPECT-RED: export TMPDIR=$(mktemp -d); GM_INBOX_CONTROL=never node scripts/simGmInbox.mjs
+gminbox-random-EXPECT-RED: export TMPDIR=$(mktemp -d); GM_INBOX_CONTROL=random node scripts/simGmInbox.mjs
+gminbox-shift-EXPECT-RED: export TMPDIR=$(mktemp -d); GM_INBOX_CONTROL=shift node scripts/simGmInbox.mjs
+gminbox-opencap-EXPECT-RED: export TMPDIR=$(mktemp -d); GM_INBOX_CONTROL=opencap node scripts/simGmInbox.mjs
+gminbox-maxcap-EXPECT-RED: export TMPDIR=$(mktemp -d); GM_INBOX_CONTROL=maxcap node scripts/simGmInbox.mjs
+gminbox-oneshot-EXPECT-RED: export TMPDIR=$(mktemp -d); GM_INBOX_CONTROL=oneshot node scripts/simGmInbox.mjs
+gminbox-ungate-EXPECT-RED: export TMPDIR=$(mktemp -d); GM_INBOX_CONTROL=ungate node scripts/simGmInbox.mjs
+gminbox-unclamp-EXPECT-RED: export TMPDIR=$(mktemp -d); GM_INBOX_CONTROL=unclamp node scripts/simGmInbox.mjs
+gminbox-quotevariant-EXPECT-RED: export TMPDIR=$(mktemp -d); GM_INBOX_CONTROL=quotevariant node scripts/simGmInbox.mjs
+gminbox-effectvariant-EXPECT-RED: export TMPDIR=$(mktemp -d); GM_INBOX_CONTROL=effectvariant node scripts/simGmInbox.mjs
+inbox-privatecap-EXPECT-RED: export TMPDIR=$(mktemp -d); INBOX_CONTROL=privatecap node scripts/simCareerInbox.mjs
+vitest3: export TMPDIR=$(mktemp -d); node_modules/.bin/vitest run src/test/soccerEventDeckIntegrity.test.ts src/test/eventChoiceAfterReload.test.ts src/test/seasonCentreOwnGoals.test.tsx --testTimeout=300000 --hookTimeout=120000
+og-revert-EXPECT-RED: export TMPDIR=$(mktemp -d); R=$PWD && git worktree add -q /tmp/ogrev HEAD && cd /tmp/ogrev && git -c user.email=rc@rc -c user.name=rc revert --no-commit 8974536d && git diff --stat HEAD && ln -s "$R/node_modules" node_modules && node_modules/.bin/vitest run src/test/seasonCentreOwnGoals.test.tsx --testTimeout=300000
+promises: export TMPDIR=$(mktemp -d); node scripts/simSoccerEventPromises.mjs
+fairness: export TMPDIR=$(mktemp -d); node scripts/simSoccerDeckFairness.mjs
+fair1: export TMPDIR=$(mktemp -d); SEED_OFFSET=1 node scripts/simSoccerDeckFairness.mjs
+fair2: export TMPDIR=$(mktemp -d); SEED_OFFSET=2 node scripts/simSoccerDeckFairness.mjs
+fair3: export TMPDIR=$(mktemp -d); SEED_OFFSET=3 node scripts/simSoccerDeckFairness.mjs
+fair4: export TMPDIR=$(mktemp -d); SEED_OFFSET=4 node scripts/simSoccerDeckFairness.mjs
+cool-nocooldown-control: export TMPDIR=$(mktemp -d); SIM_CAREER_LIFE_COOLDOWNS_CONTROL=nocooldown node scripts/simCareerLifeCooldowns.mjs
