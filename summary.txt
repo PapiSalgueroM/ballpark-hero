@@ -1,0 +1,9 @@
+simSoccerCurrency exit=0 6s | simSoccerCurrency: green. The money reads in your currency and the game underneath it never noticed.
+simCareerFacts exit=0 12s | simCareerFacts: all sections green
+simCareerNoDeadEnd exit=0 0s | simCareerNoDeadEnd: green. A convicted career is still a career, and a stranded save comes back.
+simCareerInbox exit=0 3s | simCareerInbox: green. Soccer is unchanged, and the NFL, MLB, NBA and NHL inboxes fire.
+simCareerInboxBeats exit=0 58s | simCareerInboxBeats: green. Soccer is unchanged, the NFL, NBA, MLB and NHL inboxes each run on their own calendar, and every rival choice does what it says.
+simLoanSpell exit=0 8s | simLoanSpell: green. The bench has a door now, and the door does not lie.
+simCareerKeepPlaying exit=0 120s | simCareerKeepPlaying: 1464 checks, 0 failures
+simMoney exit=1 219s | 1 FAILURES
+simCreation exit=1 386s | 1 FAILURES

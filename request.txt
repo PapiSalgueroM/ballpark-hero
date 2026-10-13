@@ -1,0 +1,9 @@
+simMoney: node scripts/simMoney.mjs
+simSoccerCurrency: node scripts/simSoccerCurrency.mjs
+simCareerFacts: node scripts/simCareerFacts.mjs
+simCareerKeepPlaying: node scripts/simCareerKeepPlaying.mjs
+simCareerNoDeadEnd: node scripts/simCareerNoDeadEnd.mjs
+simCareerInbox: node scripts/simCareerInbox.mjs
+simCareerInboxBeats: node scripts/simCareerInboxBeats.mjs
+simLoanSpell: node scripts/simLoanSpell.mjs
+simCreation: node scripts/simCreation.mjs
