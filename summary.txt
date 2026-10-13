@@ -1,0 +1,3 @@
+vitest exit=0 3s |    Duration  1.56s (transform 102ms, setup 99ms, collect 90ms, tests 25ms, environment 557ms, prepare 287ms)
+simStorageWrites exit=0 4s | simStorageWrites: all green (owed: 12)
+tsc exit=0 64s | 
