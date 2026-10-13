@@ -1,0 +1,9 @@
+#!serve
+#!playwright
+tt-all: mkdir -p $RC_OUT/tt && RC_OUT=$RC_OUT/tt ENGINES=chromium node scripts/playTwoTabs.mjs
+tt-nofence: mkdir -p $RC_OUT/ttn && RC_OUT=$RC_OUT/ttn TWO_TABS_CONTROL=nofence ENGINES=chromium node scripts/playTwoTabs.mjs
+tt-nolanding: mkdir -p $RC_OUT/ttl && RC_OUT=$RC_OUT/ttl TWO_TABS_CONTROL=nolanding ENGINES=chromium node scripts/playTwoTabs.mjs
+tt-nokeep: mkdir -p $RC_OUT/ttk && RC_OUT=$RC_OUT/ttk TWO_TABS_CONTROL=nokeep ENGINES=chromium node scripts/playTwoTabs.mjs
+keeper: git worktree add -q /tmp/kb fb8d6811 && ln -s "$PWD/node_modules" /tmp/kb/node_modules && (cd /tmp/kb && node_modules/.bin/vite build > /tmp/kb-build.log 2>&1) && KEEPER_BASE_DIST=/tmp/kb/dist ENGINES=chromium node scripts/playSaveKeeper.mjs
+keeper-extrakey: git worktree add -q /tmp/kb2 fb8d6811 && ln -s "$PWD/node_modules" /tmp/kb2/node_modules && (cd /tmp/kb2 && node_modules/.bin/vite build > /tmp/kb2-build.log 2>&1) && KEEPER_CONTROL=extrakey KEEPER_BASE_DIST=/tmp/kb2/dist ENGINES=chromium node scripts/playSaveKeeper.mjs
+keeper-extrafence: git worktree add -q /tmp/kb3 fb8d6811 && ln -s "$PWD/node_modules" /tmp/kb3/node_modules && (cd /tmp/kb3 && node_modules/.bin/vite build > /tmp/kb3-build.log 2>&1) && KEEPER_CONTROL=extrafence KEEPER_BASE_DIST=/tmp/kb3/dist ENGINES=chromium node scripts/playSaveKeeper.mjs
