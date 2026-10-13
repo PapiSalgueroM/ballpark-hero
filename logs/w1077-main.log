@@ -1,0 +1,23 @@
+Prepared 29 world browser font and flag dependencies.
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[dukb] inlined 1 stylesheet(s) and 1 module(s) into 0 snapshots (0 left alone)
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: One auth startup storage probe
+
+0 !== 1
+
+    at file:///tmp/wm/scripts/qa/managerWorldBrowser1077.mjs:186:14 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 0,
+  expected: 1,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0

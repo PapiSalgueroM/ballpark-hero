@@ -1,0 +1,4 @@
+simWritesAreSent-head exit=1 1s | simWritesAreSent: 1 failure
+simWritesAreSent-main exit=1 1s | simWritesAreSent: 1 failure
+w1077-main exit=1 19s | Node.js v24.21.0
+w1077-head exit=1 19s | Node.js v24.21.0
