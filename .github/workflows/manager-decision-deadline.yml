@@ -108,6 +108,8 @@ jobs:
         continue-on-error: true
         env:
           CM_DEADLINE_ENGINE: ${{ github.workspace }}/manager-deadline-artifacts/fixed/engine.mjs
+          CM_DEADLINE_WHISTLE_ENGINE: ${{ github.workspace }}/manager-deadline-artifacts/fixed/engine-whistle.mjs
+          CM_DEADLINE_NEUTRAL_ENGINE: ${{ github.workspace }}/manager-deadline-artifacts/fixed/engine-neutral.mjs
           CM_DEADLINE_DECISIONS: ${{ github.workspace }}/manager-deadline-artifacts/fixed/decisions.mjs
         run: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node_modules/.bin/vitest run --maxWorkers=2 --reporter=verbose --reporter=json --outputFile.json="$MANAGER_DEADLINE_OUT/full-unit.json" 2>&1 | tee "$MANAGER_DEADLINE_OUT/full-unit.log"
       - name: Browser and build tools

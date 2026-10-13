@@ -92,11 +92,19 @@ try {
       build.onLoad({ filter: /\.ts$/ }, args => path.resolve(args.path) === DECISIONS && CONTROL
         ? { contents: changed.get(DECISIONS), loader: 'ts', resolveDir: path.dirname(DECISIONS) } : undefined);
     } }] });
-  const compiled = ['engine.mjs', 'decisions.mjs'];
+  const whistleCopies = ['engine-whistle.mjs', 'engine-neutral.mjs'];
+  const engineBytes = fs.readFileSync(path.join(tmp, 'engine.mjs'));
+  for (const file of whistleCopies) {
+    fs.copyFileSync(path.join(tmp, 'engine.mjs'), path.join(tmp, file));
+    assert.deepEqual(fs.readFileSync(path.join(tmp, file)), engineBytes, 'Whistle modules must preserve every original compiled byte');
+  }
+  const compiled = ['engine.mjs', 'decisions.mjs', ...whistleCopies];
   for (const file of compiled) fs.copyFileSync(path.join(tmp, file), path.join(retained, file));
   receipt({ compiled: compiled.map(file => ({ file, sha256: sha(fs.readFileSync(path.join(tmp, file))) })) });
   const env = { ...process.env, CI: '1', FORCE_COLOR: '0', NO_COLOR: '1',
     CM_DEADLINE_ENGINE: path.join(tmp, 'engine.mjs').replaceAll('\\', '/'),
+    CM_DEADLINE_WHISTLE_ENGINE: path.join(tmp, 'engine-whistle.mjs').replaceAll('\\', '/'),
+    CM_DEADLINE_NEUTRAL_ENGINE: path.join(tmp, 'engine-neutral.mjs').replaceAll('\\', '/'),
     CM_DEADLINE_DECISIONS: path.join(tmp, 'decisions.mjs').replaceAll('\\', '/') };
   const reportFile = path.join(tmp, 'unit.json'), runner = path.join(ROOT, 'node_modules/vitest/vitest.mjs');
   assert(fs.existsSync(runner), 'Locked remote unit runner must be installed');
@@ -130,7 +138,8 @@ try {
   assert.equal(edits.length, CONTROL ? 1 : 0);
   receipt({ completedNames: cases.map(row => row.title), passed: report.numPassedTests, intendedFailures: expected.length });
   console.log(`Manager deadline: one actual unit file, all20 named outcomes, ${report.numPassedTests} passes and ${expected.length} exact intended faults; childexit${result.status}.`);
-  console.log(`Complete raw outcomes/log/source retained; ${files.length} source holds, ${app.length} parent bindings and two compiled leaves; source edits${edits.length}.`);
+  console.log(`Complete raw outcomes/log/source retained; ${files.length} source holds, ${app.length} parent bindings and four compiled leaves (two exact whistle engine copies); source edits${edits.length}.`);
+  console.log(`Parsed ${cases.length} completed outcomes, zero pending or setup cases; both independent whistle engine copies equal ${sha(engineBytes)}.`);
   if (CONTROL) console.log(`Effective actual-source late control: ${edits[0].beforeSha256} -> ${edits[0].afterSha256}; complete inverse held.`);
   console.log(`simClubManagerDecisionDeadline ${RED ? 'expected baseline red' : CONTROL || 'normal'}: green.`);
 } catch (error) { receipt({ methodError: error?.stack || String(error) }); throw error;

@@ -111,6 +111,18 @@ function appealPresentation(): { before: CareerState; item: DeskItem } {
   return { before: repeatedReload(restore({ ...state, decisions: [item!] })), item: item! };
 }
 function withoutDesk(state: CareerState): CareerState { const copy = json(state); delete copy.decisions; return copy; }
+async function whistleEngines(): Promise<[typeof E, typeof E]> {
+  expect(Boolean(process.env.CM_DEADLINE_WHISTLE_ENGINE)).toBe(Boolean(process.env.CM_DEADLINE_NEUTRAL_ENGINE));
+  if (process.env.CM_DEADLINE_WHISTLE_ENGINE) expect(process.env.CM_DEADLINE_WHISTLE_ENGINE).not.toBe(process.env.CM_DEADLINE_NEUTRAL_ENGINE);
+  async function fresh(filename: string | undefined): Promise<typeof E> {
+    if (filename) return await import(/* @vite-ignore */ filename) as typeof E;
+    vi.resetModules();
+    return await import('@/lib/clubManager');
+  }
+  const actual = await fresh(process.env.CM_DEADLINE_WHISTLE_ENGINE), neutral = await fresh(process.env.CM_DEADLINE_NEUTRAL_ENGINE);
+  expect(actual).not.toBe(neutral); expect(actual.resumeMatch).not.toBe(neutral.resumeMatch);
+  return [actual, neutral];
+}
 
 describe('Club Manager saved situation reply deadline', () => {
   for (const spec of specs) it(`manager deadline missing: saved ${spec.scope} reply closes after actual kickoff`, () => {
@@ -162,11 +174,14 @@ describe('Club Manager saved situation reply deadline', () => {
     const fixture = presentation('board'), before = kickoff(fixture.before);
     for (const option of [-1, 999]) unchanged(before, fixture.item.id, option);
   });
-  it('manager deadline preservation: real whistle expires the unanswered card without a desk benefit', () => {
+  it('manager deadline preservation: real whistle expires the unanswered card without a desk benefit', async () => {
     const fixture = presentation('budget'), before = kickoff(fixture.before), held = JSON.stringify(before), neutral = withoutDesk(before);
-    const actual = seeded(13570030, () => E.resumeMatch(before)), control = seeded(13570030, () => E.resumeMatch(neutral));
+    const neutralHeld = JSON.stringify(neutral);
+    const [actualEngine, neutralEngine] = await whistleEngines();
+    const actual = seeded(13570030, () => actualEngine.resumeMatch(before)), control = seeded(13570030, () => neutralEngine.resumeMatch(neutral));
     expect(actual.result.kind).toBe('match'); expect(control.result.kind).toBe('match'); expect(actual.draws).toEqual(control.draws);
     expect(JSON.stringify(before)).toBe(held); expect(withoutDesk(actual.result.state)).toEqual(withoutDesk(control.result.state));
+    expect(JSON.stringify(neutral)).toBe(neutralHeld);
     const item = D.deskOf(actual.result.state).find(card => card.id === fixture.item.id)!;
     expect(item).toEqual({ ...fixture.item, options: [], resolved: 'Nobody answered before the next match, so nothing changed.' });
     expect(item.outcome).toBeUndefined(); repeatedReload(restore(actual.result.state));
