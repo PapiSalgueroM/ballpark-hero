@@ -1,0 +1,11 @@
+everton as saved at 320: FAIL a squad of real men shows the row label 0 and the desk note 0 times; FAIL the worst defeat reads "", wanted "1-5 vs Newcastle"; labels 0, notes 0, row label 0, desk labels 0, desk note 0, rungs 0, defeat ""
+sevilla 1052 old save at 390: FAIL a squad of real men shows the row label 0 and the desk note 0 times; FAIL the worst defeat reads "", wanted "0-3 vs Atlético Madrid"; labels 0, notes 0, row label 0, desk labels 0, desk note 0, rungs 0, defeat ""
+valencia second tier old save at 768: FAIL a squad of real men shows the row label 0 and the desk note 0 times; FAIL the worst defeat reads "", wanted "0-3 vs Real Madrid"; labels 0, notes 0, row label 0, desk labels 0, desk note 0, rungs 0, defeat ""
+hertha book save at 1280: FAIL a squad of real men shows the row label 0 and the desk note 0 times; FAIL the worst defeat reads "", wanted "2-3 vs Nürnberg"; labels 0, notes 0, row label 0, desk labels 0, desk note 0, rungs 0, defeat ""
+hostile: defeat score abc at 320: FAIL a squad of real men shows the row label 0 and the desk note 0 times; FAIL the worst defeat reads "", wanted "abc vs Newcastle"; labels 0, notes 0, row label 0, desk labels 0, desk note 0, rungs 0, defeat ""
+hostile: defeat 10-2 at 390: FAIL a squad of real men shows the row label 0 and the desk note 0 times; FAIL the worst defeat reads "", wanted "2-10 vs Newcastle"; labels 0, notes 0, row label 0, desk labels 0, desk note 0, rungs 0, defeat ""
+hostile: defeat 1-2-3 at 390: FAIL a squad of real men shows the row label 0 and the desk note 0 times; FAIL the worst defeat reads "", wanted "1-2-3 vs Newcastle"; labels 0, notes 0, row label 0, desk labels 0, desk note 0, rungs 0, defeat ""
+every man made up at 390: labels 0, notes 0, row label 0, desk labels 0, desk note 0, rungs 0, defeat ""
+hostile: wage and years missing on half at 320: FAIL a squad of real men shows the row label 0 and the desk note 0 times; labels 0, notes 0, row label 0, desk labels 0, desk note 0, rungs 0, defeat ""
+everybody in his final year at 320: FAIL a squad of real men shows the row label 0 and the desk note 0 times; labels 0, notes 0, row label 0, desk labels 0, desk note 0, rungs 0, defeat ""
+QA1325: 16 findings

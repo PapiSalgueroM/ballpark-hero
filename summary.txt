@@ -1,0 +1,4 @@
+build exit=0 32s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+basebuild exit=0 32s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+qa-head exit=0 120s | QA1325: green, 10 saves through the four screens
+qa-base exit=1 407s | QA1325: 16 findings
