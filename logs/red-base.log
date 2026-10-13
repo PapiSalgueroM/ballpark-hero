@@ -1,0 +1,40 @@
+Network mode: offline, loopback only, no production probe or database retries.
+Running 4 node harnesses
+  EMPTY simCmQuickSubs.mjs              1.6s
+        printed 1 line, so its checks did not run
+  FAIL  simGmCalendar.mjs               1.4s
+  FAIL  simGmDealTableFixture.mjs       1.2s
+  FAIL  simGmStaff.mjs                  2.1s
+
+----- simCmQuickSubs.mjs (EMPTY) -----
+simCmQuickSubs normal: real coaching outcomes and independent unmanaged baseline passed.
+
+
+----- simGmCalendar.mjs (FAIL) -----
+  FAIL: Everton seasonDays: hash 158dee139333cccc41abdbfc != recorded 4f6e77bb426d72edb25d0123; first lines now ["{\"worldYear\":2026,\"entryDates\":[{\"y\":2026,\"m\":8,\"d\":8},{\"y\":2026,\"m\":8,\"d\":15},{\"y\":2026,\"m\":8,\"d\":22},{\"y\":2026,\"m\":8,\"d\":26},{\"y\":2026,\"m\":8,\"d\":29},{\"y\":2026,\ recorded ["{\"worldYear\":2026,\"entryDates\":[{\"y\":2026,\"m\":8,\"d\":8},{\"y\":2026,\"m\":8,\"d\":15},{\"y\":2026,\"m\":8,\"d\":22},{\"y\":2026,\"m\":8,\"d\":26},{\"y\":2026,\"m\":8,\"d\":29},{\"y\":2026,\
+  FAIL: Everton monthGrid: hash 998eed009784b43682c66dfd != recorded 191228a15047c811f0735e7a; first lines now ["2026-8 light [null,null,null,null,null,null,{\"date\":{\"y\":2026,\"m\":8,\"d\":1},\"key\":20260801,\"weekIdx\":null,\"kind\":\"rest\",\"windowOpen\":false,\"isToday\":false,\"past\":true},{\"date\" recorded ["2026-8 light [null,null,null,null,null,null,{\"date\":{\"y\":2026,\"m\":8,\"d\":1},\"key\":20260801,\"weekIdx\":null,\"kind\":\"rest\",\"windowOpen\":false,\"isToday\":false,\"past\":true},{\"date\"
+  FAIL: Augsburg seasonDays: hash 29e2211231b009dd2c13593e != recorded d004198f9594eff7c0c3edf6; first lines now ["{\"worldYear\":2026,\"entryDates\":[{\"y\":2026,\"m\":8,\"d\":8},{\"y\":2026,\"m\":8,\"d\":15},{\"y\":2026,\"m\":8,\"d\":22},{\"y\":2026,\"m\":8,\"d\":26},{\"y\":2026,\"m\":8,\"d\":29},{\"y\":2026,\ recorded ["{\"worldYear\":2026,\"entryDates\":[{\"y\":2026,\"m\":8,\"d\":8},{\"y\":2026,\"m\":8,\"d\":15},{\"y\":2026,\"m\":8,\"d\":22},{\"y\":2026,\"m\":8,\"d\":26},{\"y\":2026,\"m\":8,\"d\":29},{\"y\":2026,\
+  FAIL: Augsburg monthGrid: hash 486aafe84bae636d46f7d710 != recorded ecebc393e3df7ebcd664c12a; first lines now ["2026-8 light [null,null,null,null,null,null,{\"date\":{\"y\":2026,\"m\":8,\"d\":1},\"key\":20260801,\"weekIdx\":null,\"kind\":\"rest\",\"windowOpen\":false,\"isToday\":false,\"past\":true},{\"date\" recorded ["2026-8 light [null,null,null,null,null,null,{\"date\":{\"y\":2026,\"m\":8,\"d\":1},\"key\":20260801,\"weekIdx\":null,\"kind\":\"rest\",\"windowOpen\":false,\"isToday\":false,\"past\":true},{\"date\"
+  FAIL: Norwich City seasonDays: hash 60f96d2fd871650b92af5ea0 != recorded 2e65e78a8e253e2db78b214a; first lines now ["{\"worldYear\":2026,\"entryDates\":[{\"y\":2026,\"m\":8,\"d\":8},{\"y\":2026,\"m\":8,\"d\":15},{\"y\":2026,\"m\":8,\"d\":22},{\"y\":2026,\"m\":8,\"d\":26},{\"y\":2026,\"m\":8,\"d\":29},{\"y\":2026,\ recorded ["{\"worldYear\":2026,\"entryDates\":[{\"y\":2026,\"m\":8,\"d\":8},{\"y\":2026,\"m\":8,\"d\":15},{\"y\":2026,\"m\":8,\"d\":22},{\"y\":2026,\"m\":8,\"d\":26},{\"y\":2026,\"m\":8,\"d\":29},{\"y\":2026,\
+  FAIL: Norwich City monthGrid: hash 6921469a250cd670b7984977 != recorded 6ce8f2f8c3734c582c00f4b1; first lines now ["2026-8 light [null,null,null,null,null,null,{\"date\":{\"y\":2026,\"m\":8,\"d\":1},\"key\":20260801,\"weekIdx\":null,\"kind\":\"rest\",\"windowOpen\":false,\"isToday\":false,\"past\":true},{\"date\" recorded ["2026-8 light [null,null,null,null,null,null,{\"date\":{\"y\":2026,\"m\":8,\"d\":1},\"key\":20260801,\"weekIdx\":null,\"kind\":\"rest\",\"windowOpen\":false,\"isToday\":false,\"past\":true},{\"date\"
+
+----- simGmDealTableFixture.mjs (FAIL) -----
+  FAIL: section B no longer replays (720 lines recorded, 720 now)
+  FAIL: section C no longer replays (101 lines recorded, 126 now)
+simGmDealTableFixture: FAIL, 2 section(s) differ from the recording
+
+----- simGmStaff.mjs (FAIL) -----
+  FAIL: Arsenal natural: line 5 of 81 differs
+  FAIL: Bayern Munich nines: line 5 of 63 differs
+  FAIL: PSG nines: line 5 of 74 differs
+  FAIL: AC Milan natural: line 4 of 55 differs
+  FAIL: AC Milan nines: line 4 of 70 differs
+  FAIL: Coventry City natural: line 5 of 53 differs
+  FAIL: Ipswich Town natural: line 5 of 55 differs
+  FAIL: Ipswich Town nines: line 5 of 68 differs
+  FAIL: run 26 is Clermont  natural, the fixture has Club Brugge  natural
+  FAIL: run 27 is Clermont  nines, the fixture has Club Brugge  nines
+  FAIL: run 28 is Krasnodar  natural, the fixture has Konyaspor  natural
+  FAIL: run 29 is Krasnodar  nines, the fixture has Konyaspor  nines
+
+4 harnesses not green.
