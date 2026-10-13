@@ -1,0 +1,3 @@
+#!serve
+#!playwright
+walkD: RW_SECTION=D node .rc/x/walk1325.mjs
