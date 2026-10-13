@@ -105,18 +105,25 @@
  *      otherwise leaves, which settles to the keyed draw), for the pointer
  *      median and the keyboard median. Asserted: the median's and the keyboard
  *      median's fleet gaps sit within T = 0.75 stock and inside their bands;
- *      the expert gains and the novice loses by at least half their measured
- *      extremes; the three means are ordered novice, median, expert. The
+ *      the expert gains and the novice loses by at least their measured
+ *      extremes less a margin of four or more of one row's sds across the
+ *      five sets; the three means are ordered novice, median, expert. The
  *      leaver and the two thumb bot are printed for the lead, never asserted.
- *                         Controls `flathands`, `curveflip`, `keyscurve`.
+ *              Controls `flathands`, `curveflip`, `keyscurve`, `softedge`.
  *      Measured 2026-10-12 over seed sets a to e (80 rows each), with the
  *      curves as they stand (the draft's starting anchors; no tuning was
  *      needed to bring both medians inside T):
  *        median (pointer) gap -0.34 to +0.09, band -0.55 to +0.30 (about 0.2
  *          beyond each end: one row's sd across the five sets is about 0.04);
  *        keyboard median gap -0.31 to -0.05, band -0.50 to +0.15;
- *        expert all out +6.78 to +7.29, safe +3.23 to +3.43: floors 3.4, 1.6;
- *        novice all out -7.00 to -5.68, safe -3.14 to -2.60: ceilings -2.8, -1.3;
+ *        expert all out +6.78 to +7.29, safe +3.23 to +3.43: floors 6.5, 3.0;
+ *        novice all out -7.00 to -5.68, safe -3.14 to -2.60: ceilings -5.4,
+ *          -2.4. One row's largest sd across the five sets is 0.059, 0.027,
+ *          0.063 and 0.022 in that order, so each line sits 0.20 to 0.28
+ *          beyond the nearest measured row, 4.4 to 9 sds (the median band's
+ *          rule). Until the closing check of 2026-10-12 these lines were half
+ *          the extremes (3.4, 1.6, -2.8, -1.3), which an expert edge cut by a
+ *          third would have passed: `softedge` is that cut;
  *        two thumbs +1.03 to +7.53, above the expert in nhl:y2006 (one burst
  *          station) in both approaches on all five sets;
  *        the optimal leaver gains +1.08 to +1.64 all out and +0.49 to +0.75
@@ -297,6 +304,11 @@ const CONTROLS = {
   combineloose: ['src/lib/careerPreDraft.ts', 'if (!scores.every(x => Number.isInteger(x) && x >= 0 && x <= 100)) return prev;', 'if (!scores.every(x => x <= 100)) return prev;'],
   scoutskeys: ['src/lib/careerPreDraft.ts', 's.showcase = { approach, drill, grade, stockDelta: move };', 's.showcase = { approach, drill, grade, stockDelta: move, played: undefined };'],
   combinedraw: ['src/lib/careerPreDraft.ts', "const which: PreDraftInput = input === 'keys' ? 'keys' : 'pointer';", "const which: PreDraftInput = input === 'keys' && Date.now() > 0 ? 'keys' : 'pointer';"],
+  /* Closing check of 2026-10-12: the pointer burst's slope cut by a third
+     about the median bot's 33 taps (it still scores about 51 there), so the
+     expert's edge shrinks and the median does not move. A data edit, so
+     section 10's grid, built from COMBINE_CURVES, follows it. */
+  softedge: ['src/lib/careerPreDraft.ts', 'burst: { pointer: { zeroAt: 15, fullAt: 50 },', 'burst: { pointer: { zeroAt: 6, fullAt: 59 },'],
 };
 if (CONTROL && !CONTROLS[CONTROL]) { console.error(`Unknown control ${CONTROL}`); process.exit(2); }
 if (CONTROL && RECORD) { console.error('A recording is never written from a mutated engine. Refusing to run.'); process.exit(2); }
@@ -960,8 +972,8 @@ const TARGET_T = 0.75;
 const HANDS_BAND = {
   median: [-0.55, 0.30],
   keys: [-0.50, 0.15],
-  expertMin: { allout: 3.4, steady: 1.6 },
-  noviceMax: { allout: -2.8, steady: -1.3 },
+  expertMin: { allout: 6.5, steady: 3.0 },
+  noviceMax: { allout: -5.4, steady: -2.4 },
 };
 const realRandom12 = Math.random;
 Math.random = () => { throw new Error('Math.random was called'); };
