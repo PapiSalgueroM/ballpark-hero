@@ -68,6 +68,13 @@ push; the closing report is C:/Users/antho/dukb-handoff/2026-10-10/results-g/fin
 - The meters' slot: with the chunk held back 1.5 s every resume shifted the hub 8px (the strip's top margin
   collapsed out of the slot; 0.0063 at 390 on a plain board) and a board on the edge wraps to a 60px strip at 320,
   390 and 1280. The slot is flow-root and holds 60px for that board, 52px otherwise (21d00882 the walk, 940e0824).
+- The walk's season 2 case runs on a seeded Math.random and starts again on the next seed after a sacking (an
+  unseeded run ended in "SACKED!" once, fx1328-b): it now reads a landing on seed 21 (header top 12 px from scrollY
+  23173), and the base build and the hub key mutation read -740 px instead of stalling (28dc5a42, fx1328-d).
+- Final proof: fx1328-c on 940e0824 (tsc 0, vitest 8 files 60 tests, every fence and sim of the list green, weight
+  green with /club-manager 589.7K of 590K) and fx1328-d on 28dc5a42 (walk 0 with the base build: A 8, B 65, C 156,
+  D 12, E 63, F 9; noscroll fired; simHarnessAnchors and simNoRivalNames green); fx1328-b on 940e0824 fired all six
+  controls and ran playCmRealFixtures green twice, playClubManager 0 findings, simRevealScroll green.
 - Mutations, each red on the unit files (fx1328-a): useEffect for useLayoutEffect, && to ||, week <= 1, message
   before desk card, every spend line summed, income flags ignored. A build of a7202a82 fails exactly the new strip
   check (bottom 683 against a foot of 832 at 390).
