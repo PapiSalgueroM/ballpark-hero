@@ -1,0 +1,5 @@
+#!serve
+#!playwright
+walk: ENGINES=chromium node scripts/playFrontOfficeGameDay.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
