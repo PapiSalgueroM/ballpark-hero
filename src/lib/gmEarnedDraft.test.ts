@@ -128,7 +128,24 @@ describe('the heading, from the slots', () => {
     const run = earnedContinue(host, league, night, top, toyClass(64));
     expect(run.steps).toHaveLength(0);
     expect(run.onClock?.overall).toBe(1);
-    expect(earnedDraftHeading(run.night, top, c => c)).toContain('You are on the clock at 1.');
+    const topSlots = run.night.slots.filter(s => s.holder === top).map(s => ordinal(s.overall));
+    expect(earnedDraftHeading(run.night, top, c => c)).toEqual([`You pick ${topSlots.join(' and ')}.`, 'You are on the clock at 1.']);
+  });
+
+  it('the clock line is his alone: the whole heading before Continue, on his clock and after the last pick', () => {
+    /* A playoff club, so no lottery can hand it the first pick (review 2026-10-12, mutation m4: without the
+       holder test every GM was told he was on the clock at 1 before Continue, and toContain let it through). */
+    const me = CLUBS[20];
+    const { night, league } = setUp();
+    const mine = night.slots.filter(s => s.holder === me).map(s => s.overall);
+    expect(mine).toHaveLength(2);
+    expect(mine[0]).toBeGreaterThan(1);
+    const where = `You pick ${ordinal(mine[0])} and ${ordinal(mine[1])}.`;
+    expect(earnedDraftHeading(night, me, c => c)).toEqual([where]);
+    const run = earnedContinue(host, league, night, me, toyClass(64));
+    expect(earnedDraftHeading(run.night, me, c => c)).toEqual([where, `You are on the clock at ${mine[0]}.`]);
+    const end = earnedByStaff(host, league, run.night, me, run.left);
+    expect(earnedDraftHeading(end.night, me, c => c)).toEqual([where, 'Every pick of the draft is in.']);
   });
 });
 
