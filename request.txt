@@ -1,0 +1,9 @@
+awards: node scripts/simCareerAwardsNight.mjs
+seasonHistory: node scripts/simSoccerSeasonHistory.mjs
+derbyHistory: node scripts/simSoccerDerbyHistory.mjs
+storyRole: node scripts/simCareerStoryRole.mjs
+trophy: node scripts/simCareerTrophyRuns.mjs
+social: node scripts/simCareerSocialBrands.mjs
+leagueFinish: node scripts/simCareerLeagueFinish.mjs
+development: node scripts/simSoccerCareerDevelopment.mjs
+leagueSeasons: node scripts/simCareerLeagueSeasons.mjs

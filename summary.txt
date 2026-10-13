@@ -1,0 +1,9 @@
+derbyHistory exit=0 3s | Derby history: 11 groups,24 full main season pairs,192 full campaign/RNG pairs,0 effective controls; artifacts /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/derby
+seasonHistory exit=0 3s | Season history: 9 groups,24 full AR season pairs,192 full campaign/RNG pairs,0 effective controls; artifacts /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/season-
+trophy exit=0 3s | Trophy campaigns: 9 groups, 24 full AR season pairs, 192 full campaign/RNG pairs, 0 effective controls; artifacts /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/ca
+social exit=0 28s | ALL SOCIAL AND BRAND CHECKS PASSED
+storyRole exit=0 36s | simCareerStoryRole: 16 groups, 0 failed, 48 full AR pairs
+development exit=0 4s | simSoccerCareerDevelopment: 18 outcome groups, 16+16 complete baseline saves/RNG, 16 form draws, 16 played plan seasons, 7 interruption paths, 0 failed
+leagueFinish exit=0 16s | simCareerLeagueFinish: green. 756 careers, 6048 seasons, 4820 in a verified league; finish and title agree, the ladder holds, the historical stream holds after documented
+leagueSeasons exit=0 18s | simCareerLeagueSeasons: all sections green
+awards exit=0 69s | simCareerAwardsNight: ALL 179 CHECKS PASSED
