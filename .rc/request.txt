@@ -1,0 +1,10 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+rivalPlain: node scripts/simUsRivalSense.mjs
+rivalVerdictswap: US_RIVAL_CONTROL=verdictswap node scripts/simUsRivalSense.mjs
+ledger: node scripts/simUsSeasonLedger.mjs
+ledgerMeasure: US_LEDGER_MEASURE=1 node scripts/simUsSeasonLedger.mjs > "$RC_OUT/ledgerMeasure.txt" 2>&1; s=$?; grep "MEASURE E8" "$RC_OUT/ledgerMeasure.txt"; tail -1 "$RC_OUT/ledgerMeasure.txt"; exit $s
+ledgerFullslatemlb: US_LEDGER_CONTROL=fullslatemlb node scripts/simUsSeasonLedger.mjs
+ledgerFullslatenhl: US_LEDGER_CONTROL=fullslatenhl node scripts/simUsSeasonLedger.mjs
+anchors: node scripts/simHarnessAnchors.mjs
+noRival: node scripts/simNoRivalNames.mjs
+storage: node scripts/simStorageWrites.mjs
