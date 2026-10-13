@@ -126,3 +126,19 @@ Both reviews (run and read) said ship with no major. The fixer's commits, each p
   15 and 17 of 63: S0W40 and S0W46 approach ticks), equal before " | " and differing only by the lapse sentence.
   The fixture stays untaken (main is red there); Round 1316's attribution is the builder's 136 approach lines,
   these two among them, now carrying the lapse sentence as well, all of them this round's words.
+
+## Fix pass 2, the closing check's seams (2026-10-13)
+| step | commit | runner result | exit codes |
+|---|---|---|---|
+| simCmShootoutOrder merges past Release AZ | b5e2dd3c | r1326-fx2a | tsc 0, simCmShootoutOrder 0, unsetpath control 1 (3 failures, FIRED), AZ trial 0, simCmCopy 0, simNoRivalNames 0, simHarnessAnchors 0, simStorageWrites 0, simGmStaff 1 (40, first line unchanged) |
+| trial join with Round 1328 (not on this branch) | none | r1326-fx2j | join 0 (What's New the one conflict), walk before the seam patch 1, seam 0, tsc 0, vitest 0, simCmCopy 0, finance control 1 (FIRED, 6), playCmFinanceDesk 0, playCmHubLanding C and E 0, tile control 1 (FIRED, 3) |
+- simCmShootoutOrder: the historical arm puts this round's words back on the source it starts from
+  (withRound1326WordsBack, above the arm), so the coachless line is main's again and Release AZ's withoutWorldSeed
+  rewrite of that line merges with no conflict (git merge-tree on b5e2dd3c against 97624a09: five conflict files,
+  this one no longer among them). The arm's text is the same string as before (1073482 characters, equal, on
+  this tree). On a trial tree of AZ's head plus this round's engine words plus the merged harness it ran green.
+- Round 1328's seams, owed to whichever round lands second: its playCmHubLanding read the result row this round
+  removed (on the joined tree it fails at 320, 390 and 1280 with "result null"), and its kittyChange and this
+  desk's kittyView computed the kitty change twice. The join patch (the desk calls kittyChange, kittyView goes, the
+  walk reads the desk's Kitty change row and holds the tile to it within 0.001) was proven on the trial join and
+  is kept with the closing report (dukb-handoff 2026-10-10 results-g, fix2-1326-join).
