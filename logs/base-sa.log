@@ -1,0 +1,4 @@
+== clubManager-D-vLrbID.js sa: e)).filter(e=>!!e).sort((e,r)=>e.expectation-r.expectation)}function sa(a){return Aa&&Aa.def.name===a?Aa.def:ss().get(a)??ie.find(n=>n.name===a)??{name:a,tier:4,color:"#8899aa",budget:20,expectation:10}}const El=["R16","QF","SF","F"],Oo={R16:"Round of 16",QF:"Quarter-final",SF:"Semi-final",F:"Final"},Pl=["R16","QF","SF
+   exported as a$, imported by ClubManager-ETTwrRk2.js, managerHotSeat-CM3KdIbI.js
+== clubManager-D-vLrbID.js Dd: string"&&Number.isInteger(n.ban)&&Number.isInteger(n.odds))}function Dd(a){const n=a.decisions;return Array.isArray(n)&&n.every(Lf)?n:[]}function it(a){let n=2166136261;for(let r=0;r<a.length;r++)n^=a.charCodeAt(r),n=Math.imul(n,16777619)>>>0;let e=n+1831565813|0;return e=Math.imul(e^e>>>15,1|e),e=e+Math.imul(e^e>>>7,6
+   exported as bl, imported by ClubManager-ETTwrRk2.js, InboxCard-Nj1EU4md.js

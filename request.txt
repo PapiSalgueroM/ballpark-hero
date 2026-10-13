@@ -1,0 +1,5 @@
+#!build
+#!serial
+basebuild: R="$PWD"; git worktree add /tmp/base 8fea14e216fb550b4676ac29f06867234594df21 > /dev/null 2>&1; ln -s "$R/node_modules" /tmp/base/node_modules; cd /tmp/base && npm run build > /tmp/basebuild.log 2>&1; s=$?; tail -1 /tmp/basebuild.log; exit $s
+head-Dd: node .rc/x/symWhy.mjs dist/assets clubManager Dd sa
+base-sa: node .rc/x/symWhy.mjs /tmp/base/dist/assets clubManager sa Dd
