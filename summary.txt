@@ -1,0 +1,6 @@
+fightNocards exit=1 9s | simFightCareer: 3 failure(s)
+fight exit=0 16s | simFightCareer: all sections passed
+fightLifeleak exit=1 17s | simFightCareer: 10 failure(s)
+fightFreecard exit=1 14s | simFightCareer: 20 failure(s)
+fightRedeal exit=1 13s | simFightCareer: 1 failure(s)
+fightWipesave exit=1 13s | simFightCareer: 8 failure(s)
