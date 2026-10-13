@@ -31,8 +31,9 @@
  *      them baked squads, eight groups into a round of 16, away goals on.
  *   8. THE MARKET AND THE CARD: every past season's transfer market files a
  *      man under the league his club plays in that season (the screen asks
- *      the save's era, never today's table), and the card's "every match
- *      here allows three" changes is the engine's MAX_SUBS. And leagueOf's
+ *      the save's era, never today's table), and the card's changes per
+ *      league (Round 1331: five in three stoppages for Spain, Italy, Germany
+ *      and France, three for England) are the engine's subsRuleFor. And leagueOf's
  *      fallback for a club only the past knows reads the eras in a fixed
  *      order, so reversing ERA_LEAGUES moves no club.
  *
@@ -100,7 +101,7 @@
  *      came from a club of today and 188 of 240 jobs taken moved him
  *      nowhere (the numbers are at the section).
  *
- * Sixteen negative controls, SIM_ERA2020_CONTROL=dupe|stale|fourleagues|nofield|swapfinish|nolift|modernmarket|eraorder|leak|joinage|shiporder|modernnews|modernwar|modernjobs|takestale|firstsummer,
+ * Sixteen negative controls, SIM_ERA2020_CONTROL=dupe|stale|fourleagues|nofield|swapfinish|nolift|modernmarket|eraorder|leak|joinage|shiporder|modernnews|modernwar|modernjobs|takestale|firstsummer|subsrow,
  * each of which must end the run red (see the block where they are defined).
  *
  * Run: node scripts/simEra2020.mjs
@@ -142,10 +143,10 @@ const ERA_ORDER_ANCHOR = 'for (const eraId of ERA_FALLBACK_ORDER) {';
    the constant changes for any reason. */
 const SHIP_ORDER_ANCHOR = "export const ERA_FALLBACK_ORDER: readonly string[] = ['era2010', 'era2015', 'era2005', 'era2020'];";
 const SHIP_ORDER_BROKEN = "export const ERA_FALLBACK_ORDER: readonly string[] = ['era2005', 'era2010', 'era2015', 'era2020'];";
-const engineEdit = (name, anchor, to, why) => ({
+const engineEdit = (name, anchor, to, why, filter = /[\\/]src[\\/]lib[\\/]clubManager\.ts$/) => ({
   name,
   setup(b) {
-    b.onLoad({ filter: /[\\/]src[\\/]lib[\\/]clubManager\.ts$/ }, a => {
+    b.onLoad({ filter }, a => {
       const src = fs.readFileSync(a.path, 'utf8');
       if (src.split(anchor).length !== 2) { console.error(`CONTROL ${name} did not apply: ${why}`); process.exit(2); }
       console.log(`   CONTROL ${name} applied: the engine is edited as it is bundled, one line`);
@@ -181,6 +182,8 @@ const ENGINE_CONTROLS = {
   modernjobs: [JOBS_ANCHOR, JOBS_BROKEN, 'the out of work screen does not read this save\'s own world on the line this control knows'],
   takestale: [TAKE_ANCHOR, '', 'the out of work screen does not refuse a club the season does not hold on the line this control knows'],
   firstsummer: [SUMMER_ANCHOR, SUMMER_BROKEN, 'the helper that names the clubs of this save\'s world does not branch on the era on the line this control knows'],
+  /* Round 1331, section 8: the Premier League's five change row moved to 2020-21 in memory. */
+  subsrow: ['  premier: 2022, championship: 2022,', '  premier: 2020, championship: 2022,', 'the Premier League row is not in the substitution rule table as this control knows it', /[\\/]src[\\/]lib[\\/]clubManagerSubsRule\.ts$/],
 };
 const engineControl = ENGINE_CONTROLS[process.env.SIM_ERA2020_CONTROL ?? ''];
 const plugins = engineControl ? [engineEdit(process.env.SIM_ERA2020_CONTROL, ...engineControl)] : [];
@@ -276,7 +279,7 @@ const BAND_THIN = 14;
                   in every era, and its first window and rival sentences
                   must not. */
 const CONTROL = process.env.SIM_ERA2020_CONTROL ?? '';
-if (CONTROL && !['dupe', 'stale', 'fourleagues', 'nofield', 'swapfinish', 'nolift', 'modernmarket', 'eraorder', 'leak', 'joinage', 'shiporder', 'modernnews', 'modernwar', 'modernjobs', 'takestale', 'firstsummer'].includes(CONTROL)) { console.error(`unknown control ${CONTROL}`); process.exit(2); }
+if (CONTROL && !['dupe', 'stale', 'fourleagues', 'nofield', 'swapfinish', 'nolift', 'modernmarket', 'eraorder', 'leak', 'joinage', 'shiporder', 'modernnews', 'modernwar', 'modernjobs', 'takestale', 'firstsummer', 'subsrow'].includes(CONTROL)) { console.error(`unknown control ${CONTROL}`); process.exit(2); }
 const controlRefuse = why => { console.error(`CONTROL ${CONTROL} did not apply: ${why}`); process.exit(2); };
 function controlHavertz(rosters, keepAtChelsea) {
   const row = (rosters['Chelsea'] ?? []).find(p => p.n === 'Kai Havertz');
@@ -763,11 +766,20 @@ console.log('8) Every past season\'s market files a man under the league his clu
     if (inEra < 100) fail(`${eraId}: only ${inEra} market players at era league clubs, the market did not build`);
     if (wrong) fail(`${eraId}: ${wrong} market players filed under the wrong league, e.g. ${eg.join('; ')}`);
   }
-  /* The era card says every match here allows three changes (Spain, Italy,
-     Germany and France allowed five that season, England three): the engine
-     must still apply three, or the card must change with it. */
-  if (/every match here allows three/.test(eraById('era2020').honesty) && cm.MAX_SUBS !== 3) fail(`the 2020-21 card says every match allows three changes, the engine allows ${cm.MAX_SUBS}`);
-  if (!/every match here allows three/.test(eraById('era2020').honesty)) fail('the 2020-21 card no longer says how many changes a match here allows');
+  /* Round 1331: the era card says what each league allowed that season
+     (Spain, Italy, Germany and France five in three stoppages, England
+     three) and that the matches here follow it, so the engine's own rule
+     (subsRuleFor, the table in clubManagerSubsRule.ts) must agree for all
+     five leagues, or the card must change with it. Control subsrow moves
+     the Premier League's row to 2020 in memory. */
+  {
+    const card = eraById('era2020').honesty;
+    if (!card.includes('Spain, Italy, Germany and France let a side make five changes in three stoppages that year while the Premier League stayed at three, and the matches here follow the same rule')) fail('the 2020-21 card no longer says how many changes each league allowed and that the matches follow it');
+    for (const [id, n] of Object.entries({ laliga: 5, seriea: 5, bundesliga: 5, ligue1: 5, premier: 3 })) {
+      const r = cm.subsRuleFor(id, 2020);
+      if (r.subs !== n || (n === 5 ? r.stops !== 3 : r.stops !== null)) fail(`the 2020-21 card says ${id} allowed ${n} changes, the engine plays ${r.subs} in ${r.stops ?? 'any number of'} stoppages`);
+    }
+  }
 
   /* The closing check's F16: leagueOf's fallback for a club only the past
      seasons know used to read ERA_LEAGUES in the order it was typed. Every

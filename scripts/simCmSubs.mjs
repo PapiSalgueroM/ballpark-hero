@@ -240,6 +240,7 @@ function ruleSection(cm) {
    three change eras. SEEDS and MATCHES are environment knobs; the bands below were set at the defaults. */
 const SEEDS = Number(process.env.SUBS_SEEDS ?? 3);
 const MATCHES = Number(process.env.SUBS_MATCHES ?? 14);
+const SEED_BASE = Number(process.env.SUBS_SEED_BASE ?? 7100);
 const FIVE = [['Liverpool', null], ['Barcelona', null], ['Bayern Munich', null]];
 const THREE = [['Everton', 'era2005'], ['Real Madrid', 'era2015']];
 const fleetCache = new Map();
@@ -249,9 +250,9 @@ export function quickFleet(cm) {
   if (fleetCache.has(cm)) return fleetCache.get(cm);
   const careers = [];
   for (let k = 0; k < SEEDS; k++) {
-    for (const [club, era] of FIVE) careers.push({ club, era, seed: 7100 + 37 * k, base: false, kind: 'five' });
-    for (const [club, era] of FIVE) careers.push({ club, era, seed: 7100 + 37 * k, base: true, kind: 'base' });
-    for (const [club, era] of THREE) careers.push({ club, era, seed: 7100 + 37 * k, base: false, kind: 'three' });
+    for (const [club, era] of FIVE) careers.push({ club, era, seed: SEED_BASE + 37 * k, base: false, kind: 'five' });
+    for (const [club, era] of FIVE) careers.push({ club, era, seed: SEED_BASE + 37 * k, base: true, kind: 'base' });
+    for (const [club, era] of THREE) careers.push({ club, era, seed: SEED_BASE + 37 * k, base: false, kind: 'three' });
   }
   const rows = [];
   for (const c of careers) {
@@ -280,8 +281,11 @@ export function quickFleet(cm) {
 }
 const mean = xs => (xs.length ? xs.reduce((a, b) => a + b, 0) / xs.length : 0);
 
-/* Section opponent. Measured at the defaults (3 seeds, 14 matches): see OPP_GAP. */
-const OPP_GAP = Number(process.env.SUBS_OPP_GAP ?? 1.2);
+/* Section opponent. Measured on the runner at the defaults (3 seeds, 14 matches, seed base 7100; remote check
+   r1331-s3c): 3.43 changes a match from them under five against 1.61 on the base rules, a gap of 1.82; with the
+   opproom control in, 2.76 against 1.61, a gap of 1.15. The band sits between the two (see the notes for the
+   gap over other seed bases). */
+const OPP_GAP = Number(process.env.SUBS_OPP_GAP ?? 1.5);
 function opponentSection(cm) {
   const P = 'opponent';
   const rows = quickFleet(cm).filter(r => r.named);

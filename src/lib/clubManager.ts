@@ -120,6 +120,7 @@ import { addXp, askEdge, dutyEdge, ensureXp, gateEdge, levelFor, pressCushion, p
 import { PATIENCE_FLOOR, askPremiumScale, currencySymbol, ensureStartOptions, nationJobsOn, patienceDelta, startOptionsOf } from '@/lib/clubManagerStart';
 /* Round 1331: the substitution rule by league and season, a pure table. */
 import { subsLeagueBase, subsRuleFor, type SubsRule } from '@/lib/clubManagerSubsRule';
+export { subsRuleFor, CM_SUBS_PARTIAL } from '@/lib/clubManagerSubsRule';
 /* Round 474: the five specific board asks, built and graded there for the
    same reason the facilities and the books live in their own files. */
 import { BOARD_ASKS_VERSION, askStatus, buildBoardAsks, ensureBoardAsks, isBoardAsk } from '@/lib/clubManagerBoardAsks';
