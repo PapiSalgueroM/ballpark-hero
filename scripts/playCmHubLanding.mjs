@@ -131,17 +131,28 @@ async function openPage(url, size, { consent = true, seed = null, drift = false,
 
 /* The picker, pressed like a person: era, nation, league (when the nation has
    more than one), the club's tile, the confirm bar, then the dugout form. */
-async function startCareer(page, url, { era, nation, league, club, take, entry }) {
+async function startCareer(page, url, { era, nation, league, club, take, entry }, onStep = null) {
+  const step = async name => { if (onStep) { await page.waitForTimeout(500); await onStep(name); } };
   await page.goto(`${url}/club-manager`, { waitUntil: 'domcontentloaded' });
+  await page.locator('button', { hasText: era }).first().waitFor({ timeout: 20000 });
+  await step('era');
   await page.locator('button', { hasText: era }).first().click();
+  await page.locator('button', { hasText: nation }).first().waitFor({ timeout: 20000 });
+  await step('nation');
   await page.locator('button', { hasText: nation }).first().click();
   const tiles = page.locator('button', { hasText: 'Board wants' });
   await Promise.race([tiles.first().waitFor({ timeout: 15000 }).catch(() => {}), page.locator('button', { hasText: league }).first().waitFor({ timeout: 15000 }).catch(() => {})]);
-  if (await tiles.count() === 0) await page.locator('button', { hasText: league }).first().click();
+  if (await tiles.count() === 0) {
+    await step('league');
+    await page.locator('button', { hasText: league }).first().click();
+  }
+  await tiles.filter({ hasText: club }).first().waitFor({ timeout: 20000 });
+  await step('team');
   await tiles.filter({ hasText: club }).first().click();
   await page.locator('div.fixed button', { hasText: 'Take the job' }).first().click();
   const skip = page.getByRole('button', { name: /^Skip: just manage$/ }).first();
   await skip.waitFor({ timeout: 15000 });
+  await step('dugout');
   if (entry) await page.locator('button', { hasText: entry }).first().click();
   if (take) {
     await page.locator('input[placeholder="e.g. Sam Calloway"]').fill('Jo Walker');
@@ -373,6 +384,177 @@ if (SECTIONS.has('B')) {
     fail('B', `banner-390: ${String(e).split('\n')[0].slice(0, 200)}`);
   }
   await ctx.close();
+}
+
+/* ---------------- C. Fit ---------------- */
+/* What this round changed, by selector (head only). A spec is a CSS selector,
+   or 'card:<uppercase heading>|<selector inside that card>', or
+   'text:<tag>|<words>' for an element found by its words. */
+const FIT = {
+  hub: {
+    font: [['season and mid season pills', '[data-cm-hub] header > div:first-child > span.rounded-full'], ['meter words', '[data-cm-meter] > div:first-child']],
+    controls: [['help button', 'button[aria-label="How to play"]'], ['Managers button', '[data-testid="cm-show-slots"]'], ['meter button', '[data-cm-meter]']],
+    cut: [['pills', '[data-cm-hub] header > div:first-child > span.rounded-full']],
+  },
+  calendar: {
+    font: [['day strip', '[data-testid="cm-calendar-day"]'], ['intensity buttons', 'card:Between matches|.grid > button']],
+    controls: [['previous month', 'button[aria-label="Previous month"]'], ['next month', 'button[aria-label="Next month"]'], ['Sim to', '[data-testid="cm-calendar-day"] button'], ['intensity button', 'card:Between matches|.grid > button'], ['Club home', 'text:button|Club home']],
+    cut: [['day strip lines', '[data-testid="cm-calendar-day"] div']],
+  },
+  training: {
+    font: [['intensity label', 'card:How hard you work them|.grid > button > div:nth-child(2)'], ['intensity line', 'card:How hard you work them|p']],
+    controls: [['Club home', 'text:button|Club home']],
+    cut: [],
+  },
+};
+function measureInPage({ spec, control }) {
+  const resolve = s => {
+    if (s.startsWith('card:')) {
+      const [heading, sub] = s.slice(5).split('|');
+      const head = [...document.querySelectorAll('div.uppercase')].find(d => d.textContent.includes(heading));
+      return head ? [...head.parentElement.querySelectorAll(sub)] : [];
+    }
+    if (s.startsWith('text:')) {
+      const [tag, words] = s.slice(5).split('|');
+      return [...document.querySelectorAll(tag)].filter(e => e.textContent.trim().endsWith(words));
+    }
+    return [...document.querySelectorAll(s)];
+  };
+  const shown = el => { const r = el.getBoundingClientRect(); const cs = getComputedStyle(el); return r.width > 0 && r.height > 0 && cs.visibility !== 'hidden' && cs.display !== 'none'; };
+  const own = el => [...el.childNodes].filter(n => n.nodeType === 3 && n.textContent.trim());
+  const texts = [...document.querySelectorAll('body *')].filter(el => own(el).length && shown(el) && !el.closest('[role="dialog"]') && !['SCRIPT', 'STYLE', 'NOSCRIPT'].includes(el.tagName));
+  const px = el => parseFloat(getComputedStyle(el).fontSize);
+  const small = texts.filter(el => px(el) < 12).length;
+  const font = [];
+  for (const [name, s] of spec.font ?? []) for (const root of resolve(s).filter(shown)) {
+    for (const el of [root, ...root.querySelectorAll('*')]) if (own(el).length && shown(el) && px(el) < 12) font.push(`${name}: "${el.textContent.trim().slice(0, 40)}" at ${px(el)}px`);
+  }
+  const controls = [];
+  const sizes = [];
+  for (const [name, s] of spec.controls ?? []) for (const el of resolve(s).filter(shown)) {
+    const r = el.getBoundingClientRect();
+    sizes.push(`${name} ${Math.round(r.width)}x${Math.round(r.height)}`);
+    if (r.width < 43.5 || r.height < 43.5) controls.push(`${name} is ${r.width.toFixed(1)} by ${r.height.toFixed(1)} px`);
+  }
+  const cut = [];
+  for (const [name, s] of spec.cut ?? []) for (const el of resolve(s).filter(shown)) {
+    if (el.scrollWidth > el.clientWidth + 1 || el.scrollHeight > el.clientHeight + 1) cut.push(`${name}: "${el.textContent.trim().slice(0, 40)}" (${el.scrollWidth}/${el.clientWidth} wide, ${el.scrollHeight}/${el.clientHeight} tall)`);
+  }
+  const trigger = document.querySelector('button[aria-label="How to play"]');
+  let overlaps = 0;
+  const overlapWords = [];
+  if (trigger && shown(trigger)) {
+    const t = trigger.getBoundingClientRect();
+    for (const el of texts) {
+      if (trigger.contains(el)) continue;
+      for (const n of own(el)) {
+        const range = document.createRange();
+        range.selectNodeContents(n);
+        for (const r of range.getClientRects()) {
+          const w = Math.min(r.right, t.right) - Math.max(r.left, t.left);
+          const h = Math.min(r.bottom, t.bottom) - Math.max(r.top, t.top);
+          if (w > 1 && h > 1) { overlaps += 1; overlapWords.push(n.textContent.trim().slice(0, 30)); }
+        }
+      }
+    }
+  }
+  const cell = document.querySelector('[data-testid="cm-calendar-grid"] > button');
+  const cellSize = cell ? `${Math.round(cell.getBoundingClientRect().width)}x${Math.round(cell.getBoundingClientRect().height)}` : null;
+  return { small, font, controls, sizes, cut, overlaps, overlapWords: overlapWords.slice(0, 4), sideways: document.documentElement.scrollWidth > window.innerWidth + 1, cellSize, control };
+}
+async function measure(page, screen) {
+  return page.evaluate(measureInPage, { spec: FIT[screen] ?? {}, control: CONTROL });
+}
+async function fitVisit(url, sizeKey, career) {
+  const out = {};
+  const { ctx, page, errors } = await openPage(url, SIZE[sizeKey]);
+  try {
+    if (CONTROL === 'small' || CONTROL === 'cut') await ctx.addInitScript(c => document.addEventListener('DOMContentLoaded', () => {
+      const st = document.createElement('style');
+      st.textContent = c === 'small'
+        ? '[data-cm-hub] .grid > button > div.uppercase + div + div { font-size: 11px !important; }'
+        : '[data-cm-board-wants] { max-width: 40px !important; white-space: nowrap !important; overflow: hidden !important; }';
+      document.head.appendChild(st);
+    }), CONTROL);
+    await startCareer(page, url, career, async name => { out[name] = await measure(page, name); });
+    await page.waitForTimeout(1200);
+    out.hub = await measure(page, 'hub');
+    out.hub.cls = await page.evaluate(() => window.__clsAfterHub);
+    await clickTile(page, 'Calendar');
+    await page.locator('[data-testid="cm-calendar-grid"]').waitFor({ timeout: 15000 });
+    await page.evaluate(() => [...document.querySelectorAll('[data-testid="cm-calendar-grid"] > button')].find(b => /: (vs|at|v) /.test(b.getAttribute('aria-label') ?? ''))?.click());
+    await page.waitForTimeout(400);
+    out.calendar = await measure(page, 'calendar');
+    await page.locator('button', { hasText: 'Club home' }).first().evaluate(b => b.click());
+    await clickTile(page, 'Training');
+    await page.waitForTimeout(500);
+    out.training = await measure(page, 'training');
+    out.errors = errors;
+  } catch (e) {
+    out.broke = String(e).split('\n')[0].slice(0, 200);
+  }
+  await ctx.close();
+  return out;
+}
+const FIT_RUNS = [
+  { size: 's320', career: { era: '2026-27', nation: 'England', league: 'Premier League', club: 'Liverpool', take: false, entry: 'Autumn' } },
+  { size: 's390', career: { era: '2026-27', nation: 'England', league: 'Premier League', club: 'Liverpool', take: false } },
+  { size: 's1280', career: { era: '2026-27', nation: 'Spain', league: 'La Liga', club: 'Celta Vigo', take: false, entry: 'New year' } },
+];
+if (SECTIONS.has('C')) {
+  console.log('C. Fit: sizes, controls, cut text, the help button, sideways scroll, layout shift');
+  for (const run of FIT_RUNS) {
+    const head = await fitVisit(HEAD, run.size, run.career);
+    const base = BASE_BUILD ? await fitVisit(BASE_BUILD, run.size, run.career) : null;
+    fs.writeFileSync(path.join(OUT, `C-${run.size}.json`), JSON.stringify({ head, base }, null, 1));
+    const tag = `${run.size} ${run.career.club}`;
+    if (head.broke) { fail('C', `${tag}: the visit broke (${head.broke})`); continue; }
+    for (const screen of ['era', 'nation', 'league', 'team', 'dugout', 'hub', 'calendar', 'training']) {
+      const m = head[screen];
+      if (!m) continue;
+      const b = base?.[screen];
+      for (const f of m.font) fail('C', `${tag} ${screen}: under 12px: ${f}`);
+      for (const c of m.controls) fail('C', `${tag} ${screen}: under 44px: ${c}`);
+      for (const c of m.cut) fail('C', `${tag} ${screen}: cut: ${c}`);
+      check('C', !m.sideways, `${tag} ${screen}: no sideways page scroll`);
+      if (screen === 'hub') check('C', m.overlaps === 0, `${tag} hub: the help button covers ${m.overlaps} piece(s) of header text${m.overlapWords.length ? ` (${m.overlapWords.join(', ')})` : ''}`);
+      else if (b) check('C', m.overlaps <= b.overlaps, `${tag} ${screen}: the help button covers ${m.overlaps} piece(s) of text, ${b.overlaps} on the base`);
+      if (b) check('C', m.small <= b.small, `${tag} ${screen}: ${m.small} text elements under 12px, ${b.small} on the base`);
+      else console.log(`  INFO  C  ${tag} ${screen}: ${m.small} text elements under 12px, help overlaps ${m.overlaps}`);
+      if (!m.font.length && !m.controls.length && !m.cut.length && (m.sizes.length || screen === 'hub')) pass('C', `${tag} ${screen}: changed text at 12px or more, controls at 44px or more (${m.sizes.join(', ') || 'none here'})`);
+      if (m.cellSize) console.log(`  INFO  C  ${tag} ${screen}: a calendar day cell is ${m.cellSize} px (a seventh of the grid, 46px tall by rule)`);
+    }
+    check('C', (head.hub?.cls ?? 1) === 0, `${tag} hub: layout shift after the first hub frame ${head.hub?.cls}`);
+    if (head.errors?.length) fail('C', `${tag}: page error ${head.errors[0].slice(0, 160)}`);
+  }
+}
+
+/* ---------------- F. Motion and help ---------------- */
+if (SECTIONS.has('F')) {
+  console.log('F. Reduced motion and the help');
+  for (const sizeKey of ['s320', 's390', 's1280']) {
+    const { ctx, page } = await openPage(HEAD, SIZE[sizeKey], { reduced: true });
+    try {
+      await startCareer(page, HEAD, { era: '2026-27', nation: 'England', league: 'Premier League', club: 'Liverpool', take: false });
+      const tiles = page.locator('[data-cm-hub] .grid > button:has(> div.uppercase)');
+      await tiles.nth(0).hover();
+      await tiles.nth(1).hover();
+      await page.waitForTimeout(300);
+      const running = await page.evaluate(() => document.getAnimations().filter(a => a.playState === 'running').map(a => a.animationName ?? a.transitionProperty ?? 'animation'));
+      check('F', running.length === 0, `${sizeKey}: nothing animates on the hub under reduced motion after hovering two tiles (${running.length ? running.join(', ') : 'none running'})`);
+      await page.locator('button[aria-label="How to play"]').first().click();
+      const dialog = page.getByRole('dialog', { name: 'How to Play Club Manager' });
+      await dialog.waitFor({ timeout: 10000 });
+      const text = await dialog.innerText();
+      check('F', text.length > 200, `${sizeKey}: the help opens with its rules (${text.length} characters)`);
+      const stale = ['Rest first', 'Full training', 'run-in simulated'].filter(w => text.includes(w));
+      check('F', stale.length === 0, `${sizeKey}: the help names none of the retired words${stale.length ? ` (found ${stale.join(', ')})` : ''}`);
+      await page.keyboard.press('Escape');
+    } catch (e) {
+      fail('F', `${sizeKey}: ${String(e).split('\n')[0].slice(0, 200)}`);
+    }
+    await ctx.close();
+  }
 }
 
 /* ---------------- D. Must not move ---------------- */
