@@ -1,0 +1,4 @@
+build exit=0 31s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+fonts exit=0 1s | Prepared 9 declared font dependencies for local fulfillment.
+sim exit=0 9s | PASS agent review product and proof source bytes held.
+dbgwalk exit=1 336s | PASS 1280-self 152 checks

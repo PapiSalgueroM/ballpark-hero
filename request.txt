@@ -1,0 +1,6 @@
+#!serve
+#!playwright
+#!serial
+fonts: mkdir -p .tmp-fx/font-cache && FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only
+sim: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerAgentReview.mjs
+dbgwalk: node .rc/x/dbgAgent.mjs && FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playSoccerAgentReview.mjs > $RC_OUT/dbg.log 2>&1; s=$?; git checkout -- scripts; grep -E "^DBG|^FAIL|^PASS" $RC_OUT/dbg.log | cut -c1-3000; exit $s
