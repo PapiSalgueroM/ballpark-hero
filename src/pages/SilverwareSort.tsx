@@ -231,6 +231,7 @@ const SilverwareSort = () => {
         </p>
 
         <GameSeoContent
+          reportControl={<ReportQuestion gameType="silverware-sort" gameContext={{ mode }} />}
           pageHasOwnH1
           title="Silverware Sort | DoUKnowBall"
           description="A daily ordering puzzle over real trophy cabinets. Five teams from one competition, and you stack them by how many titles each has actually won, checked against the same audited record books the rest of the site runs on. Covers the Super Bowl, NBA, World Series, Stanley Cup, college football and hoops, the English title, the AFL and the NRL."
@@ -250,9 +251,7 @@ const SilverwareSort = () => {
         />
 
         <AdBanner slot="7540487748" format="horizontal" className="mt-8" />
-        <div className="flex justify-center mt-6">
-          <ReportQuestion gameType="silverware-sort" gameContext={{ mode }} />
-        </div>
+
         <GameNav />
       </GameShell>
     </>

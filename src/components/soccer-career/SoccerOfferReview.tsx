@@ -48,12 +48,12 @@ export function SoccerOfferReview({ club, review, onAccept }: {
         <div className="min-h-0 overflow-y-auto space-y-3 text-xs leading-relaxed">
           {help ? (
             <div data-offer-review-help className="space-y-3">
-              <p>The signed wage includes your agent's negotiating effect. This is contract pay, before separate income fees and spending.</p>
+              <p>The amount shown is your final contract wage, before separate income fees and spending.</p>
               <p>{money('Example: a €1000 base offer with a 10% increase signs at €1100 a week. Against a €1000 current wage, that is €100 more each week.')}</p>
               {/* Release AW fix pass: pay by age and form (Rounds 1262 to 1264) had no rule on screen for a new
                   club's offer. The numbers are soccerExtensionQuote's, read from src/lib/soccerCareerContracts.ts. */}
               <p data-offer-review-age-rule>From 30, another club's offer follows your age and your latest season, the way a renewal at your own club does. At overall 90 or more, off a season rated 8 or better with 20 appearances, it is 10% more (5% more from 34). At overall 80 or more off a season rated 7 or better it is the same money. Anyone else gets 5% less (15% less from 34), and another 5% comes off after a season rated under 6.7. The wage shown here already has it in.</p>
-              <p>{money('Example: at 35, with an overall of 76 and a latest season rated 7.1, a €1000 offer is made at €850 a week.')}</p>
+              <p>{money('Example: with No Agent, at 35, with an overall of 76 and a latest season rated 7.1, a €1000 offer is made at €850 a week.')}</p>
               <p>Squad fit compares your rating with the recorded squad for that season. It does not decide your starts. Missing squad data stays unavailable.</p>
               <p>Back leaves the offer untouched. Only Sign contract accepts this deal.</p>
             </div>
@@ -73,7 +73,7 @@ export function SoccerOfferReview({ club, review, onAccept }: {
                   <dd className="mt-1 space-y-1">
                     <strong data-offer-signed-wage={review.signedWage} className="block text-sm">{wage(review.signedWage)}</strong>
                     <span data-offer-contract-years={review.years} className="block">{review.years}-year contract</span>
-                    <span className="block text-muted-foreground">Agent effect included</span>
+                    <span className="block text-muted-foreground">Final contract wage</span>
                   </dd>
                 </div>
               </dl>

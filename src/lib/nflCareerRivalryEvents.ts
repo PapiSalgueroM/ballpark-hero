@@ -45,8 +45,9 @@
 import type { CareerState, SeasonLine } from "./nflMyCareer";
 import type { CareerRival } from "./careerRival";
 import {
-  rollRivalryEvent, forcedRetirementEvent, applyRivalryEvent as applyRivalryEventFor, factBeat, withSeasonPlayed, rosterBeat,
+  rollRivalryEvent, forcedRetirementEvent, applyRivalryEvent as applyRivalryEventFor,
 } from "./careerRivalryEvents";
+import { factBeat, withSeasonPlayed, rosterBeat } from "./careerFactBeats";
 import type { RivalryEvent, RivalryEventDef } from "./careerRivalryEvents";
 import { rivalryChoiceTick, resolvePendingRivalryChoice, meterOption } from "./careerRivalryChoices";
 import type { RivalryChoiceDef, RivalryChoiceCard } from "./careerRivalryChoices";
@@ -105,12 +106,12 @@ export const NFL_RIVALRY_EVENTS: RivalryEventDef<CareerState, CareerRival>[] = [
      "the Pro Bowl ballot". simSeason picks no Pro Bowl: the one all league honour it decides is the first team
      All-Pro (allPro in careerAwards.ts), which is on your season card and in your Trophy Case. So the beat is
      about that team now, read off your own record on the builder MLB's 206 and the NHL's 306 use
-     (ownRosterBeat in careerRivalryEvents.ts, where the rule is written): you made the first team, or you are
+     (ownRosterBeat in careerFactBeats.ts, deleted by Round 1313; its two cards are ownRosterCards there): you made the first team, or you are
      off it a year after you were on it. The NFL rival's season is not on your stat line yet, so nothing here
      says whether HE made a team.
      Round 1227: now it is. The rival plays your position on your own stat line (nflRivalSeason in
      nflMyCareer.ts) and the same All-Pro pass that judges you judges his season, so the beat names both
-     seasons, on the three cards the NBA's 306 has had since Round 1112 (rosterBeat in careerRivalryEvents.ts):
+     seasons, on the three cards the NBA's 306 has had since Round 1112 (rosterBeat in careerFactBeats.ts):
      both of you, only you, only him, dealt only when at least one of you made the first team. Where the game's
      first team names one man (quarterback, running back, tight end, kicker: the team as it is picked today,
      which the award table uses in every era, sources beside NFL_ALL_PRO in careerAwards.ts) the "both" card

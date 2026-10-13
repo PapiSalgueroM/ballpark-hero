@@ -5,12 +5,12 @@
     "date": "2026-10-09"
   },
   "/about": {
-    "hash": "74a425d771c0b5e1",
-    "date": "2026-10-01"
+    "hash": "dbd4413c1809942b",
+    "date": "2026-10-13"
   },
   "/accessibility": {
-    "hash": "b723b35037fcd796",
-    "date": "2026-10-02"
+    "hash": "5df720d037da2b21",
+    "date": "2026-10-13"
   },
   "/afl-higher-lower": {
     "hash": "fc854d1cd1cd050e",
@@ -93,8 +93,8 @@
     "date": "2026-10-06"
   },
   "/club-manager": {
-    "hash": "6fa73586dbb290cb",
-    "date": "2026-10-09"
+    "hash": "92884906395d8cd5",
+    "date": "2026-10-13"
   },
   "/clue-auction": {
     "hash": "eb595f5de269d4aa",
@@ -129,8 +129,8 @@
     "date": "2026-09-30"
   },
   "/contact": {
-    "hash": "7be5f0e1d001c2bb",
-    "date": "2026-08-25"
+    "hash": "a681f93116dd8c3b",
+    "date": "2026-10-13"
   },
   "/contract-chaos": {
     "hash": "ccd75e13a7a82412",
@@ -181,8 +181,8 @@
     "date": "2026-10-07"
   },
   "/football-connect-4": {
-    "hash": "6c6fef315a592d41",
-    "date": "2026-09-30"
+    "hash": "e94c6e5b0daaba3c",
+    "date": "2026-10-13"
   },
   "/football-grid": {
     "hash": "04a0fd53151def05",
@@ -221,8 +221,8 @@
     "date": "2026-09-19"
   },
   "/guess-the-college": {
-    "hash": "054d430e4fea8483",
-    "date": "2026-09-30"
+    "hash": "b36d360047644172",
+    "date": "2026-10-13"
   },
   "/guess-the-golfer": {
     "hash": "d0a5ded74d80c9ae",
@@ -453,16 +453,16 @@
     "date": "2026-10-01"
   },
   "/perfect-lineup-f1": {
-    "hash": "087d160bba04b7d5",
-    "date": "2026-09-19"
+    "hash": "cfedb79c242d5df9",
+    "date": "2026-10-13"
   },
   "/perfect-lineup-nba": {
-    "hash": "3a600460d4e4319a",
-    "date": "2026-09-30"
+    "hash": "5c818e4a0df3cf7d",
+    "date": "2026-10-13"
   },
   "/perfect-lineup-nhl": {
-    "hash": "b5c6f110ba0c4521",
-    "date": "2026-10-01"
+    "hash": "fe2f888dca470d4e",
+    "date": "2026-10-13"
   },
   "/perfect-season-mlb": {
     "hash": "37a814f238fbf0ed",
@@ -481,16 +481,16 @@
     "date": "2026-10-01"
   },
   "/player-bingo": {
-    "hash": "618b428c631226ce",
-    "date": "2026-10-01"
+    "hash": "9394c65fe9bd9a1a",
+    "date": "2026-10-13"
   },
   "/player-stock-market": {
-    "hash": "6b2136f1e15d79ce",
-    "date": "2026-09-30"
+    "hash": "fed7d018989b1f49",
+    "date": "2026-10-13"
   },
   "/privacy": {
-    "hash": "dd79769546ebc3a4",
-    "date": "2026-10-09"
+    "hash": "d4753091e2ae607c",
+    "date": "2026-10-13"
   },
   "/pro-basketball": {
     "hash": "442114160c5d5786",
@@ -513,68 +513,68 @@
     "date": "2026-10-01"
   },
   "/rarity-round": {
-    "hash": "a80a0c21573d00d8",
-    "date": "2026-09-30"
+    "hash": "c479830bc067baec",
+    "date": "2026-10-13"
   },
   "/rebuild": {
     "hash": "fff04cbb11032a33",
     "date": "2026-10-03"
   },
   "/records": {
-    "hash": "0a93d340bb460176",
-    "date": "2026-09-30"
+    "hash": "acdee1ac20841eca",
+    "date": "2026-10-13"
   },
   "/records/afl-premiers": {
-    "hash": "5555085b7cfd7df2",
-    "date": "2026-09-30"
+    "hash": "ef3fc52143e2dc97",
+    "date": "2026-10-13"
   },
   "/records/brownlow-medal-winners": {
-    "hash": "285aaf09082b01d2",
-    "date": "2026-09-30"
+    "hash": "ad7d8865d956e964",
+    "date": "2026-10-13"
   },
   "/records/college-football-national-champions": {
-    "hash": "2b25d974056f1293",
-    "date": "2026-09-30"
+    "hash": "4ebc9d3c96a53b71",
+    "date": "2026-10-13"
   },
   "/records/dally-m-medal-winners": {
-    "hash": "7d55892246b501e8",
-    "date": "2026-09-30"
+    "hash": "776c85a810e07d7f",
+    "date": "2026-10-13"
   },
   "/records/english-football-champions": {
-    "hash": "84174dedab8c576d",
-    "date": "2026-09-30"
+    "hash": "50ea575b820cb262",
+    "date": "2026-10-13"
   },
   "/records/heisman-trophy-winners": {
-    "hash": "da59435b81784d1b",
-    "date": "2026-09-30"
+    "hash": "af83f9b18c448f2b",
+    "date": "2026-10-13"
   },
   "/records/nba-champions": {
-    "hash": "724356585681d6e3",
-    "date": "2026-09-30"
+    "hash": "1e6f8d454f7ae266",
+    "date": "2026-10-13"
   },
   "/records/ncaa-basketball-champions": {
-    "hash": "2c2d6beef38c288d",
-    "date": "2026-09-30"
+    "hash": "dd3633d08d73148f",
+    "date": "2026-10-13"
   },
   "/records/nrl-premiers": {
-    "hash": "9e466befb7ddba76",
-    "date": "2026-09-30"
+    "hash": "9a36f36e2a0e6732",
+    "date": "2026-10-13"
   },
   "/records/stanley-cup-winners": {
-    "hash": "906854c7e646d259",
-    "date": "2026-09-30"
+    "hash": "1d06d0d7e24240aa",
+    "date": "2026-10-13"
   },
   "/records/super-bowl-winners": {
-    "hash": "04432ed5dd0a51a6",
-    "date": "2026-09-30"
+    "hash": "b0398fdf1b8ab00d",
+    "date": "2026-10-13"
   },
   "/records/wnba-champions": {
-    "hash": "d56bfb1d752a3736",
-    "date": "2026-09-30"
+    "hash": "551dd0dbc3434d9e",
+    "date": "2026-10-13"
   },
   "/records/world-series-winners": {
-    "hash": "fc59d5ea6591ae35",
-    "date": "2026-09-30"
+    "hash": "23467a4ab2a52b9a",
+    "date": "2026-10-13"
   },
   "/score-predictor": {
     "hash": "2b287274e8d627d6",
@@ -597,8 +597,8 @@
     "date": "2026-10-09"
   },
   "/soccer-career": {
-    "hash": "f577209c49a627d3",
-    "date": "2026-10-10"
+    "hash": "2155396bb7cde6ce",
+    "date": "2026-10-13"
   },
   "/soccer-conquest": {
     "hash": "c2c02b2757b166c2",
@@ -617,8 +617,8 @@
     "date": "2026-09-19"
   },
   "/squad-deal": {
-    "hash": "6afa124666f8a35f",
-    "date": "2026-09-30"
+    "hash": "09ec4cba1c794aca",
+    "date": "2026-10-13"
   },
   "/stadium-tycoon": {
     "hash": "7a4ca715b7f2be88",
@@ -629,8 +629,8 @@
     "date": "2026-10-01"
   },
   "/teammates": {
-    "hash": "34e4bf637b66fe74",
-    "date": "2026-10-03"
+    "hash": "1db367751073d203",
+    "date": "2026-10-13"
   },
   "/tennis-chain": {
     "hash": "1b1bf186d44f1d7a",
@@ -657,8 +657,8 @@
     "date": "2026-10-06"
   },
   "/whats-new": {
-    "hash": "ab03a69a89b5c0d4",
-    "date": "2026-10-12"
+    "hash": "56bbabf210d12ae4",
+    "date": "2026-10-13"
   },
   "/who-am-i": {
     "hash": "567323061a3fc691",
@@ -673,8 +673,8 @@
     "date": "2026-09-30"
   },
   "/world-cup-2026-results": {
-    "hash": "76a539c3621e128f",
-    "date": "2026-09-30"
+    "hash": "ba726d16b7c0f8b4",
+    "date": "2026-10-13"
   },
   "/world-cup-bracket": {
     "hash": "ec24b57eecf5999e",

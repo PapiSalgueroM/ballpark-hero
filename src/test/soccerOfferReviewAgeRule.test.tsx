@@ -38,7 +38,7 @@ describe('the contract review says how a new club pays from 30', () => {
     for (const part of ['From 30', 'overall 90 or more', 'rated 8 or better with 20 appearances', '10% more (5% more from 34)',
       'overall 80 or more off a season rated 7 or better it is the same money', '5% less (15% less from 34)',
       'another 5% comes off after a season rated under 6.7']) expect(text, part).toContain(part);
-    expect(help).toHaveTextContent('Example: at 35, with an overall of 76 and a latest season rated 7.1, a €1000 offer is made at €850 a week.');
+    expect(help).toHaveTextContent('Example: with No Agent, at 35, with an overall of 76 and a latest season rated 7.1, a €1000 offer is made at €850 a week.');
     /* The agent's example the other lane's walk reads is still there, word for word. */
     expect(help).toHaveTextContent('Example: a €1000 base offer with a 10% increase signs at €1100 a week. Against a €1000 current wage, that is €100 more each week.');
   });

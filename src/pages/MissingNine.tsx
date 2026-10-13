@@ -331,6 +331,7 @@ const MissingNine = () => {
         )}
 
         <GameSeoContent
+          reportControl={<ReportQuestion gameType="missing-nine" gameContext={{ lineup: lineup.id }} />}
           pageHasOwnH1
           title="Missing Nine | DoUKnowBall"
           description="A verified real World Series starting nine is shown in batting order with one name blanked out. Remember who actually started, including the surprise starters history forgot."
@@ -348,9 +349,7 @@ const MissingNine = () => {
         />
 
         <AdBanner slot="7540487748" format="horizontal" className="mt-8" />
-        <div className="flex justify-center mt-6">
-          <ReportQuestion gameType="missing-nine" gameContext={{ lineup: lineup.id }} />
-        </div>
+
         <GameNav />
       </GameShell>
     </>

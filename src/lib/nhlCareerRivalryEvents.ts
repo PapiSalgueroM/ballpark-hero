@@ -36,8 +36,9 @@
 import type { NhlCareerState, NhlSeasonLine } from "./nhlMyCareer";
 import type { CareerRival } from "./careerRival";
 import {
-  rollRivalryEvent, forcedRetirementEvent, applyRivalryEvent as applyRivalryEventFor, withSeasonPlayed, ownRosterBeat, ALL_STAR_OWN_ROSTER,
+  rollRivalryEvent, forcedRetirementEvent, applyRivalryEvent as applyRivalryEventFor,
 } from "./careerRivalryEvents";
+import { withSeasonPlayed, rosterBeat, ALL_STAR_ROSTER, ALL_STAR_OWN_ROSTER } from "./careerFactBeats";
 import type { RivalryEvent, RivalryEventDef } from "./careerRivalryEvents";
 import { rivalryChoiceTick, resolvePendingRivalryChoice, meterOption } from "./careerRivalryChoices";
 import type { RivalryChoiceDef, RivalryChoiceCard } from "./careerRivalryChoices";
@@ -93,11 +94,18 @@ export const NHL_RIVALRY_EVENTS: RivalryEventDef<NhlCareerState, CareerRival>[] 
   },
   /* Round 1149: no coin. The beat flipped one for which of you made the All-Star ballot, in a game whose
      engine picks All-Stars for real (nhlAllStar in careerAwards.ts), so the card could say you made it in a
-     year your own season card said you did not. It is read off your own season now, the one just played, on
-     the builder MLB's 206 uses (ownRosterBeat in careerRivalryEvents.ts, where the rule is written): you made
-     it, or you are off it a year after you were on it. The NHL rival's season is not on your stat line yet, so
-     nothing here says whether HE made a roster. */
-  ownRosterBeat<NhlCareerState, CareerRival>({ id: 306, award: NHL_ROSTER_AWARD, ...ALL_STAR_OWN_ROSTER }),
+     year your own season card said you did not. Round 1313: the NHL rival plays your position on your own
+     stat line now (nhlRivalSeason in nhlMyCareer.ts) and the same All-Star pass that judges you judges his
+     season, so the beat names both seasons, on the three cards MLB's 206, the NBA's 306 and the NFL's 206
+     share (rosterBeat and ALL_STAR_ROSTER in careerFactBeats.ts): both of you, only you, only him, dealt only
+     when at least one of you made it in the season he was judged on. The All-Star rosters name many men at
+     every position, so there is no one place rule here. The two cards of Round 1149 stay as `own`, never dealt
+     again, only so a save sitting on one of them still pays what that card printed. */
+  rosterBeat<NhlSeasonLine, NhlCareerState, CareerRival>({
+    id: 306, ...ALL_STAR_ROSTER,
+    mine: last => (last.awards ?? []).includes(NHL_ROSTER_AWARD),
+    own: { award: NHL_ROSTER_AWARD, made: ALL_STAR_OWN_ROSTER.made, dropped: ALL_STAR_OWN_ROSTER.dropped },
+  }),
   {
     id: 307, emoji: "⭐", title: "Rival's Cup",
     description: (_s, r) => `${r.name}'s team wins it all. Yours came up short.`,

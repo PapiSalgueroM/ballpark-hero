@@ -400,11 +400,10 @@ const MissingXi = () => {
 
         <AdBanner slot="7540487748" format="horizontal" className="mt-8" />
 
-        <div className="flex justify-center mt-6">
-          <ReportQuestion gameType="missing-xi" />
-        </div>
+
 
         <GameSeoContent
+          reportControl={<ReportQuestion gameType="missing-xi" />}
           pageHasOwnH1
           title="Missing XI: Guess the Famous Lineup's Missing Player"
           description="A real, famous starting XI from soccer history with one player blanked out. Name the missing man with escalating hints that never repeat what the card already shows. Champions League finals, World Cup finals, Euros finals and iconic title deciders."

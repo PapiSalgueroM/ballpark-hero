@@ -13,6 +13,7 @@ import { fileURLToPath } from 'node:url';
 import { gzipSync } from 'node:zlib';
 import { nextTenPatches } from './lib/careerNextTenAttribution1197.mjs';
 import { veteranPayPatches } from './lib/careerVeteranPay1262.mjs';
+import { awardGenerationsPatches } from './lib/careerAwardGenerations1318.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const SELF = fileURLToPath(import.meta.url);
@@ -192,6 +193,9 @@ function inverseTruthPatches() {
   /* Release AW: Rounds 1262 to 1264 pay a career of 30 or more by age and form on purpose
      (scripts/lib/careerVeteranPay1262.mjs). The attributed engine takes that out too, at its one condition. */
   for (const row of veteranPayPatches()) patches.push({ id: row.id, file: row.file, from: row.from, to: row.to });
+  /* Round 1318: Rounds 1280 to 1282 and 1318 keep the made up Ballon d'Or rivals in a saved pool on purpose
+     (scripts/lib/careerAwardGenerations1318.mjs). The attributed engine takes that out too, its rows in order. */
+  for (const row of awardGenerationsPatches()) patches.push({ id: row.id, file: row.file, from: row.from, to: row.to });
   return patches;
 }
 
@@ -250,7 +254,7 @@ async function fullCareerChecks(check, current, uncopied, original, save, report
   report.attribution = { edits: neutral.faultEdits, sharedFaultInverses: shared.map(edit => ({ inverseId: edit.id, faultId: faults.find(fault => fault.file === edit.file && fault.from === edit.from && fault.to === edit.to).id, fromSha256: sha(edit.from), toSha256: sha(edit.to), effective: true })), controlledEdits: controlled.faultEdits };
   save('attribution-edits', report.attribution);
   await check('attribution boundaries', () => {
-    assert.deepEqual(neutral.faultEdits.map(edit => edit.id).sort(), ['milestone-empty-return', 'milestone-final-return', 'hundred-goal-slot', 'exact-goal-slot', 'role-consequence', 'role-event-line', 'next-ten-wheel', 'next-ten-opening', ...veteranPayPatches().map(row => row.id)].sort(), 'both actual old weighted objects, both return sites, declared role metadata, and the two later additions of Rounds 1197 to 1208 are restored');
+    assert.deepEqual(neutral.faultEdits.map(edit => edit.id).sort(), ['milestone-empty-return', 'milestone-final-return', 'hundred-goal-slot', 'exact-goal-slot', 'role-consequence', 'role-event-line', 'next-ten-wheel', 'next-ten-opening', ...veteranPayPatches().map(row => row.id), ...awardGenerationsPatches().map(row => row.id)].sort(), 'both actual old weighted objects, both return sites, declared role metadata, and the two later additions of Rounds 1197 to 1208 are restored');
     assert.ok(neutral.faultEdits.every(edit => edit.effective && edit.beforeSha256 !== edit.afterSha256), 'every certified inverse changes exactly its loaded source');
     const expectedShared = control === 'milestoneHooks' ? ['milestone-final-return'] : control === 'milestoneLegacy' ? ['exact-goal-slot', 'hundred-goal-slot'] : [];
     assert.deepEqual(shared.map(edit => edit.id).sort(), expectedShared.sort(), 'only exact same-file/from/to certified inverse edits may be shared with a product fault');

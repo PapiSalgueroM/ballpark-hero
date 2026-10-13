@@ -314,6 +314,30 @@ export function dealGoals(key: string, count: number, eleven: readonly BookMan[]
   return out;
 }
 
+/**
+ * Round 1311. What dealGoals gives each man of an eleven ON AVERAGE, worked out from the same rule rather
+ * than rolled: a goal is a penalty `pen` of the time and a direct free kick `fk` of the time (each to the
+ * taker when the rule says so, else by the weight), and an open play goal is an own goal one time in
+ * `ownGoalOneIn` (nobody's) and otherwise goes by goalWeight. `share` is a man's part of his side's goals,
+ * `setPieces` the part of it from penalties and free kicks; `ownGoals` is nobody's part. The league
+ * leaders card prints its worked example from this, and the unit file holds it against a dealt sample.
+ */
+export function dealShares(eleven: readonly BookMan[], rules: BookRules): { men: { man: BookMan; share: number; setPieces: number }[]; ownGoals: number } {
+  const outfield = eleven.filter(m => m.p !== 'GK');
+  const theTaker = rules.taker ? takerOf(outfield) : null;
+  const weights = outfield.map(m => goalWeight(m.p, m.r));
+  const total = weights.reduce((s, w) => s + w, 0);
+  const byWeight = (i: number): number => (total > 0 ? weights[i] / total : 1 / outfield.length);
+  const pieces = rules.pen + rules.fk;
+  const open = 1 - pieces;
+  const own = open / rules.ownGoalOneIn;
+  const men = outfield.map((man, i) => {
+    const setPieces = pieces * (theTaker ? (man === theTaker ? 1 : 0) : byWeight(i));
+    return { man, share: setPieces + (open - own) * byWeight(i), setPieces };
+  });
+  return { men, ownGoals: own };
+}
+
 /** The assist of ONE goal whose scorer a match report already named, on a key of its own. */
 export function dealAssist(key: string, scorer: BookMan, onPitch: readonly BookMan[], rules: BookRules): BookMan | null {
   return assistFrom(keyedRng(key), scorer, onPitch, rules);

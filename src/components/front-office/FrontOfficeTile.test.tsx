@@ -17,7 +17,8 @@
  *   - a reload or leaving the box in the middle of a watch shows the
  *     result, never a clock, and plays nothing twice;
  *   - reduced motion: Watch shows the result at once;
- *   - the final week has no Watch (its press goes to the recap);
+ *   - the final week has Watch (Round 1309: its press opens the bracket;
+ *     the old button still goes to the recap);
  *   - a save from before the log shows the next game until its first
  *     press, and its chips then start at that week;
  *   - THE OWNER CARD IS ONE OF THE READERS: its pace line prints his wins,
@@ -232,18 +233,24 @@ describe('NFL front office: the Game Day tile', () => {
     expect(button('Play Week 7').disabled).toBe(false);
   });
 
-  it('the final week has no Watch: its press goes to the recap', async () => {
+  /* Round 1309: the final week has Watch now ("Play Week 17" and "Watch Week 17" open the bracket; the old button,
+     word for word, still plays the week and the whole postseason), so the tile's own line is true of it again */
+  it('the final week has Play, Watch and the old button, and the tile offers the watch', async () => {
     const { league, team } = leagueAt(REGULAR_WEEKS);
     save(shape(league, team));
     render(<Board />);
     await openWeek();
-    expect(screen.getByText('Play the final week + playoffs')).toBeTruthy();
-    expect(q('[data-watch-week]')).toBeNull();
-    expect(screen.queryByText(/^Watch Week/)).toBeNull();
-    /* and the tile does not offer what the week box does not: no "watch it", no result promised in the box */
+    const hisGame = league.schedule[REGULAR_WEEKS - 1].some((g: any) => g.home === team || g.away === team);
+    expect(hisGame, 'the case has a game of his in the final week').toBe(true);
+    expect(button(`Play Week ${REGULAR_WEEKS}`).disabled).toBe(false);
+    expect(button(`Watch Week ${REGULAR_WEEKS}`).disabled).toBe(false);
+    expect(button('Play the final week + playoffs').disabled).toBe(false);
+    /* in that order: the new press first, the old one last */
+    expect([...document.querySelectorAll('[data-press-row] button')].map(b => (b.textContent ?? '').trim()))
+      .toEqual([`Play Week ${REGULAR_WEEKS}`, `Watch Week ${REGULAR_WEEKS}`, 'Play the final week + playoffs']);
     expect(q('[data-gameday]')!.getAttribute('data-gameday-face')).toBe('next');
-    expect(text('[data-gameday-next-note]')).toBe('No Watch on this one. The final week runs straight into the playoffs.');
-    expect(text('[data-week-box]')).not.toMatch(/watch it|lands here/i);
+    expect(text('[data-gameday-next-note]')).toBe('Play it or watch it. Your result lands here.');
+    expect(text('[data-week-box]')).not.toMatch(/No Watch on this one|straight into the playoffs/);
   });
 
   it('NO SPOILER ON THE OWNER CARD: while he watches, its pace line is the one of before the press, and at full time the saved league\'s', async () => {

@@ -39,11 +39,11 @@ export function AgentReviewCard({ career, onChange }: { career: CareerState; onC
     <p className="font-bold">Your representation</p>
     <p className="mt-1 text-xs text-muted-foreground">{current.emoji} {current.name}{saved ? '. Your representation choice is saved for this season.' : '. Compare terms before your next deal.'}</p>
     <Dialog open={open} onOpenChange={changeOpen}>
-      <DialogTrigger asChild><Button ref={trigger} data-agent-review-open variant="outline" className="mt-3 min-h-11 w-full whitespace-normal">{saved ? 'Agent review help' : 'Review your agent'}</Button></DialogTrigger>
+      <DialogTrigger asChild><Button ref={trigger} data-agent-review-open variant="outline" className="mt-3 min-h-11 w-full whitespace-normal">{saved ? 'Representation help' : 'Review representation'}</Button></DialogTrigger>
       <DialogContent data-agent-review-dialog className="flex max-h-[calc(100dvh_-_2rem)] w-[calc(100vw_-_2rem)] max-w-md flex-col gap-3 overflow-hidden rounded-xl p-4 [&>button:last-child]:h-11 [&>button:last-child]:w-11 [&>button:last-child]:opacity-100"
         onOpenAutoFocus={event => { event.preventDefault(); heading.current?.focus({ preventScroll: true }); }}
         onCloseAutoFocus={event => { event.preventDefault(); trigger.current?.focus({ preventScroll: true }); }}>
-        <DialogTitle ref={heading} data-agent-review-title tabIndex={-1} className="shrink-0 pr-12 text-base">{saved ? 'Your agent choice' : 'Review your representation'}</DialogTitle>
+        <DialogTitle ref={heading} data-agent-review-title tabIndex={-1} className="shrink-0 pr-12 text-base">{saved ? 'Your representation choice' : 'Review your representation'}</DialogTitle>
         <DialogDescription className="shrink-0">Current: {current.name}. Your current deal stays the same.</DialogDescription>
         <div className="min-h-0 flex-1 space-y-3 overflow-y-auto text-xs leading-relaxed">
           {screen === 'help' ? <div data-agent-review-help className="space-y-3">
@@ -65,12 +65,12 @@ export function AgentReviewCard({ career, onChange }: { career: CareerState; onC
             {terms(selected)}
             <p>Your current wage, savings and already-paid agent fees stay the same. Future deals use these terms.</p>
             <p>This uses your representation change for this recorded season.</p>
-            <Button data-agent-review-choices-open variant="outline" onClick={() => setScreen('choices')} className="min-h-11 w-full whitespace-normal">Choose another agent</Button>
+            <Button data-agent-review-choices-open variant="outline" onClick={() => setScreen('choices')} className="min-h-11 w-full whitespace-normal">Choose different representation</Button>
           </div> : null}
         </div>
         <div className="flex shrink-0 gap-2">
           <Button data-agent-review-cancel variant="outline" onClick={() => setOpen(false)} className="min-h-11 min-w-11 flex-1">Back</Button>
-          <Button data-agent-review-help-open variant="outline" aria-label="Agent review rules" onClick={() => setScreen('help')} className="min-h-11 min-w-11">?</Button>
+          <Button data-agent-review-help-open variant="outline" aria-label="Representation rules" onClick={() => setScreen('help')} className="min-h-11 min-w-11">?</Button>
           {!saved && (screen === 'help' ? <Button data-agent-review-choices-open onClick={() => setScreen('choices')} className="min-h-11 min-w-11 flex-1 whitespace-normal">Compare agents</Button> : screen === 'choices' ? <Button data-agent-review-review-open disabled={!selected || selected.id === current.id || !eligibility.available} onClick={() => setScreen('review')} className="min-h-11 min-w-11 flex-1 whitespace-normal">Review switch</Button> : <Button data-agent-review-confirm disabled={!selected || selected.id === current.id || !eligibility.available} onClick={confirm} className="min-h-11 min-w-11 flex-1 whitespace-normal">Make switch</Button>)}
         </div>
       </DialogContent>

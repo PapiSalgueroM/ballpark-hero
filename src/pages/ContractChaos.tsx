@@ -224,6 +224,7 @@ const ContractChaos = () => {
         </p>
 
         <GameSeoContent
+          reportControl={<ReportQuestion gameType="contract-chaos" gameContext={{ mode: g.mode, phase: g.phase, player: deal?.player.name ?? null }} />}
           pageHasOwnH1
           title="Contract Chaos | DoUKnowBall"
           description="A soccer agent game. Compare contract offers for a generated footballer on wages, years, role, bonuses, release clauses and club ambition, sign one and watch five seasons decide whether you got it right."
@@ -237,9 +238,7 @@ const ContractChaos = () => {
         />
 
         <AdBanner slot="7540487748" format="horizontal" className="mt-8" />
-        <div className="flex justify-center mt-6">
-          <ReportQuestion gameType="contract-chaos" gameContext={{ mode: g.mode, phase: g.phase, player: deal?.player.name ?? null }} />
-        </div>
+
         <GameNav />
       </GameShell>
     </>

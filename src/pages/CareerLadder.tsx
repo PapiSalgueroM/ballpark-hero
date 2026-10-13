@@ -623,14 +623,13 @@ const CareerLadder = () => {
 
         <AdBanner slot="7540487748" format="horizontal" className="mt-8" />
 
-        <div className="flex justify-center mt-6">
-          <ReportQuestion
-            gameType="career-ladder"
-            gameContext={activePlayer ? { playerId: activePlayer.id, playerName: activePlayer.name } : {}}
-          />
-        </div>
+
 
         <GameSeoContent
+          reportControl={<ReportQuestion
+            gameType="career-ladder"
+            gameContext={activePlayer ? { playerId: activePlayer.id, playerName: activePlayer.name } : {}}
+          />}
           pageHasOwnH1
           title="Career Ladder: Guess the Footballer from Their Career"
           description="Every round hides a real footballer behind their career ladder. You start with a single early stint, just a club, a season and a stat line, and work out who climbed it. The fewer clues you need, the bigger your score."

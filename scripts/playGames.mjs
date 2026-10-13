@@ -256,7 +256,7 @@ async function answerInput(page, tryClick, step) {
 // Never press the site chrome: Back and Home leave the game, which is not a
 // bug, it is the harness walking out of the room. How to play only reopens
 // the dialog we just closed, and Report opens a form over the game.
-const CHROME = /^(back|home|track stats|douknowball|menu|accept|essential only|share|copy|how to play|report|report a bug|close|privacy|terms|about|contact|log in|sign up)$/i;
+const CHROME = /^(back|home|track stats|douknowball|menu|accept|essential only|share|copy|how to play|report|report a bug|report a problem|close|privacy|terms|about|contact|log in|sign up)$/i;
 /* Round 118: and never surrender. This is the same rule as never pressing Back
    or Home, one level in. On /transfer-path the harness opened the game and
    immediately pressed "Give up and see a path", then confirmed it with "Yes,

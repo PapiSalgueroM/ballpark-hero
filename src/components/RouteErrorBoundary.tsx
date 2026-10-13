@@ -172,7 +172,7 @@ export class RouteErrorBoundary extends Component<Props, State> {
             </p>
           )}
           <p className="mt-5 text-xs text-muted-foreground">
-            Telling us what you were doing helps a lot. The report a bug button is at the bottom
+            Telling us what you were doing helps a lot. The Report a problem button is at the bottom
             of this page.
           </p>
         </div>
