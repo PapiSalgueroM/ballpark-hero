@@ -157,9 +157,14 @@ async function linesOf(spot: Spot, way: Way, ledger: number[][] = []): Promise<L
   if (!kick) throw new Error(`seasonCentreOwnGoals: no kick off card (${way}): ${container.textContent?.slice(0, 160)}`);
   expect(container.querySelector('[data-kickoff-resumed]')?.textContent, `${way}: the season opens at his place`).toContain(`${spot.md - 1} of ${spot.marked.games.length} played`);
   await act(async () => { fireEvent.click(kick); });
-  /* a moment taken the other way can move a poster (the day the title is won) onto this matchday: step past it */
-  const past = container.querySelector(`[data-matchday="${spot.md}"]`) ? null : container.querySelector<HTMLButtonElement>('[data-centre-bar] button');
-  if (past) await act(async () => { fireEvent.click(past); });
+  /* a moment taken the other way can move a poster (the day the title is won) onto this matchday: step past it.
+     Round 1327: the keyed event deck moves the seeded stream this search walks, and the save it finds now puts more
+     than one screen in front of the matchday, so step past up to three, stopping as soon as the matchday shows. */
+  for (let n = 0; n < 3 && !container.querySelector(`[data-matchday="${spot.md}"]`); n += 1) {
+    const past = container.querySelector<HTMLButtonElement>('[data-centre-bar] button');
+    if (!past) break;
+    await act(async () => { fireEvent.click(past); });
+  }
   const day = container.querySelector(`[data-matchday="${spot.md}"]`);
   if (!day) throw new Error(`seasonCentreOwnGoals: matchday ${spot.md} is not on the stage (${way})`);
   expect(day.querySelector('[data-full-time]'), `${way}: the match is at full time`).not.toBeNull();

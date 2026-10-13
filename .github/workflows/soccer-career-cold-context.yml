@@ -51,7 +51,7 @@ jobs:
           git rev-parse HEAD > "$CAREER_POPULARITY_OUT/source-head.txt"
           git status --porcelain --untracked-files=no > "$CAREER_POPULARITY_OUT/source-before.txt"
           test ! -s "$CAREER_POPULARITY_OUT/source-before.txt"
-          git diff --exit-code 42a7f7c999cb13bb24bf0992537e4ff84b112f6d -- src scripts package.json package-lock.json bun.lock ':!src/lib/soccerCareerRealismA.ts' ':!src/test/soccerCareerColdContext.test.ts' ':!scripts/simSoccerCareerColdContext.mjs'
+          git diff --exit-code 42a7f7c999cb13bb24bf0992537e4ff84b112f6d -- src scripts package.json package-lock.json bun.lock ':!src/lib/soccerCareerRealismA.ts' ':!src/test/soccerCareerColdContext.test.ts' ':!scripts/simSoccerCareerColdContext.mjs' ':!src/test/seasonCentreOwnGoals.test.tsx' ':!scripts/qa/compareSoccerCareerColdReplay.mjs'
           git diff --exit-code 42a7f7c999cb13bb24bf0992537e4ff84b112f6d -- .github/workflows ':!.github/workflows/soccer-career-cold-context.yml' index.html
           if test "$CAREER_POPULARITY_PHASE" = baseline; then
             git diff --exit-code 0a43994b2de3f882e3010934e0375a0a13d6a1c1 -- src/lib/soccerCareerLife.ts src/lib/soccerCareerLifeConsequences.ts
@@ -125,6 +125,9 @@ jobs:
       - name: Normal fleet discovery without a packet artifact variable
         if: env.CAREER_COLD_PHASE == 'fixed'
         run: env -u CAREER_COLD_OUT ONLY=simSoccerCareerColdContext node scripts/runAllSims.mjs 2>&1 | tee "$CAREER_POPULARITY_OUT/fleet-discovery.log"
+      - name: Actual original and accepted replay navigation comparison
+        if: env.CAREER_COLD_PHASE == 'fixed'
+        run: CAREER_COLD_REPLAY_OUT="$CAREER_COLD_OUT/replay-method" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/compareSoccerCareerColdReplay.mjs 2>&1 | tee "$CAREER_COLD_OUT/replay-method.log"
       - name: Full unit suite
         id: full_unit_suite
         continue-on-error: true
