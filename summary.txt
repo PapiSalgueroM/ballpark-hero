@@ -1,0 +1,7 @@
+build exit=0 29s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+playCmQuickSubs exit=0 16s | playCmQuickSubs: 3 viewports, 2 actual saved fixtures, 6 settled reports, 3 effective controls, zero external forwarding; source held.
+playClubManagerSaveLeave exit=0 22s | playClubManagerSaveLeave: green, the career survived leaving the page and the banner behaves
+playClubManagerSlots exit=0 11s | playClubManagerSlots: green
+w1079 exit=0 79s | PASS manager match plans native: 3 actual hook journeys, 12 effective restored DOM faults, independent engine previews and kickoff, reload and club isolation.
+playHomeFold exit=0 31s | playHomeFold: green. The first thing on the page is something to play.
+playSaveKeeper exit=0 623s | playSaveKeeper: green on the BRANCH ARM ONLY (KEEPER_NO_BASE=1). The base arm and journey K were NOT run, so this run carries no loss control and says nothing about the k
