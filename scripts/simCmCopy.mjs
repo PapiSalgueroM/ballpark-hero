@@ -38,6 +38,13 @@
       approach, at 2, 1 and 0 matches left: the line names the club, the
       man, his post and the weeks off the approach, counts offers, and never
       says "N matches left this season". Control staff: the line back.
+      The summer (fix pass of 2026-10-13): Club Manager sets no
+      walkAtSummer, so approaches forced three, two and one weeks from the
+      calendar's end must say the offer lapses exactly from two weeks out,
+      and the rest of the season and the summer are played to prove it (he
+      walks, or he is still in his post). Control summer: that boundary one
+      week late. Control walk: walkAtSummer on, so the man the line says
+      stays is gone (the played half is not taken on trust).
    5. THE MONEY CARD (cm M14, the display half). FinancesScreen rendered with
       react-dom/server inside a MemoryRouter for a seeded Liverpool season at
       week 18, the same week with a made up 400m signing on the books (the
@@ -109,8 +116,20 @@ const CONTROLS = {
   },
   staff: {
     file: 'src/lib/clubManagerStaff.ts', section: 4,
-    fixed: "? `${lead} Match their offer on the Staff desk within ${inWeeks} or he goes. You can match ${n} more offer${n === 1 ? '' : 's'} this season.`",
+    fixed: "? `${lead} Match their offer on the Staff desk within ${inWeeks} or he goes.${lapse} You can match ${n} more offer${n === 1 ? '' : 's'} this season.`",
     broken: "? `${STAFF_POST_INFO[post].emoji} ${club} have come in for ${person.name}. Match them or lose him: ${s.matchesLeft} match${s.matchesLeft === 1 ? '' : 'es'} left this season.`",
+  },
+  summer: {
+    file: 'src/lib/clubManagerStaff.ts', section: 4,
+    fixed: 'state.week + weeks >= state.calendar.length ?',
+    broken: 'state.week + weeks > state.calendar.length ?',
+  },
+  /* The played half of the summer check is not taken on trust: with the
+     packs' walkAtSummer switched on, the man the line says stays is gone. */
+  walk: {
+    file: 'src/lib/clubManagerStaff.ts', section: 4,
+    fixed: "  promotedFrom: 'On the academy staff already',",
+    broken: "  promotedFrom: 'On the academy staff already',\n  walkAtSummer: true,",
   },
 };
 const ctl = CONTROL ? CONTROLS[CONTROL] : null;
@@ -398,16 +417,72 @@ async function sectionStaff() {
       }
     }
     if (!line) { fail(`no approach for a level 9 desk in two seasons (matches left ${n})`); continue; }
-    const w = `${line.weeks} week${line.weeks === 1 ? '' : 's'}`;
-    const lead = `${line.post.emoji} ${line.club} have come in for ${line.name}, your ${line.post.label.toLowerCase()}.`;
-    const want = n > 0
-      ? `${lead} Match their offer on the Staff desk within ${w} or he goes. You can match ${n} more offer${n === 1 ? '' : 's'} this season.`
-      : `${lead} You have matched all the offers you can this season, so he goes in ${w} unless you let him go sooner.`;
+    const want = wantStaffLine(line, n, career.week + line.weeks >= career.calendar.length);
     if (line.left !== n) fail(`the desk holds ${line.left} matches after the tick, where ${n} were set`);
     if (/\d+ match(es)? left this season/.test(line.text)) fail(`with ${n} left the line still counts matches: "${line.text}"`);
     if (line.text !== want) fail(`with ${n} left the line reads\n      "${line.text}"\n    want\n      "${want}"`);
     else console.log(`   ${n} left: "${line.text}"`);
   }
+  /* The summer (fix pass of 2026-10-13, review minor 1). Club Manager sets no
+     walkAtSummer, so an approach still open when the season ends lapses and
+     he stays (gmRolloverStaff). Every calendar entry ticks once, so an
+     approach at week w walks only when w plus its weeks is short of the
+     calendar's length. Approaches forced at three, two and one weeks from the
+     end, at 2 and 0 matches left: the lapse sentence is there exactly from
+     two weeks out. Then the rule is played: the rest of the season is ticked
+     and the summer rolled over, and the man is gone exactly when the line
+     gave no lapse, and still in his post exactly when it did. Control summer:
+     the boundary one week late (> for >=), so two weeks out loses it. */
+  let forced = 0;
+  for (const n of [2, 0]) for (const back of [3, 2, 1]) {
+    Math.random = seeded(hashKey('cm-copy|staff'));
+    const career = cm.startCareer('Liverpool', 'now');
+    Math.random = REAL_RANDOM;
+    const L = career.calendar.length;
+    const desk = staff.ensureStaff(career);
+    for (const post of POSTS) if (desk[post]) desk[post] = { ...desk[post], level: 9, potential: 10, wage: staff.staffWage(9, false) };
+    let line = null;
+    for (let season = 1; season <= 400 && !line; season++) {
+      career.season = season;
+      career.week = L - back;
+      const d0 = staff.ensureStaff(career);
+      d0.poach = null;
+      d0.matchesLeft = n;
+      const before = career.aiHeadlines[0];
+      staff.tickStaff(career);
+      const d = staff.staffOf(career);
+      if (d.poach && career.aiHeadlines[0] !== before) {
+        const p = d[d.poach.postId];
+        line = { text: career.aiHeadlines[0], club: d.poach.club, postId: d.poach.postId, id: p.id, name: p.name, post: staff.STAFF_POST_INFO[d.poach.postId], weeks: d.poach.weeksLeft, left: d.matchesLeft };
+      }
+    }
+    const tag = `${n} left, an approach ${back} week${back === 1 ? '' : 's'} from the end of a ${L} entry calendar`;
+    if (!line) { fail(`${tag}: no approach in 400 seasons`); continue; }
+    forced += 1;
+    const late = career.week + line.weeks >= L;
+    if (late !== (back <= line.weeks)) fail(`${tag}: the harness reads the boundary wrong (late ${late})`);
+    const want = wantStaffLine(line, n, late);
+    if (line.text !== want) { fail(`${tag}: the line reads\n      "${line.text}"\n    want\n      "${want}"`); continue; }
+    for (let wk = career.week + 1; wk < L; wk++) { career.week = wk; staff.tickStaff(career); }
+    const gone = !staff.staffOf(career)[line.postId];
+    const next = { ...structuredClone(career), season: career.season + 1, week: 1 };
+    staff.rolloverStaff(next, career, false);
+    const kept = next.staff && next.staff[line.postId] && next.staff[line.postId].id === line.id;
+    if (late && (gone || !kept)) fail(`${tag}: the line says the offer lapses at the summer, but ${line.name} ${gone ? 'walked before it' : 'is not in his post after it'}`);
+    if (!late && !gone) fail(`${tag}: the line says he goes, but ${line.name} was still in his post at the season's end`);
+    if (!late && kept) fail(`${tag}: ${line.name} is back in his post after the summer`);
+    console.log(`   ${tag}: ${late ? 'lapses, he stays' : 'he goes'}: "${line.text}"`);
+  }
+  if (forced !== 6) fail(`the summer cases ran ${forced} of 6`);
+}
+
+function wantStaffLine(line, n, late) {
+  const w = `${line.weeks} week${line.weeks === 1 ? '' : 's'}`;
+  const lead = `${line.post.emoji} ${line.club} have come in for ${line.name}, your ${line.post.label.toLowerCase()}.`;
+  const lapse = late ? ' If the season ends first, the offer lapses and he stays.' : '';
+  return n > 0
+    ? `${lead} Match their offer on the Staff desk within ${w} or he goes.${lapse} You can match ${n} more offer${n === 1 ? '' : 's'} this season.`
+    : `${lead} You have matched all the offers you can this season, so he goes in ${w} unless you let him go sooner.${lapse}`;
 }
 
 async function sectionMoney() {

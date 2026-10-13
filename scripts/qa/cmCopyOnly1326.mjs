@@ -23,7 +23,9 @@
                     (kind drama, field text, and nothing else may change).
      intl           the break note's clause about the fixture list.
      staff          the approach headline counts offers, not matches, and gives
-                    the weeks (club, man and count read off the old line).
+                    the weeks (club, man and count read off the old line);
+                    near the season's end it also says the summer lets the
+                    offer lapse (fix pass of 2026-10-13).
    The screens' lines (Match Centre, world editor, the calendar's window line)
    and the money card are not in the save, so they are not rewrites here.
    A rewrite is ACTIVE when the head's source carries its new words; an active
@@ -162,8 +164,13 @@ const SAME_TREE = ENGINE_FILES.every(f => readSrc(BASE_ROOT, f) === readSrc(HEAD
 const OLD_INTL = 'and your fixtures do not stop for it, so they went straight after your last game';
 const NEW_INTL = 'and the calendar here keeps your fixtures going through it, so they went straight after your last game';
 const OLD_STAFF = /^(.+)\. Match them or lose him: (\d+) match(?:es)? left this season\.$/;
-const NEW_STAFF_ON = /^(.+), your ([a-z ]+)\. Match their offer on the Staff desk within (\d+) weeks? or he goes\. You can match (\d+) more offers? this season\.$/;
-const NEW_STAFF_NONE = /^(.+), your ([a-z ]+)\. You have matched all the offers you can this season, so he goes in (\d+) weeks? unless you let him go sooner\.$/;
+/* The fix pass of 2026-10-13: an approach that lands within its own weeks of
+   the calendar's end also says the summer lets the offer lapse (Club Manager
+   sets no walkAtSummer). Optional here, in its one place and its exact words;
+   simCmCopy section 4 pins when it must be there and plays the summer out. */
+const STAFF_LAPSE = ' If the season ends first, the offer lapses and he stays.';
+const NEW_STAFF_ON = /^(.+), your ([a-z ]+)\. Match their offer on the Staff desk within (\d+) weeks? or he goes\.( If the season ends first, the offer lapses and he stays\.)? You can match (\d+) more offers? this season\.$/;
+const NEW_STAFF_NONE = /^(.+), your ([a-z ]+)\. You have matched all the offers you can this season, so he goes in (\d+) weeks? unless you let him go sooner\.( If the season ends first, the offer lapses and he stays\.)?$/;
 const escRe = s => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 const sentenceCaps = s => s.replace(/(^|[.?!] )([a-z])/g, (m, p, c) => p + c.toUpperCase());
 const plural = (n, w) => `${n} ${w}${n === 1 ? '' : 's'}`;
@@ -191,11 +198,13 @@ function makeRewrites(head, base) {
     const none = h.match(NEW_STAFF_NONE);
     const hm = n > 0 ? on : none;
     if (!hm || hm[1] !== bm[1] || !postLabels.has(hm[2]) || Number(hm[3]) !== weeks) return false;
-    if (n > 0 && Number(hm[4]) !== n) return false;
+    if (n > 0 && Number(hm[5]) !== n) return false;
     const w = plural(weeks, 'week');
+    const lapse = hm[4] ? STAFF_LAPSE : '';
+    if (lapse) staffLapses += 1;
     return n > 0
-      ? h === `${bm[1]}, your ${hm[2]}. Match their offer on the Staff desk within ${w} or he goes. You can match ${plural(n, 'more offer')} this season.`
-      : h === `${bm[1]}, your ${hm[2]}. You have matched all the offers you can this season, so he goes in ${w} unless you let him go sooner.`;
+      ? h === `${bm[1]}, your ${hm[2]}. Match their offer on the Staff desk within ${w} or he goes.${lapse} You can match ${plural(n, 'more offer')} this season.`
+      : h === `${bm[1]}, your ${hm[2]}. You have matched all the offers you can this season, so he goes in ${w} unless you let him go sooner.${lapse}`;
   };
   const rewrites = [
     { id: 'article-board', apply: s => s.replace(winRe, 'Win $1') },
@@ -262,6 +271,7 @@ function makeComparer(rw) {
 let failures = 0;
 const fail = m => { failures += 1; console.error(`  FAIL: ${m}`); };
 const totalFired = {};
+let staffLapses = 0;
 
 function stepEntry(tree, s, policy) {
   const r = tree.cm.playNextEntry(s, { skipHalftime: true });
@@ -437,6 +447,7 @@ for (const fleet of FLEETS) {
 }
 const firedLine = Object.entries(totalFired).map(([k, v]) => `${k} ${v}`).join(', ') || 'none';
 console.log(`rewrites fired over ${careers} careers: ${firedLine}`);
+console.log(`staff lines that carry the summer lapse sentence (comparisons): ${staffLapses}`);
 if (SAME_TREE && Object.keys(totalFired).length) fail('the two trees hold the same engine and a rewrite fired');
 for (const [id, on] of Object.entries(ACTIVE)) if (on && !totalFired[id]) fail(`rewrite ${id} is active on the head and fired zero times over fleets ${FLEETS.join(',')}: widen the fleet (COPY_ONLY_SEASONS), never pick seeds`);
 if (CONTROL) {

@@ -430,6 +430,12 @@ export function releaseToPoacher(career: CareerState): CareerState | null {
  * matches) and gives the weeks off the approach gmTickStaff has just written.
  * An approach can land with none left (gmTickStaff does not look), and then
  * the line says he goes, because matchStaffOffer refuses.
+ * Club Manager sets no walkAtSummer, so an approach still open when the
+ * season ends lapses at the summer and he stays (gmRolloverStaff). Every
+ * calendar entry ticks once, at state.week or one past it, and the calendar
+ * only ever grows (cup weeks are inserted, never taken out), so short of
+ * week plus weeks reaching its length the deadline lands inside the season.
+ * From there on the line also says what the summer does.
  */
 export function tickStaff(state: CareerState): void {
   const s = ensureStaff(state);
@@ -440,12 +446,13 @@ export function tickStaff(state: CareerState): void {
   const inWeeks = `${weeks} week${weeks === 1 ? '' : 's'}`;
   const n = s.matchesLeft;
   const lead = `${STAFF_POST_INFO[post].emoji} ${club} have come in for ${person.name}, your ${STAFF_POST_INFO[post].label.toLowerCase()}.`;
+  const lapse = !Array.isArray(state.calendar) || state.week + weeks >= state.calendar.length ? ' If the season ends first, the offer lapses and he stays.' : '';
   state.aiHeadlines = [
     event.kind === 'walked'
       ? `${STAFF_POST_INFO[post].emoji} ${person.name} has gone to ${club} unanswered. ${state.clubName} need a new ${STAFF_POST_INFO[post].label.toLowerCase()}.`
       : n > 0
-        ? `${lead} Match their offer on the Staff desk within ${inWeeks} or he goes. You can match ${n} more offer${n === 1 ? '' : 's'} this season.`
-        : `${lead} You have matched all the offers you can this season, so he goes in ${inWeeks} unless you let him go sooner.`,
+        ? `${lead} Match their offer on the Staff desk within ${inWeeks} or he goes.${lapse} You can match ${n} more offer${n === 1 ? '' : 's'} this season.`
+        : `${lead} You have matched all the offers you can this season, so he goes in ${inWeeks} unless you let him go sooner.${lapse}`,
     ...state.aiHeadlines,
   ].slice(0, 8);
 }
