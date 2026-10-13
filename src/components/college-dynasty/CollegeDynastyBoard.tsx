@@ -308,6 +308,8 @@ export default function CollegeDynastyBoard<
   const start = (id: string) => {
     const state = sport.init(id, Math.random, { depth: true });
     if (sport.seat) startCollegeSeat(state, sport.seat);
+    /* A new dynasty can meet a market or a bid with the same key as the last one's: it starts unacted. */
+    marketActed.current = '';
     setSt(state); setPhase('season'); setTab('team'); setSeatOpen(false);
     setFeed(w.welcome(state, id, ctx));
     setRecap(null); setWonNow(false);
@@ -459,6 +461,7 @@ export default function CollegeDynastyBoard<
 
   const reset = () => {
     localStorage.removeItem(sport.saveKey);
+    marketActed.current = '';
     setPhase('pick'); setSt(null); setRecap(null);
   };
 

@@ -325,5 +325,43 @@ describe('Round 1320: a buyout bid after a big year', () => {
       expect(kept.st.myTeam).toBe(save.st.myTeam);
       expect(kept.st.seat.career.stints.length).toBe(1);
     });
+
+    /* The double tap guard remembers the market or bid a press acted on, by season, years out and stints. A new
+       dynasty in the same mount meets the same key at its first bid, so the guard has to start over with it. */
+    it(`${sport.name}: a second dynasty in one mount takes its own bid, though its key matches the first one's`, () => {
+      const rnd = vi.spyOn(Math, 'random').mockImplementation(lehmer(1328));
+      const { save, bid } = bidSave(sport);
+      const m = mount(sport, save);
+      const key = `${save.st.season}:0:1`;
+      fireEvent.click(m.button(`Go to ${bid.teamName}`));
+      expect(m.saved().st.myTeam).toBe(bid.teamId);
+      fireEvent.click(m.button('Close the class, run it back'));
+      fireEvent.click(m.button('Fire yourself and start over'));
+      const name = sport.binding.view(save.st).programs.find((p: { id: string; name: string }) => p.id === save.st.myTeam).name;
+      for (let seed = 1; seed <= 80; seed += 1) {
+        rnd.mockImplementation(lehmer(5000 + seed));
+        const pick = m.buttons().find(b => txt(b).startsWith(`${name}Prestige`));
+        expect(pick, `no pick button for ${name}`).toBeTruthy();
+        fireEvent.click(pick!);
+        fireEvent.click(m.button('Play'));
+        for (let i = 0; i < 30 && !m.q('[data-college-seat="recap"]'); i += 1) fireEvent.click(m.button(PLAY));
+        const st = m.saved().st;
+        expect(`${st.season}:${st.seat.career.seasonsOut}:${st.seat.career.stints.length}`).toBe(key);
+        const offer = collegeBid(st.seat, sport.binding.view(st));
+        if (offer) {
+          fireEvent.click(m.button(`Go to ${offer.teamName}`));
+          const after = m.saved();
+          expect(after.phase).toBe('recruit');
+          expect(after.st.myTeam).toBe(offer.teamId);
+          expect(after.st.seat.career.stints.length).toBe(2);
+          console.log(`${sport.name}: the second dynasty's bid came at seed ${5000 + seed}`);
+          return;
+        }
+        fireEvent.click(m.button('Hit the recruiting trail'));
+        fireEvent.click(m.button('Close the class, run it back'));
+        fireEvent.click(m.button('Fire yourself and start over'));
+      }
+      throw new Error(`${sport.name}: no second dynasty drew a bid over 80 seeds`);
+    }, 120000);
   }
 });
