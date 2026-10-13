@@ -1,0 +1,6 @@
+#!playwright
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-panel: node_modules/.bin/vitest run src/test/internationalPanelTruth.test.tsx src/test/tournamentCardMoment.test.tsx src/test/careerMomentKitLift.test.tsx src/test/soccerCareerDebutLegacy.test.tsx src/test/soccerWorldTruth.test.ts --testTimeout=300000 --hookTimeout=120000
+worldtruth: node scripts/simSoccerWorldTruth.mjs
+simCareerMoments: node scripts/simCareerMoments.mjs
+simCareerAwardsNight: node scripts/simCareerAwardsNight.mjs
