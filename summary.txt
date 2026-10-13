@@ -1,0 +1,13 @@
+simClubManagerALeague exit=0 10s | simClubManagerALeague: all checks passed
+simClubManagerMeters exit=0 32s | simClubManagerMeters: PASS. The board meter is the sack race, the fans move with results, and every table prints its goals pair.
+simCmLeagueFixtures exit=0 11s | simCmLeagueFixtures: OK, sections A to J green: 10 ledger(s), 10 frozen, 0 pending, 10 bound, 0 unbound, 3528 fixtures, 268 of 268 controls fired
+simCmVarLedger exit=0 1s | simCmVarLedger: all 691 checks passed.
+simAccessibility exit=0 0s | simAccessibility: all green
+simMissingElevenSources exit=0 1s | simMissingElevenSources: green. 40 sheets, 39 of them row for row against the record.
+simNbaLuxuryTax exit=0 19s | simNbaLuxuryTax: 347 checks passed over 10 seeded franchises and 5 seasons each. The bill is the published formula, a dollar over pays, every season tips off on fourteen 
+simNbaSeasonStats exit=0 15s | simNbaSeasonStats: 72 checks passed over 10 seeded franchises and 3 seasons each. Every game adds up, the box takes nothing from the league, the awards follow their rules
+simPerfectSeasonOdds exit=0 7s | simPerfectSeasonOdds: green. In all four sports the odds on the card are the odds in the sim, the copy agrees with both, and the best record keeps.
+simTrustCopy exit=0 0s | simTrustCopy: green. One disclaimer under every page and one count of the games, the registry's own.
+simClubManagerScore exit=0 95s | ALL SEASON SCORE CHECKS PASSED
+simClubManagerBudget exit=0 145s | simClubManagerBudget: PASS
+fences exit=1 268s | FENCE simGuideHeadings exit=0 | simGuideHeadings: green. 131 guides carry keyword h2s over h3 and h4 sections with every original sentence intact, and all 133 blocks rend
