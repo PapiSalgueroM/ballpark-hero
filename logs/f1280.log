@@ -1,0 +1,6 @@
+f1280 1280x900: 163 steps; phases {"youth":1,"contract_offer":2,"playing":6,"newspaper":9,"season_summary":8,"ballon_dor":26,"international_debut":2,"world_cup":13,"social_media_action":17,"random_events":44,"transfer_window":25,"rivalry_event":7,"moral_dilemma":3}
+audited screens 82; screens with a toast over a button 1
+  phase transfer_window #2: "🔥 Derby history" (y 46) under toast "Followers +600k, confidence is a haircut" (toast top 32)
+page errors 0; stuck 0
+[220s] done: {"phase":"playing","age":23,"senior":6,"club":"Liverpool","ovr":76,"steps":164,"secs":217} shots=41 audits=80 errors=10 pageErrors=0 stuck=0 traps=0
+WALK f1280 FINISHED

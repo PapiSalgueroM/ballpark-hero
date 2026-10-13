@@ -1,0 +1,4 @@
+  FAIL [bytes 390x844]: old save 6 (playing, pressed "null"): the bytes after the mount write differ; the bytes after one press differ; the hub names "🇮🇹Real Save 7" on head and "🇵🇹Real Save 6" on the base
+   save 7 (transfer_window, pressed "Next Season"): the bytes after the mount write differ; the bytes after one press differ; the hub names "Real Save 0" on head and "🇮🇹Real Save 7" on the base, fence 1 to 2
+  FAIL [bytes 390x844]: old save 7 (transfer_window, pressed "Next Season"): the bytes after the mount write differ; the bytes after one press differ; the hub names "Real Save 0" on head and "🇮🇹Real Save 7" on the base
+CONTROL FIRED: SOCCER_LANDING_CONTROL=seed played head on seed 1987332286 and the byte check went red, and the old save comparison went red on 8 save(s) given the next seed's save

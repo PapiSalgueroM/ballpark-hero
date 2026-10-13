@@ -1,0 +1,10 @@
+c320 320x640: 25 steps; phases {"youth":1,"contract_offer":2,"playing":1,"newspaper":1,"season_summary":1,"ballon_dor":5,"social_media_action":5,"random_events":7,"transfer_window":2}
+audited screens 48; screens with a toast over a button 5
+  phase random_events #1: "🚪 Retire" (y 27) under toast "🧘 Stay off social media" (toast top 16); "🔄 New Career" (y 27) under toast "🧘 Stay off social media" (toast top 16)
+  phase random_events #2: "🚪 Retire" (y 27) under toast "Fame comes easy: followers grow 60% fast" (toast top 16); "🔄 New Career" (y 27) under toast "Fame comes easy: followers grow 60% fast" (toast top 16)
+  phase random_events #3: "🚪 Retire" (y 27) under toast "The mascot declares victory by forfeit" (toast top 16); "🔄 New Career" (y 27) under toast "The mascot declares victory by forfeit" (toast top 16)
+  phase random_events #4: "🚪 Retire" (y 27) under toast "Morale +5, sponsor mildly concerned, the" (toast top 16); "🔄 New Career" (y 27) under toast "Morale +5, sponsor mildly concerned, the" (toast top 16)
+  phase random_events #5: "🚪 Retire" (y 27) under toast "Smart move? Or missed opportunity?" (toast top 16); "🔄 New Career" (y 27) under toast "Smart move? Or missed opportunity?" (toast top 16)
+page errors 0; stuck 0
+[106s] done: {"phase":"playing","age":18,"senior":1,"club":"Coventry City","ovr":57,"steps":26,"secs":103} shots=41 audits=34 errors=5 pageErrors=0 stuck=0 traps=0
+WALK c320 FINISHED

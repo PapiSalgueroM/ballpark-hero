@@ -1,0 +1,21 @@
+== head 320x640
+== head 390x844
+== head 1280x900
+== head 360x780 (bar only)
+== head 375x667 (bar only)
+== head 480x800 (name only)
+== head 768x1024 (name only)
+== base 320x640
+== base 390x844
+== base 1280x900
+== base 360x780 (bar only)
+== base 375x667 (bar only)
+== base 480x800 (name only)
+== base 768x1024 (name only)
+== bytes (390x844)
+   base on seed 1987332285: 36 saves through youth, contract_offer, playing, phone: bought Hire in 🏠Where you live17 left , newspaper, season_summary, ballon_dor, social_media_action, random_events, transfer_window, rivalry_event, stopped with what it neede
+   head on seed 1987332285: 36 saves through youth, contract_offer, playing, phone: bought Hire in 🏠Where you live17 left , newspaper, season_summary, ballon_dor, social_media_action, random_events, transfer_window, rivalry_event, stopped with what it neede
+== bytes: old saves (realSaves, seeds 0 to 7, 390x844)
+  ok    bytes: 8 of 8 old saves load to the same career on head and the base, and head fences each one
+  base toasts: the measurement sees the bug on the base (63 finding(s))
+playSoccerLanding: green at 320x640, 390x844, 1280x900 (also bar 360x780, bar 375x667, name 480x800, name 768x1024; landing, name, bar, retire, toasts, bytes), every marked section red on the base
