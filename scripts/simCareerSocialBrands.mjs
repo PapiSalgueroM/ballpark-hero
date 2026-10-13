@@ -160,6 +160,10 @@ import { VETERAN_PAY_ADDITIONS, inverseVeteranPay } from './lib/careerVeteranPay
    historical bundle takes that out of its copy of the engine too, its rows in order (the train1178 attribution
    already carries the same rows): scripts/lib/careerAwardGenerations1318.mjs. */
 import { AWARD_GENERATIONS_ADDITIONS, inverseAwardGenerations } from './lib/careerAwardGenerations1318.mjs';
+/* Release BB: Release BA's closing fix a7c6befe says "have told you to find a loan" to a career with no agent, on
+   purpose, and that one line moves this recording (rBBg-sb: green on its parent, red on it). The historical bundle
+   puts the old line back in its copy of the engine: scripts/lib/careerNoAgentLoanLineBA.mjs. */
+import { inverseNoAgentLoanLine } from './lib/careerNoAgentLoanLineBA.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const FIXTURE = path.join(ROOT, 'scripts', 'data', 'soccerBrandFixture835.json');
@@ -181,7 +185,7 @@ for (const relative of heldPaths) {
   const bytes = fs.readFileSync(path.join(ROOT, relative));
   sourceBefore[relative] = sha(bytes);
 }
-const report = { control: CONTROL || null, sections: SECTIONS, sourceBefore, failedLabels: [], originalSources: [], inverses: [], storyRoleInverses: [], nextTenInverses: [], veteranPayInverses: [], awardGenerationsInverses: [] };
+const report = { control: CONTROL || null, sections: SECTIONS, sourceBefore, failedLabels: [], originalSources: [], inverses: [], storyRoleInverses: [], nextTenInverses: [], veteranPayInverses: [], awardGenerationsInverses: [], noAgentLoanInverses: [] };
 function retain(name, value) {
   if (!ARTIFACTS) return;
   fs.mkdirSync(ARTIFACTS, { recursive: true });
@@ -372,7 +376,7 @@ if (SECTIONS.includes('1')) {
          fixture from before the train is asked of a tree with both taken out. */
       /* The wheel alone moves this recording (remote check rAU-G2), so the wheel alone is taken out. */
       const controlled = inverseVeteranPay(relative, inverseCareerNextTen(relative, trainOut ? trainOut.rewrite(relative, source) : inverseAwardGenerations(relative, rewrite(relative, source), report.awardGenerationsInverses), report.nextTenInverses, ['wheel']), report.veteranPayInverses);
-      return relative === 'src/lib/soccerCareerEngine.ts' ? inverseCareerStoryRole(inverseCareerDevelopment(controlled, report.inverses), report.storyRoleInverses) : controlled;
+      return relative === 'src/lib/soccerCareerEngine.ts' ? inverseNoAgentLoanLine(relative, inverseCareerStoryRole(inverseCareerDevelopment(controlled, report.inverses), report.storyRoleInverses), report.noAgentLoanInverses) : controlled;
     });
     assert.equal(controlFired - beforeControlCount, CONTROL ? 1 : 0, 'The additional historical bundle retains exactly the same effective copied fault');
     assert.equal(report.inverses.length, 1, 'One copied engine receives the bounded historical inverse');
@@ -380,6 +384,7 @@ if (SECTIONS.includes('1')) {
     assert.equal(report.nextTenInverses.length, 1, 'The copied wheel library receives the Rounds 1197 to 1208 inverse once');
     assert.equal(report.veteranPayInverses.length, VETERAN_PAY_ADDITIONS.length, 'The copied contracts file receives the veteran pay inverse of Release AW once for each addition');
     assert.equal(report.awardGenerationsInverses.length, trainOut ? 0 : AWARD_GENERATIONS_ADDITIONS.length, 'The copied engine receives the award generations inverse of Rounds 1280 to 1282 and 1318 once for each row (the train out already holds it)');
+    assert.equal(report.noAgentLoanInverses.length, 1, 'The copied engine receives the No Agent loan line inverse of Release BA once');
     compared = probeSoccerBrand(historical);
     const inverseText = JSON.stringify(compared);
     retain('inverse.json', compared);
