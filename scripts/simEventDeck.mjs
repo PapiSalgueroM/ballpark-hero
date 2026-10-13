@@ -130,6 +130,20 @@
         SIM_EVENT_DECK_WORDS=append adds rows and trailing wordings, never
         rewrites one (a changed row is the lead's call, like the replay).
 
+     15) ECONOMY. For every pack and every meter it moves (trust, fans,
+        cash, morale, recruit, every registered key), BEST and WORST answer
+        policies on the FLEET drive: the chosen options' values on that
+        meter summed per season, unclamped, a mean over 1,000 seasons. The
+        seven GM packs are printed (ECONOMY_BASELINE, their measurements at
+        the section); any other pack fails on a meter it moves with no
+        `pressure` ceiling, or when BEST or WORST passes it either way.
+     16) BYTES AND LAZY. Bytes per event (each pack module minified alone
+        and gzipped, the engine too) with the projection for 420 and 690
+        events, a report (BYTES_MEASURED at the section); and the fence:
+        nothing in src imports the engine, a pack index or GmInboxPanel
+        eagerly but the deck's own files and tests (type imports and dynamic
+        imports pass; LAZY_IMPORTERS takes W2's and W3's lazy entries).
+
    SIM_EVENT_DECK_SECTIONS=11,12 runs only the sections named (section 1
    also runs when 2 or 3 does); the green line then names them.
 
@@ -200,6 +214,9 @@
      wordorder  k_words's two wordings swap places (in memory); section 14
                 fails.
      storymove  k_plain joins a story (in memory); section 14 fails.
+     pressure   FX_COMPACT's moves times ten (in memory); section 15 fails.
+     eager      src/pages/FrontOffice.tsx read with one static import of
+                '@/lib/gmInbox' added (in memory); section 16 fails.
 
    Runtime about 85 to 100 s on a runner, three requests at a time (section 2
    reloads all 84 rows since the review's fix pass; it was 40 s with seed 1
@@ -230,7 +247,7 @@ const runs = n => SECTIONS.length === 0 || SECTIONS.includes(n) || (n === 1 && (
 const REPLAY_FILE = path.join(ROOT, 'scripts/data/gmInboxReplay.json');
 const CONTROLS = ['replay', 'weightoff', 'weightkeep', 'story', 'rest', 'failopen', 'restfall', 'expirefall', 'textrng', 'seasonweek', 'expireoff', 'expirefx', 'settledoff', 'panelexpiry', 'neutral', 'heavy',
   'fxsilent', 'fxdrop', 'fxunbound', 'fxneutral', 'conductreal', 'slotopen', 'quoteslot', 'untagged', 'rosterword',
-  'pruneearly', 'codecword', 'codecslot', 'wordedit', 'wordorder', 'storymove', 'pressure'];
+  'pruneearly', 'codecword', 'codecslot', 'wordedit', 'wordorder', 'storymove', 'pressure', 'eager'];
 if (CONTROL && !CONTROLS.includes(CONTROL)) { console.error(`EVENT_DECK_CONTROL=${CONTROL} is not a control this kit knows`); process.exit(2); }
 if (RECORD && (CONTROL || SHARD)) { console.error('a recording runs the whole replay with no control, refusing'); process.exit(2); }
 const red = new Set();
@@ -1776,6 +1793,100 @@ if (runs(15)) {
   const missing = ECONOMY_BASELINE.filter(k => !packs[k]);
   if (missing.length) fail(15, `ECONOMY_BASELINE names packs the kit does not know: ${missing.join(', ')}`);
   if (!red.has(15)) ok(`${Object.keys(packs).length} packs: the ${ECONOMY_BASELINE.length} on the baseline printed, every other pack under its own ceiling on every meter it moves`);
+}
+
+/* ═══ 16. BYTES AND LAZY: what an event costs, and the deck in no eager chunk ═══ */
+
+/* Correction 9: the whole deck (engine, rules and words) is one lazy chunk
+   W3 loads before Play enables, so nothing here may sit in an eager chunk.
+   Bytes per event: each pack module the indexes import, minified alone by
+   esbuild and gzipped (zlib, its default level), divided by its events;
+   the engine the same way (alone, and bundled with what it pulls in); the
+   projection for 420 and 690 events. A report, written in BYTES_MEASURED
+   below; W3 states its chunk. The fence: src read as code (comments
+   stripped as section 7 does), every file that imports the engine, a pack
+   index or GmInboxPanel is one of the deck's own files, a test, or uses
+   `import type` or a dynamic `import(`. LAZY_IMPORTERS, append only, takes
+   the modules W2 and W3 add (the lazy chunk's own entry).
+   BYTES_MEASURED 2026-10-13 (Round 1332's head): the seven GM packs, 54
+   events, 542 B minified and 214 B gzipped an event (each module alone,
+   esbuild minify, zlib's default level), so 420 events about 222 K
+   minified and 88 K gzipped, 690 about 365 K and 144 K. The engine
+   src/lib/gmInbox.ts: 28,478 B LF, 8,160 B minified, 3,298 B gzipped on
+   the base (082fc277) and 52,759 B LF, 16,233 B minified, 6,106 B gzipped
+   here; bundled with what it pulls in (careerInbox's answer flow,
+   careerEventDeck's ledger, keyedRng), 16,891 B and 6,379 B. */
+const LAZY_IMPORTERS = [];
+if (runs(16)) {
+  console.log('16) Bytes and lazy: bytes per event, and nothing that is not the deck imports it eagerly');
+  const zlib = await import('node:zlib');
+  const { transform } = await import('esbuild');
+  const strip = t => t.replace(/\/\*[\s\S]*?\*\//g, '').replace(/(^|[^:])\/\/.*$/gm, '$1');
+  const gz = s => zlib.gzipSync(Buffer.from(s)).length;
+  const minOf = async rel => (await transform(readSrc(rel), { loader: rel.endsWith('x') ? 'tsx' : 'ts', minify: true, format: 'esm' })).code;
+  const bundled = async rel => (await build({ entryPoints: [path.join(ROOT, rel)], bundle: true, minify: true, write: false, format: 'esm',
+    platform: 'browser', alias: { '@': path.join(ROOT, 'src') }, absWorkingDir: ROOT, logLevel: 'error' })).outputFiles[0].text;
+  const rows = [];
+  let packBytes = 0;
+  let packGz = 0;
+  let events = 0;
+  for (const [rel, name] of PACK_INDEXES) {
+    const idx = readSrc(rel);
+    const files = [...strip(idx).matchAll(/from\s+['"]\.\/([\w-]+)['"]/g)].map(m => `${path.posix.dirname(rel)}/${m[1]}.ts`);
+    const packsHere = B[`packs${PACK_INDEXES.findIndex(p => p[1] === name)}`];
+    for (const f of files) {
+      const min = await bundled(f);
+      const seat = Object.keys(packsHere).find(k => strip(readSrc(f)).includes(`seat: '${k}'`));
+      const n = seat ? packsHere[seat].events.length : 0;
+      if (!n) { fail(16, `${f}: no pack of ${rel} found in it`); continue; }
+      packBytes += min.length; packGz += gz(min); events += n;
+      rows.push(`${path.posix.basename(f, '.ts')} ${n} events ${min.length} B min ${gz(min)} B gz (${Math.round(gz(min) / n)} B gz an event)`);
+    }
+  }
+  const engineLf = Buffer.byteLength(readSrc(ENGINE_REL));
+  const alone = await minOf(ENGINE_REL);
+  const withDeps = await bundled(ENGINE_REL);
+  const perMin = packBytes / Math.max(1, events);
+  const perGz = packGz / Math.max(1, events);
+  console.log(`   packs: ${rows.join('; ')}`);
+  console.log(`   ${events} events: ${Math.round(perMin)} B minified, ${Math.round(perGz)} B gzipped an event (each module alone); 420 events about ${Math.round(perMin * 420 / 1024)} K min ${Math.round(perGz * 420 / 1024)} K gz, 690 about ${Math.round(perMin * 690 / 1024)} K min ${Math.round(perGz * 690 / 1024)} K gz`);
+  console.log(`   the engine: ${engineLf} B LF, ${alone.length} B minified alone (${gz(alone)} B gzipped), ${withDeps.length} B minified with what it pulls in (${gz(withDeps)} B gzipped)`);
+  if (events < 50) fail(16, `only ${events} events measured: the byte report measures nothing`);
+  /* The fence. */
+  const walk = dir => fs.readdirSync(path.join(ROOT, dir), { withFileTypes: true }).flatMap(d => (d.isDirectory() ? walk(`${dir}/${d.name}`)
+    : /\.(ts|tsx)$/.test(d.name) ? [`${dir}/${d.name}`] : []));
+  const files = walk('src');
+  const DECK = ['src/lib/gmInbox', 'src/components/front-office-shared/GmInboxPanel', ...PACK_INDEXES.map(([rel]) => rel.replace(/\.tsx?$/, ''))];
+  const deckDirs = PACK_INDEXES.map(([rel]) => path.posix.dirname(rel));
+  const own = f => f === 'src/lib/gmInbox.ts' || f === 'src/components/front-office-shared/GmInboxPanel.tsx' || deckDirs.some(d => f.startsWith(`${d}/`));
+  const isTest = f => /\.test\.tsx?$/.test(f) || f.startsWith('src/test/');
+  const resolve = (from, spec) => {
+    const p = spec.startsWith('@/') ? `src/${spec.slice(2)}` : spec.startsWith('.') ? path.posix.normalize(`${path.posix.dirname(from)}/${spec}`) : null;
+    if (!p) return null;
+    const bare = p.replace(/\.(ts|tsx|js)$/, '');
+    return DECK.includes(bare) ? bare : DECK.includes(`${bare}/index`) ? `${bare}/index` : null;
+  };
+  let read = 0;
+  const eager = [];
+  let lazyOk = 0;
+  for (const f of files) {
+    let code = strip(readSrc(f));
+    if (CONTROL === 'eager' && f === 'src/pages/FrontOffice.tsx') code = `import { gmInboxWeek } from '@/lib/gmInbox';\n${code}`;
+    read++;
+    for (const m of code.matchAll(/\b(import|export)\s+(type\s+)?[^;'"]*?\bfrom\s+['"]([^'"]+)['"]/g)) {
+      const hit = resolve(f, m[3]);
+      if (!hit) continue;
+      if (m[2] || own(f) || isTest(f)) continue;
+      if (LAZY_IMPORTERS.includes(f)) { lazyOk++; continue; }
+      eager.push(`${f} imports ${m[3]}`);
+    }
+    for (const m of code.matchAll(/\bimport\s+['"]([^'"]+)['"]/g)) if (resolve(f, m[1]) && !own(f) && !isTest(f)) eager.push(`${f} imports ${m[1]} for its side effects`);
+  }
+  if (CONTROL === 'eager' && !files.includes('src/pages/FrontOffice.tsx')) { console.error('eager control: src/pages/FrontOffice.tsx is gone, refusing to run'); process.exit(2); }
+  for (const b of eager.slice(0, 6)) console.error(`     ${b}`);
+  if (read < 500) fail(16, `only ${read} src files read: the fence saw nothing`);
+  if (eager.length) fail(16, `${eager.length} eager imports of the deck outside it`);
+  else ok(`${read} src files read as code: only the deck's own files, tests, type imports and dynamic imports reach the engine, a pack index or GmInboxPanel${lazyOk ? ` (${lazyOk} on LAZY_IMPORTERS)` : ''}`);
 }
 
 /* ═══ end ═══ */
