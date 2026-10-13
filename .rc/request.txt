@@ -1,0 +1,4 @@
+#!serial
+diag: MANAGER_SIZE_DIAGNOSTICS=/tmp/diag NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/managerWorldSizeDiagnostic.mjs
+own-test-head: node_modules/.bin/vitest run src/lib/clubManagerOwnClubLevel.test.ts --testTimeout=300000 --hookTimeout=120000
+own-test-pre-EXPECT-RED: git checkout 5fa99b8d -- src/lib/clubManager.ts && node_modules/.bin/vitest run src/lib/clubManagerOwnClubLevel.test.ts --testTimeout=300000 --hookTimeout=120000; s=$?; git checkout HEAD -- src; exit $s
