@@ -1,0 +1,3 @@
+ctl-new: bash .rc/x/ctl.sh $RC_OUT/ctl combinephase attemptbare combineloose scoutskeys combinedraw mathrandom gradeshift extradraw
+ctl-round: bash .rc/x/ctl.sh $RC_OUT/ctl combinewords combinemean combinemono combinecut reroll wayback combinegone flathands curveflip keyscurve nightoffbyone nightlottery nightopen nightdedup nightdraw projection
+ctl-lane: bash .rc/x/ctl.sh $RC_OUT/ctl randomteam flatstock flatlottery cardwords showcasewords erarule ceiling ladderskip undraftedtop squeeze laterlottery flatlater loadershallow
