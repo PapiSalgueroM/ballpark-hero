@@ -1,0 +1,16 @@
+A. Landing: the first frame of the hub after a new job
+  FAIL  A  liverpool-take-390: hub header top -1630 px at scrollY 1743 on the first hub frame (screen 844 px)
+  FAIL  A  liverpool-skip-390: hub header top -1681 px at scrollY 1794 on the first hub frame (screen 844 px)
+  FAIL  A  celta-skip-320: hub header top -2005 px at scrollY 2118 on the first hub frame (screen 640 px)
+  FAIL  A  aberdeen-take-1280: hub header top -1151 px at scrollY 1276 on the first hub frame (screen 900 px)
+  FAIL  A  aberdeen-skip-1280: hub header top -1151 px at scrollY 1276 on the first hub frame (screen 900 px)
+  FAIL  A  everton2005-newyear-390: hub header top -1713 px at scrollY 1826 on the first hub frame (screen 844 px)
+  FAIL  A  liverpool-autumn-320: hub header top -2118 px at scrollY 2231 on the first hub frame (screen 640 px)
+A. Landing: a new season pressed from the bottom of the season review
+  FAIL  A  liverpool-season2-390: the season review never came up (nothing, nothing, nothing, nothing, nothing, nothing, nothing, nothing)
+E. Old saves resume to a whole hub
+  PASS  E  cmOldSave1052Fixture.json: the hub header is on screen on the first frame after Resume (top 113 px)
+  PASS  E  cmOldSave1052Fixture.json: the hub draws 1238 characters and none of undefined, NaN, [object Object], Infinity
+  PASS  E  cmSecondTierOldSaveFixture.json: the hub header is on screen on the first frame after Resume (top 113 px)
+  PASS  E  cmSecondTierOldSaveFixture.json: the hub draws 1235 characters and none of undefined, NaN, [object Object], Infinity
+playCmHubLanding: 8 failure(s) (A 0 pass 8 fail, E 4 pass 0 fail)

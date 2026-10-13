@@ -1,0 +1,6 @@
+build exit=0 25s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+basebuild exit=0 29s | base server 200
+control-noscroll exit=1 58s | playCmHubLanding: CONTROL noscroll FIRED, section A went red on 8 check(s) (A 0 pass 8 fail)
+walk-base-A exit=1 91s | playCmHubLanding: 8 failure(s) (A 0 pass 8 fail, E 4 pass 0 fail)
+control-drift exit=1 130s | playCmHubLanding: CONTROL drift FIRED, section D went red on 6 check(s) (D 6 pass 6 fail)
+walk-head exit=1 221s | playCmHubLanding: 1 failure(s) (A 7 pass 1 fail, D 12 pass 0 fail, E 4 pass 0 fail)
