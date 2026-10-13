@@ -186,7 +186,9 @@ function acceptedWindow(B, supplied, clubs) {
   if (verdict.type === 'frozen_out') {
     state.morale = Math.max(0, Math.min(100, state.morale - 12));
     state.events.push(verdict.mode === 'released' ? `📄 ${state.currentClub} have torn up your contract. You are a free agent.`
-      : verdict.mode === 'loan_listed' ? `📤 ${state.currentClub} have told your agent to find you a loan for next season.`
+      : verdict.mode === 'loan_listed' ? (state.agentId && state.agentId !== 'self'
+        ? `📤 ${state.currentClub} have told your agent to find you a loan for next season.`
+        : `📤 ${state.currentClub} have told you to find a loan for next season.`)
       : `📤 ${state.currentClub} have put you on the transfer list.`);
   }
   state.pendingLoanOffers = verdict.type === 'frozen_out' ? null : B.E.determineLoanOffers(state, clubs); state.phase = 'transfer_window';

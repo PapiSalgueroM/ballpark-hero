@@ -4381,7 +4381,10 @@ function enterTransferWindow(s: CareerState, clubs: ClubData[]): void {
         sit.mode === "released"
           ? `📄 ${s.currentClub} have torn up your contract. You are a free agent.`
           : sit.mode === "loan_listed"
-            ? `📤 ${s.currentClub} have told your agent to find you a loan for next season.`
+            /* Release BA: no agent yet, or No Agent ("self"), means nobody to tell but you. */
+            ? s.agentId && s.agentId !== "self"
+              ? `📤 ${s.currentClub} have told your agent to find you a loan for next season.`
+              : `📤 ${s.currentClub} have told you to find a loan for next season.`
             : `📤 ${s.currentClub} have put you on the transfer list.`,
       );
     }
