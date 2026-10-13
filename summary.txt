@@ -1,0 +1,6 @@
+build exit=0 31s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+pressMarket exit=1 10s | Node.js v24.21.0
+reveal-head exit=0 9s | 1 harness not green.
+resultsLayout-head exit=0 2s | AssertionError [ERR_ASSERTION]: Engine is exactly the unchanged original base
+hubgrid exit=0 65s | Evidence: soccer-hub-grid-artifacts/native
+offerReview exit=0 104s | Soccer offer review: 9 actual-route journeys, 12 effective restored DOM controls, no forwarded writes.
