@@ -200,6 +200,40 @@ Proof of step 1 (src at a064a170; the later commits of the step touch no src):
   year to one side; SocialPanel.tsx line 88 prints rival.lastLine. Held by src/test/usRivalOldSavesB.test.ts and
   M.O, H.O.
 
+## Fix pass after the two reviews (2026-10-12, head before 1fb54b21)
+
+The run review found no major; the read review one (a reader never run). Commits, each pushed on its own:
+dc1abce4 (E8's header, comment only), 17a4c4f6 (the short years by position, printed), b072dc84 (P2's side
+print), ca8e5a0e (the rule sentences' wording, docs only). No src file moved, so no recording or receipt moved.
+
+- The reader decision 3 names, scripts/qa/numberFormatting1085Parity.mjs (the other lane's, not edited): runner
+  r1313-fx-nf on 1fb54b21. On the head exit 1, and on a worktree of origin/main 48cb9d4b exit 1, both at the
+  same first assertion, "Exact unchanged historical test". It pins the sha256 of three files to the tree it was
+  written on (59e808d3): src/test/usBoardFixture.test.tsx (f86d416b..., main and head be30e87b...), the board
+  recording (1f3180c9..., main e31d58d1..., head fb455fa0...) and src/lib/usCareerStatLine.ts (397407de...,
+  main and head d127a958...). Release AX moved the first two on main (c4a91cdc), so it cannot answer for any
+  recording after that; this round adds no red to it. It is the lead's to tell the other lane.
+- Section T of scripts/simNbaAwardsSense.mjs, read off the runner logs (senseC.log): base r1313-s0a (ecbdab63)
+  MLB 4,115 near tie notes (you lead 1,832, he leads 1,862, level 421), NHL 5,626 (3,588, 1,506, 532); final
+  r1313-s7a (cd86810f) MLB 6,660 (3,283, 2,565, 812), NHL 8,300 (4,003, 3,441, 856); unreadable 0, every floor
+  of 200 held. Near ties are more common because both men now print the same kind of line.
+- The short years alone by position (runner r1313-fx-a, rivalPlain, five seeds of 1,500 careers a sport), my
+  share against the engine's own length: MLB, years under 146 games (60 and 58): SP 31.8 of 132 (own 36.7),
+  RP 80.8 of 151 (60.7), C 23.0 of 135 (34.3), 1B 59.9 of 147, 2B 40.0 of 130, 3B 59.9 of 142, SS 48.5 of 130,
+  LF 57.8 of 135, CF 43.3 of 134, RF 57.4 of 136, DH 90.9 of 143. NHL, years under 74 games (48, 56 and the
+  2019-20 club lengths): C 45.7 of 2,193 (own 39.8), LW 44.3 of 2,199 (39.3), RW 47.5 of 2,196 (40.4), D 53.8 of
+  2,208 (45.4), G 53.5 of 2,193 (48.3). Printed, never judged: about 140 short years a position in MLB is a
+  wide error; the measuring swap (MLB 35 of 1,200, NHL 3 of 1,200) is the stronger number for Q1.
+- P2's side print (runner r1313-fx-b on ca8e5a0e, RIVAL_PROVE=48cb9d4b RIVAL_MOVED=mlb,nhl RIVAL_CARDS=mlb,nhl,
+  exit 0, "76 checks, 0 failed (full size)", 1,000 careers a sport with every card answered, before and after):
+  MLB mean seasons 19.87 and 19.86, All-Stars a career 2.00 and 2.02, final morale 96.0 and 95.9, fanbase 57.7
+  and 58.2, my share of the head to head years 57.0 and 60.7; NHL 21.39 and 21.38, 1.93 and 1.92, 95.3 and 95.2,
+  62.3 and 62.6, 70.8 and 58.4; the NFL (16.61, 0.43 All-Pros, 95.6, 60.4, 53.1) and the NBA (19.39, 3.36, 95.7,
+  59.2, 65.1) the same before and after, 1,000 of 1,000 whole saves byte equal. Equal to the run review's own
+  print (r1313-run-e). Nothing a career is made of moves beyond the head to head itself.
+- E8's year counts on arm a are typed in its header (NHL 2,908 and 3,092, MLB 2,990 and 3,010, floors 800), with
+  what fullslatenhl (1,528) and fullslatemlb (1,389) turn red, cell by cell; r1313-fx-a measured them again.
+
 ## Owed (not this round)
 
 - The "?" on the rival card for MLB and the NHL, with the rule sentences, the dead heat sentence of advice 13
@@ -227,6 +261,14 @@ Proof of step 1 (src at a064a170; the later commits of the step touch no src):
 - The lead's rulings this round leaves open: open question 1's fallback (score both printed lines with their
   counts read back at full pace), with the measuring swap's numbers in the header of scripts/simUsRivalSense.mjs;
   whether a defenseman's kind should follow the player (Q2; the kind pairing table is printed); the dead heat.
+- Found by the read review, data first, both older than this round and left alone by the fix pass:
+  (a) "Josh Hader's 138 in 2019 is the modern high" is false (he struck out 143 in 2018, two sources in
+  review-read-1313.md finding 5). It sits in the Round 97 comment inside mlbStatLineFor (mlbMyCareer.ts line
+  739) AND in the note of scripts/simCareerRealism.mjs line 117, which is not this round's file, so one later
+  round fixes both together (and words "149 ... no reliever has come close to" again, since 143 is close).
+  (b) wonAward has no year (careerAwards.ts line 600), so the player and now the rival can be All-Stars, and
+  beat 206 or 306 can say "The All-Star rosters are out", in MLB's 2020 and the NHL's 2012-13, when no game was
+  played. careerAwards.ts is read only here; the awards table needs a year rule.
 - Later rounds named by the brief: the engine comment at nhlMyCareer.ts (the "Twelve players make it a year"
   lines) and a second source that is not a wiki for the 44 of the hockey table (Q6); the rival's aging by
   position (Q7; this round's by age and by job tables are its baseline); beats 204, 304 and MLB 219 (Q8).
