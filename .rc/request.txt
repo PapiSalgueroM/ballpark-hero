@@ -1,0 +1,6 @@
+#!build
+#!playwright
+#!serial
+red-head: ONLY=simGmCalendar,simGmDealTableFixture,simGmStaff,simCmQuickSubs node scripts/runAllSims.mjs
+red-base: git worktree add -q /tmp/gb 8fea14e2 && ln -s "$PWD/node_modules" /tmp/gb/node_modules && cd /tmp/gb && node_modules/.bin/vite build > /tmp/gb-build.log 2>&1; ONLY=simGmCalendar,simGmDealTableFixture,simGmStaff,simCmQuickSubs node scripts/runAllSims.mjs
+simBracketMoment: node scripts/simBracketMoment.mjs
