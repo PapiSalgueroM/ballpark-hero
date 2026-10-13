@@ -120,7 +120,7 @@ try {
       try { await fn(); run.steps.push(`${name} ok`); } catch (err) {
         failNote(`${tag} ${name}: ${err.message.split('\n')[0]}`); run.steps.push(`${name} broke`);
         await page.screenshot({ path: path.join(OUT, `${tag}-${name.replace(/ /g, '-')}-broke.png`), fullPage: true }).catch(() => {});
-        const said = await page.evaluate(() => document.body.innerText.slice(0, 600).replace(/\s+/g, ' ')).catch(() => '');
+        const said = await page.evaluate(() => { const t = document.body.textContent.replace(/\s+/g, ' '); const i = t.indexOf('International Career'); return `${t.slice(0, 300)} ... [International Career at ${i}] ${i >= 0 ? t.slice(i, i + 500) : ''}`; }).catch(() => '');
         console.error(`    the page said: ${said}`);
       }
     };
@@ -176,7 +176,7 @@ try {
     await step('B history', async () => {
       await open(saveB);
       await sweep(page);
-      await waitText(page, 'Tournaments');
+      await page.getByText('played out').first().waitFor({ state: 'attached', timeout: 30000 });
       const tiles = page.locator('button', { hasText: 'Tournaments' }).first();
       await tiles.scrollIntoViewIfNeeded();
       const lastTile = await page.evaluate(() => {
@@ -206,7 +206,7 @@ try {
       for (const h of list.back) if (h < 44) report.knownSmall.push(`${tag}: the history list's Back is ${Math.round(h)} px (h-8, owed)`);
       const opened = await measure(page);
       await page.locator('button', { hasText: 'Back' }).last().click();
-      await waitText(page, 'played out');
+      await page.getByText('played out').first().waitFor({ state: 'attached', timeout: 30000 });
       await page.waitForTimeout(200);
       const after = await measure(page);
       run.steps.push(`B scroll ${before.scrollY}/${before.height} -> open ${opened.scrollY}/${opened.height} -> closed ${after.scrollY}/${after.height}`);
@@ -248,7 +248,7 @@ try {
       else if (lines.slice(0, at).some(l => / win | are champions of Europe|DONE DEAL/.test(l))) failNote(`${tag} C: a line of the season sits above its framing line`);
       await open(saveC);
       await sweep(page);
-      await waitText(page, 'played out');
+      await page.getByText('played out').first().waitFor({ state: 'attached', timeout: 30000 });
       const lastTile = page.locator('button', { hasText: 'won it' }).first();
       const label = await lastTile.textContent();
       if (!label.includes(`${saveC.lastTournament.champion} won it`)) failNote(`${tag} C: the last tile reads "${label}"`);
