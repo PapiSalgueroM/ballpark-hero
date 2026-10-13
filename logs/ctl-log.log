@@ -1,0 +1,46 @@
+NEGATIVE CONTROL ON: the season log names the winner of every summer again (section 5 must fail)
+finished saves: this tree mean 57.5 KB, median 55.8 KB, the base mean 58.1 KB, median 56.8 KB (a reading, not a check)
+fleet: 400 careers a tree (seed offset 0, 5 seeds), 7075 seasons on this tree in 33 s, 7064 on the base
+1) Player of the Month reads the month's football, with the true year
+   this tree: 2321 months over 6675 seasons; rated 8.0+ 2.6 a season (631), 7.0 to 7.5 any 0.03 (1616); at 7.5 to 8.5 all 1.04: GK 0.87 (208), DEF 1.12 (376), MID 0.86 (238), ATT 1.11 (616)
+   base:      5094 months over 6664 seasons; rated 8.0+ 2.11 a season (621), 7.0 to 7.5 any 0.48 (1551); at 7.5 to 8.5 all 1.16: GK 0.41 (209), DEF 0.47 (367), MID 0.67 (264), ATT 1.98 (600)
+   under the floor and still won: 0 here, 976 on the base; 0 goal keepers rated 6.0 or less who won: 0 of 38 here, 12 of 35 on the base
+   month lines with the wrong year: 0 here, 2609 on the base; seasons whose lines and awards disagree: 0 here, 0 on the base
+   planted: a 0 goal keeper rated 6.0 over 10,000 identities won 0 months
+2) The month award and the world tick leave the season's draws where they were
+   200 careers in lockstep with the base: 5740 steps, 823 seasons, 593 month blocks and 593 world ticks compared, 5324 world records; 0 careers with a count, seed or record off the base
+   first fields to differ: pendingBallonDor phone.feed phone.world phone.clubs 108; events awards pendingBallonDor phone.feed phone.world phone.clubs 69; phone.feed phone.world phone.clubs 13; events awards phone.feed phone.world phone.clubs 8; seasons events pendingSummary awards pendingBallonDor phone.feed phone.world phone.clubs 1; seasons pendingSummary pendingBallonDor phone.feed phone.world phone.clubs 1; never differed 0; compared until a season's input differed in 199, by pendingEvents eventLastFired 185; seasons pendingSummary pendingBallonDor 13; pendingEvents 1
+3) The phone's world says nothing it cannot stand behind
+   this tree: 6055 seasons (4300 happened, 1755 to come), 16868 lines, 5244 champion lines in seasons to come, 2174 moves of generated men
+              real names in a past season 0, past champions, transfers or scorers 0, a missed summer's winner 0, moves of real men 0, real top scorers 0, real men off their era club 0, lines off the record 0
+   base:      6043 seasons, 45893 lines; real names in a past season 17093, past champions, transfers or scorers 29868, a missed summer's winner 1044, moves of real men 31902, real top scorers 10536, real men off their era club 63636, lines off the record 0
+   lines naming the player or his club: 56 here (the feed names his club: "🔄 Andrés Weber has left Palmeiras for PSV."), 361 on the base (the feed names his club: "🔄 DONE DEAL. Christian Vieri joins AC Milan from Inter Milan. Fee around 65m.")
+4) The phone's quiz asks about the world only where the world is the game's own
+   this tree: three questions in 6675 of 6675 seasons (1); world questions about a season that happened 0, about a real man 0, answers not in the save 0, world questions asked 2026
+   base:      three questions in 6659 of 6664 seasons (1); world questions about a season that happened 7377, about a real man 4561, answers not in the save 0
+   old saves: 40 base careers at their 2028 world (40 holding a real man's move or tally) asked 120 questions here, 0 about a real man; 40 played a season on here, 0 threw, 0 grew a phone field, 0 real men left off their era club
+5) The season log and the International panel name a winner only where the rule allows
+   this tree: 3130 summers; winner lines missing where they belong 0, printed for a summer he missed 1085; kept for finals he played 1032, kept for a summer to come 705, held back 1085
+   base:      3133 summers; printed for a summer he missed that happened 1059
+     e.g. 1992 European Championship, he was not in the setup: "🌍 France won the European Championship."
+     e.g. 1994 World Cup, he was not in the setup: "🌍 Spain won the World Cup."
+     e.g. 1996 European Championship, he was Not Selected: "🌍 France won the European Championship."
+  FAIL (section 5): 1085 summers he missed, that really happened, still name their winner in the season log
+   a past summer he missed: champions line false, bracket tile false, last tile winner false (base true, true, true)
+   a past summer he played: champions line true, bracket tile true, last tile winner true (base true, true, true)
+   a summer to come he missed: champions line true, bracket tile true, last tile winner true (base true, true, true)
+   an old save's history, a missed 2010 last: champions line false, bracket tile false, last tile winner false (base true, true, true)
+6) The eighth inverse gives the base's four files back, and every change sits in this round's hunks
+  FAIL (section 6): src/lib/soccerCareerEngine.ts: the inverse does not apply (the engine-2 row of Round 1329's inverse must be in src/lib/soccerCareerEngine.ts exactly once at its turn)
+   src/lib/soccerCareerEngine.ts: head 1d187aaea8a8e3b6 (pinned 1a1c05feb120de04), inverse (none), base 44f323390d962fc1 (pinned 44f323390d962fc1)
+  FAIL (section 6): src/lib/soccerCareerEngine.ts: this tree is not the head the inverse was written for (regenerate the rows)
+     5 hunks against the base, in 3 regions
+   src/lib/soccerPhone.ts: head 8867992a7548521d (pinned 8867992a7548521d), inverse 43c30266828c0d6e, base 43c30266828c0d6e (pinned 43c30266828c0d6e)
+     11 hunks against the base, in 3 regions
+   src/lib/soccerArcade.ts: head 9b6bb4f82528546c (pinned 9b6bb4f82528546c), inverse bc8301f8b1405f6e, base bc8301f8b1405f6e (pinned bc8301f8b1405f6e)
+     5 hunks against the base, in 2 regions
+   src/components/soccer-career/InternationalPanel.tsx: head 872a55fb5a772279 (pinned 872a55fb5a772279), inverse df3dd4e16e8a046a, base df3dd4e16e8a046a (pinned df3dd4e16e8a046a)
+     10 hunks against the base, in 9 regions
+  FAIL (section 6): Round 1329's inverse ran engine-1 on src/lib/soccerCareerEngine.ts, not engine-1 engine-2 engine-3 engine-4 engine-5
+   rows applied: 27 of 31
+FIRED: WORLD_TRUTH_CONTROL=log failed section 5 (1 failures; section 5: 1, section 6: 3)

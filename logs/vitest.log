@@ -1,0 +1,49 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/test/phonePanelFocus.test.tsx [2m([22m[2m12 tests[22m[2m)[22m[33m 2377[2mms[22m[39m
+   [33m[2m✓[22m[39m actual Soccer Career phone focus[2m > [22mkeeps thirteen original apps reachable without mutating career, funds or storage [33m 747[2mms[22m[39m
+   [33m[2m✓[22m[39m actual Soccer Career phone focus[2m > [22mcontains both Tab boundaries and ShiftTab from the initially focused dialog [33m 480[2mms[22m[39m
+ [32m✓[39m src/test/tournamentCardMoment.test.tsx [2m([22m[2m23 tests[22m[2m)[22m[33m 3552[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 926: the moment plays once[2m > [22ma reload or a new tab finds the save on this card and draws it still, even a save that never played it; the control plays [33m 651[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 926: the moment plays once[2m > [22ma different career winning the same edition with the same nation still gets its moment, even after a reload [33m 396[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 926: the quiet card also plays once[2m > [22mBack, a second mount, a reload and a new tab leave a group exit quiet [33m 333[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1107: the won card's head is the career moment kit's Trophy scene[2m > [22mstill after a tile and Back, after a second mount, and after a reload on the card [33m 370[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1107: a tournament is settled on load only when the save sits on its card[2m > [22mevery phase but the card's own leaves the tournament to play [33m 452[2mms[22m[39m
+ [32m✓[39m src/test/soccerEventDeckIntegrity.test.ts [2m([22m[2m21 tests[22m[2m)[22m[32m 63[2mms[22m[39m
+ [32m✓[39m src/test/soccerCareerDebutLegacy.test.tsx [2m([22m[2m19 tests[22m[2m)[22m[33m 2009[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 985: through the real page, the moment plays when the state flips[2m > [22mContinue off the season summary onto the call-up plays the debut card [33m 401[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 985: through the real page, the moment plays when the state flips[2m > [22mRetire and Enjoy Life off the ceremony plays the legacy card, even from a save reloaded on the ceremony [33m 374[2mms[22m[39m
+[90mstderr[2m | src/test/careerMomentKitLift.test.tsx[2m > [22m[2mRound 1107: the markup on record before the lift[2m > [22m[2m1. every tournament card that is not a win, fresh and settled
+[22m[39mWarning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-router/dist/development/chunk-BV7QT456.mjs:7044:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-router/dist/development/chunk-BV7QT456.mjs:7044:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-router/dist/development/chunk-BV7QT456.mjs:7044:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-router/dist/development/chunk-BV7QT456.mjs:7044:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-router/dist/development/chunk-BV7QT456.mjs:7044:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-router/dist/development/chunk-BV7QT456.mjs:7044:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-router/dist/development/chunk-BV7QT456.mjs:7044:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-router/dist/development/chunk-BV7QT456.mjs:7044:3)
+
+[90mstderr[2m | src/test/careerMomentKitLift.test.tsx[2m > [22m[2mRound 1107: the markup on record before the lift[2m > [22m[2m5. the won tournament card, fresh and settled
+[22m[39mWarning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-router/dist/development/chunk-BV7QT456.mjs:7044:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-router/dist/development/chunk-BV7QT456.mjs:7044:3)
+
+ [32m✓[39m src/test/careerMomentKitLift.test.tsx [2m([22m[2m6 tests[22m[2m)[22m[32m 199[2mms[22m[39m
+ [32m✓[39m src/test/soccerWorldTruth.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 286[2mms[22m[39m
+ [32m✓[39m src/test/internationalPanelTruth.test.tsx [2m([22m[2m5 tests[22m[2m)[22m[32m 205[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m7 passed[39m[22m[90m (7)[39m
+[2m      Tests [22m [1m[32m97 passed[39m[22m[90m (97)[39m
+[2m   Start at [22m 20:05:18
+[2m   Duration [22m 11.35s[2m (transform 4.78s, setup 601ms, collect 14.47s, tests 8.69s, environment 4.69s, prepare 1.65s)[22m
+

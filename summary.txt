@@ -1,0 +1,22 @@
+vitest exit=0 13s |    Duration  11.35s (transform 4.78s, setup 601ms, collect 14.47s, tests 8.69s, environment 4.69s, prepare 1.65s)
+worldtruth exit=0 88s | simSoccerWorldTruth: OK, every section green
+ctl-goalsonly exit=1 79s | FIRED: WORLD_TRUTH_CONTROL=goalsonly failed section 1 (7 failures; section 1: 7, section 2: 201, section 6: 3)
+tsc exit=0 96s | 
+ctl-nolegacy exit=1 70s | FIRED: WORLD_TRUTH_CONTROL=nolegacy failed section 2 (201 failures; section 2: 201, section 6: 3)
+ctl-extradraw exit=1 75s | FIRED: WORLD_TRUTH_CONTROL=extradraw failed section 2 (201 failures; section 2: 201, section 6: 2)
+ctl-seasonyear exit=1 89s | FIRED: WORLD_TRUTH_CONTROL=seasonyear failed section 1 (1 failures; section 1: 1, section 6: 3)
+ctl-realmoves exit=1 85s | FIRED: WORLD_TRUTH_CONTROL=realmoves failed section 3 (2 failures; section 3: 2, section 4: 1, section 6: 3)
+ctl-pastchampions exit=1 79s | FIRED: WORLD_TRUTH_CONTROL=pastchampions failed section 3 (1 failures; section 3: 1, section 6: 3)
+ctl-summer exit=1 89s | FIRED: WORLD_TRUTH_CONTROL=summer failed section 3 (1 failures; section 3: 1, section 6: 3)
+ctl-arcade exit=1 83s | FIRED: WORLD_TRUTH_CONTROL=arcade failed section 4 (2 failures; section 4: 2, section 6: 3)
+ctl-log exit=1 86s | FIRED: WORLD_TRUTH_CONTROL=log failed section 5 (1 failures; section 5: 1, section 6: 3)
+ctl-panel exit=1 80s | FIRED: WORLD_TRUTH_CONTROL=panel failed section 5 (6 failures; section 5: 6, section 6: 5)
+simNoRivalNames exit=0 20s | No rival product names found. 0 findings.
+ctl-outside exit=1 79s | FIRED: WORLD_TRUTH_CONTROL=outside failed section 6 (3 failures; section 2: 29, section 6: 3)
+simInventedNames exit=0 9s | simInventedNames: green. Every invented man on this site is invented all the way down.
+worldtruth-s7 exit=1 88s | simSoccerWorldTruth: 1 FAILURES (section 4: 1)
+simHarnessAnchors exit=0 62s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simNoInventedQuotes exit=0 25s | simNoInventedQuotes: green. No real player is quoted or accused anywhere.
+simBallonDorTruth exit=0 6s | simBallonDorTruth: green. Every medal on the ceremony was won by the club that holds it, and the player's card is the record.
+simSoccerDeckFairness exit=0 57s | simSoccerDeckFairness: all sections green
+simPhone2 exit=1 123s | 1 FAILURES
