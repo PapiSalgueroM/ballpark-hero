@@ -1,0 +1,7 @@
+#!build
+#!playwright
+fit1: ENGINES=chromium CM_FIT_PART=1 node scripts/playCmTablesFit.mjs
+fit1-oldgrid-EXPECT-RED: ENGINES=chromium CM_FIT_PART=1 CM_FIT_CONTROL=oldgrid node scripts/playCmTablesFit.mjs
+fit1-scrollbox-EXPECT-RED: ENGINES=chromium CM_FIT_PART=1 CM_FIT_CONTROL=scrollbox node scripts/playCmTablesFit.mjs
+fit1-truncate-EXPECT-RED: ENGINES=chromium CM_FIT_PART=1 CM_FIT_CONTROL=truncate node scripts/playCmTablesFit.mjs
+fit1-smalltap-EXPECT-RED: ENGINES=chromium CM_FIT_PART=1 CM_FIT_CONTROL=smalltap node scripts/playCmTablesFit.mjs
