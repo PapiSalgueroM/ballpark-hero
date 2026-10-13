@@ -1,0 +1,10 @@
+build exit=0 32s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+playReleaseClause exit=0 19s | playReleaseClause: green. The desk is on the wall and the door opens and shuts like the engine promised.
+playCmDataOnDemand exit=0 32s | playCmDataOnDemand: green. The manager games open without the data they never read, and a past season brings its own.
+simRevealScroll exit=0 214s | Green. 53 presses measured, nothing dragged the page down on content that was already readable, no panel lost its top, and 4 presses proved the feature still does its job
+playClubManager exit=0 277s | Played Club Manager through its own screens. 0 findings.
+playGames exit=0 47s | Played 1 games. 0 findings, 0 the harness could not drive.
+playCmRealFixtures exit=1 0s | Node.js v24.21.0
+playFirstTeamFit exit=0 4s | playFirstTeamFit: green, six actual-component cases, thirty selections and thirty sales.
+sweepWeight exit=0 29s | sweepWeight: green. Every page is inside its budget, and the budgets came down this round.
+sweepGames exit=0 897s | Swept 183 routes across 1 engines and 3 viewports (549 checks). 0 findings.
