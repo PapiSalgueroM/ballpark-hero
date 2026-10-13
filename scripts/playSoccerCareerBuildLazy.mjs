@@ -1,5 +1,5 @@
 /* Remote-only proof of the creator's real build-editor loading and callbacks.
- * Fresh signed-out contexts use the app's backup clubs after blocked reads.
+ * Fresh signed-out contexts use the app's directly bundled club roster.
  * No career is begun, no saved fixture is inserted and no backend is credited.
  */
 import './lib/offlineTransport.cjs';
@@ -31,7 +31,7 @@ const sha = filename => hash(fs.readFileSync(filename));
 const require = createRequire(import.meta.url);
 const report = { phase: PHASE, status: 'running', sourceHead: execFileSync('git', ['rev-parse', 'HEAD'], { cwd: ROOT, encoding: 'utf8' }).trim(),
   checks: 0, failures: 0, setupFailures: 0, eagerBuildFetches: 0, healthyFlows: 0, cases: [], recoveries: [], controls: [], inventory: [], issues: [],
-  limits: ['Fresh signed-out creator only; no Begin Career action or saved fixture.', 'Actual blocked club reads exercise the existing backup roster.',
+  limits: ['Fresh signed-out creator only; no Begin Career action or saved fixture.', 'The creator loads bundled clubs directly; no database fallback is credited.',
     'A failed import first exercises the existing automatic reload, then its boundary and user-requested Retry.',
     'Creator drafts are not claimed saved across a full reload.', 'Original captures cover these selected creator states, not blanket visual acceptance.'] };
 const check = (condition, message, row) => { report.checks++; if (!condition) { report.failures++; report.issues.push(message); row?.issues.push(message); } return !!condition; };
@@ -120,7 +120,7 @@ async function open(base, profile, row, failBuild = false) {
   await page.goto(`${base}/soccer-career`, { waitUntil: 'domcontentloaded' }); await ready();
   return { context, page, fault, activate, raw, creator, preview, ready, flush };
 }
-const rowFor = (id, width) => ({ id, width, stage: 'cold', issues: [], errors: [], diagnostics: [], transport: [], jsLoads: [], documents: [], stages: [], shots: [] });
+const rowFor = (id, width) => ({ id, width, stage: 'cold', issues: [], errors: [], diagnostics: [], transport: [], jsLoads: [], documents: [], stages: [], shots: [], roster: [] });
 const buildLoads = row => row.jsLoads.filter(load => load.marker);
 const editor = page => page.getByRole('heading', { name: /Build Your Player$/ }).locator('..').locator('..');
 const customize = page => page.getByRole('button', { name: /Customize your build$/ });
@@ -136,7 +136,13 @@ async function generate(walk, row) {
   const roll = walk.page.getByRole('button', { name: /Generate Starting Potential$/ });
   await roll.waitFor(); await walk.activate(roll); await customize(walk.page).waitFor(); await walk.flush();
   check(await walk.page.getByText('Rolling...', { exact: true }).count() === 0, `${row.id}: actual generation did not finish.`, row);
-  check((await walk.page.getByText('Couldn\'t reach the live club database, so we loaded a backup roster. Everything still works.', { exact: true }).count()) === 1, `${row.id}: actual blocked club reads did not select the backup roster.`, row);
+  const academy = walk.page.getByText('Academy Placement', { exact: true }).locator('..').locator('div.font-bold.text-sm');
+  await academy.waitFor();
+  const academyText = (await academy.innerText()).trim();
+  const errorNoticeCount = await walk.page.getByText('Couldn\'t reach the live club database, so we loaded a backup roster. Everything still works.', { exact: true }).count();
+  check(academyText.endsWith(' Youth') && academyText.length > ' Youth'.length, `${row.id}: actual bundled-roster generation has no academy preview.`, row);
+  check(errorNoticeCount === 0, `${row.id}: direct bundled-roster loading incorrectly shows a live-club failure warning.`, row);
+  row.roster.push({ provider: 'direct-bundled-FALLBACK_CLUBS', academyText, errorNoticeCount });
   check(await walk.raw() === null, `${row.id}: generating a creator began or saved a career.`, row);
   return walk.preview().locator('span.w-6.text-right').allTextContents();
 }
@@ -284,6 +290,11 @@ try {
     'src/hooks/useRevealScroll.ts', 'src/components/RouteErrorBoundary.tsx', 'scripts/playSoccerCareerBuildLazy.mjs', 'scripts/lib/hostLikeServer.mjs', 'scripts/lib/playwrightLoader.mjs',
     'scripts/lib/offlineTransport.cjs', 'package.json', 'package-lock.json'];
   sourceBefore = [...new Set([...sourceFiles.map(file => path.join(ROOT, file)), ...markerSources])].sort().map(receipt); report.sourceHashes = sourceBefore;
+  const pageCode = fs.readFileSync(path.join(ROOT, 'src/pages/SoccerCareer.tsx'), 'utf8').replace(/\/\*[\s\S]*?\*\//g, '').replace(/^[\t ]*\/\/.*$/gm, '');
+  const loader = /^[\t ]*useEffect\(\(\) => \{\s*setClubs\(FALLBACK_CLUBS\);\s*setClubsError\(false\);\s*setClubsLoading\(false\);\s*\}, \[\]\);/gm;
+  const loaderMatches = [...pageCode.matchAll(loader)].length;
+  setup(loaderMatches === 1, 'Exactly one actual direct bundled-roster loader must be held; comments do not establish its behavior.');
+  report.rosterProvenance = { provider: 'FALLBACK_CLUBS', loaderMatches, source: 'src/pages/SoccerCareer.tsx', sourceSha256: sha(path.join(ROOT, 'src/pages/SoccerCareer.tsx')), warningExpected: false };
   distBefore = files(path.join(ROOT, 'dist')).map(receipt); report.dist = distBefore;
   const markers = files(path.join(ROOT, 'dist/assets')).filter(file => file.endsWith('.js') && fs.readFileSync(file, 'utf8').includes(MARKER));
   setup(markers.length === 1, 'Exactly one actual compiled JS asset must own the editor marker.');
