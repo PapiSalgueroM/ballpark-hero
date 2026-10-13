@@ -1,0 +1,5 @@
+#!serve
+#!playwright
+nfl: node .rc/x/walkFo.mjs nfl
+nba: node .rc/x/walkFo.mjs nba
+mlb: node .rc/x/walkFo.mjs mlb
