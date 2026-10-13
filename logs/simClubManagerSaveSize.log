@@ -1,0 +1,48 @@
+1) Fifteen seasons at three clubs: under 203000 bytes, slope under 2000 bytes a season, every ledger inside its cap
+   Real Madrid   seasons 15, day one 58710, season 1 166953, season 15 184874, slope after season 3 -80 bytes a season
+                 sizes: 58710 166953 176088 183156 187859 182474 182724 190267 188960 183638 188743 183728 183885 189352 183141 184874
+   Everton       seasons 15, day one 54364, season 1 153616, season 15 193921, slope after season 3 836 bytes a season
+                 sizes: 54364 153616 163759 180119 179996 185194 189994 195215 194457 194428 193592 195582 192950 192991 193386 193921
+   Lincoln City  seasons 15, day one 54224, season 1 154321, season 15 195909, slope after season 3 917 bytes a season
+                 sizes: 54224 154321 165582 172422 180149 188002 191093 192215 193181 194038 194080 194449 193908 194551 193830 195909
+   board nudges over the whole run: 262
+2) An oversized pre 634 save shrinks on load, the trim is a fixed point, and the next season plays the same
+   season 2 save 163759 bytes, inflated to 466602, loaded back as 187688
+   ledgers after load: h2h 300, transferLog 80, inbox 8, aiHeadlines 8
+   a season from the trimmed save and from the oversized one, same seed: identical (table, results, squad, budget, board, trophies, career stats)
+3) saveCareer says whether it wrote: false when refused twice, lean and true when refused once, same bytes twice
+   the season 15 save: 193921 bytes, h2h 300 rows, at most 13 per opponent
+   store throws on every write: saveCareer returned false after 2 attempts (193921, 182344 bytes)
+   store throws once: saveCareer returned true, wrote 182344 bytes (11577 fewer), h2h 167 rows, at most 6 per opponent
+   working store: true then true, 193921 bytes then 193921, identical true, equal to the trimmed career true
+4) The hook, rendered: the pagehide write, the hidden tab write, the same bytes, and saveFailed
+    after pagehide the disk holds 53889 bytes, memory 53889
+    after the tab went hidden the disk holds 53852 bytes, memory 53852
+    three writes, 54173 bytes each, identical
+    with a throwing store, saveFailed is true
+    with the store back, saveFailed is false and the disk matches memory: true
+    second press on Serge Gnabry: "Serge Gnabry is already in your squad."
+    loan out again after the recall: "Christian Pulisic has already been out on loan once this season. One loan out a season."
+   Test Files  1 passed (1)
+   Tests  6 passed (6)
+5) Two different men with one name both survive a save, a load and a week, and a loan record for one of them survives too
+   Real Madrid for three seasons, then Athletic Club at season 4: squad 21, Nando Hedlund x2 (p-nando-hedlund ST 23 r73 | p-nando-hedlund-2 GK 18 r63)
+   saved and loaded: squad 21, the pair x2; a week later: squad 21, the pair x2
+   the GK out on loan: his loan record after the load 1, after a week 1; the ST still in the squad true and true
+   Abdukodir Khusanov (CB 21): with a different man of that name on loan, listed true, refused as away false, bought true; with the man himself on loan, listed false, refused as away true, bought false
+6) The repair, on saves that really carry the duplicate the pre 634 market made
+   Andriy Lunin (GK 26) out on loan; the pre 634 market listed him at Real Madrid for 13.2 as GK 26
+   in season shape: squad 1 and away 1 before the load, squad 1 and away 0 after it, 1 of him in the squad after the summer
+   post summer shape: 2 copies before the load, 1 after (kept p-andriy-lunin, the XI copy is p-andriy-lunin), dangling XI ids 0, dangling set piece ids 0, 1 a week later
+   45 men sent out on loan one at a time at Real Madrid season 3 and Athletic Club season 4: 0 still listed while away
+7) The loan desk is not a money pump: one loan out a season
+   Florian Wirtz at Liverpool, budget 137m: 1 of 25 loan out and recall cycles went through, net +3.2m (one loan fee is 6.4m), refused on attempt 2: "Florian Wirtz has already been out on loan once this season. One loan out a season."
+   a loan approach for him after the recall: refused
+   loanOutRefusal against loanOutPlayer: 78 men over three states, 0 disagreements
+   after the summer, season 2: he can go out on loan again true
+8) Every market door agrees with its reason, and talks refuse a released man or a man on loan at the door
+   2568 presses over 8 states and 80 cards: 1321 refused, 0 where the engine and the reason disagree
+   talks for Kylian Mbappé, released: opened false, reason "You released Kylian Mbappé. He will not sign for you again."
+   talks for Andriy Lunin, out on loan: opened false, reason "Andriy Lunin is already yours, out on loan at Sevilla. Bring him back from the loan desk instead."
+
+simClubManagerSaveSize: all sections green
