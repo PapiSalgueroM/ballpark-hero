@@ -1,0 +1,32 @@
+[0s] walk nhl1280b: http://localhost:4173/nhl-my-career at 1280x900
+[22s] AUDIT hub draft trunc: With pick 123, the Montreal Canadiens select Maximilian Okonkwo-Smith. [182<312]
+[76s] season 1: hub, seasons on save 0 -> 1, year 2029, age 21, ovr 79, team MTL, $0.9M x2, last {"year":2028,"team":"MTL","age":20,"ovr":77,"games":62,"awards":[],"teamResult":"Lost in Round 1","salary":0.9,"slate":84,"wins":30,"svpct":0.915,"poGames":5,"p
+[76s] AUDIT hub s1 trunc: You said the fans should try playing through it. The sports radio host [182<612]
+[83s] AUDIT bank shop small: 🏡 Home 151x29
+[83s] AUDIT bank shop small: 🏎️ Rides 151x29
+[83s] AUDIT bank shop small: 📈 Invest 151x29
+[83s] AUDIT bank shop small: 💪 Body 151x29
+[83s] AUDIT bank shop small: 💎 Flex 151x29
+[83s] AUDIT bank shop small: ❤️ Family 151x29
+[83s] AUDIT bank shop small: 🕶️ Shady 151x29
+[83s] AUDIT bank shop small: $1.5M 57x29
+[83s] AUDIT bank shop small: $4.5M 59x29
+[83s] AUDIT bank shop small: $8M 48x29
+[83s] AUDIT bank shop small: $20M 55x29
+[83s] AUDIT bank shop small: $5M 48x29
+[83s] AUDIT bank shop small: $2M 48x29
+[83s] AUDIT bank shop small: $0.8M 59x29
+[83s] AUDIT bank shop small: $2.5M 59x29
+[91s] AUDIT tile Inbox s1 trunc: Stick and skate deal on the table. Good money, but the brand got caugh [584<596]
+[91s] AUDIT tile Inbox s1 trunc: Same pregame meal every game until we lose. Same seat on the bus too.  [584<594]
+[91s] AUDIT tile Inbox s1 trunc: Still can't believe the kid who ate us out of house and cabin during j [584<622]
+[96s] AUDIT practice menu trunc: 📱 Replied to Agent: Take the money. Karma down. [182<220]
+[214s] AUDIT event s2 trunc: 😉 The clinic turned into a chirping contest between you and Zane Cast [182<463]
+[215s] season 2: hub, seasons on save 1 -> 2, year 2030, age 22, ovr 81, team MTL, $0.9M x1, last {"year":2029,"team":"MTL","age":21,"ovr":79,"games":67,"awards":[],"teamResult":"Missed the playoffs","salary":0.9,"slate":84,"wins":35,"svpct":0.925}
+[215s] AUDIT hub s2 trunc: 🎙️ It backfired. The clip runs all week for the wrong reasons (-8 fan [182<314]
+[222s] AUDIT tile Inbox s2 trunc: Before you sign anything long term, let's sit down. Where you live and [584<606]
+[256s] AUDIT extension s3 trunc: 📱 Replied to Accountant: Set up a meeting. [182<189]
+[277s] season 3: stuck, seasons on save 2 -> 2, year 2030, age 22, ovr 81, team MTL, $0.9M x1, last {"year":2029,"team":"MTL","age":21,"ovr":79,"games":67,"awards":[],"teamResult":"Missed the playoffs","salary":0.9,"slate":84,"wins":35,"svpct":0.925}
+[277s] DONE nhl1280b: seasons 2, events 4, curtains 4, page errors 0, console 1, stuck 13, shots 40
+[277s] event titles: Nine in a row x1 | The accountability scrum x1
+[277s] CONSOLE warning Warning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.

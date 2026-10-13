@@ -1,0 +1,38 @@
+[2s] walk mlb1280b: http://localhost:4173/mlb-my-career at 1280x900
+[6s] AUDIT first visit help small: SP 70x28
+[6s] AUDIT first visit help small: RP 70x28
+[6s] AUDIT first visit help small: C 70x28
+[6s] AUDIT first visit help small: 1B 70x28
+[6s] AUDIT first visit help small: 2B 70x28
+[6s] AUDIT first visit help small: 3B 70x28
+[6s] AUDIT first visit help small: SS 70x28
+[6s] AUDIT first visit help small: LF 70x28
+[6s] AUDIT first visit help small: CF 70x28
+[6s] AUDIT first visit help small: RF 70x28
+[6s] AUDIT first visit help small: DH 70x28
+[10s] AUDIT hub draft trunc: 🎓 With pick 11, the St. Louis Cardinals select Maximilian Okonkwo-Smi [182<315]
+[22s] AUDIT tile Inbox s0 trunc: Congrats on draft day. A bat company and a glove company already calle [584<651]
+[30s] AUDIT event s1 trunc: 🪑 Another spring on the bench. The gap is closing. [182<222]
+[31s] season 1: hub, seasons on save 0 -> 1, year 2027, age 22, ovr 75, team STL, $0.8M x5, last {"year":2026,"team":"STL","age":21,"ovr":73,"games":13,"awards":[],"teamResult":"Lost the Wild Card series","salary":0.8,"era":5.44,"wins":6,"lossesP":4,"so":61
+[31s] AUDIT hub s1 trunc: The GM gave you an actual plan with actual dates and then honored it i [182<409]
+[38s] AUDIT bank shop small: 🏡 Home 151x29
+[38s] AUDIT bank shop small: 🏎️ Rides 151x29
+[38s] AUDIT bank shop small: 📈 Invest 151x29
+[38s] AUDIT bank shop small: 💪 Body 151x29
+[38s] AUDIT bank shop small: 💎 Flex 151x29
+[38s] AUDIT bank shop small: ❤️ Family 151x29
+[38s] AUDIT bank shop small: $1.5M 57x29
+[38s] AUDIT bank shop small: $4.5M 59x29
+[38s] AUDIT bank shop small: $8M 48x29
+[38s] AUDIT bank shop small: $20M 55x29
+[38s] AUDIT bank shop small: $5M 48x29
+[38s] AUDIT bank shop small: $2M 48x29
+[46s] AUDIT tile Inbox s1 trunc: Postseason shares are coming. The clubhouse staff makes a fraction of  [584<625]
+[52s] AUDIT practice menu trunc: 📱 Replied to Agent: Split a bonus with the staff. Karma up. [182<254]
+[73s] AUDIT event s2 trunc: 💛 One day, one field, two hundred kids. You and Cruz Hendricks split  [182<462]
+[74s] season 2: hub, seasons on save 1 -> 2, year 2028, age 23, ovr 78, team STL, $0.8M x4, last {"year":2027,"team":"STL","age":22,"ovr":77,"games":13,"awards":[],"teamResult":"Missed October","salary":0.8,"era":4.5,"wins":8,"lossesP":4,"so":100}
+[96s] season 3: hub, seasons on save 2 -> 3, year 2029, age 24, ovr 79, team STL, $0.8M x3, last {"year":2028,"team":"STL","age":23,"ovr":78,"games":13,"awards":[],"teamResult":"Missed October","salary":0.8,"era":3.96,"wins":7,"lossesP":3,"so":87}
+[96s] AUDIT hub s3 trunc: 🎙️ It backfired. The clip runs all week for the wrong reasons (-8 fan [182<314]
+[112s] DONE mlb1280b: seasons 3, events 4, curtains 5, page errors 0, console 1, stuck 4, shots 40
+[112s] event titles: Optioned. Again. x1 | The accountability scrum x2
+[112s] CONSOLE warning Warning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.

@@ -1,0 +1,31 @@
+[2s] walk nba1280b: http://localhost:4173/nba-my-career at 1280x900
+[10s] AUDIT hub draft trunc: 🎓 With pick 30, the Minnesota Timberwolves select Maximilian Okonkwo- [182<344]
+[22s] AUDIT tile Inbox s0 trunc: I cried the whole time they read your name. Your little cousins still  [584<691]
+[81s] centre s1: games watched 2, first card 1s, 24s, closed true
+[89s] AUDIT event s1 trunc: 💸 You sent the check and skipped the cameras. The quiet kind of good. [182<312]
+[90s] season 1: hub, seasons on save 0 -> 1, year 2027, age 22, ovr 75, team MIN, $2.5M x3, last {"year":2026,"team":"MIN","age":21,"ovr":74,"games":81,"ppg":8.1,"rpg":2.9,"apg":1.6,"awards":["All-Rookie Team"],"teamResult":"Lost in the conference semis","s
+[90s] AUDIT hub s1 trunc: You put him on the floor and then helped him up. He told a reporter th [182<604]
+[97s] AUDIT bank shop small: 🏡 Home 151x29
+[97s] AUDIT bank shop small: 🏎️ Rides 151x29
+[97s] AUDIT bank shop small: 📈 Invest 151x29
+[97s] AUDIT bank shop small: 💪 Body 151x29
+[97s] AUDIT bank shop small: 💎 Flex 151x29
+[97s] AUDIT bank shop small: ❤️ Family 151x29
+[97s] AUDIT bank shop small: $1.5M 57x29
+[97s] AUDIT bank shop small: $4.5M 59x29
+[97s] AUDIT bank shop small: $8M 48x29
+[97s] AUDIT bank shop small: $20M 55x29
+[97s] AUDIT bank shop small: $5M 48x29
+[97s] AUDIT bank shop small: $2M 48x29
+[111s] AUDIT practice menu trunc: 📱 Replied to Fan DM: Sign it and take a picture. Karma up. [182<256]
+[225s] AUDIT event s2 trunc: 🪑 Still the second unit. The minutes will come, keep pushing. [182<264]
+[226s] season 2: hub, seasons on save 1 -> 2, year 2028, age 23, ovr 78, team MIN, $2.5M x2, last {"year":2027,"team":"MIN","age":22,"ovr":75,"games":80,"ppg":5.5,"rpg":2,"apg":1.1,"awards":[],"teamResult":"Lost in the first round","salary":2.5,"mpg":15.2,"s
+[226s] AUDIT hub s2 trunc: You stayed in front of everybody small and got leaned on by everybody  [182<502]
+[232s] AUDIT tile Inbox s2 trunc: Playoff money just hit. The trainers and equipment staff make a fracti [584<640]
+[278s] AUDIT event s3 trunc: He runs your marketing under the agency for 0.3M a year. He is thrivin [182<500]
+[279s] season 3: hub, seasons on save 2 -> 3, year 2029, age 24, ovr 79, team MIN, $2.5M x1, last {"year":2028,"team":"MIN","age":23,"ovr":78,"games":78,"ppg":7.9,"rpg":2.9,"apg":2,"awards":[],"teamResult":"Lost the NBA Finals","salary":2.5,"mpg":17.1,"spg":
+[279s] AUDIT hub s3 trunc: The 0.4M is gone but you sat in twelve real meetings and kept the hood [182<421]
+[308s] centre again: games watched 2, first card 0s, 23s, closed true
+[320s] DONE nba1280b: seasons 3, events 5, curtains 5, page errors 0, console 1, stuck 3, shots 40
+[320s] event titles: The vet who wants to see something x1 | One through five x1 | Your brother has business cards now x1 | A 26 year old in a 900 dollar hoodie x1
+[320s] CONSOLE warning Warning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.

@@ -1,0 +1,2611 @@
+{
+ "tag": "nfl1280b",
+ "SPORT": "nfl",
+ "W": 1280,
+ "H": 900,
+ "SEED": 4202,
+ "POS": "K",
+ "steps": [
+  {
+   "t": 8,
+   "act": "road to the draft",
+   "text": "Play your road to the draft",
+   "scroll": [
+    19,
+    870,
+    165
+   ]
+  },
+  {
+   "act": "route 0"
+  },
+  {
+   "t": 11,
+   "act": "pre-draft season",
+   "text": "Play your first season",
+   "scroll": [
+    165,
+    165,
+    165
+   ]
+  },
+  {
+   "t": 13,
+   "act": "pre-draft season",
+   "text": "Play the next season",
+   "scroll": [
+    165,
+    165,
+    165
+   ]
+  },
+  {
+   "t": 15,
+   "act": "pre-draft season",
+   "text": "Play the next season",
+   "scroll": [
+    165,
+    165,
+    165
+   ]
+  },
+  {
+   "t": 17,
+   "act": "draft day",
+   "text": "Draft day",
+   "scroll": [
+    165,
+    165,
+    165
+   ]
+  },
+  {
+   "t": 24,
+   "act": "start your career",
+   "text": "Start your career",
+   "scroll": [
+    165,
+    165,
+    165
+   ]
+  },
+  {
+   "t": 27,
+   "act": "back from My Player",
+   "text": "Hub",
+   "scroll": [
+    165,
+    165,
+    165
+   ]
+  },
+  {
+   "t": 30,
+   "act": "back from The Bank",
+   "text": "Hub",
+   "scroll": [
+    165,
+    165,
+    165
+   ]
+  },
+  {
+   "t": 32,
+   "act": "back from Career Log",
+   "text": "Back to career",
+   "scroll": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "t": 34,
+   "act": "back from Trophy Case",
+   "text": "Hub",
+   "scroll": [
+    5,
+    5,
+    5
+   ]
+  },
+  {
+   "t": 36,
+   "act": "back from News",
+   "text": "Hub",
+   "scroll": [
+    5,
+    5,
+    5
+   ]
+  },
+  {
+   "t": 39,
+   "act": "back from Inbox",
+   "text": "Hub",
+   "scroll": [
+    5,
+    5,
+    5
+   ]
+  },
+  {
+   "t": 70,
+   "act": "week by week",
+   "text": "📺 Week by week",
+   "scroll": [
+    5,
+    5,
+    5
+   ]
+  },
+  {
+   "t": 72,
+   "act": "centre help got it",
+   "text": "Got it",
+   "scroll": [
+    5,
+    5,
+    5
+   ]
+  },
+  {
+   "t": 73,
+   "act": "centre start",
+   "text": "▶ Kick off",
+   "scroll": [
+    5,
+    5,
+    5
+   ]
+  },
+  {
+   "t": 73,
+   "act": "speed 3x",
+   "text": "3x",
+   "scroll": [
+    5,
+    5,
+    5
+   ]
+  },
+  {
+   "t": 80,
+   "act": "next game",
+   "text": "▶ Game 2",
+   "scroll": [
+    5,
+    5,
+    5
+   ]
+  },
+  {
+   "t": 86,
+   "act": "sim the rest",
+   "text": "⏭ Sim the rest",
+   "scroll": [
+    5,
+    5,
+    5
+   ]
+  },
+  {
+   "t": 94,
+   "act": "leave centre",
+   "text": "Back to your season",
+   "scroll": [
+    5,
+    5,
+    5
+   ]
+  },
+  {
+   "t": 98,
+   "act": "continue",
+   "text": "Continue",
+   "scroll": [
+    5,
+    5,
+    5
+   ]
+  },
+  {
+   "t": 99,
+   "act": "event option 1",
+   "text": "Organize a split with the other rookies Sensible, slightly l",
+   "scroll": [
+    5,
+    5,
+    5
+   ]
+  },
+  {
+   "t": 100,
+   "act": "decision continue",
+   "text": "Continue",
+   "scroll": [
+    5,
+    5,
+    5
+   ]
+  },
+  {
+   "t": 100,
+   "act": "event option 1",
+   "text": "Say nothing and hit the next one Morale +3",
+   "scroll": [
+    5,
+    5,
+    5
+   ]
+  },
+  {
+   "t": 101,
+   "act": "decision continue",
+   "text": "Continue",
+   "scroll": [
+    5,
+    5,
+    5
+   ]
+  },
+  {
+   "t": 105,
+   "act": "back from My Player",
+   "text": "Hub",
+   "scroll": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "t": 108,
+   "act": "back from The Bank",
+   "text": "Hub",
+   "scroll": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "t": 110,
+   "act": "back from Career Log",
+   "text": "Back to career",
+   "scroll": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "t": 112,
+   "act": "back from Trophy Case",
+   "text": "Hub",
+   "scroll": [
+    47,
+    47,
+    47
+   ]
+  },
+  {
+   "t": 114,
+   "act": "back from News",
+   "text": "Hub",
+   "scroll": [
+    47,
+    47,
+    47
+   ]
+  },
+  {
+   "t": 118,
+   "act": "back from Inbox",
+   "text": "Hub",
+   "scroll": [
+    47,
+    47,
+    47
+   ]
+  },
+  {
+   "t": 120,
+   "act": "open practice",
+   "text": "Start practice",
+   "scroll": [
+    47,
+    47,
+    47
+   ]
+  },
+  {
+   "t": 198,
+   "act": "close practice",
+   "text": "Close",
+   "scroll": [
+    47,
+    47,
+    47
+   ]
+  },
+  {
+   "t": 229,
+   "act": "play season 2",
+   "text": "Play the 2027 season",
+   "scroll": [
+    47,
+    47,
+    47
+   ]
+  },
+  {
+   "t": 233,
+   "act": "continue",
+   "text": "Continue",
+   "scroll": [
+    47,
+    47,
+    47
+   ]
+  },
+  {
+   "t": 238,
+   "act": "continue",
+   "text": "Continue",
+   "scroll": [
+    47,
+    47,
+    47
+   ]
+  },
+  {
+   "t": 239,
+   "act": "event option 0",
+   "text": "Full plan, no cheat days, all year Health up, joy down",
+   "scroll": [
+    47,
+    47,
+    47
+   ]
+  },
+  {
+   "t": 239,
+   "act": "decision continue",
+   "text": "Continue",
+   "scroll": [
+    47,
+    47,
+    47
+   ]
+  },
+  {
+   "t": 240,
+   "act": "event option 2",
+   "text": "Stay out of it No change",
+   "scroll": [
+    47,
+    47,
+    47
+   ]
+  },
+  {
+   "t": 240,
+   "act": "decision continue",
+   "text": "Continue",
+   "scroll": [
+    47,
+    47,
+    47
+   ]
+  },
+  {
+   "t": 241,
+   "act": "event option 1",
+   "text": "Skip the voluntary part, report for minicamp Morale -3",
+   "scroll": [
+    47,
+    47,
+    47
+   ]
+  },
+  {
+   "t": 242,
+   "act": "decision continue",
+   "text": "Continue",
+   "scroll": [
+    47,
+    47,
+    47
+   ]
+  },
+  {
+   "t": 246,
+   "act": "back from News",
+   "text": "Hub",
+   "scroll": [
+    71,
+    71,
+    71
+   ]
+  },
+  {
+   "t": 251,
+   "act": "back from Inbox",
+   "text": "Hub",
+   "scroll": [
+    71,
+    71,
+    71
+   ]
+  },
+  {
+   "t": 282,
+   "act": "play season 3",
+   "text": "Play the 2028 season",
+   "scroll": [
+    71,
+    71,
+    71
+   ]
+  },
+  {
+   "t": 287,
+   "act": "continue",
+   "text": "Continue",
+   "scroll": [
+    71,
+    71,
+    71
+   ]
+  },
+  {
+   "t": 292,
+   "act": "continue",
+   "text": "Continue",
+   "scroll": [
+    71,
+    71,
+    71
+   ]
+  },
+  {
+   "t": 293,
+   "act": "event option 1",
+   "text": "Take the notes, keep your own routine Small gain, own clock",
+   "scroll": [
+    71,
+    71,
+    71
+   ]
+  },
+  {
+   "t": 293,
+   "act": "decision continue",
+   "text": "Continue",
+   "scroll": [
+    71,
+    71,
+    71
+   ]
+  },
+  {
+   "t": 294,
+   "act": "event option 2",
+   "text": "Launch your own card brand Own the print run",
+   "scroll": [
+    71,
+    71,
+    71
+   ]
+  },
+  {
+   "t": 294,
+   "act": "decision continue",
+   "text": "Continue",
+   "scroll": [
+    71,
+    71,
+    71
+   ]
+  },
+  {
+   "t": 295,
+   "act": "event option 0",
+   "text": "Call him that night Morale +4",
+   "scroll": [
+    71,
+    71,
+    71
+   ]
+  },
+  {
+   "t": 296,
+   "act": "decision continue",
+   "text": "Continue",
+   "scroll": [
+    71,
+    71,
+    71
+   ]
+  },
+  {
+   "t": 299,
+   "act": "back from Inbox",
+   "text": "Hub",
+   "scroll": [
+    111,
+    111,
+    111
+   ]
+  },
+  {
+   "t": 302,
+   "act": "centre start",
+   "text": "▶ Kick off",
+   "scroll": [
+    111,
+    111,
+    111
+   ]
+  },
+  {
+   "t": 303,
+   "act": "speed 3x",
+   "text": "3x",
+   "scroll": [
+    111,
+    111,
+    111
+   ]
+  },
+  {
+   "t": 309,
+   "act": "next game",
+   "text": "▶ Game 2",
+   "scroll": [
+    111,
+    111,
+    111
+   ]
+  },
+  {
+   "t": 315,
+   "act": "sim the rest",
+   "text": "⏭ Sim the rest",
+   "scroll": [
+    111,
+    111,
+    111
+   ]
+  },
+  {
+   "t": 323,
+   "act": "leave centre",
+   "text": "Back to your season",
+   "scroll": [
+    111,
+    111,
+    111
+   ]
+  },
+  {
+   "t": 326,
+   "act": "back from My Player",
+   "text": "Hub",
+   "scroll": [
+    111,
+    111,
+    111
+   ]
+  },
+  {
+   "t": 328,
+   "act": "back from The Bank",
+   "text": "Hub",
+   "scroll": [
+    111,
+    111,
+    111
+   ]
+  },
+  {
+   "t": 330,
+   "act": "back from Career Log",
+   "text": "Back to career",
+   "scroll": [
+    111,
+    111,
+    111
+   ]
+  },
+  {
+   "t": 332,
+   "act": "back from Trophy Case",
+   "text": "Hub",
+   "scroll": [
+    111,
+    111,
+    111
+   ]
+  },
+  {
+   "t": 334,
+   "act": "back from News",
+   "text": "Hub",
+   "scroll": [
+    111,
+    111,
+    111
+   ]
+  },
+  {
+   "t": 336,
+   "act": "back from Inbox",
+   "text": "Hub",
+   "scroll": [
+    111,
+    111,
+    111
+   ]
+  }
+ ],
+ "audits": [
+  {
+   "overX": 0,
+   "scrollY": 0,
+   "docH": 8712,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 18,
+   "where": "first visit help",
+   "t": 6
+  },
+  {
+   "overX": 0,
+   "scrollY": 0,
+   "docH": 8712,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 17,
+   "where": "create",
+   "t": 7
+  },
+  {
+   "overX": 0,
+   "scrollY": 165,
+   "docH": 8423,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 3,
+   "where": "prospect help",
+   "t": 9
+  },
+  {
+   "overX": 0,
+   "scrollY": 165,
+   "docH": 8025,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 4,
+   "where": "prospect routes",
+   "t": 10
+  },
+  {
+   "overX": 0,
+   "scrollY": 165,
+   "docH": 8287,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 3,
+   "where": "prospect season",
+   "t": 12
+  },
+  {
+   "overX": 0,
+   "scrollY": 165,
+   "docH": 8287,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 3,
+   "where": "prospect choice",
+   "t": 12
+  },
+  {
+   "overX": 0,
+   "scrollY": 165,
+   "docH": 8287,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 3,
+   "where": "prospect season",
+   "t": 13
+  },
+  {
+   "overX": 0,
+   "scrollY": 165,
+   "docH": 8290,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 4,
+   "where": "prospect showcase",
+   "t": 16
+  },
+  {
+   "overX": 0,
+   "scrollY": 165,
+   "docH": 8059,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 2,
+   "where": "prospect draft day",
+   "t": 17
+  },
+  {
+   "overX": 0,
+   "scrollY": 165,
+   "docH": 8480,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 3,
+   "where": "draft night live",
+   "t": 19
+  },
+  {
+   "overX": 0,
+   "scrollY": 165,
+   "docH": 8480,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 2,
+   "where": "draft night end",
+   "t": 23
+  },
+  {
+   "overX": 0,
+   "scrollY": 165,
+   "docH": 8175,
+   "bad": [],
+   "trunc": [
+    "With pick 171, the Kansas City Chiefs select Maximilian Okonkwo-Smith. [182<307]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 10,
+   "where": "hub draft",
+   "t": 26
+  },
+  {
+   "overX": 0,
+   "scrollY": 165,
+   "docH": 7948,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 1,
+   "where": "tile My Player s0",
+   "t": 27
+  },
+  {
+   "overX": 0,
+   "scrollY": 165,
+   "docH": 8008,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 10,
+   "where": "tile The Bank s0",
+   "t": 29
+  },
+  {
+   "overX": 0,
+   "scrollY": 0,
+   "docH": 7621,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 1,
+   "where": "tile Career Log s0",
+   "t": 31
+  },
+  {
+   "overX": 0,
+   "scrollY": 5,
+   "docH": 8222,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 1,
+   "where": "tile Trophy Case s0",
+   "t": 33
+  },
+  {
+   "overX": 0,
+   "scrollY": 5,
+   "docH": 7680,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 4,
+   "where": "tile News s0",
+   "t": 35
+  },
+  {
+   "overX": 0,
+   "scrollY": 5,
+   "docH": 7543,
+   "bad": [],
+   "trunc": [
+    "Welcome. I need three jersey numbers from you, in order. Heads up, you [584<661]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 2,
+   "where": "tile Inbox s0",
+   "t": 37
+  },
+  {
+   "overX": 0,
+   "scrollY": 5,
+   "docH": 7752,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 8,
+   "where": "centre kickoff s1",
+   "t": 72
+  },
+  {
+   "overX": 0,
+   "scrollY": 5,
+   "docH": 7752,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 14,
+   "where": "centre live s1",
+   "t": 76
+  },
+  {
+   "overX": 0,
+   "scrollY": 5,
+   "docH": 7752,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 16,
+   "where": "centre final s1",
+   "t": 79
+  },
+  {
+   "overX": 0,
+   "scrollY": 5,
+   "docH": 7752,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 14,
+   "where": "centre live s1",
+   "t": 82
+  },
+  {
+   "overX": 0,
+   "scrollY": 5,
+   "docH": 7752,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 16,
+   "where": "centre final s1",
+   "t": 85
+  },
+  {
+   "overX": 0,
+   "scrollY": 5,
+   "docH": 7752,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 6,
+   "where": "centre review s1",
+   "t": 93
+  },
+  {
+   "overX": 0,
+   "scrollY": 5,
+   "docH": 7752,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 1,
+   "where": "continue card s1",
+   "t": 97
+  },
+  {
+   "overX": 0,
+   "scrollY": 5,
+   "docH": 8056,
+   "bad": [],
+   "trunc": [
+    "📊 Playoffs: 2 games, 3 of 3 on field goals. [182<186]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 9,
+   "where": "event s1",
+   "t": 99
+  },
+  {
+   "overX": 0,
+   "scrollY": 5,
+   "docH": 7722,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 1,
+   "where": "outcome s1",
+   "t": 99
+  },
+  {
+   "overX": 0,
+   "scrollY": 5,
+   "docH": 8056,
+   "bad": [],
+   "trunc": [
+    "You made a spreadsheet. In a steakhouse. It worked, and it will follow [182<500]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 9,
+   "where": "event s1",
+   "t": 100
+  },
+  {
+   "overX": 0,
+   "scrollY": 5,
+   "docH": 7722,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 1,
+   "where": "outcome s1",
+   "t": 100
+  },
+  {
+   "overX": 0,
+   "scrollY": 5,
+   "docH": 8241,
+   "bad": [],
+   "trunc": [
+    "You said it was one kick and went back to work. The next one was good  [182<499]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 8,
+   "where": "hub s1",
+   "t": 101
+  },
+  {
+   "overX": 0,
+   "scrollY": 0,
+   "docH": 7948,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 1,
+   "where": "tile My Player s1",
+   "t": 105
+  },
+  {
+   "overX": 0,
+   "scrollY": 0,
+   "docH": 8010,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 10,
+   "where": "tile The Bank s1",
+   "t": 107
+  },
+  {
+   "overX": 0,
+   "scrollY": 0,
+   "docH": 8358,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [
+    "🏡 Home 151x29",
+    "🏎️ Rides 151x29",
+    "📈 Invest 151x29",
+    "💪 Body 151x29",
+    "💎 Flex 151x29",
+    "❤️ Family 151x29",
+    "$1.2M 57x29",
+    "$3.5M 59x29",
+    "$6M 48x29",
+    "$14M 53x29",
+    "$4M 48x29",
+    "$2.5M 59x29"
+   ],
+   "buttonsInView": 15,
+   "where": "bank shop",
+   "t": 107
+  },
+  {
+   "overX": 0,
+   "scrollY": 0,
+   "docH": 7697,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 3,
+   "where": "tile Career Log s1",
+   "t": 110
+  },
+  {
+   "overX": 0,
+   "scrollY": 47,
+   "docH": 8222,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 1,
+   "where": "tile Trophy Case s1",
+   "t": 112
+  },
+  {
+   "overX": 0,
+   "scrollY": 47,
+   "docH": 7719,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 4,
+   "where": "tile News s1",
+   "t": 114
+  },
+  {
+   "overX": 0,
+   "scrollY": 47,
+   "docH": 7713,
+   "bad": [],
+   "trunc": [
+    "CONGRATULATIONS! You've won 2 MILLION DOLLARS. Just send your account  [584<622]",
+    "A few guys are visiting the children's hospital on the off Tuesday. To [584<621]",
+    "Welcome. I need three jersey numbers from you, in order. Heads up, you [584<661]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 5,
+   "where": "tile Inbox s1",
+   "t": 116
+  },
+  {
+   "overX": 0,
+   "scrollY": 47,
+   "docH": 8217,
+   "bad": [],
+   "trunc": [
+    "📱 Replied to Unknown: Report and warn fans. Karma up. [182<246]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 21,
+   "where": "practice menu",
+   "t": 121
+  },
+  {
+   "overX": 0,
+   "scrollY": 47,
+   "docH": 8217,
+   "bad": [],
+   "trunc": [
+    "📱 Replied to Unknown: Report and warn fans. Karma up. [182<246]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 11,
+   "where": "hub after practice",
+   "t": 198
+  },
+  {
+   "overX": 0,
+   "scrollY": 47,
+   "docH": 7703,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 1,
+   "where": "continue card s2",
+   "t": 232
+  },
+  {
+   "overX": 0,
+   "scrollY": 47,
+   "docH": 7786,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 1,
+   "where": "continue card s2",
+   "t": 237
+  },
+  {
+   "overX": 0,
+   "scrollY": 47,
+   "docH": 8056,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 9,
+   "where": "event s2",
+   "t": 238
+  },
+  {
+   "overX": 0,
+   "scrollY": 47,
+   "docH": 8072,
+   "bad": [],
+   "trunc": [
+    "You reported to camp at the exact weight they asked for, three years r [182<597]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 9,
+   "where": "event s2",
+   "t": 239
+  },
+  {
+   "overX": 0,
+   "scrollY": 47,
+   "docH": 8241,
+   "bad": [],
+   "trunc": [
+    "You trained at home and showed up the day you had to. Within the rules [182<548]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 8,
+   "where": "hub s2",
+   "t": 242
+  },
+  {
+   "overX": 0,
+   "scrollY": 47,
+   "docH": 8241,
+   "bad": [],
+   "trunc": [
+    "You trained at home and showed up the day you had to. Within the rules [182<548]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 12,
+   "where": "programme open",
+   "t": 242
+  },
+  {
+   "overX": 0,
+   "scrollY": 47,
+   "docH": 8241,
+   "bad": [],
+   "trunc": [
+    "You trained at home and showed up the day you had to. Within the rules [182<548]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 14,
+   "where": "programme menu",
+   "t": 244
+  },
+  {
+   "overX": 0,
+   "scrollY": 71,
+   "docH": 7969,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 4,
+   "where": "tile News s2",
+   "t": 246
+  },
+  {
+   "overX": 0,
+   "scrollY": 71,
+   "docH": 7769,
+   "bad": [],
+   "trunc": [
+    "CONGRATULATIONS! You've won 2 MILLION DOLLARS. Just send your account  [584<622]",
+    "A few guys are visiting the children's hospital on the off Tuesday. To [584<621]",
+    "Welcome. I need three jersey numbers from you, in order. Heads up, you [584<661]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 6,
+   "where": "tile Inbox s2",
+   "t": 248
+  },
+  {
+   "overX": 0,
+   "scrollY": 71,
+   "docH": 7735,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 1,
+   "where": "continue card s3",
+   "t": 286
+  },
+  {
+   "overX": 0,
+   "scrollY": 71,
+   "docH": 7767,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 1,
+   "where": "continue card s3",
+   "t": 291
+  },
+  {
+   "overX": 0,
+   "scrollY": 71,
+   "docH": 8056,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 9,
+   "where": "event s3",
+   "t": 292
+  },
+  {
+   "overX": 0,
+   "scrollY": 71,
+   "docH": 8040,
+   "bad": [],
+   "trunc": [
+    "You took the good stuff and slept in twice a week. Rating +1, health + [182<512]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 9,
+   "where": "event s3",
+   "t": 293
+  },
+  {
+   "overX": 0,
+   "scrollY": 71,
+   "docH": 8281,
+   "bad": [],
+   "trunc": [
+    "You talked for an hour about nothing. He will catch on somewhere. You  [182<474]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 8,
+   "where": "hub s3",
+   "t": 296
+  },
+  {
+   "overX": 0,
+   "scrollY": 111,
+   "docH": 7826,
+   "bad": [],
+   "trunc": [
+    "I'm playing the other team's star all week on scout team. Want me to g [584<594]",
+    "CONGRATULATIONS! You've won 2 MILLION DOLLARS. Just send your account  [584<622]",
+    "A few guys are visiting the children's hospital on the off Tuesday. To [584<621]",
+    "Welcome. I need three jersey numbers from you, in order. Heads up, you [584<661]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 7,
+   "where": "tile Inbox s3",
+   "t": 297
+  },
+  {
+   "overX": 0,
+   "scrollY": 111,
+   "docH": 8281,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 8,
+   "where": "centre kickoff again",
+   "t": 302
+  },
+  {
+   "overX": 0,
+   "scrollY": 111,
+   "docH": 8281,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 14,
+   "where": "centre live again",
+   "t": 306
+  },
+  {
+   "overX": 0,
+   "scrollY": 111,
+   "docH": 8281,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 16,
+   "where": "centre final again",
+   "t": 309
+  },
+  {
+   "overX": 0,
+   "scrollY": 111,
+   "docH": 8281,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 14,
+   "where": "centre live again",
+   "t": 312
+  },
+  {
+   "overX": 0,
+   "scrollY": 111,
+   "docH": 8281,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 16,
+   "where": "centre final again",
+   "t": 315
+  },
+  {
+   "overX": 0,
+   "scrollY": 111,
+   "docH": 8281,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 6,
+   "where": "centre review again",
+   "t": 323
+  },
+  {
+   "overX": 0,
+   "scrollY": 111,
+   "docH": 7948,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 1,
+   "where": "tile My Player end",
+   "t": 325
+  },
+  {
+   "overX": 0,
+   "scrollY": 111,
+   "docH": 8010,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 10,
+   "where": "tile The Bank end",
+   "t": 327
+  },
+  {
+   "overX": 0,
+   "scrollY": 111,
+   "docH": 7697,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 6,
+   "where": "tile Career Log end",
+   "t": 329
+  },
+  {
+   "overX": 0,
+   "scrollY": 111,
+   "docH": 8222,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 1,
+   "where": "tile Trophy Case end",
+   "t": 331
+  },
+  {
+   "overX": 0,
+   "scrollY": 111,
+   "docH": 8037,
+   "bad": [],
+   "trunc": [],
+   "off": [],
+   "small": [],
+   "buttonsInView": 4,
+   "where": "tile News end",
+   "t": 333
+  },
+  {
+   "overX": 0,
+   "scrollY": 111,
+   "docH": 7826,
+   "bad": [],
+   "trunc": [
+    "I'm playing the other team's star all week on scout team. Want me to g [584<594]",
+    "CONGRATULATIONS! You've won 2 MILLION DOLLARS. Just send your account  [584<622]",
+    "A few guys are visiting the children's hospital on the off Tuesday. To [584<621]",
+    "Welcome. I need three jersey numbers from you, in order. Heads up, you [584<661]"
+   ],
+   "off": [],
+   "small": [],
+   "buttonsInView": 7,
+   "where": "tile Inbox end",
+   "t": 335
+  }
+ ],
+ "errors": [
+  {
+   "t": "warning",
+   "at": 0,
+   "text": "Warning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}."
+  }
+ ],
+ "pageErrors": [],
+ "failedRequests": [],
+ "events": [
+  {
+   "tag": "s1",
+   "id": "lifeA_rookie_dinner",
+   "text": "OFFSEASON, CARD 1 OF 2\n\nThe rookie dinner tab\n\nThe vets took twelve of you to a steakhouse and ordered like the bill was a rumor. It lands face down in front of you. Your agent warned you about this exact night.\n\nCover all of it without blinking\nRoom love, wallet pain\nOrganize a split with the other rookies\nSensible, slightly lame\nRefuse and eat the silence\nMoney kept, room chilly",
+   "opts": [
+    "Cover all of it without blinking Room love, wallet pain",
+    "Organize a split with the other rookies Sensible, slightly lame",
+    "Refuse and eat the silence Money kept, room chilly"
+   ],
+   "chose": 1,
+   "delta": {
+    "ovr": [
+     77,
+     77
+    ],
+    "salary": [
+     1.2,
+     1.2
+    ],
+    "team": [
+     "KC",
+     "KC"
+    ]
+   }
+  },
+  {
+   "tag": "s1",
+   "id": "lifeC_k_the_miss",
+   "text": "OFFSEASON, CARD 2 OF 2\n\nThe miss\n\nYou missed one that mattered and the building went quiet around you for a week. Every kicker knows the next tryout is one phone call away. Everybody else knows it too.\n\nOwn it at your locker\nFanbase +4, morale -2\nSay nothing and hit the next one\nMorale +3\nBlame the hold\nMorale -7, fanbase -4",
+   "opts": [
+    "Own it at your locker Fanbase +4, morale -2",
+    "Say nothing and hit the next one Morale +3",
+    "Blame the hold Morale -7, fanbase -4"
+   ],
+   "chose": 1,
+   "delta": {
+    "ovr": [
+     77,
+     77
+    ],
+    "salary": [
+     1.2,
+     1.2
+    ],
+    "team": [
+     "KC",
+     "KC"
+    ]
+   }
+  },
+  {
+   "tag": "s2",
+   "id": "lifeA_nutritionist",
+   "text": "OFFSEASON, CARD 1 OF 3\n\nThe chef your agent hired\n\nOne hundred and eighty thousand a year for a man who weighs your breakfast and has strong opinions about orange juice. Your mother is offended on a spiritual level.\n\nFull plan, no cheat days, all year\nHealth up, joy down\nChef in season, your mom in the offseason\nBalanced, mom approved\nCancel him, eat like a human being\nMoney saved, wear up",
+   "opts": [
+    "Full plan, no cheat days, all year Health up, joy down",
+    "Chef in season, your mom in the offseason Balanced, mom approved",
+    "Cancel him, eat like a human being Money saved, wear up"
+   ],
+   "chose": 0,
+   "delta": {
+    "ovr": [
+     79,
+     80
+    ],
+    "salary": [
+     1.2,
+     1.2
+    ],
+    "team": [
+     "KC",
+     "KC"
+    ]
+   }
+  },
+  {
+   "tag": "s2",
+   "id": "lifeC_ps_elevation",
+   "text": "OFFSEASON, CARD 2 OF 3\n\nUp on Saturday, down on Monday\n\nThe team keeps calling the same practice squad kid up for game day and sending him back down the morning after. The rules only allow that so many times before they have to sign him for real or stop. The last one was last week. A coach asks what you think of him.\n\nVouch for him, loudly\nCoin flip: morale +7 or morale -3\nTell the truth: he is not ready yet\nMorale -2\nStay out of it\nNo change",
+   "opts": [
+    "Vouch for him, loudly Coin flip: morale +7 or morale -3",
+    "Tell the truth: he is not ready yet Morale -2",
+    "Stay out of it No change"
+   ],
+   "chose": 2,
+   "delta": {
+    "ovr": [
+     80,
+     80
+    ],
+    "salary": [
+     1.2,
+     1.2
+    ],
+    "team": [
+     "KC",
+     "KC"
+    ]
+   }
+  },
+  {
+   "tag": "s2",
+   "id": "lifeC_voluntary_spring",
+   "text": "OFFSEASON, CARD 3 OF 3\n\nVoluntary means voluntary\n\nThe spring workouts are voluntary. It says so in the labor deal. The minicamp at the end of them is not, and skipping that one costs real money. Your trainer back home wants you with him until camp.\n\nShow up for all of it\nMorale +5, health -2\nSkip the voluntary part, report for minicamp\nMorale -3\nSkip all of it and pay the fines\nMorale -6, net worth -0.1M",
+   "opts": [
+    "Show up for all of it Morale +5, health -2",
+    "Skip the voluntary part, report for minicamp Morale -3",
+    "Skip all of it and pay the fines Morale -6, net worth -0.1M"
+   ],
+   "chose": 1,
+   "delta": {
+    "ovr": [
+     80,
+     80
+    ],
+    "salary": [
+     1.2,
+     1.2
+    ],
+    "team": [
+     "KC",
+     "KC"
+    ]
+   }
+  },
+  {
+   "tag": "s3",
+   "id": "lifeA_vet_mentor",
+   "text": "OFFSEASON, CARD 1 OF 3\n\nThe old head adopts you\n\nA 34 year old starter at the end of his career started saving you a seat in the meeting room. He wants you there at 6am on Tuesdays. He has never once been late.\n\nEvery Tuesday, no exceptions\nRating up, sleep gone\nTake the notes, keep your own routine\nSmall gain, own clock\nPolitely dodge him all offseason\nRest, missed shortcut",
+   "opts": [
+    "Every Tuesday, no exceptions Rating up, sleep gone",
+    "Take the notes, keep your own routine Small gain, own clock",
+    "Politely dodge him all offseason Rest, missed shortcut"
+   ],
+   "chose": 1,
+   "delta": {
+    "ovr": [
+     82,
+     83
+    ],
+    "salary": [
+     1.2,
+     1.2
+    ],
+    "team": [
+     "KC",
+     "KC"
+    ]
+   }
+  },
+  {
+   "tag": "s3",
+   "id": "lifeB_tradingCards",
+   "text": "OFFSEASON, CARD 2 OF 3\n\n25,000 autographs in eleven weeks\n\nA card company has the contract drawn up. Your wrist is already suspicious of this arrangement.\n\nSign all 25,000\nWrist money\nSign 5,000 and price them like art\nScarcity play\nLaunch your own card brand\nOwn the print run",
+   "opts": [
+    "Sign all 25,000 Wrist money",
+    "Sign 5,000 and price them like art Scarcity play",
+    "Launch your own card brand Own the print run"
+   ],
+   "chose": 2,
+   "delta": {
+    "ovr": [
+     83,
+     83
+    ],
+    "salary": [
+     1.2,
+     1.2
+    ],
+    "team": [
+     "KC",
+     "KC"
+    ]
+   }
+  },
+  {
+   "tag": "s3",
+   "id": "lifeC_final_cuts",
+   "text": "OFFSEASON, CARD 3 OF 3\n\nCutdown day\n\nThe roster has to be down to the limit by the end of the day, and the guy who drove you to the facility every morning of camp is on the wrong side of the number.\n\nCall him that night\nMorale +4\nTell the coaches they got it wrong\nCoin flip: morale +5 or morale -4\nKeep your head down, it is a business\nMorale -2",
+   "opts": [
+    "Call him that night Morale +4",
+    "Tell the coaches they got it wrong Coin flip: morale +5 or morale -4",
+    "Keep your head down, it is a business Morale -2"
+   ],
+   "chose": 0,
+   "delta": {
+    "ovr": [
+     83,
+     83
+    ],
+    "salary": [
+     1.2,
+     1.2
+    ],
+    "team": [
+     "KC",
+     "KC"
+    ]
+   }
+  }
+ ],
+ "outcomes": [
+  {
+   "tag": "s1",
+   "txt": "YOUR DECISION\n\nThe rookie dinner tab\n\nYou chose: Organize a split with the other rookies\n\nMorale\n72 → \nto\n75\n+3\nContinue"
+  },
+  {
+   "tag": "s1",
+   "txt": "YOUR DECISION\n\nThe miss\n\nYou chose: Say nothing and hit the next one\n\nMorale\n75 → \nto\n78\n+3\nContinue"
+  },
+  {
+   "tag": "s2",
+   "txt": "YOUR DECISION\n\nThe chef your agent hired\n\nYou chose: Full plan, no cheat days, all year\n\nOVR\n79 → \nto\n80\n+1\nMorale\n75 → \nto\n71\n-4\nCash\n$1.1M → \nto\n$0.9M\n-$0.2M\nContinue"
+  },
+  {
+   "tag": "s2",
+   "txt": "YOUR DECISION\n\nUp on Saturday, down on Monday\n\nYou chose: Stay out of it\n\nNo rating, money, team or status changes to show.\n\nContinue"
+  },
+  {
+   "tag": "s2",
+   "txt": "YOUR DECISION\n\nVoluntary means voluntary\n\nYou chose: Skip the voluntary part, report for minicamp\n\nMorale\n71 → \nto\n68\n-3\nContinue"
+  },
+  {
+   "tag": "s3",
+   "txt": "YOUR DECISION\n\nThe old head adopts you\n\nYou chose: Take the notes, keep your own routine\n\nOVR\n82 → \nto\n83\n+1\nContinue"
+  },
+  {
+   "tag": "s3",
+   "txt": "YOUR DECISION\n\n25,000 autographs in eleven weeks\n\nYou chose: Launch your own card brand\n\nCash\n$1.4M → \nto\n$0.9M\n-$0.5M\nContinue"
+  },
+  {
+   "tag": "s3",
+   "txt": "YOUR DECISION\n\nCutdown day\n\nYou chose: Call him that night\n\nMorale\n73 → \nto\n77\n+4\nContinue"
+  }
+ ],
+ "curtains": [
+  {
+   "tag": "s1",
+   "n": 1,
+   "txt": "THE 2026 SEASON\n\nKansas City Chiefs · age 21 · K\n\nLost in the Divisional round\n\n19 of 25 FG, long of 56\n\n📊 Playoffs: 2 games, 3 of 3 on field goals.\n\n🥶 Nothing worked. The tape was rough all year.\n\n🪞 Jaxon Salvatore went 21 of 24 FG, long of 57 and had the better year of the two of you. Head to head 0-1.\n\nContinue"
+  },
+  {
+   "tag": "s2",
+   "n": 1,
+   "txt": "THE 2027 SEASON\n\nKansas City Chiefs · age 22 · K\n\nLost the Super Bowl\n\n27 of 30 FG, long of 63\n\n📊 Playoffs: 4 games, 8 of 8 on field goals.\n\n🪞 Jaxon Salvatore went 30 of 34 FG, long of 56. Nothing in it again. The head to head is level at 1-1.\n\nContinue"
+  },
+  {
+   "tag": "s2",
+   "n": 2,
+   "txt": "🪞 RIVALRY\n\n📋\n\nRoster Squeeze\n\nWord around the building is the front office is choosing between you and Jaxon Salvatore for the same cap space.\n\nMorale -5\n\nMaximilian Okonkwo-Smith\n79\nVS\nJaxon Salvatore\n78\nContinue"
+  },
+  {
+   "tag": "s3",
+   "n": 1,
+   "txt": "THE 2028 SEASON\n\nKansas City Chiefs · age 23 · K\n\nLost in the Wild Card round\n\n27 of 32 FG, long of 62\n\n📊 Playoffs: 1 game, 2 of 2 on field goals.\n\n🥶 Nothing worked. The tape was rough all year.\n\n🪞 Jaxon Salvatore went 22 of 26 FG, long of 57. You had the better year. Head to head 2-1.\n\nContinue"
+  },
+  {
+   "tag": "s3",
+   "n": 2,
+   "txt": "🪞 RIVALRY\n\n🏈\n\nHead to Head Win\n\nYour team beat Jaxon Salvatore's team this season, and you had the better box score.\n\nFanbase +5, confidence boost\n\nMaximilian Okonkwo-Smith\n82\nVS\nJaxon Salvatore\n79\nContinue"
+  }
+ ],
+ "hub": [
+  {
+   "at": "drafted",
+   "save": {
+    "phase": "season",
+    "seasons": 0,
+    "year": 2026,
+    "age": 21,
+    "ovr": 76,
+    "team": "KC",
+    "salary": 1.2,
+    "cy": 4,
+    "morale": 70,
+    "fanbase": 35,
+    "health": 100,
+    "net": 0.1,
+    "summer": null,
+    "last": null
+   },
+   "chips": [
+    "Maximilian Okonkwo-Smith · K",
+    "Kansas City Chiefs",
+    "2026 · age 21",
+    "OVR 76",
+    "$1.2M x4",
+    "⭐ Starter"
+   ],
+   "play": "Play the 2026 season",
+   "so": "Career so far: 0 rings · 0 MVPs · 0 All-Pros · 0 FG made",
+   "last": null,
+   "tiles": [
+    "📊 MY PLAYER OVR 76 The fans down at 35",
+    "💰 THE BANK $0.1M $1.2M a year, 4 years left",
+    "📜 CAREER LOG No seasons yet Play one and it goes on the books",
+    "🏆 TROPHY CASE Empty Nothing in it. Go and win something",
+    "📰 NEWS 3 headlines With pick 171, the Kansas City Chiefs select Maximilian Okonkwo-Smith.",
+    "📱 INBOX 1 unread Somebody is waiting on a reply"
+   ]
+  },
+  {
+   "at": "after s1",
+   "outcome": "hub",
+   "save": {
+    "phase": "season",
+    "seasons": 1,
+    "year": 2027,
+    "age": 22,
+    "ovr": 77,
+    "team": "KC",
+    "salary": 1.2,
+    "cy": 3,
+    "morale": 78,
+    "fanbase": 35,
+    "health": 100,
+    "net": 0.6,
+    "summer": null,
+    "last": {
+     "year": 2026,
+     "team": "KC",
+     "age": 21,
+     "ovr": 76,
+     "games": 17,
+     "awards": [],
+     "teamResult": "Lost in the Divisional round",
+     "salary": 1.2,
+     "fgAtt": 25,
+     "fgMade": 19,
+     "longFg": 56,
+     "poGames": 2,
+     "poLine": "3 of 3 on field goals"
+    }
+   },
+   "chips": [
+    "Maximilian Okonkwo-Smith · K",
+    "Kansas City Chiefs",
+    "2027 · age 22",
+    "OVR 77",
+    "$1.2M x3",
+    "⭐ Starter"
+   ],
+   "play": "Play the 2027 season",
+   "so": "Career so far: 0 rings · 0 MVPs · 0 All-Pros · 19 FG made",
+   "last": "Last season: 19 of 25 FG, long of 56 · Lost in the Divisional round",
+   "tiles": [
+    "📊 MY PLAYER OVR 77 The fans down at 35",
+    "💰 THE BANK $0.6M $1.2M a year, 3 years left",
+    "📜 CAREER LOG 1 season 19 of 25 FG, long of 56",
+    "🏆 TROPHY CASE Empty Nothing in it. Go and win something",
+    "📰 NEWS 5 headlines You said it was one kick and went back to work. The next one was good from the moment it left your foot. Morale +3.",
+    "📱 INBOX 3 unread Somebody is waiting on a reply"
+   ]
+  },
+  {
+   "at": "after s2",
+   "outcome": "hub",
+   "save": {
+    "phase": "season",
+    "seasons": 2,
+    "year": 2028,
+    "age": 23,
+    "ovr": 80,
+    "team": "KC",
+    "salary": 1.2,
+    "cy": 2,
+    "morale": 68,
+    "fanbase": 38,
+    "health": 100,
+    "net": 0.9,
+    "summer": null,
+    "last": {
+     "year": 2027,
+     "team": "KC",
+     "age": 22,
+     "ovr": 77,
+     "games": 17,
+     "awards": [],
+     "teamResult": "Lost the Super Bowl",
+     "salary": 1.2,
+     "fgAtt": 30,
+     "fgMade": 27,
+     "longFg": 63,
+     "poGames": 4,
+     "poLine": "8 of 8 on field goals"
+    }
+   },
+   "chips": [
+    "Maximilian Okonkwo-Smith · K",
+    "Kansas City Chiefs",
+    "2028 · age 23",
+    "OVR 80",
+    "$1.2M x2",
+    "⭐ Starter"
+   ],
+   "play": "Play the 2028 season",
+   "so": "Career so far: 0 rings · 0 MVPs · 0 All-Pros · 46 FG made",
+   "last": "Last season: 27 of 30 FG, long of 63 · Lost the Super Bowl",
+   "tiles": [
+    "📊 MY PLAYER OVR 80 K, age 23, 0 rings",
+    "💰 THE BANK $0.9M $1.2M a year, 2 years left",
+    "📜 CAREER LOG 2 seasons 27 of 30 FG, long of 63",
+    "🏆 TROPHY CASE Empty Nothing in it. Go and win something",
+    "📰 NEWS 6 headlines You trained at home and showed up the day you had to. Within the rules, and a little outside the mood of the building. Morale -3.",
+    "📱 INBOX 3 unread Somebody is waiting on a reply"
+   ]
+  },
+  {
+   "at": "after s3",
+   "outcome": "hub",
+   "save": {
+    "phase": "season",
+    "seasons": 3,
+    "year": 2029,
+    "age": 24,
+    "ovr": 83,
+    "team": "KC",
+    "salary": 1.2,
+    "cy": 1,
+    "morale": 77,
+    "fanbase": 47,
+    "health": 100,
+    "net": 0.9,
+    "summer": null,
+    "last": {
+     "year": 2028,
+     "team": "KC",
+     "age": 23,
+     "ovr": 80,
+     "games": 17,
+     "awards": [],
+     "teamResult": "Lost in the Wild Card round",
+     "salary": 1.2,
+     "fgAtt": 32,
+     "fgMade": 27,
+     "longFg": 62,
+     "poGames": 1,
+     "poLine": "2 of 2 on field goals"
+    }
+   },
+   "chips": [
+    "Maximilian Okonkwo-Smith · K",
+    "Kansas City Chiefs",
+    "2029 · age 24",
+    "OVR 83",
+    "$1.2M x1",
+    "⭐ Starter"
+   ],
+   "play": "Play the 2029 season",
+   "so": "Career so far: 0 rings · 0 MVPs · 0 All-Pros · 73 FG made",
+   "last": "Last season: 27 of 32 FG, long of 62 · Lost in the Wild Card round",
+   "tiles": [
+    "📊 MY PLAYER OVR 83 K, age 24, 0 rings",
+    "💰 THE BANK $0.9M $1.2M a year, final year of the deal",
+    "📜 CAREER LOG 3 seasons 27 of 32 FG, long of 62",
+    "🏆 TROPHY CASE Empty Nothing in it. Go and win something",
+    "📰 NEWS 6 headlines You talked for an hour about nothing. He will catch on somewhere. You told him so and you meant it. Morale +4.",
+    "📱 INBOX 3 unread Somebody is waiting on a reply"
+   ]
+  }
+ ],
+ "tiles": [
+  {
+   "tag": "s0",
+   "word": "My Player",
+   "shot": "nfl1280b-16-tile-myplayer-s0.jpg",
+   "text": "Hub\n📊 My Player\nYour road to the draft\n\n76\n\nOVERALL\n\nMaximilian Okonkwo-Smith · K · age 21\n\nMorale\n70\nFanbase\n35\nHealth\n100\nKarma\n50\n\n0\n\nseasons\n\n0\n\nrings",
+   "backOk": true,
+   "scroll": [
+    165,
+    165,
+    165
+   ],
+   "focus": "Skip to main content LIVE Live scores te"
+  },
+  {
+   "tag": "s0",
+   "word": "The Bank",
+   "shot": "nfl1280b-17-tile-thebank-s0.jpg",
+   "text": "Hub\n💰 The Bank\n\nEVERYTHING YOU HAVE\n\n$100k\n\n$1.2M a year, 4 years left on the deal\n\n$100k\nin the account\n$0k\nsavings\n$0k\ninvested\n🏦 Account\n📈 Market\n🃏 Cards\n🛒 Shop\n💵 Savings\npays 2.5% a season, never loses\n\nBoring, safe, and better than leaving it in the account doing nothing.\n\nSave 25%\nSave half\nSave it all\nTake out half\nTake it all out\n📄 Statement\nlast 12 only\n\nNothing yet. Save something or buy something.\n\nOlder lines drop off so your save does not grow forever.\n\nMade on investments\n$0k / $0k lost",
+   "backOk": true,
+   "scroll": [
+    165,
+    165,
+    165
+   ],
+   "focus": "Skip to main content LIVE Live scores te"
+  },
+  {
+   "tag": "s0",
+   "word": "Career Log",
+   "shot": "nfl1280b-18-tile-careerlog-s0.jpg",
+   "text": "Back to career\nCareer Log\n\nPick a year to review your saved season. No extra season is played.\n\nNo seasons on the books yet. Go play one.",
+   "backOk": true,
+   "scroll": [
+    165,
+    0,
+    0
+   ],
+   "focus": "📜 CAREER LOG No seasons yet Play one an"
+  },
+  {
+   "tag": "s0",
+   "word": "Trophy Case",
+   "shot": "nfl1280b-19-tile-trophycase-s0.jpg",
+   "text": "Hub\n🏆 Trophy Case\n\n0 rings\n\nNothing on the shelf yet. Every award you win lands here with the year on it.\n\n🎖️ BADGES\n0 of 25\n\n🔒\nSuper Bowl champion\n\nA ring. The one everything else is measured against.\n\n🔒\nBack to back\n\nTwo Super Bowls in two seasons.\n\n🔒\nLeague MVP\n\nThe best player in the league for one year.\n\n🔒\nDefensive Player of the Year\n\nThe best defender in the league for one year.\n\n🔒\nRookie of the Year\n\nThe best first year player on your side of the ball.\n\n🔒\nThree All-Pros\n\nFirst team All-Pro three times.\n\n🔒\nTen All-Pros\n\nTen first team All-Pro selections, the mark Jerry Rice and Jim Otto share.\n\n🔒\n10,000 passing yards\n\nTen thousand career yards through the air.\n\n🔒\n50,000 passing yards\n\nFifty thousand career passing yards.\n\n🔒\nA 5,000 yard season\n\nFive thousand passing yards in one year. The record is 5,477.\n\n🔒\n10,000 rushing yards\n\nTen thousand career yards on the ground.\n\n🔒\nA 2,000 yard season\n\nTwo thousand rushing yards in one year. The record is 2,105.\n\n🔒\n10,000 receiving yards\n\nTen thousand career receiving yards.\n\n🔒\n75 receiving touchdowns\n\nSeventy five career catches in the end zone.\n\n🔒\n100 sacks\n\nA hundred career sacks.\n\n🔒\nA 20 sack season\n\nTwenty sacks in one year. The record is 23.\n\n🔒\n30 interceptions\n\nThirty career interceptions.\n\n🔒\n1,000 tackles\n\nA thousand career tackles.\n\n🔒\n300 field goals\n\nThree hundred career field goals.\n\n🔒\nA decade in the league\n\nTen seasons played.\n\n🔒\nIron man\n\nFive full seasons without missing a game.\n\n🔒\nFirst m",
+   "backOk": true,
+   "scroll": [
+    0,
+    5,
+    5
+   ],
+   "focus": "Skip to main content LIVE Live scores te"
+  },
+  {
+   "tag": "s0",
+   "word": "News",
+   "shot": "nfl1280b-20-tile-news-s0.jpg",
+   "text": "Hub\n📰 News Feed\n📰 Paper\n📸 SocialGram\n🪞 Rival\n\nTHIS WEEK\n\nWith pick 171, the Kansas City Chiefs select Maximilian Okonkwo-Smith.\n\nLate pick. Everything must be earned.\n\n🎯 Kickers do not sit. The job is yours from day one.",
+   "backOk": true,
+   "scroll": [
+    5,
+    5,
+    5
+   ],
+   "focus": "Skip to main content LIVE Live scores te"
+  },
+  {
+   "tag": "s0",
+   "word": "Inbox",
+   "shot": "nfl1280b-21-tile-inbox-s0.jpg",
+   "text": "Hub\n📱 Inbox\n🧺\nEquipment manager\n🎓 Draft night, 2026\nWelcome. I need three jersey numbers from you, in order. Heads up, your college number belongs to a vet here and he likes it.",
+   "backOk": true,
+   "scroll": [
+    5,
+    5,
+    5
+   ],
+   "focus": "Skip to main content LIVE Live scores te"
+  },
+  {
+   "tag": "s1",
+   "word": "My Player",
+   "shot": "nfl1280b-37-tile-myplayer-s1.jpg",
+   "text": "Hub\n📊 My Player\nYour road to the draft\n\n77\n\nOVERALL\n\nMaximilian Okonkwo-Smith · K · age 22\n\nMorale\n78\nFanbase\n35\nHealth\n100\nKarma\n52\n\n1\n\nseasons\n\n0\n\nrings",
+   "backOk": true,
+   "scroll": [
+    0,
+    0,
+    0
+   ],
+   "focus": "Skip to main content LIVE Live scores te"
+  },
+  {
+   "tag": "s1",
+   "word": "The Bank",
+   "shot": "nfl1280b-38-tile-thebank-s1.jpg",
+   "text": "Hub\n💰 The Bank\n\nEVERYTHING YOU HAVE\n\n$600k\n\n$1.2M a year, 3 years left on the deal\n\n$600k\nin the account\n$0k\nsavings\n$0k\ninvested\n🏦 Account\n📈 Market\n🃏 Cards\n🛒 Shop\n💵 Savings\npays 2.5% a season, never loses\n\nBoring, safe, and better than leaving it in the account doing nothing.\n\nSave 25%\nSave half\nSave it all\nTake out half\nTake it all out\n📄 Statement\nlast 12 only\n\nNothing yet. Save something or buy something.\n\nOlder lines drop off so your save does not grow forever.\n\nMade on investments\n$0k / $0k lost",
+   "backOk": true,
+   "scroll": [
+    0,
+    0,
+    0
+   ],
+   "focus": "Skip to main content LIVE Live scores te"
+  },
+  {
+   "tag": "s1",
+   "word": "Career Log",
+   "shot": "nfl1280b-40-tile-careerlog-s1.jpg",
+   "text": "Back to career\nCareer Log\n\nPick a year to review your saved season. No extra season is played.\n\nSeason highs\n2026\nKansas City Chiefs",
+   "backOk": true,
+   "scroll": [
+    0,
+    0,
+    0
+   ],
+   "focus": "📜 CAREER LOG 1 season 19 of 25 FG, long"
+  },
+  {
+   "tag": "s1",
+   "word": "Trophy Case",
+   "shot": null,
+   "text": "Hub\n🏆 Trophy Case\n\n0 rings\n\nNothing on the shelf yet. Every award you win lands here with the year on it.\n\n🎖️ BADGES\n0 of 25\n\n🔒\nSuper Bowl champion\n\nA ring. The one everything else is measured against.\n\n🔒\nBack to back\n\nTwo Super Bowls in two seasons.\n\n🔒\nLeague MVP\n\nThe best player in the league for one year.\n\n🔒\nDefensive Player of the Year\n\nThe best defender in the league for one year.\n\n🔒\nRookie of the Year\n\nThe best first year player on your side of the ball.\n\n🔒\nThree All-Pros\n\nFirst team All-Pro three times.\n\n🔒\nTen All-Pros\n\nTen first team All-Pro selections, the mark Jerry Rice and Jim Otto share.\n\n🔒\n10,000 passing yards\n\nTen thousand career yards through the air.\n\n🔒\n50,000 passing yards\n\nFifty thousand career passing yards.\n\n🔒\nA 5,000 yard season\n\nFive thousand passing yards in one year. The record is 5,477.\n\n🔒\n10,000 rushing yards\n\nTen thousand career yards on the ground.\n\n🔒\nA 2,000 yard season\n\nTwo thousand rushing yards in one year. The record is 2,105.\n\n🔒\n10,000 receiving yards\n\nTen thousand career receiving yards.\n\n🔒\n75 receiving touchdowns\n\nSeventy five career catches in the end zone.\n\n🔒\n100 sacks\n\nA hundred career sacks.\n\n🔒\nA 20 sack season\n\nTwenty sacks in one year. The record is 23.\n\n🔒\n30 interceptions\n\nThirty career interceptions.\n\n🔒\n1,000 tackles\n\nA thousand career tackles.\n\n🔒\n300 field goals\n\nThree hundred career field goals.\n\n🔒\nA decade in the league\n\nTen seasons played.\n\n🔒\nIron man\n\nFive full seasons without missing a game.\n\n🔒\nFirst m",
+   "backOk": true,
+   "scroll": [
+    0,
+    47,
+    47
+   ],
+   "focus": "Skip to main content LIVE Live scores te"
+  },
+  {
+   "tag": "s1",
+   "word": "News",
+   "shot": null,
+   "text": "Hub\n📰 News Feed\n📰 Paper\n📸 SocialGram\n🪞 Rival\n\nTHIS WEEK\n\nQuiet week. Play a season and the headlines write themselves.\n\nBACK PAGES\n\n📰 Maximilian Okonkwo-Smith makes 19 of 25 field goals",
+   "backOk": true,
+   "scroll": [
+    47,
+    47,
+    47
+   ],
+   "focus": "Skip to main content LIVE Live scores te"
+  },
+  {
+   "tag": "s1",
+   "word": "Inbox",
+   "shot": null,
+   "text": "Hub\n📱 Inbox\n🎣\nUnknown\n🌴 Offseason, 2026\nCONGRATULATIONS! You've won 2 MILLION DOLLARS. Just send your account info plus a small release fee to claim it.\n🎟️\nMom\n🏟️ Playoffs, 2026\nThe whole family wants playoff tickets. All fourteen of us. Your uncle says he's bringing a sign.\n🏥\nTeam community office\n🛋️ Bye week, 2026\nA few guys are visiting the children's hospital on the off Tuesday. Totally optional, no cameras unless you want them.\n🧺\nEquipment manager\n🎓 Draft night, 2026\nWelcome. I need three jersey numbers from you, in order. Heads up, your college number belongs to a vet here and he likes it.",
+   "backOk": true,
+   "scroll": [
+    47,
+    47,
+    47
+   ],
+   "focus": "Skip to main content LIVE Live scores te"
+  },
+  {
+   "tag": "s2",
+   "word": "News",
+   "shot": null,
+   "text": "Hub\n📰 News Feed\n📰 Paper\n📸 SocialGram\n🪞 Rival\n\nTHIS WEEK\n\nYou trained at home and showed up the day you had to. Within the rules, and a little outside the mood of the building. Morale -3.\n\nYou said it was above your pay grade. The coach wrote something down anyway. No change.\n\nYou reported to camp at the exact weight they asked for, three years running. Health +10, rating +1 to 80, morale -4, net worth down 0.18M.\n\n📋 Roster Squeeze\n\n📊 Playoffs: 4 games, 8 of 8 on field goals.\n\n🪞 Jaxon Salvatore went 30 of 34 FG, long of 56. Nothing in it again. The head to head is level at 1-1.\n\nBACK PAGES\n\n📰 Kansas City Chiefs fall one game short of the Super Bowl\n\n📰 Maximilian Okonkwo-Smith makes 27 of 30 field goals\n\n📰 Maximilian Okonkwo-Smith makes 19 of 25 field goals",
+   "backOk": true,
+   "scroll": [
+    47,
+    71,
+    71
+   ],
+   "focus": "Skip to main content LIVE Live scores te"
+  },
+  {
+   "tag": "s2",
+   "word": "Inbox",
+   "shot": null,
+   "text": "Hub\n📱 Inbox\n📻\nLocal radio\n🏟️ Playoffs, 2027\nWe'd love you on the pregame show the morning of the game. Ten minutes, fire the city up.\n🎣\nUnknown\n🌴 Offseason, 2026\nCONGRATULATIONS! You've won 2 MILLION DOLLARS. Just send your account info plus a small release fee to claim it.\n🎟️\nMom\n🏟️ Playoffs, 2026\nThe whole family wants playoff tickets. All fourteen of us. Your uncle says he's bringing a sign.\n🏥\nTeam community office\n🛋️ Bye week, 2026\nA few guys are visiting the children's hospital on the off Tuesday. Totally optional, no cameras unless you want them.\n🧺\nEquipment manager\n🎓 Draft night, 2026\nWelcome. I need three jersey numbers from you, in order. Heads up, your college number belongs to a vet here and he likes it.",
+   "backOk": true,
+   "scroll": [
+    71,
+    71,
+    71
+   ],
+   "focus": "Skip to main content LIVE Live scores te"
+  },
+  {
+   "tag": "s3",
+   "word": "Inbox",
+   "shot": null,
+   "text": "Hub\n📱 Inbox\n🛡️\nPractice squad player\n🏟️ Playoffs, 2028\nI'm playing the other team's star all week on scout team. Want me to go full speed on you, even if it gets chippy?\n📻\nLocal radio\n🏟️ Playoffs, 2027\nWe'd love you on the pregame show the morning of the game. Ten minutes, fire the city up.\n🎣\nUnknown\n🌴 Offseason, 2026\nCONGRATULATIONS! You've won 2 MILLION DOLLARS. Just send your account info plus a small release fee to claim it.\n🎟️\nMom\n🏟️ Playoffs, 2026\nThe whole family wants playoff tickets. All fourteen of us. Your uncle says he's bringing a sign.\n🏥\nTeam community office\n🛋️ Bye week, 2026\nA few guys are visiting the children's hospital on the off Tuesday. Totally optional, no cameras unless you want them.\n🧺\nEquipment manager\n🎓 Draft night, 2026\nWelcome. I need three jersey numbers from you, in order. Heads up, your college number belongs to a vet here and he likes it.",
+   "backOk": true,
+   "scroll": [
+    71,
+    111,
+    111
+   ],
+   "focus": "Skip to main content LIVE Live scores te"
+  },
+  {
+   "tag": "end",
+   "word": "My Player",
+   "shot": null,
+   "text": "Hub\n📊 My Player\nYour road to the draft\n\n83\n\nOVERALL\n\nMaximilian Okonkwo-Smith · K · age 24\n\nMorale\n77\nFanbase\n47\nHealth\n100\nKarma\n60\n\n3\n\nseasons\n\n0\n\nrings",
+   "backOk": true,
+   "scroll": [
+    111,
+    111,
+    111
+   ],
+   "focus": "Skip to main content LIVE Live scores te"
+  },
+  {
+   "tag": "end",
+   "word": "The Bank",
+   "shot": null,
+   "text": "Hub\n💰 The Bank\n\nEVERYTHING YOU HAVE\n\n$900k\n\n$1.2M a year, 1 year left on the deal\n\n$900k\nin the account\n$0k\nsavings\n$0k\ninvested\n🏦 Account\n📈 Market\n🃏 Cards\n🛒 Shop\n💵 Savings\npays 2.5% a season, never loses\n\nBoring, safe, and better than leaving it in the account doing nothing.\n\nSave 25%\nSave half\nSave it all\nTake out half\nTake it all out\n📄 Statement\nlast 12 only\n\nNothing yet. Save something or buy something.\n\nOlder lines drop off so your save does not grow forever.\n\nMade on investments\n$0k / $0k lost",
+   "backOk": true,
+   "scroll": [
+    111,
+    111,
+    111
+   ],
+   "focus": "Skip to main content LIVE Live scores te"
+  },
+  {
+   "tag": "end",
+   "word": "Career Log",
+   "shot": null,
+   "text": "Back to career\nCareer Log\n\nPick a year to review your saved season. No extra season is played.\n\nSeason highs\nCompare seasons\n2028\nKansas City Chiefs\n2027\nKansas City Chiefs\n2026\nKansas City Chiefs",
+   "backOk": true,
+   "scroll": [
+    111,
+    111,
+    111
+   ],
+   "focus": "📜 CAREER LOG 3 seasons 27 of 32 FG, lon"
+  },
+  {
+   "tag": "end",
+   "word": "Trophy Case",
+   "shot": null,
+   "text": "Hub\n🏆 Trophy Case\n\n0 rings\n\nNothing on the shelf yet. Every award you win lands here with the year on it.\n\n🎖️ BADGES\n0 of 25\n\n🔒\nSuper Bowl champion\n\nA ring. The one everything else is measured against.\n\n🔒\nBack to back\n\nTwo Super Bowls in two seasons.\n\n🔒\nLeague MVP\n\nThe best player in the league for one year.\n\n🔒\nDefensive Player of the Year\n\nThe best defender in the league for one year.\n\n🔒\nRookie of the Year\n\nThe best first year player on your side of the ball.\n\n🔒\nThree All-Pros\n\nFirst team All-Pro three times.\n\n🔒\nTen All-Pros\n\nTen first team All-Pro selections, the mark Jerry Rice and Jim Otto share.\n\n🔒\n10,000 passing yards\n\nTen thousand career yards through the air.\n\n🔒\n50,000 passing yards\n\nFifty thousand career passing yards.\n\n🔒\nA 5,000 yard season\n\nFive thousand passing yards in one year. The record is 5,477.\n\n🔒\n10,000 rushing yards\n\nTen thousand career yards on the ground.\n\n🔒\nA 2,000 yard season\n\nTwo thousand rushing yards in one year. The record is 2,105.\n\n🔒\n10,000 receiving yards\n\nTen thousand career receiving yards.\n\n🔒\n75 receiving touchdowns\n\nSeventy five career catches in the end zone.\n\n🔒\n100 sacks\n\nA hundred career sacks.\n\n🔒\nA 20 sack season\n\nTwenty sacks in one year. The record is 23.\n\n🔒\n30 interceptions\n\nThirty career interceptions.\n\n🔒\n1,000 tackles\n\nA thousand career tackles.\n\n🔒\n300 field goals\n\nThree hundred career field goals.\n\n🔒\nA decade in the league\n\nTen seasons played.\n\n🔒\nIron man\n\nFive full seasons without missing a game.\n\n🔒\nFirst m",
+   "backOk": true,
+   "scroll": [
+    111,
+    111,
+    111
+   ],
+   "focus": "Skip to main content LIVE Live scores te"
+  },
+  {
+   "tag": "end",
+   "word": "News",
+   "shot": null,
+   "text": "Hub\n📰 News Feed\n📰 Paper\n📸 SocialGram\n🪞 Rival\n\nTHIS WEEK\n\n📱 Replied to Practice squad player: Keep it clean.\n\nYou talked for an hour about nothing. He will catch on somewhere. You told him so and you meant it. Morale +4.\n\nYou now personally own 61,000 unsold cards of your own face. 0.8M in, 0.3M back, one very full garage.\n\nYou took the good stuff and slept in twice a week. Rating +1, health +3. He noticed, and said nothing, which was worse.\n\n🏈 Head to Head Win\n\n📊 Playoffs: 1 game, 2 of 2 on field goals.\n\n🥶 Nothing worked. The tape was rough all year.\n\nBACK PAGES\n\n📰 Maximilian Okonkwo-Smith makes 27 of 32 field goals\n\n📰 Kansas City Chiefs fall one game short of the Super Bowl\n\n📰 Maximilian Okonkwo-Smith makes 27 of 30 field goals\n\n📰 Maximilian Okonkwo-Smith makes 19 of 25 field goals",
+   "backOk": true,
+   "scroll": [
+    111,
+    111,
+    111
+   ],
+   "focus": "Skip to main content LIVE Live scores te"
+  },
+  {
+   "tag": "end",
+   "word": "Inbox",
+   "shot": null,
+   "text": "Hub\n📱 Inbox\n🛡️\nPractice squad player\n🏟️ Playoffs, 2028\nI'm playing the other team's star all week on scout team. Want me to go full speed on you, even if it gets chippy?\n📻\nLocal radio\n🏟️ Playoffs, 2027\nWe'd love you on the pregame show the morning of the game. Ten minutes, fire the city up.\n🎣\nUnknown\n🌴 Offseason, 2026\nCONGRATULATIONS! You've won 2 MILLION DOLLARS. Just send your account info plus a small release fee to claim it.\n🎟️\nMom\n🏟️ Playoffs, 2026\nThe whole family wants playoff tickets. All fourteen of us. Your uncle says he's bringing a sign.\n🏥\nTeam community office\n🛋️ Bye week, 2026\nA few guys are visiting the children's hospital on the off Tuesday. Totally optional, no cameras unless you want them.\n🧺\nEquipment manager\n🎓 Draft night, 2026\nWelcome. I need three jersey numbers from you, in order. Heads up, your college number belongs to a vet here and he likes it.",
+   "backOk": true,
+   "scroll": [
+    111,
+    111,
+    111
+   ],
+   "focus": "Skip to main content LIVE Live scores te"
+  }
+ ],
+ "centre": [
+  {
+   "tag": "s1",
+   "games": 2,
+   "help": true,
+   "kickoff": null,
+   "firstCard": 1,
+   "review": "📺 Season Center\nKansas City Chiefs · 2026\n?\nBack to your season\n1\nA\nCLE\nW 38-10\n2\nH\nLAC\nW 34-7\n3\nA\nCHI\nW 30-20\n4\nA\nGB\nW 24-21\n5\nH\nDET\nW 52-28\n6\nH\nCIN\nL 24-27\n7\nA\nLV\nW 17-7\n8\nA\nDEN\nL 30-38\n9\nA\nBAL\nW 24-21\n10\nH\nLV\nW 34-16\n11\nH\nMIN\nL 27-28\n12\nH\nHOU\nW 31-26\n13\nA\nLAC\nW 27-21\n14\nA\nNYJ\nW 31-24\n15\nH\nPIT\nW 13-10\n16\nA\nPHI\nL 17-31\n17\nH\nDEN\nLAST GAME\nW 34-13\nSeason review\n13-4 · Lost in the Divisional round\n17\nGames\n19\nFG made\n25\nFG tries\n56\nLong FG\nRegular season, the same numbers as your season card.\n⭐ Best game: Game 4, W 24-21 vs Green Bay Packers, 3 of 4 on field goals, long of 24\nLast five:\nW\nW\nW\nL\nW\nPLAYOFFS\nW\nWild Card\nbeat the Cleveland Browns\nL\nDivisional\nlost to the Denver Broncos\nYour playoffs: 2 games, 3 of 3 on field goals\nAfter game 17\n13-4\nHome 6-2\nAway 7-2\nStreak W1\nDivision 5-1\nConference 10-2\nLast 10:\nL\nW\nW\nL\nW\nW\nW\nW\nL\nW\nGAME LOG\nG17\nH\nDEN\nW 34-13\n2/2 FG LONG 27\nG16\nA\nPHI\nL 17-31\n1/2 FG LONG 56\nG15\nH\nPIT\nW 13-10\n2/3 FG LONG 51\nG14\nA\nNYJ\nW 31-24\n1/1 FG LONG 44\nG13\nA\nLAC\nW 27-21\n0/0 FG\nG12\nH\nHOU\nW 31-26\n1/1 FG LONG 24\nG11\nH\nMIN\nL 27-28\n2/3 FG LONG 45\nG10\nH\nLV\nW 34-16\n2/2 FG LONG 25\nG9\nA\nBAL\nW 24-21\n1/1 FG LONG 52\nG8\nA\nDEN\nL 30-38\n0/1 FG\nG7\nA\nLV\nW 17-7\n1/1 FG LONG 42\nG6\nH\nCIN\nL 24-27\n0/0 FG\nG5\nH\nDET\nW 52-28\n1/1 FG LONG 46\nG4\nA\nGB\nW 24-21\n3/4 FG LONG 24\nG3\nA\nCHI\nW 30-20\n1/1 FG LONG 51\nG2\nH\nLAC\nW 34-7\n0/1 FG\nG1\nA\nCLE\nW 38-10\n1/1 FG LONG 40\nSeason so far\n17 played · 19 fg made · 25 fg tries · 76% fg %\nBack to your season",
+   "notes": [],
+   "closed": true,
+   "secs": 23
+  },
+  {
+   "tag": "again",
+   "games": 2,
+   "help": false,
+   "kickoff": null,
+   "firstCard": 0,
+   "review": "📺 Season Center\nKansas City Chiefs · 2028\n?\nBack to your season\n1\nH\nLAC\nL 13-38\n2\nH\nDEN\nL 14-21\n3\nH\nCLE\nL 24-27\n4\nA\nLV\nW 38-24\n5\nA\nWAS\nW 21-10\n6\nA\nARI\nL 28-38\n7\nH\nSEA\nL 27-31\n8\nA\nNE\nL 0-26\n9\nA\nLA\nL 9-13\n10\nA\nLAC\nL 20-24\n11\nH\nIND\nW 26-13\n12\nA\nCIN\nW 31-24\n13\nH\nSF\nW 35-27\n14\nA\nBAL\nW 21-16\n15\nH\nLV\nW 20-6\n16\nH\nPIT\nW 31-17\n17\nA\nDEN\nLAST GAME\nW 13-10\nSeason review\n9-8 · Lost in the Wild Card round\n17\nGames\n27\nFG made\n32\nFG tries\n62\nLong FG\nRegular season, the same numbers as your season card.\n⭐ Best game: Game 9, L 9-13 vs Los Angeles Rams, 3 of 3 on field goals, long of 62\nLast five:\nW\nW\nW\nW\nW\nPLAYOFFS\nL\nWild Card\nlost to the Denver Broncos\nYour playoffs: 1 game, 2 of 2 on field goals\nAfter game 17\n9-8\nHome 4-4\nAway 5-4\nStreak W7\nDivision 3-3\nConference 7-5\nLast 10:\nL\nL\nL\nW\nW\nW\nW\nW\nW\nW\nGAME LOG\nG17\nA\nDEN\nW 13-10\n2/3 FG LONG 24\nG16\nH\nPIT\nW 31-17\n1/2 FG LONG 40\nG15\nH\nLV\nW 20-6\n2/2 FG LONG 55\nG14\nA\nBAL\nW 21-16\n2/2 FG LONG 36\nG13\nH\nSF\nW 35-27\n2/2 FG LONG 38\nG12\nA\nCIN\nW 31-24\n1/1 FG LONG 34\nG11\nH\nIND\nW 26-13\n1/2 FG LONG 49\nG10\nA\nLAC\nL 20-24\n2/3 FG LONG 27\nG9\nA\nLA\nL 9-13\n3/3 FG LONG 62\nG8\nA\nNE\nL 0-26\n0/0 FG\nG7\nH\nSEA\nL 27-31\n3/3 FG LONG 31\nG6\nA\nARI\nL 28-38\n2/2 FG LONG 39\nG5\nA\nWAS\nW 21-10\n1/1 FG LONG 53\nG4\nA\nLV\nW 38-24\n1/1 FG LONG 25\nG3\nH\nCLE\nL 24-27\n2/2 FG LONG 30\nG2\nH\nDEN\nL 14-21\n0/0 FG\nG1\nH\nLAC\nL 13-38\n2/3 FG LONG 31\nSeason so far\n17 played · 27 fg made · 32 fg tries · 84% fg %\nBack to your season",
+   "notes": [],
+   "closed": true,
+   "secs": 23
+  }
+ ],
+ "stuck": [
+  {
+   "tag": "s2",
+   "texts": [],
+   "dialog": [],
+   "toast": []
+  },
+  {
+   "tag": "s3",
+   "texts": [],
+   "dialog": [],
+   "toast": []
+  },
+  {
+   "tag": "s3",
+   "texts": [],
+   "dialog": [],
+   "toast": []
+  }
+ ],
+ "notes": [
+  "watch again: ↺ Watch the 2028 season again"
+ ],
+ "shots": [
+  "nfl1280b-01-first-visit.jpg",
+  "nfl1280b-02-create.jpg",
+  "nfl1280b-03-create-filled.jpg",
+  "nfl1280b-04-prospect-help.jpg",
+  "nfl1280b-05-prospect-routes.jpg",
+  "nfl1280b-06-prospect-season1.jpg",
+  "nfl1280b-07-prospect-choice.jpg",
+  "nfl1280b-08-prospect-season2.jpg",
+  "nfl1280b-09-prospect-showcase.jpg",
+  "nfl1280b-10-prospect-draftday.jpg",
+  "nfl1280b-11-draft-night-1.jpg",
+  "nfl1280b-12-draft-night-2.jpg",
+  "nfl1280b-13-draft-night-end.jpg",
+  "nfl1280b-14-hub-draft.jpg",
+  "nfl1280b-15-hub-draft-full.jpg",
+  "nfl1280b-16-tile-myplayer-s0.jpg",
+  "nfl1280b-17-tile-thebank-s0.jpg",
+  "nfl1280b-18-tile-careerlog-s0.jpg",
+  "nfl1280b-19-tile-trophycase-s0.jpg",
+  "nfl1280b-20-tile-news-s0.jpg",
+  "nfl1280b-21-tile-inbox-s0.jpg",
+  "nfl1280b-22-inbox-open.jpg",
+  "nfl1280b-23-centre-help-s1.jpg",
+  "nfl1280b-24-centre-kickoff-s1.jpg",
+  "nfl1280b-25-centre-live-s1-g1.jpg",
+  "nfl1280b-26-centre-final-s1-g1.jpg",
+  "nfl1280b-27-centre-live-s1-g2.jpg",
+  "nfl1280b-28-centre-final-s1-g2.jpg",
+  "nfl1280b-29-centre-review-s1.jpg",
+  "nfl1280b-30-centre-review-late-s1.jpg",
+  "nfl1280b-31-continue-s1-1.jpg",
+  "nfl1280b-32-event-s1-1.jpg",
+  "nfl1280b-33-outcome-s1.jpg",
+  "nfl1280b-34-event-s1-2.jpg",
+  "nfl1280b-35-outcome-s1.jpg",
+  "nfl1280b-36-hub-s1.jpg",
+  "nfl1280b-37-tile-myplayer-s1.jpg",
+  "nfl1280b-38-tile-thebank-s1.jpg",
+  "nfl1280b-39-bank-shop.jpg",
+  "nfl1280b-40-tile-careerlog-s1.jpg"
+ ],
+ "draft": {
+  "routes": [
+   "3 seasons Big college program Every game on TV and scouts at every practice. Three seasons before you can declare. Start",
+   "3 seasons Small school Fewer eyes on you, so the scouts have to come looking. Three seasons before you can declare. Star"
+  ],
+  "route": "3 seasons Big college program Every game on TV and scouts at every practice. Three seasons before you can declare. Start",
+  "seasonShots": 3,
+  "choices": [
+   "The film room -> 0/2",
+   "The bowl game -> 0/2",
+   "A big stage -> 1/2"
+  ],
+  "showcase": "Skip it No drill and no grade. The scouts notice. Draft stock -2",
+  "range": "The scouts have you between pick 162 and pick 205 of 224.",
+  "nightSecs": 6,
+  "skipSeen": 0,
+  "result": "Your progress saves after every choice\nPick your path\nEarn your place\n3\nDraft day\n\nNFL Road to the Draft\n\nThis is your moment.\n\nKansas City Chiefs\n\nMaximilian Okonkwo-Smith\nK · Age 21\nRating\n76\nPotential\n84\nHealth\n100\nDraft stock\n52/100\nThis is your moment.\nYou skipped it. Draft stock -2, now 52.\n\n2026 DRAFT\n\nThe scouts had you between pick 162 and pick 205 of 224.\n\n1\nHouston Texans\nRound 1\n2\nChicago Bears\nRound 1\n3\nCleveland Browns\nRound 1\nPicks 4 to 167 come off the board, round 1 into round 6.\n168\nBuffalo Bills\nRound 6\n169\nWashington Commanders\nRound 6\n170\nCincinnati Bengals\nRound 6\nPick 171: Kansas City Chiefs\nYour name is called. Round 6, pick 11.\n\nRound 6, pick 11, 171 overall. Kansas City Chiefs take you.\n\nStart your career\n2026 DRAFT\nRound 6, pick 11 (171 overall)\n\nKansas City Chiefs hold the pick, and they take you.\n\nYour scout file\n3 seasons"
+ },
+ "reload": [
+  {
+   "before": {
+    "chips": [
+     "Maximilian Okonkwo-Smith · K",
+     "Kansas City Chiefs",
+     "2027 · age 22",
+     "OVR 77",
+     "$1.2M x3",
+     "⭐ Starter"
+    ],
+    "play": "Play the 2027 season",
+    "so": "Career so far: 0 rings · 0 MVPs · 0 All-Pros · 19 FG made",
+    "last": "Last season: 19 of 25 FG, long of 56 · Lost in the Divisional round",
+    "tiles": [
+     "📊 MY PLAYER OVR 77 The fans down at 35",
+     "💰 THE BANK $0.6M $1.2M a year, 3 years left",
+     "📜 CAREER LOG 1 season 19 of 25 FG, long of 56",
+     "🏆 TROPHY CASE Empty Nothing in it. Go and win something",
+     "📰 NEWS 5 headlines You said it was one kick and went back to work. The next one was good from the moment it left your foot. Morale +3.",
+     "📱 INBOX 3 unread Somebody is waiting on a reply"
+    ]
+   },
+   "after": {
+    "chips": [
+     "Maximilian Okonkwo-Smith · K",
+     "Kansas City Chiefs",
+     "2027 · age 22",
+     "OVR 77",
+     "$1.2M x3",
+     "⭐ Starter"
+    ],
+    "play": "Play the 2027 season",
+    "so": "Career so far: 0 rings · 0 MVPs · 0 All-Pros · 19 FG made",
+    "last": null,
+    "tiles": [
+     "📊 MY PLAYER OVR 77 The fans down at 35",
+     "💰 THE BANK $0.6M $1.2M a year, 3 years left",
+     "📜 CAREER LOG 1 season 19 of 25 FG, long of 56",
+     "🏆 TROPHY CASE Empty Nothing in it. Go and win something",
+     "📰 NEWS 1 headline Maximilian Okonkwo-Smith makes 19 of 25 field goals",
+     "📱 INBOX 3 unread Somebody is waiting on a reply"
+    ]
+   },
+   "save": {
+    "phase": "season",
+    "seasons": 1,
+    "year": 2027,
+    "age": 22,
+    "ovr": 77,
+    "team": "KC",
+    "salary": 1.2,
+    "cy": 3,
+    "morale": 78,
+    "fanbase": 35,
+    "health": 100,
+    "net": 0.6,
+    "summer": null,
+    "last": {
+     "year": 2026,
+     "team": "KC",
+     "age": 21,
+     "ovr": 76,
+     "games": 17,
+     "awards": [],
+     "teamResult": "Lost in the Divisional round",
+     "salary": 1.2,
+     "fgAtt": 25,
+     "fgMade": 19,
+     "longFg": 56,
+     "poGames": 2,
+     "poLine": "3 of 3 on field goals"
+    }
+   }
+  }
+ ],
+ "inbox": [
+  {
+   "rows": 1
+  },
+  {
+   "body": "Hub\n📱 Inbox\n← Back to inbox\n\n🧺 EQUIPMENT MANAGER\n\n🎓 Draft night, 2026\n\nWelcome. I need three jersey numbers from you, in order. Heads up, your college number belongs to a vet here and he likes it.\n\nNew league, new numberOffer to buy the number",
+   "answered": "New league, new number"
+  },
+  {
+   "rows": 4
+  },
+  {
+   "body": "Hub\n📱 Inbox\n← Back to inbox\n\n🎣 UNKNOWN\n\n🌴 Offseason, 2026\n\nCONGRATULATIONS! You've won 2 MILLION DOLLARS. Just send your account info plus a small release fee to claim it.\n\nReport and warn fansDelete itReply as a joke",
+   "answered": "Report and warn fans"
+  },
+  {
+   "body": "Hub\n📱 Inbox\n← Back to inbox\n\n🎣 UNKNOWN\n\n🌴 Offseason, 2026\n\nCONGRATULATIONS! You've won 2 MILLION DOLLARS. Just send your account info plus a small release fee to claim it.\n\nYou replied: Report and warn fans",
+   "answered": false
+  },
+  {
+   "rows": 5
+  },
+  {
+   "body": "Hub\n📱 Inbox\n← Back to inbox\n\n📻 LOCAL RADIO\n\n🏟️ Playoffs, 2027\n\nWe'd love you on the pregame show the morning of the game. Ten minutes, fire the city up.\n\nDo it, hype the cityDecline, locked in",
+   "answered": "Do it, hype the city"
+  },
+  {
+   "body": "Hub\n📱 Inbox\n← Back to inbox\n\n📻 LOCAL RADIO\n\n🏟️ Playoffs, 2027\n\nWe'd love you on the pregame show the morning of the game. Ten minutes, fire the city up.\n\nYou replied: Do it, hype the city",
+   "answered": false
+  },
+  {
+   "rows": 6
+  },
+  {
+   "body": "Hub\n📱 Inbox\n← Back to inbox\n\n🛡️ PRACTICE SQUAD PLAYER\n\n🏟️ Playoffs, 2028\n\nI'm playing the other team's star all week on scout team. Want me to go full speed on you, even if it gets chippy?\n\nFull speed, don't hold backKeep it clean",
+   "answered": "Keep it clean"
+  },
+  {
+   "body": "Hub\n📱 Inbox\n← Back to inbox\n\n🛡️ PRACTICE SQUAD PLAYER\n\n🏟️ Playoffs, 2028\n\nI'm playing the other team's star all week on scout team. Want me to go full speed on you, even if it gets chippy?\n\nYou replied: Keep it clean",
+   "answered": false
+  }
+ ],
+ "practice": [
+  {
+   "score": null,
+   "secs": 75
+  }
+ ],
+ "edge": [],
+ "programme": [
+  {
+   "tiles": [
+    "Workload and recovery Usual routine",
+    "Tactical approach Your usual approach",
+    "Coach expectations No extra target",
+    "Teammate partnership Keep your own routine",
+    "Performance bonus No bonus challenge",
+    "Veteran reinvention Keep your usual routine"
+   ]
+  },
+  {
+   "choices": [
+    "*Usual routine Keep your current inputs.",
+    "Push the workload Season health -8, morale +6. More form, more injury risk.",
+    "Prioritize recovery Nothing to add this season: your health is already at 100. Choosing it"
+   ]
+  },
+  {
+   "saved": false
+  }
+ ],
+ "firstVisit": {
+  "popover": false,
+  "dialog": [
+   "How to play\nThe steps\nCreate your player"
+  ],
+  "buttons": [
+   "🏈 2026 The league as it is today. Full money, every current franchise",
+   "⏪ 2005 throwback The 2005 league: the Raiders in Oakland, the Chargers",
+   "QB",
+   "RB",
+   "WR",
+   "TE",
+   "LB",
+   "CB",
+   "EDGE",
+   "K",
+   "🎲 Surprise me",
+   "🧑 Skin",
+   "💇 Hair",
+   "🧔 Beard",
+   "👟 Cleats",
+   "💍 Extras",
+   "🎉 Celebration",
+   "Porcelain",
+   "Ivory",
+   "Fair"
+  ],
+  "helpText": "How to play\nThe steps\nCreate your player: name, one of 8 positions (QB, RB, WR, TE, LB, CB, EDGE, K), and an archetype like Cannon Arm, Island Corner, Speed Bender or Ice in December that sets ceiling and durability.\nPick your league: today's NFL, or the 2005 throwback with the Raiders in Oakland, the Chargers in San Diego and the Rams in St. Louis.\nBuild your look: skin tone, hair, beard, accessories and a signature celebration, or hit Surprise me.\nEnter the draft. Your hidden rating decides the slot, and a real team calls your name.\nCheck the depth chart. Top twelve picks open as starters; everyone else fights the incumbent in camp, every single summer, and backup seasons are spot duty until you take the job.\nPlay each season with one tap: yards, touchdowns, awards, how far the team went.\nOpen Career Log and pick a year to review its saved overview, regular season and postseason. Changes compare with the previous saved season; older missing values say Not recorded. Back to seasons returns to the year tiles, and Review seasons is available after retirement.\nWhen the deal expires, work a real free agency window: competing offers from named teams with their own money, length and roster quality, and one push for more on any of them.\nMake up to three offseason calls, one card at a time: train skills or body, fix the knee or play through it, take the envelope or report it. Only the first card of a summer can move your rating, and a card you just saw rests for a while before it comes back (press moments follow your season, so those can come right back).\nAfter a normal offseason choice, the result shows the actual changes. Expand it for any extra changes, then Continue opens the next card, or takes you back to your career after the last one, without applying the choice again.\nOpen the Bank between seasons. Savings pays 2.5% a season and never loses, five things you can put money into each have a price that moves every season whether you look or not (a fund, flats back home, two shares and a coin that halves as often as it doubles), the statement keeps your last 12 moves, and the card school in the locker room is one sitting a season on odds that are printed before you sit in.\nSpend the money in 7 aisles: home, rides, investments, body, flex, family, and a shady aisle that only appears once you have something to hide.\nRead the News box. The paper writes up every season in your own position's stat, the SocialGram shows followers read off your fanbase with three fan comments under the latest post, and the rival's card keeps the head to head against the player drafted the same year as you.\nFrom 30, a falling rating brings the retirement talk: stop now, play one more year, or announce a farewell season. Then the legacy verdict, and the Hall of Fame wait one ballot at a time.\nCollect badges in the Trophy Case: 25 of them, from a first ring and Rookie of the Year to 10,000 passing yards, a 20 sack season and $100M to your name, each lit the moment the facts o",
+  "closedByEscape": true
+ },
+ "create": [
+  "*🏈 2026 The league as it is today. Full money, every current",
+  "⏪ 2005 throwback The 2005 league: the Raiders in Oakland, th",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "*The Leg Sixty is in range on a calm day",
+  "Ice in December Colder the game, straighter the kick",
+  "Journeyman Boot Cut four times, still kicking"
+ ],
+ "wbw": {
+  "visible": true,
+  "held": null
+ },
+ "final": {
+  "save": {
+   "phase": "season",
+   "seasons": 3,
+   "year": 2029,
+   "age": 24,
+   "ovr": 83,
+   "team": "KC",
+   "salary": 1.2,
+   "cy": 1,
+   "morale": 77,
+   "fanbase": 47,
+   "health": 100,
+   "net": 0.9,
+   "summer": null,
+   "last": {
+    "year": 2028,
+    "team": "KC",
+    "age": 23,
+    "ovr": 80,
+    "games": 17,
+    "awards": [],
+    "teamResult": "Lost in the Wild Card round",
+    "salary": 1.2,
+    "fgAtt": 32,
+    "fgMade": 27,
+    "longFg": 62,
+    "poGames": 1,
+    "poLine": "2 of 2 on field goals"
+   }
+  },
+  "chips": {
+   "chips": [
+    "Maximilian Okonkwo-Smith · K",
+    "Kansas City Chiefs",
+    "2029 · age 24",
+    "OVR 83",
+    "$1.2M x1",
+    "⭐ Starter"
+   ],
+   "play": "Play the 2029 season",
+   "so": "Career so far: 0 rings · 0 MVPs · 0 All-Pros · 73 FG made",
+   "last": "Last season: 27 of 32 FG, long of 62 · Lost in the Wild Card round",
+   "tiles": [
+    "📊 MY PLAYER OVR 83 K, age 24, 0 rings",
+    "💰 THE BANK $0.9M $1.2M a year, final year of the deal",
+    "📜 CAREER LOG 3 seasons 27 of 32 FG, long of 62",
+    "🏆 TROPHY CASE Empty Nothing in it. Go and win something",
+    "📰 NEWS 7 headlines 📱 Replied to Practice squad player: Keep it clean.",
+    "📱 INBOX 2 unread Somebody is waiting on a reply"
+   ]
+  },
+  "secs": 336
+ }
+}
