@@ -197,7 +197,8 @@ describe('Soccer Career saved pending Life choices', () => {
   });
   it('pending life preservation: resolved live outcomes survive repeated JSON reloads', () => {
     for (const spec of SPEC) {
-      const before = queued(spec), after = draws(0.99, () => E.applyEventChoice(before, 0, E.FALLBACK_CLUBS)).result;
+      const live = queued(spec), before = { ...restore(live), pendingEvents: live.pendingEvents };
+      const after = draws(0.99, () => E.applyEventChoice(before, 0, E.FALLBACK_CLUBS)).result;
       literal(before, after, spec, 0);
       expect(json(restore(restore(after)))).toEqual(json(after));
       expect(after.pendingEvents.some(card => card.id === spec.id)).toBe(false);
