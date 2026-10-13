@@ -1,0 +1,909 @@
+ok   320-playing-empty-events: Independent unchanged Chromium loader matches every first-load field
+ok   320-playing-empty-events: canonical-second-load: strict complete serialized reload equality
+ok   320-playing-empty-events: Actual Derby history opener is a fully painted 44 pixel target
+ok   320-playing-empty-events: Shared dialog locks body scroll
+ok   320-playing-empty-events: Every saved senior tile preserves original index, year, club and recorded status
+ok   320-playing-empty-events: Whole club and played-only player totals equal independent raw saved facts
+ok   320-playing-empty-events: seasons-top: four stable readable painted frames without overflow
+ok   320-playing-empty-events: seasons-top: every visible history control has a 44 pixel target
+ok   320-playing-empty-events: Reopenable help explains saved identities, club/player records, venues and rival example
+ok   320-playing-empty-events: seasons-help: four stable readable painted frames without overflow
+ok   320-playing-empty-events: seasons-help: every visible history control has a 44 pixel target
+ok   320-playing-empty-events: seasons: Help restores exact mode position, focus, body and page
+ok   320-playing-empty-events: seasons-help: every complete saved byte held
+ok   320-playing-empty-events: seasons-help: no global random draws
+ok   320-playing-empty-events: Long saved history naturally overflows at this viewport
+ok   320-playing-empty-events: Selected original season tile is fully painted and reachable
+ok   320-playing-empty-events: Real wheel input establishes a nonzero saved list position
+ok   320-playing-empty-events: Selected original season year/club/age/loan identity is exact
+ok   320-playing-empty-events: Every selected saved meeting keeps orientation, outcome, player goals and original identity
+ok   320-playing-empty-events: Selected club/player records equal held results
+ok   320-playing-empty-events: loan-detail: four stable readable painted frames without overflow
+ok   320-playing-empty-events: loan-detail: every visible history control has a 44 pixel target
+ok   320-playing-empty-events: Reopenable help explains saved identities, club/player records, venues and rival example
+ok   320-playing-empty-events: loan-detail-help: four stable readable painted frames without overflow
+ok   320-playing-empty-events: loan-detail-help: every visible history control has a 44 pixel target
+ok   320-playing-empty-events: loan-detail: Help restores exact mode position, focus, body and page
+ok   320-playing-empty-events: loan-detail-help: every complete saved byte held
+ok   320-playing-empty-events: loan-detail-help: no global random draws
+ok   320-playing-empty-events: Back restores the same original tile and exact captured list offset
+ok   320-playing-empty-events: Selected original season tile is fully painted and reachable
+ok   320-playing-empty-events: Selected original season year/club/age/loan identity is exact
+ok   320-playing-empty-events: Every selected saved meeting keeps orientation, outcome, player goals and original identity
+ok   320-playing-empty-events: Selected club/player records equal held results
+ok   320-playing-empty-events: Detail retains all five rivals beyond the three-line season summary
+ok   320-playing-empty-events: five-rivals: four stable readable painted frames without overflow
+ok   320-playing-empty-events: five-rivals: every visible history control has a 44 pixel target
+ok   320-playing-empty-events: Back restores the same original tile and exact captured list offset
+ok   320-playing-empty-events: Selected original season tile is fully painted and reachable
+ok   320-playing-empty-events: Selected original season year/club/age/loan identity is exact
+ok   320-playing-empty-events: Every selected saved meeting keeps orientation, outcome, player goals and original identity
+ok   320-playing-empty-events: Selected club/player records equal held results
+ok   320-playing-empty-events: All-missed zero-app season retains team results without player appearances or goals
+ok   320-playing-empty-events: all-missed: four stable readable painted frames without overflow
+ok   320-playing-empty-events: all-missed: every visible history control has a 44 pixel target
+ok   320-playing-empty-events: Back restores the same original tile and exact captured list offset
+ok   320-playing-empty-events: Selected original season tile is fully painted and reachable
+ok   320-playing-empty-events: Selected original season year/club/age/loan identity is exact
+ok   320-playing-empty-events: Every selected saved meeting keeps orientation, outcome, player goals and original identity
+ok   320-playing-empty-events: Missing, empty and unreadable histories keep their distinct explanation
+ok   320-playing-empty-events: Back restores the same original tile and exact captured list offset
+ok   320-playing-empty-events: Selected original season tile is fully painted and reachable
+ok   320-playing-empty-events: Selected original season year/club/age/loan identity is exact
+ok   320-playing-empty-events: Every selected saved meeting keeps orientation, outcome, player goals and original identity
+ok   320-playing-empty-events: Missing, empty and unreadable histories keep their distinct explanation
+ok   320-playing-empty-events: Back restores the same original tile and exact captured list offset
+ok   320-playing-empty-events: Selected original season tile is fully painted and reachable
+ok   320-playing-empty-events: Selected original season year/club/age/loan identity is exact
+ok   320-playing-empty-events: Every selected saved meeting keeps orientation, outcome, player goals and original identity
+ok   320-playing-empty-events: Missing, empty and unreadable histories keep their distinct explanation
+ok   320-playing-empty-events: Back restores the same original tile and exact captured list offset
+ok   320-playing-empty-events: saved-season-details: every complete saved byte held
+ok   320-playing-empty-events: saved-season-details: no global random draws
+ok   320-playing-empty-events: Rival list keeps exact saved names and first saved occurrence order
+ok   320-playing-empty-events: rivals-top: four stable readable painted frames without overflow
+ok   320-playing-empty-events: rivals-top: every visible history control has a 44 pixel target
+ok   320-playing-empty-events: Rival history preserves every year/club/loan and original meeting identity
+ok   320-playing-empty-events: Rival aggregate independently retains club and played-only player totals
+ok   320-playing-empty-events: rival-detail: four stable readable painted frames without overflow
+ok   320-playing-empty-events: rival-detail: every visible history control has a 44 pixel target
+ok   320-playing-empty-events: Reopenable help explains saved identities, club/player records, venues and rival example
+ok   320-playing-empty-events: rival-detail-help: four stable readable painted frames without overflow
+ok   320-playing-empty-events: rival-detail-help: every visible history control has a 44 pixel target
+ok   320-playing-empty-events: rival-detail: Help restores exact mode position, focus, body and page
+ok   320-playing-empty-events: rival-detail-help: every complete saved byte held
+ok   320-playing-empty-events: rival-detail-help: no global random draws
+ok   320-playing-empty-events: Rival Back restores exact saved-name tile and list offset
+ok   320-playing-empty-events: rival-history: every complete saved byte held
+ok   320-playing-empty-events: rival-history: no global random draws
+ok   320-playing-empty-events: Reading Derby History never reveals the pending award result
+ok   320-playing-empty-events: Tab: shared dialog focus stays trapped
+ok   320-playing-empty-events: Tab: shared dialog focus stays trapped
+ok   320-playing-empty-events: Shift+Tab: shared dialog focus stays trapped
+ok   320-playing-empty-events: Shift+Tab: shared dialog focus stays trapped
+ok   320-playing-empty-events: close: exact opener, body and page restoration
+ok   320-playing-empty-events: close: every complete saved byte held
+ok   320-playing-empty-events: close: no global random draws
+ok   320-playing-empty-events: escape: exact opener, body and page restoration
+ok   320-playing-empty-events: escape: every complete saved byte held
+ok   320-playing-empty-events: escape: no global random draws
+ok   320-playing-empty-events: completed-read-only: strict complete serialized reload equality
+ok   320-playing-empty-events: Selected original season tile is fully painted and reachable
+ok   320-playing-empty-events: Selected original season year/club/age/loan identity is exact
+ok   320-playing-empty-events: Every selected saved meeting keeps orientation, outcome, player goals and original identity
+ok   320-playing-empty-events: Selected club/player records equal held results
+ok   320-playing-empty-events: Reload keeps the same original saved loan season available
+ok   320-playing-empty-events: reloaded-escape: exact opener, body and page restoration
+ok   320-playing-empty-events: reloaded-escape: every complete saved byte held
+ok   320-playing-empty-events: reloaded-escape: no global random draws
+CONTROL FIRED(native wrong-value): saved-values
+CONTROL FIRED(native paint): opacity
+CONTROL FIRED(native geometry): clipped-controls, required-targets, touch-target
+CONTROL FIRED(native return): focus, mode-position, inline-overflow, computed-overflow, page-position
+ok   320-playing-empty-events: Copied observation detectors do not alter the actual career
+ok   320-playing-empty-events: No page or owned asset errors
+ok   320-playing-empty-events: All external write attempts blocked with zero forwarding
+ok   320-retired: Independent unchanged Chromium loader matches every first-load field
+ok   320-retired: canonical-second-load: strict complete serialized reload equality
+ok   320-retired: Actual Derby history opener is a fully painted 44 pixel target
+ok   320-retired: Shared dialog locks body scroll
+ok   320-retired: Every saved senior tile preserves original index, year, club and recorded status
+ok   320-retired: Whole club and played-only player totals equal independent raw saved facts
+ok   320-retired: seasons-top: four stable readable painted frames without overflow
+ok   320-retired: seasons-top: every visible history control has a 44 pixel target
+ok   320-retired: Reopenable help explains saved identities, club/player records, venues and rival example
+ok   320-retired: seasons-help: four stable readable painted frames without overflow
+ok   320-retired: seasons-help: every visible history control has a 44 pixel target
+ok   320-retired: seasons: Help restores exact mode position, focus, body and page
+ok   320-retired: seasons-help: every complete saved byte held
+ok   320-retired: seasons-help: no global random draws
+ok   320-retired: Long saved history naturally overflows at this viewport
+ok   320-retired: Selected original season tile is fully painted and reachable
+ok   320-retired: Real wheel input establishes a nonzero saved list position
+ok   320-retired: Selected original season year/club/age/loan identity is exact
+ok   320-retired: Every selected saved meeting keeps orientation, outcome, player goals and original identity
+ok   320-retired: Selected club/player records equal held results
+ok   320-retired: loan-detail: four stable readable painted frames without overflow
+ok   320-retired: loan-detail: every visible history control has a 44 pixel target
+ok   320-retired: Reopenable help explains saved identities, club/player records, venues and rival example
+ok   320-retired: loan-detail-help: four stable readable painted frames without overflow
+ok   320-retired: loan-detail-help: every visible history control has a 44 pixel target
+ok   320-retired: loan-detail: Help restores exact mode position, focus, body and page
+ok   320-retired: loan-detail-help: every complete saved byte held
+ok   320-retired: loan-detail-help: no global random draws
+ok   320-retired: Back restores the same original tile and exact captured list offset
+ok   320-retired: Selected original season tile is fully painted and reachable
+ok   320-retired: Selected original season year/club/age/loan identity is exact
+ok   320-retired: Every selected saved meeting keeps orientation, outcome, player goals and original identity
+ok   320-retired: Selected club/player records equal held results
+ok   320-retired: Detail retains all five rivals beyond the three-line season summary
+ok   320-retired: five-rivals: four stable readable painted frames without overflow
+ok   320-retired: five-rivals: every visible history control has a 44 pixel target
+ok   320-retired: Back restores the same original tile and exact captured list offset
+ok   320-retired: Selected original season tile is fully painted and reachable
+ok   320-retired: Selected original season year/club/age/loan identity is exact
+ok   320-retired: Every selected saved meeting keeps orientation, outcome, player goals and original identity
+ok   320-retired: Selected club/player records equal held results
+ok   320-retired: All-missed zero-app season retains team results without player appearances or goals
+ok   320-retired: all-missed: four stable readable painted frames without overflow
+ok   320-retired: all-missed: every visible history control has a 44 pixel target
+ok   320-retired: Back restores the same original tile and exact captured list offset
+ok   320-retired: Selected original season tile is fully painted and reachable
+ok   320-retired: Selected original season year/club/age/loan identity is exact
+ok   320-retired: Every selected saved meeting keeps orientation, outcome, player goals and original identity
+ok   320-retired: Missing, empty and unreadable histories keep their distinct explanation
+ok   320-retired: Back restores the same original tile and exact captured list offset
+ok   320-retired: Selected original season tile is fully painted and reachable
+ok   320-retired: Selected original season year/club/age/loan identity is exact
+ok   320-retired: Every selected saved meeting keeps orientation, outcome, player goals and original identity
+ok   320-retired: Missing, empty and unreadable histories keep their distinct explanation
+ok   320-retired: Back restores the same original tile and exact captured list offset
+ok   320-retired: Selected original season tile is fully painted and reachable
+ok   320-retired: Selected original season year/club/age/loan identity is exact
+ok   320-retired: Every selected saved meeting keeps orientation, outcome, player goals and original identity
+ok   320-retired: Missing, empty and unreadable histories keep their distinct explanation
+ok   320-retired: Back restores the same original tile and exact captured list offset
+ok   320-retired: saved-season-details: every complete saved byte held
+ok   320-retired: saved-season-details: no global random draws
+ok   320-retired: Rival list keeps exact saved names and first saved occurrence order
+ok   320-retired: rivals-top: four stable readable painted frames without overflow
+ok   320-retired: rivals-top: every visible history control has a 44 pixel target
+ok   320-retired: Rival history preserves every year/club/loan and original meeting identity
+ok   320-retired: Rival aggregate independently retains club and played-only player totals
+ok   320-retired: rival-detail: four stable readable painted frames without overflow
+ok   320-retired: rival-detail: every visible history control has a 44 pixel target
+ok   320-retired: Reopenable help explains saved identities, club/player records, venues and rival example
+ok   320-retired: rival-detail-help: four stable readable painted frames without overflow
+ok   320-retired: rival-detail-help: every visible history control has a 44 pixel target
+ok   320-retired: rival-detail: Help restores exact mode position, focus, body and page
+ok   320-retired: rival-detail-help: every complete saved byte held
+ok   320-retired: rival-detail-help: no global random draws
+ok   320-retired: Rival Back restores exact saved-name tile and list offset
+ok   320-retired: rival-history: every complete saved byte held
+ok   320-retired: rival-history: no global random draws
+ok   320-retired: Reading Derby History never reveals the pending award result
+ok   320-retired: Tab: shared dialog focus stays trapped
+ok   320-retired: Tab: shared dialog focus stays trapped
+ok   320-retired: Shift+Tab: shared dialog focus stays trapped
+ok   320-retired: Shift+Tab: shared dialog focus stays trapped
+ok   320-retired: close: exact opener, body and page restoration
+ok   320-retired: close: every complete saved byte held
+ok   320-retired: close: no global random draws
+ok   320-retired: escape: exact opener, body and page restoration
+ok   320-retired: escape: every complete saved byte held
+ok   320-retired: escape: no global random draws
+ok   320-retired: completed-read-only: strict complete serialized reload equality
+ok   320-retired: Selected original season tile is fully painted and reachable
+ok   320-retired: Selected original season year/club/age/loan identity is exact
+ok   320-retired: Every selected saved meeting keeps orientation, outcome, player goals and original identity
+ok   320-retired: Selected club/player records equal held results
+ok   320-retired: Reload keeps the same original saved loan season available
+ok   320-retired: reloaded-escape: exact opener, body and page restoration
+ok   320-retired: reloaded-escape: every complete saved byte held
+ok   320-retired: reloaded-escape: no global random draws
+ok   320-retired: No page or owned asset errors
+ok   320-retired: All external write attempts blocked with zero forwarding
+ok   320-pending-newspaper: Independent unchanged Chromium loader matches every first-load field
+ok   320-pending-newspaper: canonical-second-load: strict complete serialized reload equality
+ok   320-pending-newspaper: Actual Derby history opener is a fully painted 44 pixel target
+ok   320-pending-newspaper: Shared dialog locks body scroll
+ok   320-pending-newspaper: Every saved senior tile preserves original index, year, club and recorded status
+ok   320-pending-newspaper: Whole club and played-only player totals equal independent raw saved facts
+ok   320-pending-newspaper: seasons-top: four stable readable painted frames without overflow
+ok   320-pending-newspaper: seasons-top: every visible history control has a 44 pixel target
+ok   320-pending-newspaper: Reopenable help explains saved identities, club/player records, venues and rival example
+ok   320-pending-newspaper: seasons-help: four stable readable painted frames without overflow
+ok   320-pending-newspaper: seasons-help: every visible history control has a 44 pixel target
+ok   320-pending-newspaper: seasons: Help restores exact mode position, focus, body and page
+ok   320-pending-newspaper: seasons-help: every complete saved byte held
+ok   320-pending-newspaper: seasons-help: no global random draws
+ok   320-pending-newspaper: Long saved history naturally overflows at this viewport
+ok   320-pending-newspaper: Selected original season tile is fully painted and reachable
+ok   320-pending-newspaper: Real wheel input establishes a nonzero saved list position
+ok   320-pending-newspaper: Selected original season year/club/age/loan identity is exact
+ok   320-pending-newspaper: Every selected saved meeting keeps orientation, outcome, player goals and original identity
+ok   320-pending-newspaper: Selected club/player records equal held results
+ok   320-pending-newspaper: loan-detail: four stable readable painted frames without overflow
+ok   320-pending-newspaper: loan-detail: every visible history control has a 44 pixel target
+ok   320-pending-newspaper: Reopenable help explains saved identities, club/player records, venues and rival example
+ok   320-pending-newspaper: loan-detail-help: four stable readable painted frames without overflow
+ok   320-pending-newspaper: loan-detail-help: every visible history control has a 44 pixel target
+ok   320-pending-newspaper: loan-detail: Help restores exact mode position, focus, body and page
+ok   320-pending-newspaper: loan-detail-help: every complete saved byte held
+ok   320-pending-newspaper: loan-detail-help: no global random draws
+ok   320-pending-newspaper: Back restores the same original tile and exact captured list offset
+ok   320-pending-newspaper: Selected original season tile is fully painted and reachable
+ok   320-pending-newspaper: Selected original season year/club/age/loan identity is exact
+ok   320-pending-newspaper: Every selected saved meeting keeps orientation, outcome, player goals and original identity
+ok   320-pending-newspaper: Selected club/player records equal held results
+ok   320-pending-newspaper: Detail retains all five rivals beyond the three-line season summary
+ok   320-pending-newspaper: five-rivals: four stable readable painted frames without overflow
+ok   320-pending-newspaper: five-rivals: every visible history control has a 44 pixel target
+ok   320-pending-newspaper: Back restores the same original tile and exact captured list offset
+ok   320-pending-newspaper: Selected original season tile is fully painted and reachable
+ok   320-pending-newspaper: Selected original season year/club/age/loan identity is exact
+ok   320-pending-newspaper: Every selected saved meeting keeps orientation, outcome, player goals and original identity
+ok   320-pending-newspaper: Selected club/player records equal held results
+ok   320-pending-newspaper: All-missed zero-app season retains team results without player appearances or goals
+ok   320-pending-newspaper: all-missed: four stable readable painted frames without overflow
+ok   320-pending-newspaper: all-missed: every visible history control has a 44 pixel target
+ok   320-pending-newspaper: Back restores the same original tile and exact captured list offset
+ok   320-pending-newspaper: Selected original season tile is fully painted and reachable
+ok   320-pending-newspaper: Selected original season year/club/age/loan identity is exact
+ok   320-pending-newspaper: Every selected saved meeting keeps orientation, outcome, player goals and original identity
+ok   320-pending-newspaper: Missing, empty and unreadable histories keep their distinct explanation
+ok   320-pending-newspaper: Back restores the same original tile and exact captured list offset
+ok   320-pending-newspaper: Selected original season tile is fully painted and reachable
+ok   320-pending-newspaper: Selected original season year/club/age/loan identity is exact
+ok   320-pending-newspaper: Every selected saved meeting keeps orientation, outcome, player goals and original identity
+ok   320-pending-newspaper: Missing, empty and unreadable histories keep their distinct explanation
+ok   320-pending-newspaper: Back restores the same original tile and exact captured list offset
+ok   320-pending-newspaper: Selected original season tile is fully painted and reachable
+ok   320-pending-newspaper: Selected original season year/club/age/loan identity is exact
+ok   320-pending-newspaper: Every selected saved meeting keeps orientation, outcome, player goals and original identity
+ok   320-pending-newspaper: Missing, empty and unreadable histories keep their distinct explanation
+ok   320-pending-newspaper: Back restores the same original tile and exact captured list offset
+ok   320-pending-newspaper: saved-season-details: every complete saved byte held
+ok   320-pending-newspaper: saved-season-details: no global random draws
+ok   320-pending-newspaper: Rival list keeps exact saved names and first saved occurrence order
+ok   320-pending-newspaper: rivals-top: four stable readable painted frames without overflow
+ok   320-pending-newspaper: rivals-top: every visible history control has a 44 pixel target
+ok   320-pending-newspaper: Rival history preserves every year/club/loan and original meeting identity
+ok   320-pending-newspaper: Rival aggregate independently retains club and played-only player totals
+ok   320-pending-newspaper: rival-detail: four stable readable painted frames without overflow
+ok   320-pending-newspaper: rival-detail: every visible history control has a 44 pixel target
+ok   320-pending-newspaper: Reopenable help explains saved identities, club/player records, venues and rival example
+ok   320-pending-newspaper: rival-detail-help: four stable readable painted frames without overflow
+ok   320-pending-newspaper: rival-detail-help: every visible history control has a 44 pixel target
+ok   320-pending-newspaper: rival-detail: Help restores exact mode position, focus, body and page
+ok   320-pending-newspaper: rival-detail-help: every complete saved byte held
+ok   320-pending-newspaper: rival-detail-help: no global random draws
+ok   320-pending-newspaper: Rival Back restores exact saved-name tile and list offset
+ok   320-pending-newspaper: rival-history: every complete saved byte held
+ok   320-pending-newspaper: rival-history: no global random draws
+ok   320-pending-newspaper: Reading Derby History never reveals the pending award result
+ok   320-pending-newspaper: Pending newspaper ballot remains unrevealed
+ok   320-pending-newspaper: Tab: shared dialog focus stays trapped
+ok   320-pending-newspaper: Tab: shared dialog focus stays trapped
+ok   320-pending-newspaper: Shift+Tab: shared dialog focus stays trapped
+ok   320-pending-newspaper: Shift+Tab: shared dialog focus stays trapped
+ok   320-pending-newspaper: close: exact opener, body and page restoration
+ok   320-pending-newspaper: close: every complete saved byte held
+ok   320-pending-newspaper: close: no global random draws
+ok   320-pending-newspaper: escape: exact opener, body and page restoration
+ok   320-pending-newspaper: escape: every complete saved byte held
+ok   320-pending-newspaper: escape: no global random draws
+ok   320-pending-newspaper: completed-read-only: strict complete serialized reload equality
+ok   320-pending-newspaper: Selected original season tile is fully painted and reachable
+ok   320-pending-newspaper: Selected original season year/club/age/loan identity is exact
+ok   320-pending-newspaper: Every selected saved meeting keeps orientation, outcome, player goals and original identity
+ok   320-pending-newspaper: Selected club/player records equal held results
+ok   320-pending-newspaper: Reload keeps the same original saved loan season available
+ok   320-pending-newspaper: reloaded-escape: exact opener, body and page restoration
+ok   320-pending-newspaper: reloaded-escape: every complete saved byte held
+ok   320-pending-newspaper: reloaded-escape: no global random draws
+ok   320-pending-newspaper: No page or owned asset errors
+ok   320-pending-newspaper: All external write attempts blocked with zero forwarding
+ok   390-playing-empty-events: Independent unchanged Chromium loader matches every first-load field
+ok   390-playing-empty-events: canonical-second-load: strict complete serialized reload equality
+ok   390-playing-empty-events: Actual Derby history opener is a fully painted 44 pixel target
+ok   390-playing-empty-events: Shared dialog locks body scroll
+ok   390-playing-empty-events: Every saved senior tile preserves original index, year, club and recorded status
+ok   390-playing-empty-events: Whole club and played-only player totals equal independent raw saved facts
+ok   390-playing-empty-events: seasons-top: four stable readable painted frames without overflow
+ok   390-playing-empty-events: seasons-top: every visible history control has a 44 pixel target
+ok   390-playing-empty-events: Reopenable help explains saved identities, club/player records, venues and rival example
+ok   390-playing-empty-events: seasons-help: four stable readable painted frames without overflow
+ok   390-playing-empty-events: seasons-help: every visible history control has a 44 pixel target
+ok   390-playing-empty-events: seasons: Help restores exact mode position, focus, body and page
+ok   390-playing-empty-events: seasons-help: every complete saved byte held
+ok   390-playing-empty-events: seasons-help: no global random draws
+ok   390-playing-empty-events: Long saved history naturally overflows at this viewport
+ok   390-playing-empty-events: Selected original season tile is fully painted and reachable
+ok   390-playing-empty-events: Real wheel input establishes a nonzero saved list position
+ok   390-playing-empty-events: Selected original season year/club/age/loan identity is exact
+ok   390-playing-empty-events: Every selected saved meeting keeps orientation, outcome, player goals and original identity
+ok   390-playing-empty-events: Selected club/player records equal held results
+ok   390-playing-empty-events: loan-detail: four stable readable painted frames without overflow
+ok   390-playing-empty-events: loan-detail: every visible history control has a 44 pixel target
+ok   390-playing-empty-events: Reopenable help explains saved identities, club/player records, venues and rival example
+ok   390-playing-empty-events: loan-detail-help: four stable readable painted frames without overflow
+ok   390-playing-empty-events: loan-detail-help: every visible history control has a 44 pixel target
+ok   390-playing-empty-events: loan-detail: Help restores exact mode position, focus, body and page
+ok   390-playing-empty-events: loan-detail-help: every complete saved byte held
+ok   390-playing-empty-events: loan-detail-help: no global random draws
+ok   390-playing-empty-events: Back restores the same original tile and exact captured list offset
+ok   390-playing-empty-events: Selected original season tile is fully painted and reachable
+ok   390-playing-empty-events: Selected original season year/club/age/loan identity is exact
+ok   390-playing-empty-events: Every selected saved meeting keeps orientation, outcome, player goals and original identity
+ok   390-playing-empty-events: Selected club/player records equal held results
+ok   390-playing-empty-events: Detail retains all five rivals beyond the three-line season summary
+ok   390-playing-empty-events: five-rivals: four stable readable painted frames without overflow
+ok   390-playing-empty-events: five-rivals: every visible history control has a 44 pixel target
+ok   390-playing-empty-events: Back restores the same original tile and exact captured list offset
+ok   390-playing-empty-events: Selected original season tile is fully painted and reachable
+ok   390-playing-empty-events: Selected original season year/club/age/loan identity is exact
+ok   390-playing-empty-events: Every selected saved meeting keeps orientation, outcome, player goals and original identity
+ok   390-playing-empty-events: Selected club/player records equal held results
+ok   390-playing-empty-events: All-missed zero-app season retains team results without player appearances or goals
+ok   390-playing-empty-events: all-missed: four stable readable painted frames without overflow
+ok   390-playing-empty-events: all-missed: every visible history control has a 44 pixel target
+ok   390-playing-empty-events: Back restores the same original tile and exact captured list offset
+ok   390-playing-empty-events: Selected original season tile is fully painted and reachable
+ok   390-playing-empty-events: Selected original season year/club/age/loan identity is exact
+ok   390-playing-empty-events: Every selected saved meeting keeps orientation, outcome, player goals and original identity
+ok   390-playing-empty-events: Missing, empty and unreadable histories keep their distinct explanation
+ok   390-playing-empty-events: Back restores the same original tile and exact captured list offset
+ok   390-playing-empty-events: Selected original season tile is fully painted and reachable
+ok   390-playing-empty-events: Selected original season year/club/age/loan identity is exact
+ok   390-playing-empty-events: Every selected saved meeting keeps orientation, outcome, player goals and original identity
+ok   390-playing-empty-events: Missing, empty and unreadable histories keep their distinct explanation
+ok   390-playing-empty-events: Back restores the same original tile and exact captured list offset
+ok   390-playing-empty-events: Selected original season tile is fully painted and reachable
+ok   390-playing-empty-events: Selected original season year/club/age/loan identity is exact
+ok   390-playing-empty-events: Every selected saved meeting keeps orientation, outcome, player goals and original identity
+ok   390-playing-empty-events: Missing, empty and unreadable histories keep their distinct explanation
+ok   390-playing-empty-events: Back restores the same original tile and exact captured list offset
+ok   390-playing-empty-events: saved-season-details: every complete saved byte held
+ok   390-playing-empty-events: saved-season-details: no global random draws
+ok   390-playing-empty-events: Rival list keeps exact saved names and first saved occurrence order
+ok   390-playing-empty-events: rivals-top: four stable readable painted frames without overflow
+ok   390-playing-empty-events: rivals-top: every visible history control has a 44 pixel target
+ok   390-playing-empty-events: Rival history preserves every year/club/loan and original meeting identity
+ok   390-playing-empty-events: Rival aggregate independently retains club and played-only player totals
+ok   390-playing-empty-events: rival-detail: four stable readable painted frames without overflow
+ok   390-playing-empty-events: rival-detail: every visible history control has a 44 pixel target
+ok   390-playing-empty-events: Reopenable help explains saved identities, club/player records, venues and rival example
+ok   390-playing-empty-events: rival-detail-help: four stable readable painted frames without overflow
+ok   390-playing-empty-events: rival-detail-help: every visible history control has a 44 pixel target
+ok   390-playing-empty-events: rival-detail: Help restores exact mode position, focus, body and page
+ok   390-playing-empty-events: rival-detail-help: every complete saved byte held
+ok   390-playing-empty-events: rival-detail-help: no global random draws
+ok   390-playing-empty-events: Rival Back restores exact saved-name tile and list offset
+ok   390-playing-empty-events: rival-history: every complete saved byte held
+ok   390-playing-empty-events: rival-history: no global random draws
+ok   390-playing-empty-events: Reading Derby History never reveals the pending award result
+ok   390-playing-empty-events: Tab: shared dialog focus stays trapped
+ok   390-playing-empty-events: Tab: shared dialog focus stays trapped
+ok   390-playing-empty-events: Shift+Tab: shared dialog focus stays trapped
+ok   390-playing-empty-events: Shift+Tab: shared dialog focus stays trapped
+ok   390-playing-empty-events: close: exact opener, body and page restoration
+ok   390-playing-empty-events: close: every complete saved byte held
+ok   390-playing-empty-events: close: no global random draws
+ok   390-playing-empty-events: escape: exact opener, body and page restoration
+ok   390-playing-empty-events: escape: every complete saved byte held
+ok   390-playing-empty-events: escape: no global random draws
+ok   390-playing-empty-events: completed-read-only: strict complete serialized reload equality
+ok   390-playing-empty-events: Selected original season tile is fully painted and reachable
+ok   390-playing-empty-events: Selected original season year/club/age/loan identity is exact
+ok   390-playing-empty-events: Every selected saved meeting keeps orientation, outcome, player goals and original identity
+ok   390-playing-empty-events: Selected club/player records equal held results
+ok   390-playing-empty-events: Reload keeps the same original saved loan season available
+ok   390-playing-empty-events: reloaded-escape: exact opener, body and page restoration
+ok   390-playing-empty-events: reloaded-escape: every complete saved byte held
+ok   390-playing-empty-events: reloaded-escape: no global random draws
+ok   390-playing-empty-events: No page or owned asset errors
+ok   390-playing-empty-events: All external write attempts blocked with zero forwarding
+ok   390-retired: Independent unchanged Chromium loader matches every first-load field
+ok   390-retired: canonical-second-load: strict complete serialized reload equality
+ok   390-retired: Actual Derby history opener is a fully painted 44 pixel target
+ok   390-retired: Shared dialog locks body scroll
+ok   390-retired: Every saved senior tile preserves original index, year, club and recorded status
+ok   390-retired: Whole club and played-only player totals equal independent raw saved facts
+ok   390-retired: seasons-top: four stable readable painted frames without overflow
+ok   390-retired: seasons-top: every visible history control has a 44 pixel target
+ok   390-retired: Reopenable help explains saved identities, club/player records, venues and rival example
+ok   390-retired: seasons-help: four stable readable painted frames without overflow
+ok   390-retired: seasons-help: every visible history control has a 44 pixel target
+ok   390-retired: seasons: Help restores exact mode position, focus, body and page
+ok   390-retired: seasons-help: every complete saved byte held
+ok   390-retired: seasons-help: no global random draws
+ok   390-retired: Long saved history naturally overflows at this viewport
+ok   390-retired: Selected original season tile is fully painted and reachable
+ok   390-retired: Real wheel input establishes a nonzero saved list position
+ok   390-retired: Selected original season year/club/age/loan identity is exact
+ok   390-retired: Every selected saved meeting keeps orientation, outcome, player goals and original identity
+ok   390-retired: Selected club/player records equal held results
+ok   390-retired: loan-detail: four stable readable painted frames without overflow
+ok   390-retired: loan-detail: every visible history control has a 44 pixel target
+ok   390-retired: Reopenable help explains saved identities, club/player records, venues and rival example
+ok   390-retired: loan-detail-help: four stable readable painted frames without overflow
+ok   390-retired: loan-detail-help: every visible history control has a 44 pixel target
+ok   390-retired: loan-detail: Help restores exact mode position, focus, body and page
+ok   390-retired: loan-detail-help: every complete saved byte held
+ok   390-retired: loan-detail-help: no global random draws
+ok   390-retired: Back restores the same original tile and exact captured list offset
+ok   390-retired: Selected original season tile is fully painted and reachable
+ok   390-retired: Selected original season year/club/age/loan identity is exact
+ok   390-retired: Every selected saved meeting keeps orientation, outcome, player goals and original identity
+ok   390-retired: Selected club/player records equal held results
+ok   390-retired: Detail retains all five rivals beyond the three-line season summary
+ok   390-retired: five-rivals: four stable readable painted frames without overflow
+ok   390-retired: five-rivals: every visible history control has a 44 pixel target
+ok   390-retired: Back restores the same original tile and exact captured list offset
+ok   390-retired: Selected original season tile is fully painted and reachable
+ok   390-retired: Selected original season year/club/age/loan identity is exact
+ok   390-retired: Every selected saved meeting keeps orientation, outcome, player goals and original identity
+ok   390-retired: Selected club/player records equal held results
+ok   390-retired: All-missed zero-app season retains team results without player appearances or goals
+ok   390-retired: all-missed: four stable readable painted frames without overflow
+ok   390-retired: all-missed: every visible history control has a 44 pixel target
+ok   390-retired: Back restores the same original tile and exact captured list offset
+ok   390-retired: Selected original season tile is fully painted and reachable
+ok   390-retired: Selected original season year/club/age/loan identity is exact
+ok   390-retired: Every selected saved meeting keeps orientation, outcome, player goals and original identity
+ok   390-retired: Missing, empty and unreadable histories keep their distinct explanation
+ok   390-retired: Back restores the same original tile and exact captured list offset
+ok   390-retired: Selected original season tile is fully painted and reachable
+ok   390-retired: Selected original season year/club/age/loan identity is exact
+ok   390-retired: Every selected saved meeting keeps orientation, outcome, player goals and original identity
+ok   390-retired: Missing, empty and unreadable histories keep their distinct explanation
+ok   390-retired: Back restores the same original tile and exact captured list offset
+ok   390-retired: Selected original season tile is fully painted and reachable
+ok   390-retired: Selected original season year/club/age/loan identity is exact
+ok   390-retired: Every selected saved meeting keeps orientation, outcome, player goals and original identity
+ok   390-retired: Missing, empty and unreadable histories keep their distinct explanation
+ok   390-retired: Back restores the same original tile and exact captured list offset
+ok   390-retired: saved-season-details: every complete saved byte held
+ok   390-retired: saved-season-details: no global random draws
+ok   390-retired: Rival list keeps exact saved names and first saved occurrence order
+ok   390-retired: rivals-top: four stable readable painted frames without overflow
+ok   390-retired: rivals-top: every visible history control has a 44 pixel target
+ok   390-retired: Rival history preserves every year/club/loan and original meeting identity
+ok   390-retired: Rival aggregate independently retains club and played-only player totals
+ok   390-retired: rival-detail: four stable readable painted frames without overflow
+ok   390-retired: rival-detail: every visible history control has a 44 pixel target
+ok   390-retired: Reopenable help explains saved identities, club/player records, venues and rival example
+ok   390-retired: rival-detail-help: four stable readable painted frames without overflow
+ok   390-retired: rival-detail-help: every visible history control has a 44 pixel target
+ok   390-retired: rival-detail: Help restores exact mode position, focus, body and page
+ok   390-retired: rival-detail-help: every complete saved byte held
+ok   390-retired: rival-detail-help: no global random draws
+ok   390-retired: Rival Back restores exact saved-name tile and list offset
+ok   390-retired: rival-history: every complete saved byte held
+ok   390-retired: rival-history: no global random draws
+ok   390-retired: Reading Derby History never reveals the pending award result
+ok   390-retired: Tab: shared dialog focus stays trapped
+ok   390-retired: Tab: shared dialog focus stays trapped
+ok   390-retired: Shift+Tab: shared dialog focus stays trapped
+ok   390-retired: Shift+Tab: shared dialog focus stays trapped
+ok   390-retired: close: exact opener, body and page restoration
+ok   390-retired: close: every complete saved byte held
+ok   390-retired: close: no global random draws
+ok   390-retired: escape: exact opener, body and page restoration
+ok   390-retired: escape: every complete saved byte held
+ok   390-retired: escape: no global random draws
+ok   390-retired: completed-read-only: strict complete serialized reload equality
+ok   390-retired: Selected original season tile is fully painted and reachable
+ok   390-retired: Selected original season year/club/age/loan identity is exact
+ok   390-retired: Every selected saved meeting keeps orientation, outcome, player goals and original identity
+ok   390-retired: Selected club/player records equal held results
+ok   390-retired: Reload keeps the same original saved loan season available
+ok   390-retired: reloaded-escape: exact opener, body and page restoration
+ok   390-retired: reloaded-escape: every complete saved byte held
+ok   390-retired: reloaded-escape: no global random draws
+ok   390-retired: No page or owned asset errors
+ok   390-retired: All external write attempts blocked with zero forwarding
+ok   390-pending-newspaper: Independent unchanged Chromium loader matches every first-load field
+ok   390-pending-newspaper: canonical-second-load: strict complete serialized reload equality
+ok   390-pending-newspaper: Actual Derby history opener is a fully painted 44 pixel target
+ok   390-pending-newspaper: Shared dialog locks body scroll
+ok   390-pending-newspaper: Every saved senior tile preserves original index, year, club and recorded status
+ok   390-pending-newspaper: Whole club and played-only player totals equal independent raw saved facts
+ok   390-pending-newspaper: seasons-top: four stable readable painted frames without overflow
+ok   390-pending-newspaper: seasons-top: every visible history control has a 44 pixel target
+ok   390-pending-newspaper: Reopenable help explains saved identities, club/player records, venues and rival example
+ok   390-pending-newspaper: seasons-help: four stable readable painted frames without overflow
+ok   390-pending-newspaper: seasons-help: every visible history control has a 44 pixel target
+ok   390-pending-newspaper: seasons: Help restores exact mode position, focus, body and page
+ok   390-pending-newspaper: seasons-help: every complete saved byte held
+ok   390-pending-newspaper: seasons-help: no global random draws
+ok   390-pending-newspaper: Long saved history naturally overflows at this viewport
+ok   390-pending-newspaper: Selected original season tile is fully painted and reachable
+ok   390-pending-newspaper: Real wheel input establishes a nonzero saved list position
+ok   390-pending-newspaper: Selected original season year/club/age/loan identity is exact
+ok   390-pending-newspaper: Every selected saved meeting keeps orientation, outcome, player goals and original identity
+ok   390-pending-newspaper: Selected club/player records equal held results
+ok   390-pending-newspaper: loan-detail: four stable readable painted frames without overflow
+ok   390-pending-newspaper: loan-detail: every visible history control has a 44 pixel target
+ok   390-pending-newspaper: Reopenable help explains saved identities, club/player records, venues and rival example
+ok   390-pending-newspaper: loan-detail-help: four stable readable painted frames without overflow
+ok   390-pending-newspaper: loan-detail-help: every visible history control has a 44 pixel target
+ok   390-pending-newspaper: loan-detail: Help restores exact mode position, focus, body and page
+ok   390-pending-newspaper: loan-detail-help: every complete saved byte held
+ok   390-pending-newspaper: loan-detail-help: no global random draws
+ok   390-pending-newspaper: Back restores the same original tile and exact captured list offset
+ok   390-pending-newspaper: Selected original season tile is fully painted and reachable
+ok   390-pending-newspaper: Selected original season year/club/age/loan identity is exact
+ok   390-pending-newspaper: Every selected saved meeting keeps orientation, outcome, player goals and original identity
+ok   390-pending-newspaper: Selected club/player records equal held results
+ok   390-pending-newspaper: Detail retains all five rivals beyond the three-line season summary
+ok   390-pending-newspaper: five-rivals: four stable readable painted frames without overflow
+ok   390-pending-newspaper: five-rivals: every visible history control has a 44 pixel target
+ok   390-pending-newspaper: Back restores the same original tile and exact captured list offset
+ok   390-pending-newspaper: Selected original season tile is fully painted and reachable
+ok   390-pending-newspaper: Selected original season year/club/age/loan identity is exact
+ok   390-pending-newspaper: Every selected saved meeting keeps orientation, outcome, player goals and original identity
+ok   390-pending-newspaper: Selected club/player records equal held results
+ok   390-pending-newspaper: All-missed zero-app season retains team results without player appearances or goals
+ok   390-pending-newspaper: all-missed: four stable readable painted frames without overflow
+ok   390-pending-newspaper: all-missed: every visible history control has a 44 pixel target
+ok   390-pending-newspaper: Back restores the same original tile and exact captured list offset
+ok   390-pending-newspaper: Selected original season tile is fully painted and reachable
+ok   390-pending-newspaper: Selected original season year/club/age/loan identity is exact
+ok   390-pending-newspaper: Every selected saved meeting keeps orientation, outcome, player goals and original identity
+ok   390-pending-newspaper: Missing, empty and unreadable histories keep their distinct explanation
+ok   390-pending-newspaper: Back restores the same original tile and exact captured list offset
+ok   390-pending-newspaper: Selected original season tile is fully painted and reachable
+ok   390-pending-newspaper: Selected original season year/club/age/loan identity is exact
+ok   390-pending-newspaper: Every selected saved meeting keeps orientation, outcome, player goals and original identity
+ok   390-pending-newspaper: Missing, empty and unreadable histories keep their distinct explanation
+ok   390-pending-newspaper: Back restores the same original tile and exact captured list offset
+ok   390-pending-newspaper: Selected original season tile is fully painted and reachable
+ok   390-pending-newspaper: Selected original season year/club/age/loan identity is exact
+ok   390-pending-newspaper: Every selected saved meeting keeps orientation, outcome, player goals and original identity
+ok   390-pending-newspaper: Missing, empty and unreadable histories keep their distinct explanation
+ok   390-pending-newspaper: Back restores the same original tile and exact captured list offset
+ok   390-pending-newspaper: saved-season-details: every complete saved byte held
+ok   390-pending-newspaper: saved-season-details: no global random draws
+ok   390-pending-newspaper: Rival list keeps exact saved names and first saved occurrence order
+ok   390-pending-newspaper: rivals-top: four stable readable painted frames without overflow
+ok   390-pending-newspaper: rivals-top: every visible history control has a 44 pixel target
+ok   390-pending-newspaper: Rival history preserves every year/club/loan and original meeting identity
+ok   390-pending-newspaper: Rival aggregate independently retains club and played-only player totals
+ok   390-pending-newspaper: rival-detail: four stable readable painted frames without overflow
+ok   390-pending-newspaper: rival-detail: every visible history control has a 44 pixel target
+ok   390-pending-newspaper: Reopenable help explains saved identities, club/player records, venues and rival example
+ok   390-pending-newspaper: rival-detail-help: four stable readable painted frames without overflow
+ok   390-pending-newspaper: rival-detail-help: every visible history control has a 44 pixel target
+ok   390-pending-newspaper: rival-detail: Help restores exact mode position, focus, body and page
+ok   390-pending-newspaper: rival-detail-help: every complete saved byte held
+ok   390-pending-newspaper: rival-detail-help: no global random draws
+ok   390-pending-newspaper: Rival Back restores exact saved-name tile and list offset
+ok   390-pending-newspaper: rival-history: every complete saved byte held
+ok   390-pending-newspaper: rival-history: no global random draws
+ok   390-pending-newspaper: Reading Derby History never reveals the pending award result
+ok   390-pending-newspaper: Pending newspaper ballot remains unrevealed
+ok   390-pending-newspaper: Tab: shared dialog focus stays trapped
+ok   390-pending-newspaper: Tab: shared dialog focus stays trapped
+ok   390-pending-newspaper: Shift+Tab: shared dialog focus stays trapped
+ok   390-pending-newspaper: Shift+Tab: shared dialog focus stays trapped
+ok   390-pending-newspaper: close: exact opener, body and page restoration
+ok   390-pending-newspaper: close: every complete saved byte held
+ok   390-pending-newspaper: close: no global random draws
+ok   390-pending-newspaper: escape: exact opener, body and page restoration
+ok   390-pending-newspaper: escape: every complete saved byte held
+ok   390-pending-newspaper: escape: no global random draws
+ok   390-pending-newspaper: completed-read-only: strict complete serialized reload equality
+ok   390-pending-newspaper: Selected original season tile is fully painted and reachable
+ok   390-pending-newspaper: Selected original season year/club/age/loan identity is exact
+ok   390-pending-newspaper: Every selected saved meeting keeps orientation, outcome, player goals and original identity
+ok   390-pending-newspaper: Selected club/player records equal held results
+ok   390-pending-newspaper: Reload keeps the same original saved loan season available
+ok   390-pending-newspaper: reloaded-escape: exact opener, body and page restoration
+ok   390-pending-newspaper: reloaded-escape: every complete saved byte held
+ok   390-pending-newspaper: reloaded-escape: no global random draws
+ok   390-pending-newspaper: No page or owned asset errors
+ok   390-pending-newspaper: All external write attempts blocked with zero forwarding
+ok   1280-playing-empty-events: Independent unchanged Chromium loader matches every first-load field
+ok   1280-playing-empty-events: canonical-second-load: strict complete serialized reload equality
+ok   1280-playing-empty-events: Actual Derby history opener is a fully painted 44 pixel target
+ok   1280-playing-empty-events: Shared dialog locks body scroll
+ok   1280-playing-empty-events: Every saved senior tile preserves original index, year, club and recorded status
+ok   1280-playing-empty-events: Whole club and played-only player totals equal independent raw saved facts
+ok   1280-playing-empty-events: seasons-top: four stable readable painted frames without overflow
+ok   1280-playing-empty-events: seasons-top: every visible history control has a 44 pixel target
+ok   1280-playing-empty-events: Reopenable help explains saved identities, club/player records, venues and rival example
+ok   1280-playing-empty-events: seasons-help: four stable readable painted frames without overflow
+ok   1280-playing-empty-events: seasons-help: every visible history control has a 44 pixel target
+ok   1280-playing-empty-events: seasons: Help restores exact mode position, focus, body and page
+ok   1280-playing-empty-events: seasons-help: every complete saved byte held
+ok   1280-playing-empty-events: seasons-help: no global random draws
+ok   1280-playing-empty-events: Long saved history naturally overflows at this viewport
+ok   1280-playing-empty-events: Selected original season tile is fully painted and reachable
+ok   1280-playing-empty-events: Real wheel input establishes a nonzero saved list position
+ok   1280-playing-empty-events: Selected original season year/club/age/loan identity is exact
+ok   1280-playing-empty-events: Every selected saved meeting keeps orientation, outcome, player goals and original identity
+ok   1280-playing-empty-events: Selected club/player records equal held results
+ok   1280-playing-empty-events: loan-detail: four stable readable painted frames without overflow
+ok   1280-playing-empty-events: loan-detail: every visible history control has a 44 pixel target
+ok   1280-playing-empty-events: Reopenable help explains saved identities, club/player records, venues and rival example
+ok   1280-playing-empty-events: loan-detail-help: four stable readable painted frames without overflow
+ok   1280-playing-empty-events: loan-detail-help: every visible history control has a 44 pixel target
+ok   1280-playing-empty-events: loan-detail: Help restores exact mode position, focus, body and page
+ok   1280-playing-empty-events: loan-detail-help: every complete saved byte held
+ok   1280-playing-empty-events: loan-detail-help: no global random draws
+ok   1280-playing-empty-events: Back restores the same original tile and exact captured list offset
+ok   1280-playing-empty-events: Selected original season tile is fully painted and reachable
+ok   1280-playing-empty-events: Selected original season year/club/age/loan identity is exact
+ok   1280-playing-empty-events: Every selected saved meeting keeps orientation, outcome, player goals and original identity
+ok   1280-playing-empty-events: Selected club/player records equal held results
+ok   1280-playing-empty-events: Detail retains all five rivals beyond the three-line season summary
+ok   1280-playing-empty-events: five-rivals: four stable readable painted frames without overflow
+ok   1280-playing-empty-events: five-rivals: every visible history control has a 44 pixel target
+ok   1280-playing-empty-events: Back restores the same original tile and exact captured list offset
+ok   1280-playing-empty-events: Selected original season tile is fully painted and reachable
+ok   1280-playing-empty-events: Selected original season year/club/age/loan identity is exact
+ok   1280-playing-empty-events: Every selected saved meeting keeps orientation, outcome, player goals and original identity
+ok   1280-playing-empty-events: Selected club/player records equal held results
+ok   1280-playing-empty-events: All-missed zero-app season retains team results without player appearances or goals
+ok   1280-playing-empty-events: all-missed: four stable readable painted frames without overflow
+ok   1280-playing-empty-events: all-missed: every visible history control has a 44 pixel target
+ok   1280-playing-empty-events: Back restores the same original tile and exact captured list offset
+ok   1280-playing-empty-events: Selected original season tile is fully painted and reachable
+ok   1280-playing-empty-events: Selected original season year/club/age/loan identity is exact
+ok   1280-playing-empty-events: Every selected saved meeting keeps orientation, outcome, player goals and original identity
+ok   1280-playing-empty-events: Missing, empty and unreadable histories keep their distinct explanation
+ok   1280-playing-empty-events: Back restores the same original tile and exact captured list offset
+ok   1280-playing-empty-events: Selected original season tile is fully painted and reachable
+ok   1280-playing-empty-events: Selected original season year/club/age/loan identity is exact
+ok   1280-playing-empty-events: Every selected saved meeting keeps orientation, outcome, player goals and original identity
+ok   1280-playing-empty-events: Missing, empty and unreadable histories keep their distinct explanation
+ok   1280-playing-empty-events: Back restores the same original tile and exact captured list offset
+ok   1280-playing-empty-events: Selected original season tile is fully painted and reachable
+ok   1280-playing-empty-events: Selected original season year/club/age/loan identity is exact
+ok   1280-playing-empty-events: Every selected saved meeting keeps orientation, outcome, player goals and original identity
+ok   1280-playing-empty-events: Missing, empty and unreadable histories keep their distinct explanation
+ok   1280-playing-empty-events: Back restores the same original tile and exact captured list offset
+ok   1280-playing-empty-events: saved-season-details: every complete saved byte held
+ok   1280-playing-empty-events: saved-season-details: no global random draws
+ok   1280-playing-empty-events: Rival list keeps exact saved names and first saved occurrence order
+ok   1280-playing-empty-events: rivals-top: four stable readable painted frames without overflow
+ok   1280-playing-empty-events: rivals-top: every visible history control has a 44 pixel target
+ok   1280-playing-empty-events: Rival history preserves every year/club/loan and original meeting identity
+ok   1280-playing-empty-events: Rival aggregate independently retains club and played-only player totals
+ok   1280-playing-empty-events: rival-detail: four stable readable painted frames without overflow
+ok   1280-playing-empty-events: rival-detail: every visible history control has a 44 pixel target
+ok   1280-playing-empty-events: Reopenable help explains saved identities, club/player records, venues and rival example
+ok   1280-playing-empty-events: rival-detail-help: four stable readable painted frames without overflow
+ok   1280-playing-empty-events: rival-detail-help: every visible history control has a 44 pixel target
+ok   1280-playing-empty-events: rival-detail: Help restores exact mode position, focus, body and page
+ok   1280-playing-empty-events: rival-detail-help: every complete saved byte held
+ok   1280-playing-empty-events: rival-detail-help: no global random draws
+ok   1280-playing-empty-events: Rival Back restores exact saved-name tile and list offset
+ok   1280-playing-empty-events: rival-history: every complete saved byte held
+ok   1280-playing-empty-events: rival-history: no global random draws
+ok   1280-playing-empty-events: Reading Derby History never reveals the pending award result
+ok   1280-playing-empty-events: Tab: shared dialog focus stays trapped
+ok   1280-playing-empty-events: Tab: shared dialog focus stays trapped
+ok   1280-playing-empty-events: Shift+Tab: shared dialog focus stays trapped
+ok   1280-playing-empty-events: Shift+Tab: shared dialog focus stays trapped
+ok   1280-playing-empty-events: close: exact opener, body and page restoration
+ok   1280-playing-empty-events: close: every complete saved byte held
+ok   1280-playing-empty-events: close: no global random draws
+ok   1280-playing-empty-events: escape: exact opener, body and page restoration
+ok   1280-playing-empty-events: escape: every complete saved byte held
+ok   1280-playing-empty-events: escape: no global random draws
+ok   1280-playing-empty-events: completed-read-only: strict complete serialized reload equality
+ok   1280-playing-empty-events: Selected original season tile is fully painted and reachable
+ok   1280-playing-empty-events: Selected original season year/club/age/loan identity is exact
+ok   1280-playing-empty-events: Every selected saved meeting keeps orientation, outcome, player goals and original identity
+ok   1280-playing-empty-events: Selected club/player records equal held results
+ok   1280-playing-empty-events: Reload keeps the same original saved loan season available
+ok   1280-playing-empty-events: reloaded-escape: exact opener, body and page restoration
+ok   1280-playing-empty-events: reloaded-escape: every complete saved byte held
+ok   1280-playing-empty-events: reloaded-escape: no global random draws
+ok   1280-playing-empty-events: No page or owned asset errors
+ok   1280-playing-empty-events: All external write attempts blocked with zero forwarding
+ok   1280-retired: Independent unchanged Chromium loader matches every first-load field
+ok   1280-retired: canonical-second-load: strict complete serialized reload equality
+ok   1280-retired: Actual Derby history opener is a fully painted 44 pixel target
+ok   1280-retired: Shared dialog locks body scroll
+ok   1280-retired: Every saved senior tile preserves original index, year, club and recorded status
+ok   1280-retired: Whole club and played-only player totals equal independent raw saved facts
+ok   1280-retired: seasons-top: four stable readable painted frames without overflow
+ok   1280-retired: seasons-top: every visible history control has a 44 pixel target
+ok   1280-retired: Reopenable help explains saved identities, club/player records, venues and rival example
+ok   1280-retired: seasons-help: four stable readable painted frames without overflow
+ok   1280-retired: seasons-help: every visible history control has a 44 pixel target
+ok   1280-retired: seasons: Help restores exact mode position, focus, body and page
+ok   1280-retired: seasons-help: every complete saved byte held
+ok   1280-retired: seasons-help: no global random draws
+ok   1280-retired: Long saved history naturally overflows at this viewport
+ok   1280-retired: Selected original season tile is fully painted and reachable
+ok   1280-retired: Real wheel input establishes a nonzero saved list position
+ok   1280-retired: Selected original season year/club/age/loan identity is exact
+ok   1280-retired: Every selected saved meeting keeps orientation, outcome, player goals and original identity
+ok   1280-retired: Selected club/player records equal held results
+ok   1280-retired: loan-detail: four stable readable painted frames without overflow
+ok   1280-retired: loan-detail: every visible history control has a 44 pixel target
+ok   1280-retired: Reopenable help explains saved identities, club/player records, venues and rival example
+ok   1280-retired: loan-detail-help: four stable readable painted frames without overflow
+ok   1280-retired: loan-detail-help: every visible history control has a 44 pixel target
+ok   1280-retired: loan-detail: Help restores exact mode position, focus, body and page
+ok   1280-retired: loan-detail-help: every complete saved byte held
+ok   1280-retired: loan-detail-help: no global random draws
+ok   1280-retired: Back restores the same original tile and exact captured list offset
+ok   1280-retired: Selected original season tile is fully painted and reachable
+ok   1280-retired: Selected original season year/club/age/loan identity is exact
+ok   1280-retired: Every selected saved meeting keeps orientation, outcome, player goals and original identity
+ok   1280-retired: Selected club/player records equal held results
+ok   1280-retired: Detail retains all five rivals beyond the three-line season summary
+ok   1280-retired: five-rivals: four stable readable painted frames without overflow
+ok   1280-retired: five-rivals: every visible history control has a 44 pixel target
+ok   1280-retired: Back restores the same original tile and exact captured list offset
+ok   1280-retired: Selected original season tile is fully painted and reachable
+ok   1280-retired: Selected original season year/club/age/loan identity is exact
+ok   1280-retired: Every selected saved meeting keeps orientation, outcome, player goals and original identity
+ok   1280-retired: Selected club/player records equal held results
+ok   1280-retired: All-missed zero-app season retains team results without player appearances or goals
+ok   1280-retired: all-missed: four stable readable painted frames without overflow
+ok   1280-retired: all-missed: every visible history control has a 44 pixel target
+ok   1280-retired: Back restores the same original tile and exact captured list offset
+ok   1280-retired: Selected original season tile is fully painted and reachable
+ok   1280-retired: Selected original season year/club/age/loan identity is exact
+ok   1280-retired: Every selected saved meeting keeps orientation, outcome, player goals and original identity
+ok   1280-retired: Missing, empty and unreadable histories keep their distinct explanation
+ok   1280-retired: Back restores the same original tile and exact captured list offset
+ok   1280-retired: Selected original season tile is fully painted and reachable
+ok   1280-retired: Selected original season year/club/age/loan identity is exact
+ok   1280-retired: Every selected saved meeting keeps orientation, outcome, player goals and original identity
+ok   1280-retired: Missing, empty and unreadable histories keep their distinct explanation
+ok   1280-retired: Back restores the same original tile and exact captured list offset
+ok   1280-retired: Selected original season tile is fully painted and reachable
+ok   1280-retired: Selected original season year/club/age/loan identity is exact
+ok   1280-retired: Every selected saved meeting keeps orientation, outcome, player goals and original identity
+ok   1280-retired: Missing, empty and unreadable histories keep their distinct explanation
+ok   1280-retired: Back restores the same original tile and exact captured list offset
+ok   1280-retired: saved-season-details: every complete saved byte held
+ok   1280-retired: saved-season-details: no global random draws
+ok   1280-retired: Rival list keeps exact saved names and first saved occurrence order
+ok   1280-retired: rivals-top: four stable readable painted frames without overflow
+ok   1280-retired: rivals-top: every visible history control has a 44 pixel target
+ok   1280-retired: Rival history preserves every year/club/loan and original meeting identity
+ok   1280-retired: Rival aggregate independently retains club and played-only player totals
+ok   1280-retired: rival-detail: four stable readable painted frames without overflow
+ok   1280-retired: rival-detail: every visible history control has a 44 pixel target
+ok   1280-retired: Reopenable help explains saved identities, club/player records, venues and rival example
+ok   1280-retired: rival-detail-help: four stable readable painted frames without overflow
+ok   1280-retired: rival-detail-help: every visible history control has a 44 pixel target
+ok   1280-retired: rival-detail: Help restores exact mode position, focus, body and page
+ok   1280-retired: rival-detail-help: every complete saved byte held
+ok   1280-retired: rival-detail-help: no global random draws
+ok   1280-retired: Rival Back restores exact saved-name tile and list offset
+ok   1280-retired: rival-history: every complete saved byte held
+ok   1280-retired: rival-history: no global random draws
+ok   1280-retired: Reading Derby History never reveals the pending award result
+ok   1280-retired: Tab: shared dialog focus stays trapped
+ok   1280-retired: Tab: shared dialog focus stays trapped
+ok   1280-retired: Shift+Tab: shared dialog focus stays trapped
+ok   1280-retired: Shift+Tab: shared dialog focus stays trapped
+ok   1280-retired: close: exact opener, body and page restoration
+ok   1280-retired: close: every complete saved byte held
+ok   1280-retired: close: no global random draws
+ok   1280-retired: escape: exact opener, body and page restoration
+ok   1280-retired: escape: every complete saved byte held
+ok   1280-retired: escape: no global random draws
+ok   1280-retired: completed-read-only: strict complete serialized reload equality
+ok   1280-retired: Selected original season tile is fully painted and reachable
+ok   1280-retired: Selected original season year/club/age/loan identity is exact
+ok   1280-retired: Every selected saved meeting keeps orientation, outcome, player goals and original identity
+ok   1280-retired: Selected club/player records equal held results
+ok   1280-retired: Reload keeps the same original saved loan season available
+ok   1280-retired: reloaded-escape: exact opener, body and page restoration
+ok   1280-retired: reloaded-escape: every complete saved byte held
+ok   1280-retired: reloaded-escape: no global random draws
+ok   1280-retired: No page or owned asset errors
+ok   1280-retired: All external write attempts blocked with zero forwarding
+ok   1280-pending-newspaper: Independent unchanged Chromium loader matches every first-load field
+ok   1280-pending-newspaper: canonical-second-load: strict complete serialized reload equality
+ok   1280-pending-newspaper: Actual Derby history opener is a fully painted 44 pixel target
+ok   1280-pending-newspaper: Shared dialog locks body scroll
+ok   1280-pending-newspaper: Every saved senior tile preserves original index, year, club and recorded status
+ok   1280-pending-newspaper: Whole club and played-only player totals equal independent raw saved facts
+ok   1280-pending-newspaper: seasons-top: four stable readable painted frames without overflow
+ok   1280-pending-newspaper: seasons-top: every visible history control has a 44 pixel target
+ok   1280-pending-newspaper: Reopenable help explains saved identities, club/player records, venues and rival example
+ok   1280-pending-newspaper: seasons-help: four stable readable painted frames without overflow
+ok   1280-pending-newspaper: seasons-help: every visible history control has a 44 pixel target
+ok   1280-pending-newspaper: seasons: Help restores exact mode position, focus, body and page
+ok   1280-pending-newspaper: seasons-help: every complete saved byte held
+ok   1280-pending-newspaper: seasons-help: no global random draws
+ok   1280-pending-newspaper: Long saved history naturally overflows at this viewport
+ok   1280-pending-newspaper: Selected original season tile is fully painted and reachable
+ok   1280-pending-newspaper: Real wheel input establishes a nonzero saved list position
+ok   1280-pending-newspaper: Selected original season year/club/age/loan identity is exact
+ok   1280-pending-newspaper: Every selected saved meeting keeps orientation, outcome, player goals and original identity
+ok   1280-pending-newspaper: Selected club/player records equal held results
+ok   1280-pending-newspaper: loan-detail: four stable readable painted frames without overflow
+ok   1280-pending-newspaper: loan-detail: every visible history control has a 44 pixel target
+ok   1280-pending-newspaper: Reopenable help explains saved identities, club/player records, venues and rival example
+ok   1280-pending-newspaper: loan-detail-help: four stable readable painted frames without overflow
+ok   1280-pending-newspaper: loan-detail-help: every visible history control has a 44 pixel target
+ok   1280-pending-newspaper: loan-detail: Help restores exact mode position, focus, body and page
+ok   1280-pending-newspaper: loan-detail-help: every complete saved byte held
+ok   1280-pending-newspaper: loan-detail-help: no global random draws
+ok   1280-pending-newspaper: Back restores the same original tile and exact captured list offset
+ok   1280-pending-newspaper: Selected original season tile is fully painted and reachable
+ok   1280-pending-newspaper: Selected original season year/club/age/loan identity is exact
+ok   1280-pending-newspaper: Every selected saved meeting keeps orientation, outcome, player goals and original identity
+ok   1280-pending-newspaper: Selected club/player records equal held results
+ok   1280-pending-newspaper: Detail retains all five rivals beyond the three-line season summary
+ok   1280-pending-newspaper: five-rivals: four stable readable painted frames without overflow
+ok   1280-pending-newspaper: five-rivals: every visible history control has a 44 pixel target
+ok   1280-pending-newspaper: Back restores the same original tile and exact captured list offset
+ok   1280-pending-newspaper: Selected original season tile is fully painted and reachable
+ok   1280-pending-newspaper: Selected original season year/club/age/loan identity is exact
+ok   1280-pending-newspaper: Every selected saved meeting keeps orientation, outcome, player goals and original identity
+ok   1280-pending-newspaper: Selected club/player records equal held results
+ok   1280-pending-newspaper: All-missed zero-app season retains team results without player appearances or goals
+ok   1280-pending-newspaper: all-missed: four stable readable painted frames without overflow
+ok   1280-pending-newspaper: all-missed: every visible history control has a 44 pixel target
+ok   1280-pending-newspaper: Back restores the same original tile and exact captured list offset
+ok   1280-pending-newspaper: Selected original season tile is fully painted and reachable
+ok   1280-pending-newspaper: Selected original season year/club/age/loan identity is exact
+ok   1280-pending-newspaper: Every selected saved meeting keeps orientation, outcome, player goals and original identity
+ok   1280-pending-newspaper: Missing, empty and unreadable histories keep their distinct explanation
+ok   1280-pending-newspaper: Back restores the same original tile and exact captured list offset
+ok   1280-pending-newspaper: Selected original season tile is fully painted and reachable
+ok   1280-pending-newspaper: Selected original season year/club/age/loan identity is exact
+ok   1280-pending-newspaper: Every selected saved meeting keeps orientation, outcome, player goals and original identity
+ok   1280-pending-newspaper: Missing, empty and unreadable histories keep their distinct explanation
+ok   1280-pending-newspaper: Back restores the same original tile and exact captured list offset
+ok   1280-pending-newspaper: Selected original season tile is fully painted and reachable
+ok   1280-pending-newspaper: Selected original season year/club/age/loan identity is exact
+ok   1280-pending-newspaper: Every selected saved meeting keeps orientation, outcome, player goals and original identity
+ok   1280-pending-newspaper: Missing, empty and unreadable histories keep their distinct explanation
+ok   1280-pending-newspaper: Back restores the same original tile and exact captured list offset
+ok   1280-pending-newspaper: saved-season-details: every complete saved byte held
+ok   1280-pending-newspaper: saved-season-details: no global random draws
+ok   1280-pending-newspaper: Rival list keeps exact saved names and first saved occurrence order
+ok   1280-pending-newspaper: rivals-top: four stable readable painted frames without overflow
+ok   1280-pending-newspaper: rivals-top: every visible history control has a 44 pixel target
+ok   1280-pending-newspaper: Rival history preserves every year/club/loan and original meeting identity
+ok   1280-pending-newspaper: Rival aggregate independently retains club and played-only player totals
+ok   1280-pending-newspaper: rival-detail: four stable readable painted frames without overflow
+ok   1280-pending-newspaper: rival-detail: every visible history control has a 44 pixel target
+ok   1280-pending-newspaper: Reopenable help explains saved identities, club/player records, venues and rival example
+ok   1280-pending-newspaper: rival-detail-help: four stable readable painted frames without overflow
+ok   1280-pending-newspaper: rival-detail-help: every visible history control has a 44 pixel target
+ok   1280-pending-newspaper: rival-detail: Help restores exact mode position, focus, body and page
+ok   1280-pending-newspaper: rival-detail-help: every complete saved byte held
+ok   1280-pending-newspaper: rival-detail-help: no global random draws
+ok   1280-pending-newspaper: Rival Back restores exact saved-name tile and list offset
+ok   1280-pending-newspaper: rival-history: every complete saved byte held
+ok   1280-pending-newspaper: rival-history: no global random draws
+ok   1280-pending-newspaper: Reading Derby History never reveals the pending award result
+ok   1280-pending-newspaper: Pending newspaper ballot remains unrevealed
+ok   1280-pending-newspaper: Tab: shared dialog focus stays trapped
+ok   1280-pending-newspaper: Tab: shared dialog focus stays trapped
+ok   1280-pending-newspaper: Shift+Tab: shared dialog focus stays trapped
+ok   1280-pending-newspaper: Shift+Tab: shared dialog focus stays trapped
+ok   1280-pending-newspaper: close: exact opener, body and page restoration
+ok   1280-pending-newspaper: close: every complete saved byte held
+ok   1280-pending-newspaper: close: no global random draws
+ok   1280-pending-newspaper: escape: exact opener, body and page restoration
+ok   1280-pending-newspaper: escape: every complete saved byte held
+ok   1280-pending-newspaper: escape: no global random draws
+ok   1280-pending-newspaper: completed-read-only: strict complete serialized reload equality
+ok   1280-pending-newspaper: Selected original season tile is fully painted and reachable
+ok   1280-pending-newspaper: Selected original season year/club/age/loan identity is exact
+ok   1280-pending-newspaper: Every selected saved meeting keeps orientation, outcome, player goals and original identity
+ok   1280-pending-newspaper: Selected club/player records equal held results
+ok   1280-pending-newspaper: Reload keeps the same original saved loan season available
+ok   1280-pending-newspaper: reloaded-escape: exact opener, body and page restoration
+ok   1280-pending-newspaper: reloaded-escape: every complete saved byte held
+ok   1280-pending-newspaper: reloaded-escape: no global random draws
+ok   1280-pending-newspaper: No page or owned asset errors
+ok   1280-pending-newspaper: All external write attempts blocked with zero forwarding
+Derby history native: 904 checks,0 failed,9/9 journeys,4 copied observation controls; artifacts /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/derby-history/native
