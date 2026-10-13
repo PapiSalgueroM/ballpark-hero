@@ -126,7 +126,7 @@ import { saveFence, fenceKeyOf } from '@/lib/saveFence';
 import { SAVE_KEY } from '@/lib/clubManager';
 import { setAsideSave, browserStorage } from '@/lib/brokenSaveRecovery';
 import { CONTINUE_SAVES } from '@/data/continueSaves';
-import { takeLandOnHub } from '@/lib/clubManagerSlots';
+import { takeLandOnHub } from '@/lib/clubManagerLanding';
 
 export function useClubManager() {
   const [phase, setPhase] = useState<CMPhase>('boot');

@@ -6,9 +6,10 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { SAVE_KEY, startCareer, leanCareer, trimCareer, worldSeasonLabel } from '@/lib/clubManager';
 import { fenceKeyOf } from '@/lib/saveFence';
+import { LAND_ON_HUB_KEY, markLandOnHub, takeLandOnHub } from '@/lib/clubManagerLanding';
 import {
   SLOTS_INDEX_KEY, parkedKey, activeSlot, readSlots, switchSlot, deleteSlot, slotEraId, summarize,
-  READABLE_SAVE_VERSION, LAND_ON_HUB_KEY, markLandOnHub, takeLandOnHub,
+  READABLE_SAVE_VERSION,
 } from '@/lib/clubManagerSlots';
 
 const career = (club: string) => startCareer(club);

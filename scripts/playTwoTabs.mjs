@@ -408,8 +408,8 @@ async function caseDamaged(ctx, tag) {
     const picker = !(await onHub(P)) && !(await onSlots(P)) && /2026-27/.test(t) && where === 'other';
     const errs = errorsOf.get(P).slice(e0);
     console.log(`   ${label}: ${where}${damagedLine ? ' (damaged line shown)' : ''}${kept !== null ? `, ${kept} backup(s) holding the bytes` : ''}; save ${d ? (d.unreadable ? 'unreadable' : `squad ${d.squad}, budget ${d.budget}`) : 'none'}; NaN on screen: ${/NaN/.test(t)}; errors ${errs.length}${errs[0] ? ` (${errs[0]})` : ''}`);
+    if (want === 'record') continue; // a case m16 does not name: recorded above, not judged
     if (picker) fail(5, `${label}: the picker opened without a word`);
-    if (want === 'record') continue;
     if (want === 'kept') {
       if (!damagedLine) fail(5, `${label}: no damaged line on the managers screen (landed on ${where})`);
       else if (!kept) fail(5, `${label}: after Clear no backup holds the original bytes`);

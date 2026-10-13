@@ -122,7 +122,7 @@ function Progress({ run }: { run: HotSeatRun }) {
 function openPage(path: string) {
   window.location.assign(path);
 }
-import { markLandOnHub } from '@/lib/clubManagerSlots';
+import { markLandOnHub } from '@/lib/clubManagerLanding';
 
 export function CarryOnCard({ run, openPath = openPage }: { run: HotSeatRun; openPath?: (path: string) => void }) {
   const [ask, setAsk] = useState<ExistingClubManagerSave | null>(null);
