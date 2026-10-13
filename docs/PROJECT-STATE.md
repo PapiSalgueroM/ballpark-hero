@@ -6,6 +6,15 @@ Newunitacc266196lines has22named outcomes requiringbaseline4specificBooleanfault
 
 NewWFb3f7b4bf251lines baseline preservesold20+3/21+3/40+4/53all30/20proofs, final521/source/pkg holds; fixedfullunits/build/priorProgramme164+B-onlycontrol/all15readers/original824budget mandatory. Original60000savecap remainsheld and H-lossless-readercoord owed. Noappedit/runtime/qualification/main/backend/published/finishedgameclaim. See docs/audits/soccer-career-pending-popularity-2026-10-13.md.
 
+
+## First baseline rejected by one independent stamp-oracle error
+
+Source66a3905178d1e513b8ba1d0f33dd63a7493c5a12/run38423257701/job115385858600 has22 completed outcomes: four exact intended effect/preview Boolean faults,seventeen preserves and one unexpected full-ledger assertion. The strict helper rejects the fifth failure. Actual source220 has story squadChatLeak, so eventLedgerKey stores story:squadChatLeak; the prepared literal expected numeric220. No catalog/RNG/state behavior is changed by this failure. All later prior/full/build/browser stages are skipped and receive no credit.
+
+Whole28 artifact11827088039/1027242B/3889241uncompressed/0PNG is retained primary .tmp-fx/pending-popularity-baseline-66a39051. ZIPc7fe1afbf0433b4a3fade64d9d04cde6bf49dee5ee5ba4a9f87f0017eab37a29; full officialLF881768B SHA2b138e14cbfc0160f738af44eb0a176f9d803afb7514901093c9ca1f7b7548d5. Root closes all28 physical entries,ten before copies,five compilations,six identical parent bindings,all3508 source rows/package3/521/types0.
+
+Only one independent literal expected property is corrected to story:squadChatLeak. New unit94cd543a476898eff71815a07d83d107dc17792d92520cae236db43970c59758 (196 lines) has a complete one-literal inverse to acc266. The oracle remains literal and does not derive the expected key from the function under test. All22 names, strict4fault/18preserve manifest, complete ledger/input/catalog/RNG and every other assertion remain. HelperGitLF3ca1/WFb3f7/browser51f6/all app/oldproof/package source stay held. Fleet independently whole-reads all707 browser lines without a concrete blocker. A fresh baseline is required before any product change.
+
 ## Codex Round 1356: saved morale choices and selected browser flows verified, original save-cap failure held, 2026-10-13
 
 Testedf7c0e1a811f67d6d8df763b852c0060742e0752f/run38399411517/job115302865571 on draftPR256 verifies20 normal outcomes/three uniquely effective controls (pending4 faults16 preserves,preview1/19,legacy3/17), prior21+3/40+4/53+all30 actual routine answers/20+both review chains/discovery/types/full units482 files7445 passes plus two files58 skips/full build/14browser journeys3972 checks26 actual choices54 literal reloads2 controls54 fresh originals/download823.2K<824/all15 rebuilt readers. Related26 is25PASS1FAIL solely original simCreation60000-unit full-save guard (82.4KB label); overallFAIL remains unwaived. Source3504/package3/521/ledgerdiff0 hold. Normal Programme164 whole comparisons and original-bug B-only reward control stay qualified,163 held plus1 approved additive218 hit at originalroll0.2378400256857276.

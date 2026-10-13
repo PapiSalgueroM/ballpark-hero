@@ -191,6 +191,6 @@ describe('Soccer Career pending popularity and truthful wax statue preview', () 
     const before = roundtrip(roundtrip(waiting(context(), [213, 233, 220]))), held = JSON.stringify(before);
     const run = draws([0.99, 0.99], () => E.getAllEvents(before)); expect(run.values).toEqual([0.99, 0.99]);
     expect(run.result.some(event => event.id === 213)).toBe(true); expect(run.result.some(event => event.id === 233)).toBe(true);
-    expect(JSON.stringify(before)).toBe(held); expect(before.eventLastFired).toEqual({ '7777': 2022, '213': 2026, '233': 2026, '220': 2026 });
+    expect(JSON.stringify(before)).toBe(held); expect(before.eventLastFired).toEqual({ '7777': 2022, '213': 2026, '233': 2026, 'story:squadChatLeak': 2026 });
   });
 });
