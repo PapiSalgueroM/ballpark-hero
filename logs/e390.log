@@ -1,0 +1,13 @@
+[10s] created Japan🇯🇵/Centre Back (CB)/Early 2010s (2010 start) -> youth age 16 at Yokohama F. Marinos Youth
+[27s] explore phone-s0: 📱 Phone 3 unread -> closed true via  scroll 397->0
+[61s] explore phone-s1: 📱 Phone 3 unread -> closed true via  scroll 292->0
+[91s] explore phone-s2: 📱 Phone 3 unread -> closed true via  scroll 376->0
+[105s] reload (step 44 in random_events): same=true phase random_events->random_events
+[129s] explore phone-s3: 📱 Phone 3 unread -> closed true via  scroll 392->0
+[162s] explore phone-s4: 📱 Phone 3 unread -> closed true via  scroll 99->99
+[209s] explore phone-s5: 📱 Phone 3 unread -> closed true via  scroll 397->0
+[241s] explore phone-s6: 📱 Phone 3 unread -> closed true via  scroll 306->0
+[261s] target reached: 7 senior seasons
+[264s] reload (final): same=true phase playing->playing
+[264s] done: {"phase":"playing","age":24,"senior":7,"club":"Liverpool","ovr":78,"steps":136,"secs":261} shots=61 audits=131 errors=11 pageErrors=0 stuck=0 traps=0
+WALK e390 FINISHED

@@ -1,0 +1,14 @@
+[10s] created Argentina🇦🇷/Attacking Mid (CAM)/Current era (2025 start) -> youth age 16 at Panathinaikos Youth
+[20s] explore ambition-s0: 🎯 Season target Choose a personal challenge for next season -> closed true via  scroll 1334->370
+[22s] explore preseason-s0: 🏃 Preseason plan Balanced, or choose your next-season workl -> closed true via  scroll 370->370
+[24s] explore squad-s0: 👥 Squad Your teammates The plan: Squad player On our rating -> closed true via ← Back/Escape scroll 370->370
+[27s] explore programme-s0: Your next season Roles, contracts, playing time and your com -> closed true via Close scroll 370->370
+[28s] explore attributes-s0: Full attributes 176 cm · 71 kg · every number under the six -> closed true via ← Back scroll 370->193
+[30s] explore ratings-s0: 📈 Ratings -> closed true via Close scroll 193->1881
+[31s] explore story-s0: 📖 Career Story -> closed true via Back to your career scroll 1881->1881
+[33s] explore trophy-s0: 🏆 0 Leagues -> closed true via ‹ Back scroll 1881->1881
+[69s] reload (step 30 in ballon_dor): same=true phase ballon_dor->ballon_dor
+[150s] reload (step 77 in ballon_dor): same=true phase ballon_dor->ballon_dor
+[1083s] reload (final): same=true phase ballon_dor->ballon_dor
+[1083s] done: {"phase":"ballon_dor","age":18,"senior":1,"club":"Panathinaikos","ovr":55,"steps":637,"secs":1080} shots=31 audits=14 errors=9 pageErrors=0 stuck=0 traps=0
+WALK d390 FINISHED

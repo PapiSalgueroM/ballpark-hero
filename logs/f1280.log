@@ -1,0 +1,16 @@
+[10s] created France🇫🇷/Left Wing (LW)/Early 2000s (2000 start) -> youth age 16 at Nice Youth
+[15s] explore ambition-s0: 🎯 Season target Choose a personal challenge for next season -> closed true via  scroll 251->251
+[17s] explore preseason-s0: 🏃 Preseason plan Balanced, or choose your next-season workl -> closed true via  scroll 251->251
+[19s] explore squad-s0: 👥 Squad By role The plan: Starter most weeks On our ratings -> closed true via ← Back/Escape scroll 251->251
+[22s] explore programme-s0: Your next season Roles, contracts, playing time and your com -> closed true via Close scroll 251->251
+[24s] explore attributes-s0: Full attributes 175 cm · 70 kg · every number under the six -> closed true via ← Back scroll 251->89
+[25s] explore ratings-s0: 📈 Ratings -> closed true via Close scroll 89->1304
+[27s] explore story-s0: 📖 Career Story -> closed true via Back to your career scroll 1304->1304
+[29s] explore trophy-s0: 🏆 0 Leagues -> closed true via ‹ Back scroll 1304->1304
+[51s] reload (step 20 in random_events): same=true phase random_events->random_events
+[118s] explore ambition-s3: 🎯 Season target Choose a personal challenge for next season -> closed true via  scroll 251->251
+[120s] explore preseason-s3: 🏃 Preseason plan Balanced, or choose your next-season workl -> closed true via  scroll 251->251
+[172s] target reached: 6 senior seasons
+[175s] reload (final): same=true phase playing->playing
+[175s] done: {"phase":"playing","age":23,"senior":6,"club":"Sporting CP","ovr":76,"steps":130,"secs":172} shots=51 audits=76 errors=10 pageErrors=0 stuck=0 traps=0
+WALK f1280 FINISHED
