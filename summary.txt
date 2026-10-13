@@ -1,0 +1,6 @@
+vitest exit=0 2s |    Duration  1.53s (transform 368ms, setup 127ms, collect 632ms, tests 200ms, environment 965ms, prepare 429ms)
+deck exit=0 39s | simEventDeck: green.
+deck-weightkeep exit=1 38s | simEventDeck: 1 failure, red sections 3 (CONTROL=weightkeep fired)
+tsc exit=0 70s | 
+deck-restfall exit=1 37s | simEventDeck: 3 failures, red sections 5 (CONTROL=restfall fired)
+deck-expirefall exit=1 36s | simEventDeck: 3 failures, red sections 7 (CONTROL=expirefall fired)
