@@ -290,11 +290,26 @@ const cellBox = (page, label) => page.evaluate(l => {
 }, label);
 async function calendarTaps(page, tag, { banner = false } = {}) {
   await page.locator('[data-testid="cm-calendar-grid"]').waitFor({ timeout: 15000 });
+  /* Where a player stands: the calendar opened from the hub's tiles, the first
+     row on screen, scrolled only if it was not (its bottom placed 120 px above
+     the fold), so the strip's own place starts below the fold as in the hunt. */
   await page.evaluate(() => {
-    const g = document.querySelector('[data-testid="cm-calendar-grid"]');
-    window.scrollTo(0, window.scrollY + g.getBoundingClientRect().top - 60);
+    const first = document.querySelector('[data-testid="cm-calendar-grid"] > button');
+    const r = first.getBoundingClientRect();
+    if (r.top < 0 || r.bottom > innerHeight - 120) window.scrollTo(0, window.scrollY + r.bottom - (innerHeight - 120));
   });
   await page.waitForTimeout(300);
+  /* Before each tap the player brings the day on screen and clear of a strip
+     already riding the foot of the screen; that scroll is his, the tap's is
+     what is measured. */
+  const bringIntoReach = label => page.evaluate(l => {
+    const b = [...document.querySelectorAll('[data-testid="cm-calendar-grid"] > button')].find(x => x.getAttribute('aria-label') === l);
+    const s = document.querySelector('[data-testid="cm-calendar-day"]');
+    const r = b.getBoundingClientRect();
+    const limit = s ? s.getBoundingClientRect().top - 8 : innerHeight - 8;
+    if (r.bottom > limit) window.scrollBy(0, r.bottom - limit + 8);
+    else if (r.top < 8) window.scrollBy(0, r.top - 60);
+  }, label);
   const labels = await page.evaluate(() => {
     const cells = [...document.querySelectorAll('[data-testid="cm-calendar-grid"] > button')];
     const match = cells.find(b => /: (vs|at|v) /.test(b.getAttribute('aria-label') ?? ''));
@@ -302,6 +317,8 @@ async function calendarTaps(page, tag, { banner = false } = {}) {
   });
   const plan = [['first row, an in page click', labels.first, 'dom'], ['last row, a real click', labels.last, 'mouse'], ['a match day, a real click', labels.match, 'locator']].filter(p => p[1]);
   for (const [what, label, how] of plan) {
+    await bringIntoReach(label);
+    await page.waitForTimeout(250);
     const before = await page.evaluate(() => window.scrollY);
     const cell = await cellBox(page, label);
     if (how === 'dom') await page.evaluate(l => [...document.querySelectorAll('[data-testid="cm-calendar-grid"] > button')].find(b => b.getAttribute('aria-label') === l)?.click(), label);
@@ -343,6 +360,10 @@ if (SECTIONS.has('B')) {
         document.head.appendChild(st);
       }));
       await startCareer(page, HEAD, r);
+      /* Stand where the head lands (a no op there): the hub header 12 px from
+         the top, which is where a player on the base build scrolls to find the
+         tiles. */
+      await page.evaluate(() => { const h = document.querySelector('[data-testid="cm-show-slots"]').closest('header'); window.scrollTo(0, window.scrollY + h.getBoundingClientRect().top - 12); });
       await clickTile(page, 'Calendar');
       await calendarTaps(page, r.id);
       await shot(page, `B-${r.id}-calendar`);
