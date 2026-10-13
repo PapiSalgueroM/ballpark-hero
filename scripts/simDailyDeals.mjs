@@ -95,11 +95,16 @@ const BASELINE = {
     '2026-10-14': '1ef2cd0784039671c51c',
     '2026-10-15': 'f80bb07d1fc4d8a0ff29',
     '2026-10-16': 'ebda0cd99fe400a8d2f4',
-    '2026-10-27': 'c9af2ca70b2ea9ce4f3e',
-    '2026-11-14': 'd31a907e262a745a4246',
-    '2027-01-19': 'e233082a22176e8e1cd8',
-    '2027-01-30': '7ef7837d86a8088ad0fe',
-    '2027-02-06': '2784bbcba11e0777c580',
+    /* Round 1331: the five dates from HOT_SEAT_RULES_FROM (2026-10-24) on play the Round 1331 match rules by
+       design (five changes in three stoppages for these Premier League clubs and their opponents, the press
+       asking about the next match), so their deals were recorded again from the Round 1331 tree with --print
+       (remote check r1331-s4, line dailyDeals-print, head 62cf206a). Release AS dealt c9af2ca7, d31a907e,
+       e233082a, 7ef7837d and 2784bbcb. Every date before the cutover keeps its Release AS recording. */
+    '2026-10-27': '0400c7b1a2d756911454',
+    '2026-11-14': '67cb2096bdc45751340e',
+    '2027-01-19': 'b33b5b04a41504ec5f53',
+    '2027-01-30': '9b6451735725f9ce1ba8',
+    '2027-02-06': '75a43fcbf0106a1f29e3',
   },
   deadline: {
     '2026-10-10': 'e57fbb3c1e90b2d46068',
