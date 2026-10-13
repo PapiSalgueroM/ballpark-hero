@@ -1,0 +1,3 @@
+#!build
+allsims-head: node scripts/runAllSims.mjs
+allsims-base: git worktree add -q /tmp/rb 8fea14e2 && ln -s "$PWD/node_modules" /tmp/rb/node_modules && cd /tmp/rb && (node_modules/.bin/vite build > /tmp/rb-build.log 2>&1; node scripts/runAllSims.mjs)
