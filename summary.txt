@@ -1,0 +1,6 @@
+vitest-seat exit=0 7s |    Duration  5.75s (transform 639ms, setup 426ms, collect 2.59s, tests 7.32s, environment 2.56s, prepare 982ms)
+simCollegeDynastyBoard exit=0 7s | simCollegeDynastyBoard: all green
+simNoInventedQuotes exit=0 18s | simNoInventedQuotes: green. No real player is quoted or accused anywhere.
+simNoRivalNames exit=0 10s | No rival product names found. 0 findings.
+tsc exit=0 51s | 
+simCollegeSeat exit=0 116s | simCollegeSeat: all sections green (S1 to S9 and SY)
