@@ -6106,7 +6106,7 @@ function generateNewsArticles(s: CareerState, season: SeasonRecord, totalGoals: 
         const injury = (season.injury ?? "").split(" ").map(w => w ? w[0].toUpperCase() + w.slice(1) : w).join(" ");
         return { newspaper: pick(NEWSPAPERS), type: "negative",
           headline: `INJURY BLOW: ${name} Out For Weeks With ${injury}`,
-          body: `${club} have been dealt a blow: ${name}'s ${season.injuryWeeks} weeks out with a ${lowerFirst(season.injury ?? "")} meant the ${posLower} managed only ${season.apps} appearances this season.` };
+          body: `${club} have been dealt a blow: ${name}'s ${season.injuryWeeks} weeks out with ${withArticle(lowerFirst(season.injury ?? ""))} meant the ${posLower} managed only ${season.apps} appearances this season.` };
       } },
     { weight: 0.3, check: () => s.morale < 40,
       gen: () => ({ newspaper: pick(NEWSPAPERS), type: "negative",
@@ -6741,7 +6741,10 @@ export function cardFitsSeason(id: number, state: CareerState): boolean {
 }
 
 const ordinalOf = (n: number) => `${n}${n % 100 >= 11 && n % 100 <= 13 ? "th" : ["th", "st", "nd", "rd"][n % 10] ?? "th"}`;
-const lowerFirst = (t: string) => (/^[A-Z][a-z]/.test(t) ? t[0].toLowerCase() + t.slice(1) : t);
+/* "Achilles" is a name and keeps its capital; "ACL" and "MCL" are left alone by the second letter test */
+const lowerFirst = (t: string) => (/^(?!Achilles)[A-Z][a-z]/.test(t) ? t[0].toLowerCase() + t.slice(1) : t);
+/* "an" before a vowel and before a letter read as a vowel sound in an abbreviation ("an MCL sprain") */
+const withArticle = (t: string) => `${/^([AEIOUaeiou]|[FHLMNRSX][A-Z])/.test(t) ? "an" : "a"} ${t}`;
 
 /** The words a narrating card prints, read off the season's row, or the
  *  fallback when the row does not hold the fact (an older saved card). */
