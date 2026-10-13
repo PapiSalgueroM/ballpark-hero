@@ -1,0 +1,7 @@
+base 512 js chunks, head 512, same name on both: 144
+clubManager-: base clubManager-D-vLrbID.js 786656 bytes, head clubManager-JC_QLPhG.js 786656 bytes, names differ, bytes equal once hashed names are set aside
+managerHotSeat-: base managerHotSeat-CM3KdIbI.js 31723 bytes, head managerHotSeat-CjM6iBCj.js 31723 bytes, names differ, bytes equal once hashed names are set aside
+deadlineDay-*: none on either side
+clubManagerEras-*: none on either side
+useClubManager-*: none on either side
+CHUNKS: every engine chunk equal once hashed names are set aside
