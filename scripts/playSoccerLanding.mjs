@@ -372,6 +372,12 @@ async function sectionLanding(ctx, arm, size, w) {
     const m = await beginAndMeasure(p);
     await shot(p, `${arm}-${size}-landing-${i}`);
     if (SECTIONS.includes('landing')) judgeLanding(arm, size, `"${name}"`, m);
+    /* Any toast Begin Career raised, sampled where the player lands. */
+    for (const t of await p.evaluate(() => window.__toastAudit ?? [])) {
+      const bad = t.hits.filter(h => h.kind === 'control' || h.kind === 'heading');
+      console.log(`   at landing: "${t.words}" ${t.when} at ${t.box.x},${t.box.y} ${t.box.w}x${t.box.h}: ${t.hits.length ? JSON.stringify([...new Set(t.hits.map(h => `${h.kind} ${h.what}`))]) : 'nothing under it'}`);
+      if (bad.length && SECTIONS.includes('toasts')) rec(arm, 'toasts', size, `at landing "${t.words}" (${t.when}) lies over ${JSON.stringify([...new Set(bad.map(h => `${h.kind} ${h.what}`))])}`);
+    }
     if (SECTIONS.includes('name')) judgeName(arm, size, w, await measureName(p));
     if (i === 0 && SECTIONS.includes('landing')) {
       /* New Career, then Begin again: lands again. */
