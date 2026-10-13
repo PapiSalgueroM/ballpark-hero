@@ -1,0 +1,1718 @@
+[
+ {
+  "t": "00:38:54",
+  "kind": "help",
+  "open": false
+ },
+ {
+  "t": "00:38:55",
+  "kind": "audit",
+  "where": "pick screen",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [],
+  "tap44": 2,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 36
+ },
+ {
+  "t": "00:38:55",
+  "kind": "pick",
+  "text": "MLB Front Office Real 2026 rosters. Real tax-line pain. October does not forgive. Take over a baseball front office Every club's real 26 from MLB's own data, as they stood on the last day of the 2026 regular season, rated off their 2026 numbers. Manage the payroll under the tax line, survive the 162, then October: Wild Card, Division Series, LCS, World Series. Saves automatically. New York Yankees American League Boston Red Sox American League Toronto Blue Jays American League Tampa Bay Rays Ame"
+ },
+ {
+  "t": "00:38:55",
+  "kind": "club",
+  "clubs": 30,
+  "idx": 9,
+  "club": "Chicago White Sox American League"
+ },
+ {
+  "t": "00:38:56",
+  "kind": "audit",
+  "where": "hub start",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 3,
+  "tinyText": 12,
+  "tinyTextSample": [
+   "9px span.shrink-0.rounded-full.border \"MEASURED\"",
+   "9px span.shrink-0.rounded-full.border \"CANDID\"",
+   "9px span.shrink-0.rounded-full.border \"BOLD\"",
+   "9px div.mt-0.5.truncate.text-[9px] \"Miguel Vargas leads them at 94\""
+  ],
+  "text10": 18
+ },
+ {
+  "t": "00:38:56",
+  "kind": "hub",
+  "text": "MLB Front Office Real 2026 rosters. Real tax-line pain. October does not forgive. Chicago White Sox 2026 · Round 1/27 Record 0-0 Strength 86 Tax room $60.2M 🏛️ OWNERSHIP Trust 60 Make October. Ownership thinks this roster belongs there. 🎙️ PRESS CONFERENCE The introduction First day, full room. The Chicago White Sox beat writers want to know what kind of front office this is going to be. Process, patience, all the safe words MEASURED Nobody clips it. That is the point Name the roster holes out loud CANDID Candor plays upstairs, usually · a real gamble Say the World Series is the only bar BOLD The clip will outlive you, either way · a real gamble 👔 ROSTER 26 under contract Miguel Vargas leads them at 94 💼 FREE AGENCY $60M of room In reach: Dai Kestrel at 81 🤝 TRADES 26 to offer Your biggest chip is Miguel Vargas 🏟️ PLAY Round 1 of 27 0-0 with 27 rounds to play 📊 STANDINGS #6 in the AL Inside the top 6 with 27 to play How the GM desk works 📋 STAFF 6 of 6 jobs filled +1.86 team strength from the dugout ✍️ RE-SIGN DESK Nobody expiring Nobody is out of contract this winter 🎟️ DRAFT PICKS 2 picks in 2026 Ordinary MLB picks cannot be traded 🔁 TRADE DESK 18 rounds to the deadline Players, and cash toward a salary Welcome to the Chicago White Sox front office. Opening Day of the 2026 season is here. 🏛️ The ownership mandate: Make October. Ownership thinks this roster belongs "
+ },
+ {
+  "t": "00:38:56",
+  "kind": "press",
+  "answered": "Process, patience, all the safe words MEASURED Nobody clips it. That is the point"
+ },
+ {
+  "t": "00:38:57",
+  "kind": "economy",
+  "label": "start",
+  "cap": 244,
+  "season": 2026,
+  "my": "CHW",
+  "teams": 30,
+  "list": "STL:118.9/26 KCR:130.9/26 LAA:138.1/26 CIN:138.9/26 SEA:141.9/26 TOR:143.6/26 BAL:147.8/26 NYM:149.3/26 WSN:149.4/26 SFG:153.4/26 COL:154.1/26 SDP:158.6/26 ATH:162.7/26 HOU:165.2/26 CLE:168.7/26 DET:169.4/26 ATL:170.3/26 MIA:173.8/26 ARI:182.9/26 MIN:182.9/26 CHW:183.8/26 TEX:183.9/26 PHI:188/26 CHC:192.3/26 TBR:200.6/26 BOS:211.6/26 NYY:213.2/26 PIT:217.5/26 LAD:228.3/26 MIL:230.1/26",
+  "saveChars": 126451,
+  "storageChars": 126534
+ },
+ {
+  "t": "00:38:57",
+  "kind": "tiles",
+  "label": "s1start",
+  "tiles": [
+   "ROSTER 26 under contract Miguel Vargas leads them at 94",
+   "FREE AGENCY $60M of room In reach: Dai Kestrel at 81",
+   "TRADES 26 to offer Your biggest chip is Miguel Vargas",
+   "PLAY Round 1 of 27 0-0 with 27 rounds to play",
+   "STANDINGS #6 in the AL Inside the top 6 with 27 to play",
+   "STAFF 6 of 6 jobs filled +1.86 team strength from the dugout",
+   "RE-SIGN DESK Nobody expiring Nobody is out of contract this winter",
+   "DRAFT PICKS 2 picks in 2026 Ordinary MLB picks cannot be traded",
+   "TRADE DESK 18 rounds to the deadline Players, and cash toward a salary"
+  ]
+ },
+ {
+  "t": "00:38:58",
+  "kind": "audit",
+  "where": "s1start tile 0 ROSTER 26 under contract Migue",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.rounded-full.border.border-border \"DFA, $10.1M dead\"",
+    "w": 101,
+    "h": 22
+   },
+   {
+    "el": "button.rounded-full.border.border-border \"DFA, $10.1M dead\"",
+    "w": 101,
+    "h": 22
+   },
+   {
+    "el": "button.rounded-full.border.border-border \"DFA, $9.7M dead\"",
+    "w": 100,
+    "h": 22
+   },
+   {
+    "el": "button.rounded-full.border.border-border \"DFA, $7.6M dead\"",
+    "w": 99,
+    "h": 22
+   },
+   {
+    "el": "button.rounded-full.border.border-border \"DFA, $7.2M dead\"",
+    "w": 99,
+    "h": 22
+   },
+   {
+    "el": "button.rounded-full.border.border-border \"DFA, $6.7M dead\"",
+    "w": 100,
+    "h": 22
+   },
+   {
+    "el": "button.rounded-full.border.border-border \"DFA, $3.8M dead\"",
+    "w": 100,
+    "h": 22
+   },
+   {
+    "el": "button.rounded-full.border.border-border \"DFA, $1.3M dead\"",
+    "w": 98,
+    "h": 22
+   }
+  ],
+  "tap44": 3,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 90
+ },
+ {
+  "t": "00:38:58",
+  "kind": "panel",
+  "label": "s1start",
+  "tile": "ROSTER 26 under contract Miguel Vargas l",
+  "text": "MLB Front Office Real 2026 rosters. Real tax-line pain. October does not forgive. Chicago White Sox 2026 · Round 1/27 Record 0-0 Strength 86 Tax room $60.2M 🏛️ OWNERSHIP Trust 63 Make October. Ownership thinks this roster belongs there. Hub Roster 🎙️ Nobody clips it. That is the point. Welcome to the Chicago White Sox front office. Opening Day of the 2026 season is here. 🏛️ The ownership mandate: Make October. Ownership thinks this roster belongs there. Payroll $183.8M against the $244M tax line Cap figures as of September 2026 26 on the roster. The sim plays your best healthy 8 bats, 3 starters and 2 relievers. Salaries are the game's own, not real contracts. The men the sim plays opened at their rating's price and the rest on 0.7M depth deals. When any deal runs out he re-signs at his rating's price or walks, so a last year deal can cost a lot more next season. POSITION PLAYERS (13)"
+ },
+ {
+  "t": "00:38:59",
+  "kind": "audit",
+  "where": "s1start tile 1 FREE AGENCY $60M of room In re",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.rounded-full.bg-primary.px-2.5 \"Sign\"",
+    "w": 42,
+    "h": 20
+   },
+   {
+    "el": "button.rounded-full.bg-primary.px-2.5 \"Sign\"",
+    "w": 42,
+    "h": 20
+   },
+   {
+    "el": "button.rounded-full.bg-primary.px-2.5 \"Sign\"",
+    "w": 42,
+    "h": 20
+   },
+   {
+    "el": "button.rounded-full.bg-primary.px-2.5 \"Sign\"",
+    "w": 42,
+    "h": 20
+   },
+   {
+    "el": "button.rounded-full.bg-primary.px-2.5 \"Sign\"",
+    "w": 42,
+    "h": 20
+   },
+   {
+    "el": "button.rounded-full.bg-primary.px-2.5 \"Sign\"",
+    "w": 42,
+    "h": 20
+   },
+   {
+    "el": "button.rounded-full.bg-primary.px-2.5 \"Sign\"",
+    "w": 42,
+    "h": 20
+   },
+   {
+    "el": "button.rounded-full.bg-primary.px-2.5 \"Sign\"",
+    "w": 42,
+    "h": 20
+   }
+  ],
+  "tap44": 3,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 26
+ },
+ {
+  "t": "00:38:59",
+  "kind": "panel",
+  "label": "s1start",
+  "tile": "FREE AGENCY $60M of room In reach: Dai K",
+  "text": "MLB Front Office Real 2026 rosters. Real tax-line pain. October does not forgive. Chicago White Sox 2026 · Round 1/27 Record 0-0 Strength 86 Tax room $60.2M 🏛️ OWNERSHIP Trust 63 Make October. Ownership thinks this roster belongs there. Hub Free agency 🎙️ Nobody clips it. That is the point. Welcome to the Chicago White Sox front office. Opening Day of the 2026 season is here. 🏛️ The ownership mandate: Make October. Ownership thinks this roster belongs there. Free agents (tax room $60.2M). A man you designated for assignment waits until next season. Dai Kestrel C · 30y · wants $9.2M 81 Sign Tomas Urrutia SS · 28y · wants $8.4M 80 Sign Rafa Zaragoza 3B · 28y · wants $8.4M 80 Sign Ramon Villar OF · 27y · wants $7.6M 79 Sign Luis Okada SP · 32y · wants $5M 76 Sign Hideki Achterberg OF · 33y · wants $5M 76 Sign Marcus Whitfield RP · 29y · wants $4.2M 75 Sign Brandt Calloway DH · 29y · want"
+ },
+ {
+  "t": "00:39:00",
+  "kind": "audit",
+  "where": "s1start tile 2 TRADES 26 to offer Your bigges",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 3,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 38
+ },
+ {
+  "t": "00:39:00",
+  "kind": "panel",
+  "label": "s1start",
+  "tile": "TRADES 26 to offer Your biggest chip is ",
+  "text": "MLB Front Office Real 2026 rosters. Real tax-line pain. October does not forgive. Chicago White Sox 2026 · Round 1/27 Record 0-0 Strength 86 Tax room $60.2M 🏛️ OWNERSHIP Trust 63 Make October. Ownership thinks this roster belongs there. Hub Trades 🎙️ Nobody clips it. That is the point. Welcome to the Chicago White Sox front office. Opening Day of the 2026 season is here. 🏛️ The ownership mandate: Make October. Ownership thinks this roster belongs there. 🔍 Trade Finder Pick one of your players and shop him. Only deals the AI genuinely accepts show up, payroll checked. No pick sweeteners: in MLB only Competitive Balance picks can be traded, and this game awards none. Showing 8 of 26 players Miguel Vargas (3B) 94 Randal Grichuk (DH) 94 Munetaka Murakami (1B) 93 Tristan Peters (CF) 88 Sean Burke (SP) 88 Grant Taylor (RP) 88 Sam Antonacci (LF) 87 Sean Newcomb (RP) 87 Load more playersShop"
+ },
+ {
+  "t": "00:39:02",
+  "kind": "audit",
+  "where": "s1start tile 3 PLAY Round 1 of 27 0-0 with 27",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 4,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 7
+ },
+ {
+  "t": "00:39:02",
+  "kind": "panel",
+  "label": "s1start",
+  "tile": "PLAY Round 1 of 27 0-0 with 27 rounds to",
+  "text": "MLB Front Office Real 2026 rosters. Real tax-line pain. October does not forgive. Chicago White Sox 2026 · Round 1/27 Record 0-0 Strength 86 Tax room $60.2M 🏛️ OWNERSHIP Trust 63 Make October. Ownership thinks this roster belongs there. Hub Play 🎙️ Nobody clips it. That is the point. Welcome to the Chicago White Sox front office. Opening Day of the 2026 season is here. 🏛️ The ownership mandate: Make October. Ownership thinks this roster belongs there. Each round simulates a week and a half of baseball across the league. Play Round 1 Division winners seed 1-3, wild cards 4-6. Top two seeds skip the best-of-3 Wild Card round. Abandon franchise and restart MLB Front Office: Baseball GM Simulator Take over a real MLB club with its real 26 man roster from the last day of the 2026 regular season, every player rated off his real 2026 numbers pulled from the league's own data. Manage the payr"
+ },
+ {
+  "t": "00:39:03",
+  "kind": "audit",
+  "where": "s1start tile 4 STANDINGS #6 in the AL Inside ",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 3,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 13
+ },
+ {
+  "t": "00:39:03",
+  "kind": "panel",
+  "label": "s1start",
+  "tile": "STANDINGS #6 in the AL Inside the top 6 ",
+  "text": "MLB Front Office Real 2026 rosters. Real tax-line pain. October does not forgive. Chicago White Sox 2026 · Round 1/27 Record 0-0 Strength 86 Tax room $60.2M 🏛️ OWNERSHIP Trust 63 Make October. Ownership thinks this roster belongs there. Hub Standings 🎙️ Nobody clips it. That is the point. Welcome to the Chicago White Sox front office. Opening Day of the 2026 season is here. 🏛️ The ownership mandate: Make October. Ownership thinks this roster belongs there. AL EAST 1. New York Yankees 0-0 2. Boston Red Sox 0-0 3. Tampa Bay Rays 0-0 4. Baltimore Orioles 0-0 5. Toronto Blue Jays 0-0 AL CENTRAL 1. Minnesota Twins 0-0 2. Chicago White Sox 0-0 3. Cleveland Guardians 0-0 4. Detroit Tigers 0-0 5. Kansas City Royals 0-0 AL WEST 1. Texas Rangers 0-0 2. Houston Astros 0-0 3. Sacramento Athletics 0-0 4. Seattle Mariners 0-0 5. Los Angeles Angels 0-0 NL EAST 1. Philadelphia Phillies 0-0 2. Miami M"
+ },
+ {
+  "t": "00:39:04",
+  "kind": "audit",
+  "where": "s1start tile 5 STAFF 6 of 6 jobs filled +1.86",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 3,
+  "tinyText": 6,
+  "tinyTextSample": [
+   "9px div.text-[9px].text-muted-foreground \"Level 7 · 71k a round\"",
+   "9px div.text-[9px].text-muted-foreground \"Level 7 · 35k a round\"",
+   "9px div.text-[9px].text-muted-foreground \"Level 6 · 31k a round\"",
+   "9px div.text-[9px].text-muted-foreground \"Level 5 · 14k a round\""
+  ],
+  "text10": 13
+ },
+ {
+  "t": "00:39:04",
+  "kind": "panel",
+  "label": "s1start",
+  "tile": "STAFF 6 of 6 jobs filled +1.86 team stre",
+  "text": "MLB Front Office Real 2026 rosters. Real tax-line pain. October does not forgive. Chicago White Sox 2026 · Round 1/27 Record 0-0 Strength 86 Tax room $60.2M 🏛️ OWNERSHIP Trust 63 Make October. Ownership thinks this roster belongs there. Hub Staff Ownership gives the staff desk $11.00M each winter for fees and pay offs. Wages are paid outside the payroll the tax line reads. The pitching coach works the three starters and two relievers the sim plays, the hitting coach the eight bats, and the farm director your young men over the winter. STAFF · $11.00M TO SPEND · 183K A ROUND ON THE DESK ? 🧢 Manager · your call Percival Inglethorpe Level 7 · 71k a round ⚾ Pitching Barnaby Wetherby Level 7 · 35k a round 🏏 Hitting Nehemiah Lindqvist Level 6 · 31k a round 🔎 Scouting Jethro Jessop Level 5 · 14k a round 🌱 Farm system Thurston Netherby Level 5 · 14k a round 🩹 Medical Montague Goodenough Le"
+ },
+ {
+  "t": "00:39:05",
+  "kind": "audit",
+  "where": "s1start tile 6 RE-SIGN DESK Nobody expiring N",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 4,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 7
+ },
+ {
+  "t": "00:39:05",
+  "kind": "panel",
+  "label": "s1start",
+  "tile": "RE-SIGN DESK Nobody expiring Nobody is o",
+  "text": "MLB Front Office Real 2026 rosters. Real tax-line pain. October does not forgive. Chicago White Sox 2026 · Round 1/27 Record 0-0 Strength 86 Tax room $60.2M 🏛️ OWNERSHIP Trust 63 Make October. Ownership thinks this roster belongs there. Hub Re-sign desk Re-sign desk Nobody is out of contract this winter. Decide any time this season. Anyone you leave open is settled by your staff's own rule when the winter starts, never by a coin flip. The money is this game's own figures, not real contracts. The rules are each league's own, read in October 2026. The money is this game's own figure, not anybody's real contract. 🎙️ Nobody clips it. That is the point. Welcome to the Chicago White Sox front office. Opening Day of the 2026 season is here. 🏛️ The ownership mandate: Make October. Ownership thinks this roster belongs there. Abandon franchise and restart MLB Front Office: Baseball GM Simulator"
+ },
+ {
+  "t": "00:39:07",
+  "kind": "audit",
+  "where": "s1start tile 7 DRAFT PICKS 2 picks in 2026 Or",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 3,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 11
+ },
+ {
+  "t": "00:39:07",
+  "kind": "panel",
+  "label": "s1start",
+  "tile": "DRAFT PICKS 2 picks in 2026 Ordinary MLB",
+  "text": "MLB Front Office Real 2026 rosters. Real tax-line pain. October does not forgive. Chicago White Sox 2026 · Round 1/27 Record 0-0 Strength 86 Tax room $60.2M 🏛️ OWNERSHIP Trust 63 Make October. Ownership thinks this roster belongs there. Hub Draft picks DRAFT CAPITAL 2 picks, 1 first Trade deadline after round 18. 18 rounds to go. 2026 (this year) 1st 2nd The league runs a draft lottery; it is not modelled, so the order is reverse standings. No Competitive Balance picks are awarded yet, so there is no pick to trade. The real draft runs twenty rounds. This game drafts two, so the ledger carries two. Draft night here is the game's own short draft: you pick first in each batch, then the other clubs go in reverse standings. 🎙️ Nobody clips it. That is the point. Welcome to the Chicago White Sox front office. Opening Day of the 2026 season is here. 🏛️ The ownership mandate: Make October. Ow"
+ },
+ {
+  "t": "00:39:08",
+  "kind": "audit",
+  "where": "s1start tile 8 TRADE DESK 18 rounds to the de",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 56,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 68
+ },
+ {
+  "t": "00:39:08",
+  "kind": "panel",
+  "label": "s1start",
+  "tile": "TRADE DESK 18 rounds to the deadline Pla",
+  "text": "MLB Front Office Real 2026 rosters. Real tax-line pain. October does not forgive. Chicago White Sox 2026 · Round 1/27 Record 0-0 Strength 86 Tax room $60.2M 🏛️ OWNERSHIP Trust 63 Make October. Ownership thinks this roster belongs there. Hub Trade desk Deal with Arizona Diamondbacks (holding) Sacramento Athletics (holding) Atlanta Braves (holding) Baltimore Orioles (holding) Boston Red Sox (holding) Chicago Cubs (holding) Cincinnati Reds (holding) Cleveland Guardians (holding) Colorado Rockies (holding) Detroit Tigers (holding) Houston Astros (holding) Kansas City Royals (holding) Los Angeles Angels (holding) Los Angeles Dodgers (holding) Miami Marlins (holding) Milwaukee Brewers (holding) Minnesota Twins (holding) New York Mets (holding) New York Yankees (holding) Philadelphia Phillies (holding) Pittsburgh Pirates (holding) San Diego Padres (holding) Seattle Mariners (holding) San Franc"
+ },
+ {
+  "t": "00:39:10",
+  "kind": "sign",
+  "did": "Sign",
+  "text": "MLB Front Office Real 2026 rosters. Real tax-line pain. October does not forgive. Chicago White Sox 2026 · Round 1/27 Record 0-0 Strength 86 Tax room $51M 🏛️ OWNERSHIP Trust 63 Make October. Ownership thinks this roster belongs there. Hub Free agency ✍️ Dai Kestrel (C) signs, $9.2M a year. 🎙️ Nobody clips it. That is the point. Welcome to the Chicago White Sox front office. Opening Day of the 2026 season is here. 🏛️ The ownership mandate: Make October. Ownership thinks this roster belongs the"
+ },
+ {
+  "t": "00:39:12",
+  "kind": "audit",
+  "where": "s1a press 1 Play Round 1",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 4,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:39:12",
+  "kind": "week",
+  "label": "s1a",
+  "pressed": "Play Round 1",
+  "text": "MLB Front Office Real 2026 rosters. Real tax-line pain. October does not forgive. Chicago White Sox 2026 · Round 2/27 Record 3-3 Strength 85 Tax room $51M 🏛️ OWNERSHIP Trust 63 Make October. Ownership thinks this roster belongs there. 📈 In the postseason picture. Hold it. Hub Play Round 1: you went 3-3. 🚑 Tristan Peters hits the IL for 4 rounds. 🚑 Luis Castillo hits the IL for 2 rounds. Each round simulates a week and a half of baseball across the league. Play Round 2 Division winners seed 1-3, wild cards 4-6. Top two seeds skip the best-of-3 Wild Card round. Abandon franchise and restart "
+ },
+ {
+  "t": "00:39:13",
+  "kind": "audit",
+  "where": "s1a press 2 Play Round 2",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 4,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:39:13",
+  "kind": "audit",
+  "where": "s1a press 3 Play Round 3",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 4,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:39:14",
+  "kind": "audit",
+  "where": "s1a press 4 Play Round 4",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 4,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:39:15",
+  "kind": "audit",
+  "where": "s1a press 5 Play Round 5",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 4,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:39:16",
+  "kind": "audit",
+  "where": "s1a press 6 Play Round 6",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 4,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:39:16",
+  "kind": "audit",
+  "where": "s1a press 7 Play Round 7",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 4,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:39:16",
+  "kind": "week",
+  "label": "s1a",
+  "pressed": "Play Round 7",
+  "text": "MLB Front Office Real 2026 rosters. Real tax-line pain. October does not forgive. Chicago White Sox 2026 · Round 8/27 Record 24-18 Strength 86 Tax room $51M 🏛️ OWNERSHIP Trust 63 Make October. Ownership thinks this roster belongs there. 📈 In the postseason picture. Hold it. Hub Play Round 7: you went 4-2. Each round simulates a week and a half of baseball across the league. Play Round 8 Division winners seed 1-3, wild cards 4-6. Top two seeds skip the best-of-3 Wild Card round. Abandon franchise and restart MLB Front Office: Baseball GM Simulator Take over a real MLB club with its real 26 ma"
+ },
+ {
+  "t": "00:39:17",
+  "kind": "audit",
+  "where": "s1a press 8 Play Round 8",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 4,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:39:18",
+  "kind": "audit",
+  "where": "s1a press 9 Play Round 9",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 4,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:39:19",
+  "kind": "audit",
+  "where": "s1a press 10 Play Round 10",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 4,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:39:19",
+  "kind": "audit",
+  "where": "s1a press 11 Play Round 11",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 4,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:39:20",
+  "kind": "audit",
+  "where": "s1a press 12 Play Round 12",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 4,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:39:21",
+  "kind": "audit",
+  "where": "s1a press 13 Play Round 13",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 4,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:39:21",
+  "kind": "week",
+  "label": "s1a",
+  "pressed": "Play Round 13",
+  "text": "MLB Front Office Real 2026 rosters. Real tax-line pain. October does not forgive. Chicago White Sox 2026 · Round 14/27 Record 44-34 Strength 85 Tax room $51M 🏛️ OWNERSHIP Trust 63 Make October. Ownership thinks this roster belongs there. 📈 In the postseason picture. Hold it. Hub Play Round 13: you went 4-2. Each round simulates a week and a half of baseball across the league. Play Round 14 Division winners seed 1-3, wild cards 4-6. Top two seeds skip the best-of-3 Wild Card round. Abandon franchise and restart MLB Front Office: Baseball GM Simulator Take over a real MLB club with its real 26"
+ },
+ {
+  "t": "00:39:22",
+  "kind": "audit",
+  "where": "s1a press 14 Play Round 14",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 4,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:39:22",
+  "kind": "season",
+  "part": "s1a",
+  "presses": 14,
+  "end": "paused",
+  "secs": 29
+ },
+ {
+  "t": "00:39:22",
+  "kind": "audit",
+  "where": "mid season hub",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 3,
+  "tinyText": 9,
+  "tinyTextSample": [
+   "9px div.mt-0.5.truncate.text-[9px] \"Munetaka Murakami is out 1 round\"",
+   "9px div.mt-0.5.truncate.text-[9px] \"The market is empty\"",
+   "9px div.mt-0.5.truncate.text-[9px] \"Your biggest chip is Miguel Vargas\"",
+   "9px div.mt-0.5.truncate.text-[9px] \"46-38 with 13 rounds to play\""
+  ],
+  "text10": 15
+ },
+ {
+  "t": "00:39:22",
+  "kind": "midhub",
+  "text": "MLB Front Office Real 2026 rosters. Real tax-line pain. October does not forgive. Chicago White Sox 2026 · Round 15/27 Record 46-38 Strength 85 Tax room $51M 🏛️ OWNERSHIP Trust 63 Make October. Ownership thinks this roster belongs there. 📈 In the postseason picture. Hold it. 👔 ROSTER 3 unavailable Munetaka Murakami is out 1 round 💼 FREE AGENCY $51M of room The market is empty 🤝 TRADES 27 to offer Your biggest chip is Miguel Vargas 🏟️ PLAY Round 15 of 27 46-38 with 13 rounds to play 📊 STANDINGS #5 in the AL Inside the top 6 with 13 to play How the GM desk works 📋 STAFF 6 of 6 jobs filled +1.86 team strength from the dugout ✍️ RE-SIGN DESK 1 deal end this winter 1 still waiting on you 🎟️ DRAFT PICKS 2 picks in 2026 Ordinary MLB picks cannot be traded 🔁 TRADE DESK 4 rounds to the deadline Players, and cash toward a salary Round 14: you went 2-4. 🚑 Jordan Hicks hits the IL for 1 round. 🚑 Trevor Richards hits the IL for 2 rounds. Abandon franchise and restart MLB Front Office: Baseball GM Simulator Take over a real MLB club with its real 26 man roster from the last day of the 2026 regular season, every player rated off his real 2026 numbers pulled from the league's own data."
+ },
+ {
+  "t": "00:39:22",
+  "kind": "tiles",
+  "label": "s1mid",
+  "tiles": [
+   "ROSTER 3 unavailable Munetaka Murakami is out 1 round",
+   "FREE AGENCY $51M of room The market is empty",
+   "TRADES 27 to offer Your biggest chip is Miguel Vargas",
+   "PLAY Round 15 of 27 46-38 with 13 rounds to play",
+   "STANDINGS #5 in the AL Inside the top 6 with 13 to play",
+   "STAFF 6 of 6 jobs filled +1.86 team strength from the dugout",
+   "RE-SIGN DESK 1 deal end this winter 1 still waiting on you",
+   "DRAFT PICKS 2 picks in 2026 Ordinary MLB picks cannot be traded",
+   "TRADE DESK 4 rounds to the deadline Players, and cash toward a salary"
+  ]
+ },
+ {
+  "t": "00:39:23",
+  "kind": "audit",
+  "where": "s1mid tile 0 ROSTER 3 unavailable Munetaka ",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.rounded-full.border.border-border \"DFA, $10.1M dead\"",
+    "w": 101,
+    "h": 22
+   },
+   {
+    "el": "button.rounded-full.border.border-border \"DFA, $10.1M dead\"",
+    "w": 101,
+    "h": 22
+   },
+   {
+    "el": "button.rounded-full.border.border-border \"DFA, $9.7M dead\"",
+    "w": 100,
+    "h": 22
+   },
+   {
+    "el": "button.rounded-full.border.border-border \"DFA, $7.6M dead\"",
+    "w": 99,
+    "h": 22
+   },
+   {
+    "el": "button.rounded-full.border.border-border \"DFA, $7.2M dead\"",
+    "w": 99,
+    "h": 22
+   },
+   {
+    "el": "button.rounded-full.border.border-border \"DFA, $6.7M dead\"",
+    "w": 100,
+    "h": 22
+   },
+   {
+    "el": "button.rounded-full.border.border-border \"DFA, $4.6M dead\"",
+    "w": 100,
+    "h": 22
+   },
+   {
+    "el": "button.rounded-full.border.border-border \"DFA, $3.8M dead\"",
+    "w": 100,
+    "h": 22
+   }
+  ],
+  "tap44": 3,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:39:23",
+  "kind": "panel",
+  "label": "s1mid",
+  "tile": "ROSTER 3 unavailable Munetaka Murakami i",
+  "text": "MLB Front Office Real 2026 rosters. Real tax-line pain. October does not forgive. Chicago White Sox 2026 · Round 15/27 Record 46-38 Strength 85 Tax room $51M 🏛️ OWNERSHIP Trust 63 Make October. Ownership thinks this roster belongs there. 📈 In the postseason picture. Hold it. Hub Roster Round 14: you went 2-4. 🚑 Jordan Hicks hits the IL for 1 round. 🚑 Trevor Richards hits the IL for 2 rounds. Payroll $193M against the $244M tax line Cap figures as of September 2026 27 on the roster. The sim plays your best healthy 8 bats, 3 starters and 2 relievers. Salaries are the game's own, not real contracts. The men the sim plays opened at their rating's price and the rest on 0.7M depth deals. When any deal runs out he re-signs at his rating's price or walks, so a last year deal can cost a lot more next season. POSITION PLAYERS (14) Miguel Vargas 3B · 26y · $20.2M x3 · plays 94 DFA, $10.1M dead "
+ },
+ {
+  "t": "00:39:24",
+  "kind": "audit",
+  "where": "s1mid tile 1 FREE AGENCY $51M of room The m",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 3,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:39:24",
+  "kind": "panel",
+  "label": "s1mid",
+  "tile": "FREE AGENCY $51M of room The market is e",
+  "text": "MLB Front Office Real 2026 rosters. Real tax-line pain. October does not forgive. Chicago White Sox 2026 · Round 15/27 Record 46-38 Strength 85 Tax room $51M 🏛️ OWNERSHIP Trust 63 Make October. Ownership thinks this roster belongs there. 📈 In the postseason picture. Hold it. Hub Free agency Round 14: you went 2-4. 🚑 Jordan Hicks hits the IL for 1 round. 🚑 Trevor Richards hits the IL for 2 rounds. Free agents (tax room $51M). A man you designated for assignment waits until next season. Abandon franchise and restart MLB Front Office: Baseball GM Simulator Take over a real MLB club with its real 26 man roster from the last day of the 2026 regular season, every player rated off his real 2026 numbers pulled from the league's own data. Manage the payroll against the luxury tax line, DFA dead weight, sign free agents, swing trades the AI weighs on age, position and rating, then grind the 16"
+ },
+ {
+  "t": "00:39:26",
+  "kind": "audit",
+  "where": "s1mid tile 2 TRADES 27 to offer Your bigges",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 3,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:39:26",
+  "kind": "panel",
+  "label": "s1mid",
+  "tile": "TRADES 27 to offer Your biggest chip is ",
+  "text": "MLB Front Office Real 2026 rosters. Real tax-line pain. October does not forgive. Chicago White Sox 2026 · Round 15/27 Record 46-38 Strength 85 Tax room $51M 🏛️ OWNERSHIP Trust 63 Make October. Ownership thinks this roster belongs there. 📈 In the postseason picture. Hold it. Hub Trades Round 14: you went 2-4. 🚑 Jordan Hicks hits the IL for 1 round. 🚑 Trevor Richards hits the IL for 2 rounds. 🔍 Trade Finder Pick one of your players and shop him. Only deals the AI genuinely accepts show up, payroll checked. No pick sweeteners: in MLB only Competitive Balance picks can be traded, and this game awards none. Showing 8 of 27 players Miguel Vargas (3B) 94 Randal Grichuk (DH) 94 Munetaka Murakami (1B) 93 Tristan Peters (CF) 88 Sean Burke (SP) 88 Grant Taylor (RP) 88 Sam Antonacci (LF) 87 Sean Newcomb (RP) 87 Load more playersShop him around the league OR BUILD YOUR OWN DEAL NYY BOS TOR TBR "
+ },
+ {
+  "t": "00:39:27",
+  "kind": "audit",
+  "where": "s1mid tile 3 PLAY Round 15 of 27 46-38 with",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 4,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:39:27",
+  "kind": "panel",
+  "label": "s1mid",
+  "tile": "PLAY Round 15 of 27 46-38 with 13 rounds",
+  "text": "MLB Front Office Real 2026 rosters. Real tax-line pain. October does not forgive. Chicago White Sox 2026 · Round 15/27 Record 46-38 Strength 85 Tax room $51M 🏛️ OWNERSHIP Trust 63 Make October. Ownership thinks this roster belongs there. 📈 In the postseason picture. Hold it. Hub Play Round 14: you went 2-4. 🚑 Jordan Hicks hits the IL for 1 round. 🚑 Trevor Richards hits the IL for 2 rounds. Each round simulates a week and a half of baseball across the league. Play Round 15 Division winners seed 1-3, wild cards 4-6. Top two seeds skip the best-of-3 Wild Card round. Abandon franchise and restart MLB Front Office: Baseball GM Simulator Take over a real MLB club with its real 26 man roster from the last day of the 2026 regular season, every player rated off his real 2026 numbers pulled from the league's own data. Manage the payroll against the luxury tax line, DFA dead weight, sign free a"
+ },
+ {
+  "t": "00:39:28",
+  "kind": "audit",
+  "where": "s1mid tile 4 STANDINGS #5 in the AL Inside ",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 3,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:39:28",
+  "kind": "panel",
+  "label": "s1mid",
+  "tile": "STANDINGS #5 in the AL Inside the top 6 ",
+  "text": "MLB Front Office Real 2026 rosters. Real tax-line pain. October does not forgive. Chicago White Sox 2026 · Round 15/27 Record 46-38 Strength 85 Tax room $51M 🏛️ OWNERSHIP Trust 63 Make October. Ownership thinks this roster belongs there. 📈 In the postseason picture. Hold it. Hub Standings Round 14: you went 2-4. 🚑 Jordan Hicks hits the IL for 1 round. 🚑 Trevor Richards hits the IL for 2 rounds. AL EAST 1. Boston Red Sox 53-31 2. New York Yankees 51-33 3. Tampa Bay Rays 46-38 4. Baltimore Orioles 38-46 5. Toronto Blue Jays 33-51 AL CENTRAL 1. Chicago White Sox 46-38 2. Minnesota Twins 46-38 3. Cleveland Guardians 42-42 4. Detroit Tigers 33-51 5. Kansas City Royals 31-53 AL WEST 1. Texas Rangers 52-32 2. Houston Astros 40-44 3. Seattle Mariners 36-48 4. Sacramento Athletics 35-49 5. Los Angeles Angels 30-54 NL EAST 1. Philadelphia Phillies 51-33 2. Atlanta Braves 48-36 3. Miami Marlins"
+ },
+ {
+  "t": "00:39:29",
+  "kind": "audit",
+  "where": "s1mid tile 5 STAFF 6 of 6 jobs filled +1.86",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 3,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:39:29",
+  "kind": "panel",
+  "label": "s1mid",
+  "tile": "STAFF 6 of 6 jobs filled +1.86 team stre",
+  "text": "MLB Front Office Real 2026 rosters. Real tax-line pain. October does not forgive. Chicago White Sox 2026 · Round 15/27 Record 46-38 Strength 85 Tax room $51M 🏛️ OWNERSHIP Trust 63 Make October. Ownership thinks this roster belongs there. 📈 In the postseason picture. Hold it. Hub Staff Ownership gives the staff desk $11.00M each winter for fees and pay offs. Wages are paid outside the payroll the tax line reads. The pitching coach works the three starters and two relievers the sim plays, the hitting coach the eight bats, and the farm director your young men over the winter. STAFF · $11.00M TO SPEND · 183K A ROUND ON THE DESK ? 🧢 Manager · your call Percival Inglethorpe Level 7 · 71k a round ⚾ Pitching Barnaby Wetherby Level 7 · 35k a round 🏏 Hitting Nehemiah Lindqvist Level 6 · 31k a round 🔎 Scouting Jethro Jessop Level 5 · 14k a round 🌱 Farm system Thurston Netherby Level 5 · 14k a"
+ },
+ {
+  "t": "00:39:31",
+  "kind": "audit",
+  "where": "s1mid tile 6 RE-SIGN DESK 1 deal end this w",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 4,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:39:31",
+  "kind": "panel",
+  "label": "s1mid",
+  "tile": "RE-SIGN DESK 1 deal end this winter 1 st",
+  "text": "MLB Front Office Real 2026 rosters. Real tax-line pain. October does not forgive. Chicago White Sox 2026 · Round 15/27 Record 46-38 Strength 85 Tax room $51M 🏛️ OWNERSHIP Trust 63 Make October. Ownership thinks this roster belongs there. 📈 In the postseason picture. Hold it. Hub Re-sign desk Re-sign desk 1 still waiting on you. Dai Kestrel C 81 overall, age 30 Asks $9.2M for 2 seasons Free agent Decide any time this season. Anyone you leave open is settled by your staff's own rule when the winter starts, never by a coin flip. The money is this game's own figures, not real contracts. The rules are each league's own, read in October 2026. The money is this game's own figure, not anybody's real contract. Round 14: you went 2-4. 🚑 Jordan Hicks hits the IL for 1 round. 🚑 Trevor Richards hits the IL for 2 rounds. Abandon franchise and restart MLB Front Office: Baseball GM Simulator Take ov"
+ },
+ {
+  "t": "00:39:32",
+  "kind": "audit",
+  "where": "s1mid tile 7 DRAFT PICKS 2 picks in 2026 Or",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 3,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:39:32",
+  "kind": "panel",
+  "label": "s1mid",
+  "tile": "DRAFT PICKS 2 picks in 2026 Ordinary MLB",
+  "text": "MLB Front Office Real 2026 rosters. Real tax-line pain. October does not forgive. Chicago White Sox 2026 · Round 15/27 Record 46-38 Strength 85 Tax room $51M 🏛️ OWNERSHIP Trust 63 Make October. Ownership thinks this roster belongs there. 📈 In the postseason picture. Hold it. Hub Draft picks DRAFT CAPITAL 2 picks, 1 first Trade deadline after round 18. 4 rounds to go. 2026 (this year) 1st 2nd The league runs a draft lottery; it is not modelled, so the order is reverse standings. No Competitive Balance picks are awarded yet, so there is no pick to trade. The real draft runs twenty rounds. This game drafts two, so the ledger carries two. Draft night here is the game's own short draft: you pick first in each batch, then the other clubs go in reverse standings. Round 14: you went 2-4. 🚑 Jordan Hicks hits the IL for 1 round. 🚑 Trevor Richards hits the IL for 2 rounds. Abandon franchise and"
+ },
+ {
+  "t": "00:39:33",
+  "kind": "audit",
+  "where": "s1mid tile 8 TRADE DESK 4 rounds to the dea",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 58,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:39:33",
+  "kind": "panel",
+  "label": "s1mid",
+  "tile": "TRADE DESK 4 rounds to the deadline Play",
+  "text": "MLB Front Office Real 2026 rosters. Real tax-line pain. October does not forgive. Chicago White Sox 2026 · Round 15/27 Record 46-38 Strength 85 Tax room $51M 🏛️ OWNERSHIP Trust 63 Make October. Ownership thinks this roster belongs there. 📈 In the postseason picture. Hold it. Hub Trade desk Deal with Arizona Diamondbacks (selling) Sacramento Athletics (selling) Atlanta Braves (buying) Baltimore Orioles (selling) Boston Red Sox (buying) Chicago Cubs (buying) Cincinnati Reds (selling) Cleveland Guardians (holding) Colorado Rockies (selling) Detroit Tigers (selling) Houston Astros (holding) Kansas City Royals (selling) Los Angeles Angels (selling) Los Angeles Dodgers (buying) Miami Marlins (holding) Milwaukee Brewers (buying) Minnesota Twins (buying) New York Mets (selling) New York Yankees (buying) Philadelphia Phillies (buying) Pittsburgh Pirates (buying) San Diego Padres (selling) Seatt"
+ },
+ {
+  "t": "00:39:35",
+  "kind": "audit",
+  "where": "s1b press 1 Play Round 15",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 4,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:39:35",
+  "kind": "week",
+  "label": "s1b",
+  "pressed": "Play Round 15",
+  "text": "MLB Front Office Real 2026 rosters. Real tax-line pain. October does not forgive. Chicago White Sox 2026 · Round 16/27 Record 48-42 Strength 85 Tax room $51M 🏛️ OWNERSHIP Trust 63 Make October. Ownership thinks this roster belongs there. 📈 In the postseason picture. Hold it. Hub Play Round 15: you went 2-4. 🚑 Chase Meidroth hits the IL for 3 rounds. 🚑 Braden Montgomery hits the IL for 3 rounds. Each round simulates a week and a half of baseball across the league. Play Round 16 Division winners seed 1-3, wild cards 4-6. Top two seeds skip the best-of-3 Wild Card round. Abandon franchise and"
+ },
+ {
+  "t": "00:39:36",
+  "kind": "audit",
+  "where": "s1b press 2 Play Round 16",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 4,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:39:36",
+  "kind": "audit",
+  "where": "s1b press 3 Play Round 17",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 4,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:39:37",
+  "kind": "audit",
+  "where": "s1b press 4 Play Round 18",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 4,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:39:38",
+  "kind": "audit",
+  "where": "s1b press 5 Play Round 19",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 4,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:39:39",
+  "kind": "audit",
+  "where": "s1b press 6 Play Round 20",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 4,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:39:39",
+  "kind": "audit",
+  "where": "s1b press 7 Play Round 21",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 4,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:39:39",
+  "kind": "week",
+  "label": "s1b",
+  "pressed": "Play Round 21",
+  "text": "MLB Front Office Real 2026 rosters. Real tax-line pain. October does not forgive. Chicago White Sox 2026 · Round 22/27 Record 73-53 Strength 86 Tax room $51M 🏛️ OWNERSHIP Trust 63 Make October. Ownership thinks this roster belongs there. 📈 In the postseason picture. Hold it. Hub Play Round 21: you went 4-2. 🚑 Trevor Richards hits the IL for 3 rounds. Each round simulates a week and a half of baseball across the league. Play Round 22 Division winners seed 1-3, wild cards 4-6. Top two seeds skip the best-of-3 Wild Card round. Abandon franchise and restart MLB Front Office: Baseball GM Simulat"
+ },
+ {
+  "t": "00:39:40",
+  "kind": "audit",
+  "where": "s1b press 8 Play Round 22",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 4,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:39:41",
+  "kind": "audit",
+  "where": "s1b press 9 Play Round 23",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 4,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:39:42",
+  "kind": "audit",
+  "where": "s1b press 10 Play Round 24",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 4,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:39:42",
+  "kind": "audit",
+  "where": "s1b press 11 Play Round 25",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 4,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:39:43",
+  "kind": "audit",
+  "where": "s1b press 12 Play Round 26",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 4,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:39:46",
+  "kind": "week",
+  "label": "s1b",
+  "pressed": "Final stretch + October",
+  "text": "MLB Front Office Real 2026 rosters. Real tax-line pain. October does not forgive. Los Angeles Dodgers win the 2026 World Series Your Chicago White Sox finished 94-68, No. 3 in the AL. 📈 Ahead of the ask. Ownership noticed. Trust upstairs: 85 of 100. World Series: Los Angeles Dodgers beat New York Yankees 4-1 AL Wild Card 3v6: Chicago White Sox 2-1 AL Wild Card 4v5: New York Yankees 2-0 ALDS: New York Yankees 3-1 ALDS: Texas Rangers 3-2 ALCS: New York Yankees 4-1 NL Wild Card 3v6: Atlanta Braves 2-0 NL Wild Card 4v5: Chicago Cubs 2-0 NLDS: Chicago Cubs 3-2 NLDS: Los Angeles Dodgers 3-1 NLCS: L"
+ },
+ {
+  "t": "00:39:46",
+  "kind": "season",
+  "part": "s1b",
+  "presses": 13,
+  "end": "recap",
+  "secs": 53
+ },
+ {
+  "t": "00:39:49",
+  "kind": "audit",
+  "where": "recap",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [],
+  "tap44": 4,
+  "tinyText": 1,
+  "tinyTextSample": [
+   "9px div.mt-0.5.truncate.text-[9px] \"1 still waiting on you\""
+  ],
+  "text10": 7
+ },
+ {
+  "t": "00:39:49",
+  "kind": "recap",
+  "text": "MLB Front Office Real 2026 rosters. Real tax-line pain. October does not forgive. Los Angeles Dodgers win the 2026 World Series Your Chicago White Sox finished 94-68, No. 3 in the AL. 📈 Ahead of the ask. Ownership noticed. Trust upstairs: 85 of 100. World Series: Los Angeles Dodgers beat New York Yankees 4-1 AL Wild Card 3v6: Chicago White Sox 2-1 AL Wild Card 4v5: New York Yankees 2-0 ALDS: New York Yankees 3-1 ALDS: Texas Rangers 3-2 ALCS: New York Yankees 4-1 NL Wild Card 3v6: Atlanta Braves 2-0 NL Wild Card 4v5: Chicago Cubs 2-0 NLDS: Chicago Cubs 3-2 NLDS: Los Angeles Dodgers 3-1 NLCS: Los Angeles Dodgers 4-2 Rings 0 Seasons 1 Go to the draft 🏢 MLB Front Office Oct 13, 2026 RESULT 0 rings in 1 seasons DoUKnowBall douknowball.com/mlb-front-office Share result Copy challenge 📋 Copy Score Card 🖼️ Save Image SHARE YOUR RESULT ✍️ RE-SIGN DESK 1 deal end this winter 1 still waiting on you MLB Front Office: Baseball GM Simulator Take over a real MLB club with its real 26 man roster from the last day of the 2026 regular season, every player rated off his real 2026 numbers pulled from the league's own data. Manage the payroll against the luxury tax line, DFA dead weight, sign free agents, swing trades the AI weighs on age, position and rating, then grind the 162 in simulated stretches. Win your division for a bye, survive the best-of-3 Wild Card round, the Division Series, the LCS and the World Series. Draft prospects whose scouting grades can lie, ride aging curves and retirements, and stack rings across unlimited saved seasons. Running a front office sounds fun until the payroll page loads. This is a full GM sim of the real 30 team league, every club carrying its real 26 man roster and every player rated off his real 2026 numbers. The problems are real: a tax line tha"
+ },
+ {
+  "t": "00:39:49",
+  "kind": "economy",
+  "label": "recap",
+  "cap": 244,
+  "season": 2026,
+  "my": "CHW",
+  "teams": 30,
+  "list": "STL:118.9/26 KCR:130.9/26 LAA:138.1/26 CIN:138.9/26 SEA:141.9/26 TOR:143.6/26 BAL:147.8/26 NYM:149.3/26 WSN:149.4/26 SFG:153.4/26 SDP:158.6/26 COL:159.1/27 ATH:164.4/27 HOU:165.2/26 ATL:172/27 MIA:173.8/26 DET:174.4/27 CLE:176.3/27 MIN:182.9/26 TEX:183.9/26 PHI:188/26 ARI:191.3/27 CHW:193/27 TBR:200.6/26 CHC:200.7/27 BOS:211.6/26 NYY:213.2/26 PIT:221.7/27 MIL:230.1/26 LAD:232.5/27",
+  "saveChars": 127553,
+  "storageChars": 127708
+ },
+ {
+  "t": "00:39:52",
+  "kind": "recapReload",
+  "draftButton": true,
+  "text": "MLB Front Office Real 2026 rosters. Real tax-line pain. October does not forgive. Los Angeles Dodgers win the 2026 World Series Your Chicago White Sox finished 94-68, No. 3 in the AL. 📈 Ahead of the ask. Ownership noticed. Trust upstairs: 85 of 100. World Series: Los Angeles Dodgers beat New York Yankees 4-1 AL Wild Card 3v6: Chicago White Sox 2-1 AL Wild Card 4v5: New York Yankees 2-0 ALDS: New "
+ },
+ {
+  "t": "00:39:53",
+  "kind": "draft",
+  "label": "off",
+  "text": "MLB Front Office Real 2026 rosters. Real tax-line pain. October does not forgive. The 2027 Draft You hold 2 picks. Grades are your scouting director's read, and a better one misses by less. The roster limit is 28: if your picks take you over it, you DFA down before Round 1, dead money and all. Tomas Achterberg 1B · age 20 87 Tanner Hollis SS · age 19 86 Deacon Okada OF · age 19 86 Cole Barrero SP · age 18 86 Emilio Nakamura OF · age 18 85 Hideki Nakamura OF · age 20 84 Hideki Calloway OF · age 18 80 Marek Ferraro 3B · age 19 80 Tavi Tillery SS · age 21 80 Ramon Mabry 2B · age 20 80 Hideki Bingham SP · age 21 78 Wilmer Rademacher OF · age 19 78 Marek Whitfield C · age 19 77 Cole Ballinger SS · age 18 75 MLB Front Office: Baseball GM Simulator Take over a real MLB club with its real 26 man roster from the last day of the 2026 regular season, every player rated off his real 2026 numbers pul"
+ },
+ {
+  "t": "00:39:53",
+  "kind": "draftclick",
+  "label": "off",
+  "rule": "prospect",
+  "text": "Tomas Achterberg 1B · age 20 87"
+ },
+ {
+  "t": "00:39:54",
+  "kind": "draftclick",
+  "label": "off",
+  "rule": "prospect",
+  "text": "Emilio Nakamura OF · age 18 85"
+ },
+ {
+  "t": "00:39:57",
+  "kind": "draftdone",
+  "label": "off",
+  "text": "MLB Front Office Real 2026 rosters. Real tax-line pain. October does not forgive. The 2027 Draft That is your draft done. The offseason has run and the new season is set up on the hub. ON THE CLOCK Your pick is in, and 5 more went off the board. 1. CHW select Emilio Nakamura OF · your pick 85 2. CIN take Ramon Mabry 2B 80 3. LAA take Marek Whitfield C 77 4. KCR take Hideki Bingham SP 78 5. TOR take Cole Ballinger SS 75 6. STL take Marek Ferraro 3B 80 Continue to the hub ✂️ You are carrying 29, 1 over the limit of 28. DFA one man on the roster box before Round 1. 🏛️ The new mandate: Make October and win a series. This roster is built for it. 📋 The re-sign desk: 1 kept, 0 gone. 📋 You left 1 deal open, so your staff settled it by its own rule. MLB Front Office: Baseball GM Simulator Take over a real MLB club with its real 26 man roster from the last day of the 2026 regular season, every "
+ },
+ {
+  "t": "00:39:57",
+  "kind": "draftclick",
+  "label": "off",
+  "rule": "continue",
+  "text": "Continue to the hub"
+ },
+ {
+  "t": "00:39:59",
+  "kind": "offseason",
+  "picks": 2,
+  "end": "hub",
+  "secs": 66
+ },
+ {
+  "t": "00:39:59",
+  "kind": "economy",
+  "label": "season2",
+  "cap": 251,
+  "season": 2027,
+  "my": "CHW",
+  "teams": 30,
+  "list": "STL:125/28 KCR:138.4/28 TOR:141.4/25 BAL:141.8/26 SEA:141.9/26 LAA:144.7/27 CIN:147.9/28 NYM:149.3/26 WSN:149.4/26 ATL:150.2/26 SFG:153.4/26 COL:158.4/26 SDP:158.6/26 ATH:162.7/26 HOU:165.2/26 DET:172.9/26 MIA:173.8/26 CLE:176.3/27 MIN:182.9/26 TEX:183.9/26 PHI:187.3/25 ARI:190.6/26 NYY:199.8/25 CHC:200/26 TBR:200.6/26 CHW:202.3/29 BOS:211.6/26 PIT:221.7/27 MIL:230.1/26 LAD:231.8/26",
+  "saveChars": 127808,
+  "storageChars": 127963
+ },
+ {
+  "t": "00:39:59",
+  "kind": "audit",
+  "where": "season 2 hub",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 3,
+  "tinyText": 9,
+  "tinyTextSample": [
+   "9px div.mt-0.5.truncate.text-[9px] \"Miguel Vargas leads them at 94\"",
+   "9px div.mt-0.5.truncate.text-[9px] \"Roster full at 28. Cut or trade someone first.\"",
+   "9px div.mt-0.5.truncate.text-[9px] \"Your biggest chip is Miguel Vargas\"",
+   "9px div.mt-0.5.truncate.text-[9px] \"0-0 with 27 rounds to play\""
+  ],
+  "text10": 15
+ },
+ {
+  "t": "00:39:59",
+  "kind": "s2hub",
+  "text": "MLB Front Office Real 2026 rosters. Real tax-line pain. October does not forgive. Chicago White Sox 2027 · Round 1/27 Record 0-0 Strength 87 Tax room $48.7M 🏛️ OWNERSHIP Trust 85 Make October and win a series. This roster is built for it. 👔 ROSTER 29 under contract Miguel Vargas leads them at 94 💼 FREE AGENCY $49M of room Roster full at 28. Cut or trade someone first. 🤝 TRADES 29 to offer Your biggest chip is Miguel Vargas 🏟️ PLAY Round 1 of 27 0-0 with 27 rounds to play 📊 STANDINGS #4 in the AL Inside the top 6 with 27 to play How the GM desk works 📋 STAFF 5 of 6 jobs filled +1.18 team strength from the dugout ✍️ RE-SIGN DESK 8 deals end this winter 8 still waiting on you 🎟️ DRAFT PICKS 2 picks in 2027 Ordinary MLB picks cannot be traded 🔁 TRADE DESK 18 rounds to the deadline Players, and cash toward a salary ✂️ You are carrying 29, 1 over the limit of 28. DFA one man on the roster box before Round 1. 🏛️ The new mandate: Make October and win a series. This roster is built for it. 📋 The re-sign desk: 1 kept, 0 gone. 📋 You left 1 deal open, so your staff settled it by its own rule. 👋 Merrill Kelly retires. Abandon franchise and restart MLB Front Office: Baseball GM Simulator Take over a real MLB club with its real 26 man roster from the last day of the 2026 regular season, every player rated off his real 2026 numbers pulled from the league's own data. Manage the payroll against the luxury tax line, DFA dead weight, sign free agents, swing trades the AI weighs on age, position and rating, then grind the 162 in simulated stretches. Win your division for a bye, sur"
+ },
+ {
+  "t": "00:39:59",
+  "kind": "tiles",
+  "label": "s2",
+  "tiles": [
+   "ROSTER 29 under contract Miguel Vargas leads them at 94",
+   "FREE AGENCY $49M of room Roster full at 28. Cut or trade someone first",
+   "TRADES 29 to offer Your biggest chip is Miguel Vargas",
+   "PLAY Round 1 of 27 0-0 with 27 rounds to play",
+   "STANDINGS #4 in the AL Inside the top 6 with 27 to play",
+   "STAFF 5 of 6 jobs filled +1.18 team strength from the dugout",
+   "RE-SIGN DESK 8 deals end this winter 8 still waiting on you",
+   "DRAFT PICKS 2 picks in 2027 Ordinary MLB picks cannot be traded",
+   "TRADE DESK 18 rounds to the deadline Players, and cash toward a salary"
+  ]
+ },
+ {
+  "t": "00:40:00",
+  "kind": "audit",
+  "where": "s2 tile 0 ROSTER 29 under contract Migue",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.rounded-full.border.border-border \"DFA, $10.1M dead\"",
+    "w": 101,
+    "h": 22
+   },
+   {
+    "el": "button.rounded-full.border.border-border \"DFA, $9.7M dead\"",
+    "w": 100,
+    "h": 22
+   },
+   {
+    "el": "button.rounded-full.border.border-border \"DFA, $10.1M dead\"",
+    "w": 101,
+    "h": 22
+   },
+   {
+    "el": "button.rounded-full.border.border-border \"DFA, $7.2M dead\"",
+    "w": 99,
+    "h": 22
+   },
+   {
+    "el": "button.rounded-full.border.border-border \"DFA, $7.6M dead\"",
+    "w": 99,
+    "h": 22
+   },
+   {
+    "el": "button.rounded-full.border.border-border \"DFA, $6.7M dead\"",
+    "w": 100,
+    "h": 22
+   },
+   {
+    "el": "button.rounded-full.border.border-border \"DFA, $2.4M dead\"",
+    "w": 100,
+    "h": 22
+   },
+   {
+    "el": "button.rounded-full.border.border-border \"DFA, $2.3M dead\"",
+    "w": 100,
+    "h": 22
+   }
+  ],
+  "tap44": 3,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:40:00",
+  "kind": "panel",
+  "label": "s2",
+  "tile": "ROSTER 29 under contract Miguel Vargas l",
+  "text": "MLB Front Office Real 2026 rosters. Real tax-line pain. October does not forgive. Chicago White Sox 2027 · Round 1/27 Record 0-0 Strength 87 Tax room $48.7M 🏛️ OWNERSHIP Trust 85 Make October and win a series. This roster is built for it. Hub Roster ✂️ You are carrying 29, 1 over the limit of 28. DFA one man on the roster box before Round 1. 🏛️ The new mandate: Make October and win a series. This roster is built for it. 📋 The re-sign desk: 1 kept, 0 gone. 📋 You left 1 deal open, so your staff settled it by its own rule. 👋 Merrill Kelly retires. Payroll $202.3M against the $251M tax line Cap figures as of September 2026 29 on the roster. The sim plays your best healthy 8 bats, 3 starters and 2 relievers. Salaries are the game's own, not real contracts. The men the sim plays opened at their rating's price and the rest on 0.7M depth deals. When any deal runs out he re-signs at his rati"
+ },
+ {
+  "t": "00:40:02",
+  "kind": "audit",
+  "where": "s2 tile 1 FREE AGENCY $49M of room Roste",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.rounded-full.bg-primary.px-2.5 \"Sign\"",
+    "w": 42,
+    "h": 20
+   },
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 3,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:40:02",
+  "kind": "panel",
+  "label": "s2",
+  "tile": "FREE AGENCY $49M of room Roster full at ",
+  "text": "MLB Front Office Real 2026 rosters. Real tax-line pain. October does not forgive. Chicago White Sox 2027 · Round 1/27 Record 0-0 Strength 87 Tax room $48.7M 🏛️ OWNERSHIP Trust 85 Make October and win a series. This roster is built for it. Hub Free agency ✂️ You are carrying 29, 1 over the limit of 28. DFA one man on the roster box before Round 1. 🏛️ The new mandate: Make October and win a series. This roster is built for it. 📋 The re-sign desk: 1 kept, 0 gone. 📋 You left 1 deal open, so your staff settled it by its own rule. 👋 Merrill Kelly retires. Free agents (tax room $48.7M). A man you designated for assignment waits until next season. Roster full at 28. Cut or trade someone first. Brandt Zaragoza 1B · 29y · wants $1.7M 72 Sign Abandon franchise and restart MLB Front Office: Baseball GM Simulator Take over a real MLB club with its real 26 man roster from the last day of the 2026"
+ },
+ {
+  "t": "00:40:03",
+  "kind": "audit",
+  "where": "s2 tile 2 TRADES 29 to offer Your bigges",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 3,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:40:03",
+  "kind": "panel",
+  "label": "s2",
+  "tile": "TRADES 29 to offer Your biggest chip is ",
+  "text": "MLB Front Office Real 2026 rosters. Real tax-line pain. October does not forgive. Chicago White Sox 2027 · Round 1/27 Record 0-0 Strength 87 Tax room $48.7M 🏛️ OWNERSHIP Trust 85 Make October and win a series. This roster is built for it. Hub Trades ✂️ You are carrying 29, 1 over the limit of 28. DFA one man on the roster box before Round 1. 🏛️ The new mandate: Make October and win a series. This roster is built for it. 📋 The re-sign desk: 1 kept, 0 gone. 📋 You left 1 deal open, so your staff settled it by its own rule. 👋 Merrill Kelly retires. 🔍 Trade Finder Pick one of your players and shop him. Only deals the AI genuinely accepts show up, payroll checked. No pick sweeteners: in MLB only Competitive Balance picks can be traded, and this game awards none. Showing 8 of 29 players Miguel Vargas (3B) 94 Munetaka Murakami (1B) 93 Randal Grichuk (DH) 92 Sam Antonacci (LF) 90 Grant Tayl"
+ },
+ {
+  "t": "00:40:04",
+  "kind": "audit",
+  "where": "s2 tile 3 PLAY Round 1 of 27 0-0 with 27",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 4,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:40:04",
+  "kind": "panel",
+  "label": "s2",
+  "tile": "PLAY Round 1 of 27 0-0 with 27 rounds to",
+  "text": "MLB Front Office Real 2026 rosters. Real tax-line pain. October does not forgive. Chicago White Sox 2027 · Round 1/27 Record 0-0 Strength 87 Tax room $48.7M 🏛️ OWNERSHIP Trust 85 Make October and win a series. This roster is built for it. Hub Play ✂️ You are carrying 29, 1 over the limit of 28. DFA one man on the roster box before Round 1. 🏛️ The new mandate: Make October and win a series. This roster is built for it. 📋 The re-sign desk: 1 kept, 0 gone. 📋 You left 1 deal open, so your staff settled it by its own rule. 👋 Merrill Kelly retires. Each round simulates a week and a half of baseball across the league. You are carrying 29, 1 over the limit of 28. DFA one man on the roster box before you play. Play Round 1 Division winners seed 1-3, wild cards 4-6. Top two seeds skip the best-of-3 Wild Card round. Abandon franchise and restart MLB Front Office: Baseball GM Simulator Take ove"
+ },
+ {
+  "t": "00:40:05",
+  "kind": "audit",
+  "where": "s2 tile 4 STANDINGS #4 in the AL Inside ",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 3,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:40:05",
+  "kind": "panel",
+  "label": "s2",
+  "tile": "STANDINGS #4 in the AL Inside the top 6 ",
+  "text": "MLB Front Office Real 2026 rosters. Real tax-line pain. October does not forgive. Chicago White Sox 2027 · Round 1/27 Record 0-0 Strength 87 Tax room $48.7M 🏛️ OWNERSHIP Trust 85 Make October and win a series. This roster is built for it. Hub Standings ✂️ You are carrying 29, 1 over the limit of 28. DFA one man on the roster box before Round 1. 🏛️ The new mandate: Make October and win a series. This roster is built for it. 📋 The re-sign desk: 1 kept, 0 gone. 📋 You left 1 deal open, so your staff settled it by its own rule. 👋 Merrill Kelly retires. AL EAST 1. Boston Red Sox 0-0 2. New York Yankees 0-0 3. Tampa Bay Rays 0-0 4. Toronto Blue Jays 0-0 5. Baltimore Orioles 0-0 AL CENTRAL 1. Chicago White Sox 0-0 2. Minnesota Twins 0-0 3. Cleveland Guardians 0-0 4. Detroit Tigers 0-0 5. Kansas City Royals 0-0 AL WEST 1. Texas Rangers 0-0 2. Los Angeles Angels 0-0 3. Houston Astros 0-0 4. S"
+ },
+ {
+  "t": "00:40:07",
+  "kind": "audit",
+  "where": "s2 tile 5 STAFF 5 of 6 jobs filled +1.18",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 3,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:40:07",
+  "kind": "panel",
+  "label": "s2",
+  "tile": "STAFF 5 of 6 jobs filled +1.18 team stre",
+  "text": "MLB Front Office Real 2026 rosters. Real tax-line pain. October does not forgive. Chicago White Sox 2027 · Round 1/27 Record 0-0 Strength 87 Tax room $48.7M 🏛️ OWNERSHIP Trust 85 Make October and win a series. This roster is built for it. Hub Staff Ownership gives the staff desk $11.00M each winter for fees and pay offs. Wages are paid outside the payroll the tax line reads. The pitching coach works the three starters and two relievers the sim plays, the hitting coach the eight bats, and the farm director your young men over the winter. STAFF · $11.00M TO SPEND · 152K A ROUND ON THE DESK ? 🧢 Manager · your call Percival Inglethorpe Level 7 · 71k a round ⚾ Pitching Barnaby Wetherby Level 7 · 35k a round 🏏 Hitting Nobody Find one 🔎 Scouting Jethro Jessop Level 5 · 14k a round 🌱 Farm system Thurston Netherby Level 5 · 14k a round 🩹 Medical Montague Goodenough Level 7 · 18k a round ✂️ "
+ },
+ {
+  "t": "00:40:08",
+  "kind": "audit",
+  "where": "s2 tile 6 RE-SIGN DESK 8 deals end this ",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 4,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:40:08",
+  "kind": "panel",
+  "label": "s2",
+  "tile": "RE-SIGN DESK 8 deals end this winter 8 s",
+  "text": "MLB Front Office Real 2026 rosters. Real tax-line pain. October does not forgive. Chicago White Sox 2027 · Round 1/27 Record 0-0 Strength 87 Tax room $48.7M 🏛️ OWNERSHIP Trust 85 Make October and win a series. This roster is built for it. Hub Re-sign desk Re-sign desk 8 still waiting on you. Randal Grichuk DH 92 overall, age 36 Asks $16.7M for 1 season Free agent Sean Newcomb RP 86 overall, age 34 Asks $12.1M for 1 season Free agent Andrew Benintendi DH 77 overall, age 33 Asks $5.3M for 1 season Free agent Anthony Kay SP 75 overall, age 32 Asks $4.2M for 2 seasons Free agent Huascar Brazobán RP 75 overall, age 37 Asks $3.8M for 1 season Free agent Trevor Richards RP 71 overall, age 34 Asks $0.8M for 1 season Free agent Luis Castillo SP 69 overall, age 34 Asks $0.8M for 1 season Free agent Erick Fedde SP 68 overall, age 34 Asks $0.8M for 1 season Free agent Decide any time this season. A"
+ },
+ {
+  "t": "00:40:09",
+  "kind": "audit",
+  "where": "s2 tile 7 DRAFT PICKS 2 picks in 2027 Or",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 3,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:40:09",
+  "kind": "panel",
+  "label": "s2",
+  "tile": "DRAFT PICKS 2 picks in 2027 Ordinary MLB",
+  "text": "MLB Front Office Real 2026 rosters. Real tax-line pain. October does not forgive. Chicago White Sox 2027 · Round 1/27 Record 0-0 Strength 87 Tax room $48.7M 🏛️ OWNERSHIP Trust 85 Make October and win a series. This roster is built for it. Hub Draft picks DRAFT CAPITAL 2 picks, 1 first Trade deadline after round 18. 18 rounds to go. 2027 (this year) 1st 2nd The league runs a draft lottery; it is not modelled, so the order is reverse standings. No Competitive Balance picks are awarded yet, so there is no pick to trade. The real draft runs twenty rounds. This game drafts two, so the ledger carries two. Draft night here is the game's own short draft: you pick first in each batch, then the other clubs go in reverse standings. ✂️ You are carrying 29, 1 over the limit of 28. DFA one man on the roster box before Round 1. 🏛️ The new mandate: Make October and win a series. This roster is built f"
+ },
+ {
+  "t": "00:40:10",
+  "kind": "audit",
+  "where": "s2 tile 8 TRADE DESK 18 rounds to the de",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 59,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:40:10",
+  "kind": "panel",
+  "label": "s2",
+  "tile": "TRADE DESK 18 rounds to the deadline Pla",
+  "text": "MLB Front Office Real 2026 rosters. Real tax-line pain. October does not forgive. Chicago White Sox 2027 · Round 1/27 Record 0-0 Strength 87 Tax room $48.7M 🏛️ OWNERSHIP Trust 85 Make October and win a series. This roster is built for it. Hub Trade desk Deal with Arizona Diamondbacks (holding) Sacramento Athletics (holding) Atlanta Braves (holding) Baltimore Orioles (holding) Boston Red Sox (holding) Chicago Cubs (holding) Cincinnati Reds (holding) Cleveland Guardians (holding) Colorado Rockies (holding) Detroit Tigers (holding) Houston Astros (holding) Kansas City Royals (holding) Los Angeles Angels (holding) Los Angeles Dodgers (holding) Miami Marlins (holding) Milwaukee Brewers (holding) Minnesota Twins (holding) New York Mets (holding) New York Yankees (holding) Philadelphia Phillies (holding) Pittsburgh Pirates (holding) San Diego Padres (holding) Seattle Mariners (holding) San Fra"
+ },
+ {
+  "t": "00:40:15",
+  "kind": "STUCK",
+  "label": "s2",
+  "presses": 0,
+  "disabled": [
+   "Play Round 1"
+  ],
+  "buttons": [
+   "Hub",
+   "Play Round 1",
+   "Abandon franchise and restart"
+  ],
+  "text": "MLB Front Office Real 2026 rosters. Real tax-line pain. October does not forgive. Chicago White Sox 2027 · Round 1/27 Record 0-0 Strength 87 Tax room $48.7M 🏛️ OWNERSHIP Trust 85 Make October and win a series. This roster is built for it. Hub Play ✂️ You are carrying 29, 1 over the limit of 28. DFA one man on the roster box before Round 1. 🏛️ The new mandate: Make October and win a series. This roster is built for it. 📋 The re-sign desk: 1 kept, 0 gone. 📋 You left 1 deal open, so your staff settled it by its own rule. 👋 Merrill Kelly retires. Each round simulates a week and a half of baseball across the league. You are carrying 29, 1 over the limit of 28. DFA one man on the roster box before you play. Play Round 1 Division winners seed 1-3, wild cards 4-6. Top two seeds skip the best-of-3 Wild Card round. Abandon franchise and restart MLB Front Office: Baseball GM Simulator Take ove"
+ },
+ {
+  "t": "00:40:15",
+  "kind": "season",
+  "part": "s2",
+  "presses": 0,
+  "end": "stuck"
+ },
+ {
+  "t": "00:40:18",
+  "kind": "reload",
+  "same": true,
+  "beforeReload": "MLB Front Office Real 2026 rosters. Real tax-line pain. October does not forgive. Chicago White Sox 2027 · Round 1/27 Record 0-0 Strength 87 Tax room $48.7M 🏛️ OWNERSHIP Trust 85 Make October and win a series. This roster is built for it. 👔 ROSTER 29 under contract Miguel Vargas leads them at 94 \ud83d",
+  "after": "MLB Front Office Real 2026 rosters. Real tax-line pain. October does not forgive. Chicago White Sox 2027 · Round 1/27 Record 0-0 Strength 87 Tax room $48.7M 🏛️ OWNERSHIP Trust 85 Make October and win a series. This roster is built for it. 👔 ROSTER 29 under contract Miguel Vargas leads them at 94 \ud83d"
+ },
+ {
+  "t": "00:40:18",
+  "kind": "done",
+  "secs": 85
+ }
+]

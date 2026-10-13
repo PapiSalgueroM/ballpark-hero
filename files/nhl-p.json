@@ -1,0 +1,1644 @@
+[
+ {
+  "t": "00:37:24",
+  "kind": "help",
+  "open": false
+ },
+ {
+  "t": "00:37:24",
+  "kind": "audit",
+  "where": "pick screen",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [],
+  "tap44": 2,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 38
+ },
+ {
+  "t": "00:37:24",
+  "kind": "pick",
+  "text": "NHL Front Office A roster snapshot. Original simulation ratings. Sixteen teams, one Cup. Take over an NHL front office A curated roster snapshot with original simulation ratings. Work under the hard cap, chase points over an 80 game season, then the divisional bracket: sixteen teams, four best-of-7 rounds, one Cup. Saves automatically. Boston Bruins Eastern Buffalo Sabres Eastern Detroit Red Wings Eastern Florida Panthers Eastern Montreal Canadiens Eastern Ottawa Senators Eastern Tampa Bay Light"
+ },
+ {
+  "t": "00:37:24",
+  "kind": "club",
+  "clubs": 32,
+  "idx": 0,
+  "club": "Boston Bruins Eastern"
+ },
+ {
+  "t": "00:37:26",
+  "kind": "audit",
+  "where": "hub start",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 2,
+  "tinyText": 12,
+  "tinyTextSample": [
+   "9px span.shrink-0.rounded-full.border \"MEASURED\"",
+   "9px span.shrink-0.rounded-full.border \"CANDID\"",
+   "9px span.shrink-0.rounded-full.border \"BOLD\"",
+   "9px div.mt-0.5.truncate.text-[9px] \"David Pastrnak leads them at 93\""
+  ],
+  "text10": 18
+ },
+ {
+  "t": "00:37:26",
+  "kind": "hub",
+  "text": "NHL Front Office A roster snapshot. Original simulation ratings. Sixteen teams, one Cup. Boston Bruins 2026-27 · Round 1/20 Record 0-0-0 · 0 pts Strength 84 Cap space $10.4M 🏛️ OWNERSHIP Trust 60 Win 35 games and show the fans a direction. 🎙️ PRESS CONFERENCE The introduction First day, full room. The Boston Bruins beat writers want to know what kind of front office this is going to be. Process, patience, all the safe words MEASURED Nobody clips it. That is the point Name the roster holes out loud CANDID Candor plays upstairs, usually · a real gamble Say the Stanley Cup is the only bar BOLD The clip will outlive you, either way · a real gamble 👔 ROSTER 13 under contract David Pastrnak leads them at 93 💼 FREE AGENCY $10M of room In reach: Anders Forsell at 80 🤝 TRADES 13 to offer Your biggest chip is David Pastrnak 🏟️ PLAY Round 1 of 20 0-0 with 20 rounds to play 📊 STANDINGS #13 in the East 5 places short of the cut, 20 to play 📋 STAFF 5 of 5 jobs filled +0.87 team strength from the bench ✍️ RE-SIGN DESK Nobody expiring Nobody is out of contract this summer 🎟️ DRAFT PICKS 2 picks in 2026 6 picks over 3 drafts 🔁 TRADE DESK 15 rounds to the deadline Players, picks and retained salary Welcome to the Boston Bruins front office. The 2026-27 season drops the puck now. 🏛️ The ownership mandate: Win 35 games and show the fans a direction. Abandon franchise and restart NHL Fro"
+ },
+ {
+  "t": "00:37:26",
+  "kind": "press",
+  "answered": "Process, patience, all the safe words MEASURED Nobody clips it. That is the point"
+ },
+ {
+  "t": "00:37:26",
+  "kind": "economy",
+  "label": "start",
+  "cap": 104,
+  "season": 2026,
+  "my": "BOS",
+  "teams": 32,
+  "list": "VAN:60.3/13 CGY:64.4/13 WPG:70.4/13 CHI:73.1/13 NYI:77.5/13 STL:79.9/13 SJS:81.6/13 NSH:82.4/13 DET:82.8/13 SEA:82.8/13 ANA:84.4/13 NJD:85.2/13 PIT:85.5/13 LAK:86.8/13 EDM:87.6/13 CBJ:88/13 NYR:88/13 PHI:88/13 TOR:88.4/13 OTT:89.5/13 VGK:89.5/13 WSH:90.3/13 UTA:91.1/13 MIN:92.8/13 BOS:93.6/13 FLA:94.4/13 CAR:95.9/13 MTL:96/13 BUF:98.4/13 DAL:98.4/13 TBL:103.6/13 COL:105.2/13",
+  "saveChars": 153693,
+  "storageChars": 153773
+ },
+ {
+  "t": "00:37:26",
+  "kind": "tiles",
+  "label": "s1start",
+  "tiles": [
+   "ROSTER 13 under contract David Pastrnak leads them at 93",
+   "FREE AGENCY $10M of room In reach: Anders Forsell at 80",
+   "TRADES 13 to offer Your biggest chip is David Pastrnak",
+   "PLAY Round 1 of 20 0-0 with 20 rounds to play",
+   "STANDINGS #13 in the East 5 places short of the cut, 20 to play",
+   "STAFF 5 of 5 jobs filled +0.87 team strength from the bench",
+   "RE-SIGN DESK Nobody expiring Nobody is out of contract this summer",
+   "DRAFT PICKS 2 picks in 2026 6 picks over 3 drafts",
+   "TRADE DESK 15 rounds to the deadline Players, picks and retained salar"
+  ]
+ },
+ {
+  "t": "00:37:27",
+  "kind": "audit",
+  "where": "s1start tile 0 ROSTER 13 under contract David",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 3,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 47
+ },
+ {
+  "t": "00:37:27",
+  "kind": "panel",
+  "label": "s1start",
+  "tile": "ROSTER 13 under contract David Pastrnak ",
+  "text": "NHL Front Office A roster snapshot. Original simulation ratings. Sixteen teams, one Cup. Boston Bruins 2026-27 · Round 1/20 Record 0-0-0 · 0 pts Strength 84 Cap space $10.4M 🏛️ OWNERSHIP Trust 63 Win 35 games and show the fans a direction. Hub Roster 🎙️ Nobody clips it. That is the point. Welcome to the Boston Bruins front office. The 2026-27 season drops the puck now. 🏛️ The ownership mandate: Win 35 games and show the fans a direction. Choose simulation contributors Cap hit $93.6M of the $104M ceiling Cap figures as of September 2026 OVR, potential and contracts are simulation values. The player list stays at its roster snapshot. Opening estimates use 2024-25 and 2025-26 regular-season inputs: forwards measure offensive production, defensemen use offense and usage proxies, and goalies use save-rate proxies. The e marker means limited evidence. These do not measure every skill. Later"
+ },
+ {
+  "t": "00:37:29",
+  "kind": "audit",
+  "where": "s1start tile 1 FREE AGENCY $10M of room In re",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.rounded-full.bg-primary.px-2.5 \"Sign\"",
+    "w": 42,
+    "h": 20
+   },
+   {
+    "el": "button.rounded-full.bg-primary.px-2.5 \"Sign\"",
+    "w": 42,
+    "h": 20
+   },
+   {
+    "el": "button.rounded-full.bg-primary.px-2.5 \"Sign\"",
+    "w": 42,
+    "h": 20
+   },
+   {
+    "el": "button.rounded-full.bg-primary.px-2.5 \"Sign\"",
+    "w": 42,
+    "h": 20
+   },
+   {
+    "el": "button.rounded-full.bg-primary.px-2.5 \"Sign\"",
+    "w": 42,
+    "h": 20
+   },
+   {
+    "el": "button.rounded-full.bg-primary.px-2.5 \"Sign\"",
+    "w": 42,
+    "h": 20
+   },
+   {
+    "el": "button.rounded-full.bg-primary.px-2.5 \"Sign\"",
+    "w": 42,
+    "h": 20
+   },
+   {
+    "el": "button.rounded-full.bg-primary.px-2.5 \"Sign\"",
+    "w": 42,
+    "h": 20
+   }
+  ],
+  "tap44": 3,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 26
+ },
+ {
+  "t": "00:37:29",
+  "kind": "panel",
+  "label": "s1start",
+  "tile": "FREE AGENCY $10M of room In reach: Ander",
+  "text": "NHL Front Office A roster snapshot. Original simulation ratings. Sixteen teams, one Cup. Boston Bruins 2026-27 · Round 1/20 Record 0-0-0 · 0 pts Strength 84 Cap space $10.4M 🏛️ OWNERSHIP Trust 63 Win 35 games and show the fans a direction. Hub Free agency 🎙️ Nobody clips it. That is the point. Welcome to the Boston Bruins front office. The 2026-27 season drops the puck now. 🏛️ The ownership mandate: Win 35 games and show the fans a direction. Free agents (cap space $10.4M). A man you waived waits until next season. Anders Forsell W · 29y · wants $5.1M 80 Sign Anders Sjodin W · 26y · wants $5.1M 80 Sign Petteri Lindqvist W · 29y · wants $4.5M 79 Sign Lucas Lindqvist W · 26y · wants $4M 78 Sign Rurik Palmgren D · 31y · wants $4M 78 Sign Bjorn Bergeron G · 33y · wants $2.4M 75 Sign Aleks Byfield D · 28y · wants $1.9M 74 Sign Tuukka Sjodin C · 33y · wants $1.9M 74 Sign Wilhelm Grahn D · 2"
+ },
+ {
+  "t": "00:37:30",
+  "kind": "audit",
+  "where": "s1start tile 2 TRADES 13 to offer Your bigges",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.rounded-full.border.px-2 \"BUF\"",
+    "w": 38,
+    "h": 21
+   },
+   {
+    "el": "button.rounded-full.border.px-2 \"DET\"",
+    "w": 38,
+    "h": 21
+   },
+   {
+    "el": "button.rounded-full.border.px-2 \"FLA\"",
+    "w": 37,
+    "h": 21
+   },
+   {
+    "el": "button.rounded-full.border.px-2 \"MTL\"",
+    "w": 40,
+    "h": 21
+   },
+   {
+    "el": "button.rounded-full.border.px-2 \"OTT\"",
+    "w": 40,
+    "h": 21
+   },
+   {
+    "el": "button.rounded-full.border.px-2 \"TBL\"",
+    "w": 38,
+    "h": 21
+   },
+   {
+    "el": "button.rounded-full.border.px-2 \"TOR\"",
+    "w": 40,
+    "h": 21
+   },
+   {
+    "el": "button.rounded-full.border.px-2 \"CAR\"",
+    "w": 39,
+    "h": 21
+   }
+  ],
+  "tap44": 4,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 52
+ },
+ {
+  "t": "00:37:30",
+  "kind": "panel",
+  "label": "s1start",
+  "tile": "TRADES 13 to offer Your biggest chip is ",
+  "text": "NHL Front Office A roster snapshot. Original simulation ratings. Sixteen teams, one Cup. Boston Bruins 2026-27 · Round 1/20 Record 0-0-0 · 0 pts Strength 84 Cap space $10.4M 🏛️ OWNERSHIP Trust 63 Win 35 games and show the fans a direction. Hub Trades 🎙️ Nobody clips it. That is the point. Welcome to the Boston Bruins front office. The 2026-27 season drops the puck now. 🏛️ The ownership mandate: Win 35 games and show the fans a direction. Trade deadline: the break after round 15 is the last chance, and deals shut once round 16 is played. Packages with picks and retained salary are on the Trade desk box. 🔍 Trade Finder Pick one of your players and shop him. Only deals the AI genuinely accepts show up, cap checked. David Pastrnak (W) Opening estimate 93: offensive production. Defense and other skills are not measured. 93 Charlie McAvoy (D) Opening estimate 90: offense and usage proxy. L"
+ },
+ {
+  "t": "00:37:31",
+  "kind": "audit",
+  "where": "s1start tile 3 PLAY Round 1 of 20 0-0 with 20",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 4,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 7
+ },
+ {
+  "t": "00:37:31",
+  "kind": "panel",
+  "label": "s1start",
+  "tile": "PLAY Round 1 of 20 0-0 with 20 rounds to",
+  "text": "NHL Front Office A roster snapshot. Original simulation ratings. Sixteen teams, one Cup. Boston Bruins 2026-27 · Round 1/20 Record 0-0-0 · 0 pts Strength 84 Cap space $10.4M 🏛️ OWNERSHIP Trust 63 Win 35 games and show the fans a direction. Hub Play 🎙️ Nobody clips it. That is the point. Welcome to the Boston Bruins front office. The 2026-27 season drops the puck now. 🏛️ The ownership mandate: Win 35 games and show the fans a direction. Each round simulates a stretch of games across the league. OT losses still earn a point. Play Round 1 Top three per division plus two wild cards per conference make the divisional bracket. Every round is best-of-7. Abandon franchise and restart NHL Front Office: Hockey GM Simulator Take over an NHL franchise from a curated roster snapshot. New games use original estimates from 2024-25 and 2025-26 regular-season inputs, with limited evidence marked. Forw"
+ },
+ {
+  "t": "00:37:32",
+  "kind": "audit",
+  "where": "s1start tile 4 STANDINGS #13 in the East 5 pl",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 3,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 11
+ },
+ {
+  "t": "00:37:32",
+  "kind": "panel",
+  "label": "s1start",
+  "tile": "STANDINGS #13 in the East 5 places short",
+  "text": "NHL Front Office A roster snapshot. Original simulation ratings. Sixteen teams, one Cup. Boston Bruins 2026-27 · Round 1/20 Record 0-0-0 · 0 pts Strength 84 Cap space $10.4M 🏛️ OWNERSHIP Trust 63 Win 35 games and show the fans a direction. Hub Standings 🎙️ Nobody clips it. That is the point. Welcome to the Boston Bruins front office. The 2026-27 season drops the puck now. 🏛️ The ownership mandate: Win 35 games and show the fans a direction. ATLANTIC 1. Tampa Bay Lightning 0-0-0 · 0 2. Toronto Maple Leafs 0-0-0 · 0 3. Montreal Canadiens 0-0-0 · 0 4. Detroit Red Wings 0-0-0 · 0 5. Ottawa Senators 0-0-0 · 0 6. Florida Panthers 0-0-0 · 0 7. Buffalo Sabres 0-0-0 · 0 8. Boston Bruins 0-0-0 · 0 METROPOLITAN 1. Washington Capitals 0-0-0 · 0 2. Columbus Blue Jackets 0-0-0 · 0 3. New York Rangers 0-0-0 · 0 4. Philadelphia Flyers 0-0-0 · 0 5. New Jersey Devils 0-0-0 · 0 6. New York Islanders 0-0"
+ },
+ {
+  "t": "00:37:34",
+  "kind": "audit",
+  "where": "s1start tile 5 STAFF 5 of 5 jobs filled +0.87",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 3,
+  "tinyText": 5,
+  "tinyTextSample": [
+   "9px div.text-[9px].text-muted-foreground \"Level 5 · 68k a round\"",
+   "9px div.text-[9px].text-muted-foreground \"Level 3 · 19k a round\"",
+   "9px div.text-[9px].text-muted-foreground \"Level 4 · 11k a round\"",
+   "9px div.text-[9px].text-muted-foreground \"Level 3 · 9k a round\""
+  ],
+  "text10": 12
+ },
+ {
+  "t": "00:37:34",
+  "kind": "panel",
+  "label": "s1start",
+  "tile": "STAFF 5 of 5 jobs filled +0.87 team stre",
+  "text": "NHL Front Office A roster snapshot. Original simulation ratings. Sixteen teams, one Cup. Boston Bruins 2026-27 · Round 1/20 Record 0-0-0 · 0 pts Strength 84 Cap space $10.4M 🏛️ OWNERSHIP Trust 63 Win 35 games and show the fans a direction. Hub Staff Ownership gives the staff desk $8.00M each summer for fees and pay offs. Wages are paid outside the cap. The special teams assistant counts at 20 percent, because this game has no power play of its own. STAFF · $8.00M TO SPEND · 118K A ROUND ON THE DESK ? 📋 Head coach · your call Fenwick Hathersage Level 5 · 68k a round ⚡ Special teams Zebulon Lindqvist Level 3 · 19k a round 🥅 Goalies Silas Dunwoody Level 4 · 11k a round 🔎 Scouting Leopold Quarmby Level 3 · 9k a round 🩹 Medical Thurston Applegarth Level 4 · 11k a round 🎙️ Nobody clips it. That is the point. Welcome to the Boston Bruins front office. The 2026-27 season drops the puck now"
+ },
+ {
+  "t": "00:37:35",
+  "kind": "audit",
+  "where": "s1start tile 6 RE-SIGN DESK Nobody expiring N",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 4,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 7
+ },
+ {
+  "t": "00:37:35",
+  "kind": "panel",
+  "label": "s1start",
+  "tile": "RE-SIGN DESK Nobody expiring Nobody is o",
+  "text": "NHL Front Office A roster snapshot. Original simulation ratings. Sixteen teams, one Cup. Boston Bruins 2026-27 · Round 1/20 Record 0-0-0 · 0 pts Strength 84 Cap space $10.4M 🏛️ OWNERSHIP Trust 63 Win 35 games and show the fans a direction. Hub Re-sign desk Re-sign desk Nobody is out of contract this winter. Decide any time this season. Anyone you leave open is settled by your staff's own rule when the summer starts, never by a coin flip. The money is this game's own figures, not real contracts. The rules are each league's own, read in October 2026. The money is this game's own figure, not anybody's real contract. 🎙️ Nobody clips it. That is the point. Welcome to the Boston Bruins front office. The 2026-27 season drops the puck now. 🏛️ The ownership mandate: Win 35 games and show the fans a direction. Abandon franchise and restart NHL Front Office: Hockey GM Simulator Take over an NHL "
+ },
+ {
+  "t": "00:37:36",
+  "kind": "audit",
+  "where": "s1start tile 7 DRAFT PICKS 2 picks in 2026 6 ",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 3,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 10
+ },
+ {
+  "t": "00:37:36",
+  "kind": "panel",
+  "label": "s1start",
+  "tile": "DRAFT PICKS 2 picks in 2026 6 picks over",
+  "text": "NHL Front Office A roster snapshot. Original simulation ratings. Sixteen teams, one Cup. Boston Bruins 2026-27 · Round 1/20 Record 0-0-0 · 0 pts Strength 84 Cap space $10.4M 🏛️ OWNERSHIP Trust 63 Win 35 games and show the fans a direction. Hub Draft picks DRAFT CAPITAL 6 picks, 3 firsts Trade deadline after round 15. 15 rounds to go. 2026 (this year) 1st 2nd 2027 1st 2nd 2028 1st 2nd The limit of two lottery wins in five years is not modelled. The real draft runs seven rounds. This game drafts two, so the ledger carries two. The lottery is in the rules, but draft night here is the game's own short draft: you pick first in each batch, then the other clubs go in reverse standings. 🎙️ Nobody clips it. That is the point. Welcome to the Boston Bruins front office. The 2026-27 season drops the puck now. 🏛️ The ownership mandate: Win 35 games and show the fans a direction. Abandon franchise "
+ },
+ {
+  "t": "00:37:38",
+  "kind": "audit",
+  "where": "s1start tile 8 TRADE DESK 15 rounds to the de",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 42,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 46
+ },
+ {
+  "t": "00:37:38",
+  "kind": "panel",
+  "label": "s1start",
+  "tile": "TRADE DESK 15 rounds to the deadline Pla",
+  "text": "NHL Front Office A roster snapshot. Original simulation ratings. Sixteen teams, one Cup. Boston Bruins 2026-27 · Round 1/20 Record 0-0-0 · 0 pts Strength 84 Cap space $10.4M 🏛️ OWNERSHIP Trust 63 Win 35 games and show the fans a direction. Hub Trade desk Deal with Anaheim Ducks (holding) Buffalo Sabres (holding) Carolina Hurricanes (holding) Columbus Blue Jackets (holding) Calgary Flames (holding) Chicago Blackhawks (holding) Colorado Avalanche (holding) Dallas Stars (holding) Detroit Red Wings (holding) Edmonton Oilers (holding) Florida Panthers (holding) Los Angeles Kings (holding) Minnesota Wild (holding) Montreal Canadiens (holding) New Jersey Devils (holding) Nashville Predators (holding) New York Islanders (holding) New York Rangers (holding) Ottawa Senators (holding) Philadelphia Flyers (holding) Pittsburgh Penguins (holding) Seattle Kraken (holding) San Jose Sharks (holding) St."
+ },
+ {
+  "t": "00:37:40",
+  "kind": "sign",
+  "did": "Sign",
+  "text": "NHL Front Office A roster snapshot. Original simulation ratings. Sixteen teams, one Cup. Boston Bruins 2026-27 · Round 1/20 Record 0-0-0 · 0 pts Strength 84 Cap space $5.3M 🏛️ OWNERSHIP Trust 63 Win 35 games and show the fans a direction. Hub Free agency ✍️ Anders Forsell (W) signs, $5.1M a year. 🎙️ Nobody clips it. That is the point. Welcome to the Boston Bruins front office. The 2026-27 season drops the puck now. 🏛️ The ownership mandate: Win 35 games and show the fans a direction. Free age"
+ },
+ {
+  "t": "00:37:41",
+  "kind": "audit",
+  "where": "s1a press 1 Play Round 1",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 4,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:37:41",
+  "kind": "week",
+  "label": "s1a",
+  "pressed": "Play Round 1",
+  "text": "NHL Front Office A roster snapshot. Original simulation ratings. Sixteen teams, one Cup. Boston Bruins 2026-27 · Round 2/20 Record 2-2-0 · 4 pts Strength 84 Cap space $5.3M 🏛️ OWNERSHIP Trust 63 Win 35 games and show the fans a direction. 📈 2 wins keeps the mandate on pace. Hub Play Round 1: you went 2-2-0. Each round simulates a stretch of games across the league. OT losses still earn a point. Play Round 2 Top three per division plus two wild cards per conference make the divisional bracket. Every round is best-of-7. Abandon franchise and restart NHL Front Office: Hockey GM Simulator Take o"
+ },
+ {
+  "t": "00:37:42",
+  "kind": "audit",
+  "where": "s1a press 2 Play Round 2",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 4,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:37:43",
+  "kind": "audit",
+  "where": "s1a press 3 Play Round 3",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 4,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:37:44",
+  "kind": "audit",
+  "where": "s1a press 4 Play Round 4",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 4,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:37:44",
+  "kind": "audit",
+  "where": "s1a press 5 Play Round 5",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 4,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:37:45",
+  "kind": "audit",
+  "where": "s1a press 6 Play Round 6",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 4,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:37:46",
+  "kind": "audit",
+  "where": "s1a press 7 Play Round 7",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 4,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:37:46",
+  "kind": "week",
+  "label": "s1a",
+  "pressed": "Play Round 7",
+  "text": "NHL Front Office A roster snapshot. Original simulation ratings. Sixteen teams, one Cup. Boston Bruins 2026-27 · Round 8/20 Record 13-11-4 · 30 pts Strength 84 Cap space $5.3M 🏛️ OWNERSHIP Trust 63 Win 35 games and show the fans a direction. 📈 13 wins keeps the mandate on pace. Hub Play Round 7: you went 1-3-0. 🚑 Casey Mittelstadt is out 1 round. Each round simulates a stretch of games across the league. OT losses still earn a point. Play Round 8 Top three per division plus two wild cards per conference make the divisional bracket. Every round is best-of-7. Abandon franchise and restart NHL"
+ },
+ {
+  "t": "00:37:47",
+  "kind": "audit",
+  "where": "s1a press 8 Play Round 8",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 4,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:37:47",
+  "kind": "audit",
+  "where": "s1a press 9 Play Round 9",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 4,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:37:48",
+  "kind": "audit",
+  "where": "s1a press 10 Play Round 10",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 4,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:37:49",
+  "kind": "audit",
+  "where": "s1a press 11 Play Round 11",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 4,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:37:50",
+  "kind": "audit",
+  "where": "s1a press 12 Play Round 12",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 4,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:37:50",
+  "kind": "audit",
+  "where": "s1a press 13 Play Round 13",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 4,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:37:50",
+  "kind": "week",
+  "label": "s1a",
+  "pressed": "Play Round 13",
+  "text": "NHL Front Office A roster snapshot. Original simulation ratings. Sixteen teams, one Cup. Boston Bruins 2026-27 · Round 14/20 Record 28-17-7 · 63 pts Strength 84 Cap space $5.3M 🏛️ OWNERSHIP Trust 63 Win 35 games and show the fans a direction. 📈 28 wins keeps the mandate on pace. Hub Play Round 13: you went 0-3-1. Each round simulates a stretch of games across the league. OT losses still earn a point. Play Round 14 Top three per division plus two wild cards per conference make the divisional bracket. Every round is best-of-7. Abandon franchise and restart NHL Front Office: Hockey GM Simulator"
+ },
+ {
+  "t": "00:37:51",
+  "kind": "audit",
+  "where": "s1a press 14 Play Round 14",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 4,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:37:51",
+  "kind": "season",
+  "part": "s1a",
+  "presses": 14,
+  "end": "paused",
+  "secs": 29
+ },
+ {
+  "t": "00:37:51",
+  "kind": "audit",
+  "where": "mid season hub",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 2,
+  "tinyText": 9,
+  "tinyTextSample": [
+   "9px div.mt-0.5.truncate.text-[9px] \"Charlie McAvoy is out 1 round\"",
+   "9px div.mt-0.5.truncate.text-[9px] \"The market is empty\"",
+   "9px div.mt-0.5.truncate.text-[9px] \"Your biggest chip is David Pastrnak\"",
+   "9px div.mt-0.5.truncate.text-[9px] \"30-19 with 6 rounds to play\""
+  ],
+  "text10": 15
+ },
+ {
+  "t": "00:37:51",
+  "kind": "midhub",
+  "text": "NHL Front Office A roster snapshot. Original simulation ratings. Sixteen teams, one Cup. Boston Bruins 2026-27 · Round 15/20 Record 30-19-7 · 67 pts Strength 83 Cap space $5.3M 🏛️ OWNERSHIP Trust 63 Win 35 games and show the fans a direction. 📈 30 wins keeps the mandate on pace. 👔 ROSTER 1 unavailable Charlie McAvoy is out 1 round 💼 FREE AGENCY $5.3M of room The market is empty 🤝 TRADES 14 to offer Your biggest chip is David Pastrnak 🏟️ PLAY Round 15 of 20 30-19 with 6 rounds to play 📊 STANDINGS #8 in the East Inside the top 8 with 6 to play 📋 STAFF 5 of 5 jobs filled +0.87 team strength from the bench ✍️ RE-SIGN DESK 1 deal end this summer 1 still waiting on you 🎟️ DRAFT PICKS 2 picks in 2026 6 picks over 3 drafts 🔁 TRADE DESK 1 round to the deadline Players, picks and retained salary Round 14: you went 2-2-0. 🚑 Charlie McAvoy is out 1 round. Abandon franchise and restart NHL Front Office: Hockey GM Simulator Take over an NHL franchise from a curated roster snapshot. New games use original estimates from 2024-25 and 2025-26 regular-season inputs, with limited evidence marked. Forward ratings measure offensive production; defensemen and goalies use qualified proxies. Pot"
+ },
+ {
+  "t": "00:37:51",
+  "kind": "tiles",
+  "label": "s1mid",
+  "tiles": [
+   "ROSTER 1 unavailable Charlie McAvoy is out 1 round",
+   "FREE AGENCY $5.3M of room The market is empty",
+   "TRADES 14 to offer Your biggest chip is David Pastrnak",
+   "PLAY Round 15 of 20 30-19 with 6 rounds to play",
+   "STANDINGS #8 in the East Inside the top 8 with 6 to play",
+   "STAFF 5 of 5 jobs filled +0.87 team strength from the bench",
+   "RE-SIGN DESK 1 deal end this summer 1 still waiting on you",
+   "DRAFT PICKS 2 picks in 2026 6 picks over 3 drafts",
+   "TRADE DESK 1 round to the deadline Players, picks and retained salary"
+  ]
+ },
+ {
+  "t": "00:37:52",
+  "kind": "audit",
+  "where": "s1mid tile 0 ROSTER 1 unavailable Charlie M",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 3,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:37:52",
+  "kind": "panel",
+  "label": "s1mid",
+  "tile": "ROSTER 1 unavailable Charlie McAvoy is o",
+  "text": "NHL Front Office A roster snapshot. Original simulation ratings. Sixteen teams, one Cup. Boston Bruins 2026-27 · Round 15/20 Record 30-19-7 · 67 pts Strength 83 Cap space $5.3M 🏛️ OWNERSHIP Trust 63 Win 35 games and show the fans a direction. 📈 30 wins keeps the mandate on pace. Hub Roster Round 14: you went 2-2-0. 🚑 Charlie McAvoy is out 1 round. Choose simulation contributors Cap hit $98.7M of the $104M ceiling Cap figures as of September 2026 OVR, potential and contracts are simulation values. The player list stays at its roster snapshot. Opening estimates use 2024-25 and 2025-26 regular-season inputs: forwards measure offensive production, defensemen use offense and usage proxies, and goalies use save-rate proxies. The e marker means limited evidence. These do not measure every skill. Later ratings come from this saved simulation. David Pastrnak W · 30y · $13.4M x2 Opening estimat"
+ },
+ {
+  "t": "00:37:54",
+  "kind": "audit",
+  "where": "s1mid tile 1 FREE AGENCY $5.3M of room The ",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 3,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:37:54",
+  "kind": "panel",
+  "label": "s1mid",
+  "tile": "FREE AGENCY $5.3M of room The market is ",
+  "text": "NHL Front Office A roster snapshot. Original simulation ratings. Sixteen teams, one Cup. Boston Bruins 2026-27 · Round 15/20 Record 30-19-7 · 67 pts Strength 83 Cap space $5.3M 🏛️ OWNERSHIP Trust 63 Win 35 games and show the fans a direction. 📈 30 wins keeps the mandate on pace. Hub Free agency Round 14: you went 2-2-0. 🚑 Charlie McAvoy is out 1 round. Free agents (cap space $5.3M). A man you waived waits until next season. Abandon franchise and restart NHL Front Office: Hockey GM Simulator Take over an NHL franchise from a curated roster snapshot. New games use original estimates from 2024-25 and 2025-26 regular-season inputs, with limited evidence marked. Forward ratings measure offensive production; defensemen and goalies use qualified proxies. Potential, contracts and future events are simulated. Work the salary cap, waive contracts, sign free agents and negotiate trades, then cha"
+ },
+ {
+  "t": "00:37:55",
+  "kind": "audit",
+  "where": "s1mid tile 2 TRADES 14 to offer Your bigges",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.rounded-full.border.px-2 \"BUF\"",
+    "w": 38,
+    "h": 21
+   },
+   {
+    "el": "button.rounded-full.border.px-2 \"DET\"",
+    "w": 38,
+    "h": 21
+   },
+   {
+    "el": "button.rounded-full.border.px-2 \"FLA\"",
+    "w": 37,
+    "h": 21
+   },
+   {
+    "el": "button.rounded-full.border.px-2 \"MTL\"",
+    "w": 40,
+    "h": 21
+   },
+   {
+    "el": "button.rounded-full.border.px-2 \"OTT\"",
+    "w": 40,
+    "h": 21
+   },
+   {
+    "el": "button.rounded-full.border.px-2 \"TBL\"",
+    "w": 38,
+    "h": 21
+   },
+   {
+    "el": "button.rounded-full.border.px-2 \"TOR\"",
+    "w": 40,
+    "h": 21
+   },
+   {
+    "el": "button.rounded-full.border.px-2 \"CAR\"",
+    "w": 39,
+    "h": 21
+   }
+  ],
+  "tap44": 4,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:37:55",
+  "kind": "panel",
+  "label": "s1mid",
+  "tile": "TRADES 14 to offer Your biggest chip is ",
+  "text": "NHL Front Office A roster snapshot. Original simulation ratings. Sixteen teams, one Cup. Boston Bruins 2026-27 · Round 15/20 Record 30-19-7 · 67 pts Strength 83 Cap space $5.3M 🏛️ OWNERSHIP Trust 63 Win 35 games and show the fans a direction. 📈 30 wins keeps the mandate on pace. Hub Trades Round 14: you went 2-2-0. 🚑 Charlie McAvoy is out 1 round. Trade deadline: the break after round 15 is the last chance, and deals shut once round 16 is played. Packages with picks and retained salary are on the Trade desk box. 🔍 Trade Finder Pick one of your players and shop him. Only deals the AI genuinely accepts show up, cap checked. David Pastrnak (W) Opening estimate 93: offensive production. Defense and other skills are not measured. 93 Charlie McAvoy (D) Opening estimate 90: offense and usage proxy. Limited opening evidence. 90e Morgan Geekie (C) Opening estimate 89: offensive production. De"
+ },
+ {
+  "t": "00:37:56",
+  "kind": "audit",
+  "where": "s1mid tile 3 PLAY Round 15 of 20 30-19 with",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 4,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:37:56",
+  "kind": "panel",
+  "label": "s1mid",
+  "tile": "PLAY Round 15 of 20 30-19 with 6 rounds ",
+  "text": "NHL Front Office A roster snapshot. Original simulation ratings. Sixteen teams, one Cup. Boston Bruins 2026-27 · Round 15/20 Record 30-19-7 · 67 pts Strength 83 Cap space $5.3M 🏛️ OWNERSHIP Trust 63 Win 35 games and show the fans a direction. 📈 30 wins keeps the mandate on pace. Hub Play Round 14: you went 2-2-0. 🚑 Charlie McAvoy is out 1 round. Each round simulates a stretch of games across the league. OT losses still earn a point. Play Round 15 Top three per division plus two wild cards per conference make the divisional bracket. Every round is best-of-7. Abandon franchise and restart NHL Front Office: Hockey GM Simulator Take over an NHL franchise from a curated roster snapshot. New games use original estimates from 2024-25 and 2025-26 regular-season inputs, with limited evidence marked. Forward ratings measure offensive production; defensemen and goalies use qualified proxies. Pot"
+ },
+ {
+  "t": "00:37:57",
+  "kind": "audit",
+  "where": "s1mid tile 4 STANDINGS #8 in the East Insid",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 3,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:37:57",
+  "kind": "panel",
+  "label": "s1mid",
+  "tile": "STANDINGS #8 in the East Inside the top ",
+  "text": "NHL Front Office A roster snapshot. Original simulation ratings. Sixteen teams, one Cup. Boston Bruins 2026-27 · Round 15/20 Record 30-19-7 · 67 pts Strength 83 Cap space $5.3M 🏛️ OWNERSHIP Trust 63 Win 35 games and show the fans a direction. 📈 30 wins keeps the mandate on pace. Hub Standings Round 14: you went 2-2-0. 🚑 Charlie McAvoy is out 1 round. ATLANTIC 1. Tampa Bay Lightning 37-14-5 · 79 2. Montreal Canadiens 36-18-2 · 74 3. Florida Panthers 32-17-7 · 71 4. Buffalo Sabres 31-17-8 · 70 5. Boston Bruins 30-19-7 · 67 6. Ottawa Senators 30-20-6 · 66 7. Toronto Maple Leafs 29-21-6 · 64 8. Detroit Red Wings 28-22-6 · 62 METROPOLITAN 1. Washington Capitals 41-14-1 · 83 2. Philadelphia Flyers 33-20-3 · 69 3. Columbus Blue Jackets 28-16-12 · 68 4. Carolina Hurricanes 27-19-10 · 64 5. New York Islanders 26-18-12 · 64 6. New Jersey Devils 26-19-11 · 63 7. Pittsburgh Penguins 26-22-8 · 60 "
+ },
+ {
+  "t": "00:37:59",
+  "kind": "audit",
+  "where": "s1mid tile 5 STAFF 5 of 5 jobs filled +0.87",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 3,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:37:59",
+  "kind": "panel",
+  "label": "s1mid",
+  "tile": "STAFF 5 of 5 jobs filled +0.87 team stre",
+  "text": "NHL Front Office A roster snapshot. Original simulation ratings. Sixteen teams, one Cup. Boston Bruins 2026-27 · Round 15/20 Record 30-19-7 · 67 pts Strength 83 Cap space $5.3M 🏛️ OWNERSHIP Trust 63 Win 35 games and show the fans a direction. 📈 30 wins keeps the mandate on pace. Hub Staff Ownership gives the staff desk $8.00M each summer for fees and pay offs. Wages are paid outside the cap. The special teams assistant counts at 20 percent, because this game has no power play of its own. STAFF · $8.00M TO SPEND · 118K A ROUND ON THE DESK ? 📋 Head coach · your call Fenwick Hathersage Level 5 · 68k a round ⚡ Special teams Zebulon Lindqvist Level 3 · 19k a round 🥅 Goalies Silas Dunwoody Level 4 · 11k a round 🔎 Scouting Leopold Quarmby Level 3 · 9k a round 🩹 Medical Thurston Applegarth Level 4 · 11k a round Round 14: you went 2-2-0. 🚑 Charlie McAvoy is out 1 round. Abandon franchise a"
+ },
+ {
+  "t": "00:38:00",
+  "kind": "audit",
+  "where": "s1mid tile 6 RE-SIGN DESK 1 deal end this s",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 4,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:38:00",
+  "kind": "panel",
+  "label": "s1mid",
+  "tile": "RE-SIGN DESK 1 deal end this summer 1 st",
+  "text": "NHL Front Office A roster snapshot. Original simulation ratings. Sixteen teams, one Cup. Boston Bruins 2026-27 · Round 15/20 Record 30-19-7 · 67 pts Strength 83 Cap space $5.3M 🏛️ OWNERSHIP Trust 63 Win 35 games and show the fans a direction. 📈 30 wins keeps the mandate on pace. Hub Re-sign desk Re-sign desk 1 still waiting on you. Anders Forsell W 80 overall, age 29 Asks $5.7M for 3 seasons Free agent Decide any time this season. Anyone you leave open is settled by your staff's own rule when the summer starts, never by a coin flip. The money is this game's own figures, not real contracts. The rules are each league's own, read in October 2026. The money is this game's own figure, not anybody's real contract. Round 14: you went 2-2-0. 🚑 Charlie McAvoy is out 1 round. Abandon franchise and restart NHL Front Office: Hockey GM Simulator Take over an NHL franchise from a curated roster sna"
+ },
+ {
+  "t": "00:38:01",
+  "kind": "audit",
+  "where": "s1mid tile 7 DRAFT PICKS 2 picks in 2026 6 ",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 3,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:38:01",
+  "kind": "panel",
+  "label": "s1mid",
+  "tile": "DRAFT PICKS 2 picks in 2026 6 picks over",
+  "text": "NHL Front Office A roster snapshot. Original simulation ratings. Sixteen teams, one Cup. Boston Bruins 2026-27 · Round 15/20 Record 30-19-7 · 67 pts Strength 83 Cap space $5.3M 🏛️ OWNERSHIP Trust 63 Win 35 games and show the fans a direction. 📈 30 wins keeps the mandate on pace. Hub Draft picks DRAFT CAPITAL 6 picks, 3 firsts Trade deadline after round 15. 1 round to go. 2026 (this year) 1st 2nd 2027 1st 2nd 2028 1st 2nd The limit of two lottery wins in five years is not modelled. The real draft runs seven rounds. This game drafts two, so the ledger carries two. The lottery is in the rules, but draft night here is the game's own short draft: you pick first in each batch, then the other clubs go in reverse standings. Round 14: you went 2-2-0. 🚑 Charlie McAvoy is out 1 round. Abandon franchise and restart NHL Front Office: Hockey GM Simulator Take over an NHL franchise from a curated ro"
+ },
+ {
+  "t": "00:38:03",
+  "kind": "audit",
+  "where": "s1mid tile 8 TRADE DESK 1 round to the dead",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 43,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:38:03",
+  "kind": "panel",
+  "label": "s1mid",
+  "tile": "TRADE DESK 1 round to the deadline Playe",
+  "text": "NHL Front Office A roster snapshot. Original simulation ratings. Sixteen teams, one Cup. Boston Bruins 2026-27 · Round 15/20 Record 30-19-7 · 67 pts Strength 83 Cap space $5.3M 🏛️ OWNERSHIP Trust 63 Win 35 games and show the fans a direction. 📈 30 wins keeps the mandate on pace. Hub Trade desk Deal with Anaheim Ducks (holding) Buffalo Sabres (buying) Carolina Hurricanes (buying) Columbus Blue Jackets (buying) Calgary Flames (selling) Chicago Blackhawks (selling) Colorado Avalanche (buying) Dallas Stars (buying) Detroit Red Wings (holding) Edmonton Oilers (holding) Florida Panthers (buying) Los Angeles Kings (buying) Minnesota Wild (buying) Montreal Canadiens (buying) New Jersey Devils (holding) Nashville Predators (selling) New York Islanders (buying) New York Rangers (selling) Ottawa Senators (buying) Philadelphia Flyers (buying) Pittsburgh Penguins (holding) Seattle Kraken (buying) S"
+ },
+ {
+  "t": "00:38:04",
+  "kind": "audit",
+  "where": "s1b press 1 Play Round 15",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 4,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:38:04",
+  "kind": "week",
+  "label": "s1b",
+  "pressed": "Play Round 15",
+  "text": "NHL Front Office A roster snapshot. Original simulation ratings. Sixteen teams, one Cup. Boston Bruins 2026-27 · Round 16/20 Record 32-21-7 · 71 pts Strength 84 Cap space $5.3M 🏛️ OWNERSHIP Trust 63 Win 35 games and show the fans a direction. 📈 32 wins keeps the mandate on pace. Hub Play Round 15: you went 2-2-0. Each round simulates a stretch of games across the league. OT losses still earn a point. Play Round 16 Top three per division plus two wild cards per conference make the divisional bracket. Every round is best-of-7. Abandon franchise and restart NHL Front Office: Hockey GM Simulator"
+ },
+ {
+  "t": "00:38:05",
+  "kind": "audit",
+  "where": "s1b press 2 Play Round 16",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 4,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:38:06",
+  "kind": "audit",
+  "where": "s1b press 3 Play Round 17",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 4,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:38:07",
+  "kind": "audit",
+  "where": "s1b press 4 Play Round 18",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 4,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:38:07",
+  "kind": "audit",
+  "where": "s1b press 5 Play Round 19",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 4,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:38:10",
+  "kind": "week",
+  "label": "s1b",
+  "pressed": "Final stretch + playoffs",
+  "text": "NHL Front Office A roster snapshot. Original simulation ratings. Sixteen teams, one Cup. Tampa Bay Lightning lift the 2027 Stanley Cup Your Boston Bruins finished 44-28-8 (96 pts), No. 7 in the East. 📈 Ahead of the ask. Ownership noticed. Trust upstairs: 85 of 100. Cup Final: Tampa Bay Lightning beat Utah Mammoth 4-1 Atlantic Semi: Tampa Bay Lightning 4-0 Atlantic Semi: Florida Panthers 4-3 Atlantic Final: Tampa Bay Lightning 4-0 Metropolitan Semi: Boston Bruins 4-3 Metropolitan Semi: Carolina Hurricanes 4-1 Metropolitan Final: Boston Bruins 4-1 Eastern Final: Tampa Bay Lightning 4-2 Central "
+ },
+ {
+  "t": "00:38:10",
+  "kind": "season",
+  "part": "s1b",
+  "presses": 6,
+  "end": "recap",
+  "secs": 48
+ },
+ {
+  "t": "00:38:14",
+  "kind": "audit",
+  "where": "recap",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [],
+  "tinyTap": [],
+  "tap44": 5,
+  "tinyText": 1,
+  "tinyTextSample": [
+   "9px div.mt-0.5.truncate.text-[9px] \"1 still waiting on you\""
+  ],
+  "text10": 7
+ },
+ {
+  "t": "00:38:14",
+  "kind": "recap",
+  "text": "NHL Front Office A roster snapshot. Original simulation ratings. Sixteen teams, one Cup. Tampa Bay Lightning lift the 2027 Stanley Cup Your Boston Bruins finished 44-28-8 (96 pts), No. 7 in the East. 📈 Ahead of the ask. Ownership noticed. Trust upstairs: 85 of 100. Cup Final: Tampa Bay Lightning beat Utah Mammoth 4-1 Atlantic Semi: Tampa Bay Lightning 4-0 Atlantic Semi: Florida Panthers 4-3 Atlantic Final: Tampa Bay Lightning 4-0 Metropolitan Semi: Boston Bruins 4-3 Metropolitan Semi: Carolina Hurricanes 4-1 Metropolitan Final: Boston Bruins 4-1 Eastern Final: Tampa Bay Lightning 4-2 Central Semi: Utah Mammoth 4-1 Central Semi: Dallas Stars 4-1 Central Final: Utah Mammoth 4-2 Pacific Semi: Minnesota Wild 4-0 Pacific Semi: Vegas Golden Knights 4-2 Pacific Final: Vegas Golden Knights 4-0 Western Final: Utah Mammoth 4-3 Cups 0 Seasons 1 Go to the draft 🏢 NHL Front Office Oct 13, 2026 RESULT 0 Cups in 1 seasons DoUKnowBall douknowball.com/nhl-front-office Share result Copy challenge 📋 Copy Score Card 🖼️ Save Image SHARE YOUR RESULT ✍️ RE-SIGN DESK 1 deal end this summer 1 still waiting on you NHL Front Office: Hockey GM Simulator Take over an NHL franchise from a curated roster snapshot. New games use original estimates from 2024-25 and 2025-26 regular-season inputs, with limited evidence marked. Forward ratings measure offensive production; defensemen and goalies use qualified proxies. Potential, contracts and future events are simulated. Work the salary cap, waive contracts, sign free agents and negotiate trades, then chase points through an 80 game season where overtime losses still pay. Finish top three in your division or take a wild card, win four best-of-7 rounds for the Cup, then draft, develop and continue. Existing saves keep their ratings and progress. Runnin"
+ },
+ {
+  "t": "00:38:14",
+  "kind": "economy",
+  "label": "recap",
+  "cap": 104,
+  "season": 2026,
+  "my": "BOS",
+  "teams": 32,
+  "list": "VAN:62.2/14 CGY:64.4/13 WPG:70.4/13 CHI:73.1/13 NYI:77.5/13 STL:79.9/13 SJS:81.6/13 NSH:82.4/13 DET:82.8/13 SEA:82.8/13 ANA:84.4/13 PIT:87.4/14 CBJ:88/13 NYR:88/13 PHI:88/13 TOR:88.4/13 NJD:89.2/14 VGK:89.5/13 WSH:90.3/13 LAK:90.8/14 UTA:91.1/13 OTT:91.9/14 MIN:92.8/13 EDM:93.5/15 MTL:96/13 CAR:97.3/14 BUF:98.4/13 DAL:98.4/13 BOS:98.7/14 FLA:98.9/14 TBL:103.6/13 COL:105.2/13",
+  "saveChars": 155339,
+  "storageChars": 155491
+ },
+ {
+  "t": "00:38:16",
+  "kind": "recapReload",
+  "draftButton": true,
+  "text": "NHL Front Office A roster snapshot. Original simulation ratings. Sixteen teams, one Cup. Tampa Bay Lightning lift the 2027 Stanley Cup Your Boston Bruins finished 44-28-8 (96 pts), No. 7 in the East. 📈 Ahead of the ask. Ownership noticed. Trust upstairs: 85 of 100. Cup Final: Tampa Bay Lightning beat Utah Mammoth 4-1 Atlantic Semi: Tampa Bay Lightning 4-0 Atlantic Semi: Florida Panthers 4-3 Atlan"
+ },
+ {
+  "t": "00:38:18",
+  "kind": "draft",
+  "label": "off",
+  "text": "NHL Front Office A roster snapshot. Original simulation ratings. Sixteen teams, one Cup. The 2027 Draft You hold 2 picks. Grades are your scouting director's read, and a better one misses by less. Bjorn Halonen C · age 18 87 Brady Sjodin W · age 18 86 Miro Ivarsson C · age 19 86 Sten Jokela W · age 18 86 Petteri Lehtinen W · age 20 84 Oskar Cederholm C · age 19 83 Aleks Bergeron D · age 18 82 Juuso Grahn D · age 19 82 Ilya Forsell W · age 20 82 Tuukka Lindqvist C · age 19 81 Kasper Bergeron G · age 20 80 Lucas Karlstrom D · age 19 79 Emil Ahlberg G · age 18 79 Valter Novak C · age 20 78 NHL Front Office: Hockey GM Simulator Take over an NHL franchise from a curated roster snapshot. New games use original estimates from 2024-25 and 2025-26 regular-season inputs, with limited evidence marked. Forward ratings measure offensive production; defensemen and goalies use qualified proxies. Potent"
+ },
+ {
+  "t": "00:38:18",
+  "kind": "draftclick",
+  "label": "off",
+  "rule": "prospect",
+  "text": "Bjorn Halonen C · age 18 87"
+ },
+ {
+  "t": "00:38:19",
+  "kind": "draftclick",
+  "label": "off",
+  "rule": "prospect",
+  "text": "Sten Jokela W · age 18 86"
+ },
+ {
+  "t": "00:38:22",
+  "kind": "draftdone",
+  "label": "off",
+  "text": "NHL Front Office A roster snapshot. Original simulation ratings. Sixteen teams, one Cup. The 2027 Draft That is your draft done. The offseason has run and the new season is set up on the hub. ON THE CLOCK Your pick is in, and 5 more went off the board. 1. BOS select Sten Jokela W · your pick 86 2. NSH take Valter Novak C 78 3. CGY take Emil Ahlberg G 79 4. VAN take Ilya Forsell W 82 5. SJS take Oskar Cederholm C 83 6. CHI take Petteri Jokela W 73 Continue to the hub 🏛️ The new mandate: Make the playoffs. Ownership thinks this roster belongs there. 📋 The re-sign desk: 1 kept, 0 gone. 📋 You left 1 deal open, so your staff settled it by its own rule. 👋 Ian Cole retires. NHL Front Office: Hockey GM Simulator Take over an NHL franchise from a curated roster snapshot. New games use original estimates from 2024-25 and 2025-26 regular-season inputs, with limited evidence marked. Forward rati"
+ },
+ {
+  "t": "00:38:22",
+  "kind": "draftclick",
+  "label": "off",
+  "rule": "continue",
+  "text": "Continue to the hub"
+ },
+ {
+  "t": "00:38:23",
+  "kind": "offseason",
+  "picks": 2,
+  "end": "hub",
+  "secs": 61
+ },
+ {
+  "t": "00:38:24",
+  "kind": "economy",
+  "label": "season2",
+  "cap": 113,
+  "season": 2027,
+  "my": "BOS",
+  "teams": 32,
+  "list": "WPG:70.4/13 VAN:74.6/15 CHI:75.2/14 NYI:77.5/13 CGY:77.7/15 STL:79.9/13 DET:82.8/13 SEA:82.8/13 ANA:84.4/13 PIT:85.5/13 TOR:86.6/12 LAK:87.2/13 CBJ:88/13 NYR:88/13 PHI:88/13 NJD:88.1/14 VGK:89.5/13 WSH:90.3/13 UTA:91.1/13 OTT:91.9/14 DAL:92.2/12 MIN:92.8/13 EDM:93.5/15 NSH:94.7/15 SJS:94.8/15 MTL:96/13 CAR:97.3/14 BUF:98.4/13 FLA:98.9/14 COL:99.2/12 TBL:103.6/13 BOS:114.2/16",
+  "saveChars": 155284,
+  "storageChars": 155436
+ },
+ {
+  "t": "00:38:24",
+  "kind": "audit",
+  "where": "season 2 hub",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [
+   "d 1/20 Record 0-0-0 · 0 pts Strength 84 Cap space $-1.2M Your roster has 16 players, 1 ov"
+  ],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 2,
+  "tinyText": 9,
+  "tinyTextSample": [
+   "9px div.mt-0.5.truncate.text-[9px] \"David Pastrnak leads them at 92\"",
+   "9px div.mt-0.5.truncate.text-[9px] \"Roster full at 15. Cut or trade someone first.\"",
+   "9px div.mt-0.5.truncate.text-[9px] \"Move salary or the owner will\"",
+   "9px div.mt-0.5.truncate.text-[9px] \"0-0 with 20 rounds to play\""
+  ],
+  "text10": 15
+ },
+ {
+  "t": "00:38:24",
+  "kind": "s2hub",
+  "text": "NHL Front Office A roster snapshot. Original simulation ratings. Sixteen teams, one Cup. Boston Bruins 2027-28 · Round 1/20 Record 0-0-0 · 0 pts Strength 84 Cap space $-1.2M Your roster has 16 players, 1 over this simulation's limit of 15. Waive one player before you play. Waivers keep the usual dead money costs. Open roster 🏛️ OWNERSHIP Trust 85 Make the playoffs. Ownership thinks this roster belongs there. 👔 ROSTER 16 under contract David Pastrnak leads them at 92 💼 FREE AGENCY -$1.2M over Roster full at 15. Cut or trade someone first. 🤝 TRADES -$1.2M to shed Move salary or the owner will 🏟️ PLAY Round 1 of 20 0-0 with 20 rounds to play 📊 STANDINGS #6 in the East Inside the top 8 with 20 to play 📋 STAFF 5 of 5 jobs filled +0.93 team strength from the bench ✍️ RE-SIGN DESK 3 deals end this summer 3 still waiting on you 🎟️ DRAFT PICKS 2 picks in 2027 6 picks over 3 drafts 🔁 TRADE DESK 15 rounds to the deadline Players, picks and retained salary 🏛️ The new mandate: Make the playoffs. Ownership thinks this roster belongs there. 📋 The re-sign desk: 1 kept, 0 gone. 📋 You left 1 deal open, so your staff settled it by its own rule. 👋 Ian Cole retires. 👋 Brent Burns retires. Abandon franchise and restart NHL Front Office: Hockey GM Simulator Take over an NHL franchise from a curated roster snapshot. New games use original estimates from 2024-25 and 2025-26 regular-season inputs, with limited evidence marked. Forward ratings measure offensive production; defensemen and goalies use qualified proxies. Potential, contracts and future events are simulated. Work the salary"
+ },
+ {
+  "t": "00:38:24",
+  "kind": "tiles",
+  "label": "s2",
+  "tiles": [
+   "ROSTER 16 under contract David Pastrnak leads them at 92",
+   "FREE AGENCY -$1.2M over Roster full at 15. Cut or trade someone first.",
+   "TRADES -$1.2M to shed Move salary or the owner will",
+   "PLAY Round 1 of 20 0-0 with 20 rounds to play",
+   "STANDINGS #6 in the East Inside the top 8 with 20 to play",
+   "STAFF 5 of 5 jobs filled +0.93 team strength from the bench",
+   "RE-SIGN DESK 3 deals end this summer 3 still waiting on you",
+   "DRAFT PICKS 2 picks in 2027 6 picks over 3 drafts",
+   "TRADE DESK 15 rounds to the deadline Players, picks and retained salar"
+  ]
+ },
+ {
+  "t": "00:38:25",
+  "kind": "audit",
+  "where": "s2 tile 0 ROSTER 16 under contract David",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [
+   "d 1/20 Record 0-0-0 · 0 pts Strength 84 Cap space $-1.2M Your roster has 16 players, 1 ov"
+  ],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 3,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:38:25",
+  "kind": "panel",
+  "label": "s2",
+  "tile": "ROSTER 16 under contract David Pastrnak ",
+  "text": "NHL Front Office A roster snapshot. Original simulation ratings. Sixteen teams, one Cup. Boston Bruins 2027-28 · Round 1/20 Record 0-0-0 · 0 pts Strength 84 Cap space $-1.2M Your roster has 16 players, 1 over this simulation's limit of 15. Waive one player before you play. Waivers keep the usual dead money costs. 🏛️ OWNERSHIP Trust 85 Make the playoffs. Ownership thinks this roster belongs there. Hub Roster 🏛️ The new mandate: Make the playoffs. Ownership thinks this roster belongs there. 📋 The re-sign desk: 1 kept, 0 gone. 📋 You left 1 deal open, so your staff settled it by its own rule. 👋 Ian Cole retires. 👋 Brent Burns retires. Choose simulation contributors Cap hit $114.2M of the $113M ceiling Cap figures as of September 2026 OVR, potential and contracts are simulation values. The player list stays at its roster snapshot. Opening estimates use 2024-25 and 2025-26 regular-season"
+ },
+ {
+  "t": "00:38:26",
+  "kind": "audit",
+  "where": "s2 tile 1 FREE AGENCY -$1.2M over Roster",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [
+   "d 1/20 Record 0-0-0 · 0 pts Strength 84 Cap space $-1.2M Your roster has 16 players, 1 ov",
+   " 👋 Brent Burns retires. Free agents (cap space $-1.2M). A man you waived waits until ne"
+  ],
+  "tinyTap": [
+   {
+    "el": "button.rounded-full.bg-primary.px-2.5 \"Sign\"",
+    "w": 42,
+    "h": 20
+   },
+   {
+    "el": "button.rounded-full.bg-primary.px-2.5 \"Sign\"",
+    "w": 42,
+    "h": 20
+   },
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 3,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:38:26",
+  "kind": "panel",
+  "label": "s2",
+  "tile": "FREE AGENCY -$1.2M over Roster full at 1",
+  "text": "NHL Front Office A roster snapshot. Original simulation ratings. Sixteen teams, one Cup. Boston Bruins 2027-28 · Round 1/20 Record 0-0-0 · 0 pts Strength 84 Cap space $-1.2M Your roster has 16 players, 1 over this simulation's limit of 15. Waive one player before you play. Waivers keep the usual dead money costs. Open roster 🏛️ OWNERSHIP Trust 85 Make the playoffs. Ownership thinks this roster belongs there. Hub Free agency 🏛️ The new mandate: Make the playoffs. Ownership thinks this roster belongs there. 📋 The re-sign desk: 1 kept, 0 gone. 📋 You left 1 deal open, so your staff settled it by its own rule. 👋 Ian Cole retires. 👋 Brent Burns retires. Free agents (cap space $-1.2M). A man you waived waits until next season. Roster full at 15. Cut or trade someone first. Aleks Byfield D · 30y · wants $1.9M 74 Sign Kevin Lankinen G · 32y · wants $0.8M Opening estimate 72: save-rate proxy"
+ },
+ {
+  "t": "00:38:28",
+  "kind": "audit",
+  "where": "s2 tile 2 TRADES -$1.2M to shed Move sal",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [
+   "d 1/20 Record 0-0-0 · 0 pts Strength 84 Cap space $-1.2M Your roster has 16 players, 1 ov"
+  ],
+  "tinyTap": [
+   {
+    "el": "button.rounded-full.border.px-2 \"BUF\"",
+    "w": 38,
+    "h": 21
+   },
+   {
+    "el": "button.rounded-full.border.px-2 \"DET\"",
+    "w": 38,
+    "h": 21
+   },
+   {
+    "el": "button.rounded-full.border.px-2 \"FLA\"",
+    "w": 37,
+    "h": 21
+   },
+   {
+    "el": "button.rounded-full.border.px-2 \"MTL\"",
+    "w": 40,
+    "h": 21
+   },
+   {
+    "el": "button.rounded-full.border.px-2 \"OTT\"",
+    "w": 40,
+    "h": 21
+   },
+   {
+    "el": "button.rounded-full.border.px-2 \"TBL\"",
+    "w": 38,
+    "h": 21
+   },
+   {
+    "el": "button.rounded-full.border.px-2 \"TOR\"",
+    "w": 40,
+    "h": 21
+   },
+   {
+    "el": "button.rounded-full.border.px-2 \"CAR\"",
+    "w": 39,
+    "h": 21
+   }
+  ],
+  "tap44": 4,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:38:28",
+  "kind": "panel",
+  "label": "s2",
+  "tile": "TRADES -$1.2M to shed Move salary or the",
+  "text": "NHL Front Office A roster snapshot. Original simulation ratings. Sixteen teams, one Cup. Boston Bruins 2027-28 · Round 1/20 Record 0-0-0 · 0 pts Strength 84 Cap space $-1.2M Your roster has 16 players, 1 over this simulation's limit of 15. Waive one player before you play. Waivers keep the usual dead money costs. Open roster 🏛️ OWNERSHIP Trust 85 Make the playoffs. Ownership thinks this roster belongs there. Hub Trades 🏛️ The new mandate: Make the playoffs. Ownership thinks this roster belongs there. 📋 The re-sign desk: 1 kept, 0 gone. 📋 You left 1 deal open, so your staff settled it by its own rule. 👋 Ian Cole retires. 👋 Brent Burns retires. Trade deadline: the break after round 15 is the last chance, and deals shut once round 16 is played. Packages with picks and retained salary are on the Trade desk box. 🔍 Trade Finder Pick one of your players and shop him. Only deals the AI ge"
+ },
+ {
+  "t": "00:38:29",
+  "kind": "audit",
+  "where": "s2 tile 3 PLAY Round 1 of 20 0-0 with 20",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [
+   "d 1/20 Record 0-0-0 · 0 pts Strength 84 Cap space $-1.2M Your roster has 16 players, 1 ov"
+  ],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 4,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:38:29",
+  "kind": "panel",
+  "label": "s2",
+  "tile": "PLAY Round 1 of 20 0-0 with 20 rounds to",
+  "text": "NHL Front Office A roster snapshot. Original simulation ratings. Sixteen teams, one Cup. Boston Bruins 2027-28 · Round 1/20 Record 0-0-0 · 0 pts Strength 84 Cap space $-1.2M Your roster has 16 players, 1 over this simulation's limit of 15. Waive one player before you play. Waivers keep the usual dead money costs. Open roster 🏛️ OWNERSHIP Trust 85 Make the playoffs. Ownership thinks this roster belongs there. Hub Play 🏛️ The new mandate: Make the playoffs. Ownership thinks this roster belongs there. 📋 The re-sign desk: 1 kept, 0 gone. 📋 You left 1 deal open, so your staff settled it by its own rule. 👋 Ian Cole retires. 👋 Brent Burns retires. Each round simulates a stretch of games across the league. OT losses still earn a point. Play Round 1 Top three per division plus two wild cards per conference make the divisional bracket. Every round is best-of-7. Abandon franchise and restart "
+ },
+ {
+  "t": "00:38:30",
+  "kind": "audit",
+  "where": "s2 tile 4 STANDINGS #6 in the East Insid",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [
+   "d 1/20 Record 0-0-0 · 0 pts Strength 84 Cap space $-1.2M Your roster has 16 players, 1 ov"
+  ],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 3,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:38:30",
+  "kind": "panel",
+  "label": "s2",
+  "tile": "STANDINGS #6 in the East Inside the top ",
+  "text": "NHL Front Office A roster snapshot. Original simulation ratings. Sixteen teams, one Cup. Boston Bruins 2027-28 · Round 1/20 Record 0-0-0 · 0 pts Strength 84 Cap space $-1.2M Your roster has 16 players, 1 over this simulation's limit of 15. Waive one player before you play. Waivers keep the usual dead money costs. Open roster 🏛️ OWNERSHIP Trust 85 Make the playoffs. Ownership thinks this roster belongs there. Hub Standings 🏛️ The new mandate: Make the playoffs. Ownership thinks this roster belongs there. 📋 The re-sign desk: 1 kept, 0 gone. 📋 You left 1 deal open, so your staff settled it by its own rule. 👋 Ian Cole retires. 👋 Brent Burns retires. ATLANTIC 1. Tampa Bay Lightning 0-0-0 · 0 2. Montreal Canadiens 0-0-0 · 0 3. Toronto Maple Leafs 0-0-0 · 0 4. Boston Bruins 0-0-0 · 0 5. Buffalo Sabres 0-0-0 · 0 6. Detroit Red Wings 0-0-0 · 0 7. Ottawa Senators 0-0-0 · 0 8. Florida Panther"
+ },
+ {
+  "t": "00:38:31",
+  "kind": "audit",
+  "where": "s2 tile 5 STAFF 5 of 5 jobs filled +0.93",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [
+   "d 1/20 Record 0-0-0 · 0 pts Strength 84 Cap space $-1.2M Your roster has 16 players, 1 ov"
+  ],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 3,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:38:31",
+  "kind": "panel",
+  "label": "s2",
+  "tile": "STAFF 5 of 5 jobs filled +0.93 team stre",
+  "text": "NHL Front Office A roster snapshot. Original simulation ratings. Sixteen teams, one Cup. Boston Bruins 2027-28 · Round 1/20 Record 0-0-0 · 0 pts Strength 84 Cap space $-1.2M Your roster has 16 players, 1 over this simulation's limit of 15. Waive one player before you play. Waivers keep the usual dead money costs. Open roster 🏛️ OWNERSHIP Trust 85 Make the playoffs. Ownership thinks this roster belongs there. Hub Staff Ownership gives the staff desk $8.00M each summer for fees and pay offs. Wages are paid outside the cap. The special teams assistant counts at 20 percent, because this game has no power play of its own. STAFF · $8.00M TO SPEND · 121K A ROUND ON THE DESK ? 📋 Head coach · your call Fenwick Hathersage Level 5 · 68k a round ⚡ Special teams Zebulon Lindqvist Level 3 · 19k a round 🥅 Goalies Silas Dunwoody Level 5 · 14k a round 🔎 Scouting Leopold Quarmby Level 3 · 9k a round \ud83e"
+ },
+ {
+  "t": "00:38:33",
+  "kind": "audit",
+  "where": "s2 tile 6 RE-SIGN DESK 3 deals end this ",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [
+   "d 1/20 Record 0-0-0 · 0 pts Strength 84 Cap space $-1.2M Your roster has 16 players, 1 ov"
+  ],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 4,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:38:33",
+  "kind": "panel",
+  "label": "s2",
+  "tile": "RE-SIGN DESK 3 deals end this summer 3 s",
+  "text": "NHL Front Office A roster snapshot. Original simulation ratings. Sixteen teams, one Cup. Boston Bruins 2027-28 · Round 1/20 Record 0-0-0 · 0 pts Strength 84 Cap space $-1.2M Your roster has 16 players, 1 over this simulation's limit of 15. Waive one player before you play. Waivers keep the usual dead money costs. Open roster 🏛️ OWNERSHIP Trust 85 Make the playoffs. Ownership thinks this roster belongs there. Hub Re-sign desk Re-sign desk 3 still waiting on you. David Pastrnak W 92 overall, age 31 Asks $11.4M for 2 seasons Free agent Hampus Lindholm D 82 overall, age 33 Asks $5.5M for 1 season Free agent Elias Lindholm C 81 overall, age 32 Asks $5.6M for 2 seasons Free agent Decide any time this season. Anyone you leave open is settled by your staff's own rule when the summer starts, never by a coin flip. The money is this game's own figures, not real contracts. The rules are each league"
+ },
+ {
+  "t": "00:38:34",
+  "kind": "audit",
+  "where": "s2 tile 7 DRAFT PICKS 2 picks in 2027 6 ",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [
+   "d 1/20 Record 0-0-0 · 0 pts Strength 84 Cap space $-1.2M Your roster has 16 players, 1 ov"
+  ],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 3,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:38:34",
+  "kind": "panel",
+  "label": "s2",
+  "tile": "DRAFT PICKS 2 picks in 2027 6 picks over",
+  "text": "NHL Front Office A roster snapshot. Original simulation ratings. Sixteen teams, one Cup. Boston Bruins 2027-28 · Round 1/20 Record 0-0-0 · 0 pts Strength 84 Cap space $-1.2M Your roster has 16 players, 1 over this simulation's limit of 15. Waive one player before you play. Waivers keep the usual dead money costs. Open roster 🏛️ OWNERSHIP Trust 85 Make the playoffs. Ownership thinks this roster belongs there. Hub Draft picks DRAFT CAPITAL 6 picks, 3 firsts Trade deadline after round 15. 15 rounds to go. 2027 (this year) 1st 2nd 2028 1st 2nd 2029 1st 2nd The limit of two lottery wins in five years is not modelled. The real draft runs seven rounds. This game drafts two, so the ledger carries two. The lottery is in the rules, but draft night here is the game's own short draft: you pick first in each batch, then the other clubs go in reverse standings. 🏛️ The new mandate: Make the playoffs."
+ },
+ {
+  "t": "00:38:35",
+  "kind": "audit",
+  "where": "s2 tile 8 TRADE DESK 15 rounds to the de",
+  "overflowX": 0,
+  "wide": [],
+  "leaks": [
+   "d 1/20 Record 0-0-0 · 0 pts Strength 84 Cap space $-1.2M Your roster has 16 players, 1 ov"
+  ],
+  "tinyTap": [
+   {
+    "el": "button.inline-flex.items-center.gap-1.5 \"Abandon franchise and restart\"",
+    "w": 179,
+    "h": 17
+   }
+  ],
+  "tap44": 45,
+  "tinyText": 0,
+  "tinyTextSample": [],
+  "text10": 0
+ },
+ {
+  "t": "00:38:35",
+  "kind": "panel",
+  "label": "s2",
+  "tile": "TRADE DESK 15 rounds to the deadline Pla",
+  "text": "NHL Front Office A roster snapshot. Original simulation ratings. Sixteen teams, one Cup. Boston Bruins 2027-28 · Round 1/20 Record 0-0-0 · 0 pts Strength 84 Cap space $-1.2M Your roster has 16 players, 1 over this simulation's limit of 15. Waive one player before you play. Waivers keep the usual dead money costs. Open roster 🏛️ OWNERSHIP Trust 85 Make the playoffs. Ownership thinks this roster belongs there. Hub Trade desk Deal with Anaheim Ducks (holding) Buffalo Sabres (holding) Carolina Hurricanes (holding) Columbus Blue Jackets (holding) Calgary Flames (holding) Chicago Blackhawks (holding) Colorado Avalanche (holding) Dallas Stars (holding) Detroit Red Wings (holding) Edmonton Oilers (holding) Florida Panthers (holding) Los Angeles Kings (holding) Minnesota Wild (holding) Montreal Canadiens (holding) New Jersey Devils (holding) Nashville Predators (holding) New York Islanders (hold"
+ },
+ {
+  "t": "00:38:40",
+  "kind": "STUCK",
+  "label": "s2",
+  "presses": 0,
+  "disabled": [
+   "Play Round 1"
+  ],
+  "buttons": [
+   "Open roster",
+   "Hub",
+   "Play Round 1",
+   "Abandon franchise and restart"
+  ],
+  "text": "NHL Front Office A roster snapshot. Original simulation ratings. Sixteen teams, one Cup. Boston Bruins 2027-28 · Round 1/20 Record 0-0-0 · 0 pts Strength 84 Cap space $-1.2M Your roster has 16 players, 1 over this simulation's limit of 15. Waive one player before you play. Waivers keep the usual dead money costs. Open roster 🏛️ OWNERSHIP Trust 85 Make the playoffs. Ownership thinks this roster belongs there. Hub Play 🏛️ The new mandate: Make the playoffs. Ownership thinks this roster belongs there. 📋 The re-sign desk: 1 kept, 0 gone. 📋 You left 1 deal open, so your staff settled it by its own rule. 👋 Ian Cole retires. 👋 Brent Burns retires. Each round simulates a stretch of games across the league. OT losses still earn a point. Play Round 1 Top three per division plus two wild cards per conference make the divisional bracket. Every round is best-of-7. Abandon franchise and restart "
+ },
+ {
+  "t": "00:38:40",
+  "kind": "season",
+  "part": "s2",
+  "presses": 0,
+  "end": "stuck"
+ },
+ {
+  "t": "00:38:43",
+  "kind": "reload",
+  "same": true,
+  "beforeReload": "NHL Front Office A roster snapshot. Original simulation ratings. Sixteen teams, one Cup. Boston Bruins 2027-28 · Round 1/20 Record 0-0-0 · 0 pts Strength 84 Cap space $-1.2M Your roster has 16 players, 1 over this simulation's limit of 15. Waive one player before you play. Waivers keep the usual dea",
+  "after": "NHL Front Office A roster snapshot. Original simulation ratings. Sixteen teams, one Cup. Boston Bruins 2027-28 · Round 1/20 Record 0-0-0 · 0 pts Strength 84 Cap space $-1.2M Your roster has 16 players, 1 over this simulation's limit of 15. Waive one player before you play. Waivers keep the usual dea"
+ },
+ {
+  "t": "00:38:43",
+  "kind": "save",
+  "bytes": 155284
+ },
+ {
+  "t": "00:38:45",
+  "kind": "half",
+  "text": "NHL Front Office A roster snapshot. Original simulation ratings. Sixteen teams, one Cup. We couldn't open this save. Pick a team to start a new franchise. Your old save stays here until you pick a team or delete it. Delete unusable save Take over an NHL front office A curated roster snapshot with original simulation ratings. Work under the hard cap, chase points over an 80 game season, then the divisional bracket: sixteen teams, four best-of-7 rounds, one Cup. Saves automatically. Boston Bruins ",
+  "buttons": [
+   "Delete unusable save",
+   "Boston Bruins Eastern",
+   "Buffalo Sabres Eastern",
+   "Detroit Red Wings Eastern",
+   "Florida Panthers Eastern",
+   "Montreal Canadiens Eastern",
+   "Ottawa Senators Eastern",
+   "Tampa Bay Lightning Eastern",
+   "Toronto Maple Leafs Eastern",
+   "Carolina Hurricanes Eastern"
+  ]
+ },
+ {
+  "t": "00:38:48",
+  "kind": "draft-no-class",
+  "text": "NHL Front Office A roster snapshot. Original simulation ratings. Sixteen teams, one Cup. We couldn't open this save. Pick a team to start a new franchise. Your old save stays here until you pick a team or delete it. Delete unusable save Take over an NHL front office A curated roster snapshot with original simulation ratings. Work under the hard cap, chase points over an 80 game season, then the divisional bracket: sixteen teams, four best-of-7 rounds, one Cup. Saves automatically. Boston Bruins ",
+  "buttons": [
+   "Delete unusable save",
+   "Boston Bruins Eastern",
+   "Buffalo Sabres Eastern",
+   "Detroit Red Wings Eastern",
+   "Florida Panthers Eastern",
+   "Montreal Canadiens Eastern",
+   "Ottawa Senators Eastern",
+   "Tampa Bay Lightning Eastern",
+   "Toronto Maple Leafs Eastern",
+   "Carolina Hurricanes Eastern"
+  ]
+ },
+ {
+  "t": "00:38:48",
+  "kind": "done",
+  "secs": 86
+ }
+]

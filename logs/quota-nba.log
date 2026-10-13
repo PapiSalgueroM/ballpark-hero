@@ -1,0 +1,15 @@
+{"t":"00:37:24","kind":"help","open":false}
+{"t":"00:37:24","kind":"quota","freeChars":5234375,"usedChars":56}
+{"t":"00:37:24","kind":"filled","filler":4934375,"headroom":300000}
+{"t":"00:37:26","kind":"started","saveChars":120805,"text":"NBA Front Office Curated rosters, original ratings, simulated contracts. The play-in is waiting for your mistakes. Denver Nuggets 2026 · Round 1/20 Record 0-0 Strength 85 Cap room $-101.6M Current tax est. $140.3M 🏛️ OWNERSHIP Trust 63 Make the play"}
+{"t":"00:37:27","kind":"press","pressed":"Play Round 1","saveChars":174587,"warningOnScreen":false}
+{"t":"00:37:28","kind":"press","pressed":"Play Round 2","saveChars":175856,"warningOnScreen":false}
+{"t":"00:37:29","kind":"press","pressed":"Play Round 3","saveChars":177905,"warningOnScreen":false}
+{"t":"00:37:30","kind":"press","pressed":"Play Round 4","saveChars":179064,"warningOnScreen":false}
+{"t":"00:37:31","kind":"press","pressed":"Play Round 5","saveChars":180204,"warningOnScreen":false}
+{"t":"00:37:32","kind":"press","pressed":"Play Round 6","saveChars":180817,"warningOnScreen":false}
+{"t":"00:37:32","kind":"press","pressed":"Play Round 7","saveChars":181554,"warningOnScreen":false}
+{"t":"00:37:33","kind":"press","pressed":"Play Round 8","saveChars":181930,"warningOnScreen":false}
+{"t":"00:37:34","kind":"press","pressed":"Play Round 9","saveChars":182147,"warningOnScreen":false}
+{"t":"00:37:37","kind":"reload","lastPressed":"Play Round 9","before":"NBA Front Office Curated rosters, original ratings, simulated contracts. The play-in is waiting for your mistakes. Denver Nuggets 2026 · Round 10/20 Record 22-14 Strength 85 Cap room $-109.6M Current tax est. $189.6M 🏛️ OWNERSHIP Trust 63 Make the playoffs an","after":"NBA Front Office Curated rosters, original ratings, simula...
+WALK FINISHED quota nba
