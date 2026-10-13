@@ -1,0 +1,3 @@
+#!serve
+#!playwright
+walk: ENGINES=chromium node .rc/x/walkRun.mjs
