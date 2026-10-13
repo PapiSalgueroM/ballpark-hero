@@ -1,0 +1,23 @@
+runEach: 21 harnesses
+simLiveIndexability exit=1 0s | Node.js v24.21.0
+simCollegeGridKey exit=1 5s | simCollegeGridKey: NOTHING WAS CHECKED.
+simSeasonVerdict exit=1 0s | Node.js v24.21.0
+simSoccerGridTiers exit=1 3s | simSoccerGridTiers: the pool did not load, which is itself worth investigating
+simTactics exit=1 0s | Node.js v24.21.0
+simWhoAmIAccuracy exit=1 1s | SUPABASE UNREACHABLE. NOTHING WAS CHECKED.
+simBracketMoment exit=1 15s | 1 FAILURES (by section {"3":1}) || FAIL: the browser did not load, so the page was never measured: Cannot find module '/home/claude/.npm-global/lib/node_modules/playwright/index.js' imported from / 1 FAILURES (by section {"3":1})
+simNascarChainSpans exit=1 18s | Node.js v24.21.0 || FAIL: 25 starting drivers have no span at all and the run ends on the first guess: Dale Earnhardt, Jeff Gordon, Jimmie Johnson, Richard Petty, Dale Earnhardt Jr
+simCbbPrograms exit=1 0s | simCbbPrograms: FAIL. The cbb_programs table was unreachable (Offline harness blocked fetch to https://flawuiqbvjobmkfkauhw.supabase.co) and NOTHING WAS CHECKED. || simCbbPrograms: FAIL. The cbb_programs table was unreachable (Offline harness blocked fetch to https://flawuiqbvjobmkfkauhw.supabase.co) and NOTHING WAS CHECKED
+simWorldXiDefensiveMids exit=1 0s | SUPABASE UNREACHABLE OR POOL TOO SMALL. NOTHING WAS CHECKED.
+simChainFailClosed exit=1 0s | Node.js v24.21.0
+simWindow2026Integration exit=1 5s | Node.js v24.21.0
+simLeaderboardCache exit=1 0s | Node.js v24.21.0
+simRarityPools exit=1 42s | 2) each pool matches what the database independently says || FAIL: club-dortmund: the pool came back empty, so nothing was checked for it / FAIL: club-atletico: the pool came back empty, so nothing was checked for it
+simPlayerBingoPool exit=1 3s | SUPABASE UNREACHABLE OR POOL TOO SMALL. NOTHING WAS CHECKED.
+simResultPillComparison exit=1 0s | Node.js v24.21.0
+simVictoryMoment exit=1 1s | Node.js v24.21.0
+simWindow2026PremierLeague exit=1 5s | SUPABASE unreachable (Error: Offline harness blocked fetch to https://flawuiqbvjobmkfkauhw.supabase.co) for player_market_values?select=club&year=eq.2026&club=eq.Crystal%20Palace&limit=1 after 3 attem
+simCareerLeagueSeasons exit=1 46s | simCareerLeagueSeasons: 7 failures (sections c) || FAIL [c]: career 217235: from 2026-27 it plays differently from origin/main (first at season 2047 Napoli) / FAIL [c]: career 321964: from 2026-27 it plays differently from origin/main (first at season 2040 Tigres UANL)
+simGuessFinish exit=1 46s | simGuessFinish: 9 failure(s). || FAIL: control unkeyed did not turn red: keeps a different game that arrives already finished settled / FAIL: control noclear did not turn red: forgets the game at the menu
+simFootleKitNumbers exit=SIGKILL 1500s | [SIM_OFFLINE_BLOCK] database fetch https://flawuiqbvjobmkfkauhw.supabase.co
+runEach: done, 21 of 21 exited non zero
