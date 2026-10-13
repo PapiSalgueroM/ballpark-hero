@@ -97,7 +97,14 @@ const TMP = fs.mkdtempSync(path.join(os.tmpdir(), 'r1327-fairness-'));
 let failures = 0;
 let SECTION = '0';
 const failedSections = new Set();
-const fail = m => { failures += 1; failedSections.add(SECTION); if (failures <= 80) console.error(`  FAIL (section ${SECTION}): ${m}`); };
+const perSection = new Map();
+const fail = m => {
+  failures += 1; failedSections.add(SECTION);
+  const n = (perSection.get(SECTION) || 0) + 1;
+  perSection.set(SECTION, n);
+  if (n <= 14) console.error(`  FAIL (section ${SECTION}): ${m}`);
+  else if (n === 15) console.error(`  FAIL (section ${SECTION}): ... further failures in this section counted, not printed`);
+};
 const r3 = v => Math.round(v * 1000) / 1000;
 
 /* ─── the controls ─────────────────────────────────────────────────────── */
@@ -149,7 +156,7 @@ const MARKS = [
     '$1 globalThis.__r1327Ran = (globalThis.__r1327Ran || 0) + 1;'],
   [/(\nfunction generateNewsArticles\(s: CareerState, season: SeasonRecord, totalGoals: number, totalApps: number\): NewsArticle\[\] \{)/,
     '$1 globalThis.__r1327Ran = (globalThis.__r1327Ran || 0) + 1;'],
-  [/(\n  const eligible = templates\.filter\(t => t\.check\(\)\);)/, '\n  globalThis.__r1327Templates = templates;$1'],
+  [/(\n  const eligible = templates\.filter\(t => t\.check\(\)\);)/, '\n  globalThis.__r1327Templates = templates;$1\n  globalThis.__r1327Seen?.(templates, eligible);'],
 ];
 function mark(source) {
   let out = source;
@@ -370,10 +377,23 @@ assert.equal(E.projectLeagueApps(99, 1, '', 0).max, FULL_SEASON, 'the top of the
 console.log(`Driving the fleet: ${N} ordinary, ${N} elite and ${Math.ceil(N * 0.5)} loyal careers through the real engine`);
 const fleet = [];
 let crashes = 0;
+/* While the fleet plays, every paper reports which stories qualified: a fair
+   draw of one story prints story i with chance w_i over the qualifying
+   weights, so `expectedPrints` is what each story should have printed. */
+const expectedPrints = new Array(TEMPLATES.length).fill(0);
+const qualified = new Array(TEMPLATES.length).fill(0);
+let tableMismatch = 0;
+globalThis.__r1327Seen = (templates, eligible) => {
+  if (templates.length !== TEMPLATES.length || templates.some((t, i) => t.weight !== TEMPLATES[i].weight)) { tableMismatch += 1; return; }
+  const W = eligible.reduce((a, t) => a + t.weight, 0);
+  for (const t of eligible) { const i = templates.indexOf(t); qualified[i] += 1; expectedPrints[i] += t.weight / W; }
+};
 for (const [seed, mode] of fleetSeeds()) {
   try { fleet.push(driveFleetCareer(E, seed, mode)); }
   catch (err) { crashes += 1; if (crashes <= 2) console.error(`   ${mode} ${seed} crashed: ${err && err.stack}`); }
 }
+globalThis.__r1327Seen = undefined;
+if (tableMismatch) throw new Error(`the story table read off the source disagrees with the engine's in ${tableMismatch} papers`);
 const allBatches = fleet.flatMap(c => c.batches);
 const allPapers = fleet.flatMap(c => c.papers);
 console.log(`   ${fleet.length} careers, ${fleet.reduce((a, c) => a + c.playing, 0)} playing seasons, ${allBatches.length} batches, ${allPapers.length} papers, ${crashes} crashes`);
@@ -477,11 +497,15 @@ const paperCase = () => {
     if (i >= 0) printed.set(i, (printed.get(i) || 0) + 1);
     if (a.headline.includes('Is Officially BACK')) redemption += 1;
   }
-  const lightPrinted = TEMPLATES.map((t, i) => [t, printed.get(i) || 0]).filter(([t]) => t.weight < 1);
-  const silent = lightPrinted.filter(([, n]) => n === 0);
-  console.log(`   the fleet's ${allPapers.length} papers printed ${lightPrinted.filter(([, n]) => n > 0).length} of the ${lightPrinted.length} stories under weight 1; REDEMPTION ${redemption} times`);
-  console.log(`   under weight 1: ${lightPrinted.map(([t, n]) => `${t.fragment.slice(0, 28)} ${t.weight}:${n}`).join('; ')}`);
-  for (const [t] of silent) fail(`the story "${t.fragment}" (weight ${t.weight}) never printed in the fleet`);
+  /* A story under weight 1 whose fair share of the fleet's papers is 10 or
+     more must print at least once (a Poisson count of 10 is 0 about once in
+     22,000); the rest are reported with how often they even qualified. */
+  const light = TEMPLATES.map((t, i) => ({ t, n: printed.get(i) || 0, q: qualified[i], e: expectedPrints[i] })).filter(x => x.t.weight < 1);
+  const seenLight = light.reduce((a, x) => a + x.n, 0), dueLight = light.reduce((a, x) => a + x.e, 0);
+  console.log(`   the fleet's ${allPapers.length} papers printed ${light.filter(x => x.n > 0).length} of the ${light.length} stories under weight 1, ${seenLight} prints against a fair ${r3(dueLight)}; REDEMPTION ${redemption} times`);
+  console.log(`   under weight 1 (weight printed/fair/qualified): ${light.map(x => `${x.t.fragment.slice(0, 24)} ${x.t.weight} ${x.n}/${r3(x.e)}/${x.q}`).join('; ')}`);
+  for (const x of light) if (x.e >= 10 && x.n === 0) fail(`the story "${x.t.fragment}" (weight ${x.t.weight}) qualified in ${x.q} papers with a fair share of ${r3(x.e)} prints and never printed`);
+  if (dueLight > 50 && (seenLight / dueLight < 0.8 || seenLight / dueLight > 1.2)) fail(`the stories under weight 1 printed ${seenLight} times against a fair ${r3(dueLight)}`);
 }
 
 /* ─── 3. keyed ─────────────────────────────────────────────────────────── */

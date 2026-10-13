@@ -264,10 +264,11 @@ const CONTROLS = {
     note: 'event 221 is back to one button',
     breaks: '5',
   },
+  /* Round 1327: the deck takes careerEventDeck.ts's pick, whose story rule is this line. */
   sharedbatch: {
-    file: 'src/lib/soccerCareerEngine.ts',
-    from: '    if (drawnKeys.has(key)) continue;',
-    to: '    if (false && drawnKeys.has(key)) continue;',
+    file: 'src/lib/careerEventDeck.ts',
+    from: '    pool = pool.filter(e => ledgerKey(e) !== key);',
+    to: '    pool = pool.filter(e => e !== pick);',
     note: 'the draw can take two events of one story into the same batch',
     breaks: '2',
   },
@@ -285,10 +286,11 @@ const CONTROLS = {
     note: 'the twenty new events are never offered, the catalog is back to its old size',
     breaks: '4',
   },
+  /* Round 1327: the count is drawn from the deck's keyed stream. */
   flood: {
     file: 'src/lib/soccerCareerEngine.ts',
-    from: '  const count = rand(2, 4);',
-    to: '  const count = rand(4, 6);',
+    from: '  const count = 2 + Math.floor(rng() * 3);',
+    to: '  const count = 4 + Math.floor(rng() * 3);',
     note: 'every batch draws 4 to 6 events instead of 2 to 4',
     breaks: '4',
   },

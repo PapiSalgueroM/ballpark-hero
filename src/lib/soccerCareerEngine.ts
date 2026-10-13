@@ -177,6 +177,9 @@ export {
   confederationOf, nationStrength, fifaRankOf, hasPublishedRank,
   tournamentForYear,
 } from "./soccerInternational";
+/* Round 1327: the event deck and the paper draw from keyed streams, and the deck's pick is the shared one. */
+import { takeFresh } from "./careerEventDeck";
+import { keyedRng } from "./keyedRng";
 
 export interface ClubData {
   id: string;
@@ -2388,7 +2391,7 @@ function tryTriggerMoralDilemma(s: CareerState): boolean {
   // This is checked once per season advance, so at most one dilemma fires per
   // season here, matching "1-2 per season max" in practice, since a rivalry
   // or other event can occasionally also land the same season.
-  // ~20% chance per season after age 20. Over a long career, the pool of 12
+  // ~20% chance per season after age 20. Over a long career, the pool of 24
   // dilemmas can repeat once exhausted so drama doesn't dry up late in a save.
   // The mafia arc and a Ballon d'Or snub jump the queue: they are follow-ups
   // the player is waiting on, not random flavor.
@@ -2560,10 +2563,6 @@ export function pickAcrossLeagues(candidates: ClubData[]): ClubData {
   }
   return chosen.clubs[Math.floor(Math.random() * chosen.clubs.length)];
 }
-const pickN = <T,>(arr: T[], n: number): T[] => {
-  const shuffled = [...arr].sort(() => Math.random() - 0.5);
-  return shuffled.slice(0, n);
-};
 
 /* ─── Club helpers ─── */
 export function getClubsByTier(clubs: ClubData[], tier: number): ClubData[] {
@@ -6234,9 +6233,19 @@ function generateNewsArticles(s: CareerState, season: SeasonRecord, totalGoals: 
   const eligible = templates.filter(t => t.check());
   if (eligible.length === 0) return personalGoalMilestoneNews(out, s, season, NEWSPAPERS[0]);
 
-  const count = out.length === 0 && eligible.length >= 2 && Math.random() < 0.5 ? 2 : 1;
-  const shuffled = eligible.sort(() => Math.random() - 0.5).sort((a, b) => b.weight - a.weight);
-  for (const t of shuffled.slice(0, count)) out.push(t.gen());
+  /* Round 1327: the stories are drawn by weight, without replacement, from a stream keyed to this career and this
+     season, so a weight is a chance and not a rank. Before, the shuffle was sorted by weight: a story under weight 1
+     printed only when no weight 1 story qualified, and a second tab printed another paper. The story bodies still
+     draw their details from Math.random. */
+  const rng = keyedRng(`${soccerDeckIdentity(s)}|${season.year}|news`);
+  const count = out.length === 0 && eligible.length >= 2 && rng() < 0.5 ? 2 : 1;
+  const pool = [...eligible];
+  for (let n = 0; n < count && pool.length > 0; n += 1) {
+    let r = rng() * pool.reduce((sum, t) => sum + t.weight, 0);
+    let at = pool.length - 1;
+    for (let i = 0; i < pool.length; i += 1) { if (r < pool[i].weight) { at = i; break; } r -= pool[i].weight; }
+    out.push(pool.splice(at, 1)[0].gen());
+  }
   return personalGoalMilestoneNews(out, s, season, NEWSPAPERS[0]);
 }
 
@@ -6638,8 +6647,28 @@ export function isEventOnCooldown(s: CareerState, e: RandomEvent, season: number
   return season - last <= eventCooldown(e);
 }
 
+/* ─── Round 1327: a fair draw on a keyed stream ───
+   The deck used to shuffle with a sort on Math.random, which is not a fair
+   shuffle: the cards near the front of the catalog came up about 1.6 times as
+   often as they should and the last tenth about 0.6 times. It now takes the
+   shared pick of careerEventDeck.ts, one uniform choice per card, from a
+   stream keyed to the career and the season, so the same career deals the
+   same batch in any tab. The ledger is handed in as null because the filter
+   in generateRandomEvents has already held out soccer's per category
+   cooldowns; takeFresh still never takes two cards of one story.
+   scripts/simSoccerDeckFairness.mjs measures it. */
+export function soccerDeckIdentity(state: CareerState): string {
+  return `${state.playerName}|${state.era}|${state.nationality}|${state.position}`;
+}
+
+export function drawEventBatch(eligible: RandomEvent[], key: string): RandomEvent[] {
+  const rng = keyedRng(key);
+  const count = 2 + Math.floor(rng() * 3);
+  return takeFresh(eligible, count, null, 0, 0, [], rng);
+}
+
 /* ─── Generate 2-4 random events for a season ─── */
-function generateRandomEvents(state: CareerState): RandomEvent[] {
+export function generateRandomEvents(state: CareerState): RandomEvent[] {
   if (state.age < 17) return [];
   const all = getAllEvents(state);
   const season = eventSeasonIndex(state);
@@ -6678,20 +6707,7 @@ function generateRandomEvents(state: CareerState): RandomEvent[] {
     if (e.id === 40 && state.popularity < 55) return false; // Movie role
     return true;
   });
-  const count = rand(2, 4);
-  const shuffled = [...eligible].sort(() => Math.random() - 0.5);
-  /* Round 725: the first `count` of the shuffle, skipping a second event
-     from a story already drawn this batch. Events without a story have
-     unique keys, so for them this is exactly the old slice. */
-  const picked: RandomEvent[] = [];
-  const drawnKeys = new Set<string>();
-  for (const e of shuffled) {
-    if (picked.length >= count) break;
-    const key = eventLedgerKey(e);
-    if (drawnKeys.has(key)) continue;
-    drawnKeys.add(key);
-    picked.push(e);
-  }
+  const picked = drawEventBatch(eligible, `${soccerDeckIdentity(state)}|${season}|deck`);
   // Round 49: identity beats (personality reveal, agent signing) always show up
   // the season they become due instead of losing the random draw.
   for (const pid of getPriorityLifeEventIds(state)) {
