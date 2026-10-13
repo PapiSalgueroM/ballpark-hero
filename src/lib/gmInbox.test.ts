@@ -11,6 +11,7 @@ import type { GmEventDef, GmInboxMessage } from './gmInbox';
 import { onCooldown } from './careerEventDeck';
 import { gmChoiceLabel } from './gmInbox';
 import type { GmChoiceDef, GmFxRegistry, GmInboxBinding } from './gmInbox';
+import { gmCardSafe } from './gmInbox';
 
 interface Desk extends GmInboxHost {
   trust: number; fans: number; cash: number; year: number; recruit: number;
@@ -625,5 +626,87 @@ describe('gmInbox Round 1332: the effect registry', () => {
     expect(gmPackProblems(withChoice({ form: { who: 'coach', v: 1 } }), FX_REG).join()).toMatch(/not a target/);
     expect(gmPackProblems(withChoice({ board: Number.POSITIVE_INFINITY }), FX_REG).join()).toMatch(/finite/);
     expect(gmPackProblems(FX_TOY, FX_REG)).toEqual([]);
+  });
+});
+
+/* ─── Round 1332: slots, tags and the person resolver ────────────────────── */
+
+interface SquadDesk extends Desk { realIds: number[]; keeperId: number }
+const squadDesk = (realIds: number[], keeperId = 1): SquadDesk => ({ ...desk(), realIds, keeperId });
+const SLOT_TOY: GmInboxPack = {
+  ...TOY, seat: 'slottoy', calendar: [{ id: 'a', label: 'A', emoji: 'A' }], span: { a: 10 }, cooldown: 0,
+  facts: { man: { kind: 'num', min: 1, max: 5, per: 'week' }, foe: { kind: 'num', min: 1, max: 9, per: 'week' } },
+  targets: { keeper: 'Your keeper' },
+  slots: { player: { fact: 'man', person: true }, opponent: { fact: 'foe' } },
+  events: [
+    { id: 'tagged', beat: 'a', from: 'Your assistant', emoji: 'x', text: '{player} was fined after a late night.', tag: 'conduct', subject: { fact: 'man' },
+      choices: [{ label: 'Back the fine', reply: 'Backed.', karma: 0, morale: -1 }, { label: 'Drop it', reply: 'Dropped.', karma: 0 }] },
+    { id: 'plain', beat: 'a', from: 'Your assistant', emoji: 'x', text: 'The {opponent} game is the big one.',
+      choices: [{ label: 'Talk it up', reply: 'Up.', karma: 1 }, { label: 'Say nothing', reply: 'Quiet.', karma: 0 }] },
+    { id: 'homekeeper', beat: 'a', from: 'Your assistant', emoji: 'x', text: 'Your keeper wants a few days with his family.', tag: 'private', subject: 'keeper',
+      choices: [{ label: 'Give him the days', reply: 'Go.', karma: 0, out: { who: 'keeper', weeks: 1 } }, { label: 'Not now', reply: 'No.', karma: 0 }] },
+  ],
+};
+const squadSeat = () => bindGmInbox<SquadDesk>(SLOT_TOY, {
+  moodOf: s => s.trust, setMood: (s, v) => { s.trust = v; }, addPopularity: () => undefined, addCash: () => undefined, yearOf: s => s.year,
+  setOut: (s, who, w) => { s.out[who] = (s.out[who] ?? 0) + w; },
+  person: (s, ref) => {
+    const id = 'role' in ref ? (ref.role === 'keeper' ? s.keeperId : NaN) : Number(ref.id);
+    return Number.isInteger(id) && id >= 1 && id <= 5 ? { name: `Player ${id}`, real: s.realIds.includes(id) } : null;
+  },
+});
+const ev = (id: string) => SLOT_TOY.events.find(e => e.id === id)!;
+
+describe('gmInbox Round 1332: slots, tags and the resolver', () => {
+  it('fills a person slot with the name the seat gives and a plain slot with the fact', () => {
+    const s = squadDesk([], 2);
+    const seat = squadSeat();
+    gmInboxWeek(s, seat, 'a', { man: 3, foe: 7 }, 0, () => 0);
+    gmInboxWeek(s, seat, 'a', { man: 3, foe: 7 }, 1, () => 0.5);
+    const texts = (s.phoneInbox ?? []).map(m => m.text);
+    expect(texts).toContain('Player 3 was fined after a late night.');
+    expect(texts).toContain('The 7 game is the big one.');
+    expect(texts.some(t => /[{}]/.test(t))).toBe(false);
+  });
+
+  it('holds a card whose slot has no value, or whose person slot names nobody', () => {
+    const s = squadDesk([]);
+    const seat = squadSeat();
+    expect(gmCardSafe(ev('plain'), s, seat, { man: 3 })).toBe(false);
+    expect(gmCardSafe(ev('plain'), s, seat, { man: 3, foe: '' })).toBe(false);
+    expect(gmCardSafe(ev('plain'), s, seat, { man: 3, foe: 4 })).toBe(true);
+    expect(gmCardSafe(ev('tagged'), s, seat, { man: 9 })).toBe(false);
+  });
+
+  it('holds a tagged card for a real man and deals it for a generated one', () => {
+    const seat = squadSeat();
+    expect(gmCardSafe(ev('tagged'), squadDesk([3]), seat, { man: 3 })).toBe(false);
+    expect(gmCardSafe(ev('tagged'), squadDesk([3]), seat, { man: 4 })).toBe(true);
+    expect(gmCardSafe(ev('homekeeper'), squadDesk([1], 1), seat, {})).toBe(false);
+    expect(gmCardSafe(ev('homekeeper'), squadDesk([1], 2), seat, {})).toBe(true);
+    const s = squadDesk([3]);
+    for (let w = 0; w < 6; w++) gmInboxWeek(s, seat, 'a', { man: 3, foe: 1 }, w, () => 0);
+    expect((s.phoneInbox ?? []).some(m => m.defId === 'tagged')).toBe(false);
+  });
+
+  it('a card with no slot and no tag never asks the seat anything', () => {
+    let asked = 0;
+    const seat = { ...squadSeat(), person: () => { asked++; return null; } };
+    expect(gmCardSafe(GM_INBOX_PACKS.nfl.events[0], squadDesk([]), seat, {})).toBe(true);
+    expect(gmCardSafe({ ...ev('plain'), text: 'No slot here.' }, squadDesk([]), seat, {})).toBe(true);
+    expect(asked).toBe(0);
+  });
+
+  it('refuses a pack that misuses a slot, a brace or a tag, and a seat with no resolver', () => {
+    const one = (e: Partial<GmEventDef>): GmInboxPack => ({ ...SLOT_TOY, events: [{ ...ev('plain'), ...e }] });
+    expect(gmPackProblems(one({ text: 'The {rival} game.' })).join()).toMatch(/not a declared slot/);
+    expect(gmPackProblems(one({ text: 'The {opponent game.' })).join()).toMatch(/brace outside a slot/);
+    expect(gmPackProblems(one({ from: 'Your {player}' })).join()).toMatch(/no slot is filled/);
+    expect(gmPackProblems(one({ tag: 'drama' as never })).join()).toMatch(/neither conduct nor private/);
+    expect(gmPackProblems({ ...SLOT_TOY, slots: { player: { fact: 'nobody' } } }).join()).toMatch(/does not declare/);
+    expect(gmPackProblems({ ...SLOT_TOY, facts: { ...SLOT_TOY.facts, star: { kind: 'bool', p: 0.5, per: 'week' } }, slots: { ...SLOT_TOY.slots, s: { fact: 'star' } } }).join()).toMatch(/yes or no/);
+    expect(gmPackProblems(SLOT_TOY)).toEqual([]);
+    expect(() => bindGmInbox<SquadDesk>(SLOT_TOY, { moodOf: s => s.trust, setMood: () => undefined, addPopularity: () => undefined, addCash: () => undefined, yearOf: s => s.year, setOut: () => undefined }))
+      .toThrow(/cannot say who anyone is/);
   });
 });

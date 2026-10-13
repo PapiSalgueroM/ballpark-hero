@@ -96,6 +96,18 @@
         neutral index is the option whose every effect is zero; an answer
         whose key the seat lost is refused; a key with no words prints raw;
         bind refuses each registry breakage.
+     12) LEGAL. Every pack the kit knows plus the FX packs, against the real
+        names of simGmInbox's eight roster files and Club Manager's five
+        baked rosters: no quote mark, no first person in a wording, every
+        voice a role, no real name anywhere, a brace only as a declared slot
+        in a wording, no person slot in quote marks or by a speech verb, no
+        wording that prints an effect (built in or registered), and every
+        card whose words read as conduct or a private life tagged, but for
+        LEGAL_BASELINE (the GM cards flagged today, each with its word).
+        Then FX_CONDUCT on 100 ten season desks whose squads are about half
+        real: every tagged card dealt and every answer to one lands on
+        generated men only, tagged cards were held for real men, and no
+        dealt text keeps a brace.
 
    No board binds gmInbox yet (the importers are its own test, the packs, the
    panel and two harnesses), so every drive here is a synthetic desk: each
@@ -144,6 +156,16 @@
      fxneutral  gmNeutralIndex ignores fx, so an option that moves only a
                 registered key reads as neutral (and an expiring card could
                 be settled on it); section 11 fails.
+     conductreal the tag branch of gmCardSafe always passes; section 12
+                fails (a tagged card dealt about a real man).
+     slotopen   a slot with no value no longer holds its card; section 12
+                fails (a dealt text keeps a brace).
+     quoteslot  FX_CONDUCT gains a wording with its person slot before a
+                speech verb (in memory); section 12 fails.
+     untagged   FX_CONDUCT's curfew card loses its tag (in memory); section
+                12 fails.
+     rosterword a real roster name goes into an FX_CONDUCT text (in
+                memory); section 12 fails.
 
    Runtime about 85 to 100 s on a runner, three requests at a time (section 2
    reloads all 84 rows since the review's fix pass; it was 40 s with seed 1
@@ -168,7 +190,7 @@ const RECORD = process.env.SIM_EVENT_DECK_RECORD || '';
 const SHARD = process.env.SIM_EVENT_DECK_SHARD || '';
 const REPLAY_FILE = path.join(ROOT, 'scripts/data/gmInboxReplay.json');
 const CONTROLS = ['replay', 'weightoff', 'weightkeep', 'story', 'rest', 'failopen', 'restfall', 'expirefall', 'textrng', 'seasonweek', 'expireoff', 'expirefx', 'settledoff', 'panelexpiry', 'neutral', 'heavy',
-  'fxsilent', 'fxdrop', 'fxunbound', 'fxneutral'];
+  'fxsilent', 'fxdrop', 'fxunbound', 'fxneutral', 'conductreal', 'slotopen', 'quoteslot', 'untagged', 'rosterword'];
 if (CONTROL && !CONTROLS.includes(CONTROL)) { console.error(`EVENT_DECK_CONTROL=${CONTROL} is not a control this kit knows`); process.exit(2); }
 if (RECORD && (CONTROL || SHARD)) { console.error('a recording runs the whole replay with no control, refusing'); process.exit(2); }
 const red = new Set();
@@ -214,6 +236,8 @@ const ENGINE_CONTROLS = {
   fxdrop: ['    if (v) reg[k].apply(s, v, who);', '    /* fxdrop control */'],
   fxunbound: ['if (!def) { out.push(`${e.id}: "${c.label}" moves ${k}, which the seat has not registered`); continue; }', 'if (!def) continue; /* fxunbound control */'],
   fxneutral: ['    && !gmFxMoves(c));', '    ); /* fxneutral control */'],
+  conductreal: ['  return people.every(ref => who(ref)?.real === false);', '  return true; /* conductreal control */'],
+  slotopen: ['    if (!sl || !named(v)) return false;', '    if (!sl) return false; /* slotopen control */'],
 };
 let engineSrc = null;
 if (ENGINE_CONTROLS[CONTROL]) {
@@ -1186,7 +1210,232 @@ const FX_REGISTRY = fxPack('fx_registry', [
   else ok(`bind refuses ${breaks.map(b => b[0]).join(', ')}`);
 }
 
+/* ═══ 12. LEGAL: no real man is quoted, named in a voice or given conduct ═══ */
+
+console.log('12) Legal: every pack narrated in roles, slots only in words, and a tagged card never lands on a real man');
+/* FX_CONDUCT: tagged cards about a role or a fact's man, person slots, and
+   effects aimed at a role, beside plain cards with a person slot and a
+   plain slot. Placeholder people only ("Player 7"), never shipped. */
+const FX_CONDUCT_FX = {
+  ban: { label: 'suspended', fmt: 'weeks', who: true, apply: (s, v, who) => { s.ban = { ...(s.ban ?? {}), [who]: ((s.ban ?? {})[who] ?? 0) + v }; }, read: (s, who) => (s.ban ?? {})[who] ?? 0 },
+  pot: { label: 'Squad fine pot', fmt: 'money', apply: (s, v) => { s.pot = Math.round(((s.pot ?? 0) + v) * 1000) / 1000; }, read: s => s.pot ?? 0 },
+};
+const FX_CONDUCT = fxPack('fx_conduct', [
+  fxCard('c_curfew', { tag: 'conduct', subject: 'striker', text: 'Your striker broke the team curfew on Tuesday night.',
+    choices: [fxCh('Suspend him', { fx: { ban: { who: 'striker', v: 1 } } }), fxCh('Fine the whole squad', { fx: { pot: 0.2 } }), fxCh('Let it go')] }),
+  fxCard('c_fined', { tag: 'conduct', subject: { fact: 'man' }, text: '{player} was fined by the club after a late night out.',
+    texts: ['The club fined {player} for a late night out.'], choices: [fxCh('Back the fine', { morale: -1 }), fxCh('Drop it')] }),
+  fxCard('p_home', { tag: 'private', subject: 'keeper', text: 'Your keeper has asked for a few days at home with his family.',
+    choices: [fxCh('Give him the days', { out: { who: 'keeper', weeks: 1 } }), fxCh('Not this week', { rating: { who: 'keeper', delta: -1 } }), fxCh('Talk it over later')] }),
+  fxCard('p_grief', { tag: 'private', subject: { fact: 'man' }, text: '{player} lost someone close this week and the room knows it.',
+    choices: [fxCh('Give him space', { morale: 1 }), fxCh('Leave it with the staff')] }),
+  fxCard('n_rival', { text: 'The game against {opponent} is the one the whole room wants.', choices: [fxCh('Talk it up', { popularity: 1 }), fxCh('Keep it low key')] }),
+  fxCard('n_form', { text: '{player} is in the best form of his season.', choices: [fxCh('Praise him', { morale: 1 }), fxCh('Say nothing')] }),
+], { span: { a: 20 }, facts: { man: { kind: 'num', min: 1, max: 13, per: 'week' }, rival: { kind: 'num', min: 1, max: 20, per: 'week' } },
+  slots: { player: { fact: 'man', person: true }, opponent: { fact: 'rival' } }, subjectRest: 2 });
+/* The fixture's squad: twelve placeholder men a desk, about half of them
+   marked real (as a real footballer would be in a binding), and the three
+   roles handed to a different man each season. Id 13 is nobody. */
+const conductSquad = desk => Array.from({ length: 13 }, (_, i) => i > 0 && keyedRng(`simEventDeck|squad|${desk}|${i}`)() < 0.5);
+const conductPerson = (s, ref) => {
+  const roles = Object.keys(FX_CONDUCT.targets);
+  let id;
+  if ('role' in ref) {
+    const r = roles.indexOf(ref.role);
+    if (r < 0) return null;
+    id = 1 + ((s.year * 3 + r * 5 + s.desk) % 12);
+  } else id = Number(ref.id);
+  if (!(Number.isInteger(id) && id >= 1 && id <= 12)) return null;
+  return { name: `Player ${id}`, real: s.real[id] };
+};
+const SPEECH = 'said|says|told|tells|asked|asks|claims|insists|admits|reckons|wants|demands|vows|promised|promises';
+/* simGmInbox's ALLEGATION and CONDUCT, copied (append only), plus the
+   brief's conduct words; and the private list (a man's own life off the
+   pitch: never a playing injury, which is football and stays untagged). */
+const CONDUCT_WORDS = [
+  /\b(casino|gambling debts?|drunk|drink driv\w*|crashed his|arrested|having an affair|cheating on|missed training|hungover|assaulted)\b/i,
+  /transfer request|bust-up|bust up|agents? for|leaked|reject(ed|s)? a|refus(ed|es)|demand(ed|s)|storm(ed|s) out|fell out|falling out|row over|walked out|went on strike|downed tools|sulk|tantrum|forced? (a|his) (move|exit)|handed in/i,
+  /\b(fined|suspended|disciplin\w*|curfew|police|court|arrest\w*)\b/i,
+];
+const PRIVATE_WORDS = /\b(family|homesick|faith|pray\w*|fasting|religio\w*|illness|mental health|grief|funeral|bereave\w*|wedding|divorce|pregnan\w*)\b/i;
+/* The GM cards the untagged scan flags today, each with the word it matched
+   (decision 2 of the brief): the packs are frozen by the replay, so they sit
+   on this ratchet; an entry that no longer matches must leave. The round
+   that binds the AFL pack owes afl_go_home first: tag it private with a
+   generated youngster, or reword it, and re-record the replay by the lead's
+   leave. */
+const LEGAL_BASELINE = { 'afl/afl_go_home': 'homesick', 'nba/nba_trade_demand': 'leaked' };
+{
+  if (CONTROL === 'quoteslot') {
+    const e = FX_CONDUCT.events.find(x => x.id === 'n_form');
+    if (!e || e.texts) { console.error('quoteslot control: n_form is not there without wordings, refusing to run'); process.exit(2); }
+    e.texts = ['{player} told the room he is staying put.'];
+  }
+  if (CONTROL === 'untagged') {
+    const e = FX_CONDUCT.events.find(x => x.id === 'c_curfew');
+    if (!e || e.tag !== 'conduct') { console.error('untagged control: c_curfew is not a conduct card, refusing to run'); process.exit(2); }
+    delete e.tag;
+  }
+  /* The real people a desk could hold: simGmInbox's eight roster files and
+     Club Manager's baked rosters (full names only). */
+  const deaccent = s => s.normalize('NFD').replace(/[̀-ͯ]/g, '');
+  const REAL = new Set();
+  for (const rel of ['src/data/frontOfficePlayers.ts', 'src/data/conquestDataNba.ts', 'src/data/mlbFoPlayers.ts', 'src/data/mlbFoRosters2026.ts',
+    'src/data/nhlFoPlayers.ts', 'src/data/cfbHLPlayers.ts', 'src/data/ufcFighters.ts', 'src/data/aflGoalKickers.ts']) {
+    for (const m of readSrc(rel).matchAll(/name:\s*['"]([A-Z][^'"]{1,40} [^'"]{2,40})['"]/g)) REAL.add(deaccent(m[1]));
+  }
+  for (const rel of ['src/data/clubManagerRosters.ts', 'src/data/clubManagerEra2005.ts', 'src/data/clubManagerEra2010.ts', 'src/data/clubManagerEra2015.ts', 'src/data/clubManagerEra2020.ts']) {
+    for (const m of readSrc(rel).matchAll(/\bn:\s*['"]([^'"]{2,40} [^'"]{2,40})['"]/g)) REAL.add(deaccent(m[1]));
+  }
+  if (CONTROL === 'rosterword') {
+    const someone = [...REAL].find(n => /^[A-Z][a-z]+ [A-Z][a-z]+$/.test(n));
+    const e = FX_CONDUCT.events.find(x => x.id === 'n_form');
+    if (!someone || !e) { console.error('rosterword control: no real name or no n_form card, refusing to run'); process.exit(2); }
+    e.text = `${someone} is in the best form of his season.`;
+  }
+  /* Measured 2026-10-13: REAL_MEASURED full names (simGmInbox's eight files
+     gave 2,236 on 2026-10-03, Club Manager's five 8,240). The floor only
+     proves the harvest worked. */
+  const REAL_FLOOR = 8000;
+  if (REAL.size < REAL_FLOOR) fail(12, `only ${REAL.size} real names harvested (floor ${REAL_FLOOR}): the name scan would mean nothing`);
+  else ok(`${REAL.size} real names harvested from thirteen roster files`);
+  const QUOTE_MARK = /["“”]/;
+  const FIRST_PERSON = /\b(I|I'm|I am|I've|I'll|my|me|mine|we|we're|us|our|boss|gaffer)\b/;
+  const ROLE = /^(Your |His |A |The )[a-z]/;
+  const DEPARTMENTS = new Set(['Ownership', 'Team doctor', 'Ticket office', 'Marketing', 'Compliance office']);
+  const FX_OF = { fx_registry: FX_REGISTRY_DEF, fx_conduct: FX_CONDUCT_FX };
+  const scanned = { ...ALL_PACKS, fx_expire: FX_EXPIRE, fx_neutral: FX_NEUTRAL, fx_registry: FX_REGISTRY, fx_conduct: FX_CONDUCT };
+  const bad = [];
+  let strings = 0;
+  const flagged = {};
+  for (const [k, p] of Object.entries(scanned)) {
+    const reg = FX_OF[k] ?? {};
+    const slots = p.slots ?? {};
+    const people = Object.keys(slots).filter(n => slots[n].person);
+    const meterWords = [...Object.values(p.meters), 'Recruit interest', ...Object.values(reg).map(d => d.label)].map(w => w.toLowerCase());
+    const weekWords = Object.values(reg).filter(d => d.fmt === 'weeks').map(d => d.label.toLowerCase());
+    const printsEffect = t => {
+      const low = t.toLowerCase();
+      if (/\bout\s+\d+\s+weeks?\b/.test(low) || /\brating\s*[+-]\s*\d/.test(low)) return true;
+      if (weekWords.some(w => new RegExp(`\\b${w}\\s+\\d+\\s+weeks?\\b`).test(low))) return true;
+      return meterWords.some(w => {
+        for (let at = low.indexOf(w); at >= 0; at = low.indexOf(w, at + 1)) {
+          const after = low.slice(at + w.length, at + w.length + 8);
+          const before = low.slice(Math.max(0, at - 10), at);
+          if (/^\s*[+-]\s*\$?\d/.test(after) || /[+-]\s*\$?\d[\d.,]*\s*[a-z$]*\s*$/.test(before)) return true;
+        }
+        return false;
+      });
+    };
+    const lines = [['label', p.label], ...p.calendar.map(b => ['beat', b.label]), ...Object.values(p.targets).map(t => ['target', t])];
+    for (const e of p.events) {
+      const wordings = [e.text, ...(e.texts ?? [])];
+      for (const t of wordings) lines.push(['wording', t]);
+      lines.push(['from', e.from]);
+      for (const c of e.choices) lines.push(['option', c.label], ['reply', c.reply]);
+      if (!ROLE.test(e.from) && !DEPARTMENTS.has(e.from)) bad.push(`${k}/${e.id}: the voice "${e.from}" is not a role`);
+      for (const t of wordings) {
+        if (FIRST_PERSON.test(deaccent(t))) bad.push(`${k}/${e.id}: a wording speaks in the first person`);
+        if (printsEffect(t)) bad.push(`${k}/${e.id}: a wording prints an effect ("${t.slice(0, 50)}")`);
+        for (const n of t.matchAll(/\{(\w+)\}/g)) if (!slots[n[1]]) bad.push(`${k}/${e.id}: {${n[1]}} is not a declared slot`);
+        if (/[{}]/.test(t.replace(/\{(\w+)\}/g, ''))) bad.push(`${k}/${e.id}: a brace outside a slot`);
+        for (const n of people) {
+          const at = `\\{${n}\\}`;
+          if (new RegExp(`["“”][^"“”]*${at}[^"“”]*["“”]`).test(t)) bad.push(`${k}/${e.id}: the person slot {${n}} inside quote marks`);
+          if (new RegExp(`${at}(?:\\s+[\\w']+){0,2}\\s+(?:${SPEECH})\\b`, 'i').test(t) || new RegExp(`\\b(?:${SPEECH})\\s+${at}`, 'i').test(t)) bad.push(`${k}/${e.id}: the person slot {${n}} next to a speech verb`);
+        }
+      }
+      if (e.tag === undefined) {
+        const words = [...wordings, ...e.choices.flatMap(c => [c.label, c.reply])].join(' | ');
+        const hit = [...CONDUCT_WORDS, PRIVATE_WORDS].map(re => words.match(re)?.[0]).find(Boolean);
+        const key = `${k}/${e.id}`;
+        if (hit) {
+          flagged[key] = hit.toLowerCase();
+          if (!LEGAL_BASELINE[key]) bad.push(`${key}: an untagged card about conduct or a private life ("${hit}"): tag it conduct or private`);
+        }
+      }
+    }
+    for (const [kind, s] of lines) {
+      strings++;
+      if (QUOTE_MARK.test(s)) bad.push(`${k} ${kind} "${String(s).slice(0, 40)}": a quote mark`);
+      if (kind !== 'wording' && /[{}]/.test(s)) bad.push(`${k} ${kind} "${String(s).slice(0, 40)}": a brace where no slot is filled`);
+      const flat = deaccent(String(s));
+      const name = [...REAL].find(n => flat.includes(n));
+      if (name) bad.push(`${k} ${kind} "${String(s).slice(0, 40)}": a real name (${name})`);
+    }
+  }
+  for (const [key, word] of Object.entries(LEGAL_BASELINE)) if (flagged[key] !== word) bad.push(`LEGAL_BASELINE ${key} (${word}) no longer matches${flagged[key] ? ` (it matches ${flagged[key]})` : ''}: take it off or rewrite it`);
+  for (const b of bad.slice(0, 10)) console.error(`     ${b}`);
+  if (strings < 400) fail(12, `only ${strings} strings scanned: nothing was tested`);
+  if (bad.length) fail(12, `${bad.length} legal findings over ${Object.keys(scanned).length} packs`);
+  else ok(`${strings} strings over ${Object.keys(scanned).length} packs: no quote, no first person, every voice a role, no real name, slots only where declared, no person slot by a speech verb, no wording prints an effect, every conduct or private card tagged (baseline: ${Object.keys(LEGAL_BASELINE).join(', ')})`);
+}
+/* The fleet: FX_CONDUCT on 100 ten season desks of twenty weeks, about half
+   of each squad real and the roles changing hands every season. Every
+   tagged card dealt, and every answer to one, must land on generated men
+   only (checked here with the fixture's own resolver, not the engine's);
+   at least one tagged card must have been held for a real man; no dealt
+   text may keep a brace. Desks answer every open card the week it lands,
+   so a role is the same man at the deal and at the answer. */
+{
+  const seat = E.bindGmInbox(FX_CONDUCT, { ...BINDING, fx: FX_CONDUCT_FX, person: conductPerson });
+  const byId = new Map(FX_CONDUCT.events.map(e => [e.id, e]));
+  const refsOf = (e, facts) => {
+    const refs = [];
+    const slots = FX_CONDUCT.slots;
+    for (const t of [e.text, ...(e.texts ?? [])]) for (const n of t.matchAll(/\{(\w+)\}/g)) if (slots[n[1]]?.person) refs.push({ id: facts[slots[n[1]].fact] });
+    if (typeof e.subject === 'string') refs.push({ role: e.subject });
+    else if (e.subject) refs.push({ id: facts[e.subject.fact] });
+    return refs;
+  };
+  const choiceRefs = c => [...(c.out ? [{ role: c.out.who }] : []), ...(c.rating ? [{ role: c.rating.who }] : []),
+    ...Object.values(c.fx ?? {}).filter(v => typeof v !== 'number').map(v => ({ role: v.who }))];
+  const realHit = (s, refs) => refs.some(r => conductPerson(s, r)?.real !== false);
+  const f = { dealt: 0, tagged: 0, answered: 0, heldReal: 0, bad: [] };
+  for (let d = 0; d < 100; d++) {
+    const rng = keyedRng(`simEventDeck|conduct|${SEED}|${d}|deck`);
+    const fr = keyedRng(`simEventDeck|conduct|${SEED}|${d}|facts`);
+    const ar = keyedRng(`simEventDeck|conduct|${SEED}|${d}|answer`);
+    const s = { ...newDesk(), desk: d, real: conductSquad(d) };
+    for (let t = 0; t < SEASONS * 20; t++) {
+      s.year = 2030 + Math.floor(t / 20);
+      const facts = { man: 1 + Math.floor(fr() * 13) };
+      if (fr() < 0.7) facts.rival = `Club ${1 + Math.floor(fr() * 20)}`;
+      /* A tagged card the fixture says is about a real man must be held. */
+      for (const e of FX_CONDUCT.events) {
+        if (!e.tag) continue;
+        const allNamed = refsOf(e, facts).every(r => !('id' in r) || conductPerson(s, r) !== null);
+        if (allNamed && (realHit(s, refsOf(e, facts)) || e.choices.some(c => realHit(s, choiceRefs(c))))) {
+          if (E.gmCardSafe(e, s, seat, facts)) f.bad.push(`desk ${d} week ${t}: ${e.id} is about a real man and was not held`);
+          else f.heldReal++;
+        }
+      }
+      const got = E.gmInboxWeek(s, seat, 'a', facts, t, rng);
+      for (const m of got) {
+        f.dealt++;
+        if (/[{}]/.test(m.text)) f.bad.push(`desk ${d} week ${t}: ${m.id} reads "${m.text}"`);
+        const e = byId.get(m.defId);
+        if (!e.tag) continue;
+        f.tagged++;
+        if (realHit(s, refsOf(e, facts))) f.bad.push(`desk ${d} week ${t}: ${m.id} was dealt about a real man`);
+      }
+      for (const m of openOf(s)) {
+        const i = Math.floor(ar() * m.choices.length);
+        const e = byId.get(m.defId);
+        if (e.tag && realHit(s, choiceRefs(m.choices[i]))) f.bad.push(`desk ${d} week ${t}: answering ${m.id} lands on a real man`);
+        if (E.answerGmInbox(s, m.id, i, seat) !== null) f.answered++;
+      }
+    }
+  }
+  for (const b of f.bad.slice(0, 6)) console.error(`     ${b}`);
+  const line = `FX_CONDUCT on 100 ten season desks: ${f.dealt} cards dealt, ${f.tagged} of them tagged, ${f.answered} answered, ${f.heldReal} tagged cards held for a real man`;
+  if (f.bad.length) fail(12, `${f.bad.length} breaks: ${line}`);
+  else if (f.tagged < 200 || f.heldReal < 1 || f.answered < 500) fail(12, `${line}: too few to have tested it`);
+  else ok(`${line}; every tagged card and every answer to one landed on generated men only, no dealt text kept a brace`);
+}
+
 /* ═══ end ═══ */
+
 
 console.log('');
 console.log(`runtime ${secs()} s`);
