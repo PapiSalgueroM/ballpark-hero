@@ -41,13 +41,24 @@
  *            each point that is not the toast must not be a button, link,
  *            input, select, textarea, role button or focusable element, and at
  *            landing not the name heading. Every toast is printed with its
- *            words, size and what lay under it. BASE: at least one hit at 1280.
+ *            words, size, the step that raised it and what lay under it (and
+ *            where: the card, a dialog, the bar or the page). The drive waits
+ *            out a reveal instead of stopping, presses a loan and an extension
+ *            when offered, and buys one thing on the phone. A signing, a random
+ *            event, a transfer window and the phone purchase must each raise a
+ *            toast that is sampled, at every size, or the drive is a finding.
+ *            BASE: at least one hit at 1280.
  *   bytes    the same seeded career on the base build and on head (390 by
  *            844): Begin Career, then driven step by step (Next Year and Next
  *            Season presses, the cards' choices, one phone action), the save's
- *            bytes compared after EVERY step: equal.
- *            SOCCER_LANDING_CONTROL=seed plays the head arm on another seed:
- *            the byte check must go red (the walk prints CONTROL FIRED and
+ *            bytes compared after EVERY step: equal; a drive that never reached
+ *            three Next Seasons, a random event, a transfer window and a phone
+ *            purchase is a finding. Then every Soccer Career save
+ *            scripts/lib/realSaves.mjs builds (seeds 0 to 7) planted with no
+ *            fence key on head and base: equal after the mount and one press,
+ *            fenced on head only, no notice.
+ *            SOCCER_LANDING_CONTROL=seed plays the head arm on another seed and
+ *            opens each old save's neighbour on head: both comparisons must go red (CONTROL FIRED,
  *            exits 1; a control that changed nothing exits 2).
  *
  * Pictures of every section at every size go to RC_OUT (or
@@ -89,7 +100,7 @@ const ARMS = (process.env.SOCCER_LANDING_ARMS || (BASE_DIST ? 'head,base' : 'hea
 if (ARMS.includes('base') && !BASE_DIST) { console.error('the base arm needs SOCCER_LANDING_BASE_DIST (a plain build of the base commit)'); process.exit(2); }
 const SEED = pageSeedOf(import.meta.url, process.env.SOCCER_LANDING_SEED);
 const NAMES = ['Danny Okafor-Whitfield', 'Supercalifragilisticexpialidociouswinger'];
-const DRIVE_STEPS = Number(process.env.SOCCER_LANDING_STEPS || 24);
+const DRIVE_STEPS = Number(process.env.SOCCER_LANDING_STEPS || 40);
 console.log(`seed ${SEED}; arms ${ARMS.join(', ')}; sections ${SECTIONS.join(', ')}; sizes ${SIZES.map(s => s.join('x')).join(', ')}${CONTROL ? `; CONTROL ${CONTROL}` : ''}`);
 if (NAMES[1].length !== 40) { console.error(`the long name is ${NAMES[1].length} characters, not 40`); process.exit(2); }
 
@@ -201,7 +212,12 @@ function pageProbes() {
       if (!under) continue;
       const control = under.closest(INTERACTIVE);
       const heading = under.closest('main h1');
-      if (control) hits.push({ kind: 'control', what: (control.getAttribute('aria-label') || control.textContent || control.tagName).replace(/\s+/g, ' ').trim().slice(0, 50) });
+      /* Where the covered control lives, for whoever rules on it: a dialog,
+         the card being played (the next choice), the bar, or the page around. */
+      const where = control?.closest('[role="dialog"],[role="alertdialog"]') ? 'dialog'
+        : control?.closest('[data-career-action-bar]') ? 'bar'
+        : control?.closest('main [class*="md:order-2"]') ? 'card' : 'page';
+      if (control) hits.push({ kind: 'control', where, what: (control.getAttribute('aria-label') || control.textContent || control.tagName).replace(/\s+/g, ' ').trim().slice(0, 50) });
       else if (heading) hits.push({ kind: 'heading', what: (heading.textContent || '').replace(/\s+/g, ' ').trim().slice(0, 50) });
     }
     window.__toastAudit.push({ words: (li.textContent || '').replace(/\s+/g, ' ').trim().slice(0, 80), when, box: { x: Math.round(r.left), y: Math.round(r.top), w: Math.round(r.width), h: Math.round(r.height) }, scrollY: Math.round(scrollY), hits });
@@ -490,8 +506,8 @@ async function sectionRetire(ctx, arm, size) {
 /* One step: the bar's Next Year or Next Season on the hub, otherwise the
    card's own choice (an open dialog first, then the card area), preferring the
    words that move a career on. Clicked in the page, so nothing scrolls first. */
-function driveOne() {
-  const ADV = ['Sign contract', 'Review contract', 'Join Club', 'Continue at', 'Stay at', 'Continue', 'Accept', 'Next', 'Done', 'Confirm', 'Proceed'];
+function driveOne(prefer = []) {
+  const ADV = [...prefer, 'Sign contract', 'Review contract', 'Join Club', 'Continue at', 'Stay at', 'Continue', 'Accept', 'Next', 'Done', 'Confirm', 'Proceed'];
   const TILE = /data-(press-room-open|soccer-programme-open|squad-tile|career-mentor-tile|career-records-tile|season-ambition|preseason-plan|farewell-open|trophy-category|open-|career-utility|watch-week|week-by-week)/;
   const vis = b => { const r = b.getBoundingClientRect(); return r.width > 0 && r.height > 0 && !b.disabled; };
   const text = b => (b.textContent || '').replace(/\s+/g, ' ').trim();
@@ -513,54 +529,102 @@ function driveOne() {
   pick.click();
   return { phase, pressed: text(pick).slice(0, 40) };
 }
-async function drive(p, steps, onStep) {
+/* Drives a career. A step that finds nothing to press waits, up to about ten
+   seconds, before the drive gives up: a reveal (the Ballon d'Or list coming
+   in) holds its buttons back for a few seconds, and a drive that stopped there
+   never reached a random event, a transfer window or a third Next Season.
+   prefer(): words to press first this step (a loan, an extension), so the
+   drive reaches the toasts the default choices never raise. The phone is tried
+   on the first playing steps until one thing is bought. */
+async function drive(p, steps, onStep, prefer = () => []) {
   const kinds = new Set();
   let phoneDone = false;
+  let phoneTries = 0;
+  let nexts = 0;
   for (let i = 0; i < steps; i++) {
     if (!p.url().includes('/soccer-career')) { kinds.add(`left the page for ${p.url()}`); break; }
-    const step = await p.evaluate(driveOne).catch(e => ({ phase: null, pressed: null, error: String(e?.message ?? e).slice(0, 120) }));
+    const want = await prefer();
+    let step = null;
+    for (let wait = 0; wait < 10; wait++) {
+      step = await p.evaluate(driveOne, want).catch(e => ({ phase: null, pressed: null, error: String(e?.message ?? e).slice(0, 120) }));
+      if (step.error || step.pressed) break;
+      await p.waitForTimeout(1000);
+    }
     if (step.error) { kinds.add(`the page went away: ${step.error.slice(0, 80)}`); break; }
     await p.waitForTimeout(900);
     if (step.phase) kinds.add(step.phase);
+    if (/^Next (Year|Season)/.test(step.pressed ?? '')) nexts += 1;
     if (onStep) await onStep(`step ${i + 1} (${step.phase}: ${step.pressed})`);
-    if (!step.pressed) break;
-    if (!phoneDone && step.phase === 'playing') {
-      phoneDone = true;
+    if (!step.pressed) { kinds.add(`stopped: nothing to press on ${step.phase}`); break; }
+    if (!phoneDone && phoneTries < 3 && step.phase === 'playing') {
+      phoneTries += 1;
       const bought = await phonePurchase(p).catch(e => `the phone threw: ${String(e?.message ?? e).slice(0, 80)}`);
+      phoneDone = /^bought /.test(bought);
       kinds.add(`phone: ${bought}`);
       if (onStep) await onStep(`phone (${bought})`);
     }
   }
+  kinds.add(`${nexts} Next Year or Next Season presses`);
   return [...kinds];
 }
-/* One phone action: My Life, the first category, the first thing in it. */
+/* One phone action: My Life, then the categories in order until one holds a
+   thing that can be bought now (renting costs nothing, so the first does). The
+   phone is a dialog; its screens' back buttons start with "‹". */
 async function phonePurchase(p) {
-  const opened = await p.evaluate(() => { const b = document.querySelector('[data-career-utility="phone"]'); if (!b) return false; b.click(); return true; });
+  const opened = await p.evaluate(() => { const b = document.querySelector('[data-career-utility="phone"]'); if (!b || b.getBoundingClientRect().height === 0) return false; b.click(); return true; });
   if (!opened) return 'no phone button';
-  await p.waitForTimeout(600);
+  await p.waitForTimeout(700);
   const app = await p.evaluate(() => { const b = document.querySelector('[data-phone-app="shop"]'); if (!b) return false; b.click(); return true; });
   if (!app) return 'no My Life app';
-  await p.waitForTimeout(500);
+  await p.waitForTimeout(600);
   const picked = await p.evaluate(async () => {
-    const inPhone = () => (document.querySelector('[data-phone-back]') || document.querySelector('[data-phone-app]'))?.closest('.fixed') ?? null;
-    const buttons = () => [...(inPhone()?.querySelectorAll('button') ?? [])].filter(b => b.getBoundingClientRect().height > 0 && !b.hasAttribute('data-phone-back') && !/Put phone away/.test(b.textContent || ''));
-    const first = buttons()[0];
-    if (!first) return 'no category';
-    first.click();
-    await new Promise(r => setTimeout(r, 500));
-    const buy = buttons().find(b => /€|Buy|\$|£/.test(b.textContent || ''));
-    if (!buy) return 'no item to buy';
-    buy.click();
-    return (buy.textContent || '').replace(/\s+/g, ' ').trim().slice(0, 40);
+    const phone = () => [...document.querySelectorAll('[role="dialog"]')].find(d => [...d.querySelectorAll('button')].some(b => /Put phone away/.test(b.textContent || ''))) ?? null;
+    const text = b => (b.textContent || '').replace(/\s+/g, ' ').trim();
+    const buttons = () => [...(phone()?.querySelectorAll('button') ?? [])].filter(b => b.getBoundingClientRect().height > 0 && !/^‹/.test(text(b)) && !/Put phone away/.test(text(b)));
+    if (!phone()) return 'no phone dialog';
+    const cats = buttons().filter(b => /left to buy/.test(text(b)));
+    if (!cats.length) return `no category (${buttons().slice(0, 3).map(text).join(' | ').slice(0, 60)})`;
+    for (let c = 0; c < cats.length; c++) {
+      const cat = buttons().filter(b => /left to buy/.test(text(b)))[c];
+      if (!cat) break;
+      const label = text(cat);
+      cat.click();
+      await new Promise(r => setTimeout(r, 500));
+      const buy = buttons().find(b => !b.disabled && /^(€|Hire$)/.test(text(b)));
+      if (buy) { const what = text(buy); buy.click(); return `bought ${what} in ${label.slice(0, 24)}`; }
+      const back = [...(phone()?.querySelectorAll('button') ?? [])].find(b => /^‹/.test(text(b)));
+      back?.click();
+      await new Promise(r => setTimeout(r, 400));
+    }
+    return 'nothing can be bought now';
   });
-  await p.waitForTimeout(700);
-  await p.keyboard.press('Escape').catch(() => {});
+  await p.waitForTimeout(800);
   await p.evaluate(() => { const b = [...document.querySelectorAll('button')].find(x => /Put phone away/.test(x.textContent || '')); b?.click(); });
+  await p.waitForTimeout(300);
+  await p.keyboard.press('Escape').catch(() => {});
   await p.waitForTimeout(400);
   return picked;
 }
 
 /* ---------- toasts ---------- */
+/* The toast raising actions the brief lists, by the words of the toast or the
+   card the press was made on. Each toast is credited to the step that raised
+   it. REQUIRED kinds every driven career reaches (a signing, a random event, a
+   transfer window, the phone purchase): one not raised and sampled at a size
+   is a finding, so the audit can never go blind again the way it once saw only
+   "Signed with". The rest depend on the career and are listed, not judged. */
+const TOAST_KINDS = [
+  { kind: 'contract signing', test: t => /^Signed with /.test(t.words), required: true },
+  /* the personality card is one of the random event cards */
+  { kind: 'random event choice', test: t => t.phase === 'random_events', required: true },
+  { kind: 'transfer window choice', test: t => t.phase === 'transfer_window', required: true },
+  { kind: 'phone purchase', test: t => / is yours$/.test(t.words), required: true },
+  { kind: 'social media post', test: t => t.phase === 'social_media_action' },
+  { kind: 'moral dilemma', test: t => t.phase === 'moral_dilemma' },
+  { kind: 'loan', test: t => /^Off on loan to /.test(t.words) },
+  { kind: 'extension', test: t => /^Contract extended!/.test(t.words) },
+  { kind: 'Week by week refusal', test: t => /^📺 Nothing to watch/.test(t.words) },
+];
 async function sectionToasts(ctx, arm, size) {
   const p = await ctx.newPage();
   await plant(p, URLS[arm], {});
@@ -570,20 +634,43 @@ async function sectionToasts(ctx, arm, size) {
   await p.waitForTimeout(1200);
   await shot(p, `${arm}-${size}-toast-landing`);
   let shots = 0;
-  const kinds = await drive(p, DRIVE_STEPS, async () => {
-    if (shots < 6 && await p.locator('[data-sonner-toast]').count() > 0) { shots += 1; await shot(p, `${arm}-${size}-toast-${shots}`); }
-  });
+  let credited = 0;
+  const raisedAt = [];
+  const credit = async label => {
+    const seen = await p.evaluate(() => window.__toastSeen ?? []);
+    for (; credited < seen.length; credited++) raisedAt.push({ words: seen[credited], label, phase: (label.match(/\((\w+):/) ?? [])[1] ?? null });
+  };
+  /* A loan and an extension are pressed when offered, until each toast has shown. */
+  const prefer = async () => {
+    const seen = await p.evaluate(() => window.__toastSeen ?? []);
+    const want = [];
+    if (!seen.some(w => /^Off on loan to /.test(w))) want.push('Go on loan');
+    if (!seen.some(w => /^Contract extended!/.test(w))) want.push('Sign Extension');
+    return want;
+  };
+  const kinds = await drive(p, DRIVE_STEPS, async label => {
+    await credit(label);
+    if (shots < 8 && await p.locator('[data-sonner-toast]').count() > 0) { shots += 1; await shot(p, `${arm}-${size}-toast-${shots}`); }
+  }, prefer);
   await p.waitForTimeout(600);
+  await credit('after the drive');
   const audit = await p.evaluate(() => window.__toastAudit ?? []);
   const seenWords = await p.evaluate(() => window.__toastSeen ?? []);
-  console.log(`   ${audit.length} toast sample(s) over a drive through ${kinds.join(', ')}; toasts raised: ${JSON.stringify(seenWords)}`);
+  console.log(`   ${audit.length} toast sample(s) of ${seenWords.length} toast(s) over a drive through ${kinds.join(', ')}`);
   for (const w of new Set(seenWords)) if (!audit.some(t => t.words === w)) rec(arm, 'toasts', size, `"${w}" was raised but never sampled, so the audit is blind to it`);
   for (const t of audit) {
+    const at = raisedAt.find(r => r.words === t.words);
     const bad = t.hits.filter(h => h.kind === 'control' || (h.kind === 'heading' && /^Joined /.test(t.words)));
-    console.log(`     "${t.words}" ${t.when} at ${t.box.x},${t.box.y} ${t.box.w}x${t.box.h} (scrollY ${t.scrollY}): ${t.hits.length ? JSON.stringify([...new Set(t.hits.map(h => `${h.kind} ${h.what}`))]) : 'nothing under it'}`);
-    if (bad.length) rec(arm, 'toasts', size, `"${t.words}" (${t.when}) lies over ${JSON.stringify([...new Set(bad.map(h => `${h.kind} ${h.what}`))])}`);
+    console.log(`     "${t.words}" ${t.when} at ${t.box.x},${t.box.y} ${t.box.w}x${t.box.h} (scrollY ${t.scrollY}, ${at?.label ?? 'step unknown'}): ${t.hits.length ? JSON.stringify([...new Set(t.hits.map(h => `${h.kind}${h.where ? ` in the ${h.where}` : ''} ${h.what}`))]) : 'nothing under it'}`);
+    if (bad.length) rec(arm, 'toasts', size, `"${t.words}" (${t.when}, ${at?.label ?? 'step unknown'}) lies over ${JSON.stringify([...new Set(bad.map(h => `${h.kind}${h.where ? ` in the ${h.where}` : ''} ${h.what}`))])}`);
   }
-  if (!audit.length) note(`${arm} ${size}: no toast was raised at all`);
+  /* Coverage: which of the listed actions raised a toast that was sampled. */
+  const sampled = raisedAt.filter(r => audit.some(t => t.words === r.words));
+  for (const k of TOAST_KINDS) {
+    const n = sampled.filter(k.test).length;
+    console.log(`     coverage ${k.kind}: ${n} sampled${!n && !k.required ? ' (not raised on this career; listed, not judged)' : ''}`);
+    if (!n && k.required) rec(arm, 'drive', size, `the toast audit never raised and sampled a ${k.kind} toast (drive: ${kinds.join(', ')})`);
+  }
   await p.close();
   return audit;
 }
@@ -594,6 +681,7 @@ async function bytesArm(arm, seed) {
   const ctx = await newContext(390, 844, seed);
   const p = await ctx.newPage();
   const trail = [];
+  let kinds = [];
   try {
     await plant(p, URLS[arm], {});
     await openSoccer(p, URLS[arm]);
@@ -601,24 +689,47 @@ async function bytesArm(arm, seed) {
     await p.getByRole('button', { name: /Begin Career/ }).click({ timeout: 5000 });
     await p.waitForTimeout(1200);
     trail.push({ at: 'Begin Career', sha: sha(await saveRaw(p)) });
-    const kinds = await drive(p, DRIVE_STEPS, async label => { trail.push({ at: label, sha: sha(await saveRaw(p)) }); });
+    kinds = await drive(p, DRIVE_STEPS, async label => { trail.push({ at: label, sha: sha(await saveRaw(p)) }); });
     console.log(`   ${arm} on seed ${seed}: ${trail.length} saves through ${kinds.join(', ')}`);
   } finally {
     await ctx.close();
   }
-  return trail;
+  return { trail, kinds };
+}
+/* Old saves: every Soccer Career save scripts/lib/realSaves.mjs builds (seeds
+   0 to 7, the engine this round does not touch), planted with no fence key on
+   head and on the base, read after the mount write and after one press of the
+   bar's first button: the bytes equal, the head fenced, the base not, no
+   notice in a single tab. Under SOCCER_LANDING_CONTROL=seed the head arm opens
+   the next seed's save, so the comparison must go red. */
+const FENCE_KEY = 'dukb-fence:soccerCareerSave';
+async function fleetArm(arm, raw, seed) {
+  const ctx = await newContext(390, 844, seed);
+  const p = await ctx.newPage();
+  const read = () => p.evaluate(([k, f]) => ({ save: localStorage.getItem(k), fence: localStorage.getItem(f), notice: !!document.querySelector('[data-testid="save-moved-notice"]'), h1: (document.querySelector('main h1')?.textContent || '').trim() }), [KEY, FENCE_KEY]);
+  try {
+    await plant(p, URLS[arm], { [KEY]: raw });
+    await openSoccer(p, URLS[arm]);
+    const mount = await read();
+    const pressed = await p.evaluate(() => { const b = document.querySelector('[data-career-action-bar] button'); if (!b || b.getBoundingClientRect().height === 0 || b.disabled) return null; b.click(); return (b.textContent || '').replace(/\s+/g, ' ').trim(); });
+    await p.waitForTimeout(1500);
+    return { mount, pressed, after: await read() };
+  } finally {
+    await ctx.close();
+  }
 }
 let bytesRed = 0;
+let fleetRed = 0;
 async function sectionBytes() {
   if (!URLS.head || !URLS.base) { note('bytes needs both arms; not judged'); return; }
   console.log('== bytes (390x844)');
   const base = await bytesArm('base', SEED);
   const head = await bytesArm('head', CONTROL === 'seed' ? SEED + 1 : SEED);
-  const n = Math.max(base.length, head.length);
+  const n = Math.max(base.trail.length, head.trail.length);
   let same = 0;
   for (let i = 0; i < n; i++) {
-    const b = base[i];
-    const h = head[i];
+    const b = base.trail[i];
+    const h = head.trail[i];
     if (!b || !h || b.sha !== h.sha || b.at !== h.at) {
       bytesRed += 1;
       rec('head', 'bytes', '390x844', `the save parts from the base at ${h?.at ?? 'nothing'} (head ${h?.sha ?? 'none'}) against ${b?.at ?? 'nothing'} (base ${b?.sha ?? 'none'})`);
@@ -626,7 +737,46 @@ async function sectionBytes() {
     }
     same += 1;
   }
-  if (!bytesRed) ok(`bytes: ${same} saves equal to the base byte for byte, ${head.map(t => t.at.split(' (')[0]).length} steps`);
+  /* Decision 3's steps, each compared: three Next Seasons, a random event
+     choice, a transfer window choice and a phone action. A drive that missed
+     one proves less than it says, so that is a finding, never a note. */
+  const at = head.trail.map(t => t.at);
+  const reached = {
+    'three Next Seasons': at.filter(a => /: Next Season/.test(a)).length >= 3,
+    'a random event choice': at.some(a => /\(random_events: /.test(a)),
+    'a transfer window choice': at.some(a => /\(transfer_window: /.test(a)),
+    'a phone action': at.some(a => /^phone \(bought /.test(a)),
+  };
+  console.log(`   bytes reached: ${Object.entries(reached).map(([k, v]) => `${k} ${v ? 'yes' : 'NO'}`).join(', ')}`);
+  if (!CONTROL) for (const [k, v] of Object.entries(reached)) if (!v) rec('head', 'drive', '390x844', `the byte comparison never reached ${k} (head drive: ${head.kinds.join(', ')})`);
+  if (!bytesRed) ok(`bytes: ${same} saves equal to the base byte for byte, through ${head.kinds.join(', ')}`);
+
+  console.log('== bytes: old saves (realSaves, seeds 0 to 7, 390x844)');
+  const { buildRealSaves } = await import(pathToFileURL(path.join(ROOT, 'scripts', 'lib', 'realSaves.mjs')).href);
+  const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'soccerLandingFleet-'));
+  let saves;
+  try {
+    saves = (await buildRealSaves({ root: ROOT, tmpDir: tmp, seeds: [0, 1, 2, 3, 4, 5, 6, 7] })).fleet['/soccer-career'];
+  } finally {
+    fs.rmSync(tmp, { recursive: true, force: true });
+  }
+  if (!saves?.length) { rec('head', 'drive', '390x844', 'realSaves built no Soccer Career save'); return; }
+  let equal = 0;
+  for (let i = 0; i < saves.length; i++) {
+    const b = await fleetArm('base', saves[i], SEED + i);
+    const h = await fleetArm('head', saves[(CONTROL === 'seed' ? i + 1 : i) % saves.length], SEED + i);
+    const tag = `save ${i} (${JSON.parse(saves[i]).phase}, pressed "${h.pressed}")`;
+    const wrong = [];
+    if (h.mount.save !== b.mount.save) wrong.push('the bytes after the mount write differ');
+    if (h.after.save !== b.after.save) wrong.push('the bytes after one press differ');
+    if (h.mount.h1 !== b.mount.h1) wrong.push(`the hub names "${h.mount.h1}" on head and "${b.mount.h1}" on the base`);
+    if (h.mount.notice || h.after.notice) wrong.push('a notice showed in a single tab');
+    if (b.mount.fence !== null) wrong.push(`the base wrote a fence key (${b.mount.fence})`);
+    if (!(Number(h.mount.fence) >= 1)) wrong.push(`the head did not fence the old save at its first write (fence ${h.mount.fence})`);
+    console.log(`   ${tag}: ${wrong.length ? wrong.join('; ') : 'equal after the mount and after a press'}, fence ${h.mount.fence} to ${h.after.fence}`);
+    if (wrong.length) { fleetRed += 1; rec('head', 'bytes', '390x844', `old ${tag}: ${wrong.join('; ')}`); } else equal += 1;
+  }
+  if (!fleetRed) ok(`bytes: ${equal} of ${saves.length} old saves load to the same career on head and the base, and head fences each one`);
 }
 
 /* ---------- run ---------- */
@@ -681,8 +831,8 @@ if (ARMS.includes('head') && ARMS.includes('base') && SECTIONS.includes('bar')) 
 }
 if (CONTROL === 'seed') {
   if (!URLS.base) { console.log('control cannot run: SOCCER_LANDING_CONTROL=seed needs the base arm'); process.exit(2); }
-  if (bytesRed) { console.log(`CONTROL FIRED: SOCCER_LANDING_CONTROL=seed played head on seed ${SEED + 1} and the byte check went red`); process.exit(1); }
-  console.log('CONTROL DID NOT FIRE: another seed left every save equal to the base'); process.exit(2);
+  if (bytesRed && fleetRed) { console.log(`CONTROL FIRED: SOCCER_LANDING_CONTROL=seed played head on seed ${SEED + 1} and the byte check went red, and the old save comparison went red on ${fleetRed} save(s) given the next seed's save`); process.exit(1); }
+  console.log(`CONTROL DID NOT FIRE: the drive's byte check ${bytesRed ? 'went red' : 'stayed equal'} and the old save comparison ${fleetRed ? 'went red' : 'stayed equal'}; both must go red`); process.exit(2);
 }
 let red = 0;
 for (const [section, list] of found.head) { red += list.length; console.log(`  head ${section}: ${list.length} finding(s)`); }
@@ -694,6 +844,7 @@ if (ARMS.includes('base')) {
     else { red += 1; console.log(`  BLIND [${section}]: the base arm passed where it must fail (${n} finding(s)), so this section proves nothing`); }
   }
   if (found.base.has('walk')) { red += 1; console.log('  the base arm threw'); }
+  if (found.base.has('drive')) { red += 1; console.log('  the base arm drive fell short, so the base comparison proves less than it says'); }
 }
 if (!ARMS.includes('head')) {
   console.log(red ? `playSoccerLanding base arm: RED, ${red} section(s) blind` : 'playSoccerLanding base arm: every marked section sees the bug on the base');
@@ -701,4 +852,4 @@ if (!ARMS.includes('head')) {
 }
 if (!ARMS.includes('base') && !HEAD_ONLY) { console.log('playSoccerLanding: RED, no base arm (set SOCCER_LANDING_BASE_DIST); a head arm alone is not a proof'); process.exit(1); }
 if (red) { console.log(`playSoccerLanding: RED, ${red} finding(s)`); process.exit(1); }
-console.log(`playSoccerLanding: green at ${SIZES.map(s => s.join('x')).join(', ')} (${SECTIONS.join(', ')})${ARMS.includes('base') ? ', every marked section red on the base' : ', HEAD ONLY'}`);
+console.log(`playSoccerLanding: green at ${SIZES.map(s => s.join('x')).join(', ')} (also ${EXTRA.filter(e => SECTIONS.includes(e.section)).map(e => `${e.section} ${e.w}x${e.h}`).join(", ") || "no extra sizes"}; ${SECTIONS.join(', ')})${ARMS.includes('base') ? ', every marked section red on the base' : ', HEAD ONLY'}`);
