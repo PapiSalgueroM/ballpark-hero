@@ -32,6 +32,8 @@ export { buildDraftOrder, draftRulesFor, draftSeasonKey, draftSlots, nextSlot, o
 export type { DraftClubRow, DraftSeason, EarnedSlot, SavedDraftOrder } from './gmDraftOrder';
 export { lotteryNight, lotteryNightRule, ordinal } from './gmLotteryNight';
 export type { LotteryHelpBlock, LotteryNightView } from './gmLotteryNight';
+export type { GmDraftOrderRules } from '@/data/gmDraftOrder/rules';
+export type { GmLotteryRules } from './gmPicks';
 
 /** Where the night stands after a press. */
 export interface EarnedDraftStep<P> {

@@ -5,7 +5,7 @@ import { withGmBlock, type GmDesk } from './gmDesk';
 import { NBA_PICK_RULES, movePicks, pickKey } from './gmPicks';
 import { NBA_ROOKIE_SCALE_YEARS } from './gmContractRules';
 import {
-  NBA_DRAFT_BLOCK, nbaDraftByStaff, nbaDraftContinue, nbaDraftHeading, nbaDraftHelp, nbaDraftHost, nbaDraftNightOf,
+  NBA_DRAFT_BLOCK, draftRulesFor, nbaDraftByStaff, nbaDraftContinue, nbaDraftHeading, nbaDraftHelp, nbaDraftHost, nbaDraftNightOf,
   nbaDraftPick, nbaDraftSeason, nbaEarnedDraftClass, openNbaDraftNight, type GmDraftNight,
 } from './nbaEarnedDraft';
 
@@ -197,6 +197,8 @@ describe('the host and the three presses', () => {
 describe('the "?" (correction 9)', () => {
   it('never says the league\'s order unqualified and prints no line of the old pick rules\' partial', () => {
     const { night } = opened();
+    /* The rule set a board hands the lottery card, reached through this library's re-export (advice 17). */
+    expect(draftRulesFor('nba', night.order.draftYear)).not.toBeNull();
     const lines = nbaDraftHelp(night, ME).flatMap(b => [b.heading, ...b.lines]);
     expect(lines.length).toBeGreaterThan(5);
     expect(lines.filter(l => /league's order/i.test(l))).toEqual([]);

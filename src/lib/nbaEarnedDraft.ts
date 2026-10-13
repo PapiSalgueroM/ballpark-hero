@@ -38,8 +38,11 @@ import type {
 
 /* Everything part B's board needs, through this file, so the board never names a lift module. */
 export { nbaEarnedDraftClass } from './nbaFrontOffice';
-export { lotteryNight, lotteryNightRule, ordinal, slotsLeftFor } from './gmEarnedDraft';
-export type { EarnedDraftStep, EarnedSlot, GmDraftNight, LotteryHelpBlock, LotteryNightView, RunStep, SavedDraftOrder } from './gmEarnedDraft';
+export { draftRulesFor, lotteryNight, lotteryNightRule, ordinal, slotsLeftFor } from './gmEarnedDraft';
+export type {
+  EarnedDraftStep, EarnedSlot, GmDraftNight, GmDraftOrderRules, GmLotteryRules, LotteryHelpBlock, LotteryNightView, RunStep,
+  SavedDraftOrder,
+} from './gmEarnedDraft';
 
 /** The desk block the night is saved under. */
 export const NBA_DRAFT_BLOCK = 'draft';
