@@ -1,0 +1,38 @@
+Network mode: offline, loopback only, no production probe or database retries.
+Running 30 node harnesses
+  PASS  simAccessibility.mjs            0.1s
+  PASS  simApproaches.mjs               2.4s
+  PASS  simAwardRaces.mjs              12.5s
+  PASS  simBoard.mjs                    5.3s
+  PASS  simBoardAsks.mjs               28.5s
+  PASS  simBoardObjectives.mjs          0.8s
+  PASS  simBooks.mjs                    9.7s
+  FAIL  simBracketMoment.mjs           23.5s
+  PASS  simCalendar.mjs                 0.5s
+  PASS  simCalendarCurrentDate.mjs      8.0s
+  PASS  simCareerClubPool.mjs          32.9s
+  PASS  simCareerDerbies.mjs           58.3s
+  PASS  simCareerDomesticCup.mjs       14.9s
+  PASS  simCareerLeagueSeasons.mjs     29.9s
+  PASS  simClubManager.mjs             40.5s
+  PASS  simClubManagerCalendar.mjs     50.2s
+  PASS  simClubManagerClubList.mjs      0.8s
+  PASS  simClubManagerDeals.mjs        14.3s
+  PASS  simClubManagerDecisions.mjs    16.6s
+  PASS  simClubManagerEraMidSeason.mjs    9.4s
+  PASS  simClubManagerEraUcl.mjs       34.2s
+  PASS  simClubManagerFacilities.mjs    8.1s
+  PASS  simClubManagerFinances.mjs     65.9s
+  PASS  simClubManagerGathered.mjs      2.0s
+  PASS  simClubManagerNewLeagues.mjs  130.3s
+  PASS  simClubManagerStaff.mjs        24.4s
+  PASS  simClubManagerStart.mjs         2.7s
+  PASS  simCmApplications.mjs          77.2s
+  PASS  simCmDataOnDemand.mjs          13.4s
+  PASS  simCmFixtureFleet.mjs           7.0s
+
+----- simBracketMoment.mjs (FAIL) -----
+  FAIL: the browser did not load, so the page was never measured: Cannot find module '/home/claude/.npm-global/lib/node_modules/playwright/index.js' imported from /home/runner/work/ballpark-hero/ballpark-hero/scripts/lib/playwrightLoader.mjs
+1 FAILURES (by section {"3":1})
+
+1 harness not green.
