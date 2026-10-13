@@ -432,3 +432,31 @@ describe('gmInbox deck rules', () => {
     expect(() => seatFor(deck([hard]))).toThrow(/no option that moves nothing/);
   });
 });
+
+/* Round 1324's review: the cases no earlier test reached (more than one
+   weighted card a week, and the two new books on a clock that falls). */
+describe('gmInbox deck rules, the review cases', () => {
+  const card = (id: string, extra: Partial<GmEventDef> = {}): GmEventDef => ({
+    id, beat: 'a', from: 'Ownership', emoji: 'x', text: `${id}.`,
+    choices: [{ label: 'Leave it', reply: 'Fine.', karma: 0 }, { label: 'Push', reply: 'Push.', karma: 2 }], ...extra,
+  });
+  const deck = (events: GmEventDef[], extra: Partial<GmInboxPack> = {}): GmInboxPack => ({
+    ...TOY, calendar: [{ id: 'a', label: 'A', emoji: 'A' }], span: { a: 10 },
+    facts: { man: { kind: 'num', min: 1, max: 9, per: 'week' } }, perWeek: 1, cooldown: 0, chance: 1, events, ...extra,
+  });
+
+  it('a weighted draw of two a week takes the picked card out, so no card lands twice', () => {
+    const p = deck([card('w1', { weight: 1 }), card('w3', { weight: 3 }), card('w2', { weight: 2 })], { perWeek: 2 });
+    const seat = seatFor(p);
+    const s = desk();
+    const rng = keyedRng('gmInbox.test|weight two a week');
+    for (let clock = 0; clock < 200; clock++) {
+      const got = gmInboxWeek(s, seat, 'a', {}, clock, rng).map(m => m.defId);
+      expect(got).toHaveLength(2);
+      expect(new Set(got).size).toBe(2);
+      for (const m of s.phoneInbox!) if (m.answered === undefined) answerGmInbox(s, m.id, 0, seat);
+    }
+    /* A high draw lands on the last card, then on the heavier of the two left. */
+    expect(gmInboxWeek(desk(), seat, 'a', {}, 0, () => 0.99).map(m => m.defId)).toEqual(['w2', 'w3']);
+  });
+});

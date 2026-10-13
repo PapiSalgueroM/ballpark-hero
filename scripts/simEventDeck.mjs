@@ -33,7 +33,8 @@
         gains a field only a new pack writes.
      3) WEIGHTS. Every GM card at weight 1, then 2.5, deals the recording
         (the uniform line, by construction). FX_WEIGHT (weights 1 and 3) over
-        10,000 weeks: the light card's share sits in a measured band.
+        10,000 weeks: the light card's share sits in a measured band; two
+        a week from three weights never deals one card twice in a week.
      4) STORY. FX_STORY over 100 ten season desks: never two cards of one
         story in a week or inside the cooldown, a one shot story once; the
         same cards without the story deal measurably more.
@@ -79,6 +80,8 @@
    exactly once in the engine and refuses to run otherwise:
      replay     one extra deck draw before every pick; section 1 fails.
      weightoff  the draw ignores weights; section 3 fails.
+     weightkeep the weighted draw leaves the card it picked in the draw, so a
+                two a week pack can deal one card twice; section 3 fails.
      story      the book key ignores the story; section 4 fails.
      rest       the subject rest test always passes; section 5 fails.
      textrng    the wording drawn from the deck's rng; section 6 fails (and 1
@@ -114,7 +117,7 @@ const CONTROL = process.env.EVENT_DECK_CONTROL || '';
 const RECORD = process.env.SIM_EVENT_DECK_RECORD || '';
 const SHARD = process.env.SIM_EVENT_DECK_SHARD || '';
 const REPLAY_FILE = path.join(ROOT, 'scripts/data/gmInboxReplay.json');
-const CONTROLS = ['replay', 'weightoff', 'story', 'rest', 'textrng', 'seasonweek', 'expireoff', 'expirefx', 'neutral', 'heavy'];
+const CONTROLS = ['replay', 'weightoff', 'weightkeep', 'story', 'rest', 'textrng', 'seasonweek', 'expireoff', 'expirefx', 'neutral', 'heavy'];
 if (CONTROL && !CONTROLS.includes(CONTROL)) { console.error(`EVENT_DECK_CONTROL=${CONTROL} is not a control this kit knows`); process.exit(2); }
 if (RECORD && (CONTROL || SHARD)) { console.error('a recording runs the whole replay with no control, refusing'); process.exit(2); }
 const red = new Set();
@@ -138,6 +141,7 @@ const ENGINE_CONTROLS = {
   replay: ['const e = came.splice(Math.floor(rng() * came.length), 1)[0];',
     'rng(); const e = came.splice(Math.floor(rng() * came.length), 1)[0]; /* replay control */'],
   weightoff: ['const wt = (e: GmEventDef): number => e.weight ?? 1;', 'const wt = (e: GmEventDef): number => 1; /* weightoff control */'],
+  weightkeep: ['return came.splice(i, 1)[0];', 'return came[i]; /* weightkeep control */'],
   story: ['const bookKey = (e: GmEventDef): string => ledgerKey(e);', 'const bookKey = (e: GmEventDef): string => e.id; /* story control */'],
   rest: ['if (r !== undefined && clock - r < restFor) return false;', '/* rest control */'],
   textrng: ["const pick = alt > 0 ? Math.floor(keyedRng(`${seat.keyOf?.(s) ?? ''}|${e.id}|${year}|${clock}`)() * (1 + alt)) : 0;",
@@ -448,6 +452,19 @@ const REC = fs.existsSync(REPLAY_FILE) ? JSON.parse(fs.readFileSync(REPLAY_FILE,
   const line = `FX_WEIGHT (weights 1 and 3): the light card took ${share.toFixed(4)} of ${n} deals (band ${BAND[0]} to ${BAND[1]})`;
   if (n < 9000 || share === 0 || share < BAND[0] || share > BAND[1]) fail(3, line); else ok(line);
   if (MEASURE) console.log(`   measure: light share at seeds 1 to 10: ${TEN.map(sd => lightShare(sd).share.toFixed(4)).join(', ')}`);
+  /* Two a week from three weights (1, 3 and 2), every card up every week:
+     the picked card leaves the draw, so no week deals one card twice and
+     every week deals two. Drawn without replacement the shares of the deals
+     are 0.208, 0.425 and 0.367 (printed, not gated). The weightkeep control
+     leaves the picked card in the draw. */
+  const FX_WEIGHT2 = fxPack('fx_weight2', [fxCard('w1', { weight: 1 }), fxCard('w3', { weight: 3 }), fxCard('w2', { weight: 2 })], { perWeek: 2 });
+  const two = fxRun(FX_WEIGHT2, `weight2|${SEED}`, 5000).log;
+  const twice = two.filter(l => new Set(l.got.map(m => m.defId)).size !== l.got.length).length;
+  const notTwo = two.filter(l => l.got.length !== 2).length;
+  const dealt2 = two.flatMap(l => l.got);
+  const share2 = id => (dealt2.filter(m => m.defId === id).length / Math.max(1, dealt2.length)).toFixed(3);
+  const line2 = `FX_WEIGHT two a week (weights 1, 3 and 2) over ${two.length} weeks: ${twice} weeks dealt one card twice, ${notTwo} weeks dealt other than two; shares ${share2('w1')}, ${share2('w3')}, ${share2('w2')}`;
+  if (twice > 0 || notTwo > 0) fail(3, line2); else ok(line2);
 }
 
 /* ═══ 4. STORY: cards of one story share one stamp and one one shot ═══ */
