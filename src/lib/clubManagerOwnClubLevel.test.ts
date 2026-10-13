@@ -19,7 +19,7 @@ function withRoll<T>(value: number, action: () => T): T {
   try { return action(); } finally { random.mockRestore(); }
 }
 
-/** The same best eleven average the engine takes (top eleven, padded with 60, one decimal). */
+/** The same best eleven average the engine takes (the eleven highest ratings, padded with 60, one decimal). */
 function xi(roster: readonly ProjectedPlayer[]): number {
   const top = roster.map(p => p.r).sort((a, b) => b - a).slice(0, 11);
   while (top.length < 11) top.push(60);
