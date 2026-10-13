@@ -1,0 +1,8 @@
+progMain: git worktree add -q --detach /tmp/progMain 8fea14e2 && ln -s "$PWD/node_modules" /tmp/progMain/node_modules && cd /tmp/progMain && NODE_OPTIONS="--require=/tmp/progMain/scripts/lib/offlineTransport.cjs" node scripts/simCareerProgramme.mjs
+prog1318: git worktree add -q --detach /tmp/prog1318 12f7e041 && ln -s "$PWD/node_modules" /tmp/prog1318/node_modules && cd /tmp/prog1318 && NODE_OPTIONS="--require=/tmp/prog1318/scripts/lib/offlineTransport.cjs" node scripts/simCareerProgramme.mjs
+progBA: git worktree add -q --detach /tmp/progBA a5519151 && ln -s "$PWD/node_modules" /tmp/progBA/node_modules && cd /tmp/progBA && NODE_OPTIONS="--require=/tmp/progBA/scripts/lib/offlineTransport.cjs" node scripts/simCareerProgramme.mjs
+progHead: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerProgramme.mjs
+briefBA: git worktree add -q --detach /tmp/briefBA a5519151 && ln -s "$PWD/node_modules" /tmp/briefBA/node_modules && cd /tmp/briefBA && NODE_OPTIONS="--require=/tmp/briefBA/scripts/lib/offlineTransport.cjs" node scripts/simCareerTransferBrief.mjs
+agentBA: git worktree add -q --detach /tmp/agentBA a5519151 && ln -s "$PWD/node_modules" /tmp/agentBA/node_modules && cd /tmp/agentBA && NODE_OPTIONS="--require=/tmp/agentBA/scripts/lib/offlineTransport.cjs" node scripts/simSoccerAgentReview.mjs
+briefHead: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerTransferBrief.mjs
+agentHead: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerAgentReview.mjs
