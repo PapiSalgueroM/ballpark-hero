@@ -1,0 +1,37 @@
+NEGATIVE CONTROL ON: flatodds. Sections 2 must go red and no other.
+1) what must not move: the season before the draft, and the desk off fixture
+   1a: 30 seasons to the draft, desk on, every club the user once: league, desk and 315516 draws held to the base 48cb9d4b
+   1b: git diff --quiet 48cb9d4b -- 4 files: exit 0
+6) the class: today's twelve, then the curve, slots plus four, never over 70
+   1500 classes of 64 for 60 slots: today's twelve found in every one, 78000 men after them held to the curve rating by rating (worst 1.63 standard errors, band 4.5)
+   mean true rating by ten slots: 82.98, 77.87, 74.83, 72.67, 70.95, 69.24, 67.55; steps 5.11, 3.04, 2.16, 1.72, 1.70, 1.70
+2) the lottery through the bind: the sixteen off the numbers, drawn every season, the table's chances
+  FAIL [2]: walk seed 1 season 1 (DEN): WAS, alone on its record at seed 3, is drawn on 7.142857142857143, the table says 14
+  FAIL [2]: walk seed 1 season 1 (DEN): DAL, alone on its record at seed 4, is drawn on 7.142857142857143, the table says 12.5
+  FAIL [2]: walk seed 1 season 1 (DEN): HOU, alone on its record at seed 5, is drawn on 7.142857142857143, the table says 10.5
+  FAIL [2]: walk seed 1 season 1 (DEN): MEM, alone on its record at seed 6, is drawn on 7.142857142857143, the table says 9
+  FAIL [2]: walk seed 1 season 1 (DEN): DET, alone on its record at seed 12, is drawn on 7.142857142857143, the table says 1.5
+  FAIL [2]: walk seed 1 season 2 (DEN): BKN, alone on its record at seed 1, is drawn on 7.142857142857143, the table says 14
+  FAIL [2]: walk seed 1 season 2 (DEN): GSW, alone on its record at seed 2, is drawn on 7.142857142857143, the table says 14
+  FAIL [2]: walk seed 1 season 2 (DEN): MIA, alone on its record at seed 12, is drawn on 7.142857142857143, the table says 1.5
+   30 closed seasons, a lottery drawn on 30 (0 with no level records in the field); 20 of them, 10000 keyed lotteries each: 280 club shares, the worst 99.39 standard errors from the table (band 4.5)
+3) the slot is the truth: every pick used once by its holder at its first owner's place
+   30 drafts, 1800 picks: 150 of the year's picks moved first (16 his), a club with three or more 30 times, a club with none 30 times; on the clock 46 times; 561 rival rows shown, every one on its club at his scout's read
+4) drawn once: the block survives a round trip, every press, a second open and a swapped table
+   30 nights: each opened twice to the same block, read back after a JSON round trip, unchanged by every press; 10 drafts replayed with the table swapped under the block
+8) the fallback: a block broken mid draft finishes the old way on a valid league
+   50 blocks broken mid draft (year, order, a slot, made past the end, seen): never current, no press ran, 50 finished the old way to a valid league
+9) need: a club short at a position leans to it, and never past a better read by more than the weight
+   1754 rival choices; none passed a better read by more than 2; taken when short vs not, in points: G 35.4 (248/1506), F 29.1 (656/1098), C 26.7 (861/893)
+10) the shared half names no sport; neither library draws from Math.random or carries an address
+   src/lib/gmEarnedDraft.ts: 14 imports, all the lift's; no sport named; neither library draws from Math.random or carries an address
+   section 1: green
+   section 6: green
+   section 2: 461 failures
+   section 3: green
+   section 4: green
+   section 8: green
+   section 9: green
+   section 10: green
+   8 sections ran (1, 6, 2, 3, 4, 8, 9, 10), 212058 checks
+simNbaEarnedDraft: CONTROL flatodds FIRED. Red in section 2 (461 failures).
