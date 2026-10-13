@@ -1,0 +1,16 @@
+rival-nofallbackmlb exit=1 33s | simUsRivalSense: 43 checks, 1 failed (full size), red sections: M.U3
+rival-impurenhl exit=1 38s | simUsRivalSense: 43 checks, 1 failed (full size), red sections: H.U3
+rival-impuremlb exit=1 44s | simUsRivalSense: 43 checks, 1 failed (full size), red sections: M.U3
+rival-kindjob exit=1 33s | simUsRivalSense: 43 checks, 4 failed (full size), red sections: M.U2, M.U4, M.U6, M.F3
+rival-nofallbacknhl exit=1 41s | simUsRivalSense: 43 checks, 1 failed (full size), red sections: H.U3
+rival-oneslotmlb exit=1 42s | simUsRivalSense: 43 checks, 1 failed (full size), red sections: M.U5
+rival-nofloormlb exit=1 34s | simUsRivalSense: 43 checks, 5 failed (full size), red sections: M.U2, M.U7, M.F1, M.F2
+rival-oneslotnhl exit=1 42s | simUsRivalSense: 43 checks, 1 failed (full size), red sections: H.U5
+rival-nofloornhl exit=1 43s | simUsRivalSense: 43 checks, 5 failed (full size), red sections: H.U2, H.U7, H.F1, H.F2
+rival-drawsmlb exit=1 40s | simUsRivalSense: 43 checks, 2 failed (full size), red sections: M.U1, M.U2
+rival-drawsnhl exit=1 37s | simUsRivalSense: 43 checks, 2 failed (full size), red sections: H.U1, H.U2
+rival-onlyhimshut exit=1 39s | simUsRivalSense: 43 checks, 3 failed (full size), red sections: N.F5, M.F5, H.F5
+rival-retiredlinemlb exit=1 37s | simUsRivalSense: 43 checks, 1 failed (full size), red sections: M.O
+rival-retiredlinenhl exit=1 38s | simUsRivalSense: 43 checks, 2 failed (full size), red sections: H.F3, H.O
+rival-oldtallymlb exit=1 33s | simUsRivalSense: 43 checks, 1 failed (full size), red sections: M.O
+rival-oldtallynhl exit=1 25s | simUsRivalSense: 43 checks, 1 failed (full size), red sections: H.O
