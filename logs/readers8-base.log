@@ -1,0 +1,8 @@
+BASE simAccessibility exit=0 | simAccessibility: all green
+BASE simCmLeagueFixtures exit=0 | simCmLeagueFixtures: OK, sections A to J green: 10 ledger(s), 10 frozen, 0 pending, 10 bound, 0 unbound, 3528 fixtures, 268 of 268 controls fired
+BASE simMissingElevenSources exit=0 | simMissingElevenSources: green. 40 sheets, 39 of them row for row against the record.
+BASE simNbaLuxuryTax exit=1 |   [4] the summary counts passes and no failures: no tests
+BASE simNbaSeasonStats exit=1 |   [7] FrontOfficeSeasonClose.test.tsx exits zero with all 25 tests passed:  FAIL  src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx [ src/components/front-office-shared/FrontOfficeSea
+BASE simPerfectSeasonOdds exit=0 | simPerfectSeasonOdds: green. In all four sports the odds on the card are the odds in the sim, the copy agrees with both, and the best record keeps.
+BASE simTrustCopy exit=0 | simTrustCopy: green. One disclaimer under every page and one count of the games, the registry's own.
+BASE simPrerender exit=1 | NO dist/sitemap.xml. BUILD AND PRERENDER FIRST. NOT CHECKED.

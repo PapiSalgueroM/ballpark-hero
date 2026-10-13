@@ -1,0 +1,25 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/lib/clubManagerInternationals.test.ts src/test/clubManagerWorldEditor.test.tsx src/test/staffScreen.test.tsx src/lib/gmStaff.test.ts src/test/clubManagerEraNationalities.test.ts src/test/cmMinuteLabel.test.ts src/test/managerScorerMarks.test.tsx --testTimeout=300000 --hookTimeout=120000
+simCmCopy: node scripts/simCmCopy.mjs
+simCmCopy-base: mkdir -p .tb0 && git archive c9c77eba src | tar -x -C .tb0 && CM_COPY_ROOT=$PWD/.tb0 node scripts/simCmCopy.mjs
+simCmCopy-article: CM_COPY_CONTROL=article node scripts/simCmCopy.mjs --section=1
+simCmCopy-drama: CM_COPY_CONTROL=drama node scripts/simCmCopy.mjs --section=2
+simCmCopy-intl: CM_COPY_CONTROL=intl node scripts/simCmCopy.mjs --section=3
+simCmCopy-staff: CM_COPY_CONTROL=staff node scripts/simCmCopy.mjs --section=4
+simCmCopy-finance: CM_COPY_CONTROL=finance node scripts/simCmCopy.mjs --section=5
+copyonly-ABCD: mkdir -p .tb1 && git archive c9c77eba src | tar -x -C .tb1 && node scripts/qa/cmCopyOnly1326.mjs --base .tb1 --fleet=A,B,C,D
+copyonly-draw: mkdir -p .tb2 && git archive c9c77eba src | tar -x -C .tb2 && COPY_ONLY_CONTROL=draw node scripts/qa/cmCopyOnly1326.mjs --base .tb2 --fleet=A
+copyonly-word: mkdir -p .tb4 && git archive c9c77eba src | tar -x -C .tb4 && COPY_ONLY_CONTROL=word node scripts/qa/cmCopyOnly1326.mjs --base .tb4 --fleet=A
+simCmLeagueRules: node scripts/simCmLeagueRules.mjs
+rules-baseleg: mkdir -p .tb3 && git archive c9c77eba src | tar -x -C .tb3 && CM_RULES_ROOT=$PWD/.tb3 node scripts/simCmLeagueRules.mjs --part=modern,eras,pure
+simDailyDeals-bind: DAILY_DEALS_CONTROL=bind node scripts/simDailyDeals.mjs
+simDailyDeals-binddeadline: DAILY_DEALS_CONTROL=binddeadline node scripts/simDailyDeals.mjs
+simAccessibility: node scripts/simAccessibility.mjs
+simCmLeagueFixtures: node scripts/simCmLeagueFixtures.mjs
+simMissingElevenSources: node scripts/simMissingElevenSources.mjs
+simNbaLuxuryTax: node scripts/simNbaLuxuryTax.mjs
+simNbaSeasonStats: node scripts/simNbaSeasonStats.mjs
+simPerfectSeasonOdds: node scripts/simPerfectSeasonOdds.mjs
+simTrustCopy: node scripts/simTrustCopy.mjs
+simPrerender: node scripts/simPrerender.mjs
+readers8-base: mkdir -p .tb8 && git archive c9c77eba | tar -x -C .tb8 && ln -s $PWD/node_modules .tb8/node_modules && cd .tb8 && for n in simAccessibility simCmLeagueFixtures simMissingElevenSources simNbaLuxuryTax simNbaSeasonStats simPerfectSeasonOdds simTrustCopy simPrerender; do node scripts/$n.mjs > /tmp/r8-$n.log 2>&1; echo "BASE $n exit=$? | $(tail -1 /tmp/r8-$n.log | cut -c1-200)"; done

@@ -1,0 +1,25 @@
+simCmCopy exit=0 8s | simCmCopy: green on this tree. Sections 1, 2, 3, 4, 5: Club Manager says what it means.
+vitest exit=0 11s |    Duration  9.28s (transform 5.02s, setup 655ms, collect 12.20s, tests 5.94s, environment 4.49s, prepare 1.17s)
+simCmCopy-base exit=1 6s | simCmCopy: RED on /home/runner/work/ballpark-hero/ballpark-hero/.tb0, 184 failures
+simCmCopy-article exit=1 4s | simCmCopy: CONTROL article FIRED (107 failures, as it must)
+simCmCopy-drama exit=1 0s | simCmCopy: CONTROL drama FIRED (57 failures, as it must)
+simCmCopy-intl exit=1 0s | simCmCopy: CONTROL intl FIRED (4 failures, as it must)
+simCmCopy-staff exit=1 0s | simCmCopy: CONTROL staff FIRED (4 failures, as it must)
+simCmCopy-finance exit=1 1s | simCmCopy: CONTROL finance FIRED (6 failures, as it must)
+copyonly-draw exit=1 2s | cmCopyOnly1326: CONTROL draw FIRED (16 failures, as it must)
+copyonly-word exit=1 12s | cmCopyOnly1326: CONTROL word FIRED (12 failures, as it must)
+simCmLeagueRules exit=0 60s | simCmLeagueRules: all checks passed (modern, eras, pure, drop4, cupless, shapes, chunks)
+tsc exit=0 97s | 
+simDailyDeals-bind exit=1 3s | simDailyDeals: CONTROL bind FIRED: its 5 Premier League dates went red (2026-10-27, 2026-11-14, 2027-01-19, 2027-01-30, 2027-02-06) and no other date moved
+simDailyDeals-binddeadline exit=1 3s | simDailyDeals: CONTROL binddeadline FIRED: its 3 Premier League dates went red (2026-10-18, 2026-11-01, 2026-11-09) and no other date moved
+simAccessibility exit=0 0s | simAccessibility: all green
+simCmLeagueFixtures exit=0 12s | simCmLeagueFixtures: OK, sections A to J green: 10 ledger(s), 10 frozen, 0 pending, 10 bound, 0 unbound, 3528 fixtures, 268 of 268 controls fired
+simMissingElevenSources exit=0 0s | simMissingElevenSources: green. 40 sheets, 39 of them row for row against the record.
+rules-baseleg exit=1 35s | simCmLeagueRules: 63 failure(s)
+copyonly-ABCD exit=0 116s | cmCopyOnly1326: green. 67 careers, every entry equal on both trees but for the declared rewrites (intl 4623, staff 286, article-board 893, article-news 3794, drama 219), 
+simNbaLuxuryTax exit=0 19s | simNbaLuxuryTax: 347 checks passed over 10 seeded franchises and 5 seasons each. The bill is the published formula, a dollar over pays, every season tips off on fourteen 
+simTrustCopy exit=0 1s | simTrustCopy: green. One disclaimer under every page and one count of the games, the registry's own.
+simPrerender exit=1 0s | NO dist/sitemap.xml. BUILD AND PRERENDER FIRST. NOT CHECKED.
+simPerfectSeasonOdds exit=0 6s | simPerfectSeasonOdds: green. In all four sports the odds on the card are the odds in the sim, the copy agrees with both, and the best record keeps.
+simNbaSeasonStats exit=0 14s | simNbaSeasonStats: 72 checks passed over 10 seeded franchises and 3 seasons each. Every game adds up, the box takes nothing from the league, the awards follow their rules
+readers8-base exit=0 28s | BASE simPrerender exit=1 | NO dist/sitemap.xml. BUILD AND PRERENDER FIRST. NOT CHECKED.
