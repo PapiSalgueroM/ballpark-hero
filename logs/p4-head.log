@@ -1,0 +1,64 @@
+TEXT club list, Barcelona tile: Barcelona 👑 Elite Squad 89 Budget £158m Board wants Win La Liga
+TEXT club list, Real Madrid tile: Real Madrid 👑 Elite Squad 90 Budget £195m Board wants Win La Liga
+PICTURE head-club-list-laliga-{320,390,1280}.png: the La Liga club list, the giants asked to Win La Liga (no "the")
+PICTURE head-club-card-barcelona-{320,390,1280}.png: Barcelona picked, its card with the board demand
+STATE in the job at Barcelona, week 0
+TEXT board panel: Win La Liga Behind Win the Copa del Rey On track Reach 
+PICTURE head-board-panel-{320,390,1280}.png: the Board panel: the title objective reads Win La Liga, the double keeps its "the"
+TEXT match centre: no league line
+PICTURE head-match-centre-{320,390,1280}.png: the Match Centre before the first match (opponent league line when it shows)
+TEXT calendar window line: 🌍 International window, 21 Sep to 6 Oct (up to 4 games for each country). This calendar plays on through it: your internationals go after your last game before it and come back tired for the next one.
+PICTURE head-calendar-window-{320,390,1280}.png: the calendar on a window day not yet played: this calendar plays on through it
+STATE staff doctored, first pass: {"ok":true,"n":4,"levels":"9,9,9,9"}
+STATE staff doctored, second pass: {"ok":true,"n":4,"levels":"9,9,9,9"}
+TEXT news week 4: 📊 Atlético Madrid top La Liga on 9 points after 3 rounds.
+TEXT news week 5: ⚽ Real Madrid have the sharpest attack in La Liga: 15 scored in 4 rounds.
+TEXT news week 6: ⚽ Real Madrid have the sharpest attack in La Liga: 15 scored in 4 rounds.
+TEXT news week 7: 📊 Real Madrid top La Liga on 18 points after 6 rounds.
+TEXT news week 8: 📊 Real Madrid top La Liga on 18 points after 6 rounds.
+TEXT inbox note, week 9: International break: the window runs 21 Sep to 6 Oct, and the calendar here keeps your fixtures going through it, so they went straight after your last game. Away with their countries (Spain: Lamine Yamal, Pedri, Fermín López, Rodri, Pau Cubarsí, Dani Olmo, Al
+PICTURE head-inbox-intl-{320,390,1280}.png: the inbox after the first international window: the note says this calendar keeps your fixtures going
+TEXT news week 9: 📊 Real Madrid top La Liga on 18 points after 6 rounds.
+TEXT news week 10: 📊 Real Madrid top La Liga on 18 points after 6 rounds.
+TEXT news week 11: ⚽ Real Madrid have the sharpest attack in La Liga: 22 scored in 8 rounds.
+TEXT news week 12: 📊 Real Madrid top La Liga on 25 points after 9 rounds.
+TEXT news week 13: 📊 Real Madrid top La Liga on 25 points after 9 rounds.
+TEXT news week 14: 📊 Real Madrid top La Liga on 25 points after 9 rounds.
+TEXT news week 15: 📊 Real Madrid top La Liga on 25 points after 9 rounds.
+TEXT news week 16: 📊 Real Madrid top La Liga on 25 points after 9 rounds.
+TEXT news week 17: 📊 Real Madrid top La Liga on 25 points after 9 rounds.
+TEXT news week 18: 📊 Real Madrid top La Liga on 25 points after 9 rounds.
+TEXT news week 19: 📊 Real Madrid top La Liga on 25 points after 9 rounds.
+TEXT news week 20: ⚽ Athletic Club have the sharpest attack in La Liga: 34 scored in 14 rounds.
+TEXT news week 21: ⚽ Athletic Club have the sharpest attack in La Liga: 34 scored in 14 rounds.
+TEXT news week 22: ⚽ Athletic Club have the sharpest attack in La Liga: 34 scored in 14 rounds.
+TEXT news week 23: ⚽ Athletic Club have the sharpest attack in La Liga: 34 scored in 14 rounds.
+TEXT news week 24: ⚽ Athletic Club have the sharpest attack in La Liga: 34 scored in 14 rounds.
+TEXT news week 25: ⚽ Athletic Club have the sharpest attack in La Liga: 34 scored in 14 rounds.
+TEXT news week 26: 📊 Real Madrid top La Liga on 47 points after 18 rounds.
+TEXT news week 27: 📊 Real Madrid top La Liga on 47 points after 18 rounds.
+TEXT news week 27: 📊 Real Madrid top La Liga on 47 points after 18 rounds.
+TEXT news week 27: 📊 Real Madrid top La Liga on 47 points after 18 rounds.
+TEXT news week 27: 📊 Real Madrid top La Liga on 47 points after 18 rounds.
+TEXT news week 27: 📊 Real Madrid top La Liga on 47 points after 18 rounds.
+TEXT news week 27: 📊 Real Madrid top La Liga on 47 points after 18 rounds.
+TEXT news week 27: 📊 Real Madrid top La Liga on 47 points after 18 rounds.
+TEXT news week 27: 📊 Real Madrid top La Liga on 47 points after 18 rounds.
+TEXT news week 27: 📊 Real Madrid top La Liga on 47 points after 18 rounds.
+TEXT news week 27: 📊 Real Madrid top La Liga on 47 points after 18 rounds.
+TEXT news week 27: 📊 Real Madrid top La Liga on 47 points after 18 rounds.
+TEXT news week 27: 📊 Real Madrid top La Liga on 47 points after 18 rounds.
+TEXT news week 27: 📊 Real Madrid top La Liga on 47 points after 18 rounds.
+TEXT news week 27: 📊 Real Madrid top La Liga on 47 points after 18 rounds.
+TEXT news week 27: 📊 Real Madrid top La Liga on 47 points after 18 rounds.
+TEXT news week 27: 📊 Real Madrid top La Liga on 47 points after 18 rounds.
+TEXT news week 27: 📊 Real Madrid top La Liga on 47 points after 18 rounds.
+TEXT news week 27: 📊 Real Madrid top La Liga on 47 points after 18 rounds.
+TEXT news week 27: 📊 Real Madrid top La Liga on 47 points after 18 rounds.
+TEXT news week 27: 📊 Real Madrid top La Liga on 47 points after 18 rounds.
+TEXT news week 27: 📊 Real Madrid top La Liga on 47 points after 18 rounds.
+SUMMARY intl true, staff false, week 27
+PICTURE head-finances-{320,390,1280}.png: the Finances desk late in the walk: cover and kitty rows
+TEXT finances: 📊 PROJECTED TO SEASON END week 27, 27 left IN SO FAR SEASON Tickets · 11 certain home games left £32.5m £60.6m Food and drink £8.1m £15.1m Sponsor · no deal £0k £0k Players sold · assumes no more deals £0k £0k Income £40.6m £75.6m OUT Player wages · £1.1m a week £31m £61.9m Staff wages · £200k a week £5.4m £10.8m Travel · 10 certain away trips left £2.2m £3.6m Players bought · assumes no more dea
+PAGE ERRORS none
+p4walk: done

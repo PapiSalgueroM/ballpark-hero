@@ -1,0 +1,64 @@
+TEXT club list, Barcelona tile: Barcelona 👑 Elite Squad 89 Budget £158m Board wants Win the La Liga
+TEXT club list, Real Madrid tile: Real Madrid 👑 Elite Squad 90 Budget £195m Board wants Win the La Liga
+PICTURE base-club-list-laliga-{320,390,1280}.png: the La Liga club list, the giants asked to Win La Liga (no "the")
+PICTURE base-club-card-barcelona-{320,390,1280}.png: Barcelona picked, its card with the board demand
+STATE in the job at Barcelona, week 0
+TEXT board panel: Win the La Liga Behind Win the Copa del Rey On track Reach 
+PICTURE base-board-panel-{320,390,1280}.png: the Board panel: the title objective reads Win La Liga, the double keeps its "the"
+TEXT match centre: no league line
+PICTURE base-match-centre-{320,390,1280}.png: the Match Centre before the first match (opponent league line when it shows)
+TEXT calendar window line: 🌍 International window, 21 Sep to 6 Oct (up to 4 games for each country). Your fixtures do not stop for it: your internationals go after your last game before it and come back tired for the next one.
+PICTURE base-calendar-window-{320,390,1280}.png: the calendar on a window day not yet played: this calendar plays on through it
+STATE staff doctored, first pass: {"ok":true,"n":4,"levels":"9,9,9,9"}
+STATE staff doctored, second pass: {"ok":true,"n":4,"levels":"9,9,9,9"}
+TEXT news week 4: 📊 Valencia top the La Liga on 9 points after 3 rounds.
+TEXT news week 5: ⚽ Valencia have the sharpest attack in the La Liga: 8 scored in 4 rounds.
+TEXT news week 6: ⚽ Valencia have the sharpest attack in the La Liga: 8 scored in 4 rounds.
+TEXT news week 7: 📊 Real Madrid top the La Liga on 16 points after 6 rounds.
+TEXT news week 8: 📊 Real Madrid top the La Liga on 16 points after 6 rounds.
+TEXT inbox note, week 9: International break: the window runs 21 Sep to 6 Oct, and your fixtures do not stop for it, so they went straight after your last game. Away with their countries (Spain: Lamine Yamal, Pedri, Fermín López, Rodri, Pau Cubarsí, Dani Olmo, Alejandro Balde, Joan Ga
+PICTURE base-inbox-intl-{320,390,1280}.png: the inbox after the first international window: the note says this calendar keeps your fixtures going
+TEXT news week 9: 📊 Real Madrid top the La Liga on 16 points after 6 rounds.
+TEXT news week 10: 📊 Real Madrid top the La Liga on 16 points after 6 rounds.
+TEXT news week 11: ⚽ Real Madrid have the sharpest attack in the La Liga: 17 scored in 8 rounds.
+TEXT news week 12: 📊 Real Madrid top the La Liga on 23 points after 9 rounds.
+TEXT news week 13: 📊 Real Madrid top the La Liga on 23 points after 9 rounds.
+TEXT news week 14: 📊 Real Madrid top the La Liga on 23 points after 9 rounds.
+TEXT news week 15: 📊 Real Madrid top the La Liga on 23 points after 9 rounds.
+TEXT news week 16: 📊 Real Madrid top the La Liga on 23 points after 9 rounds.
+TEXT news week 17: 📊 Real Madrid top the La Liga on 27 points after 12 rounds.
+TEXT news week 18: 📊 Real Madrid top the La Liga on 27 points after 12 rounds.
+TEXT news week 19: 📊 Real Madrid top the La Liga on 27 points after 12 rounds.
+TEXT news week 20: ⚽ Athletic Club have the sharpest attack in the La Liga: 24 scored in 14 rounds.
+TEXT news week 21: ⚽ Athletic Club have the sharpest attack in the La Liga: 24 scored in 14 rounds.
+TEXT news week 22: ⚽ Athletic Club have the sharpest attack in the La Liga: 24 scored in 14 rounds.
+TEXT news week 23: ⚽ Athletic Club have the sharpest attack in the La Liga: 24 scored in 14 rounds.
+TEXT news week 24: ⚽ Athletic Club have the sharpest attack in the La Liga: 24 scored in 14 rounds.
+TEXT news week 25: ⚽ Athletic Club have the sharpest attack in the La Liga: 24 scored in 14 rounds.
+TEXT news week 26: ⚽ Athletic Club have the sharpest attack in the La Liga: 24 scored in 14 rounds.
+TEXT news week 27: ⚽ Athletic Club have the sharpest attack in the La Liga: 24 scored in 14 rounds.
+TEXT news week 27: ⚽ Athletic Club have the sharpest attack in the La Liga: 24 scored in 14 rounds.
+TEXT news week 27: ⚽ Athletic Club have the sharpest attack in the La Liga: 24 scored in 14 rounds.
+TEXT news week 27: ⚽ Athletic Club have the sharpest attack in the La Liga: 24 scored in 14 rounds.
+TEXT news week 27: ⚽ Athletic Club have the sharpest attack in the La Liga: 24 scored in 14 rounds.
+TEXT news week 27: ⚽ Athletic Club have the sharpest attack in the La Liga: 24 scored in 14 rounds.
+TEXT news week 27: ⚽ Athletic Club have the sharpest attack in the La Liga: 24 scored in 14 rounds.
+TEXT news week 27: ⚽ Athletic Club have the sharpest attack in the La Liga: 24 scored in 14 rounds.
+TEXT news week 27: ⚽ Athletic Club have the sharpest attack in the La Liga: 24 scored in 14 rounds.
+TEXT news week 27: ⚽ Athletic Club have the sharpest attack in the La Liga: 24 scored in 14 rounds.
+TEXT news week 27: ⚽ Athletic Club have the sharpest attack in the La Liga: 24 scored in 14 rounds.
+TEXT news week 27: ⚽ Athletic Club have the sharpest attack in the La Liga: 24 scored in 14 rounds.
+TEXT news week 27: ⚽ Athletic Club have the sharpest attack in the La Liga: 24 scored in 14 rounds.
+TEXT news week 27: ⚽ Athletic Club have the sharpest attack in the La Liga: 24 scored in 14 rounds.
+TEXT news week 27: ⚽ Athletic Club have the sharpest attack in the La Liga: 24 scored in 14 rounds.
+TEXT news week 27: ⚽ Athletic Club have the sharpest attack in the La Liga: 24 scored in 14 rounds.
+TEXT news week 27: ⚽ Athletic Club have the sharpest attack in the La Liga: 24 scored in 14 rounds.
+TEXT news week 27: ⚽ Athletic Club have the sharpest attack in the La Liga: 24 scored in 14 rounds.
+TEXT news week 27: ⚽ Athletic Club have the sharpest attack in the La Liga: 24 scored in 14 rounds.
+TEXT news week 27: ⚽ Athletic Club have the sharpest attack in the La Liga: 24 scored in 14 rounds.
+TEXT news week 27: ⚽ Athletic Club have the sharpest attack in the La Liga: 24 scored in 14 rounds.
+SUMMARY intl true, staff false, week 27
+PICTURE base-finances-{320,390,1280}.png: the Finances desk late in the walk: cover and kitty rows
+TEXT finances: 📊 PROJECTED TO SEASON END week 27, 27 left IN SO FAR SEASON Tickets · 11 certain home games left £34m £62.3m Food and drink £8.5m £15.5m Sponsor · no deal £0k £0k Players sold · assumes no more deals £0k £0k Income £42.4m £77.8m OUT Player wages · £1.1m a week £31m £61.9m Staff wages · £196k a week £5.3m £10.6m Travel · 10 certain away trips left £2.2m £3.6m Players bought · assumes no more deals
+PAGE ERRORS none
+p4walk: done
