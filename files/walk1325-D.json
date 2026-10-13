@@ -1,0 +1,14 @@
+{
+ "findings": [],
+ "notes": [
+  "clauses-320: focused element before the shot: BUTTON.inline-flex items-center justify-center whitespace-nowrap rounded-sm px-3 py-1.5 font-medium ring-offset-background transition-all data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 text-[10px] md:text-xs \"Squad\" focus-visible false",
+  "clauses-320: 3 clause rows shown, button \"Show the other 2\"",
+  "clauses-320: 5 clause rows after, scrollY 2393 to 2393, row 4 at 508 where the button was 508",
+  "clauses-390: focused element before the shot: BUTTON.inline-flex items-center justify-center whitespace-nowrap rounded-sm px-3 py-1.5 font-medium ring-offset-background transition-all data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 text-[10px] md:text-xs \"Squad\" focus-visible false",
+  "clauses-390: 3 clause rows shown, button \"Show the other 2\"",
+  "clauses-390: 5 clause rows after, scrollY 2084 to 2084, row 4 at 610 where the button was 610",
+  "clauses-1280: focused element before the shot: BUTTON.inline-flex items-center justify-center whitespace-nowrap rounded-sm px-3 py-1.5 font-medium ring-offset-background transition-all data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 text-[10px] md:text-xs \"Squad\" focus-visible false",
+  "clauses-1280: 3 clause rows shown, button \"Show the other 2\"",
+  "clauses-1280: 5 clause rows after, scrollY 1820 to 1820, row 4 at 638 where the button was 638"
+ ]
+}
