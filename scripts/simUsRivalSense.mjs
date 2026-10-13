@@ -90,7 +90,9 @@
         dealt in and every note that is not the rival's own are byte equal. A sport not named in RIVAL_MOVED: the
         rival's trail and every note too. A sport named: the trail differs. B is the table on the tree before.
    L    The NBA's cards word for word (the lift moved its beat onto rosterBeat).
-   P2   The same proof with every card answered, through the truth digest's own driver.
+   P2   The same proof with every card answered, through the truth digest's own driver. It also prints, never
+        judged, the balance on both trees with every card answered (mean seasons, the honours a career, final
+        morale and fanbase, my share of the head to head years): the brief's P2 row, added by the fix pass.
 
    WHAT WAS MEASURED (2026-10-10, five seeds of 1,500 careers a sport, GitHub runners)
    Before, on the base 980654fa (runner r1227-s0). My share of the head to head years:
@@ -1335,9 +1337,21 @@ if (PROVE) {
   for (const sport of ALL) {
     const named = MOVED.includes(sport) || CARDS.includes(sport);
     let cards = 0; let choices = 0; let equal = 0; let parted = 0; let linesHeld = 0; const firstKeys = {}; let seasons = 0;
+    /* The fix pass of Round 1313 (review finding 1, the brief's P2 row): what the cards do to a career with every
+       card answered, on both trees, PRINTED AND NEVER JUDGED (no harness measures that balance with the rivalry
+       cards answered). The honour is the roster beat's award; the NBA's is the season line's allStar. */
+    const honour = ROSTER[sport]?.award ?? 'All-Star';
+    const side = { was: { seasons: 0, honours: 0, morale: 0, fanbase: 0, mine: 0, his: 0 }, now: { seasons: 0, honours: 0, morale: 0, fanbase: 0, mine: 0, his: 0 } };
+    const sideAdd = (t, json) => {
+      const c = JSON.parse(json);
+      t.seasons += c.seasons.length; t.morale += c.morale ?? 0; t.fanbase += c.fanbase ?? 0;
+      t.honours += c.seasons.filter(s => (sport === 'nba' ? !!s.allStar : (s.awards ?? []).includes(honour))).length;
+      if (c.rival) { t.mine += c.rival.myYears ?? 0; t.his += c.rival.hisYears ?? 0; }
+    };
     for (let i = 0; i < P2N; i += 1) {
       const now = driven(E, sport, i, 40); const was = driven(B.mod, sport, i, 40);
       cards += now.cards; choices += now.choices; seasons += now.seasons;
+      sideAdd(side.now, now.json); sideAdd(side.was, was.json);
       if (now.json === was.json) { equal += 1; continue; }
       if (!named || i >= P2_STEPPED) continue;
       /* The first season where anything off the rival differs, by halving (a save that has parted stays parted:
@@ -1353,6 +1367,8 @@ if (PROVE) {
       if (at.a.seasons === at.b.seasons && (!before || before.a.rest === before.b.rest)) linesHeld += 1;
       for (const key of new Set([...Object.keys(at.a.c), ...Object.keys(at.b.c)])) if (JSON.stringify(at.a.c[key]) !== JSON.stringify(at.b.c[key])) firstKeys[key] = (firstKeys[key] ?? 0) + 1;
     }
+    const sideRow = t => `mean seasons ${f2(t.seasons / P2N)}, ${honour}s a career ${f2(t.honours / P2N)}, final morale ${f1(t.morale / P2N)}, final fanbase ${f1(t.fanbase / P2N)}, my share of the head to head years ${f1(pc(t.mine, t.mine + t.his))}`;
+    console.log(`     ${sport} with every card answered (printed, never judged): before ${sideRow(side.was)}; after ${sideRow(side.now)}`);
     check('P2', cards > 0 && seasons > 0, `${sport}: the drive answered ${cards} rivalry cards and ${choices} rival choices over ${seasons} seasons (more than none)`);
     if (!named) check('P2', equal === P2N, `${sport}: ${equal} of ${P2N} whole saves are byte equal`);
     else {
