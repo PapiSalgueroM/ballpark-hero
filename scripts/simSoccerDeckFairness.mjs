@@ -48,7 +48,8 @@
  *      followers or more (the figure it prints ends in M).
  *   6  WORDING. Every story the paper can print, rendered for every position:
  *      no bare position code in a headline or a body, no "In <lower case>"
- *      tail in a headline.
+ *      tail in a headline, and no story calls an uncapped player "the
+ *      <nation> international" (a capped one still is).
  *   7  PREFIX AND OLD SAVES. 200 careers driven on the base bundle and on
  *      this one with the same seeded Math.random agree, save and call count,
  *      step by step, until the first step that runs the paper or the deck,
@@ -75,6 +76,7 @@
  *   nogate     the row gate line out of the deck's filter: section 4.
  *   unit       the sensation check back to 1000000: section 5.
  *   poscode    the paper prints the raw position code: section 6.
+ *   uncapped   the booed story calls an uncapped player an international: section 6.
  *   prefix     one extra Math.random call in the youth year: section 7.
  *   olddebut   an old card 17 no longer records the debut: section 7.
  *   outside    one constant of the transfer market changes: section 8.
@@ -134,6 +136,8 @@ const CONTROLS = {
     edits: [['check: () => s.socialMediaFollowers >= 1,', 'check: () => s.socialMediaFollowers >= 1000000,']] },
   poscode: { breaks: '6', note: 'the paper prints the raw position code',
     edits: [['  const posWord = POSITION_WORDS[pos] ?? "Player";', '  const posWord = pos;']] },
+  uncapped: { breaks: '6', note: 'the booed story calls every player "the <nation> international" again, caps or not',
+    edits: [['The ${s.nationality} ${s.intStats.caps > 0 ? "international" : posLower} looked visibly shaken', 'The ${s.nationality} international looked visibly shaken']] },
   prefix: { breaks: '7', note: 'one extra Math.random call in every youth year, before any paper or deck',
     edits: [[YOUTH, YOUTH.replace('\n', '\n  Math.random();\n')]] },
   olddebut: { breaks: '7', note: 'an old card 17 answered from a save no longer records the debut',
@@ -624,6 +628,24 @@ console.log('6) Every story, every position: no bare position code, no "In <lowe
   }
   console.log(`   ${rendered} stories rendered over ${CODES.length} positions, ${threw} could not render without their facts`);
   if (rendered < CODES.length * 40) fail(`only ${rendered} stories rendered`);
+  /* "the <nation> international" states caps: no story calls an uncapped player one (the woken "Booed By Own Fans"
+     story did, review 2026-10-13), and a capped player still is called one, so the phrase this reads is still there */
+  let uncappedSays = 0, cappedSays = 0;
+  for (const caps of [0, 12]) {
+    const { s, season } = paperCase();
+    s.intStats = { ...s.intStats, caps };
+    const phrase = `${s.nationality} international`;
+    E.__r1327News({ ...s }, season, 50, 200);
+    for (const t of globalThis.__r1327Templates || []) {
+      let a;
+      try { a = t.gen(); } catch { continue; }
+      if (!`${a.headline} ${a.body}`.includes(phrase)) continue;
+      if (caps > 0) cappedSays += 1;
+      else { uncappedSays += 1; fail(`an uncapped player is called "the ${phrase}": "${a.headline}"`); }
+    }
+  }
+  console.log(`   "the <nation> international": ${uncappedSays} stories say it of an uncapped player, ${cappedSays} of a capped one`);
+  if (cappedSays === 0) fail('no story calls a capped player an international: the phrase this check reads is gone, re-read it');
 }
 
 /* ─── 7. the prefix, and old saves ─────────────────────────────────────── */

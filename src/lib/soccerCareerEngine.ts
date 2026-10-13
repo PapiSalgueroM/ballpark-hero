@@ -6056,7 +6056,7 @@ function generateNewsArticles(s: CareerState, season: SeasonRecord, totalGoals: 
         const elites = ["Real Madrid", "Barcelona", "Manchester City", "Bayern Munich", "PSG", "Liverpool"];
         return { newspaper: pick(NEWSPAPERS), type: "transfer",
           headline: `Transfer Rumours: ${pick(elites)} Eyeing ${name} In Summer Window`,
-          body: `Sources close to the deal suggest a bid of €${Math.round(s.marketValue)}M is being prepared. The ${s.nationality} international has been in outstanding form and could be set for a big move.` };
+          body: `Sources close to the deal suggest a bid of €${Math.round(s.marketValue)}M is being prepared. The ${s.nationality} ${s.intStats.caps > 0 ? "international" : posLower} has been in outstanding form and could be set for a big move.` };
       } },
     /* Keep this tally slot's eligibility and draw order. Senior crossings use the drawn space below. */
     { weight: 1, check: () => totalGoals > 0 && (totalGoals === 100 || totalGoals === 200 || totalGoals === 300 || totalGoals === 500),
@@ -6094,7 +6094,7 @@ function generateNewsArticles(s: CareerState, season: SeasonRecord, totalGoals: 
     { weight: 0.7, check: () => season.rating < 6.0,
       gen: () => ({ newspaper: pick(NEWSPAPERS), type: "negative",
         headline: `${name} Booed By Own Fans After Another Disappointing Display`,
-        body: `Ugly scenes at ${club} as sections of the crowd turned on ${name} after another below-par performance. The ${s.nationality} international looked visibly shaken as boos rang around the stadium.` }) },
+        body: `Ugly scenes at ${club} as sections of the crowd turned on ${name} after another below-par performance. The ${s.nationality} ${s.intStats.caps > 0 ? "international" : posLower} looked visibly shaken as boos rang around the stadium.` }) },
     { weight: 0.5, check: () => s.contractYearsLeft <= 1 && s.morale < 50,
       gen: () => ({ newspaper: pick(NEWSPAPERS), type: "negative",
         headline: `TRANSFER SAGA: ${name} Wants Out As Contract Talks Collapse`,
