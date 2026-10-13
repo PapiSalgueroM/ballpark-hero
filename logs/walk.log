@@ -1,0 +1,96 @@
+=== session reducedMotion=reduce
+STATE start Liverpool week 0 kitty 137
+STATE now week 10 kitty 148.42 (moved 11.42)
+TILE 390: 💰 FINANCES -£9m projected Fans turning · prices, sponsor, the books
+SCROLL 390: before 434 after 434
+ROW 390 Tickets · 16 certain home games left | £9.2m | £49.8m | colour rgb(52, 211, 153) | 12px
+ROW 390 Food and drink | £2.2m | £12.2m | colour rgb(52, 211, 153) | 12px
+ROW 390 Sponsor · no deal | £0k | £0k | colour rgb(52, 211, 153) | 12px
+ROW 390 Players sold · assumes no more deals | £0k | £0k | colour rgb(52, 211, 153) | 12px
+ROW 390 Income | £11.4m | £62m | colour rgb(52, 211, 153) | 12px
+ROW 390 Player wages · £1.1m a week | £10.7m | £57.8m | colour rgb(240, 242, 245) | 12px
+ROW 390 Staff wages · £199k a week | £2m | £10.8m | colour rgb(240, 242, 245) | 12px
+ROW 390 Travel · 16 certain away trips left | £480k | £2.4m | colour rgb(240, 242, 245) | 12px
+ROW 390 Players bought · assumes no more deals | £0k | £0k | colour rgb(240, 242, 245) | 12px
+ROW 390 Facilities | £0k | £0k | colour rgb(240, 242, 245) | 12px
+ROW 390 Staff fees · hires and pay offs | £0k | £0k | colour rgb(240, 242, 245) | 12px
+ROW 390 Spend | £13.2m | £71m | colour rgb(240, 242, 245) | 12px
+ROW 390 Board covers running costs | +£13.2m | +£71m | colour rgb(132, 145, 164) | 12px
+ROW 390 Kitty change | +£11.4m | +£62m | colour rgb(52, 211, 153) | 12px
+SUM 390: income 11.4 - spend 13.2 + cover 13.2 = 11.4; kitty row 11.4; the save's kitty moved 11.4
+NOTE 390: the hub tile reads "💰 FINANCES -£9m projected Fans turning · prices, sponsor, the books" while the desk's Kitty change reads +£62m (Round 1328's tile)
+TILE 1280: 💰 FINANCES -£9m projected Fans turning · prices, sponsor, the books
+SCROLL 1280: before 317 after 317
+ROW 1280 Tickets · 16 certain home games left | £9.2m | £49.8m | colour rgb(52, 211, 153) | 12px
+ROW 1280 Food and drink | £2.2m | £12.2m | colour rgb(52, 211, 153) | 12px
+ROW 1280 Sponsor · no deal | £0k | £0k | colour rgb(52, 211, 153) | 12px
+ROW 1280 Players sold · assumes no more deals | £0k | £0k | colour rgb(52, 211, 153) | 12px
+ROW 1280 Income | £11.4m | £62m | colour rgb(52, 211, 153) | 12px
+ROW 1280 Player wages · £1.1m a week | £10.7m | £57.8m | colour rgb(240, 242, 245) | 12px
+ROW 1280 Staff wages · £199k a week | £2m | £10.8m | colour rgb(240, 242, 245) | 12px
+ROW 1280 Travel · 16 certain away trips left | £480k | £2.4m | colour rgb(240, 242, 245) | 12px
+ROW 1280 Players bought · assumes no more deals | £0k | £0k | colour rgb(240, 242, 245) | 12px
+ROW 1280 Facilities | £0k | £0k | colour rgb(240, 242, 245) | 12px
+ROW 1280 Staff fees · hires and pay offs | £0k | £0k | colour rgb(240, 242, 245) | 12px
+ROW 1280 Spend | £13.2m | £71m | colour rgb(240, 242, 245) | 12px
+ROW 1280 Board covers running costs | +£13.2m | +£71m | colour rgb(132, 145, 164) | 12px
+ROW 1280 Kitty change | +£11.4m | +£62m | colour rgb(52, 211, 153) | 12px
+SUM 1280: income 11.4 - spend 13.2 + cover 13.2 = 11.4; kitty row 11.4; the save's kitty moved 11.4
+NOTE 1280: the hub tile reads "💰 FINANCES -£9m projected Fans turning · prices, sponsor, the books" while the desk's Kitty change reads +£62m (Round 1328's tile)
+PAGE ERRORS reduce: none
+=== session reducedMotion=no-preference
+STATE start Liverpool week 0 kitty 137
+STATE now week 10 kitty 149.85 (moved 12.85)
+TILE 390: 💰 FINANCES -£7.5m projected Fans turning · prices, sponsor, the books
+SCROLL 390: before 434 after 434
+ROW 390 Tickets · 16 certain home games left | £10.3m | £51m | colour rgb(52, 211, 153) | 12px
+ROW 390 Food and drink | £2.5m | £12.5m | colour rgb(52, 211, 153) | 12px
+ROW 390 Sponsor · no deal | £0k | £0k | colour rgb(52, 211, 153) | 12px
+ROW 390 Players sold · assumes no more deals | £0k | £0k | colour rgb(52, 211, 153) | 12px
+ROW 390 Income | £12.9m | £63.5m | colour rgb(52, 211, 153) | 12px
+ROW 390 Player wages · £1.1m a week | £10.7m | £57.8m | colour rgb(240, 242, 245) | 12px
+ROW 390 Staff wages · £202k a week | £2m | £10.9m | colour rgb(240, 242, 245) | 12px
+ROW 390 Travel · 15 certain away trips left | £480k | £2.3m | colour rgb(240, 242, 245) | 12px
+ROW 390 Players bought · assumes no more deals | £0k | £0k | colour rgb(240, 242, 245) | 12px
+ROW 390 Facilities | £0k | £0k | colour rgb(240, 242, 245) | 12px
+ROW 390 Staff fees · hires and pay offs | £0k | £0k | colour rgb(240, 242, 245) | 12px
+ROW 390 Spend | £13.2m | £71m | colour rgb(240, 242, 245) | 12px
+ROW 390 Board covers running costs | +£13.2m | +£71m | colour rgb(132, 145, 164) | 12px
+ROW 390 Kitty change | +£12.9m | +£63.5m | colour rgb(52, 211, 153) | 12px
+SUM 390: income 12.9 - spend 13.2 + cover 13.2 = 12.9; kitty row 12.9; the save's kitty moved 12.8
+NOTE 390: the hub tile reads "💰 FINANCES -£7.5m projected Fans turning · prices, sponsor, the books" while the desk's Kitty change reads +£63.5m (Round 1328's tile)
+ANIMS 390 running on the page with motion on: 0
+TILE 1280: 💰 FINANCES -£7.5m projected Fans turning · prices, sponsor, the books
+SCROLL 1280: before 317 after 317
+ROW 1280 Tickets · 16 certain home games left | £10.3m | £51m | colour rgb(52, 211, 153) | 12px
+ROW 1280 Food and drink | £2.5m | £12.5m | colour rgb(52, 211, 153) | 12px
+ROW 1280 Sponsor · no deal | £0k | £0k | colour rgb(52, 211, 153) | 12px
+ROW 1280 Players sold · assumes no more deals | £0k | £0k | colour rgb(52, 211, 153) | 12px
+ROW 1280 Income | £12.9m | £63.5m | colour rgb(52, 211, 153) | 12px
+ROW 1280 Player wages · £1.1m a week | £10.7m | £57.8m | colour rgb(240, 242, 245) | 12px
+ROW 1280 Staff wages · £202k a week | £2m | £10.9m | colour rgb(240, 242, 245) | 12px
+ROW 1280 Travel · 15 certain away trips left | £480k | £2.3m | colour rgb(240, 242, 245) | 12px
+ROW 1280 Players bought · assumes no more deals | £0k | £0k | colour rgb(240, 242, 245) | 12px
+ROW 1280 Facilities | £0k | £0k | colour rgb(240, 242, 245) | 12px
+ROW 1280 Staff fees · hires and pay offs | £0k | £0k | colour rgb(240, 242, 245) | 12px
+ROW 1280 Spend | £13.2m | £71m | colour rgb(240, 242, 245) | 12px
+ROW 1280 Board covers running costs | +£13.2m | +£71m | colour rgb(132, 145, 164) | 12px
+ROW 1280 Kitty change | +£12.9m | +£63.5m | colour rgb(52, 211, 153) | 12px
+SUM 1280: income 12.9 - spend 13.2 + cover 13.2 = 12.9; kitty row 12.9; the save's kitty moved 12.8
+NOTE 1280: the hub tile reads "💰 FINANCES -£7.5m projected Fans turning · prices, sponsor, the books" while the desk's Kitty change reads +£63.5m (Round 1328's tile)
+ANIMS 1280 running on the page with motion on: 0
+PAGE ERRORS no-preference: none
+DOCTOR big signing: signings 1
+ROW doctored 390 Spend | £413.2m | £471m | colour rgb(240, 242, 245)
+ROW doctored 390 Board covers running costs | +£13.2m | +£71m | colour rgb(132, 145, 164)
+ROW doctored 390 Kitty change | -£388.6m | -£338m | colour rgb(248, 113, 113)
+COLOUR doctored 390: kitty -338 colour rgb(248, 113, 113)
+ROW doctored 1280 Spend | £413.2m | £471m | colour rgb(240, 242, 245)
+ROW doctored 1280 Board covers running costs | +£13.2m | +£71m | colour rgb(132, 145, 164)
+ROW doctored 1280 Kitty change | -£388.6m | -£338m | colour rgb(248, 113, 113)
+COLOUR doctored 1280: kitty -338 colour rgb(248, 113, 113)
+TEXT Barcelona tile: Barcelona 👑 Elite Squad 89 Budget £158m Board wants Win La Liga
+TEXT board panel: Win La Liga Behind Win the Copa del Rey On track Reach the Champi
+TEXT news lines: 📊 Atlético Madrid top La Liga on 16 points after 6 rounds. | ⚽ Getafe have the sharpest attack in La Liga: 10 scored in 4 rounds. | 📊 Real Madrid top La Liga on 9 points after 3 rounds.
+PAGE ERRORS part 3: none
+rwalk: done, 0 finding(s)

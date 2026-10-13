@@ -1,0 +1,9 @@
+#!serve
+#!playwright
+walk: node .rc/x/rwalk.mjs
+oldsave: mkdir -p .rbase && git archive 36cc9ffe | tar -x -C .rbase && cd .rbase && ../node_modules/.bin/vite build > /dev/null 2>&1 && (node ../scripts/lib/hostLikeServer.mjs dist 4194 > /dev/null 2>&1 &) && for i in $(seq 1 40); do curl -sf -o /dev/null http://127.0.0.1:4194/ && break; sleep 1; done; cd .. && OLD_BASE=http://127.0.0.1:4194 node .rc/x/rold.mjs
+playCmFinanceDesk: node scripts/playCmFinanceDesk.mjs
+desk-small: CM_FINANCE_CONTROL=small node scripts/playCmFinanceDesk.mjs
+desk-cut: CM_FINANCE_CONTROL=cut node scripts/playCmFinanceDesk.mjs
+desk-wrap: CM_FINANCE_CONTROL=wrap node scripts/playCmFinanceDesk.mjs
+playSponsors: node scripts/playSponsors.mjs
