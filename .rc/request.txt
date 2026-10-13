@@ -1,0 +1,8 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simBooks: node scripts/simBooks.mjs
+simCmLeagueRules: node scripts/simCmLeagueRules.mjs
+simCmVarLedger: node scripts/simCmVarLedger.mjs
+simClubManager: node scripts/simClubManager.mjs
+simFreeAgents: node scripts/simFreeAgents.mjs
+vitest-own: node_modules/.bin/vitest run src/test/clubDetailOwnClub.test.tsx src/lib/clubManagerOwnClubLevel.test.ts src/lib/clubManagerWorldRoster.test.ts src/lib/clubManagerTrajectory.test.ts --testTimeout=300000 --hookTimeout=120000
+dup-probe: node .rc/x/dupProbe.mjs
