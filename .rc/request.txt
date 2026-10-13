@@ -1,0 +1,2 @@
+measure15: SIM_EVENT_DECK_MEASURE=1 SIM_EVENT_DECK_SECTIONS=15 node scripts/simEventDeck.mjs
+kit15: SIM_EVENT_DECK_SECTIONS=15 node scripts/simEventDeck.mjs
