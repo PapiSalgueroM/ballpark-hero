@@ -1,0 +1,9 @@
+MUT roomstale applied to src/components/club-manager/RolesScreen.tsx
+   suite: 58 cases, 52 passed, 6 failed, 0 skipped, 16s
+   red: 3 the dressing room labels a real man's wage as this game's, and no made up man's Dundee 2026-27: AssertionError: youth Enzo Ozturk (Youth), dressing room: expected true to be false // Object.is equality
+   red: 3 the dressing room labels a real man's wage as this game's, and no made up man's Everton 2005-06: AssertionError: youth Sam Ravenhill (Youth), dressing room: expected true to be false // Object.is equality
+   red: 3 the dressing room labels a real man's wage as this game's, and no made up man's OB 2026-27: AssertionError: youth Mats Novak (Youth), dressing room: expected true to be false // Object.is equality
+   red: 3 the dressing room labels a real man's wage as this game's, and no made up man's Brentford with an academy graduate: AssertionError: academy Fixture Academy Kid, dressing room: expected true to be false // Object.is equality
+   red: 3 the dressing room labels a real man's wage as this game's, and no made up man's Sevilla old save (Round 1052): AssertionError: youth Kofi Weston (Youth), dressing room: expected true to be false // Object.is equality
+   red: 3 the dressing room labels a real man's wage as this game's, and no made up man's Hertha book save: AssertionError: youth Kofi Ferreira (Youth), dressing room: expected true to be false // Object.is equality
+simCmTablesTruth: FAIL, cases red above

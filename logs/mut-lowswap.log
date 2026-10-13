@@ -1,0 +1,10 @@
+MUT lowswap applied to src/components/club-manager/ClubManagerCareerPanel.tsx
+   suite: 58 cases, 51 passed, 7 failed, 0 skipped, 16s
+   red: 4 the worst defeat reads with our score first Sevilla old save (Round 1052): AssertionError: expected '3-0 vs Atlético Madrid' to be '0-3 vs Atlético Madrid' // Object.is equality
+   red: 4 the worst defeat reads with our score first Valencia second tier old save: AssertionError: expected '3-0 vs Real Madrid' to be '0-3 vs Real Madrid' // Object.is equality
+   red: 4 the worst defeat reads with our score first Everton book save: AssertionError: expected '5-1 vs Newcastle' to be '1-5 vs Newcastle' // Object.is equality
+   red: 4 the worst defeat reads with our score first Hertha book save: AssertionError: expected '3-2 vs Nürnberg' to be '2-3 vs Nürnberg' // Object.is equality
+   red: 4 the worst defeat reads with our score first Brentford after played matches, seed 1: AssertionError: expected '1-0 vs Tottenham' to be '0-1 vs Tottenham' // Object.is equality
+   red: 4 the worst defeat reads with our score first Brentford after played matches, seed 2: AssertionError: expected '2-1 vs Leeds United' to be '1-2 vs Leeds United' // Object.is equality
+   red: 4 the worst defeat reads with our score first Brentford after played matches, seed 3: AssertionError: expected '3-0 vs Leeds United' to be '0-3 vs Leeds United' // Object.is equality
+simCmTablesTruth: FAIL, cases red above

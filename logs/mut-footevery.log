@@ -1,0 +1,10 @@
+MUT footevery applied to src/components/club-manager/SquadScreen.tsx
+   suite: 58 cases, 51 passed, 7 failed, 0 skipped, 17s
+   red: 2 the squad list labels a real man's deal as this game's, and no made up man's Dundee 2026-27: AssertionError: the squad note shows exactly when the squad holds a real man: expected false to be true // Object.is equality
+   red: 2 the squad list labels a real man's deal as this game's, and no made up man's Everton 2005-06: AssertionError: the squad note shows exactly when the squad holds a real man: expected false to be true // Object.is equality
+   red: 2 the squad list labels a real man's deal as this game's, and no made up man's OB 2026-27: AssertionError: the squad note shows exactly when the squad holds a real man: expected false to be true // Object.is equality
+   red: 2 the squad list labels a real man's deal as this game's, and no made up man's Brentford with an academy graduate: AssertionError: the squad note shows exactly when the squad holds a real man: expected false to be true // Object.is equality
+   red: 2 the squad list labels a real man's deal as this game's, and no made up man's Brentford with a made up free agent signed: AssertionError: the squad note shows exactly when the squad holds a real man: expected false to be true // Object.is equality
+   red: 2 the squad list labels a real man's deal as this game's, and no made up man's Sevilla old save (Round 1052): AssertionError: the squad note shows exactly when the squad holds a real man: expected false to be true // Object.is equality
+   red: 2 the squad list labels a real man's deal as this game's, and no made up man's Hertha book save: AssertionError: the squad note shows exactly when the squad holds a real man: expected false to be true // Object.is equality
+simCmTablesTruth: FAIL, cases red above

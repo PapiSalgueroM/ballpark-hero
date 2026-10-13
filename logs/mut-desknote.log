@@ -1,0 +1,5 @@
+MUT desknote applied to src/components/club-manager/ContractsCard.tsx
+   suite: 58 cases, 56 passed, 2 failed, 0 skipped, 16s
+   red: 1 the contracts desk labels a real man's deal as this game's, and no made up man's Dundee 2026-27: AssertionError: the desk note shows exactly when a list holds a real man: expected false to be true // Object.is equality
+   red: 1 the contracts desk labels a real man's deal as this game's, and no made up man's OB 2026-27: AssertionError: the desk note shows exactly when a list holds a real man: expected false to be true // Object.is equality
+simCmTablesTruth: FAIL, cases red above

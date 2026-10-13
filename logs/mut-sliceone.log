@@ -1,0 +1,9 @@
+MUT sliceone applied to src/components/club-manager/ContractsCard.tsx
+   suite: 58 cases, 52 passed, 6 failed, 0 skipped, 16s
+   red: 1 the contracts desk labels a real man's deal as this game's, and no made up man's Liverpool 2026-27: AssertionError: Federico Chiesa has no final year row: expected null not to be null
+   red: 1 the contracts desk labels a real man's deal as this game's, and no made up man's Brentford with an academy graduate: AssertionError: Aaron Hickey has no final year row: expected null not to be null
+   red: 1 the contracts desk labels a real man's deal as this game's, and no made up man's Brentford with a made up free agent signed: AssertionError: Aaron Hickey has no final year row: expected null not to be null
+   red: 1 the contracts desk labels a real man's deal as this game's, and no made up man's Sevilla old save (Round 1052): AssertionError: Odysseas Vlachodimos has no final year row: expected null not to be null
+   red: 1 the contracts desk labels a real man's deal as this game's, and no made up man's Valencia second tier old save: AssertionError: César Tárrega has no final year row: expected null not to be null
+   red: 1 the contracts desk labels a real man's deal as this game's, and no made up man's Everton book save: AssertionError: Mark Travers has no final year row: expected null not to be null
+simCmTablesTruth: FAIL, cases red above

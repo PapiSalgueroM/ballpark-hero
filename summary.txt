@@ -1,0 +1,9 @@
+mut-noacademy exit=1 17s | simCmTablesTruth: FAIL, cases red above
+mut-noyouth exit=1 16s | simCmTablesTruth: FAIL, cases red above
+mut-desknote exit=1 16s | simCmTablesTruth: FAIL, cases red above
+mut-footevery exit=1 17s | simCmTablesTruth: FAIL, cases red above
+mut-roomstale exit=1 16s | simCmTablesTruth: FAIL, cases red above
+mut-detailstale exit=1 16s | simCmTablesTruth: FAIL, cases red above
+mut-showcount exit=0 17s | simCmTablesTruth: every case green
+mut-sliceone exit=1 17s | simCmTablesTruth: FAIL, cases red above
+mut-lowswap exit=1 16s | simCmTablesTruth: FAIL, cases red above

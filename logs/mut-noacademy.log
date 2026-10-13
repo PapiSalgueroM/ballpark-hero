@@ -1,0 +1,6 @@
+MUT noacademy applied to src/components/club-manager/SquadScreen.tsx
+   suite: 58 cases, 55 passed, 3 failed, 0 skipped, 16s
+   red: 1 the contracts desk labels a real man's deal as this game's, and no made up man's Brentford with an academy graduate: AssertionError: academy Fixture Academy Kid, final year row: expected true to be false // Object.is equality
+   red: 2 the squad list labels a real man's deal as this game's, and no made up man's Brentford with an academy graduate: AssertionError: academy Fixture Academy Kid, squad row detail: expected true to be false // Object.is equality
+   red: 3 the dressing room labels a real man's wage as this game's, and no made up man's Brentford with an academy graduate: AssertionError: academy Fixture Academy Kid, dressing room: expected true to be false // Object.is equality
+simCmTablesTruth: FAIL, cases red above

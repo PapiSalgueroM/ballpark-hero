@@ -1,0 +1,18 @@
+MUT noyouth applied to src/components/club-manager/SquadScreen.tsx
+   suite: 58 cases, 43 passed, 15 failed, 0 skipped, 16s
+   red: 1 the contracts desk labels a real man's deal as this game's, and no made up man's Dundee 2026-27: AssertionError: youth Soren Nyman (Youth), final year row: expected true to be false // Object.is equality
+   red: 1 the contracts desk labels a real man's deal as this game's, and no made up man's Everton 2005-06: AssertionError: youth Sam Ravenhill (Youth), final year row: expected true to be false // Object.is equality
+   red: 1 the contracts desk labels a real man's deal as this game's, and no made up man's OB 2026-27: AssertionError: youth Ravi Ferreiro (Youth), final year row: expected true to be false // Object.is equality
+   red: 1 the contracts desk labels a real man's deal as this game's, and no made up man's Sevilla old save (Round 1052): AssertionError: youth Kofi Weston (Youth), final year row: expected true to be false // Object.is equality
+   red: 1 the contracts desk labels a real man's deal as this game's, and no made up man's Hertha book save: AssertionError: youth Emeka Miclea (Youth), final year row: expected true to be false // Object.is equality
+   red: 2 the squad list labels a real man's deal as this game's, and no made up man's Dundee 2026-27: AssertionError: youth Sam Ravenhill (Youth), squad row detail: expected true to be false // Object.is equality
+   red: 2 the squad list labels a real man's deal as this game's, and no made up man's Everton 2005-06: AssertionError: youth Sam Ravenhill (Youth), squad row detail: expected true to be false // Object.is equality
+   red: 2 the squad list labels a real man's deal as this game's, and no made up man's OB 2026-27: AssertionError: youth Sam Tarrant (Youth), squad row detail: expected true to be false // Object.is equality
+   red: 2 the squad list labels a real man's deal as this game's, and no made up man's Sevilla old save (Round 1052): AssertionError: youth Kofi Weston (Youth), squad row detail: expected true to be false // Object.is equality
+   red: 2 the squad list labels a real man's deal as this game's, and no made up man's Hertha book save: AssertionError: youth Omar Keane (Youth), squad row detail: expected true to be false // Object.is equality
+   red: 3 the dressing room labels a real man's wage as this game's, and no made up man's Dundee 2026-27: AssertionError: youth Enzo Ozturk (Youth), dressing room: expected true to be false // Object.is equality
+   red: 3 the dressing room labels a real man's wage as this game's, and no made up man's Everton 2005-06: AssertionError: youth Sam Ravenhill (Youth), dressing room: expected true to be false // Object.is equality
+   red: 3 the dressing room labels a real man's wage as this game's, and no made up man's OB 2026-27: AssertionError: youth Mats Novak (Youth), dressing room: expected true to be false // Object.is equality
+   red: 3 the dressing room labels a real man's wage as this game's, and no made up man's Sevilla old save (Round 1052): AssertionError: youth Kofi Weston (Youth), dressing room: expected true to be false // Object.is equality
+   red: 3 the dressing room labels a real man's wage as this game's, and no made up man's Hertha book save: AssertionError: youth Kofi Ferreira (Youth), dressing room: expected true to be false // Object.is equality
+simCmTablesTruth: FAIL, cases red above
