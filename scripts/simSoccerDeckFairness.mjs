@@ -934,7 +934,12 @@ console.log('9) What a narrating card or story prints is what the row holds');
   const erasSource = fs.readFileSync(path.join(ROOT, 'src/lib/careerEras.ts'), 'utf8');
   const INJURIES = [...erasSource.matchAll(/const INJ_[A-Z]+ = \[([^\]]*)\]/g)].flatMap(m => [...m[1].matchAll(/"([^"]+)"/g)].map(x => x[1]));
   const badArticle = t => /\ba (?:[AEIOUaeiou]|[FHLMNRSX][A-Z])/.test(t) || /\ban (?![AEIOUaeiou]|[FHLMNRSX][A-Z])/.test(t);
-  const names = (t, injury) => typeof t === 'string' && t.toLowerCase().includes(String(injury).toLowerCase());
+  /* names it, and with no article when the name is a plural ("with a bruised ribs" printed on the first fix) */
+  const names = (t, injury) => {
+    if (typeof t !== 'string') return false;
+    const low = t.toLowerCase(), inj = String(injury).toLowerCase();
+    return low.includes(inj) && !(/[^s]s$/.test(inj) && (low.includes(` a ${inj}`) || low.includes(` an ${inj}`)));
+  };
   const blowAt = TEMPLATES.findIndex(t => t.fragments.some(f => f.includes('Out For Weeks With')));
   if (INJURIES.length < 10) fail(`only ${INJURIES.length} injury names read from careerEras.ts`);
   if (blowAt < 0) fail('the INJURY BLOW story is gone from the paper\'s table');
@@ -946,7 +951,7 @@ console.log('9) What a narrating card or story prints is what the row holds');
     const card = withStream(() => E.getAllEvents(s), seeded(11)).value.find(e => e.id === 11);
     const after = card.choices[0].apply({ ...copy(s), events: [...s.events] });
     const log = after.events[after.events.length - 1];
-    if (!names(card.description, injury)) fail(`card 11 on a row holding "${injury}" reads "${card.description}"`);
+    if (!names(card.description, injury) || (/[^s]s$/.test(injury) && card.description.includes('has left its'))) fail(`card 11 on a row holding "${injury}" reads "${card.description}"`);
     if (!names(log, injury) || badArticle(log) || (/hamstring/i.test(log) && !/hamstring/i.test(injury))) fail(`card 11 on a row holding "${injury}" logs "${log}"`);
     if (/^Achilles/.test(injury) && !card.description.includes('Achilles')) fail(`card 11 lowercases a name: "${card.description}"`);
     const { s: ps, season } = paperCase();

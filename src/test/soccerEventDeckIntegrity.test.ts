@@ -142,6 +142,7 @@ describe('card 11 names the row\'s injury', () => {
     ['MCL sprain', 'Your MCL sprain this season', 'Took time to recover from an MCL sprain'],
     ['Achilles tendon rupture', 'Your Achilles tendon rupture this season', 'Took time to recover from an Achilles tendon rupture'],
     ['Twisted ankle', 'Your twisted ankle this season', 'Took time to recover from a twisted ankle'],
+    ['Bruised ribs', 'Your bruised ribs this season have left their mark', 'Took time to recover from bruised ribs'],
   ])('%s on its face and in the log line its first choice writes', (injury, face, log) => {
     const s = career([row({ injury, injuryWeeks: 3 })]);
     const card = getAllEvents(s).find(e => e.id === 11)!;

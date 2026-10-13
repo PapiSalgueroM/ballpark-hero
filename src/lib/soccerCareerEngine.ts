@@ -6751,8 +6751,9 @@ export function cardFitsSeason(id: number, state: CareerState): boolean {
 const ordinalOf = (n: number) => `${n}${n % 100 >= 11 && n % 100 <= 13 ? "th" : ["th", "st", "nd", "rd"][n % 10] ?? "th"}`;
 /* "Achilles" is a name and keeps its capital; "ACL" and "MCL" are left alone by the second letter test */
 const lowerFirst = (t: string) => (/^(?!Achilles)[A-Z][a-z]/.test(t) ? t[0].toLowerCase() + t.slice(1) : t);
-/* "an" before a vowel and before a letter read as a vowel sound in an abbreviation ("an MCL sprain") */
-const withArticle = (t: string) => `${/^([AEIOUaeiou]|[FHLMNRSX][A-Z])/.test(t) ? "an" : "a"} ${t}`;
+/* "an" before a vowel and before a letter read as a vowel sound in an abbreviation ("an MCL sprain"), and no
+   article before a plural ("bruised ribs") */
+const withArticle = (t: string) => (/[^s]s$/.test(t) ? t : `${/^([AEIOUaeiou]|[FHLMNRSX][A-Z])/.test(t) ? "an" : "a"} ${t}`);
 
 /** The injury the season's row holds, or null. Card 11's words and its log line both read it. */
 function rowInjury(state: CareerState): string | null {
@@ -6765,7 +6766,10 @@ function rowInjury(state: CareerState): string | null {
 function seasonCardText(id: number, state: CareerState, fallback: string): string {
   const row = state.seasons[state.seasons.length - 1];
   if (!row || row.type !== "playing") return fallback;
-  if (id === 11 && rowInjury(state)) return `Your ${lowerFirst(rowInjury(state)!)} this season has left its mark.`;
+  if (id === 11 && rowInjury(state)) {
+    const injury = lowerFirst(rowInjury(state)!);
+    return `Your ${injury} this season ${/[^s]s$/.test(injury) ? "have left their" : "has left its"} mark.`;
+  }
   if (id === 12 && typeof row.leagueFinish === "number") return `After finishing ${ordinalOf(row.leagueFinish)}, the club sacks the manager. The new one does not rate you.`;
   if (id === 15 && typeof row.leagueApps === "number") return `Only ${row.leagueApps} league game${row.leagueApps === 1 ? "" : "s"} this season, and now you are dropped from the starting lineup without explanation.`;
   if (id === 19 && row.tournament) return `You are left out of the ${row.tournament} squad.`;
