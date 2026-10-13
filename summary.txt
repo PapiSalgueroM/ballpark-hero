@@ -1,0 +1,9 @@
+simSoccerCareer exit=0 4s | PASS: no crashes, no snubs, homegrown path live
+simCareerEngaged exit=0 18s | ALL ENGAGED CAREER CHECKS PASSED
+simCareerLife exit=0 20s | simCareerLife: green. Every peak is reachable, the critic has an opinion and it is about the football, and nothing about either of them is on the save.
+simCareerDilemmaTruth exit=0 5s | simCareerDilemmaTruth: all green
+simCareerRivalryEvents exit=0 5s | simCareerRivalryEvents: green. Soccer is unchanged, the NFL, MLB, NBA and NHL beats fire, and the rival is never a real player.
+simClubCaptaincy exit=0 22s | simClubCaptaincy: green. The armband is earned, counted, and never travels.
+simCareerDilemmaReach exit=0 41s | simCareerDilemmaReach: all green
+simInternational exit=0 11s | ALL INTERNATIONAL CHECKS PASSED
+simInjuryArc exit=0 36s | simInjuryArc: green. Three roads back, and every one of them costs something real.
