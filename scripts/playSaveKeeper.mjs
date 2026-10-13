@@ -81,7 +81,11 @@
  * The sorted list of storage KEYS at the end must be the same on the build
  * of origin/main and on this branch: the keeper adds no key (no journal, no
  * backup, no marker) to an ordinary visit. Values are not compared, several
- * games stamp a time into their save as they load.
+ * games stamp a time into their save as they load. Since the base is a build
+ * from before the keeper, a key a later round adds on purpose is named in
+ * KEYS_ADDED_ON_PURPOSE (exact names, each with its round); every other
+ * added key still fails. Round 1323 named the first one, the Club Manager
+ * save fence's generation key.
  *
  * THE BOOT PASS'S COST. In Chromium at a 4x CPU throttle, with the largest
  * real save of every game held: the time of one runSaveKeeper pass, beside a
@@ -102,6 +106,8 @@
  *     save must be LOST, so the control exits 1 and says FIRED.
  *   KEEPER_CONTROL=extrakey  journey K plants one extra key on the branch
  *     arm: the comparison must fail.
+ *   KEEPER_CONTROL=extrafence  journey K plants a key with the fence key's
+ *     prefix that is not on the named list: the comparison must still fail.
  *   KEEPER_CONTROL=tamper    one character of every copy of A is changed
  *     after the load and before the verdict: no walk may read SURVIVED.
  *   KEEPER_CONTROL=answered  (the toggle) after the first press the walker
@@ -159,7 +165,7 @@ const BASE_DIST = process.env.KEEPER_BASE_DIST ? path.resolve(process.env.KEEPER
 const MODE = process.env.KEEPER_MODE || 'assert';
 if (!['assert', 'report'].includes(MODE)) { console.error(`KEEPER_MODE=${MODE} is not a mode this walk knows`); process.exit(2); }
 const CONTROL = process.env.KEEPER_CONTROL || '';
-if (CONTROL && !['inplace', 'extrakey', 'tamper', 'answered', 'assignload'].includes(CONTROL)) { console.error(`KEEPER_CONTROL=${CONTROL} is not a control this walk knows`); process.exit(2); }
+if (CONTROL && !['inplace', 'extrakey', 'extrafence', 'tamper', 'answered', 'assignload'].includes(CONTROL)) { console.error(`KEEPER_CONTROL=${CONTROL} is not a control this walk knows`); process.exit(2); }
 /* Round 1219 review: without a build of the tree before this round the base arm and journey K do not run, and the
    walk used to close "green" all the same, with no loss control left. It now refuses to start that way unless the
    caller says so in as many words, and its closing line then says what was not run. */
@@ -181,6 +187,14 @@ const PLANT_STAMP = '2026-01-02T03-04-05';
    route joins this list only by measurement. They are the five long games
    that write their in memory game as the page leaves. */
 const LOSS_ON_MAIN = ['/club-manager', '/stadium-tycoon', '/wonderkid-factory', '/hall-of-champions', '/idle-arena'];
+/* Journey K compares the keys of an ordinary visit with the build the base arm needs, a build from BEFORE the
+   keeper (the release gate pins fb8d6811), so a key a later round adds on purpose would read as the keeper's for
+   ever, at every gate, and hide the next key nobody meant. A key joins this list only by name, never by prefix,
+   with the round that added it and why. Any other added key still fails, a fence shaped one included
+   (KEEPER_CONTROL=extrafence proves that). */
+const KEYS_ADDED_ON_PURPOSE = {
+  'dukb-fence:dukb-club-manager-save': 'Round 1323, one tab wins: the Club Manager save\'s generation, kept in its own key beside the save and moved by every game write (src/lib/saveFence.ts)',
+};
 const HALL = '/hall-of-champions';
 
 const stripComments = s => s.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '');
@@ -647,7 +661,7 @@ async function keysAfterVisit(browser, site, fleet, extraKey) {
   const { ctx, page } = await openContext(browser, site, WIDTHS[0]);
   try {
     await page.evaluate(pairs => { for (const [k, v] of pairs) localStorage.setItem(k, v); }, ENTRIES.map(e => [e.saveKey, fleet[e.path][0]]));
-    if (extraKey) await page.evaluate(() => localStorage.setItem('dukb-control-extra-key', '1'));
+    if (extraKey) await page.evaluate(k => localStorage.setItem(k, '1'), extraKey);
     for (const p of ['/', ...ENTRIES.map(e => e.path)]) {
       await page.goto(`${site}${p}`, { waitUntil: 'domcontentloaded', timeout: 45000 });
       await settle(page);
@@ -702,7 +716,10 @@ async function keeperForPage() {
 }
 
 /* ------------------------------------------------------------------ */
-const PARTS_OF_CONTROL = { inplace: 'cross', assignload: 'cross', extrakey: 'K', tamper: 'fresh', answered: 'toggle' };
+const PARTS_OF_CONTROL = { inplace: 'cross', assignload: 'cross', extrakey: 'K', extrafence: 'K', tamper: 'fresh', answered: 'toggle' };
+/* The key each journey K control plants on the branch arm. extrafence is shaped like the fence key on the named
+   list (the same prefix) and must still fail: the list admits names, not a family. */
+const CONTROL_KEY = { extrakey: 'dukb-control-extra-key', extrafence: 'dukb-fence:dukb-control-extra-key' };
 const PARTS = (process.env.PARTS || PARTS_OF_CONTROL[CONTROL] || 'fresh,planted,cross,toggle,K,cost').split(',').map(s => s.trim());
 const has = p => PARTS.includes(p);
 if (MODE === 'assert' && !CONTROL && !BASE_DIST && !NO_BASE_SAID && (has('fresh') || has('planted') || has('K'))) {
@@ -796,10 +813,15 @@ try {
   }
   if (has('K') && baseSite) {
     console.log('\nJourney K: the storage keys after an ordinary visit (a real save of all 21 games, the home page and every route once)');
-    const onMain = await keysAfterVisit(browser, baseSite, real.fleet, false);
-    const onBranch = await keysAfterVisit(browser, site, real.fleet, CONTROL === 'extrakey');
-    keys = { onMain, onBranch, added: onBranch.filter(k => !onMain.includes(k)), gone: onMain.filter(k => !onBranch.includes(k)) };
-    console.log(`  origin/main: ${onMain.length} keys. branch: ${onBranch.length} keys. Added on the branch: ${keys.added.join(', ') || 'none'}. Only on origin/main: ${keys.gone.join(', ') || 'none'}.`);
+    const onMain = await keysAfterVisit(browser, baseSite, real.fleet, null);
+    const onBranch = await keysAfterVisit(browser, site, real.fleet, CONTROL_KEY[CONTROL] || null);
+    const added = onBranch.filter(k => !onMain.includes(k));
+    keys = { onMain, onBranch, added, gone: onMain.filter(k => !onBranch.includes(k)) };
+    keys.onPurpose = added.filter(k => Object.hasOwn(KEYS_ADDED_ON_PURPOSE, k));
+    keys.unexplained = added.filter(k => !Object.hasOwn(KEYS_ADDED_ON_PURPOSE, k));
+    console.log(`  origin/main: ${onMain.length} keys. branch: ${onBranch.length} keys. Added on the branch: ${added.join(', ') || 'none'}. Only on origin/main: ${keys.gone.join(', ') || 'none'}.`);
+    for (const k of keys.onPurpose) console.log(`  added on purpose, by name: ${k} (${KEYS_ADDED_ON_PURPOSE[k]})`);
+    console.log(`  added and NOT on the named list: ${keys.unexplained.join(', ') || 'none'}`);
     console.log(`  the branch's keys: ${onBranch.join(', ')}`);
   }
   if (has('cost')) {
@@ -871,11 +893,13 @@ if (CONTROL === 'tamper') {
     : `playSaveKeeper control tamper: DID NOT FIRE. ${count(brJudged, r => r.ok)} of ${br.length} walk(s) still read SURVIVED.`);
   process.exit(fired ? 1 : 2);
 }
-if (CONTROL === 'extrakey') {
-  const fired = !!keys && keys.added.includes('dukb-control-extra-key');
+if (CONTROL === 'extrakey' || CONTROL === 'extrafence') {
+  /* Read from the list the verdict below fails on, so a key the named list swallowed cannot read FIRED. */
+  const planted = CONTROL_KEY[CONTROL];
+  const fired = !!keys && keys.unexplained.includes(planted);
   console.log(fired
-    ? 'playSaveKeeper control extrakey: FIRED. Journey K saw the key the branch arm added.'
-    : `playSaveKeeper control extrakey: DID NOT FIRE. ${keys ? `Added: ${keys.added.join(', ') || 'none'}` : 'Journey K did not run (it needs KEEPER_BASE_DIST)'}.`);
+    ? `playSaveKeeper control ${CONTROL}: FIRED. Journey K failed on the key the branch arm added (${planted}).`
+    : `playSaveKeeper control ${CONTROL}: DID NOT FIRE. ${keys ? `Added and not on the named list: ${keys.unexplained.join(', ') || 'none'}` : 'Journey K did not run (it needs KEEPER_BASE_DIST)'}.`);
   process.exit(fired ? 1 : 2);
 }
 
@@ -895,7 +919,7 @@ if (has('planted')) {
   for (const p of must) if (!brJudged.some(r => r.flow === 'planted' && r.route === p)) problems.push(`the planted flow could not judge ${p}`);
   console.log(`playSaveKeeper: the planted flow judged ${new Set(brJudged.filter(r => r.flow === 'planted').map(r => r.route)).size} of ${routes.length} route(s)`);
 }
-if (keys && keys.added.length) problems.push(`journey K: the branch adds storage key(s) to an ordinary visit: ${keys.added.join(', ')}`);
+if (keys && keys.unexplained.length) problems.push(`journey K: the branch adds storage key(s) to an ordinary visit: ${keys.unexplained.join(', ')} (a key added on purpose joins KEYS_ADDED_ON_PURPOSE by name, with its round)`);
 if (has('K') && !keys) console.log('playSaveKeeper: journey K was NOT run (no build of origin/main was given).');
 
 if (problems.length) {
@@ -908,4 +932,4 @@ if (!BASE_DIST && (has('fresh') || has('planted') || has('K'))) {
   console.log('playSaveKeeper: green on the BRANCH ARM ONLY (KEEPER_NO_BASE=1). The base arm and journey K were NOT run, so this run carries no loss control and says nothing about the keys an ordinary visit stores.');
   process.exit(0);
 }
-console.log('playSaveKeeper: green. A save put back with a game in memory survives the load, and an ordinary visit stores nothing new.');
+console.log(`playSaveKeeper: green. A save put back with a game in memory survives the load, and an ordinary visit stores nothing new${keys && keys.onPurpose.length ? ` beyond the ${keys.onPurpose.length} key(s) named in KEYS_ADDED_ON_PURPOSE` : ''}.`);
