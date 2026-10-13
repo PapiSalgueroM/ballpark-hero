@@ -1,0 +1,6 @@
+build exit=0 21s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+simFlagshipWeight exit=0 1s | simFlagshipWeight: green. The flagship carries its own game and nobody else's.
+playWilderness-unseeded exit=0 20s | playWilderness: green. Getting sacked is a chapter now, not the last page.
+weight exit=1 29s | sweepWeight: 3 failures
+playCmLeagueLeaders exit=0 95s | playCmLeagueLeaders: green, 5 sections at 320, 390 and 1280
+playClubManager-unseeded exit=0 283s | Played Club Manager through its own screens. 0 findings.

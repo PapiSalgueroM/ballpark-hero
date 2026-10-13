@@ -1,0 +1,7 @@
+#!serve
+#!playwright
+weight: SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs
+simFlagshipWeight: node scripts/simFlagshipWeight.mjs
+playClubManager-unseeded: ENGINES=chromium node scripts/playClubManager.mjs
+playWilderness-unseeded: ENGINES=chromium node scripts/playWilderness.mjs
+playCmLeagueLeaders: ENGINES=chromium node scripts/playCmLeagueLeaders.mjs
