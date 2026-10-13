@@ -1,0 +1,1 @@
+CTL combinecut seed=e exit=1 mutated=1 threw=0 refused=0 | sections:  8 10. | simCareerPreDraft [control combinecut] [seed set e]: 8 FAILURE(S)

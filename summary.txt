@@ -1,0 +1,53 @@
+pd-a exit=0 22s | simCareerPreDraft [seed set a]: ALL GREEN
+vitest exit=0 25s |    Duration  23.39s (transform 4.97s, setup 585ms, collect 13.85s, tests 37.40s, environment 3.61s, prepare 1.26s)
+pd-b exit=0 16s | simCareerPreDraft [seed set b]: ALL GREEN
+pd-c exit=0 16s | simCareerPreDraft [seed set c]: ALL GREEN
+pd-d exit=0 16s | simCareerPreDraft [seed set d]: ALL GREEN
+pd-e exit=0 15s | simCareerPreDraft [seed set e]: ALL GREEN
+c-randomteam exit=1 14s | CTL randomteam seed=a exit=1 mutated=1 threw=0 refused=0 | sections:  8 13. 8 2. 8 9. | simCareerPreDraft [control randomteam] [seed set a]: 24 FAILURE(S)
+c-flatstock exit=1 14s | CTL flatstock seed=a exit=1 mutated=1 threw=0 refused=0 | sections:  8 2. 8 3. 8 9. | simCareerPreDraft [control flatstock] [seed set a]: 24 FAILURE(S)
+c-mathrandom exit=1 9s | CTL mathrandom seed=a exit=1 mutated=1 threw=1 refused=0 | sections:  1 11. 2 5. 8 9. | simCareerPreDraft [control mathrandom] [seed set a]: 11 FAILURE(S)
+c-flatlottery exit=1 14s | CTL flatlottery seed=a exit=1 mutated=1 threw=0 refused=0 | sections:  2 4. 2 9. | simCareerPreDraft [control flatlottery] [seed set a]: 4 FAILURE(S)
+tsc exit=0 94s | 
+c-cardwords exit=1 15s | CTL cardwords seed=a exit=1 mutated=1 threw=0 refused=0 | sections:  8 11. 8 6. 8 9. | simCareerPreDraft [control cardwords] [seed set a]: 24 FAILURE(S)
+c-showcasewords exit=1 16s | CTL showcasewords seed=a exit=1 mutated=1 threw=0 refused=0 | sections:  8 6. 8 9. | simCareerPreDraft [control showcasewords] [seed set a]: 16 FAILURE(S)
+c-erarule exit=1 15s | CTL erarule seed=a exit=1 mutated=1 threw=0 refused=0 | sections:  1 1. 1 9. | simCareerPreDraft [control erarule] [seed set a]: 2 FAILURE(S)
+c-ceiling exit=1 14s | CTL ceiling seed=a exit=1 mutated=1 threw=0 refused=0 | sections:  8 11. 8 7. 8 9. | simCareerPreDraft [control ceiling] [seed set a]: 24 FAILURE(S)
+c-ladderskip exit=1 14s | CTL ladderskip seed=a exit=1 mutated=1 threw=0 refused=0 | sections:  2 1. 2 9. | simCareerPreDraft [control ladderskip] [seed set a]: 4 FAILURE(S)
+c-undraftedtop exit=1 14s | CTL undraftedtop seed=a exit=1 mutated=1 threw=0 refused=0 | sections:  2 1. 4 9. | simCareerPreDraft [control undraftedtop] [seed set a]: 6 FAILURE(S)
+c-squeeze exit=1 15s | CTL squeeze seed=a exit=1 mutated=1 threw=0 refused=0 | sections:  8 13. 8 2. 8 3. 8 9. | simCareerPreDraft [control squeeze] [seed set a]: 32 FAILURE(S)
+c-laterlottery exit=1 15s | CTL laterlottery seed=a exit=1 mutated=1 threw=0 refused=0 | sections:  2 4b. 2 9. | simCareerPreDraft [control laterlottery] [seed set a]: 4 FAILURE(S)
+c-flatlater exit=1 15s | CTL flatlater seed=a exit=1 mutated=1 threw=0 refused=0 | sections:  2 4. 2 9. | simCareerPreDraft [control flatlater] [seed set a]: 4 FAILURE(S)
+c-loadershallow exit=1 16s | CTL loadershallow seed=a exit=1 mutated=1 threw=0 refused=0 | sections:  1 8. | simCareerPreDraft [control loadershallow] [seed set a]: 1 FAILURE(S)
+c-gradeshift exit=1 16s | CTL gradeshift seed=a exit=1 mutated=1 threw=0 refused=0 | sections:  8 10. 8 9. | simCareerPreDraft [control gradeshift] [seed set a]: 16 FAILURE(S)
+c-extradraw exit=1 15s | CTL extradraw seed=a exit=1 mutated=1 threw=0 refused=0 | sections:  8 9. | simCareerPreDraft [control extradraw] [seed set a]: 8 FAILURE(S)
+c-nightoffbyone exit=1 15s | CTL nightoffbyone seed=a exit=1 mutated=1 threw=0 refused=0 | sections:  8 13. | simCareerPreDraft [control nightoffbyone] [seed set a]: 8 FAILURE(S)
+c-nightlottery exit=1 16s | CTL nightlottery seed=a exit=1 mutated=1 threw=0 refused=0 | sections:  2 13. | simCareerPreDraft [control nightlottery] [seed set a]: 2 FAILURE(S)
+c-nightopen exit=1 16s | CTL nightopen seed=a exit=1 mutated=1 threw=0 refused=0 | sections:  8 13. | simCareerPreDraft [control nightopen] [seed set a]: 8 FAILURE(S)
+c-nightdedup exit=1 15s | CTL nightdedup seed=a exit=1 mutated=1 threw=0 refused=0 | sections:  8 13. | simCareerPreDraft [control nightdedup] [seed set a]: 8 FAILURE(S)
+c-nightdraw exit=1 14s | CTL nightdraw seed=a exit=1 mutated=1 threw=0 refused=0 | sections:  1 13. | simCareerPreDraft [control nightdraw] [seed set a]: 1 FAILURE(S)
+c-projection exit=1 15s | CTL projection seed=a exit=1 mutated=1 threw=0 refused=0 | sections:  8 13. | simCareerPreDraft [control projection] [seed set a]: 8 FAILURE(S)
+c-combinewords exit=1 15s | CTL combinewords seed=a exit=1 mutated=1 threw=0 refused=0 | sections:  8 10. 2 12. | simCareerPreDraft [control combinewords] [seed set a]: 10 FAILURE(S)
+c-combinemean exit=1 15s | CTL combinemean seed=a exit=1 mutated=1 threw=0 refused=0 | sections:  7 10. | simCareerPreDraft [control combinemean] [seed set a]: 7 FAILURE(S)
+c-combinemono exit=1 16s | CTL combinemono seed=a exit=1 mutated=1 threw=0 refused=0 | sections:  1 10. 1 12. | simCareerPreDraft [control combinemono] [seed set a]: 2 FAILURE(S)
+c-combinecut exit=1 14s | CTL combinecut seed=a exit=1 mutated=1 threw=0 refused=0 | sections:  8 10. | simCareerPreDraft [control combinecut] [seed set a]: 8 FAILURE(S)
+c-reroll exit=1 11s | CTL reroll seed=a exit=1 mutated=1 threw=0 refused=0 | sections:  8 11. | simCareerPreDraft [control reroll] [seed set a]: 8 FAILURE(S)
+c-combinegone exit=1 6s | CTL combinegone seed=a exit=1 mutated=1 threw=0 refused=0 | sections:  8 10. 8 11. 2 12. | simCareerPreDraft [control combinegone] [seed set a]: 18 FAILURE(S)
+c-flathands exit=1 14s | CTL flathands seed=a exit=1 mutated=1 threw=0 refused=0 | sections:  8 10. 2 12. | simCareerPreDraft [control flathands] [seed set a]: 10 FAILURE(S)
+c-wayback exit=1 16s | CTL wayback seed=a exit=1 mutated=1 threw=0 refused=0 | sections:  8 11. | simCareerPreDraft [control wayback] [seed set a]: 8 FAILURE(S)
+c-curveflip exit=1 16s | CTL curveflip seed=a exit=1 mutated=1 threw=0 refused=0 | sections:  1 10. 1 12. | simCareerPreDraft [control curveflip] [seed set a]: 2 FAILURE(S)
+e-combinewords exit=1 13s | CTL combinewords seed=e exit=1 mutated=1 threw=0 refused=0 | sections:  8 10. 2 12. | simCareerPreDraft [control combinewords] [seed set e]: 10 FAILURE(S)
+c-keyscurve exit=1 15s | CTL keyscurve seed=a exit=1 mutated=1 threw=0 refused=0 | sections:  1 10. 1 12. | simCareerPreDraft [control keyscurve] [seed set a]: 2 FAILURE(S)
+e-combinemean exit=1 14s | CTL combinemean seed=e exit=1 mutated=1 threw=0 refused=0 | sections:  7 10. | simCareerPreDraft [control combinemean] [seed set e]: 7 FAILURE(S)
+e-combinecut exit=1 13s | CTL combinecut seed=e exit=1 mutated=1 threw=0 refused=0 | sections:  8 10. | simCareerPreDraft [control combinecut] [seed set e]: 8 FAILURE(S)
+e-combinemono exit=1 16s | CTL combinemono seed=e exit=1 mutated=1 threw=0 refused=0 | sections:  1 10. 1 12. | simCareerPreDraft [control combinemono] [seed set e]: 2 FAILURE(S)
+e-reroll exit=1 10s | CTL reroll seed=e exit=1 mutated=1 threw=0 refused=0 | sections:  8 11. | simCareerPreDraft [control reroll] [seed set e]: 8 FAILURE(S)
+e-combinegone exit=1 6s | CTL combinegone seed=e exit=1 mutated=1 threw=0 refused=0 | sections:  8 10. 8 11. 2 12. | simCareerPreDraft [control combinegone] [seed set e]: 18 FAILURE(S)
+e-wayback exit=1 15s | CTL wayback seed=e exit=1 mutated=1 threw=0 refused=0 | sections:  8 11. | simCareerPreDraft [control wayback] [seed set e]: 8 FAILURE(S)
+e-flathands exit=1 13s | CTL flathands seed=e exit=1 mutated=1 threw=0 refused=0 | sections:  8 10. 2 12. | simCareerPreDraft [control flathands] [seed set e]: 10 FAILURE(S)
+e-curveflip exit=1 15s | CTL curveflip seed=e exit=1 mutated=1 threw=0 refused=0 | sections:  1 10. 1 12. | simCareerPreDraft [control curveflip] [seed set e]: 2 FAILURE(S)
+e-keyscurve exit=1 15s | CTL keyscurve seed=e exit=1 mutated=1 threw=0 refused=0 | sections:  1 10. 1 12. | simCareerPreDraft [control keyscurve] [seed set e]: 2 FAILURE(S)
+e-gradeshift exit=1 16s | CTL gradeshift seed=e exit=1 mutated=1 threw=0 refused=0 | sections:  8 10. 8 9. | simCareerPreDraft [control gradeshift] [seed set e]: 16 FAILURE(S)
+prospect exit=0 18s | simUsCareerProspect: 36 actual-board outcomes passed across all four sports
+rivals exit=0 17s | No rival product names found. 0 findings.
+anchors exit=0 46s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.

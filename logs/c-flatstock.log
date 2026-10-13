@@ -1,0 +1,1 @@
+CTL flatstock seed=a exit=1 mutated=1 threw=0 refused=0 | sections:  8 2. 8 3. 8 9. | simCareerPreDraft [control flatstock] [seed set a]: 24 FAILURE(S)

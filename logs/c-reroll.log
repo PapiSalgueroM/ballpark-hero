@@ -1,0 +1,1 @@
+CTL reroll seed=a exit=1 mutated=1 threw=0 refused=0 | sections:  8 11. | simCareerPreDraft [control reroll] [seed set a]: 8 FAILURE(S)

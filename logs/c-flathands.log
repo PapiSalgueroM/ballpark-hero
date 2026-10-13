@@ -1,0 +1,1 @@
+CTL flathands seed=a exit=1 mutated=1 threw=0 refused=0 | sections:  8 10. 2 12. | simCareerPreDraft [control flathands] [seed set a]: 10 FAILURE(S)

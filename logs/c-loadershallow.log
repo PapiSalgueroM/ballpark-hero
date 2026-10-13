@@ -1,0 +1,1 @@
+CTL loadershallow seed=a exit=1 mutated=1 threw=0 refused=0 | sections:  1 8. | simCareerPreDraft [control loadershallow] [seed set a]: 1 FAILURE(S)

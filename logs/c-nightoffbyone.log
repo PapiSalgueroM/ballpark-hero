@@ -1,0 +1,1 @@
+CTL nightoffbyone seed=a exit=1 mutated=1 threw=0 refused=0 | sections:  8 13. | simCareerPreDraft [control nightoffbyone] [seed set a]: 8 FAILURE(S)

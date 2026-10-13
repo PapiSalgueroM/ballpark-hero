@@ -1,0 +1,1 @@
+CTL undraftedtop seed=a exit=1 mutated=1 threw=0 refused=0 | sections:  2 1. 4 9. | simCareerPreDraft [control undraftedtop] [seed set a]: 6 FAILURE(S)

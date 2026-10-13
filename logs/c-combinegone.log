@@ -1,0 +1,1 @@
+CTL combinegone seed=a exit=1 mutated=1 threw=0 refused=0 | sections:  8 10. 8 11. 2 12. | simCareerPreDraft [control combinegone] [seed set a]: 18 FAILURE(S)

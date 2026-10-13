@@ -1,0 +1,177 @@
+  control combinemean: mutated src/lib/careerPreDraft.ts
+
+5. Every draw comes from keyedRng
+  ok: no Math.random in the code of the five files or of the night builder
+  ok: the night builder holds no stream and no clock of its own
+  ok: 16000 careers ran with Math.random made to throw
+  ok: the same seeds replay to the same careers
+
+1. Era rules
+  ok: nfl:now: 7 rounds, 32 teams, routes power, small
+  ok: nfl:y2005: 7 rounds, 32 teams, routes power, small
+  ok: nba:now: 2 rounds, 30 teams, routes one, three
+  ok: nba:y2004: 2 rounds, 29 teams, routes prep, one, three
+  ok: mlb:now: 20 rounds, 30 teams, routes hs, juco, college
+  ok: mlb:y2004: 50 rounds, 30 teams, routes hs, juco, college
+  ok: nhl:now: 7 rounds, 32 teams, routes junior, college, europe
+  ok: nhl:y2006: 7 rounds, 30 teams, routes junior, college, europe
+
+2. The team always equals the holder of the pick
+  ok: nfl:now: all 1487 drafted players joined the holder of their pick, undrafted share 25.7%
+  ok: nfl:y2005: all 1533 drafted players joined the holder of their pick, undrafted share 23.4%
+  ok: nba:now: all 1541 drafted players joined the holder of their pick, undrafted share 22.9%
+  ok: nba:y2004: all 1513 drafted players joined the holder of their pick, undrafted share 24.3%
+  ok: mlb:now: all 1530 drafted players joined the holder of their pick, undrafted share 23.5%
+  ok: mlb:y2004: all 1578 drafted players joined the holder of their pick, undrafted share 21.1%
+  ok: nhl:now: all 1583 drafted players joined the holder of their pick, undrafted share 20.8%
+  ok: nhl:y2006: all 1549 drafted players joined the holder of their pick, undrafted share 22.6%
+
+3. Median pick falls as the stock decile rises
+  ok: nfl:now: rho -0.932, decile medians 225 225 225 188 150 117 81 55 29 11, top over bottom 0.049, middle deciles at 0.595 of the draft, largest next over previous decile 1.000
+  ok: nfl:y2005: rho -0.929, decile medians 225 225 219 179 145 107 76 49 28 10, top over bottom 0.044, middle deciles at 0.563 of the draft, largest next over previous decile 1.000
+  ok: nba:now: rho -0.972, decile medians 61 61 61 48 42 33 26 19 13 6, top over bottom 0.098, middle deciles at 0.625 of the draft, largest next over previous decile 1.000
+  ok: nba:y2004: rho -0.967, decile medians 59 59 59 52 42 34 28 21 14 9, top over bottom 0.153, middle deciles at 0.655 of the draft, largest next over previous decile 1.000
+  ok: mlb:now: rho -0.968, decile medians 601 601 601 514 426 333 256 190 123 52, top over bottom 0.087, middle deciles at 0.632 of the draft, largest next over previous decile 1.000
+  ok: mlb:y2004: rho -0.973, decile medians 1501 1501 1468 1208 978 820 639 450 297 104, top over bottom 0.069, middle deciles at 0.599 of the draft, largest next over previous decile 1.000
+  ok: nhl:now: rho -0.972, decile medians 225 225 218 179 150 114 92 64 43 25, top over bottom 0.111, middle deciles at 0.588 of the draft, largest next over previous decile 1.000
+  ok: nhl:y2006: rho -0.971, decile medians 211 211 210 177 147 118 90 64 41 21, top over bottom 0.100, middle deciles at 0.629 of the draft, largest next over previous decile 1.000
+
+4. NBA lottery frequencies against the verified combinations
+  ok: nba:now: seed 1 won pick 1 14.32% (verified 14%); pick 1: largest |z| 3.01, chi-square 14.7; pick 2: largest |z| 2.42, chi-square 14.3; pick 3: largest |z| 1.73, chi-square 10.8; pick 4: largest |z| 2.02, chi-square 14.6
+  ok: nba:y2004: seed 1 won pick 1 25.14% (verified 25%); pick 1: largest |z| 3.03, chi-square 13.2; pick 2: largest |z| 2.53, chi-square 15.3; pick 3: largest |z| 1.75, chi-square 11.1
+
+4b. Every round after the first is plain inverse record
+  ok: nfl:now: 200 orders, rounds 2 to 7 all inverse record, round 1 too
+  ok: nfl:y2005: 200 orders, rounds 2 to 7 all inverse record, round 1 too
+  ok: nba:now: 200 orders, rounds 2 to 2 all inverse record
+  ok: nba:y2004: 200 orders, rounds 2 to 2 all inverse record
+  ok: mlb:now: 200 orders, rounds 2 to 20 all inverse record, round 1 too
+  ok: mlb:y2004: 200 orders, rounds 2 to 50 all inverse record, round 1 too
+  ok: nhl:now: 200 orders, rounds 2 to 7 all inverse record, round 1 too
+  ok: nhl:y2006: 200 orders, rounds 2 to 7 all inverse record, round 1 too
+
+6. Every card says what it does
+  ok: nfl:now: 6060 choices and 2000 showcases did exactly what they said; 1287 drills graded the same whichever approach
+  ok: nfl:y2005: 6060 choices and 2000 showcases did exactly what they said; 1365 drills graded the same whichever approach
+  ok: nba:now: 4084 choices and 2000 showcases did exactly what they said; 1326 drills graded the same whichever approach
+  ok: nba:y2004: 3362 choices and 2000 showcases did exactly what they said; 1319 drills graded the same whichever approach
+  ok: mlb:now: 4064 choices and 2000 showcases did exactly what they said; 1340 drills graded the same whichever approach
+  ok: mlb:y2004: 4036 choices and 2000 showcases did exactly what they said; 1320 drills graded the same whichever approach
+  ok: nhl:now: 4060 choices and 2000 showcases did exactly what they said; 1332 drills graded the same whichever approach
+  ok: nhl:y2006: 4060 choices and 2000 showcases did exactly what they said; 1361 drills graded the same whichever approach
+
+7. Growth never passes the ceiling
+  ok: nfl:now: 18000 steps, none past the ceiling
+  ok: nfl:y2005: 18000 steps, none past the ceiling
+  ok: nba:now: 14048 steps, none past the ceiling
+  ok: nba:y2004: 12604 steps, none past the ceiling
+  ok: mlb:now: 14008 steps, none past the ceiling
+  ok: mlb:y2004: 13952 steps, none past the ceiling
+  ok: nhl:now: 14000 steps, none past the ceiling
+  ok: nhl:y2006: 14000 steps, none past the ceiling
+
+8. Old saves and corrupt blocks
+  ok: 13 missing or corrupt blocks read as none, 3 good ones round trip, a renamed pending card is dropped
+
+9. The scouts path is byte equal to its recording
+  ok: all 16 digests of seed set e equal the recording (16000 roads, recorded on v24.21.0 at 09df145a)
+
+10. A played showcase does what the card prints
+  ok: 7 functions of the played path hold no draw, no clock and no call to the scouts' button (code only)
+  ok: station scores on the grid (taps 0 to 80; 0 to 12,000 ms by 50 and 0 to 8 slips; pointer and keys) are whole, inside 0 to 100, move the right way and equal the curves
+  FAIL: nfl:now: 400 played showcase(s) wrong, first: road 0: station 1 at 7 (other 0) graded C where the printed cut says otherwise | road 0: station 1 at 0 (other 50) graded D where the printed cut says otherwise | road 0: station 1 at 0 (other 100) graded D where the printed cut says otherwise
+  FAIL: nfl:y2005: 400 played showcase(s) wrong, first: road 0: station 1 at 18 (other 0) graded C where the printed cut says otherwise | road 0: station 1 at 0 (other 50) graded D where the printed cut says otherwise | road 0: station 1 at 0 (other 100) graded D where the printed cut says otherwise
+  FAIL: nba:now: 400 played showcase(s) wrong, first: road 0: 93 and 27 at rating 75, health 100 graded A (tenths 700) | road 0: grade A for a mean of 60, the cuts say B ({"A":70.5,"B":40.5,"C":10.5}) | road 0: 93 and 27 at rating 75, health 100 graded A (tenths 700)
+  FAIL: nba:y2004: 400 played showcase(s) wrong, first: road 0: 93 and 0 at rating 71, health 100 graded A (tenths 485) | road 0: grade A for a mean of 46.5, the cuts say C ({"A":78.5,"B":48.5,"C":18.5}) | road 0: 93 and 0 at rating 71, health 100 graded A (tenths 485)
+  FAIL: mlb:now: 400 played showcase(s) wrong, first: road 0: 45 and 76 at rating 71, health 80 graded C (tenths 565) | road 0: grade C for a mean of 60.5, the cuts say B ({"A":84.5,"B":54.5,"C":24.5}) | road 0: 45 and 76 at rating 71, health 80 graded C (tenths 565)
+  FAIL: mlb:y2004: 400 played showcase(s) wrong, first: road 3: station 1 at 21 (other 0) graded C where the printed cut says otherwise | road 3: station 1 at 0 (other 50) graded D where the printed cut says otherwise | road 3: station 1 at 0 (other 100) graded D where the printed cut says otherwise
+  FAIL: nhl:now: 400 played showcase(s) wrong, first: road 0: 66 and 31 at rating 70, health 80 graded B (tenths 425) | road 0: grade B for a mean of 48.5, the cuts say C ({"A":86.5,"B":56.5,"C":26.5}) | road 0: 66 and 31 at rating 70, health 80 graded B (tenths 425)
+  ok: nhl:y2006: 16000 resolves add, grade and move exactly as printed (456 on a line, where the card follows the function), 20200 walked steps never fall and flip at the printed cuts
+
+11. The engine gives no second try
+  ok: nfl:now: no button, open or resolve moves an opened or graded attempt; every reload of an opened attempt is the scouts' button for its approach, again and through the draft; 9600 bad keys dropped alone
+  ok: nfl:y2005: no button, open or resolve moves an opened or graded attempt; every reload of an opened attempt is the scouts' button for its approach, again and through the draft; 9600 bad keys dropped alone
+  ok: nba:now: no button, open or resolve moves an opened or graded attempt; every reload of an opened attempt is the scouts' button for its approach, again and through the draft; 9600 bad keys dropped alone
+  ok: nba:y2004: no button, open or resolve moves an opened or graded attempt; every reload of an opened attempt is the scouts' button for its approach, again and through the draft; 9600 bad keys dropped alone
+  ok: mlb:now: no button, open or resolve moves an opened or graded attempt; every reload of an opened attempt is the scouts' button for its approach, again and through the draft; 9600 bad keys dropped alone
+  ok: mlb:y2004: no button, open or resolve moves an opened or graded attempt; every reload of an opened attempt is the scouts' button for its approach, again and through the draft; 9600 bad keys dropped alone
+  ok: nhl:now: no button, open or resolve moves an opened or graded attempt; every reload of an opened attempt is the scouts' button for its approach, again and through the draft; 9600 bad keys dropped alone
+  ok: nhl:y2006: no button, open or resolve moves an opened or graded attempt; every reload of an opened attempt is the scouts' button for its approach, again and through the draft; 9600 bad keys dropped alone
+
+12. What hands are worth, measured against the scouts' draw
+  nfl:now: the scouts' draw, exact mean move all out +2.28, safe +1.34; realized grades of section 9's roads A 29% B 29% C 29% D 12%; one stock point is about 3.0 picks at the fleet's median stock 39
+    allout: fleet gap to the draw, novice -5.63, median +0.24, keys -0.15, thumbs +7.08, expert +6.91; median at 0.75x -4.26, at 1.25x +4.57; leaver gain pointer +1.26, keys +1.44
+      grades (percent) median A11 B57 C31 D1; keys A9 B54 C35 D1; expert A88 B11 C0 D0; novice A0 B7 C59 D34
+      by starting rating third (58 to 64, 65 to 71, 72 to 78), gap [draw's exact mean]: median -0.73 [+0.60], +0.53 [+2.10], +0.96 [+4.27]; keys -1.19, +0.04, +0.74; leaver pointer +1.97, +1.16, +0.61, keys +2.15, +1.37, +0.76
+    steady: fleet gap to the draw, novice -2.62, median +0.05, keys -0.13, thumbs +3.37, expert +3.29; median at 0.75x -2.01, at 1.25x +2.13; leaver gain pointer +0.62, keys +0.70
+      grades (percent) median A11 B57 C31 D1; keys A9 B54 C35 D1; expert A88 B11 C0 D0; novice A0 B7 C59 D34
+      by starting rating third (58 to 64, 65 to 71, 72 to 78), gap [draw's exact mean]: median -0.30 [+0.43], +0.11 [+1.32], +0.35 [+2.33]; keys -0.50, -0.10, +0.24; leaver pointer +0.88, +0.54, +0.41, keys +0.94, +0.64, +0.51
+  nfl:y2005: the scouts' draw, exact mean move all out +2.39, safe +1.39; realized grades of section 9's roads A 29% B 32% C 27% D 12%; one stock point is about 3.5 picks at the fleet's median stock 41
+    allout: fleet gap to the draw, novice -5.60, median +0.25, keys -0.13, thumbs +7.01, expert +6.88; median at 0.75x -4.31, at 1.25x +4.54; leaver gain pointer +1.29, keys +1.47
+      grades (percent) median A12 B57 C30 D1; keys A10 B56 C34 D1; expert A90 B10 C0 D0; novice A0 B8 C60 D33
+      by starting rating third (58 to 64, 65 to 71, 72 to 78), gap [draw's exact mean]: median -0.73 [+0.70], +0.39 [+2.10], +1.07 [+4.26]; keys -1.23, +0.13, +0.69; leaver pointer +2.06, +1.11, +0.72, keys +2.35, +1.18, +0.90
+    steady: fleet gap to the draw, novice -2.61, median +0.05, keys -0.13, thumbs +3.35, expert +3.28; median at 0.75x -2.03, at 1.25x +2.12; leaver gain pointer +0.61, keys +0.69
+      grades (percent) median A12 B57 C30 D1; keys A10 B56 C34 D1; expert A90 B10 C0 D0; novice A0 B8 C60 D33
+      by starting rating third (58 to 64, 65 to 71, 72 to 78), gap [draw's exact mean]: median -0.32 [+0.47], +0.05 [+1.32], +0.40 [+2.33]; keys -0.55, -0.07, +0.21; leaver pointer +0.92, +0.52, +0.39, keys +1.06, +0.55, +0.48
+  nba:now: the scouts' draw, exact mean move all out +1.69, safe +1.07; realized grades of section 9's roads A 25% B 32% C 27% D 16%; one stock point is about 1.0 picks at the fleet's median stock 36
+    allout: fleet gap to the draw, novice -5.68, median +0.15, keys -0.19, thumbs +7.52, expert +7.24; median at 0.75x -4.40, at 1.25x +4.67; leaver gain pointer +1.32, keys +1.43
+      grades (percent) median A8 B53 C37 D2; keys A7 B51 C40 D3; expert A82 B17 C0 D0; novice A0 B5 C53 D42
+      by starting rating third (58 to 64, 65 to 71, 72 to 78), gap [draw's exact mean]: median -0.80 [-0.18], +0.34 [+1.44], +0.89 [+3.83]; keys -1.13, -0.01, +0.55; leaver pointer +1.66, +1.44, +0.84, keys +1.74, +1.62, +0.92
+    steady: fleet gap to the draw, novice -2.60, median -0.00, keys -0.16, thumbs +3.54, expert +3.40; median at 0.75x -2.05, at 1.25x +2.14; leaver gain pointer +0.62, keys +0.68
+      grades (percent) median A8 B53 C37 D2; keys A7 B51 C40 D3; expert A82 B17 C0 D0; novice A0 B5 C53 D42
+      by starting rating third (58 to 64, 65 to 71, 72 to 78), gap [draw's exact mean]: median -0.34 [+0.08], +0.03 [+1.03], +0.30 [+2.10]; keys -0.49, -0.12, +0.14; leaver pointer +0.73, +0.67, +0.46, keys +0.78, +0.75, +0.49
+  nba:y2004: the scouts' draw, exact mean move all out +1.33, safe +0.90; realized grades of section 9's roads A 23% B 31% C 28% D 18%; one stock point is about 1.0 picks at the fleet's median stock 33
+    allout: fleet gap to the draw, novice -5.66, median +0.03, keys -0.27, thumbs +7.67, expert +7.41; median at 0.75x -4.44, at 1.25x +4.59; leaver gain pointer +1.33, keys +1.45
+      grades (percent) median A7 B49 C42 D3; keys A5 B47 C44 D3; expert A79 B21 C0 D0; novice A0 B3 C50 D47
+      by starting rating third (58 to 64, 65 to 71, 72 to 78), gap [draw's exact mean]: median -0.93 [-0.47], +0.23 [+1.15], +0.90 [+3.60]; keys -1.08, -0.20, +0.57; leaver pointer +1.56, +1.66, +0.69, keys +1.65, +1.81, +0.83
+    steady: fleet gap to the draw, novice -2.57, median -0.05, keys -0.19, thumbs +3.60, expert +3.47; median at 0.75x -2.05, at 1.25x +2.09; leaver gain pointer +0.61, keys +0.66
+      grades (percent) median A7 B49 C42 D3; keys A5 B47 C44 D3; expert A79 B21 C0 D0; novice A0 B3 C50 D47
+      by starting rating third (58 to 64, 65 to 71, 72 to 78), gap [draw's exact mean]: median -0.38 [-0.04], -0.01 [+0.90], +0.30 [+1.99]; keys -0.47, -0.20, +0.14; leaver pointer +0.69, +0.76, +0.34, keys +0.74, +0.82, +0.40
+  mlb:now: the scouts' draw, exact mean move all out +1.68, safe +1.06; realized grades of section 9's roads A 25% B 30% C 29% D 16%; one stock point is about 9.5 picks at the fleet's median stock 35
+    allout: fleet gap to the draw, novice -6.34, median -0.19, keys -0.26, thumbs +4.27, expert +6.99; median at 0.75x -5.18, at 1.25x +4.37; leaver gain pointer +1.60, keys +1.57
+      grades (percent) median A8 B49 C39 D5; keys A7 B49 C42 D2; expert A79 B21 C0 D0; novice A0 B3 C40 D57
+      by starting rating third (58 to 64, 65 to 71, 72 to 78), gap [draw's exact mean]: median -0.89 [+0.05], -0.05 [+1.33], +0.41 [+3.77]; keys -1.04, -0.18, +0.50; leaver pointer +1.90, +1.71, +1.18, keys +2.05, +1.61, +1.01
+      pitchers (one station) median -0.55, keys -0.29; hitters median +0.06, keys -0.24
+    steady: fleet gap to the draw, novice -2.87, median -0.15, keys -0.18, thumbs +2.00, expert +3.29; median at 0.75x -2.38, at 1.25x +2.00; leaver gain pointer +0.73, keys +0.72
+      grades (percent) median A8 B49 C39 D5; keys A7 B49 C42 D2; expert A79 B21 C0 D0; novice A0 B3 C40 D57
+      by starting rating third (58 to 64, 65 to 71, 72 to 78), gap [draw's exact mean]: median -0.40 [+0.18], -0.13 [+0.98], +0.09 [+2.09]; keys -0.45, -0.19, +0.12; leaver pointer +0.83, +0.78, +0.58, keys +0.88, +0.75, +0.52
+      pitchers (one station) median -0.30, keys -0.19; hitters median -0.05, keys -0.17
+  mlb:y2004: the scouts' draw, exact mean move all out +1.74, safe +1.09; realized grades of section 9's roads A 24% B 30% C 31% D 14%; one stock point is about 22.5 picks at the fleet's median stock 37
+    allout: fleet gap to the draw, novice -6.28, median -0.10, keys -0.24, thumbs +4.36, expert +6.97; median at 0.75x -5.09, at 1.25x +4.38; leaver gain pointer +1.61, keys +1.51
+      grades (percent) median A9 B49 C38 D4; keys A7 B50 C41 D2; expert A80 B20 C0 D0; novice A0 B4 C43 D54
+      by starting rating third (58 to 64, 65 to 71, 72 to 78), gap [draw's exact mean]: median -0.95 [+0.03], -0.01 [+1.37], +0.61 [+3.73]; keys -1.12, -0.22, +0.56; leaver pointer +2.07, +1.83, +0.97, keys +2.09, +1.66, +0.83
+      pitchers (one station) median -0.35, keys -0.26; hitters median +0.06, keys -0.23
+    steady: fleet gap to the draw, novice -2.85, median -0.10, keys -0.17, thumbs +2.05, expert +3.29; median at 0.75x -2.34, at 1.25x +2.02; leaver gain pointer +0.75, keys +0.70
+      grades (percent) median A9 B49 C38 D4; keys A7 B50 C41 D2; expert A80 B20 C0 D0; novice A0 B4 C43 D54
+      by starting rating third (58 to 64, 65 to 71, 72 to 78), gap [draw's exact mean]: median -0.40 [+0.15], -0.11 [+1.00], +0.19 [+2.07]; keys -0.47, -0.21, +0.14; leaver pointer +0.91, +0.83, +0.51, keys +0.90, +0.75, +0.46
+      pitchers (one station) median -0.21, keys -0.18; hitters median -0.04, keys -0.17
+  nhl:now: the scouts' draw, exact mean move all out +1.79, safe +1.11; realized grades of section 9's roads A 25% B 32% C 29% D 14%; one stock point is about 3.5 picks at the fleet's median stock 38
+    allout: fleet gap to the draw, novice -5.78, median +0.13, keys -0.21, thumbs +7.53, expert +7.32; median at 0.75x -4.47, at 1.25x +4.71; leaver gain pointer +1.36, keys +1.46
+      grades (percent) median A8 B54 C36 D2; keys A6 B53 C39 D2; expert A85 B15 C0 D0; novice A0 B4 C55 D41
+      by starting rating third (58 to 64, 65 to 71, 72 to 78), gap [draw's exact mean]: median -0.82 [-0.01], +0.32 [+1.48], +0.88 [+3.86]; keys -1.13, -0.03, +0.54; leaver pointer +1.97, +1.55, +0.57, keys +2.10, +1.62, +0.69
+    steady: fleet gap to the draw, novice -2.64, median -0.01, keys -0.16, thumbs +3.55, expert +3.44; median at 0.75x -2.08, at 1.25x +2.16; leaver gain pointer +0.63, keys +0.68
+      grades (percent) median A8 B54 C36 D2; keys A6 B53 C39 D2; expert A85 B15 C0 D0; novice A0 B4 C55 D41
+      by starting rating third (58 to 64, 65 to 71, 72 to 78), gap [draw's exact mean]: median -0.34 [+0.17], +0.02 [+1.05], +0.30 [+2.11]; keys -0.49, -0.13, +0.13; leaver pointer +0.86, +0.72, +0.31, keys +0.92, +0.75, +0.37
+  nhl:y2006: the scouts' draw, exact mean move all out +1.77, safe +1.09; realized grades of section 9's roads A 25% B 33% C 27% D 16%; one stock point is about 3.5 picks at the fleet's median stock 36
+    allout: fleet gap to the draw, novice -5.69, median +0.04, keys -0.23, thumbs +7.51, expert +7.29; median at 0.75x -4.40, at 1.25x +4.62; leaver gain pointer +1.37, keys +1.45
+      grades (percent) median A7 B53 C38 D2; keys A6 B52 C41 D2; expert A84 B16 C0 D0; novice A0 B4 C54 D42
+      by starting rating third (58 to 64, 65 to 71, 72 to 78), gap [draw's exact mean]: median -0.88 [+0.05], +0.15 [+1.50], +0.90 [+3.91]; keys -1.10, -0.10, +0.58; leaver pointer +1.89, +1.58, +0.59, keys +2.01, +1.55, +0.74
+    steady: fleet gap to the draw, novice -2.61, median -0.05, keys -0.16, thumbs +3.55, expert +3.43; median at 0.75x -2.05, at 1.25x +2.12; leaver gain pointer +0.64, keys +0.67
+      grades (percent) median A7 B53 C38 D2; keys A6 B52 C41 D2; expert A84 B16 C0 D0; novice A0 B4 C54 D42
+      by starting rating third (58 to 64, 65 to 71, 72 to 78), gap [draw's exact mean]: median -0.36 [+0.17], -0.05 [+1.05], +0.31 [+2.13]; keys -0.46, -0.16, +0.15; leaver pointer +0.82, +0.73, +0.35, keys +0.86, +0.71, +0.41
+  ok: in all 16 pair and approach rows the median hands, pointer and keys, sit within 0.75 stock of the scouts' draw and inside their bands
+  ok: in all 16 rows the expert gains (at least 3.4 all out, 1.6 safe), the novice loses (at least 2.8, 1.3), and the three means are in order
+  for the lead (open question 1, never asserted): the optimal leaver gains +0.61 to +1.61 stock over honest hands; above 1.0 in 8 of 16 rows (allout)
+  for the lead (open question 3, never asserted): two thumbs above the expert in 12 of 16 rows: nfl:now allout +7.08 over +6.91; nfl:now steady +3.37 over +3.29; nfl:y2005 allout +7.01 over +6.88; nfl:y2005 steady +3.35 over +3.28; nba:now allout +7.52 over +7.24; nba:now steady +3.54 over +3.40; nba:y2004 allout +7.67 over +7.41; nba:y2004 steady +3.60 over +3.47; nhl:now allout +7.53 over +7.32; nhl:now steady +3.55 over +3.44; nhl:y2006 allout +7.51 over +7.29; nhl:y2006 steady +3.55 over +3.43
+
+13. Draft night shows what the engine did, and never draws
+  ok: nfl:now: 2000 nights are the saved outcome over the engine's order (1487 drafted, 513 undrafted), every pick inside the quoted range, 17 built nights (picks 1 to 12, the last four, undrafted) show every pick once, 1208 unbacked outcomes built nothing, at most 8 board rows
+  ok: nfl:y2005: 2000 nights are the saved outcome over the engine's order (1533 drafted, 467 undrafted), every pick inside the quoted range, 17 built nights (picks 1 to 12, the last four, undrafted) show every pick once, 1160 unbacked outcomes built nothing, at most 8 board rows
+  ok: nba:now: 2000 nights are the saved outcome over the engine's order (1541 drafted, 459 undrafted), every pick inside the quoted range, 17 built nights (picks 1 to 12, the last four, undrafted) show every pick once, 1220 unbacked outcomes built nothing, at most 5 board rows and 4 lottery rows
+  ok: nba:y2004: 2000 nights are the saved outcome over the engine's order (1513 drafted, 487 undrafted), every pick inside the quoted range, 17 built nights (picks 1 to 12, the last four, undrafted) show every pick once, 1196 unbacked outcomes built nothing, at most 5 board rows and 3 lottery rows
+  ok: mlb:now: 2000 nights are the saved outcome over the engine's order (1530 drafted, 470 undrafted), every pick inside the quoted range, 17 built nights (picks 1 to 12, the last four, undrafted) show every pick once, 1200 unbacked outcomes built nothing, at most 8 board rows
+  ok: mlb:y2004: 2000 nights are the saved outcome over the engine's order (1578 drafted, 422 undrafted), every pick inside the quoted range, 17 built nights (picks 1 to 12, the last four, undrafted) show every pick once, 1204 unbacked outcomes built nothing, at most 8 board rows
+  ok: nhl:now: 2000 nights are the saved outcome over the engine's order (1583 drafted, 417 undrafted), every pick inside the quoted range, 17 built nights (picks 1 to 12, the last four, undrafted) show every pick once, 1232 unbacked outcomes built nothing, at most 8 board rows
+  ok: nhl:y2006: 2000 nights are the saved outcome over the engine's order (1549 drafted, 451 undrafted), every pick inside the quoted range, 17 built nights (picks 1 to 12, the last four, undrafted) show every pick once, 1168 unbacked outcomes built nothing, at most 8 board rows
+
+simCareerPreDraft [control combinemean] [seed set e]: 7 FAILURE(S)

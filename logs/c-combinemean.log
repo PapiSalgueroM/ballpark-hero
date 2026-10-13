@@ -1,0 +1,1 @@
+CTL combinemean seed=a exit=1 mutated=1 threw=0 refused=0 | sections:  7 10. | simCareerPreDraft [control combinemean] [seed set a]: 7 FAILURE(S)

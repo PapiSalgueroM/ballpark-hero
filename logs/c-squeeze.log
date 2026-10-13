@@ -1,0 +1,1 @@
+CTL squeeze seed=a exit=1 mutated=1 threw=0 refused=0 | sections:  8 13. 8 2. 8 3. 8 9. | simCareerPreDraft [control squeeze] [seed set a]: 32 FAILURE(S)

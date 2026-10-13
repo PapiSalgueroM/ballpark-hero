@@ -1,0 +1,1 @@
+CTL nightlottery seed=a exit=1 mutated=1 threw=0 refused=0 | sections:  2 13. | simCareerPreDraft [control nightlottery] [seed set a]: 2 FAILURE(S)
