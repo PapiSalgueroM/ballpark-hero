@@ -1,0 +1,5 @@
+#!build
+#!serial
+basebuild: R="$PWD"; git worktree add /tmp/base 8fea14e216fb550b4676ac29f06867234594df21 > /dev/null 2>&1; ln -s "$R/node_modules" /tmp/base/node_modules; cd /tmp/base && npm run build > /tmp/basebuild.log 2>&1; s=$?; tail -1 /tmp/basebuild.log; exit $s
+why: node .rc/x/chunkWhy.mjs /tmp/base/dist/assets dist/assets clubManager ManagerHotSeat managerHotSeat DeadlineDay clubManagerMeters useRevealScroll formatNumber
+who: grep -l "\\B(?=(\\d{3})+(?!\\d))" /tmp/base/dist/assets/*.js | head; echo head; grep -l "\\B(?=(\\d{3})+(?!\\d))" dist/assets/*.js | head
