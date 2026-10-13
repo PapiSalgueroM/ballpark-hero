@@ -1,0 +1,2 @@
+#!serial
+diag: MANAGER_SIZE_DIAGNOSTICS=/tmp/diag NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/managerWorldSizeDiagnostic.mjs
