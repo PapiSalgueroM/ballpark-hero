@@ -1,0 +1,42 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/lib/gmInbox.test.ts src/components/front-office-shared/GmInboxPanel.test.tsx --testTimeout=300000 --hookTimeout=120000
+deck: node scripts/simEventDeck.mjs
+deck-replay-EXPECT-RED: EVENT_DECK_CONTROL=replay node scripts/simEventDeck.mjs
+deck-weightoff-EXPECT-RED: EVENT_DECK_CONTROL=weightoff node scripts/simEventDeck.mjs
+deck-weightkeep-EXPECT-RED: EVENT_DECK_CONTROL=weightkeep node scripts/simEventDeck.mjs
+deck-story-EXPECT-RED: EVENT_DECK_CONTROL=story node scripts/simEventDeck.mjs
+deck-rest-EXPECT-RED: EVENT_DECK_CONTROL=rest node scripts/simEventDeck.mjs
+deck-failopen-EXPECT-RED: EVENT_DECK_CONTROL=failopen node scripts/simEventDeck.mjs
+deck-restfall-EXPECT-RED: EVENT_DECK_CONTROL=restfall node scripts/simEventDeck.mjs
+deck-expirefall-EXPECT-RED: EVENT_DECK_CONTROL=expirefall node scripts/simEventDeck.mjs
+deck-textrng-EXPECT-RED: EVENT_DECK_CONTROL=textrng node scripts/simEventDeck.mjs
+deck-seasonweek-EXPECT-RED: EVENT_DECK_CONTROL=seasonweek node scripts/simEventDeck.mjs
+deck-expireoff-EXPECT-RED: EVENT_DECK_CONTROL=expireoff node scripts/simEventDeck.mjs
+deck-expirefx-EXPECT-RED: EVENT_DECK_CONTROL=expirefx node scripts/simEventDeck.mjs
+deck-settledoff-EXPECT-RED: EVENT_DECK_CONTROL=settledoff node scripts/simEventDeck.mjs
+deck-panelexpiry-EXPECT-RED: EVENT_DECK_CONTROL=panelexpiry node scripts/simEventDeck.mjs
+deck-neutral-EXPECT-RED: EVENT_DECK_CONTROL=neutral node scripts/simEventDeck.mjs
+deck-heavy-EXPECT-RED: EVENT_DECK_CONTROL=heavy node scripts/simEventDeck.mjs
+gmcmp-vs-m5: git worktree add -q .rcb 25c07316 && for s in 1 2 3; do SEED=$s node .rcb/scripts/simGmInbox.mjs > /tmp/b$s.txt 2>&1; SEED=$s node scripts/simGmInbox.mjs > /tmp/h$s.txt 2>&1; if diff /tmp/b$s.txt /tmp/h$s.txt > /dev/null; then echo "seed $s: every line the same as the base"; else echo "seed $s DIFFERS"; diff /tmp/b$s.txt /tmp/h$s.txt | head -20; x=1; fi; tail -1 /tmp/h$s.txt; done; exit ${x:-0}
+simGmInbox: node scripts/simGmInbox.mjs
+gminbox-quote-EXPECT-RED: GM_INBOX_CONTROL=quote node scripts/simGmInbox.mjs
+gminbox-flip-EXPECT-RED: GM_INBOX_CONTROL=flip node scripts/simGmInbox.mjs
+gminbox-cool-EXPECT-RED: GM_INBOX_CONTROL=cool node scripts/simGmInbox.mjs
+gminbox-drift-EXPECT-RED: GM_INBOX_CONTROL=drift node scripts/simGmInbox.mjs
+gminbox-never-EXPECT-RED: GM_INBOX_CONTROL=never node scripts/simGmInbox.mjs
+gminbox-random-EXPECT-RED: GM_INBOX_CONTROL=random node scripts/simGmInbox.mjs
+gminbox-shift-EXPECT-RED: GM_INBOX_CONTROL=shift node scripts/simGmInbox.mjs
+gminbox-opencap-EXPECT-RED: GM_INBOX_CONTROL=opencap node scripts/simGmInbox.mjs
+gminbox-maxcap-EXPECT-RED: GM_INBOX_CONTROL=maxcap node scripts/simGmInbox.mjs
+gminbox-oneshot-EXPECT-RED: GM_INBOX_CONTROL=oneshot node scripts/simGmInbox.mjs
+gminbox-ungate-EXPECT-RED: GM_INBOX_CONTROL=ungate node scripts/simGmInbox.mjs
+gminbox-unclamp-EXPECT-RED: GM_INBOX_CONTROL=unclamp node scripts/simGmInbox.mjs
+gminbox-quotevariant-EXPECT-RED: GM_INBOX_CONTROL=quotevariant node scripts/simGmInbox.mjs
+gminbox-effectvariant-EXPECT-RED: GM_INBOX_CONTROL=effectvariant node scripts/simGmInbox.mjs
+simCareerInbox: node scripts/simCareerInbox.mjs
+inbox-privatecap-EXPECT-RED: INBOX_CONTROL=privatecap node scripts/simCareerInbox.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
+simNoInventedConduct: node scripts/simNoInventedConduct.mjs
+simInventedNames: node scripts/simInventedNames.mjs
