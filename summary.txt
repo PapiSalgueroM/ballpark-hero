@@ -1,0 +1,4 @@
+m-noclear exit=1 16s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/components/college-dynasty/CollegeSeat.test.tsx,title=src/components/college-dynasty/CollegeSeat.test.tsx >
+m-boundB exit=1 14s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/components/college-dynasty/CollegeSeat.test.tsx,title=src/components/college-dynasty/CollegeSeat.test.tsx >
+m-F exit=1 1s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/collegeSeat.test.ts,title=src/lib/collegeSeat.test.ts > a program that let him go never calls again > c
+m-G exit=1 1s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/collegeSeat.test.ts,title=src/lib/collegeSeat.test.ts > a program that let him go never calls again > c

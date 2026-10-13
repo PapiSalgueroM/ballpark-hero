@@ -1,0 +1,148 @@
+MUT boundB applied
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [31m❯[39m src/lib/collegeSeat.test.ts [2m([22m[2m16 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[32m 142[2mms[22m[39m
+   [32m✓[39m the ask[2m > [22mis built off the roster rank, not the prestige rank[32m 2[2mms[22m[39m
+   [32m✓[39m the ask[2m > [22mlifts a CBB win total ask one step, and nothing else[32m 1[2mms[22m[39m
+   [32m✓[39m the close[2m > [22mgrades with gradeSeason, moves trust, and grades a season once[32m 1[2mms[22m[39m
+   [32m✓[39m the close[2m > [22mfires at zero trust and opens a market instead of ending[32m 2[2mms[22m[39m
+   [32m✓[39m the close[2m > [22mreads the bracket: the final and the title from the last game[32m 0[2mms[22m[39m
+   [32m✓[39m the market and the move[2m > [22mnever offers a program that let him go, and a second press takes nothing[32m 2[2mms[22m[39m
+   [32m✓[39m the market and the move[2m > [22mreads a climb as shut: a program never changes tier here[32m 0[2mms[22m[39m
+   [32m✓[39m the market and the move[2m > [22mbids only after a big year, never at the top tier[32m 0[2mms[22m[39m
+   [32m✓[39m the market and the move[2m > [22msays the closed market plainly, with no article before a program[32m 0[2mms[22m[39m
+   [32m✓[39m a program that let him go never calls again[2m > [22mcfb: the market drops the first program that let him go when gmSeat draws it[32m 65[2mms[22m[39m
+   [32m✓[39m a program that let him go never calls again[2m > [22mcfb: a buyout bid from a program that let him go is dropped, and the same bid stands without that past[32m 8[2mms[22m[39m
+   [32m✓[39m a program that let him go never calls again[2m > [22mcbb: the market drops the first program that let him go when gmSeat draws it[32m 42[2mms[22m[39m
+   [32m✓[39m a program that let him go never calls again[2m > [22mcbb: a buyout bid from a program that let him go is dropped, and the same bid stands without that past[32m 7[2mms[22m[39m
+   [32m✓[39m the save[2m > [22mkeeps a sane block and refuses a hostile one[32m 1[2mms[22m[39m
+[31m   [31m×[31m the save[2m > [22mkeeps a coach who just moved: a job taken at a close starts the season after the one on record[39m[32m 7[2mms[22m[39m
+[31m     → expected null not to be null[39m
+   [32m✓[39m the save[2m > [22mopens where the load rules say[32m 2[2mms[22m[39m
+ [31m❯[39m src/components/college-dynasty/CollegeSeat.test.tsx [2m([22m[2m18 tests[22m[2m | [22m[31m6 failed[39m[2m)[22m[33m 12190[2mms[22m[39m
+   [32m✓[39m Round 1320: the athletic director on the college boards[2m > [22mcfb: a new dynasty starts with him, the tile carries the ask, and the card opens and closes[32m 120[2mms[22m[39m
+   [32m✓[39m Round 1320: the athletic director on the college boards[2m > [22mcfb: the live line follows the record, and the recap grades the year and moves trust[32m 132[2mms[22m[39m
+   [32m✓[39m Round 1320: the athletic director on the college boards[2m > [22mcfb: an older dynasty is offered him at the first press; Not now writes nothing, Take the ask writes the block[32m 39[2mms[22m[39m
+   [32m✓[39m Round 1320: the athletic director on the college boards[2m > [22mcfb: a block that does not check out loads as an old save, never a crash[32m 78[2mms[22m[39m
+   [32m✓[39m Round 1320: the athletic director on the college boards[2m > [22mcfb: trust at zero is a firing, the recap says so, and See who calls opens the same market after a reload[32m 40[2mms[22m[39m
+[31m   [31m×[31m Round 1320: the athletic director on the college boards[2m > [22mcfb: Take the job moves him once and opens the new program's trail; Sit the year out plays a season without him[39m[32m 87[2mms[22m[39m
+[31m     → a reload on the trail after a move dropped the athletic director: expected undefined to be 2 // Object.is equality[39m
+   [32m✓[39m Round 1320: the athletic director on the college boards[2m > [22mcfb: a closed market offers only a new dynasty, and hostile market saves load somewhere sane[32m 132[2mms[22m[39m
+   [32m✓[39m Round 1320: the athletic director on the college boards[2m > [22mcbb: a new dynasty starts with him, the tile carries the ask, and the card opens and closes[32m 33[2mms[22m[39m
+   [32m✓[39m Round 1320: the athletic director on the college boards[2m > [22mcbb: the live line follows the record, and the recap grades the year and moves trust[32m 88[2mms[22m[39m
+   [32m✓[39m Round 1320: the athletic director on the college boards[2m > [22mcbb: an older dynasty is offered him at the first press; Not now writes nothing, Take the ask writes the block[32m 33[2mms[22m[39m
+   [32m✓[39m Round 1320: the athletic director on the college boards[2m > [22mcbb: a block that does not check out loads as an old save, never a crash[32m 47[2mms[22m[39m
+   [32m✓[39m Round 1320: the athletic director on the college boards[2m > [22mcbb: trust at zero is a firing, the recap says so, and See who calls opens the same market after a reload[32m 31[2mms[22m[39m
+[31m   [31m×[31m Round 1320: the athletic director on the college boards[2m > [22mcbb: Take the job moves him once and opens the new program's trail; Sit the year out plays a season without him[39m[32m 73[2mms[22m[39m
+[31m     → a reload on the trail after a move dropped the athletic director: expected undefined to be 2 // Object.is equality[39m
+   [32m✓[39m Round 1320: the athletic director on the college boards[2m > [22mcbb: a closed market offers only a new dynasty, and hostile market saves load somewhere sane[32m 76[2mms[22m[39m
+[31m   [31m×[31m Round 1320: a buyout bid after a big year[2m > [22mcfb: the bid shows on the recap; Go to moves him with the old stint ended as a buyout, Stay put keeps him[39m[32m 49[2mms[22m[39m
+[31m     → a reload on the trail after a move dropped the athletic director: expected undefined to be 2 // Object.is equality[39m
+[31m   [31m×[31m Round 1320: a buyout bid after a big year[2m > [22mcfb: a second dynasty in one mount takes its own bid, though its key matches the first one's[39m[33m 5783[2mms[22m[39m
+[31m     → cfb: no second dynasty drew a bid over 80 seeds[39m
+[31m   [31m×[31m Round 1320: a buyout bid after a big year[2m > [22mcbb: the bid shows on the recap; Go to moves him with the old stint ended as a buyout, Stay put keeps him[39m[32m 33[2mms[22m[39m
+[31m     → a reload on the trail after a move dropped the athletic director: expected undefined to be 2 // Object.is equality[39m
+[31m   [31m×[31m Round 1320: a buyout bid after a big year[2m > [22mcbb: a second dynasty in one mount takes its own bid, though its key matches the first one's[39m[33m 5314[2mms[22m[39m
+[31m     → cbb: no second dynasty drew a bid over 80 seeds[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 7 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/lib/collegeSeat.test.ts[2m > [22mthe save[2m > [22mkeeps a coach who just moved: a job taken at a close starts the season after the one on record
+[31m[1mAssertionError[22m: expected null not to be null[39m
+[36m [2m❯[22m src/lib/collegeSeat.test.ts:[2m208:22[22m[39m
+    [90m206| [39m    moved[33m.[39mmandate [33m=[39m { [33m...[39mmoved[33m.[39mmandate[33m,[39m season[33m:[39m [34m2027[39m }[33m;[39m
+    [90m207| [39m    [35mconst[39m kept [33m=[39m [34msanitizeCollegeSeat[39m(moved[33m,[39m ctx)[33m;[39m
+    [90m208| [39m    [34mexpect[39m(kept)[33m.[39mnot[33m.[39m[34mtoBeNull[39m()[33m;[39m
+    [90m   | [39m                     [31m^[39m
+    [90m209| [39m    [34mexpect[39m(kept[33m![39m[33m.[39mcareer[33m.[39mstints[[34m1[39m][33m.[39m[35mfrom[39m)[33m.[39m[34mtoBe[39m([34m2027[39m)[33m;[39m
+    [90m210| [39m    [35mconst[39m tooLate [33m=[39m [33mJSON[39m[33m.[39m[34mparse[39m([33mJSON[39m[33m.[39m[34mstringify[39m(moved))[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/7]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/components/college-dynasty/CollegeSeat.test.tsx[2m > [22mRound 1320: the athletic director on the college boards[2m > [22mcfb: Take the job moves him once and opens the new program's trail; Sit the year out plays a season without him
+[41m[1m FAIL [22m[49m src/components/college-dynasty/CollegeSeat.test.tsx[2m > [22mRound 1320: the athletic director on the college boards[2m > [22mcbb: Take the job moves him once and opens the new program's trail; Sit the year out plays a season without him
+[31m[1mAssertionError[22m: a reload on the trail after a move dropped the athletic director: expected undefined to be 2 // Object.is equality[39m
+
+[32m- Expected:[39m 
+2
+
+[31m+ Received:[39m 
+undefined
+
+[36m [2m❯[22m reloadOnTrail src/components/college-dynasty/CollegeSeat.test.tsx:[2m288:114[22m[39m
+    [90m286| [39m  [35mconst[39m next [33m=[39m back[33m.[39m[34msaved[39m()[33m;[39m
+    [90m287| [39m  [34mexpect[39m(next[33m.[39mst[33m.[39mmyTeam)[33m.[39m[34mtoBe[39m(moved[33m.[39mst[33m.[39mmyTeam)[33m;[39m
+    [90m288| [39m  expect(next.st.seat?.career.stints.length, 'a reload on the trail af…
+    [90m   | [39m                                                                                                                 [31m^[39m
+    [90m289| [39m  [34mexpect[39m(back[33m.[39m[34mq[39m([32m'[data-college-seat="tile"]'[39m))[33m.[39m[34mtoBeTruthy[39m()[33m;[39m
+    [90m290| [39m}
+[90m [2m❯[22m src/components/college-dynasty/CollegeSeat.test.tsx:[2m200:7[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/7]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/components/college-dynasty/CollegeSeat.test.tsx[2m > [22mRound 1320: a buyout bid after a big year[2m > [22mcfb: the bid shows on the recap; Go to moves him with the old stint ended as a buyout, Stay put keeps him
+[41m[1m FAIL [22m[49m src/components/college-dynasty/CollegeSeat.test.tsx[2m > [22mRound 1320: a buyout bid after a big year[2m > [22mcbb: the bid shows on the recap; Go to moves him with the old stint ended as a buyout, Stay put keeps him
+[31m[1mAssertionError[22m: a reload on the trail after a move dropped the athletic director: expected undefined to be 2 // Object.is equality[39m
+
+[32m- Expected:[39m 
+2
+
+[31m+ Received:[39m 
+undefined
+
+[36m [2m❯[22m reloadOnTrail src/components/college-dynasty/CollegeSeat.test.tsx:[2m288:114[22m[39m
+    [90m286| [39m  [35mconst[39m next [33m=[39m back[33m.[39m[34msaved[39m()[33m;[39m
+    [90m287| [39m  [34mexpect[39m(next[33m.[39mst[33m.[39mmyTeam)[33m.[39m[34mtoBe[39m(moved[33m.[39mst[33m.[39mmyTeam)[33m;[39m
+    [90m288| [39m  expect(next.st.seat?.career.stints.length, 'a reload on the trail af…
+    [90m   | [39m                                                                                                                 [31m^[39m
+    [90m289| [39m  [34mexpect[39m(back[33m.[39m[34mq[39m([32m'[data-college-seat="tile"]'[39m))[33m.[39m[34mtoBeTruthy[39m()[33m;[39m
+    [90m290| [39m}
+[90m [2m❯[22m src/components/college-dynasty/CollegeSeat.test.tsx:[2m353:7[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/7]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/components/college-dynasty/CollegeSeat.test.tsx[2m > [22mRound 1320: a buyout bid after a big year[2m > [22mcfb: a second dynasty in one mount takes its own bid, though its key matches the first one's
+[31m[1mError[22m: cfb: no second dynasty drew a bid over 80 seeds[39m
+[36m [2m❯[22m src/components/college-dynasty/CollegeSeat.test.tsx:[2m398:13[22m[39m
+    [90m396| [39m        fireEvent[33m.[39m[34mclick[39m(m[33m.[39m[34mbutton[39m([32m'Fire yourself and start over'[39m))[33m;[39m
+    [90m397| [39m      }
+    [90m398| [39m      throw new Error(`${sport.name}: no second dynasty drew a bid ove…
+    [90m   | [39m            [31m^[39m
+    [90m399| [39m    }[33m,[39m [34m120000[39m)[33m;[39m
+    [90m400| [39m  }
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/7]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/components/college-dynasty/CollegeSeat.test.tsx[2m > [22mRound 1320: a buyout bid after a big year[2m > [22mcbb: a second dynasty in one mount takes its own bid, though its key matches the first one's
+[31m[1mError[22m: cbb: no second dynasty drew a bid over 80 seeds[39m
+[36m [2m❯[22m src/components/college-dynasty/CollegeSeat.test.tsx:[2m398:13[22m[39m
+    [90m396| [39m        fireEvent[33m.[39m[34mclick[39m(m[33m.[39m[34mbutton[39m([32m'Fire yourself and start over'[39m))[33m;[39m
+    [90m397| [39m      }
+    [90m398| [39m      throw new Error(`${sport.name}: no second dynasty drew a bid ove…
+    [90m   | [39m            [31m^[39m
+    [90m399| [39m    }[33m,[39m [34m120000[39m)[33m;[39m
+    [90m400| [39m  }
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/7]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m2 failed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[31m7 failed[39m[22m[2m | [22m[1m[32m27 passed[39m[22m[90m (34)[39m
+[2m   Start at [22m 02:47:49
+[2m   Duration [22m 13.48s[2m (transform 347ms, setup 99ms, collect 636ms, tests 12.33s, environment 617ms, prepare 287ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/collegeSeat.test.ts,title=src/lib/collegeSeat.test.ts > the save > keeps a coach who just moved%3A a job taken at a close starts the season after the one on record,line=208,column=22::AssertionError: expected null not to be null%0A ❯ src/lib/collegeSeat.test.ts:208:22%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/components/college-dynasty/CollegeSeat.test.tsx,title=src/components/college-dynasty/CollegeSeat.test.tsx > Round 1320%3A the athletic director on the college boards > cfb%3A Take the job moves him once and opens the new program's trail; Sit the year out plays a season without him,line=288,column=114::AssertionError: a reload on the trail after a move dropped the athletic director: expected undefined to be 2 // Object.is equality%0A%0A- Expected: %0A2%0A%0A+ Received: %0Aundefined%0A%0A ❯ reloadOnTrail src/components/college-dynasty/CollegeSeat.test.tsx:288:114%0A ❯ src/components/college-dynasty/CollegeSeat.test.tsx:200:7%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/components/college-dynasty/CollegeSeat.test.tsx,title=src/components/college-dynasty/CollegeSeat.test.tsx > Round 1320%3A the athletic director on the college boards > cbb%3A Take the job moves him once and opens the new program's trail; Sit the year out plays a season without him,line=288,column=114::AssertionError: a reload on the trail after a move dropped the athletic director: expected undefined to be 2 // Object.is equality%0A%0A- Expected: %0A2%0A%0A+ Received: %0Aundefined%0A%0A ❯ reloadOnTrail src/components/college-dynasty/CollegeSeat.test.tsx:288:114%0A ❯ src/components/college-dynasty/CollegeSeat.test.tsx:200:7%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/components/college-dynasty/CollegeSeat.test.tsx,title=src/components/college-dynasty/CollegeSeat.test.tsx > Round 1320%3A a buyout bid after a big year > cfb%3A the bid shows on the recap; Go to moves him with the old stint ended as a buyout%2C Stay put keeps him,line=288,column=114::AssertionError: a reload on the trail after a move dropped the athletic director: expected undefined to be 2 // Object.is equality%0A%0A- Expected: %0A2%0A%0A+ Received: %0Aundefined%0A%0A ❯ reloadOnTrail src/components/college-dynasty/CollegeSeat.test.tsx:288:114%0A ❯ src/components/college-dynasty/CollegeSeat.test.tsx:353:7%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/components/college-dynasty/CollegeSeat.test.tsx,title=src/components/college-dynasty/CollegeSeat.test.tsx > Round 1320%3A a buyout bid after a big year > cfb%3A a second dynasty in one mount takes its own bid%2C though its key matches the first one's,line=398,column=13::Error: cfb: no second dynasty drew a bid over 80 seeds%0A ❯ src/components/college-dynasty/CollegeSeat.test.tsx:398:13%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/components/college-dynasty/CollegeSeat.test.tsx,title=src/components/college-dynasty/CollegeSeat.test.tsx > Round 1320%3A a buyout bid after a big year > cbb%3A the bid shows on the recap; Go to moves him with the old stint ended as a buyout%2C Stay put keeps him,line=288,column=114::AssertionError: a reload on the trail after a move dropped the athletic director: expected undefined to be 2 // Object.is equality%0A%0A- Expected: %0A2%0A%0A+ Received: %0Aundefined%0A%0A ❯ reloadOnTrail src/components/college-dynasty/CollegeSeat.test.tsx:288:114%0A ❯ src/components/college-dynasty/CollegeSeat.test.tsx:353:7%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/components/college-dynasty/CollegeSeat.test.tsx,title=src/components/college-dynasty/CollegeSeat.test.tsx > Round 1320%3A a buyout bid after a big year > cbb%3A a second dynasty in one mount takes its own bid%2C though its key matches the first one's,line=398,column=13::Error: cbb: no second dynasty drew a bid over 80 seeds%0A ❯ src/components/college-dynasty/CollegeSeat.test.tsx:398:13%0A%0A

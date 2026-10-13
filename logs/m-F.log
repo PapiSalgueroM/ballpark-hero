@@ -1,0 +1,60 @@
+MUT mutF applied
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [31m❯[39m src/lib/collegeSeat.test.ts [2m([22m[2m16 tests[22m[2m | [22m[31m2 failed[39m[2m)[22m[32m 91[2mms[22m[39m
+   [32m✓[39m the ask[2m > [22mis built off the roster rank, not the prestige rank[32m 2[2mms[22m[39m
+   [32m✓[39m the ask[2m > [22mlifts a CBB win total ask one step, and nothing else[32m 1[2mms[22m[39m
+   [32m✓[39m the close[2m > [22mgrades with gradeSeason, moves trust, and grades a season once[32m 1[2mms[22m[39m
+   [32m✓[39m the close[2m > [22mfires at zero trust and opens a market instead of ending[32m 2[2mms[22m[39m
+   [32m✓[39m the close[2m > [22mreads the bracket: the final and the title from the last game[32m 0[2mms[22m[39m
+   [32m✓[39m the market and the move[2m > [22mnever offers a program that let him go, and a second press takes nothing[32m 2[2mms[22m[39m
+   [32m✓[39m the market and the move[2m > [22mreads a climb as shut: a program never changes tier here[32m 0[2mms[22m[39m
+   [32m✓[39m the market and the move[2m > [22mbids only after a big year, never at the top tier[32m 0[2mms[22m[39m
+   [32m✓[39m the market and the move[2m > [22msays the closed market plainly, with no article before a program[32m 0[2mms[22m[39m
+[31m   [31m×[31m a program that let him go never calls again[2m > [22mcfb: the market drops the first program that let him go when gmSeat draws it[39m[32m 38[2mms[22m[39m
+[31m     → expected [ 'p10', 'p05' ] to not include 'p10'[39m
+   [32m✓[39m a program that let him go never calls again[2m > [22mcfb: a buyout bid from a program that let him go is dropped, and the same bid stands without that past[32m 8[2mms[22m[39m
+[31m   [31m×[31m a program that let him go never calls again[2m > [22mcbb: the market drops the first program that let him go when gmSeat draws it[39m[32m 26[2mms[22m[39m
+[31m     → expected [ 'p12', 'p02' ] to not include 'p12'[39m
+   [32m✓[39m a program that let him go never calls again[2m > [22mcbb: a buyout bid from a program that let him go is dropped, and the same bid stands without that past[32m 7[2mms[22m[39m
+   [32m✓[39m the save[2m > [22mkeeps a sane block and refuses a hostile one[32m 1[2mms[22m[39m
+   [32m✓[39m the save[2m > [22mkeeps a coach who just moved: a job taken at a close starts the season after the one on record[32m 0[2mms[22m[39m
+   [32m✓[39m the save[2m > [22mopens where the load rules say[32m 0[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 2 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/lib/collegeSeat.test.ts[2m > [22ma program that let him go never calls again[2m > [22mcfb: the market drops the first program that let him go when gmSeat draws it
+[31m[1mAssertionError[22m: expected [ 'p10', 'p05' ] to not include 'p10'[39m
+[36m [2m❯[22m src/lib/collegeSeat.test.ts:[2m143:62[22m[39m
+    [90m141| [39m          ] }[33m;[39m
+    [90m142| [39m          const m = collegeMarket({ v: 1, career, trust: 0, mandate: n…
+    [90m143| [39m          for (const o of m.offers) expect([a.id, b.id]).not.toContain…
+    [90m   | [39m                                                             [31m^[39m
+    [90m144| [39m          const drawn = seatOffers(collegePack(sport), collegeSeatTeam…
+    [90m145| [39m          [35mif[39m (drawn[33m.[39m[34msome[39m(o [33m=>[39m o[33m.[39mteamId [33m===[39m a[33m.[39mid)) {
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/lib/collegeSeat.test.ts[2m > [22ma program that let him go never calls again[2m > [22mcbb: the market drops the first program that let him go when gmSeat draws it
+[31m[1mAssertionError[22m: expected [ 'p12', 'p02' ] to not include 'p12'[39m
+[36m [2m❯[22m src/lib/collegeSeat.test.ts:[2m143:62[22m[39m
+    [90m141| [39m          ] }[33m;[39m
+    [90m142| [39m          const m = collegeMarket({ v: 1, career, trust: 0, mandate: n…
+    [90m143| [39m          for (const o of m.offers) expect([a.id, b.id]).not.toContain…
+    [90m   | [39m                                                             [31m^[39m
+    [90m144| [39m          const drawn = seatOffers(collegePack(sport), collegeSeatTeam…
+    [90m145| [39m          [35mif[39m (drawn[33m.[39m[34msome[39m(o [33m=>[39m o[33m.[39mteamId [33m===[39m a[33m.[39mid)) {
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m2 failed[39m[22m[2m | [22m[1m[32m14 passed[39m[22m[90m (16)[39m
+[2m   Start at [22m 02:48:03
+[2m   Duration [22m 934ms[2m (transform 103ms, setup 49ms, collect 110ms, tests 91ms, environment 284ms, prepare 65ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/collegeSeat.test.ts,title=src/lib/collegeSeat.test.ts > a program that let him go never calls again > cfb%3A the market drops the first program that let him go when gmSeat draws it,line=143,column=62::AssertionError: expected [ 'p10', 'p05' ] to not include 'p10'%0A ❯ src/lib/collegeSeat.test.ts:143:62%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/collegeSeat.test.ts,title=src/lib/collegeSeat.test.ts > a program that let him go never calls again > cbb%3A the market drops the first program that let him go when gmSeat draws it,line=143,column=62::AssertionError: expected [ 'p12', 'p02' ] to not include 'p12'%0A ❯ src/lib/collegeSeat.test.ts:143:62%0A%0A
