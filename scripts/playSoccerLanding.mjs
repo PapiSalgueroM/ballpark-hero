@@ -23,8 +23,8 @@
  *            name heading sits inside the readable area (under anything pinned
  *            at the top, above the bar) and scrollY is the same in both reads.
  *            New Career then Begin again lands again. BASE: off screen.
- *   name     at 320 the name is never cut and no line of it sits under a
- *            button; at 1280 it is one line. BASE: cut at 320.
+ *   name     at every size the name is never cut and no line of it sits under a
+ *            button (also at 480 and 768, EXTRA_SIZES); at 1280 it is one line. BASE: cut at 320.
  *   bar      saves made by the engine (youth, playing, manager employed,
  *            manager out of work, pundit, owner, retired): every button and
  *            the AGE tile inside the screen, no button text cut, every button
@@ -74,8 +74,9 @@ if (CONTROL && CONTROL !== 'seed') { console.error(`SOCCER_LANDING_CONTROL=${CON
 const SIZES = (process.env.SIZES || '320x640,390x844,1280x900').split(',').map(s => s.split('x').map(Number));
 /* Sizes one section also runs at, as section:WxH. The bar at 360 and 375, the
    commonest phones, where a step down keyed under 360 once left AGE off the
-   screen while 320, 390 and 1280 were all green. EXTRA_SIZES= runs none. */
-const EXTRA = (process.env.EXTRA_SIZES ?? 'bar:360x780,bar:375x667').split(',').map(s => s.trim()).filter(Boolean).map(s => {
+   screen while 320, 390 and 1280 were all green; the name at 480 and 768,
+   where a name truncating from 480 up was cut. EXTRA_SIZES= runs none. */
+const EXTRA = (process.env.EXTRA_SIZES ?? 'bar:360x780,bar:375x667,name:480x800,name:768x1024').split(',').map(s => s.trim()).filter(Boolean).map(s => {
   const [section, wh] = s.split(':');
   const [w, h] = wh.split('x').map(Number);
   return { section, w, h };
@@ -368,8 +369,8 @@ async function measureName(p) {
 function judgeName(arm, size, w, n) {
   if (!n) { rec(arm, 'name', size, 'no name heading on the hub'); return; }
   console.log(`   name "${n.text}": ${n.lines} line(s), scrollWidth ${n.scrollW} of ${n.clientW}${n.under.length ? `, under ${JSON.stringify(n.under)}` : ''}`);
-  if (w <= 320 && n.scrollW > n.clientW + 1) rec(arm, 'name', size, `"${n.text}" is cut (${n.scrollW} px of text in ${n.clientW} px)`);
-  if (w <= 320 && n.under.length) rec(arm, 'name', size, `"${n.text}" sits under ${JSON.stringify(n.under)}`);
+  if (n.scrollW > n.clientW + 1) rec(arm, 'name', size, `"${n.text}" is cut (${n.scrollW} px of text in ${n.clientW} px)`);
+  if (n.under.length) rec(arm, 'name', size, `"${n.text}" sits under ${JSON.stringify(n.under)}`);
   if (w >= 1280 && n.lines !== 1) rec(arm, 'name', size, `"${n.text}" takes ${n.lines} lines at ${w}`);
 }
 async function sectionLanding(ctx, arm, size, w, judge = SECTIONS) {

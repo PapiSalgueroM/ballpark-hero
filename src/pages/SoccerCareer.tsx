@@ -4064,12 +4064,14 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
                 name was being crushed to two characters by the buttons on
                 the right of the same row. The flag holds its size, the name
                 takes the rest and truncates properly if it has to.
-                Round 1330: under 480 px the name has its own line, so it wraps
-                (at any character, for a 40 letter name with no space) and is
-                shown whole; from 480 up it is the single line it was. */}
+                Round 1330: the name wraps at every width (at any character,
+                for a 40 letter name with no space) and is never cut. It keeps
+                the truncate class, whose nowrap whitespace-normal overrides
+                (Tailwind emits whitespace after text overflow), because
+                simMobileChrome finds the name as span.truncate. */}
             <h1 className="text-xl sm:text-2xl font-black flex items-center gap-2 min-w-0">
               <FlagImg name={career.nationality} size={24} />
-              <span className="min-w-0 [overflow-wrap:anywhere] min-[480px]:truncate">{career.playerName}</span>
+              <span className="truncate whitespace-normal [overflow-wrap:anywhere] min-w-0">{career.playerName}</span>
             </h1>
             <p className="text-xs text-muted-foreground">{career.position} · Age {career.age} · <FlagImg name={career.nationality} size={12} showLabel /></p>
           </div>
