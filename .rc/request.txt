@@ -1,0 +1,16 @@
+#!serial
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-touched: node_modules/.bin/vitest run src/test/gameReportPlacement.test.tsx src/test/reportDetails.test.tsx src/test/playerBingoHonours.test.ts src/test/reportContext.test.ts src/test/playerBingoReport.test.tsx --testTimeout=300000 --hookTimeout=120000
+chips-control: git show a7c6befe:src/components/seo/GameSeoContent.tsx > src/components/seo/GameSeoContent.tsx && git show a7c6befe:src/components/game/ReportQuestion.tsx > src/components/game/ReportQuestion.tsx && NO_COLOR=1 FORCE_COLOR=0 node_modules/.bin/vitest run src/test/gameReportPlacement.test.tsx src/test/reportDetails.test.tsx > /tmp/cc.log 2>&1; git checkout -- src; grep -E "FAIL .*(sitewide chips|Duplicate question)|Tests " /tmp/cc.log | tail -5; grep -Eq "Tests +2 failed [|] 25 passed" /tmp/cc.log && [ "$(grep -c -E 'FAIL .*(sitewide chips|drops it when the page passes)' /tmp/cc.log)" -ge 2 ] && echo "CHIPS CONTROL FIRED: exactly the 2 chip cases fail on the pre fix components"
+focus-control: git show 942268ef:src/components/game/ReportQuestion.tsx > src/components/game/ReportQuestion.tsx && git show 942268ef:src/components/game/ReportSiteIssue.tsx > src/components/game/ReportSiteIssue.tsx && NO_COLOR=1 FORCE_COLOR=0 node_modules/.bin/vitest run src/test/reportDetails.test.tsx > /tmp/fc.log 2>&1; git checkout -- src; grep -E "FAIL .*(gives focus back|drops it when)|Tests " /tmp/fc.log | tail -5; grep -Eq "Tests +3 failed [|] 16 passed" /tmp/fc.log && [ "$(grep -c 'FAIL .*gives focus back' /tmp/fc.log)" -ge 2 ] && echo "FOCUS CONTROL FIRED: the 2 focus cases (and the new chips case) fail on the 942268ef components"
+simReportRelay-off: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simReportRelay.mjs
+simReportRelay-oldkinds: SIM_REPORT_CONTROL=oldkinds NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simReportRelay.mjs > /tmp/rr.log 2>&1; tail -3 /tmp/rr.log; grep -q "NEGATIVE CONTROL ON" /tmp/rr.log && grep -q "FAIL: the per question button does not take its chips" /tmp/rr.log && echo "OLDKINDS CONTROL FIRED"
+simReportContext: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simReportContext.mjs
+simGuideHeadings: node scripts/simGuideHeadings.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+simSiteSearch: node scripts/simSiteSearch.mjs
+simPlayerBingoHonours: node scripts/simPlayerBingoHonours.mjs
+simSoccerLoanMinutes: SOCCER_LOAN_MINUTES_OUT="$RUNNER_TEMP/ba-loan" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerLoanMinutes.mjs
+simErrorBoundary: node scripts/simErrorBoundary.mjs
