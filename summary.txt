@@ -1,0 +1,7 @@
+build exit=0 33s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+playEra2005 exit=0 13s | playEra2005: green. The 2005-06 branch plays like a person would find it.
+playEra2015 exit=0 19s | playEra2015: green. The 2015-16 branch plays like a person would find it.
+desk exit=0 28s | playCmFinanceDesk: green. The Finances desk reads at 12px, taps at 44px, cuts nothing, keeps every figure on one line and shows what the board covers and what the kitty k
+desk-small-EXPECT-RED exit=1 27s | playCmFinanceDesk: CONTROL small FIRED (9 failures, as it must)
+desk-cut-EXPECT-RED exit=1 27s | playCmFinanceDesk: CONTROL cut FIRED (3 failures, as it must)
+desk-wrap-EXPECT-RED exit=1 27s | playCmFinanceDesk: CONTROL wrap FIRED (3 failures, as it must)
