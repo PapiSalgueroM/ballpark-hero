@@ -63,6 +63,7 @@
  *   realmoves   real men are moved between clubs again: section 3.
  *   pastchampions  a season that happened prints its champions: section 3.
  *   summer      the feed names the winner of a missed summer that happened: section 3.
+ *   arcade      the quiz asks about the world of every season again: section 4.
  *   log         the season log names the winner of every summer again: section 5.
  *   panel       the International panel names every winner again: section 5.
  *
@@ -122,6 +123,8 @@ const CONTROLS = {
     edits: { [PHONE]: [['  if (!happened) {\n    if (ucl !== s.currentClub)', '  if (true) {\n    if (ucl !== s.currentClub)']] } },
   summer: { breaks: '3', note: 'the feed names the winner of a summer he missed that happened',
     edits: { [PHONE]: [['  if (intl && tournamentWinnerShown(year, myFinals))', '  if (intl)']] } },
+  arcade: { breaks: '4', note: 'the quiz asks about the world of every season again',
+    edits: { [ARCADE]: [['  if (w && !seasonHappened(w.year)) {', '  if (w) {'], ['    if (w.year > LAST_REAL_YEAR && w.moves.length >= 1) {', '    if (w.moves.length >= 1) {'], ['    if (w.year > LAST_REAL_YEAR && w.topScorer) {', '    if (w.topScorer) {']] } },
   log: { breaks: '5', note: 'the season log names the winner of every summer again',
     edits: { [ENGINE]: [['  if (tournamentWinnerShown(year, eligible ? t.myResult : "")) {', '  if (true) {']] } },
   panel: { breaks: '5', note: 'the International panel names every winner again',
@@ -329,7 +332,9 @@ function recordOf(B, s, row, c) {
   const t = s.lastTournament && s.lastTournament.year === row.year ? s.lastTournament : null;
   const hist = (s.intlHistory || []).filter(h => h.year === row.year).pop() || null;
   const save = JSON.stringify({ seasons: s.seasons, awards: s.awards, world: w });
-  const quiz = B.arcade.arcadeQuestions(copy(s)).map(q => ({ q: q.q, right: q.options[q.answer], inSave: save.includes(JSON.stringify(q.options[q.answer]).slice(1, -1)) }));
+  /* A right answer is in the save as written, or (a rating printed to one decimal) as the number the row holds. */
+  const inSave = right => save.includes(JSON.stringify(right).slice(1, -1)) || (/^\d+\.\d$/.test(right) && save.includes(`"rating":${Number(right)},`));
+  const quiz = B.arcade.arcadeQuestions(copy(s)).map(q => ({ q: q.q, right: q.options[q.answer], inSave: inSave(q.options[q.answer]) }));
   const clubs = {};
   for (const [name, club] of Object.entries(s.phone && s.phone.clubs ? s.phone.clubs : {})) if (ERA.has(name)) clubs[name] = club;
   return {
@@ -655,6 +660,29 @@ console.log('4) The phone\'s quiz asks about the world only where the world is t
   if (h.real) fail(`${h.real} quiz questions about a real man's move or goals`);
   if (h.missing) fail(`${h.missing} quiz answers are not in the save`);
   if (!(h.rate >= b.rate)) fail(`the quiz is ready in ${r2(h.rate)} of seasons against ${r2(b.rate)} on the base`);
+  /* Old saves: careers the base drove to its 2028 world, which still holds real men's moves and a real top
+     scorer, read by this tree's quiz (through JSON, the way a save loads). */
+  let olds = 0, realMovesHeld = 0, asked = 0, realAsked = 0;
+  for (let i = 0; i < 40; i += 1) {
+    const c = { seed: 70000 + SEED_OFFSET * 100 + i, start: 2021, pos: POSITIONS[i % 10], nation: NATIONS[i % 10], ovr: 60 + (i % 12), pot: 85 };
+    const real = Math.random;
+    Math.random = seeded(c.seed);
+    let s;
+    try {
+      const M = BASEB.engine;
+      s = M.initCareer(`Old ${c.seed}`, c.nation, c.pos, '2020s', stats(c.ovr), c.ovr, c.start, M.FALLBACK_CLUBS, null, c.pot);
+      for (let guard = 0; guard < 300 && !s.retired && !(s.phone?.world?.year >= 2028); guard += 1) { const n = step(M, s, c.seed); if (!n) break; s = n; }
+    } finally { Math.random = real; }
+    const w = s.phone?.world;
+    if (!w || w.year !== 2028) continue;
+    olds += 1;
+    if (w.moves.some(m => ERA.has(m.who)) || (w.topScorer && ERA.has(w.topScorer.who))) realMovesHeld += 1;
+    const old = HEAD.engine.repairCareer(JSON.parse(JSON.stringify(s)));
+    for (const q of HEAD.arcade.arcadeQuestions(old)) { asked += 1; if (REAL_Q.some(re => re.test(q.q))) realAsked += 1; }
+  }
+  console.log(`   old saves: ${olds} base careers at their 2028 world (${realMovesHeld} holding a real man's move or tally) asked ${asked} questions here, ${realAsked} about a real man`);
+  if (olds < 20 || realMovesHeld < 10) fail(`only ${olds} old 2028 saves (${realMovesHeld} with real moves) were read`);
+  if (realAsked) fail(`${realAsked} questions from an old 2028 world asked about a real man's move or goals`);
 }
 
 /* ─── 5. the season log and the International panel ───────────────────── */

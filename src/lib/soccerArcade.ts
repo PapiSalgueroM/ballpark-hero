@@ -29,6 +29,7 @@ import type { CareerState, SeasonRecord } from "./soccerCareerEngine";
 import { ensureMoney } from "./soccerMoney";
 import type { WorldSeason } from "./soccerPhone";
 import { phoneWorld } from "./soccerPhone";
+import { LAST_REAL_YEAR, seasonHappened } from "./soccerWorldTruth";
 
 export interface ArcadeQuestion {
   /** What is being asked. */
@@ -146,8 +147,71 @@ export function arcadeQuestions(s: CareerState): ArcadeQuestion[] {
     if (q) candidates.push(q);
   }
 
+  /* Round 1329: his own story, read off the saved rows only, so a career in a
+     season that really happened (where the world asks nothing, below) still
+     gets its three. The row is the latest season he played games in; when the
+     last one was lost to injury, its goals and games are asked here instead. */
+  const own = [...played].reverse().find(x => x.apps > 0);
+  if (own) {
+    if (own !== last) {
+      if (s.position !== "GK") {
+        const q = build(
+          `How many goals did you score in ${own.year}?`,
+          String(own.goals), nearNumbers(own.goals, rng),
+          `You got ${own.goals} in ${own.apps} games for ${own.club}.`, rng,
+        );
+        if (q) candidates.push(q);
+      }
+      const q = build(
+        `How many games did you play in ${own.year}?`,
+        String(own.apps), nearNumbers(own.apps, rng),
+        `${own.apps} appearances for ${own.club}.`, rng,
+      );
+      if (q) candidates.push(q);
+    }
+    const sheets = own.cleanSheets ?? 0;
+    if (sheets > 0) {
+      const q = build(
+        `How many clean sheets did you keep in ${own.year}?`,
+        String(sheets), nearNumbers(sheets, rng),
+        `${sheets} in ${own.apps} games for ${own.club}.`, rng,
+      );
+      if (q) candidates.push(q);
+    }
+    const months = (s.awards ?? []).filter(a => a.name === "Player of the Month" && a.year === own.year).length;
+    if (months > 0) {
+      const q = build(
+        `How many Player of the Month awards did you win in ${own.year}?`,
+        String(months), nearNumbers(months, rng),
+        `${months}, in a ${own.rating.toFixed(1)} rated season.`, rng,
+      );
+      if (q) candidates.push(q);
+    }
+    const tenths = Math.round(own.rating * 10);
+    if (tenths > 0) {
+      const near: string[] = [];
+      for (let guard = 0; guard < 40 && near.length < 6; guard += 1) {
+        const v = tenths + rng.int(-8, 8);
+        const label = (v / 10).toFixed(1);
+        if (v !== tenths && v >= 30 && v <= 100 && !near.includes(label)) near.push(label);
+      }
+      const q = build(
+        `What was your season rating in ${own.year}?`,
+        (tenths / 10).toFixed(1), near,
+        `${(tenths / 10).toFixed(1)} over ${own.apps} games for ${own.club}.`, rng,
+      );
+      if (q) candidates.push(q);
+    }
+  }
+
+  /* Round 1329: who won what in a season that really happened is a fact about
+     the real world, which this phone cannot stand behind (soccerWorldTruth.ts),
+     so the world is asked about only for a season still to come, the game's
+     own; and a move or a goal tally only past the last real names year, so an
+     old save whose 2028 world still holds a real man's move never asks about
+     him. That is how the quiz stays never wrong. */
   const w: WorldSeason | null = world;
-  if (w) {
+  if (w && !seasonHappened(w.year)) {
     const leagueNames = Object.keys(w.leagues);
     if (w.ucl) {
       const others = Object.values(w.leagues).concat(leagueNames.length ? [] : []);
@@ -168,7 +232,7 @@ export function arcadeQuestions(s: CareerState): ArcadeQuestion[] {
       );
       if (q) candidates.push(q);
     }
-    if (w.moves.length >= 1) {
+    if (w.year > LAST_REAL_YEAR && w.moves.length >= 1) {
       const mv = w.moves[rng.int(0, w.moves.length - 1)];
       const q = build(
         `Where did ${mv.who} move to in ${w.year}?`,
@@ -177,7 +241,7 @@ export function arcadeQuestions(s: CareerState): ArcadeQuestion[] {
       );
       if (q) candidates.push(q);
     }
-    if (w.topScorer) {
+    if (w.year > LAST_REAL_YEAR && w.topScorer) {
       const ts = w.topScorer;
       const q = build(
         `How many did ${ts.who} finish on in ${w.year}?`,
