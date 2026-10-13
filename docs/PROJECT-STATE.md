@@ -1,3 +1,9 @@
+## Codex Round 1362: Manager note snapshots, native proof preparation, 2026-10-13
+
+The isolated codex/manager-note-snapshots branch starts at qualified Manager handoff 8caf3307. Only three recorded-context descriptions are proposed: injurySupport, boardPressure and pressPressure will say the captured number was true when the note was written. All effects, gates, deadlines, state schemas and H core/UI/save/week/world/finance scopes stay held. No app edit or new runtime qualification exists.
+
+New pinned QA and workflow prepare actual parent/candidate whistle comparisons, complete input vectors, save/reply literals and effective old-caption controls. The fixed phase reuses every qualified257 gate and the unchanged1351 context browser with its original-seven baseline report. No old or unrelated image grants new-caption UI credit. See docs/audits/manager-note-snapshots-2026-10-13.md. Root owns review, remote execution and shipping.
+
 ## Codex Round1357: Manager kickoff reply cutoff, fixed proof qualified and ready for integration, 2026-10-13
 
 Managed branchcodex/manager-decision-deadline and attached draftPR257 start at1351 docsfinal1ed26406. Root owns only existing situation deadline plus isolated proofs; H core/page/hook/save/week/finance/13streams/rates/cap/appeals remain held. Qualified causal baselinebb3f5357 now precedes only the three-line existing situation guard. Final7c0d173c fixed proof passes all owned gates; PR257 ready for H integration, no live claim.

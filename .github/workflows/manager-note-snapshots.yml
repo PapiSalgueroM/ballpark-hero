@@ -1,0 +1,241 @@
+name: Club Manager recorded note snapshots
+
+on:
+  push:
+    branches: [codex/manager-note-snapshots]
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 100
+    defaults:
+      run:
+        shell: bash
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      ENGINES: chromium
+      CM_LOCAL_ONLY: '1'
+      MANAGER_NOTES_PHASE: baseline
+      MANAGER_NOTES_OUT: ${{ github.workspace }}/manager-note-artifacts
+      MANAGER_DEADLINE_PHASE: fixed
+      MANAGER_DEADLINE_OUT: ${{ github.workspace }}/manager-note-artifacts/prior-deadline
+      MANAGER_DECISION_DEPTH_OUT: ${{ github.workspace }}/manager-note-artifacts/prior-decisions
+      FREE_KICK_FONT_CACHE: ${{ github.workspace }}/manager-note-artifacts/font-cache
+      MANAGER_DECISION_DEPTH_PHASE: fixed
+      MANAGER_DECISION_DEPTH_BASELINE_RUN: '38329792123'
+      MANAGER_DECISION_DEPTH_BASELINE_REPORT: ${{ github.workspace }}/manager-note-artifacts/original-seven-baseline/baseline/report.json
+      PRERENDER_ONLY: /club-manager
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Block production database transport
+        run: echo '127.0.0.1 flawuiqbvjobmkfkauhw.supabase.co' | sudo tee -a /etc/hosts
+      - name: Bind held app and locked source
+        run: |
+          mkdir -p "$MANAGER_DEADLINE_OUT" "$MANAGER_DECISION_DEPTH_OUT"
+          git rev-parse HEAD > "$MANAGER_DEADLINE_OUT/source-head.txt"
+          git status --porcelain --untracked-files=no > "$MANAGER_DEADLINE_OUT/source-before.txt"
+          test ! -s "$MANAGER_DEADLINE_OUT/source-before.txt"
+          git diff --exit-code 8caf3307c980672fea887dddfbd33f38efcc0492 -- src ':!src/lib/clubManagerDecisions.ts' scripts ':!scripts/qa/qualifyManagerNoteSnapshots.mjs' .github/workflows ':!.github/workflows/manager-note-snapshots.yml' index.html package.json package-lock.json bun.lock
+          if test "$MANAGER_NOTES_PHASE" = baseline; then
+            git diff --exit-code 8caf3307c980672fea887dddfbd33f38efcc0492 -- src/lib/clubManagerDecisions.ts
+          fi
+          sha256sum package.json package-lock.json bun.lock > "$MANAGER_DEADLINE_OUT/package-hashes.txt"
+          git ls-files -z src scripts .github/workflows index.html | xargs -0 sha256sum > "$MANAGER_DEADLINE_OUT/source-wide.txt"
+          npm ci
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          const lock = JSON.parse(fs.readFileSync('package-lock.json'));
+          const installed = Object.entries(lock.packages).filter(([path]) => path.startsWith('node_modules/') && fs.existsSync(path + '/package.json')).map(([path, entry]) => {
+            const filename = path + '/package.json', bytes = fs.readFileSync(filename);
+            const version = JSON.parse(bytes).version; assert.equal(version, entry.version, path);
+            return { path, version };
+          });
+          assert.equal(installed.length, 521);
+          fs.writeFileSync(process.env.MANAGER_DEADLINE_OUT + '/installed.json', JSON.stringify(installed, null, 2) + '\n');
+          console.log('Bound all521 installed locked versions.');
+          NODE
+          sha256sum --check "$MANAGER_DEADLINE_OUT/package-hashes.txt"
+      - name: Actual application type gate
+        run: node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee "$MANAGER_DEADLINE_OUT/types.log"
+      - name: Actual note capture and complete parent whistle comparison
+        run: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/qualifyManagerNoteSnapshots.mjs 2>&1 | tee "$MANAGER_NOTES_OUT/note-proof.log"
+      - name: Actual kickoff deadline and copied old-behavior control
+        run: |
+          if test "$MANAGER_DEADLINE_PHASE" = baseline; then
+            CM_DEADLINE_EXPECT_RED=1 NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simClubManagerDecisionDeadline.mjs 2>&1 | tee "$MANAGER_DEADLINE_OUT/baseline.log"
+          else
+            NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simClubManagerDecisionDeadline.mjs 2>&1 | tee "$MANAGER_DEADLINE_OUT/fixed.log"
+            CM_DEADLINE_CONTROL=late NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simClubManagerDecisionDeadline.mjs 2>&1 | tee "$MANAGER_DEADLINE_OUT/control-late.log"
+          fi
+      - name: Original fourteen desk regressions and effective label guard
+        run: |
+          for control in normal substring; do
+            set +e
+            CM_GATE_WORDS_CONTROL="$control" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node_modules/.bin/vitest run src/test/clubManagerDecisions.test.tsx --maxWorkers=1 --reporter=verbose --reporter=json --outputFile.json="$MANAGER_DEADLINE_OUT/original-unit-$control.json" 2>&1 | tee "$MANAGER_DEADLINE_OUT/original-unit-$control.log"
+            result=${PIPESTATUS[0]}
+            set -e
+            CM_GATE_WORDS_EXIT="$result" CM_GATE_WORDS_MODE="$control" node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          const mode = process.env.CM_GATE_WORDS_MODE, fault = mode === 'substring', root = process.env.MANAGER_DEADLINE_OUT;
+          assert(['normal', 'substring'].includes(mode));
+          const report = JSON.parse(fs.readFileSync(root + '/original-unit-' + mode + '.json'));
+          const output = fs.readFileSync(root + '/original-unit-' + mode + '.log', 'utf8');
+          assert(!/TypeError:|ReferenceError:|SyntaxError:|ERR_MODULE_NOT_FOUND|Unhandled (?:Errors?|Rejection)|Uncaught Exception|Failed to load|Failed to resolve import/i.test(output), 'No fixture or setup failure credit');
+          assert.equal(report.testResults.length, 1);
+          const file = report.testResults[0];
+          assert(file.name.endsWith('/src/test/clubManagerDecisions.test.tsx') && !file.message);
+          const names = [
+            'states the odds by tier and walks every step of the ladder',
+            'offers nothing for a man with no ban',
+            'moves suspendedMatches exactly as the card says, and nothing else',
+            'refuses an appeal once the ban has started being served',
+            'closes the appeal window once the next match has kicked off',
+            'closes an unanswered appeal at the next match with the ban untouched',
+            'moves only the number each answer names, by exactly its amount',
+            'never draws from Math.random',
+            'reads a damaged block as empty and leaves the rest of the save alone',
+            'shares the inbox answer path',
+            'shows an appeal with its odds and answers it through onAnswer',
+            'shows the answered line once the card is resolved',
+            'keeps closed cards behind a toggle while a card is open',
+            'renders nothing with an empty inbox and an empty desk',
+          ];
+          const cases = file.assertionResults;
+          assert.deepEqual(cases.map(row => row.title).sort(), [...names].sort());
+          assert.equal(report.numTotalTests, 14); assert.equal(report.numPendingTests, 0);
+          assert(cases.every(row => ['passed', 'failed'].includes(row.status)));
+          const failed = cases.filter(row => row.status === 'failed');
+          assert.deepEqual(failed.map(row => row.title), fault ? [names[6]] : []);
+          for (const row of failed) assert(row.failureMessages.length > 0 && row.failureMessages.every(message =>
+            /^AssertionError:.*unlabelled gate guard rejected the delegate action.*expected false to be true/s.test(message)));
+          assert.equal(report.numFailedTests, fault ? 1 : 0); assert.equal(report.numPassedTests, fault ? 13 : 14);
+          assert.equal(Number(process.env.CM_GATE_WORDS_EXIT), fault ? 1 : 0);
+          fs.writeFileSync(root + '/original-unit-' + mode + '-qualified.json', JSON.stringify({ mode, completedNames: cases.map(row => row.title),
+            passed: report.numPassedTests, intendedFailures: failed.length, effectiveBinding: fault ? 'original substring gate regex' : 'original fan mood/crowd plus whole-word gate' }, null, 2) + '\n');
+          console.log('Original desk unit: all14 named outcomes, ' + report.numPassedTests + ' passes, ' + failed.length + ' exact label-guard faults; no setup or fixture failure.');
+          NODE
+          done
+      - name: Preserve all seven recorded-context depth outcomes
+        run: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node_modules/.bin/vitest run src/test/clubManagerDecisionDepth.test.ts --maxWorkers=1 --reporter=verbose --reporter=json --outputFile.json="$MANAGER_DEADLINE_OUT/prior-unit.json" 2>&1 | tee "$MANAGER_DEADLINE_OUT/prior-unit.log"
+      - name: Preserve actual decision coverage and effective omission controls
+        run: |
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simClubManagerDecisions.mjs 2>&1 | tee "$MANAGER_DEADLINE_OUT/prior-decisions.log"
+          for control in depthcohort presscohort; do
+            set +e
+            CM_DECISIONS_CONTROL="$control" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simClubManagerDecisions.mjs 2>&1 | tee "$MANAGER_DEADLINE_OUT/prior-control-$control.log"
+            result=${PIPESTATUS[0]}
+            set -e
+            CONTROL_EXIT="$result" CONTROL_KIND="$control" node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          const kind = process.env.CONTROL_KIND;
+          const output = fs.readFileSync(process.env.MANAGER_DEADLINE_OUT + '/prior-control-' + kind + '.log', 'utf8');
+          assert.equal(Number(process.env.CONTROL_EXIT), 1);
+          assert(!/Unhandled (?:Errors?|Rejection)|Uncaught Exception|Failed to load|Failed to resolve import|Cannot find module|Module not found|ERR_MODULE_NOT_FOUND|SyntaxError|ReferenceError|TypeError/i.test(output));
+          const cohort = kind === 'depthcohort' ? 'academyStepUp' : 'pressPressure';
+          assert.deepEqual(output.split('\n').filter(line => line.startsWith('FAIL ')), [
+            'FAIL [4] only 33 of 36 card answers were walked; missing ' + [0, 1, 2].map(index => cohort + '#' + index).join(', '),
+          ]);
+          assert(output.includes('simClubManagerDecisions (control ' + kind + '): 1 findings'));
+          assert(new RegExp('Effective ' + kind + ' source control: [a-f0-9]{64}; one unique actual binding changed; before=[a-f0-9]{64}\\.').test(output));
+          console.log('Effective held ' + kind + ': exactly three cohort answers lost, one finding, no setup credit.');
+          NODE
+          done
+      - name: Normal helper discovery without packet output
+        if: env.MANAGER_NOTES_PHASE == 'fixed'
+        run: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" env -u MANAGER_DEADLINE_OUT ONLY=simClubManagerDecisionDeadline node scripts/runAllSims.mjs 2>&1 | tee "$MANAGER_DEADLINE_OUT/fleet-discovery.log"
+      - name: Complete unit suite
+        id: full_unit_suite
+        if: env.MANAGER_NOTES_PHASE == 'fixed'
+        continue-on-error: true
+        env:
+          CM_DEADLINE_ENGINE: ${{ github.workspace }}/manager-note-artifacts/prior-deadline/fixed/engine.mjs
+          CM_DEADLINE_WHISTLE_ENGINE: ${{ github.workspace }}/manager-note-artifacts/prior-deadline/fixed/engine-whistle.mjs
+          CM_DEADLINE_NEUTRAL_ENGINE: ${{ github.workspace }}/manager-note-artifacts/prior-deadline/fixed/engine-neutral.mjs
+          CM_DEADLINE_DECISIONS: ${{ github.workspace }}/manager-note-artifacts/prior-deadline/fixed/decisions.mjs
+        run: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node_modules/.bin/vitest run --maxWorkers=2 --reporter=verbose --reporter=json --outputFile.json="$MANAGER_DEADLINE_OUT/full-unit.json" 2>&1 | tee "$MANAGER_DEADLINE_OUT/full-unit.log"
+      - name: Browser and build tools
+        if: env.MANAGER_NOTES_PHASE == 'fixed'
+        run: |
+          npm install --prefix "$RUNNER_TEMP/manager-deadline-browser" --no-save --package-lock=false playwright
+          ln -s "$RUNNER_TEMP/manager-deadline-browser/node_modules/playwright" node_modules/playwright
+          ln -s "$RUNNER_TEMP/manager-deadline-browser/node_modules/playwright-core" node_modules/playwright-core
+          node "$RUNNER_TEMP/manager-deadline-browser/node_modules/playwright/cli.js" install --with-deps chromium
+          python -m pip install fonttools pillow
+          node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only 2>&1 | tee "$MANAGER_DEADLINE_OUT/fonts.log"
+          sha256sum --check "$MANAGER_DEADLINE_OUT/package-hashes.txt"
+      - name: Complete application build and manager snapshot
+        if: env.MANAGER_NOTES_PHASE == 'fixed'
+        run: |
+          npm run build:seo 2>&1 | tee "$MANAGER_DEADLINE_OUT/build.log"
+          cp scripts/data/lastmod.json "$MANAGER_DEADLINE_OUT/build-lastmod.json"
+          git diff -- scripts/data/lastmod.json > "$MANAGER_DEADLINE_OUT/build-lastmod.diff"
+      - name: Restore the qualified original-seven definition report
+        if: env.MANAGER_NOTES_PHASE == 'fixed'
+        uses: actions/download-artifact@v4
+        with:
+          name: manager-decision-depth-${{ env.MANAGER_DECISION_DEPTH_BASELINE_RUN }}
+          run-id: ${{ env.MANAGER_DECISION_DEPTH_BASELINE_RUN }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: manager-note-artifacts/original-seven-baseline
+      - name: Reuse the original context walker for longer note descriptions
+        if: env.MANAGER_NOTES_PHASE == 'fixed'
+        run: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playClubManagerDecisionDepth.mjs 2>&1 | tee "$MANAGER_NOTES_OUT/context-browser.log"
+      - name: Actual live and pre-match inbox replies on phone and desktop
+        if: env.MANAGER_NOTES_PHASE == 'fixed'
+        run: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playClubManagerDecisionDeadline.mjs 2>&1 | tee "$MANAGER_DEADLINE_OUT/browser.log"
+      - name: Every applicable rebuilt-site reader
+        if: env.MANAGER_NOTES_PHASE == 'fixed'
+        run: ONLY=simClubManagerMeters,simNoInventedQuotes,simAdsense,simBrand,simHeadTags,simHiddenPages,simHubs,simIndexNow,simIndexing,simInternalLinks,simNoRivalNames,simPrerender,simPrerenderBoot,simRetiredRoutes,simSchema,simSitemap,simSnapshotAssets NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/runAllSims.mjs --browser 2>&1 | tee "$MANAGER_DEADLINE_OUT/related.log"
+      - name: Existing page download ceilings
+        if: env.MANAGER_NOTES_PHASE == 'fixed'
+        run: |
+          node scripts/lib/hostLikeServer.mjs dist 4173 > "$MANAGER_DEADLINE_OUT/weight-server.log" 2>&1 &
+          weight_server_pid=$!
+          trap 'kill "$weight_server_pid" 2>/dev/null || true' EXIT
+          for attempt in 1 2 3 4 5; do
+            if curl --fail --silent http://127.0.0.1:4173/ > /dev/null; then break; fi
+            sleep 1
+          done
+          BASE=http://127.0.0.1:4173 SWEEP_OFFLINE=1 NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/sweepWeight.mjs 2>&1 | tee "$MANAGER_DEADLINE_OUT/weight.log"
+      - name: Require the complete unit outcome
+        if: always() && env.MANAGER_NOTES_PHASE == 'fixed'
+        run: test '${{ steps.full_unit_suite.outcome }}' = success
+      - name: Final held source and dependencies
+        if: always()
+        run: |
+          sha256sum --check "$MANAGER_DEADLINE_OUT/package-hashes.txt"
+          grep -v '  scripts/data/lastmod.json$' "$MANAGER_DEADLINE_OUT/source-wide.txt" > "$MANAGER_DEADLINE_OUT/source-wide-build-safe.txt"
+          sha256sum --check "$MANAGER_DEADLINE_OUT/source-wide-build-safe.txt" > "$MANAGER_DEADLINE_OUT/source-hold.log"
+          git diff --exit-code -- src scripts ':!scripts/data/lastmod.json' .github/workflows index.html package.json package-lock.json bun.lock
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          const rows = JSON.parse(fs.readFileSync(process.env.MANAGER_DEADLINE_OUT + '/installed.json'));
+          assert.equal(rows.length, 521);
+          for (const row of rows) assert.equal(JSON.parse(fs.readFileSync(row.path + '/package.json')).version, row.version, row.path);
+          console.log('Held all521 installed locked versions.');
+          NODE
+      - name: Retain complete evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: manager-note-snapshots-${{ github.run_id }}
+          path: manager-note-artifacts/
+          include-hidden-files: true
+          retention-days: 14
+          if-no-files-found: error
