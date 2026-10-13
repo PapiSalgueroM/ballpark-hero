@@ -1,0 +1,36 @@
+FAIL 320-cousin AssertionError [ERR_ASSERTION]: 320-cousin: One actual queued continuation for random_events
+    at check (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playSoccerAgentReview.mjs:25:26)
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playSoccerAgentReview.mjs:118:4
+PASS 320-shark 157 checks
+PASS 320-super 152 checks
+PASS 320-self 152 checks
+FAIL 390-cousin AssertionError [ERR_ASSERTION]: 390-cousin: One actual queued continuation for random_events
+    at check (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playSoccerAgentReview.mjs:25:26)
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playSoccerAgentReview.mjs:118:4
+PASS 390-shark 152 checks
+PASS 390-super 152 checks
+PASS 390-self 152 checks
+FAIL 1280-cousin AssertionError [ERR_ASSERTION]: 1280-cousin: One actual queued continuation for random_events
+    at check (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playSoccerAgentReview.mjs:25:26)
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playSoccerAgentReview.mjs:118:4
+PASS 1280-shark 152 checks
+PASS 1280-super 152 checks
+PASS 1280-self 152 checks
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+3 !== 0
+
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playSoccerAgentReview.mjs:129:117 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: 3,
+  expected: 0,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0
