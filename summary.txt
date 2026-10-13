@@ -1,0 +1,11 @@
+build exit=0 30s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+resultsLayout exit=1 2s | Node.js v24.21.0
+pressMarket exit=1 1s | Node.js v24.21.0
+offerReview exit=1 10s | Node.js v24.21.0
+playHomeFold exit=0 32s | playHomeFold: green. The first thing on the page is something to play.
+hubgrid exit=1 50s | Node.js v24.21.0
+playReducedMotion exit=0 58s | playReducedMotion: green. Motion stops for a visitor who asked for less, content stays visible, every Round 530 route lands its reveals on the final frame, and everyone e
+playCmHubLanding exit=0 98s | playCmHubLanding: green (A 8 pass 0 fail, B 65 pass 0 fail, C 111 pass 0 fail, E 63 pass 0 fail, F 9 pass 0 fail); the hub lands on the club on its first frame
+playCorruptSaves exit=1 136s | playCorruptSaves: 1 broken save(s) trap the player: /hall-of-champions all
+playStorageBlocked exit=0 274s | playStorageBlocked: 826 checks, 0 failed
+browser-sims exit=1 236s | 1 harness not green.
