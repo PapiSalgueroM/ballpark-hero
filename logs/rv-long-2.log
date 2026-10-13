@@ -1,0 +1,12 @@
+moves {"buy young":20,"buy any":20,"sale":20,"release":18,"free agent":11,"job move in season":2,"summer move":6,"wilderness job":2}; ledgers read 1970; largest 32 records
+TIME Blackburn Rovers era2010 seed 101 season 1: 0 records; buildMarket 2 ms (stripped 1); matchday 14 ms (stripped 11)
+TIME Blackburn Rovers era2010 seed 101 season 5: 21 records; buildMarket 1 ms (stripped 1); matchday 21 ms (stripped 12)
+TIME Blackburn Rovers era2010 seed 101 season 10: 27 records; buildMarket 1 ms (stripped 1); matchday 22 ms (stripped 13)
+TIME Blackburn Rovers era2010 seed 202 season 1: 0 records; buildMarket 1 ms (stripped 1); matchday 13 ms (stripped 12)
+TIME Blackburn Rovers era2010 seed 202 season 5: 20 records; buildMarket 1 ms (stripped 1); matchday 14 ms (stripped 7)
+TIME Blackburn Rovers era2010 seed 202 season 10: 29 records; buildMarket 1 ms (stripped 1); matchday 22 ms (stripped 13)
+REFUSED: 0
+DUPLICATE: 0
+MISPLACED: 0
+ERROR: 0
+rvcmw-long: green, no refusal, no duplicate, nobody misplaced
