@@ -75,6 +75,11 @@ export default function ClubManagerHelp() {
                 <p><span className="font-semibold text-foreground">How often.</span> Rarely, and on purpose. We read the published season counts we could find, kept only what more than one publisher counts, and set the game at the cautious end of them, so a review changes fewer results, not more. In this game that is{VAR_GOALS ? ` a goal ruled out about once in ${Math.round(1 / CM_VAR_REAL.goalsRuledOut.low)} matches` : ''}{VAR_GOALS && VAR_PENALTIES ? ' and' : ''}{VAR_PENALTIES ? ` a penalty given about once in ${Math.round(1 / CM_VAR_REAL.penaltiesAwarded.low)}` : ''}. It works both ways, for you and against you, and it does change results.</p>
                 <p><span className="font-semibold text-foreground">Example:</span> {VAR_GOALS && VAR_PENALTIES ? 'it is 0-0, a goal is ruled out, then a penalty a review gave is missed. It stays 0-0.' : VAR_PENALTIES ? 'it is 0-0 and a penalty a review gave is missed. It stays 0-0.' : 'it is 0-0, the ball goes in, a check opens and the goal is ruled out. It stays 0-0, with no scorer and no shot on the stats.'} Each decision is made once and saved with the match, so the live match and the full time report always agree. Open the match's ? button to read this again.</p>
               </div>}
+              {/* Round 1323: one tab wins (src/lib/saveFence.ts). Appended on its own. */}
+              <div data-cm-help="one-tab" className="space-y-2">
+                <p>🗂️ <span className="font-semibold text-foreground">One tab at a time.</span> Each career has one save, so if Club Manager is open in two tabs, the newest tab is the one that plays. The older tab stops saving and puts up a notice asking you to reload, so it can never write an old week over what you played in the other one, or play a match again that is already done. Reloading a tab makes it the newest.</p>
+                <p><span className="font-semibold text-foreground">Example:</span> you are on week 5 in one tab, open Club Manager again in a second tab and play three matches there. Go back to the first tab and it says the career moved on in another tab. Tap Reload and your managers screen comes back with the career at the second tab's week, all three results in. Tap Resume Career and carry on from there.</p>
+              </div>
             </div>
   );
 }

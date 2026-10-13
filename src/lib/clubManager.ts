@@ -20852,22 +20852,35 @@ export function leanCareer(state: CareerState): CareerState {
  * the lean shape, and false comes back only when that is refused as well, so
  * the hook can put it on screen. Same career in, same bytes out, so writing
  * twice is harmless.
+ *
+ * Round 1323: and through the save fence (src/lib/saveFence.ts), so a tab
+ * whose career another tab has played on since writes nothing at all, at a
+ * press or at page leave, and false comes back. Every writer of the career
+ * reaches it here: the hook, the slot swap's own write in clubManagerSlots.ts,
+ * and Hot Seat's carry on, which holds nothing and so writes as a claim. The
+ * import sits here, beside its only callers in this file. The write inside
+ * the fence keeps the name saveCareer on purpose: it is the same refusal
+ * answering false, and scripts/simStorageWrites.mjs follows it by that name
+ * to every caller that keeps the answer.
  */
 export function saveCareer(career: CareerState): boolean {
   const full = trimCareer(career);
-  try {
-    localStorage.setItem(SAVE_KEY, JSON.stringify(full));
-    return true;
-  } catch {
-    /* quota, or a blocked store: once more, lean */
-  }
-  try {
-    localStorage.setItem(SAVE_KEY, JSON.stringify(leanCareer(full)));
-    return true;
-  } catch {
-    return false;
-  }
+  return saveFence.write(SAVE_KEY, function saveCareer() {
+    try {
+      localStorage.setItem(SAVE_KEY, JSON.stringify(full));
+      return true;
+    } catch {
+      /* quota, or a blocked store: once more, lean */
+    }
+    try {
+      localStorage.setItem(SAVE_KEY, JSON.stringify(leanCareer(full)));
+      return true;
+    } catch {
+      return false;
+    }
+  }) === 'written';
 }
+import { saveFence } from '@/lib/saveFence';
 
 /**
  * Round 832: which era the saved career plays in, read without opening it, so
@@ -20944,6 +20957,42 @@ export function loadCareer(): CareerState | null {
        in playNextEntry because a save can be opened on its summary and rolled
        straight into the summer without a ball being kicked. */
     ensureOneOfEach(parsed);
+    /* Round 1323: three repairs for states this engine never writes, so a
+       save edited by hand or damaged in storage opens playable instead of
+       showing "NaN" money, kicking off with five men or reading "your XI avg
+       0". Each fires only on its own condition, which no played save meets
+       (scripts/simSaveFence.mjs section fleet holds that, byte for byte and
+       draw for draw). A negative budget is NOT repaired: startNextSeason
+       clamps one with Math.max(0, ...), so the engine itself expects it. */
+    const rawBudget: unknown = parsed.budget;
+    if (typeof rawBudget !== 'number' || !Number.isFinite(rawBudget)) {
+      const spelled = typeof rawBudget === 'string' && rawBudget.trim() !== '' ? Number(rawBudget) : NaN;
+      parsed.budget = Number.isFinite(spelled) ? spelled : 0;
+    }
+    /* Too few men to name an eleven: topped up the way every squad this
+       engine assembles is, with made up youth marked as such, and the new men
+       given their rungs. NOT at the transfer floor of 14 (loanOutRefusal):
+       sell to 14 with two loanees in, send both back with breakLoan, and the
+       engine itself writes 12, a squad that plays on and must load as it is.
+       The fleet in simSaveFence plays exactly that squeeze. */
+    if (parsed.squad.length < 11) {
+      parsed.squad = ensureSquadCoverage(parsed.squad);
+      ensureRoles(parsed);
+    }
+    /* XI ids that name nobody in the squad are cleared, and only those slots
+       are filled, by the engine's own auto pick over the men not already in
+       the eleven. Pure, no draw. */
+    const squadIds = new Set(parsed.squad.map(p => p.id));
+    const lostSlots = parsed.xiIds.map((id, j) => (id !== null && !squadIds.has(id) ? j : -1)).filter(j => j >= 0);
+    if (lostSlots.length) {
+      const formation = FORMATIONS[parsed.formationIndex] ?? FORMATIONS[0];
+      const xi = parsed.xiIds.map(id => (id !== null && squadIds.has(id) ? id : null));
+      const used = new Set(xi.filter((id): id is string => !!id));
+      const fill = lostSlots.filter(j => j < formation.slots.length);
+      const picks = autoPickXI(parsed.squad.filter(p => !used.has(p.id)), { ...formation, slots: fill.map(j => formation.slots[j]) });
+      fill.forEach((j, k) => { xi[j] = picks[k] ?? null; });
+      parsed.xiIds = xi;
+    }
     /* Round 135: and the press room, for exactly the same reason. The hub tile
        and the press screen both read it before a ball is kicked. */
     ensurePress(parsed);
@@ -21068,11 +21117,16 @@ export function clearCareer(): void {
   registerCustomClub(null);
   // Round 310: the deleted save's promotions go with it.
   registerLeagueOverrides(null);
-  try {
-    localStorage.removeItem(SAVE_KEY);
-  } catch {
-    /* ignore */
-  }
+  /* Round 1323: fenced too, so a stale tab cannot clear a career another tab
+     has played on since. */
+  saveFence.write(SAVE_KEY, () => {
+    try {
+      localStorage.removeItem(SAVE_KEY);
+      return true;
+    } catch {
+      return false;
+    }
+  });
 }
 
 

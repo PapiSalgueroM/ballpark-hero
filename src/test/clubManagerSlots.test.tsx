@@ -114,7 +114,8 @@ describe('Club Manager: three manager slots', () => {
     onNew.mockClear();
     act(() => { r.getByRole('button', { name: 'Clear it, new manager' }).click(); });
     expect(onNew).not.toHaveBeenCalled();
-    expect(tile(3).textContent).toContain('no undo');
+    /* Round 1323: the bytes go to a backup first, so the confirm says a copy is kept. */
+    expect(tile(3).textContent).toContain('offers to put it back');
     act(() => { r.getByRole('button', { name: 'Clear it' }).click(); });
     expect(onNew).toHaveBeenCalledWith(3);
     r.unmount();

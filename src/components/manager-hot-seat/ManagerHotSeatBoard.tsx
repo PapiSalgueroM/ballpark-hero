@@ -122,6 +122,7 @@ function Progress({ run }: { run: HotSeatRun }) {
 function openPage(path: string) {
   window.location.assign(path);
 }
+import { markLandOnHub } from '@/lib/clubManagerLanding';
 
 export function CarryOnCard({ run, openPath = openPage }: { run: HotSeatRun; openPath?: (path: string) => void }) {
   const [ask, setAsk] = useState<ExistingClubManagerSave | null>(null);
@@ -146,6 +147,8 @@ export function CarryOnCard({ run, openPath = openPage }: { run: HotSeatRun; ope
     }
     if (res === 'saved') {
       setGoing(true);
+      /* Round 1323: and Club Manager opens it on the hub, not the managers screen. */
+      markLandOnHub();
       openPath('/club-manager');
     }
   };

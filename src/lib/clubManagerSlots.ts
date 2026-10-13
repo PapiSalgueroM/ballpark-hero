@@ -19,6 +19,7 @@
  */
 import { SAVE_KEY, leanCareer, worldSeasonLabel, type CareerState } from './clubManager';
 import { eraById, isHistoricEra } from './clubManagerEras';
+import { saveFence } from '@/lib/saveFence';
 
 export const SLOT_COUNT = 3;
 export const SLOTS_INDEX_KEY = 'dukb-cm-slots';
@@ -162,6 +163,9 @@ export function switchSlot(slot: number, outgoing?: CareerState | null): boolean
   if (!isSlot(slot)) return false;
   const from = activeSlot();
   if (slot === from) return true;
+  /* Round 1323: a page whose career another tab has played on since touches
+     nothing, not even the parked key (src/lib/saveFence.ts). */
+  if (saveFence.moved(SAVE_KEY)) return false;
   const target = get(parkedKey(slot));
   const park = parkedBytes(outgoing);
   /* 1. Park the outgoing career. Nothing has been removed yet. */
@@ -179,11 +183,20 @@ export function switchSlot(slot: number, outgoing?: CareerState | null): boolean
     undoPark();
     return false;
   }
-  /* 3. The incoming career takes SAVE_KEY. */
-  try {
-    if (target !== null) localStorage.setItem(SAVE_KEY, target);
-    else localStorage.removeItem(SAVE_KEY);
-  } catch {
+  /* 3. The incoming career takes SAVE_KEY, through the fence (Round 1323), so
+     the page that swaps holds the new generation and every other tab is stale.
+     The write inside keeps the name switchSlot: it is this swap's second
+     refusal, as scripts/simStorageWrites.mjs has always counted it. */
+  const took = saveFence.write(SAVE_KEY, function switchSlot() {
+    try {
+      if (target !== null) localStorage.setItem(SAVE_KEY, target);
+      else localStorage.removeItem(SAVE_KEY);
+      return true;
+    } catch {
+      return false;
+    }
+  });
+  if (took !== 'written') {
     try { writeIndex(from); } catch { /* the same size it was a moment ago */ }
     undoPark();
     return false;
@@ -197,9 +210,17 @@ export function switchSlot(slot: number, outgoing?: CareerState | null): boolean
  *  (the caller clears the engine's registrations, see clearCareer). */
 export function deleteSlot(slot: number): void {
   if (!isSlot(slot)) return;
-  try {
-    localStorage.removeItem(slot === activeSlot() ? SAVE_KEY : parkedKey(slot));
-  } catch {
-    /* ignore */
-  }
+  const key = slot === activeSlot() ? SAVE_KEY : parkedKey(slot);
+  const remove = (): boolean => {
+    try {
+      localStorage.removeItem(key);
+      return true;
+    } catch {
+      return false;
+    }
+  };
+  /* Round 1323: the active slot's career is fenced; a parked key only ever
+     changes in a swap. */
+  if (key === SAVE_KEY) saveFence.write(SAVE_KEY, remove);
+  else remove();
 }

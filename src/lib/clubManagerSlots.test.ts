@@ -5,6 +5,8 @@
  */
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { SAVE_KEY, startCareer, leanCareer, trimCareer, worldSeasonLabel } from '@/lib/clubManager';
+import { fenceKeyOf } from '@/lib/saveFence';
+import { LAND_ON_HUB_KEY, markLandOnHub, takeLandOnHub } from '@/lib/clubManagerLanding';
 import {
   SLOTS_INDEX_KEY, parkedKey, activeSlot, readSlots, switchSlot, deleteSlot, slotEraId, summarize,
   READABLE_SAVE_VERSION,
@@ -155,5 +157,39 @@ describe('deleting and reading', () => {
     expect(activeSlot()).toBe(1);
     localStorage.setItem(SLOTS_INDEX_KEY, 'garbage');
     expect(activeSlot()).toBe(1);
+  });
+});
+
+describe('Round 1323: the carry on lands on the hub, once, in this tab', () => {
+  it('a mark is taken once and is never in localStorage', () => {
+    sessionStorage.clear();
+    expect(takeLandOnHub()).toBe(false);
+    markLandOnHub();
+    expect(LAND_ON_HUB_KEY.startsWith('dukb-club-manager')).toBe(false);
+    expect(localStorage.getItem(LAND_ON_HUB_KEY)).toBeNull();
+    expect(takeLandOnHub()).toBe(true);
+    expect(takeLandOnHub()).toBe(false);
+  });
+
+  it('a session store that refuses the mark lands on the managers screen, and never throws', () => {
+    sessionStorage.clear();
+    vi.spyOn(Storage.prototype, 'setItem').mockImplementation(() => { throw new DOMException('quota', 'QuotaExceededError'); });
+    expect(() => markLandOnHub()).not.toThrow();
+    vi.restoreAllMocks();
+    expect(takeLandOnHub()).toBe(false);
+  });
+});
+
+describe('Round 1323: the swap and the delete go through the save fence', () => {
+  it('a swap and a delete of the active career each move the generation', () => {
+    const gen = () => Number(localStorage.getItem(fenceKeyOf(SAVE_KEY)) ?? 0);
+    localStorage.setItem(SAVE_KEY, JSON.stringify(career('Everton')));
+    const g0 = gen();
+    expect(switchSlot(2)).toBe(true);
+    expect(gen()).toBe(g0 + 1);
+    localStorage.setItem(SAVE_KEY, JSON.stringify(career('Lincoln City')));
+    deleteSlot(2);
+    expect(localStorage.getItem(SAVE_KEY)).toBeNull();
+    expect(gen()).toBe(g0 + 2);
   });
 });
