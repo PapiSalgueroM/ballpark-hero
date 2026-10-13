@@ -1,0 +1,5 @@
+#!serve
+#!playwright
+#!serial
+weight-head: node .rc/x/weight1321.mjs http://localhost:4173 dist head
+weight-base: git worktree add -q /tmp/base 48cb9d4b && ln -s "$PWD/node_modules" /tmp/base/node_modules && (cd /tmp/base && node_modules/.bin/vite build --outDir /tmp/base-dist > /tmp/vb.log 2>&1) && (node scripts/lib/hostLikeServer.mjs /tmp/base-dist 4174 > /tmp/hs.log 2>&1 &) && sleep 3 && node .rc/x/weight1321.mjs http://localhost:4174 /tmp/base-dist base
