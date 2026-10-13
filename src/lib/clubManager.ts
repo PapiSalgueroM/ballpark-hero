@@ -76,7 +76,7 @@ import { PRIMARY_RIVAL as RIVALS } from '@/data/clubRivalries';
 // from this file, so there is no cycle.
 import {
   CM_BASE_YEAR, CM_ERAS, DEFAULT_ERA_ID, eraById, seasonLabel,
-  projectedRoster, projectedWorld, projectedXIAvg, projectedWorldFor,
+  projectedRoster, projectedWorld, projectedXIAvg, projectedWorldFor, projectedClubXIAvg,
   ageDriftBand, declineScale, retireChance,
   isHistoricEra, eraRosters, eraRostersRaw, eraUpliftRating, HISTORIC_PARTIAL,
   makeGeneratedName, eraBakeRating, bakedValueForRating,
@@ -383,10 +383,11 @@ function rosterXIAvg(roster: readonly ProjectedPlayer[]): number | null {
    them, so a seeded career's club sank season by season (74.49 against 79.15 by season three) and took the free
    agent level rule and the board's reading with it. His club reads the base's projection exactly as before
    PR224; the world roster serves the other clubs only. genClubStrengths and fillSquadGaps keep the same rule.
-   src/lib/clubManagerOwnClubLevel.test.ts holds it. */
+   projectedClubXIAvg is projectedXIAvg taken for the one club, so a seeded career never builds a second whole
+   world for it. src/lib/clubManagerOwnClubLevel.test.ts holds it. */
 export function worldRosterXIAvg(career: CareerState, club: string): number | null {
-  return club !== career.clubName && (worldRosterView(career) || worldSeedOf(career) !== undefined)
-    ? rosterXIAvg(worldRosterFor(career, club)) : projectedXIAvg(club, yearsOn(career), career.eraId);
+  if (!worldRosterView(career) && worldSeedOf(career) === undefined) return projectedXIAvg(club, yearsOn(career), career.eraId);
+  return club === career.clubName ? projectedClubXIAvg(club, yearsOn(career), career.eraId) : rosterXIAvg(worldRosterFor(career, club));
 }
 
 /* Release AZ fix (reviewer 1, MAJOR 1): buildMarket runs on every change of the save, and with a ledger this
@@ -11193,9 +11194,11 @@ function genClubStrengths(myLeague: LeagueDef, yearsOnNow = 0, eraId: string = '
   /* Release AZ fix, the lead's ruling (see worldRosterXIAvg): the club I manage this season reads the base's
      projection, never the world roster. It is named by the caller, because the career handed over on a job taken
      mid season (joinClubNow) still carries the club I just left, which is another club from now on. */
+  const seededWorld = !!career && (worldRosterView(career) || worldSeedOf(career) !== undefined);
   const baseFor = (name: string): number =>
-    (career && name !== myClub && (worldRosterView(career) || worldSeedOf(career) !== undefined)
-      ? rosterXIAvg(worldRosterFor(career, name, yearsOnNow)) : projectedXIAvg(name, yearsOnNow, eraId))
+    (!seededWorld ? projectedXIAvg(name, yearsOnNow, eraId)
+      : name === myClub ? projectedClubXIAvg(name, yearsOnNow, eraId)
+        : rosterXIAvg(worldRosterFor(career!, name, yearsOnNow)))
       ?? STRENGTH_PRIORS[name] ?? Math.max(clubPreviewRating(name), 66);
   for (const name of myLeague.clubs) {
     out[name] = clamp(baseFor(name) + ri(-2, 2), 52, 95);
@@ -19732,7 +19735,7 @@ function fillSquadGaps(
      recorded from that club below, so a man signed here and sold later is not left on his old club's list too.
      The band itself is MY club's level, so it reads the base's projection with no seed (the lead's ruling of
      2026-10-12, see worldRosterXIAvg): the same level genClubStrengths gives my club. */
-  const baseline = projectedXIAvg(clubName, yearsOnNow, eraId)
+  const baseline = (worldSeed === undefined ? projectedXIAvg(clubName, yearsOnNow, eraId) : projectedClubXIAvg(clubName, yearsOnNow, eraId))
     ?? STRENGTH_PRIORS[clubName] ?? 66;
   const taken = new Set(squad.map(p => p.name));
   const retired = new Set(retiredNames);

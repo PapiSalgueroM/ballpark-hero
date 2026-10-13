@@ -746,47 +746,57 @@ export function projectedWorld(yearsOn: number, worldSeed?: number): Record<stri
  * carries the era so the two worlds can never bleed into each other.
  */
 export function projectedWorldFor(eraId: string, yearsOn: number, worldSeed?: number): Record<string, ProjectedPlayer[]> {
+  const { y, trajectoryEra, seed, key } = worldKeyOf(eraId, yearsOn, worldSeed);
+  const hit = WORLD_CACHE.get(key);
+  if (hit) return hit;
+  const out: Record<string, ProjectedPlayer[]> = {};
+  for (const [club, baked] of Object.entries(eraRosters(eraId))) out[club] = projectClub(club, baked, y, seed, trajectoryEra);
+  WORLD_CACHE.set(key, out);
+  return out;
+}
+
+function worldKeyOf(eraId: string, yearsOn: number, worldSeed?: number): { y: number; trajectoryEra: string; seed: number | undefined; key: string } {
   const y = Math.max(0, Math.round(yearsOn));
   const trajectoryEra = isHistoricEra(eraId) ? eraId : 'now';
   const seed = Number.isSafeInteger(worldSeed) && worldSeed! >= 0 && worldSeed! <= 4294967295
     && Number.isSafeInteger(y) && y > 0 ? worldSeed : undefined;
   const key = `${trajectoryEra}|${y}${seed === undefined ? '' : `|seed:${seed}`}`;
-  const hit = WORLD_CACHE.get(key);
-  if (hit) return hit;
-  const out: Record<string, ProjectedPlayer[]> = {};
-  for (const [club, baked] of Object.entries(eraRosters(eraId))) {
-    const scale = valueScaleFor(club, baked);
-    let roster: ProjectedPlayer[] = baked.map(b => ({
-      n: b.n, p: b.p, a: b.a, v: b.v, r: b.r, anchor: b.r, since: 0,
-      ...(seed === undefined ? {} : { worldRosterKey: JSON.stringify([
-        trajectoryEra, club, b.n, b.p, eraById(trajectoryEra).startYear - b.a, 0,
-      ]) }),
-    }));
-    const target = roster.length;
-    for (let year = 1; year <= y; year++) {
-      const kept: ProjectedPlayer[] = [];
-      const emptied: ProjectedPlayer[] = [];
-      for (const pl of roster) {
-        const next = ageOne(club, pl, year, scale, seed);
-        if (next) kept.push(next); else emptied.push(pl);
-      }
-      // Every slot that emptied gets filled the same summer. A real club does
-      // not carry a hole in its squad for a decade, and "no club runs out of
-      // players" is one of the things this round has to hold true twenty
-      // seasons out.
-      emptied.forEach((slot, i) => kept.push(generateFor(club, slot, year, i, scale, seed === undefined ? undefined : trajectoryEra)));
-      while (kept.length < target && emptied.length) {
-        kept.push(generateFor(club, emptied[kept.length % emptied.length], year, kept.length + 50, scale, seed === undefined ? undefined : trajectoryEra));
-      }
-      // Value descending, which is the order the bake itself is in, because
-      // buildSquad takes the top 26 off the front of this list and a career in
-      // the current era has to get byte for byte the squad it always got.
-      roster = kept.sort((a, b) => b.v - a.v || b.r - a.r || a.n.localeCompare(b.n));
+  return { y, trajectoryEra, seed, key };
+}
+
+/* One club's projection. Every draw in it is keyed on the club (ageOne, generateFor) and nothing is shared
+   between clubs, so projectedWorldFor is this, club by club, and projectedClubRoster below can take one club
+   alone and get the same list. */
+function projectClub(club: string, baked: BakedPlayer[], y: number, seed: number | undefined, trajectoryEra: string): ProjectedPlayer[] {
+  const scale = valueScaleFor(club, baked);
+  let roster: ProjectedPlayer[] = baked.map(b => ({
+    n: b.n, p: b.p, a: b.a, v: b.v, r: b.r, anchor: b.r, since: 0,
+    ...(seed === undefined ? {} : { worldRosterKey: JSON.stringify([
+      trajectoryEra, club, b.n, b.p, eraById(trajectoryEra).startYear - b.a, 0,
+    ]) }),
+  }));
+  const target = roster.length;
+  for (let year = 1; year <= y; year++) {
+    const kept: ProjectedPlayer[] = [];
+    const emptied: ProjectedPlayer[] = [];
+    for (const pl of roster) {
+      const next = ageOne(club, pl, year, scale, seed);
+      if (next) kept.push(next); else emptied.push(pl);
     }
-    out[club] = roster;
+    // Every slot that emptied gets filled the same summer. A real club does
+    // not carry a hole in its squad for a decade, and "no club runs out of
+    // players" is one of the things this round has to hold true twenty
+    // seasons out.
+    emptied.forEach((slot, i) => kept.push(generateFor(club, slot, year, i, scale, seed === undefined ? undefined : trajectoryEra)));
+    while (kept.length < target && emptied.length) {
+      kept.push(generateFor(club, emptied[kept.length % emptied.length], year, kept.length + 50, scale, seed === undefined ? undefined : trajectoryEra));
+    }
+    // Value descending, which is the order the bake itself is in, because
+    // buildSquad takes the top 26 off the front of this list and a career in
+    // the current era has to get byte for byte the squad it always got.
+    roster = kept.sort((a, b) => b.v - a.v || b.r - a.r || a.n.localeCompare(b.n));
   }
-  WORLD_CACHE.set(key, out);
-  return out;
+  return roster;
 }
 
 /** The projected roster for one club, or an empty list if it is not in the data. */
@@ -796,7 +806,34 @@ export function projectedRoster(club: string, yearsOn: number, eraId: string = '
 
 /** Best XI average of a projected roster. Null when there is no data at all. */
 export function projectedXIAvg(club: string, yearsOn: number, eraId: string = 'now', worldSeed?: number): number | null {
-  const roster = projectedRoster(club, yearsOn, eraId, worldSeed);
+  return bestElevenAvg(projectedRoster(club, yearsOn, eraId, worldSeed));
+}
+
+/* Release AZ fix pass 3 (the lead's ruling of 2026-10-12): the manager's own club reads the base's projection,
+   with no seed, while every other read of a seeded career is its seeded world. Building the whole unseeded world
+   each season for that one club cost up to a second at a rollover (954 ms at fifteen years on, on a runner), so
+   this takes the one club alone when that world is not already built. projectClub is the world's own per club
+   step, so the list is the one projectedRoster gives (src/lib/clubManagerOwnClubLevel.test.ts holds the two). */
+const CLUB_CACHE = new Map<string, ProjectedPlayer[]>();
+export function projectedClubRoster(club: string, yearsOn: number, eraId: string = 'now'): ProjectedPlayer[] {
+  const { y, trajectoryEra, seed, key } = worldKeyOf(eraId, yearsOn);
+  const world = WORLD_CACHE.get(key);
+  if (world) return world[club] ?? [];
+  let roster = CLUB_CACHE.get(`${key}|${club}`);
+  if (!roster) {
+    const baked = eraRosters(eraId)[club];
+    roster = baked ? projectClub(club, baked, y, seed, trajectoryEra) : [];
+    CLUB_CACHE.set(`${key}|${club}`, roster);
+  }
+  return roster;
+}
+
+/** projectedXIAvg of one club, through projectedClubRoster. */
+export function projectedClubXIAvg(club: string, yearsOn: number, eraId: string = 'now'): number | null {
+  return bestElevenAvg(projectedClubRoster(club, yearsOn, eraId));
+}
+
+function bestElevenAvg(roster: readonly ProjectedPlayer[]): number | null {
   if (!roster.length) return null;
   const rs = roster.map(p => p.r).sort((a, b) => b - a).slice(0, 11);
   while (rs.length < 11) rs.push(60);

@@ -3,7 +3,9 @@ import type { CareerState } from '@/lib/clubManager';
 import {
   releaseBlock, releasePlayer, startCareer, startNextSeason, worldRosterFor, worldRosterXIAvg, yearsOn,
 } from '@/lib/clubManager';
-import { projectedXIAvg, type ProjectedPlayer } from '@/lib/clubManagerEras';
+import {
+  ensureEraRosters, eraRosters, projectedClubRoster, projectedClubXIAvg, projectedRoster, projectedXIAvg, type ProjectedPlayer,
+} from '@/lib/clubManagerEras';
 
 /* Release AZ fix pass 3, the lead's ruling of 2026-10-12: the manager's OWN club is never read off the world
    roster. The ledger takes every man who left him off his club's world roster and adds nothing for the boys
@@ -69,6 +71,20 @@ describe("the manager's own club is read from his club, never the world roster",
     expect(projectedXIAvg('Everton', yearsOn(moved), moved.eraId)! - ledger).toBeGreaterThan(1);
     expect(moved.clubStrengths.Everton).toBeCloseTo(ledger + 1, 6);
     expect(moved.clubStrengths.Liverpool).toBeCloseTo(projectedXIAvg('Liverpool', yearsOn(moved), moved.eraId)! + 1, 6);
+  });
+
+  it('the one club read is the world read, club for club, in today and in a past era, cold and cached', async () => {
+    await ensureEraRosters('era2010');
+    for (const [eraId, years] of [['now', 9], ['era2010', 4]] as const) {
+      const clubs = Object.keys(eraRosters(eraId));
+      expect(clubs.length).toBeGreaterThan(40);
+      /* Cold: no world of this era and year has been built yet, so each club is projected alone first. */
+      const alone = clubs.map(club => projectedClubRoster(club, years, eraId));
+      clubs.forEach((club, i) => expect(alone[i]).toEqual(projectedRoster(club, years, eraId)));
+      /* Cached: once the world is built the one club read is the world's own list. */
+      for (const club of clubs) expect(projectedClubRoster(club, years, eraId)).toBe(projectedRoster(club, years, eraId));
+      for (const club of clubs) expect(projectedClubXIAvg(club, years, eraId)).toBe(projectedXIAvg(club, years, eraId));
+    }
   });
 
   it('a job taken mid season (the door joinClubNow opens) reads the club he left off the world roster', () => {
