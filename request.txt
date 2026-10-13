@@ -1,0 +1,9 @@
+#!serial
+base-simCareerProgramme: git worktree add -f /tmp/xb 8fea14e216fb550b4676ac29f06867234594df21 >/dev/null 2>&1; ln -sfn "$PWD/node_modules" /tmp/xb/node_modules; cd /tmp/xb && node scripts/simCareerProgramme.mjs
+base-simSoccerVeteranOffers: git worktree add -f /tmp/xb 8fea14e216fb550b4676ac29f06867234594df21 >/dev/null 2>&1; ln -sfn "$PWD/node_modules" /tmp/xb/node_modules; cd /tmp/xb && node scripts/simSoccerVeteranOffers.mjs
+base-simSoccerVeteranTalks: git worktree add -f /tmp/xb 8fea14e216fb550b4676ac29f06867234594df21 >/dev/null 2>&1; ln -sfn "$PWD/node_modules" /tmp/xb/node_modules; cd /tmp/xb && node scripts/simSoccerVeteranTalks.mjs
+base-simCareerPressMarket: git worktree add -f /tmp/xb 8fea14e216fb550b4676ac29f06867234594df21 >/dev/null 2>&1; ln -sfn "$PWD/node_modules" /tmp/xb/node_modules; cd /tmp/xb && node scripts/simCareerPressMarket.mjs
+base-simCareerTransferBrief: git worktree add -f /tmp/xb 8fea14e216fb550b4676ac29f06867234594df21 >/dev/null 2>&1; ln -sfn "$PWD/node_modules" /tmp/xb/node_modules; cd /tmp/xb && node scripts/simCareerTransferBrief.mjs
+base-simSoccerAgentReview: git worktree add -f /tmp/xb 8fea14e216fb550b4676ac29f06867234594df21 >/dev/null 2>&1; ln -sfn "$PWD/node_modules" /tmp/xb/node_modules; cd /tmp/xb && node scripts/simSoccerAgentReview.mjs
+base-simSoccerFarewell: git worktree add -f /tmp/xb 8fea14e216fb550b4676ac29f06867234594df21 >/dev/null 2>&1; ln -sfn "$PWD/node_modules" /tmp/xb/node_modules; cd /tmp/xb && node scripts/simSoccerFarewell.mjs
+base-simSoccerInternationalReturn: git worktree add -f /tmp/xb 8fea14e216fb550b4676ac29f06867234594df21 >/dev/null 2>&1; ln -sfn "$PWD/node_modules" /tmp/xb/node_modules; cd /tmp/xb && node scripts/simSoccerInternationalReturn.mjs
