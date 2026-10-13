@@ -1,0 +1,18 @@
+EFFECT facilities upgrade first: btn="Upgrade £57m" disabled=false changed=budget,boardConfidence,aiHeadlines,facilities,finance budget 73->16 screen=true CHECK {"before":"null","after":"{\"v\":1,\"stadium\":8,\"trainingGround\":6,\"medical\":6,\"dressingRoom\":6,\"seasonSpend\":57}"}
+EFFECT facilities upgrade again: btn="Upgrade £81m" disabled=true changed= budget 16->16 screen=true CHECK {"before":"{\"v\":1,\"stadium\":8,\"trainingGround\":6,\"medical\":6,\"dressingRoom\":6,\"seasonSpend\":57}","after":"{\"v\":1,\"stadium\":8,\"trainingGround\":6,\"medical\":6,\"dressingRoom\":6,\"seasonSpend\":57}"}
+EFFECT finances premium tickets: btn="💼 Premium More per seat, a few empty ones up in the corners" disabled=false changed=boardConfidence,finance,books budget 16->16 screen=true CHECK {"prices":["null","null"]}
+EFFECT finances push sponsor: btn="Push for more" disabled=false changed=aiHeadlines,books budget 16->16 screen=true 
+EFFECT finances sign sponsor: btn="Sign with Silverbeck" disabled=false changed=budget,aiHeadlines,books,sponsor budget 16->46.2 screen=true CHECK {"sponsor":["null","{\"brand\":\"Silverbeck Foods\",\"shape\":\"safe\",\"perSeason\":30.2,\"bonus\":0,\"bonusFor\":null,\"yearsLeft\":2,\"paid\":30.2,\"rep\":\"g"]}
+EFFECT staff pay off coach: btn="Pay off £470k" disabled=false changed= budget 46.2->46.2 screen=true 
+EFFECT staff hire: no such control
+EFFECT training full training: no such control
+EFFECT academy academy action: btn="Upgrade £24m" disabled=false changed=budget,academy budget 46.2->22.2 screen=true 
+EFFECT tactics formation 4-4-2: btn="4-4-2" disabled=false changed=xiIds,formationIndex,xiDuties budget 22.2->22.2 screen=true CHECK {"f":[null,null]}
+EFFECT tactics attacking mentality: btn="⚔️ Attacking Throw bodies forward and chase goals" disabled=false changed=mentality budget 22.2->22.2 screen=true CHECK {"m":["balanced","attacking"]}
+AUDIT fx-after-tactics-quick-report: 1 overlapping text pairs: "Nottingham Forest" x "2-2" (7x14 at 521,1882)
+EFFECT market sell tab: btn="Sell" disabled=false changed= budget 22.2->22.2 screen=true 
+EFFECT market latest tab: btn="Latest" disabled=false changed= budget 22.2->22.2 screen=true 
+EFFECT market buy tab: btn="Buy" disabled=false changed= budget 22.2->22.2 screen=true 
+EFFECT market open talks: btn="Talk · £500k" disabled=false changed=negotiation budget 22.2->22.2 screen=true 
+EFFECT market offer: btn="Offer it" disabled=true changed= budget 22.2->22.2 screen=true 
+EFFECTS done: 0 findings, 0 errors, 71s

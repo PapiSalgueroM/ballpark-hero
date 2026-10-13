@@ -1,0 +1,746 @@
+{
+ "tag": "fx390",
+ "width": 390,
+ "height": 844,
+ "started": "2026-10-13T01:10:23.377Z",
+ "steps": [
+  {
+   "s": 0,
+   "what": "open /club-manager"
+  },
+  {
+   "s": 6,
+   "what": "era picked"
+  },
+  {
+   "s": 7,
+   "what": "nation picked"
+  },
+  {
+   "s": 10,
+   "what": "league picked"
+  },
+  {
+   "s": 13,
+   "what": "club picked"
+  },
+  {
+   "s": 18,
+   "what": "hub reached",
+   "ok": true,
+   "save": {
+    "club": "Brentford",
+    "season": 1,
+    "week": 0,
+    "cal": 54,
+    "budget": 69,
+    "squad": 24,
+    "inbox": 0,
+    "form": "",
+    "results": 0,
+    "live": false,
+    "window": "summer"
+   }
+  },
+  {
+   "s": 20,
+   "what": "facilities: upgrade first"
+  },
+  {
+   "s": 21,
+   "what": "facilities: upgrade again"
+  },
+  {
+   "s": 28,
+   "what": "finances: premium tickets"
+  },
+  {
+   "s": 29,
+   "what": "finances: push sponsor"
+  },
+  {
+   "s": 30,
+   "what": "finances: sign sponsor"
+  },
+  {
+   "s": 36,
+   "what": "staff: pay off coach"
+  },
+  {
+   "s": 37,
+   "what": "staff: hire"
+  },
+  {
+   "s": 41,
+   "what": "training: full training"
+  },
+  {
+   "s": 44,
+   "what": "academy: academy action"
+  },
+  {
+   "s": 51,
+   "what": "tactics: formation 4-4-2"
+  },
+  {
+   "s": 52,
+   "what": "tactics: attacking mentality"
+  },
+  {
+   "s": 59,
+   "what": "market: sell tab"
+  },
+  {
+   "s": 60,
+   "what": "market: latest tab"
+  },
+  {
+   "s": 61,
+   "what": "market: buy tab"
+  },
+  {
+   "s": 63,
+   "what": "market: open talks"
+  },
+  {
+   "s": 65,
+   "what": "market: offer"
+  },
+  {
+   "s": 70,
+   "what": "end"
+  }
+ ],
+ "findings": [],
+ "errors": [],
+ "shots": [
+  {
+   "file": "fx390-001-picker-era.jpg",
+   "at": "open /club-manager",
+   "bytes": 27363
+  },
+  {
+   "file": "fx390-002-picker-nation.jpg",
+   "at": "era picked",
+   "bytes": 23231
+  },
+  {
+   "file": "fx390-003-picker-league.jpg",
+   "at": "nation picked",
+   "bytes": 27533
+  },
+  {
+   "file": "fx390-004-picker-team.jpg",
+   "at": "league picked",
+   "bytes": 113851
+  },
+  {
+   "file": "fx390-005-picker-confirm-bar.jpg",
+   "at": "league picked",
+   "bytes": 30432
+  },
+  {
+   "file": "fx390-006-manager-form.jpg",
+   "at": "club picked",
+   "bytes": 72130
+  },
+  {
+   "file": "fx390-007-facilities-before.jpg",
+   "at": "hub reached",
+   "bytes": 92221
+  },
+  {
+   "file": "fx390-008-facilities-upgrade_first.jpg",
+   "at": "facilities: upgrade first",
+   "bytes": 98115
+  },
+  {
+   "file": "fx390-009-facilities-upgrade_again.jpg",
+   "at": "facilities: upgrade again",
+   "bytes": 98096
+  },
+  {
+   "file": "fx390-010-finances-premium_tickets.jpg",
+   "at": "finances: premium tickets",
+   "bytes": 92727
+  },
+  {
+   "file": "fx390-011-finances-push_sponsor.jpg",
+   "at": "finances: push sponsor",
+   "bytes": 93289
+  },
+  {
+   "file": "fx390-012-finances-sign_sponsor.jpg",
+   "at": "finances: sign sponsor",
+   "bytes": 97590
+  },
+  {
+   "file": "fx390-013-finances-after.jpg",
+   "at": "finances: sign sponsor",
+   "bytes": 97771
+  },
+  {
+   "file": "fx390-014-staff-before.jpg",
+   "at": "finances: sign sponsor",
+   "bytes": 101533
+  },
+  {
+   "file": "fx390-015-staff-pay_off_coach.jpg",
+   "at": "staff: pay off coach",
+   "bytes": 100326
+  },
+  {
+   "file": "fx390-016-staff-after.jpg",
+   "at": "staff: hire",
+   "bytes": 101533
+  },
+  {
+   "file": "fx390-017-training.jpg",
+   "at": "staff: hire",
+   "bytes": 92684
+  },
+  {
+   "file": "fx390-018-academy.jpg",
+   "at": "training: full training",
+   "bytes": 97499
+  },
+  {
+   "file": "fx390-019-academy-academy_action.jpg",
+   "at": "academy: academy action",
+   "bytes": 96696
+  },
+  {
+   "file": "fx390-020-dressing.jpg",
+   "at": "academy: academy action",
+   "bytes": 96697
+  },
+  {
+   "file": "fx390-021-press.jpg",
+   "at": "academy: academy action",
+   "bytes": 101542
+  },
+  {
+   "file": "fx390-022-tactics.jpg",
+   "at": "academy: academy action",
+   "bytes": 127723
+  },
+  {
+   "file": "fx390-023-tactics-formation_4-4-2.jpg",
+   "at": "tactics: formation 4-4-2",
+   "bytes": 87086
+  },
+  {
+   "file": "fx390-024-tactics-attacking_mentality.jpg",
+   "at": "tactics: attacking mentality",
+   "bytes": 87045
+  },
+  {
+   "file": "fx390-025-fx-after-tactics-quick-report.jpg",
+   "at": "tactics: attacking mentality",
+   "bytes": 100702
+  },
+  {
+   "file": "fx390-026-market-sell_tab.jpg",
+   "at": "market: sell tab",
+   "bytes": 100989
+  },
+  {
+   "file": "fx390-027-market-sell.jpg",
+   "at": "market: sell tab",
+   "bytes": 115971
+  },
+  {
+   "file": "fx390-028-market-latest_tab.jpg",
+   "at": "market: latest tab",
+   "bytes": 106096
+  },
+  {
+   "file": "fx390-029-market-latest.jpg",
+   "at": "market: latest tab",
+   "bytes": 122292
+  },
+  {
+   "file": "fx390-030-market-buy_tab.jpg",
+   "at": "market: buy tab",
+   "bytes": 102268
+  },
+  {
+   "file": "fx390-031-market-open_talks.jpg",
+   "at": "market: open talks",
+   "bytes": 93563
+  },
+  {
+   "file": "fx390-032-negotiation.jpg",
+   "at": "market: open talks",
+   "bytes": 113129
+  },
+  {
+   "file": "fx390-033-market-offer.jpg",
+   "at": "market: offer",
+   "bytes": 93563
+  },
+  {
+   "file": "fx390-034-negotiation-after.jpg",
+   "at": "market: offer",
+   "bytes": 113129
+  }
+ ],
+ "audits": [
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [],
+   "overlaps": [],
+   "leaks": [],
+   "tinyTaps": [],
+   "scrollY": 0,
+   "docH": 22080,
+   "label": "picker-era"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [],
+   "overlaps": [],
+   "leaks": [],
+   "tinyTaps": [
+    "button.inline-flex.items-center.gap-1 \"All nations\" 76x16"
+   ],
+   "scrollY": 0,
+   "docH": 21599,
+   "label": "picker-league"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [
+    "\"Win the Premier League\" shown 81px of 115px",
+    "\"Win the Premier League\" shown 81px of 115px",
+    "\"Win the Premier League\" shown 81px of 115px",
+    "\"Win the Premier League\" shown 81px of 115px",
+    "\"Win the Premier League\" shown 81px of 115px",
+    "\"Qualify for the Champions League\" shown 81px of 165px",
+    "\"Qualify for the Europa League\" shown 81px of 144px",
+    "\"Qualify for the Europa League\" shown 81px of 144px",
+    "\"Qualify for the Conference League\" shown 81px of 167px",
+    "\"Qualify for the Conference League\" shown 81px of 167px",
+    "\"Finish in the top half\" shown 81px of 98px",
+    "\"Finish in the top half\" shown 81px of 98px",
+    "\"Finish in the top half\" shown 81px of 98px",
+    "\"Stay up. Avoid relegation\" shown 81px of 121px",
+    "\"Stay up. Avoid relegation\" shown 81px of 121px",
+    "\"Stay up. Avoid relegation\" shown 81px of 121px",
+    "\"Stay up. Avoid relegation\" shown 81px of 121px",
+    "\"Stay up. Avoid relegation\" shown 81px of 121px",
+    "\"Stay up. Avoid relegation\" shown 81px of 121px",
+    "\"Stay up. Avoid relegation\" shown 81px of 121px"
+   ],
+   "overlaps": [
+    "\"Qualify for the Europa League\" x \"Board wants\" (29x12 at 212,863)",
+    "\"Qualify for the Conference League\" x \"Board wants\" (52x12 at 212,986)"
+   ],
+   "leaks": [],
+   "tinyTaps": [
+    "button.inline-flex.items-center.gap-1 \"Premier League\" 127x16"
+   ],
+   "scrollY": 0,
+   "docH": 22791,
+   "label": "picker-team"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [],
+   "overlaps": [],
+   "leaks": [],
+   "tinyTaps": [
+    "button.inline-flex.items-center.gap-1 \"Brentford\" 72x16",
+    "button.rounded-md.border.border-border \"Previous skin\" 20x20",
+    "button.rounded-md.border.border-border \"Next skin\" 20x20",
+    "button.rounded-md.border.border-border \"Previous hair\" 20x20",
+    "button.rounded-md.border.border-border \"Next hair\" 20x20",
+    "button.rounded-md.border.border-border \"Previous colour\" 20x20",
+    "button.rounded-md.border.border-border \"Next colour\" 20x20",
+    "button.rounded-md.border.border-border \"Previous beard\" 20x20",
+    "button.rounded-md.border.border-border \"Next beard\" 20x20",
+    "button.rounded-md.border.border-border \"Previous outfit\" 20x20",
+    "button.rounded-md.border.border-border \"Next outfit\" 20x20",
+    "button.rounded-md.border.border-border \"Previous age\" 20x20",
+    "button.rounded-md.border.border-border \"Next age\" 20x20",
+    "button.w-5.h-5.rounded-full \"Navy\" 22x22",
+    "button.w-5.h-5.rounded-full \"Red\" 20x20",
+    "button.w-5.h-5.rounded-full \"Sky\" 20x20",
+    "button.w-5.h-5.rounded-full \"Green\" 20x20",
+    "button.w-5.h-5.rounded-full \"Claret\" 20x20",
+    "button.w-5.h-5.rounded-full \"Gold\" 20x20",
+    "button.w-5.h-5.rounded-full \"Black\" 20x20",
+    "button.w-5.h-5.rounded-full \"White\" 20x20"
+   ],
+   "scrollY": 101,
+   "docH": 23172,
+   "label": "manager-form"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [
+    "\"🧤 Shot saved: Xavi Simons\" shown 119px of 131px",
+    "\"🧤 Shot saved: Igor Thiago\" shown 119px of 128px",
+    "\"🧤 Shot saved: Archie Gray\" shown 119px of 131px",
+    "\"🧤 Shot saved: Mikkel Damsgaard\" shown 119px of 161px",
+    "\"🧤 Shot saved: Kevin Schade\" shown 119px of 140px",
+    "\"🧤 Shot saved: Omar Marmoush\" shown 119px of 155px",
+    "\"🟨 Booked: Mamadou Sangaré\" shown 119px of 148px",
+    "\"🔁 Sub: Marcos Senesi on for Pedro Porro\" shown 119px of 201px",
+    "\"🔁 Sub: Tosin Adarabioyo on for Micky van de Ven\" shown 119px of 241px",
+    "\"🟨 Booked: Lucas Bergvall\" shown 119px of 128px",
+    "\"🟨 Booked: Michael Kayode\" shown 119px of 134px",
+    "\"🧤 Shot saved: Yegor Yarmolyuk\" shown 119px of 155px",
+    "\"🔁 Sub: Savinho on for Omar Marmoush\" shown 119px of 193px"
+   ],
+   "overlaps": [
+    "\"🧤 Shot saved: Mikkel Damsgaard\" x \"45+1'\" (27x11 at 182,1107)",
+    "\"🟨 Booked: Mamadou Sangaré\" x \"56'\" (11x11 at 188,1186)",
+    "\"🧤 Shot saved: Yegor Yarmolyuk\" x \"81'\" (15x11 at 188,1306)"
+   ],
+   "leaks": [],
+   "tinyTaps": [
+    "button.mt-2.inline-flex.items-center \"All player ratings\" 95x15"
+   ],
+   "scrollY": 0,
+   "docH": 22948,
+   "label": "fx-after-tactics-quick-report"
+  }
+ ],
+ "effects": [
+  {
+   "where": "facilities",
+   "label": "upgrade first",
+   "text": "Upgrade £57m",
+   "ctx": "Upgrade £57m",
+   "disabled": false,
+   "diff": {
+    "changed": [
+     "budget",
+     "boardConfidence",
+     "aiHeadlines",
+     "facilities",
+     "finance"
+    ],
+    "budget": [
+     69,
+     12
+    ]
+   },
+   "screenChanged": true,
+   "check": {
+    "before": "null",
+    "after": "{\"v\":1,\"stadium\":8,\"trainingGround\":6,\"medical\":6,\"dressingRoom\":6,\"seasonSpend\":57}"
+   }
+  },
+  {
+   "where": "facilities",
+   "label": "upgrade again",
+   "text": "Upgrade £81m",
+   "ctx": "Upgrade £81m",
+   "disabled": true,
+   "diff": {
+    "changed": [],
+    "budget": [
+     12,
+     12
+    ]
+   },
+   "screenChanged": true,
+   "check": {
+    "before": "{\"v\":1,\"stadium\":8,\"trainingGround\":6,\"medical\":6,\"dressingRoom\":6,\"seasonSpend\":57}",
+    "after": "{\"v\":1,\"stadium\":8,\"trainingGround\":6,\"medical\":6,\"dressingRoom\":6,\"seasonSpend\":57}"
+   }
+  },
+  {
+   "where": "finances",
+   "label": "premium tickets",
+   "text": "💼 Premium More per seat, a few empty ones up in the corners.",
+   "ctx": "💼 Premium More per seat, a few empty ones up in the corners.",
+   "disabled": false,
+   "diff": {
+    "changed": [
+     "boardConfidence",
+     "finance",
+     "books"
+    ],
+    "budget": [
+     12,
+     12
+    ]
+   },
+   "screenChanged": true,
+   "check": {
+    "prices": [
+     "null",
+     "null"
+    ]
+   }
+  },
+  {
+   "where": "finances",
+   "label": "push sponsor",
+   "text": "Push for more",
+   "ctx": "Push for more",
+   "disabled": false,
+   "diff": {
+    "changed": [
+     "aiHeadlines",
+     "books"
+    ],
+    "budget": [
+     12,
+     12
+    ]
+   },
+   "screenChanged": true
+  },
+  {
+   "where": "finances",
+   "label": "sign sponsor",
+   "text": "Sign with Solstice",
+   "ctx": "Sign with Solstice",
+   "disabled": false,
+   "diff": {
+    "changed": [
+     "budget",
+     "aiHeadlines",
+     "books",
+     "sponsor"
+    ],
+    "budget": [
+     12,
+     34.4
+    ]
+   },
+   "screenChanged": true,
+   "check": {
+    "sponsor": [
+     "null",
+     "{\"brand\":\"Solstice Motors\",\"shape\":\"safe\",\"perSeason\":22.4,\"bonus\":0,\"bonusFor\":null,\"yearsLeft\":2,\"paid\":22.4,\"rep\":\"go"
+    ]
+   }
+  },
+  {
+   "where": "staff",
+   "label": "pay off coach",
+   "text": "Pay off £360k",
+   "ctx": "🧑‍🏫 STAFF · £34.4M TO SPEND · 62K A WEEK ON THE FOUR 🎯 Bram Ilving Attack coach · level 5/10, can reach 7 · 14k a week Pay off £360k The forwards grow 4.4% faster where there is room. Midfield gets half of it. As a regular, one of his players would be growing as fast as anyone can, so he would ge",
+   "disabled": false,
+   "diff": {
+    "changed": [],
+    "budget": [
+     34.4,
+     34.4
+    ]
+   },
+   "screenChanged": true
+  },
+  {
+   "where": "staff",
+   "label": "hire",
+   "result": "no such control"
+  },
+  {
+   "where": "training",
+   "label": "full training",
+   "result": "no such control"
+  },
+  {
+   "where": "academy",
+   "label": "academy action",
+   "text": "Upgrade £21m",
+   "ctx": "THE SETUP · £34.4M TO SPEND 🔍 Youth recruitment 11/20 Upgrade £21m How far up the queue you are for the best local kids. Drives intake quality and how many turn up. 🧢 Coaching staff 11/20 Upgrade £21m Better coaches develop EVERY player faster, not just the teenagers, and sharpen your scouting rep",
+   "disabled": false,
+   "diff": {
+    "changed": [
+     "budget",
+     "academy"
+    ],
+    "budget": [
+     34.4,
+     13.4
+    ]
+   },
+   "screenChanged": true
+  },
+  {
+   "where": "tactics",
+   "label": "formation 4-4-2",
+   "text": "4-4-2",
+   "ctx": "4-4-2",
+   "disabled": false,
+   "diff": {
+    "changed": [
+     "xiIds",
+     "formationIndex",
+     "xiDuties"
+    ],
+    "budget": [
+     13.4,
+     13.4
+    ]
+   },
+   "screenChanged": true,
+   "check": {
+    "f": [
+     null,
+     null
+    ]
+   }
+  },
+  {
+   "where": "tactics",
+   "label": "attacking mentality",
+   "text": "⚔️ Attacking",
+   "ctx": "⚔️ Attacking",
+   "disabled": false,
+   "diff": {
+    "changed": [
+     "mentality"
+    ],
+    "budget": [
+     13.4,
+     13.4
+    ]
+   },
+   "screenChanged": true,
+   "check": {
+    "m": [
+     "balanced",
+     "attacking"
+    ]
+   }
+  },
+  {
+   "where": "market",
+   "label": "sell tab",
+   "text": "Sell",
+   "ctx": "Sell",
+   "disabled": false,
+   "diff": {
+    "changed": [],
+    "budget": [
+     16.02,
+     16.02
+    ]
+   },
+   "screenChanged": true
+  },
+  {
+   "where": "market",
+   "label": "latest tab",
+   "text": "Latest",
+   "ctx": "Latest",
+   "disabled": false,
+   "diff": {
+    "changed": [],
+    "budget": [
+     16.02,
+     16.02
+    ]
+   },
+   "screenChanged": true
+  },
+  {
+   "where": "market",
+   "label": "buy tab",
+   "text": "Buy",
+   "ctx": "Buy",
+   "disabled": false,
+   "diff": {
+    "changed": [],
+    "budget": [
+     16.02,
+     16.02
+    ]
+   },
+   "screenChanged": true
+  },
+  {
+   "where": "market",
+   "label": "open talks",
+   "text": "Talk · £500k",
+   "ctx": "Talk · £500k",
+   "disabled": false,
+   "diff": {
+    "changed": [
+     "negotiation"
+    ],
+    "budget": [
+     16.02,
+     16.02
+    ]
+   },
+   "screenChanged": true
+  },
+  {
+   "where": "market",
+   "label": "offer",
+   "text": "Offer it",
+   "ctx": "Offer it",
+   "disabled": true,
+   "diff": {
+    "changed": [],
+    "budget": [
+     16.02,
+     16.02
+    ]
+   },
+   "screenChanged": true
+  }
+ ],
+ "elapsedS": 70,
+ "clubList": [
+  "Arsenal 👑 Elite Squad 89 Budget £167m Board wants Win the Premier League",
+  "Manchester City 👑 Elite Squad 89 Budget £160m Board wants Win the Premier League",
+  "Liverpool 👑 Elite Squad 88 Budget £137m Board wants Win the Premier League",
+  "Chelsea 👑 Elite Squad 88 Budget £131m Board wants Win the Premier League",
+  "Manchester United 🥇 Contenders Squad 87 Budget £118m Board wants Win the Premier League",
+  "Tottenham 🥇 Contenders Squad 86 Budget £114m Board wants Qualify for the Champions League",
+  "Newcastle 🥇 Contenders Squad 84 Budget £69m Board wants Qualify for the Europa League",
+  "Nottingham Forest 🥇 Contenders Squad 84 Budget £70m Board wants Qualify for the Europa League",
+  "Aston Villa 🥇 Contenders Squad 84 Budget £73m Board wants Qualify for the Conference League",
+  "Crystal Palace 🥇 Contenders Squad 84 Budget £76m Board wants Qualify for the Conference League",
+  "Brentford 🥇 Contenders Squad 84 Budget £69m Board wants Finish in the top half",
+  "Bournemouth 🥇 Contenders Squad 83 Budget £68m Board wants Finish in the top half",
+  "Brighton 🥇 Contenders Squad 83 Budget £73m Board wants Finish in the top half",
+  "Everton 🥇 Contenders Squad 83 Budget £54m Board wants Stay up. Avoid relegation",
+  "Fulham ⚔️ Challengers Squad 83 Budget £54m Board wants Stay up. Avoid relegation",
+  "Sunderland ⚔️ Challengers Squad 82 Budget £50m Board wants Stay up. Avoid relegation",
+  "Leeds United ⚔️ Challengers Squad 82 Budget £48m Board wants Stay up. Avoid relegation",
+  "Ipswich Town ⚔️ Challengers Squad 80 Budget £43m Board wants Stay up. Avoid relegation",
+  "Coventry City ⚔️ Challengers Squad 79 Budget £32m Board wants Stay up. Avoid relegation",
+  "Hull City ⚔️ Challengers Squad 79 Budget £27m Board wants Stay up. Avoid relegation"
+ ],
+ "financesAfter": "DOUKNOWBALL\nBack\nTrack stats\nBrentford\n2026-27 · Season 1\nSeason not started\n£34.4m\nNo matches yet\nManagers\nBoard\nSafe\nFans\nHopeful\nHome\nSquad\nTactics\nTable\nMarket\n☀️ Transfer window open. Tap to do business before your next match\nPREMIER LEAGUE · ROUND 1\nBrentford vs Tottenham\nHome · their strength ~88 · your XI avg 84\nPlay Live\n⚡ Quick Sim\n\nPlay live to make your calls. Quick Sim handles your subs.\n\n📊 Match Centre: form, head to head, odds, team talk\nClub home\n📊 PROJECTED TO SEASON END\nweek 0, 54 left\nIN SO FAR SEASON\nTickets · 20 certain home games left £0k £36.3m\nFood and drink £0k £6.9m\nSponsor · guaranteed money, landed £22.4m £22.4m\nPlayers sold · assumes no more deals £0k £0k\nIncome £22.4m £65.6m\nOUT\nPlayer wages · £668k a week £0k £36.1m\nStaff wages · £161k a week £0k £8.7m\nTravel · 19 certain away trips left £0k £1.7m\nPlayers bought · assumes no more deals £0k £0k\nFacilities £57m £57m\nStaff fees · hires and pay offs £0k £0k\nSpend £57m £103.5m\nSeason result -£34.6m -£37.9m\n\nTickets, food, the sponsor, deals, the builders and staff fees move the transfer kitty (£34.4m now). Wages and travel are the club's running costs: the board covers them and holds you to the wage ceiling on the contracts desk, so they never leave the kitty. Counts league fixtures and the one cup or European tie already drawn. Later rounds depend on results and are left out, and so are deals you have not done.\n\n🎟️ PRICES\nFans: Hopeful\n🎟️ Fair prices\nCheaper seats, fuller ground, a louder day out.\n🎫 Standard\nThe going rate. Nobody writes to the paper about it.\n💼 Premium\nMore per seat, a few empty ones up in the corners.\n\nTickets about £39 a head. Fans cool on it (-5 on the meter, and the ground empties over the weeks). The board adds a point of confidence the day you set it.\n\n🍟 Cheap food\nPies at cost. The fans love you for it.\n🥤 Standard\nGround prices. Nobody cheers, nobody moans.\n🍾 Premium\nHospitality margins. The fans notice the bill.\n\nFood and drink about £7.41 a head, lifted by the stadium level. Fans are neutral. The board are neutral. The mood also follows the last five results, and it moves your home crowd: 0.9x furious, 1.1x singing.\n\n🤝 SHIRT SPONSOR\n\nSolstice Motors (global) pay £22.4m a season. No bonuses, just the cheque.\n\n2 seasons left. Paid so far: £22.4m.\n\n💰 THE BOOKS\n£34.4m\nTransfer kitty\n£0k\nMatchday money this season\n-\nLast home gate\n\nEvery home crowd pays the kitty: attendance times about £46.41 a head, tickets plus food and drink at your prices. Sc",
+ "staffAfter": "DOUKNOWBALL\nBack\nTrack stats\nBrentford\n2026-27 · Season 1\nSeason not started\n£34.4m\nNo matches yet\nManagers\nBoard\nSafe\nFans\nHopeful\nHome\nSquad\nTactics\nTable\nMarket\n☀️ Transfer window open. Tap to do business before your next match\nPREMIER LEAGUE · ROUND 1\nBrentford vs Tottenham\nHome · their strength ~88 · your XI avg 84\nPlay Live\n⚡ Quick Sim\n\nPlay live to make your calls. Quick Sim handles your subs.\n\n📊 Match Centre: form, head to head, odds, team talk\nClub home\n🧑‍🏫 STAFF · £34.4M TO SPEND · 62K A WEEK ON THE FOUR\n🎯 Bram Ilving\nAttack coach · level 5/10, can reach 7 · 14k a week\nPay off £360k\n\nThe forwards grow 4.4% faster where there is room. Midfield gets half of it. As a regular, one of his players would be growing as fast as anyone can, so he would get less of the lift.\n\n🛡️ Idris Kettleby\nDefence coach · level 6/10, can reach 7 · 16k a week\nPay off £420k\n\nThe back line grows 5.5% faster where there is room. Midfield gets half of it.\n\n🧤 Alaric Praeger\nGoalkeeping coach · level 6/10, can reach 7 · 16k a week\nPay off £420k\n\nKeepers grow 5.5% faster where there is room.\n\n🔎 Caspar Lammert\nLead scout · level 6/10, can reach 8 · 16k a week\nPay off £420k\n\nBoys found on the road top out up to 3 higher.\n\nEvery one of them is a lift on the game you already play, and a level 1 man does nothing at all, the same as an empty chair. The forwards and the number ten are the attack coach's, the back line and the holding midfielder the defence coach's, the keepers their own man's, and the middle of the park splits the two. Wages are a running cost the board covers; fees and pay offs come out of the kitty. They belong to the club, so a new job starts on the new club's staff.\n\nClub Manager: Free Football Management Game\n\nA full club-management sim in your browser: 454 clubs across 27 real leagues, from the Premier League, the 2. Bundesliga, Serie B, Ligue 2, the Segunda División and the Scottish Premiership to the Saudi Pro League, MLS, Brazil, Mexico, Australia, Russia, Croatia, Denmark, Switzerland, Austria and Greece, with real players at their real market values as of August 2026 (October for the A-League Men and the Russian Premier League) and thin squads topped up with made up youth, marked as such. Manage today or in a real past season: 2020-21 with Haaland's Dortmund and Mbappé's PSG, 2015-16 with Leicester at 5000 to 1, 2010-11 with prime Messi, or 2005-06 with Ronaldinho's Barcelona. Or create your own club with its own crest and stadium. Negotiate transfer",
+ "trainingText": "DOUKNOWBALL\nBack\nTrack stats\nBrentford\n2026-27 · Season 1\nSeason not started\n£34.4m\nNo matches yet\nManagers\nBoard\nSafe\nFans\nHopeful\nHome\nSquad\nTactics\nTable\nMarket\n☀️ Transfer window open. Tap to do business before your next match\nPREMIER LEAGUE · ROUND 1\nBrentford vs Tottenham\nHome · their strength ~88 · your XI avg 84\nPlay Live\n⚡ Quick Sim\n\nPlay live to make your calls. Quick Sim handles your subs.\n\n📊 Match Centre: form, head to head, odds, team talk\nClub home\nHOW HARD YOU WORK THEM\n🛌\nLight\n⚙️\nNormal\n🔥\nDouble\n\nThe safe middle. Steady development, normal fatigue.\n\nWHO THE WEEK IS BUILT AROUND\n👔\nFirst team\n⚖️\nBalanced\n👶\nYouth\n\nEveryone gets the same session. Nothing is wasted, nothing is special.\n\nA SECOND POSITION\n\nNobody is learning one right now.\n\nRETRAIN\nPick a man\nST Igor Thiago (86)\nRW Dango Ouattara (84)\nLW Kevin Schade (84)\nRB Michael Kayode (84)\nCB Sepp van den Berg (84)\nCM Mamadou Sangaré (83)\nCAM Mikkel Damsgaard (83)\nCB Nathan Collins (83)\nCM Yegor Yarmolyuk (83)\nLB El Hadji Malick Diouf (83)\nLM Keane Lewis-Potter (82)\nCAM Antoni Milambo (81)\nLW Jaidon Anthony (80)\nCB Kristoffer Ajer (80)\nCDM Vitaly Janelt (80)\nRB Aaron Hickey (80)\nLB Rico Henry (79)\nCM Mathias Jensen (78)\nCAM Fábio Carvalho (77)\nST Kaye Furo (76)\nCM Josh Dasilva (75)\nST Callum Wilson (73)\n\nA position next to one he holds is the quickest, another on the same line takes longer, and crossing lines takes longest; past thirty it is half as long again, a better training ground shortens all of it, and nothing goes under 4 weeks. One man learns one position at a time, keeps 2 at most, and keepers stay keepers. Every second position in this squad was earned here: the real data gives each man one.\n\nWHO IS ACTUALLY GETTING BETTER\nST\nKaye Furo (18)\n76 now · lots of room left · 0 apps this season\nTicking along\nCM\nYegor Yarmolyuk (21)\n83 now · plenty of room left · 0 apps this season\nGoing nowhere\nLB\nEl Hadji Malick Diouf (21)\n83 now · plenty of room left · 0 apps this season\nGoing nowhere\nCAM\nAntoni Milambo (20)\n81 now · plenty of room left · 0 apps this season\nGoing nowhere\nRB\nMichael Kayode (21)\n84 now · a little room left · 0 apps this season\nGoing nowhere\nCM\nMamadou Sangaré (23)\n83 now · a little room left · 0 apps this season\nGoing nowhere\nRW\nDango Ouattara (23)\n84 now · a little room left · 0 apps this season\nGoing nowhere\nLW\nKevin Schade (24)\n84 now · a little room left · 0 apps this season\nGoing nowhere\nCB\nSepp van den Berg (24)\n84 now · a little room left · 0 apps this season",
+ "academyText": "DOUKNOWBALL\nBack\nTrack stats\nBrentford\n2026-27 · Season 1\nSeason not started\n£34.4m\nNo matches yet\nManagers\nBoard\nSafe\nFans\nHopeful\nHome\nSquad\nTactics\nTable\nMarket\n☀️ Transfer window open. Tap to do business before your next match\nPREMIER LEAGUE · ROUND 1\nBrentford vs Tottenham\nHome · their strength ~88 · your XI avg 84\nPlay Live\n⚡ Quick Sim\n\nPlay live to make your calls. Quick Sim handles your subs.\n\n📊 Match Centre: form, head to head, odds, team talk\nClub home\nTHE SETUP · £34.4M TO SPEND\n🔍 Youth recruitment\n11/20\nUpgrade £21m\n\nHow far up the queue you are for the best local kids. Drives intake quality and how many turn up.\n\n🧢 Coaching staff\n11/20\nUpgrade £21m\n\nBetter coaches develop EVERY player faster, not just the teenagers, and sharpen your scouting reports.\n\n🏟️ Academy building\n12/20\nUpgrade £24m\n\nThe youth building itself. Lifts intake quality and helps everyone squeeze more out of the week.\n\nSCOUTING NETWORK · 0/3 ON THE ROAD\n\nNobody is out looking for you. Send someone and reports start landing while the season runs.\n\nAVAILABLE\nDuncan Janssen\nContacts ★★★☆☆ · Judgement ★★★★★\n£5m base\nRay Steiner\nContacts ★★★★☆ · Judgement ★★★★☆\n£5m base\nDuncan Steiner\nContacts ★★★☆☆ · Judgement ★☆☆☆☆\n£2m base\nON THE BOOKS · 0/12\n\nNobody yet. Intake day comes round every summer and the better your recruitment, the better the group.\n\nClub Manager: Free Football Management Game\n\nA full club-management sim in your browser: 454 clubs across 27 real leagues, from the Premier League, the 2. Bundesliga, Serie B, Ligue 2, the Segunda División and the Scottish Premiership to the Saudi Pro League, MLS, Brazil, Mexico, Australia, Russia, Croatia, Denmark, Switzerland, Austria and Greece, with real players at their real market values as of August 2026 (October for the A-League Men and the Russian Premier League) and thin squads topped up with made up youth, marked as such. Manage today or in a real past season: 2020-21 with Haaland's Dortmund and Mbappé's PSG, 2015-16 with Leicester at 5000 to 1, 2010-11 with prime Messi, or 2005-06 with Ronaldinho's Barcelona. Or create your own club with its own crest and stadium. Negotiate transfers, survive bidding wars, hit the board's named objectives, and chase titles season after season.\n\nClub Manager is the site's big one: a full management sim in your browser. 454 real clubs across 27 leagues in 21 countries, from the Premier League, Serie B, Ligue 2 and the Segunda División to the Danish Superliga, the Swiss Super League, Croati",
+ "dressingText": "DOUKNOWBALL\nBack\nTrack stats\nBrentford\n2026-27 · Season 1\nSeason not started\n£13.4m\nNo matches yet\nManagers\nBoard\nSafe\nFans\nHopeful\nHome\nSquad\nTactics\nTable\nMarket\n☀️ Transfer window open. Tap to do business before your next match\nPREMIER LEAGUE · ROUND 1\nBrentford vs Tottenham\nHome · their strength ~88 · your XI avg 84\nPlay Live\n⚡ Quick Sim\n\nPlay live to make your calls. Quick Sim handles your subs.\n\n📊 Match Centre: form, head to head, odds, team talk\nClub home\nTHE DRESSING ROOM\n\nEverybody is getting roughly the football he was promised. Keep it that way.\n\n⭐\nSTAR MAN\n3 players\nPromised 88% of games\n🔥\nKEY FIRST TEAMER\n8 players\nPromised 74% of games\n🔄\nROTATION OPTION\n4 players\nPromised 32% of games\n🧥\nBACKUP\n8 players\nPromised 12% of games\n🌱\nONE FOR THE FUTURE\n1 player\nPromised 5% of games\nClub Manager: Free Football Management Game\n\nA full club-management sim in your browser: 454 clubs across 27 real leagues, from the Premier League, the 2. Bundesliga, Serie B, Ligue 2, the Segunda División and the Scottish Premiership to the Saudi Pro League, MLS, Brazil, Mexico, Australia, Russia, Croatia, Denmark, Switzerland, Austria and Greece, with real players at their real market values as of August 2026 (October for the A-League Men and the Russian Premier League) and thin squads topped up with made up youth, marked as such. Manage today or in a real past season: 2020-21 with Haaland's Dortmund and Mbappé's PSG, 2015-16 with Leicester at 5000 to 1, 2010-11 with prime Messi, or 2005-06 with Ronaldinho's Barcelona. Or create your own club with its own crest and stadium. Negotiate transfers, survive bidding wars, hit the board's named objectives, and chase titles season after season.\n\nClub Manager is the site's big one: a full management sim in your browser. 454 real clubs across 27 leagues in 21 countries, from the Premier League, Serie B, Ligue 2 and the Segunda División to the Danish Superliga, the Swiss Super League, Croatia's SuperSport HNL, Brazil's Serie A, Liga MX, the A-League Men and the Russian Premier League, over 5,000 real players with their real 2026 ages and market values, and a board that talks like a board.\n\nPick when you start too: today's game, or one of four real past seasons. 2020-21 is Haaland and Bellingham at Dortmund, Mbappé and Neymar at PSG and Bruno Fernandes at United, with that summer's big moves already made (Havertz and Werner at Chelsea, Thiago at Liverpool, Suárez at Atlético). 2015-16 is the year Leicester won it at 5000 to 1,",
+ "pressText": "DOUKNOWBALL\nBack\nTrack stats\nBrentford\n2026-27 · Season 1\nSeason not started\n£13.4m\nNo matches yet\nManagers\nBoard\nSafe\nFans\nHopeful\nHome\nSquad\nTactics\nTable\nMarket\n☀️ Transfer window open. Tap to do business before your next match\nPREMIER LEAGUE · ROUND 1\nBrentford vs Tottenham\nHome · their strength ~88 · your XI avg 84\nPlay Live\n⚡ Quick Sim\n\nPlay live to make your calls. Quick Sim handles your subs.\n\n📊 Match Centre: form, head to head, odds, team talk\nClub home\nTHE BACK PAGES\nNobody has an opinion\n0 fronted up · 0 left to the assistant\n\nThe board do not watch every match, they read about it. Keep the papers onside and a defeat gets the benefit of the doubt upstairs. Let them turn on you and the same defeat costs you more.\n\nNothing on the desk. The press only come when there is something to ask about.\n\nClub Manager: Free Football Management Game\n\nA full club-management sim in your browser: 454 clubs across 27 real leagues, from the Premier League, the 2. Bundesliga, Serie B, Ligue 2, the Segunda División and the Scottish Premiership to the Saudi Pro League, MLS, Brazil, Mexico, Australia, Russia, Croatia, Denmark, Switzerland, Austria and Greece, with real players at their real market values as of August 2026 (October for the A-League Men and the Russian Premier League) and thin squads topped up with made up youth, marked as such. Manage today or in a real past season: 2020-21 with Haaland's Dortmund and Mbappé's PSG, 2015-16 with Leicester at 5000 to 1, 2010-11 with prime Messi, or 2005-06 with Ronaldinho's Barcelona. Or create your own club with its own crest and stadium. Negotiate transfers, survive bidding wars, hit the board's named objectives, and chase titles season after season.\n\nClub Manager is the site's big one: a full management sim in your browser. 454 real clubs across 27 leagues in 21 countries, from the Premier League, Serie B, Ligue 2 and the Segunda División to the Danish Superliga, the Swiss Super League, Croatia's SuperSport HNL, Brazil's Serie ",
+ "tacticsText": "FORMATION\nBACK THREE\n3-5-2\n3-4-3\n3-4-2-1\n3-5-2 high wing backs\nBACK FOUR\n4-3-3\n4-4-2\n4-2-3-1\n4-1-2-1-2\n4-5-1\n4-4-1-1\n4-3-3 holding\n4-2-2-2\n4-1-4-1\n4-3-1-2\n4-2-3-1 wide\nBACK FIVE\n5-3-2\n5-4-1\nMENTALITY\n🛡️\nDefensive\n⚖️\nBalanced\n⚔️\nAttacking\nSTARTING XI · AVG 84\nAuto Pick\nSTANDARD LINE\nduty\nduty\nduty\nduty\nduty\nduty\nduty\nduty\nduty\nduty\nduty\n82\nKelleher\n84\nKayode\n84\nBerg\n83\nCollins\n83\nDiouf\n83\nSangaré\n83\nDamsgaard\n83\nYarmolyuk\n84\nOuattara\n86\nC\nThiago\n84\nSchade\n\nDrag a player onto another to swap them. Tap a spot to pick someone else, or a bench man below then a spot.\n\nMatch plans 0/3\nBENCH 13\nSET PIECES 5/5 captain Thiago\nSHOOTOUT ORDER 0/11 not set, one draw decides it",
+ "afterTacticsReport": "DOUKNOWBALL\nBack\nTrack stats\nFULL TIME\nPREMIER LEAGUE · ROUND 1\n🏟️ Your ground · crowd 56,466\n45+2'\nADDED TIME\n90+8'\nDRAW\nBrentford\n0 - 0\nTottenham\n🟨 Mamadou Sangaré 56'\n🟨 Michael Kayode 77'\nTOTTENHAM 🟨 Sandro Tonali 57'\nTOTTENHAM 🟨 Lucas Bergvall 69'\nTOTTENHAM ▲ Marcos Senesi ▼ Pedro Porro 66'\nTOTTENHAM ▲ Tosin Adarabioyo ▼ Micky van de Ven 68'\nTOTTENHAM ▲ Savinho ▼ Omar Marmoush 84'\nBrentford\nMATCH STATS\nTottenham\n53%\nPOSSESSION\n47%\n11\nSHOTS\n8\n4\nON TARGET\n3\n1.12\nEXPECTED GOALS\n0.93\n8\nCORNERS\n5\n12\nFOULS\n14\n3\nKEEPER SAVES\n4\n2\nYELLOW CARDS\n2\n0\nRED CARDS\n0\n0\nSUBSTITUTIONS\n3\n53%\nBALANCE OF PLAY\n47%\n▲ BRENTFORD\n▼ TOTTENHAM\n0'\n45'\n90'\n11 (4)\nSHOTS (ON TARGET)\n8 (3)\nBrentford\nTIMELINE\nTottenham\n0'\n⏱️ KICK OFF\n35'\n🧤 Shot saved: Xavi Simons\n🧤 Shot saved: Igor Thiago\n36'\n36'\n🧤 Shot saved: Archie Gray\n🧤 Shot saved: Mikkel Damsgaard\n45+1'\n45+2'\n⏸️ HALF TIME\n🧤 Shot saved: Kevin Schade\n46'\n56'\n🧤 Shot saved: Omar Marmoush\n🟨 Booked: Mamadou Sangaré\n56'\n57'\n🟨 Booked: Sandro Tonali\n66'\n🔁 Sub: Marcos Senesi on for Pedro Porro\n68'\n🔁 Sub: Tosin Adarabioyo on for Micky van de Ven\n69'\n🟨 Booked: Lucas Bergvall\n🟨 Booked: Michael Kayode\n77'\n🧤 Shot saved: Yegor Yarmolyuk\n81'\n84'\n🔁 Sub: Sa",
+ "afterMatch": {
+  "mentality": "attacking",
+  "training": {
+   "intensity": "normal",
+   "focus": "balanced"
+  },
+  "budget": 16.02
+ },
+ "sellText": "☀️ Summer window OPEN\n3 match weeks until the deadline · offers can arrive any week · loans used 0/2\nBUDGET\n£16m\nAROUND THE LEAGUE\n\n📰 🔎 Sunderland have come in for Caspar Lammert. Match them or lose him: 2 matches left this season.\n\n📰 🤝 Brentford have signed with Solstice Motors: £22.4m a season for 2 seasons.\n\n📰 💱 Solstice Motors came up to £22.4m a season.\n\n📰 🏟️ Brentford have signed off £57m on the stadium: level 8 of 10.\n\n📰 Chelsea sign Kenan Yıldız from Juventus for £70m.\n\n📰 Bournemouth sign Antoine Semenyo from Manchester City for £68m.\n\n📰 Manchester City sign Federico Valverde from Real Madrid for £121m.\n\n📰 Juventus sign Matheus Cunha from Manchester United for £66m.\n\nBuy\nSell\nLatest\n\nNobody sells a player over the counter. Transfer list him and clubs will come to you with offers, sometimes two of them fighting over the same man, and the bids land in Incoming above.\n\nST\nIgor Thiago\n24y · 0g 0a · worth £36.5m\n86\nTransfer list\nLoan list\nNot for sale\nLoan out now +£2.9m\nRW\nDango Ouattara\n23y · 0g 0a · worth £11.5m\n84\nTransfer list\nLoan list\nNot for sale\nLoan out now +£900k\nLW\nKevin Schade\n24y · 0g 0a · worth £25.7m\n84\nTransfer list\nLoan list\nNot for sale\nLoan out now +£2.1m\nRB\nMichael Kayode\n21y · 0g 0a · worth £25.7m\n84\nTransfer list\nLoan list\nNot for sale\nLoan out now +£2.1m\nCB\nSepp van den Berg\n24y · 0g 0a · worth £23.7m\n84\nTransfer list\nLoan list\nNot for sale\nLoan out now +£1.9m\nCM\nMamadou Sangaré\n23y · 0g 0a · worth £21.6m\n83\nTransfer list\nLoan list\nNot for sale\nLoan out now +£1.7m\nCAM\nMikkel Damsgaard\n25y · 0g 0a · worth £21.6m\n83\nTransfer list\nLoan list\nNot for sale\nLoan out now +£1.7m\nCB\nNathan Collins\n24y · 0g 0a · worth £21.6m\n83\nTransfer list\nLoan list\nNot for sale\nLoan out now +£1.7m\nCM\nYegor Yarmolyuk\n21y · 0g 0a · worth £21.6m\n83\nTransfer list\nLoan list\nNot for sale\nLoan out now +£1.7m\nLB\nEl Hadji Malick Diouf\n21y · 0g 0a · worth £20.3m\n83\nTransfer list\nLoan list\nNot for sale\nLoan out now +£1.6m\nGK\nCaoimhín Kelleher\n27y · 0g 0a · worth £18.3m\n82\nTransfer list\nLoan list\nNot for sale\nLoan out now +£1.5m\nLM\nKeane Lewis-Potter\n24y · 0g 0a · worth £18.3m\n82\nTransfer list\nLoan list\nNot for sale\nLoan out now +£1.5m\nCAM\nAntoni Milambo\n20y · 0g 0a · worth £6.7m\n81\nTransfer list\nLoan list\nNot for sale\nLoan out now +£500k\nLW\nJaidon Anthony\n26y · 0g 0a · worth £12.9m\n80\nTransfer list\nLoan list\nNot for sale\nLoan out now +£1m\nCB\nKristoffer Ajer\n27y · 0g 0a · worth £12.9m\n80\nTransfer list\nLoan list\nNot for sale\nLoan out now +£1m\nCDM\nVitaly Janelt\n27y · 0g 0a · worth £11.7m\n80\nTransfer list\nLoan list\nNot for sale\nLoan out now +£900k\nRB\nAaron Hickey\n23y · 0g 0a · worth £5.2m\n80\nTransfer list\nLoan list\nNot for sale\nLoan out now +£400k\nLB\nRico Henry\n28y · 0g 0a · worth £10.8m\n79\nTransfer list\nLoan list\nNot for sale\nLoan out now +£900k\nCM\nMathias Jensen\n30y · 0g 0a · worth £8.8m\n78\nTransfer list\nLoan list\nNot for sale\nLoan out now +£700k\nCAM\nFábio Carvalho\n23y · 0g 0a · worth £7.5m\n77\nTransfer list\nLoan list\nNot for sale\nLoan out now +£",
+ "latestText": "☀️ Summer window OPEN\n3 match weeks until the deadline · offers can arrive any week · loans used 0/2\nBUDGET\n£16m\nAROUND THE LEAGUE\n\n📰 🔎 Sunderland have come in for Caspar Lammert. Match them or lose him: 2 matches left this season.\n\n📰 🤝 Brentford have signed with Solstice Motors: £22.4m a season for 2 seasons.\n\n📰 💱 Solstice Motors came up to £22.4m a season.\n\n📰 🏟️ Brentford have signed off £57m on the stadium: level 8 of 10.\n\n📰 Chelsea sign Kenan Yıldız from Juventus for £70m.\n\n📰 Bournemouth sign Antoine Semenyo from Manchester City for £68m.\n\n📰 Manchester City sign Federico Valverde from Real Madrid for £121m.\n\n📰 Juventus sign Matheus Cunha from Manchester United for £66m.\n\nBuy\nSell\nLatest\nMost recent\nBiggest fees\nS1\nAlphonso Davies · Bayern Munich to Inter Milan\n£39m\nS1\nMatheus Cunha · Manchester United to Juventus\n£66m\nS1\nFederico Valverde · Real Madrid to Manchester City\n£121m\nS1\nAntoine Semenyo · Manchester City to Bournemouth\n£68m\nS1\nKenan Yıldız · Juventus to Chelsea\n£70m",
+ "negText": "DOUKNOWBALL\nBack\nTrack stats\nBrentford\n2026-27 · Season 1\n#11 in league\n£16m\nManagers\nBoard\nSafe\nFans\nGrumbling\nHome\nSquad\nTactics\nTable\nMarket\n☀️ Summer window OPEN\n3 match weeks until the deadline · offers can arrive any week · loans used 0/2\nBUDGET\n£16m\nNegotiating: Eldar Civic\n63\nBaltika · LB · 30y · worth £500k to £700k\nTheir ask: £500k\n●●●●○\n\n\"They know you are interested. The price just went up.\"\n\nADD-ONS\nNone\n£2m\n£5m\n£10m\nSELL-ON\nNone\n10%\n20%\n30%\nSWAP\nNo part exchange\nIgor Thiago (86, £36.5m)\nKevin Schade (84, £25.7m)\nMichael Kayode (84, £25.7m)\nSepp van den Berg (84, £23.7m)\nMamadou Sangaré (83, £21.6m)\nMikkel Damsgaard (83, £21.6m)\nNathan Collins (83, £21.6m)\nYegor Yarmolyuk (83, £21.6m)\nEl Hadji Malick Diouf (83, £20.3m)\nCaoimhín Kelleher (82, £18.3m)\nHOW CLOSE YOU ARE\nName your price\nYOUR BID\nm\nOffer it\nLowball · £400k\nHaggle · £400k\nMeet ask · £500k\nWalk away\nAROUND THE LEAGUE\n\n📰 🔎 Sunderland have come in for Caspar Lammert. Match them or lose him: 2 matches left this season.\n\n📰 🤝 Brentford have signed with Solstice Motors: £22.4m a season for 2 seasons.\n\n📰 💱 Solstice Motors came up to £22.4m a season.\n\n📰 🏟️ Brentford have signed off £57m on the stadium: level 8 of 10.\n\n📰 Chelsea sign Kenan Yıldız from Juventus for £70m.\n\n📰 Bournemouth sign Antoine Semenyo from Manchester City for £68m.\n\n📰 Manchester City sign Federico Valverde from Real Madrid for £121m.\n\n📰 Juventus sign Matheus Cunha from Manchester United for £66m.\n\nBuy\nSell\nLatest\nALL\nGK\nDEF\nMID\nATT\nExact position…\nGK\nCB\nLB\nRB\nLWB\nRWB\nCDM\nCM\nCAM\nLM\nRM\nLW\nRW\nST\nCF\nAny age\nU21\nU24\nU28\n29 plus\nAny price\nUnder 10m\nUnder 25m\nUnder 60m\nAny league\n2. Bundesliga\nA-League Men\nAustrian Bundesliga\nBelgian Pro League\nBrasileirão Série A\nBundesliga\nDanish Superliga\nEFL Championship\nEredivisie\nLa Liga\nLiga MX\nLigue 1\nLigue 2\nMLS Eastern Conference\nMLS Western Conference\nPremier League\nPrimeira Liga\nRussian Premier League\nSaudi Pro League\nScottish Premiership\nSegunda División\nSerie A\nSerie B\nSuper League Greece\nSuperSport HNL\nSwiss Super League\nSüper Lig\nAny nation\nSpain (328)\nEngland (300)\nFrance (291)\nRussia (275)\nGermany (252)\nItaly (206)\nNetherlands (150)\nPortugal (143)\nBelgium (121)\nDenmark (109)\nSwitzerland (81)\nTürkiye (76)\nCroatia (71)\nAustria (67)\nSweden (62)\nSerbia (56)\nNorway (54)\nPoland (47)\nScotland (47)\nIreland (43)\nGreece (38)\nBosnia-Herzegovina (29)\nCzech Republic (25)\nWales (24)\nAlbania (23)\nKosovo (19)\nRomania (18)\nSlovakia (17)\nUkraine (17)\nIceland (16)\nFinland (14)\nHungary",
+ "negAfter": "DOUKNOWBALL\nBack\nTrack stats\nBrentford\n2026-27 · Season 1\n#11 in league\n£16m\nManagers\nBoard\nSafe\nFans\nGrumbling\nHome\nSquad\nTactics\nTable\nMarket\n☀️ Summer window OPEN\n3 match weeks until the deadline · offers can arrive any week · loans used 0/2\nBUDGET\n£16m\nNegotiating: Eldar Civic\n63\nBaltika · LB · 30y · worth £500k to £700k\nTheir ask: £500k\n●●●●○\n\n\"They know you are interested. The price just went up.\"\n\nADD-ONS\nNone\n£2m\n£5m\n£10m\nSELL-ON\nNone\n10%\n20%\n30%\nSWAP\nNo part exchange\nIgor Thiago (86, £36.5m)\nKevin Schade (84, £25.7m)\nMichael Kayode (84, £25.7m)\nSepp van den Berg (84, £23.7m)\nMamadou Sangaré (83, £21.6m)\nMikkel Damsgaard (83, £21.6m)\nNathan Collins (83, £21.6m)\nYegor Yarmolyuk (83, £21.6m)\nEl Hadji Malick Diouf (83, £20.3m)\nCaoimhín Kelleher (82, £18.3m)\nHOW CLOSE YOU ARE\nName your price\nYOUR BID\nm\nOffer it\nLowball · £400k\nHaggle · £400k\nMeet ask · £500k\nWalk away\nAROUND THE LEAGUE\n\n📰 🔎 Sunderland have come in for Caspar Lammert. Match them or lose him: 2 matches left this season.\n\n📰 🤝 Brentford have signed with Solstice Motors: £22.4m a season for 2 seasons.\n\n📰 💱 Solstice Motors came up to £22.4m a season.\n\n📰 🏟️ Brentford have signed off £57m on the stadium: level 8 of 10.\n\n📰 Chelsea sign Kenan Yıldız from Juventus for £70m.\n\n📰 Bournemouth sign Antoine Semenyo from Manchester City for £68m.\n\n📰 Manchester City sign Federico Valverde from Real Madrid for £121m.\n\n📰 Juventus sign Matheus Cunha from Manchester United for £66m.\n\nBuy\nSell\nLatest\nALL\nGK\nDEF\nMID\nATT\nExact position…\nGK\nCB\nLB\nRB\nLWB\nRWB\nCDM\nCM\nCAM\nLM\nRM\nLW\nRW\nST\nCF\nAny age\nU21\nU24\nU28\n29 plus\nAny price\nUnder 10m\nUnder 25m\nUnder 60m\nAny league\n2. Bundesliga\nA-League Men\nAustrian Bundesliga\nBelgian Pro League\nBrasileirão Série A\nBundesliga\nDanish Superliga\nEFL Championship\nEredivisie\nLa Liga\nLiga MX\nLigue 1\nLigue 2\nMLS Eastern Conference\nMLS Western Conference\nPremier League\nPrimeira Liga\nRussian Premier League\nSaudi Pro League\nScottish Premiership\nSegunda División\nSerie A\nSerie B\nSuper League Greece\nSuperSport HNL\nSwiss Super League\nSüper Lig\nAny nation\nSpain (328)\nEngland (300)\nFrance (291)\nRussia (275)\nGermany (252)\nItaly (206)\nNetherlands (150)\nPortugal (143)\nBelgium (121)\nDenmark (109)\nSwitzerland (81)\nTürkiye (76)\nCroatia (71)\nAustria (67)\nSweden (62)\nSerbia (56)\nNorway (54)\nPoland (47)\nScotland (47)\nIreland (43)\nGreece (38)\nBosnia-Herzegovina (29)\nCzech Republic (25)\nWales (24)\nAlbania (23)\nKosovo (19)\nRomania (18)\nSlovakia (17)\nUkraine (17)\nIceland (16)\nFinland (14)\nHungary"
+}

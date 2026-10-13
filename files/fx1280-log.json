@@ -1,0 +1,713 @@
+{
+ "tag": "fx1280",
+ "width": 1280,
+ "height": 900,
+ "started": "2026-10-13T01:10:23.365Z",
+ "steps": [
+  {
+   "s": 0,
+   "what": "open /club-manager"
+  },
+  {
+   "s": 6,
+   "what": "era picked"
+  },
+  {
+   "s": 7,
+   "what": "nation picked"
+  },
+  {
+   "s": 10,
+   "what": "league picked"
+  },
+  {
+   "s": 13,
+   "what": "club picked"
+  },
+  {
+   "s": 18,
+   "what": "hub reached",
+   "ok": true,
+   "save": {
+    "club": "Aston Villa",
+    "season": 1,
+    "week": 0,
+    "cal": 54,
+    "budget": 73,
+    "squad": 26,
+    "inbox": 0,
+    "form": "",
+    "results": 0,
+    "live": false,
+    "window": "summer"
+   }
+  },
+  {
+   "s": 20,
+   "what": "facilities: upgrade first"
+  },
+  {
+   "s": 21,
+   "what": "facilities: upgrade again"
+  },
+  {
+   "s": 28,
+   "what": "finances: premium tickets"
+  },
+  {
+   "s": 30,
+   "what": "finances: push sponsor"
+  },
+  {
+   "s": 31,
+   "what": "finances: sign sponsor"
+  },
+  {
+   "s": 36,
+   "what": "staff: pay off coach"
+  },
+  {
+   "s": 38,
+   "what": "staff: hire"
+  },
+  {
+   "s": 42,
+   "what": "training: full training"
+  },
+  {
+   "s": 44,
+   "what": "academy: academy action"
+  },
+  {
+   "s": 52,
+   "what": "tactics: formation 4-4-2"
+  },
+  {
+   "s": 53,
+   "what": "tactics: attacking mentality"
+  },
+  {
+   "s": 60,
+   "what": "market: sell tab"
+  },
+  {
+   "s": 61,
+   "what": "market: latest tab"
+  },
+  {
+   "s": 63,
+   "what": "market: buy tab"
+  },
+  {
+   "s": 64,
+   "what": "market: open talks"
+  },
+  {
+   "s": 66,
+   "what": "market: offer"
+  },
+  {
+   "s": 71,
+   "what": "end"
+  }
+ ],
+ "findings": [],
+ "errors": [],
+ "shots": [
+  {
+   "file": "fx1280-001-picker-era.jpg",
+   "at": "open /club-manager",
+   "bytes": 44873
+  },
+  {
+   "file": "fx1280-002-picker-nation.jpg",
+   "at": "era picked",
+   "bytes": 40863
+  },
+  {
+   "file": "fx1280-003-picker-league.jpg",
+   "at": "nation picked",
+   "bytes": 50607
+  },
+  {
+   "file": "fx1280-004-picker-team.jpg",
+   "at": "league picked",
+   "bytes": 196260
+  },
+  {
+   "file": "fx1280-005-picker-confirm-bar.jpg",
+   "at": "league picked",
+   "bytes": 48682
+  },
+  {
+   "file": "fx1280-006-manager-form.jpg",
+   "at": "club picked",
+   "bytes": 125554
+  },
+  {
+   "file": "fx1280-007-facilities-before.jpg",
+   "at": "hub reached",
+   "bytes": 143727
+  },
+  {
+   "file": "fx1280-008-facilities-upgrade_first.jpg",
+   "at": "facilities: upgrade first",
+   "bytes": 153921
+  },
+  {
+   "file": "fx1280-009-facilities-upgrade_again.jpg",
+   "at": "facilities: upgrade again",
+   "bytes": 153910
+  },
+  {
+   "file": "fx1280-010-finances-premium_tickets.jpg",
+   "at": "finances: premium tickets",
+   "bytes": 146416
+  },
+  {
+   "file": "fx1280-011-finances-push_sponsor.jpg",
+   "at": "finances: push sponsor",
+   "bytes": 147750
+  },
+  {
+   "file": "fx1280-012-finances-sign_sponsor.jpg",
+   "at": "finances: sign sponsor",
+   "bytes": 153758
+  },
+  {
+   "file": "fx1280-013-finances-after.jpg",
+   "at": "finances: sign sponsor",
+   "bytes": 152728
+  },
+  {
+   "file": "fx1280-014-staff-before.jpg",
+   "at": "finances: sign sponsor",
+   "bytes": 158617
+  },
+  {
+   "file": "fx1280-015-staff-pay_off_coach.jpg",
+   "at": "staff: pay off coach",
+   "bytes": 154239
+  },
+  {
+   "file": "fx1280-016-staff-after.jpg",
+   "at": "staff: hire",
+   "bytes": 158617
+  },
+  {
+   "file": "fx1280-017-training.jpg",
+   "at": "staff: hire",
+   "bytes": 138389
+  },
+  {
+   "file": "fx1280-018-academy.jpg",
+   "at": "training: full training",
+   "bytes": 156492
+  },
+  {
+   "file": "fx1280-019-academy-academy_action.jpg",
+   "at": "academy: academy action",
+   "bytes": 155881
+  },
+  {
+   "file": "fx1280-020-dressing.jpg",
+   "at": "academy: academy action",
+   "bytes": 152975
+  },
+  {
+   "file": "fx1280-021-press.jpg",
+   "at": "academy: academy action",
+   "bytes": 161459
+  },
+  {
+   "file": "fx1280-022-tactics.jpg",
+   "at": "academy: academy action",
+   "bytes": 195701
+  },
+  {
+   "file": "fx1280-023-tactics-formation_4-4-2.jpg",
+   "at": "tactics: formation 4-4-2",
+   "bytes": 130033
+  },
+  {
+   "file": "fx1280-024-tactics-attacking_mentality.jpg",
+   "at": "tactics: attacking mentality",
+   "bytes": 130063
+  },
+  {
+   "file": "fx1280-025-fx-after-tactics-quick-report.jpg",
+   "at": "tactics: attacking mentality",
+   "bytes": 151353
+  },
+  {
+   "file": "fx1280-026-market-sell_tab.jpg",
+   "at": "market: sell tab",
+   "bytes": 157946
+  },
+  {
+   "file": "fx1280-027-market-sell.jpg",
+   "at": "market: sell tab",
+   "bytes": 183192
+  },
+  {
+   "file": "fx1280-028-market-latest_tab.jpg",
+   "at": "market: latest tab",
+   "bytes": 165438
+  },
+  {
+   "file": "fx1280-029-market-latest.jpg",
+   "at": "market: latest tab",
+   "bytes": 190145
+  },
+  {
+   "file": "fx1280-030-market-buy_tab.jpg",
+   "at": "market: buy tab",
+   "bytes": 158850
+  },
+  {
+   "file": "fx1280-031-market-open_talks.jpg",
+   "at": "market: open talks",
+   "bytes": 148478
+  },
+  {
+   "file": "fx1280-032-negotiation.jpg",
+   "at": "market: open talks",
+   "bytes": 176548
+  },
+  {
+   "file": "fx1280-033-market-offer.jpg",
+   "at": "market: offer",
+   "bytes": 148478
+  },
+  {
+   "file": "fx1280-034-negotiation-after.jpg",
+   "at": "market: offer",
+   "bytes": 176548
+  }
+ ],
+ "audits": [
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [],
+   "overlaps": [],
+   "leaks": [],
+   "tinyTaps": [],
+   "scrollY": 0,
+   "docH": 13092,
+   "label": "picker-era"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [],
+   "overlaps": [],
+   "leaks": [],
+   "tinyTaps": [
+    "button.inline-flex.items-center.gap-1 \"All nations\" 76x16"
+   ],
+   "scrollY": 0,
+   "docH": 12821,
+   "label": "picker-league"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [],
+   "overlaps": [],
+   "leaks": [],
+   "tinyTaps": [
+    "button.inline-flex.items-center.gap-1 \"Premier League\" 127x16"
+   ],
+   "scrollY": 0,
+   "docH": 13504,
+   "label": "picker-team"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [],
+   "overlaps": [],
+   "leaks": [],
+   "tinyTaps": [
+    "button.inline-flex.items-center.gap-1 \"Aston Villa\" 77x16",
+    "button.rounded-md.border.border-border \"Previous skin\" 20x20",
+    "button.rounded-md.border.border-border \"Next skin\" 20x20",
+    "button.rounded-md.border.border-border \"Previous hair\" 20x20",
+    "button.rounded-md.border.border-border \"Next hair\" 20x20",
+    "button.rounded-md.border.border-border \"Previous colour\" 20x20",
+    "button.rounded-md.border.border-border \"Next colour\" 20x20",
+    "button.rounded-md.border.border-border \"Previous beard\" 20x20",
+    "button.rounded-md.border.border-border \"Next beard\" 20x20",
+    "button.rounded-md.border.border-border \"Previous outfit\" 20x20",
+    "button.rounded-md.border.border-border \"Next outfit\" 20x20",
+    "button.rounded-md.border.border-border \"Previous age\" 20x20",
+    "button.rounded-md.border.border-border \"Next age\" 20x20",
+    "button.w-5.h-5.rounded-full \"Navy\" 22x22",
+    "button.w-5.h-5.rounded-full \"Red\" 20x20",
+    "button.w-5.h-5.rounded-full \"Sky\" 20x20",
+    "button.w-5.h-5.rounded-full \"Green\" 20x20",
+    "button.w-5.h-5.rounded-full \"Claret\" 20x20",
+    "button.w-5.h-5.rounded-full \"Gold\" 20x20",
+    "button.w-5.h-5.rounded-full \"Black\" 20x20",
+    "button.w-5.h-5.rounded-full \"White\" 20x20"
+   ],
+   "scrollY": 0,
+   "docH": 13972,
+   "label": "manager-form"
+  },
+  {
+   "docOverflow": 0,
+   "bodyOverflow": 0,
+   "offRight": [],
+   "clipped": [
+    "\"🧤 Shot saved: Alejandro Garnacho\" shown 164px of 169px",
+    "\"🔁 Sub: Pascal Struijk on for Mats Wieffer\" shown 164px of 198px",
+    "\"⚽ Goal: Ibrahim Mbaye 🅰️ Aaron Wan-Bissaka\" shown 164px of 226px",
+    "\"🔁 Sub: Charalampos Kostoulas on for Ferdi Kadıoğlu\" shown 164px of 254px",
+    "\"Manchester United\" shown 84px of 100px",
+    "\"Nottingham Forest\" shown 84px of 100px"
+   ],
+   "overlaps": [
+    "\"Nottingham Forest\" x \"2-2\" (7x14 at 521,1882)"
+   ],
+   "leaks": [],
+   "tinyTaps": [
+    "button.mt-2.inline-flex.items-center \"All player ratings\" 95x15"
+   ],
+   "scrollY": 0,
+   "docH": 14186,
+   "label": "fx-after-tactics-quick-report"
+  }
+ ],
+ "effects": [
+  {
+   "where": "facilities",
+   "label": "upgrade first",
+   "text": "Upgrade £57m",
+   "ctx": "Upgrade £57m",
+   "disabled": false,
+   "diff": {
+    "changed": [
+     "budget",
+     "boardConfidence",
+     "aiHeadlines",
+     "facilities",
+     "finance"
+    ],
+    "budget": [
+     73,
+     16
+    ]
+   },
+   "screenChanged": true,
+   "check": {
+    "before": "null",
+    "after": "{\"v\":1,\"stadium\":8,\"trainingGround\":6,\"medical\":6,\"dressingRoom\":6,\"seasonSpend\":57}"
+   }
+  },
+  {
+   "where": "facilities",
+   "label": "upgrade again",
+   "text": "Upgrade £81m",
+   "ctx": "Upgrade £81m",
+   "disabled": true,
+   "diff": {
+    "changed": [],
+    "budget": [
+     16,
+     16
+    ]
+   },
+   "screenChanged": true,
+   "check": {
+    "before": "{\"v\":1,\"stadium\":8,\"trainingGround\":6,\"medical\":6,\"dressingRoom\":6,\"seasonSpend\":57}",
+    "after": "{\"v\":1,\"stadium\":8,\"trainingGround\":6,\"medical\":6,\"dressingRoom\":6,\"seasonSpend\":57}"
+   }
+  },
+  {
+   "where": "finances",
+   "label": "premium tickets",
+   "text": "💼 Premium More per seat, a few empty ones up in the corners.",
+   "ctx": "💼 Premium More per seat, a few empty ones up in the corners.",
+   "disabled": false,
+   "diff": {
+    "changed": [
+     "boardConfidence",
+     "finance",
+     "books"
+    ],
+    "budget": [
+     16,
+     16
+    ]
+   },
+   "screenChanged": true,
+   "check": {
+    "prices": [
+     "null",
+     "null"
+    ]
+   }
+  },
+  {
+   "where": "finances",
+   "label": "push sponsor",
+   "text": "Push for more",
+   "ctx": "Push for more",
+   "disabled": false,
+   "diff": {
+    "changed": [
+     "aiHeadlines",
+     "books"
+    ],
+    "budget": [
+     16,
+     16
+    ]
+   },
+   "screenChanged": true
+  },
+  {
+   "where": "finances",
+   "label": "sign sponsor",
+   "text": "Sign with Silverbeck",
+   "ctx": "Sign with Silverbeck",
+   "disabled": false,
+   "diff": {
+    "changed": [
+     "budget",
+     "aiHeadlines",
+     "books",
+     "sponsor"
+    ],
+    "budget": [
+     16,
+     46.2
+    ]
+   },
+   "screenChanged": true,
+   "check": {
+    "sponsor": [
+     "null",
+     "{\"brand\":\"Silverbeck Foods\",\"shape\":\"safe\",\"perSeason\":30.2,\"bonus\":0,\"bonusFor\":null,\"yearsLeft\":2,\"paid\":30.2,\"rep\":\"g"
+    ]
+   }
+  },
+  {
+   "where": "staff",
+   "label": "pay off coach",
+   "text": "Pay off £470k",
+   "ctx": "🧑‍🏫 STAFF · £46.2M TO SPEND · 64K A WEEK ON THE FOUR 🎯 Fabbio Merrion Attack coach · level 7/10, can reach 8 · 18k a week Pay off £470k The forwards grow 6.6% faster where there is room. Midfield gets half of it. 🛡️ Matteus Kettleby Defence coach · level 6/10, can reach 6 · 16k a week Pay off £4",
+   "disabled": false,
+   "diff": {
+    "changed": [],
+    "budget": [
+     46.2,
+     46.2
+    ]
+   },
+   "screenChanged": true
+  },
+  {
+   "where": "staff",
+   "label": "hire",
+   "result": "no such control"
+  },
+  {
+   "where": "training",
+   "label": "full training",
+   "result": "no such control"
+  },
+  {
+   "where": "academy",
+   "label": "academy action",
+   "text": "Upgrade £24m",
+   "ctx": "THE SETUP · £46.2M TO SPEND 🔍 Youth recruitment 12/20 Upgrade £24m How far up the queue you are for the best local kids. Drives intake quality and how many turn up. 🧢 Coaching staff 11/20 Upgrade £21m Better coaches develop EVERY player faster, not just the teenagers, and sharpen your scouting rep",
+   "disabled": false,
+   "diff": {
+    "changed": [
+     "budget",
+     "academy"
+    ],
+    "budget": [
+     46.2,
+     22.2
+    ]
+   },
+   "screenChanged": true
+  },
+  {
+   "where": "tactics",
+   "label": "formation 4-4-2",
+   "text": "4-4-2",
+   "ctx": "4-4-2",
+   "disabled": false,
+   "diff": {
+    "changed": [
+     "xiIds",
+     "formationIndex",
+     "xiDuties"
+    ],
+    "budget": [
+     22.2,
+     22.2
+    ]
+   },
+   "screenChanged": true,
+   "check": {
+    "f": [
+     null,
+     null
+    ]
+   }
+  },
+  {
+   "where": "tactics",
+   "label": "attacking mentality",
+   "text": "⚔️ Attacking Throw bodies forward and chase goals",
+   "ctx": "⚔️ Attacking Throw bodies forward and chase goals",
+   "disabled": false,
+   "diff": {
+    "changed": [
+     "mentality"
+    ],
+    "budget": [
+     22.2,
+     22.2
+    ]
+   },
+   "screenChanged": true,
+   "check": {
+    "m": [
+     "balanced",
+     "attacking"
+    ]
+   }
+  },
+  {
+   "where": "market",
+   "label": "sell tab",
+   "text": "Sell",
+   "ctx": "Sell",
+   "disabled": false,
+   "diff": {
+    "changed": [],
+    "budget": [
+     22.2,
+     22.2
+    ]
+   },
+   "screenChanged": true
+  },
+  {
+   "where": "market",
+   "label": "latest tab",
+   "text": "Latest",
+   "ctx": "Latest",
+   "disabled": false,
+   "diff": {
+    "changed": [],
+    "budget": [
+     22.2,
+     22.2
+    ]
+   },
+   "screenChanged": true
+  },
+  {
+   "where": "market",
+   "label": "buy tab",
+   "text": "Buy",
+   "ctx": "Buy",
+   "disabled": false,
+   "diff": {
+    "changed": [],
+    "budget": [
+     22.2,
+     22.2
+    ]
+   },
+   "screenChanged": true
+  },
+  {
+   "where": "market",
+   "label": "open talks",
+   "text": "Talk · £500k",
+   "ctx": "Talk · £500k",
+   "disabled": false,
+   "diff": {
+    "changed": [
+     "negotiation"
+    ],
+    "budget": [
+     22.2,
+     22.2
+    ]
+   },
+   "screenChanged": true
+  },
+  {
+   "where": "market",
+   "label": "offer",
+   "text": "Offer it",
+   "ctx": "Offer it",
+   "disabled": true,
+   "diff": {
+    "changed": [],
+    "budget": [
+     22.2,
+     22.2
+    ]
+   },
+   "screenChanged": true
+  }
+ ],
+ "elapsedS": 71,
+ "clubList": [
+  "Arsenal 👑 Elite Squad 89 Budget £167m Board wants Win the Premier League",
+  "Manchester City 👑 Elite Squad 89 Budget £160m Board wants Win the Premier League",
+  "Liverpool 👑 Elite Squad 88 Budget £137m Board wants Win the Premier League",
+  "Chelsea 👑 Elite Squad 88 Budget £131m Board wants Win the Premier League",
+  "Manchester United 🥇 Contenders Squad 87 Budget £118m Board wants Win the Premier League",
+  "Tottenham 🥇 Contenders Squad 86 Budget £114m Board wants Qualify for the Champions League",
+  "Newcastle 🥇 Contenders Squad 84 Budget £69m Board wants Qualify for the Europa League",
+  "Nottingham Forest 🥇 Contenders Squad 84 Budget £70m Board wants Qualify for the Europa League",
+  "Aston Villa 🥇 Contenders Squad 84 Budget £73m Board wants Qualify for the Conference League",
+  "Crystal Palace 🥇 Contenders Squad 84 Budget £76m Board wants Qualify for the Conference League",
+  "Brentford 🥇 Contenders Squad 84 Budget £69m Board wants Finish in the top half",
+  "Bournemouth 🥇 Contenders Squad 83 Budget £68m Board wants Finish in the top half",
+  "Brighton 🥇 Contenders Squad 83 Budget £73m Board wants Finish in the top half",
+  "Everton 🥇 Contenders Squad 83 Budget £54m Board wants Stay up. Avoid relegation",
+  "Fulham ⚔️ Challengers Squad 83 Budget £54m Board wants Stay up. Avoid relegation",
+  "Sunderland ⚔️ Challengers Squad 82 Budget £50m Board wants Stay up. Avoid relegation",
+  "Leeds United ⚔️ Challengers Squad 82 Budget £48m Board wants Stay up. Avoid relegation",
+  "Ipswich Town ⚔️ Challengers Squad 80 Budget £43m Board wants Stay up. Avoid relegation",
+  "Coventry City ⚔️ Challengers Squad 79 Budget £32m Board wants Stay up. Avoid relegation",
+  "Hull City ⚔️ Challengers Squad 79 Budget £27m Board wants Stay up. Avoid relegation"
+ ],
+ "financesAfter": "DOUKNOWBALL\nBack\nSign up to track your stats\nAston Villa\n2026-27 · Season 1\nSeason not started\n£46.2m\nNo matches yet\nManagers\nBoard\nSafe\nFans\nHopeful\nHome\nSquad\nTactics\nTable\nMarket\n☀️ Transfer window open. Tap to do business before your next match\nPREMIER LEAGUE · ROUND 1\nAston Villa vs Brighton\nAway · their strength ~84 · your XI avg 83\nPlay Live\n⚡ Quick Sim\n\nPlay live to make your calls. Quick Sim handles your subs.\n\n📊 Match Centre: form, head to head, odds, team talk\nClub home\n📊 PROJECTED TO SEASON END\nweek 0, 54 left\nIN SO FAR SEASON\nTickets · 23 certain home games left £0k £41.7m\nFood and drink £0k £7.9m\nSponsor · guaranteed money, landed £30.2m £30.2m\nPlayers sold · assumes no more deals £0k £0k\nIncome £30.2m £79.8m\nOUT\nPlayer wages · £708k a week £0k £38.2m\nStaff wages · £163k a week £0k £8.8m\nTravel · 22 certain away trips left £0k £2.4m\nPlayers bought · assumes no more deals £0k £0k\nFacilities £57m £57m\nStaff fees · hires and pay offs £0k £0k\nSpend £57m £106.4m\nSeason result -£26.8m -£26.6m\n\nTickets, food, the sponsor, deals, the builders and staff fees move the transfer kitty (£46.2m now). Wages and travel are the club's running costs: the board covers them and holds you to the wage ceiling on the contracts desk, so they never leave the kitty. Counts league fixtures and the one cup or European tie already drawn. Later rounds depend on results and are left out, and so are deals you have not done.\n\n🎟️ PRICES\nFans: Hopeful\n🎟️ Fair prices\nCheaper seats, fuller ground, a louder day out.\n🎫 Standard\nThe going rate. Nobody writes to the paper about it.\n💼 Premium\nMore per seat, a few empty ones up in the corners.\n\nTickets about £39 a head. Fans cool on it (-5 on the meter, and the ground empties over the weeks). The board adds a point of confidence the day you set it.\n\n🍟 Cheap food\nPies at cost. The fans love you for it.\n🥤 Standard\nGround prices. Nobody cheers, nobody moans.\n🍾 Premium\nHospitality margins. The fans notice the bill.\n\nFood and drink about £7.41 a head, lifted by the stadium level. Fans are neutral. The board are neutral. The mood also follows the last five results, and it moves your home crowd: 0.9x furious, 1.1x singing.\n\n🤝 SHIRT SPONSOR\n\nSilverbeck Foods (global) pay £30.2m a season. No bonuses, just the cheque.\n\n2 seasons left. Paid so far: £30.2m.\n\n💰 THE BOOKS\n£46.2m\nTransfer kitty\n£0k\nMatchday money this season\n-\nLast home gate\n\nEvery home crowd pays the kitty: attendance times about £46.41 a head, tickets plus food and drin",
+ "staffAfter": "DOUKNOWBALL\nBack\nSign up to track your stats\nAston Villa\n2026-27 · Season 1\nSeason not started\n£46.2m\nNo matches yet\nManagers\nBoard\nSafe\nFans\nHopeful\nHome\nSquad\nTactics\nTable\nMarket\n☀️ Transfer window open. Tap to do business before your next match\nPREMIER LEAGUE · ROUND 1\nAston Villa vs Brighton\nAway · their strength ~84 · your XI avg 83\nPlay Live\n⚡ Quick Sim\n\nPlay live to make your calls. Quick Sim handles your subs.\n\n📊 Match Centre: form, head to head, odds, team talk\nClub home\n🧑‍🏫 STAFF · £46.2M TO SPEND · 64K A WEEK ON THE FOUR\n🎯 Fabbio Merrion\nAttack coach · level 7/10, can reach 8 · 18k a week\nPay off £470k\n\nThe forwards grow 6.6% faster where there is room. Midfield gets half of it.\n\n🛡️ Matteus Kettleby\nDefence coach · level 6/10, can reach 6 · 16k a week\nPay off £420k\n\nThe back line grows 5.5% faster where there is room. Midfield gets half of it. As a regular, one of his players would be growing as fast as anyone can, so he would get less of the lift.\n\n🧤 Radek Grimsby\nGoalkeeping coach · level 5/10, can reach 5 · 14k a week\nPay off £360k\n\nKeepers grow 4.4% faster where there is room.\n\n🔎 Solly Rasmusson\nLead scout · level 6/10, can reach 6 · 16k a week\nPay off £420k\n\nBoys found on the road top out up to 3 higher.\n\nEvery one of them is a lift on the game you already play, and a level 1 man does nothing at all, the same as an empty chair. The forwards and the number ten are the attack coach's, the back line and the holding midfielder the defence coach's, the keepers their own man's, and the middle of the park splits the two. Wages are a running cost the board covers; fees and pay offs come out of the kitty. They belong to the club, so a new job starts on the new club's staff.\n\nClub Manager: Free Football Management Game\n\nA full club-management sim in your browser: 454 clubs across 27 real leagues, from the Premier League, the 2. Bundesliga, Serie B, Ligue 2, the Segunda División and the Scottish Premiership to the Saudi Pro League, MLS, Brazil, Mexico, Australia, Russia, Croatia, Denmark, Switzerland, Austria and Greece, with real players at their real market values as of August 2026 (October for the A-League Men and the Russian Premier League) and thin squads topped up with made up youth, marked as such. Manage today or in a real past season: 2020-21 with Haaland's Dortmund and Mbappé's PSG, 2015-16 with Leicester at 5000 to 1, 2010-11 with prime Messi, or 2005-06 with Ronaldinho's Barcelona. Or create your own club with its own crest and sta",
+ "trainingText": "DOUKNOWBALL\nBack\nSign up to track your stats\nAston Villa\n2026-27 · Season 1\nSeason not started\n£46.2m\nNo matches yet\nManagers\nBoard\nSafe\nFans\nHopeful\nHome\nSquad\nTactics\nTable\nMarket\n☀️ Transfer window open. Tap to do business before your next match\nPREMIER LEAGUE · ROUND 1\nAston Villa vs Brighton\nAway · their strength ~84 · your XI avg 83\nPlay Live\n⚡ Quick Sim\n\nPlay live to make your calls. Quick Sim handles your subs.\n\n📊 Match Centre: form, head to head, odds, team talk\nClub home\nHOW HARD YOU WORK THEM\n🛌\nLight\n⚙️\nNormal\n🔥\nDouble\n\nThe safe middle. Steady development, normal fatigue.\n\nWHO THE WEEK IS BUILT AROUND\n👔\nFirst team\n⚖️\nBalanced\n👶\nYouth\n\nEveryone gets the same session. Nothing is wasted, nothing is special.\n\nA SECOND POSITION\n\nNobody is learning one right now.\n\nRETRAIN\nPick a man\nCDM Amadou Onana (86)\nCDM Boubacar Kamara (85)\nLW Alejandro Garnacho (85)\nST Nicolas Jackson (85)\nCM João Gomes (84)\nCM Johan Manzambi (84)\nLB Ian Maatsen (83)\nRW Ibrahim Mbaye (83)\nRB Aaron Wan-Bissaka (82)\nRB Matty Cash (82)\nCB Pau Torres (82)\nLW Jadon Sancho (81)\nLB Matteo Ruggeri (81)\nST Tammy Abraham (81)\nCB Taylor Harwood-Bellis (81)\nCDM Lamare Bogarde (81)\nCAM Emiliano Buendía (80)\nCM John McGinn (79)\nCM Leon Goretzka (79)\nRW Alysson (77)\nCB Victor Lindelöf (74)\nCB Tyrone Mings (74)\nCB Modou Kéba Cissé (73)\nCM Ross Barkley (73)\n\nA position next to one he holds is the quickest, another on the same line takes longer, and crossing lines takes longest; past thirty it is half as long again, a better training ground shortens all of it, and nothing goes under 4 weeks. One man learns one position at a time, keeps 2 at most, and keepers stay keepers. Every second position in this squad was earned here: the real data gives each man one.\n\nWHO IS ACTUALLY GETTING BETTER\nCB\nModou Kéba Cissé (20)\n73 now · lots of room left · 0 apps this season\nTicking along\nRW\nIbrahim Mbaye (17)\n83 now · lots of room left · 0 apps this season\nGoing nowhere\nCM\nJohan Manzambi (20)\n84 now · plenty of room left · 0 apps this season\nGoing nowhere\nCDM\nLamare Bogarde (21)\n81 now · plenty of room left · 0 apps this season\nGoing nowhere\nRW\nAlysson (19)\n77 now · plenty of room left · 0 apps this season\nGoing nowhere\nLW\nAlejandro Garnacho (21)\n85 now · a little room left · 0 apps this season\nGoing nowhere\nCM\nJoão Gomes (24)\n84 now · a little room left · 0 apps this season\nGoing nowhere\nLB\nIan Maatsen (23)\n83 now · a little room left · 0 apps this season\nGoing nowhere\nLB\nMatteo Ruggeri (23)\n81 now · a l",
+ "academyText": "DOUKNOWBALL\nBack\nSign up to track your stats\nAston Villa\n2026-27 · Season 1\nSeason not started\n£46.2m\nNo matches yet\nManagers\nBoard\nSafe\nFans\nHopeful\nHome\nSquad\nTactics\nTable\nMarket\n☀️ Transfer window open. Tap to do business before your next match\nPREMIER LEAGUE · ROUND 1\nAston Villa vs Brighton\nAway · their strength ~84 · your XI avg 83\nPlay Live\n⚡ Quick Sim\n\nPlay live to make your calls. Quick Sim handles your subs.\n\n📊 Match Centre: form, head to head, odds, team talk\nClub home\nTHE SETUP · £46.2M TO SPEND\n🔍 Youth recruitment\n12/20\nUpgrade £24m\n\nHow far up the queue you are for the best local kids. Drives intake quality and how many turn up.\n\n🧢 Coaching staff\n11/20\nUpgrade £21m\n\nBetter coaches develop EVERY player faster, not just the teenagers, and sharpen your scouting reports.\n\n🏟️ Academy building\n11/20\nUpgrade £21m\n\nThe youth building itself. Lifts intake quality and helps everyone squeeze more out of the week.\n\nSCOUTING NETWORK · 0/3 ON THE ROAD\n\nNobody is out looking for you. Send someone and reports start landing while the season runs.\n\nAVAILABLE\nGus Roussel\nContacts ★★★☆☆ · Judgement ★★★★☆\n£4m base\nKenny Roussel\nContacts ★☆☆☆☆ · Judgement ★☆☆☆☆\n£1m base\nWim Brennan\nContacts ★★★★★ · Judgement ★★★★☆\n£5m base\nON THE BOOKS · 0/12\n\nNobody yet. Intake day comes round every summer and the better your recruitment, the better the group.\n\nClub Manager: Free Football Management Game\n\nA full club-management sim in your browser: 454 clubs across 27 real leagues, from the Premier League, the 2. Bundesliga, Serie B, Ligue 2, the Segunda División and the Scottish Premiership to the Saudi Pro League, MLS, Brazil, Mexico, Australia, Russia, Croatia, Denmark, Switzerland, Austria and Greece, with real players at their real market values as of August 2026 (October for the A-League Men and the Russian Premier League) and thin squads topped up with made up youth, marked as such. Manage today or in a real past season: 2020-21 with Haaland's Dortmund and Mbappé's PSG, 2015-16 with Leicester at 5000 to 1, 2010-11 with prime Messi, or 2005-06 with Ronaldinho's Barcelona. Or create your own club with its own crest and stadium. Negotiate transfers, survive bidding wars, hit the board's named objectives, and chase titles season after season.\n\nClub Manager is the site's big one: a full management sim in your browser. 454 real clubs across 27 leagues in 21 countries, from the Premier League, Serie B, Ligue 2 and the Segunda División to the Danish Superliga, the Swiss Super",
+ "dressingText": "DOUKNOWBALL\nBack\nSign up to track your stats\nAston Villa\n2026-27 · Season 1\nSeason not started\n£22.2m\nNo matches yet\nManagers\nBoard\nSafe\nFans\nHopeful\nHome\nSquad\nTactics\nTable\nMarket\n☀️ Transfer window open. Tap to do business before your next match\nPREMIER LEAGUE · ROUND 1\nAston Villa vs Brighton\nAway · their strength ~84 · your XI avg 83\nPlay Live\n⚡ Quick Sim\n\nPlay live to make your calls. Quick Sim handles your subs.\n\n📊 Match Centre: form, head to head, odds, team talk\nClub home\nTHE DRESSING ROOM\n\nEverybody is getting roughly the football he was promised. Keep it that way.\n\n⭐\nSTAR MAN\n3 players\nPromised 88% of games\n🔥\nKEY FIRST TEAMER\n8 players\nPromised 74% of games\n🔄\nROTATION OPTION\n4 players\nPromised 32% of games\n🧥\nBACKUP\n10 players\nPromised 12% of games\n🌱\nONE FOR THE FUTURE\n1 player\nPromised 5% of games\nClub Manager: Free Football Management Game\n\nA full club-management sim in your browser: 454 clubs across 27 real leagues, from the Premier League, the 2. Bundesliga, Serie B, Ligue 2, the Segunda División and the Scottish Premiership to the Saudi Pro League, MLS, Brazil, Mexico, Australia, Russia, Croatia, Denmark, Switzerland, Austria and Greece, with real players at their real market values as of August 2026 (October for the A-League Men and the Russian Premier League) and thin squads topped up with made up youth, marked as such. Manage today or in a real past season: 2020-21 with Haaland's Dortmund and Mbappé's PSG, 2015-16 with Leicester at 5000 to 1, 2010-11 with prime Messi, or 2005-06 with Ronaldinho's Barcelona. Or create your own club with its own crest and stadium. Negotiate transfers, survive bidding wars, hit the board's named objectives, and chase titles season after season.\n\nClub Manager is the site's big one: a full management sim in your browser. 454 real clubs across 27 leagues in 21 countries, from the Premier League, Serie B, Ligue 2 and the Segunda División to the Danish Superliga, the Swiss Super League, Croatia's SuperSport HNL, Brazil's Serie A, Liga MX, the A-League Men and the Russian Premier League, over 5,000 real players with their real 2026 ages and market values, and a board that talks like a board.\n\nPick when you start too: today's game, or one of four real past seasons. 2020-21 is Haaland and Bellingham at Dortmund, Mbappé and Neymar at PSG and Bruno Fernandes at United, with that summer's big moves already made (Havertz and Werner at Chelsea, Thiago at Liverpool, Suárez at Atlético). 2015-16 is the year Leicester ",
+ "pressText": "DOUKNOWBALL\nBack\nSign up to track your stats\nAston Villa\n2026-27 · Season 1\nSeason not started\n£22.2m\nNo matches yet\nManagers\nBoard\nSafe\nFans\nHopeful\nHome\nSquad\nTactics\nTable\nMarket\n☀️ Transfer window open. Tap to do business before your next match\nPREMIER LEAGUE · ROUND 1\nAston Villa vs Brighton\nAway · their strength ~84 · your XI avg 83\nPlay Live\n⚡ Quick Sim\n\nPlay live to make your calls. Quick Sim handles your subs.\n\n📊 Match Centre: form, head to head, odds, team talk\nClub home\nTHE BACK PAGES\nNobody has an opinion\n0 fronted up · 0 left to the assistant\n\nThe board do not watch every match, they read about it. Keep the papers onside and a defeat gets the benefit of the doubt upstairs. Let them turn on you and the same defeat costs you more.\n\nNothing on the desk. The press only come when there is something to ask about.\n\nClub Manager: Free Football Management Game\n\nA full club-management sim in your browser: 454 clubs across 27 real leagues, from the Premier League, the 2. Bundesliga, Serie B, Ligue 2, the Segunda División and the Scottish Premiership to the Saudi Pro League, MLS, Brazil, Mexico, Australia, Russia, Croatia, Denmark, Switzerland, Austria and Greece, with real players at their real market values as of August 2026 (October for the A-League Men and the Russian Premier League) and thin squads topped up with made up youth, marked as such. Manage today or in a real past season: 2020-21 with Haaland's Dortmund and Mbappé's PSG, 2015-16 with Leicester at 5000 to 1, 2010-11 with prime Messi, or 2005-06 with Ronaldinho's Barcelona. Or create your own club with its own crest and stadium. Negotiate transfers, survive bidding wars, hit the board's named objectives, and chase titles season after season.\n\nClub Manager is the site's big one: a full management sim in your browser. 454 real clubs across 27 leagues in 21 countries, from the Premier League, Serie B, Ligue 2 and the Segunda División to the Danish Superliga, the Swiss Super League, Croatia's SuperSport H",
+ "tacticsText": "FORMATION\nBACK THREE\n3-5-2\n3-4-3\n3-4-2-1\n3-5-2 high wing backs\nBACK FOUR\n4-3-3\n4-4-2\n4-2-3-1\n4-1-2-1-2\n4-5-1\n4-4-1-1\n4-3-3 holding\n4-2-2-2\n4-1-4-1\n4-3-1-2\n4-2-3-1 wide\nBACK FIVE\n5-3-2\n5-4-1\nMENTALITY\n🛡️\nDefensive\nSit deep, frustrate them, protect the point\n⚖️\nBalanced\nKeep your shape and pick your moments\n⚔️\nAttacking\nThrow bodies forward and chase goals\nSTARTING XI · AVG 83\nAuto Pick\nSTANDARD LINE\nduty\nduty\nduty\nduty\nduty\nduty\nduty\nduty\nduty\nduty\nduty\n81\nSuzuki\n82\nWan-Bissaka\n82\nTorres\n81\nHarwood-Bellis\n83\nMaatsen\n86\nC\nOnana\n85\nKamara\n84\nGomes\n83\nMbaye\n85\nJackson\n85\nGarnacho\n\nDrag a player onto another to swap them. Tap a spot to pick someone else, or a bench man below then a spot.\n\nMatch plans 0/3\nBENCH 15\nSET PIECES 5/5 captain Onana\nSHOOTOUT ORDER 0/11 not set, one draw decides it",
+ "afterTacticsReport": "DOUKNOWBALL\nBack\nSign up to track your stats\nFULL TIME\nPREMIER LEAGUE · ROUND 1\n🏟️ Away day · crowd 54,262\n45+3'\nADDED TIME\n90+5'\nVICTORY\nBrighton\n0 - 1\nAston Villa\nASTON VILLA\n\n⚽ Ibrahim Mbaye 75' · 🅰️ Aaron Wan-Bissaka\n\nBRIGHTON\n\n-\n\n🟥 Amadou Onana 73'\nBRIGHTON 🟨 Maxim De Cuyper 38'\nBRIGHTON 🟨 Ferdi Kadıoğlu 70'\nBRIGHTON ▲ Pascal Struijk ▼ Mats Wieffer 73'\nBRIGHTON ▲ Charalampos Kostoulas ▼ Ferdi Kadıoğlu 76'\nAston Villa\nMATCH STATS\nBrighton\n50%\nPOSSESSION\n50%\n14\nSHOTS\n8\n6\nON TARGET\n3\n1.65\nEXPECTED GOALS\n0.83\n8\nCORNERS\n6\n12\nFOULS\n14\n3\nKEEPER SAVES\n5\n0\nYELLOW CARDS\n2\n1\nRED CARDS\n0\n0\nSUBSTITUTIONS\n2\n50%\nBALANCE OF PLAY\n50%\n▲ ASTON VILLA\n▼ BRIGHTON\n0'\n45'\n90'\n14 (6)\nSHOTS (ON TARGET)\n8 (3)\nAston Villa\nTIMELINE\nBrighton\n0'\n⏱️ KICK OFF\n2'\n🧤 Shot saved: Georginio Rutter\n🧤 Shot saved: João Gomes\n6'\n🧤 Shot saved: Nicolas Jackson\n7'\n🧤 Shot saved: Boubacar Kamara\n17'\n38'\n🟨 Booked: Maxim De Cuyper\n45+3'\n⏸️ HALF TIME\n47'\n🧤 Shot saved: Georginio Rutter\n60'\n🧤 Shot saved: Mats Wieffer\n🧤 Shot saved: Alejandro Garnacho\n70'\n70'\n🟨 Booked: Ferdi Kadıoğlu\n🟥 Sent off: Amadou Onana\n73'\n73'\n🔁 Sub: Pascal Struijk on for Mats Wieffer\n⚽ Goal: Ibrahim Mbaye 🅰️ Aaron Wan-Bissaka\n75'\n76'\n🔁 Su",
+ "afterMatch": {
+  "mentality": "attacking",
+  "training": {
+   "intensity": "normal",
+   "focus": "balanced"
+  },
+  "budget": 22.2
+ },
+ "sellText": "☀️ Summer window OPEN\n3 match weeks until the deadline · offers can arrive any week · loans used 0/2\nBUDGET\n£22.2m\nAROUND THE LEAGUE\n\n📰 🤝 Aston Villa have signed with Silverbeck Foods: £30.2m a season for 2 seasons.\n\n📰 💱 Silverbeck Foods came up to £30.2m a season.\n\n📰 🏟️ Aston Villa have signed off £57m on the stadium: level 8 of 10.\n\n📰 Barcelona sign Estêvão from Chelsea for £79m.\n\n📰 Manchester City sign Cristian Romero from Atlético Madrid for £48m.\n\n📰 Barcelona sign Bukayo Saka from Arsenal for £119m.\n\n📰 Bayer Leverkusen sign Eduardo Camavinga from Real Madrid for £58m.\n\n📰 Tottenham sign Bryan Mbeumo from Manchester United for £81m.\n\nBuy\nSell\nLatest\n\nNobody sells a player over the counter. Transfer list him and clubs will come to you with offers, sometimes two of them fighting over the same man, and the bids land in Incoming above.\n\nCDM\nAmadou Onana\n25y · 0g 0a · worth £32.9m\n86\nTransfer list\nLoan list\nNot for sale\nLoan out now +£2.6m\nCDM\nBoubacar Kamara\n26y · 0g 0a · worth £13.1m\n85\nTransfer list\nLoan list\nNot for sale\nLoan out now +£1m\nLW\nAlejandro Garnacho\n21y · 0g 0a · worth £29.1m\n85\nTransfer list\nLoan list\nNot for sale\nLoan out now +£2.3m\nST\nNicolas Jackson\n24y · 0g 0a · worth £29.1m\n85\nTransfer list\nLoan list\nNot for sale\nLoan out now +£2.3m\nCM\nJoão Gomes\n24y · 0g 0a · worth £11.5m\n84\nTransfer list\nLoan list\nNot for sale\nLoan out now +£900k\nCM\nJohan Manzambi\n20y · 0g 0a · worth £25.7m\n84\nTransfer list\nLoan list\nNot for sale\nLoan out now +£2.1m\nLB\nIan Maatsen\n23y · 0g 0a · worth £21.6m\n83\nTransfer list\nLoan list\nNot for sale\nLoan out now +£1.7m\nRW\nIbrahim Mbaye\n17y · 1g 0a · worth £9.7m\n83\nTransfer list\nLoan list\nNot for sale\nLoan out now +£800k\nRB\nAaron Wan-Bissaka\n28y · 0g 1a · worth £7.3m\n82\nTransfer list\nLoan list\nNot for sale\nLoan out now +£600k\nRB\nMatty Cash\n28y · 0g 0a · worth £16.2m\n82\nTransfer list\nLoan list\nNot for sale\nLoan out now +£1.3m\nCB\nPau Torres\n28y · 0g 0a · worth £16.2m\n82\nTransfer list\nLoan list\nNot for sale\nLoan out now +£1.3m\nLW\nJadon Sancho\n25y · 0g 0a · worth £14.9m\n81\nTransfer list\nLoan list\nNot for sale\nLoan out now +£1.2m\nLB\nMatteo Ruggeri\n23y · 0g 0a · worth £14.9m\n81\nTransfer list\nLoan list\nNot for sale\nLoan out now +£1.2m\nST\nTammy Abraham\n28y · 0g 0a · worth £6.7m\n81\nTransfer list\nLoan list\nNot for sale\nLoan out now +£500k\nCB\nTaylor Harwood-Bellis\n23y · 0g 0a · worth £14.9m\n81\nTransfer list\nLoan list\nNot for sale\nLoan out now +£1.2m\nGK\nZion Suzuki\n23y · 0g 0a · worth £14.9m\n81\nTransfer list\nLoan list\nNot for sale\nLoan out now +£1.2m\nCDM\nLamare Bogarde\n21y · 0g 0a · worth £5.9m\n81\nTransfer list\nLoan list\nNot for sale\nLoan out now +£500k\nCAM\nEmiliano Buendía\n29y · 0g 0a · worth £5.8m\n80\nTransfer list\nLoan list\nNot for sale\nLoan out now +£500k\nCM\nJohn McGinn\n31y · 0g 0a · worth £10.8m\n79\nTransfer list\nLoan list\nNot for sale\nLoan out now +£900k\nCM\nLeon Goretzka\n30y · 0g 0a · worth £10.8m\n79\nTransfer list\nLoan list\nNot for sale\nLoan out now +£900k\nRW\nAlysson\n19y · 0g 0a · worth £7.5m\n77\nTransfer list\n",
+ "latestText": "☀️ Summer window OPEN\n3 match weeks until the deadline · offers can arrive any week · loans used 0/2\nBUDGET\n£22.2m\nAROUND THE LEAGUE\n\n📰 🤝 Aston Villa have signed with Silverbeck Foods: £30.2m a season for 2 seasons.\n\n📰 💱 Silverbeck Foods came up to £30.2m a season.\n\n📰 🏟️ Aston Villa have signed off £57m on the stadium: level 8 of 10.\n\n📰 Barcelona sign Estêvão from Chelsea for £79m.\n\n📰 Manchester City sign Cristian Romero from Atlético Madrid for £48m.\n\n📰 Barcelona sign Bukayo Saka from Arsenal for £119m.\n\n📰 Bayer Leverkusen sign Eduardo Camavinga from Real Madrid for £58m.\n\n📰 Tottenham sign Bryan Mbeumo from Manchester United for £81m.\n\nBuy\nSell\nLatest\nMost recent\nBiggest fees\nS1\nAleksandar Pavlovic · Bayern Munich to PSG\n£92m\nS1\nBryan Mbeumo · Manchester United to Tottenham\n£81m\nS1\nEduardo Camavinga · Real Madrid to Bayer Leverkusen\n£58m\nS1\nBukayo Saka · Arsenal to Barcelona\n£119m\nS1\nCristian Romero · Atlético Madrid to Manchester City\n£48m\nS1\nEstêvão · Chelsea to Barcelona\n£79m",
+ "negText": "DOUKNOWBALL\nBack\nSign up to track your stats\nAston Villa\n2026-27 · Season 1\n#6 in league\n£22.2m\nManagers\nBoard\nSafe\nFans\nSinging\nHome\nSquad\nTactics\nTable\nMarket\n☀️ Summer window OPEN\n3 match weeks until the deadline · offers can arrive any week · loans used 0/2\nBUDGET\n£22.2m\nNegotiating: Eldar Civic\n63\nBaltika · LB · 30y · worth £500k to £700k\nTheir ask: £500k\n●●●●●\n\n\"They want top money for him.\"\n\nADD-ONS\nNone\n£2m\n£5m\n£10m\nSELL-ON\nNone\n10%\n20%\n30%\nSWAP\nNo part exchange\nAmadou Onana (86, £32.9m)\nAlejandro Garnacho (85, £29.1m)\nNicolas Jackson (85, £29.1m)\nJohan Manzambi (84, £25.7m)\nIan Maatsen (83, £21.6m)\nMatty Cash (82, £16.2m)\nPau Torres (82, £16.2m)\nJadon Sancho (81, £14.9m)\nMatteo Ruggeri (81, £14.9m)\nTaylor Harwood-Bellis (81, £14.9m)\nHOW CLOSE YOU ARE\nName your price\nYOUR BID\nm\nOffer it\nLowball · £400k\nHaggle · £400k\nMeet ask · £500k\nWalk away\nAROUND THE LEAGUE\n\n📰 🤝 Aston Villa have signed with Silverbeck Foods: £30.2m a season for 2 seasons.\n\n📰 💱 Silverbeck Foods came up to £30.2m a season.\n\n📰 🏟️ Aston Villa have signed off £57m on the stadium: level 8 of 10.\n\n📰 Barcelona sign Estêvão from Chelsea for £79m.\n\n📰 Manchester City sign Cristian Romero from Atlético Madrid for £48m.\n\n📰 Barcelona sign Bukayo Saka from Arsenal for £119m.\n\n📰 Bayer Leverkusen sign Eduardo Camavinga from Real Madrid for £58m.\n\n📰 Tottenham sign Bryan Mbeumo from Manchester United for £81m.\n\nBuy\nSell\nLatest\nALL\nGK\nDEF\nMID\nATT\nExact position…\nGK\nCB\nLB\nRB\nLWB\nRWB\nCDM\nCM\nCAM\nLM\nRM\nLW\nRW\nST\nCF\nAny age\nU21\nU24\nU28\n29 plus\nAny price\nUnder 10m\nUnder 25m\nUnder 60m\nAny league\n2. Bundesliga\nA-League Men\nAustrian Bundesliga\nBelgian Pro League\nBrasileirão Série A\nBundesliga\nDanish Superliga\nEFL Championship\nEredivisie\nLa Liga\nLiga MX\nLigue 1\nLigue 2\nMLS Eastern Conference\nMLS Western Conference\nPremier League\nPrimeira Liga\nRussian Premier League\nSaudi Pro League\nScottish Premiership\nSegunda División\nSerie A\nSerie B\nSuper League Greece\nSuperSport HNL\nSwiss Super League\nSüper Lig\nAny nation\nSpain (327)\nEngland (298)\nFrance (289)\nRussia (275)\nGermany (252)\nItaly (206)\nNetherlands (149)\nPortugal (144)\nBelgium (121)\nDenmark (111)\nSwitzerland (80)\nTürkiye (77)\nCroatia (71)\nAustria (67)\nSweden (61)\nSerbia (56)\nNorway (55)\nScotland (47)\nPoland (46)\nIreland (45)\nGreece (38)\nBosnia-Herzegovina (29)\nCzech Republic (25)\nWales (24)\nAlbania (23)\nKosovo (19)\nRomania (18)\nUkraine (18)\nIceland (17)\nSlovakia (17)\nFinland (14)\nHungary (14)\nSlovenia (13)\nGeorgia (12)\nIsrael (11)\nBulgaria (10)\nMont",
+ "negAfter": "DOUKNOWBALL\nBack\nSign up to track your stats\nAston Villa\n2026-27 · Season 1\n#6 in league\n£22.2m\nManagers\nBoard\nSafe\nFans\nSinging\nHome\nSquad\nTactics\nTable\nMarket\n☀️ Summer window OPEN\n3 match weeks until the deadline · offers can arrive any week · loans used 0/2\nBUDGET\n£22.2m\nNegotiating: Eldar Civic\n63\nBaltika · LB · 30y · worth £500k to £700k\nTheir ask: £500k\n●●●●●\n\n\"They want top money for him.\"\n\nADD-ONS\nNone\n£2m\n£5m\n£10m\nSELL-ON\nNone\n10%\n20%\n30%\nSWAP\nNo part exchange\nAmadou Onana (86, £32.9m)\nAlejandro Garnacho (85, £29.1m)\nNicolas Jackson (85, £29.1m)\nJohan Manzambi (84, £25.7m)\nIan Maatsen (83, £21.6m)\nMatty Cash (82, £16.2m)\nPau Torres (82, £16.2m)\nJadon Sancho (81, £14.9m)\nMatteo Ruggeri (81, £14.9m)\nTaylor Harwood-Bellis (81, £14.9m)\nHOW CLOSE YOU ARE\nName your price\nYOUR BID\nm\nOffer it\nLowball · £400k\nHaggle · £400k\nMeet ask · £500k\nWalk away\nAROUND THE LEAGUE\n\n📰 🤝 Aston Villa have signed with Silverbeck Foods: £30.2m a season for 2 seasons.\n\n📰 💱 Silverbeck Foods came up to £30.2m a season.\n\n📰 🏟️ Aston Villa have signed off £57m on the stadium: level 8 of 10.\n\n📰 Barcelona sign Estêvão from Chelsea for £79m.\n\n📰 Manchester City sign Cristian Romero from Atlético Madrid for £48m.\n\n📰 Barcelona sign Bukayo Saka from Arsenal for £119m.\n\n📰 Bayer Leverkusen sign Eduardo Camavinga from Real Madrid for £58m.\n\n📰 Tottenham sign Bryan Mbeumo from Manchester United for £81m.\n\nBuy\nSell\nLatest\nALL\nGK\nDEF\nMID\nATT\nExact position…\nGK\nCB\nLB\nRB\nLWB\nRWB\nCDM\nCM\nCAM\nLM\nRM\nLW\nRW\nST\nCF\nAny age\nU21\nU24\nU28\n29 plus\nAny price\nUnder 10m\nUnder 25m\nUnder 60m\nAny league\n2. Bundesliga\nA-League Men\nAustrian Bundesliga\nBelgian Pro League\nBrasileirão Série A\nBundesliga\nDanish Superliga\nEFL Championship\nEredivisie\nLa Liga\nLiga MX\nLigue 1\nLigue 2\nMLS Eastern Conference\nMLS Western Conference\nPremier League\nPrimeira Liga\nRussian Premier League\nSaudi Pro League\nScottish Premiership\nSegunda División\nSerie A\nSerie B\nSuper League Greece\nSuperSport HNL\nSwiss Super League\nSüper Lig\nAny nation\nSpain (327)\nEngland (298)\nFrance (289)\nRussia (275)\nGermany (252)\nItaly (206)\nNetherlands (149)\nPortugal (144)\nBelgium (121)\nDenmark (111)\nSwitzerland (80)\nTürkiye (77)\nCroatia (71)\nAustria (67)\nSweden (61)\nSerbia (56)\nNorway (55)\nScotland (47)\nPoland (46)\nIreland (45)\nGreece (38)\nBosnia-Herzegovina (29)\nCzech Republic (25)\nWales (24)\nAlbania (23)\nKosovo (19)\nRomania (18)\nUkraine (18)\nIceland (17)\nSlovakia (17)\nFinland (14)\nHungary (14)\nSlovenia (13)\nGeorgia (12)\nIsrael (11)\nBulgaria (10)\nMont"
+}
