@@ -20580,10 +20580,13 @@ export function loadCareer(): CareerState | null {
       const spelled = typeof rawBudget === 'string' && rawBudget.trim() !== '' ? Number(rawBudget) : NaN;
       parsed.budget = Number.isFinite(spelled) ? spelled : 0;
     }
-    /* Under the match minimum of 14 (loanOutRefusal's floor): topped up the
-       way every squad this engine assembles is, with made up youth marked as
-       such, and the new men given their rungs. */
-    if (parsed.squad.length < 14) {
+    /* Too few men to name an eleven: topped up the way every squad this
+       engine assembles is, with made up youth marked as such, and the new men
+       given their rungs. NOT at the transfer floor of 14 (loanOutRefusal):
+       sell to 14 with two loanees in, send both back with breakLoan, and the
+       engine itself writes 12, a squad that plays on and must load as it is.
+       The fleet in simSaveFence plays exactly that squeeze. */
+    if (parsed.squad.length < 11) {
       parsed.squad = ensureSquadCoverage(parsed.squad);
       ensureRoles(parsed);
     }

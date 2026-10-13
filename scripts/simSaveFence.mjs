@@ -13,7 +13,8 @@
  *   tabs    The hunt's cases, played the way the page plays them (adopt before
  *           the read, a write after every change, the leave write at the end):
  *           B1 the clobber (tab A on week N, tab B plays three matches, A
- *           leaves: the save on disk is still B's), M1 the replay three times
+ *           leaves: the save on disk is still B's, and so is it after the live
+ *           viewer's own write that follows a leave by Back), M1 the replay three times
  *           (B plays the fixture, stale A plays the same fixture: the last
  *           result on disk is B's every time), and the Hot Seat carry on (a
  *           surviving Hot Seat manager handed over while tab A holds a career:
@@ -23,10 +24,15 @@
  *           on the short ALLOWED list with its reason, and every allowed entry
  *           is still there.
  *   fleet   The three careers simClubManagerSlots plays (Everton today, a
- *           padded Lincoln City with a named manager, 2010-11 Barcelona),
- *           seeds 0 to 4 (SAVE_FENCE_SEEDS), two seasons each, a save, a load
+ *           padded Lincoln City with a named manager, 2010-11 Barcelona), plus
+ *           the review's squeeze (Everton, at every window two loans in, loans
+ *           out down to the floor of 14, both loans broken: the engine itself
+ *           writes 12 men and plays on, and every seed must reach it), seeds 0
+ *           to 4 (SAVE_FENCE_SEEDS), two seasons each, a save, a load
  *           and a save again after EVERY entry. No played save ever reaches a
- *           state a load repair fires on. With FENCE_BASE (a worktree of the
+ *           state a load repair fires on. A save holding a negative budget
+ *           opens with that budget, no draw, and the base's JSON (the load
+ *           leaves negatives alone). With FENCE_BASE (a worktree of the
  *           commit before the round): every face (both saves' bytes and the
  *           draw count) equals the base engine's, and every Club Manager save
  *           scripts/lib/realSaves.mjs builds with the BASE engine opens to the
@@ -43,7 +49,12 @@
  *                                draw count parts from the base, fleet red.
  *   SAVE_FENCE_CONTROL=repairall the budget repair runs on every load: the
  *                                saved bytes part from the base, fleet red.
- *   (the two fleet controls need FENCE_BASE and refuse to run without it)
+ *   SAVE_FENCE_CONTROL=squadline the squad repair's line back at the transfer
+ *                                floor of 14 (the code the review caught): the
+ *                                squeezed saves get made up youth, fleet red.
+ *   SAVE_FENCE_CONTROL=budgetneg a negative budget repaired like one that is
+ *                                not a number: fleet red.
+ *   (the fleet controls need FENCE_BASE and refuse to run without it)
  *
  * MEASURED: see the numbers written under each section once taken on a runner.
  * Nothing here reads dist or the network.
@@ -61,7 +72,7 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const SAVE_KEY = 'dukb-club-manager-save';
 const FENCE_KEY = 'dukb-fence:dukb-club-manager-save';
 const CONTROL = process.env.SAVE_FENCE_CONTROL || '';
-const CONTROLS = { nofence: 'tabs', rawwrite: 'source', loaddraw: 'fleet', repairall: 'fleet' };
+const CONTROLS = { nofence: 'tabs', rawwrite: 'source', loaddraw: 'fleet', repairall: 'fleet', squadline: 'fleet', budgetneg: 'fleet' };
 if (CONTROL && !(CONTROL in CONTROLS)) { console.error(`SAVE_FENCE_CONTROL=${CONTROL} is not a control here (${Object.keys(CONTROLS).join(', ')})`); process.exit(1); }
 if (CONTROLS[CONTROL] === 'fleet' && !process.env.FENCE_BASE) { console.error(`control cannot run: SAVE_FENCE_CONTROL=${CONTROL} is judged against the base commit, set FENCE_BASE`); process.exit(1); }
 const WANT = (process.env.SAVE_FENCE_SECTIONS || (CONTROL ? CONTROLS[CONTROL] : 'tabs,source,fleet')).split(',').map(s => s.trim()).filter(Boolean);
@@ -93,6 +104,7 @@ const TMP = fs.mkdtempSync(path.join(os.tmpdir(), 'saveFence-'));
 const NOFENCE_FROM = '          s.setItem(fenceKeyOf(saveKey), String(next));\n';
 const LOADDRAW_FROM = '    const rawBudget: unknown = parsed.budget;\n';
 const REPAIRALL_FROM = "    if (typeof rawBudget !== 'number' || !Number.isFinite(rawBudget)) {\n";
+const SQUADLINE_FROM = '    if (parsed.squad.length < 11) {\n';
 /** The engine bundled from `root` (this tree, or FENCE_BASE). `patch` names a
     head control to apply on load. Each call of the answer is a fresh module
     instance: a fresh tab, or a fresh arm with no module state carried over. */
@@ -119,6 +131,8 @@ async function bundle(root = ROOT, label = 'head', patch = CONTROL) {
         if (patch === 'nofence' && file === 'saveFence.ts') text = once(lf(args.path), NOFENCE_FROM, file).replace(NOFENCE_FROM, '');
         if (patch === 'loaddraw' && file === 'clubManager.ts') text = once(lf(args.path), LOADDRAW_FROM, file).replace(LOADDRAW_FROM, `    Math.random();\n${LOADDRAW_FROM}`);
         if (patch === 'repairall' && file === 'clubManager.ts') text = once(lf(args.path), REPAIRALL_FROM, file).replace(REPAIRALL_FROM, '    if (true) {\n');
+        if (patch === 'squadline' && file === 'clubManager.ts') text = once(lf(args.path), SQUADLINE_FROM, file).replace(SQUADLINE_FROM, '    if (parsed.squad.length < 14) {\n');
+        if (patch === 'budgetneg' && file === 'clubManager.ts') text = once(lf(args.path), REPAIRALL_FROM, file).replace(REPAIRALL_FROM, "    if (typeof rawBudget !== 'number' || !Number.isFinite(rawBudget) || rawBudget < 0) {\n");
         if (text === null) return undefined;
         fired += 1;
         console.log(`NEGATIVE CONTROL ON: SAVE_FENCE_CONTROL=${patch} rewrote ${file} in the ${label} bundle`);
@@ -172,7 +186,12 @@ function tab(mod, name) {
       }
     },
     moved: () => fence.saveFence.moved(SAVE_KEY),
-    leave() { const ok = t.s ? t.persist() : true; fence.saveFence.release(SAVE_KEY); t.s = null; return ok; },
+    /* As the hook's unmount: the last write, then the release, except that a
+       page another tab has moved on stays held until the unmount is over. */
+    leave() { const ok = t.s ? t.persist() : true; if (!t.moved()) fence.saveFence.release(SAVE_KEY); t.last = t.s; t.s = null; return ok; },
+    /** The live viewer's own unmount write, which React runs after the hook's
+        cleanup, then the end of that commit (the held stale page lets go). */
+    late() { const ok = t.last ? cm.saveCareer(t.last) : false; if (t.moved()) fence.saveFence.release(SAVE_KEY); return ok; },
   };
   return t;
 }
@@ -197,6 +216,12 @@ async function sectionTabs(load) {
     const staleSeen = A.moved();
     const leaveOk = A.leave();
     const afterLeave = face(store.get(SAVE_KEY));
+    /* The review's door (r1323-run-d W1): left by Back mid Play Live, the live
+       viewer writes after the hook's cleanup. Still refused. */
+    const lateOk = A.late();
+    const afterLate = face(store.get(SAVE_KEY));
+    tick('tabs');
+    if (lateOk || afterLate !== afterB) fail('tabs', `B1 BACK: the live viewer's write after the leave took the save from "${afterB}" to "${afterLate}"`);
     B.leave();
     B.open();
     const reloaded = B.s ? `${B.s.clubName} week ${B.s.week}` : 'nothing';
@@ -353,7 +378,30 @@ const FLEET = [
   { label: 'Lincoln City (today, named manager, padded)', club: 'Lincoln City', era: 'now',
     manager: { name: 'Harness Manager', nationality: 'England', background: 'coachingBadges', style: 'counter' } },
   { label: 'Barcelona (2010-11)', club: 'Barcelona', era: 'era2010' },
+  /* The review's squeeze (r1323-run-b probe): at every window two loans in,
+     loaned out down to the floor of 14, both loans broken, so the engine
+     itself writes a squad of 12 and plays on with it. */
+  { label: 'Everton (today, squeezed to 12 at every window)', club: 'Everton', era: 'now', squeeze: true },
 ];
+/** The manager's own moves in an open window, every one an engine function the
+    transfer desk calls: two loans in, loans out down to 14, both loans broken. */
+function squeeze(cm, s) {
+  let taken = 0;
+  for (const mp of cm.buildMarket(s)) {
+    if (taken >= 2) break;
+    if (!cm.loanEligible(s, mp)) continue;
+    const next = cm.loanIn(s, mp);
+    if (next) { s = next; taken += 1; }
+  }
+  for (let guard = 0; s.squad.length > 14 && guard < 60; guard++) {
+    const p = s.squad.find(x => !x.onLoan && cm.loanOutRefusal(s, x.id) === null);
+    const next = p ? cm.loanOutPlayer(s, p.id) : null;
+    if (!next) break;
+    s = next;
+  }
+  for (const p of s.squad.filter(x => x.onLoan)) { const next = cm.breakLoan(s, p.id); if (next) s = next; }
+  return s;
+}
 const FLEET_SEEDS = (process.env.SAVE_FENCE_SEEDS || '0,1,2,3,4').split(',').map(Number);
 const FLEET_SEASONS = Number(process.env.SAVE_FENCE_SEASONS || 2);
 const sha = s => crypto.createHash('sha256').update(s ?? '').digest('hex').slice(0, 16);
@@ -363,13 +411,13 @@ const repairWanted = raw => {
   const ids = new Set(c.squad.map(p => p.id));
   const out = [];
   if (typeof c.budget !== 'number' || !Number.isFinite(c.budget)) out.push('budget');
-  if (c.squad.length < 14) out.push('squad');
+  if (c.squad.length < 11) out.push('squad');
   if (c.xiIds.some(id => id !== null && !ids.has(id))) out.push('xi');
   return out;
 };
 /** One career on one stream: after EVERY entry a save, a load and a save
     again. The faces are both saves' hashes and the draws so far. */
-function playFleet(mod, C, seedN, wanted) {
+function playFleet(mod, C, seedN, wanted, seen = { under14: 0 }) {
   const { cm } = mod;
   const draw = seed(seedN * 7919 + FLEET.indexOf(C) * 104729 + 1);
   const realRandom = Math.random, realNow = Date.now;
@@ -380,6 +428,7 @@ function playFleet(mod, C, seedN, wanted) {
     cm.saveCareer(s);
     const a = store.get(SAVE_KEY);
     for (const w of repairWanted(a)) wanted.push(`${C.label} seed ${seedN} ${tag}: ${w}`);
+    if (JSON.parse(a).squad.length < 14) seen.under14 += 1;
     const back = cm.loadCareer();
     if (!back) { faces.push(`${tag}|unreadable`); return; }
     cm.saveCareer(back);
@@ -389,8 +438,11 @@ function playFleet(mod, C, seedN, wanted) {
     store.clear();
     let s = cm.startCareer(C.club, C.era, undefined, C.manager);
     round(s, 'start');
+    let lastWindow = null;
     for (let season = 0; season < FLEET_SEASONS; season++) {
       for (let guard = 0; s.week < s.calendar.length && guard < 220; guard++) {
+        if (C.squeeze && s.transferWindow && s.transferWindow !== lastWindow) { s = squeeze(cm, s); round(s, `s${season} w${s.week} squeezed`); }
+        lastWindow = s.transferWindow;
         const r = cm.playNextEntry(s, { skipHalftime: true });
         s = r.state;
         round(s, `s${season} w${s.week}`);
@@ -413,11 +465,14 @@ async function sectionFleet() {
   const baseLoad = BASE ? await bundle(BASE, 'fleet-base', '') : null;
   const wanted = [];
   let entries = 0, equal = 0, firstDiff = null;
+  const squeezed = new Map();
   for (const C of FLEET) {
     for (const n of FLEET_SEEDS) {
       const head = await headLoad();
       await head.eras.ensureEraRosters(C.era);
-      const hf = playFleet(head, C, n, wanted);
+      const seen = { under14: 0 };
+      const hf = playFleet(head, C, n, wanted, seen);
+      if (C.squeeze) squeezed.set(n, seen.under14);
       entries += hf.length;
       if (!baseLoad) continue;
       const base = await baseLoad();
@@ -436,6 +491,40 @@ async function sectionFleet() {
   console.log(`  ${entries} saves on head, ${wanted.length} of them in a state a load repair fires on${baseLoad ? `; ${equal} faces equal to the base commit's (both saves' bytes and the draw count)` : ''}`);
   if (wanted.length) fail('fleet', `a played save reached a repair condition, so a repair would change it: ${wanted.slice(0, 3).join('; ')}`);
   if (firstDiff) fail('fleet', `head and base part: ${firstDiff}`);
+  /* The squeeze proves something only if it really wrote squads under 14. */
+  const thin = [...squeezed.entries()].filter(([, k]) => k === 0).map(([n]) => n);
+  tick('fleet');
+  console.log(`  squeezed career: ${[...squeezed.values()].reduce((a, b) => a + b, 0)} saves the engine wrote with fewer than 14 men (seed:saves ${[...squeezed.entries()].map(([n, k]) => `${n}:${k}`).join(' ')})`);
+  if (thin.length) fail('fleet', `the squeeze wrote no squad under 14 on seed(s) ${thin.join(', ')}, so it proves nothing there`);
+  /* A NEGATIVE budget is left as it is on load. No engine of today writes one
+     (every debit checks the kitty first), but startNextSeason clamps one at the
+     summer for an older or a hand edited save, so the load does not touch it. */
+  {
+    const opened = [];
+    for (const load of [headLoad, baseLoad].filter(Boolean)) {
+      const mod = await load();
+      await mod.eras.ensureEraRosters('now');
+      const realRandom = Math.random, realNow = Date.now;
+      const draw = seed(1323);
+      Math.random = draw;
+      Date.now = () => 1791302400000;
+      try {
+        store.clear();
+        mod.cm.saveCareer({ ...mod.cm.startCareer('Everton', 'now'), budget: -2.5 });
+        const before = draw.calls();
+        const back = mod.cm.loadCareer();
+        opened.push({ budget: back?.budget, draws: draw.calls() - before, json: JSON.stringify(back) });
+      } finally {
+        Math.random = realRandom;
+        Date.now = realNow;
+      }
+    }
+    tick('fleet');
+    const [h, b] = opened;
+    console.log(`  negative budget: saved at -2.5, opened on head at ${h.budget} with ${h.draws} draws${b ? `, ${h.json === b.json ? 'the same JSON as' : 'NOT the same JSON as'} the base's` : ''}`);
+    if (h.budget !== -2.5 || h.draws !== 0) fail('fleet', `a negative budget was changed on load: -2.5 opened as ${h.budget} with ${h.draws} draws`);
+    if (b && h.json !== b.json) fail('fleet', 'a save with a negative budget opens differently on head and base');
+  }
   if (!baseLoad) { console.log('  (set FENCE_BASE to a worktree of the base commit for the byte and draw comparison and the old saves)'); return; }
   /* OLD SAVES: every Club Manager save scripts/lib/realSaves.mjs builds with
      the BASE engine (no fence key anywhere) opens to the same JSON on both. */
