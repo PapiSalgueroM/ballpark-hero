@@ -108,16 +108,16 @@ jobs:
             printf '%s\n' "$browser_status" > "$AUTOCOMPLETE_TOUCH_OUT/browser-process-status.txt"
             test "$browser_status" = 1
             node --input-type=module <<'NODE'
-            import fs from 'node:fs';
-            import assert from 'node:assert/strict';
-            const report = JSON.parse(fs.readFileSync(process.env.AUTOCOMPLETE_TOUCH_OUT + '/baseline/report.json'));
-            assert.equal(report.status, 'baseline-reproduced');
-            assert.equal(report.prematureSelections, 3);
-            assert.equal(report.failures, 0); assert.equal(report.setupFailures, 0);
-            assert.equal(report.cases.length, 6); assert.equal(report.inventory.length, 13);
-            for (const field of ['sourceHeld', 'installedHeld', 'toolsHeld', 'fontsHeld', 'distHeld', 'fixturesHeld']) assert.equal(report[field], true, field);
-            console.log('Native baseline: three actual premature touches, six completed journeys, thirteen originals, no setup failure.');
-            NODE
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          const report = JSON.parse(fs.readFileSync(process.env.AUTOCOMPLETE_TOUCH_OUT + '/baseline/report.json'));
+          assert.equal(report.status, 'baseline-reproduced');
+          assert.equal(report.prematureSelections, 3);
+          assert.equal(report.failures, 0); assert.equal(report.setupFailures, 0);
+          assert.equal(report.cases.length, 6); assert.equal(report.inventory.length, 13);
+          for (const field of ['sourceHeld', 'installedHeld', 'toolsHeld', 'fontsHeld', 'distHeld', 'fixturesHeld']) assert.equal(report[field], true, field);
+          console.log('Native baseline: three actual premature touches, six completed journeys, thirteen originals, no setup failure.');
+          NODE
           else
             NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playPlayerAutocompleteTouchScroll.mjs 2>&1 | tee "$AUTOCOMPLETE_TOUCH_OUT/browser.log"
             AUTOCOMPLETE_TOUCH_CONTROL=premature-pointerdown NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playPlayerAutocompleteTouchScroll.mjs 2>&1 | tee "$AUTOCOMPLETE_TOUCH_OUT/browser-control.log"
