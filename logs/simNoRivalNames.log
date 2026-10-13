@@ -1,0 +1,8 @@
+
+RIVAL NAMES FOUND: 1
+
+  src/lib/clubManagerOwnClubLevel.test.ts:22  [top eleven]
+      /** The same best eleven average the engine takes (top eleven, padded with 60, one decimal). */
+
+Scanned 3810 files. 1 findings.
+Replace each one with a plain description of the thing itself, not a redaction.
