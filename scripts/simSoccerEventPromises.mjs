@@ -262,7 +262,7 @@ function parseNumeric(p) {
   if (m[5] === '%' && word !== 'wage') return null;
   if (word === 'all stats') {
     if (tail !== 'next season') return null;
-    return STATS.slice(0, 6).map(k => [`boost.${k}`, n]);
+    return STATS.map(k => [`boost.${k}`, n]);
   }
   const meter = METER_OF[word];
   if (tail === 'a year' && meter !== 'sponsorBonus') return null;
@@ -363,7 +363,7 @@ function judge(card, ci, save, C) {
   const { ma, d } = runs[0];
   const expected = {};
   const accounted = new Set();
-  const parts = FIELD[text]?.whole ? [text] : splitClauses(text);
+  const parts = (FIELD[text]?.whole || FLAVOR[text]) ? [text] : splitClauses(text);
   for (const p of parts) {
     const f = FIELD[p];
     if (f) { f.moves.forEach(m => accounted.add(m)); if (!f.ok(mb, ma)) bad.push(`"${p}" did not happen`); continue; }

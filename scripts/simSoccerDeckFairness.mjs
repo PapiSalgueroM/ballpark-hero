@@ -156,7 +156,7 @@ const MARKS = [
     '$1 globalThis.__r1327Ran = (globalThis.__r1327Ran || 0) + 1;'],
   [/(\nfunction generateNewsArticles\(s: CareerState, season: SeasonRecord, totalGoals: number, totalApps: number\): NewsArticle\[\] \{)/,
     '$1 globalThis.__r1327Ran = (globalThis.__r1327Ran || 0) + 1;'],
-  [/(\n  const eligible = templates\.filter\(t => t\.check\(\)\);)/, '\n  globalThis.__r1327Templates = templates;$1\n  globalThis.__r1327Seen?.(templates, eligible);'],
+  [/(\n  const eligible = templates\.filter\(t => t\.check\(\)\);)/, '\n  globalThis.__r1327Templates = templates;$1\n  globalThis.__r1327Seen?.(templates, eligible, season);'],
 ];
 function mark(source) {
   let out = source;
@@ -612,13 +612,20 @@ SECTION = '7';
 console.log('7) Before the first paper or deck nothing moves; saves the base wrote still answer here');
 {
   /* (a) lockstep: base and head on one seed each, compared after every step. */
+  /* The paper is handed the season row it reports on, so the row as it stood
+     the moment the paper ran is what each arm hands over here. The steps
+     after the paper (the finances, the summer's tournament) still draw into
+     that row, and on a keyed paper they draw from a stream the old sort no
+     longer shifts, so the row after the step is reported, not asserted. */
   const run = (rng, fn) => {
     const real = Math.random;
-    let n = 0;
+    let n = 0, paperRow = null;
     Math.random = () => { n += 1; return rng(); };
     globalThis.__r1327Ran = 0;
-    try { return { s: fn(), n, ran: globalThis.__r1327Ran }; } finally { Math.random = real; }
+    globalThis.__r1327Seen = (t, e, season) => { if (paperRow === null) paperRow = JSON.stringify(season); };
+    try { return { s: fn(), n, ran: globalThis.__r1327Ran, paperRow }; } finally { Math.random = real; globalThis.__r1327Seen = undefined; }
   };
+  let afterStepDiffers = 0;
   let compared = 0, rowsEqual = 0, steps = 0, reached = 0;
   for (let i = 0; i < 200; i += 1) {
     const seed = 70000 + i + SEED_OFFSET;
@@ -636,14 +643,23 @@ console.log('7) Before the first paper or deck nothing moves; saves the base wro
       if (same) { a = na; b = nb; continue; }
       compared += 1;
       if (!na.ran && !nb.ran) { fail(`career ${seed}: the saves part at step ${k + 1} (${phase}), which runs neither the paper nor the deck`); break; }
-      const rowA = JSON.stringify(na.s.seasons[na.s.seasons.length - 1]);
-      const rowB = JSON.stringify(nb.s.seasons[nb.s.seasons.length - 1]);
-      if (rowA === rowB) rowsEqual += 1; else fail(`career ${seed}: the season row written in the step that parts the saves (${phase}) differs`);
+      const lastA = JSON.stringify(na.s.seasons[na.s.seasons.length - 1]);
+      const lastB = JSON.stringify(nb.s.seasons[nb.s.seasons.length - 1]);
+      if (lastA !== lastB) afterStepDiffers += 1;
+      /* a step that ran the paper is judged on the row the paper was handed; a deck step writes no row */
+      const rowA = na.paperRow ?? JSON.stringify(na.s.seasons);
+      const rowB = nb.paperRow ?? JSON.stringify(nb.s.seasons);
+      if (rowA === rowB) rowsEqual += 1;
+      else {
+        const a = JSON.parse(rowA), b = JSON.parse(rowB);
+        const keys = Object.keys({ ...a, ...b }).filter(k => JSON.stringify(a[k]) !== JSON.stringify(b[k]));
+        fail(`career ${seed}: the season row in the step that parts the saves (${phase}) differs in ${keys.join(', ')}`);
+      }
       break;
     }
     if (touched) reached += 1;
   }
-  console.log(`   200 careers, ${steps} steps compared: ${reached} reached a paper or deck step, ${compared} parted there, ${rowsEqual} with the new row byte equal`);
+  console.log(`   200 careers, ${steps} steps compared: ${reached} reached a paper or deck step, ${compared} parted there, ${rowsEqual} with the season row byte equal when the paper ran (${afterStepDiffers} rows differ by the end of that step, from the draws after the paper)`);
   if (reached < 150) fail(`only ${reached} of 200 careers ever reached a paper or a deck`);
 
   /* (b) saves the base wrote with a card on screen. */
