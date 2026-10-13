@@ -1,0 +1,15 @@
+PART 1, CSS: built dist/assets (41 file(s)), every request blocked
+CONTROL smalltap: ContractsCard.tsx changed in the bundle only
+file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playCmTablesFit.mjs:360
+          throw new Error(`${which} at ${w}: the ${screen} screen for ${career} never drew. Page errors: ${errors.join(' | ') || 'none'}. ${String(e).slice(0, 120)}`);
+                ^
+
+Error: head at 320: the help screen for liverpool never drew. Page errors: none. TimeoutError: page.waitForSelector: Timeout 20000ms exceeded.
+Call log:
+  - waiting for locator('[data-fit-screen="help"
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playCmTablesFit.mjs:360:17
+    at async show (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playCmTablesFit.mjs:359:9)
+    at async partOne (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playCmTablesFit.mjs:531:9)
+    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playCmTablesFit.mjs:576:20
+
+Node.js v24.21.0
