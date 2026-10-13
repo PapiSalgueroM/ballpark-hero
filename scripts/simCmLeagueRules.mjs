@@ -482,6 +482,21 @@
       and every differing string one of the round's declared rewrites
       (now|saudi none). Written with --part=modern,eras,pure --write on the
       tree itself, then run green whole.
+      Release BC's join (2026-10-13) took it ONCE on the merged tree
+      25c07316 (main with Release AZ, Rounds 1325, 1326, 1328 and 1323),
+      where AZ's world seed and 1326's words meet. Attribution on a
+      GitHub runner at 25c07316 (remote check rBCg-m5d), two legs, each
+      in a throwaway checkout. Leg A, the seed block of startCareer taken
+      out by scripts/lib/cmWorldSeed1250.mjs, against the file the join
+      held (Round 1326's own, byte equal to origin/r1326-cm-copy's): green
+      whole, so the seed is the only cause of what moved past 1326. Leg B,
+      the same tree against Release BB's file (36cc9ffe): 63 failures,
+      the same 63 FAIL lines, line for line, as Round 1326's own base leg
+      (r1326-s8a, rules-baseleg), so 1326's words are the only other
+      cause. The committed file on the tree itself: 47 entries red, the
+      47 the seed moved. Written with --part=modern,eras,pure --write on
+      the tree itself (line write-digest, 201 lines changed), then run
+      green whole on the same runner.
    2. DIGEST, ERAS (hard). The same for every league of every historic era,
       one career each.
    3. DIGEST, PURE (hard). For every modern and era league: the drop count,
