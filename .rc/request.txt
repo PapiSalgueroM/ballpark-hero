@@ -1,0 +1,13 @@
+#!serve
+#!playwright
+walkCards: node scripts/playSoccerEventCards.mjs
+depth: node scripts/playSoccerCareerDepth.mjs
+storyRoleWalk: node scripts/playCareerStoryRole.mjs
+trophyWalk: node scripts/playCareerTrophyRuns.mjs
+contracts: node scripts/playSoccerCareerContracts.mjs
+corrupt: node scripts/playCorruptSaves.mjs
+reducedMotion: node scripts/playReducedMotion.mjs
+seasonCentre: node scripts/playSeasonCentre.mjs
+soccerCareer: node scripts/playSoccerCareer.mjs
+intlReturnWalk: node scripts/playSoccerInternationalReturn.mjs
+intlReturn: node scripts/simSoccerInternationalReturn.mjs
