@@ -1,0 +1,4 @@
+CM_TABLES_TRUTH_CONTROL=nomark exit=1 | CONTROL nomark FIRED: 30 cases red (section 1: 10, section 2: 10, section 3: 10), none elsewhere
+CM_TABLES_TRUTH_CONTROL=markall exit=1 | CONTROL markall FIRED: 21 cases red (section 1: 7, section 2: 7, section 3: 7), none elsewhere
+CM_TABLES_TRUTH_CONTROL=defeatraw exit=1 | CONTROL defeatraw FIRED: 7 cases red (section 4: 7), none elsewhere
+CM_TABLES_TRUTH_CONTROL=drawinrender exit=1 | CONTROL drawinrender FIRED: 10 cases red (section 5: 10), none elsewhere

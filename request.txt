@@ -1,0 +1,18 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-units: node_modules/.bin/vitest run src/test/contractPreview.test.tsx src/test/clubManagerDeskCues.test.tsx src/test/rolesBrokenPromises.test.tsx src/test/clubManagerManagerFace.test.tsx src/test/numberFormatting.test.tsx src/test/cmTablesTruth.test.tsx --testTimeout=300000 --hookTimeout=120000
+simCmTablesTruth: node scripts/simCmTablesTruth.mjs
+truthControls: for c in nomark markall defeatraw drawinrender; do CM_TABLES_TRUTH_CONTROL=$c node scripts/simCmTablesTruth.mjs > /tmp/t-$c.log 2>&1; echo "CM_TABLES_TRUTH_CONTROL=$c exit=$? | $(tail -1 /tmp/t-$c.log | cut -c1-200)"; done
+simContractPreview-all: CONTRACT_PREVIEW_CONTROL=all node scripts/simContractPreview.mjs
+simSquadRows: node scripts/simSquadRows.mjs
+squadControls: for c in truth centred flatscout sorttruth nowage rawpot deaf allopen; do SQUAD_ROWS_CONTROL=$c node scripts/simSquadRows.mjs > /tmp/sq-$c.log 2>&1; echo "SQUAD_ROWS_CONTROL=$c exit=$? | $(tail -1 /tmp/sq-$c.log | cut -c1-200)"; done
+simFreeAgents: node scripts/simFreeAgents.mjs
+faControls: for c in cardrelease cardsign onetap; do FA_CONTROL=$c node scripts/simFreeAgents.mjs > /tmp/fa-$c.log 2>&1; echo "FA_CONTROL=$c exit=$? | $(tail -1 /tmp/fa-$c.log | cut -c1-200)"; done
+simClubManagerDeskCues: node scripts/simClubManagerDeskCues.mjs
+deskCuesPlural: CLUB_MANAGER_DESK_CUES_CONTROL=plural node scripts/simClubManagerDeskCues.mjs
+simReleaseClause: node scripts/simReleaseClause.mjs
+simClubManagerSaveSize: node scripts/simClubManagerSaveSize.mjs
+simClubManagerSlots: node scripts/simClubManagerSlots.mjs
+simDailyDeals: node scripts/simDailyDeals.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+simNumberFormatting: node scripts/simNumberFormatting.mjs
+simWilderness: node scripts/simWilderness.mjs

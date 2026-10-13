@@ -1,0 +1,18 @@
+simCmTablesTruth exit=0 29s | simCmTablesTruth: every case green
+vitest-units exit=0 30s |    Duration  29.76s (transform 5.75s, setup 573ms, collect 15.75s, tests 34.25s, environment 4.02s, prepare 1.13s)
+simContractPreview-all exit=0 24s | Contract preview cleanup: owned copies/reports removed; production component, engine and test bytes stayed identical.
+simSquadRows exit=0 3s | simSquadRows: all green
+squadControls exit=0 23s | SQUAD_ROWS_CONTROL=allopen exit=1 | simSquadRows control allopen: RED ON ITS OWN CHECK, as it should be
+tsc exit=0 100s | 
+simFreeAgents exit=0 19s | simFreeAgents: all sections passed
+simClubManagerDeskCues exit=0 5s | simClubManagerDeskCues: green
+deskCuesPlural exit=0 6s | simClubManagerDeskCues: green
+simReleaseClause exit=0 2s | simReleaseClause: green. The exit door is real, priced, hunted, and honestly escapable only at full wage.
+truthControls exit=0 90s | CM_TABLES_TRUTH_CONTROL=drawinrender exit=1 | CONTROL drawinrender FIRED: 10 cases red (section 5: 10), none elsewhere
+faControls exit=0 56s | FA_CONTROL=onetap exit=1 | simFreeAgents: 1 failure(s)
+simDailyDeals exit=0 3s | simDailyDeals: green. 12 Hot Seat dates (5 Premier League) and 6 Deadline Day dates (3 Premier League) deal what Release AS dealt, and no daily carries the real fixture k
+simClubManagerSaveSize exit=0 46s | simClubManagerSaveSize: all sections green
+simStorageWrites exit=0 3s | simStorageWrites: all green (owed: 12)
+simWilderness exit=0 1s | simWilderness: green. The sack is the start of something now, and the phone always rings in the end.
+simClubManagerSlots exit=0 50s | simClubManagerSlots: all sections green
+simNumberFormatting exit=0 114s | Number formatting: passed. Evidence at /home/runner/work/ballpark-hero/ballpark-hero/number-formatting-artifacts/outcomes
