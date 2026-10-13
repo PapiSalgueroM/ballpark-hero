@@ -1,0 +1,12 @@
+Soccer farewell:9 healthy groups,168 full original state/RNG pairs,6 effective source controls,6 prepared native branches.
+node:path:1339
+      validateString(arg, 'path');
+      ^
+
+TypeError [ERR_INVALID_ARG_TYPE]: The "path" argument must be of type string. Received undefined
+    at Object.join (node:path:1339:7)
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playSoccerFarewell.mjs:13:52 {
+  code: 'ERR_INVALID_ARG_TYPE'
+}
+
+Node.js v24.21.0

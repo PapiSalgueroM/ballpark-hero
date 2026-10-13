@@ -1,0 +1,7 @@
+build exit=0 33s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+playSoccerInternationalReturn exit=1 11s | Node.js v24.21.0
+playSoccerFarewell exit=1 11s | Node.js v24.21.0
+playSoccerAgentReview exit=1 17s | Node.js v24.21.0
+saveRetry1078 exit=0 20s | Soccer Career save recovery: 3 real-page journeys, 9 effective DOM controls, exact earned-state retry and reload.
+playCareerProgramme exit=1 96s | Node.js v24.21.0
+playSoccerCareer-base exit=1 528s |   - 6. no console or page errors across the walk: Failed to load resource: net::ERR_CONNECTION_REFUSED | Failed to load resource: net::ERR_CONNECTION_REFUSED | Failed to 

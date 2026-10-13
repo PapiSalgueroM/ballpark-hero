@@ -1,0 +1,12 @@
+PASS international return copied production source bytes held.
+node:path:1339
+      validateString(arg, 'path');
+      ^
+
+TypeError [ERR_INVALID_ARG_TYPE]: The "path" argument must be of type string. Received undefined
+    at Object.join (node:path:1339:7)
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playSoccerInternationalReturn.mjs:13:52 {
+  code: 'ERR_INVALID_ARG_TYPE'
+}
+
+Node.js v24.21.0

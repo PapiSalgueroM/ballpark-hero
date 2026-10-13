@@ -1,0 +1,12 @@
+Career programme:50 original/compatibility/full product season pairs with exact RNG,240 opted gameplay seasons,21 effective loaded faults,164 unchanged original chance outcomes,7 native career fixtures.
+node:path:1339
+      validateString(arg, 'path');
+      ^
+
+TypeError [ERR_INVALID_ARG_TYPE]: The "path" argument must be of type string. Received undefined
+    at Object.join (node:path:1339:7)
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerProgramme.mjs:13:52 {
+  code: 'ERR_INVALID_ARG_TYPE'
+}
+
+Node.js v24.21.0
