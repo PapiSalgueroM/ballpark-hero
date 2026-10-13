@@ -1,0 +1,23 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-cm: node_modules/.bin/vitest run src/test/cmTablesTruth.test.tsx src/test/clubManagerDeskCues.test.tsx src/test/clubManagerManagerFace.test.tsx src/test/contractPreview.test.tsx src/test/numberFormatting.test.tsx src/test/rolesBrokenPromises.test.tsx src/test/clubDetailOwnClub.test.tsx --testTimeout=300000 --hookTimeout=120000
+simCmTablesTruth: node scripts/simCmTablesTruth.mjs
+truth-nomark-EXPECT-RED: CM_TABLES_TRUTH_CONTROL=nomark node scripts/simCmTablesTruth.mjs
+truth-markall-EXPECT-RED: CM_TABLES_TRUTH_CONTROL=markall node scripts/simCmTablesTruth.mjs
+truth-defeatraw-EXPECT-RED: CM_TABLES_TRUTH_CONTROL=defeatraw node scripts/simCmTablesTruth.mjs
+truth-drawinrender-EXPECT-RED: CM_TABLES_TRUTH_CONTROL=drawinrender node scripts/simCmTablesTruth.mjs
+simSquadRows: node scripts/simSquadRows.mjs
+simRoles: node scripts/simRoles.mjs
+simClubManagerDeskCues: node scripts/simClubManagerDeskCues.mjs
+simClubManagerMeters: node scripts/simClubManagerMeters.mjs
+simContractPreview: node scripts/simContractPreview.mjs
+simNumberFormatting: node scripts/simNumberFormatting.mjs
+simReleaseClause: node scripts/simReleaseClause.mjs
+simPress: node scripts/simPress.mjs
+simAcademy: node scripts/simAcademy.mjs
+simClubManagerALeague: node scripts/simClubManagerALeague.mjs
+simCmLeagueFixtures: node scripts/simCmLeagueFixtures.mjs
+simWilderness: node scripts/simWilderness.mjs
+simTrustCopy: node scripts/simTrustCopy.mjs
+simAccessibility: node scripts/simAccessibility.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
