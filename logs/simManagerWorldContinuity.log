@@ -1,0 +1,4541 @@
+FAIL [healthy] inactive: Entire inactive AR result and saved bytes match
++ actual - expected
+... Skipped lines
+
+  {
+    loaded: {
+      academy: {
+        candidates: [
+          {
+...
+        competition: 'league',
++       confidence: 53.4,
++       confidenceDelta: -6.6,
+-       confidence: 53.1,
+-       confidenceDelta: -6.9,
+        decidedBy: 'regular',
+        detail: {
+          added: {
+            h1: 3,
+            h2: 8
+          },
++         attendance: 37784,
+-         attendance: 54176,
+          capacity: null,
+          cards: [
+            {
+              id: 'p-james-garner',
+              kind: 'yellow',
+...
+            0.03,
++           0.13,
+-           0.28,
+-           0.77,
+-           -0.79,
+            -0.22,
++           -0.67,
++           -0.71,
+            -1
+          ],
+          myRatings: [
+            {
+              assists: 0,
+              goals: 0,
+              motm: true,
++             name: 'Thierno Barry',
++             pos: 'ST',
+-             name: 'Brennan Johnson',
+-             pos: 'RW',
+              rating: 6.2
+            },
+            {
+              assists: 0,
+              goals: 0,
++             name: 'James Garner',
++             pos: 'CDM',
++             rating: 6.1
+-             name: 'Kiernan Dewsbury-Hall',
+-             pos: 'CM',
+-             rating: 6.2
+            },
+            {
+              assists: 0,
+              goals: 0,
++             name: 'Kiernan Dewsbury-Hall',
++             pos: 'CM',
+-             name: 'Thierno Barry',
+-             pos: 'ST',
+-             rating: 6.2
+-           },
+-           {
+-             assists: 0,
+-             goals: 0,
+-             name: 'Hayden Hackney',
+-             pos: 'CDM',
+              rating: 6.1
+            },
+            {
+              assists: 0,
+              goals: 0,
+...
+              goals: 0,
++             name: 'Brennan Johnson',
++             pos: 'RW',
++             rating: 5.7
++           },
++           {
++             assists: 0,
++             goals: 0,
++             name: 'Hayden Hackney',
++             pos: 'CDM',
+-             name: 'Jack Grealish',
+-             pos: 'LW',
+              rating: 5.6
+            },
+            {
+              assists: 0,
+              goals: 0,
++             name: 'Jarrad Branthwaite',
++             pos: 'CB',
+-             name: 'Jordan Pickford',
+-             pos: 'GK',
+              rating: 5.5
+            },
+            {
+              assists: 0,
+              goals: 0,
++             name: 'Jack Grealish',
++             pos: 'LW',
+-             name: 'Jarrad Branthwaite',
+-             pos: 'CB',
+              rating: 5.4
+            },
+            {
+              assists: 0,
+              goals: 0,
++             name: 'Jordan Pickford',
++             pos: 'GK',
+-             name: 'James Tarkowski',
+-             pos: 'CB',
+              rating: 5.4
+            },
+            {
+              assists: 0,
+              goals: 0,
++             name: 'James Tarkowski',
++             pos: 'CB',
++             rating: 5.4
+-             name: 'James Garner',
+-             pos: 'CDM',
+-             rating: 5.2
+            }
+          ],
++         oppBest: 'Tyrick Mitchell',
+-         oppBest: 'Anan Khalaili',
+          oppCards: [
+            {
+              kind: 'yellow',
+              minute: 53,
+              name: 'Adam Wharton'
+...
+              assists: 0,
++             goals: 1,
++             name: 'Tyrick Mitchell',
++             pos: 'LB',
++             rating: 8.9
+-             goals: 2,
+-             name: 'Anan Khalaili',
+-             pos: 'RM',
+-             rating: 9.4
+            },
+            {
+              assists: 0,
+              goals: 0,
++             name: 'Dean Henderson',
++             pos: 'GK',
++             rating: 8.4
+-             name: 'Jaydee Canvot',
+-             pos: 'CB',
+-             rating: 7.9
+            },
+            {
+              assists: 0,
+              goals: 0,
++             name: 'Axel Disasi',
++             pos: 'CB',
++             rating: 8.1
+-             name: 'Óscar Mingueza',
+-             pos: 'RB',
+-             rating: 7.9
+            },
+            {
+              assists: 0,
++             goals: 1,
++             name: 'Daichi Kamada',
++             pos: 'CAM',
++             rating: 8
+-             goals: 0,
+-             name: 'Dean Henderson',
+-             pos: 'GK',
+-             rating: 7.7
+            },
+            {
+              assists: 0,
+              goals: 0,
++             name: 'Jaydee Canvot',
+-             name: 'Chris Richards',
+              pos: 'CB',
++             rating: 7.8
+-             rating: 7.7
+            },
+            {
+              assists: 0,
+              goals: 0,
++             name: 'Óscar Mingueza',
++             pos: 'RB',
++             rating: 7.8
++           },
++           {
++             assists: 0,
++             goals: 0,
++             name: 'Honest Ahanor',
++             pos: 'CB',
+-             name: 'Adam Wharton',
+-             pos: 'CDM',
+              rating: 7.6
+            },
+            {
+              assists: 0,
++             goals: 1,
+-             goals: 0,
+              name: 'Ismaïla Sarr',
+              pos: 'RW',
+              rating: 7.4
+            },
+            {
+              assists: 0,
+              goals: 0,
++             name: 'Cheick Doucouré',
++             pos: 'CDM',
++             rating: 7.4
+-             name: 'Daichi Kamada',
+-             pos: 'CAM',
+-             rating: 7.3
+            },
+            {
+              assists: 0,
+              goals: 0,
++             name: 'Adam Wharton',
++             pos: 'CDM',
+-             name: 'Honest Ahanor',
+-             pos: 'CB',
+              rating: 7.2
+            },
+            {
+              assists: 0,
+              goals: 0,
++             name: 'Anan Khalaili',
++             pos: 'RM',
++             rating: 7.1
+-             name: 'Tyrick Mitchell',
+-             pos: 'LB',
+-             rating: 7.2
+            },
+            {
+              assists: 0,
+              goals: 0,
++             name: 'Chris Richards',
++             pos: 'CB',
++             rating: 6.9
++           },
++           {
++             assists: 0,
++             goals: 0,
+              name: 'Quinten Timber',
+              pos: 'CM',
++             rating: 6.9
+-             rating: 6.8
+            },
+            {
+              assists: 0,
+              goals: 0,
++             name: 'Jørgen Strand Larsen',
+-             name: 'Jean-Philippe Mateta',
+              pos: 'ST',
++             rating: 6.7
+-             rating: 6.8
+            },
+            {
+              assists: 0,
+              goals: 0,
++             name: 'Jeffrey Schlupp',
++             pos: 'LM',
++             rating: 6.5
+-             name: 'Jørgen Strand Larsen',
+-             pos: 'ST',
+-             rating: 6.6
+            }
+          ],
+          oppSubs: [
+            {
+              minute: 58,
++             off: 'Honest Ahanor',
++             on: 'Óscar Mingueza'
+-             off: 'Ismaïla Sarr',
+-             on: 'Jean-Philippe Mateta'
+            },
+            {
++             minute: 58,
++             off: 'Jaydee Canvot',
++             on: 'Axel Disasi'
++           },
++           {
+              minute: 59,
++             off: 'Adam Wharton',
++             on: 'Cheick Doucouré'
+-             off: 'Honest Ahanor',
+-             on: 'Óscar Mingueza'
+            },
++           {
++             minute: 86,
++             off: 'Chris Richards',
++             on: 'Jeffrey Schlupp'
++           }
+          ],
+          oppXi: [
+            {
+              n: 'Dean Henderson',
+              p: 'GK',
+...
+            {
++             kind: 'throwin',
+-             flank: 'right',
+-             kind: 'corner',
+              minute: 46,
+              side: 'opp',
++             who: 'Tyrick Mitchell'
+-             who: 'Jaydee Canvot'
+            },
+            {
+              kind: 'throwin',
++             minute: 46,
+-             minute: 47,
+              side: 'opp',
++             who: 'Quinten Timber'
+-             who: 'Tyrick Mitchell'
+            },
+            {
++             kind: 'shot',
++             minute: 47,
++             on: false,
++             side: 'me',
++             who: 'Jack Grealish',
++             xg: 0.08
++           },
++           {
++             kind: 'foul',
+-             flank: 'left',
+-             kind: 'corner',
+              minute: 48,
++             side: 'me',
++             who: 'Michael Keane'
++           },
++           {
++             kind: 'shot',
++             minute: 48,
++             on: false,
+              side: 'opp',
++             who: 'Daichi Kamada',
++             xg: 0.09
+-             who: 'Tyrick Mitchell'
+            },
+            {
++             kind: 'foul',
++             minute: 49,
++             side: 'me',
++             who: 'Brennan Johnson'
++           },
++           {
++             kind: 'shot',
++             minute: 50,
++             on: false,
++             side: 'me',
++             who: 'Brennan Johnson',
++             xg: 0.08
++           },
++           {
++             kind: 'shot',
++             minute: 50,
++             on: false,
++             side: 'opp',
++             who: 'Jørgen Strand Larsen',
++             xg: 0.09
++           },
++           {
+              kind: 'throwin',
++             minute: 51,
++             side: 'me',
++             who: 'James Garner'
++           },
++           {
++             kind: 'shot',
++             minute: 52,
++             on: false,
++             side: 'opp',
++             who: 'Jørgen Strand Larsen',
++             xg: 0.09
++           },
++           {
++             kind: 'foul',
+              minute: 53,
+              side: 'me',
++             who: 'James Tarkowski'
+-             who: 'Vitaliy Mykolenko'
+            },
+            {
+              kind: 'foul',
+              minute: 53,
++             side: 'me',
++             who: 'James Tarkowski'
++           },
++           {
++             kind: 'foul',
++             minute: 53,
+              side: 'opp',
+              who: 'Adam Wharton'
+            },
+            {
+              flank: 'right',
+              kind: 'corner',
++             minute: 54,
++             side: 'me',
++             who: 'Jack Grealish'
++           },
++           {
++             kind: 'shot',
+              minute: 56,
++             on: true,
+              side: 'opp',
+              who: 'Ismaïla Sarr',
++             xg: 0.13
+            },
+            {
++             flank: 'right',
++             kind: 'corner',
++             minute: 57,
++             side: 'me',
++             who: 'Jack Grealish'
++           },
++           {
+              kind: 'shot',
++             minute: 57,
+-             minute: 56,
+              on: true,
+              side: 'me',
++             who: 'Brennan Johnson',
++             xg: 0.13
+-             who: 'Kiernan Dewsbury-Hall',
+-             xg: 0.15
+            },
+            {
++             flank: 'right',
++             kind: 'corner',
++             minute: 58,
+-             kind: 'throwin',
+-             minute: 57,
+              side: 'opp',
++             who: 'Jørgen Strand Larsen'
+-             who: 'Honest Ahanor'
+            },
+            {
+              kind: 'throwin',
++             minute: 60,
+-             minute: 59,
+              side: 'me',
++             who: 'Brennan Johnson'
+-             who: 'Jarrad Branthwaite'
+            },
+            {
++             kind: 'foul',
++             minute: 61,
+-             kind: 'throwin',
+-             minute: 63,
+              side: 'me',
++             who: 'Hayden Hackney'
+-             who: 'Jarrad Branthwaite'
+            },
+            {
++             flank: 'right',
++             kind: 'corner',
++             minute: 63,
++             side: 'opp',
++             who: 'Daichi Kamada'
++           },
++           {
+              goal: true,
+              kind: 'shot',
+              minute: 64,
+              on: true,
+-             penalty: true,
+              side: 'opp',
++             who: 'Tyrick Mitchell',
+-             who: 'Anan Khalaili',
+              xg: 0.26
+            },
+            {
+              kind: 'shot',
+              minute: 64,
++             on: true,
+-             on: false,
+              side: 'opp',
++             who: 'Axel Disasi',
++             xg: 0.13
+-             who: 'Quinten Timber',
+-             xg: 0.09
+            },
+            {
+              kind: 'throwin',
+              minute: 65,
+              side: 'me',
+...
+            {
+-             kind: 'foul',
+-             minute: 65,
+-             side: 'opp',
+-             who: 'Chris Richards'
+-           },
+-           {
+              kind: 'shot',
+-             minute: 65,
+-             on: false,
+-             side: 'opp',
+-             who: 'Anan Khalaili',
+-             xg: 0.09
+-           },
+-           {
+-             kind: 'shot',
+              minute: 66,
++             on: true,
+-             on: false,
+              side: 'me',
+              who: 'Brennan Johnson',
++             xg: 0.13
+-             xg: 0.1
+            },
+            {
++             kind: 'throwin',
++             minute: 67,
++             side: 'me',
++             who: 'Kiernan Dewsbury-Hall'
++           },
++           {
+              flank: 'left',
+              kind: 'corner',
+              minute: 70,
+-             side: 'me',
+-             who: 'Brennan Johnson'
+-           },
+-           {
+-             kind: 'shot',
+-             minute: 71,
+-             on: false,
+              side: 'opp',
++             who: 'Axel Disasi'
+-             who: 'Daichi Kamada',
+-             xg: 0.09
+            },
+            {
++             flank: 'right',
+-             flank: 'left',
+              kind: 'corner',
++             minute: 74,
+-             minute: 72,
+              side: 'me',
++             who: 'Jack Grealish'
+-             who: 'Brennan Johnson'
+            },
+            {
+-             flank: 'left',
+-             kind: 'corner',
+-             minute: 72,
+-             side: 'opp',
+-             who: 'Daichi Kamada'
+-           },
+-           {
+              kind: 'shot',
++             minute: 74,
+-             minute: 72,
+              on: false,
++             side: 'opp',
++             who: 'Chris Richards',
++             xg: 0.09
+-             side: 'me',
+-             who: 'Kiernan Dewsbury-Hall',
+-             xg: 0.1
+            },
+            {
++             kind: 'throwin',
++             minute: 75,
+-             kind: 'foul',
+-             minute: 74,
+              side: 'opp',
+              who: 'Daichi Kamada'
+            },
+            {
++             kind: 'foul',
+-             flank: 'left',
+-             kind: 'corner',
+              minute: 76,
+              side: 'opp',
++             who: 'Tyrick Mitchell'
+-             who: 'Óscar Mingueza'
+            },
+            {
+              kind: 'shot',
++             minute: 76,
++             on: false,
+-             minute: 78,
+-             on: true,
+              side: 'opp',
++             who: 'Daichi Kamada',
++             xg: 0.09
+-             who: 'Jaydee Canvot',
+-             xg: 0.13
+            },
+            {
++             kind: 'throwin',
++             minute: 78,
+-             kind: 'foul',
+-             minute: 80,
+              side: 'me',
++             who: 'Kiernan Dewsbury-Hall'
+-             who: 'Jack Grealish'
+            },
+            {
+-             flank: 'right',
+-             kind: 'corner',
+-             minute: 80,
+-             side: 'opp',
+-             who: 'Anan Khalaili'
+-           },
+-           {
+              kind: 'foul',
++             minute: 79,
+-             minute: 83,
+              side: 'me',
++             who: 'Michael Keane'
+-             who: 'James Tarkowski'
+            },
+            {
+              kind: 'shot',
++             minute: 80,
+-             minute: 83,
+              on: false,
+              side: 'opp',
++             who: 'Jørgen Strand Larsen',
+-             who: 'Jean-Philippe Mateta',
+              xg: 0.09
+            },
+            {
+              kind: 'throwin',
++             minute: 83,
+-             minute: 84,
+-             side: 'opp',
+-             who: 'Adam Wharton'
+-           },
+-           {
+-             kind: 'foul',
+-             minute: 84,
+              side: 'me',
+              who: 'James Garner'
+            },
+            {
++             kind: 'throwin',
++             minute: 83,
+-             kind: 'shot',
+-             minute: 84,
+-             on: true,
+              side: 'opp',
++             who: 'Tyrick Mitchell'
+-             who: 'Jean-Philippe Mateta',
+-             xg: 0.13
+            },
+            {
+              kind: 'foul',
++             minute: 84,
+-             minute: 85,
+              side: 'me',
+              who: 'James Garner'
+            },
+            {
+              goal: true,
+...
+              side: 'opp',
++             who: 'Ismaïla Sarr',
+-             who: 'Anan Khalaili',
+              xg: 0.26
+            },
+            {
++             kind: 'shot',
+-             kind: 'throwin',
+              minute: 87,
++             on: true,
++             side: 'opp',
++             who: 'Daichi Kamada',
++             xg: 0.13
+-             side: 'me',
+-             who: 'Vitaliy Mykolenko'
+            },
+            {
++             flank: 'left',
++             kind: 'corner',
+-             kind: 'throwin',
+              minute: 88,
+              side: 'opp',
++             who: 'Tyrick Mitchell'
+-             who: 'Jaydee Canvot'
+            },
+            {
++             kind: 'shot',
+-             kind: 'foul',
+              minute: 88,
++             on: false,
+              side: 'me',
++             who: 'Hayden Hackney',
++             xg: 0.08
+-             who: 'Vitaliy Mykolenko'
+            },
+            {
++             flank: 'left',
++             kind: 'corner',
++             minute: 89,
++             side: 'opp',
++             who: 'Jeffrey Schlupp'
+-             kind: 'foul',
+-             minute: 88,
+-             side: 'me',
+-             who: 'James Tarkowski'
+            },
+            {
+              kind: 'throwin',
++             minute: 90,
++             plus: 1,
+-             minute: 89,
+              side: 'opp',
++             who: 'Quinten Timber'
+-             who: 'Chris Richards'
+            },
+            {
++             kind: 'throwin',
++             minute: 90,
++             plus: 2,
++             side: 'me',
++             who: 'Jarrad Branthwaite'
++           },
++           {
++             kind: 'foul',
++             minute: 90,
++             plus: 2,
++             side: 'opp',
++             who: 'Daichi Kamada'
++           },
++           {
+              kind: 'shot',
+              minute: 90,
++             on: true,
++             plus: 2,
++             side: 'opp',
++             who: 'Ismaïla Sarr',
++             xg: 0.13
++           },
++           {
++             kind: 'shot',
++             minute: 90,
+              on: false,
+              plus: 2,
+              side: 'opp',
++             who: 'Óscar Mingueza',
+-             who: 'Daichi Kamada',
+              xg: 0.09
+            },
+            {
+              kind: 'throwin',
+              minute: 90,
+              plus: 3,
++             side: 'opp',
++             who: 'Óscar Mingueza'
+-             side: 'me',
+-             who: 'James Tarkowski'
+            },
+            {
++             flank: 'right',
++             kind: 'corner',
+-             kind: 'foul',
+              minute: 90,
+              plus: 3,
+              side: 'opp',
+              who: 'Anan Khalaili'
+            },
+...
+              side: 'opp',
++             who: 'Daichi Kamada',
+-             who: 'Jaydee Canvot',
+              xg: 0.26
+            },
+            {
++             kind: 'throwin',
+-             kind: 'shot',
+              minute: 90,
++             plus: 4,
++             side: 'me',
++             who: 'Vitaliy Mykolenko'
+-             on: false,
+-             plus: 3,
+-             side: 'opp',
+-             who: 'Jean-Philippe Mateta',
+-             xg: 0.09
+            },
+            {
++             flank: 'right',
++             kind: 'corner',
+-             kind: 'shot',
+              minute: 90,
+-             on: false,
+              plus: 4,
+-             side: 'opp',
+-             who: 'Jørgen Strand Larsen',
+-             xg: 0.09
+-           },
+-           {
+-             kind: 'foul',
+-             minute: 90,
+-             plus: 5,
+              side: 'me',
++             who: 'Jack Grealish'
+-             who: 'Brennan Johnson'
+            },
+            {
+              kind: 'foul',
+              minute: 90,
+              plus: 5,
+...
+            {
++             kind: 'throwin',
+-             kind: 'shot',
+              minute: 90,
+-             on: true,
+-             plus: 5,
+-             side: 'opp',
+-             who: 'Tyrick Mitchell',
+-             xg: 0.13
+-           },
+-           {
+-             kind: 'shot',
+-             minute: 90,
+-             on: true,
+              plus: 6,
++             side: 'me',
++             who: 'Michael Keane'
+-             side: 'opp',
+-             who: 'Anan Khalaili',
+-             xg: 0.13
+            }
+          ],
+          possHalves: [
+            56,
+            52
+          ],
+          stats: {
++           corners: 6,
+-           corners: 4,
+            fouls: 13,
++           onTarget: 4,
+-           onTarget: 3,
+            oppCorners: 9,
++           oppFouls: 8,
+-           oppFouls: 9,
+            oppOnTarget: 9,
++           oppSaves: 4,
+-           oppSaves: 3,
+            oppShots: 20,
+            oppXg: 2.41,
+            possession: 54,
+            saves: 6,
++           shots: 10,
++           xg: 0.86
+-           shots: 8,
+-           xg: 0.71
+          },
+          subs: [],
+          timeline: [
+            {
+              kind: 'kickoff',
+...
+            {
++             kind: 'shot',
++             minute: 47,
++             side: 'me',
++             text: 'Jack Grealish'
+-             kind: 'corner',
+-             minute: 46,
+-             side: 'opp',
+-             text: 'Jaydee Canvot'
+            },
+            {
++             kind: 'shot',
+-             kind: 'corner',
+              minute: 48,
+              side: 'opp',
++             text: 'Daichi Kamada'
+-             text: 'Tyrick Mitchell'
+            },
+            {
++             kind: 'shot',
++             minute: 50,
++             side: 'me',
++             text: 'Brennan Johnson'
++           },
++           {
++             kind: 'shot',
++             minute: 50,
++             side: 'opp',
++             text: 'Jørgen Strand Larsen'
++           },
++           {
++             kind: 'shot',
++             minute: 52,
++             side: 'opp',
++             text: 'Jørgen Strand Larsen'
++           },
++           {
+              kind: 'yellow',
+              minute: 53,
+              side: 'opp',
+              text: 'Adam Wharton'
+            },
+            {
+              kind: 'corner',
++             minute: 54,
++             side: 'me',
++             text: 'Jack Grealish'
++           },
++           {
++             kind: 'save',
+              minute: 56,
+              side: 'opp',
+              text: 'Ismaïla Sarr'
+            },
+            {
++             kind: 'corner',
++             minute: 57,
++             side: 'me',
++             text: 'Jack Grealish'
++           },
++           {
+              kind: 'save',
++             minute: 57,
+-             minute: 56,
+              side: 'me',
++             text: 'Brennan Johnson'
+-             text: 'Kiernan Dewsbury-Hall'
+            },
+            {
++             kind: 'corner',
++             minute: 58,
++             side: 'opp',
++             text: 'Jørgen Strand Larsen'
++           },
++           {
+              kind: 'sub',
+              minute: 58,
+              side: 'opp',
++             text: 'Óscar Mingueza on for Honest Ahanor'
+-             text: 'Jean-Philippe Mateta on for Ismaïla Sarr'
+            },
+            {
+              kind: 'sub',
++             minute: 58,
++             side: 'opp',
++             text: 'Axel Disasi on for Jaydee Canvot'
++           },
++           {
++             kind: 'sub',
+              minute: 59,
+              side: 'opp',
++             text: 'Cheick Doucouré on for Adam Wharton'
+-             text: 'Óscar Mingueza on for Honest Ahanor'
+            },
+            {
++             kind: 'corner',
++             minute: 63,
+-             kind: 'penalty',
+-             minute: 64,
+              side: 'opp',
++             text: 'Daichi Kamada'
+-             text: 'Anan Khalaili'
+            },
+            {
+              kind: 'goal',
+              minute: 64,
+-             penalty: true,
+              side: 'opp',
++             text: 'Tyrick Mitchell'
+-             text: 'Anan Khalaili'
+            },
+            {
++             kind: 'save',
+-             kind: 'shot',
+              minute: 64,
+              side: 'opp',
++             text: 'Axel Disasi'
+-             text: 'Quinten Timber'
+            },
+            {
++             kind: 'save',
+-             kind: 'shot',
+-             minute: 65,
+-             side: 'opp',
+-             text: 'Anan Khalaili'
+-           },
+-           {
+-             kind: 'shot',
+              minute: 66,
+              side: 'me',
+              text: 'Brennan Johnson'
+            },
+            {
+              kind: 'corner',
+              minute: 70,
++             side: 'opp',
++             text: 'Axel Disasi'
++           },
++           {
++             kind: 'corner',
++             minute: 74,
+              side: 'me',
++             text: 'Jack Grealish'
+-             text: 'Brennan Johnson'
+            },
+            {
+              kind: 'shot',
++             minute: 74,
+-             minute: 71,
+              side: 'opp',
++             text: 'Chris Richards'
+-             text: 'Daichi Kamada'
+            },
+            {
++             kind: 'shot',
++             minute: 76,
++             side: 'opp',
++             text: 'Daichi Kamada'
+-             kind: 'corner',
+-             minute: 72,
+-             side: 'me',
+-             text: 'Brennan Johnson'
+            },
+            {
++             kind: 'shot',
++             minute: 80,
+-             kind: 'corner',
+-             minute: 72,
+              side: 'opp',
++             text: 'Jørgen Strand Larsen'
+-             text: 'Daichi Kamada'
+            },
+            {
++             kind: 'yellow',
++             minute: 84,
+-             kind: 'shot',
+-             minute: 72,
+              side: 'me',
++             text: 'James Garner'
+-             text: 'Kiernan Dewsbury-Hall'
+            },
+            {
++             kind: 'goal',
++             minute: 85,
+-             kind: 'corner',
+-             minute: 76,
+              side: 'opp',
++             text: 'Ismaïla Sarr'
+-             text: 'Óscar Mingueza'
+            },
+            {
++             kind: 'sub',
++             minute: 86,
++             side: 'opp',
++             text: 'Jeffrey Schlupp on for Chris Richards'
++           },
++           {
+              kind: 'save',
++             minute: 87,
+-             minute: 78,
+              side: 'opp',
++             text: 'Daichi Kamada'
+-             text: 'Jaydee Canvot'
+            },
+            {
+              kind: 'corner',
++             minute: 88,
+-             minute: 80,
+              side: 'opp',
++             text: 'Tyrick Mitchell'
+-             text: 'Anan Khalaili'
+            },
+            {
+              kind: 'shot',
++             minute: 88,
++             side: 'me',
++             text: 'Hayden Hackney'
+-             minute: 83,
+-             side: 'opp',
+-             text: 'Jean-Philippe Mateta'
+            },
+            {
++             kind: 'corner',
++             minute: 89,
+-             kind: 'save',
+-             minute: 84,
+              side: 'opp',
++             text: 'Jeffrey Schlupp'
+-             text: 'Jean-Philippe Mateta'
+            },
+            {
++             kind: 'save',
++             minute: 90,
++             plus: 2,
+-             kind: 'yellow',
+-             minute: 84,
+-             side: 'me',
+-             text: 'James Garner'
+-           },
+-           {
+-             kind: 'goal',
+-             minute: 85,
+              side: 'opp',
++             text: 'Ismaïla Sarr'
+-             text: 'Anan Khalaili'
+            },
+            {
+              kind: 'shot',
+              minute: 90,
+              plus: 2,
+              side: 'opp',
++             text: 'Óscar Mingueza'
+-             text: 'Daichi Kamada'
+            },
+            {
++             kind: 'corner',
+-             kind: 'goal',
+              minute: 90,
+-             og: true,
+              plus: 3,
+              side: 'opp',
++             text: 'Anan Khalaili'
+-             text: 'Michael Keane'
+            },
+            {
++             kind: 'goal',
+-             kind: 'shot',
+              minute: 90,
+              plus: 3,
+              side: 'opp',
++             text: 'Daichi Kamada'
+-             text: 'Jean-Philippe Mateta'
+            },
+            {
++             kind: 'corner',
+-             kind: 'shot',
+              minute: 90,
+              plus: 4,
++             side: 'me',
++             text: 'Jack Grealish'
+-             side: 'opp',
+-             text: 'Jørgen Strand Larsen'
+            },
+            {
+-             kind: 'save',
+-             minute: 90,
+-             plus: 5,
+-             side: 'opp',
+-             text: 'Tyrick Mitchell'
+-           },
+-           {
+              kind: 'yellow',
+              minute: 90,
+              plus: 5,
+              side: 'opp',
+              text: 'Anan Khalaili'
+            },
+            {
+-             kind: 'save',
+-             minute: 90,
+-             plus: 6,
+-             side: 'opp',
+-             text: 'Anan Khalaili'
+-           },
+-           {
+              kind: 'fulltime',
+              minute: 90,
+              plus: 8,
+              side: 'none',
+              text: "Full time (+8')"
+...
+        homeGoals: 0,
++       myPosition: 19,
+-       myPosition: 20,
+        myScorers: [],
+        oppScorers: [
+          {
+            minute: 64,
++           name: 'Tyrick Mitchell'
+-           name: 'Anan Khalaili',
+-           penalty: true
+          },
+          {
+            minute: 85,
++           name: 'Ismaïla Sarr'
+-           name: 'Anan Khalaili'
+          },
+          {
+-           drawn: 'Jaydee Canvot',
+            minute: 90,
++           name: 'Daichi Kamada',
+-           name: 'Michael Keane',
+-           og: true,
+            plus: 3
+          }
+        ],
+        otherResults: [
+          {
++           ag: 3,
+-           ag: 2,
+            away: 'Coventry City',
+            hg: 0,
+            home: 'Arsenal'
+          },
+          {
++           ag: 2,
+-           ag: 1,
+            away: 'Manchester United',
++           hg: 3,
+-           hg: 0,
+            home: 'Hull City'
+          },
+          {
++           ag: 0,
+-           ag: 1,
+            away: 'Sunderland',
++           hg: 1,
+-           hg: 3,
+            home: 'Ipswich Town'
+          },
+          {
+            ag: 1,
+            away: 'Leeds United',
++           hg: 2,
+-           hg: 3,
+            home: 'Nottingham Forest'
+          },
+          {
++           ag: 2,
+-           ag: 1,
+            away: 'Tottenham',
++           hg: 3,
+-           hg: 2,
+            home: 'Brentford'
+          },
+          {
+            ag: 0,
+            away: 'Aston Villa',
++           hg: 0,
+-           hg: 1,
+            home: 'Brighton'
+          },
+          {
++           ag: 4,
+-           ag: 1,
+            away: 'Bournemouth',
++           hg: 1,
+-           hg: 2,
+            home: 'Manchester City'
+          },
+          {
++           ag: 0,
+-           ag: 2,
+            away: 'Liverpool',
+            hg: 3,
+            home: 'Newcastle'
+          },
+          {
++           ag: 2,
+-           ag: 0,
+            away: 'Chelsea',
++           hg: 1,
+-           hg: 0,
+            home: 'Fulham'
+          }
+        ],
+        shootoutWon: null,
+        trophyWon: null,
+...
+        boardAsksVersion: 1,
++       boardConfidence: 53.4,
+-       boardConfidence: 53.1,
+        boardObjectives: [
+          {
+            id: 'league',
+            label: 'Stay up. Avoid relegation',
+            target: 17
+...
+            awayTrips: 0,
++           concessions: 0.28,
+-           concessions: 0.39,
+            homeGames: 1,
+            playerWages: 0.533,
+            sponsor: 0,
+            staffWages: 0.167,
++           tickets: 1.13,
+-           tickets: 1.63,
+            travel: 0,
+            weeks: 1
+          },
+          v: 1,
+          walked: []
+        },
++       budget: 55.41,
+-       budget: 56.02,
+        calendar: [
+          {
+            round: 0,
+            type: 'league'
+          },
+...
+          'Aston Villa': [
++           'D'
+-           'L'
+          ],
+          'Athletic Club': [
+            'W'
+          ],
+          'Athletico Paranaense': [
+...
+          'Hull City': [
++           'W'
+-           'L'
+          ],
+          'Inter Miami': [
+            'W'
+          ],
+          'Inter Milan': [
+...
+          'Manchester City': [
++           'L'
+-           'W'
+          ],
+          'Manchester United': [
++           'L'
+-           'W'
+          ],
+          'Marítimo': [
+            'L'
+          ],
+          'Melbourne City': [
+...
+          Bournemouth: [
++           'W'
+-           'L'
+          ],
+          Braga: [
+            'W'
+          ],
+          Braunschweig: [
+...
+          Brighton: [
++           'D'
+-           'W'
+          ],
+          Burgos: [
+            'L'
+          ],
+          Burnley: [
+...
+          Chelsea: [
++           'W'
+-           'D'
+          ],
+          Clermont: [
+            'L'
+          ],
+          Como: [
+...
+          Fulham: [
++           'L'
+-           'D'
+          ],
+          Galatasaray: [
+            'W'
+          ],
+          Genk: [
+...
+          groundUpgrades: 0,
++         lastGate: 1.41,
++         seasonGate: 1.41,
+-         lastGate: 2.02,
+-         seasonGate: 2.02,
+          ticketTier: 1
+        },
+        form: [
+          'L'
+        ],
+...
+        history: [],
++       inbox: [
++         {
++           id: 'msg-1-0-1',
++           kind: 'drama',
++           options: [
++             {
++               effect: 'refuse',
++               label: 'Ask the physio to have a word'
++             },
++             {
++               effect: 'laugh',
++               label: 'Join him once, for the group chat'
++             }
++           ],
++           playerId: 'p-ainsley-maitland-niles',
++           playerName: 'Ainsley Maitland-Niles',
++           text: 'One of your defenders has taken up open water swimming in January and keeps posting about it at six in the morning.',
++           week: 0
++         }
++       ],
+-       inbox: [],
+        incomingBids: [
+          {
+            club: 'Birmingham City',
+            offer: 42.5,
+            playerId: 'p-james-garner',
+...
+          c: {
++           'Aston Villa': {
++             m: {
++               'Aaron Wan-Bissaka|RB': [
++                 0,
++                 0,
++                 1,
++                 0
++               ],
++               'Ian Maatsen|LB': [
++                 0,
++                 0,
++                 1,
++                 0
++               ],
++               'Matty Cash|RB': [
++                 0,
++                 0,
++                 1,
++                 0
++               ],
++               'Pau Torres|CB': [
++                 0,
++                 0,
++                 1,
++                 0
++               ],
++               'Zion Suzuki|GK': [
++                 0,
++                 0,
++                 1,
++                 0
++               ]
++             },
++             og: 0,
++             u: 0
++           },
+            'Coventry City': {
+              m: {
+                'Aurèle Amenda|CB': [
+                  0,
+                  0,
+...
+                  0,
+-                 0,
+                  1,
++                 1,
+                  0
+                ],
+                'Carl Rushworth|GK': [
+                  0,
+                  0,
+...
+                ],
++               'Gustavo Hamer|CM': [
++                 0,
++                 1,
++                 0,
++                 0
++               ],
+                'Milan van Ewijk|RB': [
+                  0,
++                 0,
+                  1,
+-                 1,
+                  0
+                ],
+                'Sidiki Chérif|ST': [
++                 3,
+-                 2,
+                  0,
+                  0,
+                  0
+                ],
++               'Yann Gboho|LW': [
++                 0,
++                 1,
++                 0,
++                 0
++               ]
+              },
+              og: 0,
+              u: 0
+            },
+            'Crystal Palace': {
+              m: {
++               'Chris Richards|CB': [
+-               'Anan Khalaili|RM': [
+-                 2,
+                  0,
+                  0,
++                 1,
+                  0
+                ],
++               'Daichi Kamada|CAM': [
++                 1,
++                 1,
+-               'Chris Richards|CB': [
+                  0,
+                  0,
+-                 1,
+-                 0
+                ],
+                'Dean Henderson|GK': [
+                  0,
+                  0,
+                  1,
+...
+                ],
++               'Ismaïla Sarr|RW': [
++                 1,
++                 0,
++                 0,
++                 0
++               ],
+                'Jaydee Canvot|CB': [
+                  0,
+                  0,
+                  1,
+                  0
+...
+                'Tyrick Mitchell|LB': [
++                 1,
+                  0,
+-                 0,
+                  1,
+                  0
+                ]
+              },
++             og: 0,
+-             og: 1,
+              u: 0
+            },
++           'Hull City': {
+-           'Ipswich Town': {
+              m: {
++               'Christos Mouzakitis|CM': [
++                 1,
+-               'Anis Mehmeti|CAM': [
+                  0,
++                 0,
++                 0
++               ],
++               'Mohamed-Ali Cho|RW': [
+                  1,
+                  0,
+                  0,
++                 0
+                ],
++               'Robinio Vaz|ST': [
++                 0,
+-               'Exequiel Palacios|CM': [
+                  1,
+                  0,
+                  0,
++               ],
++               'Tim Iroegbunam|CM': [
++                 1,
+                  0,
++                 0,
++                 0
+                ],
++             },
++             og: 0,
++             u: 0
++           },
++           'Ipswich Town': {
++             m: {
++               "Dara O'Shea|CB": [
++                 0,
++                 0,
+-               'Jack Clarke|LW': [
+                  1,
++                 0
++               ],
++               'Abdoul Ouattara|RB': [
++                 0,
++                 0,
+                  1,
+                  0,
++               ],
++               'Jacob Greaves|CB': [
+                  0,
++                 0,
++                 1,
++                 0
+                ],
++               'Kjell Scherpen|GK': [
++                 0,
++                 0,
+-               'Julio Enciso|CAM': [
+                  1,
+                  0,
++               ],
++               'Leif Davis|LB': [
+                  0,
+                  0,
++                 1,
++                 0
+                ]
+              },
++             og: 1,
+-             og: 0,
+              u: 0
+            },
+            'Leeds United': {
+              m: {
+                'Harry Wilson|RW': [
++                 0,
+                  1,
+                  0,
+                  0,
++               ],
++               'Sean Longstaff|CM': [
++                 1,
+                  0,
++                 0,
++                 0
+                ]
+              },
+              og: 0,
+              u: 0
+            },
+            'Manchester City': {
+              m: {
++               'Antoine Semenyo|RW': [
++                 1,
+-               'Erling Haaland|ST': [
+-                 2,
+                  0,
+                  0,
+                  0
+                ],
+                'Phil Foden|CAM': [
+...
+              m: {
++               'Bryan Mbeumo|RW': [
++                 0,
+-               'Kobbie Mainoo|CM': [
+                  1,
+                  0,
+                  0,
+-                 0
+                ],
++               'Kobbie Mainoo|CM': [
+-               'Leny Yoro|CB': [
+-                 0,
+-                 0,
+                  1,
+                  0,
+-               ],
+-               'Lisandro Martínez|CB': [
+                  0,
+                  0,
+-                 1,
+-                 0
+                ],
++               'Matheus Cunha|ST': [
+-               'Matthijs de Ligt|CB': [
+-                 0,
+-                 0,
+                  1,
+                  0,
+-               ],
+-               'Patrick Dorgu|LB': [
+                  0,
+                  0,
+-                 1,
+-                 0
+                ],
+-               'Senne Lammens|GK': [
+-                 0,
+-                 0,
+-                 1,
+-                 0
+-               ]
+              },
+              og: 0,
+              u: 0
+            },
+            'Nottingham Forest': {
+              m: {
++               'James McAtee|CAM': [
++                 0,
+-               'Dan Ndoye|RW': [
+                  1,
+                  0,
+                  0,
++               ],
++               'Morgan Gibbs-White|CAM': [
+                  0,
+-               ],
+-               'James McAtee|CAM': [
+                  1,
+-                 1,
+                  0,
+                  0
+                ],
++               'Murillo|CB': [
+-               'Liam Delap|ST': [
+                  1,
+                  0,
+                  0,
+                  0
+                ],
+                'Nicolás Domínguez|CM': [
++                 1,
+                  0,
+-                 2,
+                  0,
+                  0
+                ]
+              },
+              og: 0,
+...
+              m: {
++               'Adrien Truffert|LB': [
+-               'Marcus Tavernier|CAM': [
+                  0,
+                  1,
+                  0,
+                  0
+                ],
++               'Alex Scott|CM': [
++                 0,
+-               'Veljko Milosavljevic|CB': [
+                  1,
+                  0,
+                  0,
+-                 0
+                ],
++               'António Silva|CB': [
+-             },
+-             og: 0,
+-             u: 0
+-           },
+-           Brentford: {
+-             m: {
+-               'Dango Ouattara|RW': [
+                  1,
+                  0,
+                  0,
+                  0
+                ],
++               'Junior Kroupi|ST': [
++                 2,
+-               'Igor Thiago|ST': [
+                  1,
+                  0,
+                  0,
+-                 0
+                ],
++               'Rayan|RW': [
+-               'Sepp van den Berg|CB': [
+-                 0,
+                  1,
+                  0,
+                  0,
++                 0
+                ]
+              },
+              og: 0,
+              u: 0
+            },
++           Brentford: {
+-           Brighton: {
+              m: {
++               'Dango Ouattara|RW': [
+-               'Bart Verbruggen|GK': [
+-                 0,
+-                 0,
+                  1,
+                  0,
+-               ],
+-               'Ferdi Kadıoğlu|LB': [
+                  0,
+                  0,
+-                 1,
+-                 0
+                ],
++               'Igor Thiago|ST': [
+-               'Jack Hinshelwood|CDM': [
+                  1,
+                  0,
+                  0,
+                  0
+                ],
++               'Keane Lewis-Potter|LM': [
+-               'Luka Vuskovic|CB': [
+-                 0,
+-                 0,
+                  1,
+                  0,
+-               ],
+-               'Mats Wieffer|RB': [
+                  0,
+                  0,
+-                 1,
+-                 0
+                ],
++               'Mikkel Damsgaard|CAM': [
+-               'Maxim De Cuyper|LB': [
+                  0,
++                 2,
+                  0,
+-                 1,
+                  0
+                ]
+              },
+              og: 0,
+              u: 0
+            },
++           Brighton: {
+-           Chelsea: {
+              m: {
++               'Bart Verbruggen|GK': [
+-               'Emiliano Martínez|GK': [
+                  0,
+                  0,
+                  1,
+                  0
+                ],
++               'Ferdi Kadıoğlu|LB': [
+-               'Jorrel Hato|LB': [
+                  0,
+                  0,
+                  1,
+                  0
+                ],
++               'Luka Vuskovic|CB': [
+-               'Levi Colwill|CB': [
+                  0,
+                  0,
+                  1,
+                  0
+                ],
++               'Mats Wieffer|RB': [
+-               'Maxence Lacroix|CB': [
+                  0,
+                  0,
+                  1,
+                  0
+                ],
++               'Maxim De Cuyper|LB': [
+-               'Reece James|RB': [
+                  0,
+                  0,
+                  1,
+                  0
+                ]
+...
+            },
++           Chelsea: {
+-           Fulham: {
+              m: {
++               'João Pedro|ST': [
++                 1,
+-               'Antonee Robinson|LB': [
+                  0,
+                  0,
+-                 1,
+                  0
+                ],
++               'Levi Colwill|CB': [
+-               'Bernd Leno|GK': [
+                  0,
+-                 0,
+                  1,
+                  0,
+-               ],
+-               'Calvin Bassey|CB': [
+                  0,
+-                 0,
+-                 1,
+-                 0
+                ],
++               'Morgan Rogers|CAM': [
+-               'Joachim Andersen|CB': [
+-                 0,
+-                 0,
+                  1,
+                  0,
+-               ],
+-               'Ryan Sessegnon|LB': [
+                  0,
+                  0,
+-                 1,
+-                 0
+                ]
+              },
+              og: 0,
+              u: 0
+            },
++           Fulham: {
+-           Liverpool: {
+              m: {
++               'Hugo Larsson|CM': [
+-               'Alexander Isak|ST': [
+                  1,
+                  0,
+                  0,
+                  0
+                ],
++               'Josh King|CAM': [
++                 0,
+-               'Alexis Mac Allister|CM': [
+                  1,
+                  0,
+                  0,
+-                 0
+                ]
+              },
+              og: 0,
+              u: 0
+            },
+...
+                'Anthony Elanga|RW': [
++                 3,
+-                 2,
+                  0,
+                  0,
+                  0
+                ],
++               'Lewis Hall|LB': [
++                 0,
++                 0,
+-               'Bazoumana Touré|LW': [
+                  1,
++                 0
++               ],
++               'Lukas Hornicek|GK': [
++                 0,
++                 0,
+                  1,
+                  0,
+-                 0
+                ],
++               'Malick Thiaw|CB': [
+-               'Jacob Ramsey|CM': [
+                  0,
++                 0,
+                  1,
+                  0,
++               ],
++               'Sven Botman|CB': [
+                  0,
++                 0,
+-               ]
+-             },
+-             og: 0,
+-             u: 0
+-           },
+-           Sunderland: {
+-             m: {
+-               'Malick Fofana|LW': [
+                  1,
+                  0,
++               ],
++               'Tino Livramento|RB': [
+                  0,
++                 1,
++                 1,
+                  0
+                ]
+              },
+              og: 0,
+              u: 0
+...
+              m: {
++               'Lucas Bergvall|CM': [
+-               'Omar Marmoush|ST': [
+-                 0,
+                  1,
+                  0,
+                  0,
++                 0
+                ],
++               'Omar Marmoush|ST': [
+-               'Xavi Simons|CAM': [
+                  1,
++                 1,
+                  0,
+                  0,
+-                 0
+                ]
+              },
+              og: 0,
+              u: 0
+            }
+...
+              0,
++             3
+-             2
+            ],
+            'Brentford|Tottenham': [
++             3,
+              2,
+-             1
+            ],
+            'Brighton|Aston Villa': [
+-             1,
+              0,
++             0
+            ],
+            'Everton|Crystal Palace': [
+              0,
+              3
+            ],
+            'Fulham|Chelsea': [
++             1,
++             2
+-             0,
+-             0
+            ],
+            'Hull City|Manchester United': [
++             3,
++             2
+-             0,
+-             1
+            ],
+            'Ipswich Town|Sunderland': [
+-             3,
+              1,
++             0
+            ],
+            'Manchester City|Bournemouth': [
+-             2,
+              1,
++             4
+            ],
+            'Newcastle|Liverpool': [
+              3,
++             0
+-             2
+            ],
+            'Nottingham Forest|Leeds United': [
++             2,
+-             3,
+              1
+            ]
+          },
+          seriea: {
+            'Atalanta|Venezia': [
+...
+            club: 'Chelsea',
++           goals: 1,
+-           goals: 0,
+            name: 'Cole Palmer'
+          },
+          {
+            club: 'Chelsea',
+            goals: 0,
+...
+            club: 'Manchester City',
++           goals: 0,
+-           goals: 1,
+            name: 'Erling Haaland'
+          },
+          {
+            club: 'Manchester City',
+            goals: 1,
+...
+            club: 'Nottingham Forest',
++           goals: 1,
+-           goals: 0,
+            name: 'Morgan Gibbs-White'
+          },
+          {
+            club: 'Nottingham Forest',
+            goals: 1,
+...
+            club: 'Manchester United',
++           goals: 1,
+-           goals: 0,
+            name: 'Matheus Cunha'
+          },
+          {
+            club: 'Newcastle',
++           goals: 2,
+-           goals: 1,
+            name: 'Anthony Elanga'
+          },
+          {
+            club: 'Newcastle',
+            goals: 0,
+...
+            club: 'Hull City',
++           goals: 2,
+-           goals: 0,
+            name: 'Christos Mouzakitis'
+          },
+          {
+            club: 'Hull City',
++           goals: 1,
+-           goals: 0,
+            name: 'Robinio Vaz'
+          },
+          {
+            club: 'Leeds United',
+            goals: 0,
+...
+            club: 'Leeds United',
++           goals: 1,
+-           goals: 0,
+            name: 'Anton Stach'
+          },
+          {
+            club: 'Tottenham',
+            goals: 0,
+...
+            club: 'Tottenham',
++           goals: 2,
+-           goals: 1,
+            name: 'Omar Marmoush'
+          },
+          {
+            club: 'Crystal Palace',
+            goals: 0,
+...
+            club: 'Ipswich Town',
++           goals: 0,
+-           goals: 2,
+            name: 'Exequiel Palacios'
+          },
+          {
+            club: 'Ipswich Town',
+            goals: 0,
+...
+            club: 'Bournemouth',
++           goals: 2,
+-           goals: 0,
+            name: 'Alex Scott'
+          },
+          {
+            club: 'Bournemouth',
+            goals: 1,
+...
+            club: 'Fulham',
++           goals: 1,
+-           goals: 0,
+            name: 'Gonzalo García'
+          },
+          {
+            club: 'Brentford',
+            goals: 1,
+...
+            club: 'Liverpool',
++           goals: 0,
+-           goals: 2,
+            name: 'Alexander Isak'
+          }
+        ],
+        season: 1,
+        seasonSignings: [],
+...
+                goals: 0,
++               ratingSum: 5.5,
+-               ratingSum: 5.4,
+                reds: 0,
+                yellows: 0
+              }
+            },
+            contractYears: 2,
++           fitness: 77,
+-           fitness: 76,
+            id: 'p-jarrad-branthwaite',
+            injuryWeeks: 0,
+            isYouth: false,
+            lastTen: [
+              1
+...
+            rating: 86,
++           ratingSum: 5.5,
+-           ratingSum: 5.4,
+            role: 'star',
+            seasonAssists: 0,
+            seasonGoals: 0,
+            suspendedMatches: 0,
+            value: 36.8,
+...
+                goals: 0,
++               ratingSum: 6.1,
+-               ratingSum: 5.2,
+                reds: 0,
+                yellows: 1
+              }
+            },
+            contractYears: 4,
++           fitness: 82,
+-           fitness: 81,
+            id: 'p-james-garner',
+            injuryWeeks: 0,
+            isYouth: false,
+            lastTen: [
+              1
+...
+            rating: 86,
++           ratingSum: 6.1,
+-           ratingSum: 5.2,
+            role: 'star',
+            seasonAssists: 0,
+            seasonGoals: 0,
+            seasonYellows: 1,
+            suspendedMatches: 0,
+...
+                goals: 0,
++               ratingSum: 5.7,
+-               ratingSum: 6.2,
+                reds: 0,
+                yellows: 0
+              }
+            },
+            contractYears: 2,
++           fitness: 84,
+-           fitness: 83,
+            id: 'p-brennan-johnson',
+            injuryWeeks: 0,
+            isYouth: false,
+            lastTen: [
+              1
+...
+            rating: 84,
++           ratingSum: 5.7,
+-           ratingSum: 6.2,
+            role: 'star',
+            seasonAssists: 0,
+            seasonGoals: 0,
+            suspendedMatches: 0,
+            value: 28.5,
+...
+                goals: 0,
++               ratingSum: 6.1,
+-               ratingSum: 6.2,
+                reds: 0,
+                yellows: 0
+              }
+            },
+            contractYears: 4,
++           fitness: 78,
+-           fitness: 82,
+            id: 'p-kiernan-dewsbury-hall',
+            injuryWeeks: 0,
+            isYouth: false,
+            lastTen: [
+              1
+...
+            rating: 84,
++           ratingSum: 6.1,
+-           ratingSum: 6.2,
+            role: 'key',
+            seasonAssists: 0,
+            seasonGoals: 0,
+            suspendedMatches: 0,
+            value: 26.3,
+...
+                goals: 0,
++               ratingSum: 5.6,
+-               ratingSum: 6.1,
+                reds: 0,
+                yellows: 0
+              }
+            },
+            contractYears: 3,
++           fitness: 76,
+-           fitness: 77,
+            id: 'p-hayden-hackney',
+            injuryWeeks: 0,
+            isYouth: false,
+            lastTen: [
+              1
+...
+            rating: 84,
++           ratingSum: 5.6,
+-           ratingSum: 6.1,
+            role: 'key',
+            seasonAssists: 0,
+            seasonGoals: 0,
+            suspendedMatches: 0,
+            value: 25.9,
+...
+            contractYears: 2,
++           fitness: 77,
+-           fitness: 84,
+            id: 'p-thierno-barry',
+            injuryWeeks: 1,
+            isYouth: false,
+            lastTen: [
+              1
+...
+                goals: 0,
++               ratingSum: 5.4,
+-               ratingSum: 5.6,
+                reds: 0,
+                yellows: 0
+              }
+            },
+            contractYears: 3,
++           fitness: 77,
+-           fitness: 81,
+            id: 'p-jack-grealish',
+            injuryWeeks: 0,
+            isYouth: false,
+            lastTen: [
+              1
+...
+            rating: 82,
++           ratingSum: 5.4,
+-           ratingSum: 5.6,
+            role: 'key',
+            seasonAssists: 0,
+            seasonGoals: 0,
+            suspendedMatches: 0,
+            value: 20.3,
+...
+            contractYears: 2,
++           fitness: 84,
+-           fitness: 82,
+            id: 'p-vitaliy-mykolenko',
+            injuryWeeks: 0,
+            isYouth: false,
+            lastTen: [
+              1
+...
+                goals: 0,
++               ratingSum: 5.4,
+-               ratingSum: 5.5,
+                reds: 0,
+                yellows: 0
+              }
+            },
+            contractYears: 1,
++           fitness: 81,
+-           fitness: 80,
+            id: 'p-jordan-pickford',
+            injuryWeeks: 0,
+            isYouth: false,
+            lastTen: [
+              1
+...
+            rating: 79,
++           ratingSum: 5.4,
+-           ratingSum: 5.5,
+            role: 'key',
+            seasonAssists: 0,
+            seasonGoals: 0,
+            suspendedMatches: 0,
+            value: 12,
+...
+            contractYears: 4,
++           fitness: 78,
+-           fitness: 79,
+            id: 'p-james-tarkowski',
+            injuryWeeks: 0,
+            isYouth: false,
+            lastTen: [
+              1
+...
+            d: 0,
++           ga: 3,
+-           ga: 2,
+            gf: 0,
+            l: 1,
+            pts: 0,
+            w: 0
+          },
+...
+            club: 'Brighton',
++           d: 1,
+-           d: 0,
+            ga: 0,
++           gf: 0,
+-           gf: 1,
+            l: 0,
++           pts: 1,
++           w: 0
+-           pts: 3,
+-           w: 1
+          },
+          {
+            club: 'Coventry City',
+            d: 0,
+            ga: 0,
++           gf: 3,
+-           gf: 2,
+            l: 0,
+            pts: 3,
+            w: 1
+          },
+          {
+            club: 'Chelsea',
+-           d: 1,
+-           ga: 0,
+-           gf: 0,
+-           l: 0,
+-           pts: 1,
+-           w: 0
+-         },
+-         {
+-           club: 'Manchester City',
+            d: 0,
+            ga: 1,
+            gf: 2,
+            l: 0,
+            pts: 3,
+...
+          {
++           club: 'Manchester City',
++           d: 0,
++           ga: 4,
++           gf: 1,
++           l: 1,
++           pts: 0,
++           w: 0
++         },
++         {
+            club: 'Nottingham Forest',
+            d: 0,
+            ga: 1,
++           gf: 2,
+-           gf: 3,
+            l: 0,
+            pts: 3,
+            w: 1
+          },
+          {
+            club: 'Manchester United',
+            d: 0,
++           ga: 3,
++           gf: 2,
++           l: 1,
++           pts: 0,
++           w: 0
++         },
++         {
++           club: 'Newcastle',
++           d: 0,
+            ga: 0,
++           gf: 3,
+-           gf: 1,
+            l: 0,
+            pts: 3,
+            w: 1
+          },
+          {
++           club: 'Hull City',
+-           club: 'Newcastle',
+            d: 0,
+            ga: 2,
+            gf: 3,
+            l: 0,
+            pts: 3,
+...
+          {
+-           club: 'Hull City',
+-           d: 0,
+-           ga: 1,
+-           gf: 0,
+-           l: 1,
+-           pts: 0,
+-           w: 0
+-         },
+-         {
+            club: 'Leeds United',
+            d: 0,
++           ga: 2,
+-           ga: 3,
+            gf: 1,
+            l: 1,
+            pts: 0,
+            w: 0
+          },
+...
+            d: 0,
++           ga: 3,
++           gf: 2,
+-           ga: 2,
+-           gf: 1,
+            l: 1,
+            pts: 0,
+            w: 0
+          },
+          {
+...
+            d: 0,
++           ga: 1,
++           gf: 0,
+-           ga: 3,
+-           gf: 1,
+            l: 1,
+            pts: 0,
+            w: 0
+          },
+          {
+            club: 'Ipswich Town',
+            d: 0,
++           ga: 0,
++           gf: 1,
+-           ga: 1,
+-           gf: 3,
+            l: 0,
+            pts: 3,
+            w: 1
+          },
+          {
+            club: 'Aston Villa',
++           d: 1,
++           ga: 0,
+-           d: 0,
+-           ga: 1,
+            gf: 0,
++           l: 0,
++           pts: 1,
+-           l: 1,
+-           pts: 0,
+            w: 0
+          },
+          {
+            club: 'Bournemouth',
+            d: 0,
++           ga: 1,
++           gf: 4,
++           l: 0,
++           pts: 3,
++           w: 1
++         },
++         {
++           club: 'Fulham',
++           d: 0,
+            ga: 2,
+            gf: 1,
+            l: 1,
+            pts: 0,
+            w: 0
+          },
+          {
+-           club: 'Fulham',
+-           d: 1,
+-           ga: 0,
+-           gf: 0,
+-           l: 0,
+-           pts: 1,
+-           w: 0
+-         },
+-         {
+            club: 'Brentford',
+            d: 0,
++           ga: 2,
++           gf: 3,
+-           ga: 1,
+-           gf: 2,
+            l: 0,
+            pts: 3,
+            w: 1
+          },
+          {
+...
+            ga: 3,
++           gf: 0,
+-           gf: 2,
+            l: 1,
+            pts: 0,
+            w: 0
+          }
+        ],
+...
+          {
++           age: 18,
+-           age: 15,
+            fee: 0,
+            flag: '🏠',
++           highGuess: 82,
++           id: 'pr-mv2cdxc0-2678-649',
++           lowGuess: 73,
++           name: 'Yusuf Diallo',
++           position: 'RW',
++           potential: 78,
++           rating: 65,
+-           highGuess: 76,
+-           id: 'pr-mv2cdxc0-4654-963',
+-           lowGuess: 71,
+-           name: 'Enzo Baptiste',
+-           position: 'CM',
+-           potential: 72,
+-           rating: 64,
+            season: 2,
+            source: 'Academy'
+          },
+          {
++           age: 15,
+-           age: 17,
+            fee: 0,
+            flag: '🏠',
++           highGuess: 79,
++           id: 'pr-mv2cdxc0-6790-309',
++           lowGuess: 76,
++           name: 'Tyler Ferreira',
++           position: 'GK',
++           potential: 77,
++           rating: 66,
+-           highGuess: 76,
+-           id: 'pr-mv2cdxc0-1205-187',
+-           lowGuess: 70,
+-           name: 'Matteo Kimura',
+-           position: 'LM',
+-           potential: 71,
+-           rating: 52,
+            season: 2,
+            source: 'Academy'
+          },
+-         {
+-           age: 18,
+-           fee: 0,
+-           flag: '🏠',
+-           highGuess: 71,
+-           id: 'pr-mv2cdxc0-7755-661',
+-           lowGuess: 67,
+-           name: 'Rune Achebe',
+-           position: 'RM',
+-           potential: 69,
+-           rating: 51,
+-           season: 2,
+-           source: 'Academy'
+-         }
+        ],
+        recruitment: 12,
+        scouts: []
+      },
+      academyGraduates: 0,
+...
+        '⬇ Tottenham are relegated to the EFL Championship.',
++       '🪑 Nottingham Forest sack Jaden Machado after finishing 18th. Ari Bouhaddi takes over.',
++       'Manchester City sign Vinicius Junior from Real Madrid for £90m.'
+-       '🪑 Tottenham sack Ivo Colombo after finishing 20th. Zaid Pinto takes over.',
+-       'Borussia Dortmund sign Trent Alexander-Arnold from Real Madrid for £54m.'
+      ],
+      approach: null,
+      balancedFixtures: true,
+      boardAsksVersion: 1,
+      boardConfidence: 59.5,
+...
+        'AC Milan': 83.7,
++       'ADO Den Haag': 64,
++       'AEK Athens': 72,
++       'AZ Alkmaar': 78.6,
++       'Académico de Viseu': 61,
++       'Adelaide United': 59,
++       'Akhmat Grozny': 67.8,
++       'Akron Tolyatti': 65.7,
++       'Al-Ahli': 81.4,
++       'Al-Diriyah': 60.9,
++       'Al-Ettifaq': 67.7,
+-       'ADO Den Haag': 68,
+-       'AEK Athens': 71,
+-       'AZ Alkmaar': 75.6,
+-       'Académico de Viseu': 60,
+-       'Adelaide United': 62,
+-       'Akhmat Grozny': 70.8,
+-       'Akron Tolyatti': 68.7,
+-       'Al-Ahli': 82.4,
+-       'Al-Diriyah': 63.9,
+-       'Al-Ettifaq': 65.7,
+        'Al-Faisaly': 65,
++       'Al-Fateh': 64.5,
++       'Al-Fayha': 60.6,
++       'Al-Hazem': 62.2,
++       'Al-Hilal': 82.9,
++       'Al-Ittihad': 74,
+-       'Al-Fateh': 62.5,
+-       'Al-Fayha': 62.6,
+-       'Al-Hazem': 63.2,
+-       'Al-Hilal': 80.9,
+-       'Al-Ittihad': 75,
+        'Al-Khaleej': 63.099999999999994,
++       'Al-Kholood': 62.4,
++       'Al-Nassr': 76.2,
++       'Al-Qadsiah': 76.9,
++       'Al-Riyadh': 60,
++       'Al-Shabab': 66.8,
++       'Al-Taawoun': 62.5,
++       'Alavés': 72.5,
++       'Almería': 63.7,
++       'América': 76.1,
++       'Arminia Bielefeld': 62,
++       'Asteras Tripolis': 66,
++       'Aston Villa': 86.5,
+-       'Al-Kholood': 60.4,
+-       'Al-Nassr': 74.2,
+-       'Al-Qadsiah': 74.9,
+-       'Al-Riyadh': 63,
+-       'Al-Shabab': 67.8,
+-       'Al-Taawoun': 65.5,
+-       'Alavés': 75.5,
+-       'Almería': 67.7,
+-       'América': 74.1,
+-       'Arminia Bielefeld': 63,
+-       'Asteras Tripolis': 63,
+-       'Aston Villa': 85.5,
+        'Athletic Club': 82,
++       'Athletico Paranaense': 68.7,
++       'Atlanta United': 70.5,
++       'Atlético Madrid': 87.1,
+-       'Athletico Paranaense': 66.7,
+-       'Atlanta United': 69.5,
+-       'Atlético Madrid': 88.1,
+        'Atlético Mineiro': 76.1,
++       'Atlético San Luis': 68,
+-       'Atlético San Luis': 67,
+        'Auckland FC': 61.4,
+        'Austin FC': 71.9,
++       'Austria Lustenau': 63,
++       'Austria Wien': 62.2,
++       'Bayer Leverkusen': 85.1,
++       'Bayern Munich': 87.1,
++       'Başakşehir': 73.9,
++       'Beşiktaş': 81.3,
++       'Birmingham City': 76.7,
++       'Blackburn Rovers': 67.5,
++       'Bolton Wanderers': 60.7,
++       'Borussia Dortmund': 83.8,
+-       'Austria Lustenau': 62,
+-       'Austria Wien': 63.2,
+-       'Bayer Leverkusen': 86.1,
+-       'Bayern Munich': 86.1,
+-       'Başakşehir': 71.9,
+-       'Beşiktaş': 79.3,
+-       'Birmingham City': 72.7,
+-       'Blackburn Rovers': 65.5,
+-       'Bolton Wanderers': 62.7,
+-       'Borussia Dortmund': 87.8,
+        'Brisbane Roar': 59.4,
++       'Bristol City': 70.4,
++       'Brøndby IF': 67,
++       'CF Montréal': 66.1,
++       'CSKA Moscow': 74.3,
++       'Cardiff City': 62.2,
++       'Casa Pia': 66.5,
++       'Castellón': 61.6,
++       'Celta Vigo': 76.8,
++       'Central Coast Mariners': 56.6,
++       'Cercle Brugge': 69.4,
++       'Charlotte FC': 70.1,
++       'Charlton Athletic': 66.5,
++       'Chicago Fire': 68.6,
++       'Club Brugge': 77.4,
++       'Colorado Rapids': 71.5,
++       'Columbus Crew': 70.2,
++       'Coventry City': 78.1,
++       'Cruz Azul': 70.6,
+-       'Bristol City': 73.4,
+-       'Brøndby IF': 66,
+-       'CF Montréal': 67.1,
+-       'CSKA Moscow': 76.3,
+-       'Cardiff City': 61.2,
+-       'Casa Pia': 64.5,
+-       'Castellón': 60.6,
+-       'Celta Vigo': 75.8,
+-       'Central Coast Mariners': 59.6,
+-       'Cercle Brugge': 67.4,
+-       'Charlotte FC': 72.1,
+-       'Charlton Athletic': 64.5,
+-       'Chicago Fire': 70.6,
+-       'Club Brugge': 79.4,
+-       'Colorado Rapids': 69.5,
+-       'Columbus Crew': 68.2,
+-       'Coventry City': 81.1,
+-       'Cruz Azul': 73.6,
+        'Crystal Palace': 85.6,
+        'Cádiz': 63,
++       'Córdoba': 62,
++       'D.C. United': 66.6,
++       'Deportivo La Coruña': 75.5,
++       'Derby County': 72.2,
++       'Dinamo Zagreb': 68.5,
+-       'Córdoba': 60,
+-       'D.C. United': 67.6,
+-       'Deportivo La Coruña': 77.5,
+-       'Derby County': 73.2,
+-       'Dinamo Zagreb': 69.5,
+        'Dundee United': 58.3,
++       'Dynamo Dresden': 61.9,
++       'Dynamo Makhachkala': 66.5,
++       'Dynamo Moscow': 74.4,
++       'Eintracht Frankfurt': 84.2,
++       'Energie Cottbus': 63,
++       'Estrela Amadora': 60.2,
++       'Eyüpspor': 63.8,
++       'FC Andorra': 63,
+-       'Dynamo Dresden': 58.9,
+-       'Dynamo Makhachkala': 65.5,
+-       'Dynamo Moscow': 75.4,
+-       'Eintracht Frankfurt': 81.2,
+-       'Energie Cottbus': 62,
+-       'Estrela Amadora': 62.2,
+-       'Eyüpspor': 61.8,
+-       'FC Andorra': 59,
+        'FC Cincinnati': 69.5,
++       'FC Copenhagen': 75,
++       'FC Dallas': 65.9,
++       'FC Juárez': 66.1,
++       'FC Midtjylland': 73.5,
++       'FC Nordsjælland': 66.9,
++       'FC Zürich': 61.8,
+-       'FC Copenhagen': 72,
+-       'FC Dallas': 63.900000000000006,
+-       'FC Juárez': 67.1,
+-       'FC Midtjylland': 76.5,
+-       'FC Nordsjælland': 67.9,
+-       'FC Zürich': 64.8,
+        'Fakel Voronezh': 61,
+        'Famalicão': 72,
++       'Fenerbahçe': 83.4,
++       'Fortuna Sittard': 63.6,
++       'Gaziantep FK': 64.7,
+-       'Fenerbahçe': 80.4,
+-       'Fortuna Sittard': 61.6,
+-       'Gaziantep FK': 62.7,
+        'Gençlerbirliği': 64.5,
++       'Gil Vicente': 65.9,
++       'Go Ahead Eagles': 62.099999999999994,
++       'Grazer AK': 58.1,
+-       'Gil Vicente': 64.9,
+-       'Go Ahead Eagles': 63.099999999999994,
+-       'Grazer AK': 60.1,
+        'Greuther Fürth': 60.6,
++       'Grêmio': 72,
++       'Göztepe': 73.4,
+-       'Grêmio': 75,
+-       'Göztepe': 70.4,
+        'Hajduk Split': 70.1,
++       'Hannover 96': 64.8,
+-       'Hannover 96': 62.8,
+        'Hertha BSC': 66.6,
+        'Holstein Kiel': 65.9,
++       'Houston Dynamo': 68.7,
++       'Hull City': 77.2,
++       'Inter Miami': 75.8,
+-       'Houston Dynamo': 69.7,
+-       'Hull City': 78.2,
+-       'Inter Miami': 71.8,
+        'Inter Milan': 86.4,
+        'Ipswich Town': 83.7,
++       'Istra 1961': 64,
+-       'Istra 1961': 63,
+        'Juve Stabia': 59,
++       'Kasımpaşa': 65.9,
++       'Krylia Sovetov': 67.8,
+-       'Kasımpaşa': 61.9,
+-       'Krylia Sovetov': 65.8,
+        'Köln': 77.8,
++       'LA Galaxy': 64.8,
++       'La Louvière': 61.1,
++       'Las Palmas': 63.599999999999994,
++       'Lausanne-Sport': 64.9,
++       'Le Havre': 72.5,
++       'Le Mans': 61.6,
+-       'LA Galaxy': 63.8,
+-       'La Louvière': 62.1,
+-       'Las Palmas': 66.6,
+-       'Lausanne-Sport': 66.9,
+-       'Le Havre': 73.5,
+-       'Le Mans': 59.6,
+        'Leeds United': 83.5,
++       'Leganés': 61.2,
++       'León': 70.5,
++       'Lincoln City': 61.8,
++       'Lokomotiv Moscow': 73.2,
+-       'Leganés': 60.2,
+-       'León': 69.5,
+-       'Lincoln City': 62.8,
+-       'Lokomotiv Moscow': 71.2,
+        'Lokomotiva Zagreb': 63,
+        'Macarthur FC': 59.9,
+        'Manchester City': 89.1,
+        'Manchester United': 85.5,
++       'Marítimo': 62,
+-       'Marítimo': 61,
+        'Melbourne City': 57.6,
++       'Melbourne Victory': 58.8,
++       'Minnesota United': 69.6,
++       'Málaga': 68.9,
++       'NEC Nijmegen': 70.4,
++       'NEOM SC': 75.1,
++       'Nashville SC': 65.5,
++       'New England Revolution': 69.2,
++       'New York City FC': 74.7,
++       'New York Red Bulls': 69.2,
++       'Newcastle Jets': 59,
+-       'Melbourne Victory': 61.8,
+-       'Minnesota United': 66.6,
+-       'Málaga': 65.9,
+-       'NEC Nijmegen': 67.4,
+-       'NEOM SC': 71.1,
+-       'Nashville SC': 66.5,
+-       'New England Revolution': 71.2,
+-       'New York City FC': 71.7,
+-       'New York Red Bulls': 68.2,
+-       'Newcastle Jets': 60,
+        'Norwich City': 75.8,
++       'Nottingham Forest': 84.6,
++       'Nürnberg': 68,
++       'OH Leuven': 60.5,
++       'Orlando City': 73.2,
++       'Osnabrück': 63,
+-       'Nottingham Forest': 83.6,
+-       'Nürnberg': 67,
+-       'OH Leuven': 61.5,
+-       'Orlando City': 71.2,
+-       'Osnabrück': 64,
+        'PEC Zwolle': 65.1,
++       'Paris FC': 72.7,
++       'Perth Glory': 61.9,
++       'Philadelphia Union': 65.5,
++       'Portland Timbers': 69.9,
+-       'Paris FC': 71.7,
+-       'Perth Glory': 60.9,
+-       'Philadelphia Union': 67.5,
+-       'Portland Timbers': 70.9,
+        'Preston North End': 70.2,
++       'Pumas UNAM': 68.9,
++       'Querétaro': 63.5,
++       'RB Leipzig': 85.1,
++       'RB Salzburg': 73.4,
++       'Racing Santander': 74.5,
++       'Randers FC': 62.8,
+-       'Pumas UNAM': 67.9,
+-       'Querétaro': 62.5,
+-       'RB Leipzig': 82.1,
+-       'RB Salzburg': 76.4,
+-       'Racing Santander': 72.5,
+-       'Randers FC': 63.8,
+        'Rapid Wien': 72.6,
++       'Rayo Vallecano': 76.6,
++       'Real Betis': 79.8,
+-       'Rayo Vallecano': 75.6,
+-       'Real Betis': 78.8,
+        'Real Madrid': 93,
++       'Real Oviedo': 61.8,
++       'Real Salt Lake': 65.7,
++       'Real Sociedad': 80.9,
++       'Red Bull Bragantino': 73,
++       'Red Star FC': 62,
++       'Rio Ave': 67,
++       'Rodina Moscow': 67.1,
+-       'Real Oviedo': 63.8,
+-       'Real Salt Lake': 64.7,
+-       'Real Sociedad': 81.9,
+-       'Red Bull Bragantino': 76,
+-       'Red Star FC': 61,
+-       'Rio Ave': 70,
+-       'Rodina Moscow': 66.1,
+        'Rubin Kazan': 71.4,
++       'Rudeš': 60,
++       'Saint-Étienne': 68.5,
++       'San Diego FC': 68.4,
++       'San Jose Earthquakes': 63.5,
+-       'Rudeš': 62,
+-       'Saint-Étienne': 70.5,
+-       'San Diego FC': 65.4,
+-       'San Jose Earthquakes': 64.5,
+        'Santa Clara': 66.3,
++       'Santos Laguna': 63.9,
++       'Schalke 04': 74.6,
+-       'Santos Laguna': 62.9,
+-       'Schalke 04': 71.6,
+        'Seattle Sounders': 68.4,
+        'Sheffield United': 74.4,
++       'Silkeborg IF': 58.2,
++       'Sint-Truiden': 66.3,
++       'Slaven Belupo': 61.2,
++       'Sparta Rotterdam': 65.6,
++       'Spartak Moscow': 75.3,
++       'Sporting CP': 80.2,
++       'Sporting Gijón': 60.7,
++       'Sporting Kansas City': 65.4,
++       'St Johnstone': 63.2,
++       'St Mirren': 64,
++       'St. Gallen': 66.4,
++       'St. Louis City': 65.7,
++       'St. Pauli': 72.1,
++       'Standard Liège': 63.7,
++       'Stoke City': 73.5,
++       'Sturm Graz': 71.7,
++       'Swansea City': 76.5,
++       'Sydney FC': 62.8,
++       'São Paulo': 72.5,
++       'SønderjyskE': 61,
++       'Südtirol': 63.6,
++       'Tigres UANL': 72.4,
+-       'Silkeborg IF': 61.2,
+-       'Sint-Truiden': 69.3,
+-       'Slaven Belupo': 63.2,
+-       'Sparta Rotterdam': 66.6,
+-       'Spartak Moscow': 76.3,
+-       'Sporting CP': 84.2,
+-       'Sporting Gijón': 64.7,
+-       'Sporting Kansas City': 66.4,
+-       'St Johnstone': 61.2,
+-       'St Mirren': 67,
+-       'St. Gallen': 67.4,
+-       'St. Louis City': 66.7,
+-       'St. Pauli': 69.1,
+-       'Standard Liège': 65.7,
+-       'Stoke City': 76.5,
+-       'Sturm Graz': 68.7,
+-       'Swansea City': 77.5,
+-       'Sydney FC': 59.8,
+-       'São Paulo': 73.5,
+-       'SønderjyskE': 60,
+-       'Südtirol': 60.6,
+-       'Tigres UANL': 75.4,
+        'Toronto FC': 65.9,
++       'Union Berlin': 75.4,
++       'Union Saint-Gilloise': 72.5,
+-       'Union Berlin': 78.4,
+-       'Union Saint-Gilloise': 74.5,
+        'Vancouver Whitecaps': 68.5,
++       'Varaždin': 67,
++       'Vasco da Gama': 76.6,
+-       'Varaždin': 65,
+-       'Vasco da Gama': 74.6,
+        'Viborg FF': 65.8,
++       'Vitória Guimarães': 67.5,
++       'Vitória': 66.7,
++       'WSG Tirol': 60.5,
++       'Wellington Phoenix': 59.1,
++       'Werder Bremen': 73.4,
++       'West Brom': 72.1,
++       'West Ham': 80.7,
+-       'Vitória Guimarães': 69.5,
+-       'Vitória': 68.7,
+-       'WSG Tirol': 57.5,
+-       'Wellington Phoenix': 61.1,
+-       'Werder Bremen': 76.4,
+-       'West Brom': 73.1,
+-       'West Ham': 81.7,
+        'Western Sydney Wanderers': 58.5,
++       'Willem II': 58.6,
++       'Wolfsberger AC': 59.5,
++       'Young Boys': 74.2,
++       'Zulte Waregem': 62.9,
+-       'Willem II': 61.6,
+-       'Wolfsberger AC': 61.5,
+-       'Young Boys': 70.2,
+-       'Zulte Waregem': 60.9,
+        'Çorum FK': 60.4,
++       AGF: 63.3,
++       Aberdeen: 60.1,
++       Abha: 64.1,
++       Ajax: 79.2,
++       Alanyaspor: 67.1,
++       Albacete: 59.9,
++       Altach: 64,
++       Alverca: 62.8,
++       Amedspor: 62,
+-       AGF: 65.3,
+-       Aberdeen: 62.1,
+-       Abha: 61.1,
+-       Ajax: 78.2,
+-       Alanyaspor: 66.1,
+-       Albacete: 60.9,
+-       Altach: 65,
+-       Alverca: 66.8,
+-       Amedspor: 65,
+        Anderlecht: 71.6,
++       Angers: 71.5,
++       Annecy: 58.5,
++       Antwerp: 70.8,
++       Arezzo: 59,
++       Aris: 67.4,
++       Arouca: 60.6,
+-       Angers: 75.5,
+-       Annecy: 61.5,
+-       Antwerp: 71.8,
+-       Arezzo: 60,
+-       Aris: 64.4,
+-       Arouca: 62.6,
+        Arsenal: 88.6,
++       Ascoli: 61.6,
++       Atalanta: 83.3,
++       Atlante: 60,
++       Atlas: 67.5,
++       Atromitos: 67,
++       Augsburg: 80.7,
++       Auxerre: 76.1,
++       Avellino: 60.9,
++       Bahia: 77.8,
+-       Ascoli: 59.6,
+-       Atalanta: 85.3,
+-       Atlante: 62,
+-       Atlas: 63.5,
+-       Atromitos: 63,
+-       Augsburg: 79.7,
+-       Auxerre: 77.1,
+-       Avellino: 61.9,
+-       Bahia: 78.8,
+        Baltika: 71,
++       Barcelona: 91.3,
++       Basel: 73.7,
+-       Barcelona: 89.3,
+-       Basel: 71.7,
+        Benevento: 61.5,
+        Benfica: 79.8,
++       Beveren: 60.5,
++       Bochum: 62.5,
+-       Beveren: 62.5,
+-       Bochum: 64.5,
+        Bologna: 78.5,
++       Botafogo: 76.7,
++       Boulogne: 62.5,
++       Bournemouth: 86.6,
++       Braga: 77.8,
++       Braunschweig: 61.5,
++       Brentford: 86.2,
++       Brest: 74.6,
++       Brighton: 85.1,
++       Burgos: 59.7,
++       Burnley: 76.1,
++       Cagliari: 78.7,
+-       Botafogo: 77.7,
+-       Boulogne: 59.5,
+-       Bournemouth: 84.6,
+-       Braga: 76.8,
+-       Braunschweig: 63.5,
+-       Brentford: 82.2,
+-       Brest: 73.6,
+-       Brighton: 86.1,
+-       Burgos: 61.7,
+-       Burnley: 78.1,
+-       Cagliari: 75.7,
+        Cambuur: 64,
++       Carrarese: 64,
++       Catanzaro: 61.4,
++       Celtic: 76.1,
++       Cesena: 64.5,
++       Ceuta: 61,
+-       Carrarese: 63,
+-       Catanzaro: 64.4,
+-       Celtic: 77.1,
+-       Cesena: 61.5,
+-       Ceuta: 62,
+        Chapecoense: 60,
++       Charleroi: 62.599999999999994,
++       Chelsea: 89.6,
++       Clermont: 59.9,
++       Como: 86.2,
+-       Charleroi: 64.6,
+-       Chelsea: 87.6,
+-       Clermont: 62.9,
+-       Como: 84.2,
+        Corinthians: 79,
+        Coritiba: 66.5,
++       Cremonese: 65.4,
+-       Cremonese: 64.4,
+        Cruzeiro: 79.2,
++       Darmstadt: 65.5,
++       Dijon: 62,
+-       Darmstadt: 61.5,
+-       Dijon: 60,
+        Dundee: 62.4,
++       Dunkerque: 60.5,
++       Eibar: 61,
++       Elche: 74.7,
++       Eldense: 59,
++       Elversberg: 69.2,
++       Empoli: 63.9,
++       Entella: 61.5,
++       Erzurumspor: 60.2,
++       Espanyol: 79.2,
++       Estoril: 67.2,
++       Everton: 82.8,
++       Excelsior: 62.4,
++       Falkirk: 59.5,
++       Feyenoord: 79.2,
+-       Dunkerque: 58.5,
+-       Eibar: 59,
+-       Elche: 75.7,
+-       Eldense: 63,
+-       Elversberg: 70.2,
+-       Empoli: 59.9,
+-       Entella: 60.5,
+-       Erzurumspor: 61.2,
+-       Espanyol: 76.2,
+-       Estoril: 70.2,
+-       Everton: 85.8,
+-       Excelsior: 59.4,
+-       Falkirk: 58.5,
+-       Feyenoord: 77.2,
+        Fiorentina: 82.7,
++       Flamengo: 78.3,
++       Fluminense: 74.8,
++       Freiburg: 76.2,
++       Frosinone: 75.7,
++       Fulham: 82.2,
++       Galatasaray: 82.8,
++       Genk: 73.5,
++       Genoa: 78.1,
++       Gent: 68.1,
+-       Flamengo: 77.3,
+-       Fluminense: 75.8,
+-       Freiburg: 79.2,
+-       Frosinone: 72.7,
+-       Fulham: 81.2,
+-       Galatasaray: 83.8,
+-       Genk: 77.5,
+-       Genoa: 76.1,
+-       Gent: 71.1,
+        Getafe: 73.8,
++       Girona: 71.8,
++       Gladbach: 74.2,
++       Gorica: 64,
++       Granada: 63,
+-       Girona: 73.8,
+-       Gladbach: 78.2,
+-       Gorica: 66,
+-       Granada: 60,
+        Grasshopper: 60.8,
++       Grenoble: 63,
++       Groningen: 68.7,
++       Guadalajara: 75.9,
+-       Grenoble: 59,
+-       Groningen: 67.7,
+-       Guadalajara: 72.9,
+        Guingamp: 61.8,
++       Hamburg: 76.2,
++       Hartberg: 61.2,
++       Hearts: 60.1,
++       Heerenveen: 70,
++       Heidenheim: 66.2,
++       Hibernian: 60.7,
++       Hoffenheim: 78.9,
++       Internacional: 70.5,
+-       Hamburg: 79.2,
+-       Hartberg: 60.2,
+-       Hearts: 61.1,
+-       Heerenveen: 74,
+-       Heidenheim: 67.2,
+-       Hibernian: 62.7,
+-       Hoffenheim: 82.9,
+-       Internacional: 72.5,
+        Iraklis: 59,
+        Juventus: 85.2,
++       Kaiserslautern: 67.8,
++       Kalamata: 63,
++       Karlsruhe: 61.9,
+-       Kaiserslautern: 63.8,
+-       Kalamata: 62,
+-       Karlsruhe: 62.9,
+        Kifisia: 60,
++       Kilmarnock: 59.8,
++       Kocaelispor: 63.7,
++       Konyaspor: 65.6,
++       Kortrijk: 63.5,
++       Krasnodar: 76,
++       LAFC: 67.4,
++       LASK: 67.2,
++       Laval: 63,
++       Lazio: 79.6,
++       Lecce: 75.9,
+-       Kilmarnock: 62.8,
+-       Kocaelispor: 60.7,
+-       Konyaspor: 67.6,
+-       Kortrijk: 59.5,
+-       Krasnodar: 74,
+-       LAFC: 71.4,
+-       LASK: 63.2,
+-       Laval: 62,
+-       Lazio: 80.6,
+-       Lecce: 74.9,
+        Lens: 79.6,
++       Levadiakos: 63,
++       Levante: 77.9,
++       Lille: 77.9,
++       Liverpool: 90.5,
+-       Levadiakos: 62,
+-       Levante: 73.9,
+-       Lille: 79.9,
+-       Liverpool: 87.5,
+        Lommel: 63,
+        Lorient: 75.5,
++       Lugano: 65.8,
++       Luzern: 65.8,
+-       Lugano: 67.8,
+-       Luzern: 66.8,
+        Lyngby: 63.5,
+        Lyon: 81.1,
++       Magdeburg: 64,
+-       Magdeburg: 68,
+        Mainz: 76,
++       Mallorca: 64.8,
++       Mantova: 61.2,
+-       Mallorca: 66.8,
+-       Mantova: 62.2,
+        Marseille: 78.5,
++       Mechelen: 67.7,
++       Metz: 65.1,
++       Middlesbrough: 79.2,
++       Millwall: 72.7,
++       Mirassol: 60.1,
++       Modena: 62.7,
++       Monaco: 83.7,
++       Monterrey: 69.6,
++       Montpellier: 67.2,
++       Monza: 74.4,
+-       Mechelen: 66.7,
+-       Metz: 66.1,
+-       Middlesbrough: 77.2,
+-       Millwall: 71.7,
+-       Mirassol: 63.1,
+-       Modena: 61.7,
+-       Monaco: 81.7,
+-       Monterrey: 71.6,
+-       Montpellier: 64.2,
+-       Monza: 75.4,
+        Moreirense: 68.1,
++       Motherwell: 60.1,
+-       Motherwell: 61.1,
+        Nacional: 63.5,
++       Nancy: 59.9,
++       Nantes: 74.1,
++       Napoli: 83.5,
++       Necaxa: 66,
+-       Nancy: 58.9,
+-       Nantes: 71.1,
+-       Napoli: 82.5,
+-       Necaxa: 68,
+        Newcastle: 83,
++       Nice: 77.2,
++       OB: 61.6,
+-       Nice: 78.2,
+-       OB: 58.6,
+        OFI: 59,
++       Olympiacos: 75.4,
+-       Olympiacos: 76.4,
+        Orenburg: 66.5,
++       Osasuna: 72.2,
++       Osijek: 60.7,
++       PAOK: 75.9,
++       PSG: 88.9,
++       PSV: 82.1,
++       Pachuca: 68.9,
++       Paderborn: 69.7,
++       Padova: 64.3,
++       Palermo: 64,
++       Palmeiras: 77.5,
++       Panathinaikos: 75.9,
++       Panetolikos: 58.8,
+-       Osasuna: 73.2,
+-       Osijek: 63.7,
+-       PAOK: 72.9,
+-       PSG: 90.9,
+-       PSV: 79.1,
+-       Pachuca: 67.9,
+-       Paderborn: 68.7,
+-       Padova: 63.3,
+-       Palermo: 65,
+-       Palmeiras: 78.5,
+-       Panathinaikos: 72.9,
+-       Panetolikos: 62.8,
+        Parma: 78.5,
++       Pau: 60,
++       Pisa: 73.7,
++       Porto: 82.9,
++       Portsmouth: 67.5,
++       Puebla: 62.2,
++       QPR: 75.7,
+-       Pau: 63,
+-       Pisa: 71.7,
+-       Porto: 81.9,
+-       Portsmouth: 63.5,
+-       Puebla: 60.2,
+-       QPR: 73.7,
+        Rangers: 79.2,
++       Reims: 68.4,
++       Remo: 60.4,
++       Rennes: 76.9,
++       Ried: 63.5,
++       Rijeka: 67.6,
+-       Reims: 67.4,
+-       Remo: 59.4,
+-       Rennes: 77.9,
+-       Ried: 61.5,
+-       Rijeka: 64.6,
+        Rizespor: 66.1,
++       Rodez: 63,
++       Roma: 85.2,
++       Rostov: 68,
+-       Rodez: 61,
+-       Roma: 86.2,
+-       Rostov: 71,
+        Sabadell: 63,
+        Sampdoria: 65.5,
+        Samsunspor: 68.8,
++       Santos: 75.6,
++       Sassuolo: 78.4,
+-       Santos: 73.6,
+-       Sassuolo: 79.4,
+        Servette: 65.3,
++       Sevilla: 76.1,
++       Sion: 62.4,
++       Sochaux: 63,
+-       Sevilla: 77.1,
+-       Sion: 65.4,
+-       Sochaux: 59,
+        Southampton: 76.7,
++       Strasbourg: 81.6,
++       Stuttgart: 81.3,
++       Sunderland: 83.7,
+-       Strasbourg: 83.6,
+-       Stuttgart: 84.3,
+-       Sunderland: 82.7,
+        Telstar: 60.6,
+        Tenerife: 62,
++       Thun: 63,
++       Tijuana: 67.5,
++       Toluca: 72.7,
++       Torino: 77.5,
++       Tottenham: 86.9,
++       Toulouse: 77.4,
++       Trabzonspor: 78.7,
++       Troyes: 67,
++       Twente: 74.2,
++       Udinese: 78.8,
+-       Thun: 62,
+-       Tijuana: 63.5,
+-       Toluca: 75.7,
+-       Torino: 80.5,
+-       Tottenham: 84.9,
+-       Toulouse: 78.4,
+-       Trabzonspor: 76.7,
+-       Troyes: 64,
+-       Twente: 72.2,
+-       Udinese: 75.8,
+        Utrecht: 73.5,
+        Vaduz: 61.4,
++       Valencia: 80.2,
++       Valladolid: 63.4,
++       Venezia: 76.5,
++       Verona: 72.5,
++       Vicenza: 59.5,
++       Villarreal: 82.9,
++       Volos: 63.3,
++       Watford: 74.3,
+-       Valencia: 79.2,
+-       Valladolid: 61.4,
+-       Venezia: 74.5,
+-       Verona: 69.5,
+-       Vicenza: 62.5,
+-       Villarreal: 81.9,
+-       Volos: 60.3,
+-       Watford: 77.3,
+        Westerlo: 72.1,
++       Wolfsburg: 78.6,
++       Wolves: 80,
++       Wrexham: 72.8,
++       Zenit: 74.7
+-       Wolfsburg: 74.6,
+-       Wolves: 78,
+-       Wrexham: 73.8,
+-       Zenit: 78.7
+      },
+      coldNames: [],
+      cupBracket: [
+        {
++         away: 'Newcastle',
+-         away: 'Blackburn Rovers',
+          awayGoals: null,
+          home: 'Everton',
+          homeGoals: null,
+          mine: true,
+          round: 'R16',
+...
+        {
++         away: 'Coventry City',
+-         away: 'Brighton',
+          awayGoals: null,
++         home: 'Liverpool',
+-         home: 'Hull City',
+          homeGoals: null,
+          mine: false,
+          round: 'R16',
+          slot: 1,
+          winner: null
+        },
+        {
++         away: 'Blackburn Rovers',
+-         away: 'Arsenal',
+          awayGoals: null,
++         home: 'Wrexham',
+-         home: 'Bristol City',
+          homeGoals: null,
+          mine: false,
+          round: 'R16',
+          slot: 2,
+          winner: null
+        },
+        {
++         away: 'Ipswich Town',
+-         away: 'Brentford',
+          awayGoals: null,
++         home: 'Arsenal',
+-         home: 'Manchester City',
+          homeGoals: null,
+          mine: false,
+          round: 'R16',
+          slot: 3,
+          winner: null
+        },
+        {
++         away: 'Fulham',
+-         away: 'Norwich City',
+          awayGoals: null,
++         home: 'Leeds United',
+-         home: 'Fulham',
+          homeGoals: null,
+          mine: false,
+          round: 'R16',
+          slot: 4,
+          winner: null
+        },
+        {
++         away: 'Chelsea',
+-         away: 'Ipswich Town',
+          awayGoals: null,
++         home: 'Brighton',
+-         home: 'Chelsea',
+          homeGoals: null,
+          mine: false,
+          round: 'R16',
+          slot: 5,
+          winner: null
+        },
+        {
++         away: 'Birmingham City',
+-         away: 'Manchester United',
+          awayGoals: null,
++         home: 'Bolton Wanderers',
+-         home: 'Wolves',
+          homeGoals: null,
+          mine: false,
+          round: 'R16',
+          slot: 6,
+          winner: null
+        },
+        {
++         away: 'Brentford',
+-         away: 'Leeds United',
+          awayGoals: null,
++         home: 'QPR',
+-         home: 'Newcastle',
+          homeGoals: null,
+          mine: false,
+          round: 'R16',
+          slot: 7,
+          winner: null
+...
+      cupDraw: {
++       R16: 'Newcastle'
+-       R16: 'Blackburn Rovers'
+      },
+      cupExit: null,
+      cupRound: 'R16',
+      decisions: undefined,
+      eraId: 'now',
+...
+          position: 'GK',
++         rating: 78,
+-         rating: 79,
+          reason: 'expired',
+          since: 2,
++         value: 8.5
+-         value: 10.2
+        },
+        {
+          age: 32,
+          founderSaleRatio: undefined,
+          fromMyClub: true,
+...
+      goneNames: [
++       'Vinicius Junior',
++       'Omar Marmoush',
++       'Raphinha',
+-       'Trent Alexander-Arnold',
+        'Alejandro Balde',
+-       'Erling Haaland',
+-       'Martin Ødegaard',
+-       'Amadou Onana',
+-       'Karim Adeyemi'
+      ],
+      handover: null,
+      history: [],
+      inbox: [],
+      incomingBids: [],
+...
+        my: [],
++       s: 'premier|1tjorsj'
+-       s: 'premier|1f2aktr'
+      },
+      leagueClubs: [
+-       'Arsenal',
+        'Everton',
++       'Fulham',
++       'Liverpool',
++       'Bolton Wanderers',
++       'Manchester City',
++       'Leeds United',
+        'Newcastle',
++       'Brentford',
+        'Crystal Palace',
++       'Brighton',
++       'Birmingham City',
++       'Arsenal',
+-       'Brentford',
+-       'Manchester City',
+-       'Bournemouth',
+-       'Liverpool',
+-       'Chelsea',
+        'Manchester United',
+-       'Aston Villa',
+-       'Brighton',
+        'Hull City',
++       'Ipswich Town',
++       'Coventry City',
++       'Bournemouth',
+-       'Leeds United',
+-       'Fulham',
+        'Blackburn Rovers',
++       'Aston Villa',
++       'Chelsea'
+-       'Birmingham City',
+-       'Bolton Wanderers',
+-       'Coventry City',
+-       'Ipswich Town'
+      ],
+      leagueOverrides: {
+        bundesliga2: [
+          'Wolfsburg',
+          'Heidenheim',
+...
+        {
++         club: 'Fulham',
+-         club: 'Arsenal',
+          gen: undefined,
+          goals: 0,
++         name: 'Gonzalo García'
+-         name: 'Bukayo Saka'
+        },
+        {
++         club: 'Fulham',
+-         club: 'Arsenal',
+          gen: undefined,
+          goals: 0,
++         name: 'Hugo Larsson'
+-         name: 'Declan Rice'
+        },
+        {
++         club: 'Liverpool',
+-         club: 'Newcastle',
+          gen: undefined,
+          goals: 0,
++         name: 'Hugo Ekitiké'
+-         name: 'Bazoumana Touré'
+        },
+        {
++         club: 'Liverpool',
+-         club: 'Newcastle',
+          gen: undefined,
+          goals: 0,
++         name: 'Florian Wirtz'
+-         name: 'Anthony Elanga'
+        },
+        {
++         club: 'Bolton Wanderers',
+-         club: 'Crystal Palace',
+          gen: undefined,
+          goals: 0,
++         name: 'Rob Apter'
+-         name: 'Adam Wharton'
+        },
+        {
++         club: 'Bolton Wanderers',
+-         club: 'Crystal Palace',
+          gen: undefined,
+          goals: 0,
++         name: 'John McAtee'
+-         name: 'Yéremy Pino'
+        },
+        {
++         club: 'Manchester City',
+-         club: 'Brentford',
+          gen: undefined,
+          goals: 0,
++         name: 'Erling Haaland'
+-         name: 'Igor Thiago'
+        },
+        {
++         club: 'Manchester City',
+-         club: 'Brentford',
+          gen: undefined,
+          goals: 0,
++         name: 'Rayan Cherki'
+-         name: 'Kevin Schade'
+        },
+        {
++         club: 'Leeds United',
+-         club: 'Manchester City',
+          gen: undefined,
+          goals: 0,
++         name: 'Ethan Ampadu'
+-         name: 'Erling Haaland'
+        },
+        {
++         club: 'Leeds United',
+-         club: 'Manchester City',
+          gen: undefined,
+          goals: 0,
++         name: 'Jean-Mattéo Bahoya'
+-         name: 'Rayan Cherki'
+        },
+        {
++         club: 'Newcastle',
+-         club: 'Bournemouth',
+          gen: undefined,
+          goals: 0,
++         name: 'Bazoumana Touré'
+-         name: 'Rayan'
+        },
+        {
++         club: 'Newcastle',
+-         club: 'Bournemouth',
+          gen: undefined,
+          goals: 0,
++         name: 'Anthony Elanga'
+-         name: 'Alex Scott'
+        },
+        {
++         club: 'Brentford',
+-         club: 'Liverpool',
+          gen: undefined,
+          goals: 0,
++         name: 'Igor Thiago'
+-         name: 'Hugo Ekitiké'
+        },
+        {
++         club: 'Brentford',
+-         club: 'Liverpool',
+          gen: undefined,
+          goals: 0,
++         name: 'Kevin Schade'
+-         name: 'Florian Wirtz'
+        },
+        {
++         club: 'Crystal Palace',
+-         club: 'Chelsea',
+          gen: undefined,
+          goals: 0,
++         name: 'Adam Wharton'
+-         name: 'Cole Palmer'
+        },
+        {
++         club: 'Crystal Palace',
+-         club: 'Chelsea',
+          gen: undefined,
+          goals: 0,
++         name: 'Yéremy Pino'
+-         name: 'Moisés Caicedo'
+        },
+        {
++         club: 'Brighton',
+-         club: 'Manchester United',
+          gen: undefined,
+          goals: 0,
++         name: 'Charalampos Kostoulas'
+-         name: 'Benjamin Sesko'
+        },
+        {
++         club: 'Brighton',
+-         club: 'Manchester United',
+          gen: undefined,
+          goals: 0,
++         name: 'Jack Hinshelwood'
+-         name: 'Bryan Mbeumo'
+        },
+        {
++         club: 'Birmingham City',
+-         club: 'Aston Villa',
+          gen: undefined,
+          goals: 0,
++         name: 'Jay Stansfield'
+-         name: 'Amadou Onana'
+        },
+        {
++         club: 'Birmingham City',
+-         club: 'Aston Villa',
+          gen: undefined,
+          goals: 0,
++         name: 'August Priske'
+-         name: 'Alejandro Garnacho'
+        },
+        {
++         club: 'Arsenal',
+-         club: 'Brighton',
+          gen: undefined,
+          goals: 0,
++         name: 'Bukayo Saka'
+-         name: 'Charalampos Kostoulas'
+        },
+        {
++         club: 'Arsenal',
+-         club: 'Brighton',
+          gen: undefined,
+          goals: 0,
++         name: 'Declan Rice'
+-         name: 'Jack Hinshelwood'
+        },
+        {
++         club: 'Manchester United',
+-         club: 'Hull City',
+          gen: undefined,
+          goals: 0,
++         name: 'Benjamin Sesko'
+-         name: 'Christos Mouzakitis'
+        },
+        {
++         club: 'Manchester United',
+-         club: 'Hull City',
+          gen: undefined,
+          goals: 0,
++         name: 'Bryan Mbeumo'
+-         name: 'Tim Iroegbunam'
+        },
+        {
++         club: 'Hull City',
+-         club: 'Leeds United',
+          gen: undefined,
+          goals: 0,
++         name: 'Christos Mouzakitis'
+-         name: 'Ethan Ampadu'
+        },
+        {
++         club: 'Hull City',
+-         club: 'Leeds United',
+          gen: undefined,
+          goals: 0,
++         name: 'Tim Iroegbunam'
+-         name: 'Jean-Mattéo Bahoya'
+        },
+        {
++         club: 'Ipswich Town',
+-         club: 'Fulham',
+          gen: undefined,
+          goals: 0,
++         name: 'Julio Enciso'
+-         name: 'Gonzalo García'
+        },
+        {
++         club: 'Ipswich Town',
+-         club: 'Fulham',
+          gen: undefined,
+          goals: 0,
++         name: 'Abdul Fatawu'
+-         name: 'Hugo Larsson'
+        },
+        {
++         club: 'Coventry City',
+-         club: 'Blackburn Rovers',
+          gen: undefined,
+          goals: 0,
++         name: 'Sidiki Chérif'
+-         name: 'Mathias Jørgensen'
+        },
+        {
++         club: 'Coventry City',
+-         club: 'Blackburn Rovers',
+          gen: undefined,
+          goals: 0,
++         name: 'Loum Tchaouna'
+-         name: 'Oladapo Afolayan'
+        },
+        {
++         club: 'Bournemouth',
+-         club: 'Birmingham City',
+          gen: undefined,
+          goals: 0,
++         name: 'Rayan'
+-         name: 'Jay Stansfield'
+        },
+        {
++         club: 'Bournemouth',
+-         club: 'Birmingham City',
+          gen: undefined,
+          goals: 0,
++         name: 'Alex Scott'
+-         name: 'August Priske'
+        },
+        {
++         club: 'Blackburn Rovers',
+-         club: 'Bolton Wanderers',
+          gen: undefined,
+          goals: 0,
++         name: 'Mathias Jørgensen'
+-         name: 'Rob Apter'
+        },
+        {
++         club: 'Blackburn Rovers',
+-         club: 'Bolton Wanderers',
+          gen: undefined,
+          goals: 0,
++         name: 'Oladapo Afolayan'
+-         name: 'John McAtee'
+        },
+        {
++         club: 'Aston Villa',
+-         club: 'Coventry City',
+          gen: undefined,
+          goals: 0,
++         name: 'Amadou Onana'
+-         name: 'Sidiki Chérif'
+        },
+        {
++         club: 'Aston Villa',
+-         club: 'Coventry City',
+          gen: undefined,
+          goals: 0,
++         name: 'Alejandro Garnacho'
+-         name: 'Loum Tchaouna'
+        },
+        {
++         club: 'Chelsea',
+-         club: 'Ipswich Town',
+          gen: undefined,
+          goals: 0,
++         name: 'Cole Palmer'
+-         name: 'Julio Enciso'
+        },
+        {
++         club: 'Chelsea',
+-         club: 'Ipswich Town',
+          gen: undefined,
+          goals: 0,
++         name: 'Moisés Caicedo'
+-         name: 'Abdul Fatawu'
+        }
+      ],
+      season: 2,
+      seasonSignings: [],
+      setPieces: {
+...
+          potential: 85,
++         rating: 84,
+-         rating: 85,
+          ratingSum: 0,
+          role: 'star',
+          seasonAssists: 0,
+          seasonGoals: 0,
+          seasonReds: 0,
+          seasonYellows: 0,
+          suspendedMatches: 0,
++         value: 28.5,
+-         value: 34.2,
+          wage: 40,
+          wantsOut: undefined
+        },
+        {
+          age: 28,
+...
+          potential: 90,
++         rating: 84,
+-         rating: 85,
+          ratingSum: 0,
+          role: 'key',
+          seasonAssists: 0,
+          seasonGoals: 0,
+          seasonReds: 0,
+          seasonYellows: 0,
+          suspendedMatches: 0,
++         value: 25.9,
+-         value: 31.1,
+          wage: 37,
+          wantsOut: undefined
+        },
+        {
+          age: 24,
+...
+          position: 'LW',
++         potential: 82,
++         rating: 82,
+-         potential: 80,
+-         rating: 80,
+          ratingSum: 0,
+          role: 'key',
+          seasonAssists: 0,
+          seasonGoals: 0,
+          seasonReds: 0,
+          seasonYellows: 0,
+          suspendedMatches: 0,
++         value: 17.3,
+-         value: 12,
+          wage: 31,
+          wantsOut: undefined
+        },
+        {
+          age: 27,
+...
+          potential: 84,
++         rating: 81,
+-         rating: 80,
+          ratingSum: 0,
+          role: 'rotation',
+          seasonAssists: 0,
+          seasonGoals: 0,
+          seasonReds: 0,
+          seasonYellows: 0,
+          suspendedMatches: 0,
++         value: 17.2,
+-         value: 14.3,
+          wage: 24,
+          wantsOut: undefined
+        },
+        {
+          age: 24,
+...
+          potential: 85,
++         rating: 79,
+-         rating: 80,
+          ratingSum: 0,
+          role: 'backup',
+          seasonAssists: 0,
+          seasonGoals: 0,
+          seasonReds: 0,
+          seasonYellows: 0,
+          suspendedMatches: 0,
++         value: 12,
+-         value: 14.4,
+          wage: 22,
+          wantsOut: undefined
+        },
+        {
+          age: 19,
+...
+          position: 'CB',
++         potential: 74,
++         rating: 74,
+-         potential: 75,
+-         rating: 75,
+          ratingSum: 0,
+          role: 'key',
+          seasonAssists: 0,
+          seasonGoals: 0,
+          seasonReds: 0,
+          seasonYellows: 0,
+          suspendedMatches: 0,
++         value: 3.5,
+-         value: 4.3,
+          wage: 13,
+          wantsOut: undefined
+        },
+        {
+          age: 33,
+...
+          position: 'CB',
++         potential: 72,
++         rating: 72,
+-         potential: 71,
+-         rating: 71,
+          ratingSum: 0,
+          role: 'key',
+          seasonAssists: 0,
+          seasonGoals: 0,
+          seasonReds: 0,
+          seasonYellows: 0,
+          suspendedMatches: 0,
++         value: 2.6,
+-         value: 2.1,
+          wage: 9,
+          wantsOut: undefined
+        },
+        {
++         age: 19,
++         contractYears: 2,
+-         age: 17,
+-         contractYears: 3,
+          fitness: 100,
++         id: 'youth-mv2cdxc0-1-435',
+-         id: 'youth-mv2cdxc0-1-963',
+          injuryWeeks: 0,
+          isYouth: true,
+          lastTen: [],
+          morale: 72,
++         name: 'Zane Ozturk (Youth)',
++         position: 'RM',
++         potential: 59,
++         rating: 56,
+-         name: 'Zane Adeyemi (Youth)',
+-         position: 'RB',
+-         potential: 75,
+-         rating: 66,
+          role: 'prospect',
+          seasonAssists: 0,
+          seasonGoals: 0,
+          suspendedMatches: 0,
++         value: 0.3,
++         wage: 5
+-         value: 1.1,
+-         wage: 12
+        },
+        {
++         age: 17,
+-         age: 19,
+          contractYears: 3,
+          fitness: 100,
++         id: 'youth-mv2cdxc0-2-545',
+-         id: 'youth-mv2cdxc0-2-620',
+          injuryWeeks: 0,
+          isYouth: true,
+          lastTen: [],
+          morale: 72,
++         name: 'Theo Adeyemi (Youth)',
++         position: 'LM',
++         potential: 74,
++         rating: 63,
+-         name: 'Mats Lindholm (Youth)',
+-         position: 'RWB',
+-         potential: 77,
+-         rating: 64,
+          role: 'prospect',
+          seasonAssists: 0,
+          seasonGoals: 0,
+          suspendedMatches: 0,
++         value: 0.8,
++         wage: 9
+-         value: 0.9,
+-         wage: 10
+        },
+        {
++         age: 17,
++         contractYears: 3,
+-         age: 18,
+-         contractYears: 1,
+          fitness: 100,
++         id: 'youth-mv2cdxc0-3-768',
+-         id: 'youth-mv2cdxc0-3-495',
+          injuryWeeks: 0,
+          isYouth: true,
+          lastTen: [],
+          morale: 72,
++         name: 'Matteo Ferreira (Youth)',
++         position: 'RM',
+-         name: 'Enzo Berg (Youth)',
+-         position: 'GK',
+          potential: 76,
++         rating: 61,
++         role: 'prospect',
+-         rating: 63,
+-         role: 'key',
+          seasonAssists: 0,
+          seasonGoals: 0,
+          suspendedMatches: 0,
++         value: 0.6,
++         wage: 8
+-         value: 0.8,
+-         wage: 9
+        },
+        {
++         age: 19,
++         contractYears: 4,
+-         age: 18,
+-         contractYears: 2,
+          fitness: 100,
++         id: 'youth-mv2cdxc0-4-786',
+-         id: 'youth-mv2cdxc0-4-328',
+          injuryWeeks: 0,
+          isYouth: true,
+          lastTen: [],
+          morale: 72,
++         name: 'Rune Novak (Youth)',
++         position: 'GK',
++         potential: 76,
++         rating: 65,
++         role: 'key',
+-         name: 'Sam Moretti (Youth)',
+-         position: 'LW',
+-         potential: 79,
+-         rating: 66,
+-         role: 'prospect',
+          seasonAssists: 0,
+          seasonGoals: 0,
+          suspendedMatches: 0,
++         value: 1,
++         wage: 11
+-         value: 1.1,
+-         wage: 12
+        },
+        {
++         age: 17,
+-         age: 18,
+          contractYears: 4,
+          fitness: 100,
++         id: 'youth-mv2cdxc0-5-904',
+-         id: 'youth-mv2cdxc0-5-643',
+          injuryWeeks: 0,
+          isYouth: true,
+          lastTen: [],
+          morale: 72,
++         name: 'Noah Sato (Youth)',
+-         name: 'Tyler Miclea (Youth)',
+          position: 'GK',
++         potential: 71,
++         rating: 65,
+-         potential: 74,
+-         rating: 60,
+          role: 'prospect',
+          seasonAssists: 0,
+          seasonGoals: 0,
+          suspendedMatches: 0,
++         value: 1,
++         wage: 11
+-         value: 0.5,
+-         wage: 7
+        }
+      ],
+      staff: undefined,
+      startYear: 2026,
+      table: [
+        {
++         club: 'Everton',
+-         club: 'Arsenal',
+          d: 0,
+          ga: 0,
+          gf: 0,
+          l: 0,
+          pts: 0,
+...
+        {
++         club: 'Fulham',
+-         club: 'Everton',
+          d: 0,
+          ga: 0,
+          gf: 0,
+          l: 0,
+          pts: 0,
+...
+        {
++         club: 'Liverpool',
+-         club: 'Newcastle',
+          d: 0,
+          ga: 0,
+          gf: 0,
+          l: 0,
+          pts: 0,
+...
+        {
++         club: 'Bolton Wanderers',
+-         club: 'Crystal Palace',
+          d: 0,
+          ga: 0,
+          gf: 0,
+          l: 0,
+          pts: 0,
+...
+        {
++         club: 'Manchester City',
+-         club: 'Brentford',
+          d: 0,
+          ga: 0,
+          gf: 0,
+          l: 0,
+          pts: 0,
+...
+        {
++         club: 'Leeds United',
+-         club: 'Manchester City',
+          d: 0,
+          ga: 0,
+          gf: 0,
+          l: 0,
+          pts: 0,
+...
+        {
++         club: 'Newcastle',
+-         club: 'Bournemouth',
+          d: 0,
+          ga: 0,
+          gf: 0,
+          l: 0,
+          pts: 0,
+...
+        {
++         club: 'Brentford',
+-         club: 'Liverpool',
+          d: 0,
+          ga: 0,
+          gf: 0,
+          l: 0,
+          pts: 0,
+...
+        {
++         club: 'Crystal Palace',
+-         club: 'Chelsea',
+          d: 0,
+          ga: 0,
+          gf: 0,
+          l: 0,
+          pts: 0,
+...
+        {
++         club: 'Brighton',
+-         club: 'Manchester United',
+          d: 0,
+          ga: 0,
+          gf: 0,
+          l: 0,
+          pts: 0,
+...
+        {
++         club: 'Birmingham City',
+-         club: 'Aston Villa',
+          d: 0,
+          ga: 0,
+          gf: 0,
+          l: 0,
+          pts: 0,
+...
+        {
++         club: 'Arsenal',
+-         club: 'Brighton',
+          d: 0,
+          ga: 0,
+          gf: 0,
+          l: 0,
+          pts: 0,
+...
+        {
++         club: 'Manchester United',
+-         club: 'Hull City',
+          d: 0,
+          ga: 0,
+          gf: 0,
+          l: 0,
+          pts: 0,
+...
+        {
++         club: 'Hull City',
+-         club: 'Leeds United',
+          d: 0,
+          ga: 0,
+          gf: 0,
+          l: 0,
+          pts: 0,
+...
+        {
++         club: 'Ipswich Town',
+-         club: 'Fulham',
+          d: 0,
+          ga: 0,
+          gf: 0,
+          l: 0,
+          pts: 0,
+...
+        {
++         club: 'Coventry City',
+-         club: 'Blackburn Rovers',
+          d: 0,
+          ga: 0,
+          gf: 0,
+          l: 0,
+          pts: 0,
+...
+        {
++         club: 'Bournemouth',
+-         club: 'Birmingham City',
+          d: 0,
+          ga: 0,
+          gf: 0,
+          l: 0,
+          pts: 0,
+...
+        {
++         club: 'Blackburn Rovers',
+-         club: 'Bolton Wanderers',
+          d: 0,
+          ga: 0,
+          gf: 0,
+          l: 0,
+          pts: 0,
+...
+        {
++         club: 'Aston Villa',
+-         club: 'Coventry City',
+          d: 0,
+          ga: 0,
+          gf: 0,
+          l: 0,
+          pts: 0,
+...
+        {
++         club: 'Chelsea',
+-         club: 'Ipswich Town',
+          d: 0,
+          ga: 0,
+          gf: 0,
+          l: 0,
+          pts: 0,
+...
+        {
++         fee: 90,
+-         fee: 54,
+          from: 'Real Madrid',
++         name: 'Vinicius Junior',
+-         name: 'Trent Alexander-Arnold',
+          season: 2,
++         to: 'Manchester City',
+-         to: 'Borussia Dortmund',
+          week: 0
+        },
+        {
++         fee: 47,
++         from: 'Tottenham',
++         name: 'Omar Marmoush',
+-         fee: 66,
+-         from: 'Barcelona',
+-         name: 'Alejandro Balde',
+          season: 2,
++         to: 'Manchester City',
+-         to: 'Nottingham Forest',
+          week: 0
+        },
+        {
++         fee: 32,
++         from: 'Barcelona',
++         name: 'Raphinha',
+-         fee: 100,
+-         from: 'Manchester City',
+-         name: 'Erling Haaland',
+          season: 2,
++         to: 'Como',
+-         to: 'Chelsea',
+          week: 0
+        },
+        {
++         fee: 61,
+-         fee: 58,
+-         from: 'Arsenal',
+-         name: 'Martin Ødegaard',
+-         season: 2,
+-         to: 'Manchester United',
+-         week: 0
+-       },
+-       {
+-         fee: 37,
+-         from: 'Aston Villa',
+-         name: 'Amadou Onana',
+-         season: 2,
+-         to: 'Leeds United',
+-         week: 0
+-       },
+-       {
+-         fee: 60,
+          from: 'Barcelona',
++         name: 'Alejandro Balde',
+-         name: 'Karim Adeyemi',
+          season: 2,
++         to: 'Liverpool',
+-         to: 'Crystal Palace',
+          week: 0
+        }
+      ],
+      transferWindow: 'summer',
+      trophies: [],
+...
+      xiIds: [
++       'youth-mv2cdxc0-4-786',
+-       'youth-mv2cdxc0-3-495',
+        'p-jarrad-branthwaite',
+        'p-james-tarkowski',
+        'p-michael-keane',
+        'p-vitaliy-mykolenko',
+        'p-james-garner',
++       'p-kiernan-dewsbury-hall',
+        'p-hayden-hackney',
+-       'p-kiernan-dewsbury-hall',
+        'p-brennan-johnson',
+        'p-thierno-barry',
+        'p-tyrique-george'
+      ]
+    }
+
+FAIL [healthy] constructors: Fresh constructor changes only the declared held seed
++ actual - expected
+... Skipped lines
+
+  {
+    academy: {
+      candidates: [
+        {
+          fee: 4,
+...
+        id: 'league',
++       label: 'Win La Liga',
+-       label: 'Win the La Liga',
+        target: 1
+      },
+      {
+        id: 'cup',
+        label: 'Win the Copa del Rey',
+
+PASS [healthy] identity
+PASS [healthy] buy-job
+PASS [healthy] year-away
+PASS [healthy] sale
+PASS [healthy] option
+PASS [healthy] release
+PASS [healthy] refresh
+PASS [healthy] seeded-world
+PASS [healthy] storage
+AssertionError [ERR_ASSERTION]: Healthy complete outcome groups all pass
+
+2 !== 0
+
+    at arm (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simManagerWorldContinuity.mjs:475:19)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simManagerWorldContinuity.mjs:483:24

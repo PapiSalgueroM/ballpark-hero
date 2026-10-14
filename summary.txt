@@ -1,0 +1,12 @@
+simManagerWorldContinuity exit=1 36s |     at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simManagerWorldContinuity.mjs:483:24
+simManagerAppealIsolation exit=1 10s | Node.js v24.21.0
+simClubManagerDecisions exit=0 16s | simClubManagerDecisions: 0 findings
+simCmLeagueRules exit=1 69s | simCmLeagueRules: 49 failure(s)
+simCmFixtureFleet exit=0 7s | simCmFixtureFleet: green. 10 registered league(s), 9 in a file of their own. nofetch NOT RUN, oldsaves NOT RUN, dailies 11 clubs.
+simClubManagerSave exit=0 13s | simClubManagerSave: all sections green
+simSaveFence exit=0 59s | simSaveFence: all green (tabs, source, fleet)
+simDailyClubPool exit=0 5s | simDailyClubPool: all sections green
+simCmQuickSubs-runAll exit=0 20s | All 1 harnesses green.
+simCmUnseededWorld exit=1 176s | simCmUnseededWorld: 113 FAILURE(S)
+simManagerMatchPlans exit=1 128s | 1 harness not green.
+worldSizeDiagnostic exit=0 447s | DIAGNOSTIC complete: original/current unchanged historical budgets, full raw states, storage and unfiltered action vectors retained

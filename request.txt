@@ -1,0 +1,12 @@
+simCmUnseededWorld: node scripts/simCmUnseededWorld.mjs
+simManagerWorldContinuity: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simManagerWorldContinuity.mjs
+simCmLeagueRules: node scripts/simCmLeagueRules.mjs
+simManagerAppealIsolation: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simManagerAppealIsolation.mjs
+simClubManagerDecisions: node scripts/simClubManagerDecisions.mjs
+simCmFixtureFleet: node scripts/simCmFixtureFleet.mjs
+simSaveFence: node scripts/simSaveFence.mjs
+simClubManagerSave: node scripts/simClubManagerSave.mjs
+worldSizeDiagnostic: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/managerWorldSizeDiagnostic.mjs
+simDailyClubPool: node scripts/simDailyClubPool.mjs
+simCmQuickSubs-runAll: CM_QUICK_SUBS_CONTROL=all ONLY=simCmQuickSubs node scripts/runAllSims.mjs
+simManagerMatchPlans: MANAGER_MATCH_PLANS_CONTROL=all ONLY=simManagerMatchPlans node scripts/runAllSims.mjs
