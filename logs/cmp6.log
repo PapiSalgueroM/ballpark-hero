@@ -1,0 +1,13 @@
+simAuthSave: head exit 1, base exit 1, same last line | head: simAuthSave: 1 failure(s) || FAIL: could not reach the database (Error: Offline harness blocked fetch to https://flawuiqbvjobmkfkauhw.supabase.co). Th | base: simAuthSave: 1 failure(s) || FAIL: could not reach the database (Error: Offline harness blocked fetch to https://flawuiqbvjobmkfkauhw.supabase.co). Th
+simCareerSeasonTruth: head exit 1, base exit 1, same last line | head: Supabase unreachable, nothing was checked: Offline harness blocked fetch to https://flawuiqbvjobmkfkauhw.supabase.co | base: Supabase unreachable, nothing was checked: Offline harness blocked fetch to https://flawuiqbvjobmkfkauhw.supabase.co
+simLeaderboardCache: head exit 1, base exit 1, same last line | head: Node.js v24.21.0 | base: Node.js v24.21.0
+simNbaChainNames: head exit 1, base exit 1, same last line | head: Node.js v24.21.0 | base: Node.js v24.21.0
+simMobileChrome: head exit 1, base exit 1, same last line | head: Node.js v24.21.0 | base: Node.js v24.21.0
+simSchemaNames: head exit 1, base exit 1, same last line | head: SUPABASE UNREACHABLE. NOTHING WAS CHECKED. | base: SUPABASE UNREACHABLE. NOTHING WAS CHECKED.
+simSoccerConquest: head exit 1, base exit 1, same last line | head: 1 FAILURES || FAIL: the database refused game_score_caps?select=game,max_score&game=eq.conquest-soccer-imperialism: Error: Offline harness blocked fet | base: 1 FAILURES || FAIL: the database refused game_score_caps?select=game,max_score&game=eq.conquest-soccer-imperialism: Error: Offline harness blocked fet
+simTactics: head exit 1, base exit 1, same last line | head: Node.js v24.21.0 | base: Node.js v24.21.0
+simWhoAmIAccuracy: head exit 1, base exit 1, same last line | head: SUPABASE UNREACHABLE. NOTHING WAS CHECKED. | base: SUPABASE UNREACHABLE. NOTHING WAS CHECKED.
+simWindow2026Integration: head exit 1, base exit 1, same last line | head: Node.js v24.21.0 | base: Node.js v24.21.0
+simRarityPools: head exit 1, base exit 1, DIFFERS | head: Node.js v24.21.0 || FAIL: club-dortmund: the pool came back empty, so nothing was checked for it / FAIL: club-atletico: the pool came back empty, so n | base: 2) each pool matches what the database independently says || FAIL: club-dortmund: the pool came back empty, so nothing was checked for it / FAIL: club
+simGuessFinish: head exit 1, base exit 1, same last line | head: simGuessFinish: 9 failure(s). || FAIL: control unkeyed did not turn red: keeps a different game that arrives already finished settled / FAIL: control  | base: simGuessFinish: 9 failure(s). || FAIL: control unkeyed did not turn red: keeps a different game that arrives already finished settled / FAIL: control 
+cmp: 12 harnesses, 1 differ between head and base
