@@ -52,6 +52,21 @@
    desk never freezes the deck). gmPackProblems is the one place every pack
    check lives; bindGmInbox refuses a pack with any.
 
+   Round 1332 adds what a Club Manager or Soccer Career card needs, again
+   each an optional field: a seat effect registry (an option's `fx` moves a
+   key the seat registered once, with its words and how it lands, so the
+   button prints exactly what the answer does), name slots ({player} filled
+   from a fact at deal time), conduct and private tags (such a card is held
+   unless every man it is about or moves is a generated person, so nothing
+   about discipline or a private life ever lands on a real player), and a
+   compact desk (a pack's opt in: a pruned cooldown book, short keys, and
+   messages saved as numbers and rebuilt from the pack on read). A role on a
+   tagged card is asked again whenever it matters, because who holds it can
+   change between the deal and the answer (a new season, a sale): at the
+   deal, at the answer, and every week the card sits open. Once the role has
+   passed to a real man (or to nobody) the answer fails closed and the staff
+   settle the card on its neutral option, moving nothing (step 2b).
+
    A seat delivers through gmInboxWeek, never through careerInbox's own
    receive or deliver: those know nothing of conditions or cooldowns and
    would deal the whole pack. The seat satisfies InboxSport so the answer
@@ -88,6 +103,11 @@ export type GmFactSpec =
   | { kind: 'num'; min: number; max: number; per: 'season' | 'week' }
   | { kind: 'bool'; p: number; per: 'season' | 'week' };
 
+/** A registered effect's value on an option (Round 1332): a plain number
+ *  for a key that names no one, `{ who, v }` (who a key of the pack's
+ *  targets) for one that names a man. */
+export type GmFxValue = number | { who: string; v: number };
+
 /** One answer. karma is owner trust, popularity is fans, cash is budget. */
 export interface GmChoiceDef extends InboxChoiceDef {
   /** One man, named by role, misses this many weeks. */
@@ -96,7 +116,43 @@ export interface GmChoiceDef extends InboxChoiceDef {
   rating?: { who: string; delta: number };
   /** A recruit's interest in your program moves by this much. */
   recruit?: number;
+  /** Round 1332: what else it moves, each key one the seat registered. */
+  fx?: Record<string, GmFxValue>;
 }
+
+/* ─── Round 1332: the seat effect registry ───────────────────────────────────
+
+   The seven built in effects (trust, fans, budget, the room, out, rating,
+   recruit) are what a GM desk moves. A seat that moves more (board
+   confidence, a club suspension) registers each key once: its words and
+   how it lands. The button's words and the answer read the same entry, so
+   a card can never print a promise it does not keep, and `read` is how a
+   harness proves it. */
+
+/** What choiceEffects needs of a registered effect: its words. */
+export interface GmFxWords {
+  label: string;
+  /** 'signed' (the default) prints +3, 'money' as the budget prints,
+   *  'weeks' as "2 weeks". */
+  fmt?: 'signed' | 'money' | 'weeks';
+  /** The key names a man: its values are `{ who, v }`. */
+  who?: true;
+}
+export interface GmFxDef<S> extends GmFxWords {
+  apply: (s: S, v: number, who?: string) => void;
+  read: (s: S, who?: string) => number;
+}
+export type GmFxRegistry<S> = Record<string, GmFxDef<S>>;
+
+/** The built in effects: no registry key may take one of these names. */
+export const GM_BUILT_IN_FX: readonly string[] = ['karma', 'popularity', 'cash', 'morale', 'out', 'rating', 'recruit'];
+
+/** One fx value as its man (if any) and its amount. */
+const fxParts = (raw: GmFxValue): { who?: string; v: number } =>
+  (typeof raw === 'number' ? { v: raw } : { who: raw?.who, v: raw?.v });
+
+/** Whether an option moves anything through a registered key. */
+const gmFxMoves = (c: GmChoiceDef): boolean => Object.values(c.fx ?? {}).some(raw => fxParts(raw).v !== 0);
 
 /** One event in a pack. The phase and age gates of a player's phone mean
  *  nothing at a desk, so a pack leaves them out and gmPool fills them in. */
@@ -124,6 +180,13 @@ export interface GmEventDef extends Omit<InboxMessageDef, 'phase' | 'choices' | 
   /** Ticks it may sit open before the desk's staff settle it on its neutral
    *  option, moving nothing. Needs a neutral option. */
   expires?: number;
+  /** Round 1332: a card about a man's conduct (discipline, a fine) or his
+   *  private life (family, faith, his own health off the pitch). It is dealt
+   *  only when its subject, every person slot and every man an option moves
+   *  are generated people: never a real one. A tagged card that names a
+   *  role needs an option that moves nothing, which the staff settle it on
+   *  once that role passes to a real man (step 2b). */
+  tag?: 'conduct' | 'private';
 }
 
 /** A delivered message. Only a card that expires carries w (the tick it
@@ -131,6 +194,10 @@ export interface GmEventDef extends Omit<InboxMessageDef, 'phase' | 'choices' | 
 export interface GmInboxMessage extends InboxMessage {
   w?: number;
   auto?: true;
+  /** Round 1332, a compact pack's message only: the wording it was dealt
+   *  (0 is `text`) and what its slots printed, so it can be rebuilt. */
+  t?: number;
+  sv?: Record<string, string>;
 }
 
 /** Words for the meters, so the card reads in the seat's own language. */
@@ -161,8 +228,29 @@ export interface GmInboxPack {
   reachBy?: string;
   /** Ticks a subject rests after a card about him. Absent or 0: no rest. */
   subjectRest?: number;
+  /** Round 1332: the name slots a wording may hold ({player}, {opponent}),
+   *  each filled from a fact. A person slot's fact is a person's id, printed
+   *  as the name the seat gives it; any other prints the fact as it is. */
+  slots?: Record<string, { fact: string; person?: true }>;
+  /** Round 1332: the pack's own ceiling per meter it moves ('trust',
+   *  'fans', 'cash', 'morale', 'recruit' or a registered key): the most its
+   *  cards may push that meter in a season when every card is answered the
+   *  way that moves it most (or least). Set by the binding round from the
+   *  real engine's meter harness; the kit holds every new pack to it. */
+  pressure?: Record<string, number>;
+  /** Round 1332: 'compact' opts in to a pruned cooldown book (on a rising
+   *  clock only: a pruned entry is not rebased when a clock falls) and to
+   *  messages saved as numbers by gmDeskSave. Absent is 'whole'. Its words,
+   *  voices, replies and effects are then frozen
+   *  (scripts/data/eventDeckWords.json): a saved message is rebuilt from
+   *  them. */
+  store?: 'whole' | 'compact';
   events: GmEventDef[];
 }
+
+/** Round 1332: who a role or an id is, as only the seat knows. */
+export type GmPersonRef = { role: string } | { id: string | number };
+export interface GmPerson { name: string; real: boolean }
 
 /* ─── what a desk save carries, and what a seat hands in ─────────────────── */
 
@@ -182,6 +270,10 @@ export interface GmInboxSeat<S extends GmInboxHost> extends InboxSport<S> {
   addRating: (s: S, who: string, delta: number) => void;
   addRecruit: (s: S, delta: number) => void;
   keyOf?: (s: S) => string;
+  /** Round 1332: the seat's registered effects. Absent reads as none. */
+  fx?: GmFxRegistry<S>;
+  /** Round 1332: the seat's only way to say who a role or an id is. */
+  person?: (s: S, ref: GmPersonRef) => GmPerson | null;
 }
 
 export interface GmInboxBinding<S extends GmInboxHost> {
@@ -199,6 +291,11 @@ export interface GmInboxBinding<S extends GmInboxHost> {
   setOut?: (s: S, who: string, weeks: number) => void;
   addRating?: (s: S, who: string, delta: number) => void;
   addRecruit?: (s: S, delta: number) => void;
+  /** Round 1332: every key a pack's `fx` moves, declared once. */
+  fx?: GmFxRegistry<S>;
+  /** Round 1332: who a role or an id is ({ name, real }), or null when
+   *  nobody. Needed by a pack with a tagged card or a person slot. */
+  person?: (s: S, ref: GmPersonRef) => GmPerson | null;
 }
 
 /** The pack as careerInbox's pool: every event with the phase gate open. */
@@ -226,8 +323,12 @@ export function bindGmInbox<S extends GmInboxHost>(pack: GmInboxPack, b: GmInbox
   const missing = (['out', 'rating', 'recruit'] as const).filter(k =>
     used[k] && !(k === 'out' ? b.setOut : k === 'rating' ? b.addRating : b.addRecruit));
   if (missing.length > 0) throw new Error(`gmInbox: the ${pack.seat} pack moves ${missing.join(', ')} and the seat cannot`);
-  const problems = gmPackProblems(pack);
+  const problems = gmPackProblems(pack, b.fx);
   if (problems.length > 0) throw new Error(`gmInbox: the ${pack.seat} pack: ${problems[0]}`);
+  /* Round 1332: a card about a person could never be dealt honestly by a
+     seat that cannot say who anyone is. */
+  const aboutSomeone = pack.events.some(e => e.tag !== undefined) || Object.values(pack.slots ?? {}).some(sl => sl.person);
+  if (aboutSomeone && !b.person) throw new Error(`gmInbox: the ${pack.seat} pack has cards about people and the seat cannot say who anyone is`);
   const none = () => undefined;
   return {
     pack,
@@ -245,21 +346,79 @@ export function bindGmInbox<S extends GmInboxHost>(pack: GmInboxPack, b: GmInbox
     addRating: b.addRating ?? none,
     addRecruit: b.addRecruit ?? none,
     keyOf: b.keyOf,
+    fx: b.fx ?? {},
+    person: b.person,
   };
 }
 
-/** The first option that moves nothing at all, or -1. */
+/** The first option that moves nothing at all, or -1. Since Round 1332 a
+ *  registered effect counts: an option is neutral only when every one of
+ *  its fx values is zero or absent. */
 export function gmNeutralIndex(choices: readonly GmChoiceDef[]): number {
   return choices.findIndex(c => !c.karma && !c.popularity && !c.cash && !c.morale
-    && !(c.out && c.out.weeks > 0) && !(c.rating && c.rating.delta) && !c.recruit);
+    && !(c.out && c.out.weeks > 0) && !(c.rating && c.rating.delta) && !c.recruit
+    && !gmFxMoves(c));
 }
 
 const has = (o: object, k: string) => Object.prototype.hasOwnProperty.call(o, k);
 
+/** Round 1332: the meters a pack's options move, by the names `pressure`
+ *  uses: the built in meters and every fx key with a value that moves. */
+export function gmMetersMoved(pack: GmInboxPack): Set<string> {
+  const out = new Set<string>();
+  for (const c of pack.events.flatMap(e => e.choices)) {
+    if (c.karma) out.add('trust');
+    if (c.popularity) out.add('fans');
+    if (c.cash) out.add('cash');
+    if (c.morale) out.add('morale');
+    if (c.recruit) out.add('recruit');
+    for (const [k, raw] of Object.entries(c.fx ?? {})) if (fxParts(raw).v) out.add(k);
+  }
+  return out;
+}
+
+/** Round 1332: a name slot in a wording, `{player}`. */
+const SLOT_RE = /\{(\w+)\}/g;
+/** The slot names a wording holds, in order, each once. */
+const slotNames = (t: string): string[] => [...new Set([...t.matchAll(SLOT_RE)].map(m => m[1]))];
+
 /** Every problem a pack has, in one place: bindGmInbox refuses the first,
- *  the kit lists them all. W1b adds its effect registry check here. */
-export function gmPackProblems(pack: GmInboxPack): string[] {
+ *  the kit lists them all. Round 1332's effect registry check is the
+ *  `fx` loop: a key the registry does not hold (with no registry, every
+ *  key), a registry key named like a built in, a man given to a plain key
+ *  or a bare number to a key that names one, a man off the targets, and a
+ *  value that is not a finite number. */
+export function gmPackProblems(pack: GmInboxPack, fx?: Readonly<Record<string, GmFxWords>>): string[] {
   const out: string[] = [];
+  const reg = fx ?? {};
+  for (const k of Object.keys(reg)) if (GM_BUILT_IN_FX.includes(k)) out.push(`the seat registers ${k}, the name of a built in effect`);
+  /* trust and fans are the built in meters' names in `pressure`. */
+  for (const k of Object.keys(reg)) if (k === 'trust' || k === 'fans') out.push(`the seat registers ${k}, the name of a built in meter`);
+  /* Round 1332: a slot's fact is declared and names someone or something. */
+  const slots = pack.slots ?? {};
+  for (const [name, sl] of Object.entries(slots)) {
+    if (!(sl && has(pack.facts, sl.fact))) out.push(`slot ${name} reads a fact the pack does not declare`);
+    else if (pack.facts[sl.fact].kind === 'bool') out.push(`slot ${name} reads a yes or no fact, which names nobody`);
+  }
+  for (const [k, t] of Object.entries(pack.targets)) if (/[{}]/.test(t)) out.push(`target ${k} holds a brace`);
+  if (pack.store !== undefined && pack.store !== 'whole' && pack.store !== 'compact') out.push(`store ${pack.store} is neither whole nor compact`);
+  if (pack.pressure !== undefined) {
+    const moved = gmMetersMoved(pack);
+    for (const [k, v] of Object.entries(pack.pressure)) {
+      if (!(typeof v === 'number' && Number.isFinite(v) && v > 0)) out.push(`pressure on ${k} is ${v}, not a number above 0`);
+      if (!moved.has(k)) out.push(`pressure names ${k}, a meter the pack never moves`);
+    }
+  }
+  if (pack.store === 'compact') {
+    /* A compact save keeps ids and book keys short: two may never share one. */
+    const seen = new Map<string, string>();
+    for (const k of new Set(pack.events.flatMap(e => [e.id, bookKey(e)]))) {
+      const sk = gmShortKey(k);
+      const other = seen.get(sk);
+      if (other !== undefined) out.push(`${k} and ${other} share the short key ${sk}`);
+      else seen.set(sk, k);
+    }
+  }
   const whole = (v: unknown, min: number) => typeof v === 'number' && Number.isInteger(v) && v >= min;
   if (pack.subjectRest !== undefined && !whole(pack.subjectRest, 0)) out.push(`subjectRest ${pack.subjectRest} is not a whole number`);
   if (pack.clock !== undefined && pack.clock !== 'week' && pack.clock !== 'season') out.push(`clock ${pack.clock} is neither week nor season`);
@@ -278,6 +437,37 @@ export function gmPackProblems(pack: GmInboxPack): string[] {
     } else if (sub !== undefined && typeof sub !== 'string' && pack.facts[sub.fact].kind === 'bool') {
       /* A yes or no names nobody, so gmSubjectKey would hold the card forever. */
       out.push(`${e.id} is about a yes or no fact, which names nobody`);
+    }
+    /* Round 1332: a {slot} only where words are dealt, and only a declared one. */
+    for (const t of [e.text, ...(Array.isArray(e.texts) ? e.texts : [])]) {
+      if (typeof t !== 'string') continue;
+      for (const name of slotNames(t)) if (!has(slots, name)) out.push(`${e.id} names {${name}}, not a declared slot`);
+      if (/[{}]/.test(t.replace(SLOT_RE, ''))) out.push(`${e.id} has a brace outside a slot`);
+    }
+    if ([e.from, e.beat, ...e.choices.flatMap(c => [c.label, c.reply])].some(t => typeof t === 'string' && /[{}]/.test(t))) {
+      out.push(`${e.id} has a brace where no slot is filled (its voice, beat, a label or a reply)`);
+    }
+    if (e.tag !== undefined && e.tag !== 'conduct' && e.tag !== 'private') out.push(`${e.id} has tag ${e.tag}, neither conduct nor private`);
+    /* A tagged card names who it is about (a subject or a person slot), or
+       the hold could never check that he is a generated man. */
+    if (e.tag !== undefined && e.subject === undefined && !cardSlots(e).some(n => has(slots, n) && slots[n].person)) {
+      out.push(`${e.id} is tagged ${e.tag} and names nobody it is about (no subject, no person slot)`);
+    }
+    /* Who holds a role can change while the card sits open, and then the
+       staff settle it (step 2b): it needs an option that moves nothing. */
+    if (e.tag !== undefined && tagRoles(e, e.choices).length > 0 && gmNeutralIndex(e.choices) < 0) {
+      out.push(`${e.id} is tagged ${e.tag} and names a role, with no option that moves nothing for the staff to settle on`);
+    }
+    for (const c of e.choices) {
+      for (const [k, raw] of Object.entries(c.fx ?? {})) {
+        const def = has(reg, k) ? reg[k] : undefined;
+        if (!def) { out.push(`${e.id}: "${c.label}" moves ${k}, which the seat has not registered`); continue; }
+        const { who, v } = fxParts(raw);
+        if (!(typeof v === 'number' && Number.isFinite(v))) out.push(`${e.id}: "${c.label}" moves ${k} by ${v}, not a finite number`);
+        if (def.who && typeof raw === 'number') out.push(`${e.id}: ${k} names a man and "${c.label}" gives it a bare number`);
+        if (!def.who && typeof raw !== 'number') out.push(`${e.id}: ${k} names nobody and "${c.label}" gives it a man`);
+        if (typeof raw !== 'number' && !(typeof who === 'string' && has(pack.targets, who))) out.push(`${e.id}: "${c.label}" moves ${k} for ${who}, not a target`);
+      }
     }
   }
   return out;
@@ -315,10 +505,107 @@ export function gmSubjectKey(e: GmEventDef, facts: GmFacts): string | null | und
   return (typeof v === 'string' && v !== '') || (typeof v === 'number' && Number.isFinite(v)) ? `id:${v}` : null;
 }
 
-/** The events that may arrive this week, in pack order (rules 1 and 2). */
+/** A fact value that can fill a slot or name a man: a word or a number. */
+const named = (v: GmFactValue | undefined): v is string | number =>
+  (typeof v === 'string' && v !== '') || (typeof v === 'number' && Number.isFinite(v));
+
+/** Every slot any wording of a card holds. */
+const cardSlots = (e: GmEventDef): string[] =>
+  [...new Set([e.text, ...(e.texts ?? [])].flatMap(slotNames))];
+
+/** The man (a role) each effect of one option lands on. A value read off a
+ *  save that names nobody becomes a role no seat holds, so it fails closed. */
+const choiceRoles = (c: GmChoiceDef): GmPersonRef[] => [
+  ...(c.out ? [{ role: c.out.who }] : []), ...(c.rating ? [{ role: c.rating.who }] : []),
+  ...Object.values(c.fx ?? {}).filter(raw => typeof raw !== 'number').map(raw => ({ role: String((raw as { who?: unknown } | null)?.who) })),
+];
+
+/** Round 1332: the roles a tagged card names (its subject when that is a
+ *  role, and the man every option's out, rating and targeted fx lands on).
+ *  Who holds a role can change between the deal and the answer, so these
+ *  are asked again at the answer and every week the card sits open. */
+function tagRoles(e: GmEventDef, choices: readonly GmChoiceDef[]): GmPersonRef[] {
+  const refs: GmPersonRef[] = typeof e.subject === 'string' ? [{ role: e.subject }] : [];
+  for (const c of choices) refs.push(...choiceRoles(c));
+  return refs;
+}
+
+/** Every ref names a generated man: a real one, or nobody, fails. */
+const allGenerated = <S extends GmInboxHost>(s: S, seat: GmInboxSeat<S>, refs: readonly GmPersonRef[]): boolean =>
+  refs.every(ref => seat.person?.(s, ref)?.real === false);
+
+/** Round 1332: whether every role a tagged card names is still held by a
+ *  generated man, with the options as saved on the message (what an answer
+ *  would apply). Asked at the answer and by step 2b. */
+function gmTagStillSafe<S extends GmInboxHost>(e: GmEventDef, choices: readonly GmChoiceDef[], s: S, seat: GmInboxSeat<S>): boolean {
+  return allGenerated(s, seat, tagRoles(e, choices));
+}
+
+/**
+ * Round 1332, the hold (step 4b): whether a card may be dealt this week.
+ * Every slot in any wording of it has a value (a word or a number) and every
+ * person slot names somebody. And a tagged card (conduct, private) only when
+ * its subject, every person slot and the man every option's out, rating and
+ * targeted fx lands on are generated people (`real: false`): nothing about a
+ * man's conduct or private life ever lands on a real one. A card with no
+ * slot and no tag is safe without asking anything.
+ */
+export function gmCardSafe<S extends GmInboxHost>(e: GmEventDef, s: S, seat: GmInboxSeat<S>, facts: GmFacts): boolean {
+  const slots = seat.pack.slots;
+  if (!e.tag && !slots) return true;
+  const used = slots ? cardSlots(e) : [];
+  if (!e.tag && used.length === 0) return true;
+  const who = (ref: GmPersonRef) => (seat.person ? seat.person(s, ref) : null);
+  const people: GmPersonRef[] = [];
+  for (const name of used) {
+    const sl = slots?.[name];
+    const v = sl ? facts[sl.fact] : undefined;
+    if (!sl || !named(v)) return false;
+    if (sl.person) {
+      if (!who({ id: v })) return false;
+      people.push({ id: v });
+    }
+  }
+  if (!e.tag) return true;
+  const sub = e.subject;
+  if (sub !== undefined && typeof sub !== 'string') {
+    const v = facts[sub.fact];
+    if (!named(v)) return false;
+    people.push({ id: v });
+  }
+  people.push(...tagRoles(e, e.choices));
+  return allGenerated(s, seat, people);
+}
+
+/** Round 1332: what each slot of one wording prints, by slot name, or
+ *  undefined for a wording with none. A slot with no value is left out, so
+ *  it stays a brace (the hold makes sure that never happens). */
+function gmSlotValues<S extends GmInboxHost>(words: string, s: S, seat: GmInboxSeat<S>, facts: GmFacts): Record<string, string> | undefined {
+  const names = slotNames(words);
+  if (names.length === 0) return undefined;
+  const slots = seat.pack.slots ?? {};
+  const sv: Record<string, string> = {};
+  for (const name of names) {
+    const sl = has(slots, name) ? slots[name] : undefined;
+    const v = sl ? facts[sl.fact] : undefined;
+    if (!sl || !named(v)) continue;
+    const p = sl.person ? seat.person?.(s, { id: v }) : undefined;
+    if (sl.person && !p) continue;
+    sv[name] = p ? p.name : String(v);
+  }
+  return sv;
+}
+
+/** A wording with its slots filled; a slot with no value stays as it is. */
+const gmFill = (words: string, sv: Readonly<Record<string, string>>): string =>
+  words.replace(SLOT_RE, (all: string, k: string) => (has(sv, k) ? sv[k] : all));
+
+/** The events that may arrive this week, in pack order (rules 1 and 2).
+ *  Round 1332: `safe`, when handed in, holds a card it refuses (step 4b). */
 export function gmEligible(
   pack: GmInboxPack, beat: string, facts: GmFacts, usedIds: readonly string[],
   last: Readonly<Record<string, number>>, clock: number, rest?: Readonly<Record<string, number>>,
+  safe?: (e: GmEventDef) => boolean,
 ): GmEventDef[] {
   const used = new Set(usedIds);
   const restFor = pack.subjectRest ?? 0;
@@ -334,6 +621,7 @@ export function gmEligible(
     if (sk === null) return false;
     const r = sk === undefined || restFor <= 0 ? undefined : rest?.[sk];
     if (r !== undefined && clock - r < restFor) return false;
+    if (safe && !safe(e)) return false;
     /* A story's one shot is once for the story, and waits out its stamp. */
     if (e.story) return !(e.oneShot && used.has(bookKey(e))) && cooled(e);
     if (e.oneShot) return !used.has(e.id);
@@ -370,15 +658,19 @@ const drop = (list: GmEventDef[], hit: (x: GmEventDef) => boolean) => {
  * `clock` the save's own tick counter, which a seat may hand in falling (the
  * week of its season), so the books are rebased. The steps, in this order:
  * (1) rebase the cooldown book and the rest book from the future, pruning
- * the rest book; (2) settle the expired cards; (3) count the open ones and
+ * the rest book; (2) settle the expired cards; (2b) settle an open tagged
+ * card whose role has passed to a real man; (3) count the open ones and
  * `want`; (4) the eligible events (beat, conditions, subject rest, story,
- * one shots, cooldowns); (5) one chance roll per eligible event in pack
- * order; (6) up to `perWeek` picks, never past GM_INBOX_OPEN unanswered
- * (rule 3), each dropping its story and subject siblings with no draw;
- * (7) each pick's wording, from a keyed draw, never `rng`; (8) the kept cap.
+ * one shots, cooldowns); (4b) the safety hold (gmCardSafe: a slot with no
+ * value, a tagged card about a real man); (5) one chance roll per eligible
+ * event in pack order; (6) up to `perWeek` picks, never past GM_INBOX_OPEN
+ * unanswered (rule 3), each dropping its story and subject siblings with no
+ * draw; (7) each pick's wording, from a keyed draw, never `rng`; (7b) its
+ * slots filled; (8) the kept cap; (8b) a compact pack's book pruned to the
+ * entries still cooling.
  * The deck's draws all come from `rng`, so the same seed deals the same
  * deck. Returns what arrived. A seat that hands in `settled` gets every card
- * step (2) settled pushed onto it, even one the kept cap then drops, so it
+ * step (2) or (2b) settled pushed onto it, even one the kept cap then drops, so it
  * can show gmExpiredLine for each; it changes nothing else.
  */
 export function gmInboxWeek<S extends GmInboxHost>(
@@ -417,9 +709,22 @@ export function gmInboxWeek<S extends GmInboxHost>(
     else if (w !== m.w) inbox[i] = { ...m, w };
     if (inbox[i].auto && !m.auto) settled?.push(inbox[i]);
   }
+  /* (2b) Round 1332: an open tagged card whose role has passed to a real man
+     (or to nobody) since its deal can no longer be answered (the answer
+     fails closed), so the staff settle it on its neutral option, moving
+     nothing, as they settle an expired card. A pack with no tagged card
+     never comes in here. */
+  if (pack.events.some(e => e.tag !== undefined)) {
+    for (let i = 0; i < inbox.length; i++) {
+      const m = inbox[i];
+      const e = m.answered === undefined ? pack.events.find(x => x.id === m.defId) : undefined;
+      const n = e?.tag !== undefined ? gmNeutralIndex(m.choices) : -1;
+      if (e && n >= 0 && !gmTagStillSafe(e, m.choices, s, seat)) { inbox[i] = { ...m, answered: n, auto: true }; settled?.push(inbox[i]); }
+    }
+  }
   const open = inbox.filter(m => m.answered === undefined).length;
   const want = Math.max(0, Math.min(pack.perWeek, GM_INBOX_OPEN - open));
-  const came = gmEligible(pack, beat, facts, used, last, clock, rest).filter(e => rng() < (e.chance ?? pack.chance));
+  const came = gmEligible(pack, beat, facts, used, last, clock, rest, e => gmCardSafe(e, s, seat, facts)).filter(e => rng() < (e.chance ?? pack.chance));
   const year = seat.yearOf(s);
   const fresh: InboxMessage[] = [];
   while (fresh.length < want && came.length > 0) {
@@ -442,11 +747,20 @@ export function gmInboxWeek<S extends GmInboxHost>(
        The picked words are saved whole. */
     const alt = e.texts?.length ?? 0;
     const pick = alt > 0 ? Math.floor(keyedRng(`${seat.keyOf?.(s) ?? ''}|${e.id}|${year}|${clock}`)() * (1 + alt)) : 0;
+    /* (7b) Round 1332: the picked wording's slots, filled from this week's
+       facts (step 4b made sure each has a value); a person slot prints the
+       name the seat gives him. */
+    const words = pick > 0 ? e.texts![pick - 1] : e.text;
+    const sv = pack.slots ? gmSlotValues(words, s, seat, facts) : undefined;
     const msg: GmInboxMessage = {
-      id, defId: e.id, from: e.from, emoji: e.emoji, text: pick > 0 ? e.texts![pick - 1] : e.text,
+      id, defId: e.id, from: e.from, emoji: e.emoji, text: sv ? gmFill(words, sv) : words,
       year, choices: e.choices, beat: e.beat,
     };
     if (e.expires !== undefined) msg.w = clock;
+    if (pack.store === 'compact') {
+      msg.t = pick;
+      if (sv && Object.keys(sv).length > 0) msg.sv = sv;
+    }
     inbox.push(msg);
     fresh.push(msg);
     if (e.oneShot) used.push(e.story ? bookKey(e) : e.id);
@@ -459,6 +773,8 @@ export function gmInboxWeek<S extends GmInboxHost>(
     if (idx === -1) break;
     inbox.splice(idx, 1);
   }
+  /* (8b) Round 1332: a compact pack's book keeps only what still cools. */
+  if (pack.store === 'compact') gmPruneBook(pack, last, clock);
   s.phoneInbox = inbox;
   s.phoneUsedIds = used;
   s.gmInboxLast = last;
@@ -475,8 +791,11 @@ export function gmSeasonWeeks(pack: GmInboxPack): string[] {
 
 const signed = (v: number) => (v > 0 ? `+${v}` : `${v}`);
 
-/** Every effect an option moves, in the seat's own words. Zero is left out. */
-export function choiceEffects(c: GmChoiceDef, pack: GmInboxPack): string[] {
+/** Every effect an option moves, in the seat's own words. Zero is left out.
+ *  Round 1332: then one entry per nonzero registered key, in the option's
+ *  key order, from the registry's words; a key with no entry prints its own
+ *  name and value, so a label can never hide an effect. */
+export function choiceEffects(c: GmChoiceDef, pack: GmInboxPack, fx?: Readonly<Record<string, GmFxWords>>): string[] {
   const m = pack.meters;
   const out: string[] = [];
   if (c.karma) out.push(`${m.trust} ${signed(c.karma)}`);
@@ -486,13 +805,23 @@ export function choiceEffects(c: GmChoiceDef, pack: GmInboxPack): string[] {
   if (c.out && c.out.weeks > 0) out.push(`${pack.targets[c.out.who] ?? c.out.who} out ${c.out.weeks} week${c.out.weeks === 1 ? '' : 's'}`);
   if (c.rating && c.rating.delta) out.push(`${pack.targets[c.rating.who] ?? c.rating.who} rating ${signed(c.rating.delta)}`);
   if (c.recruit) out.push(`${m.recruit ?? 'Recruit interest'} ${signed(c.recruit)}`);
+  for (const [k, raw] of Object.entries(c.fx ?? {})) {
+    const { who, v } = fxParts(raw);
+    if (!v) continue;
+    const def = fx && has(fx, k) ? fx[k] : undefined;
+    const man = who === undefined ? '' : `${pack.targets[who] ?? who} `;
+    if (!def) { out.push(`${man}${k} ${signed(v)}`); continue; }
+    const amount = def.fmt === 'money' ? `${v > 0 ? '+' : '-'}${pack.money.prefix}${Math.abs(v)}${pack.money.suffix}`
+      : def.fmt === 'weeks' ? `${v} week${v === 1 ? '' : 's'}` : signed(v);
+    out.push(`${man}${def.label} ${amount}`);
+  }
   return out;
 }
 
 /** The option's words with its effects after them, as the button reads. */
-export function gmChoiceLabel(c: GmChoiceDef, pack: GmInboxPack): string {
-  const fx = choiceEffects(c, pack);
-  return fx.length ? `${c.label} · ${fx.join(', ')}` : c.label;
+export function gmChoiceLabel(c: GmChoiceDef, pack: GmInboxPack, fx?: Readonly<Record<string, GmFxWords>>): string {
+  const fx2 = choiceEffects(c, pack, fx);
+  return fx2.length ? `${c.label} · ${fx2.join(', ')}` : c.label;
 }
 
 /* ─── the answer ─────────────────────────────────────────────────────────── */
@@ -509,17 +838,33 @@ export function answerGmInbox<S extends GmInboxHost>(
   if (!msg || msg.answered !== undefined) return null;
   const c = msg.choices[choiceIdx] as GmChoiceDef | undefined;
   if (!c) return null;
+  /* Round 1332: an effect the seat never registered could not land, so
+     the answer fails closed and nothing moves. */
+  const reg = seat.fx ?? {};
+  if (c.fx && Object.keys(c.fx).some(k => !has(reg, k))) return null;
+  /* Round 1332: a tagged card is asked again at the answer. If a role it
+     names has passed to a real man (or to nobody) since the deal, nothing
+     about his conduct or private life may land on him: the answer fails
+     closed, and the next week's step (2b) settles the card. */
+  const def = seat.pack.events.find(e => e.id === msg.defId);
+  if (def?.tag !== undefined && !gmTagStillSafe(def, msg.choices as GmChoiceDef[], s, seat)) return null;
   if (answerInboxMessage(s, msgId, choiceIdx, seat) === null) return null;
   if (c.out && c.out.weeks > 0) seat.setOut(s, c.out.who, c.out.weeks);
   if (c.rating && c.rating.delta) seat.addRating(s, c.rating.who, c.rating.delta);
   if (c.recruit) seat.addRecruit(s, c.recruit);
-  const fx = choiceEffects(c, seat.pack);
+  for (const [k, raw] of Object.entries(c.fx ?? {})) {
+    const { who, v } = fxParts(raw);
+    if (v) reg[k].apply(s, v, who);
+  }
+  const fx = choiceEffects(c, seat.pack, reg);
   return `📨 ${msg.from}: ${c.label}.${fx.length ? ` ${fx.join(', ')}.` : ''}`;
 }
 
 /** The line a seat shows for a card the staff settled, null for any other.
  *  The voice and the label are read off the saved message, so a later edit
- *  of the pack never rewrites a line already on a desk. A card the assistant
+ *  of the pack never rewrites a line already on a desk (a compact message
+ *  is rebuilt from its card, whose voice, labels, replies and effects the
+ *  kit's frozen words ledger holds once recorded). A card the assistant
  *  sent names the assistant once, not twice. */
 export function gmExpiredLine(msg: InboxMessage): string | null {
   const m = msg as GmInboxMessage;
@@ -562,4 +907,188 @@ export function repairGmInbox<S extends GmInboxHost>(s: S): S {
   if (s.gmInboxLast !== undefined && !isBook(s.gmInboxLast)) s.gmInboxLast = {};
   if (s.gmInboxRest !== undefined && !isBook(s.gmInboxRest)) delete s.gmInboxRest;
   return s;
+}
+
+/* ─── Round 1332: the compact desk ───────────────────────────────────────────
+
+   A Club Manager save has little room, and a desk dealt forty five cards a
+   season would grow its book every season and save every message whole. A
+   pack that opts in (`store: 'compact'`) keeps a pruned book (step 8b) and
+   is saved by gmDeskSave as numbers: short keys for ids and book keys, and
+   each message as its card, year, clock, wording and slot values, rebuilt
+   from the pack by gmDeskLoad. Its words, voice and every option's reply
+   and effects are frozen once shipped (scripts/data/eventDeckWords.json),
+   so a rebuilt message reads, and an answered one prints, exactly as it was
+   dealt. Nothing calls the codec yet: the binding rounds will, at
+   save and load. It holds no answer or cap logic. */
+
+/** A ledger key or id as a short key: FNV 1a, 32 bit, in base 36. */
+export function gmShortKey(key: string): string {
+  let h = 0x811c9dc5;
+  for (let i = 0; i < key.length; i++) {
+    h ^= key.charCodeAt(i);
+    h = Math.imul(h, 0x01000193) >>> 0;
+  }
+  return h.toString(36);
+}
+
+/* The pack's cards by book key and by short key, built once a deck. */
+const KEY_INDEX = new WeakMap<GmEventDef[], Map<string, GmEventDef[]>>();
+const SHORT_INDEX = new WeakMap<GmEventDef[], Map<string, string>>();
+const keyIndex = (pack: GmInboxPack): Map<string, GmEventDef[]> => {
+  let m = KEY_INDEX.get(pack.events);
+  if (!m) {
+    m = new Map();
+    for (const e of pack.events) m.set(bookKey(e), [...(m.get(bookKey(e)) ?? []), e]);
+    KEY_INDEX.set(pack.events, m);
+  }
+  return m;
+};
+const shortIndex = (pack: GmInboxPack): Map<string, string> => {
+  let m = SHORT_INDEX.get(pack.events);
+  if (!m) {
+    m = new Map();
+    for (const e of pack.events) for (const k of [e.id, bookKey(e)]) m.set(gmShortKey(k), k);
+    SHORT_INDEX.set(pack.events, m);
+  }
+  return m;
+};
+
+/** Step 8b: an entry goes once every card sharing its key has cooled at
+ *  this clock (the week rule, or careerEventDeck's on a season clock), or
+ *  when no card holds its key. On a rising clock a cooled entry and an
+ *  absent one deal the same. */
+function gmPruneBook(pack: GmInboxPack, last: Record<string, number>, clock: number): void {
+  const byKey = keyIndex(pack);
+  for (const [k, at] of Object.entries(last)) {
+    const sharing = byKey.get(k) ?? [];
+    if (sharing.every(e => (pack.clock === 'season' ? !onCooldown(last, e, clock, pack.cooldown) : clock - at >= (e.cooldown ?? pack.cooldown)))) delete last[k];
+  }
+}
+
+/** One message as numbers: its card's short key, year, clock, the id's
+ *  repeat suffix, wording, slot values, arrival, answer and auto. */
+export interface GmCompactMsg { d: string; y: number; c: number; n?: number; t?: number; s?: Record<string, string>; w?: number; a?: number; x?: 1 }
+/** A desk's four inbox fields as saved: a compact pack's own ids and book
+ *  keys short, every other key whole. */
+export interface GmDeskBlock { v: 1; l?: Record<string, number>; u?: string[]; r?: Record<string, number>; m?: (GmCompactMsg | InboxMessage)[] }
+/** The four host fields a block reads back to. */
+export interface GmDeskFields { phoneInbox?: InboxMessage[]; phoneUsedIds?: string[]; gmInboxLast?: Record<string, number>; gmInboxRest?: Record<string, number> }
+
+const ID_TAIL = /^(\d+)(?:-(\d+))?$/;
+const isNumBook = (b: unknown): b is Record<string, number> => !!b && typeof b === 'object' && !Array.isArray(b)
+  && Object.values(b as Record<string, unknown>).every(v => typeof v === 'number' && Number.isFinite(v));
+const isWordBook = (b: unknown): b is Record<string, string> => !!b && typeof b === 'object' && !Array.isArray(b)
+  && Object.values(b as Record<string, unknown>).every(v => typeof v === 'string');
+
+/** A compact pack's message as numbers, or null to save it whole: a message
+ *  whose id does not parse as `${defId}-${year}-w${clock}` (and `-${n}`),
+ *  whose card is gone, or that was not dealt compact (no wording index). */
+function compactOf(m: InboxMessage, pack: GmInboxPack): GmCompactMsg | null {
+  const g = m as GmInboxMessage;
+  if (typeof g.t !== 'number' || !pack.events.some(e => e.id === m.defId)) return null;
+  const head = `${m.defId}-${m.year}-w`;
+  const tail = m.id.startsWith(head) ? ID_TAIL.exec(m.id.slice(head.length)) : null;
+  if (!tail) return null;
+  const out: GmCompactMsg = { d: gmShortKey(m.defId), y: m.year, c: Number(tail[1]) };
+  if (tail[2] !== undefined) out.n = Number(tail[2]);
+  if (g.t) out.t = g.t;
+  if (g.sv) out.s = g.sv;
+  if (g.w !== undefined) out.w = g.w;
+  if (m.answered !== undefined) out.a = m.answered;
+  if (g.auto) out.x = 1;
+  return out;
+}
+
+/** A desk's four inbox fields as a block for the save: a compact pack's as
+ *  numbers, any other pack's as they are. */
+export function gmDeskSave(s: GmInboxHost, pack: GmInboxPack): GmDeskBlock {
+  const compact = pack.store === 'compact';
+  const out: GmDeskBlock = { v: 1 };
+  /* Only the pack's own ids and book keys go short. Anything else in these
+     host fields (another deck's one shots sharing phoneUsedIds, such as
+     Soccer Career's phone texts, or a card a later pack round removed)
+     stays whole, so gmDeskLoad hands it back as it was. */
+  const own = compact ? new Set(shortIndex(pack).values()) : undefined;
+  const short = (k: string) => (own?.has(k) ? gmShortKey(k) : k);
+  if (s.gmInboxLast) {
+    const l: Record<string, number> = {};
+    for (const [k, at] of Object.entries(s.gmInboxLast)) l[short(k)] = at;
+    out.l = l;
+  }
+  if (s.phoneUsedIds) out.u = s.phoneUsedIds.map(short);
+  if (s.gmInboxRest) out.r = { ...s.gmInboxRest };
+  if (s.phoneInbox) out.m = s.phoneInbox.map(m => (compact ? compactOf(m, pack) ?? m : m));
+  return out;
+}
+
+/** A compact message rebuilt from its card, or null when its card or its
+ *  wording is gone or a field is broken. */
+function rebuild(c: GmCompactMsg, pack: GmInboxPack): GmInboxMessage | null {
+  const whole = (v: unknown, min: number) => typeof v === 'number' && Number.isInteger(v) && v >= min;
+  const id = typeof c.d === 'string' ? shortIndex(pack).get(c.d) : undefined;
+  const e = id === undefined ? undefined : pack.events.find(x => x.id === id);
+  if (!e || !whole(c.y, 0) || !whole(c.c, 0) || !(c.n === undefined || whole(c.n, 2))) return null;
+  const t = c.t ?? 0;
+  const words = !whole(t, 0) ? undefined : t === 0 ? e.text : e.texts?.[t - 1];
+  if (words === undefined) return null;
+  if (c.s !== undefined && !isWordBook(c.s)) return null;
+  if (c.w !== undefined && !(typeof c.w === 'number' && Number.isFinite(c.w))) return null;
+  if (c.a !== undefined && !(whole(c.a, 0) && c.a < e.choices.length)) return null;
+  if (c.x !== undefined && !(c.x === 1 && c.a !== undefined)) return null;
+  const msg: GmInboxMessage = {
+    id: `${e.id}-${c.y}-w${c.c}${c.n === undefined ? '' : `-${c.n}`}`, defId: e.id, from: e.from, emoji: e.emoji,
+    text: c.s ? gmFill(words, c.s) : words, year: c.y, choices: e.choices, beat: e.beat,
+  };
+  if (c.w !== undefined) msg.w = c.w;
+  msg.t = t;
+  if (c.s) msg.sv = c.s;
+  if (c.a !== undefined) msg.answered = c.a;
+  if (c.x === 1) msg.auto = true;
+  return msg;
+}
+
+/**
+ * A saved block back to the desk's four fields. It fails closed field by
+ * field, like repairGmInbox: a block that is not `v: 1` reads as an empty
+ * desk, a broken field resets alone, a compact message whose card or
+ * wording is gone is dropped and counted, and a whole message from an older
+ * build is kept when it reads as a message.
+ */
+export function gmDeskLoad(block: unknown, pack: GmInboxPack): { host: GmDeskFields; dropped: number } {
+  const b = block as Partial<GmDeskBlock> | null;
+  if (!b || typeof b !== 'object' || b.v !== 1) return { host: { phoneInbox: [], phoneUsedIds: [], gmInboxLast: {} }, dropped: 0 };
+  const compact = pack.store === 'compact';
+  const keys = shortIndex(pack);
+  /* A short key of the pack's own reads back to its id or book key, in
+     either mode (a pack switched from compact to whole keeps its one shots);
+     any other key is kept whole (another deck's one shot, or a block a whole
+     pack wrote before it went compact): a one shot is never dropped. */
+  const back = (k: string) => keys.get(k) ?? k;
+  const host: GmDeskFields = {};
+  let dropped = 0;
+  if (b.m !== undefined) {
+    const list: InboxMessage[] = [];
+    if (Array.isArray(b.m)) {
+      for (const raw of b.m as unknown[]) {
+        const isCompact = !!raw && typeof raw === 'object' && 'd' in raw && !('id' in raw);
+        const m = isCompact ? (compact ? rebuild(raw as GmCompactMsg, pack) : null) : (isMsg(raw) ? raw : null);
+        if (m && isMsg(m)) list.push(m);
+        else dropped++;
+      }
+    }
+    host.phoneInbox = list;
+  }
+  if (b.u !== undefined) {
+    const u: unknown = b.u;
+    const ok = Array.isArray(u) && u.every(x => typeof x === 'string');
+    host.phoneUsedIds = !ok ? [] : (u as string[]).map(back);
+  }
+  if (b.l !== undefined) {
+    const l: Record<string, number> = {};
+    if (isNumBook(b.l)) for (const [k, at] of Object.entries(b.l)) l[back(k)] = at;
+    host.gmInboxLast = l;
+  }
+  if (b.r !== undefined && isNumBook(b.r)) host.gmInboxRest = { ...b.r };
+  return { host, dropped };
 }

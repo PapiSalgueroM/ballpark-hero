@@ -28,14 +28,19 @@
    Round 796: a sport that delivers on its own calendar passes it in, and
    every text that arrived on a beat says which one and which year ("Trade
    deadline, 2027"), on the row and on the open message. A text from before
-   that round has no beat and simply shows without the line. */
+   that round has no beat and simply shows without the line.
+
+   Round 1332: a desk whose staff can settle a card for the manager passes
+   settledLine. When it returns a line for an opened card, that line shows
+   in the reply box instead of "You replied", because he never made that
+   choice. A board that passes nothing draws exactly what it drew before. */
 import { useEffect, useState } from 'react';
 import { CelebrationStyles, revealDelay } from '@/components/club-manager/Celebration';
 import { cn } from '@/lib/utils';
 import { inboxBeatLine } from '@/lib/careerInbox';
 import type { InboxMessage, InboxBeat } from '@/lib/careerInbox';
 
-export function InboxPanel({ messages, onAnswer, seen, calendar }: {
+export function InboxPanel({ messages, onAnswer, seen, calendar, settledLine }: {
   /** Newest delivered first reads best; this component does not resort them. */
   messages: InboxMessage[];
   onAnswer: (msgId: string, choiceIdx: number) => void;
@@ -43,10 +48,14 @@ export function InboxPanel({ messages, onAnswer, seen, calendar }: {
   seen: Set<string>;
   /** Round 796: the sport's calendar, for the beat each text arrived on. */
   calendar?: InboxBeat[];
+  /** Round 1332: the line for an answered card someone else settled, or
+   *  null for one the player answered himself. */
+  settledLine?: (m: InboxMessage) => string | null;
 }) {
   const [openId, setOpenId] = useState<string | null>(null);
   const open = messages.find(m => m.id === openId) ?? null;
   const openBeat = open ? inboxBeatLine(open, calendar) : null;
+  const settled = open && open.answered !== undefined && settledLine ? settledLine(open) : null;
   /* Read during render on purpose: it is a plain set behind the board's ref,
      not state, and the answer is "was this row here last time", which is
      exactly what a ref remembers. Marked after commit so the first draw of a
@@ -67,7 +76,9 @@ export function InboxPanel({ messages, onAnswer, seen, calendar }: {
           {openBeat && <p className="mt-0.5 text-[10px] text-muted-foreground" data-inbox-beat={open.beat}>{openBeat}</p>}
           <p className="mt-2 text-sm text-foreground">{open.text}</p>
         </div>
-        {open.answered !== undefined ? (
+        {typeof settled === 'string' ? (
+          <p className="rounded-xl bg-secondary px-3 py-2 text-xs text-muted-foreground" data-inbox-settled>{settled}</p>
+        ) : open.answered !== undefined ? (
           <p className="rounded-xl bg-secondary px-3 py-2 text-xs text-muted-foreground">
             You replied: <span className="font-semibold text-foreground">{open.choices[open.answered]?.label}</span>
           </p>

@@ -9,24 +9,43 @@
    2. Newest first, because the deck appends and the panel does not resort.
 
    A board mounts it inside its own inbox tab and owns `seen` (the panel's own
-   header explains why that set lives on the board). */
+   header explains why that set lives on the board).
+
+   Round 1332: a card the desk's staff settled (it expired) opens on
+   gmExpiredLine, read off the message as saved, never on "You replied". The
+   full desk line says the staff may deal with a card only when an open card
+   can expire. A seat with registered effects passes `fx` (its registry), so
+   every option prints those too, in the registry's own words. */
 import { useMemo } from 'react';
 import { InboxPanel } from '@/components/us-career/InboxPanel';
-import { gmChoiceLabel, GM_INBOX_OPEN } from '@/lib/gmInbox';
-import type { GmChoiceDef, GmInboxPack } from '@/lib/gmInbox';
+import { gmChoiceLabel, gmExpiredLine, gmNeutralIndex, GM_INBOX_OPEN } from '@/lib/gmInbox';
+import type { GmChoiceDef, GmFxWords, GmInboxMessage, GmInboxPack } from '@/lib/gmInbox';
 import type { InboxMessage } from '@/lib/careerInbox';
 
-export function GmInboxPanel({ pack, messages, onAnswer, seen }: {
+export function GmInboxPanel({ pack, messages, onAnswer, seen, fx }: {
   pack: GmInboxPack;
   messages: InboxMessage[];
   onAnswer: (msgId: string, choiceIdx: number) => void;
   seen: Set<string>;
+  /** The seat's effect registry (only its words are read here). */
+  fx?: Readonly<Record<string, GmFxWords>>;
 }) {
   const shown = useMemo(() => [...messages].reverse().map(m => ({
     ...m,
-    choices: m.choices.map(c => ({ ...c, label: gmChoiceLabel(c as GmChoiceDef, pack) })),
-  })), [messages, pack]);
-  const open = messages.filter(m => m.answered === undefined).length;
+    choices: m.choices.map(c => ({ ...c, label: gmChoiceLabel(c as GmChoiceDef, pack, fx) })),
+  })), [messages, pack, fx]);
+  /* The settled line reads the message as saved, not the relabelled copy,
+     so it names the option's own label. */
+  const byId = useMemo(() => new Map(messages.map(m => [m.id, m])), [messages]);
+  const settledLine = (m: InboxMessage) => gmExpiredLine(byId.get(m.id) ?? m);
+  const openMsgs = messages.filter(m => m.answered === undefined);
+  const open = openMsgs.length;
+  /* An open card the staff will settle, exactly as gmInboxWeek's step 2
+     settles one: it carries its arrival tick (w, stamped at the deal only
+     when its card expired then), its card still expires, and it has an
+     option that moves nothing. */
+  const canExpire = openMsgs.some(m => (m as GmInboxMessage).w !== undefined
+    && pack.events.find(e => e.id === m.defId)?.expires !== undefined && gmNeutralIndex(m.choices as GmChoiceDef[]) >= 0);
   /* The career panel's empty line talks about a phone; a desk gets its own. */
   if (messages.length === 0) {
     return (
@@ -39,9 +58,11 @@ export function GmInboxPanel({ pack, messages, onAnswer, seen }: {
     <div className="space-y-2" data-gm-inbox={pack.seat}>
       <p className="text-[11px] text-muted-foreground">
         {open === 0 ? 'Nothing waiting on you.' : `${open} waiting on you.`} Each answer shows what it moves before you pick it.
-        {open >= GM_INBOX_OPEN ? ' Nothing new lands until you answer one.' : ''}
+        {open >= GM_INBOX_OPEN
+          ? (canExpire ? ' Nothing new lands until you answer one, or your assistant deals with one for you.' : ' Nothing new lands until you answer one.')
+          : ''}
       </p>
-      <InboxPanel messages={shown} onAnswer={onAnswer} seen={seen} calendar={pack.calendar} />
+      <InboxPanel messages={shown} onAnswer={onAnswer} seen={seen} calendar={pack.calendar} settledLine={settledLine} />
     </div>
   );
 }
