@@ -1,0 +1,5 @@
+build exit=0 30s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+tt-nolanding exit=1 26s | CONTROL FIRED: TWO_TABS_CONTROL=nolanding dropped 3 writes and turned case(s) 4 red
+tt-nokeep exit=1 88s | CONTROL FIRED: TWO_TABS_CONTROL=nokeep dropped 6 writes and turned case(s) 5 red
+keeper-extrakey exit=1 115s | playSaveKeeper control extrakey: FIRED. Journey K failed on the key the branch arm added (dukb-control-extra-key).
+keeper-extrafence exit=1 115s | playSaveKeeper control extrafence: FIRED. Journey K failed on the key the branch arm added (dukb-fence:dukb-control-extra-key).
