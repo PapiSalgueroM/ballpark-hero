@@ -1,0 +1,66 @@
+seed 1987332285; arms head; sections landing, toasts; sizes 320x640, 390x844, 1280x900
+== head 320x640
+   "Danny Okafor-Whitfield": from scrollY 1876 of 15004; first frame name heading 12 to 68, readable 0 to 556, scrollY 193; one second later name heading 12 to 68, readable 0 to 556, scrollY 193
+   "Danny Okafor-Whitfield": the club "QPR Youth" at 258 to 275, in the readable area: true
+   "Danny Okafor-Whitfield" after New Career: from scrollY 1892 of 15020; first frame name heading 12 to 68, readable 0 to 556, scrollY 193; one second later name heading 12 to 68, readable 0 to 556, scrollY 193
+   "Danny Okafor-Whitfield" after New Career: the club "Stoke City Youth" at 258 to 275, in the readable area: true
+   "Supercalifragilisticexpialidociouswinger": from scrollY 1876 of 15004; first frame name heading 12 to 68, readable 0 to 556, scrollY 193; one second later name heading 12 to 68, readable 0 to 556, scrollY 193
+   "Supercalifragilisticexpialidociouswinger": the club "QPR Youth" at 258 to 275, in the readable area: true
+   0 toast sample(s) of 0 toast(s) over a drive through youth, contract_offer, 2 steps, 1 Next Year or Next Season presses (0 Next Season), hit the step cap; the last steps: youth: Next Year / contract_offer: Review contract
+     coverage contract signing: 0 sampled
+  FAIL [drive 320x640]: the toast audit never raised and sampled a contract signing toast (drive: youth, contract_offer, 2 steps, 1 Next Year or Next Season presses (0 Next Season), hit the step cap; the last steps: youth: Next Year / contract_offer: Review contract)
+     coverage random event choice: 0 sampled
+  FAIL [drive 320x640]: the toast audit never raised and sampled a random event choice toast (drive: youth, contract_offer, 2 steps, 1 Next Year or Next Season presses (0 Next Season), hit the step cap; the last steps: youth: Next Year / contract_offer: Review contract)
+     coverage transfer window choice: 0 sampled
+  FAIL [drive 320x640]: the toast audit never raised and sampled a transfer window choice toast (drive: youth, contract_offer, 2 steps, 1 Next Year or Next Season presses (0 Next Season), hit the step cap; the last steps: youth: Next Year / contract_offer: Review contract)
+     coverage phone purchase: 0 sampled
+  FAIL [drive 320x640]: the toast audit never raised and sampled a phone purchase toast (drive: youth, contract_offer, 2 steps, 1 Next Year or Next Season presses (0 Next Season), hit the step cap; the last steps: youth: Next Year / contract_offer: Review contract)
+     coverage social media post: 0 sampled (not raised on this career; listed, not judged)
+     coverage moral dilemma: 0 sampled (not raised on this career; listed, not judged)
+     coverage loan: 0 sampled (not raised on this career; listed, not judged)
+     coverage extension: 0 sampled (not raised on this career; listed, not judged)
+     coverage Week by week refusal: 0 sampled (not raised on this career; listed, not judged)
+== head 390x844
+   "Danny Okafor-Whitfield": from scrollY 1632 of 12671; first frame name heading 17 to 45, readable 0 to 760, scrollY 193; one second later name heading 17 to 45, readable 0 to 760, scrollY 193
+   "Danny Okafor-Whitfield": the club "QPR Youth" at 240 to 257, in the readable area: true
+   "Danny Okafor-Whitfield" after New Career: from scrollY 1632 of 12671; first frame name heading 17 to 45, readable 0 to 760, scrollY 193; one second later name heading 17 to 45, readable 0 to 760, scrollY 193
+   "Danny Okafor-Whitfield" after New Career: the club "Stoke City Youth" at 240 to 257, in the readable area: true
+   "Supercalifragilisticexpialidociouswinger": from scrollY 1632 of 12671; first frame name heading 12 to 68, readable 0 to 760, scrollY 193; one second later name heading 12 to 68, readable 0 to 760, scrollY 193
+   "Supercalifragilisticexpialidociouswinger": the club "QPR Youth" at 258 to 275, in the readable area: true
+   0 toast sample(s) of 0 toast(s) over a drive through youth, contract_offer, 2 steps, 1 Next Year or Next Season presses (0 Next Season), hit the step cap; the last steps: youth: Next Year / contract_offer: Review contract
+     coverage contract signing: 0 sampled
+  FAIL [drive 390x844]: the toast audit never raised and sampled a contract signing toast (drive: youth, contract_offer, 2 steps, 1 Next Year or Next Season presses (0 Next Season), hit the step cap; the last steps: youth: Next Year / contract_offer: Review contract)
+     coverage random event choice: 0 sampled
+  FAIL [drive 390x844]: the toast audit never raised and sampled a random event choice toast (drive: youth, contract_offer, 2 steps, 1 Next Year or Next Season presses (0 Next Season), hit the step cap; the last steps: youth: Next Year / contract_offer: Review contract)
+     coverage transfer window choice: 0 sampled
+  FAIL [drive 390x844]: the toast audit never raised and sampled a transfer window choice toast (drive: youth, contract_offer, 2 steps, 1 Next Year or Next Season presses (0 Next Season), hit the step cap; the last steps: youth: Next Year / contract_offer: Review contract)
+     coverage phone purchase: 0 sampled
+  FAIL [drive 390x844]: the toast audit never raised and sampled a phone purchase toast (drive: youth, contract_offer, 2 steps, 1 Next Year or Next Season presses (0 Next Season), hit the step cap; the last steps: youth: Next Year / contract_offer: Review contract)
+     coverage social media post: 0 sampled (not raised on this career; listed, not judged)
+     coverage moral dilemma: 0 sampled (not raised on this career; listed, not judged)
+     coverage loan: 0 sampled (not raised on this career; listed, not judged)
+     coverage extension: 0 sampled (not raised on this career; listed, not judged)
+     coverage Week by week refusal: 0 sampled (not raised on this career; listed, not judged)
+== head 1280x900
+   "Danny Okafor-Whitfield": from scrollY 1530 of 9158; first frame name heading 23 to 55, readable 0 to 816, scrollY 101; one second later name heading 23 to 55, readable 0 to 816, scrollY 101
+   "Danny Okafor-Whitfield": the club "QPR Youth" at 221 to 236, in the readable area: true
+   "Danny Okafor-Whitfield" after New Career: from scrollY 1530 of 9158; first frame name heading 23 to 55, readable 0 to 816, scrollY 101; one second later name heading 23 to 55, readable 0 to 816, scrollY 101
+   "Danny Okafor-Whitfield" after New Career: the club "Stoke City Youth" at 221 to 236, in the readable area: true
+   "Supercalifragilisticexpialidociouswinger": from scrollY 1530 of 9158; first frame name heading 23 to 55, readable 0 to 816, scrollY 101; one second later name heading 23 to 55, readable 0 to 816, scrollY 101
+   "Supercalifragilisticexpialidociouswinger": the club "QPR Youth" at 221 to 236, in the readable area: true
+   0 toast sample(s) of 0 toast(s) over a drive through youth, contract_offer, 2 steps, 1 Next Year or Next Season presses (0 Next Season), hit the step cap; the last steps: youth: Next Year / contract_offer: Review contract
+     coverage contract signing: 0 sampled
+  FAIL [drive 1280x900]: the toast audit never raised and sampled a contract signing toast (drive: youth, contract_offer, 2 steps, 1 Next Year or Next Season presses (0 Next Season), hit the step cap; the last steps: youth: Next Year / contract_offer: Review contract)
+     coverage random event choice: 0 sampled
+  FAIL [drive 1280x900]: the toast audit never raised and sampled a random event choice toast (drive: youth, contract_offer, 2 steps, 1 Next Year or Next Season presses (0 Next Season), hit the step cap; the last steps: youth: Next Year / contract_offer: Review contract)
+     coverage transfer window choice: 0 sampled
+  FAIL [drive 1280x900]: the toast audit never raised and sampled a transfer window choice toast (drive: youth, contract_offer, 2 steps, 1 Next Year or Next Season presses (0 Next Season), hit the step cap; the last steps: youth: Next Year / contract_offer: Review contract)
+     coverage phone purchase: 0 sampled
+  FAIL [drive 1280x900]: the toast audit never raised and sampled a phone purchase toast (drive: youth, contract_offer, 2 steps, 1 Next Year or Next Season presses (0 Next Season), hit the step cap; the last steps: youth: Next Year / contract_offer: Review contract)
+     coverage social media post: 0 sampled (not raised on this career; listed, not judged)
+     coverage moral dilemma: 0 sampled (not raised on this career; listed, not judged)
+     coverage loan: 0 sampled (not raised on this career; listed, not judged)
+     coverage extension: 0 sampled (not raised on this career; listed, not judged)
+     coverage Week by week refusal: 0 sampled (not raised on this career; listed, not judged)
+  head drive: 12 finding(s)
+playSoccerLanding: RED, 12 finding(s)

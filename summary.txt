@@ -1,0 +1,13 @@
+build exit=0 33s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+joined-at-landing exit=1 155s | playSoccerLanding: RED, 12 finding(s)
+land-seed exit=1 190s | CONTROL FIRED: SOCCER_LANDING_CONTROL=seed played head on seed 1987332286 and the byte check went red, and the old save comparison went red on 8 save(s) given the next se
+playSeasonCentre exit=0 118s | playSeasonCentre: 41 checks, 0 failed
+playSoccerAgentReview exit=1 1s | Node.js v24.21.0
+playSoccerFarewell exit=1 1s | Node.js v24.21.0
+playSoccerInternationalReturn exit=1 1s | Node.js v24.21.0
+playSoccerEventCards exit=0 29s | playSoccerEventCards: green over 6 runs (known small lines: text-[10px], text-[11px])
+playCareerProgramme exit=1 1s | Node.js v24.21.0
+saveRetry1078 exit=0 14s | Soccer Career save recovery: 3 real-page journeys, 9 effective DOM controls, exact earned-state retry and reload.
+playSoccerCareer exit=1 481s |   - 6. no console or page errors across the walk: Failed to load resource: net::ERR_CONNECTION_REFUSED | Failed to load resource: net::ERR_CONNECTION_REFUSED | Failed to 
+land exit=0 749s | playSoccerLanding: green at 320x640, 390x844, 1280x900 (also bar 360x780, bar 375x667, name 480x800, name 768x1024; landing, name, bar, retire, toasts, bytes), every mark
+playSoccerCareer-base exit=1 518s |   - 6. no console or page errors across the walk: Failed to load resource: net::ERR_CONNECTION_REFUSED | Failed to load resource: net::ERR_CONNECTION_REFUSED | Failed to 
