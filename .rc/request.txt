@@ -1,0 +1,17 @@
+simPress: node scripts/simPress.mjs
+pressCoverage: node scripts/qa/managerPressCoverageProof.mjs
+simClubManagerMeters: node scripts/simClubManagerMeters.mjs
+simCmFixtureFleet: node scripts/simCmFixtureFleet.mjs
+simDailyDeals: node scripts/simDailyDeals.mjs
+simManagerHotSeat: node scripts/simManagerHotSeat.mjs
+simSaveFence: node scripts/simSaveFence.mjs
+simDailyClubPool: node scripts/simDailyClubPool.mjs
+simDeadlineDay: node scripts/simDeadlineDay.mjs
+simClubManagerSave: node scripts/simClubManagerSave.mjs
+saveSize-head: node scripts/simClubManagerSaveSize.mjs
+slots-head: node scripts/simClubManagerSlots.mjs
+simCmUnseededWorld: node scripts/simCmUnseededWorld.mjs
+continuity: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simManagerWorldContinuity.mjs
+matchPlans: MANAGER_MATCH_PLANS_CONTROL=all ONLY=simManagerMatchPlans node scripts/runAllSims.mjs
+worldSizeDiagnostic: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/managerWorldSizeDiagnostic.mjs
+worldBrowser: MANAGER_WORLD_BROWSER_CONTROL=all ONLY=simManagerWorldBrowser node scripts/runAllSims.mjs
