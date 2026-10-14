@@ -1,0 +1,683 @@
+{
+ "log": [
+  {
+   "k": "engine rule liverpool",
+   "v": {
+    "subs": 5,
+    "stops": 3,
+    "partial": false
+   }
+  },
+  {
+   "k": "engine rule everton",
+   "v": {
+    "subs": 3,
+    "stops": null,
+    "partial": false
+   }
+  },
+  {
+   "k": "390-rm in-play lines",
+   "v": [
+    {
+     "target": 57,
+     "at": 57,
+     "line": "Change at 57' · Subs left: 4 · 3 stops left"
+    },
+    {
+     "target": 66,
+     "at": 66,
+     "line": "Change at 66' · Subs left: 3 · 2 stops left"
+    },
+    {
+     "target": 75,
+     "at": 75,
+     "line": "Change at 75' · Subs left: 2 · 1 stop left"
+    }
+   ]
+  },
+  {
+   "k": "390-rm shared",
+   "v": {
+    "okShared": true,
+    "shared": "Change at 75' · Subs left: 1 · 0 stops left",
+    "sharedRefusal": 0,
+    "sharedBench": 11
+   }
+  },
+  {
+   "k": "390-rm refusal",
+   "v": {
+    "at4": 82,
+    "okRef": true,
+    "refusedLine": "Change at 82' · Subs left: 1 · 0 stops left",
+    "kind": "stops",
+    "said": "No stoppages left for changes. All three are used.",
+    "b0": {
+     "y": 741,
+     "h": 22663
+    },
+    "b1": {
+     "y": 741,
+     "h": 22663
+    },
+    "sizes": {
+     "buttons": [
+      44,
+      44,
+      44,
+      44
+     ],
+     "refusalPx": 12,
+     "stopsPx": 12,
+     "labelOverflow": 0,
+     "labelRight": -56,
+     "sheetBottom": 786,
+     "vh": 844
+    }
+   }
+  },
+  {
+   "k": "390-rm report lines",
+   "v": [
+    "SUBSTITUTIONS",
+    "⏱️ KICK OFF",
+    "🔁 Sub: Cody Gakpo on for Bradley Barcola",
+    "🔁 Sub: Rio Ngumoha on for Cody Gakpo",
+    "🔁 Sub: Amar Dedić on for Malick Thiaw",
+    "🔁 Sub: Hugo Ekitiké on for Alexander Isak",
+    "🔁 Sub: Joe Willock on for Aladji Bamba",
+    "🔁 Sub: Jeremie Frimpong on for Federico Chiesa",
+    "🔁 Sub: Fabian Schär on for Sven Botman",
+    "A full club-management sim in your browser: 454 clubs across 27 real leagues, from the Premier League, the 2. Bundesliga, Serie B, Ligue 2, the Segunda División and the Scottish Premiership to the Saudi Pro League, MLS, Brazil, Mexico, Australia, Russia, Croatia, Denmark, Switzerland, Austria and Greece, with real players at their real market values as of August 2026 (October for the A-League Men and the Russian Premier League) and thin squads topped up with made up youth, marked as such. Manage today or in a real past season: 2020-21 with Haaland's Dortmund and Mbappé's PSG, 2015-16 with Leicester at 5000 to 1, 2010-11 with prime Messi, or 2005-06 with Ronaldinho's Barcelona. Or create your own club with its own crest and stadium. Negotiate transfers, survive bidding wars, hit the board's named objectives, and chase titles season after season.",
+    "Play the match one of two ways: Play Live puts it on the pitch with the dressing room at the break, and Quick Sim goes straight to the report with the coach making your subs. Then read the report, answer the press, and manage the dressing room between games.",
+    "A live match moves: both teams hold their shape around the ball, and goals play out on the pitch before the score changes. Pause it, change the speed or skip to the whistle, and tap one of your players at any minute to make a sub or change shape.",
+    "Or open the calendar, tap any day and sim to it: every match up to that day plays in one go, and the run stops early only for a transfer window opening, the season review, the sack or a club's approach. The four fast forwards (next match, about a month, to the window, rest of season) are the same tap on a chosen day.",
+    "Buy and sell in the summer and January windows: negotiate fees, pay release clauses, take loans, and field bids for your own stars before rival clubs close your targets.",
+    "Run the staff room: hire an attack, defence or goalkeeping coach and a lead scout, promote one of your own academy staff for nothing, pay somebody off, and decide whether to match a rival's offer when they come calling.",
+    "Boards demand the actual prize, never a number: win the league, qualify for the Champions League or Europa League, reach mid table, or stay up, plus cup targets, a rival to finish above, and squad-building mandates.",
+    "On top of those, every board makes two specific asks a season, and they are the ones you go out and buy: get one more player from the club's own country into the squad, keep one more aged 30 or over, sign somebody in the thinnest line of your squad, sign somebody 21 or under at a rating floor, or spend a set fee or more on one signing. Which two you get is fixed for your club and your season, and every threshold is read off the market and the money you really have, so the pair can always be met and never costs more than the pot. Countries come from the same per-era map the market screen puts a flag next to his name with, so anyone it has no country for counts for nobody.",
+    "Your inbox is not just the dressing room. The board chase an ask you have not met and you can take their money, give them your word or tell them no; an agent writes about a player of yours with a year left; your assistant argues about the training plan when it is wrong for the squad; the supporters trust write when the tickets are on premium; and a reporter wants a line on whether the squad is good enough. Each answer moves something with a screen behind it: the kitty, the board meter, a contract, the plan, the ticket price or the press mood. A word given to the board settles in the summer, three points of next season's opening confidence either way.",
+    "Every league plays its real length: 38 rounds in the Premier League, 46 in the Championship, 34 in the Bundesliga, with the domestic cup from a round of 16 to the final and a full Champions League on top for qualified clubs.",
+    "Serie B (20 clubs), Ligue 2 (18) and the Segunda División (20) sit under Serie A, Ligue 1 and La Liga, so the bottom three of Serie A and La Liga and the bottom two of Ligue 1 really go down and swap with the top of the division below every summer. The Segunda plays 20 of its real 22 clubs: Real Sociedad B and Celta Fortuna are reserve sides that don't play the Copa del Rey, so they're left out. The promotion playoffs, Serie B's playout and the French barrages aren't played, so it's a straight swap. Most second division squads are thin in the game's data (only Pisa and Verona in Serie B, Nantes, Saint-Étienne and Reims in Ligue 2, and Girona and Mallorca in the Segunda have eight or more real players), so the rest get topped up with made up youth players, marked as made up. These squads are last season's players that each club's 2026-27 squad list still names, so summer signings at these clubs aren't in yet."
+   ]
+  },
+  {
+   "k": "390-rm free save after taking the job",
+   "v": {
+    "club": "Westerlo",
+    "rules": 1331,
+    "v": 1
+   }
+  },
+  {
+   "k": "390-rm hot seat",
+   "v": [
+    {
+     "n": 1,
+     "played": "Home to Lommel",
+     "result": "Westerlo 1 to 1 LommelDrew",
+     "q": "3 defeats in your last 5. Have you lost the dressing room?",
+     "nextHeader": "Away at La Louvière",
+     "qOnNext": ""
+    },
+    {
+     "n": 2,
+     "played": "Away at La Louvière",
+     "result": "Westerlo 4 to 3 La LouvièreWon",
+     "q": "",
+     "nextHeader": "Away at OH Leuven",
+     "qOnNext": ""
+    },
+    {
+     "n": 3,
+     "played": "Away at OH Leuven",
+     "result": "Westerlo 0 to 0 OH LeuvenWon on penalties",
+     "q": "Mechelen on paper are a level above you. Realistically, what are you going there for?",
+     "nextHeader": "Away at Mechelen",
+     "qOnNext": ""
+    },
+    {
+     "n": 4,
+     "played": "Away at Mechelen",
+     "result": "Westerlo 1 to 2 MechelenLost",
+     "q": "",
+     "nextHeader": "Home to Union Saint-Gilloise",
+     "qOnNext": ""
+    },
+    {
+     "n": 5,
+     "played": "Home to Union Saint-Gilloise",
+     "result": "Westerlo 0 to 1 Union Saint-GilloiseLost",
+     "q": "",
+     "nextHeader": "Away at Charleroi",
+     "qOnNext": ""
+    },
+    {
+     "n": 6,
+     "played": "Away at Charleroi",
+     "result": "",
+     "q": ""
+    }
+   ]
+  },
+  {
+   "k": "390-rm hot seat questions",
+   "v": {
+    "asked": 1,
+    "wrong": []
+   }
+  },
+  {
+   "k": "390-motion in-play lines",
+   "v": [
+    {
+     "target": 57,
+     "at": 57,
+     "line": "Change at 57' · Subs left: 4 · 3 stops left"
+    },
+    {
+     "target": 66,
+     "at": 66,
+     "line": "Change at 66' · Subs left: 3 · 2 stops left"
+    },
+    {
+     "target": 75,
+     "at": 75,
+     "line": "Change at 75' · Subs left: 2 · 1 stop left"
+    }
+   ]
+  },
+  {
+   "k": "390-motion shared",
+   "v": {
+    "okShared": true,
+    "shared": "Change at 75' · Subs left: 1 · 0 stops left",
+    "sharedRefusal": 0,
+    "sharedBench": 11
+   }
+  },
+  {
+   "k": "390-motion refusal",
+   "v": {
+    "at4": 82,
+    "okRef": true,
+    "refusedLine": "Change at 82' · Subs left: 1 · 0 stops left",
+    "kind": "stops",
+    "said": "No stoppages left for changes. All three are used.",
+    "b0": {
+     "y": 741,
+     "h": 22663
+    },
+    "b1": {
+     "y": 741,
+     "h": 22663
+    },
+    "sizes": {
+     "buttons": [
+      44,
+      44,
+      44,
+      44
+     ],
+     "refusalPx": 12,
+     "stopsPx": 12,
+     "labelOverflow": 0,
+     "labelRight": -56,
+     "sheetBottom": 786,
+     "vh": 844
+    }
+   }
+  },
+  {
+   "k": "390-motion report lines",
+   "v": [
+    "SUBSTITUTIONS",
+    "⏱️ KICK OFF",
+    "🔁 Sub: Cody Gakpo on for Bradley Barcola",
+    "🔁 Sub: Rio Ngumoha on for Cody Gakpo",
+    "🔁 Sub: Joe Willock on for Aladji Bamba",
+    "🔁 Sub: Hugo Ekitiké on for Alexander Isak",
+    "🔁 Sub: Jeremie Frimpong on for Federico Chiesa",
+    "🔁 Sub: Sean Steur on for Jacob Ramsey",
+    "A full club-management sim in your browser: 454 clubs across 27 real leagues, from the Premier League, the 2. Bundesliga, Serie B, Ligue 2, the Segunda División and the Scottish Premiership to the Saudi Pro League, MLS, Brazil, Mexico, Australia, Russia, Croatia, Denmark, Switzerland, Austria and Greece, with real players at their real market values as of August 2026 (October for the A-League Men and the Russian Premier League) and thin squads topped up with made up youth, marked as such. Manage today or in a real past season: 2020-21 with Haaland's Dortmund and Mbappé's PSG, 2015-16 with Leicester at 5000 to 1, 2010-11 with prime Messi, or 2005-06 with Ronaldinho's Barcelona. Or create your own club with its own crest and stadium. Negotiate transfers, survive bidding wars, hit the board's named objectives, and chase titles season after season.",
+    "Play the match one of two ways: Play Live puts it on the pitch with the dressing room at the break, and Quick Sim goes straight to the report with the coach making your subs. Then read the report, answer the press, and manage the dressing room between games.",
+    "A live match moves: both teams hold their shape around the ball, and goals play out on the pitch before the score changes. Pause it, change the speed or skip to the whistle, and tap one of your players at any minute to make a sub or change shape.",
+    "Or open the calendar, tap any day and sim to it: every match up to that day plays in one go, and the run stops early only for a transfer window opening, the season review, the sack or a club's approach. The four fast forwards (next match, about a month, to the window, rest of season) are the same tap on a chosen day.",
+    "Buy and sell in the summer and January windows: negotiate fees, pay release clauses, take loans, and field bids for your own stars before rival clubs close your targets.",
+    "Run the staff room: hire an attack, defence or goalkeeping coach and a lead scout, promote one of your own academy staff for nothing, pay somebody off, and decide whether to match a rival's offer when they come calling.",
+    "Boards demand the actual prize, never a number: win the league, qualify for the Champions League or Europa League, reach mid table, or stay up, plus cup targets, a rival to finish above, and squad-building mandates.",
+    "On top of those, every board makes two specific asks a season, and they are the ones you go out and buy: get one more player from the club's own country into the squad, keep one more aged 30 or over, sign somebody in the thinnest line of your squad, sign somebody 21 or under at a rating floor, or spend a set fee or more on one signing. Which two you get is fixed for your club and your season, and every threshold is read off the market and the money you really have, so the pair can always be met and never costs more than the pot. Countries come from the same per-era map the market screen puts a flag next to his name with, so anyone it has no country for counts for nobody.",
+    "Your inbox is not just the dressing room. The board chase an ask you have not met and you can take their money, give them your word or tell them no; an agent writes about a player of yours with a year left; your assistant argues about the training plan when it is wrong for the squad; the supporters trust write when the tickets are on premium; and a reporter wants a line on whether the squad is good enough. Each answer moves something with a screen behind it: the kitty, the board meter, a contract, the plan, the ticket price or the press mood. A word given to the board settles in the summer, three points of next season's opening confidence either way.",
+    "Every league plays its real length: 38 rounds in the Premier League, 46 in the Championship, 34 in the Bundesliga, with the domestic cup from a round of 16 to the final and a full Champions League on top for qualified clubs.",
+    "Serie B (20 clubs), Ligue 2 (18) and the Segunda División (20) sit under Serie A, Ligue 1 and La Liga, so the bottom three of Serie A and La Liga and the bottom two of Ligue 1 really go down and swap with the top of the division below every summer. The Segunda plays 20 of its real 22 clubs: Real Sociedad B and Celta Fortuna are reserve sides that don't play the Copa del Rey, so they're left out. The promotion playoffs, Serie B's playout and the French barrages aren't played, so it's a straight swap. Most second division squads are thin in the game's data (only Pisa and Verona in Serie B, Nantes, Saint-Étienne and Reims in Ligue 2, and Girona and Mallorca in the Segunda have eight or more real players), so the rest get topped up with made up youth players, marked as made up. These squads are last season's players that each club's 2026-27 squad list still names, so summer signings at these clubs aren't in yet.",
+    "Liga MX is 18 clubs and nobody goes down, because relegation is suspended for 2026-27. Three simplifications: the Apertura and the Clausura are played as one 34 round double round robin with one champion, the Liguilla is not played (the board still asks a playoff club to finish in the top eight, the places that reach it), and clubs level on points are split by goal difference then goals scored, the real table's first two steps, and the game stops there. There is no cup, because the Copa MX has not been played since 2020, and the Leagues Cup is not modelled."
+   ]
+  },
+  {
+   "k": "390-motion free save after taking the job",
+   "v": {
+    "club": "Westerlo",
+    "rules": 1331,
+    "v": 1
+   }
+  },
+  {
+   "k": "390-motion hot seat",
+   "v": [
+    {
+     "n": 1,
+     "played": "Away at Cercle Brugge",
+     "result": "Westerlo 1 to 5 Cercle BruggeLost",
+     "q": "The bookmakers have you favourite for the sack. Are you worried about your job?",
+     "nextHeader": "Home to Charleroi",
+     "qOnNext": ""
+    },
+    {
+     "n": 2,
+     "played": "Home to Charleroi",
+     "result": "Westerlo 0 to 0 CharleroiDrew",
+     "q": "",
+     "nextHeader": "Away at Kortrijk",
+     "qOnNext": ""
+    },
+    {
+     "n": 3,
+     "played": "Away at Kortrijk",
+     "result": "Westerlo 0 to 1 KortrijkLost",
+     "q": "",
+     "nextHeader": "Home to Mechelen",
+     "qOnNext": ""
+    },
+    {
+     "n": 4,
+     "played": "Home to Mechelen",
+     "result": "Westerlo 0 to 2 MechelenLost",
+     "q": "3 defeats in your last 5. Have you lost the dressing room?",
+     "nextHeader": "Home to Genk",
+     "qOnNext": ""
+    },
+    {
+     "n": 5,
+     "played": "Home to Genk",
+     "result": "Westerlo 4 to 2 GenkWon",
+     "q": "",
+     "nextHeader": "Away at OH Leuven",
+     "qOnNext": ""
+    },
+    {
+     "n": 6,
+     "played": "Away at OH Leuven",
+     "result": "",
+     "q": ""
+    }
+   ]
+  },
+  {
+   "k": "390-motion hot seat questions",
+   "v": {
+    "asked": 0,
+    "wrong": []
+   }
+  },
+  {
+   "k": "1280-rm in-play lines",
+   "v": [
+    {
+     "target": 57,
+     "at": 57,
+     "line": "Change at 57' · Subs left: 4 · 3 stops left"
+    },
+    {
+     "target": 66,
+     "at": 66,
+     "line": "Change at 66' · Subs left: 3 · 2 stops left"
+    },
+    {
+     "target": 75,
+     "at": 75,
+     "line": "Change at 75' · Subs left: 2 · 1 stop left"
+    }
+   ]
+  },
+  {
+   "k": "1280-rm shared",
+   "v": {
+    "okShared": true,
+    "shared": "Change at 75' · Subs left: 1 · 0 stops left",
+    "sharedRefusal": 0,
+    "sharedBench": 11
+   }
+  },
+  {
+   "k": "1280-rm refusal",
+   "v": {
+    "at4": 82,
+    "okRef": true,
+    "refusedLine": "Change at 82' · Subs left: 1 · 0 stops left",
+    "kind": "stops",
+    "said": "No stoppages left for changes. All three are used.",
+    "b0": {
+     "y": 718,
+     "h": 12902
+    },
+    "b1": {
+     "y": 718,
+     "h": 12902
+    },
+    "sizes": {
+     "buttons": [
+      44,
+      44,
+      44,
+      44
+     ],
+     "refusalPx": 12,
+     "stopsPx": 12,
+     "labelOverflow": 0,
+     "labelRight": -49,
+     "sheetBottom": 238,
+     "vh": 900
+    }
+   }
+  },
+  {
+   "k": "1280-rm report lines",
+   "v": [
+    "SUBSTITUTIONS",
+    "⏱️ KICK OFF",
+    "🔁 Sub: Cody Gakpo on for Bradley Barcola",
+    "🔁 Sub: Rio Ngumoha on for Cody Gakpo",
+    "🔁 Sub: Hugo Ekitiké on for Alexander Isak",
+    "🔁 Sub: Jeremie Frimpong on for Federico Chiesa",
+    "🔁 Sub: Amar Dedić on for Anthony Elanga",
+    "A full club-management sim in your browser: 454 clubs across 27 real leagues, from the Premier League, the 2. Bundesliga, Serie B, Ligue 2, the Segunda División and the Scottish Premiership to the Saudi Pro League, MLS, Brazil, Mexico, Australia, Russia, Croatia, Denmark, Switzerland, Austria and Greece, with real players at their real market values as of August 2026 (October for the A-League Men and the Russian Premier League) and thin squads topped up with made up youth, marked as such. Manage today or in a real past season: 2020-21 with Haaland's Dortmund and Mbappé's PSG, 2015-16 with Leicester at 5000 to 1, 2010-11 with prime Messi, or 2005-06 with Ronaldinho's Barcelona. Or create your own club with its own crest and stadium. Negotiate transfers, survive bidding wars, hit the board's named objectives, and chase titles season after season.",
+    "Play the match one of two ways: Play Live puts it on the pitch with the dressing room at the break, and Quick Sim goes straight to the report with the coach making your subs. Then read the report, answer the press, and manage the dressing room between games.",
+    "A live match moves: both teams hold their shape around the ball, and goals play out on the pitch before the score changes. Pause it, change the speed or skip to the whistle, and tap one of your players at any minute to make a sub or change shape.",
+    "Or open the calendar, tap any day and sim to it: every match up to that day plays in one go, and the run stops early only for a transfer window opening, the season review, the sack or a club's approach. The four fast forwards (next match, about a month, to the window, rest of season) are the same tap on a chosen day.",
+    "Buy and sell in the summer and January windows: negotiate fees, pay release clauses, take loans, and field bids for your own stars before rival clubs close your targets.",
+    "Run the staff room: hire an attack, defence or goalkeeping coach and a lead scout, promote one of your own academy staff for nothing, pay somebody off, and decide whether to match a rival's offer when they come calling.",
+    "Boards demand the actual prize, never a number: win the league, qualify for the Champions League or Europa League, reach mid table, or stay up, plus cup targets, a rival to finish above, and squad-building mandates.",
+    "On top of those, every board makes two specific asks a season, and they are the ones you go out and buy: get one more player from the club's own country into the squad, keep one more aged 30 or over, sign somebody in the thinnest line of your squad, sign somebody 21 or under at a rating floor, or spend a set fee or more on one signing. Which two you get is fixed for your club and your season, and every threshold is read off the market and the money you really have, so the pair can always be met and never costs more than the pot. Countries come from the same per-era map the market screen puts a flag next to his name with, so anyone it has no country for counts for nobody.",
+    "Your inbox is not just the dressing room. The board chase an ask you have not met and you can take their money, give them your word or tell them no; an agent writes about a player of yours with a year left; your assistant argues about the training plan when it is wrong for the squad; the supporters trust write when the tickets are on premium; and a reporter wants a line on whether the squad is good enough. Each answer moves something with a screen behind it: the kitty, the board meter, a contract, the plan, the ticket price or the press mood. A word given to the board settles in the summer, three points of next season's opening confidence either way.",
+    "Every league plays its real length: 38 rounds in the Premier League, 46 in the Championship, 34 in the Bundesliga, with the domestic cup from a round of 16 to the final and a full Champions League on top for qualified clubs.",
+    "Serie B (20 clubs), Ligue 2 (18) and the Segunda División (20) sit under Serie A, Ligue 1 and La Liga, so the bottom three of Serie A and La Liga and the bottom two of Ligue 1 really go down and swap with the top of the division below every summer. The Segunda plays 20 of its real 22 clubs: Real Sociedad B and Celta Fortuna are reserve sides that don't play the Copa del Rey, so they're left out. The promotion playoffs, Serie B's playout and the French barrages aren't played, so it's a straight swap. Most second division squads are thin in the game's data (only Pisa and Verona in Serie B, Nantes, Saint-Étienne and Reims in Ligue 2, and Girona and Mallorca in the Segunda have eight or more real players), so the rest get topped up with made up youth players, marked as made up. These squads are last season's players that each club's 2026-27 squad list still names, so summer signings at these clubs aren't in yet.",
+    "Liga MX is 18 clubs and nobody goes down, because relegation is suspended for 2026-27. Three simplifications: the Apertura and the Clausura are played as one 34 round double round robin with one champion, the Liguilla is not played (the board still asks a playoff club to finish in the top eight, the places that reach it), and clubs level on points are split by goal difference then goals scored, the real table's first two steps, and the game stops there. There is no cup, because the Copa MX has not been played since 2020, and the Leagues Cup is not modelled.",
+    "The A-League Men is 12 clubs and nobody goes down, since Australia has no relegation. The real season is 26 games each (home and away plus four third meetings), and last season's finals series took the top six. Here it's a 22 round double round robin and the finals aren't played, so whoever tops the table wins it, and the board asks a contender to make the top six. The Australia Cup is for Australian clubs only from 2026, so Auckland FC and Wellington Phoenix play no cup at all, and with ten clubs in the draw six of them go straight to the quarter-finals. The squads are the twelve real 2026-27 squads, read in October 2026, and a player with no market value starts at the bottom of the rating scale rather than at a made up number. No Asian competition is modelled."
+   ]
+  },
+  {
+   "k": "1280-rm free save after taking the job",
+   "v": {
+    "club": "Westerlo",
+    "rules": 1331,
+    "v": 1
+   }
+  },
+  {
+   "k": "1280-rm hot seat",
+   "v": [
+    {
+     "n": 1,
+     "played": "Away at Genk",
+     "result": "Westerlo 0 to 4 GenkLost",
+     "q": "4 defeats in your last 5. Have you lost the dressing room?",
+     "nextHeader": "Away at Lommel",
+     "qOnNext": ""
+    },
+    {
+     "n": 2,
+     "played": "Away at Lommel",
+     "result": "Westerlo 2 to 0 LommelWon",
+     "q": "",
+     "nextHeader": "Home to Beveren",
+     "qOnNext": ""
+    },
+    {
+     "n": 3,
+     "played": "Home to Beveren",
+     "result": "Westerlo 5 to 1 BeverenWon",
+     "q": "Pape Diong has started 0 of the last 10. Is he finished at this club?",
+     "nextHeader": "Away at Antwerp",
+     "qOnNext": ""
+    },
+    {
+     "n": 4,
+     "played": "Away at Antwerp",
+     "result": "Westerlo 0 to 3 AntwerpLost",
+     "q": "",
+     "nextHeader": "Home to Kortrijk",
+     "qOnNext": ""
+    },
+    {
+     "n": 5,
+     "played": "Home to Kortrijk",
+     "result": "",
+     "q": ""
+    }
+   ]
+  },
+  {
+   "k": "1280-rm hot seat questions",
+   "v": {
+    "asked": 0,
+    "wrong": []
+   }
+  },
+  {
+   "k": "1280-motion in-play lines",
+   "v": [
+    {
+     "target": 57,
+     "at": 57,
+     "line": "Change at 57' · Subs left: 4 · 3 stops left"
+    },
+    {
+     "target": 66,
+     "at": 66,
+     "line": "Change at 66' · Subs left: 3 · 2 stops left"
+    },
+    {
+     "target": 75,
+     "at": 75,
+     "line": "Change at 75' · Subs left: 2 · 1 stop left"
+    }
+   ]
+  },
+  {
+   "k": "1280-motion shared",
+   "v": {
+    "okShared": true,
+    "shared": "Change at 75' · Subs left: 1 · 0 stops left",
+    "sharedRefusal": 0,
+    "sharedBench": 11
+   }
+  },
+  {
+   "k": "1280-motion refusal",
+   "v": {
+    "at4": 82,
+    "okRef": true,
+    "refusedLine": "Change at 82' · Subs left: 1 · 0 stops left",
+    "kind": "stops",
+    "said": "No stoppages left for changes. All three are used.",
+    "b0": {
+     "y": 718,
+     "h": 12902
+    },
+    "b1": {
+     "y": 718,
+     "h": 12902
+    },
+    "sizes": {
+     "buttons": [
+      44,
+      44,
+      44,
+      44
+     ],
+     "refusalPx": 12,
+     "stopsPx": 12,
+     "labelOverflow": 0,
+     "labelRight": -49,
+     "sheetBottom": 238,
+     "vh": 900
+    }
+   }
+  },
+  {
+   "k": "1280-motion report lines",
+   "v": [
+    "SUBSTITUTIONS",
+    "⏱️ KICK OFF",
+    "🔁 Sub: Cody Gakpo on for Bradley Barcola",
+    "🔁 Sub: Rio Ngumoha on for Cody Gakpo",
+    "🟥 Sent off: Ryan Gravenberch",
+    "🔁 Sub: Hugo Ekitiké on for Alexander Isak",
+    "🔁 Sub: Harvey Barnes on for Lewis Miley",
+    "🔁 Sub: Jeremie Frimpong on for Federico Chiesa",
+    "🔁 Sub: Matias Fernandez-Pardo on for Bazoumana Touré",
+    "🟥 Ryan Gravenberch was sent off, suspended for 1 match.",
+    "A full club-management sim in your browser: 454 clubs across 27 real leagues, from the Premier League, the 2. Bundesliga, Serie B, Ligue 2, the Segunda División and the Scottish Premiership to the Saudi Pro League, MLS, Brazil, Mexico, Australia, Russia, Croatia, Denmark, Switzerland, Austria and Greece, with real players at their real market values as of August 2026 (October for the A-League Men and the Russian Premier League) and thin squads topped up with made up youth, marked as such. Manage today or in a real past season: 2020-21 with Haaland's Dortmund and Mbappé's PSG, 2015-16 with Leicester at 5000 to 1, 2010-11 with prime Messi, or 2005-06 with Ronaldinho's Barcelona. Or create your own club with its own crest and stadium. Negotiate transfers, survive bidding wars, hit the board's named objectives, and chase titles season after season.",
+    "Play the match one of two ways: Play Live puts it on the pitch with the dressing room at the break, and Quick Sim goes straight to the report with the coach making your subs. Then read the report, answer the press, and manage the dressing room between games.",
+    "A live match moves: both teams hold their shape around the ball, and goals play out on the pitch before the score changes. Pause it, change the speed or skip to the whistle, and tap one of your players at any minute to make a sub or change shape.",
+    "Or open the calendar, tap any day and sim to it: every match up to that day plays in one go, and the run stops early only for a transfer window opening, the season review, the sack or a club's approach. The four fast forwards (next match, about a month, to the window, rest of season) are the same tap on a chosen day.",
+    "Buy and sell in the summer and January windows: negotiate fees, pay release clauses, take loans, and field bids for your own stars before rival clubs close your targets.",
+    "Run the staff room: hire an attack, defence or goalkeeping coach and a lead scout, promote one of your own academy staff for nothing, pay somebody off, and decide whether to match a rival's offer when they come calling.",
+    "Boards demand the actual prize, never a number: win the league, qualify for the Champions League or Europa League, reach mid table, or stay up, plus cup targets, a rival to finish above, and squad-building mandates.",
+    "On top of those, every board makes two specific asks a season, and they are the ones you go out and buy: get one more player from the club's own country into the squad, keep one more aged 30 or over, sign somebody in the thinnest line of your squad, sign somebody 21 or under at a rating floor, or spend a set fee or more on one signing. Which two you get is fixed for your club and your season, and every threshold is read off the market and the money you really have, so the pair can always be met and never costs more than the pot. Countries come from the same per-era map the market screen puts a flag next to his name with, so anyone it has no country for counts for nobody.",
+    "Your inbox is not just the dressing room. The board chase an ask you have not met and you can take their money, give them your word or tell them no; an agent writes about a player of yours with a year left; your assistant argues about the training plan when it is wrong for the squad; the supporters trust write when the tickets are on premium; and a reporter wants a line on whether the squad is good enough. Each answer moves something with a screen behind it: the kitty, the board meter, a contract, the plan, the ticket price or the press mood. A word given to the board settles in the summer, three points of next season's opening confidence either way.",
+    "Every league plays its real length: 38 rounds in the Premier League, 46 in the Championship, 34 in the Bundesliga, with the domestic cup from a round of 16 to the final and a full Champions League on top for qualified clubs."
+   ]
+  },
+  {
+   "k": "1280-motion free save after taking the job",
+   "v": {
+    "club": "Westerlo",
+    "rules": 1331,
+    "v": 1
+   }
+  },
+  {
+   "k": "1280-motion hot seat",
+   "v": [
+    {
+     "n": 1,
+     "played": "Home to Sint-Truiden",
+     "result": "Westerlo 0 to 0 Sint-TruidenWon on penalties",
+     "q": "Union Saint-Gilloise on paper are a level above you. Realistically, what are you going there for?",
+     "nextHeader": "Home to Union Saint-Gilloise",
+     "qOnNext": ""
+    },
+    {
+     "n": 2,
+     "played": "Home to Union Saint-Gilloise",
+     "result": "Westerlo 3 to 1 Union Saint-GilloiseWon",
+     "q": "",
+     "nextHeader": "Away at Sint-Truiden",
+     "qOnNext": ""
+    },
+    {
+     "n": 3,
+     "played": "Away at Sint-Truiden",
+     "result": "",
+     "q": ""
+    }
+   ]
+  },
+  {
+   "k": "1280-motion hot seat questions",
+   "v": {
+    "asked": 1,
+    "wrong": []
+   }
+  },
+  {
+   "k": "320-rm in-play lines",
+   "v": [
+    {
+     "target": 57,
+     "at": 57,
+     "line": "Change at 57' · Subs left: 4 · 3 stops left"
+    },
+    {
+     "target": 66,
+     "at": 66,
+     "line": "Change at 66' · Subs left: 3 · 2 stops left"
+    },
+    {
+     "target": 75,
+     "at": 75,
+     "line": "Change at 75' · Subs left: 2 · 1 stop left"
+    }
+   ]
+  },
+  {
+   "k": "320-rm shared",
+   "v": {
+    "okShared": true,
+    "shared": "Change at 75' · Subs left: 1 · 0 stops left",
+    "sharedRefusal": 0,
+    "sharedBench": 11
+   }
+  },
+  {
+   "k": "320-rm refusal",
+   "v": {
+    "at4": 82,
+    "okRef": true,
+    "refusedLine": "Change at 82' · Subs left: 1 · 0 stops left",
+    "kind": "stops",
+    "said": "No stoppages left for changes. All three are used.",
+    "b0": {
+     "y": 902,
+     "h": 28506
+    },
+    "b1": {
+     "y": 902,
+     "h": 28506
+    },
+    "sizes": {
+     "buttons": [
+      44,
+      44,
+      44,
+      44
+     ],
+     "refusalPx": 12,
+     "stopsPx": 12,
+     "labelOverflow": 0,
+     "labelRight": -49,
+     "sheetBottom": 582,
+     "vh": 640
+    }
+   }
+  },
+  {
+   "k": "320-rm report lines",
+   "v": [
+    "SUBSTITUTIONS",
+    "⏱️ KICK OFF",
+    "🔁 Sub: Cody Gakpo on for Bradley Barcola",
+    "🔁 Sub: Rio Ngumoha on for Cody Gakpo",
+    "🔁 Sub: Joe Willock on for Aladji Bamba",
+    "🔁 Sub: Harvey Barnes on for Bazoumana Touré",
+    "🔁 Sub: Hugo Ekitiké on for Alexander Isak",
+    "🔁 Sub: Amar Dedić on for Tino Livramento",
+    "🔁 Sub: Sean Steur on for Lewis Miley",
+    "🔁 Sub: Jeremie Frimpong on for Federico Chiesa",
+    "A full club-management sim in your browser: 454 clubs across 27 real leagues, from the Premier League, the 2. Bundesliga, Serie B, Ligue 2, the Segunda División and the Scottish Premiership to the Saudi Pro League, MLS, Brazil, Mexico, Australia, Russia, Croatia, Denmark, Switzerland, Austria and Greece, with real players at their real market values as of August 2026 (October for the A-League Men and the Russian Premier League) and thin squads topped up with made up youth, marked as such. Manage today or in a real past season: 2020-21 with Haaland's Dortmund and Mbappé's PSG, 2015-16 with Leicester at 5000 to 1, 2010-11 with prime Messi, or 2005-06 with Ronaldinho's Barcelona. Or create your own club with its own crest and stadium. Negotiate transfers, survive bidding wars, hit the board's named objectives, and chase titles season after season.",
+    "Play the match one of two ways: Play Live puts it on the pitch with the dressing room at the break, and Quick Sim goes straight to the report with the coach making your subs. Then read the report, answer the press, and manage the dressing room between games.",
+    "A live match moves: both teams hold their shape around the ball, and goals play out on the pitch before the score changes. Pause it, change the speed or skip to the whistle, and tap one of your players at any minute to make a sub or change shape.",
+    "Or open the calendar, tap any day and sim to it: every match up to that day plays in one go, and the run stops early only for a transfer window opening, the season review, the sack or a club's approach. The four fast forwards (next match, about a month, to the window, rest of season) are the same tap on a chosen day.",
+    "Buy and sell in the summer and January windows: negotiate fees, pay release clauses, take loans, and field bids for your own stars before rival clubs close your targets.",
+    "Run the staff room: hire an attack, defence or goalkeeping coach and a lead scout, promote one of your own academy staff for nothing, pay somebody off, and decide whether to match a rival's offer when they come calling.",
+    "Boards demand the actual prize, never a number: win the league, qualify for the Champions League or Europa League, reach mid table, or stay up, plus cup targets, a rival to finish above, and squad-building mandates.",
+    "On top of those, every board makes two specific asks a season, and they are the ones you go out and buy: get one more player from the club's own country into the squad, keep one more aged 30 or over, sign somebody in the thinnest line of your squad, sign somebody 21 or under at a rating floor, or spend a set fee or more on one signing. Which two you get is fixed for your club and your season, and every threshold is read off the market and the money you really have, so the pair can always be met and never costs more than the pot. Countries come from the same per-era map the market screen puts a flag next to his name with, so anyone it has no country for counts for nobody.",
+    "Your inbox is not just the dressing room. The board chase an ask you have not met and you can take their money, give them your word or tell them no; an agent writes about a player of yours with a year left; your assistant argues about the training plan when it is wrong for the squad; the supporters trust write when the tickets are on premium; and a reporter wants a line on whether the squad is good enough. Each answer moves something with a screen behind it: the kitty, the board meter, a contract, the plan, the ticket price or the press mood. A word given to the board settles in the summer, three points of next season's opening confidence either way.",
+    "Every league plays its real length: 38 rounds in the Premier League, 46 in the Championship, 34 in the Bundesliga, with the domestic cup from a round of 16 to the final and a full Champions League on top for qualified clubs."
+   ]
+  }
+ ],
+ "bad": []
+}
