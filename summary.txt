@@ -1,0 +1,13 @@
+build exit=0 24s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+resultsLayout exit=0 1s | Node.js v24.21.0
+hubgrid exit=0 52s | Evidence: soccer-hub-grid-artifacts/native
+offerReview exit=0 81s | Soccer offer review: 9 actual-route journeys, 12 effective restored DOM controls, no forwarded writes.
+playReducedMotion exit=0 46s | playReducedMotion: green. Motion stops for a visitor who asked for less, content stays visible, every Round 530 route lands its reveals on the final frame, and everyone e
+playHomeFold exit=0 29s | playHomeFold: green. The first thing on the page is something to play.
+playCmHubLanding exit=0 91s | playCmHubLanding: green (A 8 pass 0 fail, B 65 pass 0 fail, C 111 pass 0 fail, E 63 pass 0 fail, F 9 pass 0 fail); the hub lands on the club on its first frame
+playCorruptSaves exit=1 133s | playCorruptSaves: 1 broken save(s) trap the player: /hall-of-champions all
+playStorageBlocked exit=0 271s | playStorageBlocked: 826 checks, 0 failed
+pressMarket exit=0 376s | Press/Market native 1899 checks,54 journeys,3 effective observation detectors,0 failures.
+resultsLayout-head exit=0 0s | AssertionError [ERR_ASSERTION]: Engine is exactly the unchanged original base
+browser-sims exit=1 232s | 1 harness not green.
+reveal-head exit=0 214s | 1 harness not green.

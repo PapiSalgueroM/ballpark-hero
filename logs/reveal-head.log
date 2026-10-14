@@ -1,0 +1,4 @@
+  FAIL  simRevealScroll.mjs           213.2s
+        it reported success after an offline transport block; checks needing live data did not run
+----- simRevealScroll.mjs (FAIL) -----
+1 harness not green.
