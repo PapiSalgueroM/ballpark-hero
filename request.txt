@@ -1,0 +1,5 @@
+#!build
+#!playwright
+headsha: git log --oneline -2
+fonts-default: node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only | tail -1
+playDeadline: node .rc/x/prepInstalled.mjs "$PWD/mdo" && MANAGER_DEADLINE_OUT="$PWD/mdo" MANAGER_DEADLINE_PHASE=fixed NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playClubManagerDecisionDeadline.mjs
