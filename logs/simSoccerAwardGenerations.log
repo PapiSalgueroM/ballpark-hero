@@ -1,0 +1,7 @@
+AssertionError [ERR_ASSERTION]: actual separate component tests pass
+
+1 !== 0
+
+    at main (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simSoccerAwardGenerations.mjs:454:10)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simSoccerAwardGenerations.mjs:530:52

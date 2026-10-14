@@ -1,0 +1,14 @@
+1) every harness parses
+   ok   897 harnesses pass node --check
+2) no harness carries an anchor it can never match
+   897 harnesses, 241 carry a multi line anchor into src, 283 normalised reads guard one
+   ok   241 harnesses are in scope, so the check is looking at something
+   FAIL playPitchRestartContinuity.mjs reads src/components/pitch-motion/motion.tsx raw at line 147 and searches it with a multi line anchor (line 19), so on a CRLF checkout it matches nothing (3 raw reads in all)
+   FAIL playPlayerAutocompleteTouchScroll.mjs reads src/components/game/PlayerAutocomplete.tsx raw at line 29 and searches it with a multi line anchor (line 66), so on a CRLF checkout it matches nothing
+   FAIL simClubDetailCurrentRoster.mjs reads src/components/club-manager/ClubDetailScreen.tsx raw at line 34 and searches it with a multi line anchor (line 72), so on a CRLF checkout it matches nothing (3 raw reads in all)
+   FAIL simClubManagerDecisionDeadline.mjs reads src/lib/clubManagerDecisions.ts raw at line 45 and searches it with a multi line anchor (line 78), so on a CRLF checkout it matches nothing (3 raw reads in all)
+   FAIL simManagerHalftimeLineups.mjs reads src/components/club-manager/HalftimeScreen.tsx raw at line 34 and searches it with a multi line anchor (line 62), so on a CRLF checkout it matches nothing (3 raw reads in all)
+   FAIL simPitchRestartContinuity.mjs reads src/components/pitch-motion/motion.tsx raw at line 50 and searches it with a multi line anchor (line 26), so on a CRLF checkout it matches nothing
+   FAIL simPlayerAutocompleteTouchScroll.mjs reads src/components/game/PlayerAutocomplete.tsx raw at line 54 and searches it with a multi line anchor (line 92), so on a CRLF checkout it matches nothing (3 raw reads in all)
+
+simHarnessAnchors: 7 failure(s)
