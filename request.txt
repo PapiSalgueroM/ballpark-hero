@@ -1,0 +1,4 @@
+#!serial
+appealIsolation: node scripts/simManagerAppealIsolation.mjs
+pin-proof-oldtext: git show 196fd642:src/lib/clubManager.ts > src/lib/clubManager.ts && git show HEAD~1:scripts/fixtures/managerAppealIsolation1081/manifest.json > scripts/fixtures/managerAppealIsolation1081/manifest.json && node scripts/simManagerAppealIsolation.mjs; s=$?; git checkout HEAD -- src scripts; exit $s
+liveSimVitest: node_modules/.bin/vitest run src/test/liveSimMotion.test.tsx -t "extra time banner" --testTimeout=300000
