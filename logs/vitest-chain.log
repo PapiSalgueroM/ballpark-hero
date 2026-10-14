@@ -1,0 +1,73 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/test/soccerCareerRoutineEvents.test.ts [2m([22m[2m44 tests[22m[2m)[22m[33m 721[2mms[22m[39m
+ [31m❯[39m src/test/soccerCareerStatRewards.test.ts [2m([22m[2m21 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[33m 950[2mms[22m[39m
+   [32m✓[39m Soccer Career stat rewards and truthful Life previews[2m > [22mstat rewards missing: positive queued bonuses survive the actual hit[32m 78[2mms[22m[39m
+   [32m✓[39m Soccer Career stat rewards and truthful Life previews[2m > [22mstat rewards missing: negative queued bonuses survive the actual hit[32m 16[2mms[22m[39m
+   [32m✓[39m Soccer Career stat rewards and truthful Life previews[2m > [22mstat rewards missing: zero and absent queued bonuses survive the actual hit[32m 14[2mms[22m[39m
+   [32m✓[39m Soccer Career stat rewards and truthful Life previews[2m > [22mstat rewards preservation: positive queued bonuses survive the actual miss[32m 12[2mms[22m[39m
+   [32m✓[39m Soccer Career stat rewards and truthful Life previews[2m > [22mstat rewards preservation: negative queued bonuses survive the actual miss[32m 13[2mms[22m[39m
+   [32m✓[39m Soccer Career stat rewards and truthful Life previews[2m > [22mstat rewards preservation: zero and absent queued bonuses survive the actual miss[32m 14[2mms[22m[39m
+   [32m✓[39m Soccer Career stat rewards and truthful Life previews[2m > [22mstat rewards preservation: leaving holds every queued bonus[32m 11[2mms[22m[39m
+   [32m✓[39m Soccer Career stat rewards and truthful Life previews[2m > [22mstat rewards preservation: a wrong personality still skips the saved card[32m 7[2mms[22m[39m
+   [32m✓[39m Soccer Career stat rewards and truthful Life previews[2m > [22mstat rewards preservation: the original lookup and single wheel draw stay intact[32m 9[2mms[22m[39m
+[31m   [31m×[31m Soccer Career stat rewards and truthful Life previews[2m > [22mstat rewards missing: earned bonuses reach the actual next-season boundary once[39m[33m 635[2mms[22m[39m
+[31m     → Cannot find module '/home/runner/work/_temp/t-vitest-chain/career-stat-boundary-unit-R4HbcN/engine.mjs' imported from '/home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerCareerStatRewards.test.ts'[39m
+   [32m✓[39m Soccer Career stat rewards and truthful Life previews[2m > [22mstat rewards preservation: loaded choice inputs remain immutable[32m 25[2mms[22m[39m
+   [32m✓[39m Soccer Career stat rewards and truthful Life previews[2m > [22mstat rewards preservation: original prerequisite offer and cooldown remain intact[32m 6[2mms[22m[39m
+   [32m✓[39m Soccer Career stat rewards and truthful Life previews[2m > [22mstat preview missing: 205 choice0 shows the actual effect[32m 20[2mms[22m[39m
+   [32m✓[39m Soccer Career stat rewards and truthful Life previews[2m > [22mstat preview missing: 205 choice1 shows the actual effect[32m 20[2mms[22m[39m
+   [32m✓[39m Soccer Career stat rewards and truthful Life previews[2m > [22mstat preview missing: 211 choice1 shows the actual effect[32m 8[2mms[22m[39m
+   [32m✓[39m Soccer Career stat rewards and truthful Life previews[2m > [22mstat preview missing: 213 choice0 shows the actual effect[32m 6[2mms[22m[39m
+   [32m✓[39m Soccer Career stat rewards and truthful Life previews[2m > [22mstat preview missing: 214 choice1 shows the actual effect[32m 6[2mms[22m[39m
+   [32m✓[39m Soccer Career stat rewards and truthful Life previews[2m > [22mstat preview missing: 215 choice1 shows the actual effect[32m 10[2mms[22m[39m
+   [32m✓[39m Soccer Career stat rewards and truthful Life previews[2m > [22mstat preview missing: 217 choice0 shows the actual effect[32m 14[2mms[22m[39m
+   [32m✓[39m Soccer Career stat rewards and truthful Life previews[2m > [22mstat preview missing: 218 choice0 shows the actual effect[32m 11[2mms[22m[39m
+   [32m✓[39m Soccer Career stat rewards and truthful Life previews[2m > [22mstat preview missing: 219 choice0 shows the actual effect[32m 11[2mms[22m[39m
+ [32m✓[39m src/test/soccerCareerDocumentaryReview.test.ts [2m([22m[2m22 tests[22m[2m)[22m[33m 1475[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career recorded documentary review[2m > [22mdocumentary review missing: another full-access deal enables one later review [33m 327[2mms[22m[39m
+ [32m✓[39m src/test/soccerCareerPendingLife.test.ts [2m([22m[2m40 tests[22m[2m)[22m[33m 592[2mms[22m[39m
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ [32m✓[39m src/test/soccerCareerLifeReviews.test.ts [2m([22m[2m20 tests[22m[2m)[22m[33m 1113[2mms[22m[39m
+ [32m✓[39m src/test/soccerCareerPendingPopularity.test.ts [2m([22m[2m22 tests[22m[2m)[22m[32m 216[2mms[22m[39m
+ [32m✓[39m src/test/soccerCareerColdContext.test.ts [2m([22m[2m16 tests[22m[2m)[22m[32m 246[2mms[22m[39m
+ [32m✓[39m src/test/soccerCareerPendingMorale.test.ts [2m([22m[2m20 tests[22m[2m)[22m[33m 320[2mms[22m[39m
+ [32m✓[39m src/test/seasonCentreOwnGoals.test.tsx [2m([22m[2m7 tests[22m[2m)[22m[33m 3224[2mms[22m[39m
+   [33m[2m✓[22m[39m Season Centre: own goals on the page (Round 1167, read after the Release AP merge)[2m > [22mprints an own goal for side "us" with who did it and the club that got it, the same live, held and replayed [33m 1169[2mms[22m[39m
+   [33m[2m✓[22m[39m Season Centre: own goals on the page (Round 1167, read after the Release AP merge)[2m > [22mprints an own goal for side "them" with who did it and the club that got it, the same live, held and replayed [33m 494[2mms[22m[39m
+   [33m[2m✓[22m[39m Season Centre: own goals on the page (Round 1167, read after the Release AP merge)[2m > [22mleaves a return match alone in a replay exactly as it does live (the moments are planned, offered or not) [33m 506[2mms[22m[39m
+ [32m✓[39m src/test/soccerCareerSavedLoan.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 241[2mms[22m[39m
+ [32m✓[39m src/test/soccerCareerLifeFollowups.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 209[2mms[22m[39m
+ [32m✓[39m src/test/soccerCareerContracts.test.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 129[2mms[22m[39m
+ [32m✓[39m src/test/soccerLifeChainPackedSave.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 134[2mms[22m[39m
+ [32m✓[39m src/test/soccerSavePackedReaders.test.tsx [2m([22m[2m3 tests[22m[2m)[22m[32m 143[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/soccerCareerStatRewards.test.ts[2m > [22mSoccer Career stat rewards and truthful Life previews[2m > [22mstat rewards missing: earned bonuses reach the actual next-season boundary once
+[31m[1mError[22m: Cannot find module '/home/runner/work/_temp/t-vitest-chain/career-stat-boundary-unit-R4HbcN/engine.mjs' imported from '/home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerCareerStatRewards.test.ts'[39m
+[36m [2m❯[22m boundaryEngine src/test/soccerCareerStatRewards.test.ts:[2m122:18[22m[39m
+    [90m120| [39m        ? { contents: changed, loader: 'ts', resolveDir: path.dirname(…
+    [90m121| [39m    } }] })[33m;[39m
+    [90m122| [39m  const engine = await import(/* @vite-ignore */ url.pathToFileURL(pat…
+    [90m   | [39m                 [31m^[39m
+    [90m123| [39m  console.log(`Retained actual stat-boundary unit sources: ${tmp}`); r…
+    [90m124| [39m  } [35mfinally[39m { globalThis[33m.[39m[33mTextEncoder[39m [33m=[39m suiteEncoder[33m;[39m }
+[90m [2m❯[22m src/test/soccerCareerStatRewards.test.ts:[2m171:54[22m[39m
+
+[31m[1mCaused by: Error[22m: Failed to load url /home/runner/work/_temp/t-vitest-chain/career-stat-boundary-unit-R4HbcN/engine.mjs (resolved id: /home/runner/work/_temp/t-vitest-chain/career-stat-boundary-unit-R4HbcN/engine.mjs). Does the file exist?[39m
+[90m [2m❯[22m loadAndTransform node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:[2m51969:17[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m13 passed[39m[22m[90m (14)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m243 passed[39m[22m[90m (244)[39m
+[2m   Start at [22m 21:37:56
+[2m   Duration [22m 14.66s[2m (transform 3.86s, setup 1.42s, collect 14.43s, tests 9.71s, environment 9.53s, prepare 2.57s)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerCareerStatRewards.test.ts,title=src/test/soccerCareerStatRewards.test.ts > Soccer Career stat rewards and truthful Life previews > stat rewards missing%3A earned bonuses reach the actual next-season boundary once,line=122,column=18::Error: Cannot find module '/home/runner/work/_temp/t-vitest-chain/career-stat-boundary-unit-R4HbcN/engine.mjs' imported from '/home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerCareerStatRewards.test.ts'%0A ❯ boundaryEngine src/test/soccerCareerStatRewards.test.ts:122:18%0A ❯ src/test/soccerCareerStatRewards.test.ts:171:54%0A%0A⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯%0ASerialized Error: { code: 'ERR_MODULE_NOT_FOUND' }%0ACaused by: Caused by: Error: Failed to load url /home/runner/work/_temp/t-vitest-chain/career-stat-boundary-unit-R4HbcN/engine.mjs (resolved id: /home/runner/work/_temp/t-vitest-chain/career-stat-boundary-unit-R4HbcN/engine.mjs). Does the file exist?%0A ❯ loadAndTransform node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:51969:17%0A%0A
