@@ -1,0 +1,2 @@
+dev-mentorRemember: CAREER_DEVELOPMENT_CONTROL=mentorRemember CAREER_DEVELOPMENT_IMPORT_ONLY=0 CAREER_DEVELOPMENT_ARTIFACTS=/tmp/devmr node scripts/simSoccerCareerDevelopment.mjs
+base-dev-mentorRemember: git worktree add -q /tmp/b1329mr 082fc2774c8aa9f919c14efa33bfc3fbfc599597 && ln -s "$PWD/node_modules" /tmp/b1329mr/node_modules && cd /tmp/b1329mr && CAREER_DEVELOPMENT_CONTROL=mentorRemember CAREER_DEVELOPMENT_IMPORT_ONLY=0 CAREER_DEVELOPMENT_ARTIFACTS=/tmp/devmrb node scripts/simSoccerCareerDevelopment.mjs
