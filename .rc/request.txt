@@ -1,0 +1,25 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+subs-all: (git worktree add -f /tmp/sbA dec9075b >/dev/null 2>&1 || (sleep 7; git worktree add -f /tmp/sbA dec9075b >/dev/null 2>&1)); SUBS_BASE=/tmp/sbA node scripts/simCmSubs.mjs
+c-onesource: SUBS_CONTROL=onesource node scripts/simCmSubs.mjs
+c-oldcap: SUBS_CONTROL=oldcap node scripts/simCmSubs.mjs
+c-nostops: SUBS_CONTROL=nostops node scripts/simCmSubs.mjs
+c-htstop: SUBS_CONTROL=htstop node scripts/simCmSubs.mjs
+c-opproom: SUBS_CONTROL=opproom node scripts/simCmSubs.mjs
+c-coachall: SUBS_CONTROL=coachall node scripts/simCmSubs.mjs
+c-pressold: SUBS_CONTROL=pressold node scripts/simCmSubs.mjs
+c-legacyleak: (git worktree add -f /tmp/sbB dec9075b >/dev/null 2>&1 || (sleep 9; git worktree add -f /tmp/sbB dec9075b >/dev/null 2>&1)); SUBS_BASE=/tmp/sbB SUBS_CONTROL=legacyleak node scripts/simCmSubs.mjs
+c-pressnew: (git worktree add -f /tmp/sbC dec9075b >/dev/null 2>&1 || (sleep 11; git worktree add -f /tmp/sbC dec9075b >/dev/null 2>&1)); SUBS_BASE=/tmp/sbC SUBS_CONTROL=pressnew node scripts/simCmSubs.mjs
+c-nodate: (git worktree add -f /tmp/sbD dec9075b >/dev/null 2>&1 || (sleep 13; git worktree add -f /tmp/sbD dec9075b >/dev/null 2>&1)); SUBS_BASE=/tmp/sbD SUBS_CONTROL=nodate node scripts/simCmSubs.mjs
+dd: node scripts/simDailyDeals.mjs
+dd-rulesall: DAILY_DEALS_CONTROL=rulesall node scripts/simDailyDeals.mjs
+dd-rulesstale: DAILY_DEALS_CONTROL=rulesstale node scripts/simDailyDeals.mjs
+era2020: node scripts/simEra2020.mjs
+era2020-subsrow: SIM_ERA2020_CONTROL=subsrow node scripts/simEra2020.mjs
+unit: node_modules/.bin/vitest run src/lib/clubManagerSubsRule.test.ts
+qs-all: CM_QUICK_SUBS_CONTROL=all ONLY=simCmQuickSubs node scripts/runAllSims.mjs
+ql: node scripts/simCmQuickLegs.mjs
+ql-nokeep: CM_QUICK_LEGS_CONTROL=nokeep node scripts/simCmQuickLegs.mjs
+lsm-whistle: LIVE_MOTION_CONTROL=whistle node scripts/simLiveSimMotion.mjs
+anchors: node scripts/simHarnessAnchors.mjs
+unseeded-diff: R=$PWD; node scripts/simCmUnseededWorld.mjs > /tmp/uh.log 2>&1; echo head_exit=$?; (git worktree add -f /tmp/ub dec9075b >/dev/null 2>&1 || (sleep 15; git worktree add -f /tmp/ub dec9075b >/dev/null 2>&1)); ln -s $R/node_modules /tmp/ub/node_modules; cd /tmp/ub && node scripts/simCmUnseededWorld.mjs > /tmp/ubase.log 2>&1; echo base_exit=$?; cd $R; tail -3 /tmp/uh.log; tail -3 /tmp/ubase.log; grep -i fail /tmp/uh.log | sort > /tmp/uh.f; grep -i fail /tmp/ubase.log | sort > /tmp/ub.f; diff /tmp/uh.f /tmp/ub.f | head -40; echo "UNSEEDED head_fail_lines=$(wc -l < /tmp/uh.f) base_fail_lines=$(wc -l < /tmp/ub.f) diff_lines=$(diff /tmp/uh.f /tmp/ub.f | wc -l)"
+continuity-diff: R=$PWD; node scripts/simManagerWorldContinuity.mjs > /tmp/ch.log 2>&1; echo head_exit=$?; (git worktree add -f /tmp/cb dec9075b >/dev/null 2>&1 || (sleep 17; git worktree add -f /tmp/cb dec9075b >/dev/null 2>&1)); ln -s $R/node_modules /tmp/cb/node_modules; cd /tmp/cb && node scripts/simManagerWorldContinuity.mjs > /tmp/cbase.log 2>&1; echo base_exit=$?; cd $R; tail -4 /tmp/ch.log; tail -4 /tmp/cbase.log; diff <(grep -iv "ms\b\|seconds\|elapsed" /tmp/ch.log) <(grep -iv "ms\b\|seconds\|elapsed" /tmp/cbase.log) | head -40; echo "CONTINUITY diff_lines=$(diff <(grep -iv "ms\b\|seconds\|elapsed" /tmp/ch.log) <(grep -iv "ms\b\|seconds\|elapsed" /tmp/cbase.log) | wc -l)"
