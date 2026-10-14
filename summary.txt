@@ -1,0 +1,22 @@
+build exit=0 33s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+fonts exit=0 0s | Prepared 9 declared font dependencies for local fulfillment.
+assets1082 exit=0 11s | Prepared 92 actual font and flag dependencies for 84 career-club countries.
+playGameReports exit=0 10s | PASS all eight game report journeys
+playGameReports-below exit=0 5s | PASS below-guide control fired on all eight actual pages
+playWorldXiReportFit exit=0 4s | playWorldXiReportFit: green. 16 cases, the narrowest name column 87px, nothing cut, nothing sideways, nothing jumps.
+simCareerTransferBrief-forwalk exit=0 6s | Transfer Brief:9 healthy outcome groups,60 full original state/RNG pairs,8 effective copied source controls,9 prepared native branches.
+playCareerTransferBrief exit=0 179s | Transfer Brief native 1341 checks,27 journeys,3 copied observation controls,0 failures.
+simSoccerAgentReview-forwalk exit=0 10s | PASS agent review product and proof source bytes held.
+playSoccerAgentReview exit=0 414s | Soccer agent review native 1904 checks,12 journeys,3 copied observation controls,0 failures.
+playSoccerOfferReview1082 exit=0 74s | Soccer offer review: 9 actual-route journeys, 12 effective restored DOM controls, no forwarded writes.
+simSoccerOpponentLabels-forwalk exit=0 26s | PASS simSoccerOpponentLabels: complete original/current careers, display controls and whole undo
+simSoccerOpponentLabels-browser exit=0 10s | PASS simSoccerOpponentLabels browser: 3 actual saved-row journeys, complete saves and read vectors
+base-minus1325 exit=0 34s | /tmp/wt-4175
+fit-part2 exit=0 226s | Shots and part1.json: /home/runner/work/_temp/t-fit-part2/out/shots
+base-minus1328 exit=0 33s | /tmp/wt-4174
+hub-walk-full exit=0 241s | playCmHubLanding: green (A 8 pass 0 fail, B 65 pass 0 fail, C 156 pass 0 fail, D 12 pass 0 fail, E 63 pass 0 fail, F 9 pass 0 fail); the hub lands on the club on its firs
+ctl-hub-drift exit=0 132s | playCmHubLanding: CONTROL drift FIRED, 6 D check(s) went red, first: liverpool-take-seed1: dukb-club-manager-save differs, $.budget: 139.82 against 140.07 (D 6 pass 6 fai
+ctl-hub-tilectl exit=0 60s | playCmHubLanding: 3 failure(s) (C 108 pass 3 fail)
+land-main exit=0 340s | playSoccerLanding: green at 320x640, 390x844, 1280x900 (also bar 360x780, bar 375x667, name 480x800, name 768x1024; landing, name, bar, retire), every marked section red 
+land-toasts exit=1 407s | playSoccerLanding: RED, 2 finding(s)
+ctl-land-seed exit=0 165s | CONTROL FIRED: SOCCER_LANDING_CONTROL=seed played head on seed 1987332286 and the byte check went red, and the old save comparison went red on 8 save(s) given the next se

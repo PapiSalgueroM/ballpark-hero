@@ -1,0 +1,4 @@
+treeWithoutMerge: 12c10788ff2b70720d1ff8df30dbb4f0d1453d37, e14f66e6 without 79b08e00; conflicts kept from e14f66e6: src/pages/WhatsNew.tsx
+base 12c10788ff2b70720d1ff8df30dbb4f0d1453d37 (this head without 79b08e00), differs in: src/components/club-manager/ClubManagerCareerPanel.tsx src/components/club-manager/ClubManagerHelp.tsx src/components/club-manager/ContractsCard.tsx src/components/club-manager/RolesScreen.tsx src/components/club-manager/SquadScreen.tsx src/test/cmTablesTruth.test.tsx 
+served on 4175: 200
+/tmp/wt-4175
