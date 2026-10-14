@@ -1,0 +1,18 @@
+headsha: git log --oneline -2
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node_modules/.bin/vitest run src/lib/clubManagerCustomPromotion.test.ts src/lib/clubManagerReportAge.test.ts src/lib/clubManagerReportedScorers.test.ts src/lib/clubManagerOwnClubLevel.test.ts src/lib/clubManagerSubsRule.test.ts --testTimeout=300000 --hookTimeout=120000
+simPromotion: node scripts/simPromotion.mjs
+simManagerCustomPromotion: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simManagerCustomPromotion.mjs
+reportControls: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/checkManagerReportControls.mjs
+worldBrowser-ctl-all: MANAGER_WORLD_BROWSER_CONTROL=all MANAGER_WORLD_BROWSER_ARTIFACTS=/tmp/mwb node scripts/simManagerWorldBrowser.mjs
+appealIsolation: node scripts/simManagerAppealIsolation.mjs
+continuity-minusAZ: MANAGER_WORLD_CONTINUITY_BASE=$(node scripts/lib/treeWithoutMerge.mjs 5ec5a724 36cc9ffe 082fc277) && export MANAGER_WORLD_CONTINUITY_BASE && MANAGER_WORLD_CONTINUITY_ARTIFACTS=/tmp/mwc node scripts/simManagerWorldContinuity.mjs > /tmp/mwc.log 2>&1; s=$?; tail -3 /tmp/mwc.log | cut -c1-200; [ $s -eq 0 ] && grep -qF 'Manager world continuity: 1 arms, eleven complete groups per arm' /tmp/mwc.log && echo GREEN-OK
+simClubManager: node scripts/simClubManager.mjs
+simClubManagerCalendar: node scripts/simClubManagerCalendar.mjs
+simEra2010: node scripts/simEra2010.mjs
+simCmLeagueBook: node scripts/simCmLeagueBook.mjs
+simUclField: node scripts/simUclField.mjs
+simCustomClubValues: node scripts/simCustomClubValues.mjs
+simSaveFence: node scripts/simSaveFence.mjs
+simCmSubs: node scripts/simCmSubs.mjs
+simClubManagerSaveSize: node scripts/simClubManagerSaveSize.mjs

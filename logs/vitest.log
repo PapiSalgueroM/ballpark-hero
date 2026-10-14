@@ -1,0 +1,23 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/lib/clubManagerOwnClubLevel.test.ts [2m([22m[2m7 tests[22m[2m)[22m[33m 1085[2mms[22m[39m
+   [33m[2m✓[22m[39m the manager's own club is read from his club, never the world roster[2m > [22mthe one club read is the world read, club for club, in today and in a past era, cold and cached [33m 362[2mms[22m[39m
+ [32m✓[39m src/lib/clubManagerReportAge.test.ts [2m([22m[2m3 tests[22m[2m)[22m[33m 1509[2mms[22m[39m
+   [33m[2m✓[22m[39m reported historical Club Manager retirement[2m > [22mclassifies the first simulated Messi contract expiry separately from retirement and renewal [33m 1345[2mms[22m[39m
+ [32m✓[39m src/lib/clubManagerCustomPromotion.test.ts [2m([22m[2m13 tests[22m[2m)[22m[33m 4701[2mms[22m[39m
+   [33m[2m✓[22m[39m created clubs use the existing modern promotion slots[2m > [22mpromotes created champions in every configured pair while preserving all real clubs [33m 812[2mms[22m[39m
+   [33m[2m✓[22m[39m created clubs use the existing modern promotion slots[2m > [22mpromotes an ordinary champion through the same existing slots [33m 553[2mms[22m[39m
+   [33m[2m✓[22m[39m created clubs use the existing modern promotion slots[2m > [22mkeeps the created club outside the automatic places in its current division [33m 564[2mms[22m[39m
+   [33m[2m✓[22m[39m created clubs use the existing modern promotion slots[2m > [22mkeeps qualified non-English created clubs apart from their domestic opponents in Europe [33m 1392[2mms[22m[39m
+ [32m✓[39m src/lib/clubManagerSubsRule.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 9[2mms[22m[39m
+[90mstdout[2m | src/lib/clubManagerReportedScorers.test.ts
+[22m[39mManager scorer diagnostic {"campaigns":4,"matches":191,"league":144,"cup":8,"europe":39,"ownGoals":8,"shootouts":2,"leagueSubGoals":14}
+
+ [32m✓[39m src/lib/clubManagerReportedScorers.test.ts [2m([22m[2m7 tests[22m[2m)[22m[33m 5700[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m5 passed[39m[22m[90m (5)[39m
+[2m      Tests [22m [1m[32m35 passed[39m[22m[90m (35)[39m
+[2m   Start at [22m 14:49:32
+[2m   Duration [22m 8.47s[2m (transform 1.81s, setup 317ms, collect 6.65s, tests 13.00s, environment 1.85s, prepare 562ms)[22m
+

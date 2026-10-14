@@ -1,0 +1,18 @@
+headsha exit=0 0s | 8f604f771 Round BEG: the Round 1081 pin taken again once, after m5
+simPromotion exit=0 3s | simPromotion: all green
+vitest exit=0 9s |    Duration  8.47s (transform 1.81s, setup 317ms, collect 6.65s, tests 13.00s, environment 1.85s, prepare 562ms)
+simManagerCustomPromotion exit=0 6s | PASS all five actual save/load summers: identical outcomes and RNG draws; source bytes held
+reportControls exit=0 34s | Manager report controls: 5/5 effective faults, source restored=true
+tsc exit=0 63s | 
+worldBrowser-ctl-all exit=1 63s | Node.js v24.21.0
+appealIsolation exit=0 33s | Equivalent appeal outcomes must agree: passed for 24 original pairs and 3 separate generated-position pairs.
+continuity-minusAZ exit=1 23s |     at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simManagerWorldContinuity.mjs:489:24
+simEra2010 exit=0 12s | simEra2010: green. 2010 is real, sealed, and plays like 2010.
+simClubManager exit=0 27s | ALL CLUB MANAGER SIMS PASSED
+simUclField exit=0 3s | simUclField: all green
+simClubManagerCalendar exit=0 33s | simClubManagerCalendar: all green
+simSaveFence exit=0 38s | simSaveFence: all green (tabs, source, fleet)
+simCmLeagueBook exit=0 60s | simCmLeagueBook: green, 11 sections, 5 careers x 2 seasons (61s)
+simCustomClubValues exit=0 70s | simCustomClubValues: 25 checks, 0 failures
+simCmSubs exit=0 38s | simCmSubs GREEN: 59 of 59 checks green (parts ledger, rule, extratime, cutover, oppextratime, opponent, coach, press)
+simClubManagerSaveSize exit=0 35s | simClubManagerSaveSize: all sections green

@@ -1,0 +1,6 @@
+freeze-custom-movement: FIRED, 5 failed named assertions
+stale-saved-custom-league: FIRED, 5 failed named assertions
+missing-reload-memberships: FIRED, 1 failed named assertions
+departed-created-name-in-europe: FIRED, 2 failed named assertions
+created-domestic-european-draw: FIRED, 1 failed named assertions
+Manager report controls: 5/5 effective faults, source restored=true
