@@ -29,13 +29,19 @@ const originalState = JSON.parse(original);
 const packed = fs.readFileSync(path.join(FIXTURES, `${held.id}-stored.json`), 'utf8');
 assert(original.length > LIMIT && packed.length <= LIMIT && original !== packed, 'Selected original exceeds the cap and its actual stored representation fits');
 const envelope = JSON.parse(packed);
-assert(envelope.seasons?.format === 'lz-string-utf16' && typeof envelope.seasons.data === 'string', 'Selected fixture actually uses packed history');
-assert(envelope.story?.format === 'lz-string-utf16' && typeof envelope.story.data === 'string', 'Selected fixture actually uses packed story');
+const fixtureFormat = envelope.seasons?.format;
+assert(['lz-string-utf16', 'lz-string-utf16-career'].includes(fixtureFormat) && typeof envelope.seasons.data === 'string', 'Selected fixture uses a known actual codec envelope');
+if (fixtureFormat === 'lz-string-utf16') {
+  assert(envelope.story?.format === 'lz-string-utf16' && typeof envelope.story.data === 'string', 'Selected fixture actually uses packed story');
+} else {
+  assert.deepEqual(Object.keys(envelope).sort(), ['age', 'currentClub', 'retired', 'seasons'], 'Whole-career envelope has only the actual exposed metadata and payload');
+  assert.deepEqual([envelope.currentClub, envelope.age, envelope.retired], [originalState.currentClub, originalState.age, originalState.retired], 'Whole-career envelope retains exact original Continue metadata');
+}
 const invalid = {
   corrupt: JSON.stringify({ ...envelope, seasons: { ...envelope.seasons, data: 'invalid compressed history' } }),
   future: JSON.stringify({ ...envelope, seasons: { ...envelope.seasons, format: 'future-history-format' } }),
-  'corrupt-story': JSON.stringify({ ...envelope, story: { ...envelope.story, data: 'invalid compressed story' } }),
-  'future-story': JSON.stringify({ ...envelope, story: { ...envelope.story, format: 'future-story-format' } }),
+  'corrupt-story': JSON.stringify({ ...originalState, story: { format: 'lz-string-utf16', data: 'invalid compressed story' } }),
+  'future-story': JSON.stringify({ ...originalState, story: { format: 'future-story-format', data: envelope.story?.data ?? envelope.seasons.data } }),
 };
 for (const raw of Object.values(invalid)) assert.notEqual(raw, packed, 'Invalid fixture changed the valid history envelope');
 const fonts = new Map(JSON.parse(fs.readFileSync(path.join(CACHE, 'manifest.json'), 'utf8')).map(entry => {
@@ -50,7 +56,7 @@ const sheet = [...template.matchAll(/<link\s+href="(https:\/\/fonts\.googleapis\
 assert.equal(sheet.length, 1); assert(fonts.has(sheet[0]), 'Actual template stylesheet is cached');
 assert(fs.existsSync(path.join(ROOT, 'dist/index.html')), 'Complete the real app build before browser verification');
 fs.mkdirSync(OUT, { recursive: true });
-const report = { fixture: held, originalHash: sha(original), packedHash: sha(packed), cases: [], checks: 0, failed: 0,
+const report = { fixture: held, fixtureFormat, originalHash: sha(original), packedHash: sha(packed), cases: [], checks: 0, failed: 0,
   forwardedExternalRequests: 0, limitations: ['Fictional career produced by the actual engine, not real historical sports results.', 'External flag images use inert offline fixtures.', 'No career advancement is clicked; the simulation proof checks following-step state and RNG parity.'] };
 const write = (name, value) => fs.writeFileSync(path.join(OUT, `${name}.json`), JSON.stringify(value, null, 2));
 const oracleBuild = await build({
@@ -123,7 +129,7 @@ async function journey(width, height, kind) {
       await resume.click();
       await page.locator('[data-career-recorded-stats]').waitFor({ timeout: 45000 });
       await page.locator('[data-career-records-tile]').waitFor({ timeout: 45000 });
-      await page.waitForFunction(key => { const raw = localStorage.getItem(key); if (!raw || raw.length > 60000) return false; try { return JSON.parse(raw).seasons?.format === 'lz-string-utf16'; } catch { return false; } }, KEY, { timeout: 15000 });
+      await page.waitForFunction(key => { const raw = localStorage.getItem(key); if (!raw || raw.length > 60000) return false; try { return ['lz-string-utf16', 'lz-string-utf16-career'].includes(JSON.parse(raw).seasons?.format); } catch { return false; } }, KEY, { timeout: 15000 });
       let loaded = await bytes(), actual = await decoded(loaded);
       const normalized = await oracle.evaluate(input => { const O = window.__saveSizeOracle, random = Math.random; Math.random = () => { throw new Error('Save normalization consumed randomness'); }; try { const career = O.engine.repairCareer(O.save.parseSoccerCareerSave(input)); O.moments.settleLoadedMoments(career); return JSON.parse(JSON.stringify(career)); } finally { Math.random = random; } }, original);
       write(`${row.id}-expected`, normalized); write(`${row.id}-actual`, actual);
@@ -135,8 +141,8 @@ async function journey(width, height, kind) {
       if (await oracle.evaluate(career => window.__saveSizeOracle.chance.validChanceWheel(career.chanceWheel) && !career.chanceWheel.seen, actual)) {
         const expected = await oracle.evaluate(career => { const O = window.__saveSizeOracle, random = Math.random; Math.random = () => { throw new Error('Receipt acknowledgement consumed randomness'); }; try { return O.chance.acknowledgeChanceWheel(career); } finally { Math.random = random; } }, actual);
         const wheel = page.locator('[data-career-chance-wheel]'); await wheel.waitFor();
-        await wheel.locator('[data-wheel-skip]').click(); await wheel.locator('[data-wheel-continue]').click(); await wheel.waitFor({ state: 'hidden' });
-        await page.waitForFunction(key => { try { return JSON.parse(localStorage.getItem(key))?.chanceWheel?.seen === true; } catch { return false; } }, KEY);
+        await wheel.locator('[data-wheel-skip]').click(); const beforeReceipt = await bytes(); await wheel.locator('[data-wheel-continue]').click(); await wheel.waitFor({ state: 'hidden' });
+        await page.waitForFunction(({ key, before }) => { const raw = localStorage.getItem(key); return raw !== null && raw !== before; }, { key: KEY, before: beforeReceipt });
         loaded = await bytes(); actual = await decoded(loaded);
         row.receiptAction = { action: 'Actual Show result, then Continue', expectedHash: sha(JSON.stringify(expected)), actualHash: sha(JSON.stringify(actual)), storedChars: loaded.length };
         write(`${row.id}-receipt-expected`, expected); write(`${row.id}-receipt-actual`, actual);
