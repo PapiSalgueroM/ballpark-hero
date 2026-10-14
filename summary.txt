@@ -1,0 +1,6 @@
+build exit=0 33s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+headsha exit=0 0s | 7f62629e0 Round BEG: bind Round 1357's deadline proof to the tree's own core (CM_DEADLINE_CORE_REF)
+fonts exit=0 0s | Prepared 9 declared font dependencies for local fulfillment.
+playTouch exit=0 12s | playPlayerAutocompleteTouchScroll passed: 1985 checks, 6 journeys, 0 controls, 0 premature selections, 13 originals, 0 failures, 0 setup failures.
+playTouch-ctl exit=1 1s | playPlayerAutocompleteTouchScroll failed: 1625 checks, 0 journeys, 0 controls, 0 premature selections, 0 originals, 1 failures, 2 setup failures.
+playRace-ctl-notag exit=0 264s | FIRED-OK

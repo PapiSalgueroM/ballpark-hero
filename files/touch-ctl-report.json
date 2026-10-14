@@ -1,0 +1,3087 @@
+{
+  "status": "failed",
+  "phase": "fixed",
+  "control": "premature-pointerdown",
+  "sourceHead": "9b63359d759f9477e957610d474875f21e8fc09f",
+  "checks": 1625,
+  "failures": 1,
+  "setupFailures": 2,
+  "prematureSelections": 0,
+  "cases": [],
+  "controls": [],
+  "inventory": [],
+  "issues": [
+    "Error: Copied source-control build failed; it receives no gesture credit.\n    at setup (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playPlayerAutocompleteTouchScroll.mjs:51:89)\n    at sideBuild (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playPlayerAutocompleteTouchScroll.mjs:111:3)\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playPlayerAutocompleteTouchScroll.mjs:409:64",
+    "distHeld: the actual held inputs changed or were never qualified."
+  ],
+  "sourceHeld": true,
+  "installedHeld": true,
+  "toolsHeld": true,
+  "fontsHeld": true,
+  "fixturesHeld": true,
+  "distHeld": false,
+  "limits": [
+    "Chromium touch emulation uses native CDP contacts at 320/384/390, not a physical Android device or soft keyboard.",
+    "Search and validator replies are explicitly fictional fixtures. No real-person metadata or backend verdict is credited.",
+    "The actual XI page has no lineup save. Its visible slot and actual validator-client input are the outcome.",
+    "Missing XI uses its original committed puzzle and daily writer; a fictional wrong guess tests the separate Lock action.",
+    "Mouse, ArrowEnter, query identity and focus are selected paths. Shared use across 22 routes is source audit, not 22 played routes.",
+    "Only a control copy is changed. The original source, normal build and package inputs must stay byte-identical.",
+    "Selected settled original captures are not a blanket visual or live-site acceptance claim."
+  ],
+  "source": [
+    {
+      "file": "src/components/game/PlayerAutocomplete.tsx",
+      "bytes": 27664,
+      "sha256": "7c11c31109912ccb50b23817b53c6c1e0c2ac809d6d7f9ce525fed2c36ffbe82",
+      "retained": "source-before/src/components/game/PlayerAutocomplete.tsx"
+    },
+    {
+      "file": "src/lib/playerSearch.ts",
+      "bytes": 40727,
+      "sha256": "f9727a18b786a23e5d9e1849abff8a676dcd6aec10058ccd2e857473bb5fdbcd",
+      "retained": "source-before/src/lib/playerSearch.ts"
+    },
+    {
+      "file": "src/lib/nameFold.ts",
+      "bytes": 883,
+      "sha256": "e36d89a779d486a748edc2b22a6a29e38b85105956e3d8ffb19af907c3e5f15c",
+      "retained": "source-before/src/lib/nameFold.ts"
+    },
+    {
+      "file": "src/lib/validatorClient.ts",
+      "bytes": 4916,
+      "sha256": "75af0951f5a87c5fd7da80f557547f5b35e04c3fccc19d6811de9b87c96b471b",
+      "retained": "source-before/src/lib/validatorClient.ts"
+    },
+    {
+      "file": "src/lib/missingXi.ts",
+      "bytes": 372940,
+      "sha256": "e6856049dcb6e442039b7cb1b41debe64217c9fa4454cd081a4aceaf60873827",
+      "retained": "source-before/src/lib/missingXi.ts"
+    },
+    {
+      "file": "src/hooks/useDailyPuzzle.ts",
+      "bytes": 24577,
+      "sha256": "7ca4592d195f8446106faad991b73500113405d2ae8091b2d87077200461c308",
+      "retained": "source-before/src/hooks/useDailyPuzzle.ts"
+    },
+    {
+      "file": "src/hooks/useLineupBuilder.ts",
+      "bytes": 20181,
+      "sha256": "701faa1be4fb74af91db2395367b9f1cd0c0a90ea04f8960a90d5e34b16f1455",
+      "retained": "source-before/src/hooks/useLineupBuilder.ts"
+    },
+    {
+      "file": "src/types/lineupBuilder.ts",
+      "bytes": 4306,
+      "sha256": "1c1ff7bef638b7ef39ed8cbb590774bbc8714b40cb2c9cdaf8bdb85790c8fa2d",
+      "retained": "source-before/src/types/lineupBuilder.ts"
+    },
+    {
+      "file": "src/pages/LineupBuilder.tsx",
+      "bytes": 28033,
+      "sha256": "f5d480495513f58709dfcf4ff2151837135600e5bf5d7009c27a28ad13f62df4",
+      "retained": "source-before/src/pages/LineupBuilder.tsx"
+    },
+    {
+      "file": "src/pages/MissingXi.tsx",
+      "bytes": 23435,
+      "sha256": "948cd7c2b2f10fce8203c6e170165d97abd4745bf91341379c6734dffcdcbe3a",
+      "retained": "source-before/src/pages/MissingXi.tsx"
+    },
+    {
+      "file": "src/components/lineup/FormationPitch.tsx",
+      "bytes": 3151,
+      "sha256": "aec666b483c94b6b9d1211c4cd063beef997c4e2ac4156d409976c8821c2f9b6",
+      "retained": "source-before/src/components/lineup/FormationPitch.tsx"
+    },
+    {
+      "file": "src/data/lineupTeams.ts",
+      "bytes": 7325,
+      "sha256": "8c47d9c51b62c02de96fd3acdb910bc4d416d76d3797d2265228903ac6da173a",
+      "retained": "source-before/src/data/lineupTeams.ts"
+    },
+    {
+      "file": "src/lib/dateUtils.ts",
+      "bytes": 10649,
+      "sha256": "b580faa88089a5d6a15aef0a1fc08f0f1444b38c273d458e3c74a43a7f72781e",
+      "retained": "source-before/src/lib/dateUtils.ts"
+    },
+    {
+      "file": "src/lib/safeStorage.ts",
+      "bytes": 19906,
+      "sha256": "3be2f5e5de4da6f6137e5aad30482da3313965f71169fb965765e37c3206225a",
+      "retained": "source-before/src/lib/safeStorage.ts"
+    },
+    {
+      "file": "src/integrations/supabase/client.ts",
+      "bytes": 1247,
+      "sha256": "c8bd6d5ebf2610a34eda085224ae087293162b1fda6d4b7d03ae51d77e369684",
+      "retained": "source-before/src/integrations/supabase/client.ts"
+    },
+    {
+      "file": "src/test/playerAutocompleteInteraction.test.tsx",
+      "bytes": 6261,
+      "sha256": "61f26fbf06bcea17ab3bf5c60032611446730a163080c1513ff59d389811be71",
+      "retained": "source-before/src/test/playerAutocompleteInteraction.test.tsx"
+    },
+    {
+      "file": "src/test/playerAutocompleteStale.test.tsx",
+      "bytes": 34807,
+      "sha256": "ab23b9ba0bfdc7dafe93450fc0cab4d9289d40b2d2defefc58858dd40cc661f7",
+      "retained": "source-before/src/test/playerAutocompleteStale.test.tsx"
+    },
+    {
+      "file": "scripts/simPlayerAutocompleteInteraction.mjs",
+      "bytes": 17238,
+      "sha256": "285dc6b87e804b82fed4320a4cb5dd79a05dff9637f31113844a11402bfe2574",
+      "retained": "source-before/scripts/simPlayerAutocompleteInteraction.mjs"
+    },
+    {
+      "file": "scripts/playAutocompleteRace.mjs",
+      "bytes": 25697,
+      "sha256": "dc2dbb55933751418f6e815045eac4438989fc359444a282f8be8251bd29a34e",
+      "retained": "source-before/scripts/playAutocompleteRace.mjs"
+    },
+    {
+      "file": "scripts/playLineupValidator.mjs",
+      "bytes": 20978,
+      "sha256": "1910e58ad5ce3e090ed1a0b6992043ede3ba3b369aaf8c3f6b53ef4d163850d9",
+      "retained": "source-before/scripts/playLineupValidator.mjs"
+    },
+    {
+      "file": "src/test/playerAutocompleteTouchScroll.test.tsx",
+      "bytes": 11218,
+      "sha256": "db8037672e503bc48b52d803c009753bd04b607dcd033e60eb9c872f7c7ca9be",
+      "retained": "source-before/src/test/playerAutocompleteTouchScroll.test.tsx"
+    },
+    {
+      "file": "scripts/simPlayerAutocompleteTouchScroll.mjs",
+      "bytes": 12969,
+      "sha256": "34853d993140a8d71c323feef52b74683def43d112fcb65b1255c57ccd7b616e",
+      "retained": "source-before/scripts/simPlayerAutocompleteTouchScroll.mjs"
+    },
+    {
+      "file": "scripts/playPlayerAutocompleteTouchScroll.mjs",
+      "bytes": 40723,
+      "sha256": "f203d03666a1fc1ed62fc61488fc9ec2b10d5c55d52b0b2271b0c21b42a40ac9",
+      "retained": "source-before/scripts/playPlayerAutocompleteTouchScroll.mjs"
+    },
+    {
+      "file": "scripts/lib/hostLikeServer.mjs",
+      "bytes": 2690,
+      "sha256": "3958c9a3b4d9e49bb60a3b7dd72d81a997bd1caed56e82e4c3bae07e1a918ef0",
+      "retained": "source-before/scripts/lib/hostLikeServer.mjs"
+    },
+    {
+      "file": "scripts/lib/playwrightLoader.mjs",
+      "bytes": 2777,
+      "sha256": "94a07179be7ca6b9562d118b52c2d5d0dff0b6b2e29e49e4fea16fa2defb5a93",
+      "retained": "source-before/scripts/lib/playwrightLoader.mjs"
+    },
+    {
+      "file": "scripts/lib/offlineTransport.cjs",
+      "bytes": 10571,
+      "sha256": "e4d02973811c506642e115be847054c69e2b324140174d3281e411895ac704a1",
+      "retained": "source-before/scripts/lib/offlineTransport.cjs"
+    },
+    {
+      "file": "vite.config.ts",
+      "bytes": 10178,
+      "sha256": "a89ffb06f6fd95cf8b7d4695b56f8ad651efbf3a9cebeafb70c7bd6e286be88f",
+      "retained": "source-before/vite.config.ts"
+    },
+    {
+      "file": "package.json",
+      "bytes": 3495,
+      "sha256": "acfe14626dea53cf5f9c5e0286b766a22237656b52aac4c888b080873ac90e31",
+      "retained": "source-before/package.json"
+    },
+    {
+      "file": "package-lock.json",
+      "bytes": 309049,
+      "sha256": "c7e3867eabf0bfa03a8aa6a5e601b0050b937ed210d48c6bbd241019e3c9ea76",
+      "retained": "source-before/package-lock.json"
+    },
+    {
+      "file": "bun.lock",
+      "bytes": 152868,
+      "sha256": "463fa5e2dcc51efaaf1cff386daa9b5792036e8d91ab2c9ca416645086f96b9d",
+      "retained": "source-before/bun.lock"
+    },
+    {
+      "file": "index.html",
+      "bytes": 31644,
+      "sha256": "04d00404be213702b2effca3ea227010b35134cd45b94cabf848061c999f0164",
+      "retained": "source-before/index.html"
+    },
+    {
+      "file": ".github/workflows/player-autocomplete-touch-scroll.yml",
+      "bytes": 17240,
+      "sha256": "756a167227a08662967e17799c4ae4a20d5c2b096f6f42eceddc0c19dcfd28c7",
+      "retained": "source-before/.github/workflows/player-autocomplete-touch-scroll.yml"
+    }
+  ],
+  "installed": [
+    {
+      "path": "node_modules/@adobe/css-tools",
+      "version": "4.4.4",
+      "sha256": "ee59879bb93e30fa8fbdce26ee75189f7846008d602b67fe57c842451e58c03c"
+    },
+    {
+      "path": "node_modules/@alloc/quick-lru",
+      "version": "5.2.0",
+      "sha256": "3ade21a5bfd1fa417f6a7828c4adcc5f65a7d5d71fd628db81491537489d1d43"
+    },
+    {
+      "path": "node_modules/@babel/code-frame",
+      "version": "7.29.7",
+      "sha256": "f9cccb2e601db93851f10935b4e723c95a730c467f187462eb54b16bb353b036"
+    },
+    {
+      "path": "node_modules/@babel/helper-string-parser",
+      "version": "7.29.7",
+      "sha256": "ecbd1aaffa9ad000d3bc5a526067b89244cb3ec64c738fbae8b64a9e805f401b"
+    },
+    {
+      "path": "node_modules/@babel/helper-validator-identifier",
+      "version": "7.29.7",
+      "sha256": "1ad6aeced8b186ac259da45fea50ab9d65d3d958f6458c80e3c8013649d1b12d"
+    },
+    {
+      "path": "node_modules/@babel/parser",
+      "version": "7.29.8",
+      "sha256": "6d6a65b879cd7cd249a4367c0b57cce00e78c728de45056ac2a5ca1d1f528d1a"
+    },
+    {
+      "path": "node_modules/@babel/runtime",
+      "version": "7.28.2",
+      "sha256": "7652cb30155cfcf18c00652025648150ebfc69d6ca6805a16686e53681c2c4eb"
+    },
+    {
+      "path": "node_modules/@babel/types",
+      "version": "7.29.8",
+      "sha256": "f32460a35cc4649d81f10d4bc6dcfa1ade7a47f95df5db4bb4483f34d24b476e"
+    },
+    {
+      "path": "node_modules/@dyad-sh/react-vite-component-tagger",
+      "version": "0.9.0",
+      "sha256": "9e44a0dbd8d216c8fe766b8a21904641907edf9ada4625dced4f192f9e7f15d8"
+    },
+    {
+      "path": "node_modules/@dyad-sh/react-vite-component-tagger/node_modules/estree-walker",
+      "version": "2.0.2",
+      "sha256": "6f08430331daeaedaa35e7a8ca347cdb7493922fe9485bf57eb4d619cfb0b3ad"
+    },
+    {
+      "path": "node_modules/@esbuild/linux-x64",
+      "version": "0.21.5",
+      "sha256": "cfcc162c440e93cc43afbf1edc478f4fc286c6ad16b8b850f3adc3e045a27165"
+    },
+    {
+      "path": "node_modules/@eslint-community/eslint-utils",
+      "version": "4.7.0",
+      "sha256": "7c13b2304ebdaf9a43ae16bdcb780167b19c9323a8eea5025799ae373c075638"
+    },
+    {
+      "path": "node_modules/@eslint-community/eslint-utils/node_modules/eslint-visitor-keys",
+      "version": "3.4.3",
+      "sha256": "54feabdd2ef488414247dd4ecf71542549db02baced1153465c3ac2e5bf61a6c"
+    },
+    {
+      "path": "node_modules/@eslint-community/regexpp",
+      "version": "4.12.1",
+      "sha256": "2b2bb821eb51cb686a206791a0f557c87ec6f782c7f55e7f6d98a7717585addf"
+    },
+    {
+      "path": "node_modules/@eslint/config-array",
+      "version": "0.21.0",
+      "sha256": "ecd90422df48a2c6325a0819fd4c8a1eb83cf745bb4d32010ee3e4bfede93fe3"
+    },
+    {
+      "path": "node_modules/@eslint/config-helpers",
+      "version": "0.3.0",
+      "sha256": "b26f69f3bb581de56110585d99cbdac0358eaab138442139b1d8d00a056b8d8b"
+    },
+    {
+      "path": "node_modules/@eslint/core",
+      "version": "0.15.1",
+      "sha256": "280a3fe6ca4bdb610a7b5743dff89be1fbcf2be6207a436e09cb631a70c49546"
+    },
+    {
+      "path": "node_modules/@eslint/eslintrc",
+      "version": "3.3.1",
+      "sha256": "be673c2c7ce7dd63c42ef4b364fd888c33a089bbfa4fd7c220eea61e22d8a9c3"
+    },
+    {
+      "path": "node_modules/@eslint/eslintrc/node_modules/globals",
+      "version": "14.0.0",
+      "sha256": "7825cb9a75020bbeba926f89926588ccc21322d4e8be27a0c5c70fec340f6ec1"
+    },
+    {
+      "path": "node_modules/@eslint/js",
+      "version": "9.32.0",
+      "sha256": "1ac76703348dc7b4019144d4ae01ee1f5bd14e6e86329fb69ded5f51e5c7c94e"
+    },
+    {
+      "path": "node_modules/@eslint/object-schema",
+      "version": "2.1.6",
+      "sha256": "fd780b1a69dd3a9b2ef55c88846c5a175a81df6ccd5dcad477c49ec41ca9dca2"
+    },
+    {
+      "path": "node_modules/@eslint/plugin-kit",
+      "version": "0.3.4",
+      "sha256": "680b1a400e588300917bf5680a32cc873c017f05154a40b5189d42c91e6a53c2"
+    },
+    {
+      "path": "node_modules/@floating-ui/core",
+      "version": "1.7.2",
+      "sha256": "686889e774a927f25c1b3eb0ed52efedae490cf3378a589db15c0cf2b4bc7648"
+    },
+    {
+      "path": "node_modules/@floating-ui/dom",
+      "version": "1.7.2",
+      "sha256": "15b79347850bab8316cf31a72e26bfb7d672309d2b3f7a3a620d50aa5e58605f"
+    },
+    {
+      "path": "node_modules/@floating-ui/react-dom",
+      "version": "2.1.4",
+      "sha256": "27bc0ca81cb2aab997762158bf907572f4c70f96a9ef6a1cffe978f4ebce2ed1"
+    },
+    {
+      "path": "node_modules/@floating-ui/utils",
+      "version": "0.2.10",
+      "sha256": "d03a131cd80aa033696cc2f3d89786eb271a901eab4380e5253b6bfdf2248ea2"
+    },
+    {
+      "path": "node_modules/@hookform/resolvers",
+      "version": "3.10.0",
+      "sha256": "5a0aab6f47ea926b2a1b739dcccc0bfc3190f7c61c949e9a587c071125d82d34"
+    },
+    {
+      "path": "node_modules/@humanfs/core",
+      "version": "0.19.1",
+      "sha256": "f72227bca7a804d3ddc2408c3e8ce6419123d41316bb6afa7ad8527c0e338c74"
+    },
+    {
+      "path": "node_modules/@humanfs/node",
+      "version": "0.16.6",
+      "sha256": "70341494556e3f2c52e6be80448f8f79e73472ad1bc76f7969bb06ee6f21e823"
+    },
+    {
+      "path": "node_modules/@humanfs/node/node_modules/@humanwhocodes/retry",
+      "version": "0.3.1",
+      "sha256": "c66722020699815957a0590eac63e97705e719a2db76d9924c0ec2a5f755d395"
+    },
+    {
+      "path": "node_modules/@humanwhocodes/module-importer",
+      "version": "1.0.1",
+      "sha256": "8c22f2bce041e8f99fb983b622ed64efb8098e75d9b01e9cddc3254f5731045b"
+    },
+    {
+      "path": "node_modules/@humanwhocodes/retry",
+      "version": "0.4.3",
+      "sha256": "8e18a261a246f3e65a25664362cf367e18567ae214b1094b297fc1d056c48211"
+    },
+    {
+      "path": "node_modules/@isaacs/cliui",
+      "version": "8.0.2",
+      "sha256": "b4f9cc8d09602a487dea1c227ce24777cda87e2ad8a29ab9f741214ab78dc065"
+    },
+    {
+      "path": "node_modules/@jridgewell/gen-mapping",
+      "version": "0.3.5",
+      "sha256": "6841fac6da8fda27314a8cdb753f20dd8805d9eaee92c33da0cf956813fafe55"
+    },
+    {
+      "path": "node_modules/@jridgewell/resolve-uri",
+      "version": "3.1.2",
+      "sha256": "0793e722ffe08f3b4f1862c4dc96d920a62d6811a3648b4feb02f06c63227e8b"
+    },
+    {
+      "path": "node_modules/@jridgewell/set-array",
+      "version": "1.2.1",
+      "sha256": "e6322fcb32d5adc80ed8bc4b2f2fca0e8e49f74e1ce8d1078dd4b5db0efee1b0"
+    },
+    {
+      "path": "node_modules/@jridgewell/sourcemap-codec",
+      "version": "1.5.5",
+      "sha256": "398fc774628ec1592c794e8c14ecdc0096206a2521545e527e5a06429dac6006"
+    },
+    {
+      "path": "node_modules/@jridgewell/trace-mapping",
+      "version": "0.3.25",
+      "sha256": "d091ff9a3597e7a8fd25559a5b61ca29b9def430c29a0b0b4d9b2d9cf9e92558"
+    },
+    {
+      "path": "node_modules/@lovable.dev/cloud-auth-js",
+      "version": "0.0.3",
+      "sha256": "716d53fb64da254c3acb82a54bd5da556aa848fd556dde7669b5b6d4eefeacd5"
+    },
+    {
+      "path": "node_modules/@napi-rs/lzma-linux-x64-gnu",
+      "version": "1.5.1",
+      "sha256": "578e2a50ae69cd627c2953f8fa677efbf89f3087efeafff2db65aa31b81dc136"
+    },
+    {
+      "path": "node_modules/@nodelib/fs.scandir",
+      "version": "2.1.5",
+      "sha256": "d2dd608ef7400bc51bfa744f658b6a32b679ac5c053ef6d21499b2b0db1ccaba"
+    },
+    {
+      "path": "node_modules/@nodelib/fs.stat",
+      "version": "2.0.5",
+      "sha256": "ad8601ad12a424f995579ffa7ae24042c44df9f89248b715dcd8ef56c54aacca"
+    },
+    {
+      "path": "node_modules/@nodelib/fs.walk",
+      "version": "1.2.8",
+      "sha256": "509382ca0b57206ef4ccec2738a6ba060094eb65bd2f4bee1462d941c72d4344"
+    },
+    {
+      "path": "node_modules/@pkgjs/parseargs",
+      "version": "0.11.0",
+      "sha256": "c52af8cea1efc18fc306336d6ade5a1d8d9ccd8916a5d2246bc585a92635901e"
+    },
+    {
+      "path": "node_modules/@radix-ui/number",
+      "version": "1.1.1",
+      "sha256": "c1a398060a438655c46112033017bff1688a85e3264b5296e3589119e391d49e"
+    },
+    {
+      "path": "node_modules/@radix-ui/primitive",
+      "version": "1.1.2",
+      "sha256": "05683f68ab1694cd61719c3419fde42e0f0d55a8a882aabd18b08033e8c80f9d"
+    },
+    {
+      "path": "node_modules/@radix-ui/react-accordion",
+      "version": "1.2.11",
+      "sha256": "4d164885daf88880a03afc2e7b32fbd6f01788bf82838ff43b1a14e3ea233047"
+    },
+    {
+      "path": "node_modules/@radix-ui/react-alert-dialog",
+      "version": "1.1.14",
+      "sha256": "8073abea57ccae66b15665b20bbecfe85f7cf076397e4623ce21407d5d03c335"
+    },
+    {
+      "path": "node_modules/@radix-ui/react-arrow",
+      "version": "1.1.7",
+      "sha256": "243b93c4ce4dde24edb7902ebd847f909192fb262e308ac482fa85b0d573d950"
+    },
+    {
+      "path": "node_modules/@radix-ui/react-aspect-ratio",
+      "version": "1.1.7",
+      "sha256": "182eccb6ba2d755ae832c42bec5b8ddeb81406465e9038e24ce71941df688408"
+    },
+    {
+      "path": "node_modules/@radix-ui/react-avatar",
+      "version": "1.1.10",
+      "sha256": "e199d29474ea775d9c594ce9c2ecff27b0e934458865ec91c6c5b746d078eb7c"
+    },
+    {
+      "path": "node_modules/@radix-ui/react-checkbox",
+      "version": "1.3.2",
+      "sha256": "64c4c029781f19502de39a05b89f354abef3fd3f3577dc2157a790af02ba2831"
+    },
+    {
+      "path": "node_modules/@radix-ui/react-collapsible",
+      "version": "1.1.11",
+      "sha256": "740d6e19e6e6710c1d4ea68179598671eab7033b227147a3094e3788142f4b0a"
+    },
+    {
+      "path": "node_modules/@radix-ui/react-collection",
+      "version": "1.1.7",
+      "sha256": "b15d027b7e3f7a67814c6487791e566246f2f5ddfdc4bc329e35e181f14ceb12"
+    },
+    {
+      "path": "node_modules/@radix-ui/react-compose-refs",
+      "version": "1.1.2",
+      "sha256": "4373969b0a688de99b33ed5c24cf91d707f638573f24fbd2dd2ad2c441c9b34c"
+    },
+    {
+      "path": "node_modules/@radix-ui/react-context",
+      "version": "1.1.2",
+      "sha256": "70bee29bb1a5a8cc5fca28805bc5a4b9ddbe56ec7c914a28163b3e8bfe6edcb7"
+    },
+    {
+      "path": "node_modules/@radix-ui/react-context-menu",
+      "version": "2.2.15",
+      "sha256": "a3935c867e7c5f3553861882d9eab4e324f550387c0a3fef12b3c3845ff48379"
+    },
+    {
+      "path": "node_modules/@radix-ui/react-dialog",
+      "version": "1.1.14",
+      "sha256": "b1c69fc7e5742df777b38b9e690bec17fbce2c19aeea2b9cf15fa933cc18499c"
+    },
+    {
+      "path": "node_modules/@radix-ui/react-direction",
+      "version": "1.1.1",
+      "sha256": "cf9134c4c5e4495c71fb536c77dd2588cfbab3886c18b049ee39c9d120ea502f"
+    },
+    {
+      "path": "node_modules/@radix-ui/react-dismissable-layer",
+      "version": "1.1.10",
+      "sha256": "3aa35a087ce254bc8af1594a97e85ebcd38d8218c89ff8dc3072a384e09f29ba"
+    },
+    {
+      "path": "node_modules/@radix-ui/react-dropdown-menu",
+      "version": "2.1.15",
+      "sha256": "0143869dd95c5a0600dfb03432b970029ca3e89303463a66d4a028d31c75e593"
+    },
+    {
+      "path": "node_modules/@radix-ui/react-focus-guards",
+      "version": "1.1.2",
+      "sha256": "f25526b00066ecc9a4779c159f6e9a57880753bf8e17c88cfa020aee7af60f50"
+    },
+    {
+      "path": "node_modules/@radix-ui/react-focus-scope",
+      "version": "1.1.7",
+      "sha256": "ebc9fba87fe923d5c71f624268777a415ce5021e2d09b0647243bd900473ad83"
+    },
+    {
+      "path": "node_modules/@radix-ui/react-hover-card",
+      "version": "1.1.14",
+      "sha256": "f4e7a8be9f0ccbfd84a967459da30b60200906113c6a69c47160d25ff9ab9d16"
+    },
+    {
+      "path": "node_modules/@radix-ui/react-id",
+      "version": "1.1.1",
+      "sha256": "7f478427006dd8e521ac26a963bd63de2237b5cc4cb592ca936881a68eccb365"
+    },
+    {
+      "path": "node_modules/@radix-ui/react-label",
+      "version": "2.1.7",
+      "sha256": "ec64e66ce12ba4a19bf2caf4f8f58802547b44b6ee6d23d4ea9c4e64e740f2bc"
+    },
+    {
+      "path": "node_modules/@radix-ui/react-menu",
+      "version": "2.1.15",
+      "sha256": "fbb2f0e326a493564a4f3396976604c35578fd66bd7308e412f6e7b9df057e02"
+    },
+    {
+      "path": "node_modules/@radix-ui/react-menubar",
+      "version": "1.1.15",
+      "sha256": "036edfed3590d3d79890824a85476243e38134c434f820244bef134e6e9a083a"
+    },
+    {
+      "path": "node_modules/@radix-ui/react-navigation-menu",
+      "version": "1.2.13",
+      "sha256": "9c995fd5b980e70c54b5971ecf0b5b28ce587520999936306eeee49e4a7e4d6a"
+    },
+    {
+      "path": "node_modules/@radix-ui/react-popover",
+      "version": "1.1.14",
+      "sha256": "981f869ec2deab86e3f6b81e32253e79ab9b876bd5678dbd5fad168d6f6cde8a"
+    },
+    {
+      "path": "node_modules/@radix-ui/react-popper",
+      "version": "1.2.7",
+      "sha256": "b99ad2642c42842580a536e233639f5ea2bcbbd3a26f1cd3a35302cacd9162c8"
+    },
+    {
+      "path": "node_modules/@radix-ui/react-portal",
+      "version": "1.1.9",
+      "sha256": "99031571624338fcdf5fcacbdfac408ab509de925fe004f1cbf614e8f2c0bcc4"
+    },
+    {
+      "path": "node_modules/@radix-ui/react-presence",
+      "version": "1.1.4",
+      "sha256": "e65e99eee3aea2e4e0b10fbf5cbfd23c774a604db21261315a46d57d5a88de42"
+    },
+    {
+      "path": "node_modules/@radix-ui/react-primitive",
+      "version": "2.1.3",
+      "sha256": "89cb98626bf0287526618c882fe614f6330695e7b794ae517c8b43be480664fa"
+    },
+    {
+      "path": "node_modules/@radix-ui/react-progress",
+      "version": "1.1.7",
+      "sha256": "95283a71b6e597819cceb205e7ba570d57f3fa8341e10247323a2494db94c39e"
+    },
+    {
+      "path": "node_modules/@radix-ui/react-radio-group",
+      "version": "1.3.7",
+      "sha256": "aa223c2d211e7389b8aa318cf75a4cc8ffbcd156e3870ee252cfd70b0c4a10c5"
+    },
+    {
+      "path": "node_modules/@radix-ui/react-roving-focus",
+      "version": "1.1.10",
+      "sha256": "127ce3c2acc3dfd918c8202abf885b4ef2af7f7e3d34d860d69a14223f7d023a"
+    },
+    {
+      "path": "node_modules/@radix-ui/react-scroll-area",
+      "version": "1.2.9",
+      "sha256": "a5480df970a34dd07f042ee5e6b9b534845e964e2b096e14827f2a9493430ada"
+    },
+    {
+      "path": "node_modules/@radix-ui/react-select",
+      "version": "2.2.5",
+      "sha256": "0b42e544176eb35ce28e0d5b32d84a3eea99b2acf1ec30695bb06e8f0a281a1e"
+    },
+    {
+      "path": "node_modules/@radix-ui/react-separator",
+      "version": "1.1.7",
+      "sha256": "0f88816b939de15719ffacefb669f564fca144aa5aefa6c8328a917358639244"
+    },
+    {
+      "path": "node_modules/@radix-ui/react-slider",
+      "version": "1.3.5",
+      "sha256": "5bbf875dc3f23f78f3a037609a0474e02f01eea93a7840c71748ab43f9dd53a0"
+    },
+    {
+      "path": "node_modules/@radix-ui/react-slot",
+      "version": "1.2.3",
+      "sha256": "a1b3cccb9e9af05cdb84147a9c54d5b83b63994bd2ed0d744613ea3c9066255e"
+    },
+    {
+      "path": "node_modules/@radix-ui/react-switch",
+      "version": "1.2.5",
+      "sha256": "a40c9e5bb2e52acdc304992cc01507bff00c30bf9a4ffa85933a263be5a57058"
+    },
+    {
+      "path": "node_modules/@radix-ui/react-tabs",
+      "version": "1.1.12",
+      "sha256": "9139dc5804e9937d15d6829b61869c993182049783f5f27df51a7116b530a8ab"
+    },
+    {
+      "path": "node_modules/@radix-ui/react-toast",
+      "version": "1.2.14",
+      "sha256": "27f6e960306e00bd460987c40c430db69f97929fb635b85933c66ae0ef154b04"
+    },
+    {
+      "path": "node_modules/@radix-ui/react-toggle",
+      "version": "1.1.9",
+      "sha256": "83416cb60c3f19391b286ea38f5b776d772bc1c115dfbd2cc50c32978d420e51"
+    },
+    {
+      "path": "node_modules/@radix-ui/react-toggle-group",
+      "version": "1.1.10",
+      "sha256": "aacedb4a4d1e5d69bf7a84a1308526cbdfb64caa61712406b6fc32c50145bd2d"
+    },
+    {
+      "path": "node_modules/@radix-ui/react-tooltip",
+      "version": "1.2.7",
+      "sha256": "a86c276a540281e3109bcb4e853f912be0127c0b558d4949be1e327e88548360"
+    },
+    {
+      "path": "node_modules/@radix-ui/react-use-callback-ref",
+      "version": "1.1.1",
+      "sha256": "5440709ff10a782eed7151b71e5ad1d0e76de5c14e38502b45d22de8a3400ea4"
+    },
+    {
+      "path": "node_modules/@radix-ui/react-use-controllable-state",
+      "version": "1.2.2",
+      "sha256": "6e8b8718cf762f58bd0e2b0de53bfb9649232854c38622a6e180cb27383cf1fd"
+    },
+    {
+      "path": "node_modules/@radix-ui/react-use-effect-event",
+      "version": "0.0.2",
+      "sha256": "877a9238b09fb41d4ac26e80c2e54b042d9567fa4206217e929c802c8b509ec5"
+    },
+    {
+      "path": "node_modules/@radix-ui/react-use-escape-keydown",
+      "version": "1.1.1",
+      "sha256": "a1706f4010a2ed8309b0c109d2b884cf13aa02d27765b27ba755e7eb2a495d35"
+    },
+    {
+      "path": "node_modules/@radix-ui/react-use-is-hydrated",
+      "version": "0.1.0",
+      "sha256": "b8137c51b67ec6f0f0efc6912dcd441b52dcd48a6bc45bb7145725ddde7460be"
+    },
+    {
+      "path": "node_modules/@radix-ui/react-use-layout-effect",
+      "version": "1.1.1",
+      "sha256": "b18e430ab5bbaf53945f55b495838dd71582f4203193747a939e2a7593f76744"
+    },
+    {
+      "path": "node_modules/@radix-ui/react-use-previous",
+      "version": "1.1.1",
+      "sha256": "ca657d76c2581244474df4988dca5727fc3187f4a947c52c252a8be6dc0d735a"
+    },
+    {
+      "path": "node_modules/@radix-ui/react-use-rect",
+      "version": "1.1.1",
+      "sha256": "9c977de80b701b018e1240e6f750544deda622233dc0d73094b2cfae28801e7a"
+    },
+    {
+      "path": "node_modules/@radix-ui/react-use-size",
+      "version": "1.1.1",
+      "sha256": "eb31b5e5e1220a8c0a1657937e24d9f639d73521bce8e9ec9522f28c46b989e0"
+    },
+    {
+      "path": "node_modules/@radix-ui/react-visually-hidden",
+      "version": "1.2.3",
+      "sha256": "9c3bf95803fa2c0a35cb1efe32001997268643cfa7827ca0581d29e8c0d0fae5"
+    },
+    {
+      "path": "node_modules/@radix-ui/rect",
+      "version": "1.1.1",
+      "sha256": "d59c3d6bd0117489e3de453a2f858e4614bf1903c7a394bf4f4460e81fb4b7b1"
+    },
+    {
+      "path": "node_modules/@rolldown/pluginutils",
+      "version": "1.0.0-beta.27",
+      "sha256": "23c10679297855f4f4269d28bee817c61878d09d983e91919b04c309b9db5b6a"
+    },
+    {
+      "path": "node_modules/@rollup/rollup-linux-x64-gnu",
+      "version": "4.63.0",
+      "sha256": "90e04453f49351b751711903873cf87b825b7ffbc6f474e785ee840bc9f25e7a"
+    },
+    {
+      "path": "node_modules/@rollup/rollup-linux-x64-musl",
+      "version": "4.63.0",
+      "sha256": "b7c929181fdfd22a78b2b467f28f4ac2efc4c9870367a1710c5be72c43385dfe"
+    },
+    {
+      "path": "node_modules/@supabase/auth-js",
+      "version": "2.95.3",
+      "sha256": "592b0fc153ef48cd0a95a9773d1303fd73e554306250efdbac8e8ce0a5a860da"
+    },
+    {
+      "path": "node_modules/@supabase/functions-js",
+      "version": "2.95.3",
+      "sha256": "5919075c55b2519a57a4824821a8b2c61aff767a63abeb40607a750c20ab5c05"
+    },
+    {
+      "path": "node_modules/@supabase/postgrest-js",
+      "version": "2.95.3",
+      "sha256": "718f09f7bebb6885975b46ae038209388db163149df2ed7ca46c86335102d840"
+    },
+    {
+      "path": "node_modules/@supabase/realtime-js",
+      "version": "2.95.3",
+      "sha256": "346747b315ece6896271abda37978e8615a1e1626afccbb99bb0cd1960d8acf0"
+    },
+    {
+      "path": "node_modules/@supabase/storage-js",
+      "version": "2.95.3",
+      "sha256": "645dee659ae611dc3db2a7f44f90fc62fda91e648292b066bf9096f644e88d3c"
+    },
+    {
+      "path": "node_modules/@supabase/supabase-js",
+      "version": "2.95.3",
+      "sha256": "c84ae51a1a6af3c5d1db858649b4b0ab325d15ce76b56aa8aa70e4aba1b1dfa3"
+    },
+    {
+      "path": "node_modules/@swc/core",
+      "version": "1.13.2",
+      "sha256": "6c28839420ec805fee72fe7b0b14b9719988a1aa8332d054806867ffc47b69a1"
+    },
+    {
+      "path": "node_modules/@swc/core-linux-x64-gnu",
+      "version": "1.13.2",
+      "sha256": "fbb9d6fe03e5d15a82d97570f053def1cc304337f71f60b67a655a8b104f715a"
+    },
+    {
+      "path": "node_modules/@swc/core-linux-x64-musl",
+      "version": "1.13.2",
+      "sha256": "cd4c4fb3438efab671605281411937f459ba024da2d6b60652ef19a8836ca772"
+    },
+    {
+      "path": "node_modules/@swc/counter",
+      "version": "0.1.3",
+      "sha256": "501bc5484d423138eee6d21eb748d485de22ba290d8451174a207fb7e1a041ea"
+    },
+    {
+      "path": "node_modules/@swc/types",
+      "version": "0.1.23",
+      "sha256": "2a3279a1e58b987d33ff4d2e498c5465127da62f3f278f8d2b3b40918efc8549"
+    },
+    {
+      "path": "node_modules/@tailwindcss/typography",
+      "version": "0.5.16",
+      "sha256": "345ab9b98463805d6ed2d6fb0177d7fb05cb429fe6d30ab7174942fddc4a326b"
+    },
+    {
+      "path": "node_modules/@tailwindcss/typography/node_modules/postcss-selector-parser",
+      "version": "6.0.10",
+      "sha256": "d693abe0f0819c690759141be53a9b2a44f9713ec924b1e3ac78bf88ef11efe8"
+    },
+    {
+      "path": "node_modules/@tanstack/query-core",
+      "version": "5.83.0",
+      "sha256": "36314a3c36ab6b85d83eb3afcc9fb8d9f0ebbc7a06244ec3407434b017c20d1a"
+    },
+    {
+      "path": "node_modules/@tanstack/react-query",
+      "version": "5.83.0",
+      "sha256": "accb1837faba1e4aa82a356796ccba142d08c856289f810f6eca49bb43f2d770"
+    },
+    {
+      "path": "node_modules/@testing-library/dom",
+      "version": "10.4.2",
+      "sha256": "dfe7eef49a033ad1fa59b78282cdd81faff64c4c60540f805ef47444a23122f2"
+    },
+    {
+      "path": "node_modules/@testing-library/dom/node_modules/aria-query",
+      "version": "5.3.0",
+      "sha256": "3247957b828b3d82802548f9d0192cec1a67f0d82b7174cc31a3efd58b3ce2e1"
+    },
+    {
+      "path": "node_modules/@testing-library/dom/node_modules/dom-accessibility-api",
+      "version": "0.5.16",
+      "sha256": "02fb2e79d4821469fe8e2db395351084ee9359c683344c81f93bb63728b61ffd"
+    },
+    {
+      "path": "node_modules/@testing-library/jest-dom",
+      "version": "6.9.1",
+      "sha256": "69feda5b43fa7a69ece4cda0626efcf0c762098b9c5a82a85fd8fb33f588720a"
+    },
+    {
+      "path": "node_modules/@testing-library/react",
+      "version": "16.3.2",
+      "sha256": "67974b165512b3f03785a70ce8228c1df0ab84408f02d2185aafac171621ed6e"
+    },
+    {
+      "path": "node_modules/@tootallnate/once",
+      "version": "2.0.1",
+      "sha256": "a07fe16edd5d2d5fe87e86027cd5463bea954af69a1220285deed6b9e92f3f06"
+    },
+    {
+      "path": "node_modules/@types/aria-query",
+      "version": "5.0.4",
+      "sha256": "c8703bc6a932340a585b497975b140151dc98580b9fd068932bf1043baf11cab"
+    },
+    {
+      "path": "node_modules/@types/chai",
+      "version": "5.2.3",
+      "sha256": "273a3159a592826cc068b22356e9a3e968dffe88a0f99892032a889f28c567a7"
+    },
+    {
+      "path": "node_modules/@types/d3-array",
+      "version": "3.2.1",
+      "sha256": "6820dd5baf6133cef7f39336cbc18f1353ed15a1d84879820c1bddc7feef2197"
+    },
+    {
+      "path": "node_modules/@types/d3-color",
+      "version": "3.1.3",
+      "sha256": "409ac013405caa33f42ed394d92b357fde96b950ee4d5bbfb7de8d6dbebe6f37"
+    },
+    {
+      "path": "node_modules/@types/d3-ease",
+      "version": "3.0.2",
+      "sha256": "7ba99c6eb0a18cfb6dd35693feed30f23cf992d73e60c346840a5acb35ce1e50"
+    },
+    {
+      "path": "node_modules/@types/d3-interpolate",
+      "version": "3.0.4",
+      "sha256": "751bcbf0a81dc0b5e507e535e29d9c27b7132b74b3b950594391f9eea0b46a76"
+    },
+    {
+      "path": "node_modules/@types/d3-path",
+      "version": "3.1.0",
+      "sha256": "02a3dbbd875f5d0e6d4e81da864f0dcfed09f19e3d0d68c44ec77ea8faec628c"
+    },
+    {
+      "path": "node_modules/@types/d3-scale",
+      "version": "4.0.8",
+      "sha256": "b135ff58127168900269145b53932600bb3dc902b82e003077035e3835ed712e"
+    },
+    {
+      "path": "node_modules/@types/d3-shape",
+      "version": "3.1.6",
+      "sha256": "b1bf03a9a9c8f158b95b8d208e94f476cbb6a558af21c5c9bb04fdebb380c5e6"
+    },
+    {
+      "path": "node_modules/@types/d3-time",
+      "version": "3.0.3",
+      "sha256": "fe671734a09eb16ee7e646d0678a97d1e6bdd989f77c889996fb1e104815e551"
+    },
+    {
+      "path": "node_modules/@types/d3-timer",
+      "version": "3.0.2",
+      "sha256": "3be7bbce108834ebe5b901437fd40e87fa57a7c1d52c4aaa33152b71f87f3314"
+    },
+    {
+      "path": "node_modules/@types/deep-eql",
+      "version": "4.0.2",
+      "sha256": "a2e45f386b2fbaed8a8fe333502f97e59061ed738ddd0437437fde05acfa5484"
+    },
+    {
+      "path": "node_modules/@types/estree",
+      "version": "1.0.9",
+      "sha256": "3537a6a503f57901111d8a29df81962887653deb199b9a795c7fb50bbfdd1bdc"
+    },
+    {
+      "path": "node_modules/@types/json-schema",
+      "version": "7.0.15",
+      "sha256": "6bf0cb0808cafc14023ae10d55d6a88228397dc54c16106d121f42ac88d64fc8"
+    },
+    {
+      "path": "node_modules/@types/node",
+      "version": "22.16.5",
+      "sha256": "0b1ae538f986f8338ec6f59a55fee4ec8018d212169e5d51fe1d4c2811915255"
+    },
+    {
+      "path": "node_modules/@types/phoenix",
+      "version": "1.6.7",
+      "sha256": "2ca17202108c3a2c2c967a4e86e50694014830bd347094c281223f76d4768bee"
+    },
+    {
+      "path": "node_modules/@types/prop-types",
+      "version": "15.7.13",
+      "sha256": "f115c4d705c894bbeaade4ba3d4f2cc6d7787be7e59b4bcf86aaea00d441d48c"
+    },
+    {
+      "path": "node_modules/@types/react",
+      "version": "18.3.23",
+      "sha256": "1205b7823dd40af3aa80e797079b87d66b9b62319c60ad00f1d3d5ad2f375a73"
+    },
+    {
+      "path": "node_modules/@types/react-dom",
+      "version": "18.3.7",
+      "sha256": "7e3ee716354deebd531059c294716eed6ab402bdf37721b5b011ea093f978f70"
+    },
+    {
+      "path": "node_modules/@types/ws",
+      "version": "8.18.1",
+      "sha256": "92f0a87117b71231a0864f7bb7c6a84b7fc91dbdd7d33379fc23d655980ad083"
+    },
+    {
+      "path": "node_modules/@typescript-eslint/eslint-plugin",
+      "version": "8.38.0",
+      "sha256": "990f9f5cf3c92e7b1e463ef70cb912a485015d05a3f95bacd374bd6b4d2a49a5"
+    },
+    {
+      "path": "node_modules/@typescript-eslint/eslint-plugin/node_modules/ignore",
+      "version": "7.0.5",
+      "sha256": "9aea50de5a5f199b29b8f6d5e3c46ffac58958dd4d4f525bfde14214ad39417f"
+    },
+    {
+      "path": "node_modules/@typescript-eslint/parser",
+      "version": "8.38.0",
+      "sha256": "fe8101465b1cad1bb1b33d8f4503d2fc18202c750c812ed968b93efae8910f29"
+    },
+    {
+      "path": "node_modules/@typescript-eslint/project-service",
+      "version": "8.38.0",
+      "sha256": "28a91c9828f6097221e974c602880b9aa84eef8b7b6791491ba29c892f362089"
+    },
+    {
+      "path": "node_modules/@typescript-eslint/scope-manager",
+      "version": "8.38.0",
+      "sha256": "46abecc9b2c068453e63f3bc12cd501ab9e55531dfad0d2b974b383f0864616b"
+    },
+    {
+      "path": "node_modules/@typescript-eslint/tsconfig-utils",
+      "version": "8.38.0",
+      "sha256": "40659b5396f10bcda2314e5f730ba977228fb20a1477926d49e8351a0644a574"
+    },
+    {
+      "path": "node_modules/@typescript-eslint/type-utils",
+      "version": "8.38.0",
+      "sha256": "8f345f7fe8d31262b5d0bc7b9eba9f5bd93d9791040673228a1b4e283aca137a"
+    },
+    {
+      "path": "node_modules/@typescript-eslint/types",
+      "version": "8.38.0",
+      "sha256": "cd76ec6271a720efb6776159c13873975d11c0ed51699609ffb3cc0767ec1e97"
+    },
+    {
+      "path": "node_modules/@typescript-eslint/typescript-estree",
+      "version": "8.38.0",
+      "sha256": "5ed955ba3ab5ad80f751c796882ba15b41677fab02f15ff23fe3c728e6cf0a56"
+    },
+    {
+      "path": "node_modules/@typescript-eslint/typescript-estree/node_modules/brace-expansion",
+      "version": "2.1.4",
+      "sha256": "0242781e7c6ed4459649b4aca0903ec03690bde675d2e4636538a5956fc9c542"
+    },
+    {
+      "path": "node_modules/@typescript-eslint/typescript-estree/node_modules/minimatch",
+      "version": "9.0.9",
+      "sha256": "07347ae64d38f4cc1be3ffcc83322ec40d4609f5f3e9dc027ae91a4617239ac2"
+    },
+    {
+      "path": "node_modules/@typescript-eslint/utils",
+      "version": "8.38.0",
+      "sha256": "9c79ae38ee08b3e55947bb74f26b11b4f2ea3ca3f59ec39bbf5a8c292c81011e"
+    },
+    {
+      "path": "node_modules/@typescript-eslint/visitor-keys",
+      "version": "8.38.0",
+      "sha256": "a6af7d662b933708d4023f935f3ca664749eb9c1253fdcbcc8dc407f674ec056"
+    },
+    {
+      "path": "node_modules/@vitejs/plugin-react-swc",
+      "version": "3.11.0",
+      "sha256": "d00d40552a1addd2b181aea687fa1146326f723722671e1bae06cd7dd5e2ec63"
+    },
+    {
+      "path": "node_modules/@vitest/expect",
+      "version": "3.2.7",
+      "sha256": "329cbb991e3265ae53272bbb710d02d8da7794fdf8cc385522fd4210ae1ffb0f"
+    },
+    {
+      "path": "node_modules/@vitest/mocker",
+      "version": "3.2.7",
+      "sha256": "6f9a21f0164a5dc5c57f1c135c82423938c70b573fafb805545c645a931a68ed"
+    },
+    {
+      "path": "node_modules/@vitest/pretty-format",
+      "version": "3.2.7",
+      "sha256": "45d80489327eca387a3bfb8bd70ad2851f7044e89376776678d0b0f54e19e97b"
+    },
+    {
+      "path": "node_modules/@vitest/runner",
+      "version": "3.2.7",
+      "sha256": "43fa1b19947fe8434a6bc04c428488a7edb44c5d87d76d4b37a167e6b2b251e5"
+    },
+    {
+      "path": "node_modules/@vitest/snapshot",
+      "version": "3.2.7",
+      "sha256": "42d0d7e9522464cfd7d6aa8211cb8ed36820246c29f4ebc906fe719989091837"
+    },
+    {
+      "path": "node_modules/@vitest/spy",
+      "version": "3.2.7",
+      "sha256": "71c7a2a0b747125cf83aad2009eb40b9ba4b28d0866406178ee4cd131bb0238b"
+    },
+    {
+      "path": "node_modules/@vitest/utils",
+      "version": "3.2.7",
+      "sha256": "6c8addb8935417adf48bcc08b7c190a12364ab8ceb406b819455d1a4687e8d48"
+    },
+    {
+      "path": "node_modules/abab",
+      "version": "2.0.6",
+      "sha256": "4ed08bcd631311be1d67ffb5fb3fdc2d7d957b199a40789ec3159cee11bb3a94"
+    },
+    {
+      "path": "node_modules/acorn",
+      "version": "8.15.0",
+      "sha256": "9e422c8225c9cc4c774e9a9392d0ecac7f766b46122ef2db99db0fc4bbedc247"
+    },
+    {
+      "path": "node_modules/acorn-globals",
+      "version": "7.0.1",
+      "sha256": "5107f41263a4c0d7401e0a848d1af95d7850063faa2e66effbe30f681e669452"
+    },
+    {
+      "path": "node_modules/acorn-jsx",
+      "version": "5.3.2",
+      "sha256": "5e123a5ee3b16fd10fe4b44ef70ff7885f05117fb9ae75f72a0d821f919d423d"
+    },
+    {
+      "path": "node_modules/acorn-walk",
+      "version": "8.3.4",
+      "sha256": "95f930fb1606221d00cb13f4059d0ead88055192a7c5b703fcf72f2480f1b7d2"
+    },
+    {
+      "path": "node_modules/agent-base",
+      "version": "6.0.2",
+      "sha256": "05daa619e51686fd21d15f987f943f6692c56b9f489f555cbaf42a4263d5c5e8"
+    },
+    {
+      "path": "node_modules/ajv",
+      "version": "6.15.0",
+      "sha256": "be4fd09eb4658674ed5ffb9da2786d2056fd78429192a3619e0458f84fe0ca6b"
+    },
+    {
+      "path": "node_modules/ansi-regex",
+      "version": "6.1.0",
+      "sha256": "812dcfa3e1e50741dc28d4f22845c4df1c2464249c90fd883c59d1d44fca0720"
+    },
+    {
+      "path": "node_modules/ansi-styles",
+      "version": "4.3.0",
+      "sha256": "d405f010681d53f77691015e98461f8484b2afe6a9edfdd2ddb27b1e8a8e883d"
+    },
+    {
+      "path": "node_modules/any-promise",
+      "version": "1.3.0",
+      "sha256": "5c4970ee5a2c8d98648a03c96ce8753134567f976e50bf039964c2165c246078"
+    },
+    {
+      "path": "node_modules/anymatch",
+      "version": "3.1.3",
+      "sha256": "83f4f2ce1880ee96d44a7fa5add101c19edf3ca42f50c7c20cf2e59f6d751c3f"
+    },
+    {
+      "path": "node_modules/anymatch/node_modules/picomatch",
+      "version": "2.3.2",
+      "sha256": "63264d817e856a4bff57d4304f2b38d2964a4f6df520eb169e7bcdb619f13e9a"
+    },
+    {
+      "path": "node_modules/arg",
+      "version": "5.0.2",
+      "sha256": "9444ae107d7786693658f99e4b94e93fb8b371bc8e8c40e9b62ed4a49c62e113"
+    },
+    {
+      "path": "node_modules/argparse",
+      "version": "2.0.1",
+      "sha256": "688bace28e14392b3a1c4137eb56bc48b684dbf5cb56278ed7056cd2ece07990"
+    },
+    {
+      "path": "node_modules/aria-hidden",
+      "version": "1.2.4",
+      "sha256": "c83d002d1ba27c278c0ea0b94ad16771d79c64ba4d5119690686c4b50732a3e4"
+    },
+    {
+      "path": "node_modules/aria-query",
+      "version": "5.3.2",
+      "sha256": "3e79dcdafd4e2226a2775c0cf423bb72622dd6890908dddfbba66c10a93606de"
+    },
+    {
+      "path": "node_modules/assertion-error",
+      "version": "2.0.1",
+      "sha256": "7a77fe7be32038e40aab9a3fc6180a6fbe3fdbb68b006b78a47401f7026e96e7"
+    },
+    {
+      "path": "node_modules/asynckit",
+      "version": "0.4.0",
+      "sha256": "63eb9ff63be2e241ee6e80434d4641d6e9b5157d88bd3bbb692fcb2dfc8da4a9"
+    },
+    {
+      "path": "node_modules/autoprefixer",
+      "version": "10.4.21",
+      "sha256": "39c01e338d38a21dc48946118e61415d915b91610c72f550e57b528e23e50836"
+    },
+    {
+      "path": "node_modules/balanced-match",
+      "version": "1.0.2",
+      "sha256": "b30c328501dead1870b894ad604405b2284b571c1f12664cdc61d92a2e3397c2"
+    },
+    {
+      "path": "node_modules/base64-arraybuffer",
+      "version": "1.0.2",
+      "sha256": "b8186cb74136ee5068e9d5a0491e9b1a6a31d45f4ed8d3d69784c46694f60f4c"
+    },
+    {
+      "path": "node_modules/binary-extensions",
+      "version": "2.3.0",
+      "sha256": "f775eb159a64b320a9a62aaa831ae67e13ab05bd9ca375b8ec830a1e53cbc56d"
+    },
+    {
+      "path": "node_modules/brace-expansion",
+      "version": "1.1.18",
+      "sha256": "b3d90a29e25c740191374e4ac67f6a4503f28e3b3ffa25e20d534c57419155d4"
+    },
+    {
+      "path": "node_modules/braces",
+      "version": "3.0.3",
+      "sha256": "56f08b888a4f30dc7cf8a7dbb36ffe92b737912ba36abe9d069d32167c957ac7"
+    },
+    {
+      "path": "node_modules/browserslist",
+      "version": "4.25.1",
+      "sha256": "9f8e6aa7ffa9cae2080ec7b3edb66e5dd4b2c48888d9df765416be23bdcfebd5"
+    },
+    {
+      "path": "node_modules/cac",
+      "version": "6.7.14",
+      "sha256": "8677bbbe7404ce455200b5f088a45f841bd8a40e7d63475ac711b631516ddcdf"
+    },
+    {
+      "path": "node_modules/call-bind-apply-helpers",
+      "version": "1.0.2",
+      "sha256": "59639b628c6846f674857c6a613fd47e2e4d2a24036cdf0f7a62ac634f4c8a5f"
+    },
+    {
+      "path": "node_modules/callsites",
+      "version": "3.1.0",
+      "sha256": "9c27ea7f90c3a348c038fd6b3213848552ed1ec5dd38e0a06016af19d19e526a"
+    },
+    {
+      "path": "node_modules/camelcase-css",
+      "version": "2.0.1",
+      "sha256": "919bdc877794692f7f3682315991b485d399a62e3d1d5c92d266fdbf13ef429f"
+    },
+    {
+      "path": "node_modules/caniuse-lite",
+      "version": "1.0.30001727",
+      "sha256": "152b9d35a57c9831a99980664d92eb75879e5029a2e4c4a80462915c79d23f1e"
+    },
+    {
+      "path": "node_modules/chai",
+      "version": "5.3.3",
+      "sha256": "25ef536c7435582fe1bfa2c299c691517763bb7a6aac25c4e33a508a5905f02e"
+    },
+    {
+      "path": "node_modules/chalk",
+      "version": "4.1.2",
+      "sha256": "9cd907d34a45cb73b5c8a459d5602a36ccd456794665c529a3a5b0f02e196f26"
+    },
+    {
+      "path": "node_modules/check-error",
+      "version": "2.1.3",
+      "sha256": "0a58f4d67c1455b141c79b8cdabc009baeba2729b37d4b3b528c0af493d09185"
+    },
+    {
+      "path": "node_modules/chokidar",
+      "version": "3.6.0",
+      "sha256": "24c7edf8c0127eb1bd257da726983a9aed172a0a1cd5454607a040021675f50e"
+    },
+    {
+      "path": "node_modules/chokidar/node_modules/glob-parent",
+      "version": "5.1.2",
+      "sha256": "858af9aa27cfe6eea1cfd1abbda15ad0ccc87e66e88b3ad249fab8df6dd13192"
+    },
+    {
+      "path": "node_modules/class-variance-authority",
+      "version": "0.7.1",
+      "sha256": "f487885eb010b36aec829ab8fb5fc845918006c4633e3c88c750e73bd35c6381"
+    },
+    {
+      "path": "node_modules/clsx",
+      "version": "2.1.1",
+      "sha256": "a5e616b9883177fb47c1fca22b6a4ab42be1c3ed6ffae8595a5c7d88630eeec2"
+    },
+    {
+      "path": "node_modules/cmdk",
+      "version": "1.1.1",
+      "sha256": "00bb6d53974c8b1e4ae42c04fef75b07a94a69fae2fdb1095dd92a834cd6db71"
+    },
+    {
+      "path": "node_modules/color-convert",
+      "version": "2.0.1",
+      "sha256": "9471d21744ca3137410448da6b3bd7b30ee91d42edce3b82ebcbf84faef74fb4"
+    },
+    {
+      "path": "node_modules/color-name",
+      "version": "1.1.4",
+      "sha256": "4a557ea373907e4643badb89ff21b3f4b969d20631086d78eab2e03d05c2efa4"
+    },
+    {
+      "path": "node_modules/combined-stream",
+      "version": "1.0.8",
+      "sha256": "761adece21443081ae818fe0e18864d7fa03f387075b89afa6cc5dd98356fafa"
+    },
+    {
+      "path": "node_modules/commander",
+      "version": "4.1.1",
+      "sha256": "b6562534f106b47ea0bfdebb1ae093461bdfd274e1a4ae5aef9057a141dbe0b9"
+    },
+    {
+      "path": "node_modules/concat-map",
+      "version": "0.0.1",
+      "sha256": "4fe5e8089b65ebfd55bb86f465ba896ba6a8e24b7b61de1e0f420f590616b118"
+    },
+    {
+      "path": "node_modules/cookie",
+      "version": "1.1.1",
+      "sha256": "e13337a4eb106b201e0502361f3214af9cc22ae88b2bfac2368996bb949a102f"
+    },
+    {
+      "path": "node_modules/cross-spawn",
+      "version": "7.0.6",
+      "sha256": "2e106cd9b4ae4e34ead35218371a0d4e172da72515a4f8f97d69a2e1fe3dee82"
+    },
+    {
+      "path": "node_modules/css-line-break",
+      "version": "2.1.0",
+      "sha256": "bb396a67d68c3641ab79126fc839a4b97e5380c8a9deb81a0dd7d9c5423f0ec8"
+    },
+    {
+      "path": "node_modules/css.escape",
+      "version": "1.5.1",
+      "sha256": "77766896bc04668e5777b54038a30ba198cc1eb317c1675e29781d67499e6055"
+    },
+    {
+      "path": "node_modules/cssesc",
+      "version": "3.0.0",
+      "sha256": "23f134be44f2877c298ca56c5464ebbe190ddb49c3ce9b82be3c73a64512d014"
+    },
+    {
+      "path": "node_modules/cssom",
+      "version": "0.5.0",
+      "sha256": "f9babfc8744f2ed28a3661c14d6d8a0a015bdf437c52f996f5cc6111cb400237"
+    },
+    {
+      "path": "node_modules/cssstyle",
+      "version": "2.3.0",
+      "sha256": "f9fb22fbd3b498b0010dcbec5306528ab261cdab60004ff7f7f5e29ece6884fa"
+    },
+    {
+      "path": "node_modules/cssstyle/node_modules/cssom",
+      "version": "0.3.8",
+      "sha256": "bbad5d733248d265baf97b9345b352aa3bc2538cac56ede23c9342a05fada088"
+    },
+    {
+      "path": "node_modules/csstype",
+      "version": "3.1.3",
+      "sha256": "d0b9e2833b46ea199c965e6b87838ec4965ca4d7c32beddf33308d98f68c76a8"
+    },
+    {
+      "path": "node_modules/d3-array",
+      "version": "3.2.4",
+      "sha256": "f9e9dc28e2a9bfe32a0a80dda5c9f8bb49758ee112f4418e2b5662787f1bf500"
+    },
+    {
+      "path": "node_modules/d3-color",
+      "version": "3.1.0",
+      "sha256": "3de1c3c467f09ffc0372c8b765f8981535c22e1d9f944d17a35ee37df1033516"
+    },
+    {
+      "path": "node_modules/d3-ease",
+      "version": "3.0.1",
+      "sha256": "393518c7886852c8cdeae42a54065c3ba54eddb701dd2da98c6d048f92cbc91c"
+    },
+    {
+      "path": "node_modules/d3-format",
+      "version": "3.1.0",
+      "sha256": "2f9c48fa0c03d3fcc86843825ef5698be2f3e475067e6a210cbb3a4e900bf57e"
+    },
+    {
+      "path": "node_modules/d3-interpolate",
+      "version": "3.0.1",
+      "sha256": "3e2ce33f9d7072b6bfedbae949c1df546e187994e44b6f4b3795abeb63914613"
+    },
+    {
+      "path": "node_modules/d3-path",
+      "version": "3.1.0",
+      "sha256": "1aae497436309c84e7db7e5a2a11b1cc78bbba98f26088e4e71079cd725bdc89"
+    },
+    {
+      "path": "node_modules/d3-scale",
+      "version": "4.0.2",
+      "sha256": "75f7dfe869b2e6d1cbecd380f939f218ca046a26313c4e623aa52d6352a9b51b"
+    },
+    {
+      "path": "node_modules/d3-shape",
+      "version": "3.2.0",
+      "sha256": "c3d084a64bc3c85c407db4282be588a42484c4dc2639bb0a21424fe29ff38335"
+    },
+    {
+      "path": "node_modules/d3-time",
+      "version": "3.1.0",
+      "sha256": "f145cd8f545cc98527d75c3717be9159616680fe5ba312c350828b44857e1ee6"
+    },
+    {
+      "path": "node_modules/d3-time-format",
+      "version": "4.1.0",
+      "sha256": "98ffed8c2cf40a4d279b4346b73c09e38cbce40a96fa11caa69a174dea7cbf55"
+    },
+    {
+      "path": "node_modules/d3-timer",
+      "version": "3.0.1",
+      "sha256": "d2b6cb2200728b60982aa30c4caf787f0bda2c066ef9176282ab54ba656403cb"
+    },
+    {
+      "path": "node_modules/data-urls",
+      "version": "3.0.2",
+      "sha256": "9e30e84402d55e26de13f5bd6d3fd270935e921d6d8ce2794b291c19516681d6"
+    },
+    {
+      "path": "node_modules/date-fns",
+      "version": "3.6.0",
+      "sha256": "63a331c8f500a99e5a6f23882d2eb58da4865e4d9c3ed9b121c3b8b0e6e09335"
+    },
+    {
+      "path": "node_modules/debug",
+      "version": "4.4.3",
+      "sha256": "ea8e33d63fe5f3a4c36609b6c3df8e2ef1f8b8ba2fc3a2e1e53cb27291f384af"
+    },
+    {
+      "path": "node_modules/decimal.js",
+      "version": "10.6.0",
+      "sha256": "d7e3794828ee8bc94818613c9d901a9e7c857e6ffcf027245e661ddfc63d9b72"
+    },
+    {
+      "path": "node_modules/decimal.js-light",
+      "version": "2.5.1",
+      "sha256": "d20b9fb64b091a9bb3f06d9aba27a1aa8b2e391aac84082b37875255b1989975"
+    },
+    {
+      "path": "node_modules/deep-eql",
+      "version": "5.0.2",
+      "sha256": "0ee7e49522979ad93908876af0e32a812da311ba86d720ebd1f226a4c8c74635"
+    },
+    {
+      "path": "node_modules/deep-is",
+      "version": "0.1.4",
+      "sha256": "5caed41b62144a29c30415d2d92293c8122b4adeb281bffd097cbfca0f70645d"
+    },
+    {
+      "path": "node_modules/delayed-stream",
+      "version": "1.0.0",
+      "sha256": "4f5bd886efbd8feda6ac04db6ac1aa8b2e8dfc159503b0652667e1bc88efd4cb"
+    },
+    {
+      "path": "node_modules/dequal",
+      "version": "2.0.3",
+      "sha256": "a41e430cd3d990700f1544c5ffece552449ab758d778fa34ad5458cf6ec35d6b"
+    },
+    {
+      "path": "node_modules/detect-node-es",
+      "version": "1.1.0",
+      "sha256": "06f9cfd73b6c401019dfa5cbdf4b4a5b346b1b15c4fca2d6f3ecc1a830528b06"
+    },
+    {
+      "path": "node_modules/didyoumean",
+      "version": "1.2.2",
+      "sha256": "29c36bb1dd85d93218159e55ddf2c8ca22ab7ee3f8c894b94a4f498011e7d7a9"
+    },
+    {
+      "path": "node_modules/dlv",
+      "version": "1.1.3",
+      "sha256": "d0355a98f75d3547e341ff1cbade270c5d5e9b109dd2b03163178c58b8d525d2"
+    },
+    {
+      "path": "node_modules/dom-accessibility-api",
+      "version": "0.6.3",
+      "sha256": "1ef49d957023e0148718606544902a002b29c794ec3938b6840bcfa42654edb0"
+    },
+    {
+      "path": "node_modules/dom-helpers",
+      "version": "5.2.1",
+      "sha256": "efce7444ae9b3409183abbf4f09fdb5207217a38ad504c87ace88e1975a1d083"
+    },
+    {
+      "path": "node_modules/domexception",
+      "version": "4.0.0",
+      "sha256": "5534a857c65caa99e2e6bcbb61577e6492e4eb6a7e3f900bd1c204f579607c2b"
+    },
+    {
+      "path": "node_modules/dunder-proto",
+      "version": "1.0.1",
+      "sha256": "24df71008e4225c858f389dd2728b76cf66b752256d42a38ed7930aacae7fe2b"
+    },
+    {
+      "path": "node_modules/eastasianwidth",
+      "version": "0.2.0",
+      "sha256": "51db62f97656d02d4bc9670393cae42930dbd1ed89f5837056851807e602867a"
+    },
+    {
+      "path": "node_modules/electron-to-chromium",
+      "version": "1.5.192",
+      "sha256": "5eee46ac410533f52bcbac622a520cff32f9d7740ca9fba3d452be11c9ce5f75"
+    },
+    {
+      "path": "node_modules/embla-carousel",
+      "version": "8.6.0",
+      "sha256": "25a173f262cefcb739f4b11268e866cff088976e0f0e79059f75811ddab8e77c"
+    },
+    {
+      "path": "node_modules/embla-carousel-react",
+      "version": "8.6.0",
+      "sha256": "c3b98c1f6ab7f079cee036c666d9b9d761ab1ff2ca328e0d139b19bf89b014ee"
+    },
+    {
+      "path": "node_modules/embla-carousel-reactive-utils",
+      "version": "8.6.0",
+      "sha256": "3fd96f05014a38ef57e5f4ad7c7081778769b0f6bfa85761d925a6de8af5c3ab"
+    },
+    {
+      "path": "node_modules/emoji-regex",
+      "version": "9.2.2",
+      "sha256": "181fa046bdbb7d8958c57dcef2e63aea9af667036e218c7222479a8618375f1a"
+    },
+    {
+      "path": "node_modules/entities",
+      "version": "6.0.1",
+      "sha256": "2b110e5a5a7a7bcbc843b885105a952630299cb1a7817b4b321d69479cfa7086"
+    },
+    {
+      "path": "node_modules/es-define-property",
+      "version": "1.0.1",
+      "sha256": "3a2cb30dae30a96705dcd9aa2d5fb190cf8200f27badccfa5a81a4374e5708b4"
+    },
+    {
+      "path": "node_modules/es-errors",
+      "version": "1.3.0",
+      "sha256": "1a0a0bcccc76b915cb64073317312840cf6363e9144b96f406d0059774dd5278"
+    },
+    {
+      "path": "node_modules/es-module-lexer",
+      "version": "1.7.0",
+      "sha256": "de68b22f72517f94d53290ecdbaf975f5e79ca26d8757768b07c5b466749c494"
+    },
+    {
+      "path": "node_modules/es-object-atoms",
+      "version": "1.1.1",
+      "sha256": "9975f032714dd642d08c9b50129096f5daf878dbede1ca3544cdcdbf45b48eb0"
+    },
+    {
+      "path": "node_modules/es-set-tostringtag",
+      "version": "2.1.0",
+      "sha256": "c9506942c9ef472286aff079bb65b7f3edcaccbc7f59fac9f419787b570086e5"
+    },
+    {
+      "path": "node_modules/esbuild",
+      "version": "0.21.5",
+      "sha256": "0f35e0d63bd60a43ed85879604a40f7e9688b321904cf28a95be5b1bc629559c"
+    },
+    {
+      "path": "node_modules/escalade",
+      "version": "3.2.0",
+      "sha256": "acd22b264ecbea162e320a360dab0ad0f3e5438fa4382288df844fa08b484e73"
+    },
+    {
+      "path": "node_modules/escape-string-regexp",
+      "version": "4.0.0",
+      "sha256": "63763f28aefa6c49e6e6599e44b7c9aa5afd6518ae04bcfa534ff3759ad428e8"
+    },
+    {
+      "path": "node_modules/escodegen",
+      "version": "2.1.0",
+      "sha256": "c8d08b0f4dbb8cd4a30c7183fa247d67003d63749a1c46a430c1a265a8147cf0"
+    },
+    {
+      "path": "node_modules/eslint",
+      "version": "9.32.0",
+      "sha256": "ce4aa615dcb9544c447c3cc4b9abe80f077c361d6bee53a2fd3ecabe97b2e4fd"
+    },
+    {
+      "path": "node_modules/eslint-plugin-react-hooks",
+      "version": "5.2.0",
+      "sha256": "a63ae650302f1dc821bcdb9b3bc57e7eccb2c499c39ca16636cd243c9f766705"
+    },
+    {
+      "path": "node_modules/eslint-plugin-react-refresh",
+      "version": "0.4.20",
+      "sha256": "ab9f8a27c70c76ad15e46fef4f87f81efd73826d75c41d45fa7536936b3bafef"
+    },
+    {
+      "path": "node_modules/eslint-scope",
+      "version": "8.4.0",
+      "sha256": "5d0d647be190cc44954e520036832957f55dd4738536b9f85eaf479b4a279ab8"
+    },
+    {
+      "path": "node_modules/eslint-visitor-keys",
+      "version": "4.2.1",
+      "sha256": "f479c384cbd48ab3d95ba3f02f332ee42320b408a09f1cb8f1d3da96273ed4d3"
+    },
+    {
+      "path": "node_modules/espree",
+      "version": "10.4.0",
+      "sha256": "76d68e5b8ac5aae00882165c4feae4a8a8825ccb4ea76ab8af0f02ba320fd250"
+    },
+    {
+      "path": "node_modules/esprima",
+      "version": "4.0.1",
+      "sha256": "860df2e62153db26b370badf352d95edbf18e1eb54bdc2a479429b97155205b2"
+    },
+    {
+      "path": "node_modules/esquery",
+      "version": "1.6.0",
+      "sha256": "af8d6700174e63037f4ca8be7d96a4b2dc55ba351f7f7e1a336d7d038fbe973c"
+    },
+    {
+      "path": "node_modules/esrecurse",
+      "version": "4.3.0",
+      "sha256": "3bc67cb54672ec6957b53947613c23599371bf9222dbbe97275d20516a561a20"
+    },
+    {
+      "path": "node_modules/estraverse",
+      "version": "5.3.0",
+      "sha256": "133a5be160a0123ad20ab8f2bdaa9da2fd94ebf3403996bf4cb69606e6a84a65"
+    },
+    {
+      "path": "node_modules/estree-walker",
+      "version": "3.0.3",
+      "sha256": "c459668153035def85be26dbeb40caf315191da06ac8a092cd8024b677c2fc21"
+    },
+    {
+      "path": "node_modules/esutils",
+      "version": "2.0.3",
+      "sha256": "af08fd13ef49c88af75c5f4ad02812216028ad848f8354fd97346e7ddc816c0e"
+    },
+    {
+      "path": "node_modules/eventemitter3",
+      "version": "4.0.7",
+      "sha256": "2e9612fd0b3b723d4e27dbd741752f84ad840f3151973250820be782650cb7e1"
+    },
+    {
+      "path": "node_modules/expect-type",
+      "version": "1.3.0",
+      "sha256": "a7453b74e6d7d4d1f0a9e78f13d9d8c01a28a9b53e2dcdd4e0976fcdf81515a3"
+    },
+    {
+      "path": "node_modules/fast-deep-equal",
+      "version": "3.1.3",
+      "sha256": "a5c63940db0260739be9e2ac67f3aac268df4db5770420ee4e34e493152f97d2"
+    },
+    {
+      "path": "node_modules/fast-equals",
+      "version": "5.2.2",
+      "sha256": "5740554fbb02909e7f59b76a6bb9a35d4b5e88680e7df1fe5a89534a67c5ff26"
+    },
+    {
+      "path": "node_modules/fast-glob",
+      "version": "3.3.2",
+      "sha256": "9cb705fdcccc6df1d9f53ead60c1b5c055f25d391350cb9abec0e36304aecbb5"
+    },
+    {
+      "path": "node_modules/fast-glob/node_modules/glob-parent",
+      "version": "5.1.2",
+      "sha256": "858af9aa27cfe6eea1cfd1abbda15ad0ccc87e66e88b3ad249fab8df6dd13192"
+    },
+    {
+      "path": "node_modules/fast-json-stable-stringify",
+      "version": "2.1.0",
+      "sha256": "c4907a6cf1a242f65589b9bb762b9330088aa4a940d382b470d3c47b5309ef44"
+    },
+    {
+      "path": "node_modules/fast-levenshtein",
+      "version": "2.0.6",
+      "sha256": "80167ee3483f23228b48d5cf5c9db355bacf55922282eb132af83136b9c9213e"
+    },
+    {
+      "path": "node_modules/fastq",
+      "version": "1.17.1",
+      "sha256": "e19ec82e26a8d136f4e623328aefd797d3ae72e9c02cd0f390e0710a9ea145f2"
+    },
+    {
+      "path": "node_modules/fdir",
+      "version": "6.5.0",
+      "sha256": "aca49395d61ef383a09f74555c66ed45817ca2b5724e710a4dc9e0471b83d8f5"
+    },
+    {
+      "path": "node_modules/file-entry-cache",
+      "version": "8.0.0",
+      "sha256": "1d88b9fe323d9766712599c0ee134c56e02a472e1fa633f304bc7be8cdc4dcec"
+    },
+    {
+      "path": "node_modules/fill-range",
+      "version": "7.1.1",
+      "sha256": "87f5c78f9b47d21f9ca62b60cff1d250a3b468eab320dd13c3f3ab2464a02735"
+    },
+    {
+      "path": "node_modules/find-up",
+      "version": "5.0.0",
+      "sha256": "d1de12b1501bb90cf2fe6ef2668eb9d56a3dadeccdcaf075db46287bcb2f43ea"
+    },
+    {
+      "path": "node_modules/flat-cache",
+      "version": "4.0.1",
+      "sha256": "8086a3cb7efb10e538f6d55d820c22c237d686454f8b0e6b144c4baf92ea7e1e"
+    },
+    {
+      "path": "node_modules/flatted",
+      "version": "3.4.4",
+      "sha256": "b2ff4da4785cbefcbdb4bd5951cf9232f3fe8d9c55c210cab5e28c0a120f0ba0"
+    },
+    {
+      "path": "node_modules/foreground-child",
+      "version": "3.3.0",
+      "sha256": "40af5d0819d910ddc5e597002426a099b69ca24d8d0766cfa5ef7eb8410d4aca"
+    },
+    {
+      "path": "node_modules/form-data",
+      "version": "4.0.6",
+      "sha256": "d5222c863d975ddefb3ec2c012d3c3ab92f51ef8f3f5c3080dee02c79d217665"
+    },
+    {
+      "path": "node_modules/fraction.js",
+      "version": "4.3.7",
+      "sha256": "113c4a35545d117d2cd58ad5311788ade1d8595c0e1543e4913e1275aa100dc8"
+    },
+    {
+      "path": "node_modules/function-bind",
+      "version": "1.1.2",
+      "sha256": "edb1c4faf4148e6e3d74ed8dbac1a1dc359a647ff4207aad4851396dc7a3559a"
+    },
+    {
+      "path": "node_modules/get-intrinsic",
+      "version": "1.3.0",
+      "sha256": "45b14763baacc59b0fd7b39e3ad983d5d2aaf7f5ed682f2fce9edb469826c999"
+    },
+    {
+      "path": "node_modules/get-nonce",
+      "version": "1.0.1",
+      "sha256": "cd0262ed52e44beb166ba0ed31081587074d48602bd057d1d438103ec169ef8b"
+    },
+    {
+      "path": "node_modules/get-proto",
+      "version": "1.0.1",
+      "sha256": "73839e012ac7134a632c9d9fc6bdb700ac9ab5553cce39eb789ba2b65663e734"
+    },
+    {
+      "path": "node_modules/glob",
+      "version": "10.5.0",
+      "sha256": "5455b1a29f8c3f3b6a41c2c053bf0684f14464bb5360f7b8c8702bf45b2da0bb"
+    },
+    {
+      "path": "node_modules/glob-parent",
+      "version": "6.0.2",
+      "sha256": "1a0b9ff627b3ded5a3e8c7e7ab99eface3c79e92d7691a11e3eff8d78e0f8e24"
+    },
+    {
+      "path": "node_modules/glob/node_modules/brace-expansion",
+      "version": "2.1.4",
+      "sha256": "0242781e7c6ed4459649b4aca0903ec03690bde675d2e4636538a5956fc9c542"
+    },
+    {
+      "path": "node_modules/glob/node_modules/minimatch",
+      "version": "9.0.9",
+      "sha256": "07347ae64d38f4cc1be3ffcc83322ec40d4609f5f3e9dc027ae91a4617239ac2"
+    },
+    {
+      "path": "node_modules/globals",
+      "version": "15.15.0",
+      "sha256": "3283bbc72ccb87e4652b9310d95ab643283fd1752a96b75f751a0eadeab36456"
+    },
+    {
+      "path": "node_modules/gopd",
+      "version": "1.2.0",
+      "sha256": "33ace32dc861f6da9d1fd9d0a44c66e8c6ff3b13358d070683c1c2978ff5f19f"
+    },
+    {
+      "path": "node_modules/graphemer",
+      "version": "1.4.0",
+      "sha256": "a6fc1e3cb7a9e3cc0526e09ca269b2009ec7da5ae47cc35d70b82970286047af"
+    },
+    {
+      "path": "node_modules/has-flag",
+      "version": "4.0.0",
+      "sha256": "3fef4b52efbeabeadfffd5994e90b1025eb24263286e34170675956637d368b1"
+    },
+    {
+      "path": "node_modules/has-symbols",
+      "version": "1.1.0",
+      "sha256": "5190268c0e3308d7446d1f7c036238f329f786938453e6017cb90980b3612e7a"
+    },
+    {
+      "path": "node_modules/has-tostringtag",
+      "version": "1.0.2",
+      "sha256": "30ab773c52021a6b800ea48f251abeeb1f6e378300f819204dfbb38d6e43f3ad"
+    },
+    {
+      "path": "node_modules/hasown",
+      "version": "2.0.4",
+      "sha256": "40b750c55a8bacf2c5ac316f5299dd44d48acc101c189a00cd59d39376b5eb89"
+    },
+    {
+      "path": "node_modules/html-encoding-sniffer",
+      "version": "3.0.0",
+      "sha256": "f250af1485373b6b0348e98519d6175a14187fc64914ba4cea358ad17b306078"
+    },
+    {
+      "path": "node_modules/html2canvas",
+      "version": "1.4.1",
+      "sha256": "0f9ec876862475d42f2badf8adc0335bec6933ef9b87d8ffb06cb2a6f6cb6d5b"
+    },
+    {
+      "path": "node_modules/http-proxy-agent",
+      "version": "5.0.0",
+      "sha256": "7c6265385a57a724d42f1c365d3af5b3e61cfec4e5007c67a1719de939c74072"
+    },
+    {
+      "path": "node_modules/https-proxy-agent",
+      "version": "5.0.1",
+      "sha256": "d41d9127cbed43df8e2d404bfaf41361942a8afeb82eb57ccf8515e04eb33d1d"
+    },
+    {
+      "path": "node_modules/iceberg-js",
+      "version": "0.8.1",
+      "sha256": "0976ea84c41c49a5d853da05066c343ac735329301cf9c9c81c01848e0988c35"
+    },
+    {
+      "path": "node_modules/iconv-lite",
+      "version": "0.6.3",
+      "sha256": "3a9582fd121f841c245d1fcf84ef0b9e41c94b785b8d7eb63f9f5aec9bad0b98"
+    },
+    {
+      "path": "node_modules/ignore",
+      "version": "5.3.2",
+      "sha256": "a9f40bd310889f21ed824bc19ce140714b7459d658f6708041af53e9855258a6"
+    },
+    {
+      "path": "node_modules/import-fresh",
+      "version": "3.3.1",
+      "sha256": "c71eb71fede603ba3191c01c55c9d5a3977dd5f8d91f24835aaffc9785c19534"
+    },
+    {
+      "path": "node_modules/imurmurhash",
+      "version": "0.1.4",
+      "sha256": "aa3b07e7fa3d63aa96e401c3842b8cca1dd3247954baf92377094766e903c185"
+    },
+    {
+      "path": "node_modules/indent-string",
+      "version": "4.0.0",
+      "sha256": "5b15d951490ea56f6309d9203e1c3cfd036ad1c67ca1c7f372cbfdfbf3faecb7"
+    },
+    {
+      "path": "node_modules/input-otp",
+      "version": "1.4.2",
+      "sha256": "9590df2c15b05beccf02c5cffcfb4d90fdfe21debd191fade385cdd1e9821ed4"
+    },
+    {
+      "path": "node_modules/internmap",
+      "version": "2.0.3",
+      "sha256": "b94bd846fb96743a86d527a3d0a3ad1bd5b1ffd3cd1109e6b115ebaef59dd195"
+    },
+    {
+      "path": "node_modules/invariant",
+      "version": "2.2.4",
+      "sha256": "ef0c08d9f91029e247bb570a04903f3a9bd646c1f2128d29e69ee171794cd2a3"
+    },
+    {
+      "path": "node_modules/is-binary-path",
+      "version": "2.1.0",
+      "sha256": "35e07770a839325f659cd533abf346934f4544cb6f42ce9bc852abd22999c20c"
+    },
+    {
+      "path": "node_modules/is-core-module",
+      "version": "2.15.1",
+      "sha256": "127d9a30a452e25b9facde584a00e67b9a1ad5a831c1aaac5a35774c2ab51e5a"
+    },
+    {
+      "path": "node_modules/is-extglob",
+      "version": "2.1.1",
+      "sha256": "8031afcd87f448d75ba8a5dd2cde9c68f982a94f406ebae8e5fb7cf6dfdeede2"
+    },
+    {
+      "path": "node_modules/is-fullwidth-code-point",
+      "version": "3.0.0",
+      "sha256": "5b48496ca129073ed44a677b777ea3b91366c8bc228bc75fe858749a78ac1a32"
+    },
+    {
+      "path": "node_modules/is-glob",
+      "version": "4.0.3",
+      "sha256": "1cce62b80db12fc033d85250b5881b1a288476229abda8e1abd983724befd56f"
+    },
+    {
+      "path": "node_modules/is-number",
+      "version": "7.0.0",
+      "sha256": "51c133f4e41df982aef69027249ff9d7262645029f437d079adc7c83328fb620"
+    },
+    {
+      "path": "node_modules/is-potential-custom-element-name",
+      "version": "1.0.1",
+      "sha256": "9b41645708a8d3fdae25ceac23c0b8861be9010c6c9dbb9770d0018e803bd1d9"
+    },
+    {
+      "path": "node_modules/isexe",
+      "version": "2.0.0",
+      "sha256": "395c2af9abeeaafe7391974c1eacfb2a2bdeef187f21c3f5582c49e0368e59bf"
+    },
+    {
+      "path": "node_modules/jackspeak",
+      "version": "3.4.3",
+      "sha256": "3379e9c1be25729a6c7fc160e840108e15895c368e8060e42f68598f9f3065cd"
+    },
+    {
+      "path": "node_modules/jiti",
+      "version": "1.21.6",
+      "sha256": "c910976d25c6f8233d438bb6c37ae51d683e6290a6a9daf62b2bd36346f5801e"
+    },
+    {
+      "path": "node_modules/js-tokens",
+      "version": "4.0.0",
+      "sha256": "47345931827b3e26db9fe690abb81f856a0d040cbca8af1e69711a64cd58ce0d"
+    },
+    {
+      "path": "node_modules/js-yaml",
+      "version": "4.3.2",
+      "sha256": "3eeb05aa0ceb4c3686e44c9b5d9b88f914b099ba9a7426b36947e65c6373d9a5"
+    },
+    {
+      "path": "node_modules/jsdom",
+      "version": "20.0.3",
+      "sha256": "9a2b2a263eb5f166f6053f448313f75bdfb0463baa4e7fd455df50b3d917eaa8"
+    },
+    {
+      "path": "node_modules/json-buffer",
+      "version": "3.0.1",
+      "sha256": "67bd0213396ba4664a9f2fafa3d2d25864a29f4f3800e766ea17c2aa3f4dbef9"
+    },
+    {
+      "path": "node_modules/json-schema-traverse",
+      "version": "0.4.1",
+      "sha256": "bdedf225125f10e80911bb94f9a3992f93835e3c70894b3d5081ed75f25c5126"
+    },
+    {
+      "path": "node_modules/json-stable-stringify-without-jsonify",
+      "version": "1.0.1",
+      "sha256": "49bfc3a3a94d19ccb890f71c39f41a2a56ae8cc54b45d6330d4e30dc59418ae7"
+    },
+    {
+      "path": "node_modules/keyv",
+      "version": "4.5.4",
+      "sha256": "e8afd30f2f2a40ef5023928b50fdaed3a3338aa7e1c4e86205413afb05e8a099"
+    },
+    {
+      "path": "node_modules/levn",
+      "version": "0.4.1",
+      "sha256": "0a25421ab66ec56def7407234858f52c1d593b2454155c06df1d7feaa324c8fe"
+    },
+    {
+      "path": "node_modules/lilconfig",
+      "version": "3.1.3",
+      "sha256": "e0f25fc3818a4ee457e1e4828073ca6a2409b5cd4f32fb25c3146f3cdb19702b"
+    },
+    {
+      "path": "node_modules/lines-and-columns",
+      "version": "1.2.4",
+      "sha256": "34920a73cb6486742115f5fb9385cb50a1e6fbb771b8e56e8b8b143f9a94d1d7"
+    },
+    {
+      "path": "node_modules/locate-path",
+      "version": "6.0.0",
+      "sha256": "f77d343dc6be5bc096137fb765753139e8d23971f5ad740b7a40bc8dc6a24f82"
+    },
+    {
+      "path": "node_modules/lodash",
+      "version": "4.18.1",
+      "sha256": "5ef0a453b679125b155af19e1477f93b577ea826a57e1545f77608d326966e6a"
+    },
+    {
+      "path": "node_modules/lodash.castarray",
+      "version": "4.4.0",
+      "sha256": "fe98a12583d8e07cd7dbc9189190a37f841b82461128d0613c521ef40a36fdb5"
+    },
+    {
+      "path": "node_modules/lodash.isplainobject",
+      "version": "4.0.6",
+      "sha256": "c76488b831ad65dfa3a3e51201c9eb2193313ba1bee05bad910e9c6fa613bcd7"
+    },
+    {
+      "path": "node_modules/lodash.merge",
+      "version": "4.6.2",
+      "sha256": "5aaf4c24df9052e680d0728754c249fb94c11aef2e76ec3f76320431915c92f1"
+    },
+    {
+      "path": "node_modules/loose-envify",
+      "version": "1.4.0",
+      "sha256": "8c2e27dae366396ced36fe0f7c6d35d71a1440fd8e82df5f2005a5297888a0d4"
+    },
+    {
+      "path": "node_modules/loupe",
+      "version": "3.2.1",
+      "sha256": "576be81053b77e14f3ccb78111e9c0dbf19164f59d3eeff9763d620d21ef2591"
+    },
+    {
+      "path": "node_modules/lovable-tagger",
+      "version": "1.1.13",
+      "sha256": "617e6a75d3e048a963987597ec895b1d53a78419b654028ba2643bc41c9e4a11"
+    },
+    {
+      "path": "node_modules/lovable-tagger/node_modules/@esbuild/linux-x64",
+      "version": "0.25.0",
+      "sha256": "890d8280e7121159b4f7984c81671bf91e8a65e8d78a5901ae24ace752dff064"
+    },
+    {
+      "path": "node_modules/lovable-tagger/node_modules/esbuild",
+      "version": "0.25.0",
+      "sha256": "63c56f3176b0503f074a6a0c862c7c99d591b27139dde6d8b838824c988c5905"
+    },
+    {
+      "path": "node_modules/lru-cache",
+      "version": "10.4.3",
+      "sha256": "a7e05794a5dc81dfc79a0f186c5219f442f2f735b08a3e9b91aba59833badc2d"
+    },
+    {
+      "path": "node_modules/lucide-react",
+      "version": "0.462.0",
+      "sha256": "7897e06314357ebc81ca292673e165fcc8741a7c74793bdba65240af05610af8"
+    },
+    {
+      "path": "node_modules/lz-string",
+      "version": "1.5.0",
+      "sha256": "f0990a8fd6c347d66c1469d18918f5460d372c6b3af8a0a5737dfd34c809e20d"
+    },
+    {
+      "path": "node_modules/magic-string",
+      "version": "0.30.21",
+      "sha256": "86814aaf7dacba9d31fbf361c3285981f1cbbda0a87108caa4131d297bd9eba2"
+    },
+    {
+      "path": "node_modules/math-intrinsics",
+      "version": "1.1.0",
+      "sha256": "39d74aa5a354153130706286dd60a2d8409ce0c8f66546eff2edcac0afff17e1"
+    },
+    {
+      "path": "node_modules/merge2",
+      "version": "1.4.1",
+      "sha256": "5424b2be337f1f0a1fa376fa67262bceaead62275d5f8df6ff82103e283cc358"
+    },
+    {
+      "path": "node_modules/micromatch",
+      "version": "4.0.8",
+      "sha256": "94dbc881c0329813f2481f35fcfa725a2285d45926d33e9b9b8b80b28487752b"
+    },
+    {
+      "path": "node_modules/micromatch/node_modules/picomatch",
+      "version": "2.3.2",
+      "sha256": "63264d817e856a4bff57d4304f2b38d2964a4f6df520eb169e7bcdb619f13e9a"
+    },
+    {
+      "path": "node_modules/mime-db",
+      "version": "1.52.0",
+      "sha256": "d03e37b915a050af548d543f4e45ff5de06ec767c19e745f18c431d9dc26b5bf"
+    },
+    {
+      "path": "node_modules/mime-types",
+      "version": "2.1.35",
+      "sha256": "5053cc10259c3913ab6b6c8f13170a619c0d1836c1d9081238329a559fafeb3a"
+    },
+    {
+      "path": "node_modules/min-indent",
+      "version": "1.0.1",
+      "sha256": "3564f623842952c2b51a77b2f31a1e00ea245ba6b31f9f9d59a3c0c1afd5b215"
+    },
+    {
+      "path": "node_modules/minimatch",
+      "version": "3.1.5",
+      "sha256": "eefa1c89527d52bbb2e8b053fe8ecf3e3ced399bdba82cf27e0e92edfd833938"
+    },
+    {
+      "path": "node_modules/minipass",
+      "version": "7.1.2",
+      "sha256": "f6cfe184c40e1c08eac8f614d7ca6888fee9654259668ad0670bb6011f74a005"
+    },
+    {
+      "path": "node_modules/ms",
+      "version": "2.1.3",
+      "sha256": "1a6b4d9739790c0b94ab96c8cc0507e281c164c311ff4fbf5e57fb8d26290b40"
+    },
+    {
+      "path": "node_modules/mz",
+      "version": "2.7.0",
+      "sha256": "c56342bdf1a99c348834f053cc4b1c716323b6411208c0a76296ef9706954d8f"
+    },
+    {
+      "path": "node_modules/nanoid",
+      "version": "3.3.18",
+      "sha256": "18673eb0d7ed43dd871d59dc22a5670303f5d4eb9b17783b1f698f5840ce1fff"
+    },
+    {
+      "path": "node_modules/natural-compare",
+      "version": "1.4.0",
+      "sha256": "3d99911ccfa0ca34ae0c68bfd32c038b952542e55db7c649c37b11dd1573f6af"
+    },
+    {
+      "path": "node_modules/next-themes",
+      "version": "0.3.0",
+      "sha256": "559fe9142c2fea592416b039e0bdcf82a0d00169ee4ce7f2f2805b78bdfb4a16"
+    },
+    {
+      "path": "node_modules/node-releases",
+      "version": "2.0.19",
+      "sha256": "67b1e7d5054efbc724996f66c53e8dd47f56706a8f351f0c206db8edc2bfab91"
+    },
+    {
+      "path": "node_modules/normalize-path",
+      "version": "3.0.0",
+      "sha256": "284ea445a01a454ab1235a08101445fe16592303167090815f4a75b54d6fba04"
+    },
+    {
+      "path": "node_modules/normalize-range",
+      "version": "0.1.2",
+      "sha256": "55cfff58b284a8c81ac6d8f94046162505e0514bed9e112822f0428980bf303b"
+    },
+    {
+      "path": "node_modules/nwsapi",
+      "version": "2.2.23",
+      "sha256": "966a63bde71070017185611413e1de5434570f41e1883e6d54408fc84b5ecea3"
+    },
+    {
+      "path": "node_modules/object-assign",
+      "version": "4.1.1",
+      "sha256": "5990bbffa235fc675debd925d50f6c3f48a2b4526d8c9f7555cadec9029d0d7f"
+    },
+    {
+      "path": "node_modules/object-hash",
+      "version": "3.0.0",
+      "sha256": "f86b3a8a18078fbbf71ea1cf4468129e609566f860b9d93f99f63dc2543962eb"
+    },
+    {
+      "path": "node_modules/optionator",
+      "version": "0.9.4",
+      "sha256": "8011d3db01182479d3881e788bacb5a9f603ca74bd564c4d26f713d5f5f571d1"
+    },
+    {
+      "path": "node_modules/p-limit",
+      "version": "3.1.0",
+      "sha256": "0de84d3e2ad5bc3a7bac54354fe6f049ce7b351d67fcc57eda6660f9fa2e83b5"
+    },
+    {
+      "path": "node_modules/p-locate",
+      "version": "5.0.0",
+      "sha256": "3a3baffa53cfac8fd6281250dd824d56118f46ad258edb09d8aed1a15e0003d2"
+    },
+    {
+      "path": "node_modules/package-json-from-dist",
+      "version": "1.0.1",
+      "sha256": "38fdaf168bc63a6422a7dbe7e41a7b52b02326edef8b14019e0333ef60b37b47"
+    },
+    {
+      "path": "node_modules/parent-module",
+      "version": "1.0.1",
+      "sha256": "4c6c519739db25dabf32a8fe29b08e34fb763ca897f14b776a0e2e99fc40afed"
+    },
+    {
+      "path": "node_modules/parse5",
+      "version": "7.3.0",
+      "sha256": "8196284780fe95c3245a40e3c17b45fc85ef709f1211775987d037e5e873fe95"
+    },
+    {
+      "path": "node_modules/path-exists",
+      "version": "4.0.0",
+      "sha256": "5e258d1a0d185ae469fec34de2af18913421b94181ef61238efcfe0b00d1b2c3"
+    },
+    {
+      "path": "node_modules/path-key",
+      "version": "3.1.1",
+      "sha256": "25594dab72681c910d9cc919263a4daf27d77a75e0d2c26a4d958d6d6b798f86"
+    },
+    {
+      "path": "node_modules/path-parse",
+      "version": "1.0.7",
+      "sha256": "9c680ecfd322afe056b4ccbfdb6c7043342276903f017c0a29b77c3926790d13"
+    },
+    {
+      "path": "node_modules/path-scurry",
+      "version": "1.11.1",
+      "sha256": "eda5ff683c26f88a134198fa2700b371abc9092c61a81474226bdfc6f9348c14"
+    },
+    {
+      "path": "node_modules/pathe",
+      "version": "2.0.3",
+      "sha256": "6cccffe6bb2a39e2e4f257aefc3f5d553d98199a0c79558bdb5ea2880fa030a3"
+    },
+    {
+      "path": "node_modules/pathval",
+      "version": "2.0.1",
+      "sha256": "66c51bced00e284db042748deb34d3ab3d4428982818a10f78064cea4bc9a991"
+    },
+    {
+      "path": "node_modules/picocolors",
+      "version": "1.1.1",
+      "sha256": "ef2ac226c4811d312e12c64214c453878653e834482125ae475f27cea60de737"
+    },
+    {
+      "path": "node_modules/picomatch",
+      "version": "4.0.4",
+      "sha256": "b8deb10b4e1f7cc2fe8236a70995f4c6b5ec3ecf93f02f2b6427a8600d2c1d20"
+    },
+    {
+      "path": "node_modules/pify",
+      "version": "2.3.0",
+      "sha256": "bb4265f25a454b4daf716b81e525679d774fb23208b3f15284f23723be4e3284"
+    },
+    {
+      "path": "node_modules/pirates",
+      "version": "4.0.6",
+      "sha256": "e449beb0abc56ea4daef3315f67308a7947006e9aae22b595dc1c499d297760f"
+    },
+    {
+      "path": "node_modules/postcss",
+      "version": "8.5.26",
+      "sha256": "e0f23518d0e8fc0570ac68438eff7ecc7554774de3194af6f54f502e33f0c25b"
+    },
+    {
+      "path": "node_modules/postcss-import",
+      "version": "15.1.0",
+      "sha256": "0cb31590bb562182c67b7e9a8242dcf09e4cd1fd35743d2a9af3a5bf5671e375"
+    },
+    {
+      "path": "node_modules/postcss-js",
+      "version": "4.0.1",
+      "sha256": "28f2d1121639c785c6c7dfefec3ea6ba5307400964059ec92b757fd53bc94301"
+    },
+    {
+      "path": "node_modules/postcss-load-config",
+      "version": "4.0.2",
+      "sha256": "21203b55ceb60305275dd36d3cc325f723e8759d86ef74fe259842f0bc13281c"
+    },
+    {
+      "path": "node_modules/postcss-nested",
+      "version": "6.2.0",
+      "sha256": "c3a095ba7eb31614fe553cc0bfb6bcf843b1856bd9d9ed8569234d6b12b07d99"
+    },
+    {
+      "path": "node_modules/postcss-selector-parser",
+      "version": "6.1.2",
+      "sha256": "b97b25257614f8cc53913e9eab7fe777dc9fde915e2cd3a939b4c0606b691951"
+    },
+    {
+      "path": "node_modules/postcss-value-parser",
+      "version": "4.2.0",
+      "sha256": "6cf9201a4d0d15253e7e7b78b4ef808b8cb3354c9809214423453b48bd012bc0"
+    },
+    {
+      "path": "node_modules/prelude-ls",
+      "version": "1.2.1",
+      "sha256": "d943e3b5a7189692268bf64e3a068249696985a9c8728397fc8786b59a198b53"
+    },
+    {
+      "path": "node_modules/pretty-format",
+      "version": "27.5.1",
+      "sha256": "52b94bbfca4f1e70d0c1818861223532a32c159a7a5dde85e4fcae3491969e41"
+    },
+    {
+      "path": "node_modules/pretty-format/node_modules/ansi-regex",
+      "version": "5.0.1",
+      "sha256": "8b2dc166f2b74d5098bad38bdd3dd2f4d4775c626199872f5e36dbb48c40931d"
+    },
+    {
+      "path": "node_modules/pretty-format/node_modules/ansi-styles",
+      "version": "5.2.0",
+      "sha256": "c4b717d4808738c3a8270e8485df6cdbf0cd4f7abb523784dca883b94c212e79"
+    },
+    {
+      "path": "node_modules/pretty-format/node_modules/react-is",
+      "version": "17.0.2",
+      "sha256": "96002dcc58acbd31c0e1329c548f4d967ea1446c5658e514de125be7293e5e60"
+    },
+    {
+      "path": "node_modules/prop-types",
+      "version": "15.8.1",
+      "sha256": "96aa387585c686397a80616d6a563759576e9b9fac1f80d57874aa4ee4730a2c"
+    },
+    {
+      "path": "node_modules/prop-types/node_modules/react-is",
+      "version": "16.13.1",
+      "sha256": "06784c4340af9853928c519791684487b83076b3c84e8de6ba5f240e33700b71"
+    },
+    {
+      "path": "node_modules/psl",
+      "version": "1.15.0",
+      "sha256": "086ee1000979358d8ae64c7174e5c3cce1067adf8668d104a5539bb08d35badd"
+    },
+    {
+      "path": "node_modules/punycode",
+      "version": "2.3.1",
+      "sha256": "e025033bd11110af671fb8eb62f0db8895073ccdca70b596aa94a27eb5bf9acb"
+    },
+    {
+      "path": "node_modules/querystringify",
+      "version": "2.2.0",
+      "sha256": "52a9fb122bf39ca64b3724f8d419273b0500918a186333a3a0c0f2db28f05073"
+    },
+    {
+      "path": "node_modules/queue-microtask",
+      "version": "1.2.3",
+      "sha256": "e6d153dda4c9aee863e7d8cc59419d4eb94b9829277cda9289a40f96efb36c11"
+    },
+    {
+      "path": "node_modules/react",
+      "version": "18.3.1",
+      "sha256": "d4e68a5c96babb20cad1daafea8b78822eae45b341552cf5418d06a5304fa64c"
+    },
+    {
+      "path": "node_modules/react-day-picker",
+      "version": "8.10.1",
+      "sha256": "841e90f684adcfa3247a8382c6999cd3f575310eb71ec30469d76d55f7a448ba"
+    },
+    {
+      "path": "node_modules/react-dom",
+      "version": "18.3.1",
+      "sha256": "d2f29e31bd48b833e48cd7bbf41f192e8ee4ff8da249fdbe10d4ac4114b8b12e"
+    },
+    {
+      "path": "node_modules/react-fast-compare",
+      "version": "3.2.2",
+      "sha256": "00f283f5487240c6a8aa07ec0e21269c4cf810316a8d4ff95d6cadd9d076c079"
+    },
+    {
+      "path": "node_modules/react-helmet-async",
+      "version": "3.0.0",
+      "sha256": "6fe1c707e78cd4cd2e6efec54bad2de458521a58dd10c2136d6042eff8549bc9"
+    },
+    {
+      "path": "node_modules/react-hook-form",
+      "version": "7.61.1",
+      "sha256": "a8d692185bb93622ff5049dc1409ec08053ceb9f490af6ec767bf07a870a29de"
+    },
+    {
+      "path": "node_modules/react-is",
+      "version": "18.3.1",
+      "sha256": "8d8b7b3d6df8fa36fcd2fbee3561faea9bfa488c2318dabef4cfeaf275aee7f3"
+    },
+    {
+      "path": "node_modules/react-remove-scroll",
+      "version": "2.7.1",
+      "sha256": "a64ac3e7829403373ac4b516a9d83f4dd650b190cf5e1e696781bf40313fc2af"
+    },
+    {
+      "path": "node_modules/react-remove-scroll-bar",
+      "version": "2.3.8",
+      "sha256": "e372f857ce05f266137c65293436b5380fec42ac311e6acb9378ed78b98d75d0"
+    },
+    {
+      "path": "node_modules/react-resizable-panels",
+      "version": "2.1.9",
+      "sha256": "6d1f54d4601e5bfeda4a992ca4705d67eef6d1ae4d443a5061573077df6dbdfb"
+    },
+    {
+      "path": "node_modules/react-router",
+      "version": "7.18.3",
+      "sha256": "4b584ec7559415493ea8d4cb553f0dc4e7db62ccac0d2e039c0999a9eff26f4f"
+    },
+    {
+      "path": "node_modules/react-router-dom",
+      "version": "7.18.3",
+      "sha256": "ccb3b0400e147d8c8213675aaf65a478b4cc7738d66b5ba58a27fdcb7613b1fd"
+    },
+    {
+      "path": "node_modules/react-smooth",
+      "version": "4.0.4",
+      "sha256": "550a6e4daa68b7809a679285de528c04ae3423e4a26210e5f93c0a9753f13f14"
+    },
+    {
+      "path": "node_modules/react-style-singleton",
+      "version": "2.2.3",
+      "sha256": "c6d832faf8d9d54cd854d47f23b5b747928fe7554f548b093a7faaf239185d08"
+    },
+    {
+      "path": "node_modules/react-transition-group",
+      "version": "4.4.5",
+      "sha256": "2c6a5bfbbe8f65366df04ef7ea28a32fe6d8a8e582f3d68afb84ff3d3c86436a"
+    },
+    {
+      "path": "node_modules/read-cache",
+      "version": "1.0.0",
+      "sha256": "d48b2e2f79edd8537421a19ccc91c0973cf56b9bef422dd136ce13e212797252"
+    },
+    {
+      "path": "node_modules/readdirp",
+      "version": "3.6.0",
+      "sha256": "93b8758f0f281218bffe31db03a3d7b92d37f5965c8ac7c846740dd4e187d317"
+    },
+    {
+      "path": "node_modules/readdirp/node_modules/picomatch",
+      "version": "2.3.2",
+      "sha256": "63264d817e856a4bff57d4304f2b38d2964a4f6df520eb169e7bcdb619f13e9a"
+    },
+    {
+      "path": "node_modules/recharts",
+      "version": "2.15.4",
+      "sha256": "91ad4851d8a34ed86c60a003e372b9aa2756ad1d300b8b4d8ae21ce40dd2d20c"
+    },
+    {
+      "path": "node_modules/recharts-scale",
+      "version": "0.4.5",
+      "sha256": "9e776d8c82fce431cc1f506d0985b67f0c5d9c096dcef13df5598b3eea864d38"
+    },
+    {
+      "path": "node_modules/redent",
+      "version": "3.0.0",
+      "sha256": "dd1623e1fcfa5fb1a4183d9367a35cf339c5efce65f20189e17301ee69752620"
+    },
+    {
+      "path": "node_modules/requires-port",
+      "version": "1.0.0",
+      "sha256": "537ddc6900b1f1996989cc61a3e170d918bed0ab5cc77a49245bcc59361e8f47"
+    },
+    {
+      "path": "node_modules/resolve",
+      "version": "1.22.8",
+      "sha256": "36afdcf98f3eb96dc12bdbcf3033c38c2f604ad77acf451e41be9f9f812ce940"
+    },
+    {
+      "path": "node_modules/resolve-from",
+      "version": "4.0.0",
+      "sha256": "dd5b0fa6d310443ccf3e93e9eb6277bd7004c18f5263ca2ac2ebf52f3708f39f"
+    },
+    {
+      "path": "node_modules/reusify",
+      "version": "1.0.4",
+      "sha256": "1b77d300501f4e04fde008f4fc63049d44e5d4211ee5a14750e402efb92de341"
+    },
+    {
+      "path": "node_modules/rollup",
+      "version": "4.63.0",
+      "sha256": "ef21f4f871c72820f00a467b04a8a89dd58f74449f278b5e6e607ed6250b81fd"
+    },
+    {
+      "path": "node_modules/run-parallel",
+      "version": "1.2.0",
+      "sha256": "a45d96ac517ff7b6612a6e9961b66fc3e6d74adb1eeba5242ae0d36f77a35b58"
+    },
+    {
+      "path": "node_modules/safer-buffer",
+      "version": "2.1.2",
+      "sha256": "4247a3a63c45a6a7ced1557fe4dd9d2a163af4915d594b95e5867b69a53edb52"
+    },
+    {
+      "path": "node_modules/saxes",
+      "version": "6.0.0",
+      "sha256": "32052572b41c2a890ed0854798c48454cc5991dcaafe5fb1718a4253046acfd3"
+    },
+    {
+      "path": "node_modules/scheduler",
+      "version": "0.23.2",
+      "sha256": "0893643a24576d727174e639586b8833a53f2a7b4a2199a719b9cfcebe9bae88"
+    },
+    {
+      "path": "node_modules/semver",
+      "version": "7.7.2",
+      "sha256": "bf2e091359d5870257cc8287a268e001bfb39abf19275f382276efe3c7785a4f"
+    },
+    {
+      "path": "node_modules/set-cookie-parser",
+      "version": "2.7.2",
+      "sha256": "30485e315a03f4ffbafbbcdc205542b754526850a6d71e4cfc1130a4a986a057"
+    },
+    {
+      "path": "node_modules/shallowequal",
+      "version": "1.1.0",
+      "sha256": "fca9733ab63419bb68eb2129b4bc114a0d91a66fb32a63d838fda24ff379b0d6"
+    },
+    {
+      "path": "node_modules/shebang-command",
+      "version": "2.0.0",
+      "sha256": "44de390ae5ed6c5f9758b8b9c90b93fa53977d5361731600429f1de08f4b3f30"
+    },
+    {
+      "path": "node_modules/shebang-regex",
+      "version": "3.0.0",
+      "sha256": "b8018c6b8cc9900dfd1ac18a54956ba34c453fdc2da5e5fe555ee8f04133a1c5"
+    },
+    {
+      "path": "node_modules/siginfo",
+      "version": "2.0.0",
+      "sha256": "ff13b85283144b84f297d757a7b5dcffc7abcc469b3b22bb6fc94b6b1ae5f662"
+    },
+    {
+      "path": "node_modules/signal-exit",
+      "version": "4.1.0",
+      "sha256": "cd1c6cfa95782e432dd2affaa88c3a6dda7f46c8088d91f3acc0fba79dce5075"
+    },
+    {
+      "path": "node_modules/sonner",
+      "version": "1.7.4",
+      "sha256": "da081cba3fca307a16e68aedb8307239be9a39871076894f4c8b6d875dbfcc08"
+    },
+    {
+      "path": "node_modules/source-map",
+      "version": "0.6.1",
+      "sha256": "3fdebd9f5c0107bcf7b73e0d17e0147042bcfb74884106e4428afbf17171ef06"
+    },
+    {
+      "path": "node_modules/source-map-js",
+      "version": "1.2.1",
+      "sha256": "58f8e94a461a5e461e0cb2bb2be681cbd89b9181989fd26fceb858e67711469a"
+    },
+    {
+      "path": "node_modules/stackback",
+      "version": "0.0.2",
+      "sha256": "4d984909b27d37d2f1a379b9cda7292a6e3a133c076df166d740a17514ac6e60"
+    },
+    {
+      "path": "node_modules/std-env",
+      "version": "3.10.0",
+      "sha256": "47978ed306b2a6054d237c3d48f37681aac1de0648ab1544fc6ce44295024a83"
+    },
+    {
+      "path": "node_modules/string-width",
+      "version": "5.1.2",
+      "sha256": "adbcb3b95ea29c1f2a91a0af600fd9136ce408a38622332848ba4630dc473659"
+    },
+    {
+      "path": "node_modules/string-width-cjs",
+      "version": "4.2.3",
+      "sha256": "6457a02418f004fe5d3fbbb19c7cbcc1450a8b887ff9a471dc6985ac83a48d36"
+    },
+    {
+      "path": "node_modules/string-width-cjs/node_modules/ansi-regex",
+      "version": "5.0.1",
+      "sha256": "8b2dc166f2b74d5098bad38bdd3dd2f4d4775c626199872f5e36dbb48c40931d"
+    },
+    {
+      "path": "node_modules/string-width-cjs/node_modules/emoji-regex",
+      "version": "8.0.0",
+      "sha256": "7bec29b9ca68f2c4becc60e866c2f9342ecdc89fab39841a818ccd9eda15c148"
+    },
+    {
+      "path": "node_modules/string-width-cjs/node_modules/strip-ansi",
+      "version": "6.0.1",
+      "sha256": "0130850b9da0584f54cc20d3dab6365c807e9436ac78e016d5009efa99bd0530"
+    },
+    {
+      "path": "node_modules/strip-ansi",
+      "version": "7.1.0",
+      "sha256": "01cee5e384d1e26843021c1f91bc05ed009e14c2d31c01349a374e64d3416e7d"
+    },
+    {
+      "path": "node_modules/strip-ansi-cjs",
+      "version": "6.0.1",
+      "sha256": "0130850b9da0584f54cc20d3dab6365c807e9436ac78e016d5009efa99bd0530"
+    },
+    {
+      "path": "node_modules/strip-ansi-cjs/node_modules/ansi-regex",
+      "version": "5.0.1",
+      "sha256": "8b2dc166f2b74d5098bad38bdd3dd2f4d4775c626199872f5e36dbb48c40931d"
+    },
+    {
+      "path": "node_modules/strip-indent",
+      "version": "3.0.0",
+      "sha256": "573ecac977fe836c0e1bfa9ad96a1fd6cebfee4ddec4098a2db10110623ba8ba"
+    },
+    {
+      "path": "node_modules/strip-json-comments",
+      "version": "3.1.1",
+      "sha256": "92b83192db22eb46049920e4b750555193d10eafe609cf2adc4f14125c951ed4"
+    },
+    {
+      "path": "node_modules/strip-literal",
+      "version": "3.1.0",
+      "sha256": "449a78d5321c299b0ea753390cc04a31750d1d66b608870ca9829ca524cb7188"
+    },
+    {
+      "path": "node_modules/strip-literal/node_modules/js-tokens",
+      "version": "9.0.1",
+      "sha256": "3409fe9f61aebdb37b9ebadea6d47f44a2da768e7bbca200bd66dd81f28777b6"
+    },
+    {
+      "path": "node_modules/sucrase",
+      "version": "3.35.0",
+      "sha256": "ee918a5b496e57e82e4398a79080cf26f03ecd04e4904d7f4727fa801df4ed2e"
+    },
+    {
+      "path": "node_modules/supports-color",
+      "version": "7.2.0",
+      "sha256": "d410a772f9f64b224482ec13815a4bbf1837c533e1be04b3687755c48b2efa1f"
+    },
+    {
+      "path": "node_modules/supports-preserve-symlinks-flag",
+      "version": "1.0.0",
+      "sha256": "aef0ae2d21ae9181d8702c2063ce0ee274ba1063e5312e4baab5673aa6d4d5db"
+    },
+    {
+      "path": "node_modules/symbol-tree",
+      "version": "3.2.4",
+      "sha256": "962fd6c0ed18cdec3bdb7df4684da775e294078a8302504e8ce04c711e1c37d4"
+    },
+    {
+      "path": "node_modules/tailwind-merge",
+      "version": "2.6.0",
+      "sha256": "f81a694a4218c3e5d5710b2518a7d141eda5de6e5d667ebedce6a141d7d49169"
+    },
+    {
+      "path": "node_modules/tailwindcss",
+      "version": "3.4.17",
+      "sha256": "56330837214a14ffcf0faba46f0f94fb23209778f5d4cc0a2bed7d775108c8d1"
+    },
+    {
+      "path": "node_modules/tailwindcss-animate",
+      "version": "1.0.7",
+      "sha256": "a6a9ae2d3731891b7d005a7baf235db24fa9ce6c56a6da1cda4a953ea131bb69"
+    },
+    {
+      "path": "node_modules/text-segmentation",
+      "version": "1.0.3",
+      "sha256": "4e3113cb4e47238d991ce44102a508fa41c630bc8b0fdf98aa137d971f702533"
+    },
+    {
+      "path": "node_modules/thenify",
+      "version": "3.3.1",
+      "sha256": "3097b540621a555dd76ca0416492a4b98f465d3519228e3de2ecfa42a37da4dd"
+    },
+    {
+      "path": "node_modules/thenify-all",
+      "version": "1.6.0",
+      "sha256": "42f8e4698f4d61a17b9e10dd592b30654a53925a3f46eebced27f4e58e29cac9"
+    },
+    {
+      "path": "node_modules/tiny-invariant",
+      "version": "1.3.3",
+      "sha256": "27d6815b2577f3e7184f5c69af817377a2e6a0390a68acdfd852402f81d8ba2c"
+    },
+    {
+      "path": "node_modules/tinybench",
+      "version": "2.9.0",
+      "sha256": "74cf001e0ad7780cb3f596a75a2595d737337741ba76f734811387a5139ff327"
+    },
+    {
+      "path": "node_modules/tinyexec",
+      "version": "0.3.2",
+      "sha256": "37b9e1a7b215d99d4696da75b08818204c8b382387db8591fb7ae8d5d7b1be78"
+    },
+    {
+      "path": "node_modules/tinyglobby",
+      "version": "0.2.15",
+      "sha256": "473bd5e2e8708e7c5700b2196c4225b42418c310d29893d4043aece3d5dea51d"
+    },
+    {
+      "path": "node_modules/tinypool",
+      "version": "1.1.1",
+      "sha256": "fab0aa2756e7cf5c2dc020daafa86c2b5fa3cfd2f9087393418b9a7379dc3dda"
+    },
+    {
+      "path": "node_modules/tinyrainbow",
+      "version": "2.0.0",
+      "sha256": "0cb71f642cec4eaf8db6e4142e12482e32ed4914bbefe5cb2a699c3b2fd39ae7"
+    },
+    {
+      "path": "node_modules/tinyspy",
+      "version": "4.0.4",
+      "sha256": "7e78b77f1d3ca418c431900bb94b650482f2d010d0943e51f39674d34092c4ce"
+    },
+    {
+      "path": "node_modules/to-regex-range",
+      "version": "5.0.1",
+      "sha256": "766fc1bb34fffcd503c89f4194188ce059795c52fd0dc6753cd4b7dcfc3fe1ec"
+    },
+    {
+      "path": "node_modules/tough-cookie",
+      "version": "4.1.4",
+      "sha256": "86c4464c997b608573f70c53fc5693e584d8d8d56c3c08c1a138082b291d225a"
+    },
+    {
+      "path": "node_modules/tr46",
+      "version": "3.0.0",
+      "sha256": "3c350f508b005b8b2b2aca479740e4bffa4a759f86da36599fa347a4b62d1dcb"
+    },
+    {
+      "path": "node_modules/ts-api-utils",
+      "version": "2.1.0",
+      "sha256": "513bc8b039e3f9bec64f7550adc188477ab98460d0d87c5e496add5baa6b9f73"
+    },
+    {
+      "path": "node_modules/ts-interface-checker",
+      "version": "0.1.13",
+      "sha256": "08d9b9d3f3b7f0f252df45dbef7017d854eae637cb87be2c6855099b2b0d8190"
+    },
+    {
+      "path": "node_modules/tslib",
+      "version": "2.8.1",
+      "sha256": "f02b4851df316f29bdfcd404aa1eb41e4e216b5859015f81fcd3e91caf8be931"
+    },
+    {
+      "path": "node_modules/type-check",
+      "version": "0.4.0",
+      "sha256": "f52058410cf8e57ed28dd462eece693ba490c619c70c17caef8af60b84dc4ed0"
+    },
+    {
+      "path": "node_modules/typescript",
+      "version": "5.8.3",
+      "sha256": "ebb0ce176c85ac13ce82f5be7e6f15114732ba0f064ccc893fd9051426d35d3a"
+    },
+    {
+      "path": "node_modules/typescript-eslint",
+      "version": "8.38.0",
+      "sha256": "6259354a2ba62ba8a5a350145ae20fb6939ac25295719c0661a26e0e9aba153b"
+    },
+    {
+      "path": "node_modules/undici-types",
+      "version": "6.21.0",
+      "sha256": "11f873b423b96a5ad444a099685ca6b9de1379dcd83fd8d368e757ddb53658e4"
+    },
+    {
+      "path": "node_modules/universalify",
+      "version": "0.2.0",
+      "sha256": "51347a18c7cd693273a9428d5de03a11ff8e7c3630b0d02e3bbb8672341b6282"
+    },
+    {
+      "path": "node_modules/update-browserslist-db",
+      "version": "1.1.3",
+      "sha256": "91b6021f188259be4d3600445445d764d19f6a0bfccfd2ac3989ecdf3fc181a9"
+    },
+    {
+      "path": "node_modules/uri-js",
+      "version": "4.4.1",
+      "sha256": "13f6722afc3b74de0487b56d3087df1954a156e93f341aebb6ca9c1471891d6b"
+    },
+    {
+      "path": "node_modules/url-parse",
+      "version": "1.5.10",
+      "sha256": "c3047872ef776e7eff8a0440e8c7c70d8d8c6dae4f5d09dc651a83820734a746"
+    },
+    {
+      "path": "node_modules/use-callback-ref",
+      "version": "1.3.3",
+      "sha256": "1fb8f0b34573d1d4057710e559488dbfdff0436cd01d318e20bf66e4cd165318"
+    },
+    {
+      "path": "node_modules/use-sidecar",
+      "version": "1.1.3",
+      "sha256": "a8703897c0caeb8ddfa35ef4b622bd7ebd677ea3fc6c97a0264574552e9404e1"
+    },
+    {
+      "path": "node_modules/use-sync-external-store",
+      "version": "1.5.0",
+      "sha256": "2868883a90b9918383a5358ae721c68e62bb6d705ec6c888e25ac218bddbaa9e"
+    },
+    {
+      "path": "node_modules/util-deprecate",
+      "version": "1.0.2",
+      "sha256": "7bba467f049074957e693fc06672848b040c38fa071b6eed8690f5fbe090a8b2"
+    },
+    {
+      "path": "node_modules/utrie",
+      "version": "1.0.2",
+      "sha256": "2df3a57e3df7d6c43268ef7a6910f99b40ac3946c2855b5c42eef7864d23aa6a"
+    },
+    {
+      "path": "node_modules/vaul",
+      "version": "0.9.9",
+      "sha256": "da6cc10ab0bc38c5a73fc87459da2c694245d3569d24a26fa958627988e5e0e4"
+    },
+    {
+      "path": "node_modules/victory-vendor",
+      "version": "36.9.2",
+      "sha256": "d1b66abeb4072c2c5137b5a82ec7b24b63966c4580cec8592bb504f7fa608a83"
+    },
+    {
+      "path": "node_modules/vite",
+      "version": "5.4.21",
+      "sha256": "e9802045cdc313b6da55ec2e2dd79312074645816089d64f6021f567c10c0a03"
+    },
+    {
+      "path": "node_modules/vite-node",
+      "version": "3.2.4",
+      "sha256": "6c53b6d8ff3e8c3a46950d4062b0d7c04c26545aadefb654ffe7fc488c2650fb"
+    },
+    {
+      "path": "node_modules/vitest",
+      "version": "3.2.7",
+      "sha256": "3f3dc1ef7acc6ffac8d0a7f10c4460f98e36026837b57f774426d962d546d740"
+    },
+    {
+      "path": "node_modules/w3c-xmlserializer",
+      "version": "4.0.0",
+      "sha256": "beaefe3e2b8b53dd7a706ec7017cf772dbbefc4f4b1d3ba09020b64bf8822a6d"
+    },
+    {
+      "path": "node_modules/webidl-conversions",
+      "version": "7.0.0",
+      "sha256": "6737cdc9d0dc816e0b3151b2dd5e60feaa4344c3605848526fbc7e33b570bbf0"
+    },
+    {
+      "path": "node_modules/whatwg-encoding",
+      "version": "2.0.0",
+      "sha256": "32913d71b48088b49d22b5ef3a77cf0b5b5e19beaed532420df6ef9946051329"
+    },
+    {
+      "path": "node_modules/whatwg-mimetype",
+      "version": "3.0.0",
+      "sha256": "c5f48d9432913c8b8611b46c7093f3029c1035db011acdfcce3b9aa376b02ffd"
+    },
+    {
+      "path": "node_modules/whatwg-url",
+      "version": "11.0.0",
+      "sha256": "dd1ffd9ac7af60477e5de2e343f16d85f796fa9b4adc7de811f81deea5084d3f"
+    },
+    {
+      "path": "node_modules/which",
+      "version": "2.0.2",
+      "sha256": "43010039ed5e89f7186960be682b3cb5cda5ab6cdfb06cbfd4f081cf0e7b4260"
+    },
+    {
+      "path": "node_modules/why-is-node-running",
+      "version": "2.3.0",
+      "sha256": "c762d49d3da5e8d8fdaa840ba1f18d68bb433e61c671b66b3127f8430d490fe2"
+    },
+    {
+      "path": "node_modules/word-wrap",
+      "version": "1.2.5",
+      "sha256": "917ace72e6293d7bc27ce908ed87f59526c05438930afcdf04462845e103fb94"
+    },
+    {
+      "path": "node_modules/wrap-ansi",
+      "version": "8.1.0",
+      "sha256": "609dd6ab176847e57e799dba2e4c4ad355abe463ec67a5ab0dccec08b67e6761"
+    },
+    {
+      "path": "node_modules/wrap-ansi-cjs",
+      "version": "7.0.0",
+      "sha256": "0b0cf0bf62bd0cc71da2128e3269e63edd566feffdd501aa3692acd6db93c3c9"
+    },
+    {
+      "path": "node_modules/wrap-ansi-cjs/node_modules/ansi-regex",
+      "version": "5.0.1",
+      "sha256": "8b2dc166f2b74d5098bad38bdd3dd2f4d4775c626199872f5e36dbb48c40931d"
+    },
+    {
+      "path": "node_modules/wrap-ansi-cjs/node_modules/emoji-regex",
+      "version": "8.0.0",
+      "sha256": "7bec29b9ca68f2c4becc60e866c2f9342ecdc89fab39841a818ccd9eda15c148"
+    },
+    {
+      "path": "node_modules/wrap-ansi-cjs/node_modules/string-width",
+      "version": "4.2.3",
+      "sha256": "6457a02418f004fe5d3fbbb19c7cbcc1450a8b887ff9a471dc6985ac83a48d36"
+    },
+    {
+      "path": "node_modules/wrap-ansi-cjs/node_modules/strip-ansi",
+      "version": "6.0.1",
+      "sha256": "0130850b9da0584f54cc20d3dab6365c807e9436ac78e016d5009efa99bd0530"
+    },
+    {
+      "path": "node_modules/wrap-ansi/node_modules/ansi-styles",
+      "version": "6.2.1",
+      "sha256": "d5c878207f5be10c4df575461e73794a17d045b178e006a56c74598c0652800c"
+    },
+    {
+      "path": "node_modules/ws",
+      "version": "8.21.3",
+      "sha256": "a56a3fd55945a3ce177e3ca165dafae6f7eb03b7aefd58c092ac723d5741a6fb"
+    },
+    {
+      "path": "node_modules/xml-name-validator",
+      "version": "4.0.0",
+      "sha256": "632244331298ad766d9f25513b4210ba260e56a9929efe6f423241e27e831ffc"
+    },
+    {
+      "path": "node_modules/xmlchars",
+      "version": "2.2.0",
+      "sha256": "a91c0b20003ff9399dde1de8c59681f1b6901c6fb1aac71780a3a876dc548583"
+    },
+    {
+      "path": "node_modules/yaml",
+      "version": "2.9.0",
+      "sha256": "20b8b197cbd10dad245d45e463dfe58e4c8c25a47e24bc4256ad9ab58bf35683"
+    },
+    {
+      "path": "node_modules/yocto-queue",
+      "version": "0.1.0",
+      "sha256": "e94d571d03c65c94eab2216f4fde773918a152d5d36e5672e1f5c158ff6ac42d"
+    },
+    {
+      "path": "node_modules/zod",
+      "version": "3.25.76",
+      "sha256": "70eedbe34fd52385a4ae2f3e5759b19682189f0118ea73a6e7c32c677f61668e"
+    }
+  ],
+  "tools": [
+    {
+      "name": "esbuild",
+      "file": "/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/package.json",
+      "retained": "tools/esbuild.package.json",
+      "version": "0.21.5",
+      "sha256": "0f35e0d63bd60a43ed85879604a40f7e9688b321904cf28a95be5b1bc629559c"
+    },
+    {
+      "name": "playwright",
+      "file": "/home/runner/work/ballpark-hero/ballpark-hero/node_modules/playwright/package.json",
+      "retained": "tools/playwright.package.json",
+      "version": "1.64.1",
+      "sha256": "313d23ce667d93962d3a1ab4be80908cefe840e4d9e48f1cd5863b91f65e8e39"
+    },
+    {
+      "name": "playwright-core",
+      "file": "/home/runner/work/ballpark-hero/ballpark-hero/node_modules/playwright-core/package.json",
+      "retained": "tools/playwright-core.package.json",
+      "version": "1.64.1",
+      "sha256": "8aa1c9863fa8dea324e674254158cdc79440f4124ef2d84d38053013541cb7d6"
+    }
+  ],
+  "fonts": [
+    {
+      "url": "https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap",
+      "file": "d31cf2fc57ff806591439de3aa2749d4e191acf5005a85c68556dddd009d1141",
+      "contentType": "text/css; charset=utf-8",
+      "sha256": "f867cc05f0d31bbbdad175a4301931100be7a1316ead1b8f83bf492d38ba6b3b"
+    },
+    {
+      "url": "https://fonts.gstatic.com/s/inter/v20/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuLyfMZg.ttf",
+      "file": "a699af1dea30b799318e058c03ae61680de787476d635909fbb0354740971bab",
+      "contentType": "font/ttf",
+      "sha256": "1b08e7fc267a5c7e1d614100f604b83e7e8a0be241f0f288faa2b3ac93a683ba"
+    },
+    {
+      "url": "https://fonts.gstatic.com/s/inter/v20/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuI6fMZg.ttf",
+      "file": "e45972c7e9f24dc390848eb598daf023bc4e4284384ba7bb6696dc53c9e90a67",
+      "contentType": "font/ttf",
+      "sha256": "8c883f63b2c4157d997319f2c8bc6995ed4357ef371940d31ca159004a4aae63"
+    },
+    {
+      "url": "https://fonts.gstatic.com/s/inter/v20/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuGKYMZg.ttf",
+      "file": "87e867b52640b3b397a977c3046d1cc543ecde56ff4d0fd14bc53b812bc940ed",
+      "contentType": "font/ttf",
+      "sha256": "e7a1aaf7eda9f2fad4131725fa556265ec75ca7b2d756260173a040363e8d4f7"
+    },
+    {
+      "url": "https://fonts.gstatic.com/s/inter/v20/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuFuYMZg.ttf",
+      "file": "6f49e1b28bce7339f4846ecd070af9e4eb927e5b7b543fde5f0cf8e6a7730736",
+      "contentType": "font/ttf",
+      "sha256": "b37284b5701b6b168dfc770aa1a4ac492106422fd3ba76bc7641e37434e8019c"
+    },
+    {
+      "url": "https://fonts.gstatic.com/s/spacegrotesk/v22/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj7oUUsj.ttf",
+      "file": "0dfc29fde7d95ca65fe2a51c3649883a423d0d3fd86bfe63e2a35e38a0a995b5",
+      "contentType": "font/ttf",
+      "sha256": "ec926d5065eaca49a48f96e312bbae0bbc5733c24215cf5dfabbdccee926fef7"
+    },
+    {
+      "url": "https://fonts.gstatic.com/s/spacegrotesk/v22/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj7aUUsj.ttf",
+      "file": "56632cca6632f379925bba8326ffd04478b42d23ec4f5c22d194c9a440c93eae",
+      "contentType": "font/ttf",
+      "sha256": "3e699ead1876244fa392243054ddefe7cf631b488438828a8a100731a22ab995"
+    },
+    {
+      "url": "https://fonts.gstatic.com/s/spacegrotesk/v22/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj42Vksj.ttf",
+      "file": "d03f1389be8c7cea7e4f4546b5715c72a75444a877838be6f0a2dc347c1c840d",
+      "contentType": "font/ttf",
+      "sha256": "6c0346b8d297ebdc225832833e03e884a26ad99d265ecd3924d46e1ba285ea87"
+    },
+    {
+      "url": "https://fonts.gstatic.com/s/spacegrotesk/v22/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj4PVksj.ttf",
+      "file": "aaf352f017a5007bcd6888e3ff12196b1ebd868d5769eac83cec687f5678c909",
+      "contentType": "font/ttf",
+      "sha256": "3e756954468ff1cb302dae0414262e72f76a67d87bef3fa1f3226cd0fb9b2d85"
+    }
+  ],
+  "fixtures": {
+    "file": "network-fixtures.json",
+    "sha256": "814f1f5c6b63f411835b48ec03bced23d4b26f23d5d876f781fa92913dbf34a1",
+    "kind": "explicitly-fictional-transport-fixtures",
+    "query": "qzxlucas",
+    "rows": [
+      {
+        "player_name": "Qzxlucas Fixture A",
+        "name_folded": "qzxlucas fixture a",
+        "market_value_usd": 12000000,
+        "year": 2026,
+        "club": "Gesture Fixture Rovers",
+        "nationality": "Fixtureland",
+        "position": "Centre-Back",
+        "age": 27
+      },
+      {
+        "player_name": "Qzxlucas Fixture B",
+        "name_folded": "qzxlucas fixture b",
+        "market_value_usd": 11900000,
+        "year": 2026,
+        "club": "Gesture Fixture Rovers",
+        "nationality": "Fixtureland",
+        "position": "Centre-Back",
+        "age": 27
+      },
+      {
+        "player_name": "Qzxlucas Fixture C",
+        "name_folded": "qzxlucas fixture c",
+        "market_value_usd": 11800000,
+        "year": 2026,
+        "club": "Gesture Fixture Rovers",
+        "nationality": "Fixtureland",
+        "position": "Centre-Back",
+        "age": 27
+      },
+      {
+        "player_name": "Qzxlucas Fixture D",
+        "name_folded": "qzxlucas fixture d",
+        "market_value_usd": 11700000,
+        "year": 2026,
+        "club": "Gesture Fixture Rovers",
+        "nationality": "Fixtureland",
+        "position": "Centre-Back",
+        "age": 27
+      },
+      {
+        "player_name": "Qzxlucas Fixture E",
+        "name_folded": "qzxlucas fixture e",
+        "market_value_usd": 11600000,
+        "year": 2026,
+        "club": "Gesture Fixture Rovers",
+        "nationality": "Fixtureland",
+        "position": "Centre-Back",
+        "age": 27
+      },
+      {
+        "player_name": "Qzxlucas Fixture F",
+        "name_folded": "qzxlucas fixture f",
+        "market_value_usd": 11500000,
+        "year": 2026,
+        "club": "Gesture Fixture Rovers",
+        "nationality": "Fixtureland",
+        "position": "Centre-Back",
+        "age": 27
+      },
+      {
+        "player_name": "Qzxlucas Fixture G",
+        "name_folded": "qzxlucas fixture g",
+        "market_value_usd": 11400000,
+        "year": 2026,
+        "club": "Gesture Fixture Rovers",
+        "nationality": "Fixtureland",
+        "position": "Centre-Back",
+        "age": 27
+      },
+      {
+        "player_name": "Qzxlucas Fixture H",
+        "name_folded": "qzxlucas fixture h",
+        "market_value_usd": 11300000,
+        "year": 2026,
+        "club": "Gesture Fixture Rovers",
+        "nationality": "Fixtureland",
+        "position": "Centre-Back",
+        "age": 27
+      },
+      {
+        "player_name": "Qzxlucas Fixture I",
+        "name_folded": "qzxlucas fixture i",
+        "market_value_usd": 11200000,
+        "year": 2026,
+        "club": "Gesture Fixture Rovers",
+        "nationality": "Fixtureland",
+        "position": "Centre-Back",
+        "age": 27
+      },
+      {
+        "player_name": "Qzxlucas Fixture J",
+        "name_folded": "qzxlucas fixture j",
+        "market_value_usd": 11100000,
+        "year": 2026,
+        "club": "Gesture Fixture Rovers",
+        "nationality": "Fixtureland",
+        "position": "Centre-Back",
+        "age": 27
+      },
+      {
+        "player_name": "Qzxlucas Fixture K",
+        "name_folded": "qzxlucas fixture k",
+        "market_value_usd": 11000000,
+        "year": 2026,
+        "club": "Gesture Fixture Rovers",
+        "nationality": "Fixtureland",
+        "position": "Centre-Back",
+        "age": 27
+      },
+      {
+        "player_name": "Qzxlucas Fixture L",
+        "name_folded": "qzxlucas fixture l",
+        "market_value_usd": 10900000,
+        "year": 2026,
+        "club": "Gesture Fixture Rovers",
+        "nationality": "Fixtureland",
+        "position": "Centre-Back",
+        "age": 27
+      }
+    ],
+    "validator": {
+      "valid": true
+    },
+    "otherReadTables": {
+      "national_team_squads": [],
+      "player_verified_positions": []
+    },
+    "sourceHead": "9b63359d759f9477e957610d474875f21e8fc09f"
+  },
+  "sourceControl": {
+    "kind": "premature-pointerdown",
+    "original": {
+      "file": "source-control/PlayerAutocomplete.before.tsx",
+      "sha256": "7c11c31109912ccb50b23817b53c6c1e0c2ac809d6d7f9ce525fed2c36ffbe82"
+    },
+    "changed": {
+      "file": "source-control/PlayerAutocomplete.tsx",
+      "sha256": "5bac9b698f7f341c9952cafb817fb313f1a583ad8feed258b4396ad727437093"
+    },
+    "anchor": "                  if (e.pointerType === 'touch' || e.pointerType === 'pen') return;\n",
+    "replacement": "",
+    "occurrences": 1,
+    "config": {
+      "file": "source-control/touch.vite.config.ts",
+      "sha256": "9eabc2ce93f9562b9461d2a677de543fb8a82f63028e630d2d8ff75837463a0c"
+    },
+    "build": {
+      "exitCode": 1,
+      "signal": null,
+      "error": null,
+      "dist": "source-control/dist"
+    }
+  },
+  "summary": {
+    "checks": 1625,
+    "cases": 0,
+    "controls": 0,
+    "originals": 0,
+    "prematureSelections": 0,
+    "nativeContacts": 0,
+    "validatorClientInputs": 0,
+    "fixtureReads": 0,
+    "externalAborts": 0,
+    "expectedDiagnostics": 0,
+    "installedVersions": 521,
+    "failures": 1,
+    "setupFailures": 2
+  }
+}
