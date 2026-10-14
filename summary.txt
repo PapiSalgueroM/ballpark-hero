@@ -1,0 +1,3 @@
+build exit=0 34s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+fonts exit=0 0s | Prepared 9 declared font dependencies for local fulfillment.
+farewell-native exit=0 251s | PASS farewell native: {"mode":"native","checks":1343,"journeys":18,"wholePairs":105,"postStartupExactVectors":138,"rawReloads":72,"unfilteredStartupObservations":72,"layo
