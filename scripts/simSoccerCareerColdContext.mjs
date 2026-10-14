@@ -49,7 +49,8 @@ const SETUP = /Unhandled (?:Errors?|Rejection)|Uncaught Exception|Failed to load
 const sha = value => createHash('sha256').update(value).digest('hex');
 const appFiles = [ENGINE, REALISM, SAVE, LIFE, CONTRACTS, CAPTIONS, ROUTINE];
 const files = [...appFiles, SELF, path.join(ROOT, TEST), BROWSER, WORKFLOW];
-const sources = new Map(files.map(file => [file, fs.readFileSync(file, 'utf8')]));
+const readLf = file => fs.readFileSync(file, 'utf8').replaceAll('\r\n', '\n'); /* Release BF join: simHarnessAnchors, a CRLF checkout */
+const sources = new Map(files.map(file => [file, readLf(file)]));
 const OUT = process.env.CAREER_COLD_OUT ? path.resolve(process.env.CAREER_COLD_OUT)
   : fs.mkdtempSync(path.join(os.tmpdir(), 'soccer-career-cold-context-'));
 assert(OUT !== ROOT && !OUT.startsWith(path.join(ROOT, 'dist') + path.sep) && OUT !== path.join(ROOT, 'dist'), 'Proof output must stay outside the actual build');
@@ -138,7 +139,7 @@ const parentAppHashes = appFiles.map(file => {
 function receipt(extra = {}) {
   outcome = { ...outcome, ...extra };
   const sourceReceipts = [...sources].map(([file, before]) => ({ file: path.relative(ROOT, file).replaceAll('\\', '/'),
-    beforeSha256: sha(before), afterSha256: sha(fs.readFileSync(file, 'utf8')) }));
+    beforeSha256: sha(before), afterSha256: sha(readLf(file)) }));
   fs.writeFileSync(path.join(retained, 'source.json'), JSON.stringify({ arm, sourceHead, parentAppRef: PARENT,
     parentAppHashes, parentRealismSha256: sha(parentRealism), documentaryLifeBinding, sourceReceipts, actualSourceEdits: anchors, ...outcome }, null, 2) + '\n');
   return sourceReceipts;
@@ -288,7 +289,7 @@ try {
   assert.equal(report.numFailedTests, indices.length); assert.equal(report.numPassedTests, 16 - indices.length);
   assert.equal(result.status, indices.length ? 1 : 0, 'Actual child exit must match all exact completed outcomes');
   const fixtures = !RED && !CONTROL ? await legacyFixtures() : null;
-  for (const [file, before] of sources) assert.equal(fs.readFileSync(file, 'utf8'), before, 'Actual app and proof source must stay held');
+  for (const [file, before] of sources) assert.equal(readLf(file), before, 'Actual app and proof source must stay held');
   receipt({ fixtures: fixtures ? { ...fixtures, file: path.relative(OUT, fixtures.file) } : null });
   if (CONTROL) console.log(`Effective original gate control: one unique copied RealismA fault; whole parent inverse; changed sha256=${anchors[0].afterSha256}.`);
   console.log(`Actual physical unit files: 1; ${cases.length} exact completed outcomes.`);

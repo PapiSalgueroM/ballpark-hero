@@ -26,7 +26,7 @@ for (const [file, bytes] of held) {
 }
 const original = held.get('scripts/simSoccerCareerColdContext.mjs').toString('utf8'), life = held.get('src/lib/soccerCareerLife.ts').toString('utf8');
 const sha = value => createHash('sha256').update(value).digest('hex');
-const anchor = "const sources = new Map(files.map(file => [file, fs.readFileSync(file, 'utf8')]));\n";
+const anchor = "const sources = new Map(files.map(file => [file, readLf(file)]));\n"; /* Release BF join: the cold proof reads through readLf */
 const effect = 'setFlag(s, "rDocCrew", 2); s.integrityBonus += 2;', wrongEffect = 'setFlag(s, "rDocCrew", 2); s.integrityBonus += 0;';
 const loanGate = '  if (!flag(state, "teammateLoan") && (state.pendingEvents.some(event => event.id === 236) || state.netWorth >= 0.5)) {';
 const wrongLoanGate = '  if (!flag(state, "teammateLoan") && (state.pendingEvents.some(event => event.id === 237) || state.netWorth >= 0.5)) {';
