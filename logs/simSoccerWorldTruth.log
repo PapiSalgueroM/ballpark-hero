@@ -1,0 +1,49 @@
+base b9df63b4 reads 2 file(s) from this tree: src/lib/soccerCareerLife.ts, src/lib/soccerCareerRoutineEvents.ts
+fatal: path 'src/lib/soccerCareerLifeConsequences.ts' exists on disk, but not in 'b9df63b4e9ad8925c1f19536ec6a32d8a77358ea'
+✘ [ERROR] Command failed: git show b9df63b4e9ad8925c1f19536ec6a32d8a77358ea:src/lib/soccerCareerLifeConsequences.ts
+fatal: path 'src/lib/soccerCareerLifeConsequences.ts' exists on disk, but not in 'b9df63b4e9ad8925c1f19536ec6a32d8a77358ea'
+ [plugin r1329-source]
+
+    src/lib/soccerCareerLife.ts:3:41:
+      3 │ ...{ SOCCER_LIFE_CONSEQUENCES } from "./soccerCareerLifeConsequences";
+        ╵                                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+  This error came from the "onLoad" callback registered here:
+
+    node_modules/esbuild/lib/main.js:1150:20:
+      1150 │       let promise = setup({
+           ╵                     ^
+
+    at setup (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simSoccerWorldTruth.mjs:257:7)
+    at handlePlugins (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:1150:21)
+    at buildOrContextImpl (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:873:5)
+    at Object.buildOrContext (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:699:5)
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:2023:15
+    at new Promise (<anonymous>)
+    at Object.build (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:2022:25)
+    at Object.build (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:1873:51)
+    at bundle (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simSoccerWorldTruth.mjs:270:17)
+
+/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:1472
+  let error = new Error(text);
+              ^
+
+Error: Build failed with 1 error:
+src/lib/soccerCareerLife.ts:3:41: ERROR: [plugin: r1329-source] Command failed: git show b9df63b4e9ad8925c1f19536ec6a32d8a77358ea:src/lib/soccerCareerLifeConsequences.ts
+fatal: path 'src/lib/soccerCareerLifeConsequences.ts' exists on disk, but not in 'b9df63b4e9ad8925c1f19536ec6a32d8a77358ea'
+
+    at failureErrorWithLog (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:1472:15)
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:945:25
+    at runOnEndCallbacks (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:1315:45)
+    at buildResponseToResult (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:943:7)
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:970:16
+    at responseCallbacks.<computed> (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:622:9)
+    at handleIncomingPacket (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:677:12)
+    at Socket.readFromStdout (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:600:7)
+    at Socket.emit (node:events:514:28)
+    at addChunk (node:internal/streams/readable:568:12) {
+  errors: [Getter/Setter],
+  warnings: [Getter/Setter]
+}
+
+Node.js v24.21.0
