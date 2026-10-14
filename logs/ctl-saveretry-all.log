@@ -1,0 +1,4 @@
+PASS career save retry role
+simSoccerCareerSaveRetry role: mapped save retry outcome rejected changed source; independent restore passed.
+simSoccerCareerSaveRetry all: 8 actual outcomes and 16 effective faults passed.
+FIRED-OK

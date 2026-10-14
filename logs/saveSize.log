@@ -1,0 +1,3 @@
+SOCCER_SAVE_SIZE {"control":null,"codecPresent":true,"careers":12,"fixtures":233,"genuineLarge":192,"packed":192,"parity":185,"originalMax":131564,"storedMax":59018,"limit":60000,"failures":[],"rows":[{"id":"131-ST-youth","phase":"youth","seasons":1,"story":0,"original":4186,"stored":4186,"breakdown":[{"field":"phone","chars":728},{"field":"seasons","chars":408},{"field":"phoneInbox","chars":382},
+SOCCER_SAVE_SIZE {"control":null,"codecPresent":true,"careers":12,"fixtures":233,"genuineLarge":192,"packed":192,"parity":185,"originalMax":131564,"storedMax":59018,"limit":60000,"failures":[],"rows":
+simSoccerCareerSaveSize: PASS.

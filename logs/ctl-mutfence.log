@@ -1,0 +1,3 @@
+[41m[1m FAIL [22m[49m src/test/soccerCareerSaveFence.test.tsx[2m > [22mSoccer Career save fence[2m > [22mwith no event at all, the press finds the move at write time and writes nothing
+CONTROL FIRED: the raw write turned the fence test red (vitest exit 1)
+FIRED-OK

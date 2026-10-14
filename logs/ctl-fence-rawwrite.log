@@ -1,0 +1,3 @@
+  section source: 19 checks, 1 red
+CONTROL FIRED: SAVE_FENCE_CONTROL=rawwrite fired 1 times and section source went red with 1 findings
+FIRED-OK

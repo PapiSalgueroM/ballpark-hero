@@ -1,0 +1,3 @@
+SOCCER_SAVE_SIZE {"control":"plain","codecPresent":true,"careers":12,"fixtures":233,"genuineLarge":192,"packed":0,"parity":185,"originalMax":131564,"storedMax":131564,"limit":60000,"failures":[{"id":"
+simSoccerCareerSaveSize: expected RED, only the unchanged 60000-character cap failed.
+FIRED-OK

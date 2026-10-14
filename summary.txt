@@ -1,0 +1,14 @@
+headsha exit=0 0s | 4ad390d5a Round BEG: the packed Soccer Career save is read by every reader of its key (walk and unit test)
+saveSize exit=0 17s | simSoccerCareerSaveSize: PASS.
+saveSize-ctl-plain exit=0 8s | FIRED-OK
+vitest exit=1 43s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerSavePackedReaders.test.tsx,title=src/test/soccerSavePackedReaders.test.tsx > packed Soccer Caree
+tsc exit=0 78s | 
+saveRetry exit=0 12s | simSoccerCareerSaveRetry: 8 actual outcomes passed.
+ctl-saveretry-all exit=0 100s | FIRED-OK
+simSaveFence exit=0 51s | simSaveFence: all green (tabs, source, fleet)
+ctl-mutfence exit=0 7s | FIRED-OK
+ctl-fence-rawwrite exit=0 2s | FIRED-OK
+simSaveKeeper exit=0 5s | simSaveKeeper: all green. The keeper holds on real saves of all 21 long games.
+simCreation-after exit=0 417s | ALL CREATION CHECKS PASSED
+simCreation-before-main exit=1 409s | 1 FAILURES
+simMoney exit=1 198s | 1 FAILURES

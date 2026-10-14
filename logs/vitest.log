@@ -1,0 +1,79 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/lib/soccerCareerSave.test.ts [2m([22m[2m16 tests[22m[2m)[22m[32m 201[2mms[22m[39m
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ [31m❯[39m src/test/soccerSavePackedReaders.test.tsx [2m([22m[2m3 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[32m 83[2mms[22m[39m
+[31m   [31m×[31m packed Soccer Career saves outside the game[2m > [22mthe fixture crosses the threshold and is packed[39m[32m 15[2mms[22m[39m
+[31m     → expected 52235 to be greater than 60000[39m
+   [32m✓[39m packed Soccer Career saves outside the game[2m > [22mdescribeSave reads the packed save exactly as the plain one[32m 6[2mms[22m[39m
+   [32m✓[39m packed Soccer Career saves outside the game[2m > [22mthe profile careers card lists the packed career with its club and age[32m 60[2mms[22m[39m
+[90mstdout[2m | src/test/careerKeepPlaying.test.tsx[2m > [22m[2mSoccer Career: Keep Playing plays the season through the page[2m > [22m[2mthe warning, Keep Playing, and the season that follows
+[22m[39mKEEP seed=850 problems=0
+
+[90mstdout[2m | src/test/careerKeepPlaying.test.tsx[2m > [22m[2mSoccer Career: Keep Playing plays the season through the page[2m > [22m[2mthe warning, Keep Playing, and the season that follows
+[22m[39mKEEP seed=851 problems=0
+
+[90mstdout[2m | src/test/careerKeepPlaying.test.tsx[2m > [22m[2mSoccer Career: Keep Playing plays the season through the page[2m > [22m[2mthe warning, Keep Playing, and the season that follows
+[22m[39mKEEP seed=852 problems=0
+
+[90mstdout[2m | src/test/careerKeepPlaying.test.tsx[2m > [22m[2mSoccer Career: Keep Playing plays the season through the page[2m > [22m[2ma save left on the rehab choice or the conviction paper gets that year once
+[22m[39mSTOP seed=900 rehab at 21
+
+[90mstdout[2m | src/test/careerKeepPlaying.test.tsx[2m > [22m[2mSoccer Career: Keep Playing plays the season through the page[2m > [22m[2ma save left on the rehab choice or the conviction paper gets that year once
+[22m[39mSTOP seed=900 conviction at 23
+
+[90mstdout[2m | src/test/careerKeepPlaying.test.tsx[2m > [22m[2mSoccer Career: Keep Playing plays the season through the page[2m > [22m[2ma save left on the rehab choice or the conviction paper gets that year once
+[22m[39mSTOP seed=901 conviction at 23
+
+[90mstdout[2m | src/test/careerKeepPlaying.test.tsx[2m > [22m[2mSoccer Career: Keep Playing plays the season through the page[2m > [22m[2ma save left on the rehab choice or the conviction paper gets that year once
+[22m[39mSTOP seed=902 rehab at 20
+
+ [32m✓[39m src/test/careerKeepPlaying.test.tsx [2m([22m[2m2 tests[22m[2m)[22m[33m 7601[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career: Keep Playing plays the season through the page[2m > [22mthe warning, Keep Playing, and the season that follows [33m 4635[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career: Keep Playing plays the season through the page[2m > [22ma save left on the rehab choice or the conviction paper gets that year once [33m 1462[2mms[22m[39m
+[90mstdout[2m | src/test/careerDilemmaReach.test.tsx[2m > [22m[2mSoccer Career: the moral dilemmas reach the player through the page[2m > [22m[2mreach: careers picked up at 17
+[22m[39mREACH start=17 careers=6 seasons=24 adultSeasons=12 offers=4 shows=4 adultShows=4
+
+[90mstdout[2m | src/test/careerDilemmaReach.test.tsx[2m > [22m[2mSoccer Career: the moral dilemmas reach the player through the page[2m > [22m[2mreach: careers picked up at 19
+[22m[39mREACH start=19 careers=6 seasons=24 adultSeasons=24 offers=11 shows=11 adultShows=11
+
+[90mstdout[2m | src/test/careerDilemmaReach.test.tsx[2m > [22m[2mSoccer Career: the moral dilemmas reach the player through the page[2m > [22m[2mreach: careers picked up at 24
+[22m[39mREACH start=24 careers=6 seasons=24 adultSeasons=24 offers=10 shows=10 adultShows=10
+
+[90mstdout[2m | src/test/careerDilemmaReach.test.tsx[2m > [22m[2mSoccer Career: the moral dilemmas reach the player through the page[2m > [22m[2mreach: careers picked up at 30
+[22m[39mREACH start=30 careers=6 seasons=24 adultSeasons=24 offers=9 shows=9 adultShows=9
+
+[90mstdout[2m | src/test/careerDilemmaReach.test.tsx[2m > [22m[2mSoccer Career: the moral dilemmas reach the player through the page[2m > [22m[2mreach: a player from 20 up sees dilemmas on screen
+[22m[39mREACH total adultOffers=34 adultShows=34
+
+ [32m✓[39m src/test/careerDilemmaReach.test.tsx [2m([22m[2m5 tests[22m[2m)[22m[33m 37004[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career: the moral dilemmas reach the player through the page[2m > [22mreach: careers picked up at 17 [33m 8604[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career: the moral dilemmas reach the player through the page[2m > [22mreach: careers picked up at 19 [33m 6470[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career: the moral dilemmas reach the player through the page[2m > [22mreach: careers picked up at 24 [33m 7786[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career: the moral dilemmas reach the player through the page[2m > [22mreach: careers picked up at 30 [33m 12640[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/soccerSavePackedReaders.test.tsx[2m > [22mpacked Soccer Career saves outside the game[2m > [22mthe fixture crosses the threshold and is packed
+[31m[1mAssertionError[22m: expected 52235 to be greater than 60000[39m
+[36m [2m❯[22m src/test/soccerSavePackedReaders.test.tsx:[2m30:24[22m[39m
+    [90m 28| [39m  [34mit[39m([32m'the fixture crosses the threshold and is packed'[39m[33m,[39m () [33m=>[39m {
+    [90m 29| [39m    [35mconst[39m { raw[33m,[39m stored } [33m=[39m [34mlongSave[39m()[33m;[39m
+    [90m 30| [39m    [34mexpect[39m(raw[33m.[39mlength)[33m.[39m[34mtoBeGreaterThan[39m([34m60000[39m)[33m;[39m
+    [90m   | [39m                       [31m^[39m
+    [90m 31| [39m    [34mexpect[39m(stored[33m.[39mlength)[33m.[39m[34mtoBeLessThan[39m(raw[33m.[39mlength)[33m;[39m
+    [90m 32| [39m    [34mexpect[39m([33mJSON[39m[33m.[39m[34mparse[39m(stored)[33m.[39mseasons[33m.[39mformat)[33m.[39m[34mtoBe[39m([32m'lz-string-utf16'[39m)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m3 passed[39m[22m[90m (4)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m25 passed[39m[22m[90m (26)[39m
+[2m   Start at [22m 15:24:44
+[2m   Duration [22m 42.88s[2m (transform 3.71s, setup 393ms, collect 12.10s, tests 44.89s, environment 2.34s, prepare 700ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerSavePackedReaders.test.tsx,title=src/test/soccerSavePackedReaders.test.tsx > packed Soccer Career saves outside the game > the fixture crosses the threshold and is packed,line=30,column=24::AssertionError: expected 52235 to be greater than 60000%0A ❯ src/test/soccerSavePackedReaders.test.tsx:30:24%0A%0A
