@@ -26,7 +26,7 @@ Next: retain the exact puzzle/rule, selected identities and rejection line; insp
 
 ## Soccer Career and MLB
 
-- Soccer Career's reported 38-0 score needs the exact game context, teams, season, difficulty/build and recorded result. No matching qualified balance fix was identified. Existing `r1329-sc-world-truth` work addresses sourced historical/world narrative boundaries and must not be credited as a 38-0 fix without matching outcome evidence.
+- The soccer 38-0 message requests a new perfect-season game with random teams and limited rerolls, like the existing perfect-season games. It is a product idea, not a Soccer Career score or balance defect. It remains outside this save-size change and the active manager/career core work.
 - A referee career is a product idea, not a reproduced defect. No matching implementation was identified. It remains outside the save-size change and the active manager/career core work.
 - MLB manual retirement already has a `Hang them up now` action in `UsCareerBoard.tsx`, guarded by at least six saved seasons and located in the season hub. The actual callback calls the retirement flow and persists the retired phase. This source finding does not prove the reported UI is accessible. Retain current phase and season count, then test visibility, confirmation, durable retirement and reload on that save. An earlier-retirement request is a separate product decision from a broken existing action.
 
