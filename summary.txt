@@ -1,0 +1,8 @@
+dig-proof-old exit=0 37s | simCmLeagueRules: all checks passed (modern, eras, pure, drop4, cupless, shapes, chunks)
+dig-proof-ctl exit=1 37s | simCmLeagueRules: 43 failure(s)
+dig-retake exit=0 21s | simCmLeagueRules: all checks passed (modern, eras, pure)
+dig-head exit=0 37s | simCmLeagueRules: all checks passed (modern, eras, pure, drop4, cupless, shapes, chunks)
+dd-proof-both exit=0 2s | simDailyDeals: the recorded deals ARE the deals of the source at /home/runner/work/ballpark-hero/ballpark-hero (12 Hot Seat dates, 6 Deadline Day dates)
+dd-proof-digests exit=1 2s | simDailyDeals: the recorded deals are NOT the deals of the source at /home/runner/work/ballpark-hero/ballpark-hero
+dd-retake exit=0 2s | simDailyDeals: the recorded deals ARE the deals of the source at /home/runner/work/ballpark-hero/ballpark-hero (12 Hot Seat dates, 6 Deadline Day dates)
+dd-plain exit=0 2s | simDailyDeals: green. 12 Hot Seat dates (5 Premier League) and 6 Deadline Day dates (3 Premier League) deal what Release AS dealt, no daily carries the real fixture key, 
