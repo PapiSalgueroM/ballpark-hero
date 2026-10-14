@@ -1,0 +1,2 @@
+headsha exit=0 0s | 758f59ec6 Round BEG: Round 1362's qualifier holds undefined fields on both sides (structuredClone)
+notes exit=0 4s | Phase fixed: three text-only snapshot observations; 3 effective copied old-caption controls; no gameplay, core or schema change.
