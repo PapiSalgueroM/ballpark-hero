@@ -65,6 +65,20 @@ origin/main 082fc277 (docs only) at 12f3fd65. Every gate ran on a GitHub runner 
 - simCmQuickSubs and simCmQuickLegs hold the three change coach of Rounds 1072 and 1146: their careers play the base
   rules; the coach under five is simCmSubs section coach.
 
+## The fence on league ids, the digest and the 1081 pin (the round's last three commits)
+
+- simCmLeagueRules section 3d (Round 832: no league id branched on, and no map keyed by league id, outside the
+  LEAGUE_RULES rows) named the five change table six times while it was an object keyed by league id. It is now a
+  list of [league id, first season] tuples (73c5422d), the shape decision 8 of the brief asks for; the fence reads 0
+  findings and its own control idbranch still fires (r1331-dig2). The fence was not edited.
+- scripts/data/cmLeagueRulesDigest.json was retaken in its own commit (b16b3488), by its legs: the base commit's src
+  reproduces the committed digest (r1331-dig rules-base: 0 differ in modern 27, eras 20, pure 48); the head with both
+  matchRules reads forced to the base rules reproduces it too (r1331-dig2 rules-old, exit 0); the head on its own
+  rules differs in 27 modern and 16 era entries and 0 pure ones (r1331-dig rules-head; the press fix moves every
+  era, the rule moves the five change seasons); then the write (r1331-dig2 write-digest, exit 0).
+- The Round 1081 pin (scripts/fixtures/managerAppealIsolation1081/manifest.json, unchangedSource for
+  src/lib/clubManager.ts, the LF text sha256) went from 22833be3 to 36f255cf in its own commit (a72d76bc), last.
+
 ## Red on the base too, not this round's
 
 simCmUnseededWorld (112 failures, Round 1326's words, the same first line on base and head), simManagerWorldContinuity

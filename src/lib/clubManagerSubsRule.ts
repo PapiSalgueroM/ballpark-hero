@@ -7,8 +7,8 @@
    ESPN 37630254). From May 2020 a competition could allow five in at most
    three stoppages during play, with changes at half time, before extra time
    and at half time in extra time not counting as one (IFAB circular 20,
-   FIFA 8 May 2020, STV), made permanent from 1 July 2022 (FIFA 13 June 2022,
-   CBS Sports).
+   fifa.com 8 May 2020, STV), made permanent from 1 July 2022 (fifa.com 13
+   June 2022, CBS Sports).
 
    The leagues: Spain, Italy, Germany and France from 2020-21 (Inside World
    Football 18 December 2020, ESPN 4 August 2022); England stayed at three
