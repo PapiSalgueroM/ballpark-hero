@@ -1,6 +1,6 @@
-## Codex Round1365: halftime XIs and provisional grades, fixed qualification pending, 2026-10-14
+## Codex Round1365: halftime view, full-source proof buffer repaired, 2026-10-14
 
-Round1365 baseline155a0fc2 is physically qualified. The read-only both-XI/provisional-grade view is authored in a separate module plus exact4 HTspans. Core, live viewer, old qualified6 proofs, callbacks/data/economics/schema remain held. New12 semantic cases/eight effective controls and fresh actual Resume Match/Skip/tab/reload/sub driver are ready for remote fixed qualification. Existing current604830/203000532500 budgets unraised. DraftPR267 is not merged/live and this is not a finished-game claim. See docs/audits/manager-halftime-lineups-2026-10-14.md.
+Round1365 fixeda67 passed UI6/original2+4/type0, then its new semantic parent-source read hit default1MiB stdout buffer before anysemanticcase. Wholefailedpacket100files retained and later gates uncredited. Exactlytwo new Git source-read calls now use8MiB, preserving complete comparisons and all app/unit/oracle/control/WF/package/cap bytes. Independently reviewed transport-only repair awaits freshfullremotequalification. DraftPR267not merged/live. See docs/audits/manager-halftime-lineups-2026-10-14.md.
 
 ## Release BC LIVE, 2026-10-13 18:23 EDT: one tab can no longer wipe a Club Manager save, Club Manager's world remembers your deals, its tables, copy and hub fixed, Soccer Career's events drawn fairly, the shared event deck, the college athletic director
 

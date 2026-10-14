@@ -76,7 +76,7 @@ try {
     report.sources.push({ file, sha256: hash(body), before: path.relative(OUT, before).replaceAll('\\', '/') });
   }
   for (const file of [CORE, 'src/lib/clubManagerClock.ts']) assert.equal(sources.get(file),
-    execFileSync('git', ['show', PARENT + ':' + file], { cwd: ROOT, encoding: 'utf8' }), file + ': whole parent must stay held.');
+    execFileSync('git', ['show', PARENT + ':' + file], { cwd: ROOT, encoding: 'utf8', maxBuffer: 8 * 1024 * 1024 }), file + ': whole parent must stay held.');
   write();
   const esbuild = await import('esbuild'), engine = path.join(scratch, 'engine.mjs');
   await esbuild.build({ entryPoints: [path.join(ROOT, CORE)], outfile: engine, bundle: true, format: 'esm', platform: 'node',

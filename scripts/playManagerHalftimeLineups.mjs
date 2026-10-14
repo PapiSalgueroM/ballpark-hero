@@ -180,7 +180,7 @@ try {
   setup(JSON.stringify(model.sources.map(row => row.file)) === JSON.stringify(SOURCE_FILES.slice(0, 12)) && JSON.stringify(model.bindings.map(row => row.file)) === JSON.stringify(SOURCE_FILES.slice(0, 6)), 'All twelve exact model source inputs and six parent bindings are required.');
   setup(JSON.stringify(fixtures.map(row => row.name)) === JSON.stringify(['entry', 'opposition', 'readonly', 'shape', 'talk-and-second-half', 'not-live']), 'Six exact source-prepared intervals are required.');
   for (const row of model.sources) { setup(hash(path.join(ROOT, row.file)) === row.beforeSha256 && row.beforeSha256 === row.afterSha256, 'Actual source hold: ' + row.file); retained('fixed/' + path.basename(row.file) + '.before', row.beforeSha256); }
-  for (const row of model.bindings) setup(hash(path.join(ROOT, row.file)) === row.candidateSha256 && sha(execFileSync('git', ['show', PARENT + ':' + row.file], { cwd: ROOT })) === row.parentSha256
+  for (const row of model.bindings) setup(hash(path.join(ROOT, row.file)) === row.candidateSha256 && sha(execFileSync('git', ['show', PARENT + ':' + row.file], { cwd: ROOT, maxBuffer: 8 * 1024 * 1024 })) === row.parentSha256
     && (row.file === SOURCE_FILES[0] || row.candidateSha256 === row.parentSha256), 'Whole parent binding: ' + row.file);
   retained('fixed/HalftimeScreen.parent.tsx', model.integration.parentSha256); retained('fixed/HalftimeScreen.fixed-plan.tsx', model.integration.plannedSha256); retained('fixed/HalftimeScreen.inverse.tsx', model.integration.inverseSha256);
   setup(model.integration.parentSha256 === model.integration.inverseSha256 && model.integration.plannedSha256 === hash(path.join(ROOT, SOURCE_FILES[0])), 'Whole halftime integration inverse must be held.');
