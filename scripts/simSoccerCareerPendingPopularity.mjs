@@ -7,6 +7,7 @@ import os from 'node:os';
 import { createHash } from 'node:crypto';
 import { spawnSync } from 'node:child_process';
 import { fileURLToPath, pathToFileURL } from 'node:url';
+import { isKeyedEngine, keyedObserver, keyedSearch, KEYED_KIND, KEYED_LIMIT } from './lib/keyedPicker1327.mjs';
 
 assert(process.env.CI && process.env.SIM_NETWORK === 'offline', 'Pending popularity proof requires remote offline transport');
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..'), SELF = fileURLToPath(import.meta.url);
@@ -115,40 +116,48 @@ async function browserFixtures() {
     function canonical(state) { const repaired = random(0.99, () => E.repairCareer(copy(state))), loaded = repaired.result;
       assert.deepEqual(repaired.draws, [], 'Actual canonical repair must consume no picker or answer inputs');
       assert(S.isSoccerCareerSave(loaded), 'Complete fixture must pass actual route save validation'); return copy(loaded); }
-    const anchor = '  const shuffled = [...eligible].sort(() => Math.random() - 0.5);';
-    const replacement = '  const shuffled = [...eligible].sort((a, b) => {\n    if (typeof globalThis.__SC_POPULARITY_PICKER_COMPARISON === "function") globalThis.__SC_POPULARITY_PICKER_COMPARISON(a.id, b.id);\n    return Math.random() - 0.5;\n  });';
-    const original = sources.get(ENGINE);
-    assert.equal(original.split(anchor).length - 1, 1, 'Picker observer needs one actual sort anchor');
-    const observed = original.replace(anchor, replacement);
-    assert.notEqual(observed, original, 'Picker observer must change its copied source');
-    assert.equal(observed.split(replacement).length - 1, 1, 'Copied observer inverse must be unique');
-    assert.equal(observed.replace(replacement, anchor), original, 'Removing the read-only observer restores every original engine byte');
-    const pickerObserver = { kind: 'read-only-sort-comparisons', file: 'src/lib/soccerCareerEngine.ts', anchor, replacement,
-      originalSourcePath: 'fixed/soccerCareerEngine.picker-original.ts', observedSourcePath: 'fixed/soccerCareerEngine.picker-observed.ts',
-      originalSha256: sha(original), observedSha256: sha(observed), compiledPath: 'fixed/engine-picker-observed.mjs',
-      plainCompiledPath: 'fixed/engine.mjs', plainCompiledSha256: sha(fs.readFileSync(path.join(tmp, 'engine.mjs'))) };
-    fs.writeFileSync(path.join(retained, 'soccerCareerEngine.picker-original.ts'), original);
-    fs.writeFileSync(path.join(retained, 'soccerCareerEngine.picker-observed.ts'), observed);
-    receipt({ pickerObserver });
-    const esbuild = await import('esbuild'), observedCompiled = path.join(tmp, 'engine-picker-observed.mjs');
-    await esbuild.build({ entryPoints: [ENGINE], outfile: observedCompiled, bundle: true, format: 'esm', platform: 'node',
-      logLevel: 'error', alias: { '@': path.join(ROOT, 'src') }, plugins: [{ name: 'pending-popularity-picker-observer', setup(build) {
-        build.onLoad({ filter: /\.ts$/ }, args => path.resolve(args.path) === ENGINE
-          ? { contents: observed, loader: 'ts', resolveDir: path.dirname(ENGINE) } : undefined);
-      } }] });
-    fs.copyFileSync(observedCompiled, path.join(retained, 'engine-picker-observed.mjs'));
-    pickerObserver.compiledSha256 = sha(fs.readFileSync(observedCompiled));
-    receipt({ pickerObserver, compiled: [...outcome.compiled, { file: 'engine-picker-observed.mjs', sha256: pickerObserver.compiledSha256 }] });
-    const observedEngine = await import(pathToFileURL(observedCompiled).href);
+    /* Release BF join: on Round 1327's keyed deck the comparator cannot be steered; see scripts/lib/keyedPicker1327.mjs. */
+    const KEYED = isKeyedEngine(sources.get(ENGINE));
+    let pickerObserver, observedEngine;
+    if (KEYED) {
+      pickerObserver = keyedObserver('src/lib/soccerCareerEngine.ts', sha(fs.readFileSync(path.join(tmp, 'engine.mjs'))));
+      receipt({ pickerObserver }); observedEngine = E;
+    } else {
+      const anchor = '  const shuffled = [...eligible].sort(() => Math.random() - 0.5);';
+      const replacement = '  const shuffled = [...eligible].sort((a, b) => {\n    if (typeof globalThis.__SC_POPULARITY_PICKER_COMPARISON === "function") globalThis.__SC_POPULARITY_PICKER_COMPARISON(a.id, b.id);\n    return Math.random() - 0.5;\n  });';
+      const original = sources.get(ENGINE);
+      assert.equal(original.split(anchor).length - 1, 1, 'Picker observer needs one actual sort anchor');
+      const observed = original.replace(anchor, replacement);
+      assert.notEqual(observed, original, 'Picker observer must change its copied source');
+      assert.equal(observed.split(replacement).length - 1, 1, 'Copied observer inverse must be unique');
+      assert.equal(observed.replace(replacement, anchor), original, 'Removing the read-only observer restores every original engine byte');
+      pickerObserver = { kind: 'read-only-sort-comparisons', file: 'src/lib/soccerCareerEngine.ts', anchor, replacement,
+        originalSourcePath: 'fixed/soccerCareerEngine.picker-original.ts', observedSourcePath: 'fixed/soccerCareerEngine.picker-observed.ts',
+        originalSha256: sha(original), observedSha256: sha(observed), compiledPath: 'fixed/engine-picker-observed.mjs',
+        plainCompiledPath: 'fixed/engine.mjs', plainCompiledSha256: sha(fs.readFileSync(path.join(tmp, 'engine.mjs'))) };
+      fs.writeFileSync(path.join(retained, 'soccerCareerEngine.picker-original.ts'), original);
+      fs.writeFileSync(path.join(retained, 'soccerCareerEngine.picker-observed.ts'), observed);
+      receipt({ pickerObserver });
+      const esbuild = await import('esbuild'), observedCompiled = path.join(tmp, 'engine-picker-observed.mjs');
+      await esbuild.build({ entryPoints: [ENGINE], outfile: observedCompiled, bundle: true, format: 'esm', platform: 'node',
+        logLevel: 'error', alias: { '@': path.join(ROOT, 'src') }, plugins: [{ name: 'pending-popularity-picker-observer', setup(build) {
+          build.onLoad({ filter: /\.ts$/ }, args => path.resolve(args.path) === ENGINE
+            ? { contents: observed, loader: 'ts', resolveDir: path.dirname(ENGINE) } : undefined);
+        } }] });
+      fs.copyFileSync(observedCompiled, path.join(retained, 'engine-picker-observed.mjs'));
+      pickerObserver.compiledSha256 = sha(fs.readFileSync(observedCompiled));
+      receipt({ pickerObserver, compiled: [...outcome.compiled, { file: 'engine-picker-observed.mjs', sha256: pickerObserver.compiledSha256 }] });
+      observedEngine = await import(pathToFileURL(observedCompiled).href);
+    }
     const current = {
       '213:0': 'Followers +500k, Popularity -2, journalists hate it',
       '233:0': 'Followers +800k, Popularity +4, self-awareness is elite',
       '233:1': 'Popularity -3, the museum posts the demand letter',
     };
     const legacyKeys = new Set(['233:0']);
-    function prepared(name) {
+    function prepared(name, variant = '') {
       const stats = { pace: 70, shooting: 70, passing: 70, dribbling: 70, defending: 70, physical: 70, reflexes: 70 };
-      const initialized = random(0.9, () => E.initCareer(`Pending Popularity ${name}`, 'England', 'CM', '2020s',
+      const initialized = random(0.9, () => E.initCareer(`Pending Popularity ${name}${variant}`, 'England', 'CM', '2020s',
         stats, 70, 2020, E.FALLBACK_CLUBS, null, 90)), base = initialized.result, club = E.FALLBACK_CLUBS[0];
       const context = canonical({ ...base, age: 23, phase: 'social_media_action', retired: false, personality: 'iceman', agentId: 'self',
         currentClub: club.name, currentClubCountry: club.country, currentClubTier: club.tier, currentClubColor: club.color,
@@ -160,7 +169,46 @@ async function browserFixtures() {
         statBoostNextSeason: { physical: 2, reflexes: 3 }, events: ['Prepared fictional saved popularity context'] });
       return { context, initializationDraws: initialized.draws };
     }
+    const KEYED_PREFIX = [0.99,0.99,0.01];
+    function acquireKeyed(name, targets) {
+      const base = prepared(name);
+      const found = keyedSearch(targets, n => {
+        const context = n ? { ...base.context, playerName: `${base.context.playerName} ${n}` } : base.context, inputs = [];
+        const held = JSON.stringify(context);
+        const picked = random(() => { const value = KEYED_PREFIX[inputs.length] ?? 0.99; inputs.push(value); return value; },
+          () => E.dismissSocialMediaPhase(context, E.FALLBACK_CLUBS));
+        assert.equal(JSON.stringify(context), held, 'Keyed picker must hold the complete context input');
+        return { context, held, inputs, picked };
+      });
+      assert(found, `Keyed picker must deal ${targets.join(' then ')} first within ${KEYED_LIMIT} player names`);
+      const { context, held, inputs, picked, attempts } = found, initializationDraws = base.initializationDraws, comparisons = [];
+      const witness = { name, targets, contextSha256: sha(held), initializationDraws,
+        input: { mode: KEYED_KIND, draws: inputs, drawCount: inputs.length, attempts, playerName: context.playerName }, comparisons, observed: null, replay: null };
+      progress.acquisitions.push({ context, witness }); saveProgress();
+      witness.observed = { rawBatch: copy(picked.result), draws: picked.draws };
+      const observedBatch = canonical(picked.result);
+      Object.assign(witness.observed, { batch: observedBatch, batchSha256: sha(JSON.stringify(observedBatch)) }); saveProgress();
+      assert.deepEqual(picked.draws, inputs, 'Keyed picker must consume exactly the disclosed complete input vector');
+      const replayContext = copy(context); let consumed = 0;
+      assert.equal(globalThis.__SC_POPULARITY_PICKER_COMPARISON, undefined, 'The actual unmodified replay must have no observer receiver');
+      const replay = random(() => { assert(consumed < inputs.length, 'The actual unmodified picker cannot consume an unlisted draw'); return inputs[consumed++]; },
+        () => E.dismissSocialMediaPhase(replayContext, E.FALLBACK_CLUBS));
+      witness.replay = { rawBatch: copy(replay.result), draws: replay.draws, consumed }; saveProgress();
+      const batch = canonical(replay.result);
+      Object.assign(witness.replay, { batch, batchSha256: sha(JSON.stringify(batch)) }); saveProgress();
+      assert.equal(JSON.stringify(replayContext), held, 'Unmodified actual picker must hold the complete replay context');
+      assert.equal(consumed, inputs.length, 'Unmodified actual picker must consume every recorded input exactly once');
+      assert.deepEqual(replay.draws, picked.draws, 'Unmodified replay must preserve every observed input value and ordinal');
+      assert.deepEqual(witness.replay.rawBatch, witness.observed.rawBatch, 'Unmodified replay must reproduce every raw observed batch field');
+      assert.deepEqual(batch, witness.observed.batch, 'Unmodified replay must reproduce the whole observed repaired batch and stamps');
+      assert(batch.phase === 'random_events' && batch.pendingEvents.length > targets.length
+        && targets.every((id, index) => batch.pendingEvents[index]?.id === id), 'Actual unmodified replay must deliver the target prefix and a real continuation');
+      assert.equal(new Set(batch.pendingEvents.map(card => E.eventLedgerKey(card))).size, batch.pendingEvents.length);
+      for (const card of batch.pendingEvents) assert.equal(batch.eventLastFired[E.eventLedgerKey(card)], year(batch));
+      return { context, batch, draws: replay.draws, witness };
+    }
     function acquire(name, targets) {
+      if (KEYED) return acquireKeyed(name, targets);
       const { context, initializationDraws } = prepared(name), held = JSON.stringify(context), inputs = [], comparisons = [];
       const prefix = [
         { ordinal: 1, value: 0.99, cause: 'original ordinary moral-dilemma gate rejects' },
@@ -279,14 +327,15 @@ async function browserFixtures() {
           resolve: { mode: 'vector', drawCount: values.length, draws: values }, expected, expectedSha256: sha(JSON.stringify(expected)), reloadAfter: true });
         before = expected;
       }
-      deliveries.push({ scenarioId: spec.id, playerName: initial.playerName, pickerInputMode: 'controlled-sort-vector',
+      deliveries.push({ scenarioId: spec.id, playerName: initial.playerName, pickerInputMode: KEYED ? KEYED_KIND : 'controlled-sort-vector',
         pickerDrawCount: spec.acquired.draws.length, resolverDrawCounts: steps.map(step => step.resolve.drawCount),
         queue: initial.pendingEvents.map(card => card.id), actualPickerBatchSha256: sha(batchBytes), answers: steps.length });
       scenarios.push({ id: spec.id, initial, initialSha256: sha(JSON.stringify(initial)), provenance: {
         kind: 'actual-picker-controlled-input-replay-legacy-caption-overlay', preparedFields: [
           'Fictional identity, age23, supported club, senior row/year/apps24, money, popularity60, other meters and iceman/self are prepared context.',
           'Social-media-used prepares the existing actual picker entry. This is not a complete played career.',
-          'A copied read-only comparator observer chooses legal controlled picker inputs. The whole vector is replayed through the unmodified actual picker with no receiver.',
+          KEYED ? 'On the keyed deck of Round 1327 the prepared context is tried under its own player name, in order, until the unmodified actual picker deals the targets first. The whole vector is replayed through the unmodified actual picker with no receiver.'
+            : 'A copied read-only comparator observer chooses legal controlled picker inputs. The whole vector is replayed through the unmodified actual picker with no receiver.',
           'The original moral, 212, 213 and count calls use the disclosed prefix .99/.99/.01/.99. The 213 offer is admitted by its unchanged0.35 gate.',
           'The actual picker supplies every card, stamp and order. No queue reorder, extra sentinel or prepared fallback is added.',
           'Only selected saved captions are overlaid from the actual held parent factory. Labels, effects and all other picked fields stay held.',
