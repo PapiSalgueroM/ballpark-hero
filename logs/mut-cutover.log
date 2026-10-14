@@ -1,0 +1,4 @@
+MUTATION cutover applied to src/lib/managerHotSeat.ts
+ok   [cutover] the 2026-10-23 daily plays the base rules (matchRules base)
+FAIL [cutover] the 2026-10-24 daily plays the current rules (matchRules base)
+simCmSubs RED: 1 of 2 checks green (parts cutover)

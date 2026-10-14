@@ -1,0 +1,7 @@
+8
+ok   [extratime] the walk reaches a knockout second leg in a five change season (uclKo 5/3)
+   259 of 1500 nights went to extra time: 0.00 changes from them in extra time a night (0 at the break), 178 nights with changes left and none made
+ok   [extratime] enough nights go to extra time to judge (259)
+ok   [extratime] the other dugout never passes five changes or three stoppages in play, the break before extra time free (0 of 259)
+FAIL [extratime] their unused changes carry on into extra time: at least 0.5 a night (0.00)
+simCmSubs RED: 3 of 4 checks green (parts extratime)

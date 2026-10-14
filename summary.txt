@@ -1,0 +1,17 @@
+tsc exit=0 98s | 
+press-wide exit=0 116s | simCmSubs GREEN: 4 of 4 checks green (parts press)
+mut-etbreak exit=1 4s | simCmSubs RED: 3 of 4 checks green (parts extratime)
+mut-yearplus exit=1 2s | simCmSubs RED: 16 of 17 checks green (parts rule)
+mut-ht45 exit=1 2s | simCmSubs RED: 16 of 17 checks green (parts rule)
+mut-cutover exit=1 2s | simCmSubs RED: 1 of 2 checks green (parts cutover)
+mut-pressedge exit=1 47s | simCmSubs RED: 3 of 4 checks green (parts press)
+c-etbreak exit=1 3s | control etbreak FIRED: 1 of 4 checks red
+c-yearplus exit=1 0s | control yearplus FIRED: 1 of 17 checks red
+c-ht45 exit=1 0s | control ht45 FIRED: 1 of 17 checks red
+c-cutover exit=1 0s | control cutover FIRED: 1 of 2 checks red
+et-owed exit=1 14s | simCmSubs RED: 3 of 4 checks green (parts extratime)
+c-pressedge exit=1 44s | control pressedge FIRED: 1 of 4 checks red
+dailyDeals exit=0 4s | simDailyDeals: green. 12 Hot Seat dates (5 Premier League) and 6 Deadline Day dates (3 Premier League) deal what Release AS dealt, no daily carries the real fixture key, 
+headsha exit=0 0s | 196fd642357d3af85f08c8d4290f3302e8b12b07
+appealIsolation exit=0 40s | Equivalent appeal outcomes must agree: passed for 24 original pairs and 3 separate generated-position pairs.
+subs-all-base exit=0 212s | simCmSubs GREEN: 61 of 61 checks green (parts ledger, rule, extratime, cutover, opponent, coach, press, legacy, three, hotseat)

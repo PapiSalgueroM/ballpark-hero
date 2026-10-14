@@ -1,0 +1,7 @@
+MUTATION etbreak applied to src/lib/clubManager.ts
+ok   [extratime] the walk reaches a knockout second leg in a five change season (uclKo 5/3)
+   12 nights to extra time with three stoppages used: the change at the break taken 0 (stoppages still three 0), the change at 95 refused 12
+ok   [extratime] enough nights go to extra time to judge (12) (12)
+FAIL [extratime] with three stoppages used, a change at the break before extra time is taken and uses none (0 taken, 0 at three stoppages, of 12)
+ok   [extratime] a change at 95, a fourth stoppage, is refused (12 of 12)
+simCmSubs RED: 3 of 4 checks green (parts extratime)

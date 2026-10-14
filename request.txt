@@ -1,0 +1,17 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+subs-all-base: git worktree add /tmp/vbase dec9075b >/dev/null 2>&1 && SUBS_BASE=/tmp/vbase node scripts/simCmSubs.mjs
+press-wide: SUBS_EDGE_SEEDS=24 node scripts/simCmSubs.mjs --part=press
+mut-pressedge: R=$PWD; W=/tmp/vP; (git worktree add -f $W HEAD >/dev/null 2>&1 || (sleep 5; git worktree add -f $W HEAD >/dev/null 2>&1)); ln -s $R/node_modules $W/node_modules; cd $W && node $R/.rc/x/rvmut.mjs pressedge && node scripts/simCmSubs.mjs --part=press
+mut-etbreak: R=$PWD; W=/tmp/vE; (git worktree add -f $W HEAD >/dev/null 2>&1 || (sleep 7; git worktree add -f $W HEAD >/dev/null 2>&1)); ln -s $R/node_modules $W/node_modules; cd $W && node $R/.rc/x/rvmut.mjs etbreak && node scripts/simCmSubs.mjs --part=extratime
+mut-yearplus: R=$PWD; W=/tmp/vY; (git worktree add -f $W HEAD >/dev/null 2>&1 || (sleep 9; git worktree add -f $W HEAD >/dev/null 2>&1)); ln -s $R/node_modules $W/node_modules; cd $W && node $R/.rc/x/rvmut.mjs yearplus && node scripts/simCmSubs.mjs --part=rule
+mut-ht45: R=$PWD; W=/tmp/vH; (git worktree add -f $W HEAD >/dev/null 2>&1 || (sleep 11; git worktree add -f $W HEAD >/dev/null 2>&1)); ln -s $R/node_modules $W/node_modules; cd $W && node $R/.rc/x/rvmut.mjs ht45 && node scripts/simCmSubs.mjs --part=rule
+mut-cutover: R=$PWD; W=/tmp/vC; (git worktree add -f $W HEAD >/dev/null 2>&1 || (sleep 13; git worktree add -f $W HEAD >/dev/null 2>&1)); ln -s $R/node_modules $W/node_modules; cd $W && node $R/.rc/x/rvmut.mjs cutover && node scripts/simCmSubs.mjs --part=cutover
+c-pressedge: SUBS_CONTROL=pressedge node scripts/simCmSubs.mjs
+c-etbreak: SUBS_CONTROL=etbreak node scripts/simCmSubs.mjs
+c-yearplus: SUBS_CONTROL=yearplus node scripts/simCmSubs.mjs
+c-ht45: SUBS_CONTROL=ht45 node scripts/simCmSubs.mjs
+c-cutover: SUBS_CONTROL=cutover node scripts/simCmSubs.mjs
+et-owed: R=$PWD; W=/tmp/vet; (git worktree add -f $W HEAD >/dev/null 2>&1 || (sleep 15; git worktree add -f $W HEAD >/dev/null 2>&1)); ln -s $R/node_modules $W/node_modules; cd $W && git show c00694b8:scripts/simCmSubs.mjs > scripts/rvSubsET.mjs && grep -c "extratime" scripts/rvSubsET.mjs && node scripts/rvSubsET.mjs --part=extratime
+appealIsolation: node scripts/simManagerAppealIsolation.mjs
+dailyDeals: node scripts/simDailyDeals.mjs
+headsha: git log --oneline -3 && git rev-parse HEAD~1
