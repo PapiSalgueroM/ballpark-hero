@@ -1,0 +1,36 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+[90mstdout[2m | src/test/probeVarEt.test.ts[2m > [22m[2mextra time of the knockout night on both rules
+[22m[39mprobeVarEt current: tie undefined leg 2, week 34, nights 1636, decided in 90 8364, opp subs a night 3.97, of them in extra time 0.00
+probeVarEt current kinds: throwin:me x8197; throwin:opp x8156; foul:me x5622; foul:opp x5530; shot:opp x4215; corner:opp x3773; shot:me x3538; corner:me x3147; save:opp x2178; save:me x1876; yellow:me x1044; yellow:opp x1022; goal:opp x862; goal:me x671; injury:me x132; red:me x87; var:opp x38; var:me x28; red:opp x27
+probeVarEt current awarded: me:120+3:Pedri x2
+probeVarEt current fouls (top): me:Martín Zubimendi x839; opp:Gerard Martín x759; me:Riccardo Calafiori x744; me:Gabriel x742; me:Piero Hincapié x724; me:William Saliba x719; me:Declan Rice x531; me:Bruno Guimarães x484; opp:Andreas Christensen x482; opp:Rodri x467
+probeVarEt base: tie undefined leg 2, week 34, nights 1511, decided in 90 8489, opp subs a night 2.77, of them in extra time 0.79
+probeVarEt base kinds: throwin:opp x7536; throwin:me x7440; foul:opp x5178; foul:me x5132; shot:opp x3965; corner:opp x3589; shot:me x3178; corner:me x2821; save:opp x2063; save:me x1682; sub:opp x1191; yellow:me x979; yellow:opp x966; goal:opp x896; goal:me x626; injury:me x124; red:me x69; var:opp x51; red:opp x31; var:me x31
+probeVarEt base awarded: opp:113:William Saliba x16; me:107:João Neves x12; opp:104:Christos Tzolis x11; opp:120:Bukayo Saka x6; opp:115:Bukayo Saka x5
+probeVarEt base fouls (top): me:Martín Zubimendi x741; me:Gabriel x699; me:Piero Hincapié x697; me:Riccardo Calafiori x692; me:William Saliba x622; opp:Vitinha x525; opp:Ilya Zabarnyi x507; opp:Achraf Hakimi x503; opp:Willian Pacho x503; opp:Nuno Mendes x481
+
+ [32m✓[39m src/test/probeVarEt.test.ts [2m([22m[2m1 test[22m[2m)[22m[33m 113021[2mms[22m[39m
+   [33m[2m✓[22m[39m extra time of the knockout night on both rules [33m 113020[2mms[22m[39m
+[31m⎯⎯⎯⎯⎯⎯[39m[1m[41m Unhandled Errors [49m[22m[31m⎯⎯⎯⎯⎯⎯[39m
+[31m[1m
+Vitest caught 1 unhandled error during the test run.
+This might cause false positive tests. Resolve unhandled errors to make sure your tests are not affected.[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯[39m[1m[41m Unhandled Error [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+[31m[1mError[22m: [vitest-worker]: Timeout calling "onTaskUpdate"[39m
+[90m [2m❯[22m Object.onTimeoutError node_modules/vitest/dist/chunks/rpc.-pEldfrD.js:[2m53:10[22m[39m
+[90m [2m❯[22m Timeout._onTimeout node_modules/vitest/dist/chunks/index.B521nVV-.js:[2m59:62[22m[39m
+[90m [2m❯[22m listOnTimeout node:internal/timers:[2m685:17[22m[39m
+[90m [2m❯[22m processTimers node:internal/timers:[2m618:7[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[39m
+
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m     Errors [22m [1m[31m1 error[39m[22m
+[2m   Start at [22m 02:16:41
+[2m   Duration [22m 115.43s[2m (transform 1.34s, setup 54ms, collect 1.63s, tests 113.02s, environment 321ms, prepare 132ms)[22m
+

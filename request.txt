@@ -1,0 +1,1 @@
+probeEt: cp .rc/x/probeVarEt.test.ts src/test/probeVarEt.test.ts && PROBE_SEEDS=10000 node_modules/.bin/vitest run src/test/probeVarEt.test.ts --testTimeout=3600000; s=$?; rm -f src/test/probeVarEt.test.ts; exit $s
