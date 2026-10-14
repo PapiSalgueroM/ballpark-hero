@@ -50,7 +50,7 @@ jobs:
           SCOPE
           node --input-type=module <<'PINS'
           import fs from 'node:fs';import assert from 'node:assert/strict';import {createHash} from 'node:crypto';
-          const pins=[['src/lib/soccerCareerEngine.ts',544380,'e37b73f25a17e4c63718430365de87cd1d5a001960ba8257ac674834e691dd90'],['src/test/soccerCareerContracts.test.ts',14350,'7746509861c887dfa0f0cf56d62a37fa6386f0a0ea9702ee8d23ba92469e78d4'],['scripts/qa/soccerRivalWagesProof.mjs',18563,'787dc00942d04f33103bf1e5f1f6fae8c6a0e7151fa6017d8d1e6e1b06b6445b']];
+          const pins=[['src/lib/soccerCareerEngine.ts',544380,'e37b73f25a17e4c63718430365de87cd1d5a001960ba8257ac674834e691dd90'],['src/test/soccerCareerContracts.test.ts',14350,'7746509861c887dfa0f0cf56d62a37fa6386f0a0ea9702ee8d23ba92469e78d4'],['scripts/qa/soccerRivalWagesProof.mjs',18671,'94529a3bbea10104125a3efbea87e9b8291f57c0023ceafbc410f0aa2e654db0']];
           fs.writeFileSync('career-rival-wages-artifacts/expected-source-pins.json',JSON.stringify(pins,null,2));for(const [file,bytes,sha256] of pins){const body=fs.readFileSync(file);assert.equal(body.length,bytes);assert.equal(createHash('sha256').update(body).digest('hex'),sha256);}
           PINS
           git rev-parse HEAD HEAD^{tree} > career-rival-wages-artifacts/head-tree.txt
@@ -160,8 +160,8 @@ jobs:
             ['shark35',35,76,6.4,32,'playing','shark',100000,88000,110000,2.4,'€88k/wk','€110k/wk'],
             ['cousin35',35,76,6.4,32,'playing','cousin',100000,76000,95000,2.15,'€76k/wk','€95k/wk'],
             ['market35',35,76,6.4,32,'playing','self',100,400,500,2,'€400/wk','€500/wk'],
-          ].map(([id,age,overall,rating,apps,form,agent,wage,currentWage,originalWage,fees,currentLabel,originalLabel]) => ({ id, currentWage, originalWage, fees, currentLabel, originalLabel, title: `prices the actual rival choice and Continue at ${id} without another draw`, marker: `SOCCER_RIVAL_WAGE_${id}`, unitSpec: { id, age, overall, rating, apps, form, agent, wage, want: currentWage, fees } }));
-          const titles = [...oldTitles, ...specs.map(row => row.title)], armIds = ['current', 'original', 'whole-undo'];
+          ].map(([id,age,overall,rating,apps,form,agent,wage,currentWage,originalWage,fees,currentLabel,originalLabel]) => ({ id, currentWage, originalWage, fees, currentLabel, originalLabel, title: `prices the actual rival choice and Continue at ${id} without another draw`, testTitle: `prices the actual rival choice and Continue at '${id}' without another draw`, marker: `SOCCER_RIVAL_WAGE_${id}`, unitSpec: { id, age, overall, rating, apps, form, agent, wage, want: currentWage, fees } }));
+          const titles = [...oldTitles, ...specs.map(row => row.testTitle)], armIds = ['current', 'original', 'whole-undo'];
           const held = [ENGINE, TEST, 'src/lib/soccerCareerContracts.ts', 'src/lib/careerRivalryChoices.ts', 'src/lib/soccerCareerLife.ts', 'src/lib/soccerCareerRole.ts', 'src/lib/soccerCareerMentor.ts', 'src/lib/soccerCareerTransferBrief.ts', 'scripts/simSoccerContractMoves.mjs', 'scripts/simSoccerVeteranOffers.mjs', 'scripts/simCareerDilemmaTruth.mjs', 'src/test/setup.ts', 'vitest.config.ts', 'package.json', 'package-lock.json', 'scripts/qa/soccerRivalWagesProof.mjs'];
           try {
             const reportBytes = fs.readFileSync(path.join(OUT, 'report.json')), report = JSON.parse(reportBytes);
@@ -181,7 +181,7 @@ jobs:
             assert.equal(hash(original), '1a1c05feb120de043944ef45ec0880ed53e38f6b324e28889de2064fddd623ef'); assert.equal(original.length, 544316);
             assert(original.equals(execFileSync('git', ['show', BASE + ':' + ENGINE], { maxBuffer: 2000000 })));
             assert.equal(hash(fs.readFileSync(TEST)), '7746509861c887dfa0f0cf56d62a37fa6386f0a0ea9702ee8d23ba92469e78d4');
-            assert.equal(hash(fs.readFileSync('scripts/qa/soccerRivalWagesProof.mjs')), '787dc00942d04f33103bf1e5f1f6fae8c6a0e7151fa6017d8d1e6e1b06b6445b');
+            assert.equal(hash(fs.readFileSync('scripts/qa/soccerRivalWagesProof.mjs')), '94529a3bbea10104125a3efbea87e9b8291f57c0023ceafbc410f0aa2e654db0');
             keys(report.original, ['source','stderr','status','signal','error']); assert.equal(report.original.status, 0); assert.equal(report.original.signal, null); assert.equal(report.original.error, null); assert.equal(body(report.original.stderr).length, 0);
             const operands = [
               { from: '        wage: Math.max(s.weeklyWage, wageForTier(club.tier, s.overall)),', to: '        wage: soccerTransferTerms(s, Math.max(s.weeklyWage, wageForTier(club.tier, s.overall)), 4).wage,' },
@@ -196,7 +196,7 @@ jobs:
             const allRows = {};
             for (const arm of report.arms) {
               keys(arm, ['id','status','expectedFailures','source','observations','command','process','vitest','assertions','actualFailures','actualRows']); assert.equal(arm.status, 'pass');
-              const expectedFailures = arm.id === 'original' ? specs.filter(row => row.currentWage !== row.originalWage).map(row => row.title) : [];
+              const expectedFailures = arm.id === 'original' ? specs.filter(row => row.currentWage !== row.originalWage).map(row => row.testTitle) : [];
               assert.deepEqual(arm.expectedFailures, expectedFailures); assert.deepEqual(arm.actualFailures, [...expectedFailures].sort()); assert(body(arm.source).equals(arm.id === 'original' ? original : current));
               keys(arm.command, ['executable','args','cwd','env']); assert.equal(arm.command.executable, process.execPath); assert.equal(arm.command.cwd, ROOT); assert.deepEqual(arm.command.env, { SOCCER_RIVAL_WAGES_OUT: path.join(OUT, 'arms', arm.id, 'observations') });
               assert.deepEqual(arm.command.args, [path.join(ROOT,'node_modules/vitest/vitest.mjs'),'run',TEST,'--no-cache','--maxWorkers=1','--no-file-parallelism','--reporter=default','--reporter=json','--outputFile=' + path.join(OUT,'arms',arm.id,'vitest.json')]);
@@ -209,7 +209,7 @@ jobs:
               [diagnostic,fault,undo].forEach((text,i)=>fs.writeFileSync(path.join(ART,`runtime-${arm.id}-${['before','fault','undo'][i]}.txt`),text)); assert(!detect(diagnostic),'No unrelated runtime/suite errors'); assert(fault!==diagnostic&&detect(fault)&&undo===diagnostic&&!detect(undo),'Effective copied diagnostic banner and exact same-fault undo'); summary.runtimeControls=(summary.runtimeControls??0)+1;
               assert.deepEqual(assertions, vitest.testResults.flatMap(row => row.assertionResults)); assert.equal(assertions.length, 23); assert.deepEqual(assertions.map(row => row.title).sort(), [...titles].sort()); assert(assertions.every(row => ['passed','failed'].includes(row.status)));
               assert.deepEqual(assertions.filter(row => row.status === 'failed').map(row => row.title).sort(), [...expectedFailures].sort());
-              for (const assertion of assertions) { const failed = expectedFailures.includes(assertion.title); assert.equal(assertion.status, failed ? 'failed' : 'passed'); if (failed) { const spec = specs.find(row => row.title === assertion.title); assert(spec); assert(assertion.failureMessages.length > 0); assert(assertion.failureMessages.every(message => message.includes(spec.marker))); } else assert.deepEqual(assertion.failureMessages, []); }
+              for (const assertion of assertions) { const failed = expectedFailures.includes(assertion.title); assert.equal(assertion.status, failed ? 'failed' : 'passed'); if (failed) { const spec = specs.find(row => row.testTitle === assertion.title); assert(spec); assert(assertion.failureMessages.length > 0); assert(assertion.failureMessages.every(message => message.includes(spec.marker))); } else assert.deepEqual(assertion.failureMessages, []); }
               assert.deepEqual(arm.observations.map(row => row.name), specs.map(row => row.id + '.json').sort());
               const rows = json(arm.actualRows); assert.equal(rows.length, 13); assert.deepEqual(rows.map(row => row.id), specs.map(row => row.id)); allRows[arm.id] = rows;
               for (let i = 0; i < specs.length; i++) { const spec = specs[i], row = rows[i], item = arm.observations.find(value => value.name === spec.id + '.json'); keys(item, ['name','file']); assert.equal(item.file.path, `arms/${arm.id}/observations/${spec.id}.json`); assert.deepEqual(json(item.file), row);
@@ -219,7 +219,7 @@ jobs:
                 assert.equal(result.currentClub,'Twente'); assert.equal(result.contractYearsLeft,4); assert.equal(result.phase,'playing'); assert.equal(result.pendingRivalMove,null); assert.equal(result.isClubCaptain,false); assert.equal(result.captainClub,null); assert.equal(result.agentFeesPaid,spec.fees); assert.deepEqual(result.seasons,input.seasons); assert.equal(result.weeklyWage,arm.id === 'original' ? spec.originalWage : spec.currentWage);
                 assert.deepEqual(row.draws.map(value => value.value), [0,0]); assert.equal(row.draws.length,2); for(const draw of [...row.fixtureDraws,...row.draws]) { keys(draw,['value','caller']); assert.equal(typeof draw.value,'number'); assert(Number.isFinite(draw.value)); assert.equal(typeof draw.caller,'string'); }
                 assert(row.draws[0].caller.includes('wageForTier')); assert(row.draws[1].caller.includes('realisticTransferFee')); assert(row.fixtureDraws.length > 0 && row.fixtureDraws.every(value => value.value === 0.7));
-                const failed = expectedFailures.includes(spec.title); assert.equal(row.completed,!failed); if(failed) { keys(row.failure,['classification','name','message','stack']); assert.equal(row.failure.classification,'assertion'); assert.equal(row.failure.name,'AssertionError'); assert(row.failure.message.includes(spec.marker)); assert.equal(typeof row.failure.stack,'string'); } else assert.equal(row.failure,null); summary.observations++;
+                const failed = expectedFailures.includes(spec.testTitle); assert.equal(row.completed,!failed); if(failed) { keys(row.failure,['classification','name','message','stack']); assert.equal(row.failure.classification,'assertion'); assert.equal(row.failure.name,'AssertionError'); assert(row.failure.message.includes(spec.marker)); assert.equal(typeof row.failure.stack,'string'); } else assert.equal(row.failure,null); summary.observations++;
               }
               summary.arms++; summary.assertions += assertions.length;
             }
@@ -239,7 +239,7 @@ jobs:
             assert.equal(summary.arms,3); assert.equal(summary.assertions,69); assert.equal(summary.observations,39); assert.equal(summary.comparisons,13); assert.equal(summary.transitions,2); summary.status='pass';
           } catch(error) { errors.push({name:error?.name||typeof error,message:String(error?.message||error),stack:String(error?.stack||error)}); summary.status='fail'; process.exitCode=1; }
           finally { fs.mkdirSync(ART,{recursive:true}); fs.writeFileSync(path.join(ART,'proof-consumer-references.json'),JSON.stringify(refs,null,2)); fs.writeFileSync(path.join(ART,'proof-consumer-errors.json'),JSON.stringify(errors,null,2)); fs.writeFileSync(path.join(ART,'proof-consumer-summary.json'),JSON.stringify({...summary,errors},null,2)); }
-          if(summary.status==='pass') { console.log('PASS rival consumer: all3 whole unit arms and69 exact assertions.'); console.log('PASS rival consumer: ten precise original wage failures and39 complete trace rows.'); console.log('PASS rival consumer: all13 saved results, complete raw draw callers and wage-only differences.'); console.log('PASS rival consumer: actual whole Source transitions, full undo and every retained reference.'); }
+          if(summary.status==='pass') { console.log('PASS rival consumer: 3 arms, 69 assertions.'); console.log('PASS rival consumer: 10 wage faults, 39 traces.'); console.log('PASS rival consumer: 13 wage-only results, full raw callers.'); console.log('PASS rival consumer: full Source transitions, undo, references.'); }
           else console.error('FAIL rival consumer: complete errors and partial references retained.');
           RIVAL
       - name: Full production SEO build

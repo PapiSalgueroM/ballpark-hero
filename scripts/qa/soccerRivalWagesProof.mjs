@@ -48,10 +48,11 @@ const cases = [
   ['market35', 400, 500, 2, '€400/wk', '€500/wk'],
 ].map(([id, currentWage, originalWage, fees, currentLabel, originalLabel]) => ({
   id, currentWage, originalWage, fees, currentLabel, originalLabel,
-  title: `prices the actual rival choice and Continue at ${id} without another draw`, marker: `SOCCER_RIVAL_WAGE_${id}`,
+  title: `prices the actual rival choice and Continue at ${id} without another draw`,
+  testTitle: `prices the actual rival choice and Continue at '${id}' without another draw`, marker: `SOCCER_RIVAL_WAGE_${id}`,
 }));
 const failing = cases.filter(row => row.currentWage !== row.originalWage);
-const expectedTitles = [...oldTitles, ...cases.map(row => row.title)];
+const expectedTitles = [...oldTitles, ...cases.map(row => row.testTitle)];
 const operands = [
   { from: '        wage: Math.max(s.weeklyWage, wageForTier(club.tier, s.overall)),',
     to: '        wage: soccerTransferTerms(s, Math.max(s.weeklyWage, wageForTier(club.tier, s.overall)), 4).wage,' },
@@ -104,7 +105,7 @@ const runArm = (id, expectedFailures) => {
   assert(assertions.every(value => ['passed', 'failed'].includes(value.status)));
   assert.deepEqual(row.actualFailures, [...expectedFailures].sort());
   for (const value of assertions.filter(value => value.status === 'failed')) {
-    const spec = cases.find(item => item.title === value.title); assert(spec);
+    const spec = cases.find(item => item.testTitle === value.title); assert(spec);
     assert(value.failureMessages.length > 0 && value.failureMessages.every(message => message.includes(spec.marker)), 'Only the intended wage assertion can satisfy the original control');
   }
   assert.deepEqual(row.observations.map(value => value.name), cases.map(value => `${value.id}.json`).sort());
@@ -124,7 +125,7 @@ const runArm = (id, expectedFailures) => {
     assert(actual.draws.every(value => typeof value.caller === 'string'));
     assert(actual.draws[0].caller.includes('wageForTier')); assert(actual.draws[1].caller.includes('realisticTransferFee'));
     assert(actual.fixtureDraws.length > 0 && actual.fixtureDraws.every(value => value.value === 0.7 && typeof value.caller === 'string'));
-    const failed = expectedFailures.includes(spec.title); assert.equal(actual.completed, !failed);
+    const failed = expectedFailures.includes(spec.testTitle); assert.equal(actual.completed, !failed);
     if (failed) assert(actual.failure?.classification === 'assertion' && actual.failure.message.includes(spec.marker));
     else assert.equal(actual.failure, null);
   }
@@ -162,7 +163,7 @@ try {
   for (const operand of [...operands].reverse()) { assert.equal(reverse.split(operand.to).length - 1, 1); reverse = reverse.replace(operand.to, operand.from); }
   assert.equal(reverse, originalRaw.toString('utf8')); report.sourceEdits = write('source/edits.json', operands); report.wholeSourceInverse = true; save();
   const byArm = {}; byArm.current = perform('current', []);
-  replaceSource('original', originalRaw, [currentRaw]); byArm.original = perform('original', failing.map(value => value.title));
+  replaceSource('original', originalRaw, [currentRaw]); byArm.original = perform('original', failing.map(value => value.testTitle));
   replaceSource('whole-undo', currentRaw, [originalRaw]); byArm['whole-undo'] = perform('whole-undo', []);
   assert(report.arms.length === 3 && report.arms.every(value => value.status === 'pass'));
   const rows = id => JSON.parse(fs.readFileSync(path.join(OUT, byArm[id].actualRows.path)));
