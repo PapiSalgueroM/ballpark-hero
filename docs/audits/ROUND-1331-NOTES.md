@@ -31,6 +31,18 @@ origin/main 082fc277 (docs only) at 12f3fd65. Every gate ran on a GitHub runner 
   at a stoppage already used is taken.
 - `drawOppSubs(…, rule)`: room `rule.subs - made`, count `ri(rule.subs - 2, rule.subs)` (ri(1, 3) under three, the
   stream unchanged), and under a stoppage limit the changes go on at most the stoppages left (no new draw).
+- OWED, extra time: under five the other dugout uses its three stoppages by 88 in nearly every match, so the
+  extra time draw returns before drawing anything and they make no change in extra time at all (r1331-et, 10,000
+  seeds of one Arsenal knockout night: 3.97 changes a night, 0.00 of them in extra time, on 1,636 nights; on the
+  base rules 2.77 and 0.79 on 1,511). Decision 1(b) ("breaks free" in drawOppSubs) and decision 2 ("unused changes
+  carry on") both ask for them. 52d787d5 put them on at the break before extra time (minute 90, as mine go on, the
+  count drawn as before, a redraw from 90 keeping them), with simCmSubs section extratime (1.06, 0.98 and 0.99 a
+  night at three seed bases, ET_MIN 0.5, control etfrozen 0.00; r1331-et2) and the digest unmoved. It was backed
+  out in cb722d78: the live viewer fires a change at 90 as the extra time stage opens, and its "Sub:" banner takes
+  the place of the "Level 3-3 on aggregate" banner (liveSimMotion "the extra time banner says what is true", red
+  in r1331-et2b). The viewer is F3's (this round owns four lines of LiveSimScreen.tsx), so the engine hunk waits in
+  52d787d5 for a round that also lets the extra time banner keep its time. The other dugout never changes at half
+  time either, under any rule (it never did).
 - The coach: under three line for line; under five two at the break, up to two at each look, a change and a
   stoppage kept back for an injury. Measured means a match (r1331-s3c): five 2.83, the same careers on the base
   rules 1.89, the three change eras 1.62. The other dugout: 3.43 under five, 1.61 on the base rules.
@@ -64,6 +76,13 @@ origin/main 082fc277 (docs only) at 12f3fd65. Every gate ran on a GitHub runner 
   that stands for the old engine plays `matchRules: 'base'` and the key comes off before any compare.
 - simCmQuickSubs and simCmQuickLegs hold the three change coach of Rounds 1072 and 1146: their careers play the base
   rules; the coach under five is simCmSubs section coach.
+- src/test/clubManagerVarScreen.test.tsx (a13b90e9): its case hints were found on the old stream, and two of them
+  (league match 2, hint 2287; extra time 'awarded', hint 1927) held no case in 2,500 seeds on the new rules
+  (r1331-vt: head red, head forced onto the old rules green, base green). Its two careers play the base rules. A
+  probe (r1331-vt2, r1331-et) showed the rule moves nothing the review screen reads: the first halves of match 2
+  hold 149 and 38 reviews (disallowed, awarded) on the new rules and 150 and 39 on the old; the extra time split
+  differs only because the 34 step walk meets a different knockout opponent on each rule and the penalty reviews
+  are keyed by match, minute and man.
 
 ## The fence on league ids, the digest and the 1081 pin (the round's last three commits)
 
@@ -78,6 +97,7 @@ origin/main 082fc277 (docs only) at 12f3fd65. Every gate ran on a GitHub runner 
   era, the rule moves the five change seasons); then the write (r1331-dig2 write-digest, exit 0).
 - The Round 1081 pin (scripts/fixtures/managerAppealIsolation1081/manifest.json, unchangedSource for
   src/lib/clubManager.ts, the LF text sha256) went from 22833be3 to 36f255cf in its own commit (a72d76bc), last.
+  clubManager.ts has not changed since (the extra time hunk was backed out to the same text, checked by hash).
 
 ## Red on the base too, not this round's
 
