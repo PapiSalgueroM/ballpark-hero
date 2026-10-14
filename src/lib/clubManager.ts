@@ -12590,6 +12590,9 @@ function recordMyUclTie(
 
 function initUclGroup(qualified: boolean, myClub: string, eraId?: string, field?: string[]): UclGroupState | null {
   if (!qualified) return null;
+  const custom = activeCustomClub();
+  const myLeague = custom?.name === myClub && customUsesPyramid(custom, eraId)
+    ? customLeagueDef(custom, eraId)! : leagueOf(myClub);
   /* Round 547: when last season's tables gave us a real field, my three group
      opponents come out of it, avoiding my own league the way the real draw
      does. Only when that leaves too few does it fall back to the pool below,
@@ -12597,7 +12600,7 @@ function initUclGroup(qualified: boolean, myClub: string, eraId?: string, field?
      Round 612: season one of a 2026-27 career hands in the field from the
      real 2025-26 tables, so it takes the first path too. */
   if (field && field.length >= 8) {
-    const myLeagueClubs = new Set(leagueOf(myClub).clubs);
+    const myLeagueClubs = new Set(myLeague.clubs);
     const fromField = shuffle(field.filter(c => c !== myClub && !myLeagueClubs.has(c)));
     if (fromField.length >= 3) {
       const opponents = fromField.slice(0, 3);
@@ -12612,7 +12615,7 @@ function initUclGroup(qualified: boolean, myClub: string, eraId?: string, field?
     const opponents = shuffle(pool).slice(0, 3);
     return { opponents, table: [myClub, ...opponents].map(emptyRow), matchday: 0 };
   }
-  const myLeagueClubs = new Set(leagueOf(myClub).clubs);
+  const myLeagueClubs = new Set(myLeague.clubs);
   const bigForeign = CLUBS.map(c => c.name).filter(c => c !== myClub && !myLeagueClubs.has(c));
   const pool = [...new Set([...EURO_CLUBS, ...bigForeign])].filter(c => c !== myClub && !myLeagueClubs.has(c));
   const opponents = shuffle(pool).slice(0, 3);

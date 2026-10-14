@@ -11,7 +11,7 @@ jobs:
     env:
       CI: '1'
       SIM_NETWORK: offline
-      MANAGER_REPORT_PHASE: alias-baseline
+      MANAGER_REPORT_PHASE: fixed
     defaults:
       run:
         shell: bash
@@ -89,6 +89,12 @@ jobs:
         env:
           NODE_OPTIONS: --require=${{ github.workspace }}/scripts/lib/offlineTransport.cjs
         run: node scripts/simPromotion.mjs 2>&1 | tee manager-report-artifacts/original-promotion.log
+      - name: Actual created-club seasons and save/load summers
+        if: env.MANAGER_REPORT_PHASE == 'fixed'
+        env:
+          NODE_OPTIONS: --require=${{ github.workspace }}/scripts/lib/offlineTransport.cjs
+          MANAGER_REPORT_ARTIFACTS: manager-report-artifacts/natural
+        run: node scripts/simManagerCustomPromotion.mjs 2>&1 | tee manager-report-artifacts/natural.log
       - name: Final source holds
         if: always()
         run: |
