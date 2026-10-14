@@ -222,6 +222,13 @@
    reloads all 84 rows since the review's fix pass; it was 40 s with seed 1
    alone), so SIM_EVENT_DECK_SHARD is not needed yet; SIM_EVENT_DECK_MEASURE=1 adds the
    seeds 1 to 10 measurements (about a minute more).
+   Round 1332: the whole kit takes 206 to 263 s on a runner now (section 13
+   alone about 70 to 110 s), over the 150 s an agent's command may take. Run
+   it as three gate lines, measured on runners 2026-10-13 (rc r1332-g and
+   r1332-h): SIM_EVENT_DECK_SECTIONS=1,2,3,4,5,6,7,8,9,10,11,12 (101 s),
+   SIM_EVENT_DECK_SECTIONS=13 (71 s) and SIM_EVENT_DECK_SECTIONS=14,15,16
+   (29 s). Section 15's measurement (SIM_EVENT_DECK_MEASURE=1) takes about
+   six minutes more.
 
    Run: node scripts/simEventDeck.mjs
         SIM_EVENT_DECK_SHARD=nfl runs one seat's rows of section 1 only. */
