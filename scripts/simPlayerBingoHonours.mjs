@@ -21,7 +21,9 @@ const testFile = path.join(root, 'src/test/playerBingoHonours.test.ts');
 const heldLib = readFileSync(libFile);
 const heldTest = readFileSync(testFile);
 const source = heldLib.toString('utf8').replaceAll('\r\n', '\n');
-assert.equal(hash(Buffer.from(source)), '9195E9890C28CDB8A46D52F7150A21F459A4B4AFDE4B3EF23AA887CA8F543450');
+/* Release BE join (Round BEG): taken again once because Round 1352 (PR251, the World Cup Andy Robertson alias)
+   changed fetchWorldCupSets in playerBingo.ts; main's file held 9195E989... before that merge. */
+assert.equal(hash(Buffer.from(source)), 'AD1D776406BF0151C6BE4B1EB53EA544E6FEC40363BD1D5B491D491342FEAEEF');
 assert.equal(hash(heldTest), '0AE18AE01A012509200926DB6F66BA115C81AF718FD07B308299DFE21EB4EB72');
 writeFileSync(path.join(out, 'source.raw.ts'), heldLib);
 writeFileSync(path.join(out, 'source.LF.ts'), source);
