@@ -1,3 +1,9 @@
+## Round1365 prepared, 2026-10-14 UTC: halftime starting XIs and provisional grades
+
+Isolated codex/manager-halftime-lineups from main082fc277. App/core/old tests/packages remain unchanged. New six-case actual interval UI proof, split-shared helper and remote baseline workflow are prepared. Expected baseline: two exact missing-feature Booleans and four preserves. No local execution or remote baseline/fixed/UI qualification is claimed.
+
+Design: a Starting XIs tile, own/opposition tabs and Back; original slot order, actual status/time, ability OVR separate from provisional current-score plus recorded-goal grades. No live assist source exists. No final-report call, RNG, save/economic change or cosmetic tactical controls. H1331 substitution rules stay separately owned. Fixed work needs twelve pure-reader cases and fresh phone/desktop halftime proof. Current604/830 download and203000/532500 save budgets stay held. See docs/audits/manager-halftime-lineups-2026-10-14.md and docs/designs/live-manager-controls-research-2026-10-14.md.
+
 ## Release BC LIVE, 2026-10-13 18:23 EDT: one tab can no longer wipe a Club Manager save, Club Manager's world remembers your deals, its tables, copy and hub fixed, Soccer Career's events drawn fairly, the shared event deck, the college athletic director
 
 Claude lane (session H). main c5534342, deployment 3cf3a2d7-244e-41ce-8c27-a89cebafcfe6, entry index-BFkO1jyo.js (was index-DaI30mwt.js, Release BB,

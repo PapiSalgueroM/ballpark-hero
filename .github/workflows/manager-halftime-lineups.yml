@@ -1,0 +1,118 @@
+name: Manager halftime starting XIs
+on:
+  push:
+    branches: [codex/manager-halftime-lineups]
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      CM_HT_LINEUPS_PHASE: baseline
+      CM_HT_LINEUPS_OUT: ${{ github.workspace }}/halftime-lineups-artifacts
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Bind unchanged current app and locked dependencies
+        run: |
+          echo '127.0.0.1 flawuiqbvjobmkfkauhw.supabase.co' | sudo tee -a /etc/hosts
+          mkdir -p "$CM_HT_LINEUPS_OUT"
+          test "$CM_HT_LINEUPS_PHASE" = baseline
+          git diff --exit-code 082fc2774c8aa9f919c14efa33bfc3fbfc599597 -- src scripts .github/workflows package.json package-lock.json bun.lock index.html ':!src/test/managerHalftimeLineups.test.tsx' ':!scripts/simManagerHalftimeLineups.mjs' ':!.github/workflows/manager-halftime-lineups.yml'
+          find src scripts .github/workflows -type f ! -path scripts/data/lastmod.json -print0 | sort -z | xargs -0 sha256sum > "$CM_HT_LINEUPS_OUT/source-hashes.txt"
+          sha256sum package.json package-lock.json bun.lock > "$CM_HT_LINEUPS_OUT/package-hashes.txt"
+          npm ci
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          import { createHash } from 'node:crypto';
+          const lock = JSON.parse(fs.readFileSync('package-lock.json'));
+          const rows = Object.entries(lock.packages).filter(([file]) => file.startsWith('node_modules/') && fs.existsSync(file + '/package.json')).map(([file, entry]) => {
+            const bytes = fs.readFileSync(file + '/package.json'), version = JSON.parse(bytes).version;
+            assert.equal(version, entry.version);
+            return { file, version, sha256: createHash('sha256').update(bytes).digest('hex') };
+          });
+          fs.writeFileSync(process.env.CM_HT_LINEUPS_OUT + '/installed.json', JSON.stringify(rows, null, 2));
+          console.log('Bound ' + rows.length + ' actual installed locked versions.');
+          NODE
+      - name: Actual application type gate
+        run: node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee "$CM_HT_LINEUPS_OUT/types.log"
+      - name: Actual missing halftime features and four preserves
+        run: CM_HT_LINEUPS_EXPECT_RED=1 NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simManagerHalftimeLineups.mjs 2>&1 | tee "$CM_HT_LINEUPS_OUT/baseline.log"
+      - name: Existing match plans scorer identities and added-time unit cases
+        run: |
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node_modules/.bin/vitest run src/test/managerMatchPlans.test.tsx src/test/managerScorerMarks.test.tsx src/test/cmMinuteLabel.test.ts --maxWorkers=1 --reporter=verbose --reporter=json --outputFile="$CM_HT_LINEUPS_OUT/prior-unit.json" 2>&1 | tee "$CM_HT_LINEUPS_OUT/prior-unit.log"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          const raw = JSON.parse(fs.readFileSync(process.env.CM_HT_LINEUPS_OUT + '/prior-unit.json'));
+          assert(raw.numTotalTests > 0 && raw.numPassedTests === raw.numTotalTests && raw.numFailedTests === 0 && raw.numPendingTests === 0);
+          assert(raw.testResults.length === 3 && raw.testResults.every(file => !file.message && file.assertionResults.every(row => row.status === 'passed')));
+          console.log('All ' + raw.numPassedTests + ' actual existing unit cases passed without pending or file failures.');
+          NODE
+      - name: Existing halftime live report and motion model outcomes
+        run: |
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import assert from 'node:assert/strict';
+          import { spawnSync } from 'node:child_process';
+          const root = process.env.CM_HT_LINEUPS_OUT;
+          const arms = [
+            ['simHalftime.mjs', 'ALL HALFTIME CHECKS PASSED'],
+            ['simLiveSim.mjs', 'simLiveSim: all green'],
+            ['simMatchDetail.mjs', 'simMatchDetail: all green'],
+            ['simLiveMatch.mjs', 'simLiveMatch: PASS.'],
+            ['simLiveSimMotion.mjs', 'simLiveSimMotion: green.'],
+          ];
+          for (const [script, closing] of arms) {
+            const child = spawnSync(process.execPath, ['scripts/' + script], { encoding: 'utf8', timeout: 7200000,
+              maxBuffer: 128 * 1024 * 1024, env: { ...process.env, FORCE_COLOR: '0', NO_COLOR: '1' } });
+            const output = (child.stdout || '') + (child.stderr || '');
+            fs.writeFileSync(path.join(root, script + '.log'), output);
+            fs.writeFileSync(path.join(root, script + '.process.json'), JSON.stringify({ script, closing, status: child.status,
+              signal: child.signal, error: child.error?.message || null }, null, 2));
+            assert(!child.error && !child.signal && child.status === 0 && output.includes(closing), script + ': actual prior model must finish with its owned closing output.');
+            assert(!/Test timed out|ERR_MODULE_NOT_FOUND|Cannot find module|SyntaxError:|ReferenceError:|TypeError:|Unhandled (?:Errors?|Rejection)/.test(output), script + ': no setup failure credit.');
+            console.log(script + ': actual exit0 and complete owned closing output retained.');
+          }
+          NODE
+      - name: Final complete source and package holds
+        if: always()
+        run: |
+          sha256sum --check "$CM_HT_LINEUPS_OUT/source-hashes.txt" > "$CM_HT_LINEUPS_OUT/source-holds.log"
+          sha256sum --check "$CM_HT_LINEUPS_OUT/package-hashes.txt"
+          git diff --exit-code -- src scripts .github/workflows package.json package-lock.json bun.lock index.html
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          import { createHash } from 'node:crypto';
+          const rows = JSON.parse(fs.readFileSync(process.env.CM_HT_LINEUPS_OUT + '/installed.json'));
+          for (const row of rows) {
+            const bytes = fs.readFileSync(row.file + '/package.json');
+            assert.equal(JSON.parse(bytes).version, row.version);
+            assert.equal(createHash('sha256').update(bytes).digest('hex'), row.sha256);
+          }
+          console.log('Held all ' + rows.length + ' installed package versions and bytes. Existing604/830 download and203000/532500 save caps remain source-identical.');
+          NODE
+      - name: Retain complete causal baseline
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: halftime-lineups-${{ github.run_id }}
+          path: halftime-lineups-artifacts/
+          include-hidden-files: true
+          retention-days: 14
+          if-no-files-found: error
