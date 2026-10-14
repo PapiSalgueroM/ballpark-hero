@@ -1,0 +1,5 @@
+build exit=0 28s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+headsha exit=0 0s | 25c6b0d20 Round BFG: Rounds 1354 and 1355's proofs hold their unchanged app files to a core ref (default their parent)
+walk exit=1 3s | Node.js v24.21.0
+walkPending exit=0 48s | Soccer pending-Life browser: passed; 2173 checks, 21 natural cases, 2 controls, 44 originals, 0 failures, 0 setup failures.
+walkRewards exit=0 35s | Soccer stat-rewards browser: passed; 1836 checks, 14 natural cases, 2 controls, 30 originals, 0 failures, 0 setup failures.

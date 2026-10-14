@@ -1,0 +1,22 @@
+Prepared 9 declared font dependencies for local fulfillment.
+prepInstalled: 521 installed locked versions written to /home/runner/work/ballpark-hero/ballpark-hero/wm5
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Picker observer needs one actual sort anchor
+
+0 !== 1
+
+    at browserFixtures (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simSoccerCareerPendingMorale.mjs:116:12)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simSoccerCareerPendingMorale.mjs:356:39 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 0,
+  expected: 1,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0
