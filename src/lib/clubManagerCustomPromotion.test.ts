@@ -113,14 +113,15 @@ describe('created clubs use the existing modern promotion slots', () => {
   });
 
   it('uses the saved own-name head-to-head before mapping the promotion slot', () => {
-    const pair = PYRAMIDS.find(row => row.second === 'serieb')!;
+    const pair = PYRAMIDS.find(row => row.top === 'seriea')!;
     expect(pair).toBeDefined();
-    const state = finished(created(pair.second), pair.count + 1);
-    const ordered = [...state.table], mine = ordered[pair.count], rival = ordered[pair.count - 1];
+    const safePlace = REAL_LEAGUES.find(row => row.id === pair.top)!.clubs.length - pair.count;
+    const state = finished(created(pair.top), safePlace + 1);
+    const ordered = [...state.table], mine = ordered[safePlace], rival = ordered[safePlace - 1];
     expect(mine.club).toBe(state.clubName);
     mine.pts = rival.pts; mine.gf = 0; mine.ga = 50; rival.gf = 50; rival.ga = 0;
-    state.pairResults = { [pair.second]: { [`${mine.club}|${rival.club}`]: [2, 0], [`${rival.club}|${mine.club}`]: [0, 1] } };
-    expect(sortedLeagueTable(state).findIndex(row => row.club === state.clubName) + 1).toBe(pair.count);
+    state.pairResults = { [pair.top]: { [`${mine.club}|${rival.club}`]: [2, 0], [`${rival.club}|${mine.club}`]: [0, 1] } };
+    expect(sortedLeagueTable(state).findIndex(row => row.club === state.clubName) + 1).toBe(safePlace);
     const fin = finishSeason(state), before = JSON.stringify(fin.state);
     const next = startNextSeason(fin.state);
     ownLeague(next, pair.top); realWorld(next);
