@@ -1,0 +1,9 @@
+# Release BF join: lane A's chain seams. LeagueSeasons with its base given the chain (origin/main plus the chain, the BE baseDeck pattern); the attribution legs of LeagueFinish, SocialBrands, AwardsNight and KeepPlaying on HEAD with the chain's three engine inputs put back to 4ae7a534; and the world truth default, the anchor fence and the story role on this head
+leagueSeasons-chainBase: B=$(bash .rc/x/chainMain.sh) && echo "base $B" && SIM_LEAGUE_SEASONS_BASE=$B node scripts/simCareerLeagueSeasons.mjs
+simCareerLeagueFinish-chainOut: D=$(bash .rc/x/chainOut.sh) && echo "tree $D" && cd "$D" && git status --short | head -5 && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerLeagueFinish.mjs
+simCareerSocialBrands-chainOut: D=$(bash .rc/x/chainOut.sh) && echo "tree $D" && cd "$D" && git status --short | head -5 && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerSocialBrands.mjs
+simCareerAwardsNight-chainOut: D=$(bash .rc/x/chainOut.sh) && echo "tree $D" && cd "$D" && git status --short | head -5 && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerAwardsNight.mjs
+simCareerKeepPlaying-chainOut: D=$(bash .rc/x/chainOut.sh) && echo "tree $D" && cd "$D" && git status --short | head -5 && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerKeepPlaying.mjs
+worldTruth: node scripts/simSoccerWorldTruth.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+storyRole: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerStoryRole.mjs
