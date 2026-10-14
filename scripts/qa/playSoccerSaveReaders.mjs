@@ -23,11 +23,18 @@ const KEY = 'soccerCareerSave', LIMIT = 60000;
 const report = JSON.parse(fs.readFileSync(path.join(FIX, 'report.json'), 'utf8'));
 const held = report.rows.filter(row => row.original > LIMIT && row.phase === 'playing').sort((a, b) => b.original - a.original)[0];
 if (!held) { console.log('playSoccerSaveReaders: SETUP no over-cap career in the fixtures'); process.exit(2); }
-const packed = fs.readFileSync(path.join(FIX, `${held.id}-stored.json`), 'utf8');
-const top = JSON.parse(packed);
-if (packed.length > LIMIT || top.seasons?.format !== 'lz-string-utf16') {
+const genuine = fs.readFileSync(path.join(FIX, `${held.id}-stored.json`), 'utf8');
+const top = JSON.parse(genuine);
+if (genuine.length > LIMIT || top.seasons?.format !== 'lz-string-utf16') {
   console.log('playSoccerSaveReaders: SETUP the fixture is not a packed save'); process.exit(2);
 }
+/* Negative control SOCCER_READERS_CONTROL=envelope: the seeded save names an envelope no reader can decode, standing in
+   for a reader that cannot read a packed save. The game's check must go red; the run then exits 1 with CONTROL FIRED. */
+const CONTROL = process.env.SOCCER_READERS_CONTROL || '';
+if (CONTROL && CONTROL !== 'envelope') { console.log('playSoccerSaveReaders: CONTROL ABORTED unknown control ' + CONTROL); process.exit(3); }
+const anchor = '"format":"lz-string-utf16"';
+if (CONTROL && genuine.split(anchor).length - 1 < 1) { console.log('playSoccerSaveReaders: CONTROL ABORTED anchor not found'); process.exit(3); }
+const packed = CONTROL ? genuine.replace(anchor, '"format":"lz-string-utf16-unknown"') : genuine;
 const club = String(top.currentClub ?? ''), age = top.age;
 const failures = [];
 let checks = 0;
@@ -62,8 +69,9 @@ for (const [width, height] of [[390, 844], [1280, 900]]) {
     /* 1. the game */
     await page.goto(`${BASE}/soccer-career`, { waitUntil: 'domcontentloaded' });
     if (pass === 'reload') await page.reload({ waitUntil: 'domcontentloaded' });
-    await page.locator('[data-career-records-tile]').waitFor();
+    await page.locator('[data-career-records-tile]').or(page.getByText("We couldn't open this save")).first().waitFor();
     check(await page.getByText("We couldn't open this save").count() === 0, `${tag} ${pass}: the game refused the packed save`);
+    if (CONTROL) continue;
     const stored = await page.evaluate(k => localStorage.getItem(k), KEY);
     let format = null; try { format = JSON.parse(stored).seasons?.format ?? 'array'; } catch { format = 'unparsable'; }
     check(stored.length <= LIMIT && format === 'lz-string-utf16', `${tag} ${pass}: the game wrote ${stored.length} characters, seasons ${format}`);
@@ -74,4 +82,10 @@ for (const [width, height] of [[390, 844], [1280, 900]]) {
 await browser.close();
 for (const f of failures) console.log('FAIL ' + f);
 console.log(`playSoccerSaveReaders: ${failures.length ? 'RED' : 'green'}, ${checks} checks at 390 and 1280 on career ${held.id} (${held.original} characters raw, ${packed.length} stored), ${failures.length} failures.`);
+if (CONTROL) {
+  const fired = failures.filter(f => f.includes('the game refused the packed save')).length;
+  console.log(fired === 4 ? `playSoccerSaveReaders: CONTROL FIRED: envelope turned ${fired} game reads red`
+    : `playSoccerSaveReaders: CONTROL DID NOT FIRE (${fired} of 4 game reads red)`);
+  process.exit(fired === 4 ? 1 : 0);
+}
 process.exit(failures.length ? 1 : 0);
