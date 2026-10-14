@@ -1,0 +1,16 @@
+c-onesource exit=1 1s | control onesource FIRED: 1 of 22 checks red
+c-nostops exit=1 0s | control nostops FIRED: 1 of 17 checks red
+c-oldcap exit=1 0s | control oldcap FIRED: 9 of 17 checks red
+c-ht45 exit=1 0s | control ht45 FIRED: 1 of 17 checks red
+c-htstop exit=1 0s | control htstop FIRED: 6 of 17 checks red
+c-yearplus exit=1 0s | control yearplus FIRED: 1 of 17 checks red
+c-cutover exit=1 0s | control cutover FIRED: 1 of 2 checks red
+c-etbreak exit=1 2s | control etbreak FIRED: 1 of 4 checks red
+c-opproom exit=1 10s | control opproom FIRED: 2 of 3 checks red
+c-coachall exit=1 12s | control coachall FIRED: 1 of 3 checks red
+c-pressedge exit=1 31s | control pressedge FIRED: 1 of 4 checks red
+c-pressold exit=1 35s | control pressold FIRED: 3 of 4 checks red
+c-etfrozen exit=1 10s | control etfrozen FIRED: 1 of 4 checks red
+c-nodate exit=1 14s | control nodate FIRED: 2 of 5 checks red
+c-legacyleak exit=1 70s | control legacyleak FIRED: 1 of 1 checks red
+c-pressnew exit=1 67s | control pressnew FIRED: 1 of 1 checks red
