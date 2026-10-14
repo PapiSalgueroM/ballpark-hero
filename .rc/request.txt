@@ -1,0 +1,9 @@
+#!serve
+sweepWeight: SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs
+saveSize: node scripts/simClubManagerSaveSize.mjs
+slots: node scripts/simClubManagerSlots.mjs
+appealIsolation: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simManagerAppealIsolation.mjs
+simCmLeagueRules: node scripts/simCmLeagueRules.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simLiveSimMotion: node scripts/simLiveSimMotion.mjs
+simHalftime: node scripts/simHalftime.mjs
