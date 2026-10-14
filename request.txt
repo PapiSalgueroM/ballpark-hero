@@ -1,0 +1,6 @@
+#!build
+#!playwright
+#!serial
+headsha: git log --oneline -2
+playCustomPromotion: export FREE_KICK_FONT_CACHE=/tmp/fcm MANAGER_REPORT_ARTIFACTS=/tmp/mra/natural; node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only | tail -1 && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simManagerCustomPromotion.mjs | tail -2 && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playManagerCustomPromotion.mjs
+worldBrowser1077: export MANAGER_WORLD_FONT_CACHE=/tmp/mwfc; node scripts/qa/managerWorldBrowser1077.mjs --prefetch-fonts-only | tail -1 && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/managerWorldBrowser1077.mjs

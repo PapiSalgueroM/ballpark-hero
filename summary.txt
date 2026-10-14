@@ -1,0 +1,4 @@
+build exit=0 32s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+headsha exit=0 0s | 8f604f771 Round BEG: the Round 1081 pin taken again once, after m5
+playCustomPromotion exit=0 48s | playManagerCustomPromotion: 10 genuine promotion journeys, 520 checks, 0 failed, 0 external requests forwarded
+worldBrowser1077 exit=0 31s | PASS manager world native:3 profiles,9 effective DOM faults,actual modern/edited/historical worlds,unchanged saved tables and sources.
