@@ -20,9 +20,11 @@ The active roster/ownership proposals PR266 and PR269 address current squad disp
 
 ## Transfer Path
 
-The Isak/Dijk stale-season report remains unverified. [PR242](https://github.com/PapiSalgueroM/ballpark-hero/pull/242) and [PR243](https://github.com/PapiSalgueroM/ballpark-hero/pull/243) are open draft and unmerged. They cover verified Trent/Mbappe 2025/26 Madrid membership and its changed paths, not this reported pair. The scoped Isak/Dijk PR search found no matching proposal.
+Follow-up read-only diagnosis after Anthony asked to keep going: verified main `082fc277` has a concrete coverage gap. `transferPathGraph.ts` reads only `p.career` club-season rows. Isak's retained rows stop at Newcastle in 2024/25; Van Dijk's Liverpool rows also stop in 2024/25. The September quarantine migration removed their projected Liverpool 2025/26 statistic rows, which had also supplied this graph's membership evidence. Oyarzabal and Isak already have exact shared Real Sociedad 2019/20 and 2020/21 records. The missing recorded edge is Isak to Van Dijk. The board's word `never` overstates that missing coverage. This is current-source diagnosis, not a replay of the reported live session.
 
-Next: retain the exact puzzle/rule, selected identities and rejection line; inspect the actual loaded player pool and club-season index, including whether the dates represent shared-season coverage rather than current club. Reproduce before changing data. Any missing real membership requires the existing two-source data workflow; do not fill it from a plausible transfer.
+The overlap is independently verified: Liverpool's starting XI against Atletico on 17 September 2025 includes both players, in [Liverpool's official lineup](https://www.liverpoolfc.com/news/confirmed-liverpool-line-v-atletico-madrid-1?amp=1) and [UEFA's official match report](https://www.uefa.com/newsfiles/UCL/2026/2045911_HR.pdf). No new statistics or membership rows were written here.
+
+[PR242](https://github.com/PapiSalgueroM/ballpark-hero/pull/242), head `e0c94d42`, and [PR243](https://github.com/PapiSalgueroM/ballpark-hero/pull/243) remain open draft and unmerged on the follow-up check. Their membership-only infrastructure and path work cover Trent/Mbappe 2025/26 Madrid, not this Liverpool pair. PR242's retained source `2dfee304` has successful run `38285493476`, but that does not resolve this report on main. Next: reuse the verified membership-only path after its integration and add this independently sourced Liverpool membership. Do not restore quarantined statistics or duplicate the open infrastructure proposal.
 
 ## Soccer Career and MLB
 
@@ -31,3 +33,5 @@ Next: retain the exact puzzle/rule, selected identities and rejection line; insp
 - MLB manual retirement already has a `Hang them up now` action in `UsCareerBoard.tsx`, guarded by at least six saved seasons and located in the season hub. The actual callback calls the retirement flow and persists the retired phase. This source finding does not prove the reported UI is accessible. Retain current phase and season count, then test visibility, confirmation, durable retirement and reload on that save. An earlier-retirement request is a separate product decision from a broken existing action.
 
 No issue in this note is marked fixed, published or accepted. The original focused task remains the unchanged 60,000-character Soccer Career save gate.
+
+The separate keep-going Manager work is draft [PR272](https://github.com/PapiSalgueroM/ballpark-hero/pull/272). It reproduced created-club promotion failures before editing the engine and added current-source age/scorer diagnostics. Its full build and source-fault checks passed; browser and full-unit qualification were still in progress when this follow-up was recorded. The unavailable original Manager saves remain unreplayed. All Soccer save application and proof bytes stay held.
