@@ -1,0 +1,10 @@
+simHarnessAnchors exit=0 88s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+tsc exit=0 166s | 
+simSoccerWorldTruth exit=0 133s | simSoccerWorldTruth: OK, every section green
+simSoccerDeckFairness exit=0 123s | simSoccerDeckFairness: all sections green
+simCareerStoryRole exit=0 79s | simCareerStoryRole: 16 groups, 0 failed, 48 full AR pairs
+simSoccerVeteranTalks exit=0 143s | ok   five production browser fixtures including USD, all raw amounts remain EUR
+simNoRivalNames exit=0 27s | No rival product names found. 0 findings.
+simCareerKeepPlaying exit=0 196s | simCareerKeepPlaying: 1495 checks, 0 failures
+simCareerProgramme exit=0 129s | Career programme:50 original/compatibility/full product season pairs with exact RNG,240 opted gameplay seasons,21 effective loaded faults,163 unchanged chance outcomes an
+vitest-all exit=1 942s |  Test Files  1 failed | 536 passed | 2 skipped (539)
