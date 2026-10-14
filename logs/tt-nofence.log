@@ -1,0 +1,3 @@
+  FAIL [case 14]: the old save was not fenced: a second tab did not stale it
+cases red: 1, 10, 11, 12, 14, 2, 3, 6, 9; pictures in /home/runner/work/_temp/rc-out/files/ttn
+CONTROL FIRED: TWO_TABS_CONTROL=nofence dropped 180 writes and turned case(s) 1, 2, 3, 6, 9, 10, 11, 12, 14 red
