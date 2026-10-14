@@ -1,0 +1,35 @@
+#!playwright
+cooldowns-keynostory: SIM_CAREER_LIFE_COOLDOWNS_CONTROL=keynostory node scripts/simCareerLifeCooldowns.mjs
+cooldowns-nocooldown: SIM_CAREER_LIFE_COOLDOWNS_CONTROL=nocooldown node scripts/simCareerLifeCooldowns.mjs
+cooldowns-s0: node scripts/simCareerLifeCooldowns.mjs
+cooldowns-s1: SEED_OFFSET=1 node scripts/simCareerLifeCooldowns.mjs
+cooldowns-s2: SEED_OFFSET=2 node scripts/simCareerLifeCooldowns.mjs
+cooldowns-s3: SEED_OFFSET=3 node scripts/simCareerLifeCooldowns.mjs
+cooldowns-s4: SEED_OFFSET=4 node scripts/simCareerLifeCooldowns.mjs
+cooldowns-sharedbatch: SIM_CAREER_LIFE_COOLDOWNS_CONTROL=sharedbatch node scripts/simCareerLifeCooldowns.mjs
+simAwards: node scripts/simAwards.mjs
+simBallonDorFairness: node scripts/simBallonDorFairness.mjs
+simBallonDorTruth: node scripts/simBallonDorTruth.mjs
+simCareerCleanSheets: node scripts/simCareerCleanSheets.mjs
+simCareerDomesticCup: node scripts/simCareerDomesticCup.mjs
+simCareerFacts: node scripts/simCareerFacts.mjs
+simCareerKeepPlaying: node scripts/simCareerKeepPlaying.mjs
+simCareerSquad: node scripts/simCareerSquad.mjs
+simInternational: node scripts/simInternational.mjs
+simSeasonCentreNeutral: node scripts/simSeasonCentreNeutral.mjs
+simSoccerAwardGenerations: node scripts/simSoccerAwardGenerations.mjs
+simSoccerEventPromises: node scripts/simSoccerEventPromises.mjs
+simSoccerLoanBite: node scripts/simSoccerLoanBite.mjs
+simSoccerLoanMinutes: node scripts/simSoccerLoanMinutes.mjs
+simSoccerOfferReview: node scripts/simSoccerOfferReview.mjs
+simSoccerOpponentLabels: node scripts/simSoccerOpponentLabels.mjs
+simSoccerOwnGoals: node scripts/simSoccerOwnGoals.mjs
+simSoccerPracticeLifecycle: node scripts/simSoccerPracticeLifecycle.mjs
+simSoccerVeteranOffers: node scripts/simSoccerVeteranOffers.mjs
+simSoccerVeteranTalks: node scripts/simSoccerVeteranTalks.mjs
+simStartingXi: node scripts/simStartingXi.mjs
+simThroughBallDrill: node scripts/simThroughBallDrill.mjs
+simTraining: node scripts/simTraining.mjs
+simTransferBriefPageControl: node scripts/simTransferBriefPageControl.mjs
+development-all: CAREER_DEVELOPMENT_CONTROL=all CAREER_DEVELOPMENT_ARTIFACTS=$RC_OUT/dev node scripts/simSoccerCareerDevelopment.mjs
+base-development-all: git worktree add -q /tmp/b1329dev 082fc2774c8aa9f919c14efa33bfc3fbfc599597 && ln -s "$PWD/node_modules" /tmp/b1329dev/node_modules && cd /tmp/b1329dev && CAREER_DEVELOPMENT_CONTROL=all CAREER_DEVELOPMENT_ARTIFACTS=$RC_OUT/devbase node scripts/simSoccerCareerDevelopment.mjs
