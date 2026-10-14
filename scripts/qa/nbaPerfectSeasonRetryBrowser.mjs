@@ -31,7 +31,13 @@ const report = { status: 'running', declarations: { widths: [390, 1280], cases: 
     'No game-state access through React internals and no page reload, route replacement or retry loop in the driver. One real Try again per journey.',
     'The component proof separately covers the complete six-player/82-game result and reroll boundaries.'],
   sourceBefore: source(), fixture: put('fictional-archive.json', fixture), cases: [], controls: [], errors: [] };
-const recoveryFindings = value => [(value.beforeNonce !== value.afterNonce || value.afterNavigations.length !== 1) && 'no-reload',
+const oneDocument = (documents, url) => documents.length === 1 && documents[0].index === 0
+  && documents[0].request.url === url && documents[0].request.method === 'GET' && documents[0].request.resourceType === 'document'
+  && documents[0].request.navigationRequest === true && documents[0].request.mainFrame === true && documents[0].request.owned === true
+  && documents[0].response?.url === url && documents[0].response.status === 200 && documents[0].response.body && documents[0].response.built;
+const recoveryFindings = value => [(value.beforeNonce !== value.afterNonce || value.beforeTimeOrigin !== value.afterTimeOrigin
+  || !oneDocument(value.afterDocuments, value.documentUrl) || value.afterPerformance.length !== 1
+  || value.afterPerformance[0].type !== 'navigate' || value.afterPerformance[0].name !== value.documentUrl) && 'no-reload',
   !value.afterRoster.includes(value.beforePick) && 'picks-held'].filter(Boolean);
 const layoutFindings = value => [value.overflow && 'overflow', (!value.painted || value.ancestors.some(ancestor => ancestor.visibility !== 'visible' || ancestor.display === 'none')) && 'paint', Number(value.effectiveOpacity) !== 1 && 'opacity', !value.fonts.ready && 'fonts',
   value.rect.x < 0 || value.rect.right > value.viewport.width + 1 || value.rect.y < 0 || value.rect.bottom > value.viewport.height + 1 ? 'viewport' : false,
@@ -48,7 +54,7 @@ let browser;
 try {
   browser = await pw.chromium.launch({ headless: true });
   for (const width of report.declarations.widths) {
-    const row = { width, status: 'running', requests: [], assets: [], scopes: [], navigations: [], errors: [], console: [], captures: [], observations: [] }; report.cases.push(row); put('report.json', report);
+    const row = { width, status: 'running', requests: [], assets: [], scopes: [], navigations: [], documents: [], errors: [], console: [], captures: [], observations: [] }; report.cases.push(row); put('report.json', report);
     let failSquads = false, squadFailures = 0; const pending = new Set();
     const context = await browser.newContext({ viewport: { width, height: width === 390 ? 900 : 1000 }, reducedMotion: 'reduce', colorScheme: 'dark', serviceWorkers: 'block',
       storageState: { cookies: [], origins: [{ origin: new URL(BASE).origin, localStorage: [{ name: 'cookie-consent', value: 'essential' },
@@ -90,20 +96,33 @@ try {
     const page = await context.newPage(); page.on('pageerror', error => row.errors.push(String(error.stack || error)));
     page.on('console', value => row.console.push({ type: value.type(), text: value.text() }));
     page.on('framenavigated', frame => { if (frame === page.mainFrame()) row.navigations.push({ url: frame.url(), observedAt: Date.now() }); });
-    page.on('response', response => { if (new URL(response.url()).origin !== new URL(BASE).origin) return;
-      const asset = { url: response.url(), status: response.status() }; row.assets.push(asset);
+    // Raw frame events include same-document changes and remain complete diagnostics.
+    const documentRequests = new Map(), requestMeta = request => ({ url: request.url(), method: request.method(), resourceType: request.resourceType(),
+      navigationRequest: request.isNavigationRequest(), mainFrame: request.frame() === page.mainFrame(), owned: new URL(request.url()).origin === new URL(BASE).origin });
+    page.on('request', request => {
+      if (!request.isNavigationRequest() || request.resourceType() !== 'document' || request.frame() !== page.mainFrame()) return;
+      const document = { index: row.documents.length, request: requestMeta(request), observedAt: Date.now(), response: null };
+      row.documents.push(document); documentRequests.set(request, document);
+    });
+    page.on('response', response => { const request = response.request(), document = documentRequests.get(request);
+      if (document) document.response = { url: response.url(), status: response.status(), observedAt: Date.now(), assetIndex: null, body: null, built: null };
+      if (new URL(response.url()).origin !== new URL(BASE).origin) return;
+      const asset = { url: response.url(), status: response.status(), request: requestMeta(request), documentIndex: document?.index ?? null }; row.assets.push(asset);
+      if (document) document.response.assetIndex = row.assets.length - 1;
       const promise = (async () => { try {
         const body = await response.body(); asset.body = whole(body); assert.equal(response.status(), 200);
         const relative = decodeURIComponent(new URL(response.url()).pathname).replace(/^\/+/, ''), root = path.resolve(ROOT, 'dist'), file = path.resolve(root, relative || 'index.html');
         assert(file.startsWith(`${root}${path.sep}`)); const disk = fs.existsSync(file) && fs.statSync(file).isDirectory() ? path.join(file, 'index.html') : file;
         const built = fs.readFileSync(disk); assert(built.equals(body), 'Whole served response equals its actual production build body'); asset.built = { file: path.relative(ROOT, disk), ...whole(built) };
-      } catch (error) { asset.error = String(error.stack || error); } })();
+        if (document) { document.response.body = asset.body; document.response.built = asset.built; }
+      } catch (error) { asset.error = String(error.stack || error); if (document) document.response.error = asset.error; } })();
       pending.add(promise); promise.finally(() => pending.delete(promise));
     });
-    const state = async label => { const value = await page.evaluate(async () => { await window.__retryScopeReady; return {
+    const state = async label => { while (pending.size) await Promise.all([...pending]); const value = await page.evaluate(async () => { await window.__retryScopeReady; return {
       document: window.__retryDocument, roster: document.querySelector('aside')?.outerHTML ?? null, publicMain: document.querySelector('main')?.outerHTML ?? null,
       href: location.href, scrollY, navigationEntries: performance.getEntriesByType('navigation').map(entry => ({ type: entry.type, name: entry.name })) };
-    }); row.observations.push({ label, record: put(`${width}-${label}.json`, value) }); return value; };
+    }); while (pending.size) await Promise.all([...pending]); value.documents = copy(row.documents); value.frameEvents = copy(row.navigations);
+      row.observations.push({ label, record: put(`${width}-${label}.json`, value) }); return value; };
     const capture = async (target, name, isControl = false, screenshot = true) => {
       await target.waitFor({ state: 'visible' }); await target.scrollIntoViewIfNeeded(); await page.evaluate(() => document.fonts.ready);
       const geometry = await target.evaluate(async (element, isControl) => { let last, prior, stable = 0;
@@ -124,26 +143,32 @@ try {
       await page.getByRole('button', { name: 'Spin the wheel', exact: true }).click();
       const pg = page.getByRole('button', { name: /Retry Browser PG/ }); await pg.waitFor(); await pg.click(); await page.getByRole('button', { name: 'PG', exact: true }).click();
       const before = await state('earlier-pick'); assert(before.roster.includes('Retry Browser PG'));
+      assert(oneDocument(before.documents, before.href)); assert.deepEqual(before.navigationEntries, [{ type: 'navigate', name: before.href }]);
       await capture(page.locator('aside'), 'draft'); failSquads = true;
       await page.getByRole('button', { name: 'Next spin', exact: true }).click();
       const error = page.getByText("Couldn't reach the basketball archives.", { exact: true }); await error.waitFor();
-      assert.equal(squadFailures, 6); const failed = await state('failed-fetch'); assert.equal(failed.document.nonce, before.document.nonce); assert.equal(row.navigations.length, 1);
+      assert.equal(squadFailures, 6); const failed = await state('failed-fetch'); assert.equal(failed.document.nonce, before.document.nonce);
+      assert.equal(failed.document.timeOrigin, before.document.timeOrigin); assert(oneDocument(failed.documents, before.href)); assert.deepEqual(failed.navigationEntries, before.navigationEntries);
       await capture(error.locator('..'), 'failed-fetch'); const retryTarget = await capture(page.getByRole('button', { name: 'Try again', exact: true }), 'retry-target', true, false);
       const indexRequests = row.requests.filter(request => request.fixture === 'fictional-index').length;
       failSquads = false; await page.getByRole('button', { name: 'Try again', exact: true }).click();
       const sg = page.getByRole('button', { name: /Retry Browser SG/ }); await sg.waitFor();
       const recovered = await state('recovered-draft');
-      const witness = { beforeNonce: before.document.nonce, afterNonce: recovered.document.nonce, afterNavigations: copy(row.navigations), beforePick: 'Retry Browser PG', afterRoster: recovered.roster };
+      const witness = { beforeNonce: before.document.nonce, afterNonce: recovered.document.nonce, beforeTimeOrigin: before.document.timeOrigin, afterTimeOrigin: recovered.document.timeOrigin,
+        documentUrl: before.href, afterDocuments: copy(recovered.documents), afterPerformance: copy(recovered.navigationEntries), afterNavigations: copy(recovered.frameEvents), beforePick: 'Retry Browser PG', afterRoster: recovered.roster };
       row.recovery = put(`${width}-recovery-witness.json`, witness); assert.deepEqual(recoveryFindings(witness), []);
       assert.equal(row.requests.filter(request => request.fixture === 'fictional-index').length, indexRequests, 'Retry uses the held wheel, not a new boot');
       await sg.click(); await page.getByRole('button', { name: 'SG', exact: true }).click();
       const picked = await state('recovered-second-pick'); assert(picked.roster.includes('Retry Browser PG') && picked.roster.includes('Retry Browser SG'));
-      assert.equal(picked.document.nonce, before.document.nonce); assert.equal(row.navigations.length, 1); await capture(page.locator('aside'), 'recovered-draft');
+      assert.equal(picked.document.nonce, before.document.nonce); assert.equal(picked.document.timeOrigin, before.document.timeOrigin);
+      assert(oneDocument(picked.documents, before.href)); assert.deepEqual(picked.navigationEntries, before.navigationEntries); await capture(page.locator('aside'), 'recovered-draft');
       if (width === 390) {
-        control('no-reload-picks', witness, value => { value.afterNonce += '-copied-fault'; value.afterNavigations.push({ url: 'labelled copied navigation only' }); value.afterRoster = ''; }, (value, original) => {
+        control('no-reload-picks', witness, value => { value.afterNonce += '-copied-fault'; value.afterDocuments.push({ ...copy(value.afterDocuments[0]), index: value.afterDocuments.length, copiedFault: true });
+          value.afterNavigations.push({ url: 'labelled copied navigation only' }); value.afterRoster = ''; }, (value, original) => {
           assert.equal(value.afterNonce, `${original.afterNonce}-copied-fault`); assert.equal(value.afterRoster, '');
+          assert.deepEqual(value.afterDocuments.at(-1), { ...copy(original.afterDocuments[0]), index: original.afterDocuments.length, copiedFault: true }); assert.equal(value.afterDocuments.length, original.afterDocuments.length + 1);
           assert.deepEqual(value.afterNavigations.at(-1), { url: 'labelled copied navigation only' }); assert.equal(value.afterNavigations.length, original.afterNavigations.length + 1);
-          value.afterNonce = value.afterNonce.slice(0, -'-copied-fault'.length); value.afterNavigations.pop(); value.afterRoster = original.afterRoster;
+          value.afterNonce = value.afterNonce.slice(0, -'-copied-fault'.length); value.afterDocuments.pop(); value.afterNavigations.pop(); value.afterRoster = original.afterRoster;
         }, recoveryFindings, ['no-reload', 'picks-held']);
         control('layout', retryTarget, value => { value.overflow = true; value.painted = false; value.ancestors[0].opacity = '0'; value.effectiveOpacity = 0;
           value.fonts.ready = false; value.rect.x = -1; value.stable = 3; value.finite = 1; value.rect.height = 43; }, (value, original) => {
@@ -160,6 +185,7 @@ try {
     } finally {
       while (pending.size) await Promise.all([...pending]); await context.close(); while (pending.size) await Promise.all([...pending]);
       if (row.errors.length || row.assets.some(asset => asset.error)) { row.status = 'fail'; report.errors.push({ width, pageErrors: copy(row.errors), assetErrors: row.assets.filter(asset => asset.error) }); }
+      if (!oneDocument(row.documents, `${BASE}/perfect-season-nba`)) { row.status = 'fail'; report.errors.push({ width, documentRequests: copy(row.documents) }); }
       put('report.json', report);
     }
   }
