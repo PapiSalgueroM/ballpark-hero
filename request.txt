@@ -1,0 +1,12 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/lib/gmInbox.test.ts src/components/front-office-shared/GmInboxPanel.test.tsx src/components/us-career/InboxPanel.test.tsx --testTimeout=300000 --hookTimeout=120000
+kitA: SIM_EVENT_DECK_SECTIONS=1,2,3,4,5,6,7,8,9,10,11,12 node scripts/simEventDeck.mjs
+kit13: SIM_EVENT_DECK_SECTIONS=13 node scripts/simEventDeck.mjs
+kitC: SIM_EVENT_DECK_SECTIONS=14,15,16 node scripts/simEventDeck.mjs
+ctl-conductlate: EVENT_DECK_CONTROL=conductlate SIM_EVENT_DECK_SECTIONS=12 node scripts/simEventDeck.mjs
+ctl-conductstale: EVENT_DECK_CONTROL=conductstale SIM_EVENT_DECK_SECTIONS=12 node scripts/simEventDeck.mjs
+ctl-conducttarget: EVENT_DECK_CONTROL=conducttarget SIM_EVENT_DECK_SECTIONS=12 node scripts/simEventDeck.mjs
+ctl-nullpass: EVENT_DECK_CONTROL=nullpass SIM_EVENT_DECK_SECTIONS=12 node scripts/simEventDeck.mjs
+ctl-newpack: EVENT_DECK_CONTROL=newpack SIM_EVENT_DECK_SECTIONS=13,14,15 node scripts/simEventDeck.mjs
+probe-drift-asis: PART=drift node .rc/x/probe1332.mjs
+probe-drift-n: PART=drift node .rc/x/probe1332n.mjs

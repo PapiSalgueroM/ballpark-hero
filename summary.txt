@@ -1,0 +1,12 @@
+vitest exit=0 4s |    Duration  2.47s (transform 575ms, setup 238ms, collect 1.45s, tests 781ms, environment 2.10s, prepare 866ms)
+tsc exit=0 94s | 
+kitA exit=0 104s | simEventDeck: green. Sections 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 only.
+ctl-conductlate exit=1 2s | simEventDeck: 1 failure, red sections 12 (CONTROL=conductlate fired)
+ctl-conductstale exit=1 2s | simEventDeck: 1 failure, red sections 12 (CONTROL=conductstale fired)
+ctl-conducttarget exit=1 2s | simEventDeck: 1 failure, red sections 12 (CONTROL=conducttarget fired)
+ctl-nullpass exit=1 2s | simEventDeck: 1 failure, red sections 12 (CONTROL=nullpass fired)
+kitC exit=0 44s | simEventDeck: green. Sections 14, 15, 16 only.
+probe-drift-asis exit=1 0s | Node.js v24.21.0
+probe-drift-n exit=0 1s | probe drift: green, no effect of a tagged card reached a real man
+kit13 exit=0 139s | simEventDeck: green. Sections 13 only.
+ctl-newpack exit=1 145s | simEventDeck: 3 failures, red sections 14, 15 (CONTROL=newpack fired)

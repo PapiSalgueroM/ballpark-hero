@@ -1,0 +1,25 @@
+simEventDeck: 7 packs (nfl, nba, mlb, nhl, college, gym, afl), CONTROL=conductlate
+1) Replay: 7 GM packs, seeds 1, 2, 3, drives FLEET, SILENT, STUBBORN, FALLEN, 10 seasons a desk
+2) Same seed, same deck; a JSON round trip and repairGmInbox between every two weeks change nothing
+3) Weights: equal weights deal the recording, and a weight is a share of the draw, never a rank
+4) Story: never two of one story inside its cooldown or in one week, a one shot story once
+5) Subject rest: no subject inside its rest or twice in a week, the rest book born pruned
+6) Texts: wordings move no deal and no draw, every wording comes up at its share, a key reads the same words
+7) Expiry: an open card is settled at exactly w plus expires on its neutral option, nothing moves, the deck never freezes
+8) Neutral: every card of every pack off the baseline has an option that moves nothing, and every pack check holds
+9) Season clock: a card is held out exactly as careerEventDeck holds it; the week clock is back after exactly N
+10) Share and reach: every card of every pack reached over 1,000 seasons, no card above its pack's measured ceiling
+11) Registry: every option prints exactly the keys it moves, by exactly the amounts, and bind refuses each breakage
+12) Legal: every pack narrated in roles, slots only in words, and a tagged card never lands on a real man
+   ok 10483 real names harvested from thirteen roster files
+   ok 536 strings over 11 packs: no quote, no first person, every voice a role, no real name, slots only where declared, no person slot by a speech verb, no wording prints an effect, every conduct or private card tagged (baseline: afl/afl_go_home, nba/nba_trade_demand)
+     desk 2 week 19: answering p_home-2030-w17 lands on a real man (or nobody)
+     desk 2 week 79: answering c_curfew-2033-w79 lands on a real man (or nobody)
+     desk 2 week 119: answering c_curfew-2035-w117 lands on a real man (or nobody)
+     desk 3 week 99: answering p_home-2034-w99 lands on a real man (or nobody)
+     desk 6 week 79: answering c_curfew-2033-w79 lands on a real man (or nobody)
+     desk 7 week 19: answering c_skip-2030-w18 lands on a real man (or nobody)
+   FAIL 112 breaks: FX_CONDUCT on 100 ten season desks answering late: 17035 cards dealt, 6985 of them tagged, 16686 answered, 59656 tagged cards held for a real man, 0 answers refused and 178 open cards settled after a role passed to a real man (or nobody)
+
+runtime 2.2 s
+simEventDeck: 1 failure, red sections 12 (CONTROL=conductlate fired)

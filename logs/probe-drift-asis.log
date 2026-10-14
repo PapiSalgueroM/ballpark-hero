@@ -1,0 +1,10 @@
+file:///home/runner/work/_temp/t-probe-drift-asis/probe1332-5HdLzw/bundle-head.mjs:109
+  if (problems.length > 0) throw new Error(`gmInbox: the ${pack.seat} pack: ${problems[0]}`);
+                                 ^
+
+Error: gmInbox: the drift pack: p_home is tagged private and names a role, with no option that moves nothing for the staff to settle on
+    at Object.bindGmInbox (file:///home/runner/work/_temp/t-probe-drift-asis/probe1332-5HdLzw/bundle-head.mjs:109:34)
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/.rc/x/probe1332.mjs:193:21
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+
+Node.js v24.21.0
