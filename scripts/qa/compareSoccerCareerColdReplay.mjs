@@ -13,6 +13,10 @@ import { fileURLToPath } from 'node:url';
 assert(process.env.CI && process.env.SIM_NETWORK === 'offline', 'Replay proof requires remote offline transport');
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 const TEST = 'src/test/seasonCentreOwnGoals.test.tsx', PARENT = '42a7f7c999cb13bb24bf0992537e4ff84b112f6d';
+/* Release BF join: SC_COLD_REPLAY_CORE_REF (default PARENT) is the ref the unchanged app files are held to. The packet was proved on
+   an older tree; on a newer one the join names the tree without this packet (its merge's first parent), and the
+   files this packet fixes are still compared with PARENT. */
+const CORE_REF = process.env.SC_COLD_REPLAY_CORE_REF || PARENT;
 const ACCEPTED = '8974536d80c1c461b1cddebb3fc3dfc487c410b7';
 const ORIGINAL = '  /* a moment taken the other way can move a poster (the day the title is won) onto this matchday: step past it */\n'
   + '  const past = container.querySelector(`[data-matchday="${spot.md}"]`) ? null : container.querySelector<HTMLButtonElement>(\'[data-centre-bar] button\');\n'
@@ -115,7 +119,7 @@ try {
   assert.equal(candidate, accepted, 'The whole current test must equal the accepted H1327 test');
   assert.equal(unique(candidate, CURRENT, ORIGINAL), parent, 'The method inverse restores the whole held parent test');
   const parentBindings = app.map(file => {
-    const before = git(['show', `${PARENT}:${file}`]), current = sources.get(file);
+    const before = git(['show', `${file !== 'src/lib/soccerCareerRealismA.ts' ? CORE_REF : PARENT}:${file}`]), current = sources.get(file);
     if (file === 'src/lib/soccerCareerRealismA.ts') {
       const gate = '  if (state.pendingEvents.some(event => event.id === 426)) {\n    push({ id: 426,';
       const originalGate = '  if (pro >= 1) {\n    push({ id: 426,';
