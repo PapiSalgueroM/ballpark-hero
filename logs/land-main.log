@@ -1,0 +1,85 @@
+bar save retired: phase retired, age 18
+== head 320x640
+   youth: 1 Retire control(s)
+   youth: "🚪 Retire" is 44 px tall
+   youth: "🔄 New Career" is 44 px tall
+   playing: 1 Retire control(s)
+   playing: "🚪 Retire" is 44 px tall
+   playing: "🔄 New Career" is 44 px tall
+   retired: 0 Weekly Wage tile(s)
+== head 390x844
+   youth: 1 Retire control(s)
+   youth: "🚪 Retire" is 44 px tall
+   youth: "🔄 New Career" is 44 px tall
+   playing: 1 Retire control(s)
+   playing: "🚪 Retire" is 44 px tall
+   playing: "🔄 New Career" is 44 px tall
+   retired: 0 Weekly Wage tile(s)
+== head 1280x900
+   youth: 1 Retire control(s)
+   youth: "🚪 Retire" is 44 px tall
+   youth: "🔄 New Career" is 44 px tall
+   playing: 1 Retire control(s)
+   playing: "🚪 Retire" is 44 px tall
+   playing: "🔄 New Career" is 44 px tall
+   retired: 0 Weekly Wage tile(s)
+== head 360x780 (bar only)
+== head 375x667 (bar only)
+== head 480x800 (name only)
+== head 768x1024 (name only)
+== base 320x640
+  base [bar 320x640]: retired: 18Age spans 329 to 383 on a 320 screen
+  base [bar 320x640]: retired: the AGE number is not fully on screen (346 to 366)
+   youth: 2 Retire control(s)
+  base [retire 320x640]: youth: 2 Retire controls on the hub
+   youth: "🚪 Retire" is 40 px tall
+  base [retire 320x640]: youth: the header's "🚪 Retire" is 40 px tall, under 44
+   youth: "🔄 New Career" is 40 px tall
+  base [retire 320x640]: youth: the header's "🔄 New Career" is 40 px tall, under 44
+   playing: 2 Retire control(s)
+  base [retire 320x640]: playing: 2 Retire controls on the hub
+   playing: "🚪 Retire" is 40 px tall
+  base [retire 320x640]: playing: the header's "🚪 Retire" is 40 px tall, under 44
+   playing: "🔄 New Career" is 40 px tall
+  base [retire 320x640]: playing: the header's "🔄 New Career" is 40 px tall, under 44
+   retired: 1 Weekly Wage tile(s)
+== base 390x844
+   youth: 2 Retire control(s)
+  base [retire 390x844]: youth: 2 Retire controls on the hub
+   youth: "🚪 Retire" is 40 px tall
+  base [retire 390x844]: youth: the header's "🚪 Retire" is 40 px tall, under 44
+   youth: "🔄 New Career" is 40 px tall
+  base [retire 390x844]: youth: the header's "🔄 New Career" is 40 px tall, under 44
+   playing: 2 Retire control(s)
+  base [retire 390x844]: playing: 2 Retire controls on the hub
+   playing: "🚪 Retire" is 40 px tall
+  base [retire 390x844]: playing: the header's "🚪 Retire" is 40 px tall, under 44
+   playing: "🔄 New Career" is 40 px tall
+  base [retire 390x844]: playing: the header's "🔄 New Career" is 40 px tall, under 44
+   retired: 1 Weekly Wage tile(s)
+== base 1280x900
+   youth: 2 Retire control(s)
+  base [retire 1280x900]: youth: 2 Retire controls on the hub
+   youth: "🚪 Retire" is 40 px tall
+  base [retire 1280x900]: youth: the header's "🚪 Retire" is 40 px tall, under 44
+   youth: "🔄 New Career" is 40 px tall
+  base [retire 1280x900]: youth: the header's "🔄 New Career" is 40 px tall, under 44
+   playing: 2 Retire control(s)
+  base [retire 1280x900]: playing: 2 Retire controls on the hub
+   playing: "🚪 Retire" is 40 px tall
+  base [retire 1280x900]: playing: the header's "🚪 Retire" is 40 px tall, under 44
+   playing: "🔄 New Career" is 40 px tall
+  base [retire 1280x900]: playing: the header's "🔄 New Career" is 40 px tall, under 44
+   retired: 1 Weekly Wage tile(s)
+== base 360x780 (bar only)
+  base [bar 360x780]: retired: 18Age spans 329 to 383 on a 360 screen
+  base [bar 360x780]: retired: the AGE number is not fully on screen (346 to 366)
+== base 375x667 (bar only)
+  base [bar 375x667]: retired: 18Age spans 329 to 383 on a 375 screen
+== base 480x800 (name only)
+== base 768x1024 (name only)
+  base landing: the measurement sees the bug on the base (21 finding(s))
+  base name: the measurement sees the bug on the base (9 finding(s))
+  base bar: the measurement sees the bug on the base (26 finding(s))
+  base retire: the measurement sees the bug on the base (21 finding(s))
+playSoccerLanding: green at 320x640, 390x844, 1280x900 (also bar 360x780, bar 375x667, name 480x800, name 768x1024; landing, name, bar, retire), every marked section red on the base

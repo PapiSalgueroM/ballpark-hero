@@ -1,0 +1,54 @@
+== head 320x640
+   26 toast sample(s) of 13 toast(s) over a drive through youth, contract_offer, playing, phone: bought Hire in 🏠Where you live17 left , newspaper, season_summary, ballon_dor, social_media_action, random_events, transfer_window
+     coverage contract signing: 1 sampled
+     coverage random event choice: 7 sampled
+     coverage transfer window choice: 2 sampled
+     coverage phone purchase: 1 sampled
+     coverage social media post: 2 sampled
+== head 390x844
+   26 toast sample(s) of 13 toast(s) over a drive through youth, contract_offer, playing, phone: bought Hire in 🏠Where you live17 left , newspaper, season_summary, ballon_dor, social_media_action, random_events, transfer_window
+     coverage contract signing: 1 sampled
+     coverage random event choice: 7 sampled
+     coverage transfer window choice: 2 sampled
+     coverage phone purchase: 1 sampled
+     coverage social media post: 2 sampled
+== head 1280x900
+   26 toast sample(s) of 13 toast(s) over a drive through youth, contract_offer, playing, phone: bought Hire in 🏠Where you live17 left , newspaper, season_summary, ballon_dor, social_media_action, random_events, transfer_window
+     coverage contract signing: 1 sampled
+     coverage random event choice: 7 sampled
+     coverage transfer window choice: 2 sampled
+     coverage phone purchase: 1 sampled
+     coverage social media post: 2 sampled
+== base 320x640
+   28 toast sample(s) of 14 toast(s) over a drive through youth, contract_offer, playing, phone: bought Hire in 🏠Where you live17 left , newspaper, season_summary, ballon_dor, social_media_action, random_events, transfer_window
+     coverage contract signing: 1 sampled
+     coverage random event choice: 7 sampled
+     coverage transfer window choice: 2 sampled
+     coverage phone purchase: 1 sampled
+     coverage social media post: 2 sampled
+== base 390x844
+   28 toast sample(s) of 14 toast(s) over a drive through youth, contract_offer, playing, phone: bought Hire in 🏠Where you live17 left , newspaper, season_summary, ballon_dor, social_media_action, random_events, transfer_window
+     coverage contract signing: 1 sampled
+     coverage random event choice: 7 sampled
+     coverage transfer window choice: 2 sampled
+     coverage phone purchase: 1 sampled
+     coverage social media post: 2 sampled
+== base 1280x900
+   28 toast sample(s) of 14 toast(s) over a drive through youth, contract_offer, playing, phone: bought Hire in 🏠Where you live17 left , newspaper, season_summary, ballon_dor, social_media_action, random_events, transfer_window
+     coverage contract signing: 1 sampled
+     coverage random event choice: 7 sampled
+     coverage transfer window choice: 2 sampled
+     coverage phone purchase: 1 sampled
+     coverage social media post: 2 sampled
+== bytes (390x844)
+  FAIL [bytes 390x844]: the save parts from the base at step 4 (playing: Next Season) (head 68aef9041ee5f181) against step 4 (playing: Next Season) (base 938beef9f0a9d016)
+   bytes reached: three Next Seasons yes, a random event choice yes, a transfer window choice yes, a phone action yes
+== bytes: old saves (realSaves, seeds 0 to 7, 390x844)
+  FAIL [bytes 390x844]: old save 0 (playing, pressed "Next Season"): the bytes after one press differ
+  FAIL [bytes 390x844]: old save 1 (playing, pressed "Next Season"): the bytes after one press differ
+  FAIL [bytes 390x844]: old save 2 (playing, pressed "Next Season"): the bytes after one press differ
+  FAIL [bytes 390x844]: old save 4 (playing, pressed "Next Season"): the bytes after one press differ
+  FAIL [bytes 390x844]: old save 5 (playing, pressed "Next Season"): the bytes after one press differ
+  FAIL [bytes 390x844]: old save 6 (playing, pressed "Next Season"): the bytes after one press differ
+  base toasts: the measurement sees the bug on the base (55 finding(s))
+playSoccerLanding: RED, 7 finding(s)

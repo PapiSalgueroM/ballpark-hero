@@ -1,0 +1,7 @@
+build exit=0 31s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+mobile exit=0 211s | GREEN: 34 top bar measurements and 132 scroll stops, no overlaps, nothing off the side of the screen, controls reachable everywhere, footer never covered.
+land-main exit=0 357s | playSoccerLanding: green at 320x640, 390x844, 1280x900 (also bar 360x780, bar 375x667, name 480x800, name 768x1024; landing, name, bar, retire), every marked section red 
+land-toasts exit=1 421s | playSoccerLanding: RED, 7 finding(s)
+tt-all exit=0 433s | playTwoTabs: green at 320x640, 390x844, 1280x900
+tt-nofence exit=1 494s | CONTROL FIRED: TWO_TABS_CONTROL=nofence dropped 180 writes and turned case(s) 1, 2, 3, 6, 9, 10, 11, 12, 14 red
+keeper exit=0 853s | playSaveKeeper: green. A save put back with a game in memory survives the load, and an ordinary visit stores nothing new beyond the 2 key(s) named in KEYS_ADDED_ON_PURPOS

@@ -1,0 +1,171 @@
+fixtures: Brighton 55840 chars, Everton 54114 chars, Hot Seat survivor Arsenal (survived, 9 actions)
+== 320x640
+1) CLOBBER, and 8) THE NOTICE (320x640)
+   start Brighton week 1, 1 results, last Aston Villa 3-3 | after B played three Brighton week 5, 4 results, last Coventry City 0-0 | after A left Brighton week 1, 1 results, last Aston Villa 3-3 | A saw the notice: false
+  FAIL [case 1]: tab A never showed the notice after tab B opened the career and played on
+  FAIL [case 1]: CLOBBER: tab A's leave took the save from "Brighton week 5, 4 results, last Coventry City 0-0" to "Brighton week 1, 1 results, last Aston Villa 3-3"
+2) REPLAY, three times (320x640)
+   REPLAY 0: B wrote "Brighton week 1, 1 results, last Aston Villa 0-1"; A's press went through: true; on disk after A's press "Brighton week 1, 1 results, last Aston Villa 3-2", after the forced press "Brighton week 1, 1 results, last Aston Villa 3-2"
+  FAIL [case 2]: REPLAY 0: the press reached Quick Sim behind the notice
+  FAIL [case 2]: REPLAY 0: the stale tab changed the save from "Brighton week 1, 1 results, last Aston Villa 0-1" to "Brighton week 1, 1 results, last Aston Villa 3-2"
+   REPLAY 1: B wrote "Brighton week 2, 2 results, last Chelsea 0-0"; A's press went through: true; on disk after A's press "Brighton week 2, 2 results, last Chelsea 0-2", after the forced press "Brighton week 2, 2 results, last Chelsea 0-2"
+  FAIL [case 2]: REPLAY 1: the press reached Quick Sim behind the notice
+  FAIL [case 2]: REPLAY 1: the stale tab changed the save from "Brighton week 2, 2 results, last Chelsea 0-0" to "Brighton week 2, 2 results, last Chelsea 0-2"
+   REPLAY 2: B wrote "Brighton week 3, 3 results, last Leeds United 5-0"; A's press went through: true; on disk after A's press "Brighton week 3, 3 results, last Leeds United 1-2", after the forced press "Brighton week 3, 3 results, last Leeds United 1-2"
+  FAIL [case 2]: REPLAY 2: the press reached Quick Sim behind the notice
+  FAIL [case 2]: REPLAY 2: the stale tab changed the save from "Brighton week 3, 3 results, last Leeds United 5-0" to "Brighton week 3, 3 results, last Leeds United 1-2"
+3) HOT SEAT carry on beside a Club Manager tab, and 4) LANDING (320x640)
+   A held "Brighton week 1, 1 results, last Aston Villa 0-1"; B handed over "Arsenal week 26, 26 results, last Hull City 2-0" and landed on the hub; A saw it: false; after A left "Brighton week 1, 1 results, last Aston Villa 0-1"
+  FAIL [case 3]: tab A never showed the notice after the handover
+  FAIL [case 3]: tab A's leave write put "Brighton week 1, 1 results, last Aston Villa 0-1" over the handover "Arsenal week 26, 26 results, last Hull City 2-0"
+  ok    the carry on opened Club Manager on the hub
+6) PUT BACK through the restore card beside a Club Manager tab (320x640)
+   offered: true; put back "Everton week 0, 0 results, last none"; A saw it: false; after A left "Brighton week 1, 1 results, last Aston Villa 5-1"
+  FAIL [case 6]: tab A never showed the notice after the put back
+  FAIL [case 6]: tab A's leave write put "Brighton week 1, 1 results, last Aston Villa 5-1" over the put back "Everton week 0, 0 results, last none"
+9) BACK: a stale tab leaves by the browser's Back, mid Play Live and on the hub (320x640)
+  note  tab A's live match is in minute 5
+   mid Play Live: A came in by a link; B played 3: "Brighton week 3, 3 results, last Leeds United 1-0" (live none); A saw the notice: false; after A's Back (same document true) "Brighton week 0, 0 results, last none" (live minute 13)
+  FAIL [case 9]: mid Play Live: tab A never showed the notice
+  FAIL [case 9]: CLOBBER by Back mid Play Live: B left "Brighton week 3, 3 results, last Leeds United 1-0" (live none), after A's Back the save holds "Brighton week 0, 0 results, last none" (live minute 13)
+   on the hub: A came in by a link; B played 3: "Brighton week 3, 3 results, last Leeds United 5-1" (live none); A saw the notice: false; after A's Back (same document true) "Brighton week 0, 0 results, last none" (live none)
+  FAIL [case 9]: on the hub: tab A never showed the notice
+  FAIL [case 9]: CLOBBER by Back on the hub: B left "Brighton week 3, 3 results, last Leeds United 5-1" (live none), after A's Back the save holds "Brighton week 0, 0 results, last none" (live none)
+   then in the same document a Hot Seat carry on: the save holds "Arsenal week 26, 26 results, last Hull City 2-0"
+  ok    the same document carried a Hot Seat job on afterwards
+10) SOCCER REPLACE, and 11) REVERSE (320x640)
+soccer fixture: Two Tab Tester age 18, playing, 3 seasons, last 2022 West Ham: 32 apps, 5 goals, 6.9, 13504 chars
+   A opened on "Next Season"; B played "Next Season": Two Tab Tester age 19, newspaper, 4 seasons, last 2023 Leverkusen: 30 apps, 4 goals, 7.2; A saw the notice at once: false; A's press went through: true; forced "Continue to Season Summary →"; A's writes 1 to 3
+  FAIL [case 10]: tab A never showed the notice after tab B opened the career
+  FAIL [case 10]: the press reached Next Season behind the notice
+  FAIL [case 10]: REPLACE: the stale tab wrote the save 2 time(s) after tab B played
+  FAIL [case 10]: REPLACE: the save on disk is not tab B's any more (Two Tab Tester age 19, season_summary, 4 seasons, last 2023 Leverkusen: 33 apps, 8 goals, 7)
+  FAIL [case 10]: tab A reloaded onto another season: Two Tab Tester age 19, season_summary, 4 seasons, last 2023 Leverkusen: 33 apps, 8 goals, 7
+   REVERSE: B saw the notice: false; A stepped "Continue →": Two Tab Tester age 19, ballon_dor, 4 seasons, last 2023 Leverkusen: 33 apps, 8 goals, 7; B forced "Continue to Season Summary →"; B's writes 2 to 3
+  FAIL [case 11]: tab B never showed the notice once tab A reloaded
+  FAIL [case 11]: REVERSE: the stale tab B wrote the save 1 time(s)
+  FAIL [case 11]: REVERSE: the save on disk is not tab A's (Two Tab Tester age 19, season_summary, 4 seasons, last 2023 Leverkusen: 30 apps, 4 goals, 7.2)
+12) NEW CAREER IN A STALE TAB (320x640)
+   A saw the notice: false; forced New Career true, forced confirm true; A's writes 1 to 2; on disk no save
+  FAIL [case 12]: tab A never showed the notice
+  FAIL [case 12]: NEW CAREER: the stale tab cleared or wrote the save (1 writes, on disk no save)
+   creation: B began Fresh Creator age 16, youth, 1 seasons, last 2025 Fulham Youth: 0 apps, 0 goals, 0; A saw the notice: false; A's forced Begin Career true; A's writes 0 to 1; on disk Stale Creator age 16, youth, 1 seasons, last 2025 Everton Youth: 0 apps, 0 goals, 0
+  FAIL [case 12]: the tab on the creation screen never showed the notice
+  FAIL [case 12]: CREATION: the stale tab began a career over the other one (1 writes, on disk Stale Creator age 16, youth, 1 seasons, last 2025 Everton Youth: 0 apps, 0 goals, 0)
+14) SOCCER OLD SAVE AND THE NOTICE (320x640)
+   fence before absent, after "Next Season" null; Two Tab Tester age 18, playing, 3 seasons, last 2022 West Ham: 32 apps, 5 goals, 6.9 to Two Tab Tester age 19, newspaper, 4 seasons, last 2023 Leverkusen: 33 apps, 8 goals, 7; a second tab stales it: false
+  FAIL [case 14]: no fence after the first write (null)
+  FAIL [case 14]: the old save was not fenced: a second tab did not stale it
+== 390x844
+1) CLOBBER, and 8) THE NOTICE (390x844)
+   start Brighton week 1, 1 results, last Aston Villa 2-0 | after B played three Brighton week 5, 4 results, last Coventry City 2-2 | after A left Brighton week 1, 1 results, last Aston Villa 2-0 | A saw the notice: false
+  FAIL [case 1]: tab A never showed the notice after tab B opened the career and played on
+  FAIL [case 1]: CLOBBER: tab A's leave took the save from "Brighton week 5, 4 results, last Coventry City 2-2" to "Brighton week 1, 1 results, last Aston Villa 2-0"
+2) REPLAY, three times (390x844)
+   REPLAY 0: B wrote "Brighton week 1, 1 results, last Aston Villa 2-0"; A's press went through: true; on disk after A's press "Brighton week 1, 1 results, last Aston Villa 0-0", after the forced press "Brighton week 1, 1 results, last Aston Villa 0-0"
+  FAIL [case 2]: REPLAY 0: the press reached Quick Sim behind the notice
+  FAIL [case 2]: REPLAY 0: the stale tab changed the save from "Brighton week 1, 1 results, last Aston Villa 2-0" to "Brighton week 1, 1 results, last Aston Villa 0-0"
+   REPLAY 1: B wrote "Brighton week 2, 2 results, last Chelsea 0-2"; A's press went through: true; on disk after A's press "Brighton week 2, 2 results, last Chelsea 0-2", after the forced press "Brighton week 2, 2 results, last Chelsea 0-2"
+  FAIL [case 2]: REPLAY 1: the press reached Quick Sim behind the notice
+   REPLAY 2: B wrote "Brighton week 3, 3 results, last Leeds United 0-1"; A's press went through: true; on disk after A's press "Brighton week 3, 3 results, last Leeds United 2-2", after the forced press "Brighton week 3, 3 results, last Leeds United 2-2"
+  FAIL [case 2]: REPLAY 2: the press reached Quick Sim behind the notice
+  FAIL [case 2]: REPLAY 2: the stale tab changed the save from "Brighton week 3, 3 results, last Leeds United 0-1" to "Brighton week 3, 3 results, last Leeds United 2-2"
+3) HOT SEAT carry on beside a Club Manager tab, and 4) LANDING (390x844)
+   A held "Brighton week 1, 1 results, last Aston Villa 3-0"; B handed over "Arsenal week 26, 26 results, last Hull City 2-0" and landed on the hub; A saw it: false; after A left "Brighton week 1, 1 results, last Aston Villa 3-0"
+  FAIL [case 3]: tab A never showed the notice after the handover
+  FAIL [case 3]: tab A's leave write put "Brighton week 1, 1 results, last Aston Villa 3-0" over the handover "Arsenal week 26, 26 results, last Hull City 2-0"
+  ok    the carry on opened Club Manager on the hub
+6) PUT BACK through the restore card beside a Club Manager tab (390x844)
+   offered: true; put back "Everton week 0, 0 results, last none"; A saw it: false; after A left "Brighton week 1, 1 results, last Aston Villa 0-0"
+  FAIL [case 6]: tab A never showed the notice after the put back
+  FAIL [case 6]: tab A's leave write put "Brighton week 1, 1 results, last Aston Villa 0-0" over the put back "Everton week 0, 0 results, last none"
+9) BACK: a stale tab leaves by the browser's Back, mid Play Live and on the hub (390x844)
+  note  tab A's live match is in minute 3
+   mid Play Live: A came in by a link; B played 3: "Brighton week 3, 3 results, last Leeds United 0-0" (live none); A saw the notice: false; after A's Back (same document true) "Brighton week 0, 0 results, last none" (live minute 12)
+  FAIL [case 9]: mid Play Live: tab A never showed the notice
+  FAIL [case 9]: CLOBBER by Back mid Play Live: B left "Brighton week 3, 3 results, last Leeds United 0-0" (live none), after A's Back the save holds "Brighton week 0, 0 results, last none" (live minute 12)
+   on the hub: A came in by a link; B played 3: "Brighton week 3, 3 results, last Leeds United 2-2" (live none); A saw the notice: false; after A's Back (same document true) "Brighton week 0, 0 results, last none" (live none)
+  FAIL [case 9]: on the hub: tab A never showed the notice
+  FAIL [case 9]: CLOBBER by Back on the hub: B left "Brighton week 3, 3 results, last Leeds United 2-2" (live none), after A's Back the save holds "Brighton week 0, 0 results, last none" (live none)
+   then in the same document a Hot Seat carry on: the save holds "Arsenal week 26, 26 results, last Hull City 2-0"
+  ok    the same document carried a Hot Seat job on afterwards
+10) SOCCER REPLACE, and 11) REVERSE (390x844)
+   A opened on "Next Season"; B played "Next Season": Two Tab Tester age 19, newspaper, 4 seasons, last 2023 Leverkusen: 30 apps, 4 goals, 7.2; A saw the notice at once: false; A's press went through: true; forced "Continue to Season Summary →"; A's writes 1 to 3
+  FAIL [case 10]: tab A never showed the notice after tab B opened the career
+  FAIL [case 10]: the press reached Next Season behind the notice
+  FAIL [case 10]: REPLACE: the stale tab wrote the save 2 time(s) after tab B played
+  FAIL [case 10]: REPLACE: the save on disk is not tab B's any more (Two Tab Tester age 19, season_summary, 4 seasons, last 2023 Leverkusen: 33 apps, 8 goals, 7)
+  FAIL [case 10]: tab A reloaded onto another season: Two Tab Tester age 19, season_summary, 4 seasons, last 2023 Leverkusen: 33 apps, 8 goals, 7
+   REVERSE: B saw the notice: false; A stepped "Continue →": Two Tab Tester age 19, ballon_dor, 4 seasons, last 2023 Leverkusen: 33 apps, 8 goals, 7; B forced "Continue to Season Summary →"; B's writes 2 to 3
+  FAIL [case 11]: tab B never showed the notice once tab A reloaded
+  FAIL [case 11]: REVERSE: the stale tab B wrote the save 1 time(s)
+  FAIL [case 11]: REVERSE: the save on disk is not tab A's (Two Tab Tester age 19, season_summary, 4 seasons, last 2023 Leverkusen: 30 apps, 4 goals, 7.2)
+12) NEW CAREER IN A STALE TAB (390x844)
+   A saw the notice: false; forced New Career true, forced confirm true; A's writes 1 to 2; on disk no save
+  FAIL [case 12]: tab A never showed the notice
+  FAIL [case 12]: NEW CAREER: the stale tab cleared or wrote the save (1 writes, on disk no save)
+   creation: B began Fresh Creator age 16, youth, 1 seasons, last 2025 Fulham Youth: 0 apps, 0 goals, 0; A saw the notice: false; A's forced Begin Career true; A's writes 0 to 1; on disk Stale Creator age 16, youth, 1 seasons, last 2025 Everton Youth: 0 apps, 0 goals, 0
+  FAIL [case 12]: the tab on the creation screen never showed the notice
+  FAIL [case 12]: CREATION: the stale tab began a career over the other one (1 writes, on disk Stale Creator age 16, youth, 1 seasons, last 2025 Everton Youth: 0 apps, 0 goals, 0)
+14) SOCCER OLD SAVE AND THE NOTICE (390x844)
+   fence before absent, after "Next Season" null; Two Tab Tester age 18, playing, 3 seasons, last 2022 West Ham: 32 apps, 5 goals, 6.9 to Two Tab Tester age 19, newspaper, 4 seasons, last 2023 Leverkusen: 33 apps, 8 goals, 7; a second tab stales it: false
+  FAIL [case 14]: no fence after the first write (null)
+  FAIL [case 14]: the old save was not fenced: a second tab did not stale it
+== 1280x900
+1) CLOBBER, and 8) THE NOTICE (1280x900)
+   start Brighton week 1, 1 results, last Aston Villa 3-0 | after B played three Brighton week 5, 4 results, last Coventry City 1-1 | after A left Brighton week 1, 1 results, last Aston Villa 3-0 | A saw the notice: false
+  FAIL [case 1]: tab A never showed the notice after tab B opened the career and played on
+  FAIL [case 1]: CLOBBER: tab A's leave took the save from "Brighton week 5, 4 results, last Coventry City 1-1" to "Brighton week 1, 1 results, last Aston Villa 3-0"
+2) REPLAY, three times (1280x900)
+   REPLAY 0: B wrote "Brighton week 1, 1 results, last Aston Villa 2-1"; A's press went through: true; on disk after A's press "Brighton week 1, 1 results, last Aston Villa 1-0", after the forced press "Brighton week 1, 1 results, last Aston Villa 1-0"
+  FAIL [case 2]: REPLAY 0: the press reached Quick Sim behind the notice
+  FAIL [case 2]: REPLAY 0: the stale tab changed the save from "Brighton week 1, 1 results, last Aston Villa 2-1" to "Brighton week 1, 1 results, last Aston Villa 1-0"
+   REPLAY 1: B wrote "Brighton week 2, 2 results, last Chelsea 0-2"; A's press went through: true; on disk after A's press "Brighton week 2, 2 results, last Chelsea 1-1", after the forced press "Brighton week 2, 2 results, last Chelsea 1-1"
+  FAIL [case 2]: REPLAY 1: the press reached Quick Sim behind the notice
+  FAIL [case 2]: REPLAY 1: the stale tab changed the save from "Brighton week 2, 2 results, last Chelsea 0-2" to "Brighton week 2, 2 results, last Chelsea 1-1"
+   REPLAY 2: B wrote "Brighton week 3, 3 results, last Leeds United 1-0"; A's press went through: true; on disk after A's press "Brighton week 3, 3 results, last Leeds United 2-1", after the forced press "Brighton week 3, 3 results, last Leeds United 2-1"
+  FAIL [case 2]: REPLAY 2: the press reached Quick Sim behind the notice
+  FAIL [case 2]: REPLAY 2: the stale tab changed the save from "Brighton week 3, 3 results, last Leeds United 1-0" to "Brighton week 3, 3 results, last Leeds United 2-1"
+3) HOT SEAT carry on beside a Club Manager tab, and 4) LANDING (1280x900)
+   A held "Brighton week 1, 1 results, last Aston Villa 1-0"; B handed over "Arsenal week 26, 26 results, last Hull City 2-0" and landed on the hub; A saw it: false; after A left "Brighton week 1, 1 results, last Aston Villa 1-0"
+  FAIL [case 3]: tab A never showed the notice after the handover
+  FAIL [case 3]: tab A's leave write put "Brighton week 1, 1 results, last Aston Villa 1-0" over the handover "Arsenal week 26, 26 results, last Hull City 2-0"
+  ok    the carry on opened Club Manager on the hub
+6) PUT BACK through the restore card beside a Club Manager tab (1280x900)
+   offered: true; put back "Everton week 0, 0 results, last none"; A saw it: false; after A left "Brighton week 1, 1 results, last Aston Villa 1-0"
+  FAIL [case 6]: tab A never showed the notice after the put back
+  FAIL [case 6]: tab A's leave write put "Brighton week 1, 1 results, last Aston Villa 1-0" over the put back "Everton week 0, 0 results, last none"
+9) BACK: a stale tab leaves by the browser's Back, mid Play Live and on the hub (1280x900)
+  note  tab A's live match is in minute 3
+   mid Play Live: A came in by a link; B played 3: "Brighton week 3, 3 results, last Leeds United 2-2" (live none); A saw the notice: false; after A's Back (same document true) "Brighton week 0, 0 results, last none" (live minute 13)
+  FAIL [case 9]: mid Play Live: tab A never showed the notice
+  FAIL [case 9]: CLOBBER by Back mid Play Live: B left "Brighton week 3, 3 results, last Leeds United 2-2" (live none), after A's Back the save holds "Brighton week 0, 0 results, last none" (live minute 13)
+   on the hub: A came in by a link; B played 3: "Brighton week 3, 3 results, last Leeds United 1-1" (live none); A saw the notice: false; after A's Back (same document true) "Brighton week 0, 0 results, last none" (live none)
+  FAIL [case 9]: on the hub: tab A never showed the notice
+  FAIL [case 9]: CLOBBER by Back on the hub: B left "Brighton week 3, 3 results, last Leeds United 1-1" (live none), after A's Back the save holds "Brighton week 0, 0 results, last none" (live none)
+   then in the same document a Hot Seat carry on: the save holds "Arsenal week 26, 26 results, last Hull City 2-0"
+  ok    the same document carried a Hot Seat job on afterwards
+10) SOCCER REPLACE, and 11) REVERSE (1280x900)
+   A opened on "Next Season"; B played "Next Season": Two Tab Tester age 19, newspaper, 4 seasons, last 2023 Leverkusen: 30 apps, 4 goals, 7.2; A saw the notice at once: false; A's press went through: true; forced "Continue to Season Summary →"; A's writes 1 to 3
+  FAIL [case 10]: tab A never showed the notice after tab B opened the career
+  FAIL [case 10]: the press reached Next Season behind the notice
+  FAIL [case 10]: REPLACE: the stale tab wrote the save 2 time(s) after tab B played
+  FAIL [case 10]: REPLACE: the save on disk is not tab B's any more (Two Tab Tester age 19, season_summary, 4 seasons, last 2023 Leverkusen: 33 apps, 8 goals, 7)
+  FAIL [case 10]: tab A reloaded onto another season: Two Tab Tester age 19, season_summary, 4 seasons, last 2023 Leverkusen: 33 apps, 8 goals, 7
+   REVERSE: B saw the notice: false; A stepped "Continue →": Two Tab Tester age 19, ballon_dor, 4 seasons, last 2023 Leverkusen: 33 apps, 8 goals, 7; B forced "Continue to Season Summary →"; B's writes 2 to 3
+  FAIL [case 11]: tab B never showed the notice once tab A reloaded
+  FAIL [case 11]: REVERSE: the stale tab B wrote the save 1 time(s)
+  FAIL [case 11]: REVERSE: the save on disk is not tab A's (Two Tab Tester age 19, season_summary, 4 seasons, last 2023 Leverkusen: 30 apps, 4 goals, 7.2)
+12) NEW CAREER IN A STALE TAB (1280x900)
+   A saw the notice: false; forced New Career true, forced confirm true; A's writes 1 to 2; on disk no save
+  FAIL [case 12]: tab A never showed the notice
+  FAIL [case 12]: NEW CAREER: the stale tab cleared or wrote the save (1 writes, on disk no save)
+   creation: B began Fresh Creator age 16, youth, 1 seasons, last 2025 Fulham Youth: 0 apps, 0 goals, 0; A saw the notice: false; A's forced Begin Career true; A's writes 0 to 1; on disk Stale Creator age 16, youth, 1 seasons, last 2025 Everton Youth: 0 apps, 0 goals, 0
+  FAIL [case 12]: the tab on the creation screen never showed the notice
+  FAIL [case 12]: CREATION: the stale tab began a career over the other one (1 writes, on disk Stale Creator age 16, youth, 1 seasons, last 2025 Everton Youth: 0 apps, 0 goals, 0)
+14) SOCCER OLD SAVE AND THE NOTICE (1280x900)
+   fence before absent, after "Next Season" null; Two Tab Tester age 18, playing, 3 seasons, last 2022 West Ham: 32 apps, 5 goals, 6.9 to Two Tab Tester age 19, newspaper, 4 seasons, last 2023 Leverkusen: 33 apps, 8 goals, 7; a second tab stales it: false
+  FAIL [case 14]: no fence after the first write (null)
+  FAIL [case 14]: the old save was not fenced: a second tab did not stale it
+cases red: 1, 10, 11, 12, 14, 2, 3, 6, 9; pictures in /home/runner/work/_temp/rc-out/files/ttn
+CONTROL FIRED: TWO_TABS_CONTROL=nofence dropped 180 writes and turned case(s) 1, 2, 3, 6, 9, 10, 11, 12, 14 red
