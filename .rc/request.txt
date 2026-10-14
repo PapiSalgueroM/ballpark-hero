@@ -1,0 +1,3 @@
+#!build
+#!playwright
+cmp35: bash .rc/x/cmp.sh simAcademyFilters simBrand simCareerFallback simCbbGrid simCmUnseededWorld simMostPlayed simManagerWorldContinuity simPlayerBingoPool simPhone2 simSoccerGridLabels simWindow2026PremierLeague simWorldXiDefensiveMids simCbbPrograms simChainFailClosed simConnect4ClubRecords simDailyPoolOrder simGmStaff simGridArchive simHallOfChampions simNascarChainSpans simRecordBooks simTransferOverlay simValidatorCache simWindow2026Bundesliga 
