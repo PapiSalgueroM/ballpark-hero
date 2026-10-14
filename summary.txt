@@ -1,0 +1,2 @@
+storyRole exit=0 27s | simCareerStoryRole: 16 groups, 0 failed, 48 full AR pairs
+simHarnessAnchors exit=0 30s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.

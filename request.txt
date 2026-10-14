@@ -1,0 +1,3 @@
+# Release BF join: the anchor fence and the story role after the read shape fix
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+storyRole: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerStoryRole.mjs
