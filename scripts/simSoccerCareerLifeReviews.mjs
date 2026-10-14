@@ -137,11 +137,16 @@ async function browserFixtures() {
       }
       throw new Error('Fixture refused: no actual next playing season within 32 fixed seeds');
     }
+    /* Release BF join: Round 1327 deals the batch from a stream keyed to the career and the season, so on such a tree a
+       Math.random seed moves nothing in the pick. There each acquisition attempt is the fixture under its own player name
+       (the deck key's moving part, as simSoccerDeckFairness varies it); without the keyed deck the seed varies as before. */
+    const KEYED = typeof E.soccerDeckIdentity === 'function';
+    console.log(`Acquisition attempts vary: ${KEYED ? 'the player name (keyed deck, Round 1327)' : 'the Math.random seed'}.`);
     const scenarios = [], delivery = [];
     for (const [acquisitionId, eventId, flag] of [[270, 630, 'coachingBadges'], [236, 237, 'teammateLoan']]) {
       const prepared = initial(); let acquisitionBatch = null, acquisitionSeed = null;
       for (let offset = 0; offset < 2048; offset++) {
-        const seed = 60000 + acquisitionId * 2048 + offset, actual = draw(prepared, seed);
+        const seed = 60000 + acquisitionId * 2048 + offset, actual = draw(KEYED ? { ...prepared, playerName: `Life Review Fixture ${offset}` } : prepared, seed);
         if (actual.pendingEvents[0]?.id === acquisitionId && actual.pendingEvents.length > 1) {
           acquisitionBatch = actual; acquisitionSeed = seed; break;
         }
