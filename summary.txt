@@ -1,0 +1,24 @@
+headsha exit=0 0s | d7576545f Round BEG: the save readers walk gets its negative control (SOCCER_READERS_CONTROL=envelope)
+bingo-alias-ctl-alias exit=0 2s | FIRED-OK
+bingo-alias exit=0 2s | Source bytes held; raw unit/output/control receipts retained when OUT is set. Offline proof only.
+bingo-alias-ctl-country exit=0 2s | FIRED-OK
+touch exit=0 3s | simPlayerAutocompleteTouchScroll normal: green.
+touch-ctl-pointerdown exit=0 3s | FIRED-OK
+gatewords-ctl-substring exit=0 6s | FIRED-OK
+simPlayerBingoHonours exit=0 12s | simPlayerBingoHonours PASS
+deadline exit=0 9s | simClubManagerDecisionDeadline normal: green.
+deadline-ctl-late exit=0 8s | FIRED-OK
+notes exit=0 10s | Phase fixed: three text-only snapshot observations; 3 effective copied old-caption controls; no gameplay, core or schema change.
+roster exit=0 6s | simClubDetailCurrentRoster normal: green.
+roster-ctl-original exit=0 5s | FIRED-OK
+customPromotion exit=0 8s | PASS all five actual save/load summers: identical outcomes and RNG draws; source bytes held
+decisions-ctls exit=0 45s | presscohort FIRED
+htLineups exit=0 6s | simManagerHalftimeLineups normal: green.
+htLineups-ctl-original exit=0 6s | FIRED-OK
+interaction-ctls exit=0 79s | zerotimer FIRED
+pitch exit=0 2s | simPitchRestartContinuity: normal qualified (actual committed coordinates); browser paint unmeasured
+pitch-ctl-oldrender exit=0 2s | FIRED-OK
+saveSize exit=0 18s | simSoccerCareerSaveSize: PASS.
+saveSize-ctl-plain exit=0 10s | FIRED-OK
+liveLineups exit=0 45s | Three byte-identical actual engines retain complete final-state/id/input equality; pure reader graph imports no game engine.
+worldBrowser-ctl-all exit=0 88s | simManagerWorldBrowser all: 13 outcomes and 16 effective copied faults passed.
