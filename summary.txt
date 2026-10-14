@@ -1,0 +1,5 @@
+build exit=0 33s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+headsha exit=0 0s | a5d5f8b37 Round BEG: the league rules digest taken again once, after m3
+hubC-head exit=0 26s | playCmHubLanding: green (C 111 pass 0 fail); the hub lands on the club on its first frame
+hubC-head-again exit=0 26s | playCmHubLanding: green (C 111 pass 0 fail); the hub lands on the club on its first frame
+hubC-main exit=124 4200s | 
