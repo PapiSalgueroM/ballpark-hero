@@ -1,0 +1,2 @@
+  section source: 18 checks, 1 red
+CONTROL FIRED: SAVE_FENCE_CONTROL=adoptlate fired 1 times and section source went red with 1 findings

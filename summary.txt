@@ -1,0 +1,13 @@
+build exit=0 32s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+sims2 exit=0 143s | All 12 harnesses green.
+sims1 exit=0 420s | All 12 harnesses green.
+prerender16 exit=0 1s | --- base
+vitest-fence exit=0 21s |    Duration  20.34s (transform 7.00s, setup 904ms, collect 14.82s, tests 26.34s, environment 6.05s, prepare 1.55s)
+vitest-pages exit=0 75s |    Duration  74.63s (transform 8.91s, setup 1.79s, collect 33.10s, tests 127.47s, environment 12.56s, prepare 3.00s)
+saveFence-base exit=1 121s | simSaveFence: RED, 1 findings
+fence-adoptlate exit=1 2s | CONTROL FIRED: SAVE_FENCE_CONTROL=adoptlate fired 1 times and section source went red with 1 findings
+fence-rawsoccer exit=1 2s | CONTROL FIRED: SAVE_FENCE_CONTROL=rawsoccer fired 1 times and section source went red with 1 findings
+saveRetry-all exit=0 125s | simSoccerCareerSaveRetry all: 8 actual outcomes and 16 effective faults passed.
+saveRecovery-all exit=0 34s | Soccer Career save recovery cleanup: temporary copies and reports removed; production page and reader bytes stayed identical.
+simCreation exit=1 724s | 1 FAILURES
+sims3 exit=1 1338s | 1 harness not green.
