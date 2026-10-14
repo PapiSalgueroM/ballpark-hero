@@ -11,6 +11,10 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 assert(process.env.CI && process.env.SIM_NETWORK === 'offline', 'Stat reward proof requires remote offline transport');
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..'), SELF = fileURLToPath(import.meta.url);
 const TEST = 'src/test/soccerCareerStatRewards.test.ts', PARENT = 'ee135646dd2344b90057140116aa15e804a7d9c3';
+/* Release BF join: SC_LIFE_REWARDS_CORE_REF (default PARENT) is the ref the unchanged app files are held to. The packet was proved on
+   an older tree; on a newer one the join names the tree without this packet (its merge's first parent), and the
+   files this packet fixes are still compared with PARENT. */
+const CORE_REF = process.env.SC_LIFE_REWARDS_CORE_REF || PARENT;
 const ENGINE = path.join(ROOT, 'src/lib/soccerCareerEngine.ts'), LIFE = path.join(ROOT, 'src/lib/soccerCareerLife.ts');
 const SAVE = path.join(ROOT, 'src/lib/soccerCareerSave.ts'), CONTRACTS = path.join(ROOT, 'src/lib/soccerCareerContracts.ts');
 const CAPTIONS = path.join(ROOT, 'src/lib/soccerCareerLifeConsequences.ts'), ROUTINE = path.join(ROOT, 'src/lib/soccerCareerRoutineEvents.ts');
@@ -66,7 +70,7 @@ function git(args) {
 const sourceHead = git(['rev-parse', 'HEAD']).trim(), parentLife = git(['show', `${PARENT}:src/lib/soccerCareerLife.ts`]);
 fs.writeFileSync(path.join(retained, 'soccerCareerLife.parent.ts'), parentLife);
 const parentAppHashes = files.filter(file => file !== SELF && file !== path.join(ROOT, TEST) && file !== CAPTIONS).map(file => {
-  const name = path.relative(ROOT, file).replaceAll('\\', '/'), before = git(['show', `${PARENT}:${name}`]);
+  const name = path.relative(ROOT, file).replaceAll('\\', '/'), before = git(['show', `${file !== LIFE && file !== CONTRACTS ? CORE_REF : PARENT}:${name}`]);
   const row = { file: name, parentSha256: sha(before), candidateSha256: sha(sources.get(file)) };
   if (RED || (file !== LIFE && file !== CONTRACTS)) assert.equal(row.candidateSha256, row.parentSha256, 'Only fixed Life and Contracts may differ from held parent app');
   return row;

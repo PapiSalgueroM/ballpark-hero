@@ -17,6 +17,10 @@ const MOMENTS = path.join(ROOT, 'src/components/soccer-career/careerMoments.ts')
 const SHARED = path.join(ROOT, 'src/components/career-moments/useCareerMoment.ts');
 const ROUTINE = path.join(ROOT, 'src/lib/soccerCareerRoutineEvents.ts');
 const PARENT = '83831b32a9a4445a5d60a5c326a4e581e2a73237';
+/* Release BF join: SC_PENDING_LIFE_CORE_REF (default PARENT) is the ref the unchanged app files are held to. The packet was proved on
+   an older tree; on a newer one the join names the tree without this packet (its merge's first parent), and the
+   files this packet fixes are still compared with PARENT. */
+const CORE_REF = process.env.SC_PENDING_LIFE_CORE_REF || PARENT;
 const CONTROL = process.env.SC_PENDING_LIFE_CONTROL || '', RED = process.env.SC_PENDING_LIFE_EXPECT_RED === '1';
 assert(['', 'missing', 'profile', 'draw', 'rate'].includes(CONTROL), 'Unknown or combined actual-source control');
 assert(!(RED && CONTROL), 'Baseline and fixed-source controls are separate');
@@ -62,7 +66,7 @@ function git(args) {
 const sourceHead = git(['rev-parse', 'HEAD']);
 const parentAppHashes = files.filter(file => file !== SELF && file !== path.join(ROOT, TEST)).map(file => {
   const name = path.relative(ROOT, file).replaceAll('\\', '/');
-  const result = spawnSync('git', ['show', `${PARENT}:${name}`], { cwd: ROOT, encoding: 'utf8', maxBuffer: 8 * 1024 * 1024 });
+  const result = spawnSync('git', ['show', `${file !== LIFE ? CORE_REF : PARENT}:${name}`], { cwd: ROOT, encoding: 'utf8', maxBuffer: 8 * 1024 * 1024 });
   assert.equal(result.status, 0, 'Held parent app source must exist');
   const row = { file: name, parentSha256: sha(result.stdout), candidateSha256: sha(sources.get(file)) };
   if (RED || file !== LIFE) assert.equal(row.candidateSha256, row.parentSha256, 'Only later fixed Life may differ from held parent app');
