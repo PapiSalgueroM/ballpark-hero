@@ -1,0 +1,3 @@
+dev: node scripts/simSoccerCareerDevelopment.mjs
+dev-all: CAREER_DEVELOPMENT_CONTROL=all CAREER_DEVELOPMENT_ARTIFACTS=$RC_OUT/dev node scripts/simSoccerCareerDevelopment.mjs
+dev-mentorRemember: CAREER_DEVELOPMENT_CONTROL=mentorRemember CAREER_DEVELOPMENT_IMPORT_ONLY=0 CAREER_DEVELOPMENT_ARTIFACTS=/tmp/devmr node scripts/simSoccerCareerDevelopment.mjs
