@@ -1,0 +1,19 @@
+Prepared 9 declared font dependencies for local fulfillment.
+prepInstalled: 521 installed locked versions written to /home/runner/work/ballpark-hero/ballpark-hero/scro
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: The actual picker must deliver the acquisition first within2048 fixed seeds
+    at actualPickerAndFixtures (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simSoccerCareerRoutineEvents.mjs:269:7)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simSoccerCareerRoutineEvents.mjs:427:38 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: null,
+  expected: true,
+  operator: '==',
+  diff: 'simple'
+}
+
+Node.js v24.21.0

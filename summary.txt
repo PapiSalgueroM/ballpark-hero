@@ -1,0 +1,6 @@
+build exit=0 33s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+headsha exit=0 0s | 18dc6e701 Round BFG: two proofs read Round 1327's keyed deck after Round 1350
+routineWalk exit=1 8s | Node.js v24.21.0
+land-main exit=0 343s | playSoccerLanding: green at 320x640, 390x844, 1280x900 (also bar 360x780, bar 375x667, name 480x800, name 768x1024; landing, name, bar, retire), every marked section red 
+land-toasts exit=0 402s | playSoccerLanding: green at 320x640, 390x844, 1280x900 (also no extra sizes; toasts, bytes), every marked section red on the base
+ctl-land-seed exit=0 162s | CONTROL FIRED: SOCCER_LANDING_CONTROL=seed played head on seed 1987332286 and the byte check went red, and the old save comparison went red on 8 save(s) given the next se
