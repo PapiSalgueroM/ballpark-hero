@@ -98,7 +98,7 @@ const vectors: { name: string; queue: CareerState['statBoostNextSeason'] }[] = [
 // Direct unit runs compile the same read-only consumer checkpoint as the remote helper.
 async function boundaryEngine(): Promise<typeof E> {
   if (process.env.SC_REWARDS_ENGINE) return E;
-  const fs = await import('node:fs/promises'), path = await import('node:path'), os = await import('node:os');
+  const fs = await import('node:fs/promises'), path = await import('node:path');
   /* Release BF join: in the suite's jsdom environment esbuild refuses to start (its check that an encoded string is an
      instance of this realm's Uint8Array fails), so a plain run of the whole suite went red here. For the build the
      encoder hands back bytes made by this realm's Uint8Array, and the environment's encoder is put back after. The
@@ -112,7 +112,10 @@ async function boundaryEngine(): Promise<typeof E> {
   const anchor = '  s.statBoostNextSeason = {};'; expect(original.split(anchor)).toHaveLength(2);
   const changed = original.replace(anchor, `${anchor}\n  if (Array.isArray(globalThis.__SC_REWARDS_BOUNDARIES)) globalThis.__SC_REWARDS_BOUNDARIES.push({ pace: s.pace, shooting: s.shooting, passing: s.passing, dribbling: s.dribbling, defending: s.defending, physical: s.physical, reflexes: s.reflexes, statBoostNextSeason: { ...s.statBoostNextSeason } });`);
   expect(changed).not.toBe(original);
-  const tmp = await fs.mkdtemp(path.join(os.tmpdir(), 'career-stat-boundary-unit-'));
+  /* Release BF join: vitest only loads a module from inside the project, so the build goes to the ignored /tmp/ folder of
+     the checkout rather than the system temp folder (there the import failed with "Failed to load url"). */
+  await fs.mkdir(path.join(process.cwd(), 'tmp'), { recursive: true });
+  const tmp = await fs.mkdtemp(path.join(process.cwd(), 'tmp', 'career-stat-boundary-unit-'));
   await fs.writeFile(path.join(tmp, 'engine.original.ts'), original); await fs.writeFile(path.join(tmp, 'engine.observed.ts'), changed);
   await esbuild.build({ entryPoints: [source], outfile: path.join(tmp, 'engine.mjs'), bundle: true, format: 'esm', platform: 'node',
     alias: { '@': path.join(process.cwd(), 'src') }, logLevel: 'error', plugins: [{ name: 'stat-boundary-read-only', setup(build) {
