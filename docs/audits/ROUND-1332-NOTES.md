@@ -71,3 +71,6 @@ mode only).
 - Suite (r1332-all1 to all6, 746 harnesses): 83 not green on the head, 7 of them killed at a 25 minute cap; every
   other one rerun on the head and the base on one runner (r1332-cmp35, cmp12, cmp4, cmp6): identical but for two
   whose last line follows the live service (simSoccerGridLabels, simAnswerFromRecords, same failure on both).
+- r1332-cmp6 (612d7b0b): simUsCareerSummer alone on the head, green in 4,060 s (close to the runner's 4,200 s cap);
+  shard 6's reds identical on head and base but simRarityPools (same failures, the live pools empty, a different
+  last line). Conclusion: no red in the suite is this round's.
