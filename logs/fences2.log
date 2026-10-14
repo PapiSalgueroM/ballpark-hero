@@ -1,0 +1,50 @@
+Network mode: offline, loopback only, no production probe or database retries.
+Running 7 node harnesses
+  PASS  simDailyPuzzleContract.mjs      1.1s
+  FAIL  simDailySaveHardening.mjs      64.5s
+        it reported success after an offline transport block; checks needing live data did not run
+  PASS  simFetchRetry.mjs               4.8s
+  PASS  simGoogleOnlyReturn.mjs        94.9s
+  PASS  simNoDoubleRecord.mjs          34.5s
+  FAIL  simReportRelay.mjs              0.5s
+        it reported success after an offline transport block; checks needing live data did not run
+  SKIP  simSchemaNames.mjs              1.2s
+        it reached no database and said so, and the database is unreachable here (offline mode blocks production; no database probe was sent)
+
+Skipping 1 browser harness (simWritesAreSent). Pass --browser to include them.
+
+1 harness SKIPPED, not run and not counted: simSchemaNames.
+Each one reached no database and said so, and the database is unreachable here: offline mode blocks production; no database probe was sent.
+Run SIM_NETWORK=live only after production traffic is cleared. DB_PROBE changes classification in live mode, not transport permission.
+----- simDailySaveHardening.mjs (FAIL) -----
+0) every useDailyPuzzle consumer is mounted by one of the two tests
+   39 consumers: 36 routes in the shapes test, 3 unrouted (useFootballDraft.ts, useGuessTransferValue.ts, useWorldCup.ts) in the hardening test; 19 hand in their own check
+saves) two tabs, damaged saves on the hooks, saves from before this round
+   74 rows green, the fixture writer skipped
+   src/test/fixtures/dailySavesPre848.json: 6 saves, byte for byte what the hooks at 617b8354 write (afl-higher-lower, nfl-higher-lower, shirt-number, footle, ufc, nba-connections)
+shapes) every route with a daily consumer under every damaged form
+   36 of 36 routes: nothing thrown on any damaged form, and the audit's and the brief's forms draw exactly a fresh daily (guide ready on 35, none on 1)
+parity) every consumer plays and restores through the new hook exactly as through the hook at 617b8354
+   39 of 39 consumers identical over 511 steps; 362 saves written by the old hook restored unchanged (statuses lost, playing, won)
+skip) one skip target on every page
+   173 of 173 addresses (171 sitemap pages, reset-password, an unknown address) draw exactly one #dukb-main
+simDailySaveHardening: part all green
+
+
+----- simReportRelay.mjs (FAIL) -----
+4) the live table carries the column
+[SIM_OFFLINE_BLOCK] database fetch https://flawuiqbvjobmkfkauhw.supabase.co
+   SKIPPED: the table could not be reached (Offline harness blocked fetch to https://flawuiqbvjobmkfkauhw.supabase.co), so the live column check did not run.
+5) the triage workflow, run: the spec statuses, every status move, the counts on every chip
+   7 statuses and 4 priorities, the same as spec section 123
+   all 49 status moves keep resolved and resolved_at true, with and without the new columns
+   every status offered reads back as itself after a save (7 with the columns, 2 before the migration)
+   36 chip counts (9 filters by 4 game choices) match the cards and the hand count
+6) the migration and the module agree, and the public insert path can only take the defaults
+   the insert policy keeps all 4 committed clauses and pins 6 admin columns to their defaults; no other policy is touched
+   7 statuses, 4 priorities and both length caps match the module; the backfill is there; no grant, trigger or function
+
+simReportRelay: green. Both buttons ask the same questions, every report records whether it reached him, and the queue has a real workflow.
+
+
+2 harnesses not green.

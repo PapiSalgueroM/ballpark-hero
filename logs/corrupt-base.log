@@ -1,0 +1,5 @@
+playCorruptSaves: 1 broken save(s) trap the player: /hall-of-champions all
+  PASS  /soccer-career shell: coped without the button, 0 click(s), buttons: Delete unusable save | Choose nationality | Choose position
+  PASS  /soccer-career wrongtype: coped without the button, 0 click(s), buttons: Delete unusable save | Choose nationality | Choose position
+  FAIL  /hall-of-champions: excused in OFFLINE_ONLY but judged offline now, remove the excuse
+4 broken saves over 2 long games: 0 reached the error page and needed the button, 4 were coped with by the game, 0 drew the broken save without throwing, 0 could not be judged offline, 1 trapped

@@ -1,0 +1,10 @@
+ src/components/SaveMovedNotice.tsx | 4 ----
+ 1 file changed, 4 deletions(-)
+[90mstderr[2m | src/test/saveMovedNotice.test.tsx[2m > [22m[2mSaveMovedNotice[2m > [22m[2mReload takes the first press while a dialog behind it holds the page (Release BD, the lead ruling of R
+[31m   [31m×[31m SaveMovedNotice[2m > [22mReload takes the first press while a dialog behind it holds the page (Release BD, the lead ruling of Round 1330)[39m[32m 47[2mms[22m[39m
+[31m     → expected 'none' not to be 'none' // Object.is equality[39m
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+[41m[1m FAIL [22m[49m src/test/saveMovedNotice.test.tsx[2m > [22mSaveMovedNotice[2m > [22mReload takes the first press while a dialog behind it holds the page (Release BD, the lead ruling of R
+[31m[1mAssertionError[22m: expected 'none' not to be 'none' // Object.is equality[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m5 passed[39m[22m[90m (6)[39m
+::error file=/tmp/nf/src/test/saveMovedNotice.test.tsx,title=src/test/saveMovedNotice.test.tsx > SaveMovedNotice > Reload takes the first press while a dialog behind it holds the page (Release BD%2C t

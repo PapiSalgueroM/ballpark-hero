@@ -1,0 +1,30 @@
+simPhone2 exit=1 106s | 1 FAILURES
+simMoney exit=1 140s | 1 FAILURES
+fence exit=0 38s | simSaveFence: all green (tabs, source, fleet)
+vitest-notice exit=0 1s |    Duration  1.00s (transform 59ms, setup 41ms, collect 230ms, tests 147ms, environment 235ms, prepare 121ms)
+retry exit=0 8s | simSoccerCareerSaveRetry: 8 actual outcomes passed.
+vitest-nofix exit=1 2s | ::error file=/tmp/nf/src/test/saveMovedNotice.test.tsx,title=src/test/saveMovedNotice.test.tsx > SaveMovedNotice > Reload takes the first press while a dialog behind it h
+corrupt-base exit=0 44s | 4 broken saves over 2 long games: 0 reached the error page and needed the button, 4 were coped with by the game, 0 drew the broken save without throwing, 0 could not be j
+results-base exit=0 27s | AssertionError [ERR_ASSERTION]: Engine is exactly the unchanged original base
+fb1 exit=1 3s | 2 harnesses not green.
+fb2 exit=1 48s | 1 harness not green.
+fb3 exit=1 1s | 1 harness not green.
+fence-rawwrite exit=1 1s | CONTROL FIRED: SAVE_FENCE_CONTROL=rawwrite fired 1 times and section source went red with 1 findings
+fence-nofence exit=1 0s | CONTROL FIRED: SAVE_FENCE_CONTROL=nofence fired 1 times and section tabs went red with 11 findings
+mutfence exit=1 4s | CONTROL FIRED: the raw write turned the fence test red (vitest exit 1)
+creation-head exit=1 285s | 1 FAILURES
+retry-disk exit=0 3s | simSoccerCareerSaveRetry disk: mapped save retry outcome rejected changed source; independent restore passed.
+fences1 exit=1 30s | 1 harness not green.
+fences3 exit=1 4s | 1 harness not green.
+fences2 exit=1 96s | 2 harnesses not green.
+reveal-base exit=0 254s | 1 harness not green.
+c-legacyleak-minus1331 exit=1 65s | control legacyleak FIRED: 1 of 1 checks red
+subs-all-minus1331 exit=0 149s | simCmSubs GREEN: 66 of 66 checks green (parts ledger, rule, extratime, cutover, oppextratime, opponent, coach, press, legacy, three, hotseat)
+c-pressnew-minus1331 exit=1 66s | control pressnew FIRED: 1 of 1 checks red
+gmdiff-minus1332 exit=0 5s | gmdiff: all three seeds identical to the base and green
+c-nodate-minus1331 exit=1 11s | control nodate FIRED: 2 of 5 checks red
+simAnswerFromRecords exit=1 23s | Read the failures above as the live service, not the branch: those calls returned no verdict at all.
+simBallonDorFairness exit=0 2s | PASS: 100.0% of must-win seasons won, every monster season podiumed, every night on the ballot judged the rivals it seats
+simBallonDorTruth exit=0 3s | simBallonDorTruth: green. Every medal on the ceremony was won by the club that holds it, and the player's card is the record.
+creation-main exit=1 280s | 1 FAILURES
+simAcademy exit=0 226s | ALL ACADEMY CHECKS PASSED

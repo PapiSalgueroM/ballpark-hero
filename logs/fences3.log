@@ -1,0 +1,14 @@
+Network mode: offline, loopback only, no production probe or database retries.
+Running 5 node harnesses
+  PASS  simGuideHeadings.mjs            1.5s
+  FAIL  simLeaderboardCaps.mjs          2.0s
+  PASS  simNavbarStatsReads.mjs         2.7s
+  PASS  simScoringCoverage.mjs          0.7s
+  PASS  simSiteSearch.mjs               1.5s
+
+Skipping 1 browser harness (simResultMoment). Pass --browser to include them.
+
+----- simLeaderboardCaps.mjs (FAIL) -----
+the database refused game_score_caps?select=game,max_score&limit=2000: Error: Offline harness blocked fetch to https://flawuiqbvjobmkfkauhw.supabase.co
+
+1 harness not green.

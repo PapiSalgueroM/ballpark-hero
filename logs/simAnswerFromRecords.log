@@ -1,0 +1,17 @@
+FAIL  482  Haaland at Man City settled from records  -> THE FUNCTION DID NOT ANSWER after 3 tries, s
+FAIL  482  Messi for Argentina settled from records  -> THE FUNCTION DID NOT ANSWER after 3 tries, s
+ok    482  Haaland at Liverpool NOT confirmed  -> fell through, correct
+FAIL  483  Barcelona pool is only FC Barcelona
+FAIL  484  no squad name still holds "( captain )"  -> 0 annotated
+FAIL  484  the captaincy survived as a column  -> 0 sampled
+FAIL  486  Jokic answerable  -> THE FUNCTION DID NOT ANSWER after 3 tries, so this is the service and not the data
+FAIL  486  Doncic answerable  -> THE FUNCTION DID NOT ANSWER after 3 tries, so this is the service and not the data
+FAIL  487  Andreescu is a known champion  -> THE FUNCTION DID NOT ANSWER after 3 tries, so this is the service and not the data
+FAIL  487  Tom Brady still refused  -> THE FUNCTION DID NOT ANSWER after 3 tries, so 
+FAIL  488  Hamlin has a racing span  -> THE FUNCTION DID NOT ANSWER after 3 tries, so 
+FAIL  488  eras that do not meet still refused  -> refused
+FAIL  489  PSG is answerable  -> THE FUNCTION DID NOT ANSWER after 3 trie
+FAIL  489  Celta Vigo is answerable  -> THE FUNCTION DID NOT ANSWER after 3 trie
+
+1 passed, 13 failed. 22 call(s) retried for an empty response, 11 still silent after three tries.
+Read the failures above as the live service, not the branch: those calls returned no verdict at all.

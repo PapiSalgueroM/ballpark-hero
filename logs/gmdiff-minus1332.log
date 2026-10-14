@@ -1,0 +1,5 @@
+treeWithoutMerge: 3ae6f67c0807e265a3a7658843075b9221565225, 57bac8a6 without b9df63b4; conflicts kept from 57bac8a6: none
+seed 1: head exit 0, base exit 0, whole output identical (29 lines; last: simGmInbox: green.)
+seed 2: head exit 0, base exit 0, whole output identical (29 lines; last: simGmInbox: green.)
+seed 3: head exit 0, base exit 0, whole output identical (29 lines; last: simGmInbox: green.)
+gmdiff: all three seeds identical to the base and green

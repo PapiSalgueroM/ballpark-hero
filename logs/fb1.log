@@ -1,0 +1,26 @@
+Network mode: offline, loopback only, no production probe or database retries.
+Running 2 node harnesses
+  FAIL  simCompletionSlugs.mjs          2.2s
+        it reported success after an offline transport block; checks needing live data did not run
+  FAIL  simLeaderboardCaps.mjs          1.8s
+
+----- simCompletionSlugs.mjs (FAIL) -----
+1) every slug the source writes names a routed game
+   98 slugs written by source, 11 for games withdrawn from the registry on purpose, 0 that name no game
+2) every slug in the live table resolves, or is a declared retirement
+[SIM_OFFLINE_BLOCK] database fetch https://flawuiqbvjobmkfkauhw.supabase.co
+[SIM_OFFLINE_BLOCK] database fetch https://flawuiqbvjobmkfkauhw.supabase.co
+[SIM_OFFLINE_BLOCK] database fetch https://flawuiqbvjobmkfkauhw.supabase.co
+   the database did not answer, skipped (section 1 still holds the source side)
+3) the map has no dead rows
+   7 mapped slugs, 0 pointing nowhere
+4) the round trip closes for every game that records
+   87 games checked both ways, 0 that do not round trip
+
+simCompletionSlugs: green. Every recorded slug names a game the site can find.
+
+
+----- simLeaderboardCaps.mjs (FAIL) -----
+the database refused game_score_caps?select=game,max_score&limit=2000: Error: Offline harness blocked fetch to https://flawuiqbvjobmkfkauhw.supabase.co
+
+2 harnesses not green.

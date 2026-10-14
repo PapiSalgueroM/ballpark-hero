@@ -1,0 +1,3 @@
+treeWithoutMerge: 4bb33c0075a3656ab07f8f9d3a9d3796e7f41e7c, 57bac8a6 without 26eadaaa; conflicts kept from 57bac8a6: src/pages/WhatsNew.tsx
+FAIL [legacy] 40 careers, every save byte and every draw equal to SUBS_BASE (13 differ; first Liverpool now seed 0 coach: head c938127648f3fcbf 102134 draws, base 1ccce15ab50b4ebc 102134 draws (season 2 week 54))
+control pressnew FIRED: 1 of 1 checks red
