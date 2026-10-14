@@ -130,7 +130,10 @@
         source declares store: 'compact' (FX_COMPACT and every index pack
         that declares it, read off INDEX_PACKS): no recorded card gone, no wording changed or moved,
         a new wording only at the end, no option added, removed, reordered
-        or relabelled, no story added or taken away, no card without a row.
+        or relabelled, no story added or taken away, no card without a row,
+        and (Round 1332's review fix) no change to a card's voice, emoji or
+        beat or to an option's reply or effects, which a rebuilt message
+        takes from the pack too.
         SIM_EVENT_DECK_WORDS=append adds rows and trailing wordings, never
         rewrites one (a changed row is the lead's call, like the replay).
 
@@ -242,6 +245,10 @@
      speechpast    FX_CONDUCT gains a wording with its person slot's
                    possessive before a past tense speech verb (in memory);
                    section 12 fails (the brief's verb list alone missed it).
+     voiceedit     FX_COMPACT's k_plain speaks in another voice (in memory);
+                   section 14 fails.
+     effectedit    k_plain's second option moves trust by one more (in
+                   memory); section 14 fails.
 
    Runtime about 85 to 100 s on a runner, three requests at a time (section 2
    reloads all 84 rows since the review's fix pass; it was 40 s with seed 1
@@ -280,7 +287,7 @@ const REPLAY_FILE = path.join(ROOT, 'scripts/data/gmInboxReplay.json');
 const CONTROLS = ['replay', 'weightoff', 'weightkeep', 'story', 'rest', 'failopen', 'restfall', 'expirefall', 'textrng', 'seasonweek', 'expireoff', 'expirefx', 'settledoff', 'panelexpiry', 'neutral', 'heavy',
   'fxsilent', 'fxdrop', 'fxunbound', 'fxneutral', 'conductreal', 'slotopen', 'quoteslot', 'untagged', 'rosterword',
   'pruneearly', 'codecword', 'codecslot', 'wordedit', 'wordorder', 'storymove', 'pressure', 'eager',
-  'conductlate', 'conductstale', 'conducttarget', 'nullpass', 'newpack', 'speechpast'];
+  'conductlate', 'conductstale', 'conducttarget', 'nullpass', 'newpack', 'speechpast', 'voiceedit', 'effectedit'];
 if (CONTROL && !CONTROLS.includes(CONTROL)) { console.error(`EVENT_DECK_CONTROL=${CONTROL} is not a control this kit knows`); process.exit(2); }
 if (RECORD && (CONTROL || SHARD)) { console.error('a recording runs the whole replay with no control, refusing'); process.exit(2); }
 const red = new Set();
@@ -1810,11 +1817,29 @@ if (runs(14)) {
     if (!e || e.story !== undefined) { console.error('storymove control: k_plain is not a plain card, refusing to run'); process.exit(2); }
     e.story = 'arc';
   }
+  if (CONTROL === 'voiceedit') {
+    const e = fx.find(x => x.id === 'k_plain');
+    if (!e || e.from === 'Your captain') { console.error('voiceedit control: k_plain is gone or already speaks as the captain, refusing to run'); process.exit(2); }
+    e.from = 'Your captain';
+  }
+  if (CONTROL === 'effectedit') {
+    const e = fx.find(x => x.id === 'k_plain');
+    if (!e || !(e.choices[1]?.karma > 0)) { console.error('effectedit control: k_plain has no second option moving trust, refusing to run'); process.exit(2); }
+    e.choices = e.choices.map((c, i) => (i === 1 ? { ...c, karma: c.karma + 1 } : c));
+  }
+  /* Round 1332's review fix: a compact message is rebuilt with its card's
+     voice, emoji, beat and every option's reply and effects too, so those
+     are frozen with the words (a retune of a recorded card is the lead's
+     call, like a wording). Keys are sorted before hashing, so moving a key
+     in the source changes nothing. */
+  const canon = v => JSON.stringify(v, (k, x) => (x && typeof x === 'object' && !Array.isArray(x) ? Object.fromEntries(Object.entries(x).sort(([a], [b]) => (a < b ? -1 : a > b ? 1 : 0))) : x));
   const rowOf = e => ({
     key: e.story ? `story:${e.story}` : e.id,
     words: [e.text, ...(e.texts ?? [])].map(h12),
     options: e.choices.map(c => h12(c.label)),
     slots: [...new Set([e.text, ...(e.texts ?? [])].flatMap(t => [...t.matchAll(/\{(\w+)\}/g)].map(m => m[1])))].sort(),
+    voice: h12(canon([e.from, e.emoji, e.beat])),
+    effects: e.choices.map(({ label, ...rest }) => h12(canon(rest))),
   });
   const rec = fs.existsSync(WORDS_FILE) ? JSON.parse(fs.readFileSync(WORDS_FILE, 'utf8')) : { rows: {} };
   const rows = rec.rows ?? {};
@@ -1834,6 +1859,13 @@ if (runs(14)) {
     }
     if (n.options.join() !== r.options.join()) bad.push(`${id}: an option was added, removed, reordered or relabelled`);
     if (n.slots.join() !== r.slots.join() && prefix.join() === r.words.join()) bad.push(`${id}: its slots changed`);
+    /* A row recorded before these two fields gains them by the append mode
+       only, which never changes a value already recorded. */
+    for (const [field, what] of [['voice', 'voice, emoji or beat'], ['effects', 'option replies or effects']]) {
+      if (r[field] === undefined) {
+        if (APPEND) { r[field] = n[field]; added.push(`${id} ${field}`); } else bad.push(`${id}: its ${what} not yet recorded (SIM_EVENT_DECK_WORDS=append)`);
+      } else if (JSON.stringify(r[field]) !== JSON.stringify(n[field])) bad.push(`${id}: its ${what} changed`);
+    }
   }
   for (const [id, n] of Object.entries(now)) {
     if (rows[id]) continue;

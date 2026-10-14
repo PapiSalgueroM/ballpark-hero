@@ -240,9 +240,10 @@ export interface GmInboxPack {
   pressure?: Record<string, number>;
   /** Round 1332: 'compact' opts in to a pruned cooldown book (on a rising
    *  clock only: a pruned entry is not rebased when a clock falls) and to
-   *  messages saved as numbers by gmDeskSave. Absent is 'whole'. Its words
-   *  are then frozen (scripts/data/eventDeckWords.json): a saved message is
-   *  rebuilt from them. */
+   *  messages saved as numbers by gmDeskSave. Absent is 'whole'. Its words,
+   *  voices, replies and effects are then frozen
+   *  (scripts/data/eventDeckWords.json): a saved message is rebuilt from
+   *  them. */
   store?: 'whole' | 'compact';
   events: GmEventDef[];
 }
@@ -861,7 +862,9 @@ export function answerGmInbox<S extends GmInboxHost>(
 
 /** The line a seat shows for a card the staff settled, null for any other.
  *  The voice and the label are read off the saved message, so a later edit
- *  of the pack never rewrites a line already on a desk. A card the assistant
+ *  of the pack never rewrites a line already on a desk (a compact message
+ *  is rebuilt from its card, whose voice, labels, replies and effects the
+ *  kit's frozen words ledger holds once recorded). A card the assistant
  *  sent names the assistant once, not twice. */
 export function gmExpiredLine(msg: InboxMessage): string | null {
   const m = msg as GmInboxMessage;
@@ -913,9 +916,10 @@ export function repairGmInbox<S extends GmInboxHost>(s: S): S {
    pack that opts in (`store: 'compact'`) keeps a pruned book (step 8b) and
    is saved by gmDeskSave as numbers: short keys for ids and book keys, and
    each message as its card, year, clock, wording and slot values, rebuilt
-   from the pack by gmDeskLoad. Its words are frozen once shipped
-   (scripts/data/eventDeckWords.json), so a rebuilt message reads exactly as
-   it was dealt. Nothing calls the codec yet: the binding rounds will, at
+   from the pack by gmDeskLoad. Its words, voice and every option's reply
+   and effects are frozen once shipped (scripts/data/eventDeckWords.json),
+   so a rebuilt message reads, and an answered one prints, exactly as it was
+   dealt. Nothing calls the codec yet: the binding rounds will, at
    save and load. It holds no answer or cap logic. */
 
 /** A ledger key or id as a short key: FNV 1a, 32 bit, in base 36. */

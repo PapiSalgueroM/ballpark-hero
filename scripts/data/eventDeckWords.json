@@ -1,16 +1,16 @@
 {
   "note": "Round 1332: the frozen words of every compact pack (scripts/simEventDeck.mjs section 14). Appended by SIM_EVENT_DECK_WORDS=append only; a changed row is the lead's call.",
   "rows": {
-    "fx_compact/k_plain": {"key":"k_plain","words":["af6ae0786ae5"],"options":["77096d0263e9","c454a3a8164e"],"slots":[]},
-    "fx_compact/k_once": {"key":"k_once","words":["d4970469f63e"],"options":["77096d0263e9","c454a3a8164e"],"slots":[]},
-    "fx_compact/k_arc_a": {"key":"story:arc","words":["8f13c9cb820f"],"options":["77096d0263e9","c454a3a8164e"],"slots":[]},
-    "fx_compact/k_arc_b": {"key":"story:arc","words":["cf78cdff6541"],"options":["77096d0263e9","c454a3a8164e"],"slots":[]},
-    "fx_compact/k_saga_a": {"key":"story:saga","words":["72c9e3804e77"],"options":["77096d0263e9","c454a3a8164e"],"slots":[]},
-    "fx_compact/k_saga_b": {"key":"story:saga","words":["c6134c6a5830"],"options":["77096d0263e9","c454a3a8164e"],"slots":[]},
-    "fx_compact/k_words": {"key":"k_words","words":["013b1362539b","3a4681c06546","3b602a978f68"],"options":["77096d0263e9","c454a3a8164e"],"slots":[]},
-    "fx_compact/k_slot": {"key":"k_slot","words":["9c181a19c7a2","038f4cc15b13"],"options":["77096d0263e9","c454a3a8164e"],"slots":["player"]},
-    "fx_compact/k_rival": {"key":"k_rival","words":["1be402a51513"],"options":["77096d0263e9","c454a3a8164e"],"slots":["opponent"]},
-    "fx_compact/k_exp": {"key":"k_exp","words":["ffe9096dbb28"],"options":["c454a3a8164e","77096d0263e9"],"slots":[]},
-    "fx_compact/k_cool": {"key":"k_cool","words":["b405f01f6c4a"],"options":["77096d0263e9","c454a3a8164e"],"slots":[]}
+    "fx_compact/k_plain": {"key":"k_plain","words":["af6ae0786ae5"],"options":["77096d0263e9","c454a3a8164e"],"slots":[],"voice":"2f60b696fa63","effects":["faf4daa2871b","0384bfe2afbc"]},
+    "fx_compact/k_once": {"key":"k_once","words":["d4970469f63e"],"options":["77096d0263e9","c454a3a8164e"],"slots":[],"voice":"2f60b696fa63","effects":["faf4daa2871b","0384bfe2afbc"]},
+    "fx_compact/k_arc_a": {"key":"story:arc","words":["8f13c9cb820f"],"options":["77096d0263e9","c454a3a8164e"],"slots":[],"voice":"2f60b696fa63","effects":["faf4daa2871b","0384bfe2afbc"]},
+    "fx_compact/k_arc_b": {"key":"story:arc","words":["cf78cdff6541"],"options":["77096d0263e9","c454a3a8164e"],"slots":[],"voice":"2f60b696fa63","effects":["faf4daa2871b","0384bfe2afbc"]},
+    "fx_compact/k_saga_a": {"key":"story:saga","words":["72c9e3804e77"],"options":["77096d0263e9","c454a3a8164e"],"slots":[],"voice":"2f60b696fa63","effects":["faf4daa2871b","0384bfe2afbc"]},
+    "fx_compact/k_saga_b": {"key":"story:saga","words":["c6134c6a5830"],"options":["77096d0263e9","c454a3a8164e"],"slots":[],"voice":"2f60b696fa63","effects":["faf4daa2871b","0384bfe2afbc"]},
+    "fx_compact/k_words": {"key":"k_words","words":["013b1362539b","3a4681c06546","3b602a978f68"],"options":["77096d0263e9","c454a3a8164e"],"slots":[],"voice":"2f60b696fa63","effects":["faf4daa2871b","0384bfe2afbc"]},
+    "fx_compact/k_slot": {"key":"k_slot","words":["9c181a19c7a2","038f4cc15b13"],"options":["77096d0263e9","c454a3a8164e"],"slots":["player"],"voice":"2f60b696fa63","effects":["faf4daa2871b","0384bfe2afbc"]},
+    "fx_compact/k_rival": {"key":"k_rival","words":["1be402a51513"],"options":["77096d0263e9","c454a3a8164e"],"slots":["opponent"],"voice":"2f60b696fa63","effects":["faf4daa2871b","0384bfe2afbc"]},
+    "fx_compact/k_exp": {"key":"k_exp","words":["ffe9096dbb28"],"options":["c454a3a8164e","77096d0263e9"],"slots":[],"voice":"2f60b696fa63","effects":["0384bfe2afbc","faf4daa2871b"]},
+    "fx_compact/k_cool": {"key":"k_cool","words":["b405f01f6c4a"],"options":["77096d0263e9","c454a3a8164e"],"slots":[],"voice":"2f60b696fa63","effects":["faf4daa2871b","0384bfe2afbc"]}
   }
 }
