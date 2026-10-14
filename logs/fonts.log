@@ -1,0 +1,40 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+[TypeError: fetch failed] {
+  [cause]: AggregateError [ETIMEDOUT]: 
+      at internalConnectMultiple (node:net:1430:18)
+      at internalConnectMultiple (node:net:1506:5)
+      at Timeout.internalConnectMultipleTimeout (node:net:2126:5)
+      at listOnTimeout (node:internal/timers:687:11)
+      at process.processTimers (node:internal/timers:618:7) {
+    code: 'ETIMEDOUT',
+    [errors]: [
+      Error: connect ETIMEDOUT 142.251.215.74:443
+          at createConnectionError (node:net:2062:14)
+          at Timeout.internalConnectMultipleTimeout (node:net:2121:38)
+          at listOnTimeout (node:internal/timers:687:11)
+          at process.processTimers (node:internal/timers:618:7) {
+        errno: -110,
+        code: 'ETIMEDOUT',
+        syscall: 'connect',
+        address: '142.251.215.74',
+        port: 443
+      },
+      Error: connect ENETUNREACH 2607:f8b0:4007:817::200a:443 - Local (:::0)
+          at internalConnectMultiple (node:net:1502:16)
+          at Timeout.internalConnectMultipleTimeout (node:net:2126:5)
+          at listOnTimeout (node:internal/timers:687:11)
+          at process.processTimers (node:internal/timers:618:7) {
+        errno: -101,
+        code: 'ENETUNREACH',
+        syscall: 'connect',
+        address: '2607:f8b0:4007:817::200a',
+        port: 443
+      }
+    ]
+  }
+}
+
+Node.js v24.21.0

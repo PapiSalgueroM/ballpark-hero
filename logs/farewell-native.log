@@ -1,0 +1,33 @@
+sim first: Soccer farewell:9 healthy groups,168 full original state/RNG pairs,6 effective source controls,6 prepared native branches.
+node:fs:483
+    return binding.readFileUtf8(path, stringToFlags(options.flag));
+                   ^
+
+Error: ENOENT: no such file or directory, open '/home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/font-cache/manifest.json'
+    at Object.readFileSync (node:fs:483:20)
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playSoccerFarewell.mjs:13:34 {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/font-cache/manifest.json'
+}
+
+Node.js v24.21.0
+node:fs:483
+    return binding.readFileUtf8(path, stringToFlags(options.flag));
+                   ^
+
+Error: ENOENT: no such file or directory, open '/home/runner/work/ballpark-hero/ballpark-hero/soccer-farewell-artifacts/native/report.json'
+    at Object.readFileSync (node:fs:483:20)
+    at read (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/checkSoccerFarewell.mjs:5:32)
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/checkSoccerFarewell.mjs:27:10
+    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)
+    at async node:internal/modules/esm/loader:647:26
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/home/runner/work/ballpark-hero/ballpark-hero/soccer-farewell-artifacts/native/report.json'
+}
+
+Node.js v24.21.0
