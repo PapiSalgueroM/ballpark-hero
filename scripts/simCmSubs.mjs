@@ -17,6 +17,8 @@
                go to extra time a change at the break (90) is taken and one at 95 refused.
      cutover   the Hot Seat daily the day before HOT_SEAT_RULES_FROM plays the base rules, the daily ON
                that date the current ones.
+     oppextratime  the same knockout night on SUBS_ET_SEEDS seeds: the other dugout's unused changes carry
+               on into extra time (the break before it is free), at least ET_MIN a night.
      opponent  over a quick sim fleet (2026-27 Liverpool, Barcelona and Bayern on the current rules and
                again on the base rules, 2005-06 Everton and 2015-16 Real Madrid; SUBS_SEEDS seeds of
                SUBS_MATCHES matches each), the other dugout never passes its rule's changes or stoppages,
@@ -53,6 +55,7 @@
      etbreak    the break before extra time costs a stoppage: extratime red.
      cutover    the cutover day itself plays the base rules: cutover red.
      pressedge  the bigGame edge judged against the match just played (no fixture handed in): press red.
+     etfrozen   the break before extra time is not free for the other dugout: oppextratime red.
      opproom    the other dugout's room back to MAX_HALFTIME_SUBS less the changes made: opponent red.
      coachall   the coach keeps nothing back (his three keep back lines opened): coach red.
      pressold   the press at the whistle reads the match just played again: press red.
@@ -78,7 +81,7 @@ const partArg = process.argv.find(a => a.startsWith('--part='));
 const HS_FILE = 'src/lib/managerHotSeat.ts';
 /* The base arm's sections run only with SUBS_BASE, a checkout of the commit this branch started from. */
 const BASE_PARTS = ['legacy', 'three', 'hotseat'];
-const ALL_PARTS = ['ledger', 'rule', 'extratime', 'cutover', 'opponent', 'coach', 'press', ...(process.env.SUBS_BASE ? BASE_PARTS : [])];
+const ALL_PARTS = ['ledger', 'rule', 'extratime', 'cutover', 'oppextratime', 'opponent', 'coach', 'press', ...(process.env.SUBS_BASE ? BASE_PARTS : [])];
 /** The engine sections past rule register here as they are defined below. */
 const SECTIONS = {};
 
@@ -92,6 +95,7 @@ const CONTROLS = {
   etbreak: { part: 'extratime', from: '  return !!live.et && minute === live.et.from && !(plus && plus > 0);', to: '  return false;' },
   cutover: { part: 'cutover', file: HS_FILE, from: "  if (setup.daily) return setup.daily < HOT_SEAT_RULES_FROM ? 'base' : undefined;", to: "  if (setup.daily) return setup.daily <= HOT_SEAT_RULES_FROM ? 'base' : undefined;" },
   pressedge: { part: 'press', from: '    const edge = matchEdge(state, fromWeek === undefined ? undefined : fx);', to: '    const edge = matchEdge(state);' },
+  etfrozen: { part: 'oppextratime', from: '  if (stopsLeft !== null && stopsLeft <= 0 && !etBreak) return made;', to: '  if (stopsLeft !== null && stopsLeft <= 0) return made;' },
   legacyleak: { part: 'legacy', from: "  if (career.matchRules === 'base') return { subs: MAX_SUBS, stops: null, partial: false };", to: '' },
   pressnew: { part: 'legacy', from: "  maybeAskPress(state, state.matchRules === 'base' ? undefined : live.week + 1);", to: '  maybeAskPress(state, live.week + 1);' },
   pressold: { part: 'press', from: "  maybeAskPress(state, state.matchRules === 'base' ? undefined : live.week + 1);", to: '  maybeAskPress(state);' },
@@ -281,14 +285,19 @@ function ruleSection(cm) {
    and 80 (four changes, three stoppages), then on the nights that go to extra time a change at 90 (the break)
    and, separately, one at 95 (a fourth stoppage). */
 const ET_NIGHTS = Number(process.env.SUBS_ET_NIGHTS ?? 12);
-function extratimeSection(cm) {
-  const P = 'extratime';
+/** A 2026-27 Arsenal career (seed 4107, fixed steps) walked to the second leg of its first knockout tie. */
+function arsenalKnockout(cm) {
   let pre = withSeed(4107, () => cm.startCareer('Arsenal'));
   for (let step = 1; step < 90; step++) {
     const next = pre.calendar[pre.week];
     if (!next || (next.type === 'uclKo' && (next.uclLeg === 2 || !next.uclLeg))) break;
     pre = withSeed(4107 * 31 + step, () => cm.playNextEntry(pre, { skipHalftime: true, noCoach: true })).state;
   }
+  return pre;
+}
+function extratimeSection(cm) {
+  const P = 'extratime';
+  const pre = arsenalKnockout(cm);
   const rule = cm.matchRuleOf(pre);
   check(P, 'the walk reaches a knockout second leg in a five change season', pre.calendar[pre.week]?.type === 'uclKo' && ruleText(rule) === '5/3', `${pre.calendar[pre.week]?.type} ${ruleText(rule)}`);
   let nights = 0, taken90 = 0, kept90 = 0, refused95 = 0;
@@ -328,8 +337,49 @@ function cutoverSection(cm) {
     check(P, `the ${date} daily plays the ${want ? 'base' : 'current'} rules`, day.daily === date && run.state.matchRules === want, `matchRules ${run.state.matchRules}`);
   }
 }
+/* Section oppextratime: the other dugout's unused changes carry on into extra time (brief decisions 1(b) and 2;
+   the RUN and READ reviews' MAJOR). The same knockout night on SUBS_ET_SEEDS seeds, to the whistle and into extra
+   time where it is level. Under five a side that used its three stoppages by 90 still has changes, and they go on
+   at the break before extra time (minute 90, no stoppage), as mine do. Checked: no night passes five changes or
+   three stoppages in play; their mean changes in extra time (the break's included) at least ET_MIN. Measured by
+   the builder (remote check r1331-et2, 1500 seeds each): seed base 1700, 259 nights, 1.06 a night; 5000, 252
+   nights, 0.98; 9000, 241 nights, 0.99. With the etfrozen control in, 0.00 (178 of 259 nights had changes left and
+   made none, r1331-run-p et-owed on the round's head); the base rules made 0.79 a night (r1331-et). ET_MIN 0.5. */
+const ET_SEEDS = Number(process.env.SUBS_ET_SEEDS ?? 1500);
+const ET_SEED_BASE = Number(process.env.SUBS_ET_SEED_BASE ?? 1700);
+const ET_MIN = Number(process.env.SUBS_ET_MIN ?? 0.5);
+function oppExtratimeSection(cm) {
+  const P = 'oppextratime';
+  const pre = arsenalKnockout(cm);
+  const rule = cm.matchRuleOf(pre);
+  check(P, 'the walk reaches a knockout second leg in a five change season', pre.calendar[pre.week]?.type === 'uclKo' && ruleText(rule) === '5/3', `${pre.calendar[pre.week]?.type} ${ruleText(rule)}`);
+  let nights = 0, over = 0, inEt = 0, atBreak = 0, frozen = 0;
+  for (let k = 0; k < ET_SEEDS; k++) {
+    const seed = ET_SEED_BASE + k;
+    const ht = withSeed(seed, () => cm.playNextEntry(pre));
+    if (ht.kind !== 'halftime' || !ht.state.live) continue;
+    const on = withSeed(seed + 500000, () => cm.startSecondHalf(ht.state));
+    const et = on && withSeed(seed + 900000, () => cm.startExtraTime(on));
+    if (!et?.live?.et) continue;
+    nights += 1;
+    const opp = et.live.oppSubs ?? [];
+    const breakAt = et.live.et.from;
+    const stopsInPlay = new Set(opp.filter(s => s.minute !== breakAt).map(s => s.minute)).size;
+    if (opp.length > rule.subs || stopsInPlay > rule.stops) over += 1;
+    const late = opp.filter(s => s.minute >= breakAt).length;
+    inEt += late;
+    atBreak += opp.filter(s => s.minute === breakAt).length;
+    if (late === 0 && opp.length < rule.subs) frozen += 1;
+  }
+  const mean = inEt / Math.max(1, nights);
+  console.log(`   ${nights} of ${ET_SEEDS} nights went to extra time: ${mean.toFixed(2)} changes from them in extra time a night (${atBreak} at the break), ${frozen} nights with changes left and none made`);
+  check(P, 'enough nights go to extra time to judge', nights >= 100, `${nights}`);
+  check(P, 'the other dugout never passes five changes or three stoppages in play, the break before extra time free', over === 0, `${over} of ${nights}`);
+  check(P, `their unused changes carry on into extra time: at least ${ET_MIN} a night`, mean >= ET_MIN, mean.toFixed(2));
+}
 SECTIONS.extratime = extratimeSection;
 SECTIONS.cutover = cutoverSection;
+SECTIONS.oppextratime = oppExtratimeSection;
 
 /* ---------------- the quick sim fleet (sections opponent and coach) ---------------- */
 /* Five change careers in 2026-27 (England, Spain, Germany), the same careers on the base rules, and two
@@ -390,7 +440,9 @@ function opponentSection(cm) {
   const rows = quickFleet(cm).filter(r => r.named);
   let over = 0;
   for (const r of rows) {
-    const stops = new Set(r.opp.map(s => s.minute)).size;
+    /* Their changes in play are drawn at 56 to 88 and in extra time from 91, so a change at 90 is one made at the
+       break before extra time, which uses no stoppage (section oppextratime). */
+    const stops = new Set(r.opp.filter(s => s.minute !== 90).map(s => s.minute)).size;
     if (r.opp.length > r.rule.subs || (r.rule.stops !== null && stops > r.rule.stops)) over += 1;
   }
   check(P, 'the other dugout never passes its rule\'s changes or stoppages', over === 0, `${over} of ${rows.length} matches over`);
