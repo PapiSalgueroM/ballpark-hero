@@ -1,0 +1,5 @@
+#!serve
+#!playwright
+#!serial
+simWritesAreSent-alone: node scripts/simWritesAreSent.mjs
+cmRealFixtures: export FREE_KICK_FONT_CACHE=/tmp/fkfc2; NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCmRealFixtures.mjs && node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only >/dev/null 2>&1; NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playCmRealFixtures.mjs
