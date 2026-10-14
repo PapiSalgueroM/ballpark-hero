@@ -135,7 +135,7 @@ async function journey(width, height, kind) {
     const waitWrite = after => page.waitForFunction(count => window.__tailOwnWrites.length > count, after);
     const pair = (stage, actual, expected) => { write(row.id + '-' + stage + '-actual', actual); write(row.id + '-' + stage + '-expected', expected); check(JSON.stringify(actual) === JSON.stringify(expected), stage + ': every logical field matches the actual reducer or restoration'); };
     const capture = async (target, stage, button = false) => {
-      await target.waitFor(); await target.scrollIntoViewIfNeeded();
+      await target.waitFor(); await target.evaluate(node => node.scrollIntoView({ block: 'center', inline: 'nearest', behavior: 'instant' }));
       await target.evaluate(async node => { await Promise.all(node.getAnimations({ subtree: true }).filter(animation => Number.isFinite(animation.effect?.getComputedTiming().iterations)).map(animation => animation.finished.catch(() => {}))); });
       const frames = await target.evaluate(async node => { const result = []; for (let index = 0; index < 4; index++) { await new Promise(requestAnimationFrame); const b = node.getBoundingClientRect(), css = getComputedStyle(node); result.push({ x: b.x, y: b.y, width: b.width, height: b.height, viewport: innerWidth, documentWidth: document.documentElement.scrollWidth, opacity: Number(css.opacity), visibility: css.visibility, disabled: node.disabled === true, hit: node.contains(document.elementFromPoint(b.x + b.width / 2, b.y + b.height / 2)), text: node.innerText }); } return result; });
       row.layout.push({ stage, frames });
