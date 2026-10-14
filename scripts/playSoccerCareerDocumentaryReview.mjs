@@ -389,6 +389,13 @@ try {
         'Second full-access deal must reset stage1 and earn a later actual review.');
     } else { due = history.later; setup(year(due) === year(history.acquired.after) + 1 && initial.eventLastFired['408'] === 2026, fixture.id + ': review did not follow the actual later season.'); }
     const context = copy(due); context.phase = 'social_media_action'; context.pendingEvents = []; context.socialMediaActionUsedThisSeason = true;
+    /* Release BF join: on Round 1327's keyed deck the acquisition is this context under its own player name (scripts/lib/keyedPicker1327.mjs). */
+    const keyedName = provenance.pickerWitness?.input?.mode === KEYED_KIND ? provenance.pickerWitness.input.playerName : null;
+    if (keyedName !== null) {
+      setup(keyedName === due.playerName || (keyedName.startsWith(due.playerName + ' ') && /^[0-9]+$/.test(keyedName.slice(due.playerName.length + 1))),
+        fixture.id + ': the keyed player name is not the context name plus an attempt number.');
+      context.playerName = keyedName;
+    }
     setup(JSON.stringify(context) === JSON.stringify(provenance.context), fixture.id + ': fields beyond disclosed actual picker entry changed.');
     setup(step.choiceIndex === (fixture.id.includes('family') ? 1 : 0), fixture.id + ': actual owned branch differs.');
   }
