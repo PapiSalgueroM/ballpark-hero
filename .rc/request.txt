@@ -1,0 +1,18 @@
+# Release BF join, m2 (Round 1353 PR252 at eca2731a) on efb7896d: type gate, units, the reviews sim and its three controls, the prior routine sim, and the Life readers
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/test/soccerCareerLifeReviews.test.ts src/test/soccerCareerRoutineEvents.test.ts src/test/soccerCareerLifeFollowups.test.ts src/test/careerDilemmaReach.test.tsx src/test/careerStory.test.tsx --testTimeout=300000 --hookTimeout=120000
+reviews: CI=1 SIM_NETWORK=offline NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerCareerLifeReviews.mjs
+reviews-ctl-missing: CI=1 SIM_NETWORK=offline SC_LIFE_REVIEWS_CONTROL=missing NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerCareerLifeReviews.mjs > /tmp/rmissing.log 2>&1; s=$?; tail -3 /tmp/rmissing.log | cut -c1-220; [ $s = 0 ] && grep -q "Effective actual source control: missing" /tmp/rmissing.log && grep -q "simSoccerCareerLifeReviews missing: green" /tmp/rmissing.log && echo FIRED-OK
+reviews-ctl-priority: CI=1 SIM_NETWORK=offline SC_LIFE_REVIEWS_CONTROL=priority NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerCareerLifeReviews.mjs > /tmp/rpriority.log 2>&1; s=$?; tail -3 /tmp/rpriority.log | cut -c1-220; [ $s = 0 ] && grep -q "Effective actual source control: priority" /tmp/rpriority.log && grep -q "simSoccerCareerLifeReviews priority: green" /tmp/rpriority.log && echo FIRED-OK
+reviews-ctl-effect: CI=1 SIM_NETWORK=offline SC_LIFE_REVIEWS_CONTROL=effect NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerCareerLifeReviews.mjs > /tmp/reffect.log 2>&1; s=$?; tail -3 /tmp/reffect.log | cut -c1-220; [ $s = 0 ] && grep -q "Effective actual source control: effect" /tmp/reffect.log && grep -q "simSoccerCareerLifeReviews effect: green" /tmp/reffect.log && echo FIRED-OK
+routine: CI=1 SIM_NETWORK=offline NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerCareerRoutineEvents.mjs
+simCareerLife: node scripts/simCareerLife.mjs
+simCareerLifeCooldowns: node scripts/simCareerLifeCooldowns.mjs
+simCareerStory: node scripts/simCareerStory.mjs
+simCareerProgramme: node scripts/simCareerProgramme.mjs
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simCareerDilemmaReach: node scripts/simCareerDilemmaReach.mjs
+simCreation: node scripts/simCreation.mjs > /tmp/cr.log 2>&1; s=$?; grep -E "full career save|FAIL|PASSED" /tmp/cr.log | head -6; exit $s
+worldTruth: export WORLD_TRUTH_BASE_FROM_HEAD=$(git diff --name-only 4ae7a534 HEAD -- src/lib | grep -v "\.test\." | paste -sd, -); node scripts/simSoccerWorldTruth.mjs
+simSoccerDeckFairness: node scripts/simSoccerDeckFairness.mjs
