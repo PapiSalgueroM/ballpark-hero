@@ -1,0 +1,7 @@
+#!build
+distgrep: bash .rc/x/distgrep.sh
+kctl1: bash .rc/x/kctl.sh replay:1 weightoff:3 weightkeep:3 story:4 rest:5 failopen:5 restfall:5 textrng:6 seasonweek:9
+kctl2: bash .rc/x/kctl.sh expirefall:7 expireoff:7 expirefx:7 settledoff:7 panelexpiry:7 neutral:8 heavy:10 fxsilent:11 fxdrop:11 fxunbound:11 fxneutral:11
+kctl3: bash .rc/x/kctl.sh conductreal:12 slotopen:12 quoteslot:12 untagged:12 rosterword:12 conductlate:12 conductstale:12 conducttarget:12 nullpass:12 speechpast:12
+kctl4: bash .rc/x/kctl.sh pruneearly:13 codecword:13 codecslot:13
+kctl5: bash .rc/x/kctl.sh wordedit:14 wordorder:14 storymove:14 voiceedit:14 effectedit:14 newpack:14,15 pressure:15 eager:16
