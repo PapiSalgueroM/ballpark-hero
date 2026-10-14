@@ -42,9 +42,9 @@ const sha = value => createHash('sha256').update(value).digest('hex');
    CAREER_STORY_ROLE_CHAIN_REF replaces the ref, and an empty value reads this tree. */
 const CHAIN_REF = process.env.CAREER_STORY_ROLE_CHAIN_REF ?? '4ae7a534';
 const CHAIN_FILES = new Set(['src/lib/soccerCareerLife.ts', 'src/lib/soccerCareerContracts.ts', 'src/lib/soccerCareerRealismA.ts']);
-const textAt = file => (CHAIN_REF && CHAIN_FILES.has(file)
-  ? execFileSync('git', ['show', `${CHAIN_REF}:${file}`], { cwd: ROOT, encoding: 'utf8', maxBuffer: 8e6 })
-  : fs.readFileSync(path.join(ROOT, file), 'utf8')).replaceAll('\r\n', '\n');
+const textAt = file => CHAIN_REF && CHAIN_FILES.has(file)
+  ? execFileSync('git', ['show', `${CHAIN_REF}:${file}`], { cwd: ROOT, encoding: 'utf8', maxBuffer: 8e6 }).replaceAll('\r\n', '\n')
+  : fs.readFileSync(path.join(ROOT, file), 'utf8').replaceAll('\r\n', '\n');
 const originalAt = file => execFileSync('git', ['show', `${STORY_ROLE_BASE}:${file}`], { cwd: ROOT, encoding: 'utf8', maxBuffer: 8e6 }).replaceAll('\r\n', '\n');
 const copy = value => structuredClone(value);
 const serial = value => JSON.stringify(value);
