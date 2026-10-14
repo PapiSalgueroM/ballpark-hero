@@ -1,0 +1,40 @@
+fleet: 4 careers x seeds 0,1,2,3,4 x 2 seasons, a save, a load and a save after every entry, against FENCE_BASE /tmp/f2
+NEGATIVE CONTROL ON: SAVE_FENCE_CONTROL=squadline rewrote clubManager.ts in the fleet-head bundle
+  1913 saves on head, 0 of them in a state a load repair fires on; 275 faces equal to the base commit's (both saves' bytes and the draw count)
+  FAIL [fleet]: head and base part: Everton (today) seed 0: head "s0 w20|6577b1ed8a846d43|6577b1ed8a846d43|19405" base "s0 w20|3c7837a5334df8ad|3c7837a5334df8ad|19405"
+  squeezed career: 455 saves the engine wrote with fewer than 14 men (seed:saves 0:92 1:92 2:93 3:84 4:94)
+  negative budget: saved at -2.5, opened on head at -2.5 with 0 draws, the same JSON as the base's
+✘ [ERROR] No matching export in "../../../../../tmp/f2/src/lib/soccerCareerSave.ts" for import "parseSoccerCareerSave"
+
+    <stdin>:3:29:
+      3 │ ...{ isSoccerCareerSave, parseSoccerCareerSave, serializeSoccerCare...
+        ╵                          ~~~~~~~~~~~~~~~~~~~~~
+
+✘ [ERROR] No matching export in "../../../../../tmp/f2/src/lib/soccerCareerSave.ts" for import "serializeSoccerCareerSave"
+
+    <stdin>:3:52:
+      3 │ ...seSoccerCareerSave, serializeSoccerCareerSave } from './src/lib/...
+        ╵                        ~~~~~~~~~~~~~~~~~~~~~~~~~
+
+/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:1472
+  let error = new Error(text);
+              ^
+
+Error: Build failed with 2 errors:
+<stdin>:3:29: ERROR: No matching export in "../../../../../tmp/f2/src/lib/soccerCareerSave.ts" for import "parseSoccerCareerSave"
+<stdin>:3:52: ERROR: No matching export in "../../../../../tmp/f2/src/lib/soccerCareerSave.ts" for import "serializeSoccerCareerSave"
+    at failureErrorWithLog (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:1472:15)
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:945:25
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:897:52
+    at buildResponseToResult (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:943:7)
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:970:16
+    at responseCallbacks.<computed> (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:622:9)
+    at handleIncomingPacket (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:677:12)
+    at Socket.readFromStdout (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:600:7)
+    at Socket.emit (node:events:514:28)
+    at addChunk (node:internal/streams/readable:568:12) {
+  errors: [Getter/Setter],
+  warnings: [Getter/Setter]
+}
+
+Node.js v24.21.0
