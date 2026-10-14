@@ -58,21 +58,21 @@ function opponentOracle(state: CareerState) {
 describe('Halftime starting XIs and provisional grades', () => {
   it('halftime lineups missing: starting XIs are available at the interval', () => {
     const state = interval('entry'), held = JSON.stringify(state), random = vi.spyOn(Math, 'random');
-    const view = mount(state), entry = screen.queryByRole('button', { name: 'Starting XIs', exact: true });
+    const view = mount(state), entry = screen.queryByRole('button', { name: 'Starting XIs' });
     expect(!!entry, 'halftime starting XIs entry is missing').toBe(true);
     fireEvent.click(entry!);
     const panel = view.container.querySelector('[data-cm-halftime-team="me"]');
     expect(names(panel)).toEqual(state.live!.startXi.map(id => state.squad.find(player => player.id === id)!.name));
-    fireEvent.click(screen.getByRole('button', { name: 'Back', exact: true }));
-    expect(screen.getByRole('button', { name: 'Starting XIs', exact: true })).toBeTruthy();
+    fireEvent.click(screen.getByRole('button', { name: 'Back' }));
+    expect(screen.getByRole('button', { name: 'Starting XIs' })).toBeTruthy();
     expect(Object.values(view.callbacks).every(callback => callback.mock.calls.length === 0)).toBe(true);
     expect(JSON.stringify(state)).toBe(held); expect(random).not.toHaveBeenCalled();
   });
   it('halftime lineups missing: opposition has truthful provisional so-far grades', () => {
     const state = interval('opposition'), held = JSON.stringify(state), random = vi.spyOn(Math, 'random');
-    const view = mount(state), entry = screen.queryByRole('button', { name: 'Starting XIs', exact: true });
+    const view = mount(state), entry = screen.queryByRole('button', { name: 'Starting XIs' });
     if (entry) fireEvent.click(entry);
-    const tab = screen.queryByRole('tab', { name: state.live!.opponent, exact: true });
+    const tab = screen.queryByRole('tab', { name: state.live!.opponent });
     if (tab) fireEvent.click(tab);
     const panel = view.container.querySelector('[data-cm-halftime-team="opp"]');
     expect(!!panel && panel.textContent!.includes('So far (provisional)'),
@@ -110,7 +110,7 @@ describe('Halftime starting XIs and provisional grades', () => {
     const view = mount(state);
     for (const tone of E.TALK_TONES) fireEvent.click(screen.getByRole('button', { name: new RegExp(tone.label) }));
     expect(view.callbacks.onTalk.mock.calls).toEqual([['calm'], ['rally'], ['demand'], ['blast']]);
-    fireEvent.click(screen.getByRole('button', { name: 'Second half', exact: true }));
+    fireEvent.click(screen.getByRole('button', { name: 'Second half' }));
     expect(view.callbacks.onSecondHalf).toHaveBeenCalledTimes(1);
     expect(view.callbacks.onShape).not.toHaveBeenCalled(); expect(view.callbacks.onSub).not.toHaveBeenCalled();
     expect(JSON.stringify(state)).toBe(held); expect(random).not.toHaveBeenCalled();
