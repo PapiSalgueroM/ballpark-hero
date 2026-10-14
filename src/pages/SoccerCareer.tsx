@@ -1669,8 +1669,8 @@ export default function SoccerCareer() {
             <h3 className="text-lg font-black text-center">⚠️ Start New Career?</h3>
             <p className="text-sm text-muted-foreground text-center">Are you sure? This will delete your current career. All progress will be lost forever.</p>
             <div className="flex flex-col gap-3 sm:flex-row">
-              <Button onClick={() => setShowNewCareerConfirm(false)} variant="outline" className="flex-1 h-10 font-bold">Cancel</Button>
-              <Button onClick={handleConfirmNewCareer} className="flex-1 h-10 font-bold bg-red-600 hover:bg-red-500 text-black">Delete & Start Over</Button>
+              <Button onClick={() => setShowNewCareerConfirm(false)} variant="outline" className="flex-none sm:flex-1 h-10 font-bold">Cancel</Button>
+              <Button onClick={handleConfirmNewCareer} className="flex-none sm:flex-1 h-10 font-bold bg-red-600 hover:bg-red-500 text-black">Delete & Start Over</Button>
             </div>
           </div>
         </div>
