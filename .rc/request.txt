@@ -1,0 +1,4 @@
+#!serial
+headsha: git log --oneline -2
+worldBrowser-ctl-all: MANAGER_WORLD_BROWSER_CONTROL=all MANAGER_WORLD_BROWSER_ARTIFACTS="$PWD/mwb" node scripts/simManagerWorldBrowser.mjs > /tmp/wb.log 2>&1; s=$?; grep -E "^(PASS|FAIL|simManagerWorldBrowser)" /tmp/wb.log | head -20; tail -2 /tmp/wb.log; exit $s
+continuity-minusAZ: MANAGER_WORLD_CONTINUITY_BASE=$(node scripts/lib/treeWithoutMerge.mjs 5ec5a724 36cc9ffe 082fc277) && export MANAGER_WORLD_CONTINUITY_BASE && MANAGER_WORLD_CONTINUITY_ARTIFACTS="$PWD/mwc" node scripts/simManagerWorldContinuity.mjs > /tmp/mwc.log 2>&1; s=$?; grep -v "^    at " /tmp/mwc.log | tail -40 | cut -c1-300; [ $s -eq 0 ] && grep -qF 'Manager world continuity: 1 arms, eleven complete groups per arm' /tmp/mwc.log && echo GREEN-OK
