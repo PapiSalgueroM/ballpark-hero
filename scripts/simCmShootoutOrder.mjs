@@ -548,8 +548,16 @@ const fail = m => { failures += 1; (failedSections[section] ??= []).push(m); con
 const pct = x => `${(x * 100).toFixed(1)}%`;
 
 /* ---------- the base career, simmed to its first cup week ---------- */
+/* Round 1331, the bridge for a kit pinned to an old engine: since that round a match plays its league and
+   season's substitution rule (five in three stoppages in La Liga from 2020-21) and the press at the whistle reads
+   the next fixture, and the pinned pre-1072 engine knows neither. The arms that stand for the engine before
+   (historical, and the league out arm made from it) play with matchRules 'base', which is the old engine for
+   subs and press by construction (scripts/simCmSubs.mjs section legacy proves it byte for byte), set again
+   after a loadCareer (which drops it), and the key is taken off every state before it is hashed or compared. */
+const oldRules = engine => !WRITE_FIXTURE && (engine === historical || (!!leagueOut && engine === leagueOut));
 const reachCup = (engine, baseSeed = BASE_SEED) => withSeed(baseSeed, () => {
   const start = engine.startCareer(CLUB);
+  if (oldRules(engine)) start.matchRules = 'base';
   const cupIdx = start.calendar.findIndex(e => e.type === 'cup');
   if (cupIdx < 0) abort(`${CLUB} has no cup entry in its calendar`);
   /* playNextEntry hands back after every match, so the walk to the cup week is a loop. */
@@ -578,6 +586,8 @@ function playCup(state, seed, engine = cm) {
     const r = engine.playNextEntry(state, { skipHalftime: true });
     if (r.kind !== 'match' || !r.report) abort(`seed ${seed}: the cup week did not play a match (${r.kind})`);
     if (r.report.competition !== 'cup') abort(`seed ${seed}: played a ${r.report.competition} match, not the cup`);
+    /* Round 1331: the bridge's key comes off before anything is hashed (see oldRules). */
+    if (r.state && 'matchRules' in r.state) delete r.state.matchRules;
     const rep = r.report;
     return {
       seed, decidedBy: rep.decidedBy, shootoutWon: rep.shootoutWon ?? null,
@@ -975,6 +985,7 @@ section = 5;
   const probe = fixture?.rows?.find(r => pensNow.has(r.seed));
   if (!probe) fail(`none of the ${fixture?.rows?.length ?? 0} rows is a shootout on main's engine, so the old save never walks the one draw path`);
   if (probe) {
+    back.matchRules = 'base'; /* Round 1331: loadCareer drops the bridge's key; set again (see oldRules) */
     let out = playCup(back, probe.seed, historical);
     const baselineOld = JSON.parse(JSON.stringify(baselineCup));
     delete baselineOld.shootoutOrder;
@@ -994,6 +1005,7 @@ section = 5;
       const backOut = leagueOut.loadCareer();
       if (!backOut) abort('the league out engine could not open its old save');
       if ('shootoutOrder' in backOut) fail('the league out engine gave an old save an order');
+      backOut.matchRules = 'base'; /* Round 1331: set again after loadCareer (see oldRules) */
       const alt = playCup(backOut, probe.seed, leagueOut);
       const altContent = compareContent(alt, baselineOut);
       if (altContent.paired) { out = alt; content = altContent; oldBy1052 = true; }
