@@ -1,0 +1,6 @@
+treeWithoutMerge: 24a18a697ca576016777f9481649a0b940cdd3df, 9734ed35 without b9df63b4; conflicts kept from 9734ed35: none
+base 24a18a697ca576016777f9481649a0b940cdd3df (this head without Round 1332)
+seed 1: head exit 0, base exit 0, whole output identical (29 lines; last: simGmInbox: green.)
+seed 2: head exit 0, base exit 0, whole output identical (29 lines; last: simGmInbox: green.)
+seed 3: head exit 0, base exit 0, whole output identical (29 lines; last: simGmInbox: green.)
+gmdiff: all three seeds identical to the base and green

@@ -1,0 +1,10 @@
+1) The real hook, rendered: a match is activity, a season end is one completion
+   vitest exit 0, 2 passed (2)
+2) Soccer Career, as code: the season advance pings activity and the file owns no completion
+   advance calls: 1, ping 44 characters after the call (window 600), advance ping present: true, own completions: 0
+3) The ping is light, as code: recordActivity reaches neither the streak record nor the signed in save
+   NEGATIVE CONTROL ON: a signed in save added to the ping in memory
+  FAIL: recordActivity calls saveAuthCompletion(...), which makes every sim round a full completion again
+   body 795 characters, writes the anonymous row: true
+
+control "heavy": 1 failure(s) fired in section 3 as expected, the check works
