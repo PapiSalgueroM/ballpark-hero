@@ -355,6 +355,7 @@ try {
     && normal.fixtures.file === 'browser-fixtures.json' && normal.fixtures.sha256 === fixtureHash && normal.fixtures.scenarios === 2
     && normal.fixtures.actualPickerBatches === 1 && normal.fixtures.actualAnswers === 4
     && JSON.stringify(normal.pickerObserver) === JSON.stringify(observer), 'Completed normal model receipts differ or credit a source fault.');
+  if (observer?.kind === KEYED_KIND) pickerFiles.keyed = true;
   for (const [field, digest, file] of (observer?.kind === KEYED_KIND ? [['plainCompiledPath', 'plainCompiledSha256', 'fixed/engine.mjs']] : [['originalSourcePath', 'originalSha256', 'fixed/soccerCareerEngine.picker-original.ts'],
     ['observedSourcePath', 'observedSha256', 'fixed/soccerCareerEngine.picker-observed.ts'], ['compiledPath', 'compiledSha256', 'fixed/engine-picker-observed.mjs'],
     ['plainCompiledPath', 'plainCompiledSha256', 'fixed/engine.mjs']])) { setup(observer[field] === file, 'Picker physical path differs.'); physical(file, observer[digest], pickerFiles); }
@@ -455,7 +456,7 @@ try {
   report.toolsHeld = toolsBefore.length === 3 && toolsBefore.every(item => fileHash(item.filename) === item.sha256);
   report.installedHeld = installedBefore.length === 521 && installedBefore.every(item => fileHash(path.join(ROOT, item.path, 'package.json')) === item.sha256);
   report.parentHeld = parentFiles.length === 1 && parentFiles.every(item => fileHash(item.filename) === item.sha256);
-  report.pickerHeld = pickerFiles.length === 5 && pickerFiles.every(item => fileHash(item.filename) === item.sha256);
+  report.pickerHeld = pickerFiles.length === (pickerFiles.keyed ? 2 : 5) && pickerFiles.every(item => fileHash(item.filename) === item.sha256);
   report.fixturesHeld = !!fixtureHash && fileHash(FIXTURE) === fixtureHash;
   report.distHeld = distBefore.length > 0 && JSON.stringify(listFiles(path.join(ROOT, 'dist'))) === JSON.stringify(distBefore);
   report.fontsHeld = !!fontHash && fileHash(path.join(cache, 'manifest.json')) === fontHash && report.fonts.every(item => fileHash(path.join(cache, item.file)) === item.sha256);

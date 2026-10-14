@@ -441,6 +441,7 @@ try {
   const pickerObserver = fixtures.source.pickerObserver;
   /* Release BF join: a fixture dealt on Round 1327's keyed deck carries a keyed receipt (scripts/lib/keyedPicker1327.mjs). */
   const keyedDeck = pickerObserver?.kind === KEYED_KIND;
+  if (keyedDeck) pickerFiles.keyed = true;
   if (keyedDeck) {
     const keyedProblems = keyedObserverProblems(pickerObserver, fs.readFileSync(path.join(ROOT, 'src/lib/soccerCareerEngine.ts'), 'utf8'));
     setup(keyedProblems.length === 0, 'The keyed deck receipt differs: ' + keyedProblems.join('; '));
@@ -677,7 +678,7 @@ try {
   report.toolsHeld = toolsBefore.length === 3 && toolsBefore.every(tool => fileHash(tool.file) === tool.sha256);
   report.installedHeld = installedBefore.length === 521 && installedBefore.every(row => fileHash(path.join(ROOT, row.path, 'package.json')) === row.sha256);
   report.parentHeld = parentFiles.length === 3 && parentFiles.every(file => fileHash(file.filename) === file.sha256);
-  report.pickerHeld = pickerFiles.length === 5 && pickerFiles.every(file => fileHash(file.filename) === file.sha256);
+  report.pickerHeld = pickerFiles.length === (pickerFiles.keyed ? 2 : 5) && pickerFiles.every(file => fileHash(file.filename) === file.sha256);
   report.fixturesHeld = !!fixtureHash && fileHash(FIXTURE) === fixtureHash;
   report.distHeld = distBefore.length > 0 && JSON.stringify(listFiles(path.join(ROOT, 'dist'))) === JSON.stringify(distBefore);
   report.fontsHeld = !!fontHash && fileHash(path.join(cache, 'manifest.json')) === fontHash && report.fonts.every(entry => fileHash(path.join(cache, entry.file)) === entry.sha256);
