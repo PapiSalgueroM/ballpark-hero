@@ -485,6 +485,9 @@ const NOTHING_HELD = [
     why: 'the hand over to Club Manager answers "failed" and writes nothing; the run stays in the hot seat save' },
   { file: 'src/lib/rankEmCircuit.ts', keys: ['write:saveCircuit'],
     why: 'answers false and holds nothing itself; RankEm.tsx keeps the answer and is listed' },
+  /* Round 1330: the soccer save's write runs inside saveFence.write */
+  { file: 'src/pages/SoccerCareer.tsx', keys: ['write:saveCareer'],
+    why: 'answers false and holds nothing itself; saveFence.write hands the answer back to saveCurrentCareer, which keeps it as state:saveFailed, listed under OWED' },
   { file: 'src/lib/squadDeal.ts', keys: ['write:saveScore'],
     why: 'a refused leaderboard row is dropped and the stored board is answered; nothing waits for a retry' },
   { file: 'src/hooks/useHofOrBust.ts', keys: ['keeps:safeSetItem'],

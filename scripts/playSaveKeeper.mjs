@@ -194,6 +194,7 @@ const LOSS_ON_MAIN = ['/club-manager', '/stadium-tycoon', '/wonderkid-factory', 
    (KEEPER_CONTROL=extrafence proves that). */
 const KEYS_ADDED_ON_PURPOSE = {
   'dukb-fence:dukb-club-manager-save': 'Round 1323, one tab wins: the Club Manager save\'s generation, kept in its own key beside the save and moved by every game write (src/lib/saveFence.ts)',
+  'dukb-fence:soccerCareerSave': 'Round 1330, one tab wins on Soccer Career: the soccer save\'s generation, kept in its own key beside the save and moved by every game write, the mount write of an ordinary visit included (src/lib/saveFence.ts)',
 };
 const HALL = '/hall-of-champions';
 

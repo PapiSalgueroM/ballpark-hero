@@ -460,12 +460,20 @@ async function measureActionBar(browser, width) {
         row.style.flexWrap = 'nowrap';
         if (row.firstElementChild) row.firstElementChild.style.width = 'auto';
       }
-      return { name: span.innerText, truncated: span.scrollWidth > span.clientWidth + 1 };
+      /* Round 1330: the name now wraps (at any character) instead of being
+         cut, so a crushed name shows as a column of letters rather than an
+         ellipsis. "Playtest" has a whole line to itself below 480, so it must
+         sit on ONE line; more lines means the row crushed it, which is what
+         the nowrap control re-creates. */
+      const range = document.createRange();
+      range.selectNodeContents(span);
+      const lines = new Set([...range.getClientRects()].filter((r) => r.width > 0).map((r) => Math.round(r.top))).size;
+      return { name: span.innerText, truncated: span.scrollWidth > span.clientWidth + 1, lines };
     }, NOWRAP_CONTROL);
     if (nameCheck.err) {
       failures.push(`${tag}: ${nameCheck.err}`);
-    } else if (nameCheck.truncated || nameCheck.name !== 'Playtest') {
-      failures.push(`${tag}: the player's own name is not whole on the career header (shows "${nameCheck.name}"${nameCheck.truncated ? ', truncated' : ''})`);
+    } else if (nameCheck.truncated || nameCheck.name !== 'Playtest' || nameCheck.lines > 1) {
+      failures.push(`${tag}: the player's own name is not whole on the career header (shows "${nameCheck.name}"${nameCheck.truncated ? ', truncated' : ''}${nameCheck.lines > 1 ? `, crushed onto ${nameCheck.lines} lines` : ''})`);
     }
     const maxY = Math.max(0, first.docH - VH);
     /* 300px a step is about a third of a screen, which is roughly how far a
@@ -630,7 +638,16 @@ function unpinVerdict() {
   }
   return { code: 3, line: `CONTROL unpin DID NOT FIRE: the bar was unpinned at ${edits} scroll stops and the run did not go red on both the reachable check and the pinned proof` };
 }
-const control = unpinVerdict();
+/* Round 1330: the nowrap control says whether it fired, like unpin. It went
+   GREEN with exit 0 once the name started wrapping instead of truncating, and
+   nothing noticed; now a nowrap run that crushes no name exits 3. */
+function nowrapVerdict() {
+  if (!NOWRAP_CONTROL) return null;
+  const crushed = failures.filter((f) => f.includes("the player's own name is not whole")).length;
+  if (crushed) return { code: 1, line: `CONTROL nowrap FIRED: the single row header crushed the player's name at ${crushed} measured width(s)` };
+  return { code: 3, line: 'CONTROL nowrap DID NOT FIRE: the single row header was re-applied and the name check stayed green' };
+}
+const control = unpinVerdict() ?? nowrapVerdict();
 
 console.log('');
 if (failures.length) {
