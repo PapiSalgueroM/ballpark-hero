@@ -161,8 +161,9 @@ async function journey(width, height, kind) {
       row.fonts = await loadedFonts(page);
       const expectedLabel = await label(raw); check(await resume.locator('[data-continue-line]').innerText() === expectedLabel, 'Actual home Continue reads the exposed original metadata');
       await capture(resume, 'home-continue', true); await resume.click();
-      const heading = page.getByRole('heading', { name: kind === 'manager' ? /Manager Career/ : kind === 'pundit' ? /TV Pundit Career/ : /Club Owner/, exact: false });
-      await heading.waitFor({ timeout: 45000 });
+      const headingName = kind === 'manager' ? /Manager Career/ : kind === 'pundit' ? /TV Pundit Career/ : /Club Owner/;
+      const heading = page.getByRole('heading', { name: headingName, exact: false });
+      await page.getByRole('heading', { name: headingName, exact: false, includeHidden: true }).waitFor({ timeout: 45000 });
       let current = await normalize(candidate.original), stored = await serialized(current); await waitWrite(0);
       pair('restored', await decoded(await bytes()), current);
       check(await bytes() === stored, 'Actual page writer bytes match the complete normalized oracle encoding');
@@ -177,14 +178,17 @@ async function journey(width, height, kind) {
         stored = await serialized(expected); await waitWrite(ackWrites); pair('acknowledged', await decoded(await bytes()), expected);
         check(await bytes() === stored && stored.length <= LIMIT, 'Actual acknowledged writer bytes match the whole reducer output and cap'); current = expected; row.receiptAcknowledged = true;
       }
+      await heading.waitFor({ timeout: 45000 });
       const panel = heading.locator('xpath=..').locator('xpath=..');
-      const visibleRows = panel.locator(':scope > div.space-y-1').first().locator(':scope > div');
+      const visibleRows = panel.locator(':scope > div.space-y-1:not(.text-center)').locator(':scope > div');
       if (kind === 'pundit') {
         const expected = await oracle.evaluate(career => career.punditEvents.slice(-4).map(line => { const O = window.__tailSaveOracle; return O.flags.splitFlagSegments(O.currency.localizeMoney(line)).filter(segment => 'text' in segment).map(segment => segment.text).join(''); }), current);
-        check(JSON.stringify(await visibleRows.allTextContents()) === JSON.stringify(expected), 'Actual latest pundit lines match the saved events');
+        const actual = await visibleRows.allTextContents(); write(row.id + '-visible-rows', { actual, expected });
+        check(JSON.stringify(actual) === JSON.stringify(expected), 'Actual latest pundit lines match the saved events');
       } else {
         const expected = current[kind + 'State'].seasonResults.slice(-5).map(record => ['S' + record.year, record.club, record.result]);
         const actual = await visibleRows.evaluateAll(nodes => nodes.map(node => [...node.querySelectorAll(':scope > span')].map(span => span.textContent)));
+        write(row.id + '-visible-rows', { actual, expected });
         check(JSON.stringify(actual) === JSON.stringify(expected), 'Actual latest tail rows match their saved year, club and result');
       }
       await capture(heading, 'actual-tail'); row.fonts = await loadedFonts(page); await shot('tail');
