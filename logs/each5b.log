@@ -1,0 +1,41 @@
+runEach: done, 5 of 62 exited non zero
+simPerfectSeason exit=0 65s | simPerfectSeason: green. Four sports, one engine, no dead spins.
+simReportRelay exit=0 1s | simReportRelay: green. Both buttons ask the same questions, every report records whether it reached him, and the queue has a real workflow.
+simRetirementToManager exit=0 1s | ALL RETIREMENT BRIDGE CHECKS PASSED
+simPrerenderBoot exit=0 23s | simPrerenderBoot: green. The snapshots read like documents and still turn into the app.
+simSchema exit=0 1s | simSchema: green. Every page says what it is, and everything it generates reaches the file a crawler reads.
+simRecordBooks exit=1 8s | simRecordBooks: 1 failure || FAIL: no section could be compared, so this section is not really testing anything
+simRugbyLeagueReview exit=0 21s | simRugbyLeagueReview normal: 10 passed, 0 intended failures, 0 intentional skips; 8 source inputs held.
+simSessionMarks exit=0 1s | simSessionMarks: green. Nine games count the day you play them, none of them invented a score or a streak day to do it.
+simSingleFooter exit=0 2s | simSingleFooter: green. One footer, rendered once, on every page.
+simSeasonCentreAgreement exit=0 45s | simSeasonCentreAgreement: 24 checks, 0 failed
+simSeasonMoments exit=0 44s | simSeasonMoments: 54 checks, 0 failed
+simSoccerCompetitionNavigation exit=0 71s | simSoccerCompetitionNavigation: outcomes green, 4 effective copied defects caught || [41m[1m FAIL [22m[49m src/test/soccerSeasonCompetitions.test.tsx[2m > [22mSoccer Career competition navigation keeps the actual league view[2m > [22mlab
+simSoccerDiscipline exit=0 105s | simSoccerDiscipline: 11 outcome assertions green, 9 effective copied defects caught || [41m[1m FAIL [22m[49m src/test/soccerDiscipline.test.ts[2m > [22mSoccer discipline consequences[2m > [22mkeeps all appearances suspended at zero goals a
+simSoccerHigherLowerReveal exit=0 7s | simSoccerHigherLowerReveal: source bytes held, owned copies and report cleaned.
+simSoccerCareerLeagueWorld exit=0 258s | simSoccerCareerLeagueWorld: seventeen outcome tests and two engine career tests green, all twelve effective negative controls caught || [41m[1m FAIL [22m[49m src/test/soccerCareerLeagueWorld.test.ts[2m > [22mSoccer Career simulated promotion and relegation[2m > [22mdraws a settled season / [41m[1m FAIL [22m[49m src/test/soccerCareerWorldSettle.test.ts[2m > [22mSoccer Career: every season of the league world is settled and shown as saved[2m 
+simSoccerSeasonCompetitions exit=0 3s | simSoccerSeasonCompetitions: saved names, exact outcomes, no historical leakage and independent engine snapshots passed
+simSound exit=0 8s | simSound: 158 checks, 0 failed
+simSquadRows exit=0 7s | simSquadRows: all green
+simStatsCentre exit=0 8s | ALL STATS CENTRE CHECKS PASSED
+simStreakHistory exit=0 1s | simStreakHistory: all 7 sections green
+simThreePointContest exit=0 16s | simThreePointContest: eight runtime inputs held; only owned copies/report removed.
+simTradeFinder exit=0 21s | ALL TRADE FINDER CHECKS PASSED
+simTransferOverlay exit=1 5s | SUPABASE unreachable (Error: Offline harness blocked fetch to https://flawuiqbvjobmkfkauhw.supabase.co) for player_market_values?select=player_name,club,market_value_usd&year=eq.2026&player_name=in.(%
+simSoccerLoanMinutes exit=0 147s | PASS simSoccerLoanMinutes: projected forced loans, complete moves and parent returns
+simTransferPathRepeat exit=0 5s | simTransferPathRepeat: green. Valid moves remain valid and repeated players are rejected.
+simTycoonAway exit=0 12s |    The control put the load-only settle back and sections 3 and 4 went red, so these checks are alive.
+simTycoonPitchRunner exit=0 1s | simTycoonPitchRunner: healthy and intended assertion exits accepted; all 8 runner error controls rejected.
+simTycoonTicketPolicy exit=0 13s | Ticket policy: 21/21 normal outcomes; 0/0 effective copied faults, each with independent purchase baseline. Raw reports, logs, copied sources and hashes retained at /home/runner/work/ballpark-hero/bal
+simUclSeasonOne exit=0 24s | simUclSeasonOne: all green
+simTycoonHelp exit=0 51s |    All 25 controls fired exactly where they should.
+simUsCareerSaveRetry exit=0 219s | US career save retry: passed. Evidence at /home/runner/work/ballpark-hero/ballpark-hero/us-career-save-recovery-artifacts/outcomes
+simUsPlanSeason exit=0 3s | simUsPlanSeason: green. 19638 checks, 0 failed, 954 cards read over both ledgers, 2280 seasons played and settled (60 careers a case, seed set 0).
+simValidatorCache exit=1 13s | simValidatorCache: 4 failures || FAIL: 3 cell(s) had no reusable attribute facts. Either the function stopped consulting the cache, or these probe cells are stale because the boards changed. / FAIL: the same cell asked twice did not come back from cache the second time, so answers are being paid for repeatedly
+simWc2026ResultsPage exit=0 1s | simWc2026ResultsPage: green. The saved page carries the final, 12 groups and 32 matches exactly as src/data/wc2026Results.ts has them.
+simUsCareerBank exit=0 240s | simUsCareerBank: green. No call leaves a bank below zero in any of the four careers, savings pay a bill before anything is written off, and a reload never adds money.
+simWonderkid exit=0 0s | simWonderkid: green. The academy cannot lie, leak, or stall.
+simWorldXiReport exit=0 1s | simWorldXiReport: green. The report says more and the season it describes did not move.
+simWindow2026Bundesliga exit=1 5s | SUPABASE unreachable (Error: Offline harness blocked fetch to https://flawuiqbvjobmkfkauhw.supabase.co) for player_market_values?select=club&year=eq.2026&club=eq.RB%20Leipzig&limit=1 after 3 attempts.
+simSoccerAwardGenerations exit=0 1256s | PASS simSoccerAwardGenerations: saved generated identities, aging, turnover and raw recovery
+runEach: done, 5 of 62 exited non zero
