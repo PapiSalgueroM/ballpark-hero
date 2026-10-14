@@ -1,0 +1,2 @@
+saves-head: R=$PWD; (git worktree add -f /tmp/ob dec9075b >/dev/null 2>&1 || (sleep 6; git worktree add -f /tmp/ob dec9075b >/dev/null 2>&1)); node .rc/x/rvsaves.mjs /tmp/ob
+saves-pressback: R=$PWD; W=/tmp/sp; (git worktree add -f $W HEAD >/dev/null 2>&1 || (sleep 9; git worktree add -f $W HEAD >/dev/null 2>&1)); (git worktree add -f /tmp/ob2 dec9075b >/dev/null 2>&1 || (sleep 12; git worktree add -f /tmp/ob2 dec9075b >/dev/null 2>&1)); ln -s $R/node_modules $W/node_modules; cd $W && node $R/.rc/x/rvmut.mjs pressback && node $R/.rc/x/rvsaves.mjs /tmp/ob2
