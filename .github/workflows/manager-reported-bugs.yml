@@ -11,7 +11,7 @@ jobs:
     env:
       CI: '1'
       SIM_NETWORK: offline
-      MANAGER_REPORT_PHASE: fixed
+      MANAGER_REPORT_PHASE: alias-baseline
     defaults:
       run:
         shell: bash
@@ -62,9 +62,9 @@ jobs:
             'restores the real proxy on summer departure and removes the departed name from Europe',
             'restores the real proxy when leaving a created European club during a season',
           ];
-          assert.equal(results.length, 22, 'Every specified outcome case must run');
+          assert.equal(results.length, 23, 'Every specified outcome case must run');
           assert.equal(report.testResults.length, 3, 'All three diagnostic files must run');
-          for (const [name, count] of [['clubManagerCustomPromotion.test.ts', 12], ['clubManagerReportAge.test.ts', 3], ['clubManagerReportedScorers.test.ts', 7]]) assert.equal(report.testResults.find(file => file.name.endsWith(name))?.assertionResults.length, count, name);
+          for (const [name, count] of [['clubManagerCustomPromotion.test.ts', 13], ['clubManagerReportAge.test.ts', 3], ['clubManagerReportedScorers.test.ts', 7]]) assert.equal(report.testResults.find(file => file.name.endsWith(name))?.assertionResults.length, count, name);
           assert.equal(report.numPendingTests, 0);
           assert.equal(results.some(row => !['passed', 'failed'].includes(row.status)), false);
           const failed = results.filter(row => row.status === 'failed');
@@ -72,6 +72,10 @@ jobs:
             assert.equal(fs.readFileSync('manager-report-artifacts/outcomes-exit.txt', 'utf8').trim(), '1');
             assert.deepEqual(failed.map(row => row.title).sort(), expected.sort());
             for (const row of failed) assert.ok(row.failureMessages.every(message => message.includes('AssertionError') && !/TypeError|ReferenceError|SyntaxError/.test(message)), row.fullName);
+          } else if (process.env.MANAGER_REPORT_PHASE === 'alias-baseline') {
+            assert.equal(fs.readFileSync('manager-report-artifacts/outcomes-exit.txt', 'utf8').trim(), '1');
+            assert.deepEqual(failed.map(row => row.title), ['keeps qualified non-English created clubs apart from their domestic opponents in Europe']);
+            assert.ok(failed[0].failureMessages.every(message => message.includes('AssertionError') && !/TypeError|ReferenceError|SyntaxError/.test(message)));
           } else {
             assert.equal(fs.readFileSync('manager-report-artifacts/outcomes-exit.txt', 'utf8').trim(), '0');
             assert.equal(report.success, true); assert.equal(failed.length, 0);

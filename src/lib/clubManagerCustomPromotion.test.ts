@@ -202,6 +202,20 @@ describe('created clubs use the existing modern promotion slots', () => {
     expect(again.squad).toEqual(fresh.squad);
   });
 
+  it('keeps qualified non-English created clubs apart from their domestic opponents in Europe', () => {
+    for (const pair of PYRAMIDS.filter(row => row.top !== 'premier')) {
+      const qualified = finishSeason(finished(created(pair.top))).state;
+      expect(uclQualifiersFrom(qualified)).toContain(qualified.clubName);
+      for (const draw of [0.05, 0.2, 0.4, 0.6, 0.8, 0.95]) {
+        vi.mocked(Math.random).mockReturnValue(draw);
+        const next = startNextSeason(qualified);
+        expect(next.uclGroup?.opponents).toHaveLength(3);
+        const domestic = new Set(careerLeagueOf(next).clubs);
+        expect(next.uclGroup!.opponents.filter(name => domestic.has(name))).toEqual([]);
+      }
+    }
+  });
+
   it('restores the real proxy on summer departure and removes the departed name from Europe', () => {
     const top = rolled(created()), qualified = finishSeason(finished(top)).state;
     const proxy = qualified.customClub!.replacedClub;
