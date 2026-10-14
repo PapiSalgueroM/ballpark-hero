@@ -349,7 +349,10 @@ SECTIONS.coach = coachSection;
    knockout tie and plays that night on SUBS_ET_SEEDS seeds, to the whistle and into extra time where it is level.
    Under five a side that used its three stoppages by 90 still has changes, and they go on at the break before extra
    time (minute 90, no stoppage). Checked: no night passes five changes or three stoppages in play; their mean
-   changes in extra time (the break's included) at least ET_MIN. Measured: see the notes (remote check r1331-et2). */
+   changes in extra time (the break's included) at least ET_MIN. Measured on the runner (remote check r1331-et2,
+   1500 seeds each): seed base 1700, 259 nights, 1.06 a night; 5000, 252 nights, 0.98; 9000, 241 nights, 0.99. With
+   the etfrozen control in, 0.00 (178 of 259 nights had changes left and made none); before this round's fix the
+   base rules made 0.79 a night (remote check r1331-et). ET_MIN 0.5 sits half way between. */
 const ET_SEEDS = Number(process.env.SUBS_ET_SEEDS ?? 1500);
 const ET_SEED_BASE = Number(process.env.SUBS_ET_SEED_BASE ?? 1700);
 const ET_MIN = Number(process.env.SUBS_ET_MIN ?? 0.5);
