@@ -1,0 +1,8 @@
+#!build
+#!playwright
+#!serial
+headsha: git log --oneline -2
+fonts: node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only | tail -2
+playTouch: node .rc/x/prepInstalled.mjs /tmp/apt1 && AUTOCOMPLETE_TOUCH_OUT=/tmp/apt1 AUTOCOMPLETE_TOUCH_PHASE=fixed NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playPlayerAutocompleteTouchScroll.mjs; s=$?; cp /tmp/apt1/fixed/report.json "$RC_OUT/touch-report.json" 2>/dev/null; exit $s
+playTouch-ctl: node .rc/x/prepInstalled.mjs /tmp/apt2 && AUTOCOMPLETE_TOUCH_OUT=/tmp/apt2 AUTOCOMPLETE_TOUCH_PHASE=fixed AUTOCOMPLETE_TOUCH_CONTROL=premature-pointerdown NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playPlayerAutocompleteTouchScroll.mjs > /tmp/pt.log 2>&1; s=$?; tail -4 /tmp/pt.log; cp /tmp/apt2/premature-pointerdown/report.json "$RC_OUT/touch-ctl-report.json" 2>/dev/null; [ $s = 0 ] && grep -q "playPlayerAutocompleteTouchScroll control-reproduced" /tmp/pt.log && echo FIRED-OK
+playRace-ctl-notag: AUTOCOMPLETE_RACE_CONTROL=notag NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playAutocompleteRace.mjs > /tmp/pr.log 2>&1; s=$?; tail -4 /tmp/pr.log; [ $s = 0 ] && grep -q "green, the race is there" /tmp/pr.log && echo FIRED-OK
