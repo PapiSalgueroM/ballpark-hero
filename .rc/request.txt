@@ -1,0 +1,14 @@
+headsha: git log --oneline -2
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node_modules/.bin/vitest run src/lib/soccerCareerSave.test.ts src/test/careerDilemmaReach.test.tsx src/test/careerKeepPlaying.test.tsx src/test/soccerSavePackedReaders.test.tsx --testTimeout=300000 --hookTimeout=120000
+saveSize: SC_SAVE_OUT="$PWD/scs1" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerCareerSaveSize.mjs > /tmp/ss.log 2>&1; s=$?; grep -o 'SOCCER_SAVE_SIZE .*' /tmp/ss.log | cut -c1-400; tail -2 /tmp/ss.log | cut -c1-200; exit $s
+saveSize-ctl-plain: SC_SAVE_CONTROL=plain SC_SAVE_EXPECT_RED=1 SC_SAVE_OUT="$PWD/scs2" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerCareerSaveSize.mjs > /tmp/sc.log 2>&1; s=$?; tail -2 /tmp/sc.log | cut -c1-200; [ $s = 0 ] && grep -q "simSoccerCareerSaveSize: expected RED, only the unchanged 60000-character cap failed." /tmp/sc.log && echo FIRED-OK
+simCreation-after: node scripts/simCreation.mjs
+simCreation-before-main: git worktree add -q --detach /tmp/mainb 4a5f759a && ln -s "$PWD/node_modules" /tmp/mainb/node_modules && cd /tmp/mainb && node scripts/simCreation.mjs
+saveRetry: node scripts/simSoccerCareerSaveRetry.mjs
+ctl-saveretry-all: SOCCER_CAREER_SAVE_RETRY_CONTROL=all node scripts/simSoccerCareerSaveRetry.mjs > /tmp/sr.log 2>&1; s=$?; tail -3 /tmp/sr.log | cut -c1-200; [ $s -eq 0 ] && grep -qE 'simSoccerCareerSaveRetry all: [0-9]+ actual outcomes and [1-9][0-9]* effective faults passed\.' /tmp/sr.log && echo FIRED-OK
+simSaveFence: node scripts/simSaveFence.mjs
+ctl-mutfence: node .rc/x/mutfence.mjs > /tmp/mf.log 2>&1; s=$?; tail -2 /tmp/mf.log | cut -c1-200; [ $s -eq 1 ] && grep -qE 'CONTROL FIRED: the raw write turned the fence test red \(vitest exit [1-9][0-9]*\)' /tmp/mf.log && echo FIRED-OK
+ctl-fence-rawwrite: SAVE_FENCE_CONTROL=rawwrite node scripts/simSaveFence.mjs > /tmp/rw.log 2>&1; s=$?; tail -2 /tmp/rw.log | cut -c1-200; [ $s -eq 1 ] && grep -qE 'CONTROL FIRED: SAVE_FENCE_CONTROL=rawwrite fired [0-9]+ times and section source went red with [0-9]+ findings' /tmp/rw.log && echo FIRED-OK
+simSaveKeeper: node scripts/simSaveKeeper.mjs
+simMoney: node scripts/simMoney.mjs
