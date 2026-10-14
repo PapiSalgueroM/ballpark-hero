@@ -1,0 +1,17 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+[90mstdout[2m | src/test/probeVarRule.test.ts[2m > [22m[2mcounts reviews by decision on both rules
+[22m[39mprobeVarRule FIRST HALF match 2, current rules: halves 2500, reviews {"disallowed":149,"awarded":38}, at 44 or later 34, opponent week 1
+probeVarRule EXTRA TIME, current rules: knockout week 34, nights to extra time 429, reviews {"disallowed":20,"awarded":1}
+probeVarRule FIRST HALF match 2, base rules: halves 2500, reviews {"disallowed":150,"awarded":39}, at 44 or later 36, opponent week 1
+probeVarRule EXTRA TIME, base rules: knockout week 34, nights to extra time 391, reviews {"awarded":13,"disallowed":9}
+
+ [32m✓[39m src/test/probeVarRule.test.ts [2m([22m[2m1 test[22m[2m)[22m[33m 59701[2mms[22m[39m
+   [33m[2m✓[22m[39m counts reviews by decision on both rules [33m 59697[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m   Start at [22m 02:10:39
+[2m   Duration [22m 63.32s[2m (transform 2.01s, setup 90ms, collect 2.53s, tests 59.70s, environment 439ms, prepare 153ms)[22m
+
