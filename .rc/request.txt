@@ -1,0 +1,6 @@
+# Release BF join, m6 served on 68142408: playSoccerCareerPendingPopularity on its own normal sim's fixtures
+#!serve
+#!playwright
+#!serial
+headsha: git log --oneline -2
+walk: set -o pipefail; export CI=1 SC_PENDING_MORALE_CORE_REF=26cad60f SC_PENDING_LIFE_CORE_REF=50f49993 SC_LIFE_REWARDS_CORE_REF=80084c4b SC_PENDING_POPULARITY_CORE_REF=25c6b0d2 SC_COLD_CONTEXT_CORE_REF=f727cfbf SC_COLD_REPLAY_CORE_REF=f727cfbf SIM_NETWORK=offline CAREER_POPULARITY_OUT="$PWD/wm6" CAREER_POPULARITY_PHASE=fixed FREE_KICK_FONT_CACHE="$PWD/wm6/font-cache"; node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only | tail -1 && node .rc/x/prepInstalled.mjs "$PWD/wm6" && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerCareerPendingPopularity.mjs | tail -2 && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playSoccerCareerPendingPopularity.mjs
