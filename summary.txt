@@ -1,0 +1,9 @@
+build exit=0 31s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+sweepWeight exit=1 0s | Node.js v24.21.0
+appealIsolation exit=0 49s | Equivalent appeal outcomes must agree: passed for 24 original pairs and 3 separate generated-position pairs.
+saveSize exit=0 71s | simClubManagerSaveSize: all sections green
+slots exit=0 77s | simClubManagerSlots: all sections green
+simNoRivalNames exit=0 19s | No rival product names found. 0 findings.
+simCmLeagueRules exit=0 69s | simCmLeagueRules: all checks passed (modern, eras, pure, drop4, cupless, shapes, chunks)
+simLiveSimMotion exit=0 67s | simLiveSimMotion: green. 55 tests passed (the viewer on real feeds, the pitch part's rules on 200 half feeds and on feeds made by hand, the goal sequence, match mode), an
+simHalftime exit=0 669s | ALL HALFTIME CHECKS PASSED
