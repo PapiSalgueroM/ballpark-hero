@@ -99,6 +99,14 @@ const vectors: { name: string; queue: CareerState['statBoostNextSeason'] }[] = [
 async function boundaryEngine(): Promise<typeof E> {
   if (process.env.SC_REWARDS_ENGINE) return E;
   const fs = await import('node:fs/promises'), path = await import('node:path'), os = await import('node:os');
+  /* Release BF join: in the suite's jsdom environment esbuild refuses to start (its check that an encoded string is an
+     instance of this realm's Uint8Array fails), so a plain run of the whole suite went red here. For the build the
+     encoder hands back bytes made by this realm's Uint8Array, and the environment's encoder is put back after. The
+     remote proof sets SC_REWARDS_ENGINE and never reaches this. */
+  const util = await import('node:util'), suiteEncoder = globalThis.TextEncoder;
+  class RealmEncoder { readonly encoding = 'utf-8'; encode(input = '') { return new Uint8Array(new util.TextEncoder().encode(input)); } }
+  globalThis.TextEncoder = RealmEncoder as unknown as typeof TextEncoder;
+  try {
   const esbuild = await import('esbuild'), url = await import('node:url');
   const source = path.join(process.cwd(), 'src/lib/soccerCareerEngine.ts'), original = await fs.readFile(source, 'utf8');
   const anchor = '  s.statBoostNextSeason = {};'; expect(original.split(anchor)).toHaveLength(2);
@@ -113,6 +121,7 @@ async function boundaryEngine(): Promise<typeof E> {
     } }] });
   const engine = await import(/* @vite-ignore */ url.pathToFileURL(path.join(tmp, 'engine.mjs')).href) as typeof E;
   console.log(`Retained actual stat-boundary unit sources: ${tmp}`); return engine;
+  } finally { globalThis.TextEncoder = suiteEncoder; }
 }
 
 type Preview = { id: number; choice: number; clauses: RegExp[]; changes: Partial<CareerState>; line: string };
