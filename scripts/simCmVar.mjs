@@ -407,8 +407,16 @@ async function main() {
            in this file, leave that one field out on both sides. scripts/simCmLeagueBook.mjs holds the book
            itself, and that the match stream does not move with it. */
         const sansBook = played => { const state = { ...played.state }; delete state.leagueBook; return { ...played, state }; };
+        /* Round 1331 (the bridge, added at the Release BD join): today's engine plays each league's own
+           substitution rule (five changes in the Premier League match below) and asks the press about the next
+           fixture, which the prior engine never did, so a whole match of today's default caller is meant to differ
+           from the prior one. A career that carries matchRules 'base' plays the old engine for subs and press, the
+           bridge Round 1331 itself put on simManagerWorldContinuity, simCmUnseededWorld, simCmShootoutOrder,
+           simCmQuickSubs and simCmQuickLegs. So today's arm of this full match comparison is played with that key,
+           and the key comes off its played state before the comparison. scripts/simCmSubs.mjs holds the new rule. */
+        const unbased = played => { if (!played.state || !('matchRules' in played.state)) return played; const state = { ...played.state }; delete state.matchRules; return { ...played, state }; };
         for (const seed of [7110, 7111, 7112]) {
-          const current = withCmVarSeed(seed, () => candidateFactory().playNextEntry(pre, { skipHalftime: true, noCoach: true }));
+          const current = unbased(withCmVarSeed(seed, () => candidateFactory().playNextEntry({ ...pre, matchRules: 'base' }, { skipHalftime: true, noCoach: true })));
           const prior = withCmVarSeed(seed, () => oldFactory().playNextEntry(pre, { skipHalftime: true, noCoach: true }));
           assert.deepEqual(sansBook(current), sansBook(prior), 'Default callers retain every prior report, stat, player credit and save byte');
         }
