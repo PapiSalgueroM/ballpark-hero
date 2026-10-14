@@ -1,0 +1,110 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/test/soccerCareerRoutineEvents.test.ts [2m([22m[2m44 tests[22m[2m)[22m[33m 534[2mms[22m[39m
+[90mstdout[2m | src/test/careerStory.test.tsx[2m > [22m[2mSoccer Career: the story keeps the save small[2m > [22m[2mthe longest career on seed 9748 plus ten dugout seasons stays under the bound
+[22m[39m[story size] seed 9748: 27 season rows, 26 story seasons, story 16416 bytes, save 128413 bytes, save without story 111997
+[save parts] seed 9748: rest 65360 bytes, cup games 38555 bytes over 22 seasons, division 12280 bytes over 20 seasons, ten divisions 4489 bytes
+[save parts] seed 9748: opening cup ties 2187 bytes over 20 seasons, chance wheel 159 bytes
+[save parts] seed 9748: generated rivals' pool 4502 bytes
+
+[90mstdout[2m | src/test/careerStory.test.tsx[2m > [22m[2mSoccer Career: the story keeps the save small[2m > [22m[2mthe longest career on seed 9749 plus ten dugout seasons stays under the bound
+[22m[39m[story size] seed 9749: 30 season rows, 29 story seasons, story 19024 bytes, save 114789 bytes, save without story 95765
+[save parts] seed 9749: rest 73813 bytes, cup games 14726 bytes over 9 seasons, division 13034 bytes over 21 seasons, ten divisions 4489 bytes
+[save parts] seed 9749: opening cup ties 1958 bytes over 18 seasons, chance wheel 166 bytes
+[save parts] seed 9749: generated rivals' pool 5911 bytes
+
+[90mstdout[2m | src/test/careerStory.test.tsx[2m > [22m[2mSoccer Career: the story keeps the save small[2m > [22m[2mthe longest career on seed 9750 plus ten dugout seasons stays under the bound
+[22m[39m[story size] seed 9750: 27 season rows, 26 story seasons, story 16159 bytes, save 130889 bytes, save without story 114730
+[save parts] seed 9750: rest 66713 bytes, cup games 39409 bytes over 22 seasons, division 12266 bytes over 20 seasons, ten divisions 4490 bytes
+[save parts] seed 9750: opening cup ties 2087 bytes over 19 seasons, chance wheel 154 bytes
+[save parts] seed 9750: generated rivals' pool 4900 bytes
+
+[90mstdout[2m | src/test/careerKeepPlaying.test.tsx[2m > [22m[2mSoccer Career: Keep Playing plays the season through the page[2m > [22m[2mthe warning, Keep Playing, and the season that follows
+[22m[39mKEEP seed=850 problems=0
+
+[90mstdout[2m | src/test/careerKeepPlaying.test.tsx[2m > [22m[2mSoccer Career: Keep Playing plays the season through the page[2m > [22m[2mthe warning, Keep Playing, and the season that follows
+[22m[39mKEEP seed=851 problems=0
+
+[90mstdout[2m | src/test/careerKeepPlaying.test.tsx[2m > [22m[2mSoccer Career: Keep Playing plays the season through the page[2m > [22m[2mthe warning, Keep Playing, and the season that follows
+[22m[39mKEEP seed=852 problems=0
+
+ [32m✓[39m src/test/careerStory.test.tsx [2m([22m[2m13 tests[22m[2m)[22m[33m 7350[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career: the story keeps every season[2m > [22mtwelve seasons on seed 9741: every line kept, in order, once [33m 515[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career: the story keeps every season[2m > [22mtwelve seasons on seed 9742: every line kept, in order, once [33m 324[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career: the story keeps every season[2m > [22mthe story draws nothing: the same seed without it plays the same career [33m 499[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career: the story keeps the save small[2m > [22mthe longest career on seed 9748 plus ten dugout seasons stays under the bound [33m 522[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career: the story keeps the save small[2m > [22mthe longest career on seed 9749 plus ten dugout seasons stays under the bound [33m 550[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career: the story keeps the save small[2m > [22mthe longest career on seed 9750 plus ten dugout seasons stays under the bound [33m 583[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career: the story on the real page[2m > [22mLatest Events opens the story, a season opens, Back returns, Close shuts it [33m 1120[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career: the story on the real page[2m > [22mthe retired screen carries the same story, the last chapter included [33m 1311[2mms[22m[39m
+[90mstdout[2m | src/test/careerKeepPlaying.test.tsx[2m > [22m[2mSoccer Career: Keep Playing plays the season through the page[2m > [22m[2ma save left on the rehab choice or the conviction paper gets that year once
+[22m[39mSTOP seed=900 rehab at 26
+
+[90mstdout[2m | src/test/careerKeepPlaying.test.tsx[2m > [22m[2mSoccer Career: Keep Playing plays the season through the page[2m > [22m[2ma save left on the rehab choice or the conviction paper gets that year once
+[22m[39mSTOP seed=900 conviction at 24
+
+[90mstdout[2m | src/test/careerKeepPlaying.test.tsx[2m > [22m[2mSoccer Career: Keep Playing plays the season through the page[2m > [22m[2ma save left on the rehab choice or the conviction paper gets that year once
+[22m[39mSTOP seed=901 conviction at 23
+
+[90mstdout[2m | src/test/careerKeepPlaying.test.tsx[2m > [22m[2mSoccer Career: Keep Playing plays the season through the page[2m > [22m[2ma save left on the rehab choice or the conviction paper gets that year once
+[22m[39mSTOP seed=904 rehab at 26
+
+ [32m✓[39m src/test/careerKeepPlaying.test.tsx [2m([22m[2m2 tests[22m[2m)[22m[33m 11492[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career: Keep Playing plays the season through the page[2m > [22mthe warning, Keep Playing, and the season that follows [33m 7036[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career: Keep Playing plays the season through the page[2m > [22ma save left on the rehab choice or the conviction paper gets that year once [33m 2951[2mms[22m[39m
+[90mstdout[2m | src/test/careerDilemmaReach.test.tsx[2m > [22m[2mSoccer Career: the moral dilemmas reach the player through the page[2m > [22m[2mreach: careers picked up at 17
+[22m[39mREACH start=17 careers=6 seasons=24 adultSeasons=12 offers=2 shows=2 adultShows=2
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ [32m✓[39m src/test/soccerCareerSaveRecovery.test.tsx [2m([22m[2m39 tests[22m[2m)[22m[33m 7503[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career actual save recovery[2m > [22mrestores current progress synchronously and advances the same career once [33m 360[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career actual save recovery[2m > [22mrecords a newly finished ceremony once and does not replay it on the next mount [33m 358[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career actual save recovery[2m > [22mrejects missing seasons before render, retains raw bytes and deletes only its own key on request [33m 336[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career actual save recovery[2m > [22mrejects object seasons before render, retains raw bytes and deletes only its own key on request [33m 337[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career actual save recovery[2m > [22mrejects null pending events before render, retains raw bytes and deletes only its own key on request [33m 333[2mms[22m[39m
+ [32m✓[39m src/test/careerDilemmaSaves.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[33m 5003[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career: saves on the dilemma screens load and carry on[2m > [22ma save from before 819 on the social media screen posts, continues and plays the next season [33m 1391[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career: saves on the dilemma screens load and carry on[2m > [22ma save waiting on a dilemma: the choice lands, the card says what happened, Continue keeps it [33m 447[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career: saves on the dilemma screens load and carry on[2m > [22ma decided dilemma reloaded before Continue draws its card, continues and plays on [33m 854[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career: saves on the dilemma screens load and carry on[2m > [22ma match fixing ban closes its season through the page and the next one is played [33m 808[2mms[22m[39m
+[90mstdout[2m | src/test/careerDilemmaReach.test.tsx[2m > [22m[2mSoccer Career: the moral dilemmas reach the player through the page[2m > [22m[2mreach: careers picked up at 19
+[22m[39mREACH start=19 careers=6 seasons=24 adultSeasons=24 offers=10 shows=10 adultShows=10
+
+ [32m✓[39m src/test/soccerCareerSaveRetry.test.tsx [2m([22m[2m8 tests[22m[2m)[22m[33m 13900[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career failed write recovery[2m > [22mkeeps the restored career and old bytes while showing a persistent save warning and one toast [33m 656[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career failed write recovery[2m > [22mkeeps repeated refused retries visible without replaying progress or repeating the toast [33m 424[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career failed write recovery[2m > [22mretries the actually earned training result exactly once and restores it on the next mount [33m 4417[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career failed write recovery[2m > [22mretries the latest earned season after more than one failed career change without rerunning its engine [33m 3620[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career failed write recovery[2m > [22mclears a failed save on the next successful automatic save and alerts again on a later refusal [33m 3458[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career failed write recovery[2m > [22mclears the old failure after explicit reset and saves the replacement career without old progress [33m 979[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career failed write recovery[2m > [22mpersists the finished retirement on retry without recording its completion a second time [33m 335[2mms[22m[39m
+ [32m✓[39m src/test/soccerCareerSaveFence.test.tsx [2m([22m[2m8 tests[22m[2m)[22m[33m 2191[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career save fence[2m > [22man old save with no fence key opens, plays, and is fenced from its first write [33m 364[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career save fence[2m > [22mNew Career in a stale tab clears nothing [33m 531[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career save fence[2m > [22mNew Career whose removal the browser refuses resets nothing and says so [33m 353[2mms[22m[39m
+ [32m✓[39m src/test/soccerCareerLifeFollowups.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 209[2mms[22m[39m
+ [32m✓[39m src/test/soccerCareerContracts.test.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 166[2mms[22m[39m
+ [32m✓[39m src/test/soccerSavePackedReaders.test.tsx [2m([22m[2m3 tests[22m[2m)[22m[32m 190[2mms[22m[39m
+[90mstdout[2m | src/test/careerDilemmaReach.test.tsx[2m > [22m[2mSoccer Career: the moral dilemmas reach the player through the page[2m > [22m[2mreach: careers picked up at 24
+[22m[39mREACH start=24 careers=6 seasons=24 adultSeasons=24 offers=8 shows=8 adultShows=8
+
+[90mstdout[2m | src/test/careerDilemmaReach.test.tsx[2m > [22m[2mSoccer Career: the moral dilemmas reach the player through the page[2m > [22m[2mreach: careers picked up at 30
+[22m[39mREACH start=30 careers=6 seasons=24 adultSeasons=24 offers=6 shows=6 adultShows=6
+
+[90mstdout[2m | src/test/careerDilemmaReach.test.tsx[2m > [22m[2mSoccer Career: the moral dilemmas reach the player through the page[2m > [22m[2mreach: a player from 20 up sees dilemmas on screen
+[22m[39mREACH total adultOffers=26 adultShows=26
+
+ [32m✓[39m src/test/careerDilemmaReach.test.tsx [2m([22m[2m5 tests[22m[2m)[22m[33m 52209[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career: the moral dilemmas reach the player through the page[2m > [22mreach: careers picked up at 17 [33m 12430[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career: the moral dilemmas reach the player through the page[2m > [22mreach: careers picked up at 19 [33m 13302[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career: the moral dilemmas reach the player through the page[2m > [22mreach: careers picked up at 24 [33m 10910[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career: the moral dilemmas reach the player through the page[2m > [22mreach: careers picked up at 30 [33m 14062[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m11 passed[39m[22m[90m (11)[39m
+[2m      Tests [22m [1m[32m145 passed[39m[22m[90m (145)[39m
+[2m   Start at [22m 19:41:36
+[2m   Duration [22m 59.82s[2m (transform 7.60s, setup 1.06s, collect 20.23s, tests 100.75s, environment 7.91s, prepare 2.35s)[22m
+

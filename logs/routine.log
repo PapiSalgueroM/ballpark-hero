@@ -1,0 +1,17 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Actual picker did not queue routine 600 within 2048 fixed seeds
+    at actualPickerAndFixtures (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simSoccerCareerRoutineEvents.mjs:170:7)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simSoccerCareerRoutineEvents.mjs:418:38 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: null,
+  expected: true,
+  operator: '==',
+  diff: 'simple'
+}
+
+Node.js v24.21.0

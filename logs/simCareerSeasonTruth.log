@@ -1,0 +1,11 @@
+1) Ledger provenance matches the seed, fallback snapshot and Git history
+   77 seed tuples, 77 fallback tuples, 73 exact matches, 4 variants, 19 evidence commits
+2) Current fallback carries exactly the 27 researched 2025-2026 rows and no projection
+   3640 fallback seasons and 3608 Transfer Path spells parsed
+   all 77 projected tuples absent, 27 researched spells preserved, 17 unreachable puzzles quarantined
+3) Two fail-closed migrations cover all 77 exact live seed tuples
+   8 + 69 exact tuples, full preconditions and removal guards present
+4) The 27 later researched live tuples stay outside quarantine
+   27 exact July research tuples are unique and disjoint from all 77 quarantine tuples
+5) Live 2025-2026 state equals the 27 preserved researched tuples
+Supabase unreachable, nothing was checked: fetch failed
