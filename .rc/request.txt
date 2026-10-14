@@ -1,0 +1,4 @@
+#!serial
+rules-old: node .rc/x/mutOldEngine.mjs && node scripts/simCmLeagueRules.mjs; s=$?; git checkout HEAD -- src; exit $s
+rules-idbranch: CM_RULES_CONTROL=idbranch node scripts/simCmLeagueRules.mjs --part=pure
+write-digest: node scripts/simCmLeagueRules.mjs --part=modern,eras,pure --write && cp scripts/data/cmLeagueRulesDigest.json $RC_OUT/cmLeagueRulesDigest.json && node scripts/simCmLeagueRules.mjs
