@@ -1,0 +1,5 @@
+#!serial
+vt-head: node_modules/.bin/vitest run src/test/clubManagerVarScreen.test.tsx src/test/managerQuickSimLegs.test.tsx --testTimeout=300000 --hookTimeout=120000
+vt-old: node .rc/x/mutOldEngine.mjs && node_modules/.bin/vitest run src/test/clubManagerVarScreen.test.tsx src/test/managerQuickSimLegs.test.tsx --testTimeout=300000 --hookTimeout=120000; s=$?; git checkout HEAD -- src; exit $s
+vt-base: R=$PWD; git worktree add -f /tmp/vb dec9075b >/dev/null 2>&1 && cd /tmp/vb && ln -s $R/node_modules node_modules && node_modules/.bin/vitest run src/test/clubManagerVarScreen.test.tsx src/test/managerQuickSimLegs.test.tsx --testTimeout=300000 --hookTimeout=120000
+simNoRivalNames: node scripts/simNoRivalNames.mjs
