@@ -51,7 +51,12 @@ function receipt(extra = {}) { outcome = { ...outcome, ...extra }; fs.writeFileS
 }, null, 2) + '\n'); }
 try {
   receipt();
-  for (const row of bindings) if (RED || ![COMPONENT, 'src/test/clubDetailOwnClub.test.tsx'].includes(row.file)) assert.equal(row.candidateSha256, row.parentSha256);
+  /* Release BE join (Round BEG): the unchanged inputs are held against CORE_REF, PARENT on the packet branch; on a newer
+     core (Release BD changed clubManager.ts) the join passes CM_OWN_ROSTER_CORE_REF=HEAD. The recorded parentSha256 stays
+     PARENT's, which the walk reads. */
+  const CORE_REF = process.env.CM_OWN_ROSTER_CORE_REF || PARENT;
+  for (const row of bindings) if (RED || ![COMPONENT, 'src/test/clubDetailOwnClub.test.tsx'].includes(row.file))
+    assert.equal(row.candidateSha256, CORE_REF === PARENT ? row.parentSha256 : sha(git(['show', `${CORE_REF}:${row.file}`])));
   assert.equal(parent.split(OLD).length - 1, 1, 'One original own-club gate must exist');
   const comment = `  /* Release AZ fix pass 4, the lead's ruling (the manager's own club is read
      from his squad, never the world roster): in a career that plays the living
