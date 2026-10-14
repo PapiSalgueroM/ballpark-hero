@@ -1,0 +1,6 @@
+build exit=0 32s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+sweepWeight exit=1 0s | Node.js v24.21.0
+saveSize-base exit=0 66s | simClubManagerSaveSize: all sections green
+saveSize-head exit=0 74s | simClubManagerSaveSize: all sections green
+slots-head exit=0 79s | simClubManagerSlots: all sections green
+slots-base exit=0 52s | simClubManagerSlots: all sections green
