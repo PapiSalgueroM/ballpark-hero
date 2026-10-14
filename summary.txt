@@ -1,0 +1,11 @@
+c-yearplus exit=1 1s | control yearplus FIRED: 1 of 17 checks red
+c-ht45 exit=1 1s | control ht45 FIRED: 1 of 17 checks red
+c-cutover exit=1 1s | control cutover FIRED: 1 of 2 checks red
+c-etbreak exit=1 3s | control etbreak FIRED: 1 of 4 checks red
+opp-5000 exit=0 7s | simCmSubs GREEN: 3 of 3 checks green (parts opponent)
+opp-9000 exit=1 7s | simCmSubs RED: 2 of 3 checks green (parts opponent)
+opproom-5000 exit=1 6s | control opproom FIRED: 2 of 3 checks red
+opproom-9000 exit=1 5s | control opproom FIRED: 2 of 3 checks red
+c-pressedge exit=1 48s | control pressedge FIRED: 1 of 4 checks red
+subs-all exit=0 55s | simCmSubs GREEN: 54 of 54 checks green (parts ledger, rule, extratime, cutover, opponent, coach, press)
+anchors exit=0 46s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.

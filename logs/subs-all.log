@@ -1,0 +1,64 @@
+ok   [ledger] the ledger holds law lines and league rows (4 laws, 6 rows)
+ok   [ledger] laliga: has at least one sourced fact
+ok   [ledger] seriea: has at least one sourced fact
+ok   [ledger] bundesliga: has at least one sourced fact
+ok   [ledger] ligue1: has at least one sourced fact
+ok   [ledger] premier: has at least one sourced fact
+ok   [ledger] championship: has at least one sourced fact
+ok   [ledger] law threeBefore2020: two sources on two hosts, dated, quoted, no wiki (2 sources, 2 hosts, 0 malformed)
+ok   [ledger] law fiveInThree2020: two sources on two hosts, dated, quoted, no wiki (2 sources, 2 hosts, 0 malformed)
+ok   [ledger] law breaksAreFree: two sources on two hosts, dated, quoted, no wiki (2 sources, 2 hosts, 0 malformed)
+ok   [ledger] law fivePermanent2022: two sources on two hosts, dated, quoted, no wiki (2 sources, 2 hosts, 0 malformed)
+ok   [ledger] laliga: five changes from 2020-21 on: two sources on two hosts, dated, quoted, no wiki (2 sources, 2 hosts, 0 malformed)
+ok   [ledger] seriea: five changes from 2020-21 on: two sources on two hosts, dated, quoted, no wiki (2 sources, 2 hosts, 0 malformed)
+ok   [ledger] bundesliga: five changes from 2020-21 on: two sources on two hosts, dated, quoted, no wiki (2 sources, 2 hosts, 0 malformed)
+ok   [ledger] ligue1: five changes from 2020-21 on: two sources on two hosts, dated, quoted, no wiki (2 sources, 2 hosts, 0 malformed)
+ok   [ledger] premier: three changes in 2020-21: two sources on two hosts, dated, quoted, no wiki (2 sources, 2 hosts, 0 malformed)
+ok   [ledger] premier: three changes in 2021-22: two sources on two hosts, dated, quoted, no wiki (2 sources, 2 hosts, 0 malformed)
+ok   [ledger] premier: five changes in three occasions plus half time from 2022-23 on: two sources on two hosts, dated, quoted, no wiki (2 sources, 2 hosts, 0 malformed)
+ok   [ledger] championship: five changes in three opportunities from 2022-23 on, a standing EFL rule: two sources on two hosts, dated, quoted, no wiki (2 sources, 2 hosts, 0 malformed)
+ok   [ledger] the module rows equal the ledger rows
+ok   [ledger] the module partial list equals the ledger
+ok   [rule] 2005-06 Everton plays three with no stoppage limit (3/none)
+ok   [rule] 2005-06 Everton takes a third change
+ok   [rule] 2005-06 Everton refuses a fourth
+ok   [rule] 2005-06 writes no stoppage marks
+ok   [rule] 2026-27 Liverpool plays five in three stoppages (5/3)
+ok   [rule] 2026-27 two changes at half time use no stoppage
+ok   [rule] 2026-27 takes one each at 60, 70 and 80: five changes, three stoppages (5 changes, 3 stoppages)
+ok   [rule] 2026-27 refuses a sixth
+ok   [rule] 2026-27 one at the break then 60, 70, 80: four changes, three stoppages
+ok   [rule] 2026-27 refuses a change at a fourth minute
+ok   [rule] 2026-27 takes a second change at the third stoppage's minute
+ok   [rule] 2026-27 a change at 45+1 (the first half's board) is in play and uses a stoppage (1 changes, 1 stoppages)
+ok   [rule] matchRules base plays three with no limit
+ok   [rule] 2020-21 Premier League plays three (3/none)
+ok   [rule] 2020-21 La Liga plays five in three (5/3)
+ok   [rule] a 2020 era Premier League career in season 2 (2021-22) plays 3/none (2021: 3/none)
+ok   [rule] a 2020 era Premier League career in season 3 (2022-23) plays 5/3 (2022: 5/3)
+ok   [extratime] the walk reaches a knockout second leg in a five change season (uclKo 5/3)
+   12 nights to extra time with three stoppages used: the change at the break taken 12 (stoppages still three 12), the change at 95 refused 12
+ok   [extratime] enough nights go to extra time to judge (12) (12)
+ok   [extratime] with three stoppages used, a change at the break before extra time is taken and uses none (12 taken, 12 at three stoppages, of 12)
+ok   [extratime] a change at 95, a fourth stoppage, is refused (12 of 12)
+ok   [cutover] the 2026-10-23 daily plays the base rules (matchRules base)
+ok   [cutover] the 2026-10-24 daily plays the current rules (matchRules undefined)
+ok   [opponent] the other dugout never passes its rule's changes or stoppages (0 of 300 matches over)
+   the other dugout: 3.43 changes a match under five (112 matches), 1.61 on the base rules (112)
+ok   [opponent] under five they make more changes than on the base rules, by at least 1.5 (gap 1.82)
+ok   [opponent] under five some matches see a fourth or fifth change from them (54 of 112)
+   54 of 112 five change matches saw them make four or five; 59 had a double change
+ok   [coach] the coach never passes the rule's changes or stoppages (0 of 336 matches over)
+ok   [coach] a three change match carries no stoppage marks (0 matches marked)
+ok   [coach] every change he makes for legs keeps a change and a stoppage back (0 of 629 changes for legs kept nothing back)
+   the coach: 2.83 changes a match, five (126 matches)
+   the coach: 1.89 changes a match, base (126 matches)
+   the coach: 1.62 changes a match, three (84 matches)
+ok   [press] every bigGame or derby question asked at a whistle names the next fixture's opponent (0 of 11 wrong)
+   bigGame at the whistle: 31 asked over both fleets, 0 untrue of the fixture named; the closest edge - 7 -6.0 (the line needs -6 or less)
+ok   [press] every bigGame question asked at a whistle is true of the fixture it names (edge - 7 <= -6) (0 of 31 untrue)
+   question kinds at the whistle, head: {"bid":12,"dropped":29,"bigGame":8,"boardHeat":2,"slump":10,"request":13,"roll":3,"derby":3}
+   2026-10-12 daily at Westerlo: "Cercle Brugge on paper are a level above you. Realistically, what are you going there for?"; the stamped free run on its seed: "Gent on paper are a level above you. Realistically, what are you going there for?"
+ok   [press] the 2026-10-12 daily still asks about Cercle Brugge (it is dated before the rules)
+ok   [press] a stamped free run on the same seed asks about Gent after Cercle Brugge
+simCmSubs GREEN: 54 of 54 checks green (parts ledger, rule, extratime, cutover, opponent, coach, press)

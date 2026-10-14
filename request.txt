@@ -1,0 +1,11 @@
+subs-all: node scripts/simCmSubs.mjs
+c-ht45: SUBS_CONTROL=ht45 node scripts/simCmSubs.mjs
+c-yearplus: SUBS_CONTROL=yearplus node scripts/simCmSubs.mjs
+c-etbreak: SUBS_CONTROL=etbreak node scripts/simCmSubs.mjs
+c-cutover: SUBS_CONTROL=cutover node scripts/simCmSubs.mjs
+c-pressedge: SUBS_CONTROL=pressedge node scripts/simCmSubs.mjs
+opp-5000: SUBS_SEED_BASE=5000 node scripts/simCmSubs.mjs --part=opponent
+opp-9000: SUBS_SEED_BASE=9000 node scripts/simCmSubs.mjs --part=opponent
+opproom-5000: SUBS_SEED_BASE=5000 SUBS_CONTROL=opproom node scripts/simCmSubs.mjs
+opproom-9000: SUBS_SEED_BASE=9000 SUBS_CONTROL=opproom node scripts/simCmSubs.mjs
+anchors: node scripts/simHarnessAnchors.mjs
