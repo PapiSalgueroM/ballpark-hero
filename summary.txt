@@ -1,0 +1,14 @@
+headsha exit=0 0s | 7f62629e0 Round BEG: bind Round 1357's deadline proof to the tree's own core (CM_DEADLINE_CORE_REF)
+gatewords-ctl-substring exit=0 7s | FIRED-OK
+vitest exit=0 8s |    Duration  7.45s (transform 3.86s, setup 769ms, collect 9.74s, tests 3.32s, environment 2.76s, prepare 590ms)
+deadline-ctl-late exit=0 9s | FIRED-OK
+deadline exit=0 9s | simClubManagerDecisionDeadline normal: green.
+deadline-bare exit=0 0s | BINDING-HOLDS
+decisions exit=0 23s | simClubManagerDecisions: 0 findings
+notes exit=1 2s | Node.js v24.21.0
+simBingoHonours exit=0 13s | simPlayerBingoHonours PASS
+decisions-ctls exit=0 44s | presscohort FIRED
+simClubManagerMeters exit=0 36s | simClubManagerMeters: PASS. The board meter is the sack race, the fans move with results, and every table prints its goals pair.
+simNoInventedQuotes exit=0 33s | simNoInventedQuotes: green. No real player is quoted or accused anywhere.
+tsc exit=0 99s | 
+simClubManager exit=0 33s | ALL CLUB MANAGER SIMS PASSED
