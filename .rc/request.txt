@@ -1,0 +1,6 @@
+# Release BF join, m3 served on 80084c4b: playSoccerCareerPendingLife on its own normal sim's fixtures
+#!serve
+#!playwright
+#!serial
+headsha: git log --oneline -2
+walk: set -o pipefail; export CI=1 SIM_NETWORK=offline CAREER_PENDING_OUT="$PWD/wm3" CAREER_PENDING_PHASE=fixed FREE_KICK_FONT_CACHE="$PWD/wm3/font-cache"; node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only | tail -1 && node .rc/x/prepInstalled.mjs "$PWD/wm3" && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerCareerPendingLife.mjs | tail -2 && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playSoccerCareerPendingLife.mjs
