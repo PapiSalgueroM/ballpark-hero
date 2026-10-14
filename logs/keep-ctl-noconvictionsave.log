@@ -1,0 +1,4 @@
+  FAIL: old conviction save 0: the trial year at 23 did not come out as one CONVICTED row then the prison year
+  FAIL: old conviction save 1: the trial year at 23 did not come out as one CONVICTED row then the prison year
+simCareerKeepPlaying: 1495 checks, 24 failures (control noconvictionsave, red expected)
+FIRED-OK

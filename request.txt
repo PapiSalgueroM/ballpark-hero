@@ -1,0 +1,5 @@
+# Release BF join: keep playing on this head, and its conviction controls
+keepPlaying: node scripts/simCareerKeepPlaying.mjs
+keep-ctl-noconvictionrow: KEEP_PLAYING_CONTROL=noconvictionrow node scripts/simCareerKeepPlaying.mjs > /tmp/k-noconvictionrow.log 2>&1; s=$?; grep -E 'FAIL' /tmp/k-noconvictionrow.log | head -2 | cut -c1-160; tail -1 /tmp/k-noconvictionrow.log | cut -c1-160; [ $s = 1 ] && grep -q 'FAIL' /tmp/k-noconvictionrow.log && echo FIRED-OK
+keep-ctl-noconvictionsave: KEEP_PLAYING_CONTROL=noconvictionsave node scripts/simCareerKeepPlaying.mjs > /tmp/k-noconvictionsave.log 2>&1; s=$?; grep -E 'FAIL' /tmp/k-noconvictionsave.log | head -2 | cut -c1-160; tail -1 /tmp/k-noconvictionsave.log | cut -c1-160; [ $s = 1 ] && grep -q 'FAIL' /tmp/k-noconvictionsave.log && echo FIRED-OK
+keep-ctl-convictiontwice: KEEP_PLAYING_CONTROL=convictiontwice node scripts/simCareerKeepPlaying.mjs > /tmp/k-convictiontwice.log 2>&1; s=$?; grep -E 'FAIL' /tmp/k-convictiontwice.log | head -2 | cut -c1-160; tail -1 /tmp/k-convictiontwice.log | cut -c1-160; [ $s = 1 ] && grep -q 'FAIL' /tmp/k-convictiontwice.log && echo FIRED-OK

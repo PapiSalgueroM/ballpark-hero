@@ -1,0 +1,4 @@
+  FAIL: accept career 2: 2 rows at age 34
+  FAIL: accept career 32: 2 rows at age 32
+simCareerKeepPlaying: 1505 checks, 78 failures (control convictiontwice, red expected)
+FIRED-OK

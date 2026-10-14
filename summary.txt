@@ -1,0 +1,4 @@
+keepPlaying exit=0 103s | simCareerKeepPlaying: 1495 checks, 0 failures
+keep-ctl-noconvictionsave exit=0 108s | FIRED-OK
+keep-ctl-noconvictionrow exit=0 124s | FIRED-OK
+keep-ctl-convictiontwice exit=0 80s | FIRED-OK

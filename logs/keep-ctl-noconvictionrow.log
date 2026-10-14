@@ -1,0 +1,4 @@
+  FAIL: conviction save 0: a reloaded save on the conviction paper at 23 came out with 1 rows for that year
+  FAIL: conviction save 1: a reloaded save on the conviction paper at 23 came out with 1 rows for that year
+simCareerKeepPlaying: 1495 checks, 24 failures (control noconvictionrow, red expected)
+FIRED-OK
