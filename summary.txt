@@ -1,0 +1,15 @@
+c-etfrozen exit=1 8s | control etfrozen FIRED: 1 of 4 checks red
+c-opproom exit=1 9s | control opproom FIRED: 2 of 3 checks red
+tsc exit=0 55s | 
+whistle-ctl exit=1 8s | simLiveSimMotion: control whistle turned "the ninetieth minute asks the latest save" red on an assertion (2 failed), as it must.
+liveSimMotion exit=0 45s | simLiveSimMotion: green. 55 tests passed (the viewer on real feeds, the pitch part's rules on 200 half feeds and on feeds made by hand, the goal sequence, match mode), an
+liveMatch exit=0 4s | simLiveMatch: PASS. Each half is committed as one stream, the report is counted off it, a change keeps the past and redraws the future, and the other dugout fields eleven
+matchDetail exit=0 5s | simMatchDetail: all green
+dailyDeals exit=0 3s | simDailyDeals: green. 12 Hot Seat dates (5 Premier League) and 6 Deadline Day dates (3 Premier League) deal what Release AS dealt, no daily carries the real fixture key, 
+leagueRules exit=0 45s | simCmLeagueRules: all checks passed (modern, eras, pure, drop4, cupless, shapes, chunks)
+extraTime exit=0 72s | simExtraTime: PASS. A level Champions League decider plays thirty minutes of extra time before penalties, nothing else does, goals per decider hold, the AI plays it too (
+quickSubsAll exit=0 14s | simCmQuickSubs: 10 actual outcomes and 13 effective controls passed.
+noRival exit=0 13s | No rival product names found. 0 findings.
+pin-hash exit=0 1s | LF sha256 of clubManager.ts on the head: 691c9c2c4829562787fc5a93ad7dfe607711ac549cf8e4d415724a0ff51539c6
+subs-all-base exit=0 155s | simCmSubs GREEN: 65 of 65 checks green (parts ledger, rule, extratime, cutover, oppextratime, opponent, coach, press, legacy, three, hotseat)
+anchors exit=0 31s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
