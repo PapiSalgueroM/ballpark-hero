@@ -74,7 +74,7 @@ jobs:
         run: SC_PACKED_FENCE_OUT="$SC_SAVE_OUT/packed-fence" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/soccerCareerPackedFence.mjs 2>&1 | tee "$SC_SAVE_OUT/packed-fence.log"
       - name: Codec and actual veteran page regressions
         if: env.SC_SAVE_PHASE == 'fixed'
-        run: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" npm test -- src/lib/soccerCareerSave.test.ts src/test/careerDilemmaReach.test.tsx src/test/careerKeepPlaying.test.tsx src/test/soccerCareerSaveFence.test.tsx src/test/soccerCareerSaveRetry.test.tsx src/test/soccerCareerPackedFence.test.tsx --maxWorkers=2 --reporter=default --reporter=json --outputFile.json="$SC_SAVE_OUT/focused-unit.json" 2>&1 | tee "$SC_SAVE_OUT/focused-unit.log"
+        run: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" npm test -- src/lib/soccerCareerSave.test.ts src/test/careerDilemmaReach.test.tsx src/test/careerKeepPlaying.test.tsx src/test/soccerCareerSaveFence.test.tsx src/test/soccerCareerSaveRetry.test.tsx src/test/soccerCareerPackedFence.test.tsx src/test/careerStory.test.tsx --maxWorkers=2 --reporter=default --reporter=json --outputFile.json="$SC_SAVE_OUT/focused-unit.json" 2>&1 | tee "$SC_SAVE_OUT/focused-unit.log"
       - name: Fetch qualified legacy career inputs for current-main migration
         if: env.SC_SAVE_PHASE == 'fixed'
         env:

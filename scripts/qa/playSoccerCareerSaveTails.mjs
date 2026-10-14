@@ -206,6 +206,7 @@ async function journey(width, height, kind) {
       check(await bytes() === stored, 'Actual ended writer bytes equal the exact complete reducer output'); current = expectedEnd;
       row.endRandom = await page.evaluate(() => window.__tailEndRandom); check(row.endRandom.restored && row.endRandom.values.length === 0, 'Actual synchronous end click consumes no RNG and restores the original function');
       check(current.phase === 'retired' && current[kind + 'State'].season === 100 && stored.length <= LIMIT, 'Actual retirement retains every tail row and the cap');
+      await page.locator('[data-career-story="inline"]').waitFor({ timeout: 45000 });
       const projected = await oracle.evaluate(career => { const O = window.__tailSaveOracle; return { book: O.records.careerRecordBook(career), tiles: O.story.storyTiles(O.reveal.careerBeforeBallonDorReveal(career)).map(tile => ({ ...tile, textLines: tile.lines.map(line => O.flags.splitFlagSegments(O.currency.localizeMoney(line)).filter(segment => 'text' in segment).map(segment => segment.text).join('')) })) }; }, current);
       const readOnlyBytes = await bytes(), readOnlyWrites = (await page.evaluate(() => window.__tailOwnWrites)).length;
       const records = page.locator('[data-career-records-tile]'); await records.waitFor({ timeout: 45000 }); await capture(records, 'records-control', true); await records.click();
@@ -232,7 +233,7 @@ async function journey(width, height, kind) {
       }
       await story.locator('[data-story-close]').click(); await story.waitFor({ state: 'hidden' });
       check(await bytes() === readOnlyBytes && (await page.evaluate(() => window.__tailOwnWrites)).length === readOnlyWrites, 'Read-only history/story preserves every owned byte without another save write');
-      await page.reload({ waitUntil: 'domcontentloaded' }); await records.waitFor({ timeout: 45000 }); await waitWrite(0); pair('retired-reloaded', await decoded(await bytes()), current);
+      await page.reload({ waitUntil: 'domcontentloaded' }); await records.waitFor({ timeout: 45000 }); await page.locator('[data-career-story="inline"]').waitFor({ timeout: 45000 }); await waitWrite(0); pair('retired-reloaded', await decoded(await bytes()), current);
       check(await bytes() === stored && stored.length <= LIMIT, 'Final literal retired bytes and every tail field survive reload');
       check(await page.locator('[data-soccer-save-status="failed"]').count() === 0, 'No save-failure notice appears');
     }

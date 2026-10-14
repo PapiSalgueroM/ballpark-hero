@@ -89,7 +89,7 @@ import { CareerMentorTile } from '@/components/soccer-career/CareerMentorTile';
 import type { MoneyAction } from "@/lib/soccerMoney";
 import { bankSummary } from "@/lib/soccerMoney";
 import PhonePanel from "@/components/soccer-career/PhonePanel";
-import CareerStory from "@/components/soccer-career/CareerStory";
+const CareerStory = lazy(() => import("@/components/soccer-career/CareerStory").catch(() => { reloadToRetryChunk(); return new Promise<never>(() => undefined); }));
 import { BAND_CLASS } from "@/lib/careerRatingBand";
 import { soccerRatingRows, readMatchRating, readOvr, ratingBand } from "@/lib/careerSeasonRatings";
 import { applyDrillResult, type DrillKind } from "@/lib/careerDrills";
@@ -4762,7 +4762,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
           </div>
         </div>
       )}
-      {storyOpen && <CareerStory career={visibleCareer} onClose={() => setStoryOpen(false)} />}
+      {storyOpen && <Suspense fallback={null}><CareerStory career={visibleCareer} onClose={() => setStoryOpen(false)} /></Suspense>}
       {trophyCategory && <CentreMountBoundary what="trophy cabinet" onClose={() => setTrophyCategory(null)}><Suspense fallback={<div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80" data-trophy-loading><div className="rounded-2xl border border-border bg-card px-5 py-4 text-sm">Opening your trophies...</div></div>}><TrophyCabinet career={visibleCareer} category={trophyCategory} onClose={() => setTrophyCategory(null)} /></Suspense></CentreMountBoundary>}
       {ratingsOpen && <CentreMountBoundary what="season ratings" onClose={() => setRatingsOpen(false)}><Suspense fallback={null}><SeasonRatings career={visibleCareer} onClose={() => setRatingsOpen(false)} /></Suspense></CentreMountBoundary>}
       {derbyHistoryOpen && <CentreMountBoundary what="derby history" onClose={() => setDerbyHistoryOpen(false)}><Suspense fallback={null}><SoccerDerbyHistory seasons={visibleCareer.seasons} onClose={() => setDerbyHistoryOpen(false)} /></Suspense></CentreMountBoundary>}
@@ -4864,7 +4864,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
         <LegacyCard career={career} totals={totals} onShare={onShare} />
       )}
       {/* Round 974: the same story on the retirement screen, every season a tile */}
-      {career.phase === "retired" && <CareerStory career={visibleCareer} />}
+      {career.phase === "retired" && <Suspense fallback={null}><CareerStory career={visibleCareer} /></Suspense>}
 
       {/* Retire Confirmation Dialog */}
       {showRetireConfirm && (
