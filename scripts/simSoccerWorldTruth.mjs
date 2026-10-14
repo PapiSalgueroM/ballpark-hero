@@ -121,6 +121,11 @@ const esbuild = require('esbuild');
    files are byte for byte 082fc277's and c5fc5470's (origin/release-bc-gate, the tree the round was cut from), so
    the regenerated rows and every sha256 pin are unchanged; only the base named here moved. */
 const BASE = 'b9df63b4e9ad8925c1f19536ec6a32d8a77358ea';
+/* Release BF join: WORLD_TRUTH_BASE_FROM_HEAD (comma separated src paths, default none) lets the base bundle read
+   those files from this tree instead of BASE, so a later round's engine input that this round never touched (the
+   Soccer Career life chain's soccerCareerLife.ts and soccerCareerRoutineEvents.ts) is the same on both sides of the
+   lockstep. None of this round's own files may be named (checked once ENGINE, PHONE, ARCADE and PANEL are set). */
+const BASE_FROM_HEAD = new Set((process.env.WORLD_TRUTH_BASE_FROM_HEAD || '').split(',').map(f => f.trim()).filter(Boolean));
 const CONTROL = process.env.WORLD_TRUTH_CONTROL || '';
 const SEED_OFFSET = Number(process.env.SEED_OFFSET || 0);
 const SEEDS = Math.max(1, Number(process.argv[2] || 5));
@@ -146,6 +151,10 @@ const PHONE = 'src/lib/soccerPhone.ts';
 const ARCADE = 'src/lib/soccerArcade.ts';
 const PANEL = 'src/components/soccer-career/InternationalPanel.tsx';
 const TRUTH = 'src/lib/soccerWorldTruth.ts';
+for (const f of BASE_FROM_HEAD) {
+  if ([ENGINE, PHONE, ARCADE, PANEL, TRUTH, 'src/lib/keyedRng.ts'].includes(f) || !f.startsWith('src/')) { console.error(`ABORT: WORLD_TRUTH_BASE_FROM_HEAD names ${f}, which the base must keep`); process.exit(1); }
+}
+if (BASE_FROM_HEAD.size) console.log(`base ${BASE.slice(0, 8)} reads ${BASE_FROM_HEAD.size} file(s) from this tree: ${[...BASE_FROM_HEAD].join(', ')}`);
 
 /* ─── the controls ─────────────────────────────────────────────────────── */
 
@@ -246,7 +255,7 @@ export const render = {
       if (!rel.startsWith('src/')) return undefined;
       let source;
       if (!ref && controlSources.has(rel)) { source = controlSources.get(rel); used.add(rel); }
-      else if (ref) source = execFileSync('git', ['show', `${ref}:${rel}`], { cwd: ROOT, encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 });
+      else if (ref && !BASE_FROM_HEAD.has(rel)) source = execFileSync('git', ['show', `${ref}:${rel}`], { cwd: ROOT, encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 });
       else source = fs.readFileSync(args.path, 'utf8');
       source = source.replace(/\r\n/g, '\n');
       for (const [file, from, to] of MARKS) if (rel === file) source = mark(source, from, to, `${tag} ${file}`);
