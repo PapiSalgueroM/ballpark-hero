@@ -1,0 +1,10 @@
+simLiveSimMotion pause FIRED
+simLiveSimMotion reduced FIRED
+simLiveSimMotion takenback FIRED
+simLiveSimMotion lineup FIRED
+simLiveSimMotion samecommit FIRED
+simLiveSimMotion draw FIRED
+simLiveSimMotion kickoffside FIRED
+simLiveSimMotion goalkickside FIRED
+simOwnGoalMotion plain FIRED
+simOwnGoalMotion straight FIRED

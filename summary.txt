@@ -1,0 +1,10 @@
+build exit=0 24s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+headsha exit=0 0s | 182b2e632 Round BEG: Round 1366's proofs take PITCH_RESTART_PARENT_REF
+pitch exit=1 0s | Node.js v24.21.0
+pitch-ctl-oldrender exit=1 0s | Node.js v24.21.0
+vitest exit=0 55s |    Duration  54.09s (transform 3.02s, setup 205ms, collect 6.51s, tests 70.12s, environment 1.34s, prepare 240ms)
+simLiveSimMotion exit=0 56s | simLiveSimMotion: green. 55 tests passed (the viewer on real feeds, the pitch part's rules on 200 half feeds and on feeds made by hand, the goal sequence, match mode), an
+tsc exit=0 73s | 
+playPitch exit=1 1s | Node.js v24.21.0
+simOwnGoalMotion exit=0 21s | simOwnGoalMotion: green. 16 tests passed: the dense fleet, OG1 to OG9 against their baseline arm, the scenes made by hand (OG6 to OG8 and OG10), the two recorded digests,
+motion-ctls exit=0 47s | simOwnGoalMotion straight FIRED
