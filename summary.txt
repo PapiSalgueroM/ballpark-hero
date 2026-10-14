@@ -1,0 +1,2 @@
+headsha exit=0 0s | b8725d663 Round BEG: playCareerStoryRole reads the Soccer Career save through parseSoccerCareerSave
+weighChain exit=0 625s |    /transfer-path      378K gz over  39 files (budget 379K, 377.8K to the tenth)
