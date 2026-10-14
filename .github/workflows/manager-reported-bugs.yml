@@ -60,7 +60,7 @@ jobs:
             'migrates an unseeded legacy custom first summer without inventing history',
             'restores the promoted custom league and board after another slot registered overrides',
             'restores the real proxy on summer departure and removes the departed name from Europe',
-            'restores the real proxy when leaving the promoted club during a season',
+            'restores the real proxy when leaving a created European club during a season',
           ];
           assert.equal(results.length, 22, 'Every specified outcome case must run');
           assert.equal(report.testResults.length, 3, 'All three diagnostic files must run');

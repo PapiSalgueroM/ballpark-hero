@@ -214,8 +214,9 @@ describe('created clubs use the existing modern promotion slots', () => {
     expect(moved.history).toEqual(qualified.history);
   });
 
-  it('restores the real proxy when leaving the promoted club during a season', () => {
-    const top = rolled(created());
+  it('restores the real proxy when leaving a created European club during a season', () => {
+    const top = rolled(created('premier'));
+    expect(top.uclField).toContain(top.clubName);
     top.week = 1;
     const proxy = top.customClub!.replacedClub, bytes = JSON.stringify(top);
     const input: CareerState = { ...top, jobHunt: { open: { club: 'Barcelona', league: 'La Liga', tier: 1, season: top.season,
@@ -223,6 +224,8 @@ describe('created clubs use the existing modern promotion slots', () => {
     const joined = joinClubNow(input)!;
     expect(joined).not.toBeNull(); expect(joined.clubName).toBe('Barcelona'); expect(joined.customClub).toBeUndefined(); realWorld(joined);
     expect(leagueOf(proxy).id).toBe('premier');
+    expect(joined.uclField).toContain(proxy);
+    expect(joined.uclField).not.toContain(top.clubName);
     expect(applyTargets(joined).some(row => row.club === proxy)).toBe(true);
     expect(Object.values(joined.world ?? {}).flatMap(row => row.table.map(entry => entry.club))).not.toContain(top.clubName);
     expect(joined.leagueOverrides).toEqual(top.leagueOverrides);
