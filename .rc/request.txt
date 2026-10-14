@@ -1,0 +1,7 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/lib/gmInbox.test.ts src/components/front-office-shared/GmInboxPanel.test.tsx src/components/us-career/InboxPanel.test.tsx --testTimeout=300000 --hookTimeout=120000
+rivals: node scripts/simNoRivalNames.mjs
+anchors: node scripts/simHarnessAnchors.mjs
+storage: node scripts/simStorageWrites.mjs
+gmdiff: bash .rc/x/gmdiff.sh
+usBoardParity: node scripts/simUsBoardParity.mjs
