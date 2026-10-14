@@ -1,0 +1,5 @@
+kit13: SIM_EVENT_DECK_SECTIONS=13 node scripts/simEventDeck.mjs
+kitC: SIM_EVENT_DECK_SECTIONS=14,15,16 node scripts/simEventDeck.mjs
+kctl13: bash .rc/x/kctl.sh pruneearly:13 codecword:13 codecslot:13
+kctl1416: bash .rc/x/kctl.sh newpack:14,15 wordedit:14 wordorder:14 storymove:14 pressure:15 eager:16
+newpack15: EVENT_DECK_CONTROL=newpack SIM_EVENT_DECK_SECTIONS=15 node scripts/simEventDeck.mjs
