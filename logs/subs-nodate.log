@@ -1,0 +1,6 @@
+ok   [hotseat] the cutover 2026-10-24 falls after the 30 dates (2026-09-24 to 2026-10-23)
+FAIL [hotseat] every daily before the cutover plays the base rules (30 of 30 unmarked)
+FAIL [hotseat] every daily before the cutover replays exactly as on SUBS_BASE (29 differ, first 2026-09-25 Racing Santander)
+FAIL [hotseat] a free run saved without the stamp replays exactly as on SUBS_BASE
+ok   [hotseat] the career carried on to Club Manager carries no matchRules
+control nodate FIRED: 3 of 5 checks red

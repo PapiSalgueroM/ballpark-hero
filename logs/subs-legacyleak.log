@@ -1,0 +1,2 @@
+FAIL [legacy] 16 careers, every save byte and every draw equal to SUBS_BASE (12 differ; first Liverpool now seed 0 coach: head 93df86ea8f738405 108598 draws, base ec91134924355570 102134 draws (season 2 week 54))
+control legacyleak FIRED: 1 of 1 checks red

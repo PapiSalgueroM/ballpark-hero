@@ -1,0 +1,7 @@
+subs-nodate exit=1 8s | control nodate FIRED: 3 of 5 checks red
+subs-legacyleak exit=1 24s | control legacyleak FIRED: 1 of 1 checks red
+subs-pressnew exit=1 24s | control pressnew FIRED: 1 of 1 checks red
+simClubManagerMeters exit=0 27s | simClubManagerMeters: PASS. The board meter is the sack race, the fans move with results, and every table prints its goals pair.
+vitest exit=0 7s |    Duration  7.08s (transform 3.24s, setup 328ms, collect 6.93s, tests 7.73s, environment 2.68s, prepare 769ms)
+pressCoverage exit=0 267s | PASS managerPressCoverageProof.mjs: 106 actual first-season questions, 89 genuine disliked probes, whole career/vector holds, two sampling faults and actual floor fault w
+simPress exit=0 1436s | ALL PRESS AND TEAM TALK CHECKS PASSED
