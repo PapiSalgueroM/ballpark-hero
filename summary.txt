@@ -1,0 +1,5 @@
+banner-test exit=0 5s |    Duration  4.55s (transform 1.11s, setup 30ms, collect 1.46s, tests 2.60s, environment 175ms, prepare 81ms)
+noEtLine-ctl exit=1 6s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/liveSimMotion.test.tsx,title=src/test/liveSimMotion.test.tsx > Live simcast motion > the extra time ba
+ctl-nostorage exit=1 1s | control exit 1
+ctl-nounmount exit=1 1s | control exit 1
+ctl-novisible exit=1 1s | control exit 1

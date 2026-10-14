@@ -1,0 +1,7 @@
+# Release BD gate, lane S: the serial source mutations (1331 r1331-fz3, 1330 r1330-f-ctl)
+#!serial
+banner-test: node_modules/.bin/vitest run src/test/liveSimMotion.test.tsx -t "extra time banner" --testTimeout=300000
+noEtLine-ctl: node .rc/x/mutNoEtLine.mjs && node_modules/.bin/vitest run src/test/liveSimMotion.test.tsx -t "extra time banner" --testTimeout=300000; s=$?; git checkout HEAD -- src; exit $s
+ctl-nostorage: c=$(grep -c "\[null, fenceKey\]" src/hooks/useSaveFenceWatch.ts); echo "anchor count $c"; [ "$c" = 1 ] || exit 3; sed -i "s/\[null, fenceKey\]/[null]/" src/hooks/useSaveFenceWatch.ts; echo "after: $(grep -c '\[null, fenceKey\]' src/hooks/useSaveFenceWatch.ts)"; node_modules/.bin/vitest run src/test/useSaveFenceWatch.test.tsx; s=$?; git checkout -- src; echo "control exit $s"; exit $s
+ctl-nounmount: c=$(grep -c "window.removeEventListener('storage', on);" src/hooks/useSaveFenceWatch.ts); echo "anchor count $c"; [ "$c" = 1 ] || exit 3; sed -i "s/window.removeEventListener('storage', on);//" src/hooks/useSaveFenceWatch.ts; node_modules/.bin/vitest run src/test/useSaveFenceWatch.test.tsx; s=$?; git checkout -- src; echo "control exit $s"; exit $s
+ctl-novisible: c=$(grep -c "document.visibilityState === 'visible'" src/hooks/useSaveFenceWatch.ts); echo "anchor count $c"; [ "$c" = 1 ] || exit 3; sed -i "s/document.visibilityState === 'visible'/true/" src/hooks/useSaveFenceWatch.ts; node_modules/.bin/vitest run src/test/useSaveFenceWatch.test.tsx; s=$?; git checkout -- src; echo "control exit $s"; exit $s
