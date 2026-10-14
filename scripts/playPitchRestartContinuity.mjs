@@ -147,10 +147,10 @@ try {
   check(normal.length === 6 && normal.every(c => c.continuous) && controls.length === 6 && controls.every(c => !c.continuous), 'six actual fixed journeys and six effective whole-parent controls');
   check(report.captures.length === 24 && new Set(report.captures.map(c => c.path)).size === 24, 'twenty-four distinct original captures');
   for (const row of report.sources) { let digest; { const bytes = fs.readFileSync(path.join(ROOT, row.file)); digest = sha(bytes); } check(digest === row.rawSha256, row.file + ' final physical hold'); }
-  for (const row of report.packages) check(sha(fs.readFileSync(path.join(ROOT, row.file))) === row.sha256, row.file + ' final package hold');
-  for (const row of report.tools) check(sha(fs.readFileSync(row.file)) === row.sha256, row.name + ' final tool package hold');
-  for (const row of installed) check(sha(fs.readFileSync(path.join(ROOT, row.file, 'package.json'))) === row.sha256, row.file + ' final locked hold');
-  for (const row of report.compiled) check(sha(fs.readFileSync(path.join(OUT, row.path))) === row.sha256, row.path + ' final compiled hold');
+  for (const row of report.packages) { let digest; { const bytes = fs.readFileSync(path.join(ROOT, row.file)); digest = sha(bytes); } check(digest === row.sha256, row.file + ' final package hold'); }
+  for (const row of report.tools) { let digest; { const bytes = fs.readFileSync(row.file); digest = sha(bytes); } check(digest === row.sha256, row.name + ' final tool package hold'); }
+  for (const row of installed) { let digest; { const bytes = fs.readFileSync(path.join(ROOT, row.file, 'package.json')); digest = sha(bytes); } check(digest === row.sha256, row.file + ' final locked hold'); }
+  for (const row of report.compiled) { let digest; { const bytes = fs.readFileSync(path.join(OUT, row.path)); digest = sha(bytes); } check(digest === row.sha256, row.path + ' final compiled hold'); }
   report.counts = { played: normal.length, controlJourneys: controls.length, uniqueControlFaults: [...new Set(controls.filter(c => !c.continuous).map(c => c.kind))], originals: report.captures.length };
   report.success = report.failures.length === 0; write(path.join(OUT, 'report.json'), report);
   assert.equal(report.failures.length, 0, report.failures.join('\n'));
