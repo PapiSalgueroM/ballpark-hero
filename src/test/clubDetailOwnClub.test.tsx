@@ -3,13 +3,8 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import { ClubDetailScreen } from '@/components/club-manager/ClubDetailScreen';
 import { oppRosterFor, releaseBlock, releasePlayer, startCareer, type CareerState } from '@/lib/clubManager';
 
-/* Release AZ fix pass 4, the lead's ruling of 2026-10-12: the manager's own club is read from his squad, never
-   the world roster. The club screen opened on my own club (from a cup bracket, the Champions League cards or the
-   world tables) read it off the world roster minus my squad, so "your club" listed only the men of my club who
-   are not in my squad: the men a deep club's bake holds beyond the 26 a squad starts with. In a career that plays
-   the living world it now lists my squad, as a club I founded always did. A career from before the release (no
-   world seed, so by ruling Y1 no ledger either) reads the projected world here exactly as it did. Every state
-   below is the real engine's on a real club; nothing is made up. */
+/* Club details use the saved owned squad for every career, including legacy
+   saves. Rival clubs still use their current world roster. */
 
 afterEach(() => { cleanup(); vi.restoreAllMocks(); });
 
@@ -58,7 +53,7 @@ describe('the club screen reads my own club from my squad', () => {
     expect(screenText(s, 'Barcelona')).toContain(`Squad (${rival.length} on the books)`);
   });
 
-  it('a career from before the release reads its own club off the projected world exactly as it did', () => {
+  it('a career from before the release reads its own club from its current saved squad', () => {
     const seeded = withRoll(0.6, () => startCareer('Real Madrid'));
     const old: CareerState = { ...seeded };
     delete old.worldSeed;
@@ -66,6 +61,6 @@ describe('the club screen reads my own club from my squad', () => {
     const projected = oppRosterFor(old, 'Real Madrid');
     expect(projected.length).toBeGreaterThan(0);
     expect(projected.length).not.toBe(old.squad.length);
-    expect(screenText(old, 'Real Madrid')).toContain(`Squad (${projected.length} on the books)`);
+    expect(screenText(old, 'Real Madrid')).toContain(`Squad (${old.squad.length} on the books)`);
   });
 });

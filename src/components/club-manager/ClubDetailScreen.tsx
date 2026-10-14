@@ -3,12 +3,11 @@ import { cn } from '@/lib/utils';
 import { ChevronLeft, Eye } from 'lucide-react';
 import {
   money, moneyIn, sortedLeagueTable, isPartialClub, TIER_INFO,
-  oppRosterFor, worldRosterXIAvg, worldSeasonLabel, worldSeedOf, yearsOn,
+  oppRosterFor, worldRosterXIAvg, worldSeasonLabel, yearsOn,
   boardWantLabel, careerLeagueOf, eraClubDefFor,
   managerOf, sellValue,
 } from '@/lib/clubManager';
 import type { CareerState } from '@/lib/clubManager';
-import { worldRosterView } from '@/lib/clubManagerWorldRoster';
 import { ratingTint, MadeUpTag } from '@/components/club-manager/SquadScreen';
 
 interface ClubDetailScreenProps {
@@ -39,16 +38,9 @@ export function ClubDetailScreen({ clubName, career, onBack }: ClubDetailScreenP
   /* Round 154: a club you founded has no projected world entry, its squad IS
      the save's squad, so the viewer reads that directly. */
   const isMyCustom = !!career.customClub && clubName === career.customClub.name;
-  /* Release AZ fix pass 4, the lead's ruling (the manager's own club is read
-     from his squad, never the world roster): in a career that plays the living
-     world, my own club opened from a bracket or the world tables is my squad,
-     as a club I founded always was. Off the world roster it listed only the
-     men of my club who are NOT in my squad (the men a deep club's bake holds
-     beyond the 26 a squad starts with, then every replacement the projection
-     made up). A career from before the release reads the projected world here
-     exactly as it did (ruling Y1). src/test/clubDetailOwnClub.test.tsx holds
-     it. */
-  const fromMySquad = isMyCustom || (clubName === career.clubName && (worldSeedOf(career) !== undefined || worldRosterView(career) !== null));
+  /* The club you manage always reads the squad in this save. Rival clubs
+     keep their current world roster, including recorded transfers. */
+  const fromMySquad = isMyCustom || clubName === career.clubName;
   /* Round 640: a founder of a club founded above what its money buys sells
      at a fixed share of his value, so the viewer shows what a sale would pay
      (sellValue, the figure the transfer and contracts screens quote) beside
