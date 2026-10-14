@@ -99,7 +99,11 @@ const BASELINE = {
        design (five changes in three stoppages for these Premier League clubs and their opponents, the press
        asking about the next match), so their deals were recorded again from the Round 1331 tree with --print
        (remote check r1331-s4, line dailyDeals-print, head 62cf206a). Release AS dealt c9af2ca7, d31a907e,
-       e233082a, 7ef7837d and 2784bbcb. Every date before the cutover keeps its Release AS recording. */
+       e233082a, 7ef7837d and 2784bbcb. Every date before the cutover keeps its Release AS recording.
+       The leg that proves the rule is the one input (review of 2026-10-14, remote check r1331-fx3): with rulesOf
+       answering 'base' for every daily and these five put back to Release AS's values, --print --verify says the
+       tree deals exactly the recording on all 12 dates (exit 0); with the values put back and the rules left as
+       they are, it does not (exit 1); and the head as committed deals exactly this recording (retake identical). */
     '2026-10-27': '0400c7b1a2d756911454',
     '2026-11-14': '67cb2096bdc45751340e',
     '2027-01-19': 'b33b5b04a41504ec5f53',
