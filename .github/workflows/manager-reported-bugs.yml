@@ -105,6 +105,11 @@ jobs:
         env:
           NODE_OPTIONS: --require=${{ github.workspace }}/scripts/lib/offlineTransport.cjs
         run: node scripts/qa/checkManagerReportControls.mjs 2>&1 | tee manager-report-artifacts/controls.log
+      - name: Existing world browsing outcomes and effective copied faults
+        if: env.MANAGER_REPORT_PHASE == 'fixed'
+        env:
+          NODE_OPTIONS: --require=${{ github.workspace }}/scripts/lib/offlineTransport.cjs
+        run: MANAGER_WORLD_BROWSER_CONTROL=all MANAGER_WORLD_BROWSER_ARTIFACTS=manager-report-artifacts/world-browser/mounted node scripts/simManagerWorldBrowser.mjs 2>&1 | tee manager-report-artifacts/world-browser-mounted.log
       - name: Remote build and browser prerequisites
         if: env.MANAGER_REPORT_PHASE == 'fixed'
         run: |
@@ -114,6 +119,8 @@ jobs:
           node "$RUNNER_TEMP/manager-report-browser/node_modules/playwright/cli.js" install --with-deps chromium
           python -m pip install fonttools pillow
           node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only 2>&1 | tee manager-report-artifacts/fonts.log
+          mkdir -p manager-report-artifacts/world-browser
+          MANAGER_WORLD_FONT_CACHE=manager-report-artifacts/world-browser/font-cache node scripts/qa/managerWorldBrowser1077.mjs --prefetch-fonts-only 2>&1 | tee manager-report-artifacts/world-browser-fonts.log
       - name: Complete SEO build
         id: build
         if: env.MANAGER_REPORT_PHASE == 'fixed'
@@ -144,6 +151,16 @@ jobs:
         env:
           NODE_OPTIONS: --require=${{ github.workspace }}/scripts/lib/offlineTransport.cjs
         run: node scripts/playManagerCustomPromotion.mjs 2>&1 | tee manager-report-artifacts/browser.log
+      - name: Native modern edited and historical world browsing
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        env:
+          NODE_OPTIONS: --require=${{ github.workspace }}/scripts/lib/offlineTransport.cjs
+          MANAGER_WORLD_FONT_CACHE: manager-report-artifacts/world-browser/font-cache
+        run: |
+          world_browser_status=0
+          node scripts/qa/managerWorldBrowser1077.mjs 2>&1 | tee manager-report-artifacts/world-browser-native.log || world_browser_status=$?
+          if [ -d manager-world-browser-artifacts/native ]; then cp -r manager-world-browser-artifacts/native manager-report-artifacts/world-browser/; fi
+          exit "$world_browser_status"
       - name: Retain the qualified full-unit receipt
         if: ${{ !cancelled() && steps.build.outcome == 'success' }}
         uses: actions/download-artifact@v4
