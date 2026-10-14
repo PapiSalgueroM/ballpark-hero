@@ -15050,13 +15050,7 @@ function drawOppSubs(live: LiveMatch, from: number, to: number, oppGoalMinutes: 
   const room = rule.subs - made.length;
   if (!live.oppXi || !live.oppBench || room <= 0) return made;
   const stopsLeft = rule.stops === null ? null : rule.stops - new Set(made.map(s => s.minute)).size;
-  /* Breaks are free, and the one break this draw reaches is the one before extra time (their changes are never
-     drawn at half time, under any rule). Extra time drawn with changes left and no stoppage left puts them on at
-     that break, at the minute extra time is drawn from, as mine go on (isBreakChange): their unused changes carry
-     on into extra time, as Round 670 has them. Without it a five change side that used its three stoppages by 90
-     made no change in extra time at all. A redraw from that minute keeps the changes the break already has. */
-  const etBreak = stopsLeft !== null && stopsLeft <= 0 && !!live.et && from === live.et.from && !made.some(s => s.minute === from);
-  if (stopsLeft !== null && stopsLeft <= 0 && !etBreak) return made;
+  if (stopsLeft !== null && stopsLeft <= 0) return made;
   const len = (to - from) / 45;
   const lo = Math.max(from + 1, 56);
   /* Round 670: in extra time they may use whatever changes they have left. */
@@ -15074,8 +15068,7 @@ function drawOppSubs(live: LiveMatch, from: number, to: number, oppGoalMinutes: 
   for (const c of cards) lastCard.set(c.name, Math.max(lastCard.get(c.name) ?? 0, c.minute));
   const myGoalMinutes = [...(live.h1My ?? []), ...(live.h2My ?? [])].map(g => g.minute);
   const theirGoalMinutes = [...(live.h1Opp ?? []).map(g => g.minute), ...(live.h2Opp ?? []).map(g => g.minute), ...oppGoalMinutes];
-  const minutes = stopsLeft === null ? distinctMinutes(count, lo, hi, new Set())
-    : etBreak ? Array.from({ length: count }, () => from) : stopMinutes(count, stopsLeft, lo, hi);
+  const minutes = stopsLeft === null ? distinctMinutes(count, lo, hi, new Set()) : stopMinutes(count, stopsLeft, lo, hi);
   const subs: SubLine[] = [];
   /* A man who has just come on is not hooked again in the same draw. */
   const cameOn = new Set<string>(made.map(s => s.on));
