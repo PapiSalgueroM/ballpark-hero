@@ -1,0 +1,95 @@
+name: Club Manager reported season outcomes
+on:
+  push:
+    branches: [codex/manager-reported-bugs]
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      MANAGER_REPORT_PHASE: baseline
+      NODE_OPTIONS: --require=./scripts/lib/offlineTransport.cjs
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Locked setup and source binding
+        run: |
+          mkdir -p manager-report-artifacts
+          git rev-parse HEAD > manager-report-artifacts/head.txt
+          git ls-files src scripts package.json package-lock.json bun.lock index.html | xargs sha256sum > manager-report-artifacts/source-hashes.txt
+          tar -cf manager-report-artifacts/source.tar src scripts package.json package-lock.json bun.lock index.html .github/workflows/manager-reported-bugs.yml
+          NODE_OPTIONS= npm ci 2>&1 | tee manager-report-artifacts/install.log
+          if [ "$MANAGER_REPORT_PHASE" = baseline ]; then
+            git diff --exit-code 082fc2774c8aa9f919c14efa33bfc3fbfc599597 -- src scripts package.json package-lock.json bun.lock index.html ':!src/lib/clubManagerCustomPromotion.test.ts' ':!src/lib/clubManagerReportAge.test.ts' ':!src/lib/clubManagerReportedScorers.test.ts'
+          fi
+      - name: Actual application types
+        run: node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee manager-report-artifacts/types.log
+      - name: Report outcomes on the actual engine
+        run: |
+          set +e
+          npm test -- --run src/lib/clubManagerCustomPromotion.test.ts src/lib/clubManagerReportAge.test.ts src/lib/clubManagerReportedScorers.test.ts --reporter=verbose --reporter=json --outputFile=manager-report-artifacts/outcomes.json 2>&1 | tee manager-report-artifacts/outcomes.log
+          status=${PIPESTATUS[0]}
+          set -e
+          echo "$status" > manager-report-artifacts/outcomes-exit.txt
+          node --input-type=module <<'JS'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          const report = JSON.parse(fs.readFileSync('manager-report-artifacts/outcomes.json', 'utf8'));
+          const results = report.testResults.flatMap(file => file.assertionResults);
+          const expected = [
+            'promotes created champions in every configured pair while preserving all real clubs',
+            'keeps the created club outside the automatic places in its current division',
+            'uses the saved own-name head-to-head before mapping the promotion slot',
+            'relegates a promoted created club without replacing a second real club',
+            'migrates an unseeded legacy custom first summer without inventing history',
+            'restores the promoted custom league and board after another slot registered overrides',
+            'restores the real proxy on summer departure and removes the departed name from Europe',
+            'restores the real proxy when leaving the promoted club during a season',
+          ];
+          assert.equal(results.length, 22, 'Every specified outcome case must run');
+          assert.equal(report.testResults.length, 3, 'All three diagnostic files must run');
+          for (const [name, count] of [['clubManagerCustomPromotion.test.ts', 12], ['clubManagerReportAge.test.ts', 3], ['clubManagerReportedScorers.test.ts', 7]]) assert.equal(report.testResults.find(file => file.name.endsWith(name))?.assertionResults.length, count, name);
+          assert.equal(report.numPendingTests, 0);
+          assert.equal(results.some(row => !['passed', 'failed'].includes(row.status)), false);
+          const failed = results.filter(row => row.status === 'failed');
+          if (process.env.MANAGER_REPORT_PHASE === 'baseline') {
+            assert.equal(fs.readFileSync('manager-report-artifacts/outcomes-exit.txt', 'utf8').trim(), '1');
+            assert.deepEqual(failed.map(row => row.title).sort(), expected.sort());
+            for (const row of failed) assert.ok(row.failureMessages.every(message => message.includes('AssertionError') && !/TypeError|ReferenceError|SyntaxError/.test(message)), row.fullName);
+          } else {
+            assert.equal(fs.readFileSync('manager-report-artifacts/outcomes-exit.txt', 'utf8').trim(), '0');
+            assert.equal(report.success, true); assert.equal(failed.length, 0);
+          }
+          const summary = { phase: process.env.MANAGER_REPORT_PHASE, cases: results.length, passed: results.filter(row => row.status === 'passed').length, failed: failed.map(row => row.title) };
+          fs.writeFileSync('manager-report-artifacts/outcome-summary.json', JSON.stringify(summary, null, 2));
+          console.log(JSON.stringify(summary));
+          JS
+      - name: Existing promotion contracts on the baseline
+        if: env.MANAGER_REPORT_PHASE == 'baseline'
+        run: node scripts/simPromotion.mjs 2>&1 | tee manager-report-artifacts/original-promotion.log
+      - name: Final source holds
+        if: always()
+        run: |
+          sha256sum --check manager-report-artifacts/source-hashes.txt > manager-report-artifacts/source-holds.log
+          git diff --exit-code -- src scripts package.json package-lock.json bun.lock index.html
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: manager-reports-${{ github.run_id }}
+          path: manager-report-artifacts/
+          include-hidden-files: true
+          retention-days: 14
+          if-no-files-found: error
