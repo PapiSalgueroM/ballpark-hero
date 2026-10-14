@@ -110,7 +110,7 @@ describe('actual Luton historical display component boundaries', () => {
       const latest = () => observed.models.at(-1), fixtureRows = () => Array.from(mounted!.container.querySelectorAll('[data-fixtures] [data-fixture-row]'), element => ({ md: Number(element.getAttribute('data-fixture-row')), name: element.querySelector('[data-fixture-name]')?.textContent, html: element.outerHTML }));
       const tableRows = () => Array.from(mounted!.container.querySelectorAll('[data-centre-table] [data-club]'), element => ({ club: element.getAttribute('data-club'), text: element.textContent, cells: Array.from(element.children, cell => cell.textContent), html: element.outerHTML }));
       const read = async (id: string, operation: () => any) => { observed.phase = `${spec.id}:${id}`; const before = snapshot(), record: any = { id, before }; row.reads.push(record); retain();
-        try { record.output = await operation(); } catch (error) { record.error = String((error as Error)?.stack ?? error); throw error; }
+        try { record.output = await operation(); return record.output; } catch (error) { record.error = String((error as Error)?.stack ?? error); throw error; }
         finally { record.after = snapshot(); record.findings = [before.raw !== record.after.raw && 'raw-save', JSON.stringify(before.draws) !== JSON.stringify(record.after.draws) && 'read-rng'].filter(Boolean); retain(); expect(record.findings).toEqual([]); } };
       row.loaded = snapshot();
       const fixtureView = await read('fixtures', () => fixtureRows());
