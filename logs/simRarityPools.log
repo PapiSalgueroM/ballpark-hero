@@ -1,0 +1,57 @@
+36 categories
+  FAIL: ballon-dor: the pool came back empty, so nothing was checked for it
+  FAIL: club-real-madrid: the pool came back empty, so nothing was checked for it
+  FAIL: club-arsenal: the pool came back empty, so nothing was checked for it
+  FAIL: club-barcelona: the pool came back empty, so nothing was checked for it
+  FAIL: nationality-brazil: the pool came back empty, so nothing was checked for it
+  FAIL: nationality-argentina: the pool came back empty, so nothing was checked for it
+  FAIL: position-forward: the pool came back empty, so nothing was checked for it
+  FAIL: position-goalkeeper: the pool came back empty, so nothing was checked for it
+  FAIL: elite-100m: the pool came back empty, so nothing was checked for it
+  FAIL: elite-50m: the pool came back empty, so nothing was checked for it
+  FAIL: club-chelsea: the pool came back empty, so nothing was checked for it
+  FAIL: club-psg: the pool came back empty, so nothing was checked for it
+  FAIL: club-man-city: the pool came back empty, so nothing was checked for it
+  FAIL: nationality-germany: the pool came back empty, so nothing was checked for it
+  FAIL: nationality-england: the pool came back empty, so nothing was checked for it
+  FAIL: position-right-winger: the pool came back empty, so nothing was checked for it
+  FAIL: club-liverpool: the pool came back empty, so nothing was checked for it
+  FAIL: club-man-united: the pool came back empty, so nothing was checked for it
+  FAIL: club-inter: the pool came back empty, so nothing was checked for it
+  FAIL: club-ac-milan: the pool came back empty, so nothing was checked for it
+  FAIL: club-dortmund: the pool came back empty, so nothing was checked for it
+  FAIL: club-atletico: the pool came back empty, so nothing was checked for it
+  FAIL: club-tottenham: the pool came back empty, so nothing was checked for it
+  FAIL: nationality-spain: the pool came back empty, so nothing was checked for it
+  FAIL: nationality-france: the pool came back empty, so nothing was checked for it
+  FAIL: nationality-italy: the pool came back empty, so nothing was checked for it
+  FAIL: nationality-netherlands: the pool came back empty, so nothing was checked for it
+  FAIL: nationality-portugal: the pool came back empty, so nothing was checked for it
+  FAIL: nationality-belgium: the pool came back empty, so nothing was checked for it
+  FAIL: position-centre-back: the pool came back empty, so nothing was checked for it
+  FAIL: position-right-back: the pool came back empty, so nothing was checked for it
+  FAIL: position-left-back: the pool came back empty, so nothing was checked for it
+  FAIL: position-central-midfielder: the pool came back empty, so nothing was checked for it
+  FAIL: position-defensive-midfielder: the pool came back empty, so nothing was checked for it
+  FAIL: position-attacking-midfielder: the pool came back empty, so nothing was checked for it
+  FAIL: position-left-winger: the pool came back empty, so nothing was checked for it
+1) no pool is sitting on the page cap
+   0 pools, 0 of them larger than one page, 0 sitting exactly on it
+  FAIL: not one pool exceeds a single page, which given Brazil alone has 1,722 players means the read is still capped
+2) each pool matches what the database independently says
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+[TypeError: fetch failed] {
+  [cause]: Error: connect ECONNREFUSED 127.0.0.1:443
+      at TCPConnectWrap.afterConnect [as oncomplete] (node:net:2021:16) {
+    errno: -111,
+    code: 'ECONNREFUSED',
+    syscall: 'connect',
+    address: '127.0.0.1',
+    port: 443
+  }
+}
+
+Node.js v24.21.0

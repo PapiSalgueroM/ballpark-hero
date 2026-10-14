@@ -1,0 +1,21 @@
+1) no club label on the board is unsatisfiable
+  FAIL: could not read soccer_player_club_stints
+   0 stored clubs, 0 labels, 0 club cells
+   0 dead labels, 0 unanswerable cells (0.0%)
+2) the live function accepts a real player for each label that was dead
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+[TypeError: fetch failed] {
+  [cause]: Error: connect ECONNREFUSED 127.0.0.1:443
+      at TCPConnectWrap.afterConnect [as oncomplete] (node:net:2021:16) {
+    errno: -111,
+    code: 'ECONNREFUSED',
+    syscall: 'connect',
+    address: '127.0.0.1',
+    port: 443
+  }
+}
+
+Node.js v24.21.0
