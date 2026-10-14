@@ -334,7 +334,7 @@ SECTIONS.cutover = cutoverSection;
 /* ---------------- the quick sim fleet (sections opponent and coach) ---------------- */
 /* Five change careers in 2026-27 (England, Spain, Germany), the same careers on the base rules, and two
    three change eras. SEEDS and MATCHES are environment knobs; the bands below were set at the defaults. */
-const SEEDS = Number(process.env.SUBS_SEEDS ?? 3);
+const SEEDS = Number(process.env.SUBS_SEEDS ?? 8);
 const MATCHES = Number(process.env.SUBS_MATCHES ?? 14);
 const SEED_BASE = Number(process.env.SUBS_SEED_BASE ?? 7100);
 const FIVE = [['Liverpool', null], ['Barcelona', null], ['Bayern Munich', null]];
@@ -377,11 +377,14 @@ export function quickFleet(cm) {
 }
 const mean = xs => (xs.length ? xs.reduce((a, b) => a + b, 0) / xs.length : 0);
 
-/* Section opponent. Measured on the runner at the defaults (3 seeds, 14 matches, seed base 7100; remote check
-   r1331-s3c): 3.43 changes a match from them under five against 1.61 on the base rules, a gap of 1.82; with the
-   opproom control in, 2.76 against 1.61, a gap of 1.15. The band sits between the two (see the notes for the
-   gap over other seed bases). */
-const OPP_GAP = Number(process.env.SUBS_OPP_GAP ?? 1.5);
+/* Section opponent. The band was first set at 1.5 from one seed base at 3 seeds (r1331-s3c: gap 1.82, opproom
+   control 1.15), and the review's pointer to "other seed bases" found nothing behind it. Measured there (remote
+   check r1331-fx1, 3 seeds, about 115 matches a side): gap 1.68 at seed base 5000 and 1.38 at 9000, red on
+   healthy code; control 1.00 and 0.78. A coin toss, so the fleet grew to 8 seeds (about 300 matches a side) and
+   was measured at four seed bases (r1331-fx2): gap 1.68, 1.60, 1.49, 1.69 at 7100, 5000, 9000, 3000; with the
+   opproom control in, 1.02, 0.92, 0.89, 1.10. OPP_GAP 1.3 sits half way between the lowest gap and the highest
+   control. The fourth or fifth change check (0 matches under opproom at every base) is the stronger signal. */
+const OPP_GAP = Number(process.env.SUBS_OPP_GAP ?? 1.3);
 function opponentSection(cm) {
   const P = 'opponent';
   const rows = quickFleet(cm).filter(r => r.named);
@@ -500,10 +503,12 @@ async function threeSection(cm, { base, threeHead }) {
 
 /* Section press: every bigGame or derby question asked at a whistle names the next fixture's opponent. */
 const PRESS_MATCHES = Number(process.env.SUBS_PRESS_MATCHES ?? 30);
-const PRESS_FLEET = { seeds: SEEDS, base: 8300, step: 41, matches: PRESS_MATCHES,
+const PRESS_FLEET = { seeds: Number(process.env.SUBS_PRESS_SEEDS ?? 3), base: 8300, step: 41, matches: PRESS_MATCHES,
   clubs: [['Liverpool', null], ['Everton', null], ['Barcelona', null], ['Everton', 'era2005'], ['Burnley', null]] };
 /* The wider fleet for the bigGame edge (the review's probe shape, remote check r1331-run-p: 23 bigGame questions
-   on the head, every one true; 12 of 21 untrue with the fixture dropped from matchEdge). */
+   on the head, every one true; 12 of 21 untrue with the fixture dropped from matchEdge). Measured here: at the
+   defaults 31 judged, 0 untrue (r1331-fx1); with SUBS_EDGE_SEEDS=24, 74 judged, 0 untrue, the closest at -6.01
+   (r1331-fx2), so the handed back state reads the whistle's edge exactly; control pressedge 13 of 26 untrue. */
 const EDGE_FLEET = { seeds: Number(process.env.SUBS_EDGE_SEEDS ?? 8), base: 9100, step: 37, matches: 38,
   clubs: [['Liverpool', null], ['Everton', null], ['Barcelona', null], ['Burnley', null], ['Brentford', null], ['Getafe', null]] };
 function pressFleet(cm, onAsk, fleet = PRESS_FLEET) {
