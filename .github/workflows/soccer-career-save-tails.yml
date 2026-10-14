@@ -1,0 +1,105 @@
+name: Soccer Career extended save diagnostic
+on:
+  push:
+    branches: [codex/soccer-career-save-size]
+    paths:
+      - .github/workflows/soccer-career-save-tails.yml
+      - scripts/qa/soccerCareerSaveTails.mjs
+      - scripts/qa/soccerCareerSaveTailInputs.json
+      - src/lib/soccerCareerSave.ts
+      - src/lib/soccerCareerSave.test.ts
+permissions:
+  contents: read
+  actions: read
+jobs:
+  diagnose:
+    if: "contains(github.event.head_commit.message, '[tail diagnostic]')"
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      SC_TAIL_PHASE: baseline
+      SC_TAIL_INPUT: ${{ github.workspace }}/tail-inputs
+      SC_TAIL_OUT: ${{ github.workspace }}/tail-artifacts
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Hold qualified application and install remotely
+        run: |
+          mkdir -p "$SC_TAIL_OUT"
+          git rev-parse HEAD > "$SC_TAIL_OUT/head.txt"
+          git archive HEAD > "$SC_TAIL_OUT/source.tar"
+          git diff --exit-code 2083b37564e348e52f0e0306dcde91b9cea1de04 HEAD -- src ':!src/lib/soccerCareerSave.ts' ':!src/lib/soccerCareerSave.test.ts' package.json package-lock.json bun.lock index.html
+          if test "$SC_TAIL_PHASE" = baseline; then
+            git diff --exit-code 2083b37564e348e52f0e0306dcde91b9cea1de04 HEAD -- src
+          fi
+          find src scripts .github/workflows -type f -print0 | sort -z | xargs -0 sha256sum > "$SC_TAIL_OUT/source-hashes.txt"
+          sha256sum package.json package-lock.json bun.lock > "$SC_TAIL_OUT/package-hashes.txt"
+          npm ci 2>&1 | tee "$SC_TAIL_OUT/install.log"
+      - name: Fetch immutable genuine career inputs
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          python - <<'PY'
+          import os, json, hashlib, pathlib, urllib.request, urllib.error, zipfile
+          out = pathlib.Path(os.environ['SC_TAIL_OUT'])
+          inputs = pathlib.Path(os.environ['SC_TAIL_INPUT']); inputs.mkdir()
+          spec = json.loads(pathlib.Path('scripts/qa/soccerCareerSaveTailInputs.json').read_text())
+          api = 'https://api.github.com/repos/PapiSalgueroM/ballpark-hero/actions/artifacts/' + str(spec['artifact'])
+          headers = {'Authorization': 'Bearer ' + os.environ['GH_TOKEN'], 'Accept': 'application/vnd.github+json', 'User-Agent': 'career-tail-proof'}
+          meta = json.load(urllib.request.urlopen(urllib.request.Request(api, headers=headers)))
+          assert meta['workflow_run']['id'] == spec['run'] and meta['workflow_run']['head_sha'] == spec['source'] and not meta['expired']
+          (out / 'input-artifact-metadata.json').write_text(json.dumps(meta, indent=2))
+          class NoRedirect(urllib.request.HTTPRedirectHandler):
+              def redirect_request(self, req, fp, code, msg, hdrs, newurl): return None
+          try:
+              urllib.request.build_opener(NoRedirect).open(urllib.request.Request(api + '/zip', headers=headers))
+              raise AssertionError('expected signed artifact redirect')
+          except urllib.error.HTTPError as response:
+              assert response.code == 302
+              location = response.headers['Location']
+          data = urllib.request.urlopen(urllib.request.Request(location, headers={'User-Agent': 'career-tail-proof'})).read()
+          assert hashlib.sha256(data).hexdigest() == spec['zipSha256']
+          archive_path = out / 'input-artifact.zip'; archive_path.write_bytes(data)
+          with zipfile.ZipFile(archive_path) as archive:
+              names = archive.namelist()
+              for item in spec['inputs']:
+                  assert names.count(item['name']) == 1
+                  body = archive.read(item['name'])
+                  assert len(body) == item['bytes'] and hashlib.sha256(body).hexdigest() == item['sha256']
+                  (inputs / item['name']).write_bytes(body)
+          print('Twelve immutable complete career inputs held from the qualified artifact.')
+          PY
+          cp scripts/qa/soccerCareerSaveTailInputs.json "$SC_TAIL_OUT/input-manifest.json"
+          cp -r "$SC_TAIL_INPUT" "$SC_TAIL_OUT/inputs"
+      - name: Actual app types
+        run: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee "$SC_TAIL_OUT/types.log"
+      - name: Genuine manager pundit and owner seasons
+        run: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/soccerCareerSaveTails.mjs 2>&1 | tee "$SC_TAIL_OUT/tails.log"
+      - name: Effective whole original codec control
+        if: env.SC_TAIL_PHASE == 'fixed'
+        run: SC_TAIL_CONTROL=original SC_TAIL_OUT="$SC_TAIL_OUT/control" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/soccerCareerSaveTails.mjs 2>&1 | tee "$SC_TAIL_OUT/control.log"
+      - name: Final source and package holds
+        if: always()
+        run: |
+          sha256sum --check "$SC_TAIL_OUT/source-hashes.txt" > "$SC_TAIL_OUT/source-holds.log"
+          sha256sum --check "$SC_TAIL_OUT/package-hashes.txt" > "$SC_TAIL_OUT/package-holds.log"
+          git diff --exit-code -- src scripts .github/workflows package.json package-lock.json bun.lock index.html
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: career-tails-${{ github.run_id }}
+          path: tail-artifacts/
+          include-hidden-files: true
+          retention-days: 14
+          if-no-files-found: error

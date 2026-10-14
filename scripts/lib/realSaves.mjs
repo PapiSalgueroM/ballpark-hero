@@ -43,7 +43,7 @@ import { pathToFileURL } from 'node:url';
 import { build } from 'esbuild';
 
 export const WRITERS = {
-  '/soccer-career': { kind: 'whole', file: 'src/pages/SoccerCareer.tsx' },
+  '/soccer-career': { kind: 'serializer', file: 'src/pages/SoccerCareer.tsx', fn: 'serializeSoccerCareerSave' },
   '/club-manager': { kind: 'engine', file: 'src/lib/clubManager.ts', fn: 'saveCareer' },
   '/stadium-tycoon': { kind: 'serializer', file: 'src/hooks/useStadiumTycoon.ts', fn: 'serializeTycoon' },
   '/wonderkid-factory': { kind: 'serializer', file: 'src/hooks/useWonderkidFactory.ts', fn: 'serialize' },
@@ -71,7 +71,7 @@ export const PURE_LOADERS = ['/soccer-career', '/stadium-tycoon', '/wonderkid-fa
 
 const ENTRY = `
 import * as SOC from './src/lib/soccerCareerEngine';
-import { isSoccerCareerSave } from './src/lib/soccerCareerSave';
+import { isSoccerCareerSave, parseSoccerCareerSave, serializeSoccerCareerSave } from './src/lib/soccerCareerSave';
 import * as PROG from './src/lib/soccerCareerProgramme';
 import * as BRIEF from './src/lib/soccerCareerTransferBrief';
 import * as AGENT from './src/lib/soccerAgentReview';
@@ -154,7 +154,7 @@ const soccerPlayed = seed => {
   if (!pick) throw new Error('Soccer Career seed ' + seed + ' never reached a hub that offers a tactical role (phase ' + c.phase + ', ' + played(c) + ' seasons played)');
   c = PROG.chooseProgramme(c, 'tactics', pick.id);
   if (!c.programme || !c.programme.plan) throw new Error('Soccer Career seed ' + seed + ': chooseProgramme did not keep the plan on the save');
-  return JSON.stringify(c);
+  return serializeSoccerCareerSave(c);
 };
 /* Release AW closing pass (ruling C4). Four more parts of the Soccer Career save carry a version number one
    level down (transferBrief, agentReview, internationalReturn, farewellSeason) and no save above holds one:
@@ -199,7 +199,7 @@ const soccerVeteran = seed => {
     for (let g = 0; g < 2500 && !c.retired; g += 1) {
       if (c.phase === 'playing' && c.age >= 30) {
         const held = veteranParts(c, clubs);
-        if (held) return JSON.stringify(held);
+        if (held) return serializeSoccerCareerSave(held);
       }
       c = careerStep(SOC, c, clubs);
     }
@@ -215,7 +215,7 @@ const soccerWindow = seed => {
     for (let g = 0; g < 2500 && !c.retired; g += 1) {
       if (c.phase === 'transfer_window' && played(c) >= SOCCER_SEASONS) {
         const filed = BRIEF.setTransferBrief(c, 'minutes');
-        if (filed !== c && BRIEF.readTransferBrief(filed, SOC.projectLeagueApps)) return JSON.stringify(filed);
+        if (filed !== c && BRIEF.readTransferBrief(filed, SOC.projectLeagueApps)) return serializeSoccerCareerSave(filed);
       }
       c = careerStep(SOC, c, clubs);
     }
@@ -363,7 +363,7 @@ export function makeSaves(seed, rebuildClubs) {
 
 /** The game's own pure check of a stored save, where it exports one: true when the game would open it. */
 export const accepts = {
-  '/soccer-career': raw => { try { return isSoccerCareerSave(JSON.parse(raw)) === true; } catch { return false; } },
+  '/soccer-career': raw => { try { return isSoccerCareerSave(parseSoccerCareerSave(raw)) === true; } catch { return false; } },
   '/stadium-tycoon': raw => ST.deserializeTycoon(raw, NOW + 60000) !== null,
   '/wonderkid-factory': raw => WF.deserialize(raw, NOW + 60000) !== null,
   '/rebuild': raw => RBS.parseRebuildSave(raw) !== null,
@@ -383,6 +383,7 @@ export const accepts = {
  */
 const prospectRead = sport => raw => { try { return loadUsCareerProspect(sport, JSON.parse(raw).prospect) !== null; } catch { return false; } };
 const parsed = (raw, fn) => { try { return fn(JSON.parse(raw)); } catch { return false; } };
+const soccerParsed = (raw, fn) => { try { return fn(parseSoccerCareerSave(raw)); } catch { return false; } };
 /* Round 1309: the NFL board's load of the playoffs, asked exactly as FrontOfficeBoard.tsx asks it */
 const bracketLoad = s => GPOST.loadGmPostseason(NFLPOST.NFL_POSTSEASON, s.league, s.league.season, GPOST.inGmPostseason({
   period: s.league.week, phase: s.phase, seasonHasChampion: s.league.champions.some(c => c.season === s.league.season),
@@ -391,13 +392,13 @@ const bracketLoad = s => GPOST.loadGmPostseason(NFLPOST.NFL_POSTSEASON, s.league
    keyed by the part's path as PART_VERSIONS writes it. The four new parts export their readers. */
 export const partReads = {
   '/soccer-career': {
-    'programme.version': raw => parsed(raw, s => PROG.programmeOptions(s).some(view => view.choice !== null)),
-    'transferBrief.version': raw => parsed(raw, s => BRIEF.readTransferBrief(s, SOC.projectLeagueApps) !== null),
-    'agentReview.version': raw => parsed(raw, s => AGENT.readAgentReview(s) !== null),
-    'internationalReturn.version': raw => parsed(raw, s => INTL.readInternationalReturn(s) !== null),
-    'farewellSeason.version': raw => parsed(raw, s => FARE.readSoccerFarewell(s) !== null),
-    'pressRoom.version': raw => parsed(raw, s => PRESS.pressRoomView(s).history.length > 0),
-    'generatedBallonPool.version': raw => parsed(raw, s => SOC.isGeneratedBallonPool(s.generatedBallonPool, s.seasons.at(-1).year)),
+    'programme.version': raw => soccerParsed(raw, s => PROG.programmeOptions(s).some(view => view.choice !== null)),
+    'transferBrief.version': raw => soccerParsed(raw, s => BRIEF.readTransferBrief(s, SOC.projectLeagueApps) !== null),
+    'agentReview.version': raw => soccerParsed(raw, s => AGENT.readAgentReview(s) !== null),
+    'internationalReturn.version': raw => soccerParsed(raw, s => INTL.readInternationalReturn(s) !== null),
+    'farewellSeason.version': raw => soccerParsed(raw, s => FARE.readSoccerFarewell(s) !== null),
+    'pressRoom.version': raw => soccerParsed(raw, s => PRESS.pressRoomView(s).history.length > 0),
+    'generatedBallonPool.version': raw => soccerParsed(raw, s => SOC.isGeneratedBallonPool(s.generatedBallonPool, s.seasons.at(-1).year)),
   },
   '/front-office': {
     'gameLog.v': raw => parsed(raw, s => logOf(s) !== null),
@@ -421,14 +422,14 @@ const without = (s, key) => { const o = { ...s }; delete o[key]; return o; };
 export const partAbsent = {
   '/soccer-career': {
     'transferBrief.version': raw => {
-      const s = JSON.parse(raw);
+      const s = parseSoccerCareerSave(raw);
       if (BRIEF.readTransferBrief(s, SOC.projectLeagueApps) !== null) return 'the brief is still read';
       const next = BRIEF.setTransferBrief(s, 'level');
       if (next === s || !BRIEF.readTransferBrief(next, SOC.projectLeagueApps) || next.transferBrief.version !== 1) return 'a new brief did not overwrite the unreadable one';
       return null;
     },
     'agentReview.version': raw => {
-      const s = JSON.parse(raw);
+      const s = parseSoccerCareerSave(raw);
       if (AGENT.readAgentReview(s) !== null) return 'the receipt is still read';
       const now = AGENT.agentReviewEligibility(s);
       if (!sameAnswer(now, AGENT.agentReviewEligibility(without(s, 'agentReview')))) return 'the review is not judged as on the same save without the part (' + now.reason + ')';
@@ -439,7 +440,7 @@ export const partAbsent = {
       return null;
     },
     'internationalReturn.version': raw => {
-      const s = JSON.parse(raw);
+      const s = parseSoccerCareerSave(raw);
       if (INTL.readInternationalReturn(s) !== null) return 'the receipt is still read';
       const now = INTL.internationalReturnEligibility(s);
       if (!sameAnswer(now, INTL.internationalReturnEligibility(without(s, 'internationalReturn')))) return 'the comeback is not judged as on the same save without the part (' + now.reason + ')';
@@ -455,7 +456,7 @@ export const partAbsent = {
        the card is offered again on this save, which still holds the flag the announcement set, and a new
        announcement overwrites the unreadable plan. */
     'farewellSeason.version': raw => {
-      const s = JSON.parse(raw);
+      const s = parseSoccerCareerSave(raw);
       if (FARE.readSoccerFarewell(s) !== null) return 'the plan is still read';
       if (FARE.farewellSeasonComplete(s)) return 'an unreadable plan still completes a farewell season';
       if (s.isFinalSeason !== true) return 'the fixture did not keep the flag the announcement set';
@@ -470,7 +471,7 @@ export const partAbsent = {
        the same save with the part taken out (no sentence about verifying holds it shut), and the next answer
        writes a fresh part with that one answer in it. */
     'pressRoom.version': raw => {
-      const s = JSON.parse(raw);
+      const s = parseSoccerCareerSave(raw);
       const now = PRESS.pressRoomView(s);
       if (now.history.length !== 0 || now.credibility !== 50) return 'the part is still read';
       if (!sameAnswer(now, PRESS.pressRoomView(without(s, 'pressRoom')))) return 'the room is not judged as on the same save without the part (' + now.reason + ')';
@@ -485,7 +486,7 @@ export const partAbsent = {
        from its own parse, since a step changes the state it is handed), and it leaves a
        fresh pool of version 1 that reads. */
     'generatedBallonPool.version': raw => {
-      const s = JSON.parse(raw);
+      const s = parseSoccerCareerSave(raw);
       if (!isSoccerCareerSave(s)) return 'the save no longer opens';
       if (SOC.isGeneratedBallonPool(s.generatedBallonPool, s.seasons.at(-1).year)) return 'the pool is still read';
       const night = start => {
@@ -501,7 +502,7 @@ export const partAbsent = {
           return null;
         } finally { Math.random = real; }
       };
-      const a = night(JSON.parse(raw)), b = night(without(JSON.parse(raw), 'generatedBallonPool'));
+      const a = night(parseSoccerCareerSave(raw)), b = night(without(parseSoccerCareerSave(raw), 'generatedBallonPool'));
       if (!a || !b) return 'no next night was reached';
       if (a.draws !== b.draws || !sameAnswer(without(a.c, 'generatedBallonPool'), without(b.c, 'generatedBallonPool'))
         || !sameAnswer(a.c.generatedBallonPool, b.c.generatedBallonPool)) return 'the next night is not the night of the same save without the part';
