@@ -1,0 +1,4 @@
+build exit=0 27s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+pwfences exit=1 22s | fences: 1 of 2 not green on the head; A RED DIFFERS FROM THE BASE
+kitC exit=0 29s | simEventDeck: green. Sections 14, 15, 16 only.
+kitB13 exit=0 71s | simEventDeck: green. Sections 13 only.
