@@ -497,6 +497,20 @@
       47 the seed moved. Written with --part=modern,eras,pure --write on
       the tree itself (line write-digest, 201 lines changed), then run
       green whole on the same runner.
+      Release BE's join (2026-10-14) took it ONCE on the merged tree
+      f14ae6f1, after Rounds 1351 and 1357 (m3, six more desk situations
+      drawn from the real save) moved it. Attribution on a GitHub runner at
+      f14ae6f1 (remote check rBEg-rules), in a throwaway checkout. Leg A,
+      the tree with src/lib/clubManagerDecisions.ts set back to main's
+      (4a5f759a): green whole against the committed file (modern 27/0,
+      eras 20/0, pure 48/0), so the desk deck is the only cause; Release
+      BE's other merges (the created club promotion of Round 1369 among
+      them) move no hash. Leg B, the tree itself: 32 failures, 18 modern
+      and 14 era saves, in whole (27 hashes) and s2_whole (10) only, the
+      hashes of whole states that carry the desk; tables, results, cups,
+      Europe, trophies, objectives and promotions held in all 47, and pure
+      held 48/0. Written with --part=modern,eras,pure --write on the tree
+      itself (37 lines changed), then run green whole on the same runner.
    2. DIGEST, ERAS (hard). The same for every league of every historic era,
       one career each.
    3. DIGEST, PURE (hard). For every modern and era league: the drop count,
