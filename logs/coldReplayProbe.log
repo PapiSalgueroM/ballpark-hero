@@ -1,0 +1,16 @@
+exit 1
+      2 matchday 25 is not on the stage (live)
+      2 matchday 29 is not on the stage (live)
+ ✓ tmp/soccer-cold-replay-GjzMwG/original.test.tsx > Season Centre: own goals on the page (Round 1167, read after the Release AP merge) > found its three save
+ × tmp/soccer-cold-replay-GjzMwG/original.test.tsx > Season Centre: own goals on the page (Round 1167, read after the Release AP merge) > prints an own goal fo
+ ✓ tmp/soccer-cold-replay-GjzMwG/original.test.tsx > Season Centre: own goals on the page (Round 1167, read after the Release AP merge) > prints an own goal f
+ × tmp/soccer-cold-replay-GjzMwG/original.test.tsx > Season Centre: own goals on the page (Round 1167, read after the Release AP merge) > leaves a return match
+ ✓ tmp/soccer-cold-replay-GjzMwG/original.test.tsx > Season Centre: own goals on the page (Round 1167, read after the Release AP merge) > hands back the same 
+ ✓ tmp/soccer-cold-replay-GjzMwG/original.test.tsx > Season Centre: the little pitch and an own goal (Release AP) > says whose own goal it was under the pitch
+ ✓ tmp/soccer-cold-replay-GjzMwG/original.test.tsx > Season Centre: the little pitch and an own goal (Release AP) > says nothing of the kind for an ordinary g
+coldrep:
+before
+original
+seasonCentreOwnGoals.accepted-H1327.tsx
+seasonCentreOwnGoals.parent.tsx
+source.json
