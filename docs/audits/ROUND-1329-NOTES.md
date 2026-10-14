@@ -129,6 +129,14 @@ Final proof readings at the last head are in the closing report
 
 - The feed names no winner of a summer that happened, not even finals he played (7580b259): decision 2's principle
   makes every feed line world news. His finals stay in the season log and on the International card.
+- THE BRIEF IS SUPERSEDED HERE, so nobody puts the arm back: brief-1329.md decision 1(c) and design 3.6 say the feed's
+  tournament line prints "only for his own finals or a future summer". For the feed that own finals arm is gone on
+  purpose (review finding 6, ruled by decision 2's principle, which governs where the brief disagrees with itself):
+  worldSeasonTick prints `if (intl && !summerHappened(year))` and nothing else. The own finals arm
+  (tournamentWinnerShown) lives only where decision 2 puts his story, runTournamentSummer's two season log lines and
+  the International panel. simSoccerWorldTruth section 3 (any winner line of a summer that happened, control summer:
+  2,245 such lines when the arm is back, r1329-vf) and playSoccerWorldTruth case A (a save that played three real
+  summers, 0 winner lines) go red if it returns.
 - The quiz's two champion questions print the season in full, "in 2026-27?" (3a898747).
 - A history row with no result of his own carries no empty pill (20c5fa4f). The pill line sits one line below the
   brief's 565 to 573 on the base, in the same row; simSoccerWorldTruth's history row region now ends at the row's
@@ -159,10 +167,22 @@ Final proof readings at the last head are in the closing report
 
 ## Owed
 - Small type this round shows but did not write (PhonePanel.tsx and InternationalPanel.tsx): the feed items at
-  text-[11px] (PR178's PhonePanel), the champions line text-[11px], the last tile's line text-[9px], the history
-  list's Back button h-8 (32 px).
+  text-[11px] (PR178's PhonePanel), the champions line text-[11px], the history list's Back button h-8 (32 px; the
+  walk prints "known small: the history list's Back is 32 px (h-8, owed)" at all three sizes, r1329-vf).
+- The last tournament tile's line is text-[9px], the base's class, and decision 4 names it as old small type to owe.
+  But its at home words ("Did not qualify", "Left out", "Watched from home", from summerAtHomeLine) are this round's
+  text (review m4, finding 9), and the tile's partner caption ("N played out") is 9 px as well, so lifting one alone
+  would leave an odd pair. For the lead to rule: lift both captions in a visual round (the panel rows of the eighth
+  inverse and the recorded tile markup move with it), or accept the owed line as written. The walk does not measure
+  this tile's font size.
 - The tournament card's Qualifying and Squad tiles, and the group table, still show his nation's simulated run in a
-  summer that happened; this round's rule covers the winner only.
+  summer that happened; this round's rule covers the winner only. Same class as the winner (a result of a real
+  edition the game made up; review m5, finding 10, read a 2006 England card that does not match the real group), so
+  keep it near the top of F13b.
+- Weight: /soccer-career reads 829.5K gz against Release BC's 830K row on the merged head (sweepWeight green,
+  r1329-fx-f; nothing under src moved after it), 829.4K before the merge (r1329-fx-e). Round 1330 also changes the
+  flagship's chunk, so the two rounds must be measured together on one tree before a train takes both; never by
+  editing the row.
 
 - F13b: sourced history (soccerWorldHistory.ts) for champions, cups, top scorers and transfers of seasons that
   happened; the repo already sources the 2026 World Cup (src/data/wc2026Results.ts) and the 2025-26 European tables
