@@ -1,0 +1,2 @@
+headsha: git log --oneline -2
+notes: MANAGER_NOTES_CORE_REF=HEAD MANAGER_NOTES_PHASE=fixed MANAGER_NOTES_OUT=/tmp/mn1 NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/qualifyManagerNoteSnapshots.mjs
