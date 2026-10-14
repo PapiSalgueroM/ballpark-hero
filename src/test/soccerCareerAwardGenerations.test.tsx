@@ -47,12 +47,13 @@ import fs from 'node:fs';
 import * as E from '@/lib/soccerCareerEngine';
 import { revealBallonDorResult } from '@/lib/soccerAwardReveal';
 import { revealAfter } from '@/components/club-manager/Celebration';
-import { isSoccerCareerSave } from '@/lib/soccerCareerSave';
+import { isSoccerCareerSave, parseSoccerCareerSave } from '@/lib/soccerCareerSave'; /* Release BE: a long save is packed (m8), read it as the game does */
 import { recordCompletion } from '@/lib/completions';
 import { careerStep } from '../../scripts/lib/careerStep.mjs';
 import SoccerCareer from '@/pages/SoccerCareer';
 
 type Saved = Record<string, any>;
+const readSave = (raw: string) => parseSoccerCareerSave(raw) as Saved;
 const KEY = 'soccerCareerSave', OTHER = 'award-generation-unrelated-save';
 const copy = <T,>(v: T): T => JSON.parse(JSON.stringify(v));
 const actualRandom = Math.random;
@@ -189,14 +190,14 @@ describe('Soccer Career generated-candidate save boundaries', () => {
     expect(isSoccerCareerSave(value)).toBe(true); expect(draws).toHaveLength(start);
     const first = await open(raw);
     expect(first.view.queryByText('TEST: route crashed')).toBeNull(); expect(first.view.queryByRole('alert')).toBeNull();
-    const rawAfter = localStorage.getItem(KEY)!, loaded = JSON.parse(rawAfter);
+    const rawAfter = localStorage.getItem(KEY)!, loaded = readSave(rawAfter);
     row.rawAfter = rawAfter; row.actualLoadDraws = copy(draws.slice(start));
     expect(loaded).toEqual(expectedLoad.output); expect(draws).toHaveLength(start);
     expect(loaded.generatedBallonPool).toEqual(value.generatedBallonPool); expect(loaded.pendingBallonDor).toEqual(value.pendingBallonDor);
     expect(loaded.seasons).toEqual(value.seasons); expect(loaded.awards).toEqual(value.awards);
     const firstWrites = copy(first.writes.mock.calls), firstRemoves = copy(first.removes.mock.calls), firstDraws = copy(draws), firstDOM = first.view.container.innerHTML;
     cleanup(); first.writes.mockRestore(); first.removes.mockRestore();
-    const second = await open(rawAfter), rawAfterReload = localStorage.getItem(KEY)!, reloaded = JSON.parse(rawAfterReload);
+    const second = await open(rawAfter), rawAfterReload = localStorage.getItem(KEY)!, reloaded = readSave(rawAfterReload);
     const expectedReload = modelCall('repairCareer-reload', loaded, E.repairCareer);
     Object.assign(row, { rawAfterReload, expectedReload, firstWrites, firstRemoves, secondWrites: copy(second.writes.mock.calls), secondRemoves: copy(second.removes.mock.calls), firstDraws, allDraws: copy(draws), firstDOM, secondDOM: second.view.container.innerHTML });
     expect(reloaded).toEqual(expectedReload.output); expect(rawAfterReload).toBe(rawAfter); expect(expectedReload.draws).toEqual([]); expect(draws).toHaveLength(start);
@@ -208,7 +209,7 @@ describe('Soccer Career generated-candidate save boundaries', () => {
       const revealStart = draws.length, expectedReveal = modelCall('revealBallonDorResult', reloaded, revealBallonDorResult);
       const revealMs = Math.ceil((revealAfter(reloaded.pendingBallonDor.nominees.length, .75) + .24) * 1000);
       await act(async () => { vi.advanceTimersByTime(revealMs + 1); await Promise.resolve(); });
-      let rawAction = localStorage.getItem(KEY)!, actual = JSON.parse(rawAction);
+      let rawAction = localStorage.getItem(KEY)!, actual = readSave(rawAction);
       row.callbacks.push({ id: 'reveal', expected: expectedReveal, rawBefore: rawAfterReload, rawAfter: rawAction, actual, draws: copy(draws.slice(revealStart)), writes: copy(second.writes.mock.calls), removes: copy(second.removes.mock.calls), dom: second.view.container.innerHTML, revealMs });
       expect(actual).toEqual(expectedReveal.output); expect(draws.slice(revealStart).map(d => d.value)).toEqual(expectedReveal.draws.map(d => d.value));
       expect(actual.generatedBallonPool).toEqual(value.generatedBallonPool); expect(actual.seasons).toEqual(value.seasons);
@@ -219,7 +220,7 @@ describe('Soccer Career generated-candidate save boundaries', () => {
         const option = E.SOCCER_BDOR_SPEECHES.find(o => o.id === 'tears')!;
         const button = [...ceremony!.querySelectorAll('button')].find(b => b.textContent?.includes(option.label)); expect(button).toBeDefined();
         await act(async () => { fireEvent.click(button!); await Promise.resolve(); });
-        rawAction = localStorage.getItem(KEY)!; actual = JSON.parse(rawAction);
+        rawAction = localStorage.getItem(KEY)!; actual = readSave(rawAction);
         row.callbacks.push({ id: 'speech', expected: expectedSpeech, rawBefore: beforeSpeech, rawAfter: rawAction, actual, draws: copy(draws.slice(speechStart)), writes: copy(second.writes.mock.calls), removes: copy(second.removes.mock.calls), dom: second.view.container.innerHTML });
         expect(actual).toEqual(expectedSpeech.output); expect(draws.slice(speechStart).map(d => d.value)).toEqual(expectedSpeech.draws.map(d => d.value));
       }
@@ -227,7 +228,7 @@ describe('Soccer Career generated-candidate save boundaries', () => {
       const currentCeremony = second.view.container.querySelector(`[data-award-night="${E.SOCCER_BALLON_DOR.award.id}"]`)!;
       const continueButton = [...currentCeremony.querySelectorAll('button')].find(b => b.textContent?.trim() === 'Continue →'); expect(continueButton).toBeDefined();
       await act(async () => { fireEvent.click(continueButton!); await Promise.resolve(); });
-      const rawDismissed = localStorage.getItem(KEY)!, dismissed = JSON.parse(rawDismissed);
+      const rawDismissed = localStorage.getItem(KEY)!, dismissed = readSave(rawDismissed);
       row.callbacks.push({ id: 'dismiss', expected: expectedDismiss, rawBefore: beforeDismiss, rawAfter: rawDismissed, actual: dismissed, draws: copy(draws.slice(dismissStart)), writes: copy(second.writes.mock.calls), removes: copy(second.removes.mock.calls), dom: second.view.container.innerHTML });
       expect(dismissed).toEqual(expectedDismiss.output); expect(draws.slice(dismissStart).map(d => d.value)).toEqual(expectedDismiss.draws.map(d => d.value));
       expect(dismissed.generatedBallonPool).toEqual(value.generatedBallonPool); expect(dismissed.seasons).toEqual(value.seasons); expect(dismissed.pendingBallonDor).toBeNull();
@@ -238,7 +239,7 @@ describe('Soccer Career generated-candidate save boundaries', () => {
       const oldPrime = copy(value); delete oldPrime.primeType;
       const migrationStart = draws.length, migrationRaw = JSON.stringify(oldPrime), expectedMigration = modelCall('existing-primeType-migration', oldPrime, E.repairCareer);
       expect(expectedMigration.draws).toHaveLength(1);
-      const migratedPage = await open(migrationRaw), rawMigrated = localStorage.getItem(KEY)!, migrated = JSON.parse(rawMigrated);
+      const migratedPage = await open(migrationRaw), rawMigrated = localStorage.getItem(KEY)!, migrated = readSave(rawMigrated);
       row.primeMigration = { qualification: 'Existing absent-primeType migration draws once. It does not generate a candidate.', input: oldPrime, rawBefore: migrationRaw, rawAfter: rawMigrated, expected: expectedMigration, actual: migrated, draws: copy(draws.slice(migrationStart)), writes: copy(migratedPage.writes.mock.calls), removes: copy(migratedPage.removes.mock.calls), dom: migratedPage.view.container.innerHTML };
       expect(migrated).toEqual(expectedMigration.output); expect(draws.slice(migrationStart).map(d => d.value)).toEqual(expectedMigration.draws.map(d => d.value));
       expect(migrated.generatedBallonPool).toBeUndefined(); expect(migrated.pendingBallonDor).toEqual(value.pendingBallonDor);
@@ -265,7 +266,7 @@ describe('Soccer Career generated-candidate save boundaries', () => {
     const first = await open(raw);
     row.actualLoadDraws = copy(draws.slice(beforeValidation)); expect(draws).toHaveLength(beforeValidation);
     expect(first.view.queryByText('TEST: route crashed')).toBeNull(); expect(first.view.queryByRole('alert')).toBeNull();
-    const rawAfter = localStorage.getItem(KEY)!; expect(JSON.parse(rawAfter)).toEqual(expectedLoad.output);
+    const rawAfter = localStorage.getItem(KEY)!; expect(readSave(rawAfter)).toEqual(expectedLoad.output);
     const firstWrites = copy(first.writes.mock.calls), firstRemoves = copy(first.removes.mock.calls), firstDOM = first.view.container.innerHTML;
     cleanup(); first.writes.mockRestore(); first.removes.mockRestore();
     const second = await open(rawAfter), rawAfterReload = localStorage.getItem(KEY);
