@@ -123,6 +123,9 @@ try {
     assert(fixtures.some(row => S.serializeSoccerCareerSave(JSON.parse(row.raw)) !== row.raw), 'plain control changed the actual serialization');
   }
   const report = { control: CONTROL || null, codecPresent: hasCodec, careers: 12, fixtures: fixtures.length, genuineLarge, packed, parity, originalMax, storedMax, limit: LIMIT, failures, rows };
+  console.log(`Played ${report.careers} complete careers: ${fixtures.length} actual phase saves, ${genuineLarge} originally over ${LIMIT}, ${packed} compact histories.`);
+  console.log(`Largest original ${originalMax} characters, largest stored ${storedMax}, unchanged cap ${LIMIT}: ${failures.length} size failures.`);
+  console.log(`Exact whole-JSON restoration and metadata held for ${fixtures.length} saves; ${parity} following engine steps and draw counts matched.`);
   console.log('SOCCER_SAVE_SIZE ' + JSON.stringify(report));
   if (process.env.SC_SAVE_OUT) fs.writeFileSync(path.join(path.resolve(process.env.SC_SAVE_OUT), 'report.json'), JSON.stringify(report, null, 2));
   if (EXPECT_RED) {
