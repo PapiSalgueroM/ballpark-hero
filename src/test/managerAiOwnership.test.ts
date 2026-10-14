@@ -129,7 +129,7 @@ describe('Manager AI completed-deal ownership', () => {
     assertCurrentOwner(prepared.state, next, prepared.card, prepared.buyer);
   });
   it('missing actual January window records its completed buyers', () => {
-    activeCase = 'missing actual January window records its completed buyers'; let current = fresh(), previous: CareerState | null = null;
+    activeCase = 'missing actual January window records its completed buyers'; let current = frame('startCareer', null, repeat(8192), () => E.startCareer('Manchester City'), false), previous: CareerState | null = null;
     let opened = false;
     for (let step = 0; step < 96; step++) {
       const before = current, result = frame('playNextEntry:' + (step + 1), before, repeat(16384),
