@@ -964,17 +964,18 @@ export const CM_ERAS: CMEra[] = [
      Bundesliga, Serie A and Ligue 1; ESPN, Dale Johnson, 4 August 2022,
      espn.com/soccer/story/_/id/37630254), three in the Premier League (Sky
      Sports 12062269, 4 September 2020: "three replacements from seven";
-     ESPN 37585852, 6 August 2020; NBC Sports, 17 December 2020). The engine
-     allows three changes a match in every league (MAX_SUBS in
-     clubManager.ts), so the card says that too and promises nothing the
-     match does not apply. */
+     ESPN 37585852, 6 August 2020; NBC Sports, 17 December 2020). Round 1331:
+     the engine now plays each league's own rule by season (subsRuleFor in
+     clubManagerSubsRule.ts, sourced in scripts/data/cmSubsRuleSources.json),
+     so the card says the matches follow it; simEra2020 section 8 holds the
+     card's numbers to the engine's. */
   {
     id: 'era2020',
     label: seasonLabel(2020),
     startYear: 2020,
     emoji: '\u{1F3DF}\u{FE0F}',
     blurb: 'Haaland and Bellingham at Dortmund, Mbappé and Neymar at PSG, Bruno at United, Lewandowski at Bayern. All of the big five, 2020-21.',
-    get honesty() { return `Real data. ${eraPlayersPhrase('era2020')} with their real 2020 ages and values, all 98 clubs of the 2020-21 Premier League, La Liga, Serie A, Bundesliga and Ligue 1, a season played mostly in empty stadiums. Spain, Italy, Germany and France let a side make five changes that year while the Premier League stayed at three; every match here allows three. Summer 2020 moves are made where a dated record shows them and the next season's data agrees. A man who left for a club the data can't confirm is left out rather than guessed, and a mover no record covered still sits at his old club. Thin squads are padded with made up youth players and say so.`; },
+    get honesty() { return `Real data. ${eraPlayersPhrase('era2020')} with their real 2020 ages and values, all 98 clubs of the 2020-21 Premier League, La Liga, Serie A, Bundesliga and Ligue 1, a season played mostly in empty stadiums. Spain, Italy, Germany and France let a side make five changes in three stoppages that year while the Premier League stayed at three, and the matches here follow the same rule. Summer 2020 moves are made where a dated record shows them and the next season's data agrees. A man who left for a club the data can't confirm is left out rather than guessed, and a mover no record covered still sits at his old club. Thin squads are padded with made up youth players and say so.`; },
   },
   {
     id: 'era2015',

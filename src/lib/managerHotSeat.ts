@@ -291,6 +291,29 @@ export interface HotSeatSetup {
   seed: number;
   /** The Eastern day this is the daily for, or absent in free play. */
   daily?: string;
+  /** Round 1331: a free run started on a build that plays the match rules of Round 1331 (five changes
+   *  in three stoppages where the league and season had it, the press asking about the next match).
+   *  Only the number 1331 counts; a run without it (every free run in flight on the release day)
+   *  replays on the base rules for ever. Dailies ignore it and go by their date (rulesOf). */
+  rules?: 1331;
+}
+
+/**
+ * Round 1331: the first daily that plays the Round 1331 match rules. A day replays from its seed and its
+ * choices every time it is opened, so a rule that moves a match would rewrite every day already played
+ * and change the day the release lands mid day. A daily dated before this plays the base rules (three
+ * changes everywhere, the press asking the old way) exactly as it did; every daily from this date on plays
+ * the current ones. Set a week and a bit out on purpose: the release has to land before it (the lead may
+ * move it later if the release slips, never earlier than the release day). scripts/simDailyDeals.mjs
+ * proves every earlier date replays and holds this to a date after the round's base commit.
+ */
+export const HOT_SEAT_RULES_FROM = '2026-10-24';
+
+/** Round 1331: the match rules a run plays: 'base' for a daily dated before HOT_SEAT_RULES_FROM or a free
+ *  run without the 1331 stamp, undefined (the current rules) otherwise. */
+export function rulesOf(setup: HotSeatSetup): CareerState['matchRules'] {
+  if (setup.daily) return setup.daily < HOT_SEAT_RULES_FROM ? 'base' : undefined;
+  return setup.rules === 1331 ? undefined : 'base';
 }
 
 export type HotSeatAction =
@@ -500,6 +523,12 @@ function startOnStaticWorld(setup: HotSeatSetup): HotSeatRun {
      writes it a ledger (recordActualRosterTransfer). scripts/simDailyDeals.mjs holds this: its seed control
      puts this line back out. */
   delete s.worldSeed;
+  /* Round 1331: and the match rules the day plays, set before the first week (rulesOf). A day on the base
+     rules carries matchRules 'base', which the engine reads at exactly two places (the substitution rule
+     and the press fixture); handoverState takes it off again. scripts/simDailyDeals.mjs (rulesall) and
+     scripts/simCmSubs.mjs (section hotseat, control nodate) hold this. */
+  const rules = rulesOf(setup);
+  if (rules) s.matchRules = rules;
   const rounds = leagueRounds(s);
   const lastWeek = Math.max(HOT_SEAT_TAKEOVER_MIN, Math.min(HOT_SEAT_TAKEOVER_MAX, rounds - HOT_SEAT_LEASH - 1));
   let best: { state: CareerState; formPts: number; week: number } | null = null;
@@ -816,6 +845,8 @@ export function existingClubManagerSave(): ExistingClubManagerSave | null {
  *  the job opened were his, the way Club Manager's own takeovers clear them. */
 export function handoverState(run: HotSeatRun): CareerState {
   const copy = JSON.parse(JSON.stringify(run.state)) as CareerState;
+  /* Round 1331: a career carried on plays Club Manager's current rules, whatever rules the day played. */
+  delete copy.matchRules;
   const from = run.takeover.calendarWeek;
   if (Array.isArray(copy.inbox)) copy.inbox = copy.inbox.filter(m => !(typeof m.week === 'number' && m.week < from));
   return copy;
