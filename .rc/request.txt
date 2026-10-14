@@ -1,0 +1,7 @@
+# Release BD gate, lane V3: Round 1328 hub lines, base = BD head without 1328 keeping the two hooks 1330 imports (useArrivalTop.ts, useRevealScroll.ts)
+#!serve
+#!playwright
+#!serial
+base-minus1328k2: bash .rc/x/basesrv.sh f14ec63a 7073ed74 4174 nobuild && git show HEAD:src/hooks/useArrivalTop.ts > /tmp/wt-4174/src/hooks/useArrivalTop.ts && git show HEAD:src/hooks/useRevealScroll.ts > /tmp/wt-4174/src/hooks/useRevealScroll.ts && bash .rc/x/basesrv.sh f14ec63a 7073ed74 4174
+hub-walk-full: mkdir -p "$TMPDIR/out" && RC_OUT="$TMPDIR/out" HEAD_URL=http://localhost:4173 BASE_URL=http://localhost:4174 node scripts/playCmHubLanding.mjs 2>&1 | tee "$TMPDIR/ctl.log"; s=${PIPESTATUS[0]}; [ $s -eq 0 ] && grep -qE 'playCmHubLanding: green \(.*D [1-9][0-9]* pass 0 fail' "$TMPDIR/ctl.log"
+ctl-hub-drift: mkdir -p "$TMPDIR/out" && RC_OUT="$TMPDIR/out" HEAD_URL=http://localhost:4173 BASE_URL=http://localhost:4174 HUB_LANDING_SECTIONS=D HUB_LANDING_CONTROL=drift node scripts/playCmHubLanding.mjs 2>&1 | tee "$TMPDIR/ctl.log"; s=${PIPESTATUS[0]}; [ $s -eq 1 ] && grep -qE 'playCmHubLanding: CONTROL drift FIRED, [1-9][0-9]* D check\(s\) went red' "$TMPDIR/ctl.log"
