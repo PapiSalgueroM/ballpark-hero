@@ -1,0 +1,5 @@
+#!build
+#!playwright
+#!serial
+usc: node scripts/simUsCareerSummer.mjs
+cmp6: bash .rc/x/cmp.sh simAuthSave simCareerSeasonTruth simGuessFinish simLeaderboardCache simMobileChrome simNbaChainNames simRarityPools simSchemaNames simSoccerConquest simTactics simWhoAmIAccuracy simWindow2026Integration 
