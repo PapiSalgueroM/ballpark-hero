@@ -12,7 +12,7 @@ jobs:
       CI: '1'
       SIM_NETWORK: offline
       ENGINES: chromium
-      PITCH_RESTART_PHASE: baseline
+      PITCH_RESTART_PHASE: fixed
       PITCH_RESTART_OUT: ${{ github.workspace }}/pitch-restart-artifacts
       FREE_KICK_FONT_CACHE: ${{ github.workspace }}/pitch-restart-artifacts/font-cache
       PRERENDER_ONLY: /club-manager,/soccer-career
@@ -33,7 +33,7 @@ jobs:
           echo '127.0.0.1 flawuiqbvjobmkfkauhw.supabase.co' | sudo tee -a /etc/hosts
           mkdir -p "$PITCH_RESTART_OUT"
           git rev-parse HEAD > "$PITCH_RESTART_OUT/head.txt"
-          git diff --exit-code 082fc2774c8aa9f919c14efa33bfc3fbfc599597 -- src scripts .github/workflows package.json package-lock.json bun.lock index.html ':!src/components/pitch-motion/motion.tsx' ':!src/test/pitchRestartContinuity.test.tsx' ':!scripts/simPitchRestartContinuity.mjs' ':!.github/workflows/pitch-restart-continuity.yml' > "$PITCH_RESTART_OUT/parent-holds.log"
+          git diff --exit-code 082fc2774c8aa9f919c14efa33bfc3fbfc599597 -- src scripts .github/workflows package.json package-lock.json bun.lock index.html ':!src/components/pitch-motion/motion.tsx' ':!src/test/pitchRestartContinuity.test.tsx' ':!scripts/simPitchRestartContinuity.mjs' ':!scripts/playPitchRestartContinuity.mjs' ':!.github/workflows/pitch-restart-continuity.yml' > "$PITCH_RESTART_OUT/parent-holds.log"
           if test "$PITCH_RESTART_PHASE" = baseline; then
             git diff --exit-code 082fc2774c8aa9f919c14efa33bfc3fbfc599597 -- src/components/pitch-motion/motion.tsx
           fi
@@ -114,9 +114,9 @@ jobs:
           NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" npm run build:seo 2>&1 | tee "$PITCH_RESTART_OUT/build.log"
           cp scripts/data/lastmod.json "$PITCH_RESTART_OUT/build-lastmod.json"
           git diff -- scripts/data/lastmod.json > "$PITCH_RESTART_OUT/build-lastmod.diff"
-      - name: Every rebuilt-site reader and original save caps
+      - name: Actual browser restart coordinates on phone and desktop
         if: env.PITCH_RESTART_PHASE == 'fixed'
-        run: ONLY=simClubManagerSaveSize,simClubManagerSlots,simCreation,simFlagshipWeight,simAdsense,simBrand,simHeadTags,simHiddenPages,simHubs,simIndexNow,simIndexing,simInternalLinks,simNoRivalNames,simPrerender,simPrerenderBoot,simRetiredRoutes,simSchema,simSitemap,simSnapshotAssets node scripts/runAllSims.mjs --browser 2>&1 | tee "$PITCH_RESTART_OUT/readers.log"
+        run: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playPitchRestartContinuity.mjs 2>&1 | tee "$PITCH_RESTART_OUT/browser.log"
       - name: Original 604 and 830 route download ceilings
         if: env.PITCH_RESTART_PHASE == 'fixed'
         run: |
@@ -128,6 +128,9 @@ jobs:
             sleep 1
           done
           BASE=http://127.0.0.1:4173 SWEEP_OFFLINE=1 NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/sweepWeight.mjs 2>&1 | tee "$PITCH_RESTART_OUT/weights.log"
+      - name: Every rebuilt-site reader and original save caps
+        if: env.PITCH_RESTART_PHASE == 'fixed'
+        run: ONLY=simClubManagerSaveSize,simClubManagerSlots,simCreation,simFlagshipWeight,simAdsense,simBrand,simHeadTags,simHiddenPages,simHubs,simIndexNow,simIndexing,simInternalLinks,simNoRivalNames,simPrerender,simPrerenderBoot,simRetiredRoutes,simSchema,simSitemap,simSnapshotAssets node scripts/runAllSims.mjs --browser 2>&1 | tee "$PITCH_RESTART_OUT/readers.log"
       - name: Final source and dependency holds
         if: always()
         run: |
