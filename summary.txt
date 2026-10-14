@@ -1,0 +1,4 @@
+build exit=0 32s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+matchScreen exit=0 5s | simMatchScreen: PASS. One match, two ways through it, and a report that names both clubs, shows the clock it ran to, splits the ball two ways and draws a graph that moves
+stoppage exit=0 24s | simCmStoppageTime: PASS. Goals fall in the board at a measured share without adding any, every line in a board says 45+N or 90+N wherever a minute is printed, extra time 
+sweepWeight exit=0 28s | sweepWeight: green. Every page is inside its budget, and the budgets came down this round.
