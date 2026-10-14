@@ -1,0 +1,22 @@
+# Release BF join, m1 (Round 1350 PR249 at 75e03f37) on 31e29961: type gate, the packet's units, its routine sim and three controls, and the harnesses that read the Life file, the page or the deck
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/test/soccerCareerRoutineEvents.test.ts src/test/soccerCareerLifeFollowups.test.ts src/test/careerDilemmaReach.test.tsx src/test/careerDilemmaSaves.test.tsx src/test/careerKeepPlaying.test.tsx src/test/careerStory.test.tsx src/test/soccerCareerSaveFence.test.tsx src/test/soccerCareerSaveRecovery.test.tsx src/test/soccerCareerSaveRetry.test.tsx src/test/soccerSavePackedReaders.test.tsx src/test/soccerCareerContracts.test.ts --testTimeout=300000 --hookTimeout=120000
+routine: CI=1 SIM_NETWORK=offline NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerCareerRoutineEvents.mjs
+routine-ctl-missing: CI=1 SIM_NETWORK=offline SC_ROUTINE_CONTROL=missing NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerCareerRoutineEvents.mjs > /tmp/rcm.log 2>&1; s=$?; tail -3 /tmp/rcm.log | cut -c1-220; [ $s = 0 ] && grep -q "Effective actual source control: missing" /tmp/rcm.log && grep -q "control missing: green" /tmp/rcm.log && echo FIRED-OK
+routine-ctl-priority: CI=1 SIM_NETWORK=offline SC_ROUTINE_CONTROL=priority NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerCareerRoutineEvents.mjs > /tmp/rcp.log 2>&1; s=$?; tail -3 /tmp/rcp.log | cut -c1-220; [ $s = 0 ] && grep -q "Effective actual source control: priority" /tmp/rcp.log && grep -q "control priority: green" /tmp/rcp.log && echo FIRED-OK
+routine-ctl-effect: CI=1 SIM_NETWORK=offline SC_ROUTINE_CONTROL=effect NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerCareerRoutineEvents.mjs > /tmp/rce.log 2>&1; s=$?; tail -3 /tmp/rce.log | cut -c1-220; [ $s = 0 ] && grep -q "Effective actual source control: effect" /tmp/rce.log && grep -q "control effect: green" /tmp/rce.log && echo FIRED-OK
+simCareerLife: node scripts/simCareerLife.mjs
+simCareerLifeCooldowns: node scripts/simCareerLifeCooldowns.mjs
+simCareerStory: node scripts/simCareerStory.mjs
+simCareerProgramme: node scripts/simCareerProgramme.mjs
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
+simCreation: node scripts/simCreation.mjs > /tmp/cr.log 2>&1; s=$?; grep -E "full career save|FAIL|PASSED" /tmp/cr.log | head -6; exit $s
+simAllocation: node scripts/simAllocation.mjs
+simSoccerDeckFairness: node scripts/simSoccerDeckFairness.mjs
+simSoccerWorldTruth: node scripts/simSoccerWorldTruth.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simSaveFence: node scripts/simSaveFence.mjs
+simCareerRecordedStats: node scripts/simCareerRecordedStats.mjs
+simCareerSeasonTruth: node scripts/simCareerSeasonTruth.mjs
+simCareerDilemmaReach: node scripts/simCareerDilemmaReach.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
