@@ -1,0 +1,3 @@
+continuity-base: R=$PWD; git worktree add -f /tmp/b1 dec9075b >/dev/null 2>&1 && cd /tmp/b1 && ln -s $R/node_modules node_modules && NODE_OPTIONS="--require=/tmp/b1/scripts/lib/offlineTransport.cjs" node scripts/simManagerWorldContinuity.mjs
+matchPlans-base: R=$PWD; git worktree add -f /tmp/b2 dec9075b >/dev/null 2>&1 && cd /tmp/b2 && ln -s $R/node_modules node_modules && MANAGER_MATCH_PLANS_CONTROL=all ONLY=simManagerMatchPlans node scripts/runAllSims.mjs
+unseeded-base: R=$PWD; git worktree add -f /tmp/b3 dec9075b >/dev/null 2>&1 && cd /tmp/b3 && ln -s $R/node_modules node_modules && node scripts/simCmUnseededWorld.mjs
