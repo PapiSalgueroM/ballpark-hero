@@ -1,0 +1,5 @@
+#!serial
+side-sha: git fetch -q origin r1331-et-opp:refs/remotes/origin/r1331-et-opp && git log --oneline -4 origin/r1331-et-opp && git merge-base --is-ancestor 196fd642 origin/r1331-et-opp && echo "196fd642 is an ancestor of origin/r1331-et-opp" && git diff --stat 196fd642 origin/r1331-et-opp | tail -8
+side-oppet: R=$PWD; W=/tmp/vside1; git worktree add -f $W origin/r1331-et-opp >/dev/null 2>&1; ln -s $R/node_modules $W/node_modules; cd $W && git log --oneline -1 && node scripts/simCmSubs.mjs --part=oppextratime,extratime
+side-etfrozen: R=$PWD; W=/tmp/vside2; git worktree add -f $W origin/r1331-et-opp >/dev/null 2>&1; ln -s $R/node_modules $W/node_modules; cd $W && git log --oneline -1 && SUBS_CONTROL=etfrozen node scripts/simCmSubs.mjs
+side-motion: R=$PWD; W=/tmp/vside3; git worktree add -f $W origin/r1331-et-opp >/dev/null 2>&1; ln -s $R/node_modules $W/node_modules; cd $W && git log --oneline -1 && node scripts/simLiveSimMotion.mjs
