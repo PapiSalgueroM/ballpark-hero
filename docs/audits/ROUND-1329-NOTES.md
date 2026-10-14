@@ -136,6 +136,11 @@ Final proof readings at the last head are in the closing report
 - simSoccerWorldTruth: section 4's old saves play on until the world ticks (9b45a4a7), section 2 plants the draw
   count of both lotteries (cb2c58e9), section 0 holds soccerWorldTruth.ts to literal constants and rules
   (25ca7a88), and the header carries the bands' readings (2a7863cb).
+- Gate runs of the review fixes (full account: C:/Users/antho/dukb-handoff/2026-10-10/results-g/fix-1329.md):
+  r1329-fx-d and r1329-fx-e on 7d5d1ec6 (every walk, the 24 rule fences, the 16 inverse importers with their
+  controls, all 16 simSoccerWorldTruth controls FIRED), r1329-fx-f on the merged head 6f54e704, r1329-fx-g on
+  c90309f0 (simCareerLeagueSeasons' 1329 arm and simHarnessAnchors green), r1329-fx-h (the engine readers fx-d did
+  not reach, all green) and r1329-fx-i (simUsCareerSummer green, 3,379 s, every section over 400 careers a sport).
 
 ## Deviations from the brief's hunk list, and why
 
