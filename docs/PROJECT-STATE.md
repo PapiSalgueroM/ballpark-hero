@@ -1,3 +1,7 @@
+## Codex Round1364: own-club current roster display proof preparation, 2026-10-14
+
+Clean codex/manager-current-rosters starts at current main082fc277. Anthony's new report supersedes the legacy Y1 display quirk: own-club details must list career.squad and its current value/XI, while rivals keep world rosters. New8-case unit/helper/baseline workflow only, with3 explicit legacy Boolean faults and5 preserves required before app edits. Actual release/catalog purchase/save loading, real era2015 and explicit empty presentation bind full render/state receipts. Future product scope is one own-name guard, orphan import removal/comment and the old third test expectation, with first2 cases and core/data/economics/market policy held. Current BC604/830 download and203000/532500 save budgets remain. Source/native preparation only, no local execution or runtime/merge/live qualification. Separate missing AI market ownership stays under the H core seam. See docs/audits/club-detail-current-roster-2026-10-14.md.
+
 ## Release BC LIVE, 2026-10-13 18:23 EDT: one tab can no longer wipe a Club Manager save, Club Manager's world remembers your deals, its tables, copy and hub fixed, Soccer Career's events drawn fairly, the shared event deck, the college athletic director
 
 Claude lane (session H). main c5534342, deployment 3cf3a2d7-244e-41ce-8c27-a89cebafcfe6, entry index-BFkO1jyo.js (was index-DaI30mwt.js, Release BB,
