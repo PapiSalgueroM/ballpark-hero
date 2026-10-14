@@ -1,5 +1,6 @@
 import { rollCareerChance } from "./careerChanceWheel";
 import { getSoccerRoutineEvents } from "./soccerCareerRoutineEvents";
+import { SOCCER_LIFE_CONSEQUENCES } from "./soccerCareerLifeConsequences";
 /* ────────────────────────────────────────────────────────────────────────────
    soccerCareerLife.ts, the life layer for Soccer Career (Round 49)
    Personalities, agents, and the expanded off-pitch event catalog (ids 200+).
@@ -232,9 +233,9 @@ export function getLifeEvents(state: CareerState): RandomEvent[] {
     push({ id: 205, cooldown: COOLDOWN.agent, emoji: "📱", title: "Ricky Posted Your Contract",
       description: "Cousin Ricky accidentally posted a screenshot of your full contract to his public story. The numbers are everywhere.",
       category: "negative", choices: [
-        { label: "Laugh it off", emoji: "😅", color: "bg-amber-600", consequence: "Followers +400k, dressing room teases you forever",
+        { label: "Laugh it off", emoji: "😅", color: "bg-amber-600", consequence: SOCCER_LIFE_CONSEQUENCES[205][0],
           apply: s => { s.socialMediaFollowers = Math.round((s.socialMediaFollowers + 0.4) * 100) / 100; s.morale = clamp(s.morale - 3, 0, 100); s.events = [...s.events, "📱 Ricky leaked your contract. The memes were incredible"]; return s; } },
-        { label: "Fire him", emoji: "🚪", color: "bg-red-600", consequence: "Represent yourself from now on, awkward family dinners",
+        { label: "Fire him", emoji: "🚪", color: "bg-red-600", consequence: SOCCER_LIFE_CONSEQUENCES[205][1],
           apply: s => { s.agentId = "self"; s.morale = clamp(s.morale - 5, 0, 100); s.events = [...s.events, "🚪 Fired Cousin Ricky. Thanksgiving will be tense"]; return s; } },
       ] });
   }
@@ -288,7 +289,7 @@ export function getLifeEvents(state: CareerState): RandomEvent[] {
       category: "life", choices: [
         { label: "Trademark it", emoji: "®️", color: "bg-emerald-600", consequence: "Sponsorship income +€300k/yr",
           apply: s => { s.sponsorBonus = Math.round(((s.sponsorBonus ?? 0) + 0.3) * 100) / 100; s.events = [...s.events, "®️ Trademarked your celebration. The merch prints money"]; return s; } },
-        { label: "Let the kids use it free", emoji: "❤️", color: "bg-blue-600", consequence: "Integrity +4, playgrounds everywhere copy you",
+        { label: "Let the kids use it free", emoji: "❤️", color: "bg-blue-600", consequence: SOCCER_LIFE_CONSEQUENCES[211][1],
           apply: s => { s.integrityBonus += 4; s.popularity = clamp(s.popularity + 4, 0, 100); s.events = [...s.events, "❤️ Kept the celebration free for every playground on earth"]; return s; } },
       ] });
   }
@@ -306,7 +307,7 @@ export function getLifeEvents(state: CareerState): RandomEvent[] {
     push({ id: 213, cooldown: COOLDOWN.personality, emoji: "🎤", title: "The One-Word Interview",
       description: "A reporter asks you eleven questions after the match. You answer all eleven with the word 'yes'. It becomes a meme format.",
       category: "life", choices: [
-        { label: "Yes", emoji: "🧊", color: "bg-blue-600", consequence: "Followers +500k, journalists hate it",
+        { label: "Yes", emoji: "🧊", color: "bg-blue-600", consequence: SOCCER_LIFE_CONSEQUENCES[213][0],
           apply: s => { s.socialMediaFollowers = Math.round((s.socialMediaFollowers + 0.5) * 100) / 100; s.popularity = clamp(s.popularity - 2, 0, 100); s.events = [...s.events, "🎤 The all-yes interview became a meme format"]; return s; } },
         { label: "Answer the twelfth question properly", emoji: "🎙️", color: "bg-muted", consequence: "Popularity +2, the meme loses its ending",
           apply: s => { s.popularity = clamp(s.popularity + 2, 0, 100); log(s, "🎙️ Eleven yeses and then a full sentence. The reporter nearly fainted"); return s; } },
@@ -318,7 +319,7 @@ export function getLifeEvents(state: CareerState): RandomEvent[] {
       category: "negative", choices: [
         { label: "Get in his face", emoji: "😤", color: "bg-red-600", consequence: "€200k fine, Physical +1 next season, defenders think twice now",
           apply: s => { s.netWorth = Math.round((s.netWorth - 0.2) * 100) / 100; s.statBoostNextSeason = { ...s.statBoostNextSeason, physical: (s.statBoostNextSeason.physical || 0) + 1 }; s.events = [...s.events, "🚇 Tunnel confrontation. Fined, feared, worth it"]; return s; } },
-        { label: "Stare. Say nothing. Walk away", emoji: "🥶", color: "bg-emerald-600", consequence: "Integrity +2, the stare goes viral anyway",
+        { label: "Stare. Say nothing. Walk away", emoji: "🥶", color: "bg-emerald-600", consequence: SOCCER_LIFE_CONSEQUENCES[214][1],
           apply: s => { s.integrityBonus += 2; s.socialMediaFollowers = Math.round((s.socialMediaFollowers + 0.3) * 100) / 100; s.events = [...s.events, "🥶 The tunnel stare went viral. Scarier than shouting"]; return s; } },
       ] });
   }
@@ -328,7 +329,7 @@ export function getLifeEvents(state: CareerState): RandomEvent[] {
       category: "negative", choices: [
         { label: "No regrets", emoji: "🌋", color: "bg-red-600", consequence: "Morale +8 (you needed that), €100k fine",
           apply: s => { s.morale = clamp(s.morale + 8, 0, 100); s.netWorth = Math.round((s.netWorth - 0.1) * 100) / 100; s.events = [...s.events, "🧃 Flipped the drinks cart. Honestly? Therapeutic"]; return s; } },
-        { label: "Buy the kit man a new cart, apologize", emoji: "🛒", color: "bg-blue-600", consequence: "Integrity +3, dressing room respect",
+        { label: "Buy the kit man a new cart, apologize", emoji: "🛒", color: "bg-blue-600", consequence: SOCCER_LIFE_CONSEQUENCES[215][1],
           apply: s => { s.integrityBonus += 3; s.morale = clamp(s.morale + 3, 0, 100); s.events = [...s.events, "🛒 Bought the kit man a top of the line cart. All good"]; return s; } },
       ] });
   }
@@ -346,7 +347,7 @@ export function getLifeEvents(state: CareerState): RandomEvent[] {
     push({ id: 217, cooldown: COOLDOWN.once, emoji: "🗞️", title: "The Tactics Column",
       description: "A newspaper offers you a weekly tactics column. Smart, respected, and guaranteed to annoy your manager whenever you analyze your own team.",
       category: "life", choices: [
-        { label: "Write it", emoji: "✍️", color: "bg-emerald-600", consequence: "Popularity +4, Morale -3 when the manager reads issue two",
+        { label: "Write it", emoji: "✍️", color: "bg-emerald-600", consequence: SOCCER_LIFE_CONSEQUENCES[217][0],
           apply: s => { s.popularity = clamp(s.popularity + 4, 0, 100); s.morale = clamp(s.morale - 3, 0, 100); s.events = [...s.events, "✍️ Your tactics column is a hit. The gaffer underlines things in red"]; return s; } },
         { label: "Keep the notes private", emoji: "🔒", color: "bg-muted", consequence: "The knowledge stays in-house",
           apply: s => { s.events = [...s.events, "🔒 Declined the column. Your notebook stays classified"]; return s; } },
@@ -356,8 +357,8 @@ export function getLifeEvents(state: CareerState): RandomEvent[] {
     push({ id: 218, cooldown: COOLDOWN.personality, emoji: "⛰️", title: "The Monastery Offseason",
       description: "You spent the entire offseason at a mountain monastery. No phone. No boots. Nobody knew where you were, including your club.",
       category: "life", choices: [
-        { label: "Return enlightened", emoji: "🧘", color: "bg-purple-600", consequence: "60%: all stats +1 next season. 40%: Pace -1, you mostly learned soup",
-          apply: s => { if (rollCareerChance(s, 0.6, "The Monastery Offseason", "Sharper after the retreat", "Pace drops by 1")) { s.statBoostNextSeason = { pace: 1, shooting: 1, passing: 1, dribbling: 1, defending: 1, physical: 1 }; s.events = [...s.events, "⛰️ Came back from the monastery visibly sharper. Spooky"]; } else { s.pace = clamp(s.pace - 1, 20, 99); s.events = [...s.events, "⛰️ The monastery taught you inner peace and excellent soup. Pace -1"]; } return s; } },
+        { label: "Return enlightened", emoji: "🧘", color: "bg-purple-600", consequence: SOCCER_LIFE_CONSEQUENCES[218][0],
+          apply: s => { if (rollCareerChance(s, 0.6, "The Monastery Offseason", "Sharper after the retreat", "Pace drops by 1")) { for (const key of ["pace", "shooting", "passing", "dribbling", "defending", "physical", "reflexes"] as const) bump(s, key, 1); s.events = [...s.events, "⛰️ Came back from the monastery visibly sharper. Spooky"]; } else { s.pace = clamp(s.pace - 1, 20, 99); s.events = [...s.events, "⛰️ The monastery taught you inner peace and excellent soup. Pace -1"]; } return s; } },
         { label: "Leave after a week, the silence was loud", emoji: "🔔", color: "bg-muted", consequence: "Morale +3, nothing else changes, the monks send a card",
           apply: s => { s.morale = clamp(s.morale + 3, 0, 100); log(s, "🔔 Lasted a week at the monastery. The card they sent is on your fridge"); return s; } },
       ] });
@@ -366,7 +367,7 @@ export function getLifeEvents(state: CareerState): RandomEvent[] {
     push({ id: 219, cooldown: COOLDOWN.once, emoji: "🦇", title: "The Cape Era",
       description: "You arrived at training in a full-length cape. When asked why, you said 'the wind'. You have worn it every day since.",
       category: "life", choices: [
-        { label: "Commit to the cape", emoji: "🦇", color: "bg-purple-600", consequence: "Followers +800k, coin flip on public opinion",
+        { label: "Commit to the cape", emoji: "🦇", color: "bg-purple-600", consequence: SOCCER_LIFE_CONSEQUENCES[219][0],
           apply: s => { s.socialMediaFollowers = Math.round((s.socialMediaFollowers + 0.8) * 100) / 100; if (rollCareerChance(s, 0.5, "The Cape Era", "The cape is loved", "The cape divides opinion")) { s.popularity = clamp(s.popularity + 6, 0, 100); s.events = [...s.events, "🦇 The cape era is beloved. Fans wear them to matches"]; } else { s.popularity = clamp(s.popularity - 3, 0, 100); s.events = [...s.events, "🦇 The cape era divides the nation. You do not care"]; } return s; } },
         { label: "Retire the cape", emoji: "🧥", color: "bg-muted", consequence: "The mystery deepens",
           apply: s => { s.events = [...s.events, "🧥 The cape vanished as suddenly as it appeared"]; return s; } },

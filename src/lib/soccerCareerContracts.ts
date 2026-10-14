@@ -1,3 +1,5 @@
+import { SOCCER_LIFE_CONSEQUENCES } from './soccerCareerLifeConsequences';
+
 interface ExtensionCareer {
   age: number;
   overall: number;
@@ -55,7 +57,7 @@ export function soccerWageDemand(career: ExtensionCareer) {
   };
 }
 
-/** Refresh only an unanswered money-talk label, including an older saved card. */
+/** Refresh an unanswered choice label, including an older saved card. */
 export function soccerEventChoiceConsequence(career: ExtensionCareer, eventId: number, choiceIndex: number, saved: string) {
-  return eventId === 16 && choiceIndex === 1 ? soccerWageDemand(career).consequence : saved;
+  return eventId === 16 && choiceIndex === 1 ? soccerWageDemand(career).consequence : SOCCER_LIFE_CONSEQUENCES[eventId]?.[choiceIndex] ?? saved;
 }
