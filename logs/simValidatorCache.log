@@ -1,0 +1,21 @@
+1) cells never stored as a pair are answered without the AI
+   Angel Di Maria / Argentine x Played for PSG  ->  no answer
+   Angel Di Maria / Argentine x South American Nationality  ->  no answer
+   Angel Di Maria / Argentine x Played in the Premier League  ->  no answer
+   0 of 3 answered without spending quota
+  FAIL: 3 cell(s) had no reusable attribute facts. Either the function stopped consulting the cache, or these probe cells are stale because the boards changed.
+2) whatever it answers, it remembers
+   asked twice: first live, second NOT cached
+  FAIL: the same cell asked twice did not come back from cache the second time, so answers are being paid for repeatedly
+3) a refusal says which kind of refusal it is
+   deployed source distinguishes an exhausted day: flag=true, message=true
+4) classic-8 has a verified, no-quota answer in every cell
+   ledger: 42/42 cells, 42 pair verdicts, 84 attribute facts, 0 evidence problem(s)
+   migration: 42/42 pairs and 84/84 attributes present, only true verdicts
+   outage fixture: 42/42 cells still answer from verified cache
+   distinct-player proof: 42/42 cells can use different names
+  FAIL: live edge did not return the verified cache hit for Virgil van Dijk at Active Player (as of 2025-26) x Played for Liverpool: no response
+   stopped live probes at the first cache miss so an unapplied migration cannot spend the AI quota
+  FAIL: could not check classic-8 candidates against player_market_values: fetch failed
+
+simValidatorCache: 4 failures

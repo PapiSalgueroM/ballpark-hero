@@ -1,0 +1,14 @@
+1) Every lineup is structurally sound, every blank sits in its own slot, one man has one spelling
+   207 lineups swept, 864 distinct starters
+2) The Atalanta second leg stays the real 3-5-2, pinned against the teamsheet
+3) The guess check takes case and accent variants, not just exact strings
+4) A verified database alias is accepted, keys as the same try, and no other starter passes
+   10 aliased candidates checked
+5) The surname hint names the family name and counts its letters only
+   surname hints checked on every candidate, 1 pinned
+6) Every lineup equals its two host ledger (scripts/data/missingXiVerified2026-10)
+   207 ledger rows: 207 elevens matched, 869 applied changes in place, 0 held under rule 6
+7) A held lineup is never dealt, and skipping it moves no other day
+   0 held in the ledger, 0 in the code; over 1500 days 0 landed on a held lineup, 0 days moved in all; Unlimited drew a held lineup 0 times in 4000
+
+simMissingXi: all green
