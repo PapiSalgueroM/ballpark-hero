@@ -1,0 +1,21 @@
+# Release BF join, m3 on 80084c4b: type gate, units, simSoccerCareerPendingLife and its controls, the earlier chain sims, and the Life readers
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/test/soccerCareerPendingLife.test.ts src/test/soccerCareerLifeReviews.test.ts src/test/soccerCareerRoutineEvents.test.ts src/test/soccerCareerLifeFollowups.test.ts src/test/careerDilemmaReach.test.tsx src/test/careerStory.test.tsx --testTimeout=300000 --hookTimeout=120000
+simSoccerCareerPendingLife: CI=1 SIM_NETWORK=offline NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerCareerPendingLife.mjs
+simSoccerCareerPendingLife-ctl-missing: CI=1 SIM_NETWORK=offline SC_PENDING_LIFE_CONTROL=missing NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerCareerPendingLife.mjs > /tmp/c-missing.log 2>&1; s=$?; tail -3 /tmp/c-missing.log | cut -c1-220; [ $s = 0 ] && grep -q "^Effective" /tmp/c-missing.log && grep -q "^simSoccerCareerPendingLife missing: green" /tmp/c-missing.log && echo FIRED-OK
+simSoccerCareerPendingLife-ctl-profile: CI=1 SIM_NETWORK=offline SC_PENDING_LIFE_CONTROL=profile NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerCareerPendingLife.mjs > /tmp/c-profile.log 2>&1; s=$?; tail -3 /tmp/c-profile.log | cut -c1-220; [ $s = 0 ] && grep -q "^Effective" /tmp/c-profile.log && grep -q "^simSoccerCareerPendingLife profile: green" /tmp/c-profile.log && echo FIRED-OK
+simSoccerCareerPendingLife-ctl-draw: CI=1 SIM_NETWORK=offline SC_PENDING_LIFE_CONTROL=draw NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerCareerPendingLife.mjs > /tmp/c-draw.log 2>&1; s=$?; tail -3 /tmp/c-draw.log | cut -c1-220; [ $s = 0 ] && grep -q "^Effective" /tmp/c-draw.log && grep -q "^simSoccerCareerPendingLife draw: green" /tmp/c-draw.log && echo FIRED-OK
+simSoccerCareerPendingLife-ctl-rate: CI=1 SIM_NETWORK=offline SC_PENDING_LIFE_CONTROL=rate NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerCareerPendingLife.mjs > /tmp/c-rate.log 2>&1; s=$?; tail -3 /tmp/c-rate.log | cut -c1-220; [ $s = 0 ] && grep -q "^Effective" /tmp/c-rate.log && grep -q "^simSoccerCareerPendingLife rate: green" /tmp/c-rate.log && echo FIRED-OK
+simSoccerCareerRoutineEvents: CI=1 SIM_NETWORK=offline NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerCareerRoutineEvents.mjs
+simSoccerCareerLifeReviews: CI=1 SIM_NETWORK=offline NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerCareerLifeReviews.mjs
+simCareerLife: node scripts/simCareerLife.mjs
+simCareerLifeCooldowns: node scripts/simCareerLifeCooldowns.mjs
+simCareerStory: node scripts/simCareerStory.mjs
+simCareerProgramme: node scripts/simCareerProgramme.mjs
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simCareerDilemmaReach: node scripts/simCareerDilemmaReach.mjs
+simSoccerDeckFairness: node scripts/simSoccerDeckFairness.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+worldTruth: export WORLD_TRUTH_BASE_FROM_HEAD=$(git diff --name-only 4ae7a534 HEAD -- src/lib | grep -v "\.test\." | paste -sd, -); node scripts/simSoccerWorldTruth.mjs
+simCreation: node scripts/simCreation.mjs > /tmp/cr.log 2>&1; s=$?; grep -E "full career save|FAIL|PASSED" /tmp/cr.log | head -6; exit $s
