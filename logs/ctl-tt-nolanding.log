@@ -1,0 +1,15 @@
+fixtures: Brighton 55840 chars, Everton 54114 chars, Hot Seat survivor Arsenal (survived, 9 actions)
+== 320x640
+3) HOT SEAT carry on beside a Club Manager tab, and 4) LANDING (320x640)
+   A held "Brighton week 1, 1 results, last Aston Villa 2-2"; B handed over "Arsenal week 26, 26 results, last Hull City 2-0" and landed on the managers screen; A saw it: true; after A left "Arsenal week 26, 26 results, last Hull City 2-0"
+  FAIL [case 4]: the carry on landed on the managers screen, one press short
+== 390x844
+3) HOT SEAT carry on beside a Club Manager tab, and 4) LANDING (390x844)
+   A held "Brighton week 1, 1 results, last Aston Villa 1-1"; B handed over "Arsenal week 26, 26 results, last Hull City 2-0" and landed on the managers screen; A saw it: true; after A left "Arsenal week 26, 26 results, last Hull City 2-0"
+  FAIL [case 4]: the carry on landed on the managers screen, one press short
+== 1280x900
+3) HOT SEAT carry on beside a Club Manager tab, and 4) LANDING (1280x900)
+   A held "Brighton week 1, 1 results, last Aston Villa 5-2"; B handed over "Arsenal week 26, 26 results, last Hull City 2-0" and landed on the managers screen; A saw it: true; after A left "Arsenal week 26, 26 results, last Hull City 2-0"
+  FAIL [case 4]: the carry on landed on the managers screen, one press short
+cases red: 4; pictures in /home/runner/work/_temp/t-ctl-tt-nolanding/out
+CONTROL FIRED: TWO_TABS_CONTROL=nolanding dropped 3 writes and turned case(s) 4 red
