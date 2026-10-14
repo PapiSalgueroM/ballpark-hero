@@ -1,0 +1,10 @@
+#!build
+#!playwright
+headsha: git log --oneline -2
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node_modules/.bin/vitest run src/test/managerHalftimeLineups.test.tsx src/test/managerLiveLineups.test.ts src/test/managerHalftimeLineupsSubsRule.test.ts src/lib/clubManagerSubsRule.test.ts src/test/liveSimMotion.test.tsx --testTimeout=300000 --hookTimeout=120000
+htLineups: CM_HT_PARENT_REF=491c10d3 CM_HT_LINEUPS_OUT="$PWD/ht1" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simManagerHalftimeLineups.mjs
+htLineups-ctl-original: CM_HT_PARENT_REF=491c10d3 CM_HT_LINEUPS_OUT="$PWD/ht2" CM_HT_LINEUPS_CONTROL=original NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simManagerHalftimeLineups.mjs > /tmp/ht.log 2>&1; s=$?; tail -2 /tmp/ht.log | cut -c1-200; [ $s = 0 ] && grep -q "simManagerHalftimeLineups original: green" /tmp/ht.log && echo FIRED-OK
+liveLineups: CM_HT_PARENT_REF=491c10d3 CM_HT_LINEUPS_OUT="$PWD/ht3" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simManagerLiveLineups.mjs
+simCmSubs: node scripts/simCmSubs.mjs
+playHtLineups: export CM_HT_PARENT_REF=491c10d3 CM_HT_LINEUPS_OUT="$PWD/htw" CM_HT_LINEUPS_PHASE=fixed FREE_KICK_FONT_CACHE="$PWD/fch"; node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only | tail -1 && node .rc/x/prepInstalled.mjs "$PWD/htw" && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simManagerHalftimeLineups.mjs | tail -1 && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playManagerHalftimeLineups.mjs

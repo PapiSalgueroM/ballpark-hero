@@ -1,0 +1,9 @@
+build exit=0 32s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+headsha exit=0 0s | ed9b483d0 Round BEG: Round 1365's proofs take CM_HT_PARENT_REF, and a seam test against Round 1331's rule
+htLineups exit=0 13s | simManagerHalftimeLineups normal: green.
+htLineups-ctl-original exit=0 9s | FIRED-OK
+liveLineups exit=0 60s | Three byte-identical actual engines retain complete final-state/id/input equality; pure reader graph imports no game engine.
+vitest exit=0 86s |    Duration  84.07s (transform 3.88s, setup 842ms, collect 11.77s, tests 82.47s, environment 3.67s, prepare 883ms)
+playHtLineups exit=1 10s | Node.js v24.21.0
+tsc exit=0 104s | 
+simCmSubs exit=0 54s | simCmSubs GREEN: 59 of 59 checks green (parts ledger, rule, extratime, cutover, oppextratime, opponent, coach, press)
