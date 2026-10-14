@@ -1,0 +1,23 @@
+ok   [ledger] the ledger holds law lines and league rows (4 laws, 6 rows)
+ok   [ledger] laliga: has at least one sourced fact
+ok   [ledger] seriea: has at least one sourced fact
+ok   [ledger] bundesliga: has at least one sourced fact
+ok   [ledger] ligue1: has at least one sourced fact
+ok   [ledger] premier: has at least one sourced fact
+ok   [ledger] championship: has at least one sourced fact
+ok   [ledger] law threeBefore2020: two sources on two hosts, dated, quoted, no wiki (2 sources, 2 hosts, 0 malformed)
+ok   [ledger] law fiveInThree2020: two sources on two hosts, dated, quoted, no wiki (3 sources, 3 hosts, 0 malformed)
+ok   [ledger] law breaksAreFree: two sources on two hosts, dated, quoted, no wiki (3 sources, 3 hosts, 0 malformed)
+ok   [ledger] law fivePermanent2022: two sources on two hosts, dated, quoted, no wiki (2 sources, 2 hosts, 0 malformed)
+ok   [ledger] laliga: five changes from 2020-21 on: two sources on two hosts, dated, quoted, no wiki (2 sources, 2 hosts, 0 malformed)
+ok   [ledger] seriea: five changes from 2020-21 on: two sources on two hosts, dated, quoted, no wiki (2 sources, 2 hosts, 0 malformed)
+ok   [ledger] bundesliga: five changes from 2020-21 on: two sources on two hosts, dated, quoted, no wiki (2 sources, 2 hosts, 0 malformed)
+ok   [ledger] ligue1: five changes from 2020-21 on: two sources on two hosts, dated, quoted, no wiki (2 sources, 2 hosts, 0 malformed)
+FAIL [ledger] premier: three changes in 2020-21: two sources on two hosts, dated, quoted, no wiki (1 sources, 1 hosts, 0 malformed)
+ok   [ledger] premier: three changes in 2021-22: two sources on two hosts, dated, quoted, no wiki (2 sources, 2 hosts, 0 malformed)
+ok   [ledger] premier: five changes in three occasions plus half time from 2022-23 on: two sources on two hosts, dated, quoted, no wiki (2 sources, 2 hosts, 0 malformed)
+ok   [ledger] championship: five changes in three opportunities from 2022-23 on, a standing EFL rule: two sources on two hosts, dated, quoted, no wiki (2 sources, 2 hosts, 0 malformed)
+ok   [ledger] championship: five changes still allowed in 2026-27: a Championship league match of 13 October 2026 in which Watford made five: two sources on two hosts, dated, quoted, no wiki (2 sources, 2 hosts, 0 malformed)
+ok   [ledger] the module rows equal the ledger rows
+ok   [ledger] the module partial list equals the ledger
+control onesource FIRED: 1 of 22 checks red
