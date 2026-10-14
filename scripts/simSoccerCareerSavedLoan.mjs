@@ -8,6 +8,7 @@ import os from 'node:os';
 import { createHash } from 'node:crypto';
 import { spawnSync } from 'node:child_process';
 import { fileURLToPath, pathToFileURL } from 'node:url';
+import { isKeyedEngine, keyedObserver, keyedSearch, KEYED_KIND, KEYED_LIMIT } from './lib/keyedPicker1327.mjs';
 
 assert(process.env.CI && process.env.SIM_NETWORK === 'offline', 'Saved-loan proof requires remote offline transport');
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..'), SELF = fileURLToPath(import.meta.url);
@@ -108,27 +109,44 @@ async function fixtures() {
     const repair = random([], () => E.repairCareer(copy(prepared)));
     progress.initialization = { prepared, initializationDraws: init.draws, repairDraws: repair.draws, state: copy(repair.result) }; saveProgress();
     assert(S.isSoccerCareerSave(repair.result)); assert.deepEqual(repair.draws, []);
-    const context = canonical({ ...canonical(repair.result), phase: 'social_media_action', pendingEvents: [], socialMediaActionUsedThisSeason: true });
+    /* Release BF join: on Round 1327's keyed deck the comparator cannot be steered; see scripts/lib/keyedPicker1327.mjs. */
+    const KEYED = isKeyedEngine(sources.get(ENGINE));
+    const keyedFound = KEYED ? keyedSearch([220, 236], n => {
+      const named = n ? { ...repair.result, playerName: `${repair.result.playerName} ${n}` } : repair.result;
+      const context = canonical({ ...canonical(named), phase: 'social_media_action', pendingEvents: [], socialMediaActionUsedThisSeason: true });
+      const held = JSON.stringify(context), inputs = [];
+      const picked = random(() => { inputs.push(0.99); return 0.99; }, () => E.dismissSocialMediaPhase(context, E.FALLBACK_CLUBS));
+      assert.equal(JSON.stringify(context), held, 'Keyed picker must hold the whole input');
+      return { context, held, inputs, picked };
+    }, KEYED_LIMIT, batch => batch.pendingEvents.length === 4) : null;
+    if (KEYED) assert(keyedFound, `Keyed picker must deal 220 then 236 first in a batch of four within ${KEYED_LIMIT} player names`);
+    const context = KEYED ? keyedFound.context : canonical({ ...canonical(repair.result), phase: 'social_media_action', pendingEvents: [], socialMediaActionUsedThisSeason: true });
     const held = JSON.stringify(context);
-    const original = sources.get(ENGINE), anchor = '  const shuffled = [...eligible].sort(() => Math.random() - 0.5);';
-    const replacement = '  const shuffled = [...eligible].sort((a, b) => {\n    if (typeof globalThis.__SC_LOAN_PICKER_COMPARISON === "function") globalThis.__SC_LOAN_PICKER_COMPARISON(a.id, b.id);\n    return Math.random() - 0.5;\n  });';
-    assert.equal(original.split(anchor).length - 1, 1); const observed = original.replace(anchor, replacement);
-    assert.notEqual(observed, original); assert.equal(observed.replace(replacement, anchor), original);
-    const pickerObserver = { kind: 'read-only-sort-comparisons', file: 'src/lib/soccerCareerEngine.ts', anchor, replacement,
-      originalSourcePath: 'fixed/soccerCareerEngine.picker-original.ts', observedSourcePath: 'fixed/soccerCareerEngine.picker-observed.ts',
-      originalSha256: sha(original), observedSha256: sha(observed), compiledPath: 'fixed/engine-picker-observed.mjs',
-      plainCompiledPath: 'fixed/engine.mjs', plainCompiledSha256: sha(fs.readFileSync(path.join(tmp, 'engine.mjs'))) };
-    fs.writeFileSync(path.join(retained, 'soccerCareerEngine.picker-original.ts'), original);
-    fs.writeFileSync(path.join(retained, 'soccerCareerEngine.picker-observed.ts'), observed); receipt({ pickerObserver });
-    const esbuild = await import('esbuild'), observedCompiled = path.join(tmp, 'engine-picker-observed.mjs');
-    await esbuild.build({ entryPoints: [ENGINE], outfile: observedCompiled, bundle: true, format: 'esm', platform: 'node', logLevel: 'error',
-      alias: { '@': path.join(ROOT, 'src') }, plugins: [{ name: 'saved-loan-read-only-picker', setup(build) {
-        build.onLoad({ filter: /\.ts$/ }, args => path.resolve(args.path) === ENGINE
-          ? { contents: observed, loader: 'ts', resolveDir: path.dirname(ENGINE) } : undefined); } }] });
-    fs.copyFileSync(observedCompiled, path.join(retained, 'engine-picker-observed.mjs'));
-    pickerObserver.compiledSha256 = sha(fs.readFileSync(observedCompiled));
-    receipt({ pickerObserver, compiled: [...outcome.compiled, { file: 'engine-picker-observed.mjs', sha256: pickerObserver.compiledSha256 }] });
-    const O = await import(pathToFileURL(observedCompiled).href);
+    let pickerObserver, O;
+    if (KEYED) {
+      pickerObserver = keyedObserver('src/lib/soccerCareerEngine.ts', sha(fs.readFileSync(path.join(tmp, 'engine.mjs'))));
+      receipt({ pickerObserver }); O = E;
+    } else {
+      const original = sources.get(ENGINE), anchor = '  const shuffled = [...eligible].sort(() => Math.random() - 0.5);';
+      const replacement = '  const shuffled = [...eligible].sort((a, b) => {\n    if (typeof globalThis.__SC_LOAN_PICKER_COMPARISON === "function") globalThis.__SC_LOAN_PICKER_COMPARISON(a.id, b.id);\n    return Math.random() - 0.5;\n  });';
+      assert.equal(original.split(anchor).length - 1, 1); const observed = original.replace(anchor, replacement);
+      assert.notEqual(observed, original); assert.equal(observed.replace(replacement, anchor), original);
+      pickerObserver = { kind: 'read-only-sort-comparisons', file: 'src/lib/soccerCareerEngine.ts', anchor, replacement,
+        originalSourcePath: 'fixed/soccerCareerEngine.picker-original.ts', observedSourcePath: 'fixed/soccerCareerEngine.picker-observed.ts',
+        originalSha256: sha(original), observedSha256: sha(observed), compiledPath: 'fixed/engine-picker-observed.mjs',
+        plainCompiledPath: 'fixed/engine.mjs', plainCompiledSha256: sha(fs.readFileSync(path.join(tmp, 'engine.mjs'))) };
+      fs.writeFileSync(path.join(retained, 'soccerCareerEngine.picker-original.ts'), original);
+      fs.writeFileSync(path.join(retained, 'soccerCareerEngine.picker-observed.ts'), observed); receipt({ pickerObserver });
+      const esbuild = await import('esbuild'), observedCompiled = path.join(tmp, 'engine-picker-observed.mjs');
+      await esbuild.build({ entryPoints: [ENGINE], outfile: observedCompiled, bundle: true, format: 'esm', platform: 'node', logLevel: 'error',
+        alias: { '@': path.join(ROOT, 'src') }, plugins: [{ name: 'saved-loan-read-only-picker', setup(build) {
+          build.onLoad({ filter: /\.ts$/ }, args => path.resolve(args.path) === ENGINE
+            ? { contents: observed, loader: 'ts', resolveDir: path.dirname(ENGINE) } : undefined); } }] });
+      fs.copyFileSync(observedCompiled, path.join(retained, 'engine-picker-observed.mjs'));
+      pickerObserver.compiledSha256 = sha(fs.readFileSync(observedCompiled));
+      receipt({ pickerObserver, compiled: [...outcome.compiled, { file: 'engine-picker-observed.mjs', sha256: pickerObserver.compiledSha256 }] });
+      O = await import(pathToFileURL(observedCompiled).href);
+    }
     const allCatalogInputs = state => state.overall >= 80 && state.marketValue >= 30 ? [0.99, 0.99, 0.99] : [0.99, 0.99];
     const catalogRun = random(allCatalogInputs(context), () => E.getAllEvents(context));
     const targets = [220, 236], targetAvailability = targets.map(id => {
@@ -137,40 +155,56 @@ async function fixtures() {
       return { id, matches: matches.length, card: card ? copy(card) : null, season: year(context), lastEventId: context.lastEventId,
         lastFired: card ? context.eventLastFired?.[read.result.ledgerKey] ?? null : null, ...read.result, draws: read.draws };
     });
-    const inputs = [], comparisons = [], prefix = [
-      { value: 0.99, cause: 'original ordinary moral-dilemma gate rejects' },
-      { value: 0.99, cause: 'original professor216 gate rejects' },
-      { value: 0.99, cause: 'original professor217 gate rejects' },
-      ...(context.overall >= 80 && context.marketValue >= 30 ? [{ value: 0.99, cause: 'original RealismB494 release-clause caption draw' }] : []),
-      { value: 0.99, cause: 'original picker count is4' },
-    ].map((row, index) => ({ ordinal: index + 1, ...row }));
-    const witness = { name: '220-then-236', targets, targetAvailability, catalog: { cards: copy(catalogRun.result), draws: catalogRun.draws },
-      contextSha256: sha(held), comparisons, input: { mode: 'controlled-sort-vector', prefix, draws: inputs, drawCount: 0 }, observed: null, replay: null };
-    progress.acquisitions.push({ context, witness }); saveProgress();
-    assert.equal(JSON.stringify(context), held); assert.deepEqual(catalogRun.draws, allCatalogInputs(context));
-    for (const target of targetAvailability) assert(target.matches === 1 && !target.onCooldown && target.lastEventId !== target.id
-      && target.draws.length === 0, 'Requested target must exist and be available to the original picker');
-    const rank = id => targets.includes(id) ? targets.indexOf(id) : targets.length + id;
-    let comparison = null, outsideSort = 0, picked;
-    assert.equal(globalThis.__SC_LOAN_PICKER_COMPARISON, undefined);
-    globalThis.__SC_LOAN_PICKER_COMPARISON = (a, b) => { comparison = { a, b, ordinal: inputs.length + 1 }; comparisons.push(comparison); };
-    try {
-      picked = random(() => {
-        let value;
-        if (comparison) { comparison.aRank = rank(comparison.a); comparison.bRank = rank(comparison.b);
-          value = comparison.aRank < comparison.bRank ? 0.01 : comparison.aRank > comparison.bRank ? 0.99 : 0.5;
-          comparison.value = value; comparison = null;
-        } else { assert(outsideSort < prefix.length); const row = prefix[outsideSort++]; assert.equal(row.ordinal, inputs.length + 1); value = row.value; }
-        inputs.push(value); return value;
-      }, () => O.dismissSocialMediaPhase(context, E.FALLBACK_CLUBS));
-    } finally { delete globalThis.__SC_LOAN_PICKER_COMPARISON; witness.input.drawCount = inputs.length; saveProgress(); }
-    witness.observed = { rawBatch: copy(picked.result), draws: picked.draws }; saveProgress();
-    const observedBatch = canonical(picked.result); Object.assign(witness.observed, { batch: observedBatch, batchSha256: sha(JSON.stringify(observedBatch)) }); saveProgress();
-    assert.equal(JSON.stringify(context), held); assert.equal(comparison, null); assert.equal(outsideSort, prefix.length);
-    assert.deepEqual(inputs.slice(0, prefix.length), prefix.map(row => row.value)); assert.equal(comparisons[0]?.ordinal, prefix.length + 1);
-    assert(comparisons.length > 0); assert.deepEqual(picked.draws, inputs);
-    assert(comparisons.every((row, index) => Number.isInteger(row.a) && Number.isInteger(row.b) && row.ordinal >= prefix.length + 1
-      && inputs[row.ordinal - 1] === row.value && (index === 0 || row.ordinal > comparisons[index - 1].ordinal)));
+    let inputs, comparisons, witness, observedBatch;
+    if (KEYED) {
+      inputs = keyedFound.inputs; comparisons = [];
+      witness = { name: '220-then-236', targets, targetAvailability, catalog: { cards: copy(catalogRun.result), draws: catalogRun.draws },
+        contextSha256: sha(held), comparisons, input: { mode: KEYED_KIND, prefix: [], draws: inputs, drawCount: inputs.length,
+          attempts: keyedFound.attempts, playerName: context.playerName }, observed: null, replay: null };
+      progress.acquisitions.push({ context, witness }); saveProgress();
+      assert.equal(JSON.stringify(context), held); assert.deepEqual(catalogRun.draws, allCatalogInputs(context));
+      for (const target of targetAvailability) assert(target.matches === 1 && !target.onCooldown && target.lastEventId !== target.id
+        && target.draws.length === 0, 'Requested target must exist and be available to the original picker');
+      const picked = keyedFound.picked;
+      witness.observed = { rawBatch: copy(picked.result), draws: picked.draws }; saveProgress();
+      observedBatch = canonical(picked.result); Object.assign(witness.observed, { batch: observedBatch, batchSha256: sha(JSON.stringify(observedBatch)) }); saveProgress();
+      assert.deepEqual(picked.draws, inputs);
+    } else {
+      inputs = []; comparisons = []; const prefix = [
+        { value: 0.99, cause: 'original ordinary moral-dilemma gate rejects' },
+        { value: 0.99, cause: 'original professor216 gate rejects' },
+        { value: 0.99, cause: 'original professor217 gate rejects' },
+        ...(context.overall >= 80 && context.marketValue >= 30 ? [{ value: 0.99, cause: 'original RealismB494 release-clause caption draw' }] : []),
+        { value: 0.99, cause: 'original picker count is4' },
+      ].map((row, index) => ({ ordinal: index + 1, ...row }));
+      witness = { name: '220-then-236', targets, targetAvailability, catalog: { cards: copy(catalogRun.result), draws: catalogRun.draws },
+        contextSha256: sha(held), comparisons, input: { mode: 'controlled-sort-vector', prefix, draws: inputs, drawCount: 0 }, observed: null, replay: null };
+      progress.acquisitions.push({ context, witness }); saveProgress();
+      assert.equal(JSON.stringify(context), held); assert.deepEqual(catalogRun.draws, allCatalogInputs(context));
+      for (const target of targetAvailability) assert(target.matches === 1 && !target.onCooldown && target.lastEventId !== target.id
+        && target.draws.length === 0, 'Requested target must exist and be available to the original picker');
+      const rank = id => targets.includes(id) ? targets.indexOf(id) : targets.length + id;
+      let comparison = null, outsideSort = 0, picked;
+      assert.equal(globalThis.__SC_LOAN_PICKER_COMPARISON, undefined);
+      globalThis.__SC_LOAN_PICKER_COMPARISON = (a, b) => { comparison = { a, b, ordinal: inputs.length + 1 }; comparisons.push(comparison); };
+      try {
+        picked = random(() => {
+          let value;
+          if (comparison) { comparison.aRank = rank(comparison.a); comparison.bRank = rank(comparison.b);
+            value = comparison.aRank < comparison.bRank ? 0.01 : comparison.aRank > comparison.bRank ? 0.99 : 0.5;
+            comparison.value = value; comparison = null;
+          } else { assert(outsideSort < prefix.length); const row = prefix[outsideSort++]; assert.equal(row.ordinal, inputs.length + 1); value = row.value; }
+          inputs.push(value); return value;
+        }, () => O.dismissSocialMediaPhase(context, E.FALLBACK_CLUBS));
+      } finally { delete globalThis.__SC_LOAN_PICKER_COMPARISON; witness.input.drawCount = inputs.length; saveProgress(); }
+      witness.observed = { rawBatch: copy(picked.result), draws: picked.draws }; saveProgress();
+      observedBatch = canonical(picked.result); Object.assign(witness.observed, { batch: observedBatch, batchSha256: sha(JSON.stringify(observedBatch)) }); saveProgress();
+      assert.equal(JSON.stringify(context), held); assert.equal(comparison, null); assert.equal(outsideSort, prefix.length);
+      assert.deepEqual(inputs.slice(0, prefix.length), prefix.map(row => row.value)); assert.equal(comparisons[0]?.ordinal, prefix.length + 1);
+      assert(comparisons.length > 0); assert.deepEqual(picked.draws, inputs);
+      assert(comparisons.every((row, index) => Number.isInteger(row.a) && Number.isInteger(row.b) && row.ordinal >= prefix.length + 1
+        && inputs[row.ordinal - 1] === row.value && (index === 0 || row.ordinal > comparisons[index - 1].ordinal)));
+    }
     const replayContext = copy(context); let consumed = 0; assert.equal(globalThis.__SC_LOAN_PICKER_COMPARISON, undefined);
     const replay = random(() => { assert(consumed < inputs.length); return inputs[consumed++]; }, () => E.dismissSocialMediaPhase(replayContext, E.FALLBACK_CLUBS));
     witness.replay = { rawBatch: copy(replay.result), draws: replay.draws, consumed }; saveProgress();
@@ -216,7 +250,8 @@ async function fixtures() {
       const scenario = { id, initial: voucher.before, initialSha256: sha(JSON.stringify(voucher.before)),
         provenance: { kind: 'actual-picker-saved-loan', context, actualPickerBatch: batch, actualPickerBatchSha256: sha(JSON.stringify(batch)), pickerWitness: witness,
           preparedFields: ['Fictional identity, supported club, senior row, meters and professor persona prepare a complete initialized career.',
-            'Read-only comparator IDs select legal inputs. The entire vector is replayed through the unmodified actual picker without a receiver.',
+            KEYED ? 'On the keyed deck of Round 1327 the context is tried under its own player name, in order, until the unmodified actual picker deals the targets first. The entire vector is replayed through the unmodified actual picker without a receiver.'
+              : 'Read-only comparator IDs select legal inputs. The entire vector is replayed through the unmodified actual picker without a receiver.',
             'Actual220 voucher reduces funds from0.50 to0.48 before actual236. Each answer and both canonical reloads preserve the original continuation.',
             'Queue order, stamps and effects are never rewritten. No seed search, random rate or complete UI-career claim is made.'] },
         steps: [voucher, loan].map(result => ({ eventId: result.row.eventId, choiceIndex: result.row.choiceIndex,

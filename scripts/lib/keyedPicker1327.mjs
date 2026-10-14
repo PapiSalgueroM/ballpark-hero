@@ -28,11 +28,11 @@ export function dealsPrefix(batch, targets) {
     && targets.every((id, index) => batch.pendingEvents[index]?.id === id);
 }
 
-/** Try attempt(0), attempt(1), ... until one deals the targets first. attempt returns { picked, ... }. */
-export function keyedSearch(targets, attempt, limit = KEYED_LIMIT) {
+/** Try attempt(0), attempt(1), ... until one deals the targets first (and passes accept). attempt returns { picked, ... }. */
+export function keyedSearch(targets, attempt, limit = KEYED_LIMIT, accept = () => true) {
   for (let n = 0; n < limit; n += 1) {
     const run = attempt(n);
-    if (dealsPrefix(run.picked.result, targets)) return { ...run, attempts: n + 1 };
+    if (dealsPrefix(run.picked.result, targets) && accept(run.picked.result)) return { ...run, attempts: n + 1 };
   }
   return null;
 }
