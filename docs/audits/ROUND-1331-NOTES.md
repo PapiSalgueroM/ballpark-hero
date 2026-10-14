@@ -67,6 +67,10 @@ origin/main 082fc277 (docs only) at 12f3fd65. Every gate ran on a GitHub runner 
   and 10, slump 10 and 7, request 13 and 13, roll 3 and 3, boardHeat 2 and 0.
 - simDailyDeals: every date before the cutover deals what it did; the five from it on were recorded again from this
   tree (a5541fe8); rulesall and rulesstale fire.
+- The real fixture fleets against the base dec9075b with the head forced onto the old rules (the two matchRules
+  reads answering 'base', a runner only patch): simCmFixtureFleet green (nofetch 250 careers, oldsaves 132 saves,
+  dailies 11 clubs) and simCmRealFixtures green (premier, 13 groups with legacy, baseline and uncopied), r1331-fx.
+  So outside the rule and the press the round moved nothing they hold.
 - Save size, season 15, head against base: Real Madrid 194,168 and 188,570, Everton 199,501 and 197,256, Lincoln City
   199,637 and 200,686 (budget 203,000); slots 510,827 and 509,335 of 532,500.
 
