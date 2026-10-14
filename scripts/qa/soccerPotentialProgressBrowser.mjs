@@ -36,11 +36,11 @@ const source = () => sourceFiles.map(file => { const body = fs.readFileSync(path
 const widths = [320, 390, 430, 1440], kinds = ['visible', 'pending', 'reveal', 'wall99', 'retired'];
 const report = { status: 'running', scope: '20 declared saved-boundary built-page journeys. No natural careers or full ranked award list proof.',
   qualifications: ['Full ere save and complete boundary edits are retained. The pending/reveal boundary has an explicitly empty shortlist, as in the focused component fixture.',
-    'Twelve journeys reach actual Attributes. Four pending and four reveal journeys prove their actual phase screens and inaccessible Attributes; revealed counter rendering is covered separately by component tests.',
+    'All20 journeys use actual Attributes. Pending and reveal journeys also retain their actual phase views; pending Attributes masks counters, and revealed Attributes shows the actual saved values.',
     'Browser external transport is intercepted and recorded. External web fonts are aborted, with actual local/fallback fonts measured after document.fonts.ready.',
     'Opening Attributes may intentionally scroll the new screen into view. Unchanged reads and requirements toggles must preserve their established scroll position.',
-    'Pending season-summary screens cannot access Attributes. They prove its actual absence and no premature reveal, not a hidden panel screenshot.',
-    'Startup and legitimate award reveal draws are retained separately. No draw may occur during measured Attributes reads, disclosure or Back. Reload draws remain fully retained and must be zero for this explicit-prime input.'],
+    'Pending season summaries keep Full attributes available. Its actual Attributes screen must show the waiting message and omit ceiling, earned, elite-run, next-point and requirements before reveal.',
+    'Startup and legitimate award reveal draws are retained separately. No draw may occur during measured Attributes reads, disclosure or Back. Reload preserves every saved byte and the complete actual pre-panel bootstrap caller sequence/count. All initial and reload draw values and full callers remain retained, without cross-document value equality, filtering or normalization.'],
   declarations: { widths, kinds, cases: 20, copiedControls: ['read-purity', 'pending-privacy', 'hard-wall', 'layout-observation'] },
   sourceBefore: source(), cases: [], controls: [], errors: [], forwardedExternalRequests: 0 };
 put('report', report);
@@ -81,9 +81,11 @@ function boundary(kind) {
   if (kind === 'retired') { set('retired', true); set('phase', 'retired'); set('potential', 85); set('potentialEarned', 2); set('eliteStreak', 2); }
   return { value, edits };
 }
-const privacyFindings = value => value.attributesCount || value.progressCount || value.revealed ? ['pending-progress-exposure'] : [];
+const privacyFindings = value => value.mode !== 'waiting' || value.progressCount !== 1 || value.ceilingCount || value.runCount || value.nextCount || value.summaryCount || value.revealed || value.text !== 'Potential progress is waiting for the award reveal.' ? ['pending-progress-exposure'] : [];
 const wallFindings = value => value.mode !== 'visible' || value.nextCount || value.summaryCount || !value.text.includes('99 is the ceiling limit. It cannot rise further.') ? ['hard-wall-target'] : [];
 const purityFindings = value => [value.beforeRaw !== value.afterRaw && 'raw-save', JSON.stringify(value.beforeDraws) !== JSON.stringify(value.afterDraws) && 'read-rng'].filter(Boolean);
+const reloadFindings = value => [value.beforeRaw !== value.afterRaw && 'raw-save',
+  JSON.stringify(value.beforeDraws.map(draw => draw.caller)) !== JSON.stringify(value.afterDraws.map(draw => draw.caller)) && 'read-rng'].filter(Boolean);
 const layoutFindings = value => [value.overflow && 'horizontal-overflow',
   (!value.painted || Number(value.opacity) !== 1 || value.effectiveOpacity !== 1 || value.ancestors.some(layer => layer.display === 'none' || layer.visibility !== 'visible')) && 'paint',
   !value.fonts.ready && 'fonts', (value.rect.width <= 0 || value.rect.height <= 0 || value.rect.x < 0 || value.rect.right > value.viewport.width + 1 || value.rect.y < 0 || value.rect.bottom > value.viewport.height + 1) && 'viewport',
@@ -109,8 +111,13 @@ function control(id, actual, mutate, reverse, detect, expected) {
   const fault = copy(actual); mutate(fault);
   row.fault = put(`controls/${id}-fault`, fault); assert.notDeepEqual(fault, actual, 'Labelled copied defect changed the complete observation');
   row.findings = detect(fault); assert.deepEqual(row.findings, expected);
+  if (id === 'read-purity') {
+    row.reloadCallerFindings = reloadFindings(fault);
+    assert.deepEqual(reloadFindings(actual), []); assert.deepEqual(row.reloadCallerFindings, expected);
+  }
   reverse(fault, actual); row.undo = put(`controls/${id}-undo`, fault); row.reverseApplied = true;
   assert.deepEqual(fault, actual); assert.deepEqual(detect(fault), []);
+  if (id === 'read-purity') assert.deepEqual(reloadFindings(fault), []);
   assert.equal(row.actual.sha256, row.undo.sha256); row.status = 'pass';
 }
 fs.mkdirSync(path.join(OUT, 'controls'));
@@ -241,29 +248,58 @@ try {
       assert.equal(loaded.raw, predicted.output, 'Actual initial page save equals complete actual repair/reveal output');
       if (kind === 'pending') {
         await read('pending-summary-read', async () => { await capture(page.getByRole('heading', { name: 'Season Summary', exact: true }), 'pending-summary-heading'); });
-        const absent = { attributesCount: await attributes().count(), progressCount: await progress().count(), revealed: !!JSON.parse((await state()).raw).pendingBallonDor.revealed, html: await page.locator('main').innerHTML() };
-        row.inaccessiblePending = put(`${id}-pending-absence`, absent); assert.deepEqual(privacyFindings(absent), []);
+        const phaseView = { attributesCount: await attributes().count(), progressCount: await progress().count(), revealed: !!JSON.parse((await state()).raw).pendingBallonDor.revealed, html: await page.locator('main').innerHTML() };
+        row.pendingPhaseView = put(`${id}-pending-phase-view`, phaseView);
+        assert.equal(phaseView.attributesCount, 1); assert.equal(phaseView.progressCount, 0); assert.equal(phaseView.revealed, false);
+        const waitingWitness = async view => ({ mode: view.mode, progressCount: await progress().count(), ceilingCount: view.ceilingCount,
+          runCount: view.runCount, nextCount: view.nextCount, summaryCount: view.summaryCount, text: view.text,
+          revealed: !!JSON.parse((await state()).raw).pendingBallonDor.revealed, html: await page.locator('main').innerHTML() });
+        await read('open-pending-attributes', async () => { await attributes().scrollIntoViewIfNeeded(); await attributes().click(); await progress().waitFor(); });
+        const waiting = await capture(progress(), 'pending-progress'), masked = await waitingWitness(waiting);
+        row.inaccessiblePending = put(`${id}-pending-mask`, masked); assert.deepEqual(privacyFindings(masked), []);
+        await read('back-to-pending-summary', async () => { await back().click(); await page.getByRole('heading', { name: 'Season Summary', exact: true }).waitFor(); });
         const beforeReload = await state(); await page.reload({ waitUntil: 'domcontentloaded' }); await page.getByRole('heading', { name: 'Season Summary', exact: true }).waitFor();
         const afterReload = await state(), pendingReload = { status: 'running', before: put(`${id}-pending-reload-before`, beforeReload), after: put(`${id}-pending-reload-after`, afterReload) }; row.reloads.push(pendingReload);
-        assert.equal(afterReload.raw, beforeReload.raw); assert.equal(afterReload.evidence.draws.length, 0); assert.equal(await attributes().count(), 0); assert.equal(await progress().count(), 0);
-        assert.equal(!!JSON.parse(afterReload.raw).pendingBallonDor.revealed, false); pendingReload.status = 'pass';
-        if (id === '390-pending') control('pending-privacy', absent, fault => { fault.progressCount = 1; fault.html += '<p data-potential-ceiling>copied disclosure</p>'; },
-          (fault, actual) => { const marker = '<p data-potential-ceiling>copied disclosure</p>'; assert(fault.html.endsWith(marker)); assert.equal(fault.progressCount, 1);
-            fault.html = fault.html.slice(0, -marker.length); fault.progressCount = actual.progressCount; }, privacyFindings, ['pending-progress-exposure']);
-        row.status = 'pass'; console.log(`PASS ${id}: actual inaccessible Attributes boundary, no premature reveal and full raw save held`); continue;
+        const reloadWitness = { beforeRaw: beforeReload.raw, afterRaw: afterReload.raw, beforeDraws: loaded.evidence.draws, afterDraws: afterReload.evidence.draws };
+        pendingReload.witness = put(`${id}-pending-reload-witness`, reloadWitness); pendingReload.bootstrap = row.loaded;
+        assert.deepEqual(reloadFindings(reloadWitness), []); assert.equal(await attributes().count(), 1); assert.equal(await progress().count(), 0);
+        assert.equal(!!JSON.parse(afterReload.raw).pendingBallonDor.revealed, false);
+        await read('reload-pending-attributes', async () => { await attributes().scrollIntoViewIfNeeded(); await attributes().click(); await progress().waitFor(); });
+        const reloadedWaiting = await capture(progress(), 'reloaded-pending-progress'), reloadedMasked = await waitingWitness(reloadedWaiting);
+        pendingReload.mask = put(`${id}-pending-reload-mask`, reloadedMasked); assert.deepEqual(privacyFindings(reloadedMasked), []);
+        assert.equal(reloadedWaiting.html, waiting.html); pendingReload.status = 'pass';
+        if (id === '390-pending') control('pending-privacy', masked, fault => { fault.ceilingCount = 1; fault.html += '<p data-potential-ceiling>copied disclosure</p>'; },
+          (fault, actual) => { const marker = '<p data-potential-ceiling>copied disclosure</p>'; assert(fault.html.endsWith(marker)); assert.equal(fault.ceilingCount, 1);
+            fault.html = fault.html.slice(0, -marker.length); fault.ceilingCount = actual.ceilingCount; }, privacyFindings, ['pending-progress-exposure']);
+        row.status = 'pass'; console.log(`PASS ${id}: actual Attributes waiting mask, no premature disclosure and complete raw save held`); continue;
       }
       if (kind === 'reveal') {
         assert.equal(JSON.parse(loaded.raw).pendingBallonDor.revealed, true); row.actualReveal = { expected: predicted.output, actual: loaded.raw, draws: loaded.evidence.draws, source: report.oracle };
         await read('revealed-award-read', async () => { await capture(page.locator('[data-award-headline]'), 'actual-reveal-headline'); });
-        const absent = { attributesCount: await attributes().count(), progressCount: await progress().count(), html: await page.locator('main').innerHTML() };
-        row.inaccessibleRevealed = put(`${id}-revealed-absence`, absent);
-        assert.equal(absent.attributesCount, 0); assert.equal(absent.progressCount, 0);
+        const phaseView = { attributesCount: await attributes().count(), progressCount: await progress().count(), html: await page.locator('main').innerHTML() };
+        row.inaccessibleRevealed = put(`${id}-revealed-phase-view`, phaseView);
+        assert.equal(phaseView.attributesCount, 1); assert.equal(phaseView.progressCount, 0);
+        const checkRevealedView = async view => {
+          const saved = JSON.parse((await state()).raw), ceiling = await oraclePage.evaluate(value => window.__potentialOracle.effectivePotential(value), saved);
+          assert.equal(saved.pendingBallonDor.revealed, true); assert.equal(view.mode, 'visible'); assert.equal(view.ceilingCount, 1); assert.equal(view.runCount, 1);
+          assert.equal(await progress().locator('[data-potential-ceiling]').innerText(), `Ceiling ${ceiling}/99${saved.potentialEarned > 0 ? ` · ${saved.potentialEarned} earned` : ''}.`);
+          assert.equal(await progress().locator('[data-potential-run]').innerText(), `Elite run: ${saved.eliteStreak} ${saved.eliteStreak === 1 ? 'season' : 'seasons'}.`);
+          assert.equal(view.nextCount, 1); assert.equal(view.summaryCount, 1);
+          assert.equal(await progress().locator('[data-potential-next]').innerText(), `Next point: elite run 2+ and ${ceiling - 2}+ overall at season end.${saved.overall >= ceiling - 2 ? ' Overall target met now.' : ''}`);
+        };
+        await read('open-revealed-attributes', async () => { await attributes().scrollIntoViewIfNeeded(); await attributes().click(); await progress().waitFor(); });
+        const revealed = await capture(progress(), 'revealed-progress'); row.revealedProgress = put(`${id}-revealed-progress-view`, revealed); await checkRevealedView(revealed);
+        await read('back-to-revealed-award', async () => { await back().click(); await page.locator('[data-award-result="revealed"]').waitFor(); });
         const beforeReload = await state(); await page.reload({ waitUntil: 'domcontentloaded' });
         await page.locator('[data-award-result="revealed"]').waitFor();
         const afterReload = await state(), reload = { status: 'running', before: put(`${id}-reveal-reload-before`, beforeReload), after: put(`${id}-reveal-reload-after`, afterReload) }; row.reloads.push(reload);
-        assert.equal(afterReload.raw, beforeReload.raw); assert.equal(afterReload.evidence.draws.length, 0);
-        assert.equal(await attributes().count(), 0); assert.equal(await progress().count(), 0); reload.status = 'pass';
-        row.status = 'pass'; console.log(`PASS ${id}: actual reveal callback/headline, inaccessible Attributes and full raw reload held`); continue;
+        const reloadWitness = { beforeRaw: beforeReload.raw, afterRaw: afterReload.raw, beforeDraws: loaded.evidence.draws, afterDraws: afterReload.evidence.draws };
+        reload.witness = put(`${id}-reveal-reload-witness`, reloadWitness); reload.bootstrap = row.loaded;
+        assert.deepEqual(reloadFindings(reloadWitness), []); assert.equal(await attributes().count(), 1); assert.equal(await progress().count(), 0);
+        await read('reload-revealed-attributes', async () => { await attributes().scrollIntoViewIfNeeded(); await attributes().click(); await progress().waitFor(); });
+        const restored = await capture(progress(), 'reloaded-revealed-progress'); reload.progress = put(`${id}-reveal-reload-view`, restored); await checkRevealedView(restored);
+        assert.equal(restored.html, revealed.html); reload.status = 'pass';
+        row.status = 'pass'; console.log(`PASS ${id}: actual reveal, saved Attributes values and complete raw reload held`); continue;
       }
       await attributes().waitFor();
       await read('open-attributes', async () => { await attributes().scrollIntoViewIfNeeded(); await attributes().click(); await progress().waitFor(); });
@@ -305,7 +341,9 @@ try {
       await page.reload({ waitUntil: 'domcontentloaded' }); await attributes().waitFor({ timeout: 45000 });
       const afterReload = await state(); reload.after = put(`${id}-reload-after`, afterReload);
       assert.equal(afterReload.raw, beforeReload.raw, 'Reload preserves every saved byte');
-      assert.equal(afterReload.evidence.draws.length, 0, 'Reload of the explicit-prime saved input consumes no random draw');
+      const reloadWitness = { beforeRaw: beforeReload.raw, afterRaw: afterReload.raw, beforeDraws: loaded.evidence.draws, afterDraws: afterReload.evidence.draws };
+      reload.bootstrap = row.loaded; reload.purity = put(`${id}-reload-purity`, reloadWitness);
+      assert.deepEqual(reloadFindings(reloadWitness), [], 'Reload holds saved bytes and the complete actual initial-bootstrap caller sequence');
       await read('reload-open-attributes', async () => { await attributes().scrollIntoViewIfNeeded(); await attributes().click(); await progress().waitFor(); });
       const restoredView = await capture(progress(), 'reload-progress'); assert.equal(restoredView.html, view.html, 'Reload restores complete progress DOM'); reload.status = 'pass';
       if (id === '390-visible') control('read-purity', purity, fault => { fault.afterRaw += ' '; fault.afterDraws.push({ value: 0.25, caller: 'labelled copied observation only' }); },
@@ -331,11 +369,17 @@ try {
   assert.equal(report.cases.length, 20); assert(report.cases.every(row => row.status === 'pass'));
   assert.deepEqual(report.controls.map(row => row.id), ['layout-observation', 'read-purity', 'pending-privacy', 'hard-wall']);
   assert(report.controls.every(row => row.status === 'pass')); assert.equal(report.errors.length, 0);
-  report.sourceAfter = source(); assert.deepEqual(report.sourceAfter, report.sourceBefore);
   report.status = 'pass';
 } catch (error) { report.status = 'fail'; report.errors.push({ fatal: String(error.stack || error) }); }
 finally {
-  if (oracleContext) await oracleContext.close(); if (browser) await browser.close(); put('report', report);
+  try { report.sourceAfter = source(); assert.deepEqual(report.sourceAfter, report.sourceBefore); }
+  catch (error) { report.status = 'fail'; report.errors.push({ sourceClosure: String(error.stack || error) }); }
+  for (const [name, resource] of [['oracleContext', oracleContext], ['browser', browser]]) {
+    if (!resource) continue;
+    try { await resource.close(); }
+    catch (error) { report.status = 'fail'; report.errors.push({ resourceClosure: name, error: String(error.stack || error) }); }
+  }
+  put('report', report);
 }
 console.log(`Potential progress browser: ${report.cases.length}/20 declared journeys, ${report.cases.filter(row => row.status === 'pass').length} passed.`);
 console.log(`Potential progress controls: ${report.controls.filter(row => row.status === 'pass').length}/4 effective copied observation controls.`);

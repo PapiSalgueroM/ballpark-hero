@@ -188,11 +188,50 @@ jobs:
             const full=path.resolve(out,value.path);assert(full.startsWith(`${out}${path.sep}`));const body=fs.readFileSync(full);assert.equal(body.length,value.bytes);
             assert.equal(createHash('sha256').update(body).digest('hex'),value.sha256);references.push(value);
           }for(const child of Object.values(value))walk(child);};walk(report);
-          for(const row of report.cases){assert(row.reloads.every(reload=>reload.status==='pass'));
-            if(row.kind==='pending'){assert(row.inaccessiblePending);assert(row.layouts.some(layout=>layout.name==='pending-summary-heading'));}
-            else if(row.kind==='reveal'){assert(row.inaccessibleRevealed);assert(row.layouts.some(layout=>layout.name==='actual-reveal-headline'));}
-            else{assert(row.layouts.some(layout=>layout.name==='progress'));assert(row.layouts.some(layout=>layout.name==='reload-progress'));}
-            if(row.kind==='reveal')assert(row.actualReveal);
+          const readJSON=reference=>JSON.parse(fs.readFileSync(path.join(out,reference.path),'utf8'));
+          const callerSequence=draws=>{assert(Array.isArray(draws));for(const draw of draws){assert.equal(typeof draw.value,'number');assert(Number.isFinite(draw.value));assert.equal(typeof draw.caller,'string');}return draws.map(draw=>draw.caller);};
+          const reloadFindings=value=>[value.beforeRaw!==value.afterRaw&&'raw-save',JSON.stringify(callerSequence(value.beforeDraws))!==JSON.stringify(callerSequence(value.afterDraws))&&'read-rng'].filter(Boolean);
+          const privacyFindings=value=>value.mode!=='waiting'||value.progressCount!==1||value.ceilingCount||value.runCount||value.nextCount||value.summaryCount||value.revealed||value.text!=='Potential progress is waiting for the award reveal.'?['pending-progress-exposure']:[];
+          const namedLayout=(row,name)=>{const matches=row.layouts.filter(layout=>layout.name===name);assert.equal(matches.length,1);return readJSON(matches[0].observation);};
+          const readControl=report.controls.find(row=>row.id==='read-purity'),readActual=readJSON(readControl.actual),readFault=readJSON(readControl.fault),readUndo=readJSON(readControl.undo);
+          assert.deepEqual(readControl.reloadCallerFindings,controlMap['read-purity']);assert.deepEqual(reloadFindings(readActual),[]);
+          assert.deepEqual(reloadFindings(readFault),controlMap['read-purity']);assert.deepEqual(reloadFindings(readUndo),[]);assert.deepEqual(readUndo,readActual);assert.notDeepEqual(readFault,readActual);
+          const readCase=report.cases.find(row=>row.id==='390-visible'),readSteps=readCase.steps.filter(step=>step.name==='back-and-reopen');assert.equal(readSteps.length,1);assert.deepEqual(readActual,readJSON(readSteps[0].purity));
+          const privacyControl=report.controls.find(row=>row.id==='pending-privacy'),privacyActual=readJSON(privacyControl.actual),privacyFault=readJSON(privacyControl.fault),privacyUndo=readJSON(privacyControl.undo);
+          assert.deepEqual(privacyFindings(privacyActual),[]);assert.deepEqual(privacyFindings(privacyFault),controlMap['pending-privacy']);assert.deepEqual(privacyFindings(privacyUndo),[]);
+          assert.deepEqual(privacyUndo,privacyActual);assert.notDeepEqual(privacyFault,privacyActual);assert.deepEqual(privacyActual,readJSON(report.cases.find(row=>row.id==='390-pending').inaccessiblePending));
+          for(const row of report.cases){assert.equal(row.reloads.length,1);assert(row.reloads.every(reload=>reload.status==='pass'));
+            const loaded=readJSON(row.loaded),oracle=readJSON(row.oracle),reload=row.reloads[0],before=readJSON(reload.before),after=readJSON(reload.after);
+            assert.deepEqual(reload.bootstrap,row.loaded);assert.equal(loaded.raw,oracle.output);assert.equal(before.raw,loaded.raw);assert.equal(after.raw,before.raw);
+            assert.deepEqual(before.evidence.draws,loaded.evidence.draws);
+            const witness=readJSON(row.kind==='pending'||row.kind==='reveal'?reload.witness:reload.purity);
+            assert.equal(witness.beforeRaw,before.raw);assert.equal(witness.afterRaw,after.raw);
+            assert.deepEqual(witness.beforeDraws,loaded.evidence.draws);assert.deepEqual(witness.afterDraws,after.evidence.draws);
+            assert.deepEqual(callerSequence(witness.beforeDraws),callerSequence(witness.afterDraws));assert.deepEqual(reloadFindings(witness),[]);
+            if(row.kind==='pending'){
+              const phase=readJSON(row.pendingPhaseView),mask=readJSON(row.inaccessiblePending),restoredMask=readJSON(reload.mask);
+              assert.equal(phase.attributesCount,1);assert.equal(phase.progressCount,0);assert.equal(phase.revealed,false);
+              assert.equal(JSON.parse(loaded.raw).pendingBallonDor.revealed??false,false);assert.equal(JSON.parse(after.raw).pendingBallonDor.revealed??false,false);
+              const waiting=namedLayout(row,'pending-progress'),restored=namedLayout(row,'reloaded-pending-progress');
+              for(const [actual,observed] of [[mask,waiting],[restoredMask,restored]]){
+                assert.deepEqual(privacyFindings(actual),[]);assert.equal(actual.progressCount,1);assert.equal(actual.revealed,false);
+                for(const key of ['mode','ceilingCount','runCount','nextCount','summaryCount','text'])assert.deepEqual(actual[key],observed[key]);
+                assert(actual.html.includes(observed.html));
+              }
+              assert.equal(restored.html,waiting.html);assert(row.layouts.some(layout=>layout.name==='pending-summary-heading'));
+            }else if(row.kind==='reveal'){
+              const phase=readJSON(row.inaccessibleRevealed),revealed=readJSON(row.revealedProgress),restored=readJSON(reload.progress),saved=JSON.parse(loaded.raw);
+              assert.equal(phase.attributesCount,1);assert.equal(phase.progressCount,0);assert.equal(saved.pendingBallonDor.revealed,true);
+              assert.equal(row.actualReveal.expected,oracle.output);assert.equal(row.actualReveal.actual,loaded.raw);assert.deepEqual(row.actualReveal.draws,loaded.evidence.draws);
+              assert.deepEqual(revealed,namedLayout(row,'revealed-progress'));assert.deepEqual(restored,namedLayout(row,'reloaded-revealed-progress'));
+              for(const view of [revealed,restored]){
+                assert.equal(view.mode,'visible');assert.equal(view.ceilingCount,1);assert.equal(view.runCount,1);assert.equal(view.nextCount,1);assert.equal(view.summaryCount,1);
+                assert(view.text.includes(`Ceiling ${oracle.ceiling}/99${saved.potentialEarned>0?` · ${saved.potentialEarned} earned`:''}.`));
+                assert(view.text.includes(`Elite run: ${saved.eliteStreak} ${saved.eliteStreak===1?'season':'seasons'}.`));
+                assert(view.text.includes(`Next point: elite run 2+ and ${oracle.ceiling-2}+ overall at season end.${saved.overall>=oracle.ceiling-2?' Overall target met now.':''}`));
+              }
+              assert.equal(restored.html,revealed.html);assert(row.layouts.some(layout=>layout.name==='actual-reveal-headline'));
+            }else{assert.equal(namedLayout(row,'reload-progress').html,namedLayout(row,'progress').html);}
             if(row.kind==='visible')for(const name of ['requirements-closed','requirements-reclosed'])assert(row.layouts.some(layout=>layout.name===name));
             for(const layout of row.layouts){const observed=JSON.parse(fs.readFileSync(path.join(out,layout.observation.path),'utf8'));
               assert(Array.isArray(observed.ancestors)&&observed.ancestors.length>1);assert.equal(observed.effectiveOpacity,1);
