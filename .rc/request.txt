@@ -1,0 +1,6 @@
+# Release BF join, m2 served: the reviews walk on its own normal sim's fixtures
+#!serve
+#!playwright
+#!serial
+headsha: git log --oneline -2
+reviewsWalk: set -o pipefail; export CI=1 SIM_NETWORK=offline CAREER_REVIEWS_PHASE=fixed CAREER_REVIEWS_OUT="$PWD/scrv" FREE_KICK_FONT_CACHE="$PWD/scrv/font-cache"; node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only | tail -1 && node .rc/x/prepInstalled.mjs "$PWD/scrv" && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerCareerLifeReviews.mjs | tail -2 && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playSoccerCareerLifeReviews.mjs
