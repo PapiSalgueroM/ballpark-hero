@@ -35,7 +35,16 @@ const SELF = fileURLToPath(import.meta.url);
 const BASE_TREE = '487b8f9274808bd3d2a7990b2172035989b1fdee';
 const ENGINE = 'src/lib/soccerCareerEngine.ts';
 const sha = value => createHash('sha256').update(value).digest('hex');
-const textAt = file => fs.readFileSync(path.join(ROOT, file), 'utf8').replaceAll('\r\n', '\n');
+/* Release BF join: the Soccer Career life chain (Rounds 1350 to 1363) adds cards to the catalog and to the priority
+   beats, so with Round 1327 taken out the old sort shuffle draws a different number of times and no AR career keeps its
+   global draws. The chain's three changed engine inputs are read as at Release BE's head (4ae7a534), an attribution kept
+   apart from the copied faults like Round 1327's and Round 1329's; the chain's own harnesses prove what it changes.
+   CAREER_STORY_ROLE_CHAIN_REF replaces the ref, and an empty value reads this tree. */
+const CHAIN_REF = process.env.CAREER_STORY_ROLE_CHAIN_REF ?? '4ae7a534';
+const CHAIN_FILES = new Set(['src/lib/soccerCareerLife.ts', 'src/lib/soccerCareerContracts.ts', 'src/lib/soccerCareerRealismA.ts']);
+const textAt = file => (CHAIN_REF && CHAIN_FILES.has(file)
+  ? execFileSync('git', ['show', `${CHAIN_REF}:${file}`], { cwd: ROOT, encoding: 'utf8', maxBuffer: 8e6 })
+  : fs.readFileSync(path.join(ROOT, file), 'utf8')).replaceAll('\r\n', '\n');
 const originalAt = file => execFileSync('git', ['show', `${STORY_ROLE_BASE}:${file}`], { cwd: ROOT, encoding: 'utf8', maxBuffer: 8e6 }).replaceAll('\r\n', '\n');
 const copy = value => structuredClone(value);
 const serial = value => JSON.stringify(value);
