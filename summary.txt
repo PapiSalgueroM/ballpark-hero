@@ -1,0 +1,2 @@
+continuity-minusAZ exit=0 39s | Private world variation is measured, no historical fixture was re-recorded
+continuity-ctl-all exit=0 530s | Private world variation is measured, no historical fixture was re-recorded

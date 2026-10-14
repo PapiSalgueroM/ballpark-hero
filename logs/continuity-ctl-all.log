@@ -1,0 +1,26 @@
+treeWithoutMerge: d6bb7efb0e8d7a5828ac01660efe1e140dc99d94, 082fc277 without 5ec5a724; conflicts kept from 082fc277: scripts/qa/managerWorldContinuityKit.mjs, scripts/qa/managerWorldSizeDiagnostic.mjs, scripts/simCmLeagueRules.mjs, scripts/simCmUnseededWorld.mjs, src/pages/WhatsNew.tsx
+PASS [newborn] option
+PASS [newborn] release
+PASS [newborn] refresh
+FAIL [newborn] seeded-world: First later aging gives every surviving birth a bounded potential
+PASS [newborn] storage
+PASS [storage] inactive
+PASS [storage] constructors
+PASS [storage] identity
+PASS [storage] buy-job
+PASS [storage] year-away
+PASS [storage] sale
+PASS [storage] option
+PASS [storage] release
+PASS [storage] refresh
+PASS [storage] seeded-world
+FAIL [storage] storage: Inactive complete records have a saved packed representation
++ actual - expected
+
++ 'undefined'
+- 'string'
+
+Manager world continuity: 14 arms, eleven complete groups per arm
+Independent original engine (b6eb78e7) inactive saves and full draw vectors held in every arm
+Completed transactions, original source identity and actual callback receipts retained
+Private world variation is measured, no historical fixture was re-recorded
