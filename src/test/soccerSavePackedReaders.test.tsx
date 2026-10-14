@@ -16,7 +16,7 @@ const KEY = 'soccerCareerSave';
 afterEach(() => { cleanup(); localStorage.clear(); });
 
 function longSave(): { raw: string; stored: string } {
-  const seasons = Array.from({ length: 160 }, (_, i) => ({
+  const seasons = Array.from({ length: 260 }, (_, i) => ({
     season: i + 1, club: 'Fixture FC', apps: 30, goals: i % 9, assists: i % 7, rating: 6.5, notes: 'fixture season '.repeat(12),
   }));
   const story = Array.from({ length: 120 }, (_, i) => `Fixture chapter ${i}: a quiet season at the club, nothing more to report.`);
