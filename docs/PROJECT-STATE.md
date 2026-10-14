@@ -1,6 +1,6 @@
-## Round1366: restart continuity scoped qualified, creation cap debt held, 2026-10-14
+## Codex Round1368 preparing: keeper save recovery, 2026-10-14
 
-Round1366 scoped qualified tested8cde3aec/run38505007986/job115660386661, overallFAILSOLEoriginalsimCreation73.8KB>60000unwaived. Actual9normal/oldrender3+6/55+16oldcases/10controls/discovery/type/full7873pass58skip/build/15rebuiltreaders/saveguards/602.2<604 and828.2<830 hold. Standalone actualsharedpitch6+6/24originals/fullrawframe+CDPtraces/source/package521 verified; all24individuallyviewed, no realManagerjourney orpaintedoldcarrierclaim fromsettledcaptures. Exact2linemotion426d readyHscopedintegration andfresh target rebind, notfullgreen/live/finishedgames. DraftPR268unmerged/unpublished. See docs/audits/pitch-restart-continuity-2026-10-14.md.
+Isolatedcodex/pitch-save-recovery fromqualified1366final8e70. Genuine normal save tapes show keeperpose68/catching1→empty atrestart whilecoordsheld. Proposed4spanpose-onlyexisting .3travel recovery remains outside; new9case2fault+7preserve baseline/proofs source reviewing, no appedit/runtime/fixedclaim. Bothnull/retainedevent binders andactualPitchMotioncallback/paused/reduced/withdrawn/cast/role/newaction behaviors held. All compiler/test/build/browser/installremote. NoCore/world/score/schema/timerchange. Audit docs/audits/pitch-save-recovery-2026-10-14.md. Existing1366scopedreadyH, originalsimCreationdebtunwaived;Hownsmerge/publish. OutsideReleaseBC1738737bytesheld.
 
 ## Release BC LIVE, 2026-10-13 18:23 EDT: one tab can no longer wipe a Club Manager save, Club Manager's world remembers your deals, its tables, copy and hub fixed, Soccer Career's events drawn fairly, the shared event deck, the college athletic director
 
