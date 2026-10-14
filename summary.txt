@@ -1,0 +1,5 @@
+subs-ledger exit=0 0s | simCmSubs GREEN: 21 of 21 checks green (parts ledger)
+vitest exit=0 5s |    Duration  4.10s (transform 2.38s, setup 91ms, collect 2.86s, tests 18ms, environment 535ms, prepare 159ms)
+era2020-subsrow exit=1 21s | simEra2020: 1 failure(s).
+era2020 exit=0 32s | simEra2020: green. 2020-21 is real, sealed, and plays like 2020-21.
+tsc exit=0 71s | 
