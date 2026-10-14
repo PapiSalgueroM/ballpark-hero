@@ -1,0 +1,8 @@
+# Release BF join, fixes after the gate: the story role attribution (plain and its all control), the line ending fence, the cold proof and the documentary qualifier through readLf
+storyRole: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerStoryRole.mjs
+storyRole-ctl-all: CAREER_STORY_ROLE_CONTROL=all NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerStoryRole.mjs
+storyRole-unbound: CAREER_STORY_ROLE_CHAIN_REF= NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerStoryRole.mjs > /tmp/su.log 2>&1; s=$?; grep -E "^FAIL|groups" /tmp/su.log | head -4 | cut -c1-200; [ $s = 1 ] && echo "UNBOUND RED AS BEFORE"
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+cold: CI=1 SIM_NETWORK=offline SC_COLD_CONTEXT_CORE_REF=f727cfbf NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerCareerColdContext.mjs
+cold-ctl-original: CI=1 SIM_NETWORK=offline SC_COLD_CONTEXT_CORE_REF=f727cfbf SC_COLD_CONTEXT_CONTROL=original NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerCareerColdContext.mjs > /tmp/cc.log 2>&1; s=$?; tail -2 /tmp/cc.log | cut -c1-200; [ $s = 0 ] && grep -q "^Effective" /tmp/cc.log && grep -q "^simSoccerCareerColdContext original: green" /tmp/cc.log && echo FIRED-OK
+documentaryBinding: export CI=1 SIM_NETWORK=offline SC_COLD_CONTEXT_CORE_REF=f727cfbf SC_DOCUMENTARY_CORE_REF=33b722fb CAREER_DOCUMENTARY_OUT="$PWD/docbind" CAREER_DOCUMENTARY_PHASE=fixed; NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/qualifySoccerCareerDocumentaryBinding.mjs

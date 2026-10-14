@@ -1,0 +1,4 @@
+FAIL [uncopied full AR baseline] AssertionError: AR full career119101 every global draw
+FAIL [candidate full AR baseline] AssertionError: all twelve independent original careers are held
+simCareerStoryRole: 16 groups, 2 failed, 48 full AR pairs
+UNBOUND RED AS BEFORE

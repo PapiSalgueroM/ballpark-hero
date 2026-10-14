@@ -1,0 +1,7 @@
+storyRole-unbound exit=0 6s | UNBOUND RED AS BEFORE
+storyRole exit=0 34s | simCareerStoryRole: 16 groups, 0 failed, 48 full AR pairs
+cold exit=0 4s | simSoccerCareerColdContext normal: green.
+cold-ctl-original exit=0 2s | FIRED-OK
+documentaryBinding exit=0 0s | Three actual old-Cold source guard refusals: known631 corruption, unrelated whole-parent drift and malformed236 binding. No app mutation or child compiler/unit credit.
+simHarnessAnchors exit=1 39s | simHarnessAnchors: 1 failure(s)
+storyRole-ctl-all exit=0 521s | simCareerStoryRole: 16 healthy groups, 17 effective copied controls caught;12 complete AR careers and48 neutral pairs held
