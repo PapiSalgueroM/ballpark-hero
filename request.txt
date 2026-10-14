@@ -1,0 +1,23 @@
+# Release BC gate, lane V: Release BA's served walks in BA's own order, as Release BB's lane V (on the join's 2b3fae83 this is rBCg-gV, 13 of 13 exit 0: playSoccerAgentReview's three cousin journeys, red on main since Release AW, did not recur there; if they come back, 9 of 12 journeys must pass, as in Release BB), then the pieces' served lines of finish-BCG.md section 6b that need a base build or the 1328 seam helpers.
+#!serve
+#!playwright
+#!serial
+fonts: mkdir -p .tmp-fx/font-cache && FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only
+assets1082: pip3 install --quiet fonttools pillow && node scripts/qa/soccerOfferAssets1082.mjs
+playGameReports: REPORT_EVIDENCE="$RC_OUT/reports" node scripts/playGameReports.mjs
+playGameReports-below: GAME_REPORT_CONTROL=below-guide REPORT_EVIDENCE="$RUNNER_TEMP/reports-below" node scripts/playGameReports.mjs
+playWorldXiReportFit: node scripts/playWorldXiReportFit.mjs
+simCareerTransferBrief-forwalk: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerTransferBrief.mjs
+playCareerTransferBrief: FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playCareerTransferBrief.mjs
+simSoccerAgentReview-forwalk: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerAgentReview.mjs
+playSoccerAgentReview: FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playSoccerAgentReview.mjs
+playSoccerOfferReview1082: SOCCER_OFFER_REVIEW_ASSET_CACHE="$PWD/soccer-offer-review-artifacts/font-cache/manifest.json" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playSoccerOfferReview1082.mjs
+simSoccerOpponentLabels-forwalk: SIM_NETWORK=offline SOCCER_OPPONENT_LABELS_OUT="$RUNNER_TEMP/ba-labels" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerOpponentLabels.mjs
+simSoccerOpponentLabels-browser: SOCCER_OPPONENT_LABELS_BROWSER=1 SOCCER_OPPONENT_LABELS_INPUT="$RUNNER_TEMP/ba-labels" SOCCER_OPPONENT_LABELS_OUT="$RUNNER_TEMP/ba-labels-b" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerOpponentLabels.mjs
+# Release BC (finish-BCG.md section 6b): the pieces' served lines that need a base build of this head with one piece taken out (scripts/lib/treeWithoutMerge.mjs through .rc/x/basesrv.sh), and Round 1328's seam control (.rc/x/seam1328.mjs and .rc/x/join1328.sh); sendGate.sh sends the three helpers from rBCg's .tmp-fx/bc. A plain line exits 0 only on its own green line, a control only when it fired.
+base-minus1325: bash .rc/x/basesrv.sh 79b08e00 d84d8328 4175
+fit-part2: mkdir -p "$TMPDIR/out" && RC_OUT="$TMPDIR/out" CM_FIT_BASE_URL=http://localhost:4175 CM_FIT_BASE_DIST=/tmp/wt-4175/dist node scripts/playCmTablesFit.mjs 2>&1 | tee "$TMPDIR/ctl.log"; s=${PIPESTATUS[0]}; [ $s -eq 0 ] && grep -qF 'PART 2: green, labels and the low first defeat on the real page' "$TMPDIR/ctl.log"
+base-minus1328: bash .rc/x/basesrv.sh f14ec63a 7073ed74 4174
+hub-walk-full: mkdir -p "$TMPDIR/out" && RC_OUT="$TMPDIR/out" HEAD_URL=http://localhost:4173 BASE_URL=http://localhost:4174 node scripts/playCmHubLanding.mjs 2>&1 | tee "$TMPDIR/ctl.log"; s=${PIPESTATUS[0]}; [ $s -eq 0 ] && grep -qE 'playCmHubLanding: green \(.*D [1-9][0-9]* pass 0 fail' "$TMPDIR/ctl.log"
+ctl-hub-drift: mkdir -p "$TMPDIR/out" && RC_OUT="$TMPDIR/out" HEAD_URL=http://localhost:4173 BASE_URL=http://localhost:4174 HUB_LANDING_SECTIONS=D HUB_LANDING_CONTROL=drift node scripts/playCmHubLanding.mjs 2>&1 | tee "$TMPDIR/ctl.log"; s=${PIPESTATUS[0]}; [ $s -eq 1 ] && grep -qE 'playCmHubLanding: CONTROL drift FIRED, [1-9][0-9]* D check\(s\) went red' "$TMPDIR/ctl.log"
+ctl-hub-tilectl: node .rc/x/seam1328.mjs tilectl && bash .rc/x/join1328.sh build 4177 && HEAD_URL=http://localhost:4177 HUB_LANDING_SECTIONS=C node scripts/playCmHubLanding.mjs > "$TMPDIR/ctl.log" 2>&1; s=$?; git checkout -- src/pages/ClubManager.tsx; tail -2 "$TMPDIR/ctl.log"; [ $s -eq 1 ] && grep -qE "FAIL +C +.+: the Finances tile's .+ is the desk's Kitty change row" "$TMPDIR/ctl.log" && grep -qE 'playCmHubLanding: [1-9][0-9]* failure\(s\) \(' "$TMPDIR/ctl.log"
