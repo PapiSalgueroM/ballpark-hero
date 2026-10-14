@@ -1,0 +1,7 @@
+vitest exit=0 4s |    Duration  2.40s (transform 513ms, setup 285ms, collect 1.26s, tests 765ms, environment 2.21s, prepare 659ms)
+rivals exit=0 26s | No rival product names found. 0 findings.
+storage exit=0 3s | simStorageWrites: all green (owed: 12)
+gmdiff exit=0 8s | gmdiff: all three seeds identical to the base and green
+anchors exit=0 57s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+tsc exit=0 93s | 
+usBoardParity exit=0 57s | simUsBoardParity: green. Four sports replayed click for click, save for save and screen for screen.
