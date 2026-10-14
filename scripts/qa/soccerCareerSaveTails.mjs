@@ -58,6 +58,14 @@ try {
   });
   fs.copyFileSync(bundle, path.join(OUT, 'compiled-entry.mjs'));
   const { E, S, H } = await import(pathToFileURL(bundle).href);
+  let originalCodec;
+  if (PHASE === 'fixed' && !CONTROL) {
+    const originalBundle = path.join(temp, 'original-codec.mjs');
+    await build({ stdin: { contents: oldSource, resolveDir: path.dirname(savePath), loader: 'ts' },
+      outfile: originalBundle, bundle: true, format: 'esm', platform: 'node', logLevel: 'error' });
+    fs.copyFileSync(originalBundle, path.join(OUT, 'compiled-original-codec.mjs'));
+    originalCodec = await import(pathToFileURL(originalBundle).href);
+  }
   await E.loadManagerMarket();
   assert(E.managerMarketReady(), 'same loaded job market as actual manager choice');
   const home = H.CONTINUE_SAVES.find(row => row.path === '/soccer-career');
@@ -65,11 +73,13 @@ try {
   const tails = ['manager', 'pundit', 'owner'];
   const checkpoints = new Set([0, 1, 5, 10, 20, 25, 40, 50, 75, 100]);
   const rows = [], failures = [], cases = [], inputs = [];
-  let parity = 0, draws = 0;
+  let parity = 0, draws = 0, fittingBytesHeld = 0;
+  fs.mkdirSync(path.join(OUT, 'inputs'), { recursive: true });
   for (const input of manifest.inputs) {
     const bytes = fs.readFileSync(path.join(INPUT, input.name));
     assert.equal(bytes.length, input.bytes, input.name + ': retained input length');
     assert.equal(digest(bytes), input.sha256, input.name + ': retained input hash');
+    fs.writeFileSync(path.join(OUT, 'inputs', input.name), bytes);
     const original = JSON.parse(bytes.toString('utf8'));
     assert(original.retired && original.phase === 'retirement_ceremony');
     assert(S.isSoccerCareerSave(original));
@@ -103,6 +113,13 @@ try {
           same(restored, career, id + ': complete JSON restored');
           assert.equal(H.describeSave(home, stored), H.describeSave(home, raw), id + ': Continue metadata');
           assert.equal(S.serializeSoccerCareerSave(restored), stored, id + ': stable encoding');
+          if (originalCodec) {
+            const oldStored = originalCodec.serializeSoccerCareerSave(career);
+            if (oldStored.length <= 60000) {
+              assert.equal(stored, oldStored, id + ': every fitting original encoding held');
+              fittingBytesHeld += 1;
+            }
+          }
         } finally { Math.random = realRandom; }
         assert.equal(JSON.stringify(career), raw, id + ': codec input held');
         assert(S.isSoccerCareerSave(restored), id + ': restored tail valid');
@@ -127,13 +144,14 @@ try {
     }
     assert.equal(digest(fs.readFileSync(path.join(INPUT, input.name))), input.sha256, input.name + ': input bytes remain held');
   }
-  const report = { phase: PHASE, control: CONTROL ? 'original' : null, limit: 60000, inputRun: manifest.run, inputSource: manifest.source, inputs, cases, states: rows.length, parity, draws, failures, rows };
+  const report = { phase: PHASE, control: CONTROL ? 'original' : null, limit: 60000, inputRun: manifest.run, inputSource: manifest.source, inputs, cases, states: rows.length, parity, draws, fittingBytesHeld, failures, rows };
   fs.writeFileSync(path.join(OUT, 'report.json'), JSON.stringify(report, null, 2));
   assert.equal(rows.length, 12 * 3 * 101);
   assert(parity >= 12 * 3 * 10);
   assert.equal(fs.readFileSync(savePath, 'utf8'), heldSource, 'current source unchanged');
   console.log(`Actual tails: ${cases.length} careers, 100 seasons each, ${rows.length} complete-state restores.`);
   console.log(`Following real steps: ${parity} whole states, ${draws} exactly matched RNG values.`);
+  if (originalCodec) console.log(`Original fitting encodings: ${fittingBytesHeld} byte-identical saves.`);
   console.log(`Unchanged 60000-character cap: ${failures.length} oversized states; first failures ${JSON.stringify(cases.filter(row => row.firstFailure !== null))}.`);
   if (PHASE === 'baseline' || CONTROL) {
     assert(failures.length > 0, 'unchanged codec exposes actual tail size failures');
@@ -142,6 +160,7 @@ try {
     assert(cases.some(row => row.tail === 'owner' && row.firstFailure !== null));
     console.log('Expected size RED only; restoration, metadata, real-step and RNG checks passed.');
   } else {
+    assert(fittingBytesHeld > 0, 'fitting original saved bytes were independently compared');
     assert.equal(failures.length, 0, 'all measured legal tails fit the existing cap');
     console.log('Soccer Career extended saves: PASS.');
   }
