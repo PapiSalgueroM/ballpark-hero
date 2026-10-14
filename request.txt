@@ -1,0 +1,3 @@
+#!serial
+banner-test: node_modules/.bin/vitest run src/test/liveSimMotion.test.tsx -t "extra time banner" --testTimeout=300000
+noEtLine-ctl: node .rc/x/mutNoEtLine.mjs && node_modules/.bin/vitest run src/test/liveSimMotion.test.tsx -t "extra time banner" --testTimeout=300000; s=$?; git checkout HEAD -- src; exit $s

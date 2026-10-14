@@ -1,0 +1,117 @@
+MUTATION ON: the break before extra time line is gone from LiveSimScreen.tsx
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ [31m❯[39m src/test/liveSimMotion.test.tsx [2m([22m[2m55 tests[22m[2m | [22m[31m1 failed[39m[2m | [22m[33m54 skipped[39m[2m)[22m[33m 4266[2mms[22m[39m
+   [2m[90m↓[39m[22m Live simcast motion[2m > [22msettlement ID comparison rejects changed payloads, retained IDs and allocator prefixes
+   [2m[90m↓[39m[22m Live simcast motion[2m > [22mthe committed action puts goals in the correct net and saves at the keeper
+   [2m[90m↓[39m[22m Live simcast motion[2m > [22mactual feed triggers player strikes, ball flight, saves and net contact
+   [2m[90m↓[39m[22m Live simcast motion[2m > [22mpause freezes the ball and player pose, and the same player still opens changes
+   [2m[90m↓[39m[22m Live simcast motion[2m > [22mmotion leaves committed state and settled results identical
+   [2m[90m↓[39m[22m Live simcast motion[2m > [22ma substitution during a paused action replaces the clickable player immediately
+   [2m[90m↓[39m[22m Live simcast motion[2m > [22mspeed changes scale action time with the match clock
+   [2m[90m↓[39m[22m Live simcast motion[2m > [22mreduced motion shows the committed catch immediately without animated poses
+   [2m[90m↓[39m[22m Live simcast motion[2m > [22mterminal goal and save contact precede the unchanged whistle and score (45 'goal' reduced=false)
+   [2m[90m↓[39m[22m Live simcast motion[2m > [22mterminal goal and save contact precede the unchanged whistle and score (45 'goal' reduced=true)
+   [2m[90m↓[39m[22m Live simcast motion[2m > [22mterminal goal and save contact precede the unchanged whistle and score (45 'save' reduced=false)
+   [2m[90m↓[39m[22m Live simcast motion[2m > [22mterminal goal and save contact precede the unchanged whistle and score (45 'save' reduced=true)
+   [2m[90m↓[39m[22m Live simcast motion[2m > [22mterminal goal and save contact precede the unchanged whistle and score (90 'goal' reduced=false)
+   [2m[90m↓[39m[22m Live simcast motion[2m > [22mterminal goal and save contact precede the unchanged whistle and score (90 'goal' reduced=true)
+   [2m[90m↓[39m[22m Live simcast motion[2m > [22mterminal goal and save contact precede the unchanged whistle and score (90 'save' reduced=false)
+   [2m[90m↓[39m[22m Live simcast motion[2m > [22mterminal goal and save contact precede the unchanged whistle and score (90 'save' reduced=true)
+   [2m[90m↓[39m[22m Live simcast motion[2m > [22mterminal resume shows contact and Skip keeps immediate exactly-once whistle callbacks
+   [2m[90m↓[39m[22m Live simcast motion[2m > [22ma tactics redraw cancels a terminal action that is no longer committed
+   [2m[90m↓[39m[22m Live simcast motion[2m > [22mthe ninetieth minute asks the latest save: refused means full time, never thirty empty minutes
+   [2m[90m↓[39m[22m Live simcast motion[2m > [22mthe ninetieth minute asks the latest save: extra time drawn there is played, whatever this render was given
+[31m   [31m×[31m Live simcast motion[2m > [22mthe extra time banner says what is true: a second leg is level on aggregate[39m[33m 4264[2mms[22m[39m
+[31m     → expected '\n      @keyframes cmRise { 0% { opac…' to contain 'Level 3-3 on aggregate'[39m
+   [2m[90m↓[39m[22m Live simcast motion[2m > [22mthe clock runs into the board as 90 plus, with the running aggregate under the score
+   [2m[90m↓[39m[22m Live simcast motion[2m > [22ma goal in the board is announced with its plus, GOAL! ... 90+N
+   [2m[90m↓[39m[22m Live simcast motion[2m > [22mthe extra time clock runs into its own board as ET 120 plus
+   [2m[90m↓[39m[22m The pitch part on real feeds[2m > [22mthe material is 200 half feeds from five clubs in five leagues
+   [2m[90m↓[39m[22m The pitch part on real feeds[2m > [22mR1: the ball is in the goal mouth on goals only
+   [2m[90m↓[39m[22m The pitch part on real feeds[2m > [22mR2: nobody stands on a team mate
+   [2m[90m↓[39m[22m The pitch part on real feeds[2m > [22mR3: at a kick off each side is in its own half, far from the other keeper
+   [2m[90m↓[39m[22m The pitch part on real feeds[2m > [22mR4: the block follows the ball
+   [2m[90m↓[39m[22m The pitch part on real feeds[2m > [22mR5: nothing is decided here
+   [2m[90m↓[39m[22m The pitch part on real feeds[2m > [22mR6: a chance starts with the ball at the shooter and ends in its follow up
+   [2m[90m↓[39m[22m The pitch part on real feeds[2m > [22mR7: every dead ball is taken by the right side from the right place
+   [2m[90m↓[39m[22m The pitch part on real feeds[2m > [22mR8: the pitch is handed the right kick off and the right share of the ball
+   [2m[90m↓[39m[22m The pitch part on real feeds[2m > [22mR9: a goal gets its kick off before the next chance is led in
+   [2m[90m↓[39m[22m The goal sequence[2m > [22mthe score waits for the ball and the card lands at net contact
+   [2m[90m↓[39m[22m The goal sequence[2m > [22mthe card's season count is the settled count
+   [2m[90m↓[39m[22m The goal sequence[2m > [22mafter Skip the second half opens on the right score, with no card and nothing replayed
+   [2m[90m↓[39m[22m The goal sequence[2m > [22mnothing says GOAL before the ball is in: not the list beside the pitch, not the line under it
+   [2m[90m↓[39m[22m The goal sequence[2m > [22mno frame draws the new score before the ball is in
+   [2m[90m↓[39m[22m The goal sequence[2m > [22ma goal with the last kick of a period takes nothing off the score while it winds up
+   [2m[90m↓[39m[22m The goal sequence[2m > [22ma line fired late by Skip is not played again when extra time starts
+   [2m[90m↓[39m[22m The goal sequence[2m > [22munder reduced motion the card is held for its first stretch only, and then the match runs on
+   [2m[90m↓[39m[22m The goal sequence[2m > [22ma substitution in a goal's wind up takes the card with the action, and the score stops waiting
+   [2m[90m↓[39m[22m The goal sequence[2m > [22ma goal still on its way when the line up changes off the clock keeps its net, its card and its men
+   [2m[90m↓[39m[22m The goal sequence[2m > [22ma scorer card counts his goals up to this one, and gives a season count only to one of mine
+   [2m[90m↓[39m[22m Match mode[2m > [22ma name goes above its figure when another man stands just under him
+   [2m[90m↓[39m[22m Match mode[2m > [22mBack folds the match to a card and pauses it, and the card puts it back
+   [2m[90m↓[39m[22m Match mode[2m > [22mone panel at a time, and Escape closes what is open before it is Back
+   [2m[90m↓[39m[22m Match mode[2m > [22mthe stats line a phone keeps in view reads the same count as the full stats
+   [2m[90m↓[39m[22m Match mode[2m > [22mlevel neighbours take a row each, and a wall shows numbers
+   [2m[90m↓[39m[22m Match mode[2m > [22mat full time the folded card offers the report as well as the way back
+   [2m[90m↓[39m[22m Match mode[2m > [22ma phone on its side gets the pitch on its side
+   [2m[90m↓[39m[22m The part and a change of line up[2m > [22mthe part drops an action when the line up under it changes
+   [2m[90m↓[39m[22m The part and a change of line up[2m > [22ma chance whose line fires in the very commit the line up changes is still played, by the new eleven
+   [2m[90m↓[39m[22m The part and an action taken back[2m > [22mthe part drops an action the binder has taken back, even with the clock set back before its start
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/liveSimMotion.test.tsx[2m > [22mLive simcast motion[2m > [22mthe extra time banner says what is true: a second leg is level on aggregate
+[31m[1mAssertionError[22m: expected '\n      @keyframes cmRise { 0% { opac…' to contain 'Level 3-3 on aggregate'[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- Level 3-3 on aggregate[39m
+[31m+[39m
+[31m+       @keyframes cmRise { 0% { opacity: 0; transform: translateY(7px); } 100% { opacity: 1; transform: translateY(0); } }[39m
+[31m+       .cm-rise { opacity: 0; animation: cmRise 0.45s ease-out forwards; }[39m
+[31m+       @keyframes cmSlam { 0% { opacity: 0; transform: scale(1.6); } 60% { opacity: 1; transform: scale(0.94); } 100% { opacity: 1; transform: scale(1); } }[39m
+[31m+       .cm-slam { opacity: 0; animation: cmSlam 0.4s cubic-bezier(0.2, 0.8, 0.3, 1.2) forwards; }[39m
+[31m+       @keyframes cmWinPulse { 0% { box-shadow: 0 0 0 0 rgba(34,197,94,0.45); } 100% { box-shadow: 0 0 0 26px rgba(34,197,94,0); } }[39m
+[31m+       .cm-win-pulse { animation: cmWinPulse 0.9s ease-out 1; }[39m
+[31m+       @keyframes cmLossShake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-4px); } 55% { transform: translateX(3px); } 80% { transform: translateX(-2px); } }[39m
+[31m+       .cm-loss-shake { animation: cmLossShake 0.4s ease-in-out 1; }[39m
+[31m+       @keyframes cmGoldGlow { 0%, 100% { box-shadow: 0 0 8px rgba(234,179,8,0.35); } 50% { box-shadow: 0 0 22px rgba(234,179,8,0.75); } }[39m
+[31m+       .cm-gold-glow { animation: cmGoldGlow 1.5s ease-in-out infinite; }[39m
+[31m+       @keyframes cmTickIn { 0% { opacity: 0; transform: translateX(-6px); } 100% { opacity: 1; transform: translateX(0); } }[39m
+[31m+       .cm-tick-in { opacity: 0; animation: cmTickIn 0.35s ease-out forwards; }[39m
+[31m+       /* cm-rise for a control that must not be pressed before it shows: hidden[39m
+[31m+          (so unclickable) through its delay, visible from its first frame. */[39m
+[31m+       @keyframes cmRiseGated { 0% { opacity: 0; visibility: visible; transform: translateY(7px); } 100% { opacity: 1; visibility: visible; transform: translateY(0); } }[39m
+[31m+       .cm-rise-gated { opacity: 0; visibility: hidden; animation: cmRiseGated 0.45s ease-out forwards; }[39m
+[31m+[39m
+[31m+[39m
+[31m+       @media (prefers-reduced-motion: reduce) {[39m
+[31m+         .cm-rise, .cm-slam, .cm-tick-in, .cm-rise-gated { animation: none; opacity: 1; transform: none; visibility: visible; }[39m
+[31m+         .cm-win-pulse, .cm-loss-shake, .cm-gold-glow { animation: none; }[39m
+[31m+       }[39m
+[31m+     ?Real Madrid0 - 3BarcelonaChampions League · Quarter-final · second legET 90'StatsFirst leg 3-0 away · Agg 3-31 García2 Cubarsí14 Christensen4 Balde15 Jong6 Pedri7 López8 Rodri9 Olmo16 Gavi13 Martín1 Courtois2 Huijsen3 Konaté4 Militão5 Carreras6 Bellingham7 Valverde8 Güler10 MbappéC11 JuniorSub: Anthony Gordon on for Pau CubarsíBarcelona🩹 Rodrygo is down. Tap to bring somebody on.Balance of play: Poss 59% 41%Shots 10 (4) 12 (6)xG 1.01 1.80Foul by Rodri0.5x1x2x4x SkipAs it happens90'Sub: Anthony Gordon on for Pau Cubarsí90+4'Foul by Rodri90+3'Throw in, Barcelona90+2'Foul by Frenkie de Jong90+2'Throw in, BarcelonaReal MadridBalance of playBarcelona59%41%10 (4)Shots (on target)12 (6)1.01xG1.806Corners610Fouls93Saves40Yellow00Red00Subs5[39m
+
+[36m [2m❯[22m src/test/liveSimMotion.test.tsx:[2m522:18[22m[39m
+    [90m520| [39m    expect(stageOf(mounted.container)).toBe('extra');
+    [90m521| [39m    const text = mounted.container.textContent!;
+    [90m522| [39m    expect(text).toContain(`Level ${aggMine}-${aggTheirs} on aggregate…
+    [90m   | [39m                 [31m^[39m
+    [90m523| [39m    expect(text).not.toContain('Level after 90 minutes');
+    [90m524| [39m  }, 30000);
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[33m54 skipped[39m[90m (55)[39m
+[2m   Start at [22m 06:11:12
+[2m   Duration [22m 7.15s[2m (transform 1.67s, setup 52ms, collect 2.12s, tests 4.27s, environment 296ms, prepare 133ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/liveSimMotion.test.tsx,title=src/test/liveSimMotion.test.tsx > Live simcast motion > the extra time banner says what is true%3A a second leg is level on aggregate,line=522,column=18::AssertionError: expected '\n      @keyframes cmRise { 0%25 { opac…' to contain 'Level 3-3 on aggregate'%0A%0A- Expected%0A+ Received%0A%0A- Level 3-3 on aggregate%0A+%0A+       @keyframes cmRise { 0%25 { opacity: 0; transform: translateY(7px); } 100%25 { opacity: 1; transform: translateY(0); } }%0A+       .cm-rise { opacity: 0; animation: cmRise 0.45s ease-out forwards; }%0A+       @keyframes cmSlam { 0%25 { opacity: 0; transform: scale(1.6); } 60%25 { opacity: 1; transform: scale(0.94); } 100%25 { opacity: 1; transform: scale(1); } }%0A+       .cm-slam { opacity: 0; animation: cmSlam 0.4s cubic-bezier(0.2, 0.8, 0.3, 1.2) forwards; }%0A+       @keyframes cmWinPulse { 0%25 { box-shadow: 0 0 0 0 rgba(34,197,94,0.45); } 100%25 { box-shadow: 0 0 0 26px rgba(34,197,94,0); } }%0A+       .cm-win-pulse { animation: cmWinPulse 0.9s ease-out 1; }%0A+       @keyframes cmLossShake { 0%25, 100%25 { transform: translateX(0); } 25%25 { transform: translateX(-4px); } 55%25 { transform: translateX(3px); } 80%25 { transform: translateX(-2px); } }%0A+       .cm-loss-shake { animation: cmLossShake 0.4s ease-in-out 1; }%0A+       @keyframes cmGoldGlow { 0%25, 100%25 { box-shadow: 0 0 8px rgba(234,179,8,0.35); } 50%25 { box-shadow: 0 0 22px rgba(234,179,8,0.75); } }%0A+       .cm-gold-glow { animation: cmGoldGlow 1.5s ease-in-out infinite; }%0A+       @keyframes cmTickIn { 0%25 { opacity: 0; transform: translateX(-6px); } 100%25 { opacity: 1; transform: translateX(0); } }%0A+       .cm-tick-in { opacity: 0; animation: cmTickIn 0.35s ease-out forwards; }%0A+       /* cm-rise for a control that must not be pressed before it shows: hidden%0A+          (so unclickable) through its delay, visible from its first frame. */%0A+       @keyframes cmRiseGated { 0%25 { opacity: 0; visibility: visible; transform: translateY(7px); } 100%25 { opacity: 1; visibility: visible; transform: translateY(0); } }%0A+       .cm-rise-gated { opacity: 0; visibility: hidden; animation: cmRiseGated 0.45s ease-out forwards; }%0A+%0A+%0A+       @media (prefers-reduced-motion: reduce) {%0A+         .cm-rise, .cm-slam, .cm-tick-in, .cm-rise-gated { animation: none; opacity: 1; transform: none; visibility: visible; }%0A+         .cm-win-pulse, .cm-loss-shake, .cm-gold-glow { animation: none; }%0A+       }%0A+     ?Real Madrid0 - 3BarcelonaChampions League · Quarter-final · second legET 90'StatsFirst leg 3-0 away · Agg 3-31 García2 Cubarsí14 Christensen4 Balde15 Jong6 Pedri7 López8 Rodri9 Olmo16 Gavi13 Martín1 Courtois2 Huijsen3 Konaté4 Militão5 Carreras6 Bellingham7 Valverde8 Güler10 MbappéC11 JuniorSub: Anthony Gordon on for Pau CubarsíBarcelona🩹 Rodrygo is down. Tap to bring somebody on.Balance of play: Poss 59%25 41%25Shots 10 (4) 12 (6)xG 1.01 1.80Foul by Rodri0.5x1x2x4x SkipAs it happens90'Sub: Anthony Gordon on for Pau Cubarsí90+4'Foul by Rodri90+3'Throw in, Barcelona90+2'Foul by Frenkie de Jong90+2'Throw in, BarcelonaReal MadridBalance of playBarcelona59%2541%2510 (4)Shots (on target)12 (6)1.01xG1.806Corners610Fouls93Saves40Yellow00Red00Subs5%0A%0A ❯ src/test/liveSimMotion.test.tsx:522:18%0A%0A
