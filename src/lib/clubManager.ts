@@ -18663,8 +18663,10 @@ export type LiveChange =
  * that minute, and everything the engine had committed after it is redrawn
  * off the eleven and the shape you just chose: the first half from that
  * minute to the break, or the second half from that minute to the whistle.
- * Nothing before it moves. At the interval (45, or 46 before the second half
- * is drawn) there is nothing to redraw, because the second half has not
+ * Nothing before it moves. At the interval (46 or later before the second
+ * half is drawn, as the dressing room sends it; 45 and its board are still
+ * the first half, in play, and under a stoppage limit use one, Round 1331
+ * review) there is nothing to redraw, because the second half has not
  * been decided yet and will read your changes when it is. Returns null when
  * the change is not allowed: no match on, the last change the match's rule
  * allows already made (Round 1331: three, or five in three stoppages where
