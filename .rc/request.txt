@@ -1,0 +1,6 @@
+#!serve
+sweepWeight: SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs
+saveSize-head: node scripts/simClubManagerSaveSize.mjs
+slots-head: node scripts/simClubManagerSlots.mjs
+saveSize-base: R=$PWD; git worktree add -f /tmp/sbs dec9075b >/dev/null 2>&1 && cd /tmp/sbs && ln -s $R/node_modules node_modules && node scripts/simClubManagerSaveSize.mjs
+slots-base: R=$PWD; git worktree add -f /tmp/sbl dec9075b >/dev/null 2>&1 && cd /tmp/sbl && ln -s $R/node_modules node_modules && node scripts/simClubManagerSlots.mjs
