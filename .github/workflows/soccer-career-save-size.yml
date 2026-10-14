@@ -65,9 +65,9 @@ jobs:
             NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerCareerSaveSize.mjs 2>&1 | tee "$SC_SAVE_OUT/fixed.log"
             SC_SAVE_CONTROL=plain SC_SAVE_EXPECT_RED=1 SC_SAVE_OUT="$SC_SAVE_OUT/control" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerCareerSaveSize.mjs 2>&1 | tee "$SC_SAVE_OUT/control.log"
           fi
-      - name: Full ordinary unit suite
+      - name: Codec and actual veteran page regressions
         if: env.SC_SAVE_PHASE == 'fixed'
-        run: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" npm test -- --maxWorkers=2 --reporter=default --reporter=json --outputFile.json="$SC_SAVE_OUT/full-unit.json" 2>&1 | tee "$SC_SAVE_OUT/full-unit.log"
+        run: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" npm test -- src/lib/soccerCareerSave.test.ts src/test/careerDilemmaReach.test.tsx src/test/careerKeepPlaying.test.tsx --maxWorkers=2 --reporter=default --reporter=json --outputFile.json="$SC_SAVE_OUT/focused-unit.json" 2>&1 | tee "$SC_SAVE_OUT/focused-unit.log"
       - name: Build prerequisites on remote runner
         if: env.SC_SAVE_PHASE == 'fixed'
         run: |
@@ -82,12 +82,6 @@ jobs:
         run: |
           NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" npm run build:seo 2>&1 | tee "$SC_SAVE_OUT/build.log"
           git diff -- scripts/data/lastmod.json > "$SC_SAVE_OUT/lastmod.diff"
-      - name: Rebuilt readers and unchanged save guards
-        if: env.SC_SAVE_PHASE == 'fixed'
-        run: ONLY=simSoccerCareerSaveSize,simCreation,simSaveKeeper,simFlagshipWeight,simAdsense,simBrand,simHeadTags,simHiddenPages,simHubs,simIndexNow,simIndexing,simInternalLinks,simNoRivalNames,simPrerender,simPrerenderBoot,simRetiredRoutes,simSchema,simSitemap,simSnapshotAssets node scripts/runAllSims.mjs --browser 2>&1 | tee "$SC_SAVE_OUT/readers.log"
-      - name: Actual long-save continuation and full history in Chromium
-        if: env.SC_SAVE_PHASE == 'fixed'
-        run: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playSoccerCareerSaveSize.mjs 2>&1 | tee "$SC_SAVE_OUT/browser.log"
       - name: Original route download ceilings
         if: env.SC_SAVE_PHASE == 'fixed'
         run: |
@@ -99,6 +93,15 @@ jobs:
             sleep 1
           done
           BASE=http://127.0.0.1:4173 SWEEP_OFFLINE=1 NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/sweepWeight.mjs 2>&1 | tee "$SC_SAVE_OUT/weights.log"
+      - name: Rebuilt readers and unchanged save guards
+        if: env.SC_SAVE_PHASE == 'fixed'
+        run: ONLY=simSoccerCareerSaveSize,simCreation,simSaveKeeper,simFlagshipWeight,simAdsense,simBrand,simHeadTags,simHiddenPages,simHubs,simIndexNow,simIndexing,simInternalLinks,simNoRivalNames,simPrerender,simPrerenderBoot,simRetiredRoutes,simSchema,simSitemap,simSnapshotAssets node scripts/runAllSims.mjs --browser 2>&1 | tee "$SC_SAVE_OUT/readers.log"
+      - name: Actual long-save continuation and full history in Chromium
+        if: env.SC_SAVE_PHASE == 'fixed'
+        run: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playSoccerCareerSaveSize.mjs 2>&1 | tee "$SC_SAVE_OUT/browser.log"
+      - name: Full ordinary unit suite
+        if: env.SC_SAVE_PHASE == 'fixed'
+        run: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" npm test -- --maxWorkers=2 --reporter=default --reporter=json --outputFile.json="$SC_SAVE_OUT/full-unit.json" 2>&1 | tee "$SC_SAVE_OUT/full-unit.log"
       - name: Final source and package holds
         if: always()
         run: |
