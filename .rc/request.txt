@@ -1,0 +1,32 @@
+# Release BD gate, lane P3: the four pieces' plain lines and controls
+#!playwright
+simPhone2: node scripts/simPhone2.mjs
+simMoney: node scripts/simMoney.mjs
+creation-head: node scripts/simCreation.mjs 2>&1 | grep -E "FAIL|FAILURES" | head -4; exit ${PIPESTATUS[0]}
+fence: node scripts/simSaveFence.mjs 2>&1 | tail -3; exit ${PIPESTATUS[0]}
+retry: node scripts/simSoccerCareerSaveRetry.mjs 2>&1 | tail -3; exit ${PIPESTATUS[0]}
+vitest-notice: node_modules/.bin/vitest run src/test/saveMovedNotice.test.tsx --testTimeout=300000 --hookTimeout=120000
+vitest-nofix: git worktree add -q /tmp/nf HEAD && ln -s "$PWD/node_modules" /tmp/nf/node_modules && cd /tmp/nf && git show 39002b4a:src/components/SaveMovedNotice.tsx > src/components/SaveMovedNotice.tsx && git diff --stat | tail -2 && node_modules/.bin/vitest run src/test/saveMovedNotice.test.tsx --testTimeout=300000 --hookTimeout=120000 > /tmp/nf.out 2>&1; s=$?; grep -E "Reload takes|AssertionError|expected|Tests " /tmp/nf.out | cut -c1-200 | head -12; exit $s
+reveal-base: git worktree add -q /tmp/rb b59ebe2b && ln -s "$PWD/node_modules" /tmp/rb/node_modules && cd /tmp/rb && node_modules/.bin/vite build > /tmp/rb-build.log 2>&1 && (node scripts/lib/hostLikeServer.mjs /tmp/rb/dist 4194 > /dev/null 2>&1 &) && sleep 3 && BASE=http://127.0.0.1:4194 SWEEP_BASE=http://127.0.0.1:4194 ONLY=simRevealScroll node scripts/runAllSims.mjs --browser | grep -E "PASS|FAIL|EMPTY|offline transport|not green|green"
+corrupt-base: git worktree add -q /tmp/cb b59ebe2b && ln -s "$PWD/node_modules" /tmp/cb/node_modules && cd /tmp/cb && node_modules/.bin/vite build > /tmp/cb-build.log 2>&1 && ONLY=/hall-of-champions,/soccer-career ENGINES=chromium node scripts/playCorruptSaves.mjs | grep -E "FAIL|trapped|soccer-career" | head -20
+results-base: git worktree add -q /tmp/xb b59ebe2b && ln -s "$PWD/node_modules" /tmp/xb/node_modules && cd /tmp/xb && node_modules/.bin/vite build > /tmp/xb-build.log 2>&1 && node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only > /dev/null 2>&1; NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playSoccerResultsLayout.mjs 2>&1 | grep -E "Assertion|Error|green|passed" | head -5
+fb1: N=1; git worktree add -q /tmp/fb$N b59ebe2b && ln -s "$PWD/node_modules" /tmp/fb$N/node_modules && cd /tmp/fb$N && ONLY=simCompletionSlugs,simLeaderboardCaps node scripts/runAllSims.mjs
+fb2: N=2; git worktree add -q /tmp/fb$N b59ebe2b && ln -s "$PWD/node_modules" /tmp/fb$N/node_modules && cd /tmp/fb$N && ONLY=simDailySaveHardening node scripts/runAllSims.mjs
+fb3: N=3; git worktree add -q /tmp/fb$N b59ebe2b && ln -s "$PWD/node_modules" /tmp/fb$N/node_modules && cd /tmp/fb$N && ONLY=simReportRelay node scripts/runAllSims.mjs
+fence-rawwrite: SAVE_FENCE_CONTROL=rawwrite node scripts/simSaveFence.mjs
+fence-nofence: SAVE_FENCE_CONTROL=nofence node scripts/simSaveFence.mjs
+mutfence: node .rc/x/mutfence.mjs
+retry-disk: SOCCER_CAREER_SAVE_RETRY_CONTROL=disk node scripts/simSoccerCareerSaveRetry.mjs
+fences1: ONLY=simLiveScores,simInventedNames,simNoInventedQuotes,simNoInventedConduct,simLegalPages,simSingleFooter,simCompletionSlugs,simCompletionOnce node scripts/runAllSims.mjs
+fences2: ONLY=simNoDoubleRecord,simDailyPuzzleContract,simDailySaveHardening,simWritesAreSent,simSchemaNames,simFetchRetry,simGoogleOnlyReturn,simReportRelay node scripts/runAllSims.mjs
+fences3: ONLY=simNavbarStatsReads,simLeaderboardCaps,simScoringCoverage,simSiteSearch,simResultMoment,simGuideHeadings node scripts/runAllSims.mjs
+creation-main: git worktree add -q /tmp/cm b59ebe2b && ln -s "$PWD/node_modules" /tmp/cm/node_modules && cd /tmp/cm && node scripts/simCreation.mjs 2>&1 | grep -E "FAIL|FAILURES" | head -4; exit ${PIPESTATUS[0]}
+subs-all-minus1331: B=$(node scripts/lib/treeWithoutMerge.mjs 26eadaaa 082fc277) && git worktree add -q --detach /tmp/sb1 $B && SUBS_BASE=/tmp/sb1 node scripts/simCmSubs.mjs
+c-legacyleak-minus1331: B=$(node scripts/lib/treeWithoutMerge.mjs 26eadaaa 082fc277) && git worktree add -q --detach /tmp/sb2 $B && SUBS_BASE=/tmp/sb2 SUBS_CONTROL=legacyleak node scripts/simCmSubs.mjs
+c-pressnew-minus1331: B=$(node scripts/lib/treeWithoutMerge.mjs 26eadaaa 082fc277) && git worktree add -q --detach /tmp/sb3 $B && SUBS_BASE=/tmp/sb3 SUBS_CONTROL=pressnew node scripts/simCmSubs.mjs
+c-nodate-minus1331: B=$(node scripts/lib/treeWithoutMerge.mjs 26eadaaa 082fc277) && git worktree add -q --detach /tmp/sb4 $B && SUBS_BASE=/tmp/sb4 SUBS_CONTROL=nodate node scripts/simCmSubs.mjs
+gmdiff-minus1332: FENCE_BASE=$(node scripts/lib/treeWithoutMerge.mjs b9df63b4 26eadaaa) bash .rc/x/gmdiff.sh
+simAcademy: node scripts/simAcademy.mjs
+simAnswerFromRecords: node scripts/simAnswerFromRecords.mjs
+simBallonDorFairness: node scripts/simBallonDorFairness.mjs
+simBallonDorTruth: node scripts/simBallonDorTruth.mjs
