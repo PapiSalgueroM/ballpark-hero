@@ -1,0 +1,4 @@
+#!build
+#!playwright
+headsha: git log --oneline -2
+playHtLineups: export CM_HT_PARENT_REF=491c10d3 CM_HT_LINEUPS_OUT="$PWD/htw" CM_HT_LINEUPS_PHASE=fixed FREE_KICK_FONT_CACHE="$PWD/fch"; node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only | tail -1 && node .rc/x/prepInstalled.mjs "$PWD/htw" && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simManagerHalftimeLineups.mjs | tail -1 && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playManagerHalftimeLineups.mjs

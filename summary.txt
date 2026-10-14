@@ -1,0 +1,3 @@
+build exit=0 32s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+headsha exit=0 0s | 4ad390d5a Round BEG: the packed Soccer Career save is read by every reader of its key (walk and unit test)
+playHtLineups exit=0 24s | Halftime lineups browser: passed; 869 checks, 3 played profiles, 1 effective controls, 7 originals.
