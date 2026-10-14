@@ -1,0 +1,6 @@
+seam1328 tilectl: wrote src/pages/ClubManager.tsx
+[32m✓ built in 30.84s[39m
+[dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+served on 4177: 200
+  INFO  C  s1280 Celta Vigo tile Market: 100px on head ("Window shut" over "Latest transfers inside")
+playCmHubLanding: 3 failure(s) (C 108 pass 3 fail)

@@ -1,0 +1,997 @@
+{
+  "control": "",
+  "rows": [
+    {
+      "game": "perfect-season-nba",
+      "width": 320,
+      "reports": [
+        {
+          "game_type": "perfect-season-nba",
+          "game_context": {
+            "path": "/perfect-season-nba",
+            "date": "2026-10-14",
+            "submittedAt": "2026-10-14T21:38:16.133Z",
+            "source": "game-report-button",
+            "contextTruncated": false,
+            "phase": "mode-select",
+            "mode": "classic",
+            "puzzleDate": "2026-10-14",
+            "decade": null,
+            "theme": null,
+            "spins": 0,
+            "rerolls": 2,
+            "squad": null,
+            "selected": null,
+            "picks": [
+              [
+                "PG",
+                null
+              ],
+              [
+                "SG",
+                null
+              ],
+              [
+                "SF",
+                null
+              ],
+              [
+                "PF",
+                null
+              ],
+              [
+                "C",
+                null
+              ],
+              [
+                "SIXTH",
+                null
+              ]
+            ],
+            "openSlots": [
+              "PG",
+              "SG",
+              "SF",
+              "PF",
+              "C",
+              "SIXTH"
+            ],
+            "result": null,
+            "lockedResult": null,
+            "diagnostics": {
+              "build": "index-Bkd03vbn.js",
+              "viewport": {
+                "width": 320,
+                "height": 900,
+                "pixelRatio": 1
+              },
+              "timezone": "UTC",
+              "browser": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/156.0.8078.4 Safari/537.36",
+              "language": "en-US"
+            }
+          },
+          "description": "Bug: Fixture report: I picked a player and expected the draft to continue."
+        }
+      ],
+      "externalFulfilledOrAborted": [
+        {
+          "origin": "https://fonts.googleapis.com",
+          "type": "stylesheet"
+        },
+        {
+          "origin": "https://flawuiqbvjobmkfkauhw.supabase.co",
+          "type": "fetch"
+        },
+        {
+          "origin": "https://flawuiqbvjobmkfkauhw.supabase.co",
+          "type": "fetch"
+        }
+      ],
+      "errors": [],
+      "completed": true,
+      "payload": {
+        "game_type": "perfect-season-nba",
+        "game_context": {
+          "path": "/perfect-season-nba",
+          "date": "2026-10-14",
+          "submittedAt": "2026-10-14T21:38:16.133Z",
+          "source": "game-report-button",
+          "contextTruncated": false,
+          "phase": "mode-select",
+          "mode": "classic",
+          "puzzleDate": "2026-10-14",
+          "decade": null,
+          "theme": null,
+          "spins": 0,
+          "rerolls": 2,
+          "squad": null,
+          "selected": null,
+          "picks": [
+            [
+              "PG",
+              null
+            ],
+            [
+              "SG",
+              null
+            ],
+            [
+              "SF",
+              null
+            ],
+            [
+              "PF",
+              null
+            ],
+            [
+              "C",
+              null
+            ],
+            [
+              "SIXTH",
+              null
+            ]
+          ],
+          "openSlots": [
+            "PG",
+            "SG",
+            "SF",
+            "PF",
+            "C",
+            "SIXTH"
+          ],
+          "result": null,
+          "lockedResult": null,
+          "diagnostics": {
+            "build": "index-Bkd03vbn.js",
+            "viewport": {
+              "width": 320,
+              "height": 900,
+              "pixelRatio": 1
+            },
+            "timezone": "UTC",
+            "browser": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/156.0.8078.4 Safari/537.36",
+            "language": "en-US"
+          }
+        },
+        "description": "Bug: Fixture report: I picked a player and expected the draft to continue."
+      }
+    },
+    {
+      "game": "player-bingo",
+      "width": 320,
+      "reports": [
+        {
+          "game_type": "player-bingo",
+          "game_context": {
+            "path": "/player-bingo",
+            "date": "2026-10-14",
+            "submittedAt": "2026-10-14T21:38:17.282Z",
+            "source": "game-report-button",
+            "contextTruncated": false,
+            "mode": "standard",
+            "phase": "error",
+            "currentPlayer": null,
+            "playerIndex": 0,
+            "strikes": 0,
+            "criterionIds": [],
+            "claimedCells": [],
+            "choice": false,
+            "endReason": null,
+            "lastRejected": null,
+            "diagnostics": {
+              "build": "index-Bkd03vbn.js",
+              "viewport": {
+                "width": 320,
+                "height": 900,
+                "pixelRatio": 1
+              },
+              "timezone": "UTC",
+              "browser": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/156.0.8078.4 Safari/537.36",
+              "language": "en-US"
+            }
+          },
+          "description": "Bug: Fixture report: I picked a player and expected the draft to continue."
+        }
+      ],
+      "externalFulfilledOrAborted": [
+        {
+          "origin": "https://fonts.googleapis.com",
+          "type": "stylesheet"
+        },
+        {
+          "origin": "https://flawuiqbvjobmkfkauhw.supabase.co",
+          "type": "fetch"
+        },
+        {
+          "origin": "https://flawuiqbvjobmkfkauhw.supabase.co",
+          "type": "fetch"
+        },
+        {
+          "origin": "https://flawuiqbvjobmkfkauhw.supabase.co",
+          "type": "fetch"
+        }
+      ],
+      "errors": [],
+      "completed": true,
+      "payload": {
+        "game_type": "player-bingo",
+        "game_context": {
+          "path": "/player-bingo",
+          "date": "2026-10-14",
+          "submittedAt": "2026-10-14T21:38:17.282Z",
+          "source": "game-report-button",
+          "contextTruncated": false,
+          "mode": "standard",
+          "phase": "error",
+          "currentPlayer": null,
+          "playerIndex": 0,
+          "strikes": 0,
+          "criterionIds": [],
+          "claimedCells": [],
+          "choice": false,
+          "endReason": null,
+          "lastRejected": null,
+          "diagnostics": {
+            "build": "index-Bkd03vbn.js",
+            "viewport": {
+              "width": 320,
+              "height": 900,
+              "pixelRatio": 1
+            },
+            "timezone": "UTC",
+            "browser": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/156.0.8078.4 Safari/537.36",
+            "language": "en-US"
+          }
+        },
+        "description": "Bug: Fixture report: I picked a player and expected the draft to continue."
+      }
+    },
+    {
+      "game": "perfect-season-nba",
+      "width": 390,
+      "reports": [
+        {
+          "game_type": "perfect-season-nba",
+          "game_context": {
+            "path": "/perfect-season-nba",
+            "date": "2026-10-14",
+            "submittedAt": "2026-10-14T21:38:18.032Z",
+            "source": "game-report-button",
+            "contextTruncated": false,
+            "phase": "mode-select",
+            "mode": "classic",
+            "puzzleDate": "2026-10-14",
+            "decade": null,
+            "theme": null,
+            "spins": 0,
+            "rerolls": 2,
+            "squad": null,
+            "selected": null,
+            "picks": [
+              [
+                "PG",
+                null
+              ],
+              [
+                "SG",
+                null
+              ],
+              [
+                "SF",
+                null
+              ],
+              [
+                "PF",
+                null
+              ],
+              [
+                "C",
+                null
+              ],
+              [
+                "SIXTH",
+                null
+              ]
+            ],
+            "openSlots": [
+              "PG",
+              "SG",
+              "SF",
+              "PF",
+              "C",
+              "SIXTH"
+            ],
+            "result": null,
+            "lockedResult": null,
+            "diagnostics": {
+              "build": "index-Bkd03vbn.js",
+              "viewport": {
+                "width": 390,
+                "height": 900,
+                "pixelRatio": 1
+              },
+              "timezone": "UTC",
+              "browser": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/156.0.8078.4 Safari/537.36",
+              "language": "en-US"
+            }
+          },
+          "description": "Bug: Fixture report: I picked a player and expected the draft to continue."
+        }
+      ],
+      "externalFulfilledOrAborted": [
+        {
+          "origin": "https://fonts.googleapis.com",
+          "type": "stylesheet"
+        },
+        {
+          "origin": "https://flawuiqbvjobmkfkauhw.supabase.co",
+          "type": "fetch"
+        },
+        {
+          "origin": "https://flawuiqbvjobmkfkauhw.supabase.co",
+          "type": "fetch"
+        }
+      ],
+      "errors": [],
+      "completed": true,
+      "payload": {
+        "game_type": "perfect-season-nba",
+        "game_context": {
+          "path": "/perfect-season-nba",
+          "date": "2026-10-14",
+          "submittedAt": "2026-10-14T21:38:18.032Z",
+          "source": "game-report-button",
+          "contextTruncated": false,
+          "phase": "mode-select",
+          "mode": "classic",
+          "puzzleDate": "2026-10-14",
+          "decade": null,
+          "theme": null,
+          "spins": 0,
+          "rerolls": 2,
+          "squad": null,
+          "selected": null,
+          "picks": [
+            [
+              "PG",
+              null
+            ],
+            [
+              "SG",
+              null
+            ],
+            [
+              "SF",
+              null
+            ],
+            [
+              "PF",
+              null
+            ],
+            [
+              "C",
+              null
+            ],
+            [
+              "SIXTH",
+              null
+            ]
+          ],
+          "openSlots": [
+            "PG",
+            "SG",
+            "SF",
+            "PF",
+            "C",
+            "SIXTH"
+          ],
+          "result": null,
+          "lockedResult": null,
+          "diagnostics": {
+            "build": "index-Bkd03vbn.js",
+            "viewport": {
+              "width": 390,
+              "height": 900,
+              "pixelRatio": 1
+            },
+            "timezone": "UTC",
+            "browser": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/156.0.8078.4 Safari/537.36",
+            "language": "en-US"
+          }
+        },
+        "description": "Bug: Fixture report: I picked a player and expected the draft to continue."
+      }
+    },
+    {
+      "game": "player-bingo",
+      "width": 390,
+      "reports": [
+        {
+          "game_type": "player-bingo",
+          "game_context": {
+            "path": "/player-bingo",
+            "date": "2026-10-14",
+            "submittedAt": "2026-10-14T21:38:19.132Z",
+            "source": "game-report-button",
+            "contextTruncated": false,
+            "mode": "standard",
+            "phase": "error",
+            "currentPlayer": null,
+            "playerIndex": 0,
+            "strikes": 0,
+            "criterionIds": [],
+            "claimedCells": [],
+            "choice": false,
+            "endReason": null,
+            "lastRejected": null,
+            "diagnostics": {
+              "build": "index-Bkd03vbn.js",
+              "viewport": {
+                "width": 390,
+                "height": 900,
+                "pixelRatio": 1
+              },
+              "timezone": "UTC",
+              "browser": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/156.0.8078.4 Safari/537.36",
+              "language": "en-US"
+            }
+          },
+          "description": "Bug: Fixture report: I picked a player and expected the draft to continue."
+        }
+      ],
+      "externalFulfilledOrAborted": [
+        {
+          "origin": "https://fonts.googleapis.com",
+          "type": "stylesheet"
+        },
+        {
+          "origin": "https://flawuiqbvjobmkfkauhw.supabase.co",
+          "type": "fetch"
+        },
+        {
+          "origin": "https://flawuiqbvjobmkfkauhw.supabase.co",
+          "type": "fetch"
+        },
+        {
+          "origin": "https://flawuiqbvjobmkfkauhw.supabase.co",
+          "type": "fetch"
+        }
+      ],
+      "errors": [],
+      "completed": true,
+      "payload": {
+        "game_type": "player-bingo",
+        "game_context": {
+          "path": "/player-bingo",
+          "date": "2026-10-14",
+          "submittedAt": "2026-10-14T21:38:19.132Z",
+          "source": "game-report-button",
+          "contextTruncated": false,
+          "mode": "standard",
+          "phase": "error",
+          "currentPlayer": null,
+          "playerIndex": 0,
+          "strikes": 0,
+          "criterionIds": [],
+          "claimedCells": [],
+          "choice": false,
+          "endReason": null,
+          "lastRejected": null,
+          "diagnostics": {
+            "build": "index-Bkd03vbn.js",
+            "viewport": {
+              "width": 390,
+              "height": 900,
+              "pixelRatio": 1
+            },
+            "timezone": "UTC",
+            "browser": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/156.0.8078.4 Safari/537.36",
+            "language": "en-US"
+          }
+        },
+        "description": "Bug: Fixture report: I picked a player and expected the draft to continue."
+      }
+    },
+    {
+      "game": "perfect-season-nba",
+      "width": 1280,
+      "reports": [
+        {
+          "game_type": "perfect-season-nba",
+          "game_context": {
+            "path": "/perfect-season-nba",
+            "date": "2026-10-14",
+            "submittedAt": "2026-10-14T21:38:19.816Z",
+            "source": "game-report-button",
+            "contextTruncated": false,
+            "phase": "mode-select",
+            "mode": "classic",
+            "puzzleDate": "2026-10-14",
+            "decade": null,
+            "theme": null,
+            "spins": 0,
+            "rerolls": 2,
+            "squad": null,
+            "selected": null,
+            "picks": [
+              [
+                "PG",
+                null
+              ],
+              [
+                "SG",
+                null
+              ],
+              [
+                "SF",
+                null
+              ],
+              [
+                "PF",
+                null
+              ],
+              [
+                "C",
+                null
+              ],
+              [
+                "SIXTH",
+                null
+              ]
+            ],
+            "openSlots": [
+              "PG",
+              "SG",
+              "SF",
+              "PF",
+              "C",
+              "SIXTH"
+            ],
+            "result": null,
+            "lockedResult": null,
+            "diagnostics": {
+              "build": "index-Bkd03vbn.js",
+              "viewport": {
+                "width": 1280,
+                "height": 900,
+                "pixelRatio": 1
+              },
+              "timezone": "UTC",
+              "browser": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/156.0.8078.4 Safari/537.36",
+              "language": "en-US"
+            }
+          },
+          "description": "Bug: Fixture report: I picked a player and expected the draft to continue."
+        }
+      ],
+      "externalFulfilledOrAborted": [
+        {
+          "origin": "https://fonts.googleapis.com",
+          "type": "stylesheet"
+        },
+        {
+          "origin": "https://flawuiqbvjobmkfkauhw.supabase.co",
+          "type": "fetch"
+        },
+        {
+          "origin": "https://flawuiqbvjobmkfkauhw.supabase.co",
+          "type": "fetch"
+        }
+      ],
+      "errors": [],
+      "completed": true,
+      "payload": {
+        "game_type": "perfect-season-nba",
+        "game_context": {
+          "path": "/perfect-season-nba",
+          "date": "2026-10-14",
+          "submittedAt": "2026-10-14T21:38:19.816Z",
+          "source": "game-report-button",
+          "contextTruncated": false,
+          "phase": "mode-select",
+          "mode": "classic",
+          "puzzleDate": "2026-10-14",
+          "decade": null,
+          "theme": null,
+          "spins": 0,
+          "rerolls": 2,
+          "squad": null,
+          "selected": null,
+          "picks": [
+            [
+              "PG",
+              null
+            ],
+            [
+              "SG",
+              null
+            ],
+            [
+              "SF",
+              null
+            ],
+            [
+              "PF",
+              null
+            ],
+            [
+              "C",
+              null
+            ],
+            [
+              "SIXTH",
+              null
+            ]
+          ],
+          "openSlots": [
+            "PG",
+            "SG",
+            "SF",
+            "PF",
+            "C",
+            "SIXTH"
+          ],
+          "result": null,
+          "lockedResult": null,
+          "diagnostics": {
+            "build": "index-Bkd03vbn.js",
+            "viewport": {
+              "width": 1280,
+              "height": 900,
+              "pixelRatio": 1
+            },
+            "timezone": "UTC",
+            "browser": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/156.0.8078.4 Safari/537.36",
+            "language": "en-US"
+          }
+        },
+        "description": "Bug: Fixture report: I picked a player and expected the draft to continue."
+      }
+    },
+    {
+      "game": "player-bingo",
+      "width": 1280,
+      "reports": [
+        {
+          "game_type": "player-bingo",
+          "game_context": {
+            "path": "/player-bingo",
+            "date": "2026-10-14",
+            "submittedAt": "2026-10-14T21:38:20.915Z",
+            "source": "game-report-button",
+            "contextTruncated": false,
+            "mode": "standard",
+            "phase": "error",
+            "currentPlayer": null,
+            "playerIndex": 0,
+            "strikes": 0,
+            "criterionIds": [],
+            "claimedCells": [],
+            "choice": false,
+            "endReason": null,
+            "lastRejected": null,
+            "diagnostics": {
+              "build": "index-Bkd03vbn.js",
+              "viewport": {
+                "width": 1280,
+                "height": 900,
+                "pixelRatio": 1
+              },
+              "timezone": "UTC",
+              "browser": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/156.0.8078.4 Safari/537.36",
+              "language": "en-US"
+            }
+          },
+          "description": "Bug: Fixture report: I picked a player and expected the draft to continue."
+        }
+      ],
+      "externalFulfilledOrAborted": [
+        {
+          "origin": "https://fonts.googleapis.com",
+          "type": "stylesheet"
+        },
+        {
+          "origin": "https://flawuiqbvjobmkfkauhw.supabase.co",
+          "type": "fetch"
+        },
+        {
+          "origin": "https://flawuiqbvjobmkfkauhw.supabase.co",
+          "type": "fetch"
+        },
+        {
+          "origin": "https://flawuiqbvjobmkfkauhw.supabase.co",
+          "type": "fetch"
+        },
+        {
+          "origin": "https://flawuiqbvjobmkfkauhw.supabase.co",
+          "type": "fetch"
+        }
+      ],
+      "errors": [],
+      "completed": true,
+      "payload": {
+        "game_type": "player-bingo",
+        "game_context": {
+          "path": "/player-bingo",
+          "date": "2026-10-14",
+          "submittedAt": "2026-10-14T21:38:20.915Z",
+          "source": "game-report-button",
+          "contextTruncated": false,
+          "mode": "standard",
+          "phase": "error",
+          "currentPlayer": null,
+          "playerIndex": 0,
+          "strikes": 0,
+          "criterionIds": [],
+          "claimedCells": [],
+          "choice": false,
+          "endReason": null,
+          "lastRejected": null,
+          "diagnostics": {
+            "build": "index-Bkd03vbn.js",
+            "viewport": {
+              "width": 1280,
+              "height": 900,
+              "pixelRatio": 1
+            },
+            "timezone": "UTC",
+            "browser": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/156.0.8078.4 Safari/537.36",
+            "language": "en-US"
+          }
+        },
+        "description": "Bug: Fixture report: I picked a player and expected the draft to continue."
+      }
+    },
+    {
+      "game": "perfect-season-nba",
+      "width": 1440,
+      "reports": [
+        {
+          "game_type": "perfect-season-nba",
+          "game_context": {
+            "path": "/perfect-season-nba",
+            "date": "2026-10-14",
+            "submittedAt": "2026-10-14T21:38:21.599Z",
+            "source": "game-report-button",
+            "contextTruncated": false,
+            "phase": "mode-select",
+            "mode": "classic",
+            "puzzleDate": "2026-10-14",
+            "decade": null,
+            "theme": null,
+            "spins": 0,
+            "rerolls": 2,
+            "squad": null,
+            "selected": null,
+            "picks": [
+              [
+                "PG",
+                null
+              ],
+              [
+                "SG",
+                null
+              ],
+              [
+                "SF",
+                null
+              ],
+              [
+                "PF",
+                null
+              ],
+              [
+                "C",
+                null
+              ],
+              [
+                "SIXTH",
+                null
+              ]
+            ],
+            "openSlots": [
+              "PG",
+              "SG",
+              "SF",
+              "PF",
+              "C",
+              "SIXTH"
+            ],
+            "result": null,
+            "lockedResult": null,
+            "diagnostics": {
+              "build": "index-Bkd03vbn.js",
+              "viewport": {
+                "width": 1440,
+                "height": 900,
+                "pixelRatio": 1
+              },
+              "timezone": "UTC",
+              "browser": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/156.0.8078.4 Safari/537.36",
+              "language": "en-US"
+            }
+          },
+          "description": "Bug: Fixture report: I picked a player and expected the draft to continue."
+        }
+      ],
+      "externalFulfilledOrAborted": [
+        {
+          "origin": "https://fonts.googleapis.com",
+          "type": "stylesheet"
+        },
+        {
+          "origin": "https://flawuiqbvjobmkfkauhw.supabase.co",
+          "type": "fetch"
+        },
+        {
+          "origin": "https://flawuiqbvjobmkfkauhw.supabase.co",
+          "type": "fetch"
+        }
+      ],
+      "errors": [],
+      "completed": true,
+      "payload": {
+        "game_type": "perfect-season-nba",
+        "game_context": {
+          "path": "/perfect-season-nba",
+          "date": "2026-10-14",
+          "submittedAt": "2026-10-14T21:38:21.599Z",
+          "source": "game-report-button",
+          "contextTruncated": false,
+          "phase": "mode-select",
+          "mode": "classic",
+          "puzzleDate": "2026-10-14",
+          "decade": null,
+          "theme": null,
+          "spins": 0,
+          "rerolls": 2,
+          "squad": null,
+          "selected": null,
+          "picks": [
+            [
+              "PG",
+              null
+            ],
+            [
+              "SG",
+              null
+            ],
+            [
+              "SF",
+              null
+            ],
+            [
+              "PF",
+              null
+            ],
+            [
+              "C",
+              null
+            ],
+            [
+              "SIXTH",
+              null
+            ]
+          ],
+          "openSlots": [
+            "PG",
+            "SG",
+            "SF",
+            "PF",
+            "C",
+            "SIXTH"
+          ],
+          "result": null,
+          "lockedResult": null,
+          "diagnostics": {
+            "build": "index-Bkd03vbn.js",
+            "viewport": {
+              "width": 1440,
+              "height": 900,
+              "pixelRatio": 1
+            },
+            "timezone": "UTC",
+            "browser": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/156.0.8078.4 Safari/537.36",
+            "language": "en-US"
+          }
+        },
+        "description": "Bug: Fixture report: I picked a player and expected the draft to continue."
+      }
+    },
+    {
+      "game": "player-bingo",
+      "width": 1440,
+      "reports": [
+        {
+          "game_type": "player-bingo",
+          "game_context": {
+            "path": "/player-bingo",
+            "date": "2026-10-14",
+            "submittedAt": "2026-10-14T21:38:22.648Z",
+            "source": "game-report-button",
+            "contextTruncated": false,
+            "mode": "standard",
+            "phase": "error",
+            "currentPlayer": null,
+            "playerIndex": 0,
+            "strikes": 0,
+            "criterionIds": [],
+            "claimedCells": [],
+            "choice": false,
+            "endReason": null,
+            "lastRejected": null,
+            "diagnostics": {
+              "build": "index-Bkd03vbn.js",
+              "viewport": {
+                "width": 1440,
+                "height": 900,
+                "pixelRatio": 1
+              },
+              "timezone": "UTC",
+              "browser": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/156.0.8078.4 Safari/537.36",
+              "language": "en-US"
+            }
+          },
+          "description": "Bug: Fixture report: I picked a player and expected the draft to continue."
+        }
+      ],
+      "externalFulfilledOrAborted": [
+        {
+          "origin": "https://fonts.googleapis.com",
+          "type": "stylesheet"
+        },
+        {
+          "origin": "https://flawuiqbvjobmkfkauhw.supabase.co",
+          "type": "fetch"
+        },
+        {
+          "origin": "https://flawuiqbvjobmkfkauhw.supabase.co",
+          "type": "fetch"
+        },
+        {
+          "origin": "https://flawuiqbvjobmkfkauhw.supabase.co",
+          "type": "fetch"
+        },
+        {
+          "origin": "https://flawuiqbvjobmkfkauhw.supabase.co",
+          "type": "fetch"
+        }
+      ],
+      "errors": [],
+      "completed": true,
+      "payload": {
+        "game_type": "player-bingo",
+        "game_context": {
+          "path": "/player-bingo",
+          "date": "2026-10-14",
+          "submittedAt": "2026-10-14T21:38:22.648Z",
+          "source": "game-report-button",
+          "contextTruncated": false,
+          "mode": "standard",
+          "phase": "error",
+          "currentPlayer": null,
+          "playerIndex": 0,
+          "strikes": 0,
+          "criterionIds": [],
+          "claimedCells": [],
+          "choice": false,
+          "endReason": null,
+          "lastRejected": null,
+          "diagnostics": {
+            "build": "index-Bkd03vbn.js",
+            "viewport": {
+              "width": 1440,
+              "height": 900,
+              "pixelRatio": 1
+            },
+            "timezone": "UTC",
+            "browser": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/156.0.8078.4 Safari/537.36",
+            "language": "en-US"
+          }
+        },
+        "description": "Bug: Fixture report: I picked a player and expected the draft to continue."
+      }
+    }
+  ]
+}
