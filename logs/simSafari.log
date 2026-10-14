@@ -1,0 +1,21 @@
+0) The scan covers what ships: no shipped file imports a test file
+   2142 files under src, 559 test files left out (434 under src/test, 125 *.test.* or *.spec.* elsewhere), 1583 scanned, 6393 local imports read
+1) No date string is handed back to the parser
+node:fs:483
+    return binding.readFileUtf8(path, stringToFlags(options.flag));
+                   ^
+
+Error: ENOENT: no such file or directory, open '/home/runner/work/ballpark-hero/ballpark-hero/src/lib/__control_soccerCareerEngine.ts'
+    at Object.readFileSync (node:fs:483:20)
+    at read (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simSafari.mjs:101:57)
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simSafari.mjs:150:29
+    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)
+    at async node:internal/modules/esm/loader:647:26
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/home/runner/work/ballpark-hero/ballpark-hero/src/lib/__control_soccerCareerEngine.ts'
+}
+
+Node.js v24.21.0

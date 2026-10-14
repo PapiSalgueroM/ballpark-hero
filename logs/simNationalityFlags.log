@@ -1,0 +1,23 @@
+simNationalityFlags
+   OWED (a bare print this harness knows about and does not fail on): src/components/soccer-career/TrophyCabinet.tsx:175 {career.nationality}, owner the other lane (Soccer Career), listed 2026-10-10
+1. Flags: 74 print sites across 37 files, every one with a flag on its line or the line before, bar 1 owed (16 Round 453 sites pinned)
+node:fs:483
+    return binding.readFileUtf8(path, stringToFlags(options.flag));
+                   ^
+
+Error: ENOENT: no such file or directory, open '/home/runner/work/ballpark-hero/ballpark-hero/src/lib/season/__control_soccer.ts'
+    at Object.readFileSync (node:fs:483:20)
+    at read (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simNationalityFlags.mjs:102:29)
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simNationalityFlags.mjs:333:53
+    at Array.map (<anonymous>)
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simNationalityFlags.mjs:333:40
+    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)
+    at async node:internal/modules/esm/loader:647:26
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/home/runner/work/ballpark-hero/ballpark-hero/src/lib/season/__control_soccer.ts'
+}
+
+Node.js v24.21.0
