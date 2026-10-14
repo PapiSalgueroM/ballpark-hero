@@ -1,0 +1,6 @@
+mutation autodrop applied to src/lib/gmInbox.ts
+   FAIL 12 breaks, 0 messages dropped on load: 9 packs at seeds 1, 2, 3, 2700 FLEET desks three ways (519000 compact weeks, 1801581 cooled book entries pruned in all)
+   FAIL the loader: a bad book and a bad one shot list reset alone FAILED
+simEventDeck: 2 failures, red sections 13
+[2m      Tests [22m [1m[32m63 passed[39m[22m[90m (63)[39m
+kit exit=1 vitest exit=0: MUTANT KILLED

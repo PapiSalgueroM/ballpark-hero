@@ -1,0 +1,4 @@
+mutation canexpire applied to src/components/front-office-shared/GmInboxPanel.tsx
+simEventDeck: green. Sections 7 only.
+[2m      Tests [22m [1m[32m8 passed[39m[22m[90m (8)[39m
+kit exit=0 vitest exit=0: MUTANT SURVIVED

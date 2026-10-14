@@ -1,0 +1,9 @@
+[31m   [31m×[31m GmInboxPanel[2m > [22ma full desk holding a card that can expire says the assistant may deal with one[39m[32m 11[2mms[22m[39m
+[31m   [31m×[31m GmInboxPanel[2m > [22man option with a registered effect prints it in the registry words handed in as fx[39m[32m 9[2mms[22m[39m
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 4 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+[41m[1m FAIL [22m[49m src/components/front-office-shared/GmInboxPanel.test.tsx[2m > [22mGmInboxPanel[2m > [22man opened card the staff settled shows the settled line, never "You replied"
+[41m[1m FAIL [22m[49m src/components/front-office-shared/GmInboxPanel.test.tsx[2m > [22mGmInboxPanel[2m > [22ma full desk holding a card that can expire says the assistant may deal with one
+[41m[1m FAIL [22m[49m src/components/front-office-shared/GmInboxPanel.test.tsx[2m > [22mGmInboxPanel[2m > [22man option with a registered effect prints it in the registry words handed in as fx
+[41m[1m FAIL [22m[49m src/components/us-career/InboxPanel.test.tsx[2m > [22mInboxPanel[2m > [22mwith settledLine: its line in the reply box, and no "You replied"
+[2m      Tests [22m [1m[31m4 failed[39m[22m[2m | [22m[1m[32m7 passed[39m[22m[90m (11)[39m
+the base panels under the new tests: vitest exit=1 (the settled tests fail on the base, as they must)

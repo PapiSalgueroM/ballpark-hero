@@ -1,0 +1,8 @@
+m-choicetargets exit=0 59s | kit exit=0 vitest exit=0: MUTANT SURVIVED
+m-nullpass exit=0 59s | kit exit=0 vitest exit=0: MUTANT SURVIVED
+m-autodrop exit=0 93s | kit exit=1 vitest exit=0: MUTANT KILLED
+m-prunesome exit=0 92s | kit exit=1 vitest exit=1: MUTANT KILLED
+m-seasonprune exit=0 93s | kit exit=1 vitest exit=1: MUTANT KILLED
+m-failclosed exit=0 2s | kit exit=1 vitest exit=1: MUTANT KILLED
+m-canexpire exit=0 2s | kit exit=0 vitest exit=0: MUTANT SURVIVED
+basepanel exit=0 2s | the base panels under the new tests: vitest exit=1 (the settled tests fail on the base, as they must)

@@ -1,0 +1,4 @@
+mutation nullpass applied to src/lib/gmInbox.ts
+simEventDeck: green. Sections 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 only.
+[2m      Tests [22m [1m[32m74 passed[39m[22m[90m (74)[39m
+kit exit=0 vitest exit=0: MUTANT SURVIVED

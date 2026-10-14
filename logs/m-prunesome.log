@@ -1,0 +1,10 @@
+mutation prunesome applied to src/lib/gmInbox.ts
+   FAIL 32307 breaks, 0 messages dropped on load: 9 packs at seeds 1, 2, 3, 2700 FLEET desks three ways (519000 compact weeks, 1835615 cooled book entries pruned in all)
+simEventDeck: 1 failure, red sections 13
+[31m   [31m×[31m gmInbox Round 1332: the compact desk[2m > [22ma compact desk deals, answers and moves exactly as a whole one over 200 weeks[39m[32m 30[2mms[22m[39m
+[31m   [31m×[31m gmInbox Round 1332: the compact desk[2m > [22mprunes on the week clock once every card of a key has cooled, and keeps one still cooling[39m[32m 2[2mms[22m[39m
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 2 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+[41m[1m FAIL [22m[49m src/lib/gmInbox.test.ts[2m > [22mgmInbox Round 1332: the compact desk[2m > [22ma compact desk deals, answers and moves exactly as a whole one over 200 weeks
+[41m[1m FAIL [22m[49m src/lib/gmInbox.test.ts[2m > [22mgmInbox Round 1332: the compact desk[2m > [22mprunes on the week clock once every card of a key has cooled, and keeps one still cooling
+[2m      Tests [22m [1m[31m2 failed[39m[22m[2m | [22m[1m[32m61 passed[39m[22m[90m (63)[39m
+kit exit=1 vitest exit=1: MUTANT KILLED
