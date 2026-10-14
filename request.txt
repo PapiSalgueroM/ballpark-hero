@@ -1,0 +1,5 @@
+#!build
+#!serial
+distgrep: bash .rc/x/distgrep.sh
+kitdrift: node .rc/x/mutkit1332.mjs && { SIM_EVENT_DECK_SECTIONS=12 node scripts/simEventDeck.mjs > /tmp/kd.txt 2>&1; k=$?; git checkout -- scripts; grep -E "FAIL|lands on|green" /tmp/kd.txt | head -8; echo "kit section 12 with answers waiting for the season start: exit=$k"; }
+usBoardParity: node scripts/simUsBoardParity.mjs

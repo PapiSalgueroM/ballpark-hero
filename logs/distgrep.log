@@ -1,0 +1,13 @@
+js chunks in dist/assets: 519
+  "pack moves": 0 chunk(s)
+  "has not registered": 0 chunk(s)
+  "share the short key": 0 chunk(s)
+  "cannot say who anyone is": 0 chunk(s)
+  "not a declared slot": 0 chunk(s)
+  "a meter the pack never moves": 0 chunk(s)
+  "built in meter": 0 chunk(s)
+  "your assistant deals with one": 0 chunk(s)
+  "dealt with it (": 0 chunk(s)
+  "Nothing new lands until you answer one": 0 chunk(s)
+  control, InboxPanel's own "You replied" (must be found): 2 chunk(s)
+distgrep: green, no deck string in any chunk and the control string found

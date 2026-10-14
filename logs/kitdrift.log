@@ -1,0 +1,10 @@
+the kit fleet now answers in the first week of each season only
+12) Legal: every pack narrated in roles, slots only in words, and a tagged card never lands on a real man
+     desk 0 week 40: answering c_curfew-2031-w22 lands on a real man
+     desk 1 week 120: answering p_home-2035-w101 lands on a real man
+     desk 2 week 20: answering p_home-2030-w1 lands on a real man
+     desk 2 week 100: answering p_home-2034-w81 lands on a real man
+     desk 2 week 120: answering c_curfew-2035-w102 lands on a real man
+     desk 2 week 180: answering p_home-2038-w161 lands on a real man
+   FAIL 150 breaks: FX_CONDUCT on 100 ten season desks: 3099 cards dealt, 1422 of them tagged, 2799 answered, 38576 tagged cards held for a real man
+kit section 12 with answers waiting for the season start: exit=1
