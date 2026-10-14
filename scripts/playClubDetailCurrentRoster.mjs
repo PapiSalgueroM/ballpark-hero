@@ -302,7 +302,7 @@ try {
     retained('fixed/' + path.basename(row.file) + '.before', row.beforeSha256);
   }
   for (const binding of model.bindings) setup(binding.candidateSha256 === fileHash(path.join(ROOT, binding.file))
-    && binding.parentSha256 === sha(execFileSync('git', ['show', PARENT + ':' + binding.file], { cwd: ROOT })), 'Whole original parent binding differs: ' + binding.file);
+    && binding.parentSha256 === sha(execFileSync('git', ['show', PARENT + ':' + binding.file], { cwd: ROOT, maxBuffer: 8 * 1024 * 1024 })), 'Whole original parent binding differs: ' + binding.file);
   for (const binding of [model.componentBinding, model.oldTestBinding]) {
     retained('fixed/' + path.basename(binding.file) + '.fixed-plan', binding.plannedSha256);
     const inverse = retained('fixed/' + path.basename(binding.file) + '.inverse', binding.inverseSha256);

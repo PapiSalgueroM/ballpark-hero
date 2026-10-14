@@ -1,6 +1,6 @@
-## Codex Round1364: current roster fix, inverse comparison setup repaired, 2026-10-14
+## Codex Round1364: saved roster fix, browser source buffer repaired, 2026-10-14
 
-Round1364 fixed4a77cb85 passed actual type0/new8/original3+5/prior10 but failed before world checks because the old inverse-HEAD setup conflicts with the corrected display. The one workflow invocation now anchors its existing inverse comparison to the explicitly held parent082f. App/proof/oracles/controls/economics/core/package/caps unchanged. Retained failed packet earns only reached gates. Fresh full fixed run is pending, draftPR266 not merged/live. See docs/audits/club-detail-current-roster-2026-10-14.md.
+Round1364 a9 passed fixed8/control3+5/prior10/world13/alllegacyguards/fullunits7930/build/type0, then newdriverstoppedbeforelaunch atdefault1MiB Git stdout readingcomplete1.1MiBparentCore. Whole311filepacketclosed,0browserimages/no latercredit. Independently reviewedone-call8MiBbufferrepair73b8 retainsentire43677driverinverse/app/oracles/controls/WF/packages/currentlimits. Freshfullfixedgate pending, draftPR266notmerged/live. See docs/audits/club-detail-current-roster-2026-10-14.md.
 
 ## Release BC LIVE, 2026-10-13 18:23 EDT: one tab can no longer wipe a Club Manager save, Club Manager's world remembers your deals, its tables, copy and hub fixed, Soccer Career's events drawn fairly, the shared event deck, the college athletic director
 
