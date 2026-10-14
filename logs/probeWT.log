@@ -1,0 +1,29 @@
+probeWT: patched copy written
+PROBE career 50000 step 9 phase social_media_action pendH 200,62,221 pendB 53,200 | catalog only head 600,601,602,603,604 only base  | prev  awardsN 0/0
+PROBE career 50001 step 9 phase social_media_action pendH 200,602,5 pendB 200,252,5 | catalog only head 600,601,602,603,604 only base  | prev  awardsN 0/0
+PROBE career 50002 step 7 phase social_media_action pendH 200,224,72,435 pendB 200,220,53,435 | catalog only head 600,601,602,603,604 only base  | prev  awardsN 0/1
+PROBE career 50003 step 7 phase social_media_action pendH 200,252,617,485,411 pendB 200,246,247,485,411 | catalog only head 617,618 only base  | prev  awardsN 0/1
+PROBE career 50004 step 9 phase social_media_action pendH 200,29,13,405 pendB 200,26,13,411 | catalog only head 600,601,602,603 only base  | prev  awardsN 0/0
+PROBE career 50005 step 9 phase social_media_action pendH 200,230,53,494,2 pendB 200,228,50,494,2 | catalog only head 600,601,602,603 only base  | prev  awardsN 0/0
+PROBE career 50006 step 7 phase social_media_action pendH 200,426,625 pendB 200,426,247 | catalog only head 625,627 only base  | prev  awardsN 0/1
+PROBE career 50007 step 7 phase social_media_action pendH 200,247,621,223 pendB 239,246,200 | catalog only head 620,621,622,623,624 only base  | prev  awardsN 0/2
+PROBE career 50008 step 10 phase social_media_action pendH 262,200,20,247 pendB 262,200,16,240 | catalog only head 617,618 only base  | prev  awardsN 0/1
+PROBE career 50009 step 3 phase playing pendH  pendB  | catalog only head  only base  | prev  awardsN 0/0
+PROBE career 50010 step 7 phase social_media_action pendH 200,487,224,5 pendB 200,487,223,5 | catalog only head 617,618 only base  | prev  awardsN 0/0
+PROBE career 50011 step 7 phase social_media_action pendH 200,400,411 pendB 200,405,411 | catalog only head 600,601,602,603 only base  | prev  awardsN 0/1
+PROBE career 50012 step 9 phase social_media_action pendH 200,229,405 pendB 200,224,406 | catalog only head 605,606,607,608,609 only base  | prev  awardsN 0/0
+PROBE career 50013 step 9 phase social_media_action pendH 262,200,222,419 pendB 262,200,220,420 | catalog only head 605,606,607,608,609 only base  | prev  awardsN 0/1
+PROBE career 50014 step 16 phase social_media_action pendH 201,415,492,252 pendB 201,415,492,251 | catalog only head 610 only base  | prev  awardsN 0/1
+PROBE career 50015 step 9 phase social_media_action pendH 200,49,10 pendB 200,26,8 | catalog only head 600,601,602,603 only base  | prev  awardsN 0/0
+PROBE career 50016 step 9 phase social_media_action pendH 200,8,29,26 pendB 200,8,26,22 | catalog only head 605,606,607,608,609 only base  | prev  awardsN 0/0
+PROBE career 50017 step 7 phase social_media_action pendH 200,3,72,238,230 pendB 200,3,62,230,229 | catalog only head 613 only base  | prev  awardsN 0/0
+PROBE career 50018 step 7 phase social_media_action pendH 200,627,421,220,487 pendB 200,252,421,220,487 | catalog only head 627 only base  | prev  awardsN 0/0
+PROBE career 50019 step 9 phase social_media_action pendH 200,230,487,22 pendB 200,229,487,21 | catalog only head 627 only base  | prev  awardsN 0/0
+PROBE career 50020 step 9 phase social_media_action pendH 200,22,25 pendB 200,20,23 | catalog only head 600,601,602,603 only base  | prev  awardsN 0/1
+PROBE career 50021 step 7 phase social_media_action pendH 200,1,221 pendB 200,1,220 | catalog only head 617,618 only base  | prev  awardsN 0/0
+PROBE career 50022 step 9 phase social_media_action pendH 200,61,411 pendB 200,53,411 | catalog only head 627 only base  | prev  awardsN 0/1
+PROBE career 50023 step 9 phase social_media_action pendH 200,429,492,425,617 pendB 200,429,492,426,259 | catalog only head 617,618 only base  | prev  awardsN 0/0
+PROBE career 50024 step 7 phase social_media_action pendH 200,14,61,609,67 pendB 200,14,53,400,62 | catalog only head 605,606,607,608,609 only base  | prev  awardsN 0/0
+   200 careers in lockstep with the base: 1792 steps, 431 seasons, 223 month blocks and 223 world ticks compared, 1376 world records; 0 careers with a count, seed or record off the base
+  FAIL (section 2): only 223 month blocks and 223 world ticks were compared
+simSoccerWorldTruth: 1 FAILURES (section 2: 1)

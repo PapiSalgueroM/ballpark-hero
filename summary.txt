@@ -1,0 +1,8 @@
+routine-ctl-missing exit=0 6s | FIRED-OK
+routine exit=0 8s | simSoccerCareerRoutineEvents normal: green. All exact outcome and source guards passed.
+routine-ctl-priority exit=0 8s | FIRED-OK
+routine-ctl-effect exit=0 9s | FIRED-OK
+probeWT exit=1 6s | simSoccerWorldTruth: 1 FAILURES (section 2: 1)
+probeWT-BE exit=0 16s |    200 careers in lockstep with the base: 5740 steps, 823 seasons, 593 month blocks and 593 world ticks compared, 5324 world records; 0 careers with a count, seed or reco
+simSoccerDeckFairness exit=0 64s | simSoccerDeckFairness: all sections green
+deck-ctl-shuffle exit=0 65s | FIRED-OK

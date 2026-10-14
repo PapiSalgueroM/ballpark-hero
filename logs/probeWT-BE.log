@@ -1,0 +1,14 @@
+probeWT: patched copy written
+PROBE career 50000 step 22 phase playing pendH  pendB  | catalog only head  only base  | prev  awardsN 0/0
+PROBE career 50001 step 112 phase playing pendH  pendB  | catalog only head  only base  | prev  awardsN 0/0
+PROBE career 50002 step 7 phase social_media_action pendH 200,221,61,435 pendB 200,220,53,435 | catalog only head  only base  | prev  awardsN 0/1
+PROBE career 50003 step 7 phase social_media_action pendH 200,246,252,485,411 pendB 200,246,247,485,411 | catalog only head  only base  | prev  awardsN 0/1
+PROBE career 50004 step 20 phase social_media_action pendH 201,421,404,230,431 pendB 201,421,404,229,431 | catalog only head  only base  | prev  awardsN 0/1
+PROBE career 50005 step 33 phase social_media_action pendH 500,467,400,477,251 pendB 500,467,331,477,251 | catalog only head  only base  | prev  awardsN 0/2
+PROBE career 50006 step 7 phase social_media_action pendH 200,426,252 pendB 200,426,247 | catalog only head  only base  | prev  awardsN 0/1
+PROBE career 50007 step 27 phase social_media_action pendH 500,480,422,440,401 pendB 500,480,421,440,401 | catalog only head  only base  | prev  awardsN 0/4
+PROBE career 50008 step 10 phase social_media_action pendH 262,200,20,246 pendB 262,200,16,240 | catalog only head  only base  | prev  awardsN 0/1
+PROBE career 50009 step 3 phase playing pendH  pendB  | catalog only head  only base  | prev  awardsN 0/0
+PROBE career 50011 step 50 phase social_media_action pendH 482,41,220,480 pendB 482,41,218,480 | catalog only head  only base  | prev  awardsN 0/2
+PROBE career 50012 step 83 phase social_media_action pendH 253,473 pendB 252,473 | catalog only head  only base  | prev  awardsN 0/2
+   200 careers in lockstep with the base: 5740 steps, 823 seasons, 593 month blocks and 593 world ticks compared, 5324 world records; 0 careers with a count, seed or record off the base
