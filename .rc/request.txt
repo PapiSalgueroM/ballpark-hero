@@ -1,0 +1,6 @@
+#!serve
+#!playwright
+saveFence-b59: git worktree add -q /tmp/base1 b59ebe2b && ln -s "$PWD/node_modules" /tmp/base1/node_modules && FENCE_BASE=/tmp/base1 node scripts/simSaveFence.mjs 2>&1 | tail -8; exit ${PIPESTATUS[0]}
+playSoccerAgentReview: export FREE_KICK_FONT_CACHE=soccer-agent-review-artifacts/font-cache; node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only > /dev/null 2>&1; export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"; node scripts/simSoccerAgentReview.mjs > /tmp/sar.log 2>&1; tail -1 /tmp/sar.log; node scripts/playSoccerAgentReview.mjs
+playSoccerInternationalReturn: export FREE_KICK_FONT_CACHE=soccer-international-return-artifacts/font-cache; node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only > /dev/null 2>&1; export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"; node scripts/simSoccerInternationalReturn.mjs > /tmp/sir.log 2>&1; tail -1 /tmp/sir.log; node scripts/playSoccerInternationalReturn.mjs
+playCareerProgramme: export FREE_KICK_FONT_CACHE=career-programme-artifacts/font-cache; node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only > /dev/null 2>&1; export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"; node scripts/simCareerProgramme.mjs > /tmp/scp.log 2>&1; tail -1 /tmp/scp.log; node scripts/playCareerProgramme.mjs
