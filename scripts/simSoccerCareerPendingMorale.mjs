@@ -11,6 +11,10 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 assert(process.env.CI && process.env.SIM_NETWORK === 'offline', 'Pending morale proof requires remote offline transport');
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..'), SELF = fileURLToPath(import.meta.url);
 const TEST = 'src/test/soccerCareerPendingMorale.test.ts', PARENT = '7a0ae6ba2523719e854a054fec72b27673557982';
+/* Release BF join: SC_PENDING_MORALE_CORE_REF (default PARENT) is the ref the unchanged app files are held to. The packet was proved on
+   an older tree; on a newer one the join names the tree without this packet (its merge's first parent), and the
+   files this packet fixes are still compared with PARENT. */
+const CORE_REF = process.env.SC_PENDING_MORALE_CORE_REF || PARENT;
 const ENGINE = path.join(ROOT, 'src/lib/soccerCareerEngine.ts'), LIFE = path.join(ROOT, 'src/lib/soccerCareerLife.ts');
 const SAVE = path.join(ROOT, 'src/lib/soccerCareerSave.ts'), CONTRACTS = path.join(ROOT, 'src/lib/soccerCareerContracts.ts');
 const CAPTIONS = path.join(ROOT, 'src/lib/soccerCareerLifeConsequences.ts'), ROUTINE = path.join(ROOT, 'src/lib/soccerCareerRoutineEvents.ts');
@@ -66,7 +70,7 @@ const parentCaptions = git(['show', `${PARENT}:src/lib/soccerCareerLifeConsequen
 fs.writeFileSync(path.join(retained, 'soccerCareerLife.parent.ts'), parentLife);
 fs.writeFileSync(path.join(retained, 'soccerCareerLifeConsequences.parent.ts'), parentCaptions);
 const parentAppHashes = [ENGINE, LIFE, SAVE, CONTRACTS, CAPTIONS, ROUTINE].map(file => {
-  const name = path.relative(ROOT, file).replaceAll('\\', '/'), before = git(['show', `${PARENT}:${name}`]);
+  const name = path.relative(ROOT, file).replaceAll('\\', '/'), before = git(['show', `${file !== LIFE && file !== CAPTIONS ? CORE_REF : PARENT}:${name}`]);
   const row = { file: name, parentSha256: sha(before), candidateSha256: sha(sources.get(file)) };
   if (RED || (file !== LIFE && file !== CAPTIONS)) assert.equal(row.candidateSha256, row.parentSha256, 'Only fixed Life and captions may differ from held parent app');
   return row;
