@@ -1,0 +1,21 @@
+simSoccerCareerStatRewards exit=1 0s | Node.js v24.21.0
+simSoccerCareerStatRewards-ctl-overwrite exit=1 0s | Node.js v24.21.0
+simSoccerCareerStatRewards-ctl-preview exit=1 0s | Node.js v24.21.0
+simSoccerCareerStatRewards-ctl-legacy exit=1 0s | Node.js v24.21.0
+simSoccerCareerRoutineEvents exit=0 12s | simSoccerCareerRoutineEvents normal: green. All exact outcome and source guards passed.
+simSoccerCareerLifeReviews exit=0 5s | simSoccerCareerLifeReviews normal: green. Exact causal outcome and source guards passed.
+simSoccerCareerPendingLife exit=1 0s | Node.js v24.21.0
+vitest exit=1 49s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js,title=src/test/soccerCareerStatRewards.test.ts > Soccer Career stat rewards an
+simCareerLife exit=0 29s | simCareerLife: green. Every peak is reachable, the critic has an opinion and it is about the football, and nothing about either of them is on the save.
+simCareerStory exit=0 27s | simCareerStory: GREEN, 96 careers keep every season's lines in order, draw nothing and stay inside the size bands
+tsc exit=0 103s | 
+simCareerLifeCooldowns exit=0 69s | simCareerLifeCooldowns: green. No event repeats inside its cooldown, every new event fires, the rate held, and the catalog has two real choices everywhere.
+simNoInventedQuotes exit=0 38s | simNoInventedQuotes: green. No real player is quoted or accused anywhere.
+simCareerProgramme exit=0 97s | Career programme:50 original/compatibility/full product season pairs with exact RNG,240 opted gameplay seasons,21 effective loaded faults,163 unchanged chance outcomes an
+simHarnessAnchors exit=0 62s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simNoRivalNames exit=0 16s | No rival product names found. 0 findings.
+simCareerDilemmaReach exit=0 73s | simCareerDilemmaReach: all green
+simSoccerDeckFairness exit=0 73s | simSoccerDeckFairness: all sections green
+worldTruth exit=0 84s | simSoccerWorldTruth: OK, every section green
+programme-ctl-overwrite exit=0 74s | FIRED-OK
+simCreation exit=0 398s | ALL CREATION CHECKS PASSED

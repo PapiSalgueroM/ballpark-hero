@@ -1,0 +1,110 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/test/soccerCareerRoutineEvents.test.ts [2m([22m[2m44 tests[22m[2m)[22m[33m 474[2mms[22m[39m
+ [31m❯[39m src/test/soccerCareerStatRewards.test.ts [2m([22m[2m21 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[32m 228[2mms[22m[39m
+   [32m✓[39m Soccer Career stat rewards and truthful Life previews[2m > [22mstat rewards missing: positive queued bonuses survive the actual hit[32m 42[2mms[22m[39m
+   [32m✓[39m Soccer Career stat rewards and truthful Life previews[2m > [22mstat rewards missing: negative queued bonuses survive the actual hit[32m 17[2mms[22m[39m
+   [32m✓[39m Soccer Career stat rewards and truthful Life previews[2m > [22mstat rewards missing: zero and absent queued bonuses survive the actual hit[32m 13[2mms[22m[39m
+   [32m✓[39m Soccer Career stat rewards and truthful Life previews[2m > [22mstat rewards preservation: positive queued bonuses survive the actual miss[32m 12[2mms[22m[39m
+   [32m✓[39m Soccer Career stat rewards and truthful Life previews[2m > [22mstat rewards preservation: negative queued bonuses survive the actual miss[32m 7[2mms[22m[39m
+   [32m✓[39m Soccer Career stat rewards and truthful Life previews[2m > [22mstat rewards preservation: zero and absent queued bonuses survive the actual miss[32m 9[2mms[22m[39m
+   [32m✓[39m Soccer Career stat rewards and truthful Life previews[2m > [22mstat rewards preservation: leaving holds every queued bonus[32m 7[2mms[22m[39m
+   [32m✓[39m Soccer Career stat rewards and truthful Life previews[2m > [22mstat rewards preservation: a wrong personality still skips the saved card[32m 6[2mms[22m[39m
+   [32m✓[39m Soccer Career stat rewards and truthful Life previews[2m > [22mstat rewards preservation: the original lookup and single wheel draw stay intact[32m 11[2mms[22m[39m
+[31m   [31m×[31m Soccer Career stat rewards and truthful Life previews[2m > [22mstat rewards missing: earned bonuses reach the actual next-season boundary once[39m[32m 16[2mms[22m[39m
+[31m     → Invariant violation: "new TextEncoder().encode("") instanceof Uint8Array" is incorrectly false
+
+This indicates that your JavaScript environment is broken. You cannot use
+esbuild in this environment because esbuild relies on this invariant. This
+is not a problem with esbuild. You need to fix your environment instead.
+[39m
+   [32m✓[39m Soccer Career stat rewards and truthful Life previews[2m > [22mstat rewards preservation: loaded choice inputs remain immutable[32m 14[2mms[22m[39m
+   [32m✓[39m Soccer Career stat rewards and truthful Life previews[2m > [22mstat rewards preservation: original prerequisite offer and cooldown remain intact[32m 3[2mms[22m[39m
+   [32m✓[39m Soccer Career stat rewards and truthful Life previews[2m > [22mstat preview missing: 205 choice0 shows the actual effect[32m 6[2mms[22m[39m
+   [32m✓[39m Soccer Career stat rewards and truthful Life previews[2m > [22mstat preview missing: 205 choice1 shows the actual effect[32m 7[2mms[22m[39m
+   [32m✓[39m Soccer Career stat rewards and truthful Life previews[2m > [22mstat preview missing: 211 choice1 shows the actual effect[32m 7[2mms[22m[39m
+   [32m✓[39m Soccer Career stat rewards and truthful Life previews[2m > [22mstat preview missing: 213 choice0 shows the actual effect[32m 6[2mms[22m[39m
+   [32m✓[39m Soccer Career stat rewards and truthful Life previews[2m > [22mstat preview missing: 214 choice1 shows the actual effect[32m 5[2mms[22m[39m
+   [32m✓[39m Soccer Career stat rewards and truthful Life previews[2m > [22mstat preview missing: 215 choice1 shows the actual effect[32m 5[2mms[22m[39m
+   [32m✓[39m Soccer Career stat rewards and truthful Life previews[2m > [22mstat preview missing: 217 choice0 shows the actual effect[32m 8[2mms[22m[39m
+   [32m✓[39m Soccer Career stat rewards and truthful Life previews[2m > [22mstat preview missing: 218 choice0 shows the actual effect[32m 10[2mms[22m[39m
+   [32m✓[39m Soccer Career stat rewards and truthful Life previews[2m > [22mstat preview missing: 219 choice0 shows the actual effect[32m 11[2mms[22m[39m
+[90mstdout[2m | src/test/careerStory.test.tsx[2m > [22m[2mSoccer Career: the story keeps the save small[2m > [22m[2mthe longest career on seed 9748 plus ten dugout seasons stays under the bound
+[22m[39m[story size] seed 9748: 27 season rows, 26 story seasons, story 16416 bytes, save 128413 bytes, save without story 111997
+[save parts] seed 9748: rest 65360 bytes, cup games 38555 bytes over 22 seasons, division 12280 bytes over 20 seasons, ten divisions 4489 bytes
+[save parts] seed 9748: opening cup ties 2187 bytes over 20 seasons, chance wheel 159 bytes
+[save parts] seed 9748: generated rivals' pool 4502 bytes
+
+ [32m✓[39m src/test/soccerCareerPendingLife.test.ts [2m([22m[2m40 tests[22m[2m)[22m[33m 767[2mms[22m[39m
+[90mstdout[2m | src/test/careerStory.test.tsx[2m > [22m[2mSoccer Career: the story keeps the save small[2m > [22m[2mthe longest career on seed 9749 plus ten dugout seasons stays under the bound
+[22m[39m[story size] seed 9749: 30 season rows, 29 story seasons, story 19024 bytes, save 114789 bytes, save without story 95765
+[save parts] seed 9749: rest 73813 bytes, cup games 14726 bytes over 9 seasons, division 13034 bytes over 21 seasons, ten divisions 4489 bytes
+[save parts] seed 9749: opening cup ties 1958 bytes over 18 seasons, chance wheel 166 bytes
+[save parts] seed 9749: generated rivals' pool 5911 bytes
+
+[90mstdout[2m | src/test/careerStory.test.tsx[2m > [22m[2mSoccer Career: the story keeps the save small[2m > [22m[2mthe longest career on seed 9750 plus ten dugout seasons stays under the bound
+[22m[39m[story size] seed 9750: 27 season rows, 26 story seasons, story 16159 bytes, save 130889 bytes, save without story 114730
+[save parts] seed 9750: rest 66713 bytes, cup games 39409 bytes over 22 seasons, division 12266 bytes over 20 seasons, ten divisions 4490 bytes
+[save parts] seed 9750: opening cup ties 2087 bytes over 19 seasons, chance wheel 154 bytes
+[save parts] seed 9750: generated rivals' pool 4900 bytes
+
+ [32m✓[39m src/test/soccerCareerLifeReviews.test.ts [2m([22m[2m20 tests[22m[2m)[22m[33m 1185[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career recorded life reviews[2m > [22mlife review missing: both queued assignment skills reach the actual next season once [33m 311[2mms[22m[39m
+ [32m✓[39m src/test/careerStory.test.tsx [2m([22m[2m13 tests[22m[2m)[22m[33m 6771[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career: the story keeps every season[2m > [22mtwelve seasons on seed 9741: every line kept, in order, once [33m 416[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career: the story keeps every season[2m > [22mthe story draws nothing: the same seed without it plays the same career [33m 438[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career: the story keeps the save small[2m > [22mthe longest career on seed 9748 plus ten dugout seasons stays under the bound [33m 527[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career: the story keeps the save small[2m > [22mthe longest career on seed 9749 plus ten dugout seasons stays under the bound [33m 641[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career: the story keeps the save small[2m > [22mthe longest career on seed 9750 plus ten dugout seasons stays under the bound [33m 515[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career: the story on the real page[2m > [22mLatest Events opens the story, a season opens, Back returns, Close shuts it [33m 1081[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career: the story on the real page[2m > [22mthe retired screen carries the same story, the last chapter included [33m 992[2mms[22m[39m
+ [32m✓[39m src/test/soccerCareerContracts.test.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 133[2mms[22m[39m
+[90mstdout[2m | src/test/careerDilemmaReach.test.tsx[2m > [22m[2mSoccer Career: the moral dilemmas reach the player through the page[2m > [22m[2mreach: careers picked up at 17
+[22m[39mREACH start=17 careers=6 seasons=24 adultSeasons=12 offers=2 shows=2 adultShows=2
+
+[90mstdout[2m | src/test/careerDilemmaReach.test.tsx[2m > [22m[2mSoccer Career: the moral dilemmas reach the player through the page[2m > [22m[2mreach: careers picked up at 19
+[22m[39mREACH start=19 careers=6 seasons=24 adultSeasons=24 offers=10 shows=10 adultShows=10
+
+[90mstdout[2m | src/test/careerDilemmaReach.test.tsx[2m > [22m[2mSoccer Career: the moral dilemmas reach the player through the page[2m > [22m[2mreach: careers picked up at 24
+[22m[39mREACH start=24 careers=6 seasons=24 adultSeasons=24 offers=9 shows=9 adultShows=9
+
+[90mstdout[2m | src/test/careerDilemmaReach.test.tsx[2m > [22m[2mSoccer Career: the moral dilemmas reach the player through the page[2m > [22m[2mreach: careers picked up at 30
+[22m[39mREACH start=30 careers=6 seasons=24 adultSeasons=24 offers=5 shows=5 adultShows=5
+
+[90mstdout[2m | src/test/careerDilemmaReach.test.tsx[2m > [22m[2mSoccer Career: the moral dilemmas reach the player through the page[2m > [22m[2mreach: a player from 20 up sees dilemmas on screen
+[22m[39mREACH total adultOffers=26 adultShows=26
+
+ [32m✓[39m src/test/careerDilemmaReach.test.tsx [2m([22m[2m5 tests[22m[2m)[22m[33m 43017[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career: the moral dilemmas reach the player through the page[2m > [22mreach: careers picked up at 17 [33m 11013[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career: the moral dilemmas reach the player through the page[2m > [22mreach: careers picked up at 19 [33m 7094[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career: the moral dilemmas reach the player through the page[2m > [22mreach: careers picked up at 24 [33m 8802[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career: the moral dilemmas reach the player through the page[2m > [22mreach: careers picked up at 30 [33m 14604[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/soccerCareerStatRewards.test.ts[2m > [22mSoccer Career stat rewards and truthful Life previews[2m > [22mstat rewards missing: earned bonuses reach the actual next-season boundary once
+[31m[1mError[22m: Invariant violation: "new TextEncoder().encode("") instanceof Uint8Array" is incorrectly false
+
+This indicates that your JavaScript environment is broken. You cannot use
+esbuild in this environment because esbuild relies on this invariant. This
+is not a problem with esbuild. You need to fix your environment instead.
+[39m
+[36m [2m❯[22m Object.<anonymous> node_modules/esbuild/lib/main.js:[2m201:9[22m[39m
+    [90m199| [39m}
+    [90m200| [39m[35mif[39m ([33m![39m([34mencodeUTF8[39m([32m""[39m) [35minstanceof[39m [33mUint8Array[39m))
+    [90m201| [39m  throw new Error(`Invariant violation: "${encodeInvariant} instanceof…
+    [90m   | [39m        [31m^[39m
+    [90m202| [39m
+    [90m203| [39mThis indicates that your JavaScript environment is broken. You cannot …
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m6 passed[39m[22m[90m (7)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m152 passed[39m[22m[90m (153)[39m
+[2m   Start at [22m 20:42:45
+[2m   Duration [22m 48.78s[2m (transform 6.02s, setup 719ms, collect 13.14s, tests 52.57s, environment 4.43s, prepare 1.05s)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js,title=src/test/soccerCareerStatRewards.test.ts > Soccer Career stat rewards and truthful Life previews > stat rewards missing%3A earned bonuses reach the actual next-season boundary once,line=201,column=9::Error: Invariant violation: "new TextEncoder().encode("") instanceof Uint8Array" is incorrectly false%0A%0AThis indicates that your JavaScript environment is broken. You cannot use%0Aesbuild in this environment because esbuild relies on this invariant. This%0Ais not a problem with esbuild. You need to fix your environment instead.%0A%0A ❯ Object.<anonymous> node_modules/esbuild/lib/main.js:201:9%0A%0A

@@ -1,0 +1,36 @@
+
+1) Headless: 160 careers through the page's phase path
+   under 20 seasons  310  shown   0  rate 0.000
+   20-23    seasons  618  shown 201  rate 0.325
+   24-29    seasons  920  shown 289  rate 0.314
+   30+      seasons 1105  shown 332  rate 0.300
+   offered 822, shown 822, rival shown 114, distinct dilemma choices taken 77
+  ok   1a 20-23: 0.325 dilemmas shown per season, inside [0.2, 0.42]
+  ok   1a 24-29: 0.314 dilemmas shown per season, inside [0.2, 0.42]
+  ok   1a 30+: 0.300 dilemmas shown per season, inside [0.2, 0.42]
+  ok   1b: none shown under 20 over 310 seasons
+  ok   1c: every one of 822 offered dilemmas shown exactly once, in order
+  ok   1d: never two in one season
+  ok   1e: rival dilemmas shown 114 times (floor 40)
+  ok   1f: 160 careers ran to the end, 77 different dilemma choices taken without a throw
+  ok   1g: all 822 choices wrote their outcome and Continue kept every one
+
+2) Rendered: src/test/careerDilemmaReach.test.tsx and src/test/careerDilemmaSaves.test.tsx, the real page played by its buttons
+   REACH start=17 careers=6 seasons=24 adultSeasons=12 offers=2 shows=2 adultShows=2
+   REACH start=19 careers=6 seasons=24 adultSeasons=24 offers=10 shows=10 adultShows=10
+   REACH start=24 careers=6 seasons=24 adultSeasons=24 offers=9 shows=9 adultShows=9
+   REACH start=30 careers=6 seasons=24 adultSeasons=24 offers=5 shows=5 adultShows=5
+   REACH total adultOffers=26 adultShows=26
+  ok   2 reach: careers picked up at 17
+  ok   2 reach: careers picked up at 19
+  ok   2 reach: careers picked up at 24
+  ok   2 reach: careers picked up at 30
+  ok   2 reach: a player from 20 up sees dilemmas on screen
+  ok   2 a save from before 819 on the social media screen posts, continues and plays the next season
+  ok   2 a save waiting on a dilemma: the choice lands, the card says what happened, Continue keeps it
+  ok   2 a decided dilemma reloaded before Continue draws its card, continues and plays on
+  ok   2 a match fixing ban closes its season through the page and the next one is played
+  ok   2: 26 dilemmas drawn on screen from 20 up, inside [10, 50]
+   vitest exit 0
+
+simCareerDilemmaReach: all green
