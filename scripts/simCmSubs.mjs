@@ -166,7 +166,7 @@ function ledgerSection(ledger, rule) {
   }
   const sortObj = o => Object.fromEntries(Object.entries(o).sort(([a], [b]) => a.localeCompare(b)));
   const rows = Object.fromEntries(ledger.rows.map(r => [r.league, r.fiveFrom]));
-  check(P, 'the module rows equal the ledger rows', JSON.stringify(sortObj(rows)) === JSON.stringify(sortObj({ ...rule.CM_SUBS_FIVE_FROM })));
+  check(P, 'the module rows equal the ledger rows', JSON.stringify(sortObj(rows)) === JSON.stringify(sortObj(Object.fromEntries(rule.CM_SUBS_FIVE_FROM))));
   check(P, 'the module partial list equals the ledger', [...ledger.partial.leagues].sort().join() === [...rule.CM_SUBS_PARTIAL].sort().join());
 }
 

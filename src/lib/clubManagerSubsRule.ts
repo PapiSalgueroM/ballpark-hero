@@ -30,11 +30,13 @@ export interface SubsRule {
   partial: boolean;
 }
 
-/** League base id to the first season start year of five changes in three
- *  stoppages. Sourced rows only (the ledger names two sources for each). */
-export const CM_SUBS_FIVE_FROM: Readonly<Record<string, number>> = {
-  premier: 2022, championship: 2022, laliga: 2020, seriea: 2020, bundesliga: 2020, ligue1: 2020,
-};
+/** League base id and the first season start year of five changes in three
+ *  stoppages, as tuples. Sourced rows only (the ledger names two sources for
+ *  each). A list of facts, not a map keyed by league id: simCmLeagueRules 3d
+ *  keeps keyed maps on the LEAGUE_RULES rows. */
+export const CM_SUBS_FIVE_FROM: ReadonlyArray<readonly [string, number]> = [
+  ['premier', 2022], ['championship', 2022], ['laliga', 2020], ['seriea', 2020], ['bundesliga', 2020], ['ligue1', 2020],
+];
 
 /** Leagues whose rule this round could not two source: they keep three. */
 export const CM_SUBS_PARTIAL: string[] = [
@@ -53,7 +55,8 @@ export function subsLeagueBase(leagueId: string): string {
 
 /** The rule a match in this league and season plays. */
 export function subsRuleFor(leagueBaseId: string, seasonStartYear: number): SubsRule {
-  const from = Object.prototype.hasOwnProperty.call(CM_SUBS_FIVE_FROM, leagueBaseId) ? CM_SUBS_FIVE_FROM[leagueBaseId] : null;
+  const row = CM_SUBS_FIVE_FROM.find(r => r[0] === leagueBaseId);
+  const from = row ? row[1] : null;
   if (from !== null && seasonStartYear >= from) return { subs: 5, stops: 3, partial: false };
   return { subs: 3, stops: null, partial: from === null && seasonStartYear >= CM_SUBS_LAW_FROM };
 }

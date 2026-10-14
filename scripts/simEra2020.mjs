@@ -183,7 +183,7 @@ const ENGINE_CONTROLS = {
   takestale: [TAKE_ANCHOR, '', 'the out of work screen does not refuse a club the season does not hold on the line this control knows'],
   firstsummer: [SUMMER_ANCHOR, SUMMER_BROKEN, 'the helper that names the clubs of this save\'s world does not branch on the era on the line this control knows'],
   /* Round 1331, section 8: the Premier League's five change row moved to 2020-21 in memory. */
-  subsrow: ['  premier: 2022, championship: 2022,', '  premier: 2020, championship: 2022,', 'the Premier League row is not in the substitution rule table as this control knows it', /[\\/]src[\\/]lib[\\/]clubManagerSubsRule\.ts$/],
+  subsrow: ["  ['premier', 2022], ['championship', 2022],", "  ['premier', 2020], ['championship', 2022],", 'the Premier League row is not in the substitution rule table as this control knows it', /[\\/]src[\\/]lib[\\/]clubManagerSubsRule\.ts$/],
 };
 const engineControl = ENGINE_CONTROLS[process.env.SIM_ERA2020_CONTROL ?? ''];
 const plugins = engineControl ? [engineEdit(process.env.SIM_ERA2020_CONTROL, ...engineControl)] : [];
