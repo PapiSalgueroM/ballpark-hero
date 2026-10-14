@@ -1,0 +1,155 @@
+name: Pitch save recovery complete verification
+on:
+  push:
+    branches: [codex/pitch-save-recovery]
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      PITCH_SAVE_PHASE: fixed
+      ENGINES: chromium
+      FREE_KICK_FONT_CACHE: ${{ github.workspace }}/pitch-save-artifacts/font-cache
+      PRERENDER_ONLY: /club-manager,/soccer-career
+      PITCH_SAVE_OUT: ${{ github.workspace }}/pitch-save-artifacts
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Hold the full qualified parent and locked packages
+        run: |
+          echo '127.0.0.1 flawuiqbvjobmkfkauhw.supabase.co' | sudo tee -a /etc/hosts
+          mkdir -p "$PITCH_SAVE_OUT"
+          git rev-parse HEAD > "$PITCH_SAVE_OUT/head.txt"
+          git diff --exit-code 8e70dcf0fcfe0d9554881d73cfcfa2fea9414faf -- src scripts .github/workflows package.json package-lock.json bun.lock index.html ':!src/test/pitchSaveRecovery.test.tsx' ':!scripts/simPitchSaveRecovery.mjs' ':!.github/workflows/pitch-save-recovery.yml' ':!src/components/pitch-motion/motion.tsx' ':!scripts/simPitchRestartContinuity.mjs' ':!scripts/playPitchSaveRecovery.mjs' > "$PITCH_SAVE_OUT/parent-holds.log"
+          find src scripts .github/workflows -type f ! -path scripts/data/lastmod.json -print0 | sort -z | xargs -0 sha256sum > "$PITCH_SAVE_OUT/source-hashes.txt"
+          sha256sum package.json package-lock.json bun.lock > "$PITCH_SAVE_OUT/package-hashes.txt"
+          npm ci
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          import { createHash } from 'node:crypto';
+          const lock = JSON.parse(fs.readFileSync('package-lock.json'));
+          const rows = Object.entries(lock.packages).filter(([file]) => file.startsWith('node_modules/') && fs.existsSync(file + '/package.json')).map(([file, entry]) => {
+            const bytes = fs.readFileSync(file + '/package.json'), version = JSON.parse(bytes).version;
+            assert.equal(version, entry.version);
+            return { file, version, sha256: createHash('sha256').update(bytes).digest('hex') };
+          });
+          assert(rows.length > 0);
+          fs.writeFileSync(process.env.PITCH_SAVE_OUT + '/installed.json', JSON.stringify(rows, null, 2));
+          console.log('Bound ' + rows.length + ' actual locked package versions and bytes.');
+          NODE
+      - name: Actual application types
+        run: node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee "$PITCH_SAVE_OUT/types.log"
+      - name: Actual ten save recovery and geometry outcomes with both effective controls
+        run: |
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simPitchSaveRecovery.mjs 2>&1 | tee "$PITCH_SAVE_OUT/normal.log"
+          SC_PITCH_SAVE_CONTROL=original NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simPitchSaveRecovery.mjs 2>&1 | tee "$PITCH_SAVE_OUT/control-original.log"
+          SC_PITCH_SAVE_CONTROL=binaryarms NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simPitchSaveRecovery.mjs 2>&1 | tee "$PITCH_SAVE_OUT/control-binaryarms.log"
+      - name: Existing committed coordinates and effective original render
+        run: |
+          PITCH_RESTART_PHASE=fixed PITCH_RESTART_OUT="$PITCH_SAVE_OUT/prior-continuity" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simPitchRestartContinuity.mjs 2>&1 | tee "$PITCH_SAVE_OUT/prior-continuity.log"
+          PITCH_RESTART_PHASE=fixed PITCH_RESTART_OUT="$PITCH_SAVE_OUT/prior-continuity" SC_PITCH_RESTART_CONTROL=oldrender NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simPitchRestartContinuity.mjs 2>&1 | tee "$PITCH_SAVE_OUT/prior-original-render.log"
+      - name: Existing actual motion and own-goal models
+        run: |
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simLiveSimMotion.mjs 2>&1 | tee "$PITCH_SAVE_OUT/prior-motion.log"
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simOwnGoalMotion.mjs 2>&1 | tee "$PITCH_SAVE_OUT/prior-own-goal.log"
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node_modules/.bin/vitest run src/test/liveSimMotion.test.tsx src/test/pitchOwnGoal.test.tsx --maxWorkers=1 --reporter=json --outputFile="$PITCH_SAVE_OUT/prior-unit.json" 2>&1 | tee "$PITCH_SAVE_OUT/prior-unit.log"
+      - name: Existing ten effective motion and own-goal controls
+        run: |
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import assert from 'node:assert/strict';
+          import { spawnSync } from 'node:child_process';
+          const controls = [
+            ...['pause', 'reduced', 'takenback', 'lineup', 'samecommit', 'draw', 'kickoffside', 'goalkickside'].map(control => ['simLiveSimMotion.mjs', 'LIVE_MOTION_CONTROL', control]),
+            ...['plain', 'straight'].map(control => ['simOwnGoalMotion.mjs', 'OWN_GOAL_CONTROL', control]),
+          ];
+          for (const [script, key, control] of controls) {
+            const child = spawnSync(process.execPath, ['scripts/' + script], { encoding: 'utf8', timeout: 900000, maxBuffer: 64 * 1024 * 1024, env: { ...process.env, [key]: control, FORCE_COLOR: '0', NO_COLOR: '1' } });
+            const output = (child.stdout ?? '') + (child.stderr ?? '');
+            const file = path.join(process.env.PITCH_SAVE_OUT, 'prior-control-' + control);
+            fs.writeFileSync(file + '.log', output);
+            fs.writeFileSync(file + '.json', JSON.stringify({ script, control, status: child.status, signal: child.signal, error: child.error?.message ?? null }, null, 2));
+            assert(!child.error && !child.signal && child.status === 1, 'An old control must exit on its intentional assertion');
+            assert(/AssertionError|expected/.test(output), 'An old control must retain its assertion outcome');
+            assert(!/ERR_MODULE_NOT_FOUND|Cannot find module|SyntaxError|ReferenceError|TypeError|Test timed out|Transform failed|Unhandled Error/.test(output), 'An old control cannot earn setup credit');
+            assert(output.includes('Negative control changed temporary source: ' + control));
+            assert(output.includes('control ' + control + ' turned "'));
+            assert(output.includes('as it must.'));
+          }
+          NODE
+      - name: Ordinary fleet discovery with separate original receipts
+        run: |
+          discovery_root="$PITCH_SAVE_OUT"
+          PITCH_SAVE_OUT="$discovery_root/discovery-save" PITCH_RESTART_OUT="$discovery_root/discovery-continuity" PITCH_RESTART_PHASE=fixed ONLY=simPitchSaveRecovery,simPitchRestartContinuity NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/runAllSims.mjs 2>&1 | tee "$discovery_root/discovery.log"
+      - name: Complete ordinary unit suite
+        run: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" npm test -- --maxWorkers=2 --reporter=default --reporter=json --outputFile.json="$PITCH_SAVE_OUT/full-unit.json" 2>&1 | tee "$PITCH_SAVE_OUT/full-unit.log"
+      - name: Remote build and browser prerequisites
+        run: |
+          npm install --prefix "$RUNNER_TEMP/pitch-save-browser" --no-save --package-lock=false playwright
+          ln -s "$RUNNER_TEMP/pitch-save-browser/node_modules/playwright" node_modules/playwright
+          ln -s "$RUNNER_TEMP/pitch-save-browser/node_modules/playwright-core" node_modules/playwright-core
+          node "$RUNNER_TEMP/pitch-save-browser/node_modules/playwright/cli.js" install --with-deps chromium
+          python -m pip install fonttools pillow
+          node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only 2>&1 | tee "$PITCH_SAVE_OUT/fonts.log"
+      - name: Complete application build with both route snapshots
+        run: |
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" npm run build:seo 2>&1 | tee "$PITCH_SAVE_OUT/build.log"
+          cp scripts/data/lastmod.json "$PITCH_SAVE_OUT/build-lastmod.json"
+          git diff -- scripts/data/lastmod.json > "$PITCH_SAVE_OUT/build-lastmod.diff"
+      - name: Actual shared save recovery SVG and compositor probes
+        run: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playPitchSaveRecovery.mjs 2>&1 | tee "$PITCH_SAVE_OUT/browser.log"
+      - name: Original 604 and 830 route download ceilings
+        run: |
+          node scripts/lib/hostLikeServer.mjs dist 4173 > "$PITCH_SAVE_OUT/server.log" 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+          for attempt in 1 2 3 4 5; do
+            if curl --fail --silent http://127.0.0.1:4173/ > /dev/null; then break; fi
+            sleep 1
+          done
+          BASE=http://127.0.0.1:4173 SWEEP_OFFLINE=1 NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/sweepWeight.mjs 2>&1 | tee "$PITCH_SAVE_OUT/weights.log"
+      - name: Every rebuilt-site reader and original save limits
+        run: ONLY=simClubManagerSaveSize,simClubManagerSlots,simCreation,simFlagshipWeight,simAdsense,simBrand,simHeadTags,simHiddenPages,simHubs,simIndexNow,simIndexing,simInternalLinks,simNoRivalNames,simPrerender,simPrerenderBoot,simRetiredRoutes,simSchema,simSitemap,simSnapshotAssets node scripts/runAllSims.mjs --browser 2>&1 | tee "$PITCH_SAVE_OUT/readers.log"
+      - name: Final full source and package holds
+        if: always()
+        run: |
+          sha256sum --check "$PITCH_SAVE_OUT/source-hashes.txt" > "$PITCH_SAVE_OUT/source-holds.log"
+          sha256sum --check "$PITCH_SAVE_OUT/package-hashes.txt"
+          git diff --exit-code -- src scripts ':!scripts/data/lastmod.json' .github/workflows package.json package-lock.json bun.lock index.html
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          import { createHash } from 'node:crypto';
+          const rows = JSON.parse(fs.readFileSync(process.env.PITCH_SAVE_OUT + '/installed.json'));
+          for (const row of rows) {
+            const bytes = fs.readFileSync(row.file + '/package.json');
+            assert.equal(JSON.parse(bytes).version, row.version);
+            assert.equal(createHash('sha256').update(bytes).digest('hex'), row.sha256);
+          }
+          console.log('Held ' + rows.length + ' actual locked versions and package bytes.');
+          NODE
+      - name: Retain the complete original baseline packet
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pitch-save-recovery-fixed-${{ github.run_id }}
+          path: pitch-save-artifacts/
+          include-hidden-files: true
+          retention-days: 14
+          if-no-files-found: error
+          compression-level: 6
