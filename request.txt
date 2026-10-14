@@ -1,0 +1,5 @@
+#!build
+#!playwright
+playCmSubsRule: node scripts/playCmSubsRule.mjs
+walk-nostamp: PLAY_SUBS_CONTROL=nostamp node scripts/playCmSubsRule.mjs
+walk-oldcap: R=$PWD; git worktree add -f /tmp/oc HEAD >/dev/null 2>&1 && cd /tmp/oc && ln -s $R/node_modules node_modules && node $R/.rc/x/patchOldcap.mjs && node_modules/.bin/vite build --outDir /tmp/oc-dist >/dev/null 2>&1; cd $R && DIST=/tmp/oc-dist PLAY_SUBS_CONTROL=oldcap node scripts/playCmSubsRule.mjs

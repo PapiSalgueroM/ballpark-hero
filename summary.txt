@@ -1,0 +1,4 @@
+build exit=0 21s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+walk-nostamp exit=1 58s | playCmSubsRule: control nostamp FIRED: 6 checks of (c) red
+playCmSubsRule exit=0 58s | playCmSubsRule GREEN: 30 of 30 checks green; pictures in /home/runner/work/_temp/rc-out/files/head
+walk-oldcap exit=1 79s | playCmSubsRule: control oldcap FIRED: 9 checks of (a) red

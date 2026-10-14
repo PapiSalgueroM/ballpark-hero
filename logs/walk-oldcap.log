@@ -1,0 +1,32 @@
+oldcap patched
+FAIL (a) 320: the 2026-27 dressing room offers five changes [ Changes · 3 left]
+FAIL (a) 320: the live sheet reads one change and no stoppage left [ Change at 85' · Subs left: 0]
+FAIL (a) 320: the sheet refuses for want of a stoppage [subs: You have used all three. Nobody else is coming off.]
+ok   (d) 320: tapping the refusal moves nothing [{"y":0,"h":28506} then {"y":0,"h":28506}]
+ok   (d) 320: every button in the sheet is at least 44 px tall [44,44,44,44]
+FAIL (d) 320: the new words are at least 12 px [12 and 0]
+ok   (d) 320: the sheet's top line is not cut
+ok   (b) 320: the 2005-06 dressing room offers three changes [ Changes · 3 left]
+ok   (c) 320: the desk asks about Gent, the next match, not Cercle Brugge [Gent on paper are a level above you. Realistically, what are you going there for?]
+ok   (c) 320: after a reload it still asks about Gent [Gent on paper are a level above you. Realistically, what are you going there for?]
+FAIL (a) 390: the 2026-27 dressing room offers five changes [ Changes · 3 left]
+FAIL (a) 390: the live sheet reads one change and no stoppage left [ Change at 85' · Subs left: 0]
+FAIL (a) 390: the sheet refuses for want of a stoppage [subs: You have used all three. Nobody else is coming off.]
+ok   (d) 390: tapping the refusal moves nothing [{"y":0,"h":22663} then {"y":0,"h":22663}]
+ok   (d) 390: every button in the sheet is at least 44 px tall [44,44,44,44]
+FAIL (d) 390: the new words are at least 12 px [12 and 0]
+ok   (d) 390: the sheet's top line is not cut
+ok   (b) 390: the 2005-06 dressing room offers three changes [ Changes · 3 left]
+ok   (c) 390: the desk asks about Gent, the next match, not Cercle Brugge [Gent on paper are a level above you. Realistically, what are you going there for?]
+ok   (c) 390: after a reload it still asks about Gent [Gent on paper are a level above you. Realistically, what are you going there for?]
+FAIL (a) 1280: the 2026-27 dressing room offers five changes [ Changes · 3 left]
+FAIL (a) 1280: the live sheet reads one change and no stoppage left [ Change at 85' · Subs left: 0]
+FAIL (a) 1280: the sheet refuses for want of a stoppage [subs: You have used all three. Nobody else is coming off.]
+ok   (d) 1280: tapping the refusal moves nothing [{"y":0,"h":12902} then {"y":0,"h":12902}]
+ok   (d) 1280: every button in the sheet is at least 44 px tall [44,44,44,44]
+FAIL (d) 1280: the new words are at least 12 px [12 and 0]
+ok   (d) 1280: the sheet's top line is not cut
+ok   (b) 1280: the 2005-06 dressing room offers three changes [ Changes · 3 left]
+ok   (c) 1280: the desk asks about Gent, the next match, not Cercle Brugge [Gent on paper are a level above you. Realistically, what are you going there for?]
+ok   (c) 1280: after a reload it still asks about Gent [Gent on paper are a level above you. Realistically, what are you going there for?]
+playCmSubsRule: control oldcap FIRED: 9 checks of (a) red
