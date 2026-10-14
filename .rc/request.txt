@@ -1,0 +1,6 @@
+# Release BD gate, lane K2: farewell-native rerun alone once (ECONNRESET on a local asset fetch in rBDg-gK)
+#!serve
+#!playwright
+#!serial
+fonts: mkdir -p .tmp-fx/font-cache && FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only
+farewell-native: set -o pipefail; export SIM_NETWORK=offline ENGINES=chromium TZ=UTC FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache"; mkdir -p soccer-farewell-artifacts; NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playSoccerFarewell.mjs 2>&1 | tee soccer-farewell-artifacts/native.log | tail -60; s=$?; node scripts/qa/checkSoccerFarewell.mjs native; c=$?; exit $((s + c))
