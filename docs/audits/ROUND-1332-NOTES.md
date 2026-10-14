@@ -60,3 +60,14 @@ mode only).
   must name who it is about, the whole desk t and sv check, and the fence over pack modules imported alone. A hostile
   save probe (ten broken blocks through gmDeskLoad) loaded every one sane, no crash, no prototype pollution.
 - Final gate results: see dukb-handoff/2026-10-10/results-g/finish-1332.md.
+- r1332-g (7bb38f00): build, tsc, vitest, the kit (263 s) and its two halves, all 33 kit controls, simGmInbox
+  identical to the base, its 16 controls, simCareerInbox and privatecap, simRevealMoments, simStorageWrites: green.
+  The 24 rule fences: 20 green; simSchemaNames and simLeaderboardCaps (live database) red on head and base alike;
+  simWritesAreSent and simResultMoment (no browser in that request) red on both; r1332-h: simResultMoment green with a
+  browser; r1332-cmpw: simWritesAreSent red on head and base with the same two failures (known).
+- r1332-h (b36e366d): the kit as three gate lines: sections 1 to 12 in 101 s, 13 in 71 s, 14 to 16 in 29 s.
+- r1332-f-weight2 (b36e366d): gzipped JS, head minus base: the four US career routes +45 to +52 B (/nfl-my-career and
+  /nhl-my-career round up by 0.1K), /front-office +17 B (rounds up by 0.1K), /club-manager +20 B, /soccer-career +27 B.
+- Suite (r1332-all1 to all6, 746 harnesses): 83 not green on the head, 7 of them killed at a 25 minute cap; every
+  other one rerun on the head and the base on one runner (r1332-cmp35, cmp12, cmp4, cmp6): identical but for two
+  whose last line follows the live service (simSoccerGridLabels, simAnswerFromRecords, same failure on both).
