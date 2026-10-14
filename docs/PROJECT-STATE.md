@@ -1,3 +1,7 @@
+## Codex Round1367: completed AI transfer ownership causal baseline, 2026-10-14
+
+Proof-onlycodex/manager-ai-ownership from082fc277 reusesownmanager-daily-decisionsWT, originalPR2501ed26406held. NewactualAPI8casebaseline expects4preciseAIownerfaults/4preserves, completefiniteinput/state/process/source/pkgreceipts; no injectedbudget/seed/negotiation/calendar. Newunitcfc08ec3/helper2b049aad/WFaa562b52 reviewed, runtimepending. Core/world/UI/economics/schema/codec/oldproof/current604830203000532500limits held; exactHCoreauthoringcoordinationstillowed. No productfix/main/live/merge-readyclaim. See docs/audits/manager-ai-ownership-2026-10-14.md.
+
 ## Release BC LIVE, 2026-10-13 18:23 EDT: one tab can no longer wipe a Club Manager save, Club Manager's world remembers your deals, its tables, copy and hub fixed, Soccer Career's events drawn fairly, the shared event deck, the college athletic director
 
 Claude lane (session H). main c5534342, deployment 3cf3a2d7-244e-41ce-8c27-a89cebafcfe6, entry index-BFkO1jyo.js (was index-DaI30mwt.js, Release BB,
