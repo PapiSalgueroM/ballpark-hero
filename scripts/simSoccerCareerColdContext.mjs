@@ -12,6 +12,11 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 assert(process.env.CI && process.env.SIM_NETWORK === 'offline', 'Cold context proof requires remote offline transport');
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..'), SELF = fileURLToPath(import.meta.url);
 const TEST = 'src/test/soccerCareerColdContext.test.ts', PARENT = '42a7f7c999cb13bb24bf0992537e4ff84b112f6d';
+/* Release BF join: SC_COLD_CONTEXT_CORE_REF (default PARENT) is the ref the unchanged app files are held to. The packet was proved on
+   an older tree; on a newer one the join names the tree without this packet (its merge's first parent), and the
+   files this packet fixes are still compared with PARENT. Here only soccerCareerEngine.ts and soccerCareerSave.ts
+   (the two files Releases BB to BE changed) go to CORE_REF; RealismA and the life chain's files stay with PARENT. */
+const CORE_REF = process.env.SC_COLD_CONTEXT_CORE_REF || PARENT;
 const ENGINE = path.join(ROOT, 'src/lib/soccerCareerEngine.ts'), REALISM = path.join(ROOT, 'src/lib/soccerCareerRealismA.ts');
 const SAVE = path.join(ROOT, 'src/lib/soccerCareerSave.ts'), LIFE = path.join(ROOT, 'src/lib/soccerCareerLife.ts');
 const CONTRACTS = path.join(ROOT, 'src/lib/soccerCareerContracts.ts'), CAPTIONS = path.join(ROOT, 'src/lib/soccerCareerLifeConsequences.ts');
@@ -63,7 +68,7 @@ function git(args) {
 const sourceHead = git(['rev-parse', 'HEAD']).trim(), parentRealism = git(['show', `${PARENT}:src/lib/soccerCareerRealismA.ts`]);
 fs.writeFileSync(path.join(retained, 'soccerCareerRealismA.parent.ts'), parentRealism);
 const parentAppHashes = appFiles.map(file => {
-  const name = path.relative(ROOT, file).replaceAll('\\', '/'), before = git(['show', `${PARENT}:${name}`]);
+  const name = path.relative(ROOT, file).replaceAll('\\', '/'), before = git(['show', `${[ENGINE, SAVE].includes(file) ? CORE_REF : PARENT}:${name}`]);
   const row = { file: name, parentSha256: sha(before), candidateSha256: sha(sources.get(file)) };
   if (RED || file !== REALISM) assert.equal(row.candidateSha256, row.parentSha256, 'Only fixed RealismA may differ from the held parent app');
   return row;
