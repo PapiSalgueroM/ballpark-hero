@@ -10,6 +10,7 @@ import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 
 assert(process.env.CI && process.env.SIM_NETWORK === 'offline', 'Use remote offline CI only');
+const readLf = file => fs.readFileSync(file, 'utf8').replaceAll('\r\n', '\n'); /* Release BE: simHarnessAnchors, a CRLF checkout */
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const PARENT = '1ed26406', TEST = 'src/test/clubManagerDecisionDeadline.test.ts';
 /* Release BE join (Round BEG): the core files other than Decisions are bound to CORE_REF, PARENT on the packet branch;
@@ -42,7 +43,7 @@ const app = [ENGINE, DECISIONS, ...['src/lib/clubManagerMeters.ts', 'src/hooks/u
   'src/pages/ClubManager.tsx', 'src/components/club-manager/InboxCard.tsx'].map(file => path.join(ROOT, file))];
 const files = [...app, path.join(ROOT, TEST), fileURLToPath(import.meta.url),
   path.join(ROOT, 'scripts/playClubManagerDecisionDeadline.mjs'), path.join(ROOT, '.github/workflows/manager-decision-deadline.yml')];
-const sources = new Map(files.map(file => [file, fs.readFileSync(file, 'utf8')]));
+const sources = new Map(files.map(file => [file, readLf(file)]));
 const OUT = process.env.MANAGER_DEADLINE_OUT ? path.resolve(process.env.MANAGER_DEADLINE_OUT)
   : fs.mkdtempSync(path.join(os.tmpdir(), 'manager-decision-deadline-'));
 const arm = CONTROL || PHASE, retained = path.join(OUT, arm);
@@ -67,7 +68,7 @@ const parentAppHashes = app.map(file => {
 function receipt(extra = {}) {
   outcome = { ...outcome, ...extra };
   const sourceReceipts = [...sources].map(([file, before]) => ({
-    file: path.relative(ROOT, file).replaceAll('\\', '/'), beforeSha256: sha(before), afterSha256: sha(fs.readFileSync(file)),
+    file: path.relative(ROOT, file).replaceAll('\\', '/'), beforeSha256: sha(before), afterSha256: sha(readLf(file)),
   }));
   fs.writeFileSync(path.join(retained, 'source.json'), JSON.stringify({
     arm, sourceHead, parentAppRef: PARENT, parentAppHashes, sourceReceipts, actualSourceEdits: edits, ...outcome,
@@ -137,7 +138,7 @@ try {
     'Every intended failure must have the exact Boolean deadline cause');
   assert.equal(report.numFailedTests, expected.length); assert.equal(report.numPassedTests, 20 - expected.length);
   assert.equal(result.status, expected.length ? 1 : 0, 'Actual child exit must match the complete outcome count');
-  for (const [file, before] of sources) assert.equal(fs.readFileSync(file, 'utf8'), before, 'Actual app and proof source bytes must stay held');
+  for (const [file, before] of sources) assert.equal(readLf(file), before, 'Actual app and proof source bytes must stay held');
   assert.equal(edits.length, CONTROL ? 1 : 0);
   receipt({ completedNames: cases.map(row => row.title), passed: report.numPassedTests, intendedFailures: expected.length });
   console.log(`Manager deadline: one actual unit file, all20 named outcomes, ${report.numPassedTests} passes and ${expected.length} exact intended faults; childexit${result.status}.`);

@@ -8,6 +8,7 @@ import { createHash } from 'node:crypto';
 import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 assert(process.env.CI && process.env.SIM_NETWORK === 'offline', 'Halftime proof requires remote offline CI.');
+const readLf = file => fs.readFileSync(file, 'utf8').replaceAll('\r\n', '\n'); /* Release BE: simHarnessAnchors, a CRLF checkout */
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 /* Release BE join (Round BEG): CM_HT_PARENT_REF names the tree without this packet on a newer core (the BE join passes the first parent of its m6 merge); 082fc277 on the packet branch. */
 const PARENT = process.env.CM_HT_PARENT_REF || '082fc2774c8aa9f919c14efa33bfc3fbfc599597';
@@ -31,7 +32,7 @@ const held = [COMPONENT, CORE, 'src/lib/clubManagerClock.ts', 'src/components/cl
 const files = [...held, TEST, 'scripts/simManagerHalftimeLineups.mjs', '.github/workflows/manager-halftime-lineups.yml',
   ...(RED ? [] : ['src/components/club-manager/HalftimeLineups.tsx', 'src/lib/clubManagerLiveLineups.ts', 'src/test/managerLiveLineups.test.ts'])];
 const sha = bytes => createHash('sha256').update(bytes).digest('hex');
-const sources = new Map(files.map(file => [file, fs.readFileSync(path.join(ROOT, file), 'utf8')]));
+const sources = new Map(files.map(file => [file, readLf(path.join(ROOT, file))]));
 const OUT = process.env.CM_HT_LINEUPS_OUT ? path.resolve(process.env.CM_HT_LINEUPS_OUT)
   : fs.mkdtempSync(path.join(os.tmpdir(), 'manager-halftime-lineups-'));
 assert(OUT !== ROOT && OUT !== path.join(ROOT, 'dist') && !OUT.startsWith(path.join(ROOT, 'dist') + path.sep));
@@ -51,7 +52,7 @@ function receipt(extra = {}) {
   outcome = { ...outcome, ...extra };
   fs.writeFileSync(path.join(retained, 'source.json'), JSON.stringify({
     parentRef: PARENT, head, phase: PHASE, control: CONTROL, bindings, ...outcome,
-    sources: [...sources].map(([file, source]) => ({ file, beforeSha256: sha(source), afterSha256: sha(fs.readFileSync(path.join(ROOT, file))) })),
+    sources: [...sources].map(([file, source]) => ({ file, beforeSha256: sha(source), afterSha256: sha(readLf(path.join(ROOT, file))) })),
   }, null, 2) + '\n');
 }
 try {
@@ -129,7 +130,7 @@ try {
     assert(row.draws.length > 0 && row.draws.every((draw, index) => draw.ordinal === index + 1 && draw.value === 0.6
       && (draw.phase === 'startCareer' || /^playNextEntry:[1-8]$/.test(draw.phase))));
   }
-  for (const [file, source] of sources) assert.equal(fs.readFileSync(path.join(ROOT, file), 'utf8'), source);
+  for (const [file, source] of sources) assert.equal(readLf(path.join(ROOT, file)), source);
   receipt({ status: 'complete', passed: raw.numPassedTests, failed: wanted.length, actualPreparedIntervals: fixtures.length });
   console.log('Actual halftime UI: six named cases, ' + raw.numPassedTests + ' preserves/passes, ' + wanted.length + ' exact owned Boolean faults, pending0.');
   console.log('Physical evidence: ' + sources.size + ' original source copies and ' + compiled.length + ' actual split-shared compiled modules.');

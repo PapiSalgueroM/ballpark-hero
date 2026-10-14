@@ -8,6 +8,7 @@ import { createHash } from 'node:crypto';
 import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 assert(process.env.CI && process.env.SIM_NETWORK === 'offline', 'Current-roster proof requires remote offline CI');
+const readLf = file => fs.readFileSync(file, 'utf8').replaceAll('\r\n', '\n'); /* Release BE: simHarnessAnchors, a CRLF checkout */
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..'), SELF = fileURLToPath(import.meta.url);
 const PARENT = '082fc2774c8aa9f919c14efa33bfc3fbfc599597', TEST = 'src/test/clubDetailCurrentRoster.test.tsx';
 const COMPONENT = 'src/components/club-manager/ClubDetailScreen.tsx', CORE = 'src/lib/clubManager.ts';
@@ -31,7 +32,7 @@ const OLD_TEST = 'src/test/clubDetailOwnClub.test.tsx', BROWSER = 'scripts/playC
 const files = [COMPONENT, CORE, 'src/lib/clubManagerWorldRoster.ts', 'src/lib/clubManagerEras.ts', OLD_TEST,
   TEST, 'scripts/simClubDetailCurrentRoster.mjs', '.github/workflows/club-detail-current-roster.yml', BROWSER];
 const sha = value => createHash('sha256').update(value).digest('hex');
-const sources = new Map(files.map(file => [file, fs.readFileSync(path.join(ROOT, file), 'utf8')]));
+const sources = new Map(files.map(file => [file, readLf(path.join(ROOT, file))]));
 const OUT = process.env.CM_OWN_ROSTER_OUT ? path.resolve(process.env.CM_OWN_ROSTER_OUT)
   : fs.mkdtempSync(path.join(os.tmpdir(), 'club-detail-current-roster-'));
 assert(OUT !== ROOT && OUT !== path.join(ROOT, 'dist') && !OUT.startsWith(path.join(ROOT, 'dist') + path.sep));
@@ -47,7 +48,7 @@ fs.mkdirSync(path.join(ROOT, 'tmp'), { recursive: true }); const tmp = fs.mkdtem
 let outcome = {};
 function receipt(extra = {}) { outcome = { ...outcome, ...extra }; fs.writeFileSync(path.join(retained, 'source.json'), JSON.stringify({
   head, parentRef: PARENT, phase: PHASE, control: CONTROL, bindings, ...outcome,
-  sourceReceipts: [...sources].map(([file, source]) => ({ file, beforeSha256: sha(source), afterSha256: sha(fs.readFileSync(path.join(ROOT, file))) })),
+  sourceReceipts: [...sources].map(([file, source]) => ({ file, beforeSha256: sha(source), afterSha256: sha(readLf(path.join(ROOT, file))) })),
 }, null, 2) + '\n'); }
 try {
   receipt();
@@ -134,7 +135,7 @@ try {
   assert.equal(report.numFailedTests, wanted.length); assert.equal(report.numPassedTests, 8 - wanted.length); assert.equal(run.status, wanted.length ? 1 : 0);
   const uiRows = output.split('\n').filter(line => line.startsWith('CM_OWN_UI_RECEIPT:')).map(line => JSON.parse(line.slice('CM_OWN_UI_RECEIPT:'.length)));
   fs.writeFileSync(path.join(retained, 'rendered-states.json'), JSON.stringify(uiRows, null, 2) + '\n'); assert.equal(uiRows.length, 8);
-  for (const [file, source] of sources) assert.equal(fs.readFileSync(path.join(ROOT, file), 'utf8'), source);
+  for (const [file, source] of sources) assert.equal(readLf(path.join(ROOT, file)), source);
   receipt({ status: 'complete', actualRenderedStates: uiRows.length, passed: report.numPassedTests, failed: wanted.length });
   console.log(`Actual current-roster screen: all8 named cases, ${report.numPassedTests} passes, ${wanted.length} exact Boolean faults, pending0.`);
   console.log(`Physical evidence: ${sources.size} before files, ${compiled.length} split-shared actual compiled files, eight full state/DOM receipts.`);
