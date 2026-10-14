@@ -1,0 +1,16 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/lib/gmInbox.test.ts src/components/front-office-shared/GmInboxPanel.test.tsx src/components/us-career/InboxPanel.test.tsx --testTimeout=300000 --hookTimeout=120000
+kitA: SIM_EVENT_DECK_SECTIONS=1,2,3,4,5,6,7,8,9,10,11,12 node scripts/simEventDeck.mjs
+kit13: SIM_EVENT_DECK_SECTIONS=13 node scripts/simEventDeck.mjs
+kitC: SIM_EVENT_DECK_SECTIONS=14,15,16 node scripts/simEventDeck.mjs
+gmdiff: bash .rc/x/gmdiff.sh
+gmctl: bash .rc/x/ctl.sh GM_INBOX_CONTROL scripts/simGmInbox.mjs quote flip cool drift never random shift opencap maxcap oneshot ungate unclamp quotevariant effectvariant effectout effectrating
+rivals: node scripts/simNoRivalNames.mjs
+anchors: node scripts/simHarnessAnchors.mjs
+storage: node scripts/simStorageWrites.mjs
+usBoardParity: node scripts/simUsBoardParity.mjs
+careerInbox: node scripts/simCareerInbox.mjs
+careerInbox-privatecap: INBOX_CONTROL=privatecap node scripts/simCareerInbox.mjs
+inventedQuotes: node scripts/simNoInventedQuotes.mjs
+inventedConduct: node scripts/simNoInventedConduct.mjs
+inventedNames: node scripts/simInventedNames.mjs
