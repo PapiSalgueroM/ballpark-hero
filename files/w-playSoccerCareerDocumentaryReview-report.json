@@ -1,0 +1,284 @@
+{
+  "status": "failed",
+  "phase": "fixed",
+  "sourceHead": "cc6f1bbfe5d175dbb274d3df90dc946701f74b96",
+  "checks": 108,
+  "failures": 4,
+  "setupFailures": 1,
+  "cases": [],
+  "controls": [],
+  "inventory": [],
+  "issues": [
+    "Error: 631-facts: fields beyond disclosed actual picker entry changed.\n    at setup (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playSoccerCareerDocumentaryReview.mjs:69:103)\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playSoccerCareerDocumentaryReview.mjs:392:5",
+    "toolsHeld: proof input changed or never qualified.",
+    "installedHeld: proof input changed or never qualified.",
+    "distHeld: proof input changed or never qualified.",
+    "fontsHeld: proof input changed or never qualified."
+  ],
+  "sourceHeld": true,
+  "toolsHeld": false,
+  "installedHeld": false,
+  "fixturesHeld": true,
+  "distHeld": false,
+  "fontsHeld": false,
+  "parentHeld": true,
+  "pickerHeld": true,
+  "limits": [
+    "Signed out local saved outcomes only; no backend completion or release, edit veto, film success or new economics is credited.",
+    "Fictional profile and season entry are prepared. Actual408 choices, later model seasons and priority631 delivery are distinct from a fully played UI career.",
+    "Copied read-only comparator receipts choose legal inputs. Complete vectors replay through plain unchanged picker source, not a natural rate or seeded search.",
+    "The legacy scenario omits only the recorded408 year. The repeat scenario follows another actual full-access deal and actual later season.",
+    "Each played journey has one pending and one resolved document reload; model proof separately owns its two canonical resolved reloads.",
+    "Once means the played review effect and queue remain consumed on reload, not lifetime exclusion of this recurring review.",
+    "External flags and nonessential transport are blocked. Selected untouched captures are not blanket visual, physical-device or live-site acceptance."
+  ],
+  "source": [
+    {
+      "file": "src/lib/soccerCareerEngine.ts",
+      "retained": "source-before/src/lib/soccerCareerEngine.ts",
+      "bytes": 544316,
+      "sha256": "1a1c05feb120de043944ef45ec0880ed53e38f6b324e28889de2064fddd623ef"
+    },
+    {
+      "file": "src/lib/soccerCareerLife.ts",
+      "retained": "source-before/src/lib/soccerCareerLife.ts",
+      "bytes": 104762,
+      "sha256": "873719069828bb203d9d5859d5b87eb3c7f2c9ab8c3ed0d4c1391c9f507caad4"
+    },
+    {
+      "file": "src/lib/soccerCareerRealismA.ts",
+      "retained": "source-before/src/lib/soccerCareerRealismA.ts",
+      "bytes": 81400,
+      "sha256": "a8b8a21392d5026039e0bac6b3138043d2e75782be5ebb35cec7057f5e4a60e2"
+    },
+    {
+      "file": "src/lib/soccerCareerRoutineEvents.ts",
+      "retained": "source-before/src/lib/soccerCareerRoutineEvents.ts",
+      "bytes": 7385,
+      "sha256": "7fc25242e1ce90d92cd92b31a0b1593e1219b395757d58c9b54ebc4a72e36878"
+    },
+    {
+      "file": "src/lib/soccerCareerLifeConsequences.ts",
+      "retained": "source-before/src/lib/soccerCareerLifeConsequences.ts",
+      "bytes": 1163,
+      "sha256": "6f43207a07b5f2eafc48a3b957be8da4165654c1995efc07348e8c1c7520327f"
+    },
+    {
+      "file": "src/lib/soccerCareerSave.ts",
+      "retained": "source-before/src/lib/soccerCareerSave.ts",
+      "bytes": 5592,
+      "sha256": "b6ade8a5eece0bab8aaf614c82759c12bd1401ae39a66e2d5e72a2dfdd37e2b5"
+    },
+    {
+      "file": "src/lib/soccerCareerContracts.ts",
+      "retained": "source-before/src/lib/soccerCareerContracts.ts",
+      "bytes": 3157,
+      "sha256": "153167ffd1b746d0311c07002b3dbdce996bdcf070b4496e381f0f78bcc7100a"
+    },
+    {
+      "file": "src/pages/SoccerCareer.tsx",
+      "retained": "source-before/src/pages/SoccerCareer.tsx",
+      "bytes": 265091,
+      "sha256": "01ce928b72de58fed4f138a2da593c0526d9ad81070a404fec7c6e9af5ebd060"
+    },
+    {
+      "file": "src/test/soccerCareerDocumentaryReview.test.ts",
+      "retained": "source-before/src/test/soccerCareerDocumentaryReview.test.ts",
+      "bytes": 17585,
+      "sha256": "6927144db7bb09a0056ed4bcbcb988d8e91c880a000208783564fe4d3505980d"
+    },
+    {
+      "file": "scripts/simSoccerCareerDocumentaryReview.mjs",
+      "retained": "source-before/scripts/simSoccerCareerDocumentaryReview.mjs",
+      "bytes": 41454,
+      "sha256": "cfc9bba9587e978011ec8acbfab38ec39a2b5e333eb36bc75c90e293ec591326"
+    },
+    {
+      "file": "src/lib/soccerCareerRealismB.ts",
+      "retained": "source-before/src/lib/soccerCareerRealismB.ts",
+      "bytes": 94053,
+      "sha256": "5e76fa822877d708aaee5ca4e2a0b7bc40bdb636bd9f00f11b84cd796b59ad44"
+    },
+    {
+      "file": "src/lib/careerEventDeck.ts",
+      "retained": "source-before/src/lib/careerEventDeck.ts",
+      "bytes": 5265,
+      "sha256": "7c54d6a22353fcf8a885899b900d6a0db72f0f3e5e29bba475ef775457bd4b18"
+    },
+    {
+      "file": "src/lib/careerChanceWheel.ts",
+      "retained": "source-before/src/lib/careerChanceWheel.ts",
+      "bytes": 1321,
+      "sha256": "c59d577262eebbe8586b769500ab0b9b386feb435d7b189f2476d25330cdaef5"
+    },
+    {
+      "file": "src/components/soccer-career/careerMoments.ts",
+      "retained": "source-before/src/components/soccer-career/careerMoments.ts",
+      "bytes": 6752,
+      "sha256": "e668c21f443a8935798830c77af8f2627780c948eb1f4799dc09a767d3962bc0"
+    },
+    {
+      "file": "src/components/career-moments/useCareerMoment.ts",
+      "retained": "source-before/src/components/career-moments/useCareerMoment.ts",
+      "bytes": 3945,
+      "sha256": "7dc6419e5e0ceea0eb145dcfd67df41aff478e3269acbf07244419c308291e75"
+    },
+    {
+      "file": "src/components/soccer-career/CareerChanceWheel.tsx",
+      "retained": "source-before/src/components/soccer-career/CareerChanceWheel.tsx",
+      "bytes": 3701,
+      "sha256": "d941a638dd90ccbb2589e95ebab2e2d67b6d065193480aad67d6a1c4ea676383"
+    },
+    {
+      "file": "src/components/FlagImg.tsx",
+      "retained": "source-before/src/components/FlagImg.tsx",
+      "bytes": 14346,
+      "sha256": "8c309381c4c57adda575df1a9757a7d84cd20165fa709bf216e49b9d52aadbf2"
+    },
+    {
+      "file": "src/lib/flagUtils.ts",
+      "retained": "source-before/src/lib/flagUtils.ts",
+      "bytes": 3125,
+      "sha256": "e2db791b898bfadfc083e2f4bf3dee16e55490fee2da771de0df923f64a07392"
+    },
+    {
+      "file": "src/lib/soccerCurrency.ts",
+      "retained": "source-before/src/lib/soccerCurrency.ts",
+      "bytes": 8325,
+      "sha256": "50c4ccaed2a9f3788a63d9a90f1587a5be089773292821de3d1c675f2cbff645"
+    },
+    {
+      "file": "scripts/playSoccerCareerDocumentaryReview.mjs",
+      "retained": "source-before/scripts/playSoccerCareerDocumentaryReview.mjs",
+      "bytes": 49264,
+      "sha256": "b371dfe9227799cd74017bfcbe9b5be4125882ae914749a5dc4696f9142ffd2c"
+    },
+    {
+      "file": ".github/workflows/soccer-career-documentary-review.yml",
+      "retained": "source-before/.github/workflows/soccer-career-documentary-review.yml",
+      "bytes": 24763,
+      "sha256": "be9ff3f9c3fc0897b8fa2ba5d8de94699b20822bc28551f672e0274355715ab7"
+    },
+    {
+      "file": "scripts/lib/hostLikeServer.mjs",
+      "retained": "source-before/scripts/lib/hostLikeServer.mjs",
+      "bytes": 2690,
+      "sha256": "3958c9a3b4d9e49bb60a3b7dd72d81a997bd1caed56e82e4c3bae07e1a918ef0"
+    },
+    {
+      "file": "scripts/lib/playwrightLoader.mjs",
+      "retained": "source-before/scripts/lib/playwrightLoader.mjs",
+      "bytes": 2777,
+      "sha256": "94a07179be7ca6b9562d118b52c2d5d0dff0b6b2e29e49e4fea16fa2defb5a93"
+    },
+    {
+      "file": "scripts/lib/offlineTransport.cjs",
+      "retained": "source-before/scripts/lib/offlineTransport.cjs",
+      "bytes": 10571,
+      "sha256": "e4d02973811c506642e115be847054c69e2b324140174d3281e411895ac704a1"
+    },
+    {
+      "file": "package.json",
+      "retained": "source-before/package.json",
+      "bytes": 3495,
+      "sha256": "acfe14626dea53cf5f9c5e0286b766a22237656b52aac4c888b080873ac90e31"
+    },
+    {
+      "file": "package-lock.json",
+      "retained": "source-before/package-lock.json",
+      "bytes": 309049,
+      "sha256": "c7e3867eabf0bfa03a8aa6a5e601b0050b937ed210d48c6bbd241019e3c9ea76"
+    },
+    {
+      "file": "bun.lock",
+      "retained": "source-before/bun.lock",
+      "bytes": 152868,
+      "sha256": "463fa5e2dcc51efaaf1cff386daa9b5792036e8d91ab2c9ca416645086f96b9d"
+    },
+    {
+      "file": "index.html",
+      "retained": "source-before/index.html",
+      "bytes": 31644,
+      "sha256": "04d00404be213702b2effca3ea227010b35134cd45b94cabf848061c999f0164"
+    }
+  ],
+  "fixtureReceipt": {
+    "file": "browser-fixtures.json",
+    "bytes": 5426518,
+    "sha256": "23565113f08c6d05f5f982a7df4bf503c9a517470d69576a74cd59e111570a80",
+    "source": {
+      "head": "cc6f1bbfe5d175dbb274d3df90dc946701f74b96",
+      "parentAppRef": "527ca178f6b3a0be194b7aeac09d412db49088d4",
+      "engineSha256": "1a1c05feb120de043944ef45ec0880ed53e38f6b324e28889de2064fddd623ef",
+      "lifeSha256": "873719069828bb203d9d5859d5b87eb3c7f2c9ab8c3ed0d4c1391c9f507caad4",
+      "realismSha256": "a8b8a21392d5026039e0bac6b3138043d2e75782be5ebb35cec7057f5e4a60e2",
+      "routineSha256": "7fc25242e1ce90d92cd92b31a0b1593e1219b395757d58c9b54ebc4a72e36878",
+      "consequencesSha256": "6f43207a07b5f2eafc48a3b957be8da4165654c1995efc07348e8c1c7520327f",
+      "saveSha256": "b6ade8a5eece0bab8aaf614c82759c12bd1401ae39a66e2d5e72a2dfdd37e2b5",
+      "contractsSha256": "153167ffd1b746d0311c07002b3dbdce996bdcf070b4496e381f0f78bcc7100a",
+      "pageSha256": "01ce928b72de58fed4f138a2da593c0526d9ad81070a404fec7c6e9af5ebd060",
+      "testSha256": "6927144db7bb09a0056ed4bcbcb988d8e91c880a000208783564fe4d3505980d",
+      "simSha256": "cfc9bba9587e978011ec8acbfab38ec39a2b5e333eb36bc75c90e293ec591326",
+      "parentLifeSha256": "1f69fe2f41d1eba9f19b407ea9def6f14021f3bcc41b858b61020d0faac21056",
+      "parentLifeSourcePath": "fixed/soccerCareerLife.parent.ts",
+      "pickerObserver": {
+        "kind": "keyed-deck-name-search",
+        "file": "src/lib/soccerCareerEngine.ts",
+        "deckAnchor": "  const picked = drawEventBatch(eligible, `${soccerDeckIdentity(state)}|${season}|deck`);",
+        "sortAnchor": "  const shuffled = [...eligible].sort(() => Math.random() - 0.5);",
+        "sortAnchorAbsent": true,
+        "limit": 200000,
+        "plainCompiledPath": "fixed/engine.mjs",
+        "plainCompiledSha256": "59c99830768402f694eb9dde0c556f4179b316b6bc7e4e27c13fcb2904962479"
+      }
+    }
+  },
+  "clock": "2026-10-13T16:00:00Z",
+  "parentReceipts": [
+    {
+      "file": "fixed/soccerCareerLife.parent.ts",
+      "bytes": 103238,
+      "sha256": "1f69fe2f41d1eba9f19b407ea9def6f14021f3bcc41b858b61020d0faac21056"
+    }
+  ],
+  "pickerReceipts": [
+    {
+      "file": "fixed/engine.mjs",
+      "bytes": 2220791,
+      "sha256": "59c99830768402f694eb9dde0c556f4179b316b6bc7e4e27c13fcb2904962479"
+    },
+    {
+      "file": "fixed/source.json",
+      "bytes": 6423,
+      "sha256": "6ed392619699f3fd297c42bdcfa7614e70dde03f633c14e649b772ed4ae04a05"
+    }
+  ],
+  "modelProgress": {
+    "file": "fixed/fixture-progress.json",
+    "sha256": "3ce285550f2cf7903c435bb9a4e829effa8e35432197db8ea3efeaa4c63479a5",
+    "acquisitions": 5,
+    "answers": 6,
+    "seasons": 4
+  },
+  "summary": {
+    "played": 0,
+    "controls": 0,
+    "checks": 108,
+    "originals": 0,
+    "answeredSteps": 0,
+    "reloads": 0,
+    "totalAnsweredSteps": 0,
+    "literalReloadsAll": 0,
+    "deletedSaveReloads": 0,
+    "resolverDraws": 0,
+    "externalAborts": 0,
+    "expectedDiagnostics": 0,
+    "backendPosts": 0,
+    "caseChecks": 0,
+    "controlChecks": 0,
+    "installedVersions": 0,
+    "uniqueScenarios": 0,
+    "failures": 4,
+    "setupFailures": 1
+  }
+}

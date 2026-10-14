@@ -1,0 +1,5 @@
+Prepared 9 declared font dependencies for local fulfillment.
+prepInstalled: 521 installed locked versions written to /home/runner/work/ballpark-hero/ballpark-hero/w-playSoccerCareerPendingMorale
+simSoccerCareerPendingMorale normal: green. Exact source and outcome guards passed.
+Soccer pending-morale browser: passed; 2189 checks, 14 played cases, 2 controls, 54 originals, 0 failures, 0 setup failures.
+issues: status=passed checks=2189 failures=0 setup=0
