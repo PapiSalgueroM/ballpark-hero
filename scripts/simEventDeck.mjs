@@ -105,9 +105,12 @@
         card whose words read as conduct or a private life tagged, but for
         LEGAL_BASELINE (the GM cards flagged today, each with its word).
         Then FX_CONDUCT on 100 ten season desks whose squads are about half
-        real: every tagged card dealt and every answer to one lands on
-        generated men only, tagged cards were held for real men, and no
-        dealt text keeps a brace.
+        real, answering late across season turns: every tagged card dealt
+        and every answer the engine takes lands on generated men only, an
+        answer it refuses would have landed on a real man (or nobody) and
+        moves nothing, no tagged card sits open after a week about a real
+        man, tagged cards were held for real men, answers were refused and
+        cards settled for that, and no dealt text keeps a brace.
      13) COMPACT. Every GM pack with store: 'compact' set in memory, plus
         FX_COMPACT (stories, a subject, one shots, wordings, slots, expiry)
         and its season clock twin, on the FLEET drive at seeds 1 to 3 (a
@@ -217,6 +220,17 @@
      pressure   FX_COMPACT's moves times ten (in memory); section 15 fails.
      eager      src/pages/FrontOffice.tsx read with one static import of
                 '@/lib/gmInbox' added (in memory); section 16 fails.
+     Round 1332's review fixes (a tagged card asked again after its deal):
+     conductlate   answerGmInbox no longer asks a tagged card's roles again,
+                   so an answer after the season turn lands on a real man;
+                   section 12 fails.
+     conductstale  step 2b never settles an open tagged card whose role
+                   passed to a real man; section 12 fails (it sits open).
+     conducttarget the men an option moves are left out of the tag check, at
+                   the deal and the answer (c_skip moves the captain, not the
+                   striker it is about); section 12 fails.
+     nullpass      a role that resolves to nobody passes the tag check;
+                   section 12 fails.
 
    Runtime about 85 to 100 s on a runner, three requests at a time (section 2
    reloads all 84 rows since the review's fix pass; it was 40 s with seed 1
@@ -254,7 +268,8 @@ const runs = n => SECTIONS.length === 0 || SECTIONS.includes(n) || (n === 1 && (
 const REPLAY_FILE = path.join(ROOT, 'scripts/data/gmInboxReplay.json');
 const CONTROLS = ['replay', 'weightoff', 'weightkeep', 'story', 'rest', 'failopen', 'restfall', 'expirefall', 'textrng', 'seasonweek', 'expireoff', 'expirefx', 'settledoff', 'panelexpiry', 'neutral', 'heavy',
   'fxsilent', 'fxdrop', 'fxunbound', 'fxneutral', 'conductreal', 'slotopen', 'quoteslot', 'untagged', 'rosterword',
-  'pruneearly', 'codecword', 'codecslot', 'wordedit', 'wordorder', 'storymove', 'pressure', 'eager'];
+  'pruneearly', 'codecword', 'codecslot', 'wordedit', 'wordorder', 'storymove', 'pressure', 'eager',
+  'conductlate', 'conductstale', 'conducttarget', 'nullpass'];
 if (CONTROL && !CONTROLS.includes(CONTROL)) { console.error(`EVENT_DECK_CONTROL=${CONTROL} is not a control this kit knows`); process.exit(2); }
 if (RECORD && (CONTROL || SHARD)) { console.error('a recording runs the whole replay with no control, refusing'); process.exit(2); }
 const red = new Set();
@@ -306,6 +321,11 @@ const ENGINE_CONTROLS = {
     '    if (sharing.every(e => (pack.clock === \'season\' ? !onCooldown(last, e, clock + 1, pack.cooldown) : clock + 1 - at >= (e.cooldown ?? pack.cooldown)))) delete last[k]; /* pruneearly control */'],
   codecword: ['  if (g.t) out.t = g.t;', '  /* codecword control */'],
   codecslot: ['  if (g.sv) out.s = g.sv;', '  /* codecslot control */'],
+  /* Round 1332's review fixes, appended. */
+  conductlate: ['  if (def?.tag !== undefined && !gmTagStillSafe(def, msg.choices as GmChoiceDef[], s, seat)) return null;', '  /* conductlate control */'],
+  conductstale: ['      if (e && n >= 0 && !gmTagStillSafe(e, m.choices, s, seat)) { inbox[i] = { ...m, answered: n, auto: true }; settled?.push(inbox[i]); }', '      /* conductstale control */'],
+  conducttarget: ['  for (const c of choices) refs.push(...choiceRoles(c));', '  /* conducttarget control */'],
+  nullpass: ['  refs.every(ref => seat.person?.(s, ref)?.real === false);', '  refs.every(ref => seat.person?.(s, ref)?.real !== true); /* nullpass control */'],
 };
 let engineSrc = null;
 if (ENGINE_CONTROLS[CONTROL]) {
@@ -1297,20 +1317,27 @@ const FX_CONDUCT = fxPack('fx_conduct', [
     choices: [fxCh('Give him the days', { out: { who: 'keeper', weeks: 1 } }), fxCh('Not this week', { rating: { who: 'keeper', delta: -1 } }), fxCh('Talk it over later')] }),
   fxCard('p_grief', { tag: 'private', subject: { fact: 'man' }, text: '{player} lost someone close this week and the room knows it.',
     choices: [fxCh('Give him space', { morale: 1 }), fxCh('Leave it with the staff')] }),
+  /* Round 1332's review fix: an option that moves another role than the one
+     the card is about, so the hold of every man an option moves is tested
+     apart from the subject's. */
+  fxCard('c_skip', { tag: 'conduct', subject: 'striker', text: 'Your striker skipped training again this week.',
+    choices: [fxCh('Have your captain sort it out', { rating: { who: 'captain', delta: 1 } }), fxCh('Let it go')] }),
   fxCard('n_rival', { text: 'The game against {opponent} is the one the whole room wants.', choices: [fxCh('Talk it up', { popularity: 1 }), fxCh('Keep it low key')] }),
   fxCard('n_form', { text: '{player} is in the best form of his season.', choices: [fxCh('Praise him', { morale: 1 }), fxCh('Say nothing')] }),
 ], { span: { a: 20 }, facts: { man: { kind: 'num', min: 1, max: 13, per: 'week' }, rival: { kind: 'num', min: 1, max: 20, per: 'week' } },
   slots: { player: { fact: 'man', person: true }, opponent: { fact: 'rival' } }, subjectRest: 2 });
 /* The fixture's squad: twelve placeholder men a desk, about half of them
    marked real (as a real footballer would be in a binding), and the three
-   roles handed to a different man each season. Id 13 is nobody. */
+   roles handed to a different man each season. Id 13 is nobody, and so is
+   a role in about one season in five (nobody holds it: the hold must treat
+   nobody as it treats a real man). */
 const conductSquad = desk => Array.from({ length: 13 }, (_, i) => i > 0 && keyedRng(`simEventDeck|squad|${desk}|${i}`)() < 0.5);
 const conductPerson = (s, ref) => {
   const roles = Object.keys(FX_CONDUCT.targets);
   let id;
   if ('role' in ref) {
     const r = roles.indexOf(ref.role);
-    if (r < 0) return null;
+    if (r < 0 || (s.year + r + s.desk) % 5 === 0) return null;
     id = 1 + ((s.year * 3 + r * 5 + s.desk) % 12);
   } else id = Number(ref.id);
   if (!(Number.isInteger(id) && id >= 1 && id <= 12)) return null;
@@ -1443,8 +1470,15 @@ if (runs(12)) {
    tagged card dealt, and every answer to one, must land on generated men
    only (checked here with the fixture's own resolver, not the engine's);
    at least one tagged card must have been held for a real man; no dealt
-   text may keep a brace. Desks answer every open card the week it lands,
-   so a role is the same man at the deal and at the answer. */
+   text may keep a brace. Round 1332's review fix: desks answer LATE (each
+   open card with a chance of 0.35 a week, so cards sit open across a
+   season turn) and the season turns after the last week's deal and before
+   its answers, so a role can change hands between a card's deal and its
+   answer. Then every answer the engine takes must still land on generated
+   men only, an answer it refuses must be one that would have landed on a
+   real man (or nobody) and must move nothing, no tagged card may sit open
+   after a week about a real man (step 2b settles it), and the fleet must
+   have met both cases: an answer refused and a card settled for that. */
 if (runs(12)) {
   const seat = E.bindGmInbox(FX_CONDUCT, { ...BINDING, fx: FX_CONDUCT_FX, person: conductPerson });
   const byId = new Map(FX_CONDUCT.events.map(e => [e.id, e]));
@@ -1459,12 +1493,16 @@ if (runs(12)) {
   const choiceRefs = c => [...(c.out ? [{ role: c.out.who }] : []), ...(c.rating ? [{ role: c.rating.who }] : []),
     ...Object.values(c.fx ?? {}).filter(v => typeof v !== 'number').map(v => ({ role: v.who }))];
   const realHit = (s, refs) => refs.some(r => conductPerson(s, r)?.real !== false);
-  const f = { dealt: 0, tagged: 0, answered: 0, heldReal: 0, bad: [] };
+  /* Every role a card names: its subject when a role, and every option's men. */
+  const roleRefs = (e, choices) => [...(typeof e.subject === 'string' ? [{ role: e.subject }] : []), ...choices.flatMap(choiceRefs)];
+  const f = { dealt: 0, tagged: 0, answered: 0, heldReal: 0, refusedReal: 0, settledReal: 0, bad: [] };
   for (let d = 0; d < 100; d++) {
     const rng = keyedRng(`simEventDeck|conduct|${SEED}|${d}|deck`);
     const fr = keyedRng(`simEventDeck|conduct|${SEED}|${d}|facts`);
     const ar = keyedRng(`simEventDeck|conduct|${SEED}|${d}|answer`);
     const s = { ...newDesk(), desk: d, real: conductSquad(d) };
+    /* The ids a tagged card named at its deal (person slots, a fact's man). */
+    const dealtRefs = new Map();
     for (let t = 0; t < SEASONS * 20; t++) {
       s.year = 2030 + Math.floor(t / 20);
       const facts = { man: 1 + Math.floor(fr() * 13) };
@@ -1474,32 +1512,59 @@ if (runs(12)) {
         if (!e.tag) continue;
         const allNamed = refsOf(e, facts).every(r => !('id' in r) || conductPerson(s, r) !== null);
         if (allNamed && (realHit(s, refsOf(e, facts)) || e.choices.some(c => realHit(s, choiceRefs(c))))) {
-          if (E.gmCardSafe(e, s, seat, facts)) f.bad.push(`desk ${d} week ${t}: ${e.id} is about a real man and was not held`);
+          if (E.gmCardSafe(e, s, seat, facts)) f.bad.push(`desk ${d} week ${t}: ${e.id} is about a real man (or nobody) and was not held`);
           else f.heldReal++;
         }
       }
-      const got = E.gmInboxWeek(s, seat, 'a', facts, t, rng);
+      const settled = [];
+      const got = E.gmInboxWeek(s, seat, 'a', facts, t, rng, settled);
       for (const m of got) {
         f.dealt++;
         if (/[{}]/.test(m.text)) f.bad.push(`desk ${d} week ${t}: ${m.id} reads "${m.text}"`);
         const e = byId.get(m.defId);
         if (!e.tag) continue;
         f.tagged++;
-        if (realHit(s, refsOf(e, facts))) f.bad.push(`desk ${d} week ${t}: ${m.id} was dealt about a real man`);
+        dealtRefs.set(m.id, refsOf(e, facts));
+        if (realHit(s, refsOf(e, facts))) f.bad.push(`desk ${d} week ${t}: ${m.id} was dealt about a real man (or nobody)`);
+      }
+      for (const m of settled) {
+        const e = byId.get(m.defId);
+        if (!e.tag) continue;
+        if (realHit(s, roleRefs(e, m.choices))) f.settledReal++;
+        else f.bad.push(`desk ${d} week ${t}: ${m.id} was settled though every man it names is generated`);
       }
       for (const m of openOf(s)) {
+        const e = byId.get(m.defId);
+        if (e.tag && realHit(s, roleRefs(e, m.choices))) f.bad.push(`desk ${d} week ${t}: ${m.id} sits open after the week about a real man (or nobody)`);
+      }
+      /* The season turns after its last week's deal and before its answers. */
+      if (t % 20 === 19) s.year++;
+      for (const m of openOf(s)) {
+        if (ar() >= 0.35) continue;
         const i = Math.floor(ar() * m.choices.length);
         const e = byId.get(m.defId);
-        if (e.tag && realHit(s, choiceRefs(m.choices[i]))) f.bad.push(`desk ${d} week ${t}: answering ${m.id} lands on a real man`);
-        if (E.answerGmInbox(s, m.id, i, seat) !== null) f.answered++;
+        const before = JSON.stringify(s);
+        const line = E.answerGmInbox(s, m.id, i, seat);
+        if (line !== null) f.answered++;
+        if (!e.tag) continue;
+        const hit = realHit(s, [...(dealtRefs.get(m.id) ?? []), ...roleRefs(e, m.choices)]);
+        if (line !== null && hit) f.bad.push(`desk ${d} week ${t}: answering ${m.id} lands on a real man (or nobody)`);
+        else if (line === null && !hit) f.bad.push(`desk ${d} week ${t}: answering ${m.id} was refused though every man it names is generated`);
+        else if (line === null) {
+          f.refusedReal++;
+          if (JSON.stringify(s) !== before) f.bad.push(`desk ${d} week ${t}: a refused answer to ${m.id} moved something`);
+        }
       }
     }
   }
   for (const b of f.bad.slice(0, 6)) console.error(`     ${b}`);
-  const line = `FX_CONDUCT on 100 ten season desks: ${f.dealt} cards dealt, ${f.tagged} of them tagged, ${f.answered} answered, ${f.heldReal} tagged cards held for a real man`;
+  const line = `FX_CONDUCT on 100 ten season desks answering late: ${f.dealt} cards dealt, ${f.tagged} of them tagged, ${f.answered} answered, ${f.heldReal} tagged cards held for a real man, ${f.refusedReal} answers refused and ${f.settledReal} open cards settled after a role passed to a real man (or nobody)`;
+  /* Measured 2026-10-13 at seeds 1 to 5: 91 to 121 answers refused and 245
+     to 299 cards settled after a role passed to a real man (or nobody). The
+     floors of 20 only prove the fleet met both cases. */
   if (f.bad.length) fail(12, `${f.bad.length} breaks: ${line}`);
-  else if (f.tagged < 200 || f.heldReal < 1 || f.answered < 500) fail(12, `${line}: too few to have tested it`);
-  else ok(`${line}; every tagged card and every answer to one landed on generated men only, no dealt text kept a brace`);
+  else if (f.tagged < 200 || f.heldReal < 1 || f.answered < 500 || f.refusedReal < 20 || f.settledReal < 20) fail(12, `${line}: too few to have tested it`);
+  else ok(`${line}; every tagged card dealt and every answer taken landed on generated men only, every refused answer moved nothing, no tagged card sat open about a real man, no dealt text kept a brace`);
 }
 
 /* ═══ 13. COMPACT: a pruned book and messages saved as numbers deal the same ═══ */
