@@ -1,6 +1,6 @@
-## Codex Round1368 preparing: keeper save recovery, 2026-10-14
+## Codex Round1368 baseline qualified, fixed recovery pending, 2026-10-14
 
-Isolatedcodex/pitch-save-recovery fromqualified1366final8e70. Genuine normal save tapes show keeperpose68/catching1→empty atrestart whilecoordsheld. Proposed4spanpose-onlyexisting .3travel recovery remains outside; new9case2fault+7preserve baseline/proofs source reviewing, no appedit/runtime/fixedclaim. Bothnull/retainedevent binders andactualPitchMotioncallback/paused/reduced/withdrawn/cast/role/newaction behaviors held. All compiler/test/build/browser/installremote. NoCore/world/score/schema/timerchange. Audit docs/audits/pitch-save-recovery-2026-10-14.md. Existing1366scopedreadyH, originalsimCreationdebtunwaived;Hownsmerge/publish. OutsideReleaseBC1738737bytesheld.
+Exacte547/run38521945444/job115713428305 SUCCESS9cases2posefault+7preserve, whole180file/source3588/pkg3/type0/prior71+1366/10controls evidence closed. Reviewed6span motionbbb179f3 applied, wholeinverse426d40b1; body and arms useexisting .3travel withalloldnonsave rendering/coords/phases/callback/RNGheld. Fixed10+original3/7+binary1/9/proofsrebind/fullunits/build/readers/save-downloadcaps/browser8/32 originals remain pending. No fixed/live/finished-gameclaim. Audit docs/audits/pitch-save-recovery-2026-10-14.md; baseline3proofs held, newfixedrecipesoutside, no partialpush. H ownsCore/world andmerge/publish. OutsideReleaseBC1738737bytesheld.
 
 ## Release BC LIVE, 2026-10-13 18:23 EDT: one tab can no longer wipe a Club Manager save, Club Manager's world remembers your deals, its tables, copy and hub fixed, Soccer Career's events drawn fairly, the shared event deck, the college athletic director
 

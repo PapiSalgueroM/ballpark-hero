@@ -8,7 +8,7 @@ export interface MotionPlayer extends Point { key: string; name?: string; keeper
 /** `arc` is optional: a control point, and the ball arrives at this scene along a curve through it. */
 export interface MotionScene<T extends MotionPlayer> { mine: T[]; theirs: T[]; ball: Point; holderKey: string | null; arc?: Point; }
 export interface MotionEvent { event: PitchEvent; key: string; at: number; }
-export interface Pose { kick?: number; dive?: number; catching?: number; celebrate?: number; hop?: number; rue?: number; }
+export interface Pose { kick?: number; dive?: number; catching?: number; celebrate?: number; hop?: number; rue?: number; recovery?: number; }
 export interface MotionFrame<T extends MotionPlayer> extends MotionScene<T> {
   poses: Record<string, Pose>;
   action: string;
@@ -18,6 +18,8 @@ export interface MotionFrame<T extends MotionPlayer> extends MotionScene<T> {
   /** Round 1216: on the frames of an own goal only, the key of the figure it goes in off (null when he is not on the grass). */
   ownGoalBy?: string | null;
 }
+type CapturedScene<T extends MotionPlayer> = MotionScene<T> & Partial<Pick<MotionFrame<T>, 'poses' | 'action' | 'phase'>>;
+
 const bounded = (v: number) => Math.max(0, Math.min(1, v));
 const mix = (a: number, b: number, t: number) => a + (b - a) * t;
 const point = (a: Point, b: Point, t: number): Point => ({ x: mix(a.x, b.x, t), y: mix(a.y, b.y, t) });
@@ -218,11 +220,11 @@ function ownGoalFrame<T extends MotionPlayer>(scene: MotionScene<T>, action: Mot
 /** Uses the viewer's clock, so pausing freezes players, ball and action poses. */
 export function useLiveSimMotion<T extends MotionPlayer>(scene: MotionScene<T>, event: MotionEvent | null, clock: number, active: boolean, force?: boolean): MotionFrame<T> {
   const [mediaReduced, setReduced] = useState(() => typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
-  const [travel, setTravel] = useState({ from: scene, to: scene, at: clock });
+  const [travel, setTravel] = useState<{ from: CapturedScene<T>; to: MotionScene<T>; at: number }>({ from: scene, to: scene, at: clock });
   const [action, setAction] = useState<{ event: MotionEvent; scene: MotionScene<T> } | null>(null);
   /* Round 1101: a binder may force the still form on or off; left out, the device decides, as before. */
   const reduced = force ?? mediaReduced;
-  const current = useRef<MotionScene<T>>(scene);
+  const current = useRef<CapturedScene<T>>(scene);
   const clockRef = useRef(clock);
   useEffect(() => { clockRef.current = clock; });
   useEffect(() => { setTravel({ from: current.current, to: scene, at: clockRef.current }); }, [scene]);
@@ -252,10 +254,28 @@ export function useLiveSimMotion<T extends MotionPlayer>(scene: MotionScene<T>, 
   const inAction = active && action && action.event === event && clock - action.event.at <= 1.05
     && samePlayers(action.scene.mine, scene.mine) && samePlayers(action.scene.theirs, scene.theirs);
   const travelForFrame = scene !== travel.to ? { from: current.current, to: scene, at: clock } : travel;
-  const base = reduced ? scene : between(travelForFrame.from, travelForFrame.to, smooth((clock - travelForFrame.at) / .3));
+  const progress = smooth((clock - travelForFrame.at) / .3);
+  const base = reduced ? scene : between(travelForFrame.from, travelForFrame.to, progress);
+  const keeper = action?.event.event.kind === 'save' && action.event.event.side !== 'none'
+    ? (action.event.event.side === 'me' ? travelForFrame.from.theirs : travelForFrame.from.mine).find(player => player.keeper)
+    : undefined;
+  const caughtPose = keeper && travelForFrame.from.poses?.[keeper.key];
+  /* A completed save's keeper gets up during the existing walk, from the pose actually shown. */
+  const recovering = !!(active && !reduced && action && !inAction && (!event || event === action.event)
+    && clock >= action.event.at + ACTION_SPAN && clock >= clockRef.current
+    && travelForFrame.at >= action.event.at + ACTION_SPAN
+    && travelForFrame.from.action === 'save' && travelForFrame.from.phase === 'caught'
+    && keeper && scene.holderKey === keeper.key && caughtPose && current.current.poses?.[keeper.key]
+    && samePlayers(travelForFrame.from.mine, scene.mine) && samePlayers(travelForFrame.from.theirs, scene.theirs)
+    && travelForFrame.from.mine.every(player => scene.mine.find(next => next.key === player.key)?.keeper === player.keeper)
+    && travelForFrame.from.theirs.every(player => scene.theirs.find(next => next.key === player.key)?.keeper === player.keeper));
+  const poses: Record<string, Pose> = recovering && keeper && caughtPose && progress < 1
+    ? { [keeper.key]: { ...caughtPose, dive: (caughtPose.dive ?? 0) * (1 - progress), catching: (caughtPose.catching ?? 0) * (1 - progress),
+      ...(progress > 0 ? { recovery: progress } : {}) } }
+    : {};
   const frame: MotionFrame<T> = inAction
     ? actionFrame(action.scene, action.event, reduced ? 1.05 : clock - action.event.at)
-    : { ...base, poses: {}, action: 'pass', net: null, netPulse: 0, phase: 'pass' };
+    : { ...base, poses, action: 'pass', net: null, netPulse: 0, phase: 'pass' };
   /* Round 1101: the ball is never moved in one frame. An action that starts while the ball is somewhere
      else (the last kick's wind up, a chance straight after another, a shot off a kick off picture) brings it
      to the shooter's foot during his plant, from where it was on the frame the action started from. */
@@ -279,9 +299,10 @@ export function LivePitchPlayer({ color, keeper, pose, selected }: { color: stri
   // At full reach both gloves meet the ball's anchor, at (0, 8) in this view box.
   const reachX = -25 * Math.sin(dive * Math.PI / 180) * catching;
   const reachY = (3 + 25 * Math.cos(dive * Math.PI / 180)) * catching;
-  const handY = dive ? -20 : -3 - celebrate * 19 - rue * 17;
-  const handX = dive ? 5 : 11 + celebrate * 2 - rue * 5;
-  const armX = dive ? 5 : 10 + celebrate * 3 - rue * 3;
+  const recovery = pose?.recovery;
+  const handY = recovery === undefined ? (dive ? -20 : -3 - celebrate * 19 - rue * 17) : mix(-20, -3 - celebrate * 19 - rue * 17, recovery);
+  const handX = recovery === undefined ? (dive ? 5 : 11 + celebrate * 2 - rue * 5) : mix(5, 11 + celebrate * 2 - rue * 5, recovery);
+  const armX = recovery === undefined ? (dive ? 5 : 10 + celebrate * 3 - rue * 3) : mix(5, 10 + celebrate * 3 - rue * 3, recovery);
   return <svg className="cm-pitch-player" viewBox="-18 -26 36 44" aria-hidden="true" focusable="false" data-cm-actor-pose={celebrate ? 'celebrate' : dive ? 'dive' : kick ? 'strike' : 'stand'} data-pm-rue={rue ? '1' : undefined}>
     <ellipse cy="12" rx="10" ry="3" fill="#072d3470" />
     {selected && <ellipse cy="11" rx="14" ry="5" fill="none" stroke="#fff" strokeWidth="1.5" />}

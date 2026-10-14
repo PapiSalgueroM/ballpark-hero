@@ -57,7 +57,7 @@ function watch(input: PitchInput, options: Options = {}) {
 function withoutRecovery(frame: Frame, keeper?: string) {
   const result = copy(frame);
   if (keeper && result.poses[keeper]) {
-    delete result.poses[keeper].dive; delete result.poses[keeper].catching;
+    delete result.poses[keeper].dive; delete result.poses[keeper].catching; delete result.poses[keeper].recovery;
     if (Object.keys(result.poses[keeper]).length === 0) delete result.poses[keeper];
   }
   return result;
@@ -170,5 +170,51 @@ describe('Pitch save keeper recovery', () => {
     }
     expect(callbacks.filter(row => row.arm === 'candidate').map(({ arm, ...row }) => row)).toEqual(callbacks.filter(row => row.arm === 'parent').map(({ arm, ...row }) => row));
     expect(callbacks.filter(row => row.arm === 'candidate').map(row => row.moment)).toContain('strike');
+  });
+  it('save recovery geometry: keeper arms blend from caught to standing', () => {
+    const stages = [
+      { name: 'terminal', clock: 11.049, recovery: null, handY: -20, handX: 5, armX: 5 },
+      { name: 'first', clock: 11.051, recovery: null, handY: -20, handX: 5, armX: 5 },
+      { name: 'quarter', clock: 11.126, recovery: .15625, handY: -17.34375, handX: 5.9375, armX: 5.78125 },
+      { name: 'middle', clock: 11.201, recovery: .5, handY: -11.5, handX: 8, armX: 7.5 },
+      { name: 'three-quarter', clock: 11.276, recovery: .84375, handY: -5.65625, handX: 10.0625, armX: 9.21875 },
+      { name: 'neutral', clock: 11.351, recovery: null, handY: -3, handX: 11, armX: 10 },
+    ];
+    const observe = (commit: Commit, keeper: string, stage: typeof stages[number]) => {
+      const host = document.createElement('div'); host.innerHTML = commit.svgs[keeper];
+      const group = host.querySelector('svg g')!;
+      const circles = [...group.querySelectorAll('circle')].map(node => ({ cx: Number(node.getAttribute('cx')), cy: Number(node.getAttribute('cy')) }));
+      const paths = [...group.querySelectorAll('path')], armsD = paths[3].getAttribute('d')!;
+      const armNumbers = armsD.match(/^M-5-12 ([^ ]+) ([^M ]+)M5-12 ([^ ]+) ([^ ]+)$/);
+      const geometry = { stage: stage.name, expected: stage, circles, groupCircleCount: circles.length, groupPathCount: paths.length,
+        armsD, arms: armNumbers ? armNumbers.slice(1).map(Number) : [],
+        metadataPresent: Object.prototype.hasOwnProperty.call(commit.frame.poses[keeper] ?? {}, 'recovery'),
+        recovery: (commit.frame.poses[keeper] as { recovery?: number } | undefined)?.recovery ?? null };
+      Object.assign(commit, { recoveryGeometry: geometry });
+      return geometry;
+    };
+    // All four actual hook journeys and raw SVG observations are retained before the causal Boolean.
+    const journeys = (['me', 'opp'] as const).flatMap(side => [false, true].map(retained => {
+      const keeper = side === 'me' ? 'o0' : 'm0', view = watch(source('save', side), { retained });
+      view.at(10); view.at(10.8);
+      const samples = stages.map(stage => {
+        const pair = view.at(stage.clock);
+        const current = pair.current.map(commit => observe(commit, keeper, stage));
+        const original = pair.original.map(commit => observe(commit, keeper, stage));
+        return { stage, pair, current, original };
+      });
+      view.unmount(); return { side, retained, keeper, samples };
+    }));
+    journeys.forEach(journey => journey.samples.forEach(sample => held(sample.pair, journey.keeper)));
+    // Decimal clock subtraction and SVG serialization can differ at IEEE rounding precision.
+    const equalNumber = (actual: number, expected: number) => Number.isFinite(actual) && Math.abs(actual - expected) <= 1e-9;
+    const matched = journeys.every(journey => journey.samples.every(({ stage, current }) => current.every(row =>
+      row.groupCircleCount === 2 && row.groupPathCount === 5
+      && row.circles.every((circle, index) => equalNumber(circle.cx, index === 0 ? -stage.handX : stage.handX) && equalNumber(circle.cy, stage.handY))
+      && row.arms.length === 4 && row.arms.every((value, index) => equalNumber(value, [-stage.armX, stage.handY, stage.armX, stage.handY][index]))
+      && (stage.recovery === null ? !row.metadataPresent && row.recovery === null
+        : row.metadataPresent && row.recovery !== null && equalNumber(row.recovery, stage.recovery))
+    )));
+    expect(matched, 'keeper recovery arms kept the old binary stance').toBe(true);
   });
 });

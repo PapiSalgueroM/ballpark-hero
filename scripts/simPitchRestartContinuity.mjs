@@ -23,6 +23,43 @@ const PRESERVED = [
 ].map(label => 'restart preserves: ' + label);
 const OLD = '  const base = reduced ? scene : between(travel.from, travel.to, smooth((clock - travel.at) / .3));';
 const FIXED = '  const travelForFrame = scene !== travel.to ? { from: current.current, to: scene, at: clock } : travel;\n  const base = reduced ? scene : between(travelForFrame.from, travelForFrame.to, smooth((clock - travelForFrame.at) / .3));';
+const RECOVERY_SPANS = [
+  {
+    "before": "const bounded = (v: number) => Math.max(0, Math.min(1, v));",
+    "after": "type CapturedScene<T extends MotionPlayer> = MotionScene<T> & Partial<Pick<MotionFrame<T>, 'poses' | 'action' | 'phase'>>;\n\nconst bounded = (v: number) => Math.max(0, Math.min(1, v));"
+  },
+  {
+    "before": "  const [travel, setTravel] = useState({ from: scene, to: scene, at: clock });",
+    "after": "  const [travel, setTravel] = useState<{ from: CapturedScene<T>; to: MotionScene<T>; at: number }>({ from: scene, to: scene, at: clock });"
+  },
+  {
+    "before": "  const current = useRef<MotionScene<T>>(scene);",
+    "after": "  const current = useRef<CapturedScene<T>>(scene);"
+  },
+  {
+    "before": "  const base = reduced ? scene : between(travelForFrame.from, travelForFrame.to, smooth((clock - travelForFrame.at) / .3));\n  const frame: MotionFrame<T> = inAction\n    ? actionFrame(action.scene, action.event, reduced ? 1.05 : clock - action.event.at)\n    : { ...base, poses: {}, action: 'pass', net: null, netPulse: 0, phase: 'pass' };",
+    "after": "  const progress = smooth((clock - travelForFrame.at) / .3);\n  const base = reduced ? scene : between(travelForFrame.from, travelForFrame.to, progress);\n  const keeper = action?.event.event.kind === 'save' && action.event.event.side !== 'none'\n    ? (action.event.event.side === 'me' ? travelForFrame.from.theirs : travelForFrame.from.mine).find(player => player.keeper)\n    : undefined;\n  const caughtPose = keeper && travelForFrame.from.poses?.[keeper.key];\n  /* A completed save's keeper gets up during the existing walk, from the pose actually shown. */\n  const recovering = !!(active && !reduced && action && !inAction && (!event || event === action.event)\n    && clock >= action.event.at + ACTION_SPAN && clock >= clockRef.current\n    && travelForFrame.at >= action.event.at + ACTION_SPAN\n    && travelForFrame.from.action === 'save' && travelForFrame.from.phase === 'caught'\n    && keeper && scene.holderKey === keeper.key && caughtPose && current.current.poses?.[keeper.key]\n    && samePlayers(travelForFrame.from.mine, scene.mine) && samePlayers(travelForFrame.from.theirs, scene.theirs)\n    && travelForFrame.from.mine.every(player => scene.mine.find(next => next.key === player.key)?.keeper === player.keeper)\n    && travelForFrame.from.theirs.every(player => scene.theirs.find(next => next.key === player.key)?.keeper === player.keeper));\n  const poses: Record<string, Pose> = recovering && keeper && caughtPose && progress < 1\n    ? { [keeper.key]: { ...caughtPose, dive: (caughtPose.dive ?? 0) * (1 - progress), catching: (caughtPose.catching ?? 0) * (1 - progress),\n      ...(progress > 0 ? { recovery: progress } : {}) } }\n    : {};\n  const frame: MotionFrame<T> = inAction\n    ? actionFrame(action.scene, action.event, reduced ? 1.05 : clock - action.event.at)\n    : { ...base, poses, action: 'pass', net: null, netPulse: 0, phase: 'pass' };"
+  },
+  {
+    "before": "export interface Pose { kick?: number; dive?: number; catching?: number; celebrate?: number; hop?: number; rue?: number; }",
+    "after": "export interface Pose { kick?: number; dive?: number; catching?: number; celebrate?: number; hop?: number; rue?: number; recovery?: number; }"
+  },
+  {
+    "before": "  const handY = dive ? -20 : -3 - celebrate * 19 - rue * 17;\n  const handX = dive ? 5 : 11 + celebrate * 2 - rue * 5;\n  const armX = dive ? 5 : 10 + celebrate * 3 - rue * 3;",
+    "after": "  const recovery = pose?.recovery;\n  const handY = recovery === undefined ? (dive ? -20 : -3 - celebrate * 19 - rue * 17) : mix(-20, -3 - celebrate * 19 - rue * 17, recovery);\n  const handX = recovery === undefined ? (dive ? 5 : 11 + celebrate * 2 - rue * 5) : mix(5, 11 + celebrate * 2 - rue * 5, recovery);\n  const armX = recovery === undefined ? (dive ? 5 : 10 + celebrate * 3 - rue * 3) : mix(5, 10 + celebrate * 3 - rue * 3, recovery);"
+  }
+];
+function continuitySource(body) {
+  const held = lf(execFileSync('git', ['show', '8e70dcf0fcfe0d9554881d73cfcfa2fea9414faf:' + MOTION], { cwd: ROOT, maxBuffer: 8 * 1024 * 1024 }));
+  if (body === held) return body;
+  let inverse = body;
+  for (const span of [...RECOVERY_SPANS].reverse()) {
+    assert.equal(inverse.split(span.after).length - 1, 1, 'One complete known recovery span required');
+    inverse = inverse.replace(span.after, span.before);
+  }
+  assert.equal(inverse, held, 'Removing only the six known recovery spans must restore the complete held continuity source');
+  return inverse;
+}
 const files = [MOTION, 'src/components/pitch-motion/scene.ts', 'src/components/pitch-motion/contract.ts', 'src/components/pitch-motion/pitchMotion.css', 'src/components/pitch-motion/PitchMotion.tsx', 'src/components/club-manager/LiveSimScreen.tsx', 'src/lib/keyedRng.ts', 'src/test/setup.ts', 'src/test/liveSimMotion.test.tsx', 'src/test/pitchOwnGoal.test.tsx', 'scripts/simLiveSimMotion.mjs', 'scripts/simOwnGoalMotion.mjs', 'scripts/lib/offlineTransport.cjs', 'vitest.config.ts', 'package.json', 'package-lock.json', 'tsconfig.app.json', TEST, 'scripts/simPitchRestartContinuity.mjs', '.github/workflows/pitch-restart-continuity.yml'];
 const hash = value => createHash('sha256').update(value).digest('hex');
 const lf = value => value.toString().replace(/\r\n/g, '\n');
@@ -54,19 +91,26 @@ try {
     if (![TEST, 'scripts/simPitchRestartContinuity.mjs', '.github/workflows/pitch-restart-continuity.yml'].includes(file)) {
       const parent = lf(execFileSync('git', ['show', PARENT + ':' + file], { cwd: ROOT }));
       if (file === MOTION && phase === 'fixed') {
-        assert.equal(body.split(FIXED).length - 1, 1, 'One executable derived-travel span required');
-        assert.equal(body.replace(FIXED, OLD), parent, 'The complete motion inverse must equal the parent');
+        const continuity = continuitySource(body);
+        const inversePath = path.join(DIR, 'recovery.inverse.tsx');
+        await writeFile(inversePath, continuity);
+        receipt.recoveryBinding = { sourceSha256: hash(body), inverseSha256: hash(continuity),
+          path: path.relative(OUT, inversePath).replaceAll('\\', '/'),
+          spans: body === continuity ? [] : RECOVERY_SPANS.map(span => ({ anchor: span.after, replacement: span.before, currentSourceOffset: body.indexOf(span.after) })) };
+        assert.equal(continuity.split(FIXED).length - 1, 1, 'One executable derived-travel span required');
+        assert.equal(continuity.replace(FIXED, OLD), parent, 'The complete motion inverse must equal the parent');
       } else assert.equal(body, parent, file + ' whole-parent source hold');
       receipt.parentBindings.push({ file, sha256: hash(parent) });
     }
   }
   let motion = sources.get(MOTION);
   if (control) {
-    assert.equal(motion.split(FIXED).length - 1, 1);
-    const changed = motion.replace(FIXED, OLD); assert.notEqual(changed, motion);
+    const continuity = continuitySource(motion);
+    assert.equal(continuity.split(FIXED).length - 1, 1);
+    const changed = continuity.replace(FIXED, OLD); assert.notEqual(changed, motion);
     assert.equal(changed, lf(execFileSync('git', ['show', PARENT + ':' + MOTION], { cwd: ROOT })));
     await writeFile(path.join(DIR, 'motion.control.tsx'), changed);
-    receipt.mutations.push({ file: MOTION, anchor: FIXED, replacement: OLD, offset: motion.indexOf(FIXED), beforeSha256: hash(motion), afterSha256: hash(changed), controlPath: path.join('units', arm, 'motion.control.tsx') });
+    receipt.mutations.push({ file: MOTION, anchor: FIXED, replacement: OLD, offset: motion.indexOf(FIXED), continuityAnchorOffset: continuity.indexOf(FIXED), recoveryInverseSha256: hash(continuity), recoverySpans: motion === continuity ? [] : RECOVERY_SPANS.map(span => ({ anchor: span.after, replacement: span.before, currentSourceOffset: motion.indexOf(span.after) })), beforeSha256: hash(motion), afterSha256: hash(changed), controlPath: path.join('units', arm, 'motion.control.tsx') });
     motion = changed;
   }
   const copyPath = path.join(scratch, 'motion.tsx');
