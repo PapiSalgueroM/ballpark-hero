@@ -111,7 +111,9 @@ async function qualify() { try {
     assert.equal(a.result.kind, 'match'); assert.equal(b.result.kind, 'match'); assert(!a.result.state.sacked && !b.result.state.sacked);
     const oldNote = a.result.state.decisions.find(item => !item.resolved && item.deckId === spec.id), note = b.result.state.decisions.find(item => !item.resolved && item.deckId === spec.id);
     assert(oldNote && note); const expectedText = textFor(spec.id, context);
-    const expectedResult = copy(a.result); expectedResult.state.decisions = expectedResult.state.decisions.map(item => item.id === note.id
+    /* Release BE join: structuredClone, not the JSON copy, so a field the newer core leaves undefined (Release BD's goal
+       events carry assist: undefined) is held on both sides instead of vanishing from the parent side only. */
+    const expectedResult = structuredClone(a.result); expectedResult.state.decisions = expectedResult.state.decisions.map(item => item.id === note.id
       ? { ...item, text: PHASE === 'baseline' ? oldNote.text : expectedText } : item);
     assert.deepEqual(b.result, expectedResult, 'Every actual match field outside the selected text must equal the parent');
     row.captured = { board: 34, press: 34, injuryWeeks: 1 }; row.settled = { board: b.result.state.boardConfidence, press: b.result.state.press.mood,
