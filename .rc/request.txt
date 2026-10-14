@@ -1,0 +1,7 @@
+#!build
+#!playwright
+#!serial
+headsha: git log --oneline -2
+fonts: node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only | tail -2
+playDeadline: node .rc/x/prepInstalled.mjs /tmp/mdo && MANAGER_DEADLINE_OUT=/tmp/mdo MANAGER_DEADLINE_PHASE=fixed NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playClubManagerDecisionDeadline.mjs
+playDepth: mkdir -p /tmp/ddb && gh run download 38329792123 -n manager-decision-depth-38329792123 -D /tmp/ddb && B=$(find /tmp/ddb -path '*baseline/report.json' | head -1) && echo "baseline $B" && MANAGER_DECISION_DEPTH_BASELINE_REPORT="$B" MANAGER_DECISION_DEPTH_OUT=/tmp/mdd MANAGER_DECISION_DEPTH_PHASE=fixed NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playClubManagerDecisionDepth.mjs
