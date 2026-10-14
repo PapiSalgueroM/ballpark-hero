@@ -1,0 +1,4 @@
+build exit=0 31s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+base-minus1328k exit=2 19s |     at Identifier.bind (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/rollup/dist/es/shared/node-entry.js:5220:40)
+hub-walk-full exit=1 92s | playCmHubLanding: 3 failure(s) (A 8 pass 0 fail, B 65 pass 0 fail, C 111 pass 0 fail, D 0 pass 3 fail, E 63 pass 0 fail, F 9 pass 0 fail)
+ctl-hub-drift exit=1 0s | playCmHubLanding: CONTROL drift DID NOT FIRE, its D check stayed green (D 0 pass 3 fail)

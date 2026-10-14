@@ -1,0 +1,5 @@
+D. Must not move: base http://localhost:4174 against head http://localhost:4173
+  FAIL  D  liverpool-take-seed1: the walk broke (Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:4174/club-manager)
+  FAIL  D  celta-skip-seed2: the walk broke (Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:4174/club-manager)
+  FAIL  D  everton2005-newyear-seed3: the walk broke (Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:4174/club-manager)
+playCmHubLanding: CONTROL drift DID NOT FIRE, its D check stayed green (D 0 pass 3 fail)

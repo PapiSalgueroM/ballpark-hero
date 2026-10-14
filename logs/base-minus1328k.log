@@ -1,0 +1,23 @@
+treeWithoutMerge: b7a61589a5ad143c52910c13745c1770a6657183, d4eea587 without f14ec63a; conflicts kept from d4eea587: src/pages/WhatsNew.tsx
+base b7a61589a5ad143c52910c13745c1770a6657183 (this head without f14ec63a), differs in: src/components/club-manager/CalendarScreen.tsx src/components/club-manager/FinancesScreen.tsx src/components/club-manager/MetersStrip.tsx src/components/club-manager/TrainingScreen.tsx src/hooks/useArrivalTop.ts src/hooks/useRevealScroll.ts src/lib/clubManagerHubLines.ts src/pages/ClubManager.tsx src/test/calendarCurrentDate.test.tsx src/test/clubManagerHubLines.test.ts src/test/useArrivalTop.test.tsx 
+/tmp/wt-4174
+[31merror during build:
+[31msrc/hooks/useArrivalTop.ts (2:37): "topInset" is not exported by "src/hooks/useRevealScroll.ts", imported by "src/hooks/useArrivalTop.ts".[31m
+file: [36m/tmp/wt-4174/src/hooks/useArrivalTop.ts:2:37[31m
+[33m
+1: import { useLayoutEffect, useRef } from 'react';
+2: import { GAP, MIN_LEAD, bottomInset, topInset } from './useRevealScroll';
+                                        ^
+3: 
+4: /* ─── useArrivalTop (Round 1328) ───
+[31m
+    at getRollupError (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/rollup/dist/es/shared/parseAst.js:317:41)
+    at error (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/rollup/dist/es/shared/parseAst.js:313:42)
+    at Module.error (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/rollup/dist/es/shared/node-entry.js:17285:16)
+    at Module.traceVariable (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/rollup/dist/es/shared/node-entry.js:17718:29)
+    at ModuleScope.findVariable (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/rollup/dist/es/shared/node-entry.js:15309:39)
+    at FunctionScope.findVariable (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/rollup/dist/es/shared/node-entry.js:5453:38)
+    at FunctionBodyScope.findVariable (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/rollup/dist/es/shared/node-entry.js:5453:38)
+    at ReturnValueScope.findVariable (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/rollup/dist/es/shared/node-entry.js:5453:38)
+    at FunctionBodyScope.findVariable (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/rollup/dist/es/shared/node-entry.js:5453:38)
+    at Identifier.bind (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/rollup/dist/es/shared/node-entry.js:5220:40)[39m
