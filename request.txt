@@ -1,0 +1,7 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+dev: node scripts/simSoccerCareerDevelopment.mjs
+dev-all: CAREER_DEVELOPMENT_CONTROL=all CAREER_DEVELOPMENT_ARTIFACTS=$RC_OUT/dev node scripts/simSoccerCareerDevelopment.mjs
+dev-mentorRemember: CAREER_DEVELOPMENT_CONTROL=mentorRemember CAREER_DEVELOPMENT_IMPORT_ONLY=0 CAREER_DEVELOPMENT_ARTIFACTS=/tmp/devmr node scripts/simSoccerCareerDevelopment.mjs
+base-dev-all: git worktree add -q /tmp/b1329dev 082fc2774c8aa9f919c14efa33bfc3fbfc599597 && ln -s "$PWD/node_modules" /tmp/b1329dev/node_modules && cd /tmp/b1329dev && CAREER_DEVELOPMENT_CONTROL=all CAREER_DEVELOPMENT_ARTIFACTS=$RC_OUT/devbase node scripts/simSoccerCareerDevelopment.mjs
+worldtruth: node scripts/simSoccerWorldTruth.mjs
+ctl-summer: WORLD_TRUTH_CONTROL=summer node scripts/simSoccerWorldTruth.mjs
