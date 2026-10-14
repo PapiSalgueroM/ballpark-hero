@@ -1,0 +1,4 @@
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+[41m[1m FAIL [22m[49m src/test/clubManagerDecisions.test.tsx[2m > [22mRound 979 decisions deck[2m > [22mmoves only the number each answer names, by exactly its amount
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m13 passed[39m[22m[90m (14)[39m
+FIRED-OK
