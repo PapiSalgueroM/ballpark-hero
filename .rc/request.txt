@@ -1,0 +1,5 @@
+#!serial
+rules-base: git checkout dec9075b -- src && node scripts/simCmLeagueRules.mjs; s=$?; git checkout HEAD -- src; exit $s
+rules-head: git diff --quiet HEAD -- src && node scripts/simCmLeagueRules.mjs
+write-digest: node scripts/simCmLeagueRules.mjs --part=modern,eras,pure --write && cp scripts/data/cmLeagueRulesDigest.json $RC_OUT/cmLeagueRulesDigest.json && git diff -U0 -- scripts/data/cmLeagueRulesDigest.json | grep -c '^+ ' && git diff -U0 -- scripts/data/cmLeagueRulesDigest.json | grep '^+ ' | cut -c1-60 | sed 's/"[0-9a-f]\{8,\}"/H/g' | sort | uniq -c | sort -rn | head -20 && node scripts/simCmLeagueRules.mjs
+continuity-head: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simManagerWorldContinuity.mjs
