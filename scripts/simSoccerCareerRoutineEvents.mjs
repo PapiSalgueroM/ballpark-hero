@@ -137,8 +137,13 @@ async function actualPickerAndFixtures(directory) {
     }
     const yearOf = state => state.seasons[state.seasons.length - 1].year;
     const routineCards = cards => cards.filter(card => card.id >= 600 && card.id <= 629);
-    function offered(id) {
-      const initial = context(id);
+    /* Release BF join: Round 1327 deals the batch from a stream keyed to the career and the season, so on such a tree
+       a Math.random seed moves nothing in the pick. There each picker attempt is the same fixture under its own player
+       name (the deck key's moving part, the way simSoccerDeckFairness varies it); on a tree without the keyed deck the
+       attempts vary the seed exactly as before. */
+    const KEYED = typeof E.soccerDeckIdentity === 'function';
+    function offered(id, name) {
+      const initial = name ? { ...context(id), playerName: name } : context(id);
       for (let year = 2026; year < 2056; year++) {
         const state = canonical({ ...initial, seasons: initial.seasons.map(row => ({ ...row, year })) });
         const card = withRandom(() => 0.9, () => L.getLifeEvents(state).find(card => card.id === id));
@@ -153,17 +158,21 @@ async function actualPickerAndFixtures(directory) {
       queuedIds: [], answeredIds: [], missingIds: [], cases: [], duplicateKeys: 0, cooldownLosses: 0,
       limits: ['Context fields are explicit fictional scenario preparations.', 'Delivery and stamps are produced by the actual engine picker.',
         'Only catalog reads, not the picker or the complete career, promise zero extra random draws.'] };
+    picker.attemptInput = KEYED ? 'the player name (keyed deck, Round 1327)' : 'the Math.random seed';
     const retainPicker = () => { if (retained) fs.writeFileSync(path.join(retained, 'picker.json'), JSON.stringify(picker, null, 2) + '\n'); };
     for (let id = 600; id <= 629; id++) {
       const found = offered(id);
       if (!found) { picker.missingIds.push(id); retainPicker(); continue; }
       let delivery = null;
       let deliverySeed = null;
+      let input = found;
       for (let seed = 0; seed < 2048; seed++) {
         picker.attempts++;
-        const actual = draw(found.state, 12000 + id * 2048 + seed);
+        const attempt = KEYED ? offered(id, `Routine Fixture ${seed}`) : found;
+        if (!attempt) continue;
+        const actual = draw(attempt.state, 12000 + id * 2048 + seed);
         if (actual.phase === 'random_events' && actual.pendingEvents.some(card => card.id === id)) {
-          delivery = canonical(actual); deliverySeed = 12000 + id * 2048 + seed; break;
+          delivery = canonical(actual); deliverySeed = 12000 + id * 2048 + seed; input = attempt; break;
         }
       }
       retainPicker();
@@ -191,7 +200,7 @@ async function actualPickerAndFixtures(directory) {
       assert(after.events.length > waiting.events.length, 'The actual queued routine must retain its saved outcome');
       assert.deepEqual(after.pendingEvents.map(card => card.id), waiting.pendingEvents.slice(1).map(card => card.id));
       picker.answeredIds.push(id);
-      picker.cases.push({ id, deliverySeed, input: canonical(found.state), delivery, waiting, after,
+      picker.cases.push({ id, deliverySeed, input: canonical(input.state), delivery, waiting, after,
         waitingSha256: sha(JSON.stringify(waiting)), afterSha256: sha(JSON.stringify(after)) });
       retainPicker();
     }
@@ -423,6 +432,7 @@ export function getSoccerRoutineEvents(state: Parameters<typeof getSoccerRoutine
   console.log(`Promised followups: ${FOLLOWUP_OWNED.map(title => `${title}=${followups.find(test => test.title === title).status}`).join('; ')}; 7 preservation passes.`);
   console.log(`Actual causal totals: ${failed.length} intended failures; ${report.numPassedTests} passes; pending 0; runner exit ${result.status}.`);
   console.log(`Source receipts held: ${receipts.length}; file errors empty; raw setup and unhandled markers absent.`);
+  if (played) console.log(`Picker attempts vary: ${played.picker.attemptInput}.`);
   if (played) console.log(`Actual bounded picker: ${played.picker.attempts} attempts; ${played.picker.queuedIds.length}/30 queued; ${played.picker.answeredIds.length}/30 answered; ${played.picker.duplicateKeys} duplicate keys; ${played.picker.cooldownLosses} cooldown losses.`);
   if (played?.fixtures) console.log(`Normal-only browser fixtures: ${played.fixtures.scenarios} complete scenarios; sha256=${played.fixtures.sha256}; ${played.fixtures.file}.`);
   console.log(`simSoccerCareerRoutineEvents ${EXPECT_RED ? 'expected baseline red' : CONTROL ? 'control ' + CONTROL : 'normal'}: green. All exact outcome and source guards passed.`);

@@ -24,7 +24,9 @@
  * THE SECTIONS
  *   1  THE DECK. One mid career save with no priority beat due, 40,000 draws
  *      through the real generateRandomEvents, each under its own player name
- *      (the deck key's only moving part). Math.random replays one fixed seed
+ *      (the deck key's only moving part; a name whose catalog is not the
+ *      save's, because Round 1350's routines rotate with the player's
+ *      identity, is set aside). Math.random replays one fixed seed
  *      for exactly the calls the catalogs make while the deck builds them, so
  *      their own random gates resolve alike in every trial, and runs on a
  *      fresh per trial stream after that (so an old shuffle shows its bias
@@ -510,12 +512,23 @@ if (crashes > 0) fail(`${crashes} fleet careers crashed`);
     const catalogIds = withStream(() => E.getAllEvents({ ...base }), seeded(S)).value.map(e => e.id);
     const counts = new Map();
     let picks = 0;
-    for (let t = 0; t < TRIALS; t += 1) {
-      const st = { ...base, playerName: `Deck ${t}` };
-      const K = withStream(() => E.getAllEvents({ ...st }), seeded(S)).calls;
+    /* Release BF join: Round 1350's between season routines rotate with the player's identity, so a new name can also
+       change which cards are in the catalog. A trial counts only when its catalog is the save's own, so every counted
+       draw is over the one eligible list the tenths are read against; on a tree where the name moves nothing but the
+       key, no name is set aside and the trials are exactly the ones before. */
+    const catalogKey = catalogIds.join();
+    let names = 0, setAside = 0;
+    for (let t = 0; t < TRIALS; names += 1) {
+      if (names >= TRIALS * 40) { fail(`only ${t} of ${names} player names kept the save's catalog`); break; }
+      const st = { ...base, playerName: `Deck ${names}` };
+      const built = withStream(() => E.getAllEvents({ ...st }), seeded(S));
+      if (built.value.map(e => e.id).join() !== catalogKey) { setAside += 1; continue; }
+      const K = built.calls;
       const ids = withStream(() => deck({ ...st }), seeded(S), seeded(1e6 + t + SEED_OFFSET), K).value.map(e => e.id);
       for (const id of ids) { counts.set(id, (counts.get(id) || 0) + 1); picks += 1; }
+      t += 1;
     }
+    console.log(`   ${setAside} of ${names} player names set aside because their catalog is not the save's (the routine rotation)`);
     if (JSON.stringify(base) !== before) fail('the draws wrote into the save they were handed');
     const eligible = catalogIds.filter(id => counts.has(id));
     const k = eligible.length;
