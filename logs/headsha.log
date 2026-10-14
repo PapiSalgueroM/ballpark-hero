@@ -1,0 +1,2 @@
+80b559348 rc request rBEg-fix9 for 4e5038fb0d726ba7e4a1e09684aebe092438646a
+4e5038fb0 Round BEG: the pitch walk's final holds take each digest in a block of its own (simHarnessAnchors, third pass)
