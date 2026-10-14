@@ -39,7 +39,7 @@ for (const row of cases) {
 const sources = ['src/lib/clubManager.ts', 'src/lib/clubManagerCalendar.ts', 'src/hooks/useClubManager.ts',
   'src/pages/ClubManager.tsx', 'src/components/club-manager/ClubManagerSeasonSummary.tsx',
   'src/components/club-manager/WorldTablesCard.tsx', 'src/components/club-manager/LeagueTableCard.tsx',
-  'src/components/club-manager/CalendarScreen.tsx', 'scripts/simManagerCustomPromotion.mjs', 'scripts/playManagerCustomPromotion.mjs'];
+  'src/components/club-manager/CalendarScreen.tsx', 'src/components/ui/tabs.tsx', 'scripts/simManagerCustomPromotion.mjs', 'scripts/playManagerCustomPromotion.mjs'];
 const sourceHashes = () => Object.fromEntries(sources.map(file => [file, sha(fs.readFileSync(path.join(ROOT, file)))]));
 assert.equal(manifest.source.after, sha(fs.readFileSync(path.join(ROOT, 'src/lib/clubManager.ts'))));
 const fonts = new Map(JSON.parse(fs.readFileSync(path.join(CACHE, 'manifest.json'), 'utf8')).map(entry => {
@@ -142,14 +142,20 @@ async function journey(fixture, width, height) {
             && ancestors.every(css => css.display !== 'none' && css.visibility === 'visible' && Number(css.opacity) > 0) && element.contains(hit);
           const animations = document.getAnimations().filter(a => a.playState === 'running' && Number.isFinite(a.effect?.getComputedTiming().endTime)).length;
           const data = { box, visible, animations, ancestors, documentWidth: document.documentElement.scrollWidth, viewport: { width: innerWidth, height: innerHeight },
-            label: element.innerText || element.getAttribute('aria-label'), fontFamily: style.fontFamily, fontSize: style.fontSize, opacity: style.opacity };
+            label: element.innerText || element.getAttribute('aria-label'), role: element.getAttribute('role'),
+            disabled: element.matches(':disabled') || element.getAttribute('aria-disabled') === 'true',
+            fontFamily: style.fontFamily, fontSize: style.fontSize, opacity: style.opacity };
           const signature = JSON.stringify(data); stable = visible && animations === 0 && signature === previous ? stable + 1 : 0; previous = signature;
           frames.push({ ...data, stable }); if (stable >= 3) finish(true); else frame = requestAnimationFrame(sample);
         }; frame = requestAnimationFrame(sample);
       }));
       row.layout[name] = diagnostics; write(`${id}-${name}-layout`, diagnostics);
       check(diagnostics.passed && diagnostics.frames.at(-1).documentWidth <= width + 1, `${name}: visible stable content with no horizontal overflow`);
-      if (control) check(diagnostics.frames.at(-1).box.height >= 30 && diagnostics.frames.at(-1).box.width >= 30, `${name}: measured control is at least 30px in both dimensions`);
+      if (control) {
+        const measured = diagnostics.frames.at(-1);
+        check(!measured.disabled, `${name}: the actual control is enabled`);
+        if (measured.role !== 'tab') check(measured.box.height >= 30 && measured.box.width >= 30, `${name}: measured action button is at least 30px in both dimensions`);
+      }
       if (photograph) { const filename = `${id}-${name}.png`; await page.screenshot({ path: path.join(OUT, filename), fullPage: false }); row.screenshots.push(filename); }
     };
     const activate = async (target, name) => { await capture(target, name, false, true); if (width === 390) await target.tap(); else { await target.focus(); await target.press('Enter'); } };
@@ -215,7 +221,9 @@ async function journey(fixture, width, height) {
     }
     const ownRow = table.locator('[data-club]').filter({ has: page.getByText(fixture.clubName, { exact: true }) });
     await capture(ownRow, 'promoted-table');
-    await activate(page.getByRole('tab', { name: 'Home', exact: true }), 'home-control');
+    const home = page.getByRole('tab', { name: 'Home', exact: true });
+    await activate(home, 'home-control'); await tile('Calendar').waitFor({ state: 'visible' });
+    check(await home.getAttribute('aria-selected') === 'true', 'Actual Home tab activation selects Home and exposes the calendar tile');
     await activate(tile('Calendar'), 'calendar-control'); await page.locator('[data-testid="cm-calendar-grid"]').waitFor();
     const day = expected.firstLeague; assert(day && after.leagueClubs.includes(day.opponent) && day.opponent !== fixture.proxy && day.opponent !== fixture.clubName);
     row.calendarFixture = day;

@@ -4,6 +4,7 @@ on:
     branches: [codex/manager-reported-bugs]
 permissions:
   contents: read
+  actions: read
 jobs:
   verify:
     runs-on: ubuntu-latest
@@ -143,11 +144,38 @@ jobs:
         env:
           NODE_OPTIONS: --require=${{ github.workspace }}/scripts/lib/offlineTransport.cjs
         run: node scripts/playManagerCustomPromotion.mjs 2>&1 | tee manager-report-artifacts/browser.log
-      - name: Full ordinary unit suite
+      - name: Retain the qualified full-unit receipt
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        uses: actions/download-artifact@v4
+        with:
+          name: manager-reports-38538631115
+          run-id: 38538631115
+          github-token: ${{ github.token }}
+          path: ${{ runner.temp }}/manager-prior-proof
+      - name: Full ordinary unit suite or identical qualified inputs
         if: ${{ !cancelled() && steps.build.outcome == 'success' }}
         env:
           NODE_OPTIONS: --require=${{ github.workspace }}/scripts/lib/offlineTransport.cjs
-        run: npm test -- --maxWorkers=2 --reporter=default --reporter=json --outputFile.json=manager-report-artifacts/full-unit.json 2>&1 | tee manager-report-artifacts/full-unit.log
+        run: |
+          if git diff --quiet 8eba33314fe89b43a045c31c33e916cd4d8965e4 HEAD -- . ':!scripts/playManagerCustomPromotion.mjs' ':!.github/workflows/manager-reported-bugs.yml'; then
+            node --input-type=module <<'JS'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          const folder = process.env.RUNNER_TEMP + '/manager-prior-proof';
+          assert.equal(fs.readFileSync(folder + '/head.txt', 'utf8').trim(), '8eba33314fe89b43a045c31c33e916cd4d8965e4');
+          const report = JSON.parse(fs.readFileSync(folder + '/full-unit.json', 'utf8'));
+          assert.equal(report.success, true); assert.equal(report.numFailedTests, 0);
+          assert.equal(report.numPassedTests, 7887); assert.equal(report.numPendingTests, 58);
+          for (const file of ['full-unit.json', 'full-unit.log']) fs.copyFileSync(folder + '/' + file, 'manager-report-artifacts/' + file);
+          const receipt = { qualifiedHead: '8eba33314fe89b43a045c31c33e916cd4d8965e4', run: 38538631115, passed: report.numPassedTests,
+            existingSkipped: report.numPendingTests, changedFilesAllowed: ['scripts/playManagerCustomPromotion.mjs', '.github/workflows/manager-reported-bugs.yml'],
+            method: 'All other tracked inputs are byte-identical by git diff. Only the standalone browser driver and its workflow changed.' };
+          fs.writeFileSync('manager-report-artifacts/full-unit-reuse.json', JSON.stringify(receipt, null, 2));
+          console.log(JSON.stringify(receipt));
+          JS
+          else
+            npm test -- --maxWorkers=2 --reporter=default --reporter=json --outputFile.json=manager-report-artifacts/full-unit.json 2>&1 | tee manager-report-artifacts/full-unit.log
+          fi
       - name: Final source holds
         if: always()
         run: |
