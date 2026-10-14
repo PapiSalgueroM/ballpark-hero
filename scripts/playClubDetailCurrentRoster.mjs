@@ -333,7 +333,8 @@ try {
       raw: preparedRaw, rawSha256: sha(preparedRaw), expected: wanted, preparation, preparedPagePresentation: true };
     report.fixtures.push(pageReceipt);
     setup(JSON.stringify(receipt.state) === originalRaw && !!loaded && preparation.draws.length === 0 && preparation.value.saved
-      && preparation.value.raw === JSON.stringify(loaded), receipt.name + ': actual page preparation must save the complete loaded state without model draws.');
+      && preparation.value.raw === JSON.stringify(loaded) && (receipt.name === 'founded' || preparation.value.raw === originalRaw),
+      receipt.name + ': actual page preparation must save the complete loaded state without model draws.');
     const added = Object.keys(loaded).filter(key => !Object.hasOwn(receipt.state, key)).sort(); pageReceipt.added = added;
     setup(Object.keys(receipt.state).every(key => Object.hasOwn(loaded, key) && JSON.stringify(loaded[key]) === JSON.stringify(receipt.state[key]))
       && (receipt.name === 'founded' ? JSON.stringify(added) === JSON.stringify(['books', 'facilities', 'managerXp', 'staff', 'startOptions']) : added.length === 0),
