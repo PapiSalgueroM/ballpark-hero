@@ -1,6 +1,6 @@
-## Round1366: shared restart continuity fix, fixed gate pending, 2026-10-14
+## Round1366: restart continuity scoped qualified, creation cap debt held, 2026-10-14
 
-Round1366 baseline7dea physicallyqualified9=3faults/6preserves,83commits,RNG0 and original55+16/10controls. Exact2line motion426d and fixedWF now independently reviewed; new162line standalonebrowser51c8 reviewedwithwholemethodinverse, phone/desktop6+6/24originals/rawframe+compositor scopes. Fresh fixed9/oldrender3+6/discovery/fullunits/build/browser/all15readers and unchanged604830/save budgets pending. OriginalsimCreation60000debt remains unwaived; weightsrunbeforethatgroup. No realmatchbrowser/merge/live claim. DraftPR268, see docs/audits/pitch-restart-continuity-2026-10-14.md.
+Round1366 scoped qualified tested8cde3aec/run38505007986/job115660386661, overallFAILSOLEoriginalsimCreation73.8KB>60000unwaived. Actual9normal/oldrender3+6/55+16oldcases/10controls/discovery/type/full7873pass58skip/build/15rebuiltreaders/saveguards/602.2<604 and828.2<830 hold. Standalone actualsharedpitch6+6/24originals/fullrawframe+CDPtraces/source/package521 verified; all24individuallyviewed, no realManagerjourney orpaintedoldcarrierclaim fromsettledcaptures. Exact2linemotion426d readyHscopedintegration andfresh target rebind, notfullgreen/live/finishedgames. DraftPR268unmerged/unpublished. See docs/audits/pitch-restart-continuity-2026-10-14.md.
 
 ## Release BC LIVE, 2026-10-13 18:23 EDT: one tab can no longer wipe a Club Manager save, Club Manager's world remembers your deals, its tables, copy and hub fixed, Soccer Career's events drawn fairly, the shared event deck, the college athletic director
 
