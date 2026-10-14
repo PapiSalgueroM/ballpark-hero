@@ -1,0 +1,3 @@
+continuity-base exit=1 27s |     at async file:///tmp/b1/scripts/simManagerWorldContinuity.mjs:483:24
+matchPlans-base exit=1 95s | 1 harness not green.
+unseeded-base exit=1 102s | simCmUnseededWorld: 112 FAILURE(S)

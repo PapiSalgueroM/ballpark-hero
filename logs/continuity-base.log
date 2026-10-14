@@ -1,0 +1,54 @@
+FAIL [healthy] inactive: Entire inactive AR result and saved bytes match
++ actual - expected
+... Skipped lines
+
+  {
+    loaded: {
+      academy: {
+        candidates: [
+          {
+...
+          id: 'league',
++         label: 'Win La Liga',
+-         label: 'Win the La Liga',
+          target: 1
+        },
+        {
+          id: 'cup',
+          label: 'Win the Copa del Rey',
+
+FAIL [healthy] constructors: Fresh constructor changes only the declared held seed
++ actual - expected
+... Skipped lines
+
+  {
+    academy: {
+      candidates: [
+        {
+          fee: 4,
+...
+        id: 'league',
++       label: 'Win La Liga',
+-       label: 'Win the La Liga',
+        target: 1
+      },
+      {
+        id: 'cup',
+        label: 'Win the Copa del Rey',
+
+PASS [healthy] identity
+PASS [healthy] buy-job
+PASS [healthy] year-away
+PASS [healthy] sale
+PASS [healthy] option
+PASS [healthy] release
+PASS [healthy] refresh
+PASS [healthy] seeded-world
+PASS [healthy] storage
+AssertionError [ERR_ASSERTION]: Healthy complete outcome groups all pass
+
+2 !== 0
+
+    at arm (file:///tmp/b1/scripts/simManagerWorldContinuity.mjs:475:19)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async file:///tmp/b1/scripts/simManagerWorldContinuity.mjs:483:24
