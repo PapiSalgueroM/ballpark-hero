@@ -170,6 +170,9 @@ Final proof readings at the last head are in the closing report
   happened now adds 1 to 3 items where the base added 7 to 9 (MAX_FEED 12; ensurePhone's repair is outside the
   round's hunks).
 - Re-seating a real nominee at his era club also moves his honours points on Ballon d'Or night (clubHonours of the
-  era club), so ranks can move; the player's own finish base against head is not measured here.
+  era club), so ranks can move. His own finish is now read beside the base by simSoccerWorldTruth (a reading, not
+  a check): wins this tree against the base 56 and 49 (seed offset 0, r1329-fx-g), 78 and 77 (offset 5, r1329-fx-f),
+  82 and 87 (offset 7, r1329-fx-d), each of about 6,250 seasons played; top three 76 and 80, 107 and 106, 131 and
+  120. The two move both ways by a handful, as two careers that part at the first month award would.
 - The 2012 Ballon d'Or night still prints sim honours beside real men (owed to the Ballon d'Or round), and a toast
   can cover the chance wheel's Show result button at 390 (not this round's screen).
