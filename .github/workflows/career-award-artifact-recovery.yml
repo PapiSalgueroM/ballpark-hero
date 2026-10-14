@@ -1,0 +1,516 @@
+name: Award Exact Failed Artifact Recovery
+on:
+  push:
+    branches: [codex/award-artifact-recovery]
+    paths: [.github/workflows/career-award-artifact-recovery.yml]
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: award-exact-artifact-recovery-${{ github.sha }}
+  cancel-in-progress: false
+jobs:
+  recover:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Bind read-only recovery source
+        run: |
+          set -euo pipefail
+          mkdir -p recovery/manifest recovery/chunks recovery/originals recovery/reassembled
+          test "$(git rev-parse HEAD)" = "${{ github.sha }}"
+          test "$(git rev-parse 'aa564f16019b9e821981d5c4e3e0262312c73b62^{tree}')" = e3e5332ddf95b79802c82487a03df3c0aca32e75
+          test "$(git rev-parse '39fdafd54e64792b78af21896ccb035500bf32cb^{tree}')" = 5071d305c59c7339d029f8eace758c01db52eecf
+          git rev-parse HEAD > recovery/manifest/recovery-head.txt
+          git rev-parse 'HEAD^{tree}' > recovery/manifest/recovery-tree.txt
+          git diff --name-only aa564f16019b9e821981d5c4e3e0262312c73b62 HEAD > recovery/manifest/recovery-changed-source.txt
+          test "$(cat recovery/manifest/recovery-changed-source.txt)" = .github/workflows/career-award-artifact-recovery.yml
+          git diff --exit-code aa564f16019b9e821981d5c4e3e0262312c73b62 HEAD -- src scripts package.json package-lock.json > recovery/manifest/recovery-app-source-held.log
+          cp .github/workflows/career-award-artifact-recovery.yml recovery/manifest/recovery-workflow.yml
+          sha256sum package.json package-lock.json > recovery/manifest/packages-before.txt
+      - name: Preserve the literal recovery driver
+        run: |
+          set -euo pipefail
+          cat > recovery/manifest/recovery-driver.py <<'PY'
+          import copy
+          import hashlib
+          import json
+          import os
+          from pathlib import Path, PurePosixPath
+          import stat
+          import subprocess
+          import sys
+          import urllib.error
+          import urllib.parse
+          import urllib.request
+          import zipfile
+
+          ROOT = Path('recovery')
+          MANIFEST = ROOT / 'manifest'
+          PART_BYTES = 200_000_000
+          REPO = 'PapiSalgueroM/ballpark-hero'
+          HEAD = '39fdafd54e64792b78af21896ccb035500bf32cb'
+          TREE = '5071d305c59c7339d029f8eace758c01db52eecf'
+          RUN = 38163973428
+          JOB = 114542563191
+          SPECS = [
+              {'label': 'early', 'id': 11712069077, 'name': 'career-award-generations-early-38163973428-1', 'bytes': 1030234072, 'sha256': '4d4211fdf787a0d91a6d04a4809ca18d6be4abf0ce3e9a4825ce213a51976290'},
+              {'label': 'final', 'id': 11712788586, 'name': 'career-award-generations-final-38163973428-1', 'bytes': 1035083120, 'sha256': 'd730d4925a36fb53e88c14e5c466a12856ae5fa0114da2ba1d6ab411576fe4c7'},
+          ]
+          LITERAL_SELECTED = [
+              'proof/report.json', 'proof/failures.json', 'proof/size.json', 'proof/objects.json',
+              'proof/component-fixtures.json', 'proof/component/stdout.log', 'proof/component/stderr.log',
+              'proof/component/exit.json', 'proof/component/vitest.json', 'proof/component/observations.json',
+              'method-runner/process.json', 'method-runner/discovery.json', 'method-runner/scope.json',
+              'method-runner/runner.log', 'award-generations.log', 'component-test-verification.json',
+              'source-head.txt', 'source-tree.txt', 'source-scope.json', 'source-inventory.txt',
+              'base-source-inventory.txt', 'source-archive-sha256.txt', 'changed-source.txt',
+              'packages-before.txt', 'packages-after-setup.txt', 'packages-final.txt',
+              'dependencies-before.json', 'dependencies-after-setup.json', 'dependencies-final.json',
+              'helper-source-sha256.txt', 'post-build-source-held.log', 'source-held.log',
+              'unexpected-source-files.txt', 'early-artifact-size.log', 'artifact-size.log',
+              'artifact-member-sha256.txt', 'generated-body-inventory.json', 'generated-archive-sha256.txt',
+          ]
+          PREFIX_SELECTED = ['method-runner/', 'proof/component/']
+          STAGE = 'initialization'
+          SUMMARY = {'status': 'partial-failure', 'scope': 'Byte-exact transport recovery only. Original method/component failures and 430M proof/500M workflow cap failures remain unwaived. No application, test, harness, build, dependency install, database or deployment rerun.', 'run': RUN, 'job': JOB, 'head': HEAD, 'tree': TREE, 'artifacts': [], 'failures': []}
+          MANIFEST.mkdir(parents=True, exist_ok=True)
+          (ROOT / 'chunks').mkdir(parents=True, exist_ok=True)
+          (ROOT / 'originals').mkdir(parents=True, exist_ok=True)
+          (ROOT / 'reassembled').mkdir(parents=True, exist_ok=True)
+
+
+          def write_json(file, value):
+              file.parent.mkdir(parents=True, exist_ok=True)
+              file.write_text(json.dumps(value, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+
+
+          def sha_file(file):
+              digest = hashlib.sha256()
+              with file.open('rb') as handle:
+                  for block in iter(lambda: handle.read(1024 * 1024), b''):
+                      digest.update(block)
+              return digest.hexdigest()
+
+
+          def api_json(route, file):
+              token = os.environ.get('RECOVERY_GITHUB_TOKEN')
+              assert token, 'read-only Actions token is available'
+              request = urllib.request.Request('https://api.github.com/repos/' + REPO + route, headers={'Authorization': 'Bearer ' + token, 'Accept': 'application/vnd.github+json', 'X-GitHub-Api-Version': '2022-11-28', 'User-Agent': 'exact-award-artifact-recovery'})
+              with urllib.request.build_opener(NoRedirect).open(request, timeout=120) as response:
+                  raw = response.read()
+              file.write_bytes(raw)
+              return json.loads(raw)
+
+
+          class NoRedirect(urllib.request.HTTPRedirectHandler):
+              def redirect_request(self, request, fp, code, message, headers, newurl):
+                  return None
+
+
+          def download_original(spec, destination):
+              token = os.environ['RECOVERY_GITHUB_TOKEN']
+              request = urllib.request.Request('https://api.github.com/repos/' + REPO + '/actions/artifacts/' + str(spec['id']) + '/zip', headers={'Authorization': 'Bearer ' + token, 'Accept': 'application/vnd.github+json', 'X-GitHub-Api-Version': '2022-11-28', 'User-Agent': 'exact-award-artifact-recovery'})
+              opener = urllib.request.build_opener(NoRedirect)
+              try:
+                  response = opener.open(request, timeout=120)
+              except urllib.error.HTTPError as error:
+                  assert error.code in (301, 302, 303, 307, 308), 'official archive endpoint supplies a redirect'
+                  location = error.headers.get('Location')
+                  error.close()
+                  parsed = urllib.parse.urlsplit(location or '')
+                  assert parsed.scheme == 'https' and parsed.hostname and not parsed.username and not parsed.password, 'archive redirect is HTTPS without user credentials'
+                  # The private redirect stays only in memory; no Authorization header crosses origins.
+                  response = urllib.request.urlopen(urllib.request.Request(location, headers={'User-Agent': 'exact-award-artifact-recovery'}), timeout=120)
+              digest = hashlib.sha256()
+              count = 0
+              with response, destination.open('xb') as output:
+                  while True:
+                      block = response.read(1024 * 1024)
+                      if not block:
+                          break
+                      output.write(block)
+                      digest.update(block)
+                      count += len(block)
+              assert count == spec['bytes'], 'complete original archive byte length matches immutable metadata'
+              assert digest.hexdigest() == spec['sha256'], 'complete original archive SHA256 matches immutable digest'
+
+
+          def safe_name(info):
+              name = info.filename
+              assert info.orig_filename == name, 'ZIP member preserves its complete literal path'
+              assert name and '\x00' not in name and '\\' not in name and ':' not in name, 'ZIP member has a native-safe literal path'
+              assert all(ord(char) >= 32 and char not in '<>"|?*' for char in name), 'ZIP member avoids Windows-invalid characters and controls'
+              assert not name.startswith('/') and not PurePosixPath(name).is_absolute(), 'ZIP member is relative'
+              raw_parts = name.rstrip('/').split('/')
+              assert raw_parts and all(part not in ('', '.', '..') and part == part.rstrip(' .') for part in raw_parts), 'ZIP path has no escape or ambiguous component'
+              reserved = {'CON', 'PRN', 'AUX', 'NUL'} | {'COM' + str(i) for i in range(1, 10)} | {'LPT' + str(i) for i in range(1, 10)}
+              assert all(part.split('.')[0].upper() not in reserved for part in raw_parts), 'ZIP member avoids reserved native file names'
+              assert not info.flag_bits & 1, 'ZIP member is not encrypted'
+              mode = info.external_attr >> 16
+              kind = stat.S_IFMT(mode)
+              assert kind in (0, stat.S_IFREG, stat.S_IFDIR), 'ZIP member is a regular file or directory'
+              if info.is_dir():
+                  assert kind in (0, stat.S_IFDIR) and info.file_size == 0, 'ZIP directory has zero body bytes'
+              else:
+                  assert kind in (0, stat.S_IFREG), 'ZIP file is regular'
+              return name.rstrip('/'), 'directory' if info.is_dir() else 'file'
+
+
+          def inspect_zip(spec, archive):
+              selected_root = MANIFEST / (spec['label'] + '-diagnostic')
+              inventory = []
+              with zipfile.ZipFile(archive, 'r') as source:
+                  infos = source.infolist()
+                  screened = []
+                  seen = {}
+                  for index, info in enumerate(infos):
+                      name, kind = safe_name(info)
+                      folded = name.casefold()
+                      assert folded not in seen, 'ZIP has no duplicate or case-colliding native member'
+                      seen[folded] = kind
+                      screened.append((index, info, name, kind))
+                  for _, _, name, _ in screened:
+                      parts = name.split('/')
+                      assert all(seen.get('/'.join(parts[:i]).casefold()) != 'file' for i in range(1, len(parts))), 'ZIP has no file-parent conflict'
+                  for index, info, name, kind in screened:
+                      digest = hashlib.sha256()
+                      total = 0
+                      selected = kind == 'file' and (name in LITERAL_SELECTED or any(name.startswith(prefix) for prefix in PREFIX_SELECTED))
+                      destination = selected_root.joinpath(*name.split('/')) if selected else None
+                      if destination:
+                          assert destination.resolve().is_relative_to(selected_root.resolve()), 'selected diagnostic output stays within its own directory'
+                          destination.parent.mkdir(parents=True, exist_ok=True)
+                      with source.open(info, 'r') as input_stream:
+                          output = destination.open('xb') if destination else None
+                          try:
+                              while True:
+                                  block = input_stream.read(1024 * 1024)
+                                  if not block:
+                                      break
+                                  digest.update(block)
+                                  total += len(block)
+                                  if output:
+                                      output.write(block)
+                          finally:
+                              if output:
+                                  output.close()
+                      assert total == info.file_size, 'every complete ZIP body equals its declared uncompressed length'
+                      body_sha = digest.hexdigest()
+                      if destination:
+                          assert destination.stat().st_size == total and sha_file(destination) == body_sha, 'selected complete body is byte-identical to its original member'
+                      inventory.append({'zipIndex': index, 'path': name, 'kind': kind, 'bytes': total, 'sha256': body_sha, 'compressedBytes': info.compress_size, 'crc32': info.CRC, 'method': info.compress_type, 'externalAttributes': info.external_attr, 'selected': selected})
+              write_json(MANIFEST / (spec['label'] + '-whole-zip-inventory.json'), inventory)
+              regular = {row['path']: row for row in inventory if row['kind'] == 'file'}
+              declarations = [{'path': path, 'present': path in regular, 'member': regular.get(path)} for path in LITERAL_SELECTED]
+              selected_rows = [row for row in inventory if row['selected']]
+              assert selected_root.joinpath('source-head.txt').read_text(encoding='utf-8').strip() == HEAD, 'retained original source head matches fixed runtime'
+              assert selected_root.joinpath('source-tree.txt').read_text(encoding='utf-8').strip() == TREE, 'retained original source tree matches fixed runtime'
+              write_json(MANIFEST / (spec['label'] + '-selected-diagnostic-manifest.json'), {'scope': 'Complete selected original diagnostic bodies with all literal absences declared; not a substitute for either whole original ZIP.', 'literalDeclarations': declarations, 'completePrefixes': PREFIX_SELECTED, 'expandedSelectedPaths': [row['path'] for row in selected_rows], 'selectedBodies': selected_rows, 'selectedBytes': sum(row['bytes'] for row in selected_rows)})
+              return inventory
+
+
+          def part_failures(parts, spec):
+              findings = []
+              names = [spec['label'] + '.zip.part-' + str(i).zfill(3) for i in range(6)]
+              if [row['name'] for row in parts] != names:
+                  findings.append('part-order')
+              offset = 0
+              offset_bad = False
+              for row in parts:
+                  if row['offset'] != offset or row['bytes'] <= 0 or row['bytes'] > PART_BYTES:
+                      offset_bad = True
+                  offset += row['bytes']
+              if offset_bad:
+                  findings.append('part-offsets')
+              if sum(row['bytes'] for row in parts) != spec['bytes']:
+                  findings.append('byte-total')
+              return findings
+
+
+          def split_and_reassemble(spec, original):
+              parts = []
+              offset = 0
+              with original.open('rb') as source:
+                  for index in range(6):
+                      name = spec['label'] + '.zip.part-' + str(index).zfill(3)
+                      file = ROOT / 'chunks' / name
+                      count = 0
+                      digest = hashlib.sha256()
+                      with file.open('xb') as output:
+                          while count < PART_BYTES:
+                              block = source.read(min(1024 * 1024, PART_BYTES - count))
+                              if not block:
+                                  break
+                              output.write(block)
+                              digest.update(block)
+                              count += len(block)
+                      assert count > 0 and count <= PART_BYTES, 'each of six complete raw parts fits the transport bound'
+                      parts.append({'name': name, 'offset': offset, 'bytes': count, 'sha256': digest.hexdigest()})
+                      offset += count
+                  assert source.read(1) == b'', 'all complete original bytes are allocated to exactly six parts'
+              assert part_failures(parts, spec) == [], 'complete ordered part allocation is exact'
+              restored = ROOT / 'reassembled' / (spec['label'] + '.zip')
+              with restored.open('xb') as output:
+                  for row in parts:
+                      file = ROOT / 'chunks' / row['name']
+                      assert file.stat().st_size == row['bytes'] and sha_file(file) == row['sha256'], 'every complete physical part matches its manifest'
+                      with file.open('rb') as source:
+                          for block in iter(lambda: source.read(1024 * 1024), b''):
+                              output.write(block)
+              assert restored.stat().st_size == spec['bytes'] and sha_file(restored) == spec['sha256'], 'whole ordered byte reassembly matches original length and SHA'
+              with original.open('rb') as left, restored.open('rb') as right:
+                  while True:
+                      block = left.read(1024 * 1024)
+                      assert block == right.read(1024 * 1024), 'whole reconstructed archive is byte-identical to complete original'
+                      if not block:
+                          break
+              healthy = copy.deepcopy(parts)
+              fault = copy.deepcopy(parts)
+              removed = fault.pop(2)
+              assert fault != healthy and part_failures(fault, spec) == ['part-order', 'part-offsets', 'byte-total'], 'copied missing-part manifest control is effective with exact failures'
+              fault_body = copy.deepcopy(fault)
+              fault.insert(2, removed)
+              assert fault == healthy and part_failures(fault, spec) == [], 'complete changed-copy manifest reversal restores every field'
+              write_json(MANIFEST / (spec['label'] + '-part-manifest.json'), {'original': spec, 'parts': parts, 'restoredBytes': restored.stat().st_size, 'restoredSha256': sha_file(restored), 'wholeByteEqual': True, 'copiedOmissionControl': {'healthy': healthy, 'fault': fault_body, 'undo': fault, 'failures': ['part-order', 'part-offsets', 'byte-total']}})
+              return parts
+
+
+          def recover(spec):
+              global STAGE
+              label = spec['label']
+              STAGE = label + '-metadata'
+              metadata = api_json('/actions/artifacts/' + str(spec['id']), MANIFEST / (label + '-original-artifact-metadata.json'))
+              assert metadata['id'] == spec['id'] and metadata['name'] == spec['name'], 'original artifact id and name match immutable pins'
+              assert metadata['size_in_bytes'] == spec['bytes'] and metadata['digest'] == 'sha256:' + spec['sha256'] and metadata['expired'] is False, 'original artifact size digest and unexpired state match immutable pins'
+              assert metadata['workflow_run']['id'] == RUN and metadata['workflow_run']['head_sha'] == HEAD, 'original artifact run and head match immutable runtime'
+              STAGE = label + '-download'
+              original = ROOT / 'originals' / (label + '.zip')
+              download_original(spec, original)
+              STAGE = label + '-raw-parts-and-reassembly'
+              parts = split_and_reassemble(spec, original)
+              STAGE = label + '-whole-safe-zip-scan'
+              inventory = inspect_zip(spec, original)
+              result = {'status': 'byte-exact-recovered', 'original': spec, 'metadata': label + '-original-artifact-metadata.json', 'originalRemotePath': str(original), 'originalBytes': original.stat().st_size, 'originalSha256': sha_file(original), 'members': len(inventory), 'regularMembers': sum(row['kind'] == 'file' for row in inventory), 'expandedBodyBytes': sum(row['bytes'] for row in inventory), 'parts': parts, 'inventory': label + '-whole-zip-inventory.json', 'selectedDiagnostic': label + '-selected-diagnostic-manifest.json'}
+              return result, inventory
+
+
+          def record_failure(error):
+              # Never serialize untrusted HTTP exceptions, URLs, request objects or headers.
+              detail = str(error) if isinstance(error, AssertionError) else 'Transport or native archive operation failed; URL and header details are suppressed.'
+              SUMMARY['failures'].append({'stage': STAGE, 'type': type(error).__name__, 'detail': detail})
+              print('FAIL exact recovery stage: ' + STAGE + ' (' + type(error).__name__ + ')')
+
+
+          def main():
+              global STAGE
+              STAGE = 'original-runtime-and-tree-binding'
+              run = api_json('/actions/runs/' + str(RUN), MANIFEST / 'original-run-metadata.json')
+              job = api_json('/actions/jobs/' + str(JOB), MANIFEST / 'original-job-metadata.json')
+              assert run['id'] == RUN and run['head_sha'] == HEAD and run['status'] == 'completed' and run['conclusion'] == 'failure' and run['run_attempt'] == 1, 'original exact run is completed failure'
+              assert job['id'] == JOB and job['run_id'] == RUN and job['status'] == 'completed' and job['conclusion'] == 'failure', 'original exact job is completed failure'
+              assert subprocess.check_output(['git', 'rev-parse', HEAD + '^{tree}'], text=True).strip() == TREE, 'original immutable commit tree is exact'
+              inventories = {}
+              for spec in SPECS:
+                  try:
+                      result, inventory = recover(spec)
+                      SUMMARY['artifacts'].append(result)
+                      inventories[spec['label']] = inventory
+                  except Exception as error:
+                      record_failure(error)
+                  write_json(MANIFEST / 'recovery-summary.json', SUMMARY)
+              if len(inventories) == 2:
+                  STAGE = 'whole-early-final-member-linkage'
+                  early = {row['path']: row for row in inventories['early'] if row['kind'] == 'file'}
+                  final = {row['path']: row for row in inventories['final'] if row['kind'] == 'file'}
+                  links = []
+                  for path, row in early.items():
+                      later = final.get(path)
+                      kind = 'absent-final' if later is None else 'whole-byte-identical' if row['bytes'] == later['bytes'] and row['sha256'] == later['sha256'] else 'different-full-body'
+                      links.append({'path': path, 'classification': kind, 'early': row, 'final': later})
+                  added = [row for path, row in final.items() if path not in early]
+                  write_json(MANIFEST / 'whole-early-final-links.json', {'scope': 'Every complete original member linked with distinct raw lengths/hashes. Differences and absences are retained, never normalized or silently dropped.', 'earlyMembers': len(early), 'finalMembers': len(final), 'links': links, 'addedFinal': added})
+                  SUMMARY['linkage'] = {'file': 'whole-early-final-links.json', 'earlyMembers': len(early), 'finalMembers': len(final), 'wholeByteIdentical': sum(row['classification'] == 'whole-byte-identical' for row in links), 'differentFullBody': sum(row['classification'] == 'different-full-body' for row in links), 'absentFinal': sum(row['classification'] == 'absent-final' for row in links), 'addedFinal': len(added)}
+              if not SUMMARY['failures'] and len(SUMMARY['artifacts']) == 2:
+                  SUMMARY['status'] = 'byte-exact-recovery-complete-original-job-failed'
+              write_json(MANIFEST / 'recovery-summary.json', SUMMARY)
+              STAGE = 'driver-diagnostic-transport-cap'
+              files = sorted(file for file in MANIFEST.rglob('*') if file.is_file() and file.name not in ('recovery-body-inventory.json', 'transport.log'))
+              body_rows = [{'path': file.relative_to(MANIFEST).as_posix(), 'bytes': file.stat().st_size, 'sha256': sha_file(file)} for file in files]
+              write_json(MANIFEST / 'recovery-body-inventory.json', {'scope': 'Driver-stage snapshot before closing result and transport log. final-manifest-body-inventory.json seals every final exported body after the log closes.', 'bodies': body_rows})
+              assert sum(row['bytes'] for row in body_rows) + (MANIFEST / 'recovery-body-inventory.json').stat().st_size < 500_000_000, 'complete selected diagnostic and recovery manifests fit unchanged transport cap'
+              assert SUMMARY['status'] == 'byte-exact-recovery-complete-original-job-failed', 'partial recovery remains explicitly failed'
+              print('PASS exact recovery: both original ZIPs, twelve raw parts and complete ordered reassembly')
+              print('Original method/component and evidence-cap failures remain unwaived; this is transport only.')
+
+
+          try:
+              main()
+          except Exception as error:
+              record_failure(error)
+              SUMMARY['status'] = 'partial-failure'
+              write_json(MANIFEST / 'recovery-summary.json', SUMMARY)
+              sys.exit(1)
+          PY
+          sha256sum recovery/manifest/recovery-driver.py recovery/manifest/recovery-workflow.yml > recovery/manifest/recovery-helper-sha256.txt
+      - name: Recover both immutable failed originals and verify their whole raw-byte transport
+        env:
+          RECOVERY_GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          python3 recovery/manifest/recovery-driver.py 2>&1 | tee recovery/manifest/transport.log
+      - name: Hold sources and seal the complete recovery export even after a failure
+        if: always()
+        run: |
+          set -euo pipefail
+          failed=0
+          sha256sum package.json package-lock.json > recovery/manifest/packages-after.txt
+          cmp recovery/manifest/packages-before.txt recovery/manifest/packages-after.txt || failed=1
+          git diff --exit-code HEAD -- src scripts .github/workflows package.json package-lock.json > recovery/manifest/final-source-held.log || failed=1
+          sha256sum --check recovery/manifest/recovery-helper-sha256.txt > recovery/manifest/final-helper-held.log || failed=1
+          RECOVERY_SOURCE_HOLDS="$failed" python3 - <<'PY'
+          import hashlib,json,os
+          from pathlib import Path
+          root=Path('recovery/manifest')
+          source_holds=int(os.environ['RECOVERY_SOURCE_HOLDS'])==0
+          summary_path=root/'recovery-summary.json'
+          summary=json.loads(summary_path.read_text()) if summary_path.exists() else {'status':'partial-failure','failures':[{'stage':'missing-driver-summary'}]}
+          complete=summary.get('status')=='byte-exact-recovery-complete-original-job-failed' and len(summary.get('artifacts',[]))==2
+          receipt={'status':'partial-failure','sourceHolds':source_holds,'wholeOriginalRecovery':complete,'transportCap':500000000,'transportCapHeld':False,'qualification':'Transport only. Original exact job and method/component/cap failures remain unwaived. Selected export has no substitute-original or semantic acceptance credit.'}
+          receipt_file=root/'final-recovery-receipt.json'
+          target=root/'final-manifest-body-inventory.json'
+          def seal():
+              receipt_file.write_text(json.dumps(receipt,indent=2)+'\n')
+              rows=[]
+              for file in sorted(root.rglob('*')):
+                  if not file.is_file() or file.name=='final-manifest-body-inventory.json': continue
+                  digest=hashlib.sha256()
+                  with file.open('rb') as handle:
+                      for block in iter(lambda:handle.read(1024*1024),b''): digest.update(block)
+                  rows.append({'path':file.relative_to(root).as_posix(),'bytes':file.stat().st_size,'sha256':digest.hexdigest()})
+              target.write_text(json.dumps(rows,indent=2)+'\n')
+              return sum(row['bytes'] for row in rows)+target.stat().st_size
+          total=seal()
+          receipt['transportCapHeld']=total<500000000
+          receipt['status']='complete' if complete and source_holds and receipt['transportCapHeld'] else 'partial-failure'
+          total=seal()
+          if total>=500000000:
+              receipt['status']='partial-failure'
+              receipt['transportCapHeld']=False
+              total=seal()
+          assert total<500000000 and receipt['transportCapHeld'],'Complete recovery metadata and diagnostic export stay under transport cap'
+          assert complete and source_holds,'Partial recovery or source-hold failure remains red'
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: award-38163973428-early-original-zip-part-000
+          path: recovery/chunks/early.zip.part-000
+          compression-level: 0
+          if-no-files-found: warn
+          retention-days: 5
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: award-38163973428-early-original-zip-part-001
+          path: recovery/chunks/early.zip.part-001
+          compression-level: 0
+          if-no-files-found: warn
+          retention-days: 5
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: award-38163973428-early-original-zip-part-002
+          path: recovery/chunks/early.zip.part-002
+          compression-level: 0
+          if-no-files-found: warn
+          retention-days: 5
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: award-38163973428-early-original-zip-part-003
+          path: recovery/chunks/early.zip.part-003
+          compression-level: 0
+          if-no-files-found: warn
+          retention-days: 5
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: award-38163973428-early-original-zip-part-004
+          path: recovery/chunks/early.zip.part-004
+          compression-level: 0
+          if-no-files-found: warn
+          retention-days: 5
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: award-38163973428-early-original-zip-part-005
+          path: recovery/chunks/early.zip.part-005
+          compression-level: 0
+          if-no-files-found: warn
+          retention-days: 5
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: award-38163973428-final-original-zip-part-000
+          path: recovery/chunks/final.zip.part-000
+          compression-level: 0
+          if-no-files-found: warn
+          retention-days: 5
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: award-38163973428-final-original-zip-part-001
+          path: recovery/chunks/final.zip.part-001
+          compression-level: 0
+          if-no-files-found: warn
+          retention-days: 5
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: award-38163973428-final-original-zip-part-002
+          path: recovery/chunks/final.zip.part-002
+          compression-level: 0
+          if-no-files-found: warn
+          retention-days: 5
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: award-38163973428-final-original-zip-part-003
+          path: recovery/chunks/final.zip.part-003
+          compression-level: 0
+          if-no-files-found: warn
+          retention-days: 5
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: award-38163973428-final-original-zip-part-004
+          path: recovery/chunks/final.zip.part-004
+          compression-level: 0
+          if-no-files-found: warn
+          retention-days: 5
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: award-38163973428-final-original-zip-part-005
+          path: recovery/chunks/final.zip.part-005
+          compression-level: 0
+          if-no-files-found: warn
+          retention-days: 5
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: award-38163973428-exact-recovery-manifests-and-diagnostics
+          path: recovery/manifest/
+          compression-level: 0
+          include-hidden-files: true
+          if-no-files-found: error
+          retention-days: 5
