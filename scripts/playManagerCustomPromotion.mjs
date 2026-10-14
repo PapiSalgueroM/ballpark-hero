@@ -52,7 +52,7 @@ const report = { sourceBefore: sourceHashes(), cases: [], controls: [], failed: 
   limitations: ['Five fictional campaigns played by the actual engine, not replays of the unavailable user saves.',
     'Relegation and malformed or old incomplete worlds are covered by separate crafted unit cases, not these genuine promotion journeys.',
     'External flags use inert offline fixtures. The real site fonts use retained original bytes.',
-    'Only the synchronous real Continue button handler uses the recorded summer RNG stream; UI rendering keeps its own randomness.'] };
+    'The actual Continue click arms the recorded summer RNG, restored by its final document bubble listener after the synchronous React handler.'] };
 const write = (name, value) => fs.writeFileSync(path.join(OUT, `${name}.json`), JSON.stringify(value, null, 2));
 const built = await build({ stdin: { contents: "export * as cm from './src/lib/clubManager'; export * as calendar from './src/lib/clubManagerCalendar';", resolveDir: ROOT, loader: 'ts' },
   bundle: true, platform: 'browser', format: 'iife', globalName: '__managerPromotionOracle', write: false,
@@ -167,6 +167,7 @@ async function journey(fixture, width, height) {
     check(before.pendingSummary.position === fixture.position && before.pendingSummary.club === fixture.clubName, 'Actual season review retains the genuinely earned finish and identity');
     await capture(finish, 'season-review', fixture.id === cases[0].id);
     const expected = await oracleState(fixture, true);
+    write(`${id}-browser-oracle`, expected);
     assert.deepEqual(expected.state, fixture.saveExpected, 'Browser engine matches the entire retained Node save-writer expectation');
     assert.deepEqual(expected.draws, fixture.draws, 'Browser engine consumes every recorded summer RNG draw in order');
     const next = page.getByRole('button', { name: `Continue to Season ${before.season + 1}`, exact: true });
@@ -177,16 +178,17 @@ async function journey(fixture, width, height) {
         const oldRandom = Math.random; let value = seed | 0; window.__managerSummerDraws = []; window.__managerSummerRestored = false;
         Math.random = () => { value = (value + 0x6d2b79f5) | 0; let n = Math.imul(value ^ (value >>> 15), 1 | value);
           n = (n + Math.imul(n ^ (n >>> 7), 61 | n)) ^ n; const draw = ((n ^ (n >>> 14)) >>> 0) / 4294967296; window.__managerSummerDraws.push(draw); return draw; };
-        queueMicrotask(() => { Math.random = oldRandom; window.__managerSummerRestored = true; });
+        document.addEventListener('click', () => { Math.random = oldRandom; window.__managerSummerRestored = true; }, { once: true });
       }, { capture: true, once: true });
     }, fixture.seed);
     if (width === 390) await next.tap(); else { await next.focus(); await next.press('Enter'); }
     await page.locator('[data-cm-hub]').waitFor();
     await page.waitForFunction(({ key, season }) => JSON.parse(localStorage.getItem(key))?.season === season, { key: KEY, season: before.season + 1 });
     const after = await read(), saved = await bytes();
-    sameState(after, fixture.saveExpected, id, 'rollover'); row.checks.push({ ok: true, message: 'Actual real-button rollover matches every saved field, history, player, world, calendar and European field' });
     const actualDraws = await page.evaluate(() => ({ draws: window.__managerSummerDraws, restored: window.__managerSummerRestored }));
-    write(`${id}-actual-summer-draws`, actualDraws); assert.deepEqual(actualDraws.draws, fixture.draws);
+    write(`${id}-actual-summer-draws`, actualDraws);
+    sameState(after, fixture.saveExpected, id, 'rollover'); row.checks.push({ ok: true, message: 'Actual real-button rollover matches every saved field, history, player, world, calendar and European field' });
+    assert.deepEqual(actualDraws.draws, fixture.draws);
     check(actualDraws.restored, 'The actual synchronous rollover uses exactly the recorded RNG and releases the stream');
     check(after.customClub.leagueId === fixture.toLeague && after.customClub.replacedClub === fixture.proxy && after.clubName === fixture.clubName, 'Created identity reaches its earned division while preserving the original pinned real slot');
     check(JSON.stringify(expected.effectiveClubs) === JSON.stringify(expected.realClubs) && new Set(expected.effectiveClubs).size === expected.realClubs.length, 'Every real club remains in exactly one configured world slot');
@@ -240,7 +242,7 @@ async function journey(fixture, width, height) {
     check(await page.locator('[data-testid="cm-save-failed"]').count() === 0, 'No save failure notice appears');
     check(await page.evaluate(() => localStorage.getItem('unrelated-career-save')) === '{"keep":"exact"}', 'Unrelated career bytes are untouched');
     check(row.errors.length === 0 && row.assetErrors.length === 0, 'No page errors or failed built assets');
-  } catch (error) { report.failed++; row.error = String(error.stack || error); console.error(row.error); }
+  } catch (error) { report.failed++; row.error = String(error.stack || error); console.error(`${id}: ${error.message?.split('\n')[0] || error}`); }
   finally { await context.close(); write(id, row); }
 }
 try {

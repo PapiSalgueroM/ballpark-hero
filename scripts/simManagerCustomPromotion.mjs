@@ -83,13 +83,21 @@ try {
     assert.deepEqual(view(loaded), view(input), `${id}: actual writer/reader retains the summer inputs`);
     const loadedSummer = seeded(seed, () => cm.startNextSeason(loaded));
     assert.deepEqual(view(loadedSummer.value), view(expected)); assert.deepEqual(loadedSummer.draws, summer.draws);
-    assert.equal(cm.saveCareer(loadedSummer.value), true);
+    /* A resumed page has a fresh engine module and youth serial counter. */
+    cm.saveFence.release(cm.SAVE_KEY); store.clear();
+    const cold = await import(`${pathToFileURL(bundle).href}?summer=${index}`);
+    store.set(cold.SAVE_KEY, raw);
+    const coldLoaded = cold.loadCareer(); assert.ok(coldLoaded);
+    const coldSummer = seeded(seed, () => cold.startNextSeason(coldLoaded));
+    assert.deepEqual(view(coldSummer.value), view(expected)); assert.deepEqual(coldSummer.draws, summer.draws);
+    assert.equal(cold.saveCareer(coldSummer.value), true);
     const expectedSave = store.get(cm.SAVE_KEY);
+    cold.saveFence.release(cold.SAVE_KEY);
     const row = { id, clubName, proxy, seed, now: NOW, seasonSeed, outcome: 'promotion', fromLeague: id, toLeague: pair.top,
       position: played.value.position, matches: played.value.reports.length, rawFile, rawSha256: write(rawFile, raw),
       inputFile: `${id}-input.json`, expectedFile: `${id}-expected.json`,
       expectedSaveFile: `${id}-expected-save.json`, expectedSaveSha256: write(`${id}-expected-save.json`, expectedSave),
-      inputSha256: write(`${id}-input.json`, input), expectedSha256: write(`${id}-expected.json`, expected),
+      inputSha256: write(`${id}-input.json`, input), expectedSha256: write(`${id}-expected.json`, coldSummer.value),
       reportsSha256: write(`${id}-reports.json`, played.value.reports),
       drawsSha256: write(`${id}-draws.json`, { season: played.draws, summer: summer.draws }),
       storageChars: raw.length, summerDraws: summer.draws.length };
