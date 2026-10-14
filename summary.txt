@@ -1,0 +1,17 @@
+build exit=0 31s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+vitest exit=0 7s |    Duration  5.65s (transform 3.26s, setup 382ms, collect 5.58s, tests 566ms, environment 2.60s, prepare 997ms)
+tsc exit=0 97s | 
+kitA exit=0 101s | simEventDeck: green. Sections 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 only.
+kctl1 exit=0 62s | kctl: every control exited 1 and fired
+kctl2 exit=0 8s | kctl: every control exited 1 and fired
+kctl3 exit=0 53s | kctl: every control exited 1 and fired
+kit exit=0 263s | simEventDeck: green.
+gmdiff exit=0 8s | gmdiff: all three seeds identical to the base and green
+gmctl exit=0 20s | ctl: every control exited 1
+careerInbox exit=0 3s | simCareerInbox: green. Soccer is unchanged, and the NFL, MLB, NBA and NHL inboxes fire.
+careerInbox-privatecap exit=1 2s | simCareerInbox: 1 failure
+kitB exit=0 204s | simEventDeck: green. Sections 13, 14, 15, 16 only.
+storage exit=0 4s | simStorageWrites: all green (owed: 12)
+reveal exit=0 12s | simRevealMoments: green. No counting number, a reduced motion rule beside every keyframe, one pace for every stagger, every fact and number on the cards is the fixture's 
+kctl4 exit=0 342s | kctl: every control exited 1 and fired
+fences exit=0 299s | fences: 4 of 24 not green on the head; each red has the same first failing line on the base
