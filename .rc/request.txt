@@ -1,0 +1,22 @@
+# Release BF join, m4 on 26cad60f: type gate, units, simSoccerCareerStatRewards and its controls, the earlier chain sims, and the Life readers
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/test/soccerCareerStatRewards.test.ts src/test/soccerCareerPendingLife.test.ts src/test/soccerCareerLifeReviews.test.ts src/test/soccerCareerRoutineEvents.test.ts src/test/soccerCareerContracts.test.ts src/test/careerDilemmaReach.test.tsx src/test/careerStory.test.tsx --testTimeout=300000 --hookTimeout=120000
+simSoccerCareerStatRewards: CI=1 SIM_NETWORK=offline NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerCareerStatRewards.mjs
+simSoccerCareerStatRewards-ctl-overwrite: CI=1 SIM_NETWORK=offline SC_LIFE_REWARDS_CONTROL=overwrite NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerCareerStatRewards.mjs > /tmp/c-overwrite.log 2>&1; s=$?; tail -3 /tmp/c-overwrite.log | cut -c1-220; [ $s = 0 ] && grep -q "^Effective" /tmp/c-overwrite.log && grep -q "^simSoccerCareerStatRewards overwrite: green" /tmp/c-overwrite.log && echo FIRED-OK
+simSoccerCareerStatRewards-ctl-preview: CI=1 SIM_NETWORK=offline SC_LIFE_REWARDS_CONTROL=preview NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerCareerStatRewards.mjs > /tmp/c-preview.log 2>&1; s=$?; tail -3 /tmp/c-preview.log | cut -c1-220; [ $s = 0 ] && grep -q "^Effective" /tmp/c-preview.log && grep -q "^simSoccerCareerStatRewards preview: green" /tmp/c-preview.log && echo FIRED-OK
+simSoccerCareerStatRewards-ctl-legacy: CI=1 SIM_NETWORK=offline SC_LIFE_REWARDS_CONTROL=legacy NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerCareerStatRewards.mjs > /tmp/c-legacy.log 2>&1; s=$?; tail -3 /tmp/c-legacy.log | cut -c1-220; [ $s = 0 ] && grep -q "^Effective" /tmp/c-legacy.log && grep -q "^simSoccerCareerStatRewards legacy: green" /tmp/c-legacy.log && echo FIRED-OK
+simSoccerCareerRoutineEvents: CI=1 SIM_NETWORK=offline NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerCareerRoutineEvents.mjs
+simSoccerCareerLifeReviews: CI=1 SIM_NETWORK=offline NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerCareerLifeReviews.mjs
+simSoccerCareerPendingLife: CI=1 SIM_NETWORK=offline NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerCareerPendingLife.mjs
+simCareerLife: node scripts/simCareerLife.mjs
+simCareerLifeCooldowns: node scripts/simCareerLifeCooldowns.mjs
+simCareerStory: node scripts/simCareerStory.mjs
+simCareerProgramme: node scripts/simCareerProgramme.mjs
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simCareerDilemmaReach: node scripts/simCareerDilemmaReach.mjs
+simSoccerDeckFairness: node scripts/simSoccerDeckFairness.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+worldTruth: export WORLD_TRUTH_BASE_FROM_HEAD=$(git diff --name-only 4ae7a534 HEAD -- src/lib | grep -v "\.test\." | paste -sd, -); node scripts/simSoccerWorldTruth.mjs
+simCreation: node scripts/simCreation.mjs > /tmp/cr.log 2>&1; s=$?; grep -E "full career save|FAIL|PASSED" /tmp/cr.log | head -6; exit $s
+programme-ctl-overwrite: PROGRAMME_REWARD_CONTROL=overwrite CAREER_PROGRAMME_OUT="$PWD/pgo" node scripts/simCareerProgramme.mjs > /tmp/pg.log 2>&1; s=$?; grep -E "^AssertionError|Effective Programme" /tmp/pg.log | cut -c1-220; [ $s = 1 ] && [ "$(grep -c "^AssertionError \[ERR_ASSERTION\]: " /tmp/pg.log)" = 1 ] && grep -q "^AssertionError \[ERR_ASSERTION\]: Secondary wheel preserves complete approved choice outcome: soccerCareerLife.ts/218 choice 0 seed 15" /tmp/pg.log && grep -q "Effective Programme reward source control: overwrite" /tmp/pg.log && echo FIRED-OK
