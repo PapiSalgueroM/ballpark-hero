@@ -149,6 +149,12 @@ Final proof readings at the last head are in the closing report
   controls, all 16 simSoccerWorldTruth controls FIRED), r1329-fx-f on the merged head 6f54e704, r1329-fx-g on
   c90309f0 (simCareerLeagueSeasons' 1329 arm and simHarnessAnchors green), r1329-fx-h (the engine readers fx-d did
   not reach, all green) and r1329-fx-i (simUsCareerSummer green, 3,379 s, every section over 400 careers a sport).
+- Closing check (0cc4a562): simSoccerCareerDevelopment's CAREER_DEVELOPMENT_CONTROL=all run died on this head and on
+  main 082fc277 alike (r1329-fx-j), because the mentorRemember control's label sits inside Round 1327's cards-1-to-10
+  row, once on each side, and the row then missed its anchor. The neutral bundle now carries a control through such a
+  row on both sides. r1329-fx2-a: the plain run 0 (0 failed), mentorRemember alone 1 with only "repeated Youth Mentor
+  event preserves every saved spell" failed, =all 0 ("healthy outcomes passed, 27 effective controls caught").
+  r1329-fx2-b on 1da98f6d: tsc 0, simNoRivalNames 0, simHarnessAnchors 0, simStorageWrites 0.
 
 ## Deviations from the brief's hunk list, and why
 
