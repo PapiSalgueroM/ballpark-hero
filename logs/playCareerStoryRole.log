@@ -1,0 +1,64 @@
+FAIL 320-playing: initial-current-Chromium-loader: every serialized saved field and key is identical
+FAIL 320-playing: AssertionError [ERR_ASSERTION]: 320-playing: initial-current-Chromium-loader: every serialized saved field and key is identical
+    at check (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerStoryRole.mjs:124:199)
+    at compare (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerStoryRole.mjs:161:350)
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerStoryRole.mjs:195:36
+FAIL 320-summary: initial-current-Chromium-loader: every serialized saved field and key is identical
+FAIL 320-summary: AssertionError [ERR_ASSERTION]: 320-summary: initial-current-Chromium-loader: every serialized saved field and key is identical
+    at check (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerStoryRole.mjs:124:199)
+    at compare (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerStoryRole.mjs:161:350)
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerStoryRole.mjs:195:36
+FAIL 320-retired: initial-current-Chromium-loader: every serialized saved field and key is identical
+FAIL 320-retired: AssertionError [ERR_ASSERTION]: 320-retired: initial-current-Chromium-loader: every serialized saved field and key is identical
+    at check (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerStoryRole.mjs:124:199)
+    at compare (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerStoryRole.mjs:161:350)
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerStoryRole.mjs:195:36
+FAIL 390-playing: initial-current-Chromium-loader: every serialized saved field and key is identical
+FAIL 390-playing: AssertionError [ERR_ASSERTION]: 390-playing: initial-current-Chromium-loader: every serialized saved field and key is identical
+    at check (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerStoryRole.mjs:124:199)
+    at compare (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerStoryRole.mjs:161:350)
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerStoryRole.mjs:195:36
+FAIL 390-summary: initial-current-Chromium-loader: every serialized saved field and key is identical
+FAIL 390-summary: AssertionError [ERR_ASSERTION]: 390-summary: initial-current-Chromium-loader: every serialized saved field and key is identical
+    at check (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerStoryRole.mjs:124:199)
+    at compare (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerStoryRole.mjs:161:350)
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerStoryRole.mjs:195:36
+FAIL 390-retired: initial-current-Chromium-loader: every serialized saved field and key is identical
+FAIL 390-retired: AssertionError [ERR_ASSERTION]: 390-retired: initial-current-Chromium-loader: every serialized saved field and key is identical
+    at check (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerStoryRole.mjs:124:199)
+    at compare (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerStoryRole.mjs:161:350)
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerStoryRole.mjs:195:36
+FAIL 1280-playing: initial-current-Chromium-loader: every serialized saved field and key is identical
+FAIL 1280-playing: AssertionError [ERR_ASSERTION]: 1280-playing: initial-current-Chromium-loader: every serialized saved field and key is identical
+    at check (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerStoryRole.mjs:124:199)
+    at compare (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerStoryRole.mjs:161:350)
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerStoryRole.mjs:195:36
+FAIL 1280-summary: initial-current-Chromium-loader: every serialized saved field and key is identical
+FAIL 1280-summary: AssertionError [ERR_ASSERTION]: 1280-summary: initial-current-Chromium-loader: every serialized saved field and key is identical
+    at check (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerStoryRole.mjs:124:199)
+    at compare (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerStoryRole.mjs:161:350)
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerStoryRole.mjs:195:36
+FAIL 1280-retired: initial-current-Chromium-loader: every serialized saved field and key is identical
+FAIL 1280-retired: AssertionError [ERR_ASSERTION]: 1280-retired: initial-current-Chromium-loader: every serialized saved field and key is identical
+    at check (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerStoryRole.mjs:124:199)
+    at compare (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerStoryRole.mjs:161:350)
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerStoryRole.mjs:195:36
+Career Story native: 9 checks, 18 failed, 0/9 journeys; artifacts /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/career-story-role/native
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+0 !== 4
+
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerStoryRole.mjs:283:46 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: 0,
+  expected: 4,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0
