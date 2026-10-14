@@ -1,0 +1,7 @@
+drift, answers 0 to 0 weeks after the deal: 8583 tagged cards dealt (every one held unless its man was generated at the deal), 8583 effects applied, 0 of them on a man marked real
+drift, answers 0 to 7 weeks after the deal: 6964 tagged cards dealt (every one held unless its man was generated at the deal), 6853 effects applied, 514 of them on a man marked real
+   desk 0: p_home-2032-w59 (dealt 59) answered week 60, out landed on Player 9, marked real
+   desk 0: c_curfew-2033-w77 (dealt 77) answered week 84, ban landed on Player 5, marked real
+   desk 0: c_curfew-2037-w156 (dealt 156) answered week 161, ban landed on Player 5, marked real
+   FAIL a conduct or private card's effect reached a real man 514 times once answers wait: gmCardSafe holds at the deal only, answerGmInbox never asks again
+probe drift: RED, 1 failures

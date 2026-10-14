@@ -1,0 +1,6 @@
+#!serve
+#!playwright
+walk: node .rc/x/walk1332r.mjs
+probe-default: PART=default node .rc/x/probe1332.mjs
+probe-oldsave: PART=oldsave node .rc/x/probe1332.mjs
+probe-drift: PART=drift node .rc/x/probe1332.mjs

@@ -1,0 +1,2 @@
+default path: 7 GM packs, 840 desks, 159600 weeks, 18467 deals compared base engine against head engine
+probe default: green, every week byte equal (state, deals, settled list, answer lines)

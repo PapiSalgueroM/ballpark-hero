@@ -1,0 +1,970 @@
+{
+ "gm-390-rm": {
+  "info": {
+   "settledId": "nfl_holdout-2030-w0",
+   "answeredId": "nfl_tag_deadline-2030-w0",
+   "openExpId": "nfl_holdout-2030-w16",
+   "open": 3,
+   "total": 6,
+   "settledByEngine": 2
+  },
+  "errors": [],
+  "header": [
+   {
+    "x": 16,
+    "y": 16,
+    "w": 358,
+    "h": 50,
+    "right": 374,
+    "fs": 11,
+    "text": "3 waiting on you. Each answer shows what it moves before you pick it. Nothing new lands until you answer one, or your assistant deals with one for you.",
+    "cls": "text-[11px] text-muted-foreground",
+    "anim": "none",
+    "dur": "1e-06s"
+   }
+  ],
+  "rows": [
+   {
+    "x": 16,
+    "y": 74,
+    "w": 358,
+    "h": 51,
+    "right": 374,
+    "fs": 16,
+    "text": "💼His camp🏕️ Training camp, 2030Your franchise player has not reported to camp. His camp wants a new deal before he takes a snap.",
+    "cls": "flex w-full items-center gap-2 rounded-xl border px-3 py-2 text-left cm-tick-in border-primary/40 bg-primary/5",
+    "anim": "none",
+    "dur": "1e-06s"
+   },
+   {
+    "x": 16,
+    "y": 130,
+    "w": 358,
+    "h": 51,
+    "right": 374,
+    "fs": 16,
+    "text": "📋Your offensive coordinator🏈 Regular season, 2030The rookie quarterback has been sharp in practice and the starter is not winning. The room wants to know who ",
+    "cls": "flex w-full items-center gap-2 rounded-xl border px-3 py-2 text-left cm-tick-in border-primary/40 bg-primary/5",
+    "anim": "none",
+    "dur": "1e-06s"
+   },
+   {
+    "x": 16,
+    "y": 187,
+    "w": 358,
+    "h": 51,
+    "right": 374,
+    "fs": 16,
+    "text": "🧢Your head coach✂️ Cut down day, 2030Cut down day. The coach wants to know who gets the reps in the last practice: a veteran who knows the system, or the undra",
+    "cls": "flex w-full items-center gap-2 rounded-xl border px-3 py-2 text-left cm-tick-in border-primary/40 bg-primary/5",
+    "anim": "none",
+    "dur": "1e-06s"
+   },
+   {
+    "x": 16,
+    "y": 243,
+    "w": 358,
+    "h": 51,
+    "right": 374,
+    "fs": 16,
+    "text": "💼His camp🏕️ Training camp, 2030Your franchise player has not reported to camp. His camp wants a new deal before he takes a snap.",
+    "cls": "flex w-full items-center gap-2 rounded-xl border px-3 py-2 text-left cm-tick-in border-border bg-card",
+    "anim": "none",
+    "dur": "1e-06s"
+   },
+   {
+    "x": 16,
+    "y": 300,
+    "w": 358,
+    "h": 51,
+    "right": 374,
+    "fs": 16,
+    "text": "📑Your capologist🏷️ Tag deadline, 2030This is the last week to work out a long term deal with your tagged player. After it he plays the year on the tag.",
+    "cls": "flex w-full items-center gap-2 rounded-xl border px-3 py-2 text-left cm-tick-in border-border bg-card",
+    "anim": "none",
+    "dur": "1e-06s"
+   },
+   {
+    "x": 16,
+    "y": 356,
+    "w": 358,
+    "h": 51,
+    "right": 374,
+    "fs": 16,
+    "text": "💼His camp🏕️ Training camp, 2030Your franchise player has not reported to camp. His camp wants a new deal before he takes a snap.",
+    "cls": "flex w-full items-center gap-2 rounded-xl border px-3 py-2 text-left cm-tick-in border-border bg-card",
+    "anim": "none",
+    "dur": "1e-06s"
+   }
+  ],
+  "overflowList": 0,
+  "cutList": 0,
+  "settled": [
+   {
+    "x": 16,
+    "y": 256,
+    "w": 358,
+    "h": 48,
+    "right": 374,
+    "fs": 12,
+    "text": "📨 His camp: your assistant dealt with it (Leave it with the staff).",
+    "cls": "rounded-xl bg-secondary px-3 py-2 text-xs text-muted-foreground",
+    "anim": "none",
+    "dur": "1e-06s"
+   }
+  ],
+  "repliedInSettled": 0,
+  "overflowSettled": 0,
+  "replied": [
+   {
+    "x": 16,
+    "y": 256,
+    "w": 358,
+    "h": 48,
+    "right": 374,
+    "fs": 12,
+    "text": "You replied: Make him a long term offer · Owner trust +1, Locker room +2",
+    "cls": "rounded-xl bg-secondary px-3 py-2 text-xs text-muted-foreground",
+    "anim": "none",
+    "dur": "1e-06s"
+   }
+  ],
+  "buttons": [
+   {
+    "x": 16,
+    "y": 256,
+    "w": 358,
+    "h": 50,
+    "right": 374,
+    "fs": 12,
+    "text": "Find money to get him in · Owner trust -2, Fans +3, Budget -$3M, Locker room +3",
+    "cls": "w-full rounded-xl border border-border bg-secondary px-3 py-2 text-left text-xs font-semibold text-foreground hover:border-primary/50",
+    "anim": "none",
+    "dur": "1e-06s"
+   },
+   {
+    "x": 16,
+    "y": 312,
+    "w": 358,
+    "h": 50,
+    "right": 374,
+    "fs": 12,
+    "text": "Hold firm and wait · Owner trust +2, Locker room -3, Your franchise player out 2 weeks",
+    "cls": "w-full rounded-xl border border-border bg-secondary px-3 py-2 text-left text-xs font-semibold text-foreground hover:border-primary/50",
+    "anim": "none",
+    "dur": "1e-06s"
+   },
+   {
+    "x": 16,
+    "y": 368,
+    "w": 358,
+    "h": 34,
+    "right": 374,
+    "fs": 12,
+    "text": "Leave it with the staff",
+    "cls": "w-full rounded-xl border border-border bg-secondary px-3 py-2 text-left text-xs font-semibold text-foreground hover:border-primary/50",
+    "anim": "none",
+    "dur": "1e-06s"
+   }
+  ],
+  "overflowOpen": 0
+ },
+ "gm-390-mo": {
+  "info": {
+   "settledId": "nfl_holdout-2030-w0",
+   "answeredId": "nfl_tag_deadline-2030-w0",
+   "openExpId": "nfl_holdout-2030-w16",
+   "open": 3,
+   "total": 6,
+   "settledByEngine": 2
+  },
+  "errors": [],
+  "header": [
+   {
+    "x": 16,
+    "y": 16,
+    "w": 358,
+    "h": 50,
+    "right": 374,
+    "fs": 11,
+    "text": "3 waiting on you. Each answer shows what it moves before you pick it. Nothing new lands until you answer one, or your assistant deals with one for you.",
+    "cls": "text-[11px] text-muted-foreground",
+    "anim": "none",
+    "dur": "0s"
+   }
+  ],
+  "rows": [
+   {
+    "x": 16,
+    "y": 74,
+    "w": 358,
+    "h": 51,
+    "right": 374,
+    "fs": 16,
+    "text": "💼His camp🏕️ Training camp, 2030Your franchise player has not reported to camp. His camp wants a new deal before he takes a snap.",
+    "cls": "flex w-full items-center gap-2 rounded-xl border px-3 py-2 text-left cm-tick-in border-primary/40 bg-primary/5",
+    "anim": "cmTickIn",
+    "dur": "0.35s"
+   },
+   {
+    "x": 16,
+    "y": 130,
+    "w": 358,
+    "h": 51,
+    "right": 374,
+    "fs": 16,
+    "text": "📋Your offensive coordinator🏈 Regular season, 2030The rookie quarterback has been sharp in practice and the starter is not winning. The room wants to know who ",
+    "cls": "flex w-full items-center gap-2 rounded-xl border px-3 py-2 text-left cm-tick-in border-primary/40 bg-primary/5",
+    "anim": "cmTickIn",
+    "dur": "0.35s"
+   },
+   {
+    "x": 16,
+    "y": 187,
+    "w": 358,
+    "h": 51,
+    "right": 374,
+    "fs": 16,
+    "text": "🧢Your head coach✂️ Cut down day, 2030Cut down day. The coach wants to know who gets the reps in the last practice: a veteran who knows the system, or the undra",
+    "cls": "flex w-full items-center gap-2 rounded-xl border px-3 py-2 text-left cm-tick-in border-primary/40 bg-primary/5",
+    "anim": "cmTickIn",
+    "dur": "0.35s"
+   },
+   {
+    "x": 16,
+    "y": 243,
+    "w": 358,
+    "h": 51,
+    "right": 374,
+    "fs": 16,
+    "text": "💼His camp🏕️ Training camp, 2030Your franchise player has not reported to camp. His camp wants a new deal before he takes a snap.",
+    "cls": "flex w-full items-center gap-2 rounded-xl border px-3 py-2 text-left cm-tick-in border-border bg-card",
+    "anim": "cmTickIn",
+    "dur": "0.35s"
+   },
+   {
+    "x": 15,
+    "y": 300,
+    "w": 358,
+    "h": 51,
+    "right": 373,
+    "fs": 16,
+    "text": "📑Your capologist🏷️ Tag deadline, 2030This is the last week to work out a long term deal with your tagged player. After it he plays the year on the tag.",
+    "cls": "flex w-full items-center gap-2 rounded-xl border px-3 py-2 text-left cm-tick-in border-border bg-card",
+    "anim": "cmTickIn",
+    "dur": "0.35s"
+   },
+   {
+    "x": 13,
+    "y": 356,
+    "w": 358,
+    "h": 51,
+    "right": 371,
+    "fs": 16,
+    "text": "💼His camp🏕️ Training camp, 2030Your franchise player has not reported to camp. His camp wants a new deal before he takes a snap.",
+    "cls": "flex w-full items-center gap-2 rounded-xl border px-3 py-2 text-left cm-tick-in border-border bg-card",
+    "anim": "cmTickIn",
+    "dur": "0.35s"
+   }
+  ],
+  "overflowList": 0,
+  "cutList": 0,
+  "settled": [
+   {
+    "x": 16,
+    "y": 256,
+    "w": 358,
+    "h": 48,
+    "right": 374,
+    "fs": 12,
+    "text": "📨 His camp: your assistant dealt with it (Leave it with the staff).",
+    "cls": "rounded-xl bg-secondary px-3 py-2 text-xs text-muted-foreground",
+    "anim": "none",
+    "dur": "0s"
+   }
+  ],
+  "repliedInSettled": 0,
+  "overflowSettled": 0,
+  "replied": [
+   {
+    "x": 16,
+    "y": 256,
+    "w": 358,
+    "h": 48,
+    "right": 374,
+    "fs": 12,
+    "text": "You replied: Make him a long term offer · Owner trust +1, Locker room +2",
+    "cls": "rounded-xl bg-secondary px-3 py-2 text-xs text-muted-foreground",
+    "anim": "none",
+    "dur": "0s"
+   }
+  ],
+  "buttons": [
+   {
+    "x": 16,
+    "y": 256,
+    "w": 358,
+    "h": 50,
+    "right": 374,
+    "fs": 12,
+    "text": "Find money to get him in · Owner trust -2, Fans +3, Budget -$3M, Locker room +3",
+    "cls": "w-full rounded-xl border border-border bg-secondary px-3 py-2 text-left text-xs font-semibold text-foreground hover:border-primary/50",
+    "anim": "none",
+    "dur": "0s"
+   },
+   {
+    "x": 16,
+    "y": 312,
+    "w": 358,
+    "h": 50,
+    "right": 374,
+    "fs": 12,
+    "text": "Hold firm and wait · Owner trust +2, Locker room -3, Your franchise player out 2 weeks",
+    "cls": "w-full rounded-xl border border-border bg-secondary px-3 py-2 text-left text-xs font-semibold text-foreground hover:border-primary/50",
+    "anim": "none",
+    "dur": "0s"
+   },
+   {
+    "x": 16,
+    "y": 368,
+    "w": 358,
+    "h": 34,
+    "right": 374,
+    "fs": 12,
+    "text": "Leave it with the staff",
+    "cls": "w-full rounded-xl border border-border bg-secondary px-3 py-2 text-left text-xs font-semibold text-foreground hover:border-primary/50",
+    "anim": "none",
+    "dur": "0s"
+   }
+  ],
+  "overflowOpen": 0
+ },
+ "gm-1280-rm": {
+  "info": {
+   "settledId": "nfl_holdout-2030-w0",
+   "answeredId": "nfl_tag_deadline-2030-w0",
+   "openExpId": "nfl_holdout-2030-w16",
+   "open": 3,
+   "total": 6,
+   "settledByEngine": 2
+  },
+  "errors": [],
+  "header": [
+   {
+    "x": 320,
+    "y": 16,
+    "w": 640,
+    "h": 33,
+    "right": 960,
+    "fs": 11,
+    "text": "3 waiting on you. Each answer shows what it moves before you pick it. Nothing new lands until you answer one, or your assistant deals with one for you.",
+    "cls": "text-[11px] text-muted-foreground",
+    "anim": "none",
+    "dur": "1e-06s"
+   }
+  ],
+  "rows": [
+   {
+    "x": 320,
+    "y": 57,
+    "w": 640,
+    "h": 51,
+    "right": 960,
+    "fs": 16,
+    "text": "💼His camp🏕️ Training camp, 2030Your franchise player has not reported to camp. His camp wants a new deal before he takes a snap.",
+    "cls": "flex w-full items-center gap-2 rounded-xl border px-3 py-2 text-left cm-tick-in border-primary/40 bg-primary/5",
+    "anim": "none",
+    "dur": "1e-06s"
+   },
+   {
+    "x": 320,
+    "y": 114,
+    "w": 640,
+    "h": 51,
+    "right": 960,
+    "fs": 16,
+    "text": "📋Your offensive coordinator🏈 Regular season, 2030The rookie quarterback has been sharp in practice and the starter is not winning. The room wants to know who ",
+    "cls": "flex w-full items-center gap-2 rounded-xl border px-3 py-2 text-left cm-tick-in border-primary/40 bg-primary/5",
+    "anim": "none",
+    "dur": "1e-06s"
+   },
+   {
+    "x": 320,
+    "y": 170,
+    "w": 640,
+    "h": 51,
+    "right": 960,
+    "fs": 16,
+    "text": "🧢Your head coach✂️ Cut down day, 2030Cut down day. The coach wants to know who gets the reps in the last practice: a veteran who knows the system, or the undra",
+    "cls": "flex w-full items-center gap-2 rounded-xl border px-3 py-2 text-left cm-tick-in border-primary/40 bg-primary/5",
+    "anim": "none",
+    "dur": "1e-06s"
+   },
+   {
+    "x": 320,
+    "y": 227,
+    "w": 640,
+    "h": 51,
+    "right": 960,
+    "fs": 16,
+    "text": "💼His camp🏕️ Training camp, 2030Your franchise player has not reported to camp. His camp wants a new deal before he takes a snap.",
+    "cls": "flex w-full items-center gap-2 rounded-xl border px-3 py-2 text-left cm-tick-in border-border bg-card",
+    "anim": "none",
+    "dur": "1e-06s"
+   },
+   {
+    "x": 320,
+    "y": 283,
+    "w": 640,
+    "h": 51,
+    "right": 960,
+    "fs": 16,
+    "text": "📑Your capologist🏷️ Tag deadline, 2030This is the last week to work out a long term deal with your tagged player. After it he plays the year on the tag.",
+    "cls": "flex w-full items-center gap-2 rounded-xl border px-3 py-2 text-left cm-tick-in border-border bg-card",
+    "anim": "none",
+    "dur": "1e-06s"
+   },
+   {
+    "x": 320,
+    "y": 340,
+    "w": 640,
+    "h": 51,
+    "right": 960,
+    "fs": 16,
+    "text": "💼His camp🏕️ Training camp, 2030Your franchise player has not reported to camp. His camp wants a new deal before he takes a snap.",
+    "cls": "flex w-full items-center gap-2 rounded-xl border px-3 py-2 text-left cm-tick-in border-border bg-card",
+    "anim": "none",
+    "dur": "1e-06s"
+   }
+  ],
+  "overflowList": 0,
+  "cutList": 0,
+  "settled": [
+   {
+    "x": 320,
+    "y": 219,
+    "w": 640,
+    "h": 32,
+    "right": 960,
+    "fs": 12,
+    "text": "📨 His camp: your assistant dealt with it (Leave it with the staff).",
+    "cls": "rounded-xl bg-secondary px-3 py-2 text-xs text-muted-foreground",
+    "anim": "none",
+    "dur": "1e-06s"
+   }
+  ],
+  "repliedInSettled": 0,
+  "overflowSettled": 0,
+  "replied": [
+   {
+    "x": 320,
+    "y": 219,
+    "w": 640,
+    "h": 32,
+    "right": 960,
+    "fs": 12,
+    "text": "You replied: Make him a long term offer · Owner trust +1, Locker room +2",
+    "cls": "rounded-xl bg-secondary px-3 py-2 text-xs text-muted-foreground",
+    "anim": "none",
+    "dur": "1e-06s"
+   }
+  ],
+  "buttons": [
+   {
+    "x": 320,
+    "y": 219,
+    "w": 640,
+    "h": 34,
+    "right": 960,
+    "fs": 12,
+    "text": "Find money to get him in · Owner trust -2, Fans +3, Budget -$3M, Locker room +3",
+    "cls": "w-full rounded-xl border border-border bg-secondary px-3 py-2 text-left text-xs font-semibold text-foreground hover:border-primary/50",
+    "anim": "none",
+    "dur": "1e-06s"
+   },
+   {
+    "x": 320,
+    "y": 259,
+    "w": 640,
+    "h": 34,
+    "right": 960,
+    "fs": 12,
+    "text": "Hold firm and wait · Owner trust +2, Locker room -3, Your franchise player out 2 weeks",
+    "cls": "w-full rounded-xl border border-border bg-secondary px-3 py-2 text-left text-xs font-semibold text-foreground hover:border-primary/50",
+    "anim": "none",
+    "dur": "1e-06s"
+   },
+   {
+    "x": 320,
+    "y": 299,
+    "w": 640,
+    "h": 34,
+    "right": 960,
+    "fs": 12,
+    "text": "Leave it with the staff",
+    "cls": "w-full rounded-xl border border-border bg-secondary px-3 py-2 text-left text-xs font-semibold text-foreground hover:border-primary/50",
+    "anim": "none",
+    "dur": "1e-06s"
+   }
+  ],
+  "overflowOpen": 0
+ },
+ "gm-1280-mo": {
+  "info": {
+   "settledId": "nfl_holdout-2030-w0",
+   "answeredId": "nfl_tag_deadline-2030-w0",
+   "openExpId": "nfl_holdout-2030-w16",
+   "open": 3,
+   "total": 6,
+   "settledByEngine": 2
+  },
+  "errors": [],
+  "header": [
+   {
+    "x": 320,
+    "y": 16,
+    "w": 640,
+    "h": 33,
+    "right": 960,
+    "fs": 11,
+    "text": "3 waiting on you. Each answer shows what it moves before you pick it. Nothing new lands until you answer one, or your assistant deals with one for you.",
+    "cls": "text-[11px] text-muted-foreground",
+    "anim": "none",
+    "dur": "0s"
+   }
+  ],
+  "rows": [
+   {
+    "x": 320,
+    "y": 57,
+    "w": 640,
+    "h": 51,
+    "right": 960,
+    "fs": 16,
+    "text": "💼His camp🏕️ Training camp, 2030Your franchise player has not reported to camp. His camp wants a new deal before he takes a snap.",
+    "cls": "flex w-full items-center gap-2 rounded-xl border px-3 py-2 text-left cm-tick-in border-primary/40 bg-primary/5",
+    "anim": "cmTickIn",
+    "dur": "0.35s"
+   },
+   {
+    "x": 320,
+    "y": 114,
+    "w": 640,
+    "h": 51,
+    "right": 960,
+    "fs": 16,
+    "text": "📋Your offensive coordinator🏈 Regular season, 2030The rookie quarterback has been sharp in practice and the starter is not winning. The room wants to know who ",
+    "cls": "flex w-full items-center gap-2 rounded-xl border px-3 py-2 text-left cm-tick-in border-primary/40 bg-primary/5",
+    "anim": "cmTickIn",
+    "dur": "0.35s"
+   },
+   {
+    "x": 320,
+    "y": 170,
+    "w": 640,
+    "h": 51,
+    "right": 960,
+    "fs": 16,
+    "text": "🧢Your head coach✂️ Cut down day, 2030Cut down day. The coach wants to know who gets the reps in the last practice: a veteran who knows the system, or the undra",
+    "cls": "flex w-full items-center gap-2 rounded-xl border px-3 py-2 text-left cm-tick-in border-primary/40 bg-primary/5",
+    "anim": "cmTickIn",
+    "dur": "0.35s"
+   },
+   {
+    "x": 320,
+    "y": 227,
+    "w": 640,
+    "h": 51,
+    "right": 960,
+    "fs": 16,
+    "text": "💼His camp🏕️ Training camp, 2030Your franchise player has not reported to camp. His camp wants a new deal before he takes a snap.",
+    "cls": "flex w-full items-center gap-2 rounded-xl border px-3 py-2 text-left cm-tick-in border-border bg-card",
+    "anim": "cmTickIn",
+    "dur": "0.35s"
+   },
+   {
+    "x": 319,
+    "y": 283,
+    "w": 640,
+    "h": 51,
+    "right": 959,
+    "fs": 16,
+    "text": "📑Your capologist🏷️ Tag deadline, 2030This is the last week to work out a long term deal with your tagged player. After it he plays the year on the tag.",
+    "cls": "flex w-full items-center gap-2 rounded-xl border px-3 py-2 text-left cm-tick-in border-border bg-card",
+    "anim": "cmTickIn",
+    "dur": "0.35s"
+   },
+   {
+    "x": 317,
+    "y": 340,
+    "w": 640,
+    "h": 51,
+    "right": 957,
+    "fs": 16,
+    "text": "💼His camp🏕️ Training camp, 2030Your franchise player has not reported to camp. His camp wants a new deal before he takes a snap.",
+    "cls": "flex w-full items-center gap-2 rounded-xl border px-3 py-2 text-left cm-tick-in border-border bg-card",
+    "anim": "cmTickIn",
+    "dur": "0.35s"
+   }
+  ],
+  "overflowList": 0,
+  "cutList": 0,
+  "settled": [
+   {
+    "x": 320,
+    "y": 219,
+    "w": 640,
+    "h": 32,
+    "right": 960,
+    "fs": 12,
+    "text": "📨 His camp: your assistant dealt with it (Leave it with the staff).",
+    "cls": "rounded-xl bg-secondary px-3 py-2 text-xs text-muted-foreground",
+    "anim": "none",
+    "dur": "0s"
+   }
+  ],
+  "repliedInSettled": 0,
+  "overflowSettled": 0,
+  "replied": [
+   {
+    "x": 320,
+    "y": 219,
+    "w": 640,
+    "h": 32,
+    "right": 960,
+    "fs": 12,
+    "text": "You replied: Make him a long term offer · Owner trust +1, Locker room +2",
+    "cls": "rounded-xl bg-secondary px-3 py-2 text-xs text-muted-foreground",
+    "anim": "none",
+    "dur": "0s"
+   }
+  ],
+  "buttons": [
+   {
+    "x": 320,
+    "y": 219,
+    "w": 640,
+    "h": 34,
+    "right": 960,
+    "fs": 12,
+    "text": "Find money to get him in · Owner trust -2, Fans +3, Budget -$3M, Locker room +3",
+    "cls": "w-full rounded-xl border border-border bg-secondary px-3 py-2 text-left text-xs font-semibold text-foreground hover:border-primary/50",
+    "anim": "none",
+    "dur": "0s"
+   },
+   {
+    "x": 320,
+    "y": 259,
+    "w": 640,
+    "h": 34,
+    "right": 960,
+    "fs": 12,
+    "text": "Hold firm and wait · Owner trust +2, Locker room -3, Your franchise player out 2 weeks",
+    "cls": "w-full rounded-xl border border-border bg-secondary px-3 py-2 text-left text-xs font-semibold text-foreground hover:border-primary/50",
+    "anim": "none",
+    "dur": "0s"
+   },
+   {
+    "x": 320,
+    "y": 299,
+    "w": 640,
+    "h": 34,
+    "right": 960,
+    "fs": 12,
+    "text": "Leave it with the staff",
+    "cls": "w-full rounded-xl border border-border bg-secondary px-3 py-2 text-left text-xs font-semibold text-foreground hover:border-primary/50",
+    "anim": "none",
+    "dur": "0s"
+   }
+  ],
+  "overflowOpen": 0
+ },
+ "us-390-rm": {
+  "wrote": true,
+  "errors": [],
+  "rows": [
+   {
+    "x": 16,
+    "y": 58,
+    "w": 358,
+    "h": 51,
+    "right": 374,
+    "fs": 16,
+    "text": "📱Your agentThe review wrote this one still waiting on you.",
+    "cls": "flex w-full items-center gap-2 rounded-xl border px-3 py-2 text-left cm-tick-in border-primary/40 bg-primary/5",
+    "anim": "none",
+    "dur": "1e-06s"
+   },
+   {
+    "x": 16,
+    "y": 115,
+    "w": 358,
+    "h": 51,
+    "right": 374,
+    "fs": 16,
+    "text": "📱Your agentThe review wrote this one already answered.",
+    "cls": "flex w-full items-center gap-2 rounded-xl border px-3 py-2 text-left cm-tick-in border-border bg-card",
+    "anim": "none",
+    "dur": "1e-06s"
+   }
+  ],
+  "replied": [
+   {
+    "x": 16,
+    "y": 183,
+    "w": 358,
+    "h": 32,
+    "right": 374,
+    "fs": 12,
+    "text": "You replied: Take the call",
+    "cls": "rounded-xl bg-secondary px-3 py-2 text-xs text-muted-foreground",
+    "anim": "none",
+    "dur": "1e-06s"
+   }
+  ],
+  "settled": [],
+  "buttons": [
+   {
+    "x": 16,
+    "y": 183,
+    "w": 358,
+    "h": 34,
+    "right": 374,
+    "fs": 12,
+    "text": "Take the call",
+    "cls": "w-full rounded-xl border border-border bg-secondary px-3 py-2 text-left text-xs font-semibold text-foreground hover:border-primary/50",
+    "anim": "none",
+    "dur": "1e-06s"
+   },
+   {
+    "x": 16,
+    "y": 223,
+    "w": 358,
+    "h": 34,
+    "right": 374,
+    "fs": 12,
+    "text": "Let it ring",
+    "cls": "w-full rounded-xl border border-border bg-secondary px-3 py-2 text-left text-xs font-semibold text-foreground hover:border-primary/50",
+    "anim": "none",
+    "dur": "1e-06s"
+   }
+  ],
+  "overflow": 0
+ },
+ "us-390-mo": {
+  "wrote": true,
+  "errors": [],
+  "rows": [
+   {
+    "x": 16,
+    "y": 58,
+    "w": 358,
+    "h": 51,
+    "right": 374,
+    "fs": 16,
+    "text": "📱Your agentThe review wrote this one still waiting on you.",
+    "cls": "flex w-full items-center gap-2 rounded-xl border px-3 py-2 text-left cm-tick-in border-primary/40 bg-primary/5",
+    "anim": "cmTickIn",
+    "dur": "0.35s"
+   },
+   {
+    "x": 16,
+    "y": 115,
+    "w": 358,
+    "h": 51,
+    "right": 374,
+    "fs": 16,
+    "text": "📱Your agentThe review wrote this one already answered.",
+    "cls": "flex w-full items-center gap-2 rounded-xl border px-3 py-2 text-left cm-tick-in border-border bg-card",
+    "anim": "cmTickIn",
+    "dur": "0.35s"
+   }
+  ],
+  "replied": [
+   {
+    "x": 16,
+    "y": 183,
+    "w": 358,
+    "h": 32,
+    "right": 374,
+    "fs": 12,
+    "text": "You replied: Take the call",
+    "cls": "rounded-xl bg-secondary px-3 py-2 text-xs text-muted-foreground",
+    "anim": "none",
+    "dur": "0s"
+   }
+  ],
+  "settled": [],
+  "buttons": [
+   {
+    "x": 16,
+    "y": 183,
+    "w": 358,
+    "h": 34,
+    "right": 374,
+    "fs": 12,
+    "text": "Take the call",
+    "cls": "w-full rounded-xl border border-border bg-secondary px-3 py-2 text-left text-xs font-semibold text-foreground hover:border-primary/50",
+    "anim": "none",
+    "dur": "0s"
+   },
+   {
+    "x": 16,
+    "y": 223,
+    "w": 358,
+    "h": 34,
+    "right": 374,
+    "fs": 12,
+    "text": "Let it ring",
+    "cls": "w-full rounded-xl border border-border bg-secondary px-3 py-2 text-left text-xs font-semibold text-foreground hover:border-primary/50",
+    "anim": "none",
+    "dur": "0s"
+   }
+  ],
+  "overflow": 0
+ },
+ "us-1280-rm": {
+  "wrote": true,
+  "errors": [],
+  "rows": [
+   {
+    "x": 320,
+    "y": 218,
+    "w": 640,
+    "h": 51,
+    "right": 960,
+    "fs": 16,
+    "text": "📱Your agentThe review wrote this one still waiting on you.",
+    "cls": "flex w-full items-center gap-2 rounded-xl border px-3 py-2 text-left cm-tick-in border-primary/40 bg-primary/5",
+    "anim": "none",
+    "dur": "1e-06s"
+   },
+   {
+    "x": 320,
+    "y": 275,
+    "w": 640,
+    "h": 51,
+    "right": 960,
+    "fs": 16,
+    "text": "📱Your agentThe review wrote this one already answered.",
+    "cls": "flex w-full items-center gap-2 rounded-xl border px-3 py-2 text-left cm-tick-in border-border bg-card",
+    "anim": "none",
+    "dur": "1e-06s"
+   }
+  ],
+  "replied": [
+   {
+    "x": 320,
+    "y": 343,
+    "w": 640,
+    "h": 32,
+    "right": 960,
+    "fs": 12,
+    "text": "You replied: Take the call",
+    "cls": "rounded-xl bg-secondary px-3 py-2 text-xs text-muted-foreground",
+    "anim": "none",
+    "dur": "1e-06s"
+   }
+  ],
+  "settled": [],
+  "buttons": [
+   {
+    "x": 320,
+    "y": 343,
+    "w": 640,
+    "h": 34,
+    "right": 960,
+    "fs": 12,
+    "text": "Take the call",
+    "cls": "w-full rounded-xl border border-border bg-secondary px-3 py-2 text-left text-xs font-semibold text-foreground hover:border-primary/50",
+    "anim": "none",
+    "dur": "1e-06s"
+   },
+   {
+    "x": 320,
+    "y": 383,
+    "w": 640,
+    "h": 34,
+    "right": 960,
+    "fs": 12,
+    "text": "Let it ring",
+    "cls": "w-full rounded-xl border border-border bg-secondary px-3 py-2 text-left text-xs font-semibold text-foreground hover:border-primary/50",
+    "anim": "none",
+    "dur": "1e-06s"
+   }
+  ],
+  "overflow": 0
+ },
+ "us-1280-mo": {
+  "wrote": true,
+  "errors": [],
+  "rows": [
+   {
+    "x": 320,
+    "y": 218,
+    "w": 640,
+    "h": 51,
+    "right": 960,
+    "fs": 16,
+    "text": "📱Your agentThe review wrote this one still waiting on you.",
+    "cls": "flex w-full items-center gap-2 rounded-xl border px-3 py-2 text-left cm-tick-in border-primary/40 bg-primary/5",
+    "anim": "cmTickIn",
+    "dur": "0.35s"
+   },
+   {
+    "x": 320,
+    "y": 275,
+    "w": 640,
+    "h": 51,
+    "right": 960,
+    "fs": 16,
+    "text": "📱Your agentThe review wrote this one already answered.",
+    "cls": "flex w-full items-center gap-2 rounded-xl border px-3 py-2 text-left cm-tick-in border-border bg-card",
+    "anim": "cmTickIn",
+    "dur": "0.35s"
+   }
+  ],
+  "replied": [
+   {
+    "x": 320,
+    "y": 343,
+    "w": 640,
+    "h": 32,
+    "right": 960,
+    "fs": 12,
+    "text": "You replied: Take the call",
+    "cls": "rounded-xl bg-secondary px-3 py-2 text-xs text-muted-foreground",
+    "anim": "none",
+    "dur": "0s"
+   }
+  ],
+  "settled": [],
+  "buttons": [
+   {
+    "x": 320,
+    "y": 343,
+    "w": 640,
+    "h": 34,
+    "right": 960,
+    "fs": 12,
+    "text": "Take the call",
+    "cls": "w-full rounded-xl border border-border bg-secondary px-3 py-2 text-left text-xs font-semibold text-foreground hover:border-primary/50",
+    "anim": "none",
+    "dur": "0s"
+   },
+   {
+    "x": 320,
+    "y": 383,
+    "w": 640,
+    "h": 34,
+    "right": 960,
+    "fs": 12,
+    "text": "Let it ring",
+    "cls": "w-full rounded-xl border border-border bg-secondary px-3 py-2 text-left text-xs font-semibold text-foreground hover:border-primary/50",
+    "anim": "none",
+    "dur": "0s"
+   }
+  ],
+  "overflow": 0
+ }
+}
