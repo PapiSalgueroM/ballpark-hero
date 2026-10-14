@@ -300,7 +300,7 @@ const ENGINE_CONTROLS = {
   fxdrop: ['    if (v) reg[k].apply(s, v, who);', '    /* fxdrop control */'],
   fxunbound: ['if (!def) { out.push(`${e.id}: "${c.label}" moves ${k}, which the seat has not registered`); continue; }', 'if (!def) continue; /* fxunbound control */'],
   fxneutral: ['    && !gmFxMoves(c));', '    ); /* fxneutral control */'],
-  conductreal: ['  return people.every(ref => who(ref)?.real === false);', '  return true; /* conductreal control */'],
+  conductreal: ['  return allGenerated(s, seat, people);', '  return true; /* conductreal control */'],
   slotopen: ['    if (!sl || !named(v)) return false;', '    if (!sl) return false; /* slotopen control */'],
   pruneearly: ['    if (sharing.every(e => (pack.clock === \'season\' ? !onCooldown(last, e, clock, pack.cooldown) : clock - at >= (e.cooldown ?? pack.cooldown)))) delete last[k];',
     '    if (sharing.every(e => (pack.clock === \'season\' ? !onCooldown(last, e, clock + 1, pack.cooldown) : clock + 1 - at >= (e.cooldown ?? pack.cooldown)))) delete last[k]; /* pruneearly control */'],

@@ -829,3 +829,97 @@ describe('gmInbox Round 1332: review fixes', () => {
     expect(gmPackProblems({ ...SLOT_TOY, events: [{ ...tagged, subject: undefined }] })).toEqual([]);
   });
 });
+
+/* ─── Round 1332 fix pass: a tagged card is asked again after its deal ───── */
+
+interface RoleDesk extends SquadDesk { captainId: number }
+const roleDesk = (realIds: number[], keeperId: number, captainId: number): RoleDesk => ({ ...squadDesk(realIds, keeperId), captainId });
+const SKIP: GmEventDef = {
+  id: 'skipkeeper', beat: 'a', from: 'Your assistant', emoji: 'x', text: 'Your keeper skipped training again.', tag: 'conduct', subject: 'keeper',
+  choices: [{ label: 'Have your captain sort it', reply: 'Sorted.', karma: 0, rating: { who: 'captain', delta: 1 } }, { label: 'Let it go', reply: 'Gone.', karma: 0 }],
+};
+const ROLE_TOY: GmInboxPack = { ...SLOT_TOY, seat: 'roletoy', targets: { keeper: 'Your keeper', captain: 'Your captain' }, events: [ev('homekeeper'), SKIP] };
+const roleSeat = (pack: GmInboxPack) => bindGmInbox<RoleDesk>(pack, {
+  moodOf: s => s.trust, setMood: (s, v) => { s.trust = v; }, addPopularity: () => undefined, addCash: () => undefined, yearOf: s => s.year,
+  setOut: (s, who, w) => { s.out[who] = (s.out[who] ?? 0) + w; },
+  addRating: (s, who, d) => { s.rating[who] = (s.rating[who] ?? 0) + d; },
+  person: (s, ref) => {
+    const id = 'role' in ref ? (ref.role === 'keeper' ? s.keeperId : ref.role === 'captain' ? s.captainId : NaN) : Number(ref.id);
+    return Number.isInteger(id) && id >= 1 && id <= 5 ? { name: `Player ${id}`, real: s.realIds.includes(id) } : null;
+  },
+});
+
+describe('gmInbox Round 1332: a tagged card asked again after its deal', () => {
+  it('an answer after its role passed to a real man fails closed, and the next week the staff settle it', () => {
+    const seat = roleSeat({ ...ROLE_TOY, events: [ev('homekeeper')] });
+    const s = roleDesk([2], 1, 3);
+    expect(gmInboxWeek(s, seat, 'a', {}, 0, () => 0).map(m => m.defId)).toEqual(['homekeeper']);
+    const id = s.phoneInbox![0].id;
+    s.keeperId = 2;
+    const before = JSON.stringify(s);
+    expect(answerGmInbox(s, id, 0, seat)).toBeNull();
+    expect(answerGmInbox(s, id, 1, seat)).toBeNull();
+    expect(JSON.stringify(s)).toBe(before);
+    const settled: GmInboxMessage[] = [];
+    gmInboxWeek(s, seat, 'a', {}, 1, () => 0, settled);
+    expect(settled.map(m => m.id)).toEqual([id]);
+    const m = s.phoneInbox!.find(x => x.id === id) as GmInboxMessage;
+    expect([m.answered, m.auto]).toEqual([1, true]);
+    expect(s.out).toEqual({});
+    expect(gmExpiredLine(m)).toMatch(/dealt with it \(Not now\)/);
+    expect(s.phoneInbox!.some(x => x.id !== id)).toBe(false);
+  });
+
+  it('a role that passes to another generated man still answers, on him', () => {
+    const seat = roleSeat({ ...ROLE_TOY, events: [ev('homekeeper')] });
+    const s = roleDesk([2], 1, 3);
+    gmInboxWeek(s, seat, 'a', {}, 0, () => 0);
+    s.keeperId = 4;
+    gmInboxWeek(s, seat, 'a', {}, 1, () => 0.99);
+    expect(s.phoneInbox!.filter(m => m.answered === undefined).length).toBeGreaterThan(0);
+    expect(answerGmInbox(s, s.phoneInbox![0].id, 0, seat)).not.toBeNull();
+    expect(s.out).toEqual({ keeper: 1 });
+  });
+
+  it('an option that moves another role than the card is about holds the card while that man is real, and asks again at the answer', () => {
+    const seat = roleSeat({ ...ROLE_TOY, events: [SKIP] });
+    expect(gmCardSafe(SKIP, roleDesk([3], 1, 3), seat, {})).toBe(false);
+    expect(gmCardSafe(SKIP, roleDesk([3], 1, 4), seat, {})).toBe(true);
+    const s = roleDesk([3], 1, 4);
+    gmInboxWeek(s, seat, 'a', {}, 0, () => 0);
+    s.captainId = 3;
+    expect(answerGmInbox(s, s.phoneInbox![0].id, 0, seat)).toBeNull();
+    expect(s.rating).toEqual({});
+  });
+
+  it('a role that resolves to nobody holds the card and refuses the answer', () => {
+    const seat = roleSeat({ ...ROLE_TOY, events: [ev('homekeeper')] });
+    expect(gmCardSafe(ev('homekeeper'), roleDesk([], 9, 4), seat, {})).toBe(false);
+    const s = roleDesk([], 1, 4);
+    gmInboxWeek(s, seat, 'a', {}, 0, () => 0);
+    s.keeperId = 9;
+    expect(answerGmInbox(s, s.phoneInbox![0].id, 0, seat)).toBeNull();
+    expect(s.out).toEqual({});
+  });
+
+  it('a tagged card that names a role needs an option that moves nothing; one about a fact\'s man does not', () => {
+    const home = ev('homekeeper');
+    expect(gmPackProblems({ ...SLOT_TOY, events: [{ ...home, choices: [home.choices[0]] }] }).join()).toMatch(/no option that moves nothing/);
+    expect(gmPackProblems({ ...ROLE_TOY, events: [{ ...SKIP, choices: [SKIP.choices[0]] }] }).join()).toMatch(/no option that moves nothing/);
+    const fined = ev('tagged');
+    expect(gmPackProblems({ ...SLOT_TOY, events: [{ ...fined, choices: [fined.choices[0]] }] })).toEqual([]);
+    expect(gmPackProblems(ROLE_TOY)).toEqual([]);
+  });
+
+  it('a pack with no tagged card never asks the seat at the answer or the week', () => {
+    let asked = 0;
+    const seat = { ...seatFor(TOY), person: () => { asked++; return null; } };
+    const s = desk();
+    for (let w = 0; w < 12; w++) {
+      gmInboxWeek(s, seat, w % 3 === 2 ? 'b' : 'a', { n: 6 }, w, () => 0);
+      for (const m of (s.phoneInbox ?? []).filter(x => x.answered === undefined)) answerGmInbox(s, m.id, 0, seat);
+    }
+    expect((s.phoneInbox ?? []).filter(m => m.answered !== undefined).length).toBeGreaterThan(2);
+    expect(asked).toBe(0);
+  });
+});

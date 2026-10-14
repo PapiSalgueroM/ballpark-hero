@@ -60,10 +60,12 @@
    unless every man it is about or moves is a generated person, so nothing
    about discipline or a private life ever lands on a real player), and a
    compact desk (a pack's opt in: a pruned cooldown book, short keys, and
-   messages saved as numbers and rebuilt from the pack on read). A role is
-   resolved when the seat is asked: a binding whose role holder can change
-   between a card's deal and its answer keeps the man fixed (a person slot)
-   or answers in the week it deals.
+   messages saved as numbers and rebuilt from the pack on read). A role on a
+   tagged card is asked again whenever it matters, because who holds it can
+   change between the deal and the answer (a new season, a sale): at the
+   deal, at the answer, and every week the card sits open. Once the role has
+   passed to a real man (or to nobody) the answer fails closed and the staff
+   settle the card on its neutral option, moving nothing (step 2b).
 
    A seat delivers through gmInboxWeek, never through careerInbox's own
    receive or deliver: those know nothing of conditions or cooldowns and
@@ -181,7 +183,9 @@ export interface GmEventDef extends Omit<InboxMessageDef, 'phase' | 'choices' | 
   /** Round 1332: a card about a man's conduct (discipline, a fine) or his
    *  private life (family, faith, his own health off the pitch). It is dealt
    *  only when its subject, every person slot and every man an option moves
-   *  are generated people: never a real one. */
+   *  are generated people: never a real one. A tagged card that names a
+   *  role needs an option that moves nothing, which the staff settle it on
+   *  once that role passes to a real man (step 2b). */
   tag?: 'conduct' | 'private';
 }
 
@@ -448,6 +452,11 @@ export function gmPackProblems(pack: GmInboxPack, fx?: Readonly<Record<string, G
     if (e.tag !== undefined && e.subject === undefined && !cardSlots(e).some(n => has(slots, n) && slots[n].person)) {
       out.push(`${e.id} is tagged ${e.tag} and names nobody it is about (no subject, no person slot)`);
     }
+    /* Who holds a role can change while the card sits open, and then the
+       staff settle it (step 2b): it needs an option that moves nothing. */
+    if (e.tag !== undefined && tagRoles(e, e.choices).length > 0 && gmNeutralIndex(e.choices) < 0) {
+      out.push(`${e.id} is tagged ${e.tag} and names a role, with no option that moves nothing for the staff to settle on`);
+    }
     for (const c of e.choices) {
       for (const [k, raw] of Object.entries(c.fx ?? {})) {
         const def = has(reg, k) ? reg[k] : undefined;
@@ -503,6 +512,34 @@ const named = (v: GmFactValue | undefined): v is string | number =>
 const cardSlots = (e: GmEventDef): string[] =>
   [...new Set([e.text, ...(e.texts ?? [])].flatMap(slotNames))];
 
+/** The man (a role) each effect of one option lands on. A value read off a
+ *  save that names nobody becomes a role no seat holds, so it fails closed. */
+const choiceRoles = (c: GmChoiceDef): GmPersonRef[] => [
+  ...(c.out ? [{ role: c.out.who }] : []), ...(c.rating ? [{ role: c.rating.who }] : []),
+  ...Object.values(c.fx ?? {}).filter(raw => typeof raw !== 'number').map(raw => ({ role: String((raw as { who?: unknown } | null)?.who) })),
+];
+
+/** Round 1332: the roles a tagged card names (its subject when that is a
+ *  role, and the man every option's out, rating and targeted fx lands on).
+ *  Who holds a role can change between the deal and the answer, so these
+ *  are asked again at the answer and every week the card sits open. */
+function tagRoles(e: GmEventDef, choices: readonly GmChoiceDef[]): GmPersonRef[] {
+  const refs: GmPersonRef[] = typeof e.subject === 'string' ? [{ role: e.subject }] : [];
+  for (const c of choices) refs.push(...choiceRoles(c));
+  return refs;
+}
+
+/** Every ref names a generated man: a real one, or nobody, fails. */
+const allGenerated = <S extends GmInboxHost>(s: S, seat: GmInboxSeat<S>, refs: readonly GmPersonRef[]): boolean =>
+  refs.every(ref => seat.person?.(s, ref)?.real === false);
+
+/** Round 1332: whether every role a tagged card names is still held by a
+ *  generated man, with the options as saved on the message (what an answer
+ *  would apply). Asked at the answer and by step 2b. */
+function gmTagStillSafe<S extends GmInboxHost>(e: GmEventDef, choices: readonly GmChoiceDef[], s: S, seat: GmInboxSeat<S>): boolean {
+  return allGenerated(s, seat, tagRoles(e, choices));
+}
+
 /**
  * Round 1332, the hold (step 4b): whether a card may be dealt this week.
  * Every slot in any wording of it has a value (a word or a number) and every
@@ -530,18 +567,13 @@ export function gmCardSafe<S extends GmInboxHost>(e: GmEventDef, s: S, seat: GmI
   }
   if (!e.tag) return true;
   const sub = e.subject;
-  if (typeof sub === 'string') people.push({ role: sub });
-  else if (sub !== undefined) {
+  if (sub !== undefined && typeof sub !== 'string') {
     const v = facts[sub.fact];
     if (!named(v)) return false;
     people.push({ id: v });
   }
-  for (const c of e.choices) {
-    if (c.out) people.push({ role: c.out.who });
-    if (c.rating) people.push({ role: c.rating.who });
-    for (const raw of Object.values(c.fx ?? {})) if (typeof raw !== 'number') people.push({ role: raw.who });
-  }
-  return people.every(ref => who(ref)?.real === false);
+  people.push(...tagRoles(e, e.choices));
+  return allGenerated(s, seat, people);
 }
 
 /** Round 1332: what each slot of one wording prints, by slot name, or
@@ -625,7 +657,8 @@ const drop = (list: GmEventDef[], hit: (x: GmEventDef) => boolean) => {
  * `clock` the save's own tick counter, which a seat may hand in falling (the
  * week of its season), so the books are rebased. The steps, in this order:
  * (1) rebase the cooldown book and the rest book from the future, pruning
- * the rest book; (2) settle the expired cards; (3) count the open ones and
+ * the rest book; (2) settle the expired cards; (2b) settle an open tagged
+ * card whose role has passed to a real man; (3) count the open ones and
  * `want`; (4) the eligible events (beat, conditions, subject rest, story,
  * one shots, cooldowns); (4b) the safety hold (gmCardSafe: a slot with no
  * value, a tagged card about a real man); (5) one chance roll per eligible
@@ -636,7 +669,7 @@ const drop = (list: GmEventDef[], hit: (x: GmEventDef) => boolean) => {
  * entries still cooling.
  * The deck's draws all come from `rng`, so the same seed deals the same
  * deck. Returns what arrived. A seat that hands in `settled` gets every card
- * step (2) settled pushed onto it, even one the kept cap then drops, so it
+ * step (2) or (2b) settled pushed onto it, even one the kept cap then drops, so it
  * can show gmExpiredLine for each; it changes nothing else.
  */
 export function gmInboxWeek<S extends GmInboxHost>(
@@ -674,6 +707,19 @@ export function gmInboxWeek<S extends GmInboxHost>(
     if (ttl !== undefined && clock - w >= ttl && n >= 0) inbox[i] = { ...m, w, answered: n, auto: true };
     else if (w !== m.w) inbox[i] = { ...m, w };
     if (inbox[i].auto && !m.auto) settled?.push(inbox[i]);
+  }
+  /* (2b) Round 1332: an open tagged card whose role has passed to a real man
+     (or to nobody) since its deal can no longer be answered (the answer
+     fails closed), so the staff settle it on its neutral option, moving
+     nothing, as they settle an expired card. A pack with no tagged card
+     never comes in here. */
+  if (pack.events.some(e => e.tag !== undefined)) {
+    for (let i = 0; i < inbox.length; i++) {
+      const m = inbox[i];
+      const e = m.answered === undefined ? pack.events.find(x => x.id === m.defId) : undefined;
+      const n = e?.tag !== undefined ? gmNeutralIndex(m.choices) : -1;
+      if (e && n >= 0 && !gmTagStillSafe(e, m.choices, s, seat)) { inbox[i] = { ...m, answered: n, auto: true }; settled?.push(inbox[i]); }
+    }
   }
   const open = inbox.filter(m => m.answered === undefined).length;
   const want = Math.max(0, Math.min(pack.perWeek, GM_INBOX_OPEN - open));
@@ -795,6 +841,12 @@ export function answerGmInbox<S extends GmInboxHost>(
      the answer fails closed and nothing moves. */
   const reg = seat.fx ?? {};
   if (c.fx && Object.keys(c.fx).some(k => !has(reg, k))) return null;
+  /* Round 1332: a tagged card is asked again at the answer. If a role it
+     names has passed to a real man (or to nobody) since the deal, nothing
+     about his conduct or private life may land on him: the answer fails
+     closed, and the next week's step (2b) settles the card. */
+  const def = seat.pack.events.find(e => e.id === msg.defId);
+  if (def?.tag !== undefined && !gmTagStillSafe(def, msg.choices as GmChoiceDef[], s, seat)) return null;
   if (answerInboxMessage(s, msgId, choiceIdx, seat) === null) return null;
   if (c.out && c.out.weeks > 0) seat.setOut(s, c.out.who, c.out.weeks);
   if (c.rating && c.rating.delta) seat.addRating(s, c.rating.who, c.rating.delta);
