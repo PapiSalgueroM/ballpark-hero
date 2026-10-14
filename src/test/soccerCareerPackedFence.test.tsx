@@ -125,12 +125,23 @@ function pressNext(view: ReturnType<typeof render>) {
 function clearReplayCounts() { vi.mocked(Math.random).mockClear(); vi.mocked(recordActivity).mockClear(); vi.mocked(recordStreakDay).mockClear(); vi.mocked(recordCompletion).mockClear(); }
 function noReplay() { expect(Math.random).not.toHaveBeenCalled(); expect(recordActivity).not.toHaveBeenCalled(); expect(recordStreakDay).not.toHaveBeenCalled(); expect(recordCompletion).not.toHaveBeenCalled(); }
 
-beforeEach(() => {
+let setupNumber = 0;
+beforeEach(async () => {
   localStorage.clear(); vi.clearAllMocks(); vi.useFakeTimers(); vi.setSystemTime(new Date('2026-10-14T12:00:00Z'));
   vi.spyOn(Math, 'random').mockReturnValue(0.52); vi.spyOn(console, 'error').mockImplementation(() => {});
   vi.stubGlobal('requestAnimationFrame', () => 1); vi.stubGlobal('cancelAnimationFrame', () => undefined);
   vi.stubGlobal('IntersectionObserver', class { observe() {} unobserve() {} disconnect() {} });
   vi.stubGlobal('ResizeObserver', class { observe() {} unobserve() {} disconnect() {} }); window.scrollTo = vi.fn();
+  const setupRngCalls: { value: number; stack: string | undefined }[] = [];
+  const beforePrime = { save: localStorage.getItem(KEY), fence: localStorage.getItem(FENCE), unrelated: localStorage.getItem(OTHER) };
+  vi.mocked(Math.random).mockImplementation(() => {
+    const value = 0.52; setupRngCalls.push({ value, stack: new Error('Pre-fixture async act RNG call').stack }); return value;
+  });
+  await act(async () => {});
+  caseId = 'setup-' + (++setupNumber);
+  record('async-act-prime', { scope: 'Empty async act before actual career initialization or page mount', before: beforePrime,
+    after: { save: localStorage.getItem(KEY), fence: localStorage.getItem(FENCE), unrelated: localStorage.getItem(OTHER) }, rngCalls: setupRngCalls });
+  vi.mocked(Math.random).mockReturnValue(0.52);
 });
 afterEach(() => {
   record('final-body-storage', { body: document.body.innerHTML, save: localStorage.getItem(KEY), fence: localStorage.getItem(FENCE), unrelated: localStorage.getItem(OTHER) });
@@ -166,8 +177,19 @@ describe('Soccer Career packed save and fence seam', () => {
     expect(otherFence.write(KEY, () => { localStorage.setItem(KEY, theirBytes); return true; })).toBe('written');
     expect(S.isSoccerCareerSave(S.parseSoccerCareerSave(theirBytes))).toBe(true); expect(JSON.parse(theirBytes).seasons.format).toBe(FORMAT);
     const generation = localStorage.getItem(FENCE), count = m.attempts.length; clearReplayCounts();
-    await act(async () => { fireEvent.click(m.view.getByRole('button', { name: 'Retry save' })); await import('@/components/SaveMovedNotice'); });
-    record('stale-retry', { actualBytes: localStorage.getItem(KEY), expectedBytes: theirBytes, actual: read(), expected: theirs, generation, actualGeneration: localStorage.getItem(FENCE), attempts: m.attempts, body: document.body.innerHTML });
+    const rngCalls: { stage: string; value: number; stack: string | undefined }[] = [];
+    let rngStage = 'async-act-entry';
+    vi.mocked(Math.random).mockImplementation(() => {
+      const value = 0.52;
+      rngCalls.push({ stage: rngStage, value, stack: new Error('Packed fence actual RNG call').stack });
+      return value;
+    });
+    await act(async () => {
+      rngStage = 'sync-retry-click'; fireEvent.click(m.view.getByRole('button', { name: 'Retry save' }));
+      rngStage = 'explicit-test-notice-import'; await import('@/components/SaveMovedNotice');
+      rngStage = 'async-act-settlement';
+    });
+    record('stale-retry', { actualBytes: localStorage.getItem(KEY), expectedBytes: theirBytes, actual: read(), expected: theirs, generation, actualGeneration: localStorage.getItem(FENCE), attempts: m.attempts, rngCalls, body: document.body.innerHTML });
     expect(localStorage.getItem(KEY), 'stale Retry keeps complete winning packed bytes').toBe(theirBytes);
     expect(localStorage.getItem(FENCE)).toBe(generation); expect(m.attempts).toHaveLength(count); pair('winning-save', read(), theirs); noReplay();
     expect(screen.getByTestId('save-moved-notice')).toHaveTextContent('This career moved on in another tab. Reload to carry on.');
