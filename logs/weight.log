@@ -1,0 +1,8 @@
+/nfl-my-career   base 486.3K (497986 B) over 48 files, head 486.4K (498032 B) over 48 files, 46 B  DIFFERS
+/nba-my-career   base 571.8K (585520 B) over 49 files, head 571.8K (585565 B) over 49 files, 45 B
+/mlb-my-career   base 560.0K (573420 B) over 49 files, head 560.0K (573467 B) over 49 files, 47 B
+/nhl-my-career   base 562.5K (576044 B) over 49 files, head 562.6K (576096 B) over 49 files, 52 B  DIFFERS
+/front-office    base 372.4K (381387 B) over 38 files, head 372.5K (381404 B) over 38 files, 17 B  DIFFERS
+/club-manager    base 602.2K (616649 B) over 41 files, head 602.2K (616669 B) over 41 files, 20 B
+/soccer-career   base 828.2K (848092 B) over 47 files, head 828.2K (848119 B) over 47 files, 27 B
+weight1332: 7 routes, 3 differ to one decimal
