@@ -1,0 +1,12 @@
+build exit=0 23s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+headsha exit=0 0s | 5ddc9df5b Round BEG: the award generations test reads the Soccer Career save through parseSoccerCareerSave
+fonts exit=0 0s | Prepared 9 declared font dependencies for local fulfillment.
+simCareerStoryRole-forwalk exit=0 23s | simCareerStoryRole: 16 groups, 0 failed, 48 full AR pairs
+playCareerStoryRole exit=0 34s | Career Story native: 554 checks, 0 failed, 9/9 journeys; artifacts /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/career-story-role/native
+land-main exit=0 315s | playSoccerLanding: green at 320x640, 390x844, 1280x900 (also bar 360x780, bar 375x667, name 480x800, name 768x1024; landing, name, bar, retire), every marked section red 
+land-toasts exit=0 394s | playSoccerLanding: green at 320x640, 390x844, 1280x900 (also no extra sizes; toasts, bytes), every marked section red on the base
+ctl-land-seed exit=0 151s | CONTROL FIRED: SOCCER_LANDING_CONTROL=seed played head on seed 1987332286 and the byte check went red, and the old save comparison went red on 8 save(s) given the next se
+playTouch exit=1 1s | playPlayerAutocompleteTouchScroll failed: 1602 checks, 0 journeys, 0 controls, 0 premature selections, 0 originals, 3 failures, 1 setup failures.
+playTouch-ctl exit=1 1s | playPlayerAutocompleteTouchScroll failed: 1602 checks, 0 journeys, 0 controls, 0 premature selections, 0 originals, 3 failures, 1 setup failures.
+playRoster exit=0 46s | Current-roster browser: passed; 1137 checks, 21 saved page journeys, 1 effective controls, 22 originals, 0 failures, 0 setup failures.
+playHtLineups exit=0 16s | Halftime lineups browser: passed; 869 checks, 3 played profiles, 1 effective controls, 7 originals.
