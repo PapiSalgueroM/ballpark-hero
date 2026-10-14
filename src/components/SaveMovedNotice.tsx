@@ -43,6 +43,9 @@ export default function SaveMovedNotice({ message, onReload }: Props) {
     };
   }, [host]);
   if (!host) return null;
+  /* pointerEvents auto on the root: an open modal dialog sets pointer-events none on the body, and this is a child
+     of the body, so without its own value it inherits that and the first Reload press only closes the dialog
+     (Release BD, the lead's ruling of Round 1330). Inline, so it holds whatever stylesheet loads. */
   return createPortal(
     <div
       role="alertdialog"
@@ -51,6 +54,7 @@ export default function SaveMovedNotice({ message, onReload }: Props) {
       aria-describedby="save-moved-words"
       data-testid="save-moved-notice"
       className="fixed inset-0 z-[1000] flex items-center justify-center bg-background/85 p-4"
+      style={{ pointerEvents: 'auto' }}
     >
       <div className="w-full max-w-sm rounded-2xl border border-border bg-card p-5 text-center shadow-xl">
         <p id="save-moved-words" className="text-base font-bold text-foreground">{message}</p>
