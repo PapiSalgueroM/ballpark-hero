@@ -206,16 +206,36 @@ jobs:
           assert(stdout.trimEnd().endsWith('PASS Soccer potential progress browser'));assert.equal(fs.readFileSync('potential-progress-artifacts/browser.exit','utf8').trim(),'0');
           fs.writeFileSync('potential-progress-artifacts/browser-complete-references.json',JSON.stringify(references));
           BROWSER
-      - name: Every unchanged rebuilt reader
+      - name: Every unchanged rebuilt reader with full child output
         id: readers
         if: ${{ !cancelled() && steps.build.outcome == 'success' }}
         run: |
           set -euo pipefail
           source potential-progress-artifacts/capture.sh
-          failed=0
-          for harness in simAdsense simBrand simHeadTags simHiddenPages simHubs simIndexNow simIndexing simInternalLinks simNoRivalNames simPrerender simPrerenderBoot simRetiredRoutes simSchema simSitemap simSnapshotAssets; do
-            ONLY="$harness" capture "$harness" node scripts/runAllSims.mjs --browser || failed=1
+          node scripts/lib/hostLikeServer.mjs dist 4173 > potential-progress-artifacts/reader-server.stdout 2> potential-progress-artifacts/reader-server.stderr &
+          reader_server=$!
+          trap 'kill "$reader_server" 2>/dev/null || true' EXIT
+          ready=0
+          for attempt in $(seq 1 60); do
+            if curl --fail --silent http://127.0.0.1:4173/ > /dev/null; then ready=1; break; fi
+            sleep 1
           done
+          test "$ready" -eq 1
+          failed=0
+          printf 'harness\texit\tlines\tverdict\n' > potential-progress-artifacts/readers.tsv
+          for harness in simAdsense simBrand simHeadTags simHiddenPages simHubs simIndexNow simIndexing simInternalLinks simNoRivalNames simPrerender simPrerenderBoot simRetiredRoutes simSchema simSitemap simSnapshotAssets; do
+            capture "$harness" env SIM_NETWORK=offline ENGINES=chromium NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" SIM_OFFLINE_RECEIPT="$PWD/potential-progress-artifacts/$harness.transport.log" BASE=http://127.0.0.1:4173 SWEEP_BASE=http://127.0.0.1:4173 node "scripts/$harness.mjs" || failed=1
+            status="$(cat "potential-progress-artifacts/$harness.exit")"
+            lines="$(cat "potential-progress-artifacts/$harness.stdout" "potential-progress-artifacts/$harness.stderr" | awk 'NF && $0 !~ /^\[SIM_OFFLINE_BLOCK\]/ {n++} END {print n+0}')"
+            verdict=PASS
+            if test "$status" -ne 0; then verdict=FAIL; failed=1; fi
+            if test "$status" -eq 0 && test "$lines" -lt 4; then verdict=EMPTY; failed=1; fi
+            if grep -E '(^|[[:space:]])(FAIL|SKIP|EMPTY)([[:space:]]|$)|^\[SIM_OFFLINE_BLOCK\]' "potential-progress-artifacts/$harness.stdout" "potential-progress-artifacts/$harness.stderr" > /dev/null; then verdict=FAIL; failed=1; fi
+            if test -s "potential-progress-artifacts/$harness.transport.log"; then verdict=FAIL; failed=1; fi
+            printf '%s\t%s\t%s\t%s\n' "$harness" "$status" "$lines" "$verdict" >> potential-progress-artifacts/readers.tsv
+            printf '%s: %s (exit %s, %s complete output lines)\n' "$harness" "$verdict" "$status" "$lines"
+          done
+          test "$(tail -n +2 potential-progress-artifacts/readers.tsv | wc -l)" -eq 15
           exit "$failed"
       - name: Whole source and package holds
         if: always()

@@ -51,15 +51,20 @@ assert.equal(fixtureRows.length, 1);
 const base = fixtureRows[0].state;
 assert.equal(base.phase, 'playing'); assert.equal(base.primeType, 'late');
 const entry = "export * from './src/lib/soccerCareerEngine'; export {isSoccerCareerSave} from './src/lib/soccerCareerSave'; export {ballonDorAwaitingReveal,revealBallonDorResult} from './src/lib/soccerAwardReveal';";
+const defineExpression = '{"DEV":false,"PROD":true,"MODE":"production"}';
 let compiled;
 try {
   compiled = await build({ stdin: { contents: entry, resolveDir: ROOT, sourcefile: 'potential-oracle.ts', loader: 'ts' },
     bundle: true, write: false, metafile: true, platform: 'browser', format: 'iife', globalName: '__potentialOracle',
-    alias: { '@': path.join(ROOT, 'src') }, define: { 'import.meta.env': '{"DEV":false,"PROD":true,"MODE":"production"}' }, logLevel: 'error' });
+    alias: { '@': path.join(ROOT, 'src') }, define: { 'import.meta.env': defineExpression }, logLevel: 'error' });
 } catch (error) { report.status = 'fail'; report.errors.push({ compilation: String(error.stack || error) }); put('report', report); throw error; }
 report.oracle = { entry: bodyRef(Buffer.from(entry), 'source'), code: bodyRef(compiled.outputFiles[0].contents, 'js'),
   metafile: put('oracle-metafile', compiled.metafile), inputs: Object.keys(compiled.metafile.inputs).map(file => {
     if (file === 'potential-oracle.ts') return { file, synthetic: true, ...bodyRef(Buffer.from(entry), 'source') };
+    if (file === '<define:import.meta.env>') return { file, synthetic: true, kind: 'esbuild-define',
+      metafileInput: copy(compiled.metafile.inputs[file]), declaredDefine: { name: 'import.meta.env', expression: bodyRef(Buffer.from(defineExpression), 'define-expression') },
+      scope: 'Declared define expression and actual metafile descriptor. No generated virtual-file bytes are asserted.' };
+    assert(!file.startsWith('<'), 'Unknown build-generated input remains unqualified');
     const full = path.resolve(ROOT, file); assert(full.startsWith(`${ROOT}${path.sep}`)); return { file, ...bodyRef(fs.readFileSync(full), 'source') };
   }) };
 function boundary(kind) {
