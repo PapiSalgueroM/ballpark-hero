@@ -1,0 +1,1 @@
+pin-proof-oldtext: git show 196fd642:src/lib/clubManager.ts > src/lib/clubManager.ts && git show e0527b07:scripts/fixtures/managerAppealIsolation1081/manifest.json > scripts/fixtures/managerAppealIsolation1081/manifest.json && node scripts/simManagerAppealIsolation.mjs; s=$?; git checkout HEAD -- src scripts; exit $s
