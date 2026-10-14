@@ -1,0 +1,41 @@
+runEach: done, 9 of 62 exited non zero
+simRecordPages exit=0 2s | simRecordPages: green. 13 record pages, registered everywhere, span bound, carrying every row and a recount that agrees.
+simReportedGamePools exit=0 13s | simReportedGamePools: ten offline actual-page and real-pool outcomes passed.
+simRarityPools exit=1 43s | Node.js v24.21.0 || FAIL: club-dortmund: the pool came back empty, so nothing was checked for it / FAIL: club-atletico: the pool came back empty, so nothing was checked for it
+simRevealMoments exit=0 24s | simRevealMoments: green. No counting number, a reduced motion rule beside every keyframe, one pace for every stagger, every fact and number on the cards is the fixture's own, and the last pick holds t
+simRulesGateConsentFocus exit=0 10s | simRulesGateConsentFocus: source held, owned copies cleaned, no backend or vendor requests.
+simSchemaNames exit=1 2s | SUPABASE UNREACHABLE. NOTHING WAS CHECKED.
+simSeasonReveal exit=0 2s | simSeasonReveal: green. The curtain celebrates only what the engine wrote, and only when it earned it.
+simSetPiecePresentation exit=0 12s | simSetPiecePresentation: PASS. 36 rendered cases. Evidence: /home/runner/work/_temp/t-each6b/each-simSetPiecePresentation-TOvtUb/dukb-setpiece-presentation-oHlViG
+simSiteSearch exit=0 7s | simSiteSearch: green. Every game is findable by name, typos included, and the ranking can explain itself.
+simSeasonCentreMotion exit=0 34s | simSeasonCentreMotion: 17 checks, 0 failed
+simSoccerCareerOpponents exit=0 33s | simSoccerCareerOpponents: current behavior green, 2 effective negative controls caught || [41m[1m FAIL [22m[49m src/test/soccerSeasonOpponents.test.ts[2m > [22mSoccer Career Season Centre opponent names[2m > [22mnames real opponents in a conf / [41m[1m FAIL [22m[49m src/test/soccerSeasonOpponents.test.ts[2m > [22mSoccer Career Season Centre opponent names[2m > [22muses the known split-league cl
+simSoccerConquest exit=1 17s | 1 FAILURES || FAIL: the database refused game_score_caps?select=game,max_score&game=eq.conquest-soccer-imperialism: Error: Offline harness blocked fetch to https://flawuiqbvj / 1 FAILURES
+simSoccerAwardReveal exit=0 77s | simSoccerAwardReveal: 8 outcome assertions green, 5 effective copied defects caught || [41m[1m FAIL [22m[49m src/test/soccerAwardGeneration.test.ts[2m > [22mSoccer award generations[2m > [22mputs known names and guarded new names on the sa / [41m[1m FAIL [22m[49m src/test/soccerAwardGeneration.test.ts[2m > [22mSoccer award generations[2m > [22mkeeps future contender identities across seasons
+simSoccerInternationalReturn exit=0 20s | PASS international return copied production source bytes held.
+simSoccerEventPromises exit=0 53s | simSoccerEventPromises: all sections green
+simSoccerSeasonHistory exit=0 9s | Season history: 9 groups,24 full AR season pairs,192 full campaign/RNG pairs,0 effective controls; artifacts /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/season-history/outcomes
+simSponsors exit=0 4s | simSponsors: green. The commercial desk pays real money for real reasons, and every brand is made up.
+simStadiumTycoon exit=0 2s | simStadiumTycoon: green. The turnstiles spin and the math holds.
+simStockCampaign exit=0 4s | simStockCampaign: green. The market sells numbers, never names, and the wallet always finishes.
+simTactics exit=1 2s | Node.js v24.21.0
+simSoccerOfferReview exit=0 41s | Soccer offer review: passed.
+simTradeTalks exit=0 2s | simTradeTalks: green. The other GM negotiates like a person, and the deal that closes is the deal that was agreed.
+simTransferPathActiveIdentity exit=0 2s | simTransferPathActiveIdentity: green. Active mode is identity-verified, namesake-safe, and staged consistently across runtime and migrations.
+simTransferPathSeasons exit=0 2s | simTransferPathSeasons: green. The two styles link where they are the same season and nowhere else, and the page and the generator agree on every player.
+simThroughBallDrill exit=0 29s | simThroughBallDrill: green. Twenty rules and board checks passed: one seed one run, the perfect pass scores 100, skill beats spam at every measured gap, a defender cuts out what touches him and nothin
+simTycoonAwayMatchdays exit=0 137s |    All 6 controls fired exactly where they should, in node and in the real hook.
+simNumberFormatting exit=0 484s | Number formatting: passed. Evidence at /home/runner/work/ballpark-hero/ballpark-hero/number-formatting-artifacts/outcomes
+simUclField exit=0 13s | simUclField: all green
+simUfcFacts exit=0 1s | simUfcFacts: both UFC tables are internally consistent and agree with each other, and every declaration that names ufc.com stands on it in the record. This says consistent, not verified.
+simTycoonLeague exit=0 248s |    Every older save lands in the division it had earned, no club that can compete is walled in, and all ten controls fired.
+simUsCareerDeckC exit=0 155s | simUsCareerDeckC: all checks passed
+simUsPostseason exit=0 48s | simUsPostseason: 33 checks, 0 failed, 0 findings for the lead
+simValidatorRefusalHold exit=0 1s | simValidatorRefusalHold: green. 9 validators run: a stored refusal waits for the records, and every failure mode fails closed.
+simWhoAmIAccuracy exit=1 2s | SUPABASE UNREACHABLE. NOTHING WAS CHECKED.
+simWindow2026Integration exit=1 5s | Node.js v24.21.0
+simWorld exit=0 148s | ALL WORLD CHECKS PASSED
+simTycoonRooms exit=0 465s |    All eleven controls fired exactly where they should.
+simWorldXiSeasonReport exit=0 8s | simWorldXiSeasonReport: green. The report says a great deal more, every number adds up and comes off who played, and nobody real says a word.
+simUsCareerSummer exit=SIGKILL 1500s | 6) balance: one child per sport, careers a seed nfl 12000, nba 8000, mlb 8000, nhl 2000, 3 seeds
+runEach: done, 9 of 62 exited non zero
