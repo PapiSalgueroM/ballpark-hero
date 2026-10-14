@@ -29,7 +29,7 @@ import {
   playNextEntry, fixtureFor, entryInvolvesMe, careerLeagueOf, leagueRulesOf, CUP_LABELS, UCL_LABELS,
   cupProgressRank, uclProgressRank, objectiveStatuses,
   /* Round 783: the mid season takeover an accepted application walks into. */
-  startCareer, interimManagerName, refreshWorldRoster, worldSeedOf,
+  startCareer, interimManagerName, refreshWorldRoster, worldSeedOf, customExitUclField,
 } from '@/lib/clubManager';
 import type { CareerState, CalendarEntry, Competition, FormResult, MatchWeekReport, PlayerMessage } from '@/lib/clubManager';
 import type { CmVarAsk } from '@/lib/clubManagerVar';
@@ -894,7 +894,7 @@ export function joinClubNow(career: CareerState): CareerState | null {
   try {
     fresh = startCareer(club, eraId, undefined, career.manager, {
       yearsOn,
-      uclField: career.uclField ?? null,
+      uclField: career.uclField ? customExitUclField(career, career.uclField) : null,
       keepLeagueOverrides: true,
       ...(worldRosterView(departed) || worldSeedOf(departed) !== undefined
         ? { rosterCareer: departed, worldSeed: worldSeedOf(departed) } : {}),

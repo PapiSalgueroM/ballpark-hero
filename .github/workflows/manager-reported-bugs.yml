@@ -11,7 +11,7 @@ jobs:
     env:
       CI: '1'
       SIM_NETWORK: offline
-      MANAGER_REPORT_PHASE: baseline
+      MANAGER_REPORT_PHASE: fixed
     defaults:
       run:
         shell: bash

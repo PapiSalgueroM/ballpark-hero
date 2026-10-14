@@ -5402,7 +5402,7 @@ export interface CustomClubSpec {
   budgetTier: CustomBudgetTier;
   /** The league def id this club plays in (real or era league). */
   leagueId: string;
-  /** The club it displaced this season. Recomputed every summer. */
+  /** The displaced real club. Modern paired leagues retain its slot across summers. */
   replacedClub: string;
   /**
    * Round 160: how good the squad starts, decoupled from the money. The
@@ -6328,13 +6328,28 @@ function squadXIAvg(squad: CMPlayer[]): number {
   return Math.round((rs.reduce((s, r) => s + r, 0) / 11) * 10) / 10;
 }
 
+function customUsesPyramid(spec: Pick<CustomClubSpec, 'leagueId'> | undefined, eraId?: string): boolean {
+  return !!spec && !(eraId && isHistoricEra(eraId))
+    && PYRAMIDS.some(pair => pair.top === spec.leagueId || pair.second === spec.leagueId);
+}
+
+/** Leaving a created club restores its real slot in the next European field. */
+export function customExitUclField(career: Pick<CareerState, 'customClub' | 'eraId'>, field: string[]): string[] {
+  const custom = career.customClub;
+  return customUsesPyramid(custom, career.eraId)
+    ? field.map(name => name === custom!.name ? custom!.replacedClub : name) : field;
+}
+
 /** The league def a custom spec plays in, era leagues first. */
-function customLeagueDef(spec: Pick<CustomClubSpec, 'leagueId'>, eraId?: string): LeagueDef | null {
+function customLeagueDef(spec: Pick<CustomClubSpec, 'leagueId' | 'name' | 'replacedClub'>, eraId?: string): LeagueDef | null {
   if (eraId && ERA_LEAGUES[eraId]) {
     const el = ERA_LEAGUES[eraId].find(l => l.id === spec.leagueId);
     if (el) return el;
   }
-  return REAL_LEAGUES.find(l => l.id === spec.leagueId) ?? null;
+  const real = REAL_LEAGUES.find(l => l.id === spec.leagueId);
+  if (!real || !customUsesPyramid(spec, eraId)) return real ?? null;
+  const league = effectiveLeague(real);
+  return { ...league, clubs: league.clubs.map(name => name === spec.replacedClub ? spec.name : name) };
 }
 
 /**
@@ -6353,7 +6368,7 @@ function buildCustomDef(spec: CustomClubSpec, eraId?: string, xiOverride?: numbe
   const xiOf = xiChainFor(chainEra);
   // The replaced club is out of the world, so it neither counts toward the
   // rank nor (being the weakest) moves the top of the league.
-  const others = (league?.clubs ?? []).filter(c => c !== spec.replacedClub);
+  const others = (league?.clubs ?? []).filter(c => c !== spec.replacedClub && c !== spec.name);
   let topXI = xi;
   let above = 0;
   for (const c of others) {
@@ -17969,6 +17984,9 @@ export function startCareer(clubName: string, eraId: string = DEFAULT_ERA_ID, cu
      leagueClubs, so the world simply is the world with your club in it. */
   const era = eraById(eraId);
   const historic = isHistoricEra(era.id);
+  /* A fresh start ranks its custom club inside its own memberships. */
+  const worldEdit = edit && !custom && !historic && !world ? edit : null;
+  if (!world?.keepLeagueOverrides) registerLeagueOverrides(worldEdit);
   if (custom) {
     const ranked = historic ? eraPlayableClubs(era.id, custom.leagueId) : playableClubs(custom.leagueId);
     const spec: CustomClubSpec = {
@@ -17984,11 +18002,6 @@ export function startCareer(clubName: string, eraId: string = DEFAULT_ERA_ID, cu
     // A fresh real-club career must never inherit a previous save's club.
     registerCustomClub(null);
   }
-  /* Round 310: and it starts on the static memberships for the same reason,
-     custom or not: a NEW career has no promotions behind it, so a previous
-     save's registered pyramid must never leak into its world. */
-  const worldEdit = edit && !custom && !historic && !world ? edit : null;
-  if (!world?.keepLeagueOverrides) registerLeagueOverrides(worldEdit);
   const club = custom ? clubDefFor(custom.name)
     : historic ? eraClubDefFor(clubName, era.id) : clubDefFor(clubName);
   const startYearsOn = world ? world.yearsOn : historic ? 0 : Math.max(0, era.startYear - CM_BASE_YEAR);
@@ -19967,13 +19980,14 @@ function runPromotionRelegation(prev: CareerState): { overrides: Record<string, 
   /* The finished season resolves under ITS OWN memberships, whatever a
      screen or a harness registered last. */
   registerLeagueOverrides(carried);
-  /* A historic era has no second divisions to trade with. A custom save is
-     exempt in v1 on purpose: its spec re-picks replacedClub from its league
-     every summer, and letting the membership move underneath that recompute
-     (the replaced club relegating out, say) is a seam this round does not
-     open. Both keep whatever overrides the save already carried. */
+  /* Historic and unpaired custom leagues keep their existing memberships. */
   if (prev.eraId && isHistoricEra(prev.eraId)) return { overrides: carried, lines: [] };
-  if (prev.customClub) return { overrides: carried, lines: [] };
+  if (prev.customClub && !customUsesPyramid(prev.customClub, prev.eraId)) return { overrides: carried, lines: [] };
+  const custom = prev.customClub;
+  const mySlot = custom?.replacedClub ?? prev.clubName;
+  /* Sort under the saved names first, so recorded head-to-head stays readable. */
+  const ownTable = sortedLeagueTable(prev).map(row => custom && row.club === prev.clubName
+    ? { ...row, club: custom.replacedClub } : row);
   const myLeagueId = careerLeagueOf(prev).id;
   const next: Record<string, string[]> = carried ? { ...carried } : {};
   const lines: string[] = [];
@@ -19997,10 +20011,10 @@ function runPromotionRelegation(prev: CareerState): { overrides: Record<string, 
     const topClubs = next[pyr.top] ?? topDef.clubs;
     const secondClubs = next[pyr.second] ?? secondDef.clubs;
     const topTable = myLeagueId === pyr.top
-      ? sortedLeagueTable(prev)
+      ? ownTable
       : sortedWorldTable(prev, pyr.top, prev.world?.[pyr.top]?.table ?? []);
     const secondTable = myLeagueId === pyr.second
-      ? sortedLeagueTable(prev)
+      ? ownTable
       : sortedWorldTable(prev, pyr.second, prev.world?.[pyr.second]?.table ?? []);
     /* A save with no readable table for either half (fast-forwarded with no
        world, an old save mid-repair) moves nothing: skipping is the honest
@@ -20021,11 +20035,11 @@ function runPromotionRelegation(prev: CareerState): { overrides: Record<string, 
     if (myLeagueId === pyr.top || myLeagueId === pyr.second) {
       // The player's own pyramid gets a line per moved club, own club first.
       for (const c of up) {
-        if (c === prev.clubName) lines.unshift(`\u{2B06} You are up: ${c} will play ${topDef.name} football next season.`);
+        if (c === mySlot) lines.unshift(`\u{2B06} You are up: ${prev.clubName} will play ${topDef.name} football next season.`);
         else lines.push(`\u{2B06} ${c} win promotion to ${toLeague(topDef.name)}.`);
       }
       for (const c of down) {
-        if (c === prev.clubName) lines.unshift(`\u{2B07} Relegated. ${c} go down to ${toLeague(secondDef.name)}.`);
+        if (c === mySlot) lines.unshift(`\u{2B07} Relegated. ${prev.clubName} go down to ${toLeague(secondDef.name)}.`);
         else lines.push(`\u{2B07} ${c} are relegated to ${toLeague(secondDef.name)}.`);
       }
     } else {
@@ -20098,7 +20112,7 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
      promoted into the Premier League handed the Championship's top four the
      Premier League's places, and one just relegated out of it left the
      Premier League sending nobody. */
-  const nextUclField = uclQualifiersFrom(career);
+  let nextUclField = uclQualifiersFrom(career);
   registerLeagueOverrides(pr.overrides);
   /* Round 146: inside a historic save, a "playable club" is an era club, so
      the move guard consults the era world before the modern one. */
@@ -20113,13 +20127,16 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
     ? !!eraLeagueOf(targetClub, eraId)
     : !!clubByName(targetClub));
   const moving = !!(targetClub && validTarget && targetClub !== career.clubName);
+  if (moving) nextUclField = customExitUclField(career, nextUclField);
   const clubName = moving && targetClub ? targetClub : career.clubName;
   /* Round 154: the custom club lives exactly as long as you manage it. Stay
      and it re-registers for the new season (its def re-measured against the
      aged world); walk to another job and the spec is dropped, so next season
      the real league is simply the real league again. */
   const custom = !moving && career.customClub && career.customClub.name === clubName
-    ? career.customClub
+    ? { ...career.customClub, leagueId: customUsesPyramid(career.customClub, eraId)
+      ? Object.entries(pr.overrides ?? {}).find(([, clubs]) => clubs.includes(career.customClub!.replacedClub))?.[0] ?? career.customClub.leagueId
+      : career.customClub.leagueId }
     : undefined;
   registerCustomClub(custom ?? null, eraId);
   const club = custom ? clubDefFor(clubName)
@@ -20367,11 +20384,9 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
      had, the same way Round 310 made it check that league's euro flag. */
   const qualifiedUcl = (summary ? summary.qualifiedUcl : prevPos <= playedLeagueUclPlaces) && nextLeague.euro;
   const league = nextLeague;
-  /* Round 154: the swap is recomputed every summer, because the weakest club
-     of the league can change as the world ages. The spec remembers who is
-     out this season so the cup and the def math agree with the fixture list. */
+  /* Paired modern divisions move the same displaced slot every summer. */
   const nextReplaced = custom
-    ? (() => {
+    ? customUsesPyramid(custom, eraId) ? custom.replacedClub : (() => {
         const ranked = historic ? eraPlayableClubs(eraId!, league.id) : playableClubs(league.id);
         return ranked.length ? ranked[ranked.length - 1].name : custom.replacedClub;
       })()
@@ -21080,6 +21095,7 @@ export function loadCareer(): CareerState | null {
     if (!parsed.sacked && typeof parsed.boardConfidence === 'number' && parsed.boardConfidence <= 0) {
       parsed.boardConfidence = 1;
     }
+    registerLeagueOverrides(parsed.leagueOverrides ?? null);
     /* Round 154: the custom club's identity is rebuilt from the save the
        moment it is opened, measured against the squad as saved, and cleared
        just as firmly when the save is a normal one, so a stale registration
@@ -21098,11 +21114,6 @@ export function loadCareer(): CareerState | null {
       if (parsed.customClub) delete parsed.customClub;
       registerCustomClub(null);
     }
-    /* Round 310: the save's own league memberships come back the same way,
-       registered the moment it opens and nulled for a save from before the
-       feature, so every league lookup on every screen answers with the
-       divisions this save actually plays. */
-    registerLeagueOverrides(parsed.leagueOverrides ?? null);
     /* Round 474: the specific asks, LAST, because the country an ask counts
        and the market it is measured against both read the league, and the
        league is not settled until the two registrations above have run. */
