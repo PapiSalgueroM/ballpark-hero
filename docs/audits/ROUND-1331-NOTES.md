@@ -13,8 +13,11 @@ origin/main 082fc277 (docs only) at 12f3fd65. Every gate ran on a GitHub runner 
 - Partial (`CM_SUBS_PARTIAL`, keeps three, the guide says so): every other league of the game, MLS's two
   conferences included (21 ids). Nothing was found in the round's time that two sources their 2026-27 rule.
 - The Championship row rests on the EFL's 2022-23 rule (Irish Examiner 10 June 2022, ESPN 4 August 2022) with a
-  2023 corroboration (leedsunited.com: five from nine named). No source dated 2026-27 itself was found and none
-  that reverses it: the ledger's caveat says so. The lead may want one more line dated 2026-27.
+  2023 corroboration (leedsunited.com: five from nine named). Since the closing check it also has a fact dated
+  2026-27 itself on two hosts: the Championship game Cardiff City 5-1 Watford of 13 October 2026, where Watford
+  made five changes (Sky Sports' report; ESPN's commentary lists five for each side, each side's five in three
+  stoppages). The three stoppage limit has no dated 2026-27 statement: it is the EFL's own rule from 2022-23 (Law 3
+  as it stands mandates it only for top divisions), nothing found reverses it, and the ledger's caveat says so.
 - Not covered on purpose: no Champions League row (cups and European ties follow the career league's row); nation
   jobs are not played live and keep three; the 2019-20 restart plays three (a season goes by its start year);
   extra time's own half time is not a moment the engine has (its thirty minutes are one stretch), so a change at
@@ -127,8 +130,7 @@ anchor `note(saveCareer(career));` is not in useClubManager.ts on base either).
   2022-23"; SubsRule.stops and changeLive's doc say what the engine does; the ledger's law lines cite Law 3 as it
   stands and IFAB circular 20 for what they claim.
 - OWED TO THE LEAD, not on this branch: the other dugout's changes at the break before extra time (the OWED item
-  above) needs one viewer line in LiveSimScreen.tsx (F3's); the Championship has no source dated 2025-26 or
-  2026-27 (three searches on 2026-10-14 found none; the newest is a 2024-25 guide); the older help line at
+  above) needs one viewer line in LiveSimScreen.tsx (F3's); the older help line at
   ClubManagerHelp.tsx 48 and the guide src/data/gameContent/clubManagement.ts 121 and 122 still say three. See
   C:/Users/antho/dukb-handoff/2026-10-10/results-g/fix-1331.md.
 - Engine note found while sourcing: the 2020 amendment freed the two extra time breaks only where a competition

@@ -78,10 +78,14 @@
         { "claim": "five changes in three opportunities from 2022-23 on, a standing EFL rule", "sources": [
           { "host": "irishexaminer.com", "url": "https://www.irishexaminer.com/sport/soccer/arid-40892609.html", "published": "2022-06-10", "read": "2026-10-13", "quote": "make five substitutions in Sky Bet Championship, League One and League Two matches from the 2022-23 season ... each club is only permitted a maximum of three opportunities to make changes during the fixture" },
           { "host": "espn.com", "url": "https://www.espn.com/soccer/story/_/id/37630254", "published": "2022-08-04", "read": "2026-10-13", "quote": "But from this season, five subs will be used in English football across all competitions." }
-        ] }
+        ] },
+        { "claim": "five changes still allowed in 2026-27: a Championship league match of 13 October 2026 in which Watford made five", "sources": [
+          { "host": "skysports.com", "url": "https://www.skysports.com/football/news/13592801/cardiff-city-x-x-watford", "published": "2026-10-13", "read": "2026-10-14", "quote": "They couldn't and that's why I made five substitutions." },
+          { "host": "espn.com", "url": "https://www.espn.com/soccer/commentary/_/gameId/401880229", "published": "2026-10-13", "read": "2026-10-14", "quote": "Substitution, Watford. Mamadou Doumbia replaces Myron Boadu. ... Substitution, Watford. Marc Bola replaces Jordan Zemura. ... Substitution, Watford. Amin Nabizada replaces Stephy Mavididi. ... Substitution, Watford. Iker Bravo replaces Martín Payero. ... Substitution, Watford. Krépin Diatta replaces Othmane Maamma." }
+        ], "note": "Round 1331 closing check (READ MAJOR 10): the Sky Sports report is of the Sky Bet Championship game Cardiff City 5-1 Watford and quotes Watford's head coach; ESPN's commentary of the same English League Championship game lists five changes for each side, each side's five in three stoppages (Watford at 56, 56, 56, 67 and 69; Cardiff City at 29, 69, 69, 82 and 82). Both pages were fetched whole on 2026-10-14 and the quoted lines found in them." }
       ],
       "corroboration": { "host": "leedsunited.com", "url": "https://www.leedsunited.com/en/news/efl-202324-substitutes", "published": "2023-06-29", "read": "2026-10-13", "quote": "Championship clubs have opted to use five substitutes from nine named" },
-      "caveat": "No source dated for 2026-27 itself was found, and none that reverses the 2022-23 rule (the 2023 statement above kept five and only grew the bench). The lead may want one more line dated 2026-27 before the release."
+      "caveat": "Five changes are sourced for 2026-27 itself by the second fact (two hosts, a league match of that season). No dated 2026-27 statement of the three opportunity limit was found: it is the EFL's rule from 2022-23 (the first fact), Law 3 as it stands mandates it only for top divisions (so in the Championship it is the competition's own rule), both sides in the 2026-27 match above used exactly three stoppages for their five, and nothing found reverses it."
     }
   ],
   "shared": {
