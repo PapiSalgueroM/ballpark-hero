@@ -1,0 +1,6 @@
+cmvar-head: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCmVar.mjs
+cmvar-1331: git worktree add -q --detach /tmp/w1331 fa1c45d9 && ln -s "$PWD/node_modules" /tmp/w1331/node_modules && cd /tmp/w1331 && NODE_OPTIONS="--require=/tmp/w1331/scripts/lib/offlineTransport.cjs" node scripts/simCmVar.mjs
+cmvar-main: git worktree add -q --detach /tmp/wmain 082fc277 && ln -s "$PWD/node_modules" /tmp/wmain/node_modules && cd /tmp/wmain && NODE_OPTIONS="--require=/tmp/wmain/scripts/lib/offlineTransport.cjs" node scripts/simCmVar.mjs
+cmvar-ctl-counted: CM_VAR_CONTROL=counted NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCmVar.mjs
+cmvar-ctl-historic: CM_VAR_CONTROL=historic NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCmVar.mjs
+cmvar-ctl-kindsaved: CM_VAR_CONTROL=kindsaved NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCmVar.mjs

@@ -1,0 +1,6 @@
+cmvar-main exit=0 192s | simCmVar normal: actual review outcomes and full prior baseline passed.
+cmvar-head exit=0 195s | simCmVar normal: actual review outcomes and full prior baseline passed.
+cmvar-ctl-counted exit=0 3s | simCmVar counted: actual review outcomes and full prior baseline passed.
+cmvar-ctl-kindsaved exit=0 3s | simCmVar kindsaved: actual review outcomes and full prior baseline passed.
+cmvar-1331 exit=1 203s | Node.js v24.21.0
+cmvar-ctl-historic exit=0 7s | simCmVar historic: actual review outcomes and full prior baseline passed.
