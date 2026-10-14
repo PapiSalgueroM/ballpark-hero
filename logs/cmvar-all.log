@@ -1,0 +1,84 @@
+PASS VAR normal
+simCmVar normal: actual review outcomes and full prior baseline passed.
+PASS VAR counted
+simCmVar counted: CAUGHT by "A ruled-out candidate is not committed as a scorer"
+simCmVar counted: actual review outcomes and full prior baseline passed.
+PASS VAR decorative
+simCmVar decorative: CAUGHT by "A ruled-out candidate is not committed as a scorer"
+simCmVar decorative: actual review outcomes and full prior baseline passed.
+PASS VAR penalty
+simCmVar penalty: CAUGHT by "A reviewed penalty links to exactly one existing actual penalty shot"
+simCmVar penalty: actual review outcomes and full prior baseline passed.
+PASS VAR awards
+simCmVar awards: CAUGHT by "The actual missed-foul review awards a penalty"
+simCmVar awards: actual review outcomes and full prior baseline passed.
+PASS VAR resolution
+simCmVar resolution: CAUGHT by "The saved actual kick can score or miss"
+simCmVar resolution: actual review outcomes and full prior baseline passed.
+PASS VAR past
+simCmVar past: CAUGHT by "Played review decisions and all played football survive the recut"
+simCmVar past: actual review outcomes and full prior baseline passed.
+PASS VAR reveal
+simCmVar reveal: CAUGHT by "An unresolved review withholds its own accepted resolution"
+simCmVar reveal: actual review outcomes and full prior baseline passed.
+PASS VAR resume
+simCmVar resume: CAUGHT by "A previously played reviewed goal is settled on resume"
+simCmVar resume: actual review outcomes and full prior baseline passed.
+PASS VAR announce
+simCmVar announce: CAUGHT by "A 46th-minute accepted resolution cannot announce during its review"
+simCmVar announce: actual review outcomes and full prior baseline passed.
+PASS VAR disabled
+simCmVar disabled: CAUGHT by "Enabled actual matches draw reviewed goals, overturned goals and reviewed penalties"
+simCmVar disabled: actual review outcomes and full prior baseline passed.
+PASS VAR everywhere
+simCmVar everywhere: CAUGHT by "Wolves, EFL Championship · Round 1: a match in a competition without reviews carries no opt in"
+simCmVar everywhere: actual review outcomes and full prior baseline passed.
+PASS VAR historic
+simCmVar historic: CAUGHT by "A historic era save carries no opt in, on a 2026 clock in a covered competition"
+simCmVar historic: actual review outcomes and full prior baseline passed.
+PASS VAR streamgoal
+simCmVar streamgoal: CAUGHT by "Dealing reviews draws nothing from the match stream"
+simCmVar streamgoal: actual review outcomes and full prior baseline passed.
+PASS VAR streamfoul
+simCmVar streamfoul: CAUGHT by "Dealing reviews draws nothing from the match stream"
+simCmVar streamfoul: actual review outcomes and full prior baseline passed.
+PASS VAR oldgoalreview
+simCmVar oldgoalreview: CAUGHT by "Goals ruled out a match 0.4596 is outside real football's 0.0752 to 0.1447 (headroom 0.2)"
+simCmVar oldgoalreview: actual review outcomes and full prior baseline passed.
+PASS VAR oldoverturn
+simCmVar oldoverturn: CAUGHT by "Goals ruled out a match 0.0192 is outside real football's 0.0752 to 0.1447 (headroom 0.2)"
+simCmVar oldoverturn: actual review outcomes and full prior baseline passed.
+PASS VAR oldpenaltyreview
+simCmVar oldpenaltyreview: CAUGHT by "The game showed 0 goal and 652 penalty reviews that ended with the call standing, and no publisher counts those by kind of call"
+simCmVar oldpenaltyreview: actual review outcomes and full prior baseline passed.
+PASS VAR oldmissedfoul
+simCmVar oldmissedfoul: CAUGHT by "Penalties awarded a match 0.2721 is outside real football's 0.0658 to 0.1307 (headroom 0.2)"
+simCmVar oldmissedfoul: actual review outcomes and full prior baseline passed.
+PASS VAR oldpenaltyscores
+simCmVar oldpenaltyscores: CAUGHT by "A penalty a review awards is taken under the engine penalty law, not under a rate of its own"
+simCmVar oldpenaltyscores: actual review outcomes and full prior baseline passed.
+PASS VAR oldpenaltyontarget
+simCmVar oldpenaltyontarget: CAUGHT by "A missed review penalty is on target as often as the engine penalty law says"
+simCmVar oldpenaltyontarget: actual review outcomes and full prior baseline passed.
+PASS VAR penaltyband
+simCmVar penaltyband: CAUGHT by "Penalties a match with reviews on 0.4331 (without: 0.3634) is outside real football's 0.3158 to 0.3316 (headroom 0.2) and the ledger does not hold the switch for it (owed penalties-total)"
+simCmVar penaltyband: actual review outcomes and full prior baseline passed.
+PASS VAR nolift
+simCmVar nolift: CAUGHT by "With the goal kind alone reviews move goals a match by -0.0755, past the 0.05 the family allows a rule to move them, and the ledger does not hold the goal kind off for it (a ruling does not excuse it: the engine draws th"
+simCmVar nolift: actual review outcomes and full prior baseline passed.
+PASS VAR liftpens
+simCmVar liftpens: CAUGHT by "A penalty goal is taken back as often as a review rules a goal out (0.0000 of 8192)"
+simCmVar liftpens: actual review outcomes and full prior baseline passed.
+PASS VAR liftkind
+simCmVar liftkind: CAUGHT by "A match kicked off with the penalty kind alone draws the goals of the match nobody asks a review in"
+simCmVar liftkind: actual review outcomes and full prior baseline passed.
+PASS VAR kindgoal
+simCmVar kindgoal: CAUGHT by "The penalty kind alone shows no goal review"
+simCmVar kindgoal: actual review outcomes and full prior baseline passed.
+PASS VAR kindpenalty
+simCmVar kindpenalty: CAUGHT by "The second half of a match kicked off with the goal kind shows no penalty review"
+simCmVar kindpenalty: actual review outcomes and full prior baseline passed.
+PASS VAR kindsaved
+simCmVar kindsaved: CAUGHT by "A match kicked off with the goal kind saves that list"
+simCmVar kindsaved: actual review outcomes and full prior baseline passed.
+simCmVar: 13 actual outcomes and 27 effective controls passed.

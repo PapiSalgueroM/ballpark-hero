@@ -1,0 +1,15 @@
+   31 league places across 15 leagues, all in; Chelsea not
+6) A historic era's season one is byte identical to this engine with season one switched off
+   4 historic starts identical in full, 3 of them with a Champions League group
+7) A custom club starts outside Europe, byte identical to this engine with season one switched off
+   custom clubs in premier and switzerland start outside Europe, identical in full
+8) The rollover's field follows the rule, and it and season two are byte identical to this engine with season one switched off
+   3 rollover fields of 32 follow the rule over their final tables; 3 fields and 3 whole season twos identical to the reference
+9) A season one save from before this round loads and plays unchanged
+   Chelsea's pre Round 612 group (Juventus, Bayer Leverkusen, Inter Milan) loads and plays 54 entries identical to the reference
+10) A league with no verified table falls back to the old day one, and only that league
+   Premier League marked partial: none of its clubs in the field, 14 in Europe by squad tier, La Liga still by its table
+11) Liverpool and Real Betis start outside Europe, a decision on the game's place count
+   both 5th, one below the game's 4 places, both start outside Europe and outside the field (decision owed: the 2025-26 European Performance Spots)
+
+simUclSeasonOne: all green

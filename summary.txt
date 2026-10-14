@@ -1,0 +1,2 @@
+simUclSeasonOne exit=0 18s | simUclSeasonOne: all green
+cmvar-all exit=0 553s | simCmVar: 13 actual outcomes and 27 effective controls passed.
