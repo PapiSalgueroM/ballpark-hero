@@ -7,11 +7,15 @@ permissions:
 jobs:
   verify:
     runs-on: ubuntu-latest
-    timeout-minutes: 35
+    timeout-minutes: 90
     env:
       CI: '1'
       SIM_NETWORK: offline
       MANAGER_REPORT_PHASE: fixed
+      ENGINES: chromium
+      PRERENDER_ONLY: /club-manager
+      MANAGER_REPORT_ARTIFACTS: manager-report-artifacts/natural
+      FREE_KICK_FONT_CACHE: manager-report-artifacts/font-cache
     defaults:
       run:
         shell: bash
@@ -28,7 +32,7 @@ jobs:
         run: |
           mkdir -p manager-report-artifacts
           git rev-parse HEAD > manager-report-artifacts/head.txt
-          git ls-files src scripts package.json package-lock.json bun.lock index.html | xargs sha256sum > manager-report-artifacts/source-hashes.txt
+          git ls-files src scripts .github/workflows package.json package-lock.json bun.lock index.html ':!scripts/data/lastmod.json' | xargs sha256sum > manager-report-artifacts/source-hashes.txt
           tar -cf manager-report-artifacts/source.tar src scripts package.json package-lock.json bun.lock index.html .github/workflows/manager-reported-bugs.yml
           NODE_OPTIONS= npm ci 2>&1 | tee manager-report-artifacts/install.log
           if [ "$MANAGER_REPORT_PHASE" = baseline ]; then
@@ -95,11 +99,60 @@ jobs:
           NODE_OPTIONS: --require=${{ github.workspace }}/scripts/lib/offlineTransport.cjs
           MANAGER_REPORT_ARTIFACTS: manager-report-artifacts/natural
         run: node scripts/simManagerCustomPromotion.mjs 2>&1 | tee manager-report-artifacts/natural.log
+      - name: Effective promotion faults
+        if: env.MANAGER_REPORT_PHASE == 'fixed'
+        env:
+          NODE_OPTIONS: --require=${{ github.workspace }}/scripts/lib/offlineTransport.cjs
+        run: node scripts/qa/checkManagerReportControls.mjs 2>&1 | tee manager-report-artifacts/controls.log
+      - name: Remote build and browser prerequisites
+        if: env.MANAGER_REPORT_PHASE == 'fixed'
+        run: |
+          npm install --prefix "$RUNNER_TEMP/manager-report-browser" --no-save --package-lock=false playwright
+          ln -s "$RUNNER_TEMP/manager-report-browser/node_modules/playwright" node_modules/playwright
+          ln -s "$RUNNER_TEMP/manager-report-browser/node_modules/playwright-core" node_modules/playwright-core
+          node "$RUNNER_TEMP/manager-report-browser/node_modules/playwright/cli.js" install --with-deps chromium
+          python -m pip install fonttools pillow
+          node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only 2>&1 | tee manager-report-artifacts/fonts.log
+      - name: Complete SEO build
+        id: build
+        if: env.MANAGER_REPORT_PHASE == 'fixed'
+        env:
+          NODE_OPTIONS: --require=${{ github.workspace }}/scripts/lib/offlineTransport.cjs
+        run: |
+          npm run build:seo 2>&1 | tee manager-report-artifacts/build.log
+          git diff -- scripts/data/lastmod.json > manager-report-artifacts/lastmod.diff
+          mkdir -p manager-report-artifacts/generated
+          cp -r public/club-manager manager-report-artifacts/generated/club-manager
+          cp public/sitemap.xml scripts/data/lastmod.json manager-report-artifacts/generated/
+      - name: Unchanged route download ceilings
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          node scripts/lib/hostLikeServer.mjs dist 4173 > manager-report-artifacts/server.log 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+          for attempt in 1 2 3 4 5; do
+            if curl --fail --silent http://127.0.0.1:4173/ > /dev/null; then break; fi
+            sleep 1
+          done
+          BASE=http://127.0.0.1:4173 SWEEP_OFFLINE=1 NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/sweepWeight.mjs 2>&1 | tee manager-report-artifacts/weights.log
+      - name: Rebuilt readers and existing Manager contracts
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: ONLY=simPromotion,simClubManager,simClubManagerCalendar,simClubManagerSaveSize,simClubManagerSlots,simEra2010,simCmLeagueBook,simUclField,simCustomClubValues,simSaveFence,simFlagshipWeight,simAdsense,simBrand,simHeadTags,simHiddenPages,simHubs,simIndexNow,simIndexing,simInternalLinks,simNoRivalNames,simPrerender,simPrerenderBoot,simRetiredRoutes,simSchema,simSitemap,simSnapshotAssets node scripts/runAllSims.mjs --browser 2>&1 | tee manager-report-artifacts/readers.log
+      - name: Actual promotion continuation and reload in Chromium
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        env:
+          NODE_OPTIONS: --require=${{ github.workspace }}/scripts/lib/offlineTransport.cjs
+        run: node scripts/playManagerCustomPromotion.mjs 2>&1 | tee manager-report-artifacts/browser.log
+      - name: Full ordinary unit suite
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        env:
+          NODE_OPTIONS: --require=${{ github.workspace }}/scripts/lib/offlineTransport.cjs
+        run: npm test -- --maxWorkers=2 --reporter=default --reporter=json --outputFile.json=manager-report-artifacts/full-unit.json 2>&1 | tee manager-report-artifacts/full-unit.log
       - name: Final source holds
         if: always()
         run: |
           sha256sum --check manager-report-artifacts/source-hashes.txt > manager-report-artifacts/source-holds.log
-          git diff --exit-code -- src scripts package.json package-lock.json bun.lock index.html
+          git diff --exit-code -- src scripts ':!scripts/data/lastmod.json' .github/workflows package.json package-lock.json bun.lock index.html
       - uses: actions/upload-artifact@v4
         if: always()
         with:
