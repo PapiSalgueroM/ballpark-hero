@@ -1,0 +1,6 @@
+build exit=0 31s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+headsha exit=0 0s | 36b549a1f Round BEG: the packed readers fixture crosses the codec threshold (260 seasons)
+pitch exit=0 4s | simPitchRestartContinuity: normal qualified (actual committed coordinates); browser paint unmeasured
+pitch-ctl-oldrender exit=0 4s | FIRED-OK
+vitest exit=0 3s |    Duration  2.98s (transform 1.93s, setup 132ms, collect 2.99s, tests 272ms, environment 878ms, prepare 357ms)
+playPitch exit=0 24s | playPitchRestartContinuity: green in the prepared shared-pitch scope; no real Manager journey or painted-old-jump claim.
