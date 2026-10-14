@@ -1,0 +1,6 @@
+build exit=0 32s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+headsha exit=0 0s | 491c10d33 Round BEG: bind Round 1364's roster proof to the tree's own core (CM_OWN_ROSTER_CORE_REF)
+roster exit=0 7s | simClubDetailCurrentRoster normal: green.
+roster-ctl-original exit=0 7s | FIRED-OK
+playRoster exit=1 8s | Node.js v24.21.0
+unseeded-minusAZ-plusDeck exit=0 133s | simCmUnseededWorld: green. 49 old saves with no deal and 49 with every deal play byte equal to 7f5bcd2b (state, draws and saved bytes at every step), and 15 new careers w

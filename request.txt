@@ -1,0 +1,7 @@
+#!build
+#!playwright
+headsha: git log --oneline -2
+roster: CM_OWN_ROSTER_CORE_REF=HEAD CM_OWN_ROSTER_OUT="$PWD/cor1" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simClubDetailCurrentRoster.mjs
+roster-ctl-original: CM_OWN_ROSTER_CORE_REF=HEAD CM_OWN_ROSTER_OUT="$PWD/cor2" CM_OWN_ROSTER_CONTROL=original NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simClubDetailCurrentRoster.mjs > /tmp/co.log 2>&1; s=$?; tail -3 /tmp/co.log | cut -c1-200; [ $s = 0 ] && grep -q "simClubDetailCurrentRoster original: green" /tmp/co.log && echo FIRED-OK
+playRoster: export FREE_KICK_FONT_CACHE="$PWD/fcr" CM_OWN_ROSTER_OUT="$PWD/corw" CM_OWN_ROSTER_PHASE=fixed CM_OWN_ROSTER_CORE_REF=HEAD; node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only | tail -1 && node .rc/x/prepInstalled.mjs "$PWD/corw" && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simClubDetailCurrentRoster.mjs | tail -1 && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playClubDetailCurrentRoster.mjs
+unseeded-minusAZ-plusDeck: B=$(node scripts/lib/treeWithoutMerge.mjs 5ec5a724 36cc9ffe 082fc277) && git worktree add -q --detach /tmp/ub $B && git show HEAD:src/lib/clubManagerDecisions.ts > /tmp/ub/src/lib/clubManagerDecisions.ts && git -C /tmp/ub -c user.name=gate -c user.email=gate@invalid commit -qam "BC without AZ, plus the BE desk deck" && export CM_UNSEEDED_BASE=$(git -C /tmp/ub rev-parse HEAD) && echo "base $CM_UNSEEDED_BASE" && node scripts/simCmUnseededWorld.mjs
