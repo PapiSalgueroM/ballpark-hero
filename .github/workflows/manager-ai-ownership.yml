@@ -1,0 +1,81 @@
+name: Manager AI ownership causal baseline
+on:
+  push:
+    branches: [codex/manager-ai-ownership]
+permissions:
+  contents: read
+jobs:
+  baseline:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      CM_AI_OWN_EXPECT_RED: '1'
+      CM_AI_OWN_OUT: ${{ github.workspace }}/manager-ai-artifacts
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Hold complete parent app and locked packages
+        run: |
+          echo '127.0.0.1 flawuiqbvjobmkfkauhw.supabase.co' | sudo tee -a /etc/hosts
+          mkdir -p "$CM_AI_OWN_OUT"
+          git diff --exit-code 082fc2774c8aa9f919c14efa33bfc3fbfc599597 -- src scripts .github/workflows package.json package-lock.json bun.lock index.html ':!src/test/managerAiOwnership.test.ts' ':!scripts/simManagerAiOwnership.mjs' ':!.github/workflows/manager-ai-ownership.yml'
+          find src scripts .github/workflows -type f ! -path scripts/data/lastmod.json -print0 | sort -z | xargs -0 sha256sum > "$CM_AI_OWN_OUT/source-hashes.txt"
+          sha256sum package.json package-lock.json bun.lock > "$CM_AI_OWN_OUT/package-hashes.txt"
+          npm ci
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          import { createHash } from 'node:crypto';
+          const lock = JSON.parse(fs.readFileSync('package-lock.json'));
+          const rows = Object.entries(lock.packages).filter(([file]) => file.startsWith('node_modules/') && fs.existsSync(file + '/package.json')).map(([file, entry]) => {
+            const bytes = fs.readFileSync(file + '/package.json'), version = JSON.parse(bytes).version; assert.equal(version, entry.version);
+            return { file, version, sha256: createHash('sha256').update(bytes).digest('hex') };
+          });
+          fs.writeFileSync(process.env.CM_AI_OWN_OUT + '/installed.json', JSON.stringify(rows, null, 2));
+          console.log('Bound ' + rows.length + ' actual locked package versions and bytes.');
+          NODE
+      - name: Actual application type gate
+        run: node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee "$CM_AI_OWN_OUT/types.log"
+      - name: Actual completed-deal ownership baseline
+        run: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simManagerAiOwnership.mjs 2>&1 | tee "$CM_AI_OWN_OUT/baseline.log"
+      - name: Existing world identity and codec cases
+        run: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node_modules/.bin/vitest run src/lib/clubManagerWorldRoster.test.ts --maxWorkers=1 --reporter=json --outputFile="$CM_AI_OWN_OUT/prior-unit.json" 2>&1 | tee "$CM_AI_OWN_OUT/prior-unit.log"
+      - name: Final whole source and package holds
+        if: always()
+        run: |
+          sha256sum --check "$CM_AI_OWN_OUT/source-hashes.txt" > "$CM_AI_OWN_OUT/source-holds.log"
+          sha256sum --check "$CM_AI_OWN_OUT/package-hashes.txt"
+          git diff --exit-code -- src scripts .github/workflows package.json package-lock.json bun.lock index.html
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          import { createHash } from 'node:crypto';
+          const rows = JSON.parse(fs.readFileSync(process.env.CM_AI_OWN_OUT + '/installed.json'));
+          for (const row of rows) {
+            const bytes = fs.readFileSync(row.file + '/package.json');
+            assert.equal(JSON.parse(bytes).version, row.version);
+            assert.equal(createHash('sha256').update(bytes).digest('hex'), row.sha256);
+          }
+          console.log('Held ' + rows.length + ' actual locked versions and package bytes.');
+          NODE
+      - name: Retain the entire original baseline packet
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: manager-ai-baseline-${{ github.run_id }}
+          path: manager-ai-artifacts/
+          include-hidden-files: true
+          retention-days: 14
+          if-no-files-found: error
+          compression-level: 6

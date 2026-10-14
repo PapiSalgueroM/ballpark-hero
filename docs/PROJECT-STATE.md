@@ -1,3 +1,7 @@
+## Codex Round1367 qualified causal baseline, 2026-10-14
+
+Exact1923d29187a539f63db96ded46f90ff81366e1d2/run38516377448/job115695998430 SUCCESS; actual8 cases reproduce four precise missing AI ownership Booleans and four preserves, City January realcall28/3deals. Full121file/raw74API/38815draw/source3584/pkg3/graph72/compiled21/parent6/installed521/type0/priorWorldCodec96 evidence independently closed. DraftPR269 is PROOF ONLY, no product/currentclubfix/build/browser/live claim. Core/world lease remains H's; requestednarrowhelper/dealwriters/actualpostseedflush is not authorized by this baseline. Future complete payload/origin/ambiguity/loan/summer/codec/save limits still owed. Details docs/audits/manager-ai-ownership-2026-10-14.md. OutsideReleaseBC1738737bytesheld.
+
 ## Release BC LIVE, 2026-10-13 18:23 EDT: one tab can no longer wipe a Club Manager save, Club Manager's world remembers your deals, its tables, copy and hub fixed, Soccer Career's events drawn fairly, the shared event deck, the college athletic director
 
 Claude lane (session H). main c5534342, deployment 3cf3a2d7-244e-41ce-8c27-a89cebafcfe6, entry index-BFkO1jyo.js (was index-DaI30mwt.js, Release BB,
