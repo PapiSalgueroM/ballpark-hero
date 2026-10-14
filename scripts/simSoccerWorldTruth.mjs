@@ -123,12 +123,13 @@ const esbuild = require('esbuild');
 const BASE = 'b9df63b4e9ad8925c1f19536ec6a32d8a77358ea';
 /* Release BF join: the base bundle reads the files named here from this tree instead of BASE, so a later round's
    engine input that this round never touched is the same on both sides of the lockstep. By default these are the
-   Soccer Career life chain's soccerCareerLife.ts and soccerCareerRoutineEvents.ts (Rounds 1350 to 1363: without them
-   the lockstep parted at the first deck, 223 month blocks against the floor of 400). On a tree where Life equals
-   BASE's and the routine file is never imported (Release BE), the default reads the same bytes as before.
+   Soccer Career life chain's five engine inputs, Life, its routine events and captions, Contracts and RealismA
+   (Rounds 1350 to 1363: without them the lockstep parted at the first deck, 223 month blocks against the floor of
+   400; with only the first two, Life's import of the captions file had no BASE copy). On a tree where those files
+   equal BASE's or are never imported (Release BE), the default reads the same bytes as before.
    WORLD_TRUTH_BASE_FROM_HEAD (comma separated src paths) replaces the list, and an empty value turns it off. None of
    this round's own files may be named (checked once ENGINE, PHONE, ARCADE and PANEL are set). */
-const BASE_FROM_HEAD = new Set((process.env.WORLD_TRUTH_BASE_FROM_HEAD ?? 'src/lib/soccerCareerLife.ts,src/lib/soccerCareerRoutineEvents.ts')
+const BASE_FROM_HEAD = new Set((process.env.WORLD_TRUTH_BASE_FROM_HEAD ?? ['soccerCareerLife', 'soccerCareerRoutineEvents', 'soccerCareerLifeConsequences', 'soccerCareerContracts', 'soccerCareerRealismA'].map(f => `src/lib/${f}.ts`).join(','))
   .split(',').map(f => f.trim()).filter(Boolean));
 const CONTROL = process.env.WORLD_TRUTH_CONTROL || '';
 const SEED_OFFSET = Number(process.env.SEED_OFFSET || 0);
