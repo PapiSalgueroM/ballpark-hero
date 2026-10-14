@@ -1,0 +1,6 @@
+# Release BF join, m1 routine walk again on the head with the fixture binding
+#!serve
+#!playwright
+#!serial
+headsha: git log --oneline -2
+routineWalk: set -o pipefail; export CI=1 SIM_NETWORK=offline SOCCER_ROUTINE_OUT="$PWD/scro" SOCCER_ROUTINE_PHASE=fixed FREE_KICK_FONT_CACHE="$PWD/scro/font-cache"; node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only | tail -1 && node .rc/x/prepInstalled.mjs "$PWD/scro" && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerCareerRoutineEvents.mjs | tail -2 && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playSoccerCareerRoutineEvents.mjs
