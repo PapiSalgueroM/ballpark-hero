@@ -1,0 +1,14 @@
+headsha: git log --oneline -2
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node_modules/.bin/vitest run src/test/clubManagerDecisions.test.tsx src/test/clubManagerDecisionDeadline.test.ts src/test/clubManagerDecisionDepth.test.ts src/test/playerBingoHonours.test.ts --testTimeout=300000 --hookTimeout=120000
+gatewords-ctl-substring: CM_GATE_WORDS_CONTROL=substring NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node_modules/.bin/vitest run src/test/clubManagerDecisions.test.tsx > /tmp/gw.log 2>&1; s=$?; grep -E "FAIL|Tests " /tmp/gw.log | head -6; [ $s = 1 ] && grep -q "FAIL" /tmp/gw.log && ! grep -qE "TypeError:|ReferenceError:|SyntaxError:|ERR_MODULE_NOT_FOUND" /tmp/gw.log && echo FIRED-OK
+deadline: CM_DEADLINE_CORE_REF=HEAD MANAGER_DEADLINE_OUT=/tmp/dl1 NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simClubManagerDecisionDeadline.mjs
+deadline-ctl-late: CM_DEADLINE_CORE_REF=HEAD CM_DEADLINE_CONTROL=late MANAGER_DEADLINE_OUT=/tmp/dl2 NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simClubManagerDecisionDeadline.mjs > /tmp/dl.log 2>&1; s=$?; tail -3 /tmp/dl.log; [ $s = 0 ] && grep -q "Effective actual-source late control" /tmp/dl.log && grep -q "simClubManagerDecisionDeadline late: green" /tmp/dl.log && echo FIRED-OK
+deadline-bare: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simClubManagerDecisionDeadline.mjs > /tmp/dlb.log 2>&1; s=$?; tail -3 /tmp/dlb.log | cut -c1-200; echo "bare exit $s (expected 1 on a newer core: the parent binding)"; [ $s = 1 ] && grep -q "Only fixed Decisions may differ" /tmp/dlb.log && echo BINDING-HOLDS
+decisions: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simClubManagerDecisions.mjs
+decisions-ctls: f=0; for c in depthcohort presscohort; do CM_DECISIONS_CONTROL=$c NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simClubManagerDecisions.mjs > /tmp/dc-$c.log 2>&1; s=$?; if [ $s = 1 ] && grep -q "simClubManagerDecisions (control $c): 1 findings" /tmp/dc-$c.log && grep -q "Effective $c source control" /tmp/dc-$c.log; then echo "$c FIRED"; else echo "$c NOT-FIRED s=$s"; tail -4 /tmp/dc-$c.log; f=1; fi; done; exit $f
+notes: MANAGER_NOTES_CORE_REF=HEAD MANAGER_NOTES_PHASE=fixed MANAGER_NOTES_OUT=/tmp/mn1 NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/qualifyManagerNoteSnapshots.mjs
+simBingoHonours: node scripts/simPlayerBingoHonours.mjs
+simClubManagerMeters: node scripts/simClubManagerMeters.mjs
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
+simClubManager: node scripts/simClubManager.mjs
