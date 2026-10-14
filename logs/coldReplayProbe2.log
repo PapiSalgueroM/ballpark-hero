@@ -1,0 +1,13 @@
+output.log
+stages.jsonl
+test.observed.mjs
+test.observed.tsx
+test.plain.mjs
+test.plain.tsx
+unit.json
+vitest.config.mjs
+
+prints an own goal for side "us" with wh | Error: seasonCentreOwnGoals: matchday 29 is not on the stage (live)
+    at linesOf (/home/
+leaves a return match alone in a replay  | Error: seasonCentreOwnGoals: matchday 25 is not on the stage (live)
+    at linesOf (/home/
