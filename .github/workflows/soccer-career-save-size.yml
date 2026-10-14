@@ -12,7 +12,7 @@ jobs:
       CI: '1'
       SIM_NETWORK: offline
       ENGINES: chromium
-      SC_SAVE_PHASE: baseline
+      SC_SAVE_PHASE: fixed
       SC_SAVE_OUT: ${{ github.workspace }}/career-save-artifacts
       FREE_KICK_FONT_CACHE: ${{ github.workspace }}/career-save-artifacts/font-cache
       PRERENDER_ONLY: /soccer-career
@@ -63,7 +63,7 @@ jobs:
             SC_SAVE_EXPECT_RED=1 NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerCareerSaveSize.mjs 2>&1 | tee "$SC_SAVE_OUT/baseline.log"
           else
             NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerCareerSaveSize.mjs 2>&1 | tee "$SC_SAVE_OUT/fixed.log"
-            SC_SAVE_CONTROL=plain NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerCareerSaveSize.mjs 2>&1 | tee "$SC_SAVE_OUT/control.log"
+            SC_SAVE_CONTROL=plain SC_SAVE_EXPECT_RED=1 SC_SAVE_OUT="$SC_SAVE_OUT/control" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerCareerSaveSize.mjs 2>&1 | tee "$SC_SAVE_OUT/control.log"
           fi
       - name: Full ordinary unit suite
         if: env.SC_SAVE_PHASE == 'fixed'
@@ -85,6 +85,9 @@ jobs:
       - name: Rebuilt readers and unchanged save guards
         if: env.SC_SAVE_PHASE == 'fixed'
         run: ONLY=simSoccerCareerSaveSize,simCreation,simSaveKeeper,simFlagshipWeight,simAdsense,simBrand,simHeadTags,simHiddenPages,simHubs,simIndexNow,simIndexing,simInternalLinks,simNoRivalNames,simPrerender,simPrerenderBoot,simRetiredRoutes,simSchema,simSitemap,simSnapshotAssets node scripts/runAllSims.mjs --browser 2>&1 | tee "$SC_SAVE_OUT/readers.log"
+      - name: Actual long-save continuation and full history in Chromium
+        if: env.SC_SAVE_PHASE == 'fixed'
+        run: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playSoccerCareerSaveSize.mjs 2>&1 | tee "$SC_SAVE_OUT/browser.log"
       - name: Original route download ceilings
         if: env.SC_SAVE_PHASE == 'fixed'
         run: |

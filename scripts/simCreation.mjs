@@ -43,11 +43,12 @@ const engine = await import('${ROOT.replaceAll('\\', '/')}/src/lib/soccerCareerE
 const eras = await import('${ROOT.replaceAll('\\', '/')}/src/lib/careerEras.ts');
 const attrs = await import('${ROOT.replaceAll('\\', '/')}/src/lib/soccerCareerAttributes.ts');
 const look = await import('${ROOT.replaceAll('\\', '/')}/src/lib/soccerCareerAppearance.ts');
-export { engine, eras, attrs, look };
+const save = await import('${ROOT.replaceAll('\\', '/')}/src/lib/soccerCareerSave.ts');
+export { engine, eras, attrs, look, save };
 `);
 execSync(`"${ROOT}/node_modules/.bin/esbuild" "${ENTRY}" --bundle --format=esm --platform=node --outfile="${BUNDLE}" --log-level=error`, { stdio: 'inherit' });
 
-const { engine, eras, attrs, look } = await import(pathToFileURL(BUNDLE).href);
+const { engine, eras, attrs, look, save } = await import(pathToFileURL(BUNDLE).href);
 const {
   initCareer, advanceYouthYear, advanceProSeason, acceptOffer, dismissSummary,
   repairCareer, effectivePotential, careerBuildEffects, FALLBACK_CLUBS, getCareerTotals,
@@ -653,10 +654,13 @@ console.log('11) A pre Round 131 save');
      round is sharing that budget. */
   let full = playCareer({ position: 'ST', overall: 62, potential: 92 }).state;
   full = applyShapeToState(full);
-  const bytes = JSON.stringify(full).length;
+  const raw = JSON.stringify(full);
+  const stored = save.serializeSoccerCareerSave(full);
+  const bytes = stored.length;
   const bare = JSON.stringify({ ...full, physique: undefined, attrShape: undefined, potentialEarned: undefined, eliteStreak: undefined, startingOverall: undefined }).length;
-  console.log(`   a full career save is ${(bytes / 1024).toFixed(1)} KB, of which this round added ${bytes - bare} bytes`);
-  if (bytes - bare > 900) fail(`this round put ${bytes - bare} bytes on every save, which is too much of the 40 KB budget`);
+  console.log(`   a full career save is ${(bytes / 1024).toFixed(1)} KB, of which this round added ${raw.length - bare} bytes`);
+  if (JSON.stringify(save.parseSoccerCareerSave(stored)) !== raw) fail('the stored full career did not restore every JSON field');
+  if (raw.length - bare > 900) fail(`this round put ${raw.length - bare} bytes on every save, which is too much of the 40 KB budget`);
   if (bytes > 60000) fail(`a full career save is ${(bytes / 1024).toFixed(1)} KB, over the budget`);
 }
 

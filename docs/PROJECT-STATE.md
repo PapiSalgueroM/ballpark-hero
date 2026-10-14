@@ -1,3 +1,13 @@
+## Codex: Round 1368 Soccer Career save blocker, fixed validation pending, 2026-10-14
+
+User explicitly requested the unchanged 60000-character Soccer Career blocker. Main082fc277 and recent Career PRs were inspected; no completed application save codec existed. Isolated codex/soccer-career-save-size, draft PR270, no main merge or publication.
+
+Baseline9bf3e399/run38515445460/job115693087222 qualified remotely: original simCreation has exactly one failure, save73.8KB over60000. Twelve actually played careers retained235 phase states,195 above60000, max127733; all exact-state/metadata/input/187 following-step-and-draw comparisons preserve. Complete ZIP11871304068 SHA74a0131aaa4962ebc82b8c19843c86eef6206ed43b353da790e33e019ab9e80d and official decoded log retained at primary .tmp-fx/soccer-career-save-size-1368/baseline. No fixed credit from that expected-red run.
+
+Application scope is existing SoccerCareerSave helper plus the page's existing read/write calls. Large saves pack complete seasons and optional story arrays using existing lz-string; small/legacy literal JSON and root metadata remain readable. Unknown fields survive JSON roundtrip. Claimed malformed/future envelopes refuse before optional-story repair; non-envelope legacy story repair remains unchanged. No pruning, cap increase, engine/data/Manager/UI feature change. Original simCreation now measures the actual serializer, preserves its60000/900 limits and checks whole-JSON equality. SaveKeeper's Soccer-only fixture writer/readers follow that same codec.
+
+Fixed type/full-unit/build/browser/readers/download validation is pending. Dedicated proof includes235 genuine states,187 following steps, effective plain-writer control, both raw/packed actual history journeys and invalid seasons/story refusals at390/1280. H owns integration, merge and publish. User's newly relayed reports are separately recorded, unverified, in docs/audits/reported-issues-2026-10-14.md; they introduce no other application changes.
+
 ## Release BC LIVE, 2026-10-13 18:23 EDT: one tab can no longer wipe a Club Manager save, Club Manager's world remembers your deals, its tables, copy and hub fixed, Soccer Career's events drawn fairly, the shared event deck, the college athletic director
 
 Claude lane (session H). main c5534342, deployment 3cf3a2d7-244e-41ce-8c27-a89cebafcfe6, entry index-BFkO1jyo.js (was index-DaI30mwt.js, Release BB,
