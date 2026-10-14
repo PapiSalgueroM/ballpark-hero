@@ -16,6 +16,9 @@
      coach     over the same fleet, the quick sim coach never passes the rule, writes no stoppage mark
                under three, and keeps a change and a stoppage back with every change he makes for legs;
                prints his mean changes a match under each rule (no real world average is claimed).
+     extratime a 2026-27 Arsenal knockout second leg on SUBS_ET_SEEDS seeds: on the nights that go to extra
+               time the other dugout never passes five changes or three stoppages in play, and its unused
+               changes carry on (the break before extra time is free): at least ET_MIN a night.
      press     over a quick sim fleet, every bigGame or derby question asked at a whistle names the next
                fixture's opponent (a second meeting with the same club is allowed); the 2026-10-12 Hot Seat
                daily at Westerlo still asks about Cercle Brugge (it is dated before the rules), and a stamped
@@ -39,6 +42,7 @@
      nostops    the stoppage check off: rule red.
      htstop     half time counts as a stoppage: rule red.
      opproom    the other dugout's room back to MAX_HALFTIME_SUBS less the changes made: opponent red.
+     etfrozen   the break before extra time is not free for them: extratime red.
      coachall   the coach keeps nothing back (his three keep back lines opened): coach red.
      pressold   the press at the whistle reads the match just played again: press red.
      legacyleak matchRuleOf ignores matchRules: legacy red (needs SUBS_BASE).
@@ -63,7 +67,7 @@ const partArg = process.argv.find(a => a.startsWith('--part='));
 const HS_FILE = 'src/lib/managerHotSeat.ts';
 /* The base arm's sections run only with SUBS_BASE, a checkout of the commit this branch started from. */
 const BASE_PARTS = ['legacy', 'three', 'hotseat'];
-const ALL_PARTS = ['ledger', 'rule', 'opponent', 'coach', 'press', ...(process.env.SUBS_BASE ? BASE_PARTS : [])];
+const ALL_PARTS = ['ledger', 'rule', 'opponent', 'coach', 'extratime', 'press', ...(process.env.SUBS_BASE ? BASE_PARTS : [])];
 /** The engine sections past rule register here as they are defined below. */
 const SECTIONS = {};
 
@@ -76,6 +80,7 @@ const CONTROLS = {
   pressnew: { part: 'legacy', from: "  maybeAskPress(state, state.matchRules === 'base' ? undefined : live.week + 1);", to: '  maybeAskPress(state, live.week + 1);' },
   pressold: { part: 'press', from: "  maybeAskPress(state, state.matchRules === 'base' ? undefined : live.week + 1);", to: '  maybeAskPress(state);' },
   nodate: { part: 'hotseat', file: HS_FILE, from: "  if (setup.daily) return setup.daily < HOT_SEAT_RULES_FROM ? 'base' : undefined;", to: '  if (setup.daily) return undefined;' },
+  etfrozen: { part: 'extratime', from: '  if (stopsLeft !== null && stopsLeft <= 0 && !etBreak) return made;', to: '  if (stopsLeft !== null && stopsLeft <= 0) return made;' },
   opproom: { part: 'opponent', from: '  const room = rule.subs - made.length;', to: '  const room = MAX_HALFTIME_SUBS - made.length;' },
   coachall: { part: 'coach', patches: [
     ['    if (live.subsUsed >= rule.subs - 1 || (live.minute ?? 0) > at || benchFor(state).length < 2) return false;',
@@ -294,7 +299,8 @@ function opponentSection(cm) {
   const rows = quickFleet(cm).filter(r => r.named);
   let over = 0;
   for (const r of rows) {
-    const stops = new Set(r.opp.map(s => s.minute)).size;
+    /* A change at 90 is one at the break before extra time (in play they go on from 56 to 88): no stoppage. */
+    const stops = new Set(r.opp.filter(s => s.minute !== 90).map(s => s.minute)).size;
     if (r.opp.length > r.rule.subs || (r.rule.stops !== null && stops > r.rule.stops)) over += 1;
   }
   check(P, 'the other dugout never passes its rule\'s changes or stoppages', over === 0, `${over} of ${rows.length} matches over`);
@@ -337,6 +343,51 @@ function coachSection(cm) {
 }
 SECTIONS.opponent = opponentSection;
 SECTIONS.coach = coachSection;
+
+/* Section extratime: their unused changes carry on into extra time. Only a Champions League knockout night plays
+   extra time, so this walks a 2026-27 Arsenal career (seed 4107, fixed steps) to the second leg of its first
+   knockout tie and plays that night on SUBS_ET_SEEDS seeds, to the whistle and into extra time where it is level.
+   Under five a side that used its three stoppages by 90 still has changes, and they go on at the break before extra
+   time (minute 90, no stoppage). Checked: no night passes five changes or three stoppages in play; their mean
+   changes in extra time (the break's included) at least ET_MIN. Measured: see the notes (remote check r1331-et2). */
+const ET_SEEDS = Number(process.env.SUBS_ET_SEEDS ?? 1500);
+const ET_SEED_BASE = Number(process.env.SUBS_ET_SEED_BASE ?? 1700);
+const ET_MIN = Number(process.env.SUBS_ET_MIN ?? 0.5);
+function extratimeSection(cm) {
+  const P = 'extratime';
+  let pre = withSeed(4107, () => cm.startCareer('Arsenal'));
+  for (let step = 1; step < 90; step++) {
+    const next = pre.calendar[pre.week];
+    if (!next || (next.type === 'uclKo' && (next.uclLeg === 2 || !next.uclLeg))) break;
+    pre = withSeed(4107 * 31 + step, () => cm.playNextEntry(pre, { skipHalftime: true, noCoach: true })).state;
+  }
+  const rule = cm.matchRuleOf(pre);
+  check(P, 'the walk reaches a knockout second leg in a five change season', pre.calendar[pre.week]?.type === 'uclKo' && rule.subs === 5 && rule.stops === 3, `${pre.calendar[pre.week]?.type} ${rule.subs}/${rule.stops}`);
+  let nights = 0, over = 0, inEt = 0, atBreak = 0, frozen = 0;
+  for (let k = 0; k < ET_SEEDS; k++) {
+    const seed = ET_SEED_BASE + k;
+    const ht = withSeed(seed, () => cm.playNextEntry(pre));
+    if (ht.kind !== 'halftime' || !ht.state.live) continue;
+    const on = withSeed(seed + 500000, () => cm.startSecondHalf(ht.state));
+    const et = on && withSeed(seed + 900000, () => cm.startExtraTime(on));
+    if (!et?.live?.et) continue;
+    nights += 1;
+    const opp = et.live.oppSubs ?? [];
+    const breakAt = et.live.et.from;
+    const stopsInPlay = new Set(opp.filter(s => s.minute !== breakAt).map(s => s.minute)).size;
+    if (opp.length > rule.subs || stopsInPlay > rule.stops) over += 1;
+    const late = opp.filter(s => s.minute >= breakAt).length;
+    inEt += late;
+    atBreak += opp.filter(s => s.minute === breakAt).length;
+    if (late === 0 && opp.length < rule.subs) frozen += 1;
+  }
+  const mean = inEt / Math.max(1, nights);
+  console.log(`   ${nights} of ${ET_SEEDS} nights went to extra time: ${mean.toFixed(2)} changes from them in extra time a night (${atBreak} at the break), ${frozen} nights with changes left and none made`);
+  check(P, 'enough nights go to extra time to judge', nights >= 100, `${nights}`);
+  check(P, 'the other dugout never passes five changes or three stoppages in play, the break before extra time free', over === 0, `${over} of ${nights}`);
+  check(P, `their unused changes carry on into extra time: at least ${ET_MIN} a night`, mean >= ET_MIN, mean.toFixed(2));
+}
+SECTIONS.extratime = extratimeSection;
 
 /* ---------------- the base arm (sections legacy, three, hotseat) ---------------- */
 const SUBS_BASE = process.env.SUBS_BASE ?? '';
