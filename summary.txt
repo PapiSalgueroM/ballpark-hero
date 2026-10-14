@@ -1,0 +1,4 @@
+side-sha exit=0 1s |  4 files changed, 69 insertions(+), 7 deletions(-)
+side-oppet exit=0 10s | simCmSubs GREEN: 8 of 8 checks green (parts oppextratime, extratime)
+side-etfrozen exit=1 8s | control etfrozen FIRED: 1 of 4 checks red
+side-motion exit=0 40s | simLiveSimMotion: green. 55 tests passed (the viewer on real feeds, the pitch part's rules on 200 half feeds and on feeds made by hand, the goal sequence, match mode), an

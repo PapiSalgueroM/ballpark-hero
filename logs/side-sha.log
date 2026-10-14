@@ -1,0 +1,10 @@
+f57888928 Round 1331 (side option for the lead): the Round 1081 pin retaken for clubManager.ts, last on this branch
+e0527b07a Round 1331 (side option for the lead, F3's file): the live viewer tells a change at the break before extra time on the line under the pitch, so the extra time banner and its aggregate keep their place as the stage opens (the reason cb722d78 backed the engine hunk out: liveSimMotion "the extra time banner says what is true")
+51566ac82 Round 1331 (side option for the lead): the other dugout's unused changes carry on into extra time again (52d787d5's engine hunk, backed out in cb722d78), with simCmSubs section oppextratime and control etfrozen (c00694b8's section, under a name of its own beside the round's extratime); section opponent reads a change of theirs at 90 as the break before extra time
+196fd6423 Round 1331: the Round 1081 pin retaken for clubManager.ts, last (re-record 2 of the review)
+196fd642 is an ancestor of origin/r1331-et-opp
+ .../managerAppealIsolation1081/manifest.json       |  2 +-
+ scripts/simCmSubs.mjs                              | 60 ++++++++++++++++++++--
+ src/components/club-manager/LiveSimScreen.tsx      |  3 ++
+ src/lib/clubManager.ts                             | 11 +++-
+ 4 files changed, 69 insertions(+), 7 deletions(-)
