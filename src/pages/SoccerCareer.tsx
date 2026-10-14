@@ -136,7 +136,7 @@ import { useSaveFenceWatch } from '@/hooks/useSaveFenceWatch';
 import { useArrivalTop } from '@/hooks/useArrivalTop';
 import { TournamentCard, InternationalHistoryTile } from "@/components/soccer-career/InternationalPanel";
 import { beatStyle, debutMomentKey, legacyMomentKey, rivalryMomentKey, settleLoadedMoments, useCareerMoment } from "@/components/soccer-career/careerMoments";
-import { isSoccerCareerSave } from '@/lib/soccerCareerSave';
+import { isSoccerCareerSave, parseSoccerCareerSave, serializeSoccerCareerSave } from '@/lib/soccerCareerSave';
 import { reloadToRetryChunk } from '@/lib/freshBuild';
 import { readSeasonMoments } from '@/lib/season/momentsSave';
 /* Round 1045: the Season Centre loads only when a person presses for it, and
@@ -929,7 +929,7 @@ export default function SoccerCareer() {
     try { saved = localStorage.getItem(SAVE_KEY); } catch { return { career: null, invalid: false }; }
     if (saved === null) return { career: null, invalid: false };
     try {
-      const parsed: unknown = JSON.parse(saved);
+      const parsed: unknown = parseSoccerCareerSave(saved);
       if (!isSoccerCareerSave(parsed)) return { career: null, invalid: true };
       /* Round 127's lesson, and Round 131 keeps learning it: repairing a save
          only inside the step function is not enough, because the player can
@@ -1039,7 +1039,7 @@ export default function SoccerCareer() {
     if (!career) { setSaveFailed(false); return; }
     const saved = saveFence.write(SAVE_KEY, function saveCareer() {
       try {
-        localStorage.setItem(SAVE_KEY, JSON.stringify(career));
+        localStorage.setItem(SAVE_KEY, serializeSoccerCareerSave(career));
         return true;
       } catch { return false; }
     });

@@ -1,0 +1,118 @@
+name: Soccer Career lossless save verification
+on:
+  push:
+    branches: [codex/soccer-career-save-size]
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      ENGINES: chromium
+      SC_SAVE_PHASE: fixed
+      SC_SAVE_OUT: ${{ github.workspace }}/career-save-artifacts
+      FREE_KICK_FONT_CACHE: ${{ github.workspace }}/career-save-artifacts/font-cache
+      PRERENDER_ONLY: /soccer-career
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Hold source and install locked packages remotely
+        run: |
+          mkdir -p "$SC_SAVE_OUT"
+          git rev-parse HEAD > "$SC_SAVE_OUT/head.txt"
+          git archive HEAD > "$SC_SAVE_OUT/source.tar"
+          find src scripts .github/workflows -type f ! -path scripts/data/lastmod.json -print0 | sort -z | xargs -0 sha256sum > "$SC_SAVE_OUT/source-hashes.txt"
+          sha256sum package.json package-lock.json bun.lock > "$SC_SAVE_OUT/package-hashes.txt"
+          npm ci 2>&1 | tee "$SC_SAVE_OUT/install.log"
+      - name: Actual app types
+        run: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee "$SC_SAVE_OUT/types.log"
+      - name: Reproduce the original creation size failure
+        if: env.SC_SAVE_PHASE == 'baseline'
+        run: |
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          import { spawnSync } from 'node:child_process';
+          const r = spawnSync(process.execPath, ['scripts/simCreation.mjs'], { encoding: 'utf8', maxBuffer: 32 * 1024 * 1024 });
+          const log = r.stdout + r.stderr;
+          fs.writeFileSync(process.env.SC_SAVE_OUT + '/original-creation.log', log);
+          fs.writeFileSync(process.env.SC_SAVE_OUT + '/original-creation-status.json', JSON.stringify({ status: r.status, signal: r.signal, error: r.error?.message ?? null }));
+          assert(!r.error && !r.signal && r.status === 1);
+          const faults = log.split('\n').filter(line => line.includes('FAIL:'));
+          assert.equal(faults.length, 1);
+          assert.match(faults[0], /a full career save is .* KB, over the budget/);
+          assert.match(log, /1 FAILURES/);
+          console.log(faults[0]);
+          console.log('Original creation fails only its unchanged 60000-character save guard.');
+          NODE
+      - name: Genuine long careers and lossless reloads
+        run: |
+          if test "$SC_SAVE_PHASE" = baseline; then
+            SC_SAVE_EXPECT_RED=1 NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerCareerSaveSize.mjs 2>&1 | tee "$SC_SAVE_OUT/baseline.log"
+          else
+            NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerCareerSaveSize.mjs 2>&1 | tee "$SC_SAVE_OUT/fixed.log"
+            SC_SAVE_CONTROL=plain SC_SAVE_EXPECT_RED=1 SC_SAVE_OUT="$SC_SAVE_OUT/control" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerCareerSaveSize.mjs 2>&1 | tee "$SC_SAVE_OUT/control.log"
+          fi
+      - name: Codec and actual veteran page regressions
+        if: env.SC_SAVE_PHASE == 'fixed'
+        run: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" npm test -- src/lib/soccerCareerSave.test.ts src/test/careerDilemmaReach.test.tsx src/test/careerKeepPlaying.test.tsx --maxWorkers=2 --reporter=default --reporter=json --outputFile.json="$SC_SAVE_OUT/focused-unit.json" 2>&1 | tee "$SC_SAVE_OUT/focused-unit.log"
+      - name: Build prerequisites on remote runner
+        if: env.SC_SAVE_PHASE == 'fixed'
+        run: |
+          npm install --prefix "$RUNNER_TEMP/career-save-browser" --no-save --package-lock=false playwright
+          ln -s "$RUNNER_TEMP/career-save-browser/node_modules/playwright" node_modules/playwright
+          ln -s "$RUNNER_TEMP/career-save-browser/node_modules/playwright-core" node_modules/playwright-core
+          node "$RUNNER_TEMP/career-save-browser/node_modules/playwright/cli.js" install --with-deps chromium
+          python -m pip install fonttools pillow
+          node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only 2>&1 | tee "$SC_SAVE_OUT/fonts.log"
+      - name: Complete SEO build
+        if: env.SC_SAVE_PHASE == 'fixed'
+        run: |
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" npm run build:seo 2>&1 | tee "$SC_SAVE_OUT/build.log"
+          git diff -- scripts/data/lastmod.json > "$SC_SAVE_OUT/lastmod.diff"
+      - name: Original route download ceilings
+        if: env.SC_SAVE_PHASE == 'fixed'
+        run: |
+          node scripts/lib/hostLikeServer.mjs dist 4173 > "$SC_SAVE_OUT/server.log" 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+          for attempt in 1 2 3 4 5; do
+            if curl --fail --silent http://127.0.0.1:4173/ > /dev/null; then break; fi
+            sleep 1
+          done
+          BASE=http://127.0.0.1:4173 SWEEP_OFFLINE=1 NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/sweepWeight.mjs 2>&1 | tee "$SC_SAVE_OUT/weights.log"
+      - name: Rebuilt readers and unchanged save guards
+        if: env.SC_SAVE_PHASE == 'fixed'
+        run: ONLY=simSoccerCareerSaveSize,simCreation,simSaveKeeper,simFlagshipWeight,simAdsense,simBrand,simHeadTags,simHiddenPages,simHubs,simIndexNow,simIndexing,simInternalLinks,simNoRivalNames,simPrerender,simPrerenderBoot,simRetiredRoutes,simSchema,simSitemap,simSnapshotAssets node scripts/runAllSims.mjs --browser 2>&1 | tee "$SC_SAVE_OUT/readers.log"
+      - name: Actual long-save continuation and full history in Chromium
+        if: env.SC_SAVE_PHASE == 'fixed'
+        run: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playSoccerCareerSaveSize.mjs 2>&1 | tee "$SC_SAVE_OUT/browser.log"
+      - name: Full ordinary unit suite
+        if: env.SC_SAVE_PHASE == 'fixed'
+        run: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" npm test -- --maxWorkers=2 --reporter=default --reporter=json --outputFile.json="$SC_SAVE_OUT/full-unit.json" 2>&1 | tee "$SC_SAVE_OUT/full-unit.log"
+      - name: Final source and package holds
+        if: always()
+        run: |
+          sha256sum --check "$SC_SAVE_OUT/source-hashes.txt" > "$SC_SAVE_OUT/source-holds.log"
+          sha256sum --check "$SC_SAVE_OUT/package-hashes.txt" > "$SC_SAVE_OUT/package-holds.log"
+          git diff --exit-code -- src scripts ':!scripts/data/lastmod.json' .github/workflows package.json package-lock.json bun.lock index.html
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: career-save-${{ github.run_id }}
+          path: career-save-artifacts/
+          include-hidden-files: true
+          retention-days: 14
+          if-no-files-found: error

@@ -1,3 +1,6 @@
+import { compressToUTF16, decompressFromUTF16 } from 'lz-string';
+import type { CareerState } from './soccerCareerEngine';
+
 const record = (v: unknown): v is Record<string, unknown> => typeof v === 'object' && v !== null && !Array.isArray(v);
 const text = (v: unknown) => typeof v === 'string';
 const number = (v: unknown) => typeof v === 'number' && Number.isFinite(v);
@@ -13,6 +16,33 @@ const offer = (v: unknown) => record(v) && record(v.club)
   && fields(v, ['contractYears', 'wage'], number);
 const event = (v: unknown) => record(v) && number(v.id) && fields(v, ['title', 'description'], text)
   && list(v.choices, choice => record(choice) && fields(choice, ['label', 'consequence'], text)) && v.choices.length > 0;
+
+/* Keep small saves literal. Pack complete histories, including unknown fields. */
+export function serializeSoccerCareerSave(value: CareerState): string {
+  const raw = JSON.stringify(value);
+  if (raw.length <= 60000) return raw;
+  const stored: Record<string, unknown> = { ...value };
+  for (const key of ['seasons', 'story'] as const) {
+    if (Array.isArray(value[key])) stored[key] = { format: 'lz-string-utf16', data: compressToUTF16(JSON.stringify(value[key])) };
+  }
+  const packed = JSON.stringify(stored);
+  return packed.length < raw.length ? packed : raw;
+}
+
+export function parseSoccerCareerSave(raw: string): unknown {
+  const value: unknown = JSON.parse(raw);
+  if (!record(value)) return value;
+  for (const key of ['seasons', 'story']) {
+    const history = value[key];
+    if (!record(history) || (!('format' in history) && !('data' in history))) continue;
+    if (history.format !== 'lz-string-utf16' || !text(history.data)) throw new Error('Unsupported saved history');
+    const decoded = decompressFromUTF16(history.data as string);
+    const rows: unknown = decoded === null ? null : JSON.parse(decoded);
+    if (!Array.isArray(rows)) throw new Error('Invalid saved history');
+    value[key] = rows;
+  }
+  return value;
+}
 
 /* Check the core data the page reads before its optional-field migration.
    Do not fill lost history or require newer phone, money or injury fields.

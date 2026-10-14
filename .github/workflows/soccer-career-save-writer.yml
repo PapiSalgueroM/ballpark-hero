@@ -1,0 +1,54 @@
+name: Soccer Career save writer compatibility
+on:
+  push:
+    branches: [codex/soccer-career-save-size]
+    paths:
+      - scripts/simSoccerCareerSaveRetry.mjs
+      - .github/workflows/soccer-career-save-writer.yml
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Bind application to the fully qualified save packet
+        run: |
+          mkdir -p career-writer-artifacts
+          git rev-parse HEAD > career-writer-artifacts/head.txt
+          git diff --exit-code cf453d2f311579e051bb19f77c196e77f73392ee -- src scripts/simCreation.mjs scripts/simSoccerCareerSaveSize.mjs scripts/playSoccerCareerSaveSize.mjs scripts/lib/realSaves.mjs package.json package-lock.json bun.lock index.html
+          sha256sum scripts/simSoccerCareerSaveRetry.mjs src/lib/soccerCareerSave.ts src/pages/SoccerCareer.tsx package.json package-lock.json > career-writer-artifacts/source-hashes.txt
+          npm ci
+      - name: Actual application types
+        run: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee career-writer-artifacts/types.log
+      - name: Original save retry outcomes and every effective copied fault
+        run: SOCCER_CAREER_SAVE_RETRY_ARTIFACTS="$PWD/career-writer-artifacts/retry" SOCCER_CAREER_SAVE_RETRY_CONTROL=all NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerCareerSaveRetry.mjs 2>&1 | tee career-writer-artifacts/retry.log
+      - name: Direct current-main league season diagnostic with complete stderr
+        run: SIM_LEAGUE_SEASONS_BASE=082fc2774c8aa9f919c14efa33bfc3fbfc599597 NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerLeagueSeasons.mjs 2>&1 | tee career-writer-artifacts/league-seasons.log
+      - name: Final source holds
+        if: always()
+        run: |
+          sha256sum --check career-writer-artifacts/source-hashes.txt > career-writer-artifacts/source-holds.log
+          git diff --exit-code -- src scripts package.json package-lock.json bun.lock index.html
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: career-writer-${{ github.run_id }}
+          path: career-writer-artifacts/
+          include-hidden-files: true
+          retention-days: 14
+          if-no-files-found: error

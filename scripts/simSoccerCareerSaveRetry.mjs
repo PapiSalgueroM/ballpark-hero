@@ -25,7 +25,7 @@ const controls = {
   disk: { from: "if (saved === 'failed') { setSaveFailed(true); return; }", to: "if (saved === 'failed') { localStorage.removeItem(SAVE_KEY); setSaveFailed(true); return; }", test: cases.initial },
   toast: { from: 'if (saveFailed) toast.error(', to: 'if (false) toast.error(', test: cases.initial },
   repeatedToast: { from: "if (saved === 'failed') { setSaveFailed(true); return; }", to: `if (saved === 'failed') { toast.error("Save refused"); setSaveFailed(true); return; }`, test: cases.repeat },
-  stale: { from: 'localStorage.setItem(SAVE_KEY, JSON.stringify(career));', to: 'localStorage.setItem(SAVE_KEY, JSON.stringify(restoredSave.career));', test: cases.latest },
+  stale: { from: 'localStorage.setItem(SAVE_KEY, serializeSoccerCareerSave(career));', to: 'localStorage.setItem(SAVE_KEY, serializeSoccerCareerSave(restoredSave.career));', test: cases.latest },
   staleCallback: { from: '  }, [career]);\n  useEffect(() => { saveCurrentCareer(); }, [saveCurrentCareer]);', to: '  }, []);\n  useEffect(() => { saveCurrentCareer(); }, [saveCurrentCareer]);', test: cases.training },
   automatic: { from: 'useEffect(() => { saveCurrentCareer(); }, [saveCurrentCareer]);', to: 'useEffect(() => {}, [saveCurrentCareer]);', test: cases.initial },
   retry: { from: 'onClick={saveCurrentCareer}>Retry save</Button>', to: 'onClick={() => {}}>Retry save</Button>', test: cases.training },
