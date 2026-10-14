@@ -1,0 +1,2 @@
+anchors: node scripts/simHarnessAnchors.mjs 2>&1 | tail -3; exit ${PIPESTATUS[0]}
+rivals: node scripts/simNoRivalNames.mjs 2>&1 | tail -3; exit ${PIPESTATUS[0]}
