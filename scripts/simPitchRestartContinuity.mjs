@@ -9,7 +9,8 @@ import { fileURLToPath } from 'node:url';
 import { build } from 'esbuild';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const PARENT = '082fc2774c8aa9f919c14efa33bfc3fbfc599597';
+/* Release BE join (Round BEG): PITCH_RESTART_PARENT_REF names the tree without this packet on a newer core (the BE join passes the first parent of its m7 merge, since Release BD changed LiveSimScreen.tsx); 082fc277 on the packet branch. */
+const PARENT = process.env.PITCH_RESTART_PARENT_REF || '082fc2774c8aa9f919c14efa33bfc3fbfc599597';
 const MOTION = 'src/components/pitch-motion/motion.tsx';
 const TEST = 'src/test/pitchRestartContinuity.test.tsx';
 const OWNED = ['goal to kickoff', 'shot to goalkick', 'save to keeper'].map(label => `restart continuity missing: ${label} keeps its last committed coordinates`);
