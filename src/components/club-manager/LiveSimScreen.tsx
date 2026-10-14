@@ -1939,7 +1939,7 @@ export function LiveSimScreen({
                 <div ref={sheetRef} className="bg-card border border-border rounded-xl p-3" data-cm-live-sheet={picking ?? ''}>
                   <div className="flex items-center justify-between">
                     <div className="text-[11px] text-muted-foreground uppercase tracking-wider flex items-center gap-1">
-                      <ArrowLeftRight className="w-3 h-3" /> Change at {minuteLabel({ minute: changeMinute, plus })} · Subs left: {subsLeft}{room && room.stopsLeft !== null && <span className="text-xs" data-cm-live-stops={room.stopsLeft}>{` · ${room.stopsLeft} ${room.stopsLeft === 1 ? 'stop' : 'stops'} left`}</span>}
+                      <ArrowLeftRight className="w-3 h-3" /> <span>Change at {minuteLabel({ minute: changeMinute, plus })} · Subs left: {subsLeft}{room && room.stopsLeft !== null && <span className="text-xs" data-cm-live-stops={room.stopsLeft}>{` · ${room.stopsLeft} ${room.stopsLeft === 1 ? 'stop' : 'stops'} left`}</span>}</span>
                     </div>
                     <button
                       onClick={closeSheet}

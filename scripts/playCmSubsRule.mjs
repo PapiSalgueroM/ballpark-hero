@@ -76,12 +76,18 @@ function sub(s, m) {
   if (!next) cannot(`the engine refused the fixture's change at ${m}`);
   return next;
 }
+/* A match paused in the dressing room, as the page saves one: the clock at 45 (left unset, the viewer replays
+   the first half from kick off). */
+const atBreak = s => { s.live.minute = 45; return s; };
 const liverpoolHt = toHalftime('Liverpool', null, 2601);
-const evertonHt = toHalftime('Everton', 'era2005', 501);
+const evertonHt = atBreak(toHalftime('Everton', 'era2005', 501));
 let late = sub(liverpoolHt, 46);
 late = withSeed(4601, () => cm.startSecondHalf(late));
 for (const m of [60, 70, 80]) late = sub(late, m);
 if (late.live.subsUsed !== 4 || cm.stopsUsed(late.live) !== 3) cannot('the second half fixture is not four changes in three stoppages');
+/* Paused at 84, past the third stoppage's minute: a change at 80 itself would share that stoppage and be taken. */
+late.live.minute = 84;
+atBreak(liverpoolHt);
 const daily = hs.dailyHotSeat('2026-10-12');
 const kick = { t: 'match', m: 'balanced', talk: null };
 const free = { v: 1, club: daily.club, seed: daily.seed, ...(CONTROL === 'nostamp' ? {} : { rules: 1331 }), actions: [kick, kick], done: false };
@@ -179,7 +185,12 @@ for (const profile of PROFILES) {
       buttons: [...el.querySelectorAll('button')].filter(b => b.offsetParent).map(b => Math.round(b.getBoundingClientRect().height)),
       refusalPx: (() => { const r = el.querySelector('[data-cm-live-refusal]'); return r ? parseFloat(getComputedStyle(r).fontSize) : 0; })(),
       stopsPx: (() => { const r = el.querySelector('[data-cm-live-stops]'); return r ? parseFloat(getComputedStyle(r).fontSize) : 0; })(),
-      cut: (() => { const top = el.firstElementChild; return top ? top.scrollWidth > top.clientWidth + 1 : true; })(),
+      cut: (() => {
+        const label = el.firstElementChild?.firstElementChild;
+        if (!label) return true;
+        const r = label.getBoundingClientRect(), box = el.getBoundingClientRect();
+        return label.scrollWidth > label.clientWidth + 1 || r.right > box.right + 0.5 || r.left < box.left - 0.5;
+      })(),
     })).catch(() => null);
     check('d', `${w}: every button in the sheet is at least 44 px tall`, !!sizes && sizes.buttons.length > 0 && sizes.buttons.every(h => h >= 44), sizes ? sizes.buttons.join(',') : 'no sheet');
     check('d', `${w}: the new words are at least 12 px`, !!sizes && sizes.refusalPx >= 12 && sizes.stopsPx >= 12, sizes ? `${sizes.refusalPx} and ${sizes.stopsPx}` : 'no sheet');
@@ -202,6 +213,9 @@ for (const profile of PROFILES) {
     const read = async () => {
       await page.goto(`${BASE}/manager-hot-seat`, { waitUntil: 'domcontentloaded' });
       await page.getByRole('button', { name: /^essential only$/i }).first().click({ timeout: 1200 }).catch(() => {});
+      /* The rules open on a first visit: close them the way a visitor does. */
+      await page.getByRole('dialog').first().waitFor({ timeout: 4000 }).catch(() => {});
+      for (let i = 0; i < 3 && await page.getByRole('dialog').count().catch(() => 0); i++) { await page.keyboard.press('Escape').catch(() => {}); await page.waitForTimeout(300); }
       await page.getByRole('button', { name: /Carry on at/i }).first().click({ timeout: 8000 }).catch(() => {});
       await page.getByText(/on paper are a level above you|at the weekend/).first().waitFor({ timeout: 15000 }).catch(() => {});
       return (await page.locator('p').filter({ hasText: /on paper are a level above you|at the weekend/ }).first().textContent().catch(() => '')) ?? '';
