@@ -1,0 +1,29 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/test/saveKeeper.test.ts [2m([22m[2m35 tests[22m[2m)[22m[32m 65[2mms[22m[39m
+ [32m✓[39m src/test/routeErrorRecovery.test.tsx [2m([22m[2m65 tests[22m[2m)[22m[33m 1155[2mms[22m[39m
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ [32m✓[39m src/test/soccerCareerSaveFence.test.tsx [2m([22m[2m8 tests[22m[2m)[22m[33m 1886[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career save fence[2m > [22man old save with no fence key opens, plays, and is fenced from its first write [33m 361[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career save fence[2m > [22mNew Career in a stale tab clears nothing [33m 470[2mms[22m[39m
+ [32m✓[39m src/test/saveFence.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 10[2mms[22m[39m
+ [32m✓[39m src/test/useSaveFenceWatch.test.tsx [2m([22m[2m9 tests[22m[2m)[22m[32m 53[2mms[22m[39m
+ [32m✓[39m src/test/useArrivalTop.test.tsx [2m([22m[2m9 tests[22m[2m)[22m[32m 109[2mms[22m[39m
+ [32m✓[39m src/test/soccerCareerSaveRecovery.test.tsx [2m([22m[2m39 tests[22m[2m)[22m[33m 6507[2mms[22m[39m
+ [32m✓[39m src/test/saveMovedNotice.test.tsx [2m([22m[2m5 tests[22m[2m)[22m[32m 187[2mms[22m[39m
+ [32m✓[39m src/test/soccerCareerSaveRetry.test.tsx [2m([22m[2m8 tests[22m[2m)[22m[33m 9247[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career failed write recovery[2m > [22mkeeps the restored career and old bytes while showing a persistent save warning and one toast [33m 476[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career failed write recovery[2m > [22mkeeps repeated refused retries visible without replaying progress or repeating the toast [33m 301[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career failed write recovery[2m > [22mretries the actually earned training result exactly once and restores it on the next mount [33m 3798[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career failed write recovery[2m > [22mretries the latest earned season after more than one failed career change without rerunning its engine [33m 2294[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career failed write recovery[2m > [22mclears a failed save on the next successful automatic save and alerts again on a later refusal [33m 1756[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career failed write recovery[2m > [22mclears the old failure after explicit reset and saves the replacement career without old progress [33m 472[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m9 passed[39m[22m[90m (9)[39m
+[2m      Tests [22m [1m[32m189 passed[39m[22m[90m (189)[39m
+[2m   Start at [22m 07:15:23
+[2m   Duration [22m 14.95s[2m (transform 4.70s, setup 738ms, collect 10.20s, tests 19.22s, environment 4.51s, prepare 1.39s)[22m
+

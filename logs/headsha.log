@@ -1,0 +1,4 @@
+d10825590 rc request rBDg-m4b for 39002b4a8ff79a72713a4a77fc675b21634628e1
+39002b4a8 Release BD: merge Round 1330 (Soccer Career landing and the save fence bound, 9ddfd45d); What's New keeps every entry, 1330 on top of 1329 and 1331
+b59ebe2b1 Release BD: merge Round 1329 (Soccer Career's world tells the truth, 10b074f6); What's New keeps every entry with 1329 on top of 1331; the eighth inverse regenerated on the merged base b9df63b4 (33 rows and all eight sha256 pins byte equal, only the base named moves) and simSoccerWorldTruth's BASE set to it
+39002b4a8ff79a72713a4a77fc675b21634628e1
