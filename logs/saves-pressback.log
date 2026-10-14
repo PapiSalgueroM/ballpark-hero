@@ -1,0 +1,17 @@
+MUTATION pressback applied to src/lib/clubManager.ts
+Liverpool 2026 seed 1: load same; head rule {"subs":5,"stops":3,"partial":false}; 12 more entries differ
+Liverpool 2026 seed 2: load same; head rule {"subs":5,"stops":3,"partial":false}; 12 more entries differ
+Barcelona 2026 seed 1: load same; head rule {"subs":5,"stops":3,"partial":false}; 12 more entries differ
+Barcelona 2026 seed 2: load same; head rule {"subs":5,"stops":3,"partial":false}; 12 more entries differ
+Everton era2005 seed 1: load same; head rule {"subs":3,"stops":null,"partial":false}; 12 more entries differ (three change world)
+Everton era2005 seed 2: load same; head rule {"subs":3,"stops":null,"partial":false}; 12 more entries differ (three change world)
+Real Madrid era2015 seed 1: load same; head rule {"subs":3,"stops":null,"partial":false}; 12 more entries differ (three change world)
+Real Madrid era2015 seed 2: load same; head rule {"subs":3,"stops":null,"partial":false}; 12 more entries differ (three change world)
+Barcelona era2020 seed 1: load same; head rule {"subs":5,"stops":3,"partial":false}; 12 more entries differ
+Barcelona era2020 seed 2: load same; head rule {"subs":5,"stops":3,"partial":false}; 12 more entries differ
+Arsenal era2020 seed 1: load same; head rule {"subs":3,"stops":null,"partial":false}; 12 more entries differ
+Arsenal era2020 seed 2: load same; head rule {"subs":3,"stops":null,"partial":false}; 12 more entries differ
+Westerlo 2026 seed 1: load same; head rule {"subs":3,"stops":null,"partial":true}; 12 more entries differ
+Westerlo 2026 seed 2: load same; head rule {"subs":3,"stops":null,"partial":true}; 12 more entries differ
+RVSAVES loads: 14 saves, 0 differ; three change worlds playing on: 4 differ
+RVSAVES paused base match on the head: {"subsUsed":3,"subsLeft":2,"stopsLeft":3,"stopsUsed":0}; changes after load 75:taken 80:taken 85:refused; in-play minutes now [60,70,75,80]
