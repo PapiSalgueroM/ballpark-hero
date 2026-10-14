@@ -1,0 +1,4 @@
+#!serial
+pin-proof-oldtext: git show 512835e4:src/lib/clubManager.ts > src/lib/clubManager.ts && node scripts/simManagerAppealIsolation.mjs; s=$?; git checkout HEAD -- src; exit $s
+pin-head-stale: node scripts/simManagerAppealIsolation.mjs
+pin-hash: node -e "const c=require('crypto'),f=require('fs');console.log('LF sha256 of clubManager.ts on the head:',c.createHash('sha256').update(f.readFileSync('src/lib/clubManager.ts','utf8').replaceAll('\r\n','\n')).digest('hex'))"
