@@ -12,6 +12,11 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 assert(process.env.CI && process.env.SIM_NETWORK === 'offline', 'Documentary proof requires remote offline transport');
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..'), SELF = fileURLToPath(import.meta.url);
 const TEST = 'src/test/soccerCareerDocumentaryReview.test.ts', PARENT = '527ca178f6b3a0be194b7aeac09d412db49088d4';
+/* Release BF join: SC_DOCUMENTARY_CORE_REF (default PARENT) is the ref the unchanged app files are held to. The packet was proved on
+   an older tree; on a newer one the join names the tree without this packet (its merge's first parent), and the
+   files this packet fixes are still compared with PARENT. Here soccerCareerEngine.ts, soccerCareerSave.ts and
+   SoccerCareer.tsx (moved by Releases BB to BE) go to CORE_REF; Life and the rest of the chain stay with PARENT. */
+const CORE_REF = process.env.SC_DOCUMENTARY_CORE_REF || PARENT;
 const ENGINE = path.join(ROOT, 'src/lib/soccerCareerEngine.ts'), LIFE = path.join(ROOT, 'src/lib/soccerCareerLife.ts');
 const REALISM = path.join(ROOT, 'src/lib/soccerCareerRealismA.ts'), SAVE = path.join(ROOT, 'src/lib/soccerCareerSave.ts');
 const CONTRACTS = path.join(ROOT, 'src/lib/soccerCareerContracts.ts'), ROUTINE = path.join(ROOT, 'src/lib/soccerCareerRoutineEvents.ts');
@@ -65,7 +70,7 @@ function git(args) {
 const sourceHead = git(['rev-parse', 'HEAD']).trim(), parentLife = git(['show', `${PARENT}:src/lib/soccerCareerLife.ts`]);
 fs.writeFileSync(path.join(retained, 'soccerCareerLife.parent.ts'), parentLife);
 const parentBindings = app.map(file => {
-  const name = path.relative(ROOT, file).replaceAll('\\', '/'), before = git(['show', `${PARENT}:${name}`]);
+  const name = path.relative(ROOT, file).replaceAll('\\', '/'), before = git(['show', `${[ENGINE, SAVE, PAGE].includes(file) ? CORE_REF : PARENT}:${name}`]);
   if (RED || file !== LIFE) assert.equal(sources.get(file), before, 'Only fixed Life may differ from the whole held parent app');
   return { file: name, parentSha256: sha(before), candidateSha256: sha(sources.get(file)) };
 });
