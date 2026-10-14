@@ -5,10 +5,13 @@
    2026-10-13): until May 2020 a top division side could use three
    substitutes, whenever it liked (IFAB Law 3 as quoted in circular 20;
    ESPN 37630254). From May 2020 a competition could allow five in at most
-   three stoppages during play, with changes at half time, before extra time
-   and at half time in extra time not counting as one (IFAB circular 20,
+   three stoppages during play, with changes at half time not counting as
+   one and unused changes carried into extra time (IFAB circular 20,
    fifa.com 8 May 2020, STV), made permanent from 1 July 2022 (fifa.com 13
-   June 2022, CBS Sports).
+   June 2022, CBS Sports). Law 3 as it stands (theifab.com) also frees the
+   break before extra time and extra time's half time; the 2020 amendment
+   freed those two only where a competition allowed an extra change in
+   extra time (circular 20), which this round does not model.
 
    The leagues: Spain, Italy, Germany and France from 2020-21 (Inside World
    Football 18 December 2020, ESPN 4 August 2022); England stayed at three
@@ -22,8 +25,11 @@
 export interface SubsRule {
   /** Changes a side may make in the match. */
   subs: number;
-  /** Stoppages in play it may make them at; null means no limit. Breaks
-   *  (half time, before extra time, extra time's half time) never count. */
+  /** Stoppages in play it may make them at; null means no limit. The two
+   *  breaks the engine has (half time, and the break before extra time)
+   *  never count. Law 3 frees extra time's own half time too, but the engine
+   *  plays extra time's thirty minutes as one stretch with no such moment,
+   *  so a change at 105 counts as a stoppage (isBreakChange, clubManager.ts). */
   stops: number | null;
   /** True when the game could not confirm this league's rule for this
    *  season and plays three for want of a source. */

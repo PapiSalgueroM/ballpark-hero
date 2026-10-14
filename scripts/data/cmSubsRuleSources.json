@@ -14,16 +14,20 @@
       "line": "From May 2020 a competition could allow five substitutes in at most three opportunities during play, with changes at half time on top; unused changes carry into extra time.",
       "sources": [
         { "host": "inside.fifa.com", "url": "https://inside.fifa.com/en/news/five-substitutes-option-temporarily-allowed-for-competition-organisers", "published": "2020-05-08", "read": "2026-10-13", "quote": "Each team will be permitted to use a maximum of five substitutes. ... each team will only have three opportunities to make substitutions; substitutions may also be made at half-time." },
-        { "host": "news.stv.tv", "url": "https://news.stv.tv/sport/rule-change-allows-football-teams-five-substitutions-each", "published": "2020-05-08", "read": "2026-10-13", "quote": "Football's lawmakers have approved a temporary rule change that will allow each side up to five substitutions a match." }
-      ]
+        { "host": "news.stv.tv", "url": "https://news.stv.tv/sport/rule-change-allows-football-teams-five-substitutions-each", "published": "2020-05-08", "read": "2026-10-13", "quote": "Football's lawmakers have approved a temporary rule change that will allow each side up to five substitutions a match." },
+        { "host": "downloads.theifab.com", "url": "https://downloads.theifab.com/downloads/circular-20_2020", "published": "2020-07-15", "read": "2026-10-14", "quote": "Unused substitutions and opportunities are carried forward into extra time." }
+      ],
+      "note": "Round 1331 review (READ lens, minor 4): neither of the first two quotes says the carry into extra time; IFAB circular 20 does (read through pypdf on 2026-10-14), and Law 3 as it stands says the same (see breaksAreFree)."
     },
     {
       "id": "breaksAreFree",
-      "line": "A change at half time, before extra time or at half time in extra time does not use one of the three opportunities.",
+      "line": "Under Law 3 as it stands (five substitutes for good from 2022-23), a change at half time, between full time and extra time, or at half time in extra time does not use one of the three opportunities. Under the 2020 temporary amendment only half time was free, unless a competition allowed an extra change in extra time.",
       "sources": [
-        { "host": "downloads.theifab.com", "url": "https://downloads.theifab.com/downloads/circular-20_2020", "published": "2020-07-15", "read": "2026-10-13", "quote": "making substitutions at half-time does not count as using one of the three opportunities" },
-        { "host": "inside.fifa.com", "url": "https://inside.fifa.com/en/news/five-substitutes-option-temporarily-allowed-for-competition-organisers", "published": "2020-05-08", "read": "2026-10-13", "quote": "substitutions may also be made before the start of extra time and at half-time in extra time." }
-      ]
+        { "host": "theifab.com", "url": "https://www.theifab.com/laws/latest/the-players/", "published": "2026-07-01", "read": "2026-10-14", "quote": "Substitutions may also be made in the period between full-time and the start of extra time, and at half-time in extra time ... these do not count as used substitution opportunities" },
+        { "host": "downloads.theifab.com", "url": "https://downloads.theifab.com/downloads/circular-20_2020", "published": "2020-07-15", "read": "2026-10-14", "quote": "making substitutions at half-time does not count as using one of the three opportunities ... Where competition rules allow an additional substitution in extra time, teams will each have one additional substitution opportunity; substitutions may also be made before the start of extra time and at half-time in extra time." },
+        { "host": "inside.fifa.com", "url": "https://inside.fifa.com/en/news/five-substitutes-option-temporarily-allowed-for-competition-organisers", "published": "2020-05-08", "read": "2026-10-14", "quote": "Where competition rules allow an additional substitution in extra time, teams will each have one additional substitution opportunity; substitutions may also be made before the start of extra time and at half-time in extra time." }
+      ],
+      "note": "Round 1331 review (READ lens, minor 4): the fifa.com 2020 line frees the extra time breaks only under the extra change option, so it was quoted out of context; it is quoted whole now and Law 3 as it stands carries the unconditional line. The theifab.com page is /laws/latest/ (its season menu lists 2026/27 first and it shows no publication date; 2026-07-01 is that edition's start). The engine frees half time and the break before extra time in every five change season, 2020-21 and 2021-22 included, and has no extra time half time moment (clubManagerSubsRule.ts, SubsRule.stops)."
     },
     {
       "id": "fivePermanent2022",
