@@ -1,0 +1,20 @@
+#!build
+#!playwright
+headsha: git log --oneline -2
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/test/playerAutocompleteTouchScroll.test.tsx src/test/playerAutocompleteStale.test.tsx src/test/playerAutocompleteInteraction.test.tsx src/test/playerAutocompleteEmptyText.test.tsx src/test/playerSearchFailure.test.tsx src/test/dailySaveParity.test.tsx src/test/nbaCourtSelection.test.tsx src/test/noDoubleRecord.test.tsx src/test/scoreShown.test.tsx --testTimeout=300000 --hookTimeout=120000
+simTouch: export AUTOCOMPLETE_TOUCH_OUT=/tmp/ato1; NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simPlayerAutocompleteTouchScroll.mjs
+simTouch-ctl-pointerdown: export AUTOCOMPLETE_TOUCH_OUT=/tmp/ato2; AUTOCOMPLETE_TOUCH_CONTROL=pointerdown NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simPlayerAutocompleteTouchScroll.mjs > /tmp/ct.log 2>&1; s=$?; tail -4 /tmp/ct.log; [ $s = 0 ] && grep -q "pointerdown: green" /tmp/ct.log && grep -q "Effective pointerdown control" /tmp/ct.log && echo FIRED-OK
+simInteraction: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simPlayerAutocompleteInteraction.mjs
+simInteraction-ctls: f=0; for c in pointeronly unguard enabledoptions notag keeplist noenter anyenter topenter nodropcommit minchars leaveflight pickflight lateescape pickreopens stickypick deafreturn tapthrough greedyswallow zerotimer; do AUTOCOMPLETE_INTERACTION_CONTROL=$c NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simPlayerAutocompleteInteraction.mjs > /tmp/ci-$c.log 2>&1; s=$?; if [ $s = 0 ] && grep -q "$c control: .*rejected the changed component" /tmp/ci-$c.log; then echo "$c FIRED"; else echo "$c NOT-FIRED s=$s"; tail -3 /tmp/ci-$c.log; f=1; fi; done; exit $f
+playTouch: export AUTOCOMPLETE_TOUCH_OUT=/tmp/apt1 AUTOCOMPLETE_TOUCH_PHASE=fixed FREE_KICK_FONT_CACHE=/tmp/fc1; node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playPlayerAutocompleteTouchScroll.mjs
+playTouch-ctl: export AUTOCOMPLETE_TOUCH_OUT=/tmp/apt2 AUTOCOMPLETE_TOUCH_PHASE=fixed AUTOCOMPLETE_TOUCH_CONTROL=premature-pointerdown FREE_KICK_FONT_CACHE=/tmp/fc2; node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playPlayerAutocompleteTouchScroll.mjs > /tmp/pt.log 2>&1; s=$?; tail -4 /tmp/pt.log; [ $s = 0 ] && grep -q "playPlayerAutocompleteTouchScroll control-reproduced" /tmp/pt.log && echo FIRED-OK
+playRace: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playAutocompleteRace.mjs
+playRace-ctl-notag: AUTOCOMPLETE_RACE_CONTROL=notag NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playAutocompleteRace.mjs > /tmp/pr.log 2>&1; s=$?; tail -4 /tmp/pr.log; [ $s = 0 ] && grep -q "green, the race is there" /tmp/pr.log && echo FIRED-OK
+simPlayerSearchKeyboard: node scripts/simPlayerSearchKeyboard.mjs
+simPlayerSearchFailure: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simPlayerSearchFailure.mjs
+simMissingXi: node scripts/simMissingXi.mjs
+simNflGridPage: node scripts/simNflGridPage.mjs
+simCollegeGridPage: node scripts/simCollegeGridPage.mjs
+simLineupPositions: node scripts/simLineupPositions.mjs
+simValidatorCache: node scripts/simValidatorCache.mjs
