@@ -1,0 +1,5 @@
+kitC exit=0 54s | simEventDeck: green. Sections 14, 15, 16 only.
+kit13 exit=0 143s | simEventDeck: green. Sections 13 only.
+kctl1416 exit=0 117s | kctl: every control exited 1 and fired
+newpack15 exit=1 47s | simEventDeck: 2 failures, red sections 15 (CONTROL=newpack fired)
+kctl13 exit=0 314s | kctl: every control exited 1 and fired
