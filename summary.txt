@@ -1,0 +1,25 @@
+simSoccerCareerPendingPopularity exit=1 6s | Node.js v24.21.0
+simSoccerCareerPendingPopularity-ctl-pending exit=0 7s | FIRED-OK
+vitest exit=1 17s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js,title=src/test/soccerCareerStatRewards.test.ts > Soccer Career stat rewards an
+simSoccerCareerPendingPopularity-ctl-preview exit=0 5s | FIRED-OK
+simSoccerCareerPendingPopularity-ctl-legacy exit=0 5s | FIRED-OK
+simSoccerCareerRoutineEvents exit=0 9s | simSoccerCareerRoutineEvents normal: green. All exact outcome and source guards passed.
+simSoccerCareerLifeReviews exit=0 5s | simSoccerCareerLifeReviews normal: green. Exact causal outcome and source guards passed.
+simSoccerCareerStatRewards exit=0 9s | simSoccerCareerStatRewards normal: green. Exact source and outcome guards passed.
+simSoccerCareerPendingLife exit=0 11s | simSoccerCareerPendingLife normal: green. Exact source and outcome guards passed.
+simSoccerCareerPendingMorale exit=1 5s | Node.js v24.21.0
+simSoccerCareerColdContext exit=0 5s | simSoccerCareerColdContext normal: green.
+simCareerLife exit=0 33s | simCareerLife: green. Every peak is reachable, the critic has an opinion and it is about the football, and nothing about either of them is on the save.
+tsc exit=0 105s | 
+simCareerStory exit=0 37s | simCareerStory: GREEN, 96 careers keep every season's lines in order, draw nothing and stay inside the size bands
+simCareerLifeCooldowns exit=0 73s | simCareerLifeCooldowns: green. No event repeats inside its cooldown, every new event fires, the rate held, and the catalog has two real choices everywhere.
+simNoInventedQuotes exit=0 38s | simNoInventedQuotes: green. No real player is quoted or accused anywhere.
+simHarnessAnchors exit=1 59s | simHarnessAnchors: 1 failure(s)
+simCareerProgramme exit=0 100s | Career programme:50 original/compatibility/full product season pairs with exact RNG,240 opted gameplay seasons,21 effective loaded faults,163 unchanged chance outcomes an
+simNoRivalNames exit=0 15s | No rival product names found. 0 findings.
+simCareerDilemmaReach exit=0 77s | simCareerDilemmaReach: all green
+simSoccerDeckFairness exit=0 86s | simSoccerDeckFairness: all sections green
+simSoccerCareerColdContext-ctl-original exit=0 3s | FIRED-OK
+coldReplay exit=1 5s | Node.js v24.21.0
+worldTruth exit=0 71s | simSoccerWorldTruth: OK, every section green
+simCreation exit=0 379s | ALL CREATION CHECKS PASSED
