@@ -13,6 +13,7 @@ import { spawn, execFileSync } from 'node:child_process';
 import { createRequire } from 'node:module';
 import { fileURLToPath } from 'node:url';
 import pw from './lib/playwrightLoader.mjs';
+import { keyedObserverProblems, keyedInputProblems, KEYED_KIND } from './lib/keyedPicker1327.mjs';
 
 assert(process.env.CI && process.env.SIM_NETWORK === 'offline', 'Documentary browser requires remote offline CI.');
 assert(process.env.CAREER_DOCUMENTARY_PHASE === 'fixed', 'Only the qualified fixed model may supply these actual review cards.');
@@ -137,19 +138,24 @@ function verifyDelivery(delivery, name, targets, priority) {
       && context.eventLastFired['story:squadChatLeak'] === 2027 && year(context) === 2030, name + ': repeat continuation must preserve the real cooled220 history.');
   }
   const input = witness.input, prefix = pickerPrefix(context), firstComparison = prefix.length + 1;
-  setup(input?.mode === 'controlled-sort-vector' && JSON.stringify(input.prefix) === JSON.stringify(prefix)
-    && input.drawCount === input.draws.length && input.drawCount > prefix.length
-    && JSON.stringify(input.draws.slice(0, prefix.length)) === JSON.stringify(prefix.map(row => row.value))
-    && Array.isArray(witness.comparisons) && witness.comparisons.length > 0, name + ': complete legal picker input vector is required.');
-  const ordinals = new Set(), rank = id => priority && id === 631 ? 100000 : targets.includes(id) ? targets.indexOf(id) : targets.length + id;
-  for (const [index, row] of witness.comparisons.entries()) {
-    const value = rank(row.a) < rank(row.b) ? 0.01 : rank(row.a) > rank(row.b) ? 0.99 : 0.5;
-    setup(Number.isInteger(row.a) && Number.isInteger(row.b) && Number.isInteger(row.ordinal) && row.ordinal >= firstComparison
-      && row.ordinal <= input.drawCount && !ordinals.has(row.ordinal) && (index === 0 ? row.ordinal === firstComparison : row.ordinal > witness.comparisons[index - 1].ordinal)
-      && row.aRank === rank(row.a) && row.bRank === rank(row.b) && row.value === value && input.draws[row.ordinal - 1] === value,
-      name + ': actual comparator IDs, ranks, value or original ordinal differs.'); ordinals.add(row.ordinal);
+  if (input?.mode === KEYED_KIND) {
+    const inputProblems = keyedInputProblems(witness, []);
+    setup(inputProblems.length === 0, name + ': keyed picker input witness differs: ' + inputProblems.join('; '));
+  } else {
+    setup(input?.mode === 'controlled-sort-vector' && JSON.stringify(input.prefix) === JSON.stringify(prefix)
+      && input.drawCount === input.draws.length && input.drawCount > prefix.length
+      && JSON.stringify(input.draws.slice(0, prefix.length)) === JSON.stringify(prefix.map(row => row.value))
+      && Array.isArray(witness.comparisons) && witness.comparisons.length > 0, name + ': complete legal picker input vector is required.');
+    const ordinals = new Set(), rank = id => priority && id === 631 ? 100000 : targets.includes(id) ? targets.indexOf(id) : targets.length + id;
+    for (const [index, row] of witness.comparisons.entries()) {
+      const value = rank(row.a) < rank(row.b) ? 0.01 : rank(row.a) > rank(row.b) ? 0.99 : 0.5;
+      setup(Number.isInteger(row.a) && Number.isInteger(row.b) && Number.isInteger(row.ordinal) && row.ordinal >= firstComparison
+        && row.ordinal <= input.drawCount && !ordinals.has(row.ordinal) && (index === 0 ? row.ordinal === firstComparison : row.ordinal > witness.comparisons[index - 1].ordinal)
+        && row.aRank === rank(row.a) && row.bRank === rank(row.b) && row.value === value && input.draws[row.ordinal - 1] === value,
+        name + ': actual comparator IDs, ranks, value or original ordinal differs.'); ordinals.add(row.ordinal);
+    }
+    setup(input.draws.every((value, index) => ordinals.has(index + 1) || (index < prefix.length && value === prefix[index].value)), name + ': unowned picker draw supplied.');
   }
-  setup(input.draws.every((value, index) => ordinals.has(index + 1) || (index < prefix.length && value === prefix[index].value)), name + ': unowned picker draw supplied.');
   const { observed, replay } = witness;
   setup(observed && replay && replay.consumed === input.drawCount && JSON.stringify(observed.draws) === JSON.stringify(input.draws)
     && JSON.stringify(replay.draws) === JSON.stringify(input.draws) && JSON.stringify(observed.rawBatch) === JSON.stringify(replay.rawBatch)
@@ -322,23 +328,27 @@ try {
   setup(fixtures.source.parentLifeSourcePath === 'fixed/soccerCareerLife.parent.ts' && fixtures.source.parentLifeSha256 === sha(execFileSync('git', ['show', PARENT + ':src/lib/soccerCareerLife.ts'], { cwd: ROOT })), 'Actual parent Life source differs.');
   physical(fixtures.source.parentLifeSourcePath, fixtures.source.parentLifeSha256, parentFiles); report.parentReceipts = parentFiles.map(({ filename, ...value }) => value);
   const observer = fixtures.source.pickerObserver, normalPath = 'fixed/source.json', normal = JSON.parse(fs.readFileSync(path.join(ARTIFACTS, normalPath), 'utf8'));
-  setup(observer.kind === 'read-only-sort-comparisons' && observer.file === 'src/lib/soccerCareerEngine.ts' && observer.anchor === PICKER_ANCHOR && observer.replacement === PICKER_OBSERVER,
+  /* Release BF join: a fixture dealt on Round 1327's keyed deck carries a keyed receipt (scripts/lib/keyedPicker1327.mjs). */
+  setup(observer?.kind === KEYED_KIND ? keyedObserverProblems(observer, fs.readFileSync(path.join(ROOT, 'src/lib/soccerCareerEngine.ts'), 'utf8')).length === 0 : observer.kind === 'read-only-sort-comparisons' && observer.file === 'src/lib/soccerCareerEngine.ts' && observer.anchor === PICKER_ANCHOR && observer.replacement === PICKER_OBSERVER,
     'Only the disclosed read-only comparator observer may select picker inputs.');
   setup(normal.arm === 'fixed' && normal.status === 'complete' && normal.sourceHead === report.sourceHead && normal.parentAppRef === PARENT
     && normal.exitCode === 0 && normal.processError === null && normal.processSignal === null && normal.methodError === undefined && normal.actualSourceEdits.length === 0
     && normal.fixtures.file === 'browser-fixtures.json' && normal.fixtures.sha256 === fixtureHash && normal.fixtures.scenarios === 4
     && normal.fixtures.actualPickerBatches === 5 && normal.fixtures.actualAnswers === 6 && normal.fixtures.actualLaterSeasons === 4
     && JSON.stringify(normal.pickerObserver) === JSON.stringify(observer), 'Completed normal model receipts differ or credit a source fault.');
-  for (const [field, digest, file] of [['originalSourcePath', 'originalSha256', 'fixed/soccerCareerEngine.picker-original.ts'],
+  for (const [field, digest, file] of (observer?.kind === KEYED_KIND ? [['plainCompiledPath', 'plainCompiledSha256', 'fixed/engine.mjs']] : [['originalSourcePath', 'originalSha256', 'fixed/soccerCareerEngine.picker-original.ts'],
     ['observedSourcePath', 'observedSha256', 'fixed/soccerCareerEngine.picker-observed.ts'], ['compiledPath', 'compiledSha256', 'fixed/engine-picker-observed.mjs'],
-    ['plainCompiledPath', 'plainCompiledSha256', 'fixed/engine.mjs']]) { setup(observer[field] === file, 'Picker physical path differs.'); physical(file, observer[digest], pickerFiles); }
+    ['plainCompiledPath', 'plainCompiledSha256', 'fixed/engine.mjs']])) { setup(observer[field] === file, 'Picker physical path differs.'); physical(file, observer[digest], pickerFiles); }
   physical(normalPath, fileHash(path.join(ARTIFACTS, normalPath)), pickerFiles); report.pickerReceipts = pickerFiles.map(({ filename, ...value }) => value);
-  const original = fs.readFileSync(path.join(ARTIFACTS, observer.originalSourcePath), 'utf8'), observed = fs.readFileSync(path.join(ARTIFACTS, observer.observedSourcePath), 'utf8');
-  setup(original === fs.readFileSync(path.join(ROOT, observer.file), 'utf8') && original.split(PICKER_ANCHOR).length === 2 && observed.split(PICKER_OBSERVER).length === 2
-    && original.replace(PICKER_ANCHOR, PICKER_OBSERVER) === observed && observed.replace(PICKER_OBSERVER, PICKER_ANCHOR) === original
-    && observer.originalSha256 !== observer.observedSha256, 'Read-only observer must invert to every actual engine byte.');
-  setup(normal.compiled.length === 6 && normal.compiled.some(file => file.file === 'engine.mjs' && file.sha256 === observer.plainCompiledSha256)
-    && normal.compiled.some(file => file.file === 'engine-picker-observed.mjs' && file.sha256 === observer.compiledSha256)
+  if (observer?.kind !== KEYED_KIND) {
+    const original = fs.readFileSync(path.join(ARTIFACTS, observer.originalSourcePath), 'utf8'), observed = fs.readFileSync(path.join(ARTIFACTS, observer.observedSourcePath), 'utf8');
+    setup(original === fs.readFileSync(path.join(ROOT, observer.file), 'utf8') && original.split(PICKER_ANCHOR).length === 2 && observed.split(PICKER_OBSERVER).length === 2
+      && original.replace(PICKER_ANCHOR, PICKER_OBSERVER) === observed && observed.replace(PICKER_OBSERVER, PICKER_ANCHOR) === original
+      && observer.originalSha256 !== observer.observedSha256, 'Read-only observer must invert to every actual engine byte.');
+  }
+  setup((observer?.kind === KEYED_KIND ? normal.compiled.every(file => file.file !== 'engine-picker-observed.mjs')
+      : normal.compiled.length === 6 && normal.compiled.some(file => file.file === 'engine-picker-observed.mjs' && file.sha256 === observer.compiledSha256))
+    && normal.compiled.some(file => file.file === 'engine.mjs' && file.sha256 === observer.plainCompiledSha256)
     && normal.sourceReceipts.every(value => value.beforeSha256 === value.afterSha256), 'Actual original and compiled model receipts are not held.');
   const progressPath = 'fixed/fixture-progress.json', progress = JSON.parse(fs.readFileSync(path.join(ARTIFACTS, progressPath), 'utf8'));
   report.modelProgress = { file: progressPath, sha256: fileHash(path.join(ARTIFACTS, progressPath)), acquisitions: progress.acquisitions.length, answers: progress.answers.length, seasons: progress.seasons.length };
