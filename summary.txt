@@ -1,0 +1,11 @@
+wr-main exit=1 54s | simWritesAreSent: 2 failures
+w-26eadaaa exit=0 71s | sweepWeight: green. Every page is inside its budget, and the budgets came down this round.
+w-082fc277 exit=0 72s | sweepWeight: green. Every page is inside its budget, and the budgets came down this round.
+w-b9df63b4 exit=0 61s | sweepWeight: green. Every page is inside its budget, and the budgets came down this round.
+w-b59ebe2b exit=0 66s | sweepWeight: green. Every page is inside its budget, and the budgets came down this round.
+w-39002b4a exit=0 70s | sweepWeight: 1 failure
+w-deff8654 exit=0 59s | sweepWeight: 1 failure
+w-fa1c45d9 exit=0 64s | sweepWeight: green. Every page is inside its budget, and the budgets came down this round.
+w-10a471fa exit=0 65s | sweepWeight: green. Every page is inside its budget, and the budgets came down this round.
+w-10b074f6 exit=0 60s | sweepWeight: green. Every page is inside its budget, and the budgets came down this round.
+w-9ddfd45d exit=0 55s | sweepWeight: green. Every page is inside its budget, and the budgets came down this round.
