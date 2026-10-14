@@ -1,0 +1,5 @@
+build exit=0 33s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+headsha exit=0 0s | 4ad390d5a Round BEG: the packed Soccer Career save is read by every reader of its key (walk and unit test)
+fixtures exit=0 12s | Prepared 9 declared font dependencies for local fulfillment.
+playSaveSize exit=0 23s | playSoccerCareerSaveSize: 168 checks, 0 failed, 0 external requests forwarded
+playSaveReaders exit=0 5s | playSoccerSaveReaders: green, 18 checks at 390 and 1280 on career 228-GK-playing (119964 characters raw, 46912 stored), 0 failures.
