@@ -1,0 +1,2 @@
+morale exit=0 5s | 223-choice1 keyed-deck-name-search 276
+popularity exit=0 6s | 233-choice0 keyed-deck-name-search 68
