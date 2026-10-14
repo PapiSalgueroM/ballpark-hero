@@ -9,7 +9,8 @@ import { spawnSync, execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 assert(process.env.CI && process.env.SIM_NETWORK === 'offline', 'Live lineup proof requires remote offline CI.');
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const PARENT = '082fc2774c8aa9f919c14efa33bfc3fbfc599597', READER = 'src/lib/clubManagerLiveLineups.ts';
+/* Release BE join (Round BEG): CM_HT_PARENT_REF names the tree without this packet on a newer core (the BE join passes the first parent of its m6 merge); 082fc277 on the packet branch. */
+const PARENT = process.env.CM_HT_PARENT_REF || '082fc2774c8aa9f919c14efa33bfc3fbfc599597', READER = 'src/lib/clubManagerLiveLineups.ts';
 const CORE = 'src/lib/clubManager.ts', TEST = 'src/test/managerLiveLineups.test.ts';
 const titles = [
   'actual starting sides keep slot identities and OVR',

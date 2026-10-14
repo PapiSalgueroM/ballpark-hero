@@ -9,7 +9,8 @@ import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 assert(process.env.CI && process.env.SIM_NETWORK === 'offline', 'Halftime proof requires remote offline CI.');
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const PARENT = '082fc2774c8aa9f919c14efa33bfc3fbfc599597';
+/* Release BE join (Round BEG): CM_HT_PARENT_REF names the tree without this packet on a newer core (the BE join passes the first parent of its m6 merge); 082fc277 on the packet branch. */
+const PARENT = process.env.CM_HT_PARENT_REF || '082fc2774c8aa9f919c14efa33bfc3fbfc599597';
 const TEST = 'src/test/managerHalftimeLineups.test.tsx', COMPONENT = 'src/components/club-manager/HalftimeScreen.tsx';
 const CORE = 'src/lib/clubManager.ts', CONTROL = process.env.CM_HT_LINEUPS_CONTROL || '';
 const RED = process.env.CM_HT_LINEUPS_EXPECT_RED === '1';

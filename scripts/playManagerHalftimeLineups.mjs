@@ -18,7 +18,8 @@ assert(process.env.CI && process.env.SIM_NETWORK === 'offline' && process.env.CM
 assert(process.env.CM_HT_LINEUPS_OUT && path.isAbsolute(process.env.CM_HT_LINEUPS_OUT), 'An absolute CM_HT_LINEUPS_OUT is required.');
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..'), ARTIFACTS = process.env.CM_HT_LINEUPS_OUT;
 const MODEL = path.join(ARTIFACTS, 'fixed'), OUT = path.join(ARTIFACTS, 'browser'), KEY = 'dukb-club-manager-save';
-const PARENT = '082fc2774c8aa9f919c14efa33bfc3fbfc599597', NOW = Date.parse('2026-10-14T00:00:00Z');
+/* Release BE join (Round BEG): CM_HT_PARENT_REF names the tree without this packet on a newer core (the BE join passes the first parent of its m6 merge); 082fc277 on the packet branch. */
+const PARENT = process.env.CM_HT_PARENT_REF || '082fc2774c8aa9f919c14efa33bfc3fbfc599597', NOW = Date.parse('2026-10-14T00:00:00Z');
 const PROFILES = [{ width: 320, height: 568 }, { width: 390, height: 844 }, { width: 1280, height: 800 }];
 const SOURCE_FILES = ['src/components/club-manager/HalftimeScreen.tsx', 'src/lib/clubManager.ts', 'src/lib/clubManagerClock.ts',
   'src/components/club-manager/TeamTalkRow.tsx', 'src/hooks/useRevealScroll.ts', 'src/test/liveSimMotion.test.tsx',
