@@ -1,0 +1,4 @@
+   FAIL playPitchRestartContinuity.mjs reads src/components/pitch-motion/motion.tsx raw at line 147 and searches it with a multi line anchor (line 19), so on a CRLF checkout it matches nothing (3 raw reads in all)
+   FAIL playPlayerAutocompleteTouchScroll.mjs reads src/components/game/PlayerAutocomplete.tsx raw at line 29 and searches it with a multi line anchor (line 66), so on a CRLF checkout it matches nothing
+   FAIL simPitchRestartContinuity.mjs reads src/components/pitch-motion/motion.tsx raw at line 50 and searches it with a multi line anchor (line 26), so on a CRLF checkout it matches nothing
+simHarnessAnchors: 3 failure(s)

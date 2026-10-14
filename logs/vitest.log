@@ -1,0 +1,15 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/lib/clubManagerCustomPromotion.test.ts [2m([22m[2m13 tests[22m[2m)[22m[33m 3346[2mms[22m[39m
+   [33m[2m✓[22m[39m created clubs use the existing modern promotion slots[2m > [22mpromotes created champions in every configured pair while preserving all real clubs [33m 599[2mms[22m[39m
+   [33m[2m✓[22m[39m created clubs use the existing modern promotion slots[2m > [22mpromotes an ordinary champion through the same existing slots [33m 447[2mms[22m[39m
+   [33m[2m✓[22m[39m created clubs use the existing modern promotion slots[2m > [22mkeeps qualified non-English created clubs apart from their domestic opponents in Europe [33m 1031[2mms[22m[39m
+ [32m✓[39m src/test/soccerCareerAwardGenerations.test.tsx [2m([22m[2m31 tests[22m[2m)[22m[33m 2168[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career generated-candidate save boundaries[2m > [22mholds complete legacy pool and old pending ballot over actual page reload [33m 321[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m2 passed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[32m44 passed[39m[22m[90m (44)[39m
+[2m   Start at [22m 17:42:00
+[2m   Duration [22m 6.35s[2m (transform 3.45s, setup 114ms, collect 5.36s, tests 5.51s, environment 688ms, prepare 318ms)[22m
+

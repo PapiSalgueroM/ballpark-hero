@@ -1,0 +1,15 @@
+headsha exit=0 0s | 5ddc9df5b Round BEG: the award generations test reads the Soccer Career save through parseSoccerCareerSave
+tsc exit=0 64s | 
+vitest exit=0 7s |    Duration  6.35s (transform 3.45s, setup 114ms, collect 5.36s, tests 5.51s, environment 688ms, prepare 318ms)
+simCmLeagueRules exit=0 47s | simCmLeagueRules: all checks passed (modern, eras, pure, drop4, cupless, shapes, chunks)
+simHarnessAnchors exit=0 39s | simHarnessAnchors: 3 failure(s)
+touch exit=0 2s | simPlayerAutocompleteTouchScroll normal: green.
+touch-ctl-pointerdown exit=0 2s | FIRED-OK
+deadline exit=0 5s | simClubManagerDecisionDeadline normal: green.
+deadline-ctl-late exit=0 5s | FIRED-OK
+roster exit=0 3s | simClubDetailCurrentRoster normal: green.
+roster-ctl-original exit=0 3s | FIRED-OK
+htLineups exit=0 4s | simManagerHalftimeLineups normal: green.
+htLineups-ctl-original exit=0 4s | FIRED-OK
+award exit=0 922s | PASS simSoccerAwardGenerations: saved generated identities, aging, turnover and raw recovery
+reportControls exit=0 33s | Manager report controls: 5/5 effective faults, source restored=true
