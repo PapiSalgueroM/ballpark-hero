@@ -1,0 +1,9 @@
+#!serial
+dig-proof-old: git show b16b3488^:scripts/data/cmLeagueRulesDigest.json > scripts/data/cmLeagueRulesDigest.json && node .rc/x/mutOldEngine.mjs && node scripts/simCmLeagueRules.mjs; s=$?; git checkout HEAD -- src scripts; exit $s
+dig-proof-ctl: git show b16b3488^:scripts/data/cmLeagueRulesDigest.json > scripts/data/cmLeagueRulesDigest.json && node scripts/simCmLeagueRules.mjs; s=$?; git checkout HEAD -- src scripts; exit $s
+dig-retake: node scripts/simCmLeagueRules.mjs --part=modern,eras,pure --write && cp scripts/data/cmLeagueRulesDigest.json $RC_OUT/cmLeagueRulesDigest.json && git diff --exit-code --stat -- scripts/data/cmLeagueRulesDigest.json; s=$?; git checkout HEAD -- scripts; exit $s
+dig-head: node scripts/simCmLeagueRules.mjs
+dd-proof-both: node .rc/x/mutDailiesBase.mjs both && node scripts/simDailyDeals.mjs --print --verify > $RC_OUT/dd-both.txt; s=$?; tail -1 $RC_OUT/dd-both.txt; git checkout HEAD -- src scripts; exit $s
+dd-proof-digests: node .rc/x/mutDailiesBase.mjs digests && node scripts/simDailyDeals.mjs --print --verify > $RC_OUT/dd-digests.txt; s=$?; tail -1 $RC_OUT/dd-digests.txt; git checkout HEAD -- src scripts; exit $s
+dd-retake: node scripts/simDailyDeals.mjs --print --verify > $RC_OUT/dd-head.txt; s=$?; tail -1 $RC_OUT/dd-head.txt; exit $s
+dd-plain: node scripts/simDailyDeals.mjs
