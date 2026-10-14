@@ -2005,7 +2005,9 @@ if (runs(15)) {
    src/lib/gmInbox.ts: 28,478 B LF, 8,160 B minified, 3,298 B gzipped on
    the base (082fc277) and 52,759 B LF, 16,233 B minified, 6,106 B gzipped
    here; bundled with what it pulls in (careerInbox's answer flow,
-   careerEventDeck's ledger, keyedRng), 16,891 B and 6,379 B. */
+   careerEventDeck's ledger, keyedRng), 16,891 B and 6,379 B. After the
+   review fix pass (rc r1332-fx-c, ba06f054): 57,375 B LF, 17,087 B
+   minified, 6,350 B gzipped; bundled 17,742 B and 6,627 B. */
 const LAZY_IMPORTERS = [];
 if (runs(16)) {
   console.log('16) Bytes and lazy: bytes per event, and nothing that is not the deck imports it eagerly');
