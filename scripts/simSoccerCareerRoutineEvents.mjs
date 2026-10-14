@@ -261,7 +261,8 @@ async function actualPickerAndFixtures(directory) {
       const startingSeason = nextPlaying(prepared).state;
       let acquisitionBatch = null, acquisitionSeed = null;
       for (let seed = 0; seed < 2048; seed++) {
-        const candidate = draw(startingSeason, 60000 + acquisitionId * 2048 + seed);
+        /* Release BF join: with the keyed deck (Round 1327) each attempt is the fixture under its own name, as in the picker loop above. */
+        const candidate = draw(KEYED ? { ...startingSeason, playerName: `Routine Followup Fixture ${seed}` } : startingSeason, 60000 + acquisitionId * 2048 + seed);
         if (candidate.phase === 'random_events' && candidate.pendingEvents[0]?.id === acquisitionId) {
           acquisitionBatch = canonical(candidate); acquisitionSeed = 60000 + acquisitionId * 2048 + seed; break;
         }
