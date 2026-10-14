@@ -13,6 +13,7 @@ import { spawn, execFileSync } from 'node:child_process';
 import { createRequire } from 'node:module';
 import { fileURLToPath } from 'node:url';
 import pw from './lib/playwrightLoader.mjs';
+import { keyedObserverProblems, keyedInputProblems, KEYED_KIND } from './lib/keyedPicker1327.mjs';
 
 assert(process.env.CI && process.env.SIM_NETWORK === 'offline', 'Soccer pending-popularity browser execution requires remote offline CI.');
 assert(process.env.CAREER_POPULARITY_PHASE === 'fixed', 'This actual browser proof requires the qualified fixed phase.');
@@ -443,46 +444,70 @@ try {
   }
   report.parentReceipts = parentFiles.map(({ filename, ...receipt }) => receipt);
   const pickerObserver = fixtures.source.pickerObserver;
-  setup(pickerObserver?.kind === 'read-only-sort-comparisons' && pickerObserver.file === 'src/lib/soccerCareerEngine.ts'
-    && pickerObserver.anchor === PICKER_ANCHOR && pickerObserver.replacement === PICKER_OBSERVER,
-    'Only the independently declared read-only comparison observer may produce the fixture inputs.');
-  const normalSourcePath = 'fixed/source.json', normalSourceFile = path.join(ARTIFACTS, normalSourcePath);
-  const normalSource = JSON.parse(fs.readFileSync(normalSourceFile, 'utf8'));
-  setup(normalSource.arm === 'fixed' && normalSource.sourceHead === report.sourceHead && normalSource.exitCode === 0
-    && normalSource.processError === null && normalSource.processSignal === null && normalSource.actualSourceEdits.length === 0
-    && normalSource.methodError === undefined && normalSource.fixtures?.file === 'browser-fixtures.json'
-    && normalSource.fixtures.sha256 === fixtureHash && normalSource.fixtures.actualPickerScenarios === 3
-    && normalSource.fixtures.actualPickerBatches === 2 && normalSource.fixtures.actualAnswers === 5
-    && JSON.stringify(normalSource.pickerObserver) === JSON.stringify(pickerObserver),
-    'The held normal model must record completed plain units and the same separate copied observer.');
-  const plainCompile = normalSource.compiled.filter(entry => entry.file === 'engine.mjs');
-  const observerCompile = normalSource.compiled.filter(entry => entry.file === 'engine-picker-observed.mjs');
-  const engineBinding = normalSource.sourceReceipts.filter(entry => entry.file === 'src/lib/soccerCareerEngine.ts');
-  setup(normalSource.compiled.length === 6 && plainCompile.length === 1 && observerCompile.length === 1
-    && plainCompile[0].sha256 === pickerObserver.plainCompiledSha256 && observerCompile[0].sha256 === pickerObserver.compiledSha256
-    && engineBinding.length === 1 && engineBinding[0].beforeSha256 === fixtures.source.engineSha256
-    && engineBinding[0].afterSha256 === fixtures.source.engineSha256,
-    'Normal source and compiled receipts must bind the unchanged plain picker separately from its observed copy.');
-  for (const [field, digest, relative] of [
-    ['originalSourcePath', 'originalSha256', 'fixed/soccerCareerEngine.picker-original.ts'],
-    ['observedSourcePath', 'observedSha256', 'fixed/soccerCareerEngine.picker-observed.ts'],
-    ['compiledPath', 'compiledSha256', 'fixed/engine-picker-observed.mjs'],
-    ['plainCompiledPath', 'plainCompiledSha256', 'fixed/engine.mjs']]) {
-    setup(pickerObserver[field] === relative, field + ': retained picker witness location differs.');
-    const filename = path.join(ARTIFACTS, relative);
-    setup(fileHash(filename) === pickerObserver[digest], relative + ': physical picker witness hash differs.');
-    pickerFiles.push({ file: relative, filename, bytes: fs.statSync(filename).size, sha256: fileHash(filename) });
+  /* Release BF join: a fixture dealt on Round 1327's keyed deck carries a keyed receipt (scripts/lib/keyedPicker1327.mjs). */
+  const keyedDeck = pickerObserver?.kind === KEYED_KIND;
+  if (keyedDeck) {
+    const keyedProblems = keyedObserverProblems(pickerObserver, fs.readFileSync(path.join(ROOT, 'src/lib/soccerCareerEngine.ts'), 'utf8'));
+    setup(keyedProblems.length === 0, 'The keyed deck receipt differs: ' + keyedProblems.join('; '));
+    const normalSourcePath = 'fixed/source.json', normalSourceFile = path.join(ARTIFACTS, normalSourcePath);
+    const normalSource = JSON.parse(fs.readFileSync(normalSourceFile, 'utf8'));
+    setup(normalSource.arm === 'fixed' && normalSource.sourceHead === report.sourceHead && normalSource.exitCode === 0
+      && normalSource.processError === null && normalSource.processSignal === null && normalSource.actualSourceEdits.length === 0
+      && normalSource.methodError === undefined && JSON.stringify(normalSource.pickerObserver) === JSON.stringify(pickerObserver),
+      'The held normal model must record completed plain units and the same keyed receipt.');
+    const plainCompile = normalSource.compiled.filter(entry => entry.file === 'engine.mjs');
+    const engineBinding = normalSource.sourceReceipts.filter(entry => entry.file === 'src/lib/soccerCareerEngine.ts');
+    setup(plainCompile.length === 1 && plainCompile[0].sha256 === pickerObserver.plainCompiledSha256
+      && normalSource.compiled.every(entry => entry.file !== 'engine-picker-observed.mjs')
+      && engineBinding.length === 1 && engineBinding[0].beforeSha256 === fixtures.source.engineSha256
+      && engineBinding[0].afterSha256 === fixtures.source.engineSha256,
+      'Normal receipts must bind the unchanged plain picker and no observed copy.');
+    const plainFile = path.join(ARTIFACTS, pickerObserver.plainCompiledPath);
+    setup(fileHash(plainFile) === pickerObserver.plainCompiledSha256, 'fixed/engine.mjs: physical plain picker hash differs.');
+    pickerFiles.push({ file: pickerObserver.plainCompiledPath, filename: plainFile, bytes: fs.statSync(plainFile).size, sha256: fileHash(plainFile) });
+    pickerFiles.push({ file: normalSourcePath, filename: normalSourceFile, bytes: fs.statSync(normalSourceFile).size, sha256: fileHash(normalSourceFile) });
+  } else {
+    setup(pickerObserver?.kind === 'read-only-sort-comparisons' && pickerObserver.file === 'src/lib/soccerCareerEngine.ts'
+      && pickerObserver.anchor === PICKER_ANCHOR && pickerObserver.replacement === PICKER_OBSERVER,
+      'Only the independently declared read-only comparison observer may produce the fixture inputs.');
+    const normalSourcePath = 'fixed/source.json', normalSourceFile = path.join(ARTIFACTS, normalSourcePath);
+    const normalSource = JSON.parse(fs.readFileSync(normalSourceFile, 'utf8'));
+    setup(normalSource.arm === 'fixed' && normalSource.sourceHead === report.sourceHead && normalSource.exitCode === 0
+      && normalSource.processError === null && normalSource.processSignal === null && normalSource.actualSourceEdits.length === 0
+      && normalSource.methodError === undefined && normalSource.fixtures?.file === 'browser-fixtures.json'
+      && normalSource.fixtures.sha256 === fixtureHash && normalSource.fixtures.actualPickerScenarios === 3
+      && normalSource.fixtures.actualPickerBatches === 2 && normalSource.fixtures.actualAnswers === 5
+      && JSON.stringify(normalSource.pickerObserver) === JSON.stringify(pickerObserver),
+      'The held normal model must record completed plain units and the same separate copied observer.');
+    const plainCompile = normalSource.compiled.filter(entry => entry.file === 'engine.mjs');
+    const observerCompile = normalSource.compiled.filter(entry => entry.file === 'engine-picker-observed.mjs');
+    const engineBinding = normalSource.sourceReceipts.filter(entry => entry.file === 'src/lib/soccerCareerEngine.ts');
+    setup(normalSource.compiled.length === 6 && plainCompile.length === 1 && observerCompile.length === 1
+      && plainCompile[0].sha256 === pickerObserver.plainCompiledSha256 && observerCompile[0].sha256 === pickerObserver.compiledSha256
+      && engineBinding.length === 1 && engineBinding[0].beforeSha256 === fixtures.source.engineSha256
+      && engineBinding[0].afterSha256 === fixtures.source.engineSha256,
+      'Normal source and compiled receipts must bind the unchanged plain picker separately from its observed copy.');
+    for (const [field, digest, relative] of [
+      ['originalSourcePath', 'originalSha256', 'fixed/soccerCareerEngine.picker-original.ts'],
+      ['observedSourcePath', 'observedSha256', 'fixed/soccerCareerEngine.picker-observed.ts'],
+      ['compiledPath', 'compiledSha256', 'fixed/engine-picker-observed.mjs'],
+      ['plainCompiledPath', 'plainCompiledSha256', 'fixed/engine.mjs']]) {
+      setup(pickerObserver[field] === relative, field + ': retained picker witness location differs.');
+      const filename = path.join(ARTIFACTS, relative);
+      setup(fileHash(filename) === pickerObserver[digest], relative + ': physical picker witness hash differs.');
+      pickerFiles.push({ file: relative, filename, bytes: fs.statSync(filename).size, sha256: fileHash(filename) });
+    }
+    pickerFiles.push({ file: normalSourcePath, filename: normalSourceFile, bytes: fs.statSync(normalSourceFile).size, sha256: fileHash(normalSourceFile) });
+    const originalPicker = fs.readFileSync(path.join(ARTIFACTS, pickerObserver.originalSourcePath), 'utf8');
+    const observedPicker = fs.readFileSync(path.join(ARTIFACTS, pickerObserver.observedSourcePath), 'utf8');
+    setup(pickerObserver.originalSha256 === fixtures.source.engineSha256
+      && originalPicker === fs.readFileSync(path.join(ROOT, pickerObserver.file), 'utf8')
+      && originalPicker.split(PICKER_ANCHOR).length === 2 && observedPicker.split(PICKER_OBSERVER).length === 2
+      && originalPicker.replace(PICKER_ANCHOR, PICKER_OBSERVER) === observedPicker
+      && observedPicker.replace(PICKER_OBSERVER, PICKER_ANCHOR) === originalPicker
+      && pickerObserver.originalSha256 !== pickerObserver.observedSha256,
+      'The one effective read-only insertion must invert to every unchanged actual engine byte.');
   }
-  pickerFiles.push({ file: normalSourcePath, filename: normalSourceFile, bytes: fs.statSync(normalSourceFile).size, sha256: fileHash(normalSourceFile) });
-  const originalPicker = fs.readFileSync(path.join(ARTIFACTS, pickerObserver.originalSourcePath), 'utf8');
-  const observedPicker = fs.readFileSync(path.join(ARTIFACTS, pickerObserver.observedSourcePath), 'utf8');
-  setup(pickerObserver.originalSha256 === fixtures.source.engineSha256
-    && originalPicker === fs.readFileSync(path.join(ROOT, pickerObserver.file), 'utf8')
-    && originalPicker.split(PICKER_ANCHOR).length === 2 && observedPicker.split(PICKER_OBSERVER).length === 2
-    && originalPicker.replace(PICKER_ANCHOR, PICKER_OBSERVER) === observedPicker
-    && observedPicker.replace(PICKER_OBSERVER, PICKER_ANCHOR) === originalPicker
-    && pickerObserver.originalSha256 !== pickerObserver.observedSha256,
-    'The one effective read-only insertion must invert to every unchanged actual engine byte.');
   report.pickerReceipts = pickerFiles.map(({ filename, ...receipt }) => receipt);
   setup(new Set(fixtures.scenarios.map(fixture => fixture.id)).size === 3
     && JSON.stringify(fixtures.scenarios.map(fixture => fixture.id).sort()) === JSON.stringify([...SCENARIOS].sort()),
@@ -513,30 +538,35 @@ try {
       && witness.initializationDraws.every(value => value === 0.9),
       fixture.id + ': disclosed prepared identity, context or controlled-input witness differs.');
     const inputs = witness.input;
-    setup(inputs?.mode === 'controlled-sort-vector' && Number.isInteger(inputs.drawCount) && inputs.drawCount > 0
-      && Array.isArray(inputs.draws) && inputs.draws.length === inputs.drawCount
-      && inputs.draws.every(value => [0.01, 0.99, 0.5].includes(value))
-      && Array.isArray(witness.comparisons) && witness.comparisons.length > 0,
-      fixture.id + ': complete legal controlled picker vector and actual comparison receipts are required.');
-    setup(JSON.stringify(inputs.prefix) === JSON.stringify(PICKER_PREFIX)
-      && JSON.stringify(inputs.draws.slice(0, 4)) === JSON.stringify(PICKER_PREFIX.map(row => row.value))
-      && witness.comparisons[0].ordinal === 5,
-      fixture.id + ': the four original moral/catalog/count inputs and first comparator ordinal must stay explicit.');
-    const comparisonOrdinals = new Set();
-    const rank = id => targets.includes(id) ? targets.indexOf(id) : targets.length + id;
-    for (const [index, comparison] of witness.comparisons.entries()) {
-      const expectedValue = rank(comparison.a) < rank(comparison.b) ? 0.01 : rank(comparison.a) > rank(comparison.b) ? 0.99 : 0.5;
-      setup(Number.isInteger(comparison.a) && Number.isInteger(comparison.b) && Number.isInteger(comparison.ordinal)
-        && comparison.ordinal >= 5 && comparison.ordinal <= inputs.drawCount && !comparisonOrdinals.has(comparison.ordinal)
-        && (index === 0 || comparison.ordinal > witness.comparisons[index - 1].ordinal)
-        && comparison.aRank === rank(comparison.a) && comparison.bRank === rank(comparison.b)
-        && comparison.value === expectedValue && inputs.draws[comparison.ordinal - 1] === expectedValue,
-        fixture.id + ': actual comparison IDs, ranks, legal value or original draw ordinal differs.');
-      comparisonOrdinals.add(comparison.ordinal);
+    if (keyedDeck) {
+      const inputProblems = keyedInputProblems(witness, [0.99, 0.99, 0.01]);
+      setup(inputProblems.length === 0, fixture.id + ': keyed picker input witness differs: ' + inputProblems.join('; '));
+    } else {
+      setup(inputs?.mode === 'controlled-sort-vector' && Number.isInteger(inputs.drawCount) && inputs.drawCount > 0
+        && Array.isArray(inputs.draws) && inputs.draws.length === inputs.drawCount
+        && inputs.draws.every(value => [0.01, 0.99, 0.5].includes(value))
+        && Array.isArray(witness.comparisons) && witness.comparisons.length > 0,
+        fixture.id + ': complete legal controlled picker vector and actual comparison receipts are required.');
+      setup(JSON.stringify(inputs.prefix) === JSON.stringify(PICKER_PREFIX)
+        && JSON.stringify(inputs.draws.slice(0, 4)) === JSON.stringify(PICKER_PREFIX.map(row => row.value))
+        && witness.comparisons[0].ordinal === 5,
+        fixture.id + ': the four original moral/catalog/count inputs and first comparator ordinal must stay explicit.');
+      const comparisonOrdinals = new Set();
+      const rank = id => targets.includes(id) ? targets.indexOf(id) : targets.length + id;
+      for (const [index, comparison] of witness.comparisons.entries()) {
+        const expectedValue = rank(comparison.a) < rank(comparison.b) ? 0.01 : rank(comparison.a) > rank(comparison.b) ? 0.99 : 0.5;
+        setup(Number.isInteger(comparison.a) && Number.isInteger(comparison.b) && Number.isInteger(comparison.ordinal)
+          && comparison.ordinal >= 5 && comparison.ordinal <= inputs.drawCount && !comparisonOrdinals.has(comparison.ordinal)
+          && (index === 0 || comparison.ordinal > witness.comparisons[index - 1].ordinal)
+          && comparison.aRank === rank(comparison.a) && comparison.bRank === rank(comparison.b)
+          && comparison.value === expectedValue && inputs.draws[comparison.ordinal - 1] === expectedValue,
+          fixture.id + ': actual comparison IDs, ranks, legal value or original draw ordinal differs.');
+        comparisonOrdinals.add(comparison.ordinal);
+      }
+      setup(inputs.draws.every((value, index) => comparisonOrdinals.has(index + 1)
+        || (index < PICKER_PREFIX.length && value === PICKER_PREFIX[index].value)),
+        fixture.id + ': every original non-comparator draw must be one of the four declared prefix inputs.');
     }
-    setup(inputs.draws.every((value, index) => comparisonOrdinals.has(index + 1)
-      || (index < PICKER_PREFIX.length && value === PICKER_PREFIX[index].value)),
-      fixture.id + ': every original non-comparator draw must be one of the four declared prefix inputs.');
     setup(witness.observed && witness.replay && witness.observed.rawBatch && witness.replay.rawBatch
       && witness.observed.rawBatch.phase === 'random_events' && witness.replay.rawBatch.phase === 'random_events'
       && witness.replay.consumed === inputs.drawCount
