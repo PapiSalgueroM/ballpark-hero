@@ -1,0 +1,7 @@
+#!serve
+#!playwright
+#!serial
+headsha: git log --oneline -2
+fixtures: SC_SAVE_OUT="$PWD/scsw" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerCareerSaveSize.mjs | tail -1 && FREE_KICK_FONT_CACHE="$PWD/scsw/font-cache" node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only | tail -1
+playSaveSize: SC_SAVE_OUT="$PWD/scsw" FREE_KICK_FONT_CACHE="$PWD/scsw/font-cache" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playSoccerCareerSaveSize.mjs
+playSaveReaders: SC_SAVE_OUT="$PWD/scsw" node scripts/qa/playSoccerSaveReaders.mjs
