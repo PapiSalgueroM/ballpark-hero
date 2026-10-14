@@ -1,0 +1,8 @@
+1) every harness parses
+   ok   897 harnesses pass node --check
+2) no harness carries an anchor it can never match
+   897 harnesses, 241 carry a multi line anchor into src, 289 normalised reads guard one
+   ok   241 harnesses are in scope, so the check is looking at something
+   FAIL playPitchRestartContinuity.mjs reads src/components/pitch-motion/motion.tsx raw at line 150 and searches it with a multi line anchor (line 19), so on a CRLF checkout it matches nothing (2 raw reads in all)
+
+simHarnessAnchors: 1 failure(s)

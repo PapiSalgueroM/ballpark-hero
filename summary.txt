@@ -1,0 +1,7 @@
+build exit=0 34s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+headsha exit=0 0s | b619e1d11 Round BEG: the pitch and touch walks' raw byte reads name nothing but the hash
+simHarnessAnchors exit=1 41s | simHarnessAnchors: 1 failure(s)
+fonts-default exit=0 0s | Prepared 9 declared font dependencies for local fulfillment.
+playTouch exit=0 12s | playPlayerAutocompleteTouchScroll passed: 1985 checks, 6 journeys, 0 controls, 0 premature selections, 13 originals, 0 failures, 0 setup failures.
+playTouch-ctl exit=0 42s | FIRED-OK
+playPitch exit=0 20s | playPitchRestartContinuity: green in the prepared shared-pitch scope; no real Manager journey or painted-old-jump claim.
