@@ -1,0 +1,17 @@
+simLiveMatch exit=0 6s | simLiveMatch: PASS. Each half is committed as one stream, the report is counted off it, a change keeps the past and redraws the future, and the other dugout fields eleven
+simMatchDetail exit=0 8s | simMatchDetail: all green
+quickSubs-all exit=0 19s | All 1 harnesses green.
+simCmShootoutOrder exit=0 31s | simCmShootoutOrder: all sections passed
+simMatchScreen exit=0 5s | simMatchScreen: PASS. One match, two ways through it, and a report that names both clubs, shows the clock it ran to, splits the ball two ways and draws a graph that moves
+simLiveSim exit=0 1s | simLiveSim: all green
+simCmQuickLegs exit=0 66s | simCmQuickLegs: PASS, 10 sections green
+simCmMatchCentre exit=0 5s | simCmMatchCentre: PASS. Every stat on the report and the live strip is counted off the committed play and lines, and every timeline row is an event the engine drew.
+simLiveSimMotion exit=1 67s | simLiveSimMotion: RED. vitest exit 1, 1 failed, 54 passed.
+simCmStoppageTime exit=0 29s | simCmStoppageTime: PASS. Goals fall in the board at a measured share without adding any, every line in a board says 45+N or 90+N wherever a minute is printed, extra time 
+simCmLeagueBook exit=0 91s | simCmLeagueBook: green, 11 sections, 5 careers x 2 seasons (91s)
+simCmOwnGoals exit=0 84s | simCmOwnGoals: PASS, 8 sections green
+simTacticsEngine exit=0 102s | simTacticsEngine: PASS. A man is read in his slot, a second position is earned over counted weeks, the armband and the takers reach the stream, a duty moves the football 
+simEra2020 exit=0 34s | simEra2020: green. 2020-21 is real, sealed, and plays like 2020-21.
+continuity exit=1 36s |     at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simManagerWorldContinuity.mjs:489:24
+simCmUnseededWorld exit=1 132s | simCmUnseededWorld: 112 FAILURE(S)
+simHalftime exit=0 737s | ALL HALFTIME CHECKS PASSED

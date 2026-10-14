@@ -1,0 +1,17 @@
+simLiveMatch: node scripts/simLiveMatch.mjs
+simHalftime: node scripts/simHalftime.mjs
+simMatchDetail: node scripts/simMatchDetail.mjs
+quickSubs-all: CM_QUICK_SUBS_CONTROL=all ONLY=simCmQuickSubs node scripts/runAllSims.mjs
+simCmQuickLegs: node scripts/simCmQuickLegs.mjs
+simCmShootoutOrder: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCmShootoutOrder.mjs
+simMatchScreen: node scripts/simMatchScreen.mjs
+simLiveSim: node scripts/simLiveSim.mjs
+simLiveSimMotion: node scripts/simLiveSimMotion.mjs
+simCmMatchCentre: node scripts/simCmMatchCentre.mjs
+simCmLeagueBook: node scripts/simCmLeagueBook.mjs
+simCmStoppageTime: node scripts/simCmStoppageTime.mjs
+simCmOwnGoals: node scripts/simCmOwnGoals.mjs
+simTacticsEngine: node scripts/simTacticsEngine.mjs
+simEra2020: node scripts/simEra2020.mjs
+simCmUnseededWorld: node scripts/simCmUnseededWorld.mjs
+continuity: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simManagerWorldContinuity.mjs
