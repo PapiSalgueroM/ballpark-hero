@@ -1,0 +1,5 @@
+build exit=0 31s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+headsha exit=0 0s | 5ddc9df5b Round BEG: the award generations test reads the Soccer Career save through parseSoccerCareerSave
+fonts-default exit=0 1s | Prepared 9 declared font dependencies for local fulfillment.
+playTouch exit=0 13s | playPlayerAutocompleteTouchScroll passed: 1985 checks, 6 journeys, 0 controls, 0 premature selections, 13 originals, 0 failures, 0 setup failures.
+playTouch-ctl exit=0 40s | FIRED-OK

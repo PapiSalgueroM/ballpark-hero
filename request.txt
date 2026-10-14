@@ -1,0 +1,7 @@
+#!serve
+#!playwright
+#!serial
+headsha: git log --oneline -2
+fonts-default: node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only | tail -1
+playTouch: node .rc/x/prepInstalled.mjs "$PWD/apt1" && AUTOCOMPLETE_TOUCH_OUT="$PWD/apt1" AUTOCOMPLETE_TOUCH_PHASE=fixed NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playPlayerAutocompleteTouchScroll.mjs
+playTouch-ctl: node .rc/x/prepInstalled.mjs "$PWD/apt2" && AUTOCOMPLETE_TOUCH_OUT="$PWD/apt2" AUTOCOMPLETE_TOUCH_PHASE=fixed AUTOCOMPLETE_TOUCH_CONTROL=premature-pointerdown NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playPlayerAutocompleteTouchScroll.mjs > /tmp/pt.log 2>&1; s=$?; tail -3 /tmp/pt.log; [ $s = 0 ] && grep -q "playPlayerAutocompleteTouchScroll control-reproduced" /tmp/pt.log && echo FIRED-OK
