@@ -1,0 +1,5 @@
+MUTATION oppstops applied to src/lib/clubManager.ts
+FAIL [opponent] the other dugout never passes its rule's changes or stoppages (37 of 300 matches over)
+   37 of 112 five change matches saw them make four or five; 0 had a double change
+simCmSubs RED: 2 of 3 checks green (parts opponent)
+MUTRESULT oppstops simCmSubs-opponent=1

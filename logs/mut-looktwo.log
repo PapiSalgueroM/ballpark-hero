@@ -1,0 +1,8 @@
+MUTATION looktwo applied to src/lib/clubManager.ts
+FAIL [legacy] 40 careers, every save byte and every draw equal to SUBS_BASE (15 differ; first Everton era2005 seed 0 coach: head c5bc5cd211199040 46684 draws, base d4b3b9200f6fb0e5 46622 draws (season 2 week 56))
+FAIL [three] 20 careers, every save byte and every draw equal to SUBS_BASE (10 differ; first Everton era2005 seed 0 coach: head c5bc5cd211199040 46684 draws, base d4b3b9200f6fb0e5 46622 draws (season 2 week 56))
+FAIL [three] 20 careers, every save byte and every draw equal to SUBS_BASE (10 differ; first Everton era2005 seed 0 coach: head c5bc5cd211199040 46684 draws, base d4b3b9200f6fb0e5 46622 draws (season 2 week 56))
+simCmSubs RED: 3 of 5 checks green (parts coach, legacy, three)
+  ok report (1625 checks)
+simCmQuickLegs: PASS, 10 sections green
+MUTRESULT looktwo simCmSubs-coach-legacy-three=1 simCmQuickLegs=0

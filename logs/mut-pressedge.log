@@ -1,0 +1,10 @@
+MUTATION pressedge applied to src/lib/clubManager.ts
+   question kinds at the whistle, head: {"bid":14,"dropped":29,"slump":9,"request":13,"bigGame":7,"roll":2,"derby":3}
+ok   [press] a stamped free run on the same seed asks about Gent after Cercle Brugge
+simCmSubs GREEN: 3 of 3 checks green (parts press)
+
+simClubManagerMeters: PASS. The board meter is the sack race, the fans move with results, and every table prints its goals pair.
+
+simManagerHotSeat: green. The target is the club's, reading the room pays, outcomes replay, a Club Manager save keeps its registrations and a survivor carries on in Club Manager.
+PASS managerPressCoverageProof.mjs: 106 actual first-season questions, 89 genuine disliked probes, whole career/vector holds, two sampling faults and actual floor fault with full undo
+MUTRESULT pressedge simCmSubs-press=0 simClubManagerMeters=0 simManagerHotSeat=0 pressCoverage=0

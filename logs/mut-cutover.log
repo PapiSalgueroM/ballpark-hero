@@ -1,0 +1,8 @@
+MUTATION cutover applied to src/lib/managerHotSeat.ts
+  scripted 2026-11-09    7dd6fe553473e40bc9dd Sunderland: signed Nnamdi Collins, sold Enzo Le Fée, grade F, 5 actions; replayed 5 of 5 actions
+simDailyDeals: green. 12 Hot Seat dates (5 Premier League) and 6 Deadline Day dates (3 Premier League) deal what Release AS dealt, no daily carries the real fixture key, a world seed or a ledger, and the 6 scripted Deadline Days (a signing and a sale each) play and replay as on b6eb78e7.
+ok   [hotseat] the career carried on to Club Manager carries no matchRules
+simCmSubs GREEN: 5 of 5 checks green (parts hotseat)
+
+simManagerHotSeat: green. The target is the club's, reading the room pays, outcomes replay, a Club Manager save keeps its registrations and a survivor carries on in Club Manager.
+MUTRESULT cutover simDailyDeals=0 simCmSubs-hotseat=0 simManagerHotSeat=0

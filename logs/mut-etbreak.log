@@ -1,0 +1,10 @@
+MUTATION etbreak applied to src/lib/clubManager.ts
+ok   [press] a stamped free run on the same seed asks about Gent after Cercle Brugge
+simCmSubs GREEN: 44 of 44 checks green (parts ledger, rule, opponent, coach, press)
+
+simExtraTime: PASS. A level Champions League decider plays thirty minutes of extra time before penalties, nothing else does, goals per decider hold, the AI plays it too (finals included), the screens say so, the two ways of playing it are one match, named men play it, its possession is read off rates, and what announces it says level on the night or level on aggregate, whichever is true.
+
+simLiveMatch: PASS. Each half is committed as one stream, the report is counted off it, a change keeps the past and redraws the future, and the other dugout fields eleven named men who come and go on the same clock.
+[1101 bundle] the part alone: 21153 bytes minified, 8933 gzipped (ceiling 23133 and 9693); 6 files, 30 import specifiers read; problems 0
+simLiveSimMotion: green. 55 tests passed (the viewer on real feeds, the pitch part's rules on 200 half feeds and on feeds made by hand, the goal sequence, match mode), and the part alone is 21153 bytes minified, 8933 gzipped, with nothing of Club Manager in it.
+MUTRESULT etbreak simCmSubs=0 simExtraTime=0 simLiveMatch=0 simLiveSimMotion=0

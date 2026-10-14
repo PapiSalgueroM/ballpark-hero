@@ -1,0 +1,8 @@
+MUTATION ht45 applied to src/lib/clubManager.ts
+   the coach: 1.62 changes a match, three (84 matches)
+simCmSubs GREEN: 20 of 20 checks green (parts rule, opponent, coach)
+
+simLiveMatch: PASS. Each half is committed as one stream, the report is counted off it, a change keeps the past and redraws the future, and the other dugout fields eleven named men who come and go on the same clock.
+
+simCmStoppageTime: PASS. Goals fall in the board at a measured share without adding any, every line in a board says 45+N or 90+N wherever a minute is printed, extra time comes only on a level knockout tie, a second leg shows the first leg and the running aggregate everywhere the tie is shown, and a save from before the round loads and plays.
+MUTRESULT ht45 simCmSubs-rule-opp-coach=0 simLiveMatch=0 simCmStoppageTime=0

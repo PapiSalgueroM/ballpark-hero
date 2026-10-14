@@ -1,0 +1,7 @@
+mut-oppstops exit=0 6s | MUTRESULT oppstops simCmSubs-opponent=1
+mut-yearplus exit=0 47s | MUTRESULT yearplus simCmSubs=0 simEra2020=0 simLiveMatch=0 unit=0
+mut-cutover exit=0 71s | MUTRESULT cutover simDailyDeals=0 simCmSubs-hotseat=0 simManagerHotSeat=0
+mut-ht45 exit=0 32s | MUTRESULT ht45 simCmSubs-rule-opp-coach=0 simLiveMatch=0 simCmStoppageTime=0
+mut-etbreak exit=0 161s | MUTRESULT etbreak simCmSubs=0 simExtraTime=0 simLiveMatch=0 simLiveSimMotion=0
+mut-looktwo exit=0 131s | MUTRESULT looktwo simCmSubs-coach-legacy-three=1 simCmQuickLegs=0
+mut-pressedge exit=0 404s | MUTRESULT pressedge simCmSubs-press=0 simClubManagerMeters=0 simManagerHotSeat=0 pressCoverage=0
