@@ -18,8 +18,8 @@
    every option prints those too, in the registry's own words. */
 import { useMemo } from 'react';
 import { InboxPanel } from '@/components/us-career/InboxPanel';
-import { gmChoiceLabel, gmExpiredLine, GM_INBOX_OPEN } from '@/lib/gmInbox';
-import type { GmChoiceDef, GmFxWords, GmInboxPack } from '@/lib/gmInbox';
+import { gmChoiceLabel, gmExpiredLine, gmNeutralIndex, GM_INBOX_OPEN } from '@/lib/gmInbox';
+import type { GmChoiceDef, GmFxWords, GmInboxMessage, GmInboxPack } from '@/lib/gmInbox';
 import type { InboxMessage } from '@/lib/careerInbox';
 
 export function GmInboxPanel({ pack, messages, onAnswer, seen, fx }: {
@@ -40,7 +40,12 @@ export function GmInboxPanel({ pack, messages, onAnswer, seen, fx }: {
   const settledLine = (m: InboxMessage) => gmExpiredLine(byId.get(m.id) ?? m);
   const openMsgs = messages.filter(m => m.answered === undefined);
   const open = openMsgs.length;
-  const canExpire = openMsgs.some(m => pack.events.find(e => e.id === m.defId)?.expires !== undefined);
+  /* An open card the staff will settle, exactly as gmInboxWeek's step 2
+     settles one: it carries its arrival tick (w, stamped at the deal only
+     when its card expired then), its card still expires, and it has an
+     option that moves nothing. */
+  const canExpire = openMsgs.some(m => (m as GmInboxMessage).w !== undefined
+    && pack.events.find(e => e.id === m.defId)?.expires !== undefined && gmNeutralIndex(m.choices as GmChoiceDef[]) >= 0);
   /* The career panel's empty line talks about a phone; a desk gets its own. */
   if (messages.length === 0) {
     return (

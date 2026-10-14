@@ -69,12 +69,36 @@ describe('GmInboxPanel', () => {
     expect(line).not.toContain('your assistant');
   });
 
+  /* An expiring card as gmPackProblems wants it (an option that moves
+     nothing), and a card dealt from it, which carries its arrival tick w. */
+  const expDef = { ...def, expires: 2, choices: [...def.choices, { label: 'Leave it with the staff', reply: 'Left.', karma: 0 }] };
+  const expiring = { ...pack, events: pack.events.map(e => (e.id === def.id ? expDef : e)) };
+  const dealt = (id: string, answered?: number) => ({ ...msg(id, answered), choices: expDef.choices, w: 3 }) as InboxMessage;
+  const fullLine = () => document.querySelector('[data-gm-inbox] > p')!.textContent!;
+
   it('a full desk holding a card that can expire says the assistant may deal with one', () => {
-    const expiring = { ...pack, events: pack.events.map(e => (e.id === def.id ? { ...e, expires: 2 } : e)) };
-    render(<GmInboxPanel pack={expiring} messages={[msg('a'), msg('b'), msg('c')]} onAnswer={() => undefined} seen={new Set()} />);
-    const line = document.querySelector('[data-gm-inbox] > p')!.textContent!;
+    render(<GmInboxPanel pack={expiring} messages={[dealt('a'), dealt('b'), dealt('c')]} onAnswer={() => undefined} seen={new Set()} />);
+    const line = fullLine();
     expect(line).toContain(' Nothing new lands until you answer one, or your assistant deals with one for you.');
     expect(line.split('Nothing new lands').length).toBe(2);
+  });
+
+  it('a full desk whose only expiring card is answered says only that he must answer one', () => {
+    const other = pack.events.find(e => e.id !== def.id && e.expires === undefined)!;
+    const plain = (id: string) => ({ id, defId: other.id, from: other.from, emoji: other.emoji, text: other.text, year: 2026, choices: other.choices, beat: other.beat }) as InboxMessage;
+    render(<GmInboxPanel pack={expiring} messages={[dealt('x', 2), plain('a'), plain('b'), plain('c')]} onAnswer={() => undefined} seen={new Set()} />);
+    const line = fullLine();
+    expect(line).toContain('3 waiting on you.');
+    expect(line).toContain(' Nothing new lands until you answer one.');
+    expect(line).not.toContain('your assistant');
+  });
+
+  it('a card dealt before its card could expire (no w) is never settled, so the line does not promise the assistant', () => {
+    const undated = (id: string) => ({ ...msg(id), choices: expDef.choices }) as InboxMessage;
+    render(<GmInboxPanel pack={expiring} messages={[undated('a'), undated('b'), undated('c')]} onAnswer={() => undefined} seen={new Set()} />);
+    const line = fullLine();
+    expect(line).toContain(' Nothing new lands until you answer one.');
+    expect(line).not.toContain('your assistant');
   });
 
   it('an option with a registered effect prints it in the registry words handed in as fx', () => {
