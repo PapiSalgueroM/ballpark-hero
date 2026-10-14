@@ -1,0 +1,15 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+subs-all-base: git worktree add /tmp/subsbase dec9075b >/dev/null 2>&1 && SUBS_BASE=/tmp/subsbase node scripts/simCmSubs.mjs
+c-etfrozen: SUBS_CONTROL=etfrozen node scripts/simCmSubs.mjs
+c-opproom: SUBS_CONTROL=opproom node scripts/simCmSubs.mjs
+liveSimMotion: node scripts/simLiveSimMotion.mjs
+whistle-ctl: LIVE_MOTION_CONTROL=whistle node scripts/simLiveSimMotion.mjs
+extraTime: node scripts/simExtraTime.mjs
+liveMatch: node scripts/simLiveMatch.mjs
+matchDetail: node scripts/simMatchDetail.mjs
+dailyDeals: node scripts/simDailyDeals.mjs
+leagueRules: node scripts/simCmLeagueRules.mjs
+quickSubsAll: CM_QUICK_SUBS_CONTROL=all node scripts/simCmQuickSubs.mjs
+anchors: node scripts/simHarnessAnchors.mjs
+noRival: node scripts/simNoRivalNames.mjs
+pin-hash: node -e "const c=require('crypto'),f=require('fs');console.log('LF sha256 of clubManager.ts on the head:',c.createHash('sha256').update(f.readFileSync('src/lib/clubManager.ts','utf8').replaceAll('\r\n','\n')).digest('hex'))"
