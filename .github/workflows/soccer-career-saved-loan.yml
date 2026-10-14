@@ -18,7 +18,7 @@ jobs:
       CAREER_SEASON_LOCAL_ONLY: '1'
       CAREER_POPULARITY_PHASE: fixed
       CAREER_COLD_PHASE: fixed
-      CAREER_LOAN_PHASE: baseline
+      CAREER_LOAN_PHASE: fixed
       CAREER_LOAN_OUT: ${{ github.workspace }}/career-loan-artifacts
       CAREER_DOCUMENTARY_PHASE: fixed
       CAREER_DOCUMENTARY_OUT: ${{ github.workspace }}/career-loan-artifacts/prior-documentary
@@ -55,9 +55,9 @@ jobs:
           git rev-parse HEAD > "$CAREER_POPULARITY_OUT/source-head.txt"
           git status --porcelain --untracked-files=no > "$CAREER_POPULARITY_OUT/source-before.txt"
           test ! -s "$CAREER_POPULARITY_OUT/source-before.txt"
-          git diff --exit-code 1b383132351440d16753d67af94550608a85ba87 -- src scripts package.json package-lock.json bun.lock ':!src/lib/soccerCareerLife.ts' ':!src/test/soccerCareerSavedLoan.test.ts' ':!scripts/simSoccerCareerSavedLoan.mjs' ':!scripts/playSoccerCareerSavedLoan.mjs' ':!scripts/simSoccerCareerColdContext.mjs'
+          git diff --exit-code 1b383132351440d16753d67af94550608a85ba87 -- src scripts package.json package-lock.json bun.lock ':!src/lib/soccerCareerLife.ts' ':!src/test/soccerCareerSavedLoan.test.ts' ':!scripts/simSoccerCareerSavedLoan.mjs' ':!scripts/playSoccerCareerSavedLoan.mjs' ':!scripts/simSoccerCareerColdContext.mjs' ':!scripts/qa/qualifySoccerCareerDocumentaryBinding.mjs'
           if test "$CAREER_LOAN_PHASE" = baseline; then
-            git diff --exit-code 1b383132351440d16753d67af94550608a85ba87 -- src/lib/soccerCareerLife.ts scripts/simSoccerCareerColdContext.mjs
+            git diff --exit-code 1b383132351440d16753d67af94550608a85ba87 -- src/lib/soccerCareerLife.ts scripts/simSoccerCareerColdContext.mjs scripts/qa/qualifySoccerCareerDocumentaryBinding.mjs
           fi
           git diff --exit-code 1b383132351440d16753d67af94550608a85ba87 -- .github/workflows ':!.github/workflows/soccer-career-saved-loan.yml' index.html
           if test "$CAREER_POPULARITY_PHASE" = baseline; then
@@ -116,7 +116,7 @@ jobs:
             NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerCareerColdContext.mjs 2>&1 | tee "$CAREER_COLD_OUT/fixed.log"
             SC_COLD_CONTEXT_CONTROL=original NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerCareerColdContext.mjs 2>&1 | tee "$CAREER_COLD_OUT/control-original.log"
           fi
-      - name: Exact documentary addition remains the only Cold dependency exception
+      - name: Recorded documentary and saved-loan dependency bindings remain exact
         if: env.CAREER_DOCUMENTARY_PHASE == 'fixed'
         run: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/qualifySoccerCareerDocumentaryBinding.mjs 2>&1 | tee "$CAREER_DOCUMENTARY_OUT/binding-controls.log"
       - name: Ordinary unit entry without retained-module environment

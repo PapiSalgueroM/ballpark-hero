@@ -65,6 +65,8 @@ fs.writeFileSync(path.join(retained, 'soccerCareerRealismA.parent.ts'), parentRe
 const DOCUMENTARY_START = '  const documentaryYear = state.seasons[state.seasons.length - 1]?.year ?? 0;';
 const DOCUMENTARY_END = '  if (state.age >= 31 && !flag(state, "screenTest")) {';
 const DOCUMENTARY_PAIR = ', [408, 631, "rDocCrew"]';
+const ORIGINAL_LOAN_GATE = '  if (!flag(state, "teammateLoan") && state.netWorth >= 0.5) {';
+const SAVED_LOAN_GATE = '  if (!flag(state, "teammateLoan") && (state.pendingEvents.some(event => event.id === 236) || state.netWorth >= 0.5)) {';
 const DOCUMENTARY_BODY = `  const documentaryYear = state.seasons[state.seasons.length - 1]?.year ?? 0;
   const documentaryDeal = state.eventLastFired?.["408"];
   if ((state.pendingEvents ?? []).some(event => event.id === 631) || (!state.retired && flag(state, "rDocCrew") === 1
@@ -92,7 +94,25 @@ const parentAppHashes = appFiles.map(file => {
       assert.equal(current.split(anchor).length - 1, 1, 'Only one exact recorded documentary addition may bind the old Cold proof');
     const start = current.indexOf(DOCUMENTARY_START), end = current.indexOf(DOCUMENTARY_END);
     assert(start < end); assert.equal(current.slice(start, end), DOCUMENTARY_BODY, 'The complete known documentary body must match its actual insertion boundaries');
-    let inverse = current; const removals = [];
+    let inverse = current; const removals = []; let savedLoanGate = null;
+    const fixedCount = current.split(SAVED_LOAN_GATE).length - 1, originalCount = current.split(ORIGINAL_LOAN_GATE).length - 1;
+    fs.writeFileSync(path.join(retained, 'saved-loan-gate-counts.json'), JSON.stringify({ fixedCount, originalCount }, null, 2) + '\n');
+    assert((fixedCount === 1 && originalCount === 0) || (fixedCount === 0 && originalCount === 1),
+      'Only the exact recorded236 gate or whole original loan gate may bind the old Cold proof');
+    if (fixedCount === 1) {
+      const held = inverse, offset = inverse.indexOf(SAVED_LOAN_GATE);
+      inverse = inverse.slice(0, offset) + ORIGINAL_LOAN_GATE + inverse.slice(offset + SAVED_LOAN_GATE.length);
+      assert.equal(inverse.slice(0, offset) + SAVED_LOAN_GATE + inverse.slice(offset + ORIGINAL_LOAN_GATE.length), held,
+        'Reinserting the exact recorded236 gate restores every preceding source byte');
+      savedLoanGate = { kind: 'exact-saved236-gate-inverse', anchor: SAVED_LOAN_GATE, replacement: ORIGINAL_LOAN_GATE, offset,
+        removedSha256: sha(SAVED_LOAN_GATE), beforeSha256: sha(held), afterSha256: sha(inverse),
+        fixedPath: 'soccerCareerLife.saved-loan-gate.ts', originalPath: 'soccerCareerLife.original-loan-gate.ts',
+        inversePath: 'soccerCareerLife.loan-gate-inverse.ts' };
+      fs.writeFileSync(path.join(retained, savedLoanGate.fixedPath), SAVED_LOAN_GATE);
+      fs.writeFileSync(path.join(retained, savedLoanGate.originalPath), ORIGINAL_LOAN_GATE);
+      fs.writeFileSync(path.join(retained, savedLoanGate.inversePath), inverse);
+      removals.push(savedLoanGate);
+    }
     for (const [kind, anchor] of [['body', DOCUMENTARY_BODY], ['priority-pair', DOCUMENTARY_PAIR]]) {
       assert.equal(inverse.split(anchor).length - 1, 1); const offset = inverse.indexOf(anchor), held = inverse;
       inverse = inverse.slice(0, offset) + inverse.slice(offset + anchor.length);
@@ -101,7 +121,7 @@ const parentAppHashes = appFiles.map(file => {
     }
     fs.writeFileSync(path.join(retained, 'soccerCareerLife.documentary-body.ts'), DOCUMENTARY_BODY);
     fs.writeFileSync(path.join(retained, 'soccerCareerLife.parent-equivalent.ts'), inverse);
-    documentaryLifeBinding = { kind: 'exact-documentary-addition-inverse', start, end, removals,
+    documentaryLifeBinding = { kind: 'exact-documentary-addition-inverse', start, end, removals, savedLoanGate,
       candidateSha256: row.candidateSha256, parentSha256: row.parentSha256, inverseSha256: sha(inverse),
       bodyPath: 'soccerCareerLife.documentary-body.ts', inversePath: 'soccerCareerLife.parent-equivalent.ts' };
     fs.writeFileSync(path.join(retained, 'documentary-life-binding.json'), JSON.stringify(documentaryLifeBinding, null, 2) + '\n');

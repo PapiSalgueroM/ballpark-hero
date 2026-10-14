@@ -28,8 +28,11 @@ const original = held.get('scripts/simSoccerCareerColdContext.mjs').toString('ut
 const sha = value => createHash('sha256').update(value).digest('hex');
 const anchor = "const sources = new Map(files.map(file => [file, fs.readFileSync(file, 'utf8')]));\n";
 const effect = 'setFlag(s, "rDocCrew", 2); s.integrityBonus += 2;', wrongEffect = 'setFlag(s, "rDocCrew", 2); s.integrityBonus += 0;';
+const loanGate = '  if (!flag(state, "teammateLoan") && (state.pendingEvents.some(event => event.id === 236) || state.netWorth >= 0.5)) {';
+const wrongLoanGate = '  if (!flag(state, "teammateLoan") && (state.pendingEvents.some(event => event.id === 237) || state.netWorth >= 0.5)) {';
 assert.equal(original.split(anchor).length - 1, 1, 'One actual source-map construction is required');
 assert.equal(life.split(effect).length - 1, 1, 'One actual earned631 effect is required');
+assert.equal(life.split(loanGate).length - 1, 1, 'One actual fixed236 gate is required');
 const git = spawnSync('git', ['rev-parse', 'HEAD'], { cwd: ROOT, encoding: 'utf8' });
 assert.equal(git.status, 0); assert.equal(git.signal, null); assert.equal(git.error, undefined);
 const progress = { head: git.stdout.trim(), status: 'running', helperSha256: sha(original), lifeSha256: sha(life), arms: [] };
@@ -39,26 +42,28 @@ const save = () => write(path.join(OUT, 'source.json'), { ...progress, sourceRec
 save();
 const SETUP = /SyntaxError:|ReferenceError:|TypeError:|ERR_MODULE_NOT_FOUND|ERR_REQUIRE_ESM|Cannot find module|Failed to load|Failed to resolve import|Unhandled (?:Errors?|Rejection)|Uncaught Exception/i;
 try {
-  for (const mode of ['body', 'unrelated']) {
+  for (const mode of ['body', 'unrelated', 'loan-gate']) {
     const dir = path.join(OUT, mode), childOut = path.join(dir, 'fixed'); fs.mkdirSync(dir);
-    const injection = mode === 'body'
-      ? `sources.set(LIFE, sources.get(LIFE).replace(${JSON.stringify(effect)}, ${JSON.stringify(wrongEffect)}));\n`
-      : "sources.set(LIFE, sources.get(LIFE) + '\\n ');\n";
+    const target = mode === 'body' ? effect : loanGate, replacement = mode === 'body' ? wrongEffect : wrongLoanGate;
+    const injection = mode === 'unrelated'
+      ? "sources.set(LIFE, sources.get(LIFE) + '\\n ');\n"
+      : `sources.set(LIFE, sources.get(LIFE).replace(${JSON.stringify(target)}, ${JSON.stringify(replacement)}));\n`;
     const offset = original.indexOf(anchor) + anchor.length;
     const copied = original.slice(0, offset) + injection + original.slice(offset);
     const inverse = copied.slice(0, offset) + copied.slice(offset + injection.length);
     assert.notEqual(copied, original); assert.equal(inverse, original, 'Removing only the source-map injection restores the complete helper');
-    const lifeOffset = mode === 'body' ? life.indexOf(effect) : life.length;
-    const faultLife = mode === 'body' ? life.replace(effect, wrongEffect) : life + '\n ';
-    const lifeInverse = mode === 'body' ? faultLife.slice(0, lifeOffset) + effect + faultLife.slice(lifeOffset + wrongEffect.length) : faultLife.slice(0, life.length);
+    const lifeOffset = mode === 'unrelated' ? life.length : life.indexOf(target);
+    const faultLife = mode === 'unrelated' ? life + '\n ' : life.replace(target, replacement);
+    const lifeInverse = mode === 'unrelated' ? faultLife.slice(0, life.length) : faultLife.slice(0, lifeOffset) + target + faultLife.slice(lifeOffset + replacement.length);
     assert.notEqual(faultLife, life); assert.equal(lifeInverse, life, 'The source-map fault inverse holds every app byte');
     fs.writeFileSync(path.join(dir, 'helper.before.mjs'), original); fs.writeFileSync(path.join(dir, 'helper.control.mjs'), copied);
     fs.writeFileSync(path.join(dir, 'life.before.ts'), life); fs.writeFileSync(path.join(dir, 'life.control.ts'), faultLife);
     const expectedCause = mode === 'body' ? 'Only one exact recorded documentary addition may bind the old Cold proof'
+      : mode === 'loan-gate' ? 'Only the exact recorded236 gate or whole original loan gate may bind the old Cold proof'
       : 'Removing only the full631 body and unique priority pair must restore the whole held42a Life source';
     const row = { mode, expectedCause, injection: { anchor, offset, text: injection, beforeSha256: sha(original),
-      afterSha256: sha(copied), inverseSha256: sha(inverse) }, lifeFault: { offset: lifeOffset, anchor: mode === 'body' ? effect : '',
-      replacement: mode === 'body' ? wrongEffect : '\n ', beforeSha256: sha(life), afterSha256: sha(faultLife), inverseSha256: sha(lifeInverse) } };
+      afterSha256: sha(copied), inverseSha256: sha(inverse) }, lifeFault: { offset: lifeOffset, anchor: mode === 'unrelated' ? '' : target,
+      replacement: mode === 'unrelated' ? '\n ' : replacement, beforeSha256: sha(life), afterSha256: sha(faultLife), inverseSha256: sha(lifeInverse) } };
     progress.arms.push(row); save(); write(path.join(dir, 'transform.json'), row);
     const childFile = path.join(ROOT, `scripts/.qa-documentary-binding-${mode}-${randomUUID()}.mjs`);
     const tmpRoot = path.join(ROOT, 'tmp'), beforeDirs = new Set(fs.existsSync(tmpRoot) ? fs.readdirSync(tmpRoot) : []);
@@ -91,6 +96,10 @@ try {
     assert.equal(fs.readFileSync(path.join(childOut, 'soccerCareerLife.ts.before'), 'utf8'), faultLife, 'Actual child source map adopted exactly the retained fault');
     assert.equal(fs.readFileSync(path.join(childOut, path.basename(childFile) + '.before'), 'utf8'), copied, 'Actual child retained the full copied helper');
     assert(!fs.existsSync(path.join(childOut, 'unit.json')) && !fs.existsSync(path.join(childOut, 'engine.mjs')), 'The actual source guard must refuse before compilation or unit execution');
+    if (mode === 'loan-gate') {
+      const counts = JSON.parse(fs.readFileSync(path.join(childOut, 'saved-loan-gate-counts.json'), 'utf8'));
+      assert.deepEqual(counts, { fixedCount: 0, originalCount: 0 }); row.rejectedGateCounts = counts;
+    }
     if (mode === 'unrelated') {
       const binding = JSON.parse(fs.readFileSync(path.join(childOut, 'documentary-life-binding.json'), 'utf8'));
       assert.equal(binding.candidateSha256, sha(faultLife)); assert.notEqual(binding.inverseSha256, binding.parentSha256);
@@ -102,6 +111,6 @@ try {
     console.log(`Actual Cold binding ${mode}: child exit1; one exact guard refusal; effective source-map fault ${row.lifeFault.afterSha256}.`);
   }
   progress.status = 'complete'; save();
-  console.log(`Actual source held: ${held.size} files; both full helper inverses and both physical Life fault copies retained.`);
-  console.log('Two actual old-Cold source guard refusals: known631 corruption and unrelated whole-parent drift. No app mutation or child compiler/unit credit.');
+  console.log(`Actual source held: ${held.size} files; all three full helper inverses and physical Life fault copies retained.`);
+  console.log('Three actual old-Cold source guard refusals: known631 corruption, unrelated whole-parent drift and malformed236 binding. No app mutation or child compiler/unit credit.');
 } catch (error) { progress.methodError = error?.stack || String(error); save(); throw error; }
