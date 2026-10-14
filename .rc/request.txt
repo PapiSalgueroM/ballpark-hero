@@ -1,0 +1,6 @@
+#!serve
+#!playwright
+#!serial
+headsha: git log --oneline -2
+playCmSubsRule: ENGINES=chromium node scripts/playCmSubsRule.mjs
+playCmQuickSubs: mkdir -p cm-quick-subs-artifacts/font-cache && FREE_KICK_FONT_CACHE="$PWD/cm-quick-subs-artifacts/font-cache" node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only && FREE_KICK_FONT_CACHE="$PWD/cm-quick-subs-artifacts/font-cache" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playCmQuickSubs.mjs
