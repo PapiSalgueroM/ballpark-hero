@@ -1,0 +1,25 @@
+Prepared 9 declared font dependencies for local fulfillment.
+prepInstalled: 521 installed locked versions written to /home/runner/work/ballpark-hero/ballpark-hero/sclz
+Soccer Career build fixed: failed; 3 healthy flows, 0 eager fetches, 12 originals, 1 failures, 0 setup failures.
+lazyCheck: status=failed checks=1602 failures=1 eager=0 inventory=12 issues=["390-failed-chunk: unrelated app/asset errors: http://127.0.0.1:43915/assets/index-Bkd03vbn.js: TypeError: Cannot read properties of undefined (reading 'default')\n    at $k (http://127.0.0.1:43915/assets/index-Bkd03vbn.js:10:3572)\n    at tx (http://127.0.0.1:43915/assets/index-Bkd03vbn.js:41:44434)\n    at Xb (http://127.0.0.1:43915/assets/index-Bkd03vbn.js:41:39727)\n    at Wj (http://127.0.0.1:43915/assets/index-Bkd03vbn.js:41:39655)\n    at kc (http://127.0.0.1:43915/assets/index-Bkd03vbn.js:41:39508)\n    at th (http://127.0.0.1:43915/assets/index-Bkd03vbn.js:41:35875)\n    at Yb (http:
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+1 !== 0
+
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/.rc/x/lazyCheck.mjs:8:8
+    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)
+    at async node:internal/modules/esm/loader:647:26
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: 1,
+  expected: 0,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0

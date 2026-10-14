@@ -1,0 +1,4 @@
+Prepared 9 declared font dependencies for local fulfillment.
+prepInstalled: 521 installed locked versions written to /home/runner/work/ballpark-hero/ballpark-hero/w-playSoccerCareerPendingPopularity
+simSoccerCareerPendingPopularity normal: green. Exact source and outcome guards passed.
+Soccer pending-popularity browser: failed; 1694 checks, 7 played cases, 2 controls, 28 originals, 1 failures, 0 setup failures.

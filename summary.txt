@@ -1,0 +1,11 @@
+build exit=0 23s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+headsha exit=0 0s | 2699b5ba4 Round BFG: the life chain's queued cards, flags, stamps and rewards through the save codec, packed and plain
+playSoccerCareerRoutineEvents exit=0 38s | Soccer routine browser: passed; 1863 checks, 24 natural cases, 2 controls, 50 originals, 0 failures, 0 setup failures.
+playSoccerCareerLifeReviews exit=0 25s | Soccer life-review browser: passed; 1539 checks, 12 natural cases, 2 controls, 26 originals, 0 failures, 0 setup failures.
+playSoccerCareerPendingLife exit=0 41s | Soccer pending-Life browser: passed; 2173 checks, 21 natural cases, 2 controls, 44 originals, 0 failures, 0 setup failures.
+playSoccerCareerStatRewards exit=0 32s | Soccer stat-rewards browser: passed; 1836 checks, 14 natural cases, 2 controls, 30 originals, 0 failures, 0 setup failures.
+playSoccerCareerPendingMorale exit=1 77s | Soccer pending-morale browser: failed; 2189 checks, 14 played cases, 2 controls, 54 originals, 1 failures, 0 setup failures.
+playSoccerCareerPendingPopularity exit=1 37s | Soccer pending-popularity browser: failed; 1694 checks, 7 played cases, 2 controls, 28 originals, 1 failures, 0 setup failures.
+playSoccerCareerDocumentaryReview exit=1 5s | Soccer documentary browser: failed; 108 checks, 0 played, 0 controls, 0 originals, 5 failures, 1 setup failures.
+playSoccerCareerSavedLoan exit=1 9s | Soccer saved loan browser: failed; 113 checks, 0 played, 0 controls, 0 originals, 6 failures, 0 setup failures.
+playSoccerCareerBuildLazy exit=1 27s | Node.js v24.21.0
