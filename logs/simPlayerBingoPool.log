@@ -1,0 +1,6 @@
+1) The identity rules, on the rows that motivated them, in both directions
+   12 cases, both directions
+   fetch attempt 1 returned nothing, trying again
+   fetch attempt 2 returned nothing, trying again
+
+SUPABASE UNREACHABLE OR POOL TOO SMALL. NOTHING WAS CHECKED.

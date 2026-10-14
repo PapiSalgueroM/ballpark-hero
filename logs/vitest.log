@@ -1,0 +1,22 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/test/playerBingoWorldCupAlias.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 127[2mms[22m[39m
+ [32m✓[39m src/test/playerBingoHonours.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 188[2mms[22m[39m
+ [32m✓[39m src/test/playerBingoLoad.test.tsx [2m([22m[2m8 tests[22m[2m)[22m[33m 1873[2mms[22m[39m
+   [33m[2m✓[22m[39m Player Bingo owned load[2m > [22mkeeps a successful board playable and replays without another pool request [33m 920[2mms[22m[39m
+   [33m[2m✓[22m[39m Player Bingo owned load[2m > [22mignores a timed-out old null response after a fresh retry becomes playable [33m 310[2mms[22m[39m
+ [32m✓[39m src/test/playerBingoLineFeedback.test.tsx [2m([22m[2m7 tests[22m[2m)[22m[33m 6023[2mms[22m[39m
+   [33m[2m✓[22m[39m Player Bingo earned line feedback[2m > [22mannounces one added line as 100 while the actual total moves 100 to 200 [33m 1385[2mms[22m[39m
+   [33m[2m✓[22m[39m Player Bingo earned line feedback[2m > [22mannounces two intersection lines as 200 while the actual total moves 100 to 300 [33m 941[2mms[22m[39m
+   [33m[2m✓[22m[39m Player Bingo earned line feedback[2m > [22mpreserves the first line choice banked 100 share and once-only completion [33m 628[2mms[22m[39m
+   [33m[2m✓[22m[39m Player Bingo earned line feedback[2m > [22mpreserves full blackout 1700 and original share and completion [33m 616[2mms[22m[39m
+   [33m[2m✓[22m[39m Player Bingo earned line feedback[2m > [22mannounces earned feedback then clears after 1800ms with static reduced-motion binding [33m 533[2mms[22m[39m
+   [33m[2m✓[22m[39m Player Bingo earned line feedback[2m > [22mpreserves wrong placement skip and final deck exhaustion accounting [33m 469[2mms[22m[39m
+   [33m[2m✓[22m[39m Player Bingo earned line feedback[2m > [22mclears pending feedback on replay and unmount without changing banked points [33m 1449[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m4 passed[39m[22m[90m (4)[39m
+[2m      Tests [22m [1m[32m35 passed[39m[22m[90m (35)[39m
+[2m   Start at [22m 14:28:28
+[2m   Duration [22m 9.02s[2m (transform 957ms, setup 385ms, collect 3.09s, tests 8.21s, environment 3.10s, prepare 704ms)[22m
+

@@ -1,0 +1,14 @@
+headsha exit=0 0s | 45c394012 Round BEG: merge Round 1352 (PR251) Bingo World Cup alias at 27927630
+alias exit=0 3s | Source bytes held; raw unit/output/control receipts retained when OUT is set. Offline proof only.
+alias-ctl-alias exit=0 3s | FIRED-OK
+vitest exit=0 10s |    Duration  9.02s (transform 957ms, setup 385ms, collect 3.09s, tests 8.21s, environment 3.10s, prepare 704ms)
+alias-ctl-country exit=0 2s | FIRED-OK
+simPlayerBingoLoad exit=0 6s | simPlayerBingoLoad: CRLF bindings proved, raw source bytes held, owned copies cleaned; fictional transport only, no browser or live calls.
+simPlayerBingoHonours exit=1 0s | Node.js v24.21.0
+simPlayerBingoLineFeedback exit=0 7s | simPlayerBingoLineFeedback: CRLF bindings proved, original bytes held and owned copies cleaned; fictional fixtures, no browser or backend calls.
+simSportsBingo exit=0 0s | simSportsBingo: green. Every card can be finished, and the packs play fair.
+simPlayerBingoPool exit=1 3s | SUPABASE UNREACHABLE OR POOL TOO SMALL. NOTHING WAS CHECKED.
+simBingoSeats exit=0 1s | simBingoSeats: all checks passed
+simMarketYearScope exit=0 0s | simMarketYearScope: all green
+simWindow2026Integration exit=1 5s | Node.js v24.21.0
+tsc exit=0 76s | 

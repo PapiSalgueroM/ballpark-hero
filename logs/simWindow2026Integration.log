@@ -1,0 +1,12 @@
+reading the table: 485 planned names, 503 entries
+file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/buildWindow2026.mjs:143
+  throw new Error(`buildWindow2026: Supabase ${last} for ${pathAndQuery.slice(0, 120)} after 3 attempts. Nothing was written.`);
+        ^
+
+Error: buildWindow2026: Supabase unreachable (TypeError: fetch failed) for player_market_values?select=id,player_name,club,year,position,age,market_value_usd&year=in.(2026)&player_name=in.(%22J%C after 3 attempts. Nothing was written.
+    at rest (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/buildWindow2026.mjs:143:9)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async marketRows (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/buildWindow2026.mjs:153:22)
+    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simWindow2026Integration.mjs:207:18
+
+Node.js v24.21.0

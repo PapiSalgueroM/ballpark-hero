@@ -1,0 +1,23 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
++ actual - expected
+
++ 'AD1D776406BF0151C6BE4B1EB53EA544E6FEC40363BD1D5B491D491342FEAEEF'
+- '9195E9890C28CDB8A46D52F7150A21F459A4B4AFDE4B3EF23AA887CA8F543450'
+
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simPlayerBingoHonours.mjs:24:8
+    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)
+    at async node:internal/modules/esm/loader:647:26
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: 'AD1D776406BF0151C6BE4B1EB53EA544E6FEC40363BD1D5B491D491342FEAEEF',
+  expected: '9195E9890C28CDB8A46D52F7150A21F459A4B4AFDE4B3EF23AA887CA8F543450',
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0
