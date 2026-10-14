@@ -1,0 +1,13 @@
+simCmShootoutOrder: node scripts/simCmShootoutOrder.mjs
+so-ignoreorder: CM_SHOOTOUT_CONTROL=ignoreorder node scripts/simCmShootoutOrder.mjs
+so-keeperonfull: CM_SHOOTOUT_CONTROL=keeperonfull node scripts/simCmShootoutOrder.mjs
+so-keepleague: CM_SHOOTOUT_CONTROL=keepleague node scripts/simCmShootoutOrder.mjs
+so-nocap: CM_SHOOTOUT_CONTROL=nocap node scripts/simCmShootoutOrder.mjs
+so-nomakeup: CM_SHOOTOUT_CONTROL=nomakeup node scripts/simCmShootoutOrder.mjs
+so-nooppkeeper: CM_SHOOTOUT_CONTROL=nooppkeeper node scripts/simCmShootoutOrder.mjs
+so-noskip: CM_SHOOTOUT_CONTROL=noskip node scripts/simCmShootoutOrder.mjs
+so-oppworst: CM_SHOOTOUT_CONTROL=oppworst node scripts/simCmShootoutOrder.mjs
+so-ownkeeper: CM_SHOOTOUT_CONTROL=ownkeeper node scripts/simCmShootoutOrder.mjs
+so-thinside: CM_SHOOTOUT_CONTROL=thinside node scripts/simCmShootoutOrder.mjs
+so-unsetpath: CM_SHOOTOUT_CONTROL=unsetpath node scripts/simCmShootoutOrder.mjs
+so-wrongkeeper: CM_SHOOTOUT_CONTROL=wrongkeeper node scripts/simCmShootoutOrder.mjs
