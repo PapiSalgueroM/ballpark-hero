@@ -1,0 +1,12 @@
+press-wide: SUBS_EDGE_SEEDS=24 node scripts/simCmSubs.mjs --part=press
+c-pressedge: SUBS_CONTROL=pressedge node scripts/simCmSubs.mjs
+ledger: node scripts/simCmSubs.mjs --part=ledger
+o8-7100: SUBS_SEEDS=8 node scripts/simCmSubs.mjs --part=opponent
+o8-5000: SUBS_SEEDS=8 SUBS_SEED_BASE=5000 node scripts/simCmSubs.mjs --part=opponent
+o8-9000: SUBS_SEEDS=8 SUBS_SEED_BASE=9000 node scripts/simCmSubs.mjs --part=opponent
+o8-3000: SUBS_SEEDS=8 SUBS_SEED_BASE=3000 node scripts/simCmSubs.mjs --part=opponent
+r8-7100: SUBS_SEEDS=8 SUBS_CONTROL=opproom node scripts/simCmSubs.mjs
+r8-5000: SUBS_SEEDS=8 SUBS_SEED_BASE=5000 SUBS_CONTROL=opproom node scripts/simCmSubs.mjs
+r8-9000: SUBS_SEEDS=8 SUBS_SEED_BASE=9000 SUBS_CONTROL=opproom node scripts/simCmSubs.mjs
+r8-3000: SUBS_SEEDS=8 SUBS_SEED_BASE=3000 SUBS_CONTROL=opproom node scripts/simCmSubs.mjs
+unit: node_modules/.bin/vitest run src/lib/clubManagerSubsRule.test.ts --testTimeout=300000

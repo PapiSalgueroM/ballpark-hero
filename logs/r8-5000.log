@@ -1,0 +1,6 @@
+ok   [opponent] the other dugout never passes its rule's changes or stoppages (0 of 804 matches over)
+   the other dugout: 2.71 changes a match under five (301 matches), 1.79 on the base rules (301)
+FAIL [opponent] under five they make more changes than on the base rules, by at least 1.5 (gap 0.92)
+FAIL [opponent] under five some matches see a fourth or fifth change from them (0 of 301)
+   0 of 301 five change matches saw them make four or five; 0 had a double change
+control opproom FIRED: 2 of 3 checks red

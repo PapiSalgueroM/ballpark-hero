@@ -1,0 +1,12 @@
+ledger exit=0 0s | simCmSubs GREEN: 21 of 21 checks green (parts ledger)
+o8-7100 exit=0 14s | simCmSubs GREEN: 3 of 3 checks green (parts opponent)
+o8-5000 exit=0 14s | simCmSubs GREEN: 3 of 3 checks green (parts opponent)
+c-pressedge exit=1 41s | control pressedge FIRED: 1 of 4 checks red
+o8-9000 exit=1 12s | simCmSubs RED: 2 of 3 checks green (parts opponent)
+o8-3000 exit=0 14s | simCmSubs GREEN: 3 of 3 checks green (parts opponent)
+r8-7100 exit=1 14s | control opproom FIRED: 2 of 3 checks red
+r8-5000 exit=1 14s | control opproom FIRED: 2 of 3 checks red
+r8-9000 exit=1 13s | control opproom FIRED: 2 of 3 checks red
+unit exit=0 3s |    Duration  3.29s (transform 1.78s, setup 83ms, collect 2.09s, tests 11ms, environment 494ms, prepare 199ms)
+r8-3000 exit=1 11s | control opproom FIRED: 2 of 3 checks red
+press-wide exit=0 101s | simCmSubs GREEN: 4 of 4 checks green (parts press)
