@@ -1,0 +1,41 @@
+runEach: done, 2 of 63 exited non zero
+simCmLeagueFixtures exit=0 31s | simCmLeagueFixtures: OK, sections A to J green: 10 ledger(s), 10 frozen, 0 pending, 10 bound, 0 unbound, 3528 fixtures, 268 of 268 controls fired
+simCmOwnGoals exit=0 174s | simCmOwnGoals: PASS, 8 sections green
+simAcademy exit=0 903s | ALL ACADEMY CHECKS PASSED
+simCollegeGridKey exit=1 6s | simCollegeGridKey: NOTHING WAS CHECKED.
+simColleges exit=0 1s | simColleges: green
+simCmTablesTruth exit=0 46s | simCmTablesTruth: every case green
+simConnectionsShake exit=0 7s | simConnectionsShake: all green
+simConquestNbaArcade exit=0 10s | NBA Arcade: 2 of 2 real hook and board outcomes green
+simDailyClubPool exit=0 10s | simDailyClubPool: all sections green
+simContracts exit=0 43s | ALL CONTRACT CHECKS PASSED
+simDeadlineDay exit=0 12s | simDeadlineDay: green. The brief is real, the desk pays, the clock binds, the daily is one window a day, the budget holds, a Club Manager save keeps its registrations, rivals close at the stated rate,
+simDraftShowdown exit=0 1s | simDraftShowdown: green. The draft has a point, and the pool fits on a screen.
+simEmojiGuessFeedback exit=0 14s | simEmojiGuessFeedback: source bytes held, owned copies and report cleaned.
+simEraBakeExtend exit=0 1s | simEraBakeExtend: green. The shared extend step still fails closed on every guard.
+simExtensionResponseMotion exit=0 9s | simExtensionResponseMotion: five actual-card opening, engine-response, exact-terms, one-use-push, callback, stable-node and focus checks passed.
+simF1DriverSearchNavigation exit=0 7s | simF1DriverSearchNavigation: original Search/CSS/helpers/data/hook/Board bytes held, only owned temporary source copies changed.
+simDailyReload exit=0 92s | simDailyReload: all green (21 row(s), both controls fired)
+simFaqSchema exit=0 46s | simFaqSchema: green. One block per type per page, written once and never rewritten.
+simFootleAtomicPool exit=0 7s | simFootleAtomicPool: all green
+simFootlePractice995 exit=0 22s | Footle practice: 3 modes completed, every expected case executed and exact controls verified.
+simFreeKick exit=0 1s | simFreeKick: green. The corners pay, one button does not, and the keeper is real.
+simFirstTeamPage exit=0 64s | PASS: seven real-page cases and all six effective negative controls.
+simGmCalendar exit=1 4s | simGmCalendar: 6 failure(s) || FAIL: Everton seasonDays: hash 158dee139333cccc41abdbfc != recorded 4f6e77bb426d72edb25d0123; first lines now ["{\"worldYear\":2026,\"entryDates\":[{\"y\":2026, / FAIL: Everton monthGrid: hash 998eed009784b43682c66dfd != recorded 191228a15047c811f0735e7a; first lines now ["2026-8 light [null,null,null,null,null,null,{\"da
+simGmFacilities exit=0 1s | simGmFacilities: ALL GREEN
+simGmPress exit=0 1s | simGmPress: green. The GM faces the room, the room moves the meter that matters.
+simGolfMajors exit=0 1s | simGolfMajors: green. Every row of the record is sourced on two organisations with an official host, both migration hashes and both counts recompute from it, the migration replayed on the record lands
+simFrontOfficeSchedule exit=0 28s | simFrontOfficeSchedule: GREEN, NBA, MLB and NHL seasons booked and played exactly over 20 seeds
+simCareerSquad exit=0 821s | simCareerSquad: 2217 checks, 0 failed
+simHeadTags exit=0 1s | simHeadTags: green. Every page says its own thing, once.
+simHigherLower exit=0 1s | simHigherLower: all sections green
+simGuessTheNationFeedback exit=0 12s | simGuessTheNationFeedback: eight runtime inputs held; only owned copies/report removed.
+simIdleTimers exit=0 7s | simIdleTimers: green. Every idle game floater timer is owned by its page and dies with it.
+simInternational exit=0 46s | ALL INTERNATIONAL CHECKS PASSED
+simLeaderboardEligibility exit=0 7s | simLeaderboardEligibility: actual source held, owned copies cleaned, Supabase calls stubbed and no browser launched.
+simLineupRecordPositions exit=0 7s | PASS simLineupRecordPositions
+simLiveHarnessRetry exit=0 1s | simLiveHarnessRetry: green. Transient throws retry, HTTP answers stay immediate, and all three live fences use the helper.
+simGridCells exit=0 94s | simGridCells: green. No board this builder can deal contains a cell without an answer.
+simLiveSimCelebration exit=0 6s | simLiveSimCelebration: 17 outcome checks passed, correct side, net-first, real figure, freeze/expiry, reduced motion, the three recorded digests of the lift, the part behind its contract (its dead bal
+simHomeSearchRecovery exit=0 145s | Home search recovery: passed. Evidence at /home/runner/work/ballpark-hero/ballpark-hero/home-search-recovery-artifacts/outcomes
+runEach: done, 2 of 63 exited non zero
