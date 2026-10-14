@@ -13,4 +13,5 @@ export const SOCCER_LIFE_CONSEQUENCES: Readonly<Record<number, Readonly<Record<n
   221: { 0: 'Followers +1M, Popularity +4, the people love a bad singer' },
   222: { 1: 'Morale -5, Followers +300k, the story becomes a documentary punchline' },
   223: { 1: 'Diplomacy: Morale +3, Integrity +1, whales on Wednesdays' },
+  233: { 0: 'Followers +800k, Popularity +4, self-awareness is elite' },
 };
