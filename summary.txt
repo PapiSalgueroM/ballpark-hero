@@ -1,0 +1,5 @@
+build exit=0 26s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+saveFence-b59 exit=0 79s | simSaveFence: all green (tabs, source, fleet)
+playSoccerInternationalReturn exit=0 121s | Soccer international return native 854 checks,12 journeys,3 copied observation controls,0 failures.
+playCareerProgramme exit=0 194s | Career programme native: 1154 checks, 21/21 completed gameplay journeys
+playSoccerAgentReview exit=0 409s | Soccer agent review native 1904 checks,12 journeys,3 copied observation controls,0 failures.

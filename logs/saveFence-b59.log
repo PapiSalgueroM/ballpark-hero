@@ -1,0 +1,8 @@
+  1923 saves on head, 0 of them in a state a load repair fires on; 1923 faces equal to the base commit's (both saves' bytes and the draw count)
+  squeezed career: 465 saves the engine wrote with fewer than 14 men (seed:saves 0:93 1:92 2:96 3:92 4:92)
+  negative budget: saved at -2.5, opened on head at -2.5 with 0 draws, the same JSON as the base's
+  old saves: 4 of 4 Club Manager saves the base engine wrote open to the same JSON on head and base
+  section tabs: 15 checks, 0 red
+  section source: 18 checks, 0 red
+  section fleet: 1930 checks, 0 red
+simSaveFence: all green (tabs, source, fleet)
