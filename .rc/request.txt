@@ -1,0 +1,16 @@
+c-onesource: SUBS_CONTROL=onesource node scripts/simCmSubs.mjs
+c-oldcap: SUBS_CONTROL=oldcap node scripts/simCmSubs.mjs
+c-nostops: SUBS_CONTROL=nostops node scripts/simCmSubs.mjs
+c-htstop: SUBS_CONTROL=htstop node scripts/simCmSubs.mjs
+c-ht45: SUBS_CONTROL=ht45 node scripts/simCmSubs.mjs
+c-yearplus: SUBS_CONTROL=yearplus node scripts/simCmSubs.mjs
+c-etbreak: SUBS_CONTROL=etbreak node scripts/simCmSubs.mjs
+c-cutover: SUBS_CONTROL=cutover node scripts/simCmSubs.mjs
+c-pressedge: SUBS_CONTROL=pressedge node scripts/simCmSubs.mjs
+c-pressold: SUBS_CONTROL=pressold node scripts/simCmSubs.mjs
+c-opproom: SUBS_CONTROL=opproom node scripts/simCmSubs.mjs
+c-coachall: SUBS_CONTROL=coachall node scripts/simCmSubs.mjs
+c-etfrozen: SUBS_CONTROL=etfrozen node scripts/simCmSubs.mjs
+c-legacyleak: git worktree add /tmp/subsbase2 dec9075b >/dev/null 2>&1 && SUBS_BASE=/tmp/subsbase2 SUBS_CONTROL=legacyleak node scripts/simCmSubs.mjs
+c-pressnew: git worktree add /tmp/subsbase3 dec9075b >/dev/null 2>&1 && SUBS_BASE=/tmp/subsbase3 SUBS_CONTROL=pressnew node scripts/simCmSubs.mjs
+c-nodate: git worktree add /tmp/subsbase4 dec9075b >/dev/null 2>&1 && SUBS_BASE=/tmp/subsbase4 SUBS_CONTROL=nodate node scripts/simCmSubs.mjs
