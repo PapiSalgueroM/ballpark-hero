@@ -1,0 +1,7 @@
+build exit=0 30s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+headsha exit=0 0s | 4e5038fb0 Round BEG: the pitch walk's final holds take each digest in a block of its own (simHarnessAnchors, third pass)
+simHarnessAnchors exit=0 44s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+fonts-default exit=0 1s | Prepared 9 declared font dependencies for local fulfillment.
+playTouch exit=0 14s | playPlayerAutocompleteTouchScroll passed: 1985 checks, 6 journeys, 0 controls, 0 premature selections, 13 originals, 0 failures, 0 setup failures.
+playTouch-ctl exit=0 38s | FIRED-OK
+playPitch exit=0 19s | playPitchRestartContinuity: green in the prepared shared-pitch scope; no real Manager journey or painted-old-jump claim.
