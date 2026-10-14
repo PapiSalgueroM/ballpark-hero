@@ -1,0 +1,4 @@
+# Release BF join: dailySaveShapes alone (red once inside vitest-all on 93e05923), on main 4a5f759a and on this head
+daily-head: node_modules/.bin/vitest run src/test/dailySaveShapes.test.tsx --testTimeout=300000 > /tmp/d.log 2>&1; s=$?; sed "s/\x1b\[[0-9;]*m//g" /tmp/d.log | grep -E "FAIL|Error|expected|Tests  |Test Files" | head -12 | cut -c1-220; exit $s
+daily-main: git worktree add -q --detach /tmp/m 4a5f759a && ln -s "$PWD/node_modules" /tmp/m/node_modules && cd /tmp/m && node_modules/.bin/vitest run src/test/dailySaveShapes.test.tsx --testTimeout=300000 > /tmp/dm.log 2>&1; s=$?; sed "s/\x1b\[[0-9;]*m//g" /tmp/dm.log | grep -E "FAIL|Tests  |Test Files" | head -6 | cut -c1-200; exit $s
+date: date -u
