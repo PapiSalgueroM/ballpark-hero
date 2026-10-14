@@ -12,7 +12,6 @@ jobs:
       CI: '1'
       SIM_NETWORK: offline
       MANAGER_REPORT_PHASE: baseline
-      NODE_OPTIONS: --require=./scripts/lib/offlineTransport.cjs
     defaults:
       run:
         shell: bash
@@ -36,8 +35,12 @@ jobs:
             git diff --exit-code 082fc2774c8aa9f919c14efa33bfc3fbfc599597 -- src scripts package.json package-lock.json bun.lock index.html ':!src/lib/clubManagerCustomPromotion.test.ts' ':!src/lib/clubManagerReportAge.test.ts' ':!src/lib/clubManagerReportedScorers.test.ts'
           fi
       - name: Actual application types
+        env:
+          NODE_OPTIONS: --require=${{ github.workspace }}/scripts/lib/offlineTransport.cjs
         run: node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee manager-report-artifacts/types.log
       - name: Report outcomes on the actual engine
+        env:
+          NODE_OPTIONS: --require=${{ github.workspace }}/scripts/lib/offlineTransport.cjs
         run: |
           set +e
           npm test -- --run src/lib/clubManagerCustomPromotion.test.ts src/lib/clubManagerReportAge.test.ts src/lib/clubManagerReportedScorers.test.ts --reporter=verbose --reporter=json --outputFile=manager-report-artifacts/outcomes.json 2>&1 | tee manager-report-artifacts/outcomes.log
@@ -79,6 +82,8 @@ jobs:
           JS
       - name: Existing promotion contracts on the baseline
         if: env.MANAGER_REPORT_PHASE == 'baseline'
+        env:
+          NODE_OPTIONS: --require=${{ github.workspace }}/scripts/lib/offlineTransport.cjs
         run: node scripts/simPromotion.mjs 2>&1 | tee manager-report-artifacts/original-promotion.log
       - name: Final source holds
         if: always()
