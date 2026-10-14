@@ -1,0 +1,17 @@
+simClubManagerMeters exit=0 35s | simClubManagerMeters: PASS. The board meter is the sack race, the fans move with results, and every table prints its goals pair.
+simCmFixtureFleet exit=0 7s | simCmFixtureFleet: green. 10 registered league(s), 9 in a file of their own. nofetch NOT RUN, oldsaves NOT RUN, dailies 11 clubs.
+simDailyDeals exit=0 4s | simDailyDeals: green. 12 Hot Seat dates (5 Premier League) and 6 Deadline Day dates (3 Premier League) deal what Release AS dealt, no daily carries the real fixture key, 
+simManagerHotSeat exit=0 80s | simManagerHotSeat: green. The target is the club's, reading the room pays, outcomes replay, a Club Manager save keeps its registrations and a survivor carries on in Club 
+simSaveFence exit=0 60s | simSaveFence: all green (tabs, source, fleet)
+simDailyClubPool exit=0 5s | simDailyClubPool: all sections green
+simDeadlineDay exit=0 6s | simDeadlineDay: green. The brief is real, the desk pays, the clock binds, the daily is one window a day, the budget holds, a Club Manager save keeps its registrations, ri
+simClubManagerSave exit=0 14s | simClubManagerSave: all sections green
+saveSize-head exit=0 69s | simClubManagerSaveSize: all sections green
+slots-head exit=0 79s | simClubManagerSlots: all sections green
+pressCoverage exit=0 484s | PASS managerPressCoverageProof.mjs: 106 actual first-season questions, 89 genuine disliked probes, whole career/vector holds, two sampling faults and actual floor fault w
+continuity exit=1 46s |     at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simManagerWorldContinuity.mjs:489:24
+simCmUnseededWorld exit=1 192s | simCmUnseededWorld: 112 FAILURE(S)
+matchPlans exit=1 174s | 1 harness not green.
+worldBrowser exit=0 94s | All 1 harnesses green.
+worldSizeDiagnostic exit=0 517s | DIAGNOSTIC complete: original/current unchanged historical budgets, full raw states, storage and unfiltered action vectors retained
+simPress exit=0 2172s | ALL PRESS AND TEAM TALK CHECKS PASSED
