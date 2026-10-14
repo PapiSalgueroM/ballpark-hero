@@ -541,7 +541,7 @@ export function getLifeEvents(state: CareerState): RandomEvent[] {
       ] });
   }
 
-  if (!flag(state, "teammateLoan") && state.netWorth >= 0.5) {
+  if (!flag(state, "teammateLoan") && (state.pendingEvents.some(event => event.id === 236) || state.netWorth >= 0.5)) {
     push({ id: 236, cooldown: COOLDOWN.once, emoji: "🤲", title: "A Teammate Needs €200k",
       description: "A squad player pulls you aside. Family trouble back home, he says. He needs €200k and swears he is good for it.",
       category: "life", choices: [
