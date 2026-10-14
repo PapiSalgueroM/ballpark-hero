@@ -1,0 +1,8 @@
+mutation choicetargets applied to src/lib/gmInbox.ts
+   FAIL 4934 breaks: FX_CONDUCT on 100 ten season desks answering late: 17205 cards dealt, 7242 of them tagged, 16184 answered, 55316 tagged cards held for a real man, 312 answers refused and 853 open cards settled after a role passed to a real man (or nobody)
+simEventDeck: 1 failure, red sections 12
+[31m   [31m×[31m gmInbox Round 1332: a tagged card asked again after its deal[2m > [22man option that moves another role than the card is about holds the card while that man is real, and asks again at the answer[39m[32m 14[2mms[22m[39m
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+[41m[1m FAIL [22m[49m src/lib/gmInbox.test.ts[2m > [22mgmInbox Round 1332: a tagged card asked again after its deal[2m > [22man option that moves another role than the card is about holds the card while that man is real, and asks again at the answer
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m83 passed[39m[22m[90m (84)[39m
+kit exit=1 vitest exit=1: MUTANT KILLED
