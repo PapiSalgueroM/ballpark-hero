@@ -1,0 +1,8 @@
+simCareerLeagueFinish-chainOut exit=0 19s | simCareerLeagueFinish: green. 756 careers, 6048 seasons, 4825 in a verified league; finish and title agree, the ladder holds, the historical stream holds after documented
+leagueSeasons-chainBase exit=0 30s | simCareerLeagueSeasons: all sections green
+simCareerSocialBrands-chainOut exit=0 41s | ALL SOCIAL AND BRAND CHECKS PASSED
+simCareerAwardsNight-chainOut exit=0 92s | simCareerAwardsNight: ALL 179 CHECKS PASSED
+worldTruth exit=0 93s | simSoccerWorldTruth: OK, every section green
+simCareerKeepPlaying-chainOut exit=0 119s | simCareerKeepPlaying: 1441 checks, 0 failures
+simHarnessAnchors exit=0 51s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+storyRole exit=0 42s | simCareerStoryRole: 16 groups, 0 failed, 48 full AR pairs
