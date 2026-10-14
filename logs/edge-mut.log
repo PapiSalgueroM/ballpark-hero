@@ -1,0 +1,8 @@
+MUTATION pressedge applied to src/lib/clubManager.ts
+Liverpool s0 m1: "Nottingham Forest on paper are a level above you. Realistica" edge vs Nottingham Forest 6.4 (just played Newcastle)
+Barcelona s0 m11: "Getafe on paper are a level above you. Realistically, what a" edge vs Getafe 17.5 (just played Real Madrid)
+Burnley s0 m7: "Preston North End on paper are a level above you. Realistica" edge vs Preston North End 9.7 (just played Sheffield United)
+Brentford s0 m2: "Sunderland on paper are a level above you. Realistically, wh" edge vs Sunderland 2.5 (just played Leeds United)
+Barcelona s1 m16: "Málaga on paper are a level above you. Realistically, what a" edge vs Málaga 26.0 (just played PSG)
+Liverpool s3 m1: "Nottingham Forest on paper are a level above you. Realistica" edge vs Nottingham Forest 3.2 (just played Newcastle)
+RVEDGE mut-pressedge: bigGame asked 21, of them about a club the engine does not rate a level above 12

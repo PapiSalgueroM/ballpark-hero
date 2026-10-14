@@ -1,0 +1,3 @@
+et-owed exit=1 15s | simCmSubs RED: 3 of 4 checks green (parts extratime)
+edge-mut exit=0 28s | RVEDGE mut-pressedge: bigGame asked 21, of them about a club the engine does not rate a level above 12
+edge-head exit=0 31s | RVEDGE head: bigGame asked 23, of them about a club the engine does not rate a level above 0

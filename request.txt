@@ -1,0 +1,3 @@
+edge-head: node .rc/x/rvedge.mjs head
+edge-mut: R=$PWD; W=/tmp/mP2; (git worktree add -f $W HEAD >/dev/null 2>&1 || (sleep 5; git worktree add -f $W HEAD >/dev/null 2>&1)); ln -s $R/node_modules $W/node_modules; cd $W && node $R/.rc/x/rvmut.mjs pressedge && node $R/.rc/x/rvedge.mjs mut-pressedge
+et-owed: R=$PWD; W=/tmp/et; (git worktree add -f $W HEAD >/dev/null 2>&1 || (sleep 9; git worktree add -f $W HEAD >/dev/null 2>&1)); ln -s $R/node_modules $W/node_modules; cd $W && git show c00694b8:scripts/simCmSubs.mjs > scripts/rvSubsET.mjs && grep -c "extratime" scripts/rvSubsET.mjs && node scripts/rvSubsET.mjs --part=extratime
