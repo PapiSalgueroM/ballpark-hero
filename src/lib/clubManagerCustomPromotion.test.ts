@@ -17,6 +17,8 @@ const spec = (leagueId: string, name = 'Fixture Athletic'): CustomClubSpec => ({
 });
 const created = (leagueId = 'championship', name?: string) => startCareer(name ?? 'Fixture Athletic', 'now', spec(leagueId, name));
 const clubs = (career: CareerState, id: string) => career.leagueOverrides?.[id] ?? REAL_LEAGUES.find(row => row.id === id)!.clubs;
+const leagueById = (id: string) => REAL_LEAGUES.find(row => row.id === id)!;
+const pyramidOf = (top: string) => PYRAMIDS.find(row => row.top === top)!;
 
 function rankedRows(names: string[]): TableRow[] {
   const rounds = leagueRounds(names.length);
@@ -113,7 +115,7 @@ describe('created clubs use the existing modern promotion slots', () => {
   });
 
   it('uses the saved own-name head-to-head before mapping the promotion slot', () => {
-    const pair = PYRAMIDS.find(row => row.top === 'seriea')!;
+    const pair = pyramidOf('seriea');
     expect(pair).toBeDefined();
     const safePlace = REAL_LEAGUES.find(row => row.id === pair.top)!.clubs.length - pair.count;
     const state = finished(created(pair.top), safePlace + 1);
@@ -179,8 +181,8 @@ describe('created clubs use the existing modern promotion slots', () => {
     const expectedDef = copy(clubDefFor(next.clubName));
     expect(saveCareer(next)).toBe(true);
     const saved = localStorage.getItem(SAVE_KEY);
-    const premier = REAL_LEAGUES.find(row => row.id === 'premier')!.clubs;
-    const lower = REAL_LEAGUES.find(row => row.id === 'championship')!.clubs;
+    const premier = leagueById('premier').clubs;
+    const lower = leagueById('championship').clubs;
     registerLeagueOverrides({ premier: lower.slice(0, premier.length), championship: [...premier, ...lower.slice(premier.length)] });
     registerCustomClub(spec('premier', 'Another slot'));
     const loaded = loadCareer()!;
@@ -203,7 +205,7 @@ describe('created clubs use the existing modern promotion slots', () => {
   });
 
   it('keeps qualified non-English created clubs apart from their domestic opponents in Europe', () => {
-    for (const pair of PYRAMIDS.filter(row => row.top !== 'premier')) {
+    for (const pair of PYRAMIDS.filter(row => row !== pyramidOf('premier'))) {
       const qualified = finishSeason(finished(created(pair.top))).state;
       expect(uclQualifiersFrom(qualified)).toContain(qualified.clubName);
       for (const draw of [0.05, 0.2, 0.4, 0.6, 0.8, 0.95]) {
