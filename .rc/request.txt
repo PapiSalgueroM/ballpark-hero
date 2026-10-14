@@ -1,0 +1,6 @@
+#!build
+#!playwright
+#!serial
+headsha: git log --oneline -2
+fonts: node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only | tail -2
+playTouch-ctl: node .rc/x/prepInstalled.mjs "$PWD/touch-artifacts" && AUTOCOMPLETE_TOUCH_OUT="$PWD/touch-artifacts" AUTOCOMPLETE_TOUCH_PHASE=fixed AUTOCOMPLETE_TOUCH_CONTROL=premature-pointerdown NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playPlayerAutocompleteTouchScroll.mjs > /tmp/pt.log 2>&1; s=$?; tail -4 /tmp/pt.log; cp touch-artifacts/premature-pointerdown/source-control/build.stderr.log "$RC_OUT/" 2>/dev/null; [ $s = 0 ] && grep -q "playPlayerAutocompleteTouchScroll control-reproduced" /tmp/pt.log && echo FIRED-OK
