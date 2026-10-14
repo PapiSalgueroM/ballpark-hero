@@ -1,0 +1,343 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+[90mstdout[2m | src/test/cmValueCurve.test.ts[2m > [22m[2mlevelFrom: the age read run backwards, total[2m > [22m[2mit inverts the read wherever no clamp bit, and the clamped cells are counted
+[22m[39mlevelFrom: clamped cells of 1,664 a top (52 levels by 32 ages): {"94":299,"96":235,"97":203,"98":171}
+
+[90mstdout[2m | src/test/cmValueCurve.test.ts[2m > [22m[2mone order in every world: the stretch first, then the age points[2m > [22m[2mover every row of the four past seasons: never more than six down or eight up, nobody past the top
+[22m[39mera2005: 829 of 1727 rows change, swing -6 to 8, on the top of 96: Ronaldinho, Thierry Henry
+era2010: 890 of 1751 rows change, swing -6 to 8, on the top of 97: Cristiano Ronaldo, Lionel Messi
+era2015: 738 of 1659 rows change, swing -6 to 8, on the top of 98: Cristiano Ronaldo, Lionel Messi
+era2020: 862 of 1774 rows change, swing -6 to 8, on the top of 94: Kylian Mbappé, Lionel Messi
+
+[90mstdout[2m | src/test/cmValueCurve.test.ts[2m > [22m[2mwhat every 2026 age will stand on (the basis file), man for man against the squads main ships[2m > [22m[2mevery line is what the ages rule resolves from the committed ledgers, and its last item is the value rating
+[22m[39m2026 at the flip: 2078 of 4401 ratings change; by points {"0":2323,"1":230,"2":324,"3":110,"4":76,"5":44,"6":20,"7":11,"8":13,"-1":379,"-2":306,"-3":245,"-4":182,"-6":50,"-5":88}
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ [32m✓[39m src/test/cmValueCurve.test.ts [2m([22m[2m57 tests[22m[2m)[22m[33m 1105[2mms[22m[39m
+   [33m[2m✓[22m[39m the typed door the engine will import (src/lib/cmAgeRead.ts)[2m > [22mnothing shipped imports it, or either script library, yet (part two deletes this test with its first import) [33m 412[2mms[22m[39m
+ [32m✓[39m src/lib/clubManagerWorldRoster.test.ts [2m([22m[2m96 tests[22m[2m)[22m[33m 2533[2mms[22m[39m
+   [33m[2m✓[22m[39m actual world roster continuity through manager callbacks[2m > [22mbuys, joins another job, saves, reloads and rejoins the buyer without seller resurrection [33m 540[2mms[22m[39m
+ [32m✓[39m src/lib/clubManagerLeagueBook.test.ts [2m([22m[2m25 tests[22m[2m)[22m[33m 2396[2mms[22m[39m
+   [33m[2m✓[22m[39m dealGoals[2m > [22mpays set pieces and own goals at the shares of the rules, and no assist on any of them [33m 1227[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerDeskCues.test.tsx [2m([22m[2m14 tests[22m[2m)[22m[33m 2827[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager desk cues: contracts[2m > [22ma plain renewal says who and the terms the save now holds, on the slam, once [33m 513[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager desk cues: contracts[2m > [22ma refused press and a save that moved some other way say nothing [33m 413[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager desk cues: contracts[2m > [22mwhile the cookie banner is unanswered the line sits above it, and drops back once it is answered [33m 302[2mms[22m[39m
+[90mstderr[2m | src/test/managerMatchPlans.test.tsx[2m > [22m[2mClub Manager saved match plans[2m > [22m[2mshows the worked example and current assignments then restores focus when the plan tile closes
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+ [32m✓[39m src/test/managerMatchPlans.test.tsx [2m([22m[2m13 tests[22m[2m)[22m[33m 3040[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager saved match plans[2m > [22msaves applies and reloads the actual mounted tactics atomically through the real hook [33m 628[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager saved match plans[2m > [22mkeeps three named slots independent and replaces or deletes only the selected saved setup [33m 405[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager saved match plans[2m > [22mshows the worked example and current assignments then restores focus when the plan tile closes [33m 576[2mms[22m[39m
+[90mstdout[2m | src/lib/clubManagerTrajectory.test.ts[2m > [22m[2mClub Manager save-bound player trajectories[2m > [22m[2mleaves every real season-zero source row byte-exact without adding potential
+[22m[39mTRAJECTORY original source rows held: 5113
+
+[90mstdout[2m | src/lib/clubManagerTrajectory.test.ts[2m > [22m[2mClub Manager save-bound player trajectories[2m > [22m[2mmakes both rare development turns reachable without escaping their per-season bounds
+[22m[39mTRAJECTORY zero-curve outcomes: {"players":1024,"breakouts":51,"setbacks":35,"unchanged":938}
+
+ [32m✓[39m src/test/cmLeagueLeadersCard.test.tsx [2m([22m[2m15 tests[22m[2m)[22m[33m 4885[2mms[22m[39m
+   [33m[2m✓[22m[39m the season review[2m > [22mnames the league's most assists and most clean sheets from the book, and an older summary prints as it did [33m 1267[2mms[22m[39m
+   [33m[2m✓[22m[39m the season review[2m > [22mwithholds the new awards in a league whose data is too thin, and says why [33m 727[2mms[22m[39m
+   [33m[2m✓[22m[39m the season review[2m > [22ma league between the floor and 95 is settled by the book and still carries the honest line, on the card and on the review [33m 1015[2mms[22m[39m
+   [33m[2m✓[22m[39m the season review[2m > [22ma season on a late book says the book covered only part of it, not that its data was thin [33m 1136[2mms[22m[39m
+[90mstdout[2m | src/test/clubManagerVarScreen.test.tsx[2m > [22m[2mClub Manager: the review screen[2m > [22m[2mthe last minute of a half, a goal of mine at 44 and theirs ruled out at 45: the card never sits on my goal
+[22m[39mclubManagerVarScreen: the 44 and 45 case was found on seed 2042, whistle 50
+
+[90mstdout[2m | src/lib/clubManagerTrajectory.test.ts[2m > [22m[2mClub Manager save-bound player trajectories[2m > [22m[2mrespects every source age curve, rating floor and carried potential ceiling
+[22m[39mTRAJECTORY bounded player years: 122712
+
+[90mstdout[2m | src/lib/clubManagerTrajectory.test.ts[2m > [22m[2mClub Manager save-bound player trajectories[2m > [22m[2mmeasures save variety and leader changes across the complete real source pool
+[22m[39mTRAJECTORY measured real-pool outcomes: {"sourceRows":5113,"clubs":412,"seeds":[7,31,81,307,1207,2026],"years":5,"variedPlayers":5113,"changedClubLeaders":291,"drift":{"0":1803,"1":2050,"2":4104,"3":3670,"4":2705,"5":2107,"6":1478,"7":451,"8":372,"9":206,"10":115,"11":69,"12":33,"13":10,"14":1,"15":4,"16":1,"-2":1157,"-1":1339,"-4":971,"-5":852,"-6":737,"-10":496,"-9":534,"-3":1020,"-13":305,"-8":608,"-21":98,"-24":48,"-27":22,"-29":10,"-30":28,"-7":647,"-12":420,"-14":287,"-16":218,"-15":237,"-11":447,"-20":112,"-17":200,"-19":164,"-26":44,"-25":70,"-31":8,"-23":81,"-22":115,"-28":49,"-18":153,"-33":6,"-34":7,"-32":4,"-38":1,"-35":2,"-36":1,"-37":1}}
+
+[90mstdout[2m | src/lib/clubManagerTrajectory.test.ts[2m > [22m[2msave-scoped actual world projections[2m > [22m[2mmeasures actual seeded world leader changes without asserting an unmeasured frequency
+[22m[39mTRAJECTORY actual world outcomes: {"clubs":454,"seeds":[7,31,81,307,1207,2026],"years":5,"variedClubs":410,"changedLeaders":300,"generatedRows":17786,"drift":{"0":852,"1":1040,"2":2251,"3":2075,"4":1595,"5":1292,"6":908,"7":272,"8":231,"9":124,"10":78,"11":49,"12":19,"13":7,"14":1,"15":1,"16":1,"-5":209,"-2":394,"-1":529,"-4":235,"-3":311,"-6":146,"-9":44,"-8":63,"-13":13,"-7":80,"-10":27,"-12":18,"-16":2,"-14":4,"-11":17,"-22":1,"-19":2,"-17":1}}
+
+ [32m✓[39m src/lib/clubManagerTrajectory.test.ts [2m([22m[2m44 tests[22m[2m)[22m[33m 27963[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager save-bound player trajectories[2m > [22mleaves every real season-zero source row byte-exact without adding potential [33m 479[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager save-bound player trajectories[2m > [22mreplays complete outputs after serialization and arbitrary read order [33m 368[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager save-bound player trajectories[2m > [22mrespects every source age curve, rating floor and carried potential ceiling [33m 21178[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager save-bound player trajectories[2m > [22mmeasures save variety and leader changes across the complete real source pool [33m 559[2mms[22m[39m
+   [33m[2m✓[22m[39m save-scoped actual world projections[2m > [22mpreserves complete worlds through saved seed serialization, reordered reads and interleaved careers without draws [33m 458[2mms[22m[39m
+   [33m[2m✓[22m[39m save-scoped actual world projections[2m > [22muses the actual curve and value scale while carrying original identities and simulated ceilings [33m 564[2mms[22m[39m
+   [33m[2m✓[22m[39m save-scoped actual world projections[2m > [22mmeasures actual seeded world leader changes without asserting an unmeasured frequency [33m 3743[2mms[22m[39m
+ [32m✓[39m src/test/cmTablesTruth.test.tsx [2m([22m[2m58 tests[22m[2m)[22m[33m 28627[2mms[22m[39m
+   [33m[2m✓[22m[39m 1 the contracts desk labels a real man's deal as this game's, and no made up man's[2m > [22mLiverpool 2026-27 [33m 534[2mms[22m[39m
+   [33m[2m✓[22m[39m 1 the contracts desk labels a real man's deal as this game's, and no made up man's[2m > [22mBrentford with a made up free agent signed [33m 314[2mms[22m[39m
+   [33m[2m✓[22m[39m 2 the squad list labels a real man's deal as this game's, and no made up man's[2m > [22mLiverpool 2026-27 [33m 1200[2mms[22m[39m
+   [33m[2m✓[22m[39m 2 the squad list labels a real man's deal as this game's, and no made up man's[2m > [22mEverton 2005-06 [33m 549[2mms[22m[39m
+   [33m[2m✓[22m[39m 2 the squad list labels a real man's deal as this game's, and no made up man's[2m > [22mOB 2026-27 [33m 399[2mms[22m[39m
+   [33m[2m✓[22m[39m 2 the squad list labels a real man's deal as this game's, and no made up man's[2m > [22mBrentford with an academy graduate [33m 956[2mms[22m[39m
+   [33m[2m✓[22m[39m 2 the squad list labels a real man's deal as this game's, and no made up man's[2m > [22mBrentford with a made up free agent signed [33m 763[2mms[22m[39m
+   [33m[2m✓[22m[39m 2 the squad list labels a real man's deal as this game's, and no made up man's[2m > [22mSevilla old save (Round 1052) [33m 495[2mms[22m[39m
+   [33m[2m✓[22m[39m 2 the squad list labels a real man's deal as this game's, and no made up man's[2m > [22mValencia second tier old save [33m 536[2mms[22m[39m
+   [33m[2m✓[22m[39m 2 the squad list labels a real man's deal as this game's, and no made up man's[2m > [22mEverton book save [33m 515[2mms[22m[39m
+   [33m[2m✓[22m[39m 3 the dressing room labels a real man's wage as this game's, and no made up man's[2m > [22mLiverpool 2026-27 [33m 312[2mms[22m[39m
+   [33m[2m✓[22m[39m 3 the dressing room labels a real man's wage as this game's, and no made up man's[2m > [22mBrentford with a made up free agent signed [33m 358[2mms[22m[39m
+   [33m[2m✓[22m[39m 3 the dressing room labels a real man's wage as this game's, and no made up man's[2m > [22mSevilla old save (Round 1052) [33m 317[2mms[22m[39m
+   [33m[2m✓[22m[39m 3 the dressing room labels a real man's wage as this game's, and no made up man's[2m > [22mValencia second tier old save [33m 434[2mms[22m[39m
+   [33m[2m✓[22m[39m 5 rendering the four screens draws nothing and leaves the career byte equal[2m > [22mLiverpool 2026-27 [33m 1088[2mms[22m[39m
+   [33m[2m✓[22m[39m 5 rendering the four screens draws nothing and leaves the career byte equal[2m > [22mDundee 2026-27 [33m 775[2mms[22m[39m
+   [33m[2m✓[22m[39m 5 rendering the four screens draws nothing and leaves the career byte equal[2m > [22mEverton 2005-06 [33m 784[2mms[22m[39m
+   [33m[2m✓[22m[39m 5 rendering the four screens draws nothing and leaves the career byte equal[2m > [22mOB 2026-27 [33m 492[2mms[22m[39m
+   [33m[2m✓[22m[39m 5 rendering the four screens draws nothing and leaves the career byte equal[2m > [22mBrentford with an academy graduate [33m 919[2mms[22m[39m
+   [33m[2m✓[22m[39m 5 rendering the four screens draws nothing and leaves the career byte equal[2m > [22mBrentford with a made up free agent signed [33m 987[2mms[22m[39m
+   [33m[2m✓[22m[39m 5 rendering the four screens draws nothing and leaves the career byte equal[2m > [22mSevilla old save (Round 1052) [33m 958[2mms[22m[39m
+   [33m[2m✓[22m[39m 5 rendering the four screens draws nothing and leaves the career byte equal[2m > [22mValencia second tier old save [33m 1122[2mms[22m[39m
+   [33m[2m✓[22m[39m 5 rendering the four screens draws nothing and leaves the career byte equal[2m > [22mEverton book save [33m 805[2mms[22m[39m
+   [33m[2m✓[22m[39m 5 rendering the four screens draws nothing and leaves the career byte equal[2m > [22mHertha book save [33m 705[2mms[22m[39m
+   [33m[2m✓[22m[39m 6 nothing drawn reads undefined, NaN, [object Object] or Infinity[2m > [22mLiverpool 2026-27 [33m 908[2mms[22m[39m
+   [33m[2m✓[22m[39m 6 nothing drawn reads undefined, NaN, [object Object] or Infinity[2m > [22mDundee 2026-27 [33m 555[2mms[22m[39m
+   [33m[2m✓[22m[39m 6 nothing drawn reads undefined, NaN, [object Object] or Infinity[2m > [22mEverton 2005-06 [33m 607[2mms[22m[39m
+   [33m[2m✓[22m[39m 6 nothing drawn reads undefined, NaN, [object Object] or Infinity[2m > [22mOB 2026-27 [33m 412[2mms[22m[39m
+   [33m[2m✓[22m[39m 6 nothing drawn reads undefined, NaN, [object Object] or Infinity[2m > [22mBrentford with an academy graduate [33m 999[2mms[22m[39m
+   [33m[2m✓[22m[39m 6 nothing drawn reads undefined, NaN, [object Object] or Infinity[2m > [22mBrentford with a made up free agent signed [33m 851[2mms[22m[39m
+   [33m[2m✓[22m[39m 6 nothing drawn reads undefined, NaN, [object Object] or Infinity[2m > [22mSevilla old save (Round 1052) [33m 923[2mms[22m[39m
+   [33m[2m✓[22m[39m 6 nothing drawn reads undefined, NaN, [object Object] or Infinity[2m > [22mValencia second tier old save [33m 988[2mms[22m[39m
+   [33m[2m✓[22m[39m 6 nothing drawn reads undefined, NaN, [object Object] or Infinity[2m > [22mEverton book save [33m 822[2mms[22m[39m
+   [33m[2m✓[22m[39m 6 nothing drawn reads undefined, NaN, [object Object] or Infinity[2m > [22mHertha book save [33m 796[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerJobHunt.test.ts [2m([22m[2m27 tests[22m[2m)[22m[32m 38[2mms[22m[39m
+ [32m✓[39m src/test/managerScorerMarks.test.tsx [2m([22m[2m15 tests[22m[2m)[22m[32m 152[2mms[22m[39m
+ [32m✓[39m src/lib/clubManagerLeagueBoards.test.ts [2m([22m[2m14 tests[22m[2m)[22m[32m 16[2mms[22m[39m
+[90mstdout[2m | src/test/clubManagerVarScreen.test.tsx[2m > [22m[2mClub Manager: the review screen[2m > [22m[2mtwo goals ruled out in back to back minutes (staged by hand): each card on its own goal, the second not before its minute
+[22m[39mclubManagerVarScreen: back to back (staged by hand) on seed 2460: reviews at 9 and 10, cards at 9 and 11, 2 goal(s) played, starting at 1040 ms (minute 9) and 4896 ms (minute 10), first card up from 1808 to 4304 ms
+
+ [32m✓[39m src/test/clubManagerSlots.test.tsx [2m([22m[2m12 tests[22m[2m)[22m[33m 2425[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: three manager slots[2m > [22mtwo managers survive leaving the page, and either one opens [33m 375[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: three manager slots[2m > [22mthe screen asks before it deletes, and every tile says what it holds [33m 389[2mms[22m[39m
+[90mstdout[2m | src/test/clubManagerVarLive.test.tsx[2m > [22m[2mClub Manager: VAR lit, goals only (the lit rule)[2m > [22m[2ma Quick Sim is the engine asked for the goal kind, on matches where every kind staged would show a penalty by review
+[22m[39mclubManagerVarLive, lit: Quick Sim, 8 matches, 7 chosen where every kind staged shows a penalty by review, 4 goal review rows
+
+[90mstdout[2m | src/test/clubManagerSave.test.tsx[2m > [22m[2mClub Manager: one of him[2m > [22m[2mtwo real players whose names slug to one string stay two men
+[22m[39m  the pair: Éderson CM @Atalanta 35.5 | Ederson GK @Fenerbahçe 9.5
+  squad [33m26[39m -> [33m28[39m duplicate ids: []
+
+[90mstdout[2m | src/test/clubManagerSave.test.tsx[2m > [22m[2mClub Manager: one of him[2m > [22m[2mno club starts a career with two players under one id
+[22m[39m  Hertha BSC: 16 players, duplicate ids: []
+
+[90mstdout[2m | src/test/clubManagerSave.test.tsx[2m > [22m[2mClub Manager: one of him[2m > [22m[2mno club starts a career with two players under one id
+[22m[39m  AC Milan: 21 players, duplicate ids: []
+
+[90mstdout[2m | src/test/clubManagerSave.test.tsx[2m > [22m[2mClub Manager: one of him[2m > [22m[2mno club starts a career with two players under one id
+[22m[39m  Real Madrid: 26 players, duplicate ids: []
+
+[90mstdout[2m | src/test/clubManagerSave.test.tsx[2m > [22m[2mClub Manager: the save[2m > [22m[2mevery transition is on disk, and a reload loses nothing
+[22m[39m  a shape: on disk, 54391 bytes, week 0
+  a mentality: on disk, 54392 bytes, week 0
+  an XI change: on disk, 54394 bytes, week 0
+  a training plan: on disk, 54391 bytes, week 0
+  a squad role: on disk, 54398 bytes, week 0
+  a transfer status: on disk, 54424 bytes, week 0
+  a signing: on disk, 55526 bytes, week 0
+  kick off: on disk, 70872 bytes, week 0
+  the second half: on disk, 71517 bytes, week 1
+  leaving the report: on disk, 71517 bytes, week 1
+  a quick sim: on disk, 77168 bytes, week 2
+  leaving that report: on disk, 77168 bytes, week 2
+  a run of weeks: on disk, 92148 bytes, week 8
+  leaving that report too: on disk, 92148 bytes, week 8
+
+[90mstdout[2m | src/test/clubManagerSave.test.tsx[2m > [22m[2mClub Manager: the save[2m > [22m[2mevery transition is on disk, and a reload loses nothing
+[22m[39m  reloaded: identical, 92148 bytes
+
+[90mstdout[2m | src/test/clubManagerVarLive.test.tsx[2m > [22m[2mClub Manager: VAR lit, goals only (the lit rule)[2m > [22m[2mthe fast forward is the engine run asked for the goal kind, on a run that differs both from no reviews and from every kind
+[22m[39mclubManagerVarLive, lit: fast forward on seed 26308, to week 6
+
+ [32m✓[39m src/test/clubManagerVarLive.test.tsx [2m([22m[2m8 tests[22m[2m | [22m[33m3 skipped[39m[2m)[22m[33m 16844[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: VAR lit, goals only (the lit rule)[2m > [22ma Quick Sim is the engine asked for the goal kind, on matches where every kind staged would show a penalty by review [33m 13992[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: VAR lit, goals only (the lit rule)[2m > [22mthe fast forward is the engine run asked for the goal kind, on a run that differs both from no reviews and from every kind [33m 2585[2mms[22m[39m
+[90mstdout[2m | src/test/clubManagerSave.test.tsx[2m > [22m[2mClub Manager: the save[2m > [22m[2mleaving the site mid match keeps the clock where it stood
+[22m[39m  seeded first half: seed 1218, reviews asked for: true
+
+[90mstdout[2m | src/test/clubManagerSave.test.tsx[2m > [22m[2mClub Manager: the save[2m > [22m[2mleaving the site mid match keeps the clock where it stood
+[22m[39m  on screen 19', save at 0'
+  after leaving, save at 19'
+
+[90mstdout[2m | src/test/clubManagerSave.test.tsx[2m > [22m[2mClub Manager: the save[2m > [22m[2mleaving only the viewer, with the page still up, keeps it too
+[22m[39m  seeded first half: seed 1218, reviews asked for: true
+
+[90mstdout[2m | src/test/clubManagerSave.test.tsx[2m > [22m[2mClub Manager: the save[2m > [22m[2mleaving only the viewer, with the page still up, keeps it too
+[22m[39m  on screen 19', page still up, the match finished at week 1 and the save matches memory
+
+[90mstdout[2m | src/test/clubManagerSave.test.tsx[2m > [22m[2mClub Manager: the save[2m > [22m[2mStart Fresh is not undone by leaving straight afterwards
+[22m[39m  after Start Fresh and leaving, the slot is empty
+
+ [32m✓[39m src/test/clubManagerSave.test.tsx [2m([22m[2m6 tests[22m[2m)[22m[33m 2004[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the save[2m > [22mevery transition is on disk, and a reload loses nothing [33m 998[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the save[2m > [22mleaving the site mid match keeps the clock where it stood [33m 302[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerBracketMoment.test.tsx [2m([22m[2m9 tests[22m[2m)[22m[33m 628[2mms[22m[39m
+ [32m✓[39m src/test/managerWorldBrowser.test.tsx [2m([22m[2m13 tests[22m[2m)[22m[33m 3562[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager world browser[2m > [22moffers every current league once with its actual club count [33m 651[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager world browser[2m > [22mfinds countries clubs accents and every term without inventing results [33m 351[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager world browser[2m > [22mkeeps selection through empty searches Back and Escape and returns to My league [33m 579[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager world browser[2m > [22mpreserves exact saved standings rounds tiebreaks and scout callbacks [33m 655[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerDealMoment.test.tsx [2m([22m[2m5 tests[22m[2m)[22m[33m 2299[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the deal moment[2m > [22mslams DEAL DONE only after the flip, with the fee the save holds [33m 733[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the deal moment[2m > [22mplays nothing when the screen opens onto a deal that was already done [33m 563[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the deal moment[2m > [22mshakes once for a hijack and for a collapse, and never slams [33m 560[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerDecisions.test.tsx [2m([22m[2m14 tests[22m[2m)[22m[32m 246[2mms[22m[39m
+ [32m✓[39m src/test/cmWorldIdentity1052.test.ts [2m([22m[2m6 tests[22m[2m)[22m[33m 449[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerWorldEditor.test.tsx [2m([22m[2m14 tests[22m[2m)[22m[33m 621[2mms[22m[39m
+ [32m✓[39m src/lib/clubManagerSlots.test.ts [2m([22m[2m14 tests[22m[2m)[22m[33m 378[2mms[22m[39m
+ [32m✓[39m src/lib/clubManagerOwnClubLevel.test.ts [2m([22m[2m7 tests[22m[2m)[22m[33m 1382[2mms[22m[39m
+   [33m[2m✓[22m[39m the manager's own club is read from his club, never the world roster[2m > [22mthe one club read is the world read, club for club, in today and in a past era, cold and cached [33m 411[2mms[22m[39m
+[90mstdout[2m | src/test/clubManagerEraLoad.test.tsx[2m > [22m[2mClub Manager: an era save waits for its era[2m > [22m[2ma 2010-11 save resumes once its squads arrive, exactly as saved
+[22m[39m  2010-11 Barcelona resumed with 27 players
+
+[90mstdout[2m | src/test/clubManagerEraLoad.test.tsx[2m > [22m[2mClub Manager: an era save waits for its era[2m > [22m[2mwith the 2005-06 squads unreachable the boot holds, keeps the save, and the retry resumes it
+[22m[39m  offline: the boot holds on the retry notice and the save is untouched
+
+[90mstdout[2m | src/test/clubManagerEraLoad.test.tsx[2m > [22m[2mClub Manager: an era save waits for its era[2m > [22m[2mwith the 2005-06 squads unreachable the boot holds, keeps the save, and the retry resumes it
+[22m[39m  back online: the retry fetched the squads and the career resumed
+
+ [32m✓[39m src/test/clubManagerEraLoad.test.tsx [2m([22m[2m5 tests[22m[2m)[22m[33m 1963[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: an era save waits for its era[2m > [22ma 2010-11 save resumes once its squads arrive, exactly as saved [33m 652[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: an era save waits for its era[2m > [22mwith the 2005-06 squads unreachable the boot holds, keeps the save, and the retry resumes it [33m 365[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: an era save waits for its era[2m > [22ma retry that fails again reloads the page, the first failure does not [33m 351[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: an era save waits for its era[2m > [22ma modern save opens on the same pass and fetches no era [33m 372[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerShootoutTile.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[33m 608[2mms[22m[39m
+   [33m[2m✓[22m[39m the shootout order tile[2m > [22mopens on request, adds on tap, removes on a second tap, and backs out [33m 359[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerShootoutOrder.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 20[2mms[22m[39m
+ [32m✓[39m src/lib/clubManagerInternationals.test.ts [2m([22m[2m13 tests[22m[2m)[22m[32m 50[2mms[22m[39m
+[90mstdout[2m | src/test/clubManagerSaveSize.test.tsx[2m > [22m[2mClub Manager: the write when the page goes[2m > [22m[2mpagehide writes the career held in memory, with nothing else able to
+[22m[39m  after pagehide the disk holds 53930 bytes, memory 53930
+
+[90mstdout[2m | src/test/clubManagerSaveSize.test.tsx[2m > [22m[2mClub Manager: the write when the page goes[2m > [22m[2mthe tab going hidden writes it too
+[22m[39m  after the tab went hidden the disk holds 54311 bytes, memory 54311
+
+[90mstdout[2m | src/test/clubManagerSaveSize.test.tsx[2m > [22m[2mClub Manager: the write when the page goes[2m > [22m[2mtwo writes of one career are the same bytes
+[22m[39m  three writes, 53788 bytes each, identical
+
+[90mstdout[2m | src/test/clubManagerSaveSize.test.tsx[2m > [22m[2mClub Manager: a refused write is said out loud[2m > [22m[2msaveFailed goes up when the store throws and comes down when a write lands
+[22m[39m  with a throwing store, saveFailed is true
+  with the store back, saveFailed is false and the disk matches memory: true
+
+[90mstdout[2m | src/test/clubManagerSaveSize.test.tsx[2m > [22m[2mClub Manager: a refused write is said out loud[2m > [22m[2ma refused press on the transfer desk says why, and one that goes through clears it
+[22m[39m  second press on Serge Gnabry: "Serge Gnabry is already in your squad."
+  loan out again after the recall: "Christian Pulisic has already been out on loan once this season. One loan out a season."
+
+ [32m✓[39m src/test/clubManagerSaveSize.test.tsx [2m([22m[2m6 tests[22m[2m)[22m[33m 510[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerStartWait.test.tsx [2m([22m[2m5 tests[22m[2m)[22m[33m 528[2mms[22m[39m
+ [32m✓[39m src/test/managerHotSeatCarryOnCard.test.tsx [2m([22m[2m6 tests[22m[2m)[22m[33m 1740[2mms[22m[39m
+   [33m[2m✓[22m[39m Manager Hot Seat: the offer waits on the menu[2m > [22ma finished free run that kept the job reopens on its verdict with the offer [33m 434[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerManagerFace.test.tsx [2m([22m[2m6 tests[22m[2m)[22m[33m 3068[2mms[22m[39m
+   [33m[2m✓[22m[39m the manager on the career panel[2m > [22mlets a Skip career name its manager, background point and all [33m 1208[2mms[22m[39m
+   [33m[2m✓[22m[39m the manager on the career panel[2m > [22mrefuses a real footballer on rename before it reaches the save [33m 537[2mms[22m[39m
+   [33m[2m✓[22m[39m the manager on the career panel[2m > [22mleaves the homeland alone when only the name changes [33m 425[2mms[22m[39m
+   [33m[2m✓[22m[39m the manager on the career panel[2m > [22mopens a Skip career at an MLS club on its own country [33m 632[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerHubLines.test.ts [2m([22m[2m15 tests[22m[2m)[22m[32m 22[2mms[22m[39m
+[90mstdout[2m | src/test/clubManagerEraNationalities.test.ts[2m > [22m[2mClub Manager: a past season brings its own nationalities[2m > [22m[2monce the 2005 season has loaded its men have their countries, and 2010 still has none
+[22m[39m  2005: Aaron Mokoena is South Africa, 97 call up bars; 2010: Abdelhamid El Kaoutari waits
+
+ [32m✓[39m src/test/clubManagerEraNationalities.test.ts [2m([22m[2m3 tests[22m[2m)[22m[33m 596[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: a past season brings its own nationalities[2m > [22mbefore its season is asked for, a past world answers nobody [33m 330[2mms[22m[39m
+ [32m✓[39m src/test/managerHotSeatCarryOn.test.ts [2m([22m[2m10 tests[22m[2m)[22m[33m 482[2mms[22m[39m
+ [32m✓[39m src/test/dailyMenuResume.test.tsx [2m([22m[2m3 tests[22m[2m)[22m[33m 1180[2mms[22m[39m
+   [33m[2m✓[22m[39m Manager Hot Seat: Menu and back keeps the job[2m > [22mreopens the daily on the next match, not on the brief, and the store keeps the match [33m 871[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerRowButtons.test.tsx [2m([22m[2m5 tests[22m[2m)[22m[32m 167[2mms[22m[39m
+ [32m✓[39m src/test/managerQuickSimLegs.test.tsx [2m([22m[2m2 tests[22m[2m)[22m[33m 649[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: a quick sim makes its subs (Round 1146)[2m > [22mbrings fresh legs on after the break, and the report the player lands on lists the change [33m 532[2mms[22m[39m
+[90mstdout[2m | src/test/clubManagerVarScreen.test.tsx[2m > [22m[2mClub Manager: the review screen[2m > [22m[2ma goal ruled out at the end of a half that real chances fill ('a real goal is the last kick after it…'): it is drawn, in its own net, and nothing real gives way
+[22m[39mclubManagerVarScreen: at the card 1 real goal(s) of that clock place had been told (Brennan Johnson)
+clubManagerVarScreen: the crowded end was found on seed 42322, whistle 49, review at 48, card at 49, played shot goal goal goal
+
+ [32m✓[39m src/test/clubManagerWorldEditorPage.test.tsx [2m([22m[2m1 test[22m[2m)[22m[33m 2679[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager page: the world editor reaches the career[2m > [22mstarts Celtic in the Premier League after a swap made on the World editor tile [33m 2678[2mms[22m[39m
+ [32m✓[39m src/test/cmMinuteLabel.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 8[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerEraPicker.test.tsx [2m([22m[2m1 test[22m[2m)[22m[33m 737[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager picker: a past season waits for its squads[2m > [22mholds the league step on a loading line until the 2010-11 squads land, then draws it [33m 736[2mms[22m[39m
+ [32m✓[39m src/test/managerPenaltyMarkers.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[32m 221[2mms[22m[39m
+ [32m✓[39m src/lib/clubManagerSubsRule.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 15[2mms[22m[39m
+ [32m✓[39m src/lib/clubManagerGoalWeight.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 70[2mms[22m[39m
+[90mstdout[2m | src/test/clubManagerVarScreen.test.tsx[2m > [22m[2mClub Manager: the review screen[2m > [22m[2ma goal ruled out at the end of a half that real chances fill ('it is at the whistle and a real chanc…'): it is drawn, in its own net, and nothing real gives way
+[22m[39mclubManagerVarScreen: at the card 0 real goal(s) of that clock place had been told (none there)
+clubManagerVarScreen: the crowded end was found on seed 6203, whistle 49, review at 49, card at 49, played shot save shot goal
+
+[90mstdout[2m | src/test/clubManagerVarScreen.test.tsx[2m > [22m[2mClub Manager: the review screen[2m > [22m[2ma goal ruled out at the end of a half that real chances fill ('a real chance has its own place, one …'): it is drawn, in its own net, and nothing real gives way
+[22m[39mclubManagerVarScreen: at the card 0 real goal(s) of that clock place had been told (none there)
+clubManagerVarScreen: the crowded end was found on seed 4670, whistle 50, review at 49, card at 50, played shot save shot save goal
+
+[90mstdout[2m | src/test/clubManagerVarScreen.test.tsx[2m > [22m[2mClub Manager: the review screen[2m > [22m[2ma goal ruled out at the end of a half that real chances fill ('it is at the whistle and so is a real…'): it is drawn, in its own net, and nothing real gives way
+[22m[39mclubManagerVarScreen: at the card 0 real goal(s) of that clock place had been told (none there)
+clubManagerVarScreen: the crowded end was found on seed 2219, whistle 49, review at 49, card at 49, played shot shot goal
+
+[90mstdout[2m | src/test/clubManagerVarScreen.test.tsx[2m > [22m[2mClub Manager: the review screen[2m > [22m[2ma goal ruled out at the end of a half that real chances fill ('a real last kick follows it and the p…'): it is drawn, in its own net, and nothing real gives way
+[22m[39mclubManagerVarScreen: at the card 0 real goal(s) of that clock place had been told (none there)
+clubManagerVarScreen: the crowded end was found on seed 1987, whistle 49, review at 48, card at 47, played goal shot
+
+[90mstdout[2m | src/test/clubManagerVarScreen.test.tsx[2m > [22m[2mClub Manager: the review screen[2m > [22m[2ma review at the very end of a crowded half is still shown once, and the half ends on the engine score
+[22m[39mclubManagerVarScreen: the crowded end with a penalty given was found on seed 2483, whistle 50, review at 50, card at 48, under the card pass/pass, score under it 1 - 3, at the whistle 1 - 4, played shot, goal (after the card), chances from 44 on opp shot at 47, opp goal at 50 (P)
+
+[90mstdout[2m | src/test/clubManagerVarScreen.test.tsx[2m > [22m[2mClub Manager: the review screen[2m > [22m[2ma penalty a review gives at the end of a half that real chances fill ('a real goal is the last kick after it…'): one card, the score still under it
+[22m[39mclubManagerVarScreen: a penalty given at a crowded end, seed 10321 of match 2: whistle 50, review at 49 (opp), card at 49, under the card goal/net in the top net, score under it 3 - 0, at the whistle 4 - 1, played goal, goal, goal, the kick NOT played out (goal pictures between the card and the whistle: net), chances from 44 on opp save at 47, me goal at 47, me goal at 48, opp goal at 49 (P), me goal at 50
+
+[90mstdout[2m | src/test/clubManagerVarScreen.test.tsx[2m > [22m[2mClub Manager: the review screen[2m > [22m[2ma penalty a review gives at the end of a half that real chances fill ('a real last kick follows it and the p…'): one card, the score still under it
+[22m[39mclubManagerVarScreen: a penalty given at a crowded end, seed 2287 of match 2: whistle 50, review at 49 (opp), card at 48, under the card pass/pass, score under it 2 - 2, at the whistle 2 - 3, played goal (after the card), shot (after the card), the kick played after the card, chances from 44 on me goal at 44, opp goal at 49 (P), me shot at 50
+
+[90mstdout[2m | src/test/clubManagerVarScreen.test.tsx[2m > [22m[2mClub Manager: the review screen[2m > [22m[2ma penalty a review gives at the end of a half that real chances fill ('a real chance shares its place and an…'): one card, the score still under it
+[22m[39mclubManagerVarScreen: a penalty given at a crowded end, seed 6428 of match 2: whistle 50, review at 49 (opp), card at 49, under the card shot/wide, score under it 2 - 0, at the whistle 2 - 1, played shot, shot, shot, goal (after the card), the kick NOT played out (goal pictures between the card and the whistle: plant), chances from 44 on opp shot at 46, me shot at 48, me shot at 49, opp goal at 49 (P)
+
+[90mstdout[2m | src/test/clubManagerVarScreen.test.tsx[2m > [22m[2mClub Manager: the review screen[2m > [22m[2ma penalty a review gives at the end of a half that real chances fill ('two places before the whistle, a real…'): one card, the score still under it
+[22m[39mclubManagerVarScreen: a penalty given at a crowded end, seed 2022 of match 11: whistle 50, review at 48 (opp), card at 48, under the card pass/pass, score under it 0 - 3, at the whistle 0 - 4, played shot, shot, goal (after the card), save (after the card), the kick played after the card, chances from 44 on me shot at 45, opp shot at 46, opp shot at 48, opp goal at 48 (P), opp save at 49
+
+[90mstdout[2m | src/test/clubManagerVarScreen.test.tsx[2m > [22m[2mClub Manager: the last kick of a half (finding 6 of Round 1302, mended in Round 1303)[2m > [22m[2ma real goal that is the last kick of a first half gets its scorer card, and the whistle waits for it (seed 1742, reduced motion false)
+[22m[39mclubManagerVarScreen: the last kick of the half, hint 1742, found on seed 1742: whistle 49, me goal by Kiernan Dewsbury-Hall, score at the end 1 - 1, scorer cards seen 115 frames
+
+[90mstdout[2m | src/test/clubManagerVarScreen.test.tsx[2m > [22m[2mClub Manager: the last kick of a half (finding 6 of Round 1302, mended in Round 1303)[2m > [22m[2ma real goal that is the last kick of a first half gets its scorer card, and the whistle waits for it (seed 1860, reduced motion false)
+[22m[39mclubManagerVarScreen: the last kick of the half, hint 1860, found on seed 1860: whistle 48, opp goal by Alexander Isak, score at the end 1 - 1, scorer cards seen 115 frames
+
+[90mstdout[2m | src/test/clubManagerVarScreen.test.tsx[2m > [22m[2mClub Manager: the last kick of a half (finding 6 of Round 1302, mended in Round 1303)[2m > [22m[2ma real goal that is the last kick of a first half gets its scorer card, and the whistle waits for it (seed 1742, reduced motion true)
+[22m[39mclubManagerVarScreen: the last kick of the half, hint 1742, found on seed 1742: whistle 49, me goal by Kiernan Dewsbury-Hall, score at the end 1 - 1, scorer cards seen 115 frames
+
+[90mstdout[2m | src/test/clubManagerVarScreen.test.tsx[2m > [22m[2mClub Manager: the last kick of a half (finding 6 of Round 1302, mended in Round 1303)[2m > [22m[2mtwo goals in the last two clock places of a first half are both drawn, each with its own card, in order (seed 1773)
+[22m[39mclubManagerVarScreen: two goals in the last two places, hint 1773, found on seed 1773: whistle 48, goals at 47 and 48, goals drawn 2, score at the end 2 - 0
+
+ [32m✓[39m src/test/clubManagerVarScreen.test.tsx [2m([22m[2m46 tests[22m[2m)[22m[33m 138818[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma goal a review rules out is drawn first, and its review opens with the ball in the net [33m 3573[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma review never opens over another action: the goal of the minute before is in and counted first ('disallowed') [33m 4841[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma review never opens over another action: the goal of the minute before is in and counted first ('awarded') [33m 3907[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22mthe last minute of a half, a goal of mine at 44 and theirs ruled out at 45: the card never sits on my goal [33m 7066[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma penalty a review gives: the foul is told, the card opens at its minute, and the kick is played after it [33m 5533[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma penalty a review gives that is saved: the save is drawn after the card and the score stays [33m 4312[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22mtwo reviews in one half each get their own card, in turn [33m 12904[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22mtwo goals ruled out in one minute (staged by hand): each is drawn before its own card, one card at a time [33m 4058[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22mtwo goals ruled out in back to back minutes (staged by hand): each card on its own goal, the second not before its minute [33m 4789[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22mSkip to the whistle during a review takes the card away and leaves the half as the engine has it [33m 1378[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22mleaving the site in the middle of a review and coming back shows the review again, then its penalty [33m 4304[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22mreduced motion: a short wait, nothing moves under the card, and the decision stays up as long as with motion [33m 995[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma penalty a review gives in the last minute of a half is still played before the whistle [33m 5694[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma goal ruled out 'at the whistle' is drawn before its card, at its own minute, and its review closes before the half ends [33m 3689[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma goal ruled out 'one clock place before the whistle' is drawn before its card, at its own minute, and its review closes before the half ends [33m 5039[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22mreduced motion, a goal ruled out 'at the whistle': the card opens at its own minute on the ball in the net [33m 2762[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22mreduced motion, a goal ruled out 'one clock place before the whistle': the card opens at its own minute on the ball in the net [33m 4083[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma goal ruled out at the end of a half that real chances fill ('a real goal is the last kick after it…'): it is drawn, in its own net, and nothing real gives way [33m 6293[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma goal ruled out at the end of a half that real chances fill ('it is at the whistle and a real chanc…'): it is drawn, in its own net, and nothing real gives way [33m 3924[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma goal ruled out at the end of a half that real chances fill ('a real chance has its own place, one …'): it is drawn, in its own net, and nothing real gives way [33m 2827[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma goal ruled out at the end of a half that real chances fill ('it is at the whistle and so is a real…'): it is drawn, in its own net, and nothing real gives way [33m 2284[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma goal ruled out at the end of a half that real chances fill ('a real last kick follows it and the p…'): it is drawn, in its own net, and nothing real gives way [33m 2350[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma review at the very end of a crowded half is still shown once, and the half ends on the engine score [33m 3104[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma penalty a review gives at the end of a half that real chances fill ('a real goal is the last kick after it…'): one card, the score still under it [33m 4164[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma penalty a review gives at the end of a half that real chances fill ('a real last kick follows it and the p…'): one card, the score still under it [33m 3703[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma penalty a review gives at the end of a half that real chances fill ('a real chance shares its place and an…'): one card, the score still under it [33m 2675[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma penalty a review gives at the end of a half that real chances fill ('two places before the whistle, a real…'): one card, the score still under it [33m 3045[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22man own goal the minute after a ruled out goal: the review first, then the own goal as an own goal [33m 2227[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma review in the same minute as the other side's 'injury' (a chance at the same place: false): both are told, and the card sits over nothing [33m 1942[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma review in the same minute as the other side's 'injury' (a chance at the same place: true): both are told, and the card sits over nothing [33m 1966[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma review in the same minute as the other side's 'red' (a chance at the same place: false): both are told, and the card sits over nothing [33m 1688[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma review in the same minute as the other side's substitution: the change is told and the review is whole [33m 2011[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma review in extra time ('disallowed'): its own card, over nothing, on the score the engine has [33m 2401[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma review in extra time ('awarded'): its own card, over nothing, on the score the engine has [33m 2376[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the last kick of a half (finding 6 of Round 1302, mended in Round 1303)[2m > [22ma real goal that is the last kick of a first half gets its scorer card, and the whistle waits for it (seed 1742, reduced motion false) [33m 2245[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the last kick of a half (finding 6 of Round 1302, mended in Round 1303)[2m > [22ma real goal that is the last kick of a first half gets its scorer card, and the whistle waits for it (seed 1860, reduced motion false) [33m 1971[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the last kick of a half (finding 6 of Round 1302, mended in Round 1303)[2m > [22ma real goal that is the last kick of a first half gets its scorer card, and the whistle waits for it (seed 1742, reduced motion true) [33m 2048[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the last kick of a half (finding 6 of Round 1302, mended in Round 1303)[2m > [22mtwo goals in the last two clock places of a first half are both drawn, each with its own card, in order (seed 1773) [33m 2728[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the last kick of a half (finding 6 of Round 1302, mended in Round 1303)[2m > [22mSkip during the card of the last kick ends the half at once, on the engine score (seed 1742) [33m 1637[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m43 passed[39m[22m[90m (43)[39m
+[2m      Tests [22m [1m[32m646 passed[39m[22m[2m | [22m[33m3 skipped[39m[90m (649)[39m
+[2m   Start at [22m 02:51:50
+[2m   Duration [22m 144.58s[2m (transform 8.19s, setup 2.88s, collect 31.35s, tests 258.55s, environment 23.18s, prepare 5.00s)[22m
+

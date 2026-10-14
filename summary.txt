@@ -1,0 +1,9 @@
+appealIsolation exit=0 50s | Equivalent appeal outcomes must agree: passed for 24 original pairs and 3 separate generated-position pairs.
+simLiveSimMotion exit=0 74s | simLiveSimMotion: green. 55 tests passed (the viewer on real feeds, the pitch part's rules on 200 half feeds and on feeds made by hand, the goal sequence, match mode), an
+tsc exit=0 97s | 
+simNoRivalNames exit=0 17s | No rival product names found. 0 findings.
+simHarnessAnchors exit=0 63s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simCmLeagueRules exit=0 89s | simCmLeagueRules: all checks passed (modern, eras, pure, drop4, cupless, shapes, chunks)
+diff-a13 exit=0 0s | 
+subs-all exit=0 207s | simCmSubs GREEN: 51 of 51 checks green (parts ledger, rule, opponent, coach, press, legacy, three, hotseat)
+vitest-cm exit=0 145s |    Duration  144.58s (transform 8.19s, setup 2.88s, collect 31.35s, tests 258.55s, environment 23.18s, prepare 5.00s)
