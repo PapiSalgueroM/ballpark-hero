@@ -111,7 +111,8 @@
         moves nothing, no tagged card sits open after a week about a real
         man, tagged cards were held for real men, answers were refused and
         cards settled for that, and no dealt text keeps a brace.
-     13) COMPACT. Every GM pack with store: 'compact' set in memory, plus
+     13) COMPACT. Every index pack (INDEX_PACKS: every PACK_INDEXES line,
+        never a list kept by hand) with store: 'compact' set in memory, plus
         FX_COMPACT (stories, a subject, one shots, wordings, slots, expiry)
         and its season clock twin, on the FLEET drive at seeds 1 to 3 (a
         rising clock), each desk three ways: whole, compact, and compact
@@ -126,20 +127,23 @@
         seasons: the compact block's mean bytes and the whole desk's) and
         the loader's three cases.
      14) FROZEN WORDS. scripts/data/eventDeckWords.json, for every pack whose
-        source declares store: 'compact' (FX_COMPACT today, COMPACT_PACKS
-        append only): no recorded card gone, no wording changed or moved,
+        source declares store: 'compact' (FX_COMPACT and every index pack
+        that declares it, read off INDEX_PACKS): no recorded card gone, no wording changed or moved,
         a new wording only at the end, no option added, removed, reordered
         or relabelled, no story added or taken away, no card without a row.
         SIM_EVENT_DECK_WORDS=append adds rows and trailing wordings, never
         rewrites one (a changed row is the lead's call, like the replay).
 
-     15) ECONOMY. For every pack and every meter it moves (trust, fans,
+     15) ECONOMY. For every index pack (INDEX_PACKS) and the FX packs, and
+        every meter each moves (trust, fans,
         cash, morale, recruit, every registered key), BEST and WORST answer
         policies on the FLEET drive: the chosen options' values on that
         meter summed per season, unclamped, a mean over 1,000 seasons. The
         seven GM packs are printed (ECONOMY_BASELINE, their measurements at
         the section); any other pack fails on a meter it moves with no
         `pressure` ceiling, or when BEST or WORST passes it either way.
+        An index pack whose cards move fx keys needs a PACK_BINDS entry (its
+        registry over the kit's desk), or sections 13 and 15 fail on it.
      16) BYTES AND LAZY. Bytes per event (each pack module minified alone
         and gzipped, the engine too) with the projection for 420 and 690
         events, a report (BYTES_MEASURED at the section); and the fence:
@@ -231,6 +235,10 @@
                    striker it is about); section 12 fails.
      nullpass      a role that resolves to nobody passes the tag check;
                    section 12 fails.
+     newpack       one more index pack in INDEX_PACKS (in memory, as a later
+                   round's index line would add): compact, its words never
+                   recorded, no pressure ceiling; sections 14 and 15 fail
+                   (13 deals it whole against compact and stays green).
 
    Runtime about 85 to 100 s on a runner, three requests at a time (section 2
    reloads all 84 rows since the review's fix pass; it was 40 s with seed 1
@@ -269,7 +277,7 @@ const REPLAY_FILE = path.join(ROOT, 'scripts/data/gmInboxReplay.json');
 const CONTROLS = ['replay', 'weightoff', 'weightkeep', 'story', 'rest', 'failopen', 'restfall', 'expirefall', 'textrng', 'seasonweek', 'expireoff', 'expirefx', 'settledoff', 'panelexpiry', 'neutral', 'heavy',
   'fxsilent', 'fxdrop', 'fxunbound', 'fxneutral', 'conductreal', 'slotopen', 'quoteslot', 'untagged', 'rosterword',
   'pruneearly', 'codecword', 'codecslot', 'wordedit', 'wordorder', 'storymove', 'pressure', 'eager',
-  'conductlate', 'conductstale', 'conducttarget', 'nullpass'];
+  'conductlate', 'conductstale', 'conducttarget', 'nullpass', 'newpack'];
 if (CONTROL && !CONTROLS.includes(CONTROL)) { console.error(`EVENT_DECK_CONTROL=${CONTROL} is not a control this kit knows`); process.exit(2); }
 if (RECORD && (CONTROL || SHARD)) { console.error('a recording runs the whole replay with no control, refusing'); process.exit(2); }
 const red = new Set();
@@ -283,7 +291,8 @@ const count = (hay, needle) => hay.split(needle).length - 1;
 
 /* ─── bundle the real engine and every pack index the kit knows ─────────── */
 
-/* The pack indexes, one line each, append only: W2 and W3 add theirs. */
+/* The pack indexes, one line each, append only: W2 and W3 add theirs (and a
+   PACK_BINDS entry when their cards move fx keys). */
 const PACK_INDEXES = [
   ['src/data/gmInbox/index.ts', 'GM_INBOX_PACKS', 'src/components/front-office-shared/GmInboxPanel.tsx'],
 ];
@@ -544,6 +553,31 @@ const fxPack = (seat, events, extra = {}) => ({
   meters: { trust: 'Board trust', fans: 'Fans', money: 'Budget', morale: 'Dressing room' }, money: { prefix: '$', suffix: 'M' },
   perWeek: 1, cooldown: 0, chance: 1, events, ...extra,
 });
+/* Round 1332's review fix: every pack a shipped index holds (every
+   PACK_INDEXES line, the GM index first). Sections 12 to 15 read this, never
+   a list kept by hand, so the next round's pack is gated the moment its
+   index line lands: section 13 compares it whole against compact, section
+   14 freezes its words when it declares store: 'compact', section 15 holds
+   it to its own pressure ceiling. The newpack control adds one pack here in
+   memory, as a later round's index would, with no words recorded and no
+   ceiling declared. */
+const INDEX_PACKS = { ...ALL_PACKS };
+if (CONTROL === 'newpack') {
+  if (INDEX_PACKS.fx_unlisted) { console.error('newpack control: an index already holds fx_unlisted, refusing to run'); process.exit(2); }
+  INDEX_PACKS.fx_unlisted = fxPack('fx_unlisted', [fxCard('u_one', { cooldown: 2 }), fxCard('u_two', { cooldown: 3 })], { store: 'compact', chance: 0.5 });
+}
+/* What the kit binds an index pack with beyond its own desk, append only:
+   W2 and W3 add an entry beside their PACK_INDEXES line when their cards
+   move fx keys (the registry, written over the kit's desk) or need their
+   own person resolver. A pack with fx keys and no entry fails sections 13
+   and 15, which could not bind it; a pack with a tag or a person slot and
+   no entry is bound with a resolver that makes everyone generated. */
+const PACK_BINDS = {};
+const needsFx = p => p.events.some(e => e.choices.some(c => Object.keys(c.fx ?? {}).length > 0));
+const aboutPeople = p => p.events.some(e => e.tag !== undefined) || Object.values(p.slots ?? {}).some(sl => sl.person);
+const everyoneGenerated = (s, ref) => ('role' in ref ? { name: `Your ${ref.role}`, real: false } : { name: `Player ${Math.round(Number(ref.id))}`, real: false });
+/** The binding extras for an index pack, or null when the kit cannot bind it. */
+const indexBind = (k, p) => PACK_BINDS[k] ?? (needsFx(p) ? null : aboutPeople(p) ? { person: everyoneGenerated } : {});
 /** One fixture desk over `ticks` weeks: facts(clock, rng) hands in the
  *  facts, answer 'all' answers every open message on its first option,
  *  clockOf(tick) is the clock the desk hands in (the tick itself, or a
@@ -1399,12 +1433,12 @@ if (runs(12)) {
   const ROLE = /^(Your |His |A |The )[a-z]/;
   const DEPARTMENTS = new Set(['Ownership', 'Team doctor', 'Ticket office', 'Marketing', 'Compliance office']);
   const FX_OF = { fx_registry: FX_REGISTRY_DEF, fx_conduct: FX_CONDUCT_FX };
-  const scanned = { ...ALL_PACKS, fx_expire: FX_EXPIRE, fx_neutral: FX_NEUTRAL, fx_registry: FX_REGISTRY, fx_conduct: FX_CONDUCT };
+  const scanned = { ...INDEX_PACKS, fx_expire: FX_EXPIRE, fx_neutral: FX_NEUTRAL, fx_registry: FX_REGISTRY, fx_conduct: FX_CONDUCT };
   const bad = [];
   let strings = 0;
   const flagged = {};
   for (const [k, p] of Object.entries(scanned)) {
-    const reg = FX_OF[k] ?? {};
+    const reg = FX_OF[k] ?? PACK_BINDS[k]?.fx ?? {};
     const slots = p.slots ?? {};
     const people = Object.keys(slots).filter(n => slots[n].person);
     const meterWords = [...Object.values(p.meters), 'Recruit interest', ...Object.values(reg).map(d => d.label)].map(w => w.toLowerCase());
@@ -1595,10 +1629,9 @@ if (runs(13)) {
   const keyOf = e => (e.story ? `story:${e.story}` : e.id);
   /* One FLEET row three ways: whole, compact, compact through the codec
      between every two weeks. Returns per desk hashes and the breaks. */
-  const row = (pack, tag, seed) => {
+  const row = (pack, tag, seed, bind) => {
     const whole = { ...pack, store: undefined };
     const compact = { ...pack, store: 'compact' };
-    const bind = pack.slots ? COMPACT_BIND : {};
     const out = { i: 0, ii: 0, desks: 0, bad: [], weeks: 0, pruned: 0, dropped: 0 };
     const limitUsed = oneShotKeys(pack);
     const byKey = new Map();
@@ -1644,10 +1677,16 @@ if (runs(13)) {
     return out;
   };
   const GM_MAX = E.GM_INBOX_MAX;
-  const packs = { ...Object.fromEntries(GM_SEATS.map(k => [k, GM[k]])), fx_compact: FX_COMPACT, fx_compact_season: FX_COMPACT_SEASON };
+  /* Every index pack (INDEX_PACKS, not a list kept here) and the two FX packs. */
+  const packs = { ...INDEX_PACKS, fx_compact: FX_COMPACT, fx_compact_season: FX_COMPACT_SEASON };
+  const binds = { fx_compact: COMPACT_BIND, fx_compact_season: COMPACT_BIND };
+  for (const [k, p] of Object.entries(INDEX_PACKS)) {
+    binds[k] = indexBind(k, p);
+    if (binds[k] === null) { fail(13, `${k} moves fx keys and has no PACK_BINDS entry, so the kit cannot bind it`); delete packs[k]; }
+  }
   const tot = { desks: 0, weeks: 0, pruned: 0, dropped: 0, bad: [] };
   for (const [k, p] of Object.entries(packs)) for (const seed of SEEDS) {
-    const r = row(p, k, seed);
+    const r = row(p, k, seed, binds[k]);
     tot.desks += r.desks; tot.weeks += r.weeks; tot.pruned += r.pruned; tot.dropped += r.dropped; tot.bad.push(...r.bad);
   }
   for (const b of tot.bad.slice(0, 8)) console.error(`     ${b}`);
@@ -1724,14 +1763,15 @@ if (runs(13)) {
 /* A compact message is rebuilt from its pack on read, so an edit to a
    shipped card's words would rewrite messages already sitting in saves.
    scripts/data/eventDeckWords.json records, for every pack whose source
-   declares store: 'compact' (FX_COMPACT here; W2 and W3 append theirs to
-   COMPACT_PACKS), each card's ledger key, a hash of each wording in order,
+   declares store: 'compact' (FX_COMPACT here, and every index pack that
+   declares it, read off INDEX_PACKS, so no list kept by hand can leave one
+   out), each card's ledger key, a hash of each wording in order,
    a hash of each option label, and its slots. A wording may only be added
    at the end; nothing recorded may change. SIM_EVENT_DECK_WORDS=append adds
    rows for new cards and new trailing wordings and never rewrites a row;
    changing a recorded row is the lead's call, like the replay. */
 const WORDS_FILE = path.join(ROOT, 'scripts/data/eventDeckWords.json');
-const COMPACT_PACKS = { fx_compact: FX_COMPACT };
+const COMPACT_PACKS = { fx_compact: FX_COMPACT, ...Object.fromEntries(Object.entries(INDEX_PACKS).filter(([, p]) => p.store === 'compact')) };
 if (runs(14)) {
   console.log('14) Frozen words: no recorded card of a compact pack changes its words, options, story or slots');
   const APPEND = process.env.SIM_EVENT_DECK_WORDS === 'append';
@@ -1861,7 +1901,11 @@ if (runs(15)) {
     for (let d = 0; d < DRIVES.FLEET.desks; d++) runDesk(pack, tag, seed, 'FLEET', d, { policy, bind });
     return total / (DRIVES.FLEET.desks * SEASONS);
   };
-  const packs = { ...Object.fromEntries(GM_SEATS.map(k => [k, { pack: GM[k], bind: {} }])), ...ECONOMY_FX };
+  /* Every index pack (INDEX_PACKS, not a list kept here) and the FX packs. */
+  const packs = { ...Object.fromEntries(Object.entries(INDEX_PACKS).map(([k, p]) => [k, { pack: p, bind: indexBind(k, p) }])), ...ECONOMY_FX };
+  for (const [k, { bind }] of Object.entries(packs)) {
+    if (bind === null) { fail(15, `${k} moves fx keys and has no PACK_BINDS entry, so the kit cannot bind it`); delete packs[k]; }
+  }
   if (CONTROL === 'pressure') {
     const p = packs.fx_compact.pack;
     const times = c => ({ ...c, karma: c.karma * 10, ...(c.morale ? { morale: c.morale * 10 } : {}) });
