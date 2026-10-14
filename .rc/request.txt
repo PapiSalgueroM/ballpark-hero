@@ -1,0 +1,9 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simLiveSimMotion: node scripts/simLiveSimMotion.mjs
+appealIsolation: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simManagerAppealIsolation.mjs
+subs-all: git worktree add -f /tmp/sb1 dec9075b >/dev/null 2>&1; SUBS_BASE=/tmp/sb1 node scripts/simCmSubs.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simCmLeagueRules: node scripts/simCmLeagueRules.mjs
+vitest-cm: node_modules/.bin/vitest run src/test/clubManager src/test/cm src/test/manager src/test/dailyMenuResume src/lib/clubManager --testTimeout=300000 --hookTimeout=120000
+diff-a13: git diff --stat a13b90e9 HEAD -- src scripts; test -z "$(git diff a13b90e9 HEAD -- src scripts)"
