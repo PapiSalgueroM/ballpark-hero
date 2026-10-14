@@ -1,6 +1,6 @@
-## Codex Round1364: saved roster fix, browser source buffer repaired, 2026-10-14
+## Codex Round1364: saved roster display fix, actual founded-save preparation repaired, 2026-10-14
 
-Round1364 a9 passed fixed8/control3+5/prior10/world13/alllegacyguards/fullunits7930/build/type0, then newdriverstoppedbeforelaunch atdefault1MiB Git stdout readingcomplete1.1MiBparentCore. Whole311filepacketclosed,0browserimages/no latercredit. Independently reviewedone-call8MiBbufferrepair73b8 retainsentire43677driverinverse/app/oracles/controls/WF/packages/currentlimits. Freshfullfixedgate pending, draftPR266notmerged/live. See docs/audits/club-detail-current-roster-2026-10-14.md.
+Round1364 latest078 passed source/type/new8/control3+5/prior10/world/legacy/market/fullunits/build, then browser failed beforelaunch because actual loader adds exactlyfive founded setupfields. Canonical original311filepacket retained, no browser/latergatecredit. Reviewed browser-only1d4ea4e three-span repair retains original+normalized raw beforeassertions, all67 originalfields/wholeoracleheld, exactfive additions onlyfounded, secondloader fullbyteequality/zero RNG, preparedactualjourneyinputs. App/Core/units/otherproof/WF/packages/caps held. Freshfullfixedgate pending; draftPR266notmerged/live. Actualtransfer-club ownership remains separate and outstanding. See docs/audits/club-detail-current-roster-2026-10-14.md.
 
 ## Release BC LIVE, 2026-10-13 18:23 EDT: one tab can no longer wipe a Club Manager save, Club Manager's world remembers your deals, its tables, copy and hub fixed, Soccer Career's events drawn fairly, the shared event deck, the college athletic director
 

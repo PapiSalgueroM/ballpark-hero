@@ -320,17 +320,32 @@ try {
   globalThis.fetch = async () => { throw new Error('External model transport refused.'); };
   E = await import(pathToFileURL(path.join(MODEL, 'engine.mjs')).href); setup(E.SAVE_KEY === KEY, 'Actual manager key differs.');
   await E.ensureEraRosters('era2015');
-  report.fixtures = [];
+  report.fixtures = []; const pageFixtures = [];
   for (const receipt of receipts) {
     const wanted = expected(receipt.state, receipt.name === 'rival');
     setup(JSON.stringify(wanted.names) === JSON.stringify(receipt.expected.names) && wanted.value === receipt.expected.value
       && (receipt.name === 'rival' || (wanted.average === receipt.expected.average && receipt.correct === true)), receipt.name + ': independent complete saved roster oracle differs from actual unit receipt.');
     if (receipt.name === 'legacy-empty') { report.excluded = { name: receipt.name, reason: 'Prepared empty component presentation; actual loadCareer adds squad coverage.', stateSha256: sha(JSON.stringify(receipt.state)) }; continue; }
-    const raw = JSON.stringify(receipt.state); memory.clear(); memory.set(KEY, raw);
-    const run = zeroDraws(() => { const loaded = E.loadCareer(); return { loaded, saved: loaded ? E.saveCareer(loaded) : false, raw: memory.get(KEY) }; });
-    report.fixtures.push({ name: receipt.name, raw, rawSha256: sha(raw), expected: wanted, preflight: run, preparedPagePresentation: true });
-    setup(JSON.stringify(receipt.state) === raw && run.draws.length === 0 && run.value.saved && JSON.stringify(run.value.loaded) === raw
-      && run.value.raw === raw, receipt.name + ': real loader/writer must preserve every original saved field and consume zero model draws.');
+    const originalRaw = JSON.stringify(receipt.state); memory.clear(); memory.set(KEY, originalRaw);
+    const preparation = zeroDraws(() => { const loaded = E.loadCareer(); return { loaded, saved: loaded ? E.saveCareer(loaded) : false, raw: memory.get(KEY) }; });
+    const loaded = preparation.value.loaded, preparedRaw = JSON.stringify(loaded);
+    const pageReceipt = { name: receipt.name, originalRaw, originalRawSha256: sha(originalRaw),
+      raw: preparedRaw, rawSha256: sha(preparedRaw), expected: wanted, preparation, preparedPagePresentation: true };
+    report.fixtures.push(pageReceipt);
+    setup(JSON.stringify(receipt.state) === originalRaw && !!loaded && preparation.draws.length === 0 && preparation.value.saved
+      && preparation.value.raw === JSON.stringify(loaded), receipt.name + ': actual page preparation must save the complete loaded state without model draws.');
+    const added = Object.keys(loaded).filter(key => !Object.hasOwn(receipt.state, key)).sort(); pageReceipt.added = added;
+    setup(Object.keys(receipt.state).every(key => Object.hasOwn(loaded, key) && JSON.stringify(loaded[key]) === JSON.stringify(receipt.state[key]))
+      && (receipt.name === 'founded' ? JSON.stringify(added) === JSON.stringify(['books', 'facilities', 'managerXp', 'staff', 'startOptions']) : added.length === 0),
+      receipt.name + ': only the founded presentation may receive its five actual additive loader fields; every original field must stay held.');
+    setup(JSON.stringify(expected(loaded, receipt.name === 'rival')) === JSON.stringify(wanted),
+      receipt.name + ': actual loader preparation must preserve the complete original roster oracle.');
+    const raw = JSON.stringify(loaded); memory.clear(); memory.set(KEY, raw);
+    const run = zeroDraws(() => { const reopened = E.loadCareer(); return { loaded: reopened, saved: reopened ? E.saveCareer(reopened) : false, raw: memory.get(KEY) }; });
+    pageReceipt.preflight = run;
+    setup(run.draws.length === 0 && run.value.saved && JSON.stringify(run.value.loaded) === raw && run.value.raw === raw,
+      receipt.name + ': second actual loader/writer must preserve every normalized saved field and consume zero model draws.');
+    pageFixtures.push({ ...receipt, state: copy(loaded) });
   }
   installed = JSON.parse(fs.readFileSync(path.join(ARTIFACTS, 'installed.json'), 'utf8'));
   const lock = JSON.parse(fs.readFileSync(path.join(ROOT, 'package-lock.json'), 'utf8'));
@@ -352,8 +367,8 @@ try {
   }));
   dist = files(path.join(ROOT, 'dist')); report.dist = dist; report.model = { ...model, physical: physical.map(({ filename, ...row }) => row) };
   const base = await serve(); browser = await pw.chromium.launch({ headless: true });
-  for (const profile of PROFILES) for (const receipt of receipts.filter(row => row.name !== 'legacy-empty')) await journey(base, profile, receipt);
-  await journey(base, PROFILES[1], receipts.find(row => row.name === 'legacy-deal'), true);
+  for (const profile of PROFILES) for (const receipt of pageFixtures) await journey(base, profile, receipt);
+  await journey(base, PROFILES[1], pageFixtures.find(row => row.name === 'legacy-deal'), true);
   check(report.cases.length === 21 && report.controls.length === 1 && report.inventory.length === 22, 'Exactly twenty-one page journeys, one effective copied-save control and twenty-two fresh originals are required.');
   check(report.cases.every(row => row.stages.length === 2 && row.reloads.length === 1 && row.reloads[0].equal && row.shots.length === 1), 'Each route journey needs two actual detail reads, one literal document reload and one original.');
   check(new Set(report.inventory.map(row => row.file)).size === 22, 'Every original capture filename must be unique.');
