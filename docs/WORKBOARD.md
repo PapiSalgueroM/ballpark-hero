@@ -8,6 +8,8 @@ Original Manager reports lack saves. Current actual scorer accounting and histor
 
 Other CI remains unwaived: appeal/source pins and copied decision control coverage; world browser's ineffective custom control and inherited auth-probe expectation; size diagnostic's inherited objective-copy comparison; match-plan persistence/shootout anchors. World continuity and quick-sim runs were still in progress at the final snapshot. The audit records exact runs/reasons; no all-CI-green claim.
 
+Expanded verification supersedes the prior unit-reuse limit: bc51ff20/run38548370722/job115799970672 SUCCESS. Fresh whole units7887pass/58sameexisting skips/0fail, all13 world mounted outcomes+16 effective faults, native3profiles+9DOM+6startup controls, all prior23/5natural/5promotion faults/26readers/10promo520checks/30pairs7904RNG pass. All520archive entries/3592sourceholds close;31fresh originals individually reviewed Root14/peer17. App3ddaad58 and all original unit files/packages/data/caps remain held. Stock world-browser proof now passes its real outcomes/controls/journeys and fails only the untouched historical2fff source fence. Other older base/anchor/coverage contracts remain red or incomplete, unwaived; audit records exact results. No all-CI-green or live claim.
+
 ## Release BC LIVE, 2026-10-13 18:23 EDT: one tab can no longer wipe a Club Manager save, Club Manager's world remembers your deals, its tables, copy and hub fixed, Soccer Career's events drawn fairly, the shared event deck, the college athletic director
 
 Claude lane (session H). main c5534342, deployment 3cf3a2d7-244e-41ce-8c27-a89cebafcfe6, entry index-BFkO1jyo.js (was index-DaI30mwt.js, Release BB,
