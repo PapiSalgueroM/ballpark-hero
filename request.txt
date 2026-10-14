@@ -1,0 +1,5 @@
+#!build
+#!playwright
+#!serial
+headsha: git log --oneline -2
+playRoster: export FREE_KICK_FONT_CACHE=/tmp/fcr CM_OWN_ROSTER_OUT=/tmp/corw CM_OWN_ROSTER_PHASE=fixed; node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only | tail -1 && node .rc/x/prepInstalled.mjs /tmp/corw && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simClubDetailCurrentRoster.mjs | tail -1 && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playClubDetailCurrentRoster.mjs
