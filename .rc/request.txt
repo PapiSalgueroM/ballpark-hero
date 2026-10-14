@@ -1,0 +1,6 @@
+#!serve
+#!playwright
+#!serial
+ll-head-seed: LEADERS_SEED=2362537418 node scripts/playCmLeagueLeaders.mjs
+ll-head: node scripts/playCmLeagueLeaders.mjs
+ll-main-seed: git worktree add -q --detach /tmp/lm 082fc277 && ln -s "$PWD/node_modules" /tmp/lm/node_modules && (cd /tmp/lm && node_modules/.bin/vite build > /tmp/lm.log 2>&1) && (node scripts/lib/hostLikeServer.mjs /tmp/lm/dist 4195 > /dev/null 2>&1 &) && sleep 3 && BASE=http://127.0.0.1:4195 SWEEP_BASE=http://127.0.0.1:4195 LEADERS_SEED=2362537418 node scripts/playCmLeagueLeaders.mjs
