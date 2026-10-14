@@ -1,0 +1,8 @@
+# Release BD gate rerun: the three environmental reds of lanes A and K, alone and serial
+#!serve
+#!playwright
+#!serial
+fonts: mkdir -p .tmp-fx/font-cache && FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only
+simNationalityFlags: node scripts/simNationalityFlags.mjs
+simSafari: node scripts/simSafari.mjs
+farewell-native: set -o pipefail; export SIM_NETWORK=offline ENGINES=chromium TZ=UTC FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache"; mkdir -p soccer-farewell-artifacts; NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerFarewell.mjs > "$TMPDIR/sim.log" 2>&1 || { tail -5 "$TMPDIR/sim.log"; echo "simSoccerFarewell went red, so the walk has no fixtures of this head"; exit 1; }; echo "sim first: $(tail -1 "$TMPDIR/sim.log")"; NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playSoccerFarewell.mjs 2>&1 | tee soccer-farewell-artifacts/native.log | tail -60; s=$?; node scripts/qa/checkSoccerFarewell.mjs native; c=$?; exit $((s + c))
