@@ -8,7 +8,15 @@
      rule      through changeLive: a 2005-06 Everton match takes a third change and refuses a fourth;
                a 2026-27 Liverpool match takes two at half time, then one each at 60, 70 and 80, and
                refuses a sixth; with one change at the break and three stoppages used, a change at a
-               fourth minute is refused but a second change at the third stoppage's minute is taken.
+               fourth minute is refused but a second change at the third stoppage's minute is taken; a
+               change at 45 and its board is in play and uses a stoppage (the interval starts at 46); the
+               season read is the world's start year: a 2020 era Premier League career plays three in its
+               2021-22 season and five in its 2022-23 one.
+     extratime the break before extra time is free for my changes: a 2026-27 Arsenal knockout second leg,
+               one change at half time and three in play at 60, 70 and 80; on SUBS_ET_NIGHTS nights that
+               go to extra time a change at the break (90) is taken and one at 95 refused.
+     cutover   the Hot Seat daily the day before HOT_SEAT_RULES_FROM plays the base rules, the daily ON
+               that date the current ones.
      opponent  over a quick sim fleet (2026-27 Liverpool, Barcelona and Bayern on the current rules and
                again on the base rules, 2005-06 Everton and 2015-16 Real Madrid; SUBS_SEEDS seeds of
                SUBS_MATCHES matches each), the other dugout never passes its rule's changes or stoppages,
@@ -17,7 +25,9 @@
                under three, and keeps a change and a stoppage back with every change he makes for legs;
                prints his mean changes a match under each rule (no real world average is claimed).
      press     over a quick sim fleet, every bigGame or derby question asked at a whistle names the next
-               fixture's opponent (a second meeting with the same club is allowed); the 2026-10-12 Hot Seat
+               fixture's opponent (a second meeting with the same club is allowed), and every bigGame one
+               ("on paper are a level above you") is true of that fixture by the engine's own matchEdge,
+               over that fleet and a wider bigGame fleet (SUBS_EDGE_SEEDS seeds); the 2026-10-12 Hot Seat
                daily at Westerlo still asks about Cercle Brugge (it is dated before the rules), and a stamped
                free run on its seed asks about Gent. Prints the count of each question kind, and the base's
                beside it when SUBS_BASE is set.
@@ -38,6 +48,11 @@
      oldcap     the rule answers three everywhere (the plan's control): the 2026 checks red.
      nostops    the stoppage check off: rule red.
      htstop     half time counts as a stoppage: rule red.
+     ht45       a change at 45 counts as the interval: rule red.
+     yearplus   the rule read with the season's end year: rule red.
+     etbreak    the break before extra time costs a stoppage: extratime red.
+     cutover    the cutover day itself plays the base rules: cutover red.
+     pressedge  the bigGame edge judged against the match just played (no fixture handed in): press red.
      opproom    the other dugout's room back to MAX_HALFTIME_SUBS less the changes made: opponent red.
      coachall   the coach keeps nothing back (his three keep back lines opened): coach red.
      pressold   the press at the whistle reads the match just played again: press red.
@@ -63,7 +78,7 @@ const partArg = process.argv.find(a => a.startsWith('--part='));
 const HS_FILE = 'src/lib/managerHotSeat.ts';
 /* The base arm's sections run only with SUBS_BASE, a checkout of the commit this branch started from. */
 const BASE_PARTS = ['legacy', 'three', 'hotseat'];
-const ALL_PARTS = ['ledger', 'rule', 'opponent', 'coach', 'press', ...(process.env.SUBS_BASE ? BASE_PARTS : [])];
+const ALL_PARTS = ['ledger', 'rule', 'extratime', 'cutover', 'opponent', 'coach', 'press', ...(process.env.SUBS_BASE ? BASE_PARTS : [])];
 /** The engine sections past rule register here as they are defined below. */
 const SECTIONS = {};
 
@@ -72,6 +87,11 @@ const CONTROLS = {
   oldcap: { part: 'rule', from: '  return subsRuleFor(subsLeagueBase(careerLeagueOf(career).id), worldYear(career));', to: '  return { subs: MAX_SUBS, stops: null, partial: false };' },
   nostops: { part: 'rule', from: '    if (inPlay && !sharesStop(live, m, p) && stopsUsed(live) >= rule!.stops!) return null;', to: '' },
   htstop: { part: 'rule', from: '  if (!live.h2Drawn && minute >= 46) return true;', to: '  if (false) return true;' },
+  ht45: { part: 'rule', from: '  if (!live.h2Drawn && minute >= 46) return true;', to: '  if (!live.h2Drawn && minute >= 45) return true;' },
+  yearplus: { part: 'rule', from: '  return subsRuleFor(subsLeagueBase(careerLeagueOf(career).id), worldYear(career));', to: '  return subsRuleFor(subsLeagueBase(careerLeagueOf(career).id), worldYear(career) + 1);' },
+  etbreak: { part: 'extratime', from: '  return !!live.et && minute === live.et.from && !(plus && plus > 0);', to: '  return false;' },
+  cutover: { part: 'cutover', file: HS_FILE, from: "  if (setup.daily) return setup.daily < HOT_SEAT_RULES_FROM ? 'base' : undefined;", to: "  if (setup.daily) return setup.daily <= HOT_SEAT_RULES_FROM ? 'base' : undefined;" },
+  pressedge: { part: 'press', from: '    const edge = matchEdge(state, fromWeek === undefined ? undefined : fx);', to: '    const edge = matchEdge(state);' },
   legacyleak: { part: 'legacy', from: "  if (career.matchRules === 'base') return { subs: MAX_SUBS, stops: null, partial: false };", to: '' },
   pressnew: { part: 'legacy', from: "  maybeAskPress(state, state.matchRules === 'base' ? undefined : live.week + 1);", to: '  maybeAskPress(state, live.week + 1);' },
   pressold: { part: 'press', from: "  maybeAskPress(state, state.matchRules === 'base' ? undefined : live.week + 1);", to: '  maybeAskPress(state);' },
@@ -229,6 +249,10 @@ function ruleSection(cm) {
   check(P, '2026-27 refuses a change at a fourth minute', !!b && sub(cm, b, 85) === null);
   const shared = b && sub(cm, b, 80);
   check(P, '2026-27 takes a second change at the third stoppage\'s minute', !!shared && shared.live.subsUsed === 5 && cm.stopsUsed(shared.live) === 3);
+  /* Review minor 5: 45 is the first half's last minute and its board, in play; the interval starts at 46. */
+  const at45 = sub(cm, ht, 45, 1);
+  check(P, '2026-27 a change at 45+1 (the first half\'s board) is in play and uses a stoppage', !!at45 && at45.live.subsUsed === 1 && cm.stopsUsed(at45.live) === 1,
+    at45 ? `${at45.live.subsUsed} changes, ${cm.stopsUsed(at45.live)} stoppages` : 'refused');
   // The base rules (an older Hot Seat day) are three with no limit whatever the season.
   check(P, 'matchRules base plays three with no limit', ruleText(cm.matchRuleOf({ ...ht, matchRules: 'base' })) === '3/none');
   // 2020-21: England three, Spain five.
@@ -236,7 +260,76 @@ function ruleSection(cm) {
   const ll20 = withSeed(2021, () => cm.startCareer('Barcelona', 'era2020'));
   check(P, '2020-21 Premier League plays three', ruleText(cm.matchRuleOf(pl20)) === '3/none', ruleText(cm.matchRuleOf(pl20)));
   check(P, '2020-21 La Liga plays five in three', ruleText(cm.matchRuleOf(ll20)) === '5/3', ruleText(cm.matchRuleOf(ll20)));
+  /* Review MAJOR 4: the season the rule is read for is the world's START year, the way worldYear counts it
+     (the era's start year plus the seasons played). 2020-21 alone cannot see an off by one (2021 is three
+     too), so the same career is read in its second season (2021-22, three in the ledger) and its third
+     (2022-23, five). */
+  for (const [season, want] of [[2, '3/none'], [3, '5/3']]) {
+    const later = { ...pl20, season };
+    const year = cm.worldYear(later);
+    check(P, `a 2020 era Premier League career in season ${season} (${year}-${String(year + 1).slice(2)}) plays ${want}`,
+      year === 2019 + season && ruleText(cm.matchRuleOf(later)) === want, `${year}: ${ruleText(cm.matchRuleOf(later))}`);
+  }
 }
+
+/* ---------------- section extratime (review MAJOR 2) ---------------- */
+/* The break before extra time is free for my changes, as the help and What's New promise. Only a Champions
+   League knockout night plays extra time, so this walks a 2026-27 Arsenal career (seed 4107, fixed steps) to the
+   second leg of its first knockout tie, the walk the review's probe used (remote check r1331-run-e: 60 of 60
+   nights took the change at the break and refused the one at 95 on the head; with the break's clause taken out
+   of isBreakChange, 60 of 60 refused the break). Each night: one change at half time, three in play at 60, 70
+   and 80 (four changes, three stoppages), then on the nights that go to extra time a change at 90 (the break)
+   and, separately, one at 95 (a fourth stoppage). */
+const ET_NIGHTS = Number(process.env.SUBS_ET_NIGHTS ?? 12);
+function extratimeSection(cm) {
+  const P = 'extratime';
+  let pre = withSeed(4107, () => cm.startCareer('Arsenal'));
+  for (let step = 1; step < 90; step++) {
+    const next = pre.calendar[pre.week];
+    if (!next || (next.type === 'uclKo' && (next.uclLeg === 2 || !next.uclLeg))) break;
+    pre = withSeed(4107 * 31 + step, () => cm.playNextEntry(pre, { skipHalftime: true, noCoach: true })).state;
+  }
+  const rule = cm.matchRuleOf(pre);
+  check(P, 'the walk reaches a knockout second leg in a five change season', pre.calendar[pre.week]?.type === 'uclKo' && ruleText(rule) === '5/3', `${pre.calendar[pre.week]?.type} ${ruleText(rule)}`);
+  let nights = 0, taken90 = 0, kept90 = 0, refused95 = 0;
+  for (let k = 0; k < 2000 && nights < ET_NIGHTS; k++) {
+    const seed = 2600 + k;
+    const ht = withSeed(seed, () => cm.playNextEntry(pre));
+    if (ht.kind !== 'halftime' || !ht.state.live || !legalPair(cm, ht.state, 46)) continue;
+    let s = sub(cm, ht.state, 46);
+    s = s && withSeed(seed + 500000, () => cm.startSecondHalf(s));
+    for (const m of [60, 70, 80]) s = s && legalPair(cm, s, m) ? withSeed(seed + m, () => sub(cm, s, m)) : null;
+    if (!s || s.live.subsUsed !== 4 || cm.stopsUsed(s.live) !== 3) continue;
+    const et = withSeed(seed + 900000, () => cm.startExtraTime(s));
+    if (!et?.live?.et || !legalPair(cm, et, 90) || !legalPair(cm, et, 95)) continue;
+    nights += 1;
+    const at90 = withSeed(seed + 90, () => sub(cm, et, 90));
+    if (at90) { taken90 += 1; if (cm.stopsUsed(at90.live) === 3) kept90 += 1; }
+    if (withSeed(seed + 95, () => sub(cm, et, 95)) === null) refused95 += 1;
+  }
+  console.log(`   ${nights} nights to extra time with three stoppages used: the change at the break taken ${taken90} (stoppages still three ${kept90}), the change at 95 refused ${refused95}`);
+  check(P, `enough nights go to extra time to judge (${ET_NIGHTS})`, nights >= ET_NIGHTS, `${nights}`);
+  check(P, 'with three stoppages used, a change at the break before extra time is taken and uses none', nights > 0 && taken90 === nights && kept90 === nights, `${taken90} taken, ${kept90} at three stoppages, of ${nights}`);
+  check(P, 'a change at 95, a fourth stoppage, is refused', nights > 0 && refused95 === nights, `${refused95} of ${nights}`);
+}
+
+/* ---------------- section cutover (review minor 6) ---------------- */
+/* A daily ON the cutover date plays the current rules, the day before it the base ones (rulesOf compares ISO
+   dates, so an off by one there would put the whole cutover day on the old rules with every other date right). */
+function cutoverSection(cm) {
+  const P = 'cutover';
+  const hs = HS.get(cm);
+  const from = hs.HOT_SEAT_RULES_FROM;
+  const d = new Date(`${from}T00:00:00Z`);
+  d.setUTCDate(d.getUTCDate() - 1);
+  for (const [date, want] of [[d.toISOString().slice(0, 10), 'base'], [from, undefined]]) {
+    const day = withSeed(1, () => hs.dailyHotSeat(date));
+    const run = withSeed(2, () => hs.replayHotSeat({ club: day.club, seed: day.seed, daily: day.daily }, []));
+    check(P, `the ${date} daily plays the ${want ? 'base' : 'current'} rules`, day.daily === date && run.state.matchRules === want, `matchRules ${run.state.matchRules}`);
+  }
+}
+SECTIONS.extratime = extratimeSection;
+SECTIONS.cutover = cutoverSection;
 
 /* ---------------- the quick sim fleet (sections opponent and coach) ---------------- */
 /* Five change careers in 2026-27 (England, Spain, Germany), the same careers on the base rules, and two
@@ -407,16 +500,22 @@ async function threeSection(cm, { base, threeHead }) {
 
 /* Section press: every bigGame or derby question asked at a whistle names the next fixture's opponent. */
 const PRESS_MATCHES = Number(process.env.SUBS_PRESS_MATCHES ?? 30);
-function pressFleet(cm, onAsk) {
+const PRESS_FLEET = { seeds: SEEDS, base: 8300, step: 41, matches: PRESS_MATCHES,
+  clubs: [['Liverpool', null], ['Everton', null], ['Barcelona', null], ['Everton', 'era2005'], ['Burnley', null]] };
+/* The wider fleet for the bigGame edge (the review's probe shape, remote check r1331-run-p: 23 bigGame questions
+   on the head, every one true; 12 of 21 untrue with the fixture dropped from matchEdge). */
+const EDGE_FLEET = { seeds: Number(process.env.SUBS_EDGE_SEEDS ?? 8), base: 9100, step: 37, matches: 38,
+  clubs: [['Liverpool', null], ['Everton', null], ['Barcelona', null], ['Burnley', null], ['Brentford', null], ['Getafe', null]] };
+function pressFleet(cm, onAsk, fleet = PRESS_FLEET) {
   const kinds = {};
-  for (let k = 0; k < SEEDS; k++) {
-    for (const [club, era] of [['Liverpool', null], ['Everton', null], ['Barcelona', null], ['Everton', 'era2005'], ['Burnley', null]]) {
-      let s = withSeed(8300 + 41 * k, () => (era ? cm.startCareer(club, era) : cm.startCareer(club)));
-      for (let i = 0, played = 0; played < PRESS_MATCHES && i < PRESS_MATCHES * 3; i++) {
+  for (let k = 0; k < fleet.seeds; k++) {
+    for (const [club, era] of fleet.clubs) {
+      let s = withSeed(fleet.base + fleet.step * k, () => (era ? cm.startCareer(club, era) : cm.startCareer(club)));
+      for (let i = 0, played = 0; played < fleet.matches && i < fleet.matches * 3; i++) {
         const before = s.press?.pending ?? null;
         const week = s.week;
         const last = cm.nextFixture(s);
-        const r = withSeed(8300 + 41 * k + 1000 * i, () => cm.playNextEntry(s, { skipHalftime: true }));
+        const r = withSeed(fleet.base + fleet.step * k + 1000 * i, () => cm.playNextEntry(s, { skipHalftime: true }));
         if (r.kind === 'seasonOver') break;
         s = r.state;
         if (r.kind !== 'match') continue;
@@ -424,7 +523,7 @@ function pressFleet(cm, onAsk) {
         const q = s.press?.pending ?? null;
         if (!q || q === before || s.press.lastWeek !== week) continue;
         kinds[q.kind] = (kinds[q.kind] ?? 0) + 1;
-        if (onAsk && (q.kind === 'bigGame' || q.kind === 'derby')) onAsk(q, cm.nextFixtureFrom ? cm.nextFixtureFrom(s, s.week) : null, last);
+        if (onAsk && (q.kind === 'bigGame' || q.kind === 'derby')) onAsk(q, cm.nextFixtureFrom ? cm.nextFixtureFrom(s, s.week) : null, last, s);
       }
     }
   }
@@ -433,14 +532,31 @@ function pressFleet(cm, onAsk) {
 function pressSection(cm, { base }) {
   const P = 'press';
   let asked = 0, wrong = 0, first = '';
-  const kinds = pressFleet(cm, (q, next, last) => {
+  /* Review MAJOR 1: the bigGame line claims "on paper are a level above you", which the engine asks only at
+     matchEdge - EDGE_LEVEL (7) <= -6. The name alone cannot see the edge judged against the match just played,
+     so every bigGame asked at a whistle is held to the engine's own edge against the fixture it names, read on
+     the state the match handed back. `closest` is the largest edge - 7 seen, printed as the headroom. */
+  const EDGE_LEVEL = 7;
+  let big = 0, untrue = 0, firstUntrue = '', closest = -Infinity;
+  const judge = (q, next, last, s) => {
+    if (q.kind !== 'bigGame') return;
+    big += 1;
+    const edge = next?.kind === 'match' ? cm.matchEdge(s, next) : null;
+    if (edge !== null) closest = Math.max(closest, edge - EDGE_LEVEL);
+    if (edge === null || edge - EDGE_LEVEL > -6) { untrue += 1; firstUntrue ||= `"${q.text.slice(0, 50)}" at edge ${edge?.toFixed(1)} against ${next?.opponent} (${last?.opponent} just played)`; }
+  };
+  const kinds = pressFleet(cm, (q, next, last, s) => {
     asked += 1;
     const lastOpp = last?.kind === 'match' ? last.opponent : null;
     const nextOpp = next?.kind === 'match' ? next.opponent : null;
     const ok = nextOpp !== null && q.text.includes(nextOpp) && (nextOpp === lastOpp || !lastOpp || !q.text.includes(lastOpp));
     if (!ok) { wrong += 1; first ||= `${q.kind}: "${q.text}" with ${lastOpp} just played and ${nextOpp} next`; }
+    judge(q, next, last, s);
   });
   check(P, 'every bigGame or derby question asked at a whistle names the next fixture\'s opponent', asked > 0 && wrong === 0, `${wrong} of ${asked} wrong${first ? `; first ${first}` : ''}`);
+  pressFleet(cm, judge, EDGE_FLEET);
+  console.log(`   bigGame at the whistle: ${big} asked over both fleets, ${untrue} untrue of the fixture named; the closest edge - 7 ${closest.toFixed(1)} (the line needs -6 or less)`);
+  check(P, 'every bigGame question asked at a whistle is true of the fixture it names (edge - 7 <= -6)', big >= 10 && untrue === 0, `${untrue} of ${big} untrue${firstUntrue ? `; first ${firstUntrue}` : ''}`);
   console.log(`   question kinds at the whistle, head: ${JSON.stringify(kinds)}`);
   if (base) console.log(`   question kinds at the whistle, base: ${JSON.stringify(pressFleet(base, null))}`);
   const hs = HS.get(cm);
