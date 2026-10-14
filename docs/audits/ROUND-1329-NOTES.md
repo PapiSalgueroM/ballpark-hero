@@ -1,0 +1,209 @@
+# Round 1329 notes: Soccer Career's world tells the truth (F13a)
+
+Branch r1329-sc-world-truth. Kept current at every push.
+
+## Base
+
+origin/release-bc-gate c5fc5470b3e377f22d6d538f459b9f5310b08dd0 (Release BC's join; origin/main 36cc9ffe had no
+Release BC commit when the round started on 2026-10-13). Blobs on the base: soccerCareerEngine.ts 7bcaad3c,
+soccerPhone.ts d5c9f014, soccerArcade.ts bf52d2bc, InternationalPanel.tsx d64af844.
+
+Last merged base: origin/main 082fc2774c8aa9f919c14efa33bfc3fbfc599597 (Release BC live), merged at 1a14674d. The
+four blobs there are the same four as on c5fc5470 (7bcaad3c, d5c9f014, bf52d2bc, d64af844), and main touched none
+of this round's files, so the inverse's rows and sha256 pins are unchanged; BASE in simSoccerWorldTruth.mjs and
+WORLD_TRUTH_BASE in careerWorldTruth1329.mjs now name 082fc277.
+
+## The boundary and its sources (src/lib/soccerWorldTruth.ts, read 2026-10-13)
+
+LAST_PLAYED_SEASON = 2025 (season Y is Y/Y+1):
+- European autumn to spring leagues, 2025/26 over: src/data/clubManagerFinalTables2025_26.ts (two source families,
+  read 2026-09-15: UEFA and the leagues' own data; ESPN and other press).
+- Saudi Pro League 2025/26 over on 21 May 2026: spl.com.sa news 1069886 ("2025-26 SPL Awards winners"); ESPN
+  2025-26 Saudi Pro League standings (ksa.1).
+- Calendar year leagues the eras list (MLS, Brasileirao, K League 1), the game's season Y is the year Y:
+  MLS Cup 2025 on 6 December 2025 (mlssoccer.com "Inter Miami CF Win 2025 MLS Cup presented by Audi"; ESPN gameId
+  762182); Brasileirao 2025 settled 3 December 2025 (cbf.com.br "Flamengo e campeao do Brasileirao Betano 2025";
+  ESPN Brasil artigo 16041438); K League 1 2025 settled 18 October 2025 (The Korea Herald article 10596261;
+  the-afc.com "East Asia Wrap: Jeonbuk lift K League title").
+LAST_PLAYED_SUMMER = 2026: the 2026 World Cup ended 19 July 2026 (src/data/wc2026Results.ts, ESPN's scoreboard feed
+for all 104 matches; The Athletic and FOX Sports for the awards).
+None of these champions is printed: they are held for F13b (see Owed).
+
+## Step (a): the boundary module, its unit file and the harness red on the base
+
+Month award design numbers, tuned on a base fleet probe of 200 careers (3,244 season rows; starts 1990 to 2020):
+season ratings run p10 6.1, median 7.2, p75 7.8, p90 8.4. Base award means per season by rating, ATT: 7.0 to 7.5
+1.04, 8.0 to 8.5 2.56, 8.5+ 3.51; GK: 0.33, 0.40, 0.59 (the goals lottery). 179 of 538 zero goal seasons with 10+
+games won at least one month. monthAwards on the same rows (20 streams each): 8.0 to 8.5 2.16, 8.5+ 3.61 (8.0+
+together about 2.7), 7.0 to 7.5 any 0.03, under 6.8 none; at 8.0 to 8.5 GK 2.03, DEF 2.05, MID 1.98, ATT 2.38;
+overall 0.70 a season against the base's 0.88 (card 4 is dealt less, decision 3 (vi)).
+
+simSoccerWorldTruth on the base (local smoke, one seed, 80 careers): section 1 red (223 seasons under the floor won,
+2 of 3 zero goal keepers rated 6.0 or less won, 517 month lines with the season's year for January to May, groups
+GK 0.37 DEF 0.29 MID 0.72 ATT 2.0 at 7.5 to 8.5); section 3 red (3,414 real names in past seasons, 5,971 past
+champion, transfer or scorer lines, 209 winners of missed summers, 6,364 real moves, 2,099 real top scorers, 12,868
+real men off their era club); section 4 red (1,488 world questions about a season that happened, 920 about a real
+man); section 5 red (213 missed past summers named in the log; the panel shows the champion, bracket and last tile
+winner for a missed 2006).
+
+## Steps (b) to (f), runner readings (GitHub runners through the rc kit)
+
+Month award, head against the base, five seeds a run (400 careers a tree, about 6,700 seasons each):
+- seed offset 0 (r1329-b): head 2,343 months over 6,675 seasons; rated 8.0+ 2.60 a season (636 seasons); rated 7.0 to
+  7.5 wins any 0.03 (1,613); under the floor 0; zero goal keepers rated 6.0 or less who won 0 of 38; wrong years 0.
+  Base: 5,094 months over 6,664 seasons; 8.0+ 2.11; 7.0 to 7.5 any 0.48; under the floor 976; zero goal keepers
+  12 of 35; month lines with the wrong year 2,609.
+- groups at 7.5 to 8.5, rating for rating (0.1 strata weighted by the whole fleet), seed offsets 1 to 4 (r1329-f3):
+  all 1.10, 1.06, 1.07, 1.11; GK 0.94, 0.90, 0.95, 1.00; DEF 1.12, 1.09, 0.98, 1.12; MID 1.02, 0.88, 0.91, 1.01;
+  ATT 1.18, 1.17, 1.19, 1.16. Band 30 percent: the widest reading is MID at minus 17 percent. 8.0+: 2.64, 2.61,
+  2.74, 2.72 against the band 1.0 to 3.0. Base groups (unstratified, seed 0): GK 0.40, DEF 0.46, MID 0.66, ATT 2.08.
+- planted: a 0 goal keeper rated 6.0 over 10,000 identities wins 0 months.
+Stream (section 2, 200 careers in lockstep with the base): 0 careers with a Math.random count, phone seed or world
+record off the base; about 600 month blocks and world ticks compared; the first fields to differ are always this
+round's (events and awards, or the phone's clubs, world and feed with the Ballon d'Or night).
+Feed (section 3): 0 real names, champion, transfer or top scorer lines in about 4,300 seasons that happened; every
+season to come opens with its framing line; 0 real men off their era club; base: 17,093 real names, 29,868 claims,
+1,044 winners of missed summers, 63,636 real men off their era club.
+Quiz (section 4): three questions in every season on the head (base 6,659 of 6,664); 0 world questions about a
+season that happened (base 7,377), 0 about a real man (base 4,561); 40 old 2028 saves holding real moves ask 0
+about a real man and play a season on without a throw.
+Log and panel (section 5): 0 missed past summers named in the log (base 1,059); kept for finals he played and for
+summers to come; the panel's four cases follow the rule (the base shows every winner).
+Inverse (section 6): 31 rows (engine 5, phone 11, quiz 5, panel 10) give the base's four files back byte for byte;
+every hunk inside the regions. The regenerate recipe, from the worktree root:
+  node .tmp-fx/gen-inverse.mjs c5fc5470b3e377f22d6d538f459b9f5310b08dd0 && node .tmp-fx/write-inverse.mjs
+(the two generator scripts live in the worktree's .tmp-fx and are copied into the closing report's folder).
+
+Controls, each run red once (exit 1, last line FIRED): goalsonly (section 1, 7 failures), seasonyear (1, 1),
+nolegacy (2, 202), extradraw (2, 201), realmoves (3, 2), pastchampions (3, 1), summer (3, 1), arcade (4, 2),
+log (5, 1), panel (5, 6), outside (6, 3).
+
+Known reds carried (decision 5): simPhone2 and simMoney are red on their save size budgets on the base and the head
+alike, and only there (simPhone2 biggest save 98.9 KB head, 99.6 KB base; simMoney 88.3 KB head, 89.5 KB base); the
+sections that read this round's code (simPhone2 section 6: 840 feed items, 227 transfers on the head, 245 on the
+base; simMoney section 6: 180 questions, every one answerable from the save) are green on both.
+
+## The bundler and the legacy draws (found by playSoccerCareerDepth, fixed in 7d31c5f0)
+
+The production build (Vite, Rollup's tree shaking) counts Math.random as pure, so the first version of the legacy
+draws, whose results fed nothing, was dropped from the built game: playSoccerCareerDepth saw 170 draws in the node
+and Chromium engines against 150 on the page's Next Season (r1329-i). The node harnesses cannot see this, since
+they bundle without that tree shaking. The draws now feed a sum that a branch the bundler cannot rule out reads (a
+sum of draws is never negative), the same calls in the same order; r1329-k checks the page again.
+
+## The walk (scripts/playSoccerWorldTruth.mjs, r1329-walk4 at 7d6036ba)
+
+Green at 320, 390 and 1280; WALK_CONTROL=pastfeed fired on case A at all three (3 failures). Save A was a 2012
+Liverpool striker (two month lines, August 2012 and April 2013, in the 2012 season); save B missed the 2002, 2004
+and 2006 summers; save C missed the 2030 World Cup. Pictures looked at: 390-A-feed (the honest lines, his own
+tournaments), 390-A-quiz (an own story question), 390-A-story (the two month lines with their own years),
+390-B-history ("Watched from home" on all three rows, no champion), 390-B-card and 320-B-card (no champions line,
+no Bracket tile, the third tile spanning the row), 390-C-feed (the framing line heading each season, champion lines
+under it), 390-C-bracket (the 2030 bracket opens). The history list opened and closed with scrollY and the
+document height back where they were (390: 2143 and 14952 before, 2285 and 15094 open, 2143 and 14952 closed);
+"Watched from home" is 12 px; every press measured is 44 px or more but the list's Back (32 px, owed).
+
+Final proof readings at the last head are in the closing report
+(C:/Users/antho/dukb-handoff/2026-10-10/results-g/finish-1329.md), because What's New is the round's last commit.
+
+## Records the brief asks for (written 2026-10-13 by the review fixer, base c5fc5470)
+
+- OVERLAP (decision 2), `git diff --name-only c5fc5470...origin/<branch>`, grepped for the engine, the phone, the
+  quiz, the panel, soccerWorldTruth, careerEras and WhatsNew: codex/soccer-career-daily-life (75e03f37, 14 files)
+  none; codex/manager-daily-decisions (1ed26406, 7 files) none; codex/career-continental-score (3e4a6da6, 6 files)
+  src/lib/soccerCareerEngine.ts only, hunks at base lines 6739 to 6899 inside simulateUCL, about 1,000 lines below
+  this round's month hunk (5694 to 5737) and its tournament lines (5088 to 5093); codex/f1-driver-career (a46d326b,
+  21 files) src/pages/WhatsNew.tsx only (an append conflict at most, keep both blocks). Nothing touches the phone,
+  the quiz, the panel or careerEras.ts.
+- THE GUIDE (decision 4): soccer2.ts's /soccer-career block (lines 1748 to 1975) never names the feed, the quiz or
+  Player of the Month (a case blind grep for player of the month, sportsfeed, sports feed, ball quiz, the feed and
+  the quiz counts 0). Its one World Cup section is "The World Cup cycle and your legacy score", whose first item
+  reads "The World Cup comes every 4 years. Top nations qualify about 90 percent of the time, while a small nation
+  mostly needs a world class you." Nothing in it promises a winner line, so no "?" changes.
+- THE DAILIES (decision 3 (v)): `git grep -l` of every src file outside src/test that imports soccerCareerEngine
+  finds the same 81 files on c5fc5470 and on the head. Of Round 1327's list, soccerArcade, careerEras,
+  careerSeasonRatings and seasonFamilySummary import it as types only on both trees; careerDrills imports values
+  (effectivePotential, trainingStatFor) on both trees, unchanged by this round. soccerWorldTruth.ts imports nothing.
+
+## Review fixes (2026-10-13)
+
+- The feed names no winner of a summer that happened, not even finals he played (7580b259): decision 2's principle
+  makes every feed line world news. His finals stay in the season log and on the International card.
+- THE BRIEF IS SUPERSEDED HERE, so nobody puts the arm back: brief-1329.md decision 1(c) and design 3.6 say the feed's
+  tournament line prints "only for his own finals or a future summer". For the feed that own finals arm is gone on
+  purpose (review finding 6, ruled by decision 2's principle, which governs where the brief disagrees with itself):
+  worldSeasonTick prints `if (intl && !summerHappened(year))` and nothing else. The own finals arm
+  (tournamentWinnerShown) lives only where decision 2 puts his story, runTournamentSummer's two season log lines and
+  the International panel. simSoccerWorldTruth section 3 (any winner line of a summer that happened, control summer:
+  2,245 such lines when the arm is back, r1329-vf) and playSoccerWorldTruth case A (a save that played three real
+  summers, 0 winner lines) go red if it returns.
+- The quiz's two champion questions print the season in full, "in 2026-27?" (3a898747).
+- A history row with no result of his own carries no empty pill (20c5fa4f). The pill line sits one line below the
+  brief's 565 to 573 on the base, in the same row; simSoccerWorldTruth's history row region now ends at the row's
+  close.
+- simSoccerWorldTruth: section 4's old saves play on until the world ticks (9b45a4a7), section 2 plants the draw
+  count of both lotteries (cb2c58e9), section 0 holds soccerWorldTruth.ts to literal constants and rules
+  (25ca7a88), and the header carries the bands' readings (2a7863cb).
+- Gate runs of the review fixes (full account: C:/Users/antho/dukb-handoff/2026-10-10/results-g/fix-1329.md):
+  r1329-fx-d and r1329-fx-e on 7d5d1ec6 (every walk, the 24 rule fences, the 16 inverse importers with their
+  controls, all 16 simSoccerWorldTruth controls FIRED), r1329-fx-f on the merged head 6f54e704, r1329-fx-g on
+  c90309f0 (simCareerLeagueSeasons' 1329 arm and simHarnessAnchors green), r1329-fx-h (the engine readers fx-d did
+  not reach, all green) and r1329-fx-i (simUsCareerSummer green, 3,379 s, every section over 400 careers a sport).
+- Closing check (0cc4a562): simSoccerCareerDevelopment's CAREER_DEVELOPMENT_CONTROL=all run died on this head and on
+  main 082fc277 alike (r1329-fx-j), because the mentorRemember control's label sits inside Round 1327's cards-1-to-10
+  row, once on each side, and the row then missed its anchor. The neutral bundle now carries a control through such a
+  row on both sides. r1329-fx2-a: the plain run 0 (0 failed), mentorRemember alone 1 with only "repeated Youth Mentor
+  event preserves every saved spell" failed, =all 0 ("healthy outcomes passed, 27 effective controls caught").
+  r1329-fx2-b on 1da98f6d: tsc 0, simNoRivalNames 0, simHarnessAnchors 0, simStorageWrites 0.
+
+## Deviations from the brief's hunk list, and why
+
+- InternationalPanel.tsx gains one import line (soccerWorldTruth), which the brief's list of panel lines leaves out
+  but the rule needs; and its tile grid's class line, so a card that loses its Bracket tile spans its last tile
+  across both columns. The class is added only when the tile count is odd, so every four tile card's markup stays
+  the base's (careerMomentKitLift's recorded markup holds without a re-record).
+- monthAwards takes the position and groups it with monthGroupOf, a copy of soccerInternational.ts positionGroup
+  held equal to it for all ten positions by src/test/soccerWorldTruth.test.ts, so the engine keeps its one import
+  line.
+- simCareerStoryRole and simSoccerCareerDevelopment take the engine's and the phone's rows only (their bundles load
+  neither the quiz nor the panel); simCareerLeagueSeasons' existing 1327 arm takes 1329 out first, and since
+  Release BC put Round 1327 on main (its base is origin/main) a new 1329 arm, tried first, takes 1329 out alone
+  (without it a career 1329 moved fell through to the train's arm, whose stale patch refused: r1329-fx-f);
+  simSoccerDeckFairness section 7 compares the base with this tree with 1329 taken out.
+
+## Owed
+- Small type this round shows but did not write (PhonePanel.tsx and InternationalPanel.tsx): the feed items at
+  text-[11px] (PR178's PhonePanel), the champions line text-[11px], the history list's Back button h-8 (32 px; the
+  walk prints "known small: the history list's Back is 32 px (h-8, owed)" at all three sizes, r1329-vf).
+- The last tournament tile's line is text-[9px], the base's class, and decision 4 names it as old small type to owe.
+  But its at home words ("Did not qualify", "Left out", "Watched from home", from summerAtHomeLine) are this round's
+  text (review m4, finding 9), and the tile's partner caption ("N played out") is 9 px as well, so lifting one alone
+  would leave an odd pair. For the lead to rule: lift both captions in a visual round (the panel rows of the eighth
+  inverse and the recorded tile markup move with it), or accept the owed line as written. The walk does not measure
+  this tile's font size.
+- The tournament card's Qualifying and Squad tiles, and the group table, still show his nation's simulated run in a
+  summer that happened; this round's rule covers the winner only. Same class as the winner (a result of a real
+  edition the game made up; review m5, finding 10, read a 2006 England card that does not match the real group), so
+  keep it near the top of F13b.
+- Weight: /soccer-career reads 829.5K gz against Release BC's 830K row on the merged head (sweepWeight green,
+  r1329-fx-f; nothing under src moved after it), 829.4K before the merge (r1329-fx-e). Round 1330 also changes the
+  flagship's chunk, so the two rounds must be measured together on one tree before a train takes both; never by
+  editing the row.
+
+- F13b: sourced history (soccerWorldHistory.ts) for champions, cups, top scorers and transfers of seasons that
+  happened; the repo already sources the 2026 World Cup (src/data/wc2026Results.ts) and the 2025-26 European tables
+  and Champions League holders (src/data/clubManagerFinalTables2025_26.ts), both held for F13b because the game's
+  world draws its own 2025 champions and 2026 edition and the Ballon d'Or honours those.
+- Moving LAST_PLAYED_SEASON or LAST_PLAYED_SUMMER is a data round with its own sources.
+- Transfer news for 2026 to 2032 could come from Round 1318's generated Ballon d'Or pool in a later round.
+- From the reviews, for the lead to rule: a long historical career's feed repeats the honest line once a season
+  (decision 2 asks for one a season), and an old save's invented lines stay on screen longer because a season that
+  happened now adds 1 to 3 items where the base added 7 to 9 (MAX_FEED 12; ensurePhone's repair is outside the
+  round's hunks).
+- Re-seating a real nominee at his era club also moves his honours points on Ballon d'Or night (clubHonours of the
+  era club), so ranks can move. His own finish is now read beside the base by simSoccerWorldTruth (a reading, not
+  a check): wins this tree against the base 56 and 49 (seed offset 0, r1329-fx-g), 78 and 77 (offset 5, r1329-fx-f),
+  82 and 87 (offset 7, r1329-fx-d), each of about 6,250 seasons played; top three 76 and 80, 107 and 106, 131 and
+  120. The two move both ways by a handful, as two careers that part at the first month award would.
+- The 2012 Ballon d'Or night still prints sim honours beside real men (owed to the Ballon d'Or round), and a toast
+  can cover the chance wheel's Show result button at 390 (not this round's screen).

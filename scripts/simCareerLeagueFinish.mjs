@@ -77,6 +77,9 @@ import { AWARD_GENERATIONS_ADDITIONS, inverseAwardGenerations } from './lib/care
    career from its first deck or paper on. Both historical bundles take that out first, the newest change first:
    scripts/lib/careerDeckFair1327.mjs. */
 import { inverseDeckFair, deckFairPatches, DECK_FAIR_ADDITIONS } from './lib/careerDeckFair1327.mjs';
+/* Round 1329: the world truth round (the month award, the phone's world, the quiz, the International panel) comes
+   off first, in front of Round 1327, in both historical bundles: scripts/lib/careerWorldTruth1329.mjs. */
+import { inverseWorldTruth, worldTruthPatches, worldTruthOutPlugin, worldTruthReceiptProblem } from './lib/careerWorldTruth1329.mjs';
 import crypto from 'node:crypto';
 import os from 'node:os';
 import fs from 'node:fs';
@@ -118,7 +121,7 @@ const sourceFiles = ['src/lib/soccerCareerEngine.ts', 'src/lib/soccerCareerLeagu
   'scripts/lib/careerDevelopmentAttribution1185.mjs', 'scripts/lib/careerStoryRoleAttribution1190.mjs', 'scripts/simCareerLeagueFinish.mjs'];
 const sourceHashes = () => Object.fromEntries(sourceFiles.map(file => [file,
   crypto.createHash('sha256').update(fs.readFileSync(path.join(ROOT, file))).digest('hex')]));
-const proof = { control: CONTROL, sourceBefore: sourceHashes(), sourceAfter: null, sourceHeld: false, attribution: [], storyRoleAttribution: [], nextTenAttribution: [], veteranPayAttribution: [], awardGenerationsAttribution: [], deckFairAttribution: [], originalSources: [], careers: [] };
+const proof = { control: CONTROL, sourceBefore: sourceHashes(), sourceAfter: null, sourceHeld: false, attribution: [], storyRoleAttribution: [], nextTenAttribution: [], veteranPayAttribution: [], awardGenerationsAttribution: [], deckFairAttribution: [], worldTruthAttribution: [], originalSources: [], careers: [] };
 
 /* A control edits a COPY. The copies live outside src/lib, so their relative
    imports are pointed back at the real files, except the engine's import of
@@ -193,10 +196,20 @@ function wheelOutPlugin() {
 }
 /* Round 1327's rows come off first. A control's copy of the engine has its imports pointed back at src/lib
    (relocate), so the rows are read through the same relocation as the copy they are applied to. */
+/* Round 1329: the files of the eighth inverse that no other plugin of a historical bundle loads, and the receipt of
+   the both out bundle's own loader. */
+const WORLD_TRUTH_REST = ['src/lib/soccerArcade.ts', 'src/components/soccer-career/InternationalPanel.tsx'];
+const bothWorldTruth = [];
 function deckFairOut(text) {
   const copied = enginePath !== `${ROOT}/src/lib/soccerCareerEngine.ts`;
   const keep = CONTROL === 'stream' || CONTROL === 'notitle' ? 'soccerCareerLeague' : '';
   let out = text;
+  for (const row of worldTruthPatches().filter(r => r.file === ENGINE_REL)) {
+    const from = copied ? relocate(row.from, keep) : row.from, to = copied ? relocate(row.to, keep) : row.to;
+    assert.equal(out.split(from).length, 2, `${row.id} of Round 1329's inverse is in the engine exactly once at its turn`);
+    out = out.replace(from, () => to);
+    proof.worldTruthAttribution.push({ addition: row.addition, file: ENGINE_REL, bundle: 'attributed' });
+  }
   for (const row of deckFairPatches()) {
     const from = copied ? relocate(row.from, keep) : row.from, to = copied ? relocate(row.to, keep) : row.to;
     assert.equal(out.split(from).length, 2, `${row.id} of Round 1327's inverse is in the engine exactly once at its turn`);
@@ -210,12 +223,14 @@ async function attributionEngine() {
   const attributed = inverseCareerStoryRole(inverseCareerDevelopment(inverseAwardGenerations(ENGINE_REL, deckFairOut(before), proof.awardGenerationsAttribution), proof.attribution), proof.storyRoleAttribution);
   assert.notEqual(attributed, before, 'Historical attribution changes its copied engine');
   assert.equal(proof.awardGenerationsAttribution.length, AWARD_GENERATIONS_ADDITIONS.length, 'The copied engine had the award generations of Rounds 1280 to 1282 and 1318 taken out, once for each row');
-  const file = path.join(WORK, 'attributedEngine.ts'), entry = path.join(WORK, 'attributedEntry.mjs'), out = path.join(WORK, 'attributedBundle.mjs'), veteranOut = [];
+  const file = path.join(WORK, 'attributedEngine.ts'), entry = path.join(WORK, 'attributedEntry.mjs'), out = path.join(WORK, 'attributedBundle.mjs'), veteranOut = [], worldTruthOut = [];
   fs.writeFileSync(file, relocate(attributed, CONTROL === 'stream' || CONTROL === 'notitle' ? 'soccerCareerLeague' : ''));
   fs.writeFileSync(entry, `globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };\nexport * from '${file.replaceAll('\\', '/')}';\n`);
   await build({ entryPoints: [entry], bundle: true, format: 'esm', platform: 'node', outfile: out,
-    logLevel: 'error', alias: { '@': './src' }, absWorkingDir: ROOT, plugins: [wheelOutPlugin(), veteranPayOutPlugin(ROOT, path, fs, veteranOut)] });
+    logLevel: 'error', alias: { '@': './src' }, absWorkingDir: ROOT, plugins: [wheelOutPlugin(), veteranPayOutPlugin(ROOT, path, fs, veteranOut), worldTruthOutPlugin(ROOT, path, fs, worldTruthOut, [...WORLD_TRUTH_REST, 'src/lib/soccerPhone.ts'])] });
   assert.equal(veteranOut.length, VETERAN_PAY_ADDITIONS.length, 'The attributed bundle loaded the contracts file with the veteran pay of Release AW taken out, once');
+  assert.equal(worldTruthReceiptProblem(worldTruthOut, ['src/lib/soccerPhone.ts']), '', 'The attributed bundle took Round 1329 out of the engine, the phone and every other file it loaded, once, in order');
+  proof.worldTruthAttribution.push(...worldTruthOut.map(row => ({ ...row, bundle: 'attributed' })));
   proof.veteranPayAttribution.push(...veteranOut);
   const attributedEngine = await import(pathToFileURL(out).href);
   assert.equal(JSON.stringify(attributedEngine.FALLBACK_CLUBS), JSON.stringify(engine.FALLBACK_CLUBS), 'Attribution keeps the complete club pool');
@@ -242,7 +257,7 @@ function bothOutPlugin() {
       if (!full.toLowerCase().startsWith(`${base}/`)) return undefined;
       const rel = full.slice(base.length + 1);
       if (rel !== ENGINE_REL && !SOCCER_TRAIN_FILES.includes(rel)) return undefined;
-      let text = fs.readFileSync(args.path, 'utf8').split('\r\n').join('\n');
+      let text = inverseWorldTruth(rel, fs.readFileSync(args.path, 'utf8').split('\r\n').join('\n'), bothWorldTruth);
       if (rel === ENGINE_REL) {
         const receipt = [];
         text = inverseDeckFair(ENGINE_REL, text, receipt);
@@ -260,8 +275,11 @@ async function bothOutEngine() {
   const entry = path.join(WORK, 'bothOutEntry.mjs'), out = path.join(WORK, 'bothOutBundle.mjs');
   fs.writeFileSync(entry, `globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };\nexport * from '${lib}soccerCareerEngine.ts';\n`);
   const both = bothOutPlugin(), veteranOut = [];
+  bothWorldTruth.length = 0;
   await build({ entryPoints: [entry], bundle: true, format: 'esm', platform: 'node', outfile: out,
-    logLevel: 'error', alias: { '@': './src' }, absWorkingDir: ROOT, plugins: [wheelOutPlugin(), veteranPayOutPlugin(ROOT, path, fs, veteranOut), both.plugin] });
+    logLevel: 'error', alias: { '@': './src' }, absWorkingDir: ROOT, plugins: [wheelOutPlugin(), veteranPayOutPlugin(ROOT, path, fs, veteranOut), both.plugin, worldTruthOutPlugin(ROOT, path, fs, bothWorldTruth, WORLD_TRUTH_REST)] });
+  assert.equal(worldTruthReceiptProblem(bothWorldTruth), '', 'The historical bundle took Round 1329 out of every file it loaded, once, in order');
+  proof.worldTruthAttribution.push(...bothWorldTruth.map(row => ({ ...row, bundle: 'both-out' })));
   assert.equal(veteranOut.length, VETERAN_PAY_ADDITIONS.length, 'The historical bundle loaded the contracts file with the veteran pay of Release AW taken out, once');
   proof.veteranPayAttribution.push(...veteranOut);
   const mod = await import(pathToFileURL(out).href);

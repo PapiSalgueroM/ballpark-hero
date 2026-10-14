@@ -180,6 +180,7 @@ export {
 /* Round 1327: the event deck and the paper draw from keyed streams, and the deck's pick is the shared one. */
 import { takeFresh } from "./careerEventDeck";
 import { keyedRng } from "./keyedRng";
+import { monthAwards, monthYear, tournamentWinnerShown } from "./soccerWorldTruth";
 import { personalGoalMilestone } from "./soccerCareerMilestone";
 
 export interface ClubData {
@@ -5085,11 +5086,16 @@ function runTournamentSummer(s: CareerState, season: SeasonRecord, year: number,
   season.tournament = t.name;
   season.tournamentResult = eligible ? t.myResult : null;
 
-  // The champion is announced whether you were there or not.
-  if (t.champion === s.nationality && !eligible) {
-    s.events.push(`🏆 ${s.nationality} won the ${t.name} without you.`);
-  } else if (t.champion !== s.nationality) {
-    s.events.push(`🌍 ${t.champion} won the ${t.name}.`);
+  /* The champion is announced whether you were there or not. Round 1329: who
+     won a summer that really happened is a fact about the real world, so it
+     goes in the log only when he played those finals (then it is his story);
+     a summer still to come is the game's own and keeps both lines. */
+  if (tournamentWinnerShown(year, eligible ? t.myResult : "")) {
+    if (t.champion === s.nationality && !eligible) {
+      s.events.push(`🏆 ${s.nationality} won the ${t.name} without you.`);
+    } else if (t.champion !== s.nationality) {
+      s.events.push(`🌍 ${t.champion} won the ${t.name}.`);
+    }
   }
 
   if (!eligible) return;
@@ -5691,50 +5697,40 @@ function playPendingProSeason(s: CareerState, clubs: ClubData[]): CareerState {
      with Arsenal!"), today's words everywhere else. */
   if (season.domesticCup) s.events.push(`🏆 Won the ${seasonCupTitle(season, s)} with ${s.currentClub}!`);
 
-  // Awards: Player of the Month, simulate month-by-month based on goals
-  const MONTHS = ["August", "September", "October", "November", "December", "January", "February", "March", "April", "May"];
-  const potmTotalGoals = season.goals;
-  const potmTotalApps = season.apps;
-  // Distribute goals roughly across 10 months proportional to apps
-  let potmCount = 0;
-  const potmMonths: string[] = [];
-  for (const month of MONTHS) {
-    // Each month gets roughly 1/10 of total goals with some variance
-    const monthGoals = Math.max(0, Math.round((potmTotalGoals / 10) + (Math.random() * 2 - 1)));
-    let chance = 0.02;
-    if (monthGoals >= 4) chance = 0.75;
-    else if (monthGoals >= 3) chance = 0.50;
-    else if (monthGoals >= 2) chance = 0.25;
-    else if (monthGoals >= 1) chance = 0.10;
-    if (Math.random() < chance) {
-      potmCount++;
-      potmMonths.push(month);
+  /* Awards: Player of the Month. Round 1329: it was a goals lottery (a month
+     with no goal still won 2 percent of the time, so a keeper who never scored
+     won it about once in three seasons) and it printed every month with the
+     season's starting year ("April 1992" in 1992/93). Now a month is won on
+     the month's football by position, with the month's own year
+     (soccerWorldTruth.ts monthAwards and monthYear). The old lottery's
+     Math.random calls are still made, the same number in the same order, and
+     thrown away: the Round 521 and Round 1041 rule, every branch draws exactly
+     as before, so nothing later in the season moves. The award reads a stream
+     keyed to the career and the season instead. The production bundler
+     counts Math.random as pure and drops a draw whose result goes nowhere,
+     so every draw is summed and the sum feeds a branch it cannot rule out
+     (a sum of draws is never negative); without it the built game made 20
+     fewer draws than the engine (playSoccerCareerDepth, node 170, page 150). */
+  const legacyMonthDraws = (goals: number): number => {
+    let won = 0, total = 0;
+    for (let m = 0; m < 10; m += 1) {
+      const swing = Math.random();
+      const monthGoals = Math.max(0, Math.round((goals / 10) + (swing * 2 - 1)));
+      const chance = monthGoals >= 4 ? 0.75 : monthGoals >= 3 ? 0.5 : monthGoals >= 2 ? 0.25 : monthGoals >= 1 ? 0.1 : 0.02;
+      const roll = Math.random();
+      if (roll < chance) won += 1;
+      total += swing + roll;
     }
+    if (goals >= 30) for (; won < 6; won += 1) total += rand(0, 9 - won);
+    if (goals >= 35) for (; won < 7; won += 1) total += rand(0, 9 - won);
+    return total;
+  };
+  if (legacyMonthDraws(season.goals) < 0) s.events.push("");
+  for (const month of monthAwards(season, s.position, keyedRng(`${soccerDeckIdentity(s)}|${season.year}|potm`))) {
+    s.awards = [...s.awards, { year: thisYear, name: "Player of the Month", emoji: "🏆" }];
+    s.events.push(`🏆 Won Player of the Month (${month} ${monthYear(month, thisYear)})!`);
   }
-  // Guarantee high POTM count for Ballon d'Or caliber seasons
-  if (potmTotalGoals >= 30 && potmCount < 6) {
-    const remaining = MONTHS.filter(m => !potmMonths.includes(m));
-    while (potmCount < 6 && remaining.length > 0) {
-      const idx = rand(0, remaining.length - 1);
-      potmMonths.push(remaining.splice(idx, 1)[0]);
-      potmCount++;
-    }
-  }
-  if (potmTotalGoals >= 35 && potmCount < 7) {
-    const remaining = MONTHS.filter(m => !potmMonths.includes(m));
-    while (potmCount < 7 && remaining.length > 0) {
-      const idx = rand(0, remaining.length - 1);
-      potmMonths.push(remaining.splice(idx, 1)[0]);
-      potmCount++;
-    }
-  }
-  if (potmCount > 0) {
-    for (const month of potmMonths) {
-      s.awards = [...s.awards, { year: thisYear, name: "Player of the Month", emoji: "🏆" }];
-      s.events.push(`🏆 Won Player of the Month (${month} ${thisYear})!`);
-    }
-  }
-  
+
   // Player of the Year (domestic)
   if (season.rating >= 8.0 && s.overall >= 82 && Math.random() < 0.25) {
     s.awards = [...s.awards, { year: thisYear, name: "Player of the Year", emoji: "🌟" }];
