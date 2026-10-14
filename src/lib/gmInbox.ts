@@ -965,7 +965,8 @@ function gmPruneBook(pack: GmInboxPack, last: Record<string, number>, clock: num
 /** One message as numbers: its card's short key, year, clock, the id's
  *  repeat suffix, wording, slot values, arrival, answer and auto. */
 export interface GmCompactMsg { d: string; y: number; c: number; n?: number; t?: number; s?: Record<string, string>; w?: number; a?: number; x?: 1 }
-/** A desk's four inbox fields as saved. */
+/** A desk's four inbox fields as saved: a compact pack's own ids and book
+ *  keys short, every other key whole. */
 export interface GmDeskBlock { v: 1; l?: Record<string, number>; u?: string[]; r?: Record<string, number>; m?: (GmCompactMsg | InboxMessage)[] }
 /** The four host fields a block reads back to. */
 export interface GmDeskFields { phoneInbox?: InboxMessage[]; phoneUsedIds?: string[]; gmInboxLast?: Record<string, number>; gmInboxRest?: Record<string, number> }
@@ -1000,12 +1001,18 @@ function compactOf(m: InboxMessage, pack: GmInboxPack): GmCompactMsg | null {
 export function gmDeskSave(s: GmInboxHost, pack: GmInboxPack): GmDeskBlock {
   const compact = pack.store === 'compact';
   const out: GmDeskBlock = { v: 1 };
+  /* Only the pack's own ids and book keys go short. Anything else in these
+     host fields (another deck's one shots sharing phoneUsedIds, such as
+     Soccer Career's phone texts, or a card a later pack round removed)
+     stays whole, so gmDeskLoad hands it back as it was. */
+  const own = compact ? new Set(shortIndex(pack).values()) : undefined;
+  const short = (k: string) => (own?.has(k) ? gmShortKey(k) : k);
   if (s.gmInboxLast) {
     const l: Record<string, number> = {};
-    for (const [k, at] of Object.entries(s.gmInboxLast)) l[compact ? gmShortKey(k) : k] = at;
+    for (const [k, at] of Object.entries(s.gmInboxLast)) l[short(k)] = at;
     out.l = l;
   }
-  if (s.phoneUsedIds) out.u = compact ? s.phoneUsedIds.map(gmShortKey) : [...s.phoneUsedIds];
+  if (s.phoneUsedIds) out.u = s.phoneUsedIds.map(short);
   if (s.gmInboxRest) out.r = { ...s.gmInboxRest };
   if (s.phoneInbox) out.m = s.phoneInbox.map(m => (compact ? compactOf(m, pack) ?? m : m));
   return out;
@@ -1049,6 +1056,11 @@ export function gmDeskLoad(block: unknown, pack: GmInboxPack): { host: GmDeskFie
   if (!b || typeof b !== 'object' || b.v !== 1) return { host: { phoneInbox: [], phoneUsedIds: [], gmInboxLast: {} }, dropped: 0 };
   const compact = pack.store === 'compact';
   const keys = shortIndex(pack);
+  /* A short key of the pack's own reads back to its id or book key, in
+     either mode (a pack switched from compact to whole keeps its one shots);
+     any other key is kept whole (another deck's one shot, or a block a whole
+     pack wrote before it went compact): a one shot is never dropped. */
+  const back = (k: string) => keys.get(k) ?? k;
   const host: GmDeskFields = {};
   let dropped = 0;
   if (b.m !== undefined) {
@@ -1066,17 +1078,11 @@ export function gmDeskLoad(block: unknown, pack: GmInboxPack): { host: GmDeskFie
   if (b.u !== undefined) {
     const u: unknown = b.u;
     const ok = Array.isArray(u) && u.every(x => typeof x === 'string');
-    host.phoneUsedIds = !ok ? [] : compact
-      ? (u as string[]).map(k => keys.get(k)).filter((k): k is string => k !== undefined) : [...(u as string[])];
+    host.phoneUsedIds = !ok ? [] : (u as string[]).map(back);
   }
   if (b.l !== undefined) {
     const l: Record<string, number> = {};
-    if (isNumBook(b.l)) {
-      for (const [k, at] of Object.entries(b.l)) {
-        const full = compact ? keys.get(k) : k;
-        if (full !== undefined) l[full] = at;
-      }
-    }
+    if (isNumBook(b.l)) for (const [k, at] of Object.entries(b.l)) l[back(k)] = at;
     host.gmInboxLast = l;
   }
   if (b.r !== undefined && isNumBook(b.r)) host.gmInboxRest = { ...b.r };

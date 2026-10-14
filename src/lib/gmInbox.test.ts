@@ -911,6 +911,31 @@ describe('gmInbox Round 1332: a tagged card asked again after its deal', () => {
     expect(gmPackProblems(ROLE_TOY)).toEqual([]);
   });
 
+  it('a compact load keeps a one shot and a book key the pack does not know, so another deck sharing the field loses nothing', () => {
+    const s = desk();
+    s.phoneUsedIds = ['c4', 'phone_text_7'];
+    s.gmInboxLast = { c1: 5, 'story:pair': 7, gone_card: 3 };
+    const block = JSON.parse(JSON.stringify(gmDeskSave(s, COMPACT_TOY)));
+    expect(block.u).toEqual([gmShortKey('c4'), 'phone_text_7']);
+    expect(Object.keys(block.l).sort()).toEqual([gmShortKey('c1'), gmShortKey('story:pair'), 'gone_card'].sort());
+    const host = gmDeskLoad(block, COMPACT_TOY).host;
+    expect(host.phoneUsedIds).toEqual(s.phoneUsedIds);
+    expect(host.gmInboxLast).toEqual(s.gmInboxLast);
+  });
+
+  it('a pack switched from whole to compact, or back, keeps every one shot and book key', () => {
+    const whole = { ...COMPACT_TOY, store: undefined };
+    const s = desk();
+    s.phoneUsedIds = ['c4'];
+    s.gmInboxLast = { c1: 5, 'story:pair': 7 };
+    const toCompact = gmDeskLoad(JSON.parse(JSON.stringify(gmDeskSave(s, whole))), COMPACT_TOY).host;
+    expect([toCompact.phoneUsedIds, toCompact.gmInboxLast]).toEqual([s.phoneUsedIds, s.gmInboxLast]);
+    const shortBlock = JSON.parse(JSON.stringify(gmDeskSave(s, COMPACT_TOY)));
+    expect(shortBlock.u).not.toEqual(s.phoneUsedIds);
+    const toWhole = gmDeskLoad(shortBlock, whole).host;
+    expect([toWhole.phoneUsedIds, toWhole.gmInboxLast]).toEqual([s.phoneUsedIds, s.gmInboxLast]);
+  });
+
   it('a pack with no tagged card never asks the seat at the answer or the week', () => {
     let asked = 0;
     const seat = { ...seatFor(TOY), person: () => { asked++; return null; } };
