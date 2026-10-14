@@ -1,0 +1,6 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/lib/gmInbox.test.ts src/components/front-office-shared/GmInboxPanel.test.tsx src/components/us-career/InboxPanel.test.tsx --testTimeout=300000 --hookTimeout=120000
+kitA: SIM_EVENT_DECK_SECTIONS=1,2,3,4,5,6,7,8,9,10,11,12 node scripts/simEventDeck.mjs
+kctl12: bash .rc/x/kctl.sh conductreal:12 slotopen:12 quoteslot:12 untagged:12 rosterword:12 conductlate:12 conductstale:12 conducttarget:12 nullpass:12
+gmdiff: bash .rc/x/gmdiff.sh
+anchors: node scripts/simHarnessAnchors.mjs
