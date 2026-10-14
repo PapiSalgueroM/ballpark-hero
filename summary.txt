@@ -1,0 +1,5 @@
+build exit=0 26s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+headsha exit=0 0s | 7f62629e0 Round BEG: bind Round 1357's deadline proof to the tree's own core (CM_DEADLINE_CORE_REF)
+fonts exit=0 1s | Prepared 9 declared font dependencies for local fulfillment.
+playDeadline exit=0 69s | Manager deadline browser: passed; 1938 checks, 20 played replies, 2 controls, 42 originals, 0 failures, 0 setup failures.
+playDepth exit=0 43s | Club Manager decision depth fixed: passed; 567 checks, 18 natural/catalog cases, 2 controls, 38 originals, 0 failures, 0 setup failures.
