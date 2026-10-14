@@ -10,4 +10,7 @@ export const SOCCER_LIFE_CONSEQUENCES: Readonly<Record<number, Readonly<Record<n
   217: { 0: 'Popularity +4 and Morale -3 now, the manager reads your column' },
   218: { 0: '60%: all 7 skills +1 queued for next season (normal growth and the 99 cap still apply). 40%: Pace -1 now, you mostly learned soup' },
   219: { 0: 'Followers +800k, 50%: Popularity +6, 50%: Popularity -3' },
+  221: { 0: 'Followers +1M, Popularity +4, the people love a bad singer' },
+  222: { 1: 'Morale -5, Followers +300k, the story becomes a documentary punchline' },
+  223: { 1: 'Diplomacy: Morale +3, Integrity +1, whales on Wednesdays' },
 };

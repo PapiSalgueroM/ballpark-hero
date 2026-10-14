@@ -392,19 +392,19 @@ export function getLifeEvents(state: CareerState): RandomEvent[] {
   push({ id: 221, cooldown: COOLDOWN.once, emoji: "🎤", title: "Karaoke Night Leak",
     description: "Video of your initiation karaoke escapes the team dinner. Your rendition was, being generous, an experience.",
     category: "life", choices: [
-      { label: "Post the full version yourself", emoji: "🎶", color: "bg-emerald-600", consequence: "Followers +1M, the people love a bad singer",
+      { label: "Post the full version yourself", emoji: "🎶", color: "bg-emerald-600", consequence: SOCCER_LIFE_CONSEQUENCES[221][0],
         apply: s => { s.socialMediaFollowers = Math.round((s.socialMediaFollowers + 1) * 100) / 100; s.popularity = clamp(s.popularity + 4, 0, 100); s.events = [...s.events, "🎶 Posted your own karaoke disaster. Instant classic"]; return s; } },
       { label: "Never speak of it again", emoji: "🤐", color: "bg-muted", consequence: "It resurfaces every birthday forever",
         apply: s => { s.events = [...s.events, "🤐 The karaoke video lives on in the group chat only"]; return s; } },
     ] });
 
-  if (state.morale <= 60) {
+  if (state.pendingEvents.some(event => event.id === 222) || state.morale <= 60) {
     push({ id: 222, cooldown: COOLDOWN.once, emoji: "🛫", title: "Wrong City",
       description: "You boarded the wrong connecting flight after the international break and landed 900 miles from the away match.",
       category: "negative", choices: [
         { label: "Rent a car, drive all night, make kickoff", emoji: "🚗", color: "bg-emerald-600", consequence: "Legendary commitment: Morale +6, Physical -1 next season",
           apply: s => { s.morale = clamp(s.morale + 6, 0, 100); s.statBoostNextSeason = { ...s.statBoostNextSeason, physical: (s.statBoostNextSeason.physical || 0) - 1 }; s.events = [...s.events, "🚗 Drove nine hours overnight and still made kickoff"]; return s; } },
-        { label: "Miss the match, tell the truth", emoji: "🤷", color: "bg-muted", consequence: "Morale -5, the story becomes a documentary punchline",
+        { label: "Miss the match, tell the truth", emoji: "🤷", color: "bg-muted", consequence: SOCCER_LIFE_CONSEQUENCES[222][1],
           apply: s => { s.morale = clamp(s.morale - 5, 0, 100); s.socialMediaFollowers = Math.round((s.socialMediaFollowers + 0.3) * 100) / 100; s.events = [...s.events, "🛫 Missed a match by boarding the wrong plane. Iconic, unfortunately"]; return s; } },
       ] });
   }
@@ -414,7 +414,7 @@ export function getLifeEvents(state: CareerState): RandomEvent[] {
     category: "life", choices: [
       { label: "Seize the aux", emoji: "🎧", color: "bg-emerald-600", consequence: "Your playlist unites the squad: Morale +6",
         apply: s => { s.morale = clamp(s.morale + 6, 0, 100); s.events = [...s.events, "🎧 Won the aux cord war. The whale era is over"]; return s; } },
-      { label: "Broker a schedule", emoji: "📋", color: "bg-blue-600", consequence: "Diplomacy: Morale +3, whales on Wednesdays",
+      { label: "Broker a schedule", emoji: "📋", color: "bg-blue-600", consequence: SOCCER_LIFE_CONSEQUENCES[223][1],
         apply: s => { s.morale = clamp(s.morale + 3, 0, 100); s.integrityBonus += 1; s.events = [...s.events, "📋 Negotiated the aux schedule. Whales on Wednesdays only"]; return s; } },
     ] });
 
