@@ -1,0 +1,12 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/lib/gmInbox.test.ts [2m([22m[2m69 tests[22m[2m)[22m[32m 144[2mms[22m[39m
+ [32m✓[39m src/components/us-career/InboxPanel.test.tsx [2m([22m[2m3 tests[22m[2m)[22m[32m 136[2mms[22m[39m
+ [32m✓[39m src/components/front-office-shared/GmInboxPanel.test.tsx [2m([22m[2m8 tests[22m[2m)[22m[32m 152[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m3 passed[39m[22m[90m (3)[39m
+[2m      Tests [22m [1m[32m80 passed[39m[22m[90m (80)[39m
+[2m   Start at [22m 03:00:41
+[2m   Duration [22m 1.56s[2m (transform 466ms, setup 385ms, collect 1.08s, tests 432ms, environment 1.19s, prepare 467ms)[22m
+

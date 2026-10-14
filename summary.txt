@@ -1,0 +1,6 @@
+vitest exit=0 2s |    Duration  1.56s (transform 466ms, setup 385ms, collect 1.08s, tests 432ms, environment 1.19s, prepare 467ms)
+kctl12 exit=0 9s | kctl: every control exited 1 and fired
+gmdiff exit=0 4s | gmdiff: all three seeds identical to the base and green
+kitA exit=0 51s | simEventDeck: green. Sections 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 only.
+anchors exit=0 33s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+tsc exit=0 53s | 
