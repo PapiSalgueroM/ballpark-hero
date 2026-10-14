@@ -1,0 +1,4 @@
+rules-base exit=1 37s | simCmLeagueRules: 6 failure(s)
+rules-head exit=1 38s | simCmLeagueRules: 49 failure(s)
+write-digest exit=1 59s | simCmLeagueRules: 6 failure(s)
+continuity-head exit=1 24s |     at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simManagerWorldContinuity.mjs:489:24
