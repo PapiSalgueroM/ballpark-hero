@@ -11,6 +11,10 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 assert(process.env.CI && process.env.SIM_NETWORK === 'offline', 'Use remote offline CI only');
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 const PARENT = '8caf3307c980672fea887dddfbd33f38efcc0492';
+/* Release BE join (Round BEG): the five core files are bound to CORE_REF. On the packet branch that is PARENT; on a
+   newer core (Release BD's five substitutions) the join passes MANAGER_NOTES_CORE_REF=HEAD, so the core is the
+   committed core of the tree under test while the decisions file still differs from PARENT by the three spans only. */
+const CORE_REF = process.env.MANAGER_NOTES_CORE_REF || PARENT;
 const PHASE = process.env.MANAGER_NOTES_PHASE;
 assert(['baseline', 'fixed'].includes(PHASE));
 assert(process.env.MANAGER_NOTES_OUT && path.isAbsolute(process.env.MANAGER_NOTES_OUT));
@@ -38,10 +42,10 @@ for (const spec of COPY) { assert.equal(projected.split(spec.old).length - 1, 1)
 assert.equal(current, PHASE === 'baseline' ? parent : projected, 'Only the three approved text spans may differ');
 const inverse = COPY.reduce((text, spec) => text.replace(spec.next, spec.old), projected); assert.equal(inverse, parent);
 fs.writeFileSync(path.join(OUT, 'decisions.parent.ts'), parent); fs.writeFileSync(path.join(OUT, 'decisions.projected.ts'), projected);
-const parentBindings = files.slice(0, 6).map(file => { const source = git(['show', PARENT + ':' + file]);
+const parentBindings = files.slice(0, 6).map(file => { const source = git(['show', (file === 'src/lib/clubManagerDecisions.ts' ? PARENT : CORE_REF) + ':' + file]);
   if (file !== 'src/lib/clubManagerDecisions.ts') assert.equal(held.get(file), source);
   return { file, parentSha256: sha(source), candidateSha256: sha(held.get(file)) }; });
-const record = { head: git(['rev-parse', 'HEAD']).trim(), parent: PARENT, phase: PHASE, status: 'running', parentBindings,
+const record = { head: git(['rev-parse', 'HEAD']).trim(), parent: PARENT, coreRef: CORE_REF, phase: PHASE, status: 'running', parentBindings,
   textChanges: COPY, inverseSha256: sha(inverse), compilations: [], initialization: null, kickoff: [], cases: [], controls: [],
   limits: ['Fictional Manager identity and one complete halftime context are prepared. No natural offer rate is claimed.',
     'Name selection uses the original desk hash and never edits its queue. Actual match outcomes are not selected or rewritten.',
