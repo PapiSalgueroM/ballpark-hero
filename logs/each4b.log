@@ -1,0 +1,41 @@
+runEach: done, 13 of 62 exited non zero
+simPhonePanelFocus exit=0 14s | simPhonePanelFocus: navigation changes no career bytes, funds or saved records; owned source copies are cleaned.
+simReportContext exit=0 1s | simReportContext: all green
+simRetiredRoutes exit=0 1s | simRetiredRoutes: all green
+simRugbyLeagueChallenge exit=0 15s | simRugbyLeagueChallenge: eight source/fixture inputs held byte for byte; reports and changed copies retained.
+simRebuildSeats exit=0 33s | simRebuildSeats: all checks passed
+simSaveKeeper exit=0 10s | simSaveKeeper: all green. The keeper holds on real saves of all 21 long games.
+simSeasonLaw exit=0 2s | simSeasonLaw: 14 checks, 0 failed
+simSeoTitles exit=0 2s | simSeoTitles: green. 133 games carry a keyword title and description, PageSeo renders them lazily, every saved page matches, and the entry chunk is clean, and every saved guide heading is its search t
+simSearchDiscard exit=0 5s | simSearchDiscard: green. Every search plays, and the draft is what decides the season.
+simSilverwareSort exit=0 1s | simSilverwareSort: green (WITH LOUD SKIPS ABOVE)
+simRarityAgreement exit=1 42s | SUPABASE UNREACHABLE. NOTHING WAS CHECKED. || FAIL: position-left-winger: the pool came back empty
+simSoccerCareerDevelopment exit=0 11s | simSoccerCareerDevelopment: 18 outcome groups, 16+16 complete baseline saves/RNG, 16 form draws, 16 played plan seasons, 7 interruption paths, 0 failed
+simSoccerDerbyHistory exit=0 8s | Derby history: 11 groups,24 full main season pairs,192 full campaign/RNG pairs,0 effective controls; artifacts /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/derby-history/outcomes
+simSoccerGridTiers exit=1 4s | simSoccerGridTiers: the pool did not load, which is itself worth investigating
+simSoccerCareerUcl exit=0 21s | simSoccerCareerUcl: all green
+simSoccerSeasonAvailability exit=0 21s | simSoccerSeasonAvailability: three outcomes green and effective old-capacity defect caught || [41m[1m FAIL [22m[49m src/test/soccerSeasonAvailability.test.ts[2m > [22msaved soccer availability fits the actual calendar[2m > [22mkeeps a recorded mi
+simSoccerAgentReviewPageControl exit=0 59s | PASS actual page/component source held and exact evidence retained.
+simSquadDealTopic exit=0 1s | simSquadDealTopic: green. The league you pick is the league you get, in both eras, jokes included.
+simStatDetectiveMotion exit=0 28s | simStatDetectiveMotion: controls never alter engines, pools, routes, saved data or the original page.
+simStorageWrites exit=0 8s | simStorageWrites: all green (owed: 12)
+simTennisSlams exit=0 1s | simTennisSlams: 11 checks, 0 failed; end state 1015 rows (record 1015), 1004 verified, 5 corrected, 6 filled, 10 dropped
+simTournamentWinners exit=0 2s | simTournamentWinners: every squad is under its own nation, and the file is still read by nothing.
+simTransferBriefPageControl exit=0 29s | CONTROL FIRED captured-rapid-request:2 actual equality failures,4 unrelated page cases pass,6 healthy baseline cases.
+simTransferPathModes exit=0 20s | simTransferPathModes: green. Under every rule the stored minimum is the search's, every hint describes a path the rule accepts, and no chain leaves the rule.
+simTrustCopy exit=0 2s | simTrustCopy: green. One disclaimer under every page and one count of the games, the registry's own.
+simTycoonGoalFlight exit=1 2s | Scope: finite component proof; headed browser requires xvfb and prefetched actual font cache. Evidence: /home/runner/work/ballpark-hero/ballpark-hero/tycoon-goal-flight-artifacts || simTycoonGoalFlight: FAIL, 0/4 effective copied controls; historical expected failure=false.
+simSoccerVeteranTalks exit=0 187s | ok   five production browser fixtures including USD, all raw amounts remain EUR
+simTycoonSetPiecePage exit=0 14s |   Why you should do it regularly: https://github.com/browserslist/update-db#readme
+simUclPlaces exit=0 2s | simUclPlaces: all green
+simUsCareerAnnualBenefits exit=0 12s | Career yearly support: fictional offline engine fixtures only, no native UI, full career completion or historical-data validation claim.
+simUsCareerRecovery exit=0 16s | Career recovery: fictional offline engine fixtures, no native UI, full-career completion, medical effect or real sports-stat claim.
+simUsCoaching exit=0 16s | PASS: ALL US COACHING CHECKS PASSED
+simValidatePlayerRecords exit=1 105s | simValidatePlayerRecords: 83 finding(s). || FAIL: no nation pool could be measured, so this section proved nothing / FAIL: the pool for Argentina is EMPTY, so that slot cannot be filled
+simWc2026Results exit=0 4s | simWc2026Results: all green
+simWilderness exit=0 5s | simWilderness: green. The sack is the start of something now, and the phone always rings in the end.
+simWindow2026SerieA exit=1 6s | SUPABASE unreachable (Error: Offline harness blocked fetch to https://flawuiqbvjobmkfkauhw.supabase.co) for player_market_values?select=club&year=eq.2026&club=eq.Atl%C3%A9tico%20de%20Madrid&limit=1 af
+simWorldXiPositions exit=1 2s | simWorldXiPositions: the pool did not load, which is itself worth investigating
+simSoccerLoanBite exit=0 1077s | simSoccerLoanBite PASS
+simTycoonPitch exit=SIGKILL 1500s | A.deadtiles) negative control: the office tiles open nothing
+runEach: done, 13 of 62 exited non zero
