@@ -55,7 +55,12 @@ origin/main 082fc277 (docs only) at 12f3fd65. Every gate ran on a GitHub runner 
   `handoverState` and `loadCareer` take the key off. Deadline Day plays no match (simDailyDeals and simDeadlineDay
   unchanged prove it).
 - A 2026-27 match paused by an older build at three changes may make two more after the update (old sub lines carry
-  no stoppage mark, so they count as none): the fix, as the brief rules.
+  no stoppage mark, so they count as none): the fix, as the brief rules. Said whole (review minor 7, r1331-run-s2):
+  its stoppages start from none as well, so its two remaining changes can each open a stoppage of their own on top of
+  the ones its old changes already took, up to five stoppages in play in that one match (a base save with changes at 46, 60 and 70 resumed with three stoppages left and ended
+  with stoppages in play at 60, 70, 75 and 80). Only a match in flight on release day can do it; counting an old
+  line as a stoppage was not done, because a line without the mark could also be a break change and the engine
+  cannot tell which (the reason the mark exists).
 
 ## Proof (see the closing report for every runner result)
 
@@ -108,3 +113,25 @@ origin/main 082fc277 (docs only) at 12f3fd65. Every gate ran on a GitHub runner 
 simCmUnseededWorld (112 failures, Round 1326's words, the same first line on base and head), simManagerWorldContinuity
 (inactive and constructors on Round 1326's "Win the La Liga"), simManagerMatchPlans (its persistence control's
 anchor `note(saveCareer(career));` is not in useClubManager.ts on base either).
+
+## Review fixes (2026-10-14, after the RUN and READ reviews of 4713018e)
+
+- Held by simCmSubs now, each with a control that fires (r1331-fx1): the bigGame edge against the fixture the
+  question names (press; control pressedge, 13 of 26 untrue; head 0 of 74 untrue over 24 edge seeds, closest -6.01),
+  the break before extra time free for my changes (section extratime, the Arsenal knockout walk, 12 nights: 12 taken
+  at 90, 12 refused at 95; control etbreak), the season read as the start year (rule: a 2020 era Premier League
+  career plays three in 2021-22 and five in 2022-23; control yearplus), a change at 45+1 uses a stoppage (rule;
+  control ht45), the cutover day itself on the current rules (section cutover; control cutover).
+- The opponent band was a coin toss at 3 seeds (gap 1.38 at seed base 9000): 8 seeds, OPP_GAP 1.3 from four bases.
+- Copy: the live sheet's stops phrase no longer wraps mid phrase; the help and What's New say "for good from
+  2022-23"; SubsRule.stops and changeLive's doc say what the engine does; the ledger's law lines cite Law 3 as it
+  stands and IFAB circular 20 for what they claim.
+- OWED TO THE LEAD, not on this branch: the other dugout's changes at the break before extra time (the OWED item
+  above) needs one viewer line in LiveSimScreen.tsx (F3's); the Championship has no source dated 2025-26 or
+  2026-27 (three searches on 2026-10-14 found none; the newest is a 2024-25 guide); the older help line at
+  ClubManagerHelp.tsx 48 and the guide src/data/gameContent/clubManagement.ts 121 and 122 still say three. See
+  C:/Users/antho/dukb-handoff/2026-10-10/results-g/fix-1331.md.
+- Engine note found while sourcing: the 2020 amendment freed the two extra time breaks only where a competition
+  allowed an extra change in extra time (circular 20); the engine frees the break before extra time in every five
+  change season, 2020-21 and 2021-22 included. Law 3 frees it from 2022-23. Not changed (the extra change in extra
+  time is owed by decision 1).
