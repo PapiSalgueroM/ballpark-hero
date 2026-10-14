@@ -1,0 +1,96 @@
+THIN facts
+   THIN (one 2026-27 source, marked in the ligue1 row): Ligue 1's 2026-27 drop of two and the barrage
+   THIN (one 2026-27 source, marked in the serieb row): Serie B's 2026-27 promotion playoff rung (third to eighth)
+   THIN (one 2026-27 source, marked in the ligue2 row): Ligue 2's 2026-27 drop of two
+A) brasileirao: the rows
+   20 clubs, drop 4, cup Copa do Brasil; weakest Remo (62) is asked: Stay up. Avoid relegation (16)
+B) brasileirao: 6 seeded seasons
+   6 seasons ended, 0 sacked, 24 cup weeks scheduled, 6 cup finals won, cup named on 6 saves, 0 clubs moved in the summers, 286 headlines read
+C) brasileirao: strength orders the table
+   Flamengo 70.8 pts (rated 79) against Remo 26.5 (rated 62): gap 44.3
+   Palmeiras 71.2 pts (rated 79) against Chapecoense 20.5 (rated 66): gap 50.7
+   rank correlation, preview rating against mean points, 14 clubs: 0.941
+D) brasileirao: no invented men
+   274 real men and 93 flagged pads on day one, 4 partial clubs
+A) ligamx: the rows
+   18 clubs, drop 0, cup null; weakest Puebla (61) is asked: Finish mid-table or better (14)
+   every board of 18 asks one of: Win the Liga MX | Make the Liguilla | Finish mid-table or better
+B) ligamx: 6 seeded seasons
+   6 seasons ended, 1 sacked, 0 cup weeks scheduled, 0 cup finals won, cup named on 7 saves, 0 clubs moved in the summers, 240 headlines read
+C) ligamx: strength orders the table
+   América 61.3 pts (rated 74) against Necaxa 41.5 (rated 69): gap 19.8
+   Guadalajara 53.3 pts (rated 74) against FC Juárez 43.0 (rated 68): gap 10.3
+   rank correlation, preview rating against mean points, 12 clubs: 0.873
+D) ligamx: no invented men
+   167 real men and 132 flagged pads on day one, 6 partial clubs
+A) aleague: the rows
+   12 clubs, drop 0, cup Australia Cup; weakest Central Coast Mariners (58) is asked: Finish mid-table or better (9)
+   every board of 12 asks one of: Win the A-League Men | Make the finals | Finish mid-table or better
+B) aleague: 96 seeded seasons
+   96 seasons ended, 2 sacked, 392 cup weeks scheduled, 96 cup finals won, cup named on 98 saves, 0 clubs moved in the summers, 3007 headlines read
+C) aleague: strength orders the table
+   Adelaide United 32.2 pts (rated 61) against Central Coast Mariners 25.8 (rated 58): gap 6.4
+   rank correlation, preview rating against mean points, 6 clubs: 0.853
+D) aleague: no invented men
+   296 real men and 1 flagged pads on day one, 1 partial clubs
+A) serieb: the rows
+   20 clubs, drop 3, cup Coppa Italia; weakest Ascoli (60) is asked: Stay up. Avoid relegation (17)
+B) serieb: 48 seeded seasons
+   48 seasons ended, 9 sacked, 228 cup weeks scheduled, 48 cup finals won, cup named on 57 saves, 144 clubs moved in the summers, 2255 headlines read
+C) serieb: strength orders the table
+   2 unmanaged clubs with no baked man left out of the correlation: Juve Stabia, Arezzo
+   rank correlation, preview rating against mean points, 12 clubs: 0.912
+D) serieb: no invented men
+   78 real men and 244 flagged pads on day one, 18 partial clubs
+A) ligue2: the rows
+   18 clubs, drop 2, cup Coupe de France; weakest Dunkerque (60) is asked: Stay up. Avoid relegation (16)
+B) ligue2: 48 seeded seasons
+   48 seasons ended, 2 sacked, 200 cup weeks scheduled, 48 cup finals won, cup named on 50 saves, 96 clubs moved in the summers, 2026 headlines read
+C) ligue2: strength orders the table
+   Nantes 73.8 pts (rated 73) against Reims 61.3 (rated 68): gap 12.5
+   5 unmanaged clubs with no baked man left out of the correlation: Sochaux, Dijon, Pau, Grenoble, Rodez
+   rank correlation, preview rating against mean points, 7 clubs: 0.964
+D) ligue2: no invented men
+   49 real men and 240 flagged pads on day one, 15 partial clubs
+A) segunda: the rows
+   20 clubs, drop 4, cup Copa del Rey; weakest Albacete (61) is asked: Stay up. Avoid relegation (16)
+B) segunda: 48 seeded seasons
+   48 seasons ended, 2 sacked, 200 cup weeks scheduled, 48 cup finals won, cup named on 50 saves, 144 clubs moved in the summers, 2212 headlines read
+C) segunda: strength orders the table
+   Girona 81.9 pts (rated 72) against Mallorca 68.7 (rated 68): gap 13.2
+   6 unmanaged clubs with no baked man left out of the correlation: Sabadell, Tenerife, Córdoba, Eldense, FC Andorra, Ceuta
+   rank correlation, preview rating against mean points, 8 clubs: 0.939
+D) segunda: no invented men
+   48 real men and 274 flagged pads on day one, 18 partial clubs
+A) russia: the rows
+   16 clubs, drop 2, cup Russian Cup; weakest Fakel Voronezh (63) is asked: Stay up. Avoid relegation (14)
+B) russia: 6 seeded seasons
+   6 seasons ended, 1 sacked, 28 cup weeks scheduled, 6 cup finals won, cup named on 7 saves, 0 clubs moved in the summers, 222 headlines read
+C) russia: strength orders the table
+   Zenit 56.5 pts (rated 77) against Fakel Voronezh 26.3 (rated 63): gap 30.2
+   Krasnodar 54.0 pts (rated 75) against Dynamo Makhachkala 28.2 (rated 66): gap 25.8
+   rank correlation, preview rating against mean points, 10 clubs: 0.925
+D) russia: no invented men
+   390 real men and 2 flagged pads on day one, 0 partial clubs
+E) pyramids: premier/championship 3, bundesliga/bundesliga2 2, seriea/serieb 3, ligue1/ligue2 2, laliga/segunda 3
+   30 finished seasons filed their own league and its size on the record; 156 mover lines read for the league's name
+   30 summers checked (0 careers sacked on the way); clubs moved into each league per summer: premier 3, championship 3, bundesliga 2, bundesliga2 2, seriea 3, serieb 3, ligue1 2, ligue2 2, laliga 3, segunda 3
+   relegation career: Frosinone (rated 73) finishes 20; starts in serieb, the board asks "Make the promotion playoffs"
+   wentDown: the first drop place reads relegated and the place above it does not, in premier, bundesliga, seriea, ligue1, laliga
+F) cup underdogs and the upset flag
+   premier: championship clubs in the last sixteen 2 2 2 2; over 128 pairings a top flight winner was flagged an upset 0 times and a championship winner went unflagged 0 times
+   bundesliga: bundesliga2 clubs in the last sixteen 3 3 3 3; over 64 pairings a top flight winner was flagged an upset 0 times and a bundesliga2 winner went unflagged 0 times
+   seriea: serieb clubs in the last sixteen 3 2 2 3; over 128 pairings a top flight winner was flagged an upset 0 times and a serieb winner went unflagged 0 times
+   ligue1: ligue2 clubs in the last sixteen 2 3 2 3; over 128 pairings a top flight winner was flagged an upset 0 times and a ligue2 winner went unflagged 0 times
+   laliga: segunda clubs in the last sixteen 2 3 3 2; over 128 pairings a top flight winner was flagged an upset 0 times and a segunda winner went unflagged 0 times
+   MLS (Atlanta United): 8 cup ties in the last sixteen; over 128 East and West pairings 0 flagged an upset
+G) a save written before the round
+   loaded, finished, first summer: seriea, ligue1, laliga kept their clubs and the Premier League took 3 up; second summer traded 3, 2, 3
+H) the countries of Round 1052
+   H1: Zenit won the league in 3 of 6 seasons played; 0 of those started the next season in a Champions League group
+   H2: 12 Russian Cup brackets read, each the sixteen Russian clubs
+   H3: a manager's table at Spartak Moscow under "Russian Premier League": 16 places, size verified true, names Zenit
+   H3: 16 Russian clubs on the job market under Russian Premier League; dugout size 16, playing career size null
+   H4: 7 past season Russian clubs read, each at its own season's strength
+   H4: 7 past season Russian sides read, 0 men fielded, 0 of them from today's squads
+simClubManagerNewLeagues: all checks passed

@@ -1,0 +1,1767 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
++ actual - expected
+
++ [
++   {
++     errorName: 'AssertionError',
++     message: 'Default callers retain every prior report, stat, player credit and save byte\n' +
++       '+ actual - expected\n' +
++       '... Skipped lines\n' +
++       '\n' +
++       '  {\n' +
++       "    kind: 'match',\n" +
++       '    report: {\n' +
++       "      away: 'Everton',\n" +
++       '      awayGoals: 0,\n' +
++       '...\n' +
++       '        },\n' +
++       '+       attendance: 67012,\n' +
++       '-       attendance: 60877,\n' +
++       '        capacity: null,\n' +
++       '        cards: [],\n' +
++       '        injuries: [],\n' +
++       '        momentum: [\n' +
++       '          -0.51,\n' +
++       '+         -0.18,\n' +
++       '-         -0.09,\n' +
++       '          -0.43,\n' +
++       '          -0.06,\n' +
++       '          -0.8,\n' +
++       '+         -1,\n' +
++       '+         -0.8,\n' +
++       '+         0.19,\n' +
++       '+         -0.36\n' +
++       '-         -0.76,\n' +
++       '-         -0.43,\n' +
++       '-         -0.06,\n' +
++       '-         -0.66\n' +
++       '        ],\n' +
++       '        myRatings: [\n' +
++       '          {\n' +
++       '            assists: 0,\n' +
++       '            goals: 0,\n' +
++       '            motm: true,\n' +
++       "+           name: 'Brennan Johnson',\n" +
++       "+           pos: 'RW',\n" +
++       '+           rating: 6.3\n' +
++       "-           name: 'Jarrad Branthwaite',\n" +
++       "-           pos: 'CB',\n" +
++       '-           rating: 6\n' +
++       '          },\n' +
++       '          {\n' +
++       '            assists: 0,\n' +
++       '            goals: 0,\n' +
++       "+           name: 'Vitaliy Mykolenko',\n" +
++       "+           pos: 'LB',\n" +
++       '+           rating: 6.2\n' +
++       "-           name: 'Thierno Barry',\n" +
++       "-           pos: 'ST',\n" +
++       '-           rating: 6\n' +
++       '          },\n' +
++       '          {\n' +
++       '            assists: 0,\n' +
++       '            goals: 0,\n' +
++       "+           name: 'Jarrad Branthwaite',\n" +
++       "-           name: 'Michael Keane',\n" +
++       "            pos: 'CB',\n" +
++       '+           rating: 6.1\n' +
++       '-           rating: 6\n' +
++       '          },\n' +
++       '          {\n' +
++       '            assists: 0,\n' +
++       '            goals: 0,\n' +
++       "+           name: 'Hayden Hackney',\n" +
++       "-           name: 'Kiernan Dewsbury-Hall',\n" +
++       "-           pos: 'CM',\n" +
++       '-           rating: 5.8\n' +
++       '-         },\n' +
++       '-         {\n' +
++       '-           assists: 0,\n' +
++       '-           goals: 0,\n' +
++       "-           name: 'James Garner',\n" +
++       "            pos: 'CDM',\n" +
++       '+           rating: 5.9\n' +
++       '-           rating: 5.7\n' +
++       '          },\n' +
++       '          {\n' +
++       '            assists: 0,\n' +
++       '            goals: 0,\n' +
++       "+           name: 'Thierno Barry',\n" +
++       "+           pos: 'ST',\n" +
++       '+           rating: 5.9\n' +
++       "-           name: 'Jack Grealish',\n" +
++       "-           pos: 'LW',\n" +
++       '-           rating: 5.7\n' +
++       '          },\n' +
++       '          {\n' +
++       '            assists: 0,\n' +
++       '            goals: 0,\n' +
++       "+           name: 'Kiernan Dewsbury-Hall',\n" +
++       "+           pos: 'CM',\n" +
++       "-           name: 'Vitaliy Mykolenko',\n" +
++       "-           pos: 'LB',\n" +
++       '            rating: 5.7\n' +
++       '          },\n' +
++       '          {\n' +
++       '            assists: 0,\n' +
++       '            goals: 0,\n' +
++       '...\n' +
++       '            goals: 0,\n' +
++       "+           name: 'James Garner',\n" +
++       "-           name: 'Hayden Hackney',\n" +
++       "            pos: 'CDM',\n" +
++       '+           rating: 5.6\n' +
++       '-           rating: 5.5\n' +
++       '          },\n' +
++       '          {\n' +
++       '            assists: 0,\n' +
++       '            goals: 0,\n' +
++       "+           name: 'Jordan Pickford',\n" +
++       "+           pos: 'GK',\n" +
++       '+           rating: 5.6\n' +
++       "-           name: 'Brennan Johnson',\n" +
++       "-           pos: 'RW',\n" +
++       '-           rating: 5.2\n' +
++       '          },\n' +
++       '          {\n' +
++       '            assists: 0,\n' +
++       '            goals: 0,\n' +
++       "+           name: 'Michael Keane',\n" +
++       "+           pos: 'CB',\n" +
++       '+           rating: 5.3\n' +
++       '+         },\n' +
++       '+         {\n' +
++       '+           assists: 0,\n' +
++       '+           goals: 0,\n' +
++       "+           name: 'Jack Grealish',\n" +
++       "+           pos: 'LW',\n" +
++       "-           name: 'Jordan Pickford',\n" +
++       "-           pos: 'GK',\n" +
++       '            rating: 5.2\n' +
++       '          }\n' +
++       '        ],\n' +
++       "+       oppBest: 'Alexander Isak',\n" +
++       "-       oppBest: 'Jeremie Frimpong',\n" +
++       '        oppCards: [\n' +
++       '          {\n' +
++       "            kind: 'yellow',\n" +
++       '            minute: 34,\n' +
++       "            name: 'Conor Bradley'\n" +
++       '...\n' +
++       '            assists: 0,\n' +
++       '+           goals: 2,\n' +
++       "+           name: 'Alexander Isak',\n" +
++       "+           pos: 'ST',\n" +
++       '-           goals: 1,\n' +
++       "-           name: 'Jeremie Frimpong',\n" +
++       "-           pos: 'RB',\n" +
++       '            rating: 8.8\n' +
++       '          },\n' +
++       '          {\n' +
++       '            assists: 0,\n' +
++       '            goals: 0,\n' +
++       "+           name: 'Giorgi Mamardashvili',\n" +
++       "+           pos: 'GK',\n" +
++       '+           rating: 8.2\n' +
++       '+         },\n' +
++       '+         {\n' +
++       '+           assists: 0,\n' +
++       '+           goals: 1,\n' +
++       "+           name: 'Florian Wirtz',\n" +
++       "+           pos: 'CAM',\n" +
++       '+           rating: 8\n' +
++       '+         },\n' +
++       '+         {\n' +
++       '+           assists: 0,\n' +
++       '+           goals: 0,\n' +
++       "            name: 'Giovanni Leoni',\n" +
++       "            pos: 'CB',\n" +
++       '+           rating: 8\n' +
++       '-           rating: 8.1\n' +
++       '          },\n' +
++       '          {\n' +
++       '            assists: 0,\n' +
++       '            goals: 0,\n' +
++       "+           name: 'Milos Kerkez',\n" +
++       "+           pos: 'LB',\n" +
++       '+           rating: 7.9\n' +
++       "-           name: 'Ronald Araujo',\n" +
++       "-           pos: 'CB',\n" +
++       '-           rating: 7.7\n' +
++       '          },\n' +
++       '          {\n' +
++       '            assists: 0,\n' +
++       '            goals: 0,\n' +
++       "+           name: 'Jeremie Frimpong',\n" +
++       "+           pos: 'RB',\n" +
++       '+           rating: 7.8\n' +
++       "-           name: 'Dominik Szoboszlai',\n" +
++       "-           pos: 'CAM',\n" +
++       '-           rating: 7.5\n' +
++       '          },\n' +
++       '          {\n' +
++       '            assists: 0,\n' +
++       '+           goals: 0,\n' +
++       "+           name: 'Conor Bradley',\n" +
++       "+           pos: 'RB',\n" +
++       '-           goals: 1,\n' +
++       "-           name: 'Alexander Isak',\n" +
++       "-           pos: 'ST',\n" +
++       '            rating: 7.5\n' +
++       '          },\n' +
++       '          {\n' +
++       '            assists: 0,\n' +
++       '            goals: 0,\n' +
++       "+           name: 'Hugo Ekitiké',\n" +
++       "+           pos: 'ST',\n" +
++       "-           name: 'Giorgi Mamardashvili',\n" +
++       "-           pos: 'GK',\n" +
++       '            rating: 7.4\n' +
++       '          },\n' +
++       '          {\n' +
++       '            assists: 0,\n' +
++       '+           goals: 0,\n' +
++       "+           name: 'Trey Nyoni',\n" +
++       "+           pos: 'CM',\n" +
++       '+           rating: 7.3\n' +
++       '-           goals: 1,\n' +
++       "-           name: 'Ryan Gravenberch',\n" +
++       "-           pos: 'CDM',\n" +
++       '-           rating: 7.4\n' +
++       '          },\n' +
++       '          {\n' +
++       '            assists: 0,\n' +
++       '            goals: 0,\n' +
++       "+           name: 'Jérémy Jacquet',\n" +
++       "+           pos: 'CB',\n" +
++       '+           rating: 7.2\n' +
++       "-           name: 'Conor Bradley',\n" +
++       "-           pos: 'RB',\n" +
++       '-           rating: 7.1\n' +
++       '          },\n' +
++       '          {\n' +
++       '            assists: 0,\n' +
++       '            goals: 0,\n' +
++       "+           name: 'Ronald Araujo',\n" +
++       "-           name: 'Jérémy Jacquet',\n" +
++       "            pos: 'CB',\n" +
++       '+           rating: 7.1\n' +
++       '-           rating: 7\n' +
++       '          },\n' +
++       '          {\n' +
++       '            assists: 0,\n' +
++       '            goals: 0,\n' +
++       "+           name: 'Alexis Mac Allister',\n" +
++       "+           pos: 'CM',\n" +
++       '+           rating: 6.7\n' +
++       "-           name: 'Milos Kerkez',\n" +
++       "-           pos: 'LB',\n" +
++       '-           rating: 7\n' +
++       '          },\n' +
++       '          {\n' +
++       '            assists: 0,\n' +
++       '            goals: 0,\n' +
++       "+           name: 'Wataru Endo',\n" +
++       "+           pos: 'CDM',\n" +
++       '+           rating: 6.7\n' +
++       "-           name: 'Florian Wirtz',\n" +
++       "-           pos: 'CAM',\n" +
++       '-           rating: 7\n' +
++       '          },\n' +
++       '          {\n' +
++       '            assists: 0,\n' +
++       '            goals: 0,\n' +
++       "+           name: 'Ryan Gravenberch',\n" +
++       "+           pos: 'CDM',\n" +
++       '+           rating: 6.6\n' +
++       "-           name: 'Hugo Ekitiké',\n" +
++       "-           pos: 'ST',\n" +
++       '-           rating: 7\n' +
++       '          },\n' +
++       '          {\n' +
++       '            assists: 0,\n' +
++       '            goals: 0,\n' +
++       "+           name: 'Dominik Szoboszlai',\n" +
++       "+           pos: 'CAM',\n" +
++       '+           rating: 6.5\n' +
++       "-           name: 'Alexis Mac Allister',\n" +
++       "-           pos: 'CM',\n" +
++       '-           rating: 6.7\n' +
++       '          }\n' +
++       '        ],\n' +
++       '        oppSubs: [\n' +
++       '          {\n' +
++       '+           minute: 64,\n' +
++       "+           off: 'Hugo Ekitiké',\n" +
++       '-           minute: 69,\n' +
++       "-           off: 'Conor Bradley',\n" +
++       "            on: 'Giovanni Leoni'\n" +
++       '          },\n' +
++       '          {\n' +
++       '+           minute: 64,\n' +
++       "+           off: 'Milos Kerkez',\n" +
++       '-           minute: 79,\n' +
++       "-           off: 'Hugo Ekitiké',\n" +
++       "            on: 'Ronald Araujo'\n" +
++       '          },\n' +
++       '+         {\n' +
++       '+           minute: 69,\n' +
++       "+           off: 'Ryan Gravenberch',\n" +
++       "+           on: 'Trey Nyoni'\n" +
++       '+         },\n' +
++       '+         {\n' +
++       '+           minute: 79,\n' +
++       "+           off: 'Jeremie Frimpong',\n" +
++       "+           on: 'Wataru Endo'\n" +
++       '+         }\n' +
++       '        ],\n' +
++       '        oppXi: [\n' +
++       '          {\n' +
++       "            n: 'Giorgi Mamardashvili',\n" +
++       "            p: 'GK',\n" +
++       '...\n' +
++       "            kind: 'throwin',\n" +
++       '+           minute: 46,\n' +
++       '-           minute: 51,\n' +
++       "            side: 'opp',\n" +
++       "+           who: 'Conor Bradley'\n" +
++       "-           who: 'Milos Kerkez'\n" +
++       '          },\n' +
++       '          {\n' +
++       "            kind: 'throwin',\n" +
++       '+           minute: 47,\n' +
++       "+           side: 'me',\n" +
++       "+           who: 'Jarrad Branthwaite'\n" +
++       '+         },\n' +
++       '+         {\n' +
++       "+           kind: 'shot',\n" +
++       '+           minute: 49,\n' +
++       '+           on: false,\n' +
++       "+           side: 'opp',\n" +
++       "+           who: 'Alexis Mac Allister',\n" +
++       '+           xg: 0.09\n' +
++       '+         },\n' +
++       '+         {\n' +
++       "+           kind: 'throwin',\n" +
++       '            minute: 51,\n' +
++       "+           side: 'me',\n" +
++       "+           who: 'Kiernan Dewsbury-Hall'\n" +
++       '+         },\n' +
++       '+         {\n' +
++       "+           kind: 'foul',\n" +
++       '+           minute: 51,\n' +
++       "+           side: 'me',\n" +
++       "+           who: 'Hayden Hackney'\n" +
++       '+         },\n' +
++       '+         {\n' +
++       "+           kind: 'foul',\n" +
++       '+           minute: 51,\n' +
++       "            side: 'opp',\n" +
++       "+           who: 'Milos Kerkez'\n" +
++       "-           who: 'Conor Bradley'\n" +
++       '          },\n' +
++       '          {\n' +
++       "            kind: 'foul',\n" +
++       '            minute: 51,\n' +
++       "+           side: 'opp',\n" +
++       "+           who: 'Dominik Szoboszlai'\n" +
++       '+         },\n' +
++       '+         {\n' +
++       "+           flank: 'left',\n" +
++       "+           kind: 'corner',\n" +
++       '+           minute: 51,\n' +
++       "            side: 'me',\n" +
++       "+           who: 'Brennan Johnson'\n" +
++       "-           who: 'James Tarkowski'\n" +
++       '          },\n' +
++       '          {\n' +
++       "+           flank: 'right',\n" +
++       "+           kind: 'corner',\n" +
++       "-           kind: 'foul',\n" +
++       '            minute: 52,\n' +
++       "            side: 'opp',\n" +
++       "            who: 'Ryan Gravenberch'\n" +
++       '          },\n' +
++       '          {\n' +
++       "+           kind: 'throwin',\n" +
++       '+           minute: 54,\n' +
++       "+           side: 'opp',\n" +
++       "+           who: 'Milos Kerkez'\n" +
++       '+         },\n' +
++       '+         {\n' +
++       '            goal: true,\n' +
++       "            kind: 'shot',\n" +
++       '            minute: 54,\n' +
++       '            on: true,\n' +
++       "            side: 'opp',\n" +
++       "+           who: 'Florian Wirtz',\n" +
++       '+           xg: 0.28\n' +
++       "-           who: 'Jeremie Frimpong',\n" +
++       '-           xg: 0.24\n' +
++       '          },\n' +
++       '          {\n' +
++       "            kind: 'throwin',\n" +
++       '            minute: 55,\n' +
++       "+           side: 'me',\n" +
++       "+           who: 'Thierno Barry'\n" +
++       '+         },\n' +
++       '+         {\n' +
++       "+           kind: 'throwin',\n" +
++       '+           minute: 55,\n' +
++       "            side: 'opp',\n" +
++       "            who: 'Conor Bradley'\n" +
++       '          },\n' +
++       '          {\n' +
++       "+           kind: 'shot',\n" +
++       '+           minute: 57,\n' +
++       '+           on: false,\n' +
++       "+           side: 'opp',\n" +
++       "+           who: 'Dominik Szoboszlai',\n" +
++       '+           xg: 0.09\n' +
++       "-           flank: 'right',\n" +
++       "-           kind: 'corner',\n" +
++       '-           minute: 55,\n' +
++       "-           side: 'me',\n" +
++       "-           who: 'Jack Grealish'\n" +
++       '          },\n' +
++       '          {\n' +
++       "            kind: 'throwin',\n" +
++       '+           minute: 59,\n' +
++       "+           side: 'opp',\n" +
++       "+           who: 'Milos Kerkez'\n" +
++       '-           minute: 56,\n' +
++       "-           side: 'me',\n" +
++       "-           who: 'Jarrad Branthwaite'\n" +
++       '          },\n' +
++       '          {\n' +
++       "            kind: 'shot',\n" +
++       '+           minute: 59,\n' +
++       '-           minute: 56,\n' +
++       '            on: fal'... 32508 more characters,
++     stack: 'AssertionError [ERR_ASSERTION]: Default callers retain every prior report, stat, player credit and save byte\n' +
++       '+ actual - expected\n' +
++       '... Skipped lines\n' +
++       '\n' +
++       '  {\n' +
++       "    kind: 'match',\n" +
++       '    report: {\n' +
++       "      away: 'Everton',\n" +
++       '      awayGoals: 0,\n' +
++       '...\n' +
++       '        },\n' +
++       '+       attendance: 67012,\n' +
++       '-       attendance: 60877,\n' +
++       '        capacity: null,\n' +
++       '        cards: [],\n' +
++       '        injuries: [],\n' +
++       '        momentum: [\n' +
++       '          -0.51,\n' +
++       '+         -0.18,\n' +
++       '-         -0.09,\n' +
++       '          -0.43,\n' +
++       '          -0.06,\n' +
++       '          -0.8,\n' +
++       '+         -1,\n' +
++       '+         -0.8,\n' +
++       '+         0.19,\n' +
++       '+         -0.36\n' +
++       '-         -0.76,\n' +
++       '-         -0.43,\n' +
++       '-         -0.06,\n' +
++       '-         -0.66\n' +
++       '        ],\n' +
++       '        myRatings: [\n' +
++       '          {\n' +
++       '            assists: 0,\n' +
++       '            goals: 0,\n' +
++       '            motm: true,\n' +
++       "+           name: 'Brennan Johnson',\n" +
++       "+           pos: 'RW',\n" +
++       '+           rating: 6.3\n' +
++       "-           name: 'Jarrad Branthwaite',\n" +
++       "-           pos: 'CB',\n" +
++       '-           rating: 6\n' +
++       '          },\n' +
++       '          {\n' +
++       '            assists: 0,\n' +
++       '            goals: 0,\n' +
++       "+           name: 'Vitaliy Mykolenko',\n" +
++       "+           pos: 'LB',\n" +
++       '+           rating: 6.2\n' +
++       "-           name: 'Thierno Barry',\n" +
++       "-           pos: 'ST',\n" +
++       '-           rating: 6\n' +
++       '          },\n' +
++       '          {\n' +
++       '            assists: 0,\n' +
++       '            goals: 0,\n' +
++       "+           name: 'Jarrad Branthwaite',\n" +
++       "-           name: 'Michael Keane',\n" +
++       "            pos: 'CB',\n" +
++       '+           rating: 6.1\n' +
++       '-           rating: 6\n' +
++       '          },\n' +
++       '          {\n' +
++       '            assists: 0,\n' +
++       '            goals: 0,\n' +
++       "+           name: 'Hayden Hackney',\n" +
++       "-           name: 'Kiernan Dewsbury-Hall',\n" +
++       "-           pos: 'CM',\n" +
++       '-           rating: 5.8\n' +
++       '-         },\n' +
++       '-         {\n' +
++       '-           assists: 0,\n' +
++       '-           goals: 0,\n' +
++       "-           name: 'James Garner',\n" +
++       "            pos: 'CDM',\n" +
++       '+           rating: 5.9\n' +
++       '-           rating: 5.7\n' +
++       '          },\n' +
++       '          {\n' +
++       '            assists: 0,\n' +
++       '            goals: 0,\n' +
++       "+           name: 'Thierno Barry',\n" +
++       "+           pos: 'ST',\n" +
++       '+           rating: 5.9\n' +
++       "-           name: 'Jack Grealish',\n" +
++       "-           pos: 'LW',\n" +
++       '-           rating: 5.7\n' +
++       '          },\n' +
++       '          {\n' +
++       '            assists: 0,\n' +
++       '            goals: 0,\n' +
++       "+           name: 'Kiernan Dewsbury-Hall',\n" +
++       "+           pos: 'CM',\n" +
++       "-           name: 'Vitaliy Mykolenko',\n" +
++       "-           pos: 'LB',\n" +
++       '            rating: 5.7\n' +
++       '          },\n' +
++       '          {\n' +
++       '            assists: 0,\n' +
++       '            goals: 0,\n' +
++       '...\n' +
++       '            goals: 0,\n' +
++       "+           name: 'James Garner',\n" +
++       "-           name: 'Hayden Hackney',\n" +
++       "            pos: 'CDM',\n" +
++       '+           rating: 5.6\n' +
++       '-           rating: 5.5\n' +
++       '          },\n' +
++       '          {\n' +
++       '            assists: 0,\n' +
++       '            goals: 0,\n' +
++       "+           name: 'Jordan Pickford',\n" +
++       "+           pos: 'GK',\n" +
++       '+           rating: 5.6\n' +
++       "-           name: 'Brennan Johnson',\n" +
++       "-           pos: 'RW',\n" +
++       '-           rating: 5.2\n' +
++       '          },\n' +
++       '          {\n' +
++       '            assists: 0,\n' +
++       '            goals: 0,\n' +
++       "+           name: 'Michael Keane',\n" +
++       "+           pos: 'CB',\n" +
++       '+           rating: 5.3\n' +
++       '+         },\n' +
++       '+         {\n' +
++       '+           assists: 0,\n' +
++       '+           goals: 0,\n' +
++       "+           name: 'Jack Grealish',\n" +
++       "+           pos: 'LW',\n" +
++       "-           name: 'Jordan Pickford',\n" +
++       "-           pos: 'GK',\n" +
++       '            rating: 5.2\n' +
++       '          }\n' +
++       '        ],\n' +
++       "+       oppBest: 'Alexander Isak',\n" +
++       "-       oppBest: 'Jeremie Frimpong',\n" +
++       '        oppCards: [\n' +
++       '          {\n' +
++       "            kind: 'yellow',\n" +
++       '            minute: 34,\n' +
++       "            name: 'Conor Bradley'\n" +
++       '...\n' +
++       '            assists: 0,\n' +
++       '+           goals: 2,\n' +
++       "+           name: 'Alexander Isak',\n" +
++       "+           pos: 'ST',\n" +
++       '-           goals: 1,\n' +
++       "-           name: 'Jeremie Frimpong',\n" +
++       "-           pos: 'RB',\n" +
++       '            rating: 8.8\n' +
++       '          },\n' +
++       '          {\n' +
++       '            assists: 0,\n' +
++       '            goals: 0,\n' +
++       "+           name: 'Giorgi Mamardashvili',\n" +
++       "+           pos: 'GK',\n" +
++       '+           rating: 8.2\n' +
++       '+         },\n' +
++       '+         {\n' +
++       '+           assists: 0,\n' +
++       '+           goals: 1,\n' +
++       "+           name: 'Florian Wirtz',\n" +
++       "+           pos: 'CAM',\n" +
++       '+           rating: 8\n' +
++       '+         },\n' +
++       '+         {\n' +
++       '+           assists: 0,\n' +
++       '+           goals: 0,\n' +
++       "            name: 'Giovanni Leoni',\n" +
++       "            pos: 'CB',\n" +
++       '+           rating: 8\n' +
++       '-           rating: 8.1\n' +
++       '          },\n' +
++       '          {\n' +
++       '            assists: 0,\n' +
++       '            goals: 0,\n' +
++       "+           name: 'Milos Kerkez',\n" +
++       "+           pos: 'LB',\n" +
++       '+           rating: 7.9\n' +
++       "-           name: 'Ronald Araujo',\n" +
++       "-           pos: 'CB',\n" +
++       '-           rating: 7.7\n' +
++       '          },\n' +
++       '          {\n' +
++       '            assists: 0,\n' +
++       '            goals: 0,\n' +
++       "+           name: 'Jeremie Frimpong',\n" +
++       "+           pos: 'RB',\n" +
++       '+           rating: 7.8\n' +
++       "-           name: 'Dominik Szoboszlai',\n" +
++       "-           pos: 'CAM',\n" +
++       '-           rating: 7.5\n' +
++       '          },\n' +
++       '          {\n' +
++       '            assists: 0,\n' +
++       '+           goals: 0,\n' +
++       "+           name: 'Conor Bradley',\n" +
++       "+           pos: 'RB',\n" +
++       '-           goals: 1,\n' +
++       "-           name: 'Alexander Isak',\n" +
++       "-           pos: 'ST',\n" +
++       '            rating: 7.5\n' +
++       '          },\n' +
++       '          {\n' +
++       '            assists: 0,\n' +
++       '            goals: 0,\n' +
++       "+           name: 'Hugo Ekitiké',\n" +
++       "+           pos: 'ST',\n" +
++       "-           name: 'Giorgi Mamardashvili',\n" +
++       "-           pos: 'GK',\n" +
++       '            rating: 7.4\n' +
++       '          },\n' +
++       '          {\n' +
++       '            assists: 0,\n' +
++       '+           goals: 0,\n' +
++       "+           name: 'Trey Nyoni',\n" +
++       "+           pos: 'CM',\n" +
++       '+           rating: 7.3\n' +
++       '-           goals: 1,\n' +
++       "-           name: 'Ryan Gravenberch',\n" +
++       "-           pos: 'CDM',\n" +
++       '-           rating: 7.4\n' +
++       '          },\n' +
++       '          {\n' +
++       '            assists: 0,\n' +
++       '            goals: 0,\n' +
++       "+           name: 'Jérémy Jacquet',\n" +
++       "+           pos: 'CB',\n" +
++       '+           rating: 7.2\n' +
++       "-           name: 'Conor Bradley',\n" +
++       "-           pos: 'RB',\n" +
++       '-           rating: 7.1\n' +
++       '          },\n' +
++       '          {\n' +
++       '            assists: 0,\n' +
++       '            goals: 0,\n' +
++       "+           name: 'Ronald Araujo',\n" +
++       "-           name: 'Jérémy Jacquet',\n" +
++       "            pos: 'CB',\n" +
++       '+           rating: 7.1\n' +
++       '-           rating: 7\n' +
++       '          },\n' +
++       '          {\n' +
++       '            assists: 0,\n' +
++       '            goals: 0,\n' +
++       "+           name: 'Alexis Mac Allister',\n" +
++       "+           pos: 'CM',\n" +
++       '+           rating: 6.7\n' +
++       "-           name: 'Milos Kerkez',\n" +
++       "-           pos: 'LB',\n" +
++       '-           rating: 7\n' +
++       '          },\n' +
++       '          {\n' +
++       '            assists: 0,\n' +
++       '            goals: 0,\n' +
++       "+           name: 'Wataru Endo',\n" +
++       "+           pos: 'CDM',\n" +
++       '+           rating: 6.7\n' +
++       "-           name: 'Florian Wirtz',\n" +
++       "-           pos: 'CAM',\n" +
++       '-           rating: 7\n' +
++       '          },\n' +
++       '          {\n' +
++       '            assists: 0,\n' +
++       '            goals: 0,\n' +
++       "+           name: 'Ryan Gravenberch',\n" +
++       "+           pos: 'CDM',\n" +
++       '+           rating: 6.6\n' +
++       "-           name: 'Hugo Ekitiké',\n" +
++       "-           pos: 'ST',\n" +
++       '-           rating: 7\n' +
++       '          },\n' +
++       '          {\n' +
++       '            assists: 0,\n' +
++       '            goals: 0,\n' +
++       "+           name: 'Dominik Szoboszlai',\n" +
++       "+           pos: 'CAM',\n" +
++       '+           rating: 6.5\n' +
++       "-           name: 'Alexis Mac Allister',\n" +
++       "-           pos: 'CM',\n" +
++       '-           rating: 6.7\n' +
++       '          }\n' +
++       '        ],\n' +
++       '        oppSubs: [\n' +
++       '          {\n' +
++       '+           minute: 64,\n' +
++       "+           off: 'Hugo Ekitiké',\n" +
++       '-           minute: 69,\n' +
++       "-           off: 'Conor Bradley',\n" +
++       "            on: 'Giovanni Leoni'\n" +
++       '          },\n' +
++       '          {\n' +
++       '+           minute: 64,\n' +
++       "+           off: 'Milos Kerkez',\n" +
++       '-           minute: 79,\n' +
++       "-           off: 'Hugo Ekitiké',\n" +
++       "            on: 'Ronald Araujo'\n" +
++       '          },\n' +
++       '+         {\n' +
++       '+           minute: 69,\n' +
++       "+           off: 'Ryan Gravenberch',\n" +
++       "+           on: 'Trey Nyoni'\n" +
++       '+         },\n' +
++       '+         {\n' +
++       '+           minute: 79,\n' +
++       "+           off: 'Jeremie Frimpong',\n" +
++       "+           on: 'Wataru Endo'\n" +
++       '+         }\n' +
++       '        ],\n' +
++       '        oppXi: [\n' +
++       '          {\n' +
++       "            n: 'Giorgi Mamardashvili',\n" +
++       "            p: 'GK',\n" +
++       '...\n' +
++       "            kind: 'throwin',\n" +
++       '+           minute: 46,\n' +
++       '-           minute: 51,\n' +
++       "            side: 'opp',\n" +
++       "+           who: 'Conor Bradley'\n" +
++       "-           who: 'Milos Kerkez'\n" +
++       '          },\n' +
++       '          {\n' +
++       "            kind: 'throwin',\n" +
++       '+           minute: 47,\n' +
++       "+           side: 'me',\n" +
++       "+           who: 'Jarrad Branthwaite'\n" +
++       '+         },\n' +
++       '+         {\n' +
++       "+           kind: 'shot',\n" +
++       '+           minute: 49,\n' +
++       '+           on: false,\n' +
++       "+           side: 'opp',\n" +
++       "+           who: 'Alexis Mac Allister',\n" +
++       '+           xg: 0.09\n' +
++       '+         },\n' +
++       '+         {\n' +
++       "+           kind: 'throwin',\n" +
++       '            minute: 51,\n' +
++       "+           side: 'me',\n" +
++       "+           who: 'Kiernan Dewsbury-Hall'\n" +
++       '+         },\n' +
++       '+         {\n' +
++       "+           kind: 'foul',\n" +
++       '+           minute: 51,\n' +
++       "+           side: 'me',\n" +
++       "+           who: 'Hayden Hackney'\n" +
++       '+         },\n' +
++       '+         {\n' +
++       "+           kind: 'foul',\n" +
++       '+           minute: 51,\n' +
++       "            side: 'opp',\n" +
++       "+           who: 'Milos Kerkez'\n" +
++       "-           who: 'Conor Bradley'\n" +
++       '          },\n' +
++       '          {\n' +
++       "            kind: 'foul',\n" +
++       '            minute: 51,\n' +
++       "+           side: 'opp',\n" +
++       "+           who: 'Dominik Szoboszlai'\n" +
++       '+         },\n' +
++       '+         {\n' +
++       "+           flank: 'left',\n" +
++       "+           kind: 'corner',\n" +
++       '+           minute: 51,\n' +
++       "            side: 'me',\n" +
++       "+           who: 'Brennan Johnson'\n" +
++       "-           who: 'James Tarkowski'\n" +
++       '          },\n' +
++       '          {\n' +
++       "+           flank: 'right',\n" +
++       "+           kind: 'corner',\n" +
++       "-           kind: 'foul',\n" +
++       '            minute: 52,\n' +
++       "            side: 'opp',\n" +
++       "            who: 'Ryan Gravenberch'\n" +
++       '          },\n' +
++       '          {\n' +
++       "+           kind: 'throwin',\n" +
++       '+           minute: 54,\n' +
++       "+           side: 'opp',\n" +
++       "+           who: 'Milos Kerkez'\n" +
++       '+         },\n' +
++       '+         {\n' +
++       '            goal: true,\n' +
++       "            kind: 'shot',\n" +
++       '            minute: 54,\n' +
++       '            on: true,\n' +
++       "            side: 'opp',\n" +
++       "+           who: 'Florian Wirtz',\n" +
++       '+           xg: 0.28\n' +
++       "-           who: 'Jeremie Frimpong',\n" +
++       '-           xg: 0.24\n' +
++       '          },\n' +
++       '          {\n' +
++       "            kind: 'throwin',\n" +
++       '            minute: 55,\n' +
++       "+           side: 'me',\n" +
++       "+           who: 'Thierno Barry'\n" +
++       '+         },\n' +
++       '+         {\n' +
++       "+           kind: 'throwin',\n" +
++       '+           minute: 55,\n' +
++       "            side: 'opp',\n" +
++       "            who: 'Conor Bradley'\n" +
++       '          },\n' +
++       '          {\n' +
++       "+           kind: 'shot',\n" +
++       '+           minute: 57,\n' +
++       '+           on: false,\n' +
++       "+           side: 'opp',\n" +
++       "+           who: 'Dominik Szoboszlai',\n" +
++       '+           xg: 0.09\n' +
++       "-           flank: 'right',\n" +
++       "-           kind: 'corner',\n" +
++       '-           minute: 55,\n' +
++       "-           side: 'me',\n" +
++       "-           who: 'Jack Grealish'\n" +
++       '          },\n' +
++       '          {\n' +
++       "            kind: 'throwin',\n" +
++       '+           minute: 59,\n' +
++       "+           side: 'opp',\n" +
++       "+           who: 'Milos Kerkez'\n" +
++       '-           minute: 56,\n' +
++       "-           side: 'me',\n" +
++       "-           who: 'Jarrad Branthwaite'\n" +
++       '          },\n' +
++       '          {\n' +
++       "            kind: 'shot',\n" +
++       '+           minute: 59,\n' +
++       '-          '... 32918 more characters,
++     status: 'failed',
++     title: 'preserves the full prior default match and old live or historical kickoff behavior'
++   }
++ ]
+- []
+
+    at main (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmVar.mjs:728:14)
+    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmVar.mjs:744:46 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: [
+    {
+      title: 'preserves the full prior default match and old live or historical kickoff behavior',
+      status: 'failed',
+      errorName: 'AssertionError',
+      message: 'Default callers retain every prior report, stat, player credit and save byte\n' +
+        '+ actual - expected\n' +
+        '... Skipped lines\n' +
+        '\n' +
+        '  {\n' +
+        "    kind: 'match',\n" +
+        '    report: {\n' +
+        "      away: 'Everton',\n" +
+        '      awayGoals: 0,\n' +
+        '...\n' +
+        '        },\n' +
+        '+       attendance: 67012,\n' +
+        '-       attendance: 60877,\n' +
+        '        capacity: null,\n' +
+        '        cards: [],\n' +
+        '        injuries: [],\n' +
+        '        momentum: [\n' +
+        '          -0.51,\n' +
+        '+         -0.18,\n' +
+        '-         -0.09,\n' +
+        '          -0.43,\n' +
+        '          -0.06,\n' +
+        '          -0.8,\n' +
+        '+         -1,\n' +
+        '+         -0.8,\n' +
+        '+         0.19,\n' +
+        '+         -0.36\n' +
+        '-         -0.76,\n' +
+        '-         -0.43,\n' +
+        '-         -0.06,\n' +
+        '-         -0.66\n' +
+        '        ],\n' +
+        '        myRatings: [\n' +
+        '          {\n' +
+        '            assists: 0,\n' +
+        '            goals: 0,\n' +
+        '            motm: true,\n' +
+        "+           name: 'Brennan Johnson',\n" +
+        "+           pos: 'RW',\n" +
+        '+           rating: 6.3\n' +
+        "-           name: 'Jarrad Branthwaite',\n" +
+        "-           pos: 'CB',\n" +
+        '-           rating: 6\n' +
+        '          },\n' +
+        '          {\n' +
+        '            assists: 0,\n' +
+        '            goals: 0,\n' +
+        "+           name: 'Vitaliy Mykolenko',\n" +
+        "+           pos: 'LB',\n" +
+        '+           rating: 6.2\n' +
+        "-           name: 'Thierno Barry',\n" +
+        "-           pos: 'ST',\n" +
+        '-           rating: 6\n' +
+        '          },\n' +
+        '          {\n' +
+        '            assists: 0,\n' +
+        '            goals: 0,\n' +
+        "+           name: 'Jarrad Branthwaite',\n" +
+        "-           name: 'Michael Keane',\n" +
+        "            pos: 'CB',\n" +
+        '+           rating: 6.1\n' +
+        '-           rating: 6\n' +
+        '          },\n' +
+        '          {\n' +
+        '            assists: 0,\n' +
+        '            goals: 0,\n' +
+        "+           name: 'Hayden Hackney',\n" +
+        "-           name: 'Kiernan Dewsbury-Hall',\n" +
+        "-           pos: 'CM',\n" +
+        '-           rating: 5.8\n' +
+        '-         },\n' +
+        '-         {\n' +
+        '-           assists: 0,\n' +
+        '-           goals: 0,\n' +
+        "-           name: 'James Garner',\n" +
+        "            pos: 'CDM',\n" +
+        '+           rating: 5.9\n' +
+        '-           rating: 5.7\n' +
+        '          },\n' +
+        '          {\n' +
+        '            assists: 0,\n' +
+        '            goals: 0,\n' +
+        "+           name: 'Thierno Barry',\n" +
+        "+           pos: 'ST',\n" +
+        '+           rating: 5.9\n' +
+        "-           name: 'Jack Grealish',\n" +
+        "-           pos: 'LW',\n" +
+        '-           rating: 5.7\n' +
+        '          },\n' +
+        '          {\n' +
+        '            assists: 0,\n' +
+        '            goals: 0,\n' +
+        "+           name: 'Kiernan Dewsbury-Hall',\n" +
+        "+           pos: 'CM',\n" +
+        "-           name: 'Vitaliy Mykolenko',\n" +
+        "-           pos: 'LB',\n" +
+        '            rating: 5.7\n' +
+        '          },\n' +
+        '          {\n' +
+        '            assists: 0,\n' +
+        '            goals: 0,\n' +
+        '...\n' +
+        '            goals: 0,\n' +
+        "+           name: 'James Garner',\n" +
+        "-           name: 'Hayden Hackney',\n" +
+        "            pos: 'CDM',\n" +
+        '+           rating: 5.6\n' +
+        '-           rating: 5.5\n' +
+        '          },\n' +
+        '          {\n' +
+        '            assists: 0,\n' +
+        '            goals: 0,\n' +
+        "+           name: 'Jordan Pickford',\n" +
+        "+           pos: 'GK',\n" +
+        '+           rating: 5.6\n' +
+        "-           name: 'Brennan Johnson',\n" +
+        "-           pos: 'RW',\n" +
+        '-           rating: 5.2\n' +
+        '          },\n' +
+        '          {\n' +
+        '            assists: 0,\n' +
+        '            goals: 0,\n' +
+        "+           name: 'Michael Keane',\n" +
+        "+           pos: 'CB',\n" +
+        '+           rating: 5.3\n' +
+        '+         },\n' +
+        '+         {\n' +
+        '+           assists: 0,\n' +
+        '+           goals: 0,\n' +
+        "+           name: 'Jack Grealish',\n" +
+        "+           pos: 'LW',\n" +
+        "-           name: 'Jordan Pickford',\n" +
+        "-           pos: 'GK',\n" +
+        '            rating: 5.2\n' +
+        '          }\n' +
+        '        ],\n' +
+        "+       oppBest: 'Alexander Isak',\n" +
+        "-       oppBest: 'Jeremie Frimpong',\n" +
+        '        oppCards: [\n' +
+        '          {\n' +
+        "            kind: 'yellow',\n" +
+        '            minute: 34,\n' +
+        "            name: 'Conor Bradley'\n" +
+        '...\n' +
+        '            assists: 0,\n' +
+        '+           goals: 2,\n' +
+        "+           name: 'Alexander Isak',\n" +
+        "+           pos: 'ST',\n" +
+        '-           goals: 1,\n' +
+        "-           name: 'Jeremie Frimpong',\n" +
+        "-           pos: 'RB',\n" +
+        '            rating: 8.8\n' +
+        '          },\n' +
+        '          {\n' +
+        '            assists: 0,\n' +
+        '            goals: 0,\n' +
+        "+           name: 'Giorgi Mamardashvili',\n" +
+        "+           pos: 'GK',\n" +
+        '+           rating: 8.2\n' +
+        '+         },\n' +
+        '+         {\n' +
+        '+           assists: 0,\n' +
+        '+           goals: 1,\n' +
+        "+           name: 'Florian Wirtz',\n" +
+        "+           pos: 'CAM',\n" +
+        '+           rating: 8\n' +
+        '+         },\n' +
+        '+         {\n' +
+        '+           assists: 0,\n' +
+        '+           goals: 0,\n' +
+        "            name: 'Giovanni Leoni',\n" +
+        "            pos: 'CB',\n" +
+        '+           rating: 8\n' +
+        '-           rating: 8.1\n' +
+        '          },\n' +
+        '          {\n' +
+        '            assists: 0,\n' +
+        '            goals: 0,\n' +
+        "+           name: 'Milos Kerkez',\n" +
+        "+           pos: 'LB',\n" +
+        '+           rating: 7.9\n' +
+        "-           name: 'Ronald Araujo',\n" +
+        "-           pos: 'CB',\n" +
+        '-           rating: 7.7\n' +
+        '          },\n' +
+        '          {\n' +
+        '            assists: 0,\n' +
+        '            goals: 0,\n' +
+        "+           name: 'Jeremie Frimpong',\n" +
+        "+           pos: 'RB',\n" +
+        '+           rating: 7.8\n' +
+        "-           name: 'Dominik Szoboszlai',\n" +
+        "-           pos: 'CAM',\n" +
+        '-           rating: 7.5\n' +
+        '          },\n' +
+        '          {\n' +
+        '            assists: 0,\n' +
+        '+           goals: 0,\n' +
+        "+           name: 'Conor Bradley',\n" +
+        "+           pos: 'RB',\n" +
+        '-           goals: 1,\n' +
+        "-           name: 'Alexander Isak',\n" +
+        "-           pos: 'ST',\n" +
+        '            rating: 7.5\n' +
+        '          },\n' +
+        '          {\n' +
+        '            assists: 0,\n' +
+        '            goals: 0,\n' +
+        "+           name: 'Hugo Ekitiké',\n" +
+        "+           pos: 'ST',\n" +
+        "-           name: 'Giorgi Mamardashvili',\n" +
+        "-           pos: 'GK',\n" +
+        '            rating: 7.4\n' +
+        '          },\n' +
+        '          {\n' +
+        '            assists: 0,\n' +
+        '+           goals: 0,\n' +
+        "+           name: 'Trey Nyoni',\n" +
+        "+           pos: 'CM',\n" +
+        '+           rating: 7.3\n' +
+        '-           goals: 1,\n' +
+        "-           name: 'Ryan Gravenberch',\n" +
+        "-           pos: 'CDM',\n" +
+        '-           rating: 7.4\n' +
+        '          },\n' +
+        '          {\n' +
+        '            assists: 0,\n' +
+        '            goals: 0,\n' +
+        "+           name: 'Jérémy Jacquet',\n" +
+        "+           pos: 'CB',\n" +
+        '+           rating: 7.2\n' +
+        "-           name: 'Conor Bradley',\n" +
+        "-           pos: 'RB',\n" +
+        '-           rating: 7.1\n' +
+        '          },\n' +
+        '          {\n' +
+        '            assists: 0,\n' +
+        '            goals: 0,\n' +
+        "+           name: 'Ronald Araujo',\n" +
+        "-           name: 'Jérémy Jacquet',\n" +
+        "            pos: 'CB',\n" +
+        '+           rating: 7.1\n' +
+        '-           rating: 7\n' +
+        '          },\n' +
+        '          {\n' +
+        '            assists: 0,\n' +
+        '            goals: 0,\n' +
+        "+           name: 'Alexis Mac Allister',\n" +
+        "+           pos: 'CM',\n" +
+        '+           rating: 6.7\n' +
+        "-           name: 'Milos Kerkez',\n" +
+        "-           pos: 'LB',\n" +
+        '-           rating: 7\n' +
+        '          },\n' +
+        '          {\n' +
+        '            assists: 0,\n' +
+        '            goals: 0,\n' +
+        "+           name: 'Wataru Endo',\n" +
+        "+           pos: 'CDM',\n" +
+        '+           rating: 6.7\n' +
+        "-           name: 'Florian Wirtz',\n" +
+        "-           pos: 'CAM',\n" +
+        '-           rating: 7\n' +
+        '          },\n' +
+        '          {\n' +
+        '            assists: 0,\n' +
+        '            goals: 0,\n' +
+        "+           name: 'Ryan Gravenberch',\n" +
+        "+           pos: 'CDM',\n" +
+        '+           rating: 6.6\n' +
+        "-           name: 'Hugo Ekitiké',\n" +
+        "-           pos: 'ST',\n" +
+        '-           rating: 7\n' +
+        '          },\n' +
+        '          {\n' +
+        '            assists: 0,\n' +
+        '            goals: 0,\n' +
+        "+           name: 'Dominik Szoboszlai',\n" +
+        "+           pos: 'CAM',\n" +
+        '+           rating: 6.5\n' +
+        "-           name: 'Alexis Mac Allister',\n" +
+        "-           pos: 'CM',\n" +
+        '-           rating: 6.7\n' +
+        '          }\n' +
+        '        ],\n' +
+        '        oppSubs: [\n' +
+        '          {\n' +
+        '+           minute: 64,\n' +
+        "+           off: 'Hugo Ekitiké',\n" +
+        '-           minute: 69,\n' +
+        "-           off: 'Conor Bradley',\n" +
+        "            on: 'Giovanni Leoni'\n" +
+        '          },\n' +
+        '          {\n' +
+        '+           minute: 64,\n' +
+        "+           off: 'Milos Kerkez',\n" +
+        '-           minute: 79,\n' +
+        "-           off: 'Hugo Ekitiké',\n" +
+        "            on: 'Ronald Araujo'\n" +
+        '          },\n' +
+        '+         {\n' +
+        '+           minute: 69,\n' +
+        "+           off: 'Ryan Gravenberch',\n" +
+        "+           on: 'Trey Nyoni'\n" +
+        '+         },\n' +
+        '+         {\n' +
+        '+           minute: 79,\n' +
+        "+           off: 'Jeremie Frimpong',\n" +
+        "+           on: 'Wataru Endo'\n" +
+        '+         }\n' +
+        '        ],\n' +
+        '        oppXi: [\n' +
+        '          {\n' +
+        "            n: 'Giorgi Mamardashvili',\n" +
+        "            p: 'GK',\n" +
+        '...\n' +
+        "            kind: 'throwin',\n" +
+        '+           minute: 46,\n' +
+        '-           minute: 51,\n' +
+        "            side: 'opp',\n" +
+        "+           who: 'Conor Bradley'\n" +
+        "-           who: 'Milos Kerkez'\n" +
+        '          },\n' +
+        '          {\n' +
+        "            kind: 'throwin',\n" +
+        '+           minute: 47,\n' +
+        "+           side: 'me',\n" +
+        "+           who: 'Jarrad Branthwaite'\n" +
+        '+         },\n' +
+        '+         {\n' +
+        "+           kind: 'shot',\n" +
+        '+           minute: 49,\n' +
+        '+           on: false,\n' +
+        "+           side: 'opp',\n" +
+        "+           who: 'Alexis Mac Allister',\n" +
+        '+           xg: 0.09\n' +
+        '+         },\n' +
+        '+         {\n' +
+        "+           kind: 'throwin',\n" +
+        '            minute: 51,\n' +
+        "+           side: 'me',\n" +
+        "+           who: 'Kiernan Dewsbury-Hall'\n" +
+        '+         },\n' +
+        '+         {\n' +
+        "+           kind: 'foul',\n" +
+        '+           minute: 51,\n' +
+        "+           side: 'me',\n" +
+        "+           who: 'Hayden Hackney'\n" +
+        '+         },\n' +
+        '+         {\n' +
+        "+           kind: 'foul',\n" +
+        '+           minute: 51,\n' +
+        "            side: 'opp',\n" +
+        "+           who: 'Milos Kerkez'\n" +
+        "-           who: 'Conor Bradley'\n" +
+        '          },\n' +
+        '          {\n' +
+        "            kind: 'foul',\n" +
+        '            minute: 51,\n' +
+        "+           side: 'opp',\n" +
+        "+           who: 'Dominik Szoboszlai'\n" +
+        '+         },\n' +
+        '+         {\n' +
+        "+           flank: 'left',\n" +
+        "+           kind: 'corner',\n" +
+        '+           minute: 51,\n' +
+        "            side: 'me',\n" +
+        "+           who: 'Brennan Johnson'\n" +
+        "-           who: 'James Tarkowski'\n" +
+        '          },\n' +
+        '          {\n' +
+        "+           flank: 'right',\n" +
+        "+           kind: 'corner',\n" +
+        "-           kind: 'foul',\n" +
+        '            minute: 52,\n' +
+        "            side: 'opp',\n" +
+        "            who: 'Ryan Gravenberch'\n" +
+        '          },\n' +
+        '          {\n' +
+        "+           kind: 'throwin',\n" +
+        '+           minute: 54,\n' +
+        "+           side: 'opp',\n" +
+        "+           who: 'Milos Kerkez'\n" +
+        '+         },\n' +
+        '+         {\n' +
+        '            goal: true,\n' +
+        "            kind: 'shot',\n" +
+        '            minute: 54,\n' +
+        '            on: true,\n' +
+        "            side: 'opp',\n" +
+        "+           who: 'Florian Wirtz',\n" +
+        '+           xg: 0.28\n' +
+        "-           who: 'Jeremie Frimpong',\n" +
+        '-           xg: 0.24\n' +
+        '          },\n' +
+        '          {\n' +
+        "            kind: 'throwin',\n" +
+        '            minute: 55,\n' +
+        "+           side: 'me',\n" +
+        "+           who: 'Thierno Barry'\n" +
+        '+         },\n' +
+        '+         {\n' +
+        "+           kind: 'throwin',\n" +
+        '+           minute: 55,\n' +
+        "            side: 'opp',\n" +
+        "            who: 'Conor Bradley'\n" +
+        '          },\n' +
+        '          {\n' +
+        "+           kind: 'shot',\n" +
+        '+           minute: 57,\n' +
+        '+           on: false,\n' +
+        "+           side: 'opp',\n" +
+        "+           who: 'Dominik Szoboszlai',\n" +
+        '+           xg: 0.09\n' +
+        "-           flank: 'right',\n" +
+        "-           kind: 'corner',\n" +
+        '-           minute: 55,\n' +
+        "-           side: 'me',\n" +
+        "-           who: 'Jack Grealish'\n" +
+        '          },\n' +
+        '          {\n' +
+        "            kind: 'throwin',\n" +
+        '+           minute: 59,\n' +
+        "+           side: 'opp',\n" +
+        "+           who: 'Milos Kerkez'\n" +
+        '-           minute: 56,\n' +
+        "-           side: 'me',\n" +
+        "-           who: 'Jarrad Branthwaite'\n" +
+        '          },\n' +
+        '          {\n' +
+        "            kind: 'shot',\n" +
+        '+           minute: 59,\n' +
+        '-           minute: 56,\n' +
+        '            on: fal'... 32508 more characters,
+      stack: 'AssertionError [ERR_ASSERTION]: Default callers retain every prior report, stat, player credit and save byte\n' +
+        '+ actual - expected\n' +
+        '... Skipped lines\n' +
+        '\n' +
+        '  {\n' +
+        "    kind: 'match',\n" +
+        '    report: {\n' +
+        "      away: 'Everton',\n" +
+        '      awayGoals: 0,\n' +
+        '...\n' +
+        '        },\n' +
+        '+       attendance: 67012,\n' +
+        '-       attendance: 60877,\n' +
+        '        capacity: null,\n' +
+        '        cards: [],\n' +
+        '        injuries: [],\n' +
+        '        momentum: [\n' +
+        '          -0.51,\n' +
+        '+         -0.18,\n' +
+        '-         -0.09,\n' +
+        '          -0.43,\n' +
+        '          -0.06,\n' +
+        '          -0.8,\n' +
+        '+         -1,\n' +
+        '+         -0.8,\n' +
+        '+         0.19,\n' +
+        '+         -0.36\n' +
+        '-         -0.76,\n' +
+        '-         -0.43,\n' +
+        '-         -0.06,\n' +
+        '-         -0.66\n' +
+        '        ],\n' +
+        '        myRatings: [\n' +
+        '          {\n' +
+        '            assists: 0,\n' +
+        '            goals: 0,\n' +
+        '            motm: true,\n' +
+        "+           name: 'Brennan Johnson',\n" +
+        "+           pos: 'RW',\n" +
+        '+           rating: 6.3\n' +
+        "-           name: 'Jarrad Branthwaite',\n" +
+        "-           pos: 'CB',\n" +
+        '-           rating: 6\n' +
+        '          },\n' +
+        '          {\n' +
+        '            assists: 0,\n' +
+        '            goals: 0,\n' +
+        "+           name: 'Vitaliy Mykolenko',\n" +
+        "+           pos: 'LB',\n" +
+        '+           rating: 6.2\n' +
+        "-           name: 'Thierno Barry',\n" +
+        "-           pos: 'ST',\n" +
+        '-           rating: 6\n' +
+        '          },\n' +
+        '          {\n' +
+        '            assists: 0,\n' +
+        '            goals: 0,\n' +
+        "+           name: 'Jarrad Branthwaite',\n" +
+        "-           name: 'Michael Keane',\n" +
+        "            pos: 'CB',\n" +
+        '+           rating: 6.1\n' +
+        '-           rating: 6\n' +
+        '          },\n' +
+        '          {\n' +
+        '            assists: 0,\n' +
+        '            goals: 0,\n' +
+        "+           name: 'Hayden Hackney',\n" +
+        "-           name: 'Kiernan Dewsbury-Hall',\n" +
+        "-           pos: 'CM',\n" +
+        '-           rating: 5.8\n' +
+        '-         },\n' +
+        '-         {\n' +
+        '-           assists: 0,\n' +
+        '-           goals: 0,\n' +
+        "-           name: 'James Garner',\n" +
+        "            pos: 'CDM',\n" +
+        '+           rating: 5.9\n' +
+        '-           rating: 5.7\n' +
+        '          },\n' +
+        '          {\n' +
+        '            assists: 0,\n' +
+        '            goals: 0,\n' +
+        "+           name: 'Thierno Barry',\n" +
+        "+           pos: 'ST',\n" +
+        '+           rating: 5.9\n' +
+        "-           name: 'Jack Grealish',\n" +
+        "-           pos: 'LW',\n" +
+        '-           rating: 5.7\n' +
+        '          },\n' +
+        '          {\n' +
+        '            assists: 0,\n' +
+        '            goals: 0,\n' +
+        "+           name: 'Kiernan Dewsbury-Hall',\n" +
+        "+           pos: 'CM',\n" +
+        "-           name: 'Vitaliy Mykolenko',\n" +
+        "-           pos: 'LB',\n" +
+        '            rating: 5.7\n' +
+        '          },\n' +
+        '          {\n' +
+        '            assists: 0,\n' +
+        '            goals: 0,\n' +
+        '...\n' +
+        '            goals: 0,\n' +
+        "+           name: 'James Garner',\n" +
+        "-           name: 'Hayden Hackney',\n" +
+        "            pos: 'CDM',\n" +
+        '+           rating: 5.6\n' +
+        '-           rating: 5.5\n' +
+        '          },\n' +
+        '          {\n' +
+        '            assists: 0,\n' +
+        '            goals: 0,\n' +
+        "+           name: 'Jordan Pickford',\n" +
+        "+           pos: 'GK',\n" +
+        '+           rating: 5.6\n' +
+        "-           name: 'Brennan Johnson',\n" +
+        "-           pos: 'RW',\n" +
+        '-           rating: 5.2\n' +
+        '          },\n' +
+        '          {\n' +
+        '            assists: 0,\n' +
+        '            goals: 0,\n' +
+        "+           name: 'Michael Keane',\n" +
+        "+           pos: 'CB',\n" +
+        '+           rating: 5.3\n' +
+        '+         },\n' +
+        '+         {\n' +
+        '+           assists: 0,\n' +
+        '+           goals: 0,\n' +
+        "+           name: 'Jack Grealish',\n" +
+        "+           pos: 'LW',\n" +
+        "-           name: 'Jordan Pickford',\n" +
+        "-           pos: 'GK',\n" +
+        '            rating: 5.2\n' +
+        '          }\n' +
+        '        ],\n' +
+        "+       oppBest: 'Alexander Isak',\n" +
+        "-       oppBest: 'Jeremie Frimpong',\n" +
+        '        oppCards: [\n' +
+        '          {\n' +
+        "            kind: 'yellow',\n" +
+        '            minute: 34,\n' +
+        "            name: 'Conor Bradley'\n" +
+        '...\n' +
+        '            assists: 0,\n' +
+        '+           goals: 2,\n' +
+        "+           name: 'Alexander Isak',\n" +
+        "+           pos: 'ST',\n" +
+        '-           goals: 1,\n' +
+        "-           name: 'Jeremie Frimpong',\n" +
+        "-           pos: 'RB',\n" +
+        '            rating: 8.8\n' +
+        '          },\n' +
+        '          {\n' +
+        '            assists: 0,\n' +
+        '            goals: 0,\n' +
+        "+           name: 'Giorgi Mamardashvili',\n" +
+        "+           pos: 'GK',\n" +
+        '+           rating: 8.2\n' +
+        '+         },\n' +
+        '+         {\n' +
+        '+           assists: 0,\n' +
+        '+           goals: 1,\n' +
+        "+           name: 'Florian Wirtz',\n" +
+        "+           pos: 'CAM',\n" +
+        '+           rating: 8\n' +
+        '+         },\n' +
+        '+         {\n' +
+        '+           assists: 0,\n' +
+        '+           goals: 0,\n' +
+        "            name: 'Giovanni Leoni',\n" +
+        "            pos: 'CB',\n" +
+        '+           rating: 8\n' +
+        '-           rating: 8.1\n' +
+        '          },\n' +
+        '          {\n' +
+        '            assists: 0,\n' +
+        '            goals: 0,\n' +
+        "+           name: 'Milos Kerkez',\n" +
+        "+           pos: 'LB',\n" +
+        '+           rating: 7.9\n' +
+        "-           name: 'Ronald Araujo',\n" +
+        "-           pos: 'CB',\n" +
+        '-           rating: 7.7\n' +
+        '          },\n' +
+        '          {\n' +
+        '            assists: 0,\n' +
+        '            goals: 0,\n' +
+        "+           name: 'Jeremie Frimpong',\n" +
+        "+           pos: 'RB',\n" +
+        '+           rating: 7.8\n' +
+        "-           name: 'Dominik Szoboszlai',\n" +
+        "-           pos: 'CAM',\n" +
+        '-           rating: 7.5\n' +
+        '          },\n' +
+        '          {\n' +
+        '            assists: 0,\n' +
+        '+           goals: 0,\n' +
+        "+           name: 'Conor Bradley',\n" +
+        "+           pos: 'RB',\n" +
+        '-           goals: 1,\n' +
+        "-           name: 'Alexander Isak',\n" +
+        "-           pos: 'ST',\n" +
+        '            rating: 7.5\n' +
+        '          },\n' +
+        '          {\n' +
+        '            assists: 0,\n' +
+        '            goals: 0,\n' +
+        "+           name: 'Hugo Ekitiké',\n" +
+        "+           pos: 'ST',\n" +
+        "-           name: 'Giorgi Mamardashvili',\n" +
+        "-           pos: 'GK',\n" +
+        '            rating: 7.4\n' +
+        '          },\n' +
+        '          {\n' +
+        '            assists: 0,\n' +
+        '+           goals: 0,\n' +
+        "+           name: 'Trey Nyoni',\n" +
+        "+           pos: 'CM',\n" +
+        '+           rating: 7.3\n' +
+        '-           goals: 1,\n' +
+        "-           name: 'Ryan Gravenberch',\n" +
+        "-           pos: 'CDM',\n" +
+        '-           rating: 7.4\n' +
+        '          },\n' +
+        '          {\n' +
+        '            assists: 0,\n' +
+        '            goals: 0,\n' +
+        "+           name: 'Jérémy Jacquet',\n" +
+        "+           pos: 'CB',\n" +
+        '+           rating: 7.2\n' +
+        "-           name: 'Conor Bradley',\n" +
+        "-           pos: 'RB',\n" +
+        '-           rating: 7.1\n' +
+        '          },\n' +
+        '          {\n' +
+        '            assists: 0,\n' +
+        '            goals: 0,\n' +
+        "+           name: 'Ronald Araujo',\n" +
+        "-           name: 'Jérémy Jacquet',\n" +
+        "            pos: 'CB',\n" +
+        '+           rating: 7.1\n' +
+        '-           rating: 7\n' +
+        '          },\n' +
+        '          {\n' +
+        '            assists: 0,\n' +
+        '            goals: 0,\n' +
+        "+           name: 'Alexis Mac Allister',\n" +
+        "+           pos: 'CM',\n" +
+        '+           rating: 6.7\n' +
+        "-           name: 'Milos Kerkez',\n" +
+        "-           pos: 'LB',\n" +
+        '-           rating: 7\n' +
+        '          },\n' +
+        '          {\n' +
+        '            assists: 0,\n' +
+        '            goals: 0,\n' +
+        "+           name: 'Wataru Endo',\n" +
+        "+           pos: 'CDM',\n" +
+        '+           rating: 6.7\n' +
+        "-           name: 'Florian Wirtz',\n" +
+        "-           pos: 'CAM',\n" +
+        '-           rating: 7\n' +
+        '          },\n' +
+        '          {\n' +
+        '            assists: 0,\n' +
+        '            goals: 0,\n' +
+        "+           name: 'Ryan Gravenberch',\n" +
+        "+           pos: 'CDM',\n" +
+        '+           rating: 6.6\n' +
+        "-           name: 'Hugo Ekitiké',\n" +
+        "-           pos: 'ST',\n" +
+        '-           rating: 7\n' +
+        '          },\n' +
+        '          {\n' +
+        '            assists: 0,\n' +
+        '            goals: 0,\n' +
+        "+           name: 'Dominik Szoboszlai',\n" +
+        "+           pos: 'CAM',\n" +
+        '+           rating: 6.5\n' +
+        "-           name: 'Alexis Mac Allister',\n" +
+        "-           pos: 'CM',\n" +
+        '-           rating: 6.7\n' +
+        '          }\n' +
+        '        ],\n' +
+        '        oppSubs: [\n' +
+        '          {\n' +
+        '+           minute: 64,\n' +
+        "+           off: 'Hugo Ekitiké',\n" +
+        '-           minute: 69,\n' +
+        "-           off: 'Conor Bradley',\n" +
+        "            on: 'Giovanni Leoni'\n" +
+        '          },\n' +
+        '          {\n' +
+        '+           minute: 64,\n' +
+        "+           off: 'Milos Kerkez',\n" +
+        '-           minute: 79,\n' +
+        "-           off: 'Hugo Ekitiké',\n" +
+        "            on: 'Ronald Araujo'\n" +
+        '          },\n' +
+        '+         {\n' +
+        '+           minute: 69,\n' +
+        "+           off: 'Ryan Gravenberch',\n" +
+        "+           on: 'Trey Nyoni'\n" +
+        '+         },\n' +
+        '+         {\n' +
+        '+           minute: 79,\n' +
+        "+           off: 'Jeremie Frimpong',\n" +
+        "+           on: 'Wataru Endo'\n" +
+        '+         }\n' +
+        '        ],\n' +
+        '        oppXi: [\n' +
+        '          {\n' +
+        "            n: 'Giorgi Mamardashvili',\n" +
+        "            p: 'GK',\n" +
+        '...\n' +
+        "            kind: 'throwin',\n" +
+        '+           minute: 46,\n' +
+        '-           minute: 51,\n' +
+        "            side: 'opp',\n" +
+        "+           who: 'Conor Bradley'\n" +
+        "-           who: 'Milos Kerkez'\n" +
+        '          },\n' +
+        '          {\n' +
+        "            kind: 'throwin',\n" +
+        '+           minute: 47,\n' +
+        "+           side: 'me',\n" +
+        "+           who: 'Jarrad Branthwaite'\n" +
+        '+         },\n' +
+        '+         {\n' +
+        "+           kind: 'shot',\n" +
+        '+           minute: 49,\n' +
+        '+           on: false,\n' +
+        "+           side: 'opp',\n" +
+        "+           who: 'Alexis Mac Allister',\n" +
+        '+           xg: 0.09\n' +
+        '+         },\n' +
+        '+         {\n' +
+        "+           kind: 'throwin',\n" +
+        '            minute: 51,\n' +
+        "+           side: 'me',\n" +
+        "+           who: 'Kiernan Dewsbury-Hall'\n" +
+        '+         },\n' +
+        '+         {\n' +
+        "+           kind: 'foul',\n" +
+        '+           minute: 51,\n' +
+        "+           side: 'me',\n" +
+        "+           who: 'Hayden Hackney'\n" +
+        '+         },\n' +
+        '+         {\n' +
+        "+           kind: 'foul',\n" +
+        '+           minute: 51,\n' +
+        "            side: 'opp',\n" +
+        "+           who: 'Milos Kerkez'\n" +
+        "-           who: 'Conor Bradley'\n" +
+        '          },\n' +
+        '          {\n' +
+        "            kind: 'foul',\n" +
+        '            minute: 51,\n' +
+        "+           side: 'opp',\n" +
+        "+           who: 'Dominik Szoboszlai'\n" +
+        '+         },\n' +
+        '+         {\n' +
+        "+           flank: 'left',\n" +
+        "+           kind: 'corner',\n" +
+        '+           minute: 51,\n' +
+        "            side: 'me',\n" +
+        "+           who: 'Brennan Johnson'\n" +
+        "-           who: 'James Tarkowski'\n" +
+        '          },\n' +
+        '          {\n' +
+        "+           flank: 'right',\n" +
+        "+           kind: 'corner',\n" +
+        "-           kind: 'foul',\n" +
+        '            minute: 52,\n' +
+        "            side: 'opp',\n" +
+        "            who: 'Ryan Gravenberch'\n" +
+        '          },\n' +
+        '          {\n' +
+        "+           kind: 'throwin',\n" +
+        '+           minute: 54,\n' +
+        "+           side: 'opp',\n" +
+        "+           who: 'Milos Kerkez'\n" +
+        '+         },\n' +
+        '+         {\n' +
+        '            goal: true,\n' +
+        "            kind: 'shot',\n" +
+        '            minute: 54,\n' +
+        '            on: true,\n' +
+        "            side: 'opp',\n" +
+        "+           who: 'Florian Wirtz',\n" +
+        '+           xg: 0.28\n' +
+        "-           who: 'Jeremie Frimpong',\n" +
+        '-           xg: 0.24\n' +
+        '          },\n' +
+        '          {\n' +
+        "            kind: 'throwin',\n" +
+        '            minute: 55,\n' +
+        "+           side: 'me',\n" +
+        "+           who: 'Thierno Barry'\n" +
+        '+         },\n' +
+        '+         {\n' +
+        "+           kind: 'throwin',\n" +
+        '+           minute: 55,\n' +
+        "            side: 'opp',\n" +
+        "            who: 'Conor Bradley'\n" +
+        '          },\n' +
+        '          {\n' +
+        "+           kind: 'shot',\n" +
+        '+           minute: 57,\n' +
+        '+           on: false,\n' +
+        "+           side: 'opp',\n" +
+        "+           who: 'Dominik Szoboszlai',\n" +
+        '+           xg: 0.09\n' +
+        "-           flank: 'right',\n" +
+        "-           kind: 'corner',\n" +
+        '-           minute: 55,\n' +
+        "-           side: 'me',\n" +
+        "-           who: 'Jack Grealish'\n" +
+        '          },\n' +
+        '          {\n' +
+        "            kind: 'throwin',\n" +
+        '+           minute: 59,\n' +
+        "+           side: 'opp',\n" +
+        "+           who: 'Milos Kerkez'\n" +
+        '-           minute: 56,\n' +
+        "-           side: 'me',\n" +
+        "-           who: 'Jarrad Branthwaite'\n" +
+        '          },\n' +
+        '          {\n' +
+        "            kind: 'shot',\n" +
+        '+           minute: 59,\n' +
+        '-          '... 32918 more characters
+    }
+  ],
+  expected: [],
+  operator: 'deepStrictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0
