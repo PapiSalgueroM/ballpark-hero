@@ -1,3 +1,7 @@
+## Round 1366, pitch restart committed continuity, proof preparation (2026-10-14)
+
+Own isolated branch `codex/pitch-restart-continuity`, parent `082fc2774c8aa9f919c14efa33bfc3fbfc599597`. New nine-case shared-hook proof and remote baseline workflow are authored only. Three named goal/kickoff, miss/goal kick and save/keeper first-commit coordinate faults are required with six preservation passes. Full layout-effect commit tapes retain ball/player coordinates, immutable feed inputs and zero presentation RNG. No runtime or application change has occurred. Browser paint remains unmeasured. Proposed minimal derived-travel seam waits for a strict remote causal baseline. Existing match outcomes, scoring, own-goal deflection, source/packages, old guards and unraised604/830 download ceilings remain held. [Exact method and scope](audits/pitch-restart-continuity-2026-10-14.md). H owns main integration and release.
+
 ## Release BC LIVE, 2026-10-13 18:23 EDT: one tab can no longer wipe a Club Manager save, Club Manager's world remembers your deals, its tables, copy and hub fixed, Soccer Career's events drawn fairly, the shared event deck, the college athletic director
 
 Claude lane (session H). main c5534342, deployment 3cf3a2d7-244e-41ce-8c27-a89cebafcfe6, entry index-BFkO1jyo.js (was index-DaI30mwt.js, Release BB,
