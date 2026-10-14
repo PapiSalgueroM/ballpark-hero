@@ -1,0 +1,28 @@
+simEventDeck: 7 packs (nfl, nba, mlb, nhl, college, gym, afl), CONTROL=restfall
+1) Replay: 7 GM packs, seeds 1, 2, 3, drives FLEET, SILENT, STUBBORN, FALLEN, 10 seasons a desk
+2) Same seed, same deck; a JSON round trip and repairGmInbox between every two weeks change nothing
+3) Weights: equal weights deal the recording, and a weight is a share of the draw, never a rank
+4) Story: never two of one story inside its cooldown or in one week, a one shot story once
+5) Subject rest: no subject inside its rest or twice in a week, the rest book born pruned
+   ok 13343 subject cards over 50 desks of 400 weeks, none inside its rest or twice in a week, the book never above 5 entries
+   ok subjectRest 0 deals exactly as no subjects (765 deals, 2802 draws) and writes no book
+   ok at subjectRest 0 a card about a missing fact is still held (fail closed): dealt on no week without the fact, where the same pack without subjects dealt one on 82
+     desk 0 tick 20: id:1 sits in the book at 14, ahead of the clock 0
+     desk 0 tick 20: role:keeper sits in the book at 14, ahead of the clock 0
+     desk 0 tick 20: id:2 sits in the book at 15, ahead of the clock 0
+     desk 0 tick 20: id:3 sits in the book at 17, ahead of the clock 0
+     desk 0 tick 20: role:captain sits in the book at 18, ahead of the clock 0
+     desk 0 tick 21: id:1 sits in the book at 14, ahead of the clock 1
+   FAIL only 870 subject cards dealt on a falling clock: nothing was tested
+   FAIL 77794 subject rest breaks on a clock that falls every 20 weeks
+   FAIL one card about the captain on that clock: 4 deals over ten seasons, 31 expected (ticks 0, 6, 12, 18 and on)
+6) Texts: wordings move no deal and no draw, every wording comes up at its share, a key reads the same words
+7) Expiry: an open card is settled at exactly w plus expires on its neutral option, nothing moves, the deck never freezes
+8) Neutral: every card of every pack off the baseline has an option that moves nothing, and every pack check holds
+9) Season clock: a card is held out exactly as careerEventDeck holds it; the week clock is back after exactly N
+10) Share and reach: every card of every pack reached over 1,000 seasons, no card above its pack's measured ceiling
+11) Registry: every option prints exactly the keys it moves, by exactly the amounts, and bind refuses each breakage
+12) Legal: every pack narrated in roles, slots only in words, and a tagged card never lands on a real man
+
+runtime 0.6 s
+simEventDeck: 3 failures, red sections 5 (CONTROL=restfall fired)

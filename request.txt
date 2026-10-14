@@ -1,0 +1,49 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/lib/gmInbox.test.ts src/components/front-office-shared/GmInboxPanel.test.tsx src/components/us-career/InboxPanel.test.tsx src/test/usBoardFixture.test.tsx --testTimeout=300000 --hookTimeout=120000
+kitA: SIM_EVENT_DECK_SECTIONS=1,2,3,4,5,6,7,8,9,10,11,12 node scripts/simEventDeck.mjs
+kit13: SIM_EVENT_DECK_SECTIONS=13 node scripts/simEventDeck.mjs
+kitC: SIM_EVENT_DECK_SECTIONS=14,15,16 node scripts/simEventDeck.mjs
+c-replay: EVENT_DECK_CONTROL=replay SIM_EVENT_DECK_SECTIONS=1 node scripts/simEventDeck.mjs
+c-weightoff: EVENT_DECK_CONTROL=weightoff SIM_EVENT_DECK_SECTIONS=3 node scripts/simEventDeck.mjs
+c-weightkeep: EVENT_DECK_CONTROL=weightkeep SIM_EVENT_DECK_SECTIONS=3 node scripts/simEventDeck.mjs
+c-story: EVENT_DECK_CONTROL=story SIM_EVENT_DECK_SECTIONS=4 node scripts/simEventDeck.mjs
+c-rest: EVENT_DECK_CONTROL=rest SIM_EVENT_DECK_SECTIONS=5 node scripts/simEventDeck.mjs
+c-failopen: EVENT_DECK_CONTROL=failopen SIM_EVENT_DECK_SECTIONS=5 node scripts/simEventDeck.mjs
+c-restfall: EVENT_DECK_CONTROL=restfall SIM_EVENT_DECK_SECTIONS=5 node scripts/simEventDeck.mjs
+c-textrng: EVENT_DECK_CONTROL=textrng SIM_EVENT_DECK_SECTIONS=6 node scripts/simEventDeck.mjs
+c-seasonweek: EVENT_DECK_CONTROL=seasonweek SIM_EVENT_DECK_SECTIONS=9 node scripts/simEventDeck.mjs
+c-expirefall: EVENT_DECK_CONTROL=expirefall SIM_EVENT_DECK_SECTIONS=7 node scripts/simEventDeck.mjs
+c-expireoff: EVENT_DECK_CONTROL=expireoff SIM_EVENT_DECK_SECTIONS=7 node scripts/simEventDeck.mjs
+c-expirefx: EVENT_DECK_CONTROL=expirefx SIM_EVENT_DECK_SECTIONS=7 node scripts/simEventDeck.mjs
+c-settledoff: EVENT_DECK_CONTROL=settledoff SIM_EVENT_DECK_SECTIONS=7 node scripts/simEventDeck.mjs
+c-panelexpiry: EVENT_DECK_CONTROL=panelexpiry SIM_EVENT_DECK_SECTIONS=7 node scripts/simEventDeck.mjs
+c-neutral: EVENT_DECK_CONTROL=neutral SIM_EVENT_DECK_SECTIONS=8 node scripts/simEventDeck.mjs
+c-heavy: EVENT_DECK_CONTROL=heavy SIM_EVENT_DECK_SECTIONS=10 node scripts/simEventDeck.mjs
+c-fxsilent: EVENT_DECK_CONTROL=fxsilent SIM_EVENT_DECK_SECTIONS=11 node scripts/simEventDeck.mjs
+c-fxdrop: EVENT_DECK_CONTROL=fxdrop SIM_EVENT_DECK_SECTIONS=11 node scripts/simEventDeck.mjs
+c-fxunbound: EVENT_DECK_CONTROL=fxunbound SIM_EVENT_DECK_SECTIONS=11 node scripts/simEventDeck.mjs
+c-fxneutral: EVENT_DECK_CONTROL=fxneutral SIM_EVENT_DECK_SECTIONS=11 node scripts/simEventDeck.mjs
+c-conductreal: EVENT_DECK_CONTROL=conductreal SIM_EVENT_DECK_SECTIONS=12 node scripts/simEventDeck.mjs
+c-slotopen: EVENT_DECK_CONTROL=slotopen SIM_EVENT_DECK_SECTIONS=12 node scripts/simEventDeck.mjs
+c-quoteslot: EVENT_DECK_CONTROL=quoteslot SIM_EVENT_DECK_SECTIONS=12 node scripts/simEventDeck.mjs
+c-untagged: EVENT_DECK_CONTROL=untagged SIM_EVENT_DECK_SECTIONS=12 node scripts/simEventDeck.mjs
+c-rosterword: EVENT_DECK_CONTROL=rosterword SIM_EVENT_DECK_SECTIONS=12 node scripts/simEventDeck.mjs
+c-pruneearly: EVENT_DECK_CONTROL=pruneearly SIM_EVENT_DECK_SECTIONS=13 node scripts/simEventDeck.mjs
+c-codecword: EVENT_DECK_CONTROL=codecword SIM_EVENT_DECK_SECTIONS=13 node scripts/simEventDeck.mjs
+c-codecslot: EVENT_DECK_CONTROL=codecslot SIM_EVENT_DECK_SECTIONS=13 node scripts/simEventDeck.mjs
+c-wordedit: EVENT_DECK_CONTROL=wordedit SIM_EVENT_DECK_SECTIONS=14 node scripts/simEventDeck.mjs
+c-wordorder: EVENT_DECK_CONTROL=wordorder SIM_EVENT_DECK_SECTIONS=14 node scripts/simEventDeck.mjs
+c-storymove: EVENT_DECK_CONTROL=storymove SIM_EVENT_DECK_SECTIONS=14 node scripts/simEventDeck.mjs
+c-pressure: EVENT_DECK_CONTROL=pressure SIM_EVENT_DECK_SECTIONS=15 node scripts/simEventDeck.mjs
+c-eager: EVENT_DECK_CONTROL=eager SIM_EVENT_DECK_SECTIONS=16 node scripts/simEventDeck.mjs
+gmdiff: bash .rc/x/rgmdiff.sh
+gmctl: bash .rc/x/rctl.sh GM_INBOX_CONTROL scripts/simGmInbox.mjs quote flip cool drift never random shift opencap maxcap oneshot ungate unclamp quotevariant effectvariant effectout effectrating
+careerInbox: node scripts/simCareerInbox.mjs
+careerInbox-privatecap: INBOX_CONTROL=privatecap node scripts/simCareerInbox.mjs
+harnessAnchors: node scripts/simHarnessAnchors.mjs
+noRival: node scripts/simNoRivalNames.mjs
+noQuotes: node scripts/simNoInventedQuotes.mjs
+noConduct: node scripts/simNoInventedConduct.mjs
+inventedNames: node scripts/simInventedNames.mjs
+reveal: node scripts/simRevealMoments.mjs
+storage: node scripts/simStorageWrites.mjs

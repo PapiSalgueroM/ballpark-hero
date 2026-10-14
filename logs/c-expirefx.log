@@ -1,0 +1,41 @@
+simEventDeck: 7 packs (nfl, nba, mlb, nhl, college, gym, afl), CONTROL=expirefx
+1) Replay: 7 GM packs, seeds 1, 2, 3, drives FLEET, SILENT, STUBBORN, FALLEN, 10 seasons a desk
+2) Same seed, same deck; a JSON round trip and repairGmInbox between every two weeks change nothing
+3) Weights: equal weights deal the recording, and a weight is a share of the draw, never a rank
+4) Story: never two of one story inside its cooldown or in one week, a one shot story once
+5) Subject rest: no subject inside its rest or twice in a week, the rest book born pruned
+6) Texts: wordings move no deal and no draw, every wording comes up at its share, a key reads the same words
+7) Expiry: an open card is settled at exactly w plus expires on its neutral option, nothing moves, the deck never freezes
+     desk 0 week 3: a meter moved on a desk that never answers
+     e3-2030-w0: settled on option 0, the neutral one is 1
+     desk 0 week 4: a meter moved on a desk that never answers
+     e2-2030-w2: settled on option 0, the neutral one is 1
+     desk 0 week 5: a meter moved on a desk that never answers
+     desk 0 week 6: a meter moved on a desk that never answers
+   FAIL 6570 expiry breaks on 20 silent desks
+   FAIL the settled line reads "📨 Your assistant dealt with it (Act on it)."
+   ok silent desks were dealt 2686 cards, 44.8 times the 60 of the same pack without expiry, 270 in the tenth season
+     desk 0: e2-2030-w0 settled on option 0, auto true
+     desk 0 week 2: a meter moved on a desk that never answers
+     desk 0 week 3: a meter moved on a desk that never answers
+     desk 0 week 4: a meter moved on a desk that never answers
+     desk 0: e4-2030-w1 settled on option 0, auto true
+     desk 0 week 5: a meter moved on a desk that never answers
+   FAIL 6275 expiry breaks on a clock that falls every 20 weeks
+     desk 0 week 4: t4-2030-w0 listed with auto true on option 0
+     desk 0 week 7: t7-2030-w0 listed with auto true on option 0
+     desk 0 week 8: t4-2030-w4 listed with auto true on option 0
+     desk 0 week 11: t7-2030-w4 listed with auto true on option 0
+     desk 0 week 16: t7-2030-w9 listed with auto true on option 0
+     desk 0 week 19: t7-2030-w12 listed with auto true on option 0
+   FAIL 1559 weeks where the settled list and the desk disagree
+   ok a card whose def lost its expiry stays open for the manager
+   ok src/data/gmInbox/index.ts: 0 expiring cards, src/components/front-office-shared/GmInboxPanel.tsx calls gmExpiredLine (it must before any of its cards expires)
+8) Neutral: every card of every pack off the baseline has an option that moves nothing, and every pack check holds
+9) Season clock: a card is held out exactly as careerEventDeck holds it; the week clock is back after exactly N
+10) Share and reach: every card of every pack reached over 1,000 seasons, no card above its pack's measured ceiling
+11) Registry: every option prints exactly the keys it moves, by exactly the amounts, and bind refuses each breakage
+12) Legal: every pack narrated in roles, slots only in words, and a tagged card never lands on a real man
+
+runtime 0.5 s
+simEventDeck: 4 failures, red sections 7 (CONTROL=expirefx fired)

@@ -1,0 +1,27 @@
+simEventDeck: 7 packs (nfl, nba, mlb, nhl, college, gym, afl), CONTROL=fxdrop
+1) Replay: 7 GM packs, seeds 1, 2, 3, drives FLEET, SILENT, STUBBORN, FALLEN, 10 seasons a desk
+2) Same seed, same deck; a JSON round trip and repairGmInbox between every two weeks change nothing
+3) Weights: equal weights deal the recording, and a weight is a share of the draw, never a rank
+4) Story: never two of one story inside its cooldown or in one week, a one shot story once
+5) Subject rest: no subject inside its rest or twice in a week, the rest book born pruned
+6) Texts: wordings move no deal and no draw, every wording comes up at its share, a key reads the same words
+7) Expiry: an open card is settled at exactly w plus expires on its neutral option, nothing moves, the deck never freezes
+8) Neutral: every card of every pack off the baseline has an option that moves nothing, and every pack check holds
+9) Season clock: a card is held out exactly as careerEventDeck holds it; the week clock is back after exactly N
+10) Share and reach: every card of every pack reached over 1,000 seasons, no card above its pack's measured ceiling
+11) Registry: every option prints exactly the keys it moves, by exactly the amounts, and bind refuses each breakage
+     r1 "Back the plan": prints [Board trust +2, Board confidence +3], moved [Board trust +2]
+     r2 "Sign the extension": prints [Budget -$2M, Transfer kitty -$1.5M], moved [Budget -$2M]
+     r3 "Drop him": prints [Dressing room -1, Your striker form -2, Your striker suspended 2 weeks], moved [Dressing room -1]
+     r3 "Back him": prints [Fans +1, Your striker form +1], moved [Fans +1]
+     r4 "Rest him": prints [Your keeper out 1 week, Your keeper rating +1, Your keeper suspended 1 week], moved [Your keeper out 1 week, Your keeper rating +1]
+     r5 "Fine him": prints [Transfer kitty +$0.5M], moved []
+     r6 "Make the recruiting call": prints [Recruit interest +2, Board confidence -1], moved [Recruit interest +2]
+   FAIL 7 registry breaks over 13 answered options
+   ok an answer whose key the seat never registered is refused and moves nothing
+   ok a label with unregistered keys prints them raw: Do it · mystery +2, Your keeper form -1
+   ok bind refuses an unregistered key, a built in name registered, a man on a plain key, a bare number on a key that names a man, a man off the targets, a value that is not a number, a key with no registry at all
+12) Legal: every pack narrated in roles, slots only in words, and a tagged card never lands on a real man
+
+runtime 0.0 s
+simEventDeck: 1 failure, red sections 11 (CONTROL=fxdrop fired)

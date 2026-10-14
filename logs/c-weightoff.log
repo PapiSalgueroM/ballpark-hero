@@ -1,0 +1,23 @@
+simEventDeck: 7 packs (nfl, nba, mlb, nhl, college, gym, afl), CONTROL=weightoff
+1) Replay: 7 GM packs, seeds 1, 2, 3, drives FLEET, SILENT, STUBBORN, FALLEN, 10 seasons a desk
+   84 rows, 72509 events dealt, 267577 deck draws, 296 repeat ids suffixed on FALLEN desks (22.6 s)
+   the recording: base 8fea14e2, gmInbox.ts blob 0055dbd1, drive baf7540a6deb, 84 rows
+   ok all 84 rows byte equal to the base engine's recording (desk states, ids, answer lines, deck draws, deals)
+2) Same seed, same deck; a JSON round trip and repairGmInbox between every two weeks change nothing
+3) Weights: equal weights deal the recording, and a weight is a share of the draw, never a rank
+   ok every card at weight 1: 7 FLEET rows byte equal to the recording
+   ok every card at weight 2.5: 7 FLEET rows byte equal to the recording
+   FAIL FX_WEIGHT (weights 1 and 3): the light card took 0.4983 of 10000 deals (band 0.23 to 0.272)
+   ok FX_WEIGHT two a week (weights 1, 3 and 2) over 5000 weeks: 0 weeks dealt one card twice, 0 weeks dealt other than two; shares 0.334, 0.330, 0.336
+4) Story: never two of one story inside its cooldown or in one week, a one shot story once
+5) Subject rest: no subject inside its rest or twice in a week, the rest book born pruned
+6) Texts: wordings move no deal and no draw, every wording comes up at its share, a key reads the same words
+7) Expiry: an open card is settled at exactly w plus expires on its neutral option, nothing moves, the deck never freezes
+8) Neutral: every card of every pack off the baseline has an option that moves nothing, and every pack check holds
+9) Season clock: a card is held out exactly as careerEventDeck holds it; the week clock is back after exactly N
+10) Share and reach: every card of every pack reached over 1,000 seasons, no card above its pack's measured ceiling
+11) Registry: every option prints exactly the keys it moves, by exactly the amounts, and bind refuses each breakage
+12) Legal: every pack narrated in roles, slots only in words, and a tagged card never lands on a real man
+
+runtime 28.4 s
+simEventDeck: 1 failure, red sections 3 (CONTROL=weightoff fired)

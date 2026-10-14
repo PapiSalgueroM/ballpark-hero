@@ -1,0 +1,24 @@
+simEventDeck: 7 packs (nfl, nba, mlb, nhl, college, gym, afl), CONTROL=heavy
+1) Replay: 7 GM packs, seeds 1, 2, 3, drives FLEET, SILENT, STUBBORN, FALLEN, 10 seasons a desk
+2) Same seed, same deck; a JSON round trip and repairGmInbox between every two weeks change nothing
+3) Weights: equal weights deal the recording, and a weight is a share of the draw, never a rank
+4) Story: never two of one story inside its cooldown or in one week, a one shot story once
+5) Subject rest: no subject inside its rest or twice in a week, the rest book born pruned
+6) Texts: wordings move no deal and no draw, every wording comes up at its share, a key reads the same words
+7) Expiry: an open card is settled at exactly w plus expires on its neutral option, nothing moves, the deck never freezes
+8) Neutral: every card of every pack off the baseline has an option that moves nothing, and every pack check holds
+9) Season clock: a card is held out exactly as careerEventDeck holds it; the week clock is back after exactly N
+10) Share and reach: every card of every pack reached over 1,000 seasons, no card above its pack's measured ceiling
+   FAIL nfl: nfl_fan_night took 31.7% of 3283 deals, ceiling 22.4%
+   ok nba: all 8 cards reached in 2308 deals, the top card nba_jersey_night at 27.2% (ceiling 29.8%)
+   ok mlb: all 8 cards reached in 2535 deals, the top card mlb_giveaway at 26.2% (ceiling 28.8%)
+   ok nhl: all 8 cards reached in 2780 deals, the top card nhl_line_juggle at 25.3% (ceiling 27.8%)
+   ok college: all 8 cards reached in 3321 deals, the top card col_game_day_visit at 28.0% (ceiling 30.5%)
+   ok gym: all 6 cards reached in 2833 deals, the top card gym_six_am_kid at 33.9% (ceiling 36.7%)
+   ok afl: all 6 cards reached in 2193 deals, the top card afl_sore_midfielder at 35.0% (ceiling 37.4%)
+   reach by position: no pack the kit knows names a reachBy fact yet
+11) Registry: every option prints exactly the keys it moves, by exactly the amounts, and bind refuses each breakage
+12) Legal: every pack narrated in roles, slots only in words, and a tagged card never lands on a real man
+
+runtime 3.3 s
+simEventDeck: 1 failure, red sections 10 (CONTROL=heavy fired)
