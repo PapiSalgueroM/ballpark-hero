@@ -1177,6 +1177,9 @@ export function LiveSimScreen({
           big = at > 0
             ? { segs: [{ t: 'Sub: ' }, named(side, e.text.slice(0, at)), { t: ' on for ' }, named(side, e.text.slice(at + 8))], club, tone: 'none' }
             : { segs: [{ t: `Sub: ${e.text}` }], club, tone: 'none' };
+          /* Round 1331: a change at the break before extra time is told on the line under the pitch, so the
+             extra time banner (and the aggregate on a second leg) keeps its place as the stage opens. */
+          if (liveNow?.et && e.minute === liveNow.et.from && !e.plus) { small = big.segs; big = null; }
           break;
         }
         case 'shot':
