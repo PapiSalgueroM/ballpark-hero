@@ -1,0 +1,5 @@
+treeWithoutMerge: 39178e7cc1685bc8a1e5a1c8bf759a9094b46128, 89cb6f71 without f14ec63a; conflicts kept from 89cb6f71: src/pages/WhatsNew.tsx
+base 39178e7cc1685bc8a1e5a1c8bf759a9094b46128 (this head without f14ec63a), differs in: src/components/club-manager/CalendarScreen.tsx src/components/club-manager/FinancesScreen.tsx src/components/club-manager/MetersStrip.tsx src/components/club-manager/TrainingScreen.tsx src/hooks/useArrivalTop.ts src/hooks/useRevealScroll.ts src/lib/clubManagerHubLines.ts src/pages/ClubManager.tsx src/test/calendarCurrentDate.test.tsx src/test/clubManagerHubLines.test.ts src/test/useArrivalTop.test.tsx 
+/tmp/wt-4174
+served on 4174: 200
+/tmp/wt-4174

@@ -1,0 +1,14 @@
+sim first: PASS agent review product and proof source bytes held.
+PASS 320-cousin 164 checks
+PASS 320-shark 158 checks
+PASS 320-super 158 checks
+PASS 320-self 158 checks
+PASS 390-cousin 159 checks
+PASS 390-shark 158 checks
+PASS 390-super 158 checks
+PASS 390-self 158 checks
+PASS 1280-cousin 159 checks
+PASS 1280-shark 158 checks
+PASS 1280-super 158 checks
+PASS 1280-self 158 checks
+Soccer agent review native 1904 checks,12 journeys,3 copied observation controls,0 failures.
