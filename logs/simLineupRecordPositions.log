@@ -1,0 +1,4 @@
+Actual frontend and handler: 450 canonical club/nation pairs, 1440 normalized-map requests.
+Generated identity/cache/error cases: 30; original model calls 1707, current 1409.
+Measured newly verified requests 304; narrowed requests 6; three effective faults and whole source/compiled/runtime undo.
+PASS simLineupRecordPositions
