@@ -1,0 +1,29 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+subs-all-base: git worktree add /tmp/subsbase dec9075b >/dev/null 2>&1 && SUBS_BASE=/tmp/subsbase node scripts/simCmSubs.mjs
+c-onesource: SUBS_CONTROL=onesource node scripts/simCmSubs.mjs
+c-oldcap: SUBS_CONTROL=oldcap node scripts/simCmSubs.mjs
+c-nostops: SUBS_CONTROL=nostops node scripts/simCmSubs.mjs
+c-htstop: SUBS_CONTROL=htstop node scripts/simCmSubs.mjs
+c-ht45: SUBS_CONTROL=ht45 node scripts/simCmSubs.mjs
+c-yearplus: SUBS_CONTROL=yearplus node scripts/simCmSubs.mjs
+c-etbreak: SUBS_CONTROL=etbreak node scripts/simCmSubs.mjs
+c-cutover: SUBS_CONTROL=cutover node scripts/simCmSubs.mjs
+c-pressedge: SUBS_CONTROL=pressedge node scripts/simCmSubs.mjs
+c-pressold: SUBS_CONTROL=pressold node scripts/simCmSubs.mjs
+c-opproom: SUBS_CONTROL=opproom node scripts/simCmSubs.mjs
+c-coachall: SUBS_CONTROL=coachall node scripts/simCmSubs.mjs
+c-legacyleak: git worktree add /tmp/subsbase2 dec9075b >/dev/null 2>&1 && SUBS_BASE=/tmp/subsbase2 SUBS_CONTROL=legacyleak node scripts/simCmSubs.mjs
+c-nodate: git worktree add /tmp/subsbase3 dec9075b >/dev/null 2>&1 && SUBS_BASE=/tmp/subsbase3 SUBS_CONTROL=nodate node scripts/simCmSubs.mjs
+dailyDeals: node scripts/simDailyDeals.mjs
+dd-rulesall: DAILY_DEALS_CONTROL=rulesall node scripts/simDailyDeals.mjs
+appealIsolation: node scripts/simManagerAppealIsolation.mjs
+leagueRules: node scripts/simCmLeagueRules.mjs
+era2020: node scripts/simEra2020.mjs
+unit: node_modules/.bin/vitest run src/lib/clubManagerSubsRule.test.ts --testTimeout=300000
+noRival: node scripts/simNoRivalNames.mjs
+anchors: node scripts/simHarnessAnchors.mjs
+storageWrites: node scripts/simStorageWrites.mjs
+liveSimMotion: node scripts/simLiveSimMotion.mjs
+quickSubsAll: CM_QUICK_SUBS_CONTROL=all node scripts/simCmQuickSubs.mjs
+trustCopy: node scripts/simTrustCopy.mjs
+guideHeadings: node scripts/simGuideHeadings.mjs
