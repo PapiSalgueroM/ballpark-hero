@@ -1,0 +1,17 @@
+reviews exit=0 5s | simSoccerCareerLifeReviews normal: green. Exact causal outcome and source guards passed.
+reviews-ctl-missing exit=0 4s | FIRED-OK
+reviews-ctl-priority exit=0 3s | FIRED-OK
+reviews-ctl-effect exit=0 3s | FIRED-OK
+routine exit=0 5s | simSoccerCareerRoutineEvents normal: green. All exact outcome and source guards passed.
+vitest exit=0 40s |    Duration  39.83s (transform 5.17s, setup 408ms, collect 12.27s, tests 40.44s, environment 2.89s, prepare 697ms)
+simCareerLife exit=0 22s | simCareerLife: green. Every peak is reachable, the critic has an opinion and it is about the football, and nothing about either of them is on the save.
+tsc exit=0 72s | 
+simCareerStory exit=0 27s | simCareerStory: GREEN, 96 careers keep every season's lines in order, draw nothing and stay inside the size bands
+simCareerLifeCooldowns exit=0 47s | simCareerLifeCooldowns: green. No event repeats inside its cooldown, every new event fires, the rate held, and the catalog has two real choices everywhere.
+simNoInventedQuotes exit=0 29s | simNoInventedQuotes: green. No real player is quoted or accused anywhere.
+simHarnessAnchors exit=0 47s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simCareerProgramme exit=0 73s | Career programme:50 original/compatibility/full product season pairs with exact RNG,240 opted gameplay seasons,21 effective loaded faults,164 unchanged original chance ou
+simCareerDilemmaReach exit=0 58s | simCareerDilemmaReach: all green
+worldTruth exit=0 62s | simSoccerWorldTruth: OK, every section green
+simSoccerDeckFairness exit=0 51s | simSoccerDeckFairness: all sections green
+simCreation exit=0 285s | ALL CREATION CHECKS PASSED
