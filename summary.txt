@@ -1,0 +1,8 @@
+build exit=0 32s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+headsha exit=0 0s | 6be86d528 Round BFG: Round 1355's stat rewards test builds its boundary engine inside the checkout
+vitest-stat exit=0 3s |    Duration  3.27s (transform 1.57s, setup 115ms, collect 2.61s, tests 1.21s, environment 718ms, prepare 272ms)
+playSoccerCareerPendingMorale exit=1 98s | ISSUE pickerHeld: proof inputs changed or were never qualified.
+playSoccerCareerPendingPopularity exit=1 56s | ISSUE pickerHeld: proof inputs changed or were never qualified.
+playSoccerCareerDocumentaryReview exit=1 9s | ISSUE pickerHeld: proof input changed or never qualified.
+playSoccerCareerSavedLoan exit=1 18s | ISSUE pickerHeld: proof input changed or never qualified.
+playSoccerCareerBuildLazy exit=0 32s | lazyCheck FIXED: three healthy creator flows load the editor on Customize, with actual failed-chunk recovery and omission control.

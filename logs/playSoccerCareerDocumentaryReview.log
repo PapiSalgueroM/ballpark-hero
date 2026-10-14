@@ -1,0 +1,11 @@
+Prepared 9 declared font dependencies for local fulfillment.
+prepInstalled: 521 installed locked versions written to /home/runner/work/ballpark-hero/ballpark-hero/w-playSoccerCareerDocumentaryReview
+simSoccerCareerDocumentaryReview normal: green.
+Soccer documentary browser: failed; 108 checks, 0 played, 0 controls, 0 originals, 5 failures, 1 setup failures.
+issues: status=failed checks=108 failures=5 setup=1
+ISSUE Error: 631-facts: fields beyond disclosed actual picker entry changed. at setup (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playSoccerCareerDocumentaryReview.mjs:69:103) at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playSoccerCareerDocumentaryReview.mjs:391:5
+ISSUE toolsHeld: proof input changed or never qualified.
+ISSUE installedHeld: proof input changed or never qualified.
+ISSUE distHeld: proof input changed or never qualified.
+ISSUE fontsHeld: proof input changed or never qualified.
+ISSUE pickerHeld: proof input changed or never qualified.
