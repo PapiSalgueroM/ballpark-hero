@@ -1,0 +1,32 @@
+# Release BD gate, lane P4: the four pieces' plain lines and controls
+#!playwright
+simCareerAcademy: node scripts/simCareerAcademy.mjs
+simCareerCleanSheets: node scripts/simCareerCleanSheets.mjs
+simCareerDilemmaReach: node scripts/simCareerDilemmaReach.mjs
+simCareerEngaged: node scripts/simCareerEngaged.mjs
+simCareerEras: node scripts/simCareerEras.mjs
+simCareerFacts: node scripts/simCareerFacts.mjs
+simCareerLife: node scripts/simCareerLife.mjs
+simCareerMoments: node scripts/simCareerMoments.mjs
+simCareerNoDeadEnd: node scripts/simCareerNoDeadEnd.mjs
+simCareerPositionRatings: node scripts/simCareerPositionRatings.mjs
+simClubManagerBudget: node scripts/simClubManagerBudget.mjs
+simClubManagerFacilities: node scripts/simClubManagerFacilities.mjs
+simClubManagerFinances: node scripts/simClubManagerFinances.mjs
+simClubManagerScore: node scripts/simClubManagerScore.mjs
+simCmFixtureFleet: node scripts/simCmFixtureFleet.mjs
+simEraBakeExtend: node scripts/simEraBakeExtend.mjs
+simFootleKitNumbers: node scripts/simFootleKitNumbers.mjs
+simGmStaff: node scripts/simGmStaff.mjs
+simInternational: node scripts/simInternational.mjs
+simLeaderboardCaps: node scripts/simLeaderboardCaps.mjs
+simManagerWorldContinuity: node scripts/simManagerWorldContinuity.mjs
+simOpposition: node scripts/simOpposition.mjs
+simRarityPools: node scripts/simRarityPools.mjs
+simRevealScroll: node scripts/simRevealScroll.mjs
+simSchemaNames: node scripts/simSchemaNames.mjs
+simScoreShown: node scripts/simScoreShown.mjs
+simSoccerGridLabels: node scripts/simSoccerGridLabels.mjs
+simStartingXi: node scripts/simStartingXi.mjs
+simTraining: node scripts/simTraining.mjs
+simWilderness: node scripts/simWilderness.mjs
