@@ -1,3 +1,40 @@
+## Release BD LIVE, 2026-10-14 10:14 EDT: Soccer Career stops inventing results for real people and lands every career on your player, Club Manager plays five substitutions, the shared deck gets its pack rules
+
+Claude lane (session H). main 30d2a0ea, deployment 459ba8fb-022b-49ca-9a99-4ec505704a9d, entry index-CudW2kSr.js (was index-BFkO1jyo.js, Release BC,
+published 18:23 on 2026-10-13). Proof at 10:16: x-deployment-id carries 459ba8fb from 10:15:47; /whats-new carries the three new entries ("Soccer Career: one tab at a time, and a new career opens on your player", "Soccer Career: your world stops making things up", "Club Manager: five changes where the real leagues allowed them"); /, /soccer-career, /club-manager, /manager-hot-seat, /deadline-day, /soccer-career-manager and /whats-new answer 200; a browser read no console error on /club-manager and /soccer-career, entry index-CudW2kSr.js.
+
+The second answer to the owner's ask of 2026-10-12 (fix and deepen the manager and career games), four rounds of the
+depth program, each built, reviewed adversarially, fixed and closed, then joined on release-bd-gate (finish-BDG.md):
+- Round 1329. Soccer Career's world tells the truth: Player of the Month goes to the month's best by position and form
+  (a floor of 10 apps and a 6.8 rating, the month's true year), and the game no longer invents champions, transfers or
+  top scorers for real people in seasons or summers that happened (LAST_PLAYED_SEASON 2025, LAST_PLAYED_SUMMER 2026,
+  each with two sources); real era stars stay at their era club; the phone quiz asks about the world only for future
+  seasons and adds questions about your own story.
+- Round 1330. Every Soccer Career career lands on your player; a second tab can no longer replace a season you played
+  (Round 1323's fence, bound to Soccer Career); toasts and the action bar fixed.
+- Round 1331. Club Manager plays five substitutions where the competition allows five (three where it does not, two
+  sourced), the opponent uses its changes, the press asks questions that fit the fixture; Hot Seat moves to the new
+  rules from 2026-10-24.
+- Round 1332. The shared deck, part two: the rules every event pack needs (bytes, save, registry, legal, economy) and
+  the inbox panel half. Nothing a player sees yet.
+- The lead's fix: the "your save moved" notice answers its first Reload press even with a dialog open.
+
+GATE ON GITHUB RUNNERS on b8ae21b2 (the join 52dc4828 plus the gate prep: /soccer-career 832 with its cause), eleven requests sent 07:0x to 07:26: lane A 93 of 95 (simNationalityFlags and simSafari crashed in 0 s reading a parallel control's temp copy, src/lib/season/__control_soccer.ts, deleted mid scan: green alone on rBD-rgRE), lane B 103 of 103, lane C 91 of 91 (the whole vitest suite, 7,939 tests in 512 files), the sweep and weight lane 20 of 20, the browser lanes 32 of 33 (playSoccerCareer check 6, known) and 38 of 38, the other lane's walks 20 of 20, the kits 45 of 46 (farewell-native ECONNRESET: rBD-rgRE's font fetch hit ENETUNREACH so it never ran, green alone on rBD-rgRE2, 1,343 checks), the rule lane 125 of 128 (two EXPECT-RED controls fired as designed, playCmLeagueLeaders known), the served walks 22 of 22, the live pass 18 of 18; rBD-pub on the build output head 20 of 20
+Budget moved: /soccer-career 832 (831.0K measured: Round 1329 +1.3K, Round 1330 +1.5K). Build output: three files: /whats-new (the three entries), scripts/data/lastmod.json and the sitemap (seven pages that changed only their head tag order stay as committed).
+
+Known and left: the reds already known on main (playSoccerCareer check 6 on a blocked runner, simCreation and simMoney on save size, simGmStaff, playCmLeagueLeaders, simCareerDevelopment's control all, the three live database fences, playCorruptSaves on /hall-of-champions, managerWorldBrowser1077's auth probe); /soccer-career sits at 831.0K of 832K; SaveSize 200,686 of 203,000; sendGate.sh exited 4 after its last send with no waiter output (cause not found, every lane had been sent).
+
+### For Codex
+1. Release BD is on main at 30d2a0ea and live. It holds no pull request of yours. Release BE is this lane's join of your
+   ready packets, cut from this main: PR251, PR259, PR250 with PR257 and PR262, PR266, PR272, PR267, PR268, and PR270
+   at 2083b375 (not its later tail fallback, which has no green run yet). The Soccer Career chain (PR249 to PR265) follows
+   once PR270 is in. PR271, PR269, PR263, PR223 and PR227 wait. Please do not force push those branches while BE joins
+   them; the boundary of 2026-10-12 stands.
+2. Round 1329 is the rule for every lane from now on: no simulation ever moves a real man or prints a result for a real
+   season or summer that happened unless it is sourced; the player's own competitions are his story.
+3. The eighth inverse (scripts/lib/careerWorldTruth1329.mjs) is wired into the sixteen importers of the seventh,
+   including your kits: a later edit of the four files it covers must regenerate it (results-g\r1329-tools).
+
 ## Release BC LIVE, 2026-10-13 18:23 EDT: one tab can no longer wipe a Club Manager save, Club Manager's world remembers your deals, its tables, copy and hub fixed, Soccer Career's events drawn fairly, the shared event deck, the college athletic director
 
 Claude lane (session H). main c5534342, deployment 3cf3a2d7-244e-41ce-8c27-a89cebafcfe6, entry index-BFkO1jyo.js (was index-DaI30mwt.js, Release BB,
