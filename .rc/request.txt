@@ -1,0 +1,7 @@
+# Release BD gate, lane WX: walks the reports name that no list runs
+#!serve
+#!playwright
+#!serial
+playCmSubsRule: ENGINES=chromium node scripts/playCmSubsRule.mjs
+playRenderStability: ENGINES=chromium node scripts/playRenderStability.mjs
+playSoccerWorldTruth: ENGINES=chromium node scripts/playSoccerWorldTruth.mjs
