@@ -13,6 +13,8 @@ import { build } from 'esbuild';
 import { inverseAwardGenerations, AWARD_GENERATIONS_ADDITIONS } from '../lib/careerAwardGenerations1318.mjs';
 /* Round 1327: the event deck draws on a keyed stream and the paper picks by weight, so a season makes other global draws from its paper on. Every node bundle of the tree takes that out first (scripts/lib/careerDeckFair1327.mjs), every row once, in order; the browser oracle stays the tree as built, like the page it is held to. */
 import { inverseDeckFair, DECK_FAIR_ADDITIONS } from '../lib/careerDeckFair1327.mjs';
+/* Round 1329: the world truth round (the month award, the phone's world, the quiz, the International panel) is taken out first, in front of Round 1327 (scripts/lib/careerWorldTruth1329.mjs), every row once, in order. */
+import { inverseWorldTruth, worldTruthReceiptProblem } from '../lib/careerWorldTruth1329.mjs';
 
 export const ROOT = process.cwd();
 export const BASE = 'd69a448ce830f8312af1eea252a3ae84b13bde9c';
@@ -52,7 +54,7 @@ export function evidence(name, value) {
   return name;
 }
 export async function bundleAgentReview({ original = false, patches = [], browser = false } = {}) {
-  const deckFair = [], loaded = [], faults = [], temp = fs.mkdtempSync(path.join(os.tmpdir(), 'soccer-agent-review-'));
+  const deckFair = [], worldTruth = [], loaded = [], faults = [], temp = fs.mkdtempSync(path.join(os.tmpdir(), 'soccer-agent-review-'));
   const file = path.join(temp, 'oracle.cjs');
   const entry = "export * as engine from './src/lib/soccerCareerEngine';export * as life from './src/lib/soccerCareerLife';" + (original ? '' : "export * as review from './src/lib/soccerAgentReview';export * as moments from './src/components/soccer-career/careerMoments';export * as reveal from './src/lib/soccerAwardReveal';");
   try {
@@ -69,7 +71,7 @@ export async function bundleAgentReview({ original = false, patches = [], browse
           if (!relative.startsWith('src/')) return;
           const raw = original ? execFileSync('git', ['show', BASE + ':' + relative], { maxBuffer: 30 * 1024 * 1024 }) : fs.readFileSync(args.path);
           let contents = raw.toString('utf8').replaceAll('\r\n', '\n');
-          if (!original && !browser) contents = inverseDeckFair(relative, contents, deckFair);
+          if (!original && !browser) contents = inverseDeckFair(relative, inverseWorldTruth(relative, contents, worldTruth), deckFair);
           if (!original && !browser && relative === 'src/lib/soccerCareerEngine.ts') {
             const rows = [];
             contents = inverseAwardGenerations(relative, contents, rows);
@@ -89,6 +91,7 @@ export async function bundleAgentReview({ original = false, patches = [], browse
     });
     assert.equal(faults.length, patches.length, 'Every fault reaches its compiled product source');
     assert.deepEqual(deckFair.map(row => row.addition), original || browser ? [] : DECK_FAIR_ADDITIONS, 'Round 1327 came out of every node bundle of the tree once, in order');
+    if (!original && !browser) assert.equal(worldTruthReceiptProblem(worldTruth), '', 'Round 1329 came out of every node bundle of the tree once, in order');
     return { value: browser ? result.outputFiles[0].text : createRequire(path.join(ROOT, 'package.json'))(file), loaded, faults };
   } finally { fs.rmSync(temp, { recursive: true, force: true }); }
 }

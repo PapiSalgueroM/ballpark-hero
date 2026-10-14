@@ -131,6 +131,9 @@ import ShareButtons from "@/components/game/ShareButtons";
 import { FlagImg, FlagFromEmoji, TextWithFlags } from "@/components/FlagImg";
 import { shareResult } from "@/lib/share";
 import { useRevealScroll } from "@/hooks/useRevealScroll";
+import { saveFence } from '@/lib/saveFence';
+import { useSaveFenceWatch } from '@/hooks/useSaveFenceWatch';
+import { useArrivalTop } from '@/hooks/useArrivalTop';
 import { TournamentCard, InternationalHistoryTile } from "@/components/soccer-career/InternationalPanel";
 import { beatStyle, debutMomentKey, legacyMomentKey, rivalryMomentKey, settleLoadedMoments, useCareerMoment } from "@/components/soccer-career/careerMoments";
 import { isSoccerCareerSave, parseSoccerCareerSave, serializeSoccerCareerSave } from '@/lib/soccerCareerSave';
@@ -887,6 +890,10 @@ function useFooterLift(enabled: boolean): number {
 
 /* ─── Main Component ─── */
 const SAVE_KEY = "soccerCareerSave";
+/* Round 1330: the page's own toasts sit at the top centre, clear of the bar,
+   the Training and Phone buttons and the choices a card reveals under them. */
+const PAGE_TOAST = { position: "top-center" } as const;
+const SaveMovedNotice = lazy(() => import('@/components/SaveMovedNotice').catch(() => { reloadToRetryChunk(); return new Promise<never>(() => undefined); }));
 
 export default function SoccerCareer() {
   const { user } = useAuth();
@@ -911,6 +918,13 @@ export default function SoccerCareer() {
      picker changes, and it costs nothing when nobody touches it. */
   const [, setCurrencyTick] = useState(0);
   const [restoredSave] = useState(() => {
+    /* Round 1330: one tab wins (src/lib/saveFence.ts). Adopt the save's
+       generation BEFORE it is read, so a write another tab lands between the
+       two leaves this page stale, never the other one. Never released: nothing
+       on this page writes the save once the page has gone, and the next mount
+       adopts again before it reads, while a release would turn a later write
+       of a remounted or retried tree into an unchecked claim. */
+    saveFence.adopt(SAVE_KEY);
     let saved: string | null;
     try { saved = localStorage.getItem(SAVE_KEY); } catch { return { career: null, invalid: false }; }
     if (saved === null) return { career: null, invalid: false };
@@ -1016,17 +1030,30 @@ export default function SoccerCareer() {
     setClubsLoading(false);
   }, []);
 
+  /* Round 1330: true once another tab has played this career on. Every write
+     is refused from then on and the page covers itself with a notice that
+     asks for a reload. Never saveFailed for it: the browser is fine, the
+     career is just newer somewhere else. */
+  const { moved: saveMoved, check: checkSaveMoved } = useSaveFenceWatch(SAVE_KEY);
   const saveCurrentCareer = useCallback(() => {
     if (!career) { setSaveFailed(false); return; }
-    try {
-      localStorage.setItem(SAVE_KEY, serializeSoccerCareerSave(career));
-      setSaveFailed(false);
-    } catch { setSaveFailed(true); }
+    const saved = saveFence.write(SAVE_KEY, function saveCareer() {
+      try {
+        localStorage.setItem(SAVE_KEY, serializeSoccerCareerSave(career));
+        return true;
+      } catch { return false; }
+    });
+    if (saved === 'moved') { checkSaveMoved(); return; }
+    if (saved === 'failed') { setSaveFailed(true); return; }
+    setSaveFailed(false);
   }, [career]);
   useEffect(() => { saveCurrentCareer(); }, [saveCurrentCareer]);
   useEffect(() => {
-    if (saveFailed) toast.error("Your latest progress could not be saved. Keep this tab open, then try again.");
+    if (saveFailed) toast.error("Your latest progress could not be saved. Keep this tab open, then try again.", PAGE_TOAST);
   }, [saveFailed]);
+  /* Round 1330: a press can land before the other tab's storage event does, so
+     a toast may already be up claiming something the save refused. */
+  useEffect(() => { if (saveMoved) toast.dismiss(); }, [saveMoved]);
 
   const isFormValid = playerName.trim().length > 0 && nationality && position && era;
 
@@ -1051,14 +1078,20 @@ export default function SoccerCareer() {
     }
   }, [career?.seasons.length]);
 
+  /* Round 1330: Begin Career is a screen change the player did not scroll to,
+     so the hub lands on his player card (useArrivalTop, keyed by this count). */
+  const [arrivalCount, setArrivalCount] = useState(0);
   const handleBeginCareer = () => {
     // Guests can play; careers live in local state. Sign-in is only a nice-to-have.
     if (!previewStats || !isFormValid || clubs.length === 0 || rolledOvr === null) return;
     const startYear = ERAS.find(e => e.value === era)?.startYear ?? 2020;
     const newCareer = initCareer(playerName.trim(), nationality, position, era, previewStats, rolledOvr, startYear, clubs, appearance, rolledPot ?? undefined, physique, attrShape);
     setSaveError(false);
+    setArrivalCount(n => n + 1);
     setCareer(newCareer);
-    toast.success(`Joined ${newCareer.currentClub}!`);
+    /* Round 1330: no "Joined" toast. At the top of the landing view it sat over
+       the player's name (measured at 320 by playSoccerLanding), and the hub's
+       club card names the club inside that same view at every size. */
   };
 
   /* Round 1047: the stars from this season's Season Centre moments bank before
@@ -1122,7 +1155,7 @@ export default function SoccerCareer() {
     setCareer(next);
     // Round 530: the slip prints the engine's wage, after the agent's cut, never the offer's.
     setSignedNote({ kind: "transfer", club: next.currentClub, years: next.contractYearsLeft, wage: next.weeklyWage, forCareer: next });
-    toast.success(`Signed with ${offer.club.name}!`);
+    toast.success(`Signed with ${offer.club.name}!`, PAGE_TOAST);
   };
 
   const handleDismissSummary = () => {
@@ -1142,7 +1175,7 @@ export default function SoccerCareer() {
        the new club and Continue is the only button, so "Staying at" plus the
        new club's name read as if nothing had happened. That card says where
        he went; it gets no toast. */
-    if (career.transferSituation?.type !== "club_move") toast("Staying at " + career.currentClub);
+    if (career.transferSituation?.type !== "club_move") toast("Staying at " + career.currentClub, PAGE_TOAST);
   };
 
   const onAcceptLoan = (offer: ContractOffer) => {
@@ -1160,7 +1193,7 @@ export default function SoccerCareer() {
        the toast go together, so a refusal cannot announce a move either. */
     if (!career.loan && next.loan && next.currentClub === offer.club.name) {
       setSignedNote({ kind: "loan", club: next.currentClub, years: 1, wage: next.weeklyWage, from: next.loan.parentClub, forCareer: next });
-      toast.success(`Off on loan to ${offer.club.name} for the season`);
+      toast.success(`Off on loan to ${offer.club.name} for the season`, PAGE_TOAST);
     }
   };
 
@@ -1169,7 +1202,7 @@ export default function SoccerCareer() {
     const next = signExtension(career);
     setCareer(next);
     setSignedNote({ kind: "extension", club: next.currentClub, years: next.contractYearsLeft, wage: next.weeklyWage, forCareer: next });
-    toast.success("Contract extended!");
+    toast.success("Contract extended!", PAGE_TOAST);
   };
 
   const handleRequestTransfer = () => {
@@ -1180,7 +1213,7 @@ export default function SoccerCareer() {
     }
     const next = requestTransferDecision(career, clubs);
     if (next.phase === "playing" && !next.transferSituation) {
-      toast.error("No clubs are interested right now. You must stay.");
+      toast.error("No clubs are interested right now. You must stay.", PAGE_TOAST);
     }
     setCareer(next);
   };
@@ -1192,7 +1225,7 @@ export default function SoccerCareer() {
     const result = applyEventChoice(career, choiceIndex, clubs);
     setCareer(result);
     const consequence = soccerEventChoiceConsequence(career, event.id, choiceIndex, event.choices[choiceIndex].consequence);
-    toast(event.id === 16 && choiceIndex === 1 ? moneyLine(consequence) : consequence);
+    toast(event.id === 16 && choiceIndex === 1 ? moneyLine(consequence) : consequence, PAGE_TOAST);
   };
 
   const handleDismissDebut = () => {
@@ -1222,7 +1255,7 @@ export default function SoccerCareer() {
   const handleRetireInternational = () => {
     if (!career) return;
     setCareer(retireFromInternational(career));
-    toast("Retired from international football");
+    toast("Retired from international football", PAGE_TOAST);
   };
 
   const handleReturnInternational = () => {
@@ -1293,9 +1326,9 @@ export default function SoccerCareer() {
     if (result !== career) {
       const item = SPENDING_ITEMS.find(i => i.id === itemId);
       setCareer(result);
-      toast.success(item ? `${item.emoji} ${item.name} is yours` : "Done");
+      toast.success(item ? `${item.emoji} ${item.name} is yours` : "Done", PAGE_TOAST);
     } else {
-      toast.error("You cannot buy that right now");
+      toast.error("You cannot buy that right now", PAGE_TOAST);
     }
   };
 
@@ -1308,10 +1341,10 @@ export default function SoccerCareer() {
       if (!prev) return prev;
       const res = applyMoneyAction(prev, action);
       if (res.state === prev) {
-        toast.error("That one will not go through");
+        toast.error("That one will not go through", PAGE_TOAST);
         return prev;
       }
-      if (res.toast) toast.success(res.toast);
+      if (res.toast) toast.success(res.toast, PAGE_TOAST);
       return res.state;
     });
   }, []);
@@ -1321,7 +1354,7 @@ export default function SoccerCareer() {
     const result = applySocialMediaAction(career, actionId);
     setCareer(result);
     const action = SOCIAL_MEDIA_ACTIONS.find(a => a.id === actionId);
-    if (action) toast(action.emoji + " " + action.label);
+    if (action) toast(action.emoji + " " + action.label, PAGE_TOAST);
   };
 
   const handleCoverAthlete = (accept: boolean) => {
@@ -1417,7 +1450,13 @@ export default function SoccerCareer() {
   }, []);
 
   const handleConfirmNewCareer = () => {
-    localStorage.removeItem(SAVE_KEY);
+    /* Round 1330: through the fence, so a tab another tab has moved on clears
+       nothing; a refusal keeps everything as it is, like Delete unusable save. */
+    const cleared = saveFence.write(SAVE_KEY, function clearCareer() {
+      try { localStorage.removeItem(SAVE_KEY); return true; } catch { return false; }
+    });
+    if (cleared === 'moved') { checkSaveMoved(); return; }
+    if (cleared === 'failed') { toast.error('Could not delete the save. Try again.', PAGE_TOAST); return; }
     setSaveError(false);
     setCareer(null);
     setPreviewStats(null);
@@ -1456,9 +1495,11 @@ export default function SoccerCareer() {
             'Preseason plan: choose development (+1 position skill after growth, 3 percentage points more injury risk), recovery (-1 skill, 4 points less risk), or balanced. Example: 20% injury risk becomes 23% or 16%, within existing limits. A serious injury or no appearances interrupts development; a move cancels the plan.',
             'Academy mentoring: the Youth Mentor event starts one generated player. Ten senior appearances at your shared club adds one mentoring year. Example: 12 appearances moves 0/3 to 1/3; six appearances pauses it. Three qualifying years complete it, a move ends it, and its history stays in the mentor tile.',
             ...STORY_ROLE_HELP_RULES,
+            'One tab at a time: the career plays in the newest tab you opened. An older tab asks you to reload. Example: open it in two tabs and play a season in the second; the first asks you to reload, and the reload shows that season.',
           ]} className={career ? "h-11 w-11 sm:h-auto sm:w-auto" : undefined} />
         </div>
         <main id="dukb-main" className="flex-1 w-full max-w-5xl mx-auto px-3 sm:px-4 py-4">
+          {saveMoved && <Suspense fallback={null}><SaveMovedNotice message="This career moved on in another tab. Reload to carry on." /></Suspense>}
           {career && saveFailed && (
             <div role="alert" data-soccer-save-status="failed" className="mb-4 rounded-xl border border-amber-500/40 bg-amber-500/10 p-3 text-sm sm:flex sm:items-center sm:gap-4">
               <p className="flex-1">Your latest progress could not be saved. Keep this tab open, then try again.</p>
@@ -1469,7 +1510,12 @@ export default function SoccerCareer() {
             <div role="alert" className="mb-4 rounded-xl border border-amber-500/40 bg-amber-500/10 p-4 space-y-3 text-sm">
               <p>We couldn't open this save. You can create a new player below. Your old save stays here until you begin a new career or delete it.</p>
               <Button variant="outline" onClick={() => {
-                try { localStorage.removeItem(SAVE_KEY); setSaveError(false); } catch { toast.error('Could not delete the save. Try again.'); }
+                const deleted = saveFence.write(SAVE_KEY, function deleteUnusableSave() {
+                  try { localStorage.removeItem(SAVE_KEY); return true; } catch { return false; }
+                });
+                if (deleted === 'moved') checkSaveMoved();
+                else if (deleted === 'written') setSaveError(false);
+                else toast.error('Could not delete the save. Try again.', PAGE_TOAST);
               }}>Delete unusable save</Button>
             </div>
           )}
@@ -1517,6 +1563,7 @@ export default function SoccerCareer() {
             <GameScreen
               career={career}
               clubs={clubs}
+              arrival={arrivalCount > 0 ? `begin-${arrivalCount}` : null}
               signedNote={signedNote && signedNote.forCareer === career ? signedNote : null}
               academyReport={academyReport}
               onAcademyFocus={handleAcademyFocus}
@@ -2978,7 +3025,10 @@ function FinancialPanel({ career, onCurrencyChange, onAgentChange }: { career: C
   return (
     <div className="bg-card border border-border rounded-xl p-4 space-y-3">
       <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">💰 Finances & Lifestyle</span>
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+      {/* Round 1330: retired, the grid has three tiles (no wage), so three
+          columns from sm up and, on a phone, Followers takes the whole row
+          rather than sitting alone beside an empty cell. */}
+      <div className={`grid grid-cols-2 ${career.phase === "retired" ? "sm:grid-cols-3" : "sm:grid-cols-4"} gap-3`}>
         <div className="text-center bg-muted/20 rounded-lg p-2">
           <div className={`text-lg font-black ${nwColor}`}>{formatNetWorth(career.netWorth)}</div>
           <div className="text-[9px] text-muted-foreground">Net Worth</div>
@@ -2989,16 +3039,19 @@ function FinancialPanel({ career, onCurrencyChange, onAgentChange }: { career: C
           </div>
           <div className="text-[9px] text-muted-foreground">Lifestyle</div>
         </div>
-        <div className="text-center bg-muted/20 rounded-lg p-2">
+        <div className={`text-center bg-muted/20 rounded-lg p-2 ${career.phase === "retired" ? "col-span-2 sm:col-span-1" : ""}`}>
           <div className="text-lg font-black text-blue-400">
             {formatFollowers(career.socialMediaFollowers)}
           </div>
           <div className="text-[9px] text-muted-foreground">📱 Followers</div>
         </div>
+        {/* Round 1330: a retired man earns no wage, so the retired screen shows none. */}
+        {career.phase !== "retired" && (
         <div className="text-center bg-muted/20 rounded-lg p-2">
           <div className="text-lg font-black text-emerald-400">{formatWage(career.weeklyWage)}</div>
           <div className="text-[9px] text-muted-foreground">Weekly Wage</div>
         </div>
+        )}
       </div>
 
       {/* Round 258: the currency picker, and the line that keeps it honest.
@@ -3784,7 +3837,9 @@ function SocialMediaActionCard({ career, onAction, onCoverAthlete, onDismiss }: 
 }
 
 /* ─── Game Screen ─── */
-function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSummary, onDismissNewspaper, onStay, onSignExtension, onRequestTransfer, onAcceptLoan, onEventChoice, onDismissDebut, onDismissWorldCup, onWorldCupSpeech, onRetireInternational, onReturnInternational, onDismissRivalryEvent, onDismissBallonDor, onBdorSpeech, onManualRetire, onPostRetirement, onAdvanceManager, onAcceptManagerOffer, onEndManager, onShare, onNewCareer, onOpenPhone, onSocialMediaAction, onCoverAthlete, onDismissSocialMedia, onMoralDilemmaChoice, onRehabChoice, onDismissMoralDilemma, onDismissAppeal, onAcceptRetirement, onDeclineRetirement, onAnnounceFarewell, onPunditAction, onEndPundit, onAdvanceOwner, onEndOwner, onCurrencyChange, onAgentChange, timelineRef, signedNote, academyReport, onAcademyFocus, onCareerPatch }: {
+function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSummary, onDismissNewspaper, onStay, onSignExtension, onRequestTransfer, onAcceptLoan, onEventChoice, onDismissDebut, onDismissWorldCup, onWorldCupSpeech, onRetireInternational, onReturnInternational, onDismissRivalryEvent, onDismissBallonDor, onBdorSpeech, onManualRetire, onPostRetirement, onAdvanceManager, onAcceptManagerOffer, onEndManager, onShare, onNewCareer, onOpenPhone, onSocialMediaAction, onCoverAthlete, onDismissSocialMedia, onMoralDilemmaChoice, onRehabChoice, onDismissMoralDilemma, onDismissAppeal, onAcceptRetirement, onDeclineRetirement, onAnnounceFarewell, onPunditAction, onEndPundit, onAdvanceOwner, onEndOwner, onCurrencyChange, onAgentChange, timelineRef, signedNote, academyReport, onAcademyFocus, onCareerPatch, arrival }: {
+  /** Round 1330: set once per Begin Career ("begin-" and a count), null otherwise; the hub lands on the player card when it changes. */
+  arrival?: string | null;
   career: CareerState;
   clubs: ClubData[];
   /** Round 530: the deal slip under the toast, already scoped to this career object by the page. */
@@ -3890,7 +3945,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
       /* the press drew a season he never played in (a ban year): say so
          instead of opening nothing */
       setCentreFor(null);
-      toast("📺 Nothing to watch week by week: you didn't play a game this season.");
+      toast("📺 Nothing to watch week by week: you didn't play a game this season.", PAGE_TOAST);
       return;
     }
     if (n > centreFor + 1 || n < centreFor || (career.phase === "playing" && n > centreFor)) setCentreFor(null);
@@ -3977,6 +4032,8 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
   const footerLift = useFooterLift(actionBarFloats);
   // Coming back out of the attributes screen lands at the top of the career page.
   const screenRef = useRevealScroll<HTMLDivElement>(attrsOpen ? "attrs" : "career");
+  /* Round 1330: Begin Career lands on the player card, once, before the first paint. */
+  const playerCardRef = useArrivalTop<HTMLDivElement>(arrival ?? null);
 
   /* Tile rule: the whole attribute tree takes over the screen with a back
      button rather than stacking two dozen more bars under the six. */
@@ -3996,7 +4053,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
           again at a narrower width. Below 480 the identity now takes its own
           full line and the buttons drop underneath, right aligned; from 480
           up the single row is exactly what it was. */}
-      <div className="flex flex-wrap items-center justify-between gap-2">
+      <div ref={playerCardRef} className="flex flex-wrap items-center justify-between gap-2">
         <div className="flex items-center gap-2.5 min-w-0 w-full min-[480px]:w-auto min-[480px]:flex-1">
           {/* Round 54: your face, on your career, everywhere */}
           {career.appearance && (
@@ -4009,10 +4066,15 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
                 a flex CONTAINER does nothing for the text inside it, so the
                 name was being crushed to two characters by the buttons on
                 the right of the same row. The flag holds its size, the name
-                takes the rest and truncates properly if it has to. */}
+                takes the rest and truncates properly if it has to.
+                Round 1330: the name wraps at every width (at any character,
+                for a 40 letter name with no space) and is never cut. It keeps
+                the truncate class, whose nowrap whitespace-normal overrides
+                (Tailwind emits whitespace after text overflow), because
+                simMobileChrome finds the name as span.truncate. */}
             <h1 className="text-xl sm:text-2xl font-black flex items-center gap-2 min-w-0">
               <FlagImg name={career.nationality} size={24} />
-              <span className="truncate min-w-0">{career.playerName}</span>
+              <span className="truncate whitespace-normal [overflow-wrap:anywhere] min-w-0">{career.playerName}</span>
             </h1>
             <p className="text-xs text-muted-foreground">{career.position} · Age {career.age} · <FlagImg name={career.nationality} size={12} showLabel /></p>
           </div>
@@ -4020,13 +4082,15 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
         <div className="flex items-center gap-2 ml-auto">
           {/* Round 159: his note, "the retire and new career buttons on my
               career are way too small". Real buttons now: bordered, readable,
-              44px tall on touch, still quiet enough not to fight the OVR. */}
+              44px tall on touch, still quiet enough not to fight the OVR.
+              Round 1330: h-11, the 44px this promised (h-10 was 40), now
+              that this Retire is the only one on the hub. */}
           {career.phase !== "retired" && career.phase !== "retirement_ceremony" && career.phase !== "post_retirement" && (
-            <Button onClick={() => setShowRetireConfirm(true)} variant="outline" className="text-xs font-bold px-3 h-10 border-border text-muted-foreground hover:text-red-400 hover:border-red-400/60">
+            <Button onClick={() => setShowRetireConfirm(true)} variant="outline" className="text-xs font-bold px-3 h-11 border-border text-muted-foreground hover:text-red-400 hover:border-red-400/60">
               🚪 Retire
             </Button>
           )}
-          <Button onClick={onNewCareer} variant="outline" className="text-xs font-bold px-3 h-10 border-border text-muted-foreground hover:text-red-400 hover:border-red-400/60">
+          <Button onClick={onNewCareer} variant="outline" className="text-xs font-bold px-3 h-11 border-border text-muted-foreground hover:text-red-400 hover:border-red-400/60">
             🔄 New Career
           </Button>
           <div className="text-center">
@@ -4721,6 +4785,11 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
       })()}
 
       {/* Action bar */}
+      {/* Round 1330: every phase's bar fits a 320 screen with AGE on it. Under
+          400 px (so 360 and 375 too, the commonest phones) the AGE tile is
+          narrower, the gaps, the side padding and the labels step down one
+          size and the decorative chevron goes. No label is cut or shortened
+          and none changes its name, and the bar stays one row. */}
       {/* Round 86: the bar only floats when it actually has buttons to offer.
           In button-less phases it stays inline, so no orphan AGE tile ever
           hovers over the page blocking clicks. That rule is untouched.
@@ -4732,15 +4801,15 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
           phone buttons because they were parked on the footer too. */}
       <div
         data-career-action-bar={actionBarFloats ? 'floating' : 'inline'}
-        className={`flex items-center gap-3 ${actionBarFloats ? 'fixed bottom-0 left-0 right-0 z-40 bg-background/95 backdrop-blur border-t border-border px-3 sm:px-4 py-3 max-w-5xl mx-auto' : ''}`}
+        className={`flex items-center gap-3 max-[399px]:gap-2 ${actionBarFloats ? 'fixed bottom-0 left-0 right-0 z-40 bg-background/95 backdrop-blur border-t border-border px-3 max-[399px]:px-2 sm:px-4 py-3 max-w-5xl mx-auto' : ''}`}
         style={actionBarFloats && footerLift ? { transform: `translateY(-${footerLift}px)` } : undefined}
       >
         {career.phase === "retired" ? (
           <div className="flex-1 flex gap-2">
-            <Button onClick={onShare} variant="outline" className="flex-1 h-12 text-sm font-bold">
+            <Button onClick={onShare} variant="outline" className="flex-1 h-12 text-sm font-bold max-[399px]:px-3 max-[399px]:text-xs">
               📤 Share Legacy
             </Button>
-            <Button onClick={onNewCareer} className="flex-1 h-12 text-base font-bold bg-emerald-600 hover:bg-emerald-500 text-black">
+            <Button onClick={onNewCareer} className="flex-1 h-12 text-base font-bold bg-emerald-600 hover:bg-emerald-500 text-black max-[399px]:px-3 max-[399px]:text-sm">
               ⚽ New Career
             </Button>
           </div>
@@ -4749,30 +4818,29 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
             {/* Round 112: when you are out of work you are not managing a
                 season, you are waiting for a phone call, and the button
                 should say which one of those is happening. */}
-            <Button onClick={onAdvanceManager} className="flex-1 h-12 text-base font-bold bg-emerald-600 hover:bg-emerald-500 text-black gap-2">
-              {career.managerState?.unemployed ? "Sit Out A Season" : "Next Manager Season"} <ChevronRight className="w-5 h-5" />
+            <Button onClick={onAdvanceManager} className="flex-1 h-12 text-base font-bold bg-emerald-600 hover:bg-emerald-500 text-black gap-2 max-[399px]:px-3 max-[399px]:text-sm">
+              {career.managerState?.unemployed ? "Sit Out A Season" : "Next Manager Season"} <ChevronRight className="w-5 h-5 max-[399px]:hidden" />
             </Button>
-            <Button onClick={onEndManager} variant="outline" className="h-12 text-sm font-bold">
+            <Button onClick={onEndManager} variant="outline" className="h-12 text-sm font-bold max-[399px]:px-3">
               {career.managerState?.unemployed ? "Walk Away" : "Retire"}
             </Button>
           </div>
         ) : career.phase === "owner_season" ? (
           <div className="flex-1 flex gap-2">
-            <Button onClick={onAdvanceOwner} className="flex-1 h-12 text-base font-bold bg-emerald-600 hover:bg-emerald-500 text-black gap-2">
-              Next Owner Season <ChevronRight className="w-5 h-5" />
+            <Button onClick={onAdvanceOwner} className="flex-1 h-12 text-base font-bold bg-emerald-600 hover:bg-emerald-500 text-black gap-2 max-[399px]:px-3 max-[399px]:text-sm">
+              Next Owner Season <ChevronRight className="w-5 h-5 max-[399px]:hidden" />
             </Button>
-            <Button onClick={onEndOwner} variant="outline" className="h-12 text-sm font-bold">Sell Club</Button>
+            <Button onClick={onEndOwner} variant="outline" className="h-12 text-sm font-bold max-[399px]:px-3">Sell Club</Button>
           </div>
         ) : showActionButton ? (
           <div className="flex-1 flex gap-2">
             <Button onClick={onNextSeason} className="flex-1 h-12 text-base font-bold bg-emerald-600 hover:bg-emerald-500 text-black gap-2">
               {career.phase === "youth" ? "Next Year" : "Next Season"} <ChevronRight className="w-5 h-5" />
             </Button>
-            {(career.phase === "youth" || career.phase === "playing") && (
-              <Button onClick={() => setShowRetireConfirm(true)} variant="outline" className="h-12 text-xs font-bold text-red-400 border-red-400/30 hover:bg-red-500/10">
-                Retire
-              </Button>
-            )}
+            {/* Round 1330: no Retire here. A rare and final action sits beside
+                New Career in the header ("🚪 Retire", the one Round 159 made
+                bigger), not beside Next Season, and the room it frees keeps AGE
+                on a 320 screen. */}
             {/* Round 1045: the same press as Next Season, then the season opens
                 match by match. Last in DOM order, so every test and walker that
                 presses the bar's first button still presses Next Season. */}
@@ -4785,7 +4853,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
             )}
           </div>
         ) : null}
-        <div className="bg-card border border-border rounded-xl px-4 py-2 text-center shrink-0">
+        <div className="bg-card border border-border rounded-xl px-4 max-[399px]:px-2 py-2 text-center shrink-0">
           <div className="text-lg font-black">{career.age}</div>
           <div className="text-[9px] text-muted-foreground uppercase">Age</div>
         </div>

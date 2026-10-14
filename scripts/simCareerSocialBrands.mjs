@@ -164,6 +164,9 @@ import { AWARD_GENERATIONS_ADDITIONS, inverseAwardGenerations } from './lib/care
    career from its first deck or paper on. The historical bundle takes that out first, the newest change first:
    scripts/lib/careerDeckFair1327.mjs. */
 import { inverseDeckFair, DECK_FAIR_ADDITIONS } from './lib/careerDeckFair1327.mjs';
+/* Round 1329: the world truth round (the month award, the phone's world, the quiz, the International panel) comes
+   out first, in front of Round 1327: scripts/lib/careerWorldTruth1329.mjs. */
+import { inverseWorldTruth, worldTruthReceiptProblem } from './lib/careerWorldTruth1329.mjs';
 /* Release BB: Release BA's closing fix a7c6befe says "have told you to find a loan" to a career with no agent, on
    purpose, and that one line moves this recording (rBBg-sb: green on its parent, red on it). The historical bundle
    puts the old line back in its copy of the engine: scripts/lib/careerNoAgentLoanLineBA.mjs. */
@@ -189,7 +192,7 @@ for (const relative of heldPaths) {
   const bytes = fs.readFileSync(path.join(ROOT, relative));
   sourceBefore[relative] = sha(bytes);
 }
-const report = { control: CONTROL || null, sections: SECTIONS, sourceBefore, failedLabels: [], originalSources: [], inverses: [], storyRoleInverses: [], nextTenInverses: [], veteranPayInverses: [], awardGenerationsInverses: [], noAgentLoanInverses: [], deckFairInverses: [] };
+const report = { control: CONTROL || null, sections: SECTIONS, sourceBefore, failedLabels: [], originalSources: [], inverses: [], storyRoleInverses: [], nextTenInverses: [], veteranPayInverses: [], awardGenerationsInverses: [], noAgentLoanInverses: [], deckFairInverses: [], worldTruthInverses: [] };
 function retain(name, value) {
   if (!ARTIFACTS) return;
   fs.mkdirSync(ARTIFACTS, { recursive: true });
@@ -379,7 +382,7 @@ if (SECTIONS.includes('1')) {
       /* Release AT: under SOCIAL_BRANDS_ATTRIBUTION=train1178 this bundle keeps the train out too, so the
          fixture from before the train is asked of a tree with both taken out. */
       /* The wheel alone moves this recording (remote check rAU-G2), so the wheel alone is taken out. */
-      const first = inverseDeckFair(relative, source, report.deckFairInverses);
+      const first = inverseDeckFair(relative, inverseWorldTruth(relative, source, report.worldTruthInverses), report.deckFairInverses);
       const controlled = inverseVeteranPay(relative, inverseCareerNextTen(relative, trainOut ? trainOut.rewrite(relative, first) : inverseAwardGenerations(relative, rewrite(relative, first), report.awardGenerationsInverses), report.nextTenInverses, ['wheel']), report.veteranPayInverses);
       return relative === 'src/lib/soccerCareerEngine.ts' ? inverseNoAgentLoanLine(relative, inverseCareerStoryRole(inverseCareerDevelopment(controlled, report.inverses), report.storyRoleInverses), report.noAgentLoanInverses) : controlled;
     });
@@ -391,6 +394,7 @@ if (SECTIONS.includes('1')) {
     assert.equal(report.awardGenerationsInverses.length, trainOut ? 0 : AWARD_GENERATIONS_ADDITIONS.length, 'The copied engine receives the award generations inverse of Rounds 1280 to 1282 and 1318 once for each row (the train out already holds it)');
     assert.equal(report.noAgentLoanInverses.length, 1, 'The copied engine receives the No Agent loan line inverse of Release BA once');
     assert.deepEqual(report.deckFairInverses.map(row => row.addition), DECK_FAIR_ADDITIONS, 'The copied engine receives Round 1327\'s inverse once, every row in order');
+    assert.equal(worldTruthReceiptProblem(report.worldTruthInverses), '', 'Every copied file of Round 1329 receives its inverse once, every row in order');
     compared = probeSoccerBrand(historical);
     const inverseText = JSON.stringify(compared);
     retain('inverse.json', compared);

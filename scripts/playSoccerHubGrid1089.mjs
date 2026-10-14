@@ -200,7 +200,7 @@ try {
       await context.addInitScript(() => {
         const state = window.__hubGrid1089 = { seed: 10891007, draws: 0, writes: [], inputs: [], scrolls: [] };
         Math.random = () => { state.draws++; state.seed = (Math.imul(state.seed, 1664525) + 1013904223) >>> 0; return state.seed / 4294967296; };
-        for (const method of ['setItem', 'removeItem', 'clear']) { const original = Storage.prototype[method]; Storage.prototype[method] = function(...args) { const result = original.apply(this, args); state.writes.push({ scope: this === localStorage ? 'local' : this === sessionStorage ? 'session' : 'unknown', method, args: [...args] }); return result; }; }
+        for (const method of ['setItem', 'removeItem', 'clear']) { const original = Storage.prototype[method]; Storage.prototype[method] = function(...args) { const result = original.apply(this, args); /* Round 1330: the save fence's generation key moves beside every game write; it is kept out of the write log */ if (!String(args[0]).startsWith('dukb-fence:')) state.writes.push({ scope: this === localStorage ? 'local' : this === sessionStorage ? 'session' : 'unknown', method, args: [...args] }); return result; }; }
         for (const type of ['click', 'keydown']) addEventListener(type, event => state.inputs.push({ type, key: event.key ?? null, trusted: event.isTrusted, text: event.target?.textContent ?? '', now: Date.now() }), true);
         const original = Element.prototype.scrollIntoView; Element.prototype.scrollIntoView = function(...args) { state.scrolls.push({ text: this.textContent?.slice(0, 100), args, now: Date.now() }); return original.apply(this, args); };
       });
@@ -216,7 +216,7 @@ try {
       assert.equal(row.fonts.length, 8);
       assert(row.fonts.every(font => font.faces.length > 0 && font.faces.every(face => face.family.replace(/^["']|["']$/g, '') === font.family && face.weight === String(font.weight) && face.status === 'loaded')), 'All eight actual requested font faces load with the declared family and weight');
       await page.clock.runFor(256);
-      const snapshot = () => page.evaluate(() => ({ storage: Object.fromEntries(Object.entries(localStorage).sort()), session: Object.fromEntries(Object.entries(sessionStorage).sort()), rng: { seed: window.__hubGrid1089.seed, draws: window.__hubGrid1089.draws }, writes: structuredClone(window.__hubGrid1089.writes), inputs: structuredClone(window.__hubGrid1089.inputs), scrolls: structuredClone(window.__hubGrid1089.scrolls), now: Date.now(), scrollY }));
+      const snapshot = () => page.evaluate(() => ({ storage: Object.fromEntries(Object.entries(localStorage).filter(([key]) => !key.startsWith('dukb-fence:')).sort()), session: Object.fromEntries(Object.entries(sessionStorage).sort()), rng: { seed: window.__hubGrid1089.seed, draws: window.__hubGrid1089.draws }, writes: structuredClone(window.__hubGrid1089.writes), inputs: structuredClone(window.__hubGrid1089.inputs), scrolls: structuredClone(window.__hubGrid1089.scrolls), now: Date.now(), scrollY }));
       const check = (name, value, evidence, structure = false) => {
         const result = { name, passed: !!value, evidence, structure }; row.checks.push(result);
         try { assert(value, `${arm}/${profile.name}/${scene}: ${name}`); }

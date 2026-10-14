@@ -88,6 +88,11 @@ function entry(k: number): CareerState {
   if (!entries.length) {
     const first = seeded(4107, () => startCareer('Everton'));
     delete (first as { realLeagueFixtures?: unknown }).realLeagueFixtures;
+    /* Round 1331: every hint here was found on the engine before the substitution rule and the press fixture (three
+       changes, the press reading the match just played). Both move the seeded stream of a 2026-27 career, so this
+       career plays the base match rules, the old engine for those two by construction (runner result r1331-vt: head
+       red on two hints, head forced onto the old rules green, base green). The review screen reads neither. */
+    first.matchRules = 'base';
     first.squad = first.squad.map(p => ({ ...p, fitness: 100, morale: 70, injuryWeeks: 0, suspendedMatches: 0 }));
     entries.push(first);
   }
@@ -872,6 +877,7 @@ describe('Club Manager: the review screen', () => {
    *  of 2,500 seeds go to extra time and 29 of those hold a review. */
   function extraTime(hint: number, want: (feed: LiveFeedEvent[], live: LiveMatch) => LiveFeedEvent | null | undefined): Half {
     let pre = seeded(4107, () => startCareer('Arsenal'));
+    pre.matchRules = 'base'; // Round 1331: the hints were found before the substitution rule (see entry above)
     for (let step = 1; step < 90; step++) {
       const next = pre.calendar[pre.week];
       if (!next) break;

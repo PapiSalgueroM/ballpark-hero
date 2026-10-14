@@ -26,24 +26,70 @@ jobs:
         with:
           node-version: 24
           cache: npm
-      - name: Bind application to the fully qualified save packet
+      - name: Bind current main and the qualified codec
         run: |
           mkdir -p career-writer-artifacts
           git rev-parse HEAD > career-writer-artifacts/head.txt
-          git diff --exit-code cf453d2f311579e051bb19f77c196e77f73392ee -- src scripts/simCreation.mjs scripts/simSoccerCareerSaveSize.mjs scripts/playSoccerCareerSaveSize.mjs scripts/lib/realSaves.mjs package.json package-lock.json bun.lock index.html
-          sha256sum scripts/simSoccerCareerSaveRetry.mjs src/lib/soccerCareerSave.ts src/pages/SoccerCareer.tsx package.json package-lock.json > career-writer-artifacts/source-hashes.txt
+          git archive HEAD > career-writer-artifacts/source.tar
+          git diff --exit-code 4a5f759aeab6d0e7b8d29e55d3cd624c8ad20c54 -- src ':!src/lib/soccerCareerSave.ts' ':!src/lib/soccerCareerSave.test.ts' ':!src/pages/SoccerCareer.tsx' ':!src/test/careerDilemmaReach.test.tsx' ':!src/test/careerKeepPlaying.test.tsx' ':!src/test/soccerCareerPackedFence.test.tsx' scripts/sweepWeight.mjs package.json package-lock.json bun.lock index.html
+          git diff --exit-code e6877952ca3998ac9582bf48ed4614af7edd46ae -- src/lib/soccerCareerSave.ts src/lib/soccerCareerSave.test.ts src/test/careerDilemmaReach.test.tsx src/test/careerKeepPlaying.test.tsx scripts/simCreation.mjs scripts/simSoccerCareerSaveSize.mjs scripts/qa/soccerCareerSaveTails.mjs scripts/qa/soccerCareerSaveTailInputs.json scripts/qa/playSoccerCareerSaveTails.mjs scripts/lib/realSaves.mjs package.json package-lock.json bun.lock index.html
+          python - <<'PY'
+          import hashlib, json, pathlib, subprocess
+          main = '4a5f759aeab6d0e7b8d29e55d3cd624c8ad20c54'
+          path = 'src/pages/SoccerCareer.tsx'
+          page = pathlib.Path(path).read_bytes()
+          inverse = page
+          spans = [
+              (b"import { isSoccerCareerSave, parseSoccerCareerSave, serializeSoccerCareerSave } from '@/lib/soccerCareerSave';", b"import { isSoccerCareerSave } from '@/lib/soccerCareerSave';"),
+              (b'const parsed: unknown = parseSoccerCareerSave(saved);', b'const parsed: unknown = JSON.parse(saved);'),
+              (b'localStorage.setItem(SAVE_KEY, serializeSoccerCareerSave(career));', b'localStorage.setItem(SAVE_KEY, JSON.stringify(career));'),
+          ]
+          for changed, original in spans:
+              assert inverse.count(changed) == 1, 'Exactly one codec page span: ' + changed.decode()
+              inverse = inverse.replace(changed, original)
+          original = subprocess.check_output(['git', 'show', main + ':' + path])
+          assert inverse == original, 'Only three codec spans may differ from the current-main fenced page'
+          browser_path = 'scripts/playSoccerCareerSaveSize.mjs'
+          browser = pathlib.Path(browser_path).read_bytes()
+          browser_inverse = browser
+          browser_spans = [
+              ("const fixtureFormat = envelope.seasons?.format;\nassert(['lz-string-utf16', 'lz-string-utf16-career'].includes(fixtureFormat) && typeof envelope.seasons.data === 'string', 'Selected fixture uses a known actual codec envelope');\nif (fixtureFormat === 'lz-string-utf16') {\n  assert(envelope.story?.format === 'lz-string-utf16' && typeof envelope.story.data === 'string', 'Selected fixture actually uses packed story');\n} else {\n  assert.deepEqual(Object.keys(envelope).sort(), ['age', 'currentClub', 'retired', 'seasons'], 'Whole-career envelope has only the actual exposed metadata and payload');\n  assert.deepEqual([envelope.currentClub, envelope.age, envelope.retired], [originalState.currentClub, originalState.age, originalState.retired], 'Whole-career envelope retains exact original Continue metadata');\n}", "assert(envelope.seasons?.format === 'lz-string-utf16' && typeof envelope.seasons.data === 'string', 'Selected fixture actually uses packed history');\nassert(envelope.story?.format === 'lz-string-utf16' && typeof envelope.story.data === 'string', 'Selected fixture actually uses packed story');"),
+              ("'corrupt-story': JSON.stringify({ ...originalState, story: { format: 'lz-string-utf16', data: 'invalid compressed story' } })", "'corrupt-story': JSON.stringify({ ...envelope, story: { ...envelope.story, data: 'invalid compressed story' } })"),
+              ("'future-story': JSON.stringify({ ...originalState, story: { format: 'future-story-format', data: envelope.story?.data ?? envelope.seasons.data } })", "'future-story': JSON.stringify({ ...envelope, story: { ...envelope.story, format: 'future-story-format' } })"),
+              ("['lz-string-utf16', 'lz-string-utf16-career'].includes(JSON.parse(raw).seasons?.format)", "JSON.parse(raw).seasons?.format === 'lz-string-utf16'"),
+              ("        await wheel.locator('[data-wheel-skip]').click(); const beforeReceipt = await bytes(); await wheel.locator('[data-wheel-continue]').click(); await wheel.waitFor({ state: 'hidden' });\n        await page.waitForFunction(({ key, before }) => { const raw = localStorage.getItem(key); return raw !== null && raw !== before; }, { key: KEY, before: beforeReceipt });", "        await wheel.locator('[data-wheel-skip]').click(); await wheel.locator('[data-wheel-continue]').click(); await wheel.waitFor({ state: 'hidden' });\n        await page.waitForFunction(key => { try { return JSON.parse(localStorage.getItem(key))?.chanceWheel?.seen === true; } catch { return false; } }, KEY);"),
+              ("const report = { fixture: held, fixtureFormat, originalHash:", "const report = { fixture: held, originalHash:"),
+          ]
+          for changed, original_span in browser_spans:
+              changed, original_span = changed.encode(), original_span.encode()
+              assert browser_inverse.count(changed) == 1, 'Exactly one browser method span: ' + changed.decode()
+              browser_inverse = browser_inverse.replace(changed, original_span)
+          browser_original = subprocess.check_output(['git', 'show', 'e6877952ca3998ac9582bf48ed4614af7edd46ae:' + browser_path])
+          assert browser_inverse == browser_original, 'Only six method spans may differ from the qualified browser driver'
+          receipt = {'main': main, 'qualifiedCodec': 'e6877952ca3998ac9582bf48ed4614af7edd46ae',
+              'page': path, 'codecSpans': len(spans), 'pageSha256': hashlib.sha256(page).hexdigest(),
+              'inverseSha256': hashlib.sha256(inverse).hexdigest(), 'mainPageSha256': hashlib.sha256(original).hexdigest()}
+          receipt.update({'browser': browser_path, 'browserSpans': len(browser_spans),
+              'browserSha256': hashlib.sha256(browser).hexdigest(), 'browserInverseSha256': hashlib.sha256(browser_inverse).hexdigest(),
+              'qualifiedBrowserSha256': hashlib.sha256(browser_original).hexdigest()})
+          pathlib.Path('career-writer-artifacts/source-bindings.json').write_text(json.dumps(receipt, indent=2) + '\n')
+          print('Current-main app, unchanged qualified codec, exact fenced-page and browser method inverses held.')
+          PY
+          find src scripts .github/workflows -type f ! -path scripts/data/lastmod.json -print0 | sort -z | xargs -0 sha256sum > career-writer-artifacts/source-hashes.txt
+          sha256sum package.json package-lock.json bun.lock > career-writer-artifacts/package-hashes.txt
           npm ci
       - name: Actual application types
         run: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee career-writer-artifacts/types.log
       - name: Original save retry outcomes and every effective copied fault
         run: SOCCER_CAREER_SAVE_RETRY_ARTIFACTS="$PWD/career-writer-artifacts/retry" SOCCER_CAREER_SAVE_RETRY_CONTROL=all NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerCareerSaveRetry.mjs 2>&1 | tee career-writer-artifacts/retry.log
       - name: Direct current-main league season diagnostic with complete stderr
-        run: SIM_LEAGUE_SEASONS_BASE=082fc2774c8aa9f919c14efa33bfc3fbfc599597 NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerLeagueSeasons.mjs 2>&1 | tee career-writer-artifacts/league-seasons.log
+        run: SIM_LEAGUE_SEASONS_BASE=4a5f759aeab6d0e7b8d29e55d3cd624c8ad20c54 NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerLeagueSeasons.mjs 2>&1 | tee career-writer-artifacts/league-seasons.log
       - name: Final source holds
         if: always()
         run: |
           sha256sum --check career-writer-artifacts/source-hashes.txt > career-writer-artifacts/source-holds.log
-          git diff --exit-code -- src scripts package.json package-lock.json bun.lock index.html
+          sha256sum --check career-writer-artifacts/package-hashes.txt > career-writer-artifacts/package-holds.log
+          git diff --exit-code -- src scripts .github/workflows package.json package-lock.json bun.lock index.html
       - uses: actions/upload-artifact@v4
         if: always()
         with:

@@ -64,7 +64,10 @@
         exactly the cards each call settled, the ones the kept cap drops in
         that same call included. And a fence: a pack index holding an
         expiring card fails until the component it names (PACK_INDEXES'
-        third field) calls gmExpiredLine.
+        third field) calls gmExpiredLine. That fence is the NECESSARY half;
+        the SUFFICIENT half is Round 1332's render test
+        (src/components/front-office-shared/GmInboxPanel.test.tsx: an opened
+        card the staff settled shows gmExpiredLine and never "You replied").
      8) NEUTRAL. Every card of every pack off NEUTRAL_BASELINE has an option
         that moves nothing, every pack on it still lacks one somewhere (the
         ratchet), gmPackProblems is empty for every pack the kit knows, and
@@ -80,6 +83,79 @@
         under that pack's ceiling, measured at seeds 1 to 10 and written at
         the section. A report line, not a gate: cards reached per value of a
         pack's reachBy fact (a keeper meets keeper work); W2 makes it a gate.
+
+   Round 1332 (W1b) adds the rules every event pack needs, each an optional
+   field a GM pack does not carry, so section 1 holds them to the recording:
+     11) REGISTRY. FX_REGISTRY (a fixture registry of four keys: a 0 to 100
+        board meter, a money key, a one man form meter, a suspension in
+        weeks) on a pack whose cards use all four and the built ins: every
+        option of every card answered on a fresh desk, every key read back
+        with `read`, every built in meter compared: the printed words name
+        exactly what moved, by exactly the printed amount; the button and the
+        answer line carry those words; a second answer moves nothing; the
+        neutral index is the option whose every effect is zero; an answer
+        whose key the seat lost is refused; a key with no words prints raw;
+        bind refuses each registry breakage.
+     12) LEGAL. Every pack the kit knows plus the FX packs, against the real
+        names of simGmInbox's eight roster files and Club Manager's five
+        baked rosters: no quote mark, no first person in a wording, every
+        voice a role, no real name anywhere, a brace only as a declared slot
+        in a wording, no person slot in quote marks or by a speech verb, no
+        wording that prints an effect (built in or registered), and every
+        card whose words read as conduct or a private life tagged, but for
+        LEGAL_BASELINE (the GM cards flagged today, each with its word).
+        Then FX_CONDUCT on 100 ten season desks whose squads are about half
+        real, answering late across season turns: every tagged card dealt
+        and every answer the engine takes lands on generated men only, an
+        answer it refuses would have landed on a real man (or nobody) and
+        moves nothing, no tagged card sits open after a week about a real
+        man, tagged cards were held for real men, answers were refused and
+        cards settled for that, and no dealt text keeps a brace.
+     13) COMPACT. Every index pack (INDEX_PACKS: every PACK_INDEXES line,
+        never a list kept by hand) with store: 'compact' set in memory, plus
+        FX_COMPACT (stories, a subject, one shots, wordings, slots, expiry)
+        and its season clock twin, on the FLEET drive at seeds 1 to 3 (a
+        rising clock), each desk three ways: whole, compact, and compact
+        through gmDeskSave, JSON and gmDeskLoad between every two weeks.
+        Compact deals, answers and moves exactly as whole (a hash over ids,
+        texts, the inbox, answer lines and meters a week; never the book,
+        which differs by design); the codec run equals the compact one to
+        the byte (all four fields, text included); every week the book
+        holds exactly the entries still cooling, the one shots never pass
+        the pack's one shot keys, never more than eight kept. Then a size
+        report (FX_BIG, 420 cards, Club Manager's rhythm, 20 desks of 15
+        seasons: the compact block's mean bytes and the whole desk's) and
+        the loader's three cases.
+     14) FROZEN WORDS. scripts/data/eventDeckWords.json, for every pack whose
+        source declares store: 'compact' (FX_COMPACT and every index pack
+        that declares it, read off INDEX_PACKS): no recorded card gone, no wording changed or moved,
+        a new wording only at the end, no option added, removed, reordered
+        or relabelled, no story added or taken away, no card without a row,
+        and (Round 1332's review fix) no change to a card's voice, emoji or
+        beat or to an option's reply or effects, which a rebuilt message
+        takes from the pack too.
+        SIM_EVENT_DECK_WORDS=append adds rows and trailing wordings, never
+        rewrites one (a changed row is the lead's call, like the replay).
+
+     15) ECONOMY. For every index pack (INDEX_PACKS) and the FX packs, and
+        every meter each moves (trust, fans,
+        cash, morale, recruit, every registered key), BEST and WORST answer
+        policies on the FLEET drive: the chosen options' values on that
+        meter summed per season, unclamped, a mean over 1,000 seasons. The
+        seven GM packs are printed (ECONOMY_BASELINE, their measurements at
+        the section); any other pack fails on a meter it moves with no
+        `pressure` ceiling, or when BEST or WORST passes it either way.
+        An index pack whose cards move fx keys needs a PACK_BINDS entry (its
+        registry over the kit's desk), or sections 13 and 15 fail on it.
+     16) BYTES AND LAZY. Bytes per event (each pack module minified alone
+        and gzipped, the engine too) with the projection for 420 and 690
+        events, a report (BYTES_MEASURED at the section); and the fence:
+        nothing in src imports the engine, a pack index or GmInboxPanel
+        eagerly but the deck's own files and tests (type imports and dynamic
+        imports pass; LAZY_IMPORTERS takes W2's and W3's lazy entries).
+
+   SIM_EVENT_DECK_SECTIONS=11,12 runs only the sections named (section 1
+   also runs when 2 or 3 does); the green line then names them.
 
    No board binds gmInbox yet (the importers are its own test, the packs, the
    panel and two harnesses), so every drive here is a synthetic desk: each
@@ -111,19 +187,80 @@
      settledoff the engine settles but never names the card in the settled
                 list a seat hands in; section 7 fails.
      panelexpiry one GM card is given an expiry in the panel fence's own
-                copy (a data change in the kit); section 7 fails, because
-                GmInboxPanel never calls gmExpiredLine.
+                copy (a data change in the kit) AND, since Round 1332 made
+                GmInboxPanel call gmExpiredLine, that call is stripped from
+                the fence's copy of the component's code (in memory); section
+                7 fails.
      neutral    FX_NEUTRAL's one neutral option on its first card is given
                 trust 1 (a data change in the kit, not the engine); section
                 8 fails.
      heavy      the NFL's top card loses its cooldown and weighs 50 (in
                 memory); section 10 fails. The brief's weight alone changed
                 nothing (see section 10).
+     fxsilent   choiceEffects prints no registered key; section 11 fails.
+     fxdrop     answerGmInbox applies no registered key; section 11 fails.
+     fxunbound  gmPackProblems no longer flags an unregistered key; section
+                11 fails.
+     fxneutral  gmNeutralIndex ignores fx, so an option that moves only a
+                registered key reads as neutral (and an expiring card could
+                be settled on it); section 11 fails.
+     conductreal the tag branch of gmCardSafe always passes; section 12
+                fails (a tagged card dealt about a real man).
+     slotopen   a slot with no value no longer holds its card; section 12
+                fails (a dealt text keeps a brace).
+     quoteslot  FX_CONDUCT gains a wording with its person slot before a
+                speech verb (in memory); section 12 fails.
+     untagged   FX_CONDUCT's curfew card loses its tag (in memory); section
+                12 fails.
+     rosterword a real roster name goes into an FX_CONDUCT text (in
+                memory); section 12 fails.
+     pruneearly the prune drops an entry one tick before it cools; section
+                13 fails (the book no longer holds every entry still
+                cooling).
+     codecword  the codec drops the wording index; section 13 fails.
+     codecslot  the codec drops the slot values; section 13 fails.
+     wordedit   FX_COMPACT's k_words gets an edited first wording (in
+                memory); section 14 fails.
+     wordorder  k_words's two wordings swap places (in memory); section 14
+                fails.
+     storymove  k_plain joins a story (in memory); section 14 fails.
+     pressure   FX_COMPACT's moves times ten (in memory); section 15 fails.
+     eager      src/pages/FrontOffice.tsx read with one static import of
+                '@/lib/gmInbox' added (in memory); section 16 fails.
+     Round 1332's review fixes (a tagged card asked again after its deal):
+     conductlate   answerGmInbox no longer asks a tagged card's roles again,
+                   so an answer after the season turn lands on a real man;
+                   section 12 fails.
+     conductstale  step 2b never settles an open tagged card whose role
+                   passed to a real man; section 12 fails (it sits open).
+     conducttarget the men an option moves are left out of the tag check, at
+                   the deal and the answer (c_skip moves the captain, not the
+                   striker it is about); section 12 fails.
+     nullpass      a role that resolves to nobody passes the tag check;
+                   section 12 fails.
+     newpack       one more index pack in INDEX_PACKS (in memory, as a later
+                   round's index line would add): compact, its words never
+                   recorded, no pressure ceiling; sections 14 and 15 fail
+                   (13 deals it whole against compact and stays green).
+     speechpast    FX_CONDUCT gains a wording with its person slot's
+                   possessive before a past tense speech verb (in memory);
+                   section 12 fails (the brief's verb list alone missed it).
+     voiceedit     FX_COMPACT's k_plain speaks in another voice (in memory);
+                   section 14 fails.
+     effectedit    k_plain's second option moves trust by one more (in
+                   memory); section 14 fails.
 
    Runtime about 85 to 100 s on a runner, three requests at a time (section 2
    reloads all 84 rows since the review's fix pass; it was 40 s with seed 1
    alone), so SIM_EVENT_DECK_SHARD is not needed yet; SIM_EVENT_DECK_MEASURE=1 adds the
    seeds 1 to 10 measurements (about a minute more).
+   Round 1332: the whole kit takes 206 to 263 s on a runner now (section 13
+   alone about 70 to 110 s), over the 150 s an agent's command may take. Run
+   it as three gate lines, measured on runners 2026-10-13 (rc r1332-g and
+   r1332-h): SIM_EVENT_DECK_SECTIONS=1,2,3,4,5,6,7,8,9,10,11,12 (101 s),
+   SIM_EVENT_DECK_SECTIONS=13 (71 s) and SIM_EVENT_DECK_SECTIONS=14,15,16
+   (29 s). Section 15's measurement (SIM_EVENT_DECK_MEASURE=1) takes about
+   six minutes more.
 
    Run: node scripts/simEventDeck.mjs
         SIM_EVENT_DECK_SHARD=nfl runs one seat's rows of section 1 only. */
@@ -141,8 +278,16 @@ const ROOT = path.resolve(path.dirname(SELF), '..');
 const CONTROL = process.env.EVENT_DECK_CONTROL || '';
 const RECORD = process.env.SIM_EVENT_DECK_RECORD || '';
 const SHARD = process.env.SIM_EVENT_DECK_SHARD || '';
+/* Round 1332: SIM_EVENT_DECK_SECTIONS=11,12 runs only those sections (1 runs
+   too when 2 or 3 does, which read its rows), so the gate can split the kit
+   in two lines. Absent: every section. */
+const SECTIONS = (process.env.SIM_EVENT_DECK_SECTIONS || '').split(',').filter(Boolean).map(Number);
+const runs = n => SECTIONS.length === 0 || SECTIONS.includes(n) || (n === 1 && (SECTIONS.includes(2) || SECTIONS.includes(3)));
 const REPLAY_FILE = path.join(ROOT, 'scripts/data/gmInboxReplay.json');
-const CONTROLS = ['replay', 'weightoff', 'weightkeep', 'story', 'rest', 'failopen', 'restfall', 'expirefall', 'textrng', 'seasonweek', 'expireoff', 'expirefx', 'settledoff', 'panelexpiry', 'neutral', 'heavy'];
+const CONTROLS = ['replay', 'weightoff', 'weightkeep', 'story', 'rest', 'failopen', 'restfall', 'expirefall', 'textrng', 'seasonweek', 'expireoff', 'expirefx', 'settledoff', 'panelexpiry', 'neutral', 'heavy',
+  'fxsilent', 'fxdrop', 'fxunbound', 'fxneutral', 'conductreal', 'slotopen', 'quoteslot', 'untagged', 'rosterword',
+  'pruneearly', 'codecword', 'codecslot', 'wordedit', 'wordorder', 'storymove', 'pressure', 'eager',
+  'conductlate', 'conductstale', 'conducttarget', 'nullpass', 'newpack', 'speechpast', 'voiceedit', 'effectedit'];
 if (CONTROL && !CONTROLS.includes(CONTROL)) { console.error(`EVENT_DECK_CONTROL=${CONTROL} is not a control this kit knows`); process.exit(2); }
 if (RECORD && (CONTROL || SHARD)) { console.error('a recording runs the whole replay with no control, refusing'); process.exit(2); }
 const red = new Set();
@@ -156,7 +301,8 @@ const count = (hay, needle) => hay.split(needle).length - 1;
 
 /* ─── bundle the real engine and every pack index the kit knows ─────────── */
 
-/* The pack indexes, one line each, append only: W2 and W3 add theirs. */
+/* The pack indexes, one line each, append only: W2 and W3 add theirs (and a
+   PACK_BINDS entry when their cards move fx keys). */
 const PACK_INDEXES = [
   ['src/data/gmInbox/index.ts', 'GM_INBOX_PACKS', 'src/components/front-office-shared/GmInboxPanel.tsx'],
 ];
@@ -183,6 +329,22 @@ const ENGINE_CONTROLS = {
   expirefx: ['if (ttl !== undefined && clock - w >= ttl && n >= 0) inbox[i] = { ...m, w, answered: n, auto: true };',
     'if (ttl !== undefined && clock - w >= ttl) { answerInboxMessage(s, m.id, 0, seat); inbox[i] = { ...m, w, answered: 0, auto: true }; } /* expirefx control */'],
   settledoff: ['if (inbox[i].auto && !m.auto) settled?.push(inbox[i]);', '/* settledoff control */'],
+  /* Round 1332's, appended. */
+  fxsilent: ['    out.push(`${man}${def.label} ${amount}`);', '    /* fxsilent control */'],
+  fxdrop: ['    if (v) reg[k].apply(s, v, who);', '    /* fxdrop control */'],
+  fxunbound: ['if (!def) { out.push(`${e.id}: "${c.label}" moves ${k}, which the seat has not registered`); continue; }', 'if (!def) continue; /* fxunbound control */'],
+  fxneutral: ['    && !gmFxMoves(c));', '    ); /* fxneutral control */'],
+  conductreal: ['  return allGenerated(s, seat, people);', '  return true; /* conductreal control */'],
+  slotopen: ['    if (!sl || !named(v)) return false;', '    if (!sl) return false; /* slotopen control */'],
+  pruneearly: ['    if (sharing.every(e => (pack.clock === \'season\' ? !onCooldown(last, e, clock, pack.cooldown) : clock - at >= (e.cooldown ?? pack.cooldown)))) delete last[k];',
+    '    if (sharing.every(e => (pack.clock === \'season\' ? !onCooldown(last, e, clock + 1, pack.cooldown) : clock + 1 - at >= (e.cooldown ?? pack.cooldown)))) delete last[k]; /* pruneearly control */'],
+  codecword: ['  if (g.t) out.t = g.t;', '  /* codecword control */'],
+  codecslot: ['  if (g.sv) out.s = g.sv;', '  /* codecslot control */'],
+  /* Round 1332's review fixes, appended. */
+  conductlate: ['  if (def?.tag !== undefined && !gmTagStillSafe(def, msg.choices as GmChoiceDef[], s, seat)) return null;', '  /* conductlate control */'],
+  conductstale: ['      if (e && n >= 0 && !gmTagStillSafe(e, m.choices, s, seat)) { inbox[i] = { ...m, answered: n, auto: true }; settled?.push(inbox[i]); }', '      /* conductstale control */'],
+  conducttarget: ['  for (const c of choices) refs.push(...choiceRoles(c));', '  /* conducttarget control */'],
+  nullpass: ['  refs.every(ref => seat.person?.(s, ref)?.real === false);', '  refs.every(ref => seat.person?.(s, ref)?.real !== true); /* nullpass control */'],
 };
 let engineSrc = null;
 if (ENGINE_CONTROLS[CONTROL]) {
@@ -337,7 +499,7 @@ const secs = () => ((Date.now() - T0) / 1000).toFixed(1);
 
 console.log(`1) Replay: ${GM_SEATS.length} GM packs, seeds ${SEEDS.join(', ')}, drives ${KINDS.join(', ')}, ${SEASONS} seasons a desk`);
 const ROWS = {};
-{
+if (runs(1)) {
   const seats = SHARD ? GM_SEATS.filter(k => k === SHARD) : GM_SEATS;
   if (SHARD && seats.length === 0) { console.error(`SIM_EVENT_DECK_SHARD=${SHARD} is not a GM seat`); process.exit(2); }
   for (const seat of seats) for (const seed of SEEDS) for (const kind of KINDS) ROWS[`${seat}|${seed}|${kind}`] = runRow(GM[seat], seat, seed, kind);
@@ -401,6 +563,31 @@ const fxPack = (seat, events, extra = {}) => ({
   meters: { trust: 'Board trust', fans: 'Fans', money: 'Budget', morale: 'Dressing room' }, money: { prefix: '$', suffix: 'M' },
   perWeek: 1, cooldown: 0, chance: 1, events, ...extra,
 });
+/* Round 1332's review fix: every pack a shipped index holds (every
+   PACK_INDEXES line, the GM index first). Sections 12 to 15 read this, never
+   a list kept by hand, so the next round's pack is gated the moment its
+   index line lands: section 13 compares it whole against compact, section
+   14 freezes its words when it declares store: 'compact', section 15 holds
+   it to its own pressure ceiling. The newpack control adds one pack here in
+   memory, as a later round's index would, with no words recorded and no
+   ceiling declared. */
+const INDEX_PACKS = { ...ALL_PACKS };
+if (CONTROL === 'newpack') {
+  if (INDEX_PACKS.fx_unlisted) { console.error('newpack control: an index already holds fx_unlisted, refusing to run'); process.exit(2); }
+  INDEX_PACKS.fx_unlisted = fxPack('fx_unlisted', [fxCard('u_one', { cooldown: 2 }), fxCard('u_two', { cooldown: 3 })], { store: 'compact', chance: 0.5 });
+}
+/* What the kit binds an index pack with beyond its own desk, append only:
+   W2 and W3 add an entry beside their PACK_INDEXES line when their cards
+   move fx keys (the registry, written over the kit's desk) or need their
+   own person resolver. A pack with fx keys and no entry fails sections 13
+   and 15, which could not bind it; a pack with a tag or a person slot and
+   no entry is bound with a resolver that makes everyone generated. */
+const PACK_BINDS = {};
+const needsFx = p => p.events.some(e => e.choices.some(c => Object.keys(c.fx ?? {}).length > 0));
+const aboutPeople = p => p.events.some(e => e.tag !== undefined) || Object.values(p.slots ?? {}).some(sl => sl.person);
+const everyoneGenerated = (s, ref) => ('role' in ref ? { name: `Your ${ref.role}`, real: false } : { name: `Player ${Math.round(Number(ref.id))}`, real: false });
+/** The binding extras for an index pack, or null when the kit cannot bind it. */
+const indexBind = (k, p) => PACK_BINDS[k] ?? (needsFx(p) ? null : aboutPeople(p) ? { person: everyoneGenerated } : {});
 /** One fixture desk over `ticks` weeks: facts(clock, rng) hands in the
  *  facts, answer 'all' answers every open message on its first option,
  *  clockOf(tick) is the clock the desk hands in (the tick itself, or a
@@ -428,7 +615,7 @@ function fxRun(pack, key, ticks, { facts = () => ({}), answer = 'all', bind = {}
 console.log('2) Same seed, same deck; a JSON round trip and repairGmInbox between every two weeks change nothing');
 let gmStates = 0;
 let gmGrew = 0;
-{
+if (runs(2)) {
   const seats = Object.keys(ROWS).map(k => k.split('|')[0]).filter((k, i, a) => a.indexOf(k) === i);
   const k0 = seats[0];
   const again = runRow(GM[k0], k0, 1, 'FLEET');
@@ -462,7 +649,7 @@ let gmGrew = 0;
 
 console.log('3) Weights: equal weights deal the recording, and a weight is a share of the draw, never a rank');
 const REC = fs.existsSync(REPLAY_FILE) ? JSON.parse(fs.readFileSync(REPLAY_FILE, 'utf8')) : { rows: {} };
-{
+if (runs(3)) {
   const seats = Object.keys(ROWS).map(k => k.split('|')[0]).filter((k, i, a) => a.indexOf(k) === i);
   for (const w of [1, 2.5]) {
     const moved = seats.filter(seat => {
@@ -505,7 +692,7 @@ const REC = fs.existsSync(REPLAY_FILE) ? JSON.parse(fs.readFileSync(REPLAY_FILE,
 /* ═══ 4. STORY: cards of one story share one stamp and one one shot ═══ */
 
 console.log('4) Story: never two of one story inside its cooldown or in one week, a one shot story once');
-{
+if (runs(4)) {
   const FX_STORY = fxPack('fx_story', [
     fxCard('feud1', { story: 'feud' }), fxCard('feud2', { story: 'feud', cooldown: 9 }), fxCard('feud3', { story: 'feud' }),
     fxCard('exitA', { story: 'exit', oneShot: true }), fxCard('exitB', { story: 'exit', oneShot: true }), fxCard('exitC', { story: 'exit' }),
@@ -556,7 +743,7 @@ console.log('4) Story: never two of one story inside its cooldown or in one week
 /* ═══ 5. SUBJECT REST: no one man twice inside his rest ═══ */
 
 console.log('5) Subject rest: no subject inside its rest or twice in a week, the rest book born pruned');
-{
+if (runs(5)) {
   const REST = 6;
   const FX_SUBJECT = fxPack('fx_subject', [
     fxCard('cap1', { subject: 'captain' }), fxCard('cap2', { subject: 'captain' }), fxCard('keep1', { subject: 'keeper' }),
@@ -659,7 +846,7 @@ console.log('5) Subject rest: no subject inside its rest or twice in a week, the
 /* ═══ 6. TEXTS: wordings move no deal, and a key reads the same words ═══ */
 
 console.log('6) Texts: wordings move no deal and no draw, every wording comes up at its share, a key reads the same words');
-{
+if (runs(6)) {
   /* The variant counts this section was measured on: 2 and 4 wordings. */
   const FX_TEXTS = fxPack('fx_texts', [
     fxCard('pair', { texts: ['The pair matter is back on the desk.'] }),
@@ -719,7 +906,7 @@ const fxHard = (id, extra = {}) => fxCard(id, {
 const FX_EXPIRE = fxPack('fx_expire', [
   fxHard('e2', { expires: 2 }), fxHard('e3', { expires: 3 }), fxHard('e4', { expires: 4 }), fxHard('e6', { expires: 6 }),
 ], { chance: 0.5, cooldown: 3 });
-{
+if (runs(7)) {
   const ttl = new Map(FX_EXPIRE.events.map(e => [e.id, e.expires]));
   const meters = s => JSON.stringify([s.morale, s.trust, s.fans, s.cash, s.recruit, s.out, s.rating]);
   const calm = meters(newDesk());
@@ -876,7 +1063,14 @@ const FX_EXPIRE = fxPack('fx_expire', [
     const expiring = Object.entries(packs).flatMap(([k, p]) => p.events.filter(e => e.expires !== undefined).map(e => `${k}/${e.id}`));
     if (CONTROL === 'panelexpiry' && i === 0 && expiring.length === 0) { console.error('panelexpiry control changed nothing, refusing to run'); process.exit(2); }
     if (!shows || !fs.existsSync(path.join(ROOT, shows))) { fail(7, `${rel} names no component that shows its cards`); return; }
-    const calls = code(shows).includes('gmExpiredLine(');
+    /* Round 1332: GmInboxPanel calls gmExpiredLine now, so the control also
+       strips that call from this check's own copy of the code (in memory). */
+    let shown = code(shows);
+    if (CONTROL === 'panelexpiry' && i === 0) {
+      if (!shown.includes('gmExpiredLine(')) { console.error(`panelexpiry control: ${shows} has no gmExpiredLine call to strip, refusing to run`); process.exit(2); }
+      shown = shown.replaceAll('gmExpiredLine(', 'panelExpiryControl(');
+    }
+    const calls = shown.includes('gmExpiredLine(');
     if (expiring.length && !calls) fail(7, `${rel} holds ${expiring.length} expiring card${expiring.length === 1 ? '' : 's'} (${expiring.slice(0, 3).join(', ')}) and ${shows} never calls gmExpiredLine, so a settled card would read as the manager's reply`);
     else ok(`${rel}: ${expiring.length} expiring cards, ${shows} ${calls ? 'calls' : 'does not call'} gmExpiredLine${expiring.length ? '' : ' (it must before any of its cards expires)'}`);
   });
@@ -895,7 +1089,7 @@ const NEUTRAL_BASELINE = ['afl', 'college', 'gym', 'mlb', 'nba', 'nfl', 'nhl'];
 const FX_NEUTRAL = fxPack('fx_neutral', [
   fxHard('n1'), fxHard('n2'), fxCard('n3'),
 ]);
-{
+if (runs(8)) {
   if (CONTROL === 'neutral') {
     const c = FX_NEUTRAL.events[0].choices[1];
     if (!c || c.karma !== 0 || E.gmNeutralIndex(FX_NEUTRAL.events[0].choices) !== 1) { console.error('neutral control: n1 has no neutral second option, refusing to run'); process.exit(2); }
@@ -928,7 +1122,7 @@ const FX_NEUTRAL = fxPack('fx_neutral', [
 /* ═══ 9. SEASON CLOCK: careerEventDeck's rule, and the week rule kept ═══ */
 
 console.log('9) Season clock: a card is held out exactly as careerEventDeck holds it; the week clock is back after exactly N');
-{
+if (runs(9)) {
   const FX_SEASON = fxPack('fx_season', [
     fxCard('s0', { cooldown: 0 }), fxCard('s1', { cooldown: 1 }), fxCard('s3', { cooldown: 3 }), fxCard('sd'),
     fxCard('arcA', { story: 'arc', cooldown: 4 }), fxCard('arcB', { story: 'arc' }),
@@ -973,7 +1167,7 @@ console.log('9) Season clock: a card is held out exactly as careerEventDeck hold
 /* ═══ 10. SHARE AND REACH over the FLEET drive ═══ */
 
 console.log('10) Share and reach: every card of every pack reached over 1,000 seasons, no card above its pack\'s measured ceiling');
-{
+if (runs(10)) {
   const packs = { ...ALL_PACKS };
   /* The brief's form of this control (one NFL card at weight 50) changed
      nothing here, measured: every NFL card sits out a whole season (cooldown
@@ -1031,7 +1225,866 @@ console.log('10) Share and reach: every card of every pack reached over 1,000 se
   console.log(`   reach by position: ${reach.length ? reach.join('; ') : 'no pack the kit knows names a reachBy fact yet'}`);
 }
 
+/* ═══ 11. REGISTRY: the words name exactly what the answer moves (Round 1332) ═══ */
+
+console.log('11) Registry: every option prints exactly the keys it moves, by exactly the amounts, and bind refuses each breakage');
+const signedK = v => (v > 0 ? `+${v}` : `${v}`);
+/* A fixture registry over the fixture desk: a 0 to 100 board meter, a money
+   key, a one man form meter and a suspension in weeks. */
+const FX_REGISTRY_DEF = {
+  board: { label: 'Board confidence', apply: (s, v) => { s.board = clamp100((s.board ?? 50) + v); }, read: s => s.board ?? 50 },
+  fund: { label: 'Transfer kitty', fmt: 'money', apply: (s, v) => { s.fund = Math.round(((s.fund ?? 0) + v) * 1000) / 1000; }, read: s => s.fund ?? 0 },
+  form: { label: 'form', who: true, apply: (s, v, who) => { s.form = { ...(s.form ?? {}), [who]: ((s.form ?? {})[who] ?? 0) + v }; }, read: (s, who) => (s.form ?? {})[who] ?? 0 },
+  ban: { label: 'suspended', fmt: 'weeks', who: true, apply: (s, v, who) => { s.ban = { ...(s.ban ?? {}), [who]: ((s.ban ?? {})[who] ?? 0) + v }; }, read: (s, who) => (s.ban ?? {})[who] ?? 0 },
+};
+const fxCh = (label, extra = {}) => ({ label, reply: `${label}.`, karma: 0, ...extra });
+const FX_REGISTRY = fxPack('fx_registry', [
+  fxCard('r1', { choices: [fxCh('Back the plan', { karma: 2, fx: { board: 3 } }), fxCh('Hold off')] }),
+  fxCard('r2', { choices: [fxCh('Sign the extension', { cash: -2, fx: { fund: -1.5 } }), fxCh('Wait', { fx: { board: 0 } })] }),
+  fxCard('r3', { choices: [
+    fxCh('Drop him', { morale: -1, fx: { form: { who: 'striker', v: -2 }, ban: { who: 'striker', v: 2 } } }),
+    fxCh('Back him', { popularity: 1, fx: { form: { who: 'striker', v: 1 } } }), fxCh('Say nothing')] }),
+  fxCard('r4', { choices: [
+    fxCh('Rest him', { out: { who: 'keeper', weeks: 1 }, rating: { who: 'keeper', delta: 1 }, fx: { ban: { who: 'keeper', v: 1 } } }),
+    fxCh('Play him', { fx: { form: { who: 'captain', v: 0 } } })] }),
+  fxCard('r5', { choices: [fxCh('Fine him', { fx: { fund: 0.5 } }), fxCh('Let it go')] }),
+  fxCard('r6', { choices: [fxCh('Make the recruiting call', { recruit: 2, fx: { board: -1 } }), fxCh('Skip it')] }),
+], { pressure: { trust: 8, fans: 4, cash: 8, morale: 4, recruit: 8, board: 12, fund: 6, form: 8, ban: 12 } });
+if (runs(11)) {
+  const pack = FX_REGISTRY;
+  const T = Object.keys(pack.targets);
+  /* Everything a desk holds that an option could move, read the slow way. */
+  const snap = s => {
+    const o = { trust: s.trust, fans: s.fans, cash: s.cash, morale: s.morale, recruit: s.recruit };
+    for (const w of T) { o[`out:${w}`] = s.out[w] ?? 0; o[`rating:${w}`] = s.rating[w] ?? 0; }
+    for (const [k, d] of Object.entries(FX_REGISTRY_DEF)) {
+      if (d.who) for (const w of T) o[`${k}:${w}`] = d.read(s, w); else o[k] = d.read(s);
+    }
+    return o;
+  };
+  const money = v => `${v > 0 ? '+' : '-'}${pack.money.prefix}${Math.abs(v)}${pack.money.suffix}`;
+  const weeks = v => `${v} week${v === 1 ? '' : 's'}`;
+  /* The words for what really moved, written here from the two snapshots,
+     never from the option. */
+  const movedWords = (a, b) => {
+    const out = [];
+    const d = k => Math.round((b[k] - a[k]) * 1000) / 1000;
+    const m = pack.meters;
+    if (d('trust')) out.push(`${m.trust} ${signedK(d('trust'))}`);
+    if (d('fans')) out.push(`${m.fans} ${signedK(d('fans'))}`);
+    if (d('cash')) out.push(`${m.money} ${money(d('cash'))}`);
+    if (d('morale')) out.push(`${m.morale} ${signedK(d('morale'))}`);
+    for (const w of T) if (d(`out:${w}`)) out.push(`${pack.targets[w]} out ${weeks(d(`out:${w}`))}`);
+    for (const w of T) if (d(`rating:${w}`)) out.push(`${pack.targets[w]} rating ${signedK(d(`rating:${w}`))}`);
+    if (d('recruit')) out.push(`Recruit interest ${signedK(d('recruit'))}`);
+    for (const [k, def] of Object.entries(FX_REGISTRY_DEF)) {
+      const fmt = v => (def.fmt === 'money' ? money(v) : def.fmt === 'weeks' ? weeks(v) : signedK(v));
+      if (def.who) { for (const w of T) if (d(`${k}:${w}`)) out.push(`${pack.targets[w]} ${def.label} ${fmt(d(`${k}:${w}`))}`); }
+      else if (d(k)) out.push(`${def.label} ${fmt(d(k))}`);
+    }
+    return out;
+  };
+  const seat = E.bindGmInbox(pack, { ...BINDING, fx: FX_REGISTRY_DEF });
+  const bad = [];
+  let answered = 0;
+  for (const e of pack.events) {
+    e.choices.forEach((c, i) => {
+      const s = newDesk();
+      s.phoneInbox = [{ id: 'm', defId: e.id, from: e.from, emoji: e.emoji, text: e.text, year: 2030, choices: e.choices, beat: e.beat }];
+      const a = snap(s);
+      const line = E.answerGmInbox(s, 'm', i, seat);
+      const b = snap(s);
+      const words = E.choiceEffects(c, pack, FX_REGISTRY_DEF);
+      const moved = movedWords(a, b);
+      answered++;
+      if (line === null) { bad.push(`${e.id} option ${i}: the answer was refused`); return; }
+      if ([...words].sort().join('|') !== [...moved].sort().join('|')) bad.push(`${e.id} "${c.label}": prints [${words.join(', ')}], moved [${moved.join(', ')}]`);
+      const want = `📨 ${e.from}: ${c.label}.${words.length ? ` ${words.join(', ')}.` : ''}`;
+      if (line !== want) bad.push(`${e.id} "${c.label}": the answer line reads "${line}"`);
+      if (E.gmChoiceLabel(c, pack, FX_REGISTRY_DEF) !== (words.length ? `${c.label} · ${words.join(', ')}` : c.label)) bad.push(`${e.id} "${c.label}": the button does not carry the words`);
+      const again = E.answerGmInbox(s, 'm', i, seat);
+      if (again !== null || JSON.stringify(snap(s)) !== JSON.stringify(b)) bad.push(`${e.id} "${c.label}": a second answer moved something`);
+    });
+    /* The neutral option, worked out here: every built in and every fx zero. */
+    const want = e.choices.findIndex(c => !c.karma && !c.popularity && !c.cash && !c.morale && !(c.out?.weeks > 0) && !c.rating?.delta && !c.recruit
+      && Object.values(c.fx ?? {}).every(v => (typeof v === 'number' ? v : v.v) === 0));
+    if (E.gmNeutralIndex(e.choices) !== want) bad.push(`${e.id}: gmNeutralIndex says ${E.gmNeutralIndex(e.choices)}, the option that moves nothing is ${want}`);
+  }
+  const r5 = pack.events.find(e => e.id === 'r5');
+  if (E.gmNeutralIndex(r5.choices) !== 1) bad.push(`r5: "Fine him" moves only a registered key and still read as neutral`);
+  for (const b of bad.slice(0, 8)) console.error(`     ${b}`);
+  if (answered < 12) fail(11, `only ${answered} options answered: nothing was tested`);
+  if (bad.length) fail(11, `${bad.length} registry breaks over ${answered} answered options`);
+  else ok(`${answered} options over ${pack.events.length} cards: each printed exactly the keys it moved, by exactly the amounts, the button and the answer line agree, a second answer moved nothing, every neutral index right (r5's fx only option is not neutral)`);
+  /* The answer fails closed on a key the seat lost. */
+  const s = newDesk();
+  const e1 = pack.events[0];
+  s.phoneInbox = [{ id: 'm', defId: e1.id, from: e1.from, emoji: e1.emoji, text: e1.text, year: 2030, choices: e1.choices, beat: e1.beat }];
+  const a = JSON.stringify(s);
+  const refused = E.answerGmInbox(s, 'm', 0, { ...seat, fx: {} });
+  if (refused !== null || JSON.stringify(s) !== a) fail(11, 'an answer whose key the seat never registered still moved something');
+  else ok('an answer whose key the seat never registered is refused and moves nothing');
+  /* A key with no words prints its own name: the label never hides it. */
+  const raw = E.gmChoiceLabel(fxCh('Do it', { fx: { mystery: 2, form: { who: 'keeper', v: -1 } } }), pack, {});
+  if (raw !== 'Do it · mystery +2, Your keeper form -1') fail(11, `a label with unregistered keys reads "${raw}"`);
+  else ok(`a label with unregistered keys prints them raw: ${raw}`);
+  const breaks = [
+    ['an unregistered key', fxPack('fx_break', [fxCard('b', { choices: [fxCh('Act', { fx: { nope: 1 } }), fxCh('Leave')] })]), FX_REGISTRY_DEF, /not registered/],
+    ['a built in name registered', FX_REGISTRY, { ...FX_REGISTRY_DEF, morale: FX_REGISTRY_DEF.board }, /built in/],
+    ['a man on a plain key', fxPack('fx_break', [fxCard('b', { choices: [fxCh('Act', { fx: { board: { who: 'captain', v: 1 } } }), fxCh('Leave')] })]), FX_REGISTRY_DEF, /names nobody/],
+    ['a bare number on a key that names a man', fxPack('fx_break', [fxCard('b', { choices: [fxCh('Act', { fx: { form: 2 } }), fxCh('Leave')] })]), FX_REGISTRY_DEF, /bare number/],
+    ['a man off the targets', fxPack('fx_break', [fxCard('b', { choices: [fxCh('Act', { fx: { form: { who: 'coach', v: 1 } } }), fxCh('Leave')] })]), FX_REGISTRY_DEF, /not a target/],
+    ['a value that is not a number', fxPack('fx_break', [fxCard('b', { choices: [fxCh('Act', { fx: { board: Number.NaN } }), fxCh('Leave')] })]), FX_REGISTRY_DEF, /finite/],
+    ['a key with no registry at all', FX_REGISTRY, undefined, /not registered/],
+  ];
+  const held = breaks.filter(([, p, reg, re]) => { try { E.bindGmInbox(p, { ...BINDING, fx: reg }); return false; } catch (err) { return re.test(String(err.message)); } });
+  if (held.length !== breaks.length) fail(11, `bind refused only ${held.length} of ${breaks.length} broken packs (${breaks.filter(b => !held.includes(b)).map(b => b[0]).join(', ')})`);
+  else ok(`bind refuses ${breaks.map(b => b[0]).join(', ')}`);
+}
+
+/* ═══ 12. LEGAL: no real man is quoted, named in a voice or given conduct ═══ */
+
+console.log('12) Legal: every pack narrated in roles, slots only in words, and a tagged card never lands on a real man');
+/* FX_CONDUCT: tagged cards about a role or a fact's man, person slots, and
+   effects aimed at a role, beside plain cards with a person slot and a
+   plain slot. Placeholder people only ("Player 7"), never shipped. */
+const FX_CONDUCT_FX = {
+  ban: { label: 'suspended', fmt: 'weeks', who: true, apply: (s, v, who) => { s.ban = { ...(s.ban ?? {}), [who]: ((s.ban ?? {})[who] ?? 0) + v }; }, read: (s, who) => (s.ban ?? {})[who] ?? 0 },
+  pot: { label: 'Squad fine pot', fmt: 'money', apply: (s, v) => { s.pot = Math.round(((s.pot ?? 0) + v) * 1000) / 1000; }, read: s => s.pot ?? 0 },
+};
+const FX_CONDUCT = fxPack('fx_conduct', [
+  fxCard('c_curfew', { tag: 'conduct', subject: 'striker', text: 'Your striker broke the team curfew on Tuesday night.',
+    choices: [fxCh('Suspend him', { fx: { ban: { who: 'striker', v: 1 } } }), fxCh('Fine the whole squad', { fx: { pot: 0.2 } }), fxCh('Let it go')] }),
+  fxCard('c_fined', { tag: 'conduct', subject: { fact: 'man' }, text: '{player} was fined by the club after a late night out.',
+    texts: ['The club fined {player} for a late night out.'], choices: [fxCh('Back the fine', { morale: -1 }), fxCh('Drop it')] }),
+  fxCard('p_home', { tag: 'private', subject: 'keeper', text: 'Your keeper has asked for a few days at home with his family.',
+    choices: [fxCh('Give him the days', { out: { who: 'keeper', weeks: 1 } }), fxCh('Not this week', { rating: { who: 'keeper', delta: -1 } }), fxCh('Talk it over later')] }),
+  fxCard('p_grief', { tag: 'private', subject: { fact: 'man' }, text: '{player} lost someone close this week and the room knows it.',
+    choices: [fxCh('Give him space', { morale: 1 }), fxCh('Leave it with the staff')] }),
+  /* Round 1332's review fix: an option that moves another role than the one
+     the card is about, so the hold of every man an option moves is tested
+     apart from the subject's. */
+  fxCard('c_skip', { tag: 'conduct', subject: 'striker', text: 'Your striker skipped training again this week.',
+    choices: [fxCh('Have your captain sort it out', { rating: { who: 'captain', delta: 1 } }), fxCh('Let it go')] }),
+  fxCard('n_rival', { text: 'The game against {opponent} is the one the whole room wants.', choices: [fxCh('Talk it up', { popularity: 1 }), fxCh('Keep it low key')] }),
+  fxCard('n_form', { text: '{player} is in the best form of his season.', choices: [fxCh('Praise him', { morale: 1 }), fxCh('Say nothing')] }),
+], { span: { a: 20 }, facts: { man: { kind: 'num', min: 1, max: 13, per: 'week' }, rival: { kind: 'num', min: 1, max: 20, per: 'week' } },
+  slots: { player: { fact: 'man', person: true }, opponent: { fact: 'rival' } }, subjectRest: 2 });
+/* The fixture's squad: twelve placeholder men a desk, about half of them
+   marked real (as a real footballer would be in a binding), and the three
+   roles handed to a different man each season. Id 13 is nobody, and so is
+   a role in about one season in five (nobody holds it: the hold must treat
+   nobody as it treats a real man). */
+const conductSquad = desk => Array.from({ length: 13 }, (_, i) => i > 0 && keyedRng(`simEventDeck|squad|${desk}|${i}`)() < 0.5);
+const conductPerson = (s, ref) => {
+  const roles = Object.keys(FX_CONDUCT.targets);
+  let id;
+  if ('role' in ref) {
+    const r = roles.indexOf(ref.role);
+    if (r < 0 || (s.year + r + s.desk) % 5 === 0) return null;
+    id = 1 + ((s.year * 3 + r * 5 + s.desk) % 12);
+  } else id = Number(ref.id);
+  if (!(Number.isInteger(id) && id >= 1 && id <= 12)) return null;
+  return { name: `Player ${id}`, real: s.real[id] };
+};
+/* The brief's speech verbs, plus (Round 1332's review fix) the past tense of
+   the rest and the common reporting verbs, so "{player} insisted" is caught. */
+const SPEECH = 'said|says|told|tells|asked|asks|claims|insists|admits|reckons|wants|demands|vows|promised|promises'
+  + '|claimed|insisted|admitted|reckoned|wanted|demanded|vowed|wrote|writes|posted|posts|revealed|reveals|confirmed|confirms|hinted|hints|added|adds';
+/* simGmInbox's ALLEGATION and CONDUCT, copied (append only), plus the
+   brief's conduct words; and the private list (a man's own life off the
+   pitch: never a playing injury, which is football and stays untagged). */
+const CONDUCT_WORDS = [
+  /\b(casino|gambling debts?|drunk|drink driv\w*|crashed his|arrested|having an affair|cheating on|missed training|hungover|assaulted)\b/i,
+  /transfer request|bust-up|bust up|agents? for|leaked|reject(ed|s)? a|refus(ed|es)|demand(ed|s)|storm(ed|s) out|fell out|falling out|row over|walked out|went on strike|downed tools|sulk|tantrum|forced? (a|his) (move|exit)|handed in/i,
+  /\b(fined|suspended|disciplin\w*|curfew|police|court|arrest\w*)\b/i,
+];
+const PRIVATE_WORDS = /\b(family|homesick|faith|pray\w*|fasting|religio\w*|illness|mental health|grief|funeral|bereave\w*|wedding|divorce|pregnan\w*)\b/i;
+/* The GM cards the untagged scan flags today, each with the word it matched
+   (decision 2 of the brief): the packs are frozen by the replay, so they sit
+   on this ratchet; an entry that no longer matches must leave. The round
+   that binds the AFL pack owes afl_go_home first: tag it private with a
+   generated youngster, or reword it, and re-record the replay by the lead's
+   leave. */
+const LEGAL_BASELINE = { 'afl/afl_go_home': 'homesick', 'nba/nba_trade_demand': 'leaked' };
+if (runs(12)) {
+  if (CONTROL === 'quoteslot') {
+    const e = FX_CONDUCT.events.find(x => x.id === 'n_form');
+    if (!e || e.texts) { console.error('quoteslot control: n_form is not there without wordings, refusing to run'); process.exit(2); }
+    e.texts = ['{player} told the room he is staying put.'];
+  }
+  if (CONTROL === 'speechpast') {
+    const e = FX_CONDUCT.events.find(x => x.id === 'n_form');
+    if (!e || e.texts) { console.error('speechpast control: n_form is not there without wordings, refusing to run'); process.exit(2); }
+    e.texts = ['{player}\'s camp insisted he is staying put.'];
+  }
+  if (CONTROL === 'untagged') {
+    const e = FX_CONDUCT.events.find(x => x.id === 'c_curfew');
+    if (!e || e.tag !== 'conduct') { console.error('untagged control: c_curfew is not a conduct card, refusing to run'); process.exit(2); }
+    delete e.tag;
+  }
+  /* The real people a desk could hold: simGmInbox's eight roster files and
+     Club Manager's baked rosters (full names only). */
+  const deaccent = s => s.normalize('NFD').replace(/[̀-ͯ]/g, '');
+  const REAL = new Set();
+  for (const rel of ['src/data/frontOfficePlayers.ts', 'src/data/conquestDataNba.ts', 'src/data/mlbFoPlayers.ts', 'src/data/mlbFoRosters2026.ts',
+    'src/data/nhlFoPlayers.ts', 'src/data/cfbHLPlayers.ts', 'src/data/ufcFighters.ts', 'src/data/aflGoalKickers.ts']) {
+    /* Each quote kind read up to its own closing mark, so a name with an
+       apostrophe inside double quotes (De'Aaron Fox) is harvested too. */
+    for (const m of readSrc(rel).matchAll(/name:\s*(?:"([A-Z][^"]{1,40} [^"]{2,40})"|'([A-Z][^']{1,40} [^']{2,40})')/g)) REAL.add(deaccent(m[1] ?? m[2]));
+  }
+  for (const rel of ['src/data/clubManagerRosters.ts', 'src/data/clubManagerEra2005.ts', 'src/data/clubManagerEra2010.ts', 'src/data/clubManagerEra2015.ts', 'src/data/clubManagerEra2020.ts']) {
+    for (const m of readSrc(rel).matchAll(/\bn:\s*(?:"([^"]{2,40} [^"]{2,40})"|'([^']{2,40} [^']{2,40})')/g)) REAL.add(deaccent(m[1] ?? m[2]));
+  }
+  if (![...REAL].some(n => /[A-Za-z]'[A-Za-z]/.test(n))) fail(12, 'no name with an apostrophe was harvested: the harvest skips them');
+  if (CONTROL === 'rosterword') {
+    const someone = [...REAL].find(n => /^[A-Z][a-z]+ [A-Z][a-z]+$/.test(n));
+    const e = FX_CONDUCT.events.find(x => x.id === 'n_form');
+    if (!someone || !e) { console.error('rosterword control: no real name or no n_form card, refusing to run'); process.exit(2); }
+    e.text = `${someone} is in the best form of his season.`;
+  }
+  /* Measured 2026-10-13: 10,473 full names before Round 1332's review fix
+     and 10,483 after it (the ten names with an apostrophe the old pattern
+     skipped; simGmInbox's eight files gave 2,236 on 2026-10-03, Club
+     Manager's five 8,240). The floor only proves the harvest worked. */
+  const REAL_FLOOR = 8000;
+  if (REAL.size < REAL_FLOOR) fail(12, `only ${REAL.size} real names harvested (floor ${REAL_FLOOR}): the name scan would mean nothing`);
+  else ok(`${REAL.size} real names harvested from thirteen roster files`);
+  const QUOTE_MARK = /["“”]/;
+  const FIRST_PERSON = /\b(I|I'm|I am|I've|I'll|my|me|mine|we|we're|us|our|boss|gaffer)\b/;
+  const ROLE = /^(Your |His |A |The )[a-z]/;
+  const DEPARTMENTS = new Set(['Ownership', 'Team doctor', 'Ticket office', 'Marketing', 'Compliance office']);
+  const FX_OF = { fx_registry: FX_REGISTRY_DEF, fx_conduct: FX_CONDUCT_FX };
+  const scanned = { ...INDEX_PACKS, fx_expire: FX_EXPIRE, fx_neutral: FX_NEUTRAL, fx_registry: FX_REGISTRY, fx_conduct: FX_CONDUCT };
+  const bad = [];
+  let strings = 0;
+  const flagged = {};
+  for (const [k, p] of Object.entries(scanned)) {
+    const reg = FX_OF[k] ?? PACK_BINDS[k]?.fx ?? {};
+    const slots = p.slots ?? {};
+    const people = Object.keys(slots).filter(n => slots[n].person);
+    const meterWords = [...Object.values(p.meters), 'Recruit interest', ...Object.values(reg).map(d => d.label)].map(w => w.toLowerCase());
+    const weekWords = Object.values(reg).filter(d => d.fmt === 'weeks').map(d => d.label.toLowerCase());
+    const printsEffect = t => {
+      const low = t.toLowerCase();
+      if (/\bout\s+\d+\s+weeks?\b/.test(low) || /\brating\s*[+-]\s*\d/.test(low)) return true;
+      if (weekWords.some(w => new RegExp(`\\b${w}\\s+\\d+\\s+weeks?\\b`).test(low))) return true;
+      return meterWords.some(w => {
+        for (let at = low.indexOf(w); at >= 0; at = low.indexOf(w, at + 1)) {
+          const after = low.slice(at + w.length, at + w.length + 8);
+          const before = low.slice(Math.max(0, at - 10), at);
+          if (/^\s*[+-]\s*\$?\d/.test(after) || /[+-]\s*\$?\d[\d.,]*\s*[a-z$]*\s*$/.test(before)) return true;
+        }
+        return false;
+      });
+    };
+    const lines = [['label', p.label], ...p.calendar.map(b => ['beat', b.label]), ...Object.values(p.targets).map(t => ['target', t])];
+    for (const e of p.events) {
+      const wordings = [e.text, ...(e.texts ?? [])];
+      for (const t of wordings) lines.push(['wording', t]);
+      lines.push(['from', e.from]);
+      for (const c of e.choices) lines.push(['option', c.label], ['reply', c.reply]);
+      if (!ROLE.test(e.from) && !DEPARTMENTS.has(e.from)) bad.push(`${k}/${e.id}: the voice "${e.from}" is not a role`);
+      for (const t of wordings) {
+        if (FIRST_PERSON.test(deaccent(t))) bad.push(`${k}/${e.id}: a wording speaks in the first person`);
+        if (printsEffect(t)) bad.push(`${k}/${e.id}: a wording prints an effect ("${t.slice(0, 50)}")`);
+        for (const n of t.matchAll(/\{(\w+)\}/g)) if (!slots[n[1]]) bad.push(`${k}/${e.id}: {${n[1]}} is not a declared slot`);
+        if (/[{}]/.test(t.replace(/\{(\w+)\}/g, ''))) bad.push(`${k}/${e.id}: a brace outside a slot`);
+        for (const n of people) {
+          const at = `\\{${n}\\}`;
+          if (new RegExp(`["“”][^"“”]*${at}[^"“”]*["“”]`).test(t)) bad.push(`${k}/${e.id}: the person slot {${n}} inside quote marks`);
+          /* A possessive ("{player}'s camp insists") counts as the slot. */
+          if (new RegExp(`${at}(?:['’]s)?(?:\\s+[\\w']+){0,2}\\s+(?:${SPEECH})\\b`, 'i').test(t) || new RegExp(`\\b(?:${SPEECH})\\s+${at}`, 'i').test(t)) bad.push(`${k}/${e.id}: the person slot {${n}} next to a speech verb`);
+        }
+      }
+      if (e.tag === undefined) {
+        const words = [...wordings, ...e.choices.flatMap(c => [c.label, c.reply])].join(' | ');
+        const hit = [...CONDUCT_WORDS, PRIVATE_WORDS].map(re => words.match(re)?.[0]).find(Boolean);
+        const key = `${k}/${e.id}`;
+        if (hit) {
+          flagged[key] = hit.toLowerCase();
+          if (!LEGAL_BASELINE[key]) bad.push(`${key}: an untagged card about conduct or a private life ("${hit}"): tag it conduct or private`);
+        }
+      }
+    }
+    for (const [kind, s] of lines) {
+      strings++;
+      if (QUOTE_MARK.test(s)) bad.push(`${k} ${kind} "${String(s).slice(0, 40)}": a quote mark`);
+      if (kind !== 'wording' && /[{}]/.test(s)) bad.push(`${k} ${kind} "${String(s).slice(0, 40)}": a brace where no slot is filled`);
+      const flat = deaccent(String(s));
+      const name = [...REAL].find(n => flat.includes(n));
+      if (name) bad.push(`${k} ${kind} "${String(s).slice(0, 40)}": a real name (${name})`);
+    }
+  }
+  for (const [key, word] of Object.entries(LEGAL_BASELINE)) if (flagged[key] !== word) bad.push(`LEGAL_BASELINE ${key} (${word}) no longer matches${flagged[key] ? ` (it matches ${flagged[key]})` : ''}: take it off or rewrite it`);
+  for (const b of bad.slice(0, 10)) console.error(`     ${b}`);
+  if (strings < 400) fail(12, `only ${strings} strings scanned: nothing was tested`);
+  if (bad.length) fail(12, `${bad.length} legal findings over ${Object.keys(scanned).length} packs`);
+  else ok(`${strings} strings over ${Object.keys(scanned).length} packs: no quote, no first person, every voice a role, no real name, slots only where declared, no person slot by a speech verb, no wording prints an effect, every conduct or private card tagged (baseline: ${Object.keys(LEGAL_BASELINE).join(', ')})`);
+}
+/* The fleet: FX_CONDUCT on 100 ten season desks of twenty weeks, about half
+   of each squad real and the roles changing hands every season. Every
+   tagged card dealt, and every answer to one, must land on generated men
+   only (checked here with the fixture's own resolver, not the engine's);
+   at least one tagged card must have been held for a real man; no dealt
+   text may keep a brace. Round 1332's review fix: desks answer LATE (each
+   open card with a chance of 0.35 a week, so cards sit open across a
+   season turn) and the season turns after the last week's deal and before
+   its answers, so a role can change hands between a card's deal and its
+   answer. Then every answer the engine takes must still land on generated
+   men only, an answer it refuses must be one that would have landed on a
+   real man (or nobody) and must move nothing, no tagged card may sit open
+   after a week about a real man (step 2b settles it), and the fleet must
+   have met both cases: an answer refused and a card settled for that. */
+if (runs(12)) {
+  const seat = E.bindGmInbox(FX_CONDUCT, { ...BINDING, fx: FX_CONDUCT_FX, person: conductPerson });
+  const byId = new Map(FX_CONDUCT.events.map(e => [e.id, e]));
+  const refsOf = (e, facts) => {
+    const refs = [];
+    const slots = FX_CONDUCT.slots;
+    for (const t of [e.text, ...(e.texts ?? [])]) for (const n of t.matchAll(/\{(\w+)\}/g)) if (slots[n[1]]?.person) refs.push({ id: facts[slots[n[1]].fact] });
+    if (typeof e.subject === 'string') refs.push({ role: e.subject });
+    else if (e.subject) refs.push({ id: facts[e.subject.fact] });
+    return refs;
+  };
+  const choiceRefs = c => [...(c.out ? [{ role: c.out.who }] : []), ...(c.rating ? [{ role: c.rating.who }] : []),
+    ...Object.values(c.fx ?? {}).filter(v => typeof v !== 'number').map(v => ({ role: v.who }))];
+  const realHit = (s, refs) => refs.some(r => conductPerson(s, r)?.real !== false);
+  /* Every role a card names: its subject when a role, and every option's men. */
+  const roleRefs = (e, choices) => [...(typeof e.subject === 'string' ? [{ role: e.subject }] : []), ...choices.flatMap(choiceRefs)];
+  const f = { dealt: 0, tagged: 0, answered: 0, heldReal: 0, refusedReal: 0, settledReal: 0, bad: [] };
+  for (let d = 0; d < 100; d++) {
+    const rng = keyedRng(`simEventDeck|conduct|${SEED}|${d}|deck`);
+    const fr = keyedRng(`simEventDeck|conduct|${SEED}|${d}|facts`);
+    const ar = keyedRng(`simEventDeck|conduct|${SEED}|${d}|answer`);
+    const s = { ...newDesk(), desk: d, real: conductSquad(d) };
+    /* The ids a tagged card named at its deal (person slots, a fact's man). */
+    const dealtRefs = new Map();
+    for (let t = 0; t < SEASONS * 20; t++) {
+      s.year = 2030 + Math.floor(t / 20);
+      const facts = { man: 1 + Math.floor(fr() * 13) };
+      if (fr() < 0.7) facts.rival = `Club ${1 + Math.floor(fr() * 20)}`;
+      /* A tagged card the fixture says is about a real man must be held. */
+      for (const e of FX_CONDUCT.events) {
+        if (!e.tag) continue;
+        const allNamed = refsOf(e, facts).every(r => !('id' in r) || conductPerson(s, r) !== null);
+        if (allNamed && (realHit(s, refsOf(e, facts)) || e.choices.some(c => realHit(s, choiceRefs(c))))) {
+          if (E.gmCardSafe(e, s, seat, facts)) f.bad.push(`desk ${d} week ${t}: ${e.id} is about a real man (or nobody) and was not held`);
+          else f.heldReal++;
+        }
+      }
+      const settled = [];
+      const got = E.gmInboxWeek(s, seat, 'a', facts, t, rng, settled);
+      for (const m of got) {
+        f.dealt++;
+        if (/[{}]/.test(m.text)) f.bad.push(`desk ${d} week ${t}: ${m.id} reads "${m.text}"`);
+        const e = byId.get(m.defId);
+        if (!e.tag) continue;
+        f.tagged++;
+        dealtRefs.set(m.id, refsOf(e, facts));
+        if (realHit(s, refsOf(e, facts))) f.bad.push(`desk ${d} week ${t}: ${m.id} was dealt about a real man (or nobody)`);
+      }
+      for (const m of settled) {
+        const e = byId.get(m.defId);
+        if (!e.tag) continue;
+        if (realHit(s, roleRefs(e, m.choices))) f.settledReal++;
+        else f.bad.push(`desk ${d} week ${t}: ${m.id} was settled though every man it names is generated`);
+      }
+      for (const m of openOf(s)) {
+        const e = byId.get(m.defId);
+        if (e.tag && realHit(s, roleRefs(e, m.choices))) f.bad.push(`desk ${d} week ${t}: ${m.id} sits open after the week about a real man (or nobody)`);
+      }
+      /* The season turns after its last week's deal and before its answers. */
+      if (t % 20 === 19) s.year++;
+      for (const m of openOf(s)) {
+        if (ar() >= 0.35) continue;
+        const i = Math.floor(ar() * m.choices.length);
+        const e = byId.get(m.defId);
+        const before = JSON.stringify(s);
+        const line = E.answerGmInbox(s, m.id, i, seat);
+        if (line !== null) f.answered++;
+        if (!e.tag) continue;
+        const hit = realHit(s, [...(dealtRefs.get(m.id) ?? []), ...roleRefs(e, m.choices)]);
+        if (line !== null && hit) f.bad.push(`desk ${d} week ${t}: answering ${m.id} lands on a real man (or nobody)`);
+        else if (line === null && !hit) f.bad.push(`desk ${d} week ${t}: answering ${m.id} was refused though every man it names is generated`);
+        else if (line === null) {
+          f.refusedReal++;
+          if (JSON.stringify(s) !== before) f.bad.push(`desk ${d} week ${t}: a refused answer to ${m.id} moved something`);
+        }
+      }
+    }
+  }
+  for (const b of f.bad.slice(0, 6)) console.error(`     ${b}`);
+  const line = `FX_CONDUCT on 100 ten season desks answering late: ${f.dealt} cards dealt, ${f.tagged} of them tagged, ${f.answered} answered, ${f.heldReal} tagged cards held for a real man, ${f.refusedReal} answers refused and ${f.settledReal} open cards settled after a role passed to a real man (or nobody)`;
+  /* Measured 2026-10-13 at seeds 1 to 5: 91 to 121 answers refused and 245
+     to 299 cards settled after a role passed to a real man (or nobody). The
+     floors of 20 only prove the fleet met both cases. */
+  if (f.bad.length) fail(12, `${f.bad.length} breaks: ${line}`);
+  else if (f.tagged < 200 || f.heldReal < 1 || f.answered < 500 || f.refusedReal < 20 || f.settledReal < 20) fail(12, `${line}: too few to have tested it`);
+  else ok(`${line}; every tagged card dealt and every answer taken landed on generated men only, every refused answer moved nothing, no tagged card sat open about a real man, no dealt text kept a brace`);
+}
+
+/* ═══ 13. COMPACT: a pruned book and messages saved as numbers deal the same ═══ */
+
+/* FX_COMPACT: stories, a subject with a rest, one shots (plain and a
+   story's), wordings, a person slot and a plain one, an expiring card, a
+   long cooldown, on the week clock; FX_COMPACT_SEASON is the same cards on
+   the season clock. Placeholder people only. */
+const FX_COMPACT = fxPack('fx_compact', [
+  fxCard('k_plain', { cooldown: 3 }), fxCard('k_once', { oneShot: true }),
+  fxCard('k_arc_a', { story: 'arc', cooldown: 6 }), fxCard('k_arc_b', { story: 'arc' }),
+  fxCard('k_saga_a', { story: 'saga', oneShot: true }), fxCard('k_saga_b', { story: 'saga', oneShot: true }),
+  fxCard('k_words', { texts: ['The k_words matter came up again.', 'Another k_words matter landed on the desk.'] }),
+  fxCard('k_slot', { text: '{player} has a matter for you this week.', texts: ['A matter about {player} needs a call.'], subject: { fact: 'man' } }),
+  fxCard('k_rival', { text: 'The {opponent} matter needs a call before the weekend.' }),
+  fxHard('k_exp', { expires: 3 }), fxCard('k_cool', { cooldown: 12 }),
+], { store: 'compact', chance: 0.6, cooldown: 4, subjectRest: 3, pressure: { trust: 40, morale: 20 },
+  facts: { man: { kind: 'num', min: 1, max: 9, per: 'week' }, rival: { kind: 'num', min: 1, max: 20, per: 'week' } },
+  slots: { player: { fact: 'man', person: true }, opponent: { fact: 'rival' } } });
+const FX_COMPACT_SEASON = { ...FX_COMPACT, seat: 'fx_compact_season', clock: 'season', cooldown: 2 };
+const compactPerson = (s, ref) => ('role' in ref ? { name: `Your ${ref.role}`, real: false } : { name: `Player ${Math.round(Number(ref.id))}`, real: false });
+const COMPACT_BIND = { person: compactPerson };
+const whole4 = s => JSON.stringify([s.phoneInbox, s.phoneUsedIds, s.gmInboxLast, s.gmInboxRest]);
+if (runs(13)) {
+  console.log('13) Compact: a pruned book and messages saved as numbers deal, answer and read exactly as a whole desk does');
+  const meters = s => JSON.stringify([s.morale, s.trust, s.fans, s.cash, s.recruit, s.out, s.rating]);
+  const oneShotKeys = p => new Set(p.events.filter(e => e.oneShot).map(e => (e.story ? `story:${e.story}` : e.id))).size;
+  const keyOf = e => (e.story ? `story:${e.story}` : e.id);
+  /* One FLEET row three ways: whole, compact, compact through the codec
+     between every two weeks. Returns per desk hashes and the breaks. */
+  const row = (pack, tag, seed, bind) => {
+    const whole = { ...pack, store: undefined };
+    const compact = { ...pack, store: 'compact' };
+    const out = { i: 0, ii: 0, desks: 0, bad: [], weeks: 0, pruned: 0, dropped: 0 };
+    const limitUsed = oneShotKeys(pack);
+    const byKey = new Map();
+    for (const e of pack.events) byKey.set(keyOf(e), [...(byKey.get(keyOf(e)) ?? []), e]);
+    for (let d = 0; d < DRIVES.FLEET.desks; d++) {
+      const hashes = [];
+      for (const mode of ['whole', 'compact', 'codec']) {
+        const hI = crypto.createHash('sha256');
+        const hII = crypto.createHash('sha256');
+        const book = {};
+        const observe = w => {
+          const s = w.s;
+          hI.update(`${w.got.map(m => `${m.id}|${m.text}`).join(',')}|${(s.phoneInbox ?? []).map(m => `${m.id}|${m.text}|${m.answered}|${m.auto}`).join(',')}|${w.lines.join('/')}|${meters(s)}\n`);
+          hII.update(`${whole4(s)}|${w.lines.join('/')}|${meters(s)}\n`);
+          /* Decision 3e: a whole desk (every GM desk) never gains a field
+             this round adds; these are section 1's FLEET desks exactly. */
+          if (mode === 'whole' && (s.phoneInbox ?? []).some(m => 't' in m || 'sv' in m)) out.bad.push(`${tag} desk ${d} week ${w.clock}: a whole desk's message carries t or sv`);
+          if (mode !== 'compact') return;
+          out.weeks++;
+          for (const m of w.got) book[keyOf(pack.events.find(e => e.id === m.defId))] = w.clock;
+          const cooling = k => (byKey.get(k) ?? []).some(e => (pack.clock === 'season' ? B.onCooldown(book, e, w.clock, pack.cooldown) : w.clock - book[k] < (e.cooldown ?? pack.cooldown)));
+          const want = Object.keys(book).filter(cooling).sort();
+          const have = Object.keys(s.gmInboxLast ?? {}).sort();
+          if (want.join(',') !== have.join(',')) out.bad.push(`${tag} desk ${d} week ${w.clock}: the book holds [${have.slice(0, 4).join(',')}], still cooling [${want.slice(0, 4).join(',')}]`);
+          for (const k of have) if (s.gmInboxLast[k] !== book[k]) out.bad.push(`${tag} desk ${d} week ${w.clock}: ${k} stamped ${s.gmInboxLast[k]}, dealt ${book[k]}`);
+          out.pruned += Object.keys(book).length - have.length;
+          if ((s.phoneUsedIds ?? []).length > limitUsed) out.bad.push(`${tag} desk ${d}: ${(s.phoneUsedIds ?? []).length} one shots used, the pack has ${limitUsed}`);
+          if ((s.phoneInbox ?? []).length > GM_MAX) out.bad.push(`${tag} desk ${d}: ${(s.phoneInbox ?? []).length} kept`);
+        };
+        const between = mode !== 'codec' ? undefined : s => {
+          const { host, dropped } = E.gmDeskLoad(JSON.parse(JSON.stringify(E.gmDeskSave(s, compact))), compact);
+          out.dropped += dropped;
+          for (const k of ['phoneInbox', 'phoneUsedIds', 'gmInboxLast', 'gmInboxRest']) { if (k in host) s[k] = host[k]; else delete s[k]; }
+          return s;
+        };
+        runDesk(mode === 'whole' ? whole : compact, tag, seed, 'FLEET', d, { observe, between, bind });
+        hashes.push([hI.digest('hex'), hII.digest('hex')]);
+      }
+      out.desks++;
+      if (hashes[0][0] !== hashes[1][0]) { out.i++; if (out.i <= 2) out.bad.push(`${tag} seed ${seed} desk ${d}: the compact desk dealt or moved differently from the whole one`); }
+      if (hashes[1][1] !== hashes[2][1]) { out.ii++; if (out.ii <= 2) out.bad.push(`${tag} seed ${seed} desk ${d}: a save and load between weeks changed the desk`); }
+    }
+    return out;
+  };
+  const GM_MAX = E.GM_INBOX_MAX;
+  /* Every index pack (INDEX_PACKS, not a list kept here) and the two FX packs. */
+  const packs = { ...INDEX_PACKS, fx_compact: FX_COMPACT, fx_compact_season: FX_COMPACT_SEASON };
+  const binds = { fx_compact: COMPACT_BIND, fx_compact_season: COMPACT_BIND };
+  for (const [k, p] of Object.entries(INDEX_PACKS)) {
+    binds[k] = indexBind(k, p);
+    if (binds[k] === null) { fail(13, `${k} moves fx keys and has no PACK_BINDS entry, so the kit cannot bind it`); delete packs[k]; }
+  }
+  const tot = { desks: 0, weeks: 0, pruned: 0, dropped: 0, bad: [] };
+  for (const [k, p] of Object.entries(packs)) for (const seed of SEEDS) {
+    const r = row(p, k, seed, binds[k]);
+    tot.desks += r.desks; tot.weeks += r.weeks; tot.pruned += r.pruned; tot.dropped += r.dropped; tot.bad.push(...r.bad);
+  }
+  for (const b of tot.bad.slice(0, 8)) console.error(`     ${b}`);
+  const line = `${Object.keys(packs).length} packs at seeds ${SEEDS.join(', ')}, ${tot.desks} FLEET desks three ways (${tot.weeks} compact weeks, ${tot.pruned} cooled book entries pruned in all)`;
+  if (tot.bad.length || tot.dropped) fail(13, `${tot.bad.length} breaks, ${tot.dropped} messages dropped on load: ${line}`);
+  else if (tot.pruned < 1000) fail(13, `${line}: too little pruned to have tested it`);
+  else ok(`${line}: compact and whole dealt, answered and moved alike; a save, JSON and load between every two weeks changed nothing, text included; the book held exactly the entries still cooling, the one shots never past the pack's, never more than ${GM_MAX} kept`);
+  /* Size, a report for W3 (it states its own against
+     simClubManagerSaveSize): FX_BIG, 420 generated cards with Club
+     Manager's rhythm (a fifty week season, about one deal a week the open
+     cap allows, a quarter of them one shots, cooldowns 4 to 40), on 20 desks
+     of fifteen seasons answering like the FLEET drive. The compact block's
+     mean bytes beside the same desk saved whole. */
+  const bigRng = keyedRng('simEventDeck|big|cards');
+  const FX_BIG = fxPack('fx_big', Array.from({ length: 420 }, (_, i) => fxCard(`b${i}`, {
+    ...(i % 4 === 0 ? { oneShot: true } : { cooldown: 4 + Math.floor(bigRng() * 37) }),
+    ...(i % 3 === 0 ? { texts: [`The b${i} matter is back on the desk.`] } : {}),
+  })), { span: { a: 50 }, chance: 0.02, store: 'compact' });
+  const sizeAt = [1, 5, 10, 15];
+  const sums = { compact: sizeAt.map(() => 0), whole: sizeAt.map(() => 0), deals: 0 };
+  const BIG_DESKS = 20;
+  for (const [mode, pack] of [['compact', FX_BIG], ['whole', { ...FX_BIG, store: undefined }]]) {
+    const seat = E.bindGmInbox(pack, BINDING);
+    for (let d = 0; d < BIG_DESKS; d++) {
+      const rng = keyedRng(`simEventDeck|big|${SEED}|${d}|deck`);
+      const ar = keyedRng(`simEventDeck|big|${SEED}|${d}|answer`);
+      const s = newDesk();
+      let clock = 0;
+      for (let season = 1; season <= 15; season++) {
+        s.year = 2030 + season;
+        for (let w = 0; w < 50; w++) {
+          const got = E.gmInboxWeek(s, seat, 'a', {}, clock++, rng);
+          if (mode === 'compact') sums.deals += got.length;
+          for (const m of openOf(s)) if (ar() < 0.75) E.answerGmInbox(s, m.id, Math.floor(ar() * m.choices.length), seat);
+        }
+        const at = sizeAt.indexOf(season);
+        if (at >= 0) sums[mode][at] += JSON.stringify(E.gmDeskSave(s, pack)).length;
+      }
+    }
+  }
+  const mean = (mode, i) => Math.round(sums[mode][i] / BIG_DESKS);
+  const slope = mode => Math.round((mean(mode, 3) - mean(mode, 2)) / 5);
+  console.log(`   size report: FX_BIG (420 cards, ${(sums.deals / BIG_DESKS / 15).toFixed(1)} deals a season) on ${BIG_DESKS} desks: compact block ${sizeAt.map((y, i) => `season ${y} ${mean('compact', i)} B`).join(', ')}, slope ${slope('compact')} B a season from 10 to 15; the same desk whole ${sizeAt.map((y, i) => `season ${y} ${mean('whole', i)} B`).join(', ')}, slope ${slope('whole')} B a season`);
+  if (sums.deals / BIG_DESKS / 15 < 20) fail(13, `FX_BIG dealt only ${(sums.deals / BIG_DESKS / 15).toFixed(1)} cards a season: the size report measures nothing`);
+  if (mean('compact', 3) >= mean('whole', 3)) fail(13, `the compact block (${mean('compact', 3)} B) is no smaller than the whole desk (${mean('whole', 3)} B) at season 15`);
+  /* The loader's three cases. */
+  {
+    const pack = FX_COMPACT;
+    const s = newDesk();
+    const seat = E.bindGmInbox(pack, { ...BINDING, ...COMPACT_BIND });
+    for (let t = 0; t < 30; t++) E.gmInboxWeek(s, seat, 'a', { man: 2, rival: 5 }, t, keyedRng(`simEventDeck|load|${t}`));
+    const block = JSON.parse(JSON.stringify(E.gmDeskSave(s, pack)));
+    const cases = [];
+    const empty = E.gmDeskLoad({ ...block, v: 2 }, pack);
+    cases.push(['a block of v: 2 reads as an empty desk', JSON.stringify(empty.host) === JSON.stringify({ phoneInbox: [], phoneUsedIds: [], gmInboxLast: {} })]);
+    const bent = E.gmDeskLoad({ ...block, l: [1], u: 'x' }, pack);
+    cases.push(['a bad book and a bad one shot list reset alone', JSON.stringify(bent.host.gmInboxLast) === '{}' && JSON.stringify(bent.host.phoneUsedIds) === '[]'
+      && JSON.stringify(bent.host.phoneInbox) === JSON.stringify(s.phoneInbox)]);
+    const old = { id: 'k_plain-2029-w3', defId: 'k_plain', from: 'Your assistant', emoji: '📋', text: 'An older build saved this whole.', year: 2029, choices: pack.events[0].choices, beat: 'a', answered: 0 };
+    const gone = { d: E.gmShortKey('no_such_card'), y: 2030, c: 4 };
+    const mixed = E.gmDeskLoad({ ...block, m: [old, gone, ...block.m] }, pack);
+    cases.push(['a whole message from an older build is kept, a compact one whose card is gone is dropped and counted',
+      JSON.stringify(mixed.host.phoneInbox[0]) === JSON.stringify(old) && mixed.dropped === 1 && mixed.host.phoneInbox.length === block.m.length + 1]);
+    const compactShare = block.m.filter(m => 'd' in m).length;
+    cases.push([`the saved messages are compact (${compactShare} of ${block.m.length})`, block.m.length > 0 && compactShare === block.m.length]);
+    const wrong = cases.filter(c => !c[1]);
+    if (wrong.length) fail(13, `the loader: ${wrong.map(c => c[0]).join('; ')} FAILED`);
+    else ok(`the loader: ${cases.map(c => c[0]).join('; ')}`);
+  }
+}
+
+/* ═══ 14. FROZEN WORDS: a compact pack's words never change once recorded ═══ */
+
+/* A compact message is rebuilt from its pack on read, so an edit to a
+   shipped card's words would rewrite messages already sitting in saves.
+   scripts/data/eventDeckWords.json records, for every pack whose source
+   declares store: 'compact' (FX_COMPACT here, and every index pack that
+   declares it, read off INDEX_PACKS, so no list kept by hand can leave one
+   out), each card's ledger key, a hash of each wording in order,
+   a hash of each option label, and its slots. A wording may only be added
+   at the end; nothing recorded may change. SIM_EVENT_DECK_WORDS=append adds
+   rows for new cards and new trailing wordings and never rewrites a row;
+   changing a recorded row is the lead's call, like the replay. */
+const WORDS_FILE = path.join(ROOT, 'scripts/data/eventDeckWords.json');
+const COMPACT_PACKS = { fx_compact: FX_COMPACT, ...Object.fromEntries(Object.entries(INDEX_PACKS).filter(([, p]) => p.store === 'compact')) };
+if (runs(14)) {
+  console.log('14) Frozen words: no recorded card of a compact pack changes its words, options, story or slots');
+  const APPEND = process.env.SIM_EVENT_DECK_WORDS === 'append';
+  if (APPEND && CONTROL) { console.error('the words ledger is appended with no control, refusing'); process.exit(2); }
+  const h12 = t => crypto.createHash('sha256').update(String(t)).digest('hex').slice(0, 12);
+  const packs = Object.fromEntries(Object.entries(COMPACT_PACKS).map(([k, p]) => [k, { ...p, events: p.events.map(e => ({ ...e })) }]));
+  const fx = packs.fx_compact.events;
+  if (CONTROL === 'wordedit') {
+    const e = fx.find(x => x.id === 'k_words');
+    if (!e || !e.texts?.length) { console.error('wordedit control: k_words has no wordings, refusing to run'); process.exit(2); }
+    e.texts = [`${e.texts[0]} Again.`, ...e.texts.slice(1)];
+  }
+  if (CONTROL === 'wordorder') {
+    const e = fx.find(x => x.id === 'k_words');
+    if (!e || !(e.texts?.length >= 2) || e.texts[0] === e.texts[1]) { console.error('wordorder control: k_words lacks two different wordings, refusing to run'); process.exit(2); }
+    e.texts = [e.texts[1], e.texts[0], ...e.texts.slice(2)];
+  }
+  if (CONTROL === 'storymove') {
+    const e = fx.find(x => x.id === 'k_plain');
+    if (!e || e.story !== undefined) { console.error('storymove control: k_plain is not a plain card, refusing to run'); process.exit(2); }
+    e.story = 'arc';
+  }
+  if (CONTROL === 'voiceedit') {
+    const e = fx.find(x => x.id === 'k_plain');
+    if (!e || e.from === 'Your captain') { console.error('voiceedit control: k_plain is gone or already speaks as the captain, refusing to run'); process.exit(2); }
+    e.from = 'Your captain';
+  }
+  if (CONTROL === 'effectedit') {
+    const e = fx.find(x => x.id === 'k_plain');
+    if (!e || !(e.choices[1]?.karma > 0)) { console.error('effectedit control: k_plain has no second option moving trust, refusing to run'); process.exit(2); }
+    e.choices = e.choices.map((c, i) => (i === 1 ? { ...c, karma: c.karma + 1 } : c));
+  }
+  /* Round 1332's review fix: a compact message is rebuilt with its card's
+     voice, emoji, beat and every option's reply and effects too, so those
+     are frozen with the words (a retune of a recorded card is the lead's
+     call, like a wording). Keys are sorted before hashing, so moving a key
+     in the source changes nothing. */
+  const canon = v => JSON.stringify(v, (k, x) => (x && typeof x === 'object' && !Array.isArray(x) ? Object.fromEntries(Object.entries(x).sort(([a], [b]) => (a < b ? -1 : a > b ? 1 : 0))) : x));
+  const rowOf = e => ({
+    key: e.story ? `story:${e.story}` : e.id,
+    words: [e.text, ...(e.texts ?? [])].map(h12),
+    options: e.choices.map(c => h12(c.label)),
+    slots: [...new Set([e.text, ...(e.texts ?? [])].flatMap(t => [...t.matchAll(/\{(\w+)\}/g)].map(m => m[1])))].sort(),
+    voice: h12(canon([e.from, e.emoji, e.beat])),
+    effects: e.choices.map(({ label, ...rest }) => h12(canon(rest))),
+  });
+  const rec = fs.existsSync(WORDS_FILE) ? JSON.parse(fs.readFileSync(WORDS_FILE, 'utf8')) : { rows: {} };
+  const rows = rec.rows ?? {};
+  const bad = [];
+  const added = [];
+  const now = {};
+  for (const [k, p] of Object.entries(packs)) for (const e of p.events) now[`${k}/${e.id}`] = rowOf(e);
+  for (const [id, r] of Object.entries(rows)) {
+    const n = now[id];
+    if (!n) { bad.push(`${id}: a recorded card is gone`); continue; }
+    if (n.key !== r.key) bad.push(`${id}: its ledger key moved from ${r.key} to ${n.key} (a story added or taken away)`);
+    const prefix = n.words.slice(0, r.words.length);
+    if (prefix.join() !== r.words.join()) bad.push(`${id}: a recorded wording changed or moved`);
+    else if (n.words.length > r.words.length) {
+      if (APPEND) { r.words = n.words; added.push(`${id} +${n.words.length - prefix.length} wording`); }
+      else bad.push(`${id}: ${n.words.length - r.words.length} new wording(s) at the end, not yet recorded (SIM_EVENT_DECK_WORDS=append)`);
+    }
+    if (n.options.join() !== r.options.join()) bad.push(`${id}: an option was added, removed, reordered or relabelled`);
+    if (n.slots.join() !== r.slots.join() && prefix.join() === r.words.join()) bad.push(`${id}: its slots changed`);
+    /* A row recorded before these two fields gains them by the append mode
+       only, which never changes a value already recorded. */
+    for (const [field, what] of [['voice', 'voice, emoji or beat'], ['effects', 'option replies or effects']]) {
+      if (r[field] === undefined) {
+        if (APPEND) { r[field] = n[field]; added.push(`${id} ${field}`); } else bad.push(`${id}: its ${what} not yet recorded (SIM_EVENT_DECK_WORDS=append)`);
+      } else if (JSON.stringify(r[field]) !== JSON.stringify(n[field])) bad.push(`${id}: its ${what} changed`);
+    }
+  }
+  for (const [id, n] of Object.entries(now)) {
+    if (rows[id]) continue;
+    if (APPEND) { rows[id] = n; added.push(id); } else bad.push(`${id}: a card with no row (SIM_EVENT_DECK_WORDS=append)`);
+  }
+  if (APPEND && added.length && !bad.length) {
+    const text = `{\n  "note": "Round 1332: the frozen words of every compact pack (scripts/simEventDeck.mjs section 14). Appended by SIM_EVENT_DECK_WORDS=append only; a changed row is the lead's call.",\n  "rows": {\n${
+      Object.entries(rows).map(([k, r]) => `    ${JSON.stringify(k)}: ${JSON.stringify(r)}`).join(',\n')}\n  }\n}\n`;
+    fs.writeFileSync(WORDS_FILE, text);
+    console.log(`   APPENDED ${added.length} rows or wordings to scripts/data/eventDeckWords.json: ${added.slice(0, 6).join(', ')}`);
+  }
+  for (const b of bad.slice(0, 8)) console.error(`     ${b}`);
+  const count = Object.keys(rows).length;
+  if (bad.length) fail(14, `${bad.length} frozen word breaks over ${count} recorded cards`);
+  else if (count < 10) fail(14, `only ${count} recorded cards: nothing was tested`);
+  else ok(`${count} recorded cards of ${Object.keys(packs).length} compact pack(s): every wording, option, story and slot as recorded`);
+}
+
+/* ═══ 15. ECONOMY: no pack pushes a meter past its own seasonal ceiling ═══ */
+
+/* Correction 13: forty or fifty effect cards a season can drive board
+   confidence and the budget to their ends the way Soccer Career's fame
+   ran away. For every pack and every meter it moves, two answer policies
+   on the FLEET drive (100 desks of ten seasons): BEST answers every open
+   card the week it lands with the option that moves that meter most, WORST
+   with the one that moves it least. The statistic is declared pressure:
+   the chosen options' values on that meter summed per season, unclamped,
+   a mean over the 1,000 seasons. A pack off ECONOMY_BASELINE declares
+   `pressure` (its own ceiling per meter, set by its binding round from the
+   real engine's meter harness) and fails on a meter it moves with no
+   ceiling, or when BEST or WORST passes it either way. The seven GM packs
+   predate the rule: their numbers are printed and written here, never
+   gated (ECONOMY_MEASURED).
+
+   ECONOMY_MEASURED 2026-10-13 on a runner (rc r1332-e-measure), BEST and
+   WORST a season, lowest to highest over seeds 1 to 10 (seed to seed
+   standard deviations 0.00 to 0.14):
+     nfl      cash +0.10..+0.14 / -1.09..-1.00, fans +5.19..+5.40 / -2.15..-2.00,
+              morale +4.38..+4.57 / -3.55..-3.42, trust +4.30..+4.42 / -3.75..-3.58
+     nba      cash +0.99..+1.08 / -0.33..-0.30, fans +2.41..+2.51 / -1.53..-1.40,
+              morale +2.27..+2.44 / -1.86..-1.74, trust +2.10..+2.28 / -1.64..-1.52
+     mlb      cash 0 / -0.72..-0.66, fans +3.77..+3.98 / -2.74..-2.53,
+              morale +1.82..+2.00 / -1.99..-1.83, trust +3.43..+3.56 / -1.70..-1.60
+     nhl      cash 0 / -0.51..-0.48, fans +3.19..+3.31 / -1.88..-1.76,
+              morale +1.55..+1.66 / -1.76..-1.66, trust +2.45..+2.62 / -1.71..-1.59
+     college  cash +1.35..+1.61 / -3.94..-3.63, fans +1.92..+2.05 / -1.06..-0.97,
+              morale +2.39..+2.52 / -2.15..-2.02, recruit +8.56..+8.95 / +0.34..+0.55,
+              trust +2.26..+2.43 / -4.69..-4.45
+     gym      cash +0.06..+0.07 / -0.06, trust +4.00..+4.20 / -3.21..-2.98
+     afl      morale +3.05..+3.21 / -0.91..-0.86, trust +1.30..+1.42 / -1.32..-1.20
+   The FX packs' ceilings (their own `pressure`) are each its highest
+   measured push (either way) rounded up with at least eight seed to seed
+   deviations of room: fx_registry ban 10.23 (12), board 10.25 (12), cash
+   6.88 (8), fans 3.44 (4), form 6.88 (8), fund 5.16 (6), morale 3.44 (4),
+   recruit 6.82 (8), trust 6.83 (8); fx_compact morale 19.39 (20), trust
+   38.79 (40). The pressure control multiplies fx_compact's moves by ten. */
+const ECONOMY_BASELINE = ['afl', 'college', 'gym', 'mlb', 'nba', 'nfl', 'nhl'];
+const ECONOMY_FX = {
+  fx_registry: { pack: FX_REGISTRY, bind: { fx: FX_REGISTRY_DEF } },
+  fx_compact: { pack: FX_COMPACT, bind: COMPACT_BIND },
+};
+if (runs(15)) {
+  console.log('15) Economy: every meter a pack moves, BEST and WORST answered, its seasonal push under the pack\'s own ceiling');
+  const valueOn = (c, meter) => {
+    const built = { trust: c.karma, fans: c.popularity, cash: c.cash, morale: c.morale, recruit: c.recruit }[meter];
+    if (built !== undefined || ['trust', 'fans', 'cash', 'morale', 'recruit'].includes(meter)) return built ?? 0;
+    const raw = c.fx?.[meter];
+    return raw === undefined ? 0 : typeof raw === 'number' ? raw : raw.v;
+  };
+  const metersOf = p => [...new Set(p.events.flatMap(e => e.choices).flatMap(c => ['trust', 'fans', 'cash', 'morale', 'recruit', ...Object.keys(c.fx ?? {})].filter(m => valueOn(c, m) !== 0)))].sort();
+  const pressureOf = (pack, tag, meter, sign, seed, bind) => {
+    let total = 0;
+    const policy = (s, got, bound, rng, lines) => {
+      for (const m of openOf(s)) {
+        let best = 0;
+        m.choices.forEach((c, i) => { if (sign * valueOn(c, meter) > sign * valueOn(m.choices[best], meter)) best = i; });
+        total += valueOn(m.choices[best], meter);
+        lines.push(E.answerGmInbox(s, m.id, best, bound));
+      }
+    };
+    for (let d = 0; d < DRIVES.FLEET.desks; d++) runDesk(pack, tag, seed, 'FLEET', d, { policy, bind });
+    return total / (DRIVES.FLEET.desks * SEASONS);
+  };
+  /* Every index pack (INDEX_PACKS, not a list kept here) and the FX packs. */
+  const packs = { ...Object.fromEntries(Object.entries(INDEX_PACKS).map(([k, p]) => [k, { pack: p, bind: indexBind(k, p) }])), ...ECONOMY_FX };
+  for (const [k, { bind }] of Object.entries(packs)) {
+    if (bind === null) { fail(15, `${k} moves fx keys and has no PACK_BINDS entry, so the kit cannot bind it`); delete packs[k]; }
+  }
+  if (CONTROL === 'pressure') {
+    const p = packs.fx_compact.pack;
+    const times = c => ({ ...c, karma: c.karma * 10, ...(c.morale ? { morale: c.morale * 10 } : {}) });
+    packs.fx_compact = { ...packs.fx_compact, pack: { ...p, events: p.events.map(e => ({ ...e, choices: e.choices.map(times) })) } };
+    if (!packs.fx_compact.pack.events.some(e => e.choices.some(c => c.karma >= 20))) { console.error('pressure control changed nothing, refusing to run'); process.exit(2); }
+  }
+  const lines = [];
+  for (const [k, { pack, bind }] of Object.entries(packs)) {
+    const meters = metersOf(pack);
+    const parts = [];
+    for (const meter of meters) {
+      const hi = pressureOf(pack, k, meter, 1, SEED, bind);
+      const lo = pressureOf(pack, k, meter, -1, SEED, bind);
+      parts.push(`${meter} ${hi >= 0 ? '+' : ''}${hi.toFixed(2)} / ${lo >= 0 ? '+' : ''}${lo.toFixed(2)}`);
+      if (ECONOMY_BASELINE.includes(k)) continue;
+      const cap = pack.pressure?.[meter];
+      if (cap === undefined) fail(15, `${k} moves ${meter} and declares no pressure ceiling for it`);
+      else if (Math.max(Math.abs(hi), Math.abs(lo)) > cap) fail(15, `${k}: ${meter} pushed ${hi.toFixed(2)} (BEST) and ${lo.toFixed(2)} (WORST) a season, ceiling ${cap}`);
+      if (MEASURE) console.log(`   measure: ${k} ${meter} BEST and WORST at seeds 1 to 10: ${TEN.map(sd => `${pressureOf(pack, k, meter, 1, sd, bind).toFixed(2)}/${pressureOf(pack, k, meter, -1, sd, bind).toFixed(2)}`).join(', ')}`);
+    }
+    if (MEASURE && ECONOMY_BASELINE.includes(k)) {
+      for (const meter of meters) console.log(`   measure: ${k} ${meter} BEST and WORST at seeds 1 to 10: ${TEN.map(sd => `${pressureOf(pack, k, meter, 1, sd, bind).toFixed(2)}/${pressureOf(pack, k, meter, -1, sd, bind).toFixed(2)}`).join(', ')}`);
+    }
+    lines.push(`${k} ${parts.join(', ')}`);
+  }
+  for (const l of lines) console.log(`   pressure a season (BEST / WORST): ${l}`);
+  const missing = ECONOMY_BASELINE.filter(k => !packs[k]);
+  if (missing.length) fail(15, `ECONOMY_BASELINE names packs the kit does not know: ${missing.join(', ')}`);
+  if (!red.has(15)) ok(`${Object.keys(packs).length} packs: the ${ECONOMY_BASELINE.length} on the baseline printed, every other pack under its own ceiling on every meter it moves`);
+}
+
+/* ═══ 16. BYTES AND LAZY: what an event costs, and the deck in no eager chunk ═══ */
+
+/* Correction 9: the whole deck (engine, rules and words) is one lazy chunk
+   W3 loads before Play enables, so nothing here may sit in an eager chunk.
+   Bytes per event: each pack module the indexes import, minified alone by
+   esbuild and gzipped (zlib, its default level), divided by its events;
+   the engine the same way (alone, and bundled with what it pulls in); the
+   projection for 420 and 690 events. A report, written in BYTES_MEASURED
+   below; W3 states its chunk. The fence: src read as code (comments
+   stripped as section 7 does), every file that imports the engine, a pack
+   index or GmInboxPanel is one of the deck's own files, a test, or uses
+   `import type` or a dynamic `import(`. LAZY_IMPORTERS, append only, takes
+   the modules W2 and W3 add (the lazy chunk's own entry).
+   BYTES_MEASURED 2026-10-13 (Round 1332's head): the seven GM packs, 54
+   events, 542 B minified and 214 B gzipped an event (each module alone,
+   esbuild minify, zlib's default level), so 420 events about 222 K
+   minified and 88 K gzipped, 690 about 365 K and 144 K. The engine
+   src/lib/gmInbox.ts: 28,478 B LF, 8,160 B minified, 3,298 B gzipped on
+   the base (082fc277) and 52,759 B LF, 16,233 B minified, 6,106 B gzipped
+   here; bundled with what it pulls in (careerInbox's answer flow,
+   careerEventDeck's ledger, keyedRng), 16,891 B and 6,379 B. After the
+   review fix pass (rc r1332-fx-c, ba06f054): 57,375 B LF, 17,087 B
+   minified, 6,350 B gzipped; bundled 17,742 B and 6,627 B. */
+const LAZY_IMPORTERS = [];
+if (runs(16)) {
+  console.log('16) Bytes and lazy: bytes per event, and nothing that is not the deck imports it eagerly');
+  const zlib = await import('node:zlib');
+  const { transform } = await import('esbuild');
+  const strip = t => t.replace(/\/\*[\s\S]*?\*\//g, '').replace(/(^|[^:])\/\/.*$/gm, '$1');
+  const gz = s => zlib.gzipSync(Buffer.from(s)).length;
+  const minOf = async rel => (await transform(readSrc(rel), { loader: rel.endsWith('x') ? 'tsx' : 'ts', minify: true, format: 'esm' })).code;
+  const bundled = async rel => (await build({ entryPoints: [path.join(ROOT, rel)], bundle: true, minify: true, write: false, format: 'esm',
+    platform: 'browser', alias: { '@': path.join(ROOT, 'src') }, absWorkingDir: ROOT, logLevel: 'error' })).outputFiles[0].text;
+  const rows = [];
+  let packBytes = 0;
+  let packGz = 0;
+  let events = 0;
+  for (const [rel, name] of PACK_INDEXES) {
+    const idx = readSrc(rel);
+    const files = [...strip(idx).matchAll(/from\s+['"]\.\/([\w-]+)['"]/g)].map(m => `${path.posix.dirname(rel)}/${m[1]}.ts`);
+    const packsHere = B[`packs${PACK_INDEXES.findIndex(p => p[1] === name)}`];
+    for (const f of files) {
+      const min = await bundled(f);
+      const seat = Object.keys(packsHere).find(k => strip(readSrc(f)).includes(`seat: '${k}'`));
+      const n = seat ? packsHere[seat].events.length : 0;
+      if (!n) { fail(16, `${f}: no pack of ${rel} found in it`); continue; }
+      packBytes += min.length; packGz += gz(min); events += n;
+      rows.push(`${path.posix.basename(f, '.ts')} ${n} events ${min.length} B min ${gz(min)} B gz (${Math.round(gz(min) / n)} B gz an event)`);
+    }
+  }
+  const engineLf = Buffer.byteLength(readSrc(ENGINE_REL));
+  const alone = await minOf(ENGINE_REL);
+  const withDeps = await bundled(ENGINE_REL);
+  const perMin = packBytes / Math.max(1, events);
+  const perGz = packGz / Math.max(1, events);
+  console.log(`   packs: ${rows.join('; ')}`);
+  console.log(`   ${events} events: ${Math.round(perMin)} B minified, ${Math.round(perGz)} B gzipped an event (each module alone); 420 events about ${Math.round(perMin * 420 / 1024)} K min ${Math.round(perGz * 420 / 1024)} K gz, 690 about ${Math.round(perMin * 690 / 1024)} K min ${Math.round(perGz * 690 / 1024)} K gz`);
+  console.log(`   the engine: ${engineLf} B LF, ${alone.length} B minified alone (${gz(alone)} B gzipped), ${withDeps.length} B minified with what it pulls in (${gz(withDeps)} B gzipped)`);
+  if (events < 50) fail(16, `only ${events} events measured: the byte report measures nothing`);
+  /* The fence. */
+  const walk = dir => fs.readdirSync(path.join(ROOT, dir), { withFileTypes: true }).flatMap(d => (d.isDirectory() ? walk(`${dir}/${d.name}`)
+    : /\.(ts|tsx)$/.test(d.name) ? [`${dir}/${d.name}`] : []));
+  const files = walk('src');
+  const DECK = ['src/lib/gmInbox', 'src/components/front-office-shared/GmInboxPanel', ...PACK_INDEXES.map(([rel]) => rel.replace(/\.tsx?$/, ''))];
+  const deckDirs = PACK_INDEXES.map(([rel]) => path.posix.dirname(rel));
+  const own = f => f === 'src/lib/gmInbox.ts' || f === 'src/components/front-office-shared/GmInboxPanel.tsx' || deckDirs.some(d => f.startsWith(`${d}/`));
+  const isTest = f => /\.test\.tsx?$/.test(f) || f.startsWith('src/test/');
+  const resolve = (from, spec) => {
+    const p = spec.startsWith('@/') ? `src/${spec.slice(2)}` : spec.startsWith('.') ? path.posix.normalize(`${path.posix.dirname(from)}/${spec}`) : null;
+    if (!p) return null;
+    const bare = p.replace(/\.(ts|tsx|js)$/, '');
+    /* A pack module imported on its own is the deck too, not only its index. */
+    if (deckDirs.some(d => bare.startsWith(`${d}/`))) return bare;
+    return DECK.includes(bare) ? bare : DECK.includes(`${bare}/index`) ? `${bare}/index` : null;
+  };
+  let read = 0;
+  const eager = [];
+  let lazyOk = 0;
+  for (const f of files) {
+    let code = strip(readSrc(f));
+    if (CONTROL === 'eager' && f === 'src/pages/FrontOffice.tsx') code = `import { gmInboxWeek } from '@/lib/gmInbox';\n${code}`;
+    read++;
+    for (const m of code.matchAll(/\b(import|export)\s+(type\s+)?[^;'"]*?\bfrom\s+['"]([^'"]+)['"]/g)) {
+      const hit = resolve(f, m[3]);
+      if (!hit) continue;
+      if (m[2] || own(f) || isTest(f)) continue;
+      if (LAZY_IMPORTERS.includes(f)) { lazyOk++; continue; }
+      eager.push(`${f} imports ${m[3]}`);
+    }
+    for (const m of code.matchAll(/\bimport\s+['"]([^'"]+)['"]/g)) if (resolve(f, m[1]) && !own(f) && !isTest(f)) eager.push(`${f} imports ${m[1]} for its side effects`);
+  }
+  if (CONTROL === 'eager' && !files.includes('src/pages/FrontOffice.tsx')) { console.error('eager control: src/pages/FrontOffice.tsx is gone, refusing to run'); process.exit(2); }
+  for (const b of eager.slice(0, 6)) console.error(`     ${b}`);
+  if (read < 500) fail(16, `only ${read} src files read: the fence saw nothing`);
+  if (eager.length) fail(16, `${eager.length} eager imports of the deck outside it`);
+  else ok(`${read} src files read as code: only the deck's own files, tests, type imports and dynamic imports reach the engine, a pack index or GmInboxPanel${lazyOk ? ` (${lazyOk} on LAZY_IMPORTERS)` : ''}`);
+}
+
 /* ═══ end ═══ */
+
 
 console.log('');
 console.log(`runtime ${secs()} s`);
@@ -1039,5 +2092,5 @@ if (failures > 0) {
   console.error(`simEventDeck: ${failures} failure${failures === 1 ? '' : 's'}, red sections ${[...red].sort((a, b) => a - b).join(', ')}${CONTROL ? ` (CONTROL=${CONTROL} fired)` : ''}`);
   process.exit(1);
 }
-console.log(`simEventDeck: green.${CONTROL ? ` CONTROL=${CONTROL} did not fire, which is itself a failure of the control.` : ''}`);
+console.log(`simEventDeck: green.${SECTIONS.length ? ` Sections ${SECTIONS.join(', ')} only.` : ''}${CONTROL ? ` CONTROL=${CONTROL} did not fire, which is itself a failure of the control.` : ''}`);
 if (CONTROL) process.exit(3);

@@ -6,6 +6,7 @@
 import { describe, expect, it, vi } from 'vitest';
 import { fireEvent, render, screen } from '@testing-library/react';
 import SaveMovedNotice from '@/components/SaveMovedNotice';
+import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog';
 
 const WORDS = 'This career moved on in another tab. Reload to carry on.';
 
@@ -48,6 +49,41 @@ describe('SaveMovedNotice', () => {
     fireEvent.keyDown(document.body, { key: 'Escape' });
     expect(seen).toEqual(['Escape']);
     window.removeEventListener('keydown', onKey);
+  });
+
+  it('Reload takes the first press while a dialog behind it holds the page (Release BD, the lead ruling of Round 1330)', () => {
+    /* An open modal dialog (Radix, src/components/ui/dialog.tsx) sets pointer-events none on the body, and the notice
+       is a child of the body, so it inherited that and the first press only closed the dialog. pointer-events is an
+       inherited property: the value that applies to the button is the nearest one declared on it or above it.
+       jsdom does not inherit it, so this walks up the way the browser does. */
+    const applied = (el: Element | null) => {
+      for (let at = el; at; at = at.parentElement) {
+        const v = window.getComputedStyle(at).pointerEvents;
+        if (v && v !== 'inherit' && v !== 'unset') return v;
+      }
+      return 'auto';
+    };
+    const onReload = vi.fn();
+    const page = (notice: boolean) => (
+      <div>
+        <Dialog open>
+          <DialogContent>
+            <DialogTitle>Season review</DialogTitle>
+            <button>Next season</button>
+          </DialogContent>
+        </Dialog>
+        {notice && <SaveMovedNotice message={WORDS} onReload={onReload} />}
+      </div>
+    );
+    /* The order of the game: the dialog is open first, then the other tab's write lands and the notice mounts. */
+    const r = render(page(false));
+    expect(document.body.style.pointerEvents).toBe('none');
+    r.rerender(page(true));
+    const reload = screen.getByRole('button', { name: 'Reload' });
+    expect(applied(reload)).not.toBe('none');
+    fireEvent.click(reload);
+    expect(onReload).toHaveBeenCalledTimes(1);
+    r.unmount();
   });
 
   it('Reload calls the reload it is given', () => {

@@ -4,6 +4,7 @@ on:
     branches: [codex/soccer-career-save-size]
 permissions:
   contents: read
+  actions: read
 jobs:
   verify:
     if: "!contains(github.event.head_commit.message, '[tail diagnostic]')"
@@ -15,6 +16,8 @@ jobs:
       ENGINES: chromium
       SC_SAVE_PHASE: fixed
       SC_SAVE_OUT: ${{ github.workspace }}/career-save-artifacts
+      SC_TAIL_INPUT: ${{ github.workspace }}/career-save-artifacts/legacy-inputs
+      SC_TAIL_OUT: ${{ github.workspace }}/career-save-artifacts/tails
       FREE_KICK_FONT_CACHE: ${{ github.workspace }}/career-save-artifacts/font-cache
       PRERENDER_ONLY: /soccer-career
     defaults:
@@ -66,14 +69,55 @@ jobs:
             NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerCareerSaveSize.mjs 2>&1 | tee "$SC_SAVE_OUT/fixed.log"
             SC_SAVE_CONTROL=plain SC_SAVE_EXPECT_RED=1 SC_SAVE_OUT="$SC_SAVE_OUT/control" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerCareerSaveSize.mjs 2>&1 | tee "$SC_SAVE_OUT/control.log"
           fi
+      - name: Actual packed saves and the current-main generation fence
+        if: env.SC_SAVE_PHASE == 'fixed'
+        run: SC_PACKED_FENCE_OUT="$SC_SAVE_OUT/packed-fence" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/soccerCareerPackedFence.mjs 2>&1 | tee "$SC_SAVE_OUT/packed-fence.log"
       - name: Codec and actual veteran page regressions
         if: env.SC_SAVE_PHASE == 'fixed'
-        run: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" npm test -- src/lib/soccerCareerSave.test.ts src/test/careerDilemmaReach.test.tsx src/test/careerKeepPlaying.test.tsx --maxWorkers=2 --reporter=default --reporter=json --outputFile.json="$SC_SAVE_OUT/focused-unit.json" 2>&1 | tee "$SC_SAVE_OUT/focused-unit.log"
+        run: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" npm test -- src/lib/soccerCareerSave.test.ts src/test/careerDilemmaReach.test.tsx src/test/careerKeepPlaying.test.tsx src/test/soccerCareerSaveFence.test.tsx src/test/soccerCareerSaveRetry.test.tsx src/test/soccerCareerPackedFence.test.tsx --maxWorkers=2 --reporter=default --reporter=json --outputFile.json="$SC_SAVE_OUT/focused-unit.json" 2>&1 | tee "$SC_SAVE_OUT/focused-unit.log"
+      - name: Fetch qualified legacy career inputs for current-main migration
+        if: env.SC_SAVE_PHASE == 'fixed'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          python - <<'PY'
+          import os, json, hashlib, pathlib, urllib.request, urllib.error, zipfile
+          out = pathlib.Path(os.environ['SC_TAIL_OUT'])
+          out.mkdir(parents=True, exist_ok=True)
+          inputs = pathlib.Path(os.environ['SC_TAIL_INPUT']); inputs.mkdir()
+          spec = json.loads(pathlib.Path('scripts/qa/soccerCareerSaveTailInputs.json').read_text())
+          api = 'https://api.github.com/repos/PapiSalgueroM/ballpark-hero/actions/artifacts/' + str(spec['artifact'])
+          headers = {'Authorization': 'Bearer ' + os.environ['GH_TOKEN'], 'Accept': 'application/vnd.github+json', 'User-Agent': 'career-tail-proof'}
+          meta = json.load(urllib.request.urlopen(urllib.request.Request(api, headers=headers)))
+          assert meta['workflow_run']['id'] == spec['run'] and meta['workflow_run']['head_sha'] == spec['source'] and not meta['expired']
+          (out / 'input-artifact-metadata.json').write_text(json.dumps(meta, indent=2))
+          class NoRedirect(urllib.request.HTTPRedirectHandler):
+              def redirect_request(self, req, fp, code, msg, hdrs, newurl): return None
+          try:
+              urllib.request.build_opener(NoRedirect).open(urllib.request.Request(api + '/zip', headers=headers))
+              raise AssertionError('expected signed artifact redirect')
+          except urllib.error.HTTPError as response:
+              assert response.code == 302
+              location = response.headers['Location']
+          data = urllib.request.urlopen(urllib.request.Request(location, headers={'User-Agent': 'career-tail-proof'})).read()
+          assert hashlib.sha256(data).hexdigest() == spec['zipSha256']
+          archive_path = out / 'input-artifact.zip'; archive_path.write_bytes(data)
+          with zipfile.ZipFile(archive_path) as archive:
+              names = archive.namelist()
+              for item in spec['inputs']:
+                  assert names.count(item['name']) == 1
+                  body = archive.read(item['name'])
+                  assert len(body) == item['bytes'] and hashlib.sha256(body).hexdigest() == item['sha256']
+                  (inputs / item['name']).write_bytes(body)
+          print('Twelve immutable complete career inputs held from the qualified artifact.')
+          PY
+          cp scripts/qa/soccerCareerSaveTailInputs.json "$SC_TAIL_OUT/input-manifest.json"
+          cp -r "$SC_TAIL_INPUT" "$SC_TAIL_OUT/inputs"
       - name: Actual extended careers and whole original codec control
         if: env.SC_SAVE_PHASE == 'fixed'
         run: |
-          SC_TAIL_PHASE=fixed SC_TAIL_INPUT="$SC_SAVE_OUT" SC_TAIL_OUT="$SC_SAVE_OUT/tails" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/soccerCareerSaveTails.mjs 2>&1 | tee "$SC_SAVE_OUT/tails.log"
-          SC_TAIL_PHASE=fixed SC_TAIL_INPUT="$SC_SAVE_OUT" SC_TAIL_CONTROL=original SC_TAIL_OUT="$SC_SAVE_OUT/tails/control" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/soccerCareerSaveTails.mjs 2>&1 | tee "$SC_SAVE_OUT/tail-control.log"
+          SC_TAIL_PHASE=fixed SC_TAIL_INPUT="$SC_TAIL_INPUT" SC_TAIL_OUT="$SC_SAVE_OUT/tails" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/soccerCareerSaveTails.mjs 2>&1 | tee "$SC_SAVE_OUT/tails.log"
+          SC_TAIL_PHASE=fixed SC_TAIL_INPUT="$SC_TAIL_INPUT" SC_TAIL_CONTROL=original SC_TAIL_OUT="$SC_SAVE_OUT/tails/control" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/soccerCareerSaveTails.mjs 2>&1 | tee "$SC_SAVE_OUT/tail-control.log"
       - name: Build prerequisites on remote runner
         if: env.SC_SAVE_PHASE == 'fixed'
         run: |
@@ -107,7 +151,7 @@ jobs:
         run: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playSoccerCareerSaveSize.mjs 2>&1 | tee "$SC_SAVE_OUT/browser.log"
       - name: Actual extended tail cold reloads and refusal in Chromium
         if: env.SC_SAVE_PHASE == 'fixed'
-        run: SC_TAIL_BROWSER_ROOT="$PWD" SC_TAIL_INPUT="$SC_SAVE_OUT" SC_TAIL_OUT="$SC_SAVE_OUT/tails" SC_TAIL_BROWSER_OUT="$SC_SAVE_OUT/tails/browser" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/playSoccerCareerSaveTails.mjs 2>&1 | tee "$SC_SAVE_OUT/tail-browser.log"
+        run: SC_TAIL_BROWSER_ROOT="$PWD" SC_TAIL_INPUT="$SC_TAIL_INPUT" SC_TAIL_OUT="$SC_SAVE_OUT/tails" SC_TAIL_BROWSER_OUT="$SC_SAVE_OUT/tails/browser" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/playSoccerCareerSaveTails.mjs 2>&1 | tee "$SC_SAVE_OUT/tail-browser.log"
       - name: Full ordinary unit suite
         if: env.SC_SAVE_PHASE == 'fixed'
         run: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" npm test -- --maxWorkers=2 --reporter=default --reporter=json --outputFile.json="$SC_SAVE_OUT/full-unit.json" 2>&1 | tee "$SC_SAVE_OUT/full-unit.log"

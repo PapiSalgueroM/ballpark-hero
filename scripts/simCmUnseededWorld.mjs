@@ -131,15 +131,21 @@ function firstDifference(a, b) {
   return 'the key order differs';
 }
 
-/* One journey of one save through one plan on one engine. Every step draws from its own stretch of the stream. */
-async function journey(E, input, plan, seed) {
+/* One journey of one save through one plan on one engine. Every step draws from its own stretch of the stream.
+   Round 1331, the bridge for a kit pinned to an old engine: since that round a match plays its league and season's
+   substitution rule and the press at the whistle reads the next fixture, which the pinned base does not know. This
+   tree's journeys (bridge) hand every step but a save the career with matchRules 'base', which is the old engine
+   for subs and press by construction (scripts/simCmSubs.mjs section legacy proves it byte for byte), and take the
+   key off every state before it is compared or saved. */
+async function journey(E, input, plan, seed, bridge = false) {
   const M = await E.fresh();
   const steps = [];
   let s = null; let k = 0;
   const step = (label, fn) => {
     k += 1;
-    const r = tape((seed + k * 7919) >>> 0, () => fn(s));
+    const r = tape((seed + k * 7919) >>> 0, () => fn(bridge && s && label !== 'save-and-reload' ? { ...s, matchRules: 'base' } : s));
     const got = r.value ?? {};
+    if (bridge && got.state && 'matchRules' in got.state) { got.state = { ...got.state }; delete got.state.matchRules; }
     if (got.state) s = got.state;
     steps.push({ label, note: got.note ?? '', json: JSON.stringify(s), draws: r.draws.length, drawSha: sha(r.draws), saved: got.saved ?? null });
   };
@@ -226,7 +232,7 @@ async function journey(E, input, plan, seed) {
 async function pair(sectionName, A, B, input, plan, seed, acc) {
   let a, b;
   try { a = await journey(A, input, plan, seed); } catch (e) { cannot(`${input.name} (${plan}) on the base engine: ${e.message}`); }
-  try { b = await journey(B, input, plan, seed); } catch (e) { b = null; acc.fails.push(`${sectionName} ${input.name} (${plan}, seed ${seed}): this tree threw: ${e.message}`); }
+  try { b = await journey(B, input, plan, seed, true); } catch (e) { b = null; acc.fails.push(`${sectionName} ${input.name} (${plan}, seed ${seed}): this tree threw: ${e.message}`); }
   acc.journeys += 1;
   for (const x of a) if (x.note) acc.notes[`${x.label} ${x.note}`] = (acc.notes[`${x.label} ${x.note}`] ?? 0) + 1;
   if (!b) return;

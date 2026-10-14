@@ -100,10 +100,16 @@ function reload(B, c, frames) {
   assert.equal(B.cm.saveCareer(second), true); equal([...B.store.entries()], bytes, 'Second load/save is byte-exact');
   frames.push({ label: 'stable-second-reload', input: clone(first.loaded), output: clone(second), bytes }); return second;
 }
-function neutral(B, input) {
+/* Round 1331, the bridge for a kit pinned to an old engine (b6eb78e7): since that round a match plays its league and
+   season's substitution rule and the press at the whistle reads the next fixture, which the pinned engine does not
+   know. The current arm's match (bridge) is played with matchRules 'base', the old engine for subs and press by
+   construction (scripts/simCmSubs.mjs section legacy proves it byte for byte), and the key comes off its state
+   before anything is compared; the save and the summer never carry it. */
+function neutral(B, input, bridge = false) {
   const c = clone(input); B.store.clear();
   const reads = { market: B.cm.buildMarket(c), opponent: B.cm.oppRosterFor(c, 'Arsenal'), year: B.cm.worldYear(c) };
-  const match = B.cm.playNextEntry(clone(c), { skipHalftime: true, noCoach: true });
+  const match = B.cm.playNextEntry(bridge ? { ...clone(c), matchRules: 'base' } : clone(c), { skipHalftime: true, noCoach: true });
+  if (bridge && match.state && 'matchRules' in match.state) delete match.state.matchRules;
   const summer = B.cm.startNextSeason(clone(c));
   assert.equal(B.cm.saveCareer(c), true); const loaded = B.cm.loadCareer();
   return { reads, match, summer, loaded, storage: [...B.store.entries()] };
@@ -138,7 +144,7 @@ async function arm(control) {
         const base = preparation.value;
         const input = malformed ? { ...base, worldRoster: { version: 9, records: ['held invalid data'] }, worldSeed: -1 } : base;
         const old = tape(seed + 1, () => neutral(original, input));
-        const current = tape(seed + 1, () => neutral(candidate, input));
+        const current = tape(seed + 1, () => neutral(candidate, input, true));
         observations.push({ club, era, seed, malformed, scopes: { preparation: label + '-prep', original: label + '-original', current: label + '-current' },
           preparation: clone(preparation), input: clone(input), original: clone(old), current: clone(current) });
         equal(current.value, old.value, 'Entire inactive AR result and saved bytes match');

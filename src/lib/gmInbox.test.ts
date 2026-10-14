@@ -9,6 +9,11 @@ import { keyedRng } from './keyedRng';
 import { gmExpiredLine, gmNeutralIndex, gmPackProblems, gmSubjectKey } from './gmInbox';
 import type { GmEventDef, GmInboxMessage } from './gmInbox';
 import { onCooldown } from './careerEventDeck';
+import { gmChoiceLabel } from './gmInbox';
+import type { GmChoiceDef, GmFxRegistry, GmInboxBinding } from './gmInbox';
+import { gmCardSafe } from './gmInbox';
+import { gmDeskLoad, gmDeskSave, gmShortKey } from './gmInbox';
+import { gmMetersMoved } from './gmInbox';
 
 interface Desk extends GmInboxHost {
   trust: number; fans: number; cash: number; year: number; recruit: number;
@@ -544,5 +549,402 @@ describe('gmInbox deck rules, the closing check cases', () => {
     expect(out[4].map(m => [m.defId, m.answered, m.auto])).toEqual([['x', 0, true]]);
     expect(gmExpiredLine(out[4][0])).toBe('📨 Ownership: your assistant dealt with it (Leave it).');
     expect(JSON.stringify(run(false).s)).toBe(JSON.stringify(s));
+  });
+});
+
+/* ─── Round 1332: the effect registry ────────────────────────────────────── */
+
+interface FxDesk extends Desk { board: number; form: Record<string, number> }
+const fxDesk = (): FxDesk => ({ ...desk(), board: 50, form: {} });
+const FX_REG: GmFxRegistry<FxDesk> = {
+  board: { label: 'Board confidence', apply: (s, v) => { s.board = clamp(s.board + v); }, read: s => s.board },
+  kitty: { label: 'Kitty', fmt: 'money', apply: (s, v) => { s.cash += v; }, read: s => s.cash },
+  form: { label: 'form', who: true, apply: (s, v, who) => { s.form[who!] = (s.form[who!] ?? 0) + v; }, read: (s, who) => s.form[who!] ?? 0 },
+  ban: { label: 'suspended', fmt: 'weeks', who: true, apply: (s, v, who) => { s.out[who!] = (s.out[who!] ?? 0) + v; }, read: (s, who) => s.out[who!] ?? 0 },
+};
+const FX_TOY: GmInboxPack = {
+  ...TOY, seat: 'fxtoy',
+  events: [
+    { id: 'fx1', beat: 'a', from: 'The board', emoji: 'x', text: 'A call.', choices: [
+      { label: 'Back it', reply: 'Backed.', karma: 1, fx: { board: 3, kitty: -2, form: { who: 'star', v: 2 }, ban: { who: 'star', v: 1 } } },
+      { label: 'Fine him', reply: 'Fined.', karma: 0, fx: { kitty: 0.5 } },
+      { label: 'Leave it', reply: 'Left.', karma: 0, fx: { board: 0 } },
+    ] },
+  ],
+};
+const fxBind = (reg: GmFxRegistry<FxDesk> | undefined): GmInboxBinding<FxDesk> => ({
+  moodOf: s => s.trust, setMood: (s, v) => { s.trust = v; },
+  addPopularity: (s, d) => { s.fans = clamp(s.fans + d); }, addCash: (s, a) => { s.cash += a; },
+  yearOf: s => s.year, fx: reg,
+});
+const fxSeat = (reg: GmFxRegistry<FxDesk> | undefined) => bindGmInbox<FxDesk>(FX_TOY, fxBind(reg));
+const fxMsg = (s: FxDesk) => {
+  const e = FX_TOY.events[0];
+  s.phoneInbox = [{ id: 'm', defId: e.id, from: e.from, emoji: e.emoji, text: e.text, year: 2026, choices: e.choices, beat: e.beat }];
+};
+
+describe('gmInbox Round 1332: the effect registry', () => {
+  it('the words name every registered key in its own format, after the built ins', () => {
+    const [back, fine, leave] = FX_TOY.events[0].choices;
+    expect(choiceEffects(back, FX_TOY, FX_REG)).toEqual(['Trust +1', 'Board confidence +3', 'Kitty -$2M', 'Your star form +2', 'Your star suspended 1 week']);
+    expect(gmChoiceLabel(fine, FX_TOY, FX_REG)).toBe('Fine him · Kitty +$0.5M');
+    expect(gmChoiceLabel(leave, FX_TOY, FX_REG)).toBe('Leave it');
+    /* With no words for a key, the key itself prints: nothing is hidden. */
+    expect(choiceEffects(back, FX_TOY)).toEqual(['Trust +1', 'board +3', 'kitty -2', 'Your star form +2', 'Your star ban +1']);
+  });
+
+  it('the answer moves exactly what the words say, once', () => {
+    const s = fxDesk();
+    fxMsg(s);
+    const line = answerGmInbox(s, 'm', 0, fxSeat(FX_REG));
+    expect(line).toBe('📨 The board: Back it. Trust +1, Board confidence +3, Kitty -$2M, Your star form +2, Your star suspended 1 week.');
+    expect([s.trust, s.board, s.cash, s.form.star, s.out.star]).toEqual([51, 53, 8, 2, 1]);
+    expect(answerGmInbox(s, 'm', 0, fxSeat(FX_REG))).toBeNull();
+    expect([s.trust, s.board, s.cash, s.form.star, s.out.star]).toEqual([51, 53, 8, 2, 1]);
+  });
+
+  it('an answer whose key the seat never registered fails closed and moves nothing', () => {
+    const s = fxDesk();
+    fxMsg(s);
+    const before = JSON.stringify(s);
+    const seat = { ...fxSeat(FX_REG), fx: { board: FX_REG.board } };
+    expect(answerGmInbox(s, 'm', 0, seat)).toBeNull();
+    expect(JSON.stringify(s)).toBe(before);
+  });
+
+  it('an option is neutral only when every fx value is zero or absent', () => {
+    expect(gmNeutralIndex(FX_TOY.events[0].choices)).toBe(2);
+    expect(gmNeutralIndex([{ label: 'Fine him', reply: 'x', karma: 0, fx: { kitty: 0.5 } }])).toBe(-1);
+    expect(gmNeutralIndex([{ label: 'Nothing', reply: 'x', karma: 0, fx: { kitty: 0, form: { who: 'star', v: 0 } } }])).toBe(0);
+  });
+
+  it('bind refuses every registry breakage', () => {
+    const withChoice = (fx: GmChoiceDef['fx']): GmInboxPack => ({ ...FX_TOY, events: [{ ...FX_TOY.events[0], choices: [{ label: 'Act', reply: 'x', karma: 0, fx }] }] });
+    expect(() => fxSeat(undefined)).toThrow(/not registered/);
+    expect(() => bindGmInbox<FxDesk>(withChoice({ nope: 1 }), fxBind(FX_REG))).toThrow(/not registered/);
+    expect(() => fxSeat({ ...FX_REG, morale: FX_REG.board })).toThrow(/built in/);
+    expect(gmPackProblems(withChoice({ board: { who: 'star', v: 1 } }), FX_REG).join()).toMatch(/names nobody/);
+    expect(gmPackProblems(withChoice({ form: 2 }), FX_REG).join()).toMatch(/bare number/);
+    expect(gmPackProblems(withChoice({ form: { who: 'coach', v: 1 } }), FX_REG).join()).toMatch(/not a target/);
+    expect(gmPackProblems(withChoice({ board: Number.POSITIVE_INFINITY }), FX_REG).join()).toMatch(/finite/);
+    expect(gmPackProblems(FX_TOY, FX_REG)).toEqual([]);
+  });
+});
+
+/* ─── Round 1332: slots, tags and the person resolver ────────────────────── */
+
+interface SquadDesk extends Desk { realIds: number[]; keeperId: number }
+const squadDesk = (realIds: number[], keeperId = 1): SquadDesk => ({ ...desk(), realIds, keeperId });
+const SLOT_TOY: GmInboxPack = {
+  ...TOY, seat: 'slottoy', calendar: [{ id: 'a', label: 'A', emoji: 'A' }], span: { a: 10 }, cooldown: 0,
+  facts: { man: { kind: 'num', min: 1, max: 5, per: 'week' }, foe: { kind: 'num', min: 1, max: 9, per: 'week' } },
+  targets: { keeper: 'Your keeper' },
+  slots: { player: { fact: 'man', person: true }, opponent: { fact: 'foe' } },
+  events: [
+    { id: 'tagged', beat: 'a', from: 'Your assistant', emoji: 'x', text: '{player} was fined after a late night.', tag: 'conduct', subject: { fact: 'man' },
+      choices: [{ label: 'Back the fine', reply: 'Backed.', karma: 0, morale: -1 }, { label: 'Drop it', reply: 'Dropped.', karma: 0 }] },
+    { id: 'plain', beat: 'a', from: 'Your assistant', emoji: 'x', text: 'The {opponent} game is the big one.',
+      choices: [{ label: 'Talk it up', reply: 'Up.', karma: 1 }, { label: 'Say nothing', reply: 'Quiet.', karma: 0 }] },
+    { id: 'homekeeper', beat: 'a', from: 'Your assistant', emoji: 'x', text: 'Your keeper wants a few days with his family.', tag: 'private', subject: 'keeper',
+      choices: [{ label: 'Give him the days', reply: 'Go.', karma: 0, out: { who: 'keeper', weeks: 1 } }, { label: 'Not now', reply: 'No.', karma: 0 }] },
+  ],
+};
+const squadSeat = () => bindGmInbox<SquadDesk>(SLOT_TOY, {
+  moodOf: s => s.trust, setMood: (s, v) => { s.trust = v; }, addPopularity: () => undefined, addCash: () => undefined, yearOf: s => s.year,
+  setOut: (s, who, w) => { s.out[who] = (s.out[who] ?? 0) + w; },
+  person: (s, ref) => {
+    const id = 'role' in ref ? (ref.role === 'keeper' ? s.keeperId : NaN) : Number(ref.id);
+    return Number.isInteger(id) && id >= 1 && id <= 5 ? { name: `Player ${id}`, real: s.realIds.includes(id) } : null;
+  },
+});
+const ev = (id: string) => SLOT_TOY.events.find(e => e.id === id)!;
+
+describe('gmInbox Round 1332: slots, tags and the resolver', () => {
+  it('fills a person slot with the name the seat gives and a plain slot with the fact', () => {
+    const s = squadDesk([], 2);
+    const seat = squadSeat();
+    gmInboxWeek(s, seat, 'a', { man: 3, foe: 7 }, 0, () => 0);
+    gmInboxWeek(s, seat, 'a', { man: 3, foe: 7 }, 1, () => 0.5);
+    const texts = (s.phoneInbox ?? []).map(m => m.text);
+    expect(texts).toContain('Player 3 was fined after a late night.');
+    expect(texts).toContain('The 7 game is the big one.');
+    expect(texts.some(t => /[{}]/.test(t))).toBe(false);
+  });
+
+  it('holds a card whose slot has no value, or whose person slot names nobody', () => {
+    const s = squadDesk([]);
+    const seat = squadSeat();
+    expect(gmCardSafe(ev('plain'), s, seat, { man: 3 })).toBe(false);
+    expect(gmCardSafe(ev('plain'), s, seat, { man: 3, foe: '' })).toBe(false);
+    expect(gmCardSafe(ev('plain'), s, seat, { man: 3, foe: 4 })).toBe(true);
+    expect(gmCardSafe(ev('tagged'), s, seat, { man: 9 })).toBe(false);
+  });
+
+  it('holds a tagged card for a real man and deals it for a generated one', () => {
+    const seat = squadSeat();
+    expect(gmCardSafe(ev('tagged'), squadDesk([3]), seat, { man: 3 })).toBe(false);
+    expect(gmCardSafe(ev('tagged'), squadDesk([3]), seat, { man: 4 })).toBe(true);
+    expect(gmCardSafe(ev('homekeeper'), squadDesk([1], 1), seat, {})).toBe(false);
+    expect(gmCardSafe(ev('homekeeper'), squadDesk([1], 2), seat, {})).toBe(true);
+    const s = squadDesk([3]);
+    for (let w = 0; w < 6; w++) gmInboxWeek(s, seat, 'a', { man: 3, foe: 1 }, w, () => 0);
+    expect((s.phoneInbox ?? []).some(m => m.defId === 'tagged')).toBe(false);
+  });
+
+  it('a card with no slot and no tag never asks the seat anything', () => {
+    let asked = 0;
+    const seat = { ...squadSeat(), person: () => { asked++; return null; } };
+    expect(gmCardSafe(GM_INBOX_PACKS.nfl.events[0], squadDesk([]), seat, {})).toBe(true);
+    expect(gmCardSafe({ ...ev('plain'), text: 'No slot here.' }, squadDesk([]), seat, {})).toBe(true);
+    expect(asked).toBe(0);
+  });
+
+  it('refuses a pack that misuses a slot, a brace or a tag, and a seat with no resolver', () => {
+    const one = (e: Partial<GmEventDef>): GmInboxPack => ({ ...SLOT_TOY, events: [{ ...ev('plain'), ...e }] });
+    expect(gmPackProblems(one({ text: 'The {rival} game.' })).join()).toMatch(/not a declared slot/);
+    expect(gmPackProblems(one({ text: 'The {opponent game.' })).join()).toMatch(/brace outside a slot/);
+    expect(gmPackProblems(one({ from: 'Your {player}' })).join()).toMatch(/no slot is filled/);
+    expect(gmPackProblems(one({ tag: 'drama' as never })).join()).toMatch(/neither conduct nor private/);
+    expect(gmPackProblems({ ...SLOT_TOY, slots: { player: { fact: 'nobody' } } }).join()).toMatch(/does not declare/);
+    expect(gmPackProblems({ ...SLOT_TOY, facts: { ...SLOT_TOY.facts, star: { kind: 'bool', p: 0.5, per: 'week' } }, slots: { ...SLOT_TOY.slots, s: { fact: 'star' } } }).join()).toMatch(/yes or no/);
+    expect(gmPackProblems(SLOT_TOY)).toEqual([]);
+    expect(() => bindGmInbox<SquadDesk>(SLOT_TOY, { moodOf: s => s.trust, setMood: () => undefined, addPopularity: () => undefined, addCash: () => undefined, yearOf: s => s.year, setOut: () => undefined }))
+      .toThrow(/cannot say who anyone is/);
+  });
+});
+
+/* ─── Round 1332: the compact desk ───────────────────────────────────────── */
+
+const COMPACT_TOY: GmInboxPack = {
+  ...TOY, seat: 'compacttoy', calendar: [{ id: 'a', label: 'A', emoji: 'A' }], span: { a: 10 }, cooldown: 3, chance: 0.5, perWeek: 1,
+  facts: {}, targets: { star: 'Your star' }, store: 'compact',
+  events: [
+    { id: 'c1', beat: 'a', from: 'Ownership', emoji: 'x', text: 'One.', texts: ['One again.', 'One more time.'], choices: [{ label: 'Go', reply: 'Go.', karma: 1 }, { label: 'Wait', reply: 'Wait.', karma: 0 }] },
+    { id: 'c2', beat: 'a', from: 'Ownership', emoji: 'x', text: 'Two.', story: 'pair', cooldown: 5, choices: [{ label: 'Go', reply: 'Go.', karma: 1 }] },
+    { id: 'c3', beat: 'a', from: 'Ownership', emoji: 'x', text: 'Three.', story: 'pair', choices: [{ label: 'Go', reply: 'Go.', karma: 1 }] },
+    { id: 'c4', beat: 'a', from: 'Ownership', emoji: 'x', text: 'Four.', oneShot: true, choices: [{ label: 'Go', reply: 'Go.', karma: 1 }] },
+  ],
+};
+const runToy = (pack: GmInboxPack, weeks: number, codec = false) => {
+  const s = desk();
+  const seat = seatFor(pack);
+  const rng = keyedRng('compact-toy');
+  const log: string[] = [];
+  for (let w = 0; w < weeks; w++) {
+    const got = gmInboxWeek(s, seat, 'a', {}, w, rng);
+    for (const m of (s.phoneInbox ?? []).filter(x => x.answered === undefined)) if (w % 3 !== 0) answerGmInbox(s, m.id, 0, seat);
+    log.push(`${got.map(m => `${m.id}:${m.text}`).join(',')}|${(s.phoneInbox ?? []).map(m => `${m.id}:${m.answered}`).join(',')}|${s.trust}`);
+    if (codec) Object.assign(s, gmDeskLoad(JSON.parse(JSON.stringify(gmDeskSave(s, pack))), pack).host);
+  }
+  return { s, log };
+};
+
+describe('gmInbox Round 1332: the compact desk', () => {
+  it('a compact desk deals, answers and moves exactly as a whole one over 200 weeks', () => {
+    const whole = runToy({ ...COMPACT_TOY, store: undefined }, 200);
+    const compact = runToy(COMPACT_TOY, 200);
+    expect(compact.log).toEqual(whole.log);
+    for (const [k, at] of Object.entries(compact.s.gmInboxLast ?? {})) expect(whole.s.gmInboxLast?.[k]).toBe(at);
+    expect(Object.keys(compact.s.gmInboxLast ?? {}).length).toBeLessThan(Object.keys(whole.s.gmInboxLast ?? {}).length);
+  });
+
+  it('prunes on the week clock once every card of a key has cooled, and keeps one still cooling', () => {
+    const s = desk();
+    const seat = seatFor({ ...COMPACT_TOY, chance: 1, events: [COMPACT_TOY.events[1], COMPACT_TOY.events[2]] });
+    gmInboxWeek(s, seat, 'a', {}, 0, () => 0);
+    expect(s.gmInboxLast).toEqual({ 'story:pair': 0 });
+    /* c2 cools after 5, c3 after the pack's 3: the stamp stays until both
+       have. Beat b deals nothing, so only the prune moves the book. */
+    gmInboxWeek(s, seat, 'b', {}, 3, () => 0);
+    expect(s.gmInboxLast).toEqual({ 'story:pair': 0 });
+    gmInboxWeek(s, seat, 'b', {}, 5, () => 0);
+    expect(s.gmInboxLast).toEqual({});
+  });
+
+  it('prunes on the season clock by careerEventDeck\'s rule', () => {
+    const pack: GmInboxPack = { ...COMPACT_TOY, clock: 'season', cooldown: 1, chance: 1, events: [COMPACT_TOY.events[0]] };
+    const s = desk();
+    const seat = seatFor(pack);
+    gmInboxWeek(s, seat, 'a', {}, 0, () => 0);
+    answerGmInbox(s, s.phoneInbox![0].id, 0, seat);
+    gmInboxWeek(s, seat, 'a', {}, 1, () => 0);
+    expect(s.gmInboxLast).toEqual({ c1: 0 });
+    expect(onCooldown({ c1: 0 }, pack.events[0], 1, 1)).toBe(true);
+    gmInboxWeek(s, seat, 'a', {}, 2, () => 0);
+    expect(s.gmInboxLast).toEqual({ c1: 2 });
+  });
+
+  it('a save and load between every two weeks changes nothing, and saves numbers', () => {
+    const plain = runToy(COMPACT_TOY, 120);
+    const codec = runToy(COMPACT_TOY, 120, true);
+    expect(codec.log).toEqual(plain.log);
+    const block = gmDeskSave(plain.s, COMPACT_TOY);
+    expect((block.m ?? []).every(m => 'd' in m)).toBe(true);
+    expect(JSON.stringify(gmDeskLoad(JSON.parse(JSON.stringify(block)), COMPACT_TOY).host.phoneInbox)).toBe(JSON.stringify(plain.s.phoneInbox));
+  });
+
+  it('the loader: a block not v 1 is an empty desk, a bad field resets alone, an older whole message stays, a lost card is dropped and counted', () => {
+    const { s } = runToy(COMPACT_TOY, 40);
+    const block = JSON.parse(JSON.stringify(gmDeskSave(s, COMPACT_TOY)));
+    expect(gmDeskLoad({ ...block, v: 2 }, COMPACT_TOY).host).toEqual({ phoneInbox: [], phoneUsedIds: [], gmInboxLast: {} });
+    const bent = gmDeskLoad({ ...block, l: 'x', u: [1] }, COMPACT_TOY).host;
+    expect([bent.gmInboxLast, bent.phoneUsedIds]).toEqual([{}, []]);
+    expect(bent.phoneInbox).toEqual(s.phoneInbox);
+    const old = { id: 'c1-2025-w1', defId: 'c1', from: 'Ownership', emoji: 'x', text: 'Saved whole long ago.', year: 2025, choices: COMPACT_TOY.events[0].choices, answered: 1 };
+    const out = gmDeskLoad({ ...block, m: [old, { d: gmShortKey('gone'), y: 2026, c: 1 }, { d: gmShortKey('c1'), y: 2026, c: 2, t: 9 }] }, COMPACT_TOY);
+    expect(out.host.phoneInbox).toEqual([old]);
+    expect(out.dropped).toBe(2);
+  });
+
+  it('a compact pack whose keys collide is refused, and short keys are stable', () => {
+    expect(gmShortKey('c1')).toBe(gmShortKey('c1'));
+    expect(gmShortKey('c1')).not.toBe(gmShortKey('c2'));
+    expect(gmPackProblems(COMPACT_TOY)).toEqual([]);
+    expect(gmPackProblems({ ...COMPACT_TOY, store: 'tiny' as never }).join()).toMatch(/neither whole nor compact/);
+    /* Two different ids with one short key, found by a search over card_0
+       to card_1500000 (the first pair it met). */
+    const pair = ['card_730575', 'card_1340920'];
+    expect(gmShortKey(pair[0])).toBe(gmShortKey(pair[1]));
+    const clash = { ...COMPACT_TOY, events: pair.map(id => ({ ...COMPACT_TOY.events[0], id })) };
+    expect(gmPackProblems(clash).join()).toMatch(/share the short key/);
+  });
+});
+
+describe('gmInbox Round 1332: a pack\'s declared pressure', () => {
+  it('names only meters the pack moves, each with a ceiling above 0', () => {
+    expect([...gmMetersMoved(TOY)].sort()).toEqual(['cash', 'fans', 'morale', 'trust']);
+    expect(gmPackProblems({ ...TOY, pressure: { trust: 6, cash: 2 } })).toEqual([]);
+    expect(gmPackProblems({ ...TOY, pressure: { recruit: 3 } }).join()).toMatch(/never moves/);
+    expect(gmPackProblems({ ...TOY, pressure: { trust: 0 } }).join()).toMatch(/above 0/);
+    expect(gmPackProblems({ ...TOY, pressure: { trust: Number.NaN } }).join()).toMatch(/above 0/);
+    expect(gmPackProblems(FX_TOY, { ...FX_REG, trust: FX_REG.board }).join()).toMatch(/built in meter/);
+  });
+});
+
+describe('gmInbox Round 1332: review fixes', () => {
+  it('a tagged card that names nobody it is about is refused', () => {
+    const tagged = SLOT_TOY.events.find(e => e.id === 'tagged')!;
+    const nobody = { ...tagged, text: 'Somebody was fined after a late night.', subject: undefined };
+    expect(gmPackProblems({ ...SLOT_TOY, events: [nobody] }).join()).toMatch(/names nobody it is about/);
+    expect(gmPackProblems({ ...SLOT_TOY, events: [{ ...tagged, subject: undefined }] })).toEqual([]);
+  });
+});
+
+/* ─── Round 1332 fix pass: a tagged card is asked again after its deal ───── */
+
+interface RoleDesk extends SquadDesk { captainId: number }
+const roleDesk = (realIds: number[], keeperId: number, captainId: number): RoleDesk => ({ ...squadDesk(realIds, keeperId), captainId });
+const SKIP: GmEventDef = {
+  id: 'skipkeeper', beat: 'a', from: 'Your assistant', emoji: 'x', text: 'Your keeper skipped training again.', tag: 'conduct', subject: 'keeper',
+  choices: [{ label: 'Have your captain sort it', reply: 'Sorted.', karma: 0, rating: { who: 'captain', delta: 1 } }, { label: 'Let it go', reply: 'Gone.', karma: 0 }],
+};
+const ROLE_TOY: GmInboxPack = { ...SLOT_TOY, seat: 'roletoy', targets: { keeper: 'Your keeper', captain: 'Your captain' }, events: [ev('homekeeper'), SKIP] };
+const roleSeat = (pack: GmInboxPack) => bindGmInbox<RoleDesk>(pack, {
+  moodOf: s => s.trust, setMood: (s, v) => { s.trust = v; }, addPopularity: () => undefined, addCash: () => undefined, yearOf: s => s.year,
+  setOut: (s, who, w) => { s.out[who] = (s.out[who] ?? 0) + w; },
+  addRating: (s, who, d) => { s.rating[who] = (s.rating[who] ?? 0) + d; },
+  person: (s, ref) => {
+    const id = 'role' in ref ? (ref.role === 'keeper' ? s.keeperId : ref.role === 'captain' ? s.captainId : NaN) : Number(ref.id);
+    return Number.isInteger(id) && id >= 1 && id <= 5 ? { name: `Player ${id}`, real: s.realIds.includes(id) } : null;
+  },
+});
+
+describe('gmInbox Round 1332: a tagged card asked again after its deal', () => {
+  it('an answer after its role passed to a real man fails closed, and the next week the staff settle it', () => {
+    const seat = roleSeat({ ...ROLE_TOY, events: [ev('homekeeper')] });
+    const s = roleDesk([2], 1, 3);
+    expect(gmInboxWeek(s, seat, 'a', {}, 0, () => 0).map(m => m.defId)).toEqual(['homekeeper']);
+    const id = s.phoneInbox![0].id;
+    s.keeperId = 2;
+    const before = JSON.stringify(s);
+    expect(answerGmInbox(s, id, 0, seat)).toBeNull();
+    expect(answerGmInbox(s, id, 1, seat)).toBeNull();
+    expect(JSON.stringify(s)).toBe(before);
+    const settled: GmInboxMessage[] = [];
+    gmInboxWeek(s, seat, 'a', {}, 1, () => 0, settled);
+    expect(settled.map(m => m.id)).toEqual([id]);
+    const m = s.phoneInbox!.find(x => x.id === id) as GmInboxMessage;
+    expect([m.answered, m.auto]).toEqual([1, true]);
+    expect(s.out).toEqual({});
+    expect(gmExpiredLine(m)).toMatch(/dealt with it \(Not now\)/);
+    expect(s.phoneInbox!.some(x => x.id !== id)).toBe(false);
+  });
+
+  it('a role that passes to another generated man still answers, on him', () => {
+    const seat = roleSeat({ ...ROLE_TOY, events: [ev('homekeeper')] });
+    const s = roleDesk([2], 1, 3);
+    gmInboxWeek(s, seat, 'a', {}, 0, () => 0);
+    s.keeperId = 4;
+    gmInboxWeek(s, seat, 'a', {}, 1, () => 0.99);
+    expect(s.phoneInbox!.filter(m => m.answered === undefined).length).toBeGreaterThan(0);
+    expect(answerGmInbox(s, s.phoneInbox![0].id, 0, seat)).not.toBeNull();
+    expect(s.out).toEqual({ keeper: 1 });
+  });
+
+  it('an option that moves another role than the card is about holds the card while that man is real, and asks again at the answer', () => {
+    const seat = roleSeat({ ...ROLE_TOY, events: [SKIP] });
+    expect(gmCardSafe(SKIP, roleDesk([3], 1, 3), seat, {})).toBe(false);
+    expect(gmCardSafe(SKIP, roleDesk([3], 1, 4), seat, {})).toBe(true);
+    const s = roleDesk([3], 1, 4);
+    gmInboxWeek(s, seat, 'a', {}, 0, () => 0);
+    s.captainId = 3;
+    expect(answerGmInbox(s, s.phoneInbox![0].id, 0, seat)).toBeNull();
+    expect(s.rating).toEqual({});
+  });
+
+  it('a role that resolves to nobody holds the card and refuses the answer', () => {
+    const seat = roleSeat({ ...ROLE_TOY, events: [ev('homekeeper')] });
+    expect(gmCardSafe(ev('homekeeper'), roleDesk([], 9, 4), seat, {})).toBe(false);
+    const s = roleDesk([], 1, 4);
+    gmInboxWeek(s, seat, 'a', {}, 0, () => 0);
+    s.keeperId = 9;
+    expect(answerGmInbox(s, s.phoneInbox![0].id, 0, seat)).toBeNull();
+    expect(s.out).toEqual({});
+  });
+
+  it('a tagged card that names a role needs an option that moves nothing; one about a fact\'s man does not', () => {
+    const home = ev('homekeeper');
+    expect(gmPackProblems({ ...SLOT_TOY, events: [{ ...home, choices: [home.choices[0]] }] }).join()).toMatch(/no option that moves nothing/);
+    expect(gmPackProblems({ ...ROLE_TOY, events: [{ ...SKIP, choices: [SKIP.choices[0]] }] }).join()).toMatch(/no option that moves nothing/);
+    const fined = ev('tagged');
+    expect(gmPackProblems({ ...SLOT_TOY, events: [{ ...fined, choices: [fined.choices[0]] }] })).toEqual([]);
+    expect(gmPackProblems(ROLE_TOY)).toEqual([]);
+  });
+
+  it('a compact load keeps a one shot and a book key the pack does not know, so another deck sharing the field loses nothing', () => {
+    const s = desk();
+    s.phoneUsedIds = ['c4', 'phone_text_7'];
+    s.gmInboxLast = { c1: 5, 'story:pair': 7, gone_card: 3 };
+    const block = JSON.parse(JSON.stringify(gmDeskSave(s, COMPACT_TOY)));
+    expect(block.u).toEqual([gmShortKey('c4'), 'phone_text_7']);
+    expect(Object.keys(block.l).sort()).toEqual([gmShortKey('c1'), gmShortKey('story:pair'), 'gone_card'].sort());
+    const host = gmDeskLoad(block, COMPACT_TOY).host;
+    expect(host.phoneUsedIds).toEqual(s.phoneUsedIds);
+    expect(host.gmInboxLast).toEqual(s.gmInboxLast);
+  });
+
+  it('a pack switched from whole to compact, or back, keeps every one shot and book key', () => {
+    const whole = { ...COMPACT_TOY, store: undefined };
+    const s = desk();
+    s.phoneUsedIds = ['c4'];
+    s.gmInboxLast = { c1: 5, 'story:pair': 7 };
+    const toCompact = gmDeskLoad(JSON.parse(JSON.stringify(gmDeskSave(s, whole))), COMPACT_TOY).host;
+    expect([toCompact.phoneUsedIds, toCompact.gmInboxLast]).toEqual([s.phoneUsedIds, s.gmInboxLast]);
+    const shortBlock = JSON.parse(JSON.stringify(gmDeskSave(s, COMPACT_TOY)));
+    expect(shortBlock.u).not.toEqual(s.phoneUsedIds);
+    const toWhole = gmDeskLoad(shortBlock, whole).host;
+    expect([toWhole.phoneUsedIds, toWhole.gmInboxLast]).toEqual([s.phoneUsedIds, s.gmInboxLast]);
+  });
+
+  it('a pack with no tagged card never asks the seat at the answer or the week', () => {
+    let asked = 0;
+    const seat = { ...seatFor(TOY), person: () => { asked++; return null; } };
+    const s = desk();
+    for (let w = 0; w < 12; w++) {
+      gmInboxWeek(s, seat, w % 3 === 2 ? 'b' : 'a', { n: 6 }, w, () => 0);
+      for (const m of (s.phoneInbox ?? []).filter(x => x.answered === undefined)) answerGmInbox(s, m.id, 0, seat);
+    }
+    expect((s.phoneInbox ?? []).filter(m => m.answered !== undefined).length).toBeGreaterThan(2);
+    expect(asked).toBe(0);
   });
 });
