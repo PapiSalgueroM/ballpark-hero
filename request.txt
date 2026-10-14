@@ -1,0 +1,5 @@
+# Release BD gate, lane P5: the four pieces' plain lines and controls
+#!playwright
+simWindow2026Bundesliga: node scripts/simWindow2026Bundesliga.mjs
+simWritesAreSent: node scripts/simWritesAreSent.mjs
+edge: sha256sum supabase/functions/validate-player/index.ts
