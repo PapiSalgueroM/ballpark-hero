@@ -1,0 +1,10 @@
+headsha: git log --oneline -3 && git rev-parse HEAD~1
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+et-owed: R=$PWD; W=/tmp/wet; (git worktree add -f $W HEAD >/dev/null 2>&1 || (sleep 15; git worktree add -f $W HEAD >/dev/null 2>&1)); ln -s $R/node_modules $W/node_modules; cd $W && git show c00694b8:scripts/simCmSubs.mjs > scripts/rvSubsET.mjs && grep -c "extratime" scripts/rvSubsET.mjs && node scripts/rvSubsET.mjs --part=extratime
+oppet: node scripts/simCmSubs.mjs --part=oppextratime,extratime,ledger
+etfrozen: SUBS_CONTROL=etfrozen node scripts/simCmSubs.mjs
+subs-all-base: git worktree add /tmp/wbase dec9075b >/dev/null 2>&1 && SUBS_BASE=/tmp/wbase node scripts/simCmSubs.mjs
+motion: node scripts/simLiveSimMotion.mjs
+appealIsolation: node scripts/simManagerAppealIsolation.mjs
+unit: node_modules/.bin/vitest run src/lib/clubManagerSubsRule.test.ts --testTimeout=300000 --hookTimeout=120000
+onesource: SUBS_CONTROL=onesource node scripts/simCmSubs.mjs --part=ledger

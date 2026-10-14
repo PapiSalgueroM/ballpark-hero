@@ -1,0 +1,33 @@
+ok   [oppextratime] the walk reaches a knockout second leg in a five change season (uclKo 5/3)
+   259 of 1500 nights went to extra time: 1.06 changes from them in extra time a night (275 at the break), 0 nights with changes left and none made
+ok   [oppextratime] enough nights go to extra time to judge (259)
+ok   [oppextratime] the other dugout never passes five changes or three stoppages in play, the break before extra time free (0 of 259)
+ok   [oppextratime] their unused changes carry on into extra time: at least 0.5 a night (1.06)
+ok   [extratime] the walk reaches a knockout second leg in a five change season (uclKo 5/3)
+   12 nights to extra time with three stoppages used: the change at the break taken 12 (stoppages still three 12), the change at 95 refused 12
+ok   [extratime] enough nights go to extra time to judge (12) (12)
+ok   [extratime] with three stoppages used, a change at the break before extra time is taken and uses none (12 taken, 12 at three stoppages, of 12)
+ok   [extratime] a change at 95, a fourth stoppage, is refused (12 of 12)
+ok   [ledger] the ledger holds law lines and league rows (4 laws, 6 rows)
+ok   [ledger] laliga: has at least one sourced fact
+ok   [ledger] seriea: has at least one sourced fact
+ok   [ledger] bundesliga: has at least one sourced fact
+ok   [ledger] ligue1: has at least one sourced fact
+ok   [ledger] premier: has at least one sourced fact
+ok   [ledger] championship: has at least one sourced fact
+ok   [ledger] law threeBefore2020: two sources on two hosts, dated, quoted, no wiki (2 sources, 2 hosts, 0 malformed)
+ok   [ledger] law fiveInThree2020: two sources on two hosts, dated, quoted, no wiki (3 sources, 3 hosts, 0 malformed)
+ok   [ledger] law breaksAreFree: two sources on two hosts, dated, quoted, no wiki (3 sources, 3 hosts, 0 malformed)
+ok   [ledger] law fivePermanent2022: two sources on two hosts, dated, quoted, no wiki (2 sources, 2 hosts, 0 malformed)
+ok   [ledger] laliga: five changes from 2020-21 on: two sources on two hosts, dated, quoted, no wiki (2 sources, 2 hosts, 0 malformed)
+ok   [ledger] seriea: five changes from 2020-21 on: two sources on two hosts, dated, quoted, no wiki (2 sources, 2 hosts, 0 malformed)
+ok   [ledger] bundesliga: five changes from 2020-21 on: two sources on two hosts, dated, quoted, no wiki (2 sources, 2 hosts, 0 malformed)
+ok   [ledger] ligue1: five changes from 2020-21 on: two sources on two hosts, dated, quoted, no wiki (2 sources, 2 hosts, 0 malformed)
+ok   [ledger] premier: three changes in 2020-21: two sources on two hosts, dated, quoted, no wiki (2 sources, 2 hosts, 0 malformed)
+ok   [ledger] premier: three changes in 2021-22: two sources on two hosts, dated, quoted, no wiki (2 sources, 2 hosts, 0 malformed)
+ok   [ledger] premier: five changes in three occasions plus half time from 2022-23 on: two sources on two hosts, dated, quoted, no wiki (2 sources, 2 hosts, 0 malformed)
+ok   [ledger] championship: five changes in three opportunities from 2022-23 on, a standing EFL rule: two sources on two hosts, dated, quoted, no wiki (2 sources, 2 hosts, 0 malformed)
+ok   [ledger] championship: five changes still allowed in 2026-27: a Championship league match of 13 October 2026 in which Watford made five: two sources on two hosts, dated, quoted, no wiki (2 sources, 2 hosts, 0 malformed)
+ok   [ledger] the module rows equal the ledger rows
+ok   [ledger] the module partial list equals the ledger
+simCmSubs GREEN: 30 of 30 checks green (parts oppextratime, extratime, ledger)

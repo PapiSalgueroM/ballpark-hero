@@ -1,0 +1,4 @@
+8d3f81996 rc request r1331-vf2 for fa1c45d99418002ab1265f7544150c0bfc6e178c
+fa1c45d99 Round 1331: the notes say the other dugout's extra time gap is closed on the round branch (closing check, MAJOR 3 and READ MAJOR 9): r1331-et-opp (51566ac8, e0527b07, f5788892) fast forwarded in, decisions 1(b) and 2 asking for the behaviour, with the one viewer hunk of F3's LiveSimScreen.tsx it needs named
+2669a7255 Round 1331: the Championship row has a fact dated 2026-27 on two hosts (closing check, READ MAJOR 10): the Championship game Cardiff City 5-1 Watford of 13 October 2026, where Watford made five changes (skysports.com report; espn.com commentary lists five for each side, each in three stoppages); the caveat says the three stoppage limit is the EFL's own rule from 2022-23 (Law 3 as it stands mandates it only for top divisions) with nothing found that reverses it. No module value moves (fiveFrom stays 2022).
+fa1c45d99418002ab1265f7544150c0bfc6e178c

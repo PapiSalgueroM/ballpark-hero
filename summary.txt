@@ -1,0 +1,10 @@
+headsha exit=0 0s | fa1c45d99418002ab1265f7544150c0bfc6e178c
+et-owed exit=0 16s | simCmSubs GREEN: 4 of 4 checks green (parts extratime)
+oppet exit=0 18s | simCmSubs GREEN: 30 of 30 checks green (parts oppextratime, extratime, ledger)
+etfrozen exit=1 12s | control etfrozen FIRED: 1 of 4 checks red
+tsc exit=0 100s | 
+motion exit=0 85s | simLiveSimMotion: green. 55 tests passed (the viewer on real feeds, the pitch part's rules on 200 half feeds and on feeds made by hand, the goal sequence, match mode), an
+unit exit=0 4s |    Duration  3.49s (transform 2.01s, setup 84ms, collect 2.37s, tests 15ms, environment 410ms, prepare 234ms)
+onesource exit=1 0s | control onesource FIRED: 1 of 22 checks red
+appealIsolation exit=0 44s | Equivalent appeal outcomes must agree: passed for 24 original pairs and 3 separate generated-position pairs.
+subs-all-base exit=0 202s | simCmSubs GREEN: 66 of 66 checks green (parts ledger, rule, extratime, cutover, oppextratime, opponent, coach, press, legacy, three, hotseat)
