@@ -239,6 +239,9 @@
                    round's index line would add): compact, its words never
                    recorded, no pressure ceiling; sections 14 and 15 fail
                    (13 deals it whole against compact and stays green).
+     speechpast    FX_CONDUCT gains a wording with its person slot's
+                   possessive before a past tense speech verb (in memory);
+                   section 12 fails (the brief's verb list alone missed it).
 
    Runtime about 85 to 100 s on a runner, three requests at a time (section 2
    reloads all 84 rows since the review's fix pass; it was 40 s with seed 1
@@ -277,7 +280,7 @@ const REPLAY_FILE = path.join(ROOT, 'scripts/data/gmInboxReplay.json');
 const CONTROLS = ['replay', 'weightoff', 'weightkeep', 'story', 'rest', 'failopen', 'restfall', 'expirefall', 'textrng', 'seasonweek', 'expireoff', 'expirefx', 'settledoff', 'panelexpiry', 'neutral', 'heavy',
   'fxsilent', 'fxdrop', 'fxunbound', 'fxneutral', 'conductreal', 'slotopen', 'quoteslot', 'untagged', 'rosterword',
   'pruneearly', 'codecword', 'codecslot', 'wordedit', 'wordorder', 'storymove', 'pressure', 'eager',
-  'conductlate', 'conductstale', 'conducttarget', 'nullpass', 'newpack'];
+  'conductlate', 'conductstale', 'conducttarget', 'nullpass', 'newpack', 'speechpast'];
 if (CONTROL && !CONTROLS.includes(CONTROL)) { console.error(`EVENT_DECK_CONTROL=${CONTROL} is not a control this kit knows`); process.exit(2); }
 if (RECORD && (CONTROL || SHARD)) { console.error('a recording runs the whole replay with no control, refusing'); process.exit(2); }
 const red = new Set();
@@ -1377,7 +1380,10 @@ const conductPerson = (s, ref) => {
   if (!(Number.isInteger(id) && id >= 1 && id <= 12)) return null;
   return { name: `Player ${id}`, real: s.real[id] };
 };
-const SPEECH = 'said|says|told|tells|asked|asks|claims|insists|admits|reckons|wants|demands|vows|promised|promises';
+/* The brief's speech verbs, plus (Round 1332's review fix) the past tense of
+   the rest and the common reporting verbs, so "{player} insisted" is caught. */
+const SPEECH = 'said|says|told|tells|asked|asks|claims|insists|admits|reckons|wants|demands|vows|promised|promises'
+  + '|claimed|insisted|admitted|reckoned|wanted|demanded|vowed|wrote|writes|posted|posts|revealed|reveals|confirmed|confirms|hinted|hints|added|adds';
 /* simGmInbox's ALLEGATION and CONDUCT, copied (append only), plus the
    brief's conduct words; and the private list (a man's own life off the
    pitch: never a playing injury, which is football and stays untagged). */
@@ -1400,6 +1406,11 @@ if (runs(12)) {
     if (!e || e.texts) { console.error('quoteslot control: n_form is not there without wordings, refusing to run'); process.exit(2); }
     e.texts = ['{player} told the room he is staying put.'];
   }
+  if (CONTROL === 'speechpast') {
+    const e = FX_CONDUCT.events.find(x => x.id === 'n_form');
+    if (!e || e.texts) { console.error('speechpast control: n_form is not there without wordings, refusing to run'); process.exit(2); }
+    e.texts = ['{player}\'s camp insisted he is staying put.'];
+  }
   if (CONTROL === 'untagged') {
     const e = FX_CONDUCT.events.find(x => x.id === 'c_curfew');
     if (!e || e.tag !== 'conduct') { console.error('untagged control: c_curfew is not a conduct card, refusing to run'); process.exit(2); }
@@ -1411,20 +1422,24 @@ if (runs(12)) {
   const REAL = new Set();
   for (const rel of ['src/data/frontOfficePlayers.ts', 'src/data/conquestDataNba.ts', 'src/data/mlbFoPlayers.ts', 'src/data/mlbFoRosters2026.ts',
     'src/data/nhlFoPlayers.ts', 'src/data/cfbHLPlayers.ts', 'src/data/ufcFighters.ts', 'src/data/aflGoalKickers.ts']) {
-    for (const m of readSrc(rel).matchAll(/name:\s*['"]([A-Z][^'"]{1,40} [^'"]{2,40})['"]/g)) REAL.add(deaccent(m[1]));
+    /* Each quote kind read up to its own closing mark, so a name with an
+       apostrophe inside double quotes (De'Aaron Fox) is harvested too. */
+    for (const m of readSrc(rel).matchAll(/name:\s*(?:"([A-Z][^"]{1,40} [^"]{2,40})"|'([A-Z][^']{1,40} [^']{2,40})')/g)) REAL.add(deaccent(m[1] ?? m[2]));
   }
   for (const rel of ['src/data/clubManagerRosters.ts', 'src/data/clubManagerEra2005.ts', 'src/data/clubManagerEra2010.ts', 'src/data/clubManagerEra2015.ts', 'src/data/clubManagerEra2020.ts']) {
-    for (const m of readSrc(rel).matchAll(/\bn:\s*['"]([^'"]{2,40} [^'"]{2,40})['"]/g)) REAL.add(deaccent(m[1]));
+    for (const m of readSrc(rel).matchAll(/\bn:\s*(?:"([^"]{2,40} [^"]{2,40})"|'([^']{2,40} [^']{2,40})')/g)) REAL.add(deaccent(m[1] ?? m[2]));
   }
+  if (![...REAL].some(n => /[A-Za-z]'[A-Za-z]/.test(n))) fail(12, 'no name with an apostrophe was harvested: the harvest skips them');
   if (CONTROL === 'rosterword') {
     const someone = [...REAL].find(n => /^[A-Z][a-z]+ [A-Z][a-z]+$/.test(n));
     const e = FX_CONDUCT.events.find(x => x.id === 'n_form');
     if (!someone || !e) { console.error('rosterword control: no real name or no n_form card, refusing to run'); process.exit(2); }
     e.text = `${someone} is in the best form of his season.`;
   }
-  /* Measured 2026-10-13: REAL_MEASURED full names (simGmInbox's eight files
-     gave 2,236 on 2026-10-03, Club Manager's five 8,240). The floor only
-     proves the harvest worked. */
+  /* Measured 2026-10-13: 10,473 full names before Round 1332's review fix
+     and 10,483 after it (the ten names with an apostrophe the old pattern
+     skipped; simGmInbox's eight files gave 2,236 on 2026-10-03, Club
+     Manager's five 8,240). The floor only proves the harvest worked. */
   const REAL_FLOOR = 8000;
   if (REAL.size < REAL_FLOOR) fail(12, `only ${REAL.size} real names harvested (floor ${REAL_FLOOR}): the name scan would mean nothing`);
   else ok(`${REAL.size} real names harvested from thirteen roster files`);
@@ -1471,7 +1486,8 @@ if (runs(12)) {
         for (const n of people) {
           const at = `\\{${n}\\}`;
           if (new RegExp(`["“”][^"“”]*${at}[^"“”]*["“”]`).test(t)) bad.push(`${k}/${e.id}: the person slot {${n}} inside quote marks`);
-          if (new RegExp(`${at}(?:\\s+[\\w']+){0,2}\\s+(?:${SPEECH})\\b`, 'i').test(t) || new RegExp(`\\b(?:${SPEECH})\\s+${at}`, 'i').test(t)) bad.push(`${k}/${e.id}: the person slot {${n}} next to a speech verb`);
+          /* A possessive ("{player}'s camp insists") counts as the slot. */
+          if (new RegExp(`${at}(?:['’]s)?(?:\\s+[\\w']+){0,2}\\s+(?:${SPEECH})\\b`, 'i').test(t) || new RegExp(`\\b(?:${SPEECH})\\s+${at}`, 'i').test(t)) bad.push(`${k}/${e.id}: the person slot {${n}} next to a speech verb`);
         }
       }
       if (e.tag === undefined) {
