@@ -5,6 +5,7 @@ import { benchFor, tiringAtHalftime, MAX_HALFTIME_SUBS, pressOf, liveGoneIds } f
 import type { CareerState, CMPlayer, Mentality, TalkTone } from '@/lib/clubManager';
 import { useRevealScroll } from '@/hooks/useRevealScroll';
 import { TeamTalkRow } from '@/components/club-manager/TeamTalkRow';
+import { HalftimeLineups } from '@/components/club-manager/HalftimeLineups';
 
 interface HalftimeScreenProps {
   career: CareerState;
@@ -38,9 +39,11 @@ function fitnessTone(f: number): string {
 export function HalftimeScreen({ career, onSub, onShape, onTalk, onSecondHalf }: HalftimeScreenProps) {
   const live = career.live;
   const [picking, setPicking] = useState<string | null>(null);
+  const [readingLineups, setReadingLineups] = useState(false);
   const benchRef = useRevealScroll<HTMLDivElement>(`sub:${picking ?? ''}`, { skipFirst: true });
 
   if (!live) return null;
+  if (readingLineups) return <HalftimeLineups career={career} onBack={() => setReadingLineups(false)} />;
 
   const onPitch: CMPlayer[] = live.onPitch
     .map(id => career.squad.find(p => p.id === id))
@@ -86,6 +89,8 @@ export function HalftimeScreen({ career, onSub, onShape, onTalk, onSecondHalf }:
         </div>
         <p className="text-[11px] text-muted-foreground mt-2 italic">{live.read}</p>
       </div>
+
+      <button type="button" onClick={() => setReadingLineups(true)} className="w-full rounded-xl border border-border bg-card p-3 text-left text-sm font-bold text-foreground">Starting XIs</button>
 
       {/* ---- shape ---- */}
       <div className="bg-card border border-border rounded-xl p-3">

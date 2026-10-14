@@ -11,8 +11,10 @@ jobs:
     env:
       CI: '1'
       SIM_NETWORK: offline
-      CM_HT_LINEUPS_PHASE: baseline
+      CM_HT_LINEUPS_PHASE: fixed
       CM_HT_LINEUPS_OUT: ${{ github.workspace }}/halftime-lineups-artifacts
+      FREE_KICK_FONT_CACHE: ${{ github.workspace }}/halftime-lineups-artifacts/font-cache
+      PRERENDER_ONLY: /club-manager
     defaults:
       run:
         shell: bash
@@ -29,8 +31,8 @@ jobs:
         run: |
           echo '127.0.0.1 flawuiqbvjobmkfkauhw.supabase.co' | sudo tee -a /etc/hosts
           mkdir -p "$CM_HT_LINEUPS_OUT"
-          test "$CM_HT_LINEUPS_PHASE" = baseline
-          git diff --exit-code 082fc2774c8aa9f919c14efa33bfc3fbfc599597 -- src scripts .github/workflows package.json package-lock.json bun.lock index.html ':!src/test/managerHalftimeLineups.test.tsx' ':!scripts/simManagerHalftimeLineups.mjs' ':!.github/workflows/manager-halftime-lineups.yml'
+          test "$CM_HT_LINEUPS_PHASE" = fixed
+          git diff --exit-code 082fc2774c8aa9f919c14efa33bfc3fbfc599597 -- src scripts .github/workflows package.json package-lock.json bun.lock index.html ':!src/components/club-manager/HalftimeScreen.tsx' ':!src/components/club-manager/HalftimeLineups.tsx' ':!src/lib/clubManagerLiveLineups.ts' ':!src/test/managerHalftimeLineups.test.tsx' ':!src/test/managerLiveLineups.test.ts' ':!scripts/simManagerHalftimeLineups.mjs' ':!scripts/simManagerLiveLineups.mjs' ':!scripts/playManagerHalftimeLineups.mjs' ':!.github/workflows/manager-halftime-lineups.yml'
           find src scripts .github/workflows -type f ! -path scripts/data/lastmod.json -print0 | sort -z | xargs -0 sha256sum > "$CM_HT_LINEUPS_OUT/source-hashes.txt"
           sha256sum package.json package-lock.json bun.lock > "$CM_HT_LINEUPS_OUT/package-hashes.txt"
           npm ci
@@ -49,8 +51,12 @@ jobs:
           NODE
       - name: Actual application type gate
         run: node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee "$CM_HT_LINEUPS_OUT/types.log"
-      - name: Actual missing halftime features and four preserves
-        run: CM_HT_LINEUPS_EXPECT_RED=1 NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simManagerHalftimeLineups.mjs 2>&1 | tee "$CM_HT_LINEUPS_OUT/baseline.log"
+      - name: Actual fixed halftime features and effective original-screen control
+        run: |
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simManagerHalftimeLineups.mjs 2>&1 | tee "$CM_HT_LINEUPS_OUT/fixed.log"
+          CM_HT_LINEUPS_CONTROL=original NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simManagerHalftimeLineups.mjs 2>&1 | tee "$CM_HT_LINEUPS_OUT/control-original.log"
+      - name: Independent current lineup semantics and effective controls
+        run: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simManagerLiveLineups.mjs 2>&1 | tee "$CM_HT_LINEUPS_OUT/live-lineups.log"
       - name: Existing match plans scorer identities and added-time unit cases
         run: |
           NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node_modules/.bin/vitest run src/test/managerMatchPlans.test.tsx src/test/managerScorerMarks.test.tsx src/test/cmMinuteLabel.test.ts --maxWorkers=1 --reporter=verbose --reporter=json --outputFile="$CM_HT_LINEUPS_OUT/prior-unit.json" 2>&1 | tee "$CM_HT_LINEUPS_OUT/prior-unit.log"
@@ -89,12 +95,41 @@ jobs:
             console.log(script + ': actual exit0 and complete owned closing output retained.');
           }
           NODE
+      - name: Full ordinary unit suite
+        run: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" npm test -- --maxWorkers=2 --reporter=default --reporter=json --outputFile.json="$CM_HT_LINEUPS_OUT/full-unit.json" 2>&1 | tee "$CM_HT_LINEUPS_OUT/full-unit.log"
+      - name: Remote build and browser prerequisites
+        run: |
+          npm install --prefix "$RUNNER_TEMP/halftime-lineups-browser" --no-save --package-lock=false playwright
+          ln -s "$RUNNER_TEMP/halftime-lineups-browser/node_modules/playwright" node_modules/playwright
+          ln -s "$RUNNER_TEMP/halftime-lineups-browser/node_modules/playwright-core" node_modules/playwright-core
+          node "$RUNNER_TEMP/halftime-lineups-browser/node_modules/playwright/cli.js" install --with-deps chromium
+          python -m pip install fonttools pillow
+          node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only 2>&1 | tee "$CM_HT_LINEUPS_OUT/fonts.log"
+      - name: Complete application build
+        run: |
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" npm run build:seo 2>&1 | tee "$CM_HT_LINEUPS_OUT/build.log"
+          cp scripts/data/lastmod.json "$CM_HT_LINEUPS_OUT/build-lastmod.json"
+          git diff -- scripts/data/lastmod.json > "$CM_HT_LINEUPS_OUT/build-lastmod.diff"
+      - name: Actual halftime lineups on phone and desktop
+        run: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playManagerHalftimeLineups.mjs 2>&1 | tee "$CM_HT_LINEUPS_OUT/browser.log"
+      - name: Every rebuilt-site reader and current save budgets
+        run: ONLY=simClubManagerSaveSize,simClubManagerSlots,simAdsense,simBrand,simHeadTags,simHiddenPages,simHubs,simIndexNow,simIndexing,simInternalLinks,simNoRivalNames,simPrerender,simPrerenderBoot,simRetiredRoutes,simSchema,simSitemap,simSnapshotAssets node scripts/runAllSims.mjs --browser 2>&1 | tee "$CM_HT_LINEUPS_OUT/readers.log"
+      - name: Current main download budgets
+        run: |
+          node scripts/lib/hostLikeServer.mjs dist 4173 > "$CM_HT_LINEUPS_OUT/server.log" 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+          for attempt in 1 2 3 4 5; do
+            if curl --fail --silent http://127.0.0.1:4173/ > /dev/null; then break; fi
+            sleep 1
+          done
+          BASE=http://127.0.0.1:4173 SWEEP_OFFLINE=1 NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/sweepWeight.mjs 2>&1 | tee "$CM_HT_LINEUPS_OUT/weights.log"
       - name: Final complete source and package holds
         if: always()
         run: |
           sha256sum --check "$CM_HT_LINEUPS_OUT/source-hashes.txt" > "$CM_HT_LINEUPS_OUT/source-holds.log"
           sha256sum --check "$CM_HT_LINEUPS_OUT/package-hashes.txt"
-          git diff --exit-code -- src scripts .github/workflows package.json package-lock.json bun.lock index.html
+          git diff --exit-code -- src scripts ':!scripts/data/lastmod.json' .github/workflows package.json package-lock.json bun.lock index.html
           node --input-type=module <<'NODE'
           import fs from 'node:fs';
           import assert from 'node:assert/strict';
