@@ -1,0 +1,3 @@
+#!serial
+continuity-minusAZ: MANAGER_WORLD_CONTINUITY_BASE=$(node scripts/lib/treeWithoutMerge.mjs 5ec5a724 36cc9ffe 082fc277) && export MANAGER_WORLD_CONTINUITY_BASE && echo "base $MANAGER_WORLD_CONTINUITY_BASE" && MANAGER_WORLD_CONTINUITY_ARTIFACTS=$TMPDIR/mwc node scripts/simManagerWorldContinuity.mjs 2>&1 | grep -E "^(PASS|FAIL)|Private world|Assertion|base " | tail -40; exit ${PIPESTATUS[0]}
+continuity-ctl-all: MANAGER_WORLD_CONTINUITY_BASE=$(node scripts/lib/treeWithoutMerge.mjs 5ec5a724 36cc9ffe 082fc277) && export MANAGER_WORLD_CONTINUITY_BASE && MANAGER_WORLD_CONTINUITY_ARTIFACTS=$TMPDIR/mwc2 MANAGER_WORLD_CONTINUITY_CONTROL=all node scripts/simManagerWorldContinuity.mjs 2>&1 | tail -25; exit ${PIPESTATUS[0]}
