@@ -1,0 +1,2 @@
+cmvar-all: CM_VAR_CONTROL=all NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCmVar.mjs 2>&1 | grep -E "^(PASS|FAIL) VAR|CAUGHT|passed\.$" ; exit ${PIPESTATUS[0]}
+simUclSeasonOne: git fetch -q origin main 2>/dev/null; UCL_S1_BASE=082fc277 node scripts/simUclSeasonOne.mjs 2>&1 | tail -15; exit ${PIPESTATUS[0]}
