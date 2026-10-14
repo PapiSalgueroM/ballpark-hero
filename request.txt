@@ -1,0 +1,2 @@
+headsha: git log --oneline -2
+award: SOCCER_AWARD_GENERATIONS_OUT="$PWD/sag" node scripts/simSoccerAwardGenerations.mjs > /tmp/aw.log 2>&1; s=$?; tail -3 /tmp/aw.log | cut -c1-200; cp sag/component/stdout.log "$RC_OUT/award-stdout.log" 2>/dev/null; cp sag/component/stderr.log "$RC_OUT/award-stderr.log" 2>/dev/null; grep -E "FAIL|AssertionError|expected" sag/component/stdout.log | head -10 | cut -c1-250; exit $s

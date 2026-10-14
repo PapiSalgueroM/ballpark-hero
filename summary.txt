@@ -1,0 +1,2 @@
+headsha exit=0 0s | f14ae6f10 Round BEG: Round 1369's promotion test picks its leagues through id lookups (simCmLeagueRules section 3d)
+award exit=1 899s |     at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simSoccerAwardGenerations.mjs:530:52
