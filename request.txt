@@ -1,0 +1,7 @@
+#!serve
+#!playwright
+#!serial
+headsha: git log --oneline -2
+fixtures: SC_SAVE_OUT="$PWD/scsw" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerCareerSaveSize.mjs | tail -1
+playSaveReaders: SC_SAVE_OUT="$PWD/scsw" node scripts/qa/playSoccerSaveReaders.mjs
+playSaveReaders-ctl-envelope: SOCCER_READERS_CONTROL=envelope SC_SAVE_OUT="$PWD/scsw" node scripts/qa/playSoccerSaveReaders.mjs > /tmp/sr.log 2>&1; s=$?; tail -3 /tmp/sr.log | cut -c1-200; [ $s -eq 1 ] && grep -q "playSoccerSaveReaders: CONTROL FIRED: envelope turned 4 game reads red" /tmp/sr.log && echo FIRED-OK
