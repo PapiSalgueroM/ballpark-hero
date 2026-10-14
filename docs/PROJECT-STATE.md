@@ -1,6 +1,6 @@
-## Codex Round1364: current owned roster fix awaiting remote verification, 2026-10-14
+## Codex Round1364: current roster fix, inverse comparison setup repaired, 2026-10-14
 
-Round1364 baseline37292b9d is physically qualified on remote run38495999104/job115631777565. Exact8 cases reproduce3 legacy Boolean failures and5 preserves. Complete packet, parent bindings, prior units, world controls and current budgets are retained. The bounded three-file fixed delta now reads every own club from the saved squad; existing seeded/rival assertions, all engine/world/economics/data and proof files stay held. Fresh fixed run is pending, so no fixed, merge or live claim. See docs/audits/club-detail-current-roster-2026-10-14.md.
+Round1364 fixed4a77cb85 passed actual type0/new8/original3+5/prior10 but failed before world checks because the old inverse-HEAD setup conflicts with the corrected display. The one workflow invocation now anchors its existing inverse comparison to the explicitly held parent082f. App/proof/oracles/controls/economics/core/package/caps unchanged. Retained failed packet earns only reached gates. Fresh full fixed run is pending, draftPR266 not merged/live. See docs/audits/club-detail-current-roster-2026-10-14.md.
 
 ## Release BC LIVE, 2026-10-13 18:23 EDT: one tab can no longer wipe a Club Manager save, Club Manager's world remembers your deals, its tables, copy and hub fixed, Soccer Career's events drawn fairly, the shared event deck, the college athletic director
 

@@ -66,7 +66,7 @@ jobs:
         run: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node_modules/.bin/vitest run src/test/clubDetailOwnClub.test.tsx src/lib/clubManagerOwnClubLevel.test.ts --reporter=json --outputFile="$CM_OWN_ROSTER_OUT/prior-unit.json" 2>&1 | tee "$CM_OWN_ROSTER_OUT/prior-unit.log"
       - name: Existing actual world continuity and all thirteen controls
         run: |
-          inverse_base=$(node scripts/lib/treeWithoutMerge.mjs 5ec5a724 36cc9ffe)
+          inverse_base=$(node scripts/lib/treeWithoutMerge.mjs 5ec5a724 36cc9ffe 082fc2774c8aa9f919c14efa33bfc3fbfc599597)
           echo "MANAGER_WORLD_CONTINUITY_BASE=$inverse_base" >> "$GITHUB_ENV"
           echo "CM_UNSEEDED_BASE=$inverse_base" >> "$GITHUB_ENV"
           MANAGER_WORLD_CONTINUITY_BASE="$inverse_base" MANAGER_WORLD_CONTINUITY_CONTROL=all NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simManagerWorldContinuity.mjs 2>&1 | tee "$CM_OWN_ROSTER_OUT/world-continuity.log"
