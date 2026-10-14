@@ -1,0 +1,7 @@
+build exit=0 31s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+distgrep exit=0 0s | distgrep: 519 js chunks; no deck string in any chunk
+kctl2 exit=0 8s | kctl: every control exited 1 and fired
+kctl3 exit=0 21s | kctl: every control exited 1 and fired
+kctl1 exit=0 84s | kctl: every control exited 1 and fired
+kctl5 exit=0 75s | kctl: every control exited 1 and fired
+kctl4 exit=0 312s | kctl: every control exited 1 and fired
