@@ -1,0 +1,4 @@
+FAIL 1280 reload: the game refused the packed save
+playSoccerSaveReaders: RED, 14 checks at 390 and 1280 on career 228-GK-playing (119964 characters raw, 46920 stored), 4 failures.
+playSoccerSaveReaders: CONTROL FIRED: envelope turned 4 game reads red
+FIRED-OK

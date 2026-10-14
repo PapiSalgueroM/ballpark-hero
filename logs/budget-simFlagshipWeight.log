@@ -1,0 +1,17 @@
+1) the flagship carries no other game
+   177 modules, 3430 KB of source, 4 foreign engines checked, 0 present
+1b) the Season Centre and the training ground are not in the first download
+   14 paths that must stay lazy, 0 in the static closure
+1c) the US careers' fact beat and roster beat builders are not in the first download
+   5 US career modules checked, 0 in the static closure
+2) the job market is loaded on demand, and something loads it
+   engine loads it dynamically, the page preloads it on both phases, the not-loaded state is honest
+3) the built weight of /soccer-career
+   91 lazy dependencies including the Club Manager chunk (45 are shared chunks the page already has, which is normal)
+   46 chunks, 2671 KB raw (ceiling 2700), 795 KB over the wire
+   raw bytes 2734601; the chunks: AppearanceBuilder-q-vqdnyG.js 47218, Celebration-DBQHfp5k.js 1527, CelebrationStyles-D6PbVAQ-.js 2126, Confetti-BAyzWs_O.js 904, FlagImg-CfomBbQ1.js 5846, GameHelp-BIAVj2Ze.js 1656, GameNavbar-CzUQ0zB8.js 10360, GameReportContext-CzCg6q3H.js 8487, GameSeoContent-B6PMTmbZ.js 7131, HowToPlayPopover-BLJg0JR2.js 1367, PlayerAvatar-Da7nOdYp.js 15162, ShareButtons-CzDFysZ7.js 11646, SoccerCareer-D6udi0bL.js 1402999, VictoryMoment-BxFfKh9y.js 3669, arcade-CUT7KVjC.js 489, arrow-left-BIHbkm9G.js 333, badges-BV0jAgFy.js 5813, careerAwardsNight-BDQnO6dK.js 2575, careerRivalryChoices-B2c2ZYXB.js 5988, chevron-down-B_EzYAbq.js 291, chevron-up-loNY8P8V.js 291, circle-help-CaKpRhrb.js 407, clubRivalries-DuNC-DyB.js 36634, confederationGroups-8jgsrX6T.js 1449, copy-BlxSaVw3.js 405, dialogA11y-BCgxbiii.js 150, flag-NOdaN75j.js 388, formatNumber-CGuttX8h.js 152, freeKick-BSoL5hQo.js 1943, index-D4TXDK82.js 797015, intlNames-DiJYNZJt.js 13296, keyedRng-BKZQ2UGv.js 254, lz-string-C2CCIia3.js 8420, managerOffers-EoQ6k_gA.js 3116, medal-evU3R_yw.js 604, select-BzQSJ0GK.js 21290, soccerBootIds-BWkyFIXk.js 293, soccerBoots-BK_dXNrV.js 2017, soccerCareerAppearance-C4EKR5O3.js 6153, soccerInternational-FiWGI8ks.js 21073, star-C016itmb.js 641, uclFormatHistory-DwuhruDw.js 12334, useArrivalTop-Gq5MvoOQ.js 609, useCareerMoment-BCGomZNC.js 267307, useGameCompletion-Cwshp7MK.js 810, useRevealScroll-CFcJtTTu.js 1963
+3b) the moved cards' words are in no chunk of the first download, and are built
+   "are both on them": in the first download 0, elsewhere 1 (usCareerSeasonReview-BVJ1WwQO.js)
+   "It goes down as one more line in the argument": in the first download 0, elsewhere 1 (usCareerSeasonReview-BVJ1WwQO.js)
+
+simFlagshipWeight: green. The flagship carries its own game and nobody else's.
