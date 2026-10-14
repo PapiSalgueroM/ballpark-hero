@@ -1,0 +1,3 @@
+dev exit=0 5s | simSoccerCareerDevelopment: 18 outcome groups, 16+16 complete baseline saves/RNG, 16 form draws, 16 played plan seasons, 7 interruption paths, 0 failed
+dev-mentorRemember exit=1 6s | simSoccerCareerDevelopment: 18 outcome groups, 16+16 complete baseline saves/RNG, 16 form draws, 16 played plan seasons, 7 interruption paths, 1 failed
+dev-all exit=0 88s | simSoccerCareerDevelopment: healthy outcomes passed, 27 effective controls caught
