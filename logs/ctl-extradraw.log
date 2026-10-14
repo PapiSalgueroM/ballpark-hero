@@ -1,0 +1,59 @@
+NEGATIVE CONTROL ON: the world tick makes one extra draw before Europe (section 2 must fail)
+0) soccerWorldTruth.ts states the boundary and the rule this harness pins
+   pins: season 2025, summer 2026, real names to 2032, floor 10 games and 6.8; 0 disagreements over 1980 to 2045
+   planted over 2,000 identities each: 9 games rated 9.5 won 0 months, 34 games rated 6.7 won 0, 34 games rated 8.6 won 7451
+finished saves: this tree mean 57.4 KB, median 55.6 KB, the base mean 58.1 KB, median 56.8 KB (a reading, not a check)
+his own Ballon d'Or: this tree 51 won, 71 top three, 113 in the top ten, of 6276 seasons played; the base 49 won, 80 top three, 113 in the top ten, of 6264 seasons played (a reading, not a check)
+fleet: 400 careers a tree (seed offset 0, 5 seeds), 7076 seasons on this tree in 27 s, 7064 on the base
+1) Player of the Month reads the month's football, with the true year
+   this tree: 2321 months over 6676 seasons; rated 8.0+ 2.59 a season (633), 7.0 to 7.5 any 0.03 (1615); at 7.5 to 8.5 all 1.03: GK 0.88 (208), DEF 1.12 (376), MID 0.86 (238), ATT 1.1 (614)
+   base:      5094 months over 6664 seasons; rated 8.0+ 2.11 a season (621), 7.0 to 7.5 any 0.48 (1551); at 7.5 to 8.5 all 1.16: GK 0.41 (209), DEF 0.47 (367), MID 0.67 (264), ATT 1.98 (600)
+   under the floor and still won: 0 here, 976 on the base; 0 goal keepers rated 6.0 or less who won: 0 of 38 here, 12 of 35 on the base
+   month lines with the wrong year: 0 here, 2609 on the base; seasons whose lines and awards disagree: 0 here, 0 on the base
+   planted: a 0 goal keeper rated 6.0 over 10,000 identities won 0 months
+2) The month award and the world tick leave the season's draws where they were
+  FAIL (section 2): career 50000 (GK, 1990): step 3 (1992): phone seed after the tick 785795642 against 1493245575
+  FAIL (section 2): career 50001 (GK, 1990): step 3 (1992): phone seed after the tick 2171689427 against 2878388036
+  FAIL (section 2): career 50002 (GK, 1990): step 3 (1992): phone seed after the tick 537377389 against 3107847622
+  FAIL (section 2): career 50003 (GK, 1990): step 3 (1992): phone seed after the tick 1954533006 against 1534120747
+  FAIL (section 2): career 50004 (CB, 1990): step 3 (1992): phone seed after the tick 3131795920 against 2921200885
+  FAIL (section 2): career 50005 (CB, 1990): step 3 (1992): phone seed after the tick 3741972414 against 2146108699
+  FAIL (section 2): career 50006 (CB, 1990): step 3 (1992): phone seed after the tick 2743127753 against 2632599698
+  FAIL (section 2): career 50007 (CB, 1990): step 3 (1992): phone seed after the tick 2592489743 against 77809776
+  FAIL (section 2): career 50008 (LB, 1990): step 5 (1993): phone seed after the tick 1924550208 against 252069669
+  FAIL (section 2): career 50009 (LB, 1990): step 3 (1992): phone seed after the tick 1886341131 against 3755755612
+  FAIL (section 2): career 50010 (LB, 1990): step 3 (1992): phone seed after the tick 1711282635 against 2825367836
+  FAIL (section 2): career 50011 (LB, 1990): step 3 (1992): phone seed after the tick 673944871 against 1053114088
+  FAIL (section 2): ... further failures in this section counted, not printed
+   200 careers in lockstep with the base: 616 steps, 408 seasons, 200 month blocks and 200 world ticks compared, 200 world records; 200 careers with a count, seed or record off the base
+   first fields to differ: events pendingBallonDor phone.feed phone.world phone.clubs phone.seed 73; events awards pendingBallonDor phone.feed phone.world phone.clubs phone.seed 69; pendingBallonDor phone.feed phone.world phone.clubs phone.seed 39; events 6; seasons events pendingSummary awards pendingBallonDor phone.feed phone.world phone.clubs phone.seed 4; events phone.feed phone.world phone.clubs phone.seed 3; never differed 0; compared until a season's input differed in 0, by 
+   planted: the old lottery's draws lifted from both engines, 9200 cases (0 to 45 goals, 200 seeds each): 0 with a different number of calls; calls past the twenty plain draws at 30 goals 251, at 35 goals 202
+3) The phone's world says nothing it cannot stand behind
+   this tree: 6055 seasons (4300 happened, 1755 to come), 15720 lines, 5246 champion lines in seasons to come, 2209 moves of generated men
+              real names in a past season 0, past champions, transfers or scorers 0, a winner of a summer that happened 0, moves of real men 0, real top scorers 0, real men off their era club 0, lines off the record 0
+   base:      6043 seasons, 45893 lines; real names in a past season 17093, past champions, transfers or scorers 29868, a winner of a summer that happened 2242, moves of real men 31902, real top scorers 10536, real men off their era club 63636, lines off the record 0
+   lines naming the player or his club: 43 here (the feed names his club: "🔄 Andrés Weber has left Palmeiras for PSV."), 361 on the base (the feed names his club: "🔄 DONE DEAL. Christian Vieri joins AC Milan from Inter Milan. Fee around 65m.")
+4) The phone's quiz asks about the world only where the world is the game's own
+   this tree: three questions in 6676 of 6676 seasons (1); world questions about a season that happened 0, about a real man 0, answers not in the save 0, world questions asked 2015, champion questions without the full season 0 of 1459
+   base:      three questions in 6659 of 6664 seasons (1); world questions about a season that happened 7377, about a real man 4561, answers not in the save 0
+   old saves: 40 base careers at their 2028 world (40 holding a real man's move or tally) asked 120 questions here, 0 about a real man; 40 played on here until their world ticked (0 of them through a season with no tick first), 0 threw, 0 grew a phone field, 0 real men left off their era club
+5) The season log and the International panel name a winner only where the rule allows
+   this tree: 3128 summers; winner lines missing where they belong 0, printed for a summer he missed 0; kept for finals he played 1033, kept for a summer to come 701, held back 1086
+   base:      3133 summers; printed for a summer he missed that happened 1059
+   a past summer he missed: champions line false, bracket tile false, last tile winner false (base true, true, true)
+   a past summer he played: champions line true, bracket tile true, last tile winner true (base true, true, true)
+   a summer to come he missed: champions line true, bracket tile true, last tile winner true (base true, true, true)
+   an old save's history, a missed 2010 last: champions line false, bracket tile false, last tile winner false (base true, true, true)
+6) The eighth inverse gives the base's four files back, and every change sits in this round's hunks
+   src/lib/soccerCareerEngine.ts: head 1a1c05feb120de04 (pinned 1a1c05feb120de04), inverse 44f323390d962fc1, base 44f323390d962fc1 (pinned 44f323390d962fc1)
+     5 hunks against the base, in 3 regions
+   src/lib/soccerPhone.ts: head 4493de4d9ff4c839 (pinned d7f3dd3784f08699), inverse 472559f0f86a9fac, base 43c30266828c0d6e (pinned 43c30266828c0d6e)
+  FAIL (section 6): src/lib/soccerPhone.ts: the eighth inverse gives sha256 472559f0f86a9fac3a9a4e606860a72dcf00f2647b7660804298827e09ef3056, the base is 43c30266828c0d6ed77fd061b29a0a14e70c44d73f157b859ef6f1c15a875000
+  FAIL (section 6): src/lib/soccerPhone.ts: this tree is not the head the inverse was written for (regenerate the rows)
+     12 hunks against the base, in 3 regions
+   src/lib/soccerArcade.ts: head 456ec78d275469f5 (pinned 456ec78d275469f5), inverse bc8301f8b1405f6e, base bc8301f8b1405f6e (pinned bc8301f8b1405f6e)
+     7 hunks against the base, in 2 regions
+   src/components/soccer-career/InternationalPanel.tsx: head 5c39697167844a7d (pinned 5c39697167844a7d), inverse df3dd4e16e8a046a, base df3dd4e16e8a046a (pinned df3dd4e16e8a046a)
+     10 hunks against the base, in 9 regions
+   rows applied: 33 of 33
+FIRED: WORLD_TRUTH_CONTROL=extradraw failed section 2 (201 failures; section 2: 201, section 6: 2)

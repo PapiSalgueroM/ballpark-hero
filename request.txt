@@ -1,0 +1,32 @@
+# Release BD gate, lane P2: the four pieces' plain lines and controls
+#!playwright
+kctl5: bash .rc/x/kctl.sh wordedit:14 wordorder:14 storymove:14 voiceedit:14 effectedit:14 newpack:14,15 pressure:15 eager:16
+vitest-sc: node_modules/.bin/vitest run $(git grep -l -E "soccerCareerEngine|soccerPhone|soccerArcade|InternationalPanel|soccerWorldTruth" -- 'src/test/*.test.ts' 'src/test/*.test.tsx') --testTimeout=300000 --hookTimeout=120000
+worldtruth: node scripts/simSoccerWorldTruth.mjs
+ctl-goalsonly: WORLD_TRUTH_CONTROL=goalsonly node scripts/simSoccerWorldTruth.mjs
+ctl-seasonyear: WORLD_TRUTH_CONTROL=seasonyear node scripts/simSoccerWorldTruth.mjs
+ctl-nolegacy: WORLD_TRUTH_CONTROL=nolegacy node scripts/simSoccerWorldTruth.mjs
+ctl-realmoves: WORLD_TRUTH_CONTROL=realmoves node scripts/simSoccerWorldTruth.mjs
+ctl-pastchampions: WORLD_TRUTH_CONTROL=pastchampions node scripts/simSoccerWorldTruth.mjs
+ctl-summer: WORLD_TRUTH_CONTROL=summer node scripts/simSoccerWorldTruth.mjs
+ctl-quizyear: WORLD_TRUTH_CONTROL=quizyear node scripts/simSoccerWorldTruth.mjs
+ctl-arcade: WORLD_TRUTH_CONTROL=arcade node scripts/simSoccerWorldTruth.mjs
+ctl-outside: WORLD_TRUTH_CONTROL=outside node scripts/simSoccerWorldTruth.mjs
+ctl-log: WORLD_TRUTH_CONTROL=log node scripts/simSoccerWorldTruth.mjs
+ctl-panel: WORLD_TRUTH_CONTROL=panel node scripts/simSoccerWorldTruth.mjs
+ctl-boundary: WORLD_TRUTH_CONTROL=boundary node scripts/simSoccerWorldTruth.mjs
+ctl-floor: WORLD_TRUTH_CONTROL=floor node scripts/simSoccerWorldTruth.mjs
+ctl-legacy30: WORLD_TRUTH_CONTROL=legacy30 node scripts/simSoccerWorldTruth.mjs
+ctl-legacy35: WORLD_TRUTH_CONTROL=legacy35 node scripts/simSoccerWorldTruth.mjs
+ctl-extradraw: WORLD_TRUTH_CONTROL=extradraw node scripts/simSoccerWorldTruth.mjs
+simCareerStoryRole: node scripts/simCareerStoryRole.mjs
+simCareerTrophyRuns: node scripts/simCareerTrophyRuns.mjs
+simSoccerCareerDevelopment: node scripts/simSoccerCareerDevelopment.mjs
+simCareerPressMarket: node scripts/simCareerPressMarket.mjs
+simCareerTransferBrief: node scripts/simCareerTransferBrief.mjs
+simSoccerDerbyHistory: node scripts/simSoccerDerbyHistory.mjs
+simSoccerSeasonHistory: node scripts/simSoccerSeasonHistory.mjs
+simSoccerAgentReview: node scripts/simSoccerAgentReview.mjs
+simSoccerFarewell: node scripts/simSoccerFarewell.mjs
+simSoccerInternationalReturn: node scripts/simSoccerInternationalReturn.mjs
+simCareerProgramme: CI=1 node scripts/simCareerProgramme.mjs

@@ -1,0 +1,30 @@
+worldtruth exit=0 89s | simSoccerWorldTruth: OK, every section green
+kctl5 exit=0 109s | kctl: every control exited 1 and fired
+vitest-sc exit=0 116s |    Duration  115.84s (transform 9.90s, setup 5.26s, collect 53.88s, tests 220.36s, environment 36.05s, prepare 7.78s)
+ctl-goalsonly exit=1 65s | FIRED: WORLD_TRUTH_CONTROL=goalsonly failed section 1 (7 failures; section 1: 7, section 2: 201, section 6: 3)
+ctl-nolegacy exit=1 57s | FIRED: WORLD_TRUTH_CONTROL=nolegacy failed section 2 (201 failures; section 2: 201, section 6: 3)
+ctl-seasonyear exit=1 66s | FIRED: WORLD_TRUTH_CONTROL=seasonyear failed section 1 (1 failures; section 1: 1, section 6: 3)
+ctl-realmoves exit=1 64s | FIRED: WORLD_TRUTH_CONTROL=realmoves failed section 3 (2 failures; section 3: 2, section 4: 1, section 6: 3)
+ctl-summer exit=1 61s | FIRED: WORLD_TRUTH_CONTROL=summer failed section 3 (1 failures; section 3: 1, section 6: 3)
+ctl-pastchampions exit=1 63s | FIRED: WORLD_TRUTH_CONTROL=pastchampions failed section 3 (1 failures; section 3: 1, section 6: 3)
+ctl-quizyear exit=1 65s | FIRED: WORLD_TRUTH_CONTROL=quizyear failed section 4 (1 failures; section 4: 1, section 6: 3)
+ctl-outside exit=1 61s | FIRED: WORLD_TRUTH_CONTROL=outside failed section 6 (3 failures; section 2: 29, section 6: 3)
+ctl-arcade exit=1 62s | FIRED: WORLD_TRUTH_CONTROL=arcade failed section 4 (2 failures; section 4: 2, section 6: 3)
+ctl-log exit=1 68s | FIRED: WORLD_TRUTH_CONTROL=log failed section 5 (1 failures; section 5: 1, section 6: 3)
+ctl-boundary exit=1 60s | FIRED: WORLD_TRUTH_CONTROL=boundary failed section 0 (2 failures; section 0: 2, section 3: 2, section 4: 1)
+ctl-panel exit=1 65s | FIRED: WORLD_TRUTH_CONTROL=panel failed section 5 (6 failures; section 5: 6, section 6: 5)
+ctl-floor exit=1 63s | FIRED: WORLD_TRUTH_CONTROL=floor failed section 0 (1 failures; section 0: 1)
+ctl-legacy30 exit=1 63s | FIRED: WORLD_TRUTH_CONTROL=legacy30 failed section 2 (3 failures; section 2: 3, section 6: 3)
+ctl-legacy35 exit=1 67s | FIRED: WORLD_TRUTH_CONTROL=legacy35 failed section 2 (1 failures; section 2: 1, section 6: 3)
+simCareerTrophyRuns exit=0 4s | Trophy campaigns: 9 groups, 24 full AR season pairs, 192 full campaign/RNG pairs, 0 effective controls; artifacts /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/ca
+simSoccerCareerDevelopment exit=0 4s | simSoccerCareerDevelopment: 18 outcome groups, 16+16 complete baseline saves/RNG, 16 form draws, 16 played plan seasons, 7 interruption paths, 0 failed
+simCareerPressMarket exit=0 7s | Press/Market:6 outcomes,27 full original state/RNG pairs,6 effective copied source controls,18 native fixture branches.
+simCareerTransferBrief exit=0 8s | Transfer Brief:9 healthy outcome groups,60 full original state/RNG pairs,8 effective copied source controls,9 prepared native branches.
+simSoccerDerbyHistory exit=0 3s | Derby history: 11 groups,24 full main season pairs,192 full campaign/RNG pairs,0 effective controls; artifacts /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/derby
+simSoccerSeasonHistory exit=0 3s | Season history: 9 groups,24 full AR season pairs,192 full campaign/RNG pairs,0 effective controls; artifacts /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/season-
+simCareerStoryRole exit=0 40s | simCareerStoryRole: 16 groups, 0 failed, 48 full AR pairs
+simSoccerFarewell exit=0 8s | Soccer farewell:9 healthy groups,168 full original state/RNG pairs,6 effective source controls,6 prepared native branches.
+simSoccerAgentReview exit=0 11s | PASS agent review product and proof source bytes held.
+ctl-extradraw exit=1 60s | FIRED: WORLD_TRUTH_CONTROL=extradraw failed section 2 (201 failures; section 2: 201, section 6: 2)
+simSoccerInternationalReturn exit=0 7s | PASS international return copied production source bytes held.
+simCareerProgramme exit=0 49s | Career programme:50 original/compatibility/full product season pairs with exact RNG,240 opted gameplay seasons,21 effective loaded faults,164 unchanged original chance ou
