@@ -1,0 +1,67 @@
+B. Calendar: day taps move nothing, one name for one setting
+  PASS  B  celta-320 first row, an in page click: the page moved 0 px (scrollY 683 to 683)
+  FAIL  B  celta-320 first row, an in page click: the day strip is wholly on screen (573 to 645 of 640)
+  PASS  B  celta-320 first row, an in page click: the tapped day is still on screen (279 px)
+  PASS  B  celta-320 first row, an in page click: the strip names the day "Sat 1 Aug"
+  PASS  B  celta-320 last row, a real click: the page moved 0 px (scrollY 683 to 683)
+  FAIL  B  celta-320 last row, a real click: the day strip is wholly on screen (573 to 675 of 640)
+  PASS  B  celta-320 last row, a real click: the tapped day is still on screen (519 px)
+  PASS  B  celta-320 last row, a real click: the strip names the day "Mon 31 Aug"
+  PASS  B  celta-320 a match day, a real click: the page moved 0 px (scrollY 683 to 683)
+  FAIL  B  celta-320 a match day, a real click: the day strip is wholly on screen (573 to 723 of 640)
+  PASS  B  celta-320 a match day, a real click: the tapped day is still on screen (327 px)
+  PASS  B  celta-320 a match day, a real click: the strip names the day "Sat 8 Aug"
+  PASS  B  celta-320: the calendar's intensity buttons read Light, Normal, Double
+  PASS  B  celta-320: the calendar says neither Rest first nor Full training
+  PASS  B  celta-320: the training panel's intensity buttons read Light, Normal, Double
+  PASS  B  celta-320: the training panel says neither Rest first nor Full training
+  PASS  B  liverpool-390 first row, an in page click: the page moved 0 px (scrollY 270 to 270)
+  FAIL  B  liverpool-390 first row, an in page click: the day strip is wholly on screen (972 to 1044 of 844)
+  PASS  B  liverpool-390 first row, an in page click: the tapped day is still on screen (678 px)
+  PASS  B  liverpool-390 first row, an in page click: the strip names the day "Sat 1 Aug"
+  PASS  B  liverpool-390 last row, a real click: the page moved 0 px (scrollY 270 to 270)
+  FAIL  B  liverpool-390 last row, a real click: the day strip is wholly on screen (972 to 1044 of 844)
+  FAIL  B  liverpool-390 last row, a real click: the tapped day is still on screen (918 px)
+  FAIL  B  liverpool-390 last row, a real click: the strip names the day "Mon 31 Aug"
+  PASS  B  liverpool-390 a match day, a real click: the page moved 0 px (scrollY 270 to 270)
+  FAIL  B  liverpool-390 a match day, a real click: the day strip is wholly on screen (972 to 1106 of 844)
+  PASS  B  liverpool-390 a match day, a real click: the tapped day is still on screen (726 px)
+  PASS  B  liverpool-390 a match day, a real click: the strip names the day "Sat 8 Aug"
+  PASS  B  liverpool-390: the calendar's intensity buttons read Light, Normal, Double
+  PASS  B  liverpool-390: the calendar says neither Rest first nor Full training
+  PASS  B  liverpool-390: the training panel's intensity buttons read Light, Normal, Double
+  PASS  B  liverpool-390: the training panel says neither Rest first nor Full training
+  PASS  B  aberdeen-1280 first row, an in page click: the page moved 0 px (scrollY 113 to 113)
+  FAIL  B  aberdeen-1280 first row, an in page click: the day strip is wholly on screen (941 to 1013 of 900)
+  PASS  B  aberdeen-1280 first row, an in page click: the tapped day is still on screen (647 px)
+  PASS  B  aberdeen-1280 first row, an in page click: the strip names the day "Sat 1 Aug"
+  PASS  B  aberdeen-1280 last row, a real click: the page moved 0 px (scrollY 113 to 113)
+  FAIL  B  aberdeen-1280 last row, a real click: the day strip is wholly on screen (941 to 1013 of 900)
+  FAIL  B  aberdeen-1280 last row, a real click: the tapped day is still on screen (887 px)
+  FAIL  B  aberdeen-1280 last row, a real click: the strip names the day "Mon 31 Aug"
+  PASS  B  aberdeen-1280 a match day, a real click: the page moved 0 px (scrollY 113 to 113)
+  FAIL  B  aberdeen-1280 a match day, a real click: the day strip is wholly on screen (941 to 1059 of 900)
+  PASS  B  aberdeen-1280 a match day, a real click: the tapped day is still on screen (695 px)
+  PASS  B  aberdeen-1280 a match day, a real click: the strip names the day "Sat 8 Aug"
+  PASS  B  aberdeen-1280: the calendar's intensity buttons read Light, Normal, Double
+  PASS  B  aberdeen-1280: the calendar says neither Rest first nor Full training
+  PASS  B  aberdeen-1280: the training panel's intensity buttons read Light, Normal, Double
+  PASS  B  aberdeen-1280: the training panel says neither Rest first nor Full training
+  PASS  B  banner-390 first row, an in page click: the page moved 0 px (scrollY 270 to 270)
+  PASS  B  banner-390 first row, an in page click: the day strip is wholly on screen (611 to 683 of 844)
+  PASS  B  banner-390 first row, an in page click: the tapped day is still on screen (678 px)
+  PASS  B  banner-390 first row, an in page click: the strip names the day "Sat 1 Aug"
+  PASS  B  banner-390 first row, an in page click: the strip clears the cookie banner (strip bottom 683, banner top 695)
+  PASS  B  banner-390 last row, a real click: the page moved 0 px (scrollY 639 to 639)
+  PASS  B  banner-390 last row, a real click: the day strip is wholly on screen (583 to 683 of 844)
+  PASS  B  banner-390 last row, a real click: the tapped day is still on screen (549 px)
+  PASS  B  banner-390 last row, a real click: the strip names the day "Mon 31 Aug"
+  PASS  B  banner-390 last row, a real click: the strip clears the cookie banner (strip bottom 683, banner top 695)
+  PASS  B  banner-390 a match day, a real click: the page moved 0 px (scrollY 639 to 639)
+  PASS  B  banner-390 a match day, a real click: the day strip is wholly on screen (549 to 683 of 844)
+  PASS  B  banner-390 a match day, a real click: the tapped day is still on screen (357 px)
+  PASS  B  banner-390 a match day, a real click: the strip names the day "Sat 8 Aug"
+  PASS  B  banner-390 a match day, a real click: the strip clears the cookie banner (strip bottom 683, banner top 695)
+  PASS  B  banner-390: after the banner is answered the strip's own place is below the fold, so it rides the foot (own place top 804, drawn 698, of 844)
+  PASS  B  banner-390: the strip rides the foot once the banner is answered (bottom 832, foot 832, banner gone)
+playCmHubLanding: CONTROL nosticky FIRED, 9 B check(s) went red, first: celta-320 first row, an in page click: the day strip is wholly on screen (573 to 645 of 640) (B 52 pass 13 fail)

@@ -1,0 +1,24 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/test/soccerCareerFarewell.test.ts [2m([22m[2m50 tests[22m[2m)[22m[32m 286[2mms[22m[39m
+[90mstdout[2m | src/test/soccerFarewellPage.test.tsx[2m > [22m[2mSoccer farewell real page actions[2m > [22m[2mbanks a genuine open moment and plays one final year for two captured asynchronous Next Season clicks
+[22m[39mFAREWELL_ASYNC_ACT_STARTUP {"scope":"Unfiltered empty async act initialization before either career action tape","values":[0.02040268573909998],"stacks":["Error: Farewell action random draw\n    at Math.<anonymous> (/home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerFarewellPage.test.tsx:108:18)\n    at Math.mockCall (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/@vitest/spy/dist/index.js:96:15)\n    at Math.random (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/tinyspy/dist/index.js:47:80)\n    at enqueueTask (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/react/cjs/react.development.js:2458:45)\n    at recursivelyFlushAsyncActWork (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/react/cjs/react.development.js:2634:9)\n    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/react/cjs/react.development.js:2545:15\n    at processTicksAndRejections (node:internal/process/task_queues:104:5)"],"attribution":{"diagnosticRun":"38051776558","source":"11c30639","caller":"react.development.js:2458:45 enqueueTask, recursivelyFlushAsyncActWork"}}
+
+ [32m✓[39m src/test/soccerFarewellPage.test.tsx [2m([22m[2m13 tests[22m[2m)[22m[33m 1259[2mms[22m[39m
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ [32m✓[39m src/test/soccerCareerSaveRetry.test.tsx [2m([22m[2m8 tests[22m[2m)[22m[33m 4032[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career failed write recovery[2m > [22mretries the actually earned training result exactly once and restores it on the next mount [33m 1233[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career failed write recovery[2m > [22mretries the latest earned season after more than one failed career change without rerunning its engine [33m 1080[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career failed write recovery[2m > [22mclears a failed save on the next successful automatic save and alerts again on a later refusal [33m 1051[2mms[22m[39m
+ [32m✓[39m src/test/soccerFarewellUi.test.tsx [2m([22m[2m14 tests[22m[2m)[22m[33m 328[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m4 passed[39m[22m[90m (4)[39m
+[2m      Tests [22m [1m[32m85 passed[39m[22m[90m (85)[39m
+[2m   Start at [22m 15:58:12
+[2m   Duration [22m 11.21s[2m (transform 1.57s, setup 130ms, collect 2.77s, tests 5.90s, environment 899ms, prepare 165ms)[22m
+
+JSON report written to /home/runner/work/ballpark-hero/ballpark-hero/soccer-farewell-artifacts/units.json
+PASS farewell units: {"mode":"units","total":85,"files":[{"file":"soccerCareerFarewell.test.ts","passed":50},{"file":"soccerFarewellUi.test.tsx","passed":14},{"file":"soccerFarewellPage.test.tsx","passed":13},{"file":"soccerCareerSaveRetry.test.tsx","passed":8}]}

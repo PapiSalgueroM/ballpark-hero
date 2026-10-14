@@ -1,0 +1,23 @@
+1) A fresh Liverpool career, 10 weeks by quick sim
+  ok    Liverpool, week 10 on disk, kitty 149.6m
+2) The desk at 320 by 640
+  ok    320x640: the desk opened with its top at 68px (scrollY 656 to 567)
+  FAIL: 320x640: text under 12px, data-finance-projection: "Board covers running costs" at 11px
+  FAIL: 320x640: text under 12px, data-finance-projection: "+£13.1m" at 11px
+  FAIL: 320x640: text under 12px, data-finance-projection: "+£70.4m" at 11px
+  320x640: 108 text holders, 14 buttons and 28 figures measured; kitty row at y 1092 (on screen at 525), reads Kitty change | +£12.6m | +£63.5m; cover Board covers running costs | +£13.1m | +£70.4m
+2) The desk at 390 by 844
+  ok    390x844: the desk opened with its top at 81px (scrollY 538 to 538)
+  FAIL: 390x844: text under 12px, data-finance-projection: "Board covers running costs" at 11px
+  FAIL: 390x844: text under 12px, data-finance-projection: "+£13.1m" at 11px
+  FAIL: 390x844: text under 12px, data-finance-projection: "+£70.4m" at 11px
+  390x844: 108 text holders, 14 buttons and 28 figures measured; kitty row at y 971 (on screen at 433), reads Kitty change | +£12.6m | +£63.5m; cover Board covers running costs | +£13.1m | +£70.4m
+2) The desk at 1280 by 900
+  ok    1280x900: the desk opened with its top at 242px (scrollY 363 to 363)
+  FAIL: 1280x900: text under 12px, data-finance-projection: "Board covers running costs" at 11px
+  FAIL: 1280x900: text under 12px, data-finance-projection: "+£13.1m" at 11px
+  FAIL: 1280x900: text under 12px, data-finance-projection: "+£70.4m" at 11px
+  1280x900: 108 text holders, 14 buttons and 28 figures measured; kitty row at y 927 (on screen at 564), reads Kitty change | +£12.6m | +£63.5m; cover Board covers running costs | +£13.1m | +£70.4m
+  pictures in /home/runner/work/_temp/t-ctl-desk-small/out
+
+playCmFinanceDesk: CONTROL small FIRED (9 failures, as it must)
