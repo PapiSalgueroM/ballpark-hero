@@ -43,6 +43,11 @@ const followers = (s: CareerState, delta: number) => {
 };
 const log = (s: CareerState, line: string) => { s.events = [...s.events, line]; };
 
+function pendingLifeChance(state: CareerState, id: number, chance: number): boolean {
+  const rolled = Math.random() < chance;
+  return rolled || (state.pendingEvents ?? []).some(event => event.id === id);
+}
+
 /* ─── Round 725: cooldowns ───
    Seasons an event sits out after it fires, one number per kind of story so
    the audit table in scripts/simCareerLifeCooldowns.mjs reads straight off
@@ -223,7 +228,7 @@ export function getLifeEvents(state: CareerState): RandomEvent[] {
   }
 
   /* ── agent drama ── */
-  if (state.agentId === "cousin" && Math.random() < 0.6) {
+  if (state.agentId === "cousin" && pendingLifeChance(state, 205, 0.6)) {
     push({ id: 205, cooldown: COOLDOWN.agent, emoji: "📱", title: "Ricky Posted Your Contract",
       description: "Cousin Ricky accidentally posted a screenshot of your full contract to his public story. The numbers are everywhere.",
       category: "negative", choices: [
@@ -233,7 +238,7 @@ export function getLifeEvents(state: CareerState): RandomEvent[] {
           apply: s => { s.agentId = "self"; s.morale = clamp(s.morale - 5, 0, 100); s.events = [...s.events, "🚪 Fired Cousin Ricky. Thanksgiving will be tense"]; return s; } },
       ] });
   }
-  if (state.agentId === "cousin" && Math.random() < 0.4) {
+  if (state.agentId === "cousin" && pendingLifeChance(state, 206, 0.4)) {
     push({ id: 206, cooldown: COOLDOWN.agent, emoji: "✈️", title: "Wrong Preseason, Ricky",
       description: "Ricky booked your preseason flights to the wrong country. You joined a stranger's training camp for two days before anyone noticed.",
       category: "negative", choices: [
@@ -243,7 +248,7 @@ export function getLifeEvents(state: CareerState): RandomEvent[] {
           apply: s => { s.morale = clamp(s.morale - 4, 0, 100); s.events = [...s.events, "✈️ Ricky sent you to the wrong country. You told no one"]; return s; } },
       ] });
   }
-  if (state.agentId === "shark" && Math.random() < 0.4) {
+  if (state.agentId === "shark" && pendingLifeChance(state, 207, 0.4)) {
     push({ id: 207, cooldown: COOLDOWN.agent, emoji: "🦈", title: "Double Agent",
       description: "You find out Marco also represents your direct rival for the same position, and he has been pitching you both to the same clubs.",
       category: "negative", choices: [
@@ -255,7 +260,7 @@ export function getLifeEvents(state: CareerState): RandomEvent[] {
           apply: s => { s.marketValue += 3; s.integrityBonus -= 2; s.events = [...s.events, "🧠 Turned Marco's double game to your advantage"]; return s; } },
       ] });
   }
-  if (state.agentId === "super" && Math.random() < 0.4) {
+  if (state.agentId === "super" && pendingLifeChance(state, 208, 0.4)) {
     push({ id: 208, cooldown: COOLDOWN.agent, emoji: "🗞️", title: "The Leak",
       description: "Zara leaked fake transfer interest to three newspapers to spike your value. Your manager is furious. Your value did spike though.",
       category: "negative", choices: [
@@ -267,7 +272,7 @@ export function getLifeEvents(state: CareerState): RandomEvent[] {
   }
 
   /* ── personality exclusives ── */
-  if (p === "showman" && Math.random() < 0.5) {
+  if (p === "showman" && pendingLifeChance(state, 210, 0.5)) {
     push({ id: 210, cooldown: COOLDOWN.personality, emoji: "🤸", title: "The Halftime Backflip",
       description: "The warm-up DJ plays your song at halftime. The crowd starts chanting for the backflip you posted last summer.",
       category: "life", choices: [
@@ -277,7 +282,7 @@ export function getLifeEvents(state: CareerState): RandomEvent[] {
           apply: s => { s.events = [...s.events, "🤸 Declined the backflip. The crowd booed lovingly"]; return s; } },
       ] });
   }
-  if (p === "showman" && Math.random() < 0.35) {
+  if (p === "showman" && pendingLifeChance(state, 211, 0.35)) {
     push({ id: 211, cooldown: COOLDOWN.once, emoji: "🕶️", title: "Trademark the Celebration",
       description: "Your goggles celebration is everywhere. A lawyer suggests trademarking it for merch.",
       category: "life", choices: [
@@ -287,7 +292,7 @@ export function getLifeEvents(state: CareerState): RandomEvent[] {
           apply: s => { s.integrityBonus += 4; s.popularity = clamp(s.popularity + 4, 0, 100); s.events = [...s.events, "❤️ Kept the celebration free for every playground on earth"]; return s; } },
       ] });
   }
-  if (p === "iceman" && Math.random() < 0.5) {
+  if (p === "iceman" && pendingLifeChance(state, 212, 0.5)) {
     push({ id: 212, cooldown: COOLDOWN.personality, emoji: "🧊", title: "No Celebration",
       description: "You score against your boyhood club and simply raise both hands in apology. The stadium, both ends, applauds.",
       category: "positive", choices: [
@@ -297,7 +302,7 @@ export function getLifeEvents(state: CareerState): RandomEvent[] {
           apply: s => { s.popularity = clamp(s.popularity + 2, 0, 100); s.morale = clamp(s.morale + 2, 0, 100); log(s, "👋 Scored against your old club and waved once. Everyone understood"); return s; } },
       ] });
   }
-  if (p === "iceman" && Math.random() < 0.35) {
+  if (p === "iceman" && pendingLifeChance(state, 213, 0.35)) {
     push({ id: 213, cooldown: COOLDOWN.personality, emoji: "🎤", title: "The One-Word Interview",
       description: "A reporter asks you eleven questions after the match. You answer all eleven with the word 'yes'. It becomes a meme format.",
       category: "life", choices: [
@@ -307,7 +312,7 @@ export function getLifeEvents(state: CareerState): RandomEvent[] {
           apply: s => { s.popularity = clamp(s.popularity + 2, 0, 100); log(s, "🎙️ Eleven yeses and then a full sentence. The reporter nearly fainted"); return s; } },
       ] });
   }
-  if (p === "hothead" && Math.random() < 0.5) {
+  if (p === "hothead" && pendingLifeChance(state, 214, 0.5)) {
     push({ id: 214, cooldown: COOLDOWN.personality, emoji: "🚇", title: "Tunnel Incident",
       description: "An opponent stepped on your boot in the tunnel. On purpose. Everyone is watching what you do next.",
       category: "negative", choices: [
@@ -317,7 +322,7 @@ export function getLifeEvents(state: CareerState): RandomEvent[] {
           apply: s => { s.integrityBonus += 2; s.socialMediaFollowers = Math.round((s.socialMediaFollowers + 0.3) * 100) / 100; s.events = [...s.events, "🥶 The tunnel stare went viral. Scarier than shouting"]; return s; } },
       ] });
   }
-  if (p === "hothead" && Math.random() < 0.35) {
+  if (p === "hothead" && pendingLifeChance(state, 215, 0.35)) {
     push({ id: 215, cooldown: COOLDOWN.personality, emoji: "🧃", title: "The Drinks Cart Flip",
       description: "Subbed off at 60 minutes in a match you were winning by yourself. The drinks cart caught the full force of your opinion.",
       category: "negative", choices: [
@@ -327,7 +332,7 @@ export function getLifeEvents(state: CareerState): RandomEvent[] {
           apply: s => { s.integrityBonus += 3; s.morale = clamp(s.morale + 3, 0, 100); s.events = [...s.events, "🛒 Bought the kit man a top of the line cart. All good"]; return s; } },
       ] });
   }
-  if (p === "professor" && Math.random() < 0.5) {
+  if (p === "professor" && pendingLifeChance(state, 216, 0.5)) {
     push({ id: 216, cooldown: COOLDOWN.personality, emoji: "📽️", title: "Film Room Legend",
       description: "You spotted the opponent's penalty pattern from three seasons of film and briefed the keeper. He saved two in the shootout.",
       category: "positive", choices: [
@@ -337,7 +342,7 @@ export function getLifeEvents(state: CareerState): RandomEvent[] {
           apply: s => { s.integrityBonus += 2; s.morale = clamp(s.morale + 3, 0, 100); log(s, "📋 Handed the penalty dossier to the whole defence. Four of them now study film"); return s; } },
       ] });
   }
-  if (p === "professor" && Math.random() < 0.35) {
+  if (p === "professor" && pendingLifeChance(state, 217, 0.35)) {
     push({ id: 217, cooldown: COOLDOWN.once, emoji: "🗞️", title: "The Tactics Column",
       description: "A newspaper offers you a weekly tactics column. Smart, respected, and guaranteed to annoy your manager whenever you analyze your own team.",
       category: "life", choices: [
@@ -347,7 +352,7 @@ export function getLifeEvents(state: CareerState): RandomEvent[] {
           apply: s => { s.events = [...s.events, "🔒 Declined the column. Your notebook stays classified"]; return s; } },
       ] });
   }
-  if (p === "enigma" && Math.random() < 0.5) {
+  if (p === "enigma" && pendingLifeChance(state, 218, 0.5)) {
     push({ id: 218, cooldown: COOLDOWN.personality, emoji: "⛰️", title: "The Monastery Offseason",
       description: "You spent the entire offseason at a mountain monastery. No phone. No boots. Nobody knew where you were, including your club.",
       category: "life", choices: [
@@ -357,7 +362,7 @@ export function getLifeEvents(state: CareerState): RandomEvent[] {
           apply: s => { s.morale = clamp(s.morale + 3, 0, 100); log(s, "🔔 Lasted a week at the monastery. The card they sent is on your fridge"); return s; } },
       ] });
   }
-  if (p === "enigma" && Math.random() < 0.35) {
+  if (p === "enigma" && pendingLifeChance(state, 219, 0.35)) {
     push({ id: 219, cooldown: COOLDOWN.once, emoji: "🦇", title: "The Cape Era",
       description: "You arrived at training in a full-length cape. When asked why, you said 'the wind'. You have worn it every day since.",
       category: "life", choices: [
@@ -626,7 +631,7 @@ export function getLifeEvents(state: CareerState): RandomEvent[] {
           apply: s => { s.integrityBonus += 1; s.events = [...s.events, "🛑 Declined to start a podcast. Historians will thank you"]; return s; } },
       ] });
   }
-  if (flag(state, "podcast") === 1 && Math.random() < 0.4) {
+  if (flag(state, "podcast") === 1 && pendingLifeChance(state, 245, 0.4)) {
     push({ id: 245, cooldown: COOLDOWN.media, emoji: "🔥", title: "Podcast Hot Take Backlash",
       description: "On episode 14 you said a legendary retired striker 'would not score in today's game'. He has responded. On every platform. Twice.",
       category: "negative", choices: [
