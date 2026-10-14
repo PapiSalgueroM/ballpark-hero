@@ -1,0 +1,51 @@
+playCmVar: the build plays goal.
+FIXTURE ruledOut: league match 1, seed 2460, me 9' Kiernan Dewsbury-Hall, disallowed
+FIXTURE penaltyScored: not played, the build does not play the penalty kind
+FIXTURE penaltySaved: not played, the build does not play the penalty kind
+FIXTURE goalBefore: league match 2, seed 1724, opp 8' João Gomes, disallowed
+FIXTURE two: league match 1, seed 4926, opp 6' Jérémy Jacquet, disallowed
+FIXTURE lateWhistle: league match 2, seed 1984, opp 45' Alejandro Garnacho, disallowed
+FIXTURE lateBefore: league match 2, seed 2591, opp 45' Nicolas Jackson, disallowed
+FIXTURE ownGoal: league match 2, seed 1940, me 10' Brennan Johnson, disallowed
+FIXTURE injury: league match 1, seed 3861, opp 15' Hugo Ekitiké, disallowed
+FIXTURE red: league match 2, seed 6513, opp 34' Nicolas Jackson, disallowed
+FIXTURE crowdedGoal: league match 2, seed 42322, opp 45' Alejandro Garnacho, disallowed
+FIXTURE crowdedShot: league match 2, seed 6203, opp 45' Nicolas Jackson, disallowed
+playCmVar: not walked on this build: penaltyScored (needs the penalty kind), penaltySaved (needs the penalty kind).
+HELP 390-hub-help: ok | 📺 VAR in today's game. In a save that starts in 2026/27, a match can go to a video review from its next kickoff, but only in the competitions we have checked r
+HELP 1280-hub-help: ok | 📺 VAR in today's game. In a save that starts in 2026/27, a match can go to a video review from its next kickoff, but only in the competitions we have checked r
+CASE 390-motion-ruledOut-plain: ok | disallowed me 9' | card "VAR: checking the goal |  | Kiernan Dewsbury-Hall, Everton, 9' |  | Play waits for the decision." at 9' | score under it {"me":0,"opp":0} | result 0-0 | 10s
+CASE 390-motion-goalBefore-plain: ok | disallowed opp 8' | card "VAR: checking the goal |  | João Gomes, Aston Villa, 8' |  | Play waits for the decision." at 9' | score under it {"me":1,"opp":0} | result 3-1 | 11s
+CASE 1280-motion-ruledOut-plain: ok | disallowed me 9' | card "VAR: checking the goal |  | Kiernan Dewsbury-Hall, Everton, 9' |  | Play waits for the decision." at 9' | score under it {"me":0,"opp":0} | result 0-0 | 10s
+CASE 1280-motion-goalBefore-plain: ok | disallowed opp 8' | card "VAR: checking the goal |  | João Gomes, Aston Villa, 8' |  | Play waits for the decision." at 9' | score under it {"me":1,"opp":0} | result 3-1 | 11s
+CASE 390-reduced-ruledOut-plain: ok | disallowed me 9' | card "VAR: checking the goal |  | Kiernan Dewsbury-Hall, Everton, 9' |  | Play waits for the decision." at 9' | score under it {"me":0,"opp":0} | result 0-0 | 8s
+CASE 1280-reduced-ruledOut-plain: ok | disallowed me 9' | card "VAR: checking the goal |  | Kiernan Dewsbury-Hall, Everton, 9' |  | Play waits for the decision." at 9' | score under it {"me":0,"opp":0} | result 0-0 | 8s
+CASE 390-motion-two-plain: ok | disallowed opp 6' | card "VAR: checking the goal |  | Jérémy Jacquet, Liverpool, 6' |  | Play waits for the decision." at 6' | score under it {"me":0,"opp":0} | result 1-0 | 16s
+CASE 390-motion-lateWhistle-plain: ok | disallowed opp 45+3' | card "VAR: checking the goal |  | Alejandro Garnacho, Aston Villa, 45+3' |  | Play waits for the decision." at 45' | score under it {"me":0,"opp":0} | result 1-0 | 29s
+CASE 390-motion-lateBefore-plain: ok | disallowed opp 45+4' | card "VAR: checking the goal |  | Nicolas Jackson, Aston Villa, 45+4' |  | Play waits for the decision." at 45' | score under it {"me":1,"opp":1} | result 2-1 | 32s
+CASE 390-motion-ownGoal-plain: ok | disallowed me 10' | card "VAR: checking the goal |  | Brennan Johnson, Everton, 10' |  | Play waits for the decision." at 11' | score under it {"me":0,"opp":0} | result 2-0 | 11s
+CASE 390-motion-injury-plain: ok | disallowed opp 15' | card "VAR: checking the goal |  | Hugo Ekitiké, Liverpool, 15' |  | Play waits for the decision." at 15' | score under it {"me":0,"opp":0} | result 0-0 | 13s
+CASE 390-motion-red-plain: ok | disallowed opp 34' | card "VAR: checking the goal |  | Nicolas Jackson, Aston Villa, 34' |  | Play waits for the decision." at 34' | score under it {"me":1,"opp":0} | result 2-1 | 23s
+CASE 1280-motion-lateWhistle-plain: ok | disallowed opp 45+3' | card "VAR: checking the goal |  | Alejandro Garnacho, Aston Villa, 45+3' |  | Play waits for the decision." at 45' | score under it {"me":0,"opp":0} | result 1-0 | 29s
+CASE 1280-motion-lateBefore-plain: ok | disallowed opp 45+4' | card "VAR: checking the goal |  | Nicolas Jackson, Aston Villa, 45+4' |  | Play waits for the decision." at 45' | score under it {"me":1,"opp":1} | result 2-1 | 32s
+CASE 1280-motion-ownGoal-plain: ok | disallowed me 10' | card "VAR: checking the goal |  | Brennan Johnson, Everton, 10' |  | Play waits for the decision." at 11' | score under it {"me":0,"opp":0} | result 2-0 | 10s
+CASE 1280-motion-injury-plain: ok | disallowed opp 15' | card "VAR: checking the goal |  | Hugo Ekitiké, Liverpool, 15' |  | Play waits for the decision." at 15' | score under it {"me":0,"opp":0} | result 0-0 | 13s
+CASE 1280-motion-red-plain: ok | disallowed opp 34' | card "VAR: checking the goal |  | Nicolas Jackson, Aston Villa, 34' |  | Play waits for the decision." at 34' | score under it {"me":1,"opp":0} | result 2-1 | 23s
+LASTKICK 390-motion-crowdedGoal-plain: {"text":"GOAL! Free kick,  | Brennan Johnson |  45+4' | Everton · 1 this season | Tap to carry on","minute":45,"plus":4,"stage":"first","reviewCardUp":0,"solid":true,"shot":"390-motion-crowdedGoal-plain-0-last-kick-card.jpg","goal":"me 45+4' Brennan Johnson","goalPlace":49,"whistlePlace":49,"cardAt":51,"intervalAt":57,"samples":58}
+CASE 390-motion-crowdedGoal-plain: ok | disallowed opp 45+3' | card "VAR: checking the goal |  | Alejandro Garnacho, Aston Villa, 45+3' |  | Play waits for the decision." at 45' | score under it {"me":2,"opp":0} | result 3-0 | 31s
+CASE 390-motion-crowdedShot-plain: ok | disallowed opp 45+4' | card "VAR: checking the goal |  | Nicolas Jackson, Aston Villa, 45+4' |  | Play waits for the decision." at 45' | score under it {"me":1,"opp":1} | result 2-1 | 32s
+LASTKICK 1280-motion-crowdedGoal-plain: {"text":"GOAL! Free kick,  | Brennan Johnson |  45+4' | Everton · 1 this season | Tap to carry on","minute":45,"plus":4,"stage":"first","reviewCardUp":0,"solid":true,"shot":"1280-motion-crowdedGoal-plain-0-last-kick-card.jpg","goal":"me 45+4' Brennan Johnson","goalPlace":49,"whistlePlace":49,"cardAt":51,"intervalAt":57,"samples":58}
+CASE 1280-motion-crowdedGoal-plain: ok | disallowed opp 45+3' | card "VAR: checking the goal |  | Alejandro Garnacho, Aston Villa, 45+3' |  | Play waits for the decision." at 45' | score under it {"me":2,"opp":0} | result 3-0 | 31s
+CASE 1280-motion-crowdedShot-plain: ok | disallowed opp 45+4' | card "VAR: checking the goal |  | Nicolas Jackson, Aston Villa, 45+4' |  | Play waits for the decision." at 45' | score under it {"me":1,"opp":1} | result 2-1 | 32s
+CASE 390-reduced-lateWhistle-plain: ok | disallowed opp 45+3' | card "VAR: checking the goal |  | Alejandro Garnacho, Aston Villa, 45+3' |  | Play waits for the decision." at 45' | score under it {"me":0,"opp":0} | result 1-0 | 28s
+CASE 390-reduced-lateBefore-plain: ok | disallowed opp 45+4' | card "VAR: checking the goal |  | Nicolas Jackson, Aston Villa, 45+4' |  | Play waits for the decision." at 45' | score under it {"me":1,"opp":1} | result 2-1 | 30s
+CASE 1280-reduced-lateWhistle-plain: ok | disallowed opp 45+3' | card "VAR: checking the goal |  | Alejandro Garnacho, Aston Villa, 45+3' |  | Play waits for the decision." at 45' | score under it {"me":0,"opp":0} | result 1-0 | 27s
+CASE 1280-reduced-lateBefore-plain: ok | disallowed opp 45+4' | card "VAR: checking the goal |  | Nicolas Jackson, Aston Villa, 45+4' |  | Play waits for the decision." at 45' | score under it {"me":1,"opp":1} | result 2-1 | 30s
+LASTKICK 390-reduced-crowdedGoal-plain: {"text":"GOAL! Free kick,  | Brennan Johnson |  45+4' | Everton · 1 this season | Tap to carry on","minute":45,"plus":4,"stage":"first","reviewCardUp":0,"solid":true,"shot":"390-reduced-crowdedGoal-plain-0-last-kick-card.jpg","goal":"me 45+4' Brennan Johnson","goalPlace":49,"whistlePlace":49,"cardAt":25,"intervalAt":30,"samples":31}
+CASE 390-reduced-crowdedGoal-plain: ok | disallowed opp 45+3' | card "VAR: checking the goal |  | Alejandro Garnacho, Aston Villa, 45+3' |  | Play waits for the decision." at 45' | score under it {"me":2,"opp":0} | result 3-0 | 30s
+CASE 390-motion-ruledOut-leave: ok | disallowed me 9' | card "VAR: checking the goal |  | Kiernan Dewsbury-Hall, Everton, 9' |  | Play waits for the decision." at 9' | score under it {"me":0,"opp":0} | result 0-0 | 11s
+CASE 1280-motion-ruledOut-leave: ok | disallowed me 9' | card "VAR: checking the goal |  | Kiernan Dewsbury-Hall, Everton, 9' |  | Play waits for the decision." at 9' | score under it {"me":0,"opp":0} | result 0-0 | 11s
+CASE 390-motion-ruledOut-skip: ok | disallowed me 9' | card "VAR: checking the goal |  | Kiernan Dewsbury-Hall, Everton, 9' |  | Play waits for the decision." at 9' | score under it {"me":0,"opp":0} | result 0-0 | 7s
+CASE 1280-motion-ruledOut-skip: ok | disallowed me 9' | card "VAR: checking the goal |  | Kiernan Dewsbury-Hall, Everton, 9' |  | Play waits for the decision." at 9' | score under it {"me":0,"opp":0} | result 0-0 | 7s
+playCmVar: 30 cases and 2 help views at 390 and 1280, 10 of 12 fixtures found, 0 failed assertion(s).
+playCmVar: green. Every review a player can meet was shown whole, at its minute, over nothing else, and every match settled as the engine settles it.
