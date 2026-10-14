@@ -1,0 +1,349 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+[90mstderr[2m | src/test/saveMovedNotice.test.tsx[2m > [22m[2mSaveMovedNotice[2m > [22m[2mReload takes the first press while a dialog behind it holds the page (Release BD, the lead ruling of Round 1330)
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+ [31m❯[39m src/test/saveMovedNotice.test.tsx [2m([22m[2m6 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[32m 264[2mms[22m[39m
+   [32m✓[39m SaveMovedNotice[2m > [22mis a dialog with the words and one Reload button that has focus[32m 83[2mms[22m[39m
+   [32m✓[39m SaveMovedNotice[2m > [22mmakes everything else in the document inert, and gives it back when it goes[32m 8[2mms[22m[39m
+   [32m✓[39m SaveMovedNotice[2m > [22mis named by its words (an alertdialog needs a name)[32m 13[2mms[22m[39m
+   [32m✓[39m SaveMovedNotice[2m > [22mno key reaches a listener on window behind it, and they come back when it goes[32m 15[2mms[22m[39m
+[31m   [31m×[31m SaveMovedNotice[2m > [22mReload takes the first press while a dialog behind it holds the page (Release BD, the lead ruling of Round 1330)[39m[32m 134[2mms[22m[39m
+[31m     → Unable to find an accessible element with the role "button" and name "Reload"
+
+Here are the accessible roles:
+
+  dialog:
+
+  Name "Season review":
+  [36m<div[31m
+    [33maria-describedby[31m=[32m"radix-:r2:"[31m
+    [33maria-labelledby[31m=[32m"radix-:r1:"[31m
+    [33mclass[31m=[32m"fixed left-[50%] top-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 border bg-background p-6 shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] sm:rounded-lg"[31m
+    [33mdata-state[31m=[32m"open"[31m
+    [33mid[31m=[32m"radix-:r0:"[31m
+    [33mrole[31m=[32m"dialog"[31m
+    [33mstyle[31m=[32m"pointer-events: auto;"[31m
+    [33mtabindex[31m=[32m"-1"[31m
+  [36m/>[31m
+
+  --------------------------------------------------
+  heading:
+
+  Name "Season review":
+  [36m<h2[31m
+    [33mclass[31m=[32m"text-lg font-semibold leading-none tracking-tight"[31m
+    [33mid[31m=[32m"radix-:r1:"[31m
+  [36m/>[31m
+
+  --------------------------------------------------
+  button:
+
+  Name "Next season":
+  [36m<button />[31m
+
+  Name "Close":
+  [36m<button[31m
+    [33mclass[31m=[32m"absolute right-2 top-2 p-2 rounded-sm opacity-70 ring-offset-background transition-opacity data-[state=open]:bg-accent data-[state=open]:text-muted-foreground hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none"[31m
+    [33mtype[31m=[32m"button"[31m
+  [36m/>[31m
+
+  --------------------------------------------------
+
+Ignored nodes: comments, script, style
+[36m<body[31m
+  [33mdata-scroll-locked[31m=[32m"1"[31m
+  [33mstyle[31m=[32m"pointer-events: none;"[31m
+[36m>[31m
+  [36m<span[31m
+    [33maria-hidden[31m=[32m"true"[31m
+    [33mdata-aria-hidden[31m=[32m"true"[31m
+    [33mdata-radix-focus-guard[31m=[32m""[31m
+    [33mstyle[31m=[32m"outline: none; opacity: 0; position: fixed; pointer-events: none;"[31m
+    [33mtabindex[31m=[32m"0"[31m
+  [36m/>[31m
+  [36m<div[31m
+    [33maria-hidden[31m=[32m"true"[31m
+    [33mdata-aria-hidden[31m=[32m"true"[31m
+    [33minert[31m=[32m""[31m
+  [36m>[31m
+    [36m<div />[31m
+  [36m</div>[31m
+  [36m<div[31m
+    [33maria-hidden[31m=[32m"true"[31m
+    [33mdata-aria-hidden[31m=[32m"true"[31m
+  [36m>[31m
+    [36m<div[31m
+      [33maria-describedby[31m=[32m"save-moved-words"[31m
+      [33maria-labelledby[31m=[32m"save-moved-words"[31m
+      [33maria-modal[31m=[32m"true"[31m
+      [33mclass[31m=[32m"fixed inset-0 z-[1000] flex items-center justify-center bg-background/85 p-4"[31m
+      [33mdata-testid[31m=[32m"save-moved-notice"[31m
+      [33mrole[31m=[32m"alertdialog"[31m
+      [33mstyle[31m=[32m"pointer-events: auto;"[31m
+    [36m>[31m
+      [36m<div[31m
+        [33mclass[31m=[32m"w-full max-w-sm rounded-2xl border border-border bg-card p-5 text-center shadow-xl"[31m
+      [36m>[31m
+        [36m<p[31m
+          [33mclass[31m=[32m"text-base font-bold text-foreground"[31m
+          [33mid[31m=[32m"save-moved-words"[31m
+        [36m>[31m
+          [0mThis career moved on in another tab. Reload to carry on.[0m
+        [36m</p>[31m
+        [36m<button[31m
+          [33mclass[31m=[32m"mt-4 min-h-[44px] w-full rounded-xl bg-primary px-4 py-2.5 text-base font-bold text-primary-foreground"[31m
+          [33mtype[31m=[32m"button"[31m
+        [36m>[31m
+          [0mReload[0m
+        [36m</button>[31m
+      [36m</div>[31m
+    [36m</div>[31m
+  [36m</div>[31m
+  [36m<div[31m
+    [33maria-hidden[31m=[32m"true"[31m
+    [33mclass[31m=[32m"fixed inset-0 z-50 bg-black/80 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0"[31m
+    [33mdata-aria-hidden[31m=[32m"true"[31m
+    [33mdata-state[31m=[32m"open"[31m
+    [33mstyle[31m=[32m"pointer-events: auto;"[31m
+  [36m/>[31m
+  [36m<div[31m
+    [33maria-describedby[31m=[32m"radix-:r2:"[31m
+    [33maria-labelledby[31m=[32m"radix-:r1:"[31m
+    [33mclass[31m=[32m"fixed left-[50%] top-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 border bg-background p-6 shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] sm:rounded-lg"[31m
+    [33mdata-state[31m=[32m"open"[31m
+    [33mid[31m=[32m"radix-:r0:"[31m
+    [33mrole[31m=[32m"dialog"[31m
+    [33mstyle[31m=[32m"pointer-events: auto;"[31m
+    [33mtabindex[31m=[32m"-1"[31m
+  [36m>[31m
+    [36m<h2[31m
+      [33mclass[31m=[32m"text-lg font-semibold leading-none tracking-tight"[31m
+      [33mid[31m=[32m"radix-:r1:"[31m
+    [36m>[31m
+      [0mSeason review[0m
+    [36m</h2>[31m
+    [36m<button>[31m
+      [0mNext season[0m
+    [36m</button>[31m
+    [36m<button[31m
+      [33mclass[31m=[32m"absolute right-2 top-2 p-2 rounded-sm opacity-70 ring-offset-background transition-opacity data-[state=open]:bg-accent data-[state=open]:text-muted-foreground hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none"[31m
+      [33mtype[31m=[32m"button"[31m
+    [36m>[31m
+      [36m<svg[31m
+        [33mclass[31m=[32m"lucide lucide-x h-4 w-4"[31m
+        [33mfill[31m=[32m"none"[31m
+        [33mheight[31m=[32m"24"[31m
+        [33mstroke[31m=[32m"currentColor"[31m
+        [33mstroke-linecap[31m=[32m"round"[31m
+        [33mstroke-linejoin[31m=[32m"round"[31m
+        [33mstroke-width[31m=[32m"2"[31m
+        [33mviewBox[31m=[32m"0 0 24 24"[31m
+        [33mwidth[31m=[32m"24"[31m
+        [33mxmlns[31m=[32m"http://www.w3.org/2000/svg"[31m
+      [36m>[31m
+        [36m<path[31m
+          [33md[31m=[32m"M18 6 6 18"[31m
+        [36m/>[31m
+        [36m<path[31m
+          [33md[31m=[32m"m6 6 12 12"[31m
+        [36m/>[31m
+      [36m</svg>[31m
+      [36m<span[31m
+        [33mclass[31m=[32m"sr-only"[31m
+      [36m>[31m
+        [0mClose[0m
+      [36m</span>[31m
+    [36m</button>[31m
+  [36m</div>[31m
+  [36m<span[31m
+    [33maria-hidden[31m=[32m"true"[31m
+    [33mdata-aria-hidden[31m=[32m"true"[31m
+    [33mdata-radix-focus-guard[31m=[32m""[31m
+    [33mstyle[31m=[32m"outline: none; opacity: 0; position: fixed; pointer-events: none;"[31m
+    [33mtabindex[31m=[32m"0"[31m
+  [36m/>[31m
+[36m</body>[31m[39m
+   [32m✓[39m SaveMovedNotice[2m > [22mReload calls the reload it is given[32m 9[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/saveMovedNotice.test.tsx[2m > [22mSaveMovedNotice[2m > [22mReload takes the first press while a dialog behind it holds the page (Release BD, the lead ruling of Round 1330)
+[31m[1mTestingLibraryElementError[22m[39m: Unable to find an accessible element with the role "button" and name "Reload"
+
+Here are the accessible roles:
+
+  dialog:
+
+  Name "Season review":
+  [36m<div[39m
+    [33maria-describedby[39m=[32m"radix-:r2:"[39m
+    [33maria-labelledby[39m=[32m"radix-:r1:"[39m
+    [33mclass[39m=[32m"fixed left-[50%] top-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 border bg-background p-6 shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] sm:rounded-lg"[39m
+    [33mdata-state[39m=[32m"open"[39m
+    [33mid[39m=[32m"radix-:r0:"[39m
+    [33mrole[39m=[32m"dialog"[39m
+    [33mstyle[39m=[32m"pointer-events: auto;"[39m
+    [33mtabindex[39m=[32m"-1"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+  heading:
+
+  Name "Season review":
+  [36m<h2[39m
+    [33mclass[39m=[32m"text-lg font-semibold leading-none tracking-tight"[39m
+    [33mid[39m=[32m"radix-:r1:"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+  button:
+
+  Name "Next season":
+  [36m<button />[39m
+
+  Name "Close":
+  [36m<button[39m
+    [33mclass[39m=[32m"absolute right-2 top-2 p-2 rounded-sm opacity-70 ring-offset-background transition-opacity data-[state=open]:bg-accent data-[state=open]:text-muted-foreground hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none"[39m
+    [33mtype[39m=[32m"button"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+
+Ignored nodes: comments, script, style
+[36m<body[39m
+  [33mdata-scroll-locked[39m=[32m"1"[39m
+  [33mstyle[39m=[32m"pointer-events: none;"[39m
+[36m>[39m
+  [36m<span[39m
+    [33maria-hidden[39m=[32m"true"[39m
+    [33mdata-aria-hidden[39m=[32m"true"[39m
+    [33mdata-radix-focus-guard[39m=[32m""[39m
+    [33mstyle[39m=[32m"outline: none; opacity: 0; position: fixed; pointer-events: none;"[39m
+    [33mtabindex[39m=[32m"0"[39m
+  [36m/>[39m
+  [36m<div[39m
+    [33maria-hidden[39m=[32m"true"[39m
+    [33mdata-aria-hidden[39m=[32m"true"[39m
+    [33minert[39m=[32m""[39m
+  [36m>[39m
+    [36m<div />[39m
+  [36m</div>[39m
+  [36m<div[39m
+    [33maria-hidden[39m=[32m"true"[39m
+    [33mdata-aria-hidden[39m=[32m"true"[39m
+  [36m>[39m
+    [36m<div[39m
+      [33maria-describedby[39m=[32m"save-moved-words"[39m
+      [33maria-labelledby[39m=[32m"save-moved-words"[39m
+      [33maria-modal[39m=[32m"true"[39m
+      [33mclass[39m=[32m"fixed inset-0 z-[1000] flex items-center justify-center bg-background/85 p-4"[39m
+      [33mdata-testid[39m=[32m"save-moved-notice"[39m
+      [33mrole[39m=[32m"alertdialog"[39m
+      [33mstyle[39m=[32m"pointer-events: auto;"[39m
+    [36m>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"w-full max-w-sm rounded-2xl border border-border bg-card p-5 text-center shadow-xl"[39m
+      [36m>[39m
+        [36m<p[39m
+          [33mclass[39m=[32m"text-base font-bold text-foreground"[39m
+          [33mid[39m=[32m"save-moved-words"[39m
+        [36m>[39m
+          [0mThis career moved on in another tab. Reload to carry on.[0m
+        [36m</p>[39m
+        [36m<button[39m
+          [33mclass[39m=[32m"mt-4 min-h-[44px] w-full rounded-xl bg-primary px-4 py-2.5 text-base font-bold text-primary-foreground"[39m
+          [33mtype[39m=[32m"button"[39m
+        [36m>[39m
+          [0mReload[0m
+        [36m</button>[39m
+      [36m</div>[39m
+    [36m</div>[39m
+  [36m</div>[39m
+  [36m<div[39m
+    [33maria-hidden[39m=[32m"true"[39m
+    [33mclass[39m=[32m"fixed inset-0 z-50 bg-black/80 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0"[39m
+    [33mdata-aria-hidden[39m=[32m"true"[39m
+    [33mdata-state[39m=[32m"open"[39m
+    [33mstyle[39m=[32m"pointer-events: auto;"[39m
+  [36m/>[39m
+  [36m<div[39m
+    [33maria-describedby[39m=[32m"radix-:r2:"[39m
+    [33maria-labelledby[39m=[32m"radix-:r1:"[39m
+    [33mclass[39m=[32m"fixed left-[50%] top-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 border bg-background p-6 shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] sm:rounded-lg"[39m
+    [33mdata-state[39m=[32m"open"[39m
+    [33mid[39m=[32m"radix-:r0:"[39m
+    [33mrole[39m=[32m"dialog"[39m
+    [33mstyle[39m=[32m"pointer-events: auto;"[39m
+    [33mtabindex[39m=[32m"-1"[39m
+  [36m>[39m
+    [36m<h2[39m
+      [33mclass[39m=[32m"text-lg font-semibold leading-none tracking-tight"[39m
+      [33mid[39m=[32m"radix-:r1:"[39m
+    [36m>[39m
+      [0mSeason review[0m
+    [36m</h2>[39m
+    [36m<button>[39m
+      [0mNext season[0m
+    [36m</button>[39m
+    [36m<button[39m
+      [33mclass[39m=[32m"absolute right-2 top-2 p-2 rounded-sm opacity-70 ring-offset-background transition-opacity data-[state=open]:bg-accent data-[state=open]:text-muted-foreground hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none"[39m
+      [33mtype[39m=[32m"button"[39m
+    [36m>[39m
+      [36m<svg[39m
+        [33mclass[39m=[32m"lucide lucide-x h-4 w-4"[39m
+        [33mfill[39m=[32m"none"[39m
+        [33mheight[39m=[32m"24"[39m
+        [33mstroke[39m=[32m"currentColor"[39m
+        [33mstroke-linecap[39m=[32m"round"[39m
+        [33mstroke-linejoin[39m=[32m"round"[39m
+        [33mstroke-width[39m=[32m"2"[39m
+        [33mviewBox[39m=[32m"0 0 24 24"[39m
+        [33mwidth[39m=[32m"24"[39m
+        [33mxmlns[39m=[32m"http://www.w3.org/2000/svg"[39m
+      [36m>[39m
+        [36m<path[39m
+          [33md[39m=[32m"M18 6 6 18"[39m
+        [36m/>[39m
+        [36m<path[39m
+          [33md[39m=[32m"m6 6 12 12"[39m
+        [36m/>[39m
+      [36m</svg>[39m
+      [36m<span[39m
+        [33mclass[39m=[32m"sr-only"[39m
+      [36m>[39m
+        [0mClose[0m
+      [36m</span>[39m
+    [36m</button>[39m
+  [36m</div>[39m
+  [36m<span[39m
+    [33maria-hidden[39m=[32m"true"[39m
+    [33mdata-aria-hidden[39m=[32m"true"[39m
+    [33mdata-radix-focus-guard[39m=[32m""[39m
+    [33mstyle[39m=[32m"outline: none; opacity: 0; position: fixed; pointer-events: none;"[39m
+    [33mtabindex[39m=[32m"0"[39m
+  [36m/>[39m
+[36m</body>[39m
+[90m [2m❯[22m Object.getElementError node_modules/@testing-library/dom/dist/config.js:[2m37:19[22m[39m
+[90m [2m❯[22m node_modules/@testing-library/dom/dist/query-helpers.js:[2m76:38[22m[39m
+[90m [2m❯[22m node_modules/@testing-library/dom/dist/query-helpers.js:[2m52:17[22m[39m
+[90m [2m❯[22m getByRole node_modules/@testing-library/dom/dist/query-helpers.js:[2m95:19[22m[39m
+[36m [2m❯[22m src/test/saveMovedNotice.test.tsx:[2m79:27[22m[39m
+    [90m 77| [39m    )[33m;[39m
+    [90m 78| [39m    [34mexpect[39m(document[33m.[39mbody[33m.[39mstyle[33m.[39mpointerEvents)[33m.[39m[34mtoBe[39m([32m'none'[39m)[33m;[39m
+    [90m 79| [39m    [35mconst[39m reload [33m=[39m screen[33m.[39m[34mgetByRole[39m([32m'button'[39m[33m,[39m { name[33m:[39m [32m'Reload'[39m })[33m;[39m
+    [90m   | [39m                          [31m^[39m
+    [90m 80| [39m    [34mexpect[39m([34mapplied[39m(reload))[33m.[39mnot[33m.[39m[34mtoBe[39m([32m'none'[39m)[33m;[39m
+    [90m 81| [39m    fireEvent[33m.[39m[34mclick[39m(reload)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m5 passed[39m[22m[90m (6)[39m
+[2m   Start at [22m 07:42:38
+[2m   Duration [22m 1.26s[2m (transform 75ms, setup 52ms, collect 290ms, tests 264ms, environment 277ms, prepare 83ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/saveMovedNotice.test.tsx,title=src/test/saveMovedNotice.test.tsx > SaveMovedNotice > Reload takes the first press while a dialog behind it holds the page (Release BD%2C the lead ruling of Round 1330),line=79,column=27::TestingLibraryElementError: Unable to find an accessible element with the role "button" and name "Reload"%0A%0AHere are the accessible roles:%0A%0A  dialog:%0A%0A  Name "Season review":%0A  <div%0A    aria-describedby="radix-:r2:"%0A    aria-labelledby="radix-:r1:"%0A    class="fixed left-[50%25] top-[50%25] z-50 grid w-full max-w-lg translate-x-[-50%25] translate-y-[-50%25] gap-4 border bg-background p-6 shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%25] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%25] sm:rounded-lg"%0A    data-state="open"%0A    id="radix-:r0:"%0A    role="dialog"%0A    style="pointer-events: auto;"%0A    tabindex="-1"%0A  />%0A%0A  --------------------------------------------------%0A  heading:%0A%0A  Name "Season review":%0A  <h2%0A    class="text-lg font-semibold leading-none tracking-tight"%0A    id="radix-:r1:"%0A  />%0A%0A  --------------------------------------------------%0A  button:%0A%0A  Name "Next season":%0A  <button />%0A%0A  Name "Close":%0A  <button%0A    class="absolute right-2 top-2 p-2 rounded-sm opacity-70 ring-offset-background transition-opacity data-[state=open]:bg-accent data-[state=open]:text-muted-foreground hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none"%0A    type="button"%0A  />%0A%0A  --------------------------------------------------%0A%0AIgnored nodes: comments, script, style%0A<body%0A  data-scroll-locked="1"%0A  style="pointer-events: none;"%0A>%0A  <span%0A    aria-hidden="true"%0A    data-aria-hidden="true"%0A    data-radix-focus-guard=""%0A    style="outline: none; opacity: 0; position: fixed; pointer-events: none;"%0A    tabindex="0"%0A  />%0A  <div%0A    aria-hidden="true"%0A    data-aria-hidden="true"%0A    inert=""%0A  >%0A    <div />%0A  </div>%0A  <div%0A    aria-hidden="true"%0A    data-aria-hidden="true"%0A  >%0A    <div%0A      aria-describedby="save-moved-words"%0A      aria-labelledby="save-moved-words"%0A      aria-modal="true"%0A      class="fixed inset-0 z-[1000] flex items-center justify-center bg-background/85 p-4"%0A      data-testid="save-moved-notice"%0A      role="alertdialog"%0A      style="pointer-events: auto;"%0A    >%0A      <div%0A        class="w-full max-w-sm rounded-2xl border border-border bg-card p-5 text-center shadow-xl"%0A      >%0A        <p%0A          class="text-base font-bold text-foreground"%0A          id="save-moved-words"%0A        >%0A          This career moved on in another tab. Reload to carry on.%0A        </p>%0A        <button%0A          class="mt-4 min-h-[44px] w-full rounded-xl bg-primary px-4 py-2.5 text-base font-bold text-primary-foreground"%0A          type="button"%0A        >%0A          Reload%0A        </button>%0A      </div>%0A    </div>%0A  </div>%0A  <div%0A    aria-hidden="true"%0A    class="fixed inset-0 z-50 bg-black/80 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0"%0A    data-aria-hidden="true"%0A    data-state="open"%0A    style="pointer-events: auto;"%0A  />%0A  <div%0A    aria-describedby="radix-:r2:"%0A    aria-labelledby="radix-:r1:"%0A    class="fixed left-[50%25] top-[50%25] z-50 grid w-full max-w-lg translate-x-[-50%25] translate-y-[-50%25] gap-4 border bg-background p-6 shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%25] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%25] sm:rounded-lg"%0A    data-state="open"%0A    id="radix-:r0:"%0A    role="dialog"%0A    style="pointer-events: auto;"%0A    tabindex="-1"%0A  >%0A    <h2%0A      class="text-lg font-semibold leading-none tracking-tight"%0A      id="radix-:r1:"%0A    >%0A      Season review%0A    </h2>%0A    <button>%0A      Next season%0A    </button>%0A    <button%0A      class="absolute right-2 top-2 p-2 rounded-sm opacity-70 ring-offset-background transition-opacity data-[state=open]:bg-accent data-[state=open]:text-muted-foreground hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none"%0A      type="button"%0A    >%0A      <svg%0A        class="lucide lucide-x h-4 w-4"%0A        fill="none"%0A        height="24"%0A        stroke="currentColor"%0A        stroke-linecap="round"%0A        stroke-linejoin="round"%0A        stroke-width="2"%0A        viewBox="0 0 24 24"%0A        width="24"%0A        xmlns="http://www.w3.org/2000/svg"%0A      >%0A        <path%0A          d="M18 6 6 18"%0A        />%0A        <path%0A          d="m6 6 12 12"%0A        />%0A      </svg>%0A      <span%0A        class="sr-only"%0A      >%0A        Close%0A      </span>%0A    </button>%0A  </div>%0A  <span%0A    aria-hidden="true"%0A    data-aria-hidden="true"%0A    data-radix-focus-guard=""%0A    style="outline: none; opacity: 0; position: fixed; pointer-events: none;"%0A    tabindex="0"%0A  />%0A</body>%0A ❯ Object.getElementError node_modules/@testing-library/dom/dist/config.js:37:19%0A ❯ node_modules/@testing-library/dom/dist/query-helpers.js:76:38%0A ❯ node_modules/@testing-library/dom/dist/query-helpers.js:52:17%0A ❯ getByRole node_modules/@testing-library/dom/dist/query-helpers.js:95:19%0A ❯ src/test/saveMovedNotice.test.tsx:79:27%0A%0A

@@ -1,0 +1,5 @@
+headsha exit=0 0s | 923b0d8171a86f72d9ccbcabe493ecb3b14b49e0
+vitest-notice exit=1 2s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/saveMovedNotice.test.tsx,title=src/test/saveMovedNotice.test.tsx > SaveMovedNotice > Reload takes the 
+vitest-nofix exit=1 3s | ::error file=/tmp/nf/src/test/saveMovedNotice.test.tsx,title=src/test/saveMovedNotice.test.tsx > SaveMovedNotice > Reload takes the first press while a dialog behind it h
+vitest-dialogs exit=0 5s |    Duration  3.94s (transform 1.70s, setup 47ms, collect 2.50s, tests 600ms, environment 343ms, prepare 154ms)
+tsc exit=0 43s | 
