@@ -1,0 +1,4 @@
+build exit=0 22s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+playCmSubsRule exit=0 55s | playCmSubsRule GREEN: 30 of 30 checks green; pictures in /home/runner/work/_temp/rc-out/files/head
+playRenderStability exit=0 3250s | playRenderStability: green. All 171 route(s) said the same thing 5 times, so the clock samples downstream mean what they claim.
+playSoccerWorldTruth exit=0 28s | playSoccerWorldTruth: green over 3 sizes

@@ -1,0 +1,20 @@
+rendering 171 route(s) 5 times each at the same clock
+   10/171 routes checked
+   20/171 routes checked
+   30/171 routes checked
+   40/171 routes checked
+   50/171 routes checked
+   60/171 routes checked
+   70/171 routes checked
+   80/171 routes checked
+   90/171 routes checked
+   100/171 routes checked
+   110/171 routes checked
+   120/171 routes checked
+   130/171 routes checked
+   140/171 routes checked
+   150/171 routes checked
+   160/171 routes checked
+   170/171 routes checked
+   171 route(s) rendered 5 times, 0 unstable, 0 unreachable
+playRenderStability: green. All 171 route(s) said the same thing 5 times, so the clock samples downstream mean what they claim.
