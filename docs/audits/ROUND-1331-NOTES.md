@@ -45,7 +45,7 @@ origin/main 082fc277 (docs only) at 12f3fd65. Every gate ran on a GitHub runner 
   the place of the "Level 3-3 on aggregate" banner (liveSimMotion "the extra time banner says what is true", red
   in r1331-et2b). The viewer is F3's (this round owns four lines of LiveSimScreen.tsx), so the engine hunk waits in
   52d787d5 for a round that also lets the extra time banner keep its time. The other dugout never changes at half
-  time either, under any rule (it never did).
+  time either, under any rule (it never did). CLOSED by the closing check: see "Closing check (fix2)" below.
 - The coach: under three line for line; under five two at the break, up to two at each look, a change and a
   stoppage kept back for an injury. Measured means a match (r1331-s3c): five 2.83, the same careers on the base
   rules 1.89, the three change eras 1.62. The other dugout: 3.43 under five, 1.61 on the base rules.
@@ -129,10 +129,15 @@ anchor `note(saveCareer(career));` is not in useClubManager.ts on base either).
 - Copy: the live sheet's stops phrase no longer wraps mid phrase; the help and What's New say "for good from
   2022-23"; SubsRule.stops and changeLive's doc say what the engine does; the ledger's law lines cite Law 3 as it
   stands and IFAB circular 20 for what they claim.
-- OWED TO THE LEAD, not on this branch: the other dugout's changes at the break before extra time (the OWED item
-  above) needs one viewer line in LiveSimScreen.tsx (F3's); the older help line at
-  ClubManagerHelp.tsx 48 and the guide src/data/gameContent/clubManagement.ts 121 and 122 still say three. See
-  C:/Users/antho/dukb-handoff/2026-10-10/results-g/fix-1331.md.
+- OWED TO THE LEAD, not on this branch: the older help line at ClubManagerHelp.tsx 48 and the guide
+  src/data/gameContent/clubManagement.ts 121 and 122 still say three. See
+  C:/Users/antho/dukb-handoff/2026-10-10/results-g/fix-1331.md and fix2-1331.md.
+- Closing check (fix2): the extra time gap of the other dugout (the OWED item above) is CLOSED on this branch: the
+  side branch r1331-et-opp (51566ac8 engine hunk and simCmSubs section oppextratime with control etfrozen,
+  e0527b07 the one viewer hunk in LiveSimScreen.tsx, f5788892 the 1081 pin) was fast forwarded in, because
+  decisions 1(b) and 2 ask for the behaviour and the viewer hunk is its smallest consequence. That hunk is three
+  lines of F3's file beyond the two counters: a change at the break before extra time is told on the line under
+  the pitch, so the extra time banner keeps its place (my own changes made at that break included).
 - Engine note found while sourcing: the 2020 amendment freed the two extra time breaks only where a competition
   allowed an extra change in extra time (circular 20); the engine frees the break before extra time in every five
   change season, 2020-21 and 2021-22 included. Law 3 frees it from 2022-23. Not changed (the extra change in extra
