@@ -1,0 +1,9 @@
+build exit=0 31s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+headsha exit=0 0s | 31e299614 Round BFG: merge Round 1350 PR249 (between season routine choices, lazy creator editor) at 75e03f37
+routineWalk exit=1 5s | Soccer routine browser: failed; 7 checks, 0 natural cases, 0 controls, 0 originals, 5 failures, 1 setup failures.
+buildLazy exit=0 31s | lazyCheck FIXED: three healthy creator flows load the editor on Customize, with actual failed-chunk recovery and omission control.
+land-main exit=0 324s | playSoccerLanding: green at 320x640, 390x844, 1280x900 (also bar 360x780, bar 375x667, name 480x800, name 768x1024; landing, name, bar, retire), every marked section red 
+land-toasts exit=1 393s | playSoccerLanding: RED, 1 finding(s)
+ctl-land-seed exit=0 158s | CONTROL FIRED: SOCCER_LANDING_CONTROL=seed played head on seed 1987332286 and the byte check went red, and the old save comparison went red on 8 save(s) given the next se
+simFlagshipWeight exit=0 0s | simFlagshipWeight: green. The flagship carries its own game and nobody else's.
+sweepWeight exit=0 25s | sweepWeight: green. Every page is inside its budget, and the budgets came down this round.
