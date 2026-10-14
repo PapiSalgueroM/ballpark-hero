@@ -1,0 +1,14 @@
+headsha: git log --oneline -2
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/test/playerBingoWorldCupAlias.test.ts src/test/playerBingoHonours.test.ts src/test/playerBingoLineFeedback.test.tsx src/test/playerBingoLoad.test.tsx --testTimeout=300000 --hookTimeout=120000
+alias: CI=1 NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simPlayerBingoWorldCupAlias.mjs
+alias-ctl-alias: CI=1 PLAYER_BINGO_WC_CONTROL=alias NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simPlayerBingoWorldCupAlias.mjs > /tmp/c1.log 2>&1; s=$?; tail -8 /tmp/c1.log; grep -q "one exact intended rejection detected" /tmp/c1.log && [ $s = 0 ] && echo FIRED-OK
+alias-ctl-country: CI=1 PLAYER_BINGO_WC_CONTROL=country NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simPlayerBingoWorldCupAlias.mjs > /tmp/c2.log 2>&1; s=$?; tail -8 /tmp/c2.log; grep -q "one exact intended rejection detected" /tmp/c2.log && [ $s = 0 ] && echo FIRED-OK
+simPlayerBingoLoad: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simPlayerBingoLoad.mjs
+simPlayerBingoLineFeedback: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simPlayerBingoLineFeedback.mjs
+simPlayerBingoHonours: node scripts/simPlayerBingoHonours.mjs
+simPlayerBingoPool: node scripts/simPlayerBingoPool.mjs
+simSportsBingo: node scripts/simSportsBingo.mjs
+simBingoSeats: node scripts/simBingoSeats.mjs
+simMarketYearScope: node scripts/simMarketYearScope.mjs
+simWindow2026Integration: node scripts/simWindow2026Integration.mjs
