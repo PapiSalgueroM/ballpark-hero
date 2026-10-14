@@ -1,0 +1,3 @@
+#!build
+#!playwright
+cmp12: bash .rc/x/cmp.sh simAdminAccess simAnswerFromRecords simEdgeSync simGuessSoccerClubHints simLeaderboardCaps simLineupPositions simNascarDriver simNflGridData simPerfectSeasonWheel simPlayersPool simRevealScroll simMoney simSoccerStintNameFold simUnboundedSelects simWindow2026LaLiga simWorldCupSquads simWhoAmINamesakes simWritesAreSent simCollegeGridKey simGmCalendar simSoccerStints simStockLive simTycoonSeasonReview simValueFreshness simWindow2026Ligue1 
