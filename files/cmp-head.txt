@@ -1,0 +1,3 @@
+runEach: 1 harnesses
+simWritesAreSent exit=1 14s | simWritesAreSent: 2 failures || FAIL: the harness could not drive Guess the Nation to a finish: TimeoutError: locator.click: Timeout 8000ms exceeded. / FAIL: no guess was ever submitted, so this section proved nothing about the write
+runEach: done, 1 of 1 exited non zero

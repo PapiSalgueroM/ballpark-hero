@@ -1,0 +1,2 @@
+build exit=0 27s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+cmpwrites exit=0 54s | cmp: 1 harnesses, 0 differ between head and base

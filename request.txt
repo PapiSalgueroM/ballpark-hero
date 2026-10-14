@@ -1,0 +1,3 @@
+#!build
+#!playwright
+cmpwrites: bash .rc/x/cmp.sh simWritesAreSent

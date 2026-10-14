@@ -1,0 +1,2 @@
+simWritesAreSent: head exit 1, base exit 1, same last line | head: simWritesAreSent: 2 failures || FAIL: the harness could not drive Guess the Nation to a finish: TimeoutError: locator.click: Timeout # exceeded. / FAI | base: simWritesAreSent: 2 failures || FAIL: the harness could not drive Guess the Nation to a finish: TimeoutError: locator.click: Timeout # exceeded. / FAI
+cmp: 1 harnesses, 0 differ between head and base
