@@ -1,0 +1,13 @@
+# Release BD: weights at every step and on each piece alone, and simWritesAreSent with a dist
+#!serve
+#!playwright
+simWritesAreSent: node scripts/simWritesAreSent.mjs
+w-082fc277: bash .rc/x/wt.sh 082fc277 4301
+w-26eadaaa: bash .rc/x/wt.sh 26eadaaa 4302
+w-b9df63b4: bash .rc/x/wt.sh b9df63b4 4303
+w-b59ebe2b: bash .rc/x/wt.sh b59ebe2b 4304
+w-39002b4a: bash .rc/x/wt.sh 39002b4a 4305
+w-fa1c45d9: bash .rc/x/wt.sh fa1c45d9 4306
+w-10a471fa: bash .rc/x/wt.sh 10a471fa 4307
+w-10b074f6: bash .rc/x/wt.sh 10b074f6 4308
+w-9ddfd45d: bash .rc/x/wt.sh 9ddfd45d 4309

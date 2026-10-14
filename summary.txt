@@ -1,0 +1,11 @@
+build exit=0 35s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+simWritesAreSent exit=1 14s | simWritesAreSent: 2 failures
+w-26eadaaa exit=0 82s | sweepWeight: 13 failures
+w-082fc277 exit=0 83s | sweepWeight: 13 failures
+w-b9df63b4 exit=0 89s | sweepWeight: 13 failures
+w-b59ebe2b exit=0 78s | sweepWeight: 13 failures
+w-39002b4a exit=0 83s | sweepWeight: 13 failures
+w-fa1c45d9 exit=0 86s | sweepWeight: 13 failures
+w-10a471fa exit=0 79s | sweepWeight: 13 failures
+w-10b074f6 exit=0 82s | sweepWeight: 13 failures
+w-9ddfd45d exit=0 80s | sweepWeight: 13 failures
