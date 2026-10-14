@@ -1,0 +1,7 @@
+#!serve
+#!playwright
+#!serial
+headsha: git log --oneline -2
+hubC-head: HUB_LANDING_SECTIONS=C node scripts/playCmHubLanding.mjs 2>&1 | grep -E "FAIL|playCmHubLanding:"
+hubC-head-again: HUB_LANDING_SECTIONS=C node scripts/playCmHubLanding.mjs 2>&1 | grep -E "FAIL|playCmHubLanding:"
+hubC-main: bash .rc/x/hubBase.sh 4a5f759a 4190 2>&1 | grep -E "FAIL|playCmHubLanding:"
