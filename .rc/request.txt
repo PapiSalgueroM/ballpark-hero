@@ -1,0 +1,24 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-cm: node_modules/.bin/vitest run src/test/clubManager src/test/cm src/test/manager src/test/dailyMenuResume src/lib/clubManager --testTimeout=300000 --hookTimeout=120000
+appealIsolation: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simManagerAppealIsolation.mjs
+simCmLeagueRules: node scripts/simCmLeagueRules.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+simClubManagerDecisions: node scripts/simClubManagerDecisions.mjs
+subs-all: git worktree add -f /tmp/sb1 dec9075b >/dev/null 2>&1; SUBS_BASE=/tmp/sb1 node scripts/simCmSubs.mjs
+simLiveMatch: node scripts/simLiveMatch.mjs
+simHalftime: node scripts/simHalftime.mjs
+simMatchDetail: node scripts/simMatchDetail.mjs
+quickSubs-all: CM_QUICK_SUBS_CONTROL=all ONLY=simCmQuickSubs node scripts/runAllSims.mjs
+simCmQuickLegs: node scripts/simCmQuickLegs.mjs
+simCmShootoutOrder: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCmShootoutOrder.mjs
+simMatchScreen: node scripts/simMatchScreen.mjs
+simLiveSimMotion: node scripts/simLiveSimMotion.mjs
+simLiveSim: node scripts/simLiveSim.mjs
+simCmLeagueBook: node scripts/simCmLeagueBook.mjs
+simCmMatchCentre: node scripts/simCmMatchCentre.mjs
+simCmOwnGoals: node scripts/simCmOwnGoals.mjs
+simCmStoppageTime: node scripts/simCmStoppageTime.mjs
+simExtraTime: node scripts/simExtraTime.mjs
+simTacticsEngine: node scripts/simTacticsEngine.mjs
