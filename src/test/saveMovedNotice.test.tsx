@@ -64,7 +64,7 @@ describe('SaveMovedNotice', () => {
       return 'auto';
     };
     const onReload = vi.fn();
-    const r = render(
+    const page = (notice: boolean) => (
       <div>
         <Dialog open>
           <DialogContent>
@@ -72,10 +72,13 @@ describe('SaveMovedNotice', () => {
             <button>Next season</button>
           </DialogContent>
         </Dialog>
-        <SaveMovedNotice message={WORDS} onReload={onReload} />
-      </div>,
+        {notice && <SaveMovedNotice message={WORDS} onReload={onReload} />}
+      </div>
     );
+    /* The order of the game: the dialog is open first, then the other tab's write lands and the notice mounts. */
+    const r = render(page(false));
     expect(document.body.style.pointerEvents).toBe('none');
+    r.rerender(page(true));
     const reload = screen.getByRole('button', { name: 'Reload' });
     expect(applied(reload)).not.toBe('none');
     fireEvent.click(reload);
