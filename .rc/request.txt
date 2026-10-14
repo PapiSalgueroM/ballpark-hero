@@ -1,0 +1,16 @@
+#!serial
+headsha: git log --oneline -2
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/test/soccerCareerAwardGenerations.test.tsx src/lib/clubManagerCustomPromotion.test.ts --testTimeout=300000 --hookTimeout=300000
+simCmLeagueRules: node scripts/simCmLeagueRules.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs 2>&1 | grep -E "FAIL|failure|green"
+touch: AUTOCOMPLETE_TOUCH_OUT="$PWD/ato1" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simPlayerAutocompleteTouchScroll.mjs
+touch-ctl-pointerdown: AUTOCOMPLETE_TOUCH_OUT="$PWD/ato2" AUTOCOMPLETE_TOUCH_CONTROL=pointerdown NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simPlayerAutocompleteTouchScroll.mjs > /tmp/ct.log 2>&1; s=$?; tail -3 /tmp/ct.log; [ $s = 0 ] && grep -q "pointerdown: green" /tmp/ct.log && grep -q "Effective pointerdown control" /tmp/ct.log && echo FIRED-OK
+deadline: CM_DEADLINE_CORE_REF=HEAD MANAGER_DEADLINE_OUT="$PWD/dl1" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simClubManagerDecisionDeadline.mjs
+deadline-ctl-late: CM_DEADLINE_CORE_REF=HEAD CM_DEADLINE_CONTROL=late MANAGER_DEADLINE_OUT="$PWD/dl2" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simClubManagerDecisionDeadline.mjs > /tmp/dl.log 2>&1; s=$?; tail -3 /tmp/dl.log; [ $s = 0 ] && grep -q "Effective actual-source late control" /tmp/dl.log && grep -q "simClubManagerDecisionDeadline late: green" /tmp/dl.log && echo FIRED-OK
+roster: CM_OWN_ROSTER_CORE_REF=HEAD CM_OWN_ROSTER_OUT="$PWD/cor1" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simClubDetailCurrentRoster.mjs
+roster-ctl-original: CM_OWN_ROSTER_CORE_REF=HEAD CM_OWN_ROSTER_OUT="$PWD/cor2" CM_OWN_ROSTER_CONTROL=original NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simClubDetailCurrentRoster.mjs > /tmp/co.log 2>&1; s=$?; tail -2 /tmp/co.log | cut -c1-200; [ $s = 0 ] && grep -q "simClubDetailCurrentRoster original: green" /tmp/co.log && echo FIRED-OK
+htLineups: CM_HT_PARENT_REF=491c10d3 CM_HT_LINEUPS_OUT="$PWD/ht1" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simManagerHalftimeLineups.mjs
+htLineups-ctl-original: CM_HT_PARENT_REF=491c10d3 CM_HT_LINEUPS_OUT="$PWD/ht2" CM_HT_LINEUPS_CONTROL=original NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simManagerHalftimeLineups.mjs > /tmp/ht.log 2>&1; s=$?; tail -2 /tmp/ht.log | cut -c1-200; [ $s = 0 ] && grep -q "simManagerHalftimeLineups original: green" /tmp/ht.log && echo FIRED-OK
+award: SOCCER_AWARD_GENERATIONS_OUT="$PWD/sag" node scripts/simSoccerAwardGenerations.mjs > /tmp/aw.log 2>&1; s=$?; tail -2 /tmp/aw.log | cut -c1-200; cp sag/component/vitest.json "$RC_OUT/award-vitest.json" 2>/dev/null; exit $s
+reportControls: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/checkManagerReportControls.mjs
