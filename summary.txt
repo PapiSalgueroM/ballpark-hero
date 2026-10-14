@@ -1,0 +1,3 @@
+unseeded-noinverse exit=1 24s | simCmUnseededWorld: CONTROL noinverse FIRED: without the inverse the fresh careers differ from the base (15 of 15)
+unseeded-guard exit=3 91s | simCmUnseededWorld: CONTROL guard DID NOT FIRE as it must: deals red true, quiet red true
+simCmUnseededWorld exit=1 96s | simCmUnseededWorld: 112 FAILURE(S)

@@ -1,0 +1,3 @@
+simCmUnseededWorld: node scripts/simCmUnseededWorld.mjs
+unseeded-guard: CM_UNSEEDED_CONTROL=guard node scripts/simCmUnseededWorld.mjs
+unseeded-noinverse: CM_UNSEEDED_CONTROL=noinverse node scripts/simCmUnseededWorld.mjs
