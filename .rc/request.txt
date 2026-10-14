@@ -1,0 +1,9 @@
+headsha: git log --oneline -2
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node_modules/.bin/vitest run src/test/clubDetailCurrentRoster.test.tsx src/test/clubDetailOwnClub.test.tsx src/lib/clubManagerOwnClubLevel.test.ts --testTimeout=300000 --hookTimeout=120000
+roster: CM_OWN_ROSTER_OUT=/tmp/cor1 NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simClubDetailCurrentRoster.mjs
+roster-ctl-original: CM_OWN_ROSTER_OUT=/tmp/cor2 CM_OWN_ROSTER_CONTROL=original NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simClubDetailCurrentRoster.mjs > /tmp/co.log 2>&1; s=$?; tail -3 /tmp/co.log | cut -c1-200; [ $s = 0 ] && grep -q "simClubDetailCurrentRoster original: green" /tmp/co.log && echo FIRED-OK
+simFreeAgents: node scripts/simFreeAgents.mjs
+ctl-fa-ownclub: FA_CONTROL=ownclub node scripts/simFreeAgents.mjs > /tmp/fa.log 2>&1; s=$?; tail -2 /tmp/fa.log | cut -c1-200; [ $s -eq 1 ] && grep -qF '[control ownclub applied to engine]' /tmp/fa.log && grep -q "is on my own club's market once the list and the ledger are gone" /tmp/fa.log && echo FIRED-OK
+simBooks: node scripts/simBooks.mjs
+unseeded-minusAZ: CM_UNSEEDED_BASE=$(node scripts/lib/treeWithoutMerge.mjs 5ec5a724 36cc9ffe 082fc277) && export CM_UNSEEDED_BASE && node scripts/simCmUnseededWorld.mjs
