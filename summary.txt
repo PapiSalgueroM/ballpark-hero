@@ -1,0 +1,7 @@
+build exit=0 31s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+vitest-truth exit=0 4s |    Duration  4.01s (transform 2.16s, setup 275ms, collect 3.02s, tests 411ms, environment 1.12s, prepare 503ms)
+worldtruth exit=0 81s | simSoccerWorldTruth: OK, every section green
+tsc exit=0 84s | 
+ctl-summer exit=1 81s | FIRED: WORLD_TRUTH_CONTROL=summer failed section 3 (1 failures; section 3: 1, section 6: 3)
+walk exit=0 34s | playSoccerWorldTruth: green over 3 sizes
+walk-pastfeed exit=1 32s | FIRED: WALK_CONTROL=pastfeed (3 failures)
