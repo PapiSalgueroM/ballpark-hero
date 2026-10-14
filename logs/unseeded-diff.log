@@ -1,0 +1,9 @@
+head_exit=1
+base_exit=1
+  FAIL fresh Eibar (era2015) started fresh (deals, seed 6221057) at step 15 with-deals-4: the state differs, aiHeadlines: base ...Real Madrid have the sharpest attack in the La Liga: 12 scored in 4 rounds.","⏰ ... this tree ...Real Madrid have the sharpest attack in La Liga: 12 scored in 4 rounds.","⏰ Dead...
+  ... and 7 more
+simCmUnseededWorld: 112 FAILURE(S)
+  FAIL fresh Eibar (era2015) started fresh (deals, seed 6221057) at step 15 with-deals-4: the state differs, aiHeadlines: base ...Real Madrid have the sharpest attack in the La Liga: 12 scored in 4 rounds.","⏰ ... this tree ...Real Madrid have the sharpest attack in La Liga: 12 scored in 4 rounds.","⏰ Dead...
+  ... and 7 more
+simCmUnseededWorld: 112 FAILURE(S)
+UNSEEDED head_fail_lines=25 base_fail_lines=25 diff_lines=0

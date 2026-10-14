@@ -1,0 +1,19 @@
+head_exit=1
+base_exit=1
+
+    at arm (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simManagerWorldContinuity.mjs:481:19)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simManagerWorldContinuity.mjs:489:24
+
+    at arm (file:///tmp/cb/scripts/simManagerWorldContinuity.mjs:475:19)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async file:///tmp/cb/scripts/simManagerWorldContinuity.mjs:483:24
+52c52
+<     at arm (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simManagerWorldContinuity.mjs:481:19)
+---
+>     at arm (file:///tmp/cb/scripts/simManagerWorldContinuity.mjs:475:19)
+54c54
+<     at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simManagerWorldContinuity.mjs:489:24
+---
+>     at async file:///tmp/cb/scripts/simManagerWorldContinuity.mjs:483:24
+CONTINUITY diff_lines=8
