@@ -1,0 +1,9 @@
+headsha exit=0 0s | ef8c1822e Round BEG: merge Round 1364 (PR266) club details show the current owned squad at 1b4e988c
+roster exit=1 0s | Node.js v24.21.0
+roster-ctl-original exit=1 0s | Node.js v24.21.0
+vitest exit=0 6s |    Duration  5.60s (transform 2.70s, setup 260ms, collect 7.54s, tests 3.97s, environment 1.82s, prepare 530ms)
+tsc exit=0 93s | 
+simFreeAgents exit=0 107s | simFreeAgents: all sections passed
+simBooks exit=0 17s | simBooks: green. Every number these games show agrees with every other number they show.
+ctl-fa-ownclub exit=0 106s | FIRED-OK
+unseeded-minusAZ exit=1 116s | simCmUnseededWorld: 108 FAILURE(S)
