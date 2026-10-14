@@ -1,0 +1,9 @@
+baseline written for modern, eras, pure from /home/runner/work/ballpark-hero/ballpark-hero
+
+simCmLeagueRules: all checks passed (modern, eras, pure)
+ 1 file changed, 37 insertions(+), 37 deletions(-)
+   27 entries compared, 0 differ
+   20 entries compared, 0 differ
+   48 entries compared, 0 differ
+   103 sources read, 61 ids, 0 finding(s)
+simCmLeagueRules: all checks passed (modern, eras, pure, drop4, cupless, shapes, chunks)

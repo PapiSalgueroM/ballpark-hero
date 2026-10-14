@@ -1,0 +1,5 @@
+#!serial
+headsha: git log --oneline -2
+legA-m3out: git worktree add -q --detach /tmp/la HEAD && ln -s "$PWD/node_modules" /tmp/la/node_modules && git show origin/main:src/lib/clubManagerDecisions.ts > /tmp/la/src/lib/clubManagerDecisions.ts && cd /tmp/la && git diff --stat | tail -1 && node scripts/simCmLeagueRules.mjs > /tmp/la.log 2>&1; s=$?; grep -E "entries compared|finding|FAIL" /tmp/la.log | head -12; tail -1 /tmp/la.log; exit $s
+legB-tree: node scripts/simCmLeagueRules.mjs > /tmp/lb.log 2>&1; s=$?; grep -E "entries compared|finding" /tmp/lb.log | head -8; grep "FAIL" /tmp/lb.log | sed 's/.*differs in //' | tr ',' '\n' | sed 's/^ *//' | sort | uniq -c; tail -1 /tmp/lb.log; exit $s
+write: node scripts/simCmLeagueRules.mjs --part=modern,eras,pure --write | tail -3 && cp scripts/data/cmLeagueRulesDigest.json "$RC_OUT/cmLeagueRulesDigest.json" && git diff --stat -- scripts/data/cmLeagueRulesDigest.json | tail -1 && node scripts/simCmLeagueRules.mjs > /tmp/lw.log 2>&1; s=$?; grep -E "entries compared|finding" /tmp/lw.log | head -8; tail -1 /tmp/lw.log; exit $s

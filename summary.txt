@@ -1,0 +1,4 @@
+headsha exit=0 0s | f14ae6f10 Round BEG: Round 1369's promotion test picks its leagues through id lookups (simCmLeagueRules section 3d)
+legA-m3out exit=0 48s | simCmLeagueRules: all checks passed (modern, eras, pure, drop4, cupless, shapes, chunks)
+legB-tree exit=1 47s | simCmLeagueRules: 32 failure(s)
+write exit=0 74s | simCmLeagueRules: all checks passed (modern, eras, pure, drop4, cupless, shapes, chunks)
