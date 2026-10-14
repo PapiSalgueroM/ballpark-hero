@@ -1,0 +1,5 @@
+headsha: git log --oneline -3 | cut -c1-80 && git rev-parse HEAD~1
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-notice: node_modules/.bin/vitest run src/test/saveMovedNotice.test.tsx --testTimeout=300000 --hookTimeout=120000
+vitest-nofix: git worktree add -q /tmp/nf HEAD && ln -s "$PWD/node_modules" /tmp/nf/node_modules && cd /tmp/nf && git show 39002b4a:src/components/SaveMovedNotice.tsx > src/components/SaveMovedNotice.tsx && git diff --stat | tail -2 && node_modules/.bin/vitest run src/test/saveMovedNotice.test.tsx --testTimeout=300000 --hookTimeout=120000 > /tmp/nf.out 2>&1; s=$?; grep -E "Reload takes|AssertionError|expected|Tests " /tmp/nf.out | cut -c1-200 | head -12; exit $s
+vitest-dialogs: node_modules/.bin/vitest run src/test/soccerCareerSaveFence.test.tsx --testTimeout=300000 --hookTimeout=120000 2>&1 | tail -6; exit ${PIPESTATUS[0]}
