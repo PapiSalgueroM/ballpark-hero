@@ -515,6 +515,7 @@ function pressFleet(cm, onAsk, fleet = PRESS_FLEET) {
         const before = s.press?.pending ?? null;
         const week = s.week;
         const last = cm.nextFixture(s);
+        const intlBefore = JSON.stringify(s.intl ?? null);
         const r = withSeed(fleet.base + fleet.step * k + 1000 * i, () => cm.playNextEntry(s, { skipHalftime: true }));
         if (r.kind === 'seasonOver') break;
         s = r.state;
@@ -523,7 +524,7 @@ function pressFleet(cm, onAsk, fleet = PRESS_FLEET) {
         const q = s.press?.pending ?? null;
         if (!q || q === before || s.press.lastWeek !== week) continue;
         kinds[q.kind] = (kinds[q.kind] ?? 0) + 1;
-        if (onAsk && (q.kind === 'bigGame' || q.kind === 'derby')) onAsk(q, cm.nextFixtureFrom ? cm.nextFixtureFrom(s, s.week) : null, last, s);
+        if (onAsk && (q.kind === 'bigGame' || q.kind === 'derby')) onAsk(q, cm.nextFixtureFrom ? cm.nextFixtureFrom(s, s.week) : null, last, s, JSON.stringify(s.intl ?? null) !== intlBefore);
       }
     }
   }
@@ -535,27 +536,31 @@ function pressSection(cm, { base }) {
   /* Review MAJOR 1: the bigGame line claims "on paper are a level above you", which the engine asks only at
      matchEdge - EDGE_LEVEL (7) <= -6. The name alone cannot see the edge judged against the match just played,
      so every bigGame asked at a whistle is held to the engine's own edge against the fixture it names, read on
-     the state the match handed back. `closest` is the largest edge - 7 seen, printed as the headroom. */
+     the state the match handed back. That state is the whistle's for everything matchEdge reads except on a
+     week an international break starts or a rest ends (runIntlBreaks runs after the press and can move the
+     eleven), so a question whose match moved the career's international record is counted and not judged.
+     `closest` is the largest edge - 7 seen, printed as the headroom. */
   const EDGE_LEVEL = 7;
-  let big = 0, untrue = 0, firstUntrue = '', closest = -Infinity;
-  const judge = (q, next, last, s) => {
+  let big = 0, untrue = 0, firstUntrue = '', closest = -Infinity, unjudged = 0;
+  const judge = (q, next, last, s, intlMoved) => {
     if (q.kind !== 'bigGame') return;
+    if (intlMoved) { unjudged += 1; return; }
     big += 1;
     const edge = next?.kind === 'match' ? cm.matchEdge(s, next) : null;
     if (edge !== null) closest = Math.max(closest, edge - EDGE_LEVEL);
     if (edge === null || edge - EDGE_LEVEL > -6) { untrue += 1; firstUntrue ||= `"${q.text.slice(0, 50)}" at edge ${edge?.toFixed(1)} against ${next?.opponent} (${last?.opponent} just played)`; }
   };
-  const kinds = pressFleet(cm, (q, next, last, s) => {
+  const kinds = pressFleet(cm, (q, next, last, s, intlMoved) => {
     asked += 1;
     const lastOpp = last?.kind === 'match' ? last.opponent : null;
     const nextOpp = next?.kind === 'match' ? next.opponent : null;
     const ok = nextOpp !== null && q.text.includes(nextOpp) && (nextOpp === lastOpp || !lastOpp || !q.text.includes(lastOpp));
     if (!ok) { wrong += 1; first ||= `${q.kind}: "${q.text}" with ${lastOpp} just played and ${nextOpp} next`; }
-    judge(q, next, last, s);
+    judge(q, next, last, s, intlMoved);
   });
   check(P, 'every bigGame or derby question asked at a whistle names the next fixture\'s opponent', asked > 0 && wrong === 0, `${wrong} of ${asked} wrong${first ? `; first ${first}` : ''}`);
   pressFleet(cm, judge, EDGE_FLEET);
-  console.log(`   bigGame at the whistle: ${big} asked over both fleets, ${untrue} untrue of the fixture named; the closest edge - 7 ${closest.toFixed(1)} (the line needs -6 or less)`);
+  console.log(`   bigGame at the whistle: ${big} judged over both fleets (${unjudged} more on an international break week, not judged), ${untrue} untrue of the fixture named; the closest edge - 7 ${closest.toFixed(2)} (the line needs -6 or less)`);
   check(P, 'every bigGame question asked at a whistle is true of the fixture it names (edge - 7 <= -6)', big >= 10 && untrue === 0, `${untrue} of ${big} untrue${firstUntrue ? `; first ${firstUntrue}` : ''}`);
   console.log(`   question kinds at the whistle, head: ${JSON.stringify(kinds)}`);
   if (base) console.log(`   question kinds at the whistle, base: ${JSON.stringify(pressFleet(base, null))}`);
