@@ -1,0 +1,11 @@
+build exit=0 34s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+headsha exit=0 0s | b29771151 Round BEG: three packet harnesses keep their raw byte holds in small blocks (simHarnessAnchors section 2)
+simHarnessAnchors exit=1 41s | simHarnessAnchors: 2 failure(s)
+touch exit=0 3s | simPlayerAutocompleteTouchScroll normal: green.
+touch-ctl-pointerdown exit=0 3s | FIRED-OK
+pitch exit=0 2s | simPitchRestartContinuity: normal qualified (actual committed coordinates); browser paint unmeasured
+pitch-ctl-oldrender exit=0 2s | FIRED-OK
+fonts-default exit=0 0s | Prepared 9 declared font dependencies for local fulfillment.
+playTouch exit=0 12s | playPlayerAutocompleteTouchScroll passed: 1985 checks, 6 journeys, 0 controls, 0 premature selections, 13 originals, 0 failures, 0 setup failures.
+playTouch-ctl exit=0 40s | FIRED-OK
+playPitch exit=0 20s | playPitchRestartContinuity: green in the prepared shared-pitch scope; no real Manager journey or painted-old-jump claim.
