@@ -1,0 +1,4 @@
+seed 1: head exit 0, base exit 0, whole output identical (29 lines; last: simGmInbox: green.)
+seed 2: head exit 0, base exit 0, whole output identical (29 lines; last: simGmInbox: green.)
+seed 3: head exit 0, base exit 0, whole output identical (29 lines; last: simGmInbox: green.)
+gmdiff: all three seeds identical to the base and green

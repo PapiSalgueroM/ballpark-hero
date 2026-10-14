@@ -1,0 +1,16 @@
+headsha exit=0 0s | b9df63b4e9ad8925c1f19536ec6a32d8a77358ea
+vitest exit=0 7s |    Duration  6.01s (transform 2.56s, setup 503ms, collect 4.12s, tests 1.03s, environment 3.67s, prepare 966ms)
+usBoardParity exit=0 79s | simUsBoardParity: green. Four sports replayed click for click, save for save and screen for screen.
+tsc exit=0 92s | 
+kitA exit=0 97s | simEventDeck: green. Sections 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 only.
+gmdiff exit=0 10s | gmdiff: all three seeds identical to the base and green
+gmctl exit=0 18s | ctl: every control exited 1
+careerInbox exit=0 2s | simCareerInbox: green. Soccer is unchanged, and the NFL, MLB, NBA and NHL inboxes fire.
+privatecap exit=1 2s | simCareerInbox: 1 failure
+anchors exit=0 58s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+kctl2 exit=0 9s | kctl: every control exited 1 and fired
+kctl3 exit=0 19s | kctl: every control exited 1 and fired
+kctl1 exit=0 73s | kctl: every control exited 1 and fired
+kitB exit=0 194s | simEventDeck: green. Sections 13, 14, 15, 16 only.
+kctl5 exit=0 85s | kctl: every control exited 1 and fired
+kctl4 exit=0 316s | kctl: every control exited 1 and fired
