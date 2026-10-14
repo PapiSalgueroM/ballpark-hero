@@ -1,0 +1,41 @@
+treeWithoutMerge: 6a7ac1fb7001359dc56f6664f8b8222587f9bac0, 082fc277 without 5ec5a724; conflicts kept from 082fc277: scripts/qa/managerWorldContinuityKit.mjs, scripts/qa/managerWorldSizeDiagnostic.mjs, scripts/simCmLeagueRules.mjs, scripts/simCmUnseededWorld.mjs, src/pages/WhatsNew.tsx
+                  kind: 'move',
++                 meter: 'board'
+-                 meter: 'budget'
+                },
++               label: 'Update the board (board patience +2)'
+-               label: 'Put it in the transfer pot (£100k into the transfer budget)'
+              },
+              {
+                effect: {
+                  kind: 'none'
+                },
++               label: 'Leave it with medical staff (nothing changes)'
+-               label: 'Leave it in the kitty (nothing changes)'
+              }
+            ],
++           playerId: 'p-thierno-barry',
++           playerName: 'Thierno Barry',
+            season: 1,
++           text: 'Thierno Barry had 2 injury weeks left when this note was written. Staff suggest a check in or a board update. Neither changes the recovery time.',
+-           text: "The squad's fines kitty has £100k in it from late arrivals and phones in meetings. The head coach asks where it should go. The local paper always runs it when it goes to charity.",
+            week: 0
+          }
+        ],
+        eraId: 'now',
+        facilities: {
+
+PASS [healthy] constructors
+PASS [healthy] identity
+PASS [healthy] buy-job
+PASS [healthy] year-away
+PASS [healthy] sale
+PASS [healthy] option
+PASS [healthy] release
+PASS [healthy] refresh
+PASS [healthy] seeded-world
+PASS [healthy] storage
+AssertionError [ERR_ASSERTION]: Healthy complete outcome groups all pass
+
+1 !== 0
+

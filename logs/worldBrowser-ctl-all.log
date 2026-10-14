@@ -1,0 +1,20 @@
+PASS manager world browser normal
+PASS manager world browser missing
+PASS manager world browser country
+PASS manager world browser accent
+PASS manager world browser casing
+PASS manager world browser terms
+PASS manager world browser clubs
+PASS manager world browser selection
+PASS manager world browser focus
+PASS manager world browser myfocus
+PASS manager world browser custom
+PASS manager world browser saved
+PASS manager world browser era
+PASS manager world browser order
+PASS manager world browser round
+PASS manager world browser scout
+PASS manager world browser fallback
+simManagerWorldBrowser all: 13 outcomes and 16 effective copied faults passed.
+PASS manager world browser fallback
+simManagerWorldBrowser all: 13 outcomes and 16 effective copied faults passed.

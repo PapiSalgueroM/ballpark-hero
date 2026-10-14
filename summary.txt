@@ -1,0 +1,3 @@
+headsha exit=0 0s | 491c10d33 Round BEG: bind Round 1364's roster proof to the tree's own core (CM_OWN_ROSTER_CORE_REF)
+worldBrowser-ctl-all exit=0 65s | simManagerWorldBrowser all: 13 outcomes and 16 effective copied faults passed.
+continuity-minusAZ exit=1 26s | 1 !== 0
