@@ -1,0 +1,2 @@
+et-head: node .rc/x/rvet.mjs head
+et-mut: R=$PWD; W=/tmp/mE2; (git worktree add -f $W HEAD >/dev/null 2>&1 || (sleep 5; git worktree add -f $W HEAD >/dev/null 2>&1)); ln -s $R/node_modules $W/node_modules; cd $W && node $R/.rc/x/rvmut.mjs etbreak && node $R/.rc/x/rvet.mjs mut-etbreak
