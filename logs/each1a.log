@@ -1,0 +1,41 @@
+runEach: done, 6 of 63 exited non zero
+simCmLeagueBookFacts exit=0 1s | simCmLeagueBookFacts: all 5949 checks passed.
+simCmMatchCentre exit=0 11s | simCmMatchCentre: PASS. Every stat on the report and the live strip is counted off the committed play and lines, and every timeline row is an event the engine drew.
+simClubManagerNewLeagues exit=0 324s | simClubManagerNewLeagues: all checks passed
+simCollegeDynastyBoard exit=0 15s | simCollegeDynastyBoard: all green
+simCollegeTables exit=0 5s | simCollegeTables: green. Both placeholder copies agree on 48 names, dedupePrograms hides what the cbb migration deletes and writes what it writes, the draft cleaner refuses the three placeholder shape
+simConnectionsLoss exit=0 8s | simConnectionsLoss: all green
+simCmStoppageTime exit=0 63s | simCmStoppageTime: PASS. Goals fall in the board at a measured share without adding any, every line in a board says 45+N or 90+N wherever a minute is printed, extra time comes only on a level knockout
+simClubManagerBudget exit=0 397s | simClubManagerBudget: PASS
+simContractPreview exit=0 13s | Contract preview cleanup: owned copies/reports removed; production component, engine and test bytes stayed identical.
+simDaily exit=0 4s | simDaily: green. Every daily game is a different game tomorrow.
+simDailyRecord exit=0 16s | simDailyRecord: all green (3 sections, the control fired on every one)
+simConquestMotion exit=0 43s | simConquestMotion: PASS. Evidence: /home/runner/work/_temp/t-each1a/each-simConquestMotion-ilBYCb/dukb-conquest-motion-iZYUds
+simEdgeSync exit=1 1s | simEdgeSync: 1 finding(s). || FAIL: validate-player has changed since it was deployed on 2026-10-01 (version 12). Redeploy it and update the ledger, or the live site is not running this code
+simDraftRosterMotion exit=0 6s | simDraftRosterMotion: four actual roster tests passed for committed picks, empty/full slots, exact values and stable accessible names.
+simExtension exit=0 1s | simExtension: green. The last year of a deal is a decision in all four games now.
+simF1DriverHintPoints exit=0 12s | simF1DriverHintPoints: hook/data/feedback CSS/Search/shared Dialog/save/completion/share bytes held.
+simFantasyDraftPool exit=0 21s | simFantasyDraftPool: green. Every user pick has something to draft on the view the player lands on, and it is the best available.
+simDateDraws exit=0 64s | simDateDraws: green. Every date-seeded draw reaches its whole pool or is fenced where measured.
+simFinance exit=0 17s | ALL FINANCE CHECKS PASSED
+simFootleLeagues exit=0 1s | simFootleLeagues: both Footle club maps agree with the season Club Manager is playing.
+simEra2020 exit=0 55s | simEra2020: green. 2020-21 is real, sealed, and plays like 2020-21.
+simFoRatingOrder exit=0 15s | simFoRatingOrder: green, 52 checks. One number per man: 2163 men, 0 with two numbers (main: 459). Marked on active rosters: 940 (main: 930).
+simGmBooks exit=0 4s | simGmBooks: ALL GREEN
+simFrontOfficeSaveRecovery exit=0 21s | Front Office save recovery cleanup: disposable reader copies and result directory removed; the production reader was read only.
+simGmDraftOrder exit=0 26s | simGmDraftOrder: green. 603231 checks over 10 sections: the order is the league's, the lottery is drawn once on its own stream and saved, and nothing mounts the lift yet.
+simGmXp exit=0 2s | simGmXp: all checks passed
+simGmPicks exit=0 25s | simGmPicks: 1199 checks passed over 4 leagues, 5 seeds and 10 seasons each. The lottery tables are the published ones and the draws sit inside their bands, an old save keeps every pick, picks are cons
+simGridCellMotion exit=0 9s | simGridCellMotion: eight real-board feedback, focus, callback, empty-retry and rarity checks passed.
+simGuessSoccerClubHints exit=1 2s | could not read soccer_club_puzzles
+simHiddenPages exit=0 2s | simHiddenPages: green. Every page we keep out of Google says so itself.
+simHomePersonalReads exit=0 47s | Homepage personal reads: CRLF bindings proved, original bytes held, owned copies cleaned; no live DB/browser/AdSense acceptance claimed.
+simIdleArenaCap exit=0 13s | simIdleArenaCap: green. Being there pays in real time, being away pays eight hours at half speed however the tab was left, and the trophy example is the formula.
+simInternalLinks exit=0 1s | simInternalLinks: green. Every page can be reached, and every page leads somewhere.
+simLeaderboardCaps exit=1 3s | the database refused game_score_caps?select=game,max_score&limit=2000: Error: Offline harness blocked fetch to https://flawuiqbvjobmkfkauhw.supabase.co
+simLineupPositions exit=1 2s | simLineupPositions: the pool for Real Madrid did not load, which is itself worth investigating
+simLiveBoards exit=0 62s | simLiveBoards: green. The boards people actually play keep their one right answer.
+simLiveSim exit=0 3s | simLiveSim: all green
+simFreeAgents exit=0 337s | simFreeAgents: all sections passed
+simHarnessAnchors exit=0 360s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+runEach: done, 6 of 63 exited non zero

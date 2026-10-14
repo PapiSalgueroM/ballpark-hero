@@ -1,0 +1,64 @@
+runEach: 62 harnesses
+simMatchDetail exit=0 15s | simMatchDetail: all green
+simMissingNineSources exit=0 1s | simMissingNineSources: green. 30 sheets, every one on two hosts and matching its record.
+simManagerCareer exit=0 25s | ALL MANAGER CAREER CHECKS PASSED
+simMlbDraftCapital exit=0 13s | simMlbDraftCapital: CRLF executable anchors and 8 raw sources held; owned copies cleaned; receipts /home/runner/work/_temp/t-each1b/each-simMlbDraftCapital-DgGIVB/dukb-mlb966-proof-nfHF07
+simMlbOpeningRatingModel exit=0 6s | MLB model:CRLF-safe controls, raw byte holds, bounded cleanup and offline transport guard passed. No runtime, season/save or approval claim.
+simNascarDriver exit=1 3s | Node.js v24.21.0
+simNavbarStatsReads exit=0 7s | Artifacts: /home/runner/work/_temp/t-each1b/each-simNavbarStatsReads-mOzjhC/navbar-stats-7Y4ry9
+simNbaCourtSelection exit=0 10s | NBA court: CRLF executable controls bind, original bytes held, owned copies cleaned. Native keyboard/touch geometry is verified separately.
+simNbaOpeningRatings exit=0 15s | NBA opening:normalized CRLF bindings, raw holds and owned-copy cleanup passed. These offline cases do not prove historical player ability, native UI, remote saves or all-seed balance.
+simNbaRotationUi exit=0 17s | NBA rotation UI: exact opener focus uses preventScroll, controls retain native semantics and 44px sizing, earned motion is finite with static reduced motion.
+simNflCareer exit=0 5s | PASS: no crashes, every position produces stats, shop fully reachable, deck C drawn, every card dealt only where its words hold (its words, odds and money: simUsCareerDeckC), and the six new rivalry b
+simNflGridData exit=1 6s | SUPABASE unreachable (Error: Offline harness blocked fetch to https://flawuiqbvjobmkfkauhw.supabase.co) for nfl_team_codes?select=team_code,team_name,franchise&limit=100 after 3 attempts. NOTHING WAS 
+simNflTagDepth exit=0 6s | simNflTagDepth: 62/62 checks passed
+simNhlCpuRosters exit=0 3s | simNhlCpuRosters passed: /home/runner/work/_temp/t-each1b/each-simNhlCpuRosters-64thSY/dukb-nhl969-proof-xQJB2F
+simNhlPlayoffFormatHistory exit=0 3s | simNhlPlayoffFormatHistory: green. The timeline is whole and twice sourced.
+simNoInventedQuotes exit=0 55s | simNoInventedQuotes: green. No real player is quoted or accused anywhere.
+simManagerSpec exit=0 225s | simManagerSpec: all green
+simPerfectSeasonWheel exit=1 114s | simPerfectSeasonWheel: 8 failure(s) in 1:mlb, 1:nba, 1:nfl, 1:nhl, 3:mlb, 3:nba, 3:nfl, 3:nhl || FAIL [nhl]: the wheel read returned nothing (database unreachable or a page failed every retry) / FAIL [mlb]: the wheel read returned nothing (database unreachable or a page failed every retry)
+simPlayerBingoLineFeedback exit=0 15s | simPlayerBingoLineFeedback: CRLF bindings proved, original bytes held and owned copies cleaned; fictional fixtures, no browser or backend calls.
+simPlayersPool exit=1 6s | bakePlayers: Supabase unreachable (Error: Offline harness blocked fetch to https://flawuiqbvjobmkfkauhw.supabase.co) for player_market_values?select=id,player_name,position,age,nationality,club,market
+simPrerenderTables exit=0 2s | simPrerenderTables: green. 23 data backed pages carry every table as a table, row for row.
+simQuotaHonesty exit=0 1s | simQuotaHonesty: green. When the allowance is gone, Soccer Grid says so and stops asking for retries; Build Your XI blocks the one pick, keeps the search box and never says the lineup is saved.
+simRebuildEconomy exit=0 2s | simRebuildEconomy: all checks passed
+simRecords exit=0 1s | [SIM_OFFLINE_BLOCK] database fetch https://flawuiqbvjobmkfkauhw.supabase.co
+simReservedNames exit=0 6s | simReservedNames: 89 reserved, ordinary-name, substitution, profanity and blank-name checks passed.
+simRevealScroll exit=1 2s | Node.js v24.21.0
+simRunnerTransport exit=0 24s | Transport cleanup: owned browsers, contexts, server and copies closed/removed; runner/helper/stimulus source bytes held. || Runner normal: 12/12 actual child-process outcomes passed; no offline probe/retry and honest PASS/SKIP/FAIL/EMPTY, including discarded nested diagnostics.
+simScoreShown exit=0 62s | simScoreShown: all sections green
+simSeasonCentreNeutral exit=0 58s | simSeasonCentreNeutral: 37 checks, 0 failed
+simSeasonVerdict exit=0 8s | simSeasonVerdict: green. Four pages hand the card the sim's record, 16 renders moved nothing, and the slam lands under either motion setting.
+simSharedResultChallenge exit=0 9s | simSharedResultChallenge: production modules remain unchanged; controls use only owned temporary copies.
+simSitemap exit=0 1s | simSitemap: green. Google only ever hears about real pages.
+simMoney exit=1 528s | 1 FAILURES || FAIL: biggest save is 89.5 KB / 1 FAILURES
+simSoccerCareerRecords exit=0 22s | simSoccerCareerRecords: 12 outcome checks green, three effective controls caught || [41m[1m FAIL [22m[49m src/test/soccerCareerRecords.test.tsx[2m > [22mSoccer Career record book[2m > [22mseparates a loan from a permanent spell and pres / [41m[1m FAIL [22m[49m src/test/soccerCareerRecords.test.tsx[2m > [22mSoccer Career record book[2m > [22muses actual records, keeps ties earliest and req
+simSoccerContractMoves exit=0 4s | simSoccerContractMoves: all full-save contract and club-move checks passed
+simSoccerAwardsShape exit=0 49s | simSoccerAwardsShape: sections 1, 2, 3 green; sections 4, 5, 6, 7 did not run. The live tables were NOT checked.
+simSoccerFarewell exit=0 19s | Soccer farewell:9 healthy groups,168 full original state/RNG pairs,6 effective source controls,6 prepared native branches.
+simSoccerInternationalReturnPageControl exit=0 58s | PASS actual page/component source held and exact evidence retained.
+simSoccerStintNameFold exit=1 7s | could not read the table (Offline harness blocked fetch to https://flawuiqbvjobmkfkauhw.supabase.co); refusing to run
+simSportEras exit=0 2s | ALL SPORT ERA CHECKS PASSED
+simStaffScreen exit=0 15s | simStaffScreen: production source unchanged; owned temporary copies cleaned.
+simStockFormat exit=0 5s | simStockFormat: green. Every offered season deals real choice, no card names anyone, reading the card beats every lazy buyer, the years are the table's rows, and the cap is 100.
+simSoccerOpponentLabels exit=0 73s | PASS simSoccerOpponentLabels: complete original/current careers, display controls and whole undo
+simTicker exit=0 2s | simTicker: green. The wire carries the day's games and nothing about the site.
+simTradeTalksMotion exit=0 8s | simTradeTalksMotion: six actual-card engine-text, appended-reply, immediate-action, focus and one-shot checks passed.
+simTransferPathEmptyState exit=0 13s | simTransferPathEmptyState: green. The empty list says why, and never tells a pool man he is not in the pool.
+simTransfers exit=0 182s | ALL TRANSFER CHECKS PASSED
+simTycoonClock exit=0 4s | simTycoonClock: green. The match is played, goals are scored, and no play time is dropped.
+simTacticsEngine exit=0 248s | simTacticsEngine: PASS. A man is read in his slot, a second position is earned over counted weeks, the armband and the takers reach the stream, a duty moves the football a little, the bench is ordered
+simTycoonLoads exit=0 100s |    All eleven controls fired exactly where they should.
+simUclFormatHistory exit=0 4s | simUclFormatHistory: green. The timeline is whole, twice sourced, the generated block is fresh, and the engine plays what it says.
+simUnboundedSelects exit=1 2s | Node.js v24.21.0
+simUsCareerDefects exit=0 50s | simUsCareerDefects: 157 tests passed across the stat lines, the era cards and the shop cap.
+simUsCareerWeight exit=0 1s | simUsCareerWeight: green. 31 checks: the four wrappers hand the board their own binding, no shared file or binding imports another sport, and every control fired.
+simUsRivalSense exit=0 93s | simUsRivalSense: 43 checks, 0 failed (full size)
+simValidatorsFailClosed exit=0 1s | simValidatorsFailClosed: green. Nothing a validator could not check gets accepted.
+simTycoonSaleReview exit=0 243s | Tycoon sale review: passed. Evidence at /home/runner/work/ballpark-hero/ballpark-hero/tycoon-sale-review-artifacts/outcomes
+simWindow2026LaLiga exit=1 5s | SUPABASE unreachable (Error: Offline harness blocked fetch to https://flawuiqbvjobmkfkauhw.supabase.co) for player_market_values?select=club&year=eq.2026&club=eq.Atl%C3%A9tico%20de%20Madrid&limit=1 af
+simWorldCupSquads exit=1 0s | SUPABASE UNREACHABLE. NOTHING WAS CHECKED.
+simWhoAmINamesakes exit=1 38s | This harness reads the live database, so it can only run where egress to it is open (the desktop lane).
+simWritesAreSent exit=1 14s | simWritesAreSent: 2 failures || FAIL: the harness could not drive Guess the Nation to a finish: TimeoutError: locator.click: Timeout 8000ms exceeded. / FAIL: no guess was ever submitted, so this section proved nothing about the write
+simOpposition exit=SIGKILL 1500s | Everton, 2400 seasons an arm, every break seen and nothing changed by the player.
+runEach: done, 13 of 62 exited non zero
