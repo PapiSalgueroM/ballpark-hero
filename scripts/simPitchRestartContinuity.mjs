@@ -47,11 +47,12 @@ const receipt = { head: git(['rev-parse', 'HEAD']), parent: PARENT, phase, arm, 
 try {
   const sources = new Map();
   for (const file of files) {
-    const raw = await readFile(path.join(ROOT, file)); const body = lf(raw); sources.set(file, body);
+    let rawSha256; { const raw = await readFile(path.join(ROOT, file)); rawSha256 = hash(raw); }
+    const body = lf(await readFile(path.join(ROOT, file))); sources.set(file, body);
     const beforePath = path.join('units', arm, 'before', file + '.before');
     await mkdir(path.dirname(path.join(OUT, beforePath)), { recursive: true });
     await writeFile(path.join(OUT, beforePath), body);
-    receipt.before.push({ file, rawSha256: hash(raw), sha256: hash(body), beforePath });
+    receipt.before.push({ file, rawSha256, sha256: hash(body), beforePath });
     if (![TEST, 'scripts/simPitchRestartContinuity.mjs', '.github/workflows/pitch-restart-continuity.yml'].includes(file)) {
       const parent = lf(execFileSync('git', ['show', PARENT + ':' + file], { cwd: ROOT }));
       if (file === MOTION && phase === 'fixed') {

@@ -26,7 +26,7 @@ const OUT = path.join(process.env.AUTOCOMPLETE_TOUCH_OUT, CONTROL || PHASE);
 const REPORT = path.join(OUT, 'report.json');
 const require = createRequire(import.meta.url);
 const sha = bytes => createHash('sha256').update(bytes).digest('hex');
-const hash = file => sha(fs.readFileSync(file));
+const hash = file => { const bytes = fs.readFileSync(file); return sha(bytes); };
 const same = (a, b) => JSON.stringify(a) === JSON.stringify(b);
 const slash = name => name.replaceAll('\\', '/');
 fs.mkdirSync(OUT, { recursive: true });
