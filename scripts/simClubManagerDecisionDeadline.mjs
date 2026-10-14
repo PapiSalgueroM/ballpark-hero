@@ -12,6 +12,9 @@ import { fileURLToPath } from 'node:url';
 assert(process.env.CI && process.env.SIM_NETWORK === 'offline', 'Use remote offline CI only');
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const PARENT = '1ed26406', TEST = 'src/test/clubManagerDecisionDeadline.test.ts';
+/* Release BE join (Round BEG): the core files other than Decisions are bound to CORE_REF, PARENT on the packet branch;
+   on a newer core (Release BD) the join passes CM_DEADLINE_CORE_REF=HEAD so they bind to the committed tree under test. */
+const CORE_REF = process.env.CM_DEADLINE_CORE_REF || PARENT;
 const ENGINE = path.join(ROOT, 'src/lib/clubManager.ts');
 const DECISIONS = path.join(ROOT, 'src/lib/clubManagerDecisions.ts');
 const CONTROL = process.env.CM_DEADLINE_CONTROL || '';
@@ -56,7 +59,7 @@ function git(args) {
 }
 const sourceHead = git(['rev-parse', 'HEAD']).trim();
 const parentAppHashes = app.map(file => {
-  const name = path.relative(ROOT, file).replaceAll('\\', '/'), before = git(['show', `${PARENT}:${name}`]);
+  const name = path.relative(ROOT, file).replaceAll('\\', '/'), before = git(['show', `${file === DECISIONS ? PARENT : CORE_REF}:${name}`]);
   const row = { file: name, parentSha256: sha(before), candidateSha256: sha(sources.get(file)) };
   if (RED || file !== DECISIONS) assert.equal(row.candidateSha256, row.parentSha256, 'Only fixed Decisions may differ from the held parent app');
   return row;
