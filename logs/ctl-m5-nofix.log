@@ -1,0 +1,8 @@
+ 1 file changed, 4 deletions(-)
+stderr | src/test/saveMovedNotice.test.tsx > SaveMovedNotice > Reload takes the first press while a dialog behind it holds the page (Release BD, the lead ruling of Round 1330)
+   × SaveMovedNotice > Reload takes the first press while a dialog behind it holds the page (Release BD, the lead ruling of Round 1330) 68ms
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  src/test/saveMovedNotice.test.tsx > SaveMovedNotice > Reload takes the first press while a dialog behind it holds the page (Release BD, the lead ruling of Round 1330)
+AssertionError: expected 'none' not to be 'none' // Object.is equality
+      Tests  1 failed | 5 passed (6)
+vitest exit 1
