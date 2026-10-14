@@ -1,0 +1,3 @@
+#!build
+#!playwright
+cmp4: bash .rc/x/cmp.sh simCreation simGmDealTableFixture simLineupVerifiedPositions simMissingXiReach simMlbGridPool simNbaLineupSearch simNoZeroFacts simPlayerSearchAccents simPublicWrites simRarityAgreement simSoccerGridTiers simTycoonGoalFlight simValidatePlayerRecords simWindow2026SerieA simWorldXiPositions 
