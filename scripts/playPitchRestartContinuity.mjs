@@ -35,7 +35,8 @@ const check = (ok, name) => { if (!ok) report.failures.push(name); };
 const source = new Map();
 for (const file of sourceFiles) {
   const beforePath = path.join('before', file + '.before').replaceAll('\\', '/');
-  let rawSha256; { const bytes = fs.readFileSync(path.join(ROOT, file)); rawSha256 = sha(bytes); write(path.join(OUT, beforePath), bytes); }
+  let rawSha256; { const bytes = fs.readFileSync(path.join(ROOT, file)); rawSha256 = sha(bytes); }
+  fs.mkdirSync(path.dirname(path.join(OUT, beforePath)), { recursive: true }); fs.copyFileSync(path.join(ROOT, file), path.join(OUT, beforePath));
   const text = lf(fs.readFileSync(path.join(ROOT, file))); source.set(file, text);
   report.sources.push({ file, rawSha256, sha256: sha(text), beforePath });
 }
@@ -145,7 +146,7 @@ try {
   const normal = report.cases.filter(c => c.arm === 'normal'), controls = report.cases.filter(c => c.arm === 'oldrender');
   check(normal.length === 6 && normal.every(c => c.continuous) && controls.length === 6 && controls.every(c => !c.continuous), 'six actual fixed journeys and six effective whole-parent controls');
   check(report.captures.length === 24 && new Set(report.captures.map(c => c.path)).size === 24, 'twenty-four distinct original captures');
-  for (const row of report.sources) { const bytes = fs.readFileSync(path.join(ROOT, row.file)); check(sha(bytes) === row.rawSha256, row.file + ' final physical hold'); }
+  for (const row of report.sources) { let digest; { const bytes = fs.readFileSync(path.join(ROOT, row.file)); digest = sha(bytes); } check(digest === row.rawSha256, row.file + ' final physical hold'); }
   for (const row of report.packages) check(sha(fs.readFileSync(path.join(ROOT, row.file))) === row.sha256, row.file + ' final package hold');
   for (const row of report.tools) check(sha(fs.readFileSync(row.file)) === row.sha256, row.name + ' final tool package hold');
   for (const row of installed) check(sha(fs.readFileSync(path.join(ROOT, row.file, 'package.json'))) === row.sha256, row.file + ' final locked hold');
