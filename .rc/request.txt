@@ -1,0 +1,3 @@
+#!serial
+fleet-old: node .rc/x/mutOldEngine.mjs && CM_FIXTURE_BASE=dec9075b node scripts/simCmFixtureFleet.mjs; s=$?; git checkout HEAD -- src; exit $s
+realfix-old: node .rc/x/mutOldEngine.mjs && CM_FIXTURE_BASE=dec9075b NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCmRealFixtures.mjs; s=$?; git checkout HEAD -- src; exit $s
