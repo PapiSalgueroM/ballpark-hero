@@ -18,7 +18,7 @@ const career = (extra: Partial<CareerState> = {}): CareerState => {
     clubName: 'Fixture Town', season: 2, week: 12, budget: 40, boardConfidence: 60,
     squad: [player('a', { suspendedMatches: 2, seasonReds: 1 }), player('b', { morale: 30 }), player('c', { morale: 80 })],
     press: { mood: 50, pending: null, lastWeek: 0, answered: 0, ducked: 0, nextFire: 0, nextSharpen: 0 },
-    inbox: [],
+    inbox: [], form: [],
     ...extra,
   } as unknown as CareerState;
   ensureBooks(s);
@@ -102,6 +102,11 @@ describe('Round 979 decisions deck', () => {
      the label ends in the effect's own words, and the state moves in exactly
      the one number named, by exactly the amount named. */
   it('moves only the number each answer names, by exactly its amount', () => {
+    const guard = process.env.CM_GATE_WORDS_CONTROL === 'substring' ? /fan mood|crowd|gate/ : /fan mood|crowd|\bgate\b/;
+    const delegated = DECK.find(card => card.id === 'boardPressure')!.options[2], s = career();
+    const label = optionLabel(delegated.verb, delegated.effect, s).toLowerCase();
+    expect(!guard.test(label), 'unlabelled gate guard rejected the delegate action').toBe(true);
+    for (const word of ['gate', 'crowd', 'fan mood']) expect(guard.test(word)).toBe(true);
     for (const card of DECK) {
       card.options.forEach((o, i) => {
         const s = career();
@@ -125,7 +130,7 @@ describe('Round 979 decisions deck', () => {
         const want = { board: 0, gate: 0, press: 0, morale: 0, budget: 0 };
         if (o.effect.kind === 'move') want[o.effect.meter] = o.effect.delta;
         expect(moved, `${card.id} option ${i}`).toEqual(want);
-        expect(label.toLowerCase(), `${card.id} option ${i}`).not.toMatch(/fan mood|crowd|gate/);
+        expect(label.toLowerCase(), `${card.id} option ${i}`).not.toMatch(guard);
         expect(after.squad.filter(p => p.id !== 'b')).toEqual(s.squad.filter(p => p.id !== 'b'));
         expect(deskOf(after)[0].resolved).toBeTruthy();
       });

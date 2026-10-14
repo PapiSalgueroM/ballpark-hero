@@ -215,6 +215,14 @@ const hasPress = (s: CareerState): boolean => !!s.press && typeof s.press.mood =
 const move = (meter: DeskMeter, delta: number): DeskEffect => ({ kind: 'move', meter, delta });
 const NONE: DeskEffect = { kind: 'none' };
 
+function deskPlayer(s: CareerState, fits: (p: CareerState['squad'][number]) => boolean) {
+  return s.squad.filter(fits).sort((a, b) => a.morale - b.morale || a.id.localeCompare(b.id))[0] ?? null;
+}
+const injuredPlayer = (s: CareerState) => deskPlayer(s, p => p.injuryWeeks > 0 && p.morale < 75);
+const newGraduate = (s: CareerState) => deskPlayer(s, p => p.academyGrad === true && p.apps >= 1 && p.apps <= 3);
+const limitedPlayer = (s: CareerState) => deskPlayer(s, p => !p.isYouth && !p.onLoan && p.injuryWeeks === 0 && p.suspendedMatches === 0
+  && p.morale < 70 && (p.lastTen?.length ?? 0) >= 5 && p.lastTen!.reduce((sum, share) => sum + share, 0) / p.lastTen!.length < 0.3);
+
 /** The man whose head has dropped furthest, if anybody's has. */
 function lowestMorale(s: CareerState): { id: string; name: string; morale: number } | null {
   const p = s.squad
@@ -286,6 +294,62 @@ export const DECK: DeckCard[] = [
       { verb: "Give it to the club's community partner", effect: move('press', 2) },
       { verb: 'Put it in the transfer pot', effect: move('budget', 0.1) },
       { verb: 'Leave it in the kitty', effect: NONE },
+    ],
+  },
+  {
+    id: 'poorRun', from: 'The head coach',
+    fits: s => hasPress(s) && s.form.length >= 3 && s.form.slice(-3).filter(result => result === 'L').length >= 2,
+    text: () => 'Two or more losses in the last three matches. Staff want a review; the press officer offers a public update.',
+    options: [
+      { verb: 'Give the board your review', effect: move('board', 3) },
+      { verb: 'Give a calm public update', effect: move('press', 3) },
+      { verb: 'Leave it with staff', effect: NONE },
+    ],
+  },
+  {
+    id: 'boardPressure', from: 'The board',
+    fits: s => hasPress(s) && Number.isFinite(s.boardConfidence) && s.boardConfidence < 35,
+    text: s => `Board patience was ${Math.round(s.boardConfidence * 10) / 10} when this note was written. They want a progress review; the press officer offers an update too.`,
+    options: [
+      { verb: 'Meet the board', effect: move('board', 3) },
+      { verb: 'Give the public update', effect: move('press', 3) },
+      { verb: 'Delegate the review', effect: NONE },
+    ],
+  },
+  {
+    id: 'pressPressure', from: 'The press officer', fits: s => hasPress(s) && s.press!.mood < 35,
+    text: s => `Press mood was ${s.press!.mood} when this note was written. The press officer suggests a calm briefing, or a private review with the board.`,
+    options: [
+      { verb: 'Hold the calm briefing', effect: move('press', 4) },
+      { verb: 'Review it with the board', effect: move('board', 3) },
+      { verb: 'Leave it with the press officer', effect: NONE },
+    ],
+  },
+  {
+    id: 'injurySupport', from: 'The medical team', fits: () => true, who: injuredPlayer,
+    text: s => { const p = injuredPlayer(s)!; return `${p.name} had ${p.injuryWeeks} injury week${p.injuryWeeks === 1 ? '' : 's'} left when this note was written. Staff suggest a check in or a board update. Neither changes the recovery time.`; },
+    options: [
+      { verb: 'Check in with him', effect: move('morale', 6) },
+      { verb: 'Update the board', effect: move('board', 2) },
+      { verb: 'Leave it with medical staff', effect: NONE },
+    ],
+  },
+  {
+    id: 'academyStepUp', from: 'The academy staff', fits: () => true, who: newGraduate,
+    text: s => { const p = newGraduate(s)!; return `${p.name} has made ${p.apps} first team appearance${p.apps === 1 ? '' : 's'}. Staff suggest a check in or a progress note to the board.`; },
+    options: [
+      { verb: 'Recognise his progress', effect: move('morale', 6) },
+      { verb: 'Send the progress note', effect: move('board', 2) },
+      { verb: 'Leave it with academy staff', effect: NONE },
+    ],
+  },
+  {
+    id: 'minutesCheck', from: 'The head coach', fits: () => true, who: limitedPlayer,
+    text: s => { const p = limitedPlayer(s)!; return `${p.name} has a low playing share across ${p.lastTen!.length} recorded matches and low morale. Staff suggest a conversation, with no promise of a start.`; },
+    options: [
+      { verb: 'Hear him out', effect: move('morale', 6) },
+      { verb: 'Explain the situation to the board', effect: move('board', 2) },
+      { verb: 'Leave it with the coach', effect: NONE },
     ],
   },
 ];
@@ -411,6 +475,9 @@ export function answerDecision(career: CareerState, id: string, optionIdx: numbe
     ...extra,
     decisions: desk.map(d => (d.id === id ? { ...d, options: [], resolved, ...(outcome ? { outcome } : {}) } : d)),
   });
+  if (item.kind === 'situation' && career.live) {
+    return close('The next match has already kicked off, so the reply window closed. Nothing changed.');
+  }
   const effect = opt.effect;
 
   if (effect.kind === 'acceptBan') {
