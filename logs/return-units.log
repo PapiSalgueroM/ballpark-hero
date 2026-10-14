@@ -1,0 +1,22 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/test/soccerInternationalReturn.test.ts [2m([22m[2m83 tests[22m[2m)[22m[33m 334[2mms[22m[39m
+ [32m✓[39m src/test/soccerInternationalReturnPage.test.tsx [2m([22m[2m10 tests[22m[2m)[22m[33m 1513[2mms[22m[39m
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ [32m✓[39m src/test/soccerCareerSaveRetry.test.tsx [2m([22m[2m8 tests[22m[2m)[22m[33m 5262[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career failed write recovery[2m > [22mretries the actually earned training result exactly once and restores it on the next mount [33m 1624[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career failed write recovery[2m > [22mretries the latest earned season after more than one failed career change without rerunning its engine [33m 1412[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career failed write recovery[2m > [22mclears a failed save on the next successful automatic save and alerts again on a later refusal [33m 1382[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career failed write recovery[2m > [22mclears the old failure after explicit reset and saves the replacement career without old progress [33m 323[2mms[22m[39m
+ [32m✓[39m src/test/soccerInternationalReturnUi.test.tsx [2m([22m[2m21 tests[22m[2m)[22m[33m 481[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m4 passed[39m[22m[90m (4)[39m
+[2m      Tests [22m [1m[32m122 passed[39m[22m[90m (122)[39m
+[2m   Start at [22m 19:29:41
+[2m   Duration [22m 14.49s[2m (transform 2.00s, setup 173ms, collect 3.64s, tests 7.59s, environment 1.14s, prepare 221ms)[22m
+
+JSON report written to /home/runner/work/ballpark-hero/ballpark-hero/soccer-international-return-artifacts/units.json
+PASS international return units: {"mode":"units","total":122,"files":[{"file":"soccerInternationalReturn.test.ts","passed":83},{"file":"soccerInternationalReturnUi.test.tsx","passed":21},{"file":"soccerInternationalReturnPage.test.tsx","passed":10},{"file":"soccerCareerSaveRetry.test.tsx","passed":8}]}
