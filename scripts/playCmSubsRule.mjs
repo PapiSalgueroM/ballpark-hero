@@ -142,7 +142,8 @@ async function openMatch(page) {
 }
 /** The dressing room's changes chip, as read. */
 async function chipText(page) {
-  const chip = page.locator('div').filter({ hasText: /^Changes\s*·\s*\d+\s*left$/ }).last();
+  /* The chip opens with its icon and a space before the words. */
+  const chip = page.locator('div').filter({ hasText: /^\s*Changes\s*·\s*\d+\s*left\s*$/ }).last();
   await chip.waitFor({ timeout: 10000 }).catch(() => {});
   return (await chip.textContent().catch(() => '')) ?? '';
 }
