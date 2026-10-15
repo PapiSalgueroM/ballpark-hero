@@ -1,0 +1,20 @@
+simCareerAwardsNight SIM_AWARDS_NIGHT_CONTROL=numberback: head exit 1, chainOut exit 1, 13 verdict lines on the head
+CONTROL numberback active: section 3 must go red
+CONTROL numberback: section 3 FIRED (red sections: 1, 3, 6)
+FAIL: career 8 parts at step 126 of 239: fixture bsb77be62a22 (phase bs), now bs5dcc31de55; the step before matched ss0ce54161e9
+FAIL: every complete attributed per-step save must match the independent original
+FAIL: greatest_ever miss at popularity 100, rivalry 50: says Popularity +8, moved 0
+FAIL: greatest_ever miss at popularity 100, rivalry 95: says Popularity +8, moved 0
+FAIL: greatest_ever miss at popularity 95, rivalry 50: says Popularity +8, moved 5
+FAIL: greatest_ever miss at popularity 95, rivalry 95: says Popularity +8, moved 5
+FAIL: night 10 (career 0, 2002) differs: fixture rank 1 [YOU:84, Michael Owen:75, Steven Gerrard:73, David Beckham:66, Rivaldo:64, Frank Lampard:63, Ronaldo:62, Luís Figo:59, Ronaldinho:59, Raúl:57], now rank 1 [YOU:84
+FAIL: speeches[9] differs: fixture {"kind":"bdor","sample":0,"seed":0,"id":"greatest_ever","d":{},"line":"🐐 \"I am the greatest to ever do this.\" Delivered with such calm that people just... agreed.","h":"7a5cc78a26"
+FAIL: the log line prints a number the speech did not do on 19 real winners
+FAIL: tournaments[209] differs: fixture {"c":24,"year":2000,"name":"European Championship","result":"Winner","speeches":[{"id":"for_the_country","d":{"socialMediaFollowers":3},"line":"🏆 You dedicated it to every kid i
+simCareerAwardsNight: 10 FAILURES
+head last line: simCareerAwardsNight: 10 FAILURES
+DIFFERENT on chainOut:
+11c11
+< FAIL: the log line prints a number the speech did not do on 19 real winners
+---
+> FAIL: the log line prints a number the speech did not do on 16 real winners

@@ -1,0 +1,16 @@
+simCareerAwardsNight SIM_AWARDS_NIGHT_CONTROL=reorderdraw: head exit 1, chainOut exit 1, 12 verdict lines on the head
+CONTROL reorderdraw active: section 1 must go red
+CONTROL reorderdraw: section 1 FIRED (red sections: 1)
+FAIL: career 0 parts at step 4 of 229: fixture pl52d44ceea2 (phase pl), now plf696d4eeac; the step before matched trfeb9a74a5e
+FAIL: every complete attributed per-step save must match the independent original
+FAIL: markup[5] differs: fixture {"what":"bdor shortlist","night":"2:2013","ui":"44e8db79a7"}, now {"what":"bdor shortlist","night":"2:2013","ui":"19f6cc7239"}
+FAIL: names[2] differs: fixture "Ruud Gullit", now "Marco van Basten"
+FAIL: night 0 (career 0, 1992) differs: fixture rank null [Romário:77, Hristo Stoichkov:67, Ruud Gullit:51, Marco van Basten:47, George Weah:43, Alan Shearer:43, Roberto Baggio:39, Paolo Maldini:39, Dennis Bergkamp:38, 
+FAIL: speeches[12] differs: fixture {"kind":"bdor","sample":1,"seed":0,"id":"thank_rival","d":{"integrityBonus":5,"rivalryIntensity":-10},"line":"🎤 On the biggest stage you thanked Dario Kovač by name: \"he made me t
+FAIL: the entire attributed random draw stream must match the independent original
+FAIL: the tournament card was drawn for 102 tournaments, the fixture recorded 103
+FAIL: tournaments[4] differs: fixture {"c":0,"year":2004,"name":"European Championship","result":"Winner","speeches":[{"id":"for_the_country","d":{"socialMediaFollowers":3},"line":"🏆 You dedicated it to every kid in E
+simCareerAwardsNight: 9 FAILURES
+head last line: simCareerAwardsNight: 9 FAILURES
+same FAIL and verdict lines on both trees
+FIRED-SAME

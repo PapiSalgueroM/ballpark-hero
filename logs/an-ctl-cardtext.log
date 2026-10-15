@@ -1,0 +1,13 @@
+simCareerAwardsNight SIM_AWARDS_NIGHT_CONTROL=cardtext: head exit 1, chainOut exit 1, 9 verdict lines on the head
+CONTROL cardtext active: section 6 must go red
+CONTROL cardtext: section 6 FIRED (red sections: 6)
+FAIL: a night staged before the measure (an old save) still prints a number nobody measured
+FAIL: the winner line at popularity 100 says "Legacy 20" and there is no such meter
+FAIL: the winner line at popularity 50 moves Popularity 20 and never says so
+FAIL: the winner line at popularity 50 says "Legacy 20" and there is no such meter
+FAIL: the winner line at popularity 95 moves Popularity 5 and never says so
+FAIL: the winner line at popularity 95 says "Legacy 20" and there is no such meter
+simCareerAwardsNight: 6 FAILURES
+head last line: simCareerAwardsNight: 6 FAILURES
+same FAIL and verdict lines on both trees
+FIRED-SAME

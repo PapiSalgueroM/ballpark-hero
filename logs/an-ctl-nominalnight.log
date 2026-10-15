@@ -1,0 +1,16 @@
+simCareerAwardsNight SIM_AWARDS_NIGHT_CONTROL=nominalnight: head exit 1, chainOut exit 1, 12 verdict lines on the head
+CONTROL nominalnight active: section 6 must go red
+CONTROL nominalnight: section 6 FIRED (red sections: 1, 2, 6)
+FAIL: a capped win from 10 staged moved "Alpha +9", it landed "Alpha +5"
+FAIL: a capped win from 15 staged moved "Alpha +9", it landed ""
+FAIL: every complete attributed per-step save must match the independent original
+FAIL: no real win was cut short by the popularity cap, so the replay cannot tell a measured night from one that prints its steps
+FAIL: the 2nd place line at popularity 100 says Popularity 5, it moved 0
+FAIL: the 3rd place line at popularity 100 says Popularity 5, it moved 0
+FAIL: the card of a winner already at popularity 100 still promises a popularity move
+FAIL: the winner line at popularity 100 says Popularity 20, it moved 0
+FAIL: the winner line at popularity 95 says Popularity 20, it moved 5
+simCareerAwardsNight: 9 FAILURES
+head last line: simCareerAwardsNight: 9 FAILURES
+same FAIL and verdict lines on both trees
+FIRED-SAME

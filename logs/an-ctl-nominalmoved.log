@@ -1,0 +1,26 @@
+simCareerAwardsNight SIM_AWARDS_NIGHT_CONTROL=nominalmoved: head exit 1, chainOut exit 1, 9 verdict lines on the head
+CONTROL nominalmoved active: section 6 must go red
+CONTROL nominalmoved: section 6 FIRED (red sections: 6)
+FAIL: and 157 more
+FAIL: greatest_ever on real win 0: the card says Morale 5, it moved 3
+FAIL: tears on real win 0: the card says Morale 8, it moved 3
+FAIL: tears on real win 0: the card says Popularity 10, it moved 0
+FAIL: thank_rival on real win 0: the card says Popularity 12, it moved 0
+FAIL: thank_rival on real win 0: the card says Rivalry -20, it moved -5
+simCareerAwardsNight: 6 FAILURES
+head last line: simCareerAwardsNight: 6 FAILURES
+DIFFERENT on chainOut:
+3,8c3,8
+< FAIL: and 157 more
+< FAIL: greatest_ever on real win 0: the card says Morale 5, it moved 3
+< FAIL: tears on real win 0: the card says Morale 8, it moved 3
+< FAIL: tears on real win 0: the card says Popularity 10, it moved 0
+< FAIL: thank_rival on real win 0: the card says Popularity 12, it moved 0
+< FAIL: thank_rival on real win 0: the card says Rivalry -20, it moved -5
+---
+> FAIL: and 148 more
+> FAIL: greatest_ever on real win 0: the card moves Popularity 8 and never says so
+> FAIL: thank_rival on real win 0: the card says Popularity 12, it moved 10
+> FAIL: thank_rival on real win 0: the card says Rivalry -20, it moved 0
+> FAIL: thank_rival on real win 1: the card says Popularity 12, it moved 0
+> FAIL: thank_rival on real win 1: the card says Rivalry -20, it moved 0

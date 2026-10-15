@@ -1,0 +1,8 @@
+simCareerAwardsNight SIM_AWARDS_NIGHT_CONTROL=speechcopy: head exit 1, chainOut exit 1, 4 verdict lines on the head
+CONTROL speechcopy active: section 5 must go red
+CONTROL speechcopy: section 5 FIRED (red sections: 5)
+FAIL: src/components/soccer-career/InternationalPanel.tsx carries its own spoken speech block again
+simCareerAwardsNight: 1 FAILURES
+head last line: simCareerAwardsNight: 1 FAILURES
+same FAIL and verdict lines on both trees
+FIRED-SAME

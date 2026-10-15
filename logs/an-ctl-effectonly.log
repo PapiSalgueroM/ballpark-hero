@@ -1,0 +1,17 @@
+simCareerAwardsNight SIM_AWARDS_NIGHT_CONTROL=effectonly: head exit 1, chainOut exit 1, 13 verdict lines on the head
+CONTROL effectonly active: section 6 must go red
+CONTROL effectonly: section 6 FIRED (red sections: 1, 2, 6)
+FAIL: a capped win from 10 staged moved "", it landed "Alpha +5"
+FAIL: career 0 parts at step 130 of 229: fixture pl4cfc5472a6 (phase pl), now pl9b6151b05a; the step before matched tra949414446
+FAIL: every complete attributed per-step save must match the independent original
+FAIL: night 10 (career 0, 2002) differs: fixture rank 1 [YOU:84, Michael Owen:75, Steven Gerrard:73, David Beckham:66, Rivaldo:64, Frank Lampard:63, Ronaldo:62, Luís Figo:59, Ronaldinho:59, Raúl:57], now rank 1 [YOU:84
+FAIL: settle at place 1 moved the wrong meters
+FAIL: settle at place 1 staged moved "" instead of "Alpha +9"
+FAIL: speeches[0] differs: fixture {"kind":"bdor","sample":0,"seed":0,"id":"thank_rival","d":{"integrityBonus":5},"line":"🎤 On the biggest stage you thanked Dario Kovač by name: \"he made me this good.\" The room sto
+FAIL: the entire attributed random draw stream must match the independent original
+FAIL: the winner night at popularity 50 moved {"popularity":20}, its steps are {"marketValue":15,"popularity":20}
+FAIL: tournaments[3] differs: fixture {"c":0,"year":2002,"name":"World Cup","result":"Winner","speeches":[{"id":"for_the_country","d":{"socialMediaFollowers":3},"line":"🏆 You dedicated it to every kid in England playi
+simCareerAwardsNight: 10 FAILURES
+head last line: simCareerAwardsNight: 10 FAILURES
+same FAIL and verdict lines on both trees
+FIRED-SAME

@@ -1,0 +1,10 @@
+simCareerAwardsNight SIM_AWARDS_NIGHT_CONTROL=speechtwice: head exit 1, chainOut exit 1, 6 verdict lines on the head
+CONTROL speechtwice active: section 6 must go red
+CONTROL speechtwice: section 6 FIRED (red sections: 6)
+FAIL: a second speech can be given on the same night
+FAIL: a speech can be given off the ceremony screen
+FAIL: a stale ceremony offers a speech for a past win
+simCareerAwardsNight: 3 FAILURES
+head last line: simCareerAwardsNight: 3 FAILURES
+same FAIL and verdict lines on both trees
+FIRED-SAME

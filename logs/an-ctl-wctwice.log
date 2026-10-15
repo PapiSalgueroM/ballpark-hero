@@ -1,0 +1,18 @@
+simCareerAwardsNight SIM_AWARDS_NIGHT_CONTROL=wctwice: head exit 1, chainOut exit 1, 11 verdict lines on the head
+CONTROL wctwice active: section 7 must go red
+CONTROL wctwice: section 7 FIRED (red sections: 7)
+FAIL: a lost tournament offers a speech
+FAIL: a speech can be given off the tournament screen
+FAIL: and 251 more
+FAIL: call_out_doubters on real won tournament 0: a second speech was given
+FAIL: for_the_country on real won tournament 0: a second speech was given
+FAIL: for_the_country on real won tournament 1: a second speech was given
+FAIL: quiet_lap on real won tournament 0: a second speech was given
+FAIL: shirt_to_the_fans on real won tournament 0: a second speech was given
+simCareerAwardsNight: 8 FAILURES
+head last line: simCareerAwardsNight: 8 FAILURES
+DIFFERENT on chainOut:
+5c5
+< FAIL: and 251 more
+---
+> FAIL: and 303 more

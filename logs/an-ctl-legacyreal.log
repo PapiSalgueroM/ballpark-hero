@@ -1,0 +1,8 @@
+simCareerAwardsNight SIM_AWARDS_NIGHT_CONTROL=legacyreal: head exit 1, chainOut exit 1, 4 verdict lines on the head
+CONTROL legacyreal active: section 4 must go red
+CONTROL legacyreal: section 4 FIRED (red sections: 4)
+FAIL: a sport other than Soccer ranks real people: src/lib/controlCareerSport.ts
+simCareerAwardsNight: 1 FAILURES
+head last line: simCareerAwardsNight: 1 FAILURES
+same FAIL and verdict lines on both trees
+FIRED-SAME

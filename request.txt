@@ -1,0 +1,19 @@
+# Round BFH a3: simCareerAwardsNight's eighteen controls on head and chainOut
+an-ctl-reorderdraw: bash .rc/x/ctlcmp.sh simCareerAwardsNight SIM_AWARDS_NIGHT_CONTROL reorderdraw
+an-ctl-winnernottop: bash .rc/x/ctlcmp.sh simCareerAwardsNight SIM_AWARDS_NIGHT_CONTROL winnernottop
+an-ctl-speechleak: bash .rc/x/ctlcmp.sh simCareerAwardsNight SIM_AWARDS_NIGHT_CONTROL speechleak
+an-ctl-numberback: bash .rc/x/ctlcmp.sh simCareerAwardsNight SIM_AWARDS_NIGHT_CONTROL numberback
+an-ctl-wcleaves: bash .rc/x/ctlcmp.sh simCareerAwardsNight SIM_AWARDS_NIGHT_CONTROL wcleaves
+an-ctl-wctwice: bash .rc/x/ctlcmp.sh simCareerAwardsNight SIM_AWARDS_NIGHT_CONTROL wctwice
+an-ctl-wcnominal: bash .rc/x/ctlcmp.sh simCareerAwardsNight SIM_AWARDS_NIGHT_CONTROL wcnominal
+an-ctl-wccardmute: bash .rc/x/ctlcmp.sh simCareerAwardsNight SIM_AWARDS_NIGHT_CONTROL wccardmute
+an-ctl-followersbare: bash .rc/x/ctlcmp.sh simCareerAwardsNight SIM_AWARDS_NIGHT_CONTROL followersbare
+an-ctl-legacyreal: bash .rc/x/ctlcmp.sh simCareerAwardsNight SIM_AWARDS_NIGHT_CONTROL legacyreal
+an-ctl-secondcopy: bash .rc/x/ctlcmp.sh simCareerAwardsNight SIM_AWARDS_NIGHT_CONTROL secondcopy
+an-ctl-speechcopy: bash .rc/x/ctlcmp.sh simCareerAwardsNight SIM_AWARDS_NIGHT_CONTROL speechcopy
+an-ctl-cardtext: bash .rc/x/ctlcmp.sh simCareerAwardsNight SIM_AWARDS_NIGHT_CONTROL cardtext
+an-ctl-effectonly: bash .rc/x/ctlcmp.sh simCareerAwardsNight SIM_AWARDS_NIGHT_CONTROL effectonly
+an-ctl-nominalnight: bash .rc/x/ctlcmp.sh simCareerAwardsNight SIM_AWARDS_NIGHT_CONTROL nominalnight
+an-ctl-nominalmoved: bash .rc/x/ctlcmp.sh simCareerAwardsNight SIM_AWARDS_NIGHT_CONTROL nominalmoved
+an-ctl-numberedline: bash .rc/x/ctlcmp.sh simCareerAwardsNight SIM_AWARDS_NIGHT_CONTROL numberedline
+an-ctl-speechtwice: bash .rc/x/ctlcmp.sh simCareerAwardsNight SIM_AWARDS_NIGHT_CONTROL speechtwice

@@ -1,0 +1,18 @@
+simCareerAwardsNight SIM_AWARDS_NIGHT_CONTROL=winnernottop: head exit 1, chainOut exit 1, 14 verdict lines on the head
+CONTROL winnernottop active: section 2 must go red
+CONTROL winnernottop: section 2 FIRED (red sections: 1, 2, 6)
+FAIL: 1135 nights were not ranked after a rule moved points, so the winner was not the top ranked
+FAIL: career 0 parts at step 130 of 229: fixture pl4cfc5472a6 (phase pl), now pl89a8767f6e; the step before matched tra949414446
+FAIL: every complete attributed per-step save must match the independent original
+FAIL: markup[3] differs: fixture {"what":"bdor winner","night":"0:2002"}, now {"what":"bdor winner","night":null}
+FAIL: names[37] differs: fixture "Lionel Messi", now "Deco"
+FAIL: night 10 (career 0, 2002) differs: fixture rank 1 [YOU:84, Michael Owen:75, Steven Gerrard:73, David Beckham:66, Rivaldo:64, Frank Lampard:63, Ronaldo:62, Luís Figo:59, Ronaldinho:59, Raúl:57], now rank 3 [Michae
+FAIL: speeches[0] differs: fixture {"kind":"bdor","sample":0,"seed":0,"id":"thank_rival","d":{"integrityBonus":5},"line":"🎤 On the biggest stage you thanked Dario Kovač by name: \"he made me this good.\" The room sto
+FAIL: the entire attributed random draw stream must match the independent original
+FAIL: the tournament card was drawn for 102 tournaments, the fixture recorded 103
+FAIL: too few won ceremonies in the replay to prove the offer
+FAIL: tournaments[3] differs: fixture {"c":0,"year":2002,"name":"World Cup","result":"Winner","speeches":[{"id":"for_the_country","d":{"socialMediaFollowers":3},"line":"🏆 You dedicated it to every kid in England playi
+simCareerAwardsNight: 11 FAILURES
+head last line: simCareerAwardsNight: 11 FAILURES
+same FAIL and verdict lines on both trees
+FIRED-SAME

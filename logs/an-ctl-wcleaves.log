@@ -1,0 +1,19 @@
+simCareerAwardsNight SIM_AWARDS_NIGHT_CONTROL=wcleaves: head exit 1, chainOut exit 1, 12 verdict lines on the head
+CONTROL wcleaves active: section 7 must go red
+CONTROL wcleaves: section 7 FIRED (red sections: 7)
+FAIL: a pre Round 124 World Cup save does not keep its speech on the card the same way
+FAIL: and 251 more
+FAIL: call_out_doubters on real won tournament 0: the career left the tournament screen
+FAIL: for_the_country on real won tournament 0: the career left the tournament screen
+FAIL: for_the_country on real won tournament 1: the career left the tournament screen
+FAIL: no card named a follower move, so the unit check never ran
+FAIL: no real tournament speech was cut by a cap, so this cannot tell a measured card from one that prints the steps
+FAIL: quiet_lap on real won tournament 0: the career left the tournament screen
+FAIL: shirt_to_the_fans on real won tournament 0: the career left the tournament screen
+simCareerAwardsNight: 9 FAILURES
+head last line: simCareerAwardsNight: 9 FAILURES
+DIFFERENT on chainOut:
+4c4
+< FAIL: and 251 more
+---
+> FAIL: and 303 more

@@ -1,0 +1,26 @@
+simCareerAwardsNight SIM_AWARDS_NIGHT_CONTROL=wcnominal: head exit 1, chainOut exit 1, 9 verdict lines on the head
+CONTROL wcnominal active: section 7 must go red
+CONTROL wcnominal: section 7 FIRED (red sections: 7)
+FAIL: and 344 more
+FAIL: call_out_doubters on real won tournament 0: the card moves Popularity -8 and never says so
+FAIL: call_out_doubters on real won tournament 0: the card says Morale 15, it moved 9
+FAIL: for_the_country on real won tournament 0: the card says Morale 12, it moved 9
+FAIL: for_the_country on real won tournament 0: the card says Popularity 18, it moved 9
+FAIL: shirt_to_the_fans on real won tournament 0: the card says Popularity 14, it moved 9
+simCareerAwardsNight: 6 FAILURES
+head last line: simCareerAwardsNight: 6 FAILURES
+DIFFERENT on chainOut:
+3c3
+< FAIL: and 344 more
+---
+> FAIL: and 437 more
+5,8c5,8
+< FAIL: call_out_doubters on real won tournament 0: the card says Morale 15, it moved 9
+< FAIL: for_the_country on real won tournament 0: the card says Morale 12, it moved 9
+< FAIL: for_the_country on real won tournament 0: the card says Popularity 18, it moved 9
+< FAIL: shirt_to_the_fans on real won tournament 0: the card says Popularity 14, it moved 9
+---
+> FAIL: for_the_country on real won tournament 0: the card says Popularity 18, it moved 0
+> FAIL: for_the_country on real won tournament 1: the card says Popularity 18, it moved 0
+> FAIL: quiet_lap on real won tournament 0: the card says Popularity 6, it moved 0
+> FAIL: shirt_to_the_fans on real won tournament 0: the card says Popularity 14, it moved 0

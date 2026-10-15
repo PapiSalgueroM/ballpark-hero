@@ -1,0 +1,16 @@
+simCareerAwardsNight SIM_AWARDS_NIGHT_CONTROL=followersbare: head exit 1, chainOut exit 1, 9 verdict lines on the head
+CONTROL followersbare active: section 7 must go red
+CONTROL followersbare: section 7 FIRED (red sections: 7)
+FAIL: and 123 more
+FAIL: call_out_doubters on real won tournament 0: the card says "Followers +4", and Followers is counted in M or k
+FAIL: call_out_doubters on real won tournament 1: the card says "Followers +4", and Followers is counted in M or k
+FAIL: for_the_country on real won tournament 0: the card says "Followers +3", and Followers is counted in M or k
+FAIL: for_the_country on real won tournament 1: the card says "Followers +3", and Followers is counted in M or k
+FAIL: for_the_country on real won tournament 2: the card says "Followers +3", and Followers is counted in M or k
+simCareerAwardsNight: 6 FAILURES
+head last line: simCareerAwardsNight: 6 FAILURES
+DIFFERENT on chainOut:
+3c3
+< FAIL: and 123 more
+---
+> FAIL: and 149 more

@@ -1,0 +1,31 @@
+simCareerAwardsNight SIM_AWARDS_NIGHT_CONTROL=numberedline: head exit 1, chainOut exit 1, 15 verdict lines on the head
+CONTROL numberedline active: section 6 must go red
+CONTROL numberedline: section 6 FIRED (red sections: 6, 7)
+FAIL: and 34 more
+FAIL: and 8 more
+FAIL: call_out_doubters on real won tournament 0: the card's line prints a number beside the moved line
+FAIL: call_out_doubters on real won tournament 2: the card's line prints a number beside the moved line
+FAIL: call_out_doubters on real won tournament 3: the card's line prints a number beside the moved line
+FAIL: call_out_doubters on real won tournament 4: the card's line prints a number beside the moved line
+FAIL: call_out_doubters on real won tournament 6: the card's line prints a number beside the moved line
+FAIL: greatest_ever on real win 10: the card's line prints a number beside the moved line
+FAIL: greatest_ever on real win 1: the card's line prints a number beside the moved line
+FAIL: greatest_ever on real win 3: the card's line prints a number beside the moved line
+FAIL: greatest_ever on real win 7: the card's line prints a number beside the moved line
+FAIL: greatest_ever on real win 9: the card's line prints a number beside the moved line
+head last line: simCareerAwardsNight: 12 FAILURES
+DIFFERENT on chainOut:
+3c3
+< FAIL: and 34 more
+---
+> FAIL: and 35 more
+8,10c8,10
+< FAIL: call_out_doubters on real won tournament 4: the card's line prints a number beside the moved line
+< FAIL: call_out_doubters on real won tournament 6: the card's line prints a number beside the moved line
+< FAIL: greatest_ever on real win 10: the card's line prints a number beside the moved line
+---
+> FAIL: call_out_doubters on real won tournament 5: the card's line prints a number beside the moved line
+> FAIL: call_out_doubters on real won tournament 7: the card's line prints a number beside the moved line
+> FAIL: greatest_ever on real win 0: the card's line prints a number beside the moved line
+12a13
+> FAIL: greatest_ever on real win 4: the card's line prints a number beside the moved line

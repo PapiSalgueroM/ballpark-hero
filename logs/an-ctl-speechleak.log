@@ -1,0 +1,15 @@
+simCareerAwardsNight SIM_AWARDS_NIGHT_CONTROL=speechleak: head exit 1, chainOut exit 1, 11 verdict lines on the head
+CONTROL speechleak active: section 2 must go red
+CONTROL speechleak: section 2 FIRED (red sections: 1, 2, 3)
+FAIL: 338 speeches moved a meter their steps do not name, or missed one they do
+FAIL: call_out_doubters: 104 of 250 moved a meter it does not name, missed one it does, or moved one by other than its steps
+FAIL: career 0 parts at step 163 of 229: fixture ws5dcc8cf478 (phase ws), now wsa9faaf6db3; the step before matched bsca61cd4c16
+FAIL: every complete attributed per-step save must match the independent original
+FAIL: greatest_ever: 103 of 250 moved a meter it does not name, missed one it does, or moved one by other than its steps
+FAIL: night 12 (career 0, 2004) differs: fixture rank 1 [YOU:78, Ruud van Nistelrooy:70, Zinedine Zidane:66, Michael Owen:63, Raúl:59, Ronaldo:50, Andriy Shevchenko:46, Rivaldo:46, Luís Figo:42, David Beckham:41], now 
+FAIL: speeches[21] differs: fixture {"kind":"bdor","sample":1,"seed":0,"id":"greatest_ever","d":{"popularity":-10,"rivalryIntensity":10},"line":"🐐 \"I am the greatest to ever do this.\" Half the room gasped, the pundi
+FAIL: tournaments[5] differs: fixture {"c":0,"year":2008,"name":"European Championship","result":"Winner","speeches":[{"id":"for_the_country","d":{"popularity":11,"socialMediaFollowers":3},"line":"🏆 You dedicated it t
+simCareerAwardsNight: 8 FAILURES
+head last line: simCareerAwardsNight: 8 FAILURES
+same FAIL and verdict lines on both trees
+FIRED-SAME
