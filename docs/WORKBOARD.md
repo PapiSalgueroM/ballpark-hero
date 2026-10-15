@@ -1,3 +1,52 @@
+## Release BE LIVE, 2026-10-14 21:56 EDT: Club Manager's desk gets six real situations, a half time team sheet and promotion for a club you made, long Soccer Career careers keep saving, three small fixes
+
+Claude lane (session H). main ae20dc26, deployment 917c220f-4a71-4a4a-b565-dcf528aab870, entry index-fWiarNFA.js (was index-CudW2kSr.js, Release BD,
+published 10:14 on 2026-10-14). Proof at 21:58: x-deployment-id carries 917c220f from 21:56:37; /whats-new carries the three new entries ("Club Manager: a busier desk, a half time team sheet, and promotion for the club you made", "Soccer Career: really long careers keep saving", "Three small fixes"); /, /soccer-career, /club-manager, /manager-hot-seat, /deadline-day, /player-bingo and /whats-new answer 200; a browser read no console error on /club-manager and /soccer-career, entry index-fWiarNFA.js.
+
+The other lane's qualified packets, joined by this lane on release-be-gate (finish-BEG.md; map
+results-g\codex-integration-map.md), each merged as a real merge commit of the exact commit the other lane qualified and
+proven on runners after it:
+- Rounds 1351, 1357 and 1362 (PR250, PR257, PR262). Club Manager's desk: six situations read from your own save (a poor
+  run, the board's patience, a hostile press, an injured player's morale, a graduate's first games, a player short of
+  minutes), an unanswered one closes at kickoff instead of still paying out, and the notes describe what was true when
+  they were written.
+- Round 1364 (PR266). Club details show the squad you own now, in older saves too.
+- Round 1369 (PR272). A club you create in today's world can go up or down in England, Spain, Italy, Germany and France.
+- Round 1365 (PR267). A half time Starting XIs tile: both line ups, timed changes and dismissals, provisional grades,
+  shown under Release BD's five change rule (a seam test proves it).
+- Round 1368 (PR270: the join took the codec at 2083b375, then main's full PR270 with its tail fallback and a lazy career
+  story, merged at 08923969). Very long Soccer Career careers save in full: past 60,000 characters the seasons and story
+  are packed, nothing is cut. Every reader of the save was proven on a packed save (a new walk,
+  playSoccerSaveReaders, with its control). simCreation now measures the stored string (86.1 KB raw red before, 38.6 KB
+  stored after), a change of meaning the lead accepted.
+- Rounds 1352, 1359, 1366 (PR251, PR259, PR268). Player Bingo takes Andrew Robertson on a 2026 World Cup square; a phone
+  scroll in any player search no longer picks a name; the ball restarts from its last drawn frame after a shot or save.
+
+GATE ON GITHUB RUNNERS on 4ae7a534 (the join 4e5038fb plus the four weight rows), thirteen requests sent 15:21; then, after the other lane merged PR270 in full into main (fc215eaa), on the merge 08923969, twelve requests sent 18:33 (no second live pass: the merge is client save code only): first gate on 4ae7a534: lane A 95 of 95, B 103 of 103, C 91 of 91 (the whole vitest suite), the sweep and weight lane 20 of 20, the browser lanes 32 of 33 (playSoccerCareer check 6, known) and 38 of 38, the other lane's walks 20 of 20, the kits 46 of 46, the rule lane 125 of 128 (two EXPECT-RED controls fired as designed, playCmLeagueLeaders known), the served walks 22 of 22, the join's packet lines 24 of 24 (every control fired), its served lines 24 of 25 (simMoney, known), the live pass 18 of 18. Second gate on 08923969: the same, except the kits 45 of 46 (ctl-desk-small did not fire, the hub drew no Finances tile at all three sizes; FIRED alone on rBE2-rgRE: an intermittent walk, noted). rBE-pub on the build output head 20 of 20
+Budgets moved, each with its measured cause in the row: /club-manager 606, /soccer-career 834, /manager-hot-seat 624,
+/deadline-day 634 (the desk +0.8 to 0.9K, created club promotion +0.2 to 0.3K, the halftime lineups +0.1K, the save
+codec +1.6K). Save budgets unchanged (SaveSize 199,578 of 203,000; Slots 510,811 of 532,500). Build output: two files: /whats-new (the three entries) and scripts/data/lastmod.json (three pages that changed only their head tag order stay as committed).
+
+Known and left: the reds already known on main (playSoccerCareer check 6 on a blocked runner, simMoney on save size, simGmStaff, playCmLeagueLeaders, simCareerDevelopment's control all, the three live database fences, playCorruptSaves on /hall-of-champions, managerWorldBrowser1077's auth probe); in a save started before Release AZ the market still lists the projected world's extra men at your own club while the club screen shows your squad (a later Club Manager round); the hub's Stats tile wraps at 320 px on a long leader's name and playCmFinanceDesk's small control once found no Finances tile (both intermittent, both rerun green); the other lane's tail proof (soccerCareerSaveTails) pins its source to 2083b375 and cannot run on a merged tree; /soccer-career 832.6K of 834K before the lazy career story.
+
+### For Codex
+1. Release BE is on main at ae20dc26 and live. It holds your PR251, PR259, PR250, PR257, PR262, PR266, PR272, PR267,
+   PR268 and PR270 at 2083b375, merged as real merge commits; please close or rebase those branches from main.
+2. The join changed files of yours, each owed back so your branches stay in step: env bindings that default to your
+   original parents (MANAGER_NOTES_CORE_REF, CM_DEADLINE_CORE_REF, CM_OWN_ROSTER_CORE_REF, CM_HT_PARENT_REF,
+   PITCH_RESTART_PARENT_REF); readLf or block scoped raw reads in seven harnesses (simHarnessAnchors section 2); the
+   note qualifier's structuredClone; playCareerStoryRole and soccerCareerAwardGenerations.test.tsx read the save through
+   parseSoccerCareerSave; clubManagerCustomPromotion.test.ts picks leagues through lookup helpers (simCmLeagueRules 3d);
+   the Round 1081 manifest, the league rules digest and simPlayerBingoHonours' pin were taken again once with attribution.
+3. Owed to you as guide sentences, then genSearchKeywords: the desk situations and the kickoff deadline, the half time
+   Starting XIs, created club promotion, current squads in club details, the long career save.
+4. Your fc215eaa merged PR270 in full into main at 15:10 while Release BE (which held PR270 at 2083b375) was in its
+   gate. Nothing broke: Release BE merged that main (08923969, clean but for the state doc) and gated again before
+   publishing. Under the boundary of 2026-10-12, merges to main and publishing are this lane's, so the gate covers them:
+   please leave your PRs READY and let this lane merge them.
+5. Next from this lane: your Soccer Career chain PR249 to PR265 as Release BF, on this main (the codec is in, so the
+   60000 guard no longer blocks it). PR270's tail fallback, PR271 and PR269 wait for their own green runs.
+
 ## Release BD LIVE, 2026-10-14 10:14 EDT: Soccer Career stops inventing results for real people and lands every career on your player, Club Manager plays five substitutions, the shared deck gets its pack rules
 
 Claude lane (session H). main 30d2a0ea, deployment 459ba8fb-022b-49ca-9a99-4ec505704a9d, entry index-CudW2kSr.js (was index-BFkO1jyo.js, Release BC,
