@@ -1,0 +1,14 @@
+#!serve
+#!playwright
+headsha: git log --oneline -1
+potential-browser: CI=1 SIM_NETWORK=offline ENGINES=chromium SOCCER_POTENTIAL_BROWSER_OUT="$RUNNER_TEMP/potential-browser" node scripts/qa/soccerPotentialProgressBrowser.mjs
+nba-proof: CI=1 SIM_NETWORK=offline NBA_RETRY_PARENT_REF=fb709452 NBA_RETRY_PROOF_OUT="$RUNNER_TEMP/nba-proof" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/nbaPerfectSeasonRetryProof.mjs
+nba-browser: CI=1 SIM_NETWORK=offline ENGINES=chromium NBA_RETRY_BROWSER_OUT="$RUNNER_TEMP/nba-browser" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/nbaPerfectSeasonRetryBrowser.mjs
+retire: CI=1 SIM_NETWORK=offline ENGINES=chromium SOCCER_RETIREMENT_PARENT_REF=97d706b2 SOCCER_RETIREMENT_BROWSER_OUT="$RUNNER_TEMP/retire" node scripts/qa/soccerRetirementActionsBrowser.mjs
+dialog: CI=1 SIM_NETWORK=offline ENGINES=chromium SOCCER_NEW_CAREER_PARENT_REF=bc416f2a SOCCER_NEW_CAREER_BROWSER_OUT="$RUNNER_TEMP/dialog" node scripts/qa/soccerNewCareerDialogBrowser.mjs
+drill-proof: CI=1 SIM_NETWORK=offline SOCCER_DRILL_CANCEL_OUT="$RUNNER_TEMP/drill-proof" node scripts/qa/soccerDrillPointerCancelProof.mjs
+retire-bare2: CI=1 SIM_NETWORK=offline ENGINES=chromium SOCCER_RETIREMENT_BROWSER_OUT="$RUNNER_TEMP/retire-bare" node scripts/qa/soccerRetirementActionsBrowser.mjs > /tmp/rb.log 2>&1; s=$?; tail -1 /tmp/rb.log; node -e 'const r=require(process.argv[1]);console.log(JSON.stringify(r.errors).slice(0,500))' "$RUNNER_TEMP/retire-bare/report.json" | tee /tmp/rbe.log; [ $s -ne 0 ] && grep -q "b06ecc7af7cfd75b7321c4ecae482ae924000969da27497e188f8b81f557e5eb" /tmp/rbe.log && echo BINDING-NEEDED
+dialog-bare2: CI=1 SIM_NETWORK=offline ENGINES=chromium SOCCER_NEW_CAREER_BROWSER_OUT="$RUNNER_TEMP/dialog-bare" node scripts/qa/soccerNewCareerDialogBrowser.mjs > /tmp/db.log 2>&1; s=$?; tail -1 /tmp/db.log; node -e 'const r=require(process.argv[1]);console.log(JSON.stringify(r.errors).slice(0,500))' "$RUNNER_TEMP/dialog-bare/report.json" | tee /tmp/dbe.log; [ $s -ne 0 ] && grep -q "23003dbda5dc5f96bc168d4183d8bb508c79ab196b2da3649ff8982c9ed93e6a" /tmp/dbe.log && echo BINDING-NEEDED
+simDrillMotion: node scripts/simDrillMotion.mjs
+playSoccerResultsLayout: node scripts/playSoccerResultsLayout.mjs
+vitest-packets: node_modules/.bin/vitest run src/test/soccerPotentialProgress.test.tsx src/test/soccerAwardReveal.test.tsx src/test/perfectSeasonNbaRetry.test.tsx src/test/drillBoardMatch.test.tsx src/test/drillBoardMarkup.test.tsx --testTimeout=300000 --hookTimeout=120000
