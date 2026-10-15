@@ -1,0 +1,94 @@
+PASS VAR normal
+simCmVar bands: {"seeds":[31,32,33,34,35,36],"leagueMatches":4001,"ruledOut":305,"ruledOutPerMatch":0.0762,"awarded":264,"awardedPerMatch":0.066,"awardedScored":202,"goalConfirmed":0,"penaltyConfirmed":0,"goalsPerMatchOn":2.7236,"goalsPerMatchOff":2.6738,"goalGap":0.0497,"resultMoved":328,"penaltiesPerMatch":0.4331,"matchesWithReview":539,"perSeed":[[619,0.0662,0.0711],[681,0.0734,0.0587],[679,0.0795,0.0574],[641,0.0764,0.0718],[716,0.0922,0.0726],[665,0.0677,0.0647]],"awardedScoredShare":0.7652,"penaltiesPerMatchOff":0.3634,"penaltiesTotalBand":{"low":0.2526,"high":0.3979,"inside":false,"held":true},"everyKindLevel":{"band":0.05,"inside":true,"penaltyKindHeld":true},"goalKindAlone":{"leagueMatches":4012,"ruledOut":303,"ruledOutPerMatch":0.0755,"awarded":0,"goalsPerMatchOn":2.6695,"goalsPerMatchOff":2.6742,"goalGap":-0.0047,"resultMoved":273,"matchesWithReview":299,"penaltiesPerMatch":0.3676,"penaltiesPerMatchOff":0.3659,"level":{"band":0.05,"inside":true,"held":false,"accepted":false}},"gamePlays":["goal"]}
+simCmVar coverage: {"met":{"league":{"lit":36,"dark":11},"cup":{"lit":1,"dark":4},"europe":{"lit":6,"dark":0}},"leavesOut":["league:championship","cup:FA Cup"],"historicKey":"league:premier2010"}
+simCmVar kinds: {"halves":60,"goalReviews":14,"penaltyReviews":13,"secondHalfGoal":10,"secondHalfPenalty":15,"gamePlays":["goal"]}
+simCmVar stream: {"goal":77,"foul":21,"kick":100}
+simCmVar normal: actual review outcomes and full prior baseline passed.
+PASS VAR counted
+simCmVar counted: CAUGHT by "A ruled-out candidate is not committed as a scorer"
+simCmVar counted: actual review outcomes and full prior baseline passed.
+PASS VAR decorative
+simCmVar decorative: CAUGHT by "A ruled-out candidate is not committed as a scorer"
+simCmVar decorative: actual review outcomes and full prior baseline passed.
+PASS VAR penalty
+simCmVar penalty: CAUGHT by "A reviewed penalty links to exactly one existing actual penalty shot"
+simCmVar penalty: actual review outcomes and full prior baseline passed.
+PASS VAR awards
+simCmVar awards: CAUGHT by "The actual missed-foul review awards a penalty"
+simCmVar awards: actual review outcomes and full prior baseline passed.
+PASS VAR resolution
+simCmVar resolution: CAUGHT by "The saved actual kick can score or miss"
+simCmVar resolution: actual review outcomes and full prior baseline passed.
+PASS VAR past
+simCmVar past: CAUGHT by "Played review decisions and all played football survive the recut"
+simCmVar past: actual review outcomes and full prior baseline passed.
+PASS VAR reveal
+simCmVar reveal: CAUGHT by "An unresolved review withholds its own accepted resolution"
+simCmVar reveal: actual review outcomes and full prior baseline passed.
+PASS VAR resume
+simCmVar resume: CAUGHT by "A previously played reviewed goal is settled on resume"
+simCmVar resume: actual review outcomes and full prior baseline passed.
+PASS VAR announce
+simCmVar announce: CAUGHT by "A 46th-minute accepted resolution cannot announce during its review"
+simCmVar announce: actual review outcomes and full prior baseline passed.
+PASS VAR disabled
+simCmVar disabled: CAUGHT by "Enabled actual matches draw reviewed goals, overturned goals and reviewed penalties"
+simCmVar disabled: actual review outcomes and full prior baseline passed.
+PASS VAR everywhere
+simCmVar everywhere: CAUGHT by "Wolves, EFL Championship · Round 1: a match in a competition without reviews carries no opt in"
+simCmVar everywhere: actual review outcomes and full prior baseline passed.
+PASS VAR historic
+simCmVar historic: CAUGHT by "A historic era save carries no opt in, on a 2026 clock in a covered competition"
+simCmVar historic: actual review outcomes and full prior baseline passed.
+PASS VAR streamgoal
+simCmVar streamgoal: CAUGHT by "Dealing reviews draws nothing from the match stream"
+simCmVar streamgoal: actual review outcomes and full prior baseline passed.
+PASS VAR streamfoul
+simCmVar streamfoul: CAUGHT by "Dealing reviews draws nothing from the match stream"
+simCmVar streamfoul: actual review outcomes and full prior baseline passed.
+PASS VAR oldgoalreview
+simCmVar oldgoalreview: CAUGHT by "Goals ruled out a match 0.4596 is outside real football's 0.0752 to 0.1447 (headroom 0.2)"
+simCmVar bands: {"seeds":[31,32,33,34,35,36],"leagueMatches":4045,"ruledOut":1859,"ruledOutPerMatch":0.4596,"awarded":266,"awardedPerMatch":0.0658,"awardedScored":203,"goalConfirmed":0,"penaltyConfirmed":0,"goalsPerMatchOn":2.7169,"goalsPerMatchOff":2.6791,"goalGap":0.0378,"resultMoved":1166,"penaltiesPerMatch":0.4252,"matchesWithReview":1642,"perSeed":[[606,0.4439,0.0776],[706,0.4773,0.0652],[686,0.4271,0.0583],[627,0.488,0.067],[720,0.4569,0.0792],[700,0.4643,0.0486]]}
+simCmVar oldgoalreview: actual review outcomes and full prior baseline passed.
+PASS VAR oldoverturn
+simCmVar oldoverturn: CAUGHT by "Goals ruled out a match 0.0192 is outside real football's 0.0752 to 0.1447 (headroom 0.2)"
+simCmVar bands: {"seeds":[31,32,33,34,35,36],"leagueMatches":4009,"ruledOut":77,"ruledOutPerMatch":0.0192,"awarded":283,"awardedPerMatch":0.0706,"awardedScored":217,"goalConfirmed":210,"penaltyConfirmed":0,"goalsPerMatchOn":2.7348,"goalsPerMatchOff":2.6807,"goalGap":0.0541,"resultMoved":159,"penaltiesPerMatch":0.4328,"matchesWithReview":538,"perSeed":[[623,0.0241,0.0787],[670,0.0164,0.0657],[667,0.021,0.0525],[638,0.0141,0.0737],[707,0.0226,0.0806],[704,0.017,0.0724]]}
+simCmVar oldoverturn: actual review outcomes and full prior baseline passed.
+PASS VAR oldpenaltyreview
+simCmVar oldpenaltyreview: CAUGHT by "The game showed 0 goal and 652 penalty reviews that ended with the call standing, and no publisher counts those by kind of call"
+simCmVar bands: {"seeds":[31,32,33,34,35,36],"leagueMatches":4001,"ruledOut":305,"ruledOutPerMatch":0.0762,"awarded":264,"awardedPerMatch":0.066,"awardedScored":202,"goalConfirmed":0,"penaltyConfirmed":652,"goalsPerMatchOn":2.7236,"goalsPerMatchOff":2.6738,"goalGap":0.0497,"resultMoved":328,"penaltiesPerMatch":0.4331,"matchesWithReview":1048,"perSeed":[[619,0.0662,0.0711],[681,0.0734,0.0587],[679,0.0795,0.0574],[641,0.0764,0.0718],[716,0.0922,0.0726],[665,0.0677,0.0647]]}
+simCmVar oldpenaltyreview: actual review outcomes and full prior baseline passed.
+PASS VAR oldmissedfoul
+simCmVar oldmissedfoul: CAUGHT by "Penalties awarded a match 0.2721 is outside real football's 0.0658 to 0.1307 (headroom 0.2)"
+simCmVar bands: {"seeds":[31,32,33,34,35,36],"leagueMatches":3940,"ruledOut":308,"ruledOutPerMatch":0.0782,"awarded":1072,"awardedPerMatch":0.2721,"awardedScored":815,"goalConfirmed":0,"penaltyConfirmed":0,"goalsPerMatchOn":2.8794,"goalsPerMatchOff":2.6845,"goalGap":0.1949,"resultMoved":518,"penaltiesPerMatch":0.6383,"matchesWithReview":1209,"perSeed":[[592,0.0693,0.2686],[654,0.0734,0.263],[685,0.0745,0.2759],[627,0.0702,0.2903],[708,0.0932,0.2726],[674,0.0861,0.2626]]}
+simCmVar oldmissedfoul: actual review outcomes and full prior baseline passed.
+PASS VAR oldpenaltyscores
+simCmVar oldpenaltyscores: CAUGHT by "A penalty a review awards is taken under the engine penalty law, not under a rate of its own"
+simCmVar oldpenaltyscores: actual review outcomes and full prior baseline passed.
+PASS VAR oldpenaltyontarget
+simCmVar oldpenaltyontarget: CAUGHT by "A missed review penalty is on target as often as the engine penalty law says"
+simCmVar oldpenaltyontarget: actual review outcomes and full prior baseline passed.
+PASS VAR penaltyband
+simCmVar penaltyband: CAUGHT by "Penalties a match with reviews on 0.4331 (without: 0.3634) is outside real football's 0.3158 to 0.3316 (headroom 0.2) and the ledger does not hold the switch for it (owed penalties-total)"
+simCmVar bands: {"seeds":[31,32,33,34,35,36],"leagueMatches":4001,"ruledOut":305,"ruledOutPerMatch":0.0762,"awarded":264,"awardedPerMatch":0.066,"awardedScored":202,"goalConfirmed":0,"penaltyConfirmed":0,"goalsPerMatchOn":2.7236,"goalsPerMatchOff":2.6738,"goalGap":0.0497,"resultMoved":328,"penaltiesPerMatch":0.4331,"matchesWithReview":539,"perSeed":[[619,0.0662,0.0711],[681,0.0734,0.0587],[679,0.0795,0.0574],[641,0.0764,0.0718],[716,0.0922,0.0726],[665,0.0677,0.0647]],"awardedScoredShare":0.7652,"penaltiesPerMatchOff":0.3634,"penaltiesTotalBand":{"low":0.2526,"high":0.3979,"inside":false,"held":false}}
+simCmVar penaltyband: actual review outcomes and full prior baseline passed.
+PASS VAR nolift
+simCmVar nolift: CAUGHT by "With the goal kind alone reviews move goals a match by -0.0755, past the 0.05 the family allows a rule to move them, and the ledger does not hold the goal kind off for it (a ruling does not excuse it: the engine draws th"
+simCmVar bands: {"seeds":[31,32,33,34,35,36],"leagueMatches":3983,"ruledOut":278,"ruledOutPerMatch":0.0698,"awarded":275,"awardedPerMatch":0.069,"awardedScored":210,"goalConfirmed":0,"penaltyConfirmed":0,"goalsPerMatchOn":2.6523,"goalsPerMatchOff":2.6764,"goalGap":-0.0241,"resultMoved":198,"penaltiesPerMatch":0.4276,"matchesWithReview":521,"perSeed":[[627,0.0622,0.0781],[680,0.0632,0.0691],[673,0.0817,0.0565],[623,0.069,0.069],[713,0.0715,0.0757],[667,0.0705,0.066]],"awardedScoredShare":0.7636,"penaltiesPerMatchOff":0.3645,"penaltiesTotalBand":{"low":0.2526,"high":0.3979,"inside":false,"held":true},"everyKindLevel":{"band":0.05,"inside":true,"penaltyKindHeld":true},"goalKindAlone":{"leagueMatches":4029,"ruledOut":280,"ruledOutPerMatch":0.0695,"awarded":0,"goalsPerMatchOn":2.5939,"goalsPerMatchOff":2.6694,"goalGap":-0.0755,"resultMoved":130,"matchesWithReview":275,"penaltiesPerMatch":0.3564,"penaltiesPerMatchOff":0.3631,"level":{"band":0.05,"inside":false,"held":false,"accepted":false}},"gamePlays":["goal"]}
+simCmVar nolift: actual review outcomes and full prior baseline passed.
+PASS VAR liftpens
+simCmVar liftpens: CAUGHT by "A penalty goal is taken back as often as a review rules a goal out (0.0000 of 8192)"
+simCmVar liftpens: actual review outcomes and full prior baseline passed.
+PASS VAR liftkind
+simCmVar liftkind: CAUGHT by "A match kicked off with the penalty kind alone draws the goals of the match nobody asks a review in"
+simCmVar liftkind: actual review outcomes and full prior baseline passed.
+PASS VAR kindgoal
+simCmVar kindgoal: CAUGHT by "The penalty kind alone shows no goal review"
+simCmVar kindgoal: actual review outcomes and full prior baseline passed.
+PASS VAR kindpenalty
+simCmVar kindpenalty: CAUGHT by "The second half of a match kicked off with the goal kind shows no penalty review"
+simCmVar kindpenalty: actual review outcomes and full prior baseline passed.
+PASS VAR kindsaved
+simCmVar kindsaved: CAUGHT by "A match kicked off with the goal kind saves that list"
+simCmVar kindsaved: actual review outcomes and full prior baseline passed.
+simCmVar: 13 actual outcomes and 27 effective controls passed.

@@ -1,0 +1,5 @@
+treeWithoutMerge: 18b4815c28eb466857c8c6835d5532c05299ba76, f7c2d386 without 26eadaaa; conflicts kept from f7c2d386: scripts/data/cmLeagueRulesDigest.json, scripts/fixtures/managerAppealIsolation1081/manifest.json, src/pages/WhatsNew.tsx
+control legacyleak FIRED: 1 of 1 checks red
+control pressnew FIRED: 1 of 1 checks red
+control nodate FIRED: 2 of 5 checks red
+simCmSubs: 3 of 3 Round 1331 base controls fired
