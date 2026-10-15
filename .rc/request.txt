@@ -1,0 +1,8 @@
+#!serve
+#!playwright
+#!serial
+headsha: git log --oneline -3
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+retire-bare: CI=1 SIM_NETWORK=offline ENGINES=chromium SOCCER_RETIREMENT_BROWSER_OUT="$RUNNER_TEMP/retire-bare" node scripts/qa/soccerRetirementActionsBrowser.mjs > /tmp/rb.log 2>&1; s=$?; grep -m3 -E "AssertionError|b06ecc7a" /tmp/rb.log | cut -c1-200; tail -2 /tmp/rb.log | cut -c1-200; [ $s -ne 0 ] && grep -q "b06ecc7af7cfd75b7321c4ecae482ae924000969da27497e188f8b81f557e5eb" /tmp/rb.log && echo BINDING-NEEDED
+retire: CI=1 SIM_NETWORK=offline ENGINES=chromium SOCCER_RETIREMENT_PARENT_REF=97d706b2 SOCCER_RETIREMENT_BROWSER_OUT="$RUNNER_TEMP/retire" node scripts/qa/soccerRetirementActionsBrowser.mjs
+land-main: git worktree add -q --detach /tmp/lm b59ebe2b && ln -s "$PWD/node_modules" /tmp/lm/node_modules && git diff 082fc277 2083b375 -- src/pages/SoccerCareer.tsx src/lib/soccerCareerSave.ts | git -C /tmp/lm apply && bash .rc/x/chainBase.sh /tmp/lm && (cd /tmp/lm && node_modules/.bin/vite build > /tmp/lm-build.log 2>&1 || { tail -20 /tmp/lm-build.log; exit 2; }) && mkdir -p "$TMPDIR/out" && RC_OUT="$TMPDIR/out" PORT=4187 BASE_PORT=4188 SECTIONS=landing,name,bar,retire SOCCER_LANDING_BASE_DIST=/tmp/lm/dist ENGINES=chromium node scripts/playSoccerLanding.mjs 2>&1 | tee "$TMPDIR/ctl.log"; s=${PIPESTATUS[0]}; [ $s -eq 0 ] && grep -qE 'playSoccerLanding: green at .*; landing, name, bar, retire\), every marked section red on the base' "$TMPDIR/ctl.log"
