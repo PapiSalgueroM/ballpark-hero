@@ -1,0 +1,5 @@
+Prepared 9 declared font dependencies for local fulfillment.
+prepInstalled: 521 installed locked versions written to /home/runner/work/ballpark-hero/ballpark-hero/sclz
+Soccer Career build fixed: passed; 3 healthy flows, 0 eager fetches, 12 originals, 0 failures, 0 setup failures.
+lazyCheck: status=passed checks=1602 failures=0 eager=0 inventory=12 issues=[]
+lazyCheck FIXED: three healthy creator flows load the editor on Customize, with actual failed-chunk recovery and omission control.
