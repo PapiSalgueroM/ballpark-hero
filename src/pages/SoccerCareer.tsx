@@ -60,7 +60,7 @@ import {
   nextSeasonYear, managerNextSeasonYear,
 } from "@/lib/soccerCareerEngine";
 import type { FirstStageStage } from "@/lib/soccerCareerContinental";
-import { careerBeforeBallonDorReveal, revealBallonDorResult } from "@/lib/soccerAwardReveal";
+import { careerBeforeBallonDorReveal, revealBallonDorResult, ballonDorAwaitingReveal } from "@/lib/soccerAwardReveal";
 import { readLeagueWorldSeason } from "@/lib/soccerCareerLeagueWorld";
 import { soccerExtensionQuote } from "@/lib/soccerCareerContracts";
 import { farewellEligibility, readSoccerFarewell } from "@/lib/soccerCareerFarewell";
@@ -86,6 +86,7 @@ import { CareerRecordsTile } from '@/components/soccer-career/CareerRecordsTile'
 import { SeasonAmbitionTile, SeasonAmbitionResult } from '@/components/soccer-career/SeasonAmbitionTile';
 import { PreseasonPlanTile, PreseasonPlanResult } from '@/components/soccer-career/PreseasonPlanTile';
 import { CareerMentorTile } from '@/components/soccer-career/CareerMentorTile';
+import PotentialProgress from '@/components/soccer-career/PotentialProgress';
 import type { MoneyAction } from "@/lib/soccerMoney";
 import { bankSummary } from "@/lib/soccerMoney";
 import PhonePanel from "@/components/soccer-career/PhonePanel";
@@ -1667,10 +1668,10 @@ function AttributesScreen({ career, onBack }: { career: CareerState; onBack: () 
         <div className="flex flex-wrap gap-1.5">
           {lines.map(l => <span key={l} className="px-2 py-1 rounded-md bg-muted/30 text-[11px] font-bold">{l}</span>)}
         </div>
-        <div className="pt-1 text-[11px] text-muted-foreground">
-          {buildLabel(phys)}. Scouts have your ceiling at {ceiling}
-          {earned > 0 ? `, and ${earned} of that you earned by playing your way past what they first wrote down.` : "."}
-        </div>
+        <div className="pt-1 text-[11px] text-muted-foreground">{buildLabel(phys)}.</div>
+        <PotentialProgress ceiling={ceiling} earned={earned}
+          eliteRun={career.eliteStreak ?? 0} overall={career.overall} retired={career.retired}
+          awardPending={ballonDorAwaitingReveal(career) !== null} />
       </div>
 
       {tree.map(fam => (
