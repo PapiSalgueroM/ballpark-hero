@@ -1,0 +1,221 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Only fixed Life may differ from the whole held parent app
++ actual - expected
+... Skipped lines
+
+  "import { compressToUTF16, decompressFromUTF16 } from 'lz-string';\n" +
+    "import type { CareerState } from './soccerCareerEngine';\n" +
+    '\n' +
+    "const record = (v: unknown): v is Record<string, unknown> => typeof v === 'object' && v !== null && !Array.isArray(v);\n" +
+    "const text = (v: unknown) => typeof v === 'string';\n" +
+...
+    '  }\n' +
++   '  let packed = JSON.stringify(stored);\n' +
++   '  if (packed.length > 60000) {\n' +
++   '    const complete = JSON.stringify({ currentClub: value.currentClub, age: value.age, retired: value.retired,\n' +
++   "      seasons: { format: 'lz-string-utf16-career', data: compressToUTF16(raw) } });\n" +
++   '    if (complete.length < packed.length) packed = complete;\n' +
++   '  }\n' +
+-   '  const packed = JSON.stringify(stored);\n' +
+    '  return packed.length < raw.length ? packed : raw;\n' +
+    '}\n' +
+    '\n' +
+    'export function parseSoccerCareerSave(raw: string): unknown {\n' +
++   '  let value: unknown = JSON.parse(raw);\n' +
+-   '  const value: unknown = JSON.parse(raw);\n' +
+    '  if (!record(value)) return value;\n' +
++   '  const complete = value.seasons;\n' +
++   "  if (record(complete) && complete.format === 'lz-string-utf16-career') {\n" +
++   "    if (!text(complete.data)) throw new Error('Invalid saved career');\n" +
++   '    const decoded = decompressFromUTF16(complete.data as string);\n' +
++   '    const career: unknown = decoded === null ? null : JSON.parse(decoded);\n' +
++   "    if (!record(career)) throw new Error('Invalid saved career');\n" +
++   '    value = career;\n' +
++   '  }\n' +
+    "  for (const key of ['seasons', 'story']) {\n" +
+    '    const history = value[key];\n' +
+    "    if (!record(history) || (!('format' in history) && !('data' in history))) continue;\n" +
+    "    if (history.format !== 'lz-string-utf16' || !text(history.data)) throw new Error('Unsupported saved history');\n" +
+    '    const decoded = decompressFromUTF16(history.data as string);\n' +
+
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simSoccerCareerDocumentaryReview.mjs:75:36
+    at Array.map (<anonymous>)
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simSoccerCareerDocumentaryReview.mjs:73:28
+    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)
+    at async node:internal/modules/esm/loader:647:26
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: "import { compressToUTF16, decompressFromUTF16 } from 'lz-string';\n" +
+    "import type { CareerState } from './soccerCareerEngine';\n" +
+    '\n' +
+    "const record = (v: unknown): v is Record<string, unknown> => typeof v === 'object' && v !== null && !Array.isArray(v);\n" +
+    "const text = (v: unknown) => typeof v === 'string';\n" +
+    "const number = (v: unknown) => typeof v === 'number' && Number.isFinite(v);\n" +
+    'const list = (v: unknown, check: (item: unknown) => boolean): v is unknown[] => Array.isArray(v) && v.every(check);\n' +
+    'const fields = (v: Record<string, unknown>, names: string[], check: (item: unknown) => boolean) => names.every(name => check(v[name]));\n' +
+    "const phases = ['youth', 'contract_offer', 'playing', 'newspaper', 'season_summary', 'transfer_window', 'random_events', 'international_debut', 'world_cup', 'rivalry_event', 'ballon_dor', 'retirement_ceremony', 'retirement_suggestion', 'post_retirement', 'manager_season', 'pundit_season', 'owner_season', 'social_media_action', 'moral_dilemma', 'red_card_appeal_result', 'rehab_choice', 'retired'];\n" +
+    '\n' +
+    'const season = (v: unknown) => record(v)\n' +
+    "  && fields(v, ['club', 'clubCountry', 'type'], text)\n" +
+    "  && fields(v, ['year', 'age', 'clubTier', 'apps', 'goals', 'assists', 'cleanSheets', 'yellowCards', 'redCards', 'rating'], number);\n" +
+    'const offer = (v: unknown) => record(v) && record(v.club)\n' +
+    "  && fields(v.club, ['name', 'country', 'color', 'league'], text) && number(v.club.tier)\n" +
+    "  && fields(v, ['contractYears', 'wage'], number);\n" +
+    "const event = (v: unknown) => record(v) && number(v.id) && fields(v, ['title', 'description'], text)\n" +
+    "  && list(v.choices, choice => record(choice) && fields(choice, ['label', 'consequence'], text)) && v.choices.length > 0;\n" +
+    '\n' +
+    '/* Keep small saves literal. Pack complete histories, including unknown fields. */\n' +
+    'export function serializeSoccerCareerSave(value: CareerState): string {\n' +
+    '  const raw = JSON.stringify(value);\n' +
+    '  if (raw.length <= 60000) return raw;\n' +
+    '  const stored: Record<string, unknown> = { ...value };\n' +
+    "  for (const key of ['seasons', 'story'] as const) {\n" +
+    "    if (Array.isArray(value[key])) stored[key] = { format: 'lz-string-utf16', data: compressToUTF16(JSON.stringify(value[key])) };\n" +
+    '  }\n' +
+    '  let packed = JSON.stringify(stored);\n' +
+    '  if (packed.length > 60000) {\n' +
+    '    const complete = JSON.stringify({ currentClub: value.currentClub, age: value.age, retired: value.retired,\n' +
+    "      seasons: { format: 'lz-string-utf16-career', data: compressToUTF16(raw) } });\n" +
+    '    if (complete.length < packed.length) packed = complete;\n' +
+    '  }\n' +
+    '  return packed.length < raw.length ? packed : raw;\n' +
+    '}\n' +
+    '\n' +
+    'export function parseSoccerCareerSave(raw: string): unknown {\n' +
+    '  let value: unknown = JSON.parse(raw);\n' +
+    '  if (!record(value)) return value;\n' +
+    '  const complete = value.seasons;\n' +
+    "  if (record(complete) && complete.format === 'lz-string-utf16-career') {\n" +
+    "    if (!text(complete.data)) throw new Error('Invalid saved career');\n" +
+    '    const decoded = decompressFromUTF16(complete.data as string);\n' +
+    '    const career: unknown = decoded === null ? null : JSON.parse(decoded);\n' +
+    "    if (!record(career)) throw new Error('Invalid saved career');\n" +
+    '    value = career;\n' +
+    '  }\n' +
+    "  for (const key of ['seasons', 'story']) {\n" +
+    '    const history = value[key];\n' +
+    "    if (!record(history) || (!('format' in history) && !('data' in history))) continue;\n" +
+    "    if (history.format !== 'lz-string-utf16' || !text(history.data)) throw new Error('Unsupported saved history');\n" +
+    '    const decoded = decompressFromUTF16(history.data as string);\n' +
+    '    const rows: unknown = decoded === null ? null : JSON.parse(decoded);\n' +
+    "    if (!Array.isArray(rows)) throw new Error('Invalid saved history');\n" +
+    '    value[key] = rows;\n' +
+    '  }\n' +
+    '  return value;\n' +
+    '}\n' +
+    '\n' +
+    '/* Check the core data the page reads before its optional-field migration.\n' +
+    '   Do not fill lost history or require newer phone, money or injury fields.\n' +
+    '   Serialized event choices intentionally have no executable apply function. */\n' +
+    'export function isSoccerCareerSave(value: unknown): boolean {\n' +
+    '  if (!record(value)) return false;\n' +
+    "  if (!fields(value, ['playerName', 'nationality', 'position', 'era', 'currentClub', 'currentClubCountry', 'currentClubColor', 'currentLeague', 'lifestyleLevel'], text)\n" +
+    "    || !fields(value, ['age', 'currentClubTier', 'contractYearsLeft', 'weeklyWage', 'marketValue', 'pace', 'shooting', 'passing', 'dribbling', 'defending', 'physical', 'reflexes', 'overall', 'netWorth', 'socialMediaFollowers', 'popularity', 'morale'], number)\n" +
+    "    || typeof value.retired !== 'boolean' || !phases.includes(value.phase as string)) return false;\n" +
+    '  if (!list(value.seasons, season) || value.seasons.length === 0\n' +
+    '    || !list(value.events, text) || !list(value.pendingEvents, event)\n' +
+    '    || !list(value.pendingOffers, offer)\n' +
+    "    || !list(value.pendingNews, row => record(row) && fields(row, ['newspaper', 'headline', 'body'], text))\n" +
+    "    || !list(value.awards, row => record(row) && number(row.year) && fields(row, ['name', 'emoji'], text))\n" +
+    '    || !list(value.properties, text) || !list(value.investments, text)) return false;\n' +
+    '  if (!record(value.family) || !number(value.family.children)\n' +
+    "    || typeof value.family.isMarried !== 'boolean' || typeof value.family.isDivorced !== 'boolean'\n" +
+    "    || !record(value.intStats) || !fields(value.intStats, ['caps', 'goals', 'assists'], number)) return false;\n" +
+    '  if (value.pendingSummary != null && !season(value.pendingSummary)) return false;\n' +
+    '  if (value.legacy != null && (!record(value.legacy) || !number(value.legacy.score) || !text(value.legacy.tier)\n' +
+    '    || !list(value.legacy.breakdown, row => record(row) && text(row.label) && number(row.points)))) return false;\n' +
+    "  for (const name of ['managerState', 'ownerState']) {\n" +
+    '    const tail = value[name];\n' +
+    "    if (tail != null && (!record(tail) || !text(tail.club) || !fields(tail, ['clubTier', 'season', 'trophies', 'promotions'], number)\n" +
+    "      || !list(tail.seasonResults, row => record(row) && fields(row, ['club', 'result'], text) && number(row.year)))) return false;\n" +
+    '  }\n' +
+    '  if (value.ownerState != null && (!record(value.ownerState) || !number(value.ownerState.budget))) return false;\n' +
+    "  if (value.punditState != null && (!record(value.punditState) || !fields(value.punditState, ['season', 'controversies'], number)\n" +
+    "    || !list(value.punditState.predictions, row => record(row) && text(row.prediction) && typeof row.cameTrue === 'boolean'))) return false;\n" +
+    '  return true;\n' +
+    '}\n',
+  expected: "import { compressToUTF16, decompressFromUTF16 } from 'lz-string';\n" +
+    "import type { CareerState } from './soccerCareerEngine';\n" +
+    '\n' +
+    "const record = (v: unknown): v is Record<string, unknown> => typeof v === 'object' && v !== null && !Array.isArray(v);\n" +
+    "const text = (v: unknown) => typeof v === 'string';\n" +
+    "const number = (v: unknown) => typeof v === 'number' && Number.isFinite(v);\n" +
+    'const list = (v: unknown, check: (item: unknown) => boolean): v is unknown[] => Array.isArray(v) && v.every(check);\n' +
+    'const fields = (v: Record<string, unknown>, names: string[], check: (item: unknown) => boolean) => names.every(name => check(v[name]));\n' +
+    "const phases = ['youth', 'contract_offer', 'playing', 'newspaper', 'season_summary', 'transfer_window', 'random_events', 'international_debut', 'world_cup', 'rivalry_event', 'ballon_dor', 'retirement_ceremony', 'retirement_suggestion', 'post_retirement', 'manager_season', 'pundit_season', 'owner_season', 'social_media_action', 'moral_dilemma', 'red_card_appeal_result', 'rehab_choice', 'retired'];\n" +
+    '\n' +
+    'const season = (v: unknown) => record(v)\n' +
+    "  && fields(v, ['club', 'clubCountry', 'type'], text)\n" +
+    "  && fields(v, ['year', 'age', 'clubTier', 'apps', 'goals', 'assists', 'cleanSheets', 'yellowCards', 'redCards', 'rating'], number);\n" +
+    'const offer = (v: unknown) => record(v) && record(v.club)\n' +
+    "  && fields(v.club, ['name', 'country', 'color', 'league'], text) && number(v.club.tier)\n" +
+    "  && fields(v, ['contractYears', 'wage'], number);\n" +
+    "const event = (v: unknown) => record(v) && number(v.id) && fields(v, ['title', 'description'], text)\n" +
+    "  && list(v.choices, choice => record(choice) && fields(choice, ['label', 'consequence'], text)) && v.choices.length > 0;\n" +
+    '\n' +
+    '/* Keep small saves literal. Pack complete histories, including unknown fields. */\n' +
+    'export function serializeSoccerCareerSave(value: CareerState): string {\n' +
+    '  const raw = JSON.stringify(value);\n' +
+    '  if (raw.length <= 60000) return raw;\n' +
+    '  const stored: Record<string, unknown> = { ...value };\n' +
+    "  for (const key of ['seasons', 'story'] as const) {\n" +
+    "    if (Array.isArray(value[key])) stored[key] = { format: 'lz-string-utf16', data: compressToUTF16(JSON.stringify(value[key])) };\n" +
+    '  }\n' +
+    '  const packed = JSON.stringify(stored);\n' +
+    '  return packed.length < raw.length ? packed : raw;\n' +
+    '}\n' +
+    '\n' +
+    'export function parseSoccerCareerSave(raw: string): unknown {\n' +
+    '  const value: unknown = JSON.parse(raw);\n' +
+    '  if (!record(value)) return value;\n' +
+    "  for (const key of ['seasons', 'story']) {\n" +
+    '    const history = value[key];\n' +
+    "    if (!record(history) || (!('format' in history) && !('data' in history))) continue;\n" +
+    "    if (history.format !== 'lz-string-utf16' || !text(history.data)) throw new Error('Unsupported saved history');\n" +
+    '    const decoded = decompressFromUTF16(history.data as string);\n' +
+    '    const rows: unknown = decoded === null ? null : JSON.parse(decoded);\n' +
+    "    if (!Array.isArray(rows)) throw new Error('Invalid saved history');\n" +
+    '    value[key] = rows;\n' +
+    '  }\n' +
+    '  return value;\n' +
+    '}\n' +
+    '\n' +
+    '/* Check the core data the page reads before its optional-field migration.\n' +
+    '   Do not fill lost history or require newer phone, money or injury fields.\n' +
+    '   Serialized event choices intentionally have no executable apply function. */\n' +
+    'export function isSoccerCareerSave(value: unknown): boolean {\n' +
+    '  if (!record(value)) return false;\n' +
+    "  if (!fields(value, ['playerName', 'nationality', 'position', 'era', 'currentClub', 'currentClubCountry', 'currentClubColor', 'currentLeague', 'lifestyleLevel'], text)\n" +
+    "    || !fields(value, ['age', 'currentClubTier', 'contractYearsLeft', 'weeklyWage', 'marketValue', 'pace', 'shooting', 'passing', 'dribbling', 'defending', 'physical', 'reflexes', 'overall', 'netWorth', 'socialMediaFollowers', 'popularity', 'morale'], number)\n" +
+    "    || typeof value.retired !== 'boolean' || !phases.includes(value.phase as string)) return false;\n" +
+    '  if (!list(value.seasons, season) || value.seasons.length === 0\n' +
+    '    || !list(value.events, text) || !list(value.pendingEvents, event)\n' +
+    '    || !list(value.pendingOffers, offer)\n' +
+    "    || !list(value.pendingNews, row => record(row) && fields(row, ['newspaper', 'headline', 'body'], text))\n" +
+    "    || !list(value.awards, row => record(row) && number(row.year) && fields(row, ['name', 'emoji'], text))\n" +
+    '    || !list(value.properties, text) || !list(value.investments, text)) return false;\n' +
+    '  if (!record(value.family) || !number(value.family.children)\n' +
+    "    || typeof value.family.isMarried !== 'boolean' || typeof value.family.isDivorced !== 'boolean'\n" +
+    "    || !record(value.intStats) || !fields(value.intStats, ['caps', 'goals', 'assists'], number)) return false;\n" +
+    '  if (value.pendingSummary != null && !season(value.pendingSummary)) return false;\n' +
+    '  if (value.legacy != null && (!record(value.legacy) || !number(value.legacy.score) || !text(value.legacy.tier)\n' +
+    '    || !list(value.legacy.breakdown, row => record(row) && text(row.label) && number(row.points)))) return false;\n' +
+    "  for (const name of ['managerState', 'ownerState']) {\n" +
+    '    const tail = value[name];\n' +
+    "    if (tail != null && (!record(tail) || !text(tail.club) || !fields(tail, ['clubTier', 'season', 'trophies', 'promotions'], number)\n" +
+    "      || !list(tail.seasonResults, row => record(row) && fields(row, ['club', 'result'], text) && number(row.year)))) return false;\n" +
+    '  }\n' +
+    '  if (value.ownerState != null && (!record(value.ownerState) || !number(value.ownerState.budget))) return false;\n' +
+    "  if (value.punditState != null && (!record(value.punditState) || !fields(value.punditState, ['season', 'controversies'], number)\n" +
+    "    || !list(value.punditState.predictions, row => record(row) && text(row.prediction) && typeof row.cameTrue === 'boolean'))) return false;\n" +
+    '  return true;\n' +
+    '}\n',
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0
