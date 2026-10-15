@@ -1,0 +1,7 @@
+Actual physical unit files: 1; 22 exact completed outcomes.
+Actual unit outcomes: 22 passed; 0 exact intended faults; pending 0.
+Pending popularity and previews: all 22 literal names completed; child exit 0; file message empty.
+Actual app source copies: no normal or baseline mutation; 5 original compiled leaves retained; one additional read-only picker observer.
+Source receipts held: 10; 6 parent bindings; complete raw JSON/log and actual source copies retained; setup markers absent.
+Actual picker fixtures: 3/3 scenarios; 2 controlled input replays through the unmodified picker; 5 actual answers; disclosed old-caption overlays; sha256=e08d906066ddd383ffcb27d40c41677fc99940bd9f2a8ba973879c4783b20c88.
+simSoccerCareerPendingPopularity normal: green. Exact source and outcome guards passed.
