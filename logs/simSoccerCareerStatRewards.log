@@ -1,0 +1,41 @@
+error: patch failed: src/pages/WhatsNew.tsx:27
+error: src/pages/WhatsNew.tsx: patch does not apply
+error: patch failed: src/pages/WhatsNew.tsx:27
+error: src/pages/WhatsNew.tsx: patch does not apply
+error: patch failed: src/pages/WhatsNew.tsx:27
+error: src/pages/WhatsNew.tsx: patch does not apply
+error: patch failed: src/pages/WhatsNew.tsx:27
+error: src/pages/WhatsNew.tsx: patch does not apply
+error: patch failed: src/pages/WhatsNew.tsx:27
+error: src/pages/WhatsNew.tsx: patch does not apply
+error: patch failed: src/pages/WhatsNew.tsx:27
+error: src/pages/WhatsNew.tsx: patch does not apply
+error: patch failed: src/pages/WhatsNew.tsx:27
+error: src/pages/WhatsNew.tsx: patch does not apply
+error: patch failed: src/pages/WhatsNew.tsx:27
+error: src/pages/WhatsNew.tsx: patch does not apply
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Only fixed Life and Contracts may differ from held parent app
++ actual - expected
+
++ '1a1c05feb120de043944ef45ec0880ed53e38f6b324e28889de2064fddd623ef'
+- '0d9ab4a21241ca1d993fbc7a7176d3ed0de988d6cd2e6989d662c6a1307730ea'
+
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simSoccerCareerStatRewards.mjs:75:60
+    at Array.map (<anonymous>)
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simSoccerCareerStatRewards.mjs:72:116
+    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)
+    at async node:internal/modules/esm/loader:647:26
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: '1a1c05feb120de043944ef45ec0880ed53e38f6b324e28889de2064fddd623ef',
+  expected: '0d9ab4a21241ca1d993fbc7a7176d3ed0de988d6cd2e6989d662c6a1307730ea',
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0

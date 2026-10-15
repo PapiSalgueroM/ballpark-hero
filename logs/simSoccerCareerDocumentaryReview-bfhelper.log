@@ -1,0 +1,331 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Only fixed Life may differ from the whole held parent app
++ actual - expected
+... Skipped lines
+
+  "import { acknowledgeChanceWheel, validChanceWheel } from '@/lib/careerChanceWheel';\n" +
+    "import { soccerEventChoiceConsequence } from '@/lib/soccerCareerContracts';\n" +
+    'import { Component, Fragment, lazy, Suspense, useState, useCallback, useRef, useEffect, useMemo, type ComponentType, type ReactNode, type CSSProperties } from "react";\n' +
+    "import { formatNumber } from '@/lib/formatNumber';\n" +
+    "import { focusDialogOnMount, escapeCloses } from '@/lib/dialogA11y';\n" +
+...
+    'import type { FirstStageStage } from "@/lib/soccerCareerContinental";\n' +
++   'import { careerBeforeBallonDorReveal, revealBallonDorResult, ballonDorAwaitingReveal } from "@/lib/soccerAwardReveal";\n' +
+-   'import { careerBeforeBallonDorReveal, revealBallonDorResult } from "@/lib/soccerAwardReveal";\n' +
+    'import { readLeagueWorldSeason } from "@/lib/soccerCareerLeagueWorld";\n' +
+    'import { soccerExtensionQuote } from "@/lib/soccerCareerContracts";\n' +
+    'import { farewellEligibility, readSoccerFarewell } from "@/lib/soccerCareerFarewell";\n' +
+    'import { FarewellSeasonCard } from "@/components/soccer-career/FarewellSeasonCard";\n' +
+    "import AgentBrief from '@/components/soccer-career/AgentBrief';\n" +
+...
+    "import { CareerMentorTile } from '@/components/soccer-career/CareerMentorTile';\n" +
++   "import PotentialProgress from '@/components/soccer-career/PotentialProgress';\n" +
+    'import type { MoneyAction } from "@/lib/soccerMoney";\n' +
+    'import { bankSummary } from "@/lib/soccerMoney";\n' +
+    'import PhonePanel from "@/components/soccer-career/PhonePanel";\n' +
+    'const CareerStory = lazy(() => import("@/components/soccer-career/CareerStory").catch(() => { reloadToRetryChunk(); return new Promise<never>(() => undefined); }));\n' +
+    'import { BAND_CLASS } from "@/lib/careerRatingBand";\n' +
+...
+    'import { beatStyle, debutMomentKey, legacyMomentKey, rivalryMomentKey, settleLoadedMoments, useCareerMoment } from "@/components/soccer-career/careerMoments";\n' +
++   'import { isSoccerCareerSave, parseSoccerCareerSave, serializeSoccerCare'... 254538 more characters
+-   "import { isSoccerCareerSave, parseSoccerCareerSave, serializeSoccerCareerSave } from '@/lib/soccerCareerSave';\n" +
+-   "import { reloadToRetryChunk } from '@/lib/freshBuild';\n" +
+-   'import {'... 254280 more characters
+
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simSoccerCareerDocumentaryReview.mjs:75:36
+    at Array.map (<anonymous>)
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simSoccerCareerDocumentaryReview.mjs:73:28
+    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)
+    at async node:internal/modules/esm/loader:647:26
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: "import { acknowledgeChanceWheel, validChanceWheel } from '@/lib/careerChanceWheel';\n" +
+    "import { soccerEventChoiceConsequence } from '@/lib/soccerCareerContracts';\n" +
+    'import { Component, Fragment, lazy, Suspense, useState, useCallback, useRef, useEffect, useMemo, type ComponentType, type ReactNode, type CSSProperties } from "react";\n' +
+    "import { formatNumber } from '@/lib/formatNumber';\n" +
+    "import { focusDialogOnMount, escapeCloses } from '@/lib/dialogA11y';\n" +
+    'import { useGameCompletion } from "@/hooks/useGameCompletion";\n' +
+    'import { recordCompletion, recordActivity, recordStreakDay } from "@/lib/completions";\n' +
+    'import PageSeo from "@/components/seo/PageSeo";\n' +
+    "import GameSeoContent from '@/components/seo/GameSeoContent';\n" +
+    'import { GameNavbar } from "@/components/game/GameNavbar";\n' +
+    'import { GameHelp } from "@/components/game/GameHelp";\n' +
+    "import VictoryMoment from '@/components/game/VictoryMoment';\n" +
+    'import { Button } from "@/components/ui/button";\n' +
+    'import { Input } from "@/components/ui/input";\n' +
+    'import { Label } from "@/components/ui/label";\n' +
+    'import {\n' +
+    '  Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue,\n' +
+    '} from "@/components/ui/select";\n' +
+    'import { groupByConfederation } from "@/lib/confederationGroups";\n' +
+    'import { useAuth } from "@/contexts/AuthContext";\n' +
+    'import { AuthModal } from "@/components/auth/AuthModal";\n' +
+    'import { toast } from "sonner";\n' +
+    'import { ChevronRight } from "lucide-react";\n' +
+    'import { getPersonalityDef, getAgentDef } from "@/lib/soccerCareerLife";\n' +
+    'import { AgentReviewCard } from "@/components/soccer-career/AgentReviewCard";\n' +
+    'import { agentReviewEligibility, changeCareerAgent } from "@/lib/soccerAgentReview";\n' +
+    'import {\n' +
+    '  type CareerState, type SeasonRecord, type ClubData, type ContractOffer, type TransferSituation,\n' +
+    '  type RandomEvent, type EventChoice, type WorldCupResult, type WCMatch,\n' +
+    '  type RivalPlayer, type RivalryEvent, type RivalrySummary,\n' +
+    '  type LifestyleLevel, type FamilyStatus, type BallonDorResult, type BallonDorNominee,\n' +
+    '  type UCLResult, type UCLKnockoutMatch, type Award,\n' +
+    '  type LegacyResult, type LegacyTier, type PostRetirementChoice, type ManagerState,\n' +
+    '  type PunditState, type OwnerState, type PunditAction,\n' +
+    '  type NewsArticle, type SpendingItem, type SpendingCategory,\n' +
+    '  type SocialMediaAction, type SponsorshipTier,\n' +
+    '  type MoralDilemma, type MoralDilemmaChoice,\n' +
+    '  initCareer, advanceYouthYear, acceptOffer, advanceProSeason,\n' +
+    '  dismissSummary, stayAtClub, signExtension, requestTransferDecision, applyEventChoice,\n' +
+    '  dismissDebut, dismissWorldCup, retireFromInternational, dismissRivalryEvent,\n' +
+    '  dismissBallonDor, giveBdorSpeech, bdorSpeechOpen, type BdorSpeechChoice, SOCCER_BALLON_DOR, SOCCER_BDOR_SPEECHES, SOCCER_WORLD_CUP_SPEECHES,\n' +
+    '  giveWorldCupSpeech, type WorldCupSpeechChoice, manualRetire, choosePostRetirement, advanceManagerSeason, acceptManagerOffer, endManagerCareer, loadManagerMarket,\n' +
+    '  acceptRetirementSuggestion, declineRetirementSuggestion, announceFarewellSeason,\n' +
+    '  advancePunditSeason, endPunditCareer, punditLegacyPaid, playedSeniorSeason, POST_RETIREMENT_BONUS_CAP,\n' +
+    '  advanceOwnerSeason, endOwnerCareer,\n' +
+    '  dismissNewspaper, purchaseSpendingItem, SPENDING_ITEMS,\n' +
+    '  applySocialMediaAction, handleCoverAthleteDecision, dismissSocialMediaPhase,\n' +
+    '  applyMoralDilemmaChoice, dismissMoralDilemma, MORAL_DILEMMAS,\n' +
+    '  applyRehabChoice,\n' +
+    '  SOCIAL_MEDIA_ACTIONS, SPONSORSHIP_TIERS, SOCCER_COVER,\n' +
+    '  dismissAppealResult,\n' +
+    '  generateShareText, getYouthAcademyClub,\n' +
+    '  getCareerTotals, calcOverall, formatWage, formatNetWorth, formatFollowers,\n' +
+    '  FALLBACK_CLUBS,\n' +
+    '  answerPhoneText, unreadPhoneCount,\n' +
+    '  applyTrainingResult, trainingAvailable, type TrainingDrill,\n' +
+    '  repairCareer, effectivePotential, careerBuildEffects,\n' +
+    '  applyMoneyAction,\n' +
+    '  acceptLoan, projectLeagueApps,\n' +
+    '  nextSeasonYear, managerNextSeasonYear,\n' +
+    '} from "@/lib/soccerCareerEngine";\n' +
+    'import type { FirstStageStage } from "@/lib/soccerCareerContinental";\n' +
+    'import { careerBeforeBallonDorReveal, revealBallonDorResult, ballonDorAwaitingReveal } from "@/lib/soccerAwardReveal";\n' +
+    'import { readLeagueWorldSeason } from "@/lib/soccerCareerLeagueWorld";\n' +
+    'import { soccerExtensionQuote } from "@/lib/soccerCareerContracts";\n' +
+    'import { farewellEligibility, readSoccerFarewell } from "@/lib/soccerCareerFarewell";\n' +
+    'import { FarewellSeasonCard } from "@/components/soccer-career/FarewellSeasonCard";\n' +
+    "import AgentBrief from '@/components/soccer-career/AgentBrief';\n" +
+    "import { readTransferBrief, transferBriefResult } from '@/lib/soccerCareerTransferBrief';\n" +
+    '/* Round 258, his ask alongside the net worth bug: "depending where u live\n' +
+    '   ur currency will be diffrent". `money` rewrites the euro amounts inside\n' +
+    '   any line the game draws, so a wage slip, an event consequence and a\n' +
+    '   transfer fee all follow the same chosen currency. Display only: every\n' +
+    '   number in the save stays in euros. */\n' +
+    'import { localizeMoney as money, localizeMoneyGrouped as moneyLine, CURRENCIES, getCurrency, setCurrency, rateNote } from "@/lib/soccerCurrency";\n' +
+    '/* Round 262: the squad you are actually in. Display only, and it renders\n' +
+    '   nothing at all when we have no honest answer for that club and season. */\n' +
+    'import { depthChart, GROUP_LABEL } from "@/lib/soccerClubSquad";\n' +
+    'import { SquadTile } from "@/components/soccer-career/SquadTile";\n' +
+    'import { ReducedRolePlanNote, ReducedRoleSeasonNote } from "@/components/soccer-career/ReducedRoleNote";\n' +
+    'import { personalGoalMilestone } from "@/lib/soccerCareerMilestone";\n' +
+    'import { REDUCED_ROLE_GAMES } from "@/lib/soccerCareerRole";\n' +
+    'import PressRoomTile from "@/components/soccer-career/PressRoomTile";\n' +
+    'import type { TrophyCategory } from "@/components/soccer-career/TrophyCabinet";\n' +
+    "import { CareerRecordsTile } from '@/components/soccer-career/CareerRecordsTile';\n" +
+    "import { SeasonAmbitionTile, SeasonAmbitionResult } from '@/components/soccer-career/SeasonAmbitionTile';\n" +
+    "import { PreseasonPlanTile, PreseasonPlanResult } from '@/components/soccer-career/PreseasonPlanTile';\n" +
+    "import { CareerMentorTile } from '@/components/soccer-career/CareerMentorTile';\n" +
+    "import PotentialProgress from '@/components/soccer-career/PotentialProgress';\n" +
+    'import type { MoneyAction } from "@/lib/soccerMoney";\n' +
+    'import { bankSummary } from "@/lib/soccerMoney";\n' +
+    'import PhonePanel from "@/components/soccer-career/PhonePanel";\n' +
+    'const CareerStory = lazy(() => import("@/components/soccer-career/CareerStory").catch(() => { reloadToRetryChunk(); return new Promise<never>(() => undefined); }));\n' +
+    'import { BAND_CLASS } from "@/lib/careerRatingBand";\n' +
+    'import { soccerRatingRows, readMatchRating, readOvr, ratingBand } from "@/lib/careerSeasonRatings";\n' +
+    'import { applyDrillResult, type DrillKind } from "@/lib/careerDrills";\n' +
+    'import { rollStartingOverall, rollPotential, potentialTier, adjustClubsForYear, allocOverall, normalizeAllocation, allocMax, ALLOC_MIN, playsLike, stepAllocation } from "@/lib/careerEras";\n' +
+    'import { dugoutTableWords, ordinal, leagueWithArticle, readLeagueFinish, finishLeague, leagueInYear, leagueSeasonLine, namedInLeague } from "@/lib/soccerCareerLeague";\n' +
+    'import { SeasonDerbyLines, DerbyChip, CareerDerbyTotals } from "@/components/soccer-career/DerbyLines";\n' +
+    'import { SeasonCupExitLine, SeasonCupWinBlock } from "@/components/soccer-career/CupRunLines";\n' +
+    'import { cupCabinetLabel, cupChipLabel } from "@/lib/soccerCareerCup";\n' +
+    'import { derbyHeroSeasons, DERBY_HELP_RULES } from "@/lib/soccerCareerDerby";\n' +
+    'import type { WorldSeason } from "@/lib/soccerPhone";\n' +
+    '/* Round 131: height, weight and the specifics under each family. */\n' +
+    'import {\n' +
+    '  type PlayerPhysique, type AttrShape,\n' +
+    '  attrTreeFor, deriveAttributes, buildEffects, effectsSummary, safePhysique,\n' +
+    '  applyFamilyOffset, defaultPhysique, heightLabel, weightLabel, buildLabel,\n' +
+    '  POSITION_OFFSETS, SHAPE_MAX, HEIGHT_MIN, HEIGHT_MAX, WEIGHT_MIN, WEIGHT_MAX,\n' +
+    '} from "@/lib/soccerCareerAttributes";\n' +
+    'import {\n' +
+    '  type PlayerAppearance, defaultAppearance, getCelebration,\n' +
+    '} from "@/lib/soccerCareerAppearance";\n' +
+    'import { seasonFamilySummary, type SeasonFamilyContext } from "@/lib/seasonFamilySummary";\n' +
+    'import PlayerAvatar from "@/components/soccer-career/PlayerAvatar";\n' +
+    'import AppearanceBuilder from "@/components/soccer-career/AppearanceBuilder";\n' +
+    'import { Confetti } from "@/components/soccer-career/CareerFx";\n' +
+    'import { AwardsNightCard, SpeechChoices, SpokenSpeech } from "@/components/career/AwardsNightCard";\n' +
+    'import { availableSpeeches, givenSpeechOf } from "@/lib/careerAwardsNight";\n' +
+    'import { CelebrationStyles, revealDelay } from "@/components/club-manager/Celebration";\n' +
+    'import { SignedSlip } from "@/components/soccer-career/SignedSlip";\n' +
+    'import { SoccerOfferReview } from "@/components/soccer-career/SoccerOfferReview";\n' +
+    'import { buildSoccerOfferReview } from "@/lib/soccerOfferReview";\n' +
+    'import type { SignedNote } from "@/components/soccer-career/SignedSlip";\n' +
+    'import { AcademyFocusPicker, AcademyReportCard } from "@/components/soccer-career/AcademyReportCard";\n' +
+    'import { InternationalReturnCard } from "@/components/soccer-career/InternationalReturnCard";\n' +
+    'import { internationalReturnEligibility, makeInternationallyAvailable } from "@/lib/soccerInternationalReturn";\n' +
+    'import { buildAcademyReport, academyFocusOf, withAcademyFocus } from "@/lib/soccerCareerAcademy";\n' +
+    'import type { AcademyFocus, AcademyReport } from "@/lib/soccerCareerAcademy";\n' +
+    'import { heatLabel } from "@/lib/soccerCareerCorruption";\n' +
+    'import ShareButtons from "@/components/game/ShareButtons";\n' +
+    'import { FlagImg, FlagFromEmoji, TextWithFlags } from "@/components/FlagImg";\n' +
+    'import { shareResult } from "@/lib/share";\n' +
+    'import { useRevealScroll } from "@/hooks/useRevealScroll";\n' +
+    "import { saveFence } from '@/lib/saveFence';\n" +
+    "import { useSaveFenceWatch } from '@/hooks/useSaveFenceWatch';\n" +
+    "import { useArrivalTop } from '@/hooks/useArrivalTop';\n" +
+    'import { TournamentCard, InternationalHistoryTile } from "@/components/soccer-career/InternationalPanel";\n' +
+    'import { beatStyle, debutMomentKey, legacyMomentKey, rivalryMomentKey, settleLoadedMoments, useCareerMoment } from "@/components/soccer-career/careerMoments";\n' +
+    'import { isSoccerCareerSave, parseSoccerCareerSave, serializeSoccerCare'... 254538 more characters,
+  expected: "import { acknowledgeChanceWheel, validChanceWheel } from '@/lib/careerChanceWheel';\n" +
+    "import { soccerEventChoiceConsequence } from '@/lib/soccerCareerContracts';\n" +
+    'import { Component, Fragment, lazy, Suspense, useState, useCallback, useRef, useEffect, useMemo, type ComponentType, type ReactNode, type CSSProperties } from "react";\n' +
+    "import { formatNumber } from '@/lib/formatNumber';\n" +
+    "import { focusDialogOnMount, escapeCloses } from '@/lib/dialogA11y';\n" +
+    'import { useGameCompletion } from "@/hooks/useGameCompletion";\n' +
+    'import { recordCompletion, recordActivity, recordStreakDay } from "@/lib/completions";\n' +
+    'import PageSeo from "@/components/seo/PageSeo";\n' +
+    "import GameSeoContent from '@/components/seo/GameSeoContent';\n" +
+    'import { GameNavbar } from "@/components/game/GameNavbar";\n' +
+    'import { GameHelp } from "@/components/game/GameHelp";\n' +
+    "import VictoryMoment from '@/components/game/VictoryMoment';\n" +
+    'import { Button } from "@/components/ui/button";\n' +
+    'import { Input } from "@/components/ui/input";\n' +
+    'import { Label } from "@/components/ui/label";\n' +
+    'import {\n' +
+    '  Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue,\n' +
+    '} from "@/components/ui/select";\n' +
+    'import { groupByConfederation } from "@/lib/confederationGroups";\n' +
+    'import { useAuth } from "@/contexts/AuthContext";\n' +
+    'import { AuthModal } from "@/components/auth/AuthModal";\n' +
+    'import { toast } from "sonner";\n' +
+    'import { ChevronRight } from "lucide-react";\n' +
+    'import { getPersonalityDef, getAgentDef } from "@/lib/soccerCareerLife";\n' +
+    'import { AgentReviewCard } from "@/components/soccer-career/AgentReviewCard";\n' +
+    'import { agentReviewEligibility, changeCareerAgent } from "@/lib/soccerAgentReview";\n' +
+    'import {\n' +
+    '  type CareerState, type SeasonRecord, type ClubData, type ContractOffer, type TransferSituation,\n' +
+    '  type RandomEvent, type EventChoice, type WorldCupResult, type WCMatch,\n' +
+    '  type RivalPlayer, type RivalryEvent, type RivalrySummary,\n' +
+    '  type LifestyleLevel, type FamilyStatus, type BallonDorResult, type BallonDorNominee,\n' +
+    '  type UCLResult, type UCLKnockoutMatch, type Award,\n' +
+    '  type LegacyResult, type LegacyTier, type PostRetirementChoice, type ManagerState,\n' +
+    '  type PunditState, type OwnerState, type PunditAction,\n' +
+    '  type NewsArticle, type SpendingItem, type SpendingCategory,\n' +
+    '  type SocialMediaAction, type SponsorshipTier,\n' +
+    '  type MoralDilemma, type MoralDilemmaChoice,\n' +
+    '  initCareer, advanceYouthYear, acceptOffer, advanceProSeason,\n' +
+    '  dismissSummary, stayAtClub, signExtension, requestTransferDecision, applyEventChoice,\n' +
+    '  dismissDebut, dismissWorldCup, retireFromInternational, dismissRivalryEvent,\n' +
+    '  dismissBallonDor, giveBdorSpeech, bdorSpeechOpen, type BdorSpeechChoice, SOCCER_BALLON_DOR, SOCCER_BDOR_SPEECHES, SOCCER_WORLD_CUP_SPEECHES,\n' +
+    '  giveWorldCupSpeech, type WorldCupSpeechChoice, manualRetire, choosePostRetirement, advanceManagerSeason, acceptManagerOffer, endManagerCareer, loadManagerMarket,\n' +
+    '  acceptRetirementSuggestion, declineRetirementSuggestion, announceFarewellSeason,\n' +
+    '  advancePunditSeason, endPunditCareer, punditLegacyPaid, playedSeniorSeason, POST_RETIREMENT_BONUS_CAP,\n' +
+    '  advanceOwnerSeason, endOwnerCareer,\n' +
+    '  dismissNewspaper, purchaseSpendingItem, SPENDING_ITEMS,\n' +
+    '  applySocialMediaAction, handleCoverAthleteDecision, dismissSocialMediaPhase,\n' +
+    '  applyMoralDilemmaChoice, dismissMoralDilemma, MORAL_DILEMMAS,\n' +
+    '  applyRehabChoice,\n' +
+    '  SOCIAL_MEDIA_ACTIONS, SPONSORSHIP_TIERS, SOCCER_COVER,\n' +
+    '  dismissAppealResult,\n' +
+    '  generateShareText, getYouthAcademyClub,\n' +
+    '  getCareerTotals, calcOverall, formatWage, formatNetWorth, formatFollowers,\n' +
+    '  FALLBACK_CLUBS,\n' +
+    '  answerPhoneText, unreadPhoneCount,\n' +
+    '  applyTrainingResult, trainingAvailable, type TrainingDrill,\n' +
+    '  repairCareer, effectivePotential, careerBuildEffects,\n' +
+    '  applyMoneyAction,\n' +
+    '  acceptLoan, projectLeagueApps,\n' +
+    '  nextSeasonYear, managerNextSeasonYear,\n' +
+    '} from "@/lib/soccerCareerEngine";\n' +
+    'import type { FirstStageStage } from "@/lib/soccerCareerContinental";\n' +
+    'import { careerBeforeBallonDorReveal, revealBallonDorResult } from "@/lib/soccerAwardReveal";\n' +
+    'import { readLeagueWorldSeason } from "@/lib/soccerCareerLeagueWorld";\n' +
+    'import { soccerExtensionQuote } from "@/lib/soccerCareerContracts";\n' +
+    'import { farewellEligibility, readSoccerFarewell } from "@/lib/soccerCareerFarewell";\n' +
+    'import { FarewellSeasonCard } from "@/components/soccer-career/FarewellSeasonCard";\n' +
+    "import AgentBrief from '@/components/soccer-career/AgentBrief';\n" +
+    "import { readTransferBrief, transferBriefResult } from '@/lib/soccerCareerTransferBrief';\n" +
+    '/* Round 258, his ask alongside the net worth bug: "depending where u live\n' +
+    '   ur currency will be diffrent". `money` rewrites the euro amounts inside\n' +
+    '   any line the game draws, so a wage slip, an event consequence and a\n' +
+    '   transfer fee all follow the same chosen currency. Display only: every\n' +
+    '   number in the save stays in euros. */\n' +
+    'import { localizeMoney as money, localizeMoneyGrouped as moneyLine, CURRENCIES, getCurrency, setCurrency, rateNote } from "@/lib/soccerCurrency";\n' +
+    '/* Round 262: the squad you are actually in. Display only, and it renders\n' +
+    '   nothing at all when we have no honest answer for that club and season. */\n' +
+    'import { depthChart, GROUP_LABEL } from "@/lib/soccerClubSquad";\n' +
+    'import { SquadTile } from "@/components/soccer-career/SquadTile";\n' +
+    'import { ReducedRolePlanNote, ReducedRoleSeasonNote } from "@/components/soccer-career/ReducedRoleNote";\n' +
+    'import { personalGoalMilestone } from "@/lib/soccerCareerMilestone";\n' +
+    'import { REDUCED_ROLE_GAMES } from "@/lib/soccerCareerRole";\n' +
+    'import PressRoomTile from "@/components/soccer-career/PressRoomTile";\n' +
+    'import type { TrophyCategory } from "@/components/soccer-career/TrophyCabinet";\n' +
+    "import { CareerRecordsTile } from '@/components/soccer-career/CareerRecordsTile';\n" +
+    "import { SeasonAmbitionTile, SeasonAmbitionResult } from '@/components/soccer-career/SeasonAmbitionTile';\n" +
+    "import { PreseasonPlanTile, PreseasonPlanResult } from '@/components/soccer-career/PreseasonPlanTile';\n" +
+    "import { CareerMentorTile } from '@/components/soccer-career/CareerMentorTile';\n" +
+    'import type { MoneyAction } from "@/lib/soccerMoney";\n' +
+    'import { bankSummary } from "@/lib/soccerMoney";\n' +
+    'import PhonePanel from "@/components/soccer-career/PhonePanel";\n' +
+    'const CareerStory = lazy(() => import("@/components/soccer-career/CareerStory").catch(() => { reloadToRetryChunk(); return new Promise<never>(() => undefined); }));\n' +
+    'import { BAND_CLASS } from "@/lib/careerRatingBand";\n' +
+    'import { soccerRatingRows, readMatchRating, readOvr, ratingBand } from "@/lib/careerSeasonRatings";\n' +
+    'import { applyDrillResult, type DrillKind } from "@/lib/careerDrills";\n' +
+    'import { rollStartingOverall, rollPotential, potentialTier, adjustClubsForYear, allocOverall, normalizeAllocation, allocMax, ALLOC_MIN, playsLike, stepAllocation } from "@/lib/careerEras";\n' +
+    'import { dugoutTableWords, ordinal, leagueWithArticle, readLeagueFinish, finishLeague, leagueInYear, leagueSeasonLine, namedInLeague } from "@/lib/soccerCareerLeague";\n' +
+    'import { SeasonDerbyLines, DerbyChip, CareerDerbyTotals } from "@/components/soccer-career/DerbyLines";\n' +
+    'import { SeasonCupExitLine, SeasonCupWinBlock } from "@/components/soccer-career/CupRunLines";\n' +
+    'import { cupCabinetLabel, cupChipLabel } from "@/lib/soccerCareerCup";\n' +
+    'import { derbyHeroSeasons, DERBY_HELP_RULES } from "@/lib/soccerCareerDerby";\n' +
+    'import type { WorldSeason } from "@/lib/soccerPhone";\n' +
+    '/* Round 131: height, weight and the specifics under each family. */\n' +
+    'import {\n' +
+    '  type PlayerPhysique, type AttrShape,\n' +
+    '  attrTreeFor, deriveAttributes, buildEffects, effectsSummary, safePhysique,\n' +
+    '  applyFamilyOffset, defaultPhysique, heightLabel, weightLabel, buildLabel,\n' +
+    '  POSITION_OFFSETS, SHAPE_MAX, HEIGHT_MIN, HEIGHT_MAX, WEIGHT_MIN, WEIGHT_MAX,\n' +
+    '} from "@/lib/soccerCareerAttributes";\n' +
+    'import {\n' +
+    '  type PlayerAppearance, defaultAppearance, getCelebration,\n' +
+    '} from "@/lib/soccerCareerAppearance";\n' +
+    'import { seasonFamilySummary, type SeasonFamilyContext } from "@/lib/seasonFamilySummary";\n' +
+    'import PlayerAvatar from "@/components/soccer-career/PlayerAvatar";\n' +
+    'import AppearanceBuilder from "@/components/soccer-career/AppearanceBuilder";\n' +
+    'import { Confetti } from "@/components/soccer-career/CareerFx";\n' +
+    'import { AwardsNightCard, SpeechChoices, SpokenSpeech } from "@/components/career/AwardsNightCard";\n' +
+    'import { availableSpeeches, givenSpeechOf } from "@/lib/careerAwardsNight";\n' +
+    'import { CelebrationStyles, revealDelay } from "@/components/club-manager/Celebration";\n' +
+    'import { SignedSlip } from "@/components/soccer-career/SignedSlip";\n' +
+    'import { SoccerOfferReview } from "@/components/soccer-career/SoccerOfferReview";\n' +
+    'import { buildSoccerOfferReview } from "@/lib/soccerOfferReview";\n' +
+    'import type { SignedNote } from "@/components/soccer-career/SignedSlip";\n' +
+    'import { AcademyFocusPicker, AcademyReportCard } from "@/components/soccer-career/AcademyReportCard";\n' +
+    'import { InternationalReturnCard } from "@/components/soccer-career/InternationalReturnCard";\n' +
+    'import { internationalReturnEligibility, makeInternationallyAvailable } from "@/lib/soccerInternationalReturn";\n' +
+    'import { buildAcademyReport, academyFocusOf, withAcademyFocus } from "@/lib/soccerCareerAcademy";\n' +
+    'import type { AcademyFocus, AcademyReport } from "@/lib/soccerCareerAcademy";\n' +
+    'import { heatLabel } from "@/lib/soccerCareerCorruption";\n' +
+    'import ShareButtons from "@/components/game/ShareButtons";\n' +
+    'import { FlagImg, FlagFromEmoji, TextWithFlags } from "@/components/FlagImg";\n' +
+    'import { shareResult } from "@/lib/share";\n' +
+    'import { useRevealScroll } from "@/hooks/useRevealScroll";\n' +
+    "import { saveFence } from '@/lib/saveFence';\n" +
+    "import { useSaveFenceWatch } from '@/hooks/useSaveFenceWatch';\n" +
+    "import { useArrivalTop } from '@/hooks/useArrivalTop';\n" +
+    'import { TournamentCard, InternationalHistoryTile } from "@/components/soccer-career/InternationalPanel";\n' +
+    'import { beatStyle, debutMomentKey, legacyMomentKey, rivalryMomentKey, settleLoadedMoments, useCareerMoment } from "@/components/soccer-career/careerMoments";\n' +
+    "import { isSoccerCareerSave, parseSoccerCareerSave, serializeSoccerCareerSave } from '@/lib/soccerCareerSave';\n" +
+    "import { reloadToRetryChunk } from '@/lib/freshBuild';\n" +
+    'import {'... 254280 more characters,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0

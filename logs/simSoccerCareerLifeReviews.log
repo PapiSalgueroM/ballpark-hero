@@ -1,0 +1,24 @@
+error: patch failed: src/pages/WhatsNew.tsx:27
+error: src/pages/WhatsNew.tsx: patch does not apply
+error: patch failed: src/pages/WhatsNew.tsx:27
+error: src/pages/WhatsNew.tsx: patch does not apply
+error: patch failed: src/pages/WhatsNew.tsx:27
+error: src/pages/WhatsNew.tsx: patch does not apply
+error: patch failed: src/pages/WhatsNew.tsx:27
+error: src/pages/WhatsNew.tsx: patch does not apply
+error: patch failed: src/pages/WhatsNew.tsx:27
+error: src/pages/WhatsNew.tsx: patch does not apply
+error: patch failed: src/pages/WhatsNew.tsx:27
+error: src/pages/WhatsNew.tsx: patch does not apply
+error: patch failed: src/pages/WhatsNew.tsx:27
+error: src/pages/WhatsNew.tsx: patch does not apply
+error: patch failed: src/pages/WhatsNew.tsx:27
+error: src/pages/WhatsNew.tsx: patch does not apply
+Acquisition attempts vary: the player name (keyed deck, Round 1327).
+Actual physical unit files: 1; 20 exact completed outcomes.
+Owned review outcomes: 9; passed 9; 0 intended failures.
+Preservation outcomes: 11 actual passes; pending 0; file message empty.
+Actual runner exit: 0; raw setup and unhandled markers absent.
+Source receipts held: 9; before/control copies and raw report/log retained.
+Actual delivery: 2/2 recorded chains; 4 normal-only browser fixtures; sha256=184b7c9583a43f6dc37ba21561d1777a19caf604a11c827f9b9cd327f5a29ed3.
+simSoccerCareerLifeReviews normal: green. Exact causal outcome and source guards passed.
