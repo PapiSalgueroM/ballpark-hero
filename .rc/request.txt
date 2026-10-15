@@ -1,0 +1,7 @@
+# Release BF gate rerun: playSoccerCareerBuildLazy (a failed-chunk race at 390) and hub-walk-full (the intermittent 320 Stats tile), alone and serial
+#!serve
+#!playwright
+#!serial
+fonts: mkdir -p .tmp-fx/font-cache && FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only
+playSoccerCareerBuildLazy: export CI=1 SIM_NETWORK=offline SOCCER_ROUTINE_OUT="$PWD/sclz" SOCCER_BUILD_PHASE=fixed FREE_KICK_FONT_CACHE="$PWD/sclz/font-cache"; node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only | tail -1 && node .rc/x/prepInstalled.mjs "$PWD/sclz" && { NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playSoccerCareerBuildLazy.mjs > /tmp/lz.log 2>&1; s=$?; tail -3 /tmp/lz.log | cut -c1-240; mkdir -p /tmp/lzb && gh run download 38336065963 -n soccer-routine-38336065963 -D /tmp/lzb && B=$(find /tmp/lzb -path '*build-lazy/baseline/report.json' | head -1) && BUILD_METHOD_EXIT=$s SOCCER_BUILD_BASELINE_REPORT="$B" node .rc/x/lazyCheck.mjs; }
+hub-walk-full: mkdir -p "$TMPDIR/out" && RC_OUT="$TMPDIR/out" HEAD_URL=http://localhost:4173 BASE_URL=http://localhost:4174 node scripts/playCmHubLanding.mjs 2>&1 | tee "$TMPDIR/ctl.log"; s=${PIPESTATUS[0]}; [ $s -eq 0 ] && grep -qE 'playCmHubLanding: green \(.*D [1-9][0-9]* pass 0 fail' "$TMPDIR/ctl.log"
