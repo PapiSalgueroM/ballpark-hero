@@ -1,0 +1,6 @@
+build exit=0 24s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+headsha exit=0 0s | 48bb600a8 Round BGG: m4, merge PR277 codex/career-confirmation-phone-layout at e3fbccb8 (the New Career confirmation buttons stay inside the dialog on a phone)
+dialog-bare exit=1 0s | FAIL Soccer New Career dialog browser
+dialog exit=0 9s | PASS Soccer New Career dialog browser
+retire-after-m4 exit=0 11s | PASS Soccer retirement actions browser
+tsc exit=0 47s | 

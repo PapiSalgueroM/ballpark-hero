@@ -1,0 +1,3 @@
+fe927101b rc request rBGg-m4 for d3aaf18726d4c3894af672ff48e4a41da0135745
+d3aaf1872 Round BGG: bind PR277's proof to a parent ref (SOCCER_NEW_CAREER_PARENT_REF, unset is the packet's own pin)
+48bb600a8 Round BGG: m4, merge PR277 codex/career-confirmation-phone-layout at e3fbccb8 (the New Career confirmation buttons stay inside the dialog on a phone)
