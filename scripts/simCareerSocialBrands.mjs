@@ -171,6 +171,14 @@ import { inverseWorldTruth, worldTruthReceiptProblem } from './lib/careerWorldTr
    purpose, and that one line moves this recording (rBBg-sb: green on its parent, red on it). The historical bundle
    puts the old line back in its copy of the engine: scripts/lib/careerNoAgentLoanLineBA.mjs. */
 import { inverseNoAgentLoanLine } from './lib/careerNoAgentLoanLineBA.mjs';
+/* Release BF (Round BFH): the Soccer Career life chain (Rounds 1350 to 1363) deals more Life cards and holds some
+   choices over a reload, so the recorded careers part from the fixture (the join's rBFg-gA: careers 0, 1 and 2 at steps
+   15, 11 and 24). The historical bundle reads the chain's three changed engine inputs as at Release BE's head 4ae7a534
+   before any inverse runs on them: scripts/lib/careerLifeChainBF.mjs, the pattern of simCareerStoryRole's
+   CAREER_STORY_ROLE_CHAIN_REF. SOCIAL_BRANDS_CHAIN_REF replaces the ref, and an empty value reads this tree (the
+   unattributed arm, red on this head). The current bundle keeps the chain. */
+import { lifeChain, lifeChainRef } from './lib/careerLifeChainBF.mjs';
+const CHAIN_REF = lifeChainRef('SOCIAL_BRANDS_CHAIN_REF');
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const FIXTURE = path.join(ROOT, 'scripts', 'data', 'soccerBrandFixture835.json');
@@ -192,7 +200,7 @@ for (const relative of heldPaths) {
   const bytes = fs.readFileSync(path.join(ROOT, relative));
   sourceBefore[relative] = sha(bytes);
 }
-const report = { control: CONTROL || null, sections: SECTIONS, sourceBefore, failedLabels: [], originalSources: [], inverses: [], storyRoleInverses: [], nextTenInverses: [], veteranPayInverses: [], awardGenerationsInverses: [], noAgentLoanInverses: [], deckFairInverses: [], worldTruthInverses: [] };
+const report = { control: CONTROL || null, sections: SECTIONS, sourceBefore, failedLabels: [], originalSources: [], inverses: [], storyRoleInverses: [], nextTenInverses: [], veteranPayInverses: [], awardGenerationsInverses: [], noAgentLoanInverses: [], deckFairInverses: [], worldTruthInverses: [], lifeChainInverses: [] };
 function retain(name, value) {
   if (!ARTIFACTS) return;
   fs.mkdirSync(ARTIFACTS, { recursive: true });
@@ -378,7 +386,10 @@ if (SECTIONS.includes('1')) {
   let compared = got;
   if (gotText !== want) {
     const beforeControlCount = controlFired;
-    const historical = await loadSoccerBrand(ROOT, (relative, source) => {
+    const chain = lifeChain(ROOT, CHAIN_REF);
+    const historical = await loadSoccerBrand(ROOT, (relative, authored) => {
+      /* Release BF: a chain file is its text at the chain's ref before any inverse below reads it. */
+      const source = chain.swap(relative, authored);
       /* Release AT: under SOCIAL_BRANDS_ATTRIBUTION=train1178 this bundle keeps the train out too, so the
          fixture from before the train is asked of a tree with both taken out. */
       /* The wheel alone moves this recording (remote check rAU-G2), so the wheel alone is taken out. */
@@ -387,6 +398,9 @@ if (SECTIONS.includes('1')) {
       return relative === 'src/lib/soccerCareerEngine.ts' ? inverseNoAgentLoanLine(relative, inverseCareerStoryRole(inverseCareerDevelopment(controlled, report.inverses), report.storyRoleInverses), report.noAgentLoanInverses) : controlled;
     });
     assert.equal(controlFired - beforeControlCount, CONTROL ? 1 : 0, 'The additional historical bundle retains exactly the same effective copied fault');
+    assert.equal(chain.problem(), '', "The historical bundle loaded the life chain's three engine inputs at its ref");
+    report.lifeChainInverses = chain.served.map(file => ({ file, ref: CHAIN_REF }));
+    console.log(`     life chain attribution: ${CHAIN_REF ? `${chain.served.join(', ')} read at ${CHAIN_REF} in the historical bundle` : 'none, SOCIAL_BRANDS_CHAIN_REF is empty'}`);
     assert.equal(report.inverses.length, 1, 'One copied engine receives the bounded historical inverse');
     assert.equal(report.storyRoleInverses.length, 1, 'The same copied engine receives the story and role inverse once');
     assert.equal(report.nextTenInverses.length, 1, 'The copied wheel library receives the Rounds 1197 to 1208 inverse once');
