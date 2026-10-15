@@ -1,0 +1,3 @@
+build exit=0 27s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+headsha exit=0 0s | ac1f3d676 Round BFH: simCareerDerbies plays 240 forced careers a club by default (was 120), keeping 6b's 400 meeting floor
+budget-sweepWeight exit=0 27s | sweepWeight: green. Every page is inside its budget, and the budgets came down this round.

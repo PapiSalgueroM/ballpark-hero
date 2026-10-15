@@ -1,0 +1,6 @@
+# Round BFH f2: /soccer-career and the other budgets on a served build of the final head
+#!serve
+#!playwright
+#!serial
+headsha: git log --oneline -2
+budget-sweepWeight: SWEEP_OFFLINE=1 NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/sweepWeight.mjs > /tmp/sw.log 2>&1; s=$?; grep -E "soccer-career|club-manager|manager-hot-seat|deadline-day|OVER|over" /tmp/sw.log | head -20; tail -3 /tmp/sw.log; exit $s
