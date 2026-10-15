@@ -62,6 +62,41 @@ describe('Soccer Career storage', () => {
     expect(serializeSoccerCareerSave(parseSoccerCareerSave(stored) as typeof career)).toBe(stored);
   });
 
+  it('packs the complete career when histories alone still exceed the cap', () => {
+    const value = JSON.parse(JSON.stringify(fixture()));
+    // This is a codec fixture. Actual extended careers are measured separately.
+    value.events = Array.from({ length: 1600 }, (_, n) => `Saved event ${n}: full history, 雪 ⚽ café, no lost rows.`);
+    value.extension = JSON.parse('{"__proto__":{"held":true},"constructor":"career","rows":[null,"\\ud800"]}');
+    const raw = JSON.stringify(value);
+    expect(raw.length).toBeGreaterThan(60000);
+    const stored = serializeSoccerCareerSave(value);
+    expect(stored.length).toBeLessThanOrEqual(60000);
+    const envelope = JSON.parse(stored);
+    expect(envelope.seasons.format).toBe('lz-string-utf16-career');
+    expect(Object.keys(envelope)).toEqual(['currentClub', 'age', 'retired', 'seasons']);
+    expect(JSON.stringify(value)).toBe(raw);
+    expect(JSON.stringify(parseSoccerCareerSave(stored))).toBe(raw);
+    expect(isSoccerCareerSave(parseSoccerCareerSave(stored))).toBe(true);
+    expect(serializeSoccerCareerSave(parseSoccerCareerSave(stored) as typeof value)).toBe(stored);
+    const home = CONTINUE_SAVES.find(row => row.path === '/soccer-career')!;
+    expect(describeSave(home, stored)).toBe(describeSave(home, raw));
+  });
+
+  it.each([17, '', compressToUTF16('null'), compressToUTF16('[]'), compressToUTF16('{}')])(
+    'refuses invalid complete-career payloads: %j', data => {
+      const raw = JSON.stringify({ ...fixture(), seasons: { format: 'lz-string-utf16-career', data } });
+      let accepted = false;
+      try { accepted = isSoccerCareerSave(parseSoccerCareerSave(raw)); } catch { /* unreadable */ }
+      expect(accepted).toBe(false);
+    },
+  );
+
+  it('checks claimed inner histories after unwrapping a complete career', () => {
+    const value = { ...fixture(), story: { format: 'future', data: compressToUTF16('[]') } };
+    const raw = JSON.stringify({ seasons: { format: 'lz-string-utf16-career', data: compressToUTF16(JSON.stringify(value)) } });
+    expect(() => parseSoccerCareerSave(raw)).toThrow();
+  });
+
   it.each([
     { format: 'future', data: compressToUTF16('[]') },
     { format: 'lz-string-utf16', data: 17 },

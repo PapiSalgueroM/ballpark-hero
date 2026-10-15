@@ -25,13 +25,26 @@ export function serializeSoccerCareerSave(value: CareerState): string {
   for (const key of ['seasons', 'story'] as const) {
     if (Array.isArray(value[key])) stored[key] = { format: 'lz-string-utf16', data: compressToUTF16(JSON.stringify(value[key])) };
   }
-  const packed = JSON.stringify(stored);
+  let packed = JSON.stringify(stored);
+  if (packed.length > 60000) {
+    const complete = JSON.stringify({ currentClub: value.currentClub, age: value.age, retired: value.retired,
+      seasons: { format: 'lz-string-utf16-career', data: compressToUTF16(raw) } });
+    if (complete.length < packed.length) packed = complete;
+  }
   return packed.length < raw.length ? packed : raw;
 }
 
 export function parseSoccerCareerSave(raw: string): unknown {
-  const value: unknown = JSON.parse(raw);
+  let value: unknown = JSON.parse(raw);
   if (!record(value)) return value;
+  const complete = value.seasons;
+  if (record(complete) && complete.format === 'lz-string-utf16-career') {
+    if (!text(complete.data)) throw new Error('Invalid saved career');
+    const decoded = decompressFromUTF16(complete.data as string);
+    const career: unknown = decoded === null ? null : JSON.parse(decoded);
+    if (!record(career)) throw new Error('Invalid saved career');
+    value = career;
+  }
   for (const key of ['seasons', 'story']) {
     const history = value[key];
     if (!record(history) || (!('format' in history) && !('data' in history))) continue;

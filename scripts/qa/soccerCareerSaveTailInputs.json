@@ -1,0 +1,68 @@
+{
+  "source": "cf453d2f311579e051bb19f77c196e77f73392ee",
+  "run": 38520323234,
+  "artifact": 11875350013,
+  "zipSha256": "ce92c5b8d82a6dc7d2252aa7fffa2aebacc797c38c65f6f58d95f6057207fb59",
+  "inputs": [
+    {
+      "name": "1004-GK-retirement_ceremony-original.json",
+      "bytes": 95148,
+      "sha256": "4b5a55596786662ab8929aab9c915883080e561d7ced6980f12cf6720f73056e"
+    },
+    {
+      "name": "1101-CB-retirement_ceremony-original.json",
+      "bytes": 110613,
+      "sha256": "76a6956c3c7648fa7dfbb747dc4b17dcea7fd6bcb2302843d7063fa734dec578"
+    },
+    {
+      "name": "1198-CM-retirement_ceremony-original.json",
+      "bytes": 91822,
+      "sha256": "1c52f15dd0847a11ed3f98dc6aa6b386fe1a5c8025bf48740c0b68547e4790e9"
+    },
+    {
+      "name": "131-ST-retirement_ceremony-original.json",
+      "bytes": 107049,
+      "sha256": "77fd362cea31a8f75f1e79581bdb8077f06c60e17588905f27d8821c993658f2"
+    },
+    {
+      "name": "228-GK-retirement_ceremony-original.json",
+      "bytes": 122494,
+      "sha256": "1d12831da886ee9c570ce064800ca8c3723ffa95af3777e1ee4a26e16fb4c0bb"
+    },
+    {
+      "name": "325-CB-retirement_ceremony-original.json",
+      "bytes": 106373,
+      "sha256": "556b8142096eaa7b1f373ef788dfd7e0cddda704ee57cba85ea424e8589c7ae9"
+    },
+    {
+      "name": "422-CM-retirement_ceremony-original.json",
+      "bytes": 94752,
+      "sha256": "4f8537fa4ce99c9493a1e9f35b1524ba7185c04a6c85c00a3085fdf0b5fed1aa"
+    },
+    {
+      "name": "519-ST-retirement_ceremony-original.json",
+      "bytes": 115530,
+      "sha256": "db99323d2cfe049480ba051ee143e339fbcb955acc44c6e2012d46e69d420d93"
+    },
+    {
+      "name": "616-GK-retirement_ceremony-original.json",
+      "bytes": 97029,
+      "sha256": "fc7e8e6b1f378af6d9ca997559a861622f8ee84830d91637b22731e5264ed6c8"
+    },
+    {
+      "name": "713-CB-retirement_ceremony-original.json",
+      "bytes": 73388,
+      "sha256": "1a3d3ed9d7719e90d7b4b1aebe88be1dfda4ed8990e659259a1b486bc6d85efd"
+    },
+    {
+      "name": "810-CM-retirement_ceremony-original.json",
+      "bytes": 106883,
+      "sha256": "fc3b9d2f0abbcdbb473b3fb7f4b8b3b336d11f6bec98fc5f2804356d2908b60c"
+    },
+    {
+      "name": "907-ST-retirement_ceremony-original.json",
+      "bytes": 109352,
+      "sha256": "65ece0a150b0bd86c3ccc7c6173f28c354a123d969338a65dbf8c3d86505e0db"
+    }
+  ]
+}
