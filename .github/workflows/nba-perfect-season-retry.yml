@@ -1,0 +1,329 @@
+name: NBA Perfect Season retry verification
+on:
+  push:
+    branches: [codex/nba-perfect-season-retry]
+permissions:
+  contents: read
+concurrency:
+  group: nba-perfect-season-retry-${{ github.sha }}
+  cancel-in-progress: false
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    defaults:
+      run:
+        shell: bash
+    env:
+      SIM_NETWORK: offline
+      ENGINES: chromium
+      TZ: UTC
+      SEO_SPLIT_BASE_REF: HEAD
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24.21.0'
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Complete current and original source, archive and scope
+        id: source
+        run: |
+          set -euo pipefail
+          mkdir -p nba-retry-artifacts/helpers
+          cat > nba-retry-artifacts/helpers/evidence.mjs <<'JS'
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import assert from 'node:assert/strict';
+          import { createHash } from 'node:crypto';
+          import { execFileSync } from 'node:child_process';
+          const ROOT = process.cwd(), OUT = path.resolve('nba-retry-artifacts'), mode = process.argv[2];
+          const BASE = '4aa47b12179f3e6bd734ffd84dd3a4b6641e36b5';
+          const PAGE = 'src/pages/PerfectSeasonNba.tsx';
+          const READERS = ['simAdsense','simBrand','simHeadTags','simHiddenPages','simHubs','simIndexNow','simIndexing','simInternalLinks','simNoRivalNames','simPrerender','simPrerenderBoot','simRetiredRoutes','simSchema','simSitemap','simSnapshotAssets'];
+          const allowed = [PAGE,'src/test/perfectSeasonNbaRetry.test.tsx','scripts/qa/nbaPerfectSeasonRetryProof.mjs','scripts/qa/nbaPerfectSeasonRetryBrowser.mjs','.github/workflows/nba-perfect-season-retry.yml','docs/NBA-PERFECT-SEASON-RETRY.md'];
+          const hash = b => createHash('sha256').update(b).digest('hex');
+          const git = args => execFileSync('git', args, { maxBuffer: 300000000 });
+          const text = args => git(args).toString('utf8').trim();
+          const write = (file, value) => { const full = path.join(OUT,file); fs.mkdirSync(path.dirname(full),{recursive:true}); fs.writeFileSync(full, JSON.stringify(value,null,2)); };
+          function rows(root) { if (!fs.existsSync(root)) return []; const stat = fs.lstatSync(root); assert(!stat.isSymbolicLink(),'No evidence symlink '+root); if (stat.isFile()) return [{file:path.relative(OUT,root).split(path.sep).join('/'),bytes:stat.size,sha256:hash(fs.readFileSync(root))}]; assert(stat.isDirectory(),root); return fs.readdirSync(root).sort().flatMap(name=>rows(path.join(root,name))); }
+          function vector(ref) { return git(['ls-tree','-rz',ref]).toString().split('\0').filter(Boolean).map(line=>{const tab=line.indexOf('\t'),[gitMode,type,blob]=line.slice(0,tab).split(' '),file=line.slice(tab+1); assert.equal(type,'blob'); assert(['100644','100755'].includes(gitMode)); const body=git(['show',ref+':'+file]); assert.equal(createHash('sha1').update(Buffer.concat([Buffer.from('blob '+body.length+'\0'),body])).digest('hex'),blob); return {file,gitMode,blob,bytes:body.length,sha256:hash(body)};}); }
+          function actualSource(stage) { const expected=JSON.parse(fs.readFileSync(path.join(OUT,'source-inventory.json'))),actual=expected.map(row=>{const full=path.resolve(row.file); assert(full.startsWith(ROOT+path.sep)); const stat=fs.lstatSync(full); assert(stat.isFile()&&!stat.isSymbolicLink(),row.file); assert.equal(Boolean(stat.mode&0o111),row.gitMode==='100755',row.file+' actual executable identity'); return {...row,bytes:stat.size,sha256:hash(fs.readFileSync(full))};}); write('source-'+stage+'.json',actual); for(let i=0;i<actual.length;i++)if(stage==='before'||stage==='after-setup'||!actual[i].file.startsWith('public/')&&actual[i].file!=='scripts/data/lastmod.json')assert.deepEqual(actual[i],expected[i],stage+' full source '+actual[i].file); const extras=git(['ls-files','--others','--exclude-standard','--','src','scripts','.github/workflows','index.html','package.json','package-lock.json']).toString().trim(); write('unexpected-source-'+stage+'.json',{extras}); assert.equal(extras,''); return actual; }
+          function readRef(root,ref) { assert(ref&&typeof ref.path==='string'&&Number.isInteger(ref.bytes)&&ref.bytes>=0&&/^[0-9a-f]{64}$/.test(ref.sha256)); assert(!ref.path.includes('\\')&&!path.isAbsolute(ref.path)&&ref.path.split('/').every(x=>x&&x!=='.'&&x!=='..')); const full=path.resolve(root,ref.path); assert(full.startsWith(path.resolve(root)+path.sep)); const stat=fs.lstatSync(full); assert(stat.isFile()&&!stat.isSymbolicLink()); const body=fs.readFileSync(full); assert.equal(body.length,ref.bytes); assert.equal(hash(body),ref.sha256); return body; }
+          function allRefs(root,value,found=[]) { if(!value||typeof value!=='object')return found; if(typeof value.path==='string'&&Number.isInteger(value.bytes)&&typeof value.sha256==='string'){const body=readRef(root,value);found.push({path:value.path,bytes:body.length,sha256:hash(body)});} for(const child of Object.values(value))allRefs(root,child,found); return found; }
+          function proof() {
+            const root=path.join(OUT,'proof'),r=JSON.parse(fs.readFileSync(path.join(root,'report.json')));
+            const guard={status:'running',failures:[],wholeReferences:[],actualArms:[]};
+            try {
+              guard.wholeReferences=allRefs(root,r); assert.equal(r.status,'pass'); assert.equal(r.base,BASE); assert.deepEqual(r.errors,[]); assert.equal(r.original.status,0); const proofStdout=fs.readFileSync(path.join(OUT,'proof.stdout.log'),'utf8');assert(proofStdout.split('\n').filter(x=>x.trim()).length>=4);assert(proofStdout.trimEnd().endsWith('PASS NBA Perfect Season retry proof'));
+              const titles=['retries the initial archive in the chosen mode and refuses a stale prior-mode wheel','keeps an earlier pick through a failed next spin and finishes one complete 82-game season','does not spend rerolls on repeated unusable or failed fetches and charges one usable recovery','allows exactly two successful rerolls and refuses a third squad request','keeps an ordinary healthy draft and restart unchanged with one completion per run'];
+              assert.deepEqual(r.expectedTitles,titles);
+              const ids=['original','eager-debit','forgotten-reroll','stale-wheel','current','whole-undo'],maps=[titles.slice(0,3),[titles[2]],[titles[2]],[titles[0]],[],[]]; assert.deepEqual(r.arms.map(x=>x.id),ids); assert.deepEqual(r.controls.map(x=>x.id),ids.slice(0,4));
+              const current=fs.readFileSync(PAGE),original=git(['show',BASE+':'+PAGE]); assert.equal(hash(current),'407709f4a78d811d03d6bda19e3358acc62910de5844239354e26ca5641dacac'); assert.equal(hash(original),'5c7e61f180264eb5e23fba64cbf4d40fe39e817d1b603b137dcbc4418b2a798e'); assert.deepEqual(readRef(root,r.original.source),original);
+              for(let index=0;index<ids.length;index++) { const arm=r.arms[index],source=readRef(root,arm.source),assertions=JSON.parse(readRef(root,arm.assertions)),v=JSON.parse(readRef(root,arm.vitest)); assert.equal(arm.status,'pass'); assert.deepEqual(arm.expectedFailures,maps[index]); assert.deepEqual(arm.actualFailures,[...maps[index]].sort()); assert.equal(arm.process.status,maps[index].length?1:0); assert.equal(arm.process.signal,null); assert.equal(arm.process.error,null); assert.equal(arm.command.executable,process.execPath); assert.equal(arm.command.cwd,ROOT); assert.equal(v.numTotalTests,5); assert.equal(v.numPendingTests,0); assert.equal(v.numPassedTests,5-maps[index].length); assert.equal(v.numFailedTests,maps[index].length); const actual=v.testResults.flatMap(x=>x.assertionResults); assert.deepEqual(actual,assertions); assert.deepEqual(actual.map(x=>x.title).sort(),[...titles].sort()); assert(actual.every(x=>['passed','failed'].includes(x.status))); assert.deepEqual(actual.filter(x=>x.status==='failed').map(x=>x.title).sort(),[...maps[index]].sort()); const expectedGuardRows=[['NBA_RETRY_GUARD_initial_mode_retry','NBA_RETRY_GUARD_prior_pick_recovery','NBA_RETRY_GUARD_repeat_failure_requests'],['NBA_RETRY_GUARD_usable_recovery_request'],['NBA_RETRY_GUARD_retry_reroll_debit'],['NBA_RETRY_GUARD_stale_wheel_boot'],[],[]],expectedGuards=Object.fromEntries(maps[index].map((title,i)=>[title,expectedGuardRows[index][i]]));assert.deepEqual(arm.expectedAssertionGuards,expectedGuards);for(const failure of actual.filter(x=>x.status==='failed')){assert(Array.isArray(failure.failureMessages));assert(failure.failureMessages.join('\n').includes(expectedGuards[failure.title]),'Exact intended assertion for '+failure.title);} assert.deepEqual(arm.observations.map(x=>x.title),titles); arm.observations.forEach(x=>JSON.parse(readRef(root,x.file))); if(index===0)assert.deepEqual(source,original); if(index>=4)assert.deepEqual(source,current); if(index>0&&index<4){let changed=current.toString(),edits=JSON.parse(readRef(root,arm.edits)); assert(edits.length>0); for(const edit of edits){assert.equal(changed.split(edit.from).length-1,1);changed=changed.replace(edit.from,edit.to);} assert.equal(source.toString(),changed); let undo=changed;for(const edit of [...edits].reverse()){assert.equal(undo.split(edit.to).length-1,1);undo=undo.replace(edit.to,edit.from);} assert.equal(undo,current.toString()); assert.notDeepEqual(source,current); assert.deepEqual(readRef(root,arm.undo),current);} guard.actualArms.push({id:arm.id,tests:actual.length,failures:arm.actualFailures,source:arm.source,process:arm.process}); }
+              const measured=[{index:1,squads:9,sims:0},{index:1,squads:15,sims:0},{index:1,squads:16,sims:0},{index:3,squads:7,sims:1}];
+              for(let index=0;index<4;index++){const control=r.controls[index],arm=r.arms[index],wanted=measured[index],observation=arm.observations.find(x=>x.title===titles[index===3?0:2]),body=JSON.parse(readRef(root,observation.file)); assert.equal(control.status,'pass');assert.equal(control.changed,true); assert.deepEqual(control.expectedFailures,maps[index]);assert.deepEqual(control.actualFailures,[...maps[index]].sort());assert.deepEqual(control.measuredBoundary,wanted);assert.deepEqual({index:body.indexCalls.length,squads:body.squadCalls.length,sims:body.simulations.length},wanted);assert(body.snapshots.some(x=>x.label==='retry-settled'));assert.deepEqual(readRef(root,control.wholeUndo),current);assert.deepEqual(control.source,arm.source);assert.deepEqual(control.edits,arm.edits);}
+              const outcome=ref=>{const x=JSON.parse(readRef(root,ref));return {fixture:x.fixture,indexCalls:x.indexCalls,squadCalls:x.squadCalls,simulations:x.simulations,completions:x.completions,daily:x.daily};}; for(let index=3;index<5;index++)assert.deepEqual(outcome(r.arms[4].observations[index].file),outcome(r.arms[0].observations[index].file)); for(let index=0;index<5;index++)assert.deepEqual(outcome(r.arms[5].observations[index].file),outcome(r.arms[4].observations[index].file));
+              assert.deepEqual(r.sourceAfter,r.sourceBefore.map(({retained,...row})=>row));for(const row of r.sourceBefore){assert.deepEqual(readRef(root,row.retained),fs.readFileSync(row.file));assert.equal(hash(fs.readFileSync(row.file)),row.sha256);assert.equal(fs.statSync(row.file).size,row.bytes);} guard.status='pass';
+            } catch(error){guard.status='fail';guard.failures.push(String(error.stack||error));throw error;} finally{write('proof-guard.json',guard);}
+          }
+          if(mode==='source') {
+            fs.mkdirSync(OUT,{recursive:true}); assert.equal(text(['rev-parse','HEAD']),process.env.GITHUB_SHA); assert.equal(text(['rev-parse',BASE+'^{tree}']),'23f749bd3302eeff45881690346ff05321b6ec7b');
+            const changed=git(['diff','--name-only','-z',BASE,'HEAD']).toString().split('\0').filter(Boolean); write('source-scope.json',{base:BASE,allowed,changed}); for(const file of changed)assert(allowed.includes(file),'Undeclared source '+file); for(const file of allowed)assert(Number(text(['cat-file','-s','HEAD:'+file]))>0,'Complete committed source '+file);
+            const pins={'src/pages/PerfectSeasonNba.tsx':'407709f4a78d811d03d6bda19e3358acc62910de5844239354e26ca5641dacac','src/test/perfectSeasonNbaRetry.test.tsx':'762c2d377d72c5df8479ad0e7afee445dee675e7bad3c1f901fd691dcf34132a','scripts/qa/nbaPerfectSeasonRetryProof.mjs':'baec9b2dbd3e825418b85aead780fc549c14354e8058cd8c28dcf1ede1ac9ef0','scripts/qa/nbaPerfectSeasonRetryBrowser.mjs':'3e2694daee74b9dc724a73b7e1b7651bc23e99f1031bb832c21c3ca5301f15fd','docs/NBA-PERFECT-SEASON-RETRY.md':'dc27d226a0f7e3e644ff80e25f9448411d39ffb44509dc346893d0509bae15a0'};for(const [file,wanted]of Object.entries(pins))assert.equal(hash(git(['show','HEAD:'+file])),wanted,file+' reviewed whole Source');write('reviewed-source-pins.json',pins);
+            const held=['package.json','package-lock.json','scripts/runAllSims.mjs','scripts/lib/offlineTransport.cjs','src/lib/perfectSeasonNba.ts','src/lib/perfectSeason.ts','src/lib/perfectSeasonExpansion.ts','src/lib/fetchAllRows.ts','src/hooks/usePerfectSeasonBest.ts','src/test/perfectSeasonResult.test.tsx','src/test/perfectSeasonVerdict.test.tsx',...READERS.map(x=>'scripts/'+x+'.mjs')];for(const file of held)assert.equal(text(['rev-parse','HEAD:'+file]),text(['rev-parse',BASE+':'+file]),file+' whole baseline source hold');
+            write('source-head.json',{head:process.env.GITHUB_SHA,tree:text(['rev-parse','HEAD^{tree}']),base:BASE,baseTree:text(['rev-parse',BASE+'^{tree}']),runId:process.env.GITHUB_RUN_ID,attempt:process.env.GITHUB_RUN_ATTEMPT});write('source-inventory.json',vector('HEAD'));write('base-source-inventory.json',vector(BASE));
+            git(['-c','core.autocrlf=false','archive','--format=zip','--output='+path.join(OUT,'source.zip'),'HEAD']);git(['-c','core.autocrlf=false','archive','--format=zip','--output='+path.join(OUT,'base-source.zip'),BASE]);write('source-archives.json',rows(OUT).filter(x=>x.file.endsWith('.zip')));actualSource('before');
+            write('runtime.json',{node:process.version,executable:process.execPath,platform:process.platform,arch:process.arch,cwd:ROOT,environment:Object.fromEntries(['SIM_NETWORK','ENGINES','TZ','SEO_SPLIT_BASE_REF'].map(key=>[key,process.env[key]??null]))});assert.equal(process.version,'v24.21.0');
+          } else if(mode==='dependencies') {
+            const lock=JSON.parse(fs.readFileSync('package-lock.json')),installed=[],omitted=[],fits=(rules,value)=>!rules||(!rules.some(x=>x==='!'+value)&&(rules.every(x=>x.startsWith('!'))||rules.includes(value)));
+            for(const [directory,expected]of Object.entries(lock.packages)){if(!directory.startsWith('node_modules/')||!expected.version)continue;const name=expected.name??directory.split('node_modules/').at(-1),file=directory+'/package.json';if(!fs.existsSync(file)){assert.equal(expected.optional,true);assert(expected.os&&!fits(expected.os,process.platform)||expected.cpu&&!fits(expected.cpu,process.arch));omitted.push({directory,name,version:expected.version,optional:true,os:expected.os??null,cpu:expected.cpu??null});continue;}const value=JSON.parse(fs.readFileSync(file));assert.equal(value.name,name);assert.equal(value.version,expected.version);installed.push({directory,name:value.name,version:value.version});}write('dependencies-'+process.argv[3]+'.json',{platform:process.platform,arch:process.arch,installed,omitted});assert.equal(installed.length,521);assert.equal(omitted.length,78);assert.equal(installed.length+omitted.length,599);
+          } else if(mode==='snapshot') {
+            const stage=process.argv[3];actualSource(stage);const generated=root=>rows(path.resolve(root)).map(row=>({...row,file:path.relative(ROOT,path.resolve(OUT,row.file)).split(path.sep).join('/')})),inventory={public:generated('public'),lastmod:generated('scripts/data/lastmod.json'),dist:generated('dist')};write('generated-'+stage+'.json',inventory);if(stage==='final')assert.deepEqual(inventory,JSON.parse(fs.readFileSync(path.join(OUT,'generated-post-build.json'))));
+          } else if(mode==='proof') proof();
+          else if(mode==='units') {const result=JSON.parse(fs.readFileSync(path.join(OUT,'units.json'))),cases=result.testResults.flatMap(x=>x.assertionResults);write('unit-case-vector.json',cases);assert(result.numTotalTests>0);assert.equal(result.numPassedTests,result.numTotalTests);assert.equal(result.numFailedTests,0);assert.equal(result.numPendingTests,0);assert.equal(cases.length,result.numTotalTests);assert(cases.every(x=>x.status==='passed'));assert.deepEqual(result.testResults.map(x=>path.relative(ROOT,x.name)).sort(),['src/test/perfectSeasonResult.test.tsx','src/test/perfectSeasonVerdict.test.tsx'].sort());}
+          else if(mode==='finish') {
+            const stage=process.argv[3],expected=stage==='early'?['source','browserconsumer','setup','types','proof','units']:['source','browserconsumer','setup','types','proof','units','earlycap','earlyupload','build','readers','browser','retain','holds'];
+            const context=JSON.parse(process.env.NBA_STEP_CONTEXT),actual=expected.map(id=>({id,outcome:context[id]?.outcome??null,conclusion:context[id]?.conclusion??null})),failures=actual.filter(x=>x.outcome!=='success'||x.conclusion!=='success').map(x=>({kind:'gate',...x}));
+            if(stage==='final'){const readerGuard={status:'running',rows:[],failure:null,qualification:'Complete unchanged reader Source and actual outputs. Source-scan exclusions are not live or database coverage.'};try{const lines=fs.readFileSync(path.join(OUT,'readers.tsv'),'utf8').trim().split('\n');assert.equal(lines.shift(),'harness\texit\tlines\tverdict');readerGuard.rows=lines.map(line=>{const [file,exit,meaningfulLines,verdict]=line.split('\t');return {file,exit:Number(exit),meaningfulLines:Number(meaningfulLines),verdict,stdout:rows(path.join(OUT,file+'.stdout.log'))[0],stderr:rows(path.join(OUT,file+'.stderr.log'))[0],transportBytes:fs.existsSync(path.join(OUT,file+'.transport.log'))?fs.statSync(path.join(OUT,file+'.transport.log')).size:0};});assert.deepEqual(readerGuard.rows.map(x=>x.file),READERS);for(const row of readerGuard.rows){assert.equal(row.exit,0);assert.equal(row.verdict,'PASS');assert(Number.isInteger(row.meaningfulLines)&&row.meaningfulLines>=4);assert.equal(row.transportBytes,0);}readerGuard.status='pass';}catch(error){readerGuard.status='fail';readerGuard.failure=String(error.stack||error);failures.push({kind:'reader-records',error:readerGuard.failure});}write('reader-guard.json',readerGuard);}
+            const sizeFile='physical-size-'+stage+'.json',inventoryFile='physical-inventory-'+stage+'.json',failureFile='failures-'+stage+'.json';write(failureFile,failures);
+            let last=-1,measurement;for(let attempt=0;attempt<10;attempt++){write(inventoryFile,rows(OUT).filter(x=>x.file!==inventoryFile&&x.file!==sizeFile));const vector=rows(OUT);measurement={stage,files:vector.length,bytes:vector.reduce((sum,x)=>sum+x.bytes,0),cap:500000000,selfInclusive:true,status:failures.length?'fail':'pass',gates:actual};if(measurement.bytes>=500000000&&!failures.some(x=>x.kind==='cap')){failures.push({kind:'cap',bytes:measurement.bytes,cap:500000000});write(failureFile,failures);measurement.status='fail';}write(sizeFile,measurement);const current=rows(OUT),bytes=current.reduce((sum,x)=>sum+x.bytes,0);if(bytes===measurement.bytes&&current.length===measurement.files){last=bytes;break;}}
+            assert(last>=0,'Self-inclusive physical footer reaches exact fixed point');const physical=rows(OUT);assert.equal(physical.reduce((sum,x)=>sum+x.bytes,0),measurement.bytes);assert.equal(physical.length,measurement.files);assert.deepEqual(JSON.parse(fs.readFileSync(path.join(OUT,inventoryFile))),physical.filter(x=>x.file!==inventoryFile&&x.file!==sizeFile));assert.deepEqual(JSON.parse(fs.readFileSync(path.join(OUT,failureFile))),failures);assert.equal(failures.length,0,'Every failed/skipped/empty/missing gate and actual cap remains red');assert(measurement.bytes<500000000);
+          } else throw new Error('Unknown evidence mode '+mode);
+          console.log('PASS NBA retry evidence '+mode);
+          JS
+          sha256sum nba-retry-artifacts/helpers/evidence.mjs > nba-retry-artifacts/helper-source.sha256
+          node nba-retry-artifacts/helpers/evidence.mjs source
+          node nba-retry-artifacts/helpers/evidence.mjs snapshot before
+          sha256sum package.json package-lock.json > nba-retry-artifacts/packages-before.txt
+      - name: Retain independent whole browser evidence consumer Source
+        id: browserconsumer
+        if: ${{ !cancelled() }}
+        run: |
+          set -euo pipefail
+          mkdir -p nba-retry-artifacts/helpers
+          cat > nba-retry-artifacts/helpers/browser-consumer.mjs <<'JS'
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import assert from 'node:assert/strict';
+          import {createHash} from 'node:crypto';
+          const ROOT=process.cwd(),OUT=path.resolve('nba-retry-artifacts'),root=path.join(OUT,'browser'),hash=b=>createHash('sha256').update(b).digest('hex');
+          const guard={status:'running',references:[],cases:[],controls:[],errors:[]};
+          function read(ref){assert(ref&&typeof ref.path==='string'&&Number.isInteger(ref.bytes)&&ref.bytes>=0&&/^[0-9a-f]{64}$/.test(ref.sha256));assert(!path.isAbsolute(ref.path)&&!ref.path.includes('\\')&&ref.path.split('/').every(x=>x&&x!=='.'&&x!=='..'));const full=path.resolve(root,ref.path);assert(full.startsWith(root+path.sep));const stat=fs.lstatSync(full);assert(stat.isFile()&&!stat.isSymbolicLink());const body=fs.readFileSync(full);assert.equal(body.length,ref.bytes);assert.equal(hash(body),ref.sha256);guard.references.push(ref);return body;}
+          const json=ref=>JSON.parse(read(ref));
+          function refs(value){if(!value||typeof value!=='object')return;if(typeof value.path==='string'&&Number.isInteger(value.bytes)&&typeof value.sha256==='string')read(value);for(const child of Object.values(value))refs(child);}
+          function layout(value){assert(value&&Array.isArray(value.ancestors)&&value.ancestors.length>1);for(const key of ['x','y','right','bottom','width','height'])assert(Number.isFinite(value.rect[key]));assert(Number.isFinite(value.viewport.width)&&Number.isFinite(value.viewport.height));return [value.overflow&&'overflow',(!value.painted||value.ancestors.some(row=>row.visibility!=='visible'||row.display==='none'))&&'paint',Number(value.effectiveOpacity)!==1&&'opacity',!value.fonts.ready&&'fonts',value.rect.x<0||value.rect.right>value.viewport.width+1||value.rect.y<0||value.rect.bottom>value.viewport.height+1?'viewport':false,value.stable<4&&'stable',value.finite!==0&&'animations',value.control&&(value.rect.width<44||value.rect.height<44)&&'target'].filter(Boolean);}
+          const oneDocument=(documents,url)=>documents.length===1&&documents[0].index===0&&documents[0].request.url===url&&documents[0].request.method==='GET'&&documents[0].request.resourceType==='document'&&documents[0].request.navigationRequest===true&&documents[0].request.mainFrame===true&&documents[0].request.owned===true&&documents[0].response?.url===url&&documents[0].response.status===200&&documents[0].response.body&&documents[0].response.built;
+          const recovery=value=>[(value.beforeNonce!==value.afterNonce||value.beforeTimeOrigin!==value.afterTimeOrigin||!oneDocument(value.afterDocuments,value.documentUrl)||value.afterPerformance.length!==1||value.afterPerformance[0].type!=='navigate'||value.afterPerformance[0].name!==value.documentUrl)&&'no-reload',!value.afterRoster.includes(value.beforePick)&&'picks-held'].filter(Boolean);
+          try{
+           const report=JSON.parse(fs.readFileSync(path.join(root,'report.json')));refs(report);assert.equal(report.status,'pass');assert.deepEqual(report.errors,[]);assert.deepEqual(report.declarations,{widths:[390,1280],cases:2,captures:['draft','failed-fetch','recovered-draft'],controls:['no-reload-picks','layout']});assert.deepEqual(report.cases.map(row=>row.width),[390,1280]);assert.deepEqual(report.sourceAfter,report.sourceBefore);
+           const sources=['src/pages/PerfectSeasonNba.tsx','src/lib/perfectSeasonNba.ts','src/lib/perfectSeason.ts','src/lib/perfectSeasonExpansion.ts','src/lib/fetchAllRows.ts','src/components/perfect-season/SeasonVerdict.tsx','scripts/qa/nbaPerfectSeasonRetryBrowser.mjs'];assert.deepEqual(report.sourceBefore.map(row=>row.file),sources);for(const row of report.sourceBefore)assert.deepEqual(read(row),fs.readFileSync(row.file));
+           const fixture=json(report.fixture),positions=['PG','SG','SF','PF','C','PG','SG'],expected=Array.from({length:300},(_,team)=>positions.map((position,i)=>({id:team*10+i+1,season:'2000-01',team:'FXR'+team,player_name:i<5?'Retry Browser '+position:'Retry Browser Reserve '+i,position,minutes:2000-i*10,pts:800,trb:400,ast:300}))).flat();assert.equal(fixture.length,2100);assert.deepEqual(fixture,expected);
+           for(const row of report.cases){
+            assert.equal(row.status,'pass');assert.deepEqual(row.errors,[]);assert(Array.isArray(row.navigations));for(const event of row.navigations){assert.equal(typeof event.url,'string');assert(Number.isFinite(event.observedAt));}assert.equal(row.documents.length,1);const document=row.documents[0],url=document.request.url,origin=new URL(url).origin;assert.equal(new URL(url).pathname,'/perfect-season-nba');assert(oneDocument(row.documents,url));assert(Number.isFinite(document.observedAt));assert(Number.isFinite(document.response.observedAt));assert(document.response.observedAt>=document.observedAt);assert(Number.isInteger(document.response.assetIndex));const documentAsset=row.assets[document.response.assetIndex];assert(documentAsset);assert.equal(documentAsset.documentIndex,0);assert.deepEqual(documentAsset.request,document.request);assert.equal(documentAsset.url,document.response.url);assert.equal(documentAsset.status,document.response.status);assert.deepEqual(documentAsset.body,document.response.body);assert.deepEqual(documentAsset.built,document.response.built);assert.equal(documentAsset.built.file,'dist/perfect-season-nba/index.html');assert.equal(row.assets.filter(x=>x.request.navigationRequest&&x.request.mainFrame&&x.request.resourceType==='document').length,1);assert(row.scopes.some(x=>x.included===true&&x.top===true));assert(row.scopes.every(x=>x.included===(x.top&&x.origin===origin)));
+            assert.deepEqual(row.observations.map(x=>x.label),['earlier-pick','failed-fetch','recovered-draft','recovered-second-pick']);assert.deepEqual(row.captures.map(x=>x.name),['draft','failed-fetch','retry-target','recovered-draft']);const observations=row.observations.map(x=>json(x.record)),first=observations[0];assert.equal(typeof first.document.nonce,'string');assert(first.document.nonce);assert(Number.isFinite(first.document.timeOrigin));
+            for(const observed of observations){assert.equal(observed.document.nonce,first.document.nonce);assert.equal(observed.document.timeOrigin,first.document.timeOrigin);assert.equal(observed.href,url);assert.deepEqual(observed.navigationEntries,[{type:'navigate',name:url}]);assert.deepEqual(observed.documents,row.documents);assert(Array.isArray(observed.frameEvents));assert(observed.frameEvents.length<=row.navigations.length);assert.deepEqual(observed.frameEvents,row.navigations.slice(0,observed.frameEvents.length));assert(Array.isArray(observed.document.draws));for(const draw of observed.document.draws){assert(Number.isFinite(draw.value)&&draw.value>=0&&draw.value<1);assert.equal(typeof draw.caller,'string');}}
+            assert(first.roster.includes('Retry Browser PG'));assert(observations[2].roster.includes('Retry Browser PG'));assert(observations[3].roster.includes('Retry Browser PG')&&observations[3].roster.includes('Retry Browser SG'));const witness=json(row.recovery);assert.deepEqual(witness,{beforeNonce:first.document.nonce,afterNonce:observations[2].document.nonce,beforeTimeOrigin:first.document.timeOrigin,afterTimeOrigin:observations[2].document.timeOrigin,documentUrl:first.href,afterDocuments:observations[2].documents,afterPerformance:observations[2].navigationEntries,afterNavigations:observations[2].frameEvents,beforePick:'Retry Browser PG',afterRoster:observations[2].roster});assert.deepEqual(recovery(witness),[]);
+            const failures=row.requests.filter(x=>x.fixture==='labelled-fetch-failure');assert.equal(failures.length,6);for(const request of failures){assert.equal(request.method,'GET');assert.deepEqual(json(request.response),{code:'FIXTURE_FETCH_FAILURE',message:'Fictional test transport failure'});}
+            const starts=[];for(const request of row.requests){const url=new URL(request.url);if(request.fixture==='fictional-index'){starts.push(request.from);assert.equal(request.method,'GET');assert.equal(url.pathname,'/rest/v1/bref_nba_player_seasons');assert.equal(url.searchParams.get('select'),'season,team');assert.equal(url.searchParams.get('minutes'),'gte.1000');assert.equal(url.searchParams.get('order'),'id.desc');assert(Number.isInteger(request.from)&&request.from>=0&&request.from<=14000&&request.from%1000===0);assert.deepEqual(json(request.response),fixture.slice(request.from,request.from+1000).map(x=>({season:x.season,team:x.team})));}else if(request.fixture==='fictional-squad'){assert.equal(request.method,'GET');assert.equal(url.searchParams.get('select'),'id,player_name,position,minutes,pts,trb,ast');assert.equal(url.searchParams.get('season'),'eq.2000-01');assert.equal(url.searchParams.get('minutes'),'gte.500');assert.equal(url.searchParams.get('order'),'minutes.desc');assert.equal(url.searchParams.get('limit'),'20');assert(/^eq\.FXR\d+$/.test(url.searchParams.get('team')||''));const team=url.searchParams.get('team').slice(3);assert.deepEqual(json(request.response),fixture.filter(x=>x.team===team).map(({id,player_name,position,minutes,pts,trb,ast})=>({id,player_name,position,minutes,pts,trb,ast})));}}assert.deepEqual([...starts].sort((a,b)=>a-b),Array.from({length:15},(_,i)=>i*1000));
+            assert(row.assets.length>0);for(const asset of row.assets){assert.equal(asset.status,200);assert.equal('error'in asset,false);assert.equal(asset.request.url,asset.url);assert.equal(asset.request.owned,new URL(asset.url).origin===origin);assert.equal(asset.request.owned,true);assert.equal(typeof asset.request.method,'string');assert.equal(typeof asset.request.resourceType,'string');assert.equal(typeof asset.request.navigationRequest,'boolean');assert.equal(typeof asset.request.mainFrame,'boolean');assert.equal(asset.documentIndex,asset.request.navigationRequest&&asset.request.mainFrame&&asset.request.resourceType==='document'?0:null);assert.deepEqual(read(asset.body),read(asset.built));assert.equal(typeof asset.built.file,'string');assert(asset.built.file.startsWith('dist/'));assert.deepEqual(read(asset.built),fs.readFileSync(asset.built.file));}
+            for(const capture of row.captures){const body=json(capture.geometry);assert.deepEqual(layout(body),[]);assert.equal(body.viewport.width,row.width);assert.equal(body.viewport.height,row.width===390?900:1000);assert.equal(body.fonts.ready,true);assert.equal(body.effectiveOpacity,1);assert(body.ancestors.every(x=>Number.isFinite(Number(x.opacity))&&x.display!=='none'&&x.visibility==='visible'));assert.equal(body.ancestors.reduce((value,x)=>value*Number(x.opacity),1),1);assert.equal(body.finite,0);assert(Number.isInteger(body.stable)&&body.stable>=4);if(capture.name==='retry-target'){assert.equal(body.control,true);assert.equal('png'in capture,false);assert(body.rect.width>=44&&body.rect.height>=44);}else{assert.equal(body.control,false);assert(capture.png);read(capture.png);}}
+            guard.cases.push({width:row.width,observations:row.observations,captures:row.captures,recovery:row.recovery,failedSquadResponses:failures.length,assets:row.assets.length});
+           }
+           assert.deepEqual(report.controls.map(x=>x.id),['no-reload-picks','layout']);const maps=[['no-reload','picks-held'],['overflow','paint','opacity','fonts','viewport','stable','animations','target']];
+           for(let index=0;index<report.controls.length;index++){const control=report.controls[index],before=json(control.before),fault=json(control.fault),undo=json(control.undo);assert.equal(control.status,'pass');assert.equal(control.changed,true);assert.equal(control.wholeUndo,true);assert.deepEqual(control.findings,maps[index]);assert.notDeepEqual(fault,before);assert.deepEqual(undo,before);assert.equal(control.before.sha256,control.undo.sha256);assert.notEqual(control.before.sha256,control.fault.sha256);const expectedFault=structuredClone(before),detector=index===0?recovery:layout;assert.deepEqual(detector(before),[]);assert.deepEqual(detector(fault),maps[index]);
+            if(index===0){assert.deepEqual(before,json(report.cases[0].recovery));expectedFault.afterNonce+='-copied-fault';expectedFault.afterDocuments.push({...structuredClone(before.afterDocuments[0]),index:before.afterDocuments.length,copiedFault:true});expectedFault.afterNavigations.push({url:'labelled copied navigation only'});expectedFault.afterRoster='';assert.deepEqual(fault,expectedFault);assert.equal(fault.afterNonce,before.afterNonce+'-copied-fault');assert.deepEqual(fault.afterDocuments.at(-1),{...structuredClone(before.afterDocuments[0]),index:before.afterDocuments.length,copiedFault:true});assert.equal(fault.afterDocuments.length,before.afterDocuments.length+1);assert.deepEqual(fault.afterNavigations.at(-1),{url:'labelled copied navigation only'});assert.equal(fault.afterNavigations.length,before.afterNavigations.length+1);assert.equal(fault.afterRoster,'');fault.afterNonce=fault.afterNonce.slice(0,-'-copied-fault'.length);fault.afterDocuments.pop();fault.afterNavigations.pop();fault.afterRoster=before.afterRoster;}
+            else{assert.deepEqual(before,json(report.cases[0].captures.find(x=>x.name==='retry-target').geometry));expectedFault.overflow=true;expectedFault.painted=false;expectedFault.ancestors[0].opacity='0';expectedFault.effectiveOpacity=0;expectedFault.fonts.ready=false;expectedFault.rect.x=-1;expectedFault.stable=3;expectedFault.finite=1;expectedFault.rect.height=43;assert.deepEqual(fault,expectedFault);fault.overflow=before.overflow;fault.painted=before.painted;fault.ancestors[0].opacity=before.ancestors[0].opacity;fault.effectiveOpacity=before.effectiveOpacity;fault.fonts.ready=before.fonts.ready;fault.rect.x=before.rect.x;fault.stable=before.stable;fault.finite=before.finite;fault.rect.height=before.rect.height;}
+            assert.deepEqual(fault,before);assert.deepEqual(fault,undo);assert.deepEqual(detector(fault),[]);guard.controls.push({id:control.id,findings:control.findings,before:control.before,fault:control.fault,undo:control.undo,changed:true,wholeUndo:true});
+           }
+           const stdout=fs.readFileSync(path.join(OUT,'browser.stdout.log'),'utf8');assert(stdout.split('\n').filter(x=>x.trim()).length>=4);assert(stdout.trimEnd().endsWith('PASS NBA Perfect Season retry browser'));guard.status='pass';
+          }catch(error){guard.status='fail';guard.errors.push(String(error.stack||error));throw error;}
+          finally{fs.writeFileSync(path.join(OUT,'browser-guard.json'),JSON.stringify(guard,null,2));}
+          console.log('PASS complete NBA browser retained data and same-fault undo');
+          JS
+          sha256sum nba-retry-artifacts/helpers/browser-consumer.mjs > nba-retry-artifacts/browser-helper-source.sha256
+      - name: Locked application dependencies and isolated browser tools
+        id: setup
+        if: ${{ !cancelled() && steps.source.outcome == 'success' && steps.browserconsumer.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          npm ci 2>&1 | tee nba-retry-artifacts/install.log
+          node nba-retry-artifacts/helpers/evidence.mjs dependencies before
+          browser_tools="$RUNNER_TEMP/nba-retry-browser-${{ github.run_id }}-${{ github.run_attempt }}"
+          mkdir -p "$browser_tools"
+          printf '{"private":true,"dependencies":{"playwright":"1.64.0"}}\n' > "$browser_tools/package.json"
+          npm install --prefix "$browser_tools" --ignore-scripts --no-audit --no-fund 2>&1 | tee nba-retry-artifacts/browser-install.log
+          test ! -e node_modules/playwright
+          test ! -e node_modules/playwright-core
+          ln -s "$browser_tools/node_modules/playwright" node_modules/playwright
+          ln -s "$browser_tools/node_modules/playwright-core" node_modules/playwright-core
+          cp "$browser_tools/package.json" nba-retry-artifacts/browser-package.json
+          cp "$browser_tools/package-lock.json" nba-retry-artifacts/browser-package-lock.json
+          node --input-type=module - <<'JS'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          for(const name of ['playwright','playwright-core'])assert.equal(JSON.parse(fs.readFileSync('node_modules/'+name+'/package.json')).version,'1.64.0');
+          JS
+          node "$browser_tools/node_modules/playwright/cli.js" install --with-deps chromium 2>&1 | tee nba-retry-artifacts/chromium-install.log
+          python -m pip install fonttools pillow 2>&1 | tee nba-retry-artifacts/fonts-install.log
+          python -m pip freeze > nba-retry-artifacts/python-packages.txt
+          node nba-retry-artifacts/helpers/evidence.mjs dependencies after-setup
+          cmp nba-retry-artifacts/dependencies-before.json nba-retry-artifacts/dependencies-after-setup.json
+          node nba-retry-artifacts/helpers/evidence.mjs snapshot after-setup
+          sha256sum package.json package-lock.json > nba-retry-artifacts/packages-after-setup.txt
+          cmp nba-retry-artifacts/packages-before.txt nba-retry-artifacts/packages-after-setup.txt
+          git diff --exit-code HEAD -- . > nba-retry-artifacts/setup-source-held.log
+      - name: Actual application type gate
+        id: types
+        if: ${{ !cancelled() && steps.setup.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node_modules/.bin/tsc --noEmit -p tsconfig.app.json > nba-retry-artifacts/types.stdout.log 2> nba-retry-artifacts/types.stderr.log
+      - name: Original failures and copied removals before healthy and whole undo
+        id: proof
+        if: ${{ !cancelled() && steps.setup.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          failed=0
+          NBA_RETRY_PROOF_OUT="$PWD/nba-retry-artifacts/proof" SIM_OFFLINE_RECEIPT="$PWD/nba-retry-artifacts/proof.transport.log" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/nbaPerfectSeasonRetryProof.mjs > nba-retry-artifacts/proof.stdout.log 2> nba-retry-artifacts/proof.stderr.log || failed=1
+          test ! -s nba-retry-artifacts/proof.transport.log || failed=1
+          node nba-retry-artifacts/helpers/evidence.mjs proof > nba-retry-artifacts/proof-guard.stdout.log 2> nba-retry-artifacts/proof-guard.stderr.log || failed=1
+          cat nba-retry-artifacts/proof.stdout.log
+          exit "$failed"
+      - name: Existing four-sport result and verdict regressions
+        id: units
+        if: ${{ !cancelled() && steps.setup.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          failed=0
+          SIM_OFFLINE_RECEIPT="$PWD/nba-retry-artifacts/units.transport.log" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node node_modules/vitest/vitest.mjs run src/test/perfectSeasonResult.test.tsx src/test/perfectSeasonVerdict.test.tsx --maxWorkers=1 --minWorkers=1 --reporter=default --reporter=json --outputFile=nba-retry-artifacts/units.json > nba-retry-artifacts/units.stdout.log 2> nba-retry-artifacts/units.stderr.log || failed=1
+          test ! -s nba-retry-artifacts/units.transport.log || failed=1
+          node nba-retry-artifacts/helpers/evidence.mjs units > nba-retry-artifacts/units-guard.stdout.log 2> nba-retry-artifacts/units-guard.stderr.log || failed=1
+          cat nba-retry-artifacts/units.stdout.log
+          exit "$failed"
+      - name: Complete early type and component evidence cap
+        id: earlycap
+        if: ${{ !cancelled() }}
+        env:
+          NBA_STEP_CONTEXT: ${{ toJSON(steps) }}
+        run: |
+          set -euo pipefail
+          node nba-retry-artifacts/helpers/evidence.mjs finish early
+      - name: Preserve complete early evidence including failures
+        id: earlyupload
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: nba-perfect-season-retry-early-${{ github.run_id }}-${{ github.run_attempt }}
+          path: nba-retry-artifacts/
+          include-hidden-files: true
+          retention-days: 5
+          if-no-files-found: error
+      - name: Full production SEO build
+        id: build
+        if: ${{ !cancelled() && steps.setup.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" npm run build:seo > nba-retry-artifacts/build.stdout.log 2> nba-retry-artifacts/build.stderr.log
+      - name: Complete produced public, ledger and dist bodies
+        id: retain
+        if: ${{ !cancelled() }}
+        run: |
+          set -euo pipefail
+          failed=0
+          node nba-retry-artifacts/helpers/evidence.mjs snapshot post-build > nba-retry-artifacts/generated.stdout.log 2> nba-retry-artifacts/generated.stderr.log || failed=1
+          git diff --binary HEAD -- public scripts/data/lastmod.json > nba-retry-artifacts/generated.patch || failed=1
+          tar --format=ustar -czf nba-retry-artifacts/generated-public-and-ledger.tar.gz public scripts/data/lastmod.json || failed=1
+          if test -d dist; then tar --format=ustar -czf nba-retry-artifacts/dist.tar.gz dist || failed=1; else failed=1; fi
+          sha256sum nba-retry-artifacts/*.tar.gz > nba-retry-artifacts/generated-archives.sha256 || failed=1
+          exit "$failed"
+      - name: All fifteen unchanged rebuilt readers
+        id: readers
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          node scripts/lib/hostLikeServer.mjs dist 4173 > nba-retry-artifacts/reader-server.stdout.log 2> nba-retry-artifacts/reader-server.stderr.log &
+          reader_server=$!
+          trap 'kill "$reader_server" 2>/dev/null || true' EXIT
+          ready=0
+          for attempt in $(seq 1 60); do
+            if curl --fail --silent http://127.0.0.1:4173/ > /dev/null; then ready=1; break; fi
+            sleep 1
+          done
+          test "$ready" -eq 1
+          failed=0
+          printf 'harness\texit\tlines\tverdict\n' > nba-retry-artifacts/readers.tsv
+          for harness in simAdsense simBrand simHeadTags simHiddenPages simHubs simIndexNow simIndexing simInternalLinks simNoRivalNames simPrerender simPrerenderBoot simRetiredRoutes simSchema simSitemap simSnapshotAssets; do
+            set +e
+            SIM_OFFLINE_RECEIPT="$PWD/nba-retry-artifacts/$harness.transport.log" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" BASE=http://127.0.0.1:4173 SWEEP_BASE=http://127.0.0.1:4173 node "scripts/$harness.mjs" > "nba-retry-artifacts/$harness.stdout.log" 2> "nba-retry-artifacts/$harness.stderr.log"
+            status=$?
+            set -e
+            lines="$(cat "nba-retry-artifacts/$harness.stdout.log" "nba-retry-artifacts/$harness.stderr.log" | awk 'NF && $0 !~ /^\[SIM_OFFLINE_BLOCK\]/ {n++} END {print n+0}')"
+            verdict=PASS
+            if test "$status" -ne 0; then verdict=FAIL; failed=1; fi
+            if test "$status" -eq 0 && test "$lines" -lt 4; then verdict=EMPTY; failed=1; fi
+            if grep -E '(^|[[:space:]])(SKIP|EMPTY)([[:space:]]|$)|^\[SIM_OFFLINE_BLOCK\]' "nba-retry-artifacts/$harness.stdout.log" "nba-retry-artifacts/$harness.stderr.log" > /dev/null; then verdict=FAIL; failed=1; fi
+            if test -s "nba-retry-artifacts/$harness.transport.log"; then verdict=FAIL; failed=1; fi
+            printf '%s\t%s\t%s\t%s\n' "$harness" "$status" "$lines" "$verdict" >> nba-retry-artifacts/readers.tsv
+            printf '%s: %s (exit %s, %s complete output lines)\n' "$harness" "$verdict" "$status" "$lines"
+          done
+          test "$(tail -n +2 nba-retry-artifacts/readers.tsv | wc -l)" -eq 15
+          exit "$failed"
+      - name: Actual built NBA failed-fetch, repeated-error and recovered draft journeys
+        id: browser
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          node scripts/lib/hostLikeServer.mjs dist 4173 > nba-retry-artifacts/browser-server.stdout.log 2> nba-retry-artifacts/browser-server.stderr.log &
+          browser_server=$!
+          trap 'kill "$browser_server" 2>/dev/null || true' EXIT
+          ready=0
+          for attempt in $(seq 1 60); do
+            if curl --fail --silent http://127.0.0.1:4173/ > /dev/null; then ready=1; break; fi
+            sleep 1
+          done
+          test "$ready" -eq 1
+          failed=0
+          BASE=http://127.0.0.1:4173 SWEEP_BASE=http://127.0.0.1:4173 NBA_RETRY_BROWSER_OUT="$PWD/nba-retry-artifacts/browser" SIM_OFFLINE_RECEIPT="$PWD/nba-retry-artifacts/browser.transport.log" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/nbaPerfectSeasonRetryBrowser.mjs > nba-retry-artifacts/browser.stdout.log 2> nba-retry-artifacts/browser.stderr.log || failed=1
+          test ! -s nba-retry-artifacts/browser.transport.log || failed=1
+          node nba-retry-artifacts/helpers/browser-consumer.mjs > nba-retry-artifacts/browser-guard.stdout.log 2> nba-retry-artifacts/browser-guard.stderr.log || failed=1
+          cat nba-retry-artifacts/browser.stdout.log
+          exit "$failed"
+      - name: Final source, locked packages, helpers and generated bodies held
+        id: holds
+        if: ${{ !cancelled() }}
+        run: |
+          set -euo pipefail
+          failed=0
+          node nba-retry-artifacts/helpers/evidence.mjs snapshot final > nba-retry-artifacts/final-source.stdout.log 2> nba-retry-artifacts/final-source.stderr.log || failed=1
+          node nba-retry-artifacts/helpers/evidence.mjs dependencies final > nba-retry-artifacts/final-dependencies.stdout.log 2> nba-retry-artifacts/final-dependencies.stderr.log || failed=1
+          cmp nba-retry-artifacts/dependencies-before.json nba-retry-artifacts/dependencies-final.json || failed=1
+          sha256sum package.json package-lock.json > nba-retry-artifacts/packages-final.txt
+          cmp nba-retry-artifacts/packages-before.txt nba-retry-artifacts/packages-final.txt || failed=1
+          sha256sum --check nba-retry-artifacts/helper-source.sha256 > nba-retry-artifacts/helper-held.log || failed=1
+          sha256sum --check nba-retry-artifacts/browser-helper-source.sha256 > nba-retry-artifacts/browser-helper-held.log || failed=1
+          sha256sum --check nba-retry-artifacts/generated-archives.sha256 > nba-retry-artifacts/generated-held.log || failed=1
+          git diff --exit-code HEAD -- . ':!public/**' ':!scripts/data/lastmod.json' > nba-retry-artifacts/source-held.log || failed=1
+          exit "$failed"
+      - name: Self-inclusive complete evidence and unwaived outcome cap
+        id: finalcap
+        if: ${{ !cancelled() }}
+        env:
+          NBA_STEP_CONTEXT: ${{ toJSON(steps) }}
+        run: |
+          set -euo pipefail
+          node nba-retry-artifacts/helpers/evidence.mjs finish final
+      - name: Preserve every complete or failed body
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: nba-perfect-season-retry-final-${{ github.run_id }}-${{ github.run_attempt }}
+          path: nba-retry-artifacts/
+          include-hidden-files: true
+          retention-days: 5
+          if-no-files-found: error

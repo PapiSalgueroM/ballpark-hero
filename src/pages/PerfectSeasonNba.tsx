@@ -91,6 +91,7 @@ const PerfectSeasonNba = () => {
   const countdownTimer = useRef<ReturnType<typeof setInterval> | null>(null);
   const dailyPicker = useRef<((len: number) => number) | null>(null);
   const dailySaved = useRef(false);
+  const retryReroll = useRef(false);
 
   const openSlots = useMemo(
     () => NBA_SLOTS.filter(s => !picks[s.key]).map(s => s.key),
@@ -129,6 +130,7 @@ const PerfectSeasonNba = () => {
       }
       dailyPicker.current = makeDailyPicker(SPORT_KEY);
     }
+    setIndex([]);
     setPhase('boot');
   };
 
@@ -167,8 +169,8 @@ const PerfectSeasonNba = () => {
     if (index.length === 0) return;
     if (isReroll) {
       if (rerolls <= 0) return;
-      setRerolls(r => r - 1);
     }
+    retryReroll.current = isReroll;
     const spinStart = Date.now();
     setPhase('spinning');
     setSelected(null);
@@ -202,6 +204,7 @@ const PerfectSeasonNba = () => {
       setPhase('error');
       return;
     }
+    if (isReroll) setRerolls(r => r - 1);
     setWheelText(`${found.entry.season} ${found.squad.teamName}`);
     setSquad(found.squad);
     setSpins(s => s + 1);
@@ -532,7 +535,7 @@ const PerfectSeasonNba = () => {
         {phase === 'error' && (
           <div className="text-center py-12">
             <p className="text-destructive font-semibold mb-3">Couldn't reach the basketball archives.</p>
-            <button onClick={() => window.location.reload()} className="px-6 py-2.5 bg-primary text-primary-foreground rounded-full font-semibold">
+            <button onClick={() => index.length > 0 ? void spin(retryReroll.current) : setPhase('boot')} className="px-6 py-2.5 bg-primary text-primary-foreground rounded-full font-semibold">
               Try again
             </button>
           </div>
