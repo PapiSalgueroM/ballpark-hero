@@ -1,0 +1,21 @@
+node:internal/fs/promises:1345
+  return new FileHandle(await PromisePrototypeThen(
+                        ^
+
+Error: ENOENT: no such file or directory, open '/home/runner/work/ballpark-hero/ballpark-hero/src/components/soccer-career/__drill_pointer_cancel_5299.tsx'
+    at async open (node:internal/fs/promises:1345:25)
+    at async Object.readFile (node:internal/fs/promises:1996:14)
+    at async /home/runner/work/ballpark-hero/ballpark-hero/node_modules/tailwindcss/lib/lib/expandTailwindAtRules.js:173:34
+    at async Promise.all (index 364)
+    at async /home/runner/work/ballpark-hero/ballpark-hero/node_modules/tailwindcss/lib/lib/expandTailwindAtRules.js:172:13
+    at async /home/runner/work/ballpark-hero/ballpark-hero/node_modules/tailwindcss/lib/processTailwindFeatures.js:51:9
+    at async plugins (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/tailwindcss/lib/plugin.js:38:17)
+    at async LazyResult.runAsync (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/postcss/lib/lazy-result.js:299:11)
+    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simDrillMotion.mjs:51:14 {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/home/runner/work/ballpark-hero/ballpark-hero/src/components/soccer-career/__drill_pointer_cancel_5299.tsx'
+}
+
+Node.js v24.21.0
