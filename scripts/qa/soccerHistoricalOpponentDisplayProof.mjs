@@ -127,8 +127,10 @@ try {
   const unitAssertions=unitResult.testResults.flatMap(file=>file.assertionResults);report.unitAssertions=ref('unit-assertions.json',unitAssertions);save();assert.deepEqual(unitAssertions.map(item=>item.title).sort(),unitTitles.sort());assert(unitAssertions.every(item=>item.status==='passed'&&item.failureMessages.length===0));
   const observer=fs.readFileSync(path.join(ROOT,OBSERVER));report.observer=ref('source/observer.tsx',observer);writeOwned(testCopy,observer);
   const current=fs.readFileSync(path.join(ROOT,COMPONENT)), from='season: historical ? { ...s, labels: historical.labels } : s,',to='season: s,';
-  const text=current.toString('utf8');assert.equal(text.split(from).length-1,1);const fault=Buffer.from(text.replace(from,to));assert(!fault.equals(current));report.bindingSourceControl={before:ref('controls/table-binding/before.tsx',current),fault:ref('controls/table-binding/fault.tsx',fault),from,to};writeOwned(componentCopy,fault);
-  const currentArm=captureArm('current',null,[]), originalArm=captureArm('original-table-binding',componentCopy,['table-first','table-return']);
+  const text=current.toString('utf8');assert.equal(text.split(from).length-1,1);const fault=Buffer.from(text.replace(from,to));assert(!fault.equals(current));report.bindingSourceControl={before:ref('controls/table-binding/before.tsx',current),fault:ref('controls/table-binding/fault.tsx',fault),from,to};writeOwned(componentCopy,current);
+  const currentArm=captureArm('current',componentCopy,[]);
+  assert(fs.readFileSync(componentCopy).equals(current));fs.writeFileSync(componentCopy,fault);owned.set(componentCopy,fault);assert(fs.readFileSync(componentCopy).equals(fault));
+  const originalArm=captureArm('original-table-binding',componentCopy,['table-first','table-return']);
   assert(fs.readFileSync(componentCopy).equals(fault));const changedText=fs.readFileSync(componentCopy).toString('utf8');assert.equal(changedText.split(to).length-1,1);const reversed=Buffer.from(changedText.replace(to,from));assert(reversed.equals(current));fs.writeFileSync(componentCopy,reversed);owned.set(componentCopy,reversed);report.bindingSourceControl.undo=ref('controls/table-binding/undo.tsx',fs.readFileSync(componentCopy));save();
   const undoArm=captureArm('whole-undo',componentCopy,[]);assert(report.arms.every(row=>row.status==='pass'));
   const load=arm=>JSON.parse(fs.readFileSync(path.join(OUT,arm.actualRows.path)));const currentRows=load(currentArm),faultRows=load(originalArm),undoRows=load(undoArm);
