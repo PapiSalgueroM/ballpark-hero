@@ -49,12 +49,21 @@ try {
   report.sourceBefore = source();
   const original = execFileSync('git', ['cat-file', 'blob', `${HEAD}:${PAGE}`], { cwd: ROOT, maxBuffer: 1000000 }), current = fs.readFileSync(path.join(ROOT, PAGE));
   report.page = { commit: HEAD, original: bodyRef(original, 'source'), current: bodyRef(current, 'source'), canonicalSHA: sha(Buffer.from(current.toString('utf8').replaceAll('\r\n', '\n'))) };
-  assert.equal(sha(original), '09107b95f228ec8ab5b153b9eac7f0ce3091974789f812986ca83f0bc2b72efc'); assert.equal(report.page.canonicalSHA, '23003dbda5dc5f96bc168d4183d8bb508c79ab196b2da3649ff8982c9ed93e6a');
+  assert.equal(sha(original), '09107b95f228ec8ab5b153b9eac7f0ce3091974789f812986ca83f0bc2b72efc');
+  /* Release BG join (Round BGG): SOCCER_NEW_CAREER_PARENT_REF names the tree without this packet on a newer main (the BG
+     join passes the first parent of its m4 merge). Unset, every pin and the edit identity below run exactly as before.
+     Set, the page pin holds on the packet's own head blob (PACKET_HEAD), and the same three edits must turn the bound
+     parent's page into the page under test and back again. */
+  const PACKET_HEAD = 'e3fbccb8bcc8aa41c809a31b9e674d91c22db75f', PARENT_REF = process.env.SOCCER_NEW_CAREER_PARENT_REF || '';
+  if (!PARENT_REF) assert.equal(report.page.canonicalSHA, '23003dbda5dc5f96bc168d4183d8bb508c79ab196b2da3649ff8982c9ed93e6a');
+  else assert.equal(sha(Buffer.from(execFileSync('git', ['cat-file', 'blob', `${PACKET_HEAD}:${PAGE}`], { cwd: ROOT, maxBuffer: 1000000 }).toString('utf8').replaceAll('\r\n', '\n'))), '23003dbda5dc5f96bc168d4183d8bb508c79ab196b2da3649ff8982c9ed93e6a');
+  const identityBase = PARENT_REF ? execFileSync('git', ['cat-file', 'blob', `${PARENT_REF}:${PAGE}`], { cwd: ROOT, maxBuffer: 1000000 }) : original;
+  if (PARENT_REF) report.page.joinBinding = { parentRef: PARENT_REF, packetHead: PACKET_HEAD, parent: bodyRef(identityBase, 'source') };
   const block = (group, cancel, discard) => `            <div className="${group}">\n              <Button onClick={() => setShowNewCareerConfirm(false)} variant="outline" className="${cancel}">Cancel</Button>\n              <Button onClick={handleConfirmNewCareer} className="${discard}">Delete & Start Over</Button>`;
   const edits = [{from:block(props.original,props.originalCancel,props.originalDiscard),to:block(props.current,props.originalCancel,props.originalDiscard)},
     {from:`<Button onClick={() => setShowNewCareerConfirm(false)} variant="outline" className="${props.originalCancel}">Cancel</Button>`,to:`<Button onClick={() => setShowNewCareerConfirm(false)} variant="outline" className="${props.cancel}">Cancel</Button>`},
     {from:`<Button onClick={handleConfirmNewCareer} className="${props.originalDiscard}">Delete & Start Over</Button>`,to:`<Button onClick={handleConfirmNewCareer} className="${props.discard}">Delete & Start Over</Button>`}];
-  const before=original.toString('utf8'),after=current.toString('utf8').replaceAll('\r\n','\n');let forward=before,reverse=after;
+  const before=identityBase.toString('utf8'),after=current.toString('utf8').replaceAll('\r\n','\n');let forward=before,reverse=after;
   for(const edit of edits){assert.equal(forward.split(edit.from).length-1,1);forward=forward.replace(edit.from,edit.to);}for(const edit of [...edits].reverse()){assert.equal(reverse.split(edit.to).length-1,1);reverse=reverse.replace(edit.to,edit.from);}assert.equal(forward,after);assert.equal(reverse,before);report.page.edits=put('page-edits',edits);
   const fixture = fs.readFileSync(path.join(ROOT, FIXTURE)); report.fixture = bodyRef(fixture, 'fixture'); const selected = JSON.parse(fixture).saves.filter(row => row.id === 'ere'); assert.equal(selected.length, 1);
   const input = copy(selected[0].state); assert.equal(input.phase, 'playing'); assert.equal(input.primeType, 'late');
