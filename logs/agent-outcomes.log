@@ -1,0 +1,12 @@
+CONTROL FIRED wrong-source-year: receipt-integrity
+CONTROL FIRED repeat-recorded-year: same-year-held-once
+CONTROL FIRED ignore-eligibility: eligibility-fail-closed, receipt-integrity, same-year-held-once
+CONTROL FIRED instant-wage: change-whole-state, later-recorded-year
+CONTROL FIRED no-transfer-commission: future-signings
+CONTROL FIRED no-income-commission: annual-income-economics
+CONTROL FIRED lost-super-chance: original-offer-chances
+PASS original09df complete inactive saves/read tapes/advance vectors: 120.
+PASS actual agent review groups:8 and four actual future-year fixtures.
+PASS original offer outputs, exact future signed wages and annual/transfer commissions.
+PASS agent review product and proof source bytes held.
+PASS agent review outcomes: {"mode":"outcomes","groups":8,"originalWholePairs":120,"readVectors":120,"sourceControls":7,"branches":4,"sourceHeld":true}
