@@ -1,0 +1,1 @@
+ctl-worldtruth-16 exit=0 500s | simSoccerWorldTruth: 16 of 16 Round 1329 controls fired on their own sections
