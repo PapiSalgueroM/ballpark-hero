@@ -1,0 +1,23 @@
+#!build
+#!playwright
+headsha: git log --oneline -1
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-all: node_modules/.bin/vitest run --testTimeout=300000 --hookTimeout=300000
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simAccessibility: node scripts/simAccessibility.mjs
+simCareerKeepPlaying: node scripts/simCareerKeepPlaying.mjs
+simCareerAwardsNight: node scripts/simCareerAwardsNight.mjs
+simCareerDerbies: node scripts/simCareerDerbies.mjs
+simCareerLeagueSeasons: node scripts/simCareerLeagueSeasons.mjs
+simCareerRecordedStats: node scripts/simCareerRecordedStats.mjs
+simCareerTrophyRuns: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerTrophyRuns.mjs
+simClubSquads: node scripts/simClubSquads.mjs
+simCmDataOnDemand: node scripts/simCmDataOnDemand.mjs
+simHomeFront: node scripts/simHomeFront.mjs
+simLoanSpell: node scripts/simLoanSpell.mjs
+simNationalityFlags: node scripts/simNationalityFlags.mjs
+simSessionMarks: node scripts/simSessionMarks.mjs
+simSoccerAwardGenerations: SOCCER_AWARD_GENERATIONS_OUT=$RUNNER_TEMP/sag node scripts/simSoccerAwardGenerations.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+simVictoryMoment: node scripts/simVictoryMoment.mjs
