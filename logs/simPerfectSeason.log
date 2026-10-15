@@ -1,0 +1,11 @@
+1) the core math
+2) the framing copy covers every record
+3) daily seeding decorrelates and covers
+4) the saved daily attempt loads fail closed
+5) the live squads, per sport
+   nba: SKIPPED, SUPABASE UNREACHABLE. THIS SPORT'S SQUADS WERE NOT CHECKED.
+   nfl: SKIPPED, SUPABASE UNREACHABLE. THIS SPORT'S SQUADS WERE NOT CHECKED.
+   nhl: SKIPPED, SUPABASE UNREACHABLE. THIS SPORT'S SQUADS WERE NOT CHECKED.
+   mlb: SKIPPED, SUPABASE UNREACHABLE. THIS SPORT'S SQUADS WERE NOT CHECKED.
+
+simPerfectSeason: green. Four sports, one engine, no dead spins.

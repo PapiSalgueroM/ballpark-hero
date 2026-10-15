@@ -1,0 +1,27 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/test/perfectSeasonVerdict.test.tsx [2m([22m[2m17 tests[22m[2m)[22m[33m 347[2mms[22m[39m
+ [32m✓[39m src/test/perfectSeasonReport.test.tsx [2m([22m[2m1 test[22m[2m)[22m[33m 467[2mms[22m[39m
+   [33m[2m✓[22m[39m NBA game state in reports[2m > [22mfollows the real mode, spin and draft rather than sending only the route [33m 466[2mms[22m[39m
+ [32m✓[39m src/test/perfectSeasonResult.test.tsx [2m([22m[2m16 tests[22m[2m)[22m[33m 5183[2mms[22m[39m
+   [33m[2m✓[22m[39m nba Perfect Season result card[2m > [22mprints the odds for the raw overall the sim played, and a first run is a new best [33m 772[2mms[22m[39m
+   [33m[2m✓[22m[39m nba Perfect Season result card[2m > [22mshows a stored best on the mode screen and on the card, and a worse run leaves it alone [33m 655[2mms[22m[39m
+   [33m[2m✓[22m[39m nhl Perfect Season result card[2m > [22mprints the odds for the raw overall the sim played, and a first run is a new best [33m 601[2mms[22m[39m
+   [33m[2m✓[22m[39m nhl Perfect Season result card[2m > [22mshows a stored best on the mode screen and on the card, and a worse run leaves it alone [33m 633[2mms[22m[39m
+   [33m[2m✓[22m[39m mlb Perfect Season result card[2m > [22mprints the odds for the raw overall the sim played, and a first run is a new best [33m 659[2mms[22m[39m
+   [33m[2m✓[22m[39m mlb Perfect Season result card[2m > [22mshows a stored best on the mode screen and on the card, and a worse run leaves it alone [33m 552[2mms[22m[39m
+   [33m[2m✓[22m[39m nfl Perfect Season result card[2m > [22mprints the odds for the raw overall the sim played, and a first run is a new best [33m 474[2mms[22m[39m
+   [33m[2m✓[22m[39m nfl Perfect Season result card[2m > [22mshows a stored best on the mode screen and on the card, and a worse run leaves it alone [33m 420[2mms[22m[39m
+ [32m✓[39m src/test/perfectSeasonNbaRetry.test.tsx [2m([22m[2m5 tests[22m[2m)[22m[33m 10006[2mms[22m[39m
+   [33m[2m✓[22m[39m NBA Perfect Season recoverable archive failures[2m > [22mretries the initial archive in the chosen mode and refuses a stale prior-mode wheel [33m 3435[2mms[22m[39m
+   [33m[2m✓[22m[39m NBA Perfect Season recoverable archive failures[2m > [22mkeeps an earlier pick through a failed next spin and finishes one complete 82-game season [33m 2487[2mms[22m[39m
+   [33m[2m✓[22m[39m NBA Perfect Season recoverable archive failures[2m > [22mdoes not spend rerolls on repeated unusable or failed fetches and charges one usable recovery [33m 893[2mms[22m[39m
+   [33m[2m✓[22m[39m NBA Perfect Season recoverable archive failures[2m > [22mallows exactly two successful rerolls and refuses a third squad request [33m 335[2mms[22m[39m
+   [33m[2m✓[22m[39m NBA Perfect Season recoverable archive failures[2m > [22mkeeps an ordinary healthy draft and restart unchanged with one completion per run [33m 2855[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m4 passed[39m[22m[90m (4)[39m
+[2m      Tests [22m [1m[32m39 passed[39m[22m[90m (39)[39m
+[2m   Start at [22m 05:41:57
+[2m   Duration [22m 12.24s[2m (transform 1.74s, setup 428ms, collect 4.29s, tests 16.00s, environment 2.62s, prepare 747ms)[22m
+

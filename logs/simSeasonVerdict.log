@@ -1,0 +1,24 @@
+1) wiring: each page hands the card the sim's own record and its own route
+   nfl: record from the sim, route /perfect-season-nfl, close tier from 12 wins
+   nba: record from the sim, route /perfect-season-nba, close tier from 60 wins
+   mlb: record from the sim, route /perfect-season-mlb, close tier from 110 wins
+   nhl: record from the sim, route /perfect-season-nhl, close tier from 55 wins
+2) layout: nothing moves while it plays, no sideways bleed   3) reduced: the slam is visible at once under reduce
+   390 no-preference nfl 17-0 best    card 733px, moved [], bleed 0, slam 0 then 1
+   390 no-preference nba 80-2         card 807px, moved [], bleed 0, slam null then null
+   390 no-preference mlb 61-101       card 791px, moved [], bleed 0, slam null then null
+   390 no-preference nhl 62-20 best   card 791px, moved [], bleed 0, slam 0 then 1
+   390 reduce nfl 17-0 best           card 733px, moved [], bleed 0, slam 1 then 1
+   390 reduce nba 80-2                card 807px, moved [], bleed 0, slam null then null
+   390 reduce mlb 61-101              card 791px, moved [], bleed 0, slam null then null
+   390 reduce nhl 62-20 best          card 791px, moved [], bleed 0, slam 1 then 1
+   1440 no-preference nfl 17-0 best   card 581px, moved [], bleed 0, slam 0 then 1
+   1440 no-preference nba 80-2        card 577px, moved [], bleed 0, slam null then null
+   1440 no-preference mlb 61-101      card 577px, moved [], bleed 0, slam null then null
+   1440 no-preference nhl 62-20 best  card 577px, moved [], bleed 0, slam 0 then 1
+   1440 reduce nfl 17-0 best          card 581px, moved [], bleed 0, slam 1 then 1
+   1440 reduce nba 80-2               card 577px, moved [], bleed 0, slam null then null
+   1440 reduce mlb 61-101             card 577px, moved [], bleed 0, slam null then null
+   1440 reduce nhl 62-20 best         card 577px, moved [], bleed 0, slam 1 then 1
+
+simSeasonVerdict: green. Four pages hand the card the sim's record, 16 renders moved nothing, and the slam lands under either motion setting.

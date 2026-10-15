@@ -1,0 +1,3 @@
+714b93a04 rc request rBGg-m2 for 97d706b29b598472e60e270402a8c51fc4a7e1f0
+97d706b29 Round BGG: bind PR273's proof to a parent ref (NBA_RETRY_PARENT_REF, default the packet's own parent)
+2bd250b90 Round BGG: m2, merge PR273 codex/nba-perfect-season-retry at 1984e7e3 (NBA Perfect Season keeps your draft on Try again)

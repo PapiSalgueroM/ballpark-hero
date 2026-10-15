@@ -1,0 +1,12 @@
+build exit=0 31s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+headsha exit=0 0s | 2bd250b90 Round BGG: m2, merge PR273 codex/nba-perfect-season-retry at 1984e7e3 (NBA Perfect Season keeps your draft on Try again)
+nba-proof-bare exit=1 1s | FAIL NBA Perfect Season retry proof
+vitest-m2 exit=0 13s |    Duration  12.24s (transform 1.74s, setup 428ms, collect 4.29s, tests 16.00s, environment 2.62s, prepare 747ms)
+nba-browser exit=0 14s | PASS NBA Perfect Season retry browser
+nba-proof exit=0 51s | PASS NBA Perfect Season retry proof
+simPerfectSeasonOdds exit=0 3s | simPerfectSeasonOdds: green. In all four sports the odds on the card are the odds in the sim, the copy agrees with both, and the best record keeps.
+tsc exit=0 75s | 
+simSeasonVerdict exit=0 3s | simSeasonVerdict: green. Four pages hand the card the sim's record, 16 renders moved nothing, and the slam lands under either motion setting.
+simPerfectSeason exit=0 64s | simPerfectSeason: green. Four sports, one engine, no dead spins.
+simHarnessAnchors exit=0 44s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simPerfectSeasonWheel exit=1 113s | simPerfectSeasonWheel: 8 failure(s) in 1:mlb, 1:nba, 1:nfl, 1:nhl, 3:mlb, 3:nba, 3:nfl, 3:nhl
