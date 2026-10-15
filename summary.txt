@@ -1,0 +1,22 @@
+headsha exit=0 0s | ac1f3d676 Round BFH: simCareerDerbies plays 240 forced careers a club by default (was 120), keeping 6b's 400 meeting floor
+derbies-o2 exit=0 68s | simCareerDerbies: all 8 sections green
+derbies-o0 exit=0 70s | simCareerDerbies: all 8 sections green
+tsc exit=0 94s | 
+derbies-o3 exit=0 67s | simCareerDerbies: all 8 sections green
+derbies-ctl-nodetect exit=0 67s | FIRED-OK
+derbies-ctl-cadence1 exit=0 70s | FIRED-OK
+derbies-ctl-noalias exit=0 64s | FIRED-OK
+derbies-ctl-stream exit=0 70s | FIRED-OK
+derbies-ctl-uncapped exit=0 66s | FIRED-OK
+derbies-ctl-homealt exit=0 66s | FIRED-OK
+derbies-ctl-cadhold exit=0 66s | FIRED-OK
+derbies-ctl-aliasdrop exit=0 66s | FIRED-OK
+leagueSeasons-chainBase exit=0 30s | simCareerLeagueSeasons: all sections green
+derbies-ctl-winner exit=0 68s | FIRED-OK
+derbies-ctl-eliteoff exit=0 67s | FIRED-OK
+simCareerLeagueFinish exit=0 23s | simCareerLeagueFinish: green. 756 careers, 6048 seasons, 4819 in a verified league; finish and title agree, the ladder holds, the historical stream holds after documented
+simCareerSocialBrands exit=0 39s | ALL SOCIAL AND BRAND CHECKS PASSED
+ctl-fence-squadline exit=0 118s | CONTROL FIRED: SAVE_FENCE_CONTROL=squadline fired 1 times and section fleet went red with 1 findings
+saveFence-minus1330 exit=0 124s | simSaveFence: all green (tabs, source, fleet)
+simCareerAwardsNight exit=0 89s | simCareerAwardsNight: ALL 179 CHECKS PASSED
+simHarnessAnchors exit=0 47s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
