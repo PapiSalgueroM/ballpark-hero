@@ -1,0 +1,7 @@
+# Round BFH m1d: the BE merge proof, unserved: vitest-all, save size sim and control, save retry and its control
+saveSize: SC_SAVE_OUT="$PWD/scs1" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerCareerSaveSize.mjs
+saveSize-ctl-plain: SC_SAVE_CONTROL=plain SC_SAVE_EXPECT_RED=1 SC_SAVE_OUT="$PWD/scs2" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerCareerSaveSize.mjs > /tmp/sc.log 2>&1; s=$?; tail -2 /tmp/sc.log | cut -c1-200; [ $s = 0 ] && grep -q "simSoccerCareerSaveSize: expected RED, only the unchanged 60000-character cap failed." /tmp/sc.log && echo FIRED-OK
+simSoccerCareerSaveRetry: node scripts/simSoccerCareerSaveRetry.mjs
+ctl-saveretry-all: SOCCER_CAREER_SAVE_RETRY_CONTROL=all node scripts/simSoccerCareerSaveRetry.mjs 2>&1 | tee "$TMPDIR/ctl.log"; s=${PIPESTATUS[0]}; [ $s -eq 0 ] && grep -qE 'simSoccerCareerSaveRetry all: [0-9]+ actual outcomes and [1-9][0-9]* effective faults passed\.' "$TMPDIR/ctl.log"
+vitest-all: node_modules/.bin/vitest run --testTimeout=300000 --hookTimeout=300000
+packedFence: SC_PACKED_FENCE_OUT="$PWD/pfo" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/soccerCareerPackedFence.mjs

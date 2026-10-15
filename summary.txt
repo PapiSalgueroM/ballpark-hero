@@ -1,0 +1,6 @@
+saveSize-ctl-plain exit=0 9s | FIRED-OK
+simSoccerCareerSaveRetry exit=0 11s | simSoccerCareerSaveRetry: 8 actual outcomes passed.
+saveSize exit=0 13s | simSoccerCareerSaveSize: PASS.
+packedFence exit=0 42s | PASS packed fence seam: 4 healthy cases, 3 exact effective copied controls, 4 complete undo cases, source held.
+ctl-saveretry-all exit=0 126s | simSoccerCareerSaveRetry all: 8 actual outcomes and 16 effective faults passed.
+vitest-all exit=0 573s |    Duration  571.34s (transform 34.26s, setup 24.26s, collect 160.82s, tests 1221.61s, environment 179.41s, prepare 36.17s)
