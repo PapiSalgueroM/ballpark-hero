@@ -1,0 +1,4 @@
+build exit=0 34s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+fonts exit=0 0s | Prepared 9 declared font dependencies for local fulfillment.
+playSoccerCareerBuildLazy exit=0 34s | lazyCheck FIXED: three healthy creator flows load the editor on Customize, with actual failed-chunk recovery and omission control.
+hub-walk-full exit=1 93s | playCmHubLanding: 3 failure(s) (A 8 pass 0 fail, B 65 pass 0 fail, C 111 pass 0 fail, D 0 pass 3 fail, E 63 pass 0 fail, F 9 pass 0 fail)
