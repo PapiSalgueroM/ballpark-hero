@@ -415,6 +415,10 @@ export default function DrillBoard({ career, canBank, onBank, onBack, match }: {
     if (kind === 'wallshot') strike();
     else if (kind === 'gloves') dive();
   };
+  const onCancel = () => {
+    setDragging(false);
+    dragStart.current = null;
+  };
 
   /* What moment the board is drawing. Live it is the clock; while the resolve
      plays it runs from the press to the outcome, so the wall the ball reaches
@@ -495,7 +499,7 @@ export default function DrillBoard({ career, canBank, onBank, onBack, match }: {
         onPointerDown={onDown}
         onPointerMove={onMove}
         onPointerUp={onUp}
-        onPointerCancel={onUp}
+        onPointerCancel={onCancel}
       >
         {[0, 1, 2, 3, 4, 5].map(i => (
           <rect key={i} x={0} y={(VIEW_H / 6) * i} width={VIEW_W} height={VIEW_H / 6} fill={i % 2 ? 'hsl(140 35% 20%)' : 'hsl(140 35% 17%)'} />
