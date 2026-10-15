@@ -134,3 +134,71 @@ describe('a drill board playing one round inside a match', { timeout: 20000 }, (
     expect(localStorage.length).toBe(0);
   });
 });
+
+describe('cancelled training gestures', { timeout: 20000 }, () => {
+  const cancelledGesture = (position: string, kind: 'wallshot' | 'gloves', verb: 'scored' | 'saved') => {
+    const career = fixture(position), careerBefore = JSON.stringify(career);
+    const onBank = vi.fn(), onBack = vi.fn();
+    const writes = vi.spyOn(Storage.prototype, 'setItem');
+    const key = `career-drill-${kind}-daily-2026-10-06`;
+    const view = render(<DrillBoard career={career} canBank onBank={onBank} onBack={onBack} />);
+    fireEvent.click(view.getByRole('button', { name: "Today's ten" }));
+    fireEvent.click(view.getByRole('button', { name: 'Start' }));
+    const svg = view.container.querySelector(`[data-drill-board="${kind}"]`)!;
+    vi.spyOn(svg, 'getBoundingClientRect').mockReturnValue({ left: 0, top: 0, width: 360, height: 210, right: 360, bottom: 210, x: 0, y: 0, toJSON: () => ({}) } as DOMRect);
+    const rawBefore = JSON.stringify(Array.from({ length: localStorage.length }, (_, i) => {
+      const storedKey = localStorage.key(i)!;
+      return [storedKey, localStorage.getItem(storedKey)];
+    }));
+    const expectUnplayed = () => {
+      expect(svg.getAttribute('data-drill-phase'), `DRILL_POINTER_CANCEL_${kind}`).toBe('playing');
+      expect(view.getByText('Round 1/10')).toBeTruthy();
+      expect(view.getByText(`0 ${verb}`)).toBeTruthy();
+      expect(view.getByText('0 pts')).toBeTruthy();
+      expect(view.queryByRole('button', { name: 'Next' })).toBeNull();
+      expect(JSON.stringify(Array.from({ length: localStorage.length }, (_, i) => {
+        const storedKey = localStorage.key(i)!;
+        return [storedKey, localStorage.getItem(storedKey)];
+      }))).toBe(rawBefore);
+      expect(writes.mock.calls.filter(([storedKey]) => storedKey === key)).toHaveLength(0);
+    };
+    fireEvent.pointerDown(svg, { pointerId: 7, clientX: 180, clientY: 145 });
+    fireEvent.pointerMove(svg, { pointerId: 7, clientX: 225, clientY: 80 });
+    fireEvent.pointerCancel(svg, { pointerId: 7 });
+    expectUnplayed();
+    advance(50);
+    fireEvent.pointerMove(svg, { pointerId: 7, clientX: 240, clientY: 65 });
+    fireEvent.pointerUp(svg, { pointerId: 7 });
+    expectUnplayed();
+    fireEvent.pointerDown(svg, { pointerId: 8, clientX: 180, clientY: 145 });
+    fireEvent.pointerMove(svg, { pointerId: 8, clientX: 225, clientY: 80 });
+    fireEvent.pointerUp(svg, { pointerId: 8 });
+    expect(svg.getAttribute('data-drill-phase')).toBe('flying');
+    fireEvent.pointerUp(svg, { pointerId: 8 });
+    advance(900);
+    expect(svg.getAttribute('data-drill-phase')).toBe('roundEnd');
+    expect(view.getByRole('button', { name: 'Next' })).toBeTruthy();
+    const rawSettled = localStorage.getItem(key);
+    expect(rawSettled).not.toBeNull();
+    const settled = JSON.parse(rawSettled!);
+    expect(settled.rounds).toBe(1);
+    expect(settled.banked).toBe(false);
+    expect(view.getByText(`${settled.count} ${verb}`)).toBeTruthy();
+    expect(view.getByText(`${settled.score} pts`)).toBeTruthy();
+    expect(writes.mock.calls.filter(([storedKey]) => storedKey === key)).toHaveLength(1);
+    advance(1000);
+    expect(localStorage.getItem(key)).toBe(rawSettled);
+    expect(writes.mock.calls.filter(([storedKey]) => storedKey === key)).toHaveLength(1);
+    expect(onBank).not.toHaveBeenCalled();
+    expect(onBack).not.toHaveBeenCalled();
+    expect(JSON.stringify(career)).toBe(careerBefore);
+  };
+
+  it('cancels a Wall Shot drag without spending the round, then releases once', () => {
+    cancelledGesture('ST', 'wallshot', 'scored');
+  });
+
+  it('cancels a Gloves drag without spending the round, then releases once', () => {
+    cancelledGesture('GK', 'gloves', 'saved');
+  });
+});
