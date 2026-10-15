@@ -1,0 +1,8 @@
+# Round BFH dz2: simCareerDerbies 6b at offset 0 for 120, 200, 240, 250 forced careers, one at a time for the wall time; and offset 1 on the chainOut tree (Release BE's careers)
+#!serial
+d-f120-o0: a=$(date +%s); SIM_DERBY_FORCED=120 node scripts/simCareerDerbies.mjs > /tmp/d120.log 2>&1; s=$?; b=$(date +%s); grep -E '6b:|FAIL' /tmp/d120.log | head -4 | cut -c1-220; echo "wall $((b-a)) s, exit $s"; tail -1 /tmp/d120.log | cut -c1-120; exit $s
+d-f200-o0: a=$(date +%s); SIM_DERBY_FORCED=200 node scripts/simCareerDerbies.mjs > /tmp/d200.log 2>&1; s=$?; b=$(date +%s); grep -E '6b:|FAIL' /tmp/d200.log | head -4 | cut -c1-220; echo "wall $((b-a)) s, exit $s"; tail -1 /tmp/d200.log | cut -c1-120; exit $s
+d-f240-o0: a=$(date +%s); SIM_DERBY_FORCED=240 node scripts/simCareerDerbies.mjs > /tmp/d240.log 2>&1; s=$?; b=$(date +%s); grep -E '6b:|FAIL' /tmp/d240.log | head -4 | cut -c1-220; echo "wall $((b-a)) s, exit $s"; tail -1 /tmp/d240.log | cut -c1-120; exit $s
+d-f250-o0: a=$(date +%s); SIM_DERBY_FORCED=250 node scripts/simCareerDerbies.mjs > /tmp/d250.log 2>&1; s=$?; b=$(date +%s); grep -E '6b:|FAIL' /tmp/d250.log | head -4 | cut -c1-220; echo "wall $((b-a)) s, exit $s"; tail -1 /tmp/d250.log | cut -c1-120; exit $s
+d-chainOut-o1: D=$(bash .rc/x/chainOut.sh) && cd "$D" && node scripts/simCareerDerbies.mjs 1 > /tmp/dco1.log 2>&1; s=$?; grep -E '6b:|FAIL' /tmp/dco1.log | head -4 | cut -c1-220; tail -1 /tmp/dco1.log | cut -c1-120; exit $s
+d-chainOut-o0: D=$(bash .rc/x/chainOut.sh) && cd "$D" && node scripts/simCareerDerbies.mjs > /tmp/dco0.log 2>&1; s=$?; grep -E '6b:|FAIL' /tmp/dco0.log | head -4 | cut -c1-220; tail -1 /tmp/dco0.log | cut -c1-120; exit $s
