@@ -1,0 +1,21 @@
+1) Take a job and build a record worth a country
+  PASS  exactly one hub tile is titled Manager
+  PASS  the career is running
+  PASS  the save was given a record worth an international job
+2) The country calls on the Manager tile
+  PASS  the manager tile is on the hub, exactly once
+  PASS  the tile says the country is calling (🧢 MANAGER 🌐 Your country is calling England want you for t)
+  PASS  the offer card is on the manager panel
+  PASS  an English club's manager is offered England ()
+  PASS  the offer is honest that it is a summer job
+3) Taking it holds both jobs
+  PASS  the offer is gone once accepted
+  PASS  the job card replaced it
+  PASS  the card names the country
+  PASS  the card explains when the country actually plays
+  PASS  the club job is still his
+4) It is part of the save
+  PASS  the international job survived a reload
+  PASS  no real page errors on the walk (clean)
+
+playNationJob: green. Win enough and your country calls, and the club job carries on underneath it.

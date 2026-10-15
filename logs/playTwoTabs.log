@@ -1,0 +1,30 @@
+fixtures: Brighton 55840 chars, Everton 54114 chars, Hot Seat survivor Arsenal (survived, 9 actions)
+== 320x640
+9) BACK: a stale tab leaves by the browser's Back, mid Play Live and on the hub (320x640)
+  note  tab A's live match is in minute 4
+   mid Play Live: A came in by a link; B played 3: "Brighton week 3, 3 results, last Leeds United 0-1" (live none); A saw the notice: true; after A's Back (same document true) "Brighton week 3, 3 results, last Leeds United 0-1" (live none)
+  ok    A left by Back mid Play Live: the save is still B's
+   on the hub: A came in by a link; B played 3: "Brighton week 3, 3 results, last Leeds United 0-1" (live none); A saw the notice: true; after A's Back (same document true) "Brighton week 3, 3 results, last Leeds United 0-1" (live none)
+  ok    A left by Back on the hub: the save is still B's
+   then in the same document a Hot Seat carry on: the save holds "Arsenal week 26, 26 results, last Hull City 2-0"
+  ok    the same document carried a Hot Seat job on afterwards
+== 390x844
+9) BACK: a stale tab leaves by the browser's Back, mid Play Live and on the hub (390x844)
+  note  tab A's live match is in minute 4
+   mid Play Live: A came in by a link; B played 3: "Brighton week 3, 3 results, last Leeds United 0-1" (live none); A saw the notice: true; after A's Back (same document true) "Brighton week 3, 3 results, last Leeds United 0-1" (live none)
+  ok    A left by Back mid Play Live: the save is still B's
+   on the hub: A came in by a link; B played 3: "Brighton week 3, 3 results, last Leeds United 1-0" (live none); A saw the notice: true; after A's Back (same document true) "Brighton week 3, 3 results, last Leeds United 1-0" (live none)
+  ok    A left by Back on the hub: the save is still B's
+   then in the same document a Hot Seat carry on: the save holds "Arsenal week 26, 26 results, last Hull City 2-0"
+  ok    the same document carried a Hot Seat job on afterwards
+== 1280x900
+9) BACK: a stale tab leaves by the browser's Back, mid Play Live and on the hub (1280x900)
+  note  tab A's live match is in minute 4
+   mid Play Live: A came in by a link; B played 3: "Brighton week 3, 3 results, last Leeds United 3-0" (live none); A saw the notice: true; after A's Back (same document true) "Brighton week 3, 3 results, last Leeds United 3-0" (live none)
+  ok    A left by Back mid Play Live: the save is still B's
+   on the hub: A came in by a link; B played 3: "Brighton week 3, 3 results, last Leeds United 0-2" (live none); A saw the notice: true; after A's Back (same document true) "Brighton week 3, 3 results, last Leeds United 0-2" (live none)
+  ok    A left by Back on the hub: the save is still B's
+   then in the same document a Hot Seat carry on: the save holds "Arsenal week 26, 26 results, last Hull City 2-0"
+  ok    the same document carried a Hot Seat job on afterwards
+cases red: none; pictures in /home/runner/work/_temp/rc-out/files
+playTwoTabs: green at 320x640, 390x844, 1280x900
