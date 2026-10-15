@@ -1,0 +1,356 @@
+name: Soccer New Career confirmation phone layout
+on:
+  push:
+    branches: [codex/career-confirmation-phone-layout]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    defaults:
+      run:
+        shell: bash
+    env:
+      SIM_NETWORK: offline
+      ENGINES: chromium
+      VITEST_MAX_FORKS: 1
+      VITEST_MIN_FORKS: 1
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Retain source and capture commands
+        run: |
+          set -euo pipefail
+          test "${GITHUB_REF_NAME}" = codex/career-confirmation-phone-layout
+          mkdir career-confirmation-artifacts
+          git cat-file -e 4a5f759aeab6d0e7b8d29e55d3cd624c8ad20c54^{commit}
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          test "$(git rev-parse '4a5f759aeab6d0e7b8d29e55d3cd624c8ad20c54^{tree}')" = 8f8078136ba98fc07c944553aeaa53c307a68554
+          git -c core.autocrlf=false archive --format=zip HEAD > career-confirmation-artifacts/source.zip
+          git -c core.autocrlf=false archive --format=zip 4a5f759aeab6d0e7b8d29e55d3cd624c8ad20c54 > career-confirmation-artifacts/base.zip
+          git ls-tree -r HEAD > career-confirmation-artifacts/source-inventory.txt
+          git ls-tree -r 4a5f759aeab6d0e7b8d29e55d3cd624c8ad20c54 > career-confirmation-artifacts/base-inventory.txt
+          sha256sum career-confirmation-artifacts/source.zip career-confirmation-artifacts/base.zip > career-confirmation-artifacts/source-archives.sha256
+          node --input-type=module <<'SCOPE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';import {execFileSync} from 'node:child_process';
+          const base='4a5f759aeab6d0e7b8d29e55d3cd624c8ad20c54',allowed=['src/pages/SoccerCareer.tsx','scripts/qa/soccerNewCareerDialogBrowser.mjs','.github/workflows/career-confirmation-phone-layout.yml','docs/CAREER-CONFIRMATION-PHONE-LAYOUT.md'];
+          const changed=execFileSync('git',['diff','--name-only','-z',base,'HEAD']).toString().split('\0').filter(Boolean);
+          fs.writeFileSync('career-confirmation-artifacts/source-scope.json',JSON.stringify({base,allowed,changed},null,2));assert.deepEqual([...changed].sort(),[...allowed].sort());
+          SCOPE
+          git rev-parse HEAD HEAD^{tree} > career-confirmation-artifacts/head-tree.txt
+          cp package.json career-confirmation-artifacts/package.before.json
+          cp package-lock.json career-confirmation-artifacts/package-lock.before.json
+          sha256sum src/pages/SoccerCareer.tsx scripts/qa/soccerNewCareerDialogBrowser.mjs .github/workflows/career-confirmation-phone-layout.yml docs/CAREER-CONFIRMATION-PHONE-LAYOUT.md scripts/qa/soccerAgentReviewDependencies.mjs > career-confirmation-artifacts/source-hold.sha256
+          cat > career-confirmation-artifacts/capture.sh <<'CAPTURE'
+          capture() {
+            local label="$1"; shift
+            printf '%s\0' "$@" > "career-confirmation-artifacts/$label.argv"
+            set +e
+            "$@" > "career-confirmation-artifacts/$label.stdout" 2> "career-confirmation-artifacts/$label.stderr"
+            local code=$?
+            set -e
+            echo "$code" > "career-confirmation-artifacts/$label.exit"
+            cat "career-confirmation-artifacts/$label.stdout"
+            cat "career-confirmation-artifacts/$label.stderr" >&2
+            return "$code"
+          }
+          CAPTURE
+      - name: Install remote verification dependencies
+        id: dependencies
+        run: |
+          set -euo pipefail
+          source career-confirmation-artifacts/capture.sh
+          capture npm-ci npm ci
+          capture locked-before node scripts/qa/soccerAgentReviewDependencies.mjs before
+          cp soccer-agent-review-artifacts/dependencies-before.json career-confirmation-artifacts/dependencies-before.json
+          browser_tools="$RUNNER_TEMP/new-career-dialog-browser-$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT"
+          mkdir -p "$browser_tools"
+          printf '{"private":true,"dependencies":{"playwright":"1.64.0"}}\n' > "$browser_tools/package.json"
+          capture playwright-package npm install --prefix "$browser_tools" --ignore-scripts --no-audit --no-fund
+          test ! -e node_modules/playwright
+          test ! -e node_modules/playwright-core
+          ln -s "$browser_tools/node_modules/playwright" node_modules/playwright
+          ln -s "$browser_tools/node_modules/playwright-core" node_modules/playwright-core
+          cp "$browser_tools/package.json" career-confirmation-artifacts/browser-package.json
+          cp "$browser_tools/package-lock.json" career-confirmation-artifacts/browser-package-lock.json
+          capture chromium node "$browser_tools/node_modules/playwright/cli.js" install --with-deps chromium
+          capture locked-after-setup node scripts/qa/soccerAgentReviewDependencies.mjs after
+          cp soccer-agent-review-artifacts/dependencies-after.json career-confirmation-artifacts/dependencies-after-setup.json
+          node --input-type=module <<'PLAYWRIGHT'
+          import fs from 'node:fs';import assert from 'node:assert/strict';for(const name of ['playwright','playwright-core'])assert.equal(JSON.parse(fs.readFileSync('node_modules/'+name+'/package.json')).version,'1.64.0');
+          PLAYWRIGHT
+          capture fonts python -m pip install fonttools pillow
+          cmp package.json career-confirmation-artifacts/package.before.json
+          cmp package-lock.json career-confirmation-artifacts/package-lock.before.json
+      - name: Actual application type gate
+        id: types
+        if: ${{ !cancelled() && steps.dependencies.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          source career-confirmation-artifacts/capture.sh
+          capture types node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+      # This is a layout change. The focused built-page proof checks actual controls and labels.
+      - name: Full production SEO build
+        id: build
+        if: ${{ !cancelled() && steps.dependencies.outcome == 'success' && steps.types.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          source career-confirmation-artifacts/capture.sh
+          capture build npm run build:seo
+      - name: Actual New Career dialog fit and safe Cancel reads
+        id: browser
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          source career-confirmation-artifacts/capture.sh
+          server_pid=''
+          close_server() { if test -n "$server_pid"; then kill "$server_pid" 2>/dev/null || true; wait "$server_pid" 2>/dev/null || true; fi; }
+          trap close_server EXIT
+          node scripts/lib/hostLikeServer.mjs dist 4173 > career-confirmation-artifacts/browser-server.stdout 2> career-confirmation-artifacts/browser-server.stderr &
+          server_pid=$!
+          capture browser-server-ready node --input-type=module -e 'for(let i=0;i<100;i++){try{const r=await fetch("http://127.0.0.1:4173/");if(r.ok)process.exit(0);}catch{}await new Promise(r=>setTimeout(r,100));}process.exit(1);'
+          capture browser env BASE=http://127.0.0.1:4173 SOCCER_NEW_CAREER_BROWSER_OUT=career-confirmation-artifacts/browser node scripts/qa/soccerNewCareerDialogBrowser.mjs
+      - name: Bind exact source, browser streams and observed locked oracle inputs
+        if: ${{ !cancelled() && (steps.browser.outcome == 'success' || steps.browser.outcome == 'failure') }}
+        env:
+          SOCCER_NEW_CAREER_BROWSER_OUT: career-confirmation-artifacts/browser
+        run: |
+          set -euo pipefail
+          source career-confirmation-artifacts/capture.sh
+          cat > career-confirmation-artifacts/browser-provenance.mjs <<'PROVENANCE'
+          // Retained source/process and observed locked-input joins, not browser semantics.
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import assert from 'node:assert/strict';
+          import { createHash } from 'node:crypto';
+          const ART = 'career-confirmation-artifacts', OUT = path.resolve(process.env.SOCCER_NEW_CAREER_BROWSER_OUT), ROOT = process.cwd();
+          const sha = bytes => createHash('sha256').update(bytes).digest('hex'), result = { status: 'running', streams: [], dependencySubset: [], errors: [] };
+          try {
+            assert.equal(OUT, path.resolve(ART, 'browser'));
+            assert.equal(sha(fs.readFileSync('scripts/qa/soccerNewCareerDialogBrowser.mjs')), '07ed4a2c5c1a3d8f4be6a3c20f0cd8d8199345a7f3f61fa4220fdafeb6d77a80');
+            assert.equal(sha(Buffer.from(fs.readFileSync('src/pages/SoccerCareer.tsx', 'utf8').replaceAll('\r\n', '\n'))), '23003dbda5dc5f96bc168d4183d8bb508c79ab196b2da3649ff8982c9ed93e6a');
+            for (const suffix of ['argv', 'stdout', 'stderr', 'exit']) { const file = `browser.${suffix}`, body = fs.readFileSync(path.join(ART, file)); result.streams.push({ file, bytes: body.length, sha256: sha(body) }); }
+            assert.equal(fs.readFileSync(path.join(ART, 'browser.exit'), 'utf8').trim(), '0');
+            const argv = fs.readFileSync(path.join(ART, 'browser.argv'), 'utf8').split('\0'); assert.equal(argv.pop(), '');
+            assert.deepEqual(argv, ['env', 'BASE=http://127.0.0.1:4173', 'SOCCER_NEW_CAREER_BROWSER_OUT=career-confirmation-artifacts/browser', 'node', 'scripts/qa/soccerNewCareerDialogBrowser.mjs']);
+            const stdout = fs.readFileSync(path.join(ART, 'browser.stdout'), 'utf8'), stderr = fs.readFileSync(path.join(ART, 'browser.stderr'), 'utf8');
+            assert(stdout.split('\n').filter(line => line.trim()).length >= 4); assert(stdout.trimEnd().endsWith('PASS Soccer New Career dialog browser'));
+            assert(!/(^|\s)(FAIL|EMPTY|SKIP)(\s|$)|^\[SIM_OFFLINE_BLOCK\]/m.test(stdout + '\n' + stderr));
+            const before = fs.readFileSync(path.join(ART, 'package.before.json')), lockBefore = fs.readFileSync(path.join(ART, 'package-lock.before.json'));
+            assert(before.equals(fs.readFileSync('package.json'))); assert(lockBefore.equals(fs.readFileSync('package-lock.json')));
+            const locked = JSON.parse(lockBefore), installed = JSON.parse(fs.readFileSync(path.join(ART, 'dependencies-before.json'))), after = JSON.parse(fs.readFileSync(path.join(ART, 'dependencies-after-setup.json')));
+            assert.deepEqual(after.packageFiles, installed.packageFiles); assert.deepEqual(after.packages, installed.packages);
+            for (const record of installed.packageFiles) assert.equal(record.sha256, sha(fs.readFileSync(record.file)));
+            const report = JSON.parse(fs.readFileSync(path.join(OUT, 'report.json')));
+            const bytes = ref => { const file = path.resolve(OUT, ref.path); assert(file.startsWith(`${OUT}${path.sep}`)); const body = fs.readFileSync(file); assert.equal(body.length, ref.bytes); assert.equal(sha(body), ref.sha256); return body; };
+            for (const input of report.oracleSource.inputs.filter(row => row.file.startsWith('node_modules/'))) {
+              const observed = installed.packages.filter(row => input.file.startsWith(`${row.directory}/`)).sort((a, b) => b.directory.length - a.directory.length)[0]; assert(observed, 'Physical oracle input joins observed locked installed subset');
+              const full = path.resolve(ROOT, input.file); assert(full.startsWith(`${ROOT}${path.sep}`)); assert(bytes(input).equals(fs.readFileSync(full)));
+              const manifestBytes = fs.readFileSync(path.join(ROOT, observed.directory, 'package.json')), manifest = JSON.parse(manifestBytes);
+              assert.equal(manifest.name, observed.name); assert.equal(manifest.version, observed.version); assert.equal(locked.packages[observed.directory].version, observed.version);
+              const target = path.join(ART, 'browser-dependency-manifests', `${sha(manifestBytes)}.json`); fs.mkdirSync(path.dirname(target), { recursive: true });
+              if (fs.existsSync(target)) assert(fs.readFileSync(target).equals(manifestBytes)); else fs.writeFileSync(target, manifestBytes);
+              result.dependencySubset.push({ input, installed: observed, manifest: { file: `${observed.directory}/package.json`, path: path.relative(ART, target), bytes: manifestBytes.length, sha256: sha(manifestBytes) }, qualification: 'Observed installed dependency subset, not canonical Git source or exhaustive installed-file census.' });
+            }
+            assert(result.dependencySubset.length > 0); result.status = 'pass';
+          } catch (error) { result.status = 'fail'; result.errors.push(String(error.stack || error)); }
+          finally { fs.writeFileSync(path.join(ART, 'browser-provenance.json'), JSON.stringify(result, null, 2)); }
+          console.log(`${result.status === 'pass' ? 'PASS' : 'FAIL'} New Career browser source/process/locked input provenance`); if (result.status !== 'pass') process.exitCode = 1;
+          PROVENANCE
+          capture browser-provenance node career-confirmation-artifacts/browser-provenance.mjs
+      - name: Independently check all modal observations and whole retained references
+        if: ${{ !cancelled() && (steps.browser.outcome == 'success' || steps.browser.outcome == 'failure') }}
+        env:
+          SOCCER_NEW_CAREER_BROWSER_OUT: career-confirmation-artifacts/browser
+        run: |
+          set -euo pipefail
+          source career-confirmation-artifacts/capture.sh
+          cat > career-confirmation-artifacts/browser-consumer.mjs <<'BROWSER'
+          // Independent retained-data consumer. Does not import or invoke the browser helper.
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import { createHash } from 'node:crypto';
+          import { execFileSync } from 'node:child_process';
+
+          const ROOT = process.cwd(), OUT = path.resolve(ROOT, process.env.SOCCER_NEW_CAREER_BROWSER_OUT || 'new-career-dialog-artifacts/browser');
+          const sha = body => createHash('sha256').update(body).digest('hex'), result = { status: 'running', references: [], checks: [], errors: [] };
+          const check = (id, fn) => { const row = { id, status: 'running' }; result.checks.push(row); try { fn(); row.status = 'pass'; } catch (error) { row.status = 'fail'; row.error = String(error.stack || error); throw error; } };
+          const bytes = ref => { assert(ref && typeof ref.path === 'string' && Number.isSafeInteger(ref.bytes) && ref.bytes >= 0 && /^[a-f0-9]{64}$/.test(ref.sha256));
+            const full = path.resolve(OUT, ref.path); assert(full.startsWith(`${OUT}${path.sep}`)); const body = fs.readFileSync(full); const row = { path: ref.path, expectedBytes: ref.bytes, expectedSHA: ref.sha256, bytes: body.length, sha256: sha(body), status: 'running' }; result.references.push(row);
+            assert.equal(body.length, ref.bytes); assert.equal(row.sha256, ref.sha256); row.status = 'pass'; return body; };
+          const json = ref => JSON.parse(bytes(ref)), keys = (value, expected) => assert.deepEqual(Object.keys(value).sort(), [...expected].sort());
+          const same = (left, right) => assert.deepEqual(left, right);
+          const walk = value => { if (!value || typeof value !== 'object') return; if (typeof value.path === 'string' && Number.isSafeInteger(value.bytes) && typeof value.sha256 === 'string') bytes(value); for (const child of Object.values(value)) walk(child); };
+          const contained = (box, outer) => box.x >= outer.x - 1 && box.y >= outer.y - 1 && box.right <= outer.right + 1 && box.bottom <= outer.bottom + 1;
+          const fit = value => {
+            const viewport = { x: 0, y: 0, right: value.viewport.width, bottom: value.viewport.height }, labels = [value.heading, value.warning, ...value.buttons]; let bad = !contained(value.dialog.rect, viewport) || !contained(value.group.rect, value.dialog.rect);
+            for (const label of labels) { bad ||= !contained(label.rect, value.dialog.rect) || !contained(label.rect, viewport) || label.scrollWidth > label.clientWidth + 1 || label.scrollHeight > label.clientHeight + 1;
+              for (const node of label.textNodes) if (node.text.trim()) for (const rect of node.rects) bad ||= !contained(rect, label.rect) || !contained(rect, value.dialog.rect) || !contained(rect, viewport); }
+            for (const button of value.buttons) bad ||= !contained(button.rect, value.group.rect) || button.points.some(point => !point.painted);
+            for (let i = 0; i < labels.length; i++) for (let j = i + 1; j < labels.length; j++) { const a = labels[i].rect, b = labels[j].rect; bad ||= Math.min(a.right, b.right) > Math.max(a.x, b.x) + 1 && Math.min(a.bottom, b.bottom) > Math.max(a.y, b.y) + 1; }
+            for (const item of [value.dialog, value.group, ...labels]) bad ||= Object.values(item.rect).some(number => !Number.isFinite(number)) || item.rect.width <= 0 || item.rect.height <= 0 || item.style.display === 'none' || item.style.visibility !== 'visible' || Number(item.style.opacity) !== 1;
+            bad ||= value.ancestors.some(layer => layer.display === 'none' || layer.visibility !== 'visible' || Number(layer.opacity) !== 1); return bad ? ['modal-action-fit'] : [];
+          };
+          const pure = value => [value.beforeRaw !== value.afterRaw && 'raw-save', JSON.stringify(value.beforeDraws) !== JSON.stringify(value.afterDraws) && 'read-rng'].filter(Boolean);
+          const widths = [320, 390, 430, 1440], PAGE = 'src/pages/SoccerCareer.tsx', FIXTURE = 'scripts/data/careerLeagueWorldSaves1100.json', HEAD = '4a5f759aeab6d0e7b8d29e55d3cd624c8ad20c54';
+          const props = { original: 'flex gap-3', current: 'flex flex-col gap-3 sm:flex-row', originalCancel: 'flex-1 h-10 font-bold', originalDiscard: 'flex-1 h-10 font-bold bg-red-600 hover:bg-red-500 text-black', cancel: 'flex-none sm:flex-1 h-10 font-bold', discard: 'flex-none sm:flex-1 h-10 font-bold bg-red-600 hover:bg-red-500 text-black' };
+          let report;
+          try {
+            const raw = fs.readFileSync(path.join(OUT, 'report.json')); result.report = { bytes: raw.length, sha256: sha(raw) }; report = JSON.parse(raw); walk(report);
+            check('population-and-source', () => {
+              assert.equal(report.status, 'pass'); same(report.declarations, { widths, cases: 4, controls: ['original-dialog-320', 'read-purity'], pngs: 5 }); same(report.props, props); same(report.cases.map(row => row.width), widths); same(report.cases.map(row => row.id), widths.map(String)); same(report.errors, []); assert.equal(report.forwardedExternalRequests, 0);
+              const files = [PAGE, 'src/lib/soccerCareerEngine.ts', 'src/lib/soccerCareerSave.ts', 'src/components/ui/button.tsx', 'src/lib/utils.ts', FIXTURE, 'scripts/lib/offlineTransport.cjs', 'scripts/lib/playwrightLoader.mjs', 'scripts/lib/hostLikeServer.mjs', 'package.json', 'package-lock.json', 'scripts/qa/soccerNewCareerDialogBrowser.mjs'];
+              same(report.sourceBefore, report.sourceAfter); same(report.sourceBefore.map(row => row.file), files); assert.equal(report.page.commit, HEAD);
+              for (const row of report.sourceBefore) { keys(row, ['file', 'path', 'bytes', 'sha256']); const retained = bytes(row), actual = fs.readFileSync(path.join(ROOT, row.file)); assert(retained.equals(actual));
+                if (row.file !== PAGE && row.file !== files.at(-1)) { const original = execFileSync('git', ['cat-file', 'blob', `${HEAD}:${row.file}`], { cwd: ROOT, maxBuffer: 2000000 }); assert.equal(retained.toString('utf8').replaceAll('\r\n', '\n'), original.toString('utf8')); } }
+              const before = bytes(report.page.original), current = bytes(report.page.current), text = current.toString('utf8').replaceAll('\r\n', '\n'); assert.equal(sha(before), '09107b95f228ec8ab5b153b9eac7f0ce3091974789f812986ca83f0bc2b72efc'); assert.equal(sha(Buffer.from(text)), '23003dbda5dc5f96bc168d4183d8bb508c79ab196b2da3649ff8982c9ed93e6a'); assert.equal(report.page.canonicalSHA, sha(Buffer.from(text)));
+              assert(before.equals(execFileSync('git', ['cat-file', 'blob', `${HEAD}:${PAGE}`], { cwd: ROOT, maxBuffer: 1000000 }))); assert(current.equals(bytes(report.sourceBefore[0])));
+              const block=(group,cancel,discard)=>`            <div className="${group}">\n              <Button onClick={() => setShowNewCareerConfirm(false)} variant="outline" className="${cancel}">Cancel</Button>\n              <Button onClick={handleConfirmNewCareer} className="${discard}">Delete & Start Over</Button>`;
+              const edits=json(report.page.edits);same(edits,[{from:block(props.original,props.originalCancel,props.originalDiscard),to:block(props.current,props.originalCancel,props.originalDiscard)},
+                {from:`<Button onClick={() => setShowNewCareerConfirm(false)} variant="outline" className="${props.originalCancel}">Cancel</Button>`,to:`<Button onClick={() => setShowNewCareerConfirm(false)} variant="outline" className="${props.cancel}">Cancel</Button>`},
+                {from:`<Button onClick={handleConfirmNewCareer} className="${props.originalDiscard}">Delete & Start Over</Button>`,to:`<Button onClick={handleConfirmNewCareer} className="${props.discard}">Delete & Start Over</Button>`}]);
+              let forward=before.toString('utf8'),reverse=text;for(const edit of edits){assert.equal(forward.split(edit.from).length-1,1);forward=forward.replace(edit.from,edit.to);}for(const edit of [...edits].reverse()){assert.equal(reverse.split(edit.to).length-1,1);reverse=reverse.replace(edit.to,edit.from);}assert.equal(forward,text);assert.equal(reverse,before.toString('utf8'));
+            });
+            check('fixture-core-and-compiled-provenance', () => {
+              const fixture = json(report.fixture), selected = fixture.saves.filter(row => row.id === 'ere'); assert.equal(selected.length, 1); assert.equal(selected[0].state.phase, 'playing'); assert.equal(selected[0].state.primeType, 'late'); const input = json(report.input), edits = json(report.boundaryEdits), expected = JSON.parse(JSON.stringify(selected[0].state));
+              same(edits, ['retired', 'phase'].map(key => ({ key, existed: Object.hasOwn(expected, key), before: Object.hasOwn(expected, key) ? expected[key] : null, after: key === 'retired' ? true : 'retired' }))); expected.retired = true; expected.phase = 'retired'; same(input, expected);
+              const model = json(report.model); assert.equal(model.valid, true); assert.equal(model.before, JSON.stringify(input)); assert.equal(model.inputAfter, model.output); same(model.draws, []); assert.equal(JSON.parse(model.output).phase, 'retired'); assert.equal(JSON.parse(model.output).retired, true);
+              const oracle = report.oracleSource, meta = json(oracle.metafile), entry = bytes(oracle.entry), code = bytes(oracle.code); same(Object.keys(meta.outputs), ['stdin.js']); assert.equal(meta.outputs['stdin.js'].entryPoint, 'new-career-oracle.ts'); assert.equal(meta.outputs['stdin.js'].bytes, code.length); assert.equal(oracle.code.bytes, code.length);
+              assert.equal(entry.toString('utf8'), "export {repairCareer} from './src/lib/soccerCareerEngine';export {isSoccerCareerSave} from './src/lib/soccerCareerSave';export {buttonVariants} from './src/components/ui/button';export {cn} from './src/lib/utils';"); same(oracle.inputs.map(row => row.file).sort(), Object.keys(meta.inputs).sort()); assert.equal(new Set(oracle.inputs.map(row => row.file)).size, oracle.inputs.length);
+              for (const row of oracle.inputs) { const descriptor = meta.inputs[row.file]; assert(descriptor); if (row.file === '<define:import.meta.env>') { keys(row, ['file', 'synthetic', 'kind', 'metafileInput', 'declaredDefine', 'scope']); assert.equal(row.synthetic, true); assert.equal(row.kind, 'esbuild-define'); same(descriptor, { bytes: 0, imports: [] }); same(row.metafileInput, descriptor); keys(row.declaredDefine, ['name', 'expression']); keys(row.declaredDefine.expression, ['path', 'bytes', 'sha256']); assert.equal(row.declaredDefine.name, 'import.meta.env'); assert.equal(bytes(row.declaredDefine.expression).toString('utf8'), '{"DEV":false,"PROD":true,"MODE":"production"}'); assert.equal(row.scope, 'Declared expression and actual descriptor, not generated virtual-file bytes.'); }
+                else if (row.file === 'new-career-oracle.ts') { keys(row, ['file', 'synthetic', 'path', 'bytes', 'sha256']); assert.equal(row.synthetic, true); assert(bytes(row).equals(entry)); assert.equal(descriptor.bytes, entry.length); }
+                else { keys(row, ['file', 'path', 'bytes', 'sha256']); assert(!row.file.startsWith('<')); const full = path.resolve(ROOT, row.file); assert(full.startsWith(`${ROOT}${path.sep}`)); const body = bytes(row); assert(body.equals(fs.readFileSync(full))); assert.equal(descriptor.bytes, body.length); if (!row.file.startsWith('node_modules/')) { const base = execFileSync('git', ['cat-file', 'blob', `${HEAD}:${row.file}`], { cwd: ROOT, maxBuffer: 2000000 }); assert.equal(body.toString('utf8').replaceAll('\r\n', '\n'), base.toString('utf8')); } }
+              }
+              for (const required of ['src/lib/soccerCareerEngine.ts', 'src/lib/soccerCareerSave.ts', 'src/components/ui/button.tsx', 'src/lib/utils.ts']) assert(oracle.inputs.some(row => row.file === required));
+            });
+            const model = json(report.model), expectedModel = model.output;
+            const state = ref => { const value = json(ref); assert.equal(value.raw, expectedModel); assert(value.evidence.scope.included && value.evidence.scope.top); assert(Array.isArray(value.evidence.draws)); for (const draw of value.evidence.draws) { keys(draw, ['value', 'caller']); assert(Number.isFinite(draw.value) && draw.value >= 0 && draw.value < 1); assert.equal(typeof draw.caller, 'string'); } assert(Array.isArray(value.evidence.storage)); return value; };
+            const healthy = (value, width) => { same(fit(value), []); assert.equal(value.viewport.width, width); assert(value.stableFrames >= 4); assert.equal(value.finite, 0); assert.equal(value.fonts.ready, true); assert.equal(value.heading.text, '⚠️ Start New Career?'); assert.equal(value.warning.text, 'Are you sure? This will delete your current career. All progress will be lost forever.'); same(value.buttons.map(item => item.text), ['Cancel', 'Delete & Start Over']); assert.equal(value.group.className, props.current); same(value.buttons.map(item => item.className), [model.classes.cancel, model.classes.discard]); assert(value.buttons.every(item => Math.abs(item.rect.height - 40) <= 1));
+              for (const item of [value.dialog, value.heading, value.warning, value.group, ...value.buttons]) { assert(Object.values(item.rect).every(number => Number.isFinite(number))); assert(item.rect.width > 0 && item.rect.height > 0); for (const node of item.textNodes) for (const rect of node.rects) assert(Object.values(rect).every(number => Number.isFinite(number))); }
+              for (const item of value.buttons) { assert.equal(item.points.length, 3); same(item.points.map(point => [point.x, point.y]), [[.5, .5], [.25, .25], [.75, .75]].map(([x, y]) => [item.rect.x + item.rect.width * x, item.rect.y + item.rect.height * y])); assert(item.points.every(point => point.painted === true)); }
+              assert(value.dialog.html.includes('role="dialog"') && value.dialog.html.includes('aria-modal="true"') && value.dialog.html.includes('aria-label="Start a new career?"')); assert.equal(value.group.style.flexDirection, width < 640 ? 'column' : 'row'); };
+            for (const row of report.cases) check(`${row.id}-actual-dialog-cancel`, () => {
+              assert.equal(row.status, 'pass'); same(row.errors, []); assert(row.scopes.some(item => item.included && item.top)); const loaded = state(row.loaded), open = state(row.open), closed = state(row.closed), final = state(row.finalState); same(loaded.evidence.draws, open.evidence.draws); same(loaded.evidence.draws, closed.evidence.draws); same(loaded.evidence.draws, final.evidence.draws); same([loaded.confirmationCount, open.confirmationCount, closed.confirmationCount, final.confirmationCount], [0, 1, 0, 0]);
+              const names = row.width === 320 ? ['open', 'measure', 'legacy-group', 'legacy-measure', 'restore-group', 'undo-measure', 'cancel'] : ['open', 'measure', 'cancel']; same(row.steps.map(item => item.name), names);
+              for (const step of row.steps) { assert.equal(step.status, 'pass'); assert(!step.error && !step.retentionError); const before = state(step.before), after = state(step.after), witness = json(step.purity); same([before.confirmationCount, after.confirmationCount], step.name === 'open' ? [0, 1] : step.name === 'cancel' ? [1, 0] : [1, 1]); same(witness, { beforeRaw: before.raw, afterRaw: after.raw, beforeDraws: before.evidence.draws, afterDraws: after.evidence.draws }); same(pure(witness), []); same(step.findings, []); same(before.evidence.draws, loaded.evidence.draws); same(after.evidence.draws, loaded.evidence.draws); assert(['undefined', 'json'].includes(step.result.kind)); if (step.result.kind === 'json') json(step.result.body); }
+              const actual = json(row.capture.geometry); healthy(actual, row.width); same(actual, json(row.steps.find(item => item.name === 'measure').result.body)); const png = bytes(row.capture.png); assert(png.subarray(0, 8).equals(Buffer.from([137, 80, 78, 71, 13, 10, 26, 10]))); assert.equal(png.readUInt32BE(16), row.width); assert.equal(png.readUInt32BE(20), row.width === 1440 ? 1000 : 900);
+              assert(row.assets.length > 0); assert(row.assets.some(asset => asset.built.file === 'dist/soccer-career/index.html')); assert(row.assets.some(asset => asset.url.includes('/assets/') && asset.url.endsWith('.js')));
+              for (const asset of row.assets) { assert(!asset.error); assert.equal(asset.status, 200); assert.equal(asset.method, 'GET'); assert(bytes(asset.body).equals(bytes(asset.built))); const full = path.resolve(ROOT, asset.built.file); assert(full.startsWith(`${path.resolve(ROOT, 'dist')}${path.sep}`)); assert(bytes(asset.built).equals(fs.readFileSync(full))); }
+              for (const external of row.external) assert(['Empty external read or acknowledgement', 'Aborted external resource; fallback fonts'].includes(external.fixture));
+            });
+            check('original-dialog-control-and-whole-inverse', () => {
+              same(report.controls.map(row => row.id), ['original-dialog-320', 'read-purity']); const control = report.controls[0], actual = json(control.actual), fault = json(control.fault), undo = json(control.undo), mutation = json(control.mutation), reverse = json(control.reversal); assert.equal(control.status, 'pass'); assert.equal(control.reverseApplied, true); same(actual, json(report.cases[0].capture.geometry)); healthy(actual, 320); same(undo, actual); healthy(undo, 320);
+              same(fit(fault), ['modal-action-fit']); same(control.findings, ['modal-action-fit']); same(fault, json(control.faultCapture.geometry)); assert.notDeepEqual(fault.buttons.map(row => row.rect), actual.buttons.map(row => row.rect)); same(fault.buttons.map(row => row.className), [model.classes.originalCancel,model.classes.originalDiscard]);assert(actual.buttons.every((item,index)=>item.className!==fault.buttons[index].className)); assert.equal(actual.group.className, props.current); assert.equal(fault.group.className, props.original); assert.notEqual(actual.dialog.html, fault.dialog.html);
+              const currentStyles={group:props.current,buttons:[model.classes.cancel,model.classes.discard]},originalStyles={group:props.original,buttons:[model.classes.originalCancel,model.classes.originalDiscard]};same(mutation,{before:currentStyles,after:originalStyles,changed:[true,true,true],html:fault.dialog.html});same(reverse,{before:originalStyles,after:currentStyles,changed:[true,true,true],html:actual.dialog.html});
+              let reversedDOM=fault.dialog.html;for(const [oldClass,newClass]of [[props.original,props.current],[model.classes.originalCancel,model.classes.cancel],[model.classes.originalDiscard,model.classes.discard]]){const from=`class="${oldClass.replaceAll('&','&amp;')}"`,to=`class="${newClass.replaceAll('&','&amp;')}"`;assert.equal(reversedDOM.split(from).length-1,1);reversedDOM=reversedDOM.replace(from,to);}assert.equal(reversedDOM,actual.dialog.html);assert(bytes(control.beforeDOM).equals(bytes(control.undoDOM)));assert.equal(bytes(control.beforeDOM).toString('utf8'),actual.dialog.html);
+              const png = bytes(control.faultCapture.png); assert.equal(png.readUInt32BE(16), 320); assert.equal(png.readUInt32BE(20), 900);
+            });
+            check('read-purity-control-and-whole-inverse', () => {
+              const control = report.controls[1], actual = json(control.actual), fault = json(control.fault), undo = json(control.undo); assert.equal(control.status, 'pass'); assert.equal(control.reverseApplied, true); same(actual, json(report.cases[0].steps.find(item => item.name === 'measure').purity)); same(pure(actual), []); same(pure(fault), ['raw-save', 'read-rng']); same(control.findings, ['raw-save', 'read-rng']); assert.notDeepEqual(fault, actual);
+              assert.equal(fault.afterRaw, `${actual.afterRaw} `); same(fault.afterDraws.at(-1), { value: .25, caller: 'labelled copied observation only' }); fault.afterRaw = fault.afterRaw.slice(0, -1); fault.afterDraws.pop(); same(fault, undo); same(undo, actual); same(pure(undo), []); assert.equal(control.actual.sha256, control.undo.sha256);
+            });
+            const expectedPNGs = [...report.cases.map(row => row.capture.png.path), report.controls[0].faultCapture.png.path].sort(), present = fs.readdirSync(OUT).filter(name => name.endsWith('.png')).sort(); same(present, expectedPNGs); assert.equal(new Set(expectedPNGs).size, 5); result.status = 'pass';
+          } catch (error) { result.status = 'fail'; result.errors.push(String(error.stack || error)); }
+          finally { fs.writeFileSync(path.join(OUT, 'consumer-result.json'), JSON.stringify(result, null, 2)); }
+          console.log(`${result.status === 'pass' ? 'PASS' : 'FAIL'} New Career dialog consumer: four cases, two controls, five PNGs`); if (result.status !== 'pass') process.exitCode = 1;
+          BROWSER
+          capture browser-consumer node career-confirmation-artifacts/browser-consumer.mjs
+      - name: Every unchanged rebuilt reader with full child output
+        id: readers
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          source career-confirmation-artifacts/capture.sh
+          node scripts/lib/hostLikeServer.mjs dist 4173 > career-confirmation-artifacts/reader-server.stdout 2> career-confirmation-artifacts/reader-server.stderr &
+          reader_server=$!
+          trap 'kill "$reader_server" 2>/dev/null || true' EXIT
+          ready=0
+          for attempt in $(seq 1 60); do
+            if curl --fail --silent http://127.0.0.1:4173/ > /dev/null; then ready=1; break; fi
+            sleep 1
+          done
+          test "$ready" -eq 1
+          failed=0
+          printf 'harness\texit\tlines\tverdict\n' > career-confirmation-artifacts/readers.tsv
+          for harness in simAdsense simBrand simHeadTags simHiddenPages simHubs simIndexNow simIndexing simInternalLinks simNoRivalNames simPrerender simPrerenderBoot simRetiredRoutes simSchema simSitemap simSnapshotAssets; do
+            capture "$harness" env SIM_NETWORK=offline ENGINES=chromium NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" SIM_OFFLINE_RECEIPT="$PWD/career-confirmation-artifacts/$harness.transport.log" BASE=http://127.0.0.1:4173 SWEEP_BASE=http://127.0.0.1:4173 node "scripts/$harness.mjs" || failed=1
+            status="$(cat "career-confirmation-artifacts/$harness.exit")"
+            lines="$(cat "career-confirmation-artifacts/$harness.stdout" "career-confirmation-artifacts/$harness.stderr" | awk 'NF && $0 !~ /^\[SIM_OFFLINE_BLOCK\]/ {n++} END {print n+0}')"
+            verdict=PASS
+            if test "$status" -ne 0; then verdict=FAIL; failed=1; fi
+            if test "$status" -eq 0 && test "$lines" -lt 4; then verdict=EMPTY; failed=1; fi
+            if grep -E '(^|[[:space:]])(FAIL|SKIP|EMPTY)([[:space:]]|$)|^\[SIM_OFFLINE_BLOCK\]' "career-confirmation-artifacts/$harness.stdout" "career-confirmation-artifacts/$harness.stderr" > /dev/null; then verdict=FAIL; failed=1; fi
+            if test -s "career-confirmation-artifacts/$harness.transport.log"; then verdict=FAIL; failed=1; fi
+            printf '%s\t%s\t%s\t%s\n' "$harness" "$status" "$lines" "$verdict" >> career-confirmation-artifacts/readers.tsv
+            printf '%s: %s (exit %s, %s complete output lines)\n' "$harness" "$verdict" "$status" "$lines"
+          done
+          test "$(tail -n +2 career-confirmation-artifacts/readers.tsv | wc -l)" -eq 15
+          exit "$failed"
+      - name: Whole source and package holds
+        if: always()
+        run: |
+          set -euo pipefail
+          source career-confirmation-artifacts/capture.sh
+          git diff --binary HEAD > career-confirmation-artifacts/generated.patch
+          cp package.json career-confirmation-artifacts/package.after.json
+          cp package-lock.json career-confirmation-artifacts/package-lock.after.json
+          failed=0
+          capture source-hold sha256sum -c career-confirmation-artifacts/source-hold.sha256 || failed=1
+          capture source-whole-hold git diff --exit-code HEAD -- . ':!public/**' ':!scripts/data/lastmod.json' || failed=1
+          capture source-extra git ls-files --others --exclude-standard -- src scripts .github/workflows docs || failed=1
+          test ! -s career-confirmation-artifacts/source-extra.stdout || failed=1
+          capture locked-final node scripts/qa/soccerAgentReviewDependencies.mjs after || failed=1
+          if test -f soccer-agent-review-artifacts/dependencies-after.json; then cp soccer-agent-review-artifacts/dependencies-after.json career-confirmation-artifacts/dependencies-final.json; fi
+          capture package-hold cmp package.json career-confirmation-artifacts/package.before.json || failed=1
+          capture lock-hold cmp package-lock.json career-confirmation-artifacts/package-lock.before.json || failed=1
+          exit "$failed"
+      - name: Preserve complete generated bodies and self-inclusive cap
+        if: always()
+        run: |
+          set -euo pipefail
+          mkdir -p career-confirmation-artifacts
+          paths=()
+          for item in public dist scripts/data/lastmod.json; do
+            if test -e "$item"; then paths+=("$item"); fi
+          done
+          tar -czf career-confirmation-artifacts/generated.tar.gz "${paths[@]}"
+          node --input-type=module <<'FOOTER'
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import assert from 'node:assert/strict';
+          const out='career-confirmation-artifacts';
+          const files=dir=>fs.readdirSync(dir,{withFileTypes:true}).flatMap(row=>row.isDirectory()?files(path.join(dir,row.name)):[path.join(dir,row.name)]);
+          const count=()=>files(out).reduce((sum,file)=>sum+fs.statSync(file).size,0);
+          const target=path.join(out,'size.json');
+          fs.writeFileSync(target,JSON.stringify({bytes:0,cap:500000000}));
+          let bytes=count();
+          for(let i=0;i<3;i++){fs.writeFileSync(target,JSON.stringify({bytes,cap:500000000}));bytes=count();}
+          if(bytes>=500000000){
+            fs.writeFileSync(path.join(out,'cap-failure.json'),JSON.stringify({bytes,cap:500000000,retainedAllEvidence:true}));
+            for(let i=0;i<3;i++){bytes=count();fs.writeFileSync(target,JSON.stringify({bytes,cap:500000000}));}
+            bytes=count();
+          }
+          assert.equal(JSON.parse(fs.readFileSync(target)).bytes,count(),'Exact whole self-inclusive footer byte join');
+          assert(bytes<500000000,'Whole self-inclusive evidence remains below500M; retain all failures without pruning');
+          FOOTER
+      - name: Upload complete evidence even after failure
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: career-confirmation-phone-layout-${{ github.run_id }}-${{ github.run_attempt }}
+          retention-days: 7
+          include-hidden-files: true
+          if-no-files-found: error
+          path: career-confirmation-artifacts/
