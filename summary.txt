@@ -1,0 +1,3 @@
+build exit=0 23s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+weigh-head exit=0 4s | weigh /soccer-career 832.4K gz over 48 files at http://localhost:4173
+weigh-main exit=0 32s | weigh /soccer-career 831.9K gz over 48 files at http://localhost:4179

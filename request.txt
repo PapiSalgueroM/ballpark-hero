@@ -1,0 +1,5 @@
+#!serve
+#!playwright
+#!serial
+weigh-head: node .rc/x/weighRoute.mjs http://localhost:4173 "$PWD/dist" /perfect-season-nba /soccer-career
+weigh-main: git worktree add -q --detach /tmp/wb c7b9a95a && ln -s "$PWD/node_modules" /tmp/wb/node_modules && (cd /tmp/wb && node_modules/.bin/vite build > /tmp/wb-build.log 2>&1 || { tail -20 /tmp/wb-build.log; exit 2; }) && (node scripts/lib/hostLikeServer.mjs /tmp/wb/dist 4179 > /tmp/wb-srv.log 2>&1 &) && sleep 4 && node .rc/x/weighRoute.mjs http://localhost:4179 /tmp/wb/dist /perfect-season-nba /soccer-career
