@@ -1,0 +1,13 @@
+build exit=0 31s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+headsha exit=0 0s | b836316d6 rc request rBGg-f2 for 1d13b42643c99d0cc94e01e49adc8810b777a38d
+nba-browser exit=0 13s | PASS NBA Perfect Season retry browser
+retire exit=0 16s | PASS Soccer retirement actions browser
+dialog exit=0 10s | PASS Soccer New Career dialog browser
+drill-proof exit=0 24s | PASS Drill pointer cancellation: three six-case arms, two original-binding assertion failures, five held markup cases, four diagnostic controls
+retire-bare2 exit=0 1s | BINDING-NEEDED
+dialog-bare2 exit=0 1s | BINDING-NEEDED
+nba-proof exit=0 73s | PASS NBA Perfect Season retry proof
+playSoccerResultsLayout exit=1 1s | Node.js v24.21.0
+potential-browser exit=0 75s | PASS Soccer potential progress browser
+vitest-packets exit=0 11s |    Duration  9.90s (transform 2.52s, setup 389ms, collect 6.65s, tests 10.02s, environment 2.67s, prepare 718ms)
+simDrillMotion exit=0 26s | simDrillMotion: PASS. Evidence: /home/runner/work/_temp/t-simDrillMotion/dukb-drill-motion-O6TXVM
