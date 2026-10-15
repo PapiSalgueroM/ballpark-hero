@@ -2,6 +2,7 @@
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
+import os from 'node:os';
 import { createHash } from 'node:crypto';
 import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
@@ -32,11 +33,31 @@ let pageFolder, testFolder;
 try {
   report.sourceBefore = hold(); for (const row of report.sourceBefore) row.retained = write(`source/${row.file}`, fs.readFileSync(path.join(ROOT, row.file)));
   const rawCurrent = fs.readFileSync(path.join(ROOT, PAGE)), current = rawCurrent.toString('utf8').replace(/\r\n/g, '\n');
-  assert.equal(hash(current), '407709f4a78d811d03d6bda19e3358acc62910de5844239354e26ca5641dacac');
-  const originalProcess = spawnSync('git', ['show', `${BASE}:${PAGE}`], { cwd: ROOT, maxBuffer: 1000000 });
+  /* Release BG join (Round BGG): NBA_RETRY_PARENT_REF names the tree without this packet on a newer main (the BG join
+     passes the first parent of its m2 merge). Unset, it is the packet's own parent and this proof runs exactly as before.
+     Set, both pins still hold, on the packet's own blobs (its parent BASE and its head PACKET_HEAD), and the page under
+     test must equal the bound parent's page with exactly the packet's edit merged in (git merge-file, no conflict). */
+  const PACKET_HEAD = '1984e7e39e6ce31a5d8eb8fab953472862de02c1', PARENT = process.env.NBA_RETRY_PARENT_REF || BASE;
+  report.parentRef = PARENT;
+  if (PARENT === BASE) assert.equal(hash(current), '407709f4a78d811d03d6bda19e3358acc62910de5844239354e26ca5641dacac');
+  else {
+    const blob = ref => { const shown = spawnSync('git', ['show', `${ref}:${PAGE}`], { cwd: ROOT, maxBuffer: 1000000 });
+      assert.equal(shown.status, 0); return shown.stdout.toString('utf8').replace(/\r\n/g, '\n'); };
+    const packetBase = blob(BASE), packetHead = blob(PACKET_HEAD), parentPage = blob(PARENT);
+    assert.equal(hash(packetHead), '407709f4a78d811d03d6bda19e3358acc62910de5844239354e26ca5641dacac');
+    assert.equal(hash(packetBase), '5c7e61f180264eb5e23fba64cbf4d40fe39e817d1b603b137dcbc4418b2a798e');
+    const joinFolder = fs.mkdtempSync(path.join(os.tmpdir(), 'nba-retry-join-'));
+    const joinFile = (name, body) => { const full = path.join(joinFolder, name); fs.writeFileSync(full, body); return full; };
+    const merged = spawnSync('git', ['merge-file', '-p', joinFile('parent.tsx', parentPage), joinFile('base.tsx', packetBase), joinFile('head.tsx', packetHead)], { cwd: ROOT, maxBuffer: 1000000 });
+    report.joinBinding = { parentRef: PARENT, packetHead: PACKET_HEAD, mergeStatus: merged.status, merged: write('source/join-merged-page.tsx', merged.stdout) };
+    assert.equal(merged.status, 0, 'The packet edit merges onto the bound parent without a conflict');
+    assert.equal(merged.stdout.toString('utf8'), current, 'The page under test is the bound parent plus exactly the packet edit');
+    assert.notEqual(parentPage, current, 'The bound parent is the tree without this packet');
+  }
+  const originalProcess = spawnSync('git', ['show', `${PARENT}:${PAGE}`], { cwd: ROOT, maxBuffer: 1000000 });
   report.original = { source: write('source/original-page.tsx', originalProcess.stdout), stderr: write('source/original-git.stderr', originalProcess.stderr), status: originalProcess.status };
   assert.equal(originalProcess.status, 0); const original = originalProcess.stdout.toString('utf8');
-  assert.equal(hash(original), '5c7e61f180264eb5e23fba64cbf4d40fe39e817d1b603b137dcbc4418b2a798e');
+  if (PARENT === BASE) assert.equal(hash(original), '5c7e61f180264eb5e23fba64cbf4d40fe39e817d1b603b137dcbc4418b2a798e');
   const edit = (source, from, to) => { assert.equal(source.split(from).length - 1, 1, 'A real unique Source operand is required'); const result = source.replace(from, to);
     assert.notEqual(result, source); assert.equal(result.split(to).length - 1, 1); assert.equal(result.replace(to, from), source); return result; };
   const mutations = [
