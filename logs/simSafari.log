@@ -1,0 +1,11 @@
+0) The scan covers what ships: no shipped file imports a test file
+   2173 files under src, 587 test files left out (458 under src/test, 129 *.test.* or *.spec.* elsewhere), 1586 scanned, 6324 local imports read
+1) No date string is handed back to the parser
+   1586 shipped files scanned, 0 date round trips
+2) No lookbehind in shipped code
+3) No very new JavaScript the phone in his pocket may not have
+4) No raw 100vh, because mobile Safari measures it wrong
+5) The viewport tag lets a phone zoom, and nothing blocks touch
+6) The gap this file cannot close is written down
+
+simSafari: green. Nothing shipped here is known to break on the phone he plays it on.

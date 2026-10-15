@@ -1,0 +1,6 @@
+build exit=0 32s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+fonts exit=0 1s | Prepared 9 declared font dependencies for local fulfillment.
+simSafari exit=0 1s | simSafari: green. Nothing shipped here is known to break on the phone he plays it on.
+simDrillMotion exit=0 19s | simDrillMotion: PASS. Evidence: /home/runner/work/_temp/t-simDrillMotion/dukb-drill-motion-mfEq6X
+playCareerTransferBrief exit=1 0s | Node.js v24.21.0
+playSoccerCareerPendingMorale exit=0 93s | Soccer pending-morale browser: passed; 2189 checks, 14 played cases, 2 controls, 54 originals, 0 failures, 0 setup failures.
