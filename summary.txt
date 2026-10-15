@@ -1,0 +1,1 @@
+leagueSeasons-chainBase exit=0 17s | simCareerLeagueSeasons: all sections green
