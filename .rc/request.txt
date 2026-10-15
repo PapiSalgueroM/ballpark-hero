@@ -1,0 +1,7 @@
+#!serve
+#!playwright
+headsha: git log --oneline -3
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+dialog-bare: CI=1 SIM_NETWORK=offline ENGINES=chromium SOCCER_NEW_CAREER_BROWSER_OUT="$RUNNER_TEMP/dialog-bare" node scripts/qa/soccerNewCareerDialogBrowser.mjs > /tmp/db.log 2>&1; s=$?; grep -m3 -E "AssertionError|23003dbd" /tmp/db.log | cut -c1-200; tail -2 /tmp/db.log | cut -c1-200; [ $s -ne 0 ] && grep -q "23003dbda5dc5f96bc168d4183d8bb508c79ab196b2da3649ff8982c9ed93e6a" /tmp/db.log && echo BINDING-NEEDED
+dialog: CI=1 SIM_NETWORK=offline ENGINES=chromium SOCCER_NEW_CAREER_PARENT_REF=bc416f2a SOCCER_NEW_CAREER_BROWSER_OUT="$RUNNER_TEMP/dialog" node scripts/qa/soccerNewCareerDialogBrowser.mjs
+retire-after-m4: CI=1 SIM_NETWORK=offline ENGINES=chromium SOCCER_RETIREMENT_PARENT_REF=97d706b2 SOCCER_RETIREMENT_BROWSER_OUT="$RUNNER_TEMP/retire" node scripts/qa/soccerRetirementActionsBrowser.mjs
