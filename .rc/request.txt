@@ -1,0 +1,5 @@
+# Release BE gate 2 rerun: the finance desk control alone (did not fire on rBE2-rgK; green on rBE-rgK)
+#!serve
+#!playwright
+#!serial
+ctl-desk-small: mkdir -p "$TMPDIR/out" && RC_OUT="$TMPDIR/out" ENGINES=chromium CM_FINANCE_CONTROL=small node scripts/playCmFinanceDesk.mjs 2>&1 | tee "$TMPDIR/ctl.log"; s=${PIPESTATUS[0]}; [ $s -eq 1 ] && grep -qF 'playCmFinanceDesk: CONTROL small FIRED (' "$TMPDIR/ctl.log"
