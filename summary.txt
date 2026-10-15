@@ -1,0 +1,12 @@
+d-f120-o3 exit=0 29s | simCareerDerbies: all 8 sections green
+d-f120-o1 exit=1 30s | simCareerDerbies: 1 failures, sections 6 red
+d-f120-o2 exit=0 33s | simCareerDerbies: all 8 sections green
+d-f240-o1 exit=1 33s | simCareerDerbies: 1 failures, sections 6 red
+d-f240-o2 exit=0 38s | simCareerDerbies: all 8 sections green
+d-f240-o3 exit=0 40s | simCareerDerbies: all 8 sections green
+d-f250-o1 exit=1 38s | simCareerDerbies: 1 failures, sections 6 red
+d-f250-o2 exit=0 40s | simCareerDerbies: all 8 sections green
+d-f250-o3 exit=0 38s | simCareerDerbies: all 8 sections green
+d-f300-o1 exit=1 39s | simCareerDerbies: 1 failures, sections 6 red
+d-f300-o2 exit=0 36s | simCareerDerbies: all 8 sections green
+d-f300-o3 exit=0 36s | simCareerDerbies: all 8 sections green

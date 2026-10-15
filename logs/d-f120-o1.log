@@ -1,0 +1,4 @@
+   6b: win share by strength gap 2: 0.557 (1086), 1: 0.471 (2454), 0: 0.374 (2964), -1: 0.255 (1818), -2: 0.194 (160)
+  FAIL: 6b: gap -2 has 160 meetings, under 400
+wall 30 s, exit 1
+simCareerDerbies: 1 failures, sections 6 red
