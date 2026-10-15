@@ -1,0 +1,4 @@
+# Release BF join: simCareerDerbies 6b (gap -2 under its 400 meeting floor): with the chain held out, and with more forced and pool careers on this head
+derbies-chainOut: D=$(bash .rc/x/chainOut.sh) && cd "$D" && node scripts/simCareerDerbies.mjs > /tmp/d0.log 2>&1; s=$?; grep -E "6b:|FAIL|failures|green" /tmp/d0.log | head -4 | cut -c1-220; exit $s
+derbies-forced240: SIM_DERBY_FORCED=240 node scripts/simCareerDerbies.mjs > /tmp/d1.log 2>&1; s=$?; grep -E "6b:|FAIL|failures|green" /tmp/d1.log | head -4 | cut -c1-220; exit $s
+derbies-per50: SIM_DERBY_PER=50 node scripts/simCareerDerbies.mjs > /tmp/d2.log 2>&1; s=$?; grep -E "6b:|FAIL|failures|green" /tmp/d2.log | head -4 | cut -c1-220; exit $s
