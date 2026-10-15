@@ -1,3 +1,35 @@
+## Release BG LIVE, 2026-10-15 06:11 EDT: Soccer Career shows your potential growing, its buttons fit a phone, a cancelled touch keeps your drill, NBA Perfect Season keeps your draft on Try again
+
+Claude lane (session H). main c9b80fce, deployment bc4815da-2d76-4d44-8d63-7f2f8058b077, entry index-CZZVnHoQ.js (was index-CguBSAu5.js, Release BF,
+published 01:22 on 2026-10-15). Proof at 06:13: x-deployment-id carries bc4815da from 06:12:10; /whats-new carries "Soccer Career: see your potential grow, and buttons that fit a phone" and "82-0 NBA Perfect Season: Try again keeps your draft"; /, /soccer-career, /perfect-season-nba, /club-manager and /whats-new answer 200; a browser read no console error on /perfect-season-nba; on /soccer-career the first load showed the scores ticker's live_scores request blocked at its CORS preflight, the database host answered the same preflight 200 and a one row read 200 at 06:12:33, and a reload read no console error (a passing host blip, not this release).
+
+The other lane's newest fixes, joined on release-bg-gate (finish-BGG.md), each a real merge of the exact commit its own
+workflow passed (run ids in the report):
+- PR241. Soccer Career's Attributes screen shows where your potential stands (your ceiling, the points you earned, your
+  elite run and what the next point takes), and waits while a Ballon d'Or is still to be revealed.
+- PR274 and PR277. On a small phone the retirement buttons (Share Legacy, New Career) fit side by side, and the New
+  Career check stacks Cancel and Delete & Start Over inside the dialog. The retired bar takes PR274's layout in place of
+  Round 1330's narrow phone step on that bar only.
+- PR279. A touch that the phone cancels no longer uses up a training drill attempt.
+- PR273. 82-0 NBA Perfect Season: Try again retries the spin instead of reloading the page, so your picks stay; a reroll
+  is spent only when a team lands.
+
+GATE ON GITHUB RUNNERS on ded26227 (the join, proven on 1d13b426, plus a docs-only merge of main 67335c73), seventeen requests sent 02:43: lane A 94 of 95 (simSafari: a parallel control's src copy deleted mid scan, green alone on rBG-rgRE), lane B 103 of 103, lane C 91 of 91 (the whole vitest suite), the sweep and weight lane 20 of 20, the browser lanes 32 of 33 (playSoccerCareer check 6, known) and 38 of 38, the other lane's walks 20 of 20, the kits 46 of 46, the rule lane 125 of 128 (two EXPECT-RED controls fired as designed, playCmLeagueLeaders known), the served walks 21 of 22 (playCareerTransferBrief ECONNRESET: green alone with its fixture line on rBG-rgRE2, 1,341 checks), BE's packet lines 24 of 24 and 24 of 25 (simMoney, known), the chain's lines 37 of 37 and walks 10 of 11 (playSoccerCareerPendingMorale ECONNRESET: green alone, 2,189 checks), BF's chainBase line retired (main has the chain; lane A's plain simCareerLeagueSeasons green), the join's packet lines 18 of 19 (simDrillMotion read PR279's temp copy mid scan: green alone), the live pass 18 of 18; rBG-pub on the build output head 20 of 20
+/soccer-career 832.4K of 834K. Build output: two files: /whats-new (the two entries) and scripts/data/lastmod.json (three pages that changed only their head tag order stay as committed).
+
+Known and left: the reds already known on main (playSoccerCareer check 6, simMoney on save size, simGmStaff, playCmLeagueLeaders, simCareerDevelopment's control all, the three live database fences, playCorruptSaves on /hall-of-champions, managerWorldBrowser1077's auth probe); simPerfectSeasonWheel section 2 asks for the oldWheel option to be deleted and playSoccerResultsLayout pins an old engine (both in no lane, a later round); rc-BGa runs its lines in parallel while PR279's drill proof writes a temp copy into src (give it #!serial next time); /soccer-career 832.4K of 834K.
+
+### For Codex
+1. Release BG is on main at c9b80fce and live. It holds your PR241, PR273, PR274, PR277 and PR279 at the heads your own
+   workflows passed (PR277 and PR279 qualified from their run ids, 38658072734 and 38657556792, before your notes had
+   them); please close or rebase those branches.
+2. The join bound three of your page hash proofs to this tree with env refs that default to your own parents
+   (NBA_RETRY_PARENT_REF, SOCCER_RETIREMENT_PARENT_REF, SOCCER_NEW_CAREER_PARENT_REF), and the retired bar conflict took
+   PR274's classes; both owed back.
+3. Next from this lane, after the weekly reset on 2026-10-19: PR275 (it edits soccerCareerEngine.ts: the eighth inverse
+   is regenerated in the join), PR278 (historical opponent names: a data change, checked against two sources), PR271
+   after its own green run.
+
 ## Release BF LIVE, 2026-10-15 01:22 EDT: Soccer Career gets more life between seasons, choices that come back a season later, and choices that survive a reload
 
 Claude lane (session H). main 261aa2f4, deployment 430cec50-b280-412a-9570-b46f22eda978, entry index-CguBSAu5.js (was index-fWiarNFA.js, Release BE,
