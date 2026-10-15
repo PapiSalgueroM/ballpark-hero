@@ -1,0 +1,17 @@
+1) A fresh Liverpool career, 10 weeks by quick sim
+  ok    Liverpool, week 10 on disk, kitty 150.8m
+2) The desk at 320 by 640
+  ok    320x640: the desk opened with its top at 68px (scrollY 656 to 567)
+  FAIL: 320x640: a figure off one line, "+£64.5m" in the kitty row breaks over 2 lines
+  320x640: 108 text holders, 14 buttons and 28 figures measured; kitty row at y 1095 (on screen at 528), reads Kitty change | +£13.8m | +£64.5m; cover Board covers running costs | +£13.2m | +£70.9m
+2) The desk at 390 by 844
+  ok    390x844: the desk opened with its top at 98px (scrollY 521 to 521)
+  FAIL: 390x844: a figure off one line, "+£64.5m" in the kitty row breaks over 2 lines
+  390x844: 108 text holders, 14 buttons and 28 figures measured; kitty row at y 972 (on screen at 451), reads Kitty change | +£13.8m | +£64.5m; cover Board covers running costs | +£13.2m | +£70.9m
+2) The desk at 1280 by 900
+  ok    1280x900: the desk opened with its top at 242px (scrollY 363 to 363)
+  FAIL: 1280x900: a figure off one line, "+£64.5m" in the kitty row breaks over 2 lines
+  1280x900: 108 text holders, 14 buttons and 28 figures measured; kitty row at y 928 (on screen at 565), reads Kitty change | +£13.8m | +£64.5m; cover Board covers running costs | +£13.2m | +£70.9m
+  pictures in /home/runner/work/_temp/t-ctl-desk-wrap/out
+
+playCmFinanceDesk: CONTROL wrap FIRED (3 failures, as it must)
