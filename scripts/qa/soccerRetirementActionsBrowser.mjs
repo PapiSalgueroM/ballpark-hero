@@ -59,7 +59,24 @@ try {
     assert.equal(codeOnly(bytes).replaceAll('\r\n', '\n').split(block).length - 1, 1, 'Exact actual retired JSX, excluding comments'); };
   const currentPage = fs.readFileSync(path.join(ROOT, PAGE)); report.currentPage = bodyRef(currentPage, 'source');
   report.currentPageCanonicalSHA = sha(Buffer.from(currentPage.toString('utf8').replaceAll('\r\n', '\n')));
-  assert.equal(report.currentPageCanonicalSHA, 'b06ecc7af7cfd75b7321c4ecae482ae924000969da27497e188f8b81f557e5eb');
+  /* Release BG join (Round BGG): SOCCER_RETIREMENT_PARENT_REF names the tree without this packet on a newer main (the
+     BG join passes the first parent of its m3 merge). Unset, the whole page pin below holds exactly as before. Set, the
+     same pin holds on the packet's own head blob (PACKET_HEAD), the retired action bar of the page under test must be
+     byte for byte the packet's, and the bound parent's bar must differ from it (the tree without this packet). */
+  const PACKET_HEAD = 'dd4745cf4a17677c5717a8d82a4a37a54dfce602', PARENT_REF = process.env.SOCCER_RETIREMENT_PARENT_REF || '';
+  if (!PARENT_REF) assert.equal(report.currentPageCanonicalSHA, 'b06ecc7af7cfd75b7321c4ecae482ae924000969da27497e188f8b81f557e5eb');
+  else {
+    const canonical = bytes => bytes.toString('utf8').replaceAll('\r\n', '\n');
+    const packetPage = execFileSync('git', ['cat-file', 'blob', `${PACKET_HEAD}:${PAGE}`], { cwd: ROOT, maxBuffer: 1000000 });
+    const parentPage = execFileSync('git', ['cat-file', 'blob', `${PARENT_REF}:${PAGE}`], { cwd: ROOT, maxBuffer: 1000000 });
+    assert.equal(sha(Buffer.from(canonical(packetPage))), 'b06ecc7af7cfd75b7321c4ecae482ae924000969da27497e188f8b81f557e5eb');
+    const bar = bytes => { const text = canonical(bytes), from = '{career.phase === "retired" ? (', to = ') : career.phase === "manager_season" ? (';
+      assert.equal(text.split(from).length - 1, 1); assert.equal(text.split(to).length - 1, 1);
+      const start = text.indexOf(from), end = text.indexOf(to); assert(start >= 0 && end > start); return text.slice(start, end + to.length); };
+    report.joinBinding = { parentRef: PARENT_REF, packetHead: PACKET_HEAD, bar: bodyRef(Buffer.from(bar(currentPage)), 'source') };
+    assert.equal(bar(currentPage), bar(packetPage), 'The retired action bar under test is exactly the packet head bar');
+    assert.notEqual(bar(parentPage), bar(currentPage), 'The bound parent is the tree without this packet');
+  }
   bindProps(originalPage, props.original); bindProps(currentPage, props.current);
   const fixtureBytes = fs.readFileSync(path.join(ROOT, FIXTURE)); report.fixture = bodyRef(fixtureBytes, 'fixture');
   const matches = JSON.parse(fixtureBytes).saves.filter(row => row.id === 'ere'); assert.equal(matches.length, 1);
