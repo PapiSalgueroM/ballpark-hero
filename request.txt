@@ -1,0 +1,20 @@
+#!build
+#!playwright
+headsha: git log --oneline -1
+simActivityNotCompletion: node scripts/simActivityNotCompletion.mjs
+simSaveFence: node scripts/simSaveFence.mjs
+simSoccerCareerSaveRecovery: node scripts/simSoccerCareerSaveRecovery.mjs
+simSoccerCareerSaveRetry: node scripts/simSoccerCareerSaveRetry.mjs
+simSoccerAgentReview: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerAgentReview.mjs
+simSoccerAgentReviewPageControl: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerAgentReviewPageControl.mjs
+simSoccerVeteranTalks: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerVeteranTalks.mjs
+simTransferBriefPageControl: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simTransferBriefPageControl.mjs
+simCareerTransferBrief: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerTransferBrief.mjs
+simCareerAcademy: node scripts/simCareerAcademy.mjs
+simCareerDilemmaReach: node scripts/simCareerDilemmaReach.mjs
+simCareerEras: node scripts/simCareerEras.mjs
+simCareerFacts: node scripts/simCareerFacts.mjs
+simCareerPositionRatings: node scripts/simCareerPositionRatings.mjs
+simManagerCareer: node scripts/simManagerCareer.mjs
+simScoreShown: node scripts/simScoreShown.mjs
+simSoccerCurrency: node scripts/simSoccerCurrency.mjs
