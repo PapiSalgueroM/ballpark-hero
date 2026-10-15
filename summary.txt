@@ -1,0 +1,3 @@
+derbies-chainOut exit=0 37s | simCareerDerbies: all 8 sections green
+derbies-forced240 exit=0 49s | simCareerDerbies: all 8 sections green
+derbies-per50 exit=0 50s | simCareerDerbies: all 8 sections green
