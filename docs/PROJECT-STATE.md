@@ -1,3 +1,47 @@
+## Release BF LIVE, 2026-10-15 01:22 EDT: Soccer Career gets more life between seasons, choices that come back a season later, and choices that survive a reload
+
+Claude lane (session H). main 261aa2f4, deployment 430cec50-b280-412a-9570-b46f22eda978, entry index-CguBSAu5.js (was index-fWiarNFA.js, Release BE,
+published 21:56 on 2026-10-14). Proof at 01:24: x-deployment-id carries 430cec50 from 01:23:03; /whats-new carries "Soccer Career: more life between seasons, and choices that stick"; /, /soccer-career, /club-manager, /soccer-career-manager and /whats-new answer 200; a browser read no console error on /soccer-career, entry index-CguBSAu5.js.
+
+The other lane's Soccer Career life chain, the owner's ask of 2026-10-12 (far more realistic day to day life), joined by
+this lane on release-bf-gate (finish-BFG.md, then the lead's closing pass finish-BFH.md), each a real merge commit of the
+exact commit the other lane qualified, bottom up:
+- Round 1350 (PR249). Thirty small routine choices between seasons (extra work, a proper break, an appearance, the kit,
+  a call home), each stating its true effect, a different handful each year and only the ones that fit you (keeper
+  drills for keepers, loan cards for loan players, captain duties for the captain); the creator editor loads when you
+  open Customize, which pays for them in download weight.
+- Rounds 1353 and 1361 (PR252, PR261). Choices that come back a season later: a coaching course brings coursework to
+  review, a loan to a teammate brings his repayment, a documentary crew let in everywhere brings the footage to check.
+- Rounds 1354, 1356, 1358 and 1363 (PR253, PR256, PR258, PR265). A Life choice you were offered, a Wrong City answer, a
+  queued popularity choice and a queued teammate loan all survive a reload, an interview or a change in funds.
+- Round 1355 (PR255). A stat reward adds to the bonuses already queued instead of overwriting them; nine Life previews
+  state their true cost.
+- Round 1360 (PR260). A cold weather event no longer invents a minus twenty scenario without the weather to back it.
+
+The lead's joins kept every rule this lane set since the chain was built: Round 1327's fair draw (the chain's own proofs
+were bound to this tree by a keyed name search, never by changing the draw), Round 1329's world truth (its base reads
+the chain), Round 1330's landing and fence, Release BE's codec (every chain field survives a packed and a plain save).
+Three of this lane's harnesses that compare careers with older recordings now attribute the chain's moves
+(scripts/lib/careerLifeChainBF.mjs, all 29 controls fire), and simCareerDerbies plays 240 forced careers a club (its
+400 meeting floor kept; 630 at the gap that had 390).
+
+GATE ON GITHUB RUNNERS on 18417935 (the closing pass ac1f3d67 plus main at ae20dc26), sixteen requests sent 21:55 on 2026-10-14: lane A 94 of 95 (the plain simCareerLeagueSeasons line, red by design while its base origin/main lacked the chain; rc-BFc's chainBase line replaces it, 1 of 1), lane B 103 of 103 (simCareerDerbies on its new default), lane C 91 of 91 (the whole vitest suite, 8,308 tests in 538 files), the sweep and weight lane 20 of 20, the browser lanes 32 of 33 (playSoccerCareer check 6, known) and 38 of 38, the other lane's walks 20 of 20, the kits 46 of 46, the rule lane 125 of 128 (two EXPECT-RED controls fired as designed, playCmLeagueLeaders known), the served walks 21 of 22 (playCmHubLanding section C, the intermittent 320 Stats tile: 111 of 111 alone on rBF-rgRE), BE's packet lines 24 of 24 and 24 of 25 (simMoney, known), the chain's lines 37 of 37, its walks 10 of 11 (playSoccerCareerBuildLazy saw a failed-chunk race at 390: green alone on rBF-rgRE), the live pass 18 of 18; rBF-pub on the build output head 20 of 20
+/soccer-career 831.9K of 834K (the lazy career story and the lazy creator pay for the chain). Build output: three files: /whats-new (the entry), scripts/data/lastmod.json and the sitemap (four pages that changed only their head tag order stay as committed).
+
+Known and left: the reds already known on main (playSoccerCareer check 6, simMoney on save size, simGmStaff, playCmLeagueLeaders, simCareerDevelopment's control all, the three live database fences, playCorruptSaves on /hall-of-champions, managerWorldBrowser1077's auth probe); simCareerDerbies at offset 1 (the 2021 ladder) has 160 gap -2 meetings at every sample size, before the chain too (a later round); the app's stale chunk handler (src/lib/freshBuild.ts) cancels vite:preloadError and reloads, so a lazy import can resolve empty and React throws once just before the reload (a later round: lazy loaders that wait instead); the hub's 320 px Stats tile still wraps on a long leader's name now and then; /soccer-career 831.9K of 834K.
+
+### For Codex
+1. Release BF is on main at 261aa2f4 and live. It holds your PR249, PR252, PR253, PR255, PR256, PR258, PR260, PR261 and
+   PR265 at the commits your notes qualified, merged as real merge commits; please close or rebase those branches.
+   PR263 (the diagnostic) was not merged.
+2. Owed back so your branches stay in step: the core ref bindings (SC_*_CORE_REF, defaulting to each packet's parent,
+   and x/coreBE.sh which builds the runner's core as that parent plus Release BE's merge of main), the keyed name search
+   for Round 1327 (scripts/lib/keyedPicker1327.mjs) in your fixture builders and walks, the readLf reads, the stat
+   rewards test's jsdom build folder; scripts/qa/compareSoccerCareerColdReplay.mjs no longer holds on this tree (re-pin
+   or retire it).
+3. Owed to you as guide sentences, then genSearchKeywords: the routine choices, the reviews a season later, choices that
+   survive a reload.
+
 ## Release BE LIVE, 2026-10-14 21:56 EDT: Club Manager's desk gets six real situations, a half time team sheet and promotion for a club you made, long Soccer Career careers keep saving, three small fixes
 
 Claude lane (session H). main ae20dc26, deployment 917c220f-4a71-4a4a-b565-dcf528aab870, entry index-fWiarNFA.js (was index-CudW2kSr.js, Release BD,
