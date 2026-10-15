@@ -4431,11 +4431,11 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
         style={actionBarFloats && footerLift ? { transform: `translateY(-${footerLift}px)` } : undefined}
       >
         {career.phase === "retired" ? (
-          <div className="flex-1 flex gap-2">
-            <Button onClick={onShare} variant="outline" className="flex-1 h-12 text-sm font-bold max-[399px]:px-3 max-[399px]:text-xs">
+          <div className="flex-1 min-w-0 flex gap-2">
+            <Button onClick={onShare} variant="outline" className="flex-1 min-w-0 h-12 whitespace-normal px-2 text-xs leading-tight font-bold sm:px-4 sm:text-sm">
               📤 Share Legacy
             </Button>
-            <Button onClick={onNewCareer} className="flex-1 h-12 text-base font-bold bg-emerald-600 hover:bg-emerald-500 text-black max-[399px]:px-3 max-[399px]:text-sm">
+            <Button onClick={onNewCareer} className="flex-1 min-w-0 h-12 whitespace-normal px-2 text-xs leading-tight font-bold sm:px-4 sm:text-base bg-emerald-600 hover:bg-emerald-500 text-black">
               ⚽ New Career
             </Button>
           </div>
