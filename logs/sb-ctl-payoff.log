@@ -1,0 +1,14 @@
+simCareerSocialBrands SOCIAL_BRANDS_CONTROL=payoff: head exit 1, chainOut exit 1, 10 verdict lines on the head
+6 FAILURES
+CONTROL payoff: src/lib/careerBrand.ts rewritten in the bundle
+FAIL 72 loads and 72 seasons over 4 careers, 6 stored values and 3 followings: every id loaded as itself, loading signed and moved nothing, and the deal was paid once: seed 11 local_brand at 1.4M: the season's sponsor mo
+FAIL and pays the boot deal's 3 a season
+FAIL every Testball rung pays exactly its card (0 of 5): local_deal card "a Corner Shop Deal: $0.25M/year" pays 1.25 | kit_deal card "b Signature Glove: $1.75M/year" pays 2.75 | global_ambassador card "c World Face: $6M/
+FAIL fame, followers, the legacy term, the bonus and the rung add up (6)
+FAIL soccer's five deals pay exactly what the card prints: Local Brand Deal: card €0.5M, pays 1.5 | Global Boot Deal: card €3M, pays 4 | Global Brand Ambassador: card €8M, pays 9 | Own Merchandise Line: card €15M
+FAIL the probe output differs from the fixture
+ok   1974 posts applied and 126 refused on Testball, every one moved only what it names
+ok   an unknown post is refused and uses up nothing
+head last line: 6 FAILURES
+same FAIL and verdict lines on both trees
+FIRED-SAME

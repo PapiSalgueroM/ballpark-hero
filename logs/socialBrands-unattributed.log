@@ -1,0 +1,8 @@
+     life chain attribution: none, SOCIAL_BRANDS_CHAIN_REF is empty
+  FAIL the probe output differs from the fixture
+       careers[0] first differs at step 15: fixture P:de0a098f1d7b4f7c now P:d440745d5937ae38 (after t:906f18749b4c53a0)
+       careers[1] first differs at step 11: fixture X:f43093f0f52d212f now X:b11c5032e20024b3 (after M?0:b5daa2aaf907a6e9)
+       careers[2] first differs at step 24: fixture X:4f63d2edecb8cd79 now X:e204f8d5e664d84d (after M?+3:4afc9d99f848dfd2)
+1 FAILURE
+1 FAILURE
+UNATTRIBUTED-RED

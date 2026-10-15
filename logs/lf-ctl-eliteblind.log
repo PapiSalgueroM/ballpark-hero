@@ -1,0 +1,11 @@
+simCareerLeagueFinish SIM_LEAGUE_FINISH_CONTROL=eliteblind: head exit 1, chainOut exit 1, 4 verdict lines on the head
+FAIL: Man City 1992: 62.1% is over the era tier ceiling 30%, the era blind boost is back
+FAIL: PSG 2002: 57.5% is over the era tier ceiling 30%, the era blind boost is back
+FAIL: tier 4 mean share 0.098 is not at least 0.03 below tier 3 0.653
+simCareerLeagueFinish: control eliteblind turned section 3, 5 red and nothing else. The check works.
+head last line: simCareerLeagueFinish: control eliteblind turned section 3, 5 red and nothing else. The check works.
+DIFFERENT on chainOut:
+3c3
+< FAIL: tier 4 mean share 0.098 is not at least 0.03 below tier 3 0.653
+---
+> FAIL: tier 4 mean share 0.107 is not at least 0.03 below tier 3 0.657

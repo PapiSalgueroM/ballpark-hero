@@ -1,0 +1,11 @@
+simCareerSocialBrands SOCIAL_BRANDS_CONTROL=resign: head exit 1, chainOut exit 1, 7 verdict lines on the head
+3 FAILURES
+CONTROL resign: src/lib/soccerCareerEngine.ts rewritten in the bundle
+FAIL 72 loads and 72 seasons over 4 careers, 6 stored values and 3 followings: every id loaded as itself, loading signed and moved nothing, and the deal was paid once: seed 11 local_brand at 1.4M: the season's sponsor mo
+FAIL the probe output differs from the fixture
+FAIL the renamed cover value still maps on load
+ok   1974 posts applied and 126 refused on Testball, every one moved only what it names
+ok   an unknown post is refused and uses up nothing
+head last line: 3 FAILURES
+same FAIL and verdict lines on both trees
+FIRED-SAME

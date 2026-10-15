@@ -1,0 +1,10 @@
+simCareerSocialBrands SOCIAL_BRANDS_CONTROL=cardlie: head exit 1, chainOut exit 1, 6 verdict lines on the head
+2 FAILURES
+CONTROL cardlie: src/lib/soccerCareerBrand.ts rewritten in the bundle
+FAIL every one of soccer's 7 post cards says what its post does, with no exceptions list: {"troll_rival":"prints \"Rivalry intensity increases\", which this check cannot read against the post"}
+FAIL the probe output differs from the fixture
+ok   1974 posts applied and 126 refused on Testball, every one moved only what it names
+ok   an unknown post is refused and uses up nothing
+head last line: 2 FAILURES
+same FAIL and verdict lines on both trees
+FIRED-SAME

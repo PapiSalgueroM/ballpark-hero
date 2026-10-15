@@ -1,0 +1,10 @@
+simCareerSocialBrands SOCIAL_BRANDS_CONTROL=reorder: head exit 1, chainOut exit 1, 6 verdict lines on the head
+2 FAILURES
+CONTROL reorder: src/lib/careerSocial.ts rewritten in the bundle
+FAIL a season with no viral moment draws exactly one random number (2)
+FAIL the probe output differs from the fixture
+ok   1974 posts applied and 126 refused on Testball, every one moved only what it names
+ok   an unknown post is refused and uses up nothing
+head last line: 2 FAILURES
+same FAIL and verdict lines on both trees
+FIRED-SAME

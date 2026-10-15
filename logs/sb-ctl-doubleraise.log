@@ -1,0 +1,11 @@
+simCareerSocialBrands SOCIAL_BRANDS_CONTROL=doubleraise: head exit 1, chainOut exit 1, 7 verdict lines on the head
+3 FAILURES
+CONTROL doubleraise: src/lib/careerSocial.ts rewritten in the bundle
+FAIL a banked focus boost is paid once, by the sport's own raise and nothing else, over 40 Testball saves: 0: the sport's raise was called 2 times | 1: the sport's raise was called 2 times | 2: the sport's raise was call
+FAIL every one of soccer's 7 post cards says what its post does, with no exceptions list: {"stay_off":"prints +2 to all stats, the raise did something else to pace, dribbling, defending, physical"}
+FAIL the probe output differs from the fixture
+ok   1974 posts applied and 126 refused on Testball, every one moved only what it names
+ok   an unknown post is refused and uses up nothing
+head last line: 3 FAILURES
+same FAIL and verdict lines on both trees
+FIRED-SAME

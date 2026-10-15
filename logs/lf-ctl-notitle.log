@@ -1,0 +1,10 @@
+simCareerLeagueFinish SIM_LEAGUE_FINISH_CONTROL=notitle: head exit 1, chainOut exit 1, 3 verdict lines on the head
+FAIL: 4 careers moved after guarded attribution: the main Math.random stream or another complete state field changed
+FAIL: 908 seasons break the rule
+simCareerLeagueFinish: control notitle turned section 1, 4 red and nothing else. The check works.
+head last line: simCareerLeagueFinish: control notitle turned section 1, 4 red and nothing else. The check works.
+DIFFERENT on chainOut:
+2c2
+< FAIL: 908 seasons break the rule
+---
+> FAIL: 856 seasons break the rule

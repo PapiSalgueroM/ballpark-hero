@@ -1,0 +1,10 @@
+simCareerSocialBrands SOCIAL_BRANDS_CONTROL=unbound: head exit 1, chainOut exit 1, 6 verdict lines on the head
+2 FAILURES
+CONTROL unbound: src/lib/careerIdentity.ts rewritten in the bundle
+FAIL data asking for 3 and 0.1 is held to 0.75 to 1.75 where it is read
+FAIL over 400 seasons the loudest personality multiplied growth by at most 3.000, the calmest by at least 0.897
+ok   1974 posts applied and 126 refused on Testball, every one moved only what it names
+ok   an unknown post is refused and uses up nothing
+head last line: 2 FAILURES
+same FAIL and verdict lines on both trees
+FIRED-SAME

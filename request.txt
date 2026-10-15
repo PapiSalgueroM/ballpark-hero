@@ -1,0 +1,20 @@
+# Round BFH a2: the three harnesses with the life chain attribution (green), their unattributed arms (red, the before), LeagueFinish and SocialBrands controls on head and chainOut
+leagueFinish: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerLeagueFinish.mjs
+socialBrands: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerSocialBrands.mjs
+awardsNight: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerAwardsNight.mjs
+leagueFinish-unattributed: SIM_LEAGUE_FINISH_CHAIN_REF= SIM_LEAGUE_FINISH_ARTIFACTS=/tmp/lfu NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerLeagueFinish.mjs > /tmp/lfu.log 2>&1; s=$?; grep -E 'FAIL|life chain' /tmp/lfu.log | head -8 | cut -c1-200; tail -1 /tmp/lfu.log | cut -c1-200; [ $s -eq 1 ] && echo UNATTRIBUTED-RED
+socialBrands-unattributed: SOCIAL_BRANDS_CHAIN_REF= NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerSocialBrands.mjs > /tmp/sbu.log 2>&1; s=$?; grep -E 'FAIL|differs|life chain' /tmp/sbu.log | head -8 | cut -c1-200; tail -1 /tmp/sbu.log; [ $s -eq 1 ] && echo UNATTRIBUTED-RED
+awardsNight-unattributed: SIM_AWARDS_NIGHT_CHAIN_REF= SIM_AWARDS_NIGHT_ARTIFACTS=/tmp/anu NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerAwardsNight.mjs > /tmp/anu.log 2>&1; s=$?; grep -E 'FAIL|life chain' /tmp/anu.log | head -12 | cut -c1-200; tail -1 /tmp/anu.log; [ $s -eq 1 ] && echo UNATTRIBUTED-RED
+lf-ctl-notitle: bash .rc/x/ctlcmp.sh simCareerLeagueFinish SIM_LEAGUE_FINISH_CONTROL notitle
+lf-ctl-eliteblind: bash .rc/x/ctlcmp.sh simCareerLeagueFinish SIM_LEAGUE_FINISH_CONTROL eliteblind
+lf-ctl-stream: bash .rc/x/ctlcmp.sh simCareerLeagueFinish SIM_LEAGUE_FINISH_CONTROL stream
+sb-ctl-reorder: bash .rc/x/ctlcmp.sh simCareerSocialBrands SOCIAL_BRANDS_CONTROL reorder
+sb-ctl-payoff: bash .rc/x/ctlcmp.sh simCareerSocialBrands SOCIAL_BRANDS_CONTROL payoff
+sb-ctl-unbound: bash .rc/x/ctlcmp.sh simCareerSocialBrands SOCIAL_BRANDS_CONTROL unbound
+sb-ctl-leak: bash .rc/x/ctlcmp.sh simCareerSocialBrands SOCIAL_BRANDS_CONTROL leak
+sb-ctl-cardlie: bash .rc/x/ctlcmp.sh simCareerSocialBrands SOCIAL_BRANDS_CONTROL cardlie
+sb-ctl-doubleraise: bash .rc/x/ctlcmp.sh simCareerSocialBrands SOCIAL_BRANDS_CONTROL doubleraise
+sb-ctl-resign: bash .rc/x/ctlcmp.sh simCareerSocialBrands SOCIAL_BRANDS_CONTROL resign
+sb-ctl-paytwice: bash .rc/x/ctlcmp.sh simCareerSocialBrands SOCIAL_BRANDS_CONTROL paytwice
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs

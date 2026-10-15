@@ -1,0 +1,6 @@
+   life chain attribution: none, SIM_LEAGUE_FINISH_CHAIN_REF is empty
+  FAIL: 16 careers moved with the train and the development edits both taken out: something other than those rounds changed a career
+  FAIL: 16 careers moved after guarded attribution: the main Math.random stream or another complete state field changed
+  FAIL: 16 complete random draw vectors differ from the independent original
+simCareerLeagueFinish: 3 failure(s) in section(s) 4
+UNATTRIBUTED-RED

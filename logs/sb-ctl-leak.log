@@ -1,0 +1,11 @@
+simCareerSocialBrands SOCIAL_BRANDS_CONTROL=leak: head exit 1, chainOut exit 1, 7 verdict lines on the head
+4 FAILURES
+CONTROL leak: src/lib/careerSocial.ts rewritten in the bundle
+FAIL 1974 posts applied and 126 refused on Testball, every one moved only what it names: clip/0: moved rep, which it never names | clip/1: moved rep, which it never names | clip/2: moved rep, which it never names | clip/
+FAIL soccer's 7 posts, 84 applications on real saves, moved only what they name: training_video: popularity, viral_celebration: popularity, personal_life: popularity, troll_rival: popularity
+FAIL the probe output differs from the fixture
+FAIL the rival post gains its 0.8M and moves nothing else, the rivalry meter included, with a rival playing, retired or absent: moved events,popularity,socialMediaActionUsedThisSeason,socialMediaFollowers | moved events,
+ok   an unknown post is refused and uses up nothing
+head last line: 4 FAILURES
+same FAIL and verdict lines on both trees
+FIRED-SAME

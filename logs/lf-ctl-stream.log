@@ -1,0 +1,6 @@
+simCareerLeagueFinish SIM_LEAGUE_FINISH_CONTROL=stream: head exit 1, chainOut exit 1, 2 verdict lines on the head
+FAIL: 16 careers moved after guarded attribution: the main Math.random stream or another complete state field changed
+simCareerLeagueFinish: control stream turned section 4 red and nothing else. The check works.
+head last line: simCareerLeagueFinish: control stream turned section 4 red and nothing else. The check works.
+same FAIL and verdict lines on both trees
+FIRED-SAME

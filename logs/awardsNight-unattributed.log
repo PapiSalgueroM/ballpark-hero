@@ -1,0 +1,13 @@
+   life chain attribution: none, SIM_AWARDS_NIGHT_CHAIN_REF is empty
+  FAIL: the entire attributed random draw stream must match the independent original
+  FAIL: every complete attributed per-step save must match the independent original
+  FAIL: the tournament card was drawn for 104 tournaments, the fixture recorded 103
+  FAIL: names[10] differs: fixture "Eric Cantona", now "Ryan Giggs"
+  FAIL: career 0 parts at step 13 of 229: fixture ev96c3a64125 (phase ev), now evdfc42a4e4e; the step before matched ev6e6273a334
+  FAIL: night 1 (career 0, 1993) differs: fixture rank null [Marco van Basten:80, Romário:65, Roberto Baggio:59, Eric Cantona:56, George Weah:51, Jürgen Klinsmann:50, Lothar Matthäus:48, Ryan Giggs
+  FAIL: tournaments[1] differs: fixture {"c":0,"year":1998,"name":"World Cup","result":"Semi-final"}, now {"c":0,"year":1998,"name":"World Cup","result":"Group Stage"}
+  FAIL: speeches[0] differs: fixture {"kind":"bdor","sample":0,"seed":0,"id":"thank_rival","d":{"integrityBonus":5},"line":"🎤 On the biggest stage you thanked Dario Kovač by name: \"he made me thi
+  FAIL: markup[3] differs: fixture {"what":"bdor winner","night":"0:2002"}, now {"what":"bdor winner","night":"6:2036"}
+simCareerAwardsNight: 9 FAILURES
+simCareerAwardsNight: 9 FAILURES
+UNATTRIBUTED-RED
