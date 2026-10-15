@@ -1,0 +1,3 @@
+FAIL NBA Perfect Season retry proof
+["AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n+ actual - expected\n\n+ 'f110a4a6c76ff6c27f22015998db6d2208bebee33576a56f098589d64795dd42'\n- '407709f4a78d811d03d6bda19e3358acc62910de5844239354e26ca5641dacac'\n\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/nbaPerfectSeasonRetryProof.mjs:42:31\n    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)\n    at async node:internal/modules/esm/loader:647:26\n    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)"]
+BINDING-NEEDED

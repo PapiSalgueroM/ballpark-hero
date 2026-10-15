@@ -1,0 +1,3 @@
+6b8c25080 rc request rBGg-m5 for 29758e355b40f881f01ef20cf8cb8dcdcdeebae7
+29758e355 Round BGG: m5, merge PR279 codex/career-drill-pointer-cancel at cea78220 (a cancelled touch no longer burns a drill attempt)
+d3aaf1872 Round BGG: bind PR277's proof to a parent ref (SOCCER_NEW_CAREER_PARENT_REF, unset is the packet's own pin)
