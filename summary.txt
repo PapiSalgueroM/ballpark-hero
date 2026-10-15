@@ -1,0 +1,14 @@
+build exit=0 27s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+headsha exit=0 0s | 4c2b782bc Round BFH: merge Release BE (08923969: main's Round 1368 codec whole, its lazy career story beside the chain's lazy creator editor; docs/PROJECT-STATE.md as on 
+fonts exit=0 1s | Prepared 9 declared font dependencies for local fulfillment.
+saveFixtures exit=0 11s | Prepared 9 declared font dependencies for local fulfillment.
+playSaveSize exit=0 20s | playSoccerCareerSaveSize: 168 checks, 0 failed, 0 external requests forwarded
+playSaveReaders exit=0 5s | playSoccerSaveReaders: green, 18 checks at 390 and 1280 on career 713-CB-playing (119700 characters raw, 45562 stored), 0 failures.
+playSaveReaders-ctl-envelope exit=0 4s | FIRED-OK
+simCareerStoryRole-forwalk exit=0 30s | simCareerStoryRole: 16 groups, 0 failed, 48 full AR pairs
+playCareerStoryRole exit=0 39s | Career Story native: 554 checks, 0 failed, 9/9 journeys; artifacts /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/career-story-role/native
+land-main exit=0 325s | playSoccerLanding: green at 320x640, 390x844, 1280x900 (also bar 360x780, bar 375x667, name 480x800, name 768x1024; landing, name, bar, retire), every marked section red 
+land-toasts exit=0 397s | playSoccerLanding: green at 320x640, 390x844, 1280x900 (also no extra sizes; toasts, bytes), every marked section red on the base
+ctl-land-seed exit=0 157s | CONTROL FIRED: SOCCER_LANDING_CONTROL=seed played head on seed 1987332286 and the byte check went red, and the old save comparison went red on 8 save(s) given the next se
+budget-sweepWeight exit=0 25s | sweepWeight: green. Every page is inside its budget, and the budgets came down this round.
+budget-simCreation exit=0 261s | ALL CREATION CHECKS PASSED
