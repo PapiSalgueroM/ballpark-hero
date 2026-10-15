@@ -1,0 +1,10 @@
+#!serve
+#!playwright
+headsha: git log --oneline -2
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-m1: node_modules/.bin/vitest run src/test/soccerPotentialProgress.test.tsx src/test/soccerAwardReveal.test.tsx --testTimeout=300000 --hookTimeout=120000
+potential-browser: CI=1 SIM_NETWORK=offline ENGINES=chromium SOCCER_POTENTIAL_BROWSER_OUT="$RUNNER_TEMP/potential-browser" node scripts/qa/soccerPotentialProgressBrowser.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simFlagshipWeight: node scripts/simFlagshipWeight.mjs
+simAccessibility: node scripts/simAccessibility.mjs

@@ -1,0 +1,9 @@
+build exit=0 22s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+headsha exit=0 0s | fb7094520 Round BGG: m1, merge PR241 codex/career-potential-progress at 0258fc59 (Soccer Career shows saved potential progress)
+vitest-m1 exit=0 5s |    Duration  3.97s (transform 1.52s, setup 94ms, collect 5.72s, tests 455ms, environment 643ms, prepare 241ms)
+simHarnessAnchors exit=0 40s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simNoRivalNames exit=0 11s | No rival product names found. 0 findings.
+potential-browser exit=0 56s | PASS Soccer potential progress browser
+simAccessibility exit=0 0s | simAccessibility: all green
+simFlagshipWeight exit=0 0s | simFlagshipWeight: green. The flagship carries its own game and nobody else's.
+tsc exit=0 63s | 
