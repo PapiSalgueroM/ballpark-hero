@@ -1,0 +1,6 @@
+#!serial
+saveSize-head: node scripts/simClubManagerSaveSize.mjs
+slots-head: node scripts/simClubManagerSlots.mjs
+saveSize-base: git checkout d4f2c6f6 -- src scripts && node scripts/simClubManagerSaveSize.mjs; s=$?; git checkout HEAD -- src scripts; exit $s
+slots-base: git checkout d4f2c6f6 -- src scripts && node scripts/simClubManagerSlots.mjs; s=$?; git checkout HEAD -- src scripts; exit $s
+subs-base: git worktree add -f .sb4 dec9075b >/dev/null 2>&1; git checkout d4f2c6f6 -- src scripts && SUBS_BASE=$PWD/.sb4 node scripts/simCmSubs.mjs --part=legacy,three,hotseat; s=$?; git checkout HEAD -- src scripts; exit $s
