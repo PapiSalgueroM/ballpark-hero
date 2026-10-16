@@ -1,0 +1,12 @@
+bb exit=0 16s | bb seed=4 exit=0 | 1. appeals: 256 matches, 13 straight reds, 3 second yellows, 13 appeals offered |  | simClubManagerDecisions: 0 findings
+bcm1 exit=0 16s | bcm1 seed=4 exit=0 | 1. appeals: 205 matches, 10 straight reds, 3 second yellows, 10 appeals offered |  | simClubManagerDecisions: 0 findings
+bcend exit=0 16s | bcend seed=4 exit=0 | 1. appeals: 205 matches, 10 straight reds, 3 second yellows, 10 appeals offered |  | simClubManagerDecisions: 0 findings
+pre1331 exit=0 16s | pre1331 seed=4 exit=0 | 1. appeals: 205 matches, 10 straight reds, 3 second yellows, 10 appeals offered |  | simClubManagerDecisions: 0 findings
+m1331 exit=0 15s | m1331 seed=4 exit=0 | 1. appeals: 240 matches, 12 straight reds, 4 second yellows, 12 appeals offered |  | simClubManagerDecisions: 0 findings
+bdend exit=0 15s | bdend seed=4 exit=0 | 1. appeals: 240 matches, 12 straight reds, 4 second yellows, 12 appeals offered |  | simClubManagerDecisions: 0 findings
+predesk exit=0 15s | predesk seed=4 exit=0 | 1. appeals: 240 matches, 12 straight reds, 4 second yellows, 12 appeals offered |  | simClubManagerDecisions: 0 findings
+mdesk exit=1 19s | mdesk seed=4 exit=1 | 1. appeals: 197 matches, 5 straight reds, 2 second yellows, 5 appeals offered | FAIL [1] only 5 straight reds in the play seasons, under the floor o
+m1369 exit=1 20s | m1369 seed=4 exit=1 | 1. appeals: 197 matches, 5 straight reds, 2 second yellows, 5 appeals offered | FAIL [1] only 5 straight reds in the play seasons, under the floor o
+m1365 exit=1 20s | m1365 seed=4 exit=1 | 1. appeals: 197 matches, 5 straight reds, 2 second yellows, 5 appeals offered | FAIL [1] only 5 straight reds in the play seasons, under the floor o
+m1366 exit=1 18s | m1366 seed=4 exit=1 | 1. appeals: 197 matches, 5 straight reds, 2 second yellows, 5 appeals offered | FAIL [1] only 5 straight reds in the play seasons, under the floor o
+bfh exit=1 18s | bfh seed=4 exit=1 | 1. appeals: 197 matches, 5 straight reds, 2 second yellows, 5 appeals offered | FAIL [1] only 5 straight reds in the play seasons, under the floor of 
