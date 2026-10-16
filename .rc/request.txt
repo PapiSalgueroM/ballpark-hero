@@ -1,0 +1,15 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+appealIsolation: node scripts/simManagerAppealIsolation.mjs
+s0: CM_WORLD_MOVES_SECTIONS=0 node scripts/simCmWorldMoves.mjs
+s1-now: CM_WORLD_MOVES_SECTIONS=1,4 CM_WORLD_MOVES_ERAS=now node scripts/simCmWorldMoves.mjs
+s6-now: CM_WORLD_MOVES_SECTIONS=6 CM_WORLD_MOVES_ERAS=now node scripts/simCmWorldMoves.mjs
+s8-now: CM_WORLD_MOVES_SECTIONS=8 CM_WORLD_MOVES_ERAS=now node scripts/simCmWorldMoves.mjs
+vitest-cm: node_modules/.bin/vitest run src/lib/clubManager src/test/clubDetail --testTimeout=300000 --hookTimeout=120000
+pr269-head: git show 1923d291:src/test/managerAiOwnership.test.ts > src/test/managerAiOwnership.test.ts && node_modules/.bin/vitest run src/test/managerAiOwnership.test.ts --reporter=verbose --testTimeout=300000 --hookTimeout=120000
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simGuideHeadings: node scripts/simGuideHeadings.mjs
+simSiteSearch: node scripts/simSiteSearch.mjs
+simDailyDeals: node scripts/simDailyDeals.mjs
+leagueRules: node scripts/simCmLeagueRules.mjs
+bridge-check: node scripts/lib/cmNoAiMoves1344.mjs --check
