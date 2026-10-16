@@ -2,7 +2,7 @@
 
 Codex lane, branch `codex/world-xi-ratings-chemistry`. After Simulate Season, the completed XI shows each player's card OVR out of 100 from the same rating function the season uses. Club chemistry opens the existing shared-club pairs, including a zero-link state, with Back and a clean reset on replay. The roster gives clubs their own line on phones. The season's average match rating stays out of 10; club links remain a display and do not change the simulation.
 
-Remote baseline at `14d78a1a`, run `38878152760`, passed types and proved exactly three missing-display assertions plus one preserved real-season/average case. Product verification is pending. The simulation call, rating calculation and chemistry calculation are unchanged. This candidate is not published.
+Remote baseline at `14d78a1a`, run `38878152760`, passed types and proved exactly three missing-display assertions plus one preserved real-season/average case. Fixed source `259b0cba`, run `38879093470`, passed types, all four page cases, the original-product control (three exact failures and one preservation), seven restored/related cases, the actual build, all 15 rebuilt-site readers and the unchanged World XI season digest. Artifact `12037150701` is retained with SHA256 `ebc48f1b3af736ca7db02d857b151c20b09152b285fc20a22c4ddd3090bd40e1`. The simulation call, rating calculation and chemistry calculation are unchanged. PR283 is ready for Claude I's integration review, still draft and not published. This is component and source verification, with no new browser-layout or full-suite claim.
 
 ## 2026-10-16 05:30 EDT: session I starts; player reports split between the lanes; the Lovable editor push reverted
 
