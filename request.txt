@@ -1,0 +1,15 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+s0: CM_WORLD_MOVES_SECTIONS=0 node scripts/simCmWorldMoves.mjs
+s14: CM_WORLD_MOVES_SECTIONS=1,4 node scripts/simCmWorldMoves.mjs
+s2: CM_WORLD_MOVES_SECTIONS=2 node scripts/simCmWorldMoves.mjs
+s3: CM_WORLD_MOVES_SECTIONS=3 node scripts/simCmWorldMoves.mjs
+s5: CM_WORLD_MOVES_SECTIONS=5 node scripts/simCmWorldMoves.mjs
+s6: CM_WORLD_MOVES_SECTIONS=6 node scripts/simCmWorldMoves.mjs
+s7: CM_WORLD_MOVES_SECTIONS=7 node scripts/simCmWorldMoves.mjs
+s8: CM_WORLD_MOVES_SECTIONS=8 node scripts/simCmWorldMoves.mjs
+s10: CM_WORLD_MOVES_SECTIONS=10 node scripts/simCmWorldMoves.mjs
+s11: CM_WORLD_MOVES_SECTIONS=11 node scripts/simCmWorldMoves.mjs
+bridge-check: node scripts/lib/cmNoAiMoves1344.mjs --check
+vitest-moves: node_modules/.bin/vitest run src/lib/clubManagerWorldMoves.test.ts src/lib/clubManagerWorldMovesNamesakes.test.ts src/lib/clubManagerWorldRoster.test.ts src/lib/clubManagerOwnClubLevel.test.ts src/lib/clubManagerCustomPromotion.test.ts --testTimeout=300000 --hookTimeout=120000
+edge-carried: cp .rc/x/managerTransferEdgeCasesCarried.test.ts src/test/managerTransferEdgeCases.test.ts && node_modules/.bin/vitest run src/test/managerTransferEdgeCases.test.ts --reporter=verbose --testTimeout=900000 --hookTimeout=900000; s=$?; rm -f src/test/managerTransferEdgeCases.test.ts; exit $s
+pr269-head: git show 1923d291:src/test/managerAiOwnership.test.ts > src/test/managerAiOwnership.test.ts && node_modules/.bin/vitest run src/test/managerAiOwnership.test.ts --reporter=verbose --testTimeout=300000 --hookTimeout=300000; s=$?; rm -f src/test/managerAiOwnership.test.ts; exit $s

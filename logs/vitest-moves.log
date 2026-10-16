@@ -1,0 +1,26 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/lib/clubManagerOwnClubLevel.test.ts [2m([22m[2m7 tests[22m[2m)[22m[33m 2158[2mms[22m[39m
+   [33m[2m✓[22m[39m the manager's own club is read from his club, never the world roster[2m > [22mhis club strength at the summer rollover is the base read, so the free agent level rule reads the base [33m 358[2mms[22m[39m
+   [33m[2m✓[22m[39m the manager's own club is read from his club, never the world roster[2m > [22mthe one club read is the world read, club for club, in today and in a past era, cold and cached [33m 600[2mms[22m[39m
+   [33m[2m✓[22m[39m the manager's own club is read from his club, never the world roster[2m > [22min a seeded career the market lists nobody at his own club, ledger or none, and the club he leaves is listed at once [33m 453[2mms[22m[39m
+ [32m✓[39m src/lib/clubManagerWorldRoster.test.ts [2m([22m[2m96 tests[22m[2m)[22m[33m 3747[2mms[22m[39m
+   [33m[2m✓[22m[39m actual world roster continuity through manager callbacks[2m > [22mkeeps the fresh world seed and complete constructor draw vector stable across other careers and clocks [33m 376[2mms[22m[39m
+   [33m[2m✓[22m[39m actual world roster continuity through manager callbacks[2m > [22mrecords a first purchase from the actual seeded future market [33m 382[2mms[22m[39m
+   [33m[2m✓[22m[39m actual world roster continuity through manager callbacks[2m > [22mpreserves an already higher seeded rating without raising the inherited growth ceiling [33m 448[2mms[22m[39m
+   [33m[2m✓[22m[39m actual world roster continuity through manager callbacks[2m > [22mbuys, joins another job, saves, reloads and rejoins the buyer without seller resurrection [33m 772[2mms[22m[39m
+ [32m✓[39m src/lib/clubManagerWorldMoves.test.ts [2m([22m[2m6 tests[22m[2m)[22m[33m 556[2mms[22m[39m
+ [32m✓[39m src/lib/clubManagerWorldMovesNamesakes.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 209[2mms[22m[39m
+ [32m✓[39m src/lib/clubManagerCustomPromotion.test.ts [2m([22m[2m13 tests[22m[2m)[22m[33m 6511[2mms[22m[39m
+   [33m[2m✓[22m[39m created clubs use the existing modern promotion slots[2m > [22mpromotes created champions in every configured pair while preserving all real clubs [33m 1377[2mms[22m[39m
+   [33m[2m✓[22m[39m created clubs use the existing modern promotion slots[2m > [22mpromotes an ordinary champion through the same existing slots [33m 874[2mms[22m[39m
+   [33m[2m✓[22m[39m created clubs use the existing modern promotion slots[2m > [22mkeeps the created club outside the automatic places in its current division [33m 717[2mms[22m[39m
+   [33m[2m✓[22m[39m created clubs use the existing modern promotion slots[2m > [22mrelegates a promoted created club without replacing a second real club [33m 300[2mms[22m[39m
+   [33m[2m✓[22m[39m created clubs use the existing modern promotion slots[2m > [22mkeeps qualified non-English created clubs apart from their domestic opponents in Europe [33m 1595[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m5 passed[39m[22m[90m (5)[39m
+[2m      Tests [22m [1m[32m126 passed[39m[22m[90m (126)[39m
+[2m   Start at [22m 19:22:04
+[2m   Duration [22m 10.56s[2m (transform 3.02s, setup 467ms, collect 8.94s, tests 13.18s, environment 3.17s, prepare 775ms)[22m
+
