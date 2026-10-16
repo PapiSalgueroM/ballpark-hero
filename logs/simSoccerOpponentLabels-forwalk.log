@@ -1,0 +1,50 @@
+note: source outside the overlay differs from the pinned base, so the original is the certified reversal of this head
+✘ [ERROR] component reverse anchor
+
+0 !== 1
+ [plugin retained-opponent-source]
+
+    opponent-proof.tsx:6:41:
+      6 │ ...del } from './src/components/soccer-career/SoccerSeasonCentre.tsx';
+        ╵               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+  This error came from the "onLoad" callback registered here:
+
+    node_modules/esbuild/lib/main.js:1150:20:
+      1150 │       let promise = setup({
+           ╵                     ^
+
+    at setup (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simSoccerOpponentLabels.mjs:61:524)
+    at handlePlugins (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:1150:21)
+    at buildOrContextImpl (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:873:5)
+    at Object.buildOrContext (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:699:5)
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:2023:15
+    at new Promise (<anonymous>)
+    at Object.build (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:2022:25)
+    at build (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:1873:51)
+    at bundle (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simSoccerOpponentLabels.mjs:61:22)
+
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+Error: Build failed with 1 error:
+opponent-proof.tsx:6:41: ERROR: [plugin: retained-opponent-source] component reverse anchor
+
+0 !== 1
+
+    at failureErrorWithLog (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:1472:15)
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:945:25
+    at runOnEndCallbacks (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:1315:45)
+    at buildResponseToResult (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:943:7)
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:970:16
+    at responseCallbacks.<computed> (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:622:9)
+    at handleIncomingPacket (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:677:12)
+    at Socket.readFromStdout (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:600:7)
+    at Socket.emit (node:events:514:28)
+    at addChunk (node:internal/streams/readable:568:12) {
+  errors: [Getter/Setter],
+  warnings: [Getter/Setter]
+}
+
+Node.js v24.21.0
