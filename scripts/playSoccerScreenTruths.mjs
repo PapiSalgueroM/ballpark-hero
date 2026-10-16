@@ -84,9 +84,10 @@ function check(ok, label) {
   const key = `${arm}/${section}`;
   verdicts[key] ??= { checks: 0, failed: 0 };
   verdicts[key].checks += 1;
-  if (!ok) verdicts[key].failed += 1;
+  if (!ok) { verdicts[key].failed += 1; if (arm === 'head') headFails.push(`${section} ${label}`); }
   console.log(`${ok ? 'ok  ' : 'FAIL'} [${arm}] ${section} ${label}`);
 }
+const headFails = [];
 const report = line => { reports.push(`[${arm}] ${section} ${line}`); console.log(`NOTE [${arm}] ${section} ${line}`); };
 async function shot(page, name) {
   fs.mkdirSync(SHOTS, { recursive: true });
@@ -401,6 +402,8 @@ async function w8(width, height) {
     });
     check(!!seen.title && seen.title.text.includes(LONG_NAME) && !seen.title.cut, `${width}: the title holds the whole name (${JSON.stringify(seen.title)})`);
     check(seen.labels >= 6 && seen.cutLabels.length === 0, `${width}: every keeper label holds its whole text (${seen.labels} labels, cut: ${seen.cutLabels.join(', ') || 'none'})`);
+    await page.evaluate(() => window.scrollTo(0, 0));
+    await page.waitForTimeout(200);
     await shot(page, `W8-attributes-${width}`);
     await page.getByRole('button', { name: '← Back', exact: true }).first().click();
     check(await saveBytes(page) === before, `${width}: the save is byte for byte the same`);
@@ -444,6 +447,7 @@ for (const s of SECTIONS) {
   console.log(line);
 }
 for (const r of reports) console.log(`  report: ${r}`);
+for (const f of headFails) console.log(`  head failure: ${f}`);
 if (!BASE_DIST) console.log('playSoccerScreenTruths: no base arm (set SCREEN_TRUTHS_BASE_DIST); the head alone is not a proof');
 console.log(exit === 0
   ? `playSoccerScreenTruths: green, ${SECTIONS.join(' ')} pass on the head${BASE_DIST ? ' and every control section is red on the base' : ''}`
