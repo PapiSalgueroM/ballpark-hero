@@ -1,3 +1,6 @@
+## Codex Round1381 diagnostic closed, 2026-10-16 18:26:28 UTC
+
+TESTONLY PR298, testedcd52964a, actual38945029623/job117121883298 passed. Exact I1344 e206/base1027/existing no-AI-writers bridge, no app/original-harness/pin edits. All45predeclared careers measured and3original prefixes calibrated. Current original3-career prefix has no below35 witness; wider15-start fleet has1 real witness (Everton seed102, mood34.4). Base/bridge have3 each; all15 complete base/bridge observations match. Root and independent physical audit closed210030439B artifact12065546619 SHA14b7942368cac5ba272f5db024a0dc7b2e324c1ffa9b4bd721eaf5c6f35e6b25, all48gzip receipts/45cases/4765Gitarchivefiles/216loadedinputs/3358793drawvalues. Types/source/package/521versions/24466installed holds pass. Details: docs/audits/manager-press-cohort-measurement.md. Outside six-span press15candidate is unapplied; no original harness/1081/new6f product/browser/live qualification. I's product corrections since6f require their own existing gates. BH remains live.
 ## Release BH LIVE, 2026-10-16 10:42 EDT: Player Bingo counts Rodri's Champions League, World XI shows overalls and club links, Soccer Career names Luton Town in 2023 and its choices say what they do
 
 Claude lane (session I). main ae14cf97, deployment 9056c804-07ef-4e34-96c9-1f0efdaf0425, entry index-BQUxuJaU.js (was index-CZZVnHoQ.js, Release BG,
@@ -18506,3 +18509,9 @@ approve the new tree. The completed combined 587 run `35001991548` failed the
 old broad SVG map guard, lazy-panel test waits and Wonderkid's 271K/270K budget.
 Its expected negative controls passed. The records below retain earlier
 verification context and do not supersede this current integration note.
+
+## Codex Round1381: press coverage measurement, 2026-10-16 17:54:53 UTC
+
+DIAGNOSTIC ONLY, on I1344 sourcee2063dbe. The owned runtime review asks the other lane to resolve1351presscohort coverage: the first3public-policy careers stop after164entries/51answers without a below35witness, while base/bridge reachmood34 and36pairs. Existing game assertions and core must not change. Root claims only a new remote measurement/proof, not the original harness or its future widening yet. Preserve the3-career979prefix, append the same3clubs for documented seed bases1/2/3/4, measure all15declared careers with unchanged policy/180limit/sack stop on current/base/bridge, retain rawstates/answers/seeded draws. No assigned mood, lowered threshold, favorable-seed selection, Engine/Calendar/1081pin change, local runtime, main or publication. A later method correction requires the actual measurement and effective existing omission controls. CurrentI1344product faults remain I-owned and open. This diagnostic does not add a release gate.
+
+2026-10-16 18:08:17 UTC:1381diagnostic method is source-reviewed, pending first remote run. Only new QAhelper/workflow/audit changed, allapp/oldharness/bridge/package bytes remain I1344e206. Predeclared15careers eachcurrent/base/bridge, exactoriginal3prefix binding andobservercalibration, rawJSON/gzip/seededdraw receipts. No oldharness/floor/1081/product/release change or runtimequalification. See docs/audits/manager-press-cohort-measurement.md.
