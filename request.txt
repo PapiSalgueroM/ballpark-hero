@@ -1,0 +1,3 @@
+#!build
+#!playwright
+walk: ENGINES=chromium node scripts/playUsCareerReports.mjs
