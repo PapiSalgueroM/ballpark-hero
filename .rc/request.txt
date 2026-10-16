@@ -1,0 +1,9 @@
+edge-carried: cp .rc/x/managerTransferEdgeCasesCarried.test.ts src/test/managerTransferEdgeCases.test.ts && node_modules/.bin/vitest run src/test/managerTransferEdgeCases.test.ts --reporter=verbose --testTimeout=900000 --hookTimeout=900000
+vitest-new: node_modules/.bin/vitest run src/lib/clubManagerWorldMovesNamesakes.test.ts src/lib/clubManagerWorldMoves.test.ts src/lib/clubManagerWorldRoster.test.ts --testTimeout=300000 --hookTimeout=120000
+s11-trace: CM_WORLD_MOVES_SECTIONS=11 CM_WORLD_MOVES_SEEDS=2 CM_WORLD_MOVES_TRACE=1 node scripts/simCmWorldMoves.mjs
+s0: CM_WORLD_MOVES_SECTIONS=0 node scripts/simCmWorldMoves.mjs
+s2: CM_WORLD_MOVES_SECTIONS=2 node scripts/simCmWorldMoves.mjs
+s3: CM_WORLD_MOVES_SECTIONS=3 node scripts/simCmWorldMoves.mjs
+c-noguard: CM_WORLD_MOVES_CONTROL=noguard node scripts/simCmWorldMoves.mjs
+c-seasonone: CM_WORLD_MOVES_CONTROL=seasonone node scripts/simCmWorldMoves.mjs
+c-nocarry: CM_WORLD_MOVES_CONTROL=nocarry node scripts/simCmWorldMoves.mjs
