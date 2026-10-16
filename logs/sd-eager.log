@@ -1,0 +1,12 @@
+NEGATIVE CONTROL ON: eager (section 10 must fail)
+simSoccerDeck: head and base e814c2de bundled (1.5 s); the shipped pack holds 0 cards, CONTROL=eager
+1) Bind: the shipped pack has no problem, every soccer rule is refused with its own message, and a pack with a problem deals nothing
+2) Inert: the deck not loaded, 200 careers of 12 seasons, every save byte equal to the base's after every step and the Math.random count equal
+3) Adds, never replaces: at each deal, from one identical state, the old batch is the base's and a deck card is first
+10) Lazy: the page and the engine reach the gate and nothing of the deck, and nothing but the gate and tests loads it
+   FAIL src/pages/SoccerCareer.tsx's static closure holds src/lib/soccerDeck.ts, src/lib/gmInbox.ts, src/data/soccerDeck/index.ts, src/data/soccerDeck/words.ts, src/data/soccerDeck/starter.ts
+   FAIL src/lib/soccerCareerEngine.ts's static closure holds src/lib/soccerDeck.ts, src/lib/gmInbox.ts, src/data/soccerDeck/index.ts, src/data/soccerDeck/words.ts, src/data/soccerDeck/starter.ts
+   ok 1538 src files read as code: nothing but the gate and tests calls loadSoccerDeck
+
+runtime 2.2 s
+simSoccerDeck: CONTROL=eager FIRED: section 10 failed (2 failures, red sections 10)

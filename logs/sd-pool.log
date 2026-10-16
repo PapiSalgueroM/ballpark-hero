@@ -1,0 +1,20 @@
+NEGATIVE CONTROL ON: pool (section 3 must fail)
+simSoccerDeck: head and base e814c2de bundled (1.4 s); the shipped pack holds 0 cards, CONTROL=pool
+1) Bind: the shipped pack has no problem, every soccer rule is refused with its own message, and a pack with a problem deals nothing
+2) Inert: the deck not loaded, 200 careers of 12 seasons, every save byte equal to the base's after every step and the Math.random count equal
+3) Adds, never replaces: at each deal, from one identical state, the old batch is the base's and a deck card is first
+   1933 deals compared from the base fleet's own states; a deck card dealt at 1899 (98.2%)
+     career 0 deal 0: the old batch 200,247,62 became 799,200,247,72
+     career 0 deal 0: the stamps are not the base's plus the deck card's
+     career 0 deal 0: getAllEvents differs (77 cards against 76)
+     career 0 deal 1: the old batch 201,26,50,428,486 became 799,201,26,53,429,487
+   FAIL 34 deals hold a deck card that is not first
+   FAIL 1652 deals change the old batch
+   FAIL 1649 deals stamp something other than the base's stamps plus the deck card's
+   FAIL 1933 deals read a different catalog (getAllEvents)
+   a head fleet with the deck loaded: 1935 deals, 980 batches opening on a deck card
+   ok no deck card is pending at any deal of the loaded head fleet
+10) Lazy: the page and the engine reach the gate and nothing of the deck, and nothing but the gate and tests loads it
+
+runtime 16.6 s
+simSoccerDeck: CONTROL=pool FIRED: section 3 failed (4 failures, red sections 3)

@@ -1,0 +1,9 @@
+sd exit=0 61s | simSoccerDeck: green. Every section.
+sd-bindopen exit=1 2s | simSoccerDeck: CONTROL=bindopen FIRED: section 1 failed (21 failures, red sections 1)
+vitest exit=0 72s |    Duration  71.43s (transform 8.68s, setup 2.05s, collect 28.20s, tests 135.35s, environment 14.81s, prepare 3.31s)
+sd-leak exit=1 27s | simSoccerDeck: CONTROL=leak FIRED: section 2 failed (2 failures, red sections 2)
+sd-last exit=1 21s | simSoccerDeck: CONTROL=last FIRED: section 3 failed (5 failures, red sections 3)
+sd-eager exit=1 2s | simSoccerDeck: CONTROL=eager FIRED: section 10 failed (2 failures, red sections 10)
+tsc exit=0 96s | 
+sd-caller exit=1 1s | simSoccerDeck: CONTROL=caller FIRED: section 10 failed (1 failures, red sections 10)
+sd-pool exit=1 16s | simSoccerDeck: CONTROL=pool FIRED: section 3 failed (4 failures, red sections 3)

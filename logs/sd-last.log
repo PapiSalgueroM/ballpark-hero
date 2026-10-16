@@ -1,0 +1,21 @@
+NEGATIVE CONTROL ON: last (section 3 must fail)
+simSoccerDeck: head and base e814c2de bundled (1.4 s); the shipped pack holds 0 cards, CONTROL=last
+1) Bind: the shipped pack has no problem, every soccer rule is refused with its own message, and a pack with a problem deals nothing
+2) Inert: the deck not loaded, 200 careers of 12 seasons, every save byte equal to the base's after every step and the Math.random count equal
+3) Adds, never replaces: at each deal, from one identical state, the old batch is the base's and a deck card is first
+   1933 deals compared from the base fleet's own states; a deck card dealt at 0 (0.0%)
+     career 0 deal 0: a deck card at index 3
+     career 0 deal 0: the old batch 200,247,62 became 200,247,62,799
+     career 0 deal 0: the stamps are not the base's plus the deck card's
+     career 0 deal 1: a deck card at index 5
+   FAIL the deck dealt no card at any deal, so nothing here was proven
+   FAIL 1933 deals hold a deck card that is not first
+   FAIL 1933 deals change the old batch
+   FAIL 1933 deals stamp something other than the base's stamps plus the deck card's
+   a head fleet with the deck loaded: 1937 deals, 0 batches opening on a deck card
+   FAIL the loaded head fleet was dealt no deck card
+   ok no deck card is pending at any deal of the loaded head fleet
+10) Lazy: the page and the engine reach the gate and nothing of the deck, and nothing but the gate and tests loads it
+
+runtime 20.9 s
+simSoccerDeck: CONTROL=last FIRED: section 3 failed (5 failures, red sections 3)

@@ -1,0 +1,12 @@
+NEGATIVE CONTROL ON: caller (section 10 must fail)
+simSoccerDeck: head and base e814c2de bundled (1.0 s); the shipped pack holds 0 cards, CONTROL=caller
+1) Bind: the shipped pack has no problem, every soccer rule is refused with its own message, and a pack with a problem deals nothing
+2) Inert: the deck not loaded, 200 careers of 12 seasons, every save byte equal to the base's after every step and the Math.random count equal
+3) Adds, never replaces: at each deal, from one identical state, the old batch is the base's and a deck card is first
+10) Lazy: the page and the engine reach the gate and nothing of the deck, and nothing but the gate and tests loads it
+   ok src/pages/SoccerCareer.tsx: 180 files load with it, the gate among them, and none of the deck
+   ok src/lib/soccerCareerEngine.ts: 65 files load with it, the gate among them, and none of the deck
+   FAIL 1 src files call loadSoccerDeck: src/pages/SoccerCareer.tsx
+
+runtime 1.6 s
+simSoccerDeck: CONTROL=caller FIRED: section 10 failed (1 failures, red sections 10)
