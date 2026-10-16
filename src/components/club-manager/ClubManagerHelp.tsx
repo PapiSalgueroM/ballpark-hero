@@ -95,6 +95,13 @@ export default function ClubManagerHelp() {
                 <p>Take over in mid season and the card starts with what is still open: anything the last manager had already failed is off it. And the board's summer cheque grows with a good season but never past {KITTY_TOP_SHARE} times the club's usual budget (or 10m). Money you did not spend still carries, up to one more cheque.</p>
                 <p><span className="font-semibold text-foreground">Example:</span> a club expected to finish 1st wins the league and hits its cup target, but misses its goals target and two of the board's asks. That is 55 + 1.5 x 0 + 2 x (3 + 1 - 1 - 0.5 - 0.5) = 59, but it is an A season, so next season opens at {BOARD_FRESH}, Safe. Before this the same season opened at 55 + 2 x (1 + 1 - 1 - 1 - 1) = 53, Under pressure. And a club that goes up in 2nd in the Championship gets at least a B and a line saying it is up to the Premier League.</p>
               </div>
+              {/* Round 1342: No sacking (src/lib/clubManagerStart.ts). Appended on its own; the board sentences above
+                  stay true for every career without it, and the first line here says which one they leave out. */}
+              <div data-cm-help="no-sacking" className="space-y-2">
+                <p>🛡️ <span className="font-semibold text-foreground">No sacking.</span> Everything above about the sack is for a normal career. Switch on No sacking and zero is no longer the sack for you: the board still moves after every match and still tells you what it thinks, but where it would fire you it keeps you on its last point instead. Pick it on the Dugout step when you start, or turn it on later from Options (it asks twice). It cannot be turned off, it cannot be turned on while you are out of work, and from then on the career posts no score to the leaderboards, though your days played still count. Manager Hot Seat and Deadline Day never use it.</p>
+                <p>It also takes some of the bite out of the wage ceiling. Going over the ceiling still costs board confidence after every match and still stops free agents signing, but with No sacking on the lost confidence can no longer cost you the job.</p>
+                <p><span className="font-semibold text-foreground">Example:</span> the board is on 2 and you lose 3-0 in the league. On a normal career that is almost always the sack. With No sacking the board stays on 1, the match report says they would have sacked you, and you play the next match.</p>
+              </div>
             </div>
   );
 }

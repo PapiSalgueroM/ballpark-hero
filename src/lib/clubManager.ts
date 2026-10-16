@@ -117,7 +117,7 @@ import type { LoanTerms, PersonalTerms } from '@/lib/clubManagerDeals';
 /* Round 513: manager XP and the seven trees, in their own file for the same
    reason the deals and the staff are in theirs. */
 import { addXp, askEdge, dutyEdge, ensureXp, gateEdge, levelFor, pressCushion, promiseCushion, seasonXp, xpOf, youthIntakeEdge, youthReportEdge } from '@/lib/clubManagerXp';
-import { PATIENCE_FLOOR, askPremiumScale, currencySymbol, ensureStartOptions, nationJobsOn, patienceDelta, startOptionsOf } from '@/lib/clubManagerStart';
+import { NO_SACK_LINE, PATIENCE_FLOOR, askPremiumScale, boardMaySack, currencySymbol, ensureStartOptions, nationJobsOn, patienceDelta, startOptionsOf } from '@/lib/clubManagerStart';
 /* Round 1331: the substitution rule by league and season, a pure table. */
 import { subsLeagueBase, subsRuleFor, type SubsRule } from '@/lib/clubManagerSubsRule';
 export { subsRuleFor, CM_SUBS_PARTIAL } from '@/lib/clubManagerSubsRule';
@@ -17286,6 +17286,15 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
   if (confDelta < 0 && state.press) confDelta *= pressPatience(state.press.mood);
   confDelta = Math.round(confDelta * 10) / 10;
   state.boardConfidence = clamp(state.boardConfidence + confDelta, 0, 100);
+  /* Round 1342: No sacking holds the board on its last point in front of the
+     check below, which is left exactly as it was, so zero stays the sack and
+     the warning under 22 still reads. Draws nothing. */
+  let noSackLine = false;
+  if (!boardMaySack(state) && state.boardConfidence <= 0) {
+    state.boardConfidence = 1;
+    noSackLine = true;
+    events.push(NO_SACK_LINE);
+  }
   if (state.boardConfidence <= 0) {
     state.sacked = true;
     events.push('📉 The board has seen enough. You are relieved of your duties.');
@@ -17331,6 +17340,11 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
      check that sacks, so a manager could finish the week on zero and still
      be in a job. The header meter reads this number and says zero is the
      sack (src/lib/clubManagerMeters.ts), so the check runs once more here. */
+  /* Round 1342: and No sacking's floor runs once more in front of it, with one line a match. */
+  if (!boardMaySack(state) && state.boardConfidence <= 0) {
+    state.boardConfidence = 1;
+    if (!noSackLine) events.push(NO_SACK_LINE);
+  }
   if (!state.sacked && state.boardConfidence <= 0) {
     state.sacked = true;
     events.push('📉 The board has seen enough. You are relieved of your duties.');

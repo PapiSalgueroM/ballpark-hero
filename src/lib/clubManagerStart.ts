@@ -106,6 +106,9 @@ export interface StartOptions {
   /** Round 202's international job. Off means the country never calls. */
   nationJobs: boolean;
   strictness: number;
+  /** Round 1342: No sacking, stored as the season it was switched on. One way:
+   *  absent is off and nothing deletes it. Only a positive whole number counts. */
+  noSack?: number;
 }
 
 export function defaultStartOptions(): StartOptions {
@@ -140,12 +143,20 @@ export function startOptionsOf(state: CareerState): StartOptions {
  * documented Round 127 bug was a repair that was not.
  */
 export function ensureStartOptions(state: CareerState): StartOptions {
-  if (!isValidStartOptions(state.startOptions)) state.startOptions = defaultStartOptions();
+  if (!isValidStartOptions(state.startOptions)) {
+    /* Round 1342: a broken block is replaced, but No sacking read off it
+       survives, because dropping it would hand the board its sack back
+       without the player asking. */
+    const noSack = noSackFrom(state);
+    state.startOptions = defaultStartOptions();
+    if (noSack !== null) state.startOptions.noSack = noSack;
+  }
   return state.startOptions as StartOptions;
 }
 
-/** Set one option. Returns null when it cannot be done, the shape the hook takes. */
-export function setStartOption<K extends keyof Omit<StartOptions, 'v'>>(
+/** Set one option. Returns null when it cannot be done, the shape the hook takes.
+    No sacking is not one of them: it only ever goes on, through turnOnNoSack. */
+export function setStartOption<K extends keyof Omit<StartOptions, 'v' | 'noSack'>>(
   career: CareerState,
   key: K,
   value: StartOptions[K],
@@ -199,3 +210,62 @@ export function patienceDelta(state: CareerState): number {
 /** The floor a strict setting may never take patience below, so a fair offer
     still has somewhere to go and "hard" never becomes "impossible". */
 export const PATIENCE_FLOOR = 3;
+
+/* ================================================================== */
+/* Round 1342: No sacking                                             */
+/* ================================================================== */
+
+/*
+ * A player's report: "an option to turn off sacking, so you can play out a
+ * career mode without having to move clubs". The board keeps moving and keeps
+ * its words, it just cannot fire you: where the engine would sack you, the
+ * board is held on its last point instead (playMyMatch's two floors, each in
+ * front of a sack check that is otherwise exactly what it was, so zero is
+ * still the sack for every other save).
+ *
+ * One way. Picked on the Dugout step or switched on later from Options, never
+ * off, and refused while you are sacked or out of work so it cannot undo a
+ * sack. A career with it posts no score to the leaderboards from then on.
+ * Manager Hot Seat and Deadline Day never carry it. Nothing here draws.
+ */
+
+/** The season No sacking went on, or null when it is off. */
+export function readNoSack(raw: unknown): number | null {
+  return typeof raw === 'number' && Number.isInteger(raw) && raw > 0 ? raw : null;
+}
+
+/** Read off the raw block, so a damaged block keeps it (ensureStartOptions carries it over). */
+export function noSackFrom(state: CareerState): number | null {
+  const o = state.startOptions as { noSack?: unknown } | null | undefined;
+  return readNoSack(o && typeof o === 'object' ? o.noSack : undefined);
+}
+
+/** The one gate every sack goes through. A new sack path must ask it too. */
+export function boardMaySack(state: CareerState): boolean {
+  return noSackFrom(state) === null;
+}
+
+/** Whether this career's pings carry a score to the leaderboards. */
+export function postsScore(state: CareerState): boolean {
+  return noSackFrom(state) === null;
+}
+
+/** Switch No sacking on for good. Null when it is already on, or the manager is sacked or out of work. */
+export function turnOnNoSack(state: CareerState): CareerState | null {
+  if (state.sacked || state.wilderness || noSackFrom(state) !== null) return null;
+  const season = Number.isInteger(state.season) && state.season > 0 ? state.season : 1;
+  return { ...state, startOptions: { ...startOptionsOf(state), noSack: season } };
+}
+
+/** What the Dugout step hands a new career. Absent or off is the career startCareer made. */
+export interface CareerSetup {
+  noSack?: boolean;
+}
+
+export function applyCareerSetup(state: CareerState, setup?: CareerSetup): CareerState {
+  if (!setup?.noSack) return state;
+  return turnOnNoSack(state) ?? state;
+}
+
+/** Narrated, nobody speaks: the match report's line where the sack would have been. */
+export const NO_SACK_LINE = '📉 The board would have sacked you tonight. No sacking keeps you in the job, and they are not happy about it.';

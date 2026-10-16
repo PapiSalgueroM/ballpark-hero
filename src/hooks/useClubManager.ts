@@ -43,9 +43,9 @@ import type { ConcessionTier } from '@/lib/clubManagerFinances';
 import { hireStaff, matchStaffOffer, releaseToPoacher, sackStaff } from '@/lib/clubManagerStaff';
 import type { StaffPostId } from '@/lib/clubManagerStaff';
 import { spendSkillPoint } from '@/lib/clubManagerXp';
-import { setStartOption } from '@/lib/clubManagerStart';
+import { applyCareerSetup, postsScore, setStartOption, turnOnNoSack as turnOnNoSackFor } from '@/lib/clubManagerStart';
 import { validWorldEdit } from '@/lib/clubManagerWorldEdit';
-import type { CurrencyCode } from '@/lib/clubManagerStart';
+import type { CareerSetup, CurrencyCode } from '@/lib/clubManagerStart';
 import type { SkillTree } from '@/lib/clubManagerXp';
 
 export type CMPhase = 'boot' | 'resume' | 'clubSelect' | 'hub' | 'halftime' | 'matchResult' | 'seasonEnd' | 'sacked';
@@ -593,14 +593,16 @@ export function useClubManager() {
      It passes validWorldEdit on the way in, so an edit the editor could not
      have made (a club in two leagues, a league the wrong size) starts the
      real world rather than a broken one. */
-  const confirmClub = useCallback((eraId?: string, manager?: ManagerSpec, entry?: MidSeasonEntry, worldEdit?: Record<string, string[]> | null) => {
+  /* Round 1342: and the Dugout step's career options (No sacking), applied
+     after the takeover; absent is the career startCareer made, untouched. */
+  const confirmClub = useCallback((eraId?: string, manager?: ManagerSpec, entry?: MidSeasonEntry, worldEdit?: Record<string, string[]> | null, setup?: CareerSetup) => {
     if (!pendingClub) return;
     const club = pendingClub, era = eraId ?? DEFAULT_ERA_ID, edit = validWorldEdit(worldEdit ?? null);
     const begin = () => {
       const fresh = startCareer(club, era, undefined, manager, undefined, edit);
       /* Round 549: a mid season takeover plays the run-in first, under the
          manager before you, and hands the club over where it stands. */
-      const s = entry ? startMidSeason(fresh, entry) : fresh;
+      const s = applyCareerSetup(entry ? startMidSeason(fresh, entry) : fresh, setup);
       setCareer(s);
       setActiveTab('overview');
       setPhase('hub');
@@ -668,9 +670,9 @@ export function useClubManager() {
 
   /* Round 154: founding your own club skips the pending-club dance, because
      the create form is its own confirmation. */
-  const confirmCustomClub = useCallback((eraId: string | undefined, spec: CustomClubSpec, manager?: ManagerSpec, entry?: MidSeasonEntry) => {
+  const confirmCustomClub = useCallback((eraId: string | undefined, spec: CustomClubSpec, manager?: ManagerSpec, entry?: MidSeasonEntry, setup?: CareerSetup) => {
     const fresh = startCareer(spec.name, eraId ?? DEFAULT_ERA_ID, spec, manager);
-    const s = entry ? startMidSeason(fresh, entry) : fresh;
+    const s = applyCareerSetup(entry ? startMidSeason(fresh, entry) : fresh, setup);
     setCareer(s);
     setPendingClub(null);
     setActiveTab('overview');
@@ -803,13 +805,16 @@ export function useClubManager() {
          player's points fifty times over. Measured 2026-09-01: the top of
          the points table held 80,246 of its 87,800 from 1,586 Club Manager
          rows. The finished season below is the completion. */
-      recordActivity('/club-manager', currentSeasonScore(res.state));
+      /* Round 1342: a No sacking career pings with no score, so it never ranks. */
+      if (postsScore(res.state)) recordActivity('/club-manager', currentSeasonScore(res.state));
+      else recordActivity('/club-manager');
       recordStreakDay('/club-manager');
       setReport(res.report);
       setPhase('matchResult');
     } else if (res.kind === 'seasonOver') {
       const { state, summary: sm } = finishSeason(res.state);
-      recordCompletion('/club-manager', sm.seasonScore);
+      if (postsScore(state)) recordCompletion('/club-manager', sm.seasonScore);
+      else recordCompletion('/club-manager');
       setCareer(state);
       setSummary(sm);
       setPhase('seasonEnd');
@@ -841,7 +846,8 @@ export function useClubManager() {
     }
     if (run.halt === 'seasonOver') {
       const { state: done, summary: sm } = finishSeason(run.state);
-      recordCompletion('/club-manager', sm.seasonScore);
+      if (postsScore(done)) recordCompletion('/club-manager', sm.seasonScore);
+      else recordCompletion('/club-manager');
       setCareer(done);
       setSummary(sm);
       setPhase('seasonEnd');
@@ -850,7 +856,8 @@ export function useClubManager() {
     setCareer(run.state);
     if (run.lastReport) {
       // Round 157: a fast-forwarded run still counts as playing today.
-      recordActivity('/club-manager', currentSeasonScore(run.state));
+      if (postsScore(run.state)) recordActivity('/club-manager', currentSeasonScore(run.state));
+      else recordActivity('/club-manager');
       recordStreakDay('/club-manager');
       setReport(run.lastReport);
       setPhase('matchResult');
@@ -860,7 +867,8 @@ export function useClubManager() {
   const continueFromReport = useCallback(() => {
     if (!career) return;
     if (career.sacked) {
-      recordCompletion('/club-manager', currentSeasonScore(career));
+      if (postsScore(career)) recordCompletion('/club-manager', currentSeasonScore(career));
+      else recordCompletion('/club-manager');
       /* Round 201: the sack opens the wilderness rather than closing the
          save. The screen is the same route ('sacked'), what changed is that
          it now has a way onward. */
@@ -870,7 +878,8 @@ export function useClubManager() {
     }
     if (career.week >= career.calendar.length) {
       const { state, summary: sm } = finishSeason(career);
-      recordCompletion('/club-manager', sm.seasonScore);
+      if (postsScore(state)) recordCompletion('/club-manager', sm.seasonScore);
+      else recordCompletion('/club-manager');
       setCareer(state);
       setSummary(sm);
       setPhase('seasonEnd');
@@ -987,6 +996,10 @@ export function useClubManager() {
   }, []);
   const setStrictness = useCallback((level: number) => {
     setCareer(prev => (prev ? setStartOption(prev, 'strictness', level) ?? prev : prev));
+  }, []);
+  /* Round 1342: No sacking, one way. Null (already on, sacked, out of work) leaves the save alone. */
+  const turnOnNoSack = useCallback(() => {
+    setCareer(prev => (prev ? turnOnNoSackFor(prev) ?? prev : prev));
   }, []);
   /* Round 513: a point into a tree. One way only, so it never needs a refund
      path, and null when there is nothing free to spend. */
@@ -1144,7 +1157,8 @@ export function useClubManager() {
     setCareer(res.state);
     if (res.report) {
       // Round 157: a finished match counts toward today, mid-season included.
-      recordActivity('/club-manager', currentSeasonScore(res.state));
+      if (postsScore(res.state)) recordActivity('/club-manager', currentSeasonScore(res.state));
+      else recordActivity('/club-manager');
       recordStreakDay('/club-manager');
       setReport(res.report);
       setPhase('matchResult');
@@ -1262,7 +1276,7 @@ export function useClubManager() {
     buy,
     negotiate, offer, walk, proposeTerms, buyLoanee, endLoanEarly, recallLoanee, answerApproach, setTickets, setConcessions, expandStadium, takeSponsor, pushSponsorOffer, buyFacility, waitAWeek, takeJob, acceptNation, resignNation, dismissNegotiation, clause, loan,
     appointStaff, payOffStaff, matchStaff, letStaffGo, spendPoint, updateManager,
-    setCurrency, setNationJobs, setStrictness,
+    setCurrency, setNationJobs, setStrictness, turnOnNoSack,
     acceptIncomingBid, rejectIncomingBid,
     setStatus, loanOut, renew, renewWithClause, terminate, signFree, setRole,
     upgradeFacility, sendScout, callScoutHome, promote, release, setTraining,

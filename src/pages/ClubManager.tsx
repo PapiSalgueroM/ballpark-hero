@@ -36,7 +36,8 @@ import AdBanner from '@/components/ads/AdBanner';
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
 import { ClubManagerClubList } from '@/components/club-manager/ClubManagerClubList';
-import { CURRENCIES, STRICTNESS_INFO, startOptionsOf } from '@/lib/clubManagerStart';
+import { CURRENCIES, STRICTNESS_INFO, noSackFrom, startOptionsOf } from '@/lib/clubManagerStart';
+import type { CareerSetup } from '@/lib/clubManagerStart';
 import { withWorldEdit, worldEditMoves, realLeagueIdOf } from '@/lib/clubManagerWorldEdit';
 import type { WorldEdit } from '@/lib/clubManagerWorldEdit';
 import { levelFor, pointsFree, xpOf, MAX_LEVEL } from '@/lib/clubManagerXp';
@@ -402,9 +403,9 @@ const ClubManager = () => {
   if (g.phase === 'clubSelect') {
     /* Round 303: the dugout step hands in null (skip) or a manager spec, and
        either way the picker resets for the next career. */
-    const confirmAndReset = (manager: ManagerSpec | null, entry?: MidSeasonEntry) => {
-      if (pendingCustomSpec) g.confirmCustomClub(pickEra, pendingCustomSpec, manager ?? undefined, entry);
-      else g.confirmClub(pickEra, manager ?? undefined, entry, isHistoricEra(pickEra) ? null : worldEdit);
+    const confirmAndReset = (manager: ManagerSpec | null, entry?: MidSeasonEntry, setup?: CareerSetup) => {
+      if (pendingCustomSpec) g.confirmCustomClub(pickEra, pendingCustomSpec, manager ?? undefined, entry, setup);
+      else g.confirmClub(pickEra, manager ?? undefined, entry, isHistoricEra(pickEra) ? null : worldEdit, setup);
       setWorldEdit(null);
       setPickStep('era');
       setPickEra(DEFAULT_ERA_ID);
@@ -972,6 +973,12 @@ const ClubManager = () => {
           <span className="text-xs font-bold text-muted-foreground border border-border rounded-full px-2 py-0.5 whitespace-nowrap">
             {worldSeasonLabel(c)} · Season {c.season}
           </span>
+          {/* Round 1342: a No sacking career wears it for its whole life. No pill otherwise. */}
+          {noSackFrom(c) !== null && (
+            <span data-cm-nosack-pill className="text-xs font-bold text-muted-foreground border border-border rounded-full px-2 py-0.5 whitespace-nowrap">
+              🛡️ No sacking
+            </span>
+          )}
           {/* Round 549: a career that began part way through says so for as long
               as that season runs. The games before the takeover were simulated,
               and a badge that only lives on the picker would let somebody forget
@@ -1522,6 +1529,7 @@ const ClubManager = () => {
                   onCurrency={g.setCurrency}
                   onNationJobs={g.setNationJobs}
                   onStrictness={g.setStrictness}
+                  onNoSack={g.turnOnNoSack}
                 /></ScreenLoading>
               )}
 
