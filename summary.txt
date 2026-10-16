@@ -1,0 +1,7 @@
+build exit=0 32s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+careerHub exit=0 47s | playCareerHub: green. Four career games on live boxes, and every award on the screen has a year on it.
+pressMarket exit=1 1s | Node.js v24.21.0
+marketTalk exit=0 46s | playUsMarketTalk: 40 checks, 0 failed
+career993 exit=1 25s | Node.js v24.21.0
+career993-reveal exit=0 4s | Native prospect evidence: /home/runner/work/_temp/rc-out/files/c993-reveal
+career993-choice exit=0 5s | Native prospect evidence: /home/runner/work/_temp/rc-out/files/c993-choice

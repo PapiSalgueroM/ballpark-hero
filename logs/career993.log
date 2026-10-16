@@ -1,0 +1,139 @@
+nfl-390-touch: AssertionError [ERR_ASSERTION]: Whole save differs from the expected transition
++ actual - expected
+... Skipped lines
+
+  {
+    c: {
+      age: 21,
+      allPros: 0,
+      appearance: {
+...
+      seasons: [],
++     summerSalt: '11757m9',
+      suspendedSeasons: 0,
+      team: 'NO',
+      year: 2026,
+      yearlyCosts: 0
+    },
+
+    at expectSave (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/career993.mjs:146:43)
+    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/career993.mjs:225:29
+nba-390-touch: AssertionError [ERR_ASSERTION]: Whole save differs from the expected transition
++ actual - expected
+... Skipped lines
+
+  {
+    c: {
+      age: 19,
+      allNbas: 0,
+      appearance: {
+...
+      seasons: [],
++     summerSalt: '184v3cg',
+      suspendedSeasons: 0,
+      team: 'DET',
+      year: 2026,
+      yearlyCosts: 0
+    },
+
+    at expectSave (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/career993.mjs:146:43)
+    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/career993.mjs:225:29
+mlb-390-touch: AssertionError [ERR_ASSERTION]: Whole save differs from the expected transition
++ actual - expected
+... Skipped lines
+
+  {
+    c: {
+      age: 20,
+      allStars: 0,
+      appearance: {
+...
+      seasons: [],
++     summerSalt: '1a4slrk',
+      suspendedSeasons: 0,
+      team: 'CIN',
+      year: 2028,
+      yearlyCosts: 0
+    },
+
+    at expectSave (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/career993.mjs:146:43)
+    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/career993.mjs:225:29
+nhl-390-touch: AssertionError [ERR_ASSERTION]: Whole save differs from the expected transition
++ actual - expected
+... Skipped lines
+
+  {
+    c: {
+      age: 19,
+      allStars: 0,
+      appearance: {
+...
+      seasons: [],
++     summerSalt: '57fk60',
+      suspendedSeasons: 0,
+      team: 'NSH',
+      year: 2027,
+      yearlyCosts: 0
+    },
+
+    at expectSave (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/career993.mjs:146:43)
+    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/career993.mjs:225:29
+nba-320-touch-reduced: AssertionError [ERR_ASSERTION]: Whole save differs from the expected transition
++ actual - expected
+... Skipped lines
+
+  {
+    c: {
+      age: 19,
+      allNbas: 0,
+      appearance: {
+...
+      seasons: [],
++     summerSalt: '184v3cg',
+      suspendedSeasons: 0,
+      team: 'DET',
+      year: 2026,
+      yearlyCosts: 0
+    },
+
+    at expectSave (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/career993.mjs:146:43)
+    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/career993.mjs:225:29
+nba-1440-keyboard: AssertionError [ERR_ASSERTION]: Whole save differs from the expected transition
++ actual - expected
+... Skipped lines
+
+  {
+    c: {
+      age: 19,
+      allNbas: 0,
+      appearance: {
+...
+      seasons: [],
++     summerSalt: '184v3cg',
+      suspendedSeasons: 0,
+      team: 'DET',
+      year: 2026,
+      yearlyCosts: 0
+    },
+
+    at expectSave (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/career993.mjs:146:43)
+    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/career993.mjs:225:29
+Native prospect evidence: /home/runner/work/_temp/rc-out/files/c993
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: All six native journeys must pass
+
+0 !== 6
+
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/career993.mjs:269:17 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 0,
+  expected: 6,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0
