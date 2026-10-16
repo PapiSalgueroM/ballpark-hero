@@ -107,6 +107,16 @@
  *      played on BASE and on the head to the January of season 6; the playNextEntry call that opens it is timed
  *      WINDOW_TRIALS times on each engine, alternating, each from a fresh load of the same save, and the head's median
  *      may be at most 3 times BASE's plus 5 ms. A timing red is rerun alone once before it is called red.
+ *  13. (Round 1508, the run review's major 1) section 2's protected arms in ADOPTED careers: the same 2026-27 trio,
+ *      seeds and wars, but each career is made the shape a career from before the 13 October update takes at its
+ *      first summer on this engine right after startCareer (the seed, the ledger and the squad's ledger keys off,
+ *      section 6's stripped way, then the engine's own adoptLivingWorld: a readable ledger and still no seed). A
+ *      rival may not close on a man the adopted ledger protects (the brief's decision 2: "1344's refusals apply").
+ *      Seeded careers cannot see this: livingWorldOf is the seed test on every one of them. Under 3 wars of either
+ *      kind cannot run.
+ *  14. (Round 1508, the same major) section 3's joins in ADOPTED careers, made the same way: the joined career
+ *      carries the departed adopted career's deal lines of this season between two other clubs, its gone names and
+ *      its ledger exactly as a seeded one does. Under 6 moves cannot run.
  *
  * MEASURED AT STEP 1 (GitHub runners, 2026-10-16; the head was the base plus scripts and a throwaway probe,
  * scripts/lib/cmAiRecordProbe1344.mjs, removed at step 2 and kept in the history at ee949025 and 21b3fa70):
@@ -116,7 +126,7 @@
  *   section 9: the table is in the round's notes, docs/audits/ROUND-1344-NOTES.md; the January entry took 37.8 ms on
  *     the base and about 255 ms with the probe (recorded deal by deal), which is why ruling 4 packs once a window.
  *
- * ENV. CM_WORLD_MOVES_SECTIONS (default 0,1,2,3,4,5,6,7,8,10,11,12), CM_WORLD_MOVES_SEEDS (a list or a range, 1-10; default per
+ * ENV. CM_WORLD_MOVES_SECTIONS (default 0,1,2,3,4,5,6,7,8,10,11,12,13,14), CM_WORLD_MOVES_SEEDS (a list or a range, 1-10; default per
  * section), CM_WORLD_MOVES_ERAS (default now,era2015,era2005), CM_WORLD_MOVES_BASE (default the commit the branch
  * started from), CM_WORLD_MOVES_SHAPE_ARMS (default base,head), CM_WORLD_MOVES_SEASONS (section 9, default 15),
  * CM_WORLD_MOVES_OUT (section 9's JSON folder, default $RC_OUT or the temp folder).
@@ -147,6 +157,10 @@
  *   CM_WORLD_MOVES_CONTROL=drawshift  every recorded AI deal takes one draw: section 11 red
  *   CM_WORLD_MOVES_CONTROL=slow       the window packs the ledger after every deal again (the step 1 probe's way):
  *                                     section 12 red
+ *   CM_WORLD_MOVES_CONTROL=seedclose  (Round 1508) rivalCloseRefused back to the seed only test: section 13 red
+ *                                     (r1508-run-p: sections 2 and 3 as they stand stayed green under it)
+ *   CM_WORLD_MOVES_CONTROL=seedcarry  (Round 1508) joinClubNow's carry of this season's deal lines and gone names
+ *                                     back to the seed only test: section 14 red (sections 2 and 3 stayed green)
  *   CM_WORLD_MOVES_COMBINE_CONTROL=shift  --combine adds 0.2 to the head's top five XI at season 10: red
  * Exit 0 green, 1 red or a control that fired, 2 could not run, 3 a control that did not fire.
  *
@@ -184,7 +198,7 @@ const COMBINE = process.argv[2] === '--combine';   // handled at the end of the 
 
 /* The commit this branch started from (origin/main at the claim, Release BG live; src equal to bd3b6244). */
 const BASE = process.env.CM_WORLD_MOVES_BASE || 'd4f2c6f688d656205722ba52bbdb33f03490966a';
-const SECTIONS = new Set(range(process.env.CM_WORLD_MOVES_SECTIONS, [0, 1, 2, 3, 4, 5, 6, 7, 8, 10, 11, 12]));
+const SECTIONS = new Set(range(process.env.CM_WORLD_MOVES_SECTIONS, [0, 1, 2, 3, 4, 5, 6, 7, 8, 10, 11, 12, 13, 14]));
 const ERAS = (process.env.CM_WORLD_MOVES_ERAS || 'now,era2015,era2005').split(',');
 if (process.env.CM_WORLD_MOVES_HEAD) cannot('CM_WORLD_MOVES_HEAD is gone: the step 1 probe was removed at step 2 (the head records the deals itself)');
 const CONTROL = process.env.CM_WORLD_MOVES_CONTROL || '';
@@ -219,6 +233,10 @@ const CONTROLS = {
   noskip: { section: 10, edits: [['; if (moved === working) continue; working = moved; }\n', '; working = moved; }\n']] },
   drawshift: { section: 11, edits: [['  const player = aiDealPlayer(seen, deal.mp);\n', '  Math.random();\n  const player = aiDealPlayer(seen, deal.mp);\n']] },
   slow: { section: 12, edits: [[RECORD_LINE, '    if (working && seen) { const moved = recordAiDeal(working, { mp, to: buyer, fee }, working); if (moved === working) continue; working = packedLedger(moved); }\n    else unrecorded.push({ mp, to: buyer, fee });\n']] },
+  /* Round 1508 (the run review's major 1): the two writers an adopted career needs, each put back to the seed only
+     test. Only sections 13 and 14 can see them. */
+  seedclose: { section: 13, edits: [['  return livingWorldOf(career) && recordAiDeal(career, deal, career) === career;\n', '  return worldSeedOf(career) !== undefined && recordAiDeal(career, deal, career) === career;\n']] },
+  seedcarry: { section: 14, file: 'src/lib/clubManagerCalendar.ts', edits: [['    ...(!livingWorldOf(departed) ? {} : seededJoinCarry(career, s, movedElsewhere)),\n', '    ...(worldSeedOf(departed) === undefined ? {} : seededJoinCarry(career, s, movedElsewhere)),\n']] },
 };
 if (CONTROL && !CONTROLS[CONTROL]) cannot(`unknown control ${CONTROL} (${Object.keys(CONTROLS).join(', ')})`);
 /* A control runs its own section and the anchors only, unless the sections are named. */
@@ -576,15 +594,29 @@ async function negotiationCareer(E, era, club, seed) {
    away (walkAway on [.01]) take exactly one draw and say nowhere that he moved: no news line, no gone name, no new
    headline, the talks not hijacked, his ledger record as it was. */
 const s2p = { sold: { tried: 0, set: 0, held: 0, unprotected: 0 }, behind: { tried: 0, set: 0, held: 0, unprotected: 0 } };
+/* Section 13: the same arms in adopted careers, tallied apart. */
+const s13 = { sold: { tried: 0, set: 0, held: 0, unprotected: 0 }, behind: { tried: 0, set: 0, held: 0, unprotected: 0 } };
 const ledgerRecordOf = (M, st, name) => JSON.stringify((M.ledger.readWorldRoster(st)?.records ?? []).filter(r => r.player.name === name));
-async function protectedCareer(E, club, seed, kind) {
-  const M = await E.fresh(), keep = Math.random, row = s2p[kind];
+/* Round 1508 (sections 13 and 14): a fresh career made ADOPTED, the shape a career from before the 13 October update
+   takes at its first summer on this engine: the seed, the ledger and the squad's ledger keys come off (section 6's
+   stripped way), then the engine's own adoptLivingWorld runs. It must hand back no seed and a readable ledger. */
+function adoptedStart(M, s) {
+  const c = JSON.parse(JSON.stringify(s));
+  delete c.worldSeed; delete c.worldRoster;
+  for (const p of c.squad) { delete p.worldRosterKey; delete p.worldRosterSince; }
+  const out = M.cm.adoptLivingWorld(c);
+  if (M.cm.worldSeedOf(out) !== undefined || !M.ledger.readWorldRoster(out)) cannot(`${s.clubName}: adoptLivingWorld left a seed or no readable ledger`);
+  return out;
+}
+async function protectedCareer(E, club, seed, kind, adopted = false) {
+  const M = await E.fresh(), keep = Math.random, row = (adopted ? s13 : s2p)[kind], sec = adopted ? 13 : 2;
   Math.random = stream(mix('protected', club, seed, kind));
-  const tag = `${club} (now, seed ${seed}, a man I ${kind === 'sold' ? 'sold' : 'left behind'})`;
+  const tag = `${club} (now, seed ${seed}, a man I ${kind === 'sold' ? 'sold' : 'left behind'}${adopted ? ', adopted' : ''})`;
   row.tried += 1;
   let s, name, holder;
   try {
     s = M.cm.startCareer(club, 'now');
+    if (adopted) s = adoptedStart(M, s);
     if (kind === 'sold') {
       const man = [...s.squad].filter(p => !p.onLoan && p.position !== 'GK' && !p.isYouth).sort((a, b) => b.rating - a.rating || a.id.localeCompare(b.id))[1];
       const buyer = M.cm.buildMarket(s).find(p => p.club !== s.clubName)?.club;
@@ -628,7 +660,7 @@ async function protectedCareer(E, club, seed, kind) {
   const card = name && M.cm.buildMarket(s).find(p => p.name === name && p.club === holder);
   if (!card) return;
   const st = { ...s, budget: 9999, wageCap: 9999, transferWindow: s.transferWindow ?? 'january', negotiation: null };
-  if (M.cm.aiDealPlayer(st, card) !== null) { row.unprotected += 1; fail(2, `${tag} protected: the ledger does not protect ${name} at ${holder} (ruling 3)`); return; }
+  if (M.cm.aiDealPlayer(st, card) !== null) { row.unprotected += 1; fail(sec, `${tag} protected: the ledger does not protect ${name} at ${holder} (ruling 3)`); return; }
   let war, amount;
   try {
     const started = onVector([0.6, 0.99, 0.6], () => M.cm.startNegotiation(st, card)).value;
@@ -642,7 +674,7 @@ async function protectedCareer(E, club, seed, kind) {
   let held = true;
   for (const arm of ['hijack', 'walk']) {
     const label = `${tag} protected-${arm}:`;
-    const bad = why => { held = false; fail(2, `${label} ${why}`); };
+    const bad = why => { held = false; fail(sec, `${label} ${why}`); };
     let run;
     try { run = onVector([0.01], () => arm === 'hijack' ? M.cm.makeOffer(war, amount) : M.cm.walkAway(war)); }
     catch (e) { bad(e.message); continue; }
@@ -662,13 +694,17 @@ async function protectedCareer(E, club, seed, kind) {
 /* ---------- section 3, join ---------- */
 const JOIN_TO ={ 'Real Madrid': 'Arsenal', Everton: 'Napoli', Aberdeen: 'Fulham' };
 const s3 = { joins: 0, refused: 0, departed: 0, lines: 0, runIn: 0, gone: 0, carried: 0, payloads: 0, doors: 0, notOwned: 0, namesake: 0 };
-/** A seeded 2026-27 career that takes a job mid season, before or after its January window, through joinClubNow. */
-async function joinCareer(E, club, seed, when) {
-  const M = await E.fresh(), keep = Math.random;
+/* Section 14: the same joins in adopted careers, tallied apart. */
+const s14 = { joins: 0, refused: 0, departed: 0, lines: 0, runIn: 0, gone: 0, carried: 0, payloads: 0, doors: 0, notOwned: 0, namesake: 0 };
+/** A seeded 2026-27 career (or, for section 14, an adopted one) that takes a job mid season, before or after its
+    January window, through joinClubNow. */
+async function joinCareer(E, club, seed, when, adopted = false) {
+  const M = await E.fresh(), keep = Math.random, t3 = adopted ? s14 : s3, sec = adopted ? 14 : 3;
   Math.random = stream(mix('join', club, seed, when));
-  const tag = `${club} (now, seed ${seed}, ${when === 'second' ? 'in season two' : `${when} January`})`;
+  const tag = `${club} (now, seed ${seed}, ${when === 'second' ? 'in season two' : `${when} January`}${adopted ? ', adopted' : ''})`;
   try {
     let s = M.cm.startCareer(club, 'now'), january = false, after = 0;
+    if (adopted) s = adoptedStart(M, s);
     /* The review of 2026-10-16: a join in season two, where the run in's own lines (its fresh save's season one)
        must take this season's number for the refusal to read them. */
     if (when === 'second') {
@@ -678,7 +714,7 @@ async function joinCareer(E, club, seed, when) {
         s = r.state;
         if (r.kind === 'seasonOver' || s.sacked) break;
       }
-      if (s.sacked) { s3.refused += 1; return; }
+      if (s.sacked) { t3.refused += 1; return; }
       s = M.cm.startNextSeason(M.cm.finishSeason(s).state);
     }
     for (let guard = 0; guard < 400; guard += 1) {
@@ -688,14 +724,14 @@ async function joinCareer(E, club, seed, when) {
       const r = M.cm.playNextEntry(s, OPT);
       s = r.state;
       if (r.kind === 'window') january = true;
-      if (r.kind === 'seasonOver' || s.sacked) { s3.refused += 1; return; }
+      if (r.kind === 'seasonOver' || s.sacked) { t3.refused += 1; return; }
     }
     const to = JOIN_TO[club];
     const league = M.cm.REAL_LEAGUES.find(l => M.cm.playableClubs(l.id).some(c => c.name === to))?.id;
     const open = { club: to, league, tier: 1, season: s.season, week: s.week, matchesLeft: 0, roll: 0, status: 'accepted' };
     const j = M.cal.joinClubNow({ ...s, jobHunt: { open, cooldowns: [], sentSeason: s.season, sent: 1, summerMove: null } });
-    if (!j || j.clubName !== to) { s3.refused += 1; return; }
-    s3.joins += 1;
+    if (!j || j.clubName !== to) { t3.refused += 1; return; }
+    t3.joins += 1;
     const departed = M.ledger.readWorldRoster(M.cm.refreshWorldRoster(s))?.records ?? [];
     const joined = M.ledger.readWorldRoster(j)?.records ?? [];
     const byKey = new Map(joined.map(r => [r.key, r]));
@@ -706,24 +742,24 @@ async function joinCareer(E, club, seed, when) {
     const keptGone = new Set(s.goneNames.filter(n => movedBefore.has(n)));
     const carried = (s.transferLog ?? []).filter(t => t.season === s.season && !t.loan && keptGone.has(t.name) && t.from !== s.clubName && t.to !== s.clubName);
     const log = j.transferLog ?? [];
-    s3.carried += carried.length;
-    if (JSON.stringify(log.slice(0, carried.length)) !== JSON.stringify(carried)) fail(3, `${tag}: the joined log does not open with the departed career's ${carried.length} deal lines of this season between two other clubs`);
+    t3.carried += carried.length;
+    if (JSON.stringify(log.slice(0, carried.length)) !== JSON.stringify(carried)) fail(sec, `${tag}: the joined log does not open with the departed career's ${carried.length} deal lines of this season between two other clubs`);
     const stale = log.slice(carried.length).filter(t => t.season !== s.season);
-    if (stale.length) fail(3, `${tag}: ${stale.length} of the run in's lines keep another season's number (${stale[0].season}, this season is ${s.season})`);
+    if (stale.length) fail(sec, `${tag}: ${stale.length} of the run in's lines keep another season's number (${stale[0].season}, this season is ${s.season})`);
     const runLines = log.slice(carried.length).filter(line => !line.loan);
     const runNames = new Set(runLines.map(line => line.name));
     for (const r of departed) {
-      s3.departed += 1;
+      t3.departed += 1;
       const k = byKey.get(r.key);
-      if (!k) { fail(3, `${tag}: the departed ledger's ${r.player.name} (${r.owner ?? r.status}) is not in the joined ledger`); continue; }
-      if ((k.owner !== r.owner || k.status !== r.status) && !runNames.has(r.player.name)) fail(3, `${tag}: ${r.player.name} moved from ${r.owner ?? r.status} to ${k.owner ?? k.status} with no deal line of the run in`);
+      if (!k) { fail(sec, `${tag}: the departed ledger's ${r.player.name} (${r.owner ?? r.status}) is not in the joined ledger`); continue; }
+      if ((k.owner !== r.owner || k.status !== r.status) && !runNames.has(r.player.name)) fail(sec, `${tag}: ${r.player.name} moved from ${r.owner ?? r.status} to ${k.owner ?? k.status} with no deal line of the run in`);
     }
-    for (const r of joined) if (!departed.some(d => d.key === r.key) && !runNames.has(r.player.name)) fail(3, `${tag}: the joined ledger holds ${r.player.name}, in no deal line of the run in nor the departed ledger`);
+    for (const r of joined) if (!departed.some(d => d.key === r.key) && !runNames.has(r.player.name)) fail(sec, `${tag}: the joined ledger holds ${r.player.name}, in no deal line of the run in nor the departed ledger`);
     for (const line of runLines.filter(aiLine(to))) {
-      s3.lines += 1;
+      t3.lines += 1;
       const why = placement(M, j, line);
-      if (why) fail(3, `${tag}: in the run in ${line.to} signed ${line.name} from ${line.from}, but ${why}`);
-      else s3.runIn += 1;
+      if (why) fail(sec, `${tag}: in the run in ${line.to} signed ${line.name} from ${line.from}, but ${why}`);
+      else t3.runIn += 1;
     }
     /* The read review's minor 4 (the brief's decision 3, "payload equal or refreshed"): a departed record the run in
        did not move keeps its payload, read against the departed ledger exactly as joinClubNow builds it (my old
@@ -732,12 +768,12 @@ async function joinCareer(E, club, seed, when) {
     for (const r of snapped) {
       const k = byKey.get(r.key);
       if (!k || k.owner !== r.owner || k.status !== r.status || runNames.has(r.player.name)) continue;
-      s3.payloads += 1;
-      if (k.year === r.year && JSON.stringify(k.player) !== JSON.stringify(r.player)) fail(3, `${tag}: ${r.player.name}'s payload changed across the move with no deal line of the run in`);
+      t3.payloads += 1;
+      if (k.year === r.year && JSON.stringify(k.player) !== JSON.stringify(r.player)) fail(sec, `${tag}: ${r.player.name}'s payload changed across the move with no deal line of the run in`);
     }
     /* The men other clubs bought this season before the move stay gone after it (the men I bought, sold or let go
        keep today's rule). */
-    for (const name of keptGone) { s3.gone += 1; if (!j.goneNames.includes(name)) fail(3, `${tag}: ${name}, bought by another club this season before the move, is buyable again after it`); }
+    for (const name of keptGone) { t3.gone += 1; if (!j.goneNames.includes(name)) fail(sec, `${tag}: ${name}, bought by another club this season before the move, is buyable again after it`); }
     /* And no door sells them (the run review's M1 and m4: the gone name alone held, while the screen listed him and
        Talk opened): every man of this season's deals between two other clubs, carried or the run in's, is on the
        screen at the club the ledger says owns him, marked joinedThisSeason, and Talk and buy answer what they answer
@@ -749,20 +785,20 @@ async function joinCareer(E, club, seed, when) {
     for (const name of names) {
       if (j.squad.some(p => p.name === name)) continue;
       const owned = joined.filter(r => r.status === 'owned' && r.player.name === name);
-      if (owned.length !== 1 || !owned[0].owner || owned[0].owner === to) { s3.notOwned += 1; continue; }
+      if (owned.length !== 1 || !owned[0].owner || owned[0].owner === to) { t3.notOwned += 1; continue; }
       const club = owned[0].owner;
       const row = screen.find(p => p.name === name && p.club === club);
       if (!row) {
-        if (screen.some(p => p.name === name)) { s3.namesake += 1; continue; }
-        fail(3, `${tag}: ${name}, bought by ${club} this season, is not on the screen's market there after the move`); continue;
+        if (screen.some(p => p.name === name)) { t3.namesake += 1; continue; }
+        fail(sec, `${tag}: ${name}, bought by ${club} this season, is not on the screen's market there after the move`); continue;
       }
-      if (row.joinedThisSeason !== true) fail(3, `${tag}: ${name} is listed at ${club} after the move without joinedThisSeason`);
+      if (row.joinedThisSeason !== true) fail(sec, `${tag}: ${name} is listed at ${club} after the move without joinedThisSeason`);
       const without = { ...doorsAt, transferLog: (doorsAt.transferLog ?? []).filter(t => !(t.name === name && t.to === club && t.season === doorsAt.season)) };
       for (const door of ['talk', 'buy']) {
-        s3.doors += 1;
+        t3.doors += 1;
         const want = M.cm.doorRefusal(without, row, door) ?? joinedLine(name, club, doorsAt);
         const got = M.cm.doorRefusal(doorsAt, row, door);
-        if (got !== want) fail(3, `${tag}: after the move the ${door} door on ${name} at ${club} answers "${got}", wanted "${want}"`);
+        if (got !== want) fail(sec, `${tag}: after the move the ${door} door on ${name} at ${club} answers "${got}", wanted "${want}"`);
       }
     }
   } finally { Math.random = keep; }
@@ -1423,6 +1459,23 @@ if (SECTIONS.has(3)) {
   if (!s3.doors) cannot('section 3: no door was pressed after a move, so the carry measured nothing');
   if (s3.joins < 6) cannot(`section 3: only ${s3.joins} moves could be made, under 6`);
   if (!s3.lines) cannot('section 3: no deal line of a run in was seen, so the join measured nothing');
+}
+if (SECTIONS.has(13)) {
+  const seeds = range(process.env.CM_WORLD_MOVES_SEEDS, [1, 2, 3, 4, 5]);
+  console.log(`13) section 2's protected arms in ADOPTED careers (Round 1508: no seed, the ledger adoptLivingWorld gives), seeds ${seeds.join(',')}`);
+  for (const club of CLUBS.now) for (const seed of seeds) for (const kind of ['sold', 'behind']) await protectedCareer(H, club, seed, kind, true);
+  console.log(`   a man I sold, ${s13.sold.held} of ${s13.sold.set} wars held (${s13.sold.tried} careers tried, ${s13.sold.unprotected} not protected); a man I left behind, ${s13.behind.held} of ${s13.behind.set} (${s13.behind.tried} tried, ${s13.behind.unprotected} not protected)`);
+  if (s13.sold.set < 3 || s13.behind.set < 3) cannot(`section 13: only ${s13.sold.set} wars on a man I sold and ${s13.behind.set} on a man I left behind could be set up, under 3 each`);
+}
+if (SECTIONS.has(14)) {
+  const seeds = range(process.env.CM_WORLD_MOVES_SEEDS, [1, 2, 3]);
+  console.log(`14) section 3's joins in ADOPTED careers (Round 1508), before and after January and in season two, seeds ${seeds.join(',')}`);
+  for (const club of CLUBS.now) for (const seed of seeds) for (const when of ['before', 'after', 'second']) await joinCareer(H, club, seed, when, true);
+  console.log(`   ${s14.joins} moves (${s14.refused} could not be set up), ${s14.departed} departed records kept, ${s14.runIn} deal lines of the run in placed, ${s14.gone} gone names carried over with ${s14.carried} deal lines, ${s14.payloads} payloads compared, ${s14.doors} door presses after the move (${s14.notOwned} men the ledger no longer holds at one club, ${s14.namesake} behind a namesake, counted)`);
+  if (!s14.doors) cannot('section 14: no door was pressed after a move, so the carry measured nothing');
+  if (s14.joins < 6) cannot(`section 14: only ${s14.joins} moves could be made, under 6`);
+  if (!s14.lines) cannot('section 14: no deal line of a run in was seen, so the join measured nothing');
+  if (!s14.carried) cannot('section 14: no deal line of the departed career was carried, so the seedcarry control could not fire');
 }
 if (SECTIONS.has(5)) {
   const seeds = range(process.env.CM_WORLD_MOVES_SEEDS, [1, 2, 3]);
