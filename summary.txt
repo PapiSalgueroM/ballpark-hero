@@ -1,0 +1,5 @@
+build exit=0 31s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+fonts exit=0 0s | Prepared 9 declared font dependencies for local fulfillment.
+pressMarket exit=1 6s | Node.js v24.21.0
+career993-head exit=1 24s | nba-1440-keyboard: AssertionError [ERR_ASSERTION]: Whole save differs from the expected transition
+career993-base exit=1 56s | nba-1440-keyboard: AssertionError [ERR_ASSERTION]: Whole save differs from the expected transition
