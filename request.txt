@@ -1,0 +1,5 @@
+#!build
+#!playwright
+vitest-lib: node_modules/.bin/vitest run src/lib/clubManager --testTimeout=300000 --hookTimeout=120000
+vitest-test: node_modules/.bin/vitest run src/test/clubManager src/test/clubDetail src/test/manager src/test/dailyMenuResume src/test/cmTablesTruth --testTimeout=300000 --hookTimeout=120000
+walk1344: node scripts/playCmWorldMoves.mjs

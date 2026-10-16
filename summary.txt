@@ -1,0 +1,4 @@
+build exit=0 32s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+vitest-lib exit=0 42s |    Duration  41.38s (transform 4.29s, setup 1.57s, collect 11.83s, tests 76.98s, environment 11.86s, prepare 2.92s)
+walk1344 exit=0 43s | playCmWorldMoves: green, 22 checks held; pictures in /home/runner/work/_temp/rc-out/files/head
+vitest-test exit=0 136s |    Duration  135.64s (transform 8.57s, setup 2.44s, collect 34.51s, tests 222.30s, environment 18.09s, prepare 3.70s)
