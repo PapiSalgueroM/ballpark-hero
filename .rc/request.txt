@@ -1,0 +1,15 @@
+headsha: git log --oneline -3
+simSoccerSeasonHistory: node scripts/simSoccerSeasonHistory.mjs
+simSoccerAgentReview: node scripts/simSoccerAgentReview.mjs
+simSoccerFarewell: node scripts/simSoccerFarewell.mjs
+simSoccerInternationalReturn: node scripts/simSoccerInternationalReturn.mjs
+simCareerProgramme: CI=1 node scripts/simCareerProgramme.mjs
+simPhone2: node scripts/simPhone2.mjs
+simMoney: node scripts/simMoney.mjs
+anchors: node scripts/simHarnessAnchors.mjs
+rival: node scripts/simNoRivalNames.mjs
+trust: node scripts/simTrustCopy.mjs
+rival-proof: CI=1 VITEST_MAX_FORKS=1 VITEST_MIN_FORKS=1 SOCCER_RIVAL_WAGES_PROOF_OUT=career-rival-wages-artifacts/proof NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/soccerRivalWagesProof.mjs
+simSoccerContractMoves: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerContractMoves.mjs
+simSoccerVeteranOffers: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerVeteranOffers.mjs
+simCareerDilemmaTruth: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerDilemmaTruth.mjs
