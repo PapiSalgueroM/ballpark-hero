@@ -1,0 +1,19 @@
+save A (Real Madrid, season 1) at 390 by 844
+  PASS  (a) A 390: the market searched for Real Madrid lists 0 rows at Real Madrid
+  PASS  (c) A 390: typing the search moved the page by 0px
+  PASS  (b) A 390: the club's page names 0 of the old market's men at Real Madrid
+  PASS  (b) A 390: the club's page names 26 of the save's 26 men
+  PASS  (c) A 390: 0 page errors
+save B (Real Madrid, season 3) at 390 by 844
+  PASS  (a) B 390: the market searched for Real Madrid lists 0 rows at Real Madrid
+  PASS  (c) B 390: typing the search moved the page by 0px
+  PASS  (b) B 390: the club's page names 0 of the old market's men at Real Madrid
+  PASS  (b) B 390: the club's page names 22 of the save's 22 men
+  PASS  (c) B 390: 0 page errors
+save B (Real Madrid, season 3) at 1280 by 900
+  PASS  (a) B 1280: the market searched for Real Madrid lists 0 rows at Real Madrid
+  PASS  (c) B 1280: typing the search moved the page by 0px
+  PASS  (b) B 1280: the club's page names 0 of the old market's men at Real Madrid
+  PASS  (b) B 1280: the club's page names 22 of the save's 22 men
+  PASS  (c) B 1280: 0 page errors
+playCmOwnClubMarket: green. Saves A and B from before Release AZ list nobody at their own club on the market, the club's page names its squad and none of those men, and the page holds still (pictures in /home/runner/work/_temp/rc-out/files/1339)
