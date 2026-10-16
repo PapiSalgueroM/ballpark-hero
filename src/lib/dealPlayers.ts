@@ -1,4 +1,4 @@
-import { gameQueryClient as supabase } from '@/lib/gameQueryClient';
+import { supabase } from '@/integrations/supabase/client';
 
 export interface DealPlayer {
   name: string;
