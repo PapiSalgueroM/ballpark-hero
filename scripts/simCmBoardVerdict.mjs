@@ -61,7 +61,9 @@
      title     the title fleet with the rollover handed to both trees: every A or B stay opens Safe or more,
                every D or F under, every move at BOARD_FRESH; startNextSeason draws as the base and writes the
                same save but the opening wherever the kitty band did not bind. Prints the openings by fate and
-               by grade on both trees. Control noband.
+               by grade on both trees. Control noband. Review fix: every stay's opening equals the module's
+               sum recomputed from the season it had (the expectation of the club as played, before the
+               summer, and the review's hits weighed by the card's ids); controls played and weights.
      kitty     the tier 4 fleet (and the title fleet's rollovers when --part=title,kitty): the cheque never
                passes max(10, KITTY_TOP_SHARE x budget) and equals the old one inside the band; by tier, how
                often the band binds and the next budget over the club's on both trees. Control nokitty.
@@ -157,11 +159,20 @@ const clone = v => JSON.parse(JSON.stringify(v));
  *  bundles that played different histories number their youths differently and nothing else about them. */
 const canon = v => JSON.parse(JSON.stringify(v).replace(/youth-([a-z0-9]+)-\d+-(\d+)/g, 'youth-$1-#-$2'));
 const hashOf = v => createHash('sha256').update(JSON.stringify(v)).digest('hex').slice(0, 16);
-/** A fleet split for parallel runner lines: SHARD=k/n keeps every n-th entry from the k-th. */
-function shard(list) {
+/** A fleet split for parallel runner lines: SHARD=k/n keeps every n-th entry from the k-th. With `key`, every
+ *  n-th key from the k-th instead, so entries that share a key (a career's two policies) stay in one shard and
+ *  each shard holds stays and moves alike (review fix: a list alternating stay and first split by two put
+ *  every move in one shard). With no SHARD the list is unchanged either way. */
+function shard(list, key) {
   const m = /^(\d+)\/(\d+)$/.exec(process.env.SHARD ?? '');
-  return m ? list.filter((_, i) => i % Number(m[2]) === Number(m[1])) : list;
+  if (!m) return list;
+  if (!key) return list.filter((_, i) => i % Number(m[2]) === Number(m[1]));
+  const keys = [...new Set(list.map(key))];
+  const keep = new Set(keys.filter((_, i) => i % Number(m[2]) === Number(m[1])));
+  return list.filter(x => keep.has(key(x)));
 }
+/** The key that keeps a career's policies together in a shard. */
+const careerKey = r => `${r.seed}|${r.club}|${r.era ?? ''}`;
 /** A source file with its line endings read as LF, so one anchor matches on a Windows checkout too. */
 function readSource(tree, rel) {
   return readFileSync(path.join(tree, rel), 'utf8').replaceAll('\r\n', '\n');
@@ -235,7 +246,7 @@ function playCareer(cm, { club, era, seed, seasons, policy }, onRoll, hooks = {}
       leagueBefore: cm.careerLeagueOf(fin.state).id, def: defOf(cm, era, fin.state.clubName), size: table.length, last: table[table.length - 1],
       offerTiers: fin.summary.offers.map(o => defOf(cm, era, o.club)?.tier ?? 0) };
     const rollSeed = seed * 31 + season + 5;
-    hooks.beforeRoll?.(fin.state, take, rollSeed);
+    hooks.beforeRoll?.(fin.state, take, rollSeed, { def: ctx.def, era });
     const next = withSeed(rollSeed, () => cm.startNextSeason(fin.state, take));
     hooks.step?.(next);
     onRoll?.({ ...ctx, next, moving: next.clubName !== fin.state.clubName, leagueAfter: cm.careerLeagueOf(next).id,
@@ -527,7 +538,7 @@ function gradeFleet(cm) {
     for (const [club, era] of TITLE_FLEET) for (const policy of ['stay', 'first']) out.push({ club, era, seed, seasons: 2, policy });
     for (const c of [...promo, ...bottom]) out.push({ club: c.name, era: null, seed, seasons: 2, policy: 'stay' });
   }
-  return shard(out);
+  return shard(out, careerKey);
 }
 function baseVerdicts(baseText) {
   const from = "const VERDICTS: Record<'A' | 'B' | 'C' | 'D' | 'F', string[]> = ";
@@ -798,13 +809,26 @@ function freshSection(arm) {
 }
 /** Section stream for startNextSeason: both trees handed the same finished state, the same pick and draws. */
 function rollStreamHook(head, base, acc) {
-  return (finState, take, rollSeed) => {
+  return (finState, take, rollSeed, played = {}) => {
+    const playedDef = played.def;
     const S = clone(finState);
+    /* Review fix: a stay's opening recomputed from the season it had, read here before the rollover runs:
+       the expectation of the club as it was played (the def playCareer read before the summer moved
+       anybody), and the hits the review printed weighed by the ids on the card they were graded from (one
+       each when the two lists do not line up). Controls played and weights move one input each. */
+    const sum = S.pendingSummary;
+    const objs = sum?.objectives ?? [];
+    const cardIds = (S.boardObjectives ?? []).map(o => o.id);
+    const promiseNet = head.cm.objectiveStatuses(S).filter(x => x.objective.promised).reduce((n, x) => n + (x.status === 'done' ? 1 : -1), 0);
+    const recomputed = sum && head.bv ? head.bv.openingConfidence({ grade: sum.verdictGrade ?? 'C', playedExpectation: playedDef ? playedDef.expectation : sum.position,
+      finish: sum.position, objectives: objs.map((o, i) => ({ id: cardIds.length === objs.length ? cardIds[i] : undefined, hit: o.hit })), promiseNet }) : null;
     DRAWS.n = 0;
     globalThis.__cmAlloc = [];
     const h = withSeed(rollSeed, () => head.cm.startNextSeason(clone(S), take));
     const hn = DRAWS.n;
     const hAlloc = globalThis.__cmAlloc.pop();
+    /* Read while the head's registry is next season's: the club's expectation after the summer. */
+    const nextExp = head.cm.clubDefFor(h.clubName)?.expectation;
     /* startNextSeason reads the club it was played for BEFORE it registers anything, so the base is handed
        the finished season's memberships first, the way loading the save would. */
     base.cm.registerLeagueOverrides(S.leagueOverrides ?? null);
@@ -818,6 +842,15 @@ function rollStreamHook(head, base, acc) {
     /* The head goes on to play this rollover for real: its registry back to the season just finished. */
     head.cm.registerLeagueOverrides(S.leagueOverrides ?? null);
     const moving = h.clubName !== S.clubName;
+    if (!moving && recomputed !== null) {
+      acc.inputs ??= { n: 0, swapped: 0, weighted: 0, bad: [] };
+      acc.inputs.n += 1;
+      /* How many stays each input can bite on: the summer moved the club's expectation, or the card
+         weighs a hit other than one. */
+      if (playedDef && !played.era && nextExp !== undefined && nextExp !== playedDef.expectation) acc.inputs.swapped += 1;
+      if (cardIds.length === objs.length && cardIds.some(id => head.bv.objectiveWeight(id) !== 1)) acc.inputs.weighted += 1;
+      if (h.boardConfidence !== recomputed) acc.inputs.bad.push(`${S.clubName} season ${S.season}: opened at ${h.boardConfidence}, the season it had gives ${recomputed}`);
+    }
     acc.rows.push({ grade: S.pendingSummary?.verdictGrade ?? null, fate: S.pendingSummary?.fate ?? null, title: S.pendingSummary?.position === 1,
       moving, head: h.boardConfidence, base: b.boardConfidence, bound: h.budget !== b.budget, hAlloc, bAlloc, hBudget: h.budget, bBudget: b.budget, tier: head.cm.clubDefFor(h.clubName)?.tier ?? 0 });
     const tag = `${S.clubName} season ${S.season}${take ? ` to ${take}` : ''}`;
@@ -849,6 +882,9 @@ function titleChecks(arm, acc) {
   check(P, 'every A or B season opens the next at Safe or more', ab.length > 0 && under(ab, 'head') === 0, `${under(ab, 'head')} of ${ab.length} under`);
   check(P, 'every D or F season opens the next under Safe', df.every(r => r.head < bv.BOARD_SAFE_LINE), `${df.filter(r => r.head >= bv.BOARD_SAFE_LINE).length} of ${df.length} at Safe or more`);
   check(P, 'every move at the summer opens at BOARD_FRESH', moves.every(r => r.head === bv.BOARD_FRESH), `${moves.filter(r => r.head !== bv.BOARD_FRESH).length} of ${moves.length} do not`);
+  const inp = acc.inputs ?? { n: 0, swapped: 0, weighted: 0, bad: [] };
+  console.log(`  ${inp.n} stays recomputed from the season they had; ${inp.swapped} where the summer moved the club's expectation, ${inp.weighted} with a card that weighs a hit other than one`);
+  check(P, 'every stay opens at the sum of the season it had (the expectation as played, the card\'s weights)', inp.n > 0 && inp.bad.length === 0, inp.bad.length ? `${inp.bad.length}; first ${inp.bad[0]}` : '');
   check(P, 'startNextSeason draws the same number of times on head and base wherever the kitty band did not bind', acc.draws.length === 0, acc.draws.length ? `${acc.draws.length}; first ${acc.draws[0]}` : '');
   check(P, 'and writes the same save but for the opening', acc.diff.length === 0, acc.diff.length ? `${acc.diff.length}; first ${acc.diff[0]}` : `${acc.bound} rollovers where the band bound left to section kitty`);
 }
@@ -1014,7 +1050,7 @@ function legacyRuns(cm) {
       for (let seed = 0; seed < num('LEGACY_SEEDS', 5); seed++) for (const policy of ['stay', 'first']) runs.push({ club, era, seed, seasons: num('LEGACY_SEASONS', 3), policy });
     }
   }
-  return shard(runs);
+  return shard(runs, careerKey);
 }
 const strip = s => { const c = clone(s); delete c.matchRules; return c; };
 /** One career on one arm with matchRules 'base' set after every step that can drop it, and the fresh
@@ -1170,6 +1206,12 @@ const ENGINE_CONTROLS = {
   noband: { file: MODULE, patches: [["  if (i.grade === 'A' || i.grade === 'B') v = Math.max(v, BOARD_FRESH);", '  if (false) v = Math.max(v, BOARD_FRESH);'],
     ["  else if (i.grade === 'D' || i.grade === 'F') v = Math.min(v, BOARD_SAFE_LINE - 1);", '  else if (false) v = Math.min(v, BOARD_SAFE_LINE - 1);']] },
   hotstart: { file: HS_FILE, patches: [['  s.boardConfidence = LEGACY_BOARD_START;\n', '']] },
+  /* Review fix: the stay's two engine inputs, one control each (section title). played reads the club's
+     expectation after the summer swap; weights drops the card's ids, so every hit weighs one again. */
+  played: { file: ENGINE, patches: [["openingConfidence({ grade: summary?.verdictGrade ?? 'C', playedExpectation, finish: prevPos,",
+    "openingConfidence({ grade: summary?.verdictGrade ?? 'C', playedExpectation: club.expectation, finish: prevPos,"]] },
+  weights: { file: ENGINE, patches: [['objectives: objs.map((o, i) => ({ id: cardIds.length === objs.length ? cardIds[i] : undefined, hit: o.hit })), promiseNet });',
+    'objectives: objs.map((o, i) => ({ id: undefined, hit: o.hit })), promiseNet });']] },
   /* Review fix (advice 17): Hot Seat's takeover keeps the previous manager's failed lines again. */
   hscard: { file: HS_FILE, patches: [['    boardObjectives: legacySeason(chosen.state) ? chosen.state.boardObjectives : openObjectives(chosen.state),\n', '']] },
   prefilter: { file: ENGINE, patches: [['    const classic = shuffle(everyClub.filter(c => !vacancyNames.has(c.name) && c.tier < club.tier',
@@ -1265,7 +1307,7 @@ async function main() {
       head.cm.registerLeagueOverrides(null);
       const runs = [];
       for (let seed = 0; seed < num('TITLE_SEEDS', 10); seed++) for (const [club, era] of TITLE_FLEET) for (const policy of ['stay', 'first']) runs.push({ club, era, seed, seasons: num('TITLE_SEASONS', 3), policy });
-      for (const r of shard(runs)) playCareer(head.cm, r, null, { beforeRoll: rollStreamHook(head, base, acc) });
+      for (const r of shard(runs, careerKey)) playCareer(head.cm, r, null, { beforeRoll: rollStreamHook(head, base, acc) });
       titleChecks(head, acc);
       ARMS.titleRows = acc.rows;
     } else if (part === 'kitty') {
