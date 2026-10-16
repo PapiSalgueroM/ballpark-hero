@@ -1,0 +1,347 @@
+A. Landing: the first frame of the hub after a new job
+  PASS  A  liverpool-take-390: hub header top 12 px at scrollY 101 on the first hub frame (screen 844 px)
+  PASS  A  liverpool-skip-390: hub header top 12 px at scrollY 101 on the first hub frame (screen 844 px)
+  PASS  A  celta-skip-320: hub header top 12 px at scrollY 101 on the first hub frame (screen 640 px)
+  PASS  A  aberdeen-take-1280: hub header top 12 px at scrollY 113 on the first hub frame (screen 900 px)
+  PASS  A  aberdeen-skip-1280: hub header top 12 px at scrollY 113 on the first hub frame (screen 900 px)
+  PASS  A  everton2005-newyear-390: hub header top 12 px at scrollY 101 on the first hub frame (screen 844 px)
+  PASS  A  liverpool-autumn-320: hub header top 12 px at scrollY 101 on the first hub frame (screen 640 px)
+A. Landing: a new season pressed from the bottom of the season review
+  PASS  A  liverpool-season2-390: from scrollY 23391 at the review, hub header top 12 px on the first frame of season 2 (seed 21, 6 presses to the review)
+B. Calendar: day taps move nothing, one name for one setting
+  PASS  B  celta-320 first row, an in page click: the page moved 0 px (scrollY 683 to 683)
+  PASS  B  celta-320 first row, an in page click: the day strip is wholly on screen (556 to 628 of 640)
+  PASS  B  celta-320 first row, an in page click: the tapped day is still on screen (279 px)
+  PASS  B  celta-320 first row, an in page click: the strip names the day "Sat 1 Aug"
+  PASS  B  celta-320 last row, a real click: the page moved 0 px (scrollY 708 to 708)
+  PASS  B  celta-320 last row, a real click: the day strip is wholly on screen (526 to 628 of 640)
+  PASS  B  celta-320 last row, a real click: the tapped day is still on screen (494 px)
+  PASS  B  celta-320 last row, a real click: the strip names the day "Mon 31 Aug"
+  PASS  B  celta-320 a match day, a real click: the page moved 0 px (scrollY 708 to 708)
+  PASS  B  celta-320 a match day, a real click: the day strip is wholly on screen (478 to 628 of 640)
+  PASS  B  celta-320 a match day, a real click: the tapped day is still on screen (302 px)
+  PASS  B  celta-320 a match day, a real click: the strip names the day "Sat 8 Aug"
+  PASS  B  celta-320: the calendar's intensity buttons read Light, Normal, Double
+  PASS  B  celta-320: the calendar says neither Rest first nor Full training
+  PASS  B  celta-320: the training panel's intensity buttons read Light, Normal, Double
+  PASS  B  celta-320: the training panel says neither Rest first nor Full training
+  PASS  B  liverpool-390 first row, an in page click: the page moved 0 px (scrollY 270 to 270)
+  PASS  B  liverpool-390 first row, an in page click: the day strip is wholly on screen (760 to 832 of 844)
+  PASS  B  liverpool-390 first row, an in page click: the tapped day is still on screen (678 px)
+  PASS  B  liverpool-390 first row, an in page click: the strip names the day "Sat 1 Aug"
+  PASS  B  liverpool-390 last row, a real click: the page moved 0 px (scrollY 490 to 490)
+  PASS  B  liverpool-390 last row, a real click: the day strip is wholly on screen (732 to 832 of 844)
+  PASS  B  liverpool-390 last row, a real click: the tapped day is still on screen (698 px)
+  PASS  B  liverpool-390 last row, a real click: the strip names the day "Mon 31 Aug"
+  PASS  B  liverpool-390 a match day, a real click: the page moved 0 px (scrollY 490 to 490)
+  PASS  B  liverpool-390 a match day, a real click: the day strip is wholly on screen (698 to 832 of 844)
+  PASS  B  liverpool-390 a match day, a real click: the tapped day is still on screen (506 px)
+  PASS  B  liverpool-390 a match day, a real click: the strip names the day "Sat 8 Aug"
+  PASS  B  liverpool-390: the calendar's intensity buttons read Light, Normal, Double
+  PASS  B  liverpool-390: the calendar says neither Rest first nor Full training
+  PASS  B  liverpool-390: the training panel's intensity buttons read Light, Normal, Double
+  PASS  B  liverpool-390: the training panel says neither Rest first nor Full training
+  PASS  B  aberdeen-1280 first row, an in page click: the page moved 0 px (scrollY 113 to 113)
+  PASS  B  aberdeen-1280 first row, an in page click: the day strip is wholly on screen (816 to 888 of 900)
+  PASS  B  aberdeen-1280 first row, an in page click: the tapped day is still on screen (647 px)
+  PASS  B  aberdeen-1280 first row, an in page click: the strip names the day "Sat 1 Aug"
+  PASS  B  aberdeen-1280 last row, a real click: the page moved 0 px (scrollY 246 to 246)
+  PASS  B  aberdeen-1280 last row, a real click: the day strip is wholly on screen (788 to 888 of 900)
+  PASS  B  aberdeen-1280 last row, a real click: the tapped day is still on screen (754 px)
+  PASS  B  aberdeen-1280 last row, a real click: the strip names the day "Mon 31 Aug"
+  PASS  B  aberdeen-1280 a match day, a real click: the page moved 0 px (scrollY 246 to 246)
+  PASS  B  aberdeen-1280 a match day, a real click: the day strip is wholly on screen (770 to 888 of 900)
+  PASS  B  aberdeen-1280 a match day, a real click: the tapped day is still on screen (562 px)
+  PASS  B  aberdeen-1280 a match day, a real click: the strip names the day "Sat 8 Aug"
+  PASS  B  aberdeen-1280: the calendar's intensity buttons read Light, Normal, Double
+  PASS  B  aberdeen-1280: the calendar says neither Rest first nor Full training
+  PASS  B  aberdeen-1280: the training panel's intensity buttons read Light, Normal, Double
+  PASS  B  aberdeen-1280: the training panel says neither Rest first nor Full training
+  PASS  B  banner-390 first row, an in page click: the page moved 0 px (scrollY 270 to 270)
+  PASS  B  banner-390 first row, an in page click: the day strip is wholly on screen (611 to 683 of 844)
+  PASS  B  banner-390 first row, an in page click: the tapped day is still on screen (678 px)
+  PASS  B  banner-390 first row, an in page click: the strip names the day "Sat 1 Aug"
+  PASS  B  banner-390 first row, an in page click: the strip clears the cookie banner (strip bottom 683, banner top 695)
+  PASS  B  banner-390 last row, a real click: the page moved 0 px (scrollY 639 to 639)
+  PASS  B  banner-390 last row, a real click: the day strip is wholly on screen (583 to 683 of 844)
+  PASS  B  banner-390 last row, a real click: the tapped day is still on screen (549 px)
+  PASS  B  banner-390 last row, a real click: the strip names the day "Mon 31 Aug"
+  PASS  B  banner-390 last row, a real click: the strip clears the cookie banner (strip bottom 683, banner top 695)
+  PASS  B  banner-390 a match day, a real click: the page moved 0 px (scrollY 639 to 639)
+  PASS  B  banner-390 a match day, a real click: the day strip is wholly on screen (549 to 683 of 844)
+  PASS  B  banner-390 a match day, a real click: the tapped day is still on screen (357 px)
+  PASS  B  banner-390 a match day, a real click: the strip names the day "Sat 8 Aug"
+  PASS  B  banner-390 a match day, a real click: the strip clears the cookie banner (strip bottom 683, banner top 695)
+  PASS  B  banner-390: after the banner is answered the strip's own place is below the fold, so it rides the foot (own place top 804, drawn 698, of 844)
+  PASS  B  banner-390: the strip rides the foot once the banner is answered (bottom 832, foot 832, banner gone)
+C. Fit: sizes, controls, cut text, the help button, sideways scroll, layout shift
+  PASS  C  s320 Liverpool: the Board tile wraps to 1 and 1 line(s), 100px tall ("1 behind" over "Elite patience")
+  PASS  C  s320 Liverpool: the Inbox tile wraps to 1 and 1 line(s), 100px tall ("1 new" over "The board")
+  PASS  C  s320 Liverpool: the Calendar tile wraps to 1 and 1 line(s), 100px tall ("W 3-0" over "Next: Everton")
+  PASS  C  s320 Liverpool: the League tile wraps to 1 and 1 line(s), 100px tall ("#2" over "Form: W W W L W")
+  PASS  C  s320 Liverpool: the Cups tile wraps to 1 and 1 line(s), 116px tall ("Still alive" over "FA Cup")
+  PASS  C  s320 Liverpool: the Stats tile wraps to 1 and 2 line(s), 116px tall ("22 goals" over "Florian Wirtz leads with 5")
+  PASS  C  s320 Liverpool: the Finances tile wraps to 1 and 2 line(s), 136px tall ("+£63.9m" over "Kitty change, projected")
+  PASS  C  s320 Liverpool: the Facilities tile wraps to 2 and 2 line(s), 136px tall ("Level 9 · 8 · 8 · 8" over "Stadium, training, medical, more")
+  PASS  C  s320 Liverpool: the Staff tile wraps to 2 and 2 line(s), 136px tall ("Level 9 · 8 · 7 · 9" over "Attack, defence, keepers, scouts")
+  PASS  C  s320 Liverpool: the Skills tile wraps to 1 and 2 line(s), 136px tall ("Level 1" over "Seven skill trees to grow")
+  PASS  C  s320 Liverpool: the Options tile wraps to 1 and 2 line(s), 116px tall ("£ · Normal" over "Currency, nation job, haggling")
+  PASS  C  s320 Liverpool: the Manager tile wraps to 1 and 1 line(s), 116px tall ("8W 2D 2L" over "67% win rate")
+  PASS  C  s320 Liverpool: the Treatment tile wraps to 1 and 1 line(s), 100px tall ("All fit" over "No injuries or bans")
+  PASS  C  s320 Liverpool: the Rival watch tile wraps to 1 and 1 line(s), 100px tall ("Everton" over "They sit #3")
+  PASS  C  s320 Liverpool: the Press room tile wraps to 2 and 2 line(s), 136px tall ("They want a word" over "One question, one tap")
+  PASS  C  s320 Liverpool: the Dressing room tile wraps to 1 and 1 line(s), 136px tall ("3 unhappy" over "Jeremie Frimpong")
+  PASS  C  s320 Liverpool: the Academy tile wraps to 1 and 2 line(s), 136px tall ("Nobody yet" over "Recruitment 12/20 · 0 scouting")
+  PASS  C  s320 Liverpool: the Training tile wraps to 2 and 2 line(s), 136px tall ("Normal · Balanced" over "12 players still improving")
+  PASS  C  s320 Liverpool: the Market tile wraps to 1 and 2 line(s), 116px tall ("Window shut" over "Latest transfers inside")
+  PASS  C  s320 Liverpool: the Manager tile's "8W 2D 2L" is the record the Manager panel prints
+  PASS  C  s320 Liverpool: the Inbox tile says "1 new" over "The board", and the panel holds something
+  PASS  C  s320 Liverpool: the Inbox panel names "The board" too (its card headings are drawn uppercase, so read without case)
+  PASS  C  s320 Liverpool: the Inbox tile's count reads "1 new"
+  PASS  C  s320 Liverpool: the Finances tile's +£63.9m is the desk's Kitty change row (+£63.9m)
+  PASS  C  s320 Liverpool era: no sideways page scroll
+  INFO  C  s320 Liverpool era: 23 text elements under 12px, help overlaps 0
+  PASS  C  s320 Liverpool nation: no sideways page scroll
+  INFO  C  s320 Liverpool nation: 54 text elements under 12px, help overlaps 0
+  PASS  C  s320 Liverpool league: no sideways page scroll
+  INFO  C  s320 Liverpool league: 15 text elements under 12px, help overlaps 0
+  PASS  C  s320 Liverpool team: no sideways page scroll
+  INFO  C  s320 Liverpool team: 74 text elements under 12px, help overlaps 0
+  PASS  C  s320 Liverpool dugout: no sideways page scroll
+  INFO  C  s320 Liverpool dugout: 84 text elements under 12px, help overlaps 0
+  PASS  C  s320 Liverpool hub: no sideways page scroll
+  PASS  C  s320 Liverpool hub: the help button covers 0 piece(s) of header text
+  INFO  C  s320 Liverpool hub: 34 text elements under 12px, help overlaps 0
+  PASS  C  s320 Liverpool hub: changed text at 12px or more, controls at 44px or more (help button 44x44, Managers button 59x44, meter button 140x44, meter button 140x44)
+  PASS  C  s320 Liverpool calendar: no sideways page scroll
+  INFO  C  s320 Liverpool calendar: 100 text elements under 12px, help overlaps 0
+  PASS  C  s320 Liverpool calendar: changed text at 12px or more, controls at 44px or more (previous month 44x44, next month 44x44, intensity button 83x171, intensity button 83x171, intensity button 83x171, Club home 83x44)
+  INFO  C  s320 Liverpool calendar: a calendar day cell is 36x58 px (a seventh of the grid, 46px tall by rule)
+  PASS  C  s320 Liverpool training: no sideways page scroll
+  INFO  C  s320 Liverpool training: 57 text elements under 12px, help overlaps 0
+  PASS  C  s320 Liverpool training: changed text at 12px or more, controls at 44px or more (Club home 83x44)
+  PASS  C  s320 Liverpool hub: layout shift after the first hub frame 0
+  INFO  C  s320 Liverpool tile Board: 100px on head ("1 behind" over "Elite patience")
+  INFO  C  s320 Liverpool tile Inbox: 100px on head ("1 new" over "The board")
+  INFO  C  s320 Liverpool tile Calendar: 100px on head ("W 3-0" over "Next: Everton")
+  INFO  C  s320 Liverpool tile League: 100px on head ("#2" over "Form: W W W L W")
+  INFO  C  s320 Liverpool tile Cups: 116px on head ("Still alive" over "FA Cup")
+  INFO  C  s320 Liverpool tile Stats: 116px on head ("22 goals" over "Florian Wirtz leads with 5")
+  INFO  C  s320 Liverpool tile Finances: 136px on head ("+£63.9m" over "Kitty change, projected")
+  INFO  C  s320 Liverpool tile Facilities: 136px on head ("Level 9 · 8 · 8 · 8" over "Stadium, training, medical, more")
+  INFO  C  s320 Liverpool tile Staff: 136px on head ("Level 9 · 8 · 7 · 9" over "Attack, defence, keepers, scouts")
+  INFO  C  s320 Liverpool tile Skills: 136px on head ("Level 1" over "Seven skill trees to grow")
+  INFO  C  s320 Liverpool tile Options: 116px on head ("£ · Normal" over "Currency, nation job, haggling")
+  INFO  C  s320 Liverpool tile Manager: 116px on head ("8W 2D 2L" over "67% win rate")
+  INFO  C  s320 Liverpool tile Treatment: 100px on head ("All fit" over "No injuries or bans")
+  INFO  C  s320 Liverpool tile Rival watch: 100px on head ("Everton" over "They sit #3")
+  INFO  C  s320 Liverpool tile Press room: 136px on head ("They want a word" over "One question, one tap")
+  INFO  C  s320 Liverpool tile Dressing room: 136px on head ("3 unhappy" over "Jeremie Frimpong")
+  INFO  C  s320 Liverpool tile Academy: 136px on head ("Nobody yet" over "Recruitment 12/20 · 0 scouting")
+  INFO  C  s320 Liverpool tile Training: 136px on head ("Normal · Balanced" over "12 players still improving")
+  INFO  C  s320 Liverpool tile Market: 116px on head ("Window shut" over "Latest transfers inside")
+  PASS  C  s390 Liverpool: the Board tile wraps to 1 and 1 line(s), 100px tall ("2 behind" over "Elite patience")
+  PASS  C  s390 Liverpool: the Inbox tile wraps to 1 and 1 line(s), 100px tall ("All quiet" over "No messages yet")
+  PASS  C  s390 Liverpool: the Calendar tile wraps to 1 and 1 line(s), 100px tall ("Season start" over "Next: Newcastle")
+  PASS  C  s390 Liverpool: the League tile wraps to 1 and 1 line(s), 100px tall ("Not started" over "Premier League")
+  PASS  C  s390 Liverpool: the Cups tile wraps to 1 and 1 line(s), 100px tall ("Still alive" over "FA Cup")
+  PASS  C  s390 Liverpool: the Stats tile wraps to 1 and 1 line(s), 100px tall ("0 goals" over "Goals, assists, ratings")
+  PASS  C  s390 Liverpool: the Finances tile wraps to 1 and 1 line(s), 116px tall ("+£63.4m" over "Kitty change, projected")
+  PASS  C  s390 Liverpool: the Facilities tile wraps to 1 and 2 line(s), 116px tall ("Level 9 · 8 · 8 · 8" over "Stadium, training, medical, more")
+  PASS  C  s390 Liverpool: the Staff tile wraps to 1 and 2 line(s), 116px tall ("Level 9 · 8 · 7 · 9" over "Attack, defence, keepers, scouts")
+  PASS  C  s390 Liverpool: the Skills tile wraps to 1 and 1 line(s), 116px tall ("Level 1" over "Seven skill trees to grow")
+  PASS  C  s390 Liverpool: the Options tile wraps to 1 and 2 line(s), 116px tall ("£ · Normal" over "Currency, nation job, haggling")
+  PASS  C  s390 Liverpool: the Manager tile wraps to 1 and 1 line(s), 116px tall ("0W 0D 0L" over "New in the job")
+  PASS  C  s390 Liverpool: the Treatment tile wraps to 1 and 1 line(s), 100px tall ("All fit" over "No injuries or bans")
+  PASS  C  s390 Liverpool: the Rival watch tile wraps to 1 and 1 line(s), 100px tall ("Everton" over "They sit #9")
+  PASS  C  s390 Liverpool: the Press room tile wraps to 2 and 1 line(s), 120px tall ("Nobody has an opinion" over "0 fronted up this career")
+  PASS  C  s390 Liverpool: the Dressing room tile wraps to 1 and 1 line(s), 120px tall ("Word kept" over "Set everyone a role")
+  PASS  C  s390 Liverpool: the Academy tile wraps to 1 and 2 line(s), 116px tall ("Nobody yet" over "Recruitment 12/20 · 0 scouting")
+  PASS  C  s390 Liverpool: the Training tile wraps to 1 and 2 line(s), 116px tall ("Normal · Balanced" over "12 players still improving")
+  PASS  C  s390 Liverpool: the Market tile wraps to 1 and 1 line(s), 100px tall ("Window OPEN" over "2 bids for your players")
+  PASS  C  s390 Liverpool: the Manager tile's "0W 0D 0L" is the record the Manager panel prints
+  PASS  C  s390 Liverpool: the Inbox tile says "All quiet" over "No messages yet", and the panel is empty
+  PASS  C  s390 Liverpool: the Inbox tile's count reads "All quiet"
+  PASS  C  s390 Liverpool: at week 0 the League tile reads "Not started", not a rank, under "Season not started"
+  PASS  C  s390 Liverpool: the Finances tile's +£63.4m is the desk's Kitty change row (+£63.4m)
+  PASS  C  s390 Liverpool era: no sideways page scroll
+  INFO  C  s390 Liverpool era: 23 text elements under 12px, help overlaps 0
+  PASS  C  s390 Liverpool nation: no sideways page scroll
+  INFO  C  s390 Liverpool nation: 54 text elements under 12px, help overlaps 0
+  PASS  C  s390 Liverpool league: no sideways page scroll
+  INFO  C  s390 Liverpool league: 15 text elements under 12px, help overlaps 0
+  PASS  C  s390 Liverpool team: no sideways page scroll
+  INFO  C  s390 Liverpool team: 74 text elements under 12px, help overlaps 0
+  PASS  C  s390 Liverpool dugout: no sideways page scroll
+  INFO  C  s390 Liverpool dugout: 84 text elements under 12px, help overlaps 0
+  PASS  C  s390 Liverpool hub: no sideways page scroll
+  PASS  C  s390 Liverpool hub: the help button covers 0 piece(s) of header text
+  INFO  C  s390 Liverpool hub: 34 text elements under 12px, help overlaps 0
+  PASS  C  s390 Liverpool hub: changed text at 12px or more, controls at 44px or more (help button 44x44, Managers button 59x44, meter button 175x44, meter button 175x44)
+  PASS  C  s390 Liverpool calendar: no sideways page scroll
+  INFO  C  s390 Liverpool calendar: 97 text elements under 12px, help overlaps 0
+  PASS  C  s390 Liverpool calendar: changed text at 12px or more, controls at 44px or more (previous month 44x44, next month 44x44, Sim to 139x44, intensity button 107x141, intensity button 107x141, intensity button 107x141, Club home 83x44)
+  INFO  C  s390 Liverpool calendar: a calendar day cell is 46x46 px (a seventh of the grid, 46px tall by rule)
+  PASS  C  s390 Liverpool training: no sideways page scroll
+  INFO  C  s390 Liverpool training: 57 text elements under 12px, help overlaps 0
+  PASS  C  s390 Liverpool training: changed text at 12px or more, controls at 44px or more (Club home 83x44)
+  PASS  C  s390 Liverpool hub: layout shift after the first hub frame 0
+  INFO  C  s390 Liverpool tile Board: 100px on head ("2 behind" over "Elite patience")
+  INFO  C  s390 Liverpool tile Inbox: 100px on head ("All quiet" over "No messages yet")
+  INFO  C  s390 Liverpool tile Calendar: 100px on head ("Season start" over "Next: Newcastle")
+  INFO  C  s390 Liverpool tile League: 100px on head ("Not started" over "Premier League")
+  INFO  C  s390 Liverpool tile Cups: 100px on head ("Still alive" over "FA Cup")
+  INFO  C  s390 Liverpool tile Stats: 100px on head ("0 goals" over "Goals, assists, ratings")
+  INFO  C  s390 Liverpool tile Finances: 116px on head ("+£63.4m" over "Kitty change, projected")
+  INFO  C  s390 Liverpool tile Facilities: 116px on head ("Level 9 · 8 · 8 · 8" over "Stadium, training, medical, more")
+  INFO  C  s390 Liverpool tile Staff: 116px on head ("Level 9 · 8 · 7 · 9" over "Attack, defence, keepers, scouts")
+  INFO  C  s390 Liverpool tile Skills: 116px on head ("Level 1" over "Seven skill trees to grow")
+  INFO  C  s390 Liverpool tile Options: 116px on head ("£ · Normal" over "Currency, nation job, haggling")
+  INFO  C  s390 Liverpool tile Manager: 116px on head ("0W 0D 0L" over "New in the job")
+  INFO  C  s390 Liverpool tile Treatment: 100px on head ("All fit" over "No injuries or bans")
+  INFO  C  s390 Liverpool tile Rival watch: 100px on head ("Everton" over "They sit #9")
+  INFO  C  s390 Liverpool tile Press room: 120px on head ("Nobody has an opinion" over "0 fronted up this career")
+  INFO  C  s390 Liverpool tile Dressing room: 120px on head ("Word kept" over "Set everyone a role")
+  INFO  C  s390 Liverpool tile Academy: 116px on head ("Nobody yet" over "Recruitment 12/20 · 0 scouting")
+  INFO  C  s390 Liverpool tile Training: 116px on head ("Normal · Balanced" over "12 players still improving")
+  INFO  C  s390 Liverpool tile Market: 100px on head ("Window OPEN" over "2 bids for your players")
+  PASS  C  s1280 Celta Vigo: the Board tile wraps to 1 and 1 line(s), 100px tall ("3 behind" over "Underdogs patience")
+  PASS  C  s1280 Celta Vigo: the Inbox tile wraps to 1 and 1 line(s), 100px tall ("1 new" over "The head coach")
+  PASS  C  s1280 Celta Vigo: the Calendar tile wraps to 1 and 1 line(s), 100px tall ("L 0-1" over "See the schedule")
+  PASS  C  s1280 Celta Vigo: the League tile wraps to 1 and 1 line(s), 100px tall ("#15" over "Form: W D L W L")
+  PASS  C  s1280 Celta Vigo: the Cups tile wraps to 1 and 1 line(s), 100px tall ("Still alive" over "Copa del Rey")
+  PASS  C  s1280 Celta Vigo: the Stats tile wraps to 1 and 1 line(s), 100px tall ("18 goals" over "Williot Swedberg leads with 4")
+  PASS  C  s1280 Celta Vigo: the Finances tile wraps to 1 and 1 line(s), 100px tall ("+£6.7m" over "Kitty change, projected")
+  PASS  C  s1280 Celta Vigo: the Facilities tile wraps to 1 and 1 line(s), 100px tall ("Level 3 · 2 · 2 · 2" over "Stadium, training, medical, more")
+  PASS  C  s1280 Celta Vigo: the Staff tile wraps to 1 and 1 line(s), 100px tall ("Level 3 · 3 · 2 · 3" over "Attack, defence, keepers, scouts")
+  PASS  C  s1280 Celta Vigo: the Skills tile wraps to 1 and 1 line(s), 100px tall ("Level 1" over "Seven skill trees to grow")
+  PASS  C  s1280 Celta Vigo: the Options tile wraps to 1 and 1 line(s), 100px tall ("£ · Normal" over "Currency, nation job, haggling")
+  PASS  C  s1280 Celta Vigo: the Manager tile wraps to 1 and 1 line(s), 100px tall ("6W 7D 8L" over "29% win rate")
+  PASS  C  s1280 Celta Vigo: the Treatment tile wraps to 1 and 1 line(s), 100px tall ("All fit" over "No injuries or bans")
+  PASS  C  s1280 Celta Vigo: the Rival watch tile wraps to 1 and 1 line(s), 100px tall ("Valencia" over "They sit #12")
+  PASS  C  s1280 Celta Vigo: the Press room tile wraps to 1 and 1 line(s), 100px tall ("Nobody has an opinion" over "0 fronted up this career")
+  PASS  C  s1280 Celta Vigo: the Dressing room tile wraps to 1 and 1 line(s), 100px tall ("2 unhappy" over "Altay Bayındır")
+  PASS  C  s1280 Celta Vigo: the Academy tile wraps to 1 and 1 line(s), 100px tall ("Nobody yet" over "Recruitment 5/20 · 0 scouting")
+  PASS  C  s1280 Celta Vigo: the Training tile wraps to 1 and 1 line(s), 100px tall ("Normal · Balanced" over "11 players still improving")
+  PASS  C  s1280 Celta Vigo: the Market tile wraps to 1 and 1 line(s), 100px tall ("Window shut" over "Latest transfers inside")
+  PASS  C  s1280 Celta Vigo: the Manager tile's "6W 7D 8L" is the record the Manager panel prints
+  PASS  C  s1280 Celta Vigo: the Inbox tile says "1 new" over "The head coach", and the panel holds something
+  PASS  C  s1280 Celta Vigo: the Inbox panel names "The head coach" too (its card headings are drawn uppercase, so read without case)
+  PASS  C  s1280 Celta Vigo: the Inbox tile's count reads "1 new"
+  PASS  C  s1280 Celta Vigo: the Finances tile's +£6.7m is the desk's Kitty change row (+£6.7m)
+  PASS  C  s1280 Celta Vigo era: no sideways page scroll
+  INFO  C  s1280 Celta Vigo era: 25 text elements under 12px, help overlaps 0
+  PASS  C  s1280 Celta Vigo nation: no sideways page scroll
+  INFO  C  s1280 Celta Vigo nation: 56 text elements under 12px, help overlaps 0
+  PASS  C  s1280 Celta Vigo league: no sideways page scroll
+  INFO  C  s1280 Celta Vigo league: 17 text elements under 12px, help overlaps 0
+  PASS  C  s1280 Celta Vigo team: no sideways page scroll
+  INFO  C  s1280 Celta Vigo team: 97 text elements under 12px, help overlaps 0
+  PASS  C  s1280 Celta Vigo dugout: no sideways page scroll
+  INFO  C  s1280 Celta Vigo dugout: 86 text elements under 12px, help overlaps 0
+  PASS  C  s1280 Celta Vigo hub: no sideways page scroll
+  PASS  C  s1280 Celta Vigo hub: the help button covers 0 piece(s) of header text
+  INFO  C  s1280 Celta Vigo hub: 28 text elements under 12px, help overlaps 0
+  PASS  C  s1280 Celta Vigo hub: changed text at 12px or more, controls at 44px or more (help button 44x44, Managers button 59x44, meter button 188x44, meter button 188x44)
+  PASS  C  s1280 Celta Vigo calendar: no sideways page scroll
+  INFO  C  s1280 Celta Vigo calendar: 94 text elements under 12px, help overlaps 0
+  PASS  C  s1280 Celta Vigo calendar: changed text at 12px or more, controls at 44px or more (previous month 44x44, next month 44x44, Sim to 134x44, intensity button 275x66, intensity button 275x66, intensity button 275x66, Club home 83x44)
+  INFO  C  s1280 Celta Vigo calendar: a calendar day cell is 118x46 px (a seventh of the grid, 46px tall by rule)
+  PASS  C  s1280 Celta Vigo training: no sideways page scroll
+  INFO  C  s1280 Celta Vigo training: 51 text elements under 12px, help overlaps 0
+  PASS  C  s1280 Celta Vigo training: changed text at 12px or more, controls at 44px or more (Club home 83x44)
+  PASS  C  s1280 Celta Vigo hub: layout shift after the first hub frame 0
+  INFO  C  s1280 Celta Vigo tile Board: 100px on head ("3 behind" over "Underdogs patience")
+  INFO  C  s1280 Celta Vigo tile Inbox: 100px on head ("1 new" over "The head coach")
+  INFO  C  s1280 Celta Vigo tile Calendar: 100px on head ("L 0-1" over "See the schedule")
+  INFO  C  s1280 Celta Vigo tile League: 100px on head ("#15" over "Form: W D L W L")
+  INFO  C  s1280 Celta Vigo tile Cups: 100px on head ("Still alive" over "Copa del Rey")
+  INFO  C  s1280 Celta Vigo tile Stats: 100px on head ("18 goals" over "Williot Swedberg leads with 4")
+  INFO  C  s1280 Celta Vigo tile Finances: 100px on head ("+£6.7m" over "Kitty change, projected")
+  INFO  C  s1280 Celta Vigo tile Facilities: 100px on head ("Level 3 · 2 · 2 · 2" over "Stadium, training, medical, more")
+  INFO  C  s1280 Celta Vigo tile Staff: 100px on head ("Level 3 · 3 · 2 · 3" over "Attack, defence, keepers, scouts")
+  INFO  C  s1280 Celta Vigo tile Skills: 100px on head ("Level 1" over "Seven skill trees to grow")
+  INFO  C  s1280 Celta Vigo tile Options: 100px on head ("£ · Normal" over "Currency, nation job, haggling")
+  INFO  C  s1280 Celta Vigo tile Manager: 100px on head ("6W 7D 8L" over "29% win rate")
+  INFO  C  s1280 Celta Vigo tile Treatment: 100px on head ("All fit" over "No injuries or bans")
+  INFO  C  s1280 Celta Vigo tile Rival watch: 100px on head ("Valencia" over "They sit #12")
+  INFO  C  s1280 Celta Vigo tile Press room: 100px on head ("Nobody has an opinion" over "0 fronted up this career")
+  INFO  C  s1280 Celta Vigo tile Dressing room: 100px on head ("2 unhappy" over "Altay Bayındır")
+  INFO  C  s1280 Celta Vigo tile Academy: 100px on head ("Nobody yet" over "Recruitment 5/20 · 0 scouting")
+  INFO  C  s1280 Celta Vigo tile Training: 100px on head ("Normal · Balanced" over "11 players still improving")
+  INFO  C  s1280 Celta Vigo tile Market: 100px on head ("Window shut" over "Latest transfers inside")
+F. Reduced motion and the help
+  PASS  F  s320: nothing animates on the hub under reduced motion after hovering two tiles (none running)
+  PASS  F  s320: the help opens with its rules (43637 characters)
+  PASS  F  s320: the help names none of the retired words
+  PASS  F  s390: nothing animates on the hub under reduced motion after hovering two tiles (none running)
+  PASS  F  s390: the help opens with its rules (43637 characters)
+  PASS  F  s390: the help names none of the retired words
+  PASS  F  s1280: nothing animates on the hub under reduced motion after hovering two tiles (none running)
+  PASS  F  s1280: the help opens with its rules (43637 characters)
+  PASS  F  s1280: the help names none of the retired words
+E. Old saves resume to a whole hub
+  PASS  E  cmOldSave1052Fixture.json: the hub header is on screen on the first frame after Resume (top 113 px)
+  PASS  E  cmOldSave1052Fixture.json: the hub draws 1185 characters and none of undefined, NaN, [object Object], Infinity
+  PASS  E  cmOldSave1052Fixture.json at 390: the Board tile wraps to 1 and 1 line(s), 116px tall ("5 behind" over "Underdogs patience")
+  PASS  E  cmOldSave1052Fixture.json at 390: the Inbox tile wraps to 1 and 2 line(s), 116px tall ("4 new" over "The community department")
+  PASS  E  cmOldSave1052Fixture.json at 390: the Calendar tile wraps to 1 and 1 line(s), 100px tall ("D 1-1" over "Next: Real Sociedad")
+  PASS  E  cmOldSave1052Fixture.json at 390: the League tile wraps to 1 and 1 line(s), 100px tall ("#7" over "Form: L W D D D")
+  PASS  E  cmOldSave1052Fixture.json at 390: the Cups tile wraps to 1 and 1 line(s), 116px tall ("Knocked out" over "Copa del Rey")
+  PASS  E  cmOldSave1052Fixture.json at 390: the Stats tile wraps to 1 and 2 line(s), 116px tall ("49 goals" over "Isaac Romero leads with 13")
+  PASS  E  cmOldSave1052Fixture.json at 390: the Finances tile wraps to 1 and 1 line(s), 116px tall ("+£6.6m" over "Kitty change, projected")
+  PASS  E  cmOldSave1052Fixture.json at 390: the Facilities tile wraps to 1 and 2 line(s), 116px tall ("Level 3 · 2 · 2 · 2" over "Stadium, training, medical, more")
+  PASS  E  cmOldSave1052Fixture.json at 390: the Staff tile wraps to 1 and 2 line(s), 116px tall ("Level 2 · 1 · 3 · 1" over "Attack, defence, keepers, scouts")
+  PASS  E  cmOldSave1052Fixture.json at 390: the Skills tile wraps to 1 and 1 line(s), 116px tall ("Level 1" over "Seven skill trees to grow")
+  PASS  E  cmOldSave1052Fixture.json at 390: the Options tile wraps to 1 and 2 line(s), 116px tall ("£ · Normal" over "Currency, nation job, haggling")
+  PASS  E  cmOldSave1052Fixture.json at 390: the Manager tile wraps to 1 and 1 line(s), 116px tall ("15W 8D 12L" over "43% win rate")
+  PASS  E  cmOldSave1052Fixture.json at 390: the Treatment tile wraps to 1 and 1 line(s), 100px tall ("1 out" over "Kike Salas")
+  PASS  E  cmOldSave1052Fixture.json at 390: the Rival watch tile wraps to 1 and 1 line(s), 100px tall ("Real Betis" over "They sit #5")
+  PASS  E  cmOldSave1052Fixture.json at 390: the Press room tile wraps to 1 and 1 line(s), 100px tall ("They want a word" over "One question, one tap")
+  PASS  E  cmOldSave1052Fixture.json at 390: the Dressing room tile wraps to 1 and 1 line(s), 100px tall ("3 unhappy" over "Neal Maupay")
+  PASS  E  cmOldSave1052Fixture.json at 390: the Academy tile wraps to 1 and 2 line(s), 116px tall ("Nobody yet" over "Recruitment 7/20 · 0 scouting")
+  PASS  E  cmOldSave1052Fixture.json at 390: the Training tile wraps to 1 and 2 line(s), 116px tall ("Normal · Balanced" over "11 players still improving")
+  PASS  E  cmOldSave1052Fixture.json at 390: the Market tile wraps to 1 and 1 line(s), 100px tall ("Window shut" over "Latest transfers inside")
+  PASS  E  cmOldSave1052Fixture.json at 390: the Manager tile's "15W 8D 12L" is the record the Manager panel prints
+  PASS  E  cmOldSave1052Fixture.json at 390: the Inbox tile says "4 new" over "The community department", and the panel holds something
+  PASS  E  cmOldSave1052Fixture.json at 390: the Inbox panel names "The community department" too (its card headings are drawn uppercase, so read without case)
+  PASS  E  cmOldSave1052Fixture.json at 390: the Inbox tile's count reads "4 new"
+  PASS  E  cmOldSave1052Fixture.json at 390: the Finances tile's +£6.6m is the desk's Kitty change row (+£6.6m)
+  PASS  E  cmSecondTierOldSaveFixture.json: the hub header is on screen on the first frame after Resume (top 113 px)
+  PASS  E  cmSecondTierOldSaveFixture.json: the hub draws 1174 characters and none of undefined, NaN, [object Object], Infinity
+  PASS  E  cmSecondTierOldSaveFixture.json at 390: the Board tile wraps to 1 and 1 line(s), 100px tall ("4 behind" over "Underdogs patience")
+  PASS  E  cmSecondTierOldSaveFixture.json at 390: the Inbox tile wraps to 1 and 1 line(s), 100px tall ("6 new" over "The head coach")
+  PASS  E  cmSecondTierOldSaveFixture.json at 390: the Calendar tile wraps to 1 and 1 line(s), 100px tall ("L 0-2" over "Next: Sevilla")
+  PASS  E  cmSecondTierOldSaveFixture.json at 390: the League tile wraps to 1 and 1 line(s), 100px tall ("#8" over "Form: W W W W L")
+  PASS  E  cmSecondTierOldSaveFixture.json at 390: the Cups tile wraps to 1 and 1 line(s), 100px tall ("Knocked out" over "Copa del Rey")
+  PASS  E  cmSecondTierOldSaveFixture.json at 390: the Stats tile wraps to 1 and 1 line(s), 100px tall ("54 goals" over "Hugo Duro leads with 16")
+  PASS  E  cmSecondTierOldSaveFixture.json at 390: the Finances tile wraps to 1 and 1 line(s), 116px tall ("+£6.6m" over "Kitty change, projected")
+  PASS  E  cmSecondTierOldSaveFixture.json at 390: the Facilities tile wraps to 1 and 2 line(s), 116px tall ("Level 3 · 2 · 2 · 2" over "Stadium, training, medical, more")
+  PASS  E  cmSecondTierOldSaveFixture.json at 390: the Staff tile wraps to 1 and 2 line(s), 116px tall ("Level 1 · 1 · 3 · 3" over "Attack, defence, keepers, scouts")
+  PASS  E  cmSecondTierOldSaveFixture.json at 390: the Skills tile wraps to 1 and 1 line(s), 116px tall ("Level 1" over "Seven skill trees to grow")
+  PASS  E  cmSecondTierOldSaveFixture.json at 390: the Options tile wraps to 1 and 2 line(s), 116px tall ("£ · Normal" over "Currency, nation job, haggling")
+  PASS  E  cmSecondTierOldSaveFixture.json at 390: the Manager tile wraps to 1 and 1 line(s), 116px tall ("15W 6D 15L" over "42% win rate")
+  PASS  E  cmSecondTierOldSaveFixture.json at 390: the Treatment tile wraps to 1 and 1 line(s), 100px tall ("1 out" over "Arnau Martínez")
+  PASS  E  cmSecondTierOldSaveFixture.json at 390: the Rival watch tile wraps to 1 and 1 line(s), 100px tall ("Levante" over "They sit #10")
+  PASS  E  cmSecondTierOldSaveFixture.json at 390: the Press room tile wraps to 1 and 1 line(s), 100px tall ("They want a word" over "One question, one tap")
+  PASS  E  cmSecondTierOldSaveFixture.json at 390: the Dressing room tile wraps to 1 and 1 line(s), 100px tall ("3 want out" over "Filip Ugrinic")
+  PASS  E  cmSecondTierOldSaveFixture.json at 390: the Academy tile wraps to 1 and 2 line(s), 116px tall ("Nobody yet" over "Recruitment 5/20 · 0 scouting")
+  PASS  E  cmSecondTierOldSaveFixture.json at 390: the Training tile wraps to 1 and 1 line(s), 116px tall ("Normal · Balanced" over "7 players still improving")
+  PASS  E  cmSecondTierOldSaveFixture.json at 390: the Market tile wraps to 1 and 1 line(s), 100px tall ("Window shut" over "Latest transfers inside")
+  PASS  E  cmSecondTierOldSaveFixture.json at 390: the Manager tile's "15W 6D 15L" is the record the Manager panel prints
+  PASS  E  cmSecondTierOldSaveFixture.json at 390: the Inbox tile says "6 new" over "The head coach", and the panel holds something
+  PASS  E  cmSecondTierOldSaveFixture.json at 390: the Inbox panel names "The head coach" too (its card headings are drawn uppercase, so read without case)
+  PASS  E  cmSecondTierOldSaveFixture.json at 390: the Inbox tile's count reads "6 new"
+  PASS  E  cmSecondTierOldSaveFixture.json at 390: the Finances tile's +£6.6m is the desk's Kitty change row (+£6.6m)
+  PASS  E  cmOldSave1052Fixture.json edge-320: the meters' chunk was still loading on the first hub frame
+  PASS  E  cmOldSave1052Fixture.json edge-320: the board meter reads "Board One bad week from the sack"
+  PASS  E  cmOldSave1052Fixture.json edge-320: nothing on the hub shifts when the meters land late (layout shift 0.0000, strip 60px in a 60px slot)
+  PASS  E  cmOldSave1052Fixture.json edge-390: the meters' chunk was still loading on the first hub frame
+  PASS  E  cmOldSave1052Fixture.json edge-390: the board meter reads "Board One bad week from the sack"
+  PASS  E  cmOldSave1052Fixture.json edge-390: nothing on the hub shifts when the meters land late (layout shift 0.0000, strip 60px in a 60px slot)
+  PASS  E  cmOldSave1052Fixture.json edge-1280: the meters' chunk was still loading on the first hub frame
+  PASS  E  cmOldSave1052Fixture.json edge-1280: the board meter reads "Board One bad week from the sack"
+  PASS  E  cmOldSave1052Fixture.json edge-1280: nothing on the hub shifts when the meters land late (layout shift 0.0000, strip 60px in a 60px slot)
+  PASS  E  cmOldSave1052Fixture.json plain-390: the meters' chunk was still loading on the first hub frame
+  PASS  E  cmOldSave1052Fixture.json plain-390: nothing on the hub shifts when the meters land late (layout shift 0.0000, strip 52px in a 52px slot)
+playCmHubLanding: green (A 8 pass 0 fail, B 65 pass 0 fail, C 111 pass 0 fail, E 63 pass 0 fail, F 9 pass 0 fail); the hub lands on the club on its first frame
