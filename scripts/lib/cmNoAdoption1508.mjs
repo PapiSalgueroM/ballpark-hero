@@ -1,12 +1,12 @@
-/* Round 1508: the bridge, for attribution only. It is composed NOWHERE by default.
+/* Round 1508: the bridge, for attribution only. No engine composes it; only the kits named below do.
  *
  * WHAT IT DOES. Round 1508 adopts a Club Manager career with no world seed into the living world at its next summer
  * (adoptLivingWorld, first thing in startNextSeason: an empty ledger, still no seed, and a record of each man of my
  * squad the projection still lists at another club). That moves every career from before the 13 October update, and
  * every kit that plays such a career across a summer against an engine pinned from before this round, at that summer
  * and only there. This takes the adoption back out of a COPY of the engine, so such a kit compares everything else.
- * scripts/simCmUnseededWorld.mjs (fresh section, through scripts/lib/cmWorldSeed1250.mjs) and
- * scripts/simManagerWorldContinuity.mjs (its current arm) compose it.
+ * scripts/simManagerWorldContinuity.mjs (its current arm, on every run) composes it through withoutAdoption, and
+ * scripts/lib/cmWorldSeed1250.mjs (simCmUnseededWorld's fresh section) makes the same cut with this file's ADOPT line.
  *
  * ONE EDIT, failing closed: startNextSeason's line `  career = adoptLivingWorld(career);` must stand exactly once in
  * src/lib/clubManager.ts (line endings read as LF), or nothing is changed and the caller is told (exit 2 from the
