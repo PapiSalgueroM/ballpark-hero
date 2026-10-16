@@ -34,7 +34,7 @@ import NbaMyCareerBoard from '@/components/nba-my-career/NbaMyCareerBoard';
 import MlbMyCareerBoard from '@/components/mlb-my-career/MlbMyCareerBoard';
 import NhlMyCareerBoard from '@/components/nhl-my-career/NhlMyCareerBoard';
 import { createUsCareerProspect, type UsCareerProspect } from '@/lib/usCareerProspect';
-import { preDraftChoose, preDraftPlaySeason, preDraftStart } from '@/lib/careerPreDraft';
+import { preDraftChoose, preDraftPlaySeason, preDraftShowcase, preDraftStart } from '@/lib/careerPreDraft';
 import { defaultAppearance } from '@/lib/soccerCareerAppearance';
 
 interface Saved { c: Record<string, unknown>; phase: string; coach: Record<string, unknown> | null; [k: string]: unknown }
@@ -191,5 +191,55 @@ describe('Round 1346: the showcase Skip can be undone until Draft day', () => {
       expect(within(journeyOf(view)).queryByRole('button', { name: 'Undo skip' })).toBeNull();
       view.unmount(); localStorage.clear();
     }
+  });
+});
+
+/* Draft night skipped by accident can be watched again, in the mount that played it. Nothing is saved: the night
+   never was. Under reduced motion the night starts on its last frame and there is nothing to watch again. */
+function atDraftDay(sport: UsCareerSport): UsCareerProspect {
+  const p = beforeShowcase(sport), desc = sport.preDraft(p.eraId);
+  const s = p.state!.phase === 'season' ? preDraftPlaySeason(desc, p.state!) : preDraftChoose(desc, p.state!, 0);
+  return { ...p, state: preDraftShowcase(desc, s, 'skip') };
+}
+/** The night is a lazy chunk the journey asks for at the draft step. */
+async function nightLoaded() {
+  for (let n = 0; n < 3; n++) await act(async () => { await import('@/components/career/DraftNightSequence'); await Promise.resolve(); });
+}
+const nightIn = (view: ReturnType<typeof render>) => journeyOf(view).querySelector<HTMLElement>('[data-career-night]');
+
+describe('Round 1346: draft night can be watched again', () => {
+  it.each(PROSPECTS)('%s: Skip to the end, then Watch it again plays the night again and saves nothing', async (_, Board, sport) => {
+    localStorage.setItem(sport.saveKey, JSON.stringify({ c: null, phase: 'prospect', teamQuality: null, coach: null, prospect: atDraftDay(sport) }));
+    const view = mountProspect(Board), j = () => within(journeyOf(view));
+    await nightLoaded();
+    fireEvent.click(j().getByRole('button', { name: 'Draft day' })); await flush();
+    expect(nightIn(view)).toHaveAttribute('data-night-stage', 'live');
+    expect(j().queryByRole('button', { name: 'Watch it again' })).toBeNull();
+    fireEvent.click(j().getByRole('button', { name: 'Skip to the end' }));
+    expect(nightIn(view)).toHaveAttribute('data-night-stage', 'skipped');
+    const bytes = localStorage.getItem(sport.saveKey);
+    fireEvent.click(j().getByRole('button', { name: 'Watch it again' })); await flush();
+    expect(nightIn(view)).toHaveAttribute('data-night-stage', 'live');
+    for (const row of nightIn(view)!.querySelectorAll<HTMLElement>('[data-night-row]')) expect(row.className).toMatch(/cm-(tick-in|slam|rise)/);
+    expect(journeyOf(view).querySelector('[data-night-hold]')).not.toBeNull();
+    expect(j().getByTestId('draft-result')).toHaveAttribute('aria-hidden', 'true');
+    expect(journeyOf(view).querySelector('h3.sr-only')).toHaveFocus();
+    expect(localStorage.getItem(sport.saveKey)).toBe(bytes);
+    fireEvent.click(j().getByRole('button', { name: 'Skip to the end' }));
+    expect(j().getByRole('button', { name: 'Watch it again' })).toBeEnabled();
+    expect(localStorage.getItem(sport.saveKey)).toBe(bytes);
+  });
+
+  it.each(PROSPECTS)('%s: under reduced motion the night ends on its last frame with nothing to watch again', async (_, Board, sport) => {
+    const real = window.matchMedia;
+    window.matchMedia = ((q: string) => ({ ...real(q), matches: /reduce/.test(q) })) as typeof window.matchMedia;
+    try {
+      localStorage.setItem(sport.saveKey, JSON.stringify({ c: null, phase: 'prospect', teamQuality: null, coach: null, prospect: atDraftDay(sport) }));
+      const view = mountProspect(Board), j = within(journeyOf(view));
+      await nightLoaded();
+      fireEvent.click(j.getByRole('button', { name: 'Draft day' })); await flush();
+      expect(nightIn(view)).toHaveAttribute('data-night-stage', 'skipped');
+      expect(j.queryByRole('button', { name: 'Watch it again' })).toBeNull();
+    } finally { window.matchMedia = real; }
   });
 });

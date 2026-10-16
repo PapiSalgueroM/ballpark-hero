@@ -1,11 +1,13 @@
 /**
- * Round 1346 harness: the showcase Skip of the four US road to the draft journeys can be undone until Draft day.
+ * Round 1346 harness: the two Skips of the four US road to the draft journeys that a player could regret.
  *
  * Player report (/nba-my-career, 2026-10-16): "i accidentl ckilicke3d skipp". The showcase "Skip it" is the one Skip
  * on these pages that costs the career something (draft stock -2, saved at once). It draws nothing and reveals
  * nothing (no drill, no grade), so its undo can be exact: preDraftUndoSkip gives back the state before the skip,
  * key for key. A graded approach ("Go all out", "Play it safe") reads one keyed grade, so undoing one would be a
- * free second look at it: preDraftCanUndoSkip never offers that.
+ * free second look at it: preDraftCanUndoSkip never offers that. Draft night's "Skip to the end" costs nothing but
+ * the night, which cannot be played again after a reload, so the mount that played it offers "Watch it again"
+ * (never saved, and not offered under reduced motion, where the night starts on its last frame).
  *
  *   1. Engine, every sport and era descriptor (8), the 2,000 roads of simCareerPreDraft's seed set a (the same road
  *      builder and seeds, up to the showcase), plus each descriptor's first road at the edge stocks 0, 1, 2, 99 and
@@ -14,8 +16,11 @@
  *      those states back untouched; Math.random throws the whole time. The clamped skips are counted and must exist.
  *   2. Board, src/test/usCareerReports1346.test.tsx: all of it passes as it is, and with preDraftUndoSkip swapped for
  *      one that returns its input exactly the four "Undo skip puts the save back" cases fail (one per sport).
+ *   3. The night, the same file: with DraftNightSequence swapped for one without "Watch it again" exactly the four
+ *      replay cases fail; with ProspectJourney swapped for one that offers it under reduced motion exactly the four
+ *      reduced motion cases fail.
  *
- * Controls (US_SHOWCASE_UNDO_CONTROL), one anchor edit of src/lib/careerPreDraft.ts in the bundle only, asserted
+ * Controls (US_CAREER_SKIPS_CONTROL), one anchor edit of src/lib/careerPreDraft.ts in the bundle only, asserted
  * present once first. A control that fires exits 1 with its last line "CONTROL <name> FIRED"; one that does not
  * exits 2.
  *   noundo   the undo hands back its input        -> section 1
@@ -23,8 +28,11 @@
  *   graded   the undo is offered after any approach -> section 1 (graded showcases)
  *   clamp    the undo adds back the table's 2, not the clamped move -> section 1 (the edge stocks only)
  *
- * Measured (filled in from the runner, see the notes of Round 1346).
- * Nothing here reaches the network. Run: node scripts/simUsShowcaseUndo.mjs
+ * Measured on a GitHub runner (rc r1346-s5, head fd0565ad): 16,040 showcase states, 1,099 of them clamped skips
+ * (the roads reach a stock of 0 or 1 on their own, not only the edge states); the board file 16 of 16 green and
+ * exactly the 4 undo cases red under the swap; 18 seconds. Controls: noundo and graded 16,040 states red, leak
+ * 15,233 (a skip clamped to 0 leaves nothing to keep), clamp 1,099 (exactly the clamped skips).
+ * Nothing here reaches the network. Run: node scripts/simUsCareerSkips.mjs
  */
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
@@ -39,7 +47,10 @@ const ENGINE = 'src/lib/careerPreDraft.ts';
 const BOARD_TEST = 'src/test/usCareerReports1346.test.tsx';
 const N = 2000;
 const SEEDSET = 'a';
-const control = process.env.US_SHOWCASE_UNDO_CONTROL || '';
+const control = process.env.US_CAREER_SKIPS_CONTROL || '';
+const NIGHT = 'src/components/career/DraftNightSequence.tsx', JOURNEY = 'src/components/us-career/ProspectJourney.tsx';
+const replayButton = '        {over && onReplay && <Button variant="outline" className="w-full whitespace-normal" onClick={onReplay} data-night-replay>Watch it again</Button>}\n';
+const motionGuard = 'onReplay={lessMotion() ? undefined : () => {';
 const CONTROLS = {
   noundo: ['  if (!preDraftCanUndoSkip(prev) || !prev.showcase) return prev;', '  if (prev) return prev;'],
   leak: ['  return { ...prev, stock: prev.stock - prev.showcase.stockDelta, showcase: null', '  return { ...prev, stock: prev.stock, showcase: null'],
@@ -55,7 +66,7 @@ for (const [anchor, replacement] of Object.values(CONTROLS)) {
 }
 
 let failures = 0;
-const red = { 1: new Set(), 2: new Set() };
+const red = { 1: new Set(), 2: new Set(), 3: new Set() };
 const fail = (section, who, m) => {
   failures += 1;
   if (!red[section].has(who) && red[section].size < 5) console.error(`  FAIL [section ${section}] ${who}: ${m}`);
@@ -150,23 +161,38 @@ try {
 if (clamped === 0) fail(1, 'fleet', 'no skip was clamped, so the clamped move was never undone');
 const section1Line = `   ${states} showcase states, ${clamped} of them clamped skips: ${red[1].size === 0 ? 'every skip undone to the byte, nothing offered elsewhere' : `${red[1].size} states red`}`;
 
-/* ---------- section 2: the board, as it is and with the undo taken out ---------- */
-const UNDO_FAILS = ['nfl', 'nba', 'mlb', 'nhl'].map(s => `${s}: Undo skip puts the save back to the byte, survives a reload, and is gone after Draft day`);
-function boardRun(swap) {
+/* ---------- sections 2 and 3: the board file, as it is and with one piece taken out ---------- */
+const SPORT_IDS = ['nfl', 'nba', 'mlb', 'nhl'];
+const UNDO_FAILS = SPORT_IDS.map(s => `${s}: Undo skip puts the save back to the byte, survives a reload, and is gone after Draft day`);
+const REPLAY_FAILS = SPORT_IDS.map(s => `${s}: Skip to the end, then Watch it again plays the night again and saves nothing`);
+const MOTION_FAILS = SPORT_IDS.map(s => `${s}: under reduced motion the night ends on its last frame with nothing to watch again`);
+const sourceOf = file => fs.readFileSync(path.join(ROOT, file), 'utf8').replaceAll('\r\n', '\n');
+/* Each swap is [module specifier, file, anchor, replacement]; the anchor must be held once. */
+const SWAPS = {
+  noundo: ['@/lib/careerPreDraft', ENGINE, CONTROLS.noundo[0], CONTROLS.noundo[1]],
+  noreplay: ['@/components/career/DraftNightSequence', NIGHT, replayButton, ''],
+  motion: ['@/components/us-career/ProspectJourney', JOURNEY, motionGuard, 'onReplay={false ? undefined : () => {'],
+};
+for (const [, file, anchor] of Object.values(SWAPS)) assert.equal(sourceOf(file).split(anchor).length - 1, 1, `Swap anchor held once in ${file}`);
+function boardRun(swapName) {
   fs.mkdirSync(path.join(ROOT, '.sim-control'), { recursive: true });
-  const dir = fs.mkdtempSync(path.join(ROOT, '.sim-control/showcase-undo-vitest-'));
+  const dir = fs.mkdtempSync(path.join(ROOT, '.sim-control/us-skips-vitest-'));
   try {
     const env = { ...process.env, VITEST_MAX_FORKS: '1', VITEST_MIN_FORKS: '1' };
     delete env.NO_DOUBLE_SWAP;
-    if (swap) {
-      const copy = path.join(dir, 'careerPreDraft.ts');
-      fs.writeFileSync(copy, engineSrc.replace(CONTROLS.noundo[0], () => CONTROLS.noundo[1]).replace(/(from\s+['"])\.\//g, '$1@/lib/'));
-      env.NO_DOUBLE_SWAP = JSON.stringify({ '@/lib/careerPreDraft': copy });
+    if (swapName) {
+      const [specifier, file, anchor, replacement] = SWAPS[swapName];
+      const folderAlias = specifier.slice(0, specifier.lastIndexOf('/') + 1);
+      const original = sourceOf(file), changed = original.replace(anchor, () => replacement);
+      assert.notEqual(changed, original, `Swap ${swapName} changes ${file}`);
+      const copy = path.join(dir, path.basename(file));
+      fs.writeFileSync(copy, changed.replace(/(from\s+['"])\.\//g, `$1${folderAlias}`));
+      env.NO_DOUBLE_SWAP = JSON.stringify({ [specifier]: copy });
     }
     const report = path.join(dir, 'report.json');
     const run = spawnSync(process.execPath, ['--require', path.join(ROOT, 'scripts/lib/offlineTransport.cjs'),
       path.join(ROOT, 'node_modules/vitest/vitest.mjs'), 'run', BOARD_TEST, '--reporter=json', `--outputFile.json=${report}`,
-      '--maxWorkers=1', '--no-file-parallelism', '--testTimeout=120000'], { cwd: ROOT, env, encoding: 'utf8', timeout: 240000, maxBuffer: 16 * 1024 * 1024 });
+      '--maxWorkers=1', '--no-file-parallelism', '--testTimeout=120000'], { cwd: ROOT, env, encoding: 'utf8', timeout: 300000, maxBuffer: 16 * 1024 * 1024 });
     assert.ok(!run.error && !run.signal, 'vitest finished normally');
     const json = JSON.parse(fs.readFileSync(report, 'utf8'));
     return { status: run.status, rows: json.testResults.flatMap(f => f.assertionResults), unhandled: Number(json.numUnhandledErrors ?? 0) };
@@ -174,18 +200,24 @@ function boardRun(swap) {
     fs.rmSync(dir, { recursive: true, force: true });
   }
 }
+console.log(section1Line);
 if (control) {
-  console.log(section1Line);
-  console.log('2) skipped under a control (the controls aim at section 1)');
+  console.log('2) and 3) skipped under a control (the controls aim at section 1)');
 } else {
-  console.log(section1Line);
-  const plain = boardRun(false);
+  const plain = boardRun('');
   const passed = plain.rows.filter(r => r.status === 'passed').length;
   if (plain.status !== 0 || plain.unhandled || plain.rows.length === 0 || passed !== plain.rows.length) fail(2, 'plain', `${passed} of ${plain.rows.length} passed, exit ${plain.status}`);
-  const swapped = boardRun(true);
-  const failed = swapped.rows.filter(r => r.status === 'failed').map(r => r.title).sort();
-  if (swapped.status !== 1 || swapped.rows.length !== plain.rows.length || J(failed) !== J([...UNDO_FAILS].sort())) fail(2, 'noundo', `failed ${J(failed)}`);
-  console.log(`2) ${BOARD_TEST}: ${passed}/${plain.rows.length} pass as it is; with the undo handing back its input ${failed.length} fail, exactly the ${UNDO_FAILS.length} named`);
+  console.log(`   ${BOARD_TEST}: ${passed}/${plain.rows.length} pass as it is`);
+  for (const [name, section, want, what] of [
+    ['noundo', 2, UNDO_FAILS, 'the undo handing back its input'],
+    ['noreplay', 3, REPLAY_FAILS, 'no Watch it again on the night'],
+    ['motion', 3, MOTION_FAILS, 'Watch it again offered under reduced motion'],
+  ]) {
+    const run = boardRun(name);
+    const failed = run.rows.filter(r => r.status === 'failed').map(r => r.title).sort();
+    if (run.status !== 1 || run.rows.length !== plain.rows.length || J(failed) !== J([...want].sort())) fail(section, name, `failed ${J(failed)}`);
+    console.log(`${section}) with ${what}: ${failed.length} fail, ${J(failed) === J([...want].sort()) ? `exactly the ${want.length} named` : 'NOT the named cases'}`);
+  }
 }
 
 if (control) {
@@ -193,5 +225,5 @@ if (control) {
   console.log(fired ? `CONTROL ${control} FIRED: section 1 red on ${red[1].size} states` : `CONTROL ${control} DID NOT FIRE: section 1 stayed green`);
   process.exit(fired ? 1 : 2);
 }
-console.log(failures === 0 ? 'PASS: ALL SHOWCASE UNDO CHECKS PASSED' : `${failures} FAILURES`);
+console.log(failures === 0 ? 'PASS: ALL US CAREER SKIP CHECKS PASSED' : `${failures} FAILURES`);
 process.exit(failures === 0 ? 0 : 1);

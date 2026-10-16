@@ -35,6 +35,11 @@ export default function ProspectJourney({ sport, prospect, onChange, onJoin, onB
   const titleRef = useRef<HTMLHeadingElement>(null);
   const actionTitleRef = useRef<HTMLHeadingElement>(null);
   const [help, setHelp] = useState(!state);
+  /* Round 1346: draft night can be watched again in the mount that played it (never saved, like the night itself).
+     Each run remounts the card and the stage, whose keys carry it, so the rows and the held result arrive again on
+     the night's clock; focus goes to the play area's own title, as it does at every new step. */
+  const [nightRun, setNightRun] = useState(0);
+  useEffect(() => { if (nightRun) actionTitleRef.current?.focus({ preventScroll: true }); }, [nightRun]);
   useEffect(() => { (state ? actionTitleRef : titleRef).current?.focus({ preventScroll: true }); }, [eventKey]);
   /* Round 1220: the night plays once, in the mount that pressed "Draft day".
      The flag is never saved, so a reload at the result shows the result. */
@@ -81,7 +86,7 @@ export default function ProspectJourney({ sport, prospect, onChange, onJoin, onB
           <span>{i < act ? <Check size={15} /> : i + 1}</span>{label}
         </li>)}
       </ol>
-      <div className={styles.stage} key={eventKey} data-arrival={state?.phase === 'done' || undefined} data-night-hold={nightHold ? '' : undefined}>
+      <div className={styles.stage} key={`${eventKey}:${nightRun}`} data-arrival={state?.phase === 'done' || undefined} data-night-hold={nightHold ? '' : undefined}>
         <div className={styles.stadium} aria-hidden="true"><i /><i /><i /><i /><i /></div>
         <div className={styles.stageCopy}>
           <p className={styles.chapter}>{sport.label} Road to the Draft</p>
@@ -104,7 +109,7 @@ export default function ProspectJourney({ sport, prospect, onChange, onJoin, onB
         <p>Pick a route, play its seasons, then decide how to handle scouts, training and health. Your rating and health shape your performances. Draft stock shapes how early a team takes you.</p>
         <p><strong>For example:</strong> playing through a knock can raise your stock but cost health. The button shows the exact change before you choose. The showcase lets you push hard, play safe or skip; each option lists its possible stock changes. Its grade is simulated from your rating, health and saved career seed.</p>
         <p>Pressed Skip it by mistake? Undo it any time before you press Draft day. For example: skip at a draft stock of 50 and you drop to 48; Undo skip puts you back at 50 with all three options open again.</p>
-        <p><strong>Draft night:</strong> before the draft the scouts quote a range for you, and the night always ends inside it. At a draft stock of 60, for example: {preDraftProjectionLine(preDraftProjection(desc, { stock: 60, pos: prospect.pos }), 'have')} Then you watch the picks ahead of yours come off the board in the order the game already set, until your name is called or the last pick goes by without it. Nothing is drawn while you watch, no other prospect is ever named, and you can skip to the end at any time.{desc.lottery ? ' The lottery tile shows which club won each drawn pick. Seed 1 is the worst record.' : ''}</p>
+        <p><strong>Draft night:</strong> before the draft the scouts quote a range for you, and the night always ends inside it. At a draft stock of 60, for example: {preDraftProjectionLine(preDraftProjection(desc, { stock: 60, pos: prospect.pos }), 'have')} Then you watch the picks ahead of yours come off the board in the order the game already set, until your name is called or the last pick goes by without it. Nothing is drawn while you watch, no other prospect is ever named, and you can skip to the end at any time. Once it is over, Watch it again plays the same night from the start, unless your device is set to reduce motion.{desc.lottery ? ' The lottery tile shows which club won each drawn pick. Seed 1 is the worst record.' : ''}</p>
         <p>All prospects and results are fictional. The era sets the available teams and routes. The draft uses a simplified order without traded or extra picks; baseball and hockey lotteries are not modeled. Money in your career is a simulation, not a real contract quote. Going undrafted still leads to a camp signing.</p>
         <button className={styles.helpClose} onClick={() => setHelp(false)}>Got it</button>
       </div>}
@@ -117,11 +122,12 @@ export default function ProspectJourney({ sport, prospect, onChange, onJoin, onB
             <small>Start at age {route.startAge} · Draft at {route.startAge + route.seasons}</small>
           </button>)}
         </div> : act === 1 ? <PreDraftSeasonCard desc={desc} state={state} choiceRef={actionRef} onPlaySeason={() => onChange(preDraftPlaySeason(desc, state))} onChoose={i => onChange(preDraftChoose(desc, state, i))} />
-          : <DraftShowcaseCard desc={{ ...desc, bonusLine: undefined }} state={state} onShowcase={approach => onChange(preDraftShowcase(desc, state, approach))}
+          : <DraftShowcaseCard key={nightRun} desc={{ ...desc, bonusLine: undefined }} state={state} onShowcase={approach => onChange(preDraftShowcase(desc, state, approach))}
               onRunDraft={() => { setNightStage(!nightKit ? 'off' : lessMotion() ? 'skipped' : 'live'); onChange(preDraftRunDraft(desc, state)); }} onContinue={onJoin}
               showRange nightHold={nightHold} nightHeld={held} onUndoSkip={() => onChange(preDraftUndoSkip(state))}
               night={night && nightKit && out ? <nightKit.DraftNightSequence night={night} desc={desc} draftYear={out.draftYear} stage={nightStage === 'live' ? 'live' : nightStage === 'landed' ? 'landed' : 'skipped'}
-                onLanded={() => setNightStage(s => (s === 'live' ? 'landed' : s))} onSkip={() => setNightStage('skipped')} onContinue={onJoin} /> : undefined} />}
+                onLanded={() => setNightStage(s => (s === 'live' ? 'landed' : s))} onSkip={() => setNightStage('skipped')} onContinue={onJoin}
+                onReplay={lessMotion() ? undefined : () => { setNightRun(n => n + 1); setNightStage('live'); }} /> : undefined} />}
       </div>
       {state && state.lines.length > 0 && <details className={styles.history}>
         <summary>Your scout file <span>{state.lines.length} {state.lines.length === 1 ? 'season' : 'seasons'}</span></summary>

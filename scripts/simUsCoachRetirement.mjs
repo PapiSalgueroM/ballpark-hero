@@ -223,8 +223,9 @@ const NORETIRE_FAILS = [
   'retirement requires confirmation and accepts once after cancel and escape',
   ...SPORTS.map(s => `${s}: Keep coaching and Escape save nothing, Retire saves only done, and a reload stays retired`),
 ];
-/* PR281's 14, and the board file's four cases per sport (two for the coach, two for the showcase undo). */
-const CASES = 14 + 4 * SPORTS.length;
+/* PR281's 14, and the board file's six cases per sport (two for the coach, two for the showcase undo, two for the
+   draft night replay). */
+const CASES = 14 + 6 * SPORTS.length;
 async function vitest(swap) {
   await mkdir(path.join(ROOT, '.sim-control'), { recursive: true });
   const dir = await mkdtemp(path.join(ROOT, '.sim-control/us-coach1346-vitest-'));
