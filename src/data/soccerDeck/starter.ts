@@ -138,7 +138,7 @@ const CARDS: Card[] = [
       { label: 'Back your stronger foot', reply: 'You stick with your stronger foot.', karma: 0 },
     ] }, 'Your weaker foot', 'positive'],
   [{ id: '718', beat: 'summer', from: 'Your fitness coach', emoji: '🔋', cooldown: 4, when: [FORWARD],
-    text: 'The press next season starts with the forwards, and your fitness coach wants you able to keep it up for ninety minutes.',
+    text: 'The press next season starts with the forwards, and your fitness coach wants you quicker off the mark when the trigger comes.',
     choices: [
       { label: 'Do the sprint work', reply: 'You push through the sprint work.', karma: 0, morale: -1, fx: { t_pace: 1 } },
       { label: 'Keep your usual routine', reply: 'You keep your usual summer routine.', karma: 0 },
