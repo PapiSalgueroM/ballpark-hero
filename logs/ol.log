@@ -1,0 +1,8 @@
+AssertionError [ERR_ASSERTION]: current exact failure map
+
+1 harness not green.
+control current actual ["year2024/display","year2026/display","year-null/display","year-string/display","year-fraction/display","nonmember-Beveren/display","nonmember-Everton/display","named-nonmember/display","named-duplicate/display","actual2024/display","actual2026/display"] expected []
+control remove-overlay actual ["genuine2025/display","json-reload/display","year2024/display","year2026/display","year-null/display","year-string/display","year-fraction/display","nonmember-Beveren/display","nonmember-Everton/display","recorded-valid-name/display","recorded-alias/display","named-nonmember/display","named-duplicate/display","actual2024/display","actual2026/display"] expected ["genuine2025/display","json-reload/display","recorded-valid-name/display","recorded-alias/display"]
+control widen-year actual ["year2024/display","year2026/display","year-null/display","year-string/display","year-fraction/display","nonmember-Beveren/display","nonmember-Everton/display","named-nonmember/display","named-duplicate/display","actual2024/display","actual2026/display"] expected ["year2024/display","actual2024/display"]
+control whole-undo actual ["year2024/display","year2026/display","year-null/display","year-string/display","year-fraction/display","nonmember-Beveren/display","nonmember-Everton/display","named-nonmember/display","named-duplicate/display","actual2024/display","actual2026/display"] expected []
+0 failing checks in the report
