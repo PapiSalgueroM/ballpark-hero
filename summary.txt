@@ -1,0 +1,2 @@
+summer9-noresume exit=1 5s | CONTROL noresume FIRED: section 9 went red, as it must.
+summer9 exit=0 5s | simUsCareerSummer: green. Sections 9 held.

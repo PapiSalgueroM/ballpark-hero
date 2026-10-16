@@ -1,0 +1,6 @@
+NEGATIVE CONTROL noresume: the board's summer restore switched off (section 9 must fail)
+9) board: src/test/usCareerSummer.test.tsx on the real board
+   Vitest exit 1, 20 passed, 20 failed: a mid-summer save opens on ids[at] and shows its place in the summer; answering advances, Continue opens the next card, and the last answer rolls team quality once; unmount and mount again return the same card, word for word; a card the career has moved past is skipped
+  FAIL [9]: Vitest exited 1
+  FAIL [9]: only 20 of the 32 board tests passed
+CONTROL noresume FIRED: section 9 went red, as it must.
