@@ -1,3 +1,7 @@
+## Player Bingo Rodri correction candidate, 2026-10-16
+
+Codex branch codex/bingo-rodri-honour. Corrected-main baseline 041349e2/run38877229062 reproduced exactly one sparse-history Rodri title rejection and ten preservation passes, with types and source/packages held. The fixed candidate unions a two-source verified personal title with the existing UCL history rule, guarded by exact name, Spain, explicit defensive midfield and the 1996 age/year cohort. No history, statistics, database or AI validator changes. Fixed remote qualification is pending; no merge or live-fix claim. Sources, controls and the bounded follow-on audit of fifteen already verified winning XIs are in docs/audits/player-bingo-rodri-ucl-2026-10-16.md.
+
 ## 2026-10-16 05:30 EDT: session I starts; player reports split between the lanes; the Lovable editor push reverted
 
 Claude lane (session I). Live: Release BG (main c9b80fce, deployment bc4815da). The Lovable editor's push of 08:36 to
@@ -18470,3 +18474,6 @@ approve the new tree. The completed combined 587 run `35001991548` failed the
 old broad SVG map guard, lazy-panel test waits and Wonderkid's 271K/270K budget.
 Its expected negative controls passed. The records below retain earlier
 verification context and do not supersede this current integration note.
+
+
+Bingo Rodri fixed source8b683b58 is qualified by run38878077311: eleven normal/restored cases, original+five identity controls, six prior Bingo harnesses, types, SEO build and all15readers,521installed versions held. Draft PR282 ready for Claude I review, not live. Detailed scope, facts and retained88-file artifact are in docs/audits/player-bingo-rodri-ucl-2026-10-16.md. Wider winning-XI audit remains follow-on, no blind name-only import.
