@@ -1,0 +1,5 @@
+#!serial
+s12: CM_WORLD_MOVES_SECTIONS=12 node scripts/simCmWorldMoves.mjs
+c-slow: CM_WORLD_MOVES_CONTROL=slow node scripts/simCmWorldMoves.mjs
+digest-retake: node scripts/simCmLeagueRules.mjs --part=modern,eras,pure --write && git diff --exit-code --stat -- scripts/data/cmLeagueRulesDigest.json; s=$?; git checkout -- scripts/data/cmLeagueRulesDigest.json; exit $s
+leagueRules-bridged-maindigest: D=/tmp/lrb-$$ && mkdir -p $D && git archive HEAD | tar -x -C $D && node .rc/x/applyCtl1344.mjs $D bridge && git show origin/main:scripts/data/cmLeagueRulesDigest.json > $D/scripts/data/cmLeagueRulesDigest.json && ln -s $PWD/node_modules $D/node_modules && cd $D && node scripts/simCmLeagueRules.mjs

@@ -1,0 +1,4 @@
+s12 exit=0 127s | simCmWorldMoves: green, sections 12 held
+c-slow exit=1 135s | simCmWorldMoves: control slow FIRED: section 12 red (9)
+digest-retake exit=0 30s | simCmLeagueRules: all checks passed (modern, eras, pure)
+leagueRules-bridged-maindigest exit=0 47s | simCmLeagueRules: all checks passed (modern, eras, pure, drop4, cupless, shapes, chunks)
