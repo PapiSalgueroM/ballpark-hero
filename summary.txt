@@ -1,0 +1,7 @@
+pin-check exit=0 1s | pinproof: every pin moved with its own file and nothing else
+pin-head exit=0 32s | Equivalent appeal outcomes must agree: passed for 24 original pairs and 3 separate generated-position pairs.
+pin-old-both exit=0 31s | Equivalent appeal outcomes must agree: passed for 24 original pairs and 3 separate generated-position pairs.
+pin-old-cm exit=0 31s | Equivalent appeal outcomes must agree: passed for 24 original pairs and 3 separate generated-position pairs.
+pin-old-slots exit=0 31s | Equivalent appeal outcomes must agree: passed for 24 original pairs and 3 separate generated-position pairs.
+pin-stale exit=1 6s | Node.js v24.21.0
+pin-retake exit=0 0s | retake from the head: byte identical to the committed pin

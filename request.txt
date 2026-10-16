@@ -1,0 +1,8 @@
+#!serial
+pin-check: node .rc/x/pinproof.mjs check
+pin-head: node scripts/simManagerAppealIsolation.mjs
+pin-old-both: git checkout d4f2c6f6 -- src/lib/clubManager.ts src/lib/clubManagerSlots.ts scripts/fixtures/managerAppealIsolation1081/manifest.json && node scripts/simManagerAppealIsolation.mjs; s=$?; git checkout HEAD -- src scripts; exit $s
+pin-old-cm: node .rc/x/pinproof.mjs revert src/lib/clubManager.ts && node scripts/simManagerAppealIsolation.mjs; s=$?; git checkout HEAD -- src scripts; exit $s
+pin-old-slots: node .rc/x/pinproof.mjs revert src/lib/clubManagerSlots.ts && node scripts/simManagerAppealIsolation.mjs; s=$?; git checkout HEAD -- src scripts; exit $s
+pin-stale: git checkout d4f2c6f6 -- src/lib/clubManager.ts && node scripts/simManagerAppealIsolation.mjs; s=$?; git checkout HEAD -- src scripts; exit $s
+pin-retake: node .rc/x/pinproof.mjs retake && git diff --exit-code --stat -- scripts/fixtures/managerAppealIsolation1081/manifest.json && echo "retake from the head: byte identical to the committed pin"; s=$?; git checkout HEAD -- scripts; exit $s

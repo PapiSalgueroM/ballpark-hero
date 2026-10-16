@@ -1,0 +1,5 @@
+src/lib/clubManager.ts: base 7a89018d61b149a7 (pin 7a89018d61b149a7) equal; head 19c0cef326db8e34 (pin 19c0cef326db8e34) equal; changed by the round
+src/lib/clubManagerSlots.ts: base 5c900a3701ea8420 (pin 5c900a3701ea8420) equal; head 64b3adea33921788 (pin 64b3adea33921788) equal; changed by the round
+scripts/simClubManagerSlots.mjs: base c7bd98184deee1ea (pin c7bd98184deee1ea) equal; head c7bd98184deee1ea (pin c7bd98184deee1ea) equal; unchanged by the round
+scripts/simClubManagerDecisions.mjs: base 5b3ee496e6e6a0fa (pin 5b3ee496e6e6a0fa) equal; head 5b3ee496e6e6a0fa (pin 5b3ee496e6e6a0fa) equal; unchanged by the round
+pinproof: every pin moved with its own file and nothing else
