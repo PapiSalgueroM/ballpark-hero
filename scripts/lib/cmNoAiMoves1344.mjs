@@ -14,7 +14,8 @@
  *   2. recordAiDeals' loop is taken out, so the opening flush, the hijack, the walk away and the repair on load write
  *      nothing (and the lead's ruling 3, inside the recording, goes with them);
  *   3. joinClubNow takes the departed career's ledger again (src/lib/clubManagerCalendar.ts);
- *   4. and the departed career's gone names are not carried over;
+ *   4. and the departed career's gone names and their deal lines are not carried over, nor are the run in's lines
+ *      given this season's number (the review's fix of 2026-10-16);
  *   5. and a rival in a bidding war closes whatever the ledger says (rivalCloseRefused answers false, the review's
  *      fix of 2026-10-16), as it did before the round.
  * What stays: the screen's market (marketForScreen, read by the transfer screen only) and the refusal, which only a
@@ -38,8 +39,8 @@ export const BRIDGE_EDITS = [
   [CALENDAR, 'the join keeps the departed ledger',
     '    ...(s.worldRoster !== undefined ? { worldRoster: plainCopy(s.worldRoster) }\n      : departed.worldRoster === undefined ? {} : { worldRoster: plainCopy(departed.worldRoster) }),\n',
     '    ...(departed.worldRoster === undefined ? {} : { worldRoster: plainCopy(departed.worldRoster) }),\n'],
-  [CALENDAR, 'the join keeps the run in\'s gone names',
-    '    ...(worldSeedOf(departed) === undefined ? {} : { goneNames: [...new Set([...s.goneNames, ...career.goneNames.filter(name => movedElsewhere.has(name))])] }),\n', ''],
+  [CALENDAR, 'the join keeps the run in\'s gone names and log',
+    '    ...(worldSeedOf(departed) === undefined ? {} : seededJoinCarry(career, s, movedElsewhere)),\n', ''],
   [ENGINE, 'a rival closes whatever the ledger says',
     '  return worldSeedOf(career) !== undefined && recordAiDeal(career, deal, career) === career;\n', '  return false;\n'],
 ];
