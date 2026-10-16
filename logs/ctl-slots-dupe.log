@@ -1,0 +1,29 @@
+NEGATIVE CONTROL ON: SLOTS_CONTROL=dupe, the slots module is a rewritten copy
+✘ [ERROR] Could not resolve "./clubManagerStart"
+
+    ../../_temp/t-ctl-slots-dupe/cmSlots-mWmy5A/clubManagerSlots.control.ts:22:27:
+      22 │ import { noSackFrom } from './clubManagerStart';
+         ╵                            ~~~~~~~~~~~~~~~~~~~~
+
+node:internal/errors:986
+  const err = new Error(message);
+              ^
+
+Error: Command failed: "/home/runner/work/ballpark-hero/ballpark-hero/node_modules/.bin/esbuild" "/home/runner/work/_temp/t-ctl-slots-dupe/cmSlots-mWmy5A/entry.mjs" --bundle --format=esm --platform=node --outfile="/home/runner/work/_temp/t-ctl-slots-dupe/cmSlots-mWmy5A/bundle.mjs" --log-level=error --alias:@=/home/runner/work/ballpark-hero/ballpark-hero/src
+    at genericNodeError (node:internal/errors:986:15)
+    at wrappedFn (node:internal/errors:540:14)
+    at checkExecSyncError (node:child_process:942:11)
+    at execSync (node:child_process:1014:15)
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simClubManagerSlots.mjs:296:1
+    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)
+    at async node:internal/modules/esm/loader:647:26
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {
+  status: 1,
+  signal: null,
+  output: [ null, null, null ],
+  pid: 15946,
+  stdout: null,
+  stderr: null
+}
+
+Node.js v24.21.0

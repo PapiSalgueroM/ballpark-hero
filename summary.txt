@@ -1,0 +1,49 @@
+build exit=0 32s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+playCmQuickSubs exit=0 12s | playCmQuickSubs: 3 viewports, 2 actual saved fixtures, 6 settled reports, 3 effective controls, zero external forwarding; source held.
+simDailyDeals-bind-EXPECT-RED exit=1 2s | simDailyDeals: CONTROL bind FIRED: its 5 Premier League dates went red (2026-10-27, 2026-11-14, 2027-01-19, 2027-01-30, 2027-02-06) and no other date moved
+simDailyDeals-binddeadline-EXPECT-RED exit=1 2s | simDailyDeals: CONTROL binddeadline FIRED: its 3 Premier League dates went red (2026-10-18, 2026-11-01, 2026-11-09) and no other date moved
+playSaveKeeper exit=0 841s | playSaveKeeper: green. A save put back with a game in memory survives the load, and an ordinary visit stores nothing new beyond the 2 key(s) named in KEYS_ADDED_ON_PURPOS
+controlFrontOfficeBoard exit=0 618s | blank exit 1 (1 means the control fired)
+ctl-facts-onesource exit=0 1s | simCmLeagueBookFacts control onesource: FIRED (Premier League 2015-16 topScorerGoals is THIN (premierleague), length USED (premierleague, rsssf), and the cell is not name
+ctl-facts-disagree exit=0 1s | simCmLeagueBookFacts control disagree: FIRED (Premier League 2015-16 topScorerGoals is DISPUTED (premierleague, mykhel), length USED (premierleague, rsssf), and the cell 
+ctl-slots-dupe exit=1 0s | Node.js v24.21.0
+ctl-safari-lookbehind exit=0 1s | simSafari: control lookbehind FIRED: section 2 failed on src/__control__/lookbehind.ts (0 other failures in the run)
+ctl-safari-testimport exit=0 1s | simSafari: control testimport FIRED: section 0 failed on src/__control__/testimport.ts (0 other failures in the run)
+ctl-safari-barevh exit=0 1s | simSafari: control barevh FIRED: section 4 failed on src/__control__/barevh.css (0 other failures in the run)
+ctl-safari-vhafter exit=0 1s | simSafari: control vhafter FIRED: section 4 failed on src/__control__/vhafter.css (0 other failures in the run)
+ctl-safari-dvhcomment exit=0 1s | simSafari: control dvhcomment FIRED: section 4 failed on src/__control__/dvhcomment.css (0 other failures in the run)
+ctl-safari-customprop exit=0 1s | simSafari: control customprop FIRED: section 4 failed on src/__control__/customprop.css (0 other failures in the run)
+ctl-safari-lvhafter exit=0 1s | simSafari: control lvhafter FIRED: section 4 failed on src/__control__/lvhafter.css (0 other failures in the run)
+ctl-activity-career exit=0 4s | control "career": 2 failure(s) fired in section 2 as expected, the check works
+ctl-activity-heavy exit=0 4s | control "heavy": 1 failure(s) fired in section 3 as expected, the check works
+ctl-activity-match exit=0 4s | control "match": 2 failure(s) fired in section 1 as expected, the check works
+ctl-activity-noping exit=0 4s | control "noping": 1 failure(s) fired in section 2 as expected, the check works
+ctl-activity-twocalls exit=0 4s | control "twocalls": 1 failure(s) fired in section 2 as expected, the check works
+ctl-activity-twodotted exit=0 4s | control "twodotted": 1 failure(s) fired in section 2 as expected, the check works
+ctl-gmxp-claim exit=0 1s | simGmXp: 1 failure(s) under GMXP_CONTROL=claim
+ctl-gmxp-curvestep exit=0 1s | simGmXp: 6 failure(s) under GMXP_CONTROL=curvestep
+ctl-gmxp-cushiongain exit=0 1s | simGmXp: 1 failure(s) under GMXP_CONTROL=cushiongain
+ctl-gmxp-fractional exit=0 1s | simGmXp: 50 failure(s) under GMXP_CONTROL=fractional
+ctl-gmxp-gmcap exit=0 1s | simGmXp: 137 failure(s) under GMXP_CONTROL=gmcap
+ctl-gmxp-growthshape exit=0 1s | simGmXp: 2 failure(s) under GMXP_CONTROL=growthshape
+ctl-gmxp-nocap exit=0 1s | simGmXp: 114 failure(s) under GMXP_CONTROL=nocap
+ctl-gmxp-notneutral exit=0 1s | simGmXp: 11 failure(s) under GMXP_CONTROL=notneutral
+ctl-gmxp-pastceiling exit=0 1s | simGmXp: 2 failure(s) under GMXP_CONTROL=pastceiling
+ctl-gmxp-saturate exit=0 1s | simGmXp: 7 failure(s) under GMXP_CONTROL=saturate
+ctl-report-footle exit=0 1s | control "footle": 3 failure(s) fired in section 2 as expected, the check works
+ctl-report-nopath exit=0 1s | control "nopath": 1 failure(s) fired in section 1 as expected, the check works
+ctl-report-privacy exit=0 1s | control "privacy": 3 failure(s) fired in section 4 as expected, the check works
+ctl-report-diagnostics exit=0 1s | control "diagnostics": 13 failure(s) fired in section 4 as expected, the check works
+ctl-boundary-rename exit=0 1s |    CONTROL FIRED: the rename mutation was caught
+ctl-relay-oldkinds exit=0 1s | control "oldkinds": 1 failure(s) fired in section 1 and nowhere else, the check works
+ctl-saverecovery-all exit=0 19s | Soccer Career save recovery cleanup: temporary copies and reports removed; production page and reader bytes stayed identical.
+ctl-loanbite-strict26 exit=0 61s | control "strict26" fired: checks 3, 5 failed as expected
+ctl-loanbite-nofilter exit=0 64s | control "nofilter" fired: checks 2, 4, 5 failed as expected
+ctl-story-poolcopy exit=0 23s | simCareerStory control poolcopy: fired, check parts failed as it must (failed: parts)
+ctl-keeper-partballon exit=0 4s | simSaveKeeper control partballon: FIRED. Section 1 is red.
+ctl-keeper-partplayoffs exit=0 4s | simSaveKeeper control partplayoffs: FIRED. Section 1 is red.
+ctl-gameday-undo exit=0 60s | simGmGameDay: 462 checks, 15 failed (control undo)
+ctl-gameday-keydrift exit=0 60s | simGmGameDay: 462 checks, 35 failed (control keydrift)
+ctl-gameday-trust exit=0 59s | simGmGameDay: 462 checks, 10 failed (control trust)
+ctl-gameday-keyrebuilt exit=0 59s | simGmGameDay: 462 checks, 20 failed (control keyrebuilt)
+ctl-gameday-logplayoff exit=0 59s | simGmGameDay: 462 checks, 30 failed (control logplayoff)
