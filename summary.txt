@@ -1,0 +1,4 @@
+build exit=0 32s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+opponentLabels exit=0 80s | 0 failing checks in the report
+truths exit=0 204s | playSoccerScreenTruths: green, W4 W4r W5 W6 W7 W8 pass on the head and every control section is red on the base
+anchors exit=0 244s | All 2 harnesses green.
