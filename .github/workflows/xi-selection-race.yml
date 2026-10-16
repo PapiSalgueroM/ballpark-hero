@@ -1,0 +1,110 @@
+name: XI pending history selection baseline
+
+on:
+  push:
+    branches: [codex/xi-selection-race]
+
+permissions:
+  contents: read
+
+jobs:
+  baseline:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    defaults:
+      run:
+        shell: bash
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      XI_SELECTION_RACE_PHASE: baseline
+    steps:
+      - name: Allocate physical evidence directory
+        run: echo "XI_RACE_OUT=$RUNNER_TEMP/xi-selection-race" >> "$GITHUB_ENV"
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Bind unchanged published application and locked dependencies
+        run: |
+          set -euo pipefail
+          mkdir -p "$XI_RACE_OUT"
+          git rev-parse HEAD > "$XI_RACE_OUT/head.txt"
+          git archive --format=zip HEAD > "$XI_RACE_OUT/source.zip"
+          git merge-base --is-ancestor 1823478805186fcd037d5f6b3145513a273aa4fb HEAD
+          git diff --exit-code 1823478805186fcd037d5f6b3145513a273aa4fb HEAD -- src scripts public package.json package-lock.json bun.lock bun.lockb ':!src/test/xiSelectionHistoryRace.test.tsx' ':!scripts/qa/proveXiSelectionRace.mjs'
+          git status --porcelain --untracked-files=no > "$XI_RACE_OUT/source-before.txt"
+          test ! -s "$XI_RACE_OUT/source-before.txt"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$XI_RACE_OUT/source-files.sha256"
+          npm ci > "$XI_RACE_OUT/install.log" 2>&1
+          cat "$XI_RACE_OUT/install.log"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs'; import assert from 'node:assert/strict';
+          const lock=JSON.parse(fs.readFileSync('package-lock.json'));
+          const installed=Object.entries(lock.packages).filter(([p])=>p.startsWith('node_modules/')&&fs.existsSync(p+'/package.json')).map(([p,entry])=>{
+            const version=JSON.parse(fs.readFileSync(p+'/package.json')).version;
+            assert.equal(version,entry.version,p); return {path:p,version};
+          });
+          assert.equal(installed.length,521);
+          fs.writeFileSync(process.env.XI_RACE_OUT+'/installed-versions.json',JSON.stringify(installed,null,2)+'\n');
+          fs.writeFileSync(process.env.XI_RACE_OUT+'/node-versions.json',JSON.stringify(process.versions,null,2)+'\n');
+          console.log('Bound all521 installed locked package manifests.');
+          NODE
+          find node_modules -type f -print0 | sort -z | xargs -0 sha256sum > "$XI_RACE_OUT/installed-files.sha256"
+      - name: Actual app types and new remote method syntax
+        run: |
+          set -euo pipefail
+          node --check scripts/qa/proveXiSelectionRace.mjs
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee "$XI_RACE_OUT/types.log"
+      - name: Exact overwrite fault and seven completed preserves
+        run: |
+          set -euo pipefail
+          SIM_OFFLINE_RECEIPT="$XI_RACE_OUT/new.transport" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/proveXiSelectionRace.mjs 2>&1 | tee "$XI_RACE_OUT/baseline.log"
+      - name: Existing actual history validator and picker regressions
+        run: |
+          set -euo pipefail
+          set +e
+          SIM_OFFLINE_RECEIPT="$XI_RACE_OUT/related.transport" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node node_modules/vitest/vitest.mjs run src/test/lineupBuilderHistoryRead.test.tsx src/test/lineupValidatorClient.test.tsx src/test/playerAutocompleteInteraction.test.tsx src/test/playerAutocompleteStale.test.tsx src/test/playerAutocompleteTouchScroll.test.tsx --maxWorkers=1 --minWorkers=1 --reporter=verbose --reporter=json --outputFile.json="$XI_RACE_OUT/related.json" > "$XI_RACE_OUT/related.log" 2>&1
+          unit_exit=$?
+          set -e
+          cat "$XI_RACE_OUT/related.log"
+          UNIT_EXIT="$unit_exit" node --input-type=module <<'NODE'
+          import fs from 'node:fs'; import assert from 'node:assert/strict';
+          const out=process.env.XI_RACE_OUT, r=JSON.parse(fs.readFileSync(out+'/related.json')), log=fs.readFileSync(out+'/related.log','utf8');
+          assert(!/Unhandled Errors?|Unhandled Rejection|Uncaught Exception|Failed to (?:load|resolve import)|Cannot find module|ERR_MODULE_NOT_FOUND|SIM_OFFLINE_BLOCK/i.test(log),'No setup or transport failures');
+          const expected={'lineupBuilderHistoryRead.test.tsx':3,'lineupValidatorClient.test.tsx':55,'playerAutocompleteInteraction.test.tsx':8,'playerAutocompleteStale.test.tsx':15,'playerAutocompleteTouchScroll.test.tsx':20};
+          assert.equal(Number(process.env.UNIT_EXIT),0); assert.equal(r.success,true);
+          assert.equal(r.testResults.length,5); assert.equal(r.numTotalTests,101); assert.equal(r.numPassedTests,101);
+          assert.equal(r.numFailedTests,0); assert.equal(r.numPendingTests,0); assert.equal(r.numTodoTests,0);
+          const actual={};
+          for(const file of r.testResults){
+            assert(!file.message); const name=file.name.replaceAll('\\','/').split('/').pop();
+            assert(!Object.hasOwn(actual,name)); actual[name]=file.assertionResults.length;
+            assert(file.assertionResults.every(test=>test.status==='passed'));
+          }
+          assert.deepEqual(actual,expected);
+          console.log('All101 existing history/validator/autocomplete cases completed and passed.');
+          NODE
+      - name: Full tracked source and installed dependency holds
+        if: always()
+        run: |
+          set -euo pipefail
+          sha256sum --check "$XI_RACE_OUT/source-files.sha256" > "$XI_RACE_OUT/source-holds.log" 2>&1
+          sha256sum --check "$XI_RACE_OUT/installed-files.sha256" > "$XI_RACE_OUT/installed-holds.log" 2>&1
+          test ! -s "$XI_RACE_OUT/new.transport"
+          test ! -s "$XI_RACE_OUT/related.transport"
+          git status --porcelain --untracked-files=no > "$XI_RACE_OUT/source-after.txt"
+          test ! -s "$XI_RACE_OUT/source-after.txt"
+          tail -n 2 "$XI_RACE_OUT/source-holds.log"
+          tail -n 2 "$XI_RACE_OUT/installed-holds.log"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: xi-selection-race-baseline-${{ github.sha }}
+          path: ${{ env.XI_RACE_OUT }}
+          if-no-files-found: error
+          retention-days: 14

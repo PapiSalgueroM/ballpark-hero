@@ -1,3 +1,6 @@
+## Root1389 diagnosis prepared, XI pending-position selection, 2026-10-16
+
+Eight actual-hook cases and remote baseline proof are source reviewed against unchanged published application18234788. Expected one precise late-history overwrite fault plus seven preserves,28fullpublic-state/draw/storage snapshots and101old regressions. No product patch or runtime claim. Separate1388 career fix is READY asPR305final93730ed2, tested27a39d32; actualClaudeI owns integration/publication. Details docs/audits/xi-selection-race.md.
 ## Release BH LIVE, 2026-10-16 10:42 EDT: Player Bingo counts Rodri's Champions League, World XI shows overalls and club links, Soccer Career names Luton Town in 2023 and its choices say what they do
 
 Claude lane (session I). main ae14cf97, deployment 9056c804-07ef-4e34-96c9-1f0efdaf0425, entry index-BQUxuJaU.js (was index-CZZVnHoQ.js, Release BG,
