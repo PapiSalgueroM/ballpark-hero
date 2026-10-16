@@ -1,0 +1,6 @@
+#!build
+#!playwright
+#!serial
+walk-after-stock: node scripts/simPreloadWait.mjs --build-stock dist-stock2 2>&1 | tail -1; node scripts/playChunkReloadWait.mjs
+walk-again: node scripts/playChunkReloadWait.mjs
+walk-third: node scripts/playChunkReloadWait.mjs

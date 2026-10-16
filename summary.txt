@@ -1,0 +1,4 @@
+build exit=0 22s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+walk-after-stock exit=0 109s | playChunkReloadWait: green on 16 rows. A page that loses a file waits for its one reload, no broken page, no error, nothing moved.
+walk-again exit=0 88s | playChunkReloadWait: green on 16 rows. A page that loses a file waits for its one reload, no broken page, no error, nothing moved.
+walk-third exit=0 89s | playChunkReloadWait: green on 16 rows. A page that loses a file waits for its one reload, no broken page, no error, nothing moved.
