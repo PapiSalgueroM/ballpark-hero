@@ -15,6 +15,7 @@
               against a deep copy taken before: only `retired` (and the record when absent) differ, the input never
               moves, zero draws; null with a match in progress and when already retired; careerLegacy's clubs cover
               every name in clubsManaged, its cabinet sums to the trophies, its record equals the save's.
+     dashes   no dash of any kind (U+2010 to U+2015, U+2212) in the five new files, comments included.
      fleet   (needs RETIRE_BASE) Everton 2005-06, Barcelona 2015-16, Liverpool now, seeds 0 to 4, three
               seasons, quick sims with the coach and with noCoach: every save byte equal to RETIRE_BASE's once
               careerStats.highestScoring is taken off, and every draw. A 'base' career: equal, nothing taken off.
@@ -34,6 +35,7 @@
      basewrites  the 'base' gate off: base red (and hotseat red before the cutover)
      liveok      canRetire forgets the match in progress: retire red
      drawone     a Math.random call inside retireCareer: retire red on the draw count
+     dash        an em dash planted in a copy of clubManagerRetire.ts: dashes red
      stripnone   the fleet compares with the new key left on: fleet red (proves the key is written)
      drawleak    an extra Math.random in the update: fleet red on the draw count
 
@@ -61,7 +63,7 @@ const ALL_CLUBS = { everton: ['Everton', 'era2005'], barcelona: ['Barcelona', 'e
 const CLUBS = (process.env.RETIRE_CLUBS ? process.env.RETIRE_CLUBS.split(',') : Object.keys(ALL_CLUBS)).map(k => ALL_CLUBS[k]);
 const partArg = process.argv.find(a => a.startsWith('--part='));
 const BASE_PARTS = ['fleet', 'hotseat', 'loads'];
-const OWN_PARTS = ['record', 'oldsave', 'pens', 'base', 'retire'];
+const OWN_PARTS = ['record', 'oldsave', 'pens', 'base', 'retire', 'dashes'];
 const ALL_PARTS = [...OWN_PARTS, ...(RETIRE_BASE ? BASE_PARTS : [])];
 
 const CONTROLS = {
@@ -70,6 +72,7 @@ const CONTROLS = {
   nomissed: { part: 'oldsave', file: RECORDS, from: '  return missed > 0 ? { ...rest, missed } : rest;', to: '  return rest;' },
   basewrites: { part: 'base', file: ENGINE, from: "  if (state.matchRules !== 'base') {", to: '  if (true) {' },
   stripnone: { part: 'fleet' },
+  dash: { part: 'dashes' },
   liveok: { part: 'retire', file: RETIRE, from: '  return !!c && !c.retired && !c.live;', to: '  return !!c && !c.retired;' },
   drawone: { part: 'retire', file: RETIRE, from: '  const next = JSON.parse(JSON.stringify(c)) as CareerState;', to: '  const next = JSON.parse(JSON.stringify(c)) as CareerState; Math.random();' },
   drawleak: { part: 'fleet', file: RECORDS, from: '  const stats = state.careerStats;', to: '  const stats = state.careerStats; Math.random();' },
@@ -365,6 +368,22 @@ async function retireSection(cm) {
   check(P, 'the farewell\'s clubs, cabinet and record are the save\'s', legacyBad === 0 && trophies > 0, legacyBad ? `${legacyBad} wrong; first ${legacyFirst}` : `${trophies} trophies`);
 }
 
+/* ---------------- section dashes ---------------- */
+/* The site's dash scans read the panel and the page, not these files, so this one does, comments included. */
+const NEW_FILES = [RECORDS, RETIRE, 'src/components/club-manager/RetireDoor.tsx', 'src/components/club-manager/CmRetireDoor.tsx', 'src/components/club-manager/ClubManagerFarewell.tsx'];
+async function dashesSection() {
+  const P = 'dashes';
+  const dashes = [0x2010, 0x2011, 0x2012, 0x2013, 0x2014, 0x2015, 0x2212].map(n => String.fromCharCode(n));
+  const bad = [];
+  let lines = 0;
+  for (const f of NEW_FILES) {
+    let t = (await readFile(path.join(root, f), 'utf8')).replace(/\r\n/g, '\n');
+    if (CONTROL === 'dash' && f === RETIRE) t += `\n// planted ${String.fromCharCode(0x2014)}`;
+    t.split('\n').forEach((line, i) => { lines += 1; if (dashes.some(d => line.includes(d))) bad.push(`${f}:${i + 1}`); });
+  }
+  check(P, `no dash of any kind in the ${NEW_FILES.length} new files (${lines} lines), comments included`, bad.length === 0 && lines > 200, bad.slice(0, 3).join(', '));
+}
+
 /* ---------------- section fleet (RETIRE_BASE) ---------------- */
 async function fleetSection(cm, ctx) {
   const P = 'fleet';
@@ -481,7 +500,7 @@ async function loadsSection(cm, ctx) {
 }
 
 /* ---------------- main ---------------- */
-const SECTIONS = { record: recordSection, oldsave: oldsaveSection, pens: pensSection, base: baseSection, retire: retireSection, fleet: fleetSection, hotseat: hotseatSection, loads: loadsSection };
+const SECTIONS = { record: recordSection, oldsave: oldsaveSection, pens: pensSection, base: baseSection, retire: retireSection, dashes: dashesSection, fleet: fleetSection, hotseat: hotseatSection, loads: loadsSection };
 async function main() {
   const folder = await mkdtemp(path.join(os.tmpdir(), 'simCmRetire-'));
   const lf = s => s.replace(/\r\n/g, '\n');
