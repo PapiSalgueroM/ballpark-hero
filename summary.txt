@@ -1,0 +1,7 @@
+srclib exit=0 0s | engine, save, shared files and guides byte equal to e814c2de
+storage exit=0 4s | simStorageWrites: all green (owed: 12)
+storage-gone exit=1 4s | simStorageWrites (control gone): 1 failed, the control FIRED on src/lib/safeStorage.ts write:plantedNeverWritten gone (owed: 12)
+unit exit=0 10s |       Tests  11 passed (11)
+dashes exit=0 0s | 1009 added lines scanned; with a dash: 0
+tsc exit=0 117s | tsc exit=0
+fences exit=0 332s | All 4 harnesses green.

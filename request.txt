@@ -1,0 +1,7 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json; s=$?; echo "tsc exit=$s"; exit $s
+srclib: d=$(git diff --name-only e814c2de HEAD -- src/lib); echo "src/lib changed vs e814c2de: $d"; git diff --quiet e814c2de HEAD -- src/lib/soccerCareerEngine.ts src/lib/soccerCareerSave.ts src/components/season-centre src/components/career/AwardsNightCard.tsx src/components/career/TrainingGround.tsx src/hooks/useSoundPlan.ts src/lib/soccerAwardReveal.ts src/lib/careerRetirement.ts src/components/career/FarewellCard.tsx src/data/gameContent && echo "engine, save, shared files and guides byte equal to e814c2de" && test "$d" = "src/lib/soccerClubSquadSheet.ts"
+unit: NO_COLOR=1 FORCE_COLOR=0 node_modules/.bin/vitest run src/test/soccerScreenTruths.test.tsx --reporter=verbose > /tmp/u.log 2>&1; s=$?; echo "passed lines: $(grep -c '✓' /tmp/u.log)"; grep -E "×|✗|Tests " /tmp/u.log | head -12; exit $s
+storage: node scripts/simStorageWrites.mjs > /tmp/sw.log 2>&1; s=$?; grep -i "squadsheet" /tmp/sw.log | head -3; tail -2 /tmp/sw.log; exit $s
+storage-gone: SIM_STORAGE_WRITES_CONTROL=gone node scripts/simStorageWrites.mjs > /tmp/swg.log 2>&1; s=$?; tail -3 /tmp/swg.log; exit $s
+fences: ONLY=simHarnessAnchors,simNoRivalNames,simAccessibility,simCareerSquad node scripts/runAllSims.mjs 2>&1 | tail -9; exit ${PIPESTATUS[0]}
+dashes: node .rc/x/dashrun.mjs
