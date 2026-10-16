@@ -1,0 +1,1 @@
+s11-trace exit=1 36s | simCmWorldMoves: RED, sections 11 (3)

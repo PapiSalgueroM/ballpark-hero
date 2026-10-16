@@ -1,0 +1,45 @@
+11) my own results: Aberdeen, Motherwell, St Mirren (2026-27), 3 seasons, BASE against the head on one stream, seeds 2
+  FAIL section 11: Aberdeen (now, seed 2): by step 37 (match) the head drew 56320 times and BASE 56356, with no AI deal touching my league or my opponents
+    the arms first part at draw 56028:
+    BASE
+      56026: poisson2 < simScore < simAiMatch < syncWorld < Object.playNextEntry
+      56027: poisson2 < simScore < simAiMatch < syncWorld < Object.playNextEntry
+      56028: poisson2 < simScore < simAiMatch < syncWorld < Object.playNextEntry
+      56029: poisson2 < simScore < simAiMatch < syncWorld < Object.playNextEntry
+      56030: poisson2 < simScore < simAiMatch < syncWorld < Object.playNextEntry
+    head
+      56026: poisson2 < simScore < simAiMatch < syncWorld < Object.playNextEntry
+      56027: poisson2 < simScore < simAiMatch < syncWorld < Object.playNextEntry
+      56028: ri < kickOff < Object.playNextEntry < ownResultsRun < process.processTicksAndRejections
+      56029: ri < kickOff < Object.playNextEntry < ownResultsRun < process.processTicksAndRejections
+      56030: poisson2 < drawSegment < kickOff < Object.playNextEntry < ownResultsRun
+  FAIL section 11: Motherwell (now, seed 2): by step 32 (match) the head drew 48798 times and BASE 48799, with no AI deal touching my league or my opponents
+    the arms first part at draw 48523:
+    BASE
+      48521: poisson2 < simScore < simAiMatch < syncWorld < Object.playNextEntry
+      48522: poisson2 < simScore < simAiMatch < syncWorld < Object.playNextEntry
+      48523: ri < kickOff < Object.playNextEntry < ownResultsRun < process.processTicksAndRejections
+      48524: ri < kickOff < Object.playNextEntry < ownResultsRun < process.processTicksAndRejections
+      48525: poisson2 < drawSegment < kickOff < Object.playNextEntry < ownResultsRun
+    head
+      48521: poisson2 < simScore < simAiMatch < syncWorld < Object.playNextEntry
+      48522: poisson2 < simScore < simAiMatch < syncWorld < Object.playNextEntry
+      48523: poisson2 < simScore < simAiMatch < syncWorld < Object.playNextEntry
+      48524: poisson2 < simScore < simAiMatch < syncWorld < Object.playNextEntry
+      48525: poisson2 < simScore < simAiMatch < syncWorld < Object.playNextEntry
+  FAIL section 11: St Mirren (now, seed 2): by step 43 (match) the head drew 67415 times and BASE 67392, with no AI deal touching my league or my opponents
+    the arms first part at draw 67141:
+    BASE
+      67139: poisson2 < simScore < simAiMatch < syncWorld < Object.playNextEntry
+      67140: poisson2 < simScore < simAiMatch < syncWorld < Object.playNextEntry
+      67141: poisson2 < simScore < simAiMatch < syncWorld < Object.playNextEntry
+      67142: poisson2 < simScore < simAiMatch < syncWorld < Object.playNextEntry
+      67143: poisson2 < simScore < simAiMatch < syncWorld < Object.playNextEntry
+    head
+      67139: poisson2 < simScore < simAiMatch < syncWorld < Object.playNextEntry
+      67140: poisson2 < simScore < simAiMatch < syncWorld < Object.playNextEntry
+      67141: ri < kickOff < Object.playNextEntry < ownResultsRun < process.processTicksAndRejections
+      67142: ri < kickOff < Object.playNextEntry < ownResultsRun < process.processTicksAndRejections
+      67143: poisson2 < drawSegment < kickOff < Object.playNextEntry < ownResultsRun
+   3 careers: 96 results of mine compared; 0 compared to the end, 0 cut where a deal touched my league, 0 where it touched a club I played
+simCmWorldMoves: RED, sections 11 (3)
