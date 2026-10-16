@@ -1,0 +1,6 @@
+#!serve
+#!playwright
+walk: node scripts/playCmOwnClubMarket.mjs
+hubE: HUB_LANDING_SECTIONS=E node scripts/playCmHubLanding.mjs
+playClubManager: node scripts/playClubManager.mjs
+playTwoTabs: node scripts/playTwoTabs.mjs
