@@ -15786,3 +15786,7 @@ Standing claims after Round 400:
   the desktop lane above.
 - Manager arc four, promotion style world editing: Round 310 (cloud lane, 2026-08-28).
   Tweaks item 11 is complete across rounds 303, 308, 309 and 310.
+
+## Codex Round1387 claim: additive ready-report source integration, 2026-10-16
+
+Isolated codex/report-followup-integration starts at exact I402fa4562fec28c38c42130036c65e884a25a5fb. Assemble ready root products284/285/286/287/288/289/296/297/302/303 in that order with real no-ff merges and skip-ci preparation commits. Keep I's existing shared board/state text, individual packet audits and all Manager/competition/main/publication ownership. No new feature, manager-book correction, cap or oracle allowance. First return actual merge parents, application overlaps and incoming-reference plan for root review before qualification CI. Later qualification measures exact baseline402 and joined source under identical unchanged caps, with honest inherited failures. No local app/test/build execution, competing release or requirement for BI to wait.
