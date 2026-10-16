@@ -1,0 +1,1 @@
+size: cp .rc/x/sizeProbe.test.ts src/lib/zzSizeProbe1508.test.ts && node_modules/.bin/vitest run src/lib/zzSizeProbe1508.test.ts --testTimeout=300000 2>&1 | grep -E "SIZE|Tests |FAIL|Error" | head -40; s=${PIPESTATUS[0]}; rm -f src/lib/zzSizeProbe1508.test.ts; exit $s
