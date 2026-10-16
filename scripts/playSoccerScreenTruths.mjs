@@ -278,6 +278,68 @@ async function w5(width, height) {
   } finally { await ctx.close(); }
 }
 
+/* ---------- W6: the Squad sheet opens on the squad, with a one line pointer to its ? ---------- */
+function squadSave() {
+  const save = recordedSave('ere');
+  Object.assign(save, { phase: 'playing', retired: false, currentClub: 'Arsenal', currentClubCountry: 'England', currentClubTier: 1, position: 'CM', overall: 85 });
+  save.seasons[save.seasons.length - 1].year = 2025;
+  return save;
+}
+/* Where the pointer and the first tile sit, by layout (offsetTop), so the sheet's zoom in does not count as a move. */
+const squadNow = page => page.evaluate(() => {
+  const sheet = document.querySelector('[data-squad-sheet]');
+  if (!sheet) return null;
+  const top = el => { let t = 0; for (let e = el; e && e !== sheet; e = e.offsetParent) t += e.offsetTop; return t; };
+  const hint = sheet.querySelector('[data-squad-first-hint]'), tile = sheet.querySelector('[data-squad-open]');
+  return { screen: sheet.querySelector('[data-squad-screen]')?.getAttribute('data-squad-screen') ?? null,
+    hintY: hint ? top(hint) : null, tileY: tile ? top(tile) : null };
+});
+async function w6(width, height) {
+  section = 'W6';
+  const { ctx, page, errors } = await open(squadSave(), { width, height });
+  try {
+    const tile = page.locator('[data-squad-tile]');
+    await tile.waitFor({ timeout: 45000 });
+    const before = await saveBytes(page);
+    const keysBefore = await storedKeys(page);
+    await page.evaluate(() => {
+      window.__squadFirst = null;
+      new MutationObserver(() => {
+        const sheet = document.querySelector('[data-squad-sheet]');
+        if (window.__squadFirst || !sheet?.querySelector('[data-squad-screen]')) return;
+        const top = el => { let t = 0; for (let e = el; e && e !== sheet; e = e.offsetParent) t += e.offsetTop; return t; };
+        const hint = sheet.querySelector('[data-squad-first-hint]'), first = sheet.querySelector('[data-squad-open]');
+        window.__squadFirst = { screen: sheet.querySelector('[data-squad-screen]').getAttribute('data-squad-screen'),
+          hintY: hint ? top(hint) : null, tileY: first ? top(first) : null };
+      }).observe(document.body, { childList: true, subtree: true });
+    });
+    await tile.click();
+    await page.locator('[data-squad-sheet] [data-squad-screen]').first().waitFor({ timeout: 15000 });
+    const first = await page.evaluate(() => window.__squadFirst);
+    await page.waitForTimeout(1000);
+    const later = await squadNow(page);
+    check(first?.screen === 'home' && first.hintY !== null, `${width}: the first frame of the first open is home with the pointer (${JSON.stringify(first)})`);
+    check(later?.screen === 'home' && later.hintY !== null, `${width}: one second later it is still home with the pointer (${JSON.stringify(later)})`);
+    check(!!first && !!later && first.hintY === later.hintY && first.tileY === later.tileY, `${width}: the pointer and the first tile have not moved`);
+    await shot(page, `W6-first-open-${width}`);
+    await page.getByRole('button', { name: 'How the squad works', exact: true }).click();
+    const help = await page.locator('[data-squad-sheet] [data-squad-screen="help"]').waitFor({ timeout: 8000 }).then(() => true, () => false);
+    check(help, `${width}: ? opens the help`);
+    if (help) await shot(page, `W6-help-${width}`);
+    await page.keyboard.press('Escape');
+    await page.keyboard.press('Escape');
+    await page.locator('[data-squad-sheet]').waitFor({ state: 'detached', timeout: 8000 });
+    await tile.click();
+    await page.locator('[data-squad-sheet] [data-squad-screen]').first().waitFor({ timeout: 15000 });
+    await page.waitForTimeout(500);
+    const next = await squadNow(page);
+    check(next?.screen === 'home' && next.hintY === null, `${width}: the next open is home with no pointer (${JSON.stringify(next)})`);
+    const added = (await storedKeys(page)).filter(k => !keysBefore.includes(k));
+    check(await saveBytes(page) === before && added.length === 1 && added[0] === HINT_KEY, `${width}: the save is byte for byte the same and the only key added is ${HINT_KEY} (${added.join(', ') || 'none'})`);
+    check(errors.length === 0, `${width}: no page error (${errors[0] || 'none'})`);
+  } finally { await ctx.close(); }
+}
+
 /* ---------- the run ---------- */
 async function runArm(which) {
   arm = which;

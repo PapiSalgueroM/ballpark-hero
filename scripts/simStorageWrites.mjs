@@ -474,8 +474,8 @@ const NOTHING_HELD = [
     why: 'the rules seen flag could not be read or written, so the rules show again' },
   { file: 'src/components/conquest/ImperialismBoardShared.tsx', keys: ['write:(anonymous)'],
     why: 'the help seen flag: refused, the help does not open by itself' },
-  { file: 'src/components/soccer-career/SquadSheet.tsx', keys: ['write:helpSeen', 'keeps:helpSeen'],
-    why: 'the help seen flag: a browser that refuses storage sees the help again' },
+  { file: 'src/components/soccer-career/SquadSheet.tsx', keys: ['write:markHintShown'],
+    why: 'the hint seen flag: a browser that refuses storage sees the one line pointer again' },
   /* the game refused the action instead of keeping it */
   { file: 'src/lib/clubManagerSlots.ts', keys: ['write:switchSlot', 'write:switchSlot#2'],
     why: 'a refused switch is rolled back step by step and answers false (step 1 parks the outgoing career, step 3 seats the incoming one, each write with its own undo); the outgoing career never left its key' },

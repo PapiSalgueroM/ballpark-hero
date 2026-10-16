@@ -17,8 +17,9 @@
  *  1. (page) Lazy: no SquadSheet chunk on a fresh hub, one after the press.
  *  2. The tile says what the lib says: rank, group size and trust percent
  *     equal squadView(save) in node. An academy save shows no tile.
- *  3. The sheet opens with focus inside. First open shows the help, ? shows
- *     it again. The chip names the source: an invented squad carries ages, a
+ *  3. The sheet opens with focus inside. First open lands on home with a
+ *     one line pointer to ? (Round 1337), ? shows the help, a viewer who
+ *     has been shown the pointer opens on home without it. The chip names the source: an invented squad carries ages, a
  *     real one no age, flag, NEW chip or arrival line, a sheet by role no
  *     name at all.
  *  4. Every screen opens from its tile and Back returns home; the eleven is
@@ -385,9 +386,13 @@ async function sourceFacts(page) {
 {
   const { ctx, page } = await open(SAVES.A, { helpSeen: false });
   await page.click(TILE);
-  await screenIs(page, 'help');
-  check(true, '3. the first open shows the help');
+  /* Round 1337: the first open lands on the squad with a one line pointer to ?, and ? opens the help. */
+  await screenIs(page, 'home');
+  check(await page.locator(`${SHEET} [data-squad-first-hint]`).count() === 1, '3. the first open lands on home with the one line pointer to ?');
   check(await page.evaluate(() => !!document.activeElement?.closest('[role="dialog"]')), '3. focus is inside the dialog');
+  await page.click(`${SHEET} button[aria-label="How the squad works"]`);
+  await screenIs(page, 'help');
+  check(true, '3. ? opens the help');
   await backHome(page);
   await page.click(`${SHEET} button[aria-label="How the squad works"]`);
   await screenIs(page, 'help');
@@ -409,6 +414,7 @@ async function sourceFacts(page) {
   await page.click(TILE);
   await screenIs(page, 'home');
   check(true, '3. a viewer who has seen the help opens on home');
+  check(await page.locator(`${SHEET} [data-squad-first-hint]`).count() === 0, '3. and sees no pointer to ?');
   const chip = page.locator(`${SHEET} [data-squad-source]`).first();
   check(await chip.getAttribute('data-squad-source') === 'real' && (await chip.innerText()).trim() === 'REAL SQUAD', '3. save B is labelled REAL SQUAD');
   const f = await sourceFacts(page);
@@ -483,6 +489,10 @@ async function walk(k, tag) {
   const keysBefore = await page.evaluate(() => Object.keys(window.localStorage).sort());
   const text = {};
   await page.click(TILE);
+  /* Round 1337: the first open is home with the pointer; the help is reached through ? */
+  await screenIs(page, 'home');
+  const hint = await page.locator(`${SHEET} [data-squad-first-hint]`).count() === 1;
+  await page.click(`${SHEET} button[aria-label="How the squad works"]`);
   await screenIs(page, 'help');
   text.help = await page.locator(`${SHEET} [role="dialog"]`).innerText();
   await backHome(page);
@@ -512,13 +522,14 @@ async function walk(k, tag) {
   const after = await page.evaluate(key => window.localStorage.getItem(key), SAVE_KEY);
   const keysAfter = await page.evaluate(() => Object.keys(window.localStorage).sort());
   await ctx.close();
-  return { text, opened, cells, focusOnTile, same: before === mid && before === after, added: keysAfter.filter(x => !keysBefore.includes(x)) };
+  return { text, hint, opened, cells, focusOnTile, same: before === mid && before === after, added: keysAfter.filter(x => !keysBefore.includes(x)) };
 }
 for (const k of ['A', 'B', 'R']) {
   const one = await walk(k, null);
   const two = await walk(k, null);
   const v = VIEW[k];
   const want = sheet.lastSeason(SAVES[k]) ? 4 : 3;
+  check(one.hint && two.hint, `4. save ${k}: the first open lands on home with the pointer to ? in both fresh contexts`);
   check(one.opened === want, `4. save ${k}: ${one.opened} screens opened from their tiles and Back returned home each time (${want} expected)`);
   check(!!one.cells && one.cells.all === 11 && one.cells.me === (v.inElevenOnRating ? 1 : 0), `4. save ${k}: the eleven is 11 cells with him in ${v.inElevenOnRating ? 'one' : 'none'} of them (${JSON.stringify(one.cells)})`);
   check(one.focusOnTile, `4. save ${k}: Escape went home, then closed, and focus is back on the tile`);
@@ -774,6 +785,10 @@ for (const [width, height] of SHORT) {
     await page.click(TILE);
     let alive = true;
     if (k === 'A') {
+      /* Round 1337: the first open is home with the pointer; Back is measured on the help reached through ? */
+      await screenIs(page, 'home');
+      check(await page.locator(`${SHEET} [data-squad-first-hint]`).count() === 1, `${where}: the first open lands on home with the pointer to ?`);
+      await page.click(`${SHEET} button[aria-label="How the squad works"]`);
       await screenIs(page, 'help');
       await page.waitForTimeout(500);   // the picture is of the settled screen, not of the sheet arriving
       await shot(page, `short-${k}-first-help-${width}x${height}`);

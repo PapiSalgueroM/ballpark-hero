@@ -50,6 +50,9 @@ import * as E from '@/lib/soccerCareerEngine';
 import { isSoccerCareerSave } from '@/lib/soccerCareerSave';
 import { prepareLeagueWorld, recordLeagueWorldSeason } from '@/lib/soccerCareerLeagueWorld';
 import SoccerSeasonCentre from '@/components/soccer-career/SoccerSeasonCentre';
+import SquadSheet from '@/components/soccer-career/SquadSheet';
+import TrainingPanel from '@/components/soccer-career/TrainingPanel';
+import { squadView } from '@/lib/soccerClubSquad';
 import SoccerCareer from '@/pages/SoccerCareer';
 
 const KEY = 'soccerCareerSave';
@@ -192,5 +195,66 @@ describe('S2 Week by week says it is a watch', () => {
     const review = view.container.querySelector('[data-review]');
     expect(review).not.toBeNull();
     expect(review!.textContent).toContain('The Spanish lower division uses the available first-team club pool.');
+  });
+});
+
+/* ---------- S3 the Squad sheet ---------- */
+const HINT_KEY = 'soccerSquad:help';
+const RULE_ONE = 'This is where you stand at the club right now. It explains your games, it does not change them.';
+function squadSave(): E.CareerState {
+  const career = copy(JSON.parse(readFileSync(resolve(process.cwd(), 'scripts/data/careerLeagueWorldSaves1100.json'), 'utf8')).saves.find((s: { id: string }) => s.id === 'ere').state) as E.CareerState;
+  Object.assign(career, { phase: 'playing', retired: false, currentClub: 'Arsenal', currentClubCountry: 'England', currentClubTier: 1, position: 'CM', overall: 85 });
+  career.seasons[career.seasons.length - 1].year = 2025;
+  return career;
+}
+function sheet(initialScreen?: 'home') {
+  const career = squadSave();
+  const view = squadView(career);
+  expect(view).not.toBeNull();
+  return render(<SquadSheet career={career} view={view!} onClose={() => {}} initialScreen={initialScreen} />);
+}
+const hintCalls = (spy: { mock: { calls: unknown[][] } }) => spy.mock.calls.filter(([key]) => key === HINT_KEY).length;
+
+describe('S3 the Squad sheet opens on the squad, the rules one tap away', () => {
+  it('lands on home with the pointer, writes the flag after mount only, and ? opens the help with the new first rule', () => {
+    const get = vi.spyOn(Storage.prototype, 'getItem');
+    const realSet = Storage.prototype.setItem;
+    const writes: boolean[] = [];
+    const set = vi.spyOn(Storage.prototype, 'setItem').mockImplementation(function (this: Storage, key: string, value: string) {
+      if (key === HINT_KEY) writes.push(!!document.querySelector('[data-squad-first-hint]'));
+      return realSet.call(this, key, value);
+    });
+    const checked = sheet('home');
+    expect(checked.container.querySelector('[data-squad-first-hint]')).toBeNull();
+    expect(hintCalls(get)).toBe(0);
+    expect(hintCalls(set)).toBe(0);
+    checked.unmount();
+    const view = sheet();
+    expect(view.container.querySelector('[data-squad-screen="home"]')).not.toBeNull();
+    expect(view.container.querySelector('[data-squad-first-hint]')?.textContent).toContain('Tap ?');
+    expect(writes).toEqual([true]);
+    expect(localStorage.getItem(HINT_KEY)).toBe('1');
+    fireEvent.click(screen.getByRole('button', { name: 'How the squad works' }));
+    const help = view.container.querySelector('[data-squad-screen="help"]');
+    expect(help).not.toBeNull();
+    expect(help!.querySelector('[data-squad-help] li')?.textContent).toBe(RULE_ONE);
+  });
+
+  it('shows the pointer on the first open only', () => {
+    const first = sheet();
+    expect(first.container.querySelector('[data-squad-screen="home"]')).not.toBeNull();
+    expect(first.container.querySelector('[data-squad-first-hint]')).not.toBeNull();
+    first.unmount();
+    const again = sheet();
+    expect(again.container.querySelector('[data-squad-screen="home"]')).not.toBeNull();
+    expect(again.container.querySelector('[data-squad-first-hint]')).toBeNull();
+  });
+
+  it('shows the pointer and does not crash when storage throws', () => {
+    vi.spyOn(Storage.prototype, 'getItem').mockImplementation(() => { throw new Error('storage refused'); });
+    vi.spyOn(Storage.prototype, 'setItem').mockImplementation(() => { throw new Error('storage refused'); });
+    const view = sheet();
+    expect(view.container.querySelector('[data-squad-screen="home"]')).not.toBeNull();
+    expect(view.container.querySelector('[data-squad-first-hint]')).not.toBeNull();
   });
 });
