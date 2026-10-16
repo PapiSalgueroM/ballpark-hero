@@ -69,7 +69,7 @@ origin/rc-results/<name>.
   22 file(s) on the frozen baseline, 0 new". simPrerender as a whole is red on the head only for "/whats-new drops the
   entry Soccer Career: screens that say what they are.": the saved /whats-new page is the lead's build:seo at the
   release (builders never write public/); green on the base.
-- Page readers on the head: every src/test file that renders the page (28 files) green (r1337-f1); the 41 sims that
+- Page readers on the head: every src/test file that renders the page (28 files) green (r1337-f1); the 50 sims of the three lists that
   read SoccerCareer.tsx green but simSoccerCareerDocumentaryReview, simSoccerCareerSavedLoan (both "Only ... may differ
   from the whole held parent app") and simTransferBriefPageControl (EMPTY), which are the same on the base (r1337-b0d);
   walks green: playCareerSquad (190), playCareerProgramme (1154), playSeasonCentre (41), playSeasonMoments (117),
