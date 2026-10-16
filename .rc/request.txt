@@ -1,0 +1,13 @@
+#!serial
+bb: SEEDS="3 4" bash .rc/x/bis.sh bb c2fe8231
+bcm1: SEEDS="3 4" bash .rc/x/bis.sh bcm1 5ec5a724
+bcend: SEEDS="3 4" bash .rc/x/bis.sh bcend 84af585a
+pre1331: SEEDS="3 4" bash .rc/x/bis.sh pre1331 082fc277
+m1331: SEEDS="3 4" bash .rc/x/bis.sh m1331 26eadaaa
+bdend: SEEDS="3 4" bash .rc/x/bis.sh bdend deff8654
+predesk: SEEDS="3 4" bash .rc/x/bis.sh predesk c855520d
+mdesk: SEEDS="3 4" bash .rc/x/bis.sh mdesk a298f548
+m1369: SEEDS="3 4" bash .rc/x/bis.sh m1369 4858f4f1
+m1365: SEEDS="3 4" bash .rc/x/bis.sh m1365 6a86f2a2
+m1366: SEEDS="3 4" bash .rc/x/bis.sh m1366 c76a6827
+bfh: SEEDS="3 4" bash .rc/x/bis.sh bfh 4c2b782b
