@@ -1,0 +1,4 @@
+build exit=0 34s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+roster exit=0 4s | simClubDetailCurrentRoster normal: green.
+roster-ctl-original exit=0 4s | FIRED-OK
+playRoster exit=0 66s | Current-roster browser: passed; 1137 checks, 21 saved page journeys, 1 effective controls, 22 originals, 0 failures, 0 setup failures.
