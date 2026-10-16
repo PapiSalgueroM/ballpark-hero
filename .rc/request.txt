@@ -1,0 +1,8 @@
+#!serial
+rules-base: git checkout d4f2c6f6 -- src && node scripts/simCmLeagueRules.mjs; s=$?; git checkout HEAD -- src; exit $s
+rules-nogate: sed -i "s/  if (state.matchRules !== 'base') {/  if (false) {/" src/lib/clubManager.ts && grep -c "  if (false) {" src/lib/clubManager.ts && node scripts/simCmLeagueRules.mjs; s=$?; git checkout HEAD -- src; exit $s
+rules-head-EXPECT-RED: git diff --quiet HEAD -- src && node scripts/simCmLeagueRules.mjs
+write-digest: node scripts/simCmLeagueRules.mjs --part=modern,eras,pure --write && cp scripts/data/cmLeagueRulesDigest.json $RC_OUT/ && git diff --numstat -- scripts/data/cmLeagueRulesDigest.json && node scripts/simCmLeagueRules.mjs; s=$?; git checkout HEAD -- scripts/data; exit $s
+probe38: node .rc/x/probe38.mjs
+retire: node scripts/simCmRetire.mjs
+retire-dash: RETIRE_CONTROL=dash node scripts/simCmRetire.mjs
