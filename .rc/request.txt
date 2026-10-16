@@ -1,0 +1,7 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+simPreloadWait: node scripts/simPreloadWait.mjs
+simStaleChunk: node scripts/simStaleChunk.mjs
+rerecordProof: node .rc/x/rerecordProof.mjs 1027b08cac8ef5cfc52c6b2e738e5c0a8d703402
