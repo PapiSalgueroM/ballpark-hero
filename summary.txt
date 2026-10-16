@@ -1,0 +1,7 @@
+simNoRivalNames exit=0 18s | No rival product names found. 0 findings.
+simStorageWrites exit=0 3s | simStorageWrites: all green (owed: 12)
+simPreloadWait exit=0 1s | simPreloadWait: green. A chunk that fails to download waits for the one reload instead of handing React an empty module.
+simStaleChunk exit=0 0s | simStaleChunk: green. A tab left open across a deploy reloads once for a missing chunk instead of painting the broken page.
+rerecordProof exit=0 0s | rerecordProof: green. The one input is SoccerCareer.tsx line 93; put back, the old recording replays.
+simHarnessAnchors exit=0 42s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+tsc exit=0 61s | 

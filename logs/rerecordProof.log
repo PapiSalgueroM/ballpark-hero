@@ -1,0 +1,11 @@
+ok   base line 93 found 1 time(s) in the workflow (expected 1)
+ok   head line 93 found 0 time(s) in the workflow (expected 0)
+ok   6 page spans read from the workflow (expected 6)
+ok   span import { isSoccerCareerSave, parseSoccerCareerSave, serializeSoccerCar... base 1 head 1 replay 1
+ok   span const parsed: unknown = parseSoccerCareerSave(saved);... base 1 head 1 replay 1
+ok   span localStorage.setItem(SAVE_KEY, serializeSoccerCareerSave(career));... base 1 head 1 replay 1
+ok   span const CareerStory = lazy(() => import("@/components/soccer-career/Care... base 1 head 0 replay 1 (the loader: 1, 0, 1 expected)
+ok   span {storyOpen && <Suspense fallback={null}><CareerStory career={visibleCa... base 1 head 1 replay 1
+ok   span {career.phase === "retired" && <Suspense fallback={null}><CareerStory ... base 1 head 1 replay 1
+ok   head's page with line 93 put back is byte for byte base's page (line endings normalised)
+rerecordProof: green. The one input is SoccerCareer.tsx line 93; put back, the old recording replays.
