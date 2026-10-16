@@ -49,8 +49,8 @@
         how often a deck boost and a full drill in one summer would pass the
         ceiling only because of the deck (printed: the drills' room does not
         count queued boosts, a rule owed to the drills).
-     6) REACH BY POSITION. 400 careers (the ten codes, 40 each) of 15 seasons
-        with the deck loaded: every position card is dealt to its own group
+     6) REACH BY POSITION. 400 careers (the ten codes, 40 each) of 18 seasons
+        (15 never reach card 722, which needs 31) with the deck loaded: every position card is dealt to its own group
         (the drills' grouping: a CDM defends, LW and RW are forwards) and never
         to another, every situation card to at least one group, no keeper is
         printed an outfield training word nor an outfielder a keeper one; per
@@ -670,7 +670,7 @@ if (runs(6)) {
     const code = CODES[seed % CODES.length];
     const p = (per[code] ??= { summers: 0, dealt: 0, ids: {} });
     let prev = '';
-    drive(H.engine, seed, { seasons: 15,
+    drive(H.engine, seed, { seasons: 18,
       onDeal: st => { if (st.age >= 17) p.summers += 1; },
       onStep: s => {
         const first = s.pendingEvents?.[0];

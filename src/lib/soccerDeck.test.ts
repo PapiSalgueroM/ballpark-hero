@@ -283,10 +283,12 @@ describe('the gate', () => {
     expect(soccerDeckSlot(s(), 2024, 'k', [])).toHaveLength(1);
     expect(soccerDeckPending(saved).map(e => e.id)).toEqual([716]);
   });
-  it('loads the real chunk, whose shipped pack deals nothing yet', async () => {
+  it('loads the real chunk and deals one card of the shipped pack', async () => {
     await loadSoccerDeck();
     expect(soccerDeckReady()).toBe(true);
-    expect(soccerDeckSlot(s(), 2024, 'k', [])).toEqual([]);
+    const dealt = soccerDeckSlot(s(), 2024, 'k', []);
+    expect(dealt).toHaveLength(1);
+    expect(isSoccerDeckId(dealt[0].id)).toBe(true);
   });
   it('fails closed on a load that resolves with nothing in it', async () => {
     setSoccerDeckLoader(() => Promise.resolve(undefined));
@@ -362,8 +364,9 @@ describe('the starter pack', () => {
     for (const card of deckToRandomEvents(PACK, PACK.events)) {
       card.choices.forEach(c => {
         const s = career({ morale: 50 });
-        const after = c.apply({ ...s });
-        if (c.consequence === 'Nothing changes') { expect(after).toBe(s); return; }
+        const handed = { ...s };
+        const after = c.apply(handed);
+        if (c.consequence === 'Nothing changes') { expect(after).toBe(handed); return; }
         const moved: string[] = [];
         if (after.morale !== s.morale) moved.push(`Morale ${after.morale - s.morale > 0 ? '+' : ''}${after.morale - s.morale}`);
         if (after.integrityBonus !== s.integrityBonus) moved.push(`Integrity +${after.integrityBonus - s.integrityBonus}`);
