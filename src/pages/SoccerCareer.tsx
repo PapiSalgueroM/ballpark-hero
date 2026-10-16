@@ -4184,10 +4184,10 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
               <span className="min-w-0">
                 <span className="block text-xs font-bold">Full attributes</span>
                 <span className="block text-[10px] text-muted-foreground truncate">
-                  {nightHeld ? "Opens once the Ballon d'Or night is over" : <>{career.physique?.heightCm ?? 180} cm · {career.physique?.weightKg ?? 76} kg · every number under the six</>}
+                  {nightHeld ? "Opens once the Ballon d'Or result is in" : <>{career.physique?.heightCm ?? 180} cm · {career.physique?.weightKg ?? 76} kg · every number under the six</>}
                 </span>
               </span>
-              <ChevronRight className="w-4 h-4 shrink-0 opacity-60" />
+              {!nightHeld && <ChevronRight className="w-4 h-4 shrink-0 opacity-60" />}
             </button>
           </div>
 

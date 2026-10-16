@@ -130,7 +130,8 @@ describe('S1 the Ballon d\'Or night holds Full attributes while it counts down',
     expect(card!.getAttribute('data-award-result')).toBe('waiting');
     const button = attributesButton();
     expect(button).toBeDisabled();
-    expect(button.textContent).toContain("Opens once the Ballon d'Or night is over");
+    expect(button.textContent).toContain("Opens once the Ballon d'Or result is in");
+    expect(button.querySelector('svg')).toBeNull();
     const before = localStorage.getItem(KEY);
     fireEvent.click(button);
     expect(attributesOpen(view)).toBe(false);
@@ -143,6 +144,7 @@ describe('S1 the Ballon d\'Or night holds Full attributes while it counts down',
     const button = attributesButton();
     expect(button).toBeEnabled();
     expect(button.textContent).not.toContain('Opens once');
+    expect(button.querySelector('svg')).not.toBeNull();
     fireEvent.click(button);
     expect(attributesOpen(view)).toBe(true);
   });

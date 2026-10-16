@@ -131,7 +131,7 @@ function nightSave() {
     pendingBallonDor: { year: row.year, nominees, playerRank: 3, playerPoints: 260, playerNominated: true, moved: '' } });
   return save;
 }
-const NIGHT_LINE = "Opens once the Ballon d'Or night is over";
+const NIGHT_LINE = "Opens once the Ballon d'Or result is in";
 const CARD = '[data-award-night="ballon_dor"]';
 async function recordFrames(page) {
   await page.evaluate(card => {
@@ -165,6 +165,7 @@ async function w4() {
     check(await page.locator(CARD).getAttribute('data-award-result') === 'waiting', 'the night is counting down when the hub is up');
     check(await button.isDisabled(), 'during the countdown Full attributes is disabled');
     check((await button.innerText()).includes(NIGHT_LINE), `during the countdown its second line reads "${NIGHT_LINE}"`);
+    check(await button.locator('svg').count() === 0, 'during the countdown it shows no chevron, so it does not look like a door');
     await button.scrollIntoViewIfNeeded();
     await shot(page, 'W4-countdown-390');
     const box = await button.boundingBox();
@@ -184,6 +185,7 @@ async function w4() {
       `the result arrives once and the card never leaves (${results.join(' > ')})`);
     check(await enabledSoon(page), 'once the night has been shown Full attributes is enabled');
     check(!(await button.innerText()).includes(NIGHT_LINE), 'and its second line is the usual one again');
+    check(await button.locator('svg').count() === 1, 'and its chevron is back');
     await button.click();
     check(await attributesOpen(page), 'it opens Full attributes');
     await shot(page, 'W4-attributes-390');
