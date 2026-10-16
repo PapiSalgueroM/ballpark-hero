@@ -1,0 +1,3 @@
+#!build
+fences: ONLY=simLiveScores,simNoRivalNames,simInventedNames,simHarnessAnchors,simNoInventedQuotes,simNoInventedConduct,simLegalPages,simSingleFooter,simCompletionSlugs,simCompletionOnce,simNoDoubleRecord,simDailyPuzzleContract,simDailySaveHardening,simWritesAreSent,simSchemaNames,simFetchRetry,simGoogleOnlyReturn,simReportRelay,simNavbarStatsReads,simLeaderboardCaps,simScoringCoverage,simSiteSearch,simResultMoment,simGuideHeadings node scripts/runAllSims.mjs > /tmp/f.log 2>&1; s=$?; grep -E '^\s+(PASS|FAIL|EMPTY|SKIP)' /tmp/f.log; tail -2 /tmp/f.log; exit $s
+prerender: node scripts/simPrerender.mjs > /tmp/pr.log 2>&1; s=$?; grep -nE "FAIL|failure" /tmp/pr.log | head -8; tail -3 /tmp/pr.log; exit $s

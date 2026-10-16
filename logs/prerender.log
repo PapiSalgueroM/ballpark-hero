@@ -1,0 +1,5 @@
+16:  FAIL: /whats-new drops the entry "Soccer Career: screens that say what they are.", which means the extractor is throwing away real content again
+38:simPrerender: 1 failure
+   171 documents read, 0 waiting lines found
+
+simPrerender: 1 failure
