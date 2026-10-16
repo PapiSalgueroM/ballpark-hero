@@ -1,0 +1,3 @@
+ow-never exit=1 8s | simCmOldCareersWorld: control never FIRED: section 1's moved check red 60 times, the comparison before the summer green (7s)
+ow-early exit=1 8s | simCmOldCareersWorld: control early FIRED: section 1's comparison before the summer red 2 times (8s)
+oldworld exit=0 53s | simCmOldCareersWorld: green, sections 1, 2 held (52s)
