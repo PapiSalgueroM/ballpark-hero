@@ -1,0 +1,9 @@
+#!serial
+mkbase: git worktree add -q /tmp/p 1027b08c && ln -s "$PWD/node_modules" /tmp/p/node_modules && git -C /tmp/p log --oneline -1
+simSaveFence: FENCE_BASE=/tmp/p node scripts/simSaveFence.mjs
+simCmLeagueBook: BOOK_BASE=/tmp/p node scripts/simCmLeagueBook.mjs
+savesize-base: cd /tmp/p && node scripts/simClubManagerSaveSize.mjs
+slots-head: node scripts/simClubManagerSlots.mjs
+slots-base: cd /tmp/p && node scripts/simClubManagerSlots.mjs
+weight-head: node_modules/.bin/vite build --outDir /tmp/dh --emptyOutDir > /dev/null 2>&1 && node .rc/x/weight1339.mjs /tmp/dh head
+weight-base: cd /tmp/p && node_modules/.bin/vite build --outDir /tmp/db --emptyOutDir > /dev/null 2>&1 && cd - > /dev/null && node .rc/x/weight1339.mjs /tmp/db base
