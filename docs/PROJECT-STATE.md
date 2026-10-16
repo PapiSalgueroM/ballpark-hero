@@ -18527,3 +18527,7 @@ No combined runtime or CI has run. Full build/browser/weight qualification waits
 ## Codex Round1387 preliminary source checkpoint, 2026-10-16
 
 Root and independent review passed the unrun preliminary helper6406ba6e and workflowf438860c. Native text checks confirmed seven unique feature-only inverse/forward anchors and complete reconstruction of Life17, both phone changes and both TransferScreen changes to exact402. The frozen app/tests/helpers/public/packages remain unchanged. Proposed remote scope is two real type gates, five serial helper families in three arms,284 units/control/restored plus old DealMoment, and62 old Life cases.296 is source-only; no full build/browser/weights/historical-Life/actual-BIH qualification. Commit/push preserves the source with skip-ci; no preliminary runtime was dispatched. I's actual BII individual-head join remains authoritative, and the urgent live interaction reports take priority over optional preliminary execution.
+
+## Codex Round1387 workflow context correction, 2026-10-16
+
+Corrected the optional preliminary workflow's unsupported job-env runner.temp expression after urgent1388's first request was rejected before runtime. The first runner step now writes REPORT_PRELIM_OUT from RUNNER_TEMP to GITHUB_ENV. Workflow/audit/state only, skip-ci; helper6406ba6e and all product/test/old-method/public/package bytes remain unchanged. No1387 CI dispatched or runtime qualification claimed, and I's BII release does not wait.

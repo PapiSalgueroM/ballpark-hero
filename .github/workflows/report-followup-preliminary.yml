@@ -18,8 +18,9 @@ jobs:
       CI: '1'
       SIM_NETWORK: offline
       CAREER_SEASON_LOCAL_ONLY: '1'
-      REPORT_PRELIM_OUT: ${{ runner.temp }}/report-followup-preliminary
     steps:
+      - name: Initialize evidence path on the allocated runner
+        run: echo "REPORT_PRELIM_OUT=$RUNNER_TEMP/report-followup-preliminary" >> "$GITHUB_ENV"
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
