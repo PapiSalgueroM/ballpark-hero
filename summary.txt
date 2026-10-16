@@ -1,0 +1,9 @@
+vitest-rec exit=0 1s |    Duration  841ms (transform 51ms, setup 48ms, collect 43ms, tests 7ms, environment 318ms, prepare 145ms)
+retire-tielast exit=1 16s | control tielast FIRED: 2 of 3 checks red
+retire exit=0 18s | simCmRetire: all 12 checks passed (record, oldsave, pens, base)
+retire-nomissed exit=1 4s | control nomissed FIRED: 2 of 7 checks red
+retire-basewrites exit=1 1s | control basewrites FIRED: 1 of 1 checks red
+retire-skipgame exit=1 16s | control skipgame FIRED: 2 of 3 checks red
+simNoRivalNames exit=0 11s | No rival product names found. 0 findings.
+tsc exit=0 56s | 
+simHarnessAnchors exit=0 32s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
