@@ -35,6 +35,11 @@ const REVERSE = [
   ['  const display = belgian2025OpponentLabels(row, s);\n',''],
   ['    names: display?.names ?? s.labels.map(l => (l.named ? l.name : SOCCER.words.unnamed)),','    names: s.labels.map(l => (l.named ? l.name : SOCCER.words.unnamed)),'],
   ["    resultsWhy: s.mode === 'table' ? null : [ctx.why === 'severe' ? 'Results only: your season was cut short, so there is no final table.' : RESULTS_WORDS, display?.note].filter(Boolean).join(' '),","    resultsWhy: s.mode === 'table' ? null : ctx.why === 'severe' ? 'Results only: your season was cut short, so there is no final table.' : RESULTS_WORDS,"],
+  /* Round 1337: the help's first two paragraphs (HELP.intro) were reworded; the legacy page takes the old words back. */
+  [`    'Your season was played the moment you pressed Next Season or 📺 Week by week. Here you watch it one matchday at a time, and the final table and your season totals end where your season summary has them.',`,
+    `    'Your season was played the moment you pressed Next Season. This is that same season, match by match: the final table and your season totals are settled, and nothing here can change them.',`],
+  [`    "Earlier seasons use the league's real clubs and competition rules where the game has them checked. From 2026-27, a season with a saved league world runs on your career's simulated clubs, with promotion and relegation between two divisions. Every score, every other club's result and every minute are your career's own.",`,
+    `    "Earlier-season tables use verified league membership and competition rules. From 2026-27, saved league worlds use your career's simulated clubs and direct promotion and relegation between two divisions. The review marks the available Spanish lower-division club pool. Every score, every other club's result and every minute are your career's own.",`],
 ];
 const sha = b => createHash('sha256').update(b).digest('hex');
 const json = v => JSON.stringify(v, (_k, x) => typeof x === 'function' ? { functionBody: String(x) } : x);
