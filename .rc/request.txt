@@ -1,0 +1,6 @@
+#!serve
+#!playwright
+sweepWeight-head: SWEEP_OFFLINE=1 ENGINES=chromium node scripts/sweepWeight.mjs 2>&1 | grep -E "club-manager|manager-hot-seat|deadline-day|sweepWeight" | head -12
+playCmRetire: node scripts/playCmRetire.mjs
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-s6: node_modules/.bin/vitest run src/test/clubManagerRetire.test.tsx src/test/clubManagerSlots.test.tsx src/test/clubManagerManagerFace.test.tsx src/test/cmTablesTruth.test.tsx src/test/numberFormatting.test.tsx --testTimeout=300000 --hookTimeout=120000
