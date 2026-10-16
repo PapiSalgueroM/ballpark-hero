@@ -1,0 +1,30 @@
+  T-undo-80:nba-390: two taps 80 ms apart on Undo skip: phase draft, showcase allout, stock 47
+  T-undo-150:nba-390: two taps 150 ms apart on Undo skip: phase draft, showcase allout, stock 47
+  T-undo-250:nba-390: two taps 250 ms apart on Undo skip: phase draft, showcase allout, stock 47
+  T-undo-400:nba-390: two taps 400 ms apart on Undo skip: phase draft, showcase allout, stock 47
+  T-undo-700:nba-390: two taps 700 ms apart on Undo skip: phase draft, showcase allout, stock 47
+  T-night-Skip:nba-390: two taps 150 ms apart on Skip to the end: night stage live, journey done
+  T-night-Watch:nba-390: two taps 150 ms apart on Watch it again: night stage skipped, journey done
+  T-undo-80:nba-1280: two taps 80 ms apart on Undo skip: phase draft, showcase allout, stock 47
+  T-undo-150:nba-1280: two taps 150 ms apart on Undo skip: phase draft, showcase allout, stock 47
+  T-undo-250:nba-1280: two taps 250 ms apart on Undo skip: phase draft, showcase allout, stock 47
+  T-undo-400:nba-1280: two taps 400 ms apart on Undo skip: phase draft, showcase allout, stock 47
+  T-undo-700:nba-1280: two taps 700 ms apart on Undo skip: phase draft, showcase allout, stock 47
+  T-night-Skip:nba-1280: two taps 150 ms apart on Skip to the end: night stage live, journey done
+  T-night-Watch:nba-1280: two taps 150 ms apart on Watch it again: night stage skipped, journey done
+  T-undo-80:nfl-390: two taps 80 ms apart on Undo skip: phase draft, showcase allout, stock 85
+  T-undo-150:nfl-390: two taps 150 ms apart on Undo skip: phase draft, showcase allout, stock 85
+  T-undo-250:nfl-390: two taps 250 ms apart on Undo skip: phase draft, showcase allout, stock 85
+  T-undo-400:nfl-390: two taps 400 ms apart on Undo skip: phase draft, showcase allout, stock 85
+  T-undo-700:nfl-390: two taps 700 ms apart on Undo skip: phase draft, showcase allout, stock 85
+  T-night-Skip:nfl-390: two taps 150 ms apart on Skip to the end: night stage live, journey done
+  T-night-Watch:nfl-390: two taps 150 ms apart on Watch it again: night stage skipped, journey done
+  T-undo-80:nfl-1280: two taps 80 ms apart on Undo skip: phase draft, showcase allout, stock 85
+  T-undo-150:nfl-1280: two taps 150 ms apart on Undo skip: phase draft, showcase allout, stock 85
+  T-undo-250:nfl-1280: two taps 250 ms apart on Undo skip: phase draft, showcase allout, stock 85
+  T-undo-400:nfl-1280: two taps 400 ms apart on Undo skip: phase draft, showcase allout, stock 85
+  T-undo-700:nfl-1280: two taps 700 ms apart on Undo skip: phase draft, showcase allout, stock 85
+  T-night-Skip:nfl-1280: two taps 150 ms apart on Skip to the end: night stage live, journey done
+  T-night-Watch:nfl-1280: two taps 150 ms apart on Watch it again: night stage skipped, journey done
+  screenshots: 8 in /home/runner/work/_temp/rc-out/files
+REVIEW WALK (taps): ALL GREEN

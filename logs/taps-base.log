@@ -1,0 +1,30 @@
+  FAIL T-undo-80:nba-390: locator.boundingBox: Timeout 15000ms exceeded.
+  FAIL T-undo-150:nba-390: locator.boundingBox: Timeout 15000ms exceeded.
+  FAIL T-undo-250:nba-390: locator.boundingBox: Timeout 15000ms exceeded.
+  FAIL T-undo-400:nba-390: locator.boundingBox: Timeout 15000ms exceeded.
+  FAIL T-undo-700:nba-390: locator.boundingBox: Timeout 15000ms exceeded.
+  T-night-Skip:nba-390: two taps 150 ms apart on Skip to the end: night stage undefined, journey journey gone
+  FAIL T-night-Watch:nba-390: locator.boundingBox: Timeout 15000ms exceeded.
+  FAIL T-undo-80:nba-1280: locator.boundingBox: Timeout 15000ms exceeded.
+  FAIL T-undo-150:nba-1280: locator.boundingBox: Timeout 15000ms exceeded.
+  FAIL T-undo-250:nba-1280: locator.boundingBox: Timeout 15000ms exceeded.
+  FAIL T-undo-400:nba-1280: locator.boundingBox: Timeout 15000ms exceeded.
+  FAIL T-undo-700:nba-1280: locator.boundingBox: Timeout 15000ms exceeded.
+  T-night-Skip:nba-1280: two taps 150 ms apart on Skip to the end: night stage undefined, journey journey gone
+  FAIL T-night-Watch:nba-1280: locator.boundingBox: Timeout 15000ms exceeded.
+  FAIL T-undo-80:nfl-390: locator.boundingBox: Timeout 15000ms exceeded.
+  FAIL T-undo-150:nfl-390: locator.boundingBox: Timeout 15000ms exceeded.
+  FAIL T-undo-250:nfl-390: locator.boundingBox: Timeout 15000ms exceeded.
+  FAIL T-undo-400:nfl-390: locator.boundingBox: Timeout 15000ms exceeded.
+  FAIL T-undo-700:nfl-390: locator.boundingBox: Timeout 15000ms exceeded.
+  T-night-Skip:nfl-390: two taps 150 ms apart on Skip to the end: night stage undefined, journey journey gone
+  FAIL T-night-Watch:nfl-390: locator.boundingBox: Timeout 15000ms exceeded.
+  FAIL T-undo-80:nfl-1280: locator.boundingBox: Timeout 15000ms exceeded.
+  FAIL T-undo-150:nfl-1280: locator.boundingBox: Timeout 15000ms exceeded.
+  FAIL T-undo-250:nfl-1280: locator.boundingBox: Timeout 15000ms exceeded.
+  FAIL T-undo-400:nfl-1280: locator.boundingBox: Timeout 15000ms exceeded.
+  FAIL T-undo-700:nfl-1280: locator.boundingBox: Timeout 15000ms exceeded.
+  T-night-Skip:nfl-1280: two taps 150 ms apart on Skip to the end: night stage undefined, journey journey gone
+  FAIL T-night-Watch:nfl-1280: locator.boundingBox: Timeout 15000ms exceeded.
+  screenshots: 12 in /home/runner/work/_temp/rc-out/files
+REVIEW WALK (base): 24 FAILURES
