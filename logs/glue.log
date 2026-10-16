@@ -1,0 +1,14 @@
+mut m1: applied to src/pages/ClubManager.tsx
+---- builder walk playCmNoSack on the mutated build: exit 0
+  PASS  no page errors
+
+---- reviewer walk flow A at 390 on the mutated build: exit 1
+  FAIL 390 rm A: the career the Dugout started carries the key (save noSack null, club Brentford)
+  FAIL 390 rm A: the hub wears the No sacking pill
+  FAIL 390 rm A: the pill is clear of the club name
+  FAIL 390 rm A: Options reads "🛡️ No sacking Off Turn on No sacking The board can moan but it can never fire you. There " with no way off
+  FAIL 390 rm A: the Managers card reads "SLOT 1 · LAST PLAYED You Brentford 2026-27 · Season 1 Week 1 of 54 · Board 60/100 🏆 0 trophies Resume CareerD"
+walkNoSack: FAIL (5)
+  PASS no page errors
+walkNoSack: FAIL (5)
+GLUE m1 (confirmAndReset drops setup): builder playCmNoSack exit=0, reviewer walk exit=1
