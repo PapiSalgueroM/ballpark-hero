@@ -1,0 +1,2 @@
+walk-keepfailed exit=1 118s | playCmBoardVerdict RED: 39 of 42 checks green
+pin exit=0 193s | [pin] DONE
