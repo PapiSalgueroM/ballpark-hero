@@ -1,0 +1,4 @@
+#!serve
+#!playwright
+headsha: git log --oneline -3
+playSoccerEventCards: node scripts/playSoccerEventCards.mjs
