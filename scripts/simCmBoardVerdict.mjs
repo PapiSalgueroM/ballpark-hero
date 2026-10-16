@@ -42,7 +42,29 @@
      legacy    careers in 2005-06, 2015-16 and 2026-27 (named clubs plus a tier 3 and a tier 4 club; seeds
                LEGACY_SEEDS, LEGACY_SEASONS seasons, both policies) with matchRules 'base' on BOTH trees and
                the fresh opening at the old 60: every save byte and every draw equal to CM_BOARD_BASE.
-               Control legacyleak (legacySeason answers false on the head).
+               Control legacyleak (legacySeason answers false on the head). Also the takeovers on the old
+               rules (startMidSeason at new year and the run in, joinClubNow): every byte equal.
+     offers    the grade fleet and the tier 4 fleet (the weakest club of every league, OFFER_SEEDS seeds, two
+               seasons): every summer offer that is not a handshake or a yes, and every mid season approach,
+               within the step; exhaustively, every world's tier 2 to 4 club has a club one tier up to be
+               approached by. Prints the base's offers two or more tiers up on the same season ends.
+               Control nostep.
+     dailies   60 Hot Seat days from 2026-09-24 and every seventh day back (DAILY_BACK), head against base,
+               whole runs equal with the suitor's name masked (correction 9); 30 Deadline Day days, the deal,
+               the grade and the state's keys equal. Control hotstart (the Hot Seat line taken out).
+     fresh     fleet B (disjoint seeds, three seed bases): every fresh career opens at BOARD_FRESH, and the
+               share of lost openers that leave the board Safe stays at FRESH_FLOOR or more. Control start60.
+     title     the title fleet with the rollover handed to both trees: every A or B stay opens Safe or more,
+               every D or F under, every move at BOARD_FRESH; startNextSeason draws as the base and writes the
+               same save but the opening wherever the kitty band did not bind. Prints the openings by fate and
+               by grade on both trees. Control noband.
+     kitty     the tier 4 fleet (and the title fleet's rollovers when --part=title,kitty): the cheque never
+               passes max(10, KITTY_TOP_SHARE x budget) and equals the old one inside the band; by tier, how
+               often the band binds and the next budget over the club's on both trees. Control nokitty.
+     takeover  startMidSeason at autumn, new year and the run in for twelve clubs of three worlds and
+               joinClubNow on a yes (TAKEOVER_SEEDS seeds): every takeover opens at BOARD_FRESH and equals the
+               base but for the opening and the card (the run in's suitor masked: since step 3 the previous
+               manager's approaches are stepped too), handover stamp included. Control keepfailed.
 
    Engine controls: SIM_CM_BOARD_CONTROL=<name> with --part=<its section>; each patches this tree's copy in
    memory, its anchor asserted present exactly once first, and must end FIRED with exit 1.
@@ -125,6 +147,9 @@ async function freshArm(arm) {
   return { ...mod, output: arm.output, name: arm.name };
 }
 const clone = v => JSON.parse(JSON.stringify(v));
+/** A state with the youth intake's module counter taken out of its ids (youth-<clock>-<counter>-<roll>): two
+ *  bundles that played different histories number their youths differently and nothing else about them. */
+const canon = v => JSON.parse(JSON.stringify(v).replace(/youth-([a-z0-9]+)-\d+-(\d+)/g, 'youth-$1-#-$2'));
 const hashOf = v => createHash('sha256').update(JSON.stringify(v)).digest('hex').slice(0, 16);
 /** A fleet split for parallel runner lines: SHARD=k/n keeps every n-th entry from the k-th. */
 function shard(list) {
@@ -288,7 +313,7 @@ function streamHook(head, base, acc) {
   };
 }
 function maskFinish(o, keepOffers) {
-  const c = clone(o);
+  const c = canon(o);
   for (const sm of [c.summary, c.state?.pendingSummary]) {
     if (!sm) continue;
     delete sm.verdictGrade; delete sm.verdict; delete sm.fate;
@@ -680,6 +705,180 @@ async function dailiesSection(head, base) {
   return { moved: moved.length + ddMoved.length };
 }
 
+/* ---------------- sections fresh, title and takeover (step 4 on) ---------------- */
+/* The floor of section fresh: the share of fleet B's lost openers that leave the meter Safe, set from three
+   seed bases of fleet B measured on the head (the lowest share minus its measured spread). */
+const FRESH_FLOOR = 0.9;
+function freshSection(arm) {
+  const P = 'fresh';
+  const { cm, bv } = arm;
+  const shares = [];
+  let opened = 0, notFresh = 0;
+  for (const seed0 of [500000, 600000, 700000].slice(0, num('FRESH_BASES', 3))) {
+    let lost = 0, safe = 0;
+    for (const era of ERAS) {
+      const all = worldClubs(cm, era);
+      for (const tier of [1, 2, 3, 4]) {
+        for (const c of spreadPick(all.filter(d => d.tier === tier), num('FALL_CLUBS', 4))) {
+          for (let k = 0; k < num('FRESH_SEEDS', 30); k++) {
+            const seed = seed0 + k * 977 + tier * 13;
+            const s = startOf(cm, c.name, era, seed);
+            opened += 1;
+            if (s.boardConfidence !== bv.BOARD_FRESH) notFresh += 1;
+            const m = firstMatch(cm, s, seed);
+            if (!m || !m.lost) continue;
+            lost += 1;
+            if (m.after >= bv.BOARD_SAFE_LINE) safe += 1;
+          }
+        }
+      }
+    }
+    shares.push({ seed0, lost, safe, share: lost ? safe / lost : 0 });
+  }
+  for (const s of shares) console.log(`[fresh] fleet B seed base ${s.seed0}: ${s.safe} of ${s.lost} lost openers leave the board Safe (${fmt(s.share * 100)} percent)`);
+  const low = Math.min(...shares.map(s => s.share)), high = Math.max(...shares.map(s => s.share));
+  console.log(`  lowest ${fmt(low * 100)}, spread ${fmt((high - low) * 100)} points; floor ${FRESH_FLOOR * 100} percent`);
+  check(P, `${opened} fresh careers open at BOARD_FRESH (${bv.BOARD_FRESH})`, opened > 0 && notFresh === 0, `${notFresh} do not`);
+  check(P, `a lost opener leaves the board Safe at least ${FRESH_FLOOR * 100} percent of the time on every seed base`, shares.every(s => s.lost > 0 && s.share >= FRESH_FLOOR), shares.map(s => fmt(s.share * 100)).join(', '));
+}
+/** Section stream for startNextSeason: both trees handed the same finished state, the same pick and draws. */
+function rollStreamHook(head, base, acc) {
+  return (finState, take, rollSeed) => {
+    const S = clone(finState);
+    DRAWS.n = 0;
+    globalThis.__cmAlloc = [];
+    const h = withSeed(rollSeed, () => head.cm.startNextSeason(clone(S), take));
+    const hn = DRAWS.n;
+    const hAlloc = globalThis.__cmAlloc.pop();
+    base.cm.registerCustomClub(null);
+    DRAWS.n = 0;
+    globalThis.__cmAlloc = [];
+    const b = withSeed(rollSeed, () => base.cm.startNextSeason(clone(S), take));
+    const bn = DRAWS.n;
+    const bAlloc = globalThis.__cmAlloc.pop();
+    globalThis.__cmAlloc = undefined;
+    const moving = h.clubName !== S.clubName;
+    acc.rows.push({ grade: S.pendingSummary?.verdictGrade ?? null, fate: S.pendingSummary?.fate ?? null, title: S.pendingSummary?.position === 1,
+      moving, head: h.boardConfidence, base: b.boardConfidence, bound: h.budget !== b.budget, hAlloc, bAlloc, hBudget: h.budget, bBudget: b.budget, tier: head.cm.clubDefFor(h.clubName)?.tier ?? 0 });
+    const tag = `${S.clubName} season ${S.season}${take ? ` to ${take}` : ''}`;
+    if (h.budget !== b.budget) { acc.bound += 1; return; }
+    if (hn !== bn) acc.draws.push(`${tag}: head ${hn}, base ${bn}`);
+    const mask = o => { const c = canon(o); delete c.boardConfidence; return c; };
+    if (JSON.stringify(mask(h)) !== JSON.stringify(mask(b))) acc.diff.push(`${tag}: ${firstDiff(mask(h), mask(b))}`);
+  };
+}
+function openingTable(rows, key) {
+  const groups = {};
+  for (const r of rows.filter(x => !x.moving)) (groups[r[key] ?? 'none'] ??= []).push(r);
+  return Object.entries(groups).map(([k, list]) => {
+    const mean = side => list.reduce((n, r) => n + r[side], 0) / list.length;
+    return `${k} n ${list.length}: base mean ${fmt(mean('base'))} (p10 ${fmt(pct(list.map(r => r.base), 10))} to p90 ${fmt(pct(list.map(r => r.base), 90))}), head mean ${fmt(mean('head'))} (p10 ${fmt(pct(list.map(r => r.head), 10))} to p90 ${fmt(pct(list.map(r => r.head), 90))})`;
+  });
+}
+function titleChecks(arm, acc) {
+  const P = 'title';
+  const { bv } = arm;
+  const stays = acc.rows.filter(r => !r.moving);
+  const ab = stays.filter(r => r.grade === 'A' || r.grade === 'B');
+  const df = stays.filter(r => r.grade === 'D' || r.grade === 'F');
+  const moves = acc.rows.filter(r => r.moving);
+  const under = (list, side) => list.filter(r => r[side] < bv.BOARD_SAFE_LINE).length;
+  console.log(`[title] ${acc.rows.length} rollovers, ${stays.length} stays: on CM_BOARD_BASE ${under(ab, 'base')} of ${ab.length} A or B seasons opened under Safe (${under(ab.filter(r => r.title), 'base')} of ${ab.filter(r => r.title).length} titles); on the head ${under(ab, 'head')}`);
+  for (const line of openingTable(acc.rows, 'fate')) console.log(`  by fate, ${line}`);
+  for (const line of openingTable(acc.rows, 'grade')) console.log(`  by grade, ${line}`);
+  check(P, 'every A or B season opens the next at Safe or more', ab.length > 0 && under(ab, 'head') === 0, `${under(ab, 'head')} of ${ab.length} under`);
+  check(P, 'every D or F season opens the next under Safe', df.every(r => r.head < bv.BOARD_SAFE_LINE), `${df.filter(r => r.head >= bv.BOARD_SAFE_LINE).length} of ${df.length} at Safe or more`);
+  check(P, 'every move at the summer opens at BOARD_FRESH', moves.every(r => r.head === bv.BOARD_FRESH), `${moves.filter(r => r.head !== bv.BOARD_FRESH).length} of ${moves.length} do not`);
+  check(P, 'startNextSeason draws the same number of times on head and base wherever the kitty band did not bind', acc.draws.length === 0, acc.draws.length ? `${acc.draws.length}; first ${acc.draws[0]}` : '');
+  check(P, 'and writes the same save but for the opening', acc.diff.length === 0, acc.diff.length ? `${acc.diff.length}; first ${acc.diff[0]}` : `${acc.bound} rollovers where the band bound left to section kitty`);
+}
+
+function kittyChecks(arm, rows, acc) {
+  const P = 'kitty';
+  const { bv } = arm;
+  const stays = rows.filter(r => !r.moving && r.hAlloc && r.bAlloc);
+  const band = a => Math.max(10, bv.KITTY_TOP_SHARE * a.budget);
+  const over = stays.filter(r => r.hAlloc.allocation > band(r.hAlloc));
+  const moved = stays.filter(r => r.bAlloc.allocation <= band(r.bAlloc) && r.hAlloc.allocation !== r.bAlloc.allocation);
+  for (const tier of [1, 2, 3, 4]) {
+    const list = stays.filter(r => r.hAlloc.tier === tier);
+    const bound = list.filter(r => r.hAlloc.allocation < r.bAlloc.allocation);
+    const ratio = side => list.map(r => r[side] / r.hAlloc.budget);
+    console.log(`[kitty] tier ${tier}: the band bound ${bound.length} of ${list.length} staying rollovers (${bound.filter(r => r.hAlloc.trophies > 0).length} with a trophy); next budget over the club's: base median ${fmt(pct(ratio('bBudget'), 50))} p90 ${fmt(pct(ratio('bBudget'), 90))}, head median ${fmt(pct(ratio('hBudget'), 50))} p90 ${fmt(pct(ratio('hBudget'), 90))}`);
+  }
+  console.log(`  ${acc.bound} rollovers of the tier 4 fleet where the band bound: their draws and the lines after the pot are counted, never held equal`);
+  check(P, `${stays.length} staying rollovers: the cheque never passes max(10, ${bv.KITTY_TOP_SHARE} x the club's budget)`, stays.length > 0 && over.length === 0, over.length ? `${over.length}; first ${over[0].hAlloc.allocation} on a budget of ${over[0].hAlloc.budget}` : '');
+  check(P, 'and equals the old cheque wherever the old one was inside the band', moved.length === 0, `${moved.length} differ`);
+}
+/** A takeover on one arm: startMidSeason at an entry, or joinClubNow on a yes built the way simCmApplications
+ *  builds one. The fresh state opens at the old 60 on both arms (decision 5), so every week before the
+ *  handover is the same game. */
+function takeoverOn(arm, c, legacy = false) {
+  const { cm, cal } = arm;
+  const s = startOf(cm, c.club, c.era, c.seed);
+  s.boardConfidence = 60;
+  if (legacy) s.matchRules = 'base';
+  if (c.entry !== 'join') return withSeed(c.seed * 7 + 1, () => cal.startMidSeason(s, c.entry));
+  let t = s;
+  for (let i = 0; i < 40 && t.week < 10 && !t.sacked; i++) t = withSeed(c.seed * 1009 + i, () => cm.playNextEntry(t, QUICK)).state;
+  /* An approach before the application is stepped since step 3, so its suitor (and what declining it
+     leads to) may differ between the arms: such a case is counted, not compared. */
+  /* Every call that can draw runs seeded: applyForJob rolls how many matches the answer takes. */
+  if (t.approach) { if (!legacy) return { approached: true }; t = withSeed(c.seed * 11 + 2, () => cm.respondApproach(t, false)); }
+  const target = withSeed(c.seed * 11 + 3, () => [...cm.applyTargets(t)]).sort((a, b) => a.club.localeCompare(b.club))[c.seed % 3];
+  const applied = target ? withSeed(c.seed * 11 + 4, () => cm.applyForJob(t, target.club)) : null;
+  if (!applied) return null;
+  applied.jobHunt.open.roll = 0;
+  applied.boardConfidence = 85;
+  let u = applied;
+  for (let i = 0; i < 60; i++) {
+    const open = u.jobHunt?.open;
+    if (!open || open.status !== 'pending') break;
+    u = withSeed(c.seed * 2003 + i, () => cm.playNextEntry(u, QUICK)).state;
+  }
+  if (u.jobHunt?.open?.status !== 'accepted') return null;
+  return withSeed(c.seed * 7 + 2, () => cal.joinClubNow(u));
+}
+function takeoverCases(cm) {
+  const out = [];
+  for (const { club, era } of takeoverClubs(cm)) {
+    for (const entry of ['autumn', 'newYear', 'runIn']) for (let seed = 0; seed < num('TAKEOVER_SEEDS', 5); seed++) out.push({ club, era, entry, seed });
+    if (!era) for (let seed = 0; seed < num('TAKEOVER_SEEDS', 5); seed++) out.push({ club, era, entry: 'join', seed });
+  }
+  return shard(out);
+}
+async function takeoverSection(head, base) {
+  const P = 'takeover';
+  const { bv } = head;
+  let n = 0, joins = 0, notFresh = 0, baseFailed = 0, headFailed = 0, approached = 0;
+  const diff = [];
+  const cases = takeoverCases(head.cm);
+  const joinCases = cases.filter(c => c.entry === 'join').length;
+  for (const c of cases) {
+    const h = takeoverOn(await freshArm(head), c);
+    const b = takeoverOn(await freshArm(base), c);
+    if (h?.approached || b?.approached) { approached += 1; continue; }
+    if (!h || !b) { if (!!h !== !!b) diff.push(`${c.club} ${c.entry} seed ${c.seed}: only one arm took the job`); continue; }
+    n += 1;
+    if (c.entry === 'join') joins += 1;
+    if (h.boardConfidence !== bv.BOARD_FRESH) notFresh += 1;
+    if (base.cm.objectiveStatuses(b).some(x => x.status === 'failed')) baseFailed += 1;
+    if (head.cm.objectiveStatuses(h).some(x => x.status === 'failed')) headFailed += 1;
+    /* The run in is the previous manager's and plays maybeApproach: since step 3 its suitor is stepped, so a
+       headline naming him is masked the way section dailies masks one (only the name can move). */
+    const mask = o => { const k = canon(o); delete k.boardConfidence; if (TAKEOVER_OBJECTIVES) delete k.boardObjectives;
+      k.aiHeadlines = (k.aiHeadlines ?? []).map(l => (typeof l === 'string' && l.startsWith(PHONE) ? PHONE : l)); return k; };
+    if (JSON.stringify(mask(h)) !== JSON.stringify(mask(b))) diff.push(`${c.club} ${eraLabel(c.era)} ${c.entry} seed ${c.seed}: ${firstDiff(mask(h), mask(b))}`);
+    else if (JSON.stringify(h.handover) !== JSON.stringify(b.handover)) diff.push(`${c.club} ${c.entry} seed ${c.seed}: the handover stamp moved`);
+  }
+  console.log(`[takeover] ${n} handovers (${joins} by joinClubNow, ${approached} joins skipped: approached before applying); on CM_BOARD_BASE ${baseFailed} carried a failed objective, on the head ${headFailed}`);
+  check(P, `${n} takeovers open at BOARD_FRESH (${bv.BOARD_FRESH})`, n > 0 && (joins > 0 || joinCases === 0) && notFresh === 0, `${notFresh} do not; ${joins} joins of ${joinCases} join cases`);
+  check(P, 'every takeover equal to CM_BOARD_BASE but for the opening (and the card), its handover stamp included', diff.length === 0, diff.length ? `${diff.length}; first ${diff[0]}` : '');
+  return { headFailed };
+}
+/* Set true at step 6, when the takeover card drops what is already failed. */
+const TAKEOVER_OBJECTIVES = false;
+
 /* ---------------- section legacy (step 2 on) ---------------- */
 const LEGACY_WORLDS = [['era2005', ['Everton']], ['era2015', ['Barcelona']], [null, ['Liverpool', 'West Ham', 'OB']]];
 function legacyRuns(cm) {
@@ -711,6 +910,14 @@ async function legacySection(head, base, runs) {
     const b = legacyPrint(await freshArm(base), r);
     if (h.hash !== b.hash || h.draws !== b.draws) { bad += 1; first ||= `${r.club} ${eraLabel(r.era)} seed ${r.seed} ${r.policy}: head ${h.hash} ${h.draws} draws, base ${b.hash} ${b.draws} draws (${h.at})`; }
   }
+  let tBad = 0, tFirst = '', tN = 0;
+  for (const c of takeoverCases(head.cm).filter(x => x.entry !== 'autumn')) {
+    const h = takeoverOn(await freshArm(head), c, true);
+    const b = takeoverOn(await freshArm(base), c, true);
+    tN += 1;
+    if (JSON.stringify(h && strip(h)) !== JSON.stringify(b && strip(b))) { tBad += 1; tFirst ||= `${c.club} ${eraLabel(c.era)} ${c.entry} seed ${c.seed}: ${firstDiff(h && strip(h), b && strip(b))}`; }
+  }
+  check(P, `${tN} takeovers on the old rules (startMidSeason at new year and the run in, joinClubNow): every byte equal to CM_BOARD_BASE`, tN > 0 && tBad === 0, tBad ? `${tBad} differ; first ${tFirst}` : '');
   check(P, `${runs.length} careers on the old rules (matchRules 'base' on both trees): every save byte and every draw equal to CM_BOARD_BASE`, runs.length > 0 && bad === 0, bad ? `${bad} differ; first ${first}` : '');
 }
 
@@ -819,17 +1026,26 @@ const ENGINE_CONTROLS = {
     ['      if (down.includes(mySlot)) return', '      if (topRows.slice(-(pyr.count + 1)).map(r => r.club).includes(mySlot)) return']] },
   legacyleak: { file: ENGINE, patches: [["  return c.matchRules === 'base';", '  return false;']] },
   nostep: { file: MODULE, patches: [['  return theirTier >= myTier - (bigSeason ? 2 : 1);', '  return true;']] },
+  nokitty: { file: MODULE, patches: [['  return Math.min(flat, Math.max(10, Math.floor(KITTY_TOP_SHARE * i.budget)));', '  return flat;']] },
+  start60: { file: MODULE, patches: [['export const BOARD_FRESH = 69;', 'export const BOARD_FRESH = 60;']] },
+  noband: { file: MODULE, patches: [["  if (i.grade === 'A' || i.grade === 'B') v = Math.max(v, BOARD_FRESH);", '  if (false) v = Math.max(v, BOARD_FRESH);'],
+    ["  else if (i.grade === 'D' || i.grade === 'F') v = Math.min(v, BOARD_SAFE_LINE - 1);", '  else if (false) v = Math.min(v, BOARD_SAFE_LINE - 1);']] },
+  hotstart: { file: HS_FILE, patches: [['  s.boardConfidence = LEGACY_BOARD_START;\n', '']] },
   prefilter: { file: ENGINE, patches: [['    const classic = shuffle(everyClub.filter(c => !vacancyNames.has(c.name) && c.tier < club.tier',
     "    const big0 = (position === 1 && !PYRAMIDS.some(p => p.second === careerLeagueOf(state).id)) || seasonTrophies.includes('Champions League');\n    const classic = shuffle(everyClub.filter(c => (legacy || offerStepOk(club.tier, c.tier, big0)) && !vacancyNames.has(c.name) && c.tier < club.tier"]] },
 };
 let fleetDone = false;
 const ARMS = {};
+/* A probe both arms carry, inert unless a section sets globalThis.__cmAlloc: the summer cheque the rollover
+   really computed, read off its own variable. It draws nothing. */
+const ALLOC_PROBE_FROM = '  const carried = moving || !Number.isFinite(career.budget) ? 0 : Math.max(0, career.budget);\n';
+const ALLOC_PROBE_TO = '  globalThis.__cmAlloc?.push({ allocation, moving, budget: club.budget, tier: club.tier, trophies: seasonTrophyCount });\n' + ALLOC_PROBE_FROM;
 async function headArm(folder) {
   if (ARMS.head) return ARMS.head;
-  const texts = {};
+  const texts = { [ENGINE]: patchOnce(await readSource(root, ENGINE), ALLOC_PROBE_FROM, ALLOC_PROBE_TO, 'the cheque probe') };
   const spec = ENGINE_CONTROLS[CONTROL];
   if (spec) {
-    let t = await readSource(root, spec.file);
+    let t = texts[spec.file] ?? await readSource(root, spec.file);
     for (const [from, to] of spec.patches) t = patchOnce(t, from, to, `control ${CONTROL}`);
     texts[spec.file] = t;
   }
@@ -839,7 +1055,7 @@ async function headArm(folder) {
 async function baseArm(folder) {
   if (ARMS.base) return ARMS.base;
   if (!BASE) { console.log('this section needs CM_BOARD_BASE, a checkout of the commit the branch started from; could not run'); process.exit(2); }
-  ARMS.base = await bundleArm('base', folder, path.join(BASE, 'src'));
+  ARMS.base = await bundleArm('base', folder, path.join(BASE, 'src'), { [ENGINE]: patchOnce(await readSource(BASE, ENGINE), ALLOC_PROBE_FROM, ALLOC_PROBE_TO, 'the base cheque probe') });
   return ARMS.base;
 }
 /** What the grade, fate and stream sections read of a season end, without its two whole states. */
@@ -896,6 +1112,31 @@ async function main() {
         }
         offersChecks(head, rolls, approaches, tier4, acc4);
       }
+    } else if (part === 'fresh') {
+      freshSection(await headArm(folder));
+    } else if (part === 'title') {
+      const head = await headArm(folder);
+      const base = await baseArm(folder);
+      const acc = { rows: [], draws: [], diff: [], bound: 0 };
+      head.cm.registerLeagueOverrides(null);
+      const runs = [];
+      for (let seed = 0; seed < num('TITLE_SEEDS', 10); seed++) for (const [club, era] of TITLE_FLEET) for (const policy of ['stay', 'first']) runs.push({ club, era, seed, seasons: num('TITLE_SEASONS', 3), policy });
+      for (const r of shard(runs)) playCareer(head.cm, r, null, { beforeRoll: rollStreamHook(head, base, acc) });
+      titleChecks(head, acc);
+      ARMS.titleRows = acc.rows;
+    } else if (part === 'kitty') {
+      /* The tier 4 fleet (the weakest club of every league, OFFER_SEEDS seeds, two seasons), plus the title
+         fleet's rollovers when section title ran first in the same call. */
+      const head = await headArm(folder);
+      const base = await baseArm(folder);
+      const acc = { rows: [], draws: [], diff: [], bound: 0 };
+      const fleet4 = tier4Fleet(head.cm);
+      for (let seed = 0; seed < num('OFFER_SEEDS', 8); seed++) {
+        for (const c of shard(fleet4)) playCareer(head.cm, { club: c.name, era: null, seed: 700 + seed, seasons: 2, policy: 'stay' }, null, { beforeRoll: rollStreamHook(head, base, acc) });
+      }
+      kittyChecks(head, [...(ARMS.titleRows ?? []), ...acc.rows], acc);
+    } else if (part === 'takeover') {
+      await takeoverSection(await headArm(folder), await baseArm(folder));
     } else if (part === 'dailies') {
       const r = await dailiesSection(await headArm(folder), await baseArm(folder));
       if (CONTROL === 'hotstart') console.log(`control hotstart: ${r.moved} dates moved without the line`);

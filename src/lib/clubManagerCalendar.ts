@@ -30,8 +30,11 @@ import {
   cupProgressRank, uclProgressRank, objectiveStatuses,
   /* Round 783: the mid season takeover an accepted application walks into. */
   startCareer, interimManagerName, refreshWorldRoster, worldSeedOf, customExitUclField,
+  /* Round 1335: the old season rules' switch, read by both handovers. */
+  legacySeason,
 } from '@/lib/clubManager';
 import type { CareerState, CalendarEntry, Competition, FormResult, MatchWeekReport, PlayerMessage } from '@/lib/clubManager';
+import { BOARD_FRESH, LEGACY_BOARD_START, LEGACY_NEW_JOB_BOARD } from '@/lib/clubManagerBoardVerdict';
 import type { CmVarAsk } from '@/lib/clubManagerVar';
 import { CM_BASE_YEAR, DEFAULT_ERA_ID, eraById, isHistoricEra } from '@/lib/clubManagerEras';
 import { closeOnJoiningNow, jobHuntOf, leavingLine } from '@/lib/clubManagerJobHunt';
@@ -809,7 +812,7 @@ export function startMidSeason(career: CareerState, entry: MidSeasonEntry): Care
     wilderness: null,
     /* A new appointment gets a fresh mandate, not the opinion the board had
        formed of somebody else. Slightly warm, because they just hired you. */
-    boardConfidence: 62,
+    boardConfidence: legacySeason(career) ? LEGACY_NEW_JOB_BOARD : BOARD_FRESH,
     /* Your record starts now. The club's season is inherited; the manager's is
        not, so the progression is the day one one rather than a run of matches
        you did not pick a team for. */
@@ -841,7 +844,13 @@ function playRunIn(career: CareerState, target: number): CareerState {
      they run without ours: no background point working the gate or the
      academy, no homeland in the market. Both callers put our manager and his
      own XP block back at the handover. */
-  let s: CareerState = career.manager ? { ...career, manager: undefined, managerXp: undefined } : career;
+  /* Round 1335: and the run-in is the previous manager's season, so his board opens where every board did
+     before the round (LEGACY_BOARD_START, 60), not at the new appointment's BOARD_FRESH: the number keeps
+     every inherited season (its sackings, its press questions, its draws) what it was, and the handover
+     below gives the new man his own opening. scripts/simCmBoardVerdict.mjs section takeover holds it. */
+  let s: CareerState = career.manager
+    ? { ...career, manager: undefined, managerXp: undefined, boardConfidence: LEGACY_BOARD_START }
+    : { ...career, boardConfidence: LEGACY_BOARD_START };
   let guard = 0;
   while (s.week < target && guard < 400) {
     guard += 1;
@@ -948,7 +957,7 @@ export function joinClubNow(career: CareerState): CareerState | null {
     pendingSummary: null,
     promisedStarts: [],
     /* A new appointment's mandate, the same opening the rollover gives a move. */
-    boardConfidence: 62,
+    boardConfidence: legacySeason(career) ? LEGACY_NEW_JOB_BOARD : BOARD_FRESH,
     season: career.season,
     /* Round 978: the new club's international block, played through the
        run-in in the fresh save's season one, carried onto this season's

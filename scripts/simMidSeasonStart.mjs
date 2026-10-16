@@ -175,7 +175,7 @@ console.log('3) The handover is clean: nothing of the last manager follows you i
     if (r.state.approach) fail(`${r.label} ${r.entry}: you inherit an approach from another club that was made to somebody else`);
     if (r.state.pendingMove) fail(`${r.label} ${r.entry}: you inherit a pre-agreed move somebody else shook hands on`);
     if (r.state.wilderness) fail(`${r.label} ${r.entry}: the career arrives out of work`);
-    if (r.state.boardConfidence !== 62) {
+    if (r.state.boardConfidence !== cm.BOARD_FRESH) {
       fail(`${r.label} ${r.entry}: board confidence is ${r.state.boardConfidence}, which is the opinion they formed of the last manager rather than a new appointment's`);
     }
     /* Your own progression starts now: the run-in was not your work. */

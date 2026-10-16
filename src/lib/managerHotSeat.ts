@@ -82,6 +82,7 @@ import {
   type TalkTone,
 } from '@/lib/clubManager';
 import { FAN_SINGING, boardMeter, fanMeter, type Meter, type MeterTone } from '@/lib/clubManagerMeters';
+import { LEGACY_BOARD_START } from '@/lib/clubManagerBoardVerdict';
 import type { SeasonHandover } from '@/lib/clubManagerScore';
 import { dailyIndex, dailyPrngSeed } from '@/lib/dateUtils';
 import DAILY_CLUB_POOL from '@/data/dailyClubPool.json';
@@ -496,6 +497,13 @@ function startOnStaticWorld(setup: HotSeatSetup): HotSeatRun {
      onStaticWorld wrapper is what hands a Club Manager save's registrations
      back once this returns. */
   let s = withSeed(mixSeed(setup.seed, 0), () => startCareer(setup.club));
+  /* Round 1335: and the board the previous manager had. startCareer opens a new appointment at BOARD_FRESH
+     since the round; the weeks below are the previous manager's search for the crisis, and they read the
+     board (the press question below 32, the desk below 35, the floor reset), so they open where they always
+     did, on every day, dated or free. The player never sees this number: the takeover sets
+     HOT_SEAT_BOARD_START. scripts/simDailyDeals.mjs (unedited) and scripts/simCmBoardVerdict.mjs (section
+     dailies, its control hotstart takes this line out) hold every date to what it dealt. */
+  s.boardConfidence = LEGACY_BOARD_START;
   /* Release AT: a hot seat day never plays the real fixture list. Round 1184 binds the real 2026/27
      Premier League list to any new original Premier League career, and startCareer above is one. Left on,
      the weeks this function plays to find the crisis were another season: five of 120 daily dates dealt a
@@ -524,8 +532,8 @@ function startOnStaticWorld(setup: HotSeatSetup): HotSeatRun {
      puts this line back out. */
   delete s.worldSeed;
   /* Round 1331: and the match rules the day plays, set before the first week (rulesOf). A day on the base
-     rules carries matchRules 'base', which the engine reads at exactly two places (the substitution rule
-     and the press fixture); handoverState takes it off again. scripts/simDailyDeals.mjs (rulesall) and
+     rules carries matchRules 'base', read for the substitution rule, the press fixture and (Round 1335)
+     the season rules (legacySeason); handoverState takes it off again. scripts/simDailyDeals.mjs (rulesall) and
      scripts/simCmSubs.mjs (section hotseat, control nodate) hold this. */
   const rules = rulesOf(setup);
   if (rules) s.matchRules = rules;

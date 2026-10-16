@@ -125,7 +125,8 @@ export { subsRuleFor, CM_SUBS_PARTIAL } from '@/lib/clubManagerSubsRule';
    same reason the facilities and the books live in their own files. */
 import { BOARD_ASKS_VERSION, askStatus, buildBoardAsks, ensureBoardAsks, isBoardAsk } from '@/lib/clubManagerBoardAsks';
 /* Round 1335: the board's verdict, its openings, the kitty band and the offer step, a pure module. */
-import { VERDICT_LINES, fillLeague, offerStepOk, seasonGrade, type SeasonFate } from '@/lib/clubManagerBoardVerdict';
+import { BOARD_FRESH, VERDICT_LINES, fillLeague, offerStepOk, openingConfidence, seasonGrade, type SeasonFate } from '@/lib/clubManagerBoardVerdict';
+export { BOARD_FRESH } from '@/lib/clubManagerBoardVerdict';
 /* Round 978: international duty. Called only inside functions, never at module
    scope, so the cycle back into this file stays evaluation safe. */
 import { answerBreak, backFromDuty, endRest, ensureIntl, fireDueBreaks, freshIntl, restingIds } from '@/lib/clubManagerInternationals';
@@ -18111,7 +18112,7 @@ export function startCareer(clubName: string, eraId: string = DEFAULT_ERA_ID, cu
     retiredNames: [],
     retiredLastSummer: [],
     budget: club.budget,
-    boardConfidence: 60,
+    boardConfidence: BOARD_FRESH,
     sacked: false,
     squad,
     xiIds: [],
@@ -20384,6 +20385,17 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
   const promiseNet = objectiveStatuses(career)
     .filter(s => s.objective.promised)
     .reduce((n, s) => n + (s.status === 'done' ? 1 : -1), 0);
+  /* Round 1335: next season's opening reads the season you had. A move opens at BOARD_FRESH; a stay opens
+     from the club you PLAYED for (playedExpectation, read before the summer moved anybody), with the hits
+     the review printed weighed by their ids on the card they were graded from (the season's main demand
+     three, a board ask half, a summary whose list does not line up one each), then banded by the grade:
+     an A or B at least BOARD_FRESH, a D or F under Safe. The old rules (legacySeason) keep the old sum. */
+  const legacy = legacySeason(career);
+  const cardIds = (career.boardObjectives ?? []).map(o => o.id);
+  const opening = legacy
+    ? (moving ? 62 : clamp(55 + (club.expectation - prevPos) * 1.5 + objNet * 2 + promiseNet * 3, 35, 82))
+    : moving ? BOARD_FRESH : openingConfidence({ grade: summary?.verdictGrade ?? 'C', playedExpectation, finish: prevPos,
+      objectives: objs.map((o, i) => ({ id: cardIds.length === objs.length ? cardIds[i] : undefined, hit: o.hit })), promiseNet });
 
   /* Round 132: the world clock ticks here and only here. The new season is one
      year further from the baked roster year, which moves every AI squad, the
@@ -20634,7 +20646,7 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
     season,
     week: 0,
     budget,
-    boardConfidence: moving ? 62 : clamp(55 + (club.expectation - prevPos) * 1.5 + objNet * 2 + promiseNet * 3, 35, 82),
+    boardConfidence: opening,
     sacked: false,
     squad,
     xiIds: [],
