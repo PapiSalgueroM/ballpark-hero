@@ -133,10 +133,17 @@ describe('drawG8, the eras group draw', () => {
 });
 
 describe('the nights', () => {
+  /* The participant's legs (uclLegsFor): two to the semi-finals, a one match final. The module takes them from
+     the binding and states none itself (the read review's M1: row G8 has one publisher). */
+  const participantLegs = (r: string): 1 | 2 => (r === 'F' ? 1 : 2);
   it('13 nights in the eras and 17 in the league phase, in order', () => {
-    expect(nightsOf('g8').map(n => n.id)).toEqual(['MD1', 'MD2', 'MD3', 'MD4', 'MD5', 'MD6', 'R16_1', 'R16_2', 'QF1', 'QF2', 'SF1', 'SF2', 'F']);
-    expect(nightsOf('l36').map(n => n.id)).toEqual(['MD1', 'MD2', 'MD3', 'MD4', 'MD5', 'MD6', 'MD7', 'MD8', 'PO1', 'PO2', 'R16_1', 'R16_2', 'QF1', 'QF2', 'SF1', 'SF2', 'F']);
+    expect(nightsOf('g8', participantLegs).map(n => n.id)).toEqual(['MD1', 'MD2', 'MD3', 'MD4', 'MD5', 'MD6', 'R16_1', 'R16_2', 'QF1', 'QF2', 'SF1', 'SF2', 'F']);
+    expect(nightsOf('l36', participantLegs).map(n => n.id)).toEqual(['MD1', 'MD2', 'MD3', 'MD4', 'MD5', 'MD6', 'MD7', 'MD8', 'PO1', 'PO2', 'R16_1', 'R16_2', 'QF1', 'QF2', 'SF1', 'SF2', 'F']);
     expect(nightsOf('g8', () => 1).length).toBe(10);
+  });
+  it('the final has the legs the binding gives it, like every other round', () => {
+    expect(nightsOf('g8', () => 2).map(n => n.id).slice(-2)).toEqual(['F1', 'F2']);
+    expect(nightsOf('l36', () => 2).length).toBe(18);
   });
   /* buildCalendar's own rule for where a fraction of the season falls, and its sixth European midweek (0.39). */
   const at = (rounds: number, f: number): number => Math.max(0, Math.min(rounds - 1, Math.round(rounds * f)));
@@ -334,11 +341,37 @@ describe('evaluateWorldComp', () => {
     }
     expect(crowned).toBeGreaterThanOrEqual(330);
   });
-  it('the moved groupFixtures is the double round robin it always was', () => {
+  it('a binding that makes the final two legs gets a two legged final (the module never forces one match)', () => {
+    const twoLegFinal: WorldCompBind = { ...eraBind, tie: r => ({ ...eraBind.tie(r), legs: 2 }) };
+    const slice = eraSlice(11);
+    const res = evaluateWorldComp(slice, 14, twoLegFinal);
+    expect(res.nights.map(x => x.id).slice(-2)).toEqual(['F1', 'F2']);
+    const fin = res.ties.find(t => t.round === 'F') as WorldTieView;
+    const [l1, l2] = [fin.leg1 as [number, number], fin.leg2 as [number, number]];
+    expect(l1 && l2).toBeTruthy();
+    expect(fin.agg).toEqual([l1[0] + l2[0], l1[1] + l2[1]]);
+    expect(worldCompWinner(res)?.winner).toBe(fin.winner);
+    expect(evaluateWorldComp(slice, 13, twoLegFinal).winner).toBeUndefined();
+  });
+  it('groupFixtures is a double round robin', () => {
     const seen = new Map<string, number>();
     for (let md = 0; md < 6; md += 1) for (const [h, a] of groupFixtures(['a', 'b', 'c', 'd'], md)) seen.set(`${h}|${a}`, (seen.get(`${h}|${a}`) ?? 0) + 1);
     expect(seen.size).toBe(12);
     expect([...seen.values()].every(n => n === 1)).toBe(true);
+  });
+  /* RECORDED DEBT until E2 (the read review's M3): the module's groupFixtures is a copy of the engine's, which is
+     not exported, so the two matchday tables are held to the same code text here. E2 deletes the engine's copy
+     and this check with it. */
+  it('the module groupFixtures plays the engine matchday table, line for line, until E2 deletes the copy', () => {
+    const table = (file: string): string => {
+      const src = readFileSync(path.join(process.cwd(), file), 'utf8');
+      const at = src.indexOf('function groupFixtures(');
+      const from = src.indexOf('const rounds', at);
+      const to = src.indexOf('];', from);
+      expect(at >= 0 && from > at && to > from, `${file}: no groupFixtures matchday table`).toBe(true);
+      return src.slice(from, to).replace(/\s+/g, ' ');
+    };
+    expect(table('src/lib/worldCompetition.ts')).toBe(table('src/lib/clubManager.ts'));
   });
 });
 

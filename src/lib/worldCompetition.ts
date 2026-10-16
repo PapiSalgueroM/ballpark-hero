@@ -4,14 +4,18 @@
  * slice, the season it belongs to, the nights of the calendar) and Round 1503 shows it.
  *
  * TWO FORMATS. 'g8', the eras' group stage: 32 clubs in eight groups of four, a double round robin, the top two
- * into a round of 16, two legged ties to the semi-finals and a one match final. 'l36', the league phase since
+ * into a round of 16, then knockout ties whose legs the binding gives (the participant's uclLegsFor: two legs to
+ * the semi-finals and a one match final; this module decides no round's legs itself). 'l36', the league phase since
  * 2024-25: Round 1228's library (uclLeaguePhase.ts and leagueSlate.ts), bound here and never copied: the slate
  * by drawUclLeaguePhase, the table by sortedLeaguePhaseTable, the bracket by drawUclKnockout and nextRoundTie.
  *
  * WHAT IT KNOWS AND WHAT IT IS HANDED. The formats, the draw of the eras' groups, the nights, the ties and the
- * evaluation of a season from a compact saved slice. The match itself is handed in (WorldCompBind.sim), so the
- * same engine serves any competition of these shapes in any sport; so are a knockout round's rules (legs, away
- * goals, the extra time scales) and the eras' round of 16 draw, which are the participant engine's own.
+ * evaluation of a season from a compact saved slice. The match itself is handed in (WorldCompBind.sim), and so
+ * are a knockout round's rules (legs, away goals, the extra time scales) and the eras' round of 16 draw, which are
+ * the participant engine's own. That serves a football competition of these two shapes (the Europa League binds
+ * as it is); the tables are football's (three points a win, one a draw, goals) and the Champions League's
+ * tiebreaks, and the l36 knockout is Round 1228's 36 club bracket, so a six pot competition or a sport without
+ * draws needs more than a binding.
  *
  * NOTHING IS STORED BUT THE SLICE. Every result, table, tie and the winner are derived on every read, from the
  * entrants, a strength snapshot and a seed: each fixture draws from its own keyed stream, so a result never
@@ -154,8 +158,11 @@ export interface WorldCompResult {
 const GROUP_NAMES = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
 
 /** The two fixtures of one matchday in a four club double round robin. Every club plays every matchday, and
- *  every pairing happens exactly twice with the venue swapped. Moved here from clubManager.ts in Round 1347,
- *  unchanged, so the participant's groups and the watched ones play one schedule. */
+ *  every pairing happens exactly twice with the venue swapped. RECORDED DEBT: today this is a COPY of
+ *  clubManager.ts's groupFixtures (the same six matchdays in the same order; its clamp written as Math.max and
+ *  Math.min). Round 1347's E2, held for the lead's weight ruling, deletes the engine's copy and imports this one so
+ *  the participant's groups and the watched ones play one schedule; until then the unit file holds the two
+ *  matchday tables to the same text. */
 export function groupFixtures(clubs: string[], md: number): [string, string][] {
   const [a, b, c, d] = clubs;
   const rounds: [string, string][][] = [
@@ -171,13 +178,14 @@ export function groupFixtures(clubs: string[], md: number): [string, string][] {
 
 const KO_ORDER: Record<WorldCompFormat, WorldKoRound[]> = { g8: ['R16', 'QF', 'SF', 'F'], l36: ['PO', 'R16', 'QF', 'SF', 'F'] };
 
-/** The season's nights in order. `legsOf` gives each knockout round's legs (two to the semi-finals and one
- *  final unless told otherwise): g8 is 13 nights, l36 is 17. */
-export function nightsOf(f: WorldCompFormat, legsOf: (round: WorldKoRound) => 1 | 2 = r => (r === 'F' ? 1 : 2)): WorldNight[] {
+/** The season's nights in order. `legsOf` gives each knockout round's legs, always from the binding (bind.tie):
+ *  the module states no round's legs, so the one match final stands on the participant's uclLegsFor and never on
+ *  ledger row G8, which has one publisher. With the participant's legs, g8 is 13 nights and l36 is 17. */
+export function nightsOf(f: WorldCompFormat, legsOf: (round: WorldKoRound) => 1 | 2): WorldNight[] {
   const first = f === 'g8' ? G8_SHAPE.games : UCL_LEAGUE.games;
   const out: WorldNight[] = Array.from({ length: first }, (_, md) => ({ id: `MD${md + 1}`, stage: 'md' as const, md }));
   for (const round of KO_ORDER[f]) {
-    const legs = round === 'F' ? 1 : legsOf(round);
+    const legs = legsOf(round);
     if (legs === 1) out.push({ id: round === 'F' ? 'F' : `${round}_1`, stage: round, leg: 1 });
     else for (const leg of [1, 2] as const) out.push({ id: round === 'R16' ? `R16_${leg}` : `${round}${leg}`, stage: round, leg });
   }
@@ -211,6 +219,10 @@ export function leaguePhaseNightRounds(rounds: number, lastGroupRound: number, m
  * `sim(home, away, scale)` returns the goals in the order handed. The tie's fields are written in the order the
  * engine always wrote them (legs, leg1, leg2, aet, the aggregate, byAwayGoals even when undefined, pens, the
  * winner), so a saved bracket is the same bytes whichever of the two calls this.
+ * RECORDED DEBT: until E2 (held for the lead's weight ruling) lifts advanceUclBracket's AI tie onto this
+ * function, this is a SECOND WRITING of that tie. It is held to the base engine by the golden table
+ * (scripts/data/worldTieGolden1347.json) and to the engine of any later commit by
+ * `node scripts/recordWorldTieGolden1347.mjs --ref <commit> --check`, which must say SAME before anything merges.
  */
 export function settleTie(
   t: SettleableTie, rules: TieRules,
@@ -365,7 +377,7 @@ function addResult(rows: Map<string, TableRow>, home: string, away: string, hg: 
 export function evaluateWorldComp(slice: WorldCompSlice, nightsDone: number, bind: WorldCompBind): WorldCompResult {
   const f = slice.f;
   const strOf = new Map(slice.clubs.map((c, i) => [c, slice.str[i] ?? 0]));
-  const legsOf = (r: WorldKoRound): 1 | 2 => (r === 'F' ? 1 : bind.tie(r).legs);
+  const legsOf = (r: WorldKoRound): 1 | 2 => bind.tie(r).legs;
   const nights = nightsOf(f, legsOf).map(n => ({ ...n, fixtures: [] as WorldFixture[] }));
   const k = Math.max(0, Math.min(Math.floor(nightsDone), nights.length));
   const out: WorldCompResult = { f, done: false, nightsDone: k, nights, ties: [] };
@@ -411,7 +423,7 @@ export function evaluateWorldComp(slice: WorldCompSlice, nightsDone: number, bin
   let night = firstStage;
   let last: string[] = [];
   for (const round of KO_ORDER[f]) {
-    const rules: TieRules = { ...bind.tie(round), legs: legsOf(round) };
+    const rules: TieRules = bind.tie(round);
     const pairs = round === KO_ORDER[f][0] ? field
       : f === 'l36' && round === 'R16' ? seeds.map((seed, i) => ({ home: last[i], away: seed }))
         : f === 'l36' ? Array.from({ length: last.length / 2 }, (_, i) => nextRoundTie(last, i))

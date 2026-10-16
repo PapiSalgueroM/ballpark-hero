@@ -192,8 +192,10 @@ async function section0Engine() {
     ok(Object.hasOwn(w, name) && (key === undefined || Object.hasOwn(w[name], key)), `${r.id}: usedBy ${u} is not in worldCompetition.ts`);
   }
   /* 0.6 The nights: 13 and 17, the league phase's in the real months' order, its marks eleven rising fractions. */
-  const order = w.nightsOf('l36').map(n => n.id);
-  ok(w.nightsOf('g8').length === 13 && order.length === 17, `the nights are ${w.nightsOf('g8').length} (g8) and ${order.length} (l36), 13 and 17 expected`);
+  /* The module takes every round's legs from its binding; these are the participant's (uclLegsFor). */
+  const legs = r => (r === 'F' ? 1 : 2);
+  const order = w.nightsOf('l36', legs).map(n => n.id);
+  ok(w.nightsOf('g8', legs).length === 13 && order.length === 17, `the nights are ${w.nightsOf('g8', legs).length} (g8) and ${order.length} (l36), 13 and 17 expected`);
   ok(same(order, [...w.LEAGUE_PHASE_NIGHT_ORDER]), 'LEAGUE_PHASE_NIGHT_ORDER is not the order nightsOf gives');
   const months = row('N1').months;
   ok(same(Object.keys(months), order), 'N1 does not give a month for each night in order');
