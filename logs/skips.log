@@ -1,0 +1,11 @@
+1) The engine: 8 descriptors, 2000 roads each (seed set a) plus five edge stocks
+   16040 showcase states, 1099 of them clamped skips: every skip undone to the byte, nothing offered elsewhere
+   src/test/usCareerReports1346.test.tsx: 36/36 pass as it is
+2) with the undo handing back its input: 8 fail, exactly the 8 named
+2) with the graded approaches taking a tap right after the undo: 4 fail, exactly the 4 named
+3) with no Watch it again on the night: 12 fail, exactly the 12 named
+3) with the night's shared button taking a tap right after the other half: 4 fail, exactly the 4 named
+3) with the showcase card not keyed on the night's run: 4 fail, exactly the 4 named
+3) with the stage keyed on the step only: 4 fail, exactly the 4 named
+3) with Watch it again offered under reduced motion: 4 fail, exactly the 4 named
+PASS: ALL US CAREER SKIP CHECKS PASSED
