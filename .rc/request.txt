@@ -1,0 +1,6 @@
+#!serve
+#!playwright
+#!serial
+walkc: node .rc/x/walk1339c.mjs
+walk-head: node scripts/playCmOwnClubMarket.mjs
+walk-ctl: node .rc/x/legacy1339.mjs && node_modules/.bin/vite build --outDir /tmp/dist-legacy --emptyOutDir > "$TMPDIR/b.log" 2>&1; s=$?; git checkout -- src; [ $s -eq 0 ] || { tail -20 "$TMPDIR/b.log"; exit 2; }; (node scripts/lib/hostLikeServer.mjs /tmp/dist-legacy 4174 > /dev/null 2>&1 &); sleep 4; PLAY_OWNCLUB_CONTROL=base CONTROL_URL=http://localhost:4174 node scripts/playCmOwnClubMarket.mjs
