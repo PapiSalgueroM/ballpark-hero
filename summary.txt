@@ -1,0 +1,2 @@
+build exit=0 31s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+w6 exit=1 7s |   head failure: W6 1280: the pointer and the first tile have not moved (first {"screen":"home","hintY":449,"tileY":494,"panelY":212,"panelH":476}, a second later {"screen

@@ -1,0 +1,15 @@
+ok   [head] W6 390: the first frame of the first open is home with the pointer ({"screen":"home","hintY":441,"tileY":486,"panelY":165,"panelH":515})
+ok   [head] W6 390: one second later it is still home with the pointer ({"screen":"home","hintY":441,"tileY":486,"panelY":165,"panelH":515})
+ok   [head] W6 390: the pointer and the first tile have not moved (first {"screen":"home","hintY":441,"tileY":486,"panelY":165,"panelH":515}, a second later {"screen":"home","hintY":441,"tileY":486,"panelY":165,"panelH":515})
+ok   [head] W6 390: ? opens the help
+ok   [head] W6 390: the next open is home with no pointer ({"screen":"home","hintY":null,"tileY":464,"panelY":187,"panelH":470})
+ok   [head] W6 390: the save is byte for byte the same and the only key added is soccerSquad:help (soccerSquad:help)
+ok   [head] W6 390: no page error (none)
+ok   [head] W6 1280: the first frame of the first open is home with the pointer ({"screen":"home","hintY":449,"tileY":494,"panelY":212,"panelH":476})
+ok   [head] W6 1280: one second later it is still home with the pointer ({"screen":"home","hintY":450,"tileY":495,"panelY":212,"panelH":476})
+FAIL [head] W6 1280: the pointer and the first tile have not moved (first {"screen":"home","hintY":449,"tileY":494,"panelY":212,"panelH":476}, a second later {"screen":"home","hintY":450,"tileY":495,"panelY":212,"panelH":476})
+ok   [head] W6 1280: ? opens the help
+ok   [head] W6 1280: the next open is home with no pointer ({"screen":"home","hintY":null,"tileY":473,"panelY":235,"panelH":431})
+ok   [head] W6 1280: the save is byte for byte the same and the only key added is soccerSquad:help (soccerSquad:help)
+ok   [head] W6 1280: no page error (none)
+  head failure: W6 1280: the pointer and the first tile have not moved (first {"screen":"home","hintY":449,"tileY":494,"panelY":212,"panelH":476}, a second later {"screen":"home","hintY":450,"tileY":495,"panelY":212,"panelH":476})
