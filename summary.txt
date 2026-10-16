@@ -1,0 +1,3 @@
+falls exit=0 34s | simCmBoardVerdict GREEN: 0 of 0 checks green (parts measure, 34 s)
+offers exit=0 202s | simCmBoardVerdict GREEN: 0 of 0 checks green (parts measure, 195 s)
+rollover exit=0 378s | simCmBoardVerdict GREEN: 0 of 0 checks green (parts measure, 375 s)

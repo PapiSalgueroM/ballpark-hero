@@ -1,0 +1,21 @@
+[measure] on CM_BOARD_BASE /home/runner/work/ballpark-hero/ballpark-hero/.claude/worktrees/r1335-base-b; fleets rollover
+[measure rollover] title fleet: 240 careers, 145 sacked before the end
+[measure title fleet] 461 season ends, 408 stays, 53 moves
+  A or B stays opening under Safe: 239 of 298; grade B: 83 of 86; title seasons: 129 of 153
+  promotions 12, graded C or worse 6 (first West Ham now seed 2: 2th, C); relegations 1
+  stay openings: n 408, median 50, p90 64.5, p95 72.5, p99 82
+[measure offers title fleet] 118 seasons with offers, 168 offers; 49 seasons and 56 offers two or more tiers up; e.g. Celtic (tier 4) offered Aston Villa (tier 2), Manchester United (tier 2); Celtic (tier 4) offered Crystal Palace (tier 2); Celtic (tier 4) offered Nottingham Forest (tier 2), Real Madrid (tier 1)
+[measure promotion fleet] 83 season ends, 83 stays, 0 moves
+  A or B stays opening under Safe: 8 of 57; grade B: 8 of 32; title seasons: 0 of 22
+  promotions 45, graded C or worse 4 (first West Ham now seed 303: 3th, C); relegations 3
+  stay openings: n 83, median 79, p90 82, p95 82, p99 82
+  kitty tier 1 flat over budget: n 281, median 1.08, p90 1.23, p95 1.42, p99 1.68
+  kitty tier 2 flat over budget: n 17, median 1.11, p90 1.27, p95 1.66, p99 1.66
+  kitty tier 3 flat over budget: n 56, median 1.2, p90 2.31, p95 2.6, p99 3.22
+  kitty tier 4 flat over budget: n 137, median 1.92, p90 6.5, p95 6.75, p99 7
+  KITTY_TOP_SHARE recipe: smallest multiple of 0.05 at or above the tier 1 and 2 p99 1.68 = 1.7
+  the band at 1.7 would bind 0 of 281 tier 1 rollovers (0 of them with a trophy)
+  the band at 1.7 would bind 0 of 17 tier 2 rollovers (0 of them with a trophy)
+  the band at 1.7 would bind 25 of 56 tier 3 rollovers (10 of them with a trophy)
+  the band at 1.7 would bind 77 of 137 tier 4 rollovers (39 of them with a trophy)
+simCmBoardVerdict GREEN: 0 of 0 checks green (parts measure, 375 s)

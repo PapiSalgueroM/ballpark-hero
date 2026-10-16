@@ -1,0 +1,3 @@
+falls: git worktree add -q .claude/worktrees/r1335-base-a d4f2c6f6 && CM_BOARD_BASE=$PWD/.claude/worktrees/r1335-base-a MEASURE=falls node scripts/simCmBoardVerdict.mjs --part=measure
+rollover: sleep 3 && git worktree add -q .claude/worktrees/r1335-base-b d4f2c6f6 && CM_BOARD_BASE=$PWD/.claude/worktrees/r1335-base-b MEASURE=rollover node scripts/simCmBoardVerdict.mjs --part=measure
+offers: sleep 6 && git worktree add -q .claude/worktrees/r1335-base-c d4f2c6f6 && CM_BOARD_BASE=$PWD/.claude/worktrees/r1335-base-c MEASURE=offers,takeover node scripts/simCmBoardVerdict.mjs --part=measure

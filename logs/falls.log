@@ -1,0 +1,15 @@
+[measure] on CM_BOARD_BASE /home/runner/work/ballpark-hero/ballpark-hero/.claude/worktrees/r1335-base-a; fleets falls
+[measure falls] 3200 fresh careers (4 clubs a tier a world, 40 seeds each, seed0 0), 0 with no match, openings seen 60
+  tier 1: n 129, median 8.5, p90 8.5, p95 8.5, p99 8.5
+  tier 2: n 194, median 6.5, p90 8.5, p95 8.5, p99 8.5
+  tier 3: n 319, median 5.5, p90 6.6, p95 7.2, p99 7.5
+  tier 4: n 348, median 4.9, p90 5.5, p95 5.5, p99 5.5
+  era era2005: n 204, median 5.5, p90 7.5, p95 7.5, p99 8.5
+  era era2010: n 203, median 5.5, p90 8.5, p95 8.5, p99 8.5
+  era era2015: n 180, median 5.5, p90 7.5, p95 8.5, p99 8.5
+  era era2020: n 230, median 5.5, p90 7.5, p95 8.5, p99 8.5
+  era now: n 173, median 5.5, p90 8.5, p95 8.5, p99 8.5
+  pooled lost openers: n 990, median 5.5, p90 7.5, p95 8.5, p99 8.5
+  by competition: league 990, cup 0, uclGroup 0, uclKo 0
+  BOARD_FRESH recipe: 60 + ceil(pooled p95 8.5) = 69
+simCmBoardVerdict GREEN: 0 of 0 checks green (parts measure, 34 s)

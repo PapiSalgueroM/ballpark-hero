@@ -1,0 +1,5 @@
+[measure] on CM_BOARD_BASE /home/runner/work/ballpark-hero/ballpark-hero/.claude/worktrees/r1335-base-c; fleets offers, takeover
+[measure offers] tier 4 fleet: 331 season ends over 27 leagues
+[measure offers tier 4 fleet] 265 seasons with offers, 403 offers; 131 seasons and 151 offers two or more tiers up; e.g. Lincoln City (tier 4) offered Manchester United (tier 2); Lincoln City (tier 4) offered PSG (tier 1); Frosinone (tier 4) offered Manchester City (tier 1)
+[measure takeover] 180 handovers (startMidSeason), 103 carry a failed objective; e.g. Everton era2005 autumn seed 1: Reach the FA Cup semi-finals | Everton era2005 autumn seed 2: Reach the FA Cup semi-finals | Everton era2005 autumn seed 4: Reach the FA Cup semi-finals
+simCmBoardVerdict GREEN: 0 of 0 checks green (parts measure, 195 s)
