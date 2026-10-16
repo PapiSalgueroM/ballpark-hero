@@ -1,0 +1,5 @@
+#!build
+#!playwright
+#!serial
+playSoundGate: node scripts/playSoundGate.mjs
+homeSearch: node scripts/playHomeSearchRecovery1088.mjs --prefetch-assets-only 2>&1 | tail -2 && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" xvfb-run -a timeout --signal=TERM --kill-after=15s 8m node scripts/playHomeSearchRecovery1088.mjs
