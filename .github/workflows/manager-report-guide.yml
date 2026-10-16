@@ -1,0 +1,172 @@
+name: Manager report guide verification
+
+on:
+  push:
+    branches:
+      - codex/manager-report-guide
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  qualify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    defaults:
+      run:
+        shell: bash
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      ENGINES: chromium
+      TZ: UTC
+      PRERENDER_ONLY: /club-manager,/whats-new
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Allocate and bind source
+        run: |
+          set -euo pipefail
+          echo "GUIDE_OUT=$RUNNER_TEMP/manager-report-guide" >> "$GITHUB_ENV"
+          mkdir -p "$RUNNER_TEMP/manager-report-guide"
+          git rev-parse HEAD > "$RUNNER_TEMP/manager-report-guide/head.txt"
+          git archive --format=zip HEAD > "$RUNNER_TEMP/manager-report-guide/source.zip"
+          git merge-base --is-ancestor d8aaa4cb654e1b59f783625e63b73ce85adf2681 HEAD
+          git diff --exit-code d8aaa4cb654e1b59f783625e63b73ce85adf2681 HEAD -- src scripts public package.json package-lock.json bun.lock bun.lockb ':!src/data/gameContent/clubManagement.ts' ':!src/data/searchKeywords.json' ':!scripts/data/guideHeadingsFrozen.json' ':!public/club-manager/index.html' ':!public/whats-new/index.html' ':!public/sitemap.xml' ':!scripts/data/lastmod.json'
+          test -z "$(git status --porcelain --untracked-files=no)"
+      - name: Locked application and isolated browser dependencies
+        run: |
+          set -euo pipefail
+          npm ci > "$GUIDE_OUT/install.log" 2>&1
+          node scripts/qa/soccerAgentReviewDependencies.mjs before > "$GUIDE_OUT/dependencies-before.log" 2>&1
+          browser_tools="$RUNNER_TEMP/manager-guide-tools"
+          npm install --prefix "$browser_tools" --no-save --package-lock=false playwright@1.64.0 > "$GUIDE_OUT/browser-install.log" 2>&1
+          test ! -e node_modules/playwright
+          test ! -e node_modules/playwright-core
+          ln -s "$browser_tools/node_modules/playwright" node_modules/playwright
+          ln -s "$browser_tools/node_modules/playwright-core" node_modules/playwright-core
+          node scripts/qa/soccerAgentReviewDependencies.mjs after > "$GUIDE_OUT/dependencies-after.log" 2>&1
+          cp soccer-agent-review-artifacts/dependencies-*.json "$GUIDE_OUT/"
+          node "$browser_tools/node_modules/playwright/cli.js" install --with-deps chromium > "$GUIDE_OUT/chromium-install.log" 2>&1
+          python -m pip install fonttools pillow > "$GUIDE_OUT/fonts-install.log" 2>&1
+          python -m pip freeze > "$GUIDE_OUT/python-packages.txt"
+          node -p "require('playwright/package.json').version" > "$GUIDE_OUT/playwright-version.txt"
+          find node_modules -type f -print0 | sort -z | xargs -0 sha256sum > "$GUIDE_OUT/installed-files.sha256"
+          find "$browser_tools/node_modules" -type f -print0 | sort -z | xargs -0 sha256sum > "$GUIDE_OUT/browser-tool-files.sha256"
+      - name: Refresh only the reviewed guide and keyword outputs
+        run: |
+          set -euo pipefail
+          SIM_OFFLINE_RECEIPT="$GUIDE_OUT/refresh.transport" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simGuideHeadings.mjs --refresh /club-manager > "$GUIDE_OUT/refresh.log" 2>&1
+          SIM_OFFLINE_RECEIPT="$GUIDE_OUT/keywords.transport" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/genSearchKeywords.mjs > "$GUIDE_OUT/keywords.log" 2>&1
+          cat "$GUIDE_OUT/refresh.log" "$GUIDE_OUT/keywords.log"
+      - name: Actual app types and existing manager controls
+        run: |
+          set -euo pipefail
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json > "$GUIDE_OUT/types.log" 2>&1
+          SIM_OFFLINE_RECEIPT="$GUIDE_OUT/units.transport" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node node_modules/vitest/vitest.mjs run src/lib/clubManagerSlots.test.ts src/test/clubManagerNoSack.test.tsx src/test/clubManagerRetire.test.tsx --maxWorkers=1 --minWorkers=1 --reporter=verbose --reporter=json --outputFile.json="$GUIDE_OUT/units.json" > "$GUIDE_OUT/units.log" 2>&1
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          const report=JSON.parse(fs.readFileSync(process.env.GUIDE_OUT+'/units.json'));
+          assert.equal(report.testResults.length,3);
+          const rows=report.testResults.flatMap(file=>file.assertionResults);
+          assert.equal(rows.length,47);
+          assert(rows.every(row=>row.status==='passed'&&row.failureMessages.length===0));
+          console.log('All47 existing slots, No sacking and retirement cases completed and passed.');
+          NODE
+      - name: Production build and Club Manager saved guide
+        id: build
+        run: |
+          set -euo pipefail
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" npm run build:seo > "$GUIDE_OUT/build.log" 2>&1
+          tail -n 6 "$GUIDE_OUT/build.log"
+      - name: All built-site readers plus guide and search
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          failed=0
+          printf 'method\texit\n' > "$GUIDE_OUT/readers.tsv"
+          for method in simAdsense simBrand simHeadTags simHiddenPages simHubs simIndexNow simIndexing simInternalLinks simNoRivalNames simPrerender simPrerenderBoot simRetiredRoutes simSchema simSitemap simSnapshotAssets simGuideHeadings simSiteSearch; do
+            status=0
+            SIM_OFFLINE_RECEIPT="$GUIDE_OUT/$method.transport" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node "scripts/$method.mjs" > "$GUIDE_OUT/$method.log" 2>&1 || status=$?
+            printf '%s\t%s\n' "$method" "$status" >> "$GUIDE_OUT/readers.tsv"
+            tail -n 2 "$GUIDE_OUT/$method.log"
+            test "$status" -eq 0 || failed=1
+            test ! -s "$GUIDE_OUT/$method.transport" || failed=1
+          done
+          exit "$failed"
+      - name: Existing guide controls remain effective
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          for control in nokeyword lostline snapdrift; do
+            status=0
+            SIM_OFFLINE_RECEIPT="$GUIDE_OUT/control-$control.transport" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" GUIDE_HEADINGS_CONTROL="$control" node scripts/simGuideHeadings.mjs > "$GUIDE_OUT/control-$control.log" 2>&1 || status=$?
+            cat "$GUIDE_OUT/control-$control.log"
+            test "$status" -eq 1
+            grep -F "simGuideHeadings control $control: section " "$GUIDE_OUT/control-$control.log"
+            grep -F "red and every other section green" "$GUIDE_OUT/control-$control.log"
+            test ! -s "$GUIDE_OUT/control-$control.transport"
+          done
+      - name: Retain actual generated source and emitted bytes
+        if: ${{ !cancelled() }}
+        run: |
+          set -euo pipefail
+          git diff --exit-code HEAD -- src scripts public package.json package-lock.json bun.lock bun.lockb index.html ':!src/data/searchKeywords.json' ':!scripts/data/guideHeadingsFrozen.json' ':!public/club-manager/index.html' ':!public/whats-new/index.html' ':!public/sitemap.xml' ':!scripts/data/lastmod.json'
+          git diff --binary HEAD -- src/data/searchKeywords.json scripts/data/guideHeadingsFrozen.json public/club-manager/index.html public/whats-new/index.html public/sitemap.xml scripts/data/lastmod.json > "$GUIDE_OUT/generated.patch"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$GUIDE_OUT/validated-source-files.sha256"
+          python - <<'PY'
+          import os,subprocess,zipfile
+          root=os.environ['GUIDE_OUT']
+          files=subprocess.check_output(['git','ls-files','-z']).decode().split('\0')
+          with zipfile.ZipFile(root+'/validated-source.zip','w',zipfile.ZIP_DEFLATED) as output:
+              for file in files:
+                  if file: output.write(file,file)
+          if os.path.isdir('dist'):
+              with zipfile.ZipFile(root+'/dist.zip','w',zipfile.ZIP_DEFLATED) as output:
+                  for folder,dirs,names in os.walk('dist'):
+                      for name in names: output.write(os.path.join(folder,name),os.path.join(folder,name))
+          PY
+          if test -d dist; then find dist -type f -print0 | sort -z | xargs -0 sha256sum > "$GUIDE_OUT/dist-files.sha256"; fi
+          sha256sum --check "$GUIDE_OUT/installed-files.sha256" > "$GUIDE_OUT/installed-holds.log" 2>&1
+          sha256sum --check "$GUIDE_OUT/browser-tool-files.sha256" > "$GUIDE_OUT/browser-tool-holds.log" 2>&1
+      - name: Unchanged download limits, existing I reds remain visible
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          node scripts/lib/hostLikeServer.mjs dist 4173 > "$GUIDE_OUT/server.log" 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+          for attempt in 1 2 3 4 5; do curl --fail --silent http://127.0.0.1:4173/ > /dev/null && break || sleep 1; done
+          status=0
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" SWEEP_OFFLINE=1 BASE=http://127.0.0.1:4173 SWEEP_BASE=http://127.0.0.1:4173 node scripts/sweepWeight.mjs > "$GUIDE_OUT/weights.log" 2>&1 || status=$?
+          cat "$GUIDE_OUT/weights.log"
+          printf '%s\n' "$status" > "$GUIDE_OUT/weights-exit.txt"
+          exit "$status"
+      - name: Final physical source and dist holds
+        if: ${{ !cancelled() }}
+        run: |
+          set -euo pipefail
+          sha256sum --check "$GUIDE_OUT/validated-source-files.sha256" > "$GUIDE_OUT/source-holds.log" 2>&1
+          if test -f "$GUIDE_OUT/dist-files.sha256"; then sha256sum --check "$GUIDE_OUT/dist-files.sha256" > "$GUIDE_OUT/dist-holds.log" 2>&1; fi
+          sha256sum --check "$GUIDE_OUT/installed-files.sha256" > "$GUIDE_OUT/installed-holds.log" 2>&1
+          sha256sum --check "$GUIDE_OUT/browser-tool-files.sha256" > "$GUIDE_OUT/browser-tool-holds.log" 2>&1
+          for receipt in refresh keywords units; do test ! -s "$GUIDE_OUT/$receipt.transport"; done
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: manager-report-guide-${{ github.sha }}
+          path: ${{ env.GUIDE_OUT }}
+          if-no-files-found: error
+          retention-days: 14

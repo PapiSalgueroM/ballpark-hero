@@ -110,7 +110,7 @@ export const CLUB_MANAGEMENT_CONTENT: GameContentMap = {
       {
         heading: "The board meter, the fan meter and the sack race",
         items: [
-          "Two meters sit under the club name on every tab, words by default and the number out of 100 on tap. The board meter is the sack race itself: it opens at 60 in your first season, anywhere from 35 to 82 after that depending on how the last one went, and swings with results, cup runs, promises to the press and position against expectation. Safe is 60 and above, Under pressure is 10 to 59, under 10 reads One bad week from the sack, and at zero you are sacked. Only a result can sack you: a press answer or a handshake with another club can take the board to its last point, never to zero. The fan meter is read off this season's results (recent ones count most), your position against the club's expectation, the ticket policy and the trophies lifted this season: Singing at 65 and above, Grumbling from 40 to 64, Turning under 40, Hopeful before a ball is kicked.",
+          "Two meters sit under the club name on every tab, words by default and the number out of 100 on tap. The board meter is the sack race itself: new Club Manager careers open at 69 for each new job, then from 35 to 82 after a season you stay for (an A or B opens at 69 or more, a D or F below 60). It swings with results, cup runs, promises to the press and position against expectation. Safe is 60 and above, Under pressure is 10 to 59, under 10 reads One bad week from the sack, and at zero you are sacked. With No sacking on, a result that would fire you leaves the board on 1 instead, and under 10 the meter reads Lost the board. Only a result can sack you: a press answer or a handshake with another club can take the board to its last point, never to zero. The fan meter is read off this season's results (recent ones count most), your position against the club's expectation, the ticket policy and the trophies lifted this season: Singing at 65 and above, Grumbling from 40 to 64, Turning under 40, Hopeful before a ball is kicked.",
         ],
       },
       {
@@ -184,7 +184,11 @@ export const CLUB_MANAGEMENT_CONTENT: GameContentMap = {
     faqs: [
       {
         q: "How exactly do I get sacked?",
-        a: "The board meter in the header hits zero at a final whistle. Losses, sitting below the expected position, cup exits and promises to the press you broke drain it, while wins, trophies and cup runs refill it. Tap the meter for the number: under 10 it reads One bad week from the sack, and one bad week can genuinely take that much.",
+        a: "Unless No sacking is on, you are sacked when the board meter in the header hits zero at a final whistle. Losses, sitting below the expected position, cup exits and promises to the press you broke drain it, while wins, trophies and cup runs refill it. With No sacking off, tap the meter for the number: under 10 it reads One bad week from the sack, and one bad week can take that much. Pick No sacking on the Dugout step or turn it on later from Options while you are still employed. It cannot be turned off, and from then on this career posts no new leaderboard scores.",
+      },
+      {
+        q: "How do I retire?",
+        a: "Between matches, open the Manager panel, or use the button below the season summary or on the out of work screen. When the hub says Season complete, open See Season Review first so the season is counted. Confirm retirement to end the career with a farewell saved in its slot. Your record also shows the highest scoring game it has kept: add both teams' goals, including extra time but not shootout kicks. Older saves may not have kept every score.",
       },
       {
         q: "Does my career save?",
