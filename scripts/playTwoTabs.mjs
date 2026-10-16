@@ -62,12 +62,16 @@
  *  14 OLD SAVE  a save with no fence key opens, plays and is fenced, a second
  *               tab stales it, and the notice passes case 8's checks plus focus
  *               on Reload and no toast left showing.
+ *  15 RETIRE    (Round 1343) A holds a career at its season end, B plays the next
+ *               season's first match: A's door press is taken by the notice and a
+ *               Yes forced past it writes nothing. Then C retires and the stale
+ *               B's forced Quick Sim writes nothing: the disk stays retired.
  *
  * NEGATIVE CONTROLS (TWO_TABS_CONTROL; each counts what it dropped and a
  * control that dropped nothing exits 2):
  *   nofence   an init script drops every write to a 'dukb-fence:' key in every
  *             page: cases 1, 2, 3, 6 and 9 go red, and the soccer cases 10, 11,
- *             12 and 14.
+ *             12 and 14, and case 15.
  *   nolanding drops the carry on's one shot mark: case 4 goes red.
  *   nokeep    drops every write to a key holding '.broken-': case 5's backup
  *             check goes red.
@@ -94,7 +98,7 @@ const FENCE = 'dukb-fence:' + KEY;
 const OUT = process.env.RC_OUT || path.join(ROOT, 'two-tabs-artifacts');
 fs.mkdirSync(OUT, { recursive: true });
 const CONTROL = process.env.TWO_TABS_CONTROL || '';
-const CONTROLS = { nofence: [1, 2, 3, 6, 9, 10, 11, 12, 14], nolanding: [4], nokeep: [5] };
+const CONTROLS = { nofence: [1, 2, 3, 6, 9, 10, 11, 12, 14, 15], nolanding: [4], nokeep: [5] };
 if (CONTROL && !(CONTROL in CONTROLS)) { console.error(`TWO_TABS_CONTROL=${CONTROL} is not a control here (${Object.keys(CONTROLS).join(', ')})`); process.exit(1); }
 const SIZES = (process.env.SIZES || '320x640,390x844,1280x900').split(',').map(s => s.split('x').map(Number));
 const NOTICE_WORDS = 'This career moved on in another tab. Reload to carry on.';
@@ -1000,6 +1004,95 @@ async function soccerNotice(A, before, target, theirs, tag) {
   ok(`the notice: Reload ${rb ? Math.round(rb.height) : '?'} px, smallest text ${geo.min} px, no animation, no toast, Tab stayed inside ${escaped === 0}`);
 }
 
+/* ---------- Round 1343: case 15, retiring with two tabs ---------- */
+let END15 = null;
+/** A career at its first season's end, made by the real engine on its own seeded stream. */
+function endFixture15() {
+  if (END15) return END15;
+  const saved = Math.random;
+  Math.random = seeded(1343);
+  try {
+    let s = cm.startCareer('Everton');
+    for (let i = 0; i < 140; i++) {
+      if (s.boardConfidence < 35) s = { ...s, boardConfidence: 55 };
+      const r = cm.playNextEntry(s, { skipHalftime: true });
+      s = r.state;
+      if (r.kind === 'seasonOver') break;
+    }
+    s = cm.finishSeason(s).state;
+    stubStore.clear();
+    cm.saveCareer(s);
+    END15 = stubStore.get(KEY) ?? null;
+  } finally {
+    Math.random = saved;
+  }
+  return END15;
+}
+const retiredOn = p => p.evaluate(k => { try { return !!JSON.parse(localStorage.getItem(k) ?? 'null')?.retired; } catch { return null; } }, KEY);
+async function openToEnd(p) {
+  await p.goto(BASE + '/club-manager', { waitUntil: 'domcontentloaded', timeout: 30000 });
+  await p.locator('[data-testid="cm-slots"]').first().waitFor({ timeout: 20000 }).catch(() => {});
+  await clearBanner(p);
+  await p.getByRole('button', { name: 'Resume Career', exact: true }).first().click({ timeout: 5000 }).catch(() => {});
+}
+async function caseRetire(ctx, tag) {
+  console.log(`15) RETIRE (${tag})`);
+  const END = endFixture15();
+  if (!END) { fail(15, 'the engine made no season end fixture'); return; }
+  const A = await newPage(ctx);
+  await plant(A, { [KEY]: END });
+  await openToEnd(A);
+  const doorA = A.locator('[data-cm-retire-door]').first();
+  await doorA.waitFor({ timeout: 15000 }).catch(() => {});
+  if (!await doorA.isVisible().catch(() => false)) { fail(15, 'tab A has no retire door on the season end screen'); await A.close(); return; }
+  /* B plays on: the next season's first match. */
+  const B = await newPage(ctx);
+  await openToEnd(B);
+  await B.getByRole('button', { name: /^Continue to Season 2/ }).first().click({ timeout: 8000 }).catch(() => {});
+  await B.locator('[data-cm-way="quick"]').first().waitFor({ timeout: 15000 }).catch(() => {});
+  await quick(B);
+  const afterB = await disk(B);
+  const up = await waitNotice(A);
+  const pressed = await doorA.click({ timeout: 2000 }).then(() => true).catch(() => false);
+  /* And a Yes forced past the notice, armed. */
+  await A.locator('[data-cm-retire-door]').first().dispatchEvent('click').catch(() => {});
+  await A.waitForTimeout(800);
+  await A.locator('[data-cm-retire-yes]').first().dispatchEvent('click').catch(() => {});
+  await A.waitForTimeout(800);
+  const afterA = await disk(A);
+  const retiredA = await retiredOn(A);
+  console.log(`   B played on to ${say(afterB)} | A saw the notice: ${up}, its door press went through: ${pressed} | after A's forced Yes: ${say(afterA)}, retired ${retiredA}`);
+  if (!up) fail(15, 'tab A never showed the notice after tab B played on');
+  if (pressed) fail(15, 'tab A pressed the door through the notice');
+  if (!afterB || afterB.results < 1) fail(15, `tab B did not play the next season's first match (${say(afterB)})`);
+  if (say(afterA) !== say(afterB) || retiredA !== false) fail(15, `A's forced Yes wrote: the disk went from "${say(afterB)}" to "${say(afterA)}", retired ${retiredA}`);
+  else ok('A\'s forced Yes wrote nothing: the disk is B\'s and not retired');
+  await shot(A, `${tag}-15-notice-over-door`);
+  await A.close();
+  /* The reverse: C retires, the stale B forces a Quick Sim. */
+  const C = await newPage(ctx);
+  await openCM(C);
+  const tile = C.locator('button').filter({ has: C.locator('div', { hasText: /^Manager$/ }) }).first();
+  await tile.click({ timeout: 8000 }).catch(() => {});
+  await C.locator('[data-cm-retire-door]').first().click({ timeout: 8000 }).catch(() => {});
+  await C.waitForTimeout(800);
+  await C.locator('[data-cm-retire-yes]').first().click({ timeout: 5000 }).catch(() => {});
+  await C.locator('[data-cm-farewell]').first().waitFor({ timeout: 15000 }).catch(() => {});
+  const retiredC = await retiredOn(C);
+  const atRetire = await disk(C);
+  await B.locator('[data-cm-way="quick"]').first().dispatchEvent('click').catch(() => {});
+  await B.waitForTimeout(2500);
+  const afterForced = await disk(C);
+  const stillRetired = await retiredOn(C);
+  console.log(`   C retired: ${retiredC} at ${say(atRetire)} | after B's forced Quick Sim: ${say(afterForced)}, retired ${stillRetired}`);
+  if (!retiredC) fail(15, 'tab C did not retire');
+  else if (say(afterForced) !== say(atRetire) || !stillRetired) fail(15, `B's forced Quick Sim wrote over the retired career ("${say(atRetire)}" to "${say(afterForced)}", retired ${stillRetired})`);
+  else ok('B\'s forced Quick Sim wrote nothing: the disk stays retired');
+  await shot(C, `${tag}-15-farewell`);
+  await B.close();
+  await C.close();
+}
+
 /* ---------- run ---------- */
 const ONLY_CASES = process.env.CASES ? process.env.CASES.split(',').map(Number) : null;
 const want = c => (!CONTROL || CONTROLS[CONTROL].includes(c)) && (!ONLY_CASES || ONLY_CASES.includes(c));
@@ -1016,6 +1109,7 @@ try {
       if (want(6)) await casePutBack(ctx, tag);
       if (want(7)) await caseOldSave(ctx, tag);
       if (want(9)) await caseBack(ctx, tag);
+      if (want(15)) await caseRetire(ctx, tag);
       if (SOCCER_CASES.some(want)) {
         const sctx = await soccerContext(w, h);
         try {

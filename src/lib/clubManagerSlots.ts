@@ -40,6 +40,8 @@ export interface SlotSummary {
   sacked: boolean;
   /** Round 1342: present, and true, only on a No sacking career. */
   noSack?: true;
+  /** Round 1343: present, and true, only on a career that has retired. */
+  retired?: true;
 }
 
 export interface SlotView {
@@ -108,6 +110,7 @@ export function summarize(raw: string | null): SlotSummary | null {
       historic: isHistoricEra(eraId ?? undefined),
       sacked: c.sacked === true,
       ...(noSackFrom(c as CareerState) !== null ? { noSack: true as const } : {}),
+      ...(c.retired && typeof c.retired === 'object' ? { retired: true as const } : {}),
     };
   } catch {
     return null;

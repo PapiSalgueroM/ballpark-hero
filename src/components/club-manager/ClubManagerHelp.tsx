@@ -102,6 +102,13 @@ export default function ClubManagerHelp() {
                 <p>It also takes some of the bite out of the wage ceiling. Going over the ceiling still costs board confidence after every match and still stops free agents signing, but with No sacking on the lost confidence can no longer cost you the job.</p>
                 <p><span className="font-semibold text-foreground">Example:</span> the board is on 2 and you lose 3-0 in the league. On a normal career that is almost always the sack. With No sacking the board stays on 1, the match report says they would have sacked you, and you play the next match.</p>
               </div>
+              {/* Round 1343: retiring, and the highest scoring game (src/lib/clubManagerRetire.ts, clubManagerRecords.ts). Appended on its own. */}
+              <div data-cm-help="retire" className="space-y-2">
+                <p>👋 <span className="font-semibold text-foreground">Retiring.</span> You can retire whenever you are between matches: from the Manager panel, from the season summary, or while you are out of work. One tap asks first and says what it means, and a second tap retires. It ends the career for good. Nothing more gets played, and if you go in the middle of a season that season stays unfinished. Once the last match of a season is played, the door waits until you have opened See Season Review, so that season counts, title and all. The career keeps its slot as a finished one, with a farewell you can open from your managers screen any time. A new manager starts in an empty slot.</p>
+                <p><span className="font-semibold text-foreground">Highest scoring game</span> on your record is the match with the most goals in it, both sides together, extra time included and penalty shootout kicks never. Every club match on your record counts, the same ones your wins, draws and losses count. If two games tie, the first one stays.</p>
+                <p><span className="font-semibold text-foreground">Example:</span> a 4-4 draw in Season 2 and a 5-3 win in Season 4 both have eight goals, so your record keeps the 4-4. A 3-3 cup tie you won on penalties counts six.</p>
+                <p><span className="font-semibold text-foreground">Example:</span> a career saved before this line was added works it out from the scores the save still keeps. If it no longer keeps all of them, the line says how many of your matches it could not see.</p>
+              </div>
             </div>
   );
 }

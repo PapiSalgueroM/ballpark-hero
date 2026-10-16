@@ -1,6 +1,7 @@
 import { foldSpecialLatin } from '@/lib/nameFold';
 import { nameModerationError } from '@/lib/nameModeration';
 import { realLeagueFixtureKeyForStart, realLeagueFixturePairs, realLeagueFixtureCoverage } from '@/lib/clubManagerFixtures';
+import { noteHighestScoring } from '@/lib/clubManagerRecords';
 import { settleGoalReviews, penaltyReviews, awardReviewedPenalties, cmVarCovers, cmVarKindsAsked, cmVarKindsOf, cmVarGoalLift, type CmVarDecision, type CmVarKind, type CmVarAsk } from '@/lib/clubManagerVar';
 /* Round 201: the wilderness reuses the manager job market the retired
    player path already had, so a sacked manager gets real clubs with real
@@ -2009,6 +2010,9 @@ export interface CareerStats {
   mostExpensiveBuy?: { name: string; fee: number } | null;
   mostExpensiveSale?: { name: string; fee: number } | null;
   clubsManaged?: string[];
+  /** Round 1343: the match with the most goals in it (clubManagerRecords.ts). Absent until the first match
+   *  played on Round 1343's engine, and then read from the book; null means counted with no game yet. */
+  highestScoring?: import('@/lib/clubManagerRecords').ScoringGame | null;
 }
 
 export interface JobOffer { club: string; blurb: string; }
@@ -2959,8 +2963,11 @@ export interface CareerState {
    *  every past daily replay exactly; taken off when the run is carried on to Club Manager and dropped by
    *  loadCareer, so no Club Manager save ever plays it. Absent means the current rules. A later rule
    *  that moves the dailies joins this same field (a dated value naming the newest rule a run plays)
-   *  rather than adding a second one. */
+   *  rather than adding a second one. Round 1343 joined it: 'base' also keeps no highest scoring game. */
   matchRules?: 'base';
+  /** Round 1343: set once, by retireCareer (clubManagerRetire.ts), when the manager retires. A retired career
+   *  keeps its slot as a finished career and opens on its farewell. Absent on every other save. */
+  retired?: import('@/lib/clubManagerRetire').Retirement;
 }
 
 /* ---------- Round 505: the armband and the set piece takers ---------- */
@@ -17191,7 +17198,6 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
     opp: fx.opponent, res, score: `${myGoals}-${oppGoals}`,
     season: state.season, comp: fx.competition, home: fx.home,
   });
-  state.h2h = h2hLog.slice(-300);
   /* And both sides' last-5 form, whatever the competition, because a cup
      hiding matters to the next opponent reading the form guide. */
   noteFormOne(state, state.clubName, res);
@@ -17223,6 +17229,12 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
       state.careerStats.biggestDefeat = { opp: fx.opponent, score: `${oppGoals}-${myGoals}` };
     }
   }
+  /* Round 1343: and the highest scoring game (clubManagerRecords.ts). Not on Hot Seat's base rules: 'base' is
+     the engine before Round 1331, which kept no such line, so a day dated before the cutover replays as it did. */
+  if (state.matchRules !== 'base') {
+    noteHighestScoring(state, { opp: fx.opponent, score: `${myGoals}-${oppGoals}`, res, season: state.season, club: state.clubName, comp: fx.compLabel });
+  }
+  state.h2h = h2hLog.slice(-300);
 
   // Round 73: broken start promises get noticed, then the dressing room
   // finds something new to message you about.
@@ -19234,7 +19246,7 @@ export function matchFacts(career: CareerState): MatchFacts | null {
 /* Round 633: the league title trophy's name, shared by the rollover that
    pushes it and the season score that reads it, rather than two literals that
    can drift apart. */
-const LEAGUE_TITLE_NAME = 'League Title';
+export const LEAGUE_TITLE_NAME = 'League Title';
 
 /**
  * Round 633: a record shape guard for the stamped handover, on the

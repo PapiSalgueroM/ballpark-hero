@@ -54,12 +54,12 @@ export default function ManagerSlotsScreen({ slots, activeDetail, note, onContin
                   </div>
                   {v.active && activeDetail && <div className="text-xs text-muted-foreground mt-0.5">{activeDetail}</div>}
                   <div className="text-xs text-muted-foreground mt-0.5">
-                    🏆 {s.trophies} {s.trophies === 1 ? 'trophy' : 'trophies'}{s.noSack ? ' · No sacking' : ''}{s.sacked ? ' · sacked, looking for work' : ''}
+                    🏆 {s.trophies} {s.trophies === 1 ? 'trophy' : 'trophies'}{s.noSack ? ' · No sacking' : ''}{s.retired ? ' · 👋 retired' : s.sacked ? ' · sacked, looking for work' : ''}
                   </div>
                   <div className="mt-auto pt-3">
                     {confirming === v.slot ? (
                       <div className="text-xs">
-                        <div className="text-foreground mb-2">Delete {s.clubName} for good? There is no undo.</div>
+                        <div className="text-foreground mb-2">Delete {s.clubName} for good? There is no undo.{s.retired ? ' The farewell goes with it.' : ''}</div>
                         <div className="flex gap-2">
                           <button
                             onClick={() => { setConfirming(null); onDelete(v.slot); }}
@@ -76,9 +76,10 @@ export default function ManagerSlotsScreen({ slots, activeDetail, note, onContin
                       <>
                         <button
                           onClick={() => onContinue(v.slot)}
-                          className="w-full px-4 py-2.5 bg-primary text-primary-foreground rounded-xl font-bold hover:opacity-90 transition-opacity"
+                          data-cm-slot-open={s.retired ? 'farewell' : 'resume'}
+                          className="w-full min-h-[44px] px-4 py-2.5 bg-primary text-primary-foreground rounded-xl font-bold hover:opacity-90 transition-opacity"
                         >
-                          Resume Career
+                          {s.retired ? 'See the farewell' : 'Resume Career'}
                         </button>
                         <button
                           onClick={() => setConfirming(v.slot)}
