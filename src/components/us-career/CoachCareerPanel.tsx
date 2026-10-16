@@ -22,12 +22,13 @@ import { useRevealScroll } from '@/hooks/useRevealScroll';
 /* Round 530: the season result is a moment. Same kit as the season curtain. */
 import { ConfettiBurst, CelebrationStyles, revealDelay } from '@/components/club-manager/Celebration';
 import {
-  acceptCoachOffer, playCoachSeason, sitOutCoachSeason,
+  acceptCoachOffer, playCoachSeason, sitOutCoachSeason, retireCoachCareer,
   coachOutlook, coachHotSeat, coachTotals, coachVerdict, formatCoachRecord,
 } from '@/lib/usCoachCareer';
 import type { CoachCareerState } from '@/lib/usCoachCareer';
 import { coachTierLabel, titleWord } from '@/lib/usCareerToCoach';
 import { cn } from '@/lib/utils';
+import USCareerActionConfirm from '@/components/us-career/USCareerActionConfirm';
 
 type Panel = 'none' | 'job' | 'market' | 'standing' | 'log';
 
@@ -65,7 +66,7 @@ export default function CoachCareerPanel({ state, playerName, onChange, onBack, 
     : `${totals.yearsOut} season${totals.yearsOut === 1 ? '' : 's'} without one`;
 
   const revealRef = useRevealScroll<HTMLDivElement>(
-    `${state.results.length}:${state.unemployed}:${state.offers.length}:${panel}`,
+    `${state.results.length}:${state.unemployed}:${state.offers.length}:${panel}:${state.done}`,
   );
 
   /* Round 530: the notes the last coached season produced, kept only for
@@ -88,6 +89,8 @@ export default function CoachCareerPanel({ state, playerName, onChange, onBack, 
     const o = state.offers[i];
     onChange(acceptCoachOffer(state, i), [`You took the ${o.team} job as their ${o.role}.`]);
   };
+  /* Round 1346: the player ends it himself, behind the shared confirm. Only `done` changes. */
+  const retire = () => onChange(retireCoachCareer(state), ['You stepped away from coaching. The record and the log stay.']);
 
   /* ------------------------------ drill in screens ------------------------------ */
   if (panel !== 'none') {
@@ -174,7 +177,7 @@ export default function CoachCareerPanel({ state, playerName, onChange, onBack, 
                     </span>
                     <span className="shrink-0 text-[10px] font-black text-foreground">{o.keenness}</span>
                   </div>
-                  {state.unemployed && (
+                  {state.unemployed && !state.done && (
                     <button onClick={() => { setPanel('none'); take(i); }} className="mt-2 w-full rounded-full bg-primary px-4 py-2 text-xs font-bold text-primary-foreground hover:opacity-90">
                       Take the {o.team} job
                     </button>
@@ -277,7 +280,26 @@ export default function CoachCareerPanel({ state, playerName, onChange, onBack, 
 
       <div ref={revealRef} className="rounded-2xl border border-gold/40 bg-card p-4">
         <CelebrationStyles />
-        {state.unemployed ? (
+        {state.done ? (
+          /* Round 1346: a finished coaching career. The action card becomes the
+             legacy: no season, no offer and no retire button, while the four
+             tiles below still open the job, the market, the standing and the log. */
+          <div className="cm-rise text-center">
+            <p className="text-2xl">🧢</p>
+            <h2 className="text-sm font-black text-foreground">Coaching career complete</h2>
+            <p className="mt-1 text-xs font-bold text-foreground">
+              {totals.wins}-{totals.losses}{totals.otl ? `-${totals.otl}` : ''} as a coach
+            </p>
+            <p className="text-[11px] text-muted-foreground">
+              {totals.seasons} season{totals.seasons === 1 ? '' : 's'} · {totals.rings} title{totals.rings === 1 ? '' : 's'} · {(totals.winPct * 100).toFixed(1)} percent
+            </p>
+            <p className="mt-2 text-[11px] text-muted-foreground">
+              {totals.seasons > 0
+                ? 'You called it a career. The record and the log stay with this save.'
+                : 'You walked away before coaching a season. Nothing on the books, and nothing against you either.'}
+            </p>
+          </div>
+        ) : state.unemployed ? (
           /* Round 530: being let go, or a new cycle of offers, lands as a
              beat too: the header rises and the offers tick in. Keyed on the
              results count and the offer count so only a new cycle moves. */
@@ -373,6 +395,13 @@ export default function CoachCareerPanel({ state, playerName, onChange, onBack, 
             </p>
           </div>
         )}
+        {!state.done && (
+          <div data-coach-retire className="mt-1 text-center">
+            <USCareerActionConfirm action="retireCoach" sport={state.sport.toUpperCase() as 'NFL' | 'NBA' | 'MLB' | 'NHL'} onConfirm={retire}>
+              <button className="min-h-11 min-w-11 text-[11px] text-muted-foreground hover:text-destructive">Retire from coaching</button>
+            </USCareerActionConfirm>
+          </div>
+        )}
       </div>
 
       <div className="grid grid-cols-2 gap-2">
@@ -413,7 +442,7 @@ export default function CoachCareerPanel({ state, playerName, onChange, onBack, 
             one. On the very first board it used to read "Never got a job",
             which is a strange thing to tell somebody who retired ten seconds
             ago and has not been given a chance to try yet. */}
-        <p className="text-[11px] text-muted-foreground">{totals.seasons > 0 ? coachVerdict(state) : out.blurb}</p>
+        <p className="text-[11px] text-muted-foreground">{totals.seasons > 0 ? coachVerdict(state) : state.done ? 'The book is closed.' : out.blurb}</p>
         <button onClick={onBack} className="mt-2 inline-flex items-center gap-2 rounded-full border border-border px-5 py-2 text-xs font-semibold text-foreground hover:border-primary/60">
           <Briefcase className="h-3.5 w-3.5" /> Back to the playing career
         </button>
@@ -435,6 +464,22 @@ export function CoachStartCard({
   onResume: () => void;
   sport: CoachCareerState['sport'];
 }) {
+  /* Round 1346: a finished coaching career is reviewed, never resumed. */
+  if (existing?.done) {
+    const t = coachTotals(existing);
+    return (
+      <div className="rounded-2xl border border-primary/40 bg-card p-4 text-center">
+        <p className="text-2xl">🧢</p>
+        <p className="mt-1 text-sm font-black text-foreground">Coaching career complete</p>
+        <p className="mt-1 text-[11px] text-muted-foreground">
+          {t.seasons} season{t.seasons === 1 ? '' : 's'}, {t.wins}-{t.losses}{t.otl ? `-${t.otl}` : ''}, {t.rings} title{t.rings === 1 ? '' : 's'}.
+        </p>
+        <button onClick={onResume} className="mt-3 w-full rounded-full border border-primary/60 px-6 py-2.5 text-sm font-bold text-foreground hover:bg-primary/10">
+          Review coaching career
+        </button>
+      </div>
+    );
+  }
   if (existing) {
     const t = coachTotals(existing);
     return (

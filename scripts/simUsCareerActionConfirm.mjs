@@ -34,16 +34,21 @@ const titles = {
 const actionTitles = sports.flatMap(sport => [retirementTitle(sport), restartTitle(sport)]);
 const baselines = [...sports.map(baselineTitle), titles.closed];
 const sharedTitles = [titles.focus('retire'), titles.focus('restart'), titles.duplicate, titles.unmount, titles.keyboard];
-const cancelBlock = '          <AlertDialogCancel className="min-h-11 min-w-11">\n            {retiring ? \'Keep playing\' : \'Keep this career\'}\n          </AlertDialogCancel>';
+/* Round 1346 bridge: the prompt reads its words from one copy table (the coaching retirement is its third action),
+   so the cancel block now prints copy.cancel; `initial` swaps the same Cancel element for a plain button as before.
+   The coach case is the nineteenth: it fails under every component control, so it joins those eight lists. */
+const CASE_COUNT = 19;
+const coachTitle = 'retireCoach keeps every guard of the shared prompt from Cancel first to a quiet unmount';
+const cancelBlock = '          <AlertDialogCancel className="min-h-11 min-w-11">\n            {copy.cancel}\n          </AlertDialogCancel>';
 const controls = {
-  direct: [component, '<AlertDialogTrigger asChild ref={triggerRef}>', '<AlertDialogTrigger asChild ref={triggerRef} onClick={onConfirm}>', [...actionTitles, ...sharedTitles]],
-  cancel: [component, '<AlertDialogCancel className="min-h-11 min-w-11">', '<AlertDialogCancel onClick={onConfirm} className="min-h-11 min-w-11">', [...actionTitles, titles.focus('retire'), titles.focus('restart')]],
-  escape: [component, '        className="max-w-md"', '        className="max-w-md" onEscapeKeyDown={onConfirm}', [...actionTitles, titles.focus('retire'), titles.focus('restart')]],
-  duplicate: [component, 'if (!open || acceptedRef.current) return;', 'if (!open) return;', [titles.duplicate]],
-  rearm: [component, 'if (nextOpen) acceptedRef.current = false;', 'void nextOpen;', [titles.duplicate]],
-  initial: [component, cancelBlock, cancelBlock.replace('<AlertDialogCancel ', '<button onClick={() => changeOpen(false)} ').replace('</AlertDialogCancel>', '</button>'), [titles.focus('retire'), titles.focus('restart'), titles.keyboard]],
-  focus: [component, 'triggerRef.current.focus({ preventScroll: true });', 'triggerRef.current.focus();', [titles.focus('retire'), titles.focus('restart')]],
-  unmount: [component, '          event.preventDefault();', '          event.preventDefault();\n          if (!triggerRef.current?.isConnected) onConfirm();', [titles.unmount]],
+  direct: [component, '<AlertDialogTrigger asChild ref={triggerRef}>', '<AlertDialogTrigger asChild ref={triggerRef} onClick={onConfirm}>', [...actionTitles, ...sharedTitles, coachTitle]],
+  cancel: [component, '<AlertDialogCancel className="min-h-11 min-w-11">', '<AlertDialogCancel onClick={onConfirm} className="min-h-11 min-w-11">', [...actionTitles, titles.focus('retire'), titles.focus('restart'), coachTitle]],
+  escape: [component, '        className="max-w-md"', '        className="max-w-md" onEscapeKeyDown={onConfirm}', [...actionTitles, titles.focus('retire'), titles.focus('restart'), coachTitle]],
+  duplicate: [component, 'if (!open || acceptedRef.current) return;', 'if (!open) return;', [titles.duplicate, coachTitle]],
+  rearm: [component, 'if (nextOpen) acceptedRef.current = false;', 'void nextOpen;', [titles.duplicate, coachTitle]],
+  initial: [component, cancelBlock, cancelBlock.replace('<AlertDialogCancel ', '<button onClick={() => changeOpen(false)} ').replace('</AlertDialogCancel>', '</button>'), [titles.focus('retire'), titles.focus('restart'), titles.keyboard, coachTitle]],
+  focus: [component, 'triggerRef.current.focus({ preventScroll: true });', 'triggerRef.current.focus();', [titles.focus('retire'), titles.focus('restart'), coachTitle]],
+  unmount: [component, '          event.preventDefault();', '          event.preventDefault();\n          if (!triggerRef.current?.isConnected) onConfirm();', [titles.unmount, coachTitle]],
   retireWiring: [sharedBoard, '<USCareerActionConfirm action="retire" sport={sport.label} onConfirm={retireNow}>', '<USCareerActionConfirm action="retire" sport={sport.label} onConfirm={reset}>', sports.map(retirementTitle)],
   restartWiring: [sharedBoard, '<USCareerActionConfirm action="restart" sport={sport.label} onConfirm={reset}>', '<USCareerActionConfirm action="restart" sport={sport.label} onConfirm={retireNow}>', sports.map(restartTitle)],
   ownKey: [sharedBoard, 'const reset = () => {\n    setMarketTalk(null);\n    extDeclinedRef.current = false;\n    saveValue(null);', 'const reset = () => {\n    setMarketTalk(null);\n    extDeclinedRef.current = false;\n    localStorage.clear();', sports.map(restartTitle)],
@@ -80,21 +85,21 @@ try {
   assert.doesNotMatch(output, /Unhandled (?:Error|Rejection)|Test timed out|Timeout calling|STACK_TRACE_ERROR|\bRPC\b|Failed to (?:resolve import|load)|Cannot find module|SyntaxError|Transform failed|SIM_OFFLINE_BLOCK/);
   const report = JSON.parse(await readFile(reportFile, 'utf8'));
   assert.equal(Number(report.numUnhandledErrors ?? 0), 0); assert.equal(report.numPendingTests, 0);
-  const rows = report.testResults.flatMap(file => file.assertionResults); assert.equal(rows.length, 18);
+  const rows = report.testResults.flatMap(file => file.assertionResults); assert.equal(rows.length, CASE_COUNT);
   for (const baseline of baselines) assert.equal(rows.find(row => row.title === baseline)?.status, 'passed', 'Original engine/save/unrelated callback baseline held');
   assert.ok(rows.every(row => row.status === 'failed' || row.status === 'passed'), 'All eighteen cases execute');
   if (control) {
     const expected = controls[control][3], failed = rows.filter(row => row.status === 'failed');
-    assert.equal(run.status, 1); assert.equal(report.numFailedTests, expected.length); assert.equal(report.numPassedTests, 18 - expected.length);
+    assert.equal(run.status, 1); assert.equal(report.numFailedTests, expected.length); assert.equal(report.numPassedTests, CASE_COUNT - expected.length);
     assert.deepEqual(failed.map(row => row.title).sort(), [...expected].sort());
     for (const row of failed) assert.match(row.failureMessages.join('\n'), /AssertionError:|expect\(element\)|TestingLibraryElementError: Unable to find (?:an accessible element with the role|an element with the text:)/);
     console.log(`Career confirmation ${control}: one actual executable binding changed in an isolated source copy.`);
-    console.log(`Career confirmation ${control}: ${expected.length} intended failures, ${18 - expected.length} independent passes, no skipped cases.`);
+    console.log(`Career confirmation ${control}: ${expected.length} intended failures, ${CASE_COUNT - expected.length} independent passes, no skipped cases.`);
     console.log(`US_ACTION_CONTROL: ${JSON.stringify({ control, failed: failed.map(row => ({ title: row.title, messages: row.failureMessages })) })}`);
   } else {
     if (run.status !== 0) process.stdout.write(output);
-    assert.equal(run.status, 0); assert.equal(report.numPassedTests, 18); assert.equal(report.numFailedTests, 0);
-    console.log('Career confirmation:18/18 actual-board/shared-confirmation cases passed; no cases skipped.');
+    assert.equal(run.status, 0); assert.equal(report.numPassedTests, CASE_COUNT); assert.equal(report.numFailedTests, 0);
+    console.log(`Career confirmation:${CASE_COUNT}/${CASE_COUNT} actual-board/shared-confirmation cases passed; no cases skipped.`);
     console.log('Career confirmation: all four engine-made six-season saves stay byte-identical through prompt opening, Cancel and Escape.');
     console.log('Career confirmation: explicit retirement changes only the retired flag/phase, preserves the real legacy score once and reload cannot repay it.');
     console.log('Career confirmation: explicit restart deletes only its own key, leaves unrelated storage intact and reload returns to the actual draft screen without a completion.');
