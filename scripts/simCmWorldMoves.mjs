@@ -23,10 +23,13 @@
  *      every later rollover, or the ledger says he retired; (iv) printed per window type: deals, refusals,
  *      records, the ledger's stored length. EXPECTED RED ON THIS TREE AT STEP 1: it measures the bug.
  *   6. legacy: careers with no world seed (startCareer with PR269's legacy world, and fresh careers with the seed,
- *      the ledger and the squad's ledger keys stripped the way simClubManagerSaveSize strips them), the same nine
- *      clubs, seeds 0 to 4, two seasons with their January windows, a save and a reload after every window and
- *      rollover, against BASE: every state, saved byte and Math.random draw equal. At step 1 the head IS the base,
- *      so this is green by construction and is not evidence; it proves the machinery and its control.
+ *      the ledger and the squad's ledger keys stripped the way simClubManagerSaveSize strips them, and the legacy
+ *      career with three deals of mine at its start: a release, a buy and a sale through acceptBid), the same nine
+ *      clubs, seeds 0 to 4, two seasons with their January windows, a save and a reload after every window,
+ *      deal and rollover, against BASE: every state, saved byte and Math.random draw equal. At step 1 the head IS
+ *      the base, so this is green by construction and is not evidence; it proves the machinery and its control.
+ *      The deals are what let the control fire: a quiet unseeded career calls no ledger writer at all (the first
+ *      run, remote check r1344-wm, had no deals and the seedless control did not fire).
  *   9. shape (only when asked): the world's shape over fifteen seasons at the 2026-27 trio, BASE against the head,
  *      per tier (each league's top five and bottom five by XI average, the clubs that sold and the clubs that
  *      bought in an AI deal line): the XI average, the roster length minus the projection's slot count and the
@@ -87,6 +90,8 @@ const CONTROLS = {
   seedless: { section: 6, edits: [['  if (worldSeedOf(state) === undefined) return state;\n', '']] },
 };
 if (CONTROL && !CONTROLS[CONTROL]) cannot(`unknown control ${CONTROL} (${Object.keys(CONTROLS).join(', ')})`);
+/* A control runs its own section and the anchors only, unless the sections are named. */
+if (CONTROL && !process.env.CM_WORLD_MOVES_SECTIONS) { SECTIONS.clear(); SECTIONS.add(0); }
 if (CONTROL) SECTIONS.add(CONTROLS[CONTROL].section);
 /* The careers of sections 1 and 6: a big club, a mid table club and a thin squad's club in each world. Aberdeen's
    2026-27 squad is CM_PARTIAL; Carpi and Treviso were the promoted sides with the thinnest bakes of their eras. */
@@ -326,6 +331,26 @@ async function legacyCareer(E, era, club, seed, kind) {
     }
     if (M.cm.worldSeedOf(s) !== undefined || s.worldRoster !== undefined) return { error: 'the career still carries a seed or a ledger' };
     s = keepSaved(s);
+    let dealt = 0;
+    if (kind === 'deals') {
+      /* Deals of mine in an unseeded career, the way simCmUnseededWorld's deal fleet makes them (a release, a buy,
+         a sale through acceptBid), each saved and reloaded: every writer of the ledger is called, and with no seed
+         none may write. Without them the seedless control cannot fire: a quiet unseeded career calls no writer. */
+      s = { ...s, budget: 9999, wageCap: 9999, transferWindow: 'summer' };
+      const outfield = cur => cur.squad.filter(p => !p.onLoan && p.position !== 'GK');
+      const low = [...outfield(s)].sort((a, b) => a.rating - b.rating || a.id.localeCompare(b.id))[0];
+      const released = low && M.cm.releasePlayer(s, low.id);
+      if (released) { s = keepSaved(released); dealt += 1; }
+      const mine = new Set(s.squad.map(p => p.name));
+      const mp = M.cm.buildMarket(s).find(p => p.position !== 'GK' && p.age < 29 && p.rating < 80 && !mine.has(p.name));
+      const bought = mp && M.cm.buyPlayer(s, mp);
+      if (bought) { s = keepSaved(bought); dealt += 1; }
+      const man = [...outfield(s)].sort((a, b) => b.rating - a.rating || a.id.localeCompare(b.id))[1];
+      const buyer = M.cm.buildMarket(s).find(p => p.club !== s.clubName)?.club;
+      const bid = man && buyer ? { playerId: man.id, playerName: man.name, club: buyer, offer: 30, status: 'open' } : null;
+      const sold = bid && M.cm.acceptBid({ ...s, incomingBids: [...(s.incomingBids ?? []), bid] }, man.id);
+      if (sold) { s = keepSaved(sold); dealt += 1; }
+    }
     for (let season = 1; season <= LEGACY_SEASONS; season += 1) {
       for (let guard = 0; guard < 400; guard += 1) {
         if (s.boardConfidence < 35) s = { ...s, boardConfidence: 55 };
@@ -339,17 +364,17 @@ async function legacyCareer(E, era, club, seed, kind) {
       if (season === LEGACY_SEASONS) break;
       s = keepSaved(M.cm.startNextSeason(s));
     }
-    return { state: sha(s), ledger: s.worldRoster !== undefined };
+    return { state: sha(s), ledger: s.worldRoster !== undefined, dealt };
   });
   return { saved, draws: run.draws.length, drawHash: sha(run.draws.join(',')), ...run.value };
 }
-let s6Careers = 0, s6Saves = 0, s6Draws = 0;
+let s6Careers = 0, s6Saves = 0, s6Draws = 0, s6Deals = 0;
 async function legacySection(B, H) {
   const seeds = range(process.env.CM_WORLD_MOVES_SEEDS, [0, 1, 2, 3, 4]);
-  for (const era of ERAS) for (const club of CLUBS[era]) for (const seed of seeds) for (const kind of ['legacy', 'stripped']) {
+  for (const era of ERAS) for (const club of CLUBS[era]) for (const seed of seeds) for (const kind of ['legacy', 'stripped', 'deals']) {
     const tag = `${club} (${era}, seed ${seed}, ${kind})`;
     const [b, h] = [await legacyCareer(B, era, club, seed, kind), await legacyCareer(H, era, club, seed, kind)];
-    s6Careers += 1; s6Saves += h.saved.length; s6Draws += h.draws;
+    s6Careers += 1; s6Saves += h.saved.length; s6Draws += h.draws; s6Deals += h.dealt ?? 0;
     if (b.error || h.error) { fail(6, `${tag}: ${b.error ?? h.error}`); continue; }
     if (h.ledger) fail(6, `${tag}: the head's career wrote a world ledger with no seed`);
     if (b.saved.length !== h.saved.length) fail(6, `${tag}: BASE saved ${b.saved.length} times, the head ${h.saved.length}`);
@@ -529,8 +554,9 @@ if (SECTIONS.has(1)) {
 if (SECTIONS.has(6)) {
   console.log('6) legacy: unseeded careers, BASE against the head, every saved string and Math.random draw');
   await legacySection(B, H);
-  console.log(`   ${s6Careers} careers, ${s6Saves} saves, ${s6Draws} draws on the head`);
+  console.log(`   ${s6Careers} careers, ${s6Saves} saves, ${s6Draws} draws and ${s6Deals} deals of mine on the head`);
   if (!s6Careers || !s6Saves) fail(6, 'no career was played');
+  if (!s6Deals) fail(6, 'no deal of mine was made, so no ledger writer was called');
 }
 if (SECTIONS.has(9)) {
   console.log(`9) shape: ${SHAPE_SEASONS} seasons at ${CLUBS.now.join(', ')} (the JSON goes to --combine)`);
