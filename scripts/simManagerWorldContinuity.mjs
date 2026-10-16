@@ -111,7 +111,10 @@ function neutral(B, input, bridge = false) {
   const reads = { market: B.cm.buildMarket(c), opponent: B.cm.oppRosterFor(c, 'Arsenal'), year: B.cm.worldYear(c) };
   const match = B.cm.playNextEntry(bridge ? { ...clone(c), matchRules: 'base' } : clone(c), { skipHalftime: true, noCoach: true });
   if (bridge && match.state && 'matchRules' in match.state) delete match.state.matchRules;
-  const summer = B.cm.startNextSeason(clone(c));
+  /* Round 1335: and the summer too, since 'base' now also plays the season rules from before that round
+     (legacySeason: the opening, the kitty), which the pinned engine does not know either. */
+  const summer = B.cm.startNextSeason(bridge ? { ...clone(c), matchRules: 'base' } : clone(c));
+  if (bridge && 'matchRules' in summer) delete summer.matchRules;
   assert.equal(B.cm.saveCareer(c), true); const loaded = B.cm.loadCareer();
   return { reads, match, summer, loaded, storage: [...B.store.entries()] };
 }
@@ -184,7 +187,8 @@ async function arm(control) {
     for (const row of observations) {
       const { original, current, again, interleaved } = row;
       assert.ok(Number.isSafeInteger(current.value.worldSeed) && current.value.worldSeed >= 0 && current.value.worldSeed <= 0xffffffff);
-      equal(current.value, { ...original.value, worldSeed: current.value.worldSeed }, 'Fresh constructor changes only the declared held seed');
+      /* Round 1335: a new career opens at BOARD_FRESH, which the pinned engine does not know: compared at the old 60. */
+      equal({ ...current.value, boardConfidence: 60 }, { ...original.value, worldSeed: current.value.worldSeed }, 'Fresh constructor changes only the declared held seed');
       equal(current.draws, original.draws, 'Fresh seed uses no extra global draw'); equal(again, current, 'Fresh seed and whole constructor replay exactly');
       assert.equal(row.clock.restored, row.clock.before, 'Each VM clock is restored after the interleaved witness');
       assert.notDeepEqual(interleaved.value.academy.candidates.map(p => p.id), current.value.academy.candidates.map(p => p.id), 'Actual constructor candidate IDs changed across the held clock and other career');

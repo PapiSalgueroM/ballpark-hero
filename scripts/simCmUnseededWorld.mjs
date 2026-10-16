@@ -169,7 +169,10 @@ async function journey(E, input, plan, seed, bridge = false) {
     }
     throw new Error('a season did not end in 220 entries');
   };
-  if (input.start) step('start', () => ({ state: M.cm.startCareer(input.start[0], input.start[1]) }));
+  /* Round 1335, the same bridge one step earlier: 'base' now also plays the season rules from before that round
+     (legacySeason, through every finishSeason and startNextSeason step above), and a new career opens at
+     BOARD_FRESH, which startCareer cannot be told about, so the bridged start opens at the old 60. */
+  if (input.start) step('start', () => { const st = M.cm.startCareer(input.start[0], input.start[1]); if (bridge) st.boardConfidence = 60; return { state: st }; });
   else step('load', () => { M.store.clear(); M.store.set(M.cm.SAVE_KEY, input.raw); return { state: M.cm.loadCareer() }; });
   if (!s) throw new Error(`${input.name}: the save did not open`);
   if (plan === 'quiet') {
