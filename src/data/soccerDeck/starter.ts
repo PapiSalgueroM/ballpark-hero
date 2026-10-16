@@ -67,7 +67,6 @@ const CARDS: Card[] = [
     text: 'Your set piece coach is building a new zonal setup for defending corners and wants every defender to know it inside out. That means film sessions before the rest of the squad reports back.',
     choices: [
       { label: 'Learn it inside out', reply: 'You learn every run and every zone before anyone else is back.', karma: 0, morale: -1, fx: { t_defending: 1 } },
-      { label: 'Help teach it to the others', reply: 'You walk the younger players through it in the first week.', karma: 0, fx: { integrity: 1 } },
       { label: 'Learn it with everyone else', reply: 'You pick it up with the squad in preseason.', karma: 0 },
     ] }, 'A new way to defend corners', 'positive'],
   [{ id: '707', beat: 'summer', from: 'The coaching staff', emoji: '🔁', cooldown: 3, when: [...DEFENDER],
@@ -91,7 +90,7 @@ const CARDS: Card[] = [
   [{ id: '710', beat: 'summer', from: 'The coaching staff', emoji: '📋', cooldown: 3, when: [...DEFENDER, { fact: 'age', op: '>=', value: 26 }],
     text: 'The coaching staff want an experienced voice leading the defensive walkthroughs in preseason, and they think it should be you.',
     choices: [
-      { label: 'Run the walkthroughs', reply: 'You lead the walkthroughs every morning.', karma: 0, morale: -1, fx: { integrity: 1 } },
+      { label: 'Run the walkthroughs', reply: 'You lead the walkthroughs every morning.', karma: 0, morale: -1, fx: { t_defending: 1 } },
       { label: 'Let the coaches run them', reply: 'You leave the walkthroughs to the coaches.', karma: 0 },
     ] }, 'Organising the defence', 'positive'],
   /* ─── midfielders ─── */
@@ -162,7 +161,7 @@ const CARDS: Card[] = [
   [{ id: '721', beat: 'summer', from: 'The first team coach', emoji: '🌱', cooldown: 99, when: [{ fact: 'seniorSeasons', op: '<', value: 2 }],
     text: 'You have one senior season behind you. The first team coach wants you in early for preseason, training with the senior players from the first day.',
     choices: [
-      { label: 'Go in early', reply: 'You go in early and stay late with the senior players.', karma: 0, morale: -1, fx: { integrity: 1 } },
+      { label: 'Go in early', reply: 'You go in early and stay late with the senior players.', karma: 0, morale: 1 },
       { label: 'Report on the usual day', reply: 'You report back on the usual day.', karma: 0 },
     ] }, 'Learning from the senior players', 'positive'],
   [{ id: '722', beat: 'summer', from: 'The sports science staff', emoji: '🧘', cooldown: 3, when: [{ fact: 'age', op: '>=', value: 31 }],
@@ -172,9 +171,8 @@ const CARDS: Card[] = [
       { label: 'Train as you always have', reply: 'You train the way you always have.', karma: 0 },
     ] }, 'Managing the miles', 'positive'],
   [{ id: '723', beat: 'summer', from: 'Your fitness coach', emoji: '📅', cooldown: 2, when: [{ fact: 'contractYear', op: '==', value: true }],
-    text: 'You go into the last year of your contract. Your fitness coach has a summer programme ready if you want to start the season sharp.',
+    text: 'You go into the last year of your contract, and your fitness coach wants you fresh for it.',
     choices: [
-      { label: 'Cut the summer short', reply: 'You come back early and start the programme.', karma: 0, morale: -1, fx: { integrity: 1 } },
       { label: 'Take the full break', reply: 'You take the whole break and switch off.', karma: 0, morale: 2 },
       { label: 'Come back on the usual day', reply: 'You come back with everyone else.', karma: 0 },
     ] }, 'The last year of your deal', 'positive'],
@@ -182,19 +180,17 @@ const CARDS: Card[] = [
     text: 'You played for your country last season, so the medical staff want you to take the whole break before preseason.',
     choices: [
       { label: 'Take the whole break', reply: 'You switch off for the whole break.', karma: 0, morale: 2 },
-      { label: 'Come back early anyway', reply: 'You come back a week early and get to work.', karma: 0, morale: -1, fx: { integrity: 1 } },
       { label: 'Come back on the usual day', reply: 'You come back with everyone else.', karma: 0 },
     ] }, 'Back from international duty', 'international'],
   [{ id: '725', beat: 'summer', from: 'The coaching staff', emoji: '🎖️', cooldown: 3, when: [{ fact: 'captain', op: '==', value: true }],
     text: 'You wear the armband here, and the coaching staff want you setting the tone in the first week of preseason.',
     choices: [
-      { label: 'Set the tone', reply: 'You are first in and last out all week.', karma: 0, morale: 1, fx: { integrity: 1 } },
+      { label: 'Set the tone', reply: 'You are first in and last out all week.', karma: 0, morale: 1 },
       { label: 'Let your work speak', reply: 'You get on with your own work.', karma: 0 },
     ] }, 'Setting the standard', 'positive'],
   [{ id: '726', beat: 'summer', from: 'The physio', emoji: '🩹', cooldown: 2, when: [{ fact: 'injuryWeeks', op: '>=', value: 8 }],
-    text: 'You spent a long spell out injured last season. The physio has a strength block ready for the summer, or you can ease back in.',
+    text: 'You spent a long spell out injured last season. The physio wants you to ease back in this summer rather than rush it.',
     choices: [
-      { label: 'Do the strength block', reply: 'You do the full strength block.', karma: 0, morale: -1, fx: { integrity: 1 } },
       { label: 'Ease back in', reply: 'You take the summer slowly and ease back in.', karma: 0, morale: 2 },
       { label: 'Follow the usual plan', reply: 'You follow the usual summer plan.', karma: 0 },
     ] }, 'The return plan', 'negative'],
@@ -202,7 +198,7 @@ const CARDS: Card[] = [
     when: [{ fact: 'tier', op: '<', value: 2 }, { fact: 'age', op: '<=', value: 22 }],
     text: 'You are young and at one of the top clubs around. The first team coach wants you in early to train alongside the senior players.',
     choices: [
-      { label: 'Go in early', reply: 'You go in early and keep up with the senior players.', karma: 0, morale: -1, fx: { integrity: 1 } },
+      { label: 'Go in early', reply: 'You go in early and keep up with the senior players.', karma: 0, morale: 1 },
       { label: 'Report on the usual day', reply: 'You report back on the usual day.', karma: 0 },
     ] }, 'Training with the best', 'positive'],
   [{ id: '728', beat: 'summer', from: 'The analyst', emoji: '🔥', cooldown: 3, when: [{ fact: 'derbies', op: '>=', value: 1 }],
@@ -246,11 +242,12 @@ export const STARTER: SoccerDeckPack = {
   clock: 'season',
   store: 'compact',
   /* The most the pack may push each meter it moves in a season. At most one card is dealt a summer, so a season's
-     push can never pass the largest single option on that meter: morale +2 (and -1 the other way), integrity +1, a
-     training key +1. These are those bounds; scripts/simSoccerDeck.mjs section 8 measures what the real engine's
+     push can never pass the largest single option on that meter: morale +2 (and -1 the other way), a training key +1.
+     No card moves integrity: simSoccerDeck section 8 measured the integrity options moving the recorded legacy score
+     past its seed to seed spread (ruling 2(j)), so the pack dropped them; the key stays registered for a later pack. These are those bounds; scripts/simSoccerDeck.mjs section 8 measures what the real engine's
      fleet does under them, and the event deck kit's section 15 holds BEST and WORST to them. */
   pressure: {
-    morale: 2, integrity: 1,
+    morale: 2,
     t_pace: 1, t_shooting: 1, t_passing: 1, t_dribbling: 1, t_defending: 1, t_physical: 1,
     gk_shot_stopping: 1, gk_aerial_command: 1, gk_distribution: 1, gk_penalty_saving: 1, gk_sweeping_speed: 1,
   },
