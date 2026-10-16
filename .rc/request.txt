@@ -1,0 +1,3 @@
+#!serve
+#!playwright
+w6: SECTIONS=W6 ENGINES=chromium node scripts/playSoccerScreenTruths.mjs 2>&1 | grep -E "W6 (1280|390)" | tail -20; exit ${PIPESTATUS[0]}
