@@ -70,8 +70,8 @@
    memory, its anchor asserted present exactly once first, and must end FIRED with exit 1.
    Exit 0 green or measured, 1 red or a control fired, 2 could not run, 3 a control did not fire. */
 import './lib/offlineTransport.cjs';
-import { mkdtemp, readFile, writeFile } from 'node:fs/promises';
-import { existsSync } from 'node:fs';
+import { mkdtemp, writeFile } from 'node:fs/promises';
+import { existsSync, readFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import { createRequire } from 'node:module';
 import { build } from 'esbuild';
@@ -157,8 +157,8 @@ function shard(list) {
   return m ? list.filter((_, i) => i % Number(m[2]) === Number(m[1])) : list;
 }
 /** A source file with its line endings read as LF, so one anchor matches on a Windows checkout too. */
-async function readSource(tree, rel) {
-  return (await readFile(path.join(tree, rel), 'utf8')).replace(/\r\n/g, '\n');
+function readSource(tree, rel) {
+  return readFileSync(path.join(tree, rel), 'utf8').replaceAll('\r\n', '\n');
 }
 /** One patch, its anchor asserted present exactly once first. */
 function patchOnce(text, from, to, what) {
