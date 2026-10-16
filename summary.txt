@@ -1,0 +1,2 @@
+bridge-stray exit=1 0s | Node.js v24.21.0
+bridge-hunk-missing exit=1 0s | Node.js v24.21.0

@@ -1,0 +1,20 @@
+ src/lib/usCoachCareer.ts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Round 1346 retirement hunk held once
+
+0 !== 1
+
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simUsCoachPoaching.mjs:59:10 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 0,
+  expected: 1,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0

@@ -1,0 +1,22 @@
+ src/lib/usCoachCareer.ts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Reconstructed original matches the captured pre-repair engine exactly
++ actual - expected
+
++ '84b9bcfb46c86ef0c214ee0c40b2869541a078f43dd2d23758b0284f8eb4c99e'
+- 'e607f294869072f78f63433bfda86f018b845443a6cb580b58c3fd5f3d955879'
+
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simUsCoachPoaching.mjs:64:8 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: '84b9bcfb46c86ef0c214ee0c40b2869541a078f43dd2d23758b0284f8eb4c99e',
+  expected: 'e607f294869072f78f63433bfda86f018b845443a6cb580b58c3fd5f3d955879',
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0
