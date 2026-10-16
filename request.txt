@@ -1,0 +1,6 @@
+#!build
+#!playwright
+#!serial
+walk: node scripts/playCmWorldMoves.mjs
+weight-head: ROUTES=/club-manager,/manager-hot-seat,/deadline-day RUNS=1 node scripts/measureRouteWeight.mjs head
+weight-base: D=/tmp/wb-$$ && git worktree add -q --detach $D d4f2c6f688d656205722ba52bbdb33f03490966a && ln -s $PWD/node_modules $D/node_modules && cd $D && node_modules/.bin/vite build > /dev/null 2>&1 && ROUTES=/club-manager,/manager-hot-seat,/deadline-day RUNS=1 node scripts/measureRouteWeight.mjs base

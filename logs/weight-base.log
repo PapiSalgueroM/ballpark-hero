@@ -1,0 +1,3 @@
+base     /club-manager    total  2208K  js  1926K  reqs  48  FCP    684ms  playable     -1ms  (1 runs, median; styled nodes 319)
+base     /manager-hot-seat total  2247K  js  1994K  reqs  50  FCP    664ms  playable     -1ms  (1 runs, median; styled nodes 199)
+base     /deadline-day    total  2277K  js  2021K  reqs  53  FCP    672ms  playable     -1ms  (1 runs, median; styled nodes 211)

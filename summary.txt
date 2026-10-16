@@ -1,0 +1,4 @@
+build exit=0 22s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+walk exit=1 76s | playCmWorldMoves: RED, 6 of 22 checks failed
+weight-head exit=0 543s | head     /deadline-day    total  2280K  js  2025K  reqs  53  FCP    672ms  playable     -1ms  (1 runs, median; styled nodes 211)
+weight-base exit=0 565s | base     /deadline-day    total  2277K  js  2021K  reqs  53  FCP    672ms  playable     -1ms  (1 runs, median; styled nodes 211)
