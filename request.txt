@@ -1,0 +1,2 @@
+old2: node .rc/x/oldsaves1334b.mjs
+old2-control: OLD_CONTROL=nan node .rc/x/oldsaves1334b.mjs

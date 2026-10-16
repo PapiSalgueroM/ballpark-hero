@@ -1,0 +1,10 @@
+base fleet: 120 careers, 1952 saves snapshotted: ballon_dor 276, transfer_window 208, social_media_action 170, random_events 623, playing 166, newspaper 148, season_summary 178, rivalry_event 83, moral_dilemma 38, international_debut 16, world_cup 42, rehab_choice 4
+FAIL save 0 (career 0, ballon_dor) only with the deck: morale: NaN after random_events | valid: at random_events
+FAIL save 1 (career 0, transfer_window) only with the deck: morale: NaN after random_events | valid: at random_events
+FAIL save 2 (career 0, social_media_action) only with the deck: morale: NaN after random_events | valid: at random_events
+FAIL save 3 (career 0, random_events) only with the deck: morale: NaN after random_events | valid: at random_events
+FAIL save 4 (career 0, ballon_dor) only with the deck: morale: NaN after random_events | valid: at random_events
+FAIL save 5 (career 0, transfer_window) only with the deck: morale: NaN after random_events | valid: at random_events
+problem counts, deck loaded: {"morale":41669,"valid":41716,"line":829}; deck not loaded: {"valid":318}
+head: 1952 base saves, 53485 steps with the deck; parsed JSON differs from the base's in 0; deck cards dealt 4522, answered 4522, not first 0; cards seen 27: never 722
+oldsaves1334b: 1942 saves with a problem only when the deck is loaded

@@ -1,0 +1,2 @@
+old2-control exit=1 75s | oldsaves1334b: 1942 saves with a problem only when the deck is loaded
+old2 exit=1 75s | oldsaves1334b: 9 saves with a problem only when the deck is loaded

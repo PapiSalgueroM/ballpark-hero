@@ -1,0 +1,10 @@
+base fleet: 120 careers, 1952 saves snapshotted: ballon_dor 276, transfer_window 208, social_media_action 170, random_events 623, playing 166, newspaper 148, season_summary 178, rivalry_event 83, moral_dilemma 38, international_debut 16, world_cup 42, rehab_choice 4
+FAIL save 462 (career 28, newspaper) only with the deck: valid: at newspaper | valid: at season_summary
+FAIL save 463 (career 28, social_media_action) only with the deck: valid: at newspaper | valid: at season_summary
+FAIL save 868 (career 53, world_cup) only with the deck: valid: at newspaper
+FAIL save 876 (career 53, random_events) only with the deck: valid: at newspaper | valid: at season_summary
+FAIL save 955 (career 58, playing) only with the deck: valid: at newspaper | valid: at season_summary
+FAIL save 1457 (career 89, newspaper) only with the deck: valid: at newspaper | valid: at season_summary
+problem counts, deck loaded: {"valid":372}; deck not loaded: {"valid":318}
+head: 1952 base saves, 53482 steps with the deck; parsed JSON differs from the base's in 0; deck cards dealt 4520, answered 4520, not first 0; cards seen 27: never 722
+oldsaves1334b: 9 saves with a problem only when the deck is loaded
