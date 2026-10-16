@@ -1,0 +1,10 @@
+tsc exit=0 98s | 
+grade1 exit=0 281s | simCmBoardVerdict GREEN: 11 of 11 checks green (parts grade, fate, stream, 280 s)
+grade0 exit=0 291s | simCmBoardVerdict GREEN: 11 of 11 checks green (parts grade, fate, stream, 290 s)
+grade2 exit=0 293s | simCmBoardVerdict GREEN: 11 of 11 checks green (parts grade, fate, stream, 291 s)
+rules exit=1 44s | simCmLeagueRules: 7 failure(s)
+legacy0 exit=0 164s | simCmBoardVerdict GREEN: 1 of 1 checks green (parts legacy, 162 s)
+appeal exit=1 10s | Node.js v24.21.0
+legacy1 exit=0 197s | simCmBoardVerdict GREEN: 1 of 1 checks green (parts legacy, 196 s)
+rulesforced exit=0 58s | simCmLeagueRules: all checks passed (modern, eras, pure)
+vitest exit=0 149s |    Duration  148.33s (transform 8.54s, setup 3.02s, collect 28.32s, tests 258.28s, environment 20.89s, prepare 4.62s)

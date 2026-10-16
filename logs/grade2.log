@@ -1,0 +1,16 @@
+[grade] 265 season ends: up 68, down 32, escape 10, A by a title or two trophies 53, A by overshoot alone 22, B to F with no fate 80
+  on the base ladder these same seasons: 9 promotions graded C or worse; the relegation cap changes 19 grades
+ok   [grade] every promotion grades A or B with an 'up' line naming the top flight (68 cases)
+ok   [grade] every relegation grades C or worse (B or worse with a trophy) with a 'down' line naming the league below (32 cases)
+ok   [grade] every escape keeps its grade with an 'escape' line (10 cases)
+ok   [grade] an A by a title or two trophies reads the old A lines, an A by overshoot alone the over line (75 cases)
+ok   [grade] the statues and the murals only on a title or two trophies (22 seasons could carry them)
+ok   [grade] every B to F season with no fate grades as the base ladder with a line of the old VERDICTS (80 cases)
+[fate] 265 season ends: up 68, down 32, escape 10, none 155; 20 finishes at exactly the count plus one (the cases fatecount needs)
+ok   [fate] the summary fate is the move the rollover really made, on every season end
+ok   [fate] the season record carries the same fate as the summary
+[stream] 265 season ends handed to both trees; 27 had a base offer outside the step
+ok   [stream] finishSeason draws the same number of times on head and base from the same state
+ok   [stream] and writes the same save but for the grade, the line, the fate and an offer outside the step
+ok   [stream] the offers are equal wherever every base offer was within the step
+simCmBoardVerdict GREEN: 11 of 11 checks green (parts grade, fate, stream, 291 s)
