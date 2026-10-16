@@ -1,0 +1,7 @@
+build exit=0 32s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+vitest exit=0 35s |    Duration  34.29s (transform 10.79s, setup 1.35s, collect 32.57s, tests 44.35s, environment 9.53s, prepare 2.37s)
+retire exit=0 71s | PASS: ALL US COACHING RETIREMENT CHECKS PASSED
+tsc exit=0 223s | 
+parity exit=0 157s | simUsBoardParity: green. Four sports replayed click for click, save for save and screen for screen.
+fences exit=0 289s | All 6 harnesses green.
+walk exit=0 73s | playUsCareerReports: ALL GREEN, 14 walks

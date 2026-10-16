@@ -1,0 +1,8 @@
+#!serve
+#!playwright
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/test/usCoachRetirement.test.tsx src/test/usCareerReports1346.test.tsx src/test/usCareerActionConfirm.test.tsx src/test/careerDraftNight.test.tsx src/test/usCareerHelpRules1104.test.tsx src/test/usBoardFixture.test.tsx --testTimeout=300000 --hookTimeout=120000
+fences: ONLY=simTrustCopy,simAccessibility,simNoRivalNames,simHarnessAnchors,simUsCareerSkips,simUsCoachPoaching node scripts/runAllSims.mjs
+retire: node scripts/simUsCoachRetirement.mjs
+parity: node scripts/simUsBoardParity.mjs
+walk: ENGINES=chromium node scripts/playUsCareerReports.mjs
