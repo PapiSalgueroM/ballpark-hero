@@ -1,0 +1,5 @@
+build exit=0 27s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+walk exit=0 4s | playCmOldCareersWorld: green, 5 checks held; pictures in /home/runner/work/_temp/rc-out/files/head
+writes exit=1 14s | simWritesAreSent: 2 failures
+walk-never exit=1 23s | playCmOldCareersWorld: control never FIRED: (b) red
+weight exit=0 28s | weigh: head minus base 1505 bytes (-195 gzipped) over all JS

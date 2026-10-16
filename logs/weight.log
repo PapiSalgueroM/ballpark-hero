@@ -1,0 +1,4 @@
+base build exit 0
+head: 522 js files, 14813317 bytes (4460862 gzipped); engine chunks [{"f":"clubManager-DYCHhbWo.js","raw":825080,"gz":270713}]
+base: 522 js files, 14811812 bytes (4461057 gzipped); engine chunks [{"f":"clubManager-B88sjU69.js","raw":824544,"gz":270507}]
+weigh: head minus base 1505 bytes (-195 gzipped) over all JS
