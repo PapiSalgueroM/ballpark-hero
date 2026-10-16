@@ -1,0 +1,12 @@
+simEra2010 exit=0 16s | simEra2010: green. 2010 is real, sealed, and plays like 2010.
+simEra2005 exit=0 17s | simEra2005: green. 2005 is real, sealed, and plays like 2005.
+simEra2015 exit=0 15s | simEra2015: green. 2015 is real, sealed, and plays like 2015.
+simEra2020 exit=0 27s | simEra2020: green. 2020-21 is real, sealed, and plays like 2020-21.
+simCmLeagueRules exit=0 34s | simCmLeagueRules: all checks passed (modern, eras, pure)
+tsc exit=0 102s | 
+vitest exit=0 146s |    Duration  146.06s (transform 6.35s, setup 2.86s, collect 27.40s, tests 258.24s, environment 21.78s, prepare 4.91s)
+freeagents exit=0 90s | simFreeAgents: all sections passed
+savesize exit=0 61s | simClubManagerSaveSize: all sections green
+appeal exit=0 41s | Equivalent appeal outcomes must agree: passed for 24 original pairs and 3 separate generated-position pairs.
+ownclub exit=0 296s | simCmOwnClubMarket: green (mode rule, sections 1, 2, 3, 4, 5): the market lists nobody at my own club in every old save and moves nothing else
+simEras exit=0 1079s | ALL ERA AND AGEING CHECKS PASSED
