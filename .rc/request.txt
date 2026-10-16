@@ -1,0 +1,15 @@
+simApproaches: node scripts/simApproaches.mjs
+simBoardAsks: node scripts/simBoardAsks.mjs
+simBooks: node scripts/simBooks.mjs
+simClubManager: node scripts/simClubManager.mjs
+simClubManagerALeague: node scripts/simClubManagerALeague.mjs
+simClubManagerBudget: node scripts/simClubManagerBudget.mjs
+simClubManagerDeals: node scripts/simClubManagerDeals.mjs
+simClubManagerNewLeagues: node scripts/simClubManagerNewLeagues.mjs
+simClubManagerSave: node scripts/simClubManagerSave.mjs
+simClubManagerStaff: node scripts/simClubManagerStaff.mjs
+simClubManagerStart: node scripts/simClubManagerStart.mjs
+simCmCopy: node scripts/simCmCopy.mjs
+simCmLedgerBound: node scripts/simCmLedgerBound.mjs
+simCmLedgerJourney: node scripts/simCmLedgerJourney.mjs
+simCreateClub: node scripts/simCreateClub.mjs
