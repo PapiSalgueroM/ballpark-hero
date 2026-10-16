@@ -1,0 +1,6 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-lib: node_modules/.bin/vitest run src/lib/clubManager --testTimeout=300000 --hookTimeout=120000
+vitest-cm1: node_modules/.bin/vitest run src/test/clubManager src/test/clubDetail --testTimeout=300000 --hookTimeout=120000
+vitest-mgr: node_modules/.bin/vitest run src/test/manager src/test/dailyMenuResume.test.tsx src/test/usBoardFixture.test.tsx --testTimeout=300000 --hookTimeout=120000
+saveSize-d: node scripts/simClubManagerSaveSize.mjs
+saveSize-uncapped: SAVE_SIZE_CONTROL=uncapped node scripts/simClubManagerSaveSize.mjs
