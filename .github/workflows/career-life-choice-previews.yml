@@ -15,7 +15,7 @@ jobs:
       run:
         shell: bash
     env:
-      PREVIEW_PHASE: baseline
+      PREVIEW_PHASE: fixed
       SIM_NETWORK: offline
       ENGINES: chromium
     steps:
