@@ -23,7 +23,6 @@ const H = vi.hoisted(() => {
 // and unrelated chrome are replaced. Every player and club in this pool is fictional.
 vi.mock('@/lib/worldXi', async importOriginal => {
   const actual = await importOriginal<typeof import('@/lib/worldXi')>();
-  H.simulate.mockImplementation(actual.simulateWorldXiSeason);
   return { ...actual, fetchWorldXiPool: () => Promise.resolve(H.pool()), simulateWorldXiSeason: H.simulate };
 });
 vi.mock('@/lib/completions', () => ({ recordCompletion: vi.fn(), getCurrentPlayerName: () => 'Fixture Tester' }));
@@ -42,8 +41,9 @@ vi.mock('@/components/seo/PageSeo', () => ({ default: () => null }));
 
 import WorldXi from '@/pages/WorldXi';
 
-beforeEach(() => {
-  H.simulate.mockClear();
+beforeEach(async () => {
+  const actual = await vi.importActual<typeof import('@/lib/worldXi')>('@/lib/worldXi');
+  H.simulate.mockReset().mockImplementation(actual.simulateWorldXiSeason);
   vi.spyOn(window, 'matchMedia').mockImplementation(query => ({
     matches: query === '(prefers-reduced-motion: reduce)', media: query, onchange: null,
     addListener: vi.fn(), removeListener: vi.fn(), addEventListener: vi.fn(), removeEventListener: vi.fn(), dispatchEvent: () => false,
