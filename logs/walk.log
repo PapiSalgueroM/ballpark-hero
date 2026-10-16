@@ -1,0 +1,34 @@
+playCmWorldMoves: Everton seed 1, the opening window's Jurriën Timber from Arsenal to Manchester United (both in the league)
+ok   (a) 320: the market's search for Jurriën Timber finds him at Manchester United [RB 🇳🇱 Jurriën Timber Manchester United · 24y · worth £55m to £60.3m 88 Talk · £62.7m]
+ok   (a) 320: Talk says he only joined Manchester United this season [Jurriën Timber only joined Manchester United this season. They will not sell him on until next summer.x]
+FAIL (e) 320: the refused press moves nothing (scrollY 751 to 833, height 29464 to 29546)
+ok   (e) 320: the desk note is at least 12 px and inside the screen [12 px, 16 to 304 of 320]
+     the Talk button is 23 px tall at 320 (today's button, not this round's)
+ok   (a) 390: the market's search for Jurriën Timber finds him at Manchester United [RB 🇳🇱 Jurriën Timber Manchester United · 24y · worth £55m to £60.3m 88 Talk · £62.7m]
+ok   (a) 390: Talk says he only joined Manchester United this season [Jurriën Timber only joined Manchester United this season. They will not sell him on until next summer.x]
+FAIL (e) 390: the refused press moves nothing (scrollY 601 to 667, height 23557 to 23623)
+ok   (e) 390: the desk note is at least 12 px and inside the screen [12 px, 16 to 374 of 390]
+     the Talk button is 23 px tall at 390 (today's button, not this round's)
+ok   (a) 1280: the market's search for Jurriën Timber finds him at Manchester United [RB 🇳🇱 Jurriën Timber Manchester United · 24y · worth £55m to £60.3m 88 Talk · £62.7m]
+ok   (a) 1280: Talk says he only joined Manchester United this season [Jurriën Timber only joined Manchester United this season. They will not sell him on until next summer.x]
+FAIL (e) 1280: the refused press moves nothing (scrollY 0 to 0, height 13587 to 13637)
+ok   (e) 1280: the desk note is at least 12 px and inside the screen [12 px, 208 to 1072 of 1280]
+     the Talk button is 23 px tall at 1280 (today's button, not this round's)
+ok   (b) Manchester United's club page lists Jurriën Timber
+ok   (b) Arsenal's club page does not list Jurriën Timber
+ok   (c) a season later Manchester United's club page still lists Jurriën Timber
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+locator.click: Timeout 20000ms exceeded.
+Call log:
+  - waiting for getByRole('tab', { name: /^Market$/ }).first()
+
+    at marketRow (/home/runner/work/ballpark-hero/ballpark-hero/scripts/playCmWorldMoves.mjs:161:61)
+    at /home/runner/work/ballpark-hero/ballpark-hero/scripts/playCmWorldMoves.mjs:258:30 {
+  log: [ "  - waiting for getByRole('tab', { name: /^Market$/ }).first()" ],
+  name: 'TimeoutError'
+}
+
+Node.js v24.21.0

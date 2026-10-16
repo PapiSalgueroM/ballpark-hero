@@ -1,0 +1,6 @@
+build exit=0 27s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+walk exit=1 32s | Node.js v24.21.0
+w-norepair exit=1 44s | playCmWorldMoves: control norepair FIRED: (d) red
+w-norecord exit=1 47s | playCmWorldMoves: control norecord FIRED: (b) red
+weight-base exit=1 33s | Node.js v24.21.0
+weight-head exit=0 1627s | head     /deadline-day    total  2280K  js  2025K  reqs  53  FCP    664ms  playable     -1ms  (3 runs, median; styled nodes 211)
