@@ -1,0 +1,3 @@
+#!serial
+#!playwright
+writes-base: git checkout 1027b08c -- src && npm run build > /dev/null 2>&1 && node scripts/simWritesAreSent.mjs; s=$?; git checkout HEAD -- src; exit $s
