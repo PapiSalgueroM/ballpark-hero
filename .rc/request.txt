@@ -1,0 +1,3 @@
+#!serve
+#!playwright
+w6: SECTIONS=W6,W8 SHOTS=$RC_OUT/shots ENGINES=chromium node scripts/playSoccerScreenTruths.mjs 2>&1 | grep -v "^ok " | tail -40; exit ${PIPESTATUS[0]}
