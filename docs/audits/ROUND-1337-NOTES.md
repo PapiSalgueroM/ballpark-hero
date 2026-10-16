@@ -67,6 +67,13 @@ origin/rc-results/<name>.
   "Cookie choices" (the footer's cookie settings).
 - Weight: /soccer-career 832.4K on the head (r1337-s3) and on the base (r1337-b0a), against the 834K row: +0.0K to the
   tenth (budget +0.2K). simFlagshipWeight green on both.
+- After the reviews (fixer, head c1b49890; r1337-fix-ga and r1337-fix-gb): the walk "green, W4 W4r W5 W6 W7 W8 pass
+  on the head and every control section is red on the base" with W4 now 15/15 on the head and 9/15 on the base (the
+  new night line and the chevron checks fail there), W4r 6/6 both, W5 12/12 and 6/12, W6 21/21 and 12/21, W7 12/12
+  and 6/12, W8 8/8 and 4/8. Weight /soccer-career 832.5K to the tenth against the 834K row (+0.1K of the +0.2K
+  budget), simFlagshipWeight green. Type gate 0; the unit file and four neighbours 57 of 57; simStorageWrites green
+  and its gone control fired; simHarnessAnchors and simNoRivalNames green; simSoccerOpponentLabels green with every
+  control arm exact; qa/soccerPotentialProgressBrowser PASS; the PR278 proof PASS at its new pin.
 - The rule fences (r1337-f5 head, r1337-b0f base, the same 24): 19 PASS on both; simCompletionSlugs,
   simDailySaveHardening, simLeaderboardCaps and simReportRelay FAIL and simSchemaNames SKIPs on BOTH, each for the
   live database the runner blocks. simPrerender section 16: "2125 source files scanned, 23 raw random initialiser(s),
@@ -100,8 +107,14 @@ origin/rc-results/<name>.
   sha f65e0f08. This round's two help strings change the file, so that proof is red on the head at its pin and green
   on the base (r1337-s2b hist-head 1, hist-base 0). With only the two old strings put back in a scratch copy
   (.rc/x/introBack.mjs, the file then equals the base byte for byte) the proof passes, 3/3 arms and 2/2 controls
-  (r1337-s2b hist-introback 0): the pin is its only red. Re-pin, or reverse the two strings first the way
-  simSoccerOpponentLabels now does.
+  (r1337-s2b hist-introback 0): the pin is its only red. RE-PINNED on this branch after the reviews (c1b49890): the
+  component is 31496 bytes, sha 94c3c55e, in the proof's line 31 and the workflow's lines 53 and 140; the proof file
+  is then 26837 bytes, sha 0346ebbe, in the workflow's line 53 and its HELPER hash at line 145. The fixer reproduced
+  the attribution first (r1337-fix-repro2, #!serial: introback 0 twice, base 0) and proved the head after it
+  (r1337-fix-gb hist-head 0, 3/3 arms, 2/2 controls; a pin probe reads all 19 pins equal to the tree, and 3 differ
+  on b712a7ad). Run the proof alone: the same introback line run beside another copy of it went red at its
+  comparisons (r1337-fix-repro) and passed alone twice. The workflow itself only runs on its codex branch, and its
+  scope step (line 47, a diff against 4a5f759a) cannot pass on any later main, so the proof script is what gates run.
 - No guide sentence moves: soccer2.ts:1788 ("The 📺 Week by week button plays the same season match by match ...")
   stays true.
 - To S15: the shared Season Centre help still opens by itself before the season (POLISH 24 is PART for that screen).
