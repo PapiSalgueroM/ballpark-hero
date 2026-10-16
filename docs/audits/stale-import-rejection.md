@@ -55,3 +55,20 @@ phase outcomes, payload/React/store/timeOrigin/URL/held-header checks stay intac
 The workflow caps the causal step at five minutes. The temporary cancellation job
 and its write permission are removed before the fresh baseline. App, packages and
 old proofs remain identical to e7f111b7. No product correction before qualification.
+
+First artifact12049584675 is45,891,774bytes, SHA256
+8866d45eebcf5144eacfaa5121cdf26eaee394f740349657ba7ade7360dd16ec,
+retained under dukb-handoff/2026-10-16/stale-import-first. Final job was cancelled.
+The retained new-method report is still running with zero completed cases and no
+raw case files, so it establishes no settled import outcome or exact hang point.
+Always-run old UI passed1602checks/12originals; both guarded reload files passed17
+cases; full weights and source/installed/dist holds passed. Fourteen of fifteen
+readers passed. simPrerender found exactly the three existing BHH What's New
+entries absent from its stale snapshot. The one-route scope had omitted /whats-new.
+This is a build-scope setup defect, not an application regression or waived reader.
+
+Corrected bounded baselinef8ccda9e/run38912393217 is in progress. A subsequent
+workflow-only correction includes /whats-new alongside /soccer-career and tightens
+the existing related-test count to exactly two files/seventeen passes. It is saved
+with skip-ci while that baseline runs; the next actual fixed or corrected baseline
+run must qualify that exact scope and all fifteen readers before readiness.

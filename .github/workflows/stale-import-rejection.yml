@@ -19,7 +19,7 @@ jobs:
       SOCCER_BUILD_PHASE: fixed
       STALE_IMPORT_PHASE: baseline
       STALE_IMPORT_OUT: ${{ github.workspace }}/stale-import-rejection-artifacts/causal
-      PRERENDER_ONLY: /soccer-career
+      PRERENDER_ONLY: /soccer-career,/whats-new
       SIR_BASE: e7f111b7de73153efdc7e343282d65eeae9289fc
       SIR_OUT: ${{ github.workspace }}/stale-import-rejection-artifacts
       FREE_KICK_FONT_CACHE: ${{ github.workspace }}/stale-import-rejection-artifacts/font-cache
@@ -205,7 +205,7 @@ jobs:
           const related = JSON.parse(fs.readFileSync(out + '/related.json'));
           assert.equal(related.success, true); assert.equal(related.numFailedTests, 0);
           assert.equal(related.numPendingTests, 0); assert.equal(related.numTodoTests, 0);
-          assert(related.testResults.length >= 2 && related.numPassedTests > 0);
+          assert.equal(related.testResults.length, 2); assert.equal(related.numPassedTests, 17);
           assert(related.testResults.flatMap(file => file.assertionResults).every(row => row.status === 'passed'));
           const causalRoot = process.env.STALE_IMPORT_OUT, causal = JSON.parse(fs.readFileSync(causalRoot + '/report.json'));
           const baseline = process.env.STALE_IMPORT_PHASE === 'baseline';
