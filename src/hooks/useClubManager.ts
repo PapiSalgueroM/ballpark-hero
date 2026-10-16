@@ -43,9 +43,9 @@ import type { ConcessionTier } from '@/lib/clubManagerFinances';
 import { hireStaff, matchStaffOffer, releaseToPoacher, sackStaff } from '@/lib/clubManagerStaff';
 import type { StaffPostId } from '@/lib/clubManagerStaff';
 import { spendSkillPoint } from '@/lib/clubManagerXp';
-import { postsScore, setStartOption } from '@/lib/clubManagerStart';
+import { applyCareerSetup, postsScore, setStartOption, turnOnNoSack as turnOnNoSackFor } from '@/lib/clubManagerStart';
 import { validWorldEdit } from '@/lib/clubManagerWorldEdit';
-import type { CurrencyCode } from '@/lib/clubManagerStart';
+import type { CareerSetup, CurrencyCode } from '@/lib/clubManagerStart';
 import type { SkillTree } from '@/lib/clubManagerXp';
 
 export type CMPhase = 'boot' | 'resume' | 'clubSelect' | 'hub' | 'halftime' | 'matchResult' | 'seasonEnd' | 'sacked';
@@ -593,14 +593,16 @@ export function useClubManager() {
      It passes validWorldEdit on the way in, so an edit the editor could not
      have made (a club in two leagues, a league the wrong size) starts the
      real world rather than a broken one. */
-  const confirmClub = useCallback((eraId?: string, manager?: ManagerSpec, entry?: MidSeasonEntry, worldEdit?: Record<string, string[]> | null) => {
+  /* Round 1342: and the Dugout step's career options (No sacking), applied
+     after the takeover; absent is the career startCareer made, untouched. */
+  const confirmClub = useCallback((eraId?: string, manager?: ManagerSpec, entry?: MidSeasonEntry, worldEdit?: Record<string, string[]> | null, setup?: CareerSetup) => {
     if (!pendingClub) return;
     const club = pendingClub, era = eraId ?? DEFAULT_ERA_ID, edit = validWorldEdit(worldEdit ?? null);
     const begin = () => {
       const fresh = startCareer(club, era, undefined, manager, undefined, edit);
       /* Round 549: a mid season takeover plays the run-in first, under the
          manager before you, and hands the club over where it stands. */
-      const s = entry ? startMidSeason(fresh, entry) : fresh;
+      const s = applyCareerSetup(entry ? startMidSeason(fresh, entry) : fresh, setup);
       setCareer(s);
       setActiveTab('overview');
       setPhase('hub');
@@ -668,9 +670,9 @@ export function useClubManager() {
 
   /* Round 154: founding your own club skips the pending-club dance, because
      the create form is its own confirmation. */
-  const confirmCustomClub = useCallback((eraId: string | undefined, spec: CustomClubSpec, manager?: ManagerSpec, entry?: MidSeasonEntry) => {
+  const confirmCustomClub = useCallback((eraId: string | undefined, spec: CustomClubSpec, manager?: ManagerSpec, entry?: MidSeasonEntry, setup?: CareerSetup) => {
     const fresh = startCareer(spec.name, eraId ?? DEFAULT_ERA_ID, spec, manager);
-    const s = entry ? startMidSeason(fresh, entry) : fresh;
+    const s = applyCareerSetup(entry ? startMidSeason(fresh, entry) : fresh, setup);
     setCareer(s);
     setPendingClub(null);
     setActiveTab('overview');
@@ -995,6 +997,10 @@ export function useClubManager() {
   const setStrictness = useCallback((level: number) => {
     setCareer(prev => (prev ? setStartOption(prev, 'strictness', level) ?? prev : prev));
   }, []);
+  /* Round 1342: No sacking, one way. Null (already on, sacked, out of work) leaves the save alone. */
+  const turnOnNoSack = useCallback(() => {
+    setCareer(prev => (prev ? turnOnNoSackFor(prev) ?? prev : prev));
+  }, []);
   /* Round 513: a point into a tree. One way only, so it never needs a refund
      path, and null when there is nothing free to spend. */
   /* Round 965: the Edit manager sheet. editManager returns null on a refused
@@ -1270,7 +1276,7 @@ export function useClubManager() {
     buy,
     negotiate, offer, walk, proposeTerms, buyLoanee, endLoanEarly, recallLoanee, answerApproach, setTickets, setConcessions, expandStadium, takeSponsor, pushSponsorOffer, buyFacility, waitAWeek, takeJob, acceptNation, resignNation, dismissNegotiation, clause, loan,
     appointStaff, payOffStaff, matchStaff, letStaffGo, spendPoint, updateManager,
-    setCurrency, setNationJobs, setStrictness,
+    setCurrency, setNationJobs, setStrictness, turnOnNoSack,
     acceptIncomingBid, rejectIncomingBid,
     setStatus, loanOut, renew, renewWithClause, terminate, signFree, setRole,
     upgradeFacility, sendScout, callScoutHome, promote, release, setTraining,

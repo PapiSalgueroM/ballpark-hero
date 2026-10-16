@@ -54,7 +54,7 @@ export default function ManagerSlotsScreen({ slots, activeDetail, note, onContin
                   </div>
                   {v.active && activeDetail && <div className="text-xs text-muted-foreground mt-0.5">{activeDetail}</div>}
                   <div className="text-xs text-muted-foreground mt-0.5">
-                    🏆 {s.trophies} {s.trophies === 1 ? 'trophy' : 'trophies'}{s.sacked ? ' · sacked, looking for work' : ''}
+                    🏆 {s.trophies} {s.trophies === 1 ? 'trophy' : 'trophies'}{s.noSack ? ' · No sacking' : ''}{s.sacked ? ' · sacked, looking for work' : ''}
                   </div>
                   <div className="mt-auto pt-3">
                     {confirming === v.slot ? (
