@@ -1,0 +1,5 @@
+#!serve
+#!playwright
+walk: node scripts/playCmNoSack.mjs
+walk-nopill: WIDTHS=390 PLAY_NOSACK_CONTROL=nopill node scripts/playCmNoSack.mjs
+walk-sack: WIDTHS=390 PLAY_NOSACK_CONTROL=sack node scripts/playCmNoSack.mjs
