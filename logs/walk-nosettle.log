@@ -1,0 +1,46 @@
+  FAIL W5:nba-390-150ms: a double tap on Undo skip 150 ms apart ended at phase draft, showcase allout, not the road before the skip
+  FAIL W5:nba-390-150ms: locator.tap: Timeout 15000ms exceeded.
+  FAIL W5:nba-390-700ms: a double tap on Undo skip 700 ms apart ended at phase draft, showcase allout, not the road before the skip
+  FAIL W5:nba-390-700ms: locator.tap: Timeout 15000ms exceeded.
+  FAIL W5:nba-1280-150ms: a double tap on Undo skip 150 ms apart ended at phase draft, showcase allout, not the road before the skip
+  FAIL W5:nba-1280-150ms: locator.click: Timeout 15000ms exceeded.
+  FAIL W5:nba-1280-700ms: a double tap on Undo skip 700 ms apart ended at phase draft, showcase allout, not the road before the skip
+  FAIL W5:nba-1280-700ms: locator.click: Timeout 15000ms exceeded.
+  FAIL W5:nfl-390-150ms: a double tap on Undo skip 150 ms apart ended at phase draft, showcase allout, not the road before the skip
+  FAIL W5:nfl-390-150ms: locator.tap: Timeout 15000ms exceeded.
+  FAIL W5:nfl-390-700ms: a double tap on Undo skip 700 ms apart ended at phase draft, showcase allout, not the road before the skip
+  FAIL W5:nfl-390-700ms: locator.tap: Timeout 15000ms exceeded.
+  FAIL W5:nfl-1280-150ms: a double tap on Undo skip 150 ms apart ended at phase draft, showcase allout, not the road before the skip
+  FAIL W5:nfl-1280-150ms: locator.click: Timeout 15000ms exceeded.
+  FAIL W5:nfl-1280-700ms: a double tap on Undo skip 700 ms apart ended at phase draft, showcase allout, not the road before the skip
+  FAIL W5:nfl-1280-700ms: locator.click: Timeout 15000ms exceeded.
+  W1:nba-390: Review coaching career is 44 px tall
+  W2:nba-390: a double tap on the confirm leaves the done hub open; under that spot now: no button
+  W2:nba-390: after Keep coaching focus is on button "Retire from coaching"; after the retirement it is on the page body
+  W3:nba-390: around Undo skip the card's top is at 103 then 103 px on screen (scrollY 507 then 500)
+  W3:nba-390: the night's button row is 46 px live, 46 skipped, 46 on the replay, 46 landed
+  W5:nba-390-150ms: a double tap on Undo skip 150 ms apart ends at phase draft (showcase allout); under that spot now: no button; scrollY 507 before, 507 after
+  W5:nba-390-700ms: a double tap on Undo skip 700 ms apart ends at phase draft (showcase allout); under that spot now: no button; scrollY 507 before, 507 after
+  W1:nba-1280: Review coaching career is 44 px tall
+  W2:nba-1280: a double click on the confirm leaves the done hub open; under that spot now: no button
+  W2:nba-1280: after Keep coaching focus is on button "Retire from coaching"; after the retirement it is on the page body
+  W3:nba-1280: around Undo skip the card's top is at 81 then 81 px on screen (scrollY 496 then 493)
+  W3:nba-1280: the night's button row is 46 px live, 46 skipped, 46 on the replay, 46 landed
+  W5:nba-1280-150ms: a double tap on Undo skip 150 ms apart ends at phase draft (showcase allout); under that spot now: no button; scrollY 496 before, 496 after
+  W5:nba-1280-700ms: a double tap on Undo skip 700 ms apart ends at phase draft (showcase allout); under that spot now: no button; scrollY 496 before, 496 after
+  W1:nfl-390: Review coaching career is 44 px tall
+  W2:nfl-390: a double tap on the confirm leaves the done hub open; under that spot now: no button
+  W2:nfl-390: after Keep coaching focus is on button "Retire from coaching"; after the retirement it is on button "🗞️The MarketYou are not looking now"
+  W3:nfl-390: around Undo skip the card's top is at 103 then 103 px on screen (scrollY 507 then 500)
+  W3:nfl-390: the night's button row is 46 px live, 46 skipped, 46 on the replay, 46 landed
+  W5:nfl-390-150ms: a double tap on Undo skip 150 ms apart ends at phase draft (showcase allout); under that spot now: no button; scrollY 507 before, 507 after
+  W5:nfl-390-700ms: a double tap on Undo skip 700 ms apart ends at phase draft (showcase allout); under that spot now: no button; scrollY 507 before, 507 after
+  W1:nfl-1280: Review coaching career is 44 px tall
+  W2:nfl-1280: a double click on the confirm leaves the done hub open; under that spot now: no button
+  W2:nfl-1280: after Keep coaching focus is on button "Retire from coaching"; after the retirement it is on the page body
+  W3:nfl-1280: around Undo skip the card's top is at 81 then 81 px on screen (scrollY 496 then 493)
+  W3:nfl-1280: the night's button row is 46 px live, 46 skipped, 46 on the replay, 46 landed
+  W5:nfl-1280-150ms: a double tap on Undo skip 150 ms apart ends at phase draft (showcase allout); under that spot now: no button; scrollY 496 before, 496 after
+  W5:nfl-1280-700ms: a double tap on Undo skip 700 ms apart ends at phase draft (showcase allout); under that spot now: no button; scrollY 496 before, 496 after
+  screenshots: 74 in /home/runner/work/_temp/rc-out/files/nosettle
+CONTROL nosettle FIRED: W5 red
