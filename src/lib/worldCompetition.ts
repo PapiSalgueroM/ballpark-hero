@@ -292,9 +292,24 @@ export function drawG8(
     return a;
   };
   const groupIds = Array.from({ length: groups }, (_, g) => g);
-  for (let allowed = 0; allowed <= n; allowed += 1) {
+  /* The most hemmed in clubs of each pot go first (a club's own association counted, and a banned partner's),
+     and each tries the groups it costs least in first: the first path down is the cheapest greedy draw. */
+  const count = new Map<string, number>();
+  for (const e of entrants) if (e.assoc !== null) count.set(e.assoc, (count.get(e.assoc) ?? 0) + 1);
+  const crowd = (e: G8Entrant): number => (e.assoc === null ? 0 : (rules.assocApart ? (count.get(e.assoc) ?? 0) : 0)
+    + rules.bans.reduce((s, [p, q]) => s + (p === e.assoc ? count.get(q) ?? 0 : q === e.assoc ? count.get(p) ?? 0 : 0), 0));
+  /* No draw can do better than spreading each association evenly over the groups: start the search there. */
+  let floor = 0;
+  if (rules.assocApart) {
+    for (const m of count.values()) {
+      const q = Math.floor(m / groups);
+      const r = m % groups;
+      floor += r * ((q + 1) * q) / 2 + (groups - r) * (q * (q - 1)) / 2;
+    }
+  }
+  for (let allowed = floor; allowed <= n * n; allowed += 1) {
     for (let attempt = 0; attempt < G8_TRIES; attempt += 1) {
-      const seq = pots.flatMap(p => shuffled(p));
+      const seq = pots.flatMap(p => shuffled(p).sort((x, y) => crowd(y) - crowd(x)));
       const tries = seq.map(() => shuffled(groupIds));
       const cells: G8Entrant[][] = groupIds.map(() => []);
       let steps = 0;
@@ -303,9 +318,10 @@ export function drawG8(
         steps += 1;
         if (steps > G8_BUDGET) return null;
         const pot = Math.floor(i / groups);
-        for (const g of tries[i]) {
-          if (cells[g].length !== pot) continue;
-          const add = cells[g].reduce((sum, o) => sum + cost(seq[i], o), 0);
+        const options = tries[i].filter(g => cells[g].length === pot)
+          .map(g => ({ g, add: cells[g].reduce((sum, o) => sum + cost(seq[i], o), 0) }))
+          .sort((x, y) => x.add - y.add);
+        for (const { g, add } of options) {
           if (used + add > allowed) continue;
           cells[g].push(seq[i]);
           const done = place(i + 1, used + add);
