@@ -1,0 +1,8 @@
+#!build
+#!playwright
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-panel: node_modules/.bin/vitest run src/test/clubManagerRetire.test.tsx src/test/clubManagerManagerFace.test.tsx src/test/cmTablesTruth.test.tsx src/test/numberFormatting.test.tsx src/lib/clubManagerRecords.test.ts --testTimeout=300000 --hookTimeout=120000
+simCmTablesTruth: node scripts/simCmTablesTruth.mjs
+simNumberFormatting: node scripts/simNumberFormatting.mjs
+playCmTablesFit: node scripts/playCmTablesFit.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs

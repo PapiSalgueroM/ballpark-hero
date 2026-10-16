@@ -1,0 +1,7 @@
+build exit=0 26s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+simCmTablesTruth exit=0 20s | simCmTablesTruth: every case green
+vitest-panel exit=0 21s |    Duration  20.11s (transform 4.99s, setup 309ms, collect 11.52s, tests 20.21s, environment 2.39s, prepare 739ms)
+tsc exit=0 66s | 
+playCmTablesFit exit=1 83s | Node.js v24.21.0
+simHarnessAnchors exit=0 47s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simNumberFormatting exit=0 116s | Number formatting: passed. Evidence at /home/runner/work/ballpark-hero/ballpark-hero/number-formatting-artifacts/outcomes
