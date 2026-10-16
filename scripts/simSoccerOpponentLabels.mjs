@@ -170,7 +170,7 @@ async function pure() {
     let old;if(hasBase){const tar=execFileSync('git',['archive','--format=tar',BASE],{cwd:ROOT,maxBuffer:150000000});write('original/source.tar.gz',gzipSync(tar,{level:9}));write('original/source-inventory.txt',execFileSync('git',['ls-tree','-r',BASE],{cwd:ROOT}));oldRoot=fs.mkdtempSync(path.join(os.tmpdir(),'opponent-original-'));execFileSync('tar',['-xf','-','-C',oldRoot],{input:tar});old=await bundle('original',oldRoot);report.originalScope='complete pinned f780 source';}
     else{old=await bundle('original',ROOT,null,{legacy:true});report.originalScope='canonical f780 component reconstructed, other engine/read modules from current shallow checkout';}
     const current=await bundle('current',ROOT);
-    const remove={file:PAGE,from:'  const display = belgian2025OpponentLabels(row, s);',to:'  const display = null;'};
+    const remove={file:PAGE,from:'  const display = historical ?? belgian2025OpponentLabels(row, s);',to:'  const display = historical ?? null;'};
     const widen={file:HELPER,from:'row.year !== 2025',to:'row.year !== 2024 && row.year !== 2025'};
     const removed=await bundle('remove-overlay',ROOT,remove),wide=await bundle('widen-year',ROOT,widen),undo=await bundle('whole-undo',ROOT,null,{undoPatches:[remove,widen]});report.arms=[old,current,removed,wide,undo].map(a=>a.receipt);assert.equal(undo.receipt.compiled.sha256,current.receipt.compiled.sha256,'whole compiled undo');
     for(const seed of report.cohort.seeds){const a=career(old,seed),b=career(current,seed);report.careers.push({original:a,current:b});}
