@@ -1,0 +1,6 @@
+shape-base-1-5 exit=0 598s | simCmWorldMoves: green, sections 9 held
+shape-base-11-15 exit=0 599s | simCmWorldMoves: green, sections 9 held
+shape-probe-1-5 exit=0 842s | simCmWorldMoves: green, sections 9 held
+shape-base-6-10 exit=0 591s | simCmWorldMoves: green, sections 9 held
+shape-probe-6-10 exit=0 769s | simCmWorldMoves: green, sections 9 held
+shape-base-16-20 exit=0 528s | simCmWorldMoves: green, sections 9 held

@@ -1,0 +1,18 @@
+9) shape: 15 seasons at Real Madrid, Everton, Aberdeen (the JSON goes to --combine)
+  shape base Real Madrid seed 11: 130 AI deals in 30 windows, ledger 8 records 1029 units, market 4578; season 10 top five XI 75.20, surplus -0.02
+  shape base Everton seed 11: 136 AI deals in 30 windows, ledger 11 records 1373 units, market 4622; season 10 top five XI 74.93, surplus -0.01
+  shape base Aberdeen seed 11: 132 AI deals in 30 windows, ledger 5 records 724 units, market 4622; season 10 top five XI 75.10, surplus -0.01
+  shape base Real Madrid seed 12: 134 AI deals in 30 windows, ledger 5 records 728 units, market 4564; season 10 top five XI 74.76, surplus -0.01
+  shape base Everton seed 12: 143 AI deals in 30 windows, ledger 8 records 1037 units, market 4596; season 10 top five XI 75.15, surplus 0.00
+  shape base Aberdeen seed 12: 129 AI deals in 30 windows, ledger 2 records 475 units, market 4608; season 10 top five XI 75.15, surplus 0.00
+  shape base Real Madrid seed 13: 131 AI deals in 30 windows, ledger 9 records 1077 units, market 4580; season 10 top five XI 74.91, surplus -0.02
+  shape base Everton seed 13: 143 AI deals in 30 windows, ledger 5 records 787 units, market 4589; season 10 top five XI 75.20, surplus 0.00
+  shape base Aberdeen seed 13: 141 AI deals in 30 windows, ledger 8 records 980 units, market 4594; season 10 top five XI 75.00, surplus -0.01
+  shape base Real Madrid seed 14: 121 AI deals in 30 windows, ledger 7 records 941 units, market 4567; season 10 top five XI 74.98, surplus -0.01
+  shape base Everton seed 14: 128 AI deals in 30 windows, ledger 4 records 683 units, market 4578; season 10 top five XI 74.83, surplus 0.00
+  shape base Aberdeen seed 14: 135 AI deals in 30 windows, ledger 3 records 544 units, market 4586; season 10 top five XI 74.95, surplus -0.01
+  shape base Real Madrid seed 15: 133 AI deals in 30 windows, ledger 8 records 1029 units, market 4575; season 10 top five XI 74.99, surplus -0.03
+  shape base Everton seed 15: 133 AI deals in 30 windows, ledger 6 records 843 units, market 4598; season 10 top five XI 75.28, surplus -0.01
+  shape base Aberdeen seed 15: 133 AI deals in 30 windows, ledger 5 records 769 units, market 4585; season 10 top five XI 75.02, surplus -0.01
+  shape: 15 careers written to /home/runner/work/_temp/rc-out/files/shape-base-11-15.json
+simCmWorldMoves: green, sections 9 held
