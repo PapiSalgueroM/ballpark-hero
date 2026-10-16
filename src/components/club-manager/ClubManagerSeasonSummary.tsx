@@ -58,6 +58,9 @@ export default function ClubManagerSeasonSummary({ sm, c, g }: {
   const takeRef = useRef<HTMLButtonElement>(null);
   const cardRefs = useRef<Record<string, HTMLButtonElement | null>>({});
   const backTo = useRef<string | null>(null);
+  /* Review fix: the list Back returns to is the one already on screen, so it does not rise in again (the
+     cards would sit invisible for most of a second with focus on one of them). Keyed on the season. */
+  const [backedIn, setBackedIn] = useState<number | null>(null);
   useEffect(() => {
     if (askingOffer) { takeRef.current?.focus({ preventScroll: true }); return; }
     if (backTo.current) { cardRefs.current[backTo.current]?.focus({ preventScroll: true }); backTo.current = null; }
@@ -114,7 +117,7 @@ export default function ClubManagerSeasonSummary({ sm, c, g }: {
                         </button>
                         <button
                           data-cm-offer-back
-                          onClick={() => { backTo.current = askingOffer.club; setAsking(null); }}
+                          onClick={() => { backTo.current = askingOffer.club; setBackedIn(sm.season); setAsking(null); }}
                           className="min-h-[44px] inline-flex items-center gap-1 rounded-lg border border-border px-4 text-sm text-foreground hover:bg-primary/10 transition-colors"
                         >
                           <ChevronLeft className="w-4 h-4" />Back
@@ -132,14 +135,14 @@ export default function ClubManagerSeasonSummary({ sm, c, g }: {
                           ref={el => { cardRefs.current[o.club] = el; }}
                           data-cm-offer={o.club}
                           onClick={() => setAsking({ season: sm.season, club: o.club })}
-                          className="cm-rise w-full mb-2 last:mb-0 rounded-lg border border-primary/40 bg-primary/5 p-2.5 text-left hover:bg-primary/15 transition-colors"
-                          style={{ animationDelay: revealDelay(i) }}
+                          className={cn('w-full mb-2 last:mb-0 rounded-lg border border-primary/40 bg-primary/5 p-2.5 text-left hover:bg-primary/15 transition-colors', backedIn !== sm.season && 'cm-rise')}
+                          style={backedIn === sm.season ? undefined : { animationDelay: revealDelay(i) }}
                         >
                           <div className="text-sm font-bold text-primary">{o.club} want you as manager</div>
                           <div className="text-[10px] text-muted-foreground">{o.blurb}</div>
                         </button>
                       ))}
-                      <p className="text-[9px] text-muted-foreground">Tap an offer to see it first. Nothing moves until you take the job.</p>
+                      <p data-cm-offer-note className="text-xs text-muted-foreground">Tap an offer to see it first. Nothing moves until you take the job.</p>
                     </>
                   )}
                 </div>

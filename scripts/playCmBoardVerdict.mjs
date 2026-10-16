@@ -6,7 +6,9 @@
      (a) a season review with two offers: a tap on one opens "Take the ... job?" inside the same panel, scrollY
          and the panel's top do not move, both buttons are at least 44 px tall, no new text is under 12 px and
          none of it is cut or outside the panel; Back shows the list and leaves the save as it was; Take the
-         job starts the next season at that club (the save's club and season read back);
+         job starts the next season at that club (the save's club and season read back); review fix: 150 ms
+         after Back every card is already showing (no rise in again) with focus on the tapped one, and the note
+         under the offers is 12 px or more;
      (b) the same review is West Ham's promotion: the fate line reads "You went up." and the verdict names
          the Premier League;
      (c) a fresh career on day one and after a lost first match: the header's board meter reads Safe;
@@ -17,6 +19,7 @@
    it; the runner builds it, nothing is committed):
      noconfirm  the offer card's onClick back to g.nextSeason(o.club): (a) red.
      nofate     the fate line taken out of the review: (b) red.
+     rise       the offer cards rise in again after Back (the review fix taken out): (a) red.
    Exit 0 green, 1 red or a control that fired, 2 could not run, 3 a control that did not fire. */
 import './lib/offlineTransport.cjs';
 import fs from 'node:fs';
@@ -35,7 +38,7 @@ const CONTROL = process.env.PLAY_BOARD_CONTROL || '';
 const OUT = path.join(process.env.RC_OUT || path.join(ROOT, '.tmp-fx', 'playCmBoardVerdict'), CONTROL || 'head');
 const KEY = 'dukb-club-manager-save';
 const cannot = why => { console.log(`playCmBoardVerdict could not run: ${why}`); process.exit(2); };
-if (CONTROL && !['noconfirm', 'nofate'].includes(CONTROL)) cannot(`unknown control ${CONTROL}`);
+if (CONTROL && !['noconfirm', 'nofate', 'rise'].includes(CONTROL)) cannot(`unknown control ${CONTROL}`);
 if (!fs.existsSync(path.join(DIST, 'index.html'))) cannot(`no built page in ${DIST}`);
 fs.mkdirSync(OUT, { recursive: true });
 
@@ -140,7 +143,7 @@ async function open(page, ready) {
 }
 const saved = page => page.evaluate(k => { try { return JSON.parse(localStorage.getItem(k) ?? 'null'); } catch { return null; } }, KEY);
 
-const fired = { a: 0, b: 0 };
+const fired = { a: 0, b: 0, rise: 0 };
 for (const profile of PROFILES) {
   const w = profile.width;
   /* (a) the confirm, then Back, then Take. */
@@ -176,7 +179,16 @@ for (const profile of PROFILES) {
         check('a', `${w}: the question names the club`, m.text.includes(`Take the ${offerClub} job?`));
         await shot(page, `confirm-${w}`);
         await page.locator('[data-cm-offer-back]').click();
-        await page.waitForTimeout(400);
+        await page.waitForTimeout(150);
+        const back = await page.evaluate(() => ({
+          faint: [...document.querySelectorAll('[data-cm-offer]')].filter(n => parseFloat(getComputedStyle(n).opacity) < 0.99).length,
+          note: parseFloat(getComputedStyle(document.querySelector('[data-cm-offer-note]') ?? document.body).fontSize),
+          hasNote: !!document.querySelector('[data-cm-offer-note]'),
+          focus: document.activeElement?.getAttribute('data-cm-offer') ?? null }));
+        if (back.faint) fired.rise += 1;
+        check('a', `${w}: 150 ms after Back every card is already showing, focus on the tapped one`, back.faint === 0 && back.focus === offerClub, `${back.faint} not showing, focus on ${back.focus}`);
+        check('a', `${w}: the note under the offers is 12 px or more`, back.hasNote && back.note >= 12, `${back.note} px`);
+        await page.waitForTimeout(250);
         check('a', `${w}: Back shows the list and leaves the save as it was`, (await page.locator('[data-cm-offer]').count()) >= 2 && JSON.stringify(await saved(page)) === saveBefore);
         await page.locator(`[data-cm-offer="${offerClub}"]`).first().click();
         await page.waitForTimeout(400);
@@ -228,7 +240,7 @@ await browser.close();
 server.kill();
 const red = results.filter(r => !r.ok);
 if (CONTROL) {
-  const n = CONTROL === 'noconfirm' ? fired.a : fired.b;
+  const n = CONTROL === 'noconfirm' ? fired.a : CONTROL === 'rise' ? fired.rise : fired.b;
   if (n > 0 && red.length) { console.log(`control ${CONTROL} FIRED: ${red.length} checks red, ${n} cases`); process.exit(1); }
   console.log(`control ${CONTROL} DID NOT FIRE`); process.exit(3);
 }
