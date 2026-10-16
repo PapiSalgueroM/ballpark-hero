@@ -1,0 +1,10 @@
+#!serve
+#!playwright
+playClubManager: node scripts/playClubManager.mjs
+playTwoTabs: node scripts/playTwoTabs.mjs
+playHomeFold: node scripts/playHomeFold.mjs
+playCmLeagueFixtures: node scripts/playCmLeagueFixtures.mjs
+playCmVar: node scripts/playCmVar.mjs
+playCmRealFixtures: node scripts/playCmRealFixtures.mjs
+playDealDesk: node scripts/playDealDesk.mjs
+playCmTablesFit: node scripts/playCmTablesFit.mjs
