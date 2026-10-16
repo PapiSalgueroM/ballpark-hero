@@ -1,0 +1,33 @@
+small: export BASE_SHA=$(node scripts/lib/treeWithoutMerge.mjs ea937568 420902cd) && echo "base $BASE_SHA" && CM_BOARD_BASE=$(bash .rc/x/mkbase.sh b1) node scripts/simCmBoardVerdict.mjs --part=pure,fresh,saves,dailies
+takeover: export BASE_SHA=$(node scripts/lib/treeWithoutMerge.mjs ea937568 420902cd) && echo "base $BASE_SHA" && CM_BOARD_BASE=$(bash .rc/x/mkbase.sh b2) node scripts/simCmBoardVerdict.mjs --part=takeover
+take-nopin: export BASE_SHA=$(node scripts/lib/treeWithoutMerge.mjs ea937568 420902cd) && echo "base $BASE_SHA" && CM_BOARD_BASE=$(bash .rc/x/mkbase.sh b3) SIM_CM_BOARD_CONTROL=nopin node scripts/simCmBoardVerdict.mjs --part=takeover
+take-keepfailed: export BASE_SHA=$(node scripts/lib/treeWithoutMerge.mjs ea937568 420902cd) && echo "base $BASE_SHA" && CM_BOARD_BASE=$(bash .rc/x/mkbase.sh b4) SIM_CM_BOARD_CONTROL=keepfailed node scripts/simCmBoardVerdict.mjs --part=takeover
+dailies-hscard: export BASE_SHA=$(node scripts/lib/treeWithoutMerge.mjs ea937568 420902cd) && echo "base $BASE_SHA" && CM_BOARD_BASE=$(bash .rc/x/mkbase.sh b5) SIM_CM_BOARD_CONTROL=hscard node scripts/simCmBoardVerdict.mjs --part=dailies
+dailies-hotstart: export BASE_SHA=$(node scripts/lib/treeWithoutMerge.mjs ea937568 420902cd) && echo "base $BASE_SHA" && CM_BOARD_BASE=$(bash .rc/x/mkbase.sh b6) SIM_CM_BOARD_CONTROL=hotstart node scripts/simCmBoardVerdict.mjs --part=dailies
+fleet0: export BASE_SHA=$(node scripts/lib/treeWithoutMerge.mjs ea937568 420902cd) && echo "base $BASE_SHA" && CM_BOARD_BASE=$(bash .rc/x/mkbase.sh b7) SHARD=0/3 node scripts/simCmBoardVerdict.mjs --part=grade,fate,stream,offers
+fleet1: export BASE_SHA=$(node scripts/lib/treeWithoutMerge.mjs ea937568 420902cd) && echo "base $BASE_SHA" && CM_BOARD_BASE=$(bash .rc/x/mkbase.sh b8) SHARD=1/3 node scripts/simCmBoardVerdict.mjs --part=grade,fate,stream,offers
+fleet2: export BASE_SHA=$(node scripts/lib/treeWithoutMerge.mjs ea937568 420902cd) && echo "base $BASE_SHA" && CM_BOARD_BASE=$(bash .rc/x/mkbase.sh b9) SHARD=2/3 node scripts/simCmBoardVerdict.mjs --part=grade,fate,stream,offers
+title0: export BASE_SHA=$(node scripts/lib/treeWithoutMerge.mjs ea937568 420902cd) && echo "base $BASE_SHA" && CM_BOARD_BASE=$(bash .rc/x/mkbase.sh c1) SHARD=0/2 node scripts/simCmBoardVerdict.mjs --part=title,kitty
+title1: export BASE_SHA=$(node scripts/lib/treeWithoutMerge.mjs ea937568 420902cd) && echo "base $BASE_SHA" && CM_BOARD_BASE=$(bash .rc/x/mkbase.sh c2) SHARD=1/2 node scripts/simCmBoardVerdict.mjs --part=title,kitty
+title-played: export BASE_SHA=$(node scripts/lib/treeWithoutMerge.mjs ea937568 420902cd) && echo "base $BASE_SHA" && CM_BOARD_BASE=$(bash .rc/x/mkbase.sh c3) SHARD=0/2 SIM_CM_BOARD_CONTROL=played node scripts/simCmBoardVerdict.mjs --part=title
+title-weights: export BASE_SHA=$(node scripts/lib/treeWithoutMerge.mjs ea937568 420902cd) && echo "base $BASE_SHA" && CM_BOARD_BASE=$(bash .rc/x/mkbase.sh c4) SHARD=0/2 SIM_CM_BOARD_CONTROL=weights node scripts/simCmBoardVerdict.mjs --part=title
+legacy0: export BASE_SHA=$(node scripts/lib/treeWithoutMerge.mjs ea937568 420902cd) && echo "base $BASE_SHA" && CM_BOARD_BASE=$(bash .rc/x/mkbase.sh c5) SHARD=0/2 node scripts/simCmBoardVerdict.mjs --part=legacy
+legacy1: export BASE_SHA=$(node scripts/lib/treeWithoutMerge.mjs ea937568 420902cd) && echo "base $BASE_SHA" && CM_BOARD_BASE=$(bash .rc/x/mkbase.sh c6) SHARD=1/2 node scripts/simCmBoardVerdict.mjs --part=legacy
+rules-bare: node scripts/simCmLeagueRules.mjs --part=modern,eras,pure
+rules-forced-main: sleep 3 && git worktree add -q .claude/worktrees/forced HEAD && ln -s "$PWD/node_modules" .claude/worktrees/forced/node_modules && node .rc/x/forceLegacy.mjs .claude/worktrees/forced && node .claude/worktrees/forced/scripts/simCmLeagueRules.mjs --part=modern,eras,pure
+rules-retake: sleep 9 && git worktree add -q .claude/worktrees/rt HEAD && ln -s "$PWD/node_modules" .claude/worktrees/rt/node_modules && node .claude/worktrees/rt/scripts/simCmLeagueRules.mjs --part=modern,eras,pure --write | tail -2 && node .claude/worktrees/rt/scripts/simCmLeagueRules.mjs --part=modern,eras,pure
+appeal-retake: node .rc/x/pinAll.mjs e814c2de --write && node scripts/simManagerAppealIsolation.mjs; s=$?; git checkout -- scripts/fixtures; exit $s
+simGuideHeadings: node scripts/simGuideHeadings.mjs
+simAcademy: node scripts/simAcademy.mjs
+simEras: node scripts/simEras.mjs
+simPress: node scripts/simPress.mjs
+simRoles: node scripts/simRoles.mjs
+simWilderness: node scripts/simWilderness.mjs
+simClubManagerALeague: node scripts/simClubManagerALeague.mjs
+simClubManagerBudget: node scripts/simClubManagerBudget.mjs
+simClubManagerMeters: node scripts/simClubManagerMeters.mjs
+simClubManagerScore: node scripts/simClubManagerScore.mjs
+simCmLeagueFixtures: node scripts/simCmLeagueFixtures.mjs
+simCmVarLedger: node scripts/simCmVarLedger.mjs
+simTrustCopy: node scripts/simTrustCopy.mjs
+simAccessibility: node scripts/simAccessibility.mjs
