@@ -1,0 +1,21 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+ret: node scripts/simUsCoachRetirement.mjs
+skips: node scripts/simUsCareerSkips.mjs
+ret-drift: US_COACH_RETIRE_CONTROL=drift node scripts/simUsCoachRetirement.mjs
+ret-early: US_COACH_RETIRE_CONTROL=early node scripts/simUsCoachRetirement.mjs
+ret-noretire: US_COACH_RETIRE_CONTROL=noretire node scripts/simUsCoachRetirement.mjs
+ret-noguard: US_COACH_RETIRE_CONTROL=noguard node scripts/simUsCoachRetirement.mjs
+ret-nosit: US_COACH_RETIRE_CONTROL=nosit node scripts/simUsCoachRetirement.mjs
+ret-noaccept: US_COACH_RETIRE_CONTROL=noaccept node scripts/simUsCoachRetirement.mjs
+ret-norefresh: US_COACH_RETIRE_CONTROL=norefresh node scripts/simUsCoachRetirement.mjs
+skips-noundo: US_CAREER_SKIPS_CONTROL=noundo node scripts/simUsCareerSkips.mjs
+skips-leak: US_CAREER_SKIPS_CONTROL=leak node scripts/simUsCareerSkips.mjs
+skips-graded: US_CAREER_SKIPS_CONTROL=graded node scripts/simUsCareerSkips.mjs
+skips-clamp: US_CAREER_SKIPS_CONTROL=clamp node scripts/simUsCareerSkips.mjs
+poach: node scripts/simUsCoachPoaching.mjs
+confirm: node scripts/simUsCareerActionConfirm.mjs
+confirm-initial: US_CAREER_ACTION_CONTROL=initial node scripts/simUsCareerActionConfirm.mjs
+confirm-cancel: US_CAREER_ACTION_CONTROL=cancel node scripts/simUsCareerActionConfirm.mjs
+anchors: node scripts/simHarnessAnchors.mjs
+trust: node scripts/simTrustCopy.mjs
+rivals: node scripts/simNoRivalNames.mjs
