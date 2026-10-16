@@ -1,0 +1,8 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-lib: node_modules/.bin/vitest run src/lib/clubManager --testTimeout=300000 --hookTimeout=120000
+vitest-test: node_modules/.bin/vitest run src/test/clubManager src/test/clubDetail src/test/manager src/test/dailyMenuResume src/test/cmTablesTruth --testTimeout=300000 --hookTimeout=120000
+oldworld: node scripts/simCmOldCareersWorld.mjs
+ow-never: CM_OLD_WORLD_CONTROL=never node scripts/simCmOldCareersWorld.mjs
+ow-early: CM_OLD_WORLD_CONTROL=early node scripts/simCmOldCareersWorld.mjs
+ow-bridge: CM_OLD_WORLD_CONTROL=bridge node scripts/simCmOldCareersWorld.mjs
+s06: CM_WORLD_MOVES_SECTIONS=0,6 node scripts/simCmWorldMoves.mjs
