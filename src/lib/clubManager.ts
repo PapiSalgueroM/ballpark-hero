@@ -124,6 +124,8 @@ export { subsRuleFor, CM_SUBS_PARTIAL } from '@/lib/clubManagerSubsRule';
 /* Round 474: the five specific board asks, built and graded there for the
    same reason the facilities and the books live in their own files. */
 import { BOARD_ASKS_VERSION, askStatus, buildBoardAsks, ensureBoardAsks, isBoardAsk } from '@/lib/clubManagerBoardAsks';
+/* Round 1335: the board's verdict, its openings, the kitty band and the offer step, a pure module. */
+import { VERDICT_LINES, fillLeague, seasonGrade, type SeasonFate } from '@/lib/clubManagerBoardVerdict';
 /* Round 978: international duty. Called only inside functions, never at module
    scope, so the cycle back into this file stays evaluation safe. */
 import { answerBreak, backFromDuty, endRest, ensureIntl, fireDueBreaks, freshIntl, restingIds } from '@/lib/clubManagerInternationals';
@@ -1989,6 +1991,9 @@ export interface SeasonRecord {
    *  season the book decided. Kept on the record, so a manager who moves club takes his past winners
    *  with him (joinClubNow copies the history). An older record has none. */
   awards?: SeasonAwards;
+  /** Round 1335: the summer move the season earned, written only on a season the club really went up or
+   *  down or stayed up against the odds (seasonFate). An older record, and every other season, has none. */
+  fate?: SeasonFate;
 }
 
 export interface CareerStats {
@@ -2617,6 +2622,8 @@ export interface SeasonSummary {
   ballonDor?: { name: string; club: string } | null;
   /** Round 1311: the same awards the season's record keeps, on a season the league book decided. */
   awards?: SeasonAwards;
+  /** Round 1335: the same fate the season's record keeps, only on a season that has one. */
+  fate?: SeasonFate;
 }
 
 export interface CareerState {
@@ -2943,7 +2950,9 @@ export interface CareerState {
   /** Three club-bound tactics setups. Older saves have none; the match-plan reader validates entries. */
   matchPlans?: import('@/lib/clubManagerMatchPlans').SavedMatchPlan[];
   /** Round 1331: 'base' plays the match rules from before Round 1331 (three changes with no stoppage
-   *  limit everywhere, and the press asking about the fixture the old way). Set only by Manager Hot Seat
+   *  limit everywhere, and the press asking about the fixture the old way), and since Round 1335 the
+   *  season rules from before that round as well (legacySeason: the grade and its line, the offers, the
+   *  mid season approach, the openings, the kitty and the takeovers' card). Set only by Manager Hot Seat
    *  on a day dated before HOT_SEAT_RULES_FROM or a free run started before it, so a run in flight and
    *  every past daily replay exactly; taken off when the run is carried on to Club Manager and dropped by
    *  loadCareer, so no Club Manager save ever plays it. Absent means the current rules. A later rule
@@ -18628,6 +18637,13 @@ export function matchRuleOf(career: CareerState): SubsRule {
   return subsRuleFor(subsLeagueBase(careerLeagueOf(career).id), worldYear(career));
 }
 
+/** Round 1335: true when this career plays the season rules from before Round 1335 (the CareerState doc of
+ *  matchRules: only a Hot Seat day dated before HOT_SEAT_RULES_FROM). Every read this round adds goes
+ *  through here, so one answer puts the whole round back (simCmBoardVerdict's forced leg). */
+export function legacySeason(c: Pick<CareerState, 'matchRules'>): boolean {
+  return c.matchRules === 'base';
+}
+
 /** Round 1331: is a change at this minute made at a break, which uses no stoppage? Half time is any
  *  change before the second half is drawn (the dressing room records it at 46); the break before extra
  *  time is the minute extra time is drawn from, before a ball of it is played. Extra time's own half
@@ -19701,9 +19717,18 @@ export function finishSeason(career: CareerState): { state: CareerState; summary
   }
   const seasonTrophies = state.trophies.filter(t => t.season === state.season).map(t => t.name);
   const overshoot = club.expectation - position;
+  /* Round 1335: the grade knows the summer move the season earned (going up is at least a B, going down at
+     most a C, a B with a trophy) and names why; the old rules (legacySeason) keep the ladder below. */
+  const legacy = legacySeason(state);
+  const fated = legacy ? null : fateRead(state);
+  const fate = fated?.fate ?? null;
+  const graded = legacy ? null : seasonGrade({ position, expectation: club.expectation, trophies: seasonTrophies.length,
+    europeWon: seasonTrophies.includes('Champions League'), fate });
 
   let verdictGrade: 'A' | 'B' | 'C' | 'D' | 'F';
-  if (seasonTrophies.includes('Champions League') || position === 1 || overshoot >= 3 || seasonTrophies.length >= 2) {
+  if (graded) {
+    verdictGrade = graded.grade;
+  } else if (seasonTrophies.includes('Champions League') || position === 1 || overshoot >= 3 || seasonTrophies.length >= 2) {
     verdictGrade = 'A';
   } else if (overshoot >= 0 || seasonTrophies.length >= 1) {
     verdictGrade = 'B';
@@ -19714,7 +19739,10 @@ export function finishSeason(career: CareerState): { state: CareerState; summary
   } else {
     verdictGrade = 'F';
   }
-  const verdict = pick(VERDICTS[verdictGrade]);
+  /* One pick on every path, so the season's draws are what they were. A title or two trophies read the A
+     lines, an ordinary season its grade's, and only the kinds with their own lines read the module's. */
+  const ownLines = graded && graded.kind in VERDICT_LINES ? VERDICT_LINES[graded.kind as keyof typeof VERDICT_LINES] : null;
+  const verdict = ownLines ? fillLeague(pick([...ownLines]), fated?.league ?? '') : pick(VERDICTS[verdictGrade]);
 
   const byGoals = [...state.squad].sort((a, b) => b.seasonGoals - a.seasonGoals);
   const byAssists = [...state.squad].sort((a, b) => b.seasonAssists - a.seasonAssists);
@@ -19894,11 +19922,12 @@ export function finishSeason(career: CareerState): { state: CareerState; summary
     playerOfSeason,
     ballonDor,
     ...(awards ? { awards } : {}),
+    ...(fate ? { fate } : {}),
   };
 
   state.history = [
     ...state.history.filter(h => h.season !== state.season),
-    { season: state.season, club: state.clubName, position, points: myRow.pts, trophies: seasonTrophies, leagueId: careerLeagueOf(state).id, leagueSize: table.length, ...(awards ? { awards } : {}) },
+    { season: state.season, club: state.clubName, position, points: myRow.pts, trophies: seasonTrophies, leagueId: careerLeagueOf(state).id, leagueSize: table.length, ...(awards ? { awards } : {}), ...(fate ? { fate } : {}) },
   ];
   state.history = keepTeams(state.history);
   state.pendingSummary = summary;
@@ -20189,6 +20218,60 @@ function runPromotionRelegation(prev: CareerState): { overrides: Record<string, 
     }
   }
   return { overrides: moved ? next : carried, lines: [...lines, ...elsewhere].slice(0, Math.max(5, lines.length)) };
+}
+
+/**
+ * Round 1335: the summer move runPromotionRelegation will make for MY slot, read without making it. Its own
+ * conditions, line for line: nothing in a historic era or an unpaired custom league, the same tables, the
+ * same custom slot mapping, the same skips (no readable table, a side that cannot move exactly `count`),
+ * and the pairs walked in the same order with the same memberships, stopping at the first pair that holds
+ * my league. 'up' when I finish inside the second tier's count, 'down' inside the top flight's bottom
+ * count, 'escape' when the top flight's drop zone is where my club was expected to finish and it finished
+ * outside it. No register call: it reads the registry finishSeason already reads. simCmBoardVerdict
+ * section fate holds it to what the rollover really does.
+ */
+function fateRead(prev: CareerState): { fate: SeasonFate; league: string } | null {
+  if (prev.eraId && isHistoricEra(prev.eraId)) return null;
+  if (prev.customClub && !customUsesPyramid(prev.customClub, prev.eraId)) return null;
+  const custom = prev.customClub;
+  const mySlot = custom?.replacedClub ?? prev.clubName;
+  const ownTable = sortedLeagueTable(prev).map(row => custom && row.club === prev.clubName
+    ? { ...row, club: custom.replacedClub } : row);
+  const myLeagueId = careerLeagueOf(prev).id;
+  const carried = prev.leagueOverrides ?? null;
+  const next: Record<string, string[]> = carried ? { ...carried } : {};
+  for (const pyr of PYRAMIDS) {
+    const mine = myLeagueId === pyr.top || myLeagueId === pyr.second;
+    const topDef = REAL_LEAGUES.find(l => l.id === pyr.top);
+    const secondDef = REAL_LEAGUES.find(l => l.id === pyr.second);
+    if (!topDef || !secondDef) { if (mine) return null; continue; }
+    const topClubs = next[pyr.top] ?? topDef.clubs;
+    const secondClubs = next[pyr.second] ?? secondDef.clubs;
+    const topTable = myLeagueId === pyr.top ? ownTable : sortedWorldTable(prev, pyr.top, prev.world?.[pyr.top]?.table ?? []);
+    const secondTable = myLeagueId === pyr.second ? ownTable : sortedWorldTable(prev, pyr.second, prev.world?.[pyr.second]?.table ?? []);
+    if (topTable.length < topClubs.length || secondTable.length < secondClubs.length) { if (mine) return null; continue; }
+    const topSet = new Set(topClubs);
+    const secondSet = new Set(secondClubs);
+    const topRows = topTable.filter(r => topSet.has(r.club));
+    const down = topRows.slice(-pyr.count).map(r => r.club);
+    const up = secondTable.filter(r => secondSet.has(r.club)).slice(0, pyr.count).map(r => r.club);
+    if (down.length !== pyr.count || up.length !== pyr.count) { if (mine) return null; continue; }
+    if (mine) {
+      if (myLeagueId === pyr.second) return up.includes(mySlot) ? { fate: 'up', league: toLeague(topDef.name) } : null;
+      if (down.includes(mySlot)) return { fate: 'down', league: toLeague(secondDef.name) };
+      const expected = clubDefFor(prev.clubName).expectation;
+      return expected > topRows.length - pyr.count ? { fate: 'escape', league: toLeague(topDef.name) } : null;
+    }
+    const downSet = new Set(down);
+    const upSet = new Set(up);
+    next[pyr.top] = [...topClubs.filter(c => !downSet.has(c)), ...up];
+    next[pyr.second] = [...secondClubs.filter(c => !upSet.has(c)), ...down];
+  }
+  return null;
+}
+/** Round 1335: the season's fate alone (fateRead). */
+export function seasonFate(state: CareerState): SeasonFate | null {
+  return fateRead(state)?.fate ?? null;
 }
 
 /* Round 1040 review: the summer lines name the league the way people say it.

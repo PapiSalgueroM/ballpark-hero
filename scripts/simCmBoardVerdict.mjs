@@ -21,9 +21,36 @@
                  takeover  startMidSeason at autumn, newYear and runIn for twelve clubs of three worlds:
                            the handovers that carry a failed objective.
 
+     pure      the module over full grids (positions and expectations 1 to 24, trophies 0 to 3, every fate,
+               budgets 2 to 250): no fate grades as the base's own ladder (cut from CM_BOARD_BASE's source and
+               evaluated), 'up' A or B, 'down' C or worse (B with a trophy), 'escape' keeps its grade; an A or
+               B opens at BOARD_FRESH or more, a D or F at 59 or less, always 35 to 82; the weights; the kitty
+               never above its band and equal to the flat formula inside it; the offer step's table;
+               BOARD_SAFE_LINE equals clubManagerMeters' BOARD_SAFE. Controls safeline, upgrade, band.
+     grade     the grade fleet (the title fleet with both policies, every 2026-27 second tier club expected in
+               its top four, the bottom four of every paired top flight; GRADE_SEEDS seeds, two seasons;
+               SHARD=k/n splits it): every promotion A or B with an 'up' line naming the top flight, every
+               relegation C or worse (B with a trophy) with a 'down' line, every escape its grade with an
+               'escape' line, the statues and murals only on a title or two trophies, every other season the
+               base ladder with a line of the base VERDICTS. The fate is read off the rollover itself (which
+               league the old club plays next), never off the summary. Controls nofate, statues.
+     fate      the same fleet: the summary's fate (and the season record's) is the move the rollover made.
+               Controls fateflip, fatecount (prints the finishes at exactly count plus one it needs).
+     stream    the same fleet: at every season end both trees get the same state and the same seeded draws;
+               finishSeason draws the same number of times and writes the same save but for the grade, the
+               line, the fate and (only where a base offer was outside the step) the offers.
+     legacy    careers in 2005-06, 2015-16 and 2026-27 (named clubs plus a tier 3 and a tier 4 club; seeds
+               LEGACY_SEEDS, LEGACY_SEASONS seasons, both policies) with matchRules 'base' on BOTH trees and
+               the fresh opening at the old 60: every save byte and every draw equal to CM_BOARD_BASE.
+               Control legacyleak (legacySeason answers false on the head).
+
+   Engine controls: SIM_CM_BOARD_CONTROL=<name> with --part=<its section>; each patches this tree's copy in
+   memory, its anchor asserted present exactly once first, and must end FIRED with exit 1.
    Exit 0 green or measured, 1 red or a control fired, 2 could not run, 3 a control did not fire. */
 import './lib/offlineTransport.cjs';
 import { mkdtemp, readFile, writeFile } from 'node:fs/promises';
+import { existsSync } from 'node:fs';
+import { createHash } from 'node:crypto';
 import { createRequire } from 'node:module';
 import { build } from 'esbuild';
 import os from 'node:os';
@@ -80,11 +107,28 @@ async function bundleArm(name, folder, srcRoot, texts = {}) {
   }
   const entry = path.join(folder, `${name}-entry.ts`);
   const output = path.join(folder, `${name}.cjs`);
-  await writeFile(entry, "export * as cm from '@/lib/clubManager';\nexport * as cal from '@/lib/clubManagerCalendar';\nexport * as hs from '@/lib/managerHotSeat';\n");
+  const withModule = existsSync(path.join(srcRoot, 'lib/clubManagerBoardVerdict.ts'));
+  await writeFile(entry, "export * as cm from '@/lib/clubManager';\nexport * as cal from '@/lib/clubManagerCalendar';\nexport * as hs from '@/lib/managerHotSeat';\n"
+    + (withModule ? "export * as bv from '@/lib/clubManagerBoardVerdict';\n" : ''));
   await build({ entryPoints: [entry], bundle: true, platform: 'node', format: 'cjs', outfile: output, logLevel: 'silent', alias, nodePaths: [path.join(root, 'node_modules')] });
   const mod = require(output);
   await mod.cm.ensureAllEraRosters();
   return { ...mod, output, name };
+}
+/** A fresh copy of an arm, the way a page load gets one: the engine keeps counters at module level, so two
+ *  engines compared byte for byte each start every career from a fresh module. */
+async function freshArm(arm) {
+  delete require.cache[require.resolve(arm.output)];
+  const mod = require(arm.output);
+  await mod.cm.ensureAllEraRosters();
+  return { ...mod, output: arm.output, name: arm.name };
+}
+const clone = v => JSON.parse(JSON.stringify(v));
+const hashOf = v => createHash('sha256').update(JSON.stringify(v)).digest('hex').slice(0, 16);
+/** A fleet split for parallel runner lines: SHARD=k/n keeps every n-th entry from the k-th. */
+function shard(list) {
+  const m = /^(\d+)\/(\d+)$/.exec(process.env.SHARD ?? '');
+  return m ? list.filter((_, i) => i % Number(m[2]) === Number(m[1])) : list;
 }
 /** A source file with its line endings read as LF, so one anchor matches on a Windows checkout too. */
 async function readSource(tree, rel) {
@@ -143,20 +187,29 @@ function firstMatch(cm, s, seed) {
 
 /** A career of `seasons` seasons under one policy ('stay' never takes an offer, 'first' takes the first).
  *  `onRoll` sees every season end: the finished state, its summary, the rolled state and the policy's pick. */
-function playCareer(cm, { club, era, seed, seasons, policy }, onRoll) {
+function playCareer(cm, { club, era, seed, seasons, policy }, onRoll, hooks = {}) {
   let s = startOf(cm, club, era, seed);
+  hooks.fresh?.(s);
   for (let season = 0; season < seasons; season++) {
-    const played = playSeason(cm, s, seed * 7919 + season * 997);
-    if (played.sacked || played.stuck) return { sacked: played.sacked, stuck: !!played.stuck, seasons: season };
-    const fin = withSeed(seed * 31 + season + 3, () => cm.finishSeason(played.s));
+    const played = playSeason(cm, s, seed * 7919 + season * 997, QUICK, hooks.step);
+    if (played.sacked || played.stuck) return { sacked: played.sacked, stuck: !!played.stuck, seasons: season, state: played.s };
+    const finSeed = seed * 31 + season + 3;
+    hooks.beforeFinish?.(played.s, finSeed);
+    const fin = withSeed(finSeed, () => cm.finishSeason(played.s));
+    hooks.step?.(fin.state);
     const take = policy === 'first' ? fin.summary.offers[0]?.club : undefined;
+    const table = cm.sortedLeagueTable(fin.state).map(r => r.club);
     const ctx = { club: fin.state.clubName, era, seed, season, policy, finState: fin.state, summary: fin.summary,
-      leagueBefore: cm.careerLeagueOf(fin.state).id, def: defOf(cm, era, fin.state.clubName) };
-    const next = withSeed(seed * 31 + season + 5, () => cm.startNextSeason(fin.state, take));
-    onRoll?.({ ...ctx, next, moving: next.clubName !== fin.state.clubName, leagueAfter: cm.careerLeagueOf(next).id });
+      leagueBefore: cm.careerLeagueOf(fin.state).id, def: defOf(cm, era, fin.state.clubName), size: table.length, last: table[table.length - 1] };
+    const rollSeed = seed * 31 + season + 5;
+    hooks.beforeRoll?.(fin.state, take, rollSeed);
+    const next = withSeed(rollSeed, () => cm.startNextSeason(fin.state, take));
+    hooks.step?.(next);
+    onRoll?.({ ...ctx, next, moving: next.clubName !== fin.state.clubName, leagueAfter: cm.careerLeagueOf(next).id,
+      oldClubAfter: era ? null : cm.leagueOf(ctx.club)?.id, lastAfter: era ? null : cm.leagueOf(ctx.last)?.id });
     s = next;
   }
-  return { sacked: false, stuck: false, seasons };
+  return { sacked: false, stuck: false, seasons, state: s };
 }
 const TITLE_FLEET = [
   ['Liverpool', null], ['Real Madrid', null], ['Bayern Munich', null], ['Celtic', null], ['Arsenal', null],
@@ -175,11 +228,90 @@ export function tier4Fleet(cm) {
   return cm.REAL_LEAGUES.map(lg => [...cm.playableClubs(lg.id)].sort((a, b) => b.expectation - a.expectation || a.name.localeCompare(b.name))[0]).filter(Boolean);
 }
 /** The fate a rolled season had, read from the leagues on both sides of the summer (measure only). */
-function observedFate(cm, roll) {
-  if (roll.moving) return null;
-  if (cm.PYRAMIDS.some(p => p.second === roll.leagueBefore && p.top === roll.leagueAfter)) return 'up';
-  if (cm.PYRAMIDS.some(p => p.top === roll.leagueBefore && p.second === roll.leagueAfter)) return 'down';
+function observedFate(cm, r) {
+  if (r.era) return null;
+  const up = cm.PYRAMIDS.find(p => p.second === r.leagueBefore);
+  const top = cm.PYRAMIDS.find(p => p.top === r.leagueBefore);
+  if (up && r.oldClubAfter === up.top) return 'up';
+  if (top && r.oldClubAfter === top.second) return 'down';
+  /* Stayed up against the odds: the pair really swapped (the bottom club went down), the club was expected
+     in the drop zone and finished outside it. */
+  if (top && r.lastAfter === top.second && r.def.expectation > r.size - top.count && r.summary.position <= r.size - top.count) return 'escape';
   return null;
+}
+function fateChecks(arm, rolls) {
+  const P = 'fate';
+  const { cm } = arm;
+  const counts = { up: 0, down: 0, escape: 0, none: 0 };
+  let edge = 0;
+  const bad = [], hist = [];
+  for (const r of rolls) {
+    const want = observedFate(cm, r);
+    const got = r.summary.fate ?? null;
+    counts[want ?? 'none'] += 1;
+    if (got !== want) bad.push(`${r.club} ${eraLabel(r.era)} seed ${r.seed} season ${r.season + 1}: ${r.summary.position} of ${r.size} in ${r.leagueBefore}, summary ${got}, the rollover ${want}`);
+    const row = (r.finState.history ?? []).find(h => h.season === r.summary.season);
+    if ((row?.fate ?? null) !== got) hist.push(r.club);
+    const up = cm.PYRAMIDS.find(p => p.second === r.leagueBefore), top = cm.PYRAMIDS.find(p => p.top === r.leagueBefore);
+    if ((up && r.summary.position === up.count + 1) || (top && r.summary.position === r.size - top.count)) edge += 1;
+  }
+  console.log(`[fate] ${rolls.length} season ends: up ${counts.up}, down ${counts.down}, escape ${counts.escape}, none ${counts.none}; ${edge} finishes at exactly the count plus one (the cases fatecount needs)`);
+  check(P, 'the summary fate is the move the rollover really made, on every season end', bad.length === 0 && counts.up > 0 && counts.down > 0, bad.length ? `${bad.length}; first ${bad[0]}` : '');
+  check(P, 'the season record carries the same fate as the summary', hist.length === 0, hist.length ? `${hist.length}; first ${hist[0]}` : '');
+}
+/** Section stream (finishSeason): both trees handed the same state and the same seeded draws. */
+const PRE_YES = /^(\u{1F91D}|\u{2705})/u;
+function streamHook(head, base, acc) {
+  return (s, finSeed) => {
+    const S = clone(s);
+    DRAWS.n = 0;
+    const h = withSeed(finSeed, () => head.cm.finishSeason(clone(S)));
+    const hn = DRAWS.n;
+    base.cm.registerLeagueOverrides(S.leagueOverrides ?? null);
+    base.cm.registerCustomClub(null);
+    DRAWS.n = 0;
+    const b = withSeed(finSeed, () => base.cm.finishSeason(clone(S)));
+    const bn = DRAWS.n;
+    acc.n += 1;
+    const tag = `${S.clubName} season ${S.season}`;
+    if (hn !== bn) acc.draws.push(`${tag}: head ${hn}, base ${bn}`);
+    const era = S.eraId && S.eraId !== 'now' ? S.eraId : null;
+    const myTier = defOf(base.cm, era, S.clubName)?.tier ?? 0;
+    const roll = { summary: b.summary, leagueBefore: base.cm.careerLeagueOf(S).id };
+    const big = bigSeason(base.cm, roll);
+    const inStep = b.summary.offers.filter(o => !PRE_YES.test(o.blurb)).every(o => (defOf(base.cm, era, o.club)?.tier ?? 9) >= myTier - (big ? 2 : 1));
+    if (!inStep) acc.outside += 1;
+    if (JSON.stringify(maskFinish(h, inStep)) !== JSON.stringify(maskFinish(b, inStep))) acc.diff.push(`${tag}: ${firstDiff(maskFinish(h, inStep), maskFinish(b, inStep))}`);
+    if (inStep && JSON.stringify(h.summary.offers) !== JSON.stringify(b.summary.offers)) acc.offers.push(tag);
+  };
+}
+function maskFinish(o, keepOffers) {
+  const c = clone(o);
+  for (const sm of [c.summary, c.state?.pendingSummary]) {
+    if (!sm) continue;
+    delete sm.verdictGrade; delete sm.verdict; delete sm.fate;
+    if (!keepOffers) delete sm.offers;
+  }
+  for (const h of c.state?.history ?? []) delete h.fate;
+  return c;
+}
+/** The first path where two plain values differ, for a readable red. */
+function firstDiff(a, b, at = '') {
+  if (JSON.stringify(a) === JSON.stringify(b)) return '';
+  if (a && b && typeof a === 'object' && typeof b === 'object') {
+    for (const k of new Set([...Object.keys(a), ...Object.keys(b)])) {
+      const d = firstDiff(a[k], b[k], `${at}.${k}`);
+      if (d) return d;
+    }
+  }
+  return `${at || '(root)'}: head ${JSON.stringify(a)?.slice(0, 80)} base ${JSON.stringify(b)?.slice(0, 80)}`;
+}
+function streamChecks(acc) {
+  const P = 'stream';
+  console.log(`[stream] ${acc.n} season ends handed to both trees; ${acc.outside} had a base offer outside the step`);
+  check(P, 'finishSeason draws the same number of times on head and base from the same state', acc.n > 0 && acc.draws.length === 0, acc.draws.length ? `${acc.draws.length}; first ${acc.draws[0]}` : '');
+  check(P, 'and writes the same save but for the grade, the line, the fate and an offer outside the step', acc.diff.length === 0, acc.diff.length ? `${acc.diff.length}; first ${acc.diff[0]}` : '');
+  check(P, 'the offers are equal wherever every base offer was within the step', acc.offers.length === 0, acc.offers.length ? `${acc.offers.length}; first ${acc.offers[0]}` : '');
 }
 
 /* ---------------- section measure (step 0) ---------------- */
@@ -349,6 +481,115 @@ function measureTakeover(arm) {
   console.log(`[measure takeover] ${n} handovers (startMidSeason), ${failed} carry a failed objective${examples.length ? `; e.g. ${examples.join(' | ')}` : ''}`);
 }
 
+/* ---------------- sections grade, fate and stream (step 2 on) ---------------- */
+function bottomFleet(cm) {
+  cm.registerLeagueOverrides(null);
+  return cm.PYRAMIDS.flatMap(p => [...cm.playableClubs(p.top)].sort((a, b) => b.expectation - a.expectation || a.name.localeCompare(b.name)).slice(0, 4));
+}
+/** The grade fleet: the title fleet (both policies), every 2026-27 second tier club expected in its top four
+ *  and the bottom four by expectation of every paired top flight, GRADE_SEEDS seeds, two seasons. */
+function gradeFleet(cm) {
+  const promo = promoFleet(cm), bottom = bottomFleet(cm), out = [];
+  for (let seed = 0; seed < num('GRADE_SEEDS', 10); seed++) {
+    for (const [club, era] of TITLE_FLEET) for (const policy of ['stay', 'first']) out.push({ club, era, seed, seasons: 2, policy });
+    for (const c of [...promo, ...bottom]) out.push({ club: c.name, era: null, seed, seasons: 2, policy: 'stay' });
+  }
+  return shard(out);
+}
+function baseVerdicts(baseText) {
+  const from = "const VERDICTS: Record<'A' | 'B' | 'C' | 'D' | 'F', string[]> = ";
+  const a = baseText.indexOf(from);
+  const b = baseText.indexOf('\n};', a);
+  if (a < 0 || b < 0) { console.log('the base VERDICTS are not in CM_BOARD_BASE\'s engine; could not run'); process.exit(2); }
+  return new Function(`return ${baseText.slice(a + from.length, b + 2)};`)();
+}
+const leagueName = (cm, id) => cm.REAL_LEAGUES.find(l => l.id === id)?.name ?? id;
+const bigSeason = (cm, r) => (r.summary.position === 1 && !cm.PYRAMIDS.some(p => p.second === r.leagueBefore)) || (r.summary.trophies ?? []).includes('Champions League');
+function gradeChecks(arm, rolls, ctx) {
+  const P = 'grade';
+  const { cm, bv } = arm;
+  const ladder = ladderOracle(ctx.baseText);
+  const verdicts = baseVerdicts(ctx.baseText);
+  const n = { up: 0, down: 0, escape: 0, over: 0, plain: 0, title: 0 };
+  const bad = { up: [], down: [], escape: [], statues: [], plain: [], a: [] };
+  let baseUpLow = 0, capChanged = 0;
+  for (const r of rolls) {
+    const fate = observedFate(cm, r);
+    const s = r.summary;
+    const trophies = s.trophies ?? [];
+    const old = ladder(trophies, s.position, r.def.expectation - s.position);
+    const tag = `${r.club} ${eraLabel(r.era)} seed ${r.seed} season ${r.season + 1}: ${s.position} of ${r.size}, ${s.verdictGrade} '${s.verdict}'`;
+    if (fate === 'up') {
+      n.up += 1;
+      const pair = cm.PYRAMIDS.find(p => p.second === r.leagueBefore);
+      const lines = bv.VERDICT_LINES.up.map(l => bv.fillLeague(l, cm.toLeague(leagueName(cm, pair.top))));
+      if (!['A', 'B'].includes(s.verdictGrade) || !lines.includes(s.verdict)) bad.up.push(tag);
+      if (['C', 'D', 'F'].includes(old)) baseUpLow += 1;
+    } else if (fate === 'down') {
+      n.down += 1;
+      const pair = cm.PYRAMIDS.find(p => p.top === r.leagueBefore);
+      const lines = bv.VERDICT_LINES.down.map(l => bv.fillLeague(l, cm.toLeague(leagueName(cm, pair.second))));
+      const cap = trophies.length ? 'B' : 'C';
+      if (!worse(s.verdictGrade, cap) || !lines.includes(s.verdict)) bad.down.push(tag);
+      if (!worse(old, cap)) capChanged += 1;
+    } else if (fate === 'escape') {
+      n.escape += 1;
+      if (!bv.VERDICT_LINES.escape.includes(s.verdict) || s.verdictGrade !== old) bad.escape.push(tag);
+    } else if (old === 'A') {
+      const titled = s.position === 1 || trophies.includes('Champions League') || trophies.length >= 2;
+      if (titled) n.title += 1; else n.over += 1;
+      if (s.verdictGrade !== 'A' || !(titled ? verdicts.A : bv.VERDICT_LINES.over).includes(s.verdict)) bad.a.push(tag);
+    } else {
+      n.plain += 1;
+      if (s.verdictGrade !== old || !(verdicts[old] ?? []).includes(s.verdict)) bad.plain.push(tag);
+    }
+    if (/statue|mural/i.test(s.verdict) && !(s.position === 1 || trophies.includes('Champions League') || trophies.length >= 2)) bad.statues.push(tag);
+  }
+  console.log(`[grade] ${rolls.length} season ends: up ${n.up}, down ${n.down}, escape ${n.escape}, A by a title or two trophies ${n.title}, A by overshoot alone ${n.over}, B to F with no fate ${n.plain}`);
+  console.log(`  on the base ladder these same seasons: ${baseUpLow} promotions graded C or worse; the relegation cap changes ${capChanged} grades`);
+  const say = list => (list.length ? `${list.length}; first ${list[0]}` : '');
+  check(P, "every promotion grades A or B with an 'up' line naming the top flight", n.up > 0 && bad.up.length === 0, say(bad.up) || `${n.up} cases`);
+  check(P, "every relegation grades C or worse (B or worse with a trophy) with a 'down' line naming the league below", bad.down.length === 0, say(bad.down) || `${n.down} cases`);
+  check(P, "every escape keeps its grade with an 'escape' line", bad.escape.length === 0, say(bad.escape) || `${n.escape} cases`);
+  check(P, 'an A by a title or two trophies reads the old A lines, an A by overshoot alone the over line', bad.a.length === 0, say(bad.a) || `${n.title + n.over} cases`);
+  check(P, 'the statues and the murals only on a title or two trophies', bad.statues.length === 0, say(bad.statues) || `${n.over} seasons could carry them`);
+  check(P, 'every B to F season with no fate grades as the base ladder with a line of the old VERDICTS', bad.plain.length === 0, say(bad.plain) || `${n.plain} cases`);
+}
+
+/* ---------------- section legacy (step 2 on) ---------------- */
+const LEGACY_WORLDS = [['era2005', ['Everton']], ['era2015', ['Barcelona']], [null, ['Liverpool', 'West Ham', 'OB']]];
+function legacyRuns(cm) {
+  cm.registerLeagueOverrides(null);
+  const runs = [];
+  for (const [era, named] of LEGACY_WORLDS) {
+    const all = worldClubs(cm, era).filter(d => !named.includes(d.name));
+    const extra = [3, 4].flatMap(t => spreadPick(all.filter(d => d.tier === t), 1)).map(d => d.name);
+    for (const club of [...named, ...extra]) {
+      for (let seed = 0; seed < num('LEGACY_SEEDS', 5); seed++) for (const policy of ['stay', 'first']) runs.push({ club, era, seed, seasons: num('LEGACY_SEASONS', 3), policy });
+    }
+  }
+  return shard(runs);
+}
+const strip = s => { const c = clone(s); delete c.matchRules; return c; };
+/** One career on one arm with matchRules 'base' set after every step that can drop it, and the fresh
+ *  state's opening set to the old 60 (LEGACY_BOARD_START): its end state's hash and its draws. */
+function legacyPrint(arm, r) {
+  DRAWS.n = 0;
+  const setBase = s => { if (s) s.matchRules = 'base'; };
+  const out = playCareer(arm.cm, r, null, { fresh: s => { setBase(s); s.boardConfidence = 60; }, step: setBase });
+  return { hash: hashOf(strip(out.state)), draws: DRAWS.n, at: `season ${out.state.season} week ${out.state.week}${out.sacked ? ' sacked' : ''}` };
+}
+async function legacySection(head, base, runs) {
+  const P = 'legacy';
+  let bad = 0, first = '';
+  for (const r of runs) {
+    const h = legacyPrint(await freshArm(head), r);
+    const b = legacyPrint(await freshArm(base), r);
+    if (h.hash !== b.hash || h.draws !== b.draws) { bad += 1; first ||= `${r.club} ${eraLabel(r.era)} seed ${r.seed} ${r.policy}: head ${h.hash} ${h.draws} draws, base ${b.hash} ${b.draws} draws (${h.at})`; }
+  }
+  check(P, `${runs.length} careers on the old rules (matchRules 'base' on both trees): every save byte and every draw equal to CM_BOARD_BASE`, runs.length > 0 && bad === 0, bad ? `${bad} differ; first ${first}` : '');
+}
+
 /* ---------------- section pure (step 1) ---------------- */
 const MODULE = 'src/lib/clubManagerBoardVerdict.ts';
 const METERS = 'src/lib/clubManagerMeters.ts';
@@ -442,6 +683,47 @@ const MODULE_CONTROLS = {
   band: ["  if (i.grade === 'A' || i.grade === 'B') v = Math.max(v, BOARD_FRESH);", '  if (false) v = Math.max(v, BOARD_FRESH);'],
 };
 
+/* ---------------- arms and controls ---------------- */
+/* Engine controls (SIM_CM_BOARD_CONTROL=<name>, with --part=<its part>): each patches this tree's copy in
+   memory only, its anchor asserted present exactly once first. */
+const ENGINE_CONTROLS = {
+  nofate: { file: ENGINE, patches: [['  const fated = legacy ? null : fateRead(state);', '  const fated = legacy ? null : (null as ReturnType<typeof fateRead>);']] },
+  statues: { file: MODULE, patches: [["    'Nobody saw that coming. The board has had to rewrite its expectations.',", "    'The board is thrilled. Statues have been commissioned.',"]] },
+  fateflip: { file: ENGINE, patches: [["return up.includes(mySlot) ? { fate: 'up', league", "return up.includes(mySlot) ? { fate: 'down', league"],
+    ["if (down.includes(mySlot)) return { fate: 'down', league", "if (down.includes(mySlot)) return { fate: 'up', league"]] },
+  fatecount: { file: ENGINE, patches: [['if (myLeagueId === pyr.second) return up.includes(mySlot) ?', 'if (myLeagueId === pyr.second) return secondTable.filter(r => secondSet.has(r.club)).slice(0, pyr.count + 1).map(r => r.club).includes(mySlot) ?'],
+    ['      if (down.includes(mySlot)) return', '      if (topRows.slice(-(pyr.count + 1)).map(r => r.club).includes(mySlot)) return']] },
+  legacyleak: { file: ENGINE, patches: [["  return c.matchRules === 'base';", '  return false;']] },
+};
+let fleetDone = false;
+const ARMS = {};
+async function headArm(folder) {
+  if (ARMS.head) return ARMS.head;
+  const texts = {};
+  const spec = ENGINE_CONTROLS[CONTROL];
+  if (spec) {
+    let t = await readSource(root, spec.file);
+    for (const [from, to] of spec.patches) t = patchOnce(t, from, to, `control ${CONTROL}`);
+    texts[spec.file] = t;
+  }
+  ARMS.head = await bundleArm(CONTROL || 'head', folder, path.join(root, 'src'), texts);
+  return ARMS.head;
+}
+async function baseArm(folder) {
+  if (ARMS.base) return ARMS.base;
+  if (!BASE) { console.log('this section needs CM_BOARD_BASE, a checkout of the commit the branch started from; could not run'); process.exit(2); }
+  ARMS.base = await bundleArm('base', folder, path.join(BASE, 'src'));
+  return ARMS.base;
+}
+/** What the grade, fate and stream sections read of a season end, without its two whole states. */
+function slimRoll(r) {
+  const row = (r.finState.history ?? []).find(h => h.season === r.summary.season);
+  return { club: r.club, era: r.era, seed: r.seed, season: r.season, policy: r.policy, summary: r.summary, leagueBefore: r.leagueBefore,
+    def: { tier: r.def?.tier, expectation: r.def?.expectation, budget: r.def?.budget }, size: r.size, last: r.last, oldClubAfter: r.oldClubAfter,
+    lastAfter: r.lastAfter, moving: r.moving, leagueAfter: r.leagueAfter, finState: { history: row ? [row] : [] },
+    next: { boardConfidence: r.next.boardConfidence, budget: r.next.budget, clubName: r.next.clubName } };
+}
+
 /* ---------------- main ---------------- */
 async function main() {
   const folder = await mkdtemp(path.join(os.tmpdir(), 'simCmBoardVerdict-'));
@@ -463,6 +745,23 @@ async function main() {
       if (MODULE_CONTROLS[CONTROL]) text = patchOnce(text, ...MODULE_CONTROLS[CONTROL], `control ${CONTROL}`);
       const bv = await bundleModule(text, folder, CONTROL || 'head');
       pureSection(bv, { baseText: await readSource(BASE, ENGINE), metersText: await readSource(root, METERS) });
+    } else if (['grade', 'fate', 'stream'].includes(part)) {
+      /* One fleet serves the three sections. */
+      if (fleetDone) continue;
+      fleetDone = true;
+      const head = await headArm(folder);
+      const base = await baseArm(folder);
+      const acc = { n: 0, draws: [], diff: [], offers: [], outside: 0 };
+      const rolls = [];
+      const hooks = PARTS.includes('stream') ? { beforeFinish: streamHook(head, base, acc) } : {};
+      for (const r of gradeFleet(head.cm)) playCareer(head.cm, r, roll => rolls.push(slimRoll(roll)), hooks);
+      const ctx = { baseText: await readSource(BASE, ENGINE) };
+      if (PARTS.includes('grade')) gradeChecks(head, rolls, ctx);
+      if (PARTS.includes('fate')) fateChecks(head, rolls);
+      if (PARTS.includes('stream')) streamChecks(acc);
+    } else if (part === 'legacy') {
+      const head = await headArm(folder);
+      await legacySection(head, await baseArm(folder), legacyRuns(head.cm));
     } else { console.log(`unknown part ${part}`); process.exit(2); }
   }
   const red = results.filter(r => !r.ok);
