@@ -1,0 +1,11 @@
+c-nofate: CM_BOARD_BASE=$(bash .rc/x/mkbase.sh c1) GRADE_SEEDS=3 SIM_CM_BOARD_CONTROL=nofate node scripts/simCmBoardVerdict.mjs --part=grade
+c-statues: CM_BOARD_BASE=$(bash .rc/x/mkbase.sh c2) GRADE_SEEDS=4 SIM_CM_BOARD_CONTROL=statues node scripts/simCmBoardVerdict.mjs --part=grade
+c-fateflip: CM_BOARD_BASE=$(bash .rc/x/mkbase.sh c3) GRADE_SEEDS=2 SIM_CM_BOARD_CONTROL=fateflip node scripts/simCmBoardVerdict.mjs --part=fate
+c-fatecount: CM_BOARD_BASE=$(bash .rc/x/mkbase.sh c4) GRADE_SEEDS=4 SIM_CM_BOARD_CONTROL=fatecount node scripts/simCmBoardVerdict.mjs --part=fate
+c-legacyleak: CM_BOARD_BASE=$(bash .rc/x/mkbase.sh c5) LEGACY_SEEDS=2 SIM_CM_BOARD_CONTROL=legacyleak node scripts/simCmBoardVerdict.mjs --part=legacy
+simBoard: node scripts/simBoard.mjs
+simBoardObjectives: node scripts/simBoardObjectives.mjs
+simPromotion: node scripts/simPromotion.mjs
+simManagerCustomPromotion: node scripts/simManagerCustomPromotion.mjs
+simPress: node scripts/simPress.mjs
+simClubManagerScore: node scripts/simClubManagerScore.mjs
