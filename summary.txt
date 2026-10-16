@@ -1,0 +1,14 @@
+pure exit=0 1s | simCmBoardVerdict GREEN: 16 of 16 checks green (parts pure, 0 s)
+c-example exit=1 1s | control example FIRED: 1 of 16 checks red
+simGuideHeadings exit=0 2s | simGuideHeadings: green. 131 guides carry keyword h2s over h3 and h4 sections with every original sentence intact, and all 133 blocks render a clean outline.
+simClubManagerALeague exit=0 11s | simClubManagerALeague: all checks passed
+simClubManagerMeters exit=0 38s | simClubManagerMeters: PASS. The board meter is the sack race, the fans move with results, and every table prints its goals pair.
+simCmLeagueFixtures exit=0 14s | simCmLeagueFixtures: OK, sections A to J green: 10 ledger(s), 10 frozen, 0 pending, 10 bound, 0 unbound, 3528 fixtures, 268 of 268 controls fired
+simCmVarLedger exit=0 1s | simCmVarLedger: all 691 checks passed.
+tsc exit=0 97s | 
+simAcademy exit=0 503s | ALL ACADEMY CHECKS PASSED
+simWilderness exit=0 1s | simWilderness: green. The sack is the start of something now, and the phone always rings in the end.
+simTrustCopy exit=0 1s | simTrustCopy: green. One disclaimer under every page and one count of the games, the registry's own.
+norival exit=0 21s | No rival product names found. 0 findings.
+simEras exit=0 1223s | ALL ERA AND AGEING CHECKS PASSED
+simRoles exit=0 1455s | ALL ROLE CHECKS PASSED
