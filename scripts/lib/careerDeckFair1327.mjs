@@ -14,8 +14,12 @@
  * seeded career's Math.random stream moves from the first deck or paper on, and these rows take all of it out again.
  *
  * Applied IN ORDER to the engine of this round's head they give the base's engine byte for byte:
- *   head sha256 44f323390d962fc10fd760c593cae47b23175bab676ff4fe0a9dfb3a48bb0900
- *   base sha256 65ffd9d102989f30c811ac80f884cb84f0b8ca4f9f3feb8e9fdcf9c00009661c   (git show c9c77eba:src/lib/soccerCareerEngine.ts, LF)
+ *   head sha256 d21d2f552bf72ab5e24e0fbca03f330b51f1888f529129140824115c3cebc938
+ *   base sha256 201f0361c7ec38390b7a5f59ff59b872ecd6b944bd0bf65231a5683d5acf68c6   (git show 31699c2b:src/lib/soccerCareerEngine.ts, LF)
+ * Release BH's join (Round BHH) moved both pins for PR275's engine change (the rival veteran wage, outside this
+ * round's rows): the head is the engine with Round 1329 taken off, now 3225f123's, and the base is 31699c2b, which is
+ * c9c77eba with exactly PR275's change. The rows, regenerated from git diff 31699c2b 3225f123, are byte for byte the
+ * ones before (the same 16 as from c9c77eba to b9df63b4, whose pins were 44f32339 and 65ffd9d1).
  * so the recordings and the base pins stay as they were taken: this is an attribution, not a new recording.
  * scripts/simSoccerDeckFairness.mjs section 8 proves both values on every run.
  *
@@ -25,8 +29,8 @@
 import assert from 'node:assert/strict';
 
 export const DECK_FAIR_FILE = 'src/lib/soccerCareerEngine.ts';
-export const DECK_FAIR_HEAD_SHA256 = '44f323390d962fc10fd760c593cae47b23175bab676ff4fe0a9dfb3a48bb0900';
-export const DECK_FAIR_BASE_SHA256 = '65ffd9d102989f30c811ac80f884cb84f0b8ca4f9f3feb8e9fdcf9c00009661c';
+export const DECK_FAIR_HEAD_SHA256 = 'd21d2f552bf72ab5e24e0fbca03f330b51f1888f529129140824115c3cebc938';
+export const DECK_FAIR_BASE_SHA256 = '201f0361c7ec38390b7a5f59ff59b872ecd6b944bd0bf65231a5683d5acf68c6';
 
 /* The rows, in the order they must be applied: each turns one block of this round's engine back into the base's. */
 const EDITS = [

@@ -1,3 +1,39 @@
+## Release BH LIVE, 2026-10-16 10:42 EDT: Player Bingo counts Rodri's Champions League, World XI shows overalls and club links, Soccer Career names Luton Town in 2023 and its choices say what they do
+
+Claude lane (session I). main ae14cf97, deployment 9056c804-07ef-4e34-96c9-1f0efdaf0425, entry index-BQUxuJaU.js (was index-CZZVnHoQ.js, Release BG,
+published 06:11 on 2026-10-15). Proof at 10:44: x-deployment-id carries 9056c804 from 10:43:29; /whats-new carries "Player Bingo: Rodri counts on the Champions League square", "World XI: every player's overall, and who shares a club" and "Soccer Career: Luton Town in 2023, choices that say what they do, and rival offers that follow the usual veteran pay"; /, /soccer-career, /club-manager, /player-bingo, /world-xi and /whats-new answer 200; a browser read no console error on /player-bingo and /soccer-career.
+
+The other lane's fixes of the player reports of 2026-10-16 and its qualified Soccer Career packets, joined by this lane
+on release-bh-gate (finish-BHG.md, finish-BHH.md), each a real merge of the exact commit its own workflow passed:
+- PR282 (9ff14fc7 over the tested 8b683b58). Player Bingo: Rodri counts on a Champions League winner square (a player
+  report: "bingo says rodri doesn't have a UCL title"). He won it with Manchester City in 2022/23 (uefa.com and inter.it,
+  checked by the join); the identity rule picks the City midfielder only.
+- PR283 (a6d10693 over the tested 259b0cba). World XI: after the season each player shows his overall, and the
+  chemistry line counts the club links with a tap to see them (a player report: "Show player overalls after the season
+  simulation ... expose the club chemistry"). Build Your XI's 240 squad digest is unchanged.
+- PR278 (1986608d). Soccer Career's 2023/24 Premier League names Luton Town where it said another club (RSSSF eng2024 and
+  premierleague.com, checked by the join); membership only, nothing numeric about Luton.
+- PR280 (99c98a8a). Four Soccer Career Life choices say what they really do.
+- PR275 (271189f2). Rival clubs' offers to a veteran follow the same wage policy as your own club's. The eighth inverse
+  was regenerated on base 3225f123 and the seventh's pins moved to 31699c2b, both kept reachable by the ours merges
+  4b742e2a and 202fedc5: this branch must never be squashed or rebased.
+The lead bound simSoccerOpponentLabels to PR278 (63dae17b, ae14cf97: its legacy page and its remove-overlay control
+strip PR278's hunks first; nothing it asserts changed).
+
+GATE ON GITHUB RUNNERS on e7f111b7 (part one 55712283, part two's four merges and bindings, main d4f2c6f6 merged), seventeen requests and the live pass sent 07:41: lane A 95 of 95, lane B 103 of 103, lane C 90 of 91 (simSoccerOpponentLabels: its legacy page rebuild still stripped the Belgian display line PR278 rewrote; bound in 63dae17b and ae14cf97, green alone on rBH-rgREi), H1 20 of 20, H2 32 of 33 (playSoccerCareer check 6, known), H3 38 of 38, H4 20 of 20, the other lane's walks 43 of 46 (labels-pure and labels-browser, the same binding, green alone; brief-native ENOENT on its report, the BG flake class, green alone with its fixture lines, 1,341 checks), the rule lane 125 of 128 (two EXPECT-RED controls fired as designed, playCmLeagueLeaders known), the served walks 20 of 22 (the two opponent label lines, green alone), BE's packet lines 24 of 24 and 24 of 25 (simMoney, known), the chain's lines 37 of 37 and walks 10 of 11 (playSoccerCareerBuildLazy, the preload error flake Round 1338 fixes, green alone on rBH-rgREj with its extras), BG's lines 19 of 19, BH's part one 10 of 10 and part two 14 of 14, the live pass 18 of 18; rBH-pub on the build output head 64c0fb18 20 of 20 (ae14cf97 adds only the harness binding after it)
+Build output: three files: /whats-new (the three entries), public/sitemap.xml (its date and the /whats-new row) and scripts/data/lastmod.json; four pages that changed only their head tag order stay as committed.
+
+Known and left: the reds already known on main (playSoccerCareer check 6, simMoney and simPhone2 on save size, simGmStaff, playCmLeagueLeaders, simCareerDevelopment's control all, the three live database fences, playCorruptSaves on /hall-of-champions, managerWorldBrowser1077's auth probe); /soccer-career 832.4K of 834K, /player-bingo 305.6K and /world-xi 312.3K (no budget rows).
+
+### For Codex
+1. Release BH is on main at ae14cf97 and live. It holds your PR278, PR282, PR283, PR280 and PR275 at the heads your own
+   workflows passed; please close them (PR275's two old veteran workflows still fail on their 2026-10-10 parent diffs).
+2. Owed back: the provenance note PR278 shows only in table seasons (Luton is also named in a 2023 results only
+   season: the join judged that true); a later engine packet must rebuild the 1329 and 1327 inverse bases the way this
+   join did; a later Life packet must extend the patch in the kit's x/lifeBH.sh.
+3. This lane's report rounds (1342 No sacking, 1343 retire and the record, 1344 AI transfers, 1346 US coach retirement
+   with your PR281 tests) are in review; Release BI carries them.
+
 ## Claude lane, 2026-10-16 06:40 EDT: the owner moves Club Manager's competitions to this lane; Rounds 1347 to 1349 and numbers 1500 to 1549
 
 The owner, 06:35 EDT: "keep going with the remaining reports and work with chat to get these fixes live, then finish
