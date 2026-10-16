@@ -213,7 +213,7 @@ const BUNDLE = `${TMP}/cmSaveSize.bundle.mjs`;
 
 /* Measured ranges beside each, see the header. */
 const SIZE_BUDGET = 214_000;   // Round 1344, every club's deals recorded: healthy 191,625 to 206,555; uncapped 227,507 to 239,176 (was 203,000: Round 1229, the league book, healthy 180,907 to 193,046, uncapped 215,793 to 226,422)
-const SLOPE_CAP = 2_000;       // healthy 249 to 1,178 bytes a season; uncapped 3,052 to 4,408
+const SLOPE_CAP = 2_000;       // Round 1344, every club's deals recorded: healthy -181 to 1,517 bytes a season; uncapped 3,965 to 4,802 (was healthy 249 to 1,178, uncapped 3,052 to 4,408)
 const CLUBS = ['Real Madrid', 'Everton', 'Lincoln City'];
 const SEASONS = 15;
 const SAVE_KEY = 'dukb-club-manager-save';

@@ -1198,7 +1198,13 @@ async function shapeSection(engines) {
    0.065 after BASE against BASE (whose own per seed spread reached 0.13 XI and 0.14 years), so 0.15 is more than
    twice the healthy move and about one per seed spread of BASE against itself. The buyers' surplus: +0.686, +0.665
    and +0.675 men a club at seasons 5, 10 and 15 (se 0.03 to 0.05), so at most 1.0 at each, and season 15 at most
-   0.25 above season 5 (flat, not growing). */
+   0.25 above season 5 (flat, not growing).
+   Which tiers (the read review of 2026-10-16, minor 3): this reads ruling 2's "per tier" as the league tiers, the top
+   five and the bottom five, plus the buyers' surplus the ruling names. The clubs that sold (the critic's correction
+   2 names them too) are printed and not bounded: at the final step 1 head their XI moved -0.315, -0.330 and -0.216
+   at seasons 5, 10 and 15 against BASE against BASE's +0.214, +0.138 and +0.086, and their surplus -0.356 at season 5
+   (results-g/finish-1344-shape-head.txt), the seller a man short while his shadow keeps the slot. Bounding them is
+   the lead's ruling to make, with part B's releases. */
 const SHAPE_MARGIN = { xi: 0.15, age: 0.15 };
 const SURPLUS_MAX = 1.0, SURPLUS_GROWTH_MAX = 0.25;
 function shapeVerdict(seen, shifted) {
