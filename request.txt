@@ -1,0 +1,12 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+pr269-head: git show 1923d291:src/test/managerAiOwnership.test.ts > src/test/managerAiOwnership.test.ts && echo "blob 1923d291 $(sha256sum < src/test/managerAiOwnership.test.ts)" && node_modules/.bin/vitest run src/test/managerAiOwnership.test.ts --reporter=verbose --testTimeout=300000 --hookTimeout=120000
+vitest-ledger: node_modules/.bin/vitest run src/lib/clubManagerWorldRoster.test.ts src/lib/clubManagerOwnClubLevel.test.ts --testTimeout=300000 --hookTimeout=120000
+simDailyDeals: node scripts/simDailyDeals.mjs
+simDailyDeals-ledger: DAILY_DEALS_CONTROL=ledger node scripts/simDailyDeals.mjs
+simDailyDeals-ledgerdeadline: DAILY_DEALS_CONTROL=ledgerdeadline node scripts/simDailyDeals.mjs
+simCmUnseededWorld: node scripts/simCmUnseededWorld.mjs
+simCmShootoutOrder: node scripts/simCmShootoutOrder.mjs
+seed1250-check: node scripts/lib/cmWorldSeed1250.mjs --check
+simCmLedgerBound: node scripts/simCmLedgerBound.mjs
+simManagerHotSeat: node scripts/simManagerHotSeat.mjs
+simDeadlineDay: node scripts/simDeadlineDay.mjs

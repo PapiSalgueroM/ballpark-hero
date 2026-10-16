@@ -1,0 +1,12 @@
+vitest-ledger exit=1 8s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/clubManagerWorldRoster.test.ts,title=src/lib/clubManagerWorldRoster.test.ts > actual world roster conti
+simDailyDeals exit=0 5s | simDailyDeals: green. 12 Hot Seat dates (5 Premier League) and 6 Deadline Day dates (3 Premier League) deal what Release AS dealt, no daily carries the real fixture key, 
+pr269-head exit=1 18s |    Duration  14.96s (transform 2.44s, setup 118ms, collect 101ms, tests 11.34s, environment 565ms, prepare 279ms)
+simDailyDeals-ledger exit=1 4s | simDailyDeals: CONTROL ledger FIRED: 12 of its 12 dates went red on "the state carries a world seed or a ledger" and no date of the other game moved
+simDailyDeals-ledgerdeadline exit=1 5s | simDailyDeals: CONTROL ledgerdeadline FIRED: 12 of its 12 dates went red on "the state carries a world seed or a ledger" and no date of the other game moved
+simCmShootoutOrder exit=0 33s | simCmShootoutOrder: all sections passed
+seed1250-check exit=0 0s | cmWorldSeed1250: the seed block stands once in src/lib/clubManager.ts and can be taken out
+tsc exit=0 100s | 
+simManagerHotSeat exit=0 79s | simManagerHotSeat: green. The target is the club's, reading the room pays, outcomes replay, a Club Manager save keeps its registrations and a survivor carries on in Club 
+simDeadlineDay exit=0 6s | simDeadlineDay: green. The brief is real, the desk pays, the clock binds, the daily is one window a day, the budget holds, a Club Manager save keeps its registrations, ri
+simCmUnseededWorld exit=1 189s | simCmUnseededWorld: 112 FAILURE(S)
+simCmLedgerBound exit=0 375s | simCmLedgerBound: green, all four sections held
