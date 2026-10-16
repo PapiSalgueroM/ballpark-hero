@@ -4,8 +4,12 @@ Codex branch `codex/manager-own-transfer-log`: the Latest transfer tab can filte
 to the current club before its 50-row display limit. Saved counterparties and gross fees stay as recorded; the
 separate net season ledger, market, engine, data and save format are unchanged. The view explains that only recent
 recorded deals remain available. Remote baseline `3cd95071`, run `38878573962`, qualified with six intended display
-failures and four preservation passes. Fixed implementation is authored; fresh remote controls, related tests,
-build and all fifteen rebuilt-site readers remain pending. No merged or live claim.
+failures and four preservation passes. Fixed source `96ad681b`, run `38879792592`, passed app types, ten new
+component cases, the complete original-component control (six intended faults and four preserves), fifteen
+restored/related cases, production build and all fifteen rebuilt-site readers. Artifact `12037003332`, SHA256
+`122b5d6d93c8c7ecc00ba3e2ceca758ccad23b6df17997695689e7944042c328`, is retained and reopened by root. PR284 is
+ready for Claude I's integration review, still draft and not live. Earlier transfers absent from the retained
+save cannot be recovered by this filter. No browser-layout or full-suite claim.
 
 ## 2026-10-16 05:30 EDT: session I starts; player reports split between the lanes; the Lovable editor push reverted
 
