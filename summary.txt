@@ -1,0 +1,17 @@
+livescores exit=0 1s | simLiveScores: green. The scores on the strip are shaped honestly, read from the table, and the keys stay in the database.
+invconduct exit=0 1s | simNoInventedConduct: green. A real player can score in your sim and get hurt in it. He cannot fall out with the board in it.
+legal exit=0 1s | simLegalPages: all green
+footer exit=0 1s | simSingleFooter: green. One footer, rendered once, on every page.
+slugs exit=0 2s | simCompletionSlugs: green. Every recorded slug names a game the site can find.
+invnames exit=0 11s | simInventedNames: green. Every invented man on this site is invented all the way down.
+once exit=0 6s | simCompletionOnce: all green
+puzzle exit=0 1s | simDailyPuzzleContract: green. Every caller honours the contract the selection memo depends on.
+invquotes exit=0 29s | simNoInventedQuotes: green. No real player is quoted or accused anywhere.
+retry exit=0 5s | simFetchRetry: green. A transient page failure costs a retry and the rows come back whole.
+double exit=0 33s | simNoDoubleRecord: all green (67 rows and checks, each recorded once across the finish, the toggles, the coaching, the reveals and the reloads; 115 recorders read)
+relay exit=0 0s | simReportRelay: green. Both buttons ask the same questions, every report records whether it reached him, and the queue has a real workflow.
+navbar exit=0 1s | Artifacts: /home/runner/work/_temp/t-navbar/navbar-stats-0et4cG
+scoring exit=0 0s | simScoringCoverage: all green
+moment exit=0 7s | simResultMoment: green. Every live game reaches the shared result moment or is listed with what it draws instead, the pill shows exactly the score it is given, the three 
+hardening exit=0 65s | simDailySaveHardening: part all green
+google exit=0 86s |    8 of 8 rendered checks pass, no dash in the round's files, and all 11 controls turned exactly their own checks red.

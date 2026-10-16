@@ -1,0 +1,8 @@
+1) The real hook, rendered: a restored finish records nothing, a witnessed finish records once
+   vitest exit 0, 8 passed (8)
+2) The lib's direct callers, as code: no completion is recorded from a bare effect on restored state
+   21 direct call sites read
+3) The daily hook says so, as code: the restore marks itself and the completion hook asks first
+   mark before restore: true, consume before record: true
+
+simCompletionOnce: all green
