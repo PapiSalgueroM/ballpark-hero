@@ -41,6 +41,9 @@ const REVERSE = [
   [`    "Earlier seasons use the league's real clubs and competition rules where the game has them checked. From 2026-27, a season with a saved league world runs on your career's simulated clubs, with promotion and relegation between two divisions. Every score, every other club's result and every minute are your career's own.",`,
     `    "Earlier-season tables use verified league membership and competition rules. From 2026-27, saved league worlds use your career's simulated clubs and direct promotion and relegation between two divisions. The review marks the available Spanish lower-division club pool. Every score, every other club's result and every minute are your career's own.",`],
 ];
+/* Round 1337: the same two help strings as the model carries them ([new, old], quotes and indentation off). The
+   unrelated-model check maps exactly these back before it compares; any other difference in the model still fails. */
+const INTRO_1337 = REVERSE.slice(-2).map(pair => pair.map(line => line.trim().replace(/,$/, '').slice(1, -1)));
 const sha = b => createHash('sha256').update(b).digest('hex');
 const json = v => JSON.stringify(v, (_k, x) => typeof x === 'function' ? { functionBody: String(x) } : x);
 const clone = v => JSON.parse(JSON.stringify(v));
@@ -155,7 +158,7 @@ function checkReading(row,item,original) {
   const out=read(row.output),base=read(original.output),checks=[];const expected=expectedNames(item.row,item.season);
   attempt(checks,'read-only',()=>assert.equal(row.inputAfter,row.input));attempt(checks,'read-vector',()=>{assert.equal(row.count,0);same(read(row.draws),[]);});
   attempt(checks,'whole-season',()=>same(out.model.season,item.season));
-  attempt(checks,'unrelated-model',()=>{const a=clone(out.model),b=clone(base.model);delete a.names;delete b.names;delete a.resultsWhy;delete b.resultsWhy;same(a,b);});
+  attempt(checks,'unrelated-model',()=>{const a=clone(out.model),b=clone(base.model);delete a.names;delete b.names;delete a.resultsWhy;delete b.resultsWhy;if(a.help?.intro)a.help.intro=a.help.intro.map(p=>INTRO_1337.find(([now])=>now===p)?.[1]??p);same(a,b);});
   attempt(checks,'display',()=>{if(expected){same(out.model.names,expected);assert.equal(out.model.resultsWhy,base.model.resultsWhy+' '+NOTE);const words=item.season.games.map((g,gi)=>g.events.map((e,ei)=>{if(e.kind!=='goal'||e.side!=='them')return base.eventWords[gi][ei];if(e.ownGoalBy){const who=e.ownGoalBy==='you'?'You':e.ownGoalBy==='teammate'?'A teammate':'An opponent';return `⚽ ${who} (O.G), goal for ${expected[g.opp]}`;}return `⚽ Goal, ${expected[g.opp]}`;}));same(out.eventWords,words,'complete event text with independent opponent-goal labels');}else same(out,base);});
   return checks;
 }
