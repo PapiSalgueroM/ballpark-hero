@@ -1,0 +1,12 @@
+dailyDeals: node scripts/simDailyDeals.mjs
+appeal1081: node scripts/simManagerAppealIsolation.mjs
+meters: node scripts/simClubManagerMeters.mjs
+meters-promise: CM_METERS_CONTROL=promise node scripts/simClubManagerMeters.mjs
+score: node scripts/simClubManagerScore.mjs
+sessionMarks: node scripts/simSessionMarks.mjs
+activity: node scripts/simActivityNotCompletion.mjs
+activity-match: SIM_ACTIVITY_CONTROL=match node scripts/simActivityNotCompletion.mjs
+vitest-hook: node_modules/.bin/vitest run src/hooks/useClubManager.test.ts --testTimeout=300000 --hookTimeout=120000
+start: node scripts/simClubManagerStart.mjs
+budget: node scripts/simClubManagerBudget.mjs
+saveSize: node scripts/simClubManagerSaveSize.mjs
