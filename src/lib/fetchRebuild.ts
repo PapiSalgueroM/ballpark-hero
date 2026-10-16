@@ -1,4 +1,4 @@
-import { supabase } from '@/integrations/supabase/client';
+import { gameQueryClient as supabase } from '@/lib/gameQueryClient';
 import { fetchAllRows } from '@/lib/fetchAllRows';
 import { Player } from '@/types/game';
 import { normalizePosition } from '@/lib/squadDeal';
@@ -36,7 +36,7 @@ export async function fetchRebuildClubs(): Promise<RebuildClub[]> {
     return data
       .filter(r => r.club)
       .map(r => ({
-        club: r.club!,
+        club: r.club,
         squadSize: r.squad_size ?? 0,
         squadValueM: r.squad_value_m ?? 0,
         tier: (r.tier ?? 'modest') as ClubTier,
