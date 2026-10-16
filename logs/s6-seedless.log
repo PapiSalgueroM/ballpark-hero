@@ -1,0 +1,24 @@
+0) anchors: every edit this harness can make stands exactly once in the source it is made to
+   probe "generateHeadlines returns its deals": 1
+   probe "the seeded skip": 1
+   probe "the deal is collected": 1
+   probe "generateHeadlines hands them back": 1
+   probe "the helpers": 1
+   probe "startCareer keeps the opening deals": 1
+   probe "the flush after the seed block": 1
+   probe "January records": 1
+   probe "the summer records": 1
+   control seedless: 1
+   control edit made 1 time(s): seedless: if (worldSeedOf(state) === undefined) return state;
+6) legacy: unseeded careers, BASE against the head, every saved string and Math.random draw
+  FAIL section 6: Real Madrid (now, seed 0, deals): the head's career wrote a world ledger with no seed
+  FAIL section 6: Real Madrid (now, seed 0, deals): saved string 2 of 7 differs from BASE's
+  FAIL section 6: Real Madrid (now, seed 0, deals): the last state differs from BASE's
+  FAIL section 6: Real Madrid (now, seed 1, deals): the head's career wrote a world ledger with no seed
+  FAIL section 6: Real Madrid (now, seed 1, deals): saved string 2 of 7 differs from BASE's
+  FAIL section 6: Real Madrid (now, seed 1, deals): the last state differs from BASE's
+  FAIL section 6: Everton (now, seed 0, deals): the head's career wrote a world ledger with no seed
+  FAIL section 6: Everton (now, seed 0, deals): saved string 2 of 7 differs from BASE's
+   18 careers, 88 saves, 1688390 draws and 16 deals of mine on the head
+  section 6: 10 more failures not shown
+simCmWorldMoves: control seedless FIRED: section 6 red (18)
