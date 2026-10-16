@@ -1214,6 +1214,9 @@ if (runs(10)) {
      standard deviations (about 0.4 points). A pack the kit knows with no
      ceiling here fails until a pack round measures and writes one. */
   const CEILING = { nfl: 0.224, nba: 0.298, mlb: 0.288, nhl: 0.278, college: 0.305, gym: 0.367, afl: 0.374 };
+  /* Round 1334 (W2): Soccer Career's starter pack, measured 2026-10-16 on a runner (rc r1334-s4a, measure-10) at
+     seeds 1 to 10: the top card is 726 every time, 9.00 to 11.70 percent; the highest plus 2 points. */
+  CEILING.soccer = 0.137;
   const reach = [];
   for (const [k, p] of Object.entries(packs)) {
     const r = shares(p, k, SEED);
