@@ -15689,3 +15689,9 @@ Standing claims after Round 400:
   the desktop lane above.
 - Manager arc four, promotion style world editing: Round 310 (cloud lane, 2026-08-28).
   Tweaks item 11 is complete across rounds 303, 308, 309 and 310.
+
+## Codex: Manager transfer refusal visibility
+
+Claimed 2026-10-16 16:38:44 UTC on codex/manager-desk-feedback from qualified PR284 head7c483867. Claude I's1344 walk shows the existing desk note offscreen above a mobile market player. This packet owns the TransferScreen feedback presentation and dismissal only. Existing recent-own transfer history, action semantics, state, engine and RNG must hold. Claude retains core and release ownership.
+
+Work starts with existing-pattern review and a remote causal baseline, then the minimum UI correction, types, meaningful no-scroll/browser checks at320/390/430/1440, build and all15dist readers. No local application execution or live claim. This is an additive follow-up; PR284 remains frozen and ready independently.
