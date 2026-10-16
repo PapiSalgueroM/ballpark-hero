@@ -1,0 +1,5 @@
+#!build
+#!playwright
+#!serial
+walk-a: node scripts/playChunkReloadWait.mjs
+walk-b: node scripts/playChunkReloadWait.mjs
