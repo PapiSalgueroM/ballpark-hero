@@ -1,0 +1,4 @@
+legacy: OWNCLUB_MARKET_PROBE=1 OWNCLUB_MARKET_CONTROL=legacy node scripts/simCmOwnClubMarket.mjs
+slice: OWNCLUB_MARKET_PROBE=1 OWNCLUB_MARKET_CONTROL=slice node scripts/simCmOwnClubMarket.mjs
+shallow: OWNCLUB_MARKET_PROBE=1 OWNCLUB_MARKET_CONTROL=shallow node scripts/simCmOwnClubMarket.mjs
+asis: node scripts/simCmOwnClubMarket.mjs

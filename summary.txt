@@ -1,0 +1,4 @@
+shallow exit=1 395s | simCmOwnClubMarket: CONTROL shallow FIRED: with squads of 9, 31 starts put a man of my club in the market's first 160, the lowest at index 38 (Franck Ribéry, Bayern Muni
+legacy exit=1 409s | simCmOwnClubMarket: CONTROL legacy FIRED: with main's line on the head, section 1 went red (126) and section 2 (41), and the rest stayed green
+slice exit=1 414s | simCmOwnClubMarket: CONTROL slice FIRED: one row fewer in the feed's pool moved every start (1700 of 1700) and every daily (180); sections 1 and 2 stayed green
+asis exit=1 88s | simCmOwnClubMarket: 167 FAILURE(S) (mode as-is, sections 1, 2 red): as the head stands, the defect is seen

@@ -1,0 +1,76 @@
+simCmOwnClubMarket: mode probe, head arm this tree with the rule, parent arm this tree, control shallow, sections 1, 2, 3, 4, 5
+  fleet now: Orenburg (33 bake men), Arsenal (25 bake men), Real Oviedo (3 bake men)
+  fleet era2020: Bayern Munich (28 bake men), Manchester City (24 bake men), Lille (17 bake men)
+  fleet era2015: Arsenal (30 bake men), PSG (21 bake men), Lyon (20 bake men)
+  fleet era2010: Arsenal (35 bake men), AC Milan (23 bake men), Inter Milan (20 bake men)
+  fleet era2005: Manchester United (29 bake men), Arsenal (25 bake men), AC Milan (19 bake men)
+  97 old saves (3 fixture, 4 committed, 90 written by the pre AZ engine), 75s
+  fixture A (Real Madrid, season 1): removed 4 (0 in the parent's first 120; the old engine listed 4), 0 namesakes
+  fixture B (Real Madrid, season 3): removed 17 (6 in the parent's first 120; the old engine listed 17), 0 namesakes
+  feed fixture B: the parent's first 120 held 6 men at my club; its January named 0 (none), the head's 0
+  fixture C (Real Madrid, season 1): removed 4 (0 in the parent's first 120; the old engine listed 4), 0 namesakes
+  fixture C (open question 3, MEASURED): the talk for Ferland Mendy is shown (phase fee); a fee at the ask left it at terms; terms met: status agreed, Ferland Mendy in my squad 1 time(s)
+  cmOldSave1052Fixture: removed 0 (a season 1 save of a club no deeper than 26: the no op)
+  cmSecondTierOldSaveFixture: removed 0 (a season 1 save of a club no deeper than 26: the no op)
+  cmBookSaveEvertonFixture: removed 0 (a season 1 save of a club no deeper than 26: the no op)
+  cmBookSaveHerthaFixture: removed 0 (a season 1 save of a club no deeper than 26: the no op)
+  feed Arsenal (now, season 3, seed 1339f1): the parent's first 120 held 6 men at my club; its January named 0 (none), the head's 0
+  feed Arsenal (now, season 3, seed 1339f2): the parent's first 120 held 6 men at my club; its January named 0 (none), the head's 0
+  feed Arsenal (now, season 3, seed 1339f3): the parent's first 120 held 6 men at my club; its January named 0 (none), the head's 0
+  feed Bayern Munich (era2020, season 3, seed 1339f1): the parent's first 120 held 3 men at my club; its January named 0 (none), the head's 0
+  feed Bayern Munich (era2020, season 3, seed 1339f2): the parent's first 120 held 4 men at my club; its January named 0 (none), the head's 0
+  feed Bayern Munich (era2020, season 3, seed 1339f3): the parent's first 120 held 4 men at my club; its January named 0 (none), the head's 0
+  feed Manchester City (era2020, season 3, seed 1339f1): the parent's first 120 held 5 men at my club; its January named 0 (none), the head's 0
+  feed Manchester City (era2020, season 3, seed 1339f2): the parent's first 120 held 5 men at my club; its January named 0 (none), the head's 0
+  feed Manchester City (era2020, season 3, seed 1339f3): the parent's first 120 held 5 men at my club; its January named 0 (none), the head's 0
+  feed Lille (era2020, season 3, seed 1339f1): the parent's first 120 held 1 men at my club; its January named 0 (none), the head's 0
+  feed Lille (era2020, season 3, seed 1339f2): the parent's first 120 held 1 men at my club; its January named 0 (none), the head's 0
+  feed Lille (era2020, season 3, seed 1339f3): the parent's first 120 held 1 men at my club; its January named 0 (none), the head's 0
+  feed Arsenal (era2015, season 3, seed 1339f1): the parent's first 120 held 4 men at my club; its January named 0 (none), the head's 0
+  feed Arsenal (era2015, season 3, seed 1339f2): the parent's first 120 held 5 men at my club; its January named 1 (Alex Oxlade-Chamberlain), the head's 0
+  feed Arsenal (era2015, season 3, seed 1339f3): the parent's first 120 held 5 men at my club; its January named 0 (none), the head's 0
+  feed PSG (era2015, season 3, seed 1339f1): the parent's first 120 held 3 men at my club; its January named 1 (Marco Verratti), the head's 0
+  feed PSG (era2015, season 3, seed 1339f2): the parent's first 120 held 5 men at my club; its January named 0 (none), the head's 0
+  feed PSG (era2015, season 3, seed 1339f3): the parent's first 120 held 4 men at my club; its January named 0 (none), the head's 0
+  feed Lyon (era2015, season 3, seed 1339f2): the parent's first 120 held 1 men at my club; its January named 0 (none), the head's 0
+  feed Lyon (era2015, season 3, seed 1339f3): the parent's first 120 held 1 men at my club; its January named 0 (none), the head's 0
+  feed Arsenal (era2010, season 3, seed 1339f1): the parent's first 120 held 2 men at my club; its January named 0 (none), the head's 0
+  feed Arsenal (era2010, season 3, seed 1339f2): the parent's first 120 held 2 men at my club; its January named 0 (none), the head's 0
+  feed Arsenal (era2010, season 3, seed 1339f3): the parent's first 120 held 2 men at my club; its January named 0 (none), the head's 0
+  feed AC Milan (era2010, season 3, seed 1339f1): the parent's first 120 held 4 men at my club; its January named 0 (none), the head's 0
+  feed AC Milan (era2010, season 3, seed 1339f2): the parent's first 120 held 5 men at my club; its January named 0 (none), the head's 0
+  feed AC Milan (era2010, season 3, seed 1339f3): the parent's first 120 held 5 men at my club; its January named 0 (none), the head's 0
+  feed Inter Milan (era2010, season 3, seed 1339f1): the parent's first 120 held 5 men at my club; its January named 0 (none), the head's 0
+  feed Inter Milan (era2010, season 3, seed 1339f2): the parent's first 120 held 6 men at my club; its January named 0 (none), the head's 0
+  feed Inter Milan (era2010, season 3, seed 1339f3): the parent's first 120 held 6 men at my club; its January named 0 (none), the head's 0
+  feed Manchester United (era2005, season 3, seed 1339f1): the parent's first 120 held 5 men at my club; its January named 0 (none), the head's 0
+  feed Manchester United (era2005, season 3, seed 1339f2): the parent's first 120 held 5 men at my club; its January named 0 (none), the head's 0
+  feed Manchester United (era2005, season 3, seed 1339f3): the parent's first 120 held 4 men at my club; its January named 0 (none), the head's 0
+  feed Arsenal (era2005, season 3, seed 1339f1): the parent's first 120 held 5 men at my club; its January named 0 (none), the head's 0
+  feed Arsenal (era2005, season 3, seed 1339f2): the parent's first 120 held 5 men at my club; its January named 0 (none), the head's 0
+  feed Arsenal (era2005, season 3, seed 1339f3): the parent's first 120 held 5 men at my club; its January named 0 (none), the head's 0
+  feed AC Milan (era2005, season 3, seed 1339f1): the parent's first 120 held 3 men at my club; its January named 0 (none), the head's 0
+  feed AC Milan (era2005, season 3, seed 1339f2): the parent's first 120 held 3 men at my club; its January named 0 (none), the head's 0
+  feed AC Milan (era2005, season 3, seed 1339f3): the parent's first 120 held 3 men at my club; its January named 0 (none), the head's 0
+section 1 old: 97 saves, the fleet removed 752 men at their own club (150 in the parent's first 120), 3 namesakes, 0 red, 51s
+section 2 feed: 39 season 3 saves played to January, the parent's window named 2 men from my club who were not mine (MEASURED), 0 red
+  starts: 850 clubs (now 458, era2020 98, era2015 98, era2010 98, era2005 98, three created clubs and an edited world among 'now') under 2 seed(s), 88s
+section 3 fresh starts: 1700 starts compared, 24 red
+section 3 journeys: 27 seeded careers (start, buy, an AI bid, January, the season, the summer; ai-bid done 10, ai-bid no bid 17, buy done 15, buy refused 12), 5 red, 64s
+section 5 headroom: 850 starts; the best man at my own club sits at index 38 at the lowest (Franck Ribéry, Bayern Munich, era2015); 31 under 160; 258 starts list nobody at their club; the start's own headlines took 2 to 6 names; 1520 of 4249 ask candidates count a different number of targets (MEASURED); 36 red
+section 4 dailies: 120 Hot Seat days (22 cross the January window) and 60 Deadline Days compared, 0 red, 116s
+  FAIL 3 Real Madrid (now, seed 1339a1): the state differs at character 16472: parent ...mo for £67m.","Manchester United sign Maghnes Akliouche from PSG for £54m.","Liv... head ...mo for £67m.","Manchester United sign Marcus Thuram from Inter Milan for £48m.",...
+  FAIL 3 Barcelona (now, seed 1339a1): the state differs at character 16355: parent ...us for £67m.","Manchester United sign Maghnes Akliouche from PSG for £54m.","Liv... head ...us for £67m.","Manchester United sign Marc Cucurella from Real Madrid for £48m."...
+  FAIL 3 Manchester City (era2020, seed 1339a1): the state differs at character 10127: parent ...7,"aiHeadlines":["Leicester City sign Marcos Llorente from Atlético Madrid for £... head ...7,"aiHeadlines":["Leicester City sign Mateo Kovacic from Chelsea for £42m.","Lyo...
+  FAIL 3 Bayern Munich (era2020, seed 1339a1): the state differs at character 9959: parent ...5,"aiHeadlines":["Bayer Leverkusen sign Clément Lenglet from Barcelona for £46m.... head ...5,"aiHeadlines":["Bayer Leverkusen sign David de Gea from Manchester United for ...
+  FAIL 3 Chelsea (era2015, seed 1339a1): the state differs at character 10486: parent ...rio Mandžukić from Juventus for £26m.","Lazio sign Olivier Giroud from Arsenal f... head ...rio Mandžukić from Juventus for £26m.","Bayern Munich sign Paco Alcácer from Val...
+  FAIL 3 Bayern Munich (era2015, seed 1339a1): the state differs at character 9947: parent ...er","windowWeeksLeft":4,"aiHeadlines":["Napoli sign Romelu Lukaku from Everton f... head ...er","windowWeeksLeft":4,"aiHeadlines":["Bayer Leverkusen sign Yaya Touré from Ma...
+  ... and 23 more in section 3
+  FAIL 5 Arsenal (now): (5a) the best man at Arsenal sits at index 70 of the parent's market (Eberechi Eze)
+  FAIL 5 Manchester City (now): (5a) the best man at Manchester City sits at index 83 of the parent's market (Rúben Dias)
+  FAIL 5 Real Madrid (now): (5a) the best man at Real Madrid sits at index 66 of the parent's market (Álvaro Carreras)
+  FAIL 5 Barcelona (now): (5a) the best man at Barcelona sits at index 67 of the parent's market (Alejandro Balde)
+  FAIL 5 PSG (now): (5a) the best man at PSG sits at index 100 of the parent's market (Ferran Torres)
+  FAIL 5 New York Red Bulls (now): (5b) an ask candidate's objective or minSpend differs, at character 116: parent ...ers from United States in the squad"},0.6],[{"id":"veterans","target":2,"minAge"... head ...ers from United States in the squad"},0.7],[{"id":"veterans","target":2,"minAge"...
+  ... and 30 more in section 5
+simCmOwnClubMarket: CONTROL shallow FIRED: with squads of 9, 31 starts put a man of my club in the market's first 160, the lowest at index 38 (Franck Ribéry, Bayern Munich, era2015)
