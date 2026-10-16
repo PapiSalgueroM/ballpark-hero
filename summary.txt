@@ -1,0 +1,7 @@
+ctl exit=0 12s | ok lines for soccer after the FAIL: 0 (0 expected)
+gmequal exit=1 13s | >    ok 10 packs: the 7 on the baseline each still lack a neutral option somewhere, every other card has one, no pack has a problem
+tsc exit=0 100s | 
+kit-a exit=0 97s | simEventDeck: green. Sections 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 only.
+simHarnessAnchors exit=0 68s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+reach30 exit=0 218s | reach30 done, any red: 0
+kit-b exit=0 169s | simEventDeck: green. Sections 13, 14, 15, 16 only.
