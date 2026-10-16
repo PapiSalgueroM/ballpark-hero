@@ -1,0 +1,32 @@
+treeWithoutMerge: 6f09133ec1dabbf6265e6c245698153c6604b5d1, 0d150db4 without ea937568; conflicts kept from 0d150db4: src/pages/WhatsNew.tsx
+base 6f09133ec1dabbf6265e6c245698153c6604b5d1
+ok   [pure] 4032 grid seasons with no fate grade exactly as the base ladder (0 differ)
+ok   [pure] a season with no fate names why: title, silver or over for an A, its grade otherwise (0 wrong)
+ok   [pure] fate 'up' grades A or B (an A stays an A) with the 'up' kind (0 wrong)
+ok   [pure] fate 'down' grades C or worse (B or worse with a trophy), worse grades kept (0 wrong)
+ok   [pure] fate 'escape' keeps the ladder grade with the 'escape' kind (0 wrong)
+ok   [pure] 86400 openings: an A or a B opens at BOARD_FRESH (69) or more (0 under)
+ok   [pure] a D or an F opens at 59 or less (0 over)
+ok   [pure] every opening is 35 to 82 (0 outside)
+ok   [pure] objectiveWeight: league 3, each board ask 0.5, any other id and no id 1
+ok   [pure] 573696 allocations never above max(10, 1.7 x budget) (0 above)
+ok   [pure] and equal to the flat formula wherever it is inside the band (0 differ; the band binds on 66189)
+ok   [pure] offerStepOk: one tier up, two after a title, any tier at or below
+ok   [pure] BOARD_SAFE_LINE (60) equals clubManagerMeters' BOARD_SAFE (60)
+ok   [pure] the statues and the murals live only under a title or two trophies (none in VERDICT_LINES)
+ok   [pure] LEGACY_BOARD_START 60 and LEGACY_NEW_JOB_BOARD 62
+ok   [pure] the help's example prints the module's sums: 59 raw, 53 on the old rule, and an A opens at 69 (BOARD_FRESH)
+[fresh] fleet B seed base 500000: 739 of 739 lost openers leave the board Safe (100 percent)
+[fresh] fleet B seed base 600000: 734 of 734 lost openers leave the board Safe (100 percent)
+[fresh] fleet B seed base 700000: 700 of 700 lost openers leave the board Safe (100 percent)
+  lowest 100, spread 0 points; floor 100 percent
+ok   [fresh] 7200 fresh careers open at BOARD_FRESH (69) (0 do not)
+ok   [fresh] a lost opener leaves the board Safe at least 100 percent of the time on every seed base (100, 100, 100)
+ok   [saves] 5 Club Manager saves (realSaves on CM_BOARD_BASE, and a paused review) load to the same JSON on both trees
+ok   [saves] the paused review keeps the offers it was dealt and carries no fate (2 offers)
+[dailies] Hot Seat takeovers: 160 (80 dated, 80 free); on CM_BOARD_BASE 42 of the 110 on the current rules took over with a failed line on the card
+ok   [dailies] 160 Hot Seat takeovers: the card less its failed lines on the current rules, the whole card on the old rules, nothing else moved but a suitor's name
+[dailies] Hot Seat: 80 dates (60 from 2026-09-24 and every seventh day back); 77 identical, 3 differ only in a suitor's name, 0 moved; 6 raised an approach; 14 dates compared with the base's card less the failed lines their takeover dropped
+ok   [dailies] 80 Hot Seat days: every run equal to CM_BOARD_BASE but for a suitor's name
+ok   [dailies] 30 Deadline Day days: the deal, the grade and the state's keys equal to CM_BOARD_BASE
+simCmBoardVerdict GREEN: 23 of 23 checks green (parts pure, fresh, saves, dailies, 174 s)
