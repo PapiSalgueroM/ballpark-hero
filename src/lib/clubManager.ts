@@ -17180,7 +17180,6 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
     opp: fx.opponent, res, score: `${myGoals}-${oppGoals}`,
     season: state.season, comp: fx.competition, home: fx.home,
   });
-  state.h2h = h2hLog.slice(-300);
   /* And both sides' last-5 form, whatever the competition, because a cup
      hiding matters to the next opponent reading the form guide. */
   noteFormOne(state, state.clubName, res);
@@ -17217,6 +17216,7 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
   if (state.matchRules !== 'base') {
     noteHighestScoring(state, { opp: fx.opponent, score: `${myGoals}-${oppGoals}`, res, season: state.season, club: state.clubName, comp: fx.compLabel });
   }
+  state.h2h = h2hLog.slice(-300);
 
   // Round 73: broken start promises get noticed, then the dressing room
   // finds something new to message you about.
