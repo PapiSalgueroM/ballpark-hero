@@ -1,0 +1,12 @@
+Network mode: offline, loopback only, no production probe or database retries.
+Running 0 node harnesses
+
+Serving dist on 4173 for 2 browser harnesses
+  PASS  simResultMoment.mjs             5.0s
+  FAIL  simWritesAreSent.mjs           13.4s
+
+----- simWritesAreSent.mjs (FAIL) -----
+  FAIL: the harness could not drive Guess the Nation to a finish: TimeoutError: locator.click: Timeout 8000ms exceeded.
+  FAIL: no guess was ever submitted, so this section proved nothing about the write
+
+1 harness not green.
