@@ -83,9 +83,12 @@ let mid = withSeed(10, () => cm.startNextSeason(cm.finishSeason(seasons('Liverpo
 for (let i = 0; i < 12; i++) mid = withSeed(200 + i, () => cm.playNextEntry(mid, { skipHalftime: true })).state;
 if (mid.sacked || mid.pendingSummary) cannot('the mid season fixture is not mid season');
 const sacked = { ...JSON.parse(JSON.stringify(mid)), sacked: true };
-const oldWhole = seasons('Everton', 1345, 2);
+/* Four seasons, so the league's opponents have been met more than six times and leaning drops meetings. */
+const oldWhole = seasons('Everton', 1345, 4);
 delete oldWhole.careerStats.highestScoring;
 const oldLean = cm.leanCareer(JSON.parse(JSON.stringify(oldWhole)));
+if (oldLean.h2h.length >= oldLean.careerStats.played) cannot('leaning the old save dropped no meeting, so the leaned case proves nothing');
+if (oldWhole.h2h.length !== oldWhole.careerStats.played) cannot('the book of the old save does not hold every match');
 const expectA = rec.highestScoringOf(atEnd);
 const expectB = rec.highestScoringOf(mid);
 const expectWhole = rec.highestScoringOf(oldWhole);

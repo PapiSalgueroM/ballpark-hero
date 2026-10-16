@@ -34,7 +34,6 @@ import { eraById, eraRostersLoaded, ensureEraRosters, isHistoricEra } from '@/li
 import { ensureRealLeagueFixtures, realLeagueFixturesLoaded, realLeagueFixtureKeyFor } from '@/lib/clubManagerFixtures';
 import { reloadToRetryChunk } from '@/lib/freshBuild';
 import { readSlots, switchSlot, deleteSlot, activeSlot, type SlotView } from '@/lib/clubManagerSlots';
-import { retireCareer } from '@/lib/clubManagerRetire';
 import type { MidSeasonEntry } from '@/lib/clubManagerCalendar';
 import { upgradeFacility as upgradeClubFacility } from '@/lib/clubManagerFacilities';
 import type { FacilityId } from '@/lib/clubManagerFacilities';
@@ -397,11 +396,13 @@ export function useClubManager() {
 
   /** Round 1343: retire. The write comes first: only a retired career the disk holds moves the page to the
    *  farewell. Refused (another tab moved the career on, or no room) the page stays where it was, the notice or the
-   *  banner already up. True when it retired. */
-  const retire = useCallback((): boolean => {
+   *  banner already up. True when it retired. The rule comes in from the door (retireCareer in
+   *  clubManagerRetire.ts), so the hook's first load does not carry that module. */
+  const retire = useCallback((make: (c: CareerState) => CareerState | null): boolean => {
     const now = careerRef.current;
     if (!now || !holdsActiveSlot()) return false;
-    const next = retireCareer(now);
+    const next = make(now);
+    if (next && !next.retired) return false;
     if (!next || !persist(next)) return false;
     careerRef.current = next;
     setCareer(next);

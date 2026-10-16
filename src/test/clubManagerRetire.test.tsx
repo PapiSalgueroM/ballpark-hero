@@ -13,6 +13,7 @@ import RetireDoor, { ARM_MS } from '@/components/club-manager/RetireDoor';
 import ManagerSlotsScreen from '@/components/club-manager/ManagerSlotsScreen';
 import ClubManagerFarewell from '@/components/club-manager/ClubManagerFarewell';
 import { useClubManager } from '@/hooks/useClubManager';
+import { retireCareer } from '@/lib/clubManagerRetire';
 
 vi.mock('@/lib/completions', () => ({ recordCompletion: vi.fn(), recordActivity: vi.fn(), recordStreakDay: vi.fn(), getCurrentPlayerName: vi.fn(() => null) }));
 import { ManagerRecordLines } from '@/components/club-manager/ClubManagerCareerPanel';
@@ -90,11 +91,11 @@ describe('retiring through the hook', { timeout: 120000 }, () => {
     const r = render(<Harness />);
     await start('Everton');
     let ok = false;
-    act(() => { ok = api.retire(); });
+    act(() => { ok = api.retire(retireCareer); });
     expect(ok).toBe(true);
     expect(api.phase).toBe('retired');
     expect(onDisk().retired).toMatchObject({ when: 'midSeason', club: 'Everton', season: 1 });
-    act(() => { ok = api.retire(); });
+    act(() => { ok = api.retire(retireCareer); });
     expect(ok).toBe(false);
     r.unmount();
   });
@@ -102,7 +103,7 @@ describe('retiring through the hook', { timeout: 120000 }, () => {
   it('a reload lands on the managers screen, never on hub, seasonEnd or sacked, and opening it shows the farewell', async () => {
     const first = render(<Harness />);
     await start('Everton');
-    act(() => { api.retire(); });
+    act(() => { api.retire(retireCareer); });
     first.unmount();
     render(<Harness />);
     await waitFor(() => expect(api.phase).toBe('resume'));
@@ -117,7 +118,7 @@ describe('retiring through the hook', { timeout: 120000 }, () => {
   it('opens a retired career parked in another slot on its farewell, through the boot', async () => {
     render(<Harness />);
     await start('Everton');
-    act(() => { api.retire(); });
+    act(() => { api.retire(retireCareer); });
     act(() => api.startNew());
     await start('Lincoln City');
     expect(activeSlot()).toBe(2);
@@ -130,7 +131,7 @@ describe('retiring through the hook', { timeout: 120000 }, () => {
   it('lands a Hot Seat mark on the farewell, never on the hub', async () => {
     const first = render(<Harness />);
     await start('Everton');
-    act(() => { api.retire(); });
+    act(() => { api.retire(retireCareer); });
     first.unmount();
     markLandOnHub();
     render(<Harness />);
@@ -143,7 +144,7 @@ describe('retiring through the hook', { timeout: 120000 }, () => {
     const gen = Number(localStorage.getItem(fenceKeyOf(SAVE_KEY)) ?? '0');
     localStorage.setItem(fenceKeyOf(SAVE_KEY), String(gen + 7));
     let ok = true;
-    act(() => { ok = api.retire(); });
+    act(() => { ok = api.retire(retireCareer); });
     expect(ok).toBe(false);
     expect(api.phase).toBe('hub');
     expect(api.saveMoved).toBe(true);

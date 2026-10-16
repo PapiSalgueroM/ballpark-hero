@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import { formatNumber } from '@/lib/formatNumber';
 import { Pencil, UserPlus } from 'lucide-react';
 import { FlagImg } from '@/components/FlagImg';
@@ -11,8 +11,7 @@ import EditManagerSheet from '@/components/club-manager/EditManagerSheet';
 import { huntBusy } from '@/lib/clubManagerJobHunt';
 import { BACKGROUND_TREE, TREE_INFO } from '@/lib/clubManagerXp';
 import { highestScoringOf, scoringOutcome } from '@/lib/clubManagerRecords';
-import { canRetire, retireDoorCopy } from '@/lib/clubManagerRetire';
-import RetireDoor from '@/components/club-manager/RetireDoor';
+import CmRetireDoor from '@/components/club-manager/CmRetireDoor';
 
 /* Round 1325: a score printed low number first. The save has kept the worst
    defeat as the other side's goals first since Round 71, so "3-0 vs Manchester
@@ -35,7 +34,6 @@ export default function ClubManagerCareerPanel({ c, g, nationOffer, onRetireOpen
   nationOffer: ReturnType<typeof nationOfferFor>;
   onRetireOpen?: () => void;
 }) {
-  const doorCopy = useMemo(() => (g.retire && canRetire(c) ? retireDoorCopy(c) : null), [c, g.retire]);
   /* Round 965: the Edit manager sheet, and for a Skip career the way to name
      the man in the dugout after all. */
   const [editing, setEditing] = useState(false);
@@ -177,8 +175,8 @@ export default function ClubManagerCareerPanel({ c, g, nationOffer, onRetireOpen
                     </div>
                   </div>
                   <ManagerRecordLines c={c} />
-                  {doorCopy && g.retire && (
-                    <div className="mt-3"><RetireDoor {...doorCopy} onRetire={g.retire} onOpen={onRetireOpen} /></div>
+                  {g.retire && !c.retired && !c.live && (
+                    <div className="mt-3"><CmRetireDoor c={c} retire={g.retire} onOpen={onRetireOpen} /></div>
                   )}
                 </div>
                 </>

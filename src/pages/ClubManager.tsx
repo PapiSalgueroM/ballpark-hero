@@ -42,8 +42,6 @@ import type { WorldEdit } from '@/lib/clubManagerWorldEdit';
 import { levelFor, pointsFree, xpOf, MAX_LEVEL } from '@/lib/clubManagerXp';
 import { useRevealScroll } from '@/hooks/useRevealScroll';
 import { useArrivalTop } from '@/hooks/useArrivalTop';
-import RetireDoor from '@/components/club-manager/RetireDoor';
-import { canRetire, retireDoorCopy } from '@/lib/clubManagerRetire';
 
 const ClubManagerTreatmentPanel = lazy(() => import('@/components/club-manager/ClubManagerTreatmentPanel'));
 const ClubManagerBoardPanel = lazy(() => import('@/components/club-manager/ClubManagerBoardPanel'));
@@ -62,6 +60,7 @@ const ClubManagerSeasonSummary = lazy(() => import('@/components/club-manager/Cl
 const SackedCareerSummary = lazy(() => import('@/components/club-manager/ClubManagerSeasonSummary').then(m => ({ default: m.SackedCareerSummary })));
 /* Round 1343: the farewell loads only for a career that retires; the door starts loading it when its confirm opens. */
 const ClubManagerFarewell = lazy(() => import('@/components/club-manager/ClubManagerFarewell'));
+const CmRetireDoor = lazy(() => import('@/components/club-manager/CmRetireDoor'));
 const preloadFarewell = () => { void import('@/components/club-manager/ClubManagerFarewell'); };
 const WorldEditorScreen = lazy(() => import('@/components/club-manager/WorldEditorScreen'));
 const CustomClubForm = lazy(() => import('@/components/club-manager/CustomClubForm').then(m => ({ default: m.CustomClubForm })));
@@ -900,7 +899,7 @@ const ClubManager = () => {
         <p className="text-muted-foreground text-sm mb-5">{sm.club} · finished <span className="text-foreground font-bold">#{sm.position}</span> with {sm.points} pts</p>
         <ScreenLoading><ClubManagerSeasonSummary sm={sm} c={c} g={g} /></ScreenLoading>
         {/* Round 1343: retire here, before the summer. */}
-        {canRetire(c) && <div className="mt-4 mx-auto max-w-sm"><RetireDoor {...retireDoorCopy(c)} onRetire={g.retire} onOpen={preloadFarewell} /></div>}
+        <div className="mt-4 mx-auto max-w-sm"><Suspense fallback={<div className="min-h-11" />}><CmRetireDoor c={c} retire={g.retire} onOpen={preloadFarewell} /></Suspense></div>
         {/* Round 928 review: the managers are a tap away here too, not only on the hub. */}
         <button onClick={g.showSlots} data-testid="cm-show-slots-end" className="mt-4 text-xs text-muted-foreground underline underline-offset-2 hover:text-primary transition-colors">
           Your managers
@@ -920,7 +919,7 @@ const ClubManager = () => {
         <h1 className="cm-loss-shake text-3xl md:text-5xl font-bold text-destructive font-display mb-5">SACKED!</h1>
         <ScreenLoading><SackedCareerSummary c={c} g={g} /></ScreenLoading>
         {/* Round 1343: or stop waiting for the phone. */}
-        {canRetire(c) && <div className="mt-4 mx-auto max-w-sm"><RetireDoor {...retireDoorCopy(c)} onRetire={g.retire} onOpen={preloadFarewell} /></div>}
+        <div className="mt-4 mx-auto max-w-sm"><Suspense fallback={<div className="min-h-11" />}><CmRetireDoor c={c} retire={g.retire} onOpen={preloadFarewell} /></Suspense></div>
         <button onClick={g.showSlots} data-testid="cm-show-slots-sacked" className="mt-4 text-xs text-muted-foreground underline underline-offset-2 hover:text-primary transition-colors">
           Your managers
         </button>
