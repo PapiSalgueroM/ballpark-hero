@@ -1,4 +1,4 @@
-import { gameQueryClient as supabase } from '@/lib/gameQueryClient';
+import { supabase } from '@/integrations/supabase/client';
 import { fetchAllRows } from '@/lib/fetchAllRows';
 
 export const VALUES = [200, 400, 600, 800, 1000] as const;
