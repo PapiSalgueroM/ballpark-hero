@@ -1,0 +1,4 @@
+head-continuity exit=1 38s |     at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simManagerWorldContinuity.mjs:493:24
+continuity-controls exit=1 40s |     at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simManagerWorldContinuity.mjs:493:24
+head-unseeded exit=1 161s | simCmUnseededWorld: 112 FAILURE(S)
+head-size exit=0 464s | DIAGNOSTIC complete: original/current unchanged historical budgets, full raw states, storage and unfiltered action vectors retained
