@@ -1,0 +1,6 @@
+#!serve
+#!playwright
+walk: node .rc/x/walkNoSack.mjs
+play: node scripts/playCmNoSack.mjs
+moment: node scripts/simResultMoment.mjs
+writes: node scripts/simWritesAreSent.mjs

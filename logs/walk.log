@@ -1,0 +1,69 @@
+
+== 320 by 640, reduced motion on
+  PASS 320 rm A: the Dugout step shows the Career options card
+  PASS 320 rm A: the switch reads on
+  PASS 320 rm A: the career the Dugout started carries the key (save noSack 1, club Brentford)
+  PASS 320 rm A: the hub wears the No sacking pill
+  PASS 320 rm A: the pill is clear of the club name
+  PASS 320 rm A: the hub is no wider than the screen
+  PASS 320 rm A: Options reads "🛡️ No sacking On On for this whole career. The board can moan but it cannot fire you, and" with no way off
+  PASS 320 rm A: the Managers card reads "SLOT 1 · LAST PLAYED You Brentford 2026-27 · Season 1 Week 1 of 54 · Board 60/100 🏆 0 trophies · No sacking R"
+
+== 390 by 844, reduced motion on
+  PASS 390 rm A: the Dugout step shows the Career options card
+  PASS 390 rm A: the switch reads on
+  PASS 390 rm A: the career the Dugout started carries the key (save noSack 1, club Brentford)
+  PASS 390 rm A: the hub wears the No sacking pill
+  PASS 390 rm A: the pill is clear of the club name
+  PASS 390 rm A: the hub is no wider than the screen
+  PASS 390 rm A: Options reads "🛡️ No sacking On On for this whole career. The board can moan but it cannot fire you, and" with no way off
+  PASS 390 rm A: the Managers card reads "SLOT 1 · LAST PLAYED You Brentford 2026-27 · Season 1 Week 1 of 54 · Board 60/100 🏆 0 trophies · No sacking R"
+
+== 390 by 844, reduced motion off
+  PASS 390 A: the Dugout step shows the Career options card
+  PASS 390 A: the switch reads on
+  PASS 390 A: the career the Dugout started carries the key (save noSack 1, club Brentford)
+  PASS 390 A: the hub wears the No sacking pill
+  PASS 390 A: the pill is clear of the club name
+  PASS 390 A: the hub is no wider than the screen
+  PASS 390 A: Options reads "🛡️ No sacking On On for this whole career. The board can moan but it cannot fire you, and" with no way off
+  PASS 390 A: the Managers card reads "SLOT 1 · LAST PLAYED You Brentford 2026-27 · Season 1 Week 1 of 54 · Board 60/100 🏆 0 trophies · No sacking R"
+  PASS 390 D: planted the Dugout-made career on board 1 with a weak squad
+  PASS 390 D: after 1 steps the report carries the No sacking line and no sacked screen
+  PASS 390 D: still in the job (board 1, sacked false)
+  PASS 390 D: the Board meter reads "Board Lost the board · No sacking"
+  PASS 390 D: the number view reads "Board 1/100"
+
+== 1280 by 900, reduced motion on
+  PASS 1280 rm A: the Dugout step shows the Career options card
+  PASS 1280 rm A: the switch reads on
+  PASS 1280 rm A: the career the Dugout started carries the key (save noSack 1, club Brentford)
+  PASS 1280 rm A: the hub wears the No sacking pill
+  PASS 1280 rm A: the pill is clear of the club name
+  PASS 1280 rm A: the hub is no wider than the screen
+  PASS 1280 rm A: Options reads "🛡️ No sacking On On for this whole career. The board can moan but it cannot fire you, and" with no way off
+  PASS 1280 rm A: the Managers card reads "SLOT 1 · LAST PLAYED You Brentford 2026-27 · Season 1 Week 1 of 54 · Board 60/100 🏆 0 trophies · No sacking R"
+
+== 1280 by 900, reduced motion off
+  PASS 1280 A: the Dugout step shows the Career options card
+  PASS 1280 A: the switch reads on
+  PASS 1280 A: the career the Dugout started carries the key (save noSack 1, club Brentford)
+  PASS 1280 A: the hub wears the No sacking pill
+  PASS 1280 A: the pill is clear of the club name
+  PASS 1280 A: the hub is no wider than the screen
+  PASS 1280 A: Options reads "🛡️ No sacking On On for this whole career. The board can moan but it cannot fire you, and" with no way off
+  PASS 1280 A: the Managers card reads "SLOT 1 · LAST PLAYED You Brentford 2026-27 · Season 1 Week 1 of 54 · Board 60/100 🏆 0 trophies · No sacking R"
+  PASS 1280 D: planted the Dugout-made career on board 1 with a weak squad
+  PASS 1280 D: after 1 steps the report carries the No sacking line and no sacked screen
+  PASS 1280 D: still in the job (board 1, sacked false)
+  PASS 1280 D: the Board meter reads "Board Lost the board · No sacking"
+  PASS 1280 D: the number view reads "Board 1/100"
+  PASS 390 B: Skip with the switch off is a Normal career, no key, no pill
+  PASS 390 B: planted season 2
+  PASS 390 B: after two taps Options reads "🛡️ No sacking On On since season 2. The board can moan but it cannot ", save noSack 2
+  PASS 390 B: the pill appears
+  PASS 390 C: the created club takeover carries the key (club Test Rovers, noSack 1)
+  PASS 390 C: the pill on the created club's hub
+header row heights (px): {"on-320-rm":92,"on-390-rm":62,"on-390":62,"on-1280-rm":36,"on-1280":36,"off-390":62}
+  PASS no page errors
+walkNoSack: PASS
