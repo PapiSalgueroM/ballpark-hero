@@ -1,0 +1,2 @@
+#!serial
+write-digest: node scripts/simCmLeagueRules.mjs --part=modern,eras,pure --write && cp scripts/data/cmLeagueRulesDigest.json $RC_OUT/cmLeagueRulesDigest.json && git diff --stat -- scripts/data/cmLeagueRulesDigest.json && node scripts/simCmLeagueRules.mjs
