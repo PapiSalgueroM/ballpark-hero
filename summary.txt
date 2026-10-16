@@ -1,0 +1,7 @@
+mut-tieleg1 exit=1 4s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/worldCompetition.test.ts,title=src/lib/worldCompetition.test.ts > evaluateWorldComp > is deterministic 
+mut-tieagg exit=1 4s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/worldCompetition.test.ts,title=src/lib/worldCompetition.test.ts > evaluateWorldComp > is deterministic 
+mut-r16same exit=1 4s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/worldCompetition.test.ts,title=src/lib/worldCompetition.test.ts > evaluateWorldComp > an era season pla
+mut-finalone exit=1 4s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/worldCompetition.ts,title=src/lib/worldCompetition.test.ts > evaluateWorldComp > a binding that makes t
+mut-finalnights exit=1 3s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/worldCompetition.ts,title=src/lib/worldCompetition.test.ts > evaluateWorldComp > a binding that makes t
+mut-fxorder exit=1 3s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/worldCompetition.test.ts,title=src/lib/worldCompetition.test.ts > evaluateWorldComp > the module groupF
+clean-after exit=0 3s |    Duration  2.84s (transform 1.25s, setup 53ms, collect 1.50s, tests 590ms, environment 297ms, prepare 134ms)
