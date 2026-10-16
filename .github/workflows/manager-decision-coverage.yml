@@ -1,0 +1,74 @@
+name: Manager decision coverage measurement
+
+on:
+  push:
+    branches: [codex/manager-decision-coverage]
+
+permissions:
+  contents: read
+
+jobs:
+  measure:
+    runs-on: ubuntu-latest
+    timeout-minutes: 50
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      CAREER_SEASON_LOCAL_ONLY: '1'
+      DECISION_COVERAGE_SOURCE: 6f6b81b0afdb51e5d6f67f845f2312b9e536e469
+      CM_DECISION_COVERAGE_OUT: ${{ github.workspace }}/decision-coverage-artifacts
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Bind original source and immutable historical evidence
+        run: |
+          echo '127.0.0.1 flawuiqbvjobmkfkauhw.supabase.co' | sudo tee -a /etc/hosts
+          mkdir -p "$CM_DECISION_COVERAGE_OUT"
+          git rev-parse HEAD > "$CM_DECISION_COVERAGE_OUT/head.txt"
+          git archive --format=zip HEAD > "$CM_DECISION_COVERAGE_OUT/source.zip"
+          git diff --exit-code "$DECISION_COVERAGE_SOURCE" -- src scripts package.json package-lock.json bun.lock ':!scripts/qa/measureManagerDecisionCoverage.mjs'
+          find src scripts .github/workflows -type f -print0 | sort -z | xargs -0 sha256sum > "$CM_DECISION_COVERAGE_OUT/source-hashes.txt"
+          sha256sum package.json package-lock.json bun.lock > "$CM_DECISION_COVERAGE_OUT/package-hashes.txt"
+          npm ci
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          const lock = JSON.parse(fs.readFileSync('package-lock.json'));
+          const installed = Object.entries(lock.packages).filter(([p]) => p.startsWith('node_modules/') && fs.existsSync(p + '/package.json')).map(([p, row]) => {
+            const version = JSON.parse(fs.readFileSync(p + '/package.json')).version;
+            assert.equal(version, row.version, p); return { path: p, version };
+          });
+          assert.equal(installed.length, 521);
+          fs.writeFileSync(process.env.CM_DECISION_COVERAGE_OUT + '/installed.json', JSON.stringify(installed, null, 2));
+          NODE
+          find node_modules -type f -print0 | sort -z | xargs -0 sha256sum > "$CM_DECISION_COVERAGE_OUT/installed-files.sha256"
+      - name: Real type gate and diagnostic syntax
+        run: |
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee "$CM_DECISION_COVERAGE_OUT/types.log"
+          node --check scripts/qa/measureManagerDecisionCoverage.mjs
+      - name: Original and finite wider current and frozen samples
+        run: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/measureManagerDecisionCoverage.mjs 2>&1 | tee "$CM_DECISION_COVERAGE_OUT/measurement.log"
+      - name: Exact source and installed dependency holds
+        if: always()
+        run: |
+          sha256sum --check "$CM_DECISION_COVERAGE_OUT/source-hashes.txt" > "$CM_DECISION_COVERAGE_OUT/source-holds.log"
+          sha256sum --check "$CM_DECISION_COVERAGE_OUT/package-hashes.txt" > "$CM_DECISION_COVERAGE_OUT/package-holds.log"
+          sha256sum --check "$CM_DECISION_COVERAGE_OUT/installed-files.sha256" > "$CM_DECISION_COVERAGE_OUT/installed-holds.log"
+          git diff --exit-code -- src scripts package.json package-lock.json bun.lock .github/workflows
+      - name: Retain all diagnostic outcomes including assertion reds
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: manager-decision-coverage-${{ github.run_id }}
+          path: decision-coverage-artifacts/
+          retention-days: 14
+          if-no-files-found: error
