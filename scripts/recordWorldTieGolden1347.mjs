@@ -3,11 +3,18 @@
  * base commit's advanceUclBracket, never the function under test).
  *
  *   node scripts/recordWorldTieGolden1347.mjs [--ref <commit>] [--out <file>]
+ *   node scripts/recordWorldTieGolden1347.mjs --ref <commit> --check [--against <file>]
  *
  * --ref is the commit whose src/lib/clubManager.ts is read (default d4f2c6f6, the commit Round 1347 started
  * from), through git show, so the tree on disk does not matter. --out defaults to
- * scripts/data/worldTieGolden1347.json. Run it with --ref HEAD after the lift and the two files must be the
- * same bytes: that is the proof that the lifted tie settles exactly as the old one did.
+ * scripts/data/worldTieGolden1347.json.
+ *
+ * THE PROOF FOR E2 (and for any commit before it merges) is --check: it records the engine of --ref and
+ * compares its CASES with the committed golden's (--against, the same default file), every case's text in
+ * order, and prints SAME (exit 0) or DIFFERENT with the first case that moved (exit 1). It writes nothing.
+ * Never compare two whole files of different refs: the file's "ref" names the commit it was recorded from, so
+ * they differ on that line alone (the run review's minor 3). And never re-record the golden from the function
+ * under test to make a check pass: the golden stays the recording of d4f2c6f6.
  *
  * How it records. The engine is bundled with two edits made in memory, never on disk: advanceUclBracket is
  * exported, and simAiMatch reports every call it makes (the two clubs, the scale and the goals). Math.random is a
@@ -106,6 +113,21 @@ for (const eraId of [null, 'era2005', 'era2020']) {
       if (missing.length) console.log(`  ${eraId ?? 'modern'} ${round} ${strengths.join('-')}: no seed in 4000 ended ${missing.join(', ')}`);
     }
   }
+}
+if (process.argv.includes('--check')) {
+  const against = path.resolve(ROOT, arg('--against', 'scripts/data/worldTieGolden1347.json'));
+  const kept = JSON.parse(fs.readFileSync(against, 'utf8')).cases;
+  if (!Array.isArray(kept) || kept.length === 0) cannot(`${against} holds no cases`);
+  const moved = [];
+  for (let i = 0; i < Math.max(kept.length, cases.length); i += 1) {
+    if (JSON.stringify(kept[i]) !== JSON.stringify(cases[i])) moved.push(kept[i]?.name ?? cases[i]?.name ?? `case ${i}`);
+  }
+  if (moved.length === 0) {
+    console.log(`recordWorldTieGolden1347: SAME: ${cases.length} cases recorded from ${REF} equal the ${kept.length} of ${path.relative(ROOT, against) || against}`);
+    process.exit(0);
+  }
+  console.log(`recordWorldTieGolden1347: DIFFERENT: ${moved.length} of ${kept.length} cases moved at ${REF} (${cases.length} recorded), first ${moved.slice(0, 3).join(' / ')}`);
+  process.exit(1);
 }
 const golden = { what: 'Round 1347: knockout ties as the participant engine settles them, recorded by scripts/recordWorldTieGolden1347.mjs', ref: REF, cases };
 fs.mkdirSync(path.dirname(OUT), { recursive: true });
