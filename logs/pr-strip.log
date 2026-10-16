@@ -1,0 +1,20 @@
+fixtures: A Everton S3 125 played, record 1-6 vs Aston Villa; B Liverpool S2 week 12; D 169 played, book 169, leaned 159
+ok   (A 390) a double click on the door opens the confirm and does not retire
+ok   (A 390) the confirm opens where the door was and the page does not move [scrollY 1255 to 1255, top 400 to 400]
+ok   (A 390) Keep managing puts the door back where it was [scrollY 1255, top 400]
+ok   (A 390) Yes after it arms opens the farewell, and the disk holds the retirement
+ok   (A 390) Records reads the highest scoring game node worked out [⚽ Highest scoring game: 1-6 loss vs Aston Villa, Season 2 | 1-6 vs Aston Villa, S2]
+FAIL (A 390) a reload lands on the managers screen, the tile says retired and offers the farewell [Resume Career]
+FAIL (A 390) See the farewell opens it
+FAIL (A 390) Start a new manager opens the picker in slot 2, with slot 1 still retired [index {"v":1,"active":2}]
+ok   (A 390) no page error
+ok   (A 1280) a double click on the door opens the confirm and does not retire
+ok   (A 1280) the confirm opens where the door was and the page does not move [scrollY 1081 to 1081, top 428 to 428]
+ok   (A 1280) Keep managing puts the door back where it was [scrollY 1081, top 428]
+ok   (A 1280) Yes after it arms opens the farewell, and the disk holds the retirement
+ok   (A 1280) Records reads the highest scoring game node worked out [⚽ Highest scoring game: 1-6 loss vs Aston Villa, Season 2 | 1-6 vs Aston Villa, S2]
+FAIL (A 1280) a reload lands on the managers screen, the tile says retired and offers the farewell [Resume Career]
+FAIL (A 1280) See the farewell opens it
+FAIL (A 1280) Start a new manager opens the picker in slot 2, with slot 1 still retired [index {"v":1,"active":2}]
+ok   (A 1280) no page error
+control strip FIRED: 6 of 18 checks red

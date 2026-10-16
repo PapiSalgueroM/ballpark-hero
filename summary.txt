@@ -1,0 +1,12 @@
+build exit=0 31s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+playCmRetire exit=0 94s | playCmRetire: all 60 checks passed. Pictures in /home/runner/work/_temp/rc-out/files/head
+pr-strip exit=1 21s | control strip FIRED: 6 of 18 checks red
+pr-norecord exit=1 90s | control norecord FIRED: 6 of 52 checks red
+mut-sackedfirst exit=1 4s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/clubManagerRetire.test.tsx,title=src/test/clubManagerRetire.test.tsx > retiring through the hook > a r
+mut-missedtwo exit=1 4s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/clubManagerRetire.test.tsx,title=src/test/clubManagerRetire.test.tsx > the record line > says how many
+mut-seasonover exit=1 4s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/clubManagerRetire.test.ts,title=src/lib/clubManagerRetire.test.ts > retiring > waits for the season rev
+mut-nofocus exit=1 4s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/clubManagerRetire.test.tsx,title=src/test/clubManagerRetire.test.tsx > the retire door > Keep managing
+mut-position0 exit=1 4s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/clubManagerRetire.test.ts,title=src/lib/clubManagerRetire.test.ts > retiring > names a league position 
+mut-endedline exit=1 4s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/clubManagerRetire.test.tsx,title=src/test/clubManagerRetire.test.tsx > the farewell > a career retired
+mutp-sackedfirst exit=1 174s | playCmRetire: 2 of 60 checks FAILED
+mutp-seasonover exit=1 138s | playCmRetire: 2 of 60 checks FAILED

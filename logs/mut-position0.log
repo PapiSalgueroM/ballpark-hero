@@ -1,0 +1,113 @@
+MUT position0 applied (3 edits)
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [31m❯[39m src/lib/clubManagerRetire.test.ts [2m([22m[2m14 tests[22m[2m | [22m[31m2 failed[39m[2m)[22m[32m 37[2mms[22m[39m
+   [32m✓[39m retiring[2m > [22mrefuses a retired career and a match in progress[32m 3[2mms[22m[39m
+   [32m✓[39m retiring[2m > [22mwaits for the season review once every match is played, so the title and the season are written first[32m 6[2mms[22m[39m
+   [32m✓[39m retiring[2m > [22mreads the moment: out of work over a season end, a season end over the middle of one[32m 0[2mms[22m[39m
+[31m   [31m×[31m retiring[2m > [22mchanges only `retired` at all three moments, never touching its input[39m[32m 15[2mms[22m[39m
+[31m     → expected { season: 1, …(7) } to not have property "position"[39m
+   [32m✓[39m retiring[2m > [22mwrites the record down from the book when the save had none, and keeps a stored one[32m 5[2mms[22m[39m
+[31m   [31m×[31m retiring[2m > [22mnames a league position only once the club has played a league game, in the confirm and on the save[39m[32m 3[2mms[22m[39m
+[31m     → expected 'Your season at Everton stops here, in…' to be 'Your season at Everton stops here, in…' // Object.is equality[39m
+   [32m✓[39m retiring[2m > [22mprints the week the managers screen printed, capped at the calendar[32m 0[2mms[22m[39m
+   [32m✓[39m the farewell's data[2m > [22mlists finished seasons per club, and numbers only the part season the save still names[32m 1[2mms[22m[39m
+   [32m✓[39m the farewell's data[2m > [22mkeeps the season left unfinished by a mid season retirement[32m 0[2mms[22m[39m
+   [32m✓[39m the farewell's data[2m > [22mgroups the cabinet by name in the order first won, a name it has never seen included[32m 0[2mms[22m[39m
+   [32m✓[39m the farewell's data[2m > [22mreads a Skip career with no manager and no clubs list[32m 0[2mms[22m[39m
+   [32m✓[39m the share line[2m > [22msays the seasons, the trophies, the titles and the win rate, singular where it should be[32m 0[2mms[22m[39m
+   [32m✓[39m the share line[2m > [22mdrops the titles at 0 and counts no unfinished season[32m 0[2mms[22m[39m
+   [32m✓[39m the share line[2m > [22muses no dash of any kind[32m 1[2mms[22m[39m
+ [31m❯[39m src/test/clubManagerRetire.test.tsx [2m([22m[2m24 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[33m 622[2mms[22m[39m
+   [32m✓[39m the record line[2m > [22mprints a stored record with its word and season[32m 17[2mms[22m[39m
+   [32m✓[39m the record line[2m > [22mreads a level score won or lost on penalties, and a plain draw[32m 10[2mms[22m[39m
+   [32m✓[39m the record line[2m > [22mgives no word when an old row contradicts its score (never "0-3 win")[32m 2[2mms[22m[39m
+   [32m✓[39m the record line[2m > [22mworks an old save out from a whole book with no second line[32m 2[2mms[22m[39m
+   [32m✓[39m the record line[2m > [22msays how many matches a trimmed book could not see, through formatNumber[32m 5[2mms[22m[39m
+   [32m✓[39m the record line[2m > [22mprints nothing with no game: a new career, an empty book, a stored null[32m 3[2mms[22m[39m
+   [32m✓[39m the record line[2m > [22muses no dash of any kind[32m 3[2mms[22m[39m
+   [32m✓[39m retiring through the hook[2m > [22mwrites first, then opens the farewell, and the disk holds the retirement[32m 91[2mms[22m[39m
+   [32m✓[39m retiring through the hook[2m > [22ma reload lands on the managers screen, never on hub, seasonEnd or sacked, and opening it shows the farewell[32m 34[2mms[22m[39m
+   [32m✓[39m retiring through the hook[2m > [22ma retired save that is also sacked, or holds a season summary, opens on the farewell and nowhere else[32m 157[2mms[22m[39m
+   [32m✓[39m retiring through the hook[2m > [22mopens a retired career parked in another slot on its farewell, through the boot[32m 59[2mms[22m[39m
+   [32m✓[39m retiring through the hook[2m > [22mlands a Hot Seat mark on the farewell, never on the hub[32m 26[2mms[22m[39m
+   [32m✓[39m retiring through the hook[2m > [22ma write the fence refuses shows the notice and no farewell, and the disk is not retired[32m 19[2mms[22m[39m
+   [32m✓[39m the retire door[2m > [22mtwo clicks 50 ms apart on the door do not retire[32m 16[2mms[22m[39m
+   [32m✓[39m the retire door[2m > [22mYes does nothing before it arms and retires after[32m 5[2mms[22m[39m
+   [32m✓[39m the retire door[2m > [22mignores a click whose pointer went down before it armed[32m 4[2mms[22m[39m
+   [32m✓[39m the retire door[2m > [22mKeep managing and Escape put the door back, with the focus on Keep while it is open[32m 6[2mms[22m[39m
+   [32m✓[39m the retire door[2m > [22mtakes no focus on its first draw[32m 1[2mms[22m[39m
+   [32m✓[39m the Club Manager door[2m > [22mwaits for See Season Review once every match is played, and is a door before that[32m 11[2mms[22m[39m
+   [32m✓[39m the farewell[2m > [22msays the moment with the week the managers screen printed, and opens each tile in place with a Back[32m 77[2mms[22m[39m
+[31m   [31m×[31m the farewell[2m > [22mreads a Skip career and the other two moments[39m[32m 43[2mms[22m[39m
+[31m     → expected 'Left Everton in week 1 of Season 1, 9…' to be 'Left Everton in week 1 of Season 1' // Object.is equality[39m
+   [32m✓[39m the farewell[2m > [22mcounts no unfinished season, formats every number, and keeps the trophy with its count (review fix)[32m 8[2mms[22m[39m
+   [32m✓[39m the farewell[2m > [22ma career retired before its first match is not told to take charge of one (review fix)[32m 14[2mms[22m[39m
+   [32m✓[39m the farewell[2m > [22mthe managers screen says retired and offers the farewell on that tile only[32m 5[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 3 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/clubManagerRetire.test.tsx[2m > [22mthe farewell[2m > [22mreads a Skip career and the other two moments
+[31m[1mAssertionError[22m: expected 'Left Everton in week 1 of Season 1, 9…' to be 'Left Everton in week 1 of Season 1' // Object.is equality[39m
+
+Expected: [32m"Left Everton in week 1 of Season 1"[39m
+Received: [31m"Left Everton in week 1 of Season 1[7m, 9th after 0 league games[27m"[39m
+
+[36m [2m❯[22m src/test/clubManagerRetire.test.tsx:[2m321:81[22m[39m
+    [90m319| [39m    const early = { ...skip, retired: { season: 1, worldSeason: '2026-…
+    [90m320| [39m    [35mconst[39m e [33m=[39m [34mrender[39m([33m<[39m[33mClubManagerFarewell[39m [33mc[39m[33m=[39m[33m{[39mearly[33m}[39m [33mg[39m[33m=[39m[33m{[39mg [35mas[39m any[33m}[39m [33m/[39m[33m>[39m)[33m;[39m
+    [90m321| [39m    expect(e.container.querySelector('[data-cm-farewell-moment]')?.tex…
+    [90m   | [39m                                                                                [31m^[39m
+    [90m322| [39m  })[33m;[39m
+    [90m323| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/3]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/lib/clubManagerRetire.test.ts[2m > [22mretiring[2m > [22mchanges only `retired` at all three moments, never touching its input
+[31m[1mAssertionError[22m: expected { season: 1, …(7) } to not have property "position"[39m
+
+[32m- Expected:[39m 
+undefined
+
+[31m+ Received:[39m 
+9
+
+[36m [2m❯[22m src/lib/clubManagerRetire.test.ts:[2m64:31[22m[39m
+    [90m 62| [39m        [34mexpect[39m(r[33m.[39mretired[33m?.[39mweek)[33m.[39m[34mtoBe[39m(c[33m.[39mweek)[33m;[39m
+    [90m 63| [39m        /* No league game yet: no position is kept (a table of zeros h…
+    [90m 64| [39m        [34mexpect[39m(r[33m.[39mretired)[33m.[39mnot[33m.[39m[34mtoHaveProperty[39m([32m'position'[39m)[33m;[39m
+    [90m   | [39m                              [31m^[39m
+    [90m 65| [39m        [34mexpect[39m(r[33m.[39mretired[33m?.[39mplayed)[33m.[39m[34mtoBe[39m([34m0[39m)[33m;[39m
+    [90m 66| [39m        [34mexpect[39m(r[33m.[39mretired[33m?.[39mpoints)[33m.[39m[34mtoBe[39m([34m0[39m)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/3]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/lib/clubManagerRetire.test.ts[2m > [22mretiring[2m > [22mnames a league position only once the club has played a league game, in the confirm and on the save
+[31m[1mAssertionError[22m: expected 'Your season at Everton stops here, in…' to be 'Your season at Everton stops here, in…' // Object.is equality[39m
+
+Expected: [32m"Your season at Everton stops here, in week 1. Nothing more gets played."[39m
+Received: [31m"Your season at Everton stops here, in week 1[7m, with the club 9th in the league[27m. Nothing more gets played."[39m
+
+[36m [2m❯[22m src/lib/clubManagerRetire.test.ts:[2m79:44[22m[39m
+    [90m 77| [39m
+    [90m 78| [39m  it('names a league position only once the club has played a league g…
+    [90m 79| [39m    expect(retireDoorCopy(fresh).lines[0]).toBe(`Your season at Everto…
+    [90m   | [39m                                           [31m^[39m
+    [90m 80| [39m    const table = fresh.table.map(r => (r.club === 'Everton' ? { ...r,…
+    [90m 81| [39m    [35mconst[39m after [33m=[39m { [33m...[39mfresh[33m,[39m table } [35mas[39m [33mCareerState[39m[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/3]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m2 failed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[31m3 failed[39m[22m[2m | [22m[1m[32m35 passed[39m[22m[90m (38)[39m
+[2m   Start at [22m 15:04:41
+[2m   Duration [22m 3.34s[2m (transform 1.52s, setup 106ms, collect 3.45s, tests 659ms, environment 665ms, prepare 265ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/clubManagerRetire.test.tsx,title=src/test/clubManagerRetire.test.tsx > the farewell > reads a Skip career and the other two moments,line=321,column=81::AssertionError: expected 'Left Everton in week 1 of Season 1, 9…' to be 'Left Everton in week 1 of Season 1' // Object.is equality%0A%0AExpected: "Left Everton in week 1 of Season 1"%0AReceived: "Left Everton in week 1 of Season 1, 9th after 0 league games"%0A%0A ❯ src/test/clubManagerRetire.test.tsx:321:81%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/clubManagerRetire.test.ts,title=src/lib/clubManagerRetire.test.ts > retiring > changes only `retired` at all three moments%2C never touching its input,line=64,column=31::AssertionError: expected { season: 1, …(7) } to not have property "position"%0A%0A- Expected: %0Aundefined%0A%0A+ Received: %0A9%0A%0A ❯ src/lib/clubManagerRetire.test.ts:64:31%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/clubManagerRetire.test.ts,title=src/lib/clubManagerRetire.test.ts > retiring > names a league position only once the club has played a league game%2C in the confirm and on the save,line=79,column=44::AssertionError: expected 'Your season at Everton stops here, in…' to be 'Your season at Everton stops here, in…' // Object.is equality%0A%0AExpected: "Your season at Everton stops here, in week 1. Nothing more gets played."%0AReceived: "Your season at Everton stops here, in week 1, with the club 9th in the league. Nothing more gets played."%0A%0A ❯ src/lib/clubManagerRetire.test.ts:79:44%0A%0A

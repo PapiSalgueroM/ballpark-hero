@@ -1,0 +1,61 @@
+MUT missedtwo applied (1 edit)
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/lib/clubManagerRetire.test.ts [2m([22m[2m14 tests[22m[2m)[22m[32m 29[2mms[22m[39m
+ [31m❯[39m src/test/clubManagerRetire.test.tsx [2m([22m[2m24 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[33m 619[2mms[22m[39m
+   [32m✓[39m the record line[2m > [22mprints a stored record with its word and season[32m 18[2mms[22m[39m
+   [32m✓[39m the record line[2m > [22mreads a level score won or lost on penalties, and a plain draw[32m 10[2mms[22m[39m
+   [32m✓[39m the record line[2m > [22mgives no word when an old row contradicts its score (never "0-3 win")[32m 2[2mms[22m[39m
+   [32m✓[39m the record line[2m > [22mworks an old save out from a whole book with no second line[32m 2[2mms[22m[39m
+[31m   [31m×[31m the record line[2m > [22msays how many matches a trimmed book could not see, through formatNumber[39m[32m 12[2mms[22m[39m
+[31m     → expected null to be 'Counted from 4 of your 5 matches. You…' // Object.is equality[39m
+   [32m✓[39m the record line[2m > [22mprints nothing with no game: a new career, an empty book, a stored null[32m 3[2mms[22m[39m
+   [32m✓[39m the record line[2m > [22muses no dash of any kind[32m 2[2mms[22m[39m
+   [32m✓[39m retiring through the hook[2m > [22mwrites first, then opens the farewell, and the disk holds the retirement[32m 89[2mms[22m[39m
+   [32m✓[39m retiring through the hook[2m > [22ma reload lands on the managers screen, never on hub, seasonEnd or sacked, and opening it shows the farewell[32m 34[2mms[22m[39m
+   [32m✓[39m retiring through the hook[2m > [22ma retired save that is also sacked, or holds a season summary, opens on the farewell and nowhere else[32m 153[2mms[22m[39m
+   [32m✓[39m retiring through the hook[2m > [22mopens a retired career parked in another slot on its farewell, through the boot[32m 60[2mms[22m[39m
+   [32m✓[39m retiring through the hook[2m > [22mlands a Hot Seat mark on the farewell, never on the hub[32m 26[2mms[22m[39m
+   [32m✓[39m retiring through the hook[2m > [22ma write the fence refuses shows the notice and no farewell, and the disk is not retired[32m 19[2mms[22m[39m
+   [32m✓[39m the retire door[2m > [22mtwo clicks 50 ms apart on the door do not retire[32m 16[2mms[22m[39m
+   [32m✓[39m the retire door[2m > [22mYes does nothing before it arms and retires after[32m 5[2mms[22m[39m
+   [32m✓[39m the retire door[2m > [22mignores a click whose pointer went down before it armed[32m 4[2mms[22m[39m
+   [32m✓[39m the retire door[2m > [22mKeep managing and Escape put the door back, with the focus on Keep while it is open[32m 6[2mms[22m[39m
+   [32m✓[39m the retire door[2m > [22mtakes no focus on its first draw[32m 1[2mms[22m[39m
+   [32m✓[39m the Club Manager door[2m > [22mwaits for See Season Review once every match is played, and is a door before that[32m 14[2mms[22m[39m
+   [32m✓[39m the farewell[2m > [22msays the moment with the week the managers screen printed, and opens each tile in place with a Back[32m 77[2mms[22m[39m
+   [32m✓[39m the farewell[2m > [22mreads a Skip career and the other two moments[32m 36[2mms[22m[39m
+   [32m✓[39m the farewell[2m > [22mcounts no unfinished season, formats every number, and keeps the trophy with its count (review fix)[32m 8[2mms[22m[39m
+   [32m✓[39m the farewell[2m > [22ma career retired before its first match is not told to take charge of one (review fix)[32m 14[2mms[22m[39m
+   [32m✓[39m the farewell[2m > [22mthe managers screen says retired and offers the farewell on that tile only[32m 5[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/clubManagerRetire.test.tsx[2m > [22mthe record line[2m > [22msays how many matches a trimmed book could not see, through formatNumber
+[31m[1mAssertionError[22m: expected null to be 'Counted from 4 of your 5 matches. You…' // Object.is equality[39m
+
+[32m- Expected:[39m 
+"Counted from 4 of your 5 matches. Your save no longer keeps the score of the other one."
+
+[31m+ Received:[39m 
+null
+
+[36m [2m❯[22m src/test/clubManagerRetire.test.tsx:[2m63:8[22m[39m
+    [90m 61| [39m    /* Review fix: exactly one score lost still says so (a save missin…
+    [90m 62| [39m    expect(lines(career(5, [row('A', '1-0', 'W'), row('B', '2-1', 'W')…
+    [90m 63| [39m      .toBe('Counted from 4 of your 5 matches. Your save no longer kee…
+    [90m   | [39m       [31m^[39m
+    [90m 64| [39m  })[33m;[39m
+    [90m 65| [39m  it('prints nothing with no game: a new career, an empty book, a stor…
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m1 passed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m37 passed[39m[22m[90m (38)[39m
+[2m   Start at [22m 15:04:29
+[2m   Duration [22m 3.33s[2m (transform 1.51s, setup 106ms, collect 3.42s, tests 649ms, environment 649ms, prepare 154ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/clubManagerRetire.test.tsx,title=src/test/clubManagerRetire.test.tsx > the record line > says how many matches a trimmed book could not see%2C through formatNumber,line=63,column=8::AssertionError: expected null to be 'Counted from 4 of your 5 matches. You…' // Object.is equality%0A%0A- Expected: %0A"Counted from 4 of your 5 matches. Your save no longer keeps the score of the other one."%0A%0A+ Received: %0Anull%0A%0A ❯ src/test/clubManagerRetire.test.tsx:63:8%0A%0A

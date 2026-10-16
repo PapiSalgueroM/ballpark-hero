@@ -1,0 +1,70 @@
+MUT nofocus applied (1 edit)
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/lib/clubManagerRetire.test.ts [2m([22m[2m14 tests[22m[2m)[22m[32m 29[2mms[22m[39m
+ [31m❯[39m src/test/clubManagerRetire.test.tsx [2m([22m[2m24 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[33m 627[2mms[22m[39m
+   [32m✓[39m the record line[2m > [22mprints a stored record with its word and season[32m 18[2mms[22m[39m
+   [32m✓[39m the record line[2m > [22mreads a level score won or lost on penalties, and a plain draw[32m 10[2mms[22m[39m
+   [32m✓[39m the record line[2m > [22mgives no word when an old row contradicts its score (never "0-3 win")[32m 2[2mms[22m[39m
+   [32m✓[39m the record line[2m > [22mworks an old save out from a whole book with no second line[32m 2[2mms[22m[39m
+   [32m✓[39m the record line[2m > [22msays how many matches a trimmed book could not see, through formatNumber[32m 6[2mms[22m[39m
+   [32m✓[39m the record line[2m > [22mprints nothing with no game: a new career, an empty book, a stored null[32m 3[2mms[22m[39m
+   [32m✓[39m the record line[2m > [22muses no dash of any kind[32m 3[2mms[22m[39m
+   [32m✓[39m retiring through the hook[2m > [22mwrites first, then opens the farewell, and the disk holds the retirement[32m 78[2mms[22m[39m
+   [32m✓[39m retiring through the hook[2m > [22ma reload lands on the managers screen, never on hub, seasonEnd or sacked, and opening it shows the farewell[32m 61[2mms[22m[39m
+   [32m✓[39m retiring through the hook[2m > [22ma retired save that is also sacked, or holds a season summary, opens on the farewell and nowhere else[32m 145[2mms[22m[39m
+   [32m✓[39m retiring through the hook[2m > [22mopens a retired career parked in another slot on its farewell, through the boot[32m 51[2mms[22m[39m
+   [32m✓[39m retiring through the hook[2m > [22mlands a Hot Seat mark on the farewell, never on the hub[32m 31[2mms[22m[39m
+   [32m✓[39m retiring through the hook[2m > [22ma write the fence refuses shows the notice and no farewell, and the disk is not retired[32m 21[2mms[22m[39m
+   [32m✓[39m the retire door[2m > [22mtwo clicks 50 ms apart on the door do not retire[32m 17[2mms[22m[39m
+   [32m✓[39m the retire door[2m > [22mYes does nothing before it arms and retires after[32m 6[2mms[22m[39m
+   [32m✓[39m the retire door[2m > [22mignores a click whose pointer went down before it armed[32m 4[2mms[22m[39m
+[31m   [31m×[31m the retire door[2m > [22mKeep managing and Escape put the door back, with the focus on Keep while it is open[39m[32m 18[2mms[22m[39m
+[31m     → expected <body><div>…(1)</div></body> to be <button type="button" …(2)></button> // Object.is equality[39m
+   [32m✓[39m the retire door[2m > [22mtakes no focus on its first draw[32m 1[2mms[22m[39m
+   [32m✓[39m the Club Manager door[2m > [22mwaits for See Season Review once every match is played, and is a door before that[32m 12[2mms[22m[39m
+   [32m✓[39m the farewell[2m > [22msays the moment with the week the managers screen printed, and opens each tile in place with a Back[32m 75[2mms[22m[39m
+   [32m✓[39m the farewell[2m > [22mreads a Skip career and the other two moments[32m 41[2mms[22m[39m
+   [32m✓[39m the farewell[2m > [22mcounts no unfinished season, formats every number, and keeps the trophy with its count (review fix)[32m 7[2mms[22m[39m
+   [32m✓[39m the farewell[2m > [22ma career retired before its first match is not told to take charge of one (review fix)[32m 11[2mms[22m[39m
+   [32m✓[39m the farewell[2m > [22mthe managers screen says retired and offers the farewell on that tile only[32m 5[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/clubManagerRetire.test.tsx[2m > [22mthe retire door[2m > [22mKeep managing and Escape put the door back, with the focus on Keep while it is open
+[31m[1mAssertionError[22m: expected <body><div>…(1)</div></body> to be <button type="button" …(2)></button> // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[31m+ <body>[39m
+[31m+   <div>[39m
+[2m      <button[22m
+[2m        class="w-full min-h-11 rounded-lg border border-border px-3 py-2 text-xs font-bold text-muted-foreground hover:text-foreground hover:border-primary transition-colors"[22m
+[2m        data-cm-retire-door="true"[22m
+[2m        type="button"[22m
+[2m      >[22m
+[2m        👋 Retire from management[22m
+[2m      </button>[22m
+[31m+   </div>[39m
+[31m+ </body>[39m
+
+[36m [2m❯[22m src/test/clubManagerRetire.test.tsx:[2m242:36[22m[39m
+    [90m240| [39m    [34mexpect[39m([34mq[39m(container[33m,[39m [32m'[data-cm-retire-door]'[39m))[33m.[39mnot[33m.[39m[34mtoBeNull[39m()[33m;[39m
+    [90m241| [39m    /* Review fix: and the focus goes back to the door, never to the d…
+    [90m242| [39m    expect(document.activeElement).toBe(q(container, '[data-cm-retire-…
+    [90m   | [39m                                   [31m^[39m
+    [90m243| [39m    fireEvent[33m.[39m[34mclick[39m([34mq[39m(container[33m,[39m [32m'[data-cm-retire-door]'[39m)[33m![39m)[33m;[39m
+    [90m244| [39m    fireEvent.keyDown(q(container, '[data-cm-retire-confirm]')!, { key…
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m1 passed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m37 passed[39m[22m[90m (38)[39m
+[2m   Start at [22m 15:04:37
+[2m   Duration [22m 3.43s[2m (transform 1.56s, setup 107ms, collect 3.62s, tests 655ms, environment 669ms, prepare 322ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/clubManagerRetire.test.tsx,title=src/test/clubManagerRetire.test.tsx > the retire door > Keep managing and Escape put the door back%2C with the focus on Keep while it is open,line=242,column=36::AssertionError: expected <body><div>…(1)</div></body> to be <button type="button" …(2)></button> // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A+ <body>%0A+   <div>%0A      <button%0A        class="w-full min-h-11 rounded-lg border border-border px-3 py-2 text-xs font-bold text-muted-foreground hover:text-foreground hover:border-primary transition-colors"%0A        data-cm-retire-door="true"%0A        type="button"%0A      >%0A        👋 Retire from management%0A      </button>%0A+   </div>%0A+ </body>%0A%0A ❯ src/test/clubManagerRetire.test.tsx:242:36%0A%0A
