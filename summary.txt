@@ -1,0 +1,8 @@
+vitest-lib exit=0 50s |    Duration  48.68s (transform 5.76s, setup 2.13s, collect 14.34s, tests 88.99s, environment 13.84s, prepare 3.57s)
+oldworld exit=2 4s | simCmOldCareersWorld: cannot run: fixture pre on BASE: the next season ended (or the manager was sacked) before its January window
+ow-never exit=2 4s | simCmOldCareersWorld: cannot run: fixture pre on BASE: the next season ended (or the manager was sacked) before its January window
+ow-early exit=2 4s | simCmOldCareersWorld: cannot run: fixture pre on BASE: the next season ended (or the manager was sacked) before its January window
+ow-bridge exit=1 87s | simCmOldCareersWorld: control bridge FIRED: section 2 red on 18 of 18 seeded careers (87s)
+tsc exit=0 158s | 
+vitest-test exit=0 207s |    Duration  205.47s (transform 10.50s, setup 3.99s, collect 45.53s, tests 332.98s, environment 26.30s, prepare 5.83s)
+s06 exit=0 317s | simCmWorldMoves: green, sections 0, 6 held
