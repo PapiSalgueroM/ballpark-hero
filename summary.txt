@@ -1,0 +1,5 @@
+wm-seedclose exit=1 67s | simCmWorldMoves: control seedclose FIRED: section 13 red (168)
+wm-seedcarry exit=1 79s | simCmWorldMoves: control seedcarry FIRED: section 14 red (565)
+wm-noguard exit=1 39s | simCmWorldMoves: control noguard FIRED: section 2 red (168)
+wm-nocarry exit=1 37s | simCmWorldMoves: control nocarry FIRED: section 3 red (318)
+wm-13-14 exit=0 131s | simCmWorldMoves: green, sections 0, 2, 3, 13, 14 held
