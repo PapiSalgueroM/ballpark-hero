@@ -1,0 +1,15 @@
+[title] 183 rollovers, 160 stays: on CM_BOARD_BASE 99 of 114 A or B seasons opened under Safe (51 of 63 titles); on the head 0
+  by fate, none n 149: base mean 48.83 (p10 39 to p90 57), head mean 60.56 (p10 37 to p90 69)
+  by fate, up n 8: base mean 80.31 (p10 77.5 to p90 82), head mean 69 (p10 69 to p90 69)
+  by fate, down n 1: base mean 35 (p10 35 to p90 35), head mean 42 (p10 42 to p90 42)
+  by fate, escape n 2: base mean 56.5 (p10 55 to p90 58), head mean 69 (p10 69 to p90 69)
+  by grade, A n 71: base mean 55.66 (p10 49 to p90 62.5), head mean 69.04 (p10 69 to p90 69)
+  by grade, B n 43: base mean 50.14 (p10 42 to p90 55), head mean 69 (p10 69 to p90 69)
+  by grade, C n 35: base mean 43.4 (p10 36 to p90 47.5), head mean 41.69 (p10 35 to p90 45.5)
+  by grade, D n 11: base mean 39.91 (p10 35 to p90 49), head mean 38.82 (p10 35 to p90 47)
+ok   [title] every A or B season opens the next at Safe or more (0 of 114 under)
+ok   [title] every D or F season opens the next under Safe (0 of 11 at Safe or more)
+ok   [title] every move at the summer opens at BOARD_FRESH (0 of 23 do not)
+ok   [title] startNextSeason draws the same number of times on head and base wherever the kitty band did not bind
+FAIL [title] and writes the same save but for the opening (8; first West Ham season 1: .managerXp.xp: head 513 base 913)
+simCmBoardVerdict RED: 4 of 5 checks green (parts title, 209 s)

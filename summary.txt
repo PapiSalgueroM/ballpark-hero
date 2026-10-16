@@ -1,0 +1,11 @@
+fresh exit=0 71s | simCmBoardVerdict GREEN: 2 of 2 checks green (parts fresh, 71 s)
+tsc exit=0 98s | 
+title0 exit=1 210s | simCmBoardVerdict RED: 4 of 5 checks green (parts title, 209 s)
+title1 exit=1 164s | simCmBoardVerdict RED: 4 of 5 checks green (parts title, 163 s)
+title2 exit=1 178s | simCmBoardVerdict RED: 4 of 5 checks green (parts title, 177 s)
+takeover0 exit=0 74s | simCmBoardVerdict GREEN: 2 of 2 checks green (parts takeover, 73 s)
+takeover1 exit=0 84s | simCmBoardVerdict GREEN: 2 of 2 checks green (parts takeover, 83 s)
+dailies exit=0 48s | simCmBoardVerdict GREEN: 2 of 2 checks green (parts dailies, 47 s)
+rulesforced exit=0 42s | simCmLeagueRules: all checks passed (modern, eras, pure)
+legacy0 exit=0 197s | simCmBoardVerdict GREEN: 2 of 2 checks green (parts legacy, 196 s)
+legacy1 exit=0 212s | simCmBoardVerdict GREEN: 2 of 2 checks green (parts legacy, 210 s)

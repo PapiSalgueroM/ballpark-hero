@@ -1,0 +1,4 @@
+[takeover] 100 handovers (8 by joinClubNow, 0 joins skipped: approached before applying); on CM_BOARD_BASE 60 carried a failed objective, on the head 60
+ok   [takeover] 100 takeovers open at BOARD_FRESH (69) (0 do not; 8 joins of 8 join cases)
+ok   [takeover] every takeover equal to CM_BOARD_BASE but for the opening (and the card), its handover stamp included
+simCmBoardVerdict GREEN: 2 of 2 checks green (parts takeover, 73 s)

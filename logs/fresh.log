@@ -1,0 +1,7 @@
+[fresh] fleet B seed base 500000: 739 of 739 lost openers leave the board Safe (100 percent)
+[fresh] fleet B seed base 600000: 734 of 734 lost openers leave the board Safe (100 percent)
+[fresh] fleet B seed base 700000: 700 of 700 lost openers leave the board Safe (100 percent)
+  lowest 100, spread 0 points; floor 90 percent
+ok   [fresh] 7200 fresh careers open at BOARD_FRESH (69) (0 do not)
+ok   [fresh] a lost opener leaves the board Safe at least 90 percent of the time on every seed base (100, 100, 100)
+simCmBoardVerdict GREEN: 2 of 2 checks green (parts fresh, 71 s)

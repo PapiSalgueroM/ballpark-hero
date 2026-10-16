@@ -1,0 +1,4 @@
+[dailies] Hot Seat: 80 dates (60 from 2026-09-24 and every seventh day back); 77 identical, 3 differ only in a suitor's name, 0 moved; 6 raised an approach
+ok   [dailies] 80 Hot Seat days: every run equal to CM_BOARD_BASE but for a suitor's name
+ok   [dailies] 30 Deadline Day days: the deal, the grade and the state's keys equal to CM_BOARD_BASE
+simCmBoardVerdict GREEN: 2 of 2 checks green (parts dailies, 47 s)
