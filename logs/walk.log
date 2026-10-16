@@ -1,0 +1,4 @@
+stock control dist written to /home/runner/work/ballpark-hero/ballpark-hero/dist-stock2: one chunk dispatches vite:preloadError and it does not wait (vite 5.4.21)
+playChunkReloadWait: 1 of 16 rows red
+playChunkReloadWait: control stock fired on all 16 rows: the stock wrapper flashes the bug, so the walk can see it.
+walk=1 walkstock=1
