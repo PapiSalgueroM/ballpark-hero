@@ -1,0 +1,9 @@
+build exit=0 24s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+stale exit=0 0s | head=0 controls: nowait=1 flagfirst=1 nolistener=1 noguard=1 noprerender=1 nooffline=1 nosave=1 norelease=1 barenudge=1
+simSound exit=0 4s | simSound: 158 checks, 0 failed
+vitest exit=0 6s |    Duration  5.73s (transform 2.54s, setup 598ms, collect 3.75s, tests 5.88s, environment 3.01s, prepare 657ms)
+simStorageWrites exit=0 2s | simStorageWrites: all green (owed: 12)
+simNbaDraftCapital exit=0 2s | NBA draft-capital actual29 outcomes, independent baselines, CRLF controls, source holds and owned cleanup completed.
+simPreloadWait exit=0 1s | simPreloadWait: green. A chunk that fails to download waits for the one reload instead of handing React an empty module.
+simHomeSearchRecovery exit=0 46s | Home search recovery: passed. Evidence at /home/runner/work/ballpark-hero/ballpark-hero/home-search-recovery-artifacts/outcomes
+tsc exit=0 54s | 
