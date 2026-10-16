@@ -1,6 +1,7 @@
 /* Round 1334: the soccer deck's binding, over a two card fixture pack that
-   lives here (the shipped pack is empty until its cards are written), and the
-   gate's loader (src/lib/soccerDeckGate.ts) with the two loads that must fail
+   lives here and over the shipped starter pack of 28 (every gated card dealt
+   on its side of each bound and never one step past it), and the gate's
+   loader (src/lib/soccerDeckGate.ts) with the two loads that must fail
    closed: one that resolves with nothing in it (what freshBuild.ts's cancelled
    preload error hands a dynamic import) and one that rejects. */
 import { beforeEach, describe, expect, it } from 'vitest';
@@ -354,6 +355,35 @@ describe('the starter pack', () => {
     expect(dealtIds(career({}, { derbies } as Partial<SeasonRecord>)).has(728)).toBe(true);
     expect(dealtIds(career({ isClubCaptain: true, captainClub: 'Somewhere Else' })).has(725)).toBe(false);
     expect(dealtIds(career({ isClubCaptain: true, captainClub: 'Fixture Albion' })).has(725)).toBe(true);
+  });
+  it('deals every other gated card on its side of each bound and never one step past it', () => {
+    const at = (code: string, patch: Partial<CareerState>, row: Partial<SeasonRecord> = {}) => dealtIds(career({ position: code, ...patch }, row));
+    /* 709 "a lot of yellow cards last season": yellows >= 7 */
+    expect(at('CB', {}, { yellowCards: 7 }).has(709)).toBe(true);
+    expect(at('CB', {}, { yellowCards: 6 }).has(709)).toBe(false);
+    /* 710 "an experienced voice": age >= 26 */
+    expect(at('CB', { age: 26 }).has(710)).toBe(true);
+    expect(at('CB', { age: 25 }).has(710)).toBe(false);
+    /* 714 "You chipped in with goals last season": goals >= 4 */
+    expect(at('CM', {}, { goals: 4 }).has(714)).toBe(true);
+    expect(at('CM', {}, { goals: 3 }).has(714)).toBe(false);
+    /* 719 "plenty of games last season without scoring many": goals <= 3 and apps >= 15 */
+    expect(at('ST', {}, { goals: 3, apps: 15 }).has(719)).toBe(true);
+    expect(at('ST', {}, { goals: 4, apps: 15 }).has(719)).toBe(false);
+    expect(at('ST', {}, { goals: 3, apps: 14 }).has(719)).toBe(false);
+    /* 722, the veterans' load plan: age >= 31 */
+    expect(at('ST', { age: 31 }).has(722)).toBe(true);
+    expect(at('ST', { age: 30 }).has(722)).toBe(false);
+    /* 724 "You played for your country last season": the last row's intApps above 0 */
+    expect(at('ST', {}, { intApps: 1 }).has(724)).toBe(true);
+    expect(at('ST', {}, { intApps: 0 }).has(724)).toBe(false);
+    /* 726 "You spent a long spell out injured last season": injuryWeeks >= 8 */
+    expect(at('ST', {}, { injuryWeeks: 8 }).has(726)).toBe(true);
+    expect(at('ST', {}, { injuryWeeks: 7 }).has(726)).toBe(false);
+    /* 727 "You are young and at one of the top clubs around": tier 1 and age 22 or under */
+    expect(at('ST', { currentClubTier: 1, age: 22 }).has(727)).toBe(true);
+    expect(at('ST', { currentClubTier: 2, age: 22 }).has(727)).toBe(false);
+    expect(at('ST', { currentClubTier: 1, age: 23 }).has(727)).toBe(false);
   });
   it('never deals a training card at room 0, and every option moves exactly what it prints', () => {
     for (const code of ['GK', 'CB', 'CM', 'ST']) {
