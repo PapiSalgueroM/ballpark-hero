@@ -1,0 +1,9 @@
+build exit=0 23s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+walk exit=0 121s | playUsCareerReports: ALL GREEN, 22 walks
+walk-noretire exit=1 124s | CONTROL noretire FIRED: W2 red
+walk-noundo exit=1 105s | CONTROL noundo FIRED: W3 red
+walk-noreplay exit=1 117s | CONTROL noreplay FIRED: W3 red
+walk-nosettle exit=1 213s | CONTROL nosettle FIRED: W5 red
+night exit=0 206s | playDraftNight: ALL GREEN, 49 nights walked
+career993 exit=1 21s | Node.js v24.21.0
+homefold exit=0 29s | playHomeFold: green. The first thing on the page is something to play.
