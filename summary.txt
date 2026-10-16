@@ -1,0 +1,12 @@
+simDailyDeals exit=0 5s | simDailyDeals: green. 12 Hot Seat dates (5 Premier League) and 6 Deadline Day dates (3 Premier League) deal what Release AS dealt, no daily carries the real fixture key, 
+simDeadlineDay exit=0 6s | simDeadlineDay: green. The brief is real, the desk pays, the clock binds, the daily is one window a day, the budget holds, a Club Manager save keeps its registrations, ri
+simCmShootoutOrder exit=0 33s | simCmShootoutOrder: all sections passed
+simManagerHotSeat exit=0 80s | simManagerHotSeat: green. The target is the club's, reading the room pays, outcomes replay, a Club Manager save keeps its registrations and a survivor carries on in Club 
+quickSubs-all exit=0 22s | All 1 harnesses green.
+simCmQuickLegs exit=0 74s | simCmQuickLegs: PASS, 10 sections green
+subs-all exit=1 251s | simCmSubs RED: 64 of 66 checks green (parts ledger, rule, extratime, cutover, oppextratime, opponent, coach, press, legacy, three, hotseat)
+simCmVar exit=0 195s | simCmVar normal: actual review outcomes and full prior baseline passed.
+continuity exit=1 47s |     at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simManagerWorldContinuity.mjs:489:24
+appealIsolation exit=1 10s | Node.js v24.21.0
+simCmUnseededWorld exit=1 202s | simCmUnseededWorld: 112 FAILURE(S)
+simCmLeagueRules exit=1 53s | simCmLeagueRules: 47 failure(s)
