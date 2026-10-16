@@ -125,7 +125,7 @@ export { subsRuleFor, CM_SUBS_PARTIAL } from '@/lib/clubManagerSubsRule';
    same reason the facilities and the books live in their own files. */
 import { BOARD_ASKS_VERSION, askStatus, buildBoardAsks, ensureBoardAsks, isBoardAsk } from '@/lib/clubManagerBoardAsks';
 /* Round 1335: the board's verdict, its openings, the kitty band and the offer step, a pure module. */
-import { BOARD_FRESH, VERDICT_LINES, fillLeague, offerStepOk, openingConfidence, seasonGrade, type SeasonFate } from '@/lib/clubManagerBoardVerdict';
+import { BOARD_FRESH, VERDICT_LINES, fillLeague, kittyAllocation, offerStepOk, openingConfidence, seasonGrade, type SeasonFate } from '@/lib/clubManagerBoardVerdict';
 export { BOARD_FRESH } from '@/lib/clubManagerBoardVerdict';
 /* Round 978: international duty. Called only inside functions, never at module
    scope, so the cycle back into this file stays evaluation safe. */
@@ -20578,9 +20578,13 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
      chest nothing in the game can balance against. Walking to a new job
      carries nothing, the same rule the sponsor deal and the ground
      expansions already follow: the balance belonged to the club. */
+  /* Round 1335: a stay's cheque is that same flat formula, never past KITTY_TOP_SHARE of the club's usual
+     budget or 10m (kittyAllocation), so a small club's good year pays a bonus its size can carry; the
+     carry below is unchanged, and it is capped by the cheque, so it shrinks with it. */
   const allocation = moving
     ? Math.round(club.budget * 1.1)
-    : Math.max(10, Math.round(club.budget + (club.expectation - prevPos) * 2 + seasonTrophyCount * 12));
+    : legacy ? Math.max(10, Math.round(club.budget + (club.expectation - prevPos) * 2 + seasonTrophyCount * 12))
+    : kittyAllocation({ budget: club.budget, expectation: club.expectation, finish: prevPos, trophies: seasonTrophyCount });
   /* A corrupt or pre-Round 436 save can hand us anything here, so a balance
      that is not a real number carries nothing rather than poisoning the new
      season with NaN. */
