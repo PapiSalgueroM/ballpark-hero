@@ -21358,6 +21358,10 @@ export function loadCareer(): CareerState | null {
       if (parsed.customClub) delete parsed.customClub;
       registerCustomClub(null);
     }
+    /* Round 1344: a seeded save written before this round may hold this season's deals between other clubs that
+       never reached the ledger; they are mended here, inside their own fail safe. Before the asks, which read
+       buildMarket: it drops every name on goneNames, and every man mended is on it, so no ask can move. */
+    repairAiMoves(parsed);
     /* Round 474: the specific asks, LAST, because the country an ask counts
        and the market it is measured against both read the league, and the
        league is not settled until the two registrations above have run. */
@@ -21365,6 +21369,44 @@ export function loadCareer(): CareerState | null {
     return parsed;
   } catch {
     return null;
+  }
+}
+
+/* Round 1344: mending a seeded save that is missing this season's moves between other clubs (written by an engine
+   from before the round: the news said a club bought him, the ledger never heard, so he was off the market and still
+   at his old club). Each deal line of THIS season (not a loan, neither club mine, not a free transfer) whose man is on
+   goneNames and of whose name the ledger holds no record at all: the seller's man found by name alone (a line
+   carries no age or position), exactly one or the line is skipped, then recorded through recordAiDeals, the same rules
+   as every other deal. Earlier seasons are left as they are: by then he has played a season or more at his old club
+   in that save, and the 80 line log cannot rebuild the rest honestly (PR269's audit says so too). Nothing happens
+   with no seed, with an unreadable ledger, or while the era's squads are not loaded. It can never cost a save: any
+   error leaves the parsed state exactly as it was (loadCareer reads a thrown error as no save at all). It is idempotent
+   and a no-op on every save this engine writes. scripts/simCmWorldMoves.mjs section 5 holds it. */
+function repairAiMoves(state: CareerState): void {
+  try {
+    if (worldSeedOf(state) === undefined || !eraRostersLoaded(state.eraId) || !Array.isArray(state.transferLog) || !Array.isArray(state.goneNames)) return;
+    if (state.worldRoster !== undefined && !worldRosterView(state)) return;
+    const gone = new Set(state.goneNames);
+    const records = worldRosterView(state)?.records ?? [];
+    /* In the log's order, each on the state the lines before it left, so a man sold on within the season is found
+       at the club that bought him first. */
+    let mended = state;
+    for (const line of state.transferLog) {
+      if (!line || typeof line.name !== 'string' || typeof line.from !== 'string' || typeof line.to !== 'string' || line.loan
+        || line.season !== state.season || !gone.has(line.name) || line.from === state.clubName || line.to === state.clubName
+        || line.from === 'a free transfer' || line.to === 'a free transfer') continue;
+      /* Any record of the name means the ledger already placed him (here, or wherever he went next): never a second. */
+      if (records.some(r => r.player.name === line.name || r.origin.name === line.name)) continue;
+      const found = worldRosterFor(mended, line.from).filter(p => p.n === line.name);
+      if (found.length !== 1) continue;
+      const p = found[0];
+      mended = recordAiDeals(mended, [{ mp: { name: p.n, club: line.from, position: p.p, age: p.a, rating: p.r, price: askingPrice(p.v, p.a), value: p.v,
+        generated: p.g || undefined, ...(p.worldRosterKey ? { worldRosterKey: p.worldRosterKey, worldRosterSince: p.since, potential: p.potential } : {}) },
+        to: line.to, fee: typeof line.fee === 'number' ? line.fee : 0 }]);
+    }
+    if (mended !== state && mended.worldRoster !== undefined) state.worldRoster = mended.worldRoster;
+  } catch {
+    /* The save opens as it was saved. */
   }
 }
 

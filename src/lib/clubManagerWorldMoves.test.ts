@@ -1,6 +1,8 @@
 import { describe, expect, it, vi } from 'vitest';
 import type { CareerState, MarketPlayer } from '@/lib/clubManager';
-import { acceptBid, aiDealPlayer, buildMarket, doorRefusal, marketForScreen, recordAiDeals, startCareer, worldRosterFor, worldYear } from '@/lib/clubManager';
+import {
+  SAVE_KEY, acceptBid, aiDealPlayer, buildMarket, doorRefusal, loadCareer, marketForScreen, recordAiDeals, saveCareer, startCareer, worldRosterFor, worldYear,
+} from '@/lib/clubManager';
 import { readWorldRoster } from '@/lib/clubManagerWorldRoster';
 
 /* Round 1344 (the player report of 2026-10-16: a man another club bought vanished from the market and turned up at
@@ -84,6 +86,29 @@ describe('Round 1344: deals between two other clubs reach the world ledger', () 
     delete none.worldRoster;
     expect(marketForScreen(none)).toEqual(buildMarket(none));
     expect(marketForScreen(none).some(p => p.joinedThisSeason)).toBe(false);
+  });
+
+  it('a seeded save missing this season\'s moves is mended when it opens, once, and a damaged line never costs the save', () => {
+    const s = withRoll(0.6, () => startCareer('Everton'));
+    const lines = aiLines(s);
+    const missing: CareerState = { ...s };
+    delete missing.worldRoster;   // what an engine from before the round wrote: the news, goneNames, no ledger
+    localStorage.clear();
+    expect(saveCareer(missing)).toBe(true);
+    const mended = loadCareer()!;
+    expect(mended).not.toBeNull();
+    for (const line of lines) {
+      expect((readWorldRoster(mended)?.records ?? []).some(r => r.status === 'owned' && r.owner === line.to && r.player.name === line.name), line.name).toBe(true);
+    }
+    expect(saveCareer(mended)).toBe(true);
+    const first = localStorage.getItem(SAVE_KEY);
+    expect(saveCareer(loadCareer()!)).toBe(true);
+    expect(localStorage.getItem(SAVE_KEY)).toBe(first);
+    const damaged = { ...missing, transferLog: [...(missing.transferLog ?? []), { name: 42, from: null, to: 7, fee: 'x', season: s.season, week: 1 }] } as unknown as CareerState;
+    localStorage.clear();
+    expect(saveCareer(damaged)).toBe(true);
+    expect(loadCareer()).not.toBeNull();
+    localStorage.clear();
   });
 
   it('recordAiDeals takes no draw, and hands an unseeded career back as the same object', () => {

@@ -41,6 +41,12 @@
  *      (correction 23). At the next summer he is on sale at his club like anyone else, and when the buy door opens
  *      buyPlayer takes him (on its own stream). marketForScreen is timed against buildMarket on the same states:
  *      at most 3 times plus 5 ms a call.
+ *   5. the repair on load: saves BASE's engine wrote for the three worlds' careers (seeds 1 to 3) after the opening
+ *      window and after the first January, loaded by the head: every deal line of this season between two other
+ *      clubs whose man is on goneNames is mended (placed at his buyer), or left for a counted reason (a deal of mine
+ *      holds him, Release AZ's promise; or the seller lists not exactly one man of that name); the load differs from
+ *      BASE's load in the ledger alone, every added record is one of this season's deal lines, a second save and
+ *      load is byte equal (idempotent), and every unseeded save loads byte equal to BASE's load.
  *   6. legacy: careers with no world seed (startCareer with PR269's legacy world, and fresh careers with the seed,
  *      the ledger and the squad's ledger keys stripped the way simClubManagerSaveSize strips them, and the legacy
  *      career with three deals of mine at its start: a release, a buy and a sale through acceptBid), the same nine
@@ -68,7 +74,7 @@
  *   section 9: the table is in the round's notes, docs/audits/ROUND-1344-NOTES.md; the January entry took 37.8 ms on
  *     the base and about 255 ms with the probe (recorded deal by deal), which is why ruling 4 packs once a window.
  *
- * ENV. CM_WORLD_MOVES_SECTIONS (default 0,1,2,3,4,6,12), CM_WORLD_MOVES_SEEDS (a list or a range, 1-10; default per
+ * ENV. CM_WORLD_MOVES_SECTIONS (default 0,1,2,3,4,5,6,12), CM_WORLD_MOVES_SEEDS (a list or a range, 1-10; default per
  * section), CM_WORLD_MOVES_ERAS (default now,era2015,era2005), CM_WORLD_MOVES_BASE (default the commit the branch
  * started from), CM_WORLD_MOVES_SHAPE_ARMS (default base,head), CM_WORLD_MOVES_SEASONS (section 9, default 15),
  * CM_WORLD_MOVES_OUT (section 9's JSON folder, default $RC_OUT or the temp folder).
@@ -84,7 +90,10 @@
  *   CM_WORLD_MOVES_CONTROL=joinledger joinClubNow takes the departed career's ledger again: section 3 red
  *   CM_WORLD_MOVES_CONTROL=nolock     the refusal's sentence out (a joined man is for sale): section 4 red
  *   CM_WORLD_MOVES_CONTROL=nolist     marketForScreen hands back buildMarket's list: section 4 red
- *   CM_WORLD_MOVES_CONTROL=nohijack makeOffer's hijack records nothing: section 2 red on the hijack arm only
+ *   CM_WORLD_MOVES_CONTROL=norepair   the call out of loadCareer: section 5 red
+ *   CM_WORLD_MOVES_CONTROL=repairthrows  the repair throws first thing: section 5 red on the unmended lines, while
+ *                                     every save still loads, byte equal to BASE's load (else it did not fire)
+ *   CM_WORLD_MOVES_CONTROL=nohijackmakeOffer's hijack records nothing: section 2 red on the hijack arm only
  *   CM_WORLD_MOVES_CONTROL=nowalk     walkAway's rival close records nothing: section 2 red on the walk arm only
  *   CM_WORLD_MOVES_CONTROL=slow       the window packs the ledger after every deal again (the step 1 probe's way):
  *                                     section 12 red
@@ -124,7 +133,7 @@ const COMBINE = process.argv[2] === '--combine';   // handled at the end of the 
 
 /* The commit this branch started from (origin/main at the claim, Release BG live; src equal to bd3b6244). */
 const BASE = process.env.CM_WORLD_MOVES_BASE || 'd4f2c6f688d656205722ba52bbdb33f03490966a';
-const SECTIONS = new Set(range(process.env.CM_WORLD_MOVES_SECTIONS, [0, 1, 2, 3, 4, 6, 12]));
+const SECTIONS = new Set(range(process.env.CM_WORLD_MOVES_SECTIONS, [0, 1, 2, 3, 4, 5, 6, 12]));
 const ERAS = (process.env.CM_WORLD_MOVES_ERAS || 'now,era2015,era2005').split(',');
 if (process.env.CM_WORLD_MOVES_HEAD) cannot('CM_WORLD_MOVES_HEAD is gone: the step 1 probe was removed at step 2 (the head records the deals itself)');
 const CONTROL = process.env.CM_WORLD_MOVES_CONTROL || '';
@@ -146,6 +155,8 @@ const CONTROLS = {
     '    ...(departed.worldRoster === undefined ? {} : { worldRoster: plainCopy(departed.worldRoster) }),\n']] },
   nolock: { section: 4, edits: [["  return `${mp.name} only joined ${mp.club} this season. They will not sell him on until ${career.transferWindow === 'summer' ? 'next summer' : 'the summer'}.`;\n", '  return null;\n']] },
   nolist: { section: 4, edits: [['  if (!gone.size || !worldRosterView(career)) return market;\n', '  return market;\n']] },
+  norepair: { section: 5, edits: [['    repairAiMoves(parsed);\n', '']] },
+  repairthrows: { section: 5, loads: true, edits: [["  try {\n    if (worldSeedOf(state) === undefined || !eraRostersLoaded(state.eraId)", "  try {\n    if (Math.abs(1) === 1) throw new Error('the repairthrows control');\n    if (worldSeedOf(state) === undefined || !eraRostersLoaded(state.eraId)"]] },
   nohijack: { section: 2, arm: 'hijack', edits: [['      return recordAiDeals(state, [{ mp: next.player, to: next.rivalBidder, fee: next.rivalOffer }]);\n', '      return state;\n']] },
   nowalk: { section: 2, arm: 'walk', edits: [['    return recordAiDeals(state, [{ mp: neg.player, to: neg.rivalBidder, fee: neg.rivalOffer }]);\n', '    return state;\n']] },
   slow: { section: 12, edits: [[RECORD_LINE, '    if (working && seen) { const moved = recordAiDeal(working, { mp, to: buyer, fee }, working); if (moved === working) continue; working = packedLedger(moved); }\n    else unrecorded.push({ mp, to: buyer, fee });\n']] },
@@ -519,6 +530,58 @@ async function joinCareer(E, club, seed, when) {
   } finally { Math.random = keep; }
 }
 
+/* ---------- section 5, the repair on load ---------- */
+const s5 = { saves: 0, lines: 0, mended: 0, mine: 0, namesake: 0, equal: 0, legacy: 0, noLoad: 0 };
+const withoutLedger = st => { const c = JSON.parse(JSON.stringify(st)); delete c.worldRoster; return JSON.stringify(c); };
+/** Saves BASE's engine writes for one career: after the opening window and after its first January. */
+async function baseSaves(MB, era, club, seed, world) {
+  const keep = Math.random, out = [];
+  Math.random = stream(mix('repair', era, club, seed, world ? 'legacy' : 'seeded'));
+  try {
+    let s = world ? MB.cm.startCareer(club, era, undefined, undefined, world) : MB.cm.startCareer(club, era);
+    const keepSave = label => { MB.store.clear(); if (MB.cm.saveCareer(s)) out.push([label, MB.store.get(MB.cm.SAVE_KEY)]); };
+    keepSave('the opening window');
+    for (let guard = 0; guard < 400; guard += 1) {
+      if (s.boardConfidence < 35) s = { ...s, boardConfidence: 55 };
+      const r = MB.cm.playNextEntry(s, OPT);
+      s = r.state;
+      if (r.kind === 'window') { keepSave('January'); break; }
+      if (r.kind === 'seasonOver' || s.sacked) break;
+    }
+  } finally { Math.random = keep; }
+  return out;
+}
+const loadOn = (M, raw) => { M.store.clear(); M.store.set(M.cm.SAVE_KEY, raw); return M.cm.loadCareer(); };
+async function repairCareer(B, H, era, club, seed) {
+  const MB = await B.fresh(), MH = await H.fresh(), tag = `${club} (${era}, seed ${seed})`;
+  for (const [label, raw] of await baseSaves(MB, era, club, seed, null)) {
+    s5.saves += 1;
+    const b = loadOn(MB, raw), h = loadOn(MH, raw);
+    if (!b || !h) { s5.noLoad += 1; fail(5, `${tag} ${label}: BASE's save did not load on ${b ? 'the head' : 'BASE'}`); continue; }
+    if (JSON.stringify(b) === JSON.stringify(h)) s5.equal += 1;
+    if (withoutLedger(b) !== withoutLedger(h)) fail(5, `${tag} ${label}: the head's load differs from BASE's beyond the ledger`);
+    const before = MB.ledger.readWorldRoster(b)?.records ?? [], after = MH.ledger.readWorldRoster(h)?.records ?? [];
+    const lines = (h.transferLog ?? []).filter(aiLine(h.clubName)).filter(l => l.season === h.season && h.goneNames.includes(l.name));
+    for (const line of lines) {
+      s5.lines += 1;
+      if (!placement(MH, h, line)) { s5.mended += 1; continue; }
+      if (before.some(r => r.player.name === line.name || r.origin.name === line.name)) { s5.mine += 1; continue; }
+      if (MB.cm.worldRosterFor(b, line.from).filter(p => p.n === line.name).length !== 1) { s5.namesake += 1; continue; }
+      fail(5, `${tag} ${label}: ${line.to} signed ${line.name} from ${line.from} this season and the load did not mend it`);
+    }
+    for (const r of after) if (!before.some(x => x.key === r.key) && !lines.some(l => l.name === r.player.name && l.to === r.owner)) fail(5, `${tag} ${label}: the load added ${r.player.name} at ${r.owner}, in no deal line of this season`);
+    MH.store.clear(); MH.cm.saveCareer(h);
+    const first = MH.store.get(MH.cm.SAVE_KEY), again = MH.cm.loadCareer();
+    MH.store.clear(); if (again) MH.cm.saveCareer(again);
+    if (!again || MH.store.get(MH.cm.SAVE_KEY) !== first) fail(5, `${tag} ${label}: a mended save saved and loaded again is not byte equal (the repair is not idempotent)`);
+  }
+  for (const [label, raw] of await baseSaves(MB, era, club, seed, LEGACY_WORLD)) {
+    s5.legacy += 1;
+    const b = loadOn(MB, raw), h = loadOn(MH, raw);
+    if (!b || !h || JSON.stringify(b) !== JSON.stringify(h)) fail(5, `${tag} ${label}: an unseeded save loads differently on the head`);
+  }
+}
+
 /* ---------- section 6, legacy ---------- */
 const LEGACY_SEASONS = 2;
 const LEGACY_WORLD = { yearsOn: 0, uclField: null, keepLeagueOverrides: false };
@@ -836,7 +899,7 @@ if (SECTIONS.has(0)) {
   }
 }
 const headEdits = [CONTROL ? editOf(CONTROLS[CONTROL].edits, CONTROL) : null].filter(Boolean);
-const needBase = SECTIONS.has(6) || SECTIONS.has(12) || SECTIONS.has(9) && (process.env.CM_WORLD_MOVES_SHAPE_ARMS || 'base,head').split(',').includes('base');
+const needBase = SECTIONS.has(5) || SECTIONS.has(6) || SECTIONS.has(12) || SECTIONS.has(9) && (process.env.CM_WORLD_MOVES_SHAPE_ARMS || 'base,head').split(',').includes('base');
 const H = await engine('head', { edit: headEdits.length ? text => headEdits.reduce((t, f) => f(t), text) : null,
   editFile: CONTROL ? CONTROLS[CONTROL].file ?? ENGINE : ENGINE });
 const B = needBase ? await engine('base', { base: true }) : null;
@@ -876,6 +939,13 @@ if (SECTIONS.has(3)) {
   if (s3.joins < 6) cannot(`section 3: only ${s3.joins} moves could be made, under 6`);
   if (!s3.runIn) cannot('section 3: no deal line of a run in was seen, so the join measured nothing');
 }
+if (SECTIONS.has(5)) {
+  const seeds = range(process.env.CM_WORLD_MOVES_SEEDS, [1, 2, 3]);
+  console.log(`5) the repair: saves BASE's engine wrote after the opening window and after January, loaded by the head, seeds ${seeds.join(',')}`);
+  for (const era of ERAS) for (const club of CLUBS[era]) for (const seed of seeds) await repairCareer(B, H, era, club, seed);
+  console.log(`   ${s5.saves} seeded saves (${s5.equal} loaded byte equal to BASE's load, ${s5.noLoad} did not load), ${s5.lines} deal lines of this season: ${s5.mended} mended, ${s5.mine} left as a deal of mine holds him, ${s5.namesake} left for a namesake at the seller; ${s5.legacy} unseeded saves`);
+  if (s5.saves < 6 || !s5.lines) cannot(`section 5: ${s5.saves} saves and ${s5.lines} deal lines, so the repair measured nothing`);
+}
 if (SECTIONS.has(6)) {
   console.log('6) legacy: unseeded careers, BASE against the head, every saved string and Math.random draw');
   await legacySection(B, H);
@@ -898,6 +968,12 @@ for (const section of red) if (failures[section].length > 8) console.log(`  sect
 if (CONTROL) {
   const target = CONTROLS[CONTROL].section;
   const first = CONTROLS[CONTROL].first, arm = CONTROLS[CONTROL].arm;
+  /* repairthrows (the critic's correction 8): the repair throws, and every save must still load, byte equal to BASE's
+     load (the fail safe left it as it was), while the lines it would have mended stay unmended (red). */
+  if (CONTROLS[CONTROL].loads && (s5.noLoad || s5.equal !== s5.saves)) {
+    console.log(`simCmWorldMoves: control ${CONTROL} DID NOT FIRE as it must: ${s5.noLoad} saves did not load and ${s5.saves - s5.equal} loaded unlike BASE's load`);
+    process.exit(3);
+  }
   /* An arm control (section 2) must turn its own arm red and leave the other arm green. */
   if (arm && failures[target]?.length && !failures[target].every(line => line.includes(` ${arm}:`))) {
     console.log(`simCmWorldMoves: control ${CONTROL} DID NOT FIRE as it must: section ${target} red beyond its own arm (${arm})`);
