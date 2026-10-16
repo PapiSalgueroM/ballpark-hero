@@ -86,6 +86,13 @@ export default function ClubManagerHelp() {
                 <p><span className="font-semibold text-foreground">Example:</span> a 2026-27 Premier League match. Two changes at half time cost no stoppage. Then one at 60, one at 70 and one at 80, and that is all five changes and all three stoppages gone. A 2005-06 match gives you three, whenever you like.</p>
                 <p>The other dugout and the Quick Sim coach play the same rule, and under five the coach keeps a stoppage back for an injury as well as a change. Cups and European ties play your league's rule. The 2019-20 restart did allow five, but a season here goes by the year it starts, so 2019-20 plays three. Every other league in the game (the Eredivisie, MLS, the Saudi Pro League and the rest) keeps three for now, because we could not confirm its rule on two sources yet.</p>
               </div>
+              {/* Round 1343: retiring, and the highest scoring game (src/lib/clubManagerRetire.ts, clubManagerRecords.ts). Appended on its own. */}
+              <div data-cm-help="retire" className="space-y-2">
+                <p>👋 <span className="font-semibold text-foreground">Retiring.</span> You can retire whenever you are between matches: from the Manager panel, from the season summary, or while you are out of work. One tap asks first and says what it means, and a second tap retires. It ends the career for good. Nothing more gets played, and if you go in the middle of a season that season stays unfinished. The career keeps its slot as a finished one, with a farewell you can open from your managers screen any time. A new manager starts in an empty slot.</p>
+                <p><span className="font-semibold text-foreground">Highest scoring game</span> on your record is the match with the most goals in it, both sides together, extra time included and penalty shootout kicks never. Every club match you manage counts. If two games tie, the first one stays.</p>
+                <p><span className="font-semibold text-foreground">Example:</span> a 4-4 draw in Season 2 and a 5-3 win in Season 4 both have eight goals, so your record keeps the 4-4. A 3-3 cup tie you won on penalties counts six.</p>
+                <p><span className="font-semibold text-foreground">Example:</span> a career saved before this line was added works it out from the scores the save still keeps. If it no longer keeps all of them, the line says how many of your matches it could not see.</p>
+              </div>
             </div>
   );
 }
