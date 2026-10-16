@@ -104,8 +104,21 @@ export function watchForNewBuild(): void {
    Cancelling the event stops the throw, and one reload picks up the new
    index.html and its chunks. The same loop guard as check(): at most one
    reload per tab for this reason, ever, so a host that is genuinely down
-   shows the boundary on the second failure rather than spinning. */
+   shows the boundary on the second failure rather than spinning.
+
+   Round 1338: cancelling used to hand the import an empty module. Vite's
+   wrapper simply returns when its event is cancelled, so the import resolved
+   to undefined and React threw "reading 'default'" in the instant before the
+   reload landed, which flashed the broken page anyway. The build now makes a
+   cancelled import wait (scripts/lib/vitePreloadWait.mjs), so the screen
+   keeps its loading state until the fresh document replaces the page. And
+   once this page has asked for its reload, every later chunk failure in it
+   is cancelled too (reloadAsked): it would otherwise reach a boundary while
+   the reload is already on its way. */
 const STALE_KEY = 'dukb-reloaded-stale-chunk';
+/* True only in a page that has already asked for its stale chunk reload, so
+   it lives exactly as long as that page. */
+let reloadAsked = false;
 
 export function isStaleChunkError(err: unknown): boolean {
   const msg = err instanceof Error ? err.message : typeof err === 'string' ? err : '';
@@ -149,6 +162,8 @@ export function reloadOnceForStaleChunk(): boolean {
     return false;
   }
   window.location.reload();
+  /* after the call, so it is true only once the browser took the navigation */
+  reloadAsked = true;
   return true;
 }
 
@@ -191,6 +206,6 @@ export function isOptionalChunkError(payload: unknown): boolean {
 function reloadOnStaleChunk(): void {
   window.addEventListener('vite:preloadError', (event: Event) => {
     if (isOptionalChunkError((event as Event & { payload?: unknown }).payload)) return;
-    if (reloadOnceForStaleChunk()) event.preventDefault();
+    if (reloadAsked || reloadOnceForStaleChunk()) event.preventDefault();
   });
 }
