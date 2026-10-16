@@ -119,8 +119,12 @@ const esbuild = require('esbuild');
 /* The base this round was merged onto at Release BD's join: release-bd-gate after Rounds 1331 and 1332 (b9df63b4),
    which is origin/main with Release BC live (082fc277) plus two rounds that leave the four files alone. The four
    files are byte for byte 082fc277's and c5fc5470's (origin/release-bc-gate, the tree the round was cut from), so
-   the regenerated rows and every sha256 pin are unchanged; only the base named here moved. */
-const BASE = 'b9df63b4e9ad8925c1f19536ec6a32d8a77358ea';
+   the regenerated rows and every sha256 pin are unchanged; only the base named here moved.
+   Release BH's join (Round BHH): PR275 changes soccerCareerEngine.ts (the rival veteran wage, outside this round's
+   regions), so the base is now 3225f123, which is b9df63b4 with exactly PR275's engine change, recorded in this
+   branch's history by an ours merge. Its four files differ from this tree by Round 1329 alone (the same patch id as
+   b9df63b4 against the tree before PR275); the rows regenerated from it are unchanged, the engine's two pins moved. */
+const BASE = '3225f1235112bdcb031f059259f74cea48bcb346';
 /* Release BF join: the base bundle reads the files named here from this tree instead of BASE, so a later round's
    engine input that this round never touched is the same on both sides of the lockstep. By default these are the
    Soccer Career life chain's five engine inputs, Life, its routine events and captions, Contracts and RealismA

@@ -1,0 +1,158 @@
+name: Career Life choice previews
+
+on:
+  push:
+    branches: [codex/career-life-choice-previews]
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    defaults:
+      run:
+        shell: bash
+    env:
+      PREVIEW_PHASE: fixed
+      SIM_NETWORK: offline
+      ENGINES: chromium
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Preserve source and install locked dependencies
+        run: |
+          set -euo pipefail
+          mkdir preview-artifacts
+          git archive --format=zip HEAD > preview-artifacts/source.zip
+          git rev-parse HEAD > preview-artifacts/head.txt
+          cp package.json preview-artifacts/package.before.json
+          cp package-lock.json preview-artifacts/package-lock.before.json
+          npm ci > preview-artifacts/install.log 2>&1
+      - name: Actual application types
+        run: |
+          set -euo pipefail
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node_modules/.bin/tsc --noEmit -p tsconfig.app.json > preview-artifacts/types.log 2>&1
+      - name: Focused fresh and saved choice regressions
+        run: |
+          set -euo pipefail
+          set +e
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node node_modules/vitest/vitest.mjs run src/test/soccerCareerLifeChoicePreviews.test.ts --maxWorkers=1 --minWorkers=1 --reporter=default --reporter=json --outputFile=preview-artifacts/current.json > preview-artifacts/current.log 2>&1
+          status=$?
+          set -e
+          printf '%s\n' "$status" > preview-artifacts/current.exit
+          cat preview-artifacts/current.log
+          node --input-type=module <<'JS'
+          import fs from 'node:fs'; import assert from 'node:assert/strict';
+          const r=JSON.parse(fs.readFileSync('preview-artifacts/current.json','utf8'));
+          const rows=r.testResults.flatMap(file=>file.assertionResults);
+          assert.equal(rows.length,18); assert.equal(r.testResults.length,1); assert.equal(r.numPendingTests,0); assert.equal(r.numTodoTests,0);
+          assert(rows.every(row=>['passed','failed'].includes(row.status)));
+          assert(!/Unhandled Errors|Unhandled Rejection|Uncaught Exception|\[SIM_OFFLINE_BLOCK\]/.test(fs.readFileSync('preview-artifacts/current.log','utf8')));
+          const expected=['227:0','230:0','230:1','232:0'].flatMap(id=>['fresh choice preview '+id,'restored choice preview '+id]);
+          const failed=rows.filter(row=>row.status==='failed');
+          if(process.env.PREVIEW_PHASE==='baseline') {
+            assert.equal(r.success,false); assert.deepEqual(failed.map(row=>row.title).sort(),expected.sort()); assert.equal(r.numFailedTests,8); assert.equal(r.numPassedTests,10); assert.equal(fs.readFileSync('preview-artifacts/current.exit','utf8').trim(),'1');
+            assert(failed.every(row=>row.failureMessages.length===1 && row.failureMessages[0].includes('AssertionError')));
+          } else { assert.equal(r.success,true); assert.equal(failed.length,0); assert.equal(r.numPassedTests,18); assert.equal(fs.readFileSync('preview-artifacts/current.exit','utf8').trim(),'0'); }
+          console.log('PASS declared preview cases: '+r.numPassedTests+' passed, '+r.numFailedTests+' expected failures');
+          JS
+      - name: Original product negative control and full restoration
+        if: env.PREVIEW_PHASE == 'fixed'
+        run: |
+          set -euo pipefail
+          for file in soccerCareerLife.ts soccerCareerLifeConsequences.ts; do
+            cp "src/lib/$file" "preview-artifacts/$file.fixed"
+            git show "bd3b62443d992b92c22bd303437cb3aa1c5eae5c:src/lib/$file" > "src/lib/$file"
+            cp "src/lib/$file" "preview-artifacts/$file.original"
+          done
+          restore() { for file in soccerCareerLife.ts soccerCareerLifeConsequences.ts; do cp "preview-artifacts/$file.fixed" "src/lib/$file"; done; }
+          trap restore EXIT
+          set +e
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node node_modules/vitest/vitest.mjs run src/test/soccerCareerLifeChoicePreviews.test.ts --maxWorkers=1 --minWorkers=1 --reporter=default --reporter=json --outputFile=preview-artifacts/original.json > preview-artifacts/original.log 2>&1
+          status=$?
+          set -e
+          test "$status" -eq 1
+          node --input-type=module <<'JS'
+          import fs from 'node:fs'; import assert from 'node:assert/strict';
+          const r=JSON.parse(fs.readFileSync('preview-artifacts/original.json','utf8')), rows=r.testResults.flatMap(file=>file.assertionResults);
+          assert.equal(rows.length,18); assert.equal(r.testResults.length,1); assert.equal(r.success,false); assert.equal(r.numPassedTests,10); assert.equal(r.numFailedTests,8); assert.equal(r.numPendingTests,0); assert.equal(r.numTodoTests,0);
+          assert(rows.every(row=>['passed','failed'].includes(row.status)));
+          assert(!/Unhandled Errors|Unhandled Rejection|Uncaught Exception|\[SIM_OFFLINE_BLOCK\]/.test(fs.readFileSync('preview-artifacts/original.log','utf8')));
+          const expected=['227:0','230:0','230:1','232:0'].flatMap(id=>['fresh choice preview '+id,'restored choice preview '+id]);
+          assert.deepEqual(rows.filter(row=>row.status==='failed').map(row=>row.title).sort(),expected.sort());
+          assert(rows.filter(row=>row.status==='failed').every(row=>row.failureMessages.length===1 && row.failureMessages[0].includes('AssertionError')));
+          for(const file of ['soccerCareerLife.ts','soccerCareerLifeConsequences.ts']) assert(!fs.readFileSync('preview-artifacts/'+file+'.fixed').equals(fs.readFileSync('preview-artifacts/'+file+'.original')),'Control must change both product files');
+          console.log('PASS original product: exactly eight preview failures and ten preserved outcomes');
+          JS
+          restore
+          trap - EXIT
+          git diff --exit-code -- src/lib/soccerCareerLife.ts src/lib/soccerCareerLifeConsequences.ts
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node node_modules/vitest/vitest.mjs run src/test/soccerCareerLifeChoicePreviews.test.ts src/test/soccerCareerStatRewards.test.ts src/test/soccerCareerPendingMorale.test.ts src/test/soccerCareerPendingPopularity.test.ts --maxWorkers=1 --minWorkers=1 --reporter=default --reporter=json --outputFile=preview-artifacts/restored-related.json > preview-artifacts/restored-related.log 2>&1
+          cat preview-artifacts/restored-related.log
+      - name: Production build
+        if: env.PREVIEW_PHASE == 'fixed'
+        run: |
+          set -euo pipefail
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" npm run build > preview-artifacts/build.log 2>&1
+          tail -n 6 preview-artifacts/build.log
+      - name: Install isolated reader tools
+        if: env.PREVIEW_PHASE == 'fixed'
+        run: |
+          set -euo pipefail
+          tools="$RUNNER_TEMP/preview-tools"
+          mkdir "$tools"
+          printf '{"private":true,"dependencies":{"playwright":"1.64.0"}}\n' > "$tools/package.json"
+          npm install --prefix "$tools" --ignore-scripts --no-audit --no-fund > preview-artifacts/browser-install.log 2>&1
+          test ! -e node_modules/playwright
+          ln -s "$tools/node_modules/playwright" node_modules/playwright
+          ln -s "$tools/node_modules/playwright-core" node_modules/playwright-core
+          node "$tools/node_modules/playwright/cli.js" install --with-deps chromium > preview-artifacts/chromium-install.log 2>&1
+          python -m pip install fonttools pillow > preview-artifacts/python-install.log 2>&1
+      - name: Every rebuilt-site reader
+        if: env.PREVIEW_PHASE == 'fixed'
+        run: |
+          set -euo pipefail
+          node scripts/lib/hostLikeServer.mjs dist 4173 > preview-artifacts/server.log 2>&1 &
+          server=$!
+          trap 'kill "$server" 2>/dev/null || true' EXIT
+          ready=0
+          for attempt in $(seq 1 60); do if curl --fail --silent http://127.0.0.1:4173/ > /dev/null; then ready=1; break; fi; sleep 1; done
+          test "$ready" -eq 1
+          failed=0
+          for harness in simAdsense simBrand simHeadTags simHiddenPages simHubs simIndexNow simIndexing simInternalLinks simNoRivalNames simPrerender simPrerenderBoot simRetiredRoutes simSchema simSitemap simSnapshotAssets; do
+            set +e
+            SIM_OFFLINE_RECEIPT="$PWD/preview-artifacts/$harness.transport" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" BASE=http://127.0.0.1:4173 SWEEP_BASE=http://127.0.0.1:4173 node "scripts/$harness.mjs" > "preview-artifacts/$harness.log" 2>&1
+            status=$?
+            set -e
+            cat "preview-artifacts/$harness.log"
+            printf '%s\t%s\n' "$harness" "$status" >> preview-artifacts/readers.tsv
+            if test "$status" -ne 0 || test -s "preview-artifacts/$harness.transport"; then failed=1; fi
+            if grep -E '(^|[[:space:]])(FAIL|SKIP|EMPTY)([[:space:]]|$)' "preview-artifacts/$harness.log"; then failed=1; fi
+          done
+          test "$(wc -l < preview-artifacts/readers.tsv)" -eq 15
+          exit "$failed"
+      - name: Source and package preservation
+        if: always()
+        run: |
+          set -euo pipefail
+          git diff --exit-code -- src package.json package-lock.json scripts
+          cmp package.json preview-artifacts/package.before.json
+          cmp package-lock.json preview-artifacts/package-lock.before.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: career-choice-previews-${{ github.run_id }}
+          retention-days: 7
+          if-no-files-found: error
+          path: preview-artifacts/
