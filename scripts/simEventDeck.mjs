@@ -2009,6 +2009,9 @@ if (runs(15)) {
    review fix pass (rc r1332-fx-c, ba06f054): 57,375 B LF, 17,087 B
    minified, 6,350 B gzipped; bundled 17,742 B and 6,627 B. */
 const LAZY_IMPORTERS = [];
+/* Round 1334 (W2): Soccer Career's binding, the lazy soccer chunk's own entry
+   (src/lib/soccerDeckGate.ts loads it with a dynamic import). */
+LAZY_IMPORTERS.push('src/lib/soccerDeck.ts');
 if (runs(16)) {
   console.log('16) Bytes and lazy: bytes per event, and nothing that is not the deck imports it eagerly');
   const zlib = await import('node:zlib');
