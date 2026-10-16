@@ -1,0 +1,14 @@
+build exit=0 30s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+srclib exit=0 0s | engine untouched; only soccerClubSquadSheet.ts in src/lib
+vitest exit=0 72s |    Duration  71.47s (transform 10.39s, setup 870ms, collect 29.66s, tests 96.61s, environment 6.15s, prepare 1.36s)
+tsc exit=0 203s | 
+storage-ctl-entry exit=1 8s | simStorageWrites: 1 failed (owed: 12)
+storage-ctl-gone exit=1 7s | simStorageWrites (control gone): 1 failed, the control FIRED on src/lib/safeStorage.ts write:plantedNeverWritten gone (owed: 12)
+playCareerSquad exit=0 214s | playCareerSquad: 190 checks, 0 failed
+lifecycle-ctl exit=0 366s | All 1 harnesses green.
+sims exit=0 483s | All 10 harnesses green.
+practice1076 exit=0 99s | PASS career practice native: 9 actual panel journeys, 27 effective DOM controls, trusted focus/input, earned banking and unchanged sources.
+weight exit=0 28s | sweepWeight: green. Every page is inside its budget, and the budgets came down this round.
+flagship exit=0 1s | simFlagshipWeight: green. The flagship carries its own game and nobody else's.
+truths exit=1 108s | playSoccerScreenTruths: RED
+playCareerProgramme exit=0 224s | Career programme native: 1154 checks, 21/21 completed gameplay journeys

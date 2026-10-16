@@ -1,0 +1,90 @@
+ok   [head] W8 320: the save is byte for byte the same
+ok   [head] W8 320: no page error (none)
+ok   [head] W8 1280: the title holds the whole name ({"text":"Bartholomew Fixture-Longname, full attributes","cut":false})
+ok   [head] W8 1280: every keeper label holds its whole text (14 labels, cut: none)
+ok   [head] W8 1280: the save is byte for byte the same
+ok   [head] W8 1280: no page error (none)
+ok   [base] W4 the night is counting down when the hub is up
+FAIL [base] W4 during the countdown Full attributes is disabled
+FAIL [base] W4 during the countdown its second line reads "Opens once the Ballon d'Or night is over"
+FAIL [base] W4 a press during the countdown does not open Full attributes
+ok   [base] W4 a press during the countdown writes nothing
+FAIL [base] W4 the nominee rows only rise, to all ten (0 -1 0 1 2 3 4 5 6 7 8 9 10 10)
+FAIL [base] W4 the result arrives once and the card never leaves (waiting > gone > waiting > revealed)
+ok   [base] W4 once the night has been shown Full attributes is enabled
+ok   [base] W4 and its second line is the usual one again
+ok   [base] W4 it opens Full attributes
+ok   [base] W4 Back finds the card complete (10 rows, revealed)
+ok   [base] W4 the save is unchanged but for the night being marked seen
+ok   [base] W4 no page error (none)
+ok   [base] W4r with reduced motion the card is complete at mount (10 rows, revealed)
+ok   [base] W4r and Full attributes is enabled
+ok   [base] W4r it opens Full attributes
+ok   [base] W4r Back finds the card complete (10 rows, revealed)
+ok   [base] W4r the save is unchanged but for the night being marked seen
+ok   [base] W4r no page error (none)
+FAIL [base] W5 390: the 📺 button says watch, not live ("Week by week: live the season match by match")
+FAIL [base] W5 390: the help's first open has no Spanish pool sentence
+FAIL [base] W5 390: the help's first open does not say "nothing here can change"
+ok   [base] W5 390: the help names Next Season and Week by week
+ok   [base] W5 390: watching a past season writes nothing to the save
+ok   [base] W5 390: no page error (none)
+FAIL [base] W5 1280: the 📺 button says watch, not live ("Week by week: live the season match by match")
+FAIL [base] W5 1280: the help's first open has no Spanish pool sentence
+FAIL [base] W5 1280: the help's first open does not say "nothing here can change"
+ok   [base] W5 1280: the help names Next Season and Week by week
+ok   [base] W5 1280: watching a past season writes nothing to the save
+ok   [base] W5 1280: no page error (none)
+FAIL [base] W6 390: the first frame of the first open is home with the pointer ({"screen":"home","hintY":null,"tileY":463})
+FAIL [base] W6 390: one second later it is still home with the pointer ({"screen":"help","hintY":null,"tileY":null})
+FAIL [base] W6 390: the pointer and the first tile have not moved
+ok   [base] W6 390: ? opens the help
+ok   [base] W6 390: the next open is home with no pointer ({"screen":"home","hintY":null,"tileY":464})
+ok   [base] W6 390: the save is byte for byte the same and the only key added is soccerSquad:help (soccerSquad:help)
+ok   [base] W6 390: no page error (none)
+FAIL [base] W6 320: the first frame of the first open is home with the pointer ({"screen":"home","hintY":null,"tileY":371})
+FAIL [base] W6 320: one second later it is still home with the pointer ({"screen":"help","hintY":null,"tileY":null})
+FAIL [base] W6 320: the pointer and the first tile have not moved
+ok   [base] W6 320: ? opens the help
+ok   [base] W6 320: the next open is home with no pointer ({"screen":"home","hintY":null,"tileY":372})
+ok   [base] W6 320: the save is byte for byte the same and the only key added is soccerSquad:help (soccerSquad:help)
+ok   [base] W6 320: no page error (none)
+FAIL [base] W6 1280: the first frame of the first open is home with the pointer ({"screen":"home","hintY":null,"tileY":472})
+FAIL [base] W6 1280: one second later it is still home with the pointer ({"screen":"help","hintY":null,"tileY":null})
+FAIL [base] W6 1280: the pointer and the first tile have not moved
+ok   [base] W6 1280: ? opens the help
+ok   [base] W6 1280: the next open is home with no pointer ({"screen":"home","hintY":null,"tileY":473})
+ok   [base] W6 1280: the save is byte for byte the same and the only key added is soccerSquad:help (soccerSquad:help)
+ok   [base] W6 1280: no page error (none)
+FAIL [base] W7 390: the menu's rules block is one paragraph with its worked example (3 paragraphs)
+FAIL [base] W7 390: the bank rule is said once on the menu
+ok   [base] W7 390: the first drill tile is in view without scrolling the panel ({"scrollTop":0,"bottom":501,"panelBottom":793,"vh":844})
+FAIL [base] W7 390: ? shows all three paragraphs, the bank rule last (3)
+ok   [base] W7 390: the save is byte for byte the same
+ok   [base] W7 390: no page error (none)
+FAIL [base] W7 1280: the menu's rules block is one paragraph with its worked example (3 paragraphs)
+FAIL [base] W7 1280: the bank rule is said once on the menu
+ok   [base] W7 1280: the first drill tile is in view without scrolling the panel ({"scrollTop":0,"bottom":431,"panelBottom":846,"vh":900})
+FAIL [base] W7 1280: ? shows all three paragraphs, the bank rule last (3)
+ok   [base] W7 1280: the save is byte for byte the same
+ok   [base] W7 1280: no page error (none)
+FAIL [base] W8 320: the title holds the whole name ({"text":"Bartholomew Fixture-Longname, full attributes","cut":true})
+FAIL [base] W8 320: every keeper label holds its whole text (14 labels, cut: Shot Reflexes, Recovery Saves, One On Ones, Long Range, Angles, Reading The Game, Claiming Crosses, Punching, Throwing, Kicking, Reading The Penalty, Shootout Nerve, Rushing Out, Recovery Pace)
+ok   [base] W8 320: the save is byte for byte the same
+ok   [base] W8 320: no page error (none)
+FAIL [base] W8 1280: the title holds the whole name ({"text":"Bartholomew Fixture-Longname, full attributes","cut":true})
+FAIL [base] W8 1280: every keeper label holds its whole text (14 labels, cut: Shot Reflexes, Recovery Saves, One On Ones, Long Range, Angles, Reading The Game, Claiming Crosses, Punching, Throwing, Kicking, Reading The Penalty, Shootout Nerve, Rushing Out, Recovery Pace)
+ok   [base] W8 1280: the save is byte for byte the same
+ok   [base] W8 1280: no page error (none)
+
+verdicts, section by section:
+  W4: head 13/13, base 8/13 (red wanted: as it must)
+  W4r: head 6/6, base 6/6 (green wanted: as it must)
+  W5: head 12/12, base 6/12 (red wanted: as it must)
+  W6: head 20/21, base 12/21 (red wanted: as it must)
+  W7: head 12/12, base 6/12 (red wanted: as it must)
+  W8: head 8/8, base 4/8 (red wanted: as it must)
+  report: [head] W4 pressing "Go back" during the countdown unmounts the night's card (it would count down again)
+  report: [head] W4 pressing "Cookie choices" during the countdown unmounts the night's card (it would count down again)
+  report: [head] W4 25 other hub controls pressed during the countdown, 2 of them unmount the card
+playSoccerScreenTruths: RED

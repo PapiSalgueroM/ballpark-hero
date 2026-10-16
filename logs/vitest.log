@@ -1,0 +1,40 @@
+   [33m[2m✓[22m[39m the training panel names the stat the engine pays[2m > [22mCM: every session tile says the attribute screen's name for what it pays [33m 648[2mms[22m[39m
+ [32m✓[39m src/test/usCareerPractice.test.tsx [2m([22m[2m32 tests[22m[2m)[22m[33m 41923[2mms[22m[39m
+   [33m[2m✓[22m[39m US career practice on the actual boards[2m > [22m'NFL' quiet legacy restore preserves the existing career unchanged [33m 644[2mms[22m[39m
+   [33m[2m✓[22m[39m US career practice on the actual boards[2m > [22m'NBA' quiet legacy restore preserves the existing career unchanged [33m 570[2mms[22m[39m
+   [33m[2m✓[22m[39m US career practice on the actual boards[2m > [22m'MLB' quiet legacy restore preserves the existing career unchanged [33m 574[2mms[22m[39m
+   [33m[2m✓[22m[39m US career practice on the actual boards[2m > [22m'NHL' quiet legacy restore preserves the existing career unchanged [33m 531[2mms[22m[39m
+   [33m[2m✓[22m[39m US career practice on the actual boards[2m > [22m'NFL' banks played skill into the real save once and survives reload [33m 2287[2mms[22m[39m
+   [33m[2m✓[22m[39m US career practice on the actual boards[2m > [22m'NBA' banks played skill into the real save once and survives reload [33m 1404[2mms[22m[39m
+   [33m[2m✓[22m[39m US career practice on the actual boards[2m > [22m'MLB' banks played skill into the real save once and survives reload [33m 1156[2mms[22m[39m
+   [33m[2m✓[22m[39m US career practice on the actual boards[2m > [22m'NHL' banks played skill into the real save once and survives reload [33m 1346[2mms[22m[39m
+   [33m[2m✓[22m[39m US career practice on the actual boards[2m > [22m'NFL' zero and solid scores bank only the rating earned [33m 2079[2mms[22m[39m
+   [33m[2m✓[22m[39m US career practice on the actual boards[2m > [22m'NBA' zero and solid scores bank only the rating earned [33m 1984[2mms[22m[39m
+   [33m[2m✓[22m[39m US career practice on the actual boards[2m > [22m'MLB' zero and solid scores bank only the rating earned [33m 2051[2mms[22m[39m
+   [33m[2m✓[22m[39m US career practice on the actual boards[2m > [22m'NHL' zero and solid scores bank only the rating earned [33m 2257[2mms[22m[39m
+   [33m[2m✓[22m[39m US career practice on the actual boards[2m > [22m'NFL' ceiling pays only the available headroom [33m 726[2mms[22m[39m
+   [33m[2m✓[22m[39m US career practice on the actual boards[2m > [22m'NBA' ceiling pays only the available headroom [33m 684[2mms[22m[39m
+   [33m[2m✓[22m[39m US career practice on the actual boards[2m > [22m'MLB' ceiling pays only the available headroom [33m 659[2mms[22m[39m
+   [33m[2m✓[22m[39m US career practice on the actual boards[2m > [22m'NHL' ceiling pays only the available headroom [33m 719[2mms[22m[39m
+   [33m[2m✓[22m[39m US career practice on the actual boards[2m > [22m'NFL' old above-ceiling rating is never reduced [33m 978[2mms[22m[39m
+   [33m[2m✓[22m[39m US career practice on the actual boards[2m > [22m'NBA' old above-ceiling rating is never reduced [33m 844[2mms[22m[39m
+   [33m[2m✓[22m[39m US career practice on the actual boards[2m > [22m'MLB' old above-ceiling rating is never reduced [33m 778[2mms[22m[39m
+   [33m[2m✓[22m[39m US career practice on the actual boards[2m > [22m'NHL' old above-ceiling rating is never reduced [33m 1199[2mms[22m[39m
+   [33m[2m✓[22m[39m US career practice on the actual boards[2m > [22m'NFL' abort leaves no save changes and rules reopen during play [33m 1223[2mms[22m[39m
+   [33m[2m✓[22m[39m US career practice on the actual boards[2m > [22m'NBA' abort leaves no save changes and rules reopen during play [33m 1477[2mms[22m[39m
+   [33m[2m✓[22m[39m US career practice on the actual boards[2m > [22m'MLB' abort leaves no save changes and rules reopen during play [33m 1134[2mms[22m[39m
+   [33m[2m✓[22m[39m US career practice on the actual boards[2m > [22m'NHL' abort leaves no save changes and rules reopen during play [33m 1603[2mms[22m[39m
+   [33m[2m✓[22m[39m US career practice on the actual boards[2m > [22m'NFL' earned rating reaches the next real season and practice renews afterwards [33m 2918[2mms[22m[39m
+   [33m[2m✓[22m[39m US career practice on the actual boards[2m > [22m'NBA' earned rating reaches the next real season and practice renews afterwards [33m 2841[2mms[22m[39m
+   [33m[2m✓[22m[39m US career practice on the actual boards[2m > [22m'MLB' earned rating reaches the next real season and practice renews afterwards [33m 2136[2mms[22m[39m
+   [33m[2m✓[22m[39m US career practice on the actual boards[2m > [22m'NHL' earned rating reaches the next real season and practice renews afterwards [33m 2920[2mms[22m[39m
+   [33m[2m✓[22m[39m US career practice on the actual boards[2m > [22m'NFL' keeps pending rivalry ahead of practice and resets a finished career cleanly [33m 700[2mms[22m[39m
+   [33m[2m✓[22m[39m US career practice on the actual boards[2m > [22m'NBA' keeps pending rivalry ahead of practice and resets a finished career cleanly [33m 545[2mms[22m[39m
+   [33m[2m✓[22m[39m US career practice on the actual boards[2m > [22m'MLB' keeps pending rivalry ahead of practice and resets a finished career cleanly [33m 445[2mms[22m[39m
+   [33m[2m✓[22m[39m US career practice on the actual boards[2m > [22m'NHL' keeps pending rivalry ahead of practice and resets a finished career cleanly [33m 437[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m10 passed[39m[22m[90m (10)[39m
+[2m      Tests [22m [1m[32m181 passed[39m[22m[90m (181)[39m
+[2m   Start at [22m 17:38:21
+[2m   Duration [22m 71.47s[2m (transform 10.39s, setup 870ms, collect 29.66s, tests 96.61s, environment 6.15s, prepare 1.36s)[22m
+

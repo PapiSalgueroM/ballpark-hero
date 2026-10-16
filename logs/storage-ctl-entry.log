@@ -1,0 +1,4 @@
+patched entries: 1
+           NOTHING_HELD is stale: the scan no longer finds write:hintGone in src/components/soccer-career/SquadSheet.tsx. Delete or correct the entry { file: 'src/components/soccer-career/SquadSheet.tsx', keys: ['write:hintGone'] } in scripts/simStorageWrites.mjs
+           src/components/soccer-career/SquadSheet.tsx:59 write:markHintShown is on no list: a refused save is remembered here. Name it to the seam (holdPendingSave, see UsCareerBoard.tsx) and add it to NAMED, or add it to NOTHING_HELD or OWED with the reason
+simStorageWrites: 1 failed (owed: 12)
