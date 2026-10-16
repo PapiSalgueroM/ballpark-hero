@@ -1,0 +1,4 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-cm: node_modules/.bin/vitest run src/test/clubManager src/test/cm src/test/manager src/test/dailyMenuResume src/lib/clubManager src/test/numberFormatting.test.tsx --testTimeout=300000 --hookTimeout=120000
+retire: node scripts/simCmRetire.mjs
+c-seasonover: RETIRE_CONTROL=seasonover node scripts/simCmRetire.mjs
