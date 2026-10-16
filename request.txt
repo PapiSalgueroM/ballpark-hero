@@ -1,0 +1,4 @@
+#!build
+#!playwright
+walk: node scripts/playCmOldCareersWorld.mjs
+walk-never: PLAY_OLD_WORLD_CONTROL=never node scripts/playCmOldCareersWorld.mjs

@@ -1,0 +1,3 @@
+build exit=0 33s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+walk-never exit=1 5s | playCmOldCareersWorld: control never FIRED: (b) red
+walk exit=0 5s | playCmOldCareersWorld: green, 5 checks held; pictures in /home/runner/work/_temp/rc-out/files/head
