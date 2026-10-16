@@ -1,0 +1,14 @@
+headsha: git log --oneline -3
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-bingo: node_modules/.bin/vitest run src/test/playerBingoHonours.test.ts src/test/playerBingoLineFeedback.test.tsx src/test/playerBingoLoad.test.tsx src/test/playerBingoReport.test.tsx src/test/playerBingoRodriHonour.test.ts src/test/playerBingoTransport.test.ts src/test/playerBingoWorldCupAlias.test.ts src/test/scoreShown.test.tsx --testTimeout=300000 --hookTimeout=120000
+rodri-proof: CI=1 SIM_NETWORK=offline PLAYER_BINGO_RODRI_PHASE=fixed PLAYER_BINGO_RODRI_OUT="$RUNNER_TEMP/rodri" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simPlayerBingoRodriHonour.mjs
+simPlayerBingoHonours: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simPlayerBingoHonours.mjs
+simPlayerBingoWorldCupAlias: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simPlayerBingoWorldCupAlias.mjs
+simPlayerBingoLoad: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simPlayerBingoLoad.mjs
+simPlayerBingoLineFeedback: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simPlayerBingoLineFeedback.mjs
+simSportsBingo: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSportsBingo.mjs
+simBingoSeats: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simBingoSeats.mjs
+simMarketYearScope: node scripts/simMarketYearScope.mjs
+simRevealMoments: node scripts/simRevealMoments.mjs
+simScoreShown: node scripts/simScoreShown.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
