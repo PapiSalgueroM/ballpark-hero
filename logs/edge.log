@@ -1,0 +1,104 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [31m×[39m src/test/managerTransferEdgeCases.test.ts[2m > [22mI1344 prior human sale journey[2m > [22mprior human sale hijack cannot announce an ownership-refused transfer[32m 29[2mms[22m[39m
+[31m   → MTE_SALE_HIJACK: actual public outcome: expected false to be true // Object.is equality[39m
+ [31m×[39m src/test/managerTransferEdgeCases.test.ts[2m > [22mI1344 prior human sale journey[2m > [22mprior human sale walk-away cannot announce an ownership-refused transfer[32m 13[2mms[22m[39m
+[31m   → MTE_SALE_WALK: actual public outcome: expected false to be true // Object.is equality[39m
+ [32m✓[39m src/test/managerTransferEdgeCases.test.ts[2m > [22mI1344 prior human sale journey[2m > [22mhuman-sale rule 3 keeps the full owned payload and takes no RNG[32m 18[2mms[22m[39m
+ [32m✓[39m src/test/managerTransferEdgeCases.test.ts[2m > [22mI1344 ordinary AI transfers[2m > [22mordinary AI rival closes still record both actual purchases[32m 15[2mms[22m[39m
+ [31m×[39m src/test/managerTransferEdgeCases.test.ts[2m > [22mI1344 actual job handover journey[2m > [22mcarried current-season AI signing keeps its Talk lock after job move and reload[32m 57[2mms[22m[39m
+[31m   → MTE_JOB_TALK: actual public outcome: expected false to be true // Object.is equality[39m
+ [31m×[39m src/test/managerTransferEdgeCases.test.ts[2m > [22mI1344 actual job handover journey[2m > [22mcarried current-season AI signing keeps its buy lock after job move and reload[32m 63[2mms[22m[39m
+[31m   → MTE_JOB_BUY: actual public outcome: expected false to be true // Object.is equality[39m
+ [32m✓[39m src/test/managerTransferEdgeCases.test.ts[2m > [22mI1344 actual job handover journey[2m > [22moriginal current-season AI signing refuses actual Talk and buy before the job move[32m 9[2mms[22m[39m
+ [32m✓[39m src/test/managerTransferEdgeCases.test.ts[2m > [22mI1344 actual job handover journey[2m > [22mjob move and actual January save retain the departed full player identity[32m 45[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 4 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/managerTransferEdgeCases.test.ts[2m > [22mI1344 prior human sale journey[2m > [22mprior human sale hijack cannot announce an ownership-refused transfer
+[31m[1mAssertionError[22m: MTE_SALE_HIJACK: actual public outcome: expected false to be true // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- true[39m
+[31m+ false[39m
+
+[36m [2m❯[22m observe src/test/managerTransferEdgeCases.test.ts:[2m262:58[22m[39m
+    [90m260| [39m  [35mtry[39m { row[33m.[39mcorrect [33m=[39m [34maction[39m(row)[33m;[39m [34mretain[39m()[33m;[39m }
+    [90m261| [39m  [35mcatch[39m (error) { row[33m.[39merror [33m=[39m [33mString[39m(error)[33m;[39m [34mretain[39m()[33m;[39m [35mthrow[39m error[33m;[39m }
+    [90m262| [39m  [34mexpect[39m(row[33m.[39mcorrect[33m,[39m cause [33m+[39m [32m': actual public outcome'[39m)[33m.[39m[34mtoBe[39m([35mtrue[39m)[33m;[39m
+    [90m   | [39m                                                         [31m^[39m
+    [90m263| [39m}
+    [90m264| [39mfunction close(context: Context, row: any, war: ReturnType<typeof warF…
+[90m [2m❯[22m src/test/managerTransferEdgeCases.test.ts:[2m283:85[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/4]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/managerTransferEdgeCases.test.ts[2m > [22mI1344 prior human sale journey[2m > [22mprior human sale walk-away cannot announce an ownership-refused transfer
+[31m[1mAssertionError[22m: MTE_SALE_WALK: actual public outcome: expected false to be true // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- true[39m
+[31m+ false[39m
+
+[36m [2m❯[22m observe src/test/managerTransferEdgeCases.test.ts:[2m262:58[22m[39m
+    [90m260| [39m  [35mtry[39m { row[33m.[39mcorrect [33m=[39m [34maction[39m(row)[33m;[39m [34mretain[39m()[33m;[39m }
+    [90m261| [39m  [35mcatch[39m (error) { row[33m.[39merror [33m=[39m [33mString[39m(error)[33m;[39m [34mretain[39m()[33m;[39m [35mthrow[39m error[33m;[39m }
+    [90m262| [39m  [34mexpect[39m(row[33m.[39mcorrect[33m,[39m cause [33m+[39m [32m': actual public outcome'[39m)[33m.[39m[34mtoBe[39m([35mtrue[39m)[33m;[39m
+    [90m   | [39m                                                         [31m^[39m
+    [90m263| [39m}
+    [90m264| [39mfunction close(context: Context, row: any, war: ReturnType<typeof warF…
+[90m [2m❯[22m src/test/managerTransferEdgeCases.test.ts:[2m291:88[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/4]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/managerTransferEdgeCases.test.ts[2m > [22mI1344 actual job handover journey[2m > [22mcarried current-season AI signing keeps its Talk lock after job move and reload
+[31m[1mAssertionError[22m: MTE_JOB_TALK: actual public outcome: expected false to be true // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- true[39m
+[31m+ false[39m
+
+[36m [2m❯[22m observe src/test/managerTransferEdgeCases.test.ts:[2m262:58[22m[39m
+    [90m260| [39m  [35mtry[39m { row[33m.[39mcorrect [33m=[39m [34maction[39m(row)[33m;[39m [34mretain[39m()[33m;[39m }
+    [90m261| [39m  [35mcatch[39m (error) { row[33m.[39merror [33m=[39m [33mString[39m(error)[33m;[39m [34mretain[39m()[33m;[39m [35mthrow[39m error[33m;[39m }
+    [90m262| [39m  [34mexpect[39m(row[33m.[39mcorrect[33m,[39m cause [33m+[39m [32m': actual public outcome'[39m)[33m.[39m[34mtoBe[39m([35mtrue[39m)[33m;[39m
+    [90m   | [39m                                                         [31m^[39m
+    [90m263| [39m}
+    [90m264| [39mfunction close(context: Context, row: any, war: ReturnType<typeof warF…
+[90m [2m❯[22m src/test/managerTransferEdgeCases.test.ts:[2m339:95[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/4]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/managerTransferEdgeCases.test.ts[2m > [22mI1344 actual job handover journey[2m > [22mcarried current-season AI signing keeps its buy lock after job move and reload
+[31m[1mAssertionError[22m: MTE_JOB_BUY: actual public outcome: expected false to be true // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- true[39m
+[31m+ false[39m
+
+[36m [2m❯[22m observe src/test/managerTransferEdgeCases.test.ts:[2m262:58[22m[39m
+    [90m260| [39m  [35mtry[39m { row[33m.[39mcorrect [33m=[39m [34maction[39m(row)[33m;[39m [34mretain[39m()[33m;[39m }
+    [90m261| [39m  [35mcatch[39m (error) { row[33m.[39merror [33m=[39m [33mString[39m(error)[33m;[39m [34mretain[39m()[33m;[39m [35mthrow[39m error[33m;[39m }
+    [90m262| [39m  [34mexpect[39m(row[33m.[39mcorrect[33m,[39m cause [33m+[39m [32m': actual public outcome'[39m)[33m.[39m[34mtoBe[39m([35mtrue[39m)[33m;[39m
+    [90m   | [39m                                                         [31m^[39m
+    [90m263| [39m}
+    [90m264| [39mfunction close(context: Context, row: any, war: ReturnType<typeof warF…
+[90m [2m❯[22m src/test/managerTransferEdgeCases.test.ts:[2m350:94[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/4]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m4 failed[39m[22m[2m | [22m[1m[32m4 passed[39m[22m[90m (8)[39m
+[2m   Start at [22m 17:04:09
+[2m   Duration [22m 6.56s[2m (transform 2.31s, setup 76ms, collect 94ms, tests 5.36s, environment 495ms, prepare 189ms)[22m
+
