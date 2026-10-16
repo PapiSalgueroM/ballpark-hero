@@ -1,0 +1,4 @@
+#!playwright
+#!serial
+mutb-sackedfirst: node .rc/x/review-run-mut.mjs sackedfirst && node_modules/.bin/vite build --outDir dist-mut-sacked >/dev/null 2>&1 && DIST=dist-mut-sacked node scripts/playCmRetire.mjs; s=$?; git checkout -- src scripts; echo "MUTB sackedfirst playCmRetire=$s"; exit 0
+mutb-summaryfirst: node .rc/x/review-run-mut.mjs summaryfirst && node_modules/.bin/vite build --outDir dist-mut-summary >/dev/null 2>&1 && DIST=dist-mut-summary node scripts/playCmRetire.mjs; s=$?; git checkout -- src scripts; echo "MUTB summaryfirst playCmRetire=$s"; exit 0
