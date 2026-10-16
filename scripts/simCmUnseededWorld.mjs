@@ -47,6 +47,9 @@
  *                                  before the summer goes red (quiet and deals; the fresh section is not run)
  *   CM_UNSEEDED_CONTROL=never      (Round 1508) never adopts (startNextSeason's line out): the moved check goes red
  *                                  after the rollover while the comparison before it stays green (deals only)
+ *   CM_UNSEEDED_CONTROL=norecord   (Round 1508, the read review of 2026-10-16, minor 3) adopts but records none of my
+ *                                  men (the adoption's recording line out): the mine check goes red after the
+ *                                  rollover while the comparison before it stays green (deals only)
  * CM_UNSEEDED_FLEET=quick plays one seed a club and no fixtures (for trying it out; never a gate line).
  * Exit 0 green, 1 red or a control that fired, 2 could not run, 3 a control that did not fire.
  *
@@ -76,10 +79,12 @@ const GUARD = '  if (!livingWorldOf(state)) return state;\n';
 /* Round 1508: the adoption, and where the early control puts a second one (the load, before the first summer). */
 const ADOPT = '  career = adoptLivingWorld(career);\n';
 const LOAD_REPAIR = '    repairAiMoves(parsed);\n';
+/* The adoption's one line that records a man of mine (the norecord control takes it out, the adoption stays). */
+const RECORD_MINE = "    adopted = recordActualRosterTransfer(adopted, p, clubs[0], career.clubName, 'permanent', false);\n";
 const CONTROL = process.env.CM_UNSEEDED_CONTROL || '';
 const QUICK = process.env.CM_UNSEEDED_FLEET === 'quick';
 const cannot = why => { console.log(`simCmUnseededWorld: cannot run: ${why}`); process.exit(2); };
-if (CONTROL && !['guard', 'noinverse', 'early', 'never'].includes(CONTROL)) cannot(`unknown control ${CONTROL}`);
+if (CONTROL && !['guard', 'noinverse', 'early', 'never', 'norecord'].includes(CONTROL)) cannot(`unknown control ${CONTROL}`);
 /** One anchor that must stand exactly once in the engine, replaced (a control's edit fails closed). */
 const once = (name, from, to) => text => {
   const n = text.split(from).length - 1;
@@ -420,11 +425,12 @@ const HOT_DATES = QUICK ? [] : ['2026-10-10', '2026-10-27', '2027-01-19'];
 
 const baseEngine = await engine('base', { base: true });
 const sections = CONTROL === 'noinverse' ? ['fresh'] : CONTROL === 'guard' || CONTROL === 'early' ? ['quiet', 'deals']
-  : CONTROL === 'never' ? ['deals'] : ['quiet', 'deals', 'fresh'];
+  : CONTROL === 'never' || CONTROL === 'norecord' ? ['deals'] : ['quiet', 'deals', 'fresh'];
 const thisTree = CONTROL === 'guard'
   ? await engine('noguard', { edit: text => { const n = text.split(GUARD).length - 1; if (n !== 1) cannot(`control guard: the guard is in ${ENGINE} ${n} times, it must be exactly once`); return text.replace(GUARD, ''); } })
   : CONTROL === 'early' ? await engine('early', { edit: once('early', LOAD_REPAIR, `${LOAD_REPAIR}    Object.assign(parsed, adoptLivingWorld(parsed));\n`) })
   : CONTROL === 'never' ? await engine('never', { edit: once('never', ADOPT, '') })
+  : CONTROL === 'norecord' ? await engine('norecord', { edit: once('norecord', RECORD_MINE, '') })
   : await engine('tree');
 const inverse = CONTROL === 'noinverse' ? await engine('tree') : await engine('inverse', { edit: withoutWorldSeed });
 
@@ -519,6 +525,14 @@ if (CONTROL === 'never') {
   console.log(fired
     ? `simCmUnseededWorld: CONTROL never FIRED: never adopted, the moved check went red ${moved} times after the rollover while the comparison before it stayed green`
     : `simCmUnseededWorld: CONTROL never DID NOT FIRE as it must: moved red ${moved}, the comparison before the rollover red ${red('deals')}`);
+  process.exit(fired ? 1 : 3);
+}
+if (CONTROL === 'norecord') {
+  const mine = results.deals.living.counts.mine ?? 0;
+  const fired = mine > 0 && !red('deals');
+  console.log(fired
+    ? `simCmUnseededWorld: CONTROL norecord FIRED: adopted without recording my men, the mine check went red ${mine} times after the rollover while the comparison before it stayed green (red by check: ${JSON.stringify(results.deals.living.counts)})`
+    : `simCmUnseededWorld: CONTROL norecord DID NOT FIRE as it must: mine red ${mine}, the comparison before the rollover red ${red('deals')}`);
   process.exit(fired ? 1 : 3);
 }
 /* Round 1508: the checks after the rollover must have had something to hold. */
