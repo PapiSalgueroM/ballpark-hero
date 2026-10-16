@@ -1,0 +1,8 @@
+FAIL [head] W6 1280: the pointer and the first tile have not moved
+
+verdicts, section by section:
+  W6: head 20/21
+  W8: head 8/8
+  head failure: W6 1280: the pointer and the first tile have not moved
+playSoccerScreenTruths: no base arm (set SCREEN_TRUTHS_BASE_DIST); the head alone is not a proof
+playSoccerScreenTruths: RED
