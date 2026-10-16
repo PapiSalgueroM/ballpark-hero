@@ -1,0 +1,6 @@
+title0: CM_BOARD_BASE=$(bash .rc/x/mkbase.sh a1) SHARD=0/2 node scripts/simCmBoardVerdict.mjs --part=title,kitty
+title1: CM_BOARD_BASE=$(bash .rc/x/mkbase.sh a2) SHARD=1/2 node scripts/simCmBoardVerdict.mjs --part=title,kitty
+title-played: CM_BOARD_BASE=$(bash .rc/x/mkbase.sh a3) SHARD=0/2 SIM_CM_BOARD_CONTROL=played node scripts/simCmBoardVerdict.mjs --part=title
+title-weights: CM_BOARD_BASE=$(bash .rc/x/mkbase.sh a4) SHARD=0/2 SIM_CM_BOARD_CONTROL=weights node scripts/simCmBoardVerdict.mjs --part=title
+legacy0: CM_BOARD_BASE=$(bash .rc/x/mkbase.sh a5) SHARD=0/2 node scripts/simCmBoardVerdict.mjs --part=legacy
+legacy1: CM_BOARD_BASE=$(bash .rc/x/mkbase.sh a6) SHARD=1/2 node scripts/simCmBoardVerdict.mjs --part=legacy

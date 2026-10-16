@@ -1,0 +1,6 @@
+title-played exit=1 265s | control played FIRED: 1 of 6 checks red
+title0 exit=0 373s | simCmBoardVerdict GREEN: 8 of 8 checks green (parts title, kitty, 372 s)
+title1 exit=0 401s | simCmBoardVerdict GREEN: 8 of 8 checks green (parts title, kitty, 400 s)
+title-weights exit=1 257s | control weights FIRED: 1 of 6 checks red
+legacy0 exit=0 204s | simCmBoardVerdict GREEN: 2 of 2 checks green (parts legacy, 202 s)
+legacy1 exit=0 193s | simCmBoardVerdict GREEN: 2 of 2 checks green (parts legacy, 192 s)
