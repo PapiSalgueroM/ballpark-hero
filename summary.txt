@@ -1,0 +1,3 @@
+simWorldUcl exit=0 0s | simWorldUcl: green, 369 checks, 0 failures
+vitest-world exit=0 3s |    Duration  2.12s (transform 155ms, setup 65ms, collect 191ms, tests 818ms, environment 477ms, prepare 197ms)
+tsc exit=0 64s | 
