@@ -1,0 +1,18 @@
+c-seedless: CM_WORLD_MOVES_CONTROL=seedless CM_WORLD_MOVES_ERAS=now CM_WORLD_MOVES_SEEDS=0-1 node scripts/simCmWorldMoves.mjs
+c-norecord: CM_WORLD_MOVES_CONTROL=norecord CM_WORLD_MOVES_ERAS=now CM_WORLD_MOVES_SEEDS=1-2 node scripts/simCmWorldMoves.mjs
+c-noflush: CM_WORLD_MOVES_CONTROL=noflush CM_WORLD_MOVES_ERAS=now CM_WORLD_MOVES_SEEDS=1-2 node scripts/simCmWorldMoves.mjs
+c-nojanuary: CM_WORLD_MOVES_CONTROL=nojanuary CM_WORLD_MOVES_ERAS=now CM_WORLD_MOVES_SEEDS=1-2 node scripts/simCmWorldMoves.mjs
+c-nosummer: CM_WORLD_MOVES_CONTROL=nosummer CM_WORLD_MOVES_ERAS=now CM_WORLD_MOVES_SEEDS=1-2 node scripts/simCmWorldMoves.mjs
+c-joinledger: CM_WORLD_MOVES_CONTROL=joinledger node scripts/simCmWorldMoves.mjs
+c-nocarry: CM_WORLD_MOVES_CONTROL=nocarry node scripts/simCmWorldMoves.mjs
+c-seasonone: CM_WORLD_MOVES_CONTROL=seasonone node scripts/simCmWorldMoves.mjs
+c-nolock: CM_WORLD_MOVES_CONTROL=nolock CM_WORLD_MOVES_ERAS=now CM_WORLD_MOVES_SEEDS=1-2 node scripts/simCmWorldMoves.mjs
+c-nolist: CM_WORLD_MOVES_CONTROL=nolist CM_WORLD_MOVES_ERAS=now CM_WORLD_MOVES_SEEDS=1-2 node scripts/simCmWorldMoves.mjs
+c-dropbase: CM_WORLD_MOVES_CONTROL=dropbase CM_WORLD_MOVES_ERAS=now CM_WORLD_MOVES_SEEDS=1-2 node scripts/simCmWorldMoves.mjs
+c-norepair: CM_WORLD_MOVES_CONTROL=norepair node scripts/simCmWorldMoves.mjs
+c-repairthrows: CM_WORLD_MOVES_CONTROL=repairthrows node scripts/simCmWorldMoves.mjs
+c-nohijack: CM_WORLD_MOVES_CONTROL=nohijack node scripts/simCmWorldMoves.mjs
+c-nowalk: CM_WORLD_MOVES_CONTROL=nowalk node scripts/simCmWorldMoves.mjs
+c-noguard: CM_WORLD_MOVES_CONTROL=noguard node scripts/simCmWorldMoves.mjs
+c-noskip: CM_WORLD_MOVES_CONTROL=noskip node scripts/simCmWorldMoves.mjs
+c-drawshift: CM_WORLD_MOVES_CONTROL=drawshift node scripts/simCmWorldMoves.mjs
