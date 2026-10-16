@@ -1,0 +1,8 @@
+#!serial
+preA: bash .rc/x/bis.sh preA f7500b45
+r1351: bash .rc/x/bis.sh r1351 f40dd50d
+r1357: bash .rc/x/bis.sh r1357 285b2ee9
+notes: bash .rc/x/bis.sh notes 606a8c96
+main: bash .rc/x/bis.sh main e814c2de
+mainfrozen: bash .rc/x/bis.sh mainfrozen e814c2de frozen
+head: bash .rc/x/bis.sh head b275c0a2
