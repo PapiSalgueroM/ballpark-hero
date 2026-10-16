@@ -1,0 +1,8 @@
+build exit=0 31s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+sims3 exit=1 821s | 2 harnesses not green.
+fences exit=1 371s | 4 harnesses not green.
+prerender16 exit=0 1s | simPrerender: 1 failure
+vitest-readers exit=0 89s |    Duration  88.23s (transform 13.38s, setup 2.02s, collect 46.42s, tests 166.20s, environment 15.67s, prepare 3.30s)
+unit-base exit=1 9s | vitest on the base's copies exit 1 (1 wanted)
+sims1 exit=0 1398s | All 16 harnesses green.
+sims2 exit=1 1817s | 1 harness not green.

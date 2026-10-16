@@ -1,0 +1,6 @@
+16) no random pick seeds React state directly
+   2125 source files scanned, 23 raw random initialiser(s), 22 file(s) on the frozen baseline, 0 new
+17) no saved page opens on a frozen loading line
+   171 documents read, 0 waiting lines found
+
+simPrerender: 1 failure

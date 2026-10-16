@@ -1,0 +1,20 @@
+   [33m[2m✓[22m[39m a defender keeps clean sheets in his career totals and on the Career Stats tile[2m > [22mLB: 5 seeded pro seasons add up to clean sheets, and the tile prints the same number [33m 368[2mms[22m[39m
+   [33m[2m✓[22m[39m a defender keeps clean sheets in his career totals and on the Career Stats tile[2m > [22mRB: 5 seeded pro seasons add up to clean sheets, and the tile prints the same number [33m 402[2mms[22m[39m
+ [32m✓[39m src/test/careerRecordedStats.test.tsx [2m([22m[2m8 tests[22m[2m)[22m[32m 200[2mms[22m[39m
+[90mstdout[2m | src/test/careerDilemmaReach.test.tsx[2m > [22m[2mSoccer Career: the moral dilemmas reach the player through the page[2m > [22m[2mreach: careers picked up at 30
+[22m[39mREACH start=30 careers=6 seasons=24 adultSeasons=24 offers=4 shows=4 adultShows=4
+
+[90mstdout[2m | src/test/careerDilemmaReach.test.tsx[2m > [22m[2mSoccer Career: the moral dilemmas reach the player through the page[2m > [22m[2mreach: a player from 20 up sees dilemmas on screen
+[22m[39mREACH total adultOffers=29 adultShows=29
+
+ [32m✓[39m src/test/careerDilemmaReach.test.tsx [2m([22m[2m5 tests[22m[2m)[22m[33m 55237[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career: the moral dilemmas reach the player through the page[2m > [22mreach: careers picked up at 17 [33m 11151[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career: the moral dilemmas reach the player through the page[2m > [22mreach: careers picked up at 19 [33m 11569[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career: the moral dilemmas reach the player through the page[2m > [22mreach: careers picked up at 24 [33m 13531[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career: the moral dilemmas reach the player through the page[2m > [22mreach: careers picked up at 30 [33m 17479[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m28 passed[39m[22m[90m (28)[39m
+[2m      Tests [22m [1m[32m379 passed[39m[22m[90m (379)[39m
+[2m   Start at [22m 18:32:06
+[2m   Duration [22m 88.23s[2m (transform 13.38s, setup 2.02s, collect 46.42s, tests 166.20s, environment 15.67s, prepare 3.30s)[22m
+

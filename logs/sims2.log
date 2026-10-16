@@ -1,0 +1,24 @@
+Network mode: offline, loopback only, no production probe or database retries.
+Running 17 node harnesses
+  PASS  simCreation.mjs              1189.7s
+  PASS  simHomeFront.mjs                4.7s
+  PASS  simLoanSpell.mjs               26.0s
+  PASS  simManagerCareer.mjs           42.6s
+  PASS  simNationalityFlags.mjs         3.4s
+  PASS  simSaveFence.mjs              175.8s
+  PASS  simScoreShown.mjs              83.0s
+  PASS  simSeasonCentreMotion.mjs      45.7s
+  PASS  simSeasonCentreNeutral.mjs     81.3s
+  PASS  simSessionMarks.mjs             1.6s
+  PASS  simSoccerAgentReview.mjs       39.3s
+  PASS  simSoccerAgentReviewPageControl.mjs   74.0s
+  PASS  simSoccerAwardGenerations.mjs 1558.8s
+  FAIL  simSoccerCareerDocumentaryReview.mjs    1.2s
+  PASS  simSoccerCareerSaveRecovery.mjs   31.7s
+  PASS  simSoccerCompetitionNavigation.mjs   93.6s
+  PASS  simSoccerOfferReview.mjs       44.0s
+
+----- simSoccerCareerDocumentaryReview.mjs (FAIL) -----
+AssertionError [ERR_ASSERTION]: Only fixed Life may differ from the whole held parent app
+
+1 harness not green.
