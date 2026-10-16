@@ -1,0 +1,8 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+take: CM_BOARD_BASE=$(bash .rc/x/mkbase.sh v1) node scripts/simCmBoardVerdict.mjs --part=takeover
+take-nopin: CM_BOARD_BASE=$(bash .rc/x/mkbase.sh v2) SIM_CM_BOARD_CONTROL=nopin node scripts/simCmBoardVerdict.mjs --part=takeover
+dailies: CM_BOARD_BASE=$(bash .rc/x/mkbase.sh v3) node scripts/simCmBoardVerdict.mjs --part=dailies
+dailies-hscard: CM_BOARD_BASE=$(bash .rc/x/mkbase.sh v4) SIM_CM_BOARD_CONTROL=hscard node scripts/simCmBoardVerdict.mjs --part=dailies
+simDailyDeals: node scripts/simDailyDeals.mjs
+simManagerHotSeat: node scripts/simManagerHotSeat.mjs
+hsunit: node_modules/.bin/vitest run src/test/managerHotSeatCarryOnCard.test.tsx src/test/dailyMenuResume.test.tsx --testTimeout=300000 --hookTimeout=120000
