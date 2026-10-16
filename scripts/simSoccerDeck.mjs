@@ -34,6 +34,16 @@
         Math.random count, getAllEvents equal, and the stamps the base's plus
         the deck card's own key. Then a head fleet with the deck loaded: no
         deck card is pending at any deal, and the deck dealt cards (counted).
+     4) NEUTRAL. The deck loaded and every deck card answered on its option
+        that moves nothing, every other card on its first option, Math.random
+        reseeded before every engine step from the career, the season, the
+        step's phase and its count, with no key for the deck card's answer
+        (answering it builds the catalog, and the catalog draws, so a
+        continuous stream would part the fleets on healthy code): every
+        season end save equals the base's once the deck's own stamps are
+        taken out of eventLastFired; seasons whose old draw was empty (the
+        deck card dealt alone, the one way lastEventId could move) are
+        counted and listed.
      5) PROMISES. Every option of every card on fixture careers of each group
         (GK, CB, CM, ST) at room 0, 1 and 5 under the ceiling and morale 0, 1,
         50, 99 and 100, fresh for each answer: the whole save after the answer
@@ -57,6 +67,24 @@
         code the cards reached, deck cards a summer and the top card's share,
         and per group the share of summers that dealt a deck card (printed,
         not asserted: Round 1504's words read it).
+     7) KEYED. A spy around the slot and the deck's answers only (the
+        fleet's whole Math.random count is printed, never asserted): they
+        draw nothing. The same saves dealt in a second, fresh bundle under a
+        different Math.random stream deal the same cards. The same save dealt
+        eight summers with only the last row's year moved and no stamp
+        carried: the share of careers dealt two different cards stays over a
+        floor measured over five samples.
+     8) ECONOMY. Four arms (the deck off, BEST, WORST, NEUTRAL) over five
+        seeds of whole careers: morale and integrity at 25 and 30, the overall
+        at 30, the peak, the legacy score, the share ever at integrity 40, the
+        share of season starts past the ceiling, each arm against the deck off
+        inside a band set from the measured seed to seed spread; exact: no
+        deck answer queues more than momentsRoom allowed just before it.
+     9) OLD SAVES. Saves the base wrote load to the same JSON here and play
+        the same season (the deck not loaded); a save written here with a
+        deck card pending passes the save validator, loads on the base and is
+        skipped with its stamp handed back (Round 667's path), and answers
+        here once the deck is loaded.
      10) LAZY, the static half. The static closure (scripts/lib/
         staticClosure.mjs) of src/pages/SoccerCareer.tsx and of the engine
         holds soccerDeckGate.ts and none of soccerDeck.ts, src/data/
@@ -87,6 +115,20 @@
                fleet deals from; the widened pack passes the bind check, so the
                red is a midfielder dealt 706, not a pack that deals nothing;
                section 6 fails.
+     neutralmoves the option that moves nothing gives morale +1 (soccerDeck.ts,
+               in memory); section 4 fails.
+     noreseed  section 4's fleets run on one continuous stream each; the deck
+               answer's catalog draws part them; section 4 fails, which is
+               what proves the reseeding load bearing.
+     mathrandom the slot draws from Math.random (soccerDeck.ts, in memory);
+               section 7 fails.
+     keyseason the engine's slot key loses the season (in memory): the same
+               save deals one card every summer; section 7 fails.
+     pressure  every deck move times ten (the pack, in memory); section 8
+               fails on a band.
+     noresolve the engine's catalog spread of the pending deck card is gone
+               (in memory): a saved deck card is skipped here too; section 9
+               fails.
      eager     the gate gains a static import of './soccerDeck' (in memory);
                section 10 fails.
      caller    the page gains a call of loadSoccerDeck (in memory); section 10
@@ -147,6 +189,13 @@ const CONTROLS = {
   drop: { breaks: '5', file: DECK, edits: [['    def.apply(s, raw);\n', "    if (k !== 'integrity') def.apply(s, raw); /* drop control */\n"]] },
   ceiling: { breaks: '5', file: DECK, edits: [['      const add = Math.max(0, Math.min(v, momentsRoom(s)));', '      const add = Math.max(0, v); /* ceiling control */']] },
   posleak: { breaks: '6', file: null, edits: null },
+  neutralmoves: { breaks: '4', file: DECK, edits: [['        apply: still ? (s: CareerState) => s : (s: CareerState) => landChoice(s, def.emoji, title, c),',
+    '        apply: still ? (s: CareerState) => ({ ...s, morale: Math.min(100, s.morale + 1) }) : (s: CareerState) => landChoice(s, def.emoji, title, c), /* neutralmoves control */']] },
+  noreseed: { breaks: '4', file: null, edits: null },
+  mathrandom: { breaks: '7', file: DECK, edits: [['  return deckToRandomEvents(pack, [gmTake(eligible, keyedRng(key))]);', '  return deckToRandomEvents(pack, [gmTake(eligible, Math.random)]); /* mathrandom control */']] },
+  keyseason: { breaks: '7', file: ENGINE, edits: [['  picked.unshift(...soccerDeckSlot(state, season, `${soccerDeckIdentity(state)}|${season}|deckslot`, picked));', '  picked.unshift(...soccerDeckSlot(state, season, `${soccerDeckIdentity(state)}|deckslot`, picked)); /* keyseason control */']] },
+  pressure: { breaks: '8', file: null, edits: null },
+  noresolve: { breaks: '9', file: ENGINE, edits: [['    ...soccerDeckPending(state),\n', '    /* noresolve control */\n']] },
   eager: { breaks: '10', file: GATE, edits: null },
   caller: { breaks: '10', file: PAGE, edits: null },
 };
@@ -193,7 +242,7 @@ async function bundle(tag, { ref = null } = {}) {
     : ["export * as engine from './src/lib/soccerCareerEngine';", "export * as gate from './src/lib/soccerDeckGate';",
       "export * as deck from './src/lib/soccerDeck';", "export { SOCCER_DECK_PACKS } from './src/data/soccerDeck';",
       "export * as words from './src/data/soccerDeck/words';", "export * as drills from './src/lib/careerDrills';",
-      "export { momentsRoom } from './src/lib/season/soccerMoments';"].join('\n');
+      "export { momentsRoom } from './src/lib/season/soccerMoments';", "export * as save from './src/lib/soccerCareerSave';"].join('\n');
   await esbuild.build({
     stdin: { contents: entry, resolveDir: ROOT, loader: 'ts' },
     bundle: true, format: 'esm', platform: 'node', outfile: out, logLevel: 'error',
@@ -310,7 +359,7 @@ function step(M, s, seed, clubs) {
  * One career of the fleet on one bundle, Math.random seeded from its seed, twelve seasons (or retirement).
  * `onStep(s)` sees the save after every step; `onDeal(state)` sees the exact state each deal starts from.
  */
-function drive(M, seed, { onStep = null, onDeal = null, seasons = SEASONS } = {}) {
+function drive(M, seed, { onStep = null, onDeal = null, seasons = SEASONS, deckChoice = null } = {}) {
   const real = Math.random;
   let calls = 0;
   const stream = seeded(seed + 1);
@@ -321,9 +370,10 @@ function drive(M, seed, { onStep = null, onDeal = null, seasons = SEASONS } = {}
     const clubs = M.FALLBACK_CLUBS;
     let s = startOf(M, seed);
     onStep?.(s);
-    for (let guard = 0; guard < 600 && !s.retired; guard += 1) {
+    for (let guard = 0; guard < 1500 && !s.retired; guard += 1) {
       if (s.phase === 'playing' && s.seasons.length >= seasons) break;
-      const next = step(M, s, seed, clubs);
+      const first = s.phase === 'random_events' ? s.pendingEvents?.[0] : null;
+      const next = deckChoice && isDeck(first?.id) ? M.applyEventChoice(s, deckChoice(first), clubs) : step(M, s, seed, clubs);
       if (!next) break;
       s = next;
       steps += 1;
@@ -510,6 +560,85 @@ if (runs(3)) {
   if (pendingAtDeal) fail(`${pendingAtDeal} deals start with a deck card still pending`);
   else ok('no deck card is pending at any deal of the loaded head fleet');
   H.gate.setSoccerDeckLoader();
+}
+
+/* ─── 4. a neutral deck changes nothing else ───────────────────────────── */
+
+SECTION = '4';
+console.log('4) Neutral: every deck card answered on the option that moves nothing, every season end save is the base\'s but for the deck\'s own stamps');
+/* Answering a deck card builds the catalog once more (applyEventChoice resolves the card through getAllEvents), and
+   building the catalog draws Math.random (the life catalog's pending chances), so a continuous stream would shift
+   every later draw of the career. So both bundles reseed Math.random before every engine step from the career, the
+   season, the step's phase and its count in that season, and the deck card's answer has no key of its own (it draws
+   from a throwaway stream): the base's draws are the base's whatever the deck does. The noreseed control turns the
+   reseeding off and the fleets part, which proves it is load bearing. */
+const neutralOf = card => Math.max(0, card.choices.findIndex(c => c.consequence === 'Nothing changes'));
+function driveKeyed(M, seed, { reseed = true, onDeck = null } = {}) {
+  const real = Math.random;
+  let stream = seeded(hashInt(`${seed}|start`));
+  Math.random = () => stream();
+  const counts = {};
+  const ends = [];
+  const empties = [];
+  try {
+    const clubs = M.FALLBACK_CLUBS;
+    let s = startOf(M, seed);
+    if (!reseed) stream = seeded(seed + 1);
+    for (let guard = 0; guard < 600 && !s.retired; guard += 1) {
+      if (s.phase === 'playing' && s.seasons.length >= SEASONS) break;
+      const first = s.phase === 'random_events' ? s.pendingEvents?.[0] : null;
+      const deck = isDeck(first?.id);
+      if (reseed) {
+        if (deck) stream = seeded(hashInt(`${seed}|the deck answer`));
+        else {
+          const k = `${seed}|${s.seasons.length}|${s.phase}`;
+          counts[k] = (counts[k] ?? 0) + 1;
+          stream = seeded(hashInt(`${k}|${counts[k]}`));
+        }
+      }
+      const next = deck ? M.applyEventChoice(s, onDeck ? onDeck(first) : neutralOf(first), clubs) : step(M, s, seed, clubs);
+      if (!next) break;
+      if (deck && !(next.pendingEvents ?? []).length) empties.push(s.seasons.length);
+      if (next.phase === 'playing' && s.phase !== 'playing') ends.push(JSON.stringify(next));
+      s = next;
+    }
+    return { ends, empties, s };
+  } finally { Math.random = real; }
+}
+const withoutDeckStamps = json => {
+  const o = JSON.parse(json);
+  if (o.eventLastFired) o.eventLastFired = Object.fromEntries(Object.entries(o.eventLastFired).filter(([k]) => !isDeck(Number(k))));
+  return JSON.stringify(o);
+};
+if (runs(4)) {
+  H.gate.setSoccerDeckLoader(async () => moduleFor(PACK));
+  await H.gate.loadSoccerDeck();
+  const reseed = CONTROL !== 'noreseed';
+  let seasons = 0, apart = 0, deckAnswers = 0;
+  const empties = [], firsts = [];
+  for (let seed = 0; seed < FLEET; seed += 1) {
+    let answered = 0;
+    const h = driveKeyed(H.engine, seed, { reseed, onDeck: card => { answered += 1; return neutralOf(card); } });
+    const b = driveKeyed(B.engine, seed, { reseed });
+    deckAnswers += answered;
+    for (const e of h.empties) empties.push(`career ${seed} season ${e}`);
+    const n = Math.max(h.ends.length, b.ends.length);
+    seasons += b.ends.length;
+    for (let i = 0; i < n; i += 1) {
+      if (h.ends[i] === undefined || b.ends[i] === undefined || withoutDeckStamps(h.ends[i]) !== b.ends[i]) {
+        apart += 1;
+        if (firsts.length < 3) firsts.push(`career ${seed} (${CODES[seed % CODES.length]}) from season end ${i}`);
+        break;
+      }
+    }
+  }
+  H.gate.setSoccerDeckLoader();
+  console.log(`   ${FLEET} careers, ${seasons} season ends compared, ${deckAnswers} deck cards answered on the option that moves nothing; seasons whose old draw was empty: ${empties.length}${empties.length ? ` (${empties.slice(0, 5).join(', ')})` : ''}`);
+  for (const f of firsts) console.error(`     ${f}`);
+  if (deckAnswers === 0) fail('no deck card was answered, so nothing here was proven');
+  if (empties.length) fail(`${empties.length} seasons dealt the deck card alone, so lastEventId moved (listed above)`);
+  if (apart) fail(`${apart} careers part from the base at a season end`);
+  else if (deckAnswers) ok('every season end save equals the base\'s once the deck\'s own stamps are taken out');
 }
 
 /* ─── 5. promises ──────────────────────────────────────────────────────── */
@@ -702,6 +831,243 @@ if (runs(6)) {
   const unreached = SHIPPED.events.map(e => Number(e.id)).filter(id => own[id] === 'situation' ? ![...Object.values(byGroup)].some(g => g.ids.has(id)) : !byGroup[own[id]]?.ids.has(id));
   if (unreached.length) fail(`${unreached.length} cards never reached their group (a situation card: no group): ${unreached.join(', ')}`);
   if (!strays.length && !wordsWrong.length && !unreached.length) ok(`all ${SHIPPED.events.length} cards reached: every position card its own group and no other, every situation card at least one, and no group printed another's training words`);
+}
+
+/* ─── 7. keyed ─────────────────────────────────────────────────────────── */
+
+SECTION = '7';
+console.log('7) Keyed: the slot and the deck\'s answers draw no Math.random, the same save deals the same card in a fresh bundle, and the season moves the pick');
+/* Measured on a runner (r1334-s4b, 2026-10-16) over five samples of 100 careers (seed offsets 0 to 4), each the same
+   save dealt eight summers with only the last row's year moved and no stamp carried: the share of careers dealt at
+   least two different deck cards, of those dealt one in at least two of the eight. FLOOR is written from it. */
+const KEYED_FLOOR = 0.8;
+const spiedModule = (pack, tally) => {
+  const counted = fn => (...args) => {
+    const real = Math.random;
+    let n = 0;
+    Math.random = () => { n += 1; return real(); };
+    try { return fn(...args); } finally { Math.random = real; tally.calls += n; }
+  };
+  const wrap = cards => cards.map(c => ({ ...c, choices: c.choices.map(ch => ({ ...ch, apply: counted(st => { tally.applies += 1; return ch.apply(st); }) })) }));
+  return { ...H.deck,
+    dealSoccerDeck: counted((s, season, key, taken) => { tally.slots += 1; return wrap(H.deck.dealFromPack(pack, s, season, key, taken)); }),
+    pendingSoccerDeck: s => wrap(H.deck.pendingFromPack(pack, s)) };
+};
+if (runs(7)) {
+  /* (a) the spy: Math.random calls inside the slot and the deck's applies over a loaded fleet */
+  const tally = { calls: 0, slots: 0, applies: 0 };
+  H.gate.setSoccerDeckLoader(async () => spiedModule(PACK, tally));
+  await H.gate.loadSoccerDeck();
+  let whole = 0;
+  for (let seed = 0; seed < FLEET; seed += 1) whole += drive(H.engine, seed).calls;
+  console.log(`   the loaded fleet: ${tally.slots} slot calls and ${tally.applies} deck answers drew Math.random ${tally.calls} times; the whole fleet drew it ${whole} times (printed, never asserted)`);
+  if (tally.slots === 0 || tally.applies === 0) fail('the spy saw no slot call or no deck answer, so it proves nothing');
+  else if (tally.calls) fail(`the slot and the deck's answers drew Math.random ${tally.calls} times`);
+  else ok('the slot and the deck\'s answers drew Math.random 0 times');
+  H.gate.setSoccerDeckLoader();
+  /* (b) the same saves in a second, fresh bundle deal the same cards */
+  const H2 = await bundle('head2');
+  const P2 = H2.SOCCER_DECK_PACKS.soccer.events.length ? H2.SOCCER_DECK_PACKS.soccer : FIXTURE;
+  let same = 0, asked = 0, differ = 0;
+  for (let seed = 0; seed < 40; seed += 1) {
+    const states = [];
+    drive(B.engine, seed, { onDeal: st => states.push(st) });
+    for (const st of states) {
+      if (st.age < 17) continue;
+      const key = `${H.engine.soccerDeckIdentity(st)}|${H.engine.eventSeasonIndex(st)}|deckslot`;
+      const a = withStream(() => H.deck.dealFromPack(PACK, copy(st), H.engine.eventSeasonIndex(st), key, []), seeded(1)).value.map(e => e.id).join();
+      const b = withStream(() => H2.deck.dealFromPack(P2, copy(st), H2.engine.eventSeasonIndex(st), key, []), seeded(2)).value.map(e => e.id).join();
+      asked += 1;
+      if (a === b) { if (a) same += 1; } else differ += 1;
+    }
+  }
+  if (asked === 0 || same === 0) fail('no deal was asked of both bundles');
+  else if (differ) fail(`${differ} of ${asked} saves deal a different card in a fresh bundle`);
+  else ok(`${asked} saves dealt in two fresh bundles (and two different Math.random streams): the same card every time (${same} dealt one)`);
+  /* (c) the same save eight summers with only the year moved deals different cards: the key holds the season */
+  H.gate.setSoccerDeckLoader(async () => moduleFor(PACK));
+  await H.gate.loadSoccerDeck();
+  const shares = [];
+  let oneCard = 0;
+  for (let off = 0; off < 5; off += 1) {
+    let asked8 = 0, varied = 0;
+    for (let n = 0; n < 100; n += 1) {
+      const seed = 7000 + off * 100 + n;
+      let first = null;
+      drive(B.engine, seed, { onDeal: st => { if (!first && st.age >= 17 && st.seasons[st.seasons.length - 1]?.type === 'playing') first = st; } });
+      if (!first) continue;
+      const ids = [];
+      for (let y = 0; y < 8; y += 1) {
+        const st = copy(first);
+        st.seasons[st.seasons.length - 1].year += y;
+        const batch = withStream(() => H.engine.generateRandomEvents(st), seeded(hashInt(`${seed}|${y}`))).value;
+        if (isDeck(batch[0]?.id)) ids.push(batch[0].id);
+      }
+      if (ids.length < 2) continue;
+      asked8 += 1;
+      if (new Set(ids).size >= 2) varied += 1;
+      else if (off === 0) oneCard += 1;
+    }
+    shares.push(asked8 ? varied / asked8 : 0);
+  }
+  H.gate.setSoccerDeckLoader();
+  console.log(`   the same save eight summers, the year moved: careers dealt at least two different cards, by sample: ${shares.map(x => (100 * x).toFixed(1)).join(', ')} percent (floor ${100 * KEYED_FLOOR}); sample 0 had ${oneCard} saves dealt one card eight times`);
+  if (Math.min(...shares) < KEYED_FLOOR) fail(`a sample fell to ${(100 * Math.min(...shares)).toFixed(1)} percent of careers dealt two different cards, under the floor ${100 * KEYED_FLOOR}`);
+  else ok('the pick moves with the season');
+}
+
+/* ─── 8. economy ───────────────────────────────────────────────────────── */
+
+SECTION = '8';
+console.log('8) Economy: four answer arms against the deck off, over five seeds of whole careers');
+/* Arms: OFF (the deck not loaded), BEST (every deck card answered on the option that moves the most: integrity first,
+   then training, then morale), WORST (the option that moves morale least), NEUTRAL (the option that moves nothing).
+   Every other card is answered on its first option in every arm. Per career: morale and integrityBonus at 25 and 30,
+   the overall at 30, the peak overall, the boosts the deck queued, the legacy score at the end (calculateLegacy:
+   integrity counts there, clamped -30 to 20), whether integrity ever reached 40 (the other lane's Clean Hands Award
+   needs it), and the share of season starts past the ceiling. BANDS (each arm's mean minus OFF's, averaged over the
+   five seeds) are set from the measured seed to seed spread, written with the reading. Exact, the strongest signal:
+   at every deck answer the boost it queued is at most momentsRoom just before it. */
+const ECON_N = Number(process.env.SIM_SOCCER_DECK_ECONOMY_N || 100);
+const BANDS = { morale25: 6, morale30: 6, integrity25: 4, integrity30: 6, overall30: 1, peak: 1, legacy: 3, clean40: 0.05, pastCeiling: 0.02 };
+if (runs(8)) {
+  let P8 = PACK;
+  if (CONTROL === 'pressure') {
+    P8 = { ...PACK, events: PACK.events.map(e => ({ ...e, choices: e.choices.map(c => ({ ...c, ...(c.morale ? { morale: c.morale * 10 } : {}),
+      ...(c.fx ? { fx: Object.fromEntries(Object.entries(c.fx).map(([k, v]) => [k, v * 10])) } : {}) })) })) };
+    if (H.deck.soccerDeckProblems(P8).length) { console.error(`pressure control: the scaled pack has problems (${H.deck.soccerDeckProblems(P8)[0]}), refusing to run`); process.exit(2); }
+  }
+  const defs = Object.fromEntries(P8.events.map(e => [Number(e.id), e]));
+  const TRAIN = H.words.SOCCER_TRAINING_KEYS;
+  const sumOf = (c, pick) => Object.entries(c.fx ?? {}).reduce((n, [k, v]) => n + (pick(k) ? v : 0), 0);
+  const ARMS = {
+    best: card => { const cs = defs[card.id].choices; let at = 0; const v = c => 100 * sumOf(c, k => k === 'integrity') + 10 * sumOf(c, k => k in TRAIN) + (c.morale ?? 0); cs.forEach((c, i) => { if (v(c) > v(cs[at])) at = i; }); return at; },
+    worst: card => { const cs = defs[card.id].choices; let at = 0; cs.forEach((c, i) => { if ((c.morale ?? 0) < (cs[at].morale ?? 0)) at = i; }); return at; },
+    neutral: card => neutralOf(card),
+  };
+  const queuedOf = s => Object.values(s.statBoostNextSeason ?? {}).reduce((n, v) => n + (v > 0 ? v : 0), 0);
+  let answers = 0, overRoom = 0;
+  const careerOf = (M, seed, arm) => {
+    const out = { clean40: 0, queued: 0, starts: 0, past: 0 };
+    let prev = null;
+    const r = drive(M, seed, { seasons: 40, onStep: s => {
+      const card = prev?.phase === 'random_events' ? prev.pendingEvents?.[0] : null;
+      if (arm && card && isDeck(card.id)) {
+        answers += 1;
+        const added = queuedOf(s) - queuedOf(prev);
+        out.queued += Math.max(0, added);
+        if (added > H.momentsRoom(prev)) overRoom += 1;
+      }
+      if (s.phase === 'playing' && prev?.phase !== 'playing') {
+        out.starts += 1;
+        if (s.overall > H.engine.effectivePotential(s)) out.past += 1;
+        if (s.age >= 25 && out.morale25 === undefined) { out.morale25 = s.morale; out.integrity25 = s.integrityBonus; }
+        if (s.age >= 30 && out.morale30 === undefined) { out.morale30 = s.morale; out.integrity30 = s.integrityBonus; out.overall30 = s.overall; }
+      }
+      if ((s.integrityBonus ?? 0) >= 40) out.clean40 = 1;
+      prev = s;
+    }, deckChoice: arm ? ARMS[arm] : null });
+    out.peak = r.s.peakOverall ?? r.s.overall;
+    out.legacy = withStream(() => H.engine.calculateLegacy(r.s).score, seeded(seed)).value;
+    out.pastCeiling = out.starts ? out.past / out.starts : 0;
+    return out;
+  };
+  const METRICS = Object.keys(BANDS);
+  const table = {};
+  for (const arm of ['off', 'best', 'worst', 'neutral']) {
+    if (arm !== 'off') { H.gate.setSoccerDeckLoader(async () => moduleFor(P8)); await H.gate.loadSoccerDeck(); }
+    table[arm] = [];
+    for (let sd = 0; sd < 5; sd += 1) {
+      const rows = [];
+      for (let n = 0; n < ECON_N; n += 1) rows.push(careerOf(H.engine, 20000 + sd * 1000 + n, arm === 'off' ? null : arm));
+      const mean = m => { const v = rows.map(r => r[m]).filter(x => typeof x === 'number'); return v.reduce((a, b) => a + b, 0) / Math.max(1, v.length); };
+      table[arm].push(Object.fromEntries([...METRICS, 'queued'].map(m => [m, mean(m)])));
+    }
+    H.gate.setSoccerDeckLoader();
+  }
+  const avg = xs => xs.reduce((a, b) => a + b, 0) / xs.length;
+  const sd = xs => { const m = avg(xs); return Math.sqrt(avg(xs.map(x => (x - m) ** 2))); };
+  for (const m of [...METRICS, 'queued']) {
+    const off = table.off.map(r => r[m]);
+    const parts = ['best', 'worst', 'neutral'].map(a => `${a} ${avg(table[a].map(r => r[m])).toFixed(2)} (${(avg(table[a].map(r => r[m])) - avg(off)) >= 0 ? '+' : ''}${(avg(table[a].map(r => r[m])) - avg(off)).toFixed(2)})`);
+    console.log(`   ${m}: off ${avg(off).toFixed(2)} (seed to seed sd ${sd(off).toFixed(2)}), ${parts.join(', ')}${BANDS[m] !== undefined ? `, band ${BANDS[m]}` : ''}`);
+    if (BANDS[m] === undefined) continue;
+    for (const a of ['best', 'worst', 'neutral']) {
+      const d = avg(table[a].map((r, i) => r[m] - off[i]));
+      if (Math.abs(d) > BANDS[m]) fail(`${a} moves ${m} by ${d.toFixed(2)} against the deck off, band ${BANDS[m]}`);
+    }
+  }
+  const legacyMove = avg(table.best.map((r, i) => r.legacy - table.off[i].legacy));
+  const legacySpread = sd(table.off.map(r => r.legacy));
+  console.log(`   the BEST arm's legacy against the deck off: ${legacyMove.toFixed(2)} points, the seed to seed spread ${legacySpread.toFixed(2)} (ruling 2(j): beyond it, the pack drops its integrity effects)`);
+  console.log(`   ${answers} deck answers, ${overRoom} queued more than the room just before them`);
+  if (answers === 0) fail('no deck card was answered in any arm');
+  if (overRoom) fail(`${overRoom} deck answers queued more than momentsRoom allowed`);
+  if (!red.has('8')) ok('every arm inside its bands against the deck off, and no deck answer queued past the room');
+}
+
+/* ─── 9. old saves ─────────────────────────────────────────────────────── */
+
+SECTION = '9';
+console.log('9) Old saves: the base\'s saves load and play here as they do there; a save with a deck card pending loads on the base (skipped, its stamp handed back) and answers here');
+if (runs(9)) {
+  const clubs = H.engine.FALLBACK_CLUBS;
+  const playSeason = (M, st, seed) => withStream(() => {
+    let s = M.repairCareer(st);
+    for (let k = 0; k < 60; k += 1) { const t = step(M, s, seed, clubs); if (!t) break; s = t; if (s.phase === 'playing') break; }
+    return JSON.stringify(s);
+  }, seeded(hashInt(`old|${seed}`))).value;
+  let loaded = 0, apartLoad = 0, apartPlay = 0, threw = 0;
+  for (let seed = 0; seed < 40; seed += 1) {
+    const saves = [];
+    let k = 0;
+    drive(B.engine, seed, { onStep: s => { if ((k += 1) % 9 === 0) saves.push(JSON.stringify(s)); } });
+    for (const json of saves) {
+      loaded += 1;
+      try {
+        const h = withStream(() => JSON.stringify(H.engine.repairCareer(JSON.parse(json))), seeded(1)).value;
+        const b = withStream(() => JSON.stringify(B.engine.repairCareer(JSON.parse(json))), seeded(1)).value;
+        if (h !== b) apartLoad += 1;
+        if (playSeason(H.engine, JSON.parse(json), seed) !== playSeason(B.engine, JSON.parse(json), seed)) apartPlay += 1;
+      } catch (e) { threw += 1; if (threw < 3) console.error(`     a base save threw here: ${e.message}`); }
+    }
+  }
+  console.log(`   ${loaded} saves the base wrote, loaded and played a season on both`);
+  if (loaded < 200) fail(`only ${loaded} base saves read`);
+  if (threw) fail(`${threw} base saves threw here`);
+  if (apartLoad || apartPlay) fail(`${apartLoad} base saves load differently here and ${apartPlay} play their season differently (the deck not loaded)`);
+  else ok('every base save loads to the same JSON here and plays the same season');
+  /* a head save with a deck card pending */
+  H.gate.setSoccerDeckLoader(async () => moduleFor(PACK));
+  await H.gate.loadSoccerDeck();
+  const pending = [];
+  for (let seed = 0; seed < 60 && pending.length < 60; seed += 1) {
+    drive(H.engine, seed, { onStep: s => { if (s.phase === 'random_events' && isDeck(s.pendingEvents?.[0]?.id) && pending.length < 60) pending.push(JSON.stringify(s)); } });
+  }
+  let skippedOnBase = 0, answeredHere = 0, valid = 0;
+  for (const json of pending) {
+    const saved = JSON.parse(json);
+    if (H.save.isSoccerCareerSave(saved)) valid += 1;
+    const card = saved.pendingEvents[0];
+    const season = saved.seasons[saved.seasons.length - 1].year;
+    const key = String(card.id);
+    const moving = card.choices.findIndex(c => c.consequence !== 'Nothing changes');
+    try {
+      const b = withStream(() => B.engine.applyEventChoice(JSON.parse(json), moving, clubs), seeded(3)).value;
+      const skipped = b.pendingEvents.length === saved.pendingEvents.length - 1 && !(b.events ?? []).some(l => l.includes(card.title))
+        && !(saved.eventLastFired?.[key] === season && b.eventLastFired?.[key] === season);
+      if (skipped) skippedOnBase += 1;
+    } catch (e) { console.error(`     the base threw on a pending deck card: ${e.message}`); }
+    const h = withStream(() => H.engine.applyEventChoice(JSON.parse(json), moving, clubs), seeded(3)).value;
+    if ((h.events ?? []).slice(saved.events.length).some(l => l.includes(card.title)) && h.eventLastFired?.[key] === season) answeredHere += 1;
+  }
+  H.gate.setSoccerDeckLoader();
+  console.log(`   ${pending.length} saves with a deck card pending: ${valid} pass the save validator, ${skippedOnBase} skipped on the base with the stamp handed back, ${answeredHere} answered here`);
+  if (pending.length < 20) fail(`only ${pending.length} saves with a deck card pending`);
+  if (valid !== pending.length) fail(`${pending.length - valid} saves with a deck card pending fail the save validator`);
+  if (skippedOnBase !== pending.length) fail(`${pending.length - skippedOnBase} pending deck cards were not skipped cleanly on the base`);
+  if (answeredHere !== pending.length) fail(`${pending.length - answeredHere} pending deck cards were not answered here after the reload`);
+  if (!red.has('9')) ok('a saved deck card loads on the base and is skipped with its stamp handed back, and here it is answered');
 }
 
 /* ─── 10. lazy, the static half ────────────────────────────────────────── */
