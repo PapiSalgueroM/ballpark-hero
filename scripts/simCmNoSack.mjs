@@ -24,8 +24,9 @@
  *      sacking career and true on every other; every scored ping in useClubManager.ts sits behind postsScore with
  *      an unscored else (three match pings, four completions), and the literals simClubManagerScore,
  *      simSessionMarks and simActivityNotCompletion count are still there.
- *   5. THE GATE. Every `sacked = true` write in clubManager.ts (comments stripped) has the No sacking floor in
- *      front of its check: two writes and two floors today.
+ *   5. THE GATE. Every `sacked = true` write in clubManager.ts (comments stripped) has the No sacking floor as the
+ *      statement right in front of its check (nothing between the floor's block and the check that writes the
+ *      sack): two writes and two floors today.
  *   6. THE DAILIES. Three Manager Hot Seat and three Deadline Day dates of simDailyDeals' window, played by its
  *      fixed script on this tree and on the base (as in section 1): the whole state equal, no state carries the key. Deadline
  *      Day plays no match, so the gate cannot reach it whatever its state holds; that is proved from its code
@@ -39,6 +40,7 @@
  *   noslot     summarize forgets the No sacking mark                     section 4
  *   unguarded  one scored ping loses its postsScore guard               section 4
  *   thirdsack  a third, unguarded sacked write                          section 5
+ *   farfloor   a statement between the first floor and its check     section 5
  *   leak       defaultStartOptions writes the key into every new block  sections 1 and 6 (every Hot Seat date)
  *   draw       the first floor draws from Math.random on every match    section 1
  *   ddreach    deadlineDay.ts gains a playNextEntry call                 section 6
@@ -88,7 +90,7 @@ const PLAIN = [
   { file: 'clubManager.ts', from: '  let noSackLine = false;\n  if (!boardMaySack(state) && state.boardConfidence <= 0) {\n    state.boardConfidence = 1;\n    noSackLine = true;\n    events.push(NO_SACK_LINE);\n  }\n', to: '' },
   { file: 'clubManager.ts', from: '  if (!boardMaySack(state) && state.boardConfidence <= 0) {\n    state.boardConfidence = 1;\n    if (!noSackLine) events.push(NO_SACK_LINE);\n  }\n', to: '' },
 ];
-const CONTROL_SECTIONS = { sack: [2, 3], refuse: [4], ranked: [4], stale: [4], noslot: [4], unguarded: [4], thirdsack: [5], leak: [1, 6], draw: [1], ddreach: [6] };
+const CONTROL_SECTIONS = { sack: [2, 3], refuse: [4], ranked: [4], stale: [4], noslot: [4], unguarded: [4], thirdsack: [5], farfloor: [5], leak: [1, 6], draw: [1], ddreach: [6] };
 if (CONTROL && !CONTROL_SECTIONS[CONTROL]) cannot(`unknown control ${CONTROL}`);
 const SECTIONS = CONTROL ? CONTROL_SECTIONS[CONTROL]
   : (process.env.SECTION || '1,2,3,4,5,6').split(',').map(Number);
@@ -415,13 +417,29 @@ if (SECTIONS.includes(5)) {
   section = 5;
   let code = strip(read(ROOT, 'src/lib/clubManager.ts'));
   if (CONTROL === 'thirdsack') code += '\nfunction thirdSack(state) {\n  if (state.boardConfidence <= 0) {\n    state.sacked = true;\n  }\n}\n';
+  if (CONTROL === 'farfloor') {
+    /* A statement slipped between the first floor and its check: the floor is still above the write, but no longer
+       the thing right in front of it. */
+    const from = '    events.push(NO_SACK_LINE);\n  }\n  if (state.boardConfidence <= 0) {';
+    if (code.split(from).length - 1 !== 1) cannot('control farfloor: the first floor and its check are not where the control expects them');
+    code = code.replace(from, '    events.push(NO_SACK_LINE);\n  }\n  state.boardConfidence -= 1;\n  if (state.boardConfidence <= 0) {');
+  }
   const FLOOR = '!boardMaySack(state) && state.boardConfidence <= 0';
+  /* Review of 2026-10-16: placement, not just "somewhere before". From the last floor before a write, past the
+     floor's own block, the next thing must be the sack check whose block makes that write. */
+  const NEXT_CHECK = /^\s*if \((!state\.sacked && )?state\.boardConfidence <= 0\) \{\s*state\.$/;
   const parts = code.split('sacked = true');
   const writes = parts.length - 1;
   const floors = code.split(FLOOR).length - 1;
   console.log(`5) ${writes} sacked writes and ${floors} No sacking floors in clubManager.ts, read as code`);
   if (writes < 2) fail(`only ${writes} sacked writes found; the engine has two`);
-  for (let i = 0; i < writes; i += 1) if (!parts[i].includes(FLOOR)) fail(`sacked write ${i + 1} has no No sacking floor in front of its check`);
+  for (let i = 0; i < writes; i += 1) {
+    const at = parts[i].lastIndexOf(FLOOR);
+    if (at < 0) { fail(`sacked write ${i + 1} has no No sacking floor in front of its check`); continue; }
+    const close = parts[i].indexOf('\n  }\n', at);
+    const between = close < 0 ? '' : parts[i].slice(close + 5);
+    if (close < 0 || !NEXT_CHECK.test(between)) fail(`sacked write ${i + 1}: its floor is not the statement right in front of its check (after the floor: ${JSON.stringify(between.slice(0, 80))})`);
+  }
   if (floors !== writes) fail(`${floors} floors for ${writes} sacked writes`);
 }
 
