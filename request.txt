@@ -1,0 +1,1 @@
+repro-head: cp .rc/x/clubManagerRecordBoundary.test.ts src/test/ && node_modules/.bin/vitest run src/test/clubManagerRecordBoundary.test.ts --testTimeout=300000 --hookTimeout=120000

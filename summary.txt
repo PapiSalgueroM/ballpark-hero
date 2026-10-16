@@ -1,0 +1,1 @@
+repro-head exit=1 5s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/clubManagerRecordBoundary.test.ts,title=src/test/clubManagerRecordBoundary.test.ts > Manager record re

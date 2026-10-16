@@ -1,0 +1,63 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [31m❯[39m src/test/clubManagerRecordBoundary.test.ts [2m([22m[2m6 tests[22m[2m | [22m[31m2 failed[39m[2m)[22m[33m 3150[2mms[22m[39m
+[31m   [31m×[31m Manager record retained-book boundary[2m > [22mlegacy300 preserves the oldest nine-goal game with zero missed[39m[33m 1822[2mms[22m[39m
+[31m     → RECORD_BOUNDARY_LEGACY300: oldest known nine-goal record and zero missed must survive the first capped match: expected false to be true // Object.is equality[39m
+[31m   [31m×[31m Manager record retained-book boundary[2m > [22mlegacy350 preserves the oldest nine-goal game with fifty missed[39m[32m 258[2mms[22m[39m
+[31m     → RECORD_BOUNDARY_LEGACY350: oldest known nine-goal record and fifty missed must survive the first capped match: expected false to be true // Object.is equality[39m
+   [32m✓[39m Manager record retained-book boundary[2m > [22mlegacy299 preserves the available record before the book reaches its cap[32m 247[2mms[22m[39m
+   [32m✓[39m Manager record retained-book boundary[2m > [22mstored preserves the modern nine-goal record at the book cap[32m 220[2mms[22m[39m
+   [32m✓[39m Manager record retained-book boundary[2m > [22mnull starts counting at the actual new match without reviving legacy rows[32m 221[2mms[22m[39m
+   [33m[2m✓[22m[39m Manager record retained-book boundary[2m > [22mactual higher totals replace the record and equal totals keep the first game [33m 379[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 2 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/clubManagerRecordBoundary.test.ts[2m > [22mManager record retained-book boundary[2m > [22mlegacy300 preserves the oldest nine-goal game with zero missed
+[31m[1mAssertionError[22m: RECORD_BOUNDARY_LEGACY300: oldest known nine-goal record and zero missed must survive the first capped match: expected false to be true // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- true[39m
+[31m+ false[39m
+
+[36m [2m❯[22m src/test/clubManagerRecordBoundary.test.ts:[2m149:146[22m[39m
+    [90m147| [39m    const reference = copy(state); reference.careerStats.highestScorin…
+    [90m148| [39m    const result = await pair('legacy300', initialized, state, referen…
+    [90m149| [39m    expect(result.correctRecord, 'RECORD_BOUNDARY_LEGACY300: oldest kn…
+    [90m   | [39m                                                                                                                                                 [31m^[39m
+    [90m150| [39m  })[33m;[39m
+    [90m151| [39m  it('legacy350 preserves the oldest nine-goal game with fifty missed'…
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/clubManagerRecordBoundary.test.ts[2m > [22mManager record retained-book boundary[2m > [22mlegacy350 preserves the oldest nine-goal game with fifty missed
+[31m[1mAssertionError[22m: RECORD_BOUNDARY_LEGACY350: oldest known nine-goal record and fifty missed must survive the first capped match: expected false to be true // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- true[39m
+[31m+ false[39m
+
+[36m [2m❯[22m src/test/clubManagerRecordBoundary.test.ts:[2m155:147[22m[39m
+    [90m153| [39m    const reference = copy(state); reference.careerStats.highestScorin…
+    [90m154| [39m    const result = await pair('legacy350', initialized, state, referen…
+    [90m155| [39m    expect(result.correctRecord, 'RECORD_BOUNDARY_LEGACY350: oldest kn…
+    [90m   | [39m                                                                                                                                                  [31m^[39m
+    [90m156| [39m  })[33m;[39m
+    [90m157| [39m  it('legacy299 preserves the available record before the book reaches…
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m2 failed[39m[22m[2m | [22m[1m[32m4 passed[39m[22m[90m (6)[39m
+[2m   Start at [22m 16:48:55
+[2m   Duration [22m 4.01s[2m (transform 1.32s, setup 55ms, collect 40ms, tests 3.15s, environment 316ms, prepare 138ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/clubManagerRecordBoundary.test.ts,title=src/test/clubManagerRecordBoundary.test.ts > Manager record retained-book boundary > legacy300 preserves the oldest nine-goal game with zero missed,line=149,column=146::AssertionError: RECORD_BOUNDARY_LEGACY300: oldest known nine-goal record and zero missed must survive the first capped match: expected false to be true // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- true%0A+ false%0A%0A ❯ src/test/clubManagerRecordBoundary.test.ts:149:146%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/clubManagerRecordBoundary.test.ts,title=src/test/clubManagerRecordBoundary.test.ts > Manager record retained-book boundary > legacy350 preserves the oldest nine-goal game with fifty missed,line=155,column=147::AssertionError: RECORD_BOUNDARY_LEGACY350: oldest known nine-goal record and fifty missed must survive the first capped match: expected false to be true // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- true%0A+ false%0A%0A ❯ src/test/clubManagerRecordBoundary.test.ts:155:147%0A%0A
