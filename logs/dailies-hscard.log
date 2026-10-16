@@ -1,0 +1,8 @@
+treeWithoutMerge: e8370a3a3c4a19612be112bf5ba820d6aa17bfc3, 7fd2f54b without ea937568; conflicts kept from 7fd2f54b: none
+base e8370a3a3c4a19612be112bf5ba820d6aa17bfc3
+[dailies] Hot Seat takeovers: 160 (80 dated, 80 free); on CM_BOARD_BASE 42 of the 110 on the current rules took over with a failed line on the card
+FAIL [dailies] 160 Hot Seat takeovers: the card less its failed lines on the current rules, the whole card on the old rules, nothing else moved but a suitor's name (42; first 2026-09-29 (free run) Vancouver Whitecaps: league,cup,rival,points,youth,netSpend,posGap,youngStar against league,rival,points,youth,netSpend,posGap,youngStar)
+[dailies] Hot Seat: 80 dates (60 from 2026-09-24 and every seventh day back); 64 identical, 2 differ only in a suitor's name, 14 moved; 6 raised an approach; 14 dates compared with the base's card less the failed lines their takeover dropped
+FAIL [dailies] 80 Hot Seat days: every run equal to CM_BOARD_BASE but for a suitor's name (14; first 2026-10-24: .state.boardObjectives.1.id: head "cup" base "rival")
+ok   [dailies] 30 Deadline Day days: the deal, the grade and the state's keys equal to CM_BOARD_BASE
+control hscard FIRED: 2 of 3 checks red

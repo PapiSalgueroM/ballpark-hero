@@ -1,0 +1,5 @@
+treeWithoutMerge: 4d8144b00e706fbb9ac4169618b7e5290910c93e, 7fd2f54b without ea937568; conflicts kept from 7fd2f54b: none
+base 4d8144b00e706fbb9ac4169618b7e5290910c93e
+ok   [legacy] 72 takeovers on the old rules (startMidSeason at new year and the run in, joinClubNow): every byte equal to CM_BOARD_BASE
+ok   [legacy] 54 careers on the old rules (matchRules 'base' on both trees): every save byte and every draw equal to CM_BOARD_BASE
+simCmBoardVerdict GREEN: 2 of 2 checks green (parts legacy, 224 s)
