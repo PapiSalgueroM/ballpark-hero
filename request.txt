@@ -1,0 +1,6 @@
+#!playwright
+#!serial
+numberFormatting: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" NUMBER_FORMATTING_CONTROL=all node scripts/simNumberFormatting.mjs
+matchPlans-base: git checkout d4f2c6f6 -- src scripts && MANAGER_MATCH_PLANS_CONTROL=all ONLY=simManagerMatchPlans node scripts/runAllSims.mjs; s=$?; git checkout HEAD -- src scripts; exit $s
+writes-head-alone: node_modules/.bin/vite build > /tmp/hb.log 2>&1 && node scripts/simWritesAreSent.mjs
+writes-base: git worktree add -f /tmp/wb d4f2c6f6 >/dev/null 2>&1; ln -sfn "$PWD/node_modules" /tmp/wb/node_modules; cd /tmp/wb && node_modules/.bin/vite build > /tmp/wb-build.log 2>&1 && node scripts/simWritesAreSent.mjs

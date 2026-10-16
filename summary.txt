@@ -1,0 +1,4 @@
+numberFormatting exit=0 137s | Number formatting: passed. Evidence at /home/runner/work/ballpark-hero/ballpark-hero/number-formatting-artifacts/outcomes
+matchPlans-base exit=1 141s | 1 harness not green.
+writes-head-alone exit=1 45s | simWritesAreSent: 2 failures
+writes-base exit=1 45s | simWritesAreSent: 2 failures
