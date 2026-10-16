@@ -16,7 +16,8 @@ jobs:
       SIM_NETWORK: offline
       ENGINES: chromium
       CAREER_SEASON_LOCAL_ONLY: '1'
-      SC_PENDING_POPULARITY_PHASE: baseline
+      SC_PENDING_POPULARITY_PHASE: fixed
+      SC_PENDING_POPULARITY_BASE: d4f2c6f688d656205722ba52bbdb33f03490966a
       SC_PENDING_POPULARITY_OUT: ${{ github.workspace }}/pending-popularity-artifacts
       FREE_KICK_FONT_CACHE: ${{ github.workspace }}/pending-popularity-artifacts/font-cache
       PRERENDER_ONLY: /soccer-career
@@ -40,9 +41,9 @@ jobs:
           git archive --format=zip HEAD > "$SC_PENDING_POPULARITY_OUT/source.zip"
           git status --porcelain --untracked-files=no > "$SC_PENDING_POPULARITY_OUT/source-before.txt"
           test ! -s "$SC_PENDING_POPULARITY_OUT/source-before.txt"
-          git diff --exit-code d4f2c6f688d656205722ba52bbdb33f03490966a -- src scripts package.json package-lock.json bun.lock ':!src/lib/soccerCareerLife.ts' ':!src/test/careerPendingPopularityGates.test.ts' ':!scripts/simCareerPendingPopularityGates.mjs'
+          git diff --exit-code "$SC_PENDING_POPULARITY_BASE" -- src scripts package.json package-lock.json bun.lock ':!src/lib/soccerCareerLife.ts' ':!src/test/careerPendingPopularityGates.test.ts' ':!scripts/simCareerPendingPopularityGates.mjs'
           if test "$SC_PENDING_POPULARITY_PHASE" = baseline; then
-            git diff --exit-code d4f2c6f688d656205722ba52bbdb33f03490966a -- src/lib/soccerCareerLife.ts
+            git diff --exit-code "$SC_PENDING_POPULARITY_BASE" -- src/lib/soccerCareerLife.ts
           fi
           find src scripts .github/workflows -type f ! -path scripts/data/lastmod.json -print0 | sort -z | xargs -0 sha256sum > "$SC_PENDING_POPULARITY_OUT/source-hashes.txt"
           sha256sum package.json package-lock.json bun.lock > "$SC_PENDING_POPULARITY_OUT/package-hashes.txt"
@@ -87,6 +88,7 @@ jobs:
           cp scripts/data/lastmod.json "$SC_PENDING_POPULARITY_OUT/build-lastmod.json"
           git diff -- scripts/data/lastmod.json > "$SC_PENDING_POPULARITY_OUT/build-lastmod.diff"
           ONLY=simAdsense,simBrand,simHeadTags,simHiddenPages,simHubs,simIndexNow,simIndexing,simInternalLinks,simNoRivalNames,simPrerender,simPrerenderBoot,simRetiredRoutes,simSchema,simSitemap,simSnapshotAssets node scripts/runAllSims.mjs --browser 2>&1 | tee "$SC_PENDING_POPULARITY_OUT/readers.log"
+          test "$(grep -c '^All 15 harnesses green\.$' "$SC_PENDING_POPULARITY_OUT/readers.log")" = 1
       - name: Final source and dependency holds
         if: always()
         run: |

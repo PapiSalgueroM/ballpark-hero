@@ -9,7 +9,7 @@ import { fileURLToPath } from 'node:url';
 
 assert(process.env.CI && process.env.SIM_NETWORK === 'offline', 'Popularity proof requires remote offline transport');
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const BASE = 'd4f2c6f688d656205722ba52bbdb33f03490966a';
+const BASE = process.env.SC_PENDING_POPULARITY_BASE || 'd4f2c6f688d656205722ba52bbdb33f03490966a';
 const TEST = 'src/test/careerPendingPopularityGates.test.ts';
 const LIFE = path.join(ROOT, 'src/lib/soccerCareerLife.ts');
 const ENGINE = path.join(ROOT, 'src/lib/soccerCareerEngine.ts');

@@ -1,3 +1,7 @@
+## 2026-10-16: Round 1376 queued Life popularity choices, fixed candidate
+
+Codex branch `codex/career-pending-popularity-gates`. Corrected baseline `44fb1611`, Actions `38890201198` (job `116937554747`), passed real application types, exactly eleven missing-callback failures and four preservation passes, 62 prior unit outcomes and 521 installed dependency/source holds. The first run `38889564418` is retained as a zero-case Vite import method failure. Candidate changes only eleven numeric popularity gates in `soccerCareerLife.ts`, retaining their age, relationship and story guards so an already offered card remains resolvable after card 213 lowers popularity and the save reloads. Existing card 233 and all choice effects remain unchanged. Tests use explicitly prepared actual-catalog queues, with no natural-picker or browser claim. Fixed/original/restored remote verification and build/readers remain pending. Evidence and integration-base seam are documented in `docs/audits/career-pending-popularity-gates.md`.
+
 ## 2026-10-16 05:30 EDT: session I starts; player reports split between the lanes; the Lovable editor push reverted
 
 Claude lane (session I). Live: Release BG (main c9b80fce, deployment bc4815da). The Lovable editor's push of 08:36 to
