@@ -105,10 +105,12 @@
                it first (in memory); section 3 fails.
      pool      the pending reader loses its phase guard and returns every
                card of the pack (soccerDeck.ts, in memory); section 3 fails.
-     silent    the button's words drop Integrity (soccerDeck.ts, in memory);
-               section 5 fails.
-     drop      the answer skips the integrity apply (soccerDeck.ts, in
-               memory); section 5 fails.
+     silent    the button's words drop every outfield training word
+               (soccerDeck.ts, in memory); section 5 fails.
+     drop      the answer skips every outfield training apply (soccerDeck.ts,
+               in memory); section 5 fails. Both refuse to run on a pack that
+               moves no outfield training key (their first form targeted
+               integrity, which the pack stopped moving, and changed nothing).
      ceiling   a training key ignores momentsRoom (soccerDeck.ts, in memory):
                a boost lands at room 0; section 5 fails.
      posleak   card 706 (a defender's) is widened to pos < 3 in the pack the
@@ -138,7 +140,10 @@
 
    SIM_SOCCER_DECK_SECTIONS=2,3 runs only those sections. SIM_SOCCER_DECK_BASE
    moves SC_BASE (default e814c2de, origin/main when the round started).
-   Runtime: measured on a runner, written here at the step that adds it. */
+   Runtime, measured 2026-10-16 on a GitHub runner (rc r1334-f1): the whole harness 188 s, over the 150 s an agent's
+   command may take, so the gate runs it as three lines: SIM_SOCCER_DECK_SECTIONS=1,2,3,4,5 (112 s),
+   SIM_SOCCER_DECK_SECTIONS=6,7,9,10 (69 s) and SIM_SOCCER_DECK_SECTIONS=8 (98 s). A control runs only its own
+   section: 2 s (bindopen, eager, caller) to 82 s (pressure). */
 import './lib/offlineTransport.cjs';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
@@ -185,8 +190,8 @@ const CONTROLS = {
   last: { breaks: '3', file: ENGINE, edits: [['  picked.unshift(...soccerDeckSlot(state, season, `${soccerDeckIdentity(state)}|${season}|deckslot`, picked));', '  picked.push(...soccerDeckSlot(state, season, `${soccerDeckIdentity(state)}|${season}|deckslot`, picked)); /* last control */']] },
   pool: { breaks: '3', file: DECK, edits: [["  if (state.phase !== 'random_events' || problemsOf(pack).length > 0) return [];\n", '  return deckToRandomEvents(pack, pack.events); /* pool control */\n']] },
   silent: { breaks: '5', file: DECK, edits: [["        consequence: choiceEffects(c, pack, SOCCER_FX_WORDS).join(', ') || 'Nothing changes',",
-    "        consequence: choiceEffects(c, pack, SOCCER_FX_WORDS).filter(w => !w.startsWith('Integrity')).join(', ') || 'Nothing changes', /* silent control */"]] },
-  drop: { breaks: '5', file: DECK, edits: [['    def.apply(s, raw);\n', "    if (k !== 'integrity') def.apply(s, raw); /* drop control */\n"]] },
+    "        consequence: choiceEffects(c, pack, SOCCER_FX_WORDS).filter(w => !/^(Pace|Shooting|Passing|Dribbling|Defending|Physical) next season /.test(w)).join(', ') || 'Nothing changes', /* silent control */"]] },
+  drop: { breaks: '5', file: DECK, edits: [['    def.apply(s, raw);\n', "    if (!k.startsWith('t_')) def.apply(s, raw); /* drop control */\n"]] },
   ceiling: { breaks: '5', file: DECK, edits: [['      const add = Math.max(0, Math.min(v, momentsRoom(s)));', '      const add = Math.max(0, v); /* ceiling control */']] },
   posleak: { breaks: '6', file: null, edits: null },
   neutralmoves: { breaks: '4', file: DECK, edits: [['        apply: still ? (s: CareerState) => s : (s: CareerState) => landChoice(s, def.emoji, title, c),',
@@ -281,6 +286,11 @@ const FIXTURE = (() => {
 })();
 /* The pack the deal sections use: the shipped one once it has cards. */
 const PACK = SHIPPED.events.length > 0 ? SHIPPED : FIXTURE;
+/* silent and drop change how the outfield training keys print and land: they prove nothing on a pack that moves none. */
+if ((CONTROL === 'silent' || CONTROL === 'drop') && !PACK.events.some(e => e.choices.some(c => Object.keys(c.fx ?? {}).some(k => k.startsWith('t_'))))) {
+  console.error(`${CONTROL} control: the pack moves no outfield training key, so the control would change nothing, refusing to run`);
+  process.exit(2);
+}
 const moduleFor = pack => ({ ...H.deck,
   dealSoccerDeck: (s, season, key, taken) => H.deck.dealFromPack(pack, s, season, key, taken),
   pendingSoccerDeck: s => H.deck.pendingFromPack(pack, s) });
