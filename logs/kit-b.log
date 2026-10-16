@@ -1,0 +1,20 @@
+simEventDeck: 8 packs (nfl, nba, mlb, nhl, college, gym, afl)
+1) Replay: 7 GM packs, seeds 1, 2, 3, drives FLEET, SILENT, STUBBORN, FALLEN, 10 seasons a desk
+2) Same seed, same deck; a JSON round trip and repairGmInbox between every two weeks change nothing
+3) Weights: equal weights deal the recording, and a weight is a share of the draw, never a rank
+4) Story: never two of one story inside its cooldown or in one week, a one shot story once
+5) Subject rest: no subject inside its rest or twice in a week, the rest book born pruned
+6) Texts: wordings move no deal and no draw, every wording comes up at its share, a key reads the same words
+7) Expiry: an open card is settled at exactly w plus expires on its neutral option, nothing moves, the deck never freezes
+8) Neutral: every card of every pack off the baseline has an option that moves nothing, and every pack check holds
+9) Season clock: a card is held out exactly as careerEventDeck holds it; the week clock is back after exactly N
+10) Share and reach: every card of every pack reached over 1,000 seasons, no card above its pack's measured ceiling
+11) Registry: every option prints exactly the keys it moves, by exactly the amounts, and bind refuses each breakage
+12) Legal: every pack narrated in roles, slots only in words, and a tagged card never lands on a real man
+13) Compact: a pruned book and messages saved as numbers deal, answer and read exactly as a whole desk does
+   ok 10 packs at seeds 1, 2, 3, 3000 FLEET desks three ways (522000 compact weeks, 1806854 cooled book entries pruned in all): compact and whole dealt, answered and moved alike; a save, JSON and load between every two weeks changed nothing, text included; the book held exactly the entries still cooling, the one shots never past the pack's, never more than 8 kept
+   size report: FX_BIG (420 cards, 49.9 deals a season) on 20 desks: compact block season 1 642 B, season 5 1095 B, season 10 1348 B, season 15 1509 B, slope 32 B a season from 10 to 15; the same desk whole season 1 2772 B, season 5 4674 B, season 10 6127 B, season 15 6840 B, slope 143 B a season
+   ok the loader: a block of v: 2 reads as an empty desk; a bad book and a bad one shot list reset alone; a whole message from an older build is kept, a compact one whose card is gone is dropped and counted; the saved messages are compact (4 of 4)
+
+runtime 62.1 s
+simEventDeck: green. Sections 13 only.
