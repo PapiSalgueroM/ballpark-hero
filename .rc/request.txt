@@ -1,0 +1,14 @@
+#!build
+simUsCareerPractice: SENSE_PROVE_OTHERS=1 ONLY=simUsCareerPractice node scripts/runAllSims.mjs
+simUsCareerSaveRetry: SENSE_PROVE_OTHERS=1 ONLY=simUsCareerSaveRetry node scripts/runAllSims.mjs
+simUsCareerSummer: SENSE_PROVE_OTHERS=1 ONLY=simUsCareerSummer node scripts/runAllSims.mjs
+simUsSeasonCentre: SENSE_PROVE_OTHERS=1 ONLY=simUsSeasonCentre node scripts/runAllSims.mjs
+simCareerDecisionOutcome: SENSE_PROVE_OTHERS=1 ONLY=simCareerDecisionOutcome node scripts/runAllSims.mjs
+simCareerEntryGuide: SENSE_PROVE_OTHERS=1 ONLY=simCareerEntryGuide node scripts/runAllSims.mjs
+simCareerPressMarket: SENSE_PROVE_OTHERS=1 ONLY=simCareerPressMarket node scripts/runAllSims.mjs
+simCareerSeasonReview: SENSE_PROVE_OTHERS=1 ONLY=simCareerSeasonReview node scripts/runAllSims.mjs
+simRevealMoments: SENSE_PROVE_OTHERS=1 ONLY=simRevealMoments node scripts/runAllSims.mjs
+simNbaAwardsSense: SENSE_PROVE_OTHERS=1 ONLY=simNbaAwardsSense node scripts/runAllSims.mjs
+simHelpDialogFocus: SENSE_PROVE_OTHERS=1 ONLY=simHelpDialogFocus node scripts/runAllSims.mjs
+simTrustCopy: SENSE_PROVE_OTHERS=1 ONLY=simTrustCopy node scripts/runAllSims.mjs
+simAccessibility: SENSE_PROVE_OTHERS=1 ONLY=simAccessibility node scripts/runAllSims.mjs
