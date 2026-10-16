@@ -1,0 +1,5 @@
+simCmNoSack: sections 7
+   clubs: Arsenal, Brentford, Hull City, Real Madrid, Espanyol, Málaga, Inter Milan, Torino, Frosinone
+7) A promise to win before every match, the board planted on 2, 3.5, 5, 6.5 in turn, at Hull City, Málaga, Frosinone: 2 seeds, 36 matches each, the Normal twin played beside it (fleet seed 9)
+   twins kept the job and matched to the byte: 54; twins sacked at the recheck after a broken promise: 77 (floor 36); both floors in one match: 85 (floor 28); at the first check with no promise broken: 0; 14 s
+simCmNoSack: PASS (sections 7)
