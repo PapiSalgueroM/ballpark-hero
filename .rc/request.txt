@@ -1,0 +1,8 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-lib: node_modules/.bin/vitest run src/lib/clubManager --testTimeout=300000 --hookTimeout=120000
+rivals: node scripts/simNoRivalNames.mjs
+anchors: node scripts/simHarnessAnchors.mjs
+daily: node scripts/simDailyDeals.mjs
+wm6: CM_WORLD_MOVES_SECTIONS=6 node scripts/simCmWorldMoves.mjs
+continuity: node scripts/simManagerWorldContinuity.mjs
+savesize: node scripts/simClubManagerSaveSize.mjs
