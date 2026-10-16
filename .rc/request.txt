@@ -1,0 +1,4 @@
+#!serial
+adoptYear: bash .rc/x/mutrun.sh adoptYear
+adoptLoans: bash .rc/x/mutrun.sh adoptLoans
+adoptTwoClubs: bash .rc/x/mutrun.sh adoptTwoClubs
