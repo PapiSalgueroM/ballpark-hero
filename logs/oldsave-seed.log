@@ -1,0 +1,34 @@
+oldsave: 9 clubs x 1 seeds x 4 variants, base /tmp/base-s
+  FAIL: Arsenal seed 0 after 8 entries, asWritten: 111119 draws on the base, 113857 here
+  FAIL: Arsenal seed 0 after 8 entries, asWritten: season end 1 differs
+  FAIL: Arsenal seed 0 after 8 entries, noBlock: 111119 draws on the base, 113857 here
+  FAIL: Arsenal seed 0 after 8 entries, noBlock: season end 1 differs
+  FAIL: Arsenal seed 0 after 8 entries, broken: 111119 draws on the base, 113857 here
+  FAIL: Arsenal seed 0 after 8 entries, broken: season end 1 differs
+  FAIL: Arsenal seed 0 after 8 entries, zero: 111119 draws on the base, 1633 here
+  FAIL: Arsenal seed 0 after 8 entries, zero: 2 season ends on the base, 1 here
+  FAIL: Arsenal seed 0 after 8 entries, zero: season end 1 differs
+  FAIL: Brentford seed 0 after 15 entries, asWritten: 81629 draws on the base, 83518 here
+  FAIL: Brentford seed 0 after 15 entries, asWritten: season end 1 differs
+  FAIL: Brentford seed 0 after 15 entries, noBlock: 81629 draws on the base, 83518 here
+  FAIL: Brentford seed 0 after 15 entries, noBlock: season end 1 differs
+  FAIL: Brentford seed 0 after 15 entries, broken: 81629 draws on the base, 83518 here
+  FAIL: Brentford seed 0 after 15 entries, broken: season end 1 differs
+  FAIL: Brentford seed 0 after 15 entries, zero: 1034 draws on the base, 1012 here
+  FAIL: Brentford seed 0 after 15 entries, zero: season end 1 differs
+  FAIL: Hull City seed 0 after 22 entries, asWritten: 75041 draws on the base, 78095 here
+  FAIL: Hull City seed 0 after 22 entries, asWritten: season end 1 differs
+  FAIL: Hull City seed 0 after 22 entries, noBlock: 75041 draws on the base, 78095 here
+  FAIL: Hull City seed 0 after 22 entries, noBlock: season end 1 differs
+  FAIL: Hull City seed 0 after 22 entries, broken: 75041 draws on the base, 78095 here
+  FAIL: Hull City seed 0 after 22 entries, broken: season end 1 differs
+  FAIL: Hull City seed 0 after 22 entries, zero: 75041 draws on the base, 1346 here
+  FAIL: Hull City seed 0 after 22 entries, zero: 2 season ends on the base, 1 here
+  FAIL: Hull City seed 0 after 22 entries, zero: season end 1 differs
+  FAIL: Real Madrid seed 0 after 29 entries, asWritten: 81206 draws on the base, 80535 here
+  FAIL: Real Madrid seed 0 after 29 entries, asWritten: season end 1 differs
+  FAIL: Real Madrid seed 0 after 29 entries, noBlock: 81206 draws on the base, 80535 here
+  FAIL: Real Madrid seed 0 after 29 entries, noBlock: season end 1 differs
+   season ends compared: 54; control: seed
+   36 base saves compared in 94 s; branch saves whose key survives a base load: 9 of 9
+oldsave: FAIL (70 differences)

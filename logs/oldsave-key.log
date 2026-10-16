@@ -1,0 +1,34 @@
+oldsave: 9 clubs x 1 seeds x 4 variants, base /tmp/base-k
+  FAIL: Arsenal seed 0 after 8 entries, asWritten: loadCareer differs
+  FAIL: Arsenal seed 0 after 8 entries, asWritten: summarize differs ({"managerName":null,"clubName":"Arsenal","season":1,"worldSeason":"2026-27","tro vs {"managerName":null,"clubName":"Arsenal","season":1,"worldSeason":"2026-27","tro)
+  FAIL: Arsenal seed 0 after 8 entries, asWritten: season end 1 differs
+  FAIL: Arsenal seed 0 after 8 entries, asWritten: a base save picked up the key
+  FAIL: Arsenal seed 0 after 8 entries, noBlock: loadCareer differs
+  FAIL: Arsenal seed 0 after 8 entries, noBlock: summarize differs ({"managerName":null,"clubName":"Arsenal","season":1,"worldSeason":"2026-27","tro vs {"managerName":null,"clubName":"Arsenal","season":1,"worldSeason":"2026-27","tro)
+  FAIL: Arsenal seed 0 after 8 entries, noBlock: season end 1 differs
+  FAIL: Arsenal seed 0 after 8 entries, noBlock: a base save picked up the key
+  FAIL: Arsenal seed 0 after 8 entries, broken: loadCareer differs
+  FAIL: Arsenal seed 0 after 8 entries, broken: summarize differs ({"managerName":null,"clubName":"Arsenal","season":1,"worldSeason":"2026-27","tro vs {"managerName":null,"clubName":"Arsenal","season":1,"worldSeason":"2026-27","tro)
+  FAIL: Arsenal seed 0 after 8 entries, broken: season end 1 differs
+  FAIL: Arsenal seed 0 after 8 entries, broken: a base save picked up the key
+  FAIL: Arsenal seed 0 after 8 entries, zero: loadCareer differs
+  FAIL: Arsenal seed 0 after 8 entries, zero: summarize differs ({"managerName":null,"clubName":"Arsenal","season":1,"worldSeason":"2026-27","tro vs {"managerName":null,"clubName":"Arsenal","season":1,"worldSeason":"2026-27","tro)
+  FAIL: Arsenal seed 0 after 8 entries, zero: season end 1 differs
+  FAIL: Arsenal seed 0 after 8 entries, zero: a base save picked up the key
+  FAIL: Brentford seed 0 after 15 entries, asWritten: loadCareer differs
+  FAIL: Brentford seed 0 after 15 entries, asWritten: summarize differs ({"managerName":null,"clubName":"Brentford","season":1,"worldSeason":"2026-27","t vs {"managerName":null,"clubName":"Brentford","season":1,"worldSeason":"2026-27","t)
+  FAIL: Brentford seed 0 after 15 entries, asWritten: season end 1 differs
+  FAIL: Brentford seed 0 after 15 entries, asWritten: a base save picked up the key
+  FAIL: Brentford seed 0 after 15 entries, noBlock: loadCareer differs
+  FAIL: Brentford seed 0 after 15 entries, noBlock: summarize differs ({"managerName":null,"clubName":"Brentford","season":1,"worldSeason":"2026-27","t vs {"managerName":null,"clubName":"Brentford","season":1,"worldSeason":"2026-27","t)
+  FAIL: Brentford seed 0 after 15 entries, noBlock: season end 1 differs
+  FAIL: Brentford seed 0 after 15 entries, noBlock: a base save picked up the key
+  FAIL: Brentford seed 0 after 15 entries, broken: loadCareer differs
+  FAIL: Brentford seed 0 after 15 entries, broken: summarize differs ({"managerName":null,"clubName":"Brentford","season":1,"worldSeason":"2026-27","t vs {"managerName":null,"clubName":"Brentford","season":1,"worldSeason":"2026-27","t)
+  FAIL: Brentford seed 0 after 15 entries, broken: season end 1 differs
+  FAIL: Brentford seed 0 after 15 entries, broken: a base save picked up the key
+  FAIL: Brentford seed 0 after 15 entries, zero: loadCareer differs
+  FAIL: Brentford seed 0 after 15 entries, zero: summarize differs ({"managerName":null,"clubName":"Brentford","season":1,"worldSeason":"2026-27","t vs {"managerName":null,"clubName":"Brentford","season":1,"worldSeason":"2026-27","t)
+   season ends compared: 59; control: key
+   36 base saves compared in 108 s; branch saves whose key survives a base load: 9 of 9
+oldsave: FAIL (168 differences)

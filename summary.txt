@@ -1,0 +1,3 @@
+oldsave-seed exit=1 95s | oldsave: FAIL (70 differences)
+oldsave-key exit=1 109s | oldsave: FAIL (168 differences)
+oldsave2 exit=0 146s | oldsave: PASS (every base save opens and plays on the branch as on the base)

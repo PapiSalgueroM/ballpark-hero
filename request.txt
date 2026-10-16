@@ -1,0 +1,3 @@
+oldsave2: mkdir -p /tmp/base-c && git archive d4f2c6f6 src | tar -x -C /tmp/base-c && BASE_ROOT=/tmp/base-c SEEDS=2 node .rc/x/oldsave.mjs
+oldsave-key: mkdir -p /tmp/base-k && git archive d4f2c6f6 src | tar -x -C /tmp/base-k && BASE_ROOT=/tmp/base-k SEEDS=1 OLDSAVE_CONTROL=key node .rc/x/oldsave.mjs
+oldsave-seed: mkdir -p /tmp/base-s && git archive d4f2c6f6 src | tar -x -C /tmp/base-s && BASE_ROOT=/tmp/base-s SEEDS=1 OLDSAVE_CONTROL=seed node .rc/x/oldsave.mjs
