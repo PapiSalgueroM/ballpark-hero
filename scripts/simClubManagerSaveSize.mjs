@@ -700,7 +700,9 @@ section = 6;
   const out = him ? loanOutPlayer(base, him.id, 'Sevilla', 1) : null;
   /* The pre 634 market: the same world with the loan record out of sight,
      which listed him at my own club. */
-  const card = out ? buildMarket({ ...out, loanedOut: [] }).find(m => m.name === him.name) : null;
+  /* Round 1339: since then no career's market lists a man at my own club, so his card is read off the same save seen
+     from another club, as a screen opened before the loan held it (no door refuses a man at my own club). */
+  const card = out ? buildMarket({ ...out, loanedOut: [], clubName: 'Barcelona' }).find(m => m.name === him.name) : null;
   if (!out || !card) fail(`could not rebuild the pre 634 round trip for ${him?.name} (loan out ${!!out}, card ${!!card})`);
   else {
     console.log(`   ${him.name} (${him.position} ${him.age}) out on loan; the pre 634 market listed him at ${card.club} for ${card.price} as ${card.position} ${card.age}`);
@@ -875,10 +877,9 @@ section = 8;
   /* A man out on loan, and his card from the pre 634 market. */
   const lent = A.squad.find(p => !p.isYouth && p.rating < 80 && canLeaveSquad(A, p));
   const away = lent ? loanOutPlayer(fresh(), lent.id, 'Sevilla', 1) : null;
-  /* Release AZ fix pass 4: the pre 634 market is read on the same save as it was before Round 1250 (no world seed,
-     no ledger), because a seeded career's market lists nobody at my own club since the lead's ruling. */
-  const preRelease = away ? (({ worldSeed: _seed, worldRoster: _ledger, ...rest }) => rest)(away) : null;
-  const awayCard = preRelease ? buildMarket({ ...preRelease, loanedOut: [] }).find(m => m.name === lent.name) : null;
+  /* Release AZ fix pass 4 and Round 1339: no career's market lists a man at my own club, so the pre 634 market is
+     read off the same save seen from another club, as a screen opened before the loan held it. */
+  const awayCard = away ? buildMarket({ ...away, loanedOut: [], clubName: 'Barcelona' }).find(m => m.name === lent.name) : null;
   const coldName = cards[1].name;
   const states = [
     ['open window', A, []],

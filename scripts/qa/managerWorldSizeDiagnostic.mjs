@@ -65,7 +65,9 @@ const SAVESIZE_LAST = '    if (season === 3 && s) { s = JSON.parse(JSON.stringif
 /* Release AZ fix pass 4 (closing check finding 2, the lead's ruling): a seeded career's market lists nobody at my
    own club, so SaveSize sections 6 and 8 rebuild the pre 634 market (which listed a man of mine at my own club) on
    a save from before the release. Two more exact replacements, each a comment and its statements, put back to the
-   historical line before the byte for byte comparison; each must stand exactly once. */
+   historical line before the byte for byte comparison; each must stand exactly once. Round 1339 (no career's market
+   lists a man at my own club, seeded or not): sections 6 and 8 read the card off the same save seen from another
+   club, one comment and one statement each; section 6's unseeded base stays, so its card is a third pair. */
 const SAVESIZE_OWN_CLUB = [
   [[
     "  /* Release AZ fix pass 4: a save the pre 634 engine wrote is a save from before Round 1250's world seed, so the",
@@ -74,10 +76,14 @@ const SAVESIZE_OWN_CLUB = [
     "  const { worldSeed: _preReleaseSeed, ...base } = startCareer('Real Madrid');",
   ].join('\n') + '\n', "  const base = startCareer('Real Madrid');\n"],
   [[
-    '  /* Release AZ fix pass 4: the pre 634 market is read on the same save as it was before Round 1250 (no world seed,',
-    "     no ledger), because a seeded career's market lists nobody at my own club since the lead's ruling. */",
-    '  const preRelease = away ? (({ worldSeed: _seed, worldRoster: _ledger, ...rest }) => rest)(away) : null;',
-    '  const awayCard = preRelease ? buildMarket({ ...preRelease, loanedOut: [] }).find(m => m.name === lent.name) : null;',
+    "  /* Round 1339: since then no career's market lists a man at my own club, so his card is read off the same save seen",
+    '     from another club, as a screen opened before the loan held it (no door refuses a man at my own club). */',
+    "  const card = out ? buildMarket({ ...out, loanedOut: [], clubName: 'Barcelona' }).find(m => m.name === him.name) : null;",
+  ].join('\n') + '\n', '  const card = out ? buildMarket({ ...out, loanedOut: [] }).find(m => m.name === him.name) : null;\n'],
+  [[
+    "  /* Release AZ fix pass 4 and Round 1339: no career's market lists a man at my own club, so the pre 634 market is",
+    '     read off the same save seen from another club, as a screen opened before the loan held it. */',
+    "  const awayCard = away ? buildMarket({ ...away, loanedOut: [], clubName: 'Barcelona' }).find(m => m.name === lent.name) : null;",
   ].join('\n') + '\n', '  const awayCard = away ? buildMarket({ ...away, loanedOut: [] }).find(m => m.name === lent.name) : null;\n'],
 ];
 function historicalHarnessContract(name, source) {

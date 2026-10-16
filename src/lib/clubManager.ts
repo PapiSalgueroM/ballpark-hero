@@ -402,17 +402,18 @@ export function worldRosterXIAvg(career: CareerState, club: string): number | nu
 const WORLD_MARKET_MEMO = new WeakMap<object, { years: number; year: number; start: unknown; era: unknown; seed: number | undefined; club: string; out: MarketPlayer[] }>();
 
 /* Release AZ fix pass 4, the lead's ruling (the manager's own club is read from his squad, never the world
-   roster): in a career that plays the living world the market lists nobody at my own club. My club is my squad,
-   and buildMarket drops every man of my squad by name, so what the world roster still put at my club were men
-   who are not mine (the men a deep club's bake holds beyond the 26 a squad starts with, then the projection's
-   replacements): on sale from my own club, and named in the feed as signed from it. A career from before the
-   release keeps the projected world's market exactly as it was (ruling Y1). src/lib/clubManagerOwnClubLevel.test.ts
-   and scripts/simFreeAgents.mjs section 17 (FA_CONTROL=ownclub) hold it. */
+   roster), and since Round 1339 in every career, seeded or not: the market lists nobody at my own club. My club is
+   my squad, and buildMarket drops every man of my squad by name, so what the world roster still put at my club were
+   men who are not mine (a deep club's bake beyond the 26 a squad starts with, the projection's replacements, the men
+   I sold, the men whose deals ran out): on sale from my own club, and named in the feed as signed from it. A career
+   from before Release AZ keeps its projected world and never writes a ledger (ruling Y1), but its market agrees with
+   the club's page (ClubDetailScreen). src/lib/clubManagerOwnClubLevel.test.ts, scripts/simFreeAgents.mjs section 17
+   (FA_CONTROL=ownclub) and scripts/simCmOwnClubMarket.mjs (OWNCLUB_MARKET_CONTROL=legacy) hold it. */
 function worldMarket(career: CareerState): MarketPlayer[] {
   const fallback = marketBase(yearsOn(career), career.eraId, worldSeedOf(career));
   const current = refreshWorldRoster(career);
   const held = worldRosterView(current);
-  if (!held) return worldSeedOf(career) === undefined ? fallback : fallback.filter(p => p.club !== career.clubName);
+  if (!held) return fallback.filter(p => p.club !== career.clubName);
   const raw = current.worldRoster as object, years = yearsOn(current), year = worldYear(current), seed = worldSeedOf(current);
   const hit = WORLD_MARKET_MEMO.get(raw);
   if (hit && hit.years === years && hit.year === year && hit.start === current.startYear && hit.era === current.eraId && hit.seed === seed && hit.club === current.clubName) return hit.out;

@@ -5,6 +5,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
 import { BASE, BASE_TREE, HEAD, TREE, ROOT, clone, sha, sourceHashes, writeEvidence, uniquePatch, tape, loadEngine } from './qa/managerWorldContinuityKit.mjs';
+import { PRE_AZ_ANCHOR, PRE_AZ_RULE } from './lib/cmOwnClubMarket1339.mjs';
 
 const OUT = path.resolve(process.env.MANAGER_WORLD_CONTINUITY_ARTIFACTS || '.tmp-fx/manager-world-continuity');
 const CONTROL = process.env.MANAGER_WORLD_CONTINUITY_CONTROL || '';
@@ -116,7 +117,14 @@ function neutral(B, input, bridge = false) {
 }
 async function arm(control) {
   const directory = path.join(OUT, control || 'healthy'); fs.mkdirSync(directory, { recursive: true });
-  const A = await loadEngine({ original: true, label: `${control || 'healthy'}-original` });
+  /* Round 1339, the bridge: since that round no career's market lists a man at the club you manage, seeded or not,
+     and the original engine (before AZ) listed them in every career, so the inactive group's summer (the board's
+     asks and the feed read the market) parts without it. The original arm carries that one rule
+     (scripts/lib/cmOwnClubMarket1339.mjs, its receipt in originalPatches). Its prep engine is this arm too, so the
+     inactive input is a start the rule never moves (the start moment ranks every own club man past 1150, Round
+     1339's section 5), not a byte for byte old save. */
+  const A = await loadEngine({ original: true, label: `${control || 'healthy'}-original`, patch: (file, source, receipts) =>
+    file === CORE ? uniquePatch(source, PRE_AZ_ANCHOR, PRE_AZ_RULE, file, receipts) : source });
   const defect = CONTROLS[control];
   const B = await loadEngine({ label: control || 'healthy', patch: defect
     ? (file, source, receipts) => file === defect.file ? uniquePatch(source, defect.from, defect.to, file, receipts) : source : undefined });
@@ -124,7 +132,7 @@ async function arm(control) {
   const report = { head: HEAD, tree: TREE, base: BASE, baseTree: BASE_TREE, control, groups: [], failures: [],
     originalLoaded: A.loaded, currentLoaded: B.loaded, originalBundle: A.bundleSha256, currentBundle: B.bundleSha256,
     originalScopes: A.scopes, currentScopes: B.scopes,
-    patches: B.receipts, sourceBefore: before, evidence: {}, counts: {}, measurement: null };
+    patches: B.receipts, originalPatches: A.receipts, sourceBefore: before, evidence: {}, counts: {}, measurement: null };
   async function group(id, action) {
     const observations = []; let error = null;
     try { await action(observations); } catch (caught) { error = caught; }
