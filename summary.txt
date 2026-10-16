@@ -1,0 +1,9 @@
+rivals exit=0 16s | No rival product names found. 0 findings.
+storage exit=0 2s | simStorageWrites: all green (owed: 12)
+anchors exit=0 41s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+appealIsolation exit=0 30s | Equivalent appeal outcomes must agree: passed for 24 original pairs and 3 separate generated-position pairs.
+decisions-default exit=0 15s | simClubManagerDecisions: 0 findings
+decisions-seed4 exit=1 16s | simClubManagerDecisions: 1 findings
+tsc exit=0 68s | 
+retire exit=0 19s | simCmRetire: all 18 checks passed (record, oldsave, pens, base, retire, dashes)
+decisionRegression1081 exit=1 95s | Node.js v24.21.0
