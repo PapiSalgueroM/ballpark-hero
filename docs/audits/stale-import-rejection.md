@@ -1,5 +1,13 @@
 # Preserve the original failed import while the page reloads
 
+Current result: paired original/alternative proof qualified at02af4aaf on remote
+run38915150473/job117020590854. Product remains HOLD against I1338, which owns a
+different complete waiting-state design. Its cancelled event enters a pending
+emitted helper; this alternative uncancels and rejects the original error. These
+contracts cannot be added together. Keep I's plugin/config/listener/tests/fences
+together, do not automatically merge293 or weaken either sourceguard. This draft
+retains independent causal evidence and a tested alternative, not a release gate.
+
 The unchanged BH lazy-editor browser method reported an intermittent React
 undefined.default error after its deliberate missing-chunk fault. PR291 retained
 two passing repeats and a timing trace, but those do not disprove the earlier
@@ -108,3 +116,47 @@ effective controls, full download caps, installed521 versions and source/tool/fo
 and distribution holds still apply. No full-suite, natural race frequency, ReactDOM
 output, blanket visual review or live release claim follows from the controlled
 initializer method. Remote paired runtime is still pending.
+
+Paired runtime subsequently passed every step. Both production builds and both
+complete fifteen-reader sets are green. Exact originale7 produced4completed,
+3preserves and1precise failure with0setup faults. The actual native import failed,
+the event was cancelled, emitted helper fulfilledundefined and actualReact_init
+threw the exact reading-default TypeError. Exact restored candidate produced4
+passes: native payload rejected intact, actualReact_init threw the same original
+payload, one held reload with no headers; all three preservation arms stayed true.
+Every arm used the identical methodf09d9b8a80e91855882492a3fb8a3baf75f4a0af6bb7809a5b4632e0903084c9.
+
+The original stock emitted entry is index-Bsy_bROY.js,797015bytes,
+SHA256f656e91d01ae0ca67be67449f96635f72ffd4a57387293d97dbb9ba583cb8516.
+Alternative entry is index--AmAwYOZ.js,796995bytes,
+SHA2564734cd9cdccb8fa4da86f0b44d7aff2009c40eb3b65989fa15472e397ca31ac0.
+Their actual Vite preload owner is the same948bytes, SHAd9316e0a9d1dffa4eb7dc7fca2e326abebcd3be60ba184100262da317dd77a80.
+Only the actual listener's rejection policy changes. Both exact phase source
+references and actual loaded entry response hashes are held by the proof.
+
+Unchanged old editor walk passed1602checks,3healthy flows,0eager editor fetches,
+12physical originals,0failures,0setup faults and its effective omissioncontrol.
+Both existing guarded reload files passed17cases. Normal simStaleChunk and all9
+controls passed their exact success/fault classifications, including newcancel
+andnoreload and oldnosave's exactsections2and5. Unchanged full download sweep
+passed SoccerCareer832.4K/834K and ClubManager604.4K/606K. Sources3727files plus
+all3packagefiles, all521locked versions/24466installed files, browsertools/fonts,
+and both782file distributions remained held. Browser executable has an asserted
+digest receipt, not retained physical executable bytes.
+
+Artifact12052204151 is53025358bytes,
+SHA256b2fb44ea7733b4e995a51951d9b019408da714a31d61b39c81837cec705ef53a,
+retained outside repo under dukb-handoff/2026-10-16/stale-import-paired with115
+physical files. Root independently recomputed all8raw bytes/hashes and reportdeep
+equality, confirmed both methodbytes and read all four causal outcomes per arm.
+Root viewed four selected original UI images:320cold,390failedboundary/retry and
+1280edited. No blanket visual, natural-race timing, actual saved-career persistence,
+ReactDOM output from controlledmethod, fullsuite, joinedrelease or live claim.
+
+Independent native review subsequently rehashed all115physical files against the
+retained ZIP, all3730source/package entries and both complete782file distribution
+archives. All8raw/report/deep observations, exact phase bindings, same helper and
+same method agree. A separate execution reviewer reopened actual GitHub job steps
+and decoded logs, all17tests/9effective controls/both15reader sets/full14route
+budgets and all source/installed/tool/font/distribution holds. No mismatch or
+hidden allowance found. Alternative product remains HOLD as stated above.

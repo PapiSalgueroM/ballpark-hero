@@ -1,3 +1,32 @@
+## 2026-10-16: controlled original and alternative import fix both qualified
+
+PR293 tested02af4aaf8bfc514df5534416682eabe8c3ef1ceb, remote run38915150473,
+job117020590854 passed every step. Exact original e7 application gave one precise
+native-import/actual-React failure and three preserves. Exact restored candidate
+gave four passes with identical f09d9b8a method bytes. Both actual production
+builds and both complete15-reader sets passed. Unchanged lazy UI1602checks and
+12original images,17guarded reload cases, normal source guard/all9effective
+controls, unchanged full budgets and source/dependency/dist holds passed.
+
+Product HOLD: I1338 independently owns the complete waiting-state plugin design.
+It deliberately cancels, while PR293 leaves rejection intact. Their listener,
+tests and sourceguard contracts conflict. Keep I's plugin/config/tests/fences
+together; do not merge both by taking the last writer or weakening an oracle.
+PR293 remains an explicit alternative and independent causal evidence, not an
+incoming release requirement. I owns integration and publication.
+
+Artifact12052204151 is53,025,358bytes, SHA256
+b2fb44ea7733b4e995a51951d9b019408da714a31d61b39c81837cec705ef53a,
+retained outside repo under dukb-handoff/2026-10-16/stale-import-paired. Root
+recomputed all8physicalraw/report pairs and identical method hash. Selected4UI
+images were viewed, not a blanket visual qualification. Controlled method uses
+fresh signed-out creators and actual React's private initializer; store/URL/time
+origin measured at settlement, before a separate500ms network window. No natural
+race frequency, fullsuite, joined release or live claim. Details in the audit.
+Independent artifact review also closed all115physical files,3730source/package
+entries, both782file distributions and all8raw/report pairs without mismatch;
+separate actual execution review found no hidden allowance. Keep product HOLD.
+
 ## 2026-10-16: original failed import reproduced, paired correction prepared
 
 PR293 owns only the global freshBuild preload listener correction and its narrow
