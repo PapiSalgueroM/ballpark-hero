@@ -286,6 +286,11 @@ function squadSave() {
   save.seasons[save.seasons.length - 1].year = 2025;
   return save;
 }
+/* How far text may settle inside the panel in its first second and still count as not moved. Measured on a runner
+   (r1337-w6b): 0 px at 390 and 320; 1 px at 1280 (pointer 449 to 450, first tile 494 to 495) while the panel's own
+   top and height held (212 and 476), the text settling, not anything arriving. A pointer that came after the first
+   paint, or the screen switching to the help, moves the tiles by a whole line (16 px or more). */
+const SETTLE_PX = 2;
 /* Where the pointer and the first tile sit, by layout (offsetTop), so the sheet's zoom in does not count as a move. */
 const squadNow = page => page.evaluate(() => {
   const sheet = document.querySelector('[data-squad-sheet]');
@@ -314,6 +319,7 @@ async function w6(width, height) {
           hintY: hint ? top(hint) : null, tileY: first ? top(first) : null, panelY: top(sheet.querySelector("[role=dialog]")), panelH: sheet.querySelector("[role=dialog]")?.offsetHeight ?? null };
       }).observe(document.body, { childList: true, subtree: true });
     });
+    await page.evaluate(() => document.fonts.ready.then(() => true));
     await tile.click();
     await page.locator('[data-squad-sheet] [data-squad-screen]').first().waitFor({ timeout: 15000 });
     const first = await page.evaluate(() => window.__squadFirst);
@@ -321,7 +327,7 @@ async function w6(width, height) {
     const later = await squadNow(page);
     check(first?.screen === 'home' && first.hintY !== null, `${width}: the first frame of the first open is home with the pointer (${JSON.stringify(first)})`);
     check(later?.screen === 'home' && later.hintY !== null, `${width}: one second later it is still home with the pointer (${JSON.stringify(later)})`);
-    check(!!first && !!later && first.hintY === later.hintY && first.tileY === later.tileY, `${width}: the pointer and the first tile have not moved (first ${JSON.stringify(first)}, a second later ${JSON.stringify(later)})`);
+    check(!!first && !!later && Math.abs(first.hintY - later.hintY) <= SETTLE_PX && Math.abs(first.tileY - later.tileY) <= SETTLE_PX, `${width}: the pointer and the first tile have not moved (first ${JSON.stringify(first)}, a second later ${JSON.stringify(later)})`);
     await shot(page, `W6-first-open-${width}`);
     await page.getByRole('button', { name: 'How the squad works', exact: true }).click();
     const help = await page.locator('[data-squad-sheet] [data-squad-screen="help"]').waitFor({ timeout: 8000 }).then(() => true, () => false);
