@@ -8,7 +8,10 @@ state at four widths. First remote run38900124066 at858ae1b4 passed types, all e
 component/roster controls, build and15readers, then failed before any browser journey:
 the existing loader adds only a missing default managerXp block. New method now binds
 that exact first-load canonicalization and requires two stable actual reloads of its
-persisted output. Fixture/app/oldproofs/packages held, no UI bug or pixel acceptance.
+persisted output. Second4fdb/run38901553910 reached8journeys/15correct zero-RNG reads,
+but tall full-page screenshots displaced Back on320/390; uncaptured reloads held.
+Method now uses actual viewport PNGs with strict dimension and position holds, keeping
+every UI detector/control unchanged. Fixture/app/oldproofs/packages held, no UI bug or pixel acceptance.
 All runtime is remote/offline, fresh browser/build/readers/weight pending. This add-on
 does not block ready PR285 or Claude I's current release. Details: docs/audits/club-fixtures-browser.md.
 

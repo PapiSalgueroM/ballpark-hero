@@ -220,8 +220,18 @@ function layoutFaults(value) {
 async function capture(walk, row, suffix, control = false) {
   const name = row.id + '-' + suffix + '.png', file = path.join(OUT, name);
   assert(!fs.existsSync(file), 'Refuse to replace a capture.');
-  await walk.page.screenshot({ path: file, fullPage: true });
-  const receipt = { file: name, bytes: fs.statSync(file).size, sha256: hash(file), control, original: true };
+  const position = () => walk.page.evaluate(() => {
+    const section = document.querySelector('[aria-label="Club league fixtures"]'), rect = section?.getBoundingClientRect();
+    return { viewport: [innerWidth, innerHeight], scroll: [scrollX, scrollY], list: section?.querySelector('ul')?.scrollTop,
+      section: rect ? [rect.x, rect.y, rect.width, rect.height] : null };
+  });
+  const before = await position();
+  await walk.page.screenshot({ path: file, fullPage: false });
+  const after = await position(), bytes = fs.readFileSync(file);
+  setup(equal(before, after), row.id + ': a viewport capture must preserve page, list and section position.');
+  setup(bytes.readUInt32BE(0) === 0x89504e47 && bytes.readUInt32BE(16) === row.viewport.width
+    && bytes.readUInt32BE(20) === row.viewport.height, row.id + ': original PNG must have the actual requested viewport dimensions.');
+  const receipt = { file: name, bytes: bytes.length, sha256: sha(bytes), control, original: true, before, after };
   report.captures.push(receipt); row.shots.push(name); return receipt;
 }
 async function controls(walk, row, region, expected) {

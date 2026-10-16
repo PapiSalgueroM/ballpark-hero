@@ -53,3 +53,32 @@ loads/saves of its persisted output to hold every byte and zero RNG. Browser inp
 that actual output. Capture the dist inventory before setup can fail. App, old proofs,
 packages, fixture, eight journeys, all row/layout detectors and four controls stay held.
 Fresh remote browser/build/reader/weight acceptance remains required.
+
+Second remote run `38901553910` at `4fdb7d32` passed both exact canonicalization
+preflights and reached eight journeys, fifteen full fixture reads, seven reloads and
+sixteen captures. All fifteen row comparisons matched and took zero RNG. The four
+initial 320/390 journeys lost Back visibility between the top and bottom observations;
+the first control correctly refused to run from that failing positive state. The
+same three small-phone reload journeys without captures kept Back visible and the
+page position unchanged. Both 430 and 1440 scenarios had no journey issues.
+
+The full-page captures included roughly29,000px of SEO content. At320 the section
+moved from y12 to y-47 before the wheel baseline was recorded; at390 it moved from
+y12 to y-53. Wheel baseline/after positions themselves held160 and166 respectively.
+The uncaptured reloads kept section y12 and scroll101. This strongly associates the
+failure with full-page capture, without proving the exact browser mechanism.
+No application Back bug is established. The two tall originals were inspected but
+their default previews were too small for useful visual acceptance.
+
+Artifact `12046697302`, 85,175,757 bytes, SHA256
+`41961856199984686aee5f57327469c19a4a4a7f5087c70bbf94c5fb45cc4800`
+is retained at `dukb-handoff/2026-10-16/club-fixtures-browser-second`. Browser acceptance
+failed and the weight step did not run. No four-control or complete-eight-journey
+claim is made from that packet.
+
+The next method-only change captures the actual viewport, requires its PNG dimensions
+to equal the requested profile, and requires page/list/section position to remain
+identical across each capture. It does not restore or alter that position. Every
+existing Back/row/scroll/geometry detector and fault remains unchanged, as do the
+fixture, canonicalization, application, old proofs, workflow and packages. A fresh
+complete run is required before any browser or pixel qualification.
