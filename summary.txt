@@ -1,0 +1,2 @@
+fix-holds exit=0 125s | FIX takeover with the production input: exit 0
+fix-fires exit=0 125s | FIX with the pin taken out: exit 1
