@@ -1,0 +1,9 @@
+#!build
+#!playwright
+#!serial
+preload5: node scripts/simPreloadWait.mjs --build-stock dist-stock 2>&1 | tail -1; git worktree add -f .base $(node scripts/lib/treeWithoutMerge.mjs a7094670 e814c2de) > /dev/null 2>&1; (cd .base && ../node_modules/.bin/vite build --outDir ../dist-base > /tmp/b1.log 2>&1 && ../node_modules/.bin/vite build --outDir ../dist-base2 > /tmp/b2.log 2>&1); echo "base builds=$?"; export PRELOAD_WAIT_STOCK_DIST=dist-stock PRELOAD_WAIT_BASE_DIST=dist-base PRELOAD_WAIT_BASE_DIST2=dist-base2; node scripts/simPreloadWait.mjs; a=$?; r=""; for k in stockdist extra extrabase; do PRELOAD_WAIT_CONTROL=$k node scripts/simPreloadWait.mjs > /tmp/p-$k.log 2>&1; r="$r $k=$?"; tail -1 /tmp/p-$k.log; done; echo "head=$a controls:$r"; [ $a = 0 ] && [ "$r" = " stockdist=1 extra=1 extrabase=1" ]
+walk-1: node scripts/playChunkReloadWait.mjs
+walk-2: node scripts/playChunkReloadWait.mjs
+walk-3: node scripts/playChunkReloadWait.mjs
+walk-4: node scripts/playChunkReloadWait.mjs
+walk-5: node scripts/playChunkReloadWait.mjs
