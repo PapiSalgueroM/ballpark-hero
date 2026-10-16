@@ -1,0 +1,7 @@
+treeWithoutMerge: d0a212298c1910072b826cfa78256817574886cb, 2375d3af without 819d9d16; conflicts kept from 2375d3af: none
+base d0a212298c1910072b826cfa78256817574886cb
+control stripnone FIRED: 1 of 3 checks red
+control drawleak FIRED: 1 of 3 checks red
+control hotseatwrites FIRED: 1 of 4 checks red
+control loadtouch FIRED: 1 of 1 checks red
+controls: stripnone=1/1 drawleak=1/1 hotseatwrites=1/1 loadtouch=1/1

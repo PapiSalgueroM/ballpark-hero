@@ -1,0 +1,20 @@
+treeWithoutMerge: 6b7f2013fa0db8f2e122b39567387a0585fcaf72, 2375d3af without 819d9d16; conflicts kept from 2375d3af: none
+base 6b7f2013fa0db8f2e122b39567387a0585fcaf72
+== hotseat
+ok   [hotseat] every daily before the cutover (30, 2026-09-24 to 2026-10-23) replays exactly as on RETIRE_BASE, nothing taken off
+ok   [hotseat] every daily from the cutover (10, 2026-10-24 on) replays as on RETIRE_BASE once the record is taken off
+ok   [hotseat] handoverState never carries retired (40 runs)
+ok   [hotseat] a carried run's first Club Manager match seeds the record exactly from the book (31 runs carried on) (31 seeded)
+== loads
+   16 old saves (4 from realSaves), 16 loaded
+ok   [loads] every old save loads to the same JSON on head and base
+== oldsave
+   an Everton career 4 seasons in, built on RETIRE_BASE: 167 played, 167 in the book
+ok   [oldsave] the old save carries no record
+ok   [oldsave] the old save's book holds every match (167 of 167)
+ok   [oldsave] on the whole book the derived record is the reports' first of the most goals, with no missed (6-2 vs Sunderland, S1; reports 6-2 vs Sunderland, S1)
+ok   [oldsave] leaned, the derived record says the book lost 5 matches (6-2 vs Sunderland, S1, missed 5)
+ok   [oldsave] reading the record writes nothing
+ok   [oldsave] one match on head stores the seed or that match, whichever has more goals (stored 6-2 vs Sunderland, S1, missed 5; seed 6-2 vs Sunderland, S1, missed 5; tonight 1-4 vs Burnley)
+ok   [oldsave] and carries missed forward (5 of 5)
+simCmRetire: all 12 checks passed (hotseat, loads, oldsave)

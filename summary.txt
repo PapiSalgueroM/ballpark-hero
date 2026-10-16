@@ -1,0 +1,18 @@
+build exit=0 33s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+retire exit=0 39s | simCmRetire: all 18 checks passed (record, oldsave, pens, base, retire, dashes)
+retire-hotseat-loads exit=0 81s | simCmRetire: all 12 checks passed (hotseat, loads, oldsave)
+retire-fleet exit=0 129s | simCmRetire: all 3 checks passed (fleet)
+simCmTablesTruth exit=0 25s | simCmTablesTruth: every case green
+simEarlyReturnScope exit=0 13s | simEarlyReturnScope: all green
+simNationJob exit=0 3s | simNationJob: green. You can manage a country now, and it is a job you have to earn and can lose.
+simHomeFront exit=0 1s | simHomeFront: green. The home front shows real games, real saves and a sport you can tell apart without colour.
+retire-ctl exit=0 145s | controls: tielast=1/1 skipgame=1/1 nomissed=1/1 basewrites=1/1 pensdrawn=1/1 retiretouch=1/1 legacydrop=1/1 liveok=1/1 seasonover=1/1 drawone=1/1 dash=1/1
+decisions-seed4 exit=1 27s | simClubManagerDecisions: 1 findings
+simCmShootoutOrder exit=1 36s | simCmShootoutOrder: 3 FAILURE(S)
+simCmQuickLegs exit=0 83s | simCmQuickLegs: PASS, 10 sections green
+simCmVar exit=0 198s | simCmVar normal: actual review outcomes and full prior baseline passed.
+retire-ctl-base exit=0 348s | controls: stripnone=1/1 drawleak=1/1 hotseatwrites=1/1 loadtouch=1/1
+playCmRetire-strip exit=1 23s | control strip FIRED: 6 of 18 checks red
+decisionRegression1081 exit=1 202s | Node.js v24.21.0
+playCmRetire exit=0 101s | playCmRetire: all 60 checks passed. Pictures in /home/runner/work/_temp/rc-out/files/head
+playCmRetire-norecord exit=1 92s | control norecord FIRED: 6 of 52 checks red

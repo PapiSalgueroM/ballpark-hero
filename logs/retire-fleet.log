@@ -1,0 +1,7 @@
+treeWithoutMerge: 3ee79dc65d383e5b6948ec7cdee6803d21579aae, 2375d3af without 819d9d16; conflicts kept from 2375d3af: none
+base 3ee79dc65d383e5b6948ec7cdee6803d21579aae
+== fleet
+ok   [fleet] 30 careers of 3 seasons: every save byte (the record taken off) and every draw equal to RETIRE_BASE
+ok   [fleet] every head career wrote the record (30 of 30)
+ok   [fleet] 3 careers on matchRules 'base': equal to RETIRE_BASE with nothing taken off
+simCmRetire: all 3 checks passed (fleet)

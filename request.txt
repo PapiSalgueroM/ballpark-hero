@@ -1,0 +1,26 @@
+# Release BI, Round 1343 (retire as a manager, and the highest scoring game), merged as 819d9d16 (first parent
+# dd44adff). simCmRetire's base parts bind RETIRE_BASE to this tree WITHOUT Round 1343 (scripts/lib/treeWithoutMerge.mjs
+# 819d9d16 dd44adff); the round's original base was d4f2c6f6. retire-ctl and retire-ctl-base exit 0 only when every
+# control exits 1 with FIRED. playCmRetire's controls (strip, norecord) must exit 1 with FIRED.
+# CARRIED, not this release's: decisions-seed4 (SIM_SEED=4 simClubManagerDecisions, "only 5 straight reds in the play
+# seasons, under the floor of 6") and qa/managerDecisionRegression1081 are red on main e814c2de with the same first
+# line (results-g/fix2-1343.md and verify2-1343.md).
+#!serve
+#!playwright
+retire: node scripts/simCmRetire.mjs
+retire-fleet: export RB=$(node scripts/lib/treeWithoutMerge.mjs 819d9d16 dd44adff) && echo "base $RB" && git worktree add -f .rb1 $RB >/dev/null 2>&1; RETIRE_BASE=$PWD/.rb1 node scripts/simCmRetire.mjs --part=fleet
+retire-hotseat-loads: sleep 5; export RB=$(node scripts/lib/treeWithoutMerge.mjs 819d9d16 dd44adff) && echo "base $RB" && git worktree add -f .rb2 $RB >/dev/null 2>&1; RETIRE_BASE=$PWD/.rb2 node scripts/simCmRetire.mjs --part=hotseat,loads,oldsave
+retire-ctl: r=""; for k in tielast skipgame nomissed basewrites pensdrawn retiretouch legacydrop liveok seasonover drawone dash; do RETIRE_CONTROL=$k node scripts/simCmRetire.mjs > /tmp/r-$k.log 2>&1; e=$?; f=$(grep -c "FIRED" /tmp/r-$k.log); r="$r $k=$e/$f"; done; echo "controls:$r"; [ -z "$(echo "$r" | tr ' ' '\n' | grep -v '^$' | grep -v '=1/[1-9]')" ]
+retire-ctl-base: sleep 10; export RB=$(node scripts/lib/treeWithoutMerge.mjs 819d9d16 dd44adff) && echo "base $RB" && git worktree add -f .rb3 $RB >/dev/null 2>&1; r=""; for k in stripnone drawleak hotseatwrites loadtouch; do RETIRE_BASE=$PWD/.rb3 RETIRE_CONTROL=$k node scripts/simCmRetire.mjs > /tmp/rb-$k.log 2>&1; e=$?; f=$(grep -c "FIRED" /tmp/rb-$k.log); r="$r $k=$e/$f"; tail -1 /tmp/rb-$k.log; done; echo "controls:$r"; [ -z "$(echo "$r" | tr ' ' '\n' | grep -v '^$' | grep -v '=1/[1-9]')" ]
+simCmTablesTruth: node scripts/simCmTablesTruth.mjs
+simEarlyReturnScope: node scripts/simEarlyReturnScope.mjs
+simNationJob: node scripts/simNationJob.mjs
+simHomeFront: node scripts/simHomeFront.mjs
+decisions-seed4: SIM_SEED=4 NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simClubManagerDecisions.mjs
+simCmShootoutOrder: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCmShootoutOrder.mjs
+simCmQuickLegs: node scripts/simCmQuickLegs.mjs
+simCmVar: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCmVar.mjs
+decisionRegression1081: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/managerDecisionRegression1081.mjs
+playCmRetire: node scripts/playCmRetire.mjs
+playCmRetire-strip: PLAY_RETIRE_CONTROL=strip node scripts/playCmRetire.mjs
+playCmRetire-norecord: PLAY_RETIRE_CONTROL=norecord node scripts/playCmRetire.mjs

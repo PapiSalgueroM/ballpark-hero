@@ -1,0 +1,31 @@
+sections fleet, hotseat, loads SKIPPED: they need RETIRE_BASE
+== record
+   3 clubs x 5 seeds x 2 seasons: 1312 matches, 56 ties with the record, 18 shootouts (18 single leg)
+ok   [record] the fleet played matches and read every report (1312 matches, 0 reports not read)
+ok   [record] after every match the stored record is the first of the most goals the reports show
+ok   [record] after every match the stored record equals highestFromBook over the whole book
+== oldsave
+   an Everton career 4 seasons in, built on head with the field taken off (no RETIRE_BASE): 167 played, 167 in the book
+ok   [oldsave] the old save carries no record
+ok   [oldsave] the old save's book holds every match (167 of 167)
+ok   [oldsave] on the whole book the derived record is the reports' first of the most goals, with no missed (6-2 vs Sunderland, S1; reports 6-2 vs Sunderland, S1)
+ok   [oldsave] leaned, the derived record says the book lost 5 matches (6-2 vs Sunderland, S1, missed 5)
+ok   [oldsave] reading the record writes nothing
+ok   [oldsave] one match on head stores the seed or that match, whichever has more goals (stored 6-2 vs Sunderland, S1, missed 5; seed 6-2 vs Sunderland, S1, missed 5; tonight 1-4 vs Burnley)
+ok   [oldsave] and carries missed forward (5 of 5)
+== pens
+   the record fleet held 18 shootouts, 18 of them single leg ties
+ok   [pens] every single leg shootout (18) keeps the level score with W or L, reads as penalties, counts no kick
+== base
+   a 'base' Liverpool season: 40 matches
+ok   [base] a career on the base rules plays a season and never writes the record (0 of 40 matches wrote it)
+== retire
+   18 careers at three moments, 12 trophies between them
+ok   [retire] retiring changes only `retired` (and writes the record down when absent), never its input, at the right moment (moments seasonEnd, midSeason, outOfWork)
+ok   [retire] retiring draws nothing (0 draws)
+ok   [retire] a match in progress and a retired career are refused (18 of 18)
+ok   [retire] a season played to its last match and not yet reviewed is refused, so the review writes its title and its row first (5 of 5)
+ok   [retire] the farewell's clubs, cabinet and record are the save's (12 trophies)
+== dashes
+ok   [dashes] no dash of any kind in the 5 new files (566 lines), comments included
+simCmRetire: all 18 checks passed (record, oldsave, pens, base, retire, dashes)
