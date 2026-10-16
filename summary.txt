@@ -1,0 +1,6 @@
+mut-seedcount exit=0 29s | MUT seedcount sim=1 vitest=1
+mut-sackedfirst exit=0 4s | MUT sackedfirst vitest=0
+mut-summaryfirst exit=0 4s | MUT summaryfirst vitest=0
+mut-nowritefirst exit=0 4s | MUT nowritefirst vitest=1
+mut-seedoldest exit=0 27s | MUT seedoldest sim=0 vitest=1
+mut-missedtwo exit=0 16s | MUT missedtwo vitest=0

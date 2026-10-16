@@ -1,0 +1,3 @@
+MUT sackedfirst APPLIED to src/hooks/useClubManager.ts
+[2m      Tests [22m [1m[32m46 passed[39m[22m[90m (46)[39m
+MUT sackedfirst vitest=0

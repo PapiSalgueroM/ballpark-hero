@@ -1,0 +1,6 @@
+MUT nowritefirst APPLIED to src/hooks/useClubManager.ts
+[31m   [31m×[31m retiring through the hook[2m > [22ma write the fence refuses shows the notice and no farewell, and the disk is not retired[39m[32m 35[2mms[22m[39m
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+[41m[1m FAIL [22m[49m src/test/clubManagerRetire.test.tsx[2m > [22mretiring through the hook[2m > [22ma write the fence refuses shows the notice and no farewell, and the disk is not retired
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m18 passed[39m[22m[90m (19)[39m
+MUT nowritefirst vitest=1
