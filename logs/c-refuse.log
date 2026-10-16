@@ -1,0 +1,7 @@
+simCmNoSack: sections 4, control refuse
+   clubs: Arsenal, Brentford, Hull City, Real Madrid, Espanyol, Málaga, Inter Milan, Torino, Frosinone
+4) turnOnNoSack is one way and refuses a sacked or out of work manager; the key reads strictly; only a career without it posts a score
+  FAIL (section 4): turnOnNoSack switched on for a sacked manager
+  FAIL (section 4): turnOnNoSack switched on for a manager in the wilderness
+   3 scored match pings and 4 scored completions, each behind postsScore; literals for the three ping harnesses: 3 and 3
+simCmNoSack: CONTROL refuse FIRED: section 4 red (2 failures)

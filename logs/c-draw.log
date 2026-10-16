@@ -1,0 +1,88 @@
+simCmNoSack: sections 1, control draw, compared with this tree with both floors taken out
+   clubs: Arsenal, Brentford, Hull City, Real Madrid, Espanyol, Málaga, Inter Milan, Torino, Frosinone
+1) A career without the key plays as the base tree: 9 clubs, 2 seeds, 2 seasons, coach and noCoach
+  FAIL (section 1): Arsenal seed 0 coach: 79936 draws here, 91513 on the base tree
+  FAIL (section 1): Arsenal seed 0 coach: season 1 differs from the base tree, first at key budget
+  FAIL (section 1): Arsenal seed 0 noCoach: 103372 draws here, 62195 on the base tree
+  FAIL (section 1): Arsenal seed 0 noCoach: season 1 differs from the base tree, first at key budget
+  FAIL (section 1): Arsenal seed 1 coach: 115781 draws here, 119233 on the base tree
+  FAIL (section 1): Arsenal seed 1 coach: season 1 differs from the base tree, first at key budget
+  FAIL (section 1): Arsenal seed 1 noCoach: 50607 draws here, 102124 on the base tree
+  FAIL (section 1): Arsenal seed 1 noCoach: 1 season ends here, 2 on the base tree
+  FAIL (section 1): Arsenal seed 1 noCoach: season 1 differs from the base tree, first at key budget
+  FAIL (section 1): Brentford seed 0 coach: 109832 draws here, 108681 on the base tree
+  FAIL (section 1): Brentford seed 0 coach: season 1 differs from the base tree, first at key budget
+  FAIL (section 1): Brentford seed 0 noCoach: 96331 draws here, 98510 on the base tree
+  FAIL (section 1): Brentford seed 0 noCoach: season 1 differs from the base tree, first at key budget
+  FAIL (section 1): Brentford seed 1 coach: 104413 draws here, 24804 on the base tree
+  FAIL (section 1): Brentford seed 1 coach: 2 season ends here, 1 on the base tree
+  FAIL (section 1): Brentford seed 1 coach: season 1 differs from the base tree, first at key week
+  FAIL (section 1): Brentford seed 1 noCoach: 69778 draws here, 24357 on the base tree
+  FAIL (section 1): Brentford seed 1 noCoach: 2 season ends here, 1 on the base tree
+  FAIL (section 1): Brentford seed 1 noCoach: season 1 differs from the base tree, first at key week
+  FAIL (section 1): Hull City seed 0 coach: 101662 draws here, 88025 on the base tree
+  FAIL (section 1): Hull City seed 0 coach: season 1 differs from the base tree, first at key budget
+  FAIL (section 1): Hull City seed 0 noCoach: 64014 draws here, 36865 on the base tree
+  FAIL (section 1): Hull City seed 0 noCoach: 2 season ends here, 1 on the base tree
+  FAIL (section 1): Hull City seed 0 noCoach: season 1 differs from the base tree, first at key week
+  FAIL (section 1): Hull City seed 1 coach: 45403 draws here, 101516 on the base tree
+  FAIL (section 1): Hull City seed 1 coach: 1 season ends here, 2 on the base tree
+  FAIL (section 1): Hull City seed 1 coach: season 1 differs from the base tree, first at key week
+  FAIL (section 1): Hull City seed 1 noCoach: 97025 draws here, 96949 on the base tree
+  FAIL (section 1): Hull City seed 1 noCoach: season 1 differs from the base tree, first at key budget
+  FAIL (section 1): Real Madrid seed 0 coach: 120137 draws here, 123293 on the base tree
+  FAIL (section 1): Real Madrid seed 0 coach: season 1 differs from the base tree, first at key budget
+  FAIL (section 1): Real Madrid seed 0 noCoach: 101515 draws here, 100774 on the base tree
+  FAIL (section 1): Real Madrid seed 0 noCoach: season 1 differs from the base tree, first at key budget
+  FAIL (section 1): Real Madrid seed 1 coach: 117655 draws here, 119083 on the base tree
+  FAIL (section 1): Real Madrid seed 1 coach: season 1 differs from the base tree, first at key budget
+  FAIL (section 1): Real Madrid seed 1 noCoach: 100691 draws here, 99987 on the base tree
+  FAIL (section 1): Real Madrid seed 1 noCoach: season 1 differs from the base tree, first at key budget
+  FAIL (section 1): Espanyol seed 0 coach: 32423 draws here, 20037 on the base tree
+  FAIL (section 1): Espanyol seed 0 coach: season 1 differs from the base tree, first at key week
+  FAIL (section 1): Espanyol seed 0 noCoach: 36922 draws here, 18958 on the base tree
+  FAIL (section 1): Espanyol seed 0 noCoach: season 1 differs from the base tree, first at key week
+  FAIL (section 1): Espanyol seed 1 coach: 19316 draws here, 26413 on the base tree
+  FAIL (section 1): Espanyol seed 1 coach: season 1 differs from the base tree, first at key week
+  FAIL (section 1): Espanyol seed 1 noCoach: 26772 draws here, 26815 on the base tree
+  FAIL (section 1): Espanyol seed 1 noCoach: season 1 differs from the base tree, first at key budget
+  FAIL (section 1): Málaga seed 0 coach: 33096 draws here, 33469 on the base tree
+  FAIL (section 1): Málaga seed 0 coach: season 1 differs from the base tree, first at key budget
+  FAIL (section 1): Málaga seed 0 noCoach: 76574 draws here, 28935 on the base tree
+  FAIL (section 1): Málaga seed 0 noCoach: 2 season ends here, 1 on the base tree
+  FAIL (section 1): Málaga seed 0 noCoach: season 1 differs from the base tree, first at key week
+  FAIL (section 1): Málaga seed 1 coach: 45127 draws here, 42386 on the base tree
+  FAIL (section 1): Málaga seed 1 coach: season 1 differs from the base tree, first at key week
+  FAIL (section 1): Málaga seed 1 noCoach: 24317 draws here, 25669 on the base tree
+  FAIL (section 1): Málaga seed 1 noCoach: season 1 differs from the base tree, first at key week
+  FAIL (section 1): Inter Milan seed 0 coach: 26254 draws here, 76850 on the base tree
+  FAIL (section 1): Inter Milan seed 0 coach: 1 season ends here, 2 on the base tree
+  FAIL (section 1): Inter Milan seed 0 coach: season 1 differs from the base tree, first at key week
+  FAIL (section 1): Inter Milan seed 0 noCoach: 39564 draws here, 85726 on the base tree
+  FAIL (section 1): Inter Milan seed 0 noCoach: 1 season ends here, 2 on the base tree
+  FAIL (section 1): Inter Milan seed 0 noCoach: season 1 differs from the base tree, first at key week
+  FAIL (section 1): Inter Milan seed 1 coach: 94980 draws here, 26875 on the base tree
+  FAIL (section 1): Inter Milan seed 1 coach: 2 season ends here, 1 on the base tree
+  FAIL (section 1): Inter Milan seed 1 coach: season 1 differs from the base tree, first at key week
+  FAIL (section 1): Inter Milan seed 1 noCoach: 100332 draws here, 78674 on the base tree
+  FAIL (section 1): Inter Milan seed 1 noCoach: season 1 differs from the base tree, first at key budget
+  FAIL (section 1): Torino seed 0 coach: 83295 draws here, 102573 on the base tree
+  FAIL (section 1): Torino seed 0 coach: season 1 differs from the base tree, first at key budget
+  FAIL (section 1): Torino seed 0 noCoach: 89334 draws here, 74485 on the base tree
+  FAIL (section 1): Torino seed 0 noCoach: season 1 differs from the base tree, first at key budget
+  FAIL (section 1): Torino seed 1 coach: 30252 draws here, 75980 on the base tree
+  FAIL (section 1): Torino seed 1 coach: 1 season ends here, 2 on the base tree
+  FAIL (section 1): Torino seed 1 coach: season 1 differs from the base tree, first at key week
+  FAIL (section 1): Torino seed 1 noCoach: 74814 draws here, 81796 on the base tree
+  FAIL (section 1): Torino seed 1 noCoach: season 1 differs from the base tree, first at key budget
+  FAIL (section 1): Frosinone seed 0 coach: 99727 draws here, 98987 on the base tree
+  FAIL (section 1): Frosinone seed 0 coach: season 1 differs from the base tree, first at key budget
+  FAIL (section 1): Frosinone seed 0 noCoach: 93525 draws here, 93210 on the base tree
+  FAIL (section 1): Frosinone seed 0 noCoach: season 1 differs from the base tree, first at key budget
+  FAIL (section 1): Frosinone seed 1 coach: 99366 draws here, 98402 on the base tree
+  FAIL (section 1): Frosinone seed 1 coach: season 1 differs from the base tree, first at key budget
+  FAIL (section 1): Frosinone seed 1 noCoach: 32652 draws here, 92267 on the base tree
+  FAIL (section 1): Frosinone seed 1 noCoach: 1 season ends here, 2 on the base tree
+  FAIL (section 1): Frosinone seed 1 noCoach: season 1 differs from the base tree, first at key week
+   36 careers compared, 2636794 draws here, in 83 s
+simCmNoSack: CONTROL draw FIRED: section 1 red (83 failures)
