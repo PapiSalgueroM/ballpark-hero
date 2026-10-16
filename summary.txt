@@ -1,0 +1,10 @@
+build exit=0 28s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+headsha exit=0 0s | 557122836 Round BHG: merge PR278, the verified 2023/24 Premier League opponent name (Luton Town)
+vitest-luton-unit exit=0 2s |    Duration  1.83s (transform 978ms, setup 40ms, collect 1.19s, tests 64ms, environment 228ms, prepare 97ms)
+luton-proof exit=0 16s | PASS Luton display component proof
+genCareerLeagueSeasons-check exit=0 0s | careerLeagueSeasons.ts is current
+simCareerLeagueSeasons exit=0 14s | simCareerLeagueSeasons: all sections green
+luton-walk exit=0 10s | lutonWalk: PASS 32 checks
+base-minus278 exit=0 29s | /tmp/wt-4174
+luton-walk-ctl-minus278 exit=0 10s | FIRED-OK
+playSoccerCareerOpponents exit=0 10s | playSoccerCareerOpponents: 164 checks, 0 failed
