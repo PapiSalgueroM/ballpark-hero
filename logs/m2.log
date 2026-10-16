@@ -1,0 +1,4 @@
+MUTATION m2 applied to src/pages/SoccerCareer.tsx
+ × src/test/soccerScreenTruths.test.tsx > S1 the Ballon d'Or night holds Full attributes while it counts down > keeps Full attributes open on the season summary with the night still to come 78ms
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+      Tests  1 failed | 10 passed (11)

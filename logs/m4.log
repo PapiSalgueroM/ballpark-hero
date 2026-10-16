@@ -1,0 +1,5 @@
+MUTATION m4 applied to src/components/soccer-career/SquadSheet.tsx
+ × src/test/soccerScreenTruths.test.tsx > S3 the Squad sheet opens on the squad, the rules one tap away > lands on home with the pointer, writes the flag after mount only, and ? opens the help with the new first rule 20ms
+ × src/test/soccerScreenTruths.test.tsx > S3 the Squad sheet opens on the squad, the rules one tap away > shows the pointer on the first open only 8ms
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+      Tests  2 failed | 9 passed (11)
