@@ -1,0 +1,3 @@
+#!playwright
+pin: node --max-old-space-size=6144 .rc/x/pinProbe.mjs
+walk-keepfailed: git worktree add -q .claude/worktrees/rvctl4 HEAD && node .rc/x/ctlD.mjs .claude/worktrees/rvctl4 && (cd .claude/worktrees/rvctl4 && ../../../node_modules/.bin/vite build --outDir "$OLDPWD/dist-kf" --emptyOutDir --logLevel error) && (cd .claude/worktrees/rvctl4 && DIST="$OLDPWD/dist-kf" node scripts/playCmBoardVerdict.mjs)
