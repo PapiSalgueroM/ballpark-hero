@@ -18509,3 +18509,5 @@ verification context and do not supersede this current integration note.
 
 ## Root1388 urgent browser reports, source preparation2026-10-16
 Published BH Start-career and iPad XI reports are being diagnosed on codex/safari-interaction-reports at e814 app bytes. Four mounted creation tests and two actual WebKit/Chromium native methods are source-ready for remote baseline, no app fix yet. Exact case counts, offline/fictional-transport limits and source checks are in docs/audits/safari-interaction-reports.md. I retains BI and publication.1387 preliminary source was separately frozen at2793bfa3 with no runtime or release gate.
+
+1388 baseline95a confirms two exact creation faults and Chromium UI paths, but WebKit has0journeycredit because the offline guard granted an unsupported Chromium-only permission. Root claims the narrow permission dispatch correction, preserving all guardhooks, for a second original-application baseline. The creation15lineproduct patch, fixed helper/workflow and newWebKittransportproof remain separate/uncommitted. No live fix or WebKit pass is claimed.
