@@ -1,0 +1,20 @@
+   bar manager (floating): ["Next Manager Season","Retire"], AGE 323 to 343
+   bar pundit (floating): ["Next Season"], AGE 323 to 343
+   bar owner (floating): ["Next Owner Season","Sell Club"], AGE 323 to 343
+   bar retired (floating): ["📤 Share Legacy","⚽ New Career"], AGE 323 to 343
+   bar managerOut (floating): ["Sit Out A Season","Walk Away"], AGE 323 to 343
+== head 375x667 (bar only)
+   bar youth (floating): ["Next Year"], AGE 338 to 358
+   bar playing (floating): ["Next Season","Week by week: watch your season match by match"], AGE 338 to 358
+   bar manager (floating): ["Next Manager Season","Retire"], AGE 338 to 358
+   bar pundit (floating): ["Next Season"], AGE 338 to 358
+   bar owner (floating): ["Next Owner Season","Sell Club"], AGE 338 to 358
+   bar retired (floating): ["📤 Share Legacy","⚽ New Career"], AGE 338 to 358
+   bar managerOut (floating): ["Sit Out A Season","Walk Away"], AGE 338 to 358
+== head 480x800 (name only)
+   name "Danny Okafor-Whitfield": 3 line(s), scrollWidth 106 of 106
+   name "Supercalifragilisticexpialidociouswinger": 4 line(s), scrollWidth 106 of 106
+== head 768x1024 (name only)
+   name "Danny Okafor-Whitfield": 1 line(s), scrollWidth 271 of 271
+   name "Supercalifragilisticexpialidociouswinger": 2 line(s), scrollWidth 379 of 379
+playSoccerLanding: green at 320x640, 390x844, 1280x900 (also bar 360x780, bar 375x667, name 480x800, name 768x1024; landing, name, bar, retire, toasts, bytes), HEAD ONLY

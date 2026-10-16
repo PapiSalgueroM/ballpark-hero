@@ -1,0 +1,20 @@
+ok   T390:P2 the facts are the save's: the title "Copa América 2016" (the save: Copa América 2016, Winner, phase world_cup)
+ok   T390:P3 it holds: six seconds on the scene is there with 0 animation(s) running, the same words and rect 30,29.5,330,145.5 then 30,29.5,330,145.5
+ok   T390:P4 once: after the Your Games tile and Back the scene is still with 0 confetti piece(s) on the page
+ok   T390:P5 the save is byte equal: 0 write(s) to soccerCareerSave in the window, the same string of 29475 characters
+ok   T390:P4 once: after a reload the save sits on the card: 1 card(s), the scene still with 0 confetti piece(s) and 0 animation(s) running
+ok   T390:P7 clean: 0 console or page error(s)
+     T390:info 2 resource(s) did not load (refused requests, not counted)
+walk T (trophy) at 1280 by 900
+ok   T1280:P1 the scene is on the page as [data-intl-moment] [data-career-moment="trophy"][data-cmo-bind="sc-intl-trophy"] and went live; 1 cup(s), its lift 0.9s long and running at 33 ms 3 frame(s) after it went live
+ok   T1280:P6 no jump: 2.5 s after the page settled (frame 10) scrollY 251 then 251, page height 10148 then 10148, scene 434,29.5,684,145.5 then 434,29.5,684,145.5; its size over 192 frames of play: 684.00x145.50; the page was at most 0 px wider than its window
+     T1280:boxes at rest, x y w h: card 434,30,684,146, art 744,30,64,64, pill null
+ok   T1280:P2 the facts are the save's: the title "Copa América 2016" (the save: Copa América 2016, Winner, phase world_cup)
+ok   T1280:P3 it holds: six seconds on the scene is there with 0 animation(s) running, the same words and rect 434,29.5,684,145.5 then 434,29.5,684,145.5
+ok   T1280:P4 once: after the Your Games tile and Back the scene is still with 0 confetti piece(s) on the page
+ok   T1280:P5 the save is byte equal: 0 write(s) to soccerCareerSave in the window, the same string of 29475 characters
+ok   T1280:P4 once: after a reload the save sits on the card: 1 card(s), the scene still with 0 confetti piece(s) and 0 animation(s) running
+ok   T1280:P7 clean: 0 console or page error(s)
+     T1280:info 2 resource(s) did not load (refused requests, not counted)
+requests to supabase.co refused: 8
+playCareerMoments: 34 checks, 0 failed

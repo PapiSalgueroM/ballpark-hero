@@ -1,0 +1,12 @@
+Network mode: offline, loopback only, no production probe or database retries.
+Running 2 node harnesses
+  PASS  simCareerAwardsNight.mjs      163.4s
+  PASS  simHarnessAnchors.mjs         235.6s
+
+Serving dist on 4173 for 1 browser harnesses
+  FAIL  simSoccerOpponentLabels.mjs    24.4s
+
+----- simSoccerOpponentLabels.mjs (FAIL) -----
+AssertionError [ERR_ASSERTION]: current exact failure map
+
+1 harness not green.

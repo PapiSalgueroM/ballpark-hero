@@ -1,0 +1,12 @@
+build exit=0 28s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+srclib exit=0 0s | src/lib untouched
+vitest exit=0 17s |    Duration  16.38s (transform 7.02s, setup 434ms, collect 24.50s, tests 15.57s, environment 2.86s, prepare 829ms)
+truths exit=0 157s | playSoccerScreenTruths: green, W4 W4r W5 pass on the head and every control section is red on the base
+tsc exit=0 179s | 
+awardReveal exit=0 15s | playSoccerCareerAwardReveal: 26 checks, 0 failed
+potential exit=0 63s | PASS Soccer potential progress browser
+playCareerMoments exit=0 67s | playCareerMoments: 34 checks, 0 failed
+sims exit=1 261s | 1 harness not green.
+playSoccerLanding exit=0 273s | playSoccerLanding: green at 320x640, 390x844, 1280x900 (also bar 360x780, bar 375x667, name 480x800, name 768x1024; landing, name, bar, retire, toasts, bytes), HEAD ONLY
+playSoccerCareer exit=1 479s |   - 6. no console or page errors across the walk: Failed to load resource: net::ERR_CONNECTION_REFUSED | Failed to load resource: net::ERR_CONNECTION_REFUSED | Failed to 
+playStartingXi exit=1 1830s | playStartingXi: 2 failures

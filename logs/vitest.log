@@ -1,0 +1,37 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[90mstdout[2m | src/test/soccerFarewellPage.test.tsx[2m > [22m[2mSoccer farewell real page actions[2m > [22m[2mbanks a genuine open moment and plays one final year for two captured asynchronous Next Season clicks
+[22m[39mFAREWELL_ASYNC_ACT_STARTUP {"scope":"Unfiltered empty async act initialization before either career action tape","values":[0.02040268573909998],"stacks":["Error: Farewell action random draw\n    at Math.<anonymous> (/home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerFarewellPage.test.tsx:108:18)\n    at Math.mockCall (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/@vitest/spy/dist/index.js:96:15)\n    at Math.random (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/tinyspy/dist/index.js:47:80)\n    at enqueueTask (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/react/cjs/react.development.js:2458:45)\n    at recursivelyFlushAsyncActWork (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/react/cjs/react.development.js:2634:9)\n    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/react/cjs/react.development.js:2545:15\n    at processTicksAndRejections (node:internal/process/task_queues:104:5)"],"attribution":{"diagnosticRun":"38051776558","source":"11c30639","caller":"react.development.js:2458:45 enqueueTask, recursivelyFlushAsyncActWork"}}
+
+ [32m✓[39m src/test/soccerScreenTruths.test.tsx [2m([22m[2m6 tests[22m[2m)[22m[33m 2025[2mms[22m[39m
+   [33m[2m✓[22m[39m S1 the Ballon d'Or night holds Full attributes while it counts down[2m > [22mdisables the button with the night line, and a press leaves the night up and the save unchanged [33m 664[2mms[22m[39m
+   [33m[2m✓[22m[39m S1 the Ballon d'Or night holds Full attributes while it counts down[2m > [22mopens Full attributes once the night has been shown [33m 366[2mms[22m[39m
+   [33m[2m✓[22m[39m S1 the Ballon d'Or night holds Full attributes while it counts down[2m > [22mkeeps Full attributes open on the season summary with the night still to come [33m 393[2mms[22m[39m
+ [32m✓[39m src/test/soccerPotentialProgress.test.tsx [2m([22m[2m20 tests[22m[2m)[22m[33m 886[2mms[22m[39m
+ [32m✓[39m src/test/soccerFarewellPage.test.tsx [2m([22m[2m13 tests[22m[2m)[22m[33m 5710[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer farewell real page actions[2m > [22msaves one next-year announcement for two captured confirmation clicks without playing or drawing [33m 728[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer farewell real page actions[2m > [22mplays one complete final year and draw vector for two captured Next Season clicks [33m 508[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer farewell real page actions[2m > [22mbanks a genuine open moment and plays one final year for two captured asynchronous Next Season clicks [33m 942[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer farewell real page actions[2m > [22mresumes the already-aged suggestion exactly once for two captured page announcement callbacks [33m 612[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer farewell real page actions[2m > [22mkeeps the original Keep Playing transition and complete draw vector without opting in [33m 356[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer farewell real page actions[2m > [22mkeeps the original manual Retire confirmation without declaring a farewell [33m 607[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer farewell real page actions[2m > [22mkeeps the original Stay transition and complete save in an unannounced window [33m 323[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer farewell real page actions[2m > [22mretires after the actual saved final summary without a transfer window or extra season [33m 348[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer farewell real page actions[2m > [22mshows a queued saved tournament before retirement and consumes its result without another year [33m 371[2mms[22m[39m
+ [32m✓[39m src/test/careerAwardsNightCard.test.tsx [2m([22m[2m7 tests[22m[2m)[22m[33m 6716[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career: the Ballon d'Or ceremony card[2m > [22mkeeps the actual true ballot out of newspaper, summary, timeline and cabinet until its list [33m 2254[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career: the Ballon d'Or ceremony card[2m > [22mkeeps the actual false ballot out of newspaper, summary, timeline and cabinet until its list [33m 770[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career: the Ballon d'Or ceremony card[2m > [22ma win offers the speech once, then shows what it did, and Continue leaves [33m 797[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career: the Ballon d'Or ceremony card[2m > [22man old save holding a ceremony from a past season is not offered a speech for it [33m 360[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career: the tournament winner's speech[2m > [22mstays on the card, shows what it really moved, a second tap does nothing, Continue leaves [33m 724[2mms[22m[39m
+ [32m✓[39m src/test/soccerAwardReveal.test.tsx [2m([22m[2m6 tests[22m[2m)[22m[32m 237[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m5 passed[39m[22m[90m (5)[39m
+[2m      Tests [22m [1m[32m52 passed[39m[22m[90m (52)[39m
+[2m   Start at [22m 17:10:02
+[2m   Duration [22m 16.38s[2m (transform 7.02s, setup 434ms, collect 24.50s, tests 15.57s, environment 2.86s, prepare 829ms)[22m
+
