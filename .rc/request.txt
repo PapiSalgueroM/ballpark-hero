@@ -1,0 +1,12 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+unseeded-minusAZ-nobridge: CM_UNSEEDED_BASE=$(bash .rc/x/baseDeck.sh) && export CM_UNSEEDED_BASE && echo "base $CM_UNSEEDED_BASE" && node scripts/simCmUnseededWorld.mjs
+continuity-minusAZ-nobridge: MANAGER_WORLD_CONTINUITY_BASE=$(bash .rc/x/baseDeck.sh) && export MANAGER_WORLD_CONTINUITY_BASE && echo "base $MANAGER_WORLD_CONTINUITY_BASE" && MANAGER_WORLD_CONTINUITY_ARTIFACTS="$TMPDIR/mwc" node scripts/simManagerWorldContinuity.mjs
+vitest: node_modules/.bin/vitest run clubManager cmTables cmWorld cmValue cmMinute cmLeague clubDetail staffScreen --testTimeout=300000 --hookTimeout=120000
+ownclub: node scripts/simCmOwnClubMarket.mjs
+freeagents: node scripts/simFreeAgents.mjs
+fa-ownclub: FA_CONTROL=ownclub node scripts/simFreeAgents.mjs
+savesize: node scripts/simClubManagerSaveSize.mjs
+appeal: node scripts/simManagerAppealIsolation.mjs
+diag: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/managerWorldSizeDiagnostic.mjs
+anchors: node scripts/simHarnessAnchors.mjs
+ownclub-legacy: OWNCLUB_MARKET_CONTROL=legacy node scripts/simCmOwnClubMarket.mjs
