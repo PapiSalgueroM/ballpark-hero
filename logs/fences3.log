@@ -1,0 +1,7 @@
+Network mode: offline, loopback only, no production probe or database retries.
+Running 3 node harnesses
+  PASS  simHarnessAnchors.mjs          71.9s
+  PASS  simNoRivalNames.mjs            36.7s
+  PASS  simStorageWrites.mjs            9.3s
+
+All 3 harnesses green.

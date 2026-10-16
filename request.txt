@@ -1,0 +1,3 @@
+fences3: ONLY=simNoRivalNames,simHarnessAnchors,simStorageWrites node scripts/runAllSims.mjs
+coachret: node scripts/simUsCoachRetirement.mjs > /tmp/cr.log 2>&1; s=$?; grep -E "^[0-9]\)|PASS|FAIL|CONTROL" /tmp/cr.log | cut -c1-260; exit $s
+coachret-noretire: US_COACH_RETIRE_CONTROL=noretire node scripts/simUsCoachRetirement.mjs > /tmp/crn.log 2>&1; s=$?; tail -2 /tmp/crn.log | cut -c1-200; exit $s
