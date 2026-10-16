@@ -1,0 +1,103 @@
+MUT seasonover applied (1 edit)
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [31m❯[39m src/lib/clubManagerRetire.test.ts [2m([22m[2m14 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[32m 26[2mms[22m[39m
+   [32m✓[39m retiring[2m > [22mrefuses a retired career and a match in progress[32m 1[2mms[22m[39m
+[31m   [31m×[31m retiring[2m > [22mwaits for the season review once every match is played, so the title and the season are written first[39m[32m 7[2mms[22m[39m
+[31m     → expected true to be false // Object.is equality[39m
+   [32m✓[39m retiring[2m > [22mreads the moment: out of work over a season end, a season end over the middle of one[32m 0[2mms[22m[39m
+   [32m✓[39m retiring[2m > [22mchanges only `retired` at all three moments, never touching its input[32m 10[2mms[22m[39m
+   [32m✓[39m retiring[2m > [22mwrites the record down from the book when the save had none, and keeps a stored one[32m 2[2mms[22m[39m
+   [32m✓[39m retiring[2m > [22mnames a league position only once the club has played a league game, in the confirm and on the save[32m 2[2mms[22m[39m
+   [32m✓[39m retiring[2m > [22mprints the week the managers screen printed, capped at the calendar[32m 0[2mms[22m[39m
+   [32m✓[39m the farewell's data[2m > [22mlists finished seasons per club, and numbers only the part season the save still names[32m 1[2mms[22m[39m
+   [32m✓[39m the farewell's data[2m > [22mkeeps the season left unfinished by a mid season retirement[32m 0[2mms[22m[39m
+   [32m✓[39m the farewell's data[2m > [22mgroups the cabinet by name in the order first won, a name it has never seen included[32m 0[2mms[22m[39m
+   [32m✓[39m the farewell's data[2m > [22mreads a Skip career with no manager and no clubs list[32m 0[2mms[22m[39m
+   [32m✓[39m the share line[2m > [22msays the seasons, the trophies, the titles and the win rate, singular where it should be[32m 0[2mms[22m[39m
+   [32m✓[39m the share line[2m > [22mdrops the titles at 0 and counts no unfinished season[32m 0[2mms[22m[39m
+   [32m✓[39m the share line[2m > [22muses no dash of any kind[32m 0[2mms[22m[39m
+ [31m❯[39m src/test/clubManagerRetire.test.tsx [2m([22m[2m24 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[33m 499[2mms[22m[39m
+   [32m✓[39m the record line[2m > [22mprints a stored record with its word and season[32m 13[2mms[22m[39m
+   [32m✓[39m the record line[2m > [22mreads a level score won or lost on penalties, and a plain draw[32m 8[2mms[22m[39m
+   [32m✓[39m the record line[2m > [22mgives no word when an old row contradicts its score (never "0-3 win")[32m 2[2mms[22m[39m
+   [32m✓[39m the record line[2m > [22mworks an old save out from a whole book with no second line[32m 1[2mms[22m[39m
+   [32m✓[39m the record line[2m > [22msays how many matches a trimmed book could not see, through formatNumber[32m 4[2mms[22m[39m
+   [32m✓[39m the record line[2m > [22mprints nothing with no game: a new career, an empty book, a stored null[32m 2[2mms[22m[39m
+   [32m✓[39m the record line[2m > [22muses no dash of any kind[32m 2[2mms[22m[39m
+   [32m✓[39m retiring through the hook[2m > [22mwrites first, then opens the farewell, and the disk holds the retirement[32m 60[2mms[22m[39m
+   [32m✓[39m retiring through the hook[2m > [22ma reload lands on the managers screen, never on hub, seasonEnd or sacked, and opening it shows the farewell[32m 52[2mms[22m[39m
+   [32m✓[39m retiring through the hook[2m > [22ma retired save that is also sacked, or holds a season summary, opens on the farewell and nowhere else[32m 120[2mms[22m[39m
+   [32m✓[39m retiring through the hook[2m > [22mopens a retired career parked in another slot on its farewell, through the boot[32m 40[2mms[22m[39m
+   [32m✓[39m retiring through the hook[2m > [22mlands a Hot Seat mark on the farewell, never on the hub[32m 25[2mms[22m[39m
+   [32m✓[39m retiring through the hook[2m > [22ma write the fence refuses shows the notice and no farewell, and the disk is not retired[32m 18[2mms[22m[39m
+   [32m✓[39m the retire door[2m > [22mtwo clicks 50 ms apart on the door do not retire[32m 13[2mms[22m[39m
+   [32m✓[39m the retire door[2m > [22mYes does nothing before it arms and retires after[32m 5[2mms[22m[39m
+   [32m✓[39m the retire door[2m > [22mignores a click whose pointer went down before it armed[32m 5[2mms[22m[39m
+   [32m✓[39m the retire door[2m > [22mKeep managing and Escape put the door back, with the focus on Keep while it is open[32m 5[2mms[22m[39m
+   [32m✓[39m the retire door[2m > [22mtakes no focus on its first draw[32m 1[2mms[22m[39m
+[31m   [31m×[31m the Club Manager door[2m > [22mwaits for See Season Review once every match is played, and is a door before that[39m[32m 22[2mms[22m[39m
+[31m     → expected <button type="button" …(2)></button> to be null[39m
+   [32m✓[39m the farewell[2m > [22msays the moment with the week the managers screen printed, and opens each tile in place with a Back[32m 60[2mms[22m[39m
+   [32m✓[39m the farewell[2m > [22mreads a Skip career and the other two moments[32m 25[2mms[22m[39m
+   [32m✓[39m the farewell[2m > [22mcounts no unfinished season, formats every number, and keeps the trophy with its count (review fix)[32m 5[2mms[22m[39m
+   [32m✓[39m the farewell[2m > [22ma career retired before its first match is not told to take charge of one (review fix)[32m 8[2mms[22m[39m
+   [32m✓[39m the farewell[2m > [22mthe managers screen says retired and offers the farewell on that tile only[32m 3[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 2 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/lib/clubManagerRetire.test.ts[2m > [22mretiring[2m > [22mwaits for the season review once every match is played, so the title and the season are written first
+[31m[1mAssertionError[22m: expected true to be false // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- false[39m
+[31m+ true[39m
+
+[36m [2m❯[22m src/lib/clubManagerRetire.test.ts:[2m35:30[22m[39m
+    [90m 33| [39m    [34mexpect[39m([34mseasonPlayedOut[39m(fresh))[33m.[39m[34mtoBe[39m([35mfalse[39m)[33m;[39m
+    [90m 34| [39m    [34mexpect[39m([34mseasonPlayedOut[39m(spent))[33m.[39m[34mtoBe[39m([35mtrue[39m)[33m;[39m
+    [90m 35| [39m    [34mexpect[39m([34mcanRetire[39m(spent))[33m.[39m[34mtoBe[39m([35mfalse[39m)[33m;[39m
+    [90m   | [39m                             [31m^[39m
+    [90m 36| [39m    [34mexpect[39m([34mretireCareer[39m(spent))[33m.[39m[34mtoBeNull[39m()[33m;[39m
+    [90m 37| [39m    expect(retireCareer({ ...spent, pendingSummary: summary })?.retire…
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/clubManagerRetire.test.tsx[2m > [22mthe Club Manager door[2m > [22mwaits for See Season Review once every match is played, and is a door before that
+[31m[1mAssertionError[22m: expected <button type="button" …(2)></button> to be null[39m
+
+[32m- Expected:[39m 
+null
+
+[31m+ Received:[39m 
+<button
+  class="w-full min-h-11 rounded-lg border border-border px-3 py-2 text-xs font-bold text-muted-foreground hover:text-foreground hover:border-primary transition-colors"
+  data-cm-retire-door="true"
+  type="button"
+>
+  👋 Retire from management
+</button>
+
+[36m [2m❯[22m src/test/clubManagerRetire.test.tsx:[2m267:64[22m[39m
+    [90m265| [39m    a[33m.[39m[34munmount[39m()[33m;[39m
+    [90m266| [39m    const b = render(<CmRetireDoor c={{ ...fresh, week: fresh.calendar…
+    [90m267| [39m    expect(b.container.querySelector('[data-cm-retire-door]')).toBeNul…
+    [90m   | [39m                                                               [31m^[39m
+    [90m268| [39m    expect(b.container.querySelector('[data-cm-retire-waits]')?.textCo…
+    [90m269| [39m    for (const d of DASHES) expect(b.container.textContent).not.toCont…
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m2 failed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[31m2 failed[39m[22m[2m | [22m[1m[32m36 passed[39m[22m[90m (38)[39m
+[2m   Start at [22m 15:41:42
+[2m   Duration [22m 2.80s[2m (transform 1.29s, setup 86ms, collect 3.04s, tests 525ms, environment 523ms, prepare 234ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/clubManagerRetire.test.ts,title=src/lib/clubManagerRetire.test.ts > retiring > waits for the season review once every match is played%2C so the title and the season are written first,line=35,column=30::AssertionError: expected true to be false // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- false%0A+ true%0A%0A ❯ src/lib/clubManagerRetire.test.ts:35:30%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/clubManagerRetire.test.tsx,title=src/test/clubManagerRetire.test.tsx > the Club Manager door > waits for See Season Review once every match is played%2C and is a door before that,line=267,column=64::AssertionError: expected <button type="button" …(2)></button> to be null%0A%0A- Expected: %0Anull%0A%0A+ Received: %0A<button%0A  class="w-full min-h-11 rounded-lg border border-border px-3 py-2 text-xs font-bold text-muted-foreground hover:text-foreground hover:border-primary transition-colors"%0A  data-cm-retire-door="true"%0A  type="button"%0A>%0A  👋 Retire from management%0A</button>%0A%0A ❯ src/test/clubManagerRetire.test.tsx:267:64%0A%0A
