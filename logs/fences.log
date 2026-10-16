@@ -1,0 +1,83 @@
+Network mode: offline, loopback only, no production probe or database retries.
+Running 20 node harnesses
+  PASS  simCompletionOnce.mjs           8.8s
+  FAIL  simCompletionSlugs.mjs          2.2s
+        it reported success after an offline transport block; checks needing live data did not run
+  PASS  simDailyPuzzleContract.mjs      0.6s
+  FAIL  simDailySaveHardening.mjs     180.4s
+        it reported success after an offline transport block; checks needing live data did not run
+  PASS  simFetchRetry.mjs               4.3s
+  PASS  simGoogleOnlyReturn.mjs       135.0s
+  PASS  simGuideHeadings.mjs            2.3s
+  PASS  simInventedNames.mjs           28.6s
+  FAIL  simLeaderboardCaps.mjs          2.1s
+  PASS  simLegalPages.mjs               1.0s
+  PASS  simLiveScores.mjs               1.3s
+  PASS  simNavbarStatsReads.mjs         4.6s
+  PASS  simNoDoubleRecord.mjs          57.5s
+  PASS  simNoInventedConduct.mjs        2.1s
+  PASS  simNoInventedQuotes.mjs        55.4s
+  FAIL  simReportRelay.mjs              0.4s
+        it reported success after an offline transport block; checks needing live data did not run
+  SKIP  simSchemaNames.mjs              1.8s
+        it reached no database and said so, and the database is unreachable here (offline mode blocks production; no database probe was sent)
+  PASS  simScoringCoverage.mjs          0.9s
+  PASS  simSingleFooter.mjs             1.1s
+  PASS  simSiteSearch.mjs               5.0s
+
+Skipping 2 browser harnesses (simResultMoment, simWritesAreSent). Pass --browser to include them.
+
+1 harness SKIPPED, not run and not counted: simSchemaNames.
+Each one reached no database and said so, and the database is unreachable here: offline mode blocks production; no database probe was sent.
+Run SIM_NETWORK=live only after production traffic is cleared. DB_PROBE changes classification in live mode, not transport permission.
+----- simCompletionSlugs.mjs (FAIL) -----
+1) every slug the source writes names a routed game
+   98 slugs written by source, 11 for games withdrawn from the registry on purpose, 0 that name no game
+2) every slug in the live table resolves, or is a declared retirement
+[SIM_OFFLINE_BLOCK] database fetch https://flawuiqbvjobmkfkauhw.supabase.co
+[SIM_OFFLINE_BLOCK] database fetch https://flawuiqbvjobmkfkauhw.supabase.co
+[SIM_OFFLINE_BLOCK] database fetch https://flawuiqbvjobmkfkauhw.supabase.co
+   the database did not answer, skipped (section 1 still holds the source side)
+3) the map has no dead rows
+   7 mapped slugs, 0 pointing nowhere
+4) the round trip closes for every game that records
+   87 games checked both ways, 0 that do not round trip
+
+simCompletionSlugs: green. Every recorded slug names a game the site can find.
+
+
+----- simDailySaveHardening.mjs (FAIL) -----
+0) every useDailyPuzzle consumer is mounted by one of the two tests
+   39 consumers: 36 routes in the shapes test, 3 unrouted (useFootballDraft.ts, useGuessTransferValue.ts, useWorldCup.ts) in the hardening test; 19 hand in their own check
+saves) two tabs, damaged saves on the hooks, saves from before this round
+   74 rows green, the fixture writer skipped
+   src/test/fixtures/dailySavesPre848.json: 6 saves, byte for byte what the hooks at 617b8354 write (afl-higher-lower, nfl-higher-lower, shirt-number, footle, ufc, nba-connections)
+shapes) every route with a daily consumer under every damaged form
+   36 of 36 routes: nothing thrown on any damaged form, and the audit's and the brief's forms draw exactly a fresh daily (guide ready on 35, none on 1)
+parity) every consumer plays and restores through the new hook exactly as through the hook at 617b8354
+   39 of 39 consumers identical over 511 steps; 362 saves written by the old hook restored unchanged (statuses lost, playing, won)
+skip) one skip target on every page
+   173 of 173 addresses (171 sitemap pages, reset-password, an unknown address) draw exactly one #dukb-main
+simDailySaveHardening: part all green
+
+
+----- simLeaderboardCaps.mjs (FAIL) -----
+the database refused game_score_caps?select=game,max_score&limit=2000: Error: Offline harness blocked fetch to https://flawuiqbvjobmkfkauhw.supabase.co
+
+----- simReportRelay.mjs (FAIL) -----
+4) the live table carries the column
+[SIM_OFFLINE_BLOCK] database fetch https://flawuiqbvjobmkfkauhw.supabase.co
+   SKIPPED: the table could not be reached (Offline harness blocked fetch to https://flawuiqbvjobmkfkauhw.supabase.co), so the live column check did not run.
+5) the triage workflow, run: the spec statuses, every status move, the counts on every chip
+   7 statuses and 4 priorities, the same as spec section 123
+   all 49 status moves keep resolved and resolved_at true, with and without the new columns
+   every status offered reads back as itself after a save (7 with the columns, 2 before the migration)
+   36 chip counts (9 filters by 4 game choices) match the cards and the hand count
+6) the migration and the module agree, and the public insert path can only take the defaults
+   the insert policy keeps all 4 committed clauses and pins 6 admin columns to their defaults; no other policy is touched
+   7 statuses, 4 priorities and both length caps match the module; the backfill is there; no grant, trigger or function
+
+simReportRelay: green. Both buttons ask the same questions, every report records whether it reached him, and the queue has a real workflow.
+
+
+4 harnesses not green.

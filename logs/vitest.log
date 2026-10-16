@@ -1,0 +1,143 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ [2m[90m↓[39m[22m src/test/usBoardFixture.test.tsx [2m([22m[2m4 tests[22m[2m | [22m[33m4 skipped[39m[2m)[22m
+ [32m✓[39m src/test/careerDraftNight.test.tsx [2m([22m[2m54 tests[22m[2m)[22m[33m 8097[2mms[22m[39m
+   [33m[2m✓[22m[39m the first frame holds the whole night[2m > [22mNFL now: every row, both buttons and no spoiler [33m 512[2mms[22m[39m
+   [33m[2m✓[22m[39m the first frame holds the whole night[2m > [22mskipped is the last frame: no delays, no skip, the result said once [33m 3087[2mms[22m[39m
+   [33m[2m✓[22m[39m watch it again[2m > [22monce the night is over Watch it again takes the skip's place, and without the prop the row is the one it was [33m 1143[2mms[22m[39m
+ [32m✓[39m src/test/careerPreDraft.test.tsx [2m([22m[2m37 tests[22m[2m)[22m[33m 10292[2mms[22m[39m
+   [33m[2m✓[22m[39m the save block[2m > [22mwith the descriptor: another sport, era or route resets, a card no longer dealt is dropped [33m 422[2mms[22m[39m
+   [33m[2m✓[22m[39m the cards on screen[2m > [22mthe season card prints each option with the numbers the choice applies [33m 314[2mms[22m[39m
+   [33m[2m✓[22m[39m the showcase grade, lifted[2m > [22mthe scouts path hands the lifted cut its one draw, float for float [33m 8587[2mms[22m[39m
+ [32m✓[39m src/test/usCareerActionConfirm.test.tsx [2m([22m[2m19 tests[22m[2m)[22m[33m 13949[2mms[22m[39m
+   [33m[2m✓[22m[39m US career destructive action confirmation[2m > [22m'NFL' preserves live restore and engine state as an independent baseline [33m 1345[2mms[22m[39m
+   [33m[2m✓[22m[39m US career destructive action confirmation[2m > [22m'NBA' preserves live restore and engine state as an independent baseline [33m 979[2mms[22m[39m
+   [33m[2m✓[22m[39m US career destructive action confirmation[2m > [22m'MLB' preserves live restore and engine state as an independent baseline [33m 636[2mms[22m[39m
+   [33m[2m✓[22m[39m US career destructive action confirmation[2m > [22m'NHL' preserves live restore and engine state as an independent baseline [33m 888[2mms[22m[39m
+   [33m[2m✓[22m[39m US career destructive action confirmation[2m > [22m'NFL' keeps retirement pending until explicit acceptance and records its real legacy once [33m 1065[2mms[22m[39m
+   [33m[2m✓[22m[39m US career destructive action confirmation[2m > [22m'NBA' keeps retirement pending until explicit acceptance and records its real legacy once [33m 1200[2mms[22m[39m
+   [33m[2m✓[22m[39m US career destructive action confirmation[2m > [22m'MLB' keeps retirement pending until explicit acceptance and records its real legacy once [33m 871[2mms[22m[39m
+   [33m[2m✓[22m[39m US career destructive action confirmation[2m > [22m'NHL' keeps retirement pending until explicit acceptance and records its real legacy once [33m 722[2mms[22m[39m
+   [33m[2m✓[22m[39m US career destructive action confirmation[2m > [22m'NFL' keeps restart pending then deletes only its own career without another completion [33m 799[2mms[22m[39m
+   [33m[2m✓[22m[39m US career destructive action confirmation[2m > [22m'NBA' keeps restart pending then deletes only its own career without another completion [33m 881[2mms[22m[39m
+   [33m[2m✓[22m[39m US career destructive action confirmation[2m > [22m'MLB' keeps restart pending then deletes only its own career without another completion [33m 1317[2mms[22m[39m
+   [33m[2m✓[22m[39m US career destructive action confirmation[2m > [22m'NHL' keeps restart pending then deletes only its own career without another completion [33m 1323[2mms[22m[39m
+   [33m[2m✓[22m[39m US career destructive action confirmation[2m > [22mretire starts on Cancel and returns both dismissal paths to its exact opener without scrolling [33m 445[2mms[22m[39m
+   [33m[2m✓[22m[39m US career destructive action confirmation[2m > [22mrestart starts on Cancel and returns both dismissal paths to its exact opener without scrolling [33m 341[2mms[22m[39m
+   [33m[2m✓[22m[39m US career destructive action confirmation[2m > [22mretireCoach keeps every guard of the shared prompt from Cancel first to a quiet unmount [33m 553[2mms[22m[39m
+ [32m✓[39m src/test/usCareerReports1346.test.tsx [2m([22m[2m40 tests[22m[2m)[22m[33m 27314[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1346: retire from coaching on the real board[2m > [22mnfl: Keep coaching and Escape save nothing, Retire saves only done, and a reload stays retired [33m 3321[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1346: retire from coaching on the real board[2m > [22mnba: Keep coaching and Escape save nothing, Retire saves only done, and a reload stays retired [33m 2016[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1346: retire from coaching on the real board[2m > [22mmlb: Keep coaching and Escape save nothing, Retire saves only done, and a reload stays retired [33m 1577[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1346: retire from coaching on the real board[2m > [22mnhl: Keep coaching and Escape save nothing, Retire saves only done, and a reload stays retired [33m 1379[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1346: retire from coaching on the real board[2m > [22mnfl: a second click right after the retirement opens nothing on the done hub [33m 750[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1346: retire from coaching on the real board[2m > [22mnba: a second click right after the retirement opens nothing on the done hub [33m 768[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1346: retire from coaching on the real board[2m > [22mmlb: a second click right after the retirement opens nothing on the done hub [33m 902[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1346: retire from coaching on the real board[2m > [22mnhl: a second click right after the retirement opens nothing on the done hub [33m 1132[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1346: retire from coaching on the real board[2m > [22mnfl: an old coach save with no done mounts as an active career and is not rewritten [33m 395[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1346: retire from coaching on the real board[2m > [22mnba: an old coach save with no done mounts as an active career and is not rewritten [33m 331[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1346: retire from coaching on the real board[2m > [22mmlb: an old coach save with no done mounts as an active career and is not rewritten [33m 362[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1346: retire from coaching on the real board[2m > [22mnhl: an old coach save with no done mounts as an active career and is not rewritten [33m 390[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1346: the showcase Skip can be undone until Draft day[2m > [22mnfl: Undo skip puts the save back to the byte, survives a reload, and is gone after Draft day [33m 1084[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1346: the showcase Skip can be undone until Draft day[2m > [22mnba: Undo skip puts the save back to the byte, survives a reload, and is gone after Draft day [33m 963[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1346: the showcase Skip can be undone until Draft day[2m > [22mmlb: Undo skip puts the save back to the byte, survives a reload, and is gone after Draft day [33m 890[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1346: the showcase Skip can be undone until Draft day[2m > [22mnhl: Undo skip puts the save back to the byte, survives a reload, and is gone after Draft day [33m 711[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1346: the showcase Skip can be undone until Draft day[2m > [22mnfl: a graded showcase is never offered an undo [33m 761[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1346: the showcase Skip can be undone until Draft day[2m > [22mnba: a graded showcase is never offered an undo [33m 644[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1346: the showcase Skip can be undone until Draft day[2m > [22mmlb: a graded showcase is never offered an undo [33m 487[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1346: the showcase Skip can be undone until Draft day[2m > [22mnhl: a graded showcase is never offered an undo [33m 510[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1346: the showcase Skip can be undone until Draft day[2m > [22mnfl: a second tap right after Undo skip is never taken as a graded showcase [33m 629[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1346: the showcase Skip can be undone until Draft day[2m > [22mnba: a second tap right after Undo skip is never taken as a graded showcase [33m 547[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1346: the showcase Skip can be undone until Draft day[2m > [22mmlb: a second tap right after Undo skip is never taken as a graded showcase [33m 683[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1346: the showcase Skip can be undone until Draft day[2m > [22mnhl: a second tap right after Undo skip is never taken as a graded showcase [33m 770[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1346: draft night can be watched again[2m > [22mnfl: Skip to the end, then Watch it again plays the night again and saves nothing [33m 523[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1346: draft night can be watched again[2m > [22mnba: Skip to the end, then Watch it again plays the night again and saves nothing [33m 428[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1346: draft night can be watched again[2m > [22mmlb: Skip to the end, then Watch it again plays the night again and saves nothing [33m 447[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1346: draft night can be watched again[2m > [22mnhl: Skip to the end, then Watch it again plays the night again and saves nothing [33m 425[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1346: draft night can be watched again[2m > [22mnfl: a second tap on the night's shared button does nothing for a second [33m 513[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1346: draft night can be watched again[2m > [22mnba: a second tap on the night's shared button does nothing for a second [33m 419[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1346: draft night can be watched again[2m > [22mmlb: a second tap on the night's shared button does nothing for a second [33m 330[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1346: draft night can be watched again[2m > [22mnhl: a second tap on the night's shared button does nothing for a second [33m 446[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1346: draft night can be watched again[2m > [22mnba: Watch it again after a night that landed remounts the result and the stage [33m 315[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1346: draft night can be watched again[2m > [22mmlb: Watch it again after a night that landed remounts the result and the stage [33m 302[2mms[22m[39m
+ [32m✓[39m src/test/usCareerDraftNightBoard.test.tsx [2m([22m[2m16 tests[22m[2m)[22m[33m 6758[2mms[22m[39m
+   [33m[2m✓[22m[39m draft night on the actual boards[2m > [22m'NFL' the night plays, holds its ending, lands, and starts the career it showed [33m 1695[2mms[22m[39m
+   [33m[2m✓[22m[39m draft night on the actual boards[2m > [22m'NBA' the night plays, holds its ending, lands, and starts the career it showed [33m 841[2mms[22m[39m
+   [33m[2m✓[22m[39m draft night on the actual boards[2m > [22m'MLB' the night plays, holds its ending, lands, and starts the career it showed [33m 793[2mms[22m[39m
+   [33m[2m✓[22m[39m draft night on the actual boards[2m > [22m'NHL' the night plays, holds its ending, lands, and starts the career it showed [33m 764[2mms[22m[39m
+   [33m[2m✓[22m[39m draft night on the actual boards[2m > [22m'NFL' skip lands the last frame, and a reload shows the result with no night [33m 412[2mms[22m[39m
+   [33m[2m✓[22m[39m draft night on the actual boards[2m > [22m'NBA' skip lands the last frame, and a reload shows the result with no night [33m 434[2mms[22m[39m
+   [33m[2m✓[22m[39m draft night on the actual boards[2m > [22m'MLB' skip lands the last frame, and a reload shows the result with no night [33m 514[2mms[22m[39m
+ [32m✓[39m src/test/usCoachRetirement.test.tsx [2m([22m[2m14 tests[22m[2m)[22m[33m 2030[2mms[22m[39m
+   [33m[2m✓[22m[39m US coaching retirement[2m > [22mretirement requires confirmation and accepts once after cancel and escape [33m 1296[2mms[22m[39m
+   [33m[2m✓[22m[39m US coaching retirement[2m > [22mcompleted employed coach keeps the record and log without season actions [33m 397[2mms[22m[39m
+ [32m✓[39m src/test/usCareerReveals.test.tsx [2m([22m[2m9 tests[22m[2m)[22m[33m 1695[2mms[22m[39m
+   [33m[2m✓[22m[39m draft day on the four US career hubs[2m > [22mNFL mounts the draft day card with the engine pick and the confetti rule [33m 691[2mms[22m[39m
+ [32m✓[39m src/test/usCareerProspect.test.tsx [2m([22m[2m36 tests[22m[2m)[22m[33m 45412[2mms[22m[39m
+   [33m[2m✓[22m[39m US career prospect on the actual boards[2m > [22m'NFL' quiet legacy restore preserves the existing career unchanged [33m 1695[2mms[22m[39m
+   [33m[2m✓[22m[39m US career prospect on the actual boards[2m > [22m'NBA' quiet legacy restore preserves the existing career unchanged [33m 938[2mms[22m[39m
+   [33m[2m✓[22m[39m US career prospect on the actual boards[2m > [22m'MLB' quiet legacy restore preserves the existing career unchanged [33m 799[2mms[22m[39m
+   [33m[2m✓[22m[39m US career prospect on the actual boards[2m > [22m'NHL' quiet legacy restore preserves the existing career unchanged [33m 839[2mms[22m[39m
+   [33m[2m✓[22m[39m US career prospect on the actual boards[2m > [22m'NFL' plays every saved prospect stage into the earned career and first season [33m 2138[2mms[22m[39m
+   [33m[2m✓[22m[39m US career prospect on the actual boards[2m > [22m'NBA' plays every saved prospect stage into the earned career and first season [33m 1828[2mms[22m[39m
+   [33m[2m✓[22m[39m US career prospect on the actual boards[2m > [22m'MLB' plays every saved prospect stage into the earned career and first season [33m 1537[2mms[22m[39m
+   [33m[2m✓[22m[39m US career prospect on the actual boards[2m > [22m'NHL' plays every saved prospect stage into the earned career and first season [33m 2403[2mms[22m[39m
+   [33m[2m✓[22m[39m US career prospect on the actual boards[2m > [22m'MLB' choices apply the displayed consequences and reject invalid options [33m 314[2mms[22m[39m
+   [33m[2m✓[22m[39m US career prospect on the actual boards[2m > [22m'NFL' accepts each same-frame journey action only once [33m 1141[2mms[22m[39m
+   [33m[2m✓[22m[39m US career prospect on the actual boards[2m > [22m'NBA' accepts each same-frame journey action only once [33m 999[2mms[22m[39m
+   [33m[2m✓[22m[39m US career prospect on the actual boards[2m > [22m'MLB' accepts each same-frame journey action only once [33m 1338[2mms[22m[39m
+   [33m[2m✓[22m[39m US career prospect on the actual boards[2m > [22m'NHL' accepts each same-frame journey action only once [33m 1212[2mms[22m[39m
+   [33m[2m✓[22m[39m US career prospect on the actual boards[2m > [22m'NFL' historical completed outcomes survive reload and remain the career archive [33m 1271[2mms[22m[39m
+   [33m[2m✓[22m[39m US career prospect on the actual boards[2m > [22m'NBA' historical completed outcomes survive reload and remain the career archive [33m 907[2mms[22m[39m
+   [33m[2m✓[22m[39m US career prospect on the actual boards[2m > [22m'MLB' historical completed outcomes survive reload and remain the career archive [33m 754[2mms[22m[39m
+   [33m[2m✓[22m[39m US career prospect on the actual boards[2m > [22m'NHL' historical completed outcomes survive reload and remain the career archive [33m 1216[2mms[22m[39m
+   [33m[2m✓[22m[39m US career prospect on the actual boards[2m > [22m'NFL' rejects corrupt nested journey saves without changing storage [33m 3655[2mms[22m[39m
+   [33m[2m✓[22m[39m US career prospect on the actual boards[2m > [22m'NBA' rejects corrupt nested journey saves without changing storage [33m 4422[2mms[22m[39m
+   [33m[2m✓[22m[39m US career prospect on the actual boards[2m > [22m'MLB' rejects corrupt nested journey saves without changing storage [33m 4915[2mms[22m[39m
+   [33m[2m✓[22m[39m US career prospect on the actual boards[2m > [22m'NHL' rejects corrupt nested journey saves without changing storage [33m 3897[2mms[22m[39m
+   [33m[2m✓[22m[39m US career prospect on the actual boards[2m > [22m'NFL' back before route selection preserves the player and clears only the unfinished save [33m 443[2mms[22m[39m
+   [33m[2m✓[22m[39m US career prospect on the actual boards[2m > [22m'NBA' back before route selection preserves the player and clears only the unfinished save [33m 379[2mms[22m[39m
+   [33m[2m✓[22m[39m US career prospect on the actual boards[2m > [22m'MLB' back before route selection preserves the player and clears only the unfinished save [33m 700[2mms[22m[39m
+   [33m[2m✓[22m[39m US career prospect on the actual boards[2m > [22m'NHL' back before route selection preserves the player and clears only the unfinished save [33m 774[2mms[22m[39m
+   [33m[2m✓[22m[39m US career prospect on the actual boards[2m > [22m'NFL' rules reopen and showcase approaches pay their displayed stock moves [33m 688[2mms[22m[39m
+   [33m[2m✓[22m[39m US career prospect on the actual boards[2m > [22m'NBA' rules reopen and showcase approaches pay their displayed stock moves [33m 855[2mms[22m[39m
+   [33m[2m✓[22m[39m US career prospect on the actual boards[2m > [22m'MLB' rules reopen and showcase approaches pay their displayed stock moves [33m 873[2mms[22m[39m
+   [33m[2m✓[22m[39m US career prospect on the actual boards[2m > [22m'NHL' rules reopen and showcase approaches pay their displayed stock moves [33m 1071[2mms[22m[39m
+[90mstderr[2m | src/test/usCareerHelpRules1104.test.tsx[2m > [22m[2mRound 1104: the changed rules are on the "?" screen[2m > [22m[2mNFL My Career shows slot pay, the kicker rule, the 16 game throwback and the bank, once each
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/usCareerHelpRules1104.test.tsx[2m > [22m[2mRound 1104: the changed rules are on the "?" screen[2m > [22m[2mthe NBA, MLB and NHL pages show the bank line once
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/usCareerHelpRules1104.test.tsx[2m > [22m[2mRound 1104: the changed rules are on the "?" screen[2m > [22m[2mthe NBA, MLB and NHL pages show the bank line once
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/usCareerHelpRules1104.test.tsx[2m > [22m[2mRound 1104: the changed rules are on the "?" screen[2m > [22m[2mthe NBA, MLB and NHL pages show the bank line once
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/usCareerHelpRules1104.test.tsx[2m > [22m[2mRound 1104: the changed rules are on the "?" screen[2m > [22m[2mall four pages show the coaching retirement line once
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/usCareerHelpRules1104.test.tsx[2m > [22m[2mRound 1104: the changed rules are on the "?" screen[2m > [22m[2mall four pages show the coaching retirement line once
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/usCareerHelpRules1104.test.tsx[2m > [22m[2mRound 1104: the changed rules are on the "?" screen[2m > [22m[2mall four pages show the coaching retirement line once
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/usCareerHelpRules1104.test.tsx[2m > [22m[2mRound 1104: the changed rules are on the "?" screen[2m > [22m[2mall four pages show the coaching retirement line once
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+ [32m✓[39m src/test/usCareerHelpRules1104.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[33m 2491[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1104: the changed rules are on the "?" screen[2m > [22mNFL My Career shows slot pay, the kicker rule, the 16 game throwback and the bank, once each [33m 816[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1104: the changed rules are on the "?" screen[2m > [22mthe NBA, MLB and NHL pages show the bank line once [33m 808[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1104: the changed rules are on the "?" screen[2m > [22mall four pages show the coaching retirement line once [33m 855[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m9 passed[39m[22m[2m | [22m[33m1 skipped[39m[90m (10)[39m
+[2m      Tests [22m [1m[32m229 passed[39m[22m[2m | [22m[33m4 skipped[39m[90m (233)[39m
+[2m   Start at [22m 16:24:35
+[2m   Duration [22m 65.44s[2m (transform 9.68s, setup 2.16s, collect 40.25s, tests 118.04s, environment 15.16s, prepare 3.25s)[22m
+
