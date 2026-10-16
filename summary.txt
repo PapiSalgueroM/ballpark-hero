@@ -1,0 +1,6 @@
+build exit=0 28s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+stale exit=0 3s | head=0 controls: catchreload=1 nowait=1 flagfirst=1 nolistener=1 noguard=1 noprerender=1 nooffline=1 nosave=1 norelease=1 barenudge=1
+vitest exit=0 11s |    Duration  10.49s (transform 6.23s, setup 829ms, collect 10.82s, tests 10.00s, environment 4.65s, prepare 1.24s)
+tsc exit=0 85s | 
+preload5 exit=0 166s | head=0 controls: stockdist=1 extra=1 extrabase=1
+walk exit=0 229s | walk=0 walkstock=1
