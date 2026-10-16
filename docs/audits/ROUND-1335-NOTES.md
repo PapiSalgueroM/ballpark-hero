@@ -108,3 +108,28 @@ pin's sha at simManagerAppealIsolation.mjs:142 (80ee99e7 against 7a89018d on ste
 - applyForJob draws unseeded in a harness that does not wrap it (simCmApplications does not); section takeover seeds it.
 - Hot Seat's own takeover still inherits failed objectives (advice 17): owed, a one line openObjectives in
   handoverState would close it without moving a date.
+- Step 7 (r1335-s7 on 7555fc0c): playCmBoardVerdict 42 of 42 at 320, 390 and 1280 (the confirm in the same panel,
+  scrollY and the panel's top still, buttons 44 px, no new text under 12 px, Back leaves the save, Take moves it;
+  West Ham's promotion review; a fresh career and a lost opener read Safe; Everton's 2005-06 takeover card); controls
+  noconfirm and nofate fired against dists built from patched copies.
+- Step 8 (r1335-s8 on 4c11f88d): the help example held by section pure (control example fired); every help reader
+  green (simGuideHeadings, simClubManagerALeague, simClubManagerMeters, simCmLeagueFixtures, simCmVarLedger,
+  simAcademy, simWilderness, simTrustCopy, simEras, simRoles).
+- Step 9: merged origin/main 1027b08c (Release BH; no Club Manager file moved). Closing proof r1335-c1 all green;
+  the lists r1335-c2a and c2b all green; fences r1335-c3 and r1335-f1 green but the two that read the live database;
+  walks r1335-c4 green but playManagerCustomPromotion (needs its workflow's artifacts). Save size: Real Madrid
+  194,105 to 194,209, Everton 199,578 to 199,592, Lincoln City 199,545 to 199,528 (budget 203,000), slopes at most
+  1,128 (cap 2,000); slots 510,811 to 510,825 (budget 532,500).
+- Weight (r1335-w, base and head on one runner): /club-manager 604.4K to 605.9K, /manager-hot-seat 622.8K to 624.2K,
+  /deadline-day 632.7K to 634.1K. Green by whole K; the round spends the three routes' whole spare (Q6: the lead
+  orders the joins).
+- Retakes: the digest (r1335-rt: base 0, forced 0, head 1 with 47, write 0) in 98850000; the Round 1081 pin
+  (clubManager.ts 1a0e7ace) LAST in 22d8bcab.
+
+## Owed
+
+- The other lane's guide, src/data/gameContent/clubManagement.ts line 113: "it opens at 60 in your first season,
+  anywhere from 35 to 82 after that depending on how the last one went" becomes "it opens at 69 in any new job, and
+  anywhere from 35 to 82 after a season you stayed for, depending on how that season went (a season the board grades
+  A or B opens at 69 or more, a D or an F under 60)". Then genSearchKeywords is theirs.
+- Round 1341 rebases its comment edit at managerHotSeat.ts 526 to 531 on this round's 527 and 528.
