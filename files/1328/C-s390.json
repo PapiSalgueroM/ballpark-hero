@@ -1,0 +1,253 @@
+{
+ "head": {
+  "era": {
+   "small": 23,
+   "font": [],
+   "controls": [],
+   "sizes": [],
+   "cut": [],
+   "overlaps": 0,
+   "overlapWords": [],
+   "sideways": false,
+   "cellSize": null,
+   "control": ""
+  },
+  "nation": {
+   "small": 54,
+   "font": [],
+   "controls": [],
+   "sizes": [],
+   "cut": [],
+   "overlaps": 0,
+   "overlapWords": [],
+   "sideways": false,
+   "cellSize": null,
+   "control": ""
+  },
+  "league": {
+   "small": 15,
+   "font": [],
+   "controls": [],
+   "sizes": [],
+   "cut": [],
+   "overlaps": 0,
+   "overlapWords": [],
+   "sideways": false,
+   "cellSize": null,
+   "control": ""
+  },
+  "team": {
+   "small": 74,
+   "font": [],
+   "controls": [],
+   "sizes": [],
+   "cut": [],
+   "overlaps": 0,
+   "overlapWords": [],
+   "sideways": false,
+   "cellSize": null,
+   "control": ""
+  },
+  "dugout": {
+   "small": 84,
+   "font": [],
+   "controls": [],
+   "sizes": [],
+   "cut": [],
+   "overlaps": 0,
+   "overlapWords": [],
+   "sideways": false,
+   "cellSize": null,
+   "control": ""
+  },
+  "hub": {
+   "small": 34,
+   "font": [],
+   "controls": [],
+   "sizes": [
+    "help button 44x44",
+    "Managers button 59x44",
+    "meter button 175x44",
+    "meter button 175x44"
+   ],
+   "cut": [],
+   "overlaps": 0,
+   "overlapWords": [],
+   "sideways": false,
+   "cellSize": null,
+   "control": "",
+   "cls": 0
+  },
+  "tiles": {
+   "Board": {
+    "value": "2 behind",
+    "sub": "Elite patience",
+    "h": 100,
+    "valueLines": 1,
+    "subLines": 1
+   },
+   "Inbox": {
+    "value": "All quiet",
+    "sub": "No messages yet",
+    "h": 100,
+    "valueLines": 1,
+    "subLines": 1
+   },
+   "Calendar": {
+    "value": "Season start",
+    "sub": "Next: Newcastle",
+    "h": 100,
+    "valueLines": 1,
+    "subLines": 1
+   },
+   "League": {
+    "value": "Not started",
+    "sub": "Premier League",
+    "h": 100,
+    "valueLines": 1,
+    "subLines": 1
+   },
+   "Cups": {
+    "value": "Still alive",
+    "sub": "FA Cup",
+    "h": 100,
+    "valueLines": 1,
+    "subLines": 1
+   },
+   "Stats": {
+    "value": "0 goals",
+    "sub": "Goals, assists, ratings",
+    "h": 100,
+    "valueLines": 1,
+    "subLines": 1
+   },
+   "Finances": {
+    "value": "+£63.4m",
+    "sub": "Kitty change, projected",
+    "h": 116,
+    "valueLines": 1,
+    "subLines": 1
+   },
+   "Facilities": {
+    "value": "Level 9 · 8 · 8 · 8",
+    "sub": "Stadium, training, medical, more",
+    "h": 116,
+    "valueLines": 1,
+    "subLines": 2
+   },
+   "Staff": {
+    "value": "Level 9 · 8 · 7 · 9",
+    "sub": "Attack, defence, keepers, scouts",
+    "h": 116,
+    "valueLines": 1,
+    "subLines": 2
+   },
+   "Skills": {
+    "value": "Level 1",
+    "sub": "Seven skill trees to grow",
+    "h": 116,
+    "valueLines": 1,
+    "subLines": 1
+   },
+   "Options": {
+    "value": "£ · Normal",
+    "sub": "Currency, nation job, haggling",
+    "h": 116,
+    "valueLines": 1,
+    "subLines": 2
+   },
+   "Manager": {
+    "value": "0W 0D 0L",
+    "sub": "New in the job",
+    "h": 116,
+    "valueLines": 1,
+    "subLines": 1
+   },
+   "Treatment": {
+    "value": "All fit",
+    "sub": "No injuries or bans",
+    "h": 100,
+    "valueLines": 1,
+    "subLines": 1
+   },
+   "Rival watch": {
+    "value": "Everton",
+    "sub": "They sit #9",
+    "h": 100,
+    "valueLines": 1,
+    "subLines": 1
+   },
+   "Press room": {
+    "value": "Nobody has an opinion",
+    "sub": "0 fronted up this career",
+    "h": 120,
+    "valueLines": 2,
+    "subLines": 1
+   },
+   "Dressing room": {
+    "value": "Word kept",
+    "sub": "Set everyone a role",
+    "h": 120,
+    "valueLines": 1,
+    "subLines": 1
+   },
+   "Academy": {
+    "value": "Nobody yet",
+    "sub": "Recruitment 13/20 · 0 scouting",
+    "h": 116,
+    "valueLines": 1,
+    "subLines": 2
+   },
+   "Training": {
+    "value": "Normal · Balanced",
+    "sub": "12 players still improving",
+    "h": 116,
+    "valueLines": 1,
+    "subLines": 2
+   },
+   "Market": {
+    "value": "Window OPEN",
+    "sub": "2 bids for your players",
+    "h": 100,
+    "valueLines": 1,
+    "subLines": 1
+   }
+  },
+  "calendar": {
+   "small": 97,
+   "font": [],
+   "controls": [],
+   "sizes": [
+    "previous month 44x44",
+    "next month 44x44",
+    "Sim to 139x44",
+    "intensity button 107x141",
+    "intensity button 107x141",
+    "intensity button 107x141",
+    "Club home 83x44"
+   ],
+   "cut": [],
+   "overlaps": 0,
+   "overlapWords": [],
+   "sideways": false,
+   "cellSize": "46x46",
+   "control": ""
+  },
+  "training": {
+   "small": 57,
+   "font": [],
+   "controls": [],
+   "sizes": [
+    "Club home 83x44"
+   ],
+   "cut": [],
+   "overlaps": 0,
+   "overlapWords": [],
+   "sideways": false,
+   "cellSize": null,
+   "control": ""
+  },
+  "errors": []
+ },
+ "base": null
+}

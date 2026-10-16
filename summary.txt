@@ -1,0 +1,9 @@
+build exit=0 32s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+simWritesAreSent exit=1 16s | simWritesAreSent: 2 failures
+simResultMoment exit=0 6s | simResultMoment: green. Every live game reaches the shared result moment or is listed with what it draws instead, the pill shows exactly the score it is given, the three 
+weights exit=1 29s | sweepWeight: 3 failures
+playHomeFold exit=0 31s | playHomeFold: green. The first thing on the page is something to play.
+playClubManagerSlots exit=0 11s | playClubManagerSlots: green
+playCmHubLanding exit=0 95s | playCmHubLanding: green (A 8 pass 0 fail, B 65 pass 0 fail, C 111 pass 0 fail, E 63 pass 0 fail, F 9 pass 0 fail); the hub lands on the club on its first frame
+playClubManager exit=0 289s | Played Club Manager through its own screens. 0 findings.
+playTwoTabs exit=0 469s | playTwoTabs: green at 320x640, 390x844, 1280x900
