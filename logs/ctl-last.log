@@ -1,0 +1,7 @@
+   1933 deals compared from the base fleet's own states; a deck card dealt at 1903 (98.4%)
+   FAIL 1903 deals hold a deck card that is not first
+   FAIL 1903 deals change the old batch
+   FAIL 1903 deals stamp something other than the base's stamps plus the deck card's
+   FAIL the loaded head fleet was dealt no deck card
+simSoccerDeck: CONTROL=last FIRED: section 3 failed (4 failures, red sections 3)
+simSoccerDeck: CONTROL=last FIRED: section 3 failed (4 failures, red sections 3)

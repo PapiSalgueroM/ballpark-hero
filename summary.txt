@@ -1,0 +1,8 @@
+reach40 exit=0 70s | reach40 done, any red: 1
+reach20 exit=0 69s | reach20 done, any red: 0
+reach15 exit=0 70s | reach15 done, any red: 0
+reach12 exit=0 70s | reach12 done, any red: 1
+measure15 exit=0 24s |    measure: soccer top card share at seeds 1 to 10: 726 10.70, 726 10.70, 726 9.60, 726 11.00, 726 10.70, 726 9.61, 726 8.90, 726 11.80, 726 10.61, 726 9.90
+measure12 exit=0 24s |    measure: soccer top card share at seeds 1 to 10: 726 10.20, 726 10.60, 728 9.30, 726 10.70, 726 10.10, 726 10.01, 726 9.50, 726 11.90, 726 10.81, 726 10.40
+words exit=0 0s | words append=0 check=0
+ctl-last exit=1 14s | simSoccerDeck: CONTROL=last FIRED: section 3 failed (4 failures, red sections 3)

@@ -1,0 +1,9 @@
+   ok 39 recorded cards of 2 compact pack(s): every wording, option, story and slot as recorded
+
+runtime 0.0 s
+simEventDeck: green. Sections 14 only.
+ scripts/data/eventDeckWords.json | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+runtime 0.0 s
+simEventDeck: green. Sections 14 only.
+words append=0 check=0

@@ -1,0 +1,32 @@
+REACHPATCH applied (goals max unchanged)
+SEED=1 exit=0 REACH soccer 705:5 719:5 721:6 total 1000
+SEED=2 exit=0 REACH soccer 719:2 727:5 705:6 total 1000
+SEED=3 exit=0 REACH soccer 721:2 727:4 719:6 total 1000
+SEED=4 exit=1 REACH soccer 719:0 705:5 721:5 total 1000
+SEED=5 exit=0 REACH soccer 721:4 719:5 705:6 total 1000
+SEED=6 exit=0 REACH soccer 719:5 705:6 727:7 total 999
+SEED=7 exit=0 REACH soccer 719:3 727:7 705:8 total 1000
+SEED=8 exit=0 REACH soccer 719:2 721:6 705:7 total 1000
+SEED=9 exit=0 REACH soccer 721:3 719:6 705:7 total 999
+SEED=10 exit=0 REACH soccer 719:1 721:6 727:7 total 1000
+SEED=11 exit=0 REACH soccer 719:3 727:7 705:8 total 1000
+SEED=12 exit=0 REACH soccer 721:3 719:5 705:9 total 1000
+SEED=13 exit=0 REACH soccer 719:5 705:6 721:7 total 997
+SEED=14 exit=0 REACH soccer 719:4 727:5 705:11 total 1000
+SEED=15 exit=0 REACH soccer 719:2 721:6 705:8 total 1000
+SEED=16 exit=0 REACH soccer 719:1 721:4 705:6 total 1000
+SEED=17 exit=0 REACH soccer 719:3 705:7 727:9 total 999
+SEED=18 exit=0 REACH soccer 719:3 721:10 727:10 total 1000
+SEED=19 exit=0 REACH soccer 719:1 727:5 705:8 total 1000
+SEED=20 exit=0 REACH soccer 719:1 705:7 721:8 total 1000
+SEED=21 exit=0 REACH soccer 719:4 727:7 721:8 total 1000
+SEED=22 exit=0 REACH soccer 719:3 705:4 721:8 total 1000
+SEED=23 exit=0 REACH soccer 719:3 721:6 705:8 total 998
+SEED=24 exit=0 REACH soccer 719:6 721:6 705:10 total 1000
+SEED=25 exit=0 REACH soccer 719:2 721:5 705:6 total 1000
+SEED=26 exit=0 REACH soccer 719:2 721:3 705:8 total 999
+SEED=27 exit=0 REACH soccer 719:3 705:6 721:7 total 999
+SEED=28 exit=1 REACH soccer 719:0 705:6 721:7 total 1000
+SEED=29 exit=0 REACH soccer 719:5 727:6 705:7 total 999
+SEED=30 exit=0 REACH soccer 719:2 705:4 721:7 total 1000
+reach40 done, any red: 1

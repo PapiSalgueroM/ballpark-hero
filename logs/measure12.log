@@ -1,0 +1,4 @@
+REACHPATCH applied (goals max 12)
+REACH soccer 705:7 721:7 719:8 total 1000
+   ok soccer: all 28 cards reached in 1000 deals, the top card 726 at 10.2% (ceiling 13.7%)
+   measure: soccer top card share at seeds 1 to 10: 726 10.20, 726 10.60, 728 9.30, 726 10.70, 726 10.10, 726 10.01, 726 9.50, 726 11.90, 726 10.81, 726 10.40
