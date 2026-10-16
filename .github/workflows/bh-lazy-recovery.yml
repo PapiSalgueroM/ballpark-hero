@@ -1,0 +1,223 @@
+name: BH unchanged lazy recovery diagnosis
+
+on:
+  push:
+    branches: [codex/bh-lazy-recovery]
+
+permissions:
+  contents: read
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      CI: 'true'
+      SIM_NETWORK: offline
+      ENGINES: chromium
+      CAREER_SEASON_LOCAL_ONLY: '1'
+      SOCCER_BUILD_PHASE: fixed
+      BHL_BASE: e7f111b7de73153efdc7e343282d65eeae9289fc
+      BHL_OUT: ${{ github.workspace }}/bh-lazy-recovery-artifacts
+      FREE_KICK_FONT_CACHE: ${{ github.workspace }}/bh-lazy-recovery-artifacts/font-cache
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Bind exact candidate source and all locked installed files
+        id: bind
+        run: |
+          echo '127.0.0.1 flawuiqbvjobmkfkauhw.supabase.co' | sudo tee -a /etc/hosts
+          mkdir -p "$BHL_OUT/original" "$BHL_OUT/traced"
+          git rev-parse HEAD > "$BHL_OUT/head.txt"
+          git archive --format=zip HEAD > "$BHL_OUT/source.zip"
+          git status --porcelain --untracked-files=no > "$BHL_OUT/source-before.txt"
+          test ! -s "$BHL_OUT/source-before.txt"
+          git diff --exit-code "$BHL_BASE" -- . ':!.github/workflows/bh-lazy-recovery.yml' ':!scripts/diagnoseBuildLazyRecovery.mjs' ':!docs/PROJECT-STATE.md' ':!docs/audits/bh-lazy-recovery.md'
+          find src scripts .github/workflows -type f ! -path scripts/data/lastmod.json -print0 | sort -z | xargs -0 sha256sum > "$BHL_OUT/source-files.sha256"
+          sha256sum package.json package-lock.json bun.lock > "$BHL_OUT/packages.sha256"
+          node --version > "$BHL_OUT/node-version.txt"
+          npm --version > "$BHL_OUT/npm-version.txt"
+          npm ci
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          import { createHash } from 'node:crypto';
+          const lock = JSON.parse(fs.readFileSync('package-lock.json'));
+          const installed = Object.entries(lock.packages).filter(([p]) => p.startsWith('node_modules/') && fs.existsSync(p + '/package.json')).map(([p, entry]) => {
+            const bytes = fs.readFileSync(p + '/package.json'), version = JSON.parse(bytes).version;
+            assert.equal(version, entry.version, p);
+            return { path: p, version, sha256: createHash('sha256').update(bytes).digest('hex') };
+          });
+          assert.equal(installed.length, 521);
+          for (const arm of ['original', 'traced']) fs.writeFileSync(process.env.BHL_OUT + '/' + arm + '/installed.json', JSON.stringify(installed, null, 2) + '\n');
+          fs.writeFileSync(process.env.BHL_OUT + '/installed.json', JSON.stringify(installed, null, 2) + '\n');
+          console.log('Bound all 521 actual locked installed versions.');
+          NODE
+          find node_modules -type f -print0 | sort -z | xargs -0 sha256sum > "$BHL_OUT/installed-files.sha256"
+      - name: Actual application types and new wrapper syntax
+        id: types
+        run: |
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee "$BHL_OUT/types.log"
+          node --check scripts/diagnoseBuildLazyRecovery.mjs
+      - name: Isolated pinned browser tools and retained declared fonts
+        id: tools
+        run: |
+          npm install --prefix "$RUNNER_TEMP/bh-lazy-tools" --no-save --package-lock=false playwright@1.64.0
+          ln -s "$RUNNER_TEMP/bh-lazy-tools/node_modules/playwright" node_modules/playwright
+          ln -s "$RUNNER_TEMP/bh-lazy-tools/node_modules/playwright-core" node_modules/playwright-core
+          node "$RUNNER_TEMP/bh-lazy-tools/node_modules/playwright/cli.js" install --with-deps chromium
+          python -m pip install fonttools pillow
+          node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only 2>&1 | tee "$BHL_OUT/fonts.log"
+          find "$FREE_KICK_FONT_CACHE" -type f -print0 | sort -z | xargs -0 sha256sum > "$BHL_OUT/font-files.sha256"
+          find "$RUNNER_TEMP/bh-lazy-tools/node_modules" -type f -print0 | sort -z | xargs -0 sha256sum > "$BHL_OUT/browser-tools.sha256"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          import { createRequire } from 'node:module';
+          import { createHash } from 'node:crypto';
+          import pw from './scripts/lib/playwrightLoader.mjs';
+          const require = createRequire(import.meta.url), digest = file => createHash('sha256').update(fs.readFileSync(file)).digest('hex');
+          const tools = ['esbuild', 'playwright', 'playwright-core'].map(name => {
+            const file = require.resolve(name + '/package.json'); return { name, file, version: JSON.parse(fs.readFileSync(file)).version, sha256: digest(file) };
+          });
+          for (const tool of tools.filter(row => row.name.startsWith('playwright'))) assert.equal(tool.version, '1.64.0');
+          const executable = pw.chromium.executablePath(); assert(fs.existsSync(executable));
+          fs.writeFileSync(process.env.BHL_OUT + '/tools.json', JSON.stringify({ tools, executable, executableBytes: fs.statSync(executable).size, executableSha256: digest(executable) }, null, 2) + '\n');
+          NODE
+      - name: Exact candidate production build and physical distribution
+        id: build
+        run: |
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" npm run build:seo 2>&1 | tee "$BHL_OUT/build.log"
+          cp scripts/data/lastmod.json "$BHL_OUT/build-lastmod.json"
+          git diff -- public scripts/data/lastmod.json index.html > "$BHL_OUT/build.diff"
+          find dist -type f -print0 | sort -z | xargs -0 sha256sum > "$BHL_OUT/dist-files.sha256"
+          tar -czf "$BHL_OUT/dist.tgz" dist
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import assert from 'node:assert/strict';
+          import { createHash } from 'node:crypto';
+          import { createRequire } from 'node:module';
+          const out = process.env.BHL_OUT + '/emitted'; fs.mkdirSync(out);
+          const entry = fs.readFileSync('dist/index.html', 'utf8').match(/src="(\/assets\/index-[^"]+\.js)"/)?.[1]; assert(entry);
+          const files = ['dist' + entry, ...fs.readdirSync('dist/assets').filter(file => /^SoccerCareer(?:BuildEditor)?-.*\.js$/.test(file)).map(file => 'dist/assets/' + file)];
+          const metadata = files.map(file => {
+            const bytes = fs.readFileSync(file), text = bytes.toString('utf8'), at = text.indexOf('vite:preloadError');
+            fs.copyFileSync(file, out + '/' + path.basename(file));
+            return { file, bytes: bytes.length, sha256: createHash('sha256').update(bytes).digest('hex'), preloadErrorOffset: at,
+              preloadErrorExcerpt: at < 0 ? null : text.slice(Math.max(0, at - 350), at + 500) };
+          });
+          const require = createRequire(import.meta.url), vitePackage = require.resolve('vite/package.json'), reactPackage = require.resolve('react/package.json');
+          const chunks = path.join(path.dirname(vitePackage), 'dist/node/chunks');
+          const helperOwners = fs.readdirSync(chunks).filter(file => file.endsWith('.js')).map(file => path.join(chunks, file)).filter(file => fs.readFileSync(file, 'utf8').includes('vite:preloadError'));
+          assert(helperOwners.length > 0, 'Retain at least one actual installed preload-error implementation owner.');
+          const implementations = [vitePackage, reactPackage, path.join(path.dirname(reactPackage), 'cjs/react.production.min.js'), ...helperOwners].map(file => {
+            const relative = path.relative(process.cwd(), file), retained = 'installed/' + relative, target = path.join(out, retained), bytes = fs.readFileSync(file);
+            fs.mkdirSync(path.dirname(target), { recursive: true }); fs.writeFileSync(target, bytes);
+            return { file: relative, retained, bytes: bytes.length, sha256: createHash('sha256').update(bytes).digest('hex') };
+          });
+          fs.writeFileSync(out + '/metadata.json', JSON.stringify({ entry, files: metadata, viteHelperOwnerCount: helperOwners.length, implementations,
+            limits: ['Exact emitted files from this SEO build, not the unretained original BFb distribution.', 'All actual installed Vite chunk files containing vite:preloadError are retained; owner count does not assert cancellation behavior.'] }, null, 2) + '\n');
+          NODE
+      - name: Original method once without diagnostic instrumentation
+        if: always() && steps.bind.outcome == 'success' && steps.types.outcome == 'success' && steps.tools.outcome == 'success' && steps.build.outcome == 'success'
+        run: |
+          set +e
+          SOCCER_ROUTINE_OUT="$BHL_OUT/original" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playSoccerCareerBuildLazy.mjs > "$BHL_OUT/original.log" 2>&1
+          method_exit=$?
+          set -e
+          printf '%s\n' "$method_exit" > "$BHL_OUT/original.exit"
+          cat "$BHL_OUT/original.log"
+      - name: Same unchanged method with separate read-only timing trace
+        if: always() && steps.bind.outcome == 'success' && steps.types.outcome == 'success' && steps.tools.outcome == 'success' && steps.build.outcome == 'success'
+        run: |
+          set +e
+          SOCCER_ROUTINE_OUT="$BHL_OUT/traced" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/diagnoseBuildLazyRecovery.mjs > "$BHL_OUT/traced.log" 2>&1
+          trace_exit=$?
+          set -e
+          printf '%s\n' "$trace_exit" > "$BHL_OUT/traced.exit"
+          cat "$BHL_OUT/traced.log"
+      - name: All fifteen rebuilt-site readers
+        if: always() && steps.build.outcome == 'success'
+        run: |
+          ONLY=simAdsense,simBrand,simHeadTags,simHiddenPages,simHubs,simIndexNow,simIndexing,simInternalLinks,simNoRivalNames,simPrerender,simPrerenderBoot,simRetiredRoutes,simSchema,simSitemap,simSnapshotAssets NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/runAllSims.mjs --browser 2>&1 | tee "$BHL_OUT/readers.log"
+          test "$(grep -c '^All 15 harnesses green\.$' "$BHL_OUT/readers.log")" = 1
+      - name: Unchanged full route download budgets
+        if: always() && steps.build.outcome == 'success' && steps.tools.outcome == 'success'
+        run: |
+          node scripts/lib/hostLikeServer.mjs dist 4173 > "$BHL_OUT/weight-server.log" 2>&1 &
+          bhl_server_pid=$!
+          trap 'kill "$bhl_server_pid" 2>/dev/null || true' EXIT
+          for attempt in 1 2 3 4 5; do
+            if curl --fail --silent http://127.0.0.1:4173/ > /dev/null; then break; fi
+            sleep 1
+          done
+          curl --fail --silent http://127.0.0.1:4173/ > /dev/null
+          BASE=http://127.0.0.1:4173 SWEEP_BASE=http://127.0.0.1:4173 SWEEP_OFFLINE=1 NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/sweepWeight.mjs 2>&1 | tee "$BHL_OUT/weight.log"
+      - name: Complete source installed tool font and distribution holds
+        if: always()
+        run: |
+          sha256sum --check "$BHL_OUT/source-files.sha256" > "$BHL_OUT/source-holds.log"
+          sha256sum --check "$BHL_OUT/packages.sha256"
+          sha256sum --check "$BHL_OUT/installed-files.sha256" > "$BHL_OUT/installed-holds.log"
+          sha256sum --check "$BHL_OUT/browser-tools.sha256" > "$BHL_OUT/browser-tool-holds.log"
+          sha256sum --check "$BHL_OUT/font-files.sha256" > "$BHL_OUT/font-holds.log"
+          sha256sum --check "$BHL_OUT/dist-files.sha256" > "$BHL_OUT/dist-holds.log"
+          git diff --exit-code -- src scripts ':!scripts/data/lastmod.json' .github/workflows package.json package-lock.json bun.lock
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          import { createHash } from 'node:crypto';
+          const digest = file => createHash('sha256').update(fs.readFileSync(file)).digest('hex'), out = process.env.BHL_OUT;
+          const installed = JSON.parse(fs.readFileSync(out + '/installed.json')); assert.equal(installed.length, 521);
+          for (const row of installed) { assert.equal(digest(row.path + '/package.json'), row.sha256); assert.equal(JSON.parse(fs.readFileSync(row.path + '/package.json')).version, row.version); }
+          const tools = JSON.parse(fs.readFileSync(out + '/tools.json'));
+          assert.equal(digest(tools.executable), tools.executableSha256);
+          for (const tool of tools.tools) assert.equal(digest(tool.file), tool.sha256);
+          console.log('Held all 521 installed locked versions and the recorded actual browser executable.');
+          NODE
+      - name: Strict existing detector exits and physical evidence
+        if: always()
+        run: |
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import assert from 'node:assert/strict';
+          import { createHash } from 'node:crypto';
+          const out = process.env.BHL_OUT, digest = file => createHash('sha256').update(fs.readFileSync(file)).digest('hex');
+          for (const arm of ['original', 'traced']) {
+            assert.equal(fs.readFileSync(out + '/' + arm + '.exit', 'utf8').trim(), '0', arm + ': unchanged method must exit zero');
+            const root = out + '/' + arm + '/build-lazy/fixed', report = JSON.parse(fs.readFileSync(root + '/report.json'));
+            assert.equal(report.status, 'passed', arm); assert.equal(report.failures, 0, arm); assert.equal(report.setupFailures, 0, arm);
+            assert.equal(report.healthyFlows, 3); assert.equal(report.eagerBuildFetches, 0); assert.equal(report.inventory.length, 12);
+            assert.equal(report.recoveries.length, 1); assert.equal(report.controls.length, 1);
+            for (const name of ['sourceHeld', 'distHeld', 'toolsHeld', 'installedHeld', 'fontsHeld']) assert.equal(report[name], true, arm + ':' + name);
+            for (const image of report.inventory) {
+              assert.equal(path.basename(image.file), image.file); const file = root + '/' + image.file;
+              assert.equal(fs.statSync(file).size, image.bytes); assert.equal(digest(file), image.sha256); assert.equal(image.original, true);
+            }
+          }
+          const trace = JSON.parse(fs.readFileSync(out + '/traced/trace/summary.json'));
+          assert.equal(trace.oldMethodExit, 0); assert.equal(trace.wrapperError, null); assert.equal(trace.sourceHeld, true); assert.equal(trace.observed, true); assert.equal(trace.timingPerturbed, true);
+          assert.equal(trace.completePreloadPairs, true); assert.equal(trace.eventFile.file, 'events.jsonl');
+          const events = out + '/traced/trace/events.jsonl';
+          assert.equal(fs.statSync(events).size, trace.eventFile.bytes); assert.equal(digest(events), trace.eventFile.sha256);
+          console.log('Both unchanged old detector invocations passed with 24 physical originals; trace timing is explicitly perturbed. No new error allowance or baseline callback-comparison claim.');
+          NODE
+      - name: Retain complete diagnostic evidence regardless of result
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: bh-lazy-recovery-${{ github.run_id }}
+          path: bh-lazy-recovery-artifacts/
+          retention-days: 14
+          if-no-files-found: error
