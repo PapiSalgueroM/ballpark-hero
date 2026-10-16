@@ -1,0 +1,2 @@
+skip-head exit=0 24s | skip probe: no window published a deal the ledger refused (0 protected men picked)
+skip-A exit=0 25s | skip probe: 9 window deal(s) published that the ledger refused

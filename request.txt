@@ -1,0 +1,3 @@
+#!serial
+skip-head: node .rc/x/skip.mjs
+skip-A: node .rc/x/mut.mjs A && node .rc/x/skip.mjs; s=$?; git checkout -- src scripts; exit $s

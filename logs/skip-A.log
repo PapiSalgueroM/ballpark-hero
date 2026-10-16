@@ -1,0 +1,11 @@
+mut A: applied to src/lib/clubManager.ts
+  Real Madrid seed 1: news "Arsenal sign Jude Bellingham from Athletic Club" but the ledger keeps him at Athletic Club; on goneNames: true
+  Real Madrid seed 2: news "Barcelona sign Kylian Mbappé from Kilmarnock" but the ledger keeps him at Kilmarnock; on goneNames: true
+  Real Madrid seed 3: news "PSG sign Jude Bellingham from Strasbourg" but the ledger keeps him at Strasbourg; on goneNames: true
+  Real Madrid seed 3: news "Barcelona sign Federico Valverde from Nice" but the ledger keeps him at Nice; on goneNames: true
+  Real Madrid seed 6: news "Barcelona sign Jude Bellingham from Botafogo" but the ledger keeps him at Botafogo; on goneNames: true
+  Real Madrid seed 12: news "PSG sign Vinicius Junior from Hamburg" but the ledger keeps him at Hamburg; on goneNames: true
+  Real Madrid seed 12: news "Barcelona sign Federico Valverde from Genk" but the ledger keeps him at Genk; on goneNames: true
+  Real Madrid seed 14: news "Manchester United sign Federico Valverde from Venezia" but the ledger keeps him at Venezia; on goneNames: true
+skip probe: {"careers":16,"sold":64,"windows":96,"lines":503,"protectedPicked":9,"publishedRefused":9}
+skip probe: 9 window deal(s) published that the ledger refused
