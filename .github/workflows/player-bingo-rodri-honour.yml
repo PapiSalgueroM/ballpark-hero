@@ -15,7 +15,7 @@ jobs:
       CI: '1'
       SIM_NETWORK: offline
       ENGINES: chromium
-      PLAYER_BINGO_RODRI_PHASE: baseline
+      PLAYER_BINGO_RODRI_PHASE: fixed
       PLAYER_BINGO_RODRI_OUT: ${{ github.workspace }}/bingo-rodri-artifacts
       FREE_KICK_FONT_CACHE: ${{ github.workspace }}/bingo-rodri-artifacts/font-cache
       PRERENDER_ONLY: /player-bingo
