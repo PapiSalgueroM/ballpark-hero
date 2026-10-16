@@ -37,6 +37,7 @@ jobs:
           echo '127.0.0.1 flawuiqbvjobmkfkauhw.supabase.co' | sudo tee -a /etc/hosts
           mkdir -p "$SC_PENDING_POPULARITY_OUT"
           git rev-parse HEAD > "$SC_PENDING_POPULARITY_OUT/source-head.txt"
+          git archive --format=zip HEAD > "$SC_PENDING_POPULARITY_OUT/source.zip"
           git status --porcelain --untracked-files=no > "$SC_PENDING_POPULARITY_OUT/source-before.txt"
           test ! -s "$SC_PENDING_POPULARITY_OUT/source-before.txt"
           git diff --exit-code d4f2c6f688d656205722ba52bbdb33f03490966a -- src scripts package.json package-lock.json bun.lock ':!src/lib/soccerCareerLife.ts' ':!src/test/careerPendingPopularityGates.test.ts' ':!scripts/simCareerPendingPopularityGates.mjs'
