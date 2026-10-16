@@ -1,0 +1,3 @@
+#!serial
+base-unseeded: git checkout 1027b08c -- src scripts && node scripts/simCmUnseededWorld.mjs; s=$?; git checkout HEAD -- src scripts; exit $s
+pre-unseeded: git checkout 52e346d4 -- scripts/simCmUnseededWorld.mjs && node scripts/simCmUnseededWorld.mjs; s=$?; git checkout HEAD -- scripts; exit $s
