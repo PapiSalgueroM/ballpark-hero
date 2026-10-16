@@ -1,0 +1,5 @@
+#!serial
+p-healthy: node .rc/x/adoptHarness.mjs && CM_WORLD_MOVES_SECTIONS=2,3 node scripts/simCmWorldMoves.mjs; s=$?; git checkout -- src scripts; exit $s
+p-rival: node .rc/x/adoptHarness.mjs && node .rc/x/mut.mjs rivalClose && CM_WORLD_MOVES_SECTIONS=2 node scripts/simCmWorldMoves.mjs; s=$?; git checkout -- src scripts; exit $s
+p-join: node .rc/x/adoptHarness.mjs && node .rc/x/mut.mjs joinCarry && CM_WORLD_MOVES_SECTIONS=3 node scripts/simCmWorldMoves.mjs; s=$?; git checkout -- src scripts; exit $s
+p-seeded: node .rc/x/mut.mjs rivalClose && node .rc/x/mut.mjs joinCarry && CM_WORLD_MOVES_SECTIONS=2,3 node scripts/simCmWorldMoves.mjs; s=$?; git checkout -- src scripts; exit $s
