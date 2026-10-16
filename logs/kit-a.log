@@ -1,0 +1,4 @@
+   ok src/data/soccerDeck/index.ts: 0 expiring cards, src/pages/SoccerCareer.tsx does not call gmExpiredLine (it must before any of its cards expires)
+   ok soccer: all 28 cards reached in 4999 deals, the top card 726 at 9.8% (ceiling 13.1%)
+runtime 62.1 s
+simEventDeck: green. Sections 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 only.

@@ -1,0 +1,10 @@
+kit-a exit=0 62s | simEventDeck: green. Sections 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 only.
+tsc exit=0 79s | 
+ctl exit=0 7s | ok lines for soccer after the FAIL: 0 (0 expected)
+gmequal exit=1 9s | >    ok 10 packs: the 7 on the baseline each still lack a neutral option somewhere, every other card has one, no pack has a problem
+vitest exit=0 3s |       Tests  99 passed (99)
+simNoRivalNames exit=0 13s | No rival product names found. 0 findings.
+kit-b exit=0 146s | simEventDeck: green. Sections 13, 14, 15, 16 only.
+simStorageWrites exit=0 3s | simStorageWrites: all green (owed: 12)
+simHarnessAnchors exit=0 45s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+reach30 exit=0 135s | reach30 done, any red: 0

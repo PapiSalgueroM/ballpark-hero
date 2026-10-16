@@ -1,0 +1,9 @@
+base exit=0 head exit=0, base lines 23, head lines 23
+1c1
+< simEventDeck: 7 packs (nfl, nba, mlb, nhl, college, gym, afl)
+---
+> simEventDeck: 8 packs (nfl, nba, mlb, nhl, college, gym, afl)
+10c10
+<    ok 9 packs: the 7 on the baseline each still lack a neutral option somewhere, every other card has one, no pack has a problem
+---
+>    ok 10 packs: the 7 on the baseline each still lack a neutral option somewhere, every other card has one, no pack has a problem
