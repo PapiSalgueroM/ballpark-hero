@@ -1,0 +1,11 @@
+pr269-base exit=1 9s |    Duration  6.57s (transform 1.90s, setup 73ms, collect 71ms, tests 4.72s, environment 376ms, prepare 248ms)
+slots-base-d exit=0 61s | simClubManagerSlots: all sections green
+saveSize-base-d exit=0 55s | simClubManagerSaveSize: all sections green
+saveSize-base-1 exit=0 57s | simClubManagerSaveSize: all sections green
+saveSize-base-2 exit=0 58s | simClubManagerSaveSize: all sections green
+saveSize-base-3 exit=0 56s | simClubManagerSaveSize: all sections green
+saveSize-base-4 exit=0 56s | simClubManagerSaveSize: all sections green
+saveSize-base-5 exit=0 57s | simClubManagerSaveSize: all sections green
+slots-base-1 exit=0 64s | simClubManagerSlots: all sections green
+ledgerBound-base exit=0 269s | simCmLedgerBound: green, all four sections held
+slots-base-2 exit=0 50s | simClubManagerSlots: all sections green
