@@ -1,0 +1,11 @@
+headsha exit=0 0s | 35a252ba8 rc request rBHh-m3b for 1404ca2d1024667c78b3c8280c37d43c2847c12a
+vitest-life exit=0 7s |    Duration  6.02s (transform 2.92s, setup 1.10s, collect 6.90s, tests 3.02s, environment 2.65s, prepare 600ms)
+simCareerLife exit=0 38s | simCareerLife: green. Every peak is reachable, the critic has an opinion and it is about the football, and nothing about either of them is on the save.
+simCareerSocialBrands exit=0 36s | ALL SOCIAL AND BRAND CHECKS PASSED
+simSoccerAgentReview exit=0 12s | PASS agent review product and proof source bytes held.
+simCareerLifeCooldowns exit=0 67s | simCareerLifeCooldowns: green. No event repeats inside its cooldown, every new event fires, the rate held, and the catalog has two real choices everywhere.
+simCareerStoryRole exit=0 53s | simCareerStoryRole: 16 groups, 0 failed, 48 full AR pairs
+simSoccerWorldTruth exit=0 87s | simSoccerWorldTruth: OK, every section green
+simNoRivalNames exit=0 19s | No rival product names found. 0 findings.
+simCareerProgramme exit=0 90s | Career programme:50 original/compatibility/full product season pairs with exact RNG,240 opted gameplay seasons,21 effective loaded faults,163 unchanged chance outcomes an
+simSoccerVeteranOffers exit=0 826s | PASS Soccer veteran offers: 7 groups, 11 retained bundle arms
