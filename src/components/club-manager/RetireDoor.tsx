@@ -33,9 +33,17 @@ export default function RetireDoor({ door, title, lines, keep, confirm, onRetire
   const armedRef = useRef(false);
   const downEarly = useRef(false);
   const keepRef = useRef<HTMLButtonElement | null>(null);
+  /* Review fix: Keep managing and Escape hand the focus back to the door, so a keyboard user is not dropped to the
+     top of the document. Only after a close: the first draw of the door takes nothing. */
+  const doorRef = useRef<HTMLButtonElement | null>(null);
+  const focusDoor = useRef(false);
+  const close = () => { focusDoor.current = true; setOpen(false); };
 
   useEffect(() => {
-    if (!open) return;
+    if (!open) {
+      if (focusDoor.current) { focusDoor.current = false; doorRef.current?.focus({ preventScroll: true }); }
+      return;
+    }
     armedRef.current = false;
     setArmed(false);
     keepRef.current?.focus({ preventScroll: true });
@@ -47,6 +55,7 @@ export default function RetireDoor({ door, title, lines, keep, confirm, onRetire
     return (
       <button
         type="button"
+        ref={doorRef}
         data-cm-retire-door
         onClick={() => { setOpen(true); onOpen?.(); }}
         className={cn('w-full min-h-11 rounded-lg border border-border px-3 py-2 text-xs font-bold text-muted-foreground hover:text-foreground hover:border-primary transition-colors', className)}
@@ -60,7 +69,7 @@ export default function RetireDoor({ door, title, lines, keep, confirm, onRetire
       data-cm-retire-confirm
       role="group"
       aria-label={title}
-      onKeyDown={e => { if (e.key === 'Escape') setOpen(false); }}
+      onKeyDown={e => { if (e.key === 'Escape') close(); }}
       className={cn('w-full rounded-lg border border-destructive/50 bg-card p-3 text-left', className)}
     >
       <p className="text-sm font-bold text-foreground">{title}</p>
@@ -70,7 +79,7 @@ export default function RetireDoor({ door, title, lines, keep, confirm, onRetire
           type="button"
           ref={keepRef}
           data-cm-retire-keep
-          onClick={() => setOpen(false)}
+          onClick={close}
           className="flex-1 min-h-11 rounded-lg border border-border px-3 py-2 text-xs font-bold text-foreground hover:border-primary"
         >
           {keep}

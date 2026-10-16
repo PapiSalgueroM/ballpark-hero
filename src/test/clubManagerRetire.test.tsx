@@ -238,9 +238,19 @@ describe('the retire door', () => {
     expect(document.activeElement?.hasAttribute('data-cm-retire-keep')).toBe(true);
     fireEvent.click(q(container, '[data-cm-retire-keep]')!);
     expect(q(container, '[data-cm-retire-door]')).not.toBeNull();
+    /* Review fix: and the focus goes back to the door, never to the document. */
+    expect(document.activeElement).toBe(q(container, '[data-cm-retire-door]'));
     fireEvent.click(q(container, '[data-cm-retire-door]')!);
     fireEvent.keyDown(q(container, '[data-cm-retire-confirm]')!, { key: 'Escape' });
     expect(q(container, '[data-cm-retire-door]')).not.toBeNull();
+    expect(document.activeElement).toBe(q(container, '[data-cm-retire-door]'));
+  });
+
+  it('takes no focus on its first draw', () => {
+    const before = document.activeElement;
+    const { container } = door(() => true);
+    expect(document.activeElement).toBe(before);
+    expect(document.activeElement).not.toBe(q(container, '[data-cm-retire-door]'));
   });
 });
 
