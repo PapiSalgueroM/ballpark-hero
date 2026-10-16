@@ -1,0 +1,6 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+retire: node scripts/simCmRetire.mjs
+simClubManagerSaveSize: node scripts/simClubManagerSaveSize.mjs
+c-uncapped: SAVE_SIZE_CONTROL=uncapped node scripts/simClubManagerSaveSize.mjs
+vitest-cm: node_modules/.bin/vitest run src/test/clubManager src/test/cm src/test/manager src/test/dailyMenuResume src/lib/clubManager src/test/numberFormatting.test.tsx --testTimeout=300000 --hookTimeout=120000
+decisionRegression1081: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/managerDecisionRegression1081.mjs
