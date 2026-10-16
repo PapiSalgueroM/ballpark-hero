@@ -1,0 +1,21 @@
+fairness: node scripts/simSoccerDeckFairness.mjs
+worldtruth: node scripts/simSoccerWorldTruth.mjs
+leagueseasons: node scripts/simCareerLeagueSeasons.mjs
+awardsnight: node scripts/simCareerAwardsNight.mjs
+leaguefinish: node scripts/simCareerLeagueFinish.mjs
+programme: node scripts/simCareerProgramme.mjs
+socialbrands: node scripts/simCareerSocialBrands.mjs
+storyrole: node scripts/simCareerStoryRole.mjs
+trophyruns: node scripts/simCareerTrophyRuns.mjs
+development: node scripts/simSoccerCareerDevelopment.mjs
+pressmarket: node scripts/simCareerPressMarket.mjs
+transferbrief: node scripts/simCareerTransferBrief.mjs
+derbyhistory: node scripts/simSoccerDerbyHistory.mjs
+seasonhistory: node scripts/simSoccerSeasonHistory.mjs
+agentreview: node scripts/simSoccerAgentReview.mjs
+farewell: node scripts/simSoccerFarewell.mjs
+intlreturn: node scripts/simSoccerInternationalReturn.mjs
+fair-outside: SIM_SOCCER_DECK_FAIRNESS_CONTROL=outside node scripts/simSoccerDeckFairness.mjs
+truth-outside: WORLD_TRUTH_CONTROL=outside node scripts/simSoccerWorldTruth.mjs
+promises: node scripts/simSoccerEventPromises.mjs
+cooldowns: node scripts/simCareerLifeCooldowns.mjs
