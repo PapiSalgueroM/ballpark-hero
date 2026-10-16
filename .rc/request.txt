@@ -1,0 +1,9 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-rec: node_modules/.bin/vitest run src/lib/clubManagerRecords.test.ts --testTimeout=300000 --hookTimeout=120000
+retire: node scripts/simCmRetire.mjs
+retire-tielast: RETIRE_CONTROL=tielast node scripts/simCmRetire.mjs
+retire-skipgame: RETIRE_CONTROL=skipgame node scripts/simCmRetire.mjs
+retire-nomissed: RETIRE_CONTROL=nomissed node scripts/simCmRetire.mjs
+retire-basewrites: RETIRE_CONTROL=basewrites node scripts/simCmRetire.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
