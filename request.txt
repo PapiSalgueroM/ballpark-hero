@@ -1,0 +1,11 @@
+pr269-probe: mkdir -p .p-pr && git archive HEAD | tar -x -C .p-pr && node scripts/lib/cmAiRecordProbe1344.mjs --into .p-pr && git show 1923d291:src/test/managerAiOwnership.test.ts > .p-pr/src/test/managerAiOwnership.test.ts && cd .p-pr && ../node_modules/.bin/vitest run src/test/managerAiOwnership.test.ts --reporter=verbose --testTimeout=300000 --hookTimeout=120000
+ledgerBound-probe: mkdir -p .p-lb && git archive HEAD | tar -x -C .p-lb && node scripts/lib/cmAiRecordProbe1344.mjs --into .p-lb && node .p-lb/scripts/simCmLedgerBound.mjs
+slots-probe-d: mkdir -p .p-s0 && git archive HEAD | tar -x -C .p-s0 && node scripts/lib/cmAiRecordProbe1344.mjs --into .p-s0 && node .p-s0/scripts/simClubManagerSlots.mjs
+saveSize-probe-d: mkdir -p .p-z0 && git archive HEAD | tar -x -C .p-z0 && node scripts/lib/cmAiRecordProbe1344.mjs --into .p-z0 && node .p-z0/scripts/simClubManagerSaveSize.mjs
+saveSize-probe-1: mkdir -p .p-z1 && git archive HEAD | tar -x -C .p-z1 && node scripts/lib/cmAiRecordProbe1344.mjs --into .p-z1 && SIM_SEED=1 node .p-z1/scripts/simClubManagerSaveSize.mjs
+saveSize-probe-2: mkdir -p .p-z2 && git archive HEAD | tar -x -C .p-z2 && node scripts/lib/cmAiRecordProbe1344.mjs --into .p-z2 && SIM_SEED=2 node .p-z2/scripts/simClubManagerSaveSize.mjs
+saveSize-probe-3: mkdir -p .p-z3 && git archive HEAD | tar -x -C .p-z3 && node scripts/lib/cmAiRecordProbe1344.mjs --into .p-z3 && SIM_SEED=3 node .p-z3/scripts/simClubManagerSaveSize.mjs
+saveSize-probe-4: mkdir -p .p-z4 && git archive HEAD | tar -x -C .p-z4 && node scripts/lib/cmAiRecordProbe1344.mjs --into .p-z4 && SIM_SEED=4 node .p-z4/scripts/simClubManagerSaveSize.mjs
+saveSize-probe-5: mkdir -p .p-z5 && git archive HEAD | tar -x -C .p-z5 && node scripts/lib/cmAiRecordProbe1344.mjs --into .p-z5 && SIM_SEED=5 node .p-z5/scripts/simClubManagerSaveSize.mjs
+slots-probe-1: mkdir -p .p-s1 && git archive HEAD | tar -x -C .p-s1 && node scripts/lib/cmAiRecordProbe1344.mjs --into .p-s1 && SIM_SEED=1 node .p-s1/scripts/simClubManagerSlots.mjs
+slots-probe-2: mkdir -p .p-s2 && git archive HEAD | tar -x -C .p-s2 && node scripts/lib/cmAiRecordProbe1344.mjs --into .p-s2 && SIM_SEED=2 node .p-s2/scripts/simClubManagerSlots.mjs

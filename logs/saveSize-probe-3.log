@@ -1,0 +1,43 @@
+cmAiRecordProbe1344: the AI deals are recorded in /home/runner/work/ballpark-hero/ballpark-hero/.p-z3/src/lib/clubManager.ts
+1) Fifteen seasons at three clubs: under 203000 bytes, slope under 2000 bytes a season, every ledger inside its cap
+   Real Madrid   seasons 15, day one 59812, season 1 175253, season 15 201847, slope after season 3 844 bytes a season
+                 sizes: 59812 175253 179519 185998 194392 188388 188722 195748 189771 197801 191006 198909 199238 200059 193040 201847
+   Everton       seasons 15, day one 56865, season 1 158886, season 15 203699, slope after season 3 1392 bytes a season
+                 sizes: 56865 158886 177004 177636 183482 191401 196914 199231 201595 201444 201391 202610 203543 203971 202700 203699
+  FAIL: Everton: the save is 203699 bytes after 15 seasons, over the 203000 budget
+   Lincoln City  seasons 15, day one 57543, season 1 159471, season 15 204706, slope after season 3 -181 bytes a season
+                 sizes: 57543 159471 168482 175643 186194 218500 225440 199822 200711 201393 202404 204114 202998 203670 204047 204706
+  FAIL: Lincoln City: the save is 204706 bytes after 15 seasons, over the 203000 budget
+   board nudges over the whole run: 264
+2) An oversized pre 634 save shrinks on load, the trim is a fixed point, and the next season plays the same
+   season 2 save 177004 bytes, inflated to 480669, loaded back as 200555
+   ledgers after load: h2h 300, transferLog 80, inbox 8, aiHeadlines 8
+   a season from the trimmed save and from the oversized one, same seed: identical (table, results, squad, budget, board, trophies, career stats)
+3) saveCareer says whether it wrote: false when refused twice, lean and true when refused once, same bytes twice
+   the season 15 save: 203699 bytes, h2h 300 rows, at most 13 per opponent
+   store throws on every write: saveCareer returned false after 2 attempts (203699, 192147 bytes)
+   store throws once: saveCareer returned true, wrote 192147 bytes (11552 fewer), h2h 167 rows, at most 6 per opponent
+   working store: true then true, 203699 bytes then 203699, identical true, equal to the trimmed career true
+4) The hook, rendered: the pagehide write, the hidden tab write, the same bytes, and saveFailed
+   Test Files  1 failed (1)
+the test file (or the hook it imports) did not load:
+
+ RUN  v3.2.7 /home/runner/work/ballpark-hero/ballpark-hero/.p-z3
+
+
+ Test Files  1 failed (1)
+      Tests  no tests
+   Start at  11:47:19
+   Duration  834ms (transform 15ms, setup 0ms, collect 0ms, tests 0ms, environment 333ms, prepare 184ms)
+
+
+⎯⎯⎯⎯⎯⎯ Failed Suites 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/test/clubManagerSaveSize.test.tsx [ src/test/clubManagerSaveSize.test.tsx ]
+Error: Cannot find module '/home/runner/work/ballpark-hero/ballpark-hero/src/test/setup.ts'
+Caused by: Error: Failed to load url /home/runner/work/ballpark-hero/ballpark-hero/src/test/setup.ts (resolved id: /home/runner/work/ballpark-hero/ballpark-hero/src/test/setup.ts). Does the file exist?
+ ❯ loadAndTransform ../node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:51969:17
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+

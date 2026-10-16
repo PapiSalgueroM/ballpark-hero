@@ -1,0 +1,11 @@
+pr269-probe exit=1 2s |    Duration  754ms (transform 15ms, setup 0ms, collect 0ms, tests 0ms, environment 308ms, prepare 217ms)
+saveSize-probe-d exit=1 71s | ⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+slots-probe-d exit=0 83s | simClubManagerSlots: all sections green
+saveSize-probe-2 exit=1 65s | ⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+saveSize-probe-1 exit=1 73s | ⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+saveSize-probe-3 exit=1 67s | ⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+saveSize-probe-4 exit=1 73s | ⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+saveSize-probe-5 exit=1 69s | ⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+slots-probe-1 exit=0 82s | simClubManagerSlots: all sections green
+slots-probe-2 exit=0 69s | simClubManagerSlots: all sections green
+ledgerBound-probe exit=1 382s | simCmLedgerBound: RED, sections 1 (2), 4 (5)
