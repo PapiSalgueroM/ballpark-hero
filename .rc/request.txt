@@ -1,0 +1,8 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+poaching: node scripts/simUsCoachPoaching.mjs
+poaching-phantom: US_COACH_POACHING_CONTROL=phantom node scripts/simUsCoachPoaching.mjs
+poaching-credit: US_COACH_POACHING_CONTROL=credit node scripts/simUsCoachPoaching.mjs
+poaching-rng: US_COACH_POACHING_CONTROL=rng node scripts/simUsCoachPoaching.mjs
+coachCareer: node scripts/simUsCoachCareer.mjs
+coaching: node scripts/simUsCoaching.mjs
+vitest: node_modules/.bin/vitest run src/test/usCoachRetirement.test.tsx src/lib/usCoachPoaching.test.ts src/test/usCareerReveals.test.tsx src/test/usCareerProgrammeUi.test.tsx --reporter=verbose --testTimeout=300000 --hookTimeout=120000
