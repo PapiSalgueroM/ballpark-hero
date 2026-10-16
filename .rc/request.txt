@@ -1,0 +1,6 @@
+#!build
+#!playwright
+walk: node scripts/playCmOldCareersWorld.mjs
+walk-never: PLAY_OLD_WORLD_CONTROL=never node scripts/playCmOldCareersWorld.mjs
+writes: node scripts/simWritesAreSent.mjs
+weight: git worktree add -q /tmp/wbase 3a147a7cb4a13e5a931f32eac8b8a7bd65ed10cb && ln -s $PWD/node_modules /tmp/wbase/node_modules && (cd /tmp/wbase && node_modules/.bin/vite build > /tmp/wbase-build.log 2>&1; echo "base build exit $?") && node .rc/x/weigh.mjs dist /tmp/wbase/dist
