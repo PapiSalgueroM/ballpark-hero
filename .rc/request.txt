@@ -1,0 +1,3 @@
+#!serve
+#!playwright
+browserFences: ENGINES=chromium ONLY=simResultMoment,simWritesAreSent node scripts/runAllSims.mjs --browser
