@@ -1,0 +1,9 @@
+treeWithoutMerge: taking the piece out conflicts in src/components/club-manager/ClubManagerHelp.tsx: no honest base
+base 
+[dailies] Hot Seat takeovers: 160 (80 dated, 80 free); on CM_BOARD_BASE 42 of the 110 on the current rules took over with a failed line on the card
+FAIL [dailies] 160 Hot Seat takeovers: the card less its failed lines on the current rules, the whole card on the old rules, nothing else moved but a suitor's name (125; first 2026-09-24 (free run) Pumas UNAM: the takeover moved beyond its card: .careerStats.highestScoring: head {"opp":"Atlante","score":"6-3","res":"W","season":1,"club":"Pumas UNAM","comp":" base undefined)
+[dailies] Hot Seat: 80 dates (60 from 2026-09-24 and every seventh day back); 50 identical, 0 differ only in a suitor's name, 30 moved; 6 raised an approach; 14 dates compared with the base's card less the failed lines their takeover dropped
+FAIL [dailies] 80 Hot Seat days: every run equal to CM_BOARD_BASE but for a suitor's name (30; first 2026-10-24: .state.careerStats.highestScoring: head {"opp":"Fluminense","score":"2-3","res":"L","season":1,"club":"Athletico Paranae base undefined)
+ok   [dailies] 30 Deadline Day days: the deal, the grade and the state's keys equal to CM_BOARD_BASE
+control hotstart: 30 dates moved without the line
+control hotstart FIRED: 2 of 3 checks red

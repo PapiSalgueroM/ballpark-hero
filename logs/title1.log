@@ -1,0 +1,24 @@
+treeWithoutMerge: taking the piece out conflicts in src/components/club-manager/ClubManagerHelp.tsx: no honest base
+base 
+[title] 281 rollovers, 231 stays: on CM_BOARD_BASE 134 of 174 A or B seasons opened under Safe (64 of 71 titles); on the head 0
+  by fate, none n 230: base mean 51.27 (p10 39.5 to p90 65), head mean 62.58 (p10 38 to p90 71)
+  by fate, up n 1: base mean 82 (p10 82 to p90 82), head mean 69 (p10 69 to p90 69)
+  by grade, A n 115: base mean 57.17 (p10 49 to p90 72), head mean 70.71 (p10 69 to p90 78)
+  by grade, B n 59: base mean 50.05 (p10 43.5 to p90 56.5), head mean 69 (p10 69 to p90 69)
+  by grade, C n 46: base mean 42.17 (p10 36 to p90 47.5), head mean 40.48 (p10 35 to p90 45.5)
+  by grade, D n 11: base mean 36.82 (p10 35 to p90 39.5), head mean 36.05 (p10 35 to p90 37.5)
+ok   [title] every A or B season opens the next at Safe or more (0 of 174 under)
+ok   [title] every D or F season opens the next under Safe (0 of 11 at Safe or more)
+ok   [title] every move at the summer opens at BOARD_FRESH (0 of 50 do not)
+  231 stays recomputed from the season they had; 7 where the summer moved the club's expectation, 231 with a card that weighs a hit other than one
+ok   [title] every stay opens at the sum of the season it had (the expectation as played, the card's weights)
+ok   [title] startNextSeason draws the same number of times on head and base wherever the kitty band did not bind
+ok   [title] and writes the same save but for the opening (43 rollovers where the band bound left to section kitty)
+[kitty] tier 1: the band bound 0 of 120 staying rollovers (0 with a trophy); next budget over the club's: base median 2.12 p90 2.46, head median 2.12 p90 2.46
+[kitty] tier 2: the band bound 0 of 23 staying rollovers (0 with a trophy); next budget over the club's: base median 2.16 p90 2.49, head median 2.16 p90 2.49
+[kitty] tier 3: the band bound 3 of 21 staying rollovers (0 with a trophy); next budget over the club's: base median 2 p90 3.6, head median 2 p90 3.33
+[kitty] tier 4: the band bound 174 of 239 staying rollovers (29 with a trophy); next budget over the club's: base median 4.47 p90 7.5, head median 3.25 p90 3.25
+  134 rollovers of the tier 4 fleet where the band bound: their draws and the lines after the pot are counted, never held equal
+ok   [kitty] 403 staying rollovers: the cheque never passes max(10, 1.7 x the club's budget)
+ok   [kitty] and equals the old cheque wherever the old one was inside the band (0 differ)
+simCmBoardVerdict GREEN: 8 of 8 checks green (parts title, kitty, 387 s)
