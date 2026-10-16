@@ -1,0 +1,2 @@
+#!serial
+appeal-oldengine: git show 3a147a7cb4a13e5a931f32eac8b8a7bd65ed10cb:src/lib/clubManager.ts > src/lib/clubManager.ts && git show 3a147a7cb4a13e5a931f32eac8b8a7bd65ed10cb:src/lib/clubManagerCalendar.ts > src/lib/clubManagerCalendar.ts && git show 3a147a7cb4a13e5a931f32eac8b8a7bd65ed10cb:scripts/fixtures/managerAppealIsolation1081/manifest.json > scripts/fixtures/managerAppealIsolation1081/manifest.json && node scripts/simManagerAppealIsolation.mjs; s=$?; git checkout -- src scripts; exit $s
