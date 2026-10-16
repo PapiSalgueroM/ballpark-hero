@@ -1,0 +1,3 @@
+#!serial
+new: node_modules/.bin/vitest run src/test/usCareerReports1346.test.tsx -t "No seasons coached" --testTimeout=300000 --hookTimeout=120000
+mut: git show 6923e9ec:src/components/us-career/CoachCareerPanel.tsx > src/components/us-career/CoachCareerPanel.tsx && git diff --stat && node_modules/.bin/vitest run src/test/usCareerReports1346.test.tsx -t "No seasons coached" --testTimeout=300000 --hookTimeout=120000; s=$?; git checkout -- src; exit $s
