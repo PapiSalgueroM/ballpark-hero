@@ -1,0 +1,4 @@
+head-unseeded: node scripts/simCmUnseededWorld.mjs
+head-continuity: node scripts/simManagerWorldContinuity.mjs
+head-size: node scripts/qa/managerWorldSizeDiagnostic.mjs
+continuity-controls: MANAGER_WORLD_CONTINUITY_CONTROL=all node scripts/simManagerWorldContinuity.mjs
