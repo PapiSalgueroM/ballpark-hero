@@ -1,0 +1,22 @@
+build exit=0 33s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+vitest1346 exit=0 20s |    Duration  19.32s (transform 4.42s, setup 753ms, collect 14.06s, tests 30.28s, environment 4.95s, prepare 1.31s)
+coachret-ctl exit=0 29s | controls (exit/FIRED): drift=1/1 early=1/1 noretire=1/1 noguard=1/1 nosit=1/1 noaccept=1/1 norefresh=1/1
+coachret exit=0 57s | PASS: ALL US COACHING RETIREMENT CHECKS PASSED
+skips-ctl exit=0 4s | controls (exit/FIRED): noundo=1/1 leak=1/1 graded=1/1 clamp=1/1
+tsc exit=0 112s | 
+confirm exit=0 9s | Career confirmation: CRLF controls bind, raw bytes held and owned copies cleaned. Simulated states/explicit events do not prove full-season gameplay or native Enter, view
+poach exit=0 3s | Coach poaching: CRLF anchors/raw bytes held, owned copies cleaned; fictional pure-engine fixtures do not prove UI gameplay or sports history.
+coachcareer exit=0 3s | PASS: ALL US COACHING CAREER CHECKS PASSED
+coaching exit=0 7s | PASS: ALL US COACHING CHECKS PASSED
+parity exit=0 78s | simUsBoardParity: green. Four sports replayed click for click, save for save and screen for screen.
+draftnight exit=0 0s | simDraftNight: green. Every pick the engine made is shown, none is invented, and the run cannot become a wait.
+prospect exit=0 17s | simUsCareerProspect: 36 actual-board outcomes passed across all four sports
+skips exit=0 111s | PASS: ALL US CAREER SKIP CHECKS PASSED
+usweight exit=0 0s | simUsCareerWeight: green. 31 checks: the four wrappers hand the board their own binding, no shared file or binding imports another sport, and every control fired.
+stale1338 exit=0 0s | simStaleChunk: green. A tab left open across a deploy reloads once for a missing chunk instead of painting the broken page.
+access exit=0 0s | simAccessibility: all green
+trust exit=0 0s | simTrustCopy: green. One disclaimer under every page and one count of the games, the registry's own.
+predraft exit=0 30s | simCareerPreDraft [seed set a]: ALL GREEN
+storage exit=0 5s | simStorageWrites: all green (owed: 12)
+rival exit=0 21s | No rival product names found. 0 findings.
+anchors exit=0 46s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
