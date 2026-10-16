@@ -1,0 +1,6 @@
+#!build
+weights: git worktree add /tmp/base d4f2c6f6 >/dev/null 2>&1 && ln -s "$PWD/node_modules" /tmp/base/node_modules && (cd /tmp/base && node_modules/.bin/vite build --outDir /tmp/basedist --emptyOutDir > /tmp/basebuild.log 2>&1 || (tail -20 /tmp/basebuild.log; exit 1)) && node .rc/x/weights.mjs /tmp/basedist dist
+anchors: node scripts/simHarnessAnchors.mjs
+rival: node scripts/simNoRivalNames.mjs
+storage: node scripts/simStorageWrites.mjs
+usWeight: node scripts/simUsCareerWeight.mjs

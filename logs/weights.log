@@ -1,0 +1,14 @@
+entry base index-BZ0iZQYr.js, head index-Dz5wC_Qs.js
+NbaMyCareer chunk: base 253.2 KB raw / 85.6 KB gzip (1 files), head 253.2 / 85.6 (1), gzip delta +13 bytes
+NbaMyCareer route: base 918.7 KB raw / 305.3 KB gzip (46 files), head 922.4 / 306.3 (46), gzip delta +1033 bytes
+NbaMyCareer all: base 13675.3 KB raw / 4100.7 KB gzip (521 files), head 13679.8 / 4101.7 (521), gzip delta +1023 bytes
+NflMyCareer chunk: base 15.4 KB raw / 6.8 KB gzip (1 files), head 15.4 / 6.8 (1), gzip delta +9 bytes
+NflMyCareer route: base 680.5 KB raw / 226.3 KB gzip (45 files), head 684.3 / 227.3 (45), gzip delta +1029 bytes
+NflMyCareer all: base 13675.3 KB raw / 4100.7 KB gzip (521 files), head 13679.8 / 4101.7 (521), gzip delta +1023 bytes
+MlbMyCareer chunk: base 239.1 KB raw / 80.3 KB gzip (1 files), head 239.1 / 80.3 (1), gzip delta +6 bytes
+MlbMyCareer route: base 914.9 KB raw / 302.9 KB gzip (46 files), head 918.7 / 303.9 (46), gzip delta +1026 bytes
+MlbMyCareer all: base 13675.3 KB raw / 4100.7 KB gzip (521 files), head 13679.8 / 4101.7 (521), gzip delta +1023 bytes
+NhlMyCareer chunk: base 244.5 KB raw / 80.8 KB gzip (1 files), head 244.6 / 80.8 (1), gzip delta +8 bytes
+NhlMyCareer route: base 920.4 KB raw / 303.4 KB gzip (46 files), head 924.1 / 304.4 (46), gzip delta +1028 bytes
+NhlMyCareer all: base 13675.3 KB raw / 4100.7 KB gzip (521 files), head 13679.8 / 4101.7 (521), gzip delta +1023 bytes
+WEIGHTS: MEASURED (printed, not banded)

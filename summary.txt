@@ -1,0 +1,6 @@
+build exit=0 27s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+rival exit=0 17s | No rival product names found. 0 findings.
+storage exit=0 3s | simStorageWrites: all green (owed: 12)
+usWeight exit=0 0s | simUsCareerWeight: green. 31 checks: the four wrappers hand the board their own binding, no shared file or binding imports another sport, and every control fired.
+anchors exit=0 44s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+weights exit=0 45s | WEIGHTS: MEASURED (printed, not banded)
