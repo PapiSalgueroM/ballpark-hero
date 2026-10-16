@@ -1,0 +1,6 @@
+#!playwright
+#!serial
+buildA: node_modules/.bin/vite build --outDir /tmp/dA --emptyOutDir > /tmp/bA.log 2>&1; s=$?; tail -1 /tmp/bA.log; exit $s
+buildL: node .rc/x/caller1347lib.mjs && node_modules/.bin/vite build --outDir /tmp/dL --emptyOutDir > /tmp/bL.log 2>&1; s=$?; tail -1 /tmp/bL.log; git checkout -- src; exit $s
+weighL: node .rc/x/weigh1347.mjs /tmp/dA /tmp/dL
+routesL: node .rc/x/weighRoutes1347.mjs /tmp/dA /tmp/dL
