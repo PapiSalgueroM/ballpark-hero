@@ -1,0 +1,6 @@
+c-noguard exit=1 22s | simCmWorldMoves: control noguard FIRED: section 2 red (168)
+c-nocarry exit=1 22s | simCmWorldMoves: control nocarry FIRED: section 3 red (318)
+c-drawshift exit=1 16s | simCmWorldMoves: control drawshift FIRED: section 11 red (9)
+c-noflush exit=1 41s | simCmWorldMoves: control noflush FIRED: section 1 red (28), first at opening
+c-noskip exit=1 22s | simCmWorldMoves: control noskip FIRED: section 10 red (10)
+s14-now exit=0 31s | simCmWorldMoves: green, sections 1, 4 held

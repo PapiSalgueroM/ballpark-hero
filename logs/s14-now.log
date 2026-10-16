@@ -1,0 +1,11 @@
+1) ownership: seeded careers, 6 seasons, seeds 1,2, the head engine
+   opening  6 windows, 28 AI deal lines, 0 not placed at the buyer, ledger 4.7 records and 2457 units a window on average
+   january  36 windows, 157 AI deal lines, 0 not placed at the buyer, ledger 36.5 records and 5139 units a window on average
+   summer   30 windows, 131 AI deal lines, 0 not placed at the buyer, ledger 38.3 records and 4685 units a window on average
+   6 careers (0 sacked early), 306417 listings checked by the one club rule, 735 moved men followed over 30 rollovers
+   failures by check: (i) 0, (ii) 0, (iii) 0; the first at none
+   the opening window's refusals (deal lines it closed before the seed that the flush could not place): 0 of 28 (expected 0)
+4) the market: 316 moved men on the screen's market at their buyer (1 hidden behind a namesake, counted), 1264 door presses checked, the buy door locked on 172; a season later 258 on sale there, 137 bought, 6 moved on or retired
+   the screen was checked against 360531 buildMarket rows; 950 Talk and buy presses on rows it marks joinedThisSeason
+   marketForScreen 3.67 ms a call against buildMarket's 0.99 ms on the same states (limit 3 x + 5 ms)
+simCmWorldMoves: green, sections 1, 4 held
