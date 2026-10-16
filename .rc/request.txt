@@ -1,0 +1,11 @@
+headsha: git log --oneline -1
+vitest-life: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node_modules/.bin/vitest run src/test/soccerCareerLifeChoicePreviews.test.ts src/test/soccerCareerStatRewards.test.ts src/test/soccerCareerPendingMorale.test.ts src/test/soccerCareerPendingPopularity.test.ts --testTimeout=300000 --hookTimeout=120000
+simCareerLife: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerLife.mjs
+simCareerLifeCooldowns: node scripts/simCareerLifeCooldowns.mjs
+simCareerSocialBrands: node scripts/simCareerSocialBrands.mjs
+simCareerStoryRole: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerStoryRole.mjs
+simSoccerAgentReview: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerAgentReview.mjs
+simSoccerVeteranOffers: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerVeteranOffers.mjs
+simSoccerWorldTruth: node scripts/simSoccerWorldTruth.mjs
+simCareerProgramme: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerProgramme.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
