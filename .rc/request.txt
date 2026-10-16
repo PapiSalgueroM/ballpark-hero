@@ -1,0 +1,22 @@
+fair-1: SEED_OFFSET=1 node scripts/simSoccerDeckFairness.mjs
+fair-2: SEED_OFFSET=2 node scripts/simSoccerDeckFairness.mjs
+fair-3: SEED_OFFSET=3 node scripts/simSoccerDeckFairness.mjs
+fair-4: SEED_OFFSET=4 node scripts/simSoccerDeckFairness.mjs
+fair-outside: SIM_SOCCER_DECK_FAIRNESS_CONTROL=outside node scripts/simSoccerDeckFairness.mjs
+truth-outside: WORLD_TRUTH_CONTROL=outside node scripts/simSoccerWorldTruth.mjs
+promises: node scripts/simSoccerEventPromises.mjs
+cooldowns: node scripts/simCareerLifeCooldowns.mjs
+cool-nocooldown: SIM_CAREER_LIFE_COOLDOWNS_CONTROL=nocooldown node scripts/simCareerLifeCooldowns.mjs
+cool-oneoption: SIM_CAREER_LIFE_COOLDOWNS_CONTROL=oneoption node scripts/simCareerLifeCooldowns.mjs
+cool-sharedbatch: SIM_CAREER_LIFE_COOLDOWNS_CONTROL=sharedbatch node scripts/simCareerLifeCooldowns.mjs
+derbies: node scripts/simCareerDerbies.mjs
+coldcontext: node scripts/simSoccerCareerColdContext.mjs
+documentary: node scripts/simSoccerCareerDocumentaryReview.mjs
+pendingmorale: node scripts/simSoccerCareerPendingMorale.mjs
+pendingpop: node scripts/simSoccerCareerPendingPopularity.mjs
+routines: node scripts/simSoccerCareerRoutineEvents.mjs
+savedloan: node scripts/simSoccerCareerSavedLoan.mjs
+statrewards: node scripts/simSoccerCareerStatRewards.mjs
+veterantalks: node scripts/simSoccerVeteranTalks.mjs
+eventdeck-16: SIM_EVENT_DECK_SECTIONS=14,15,16 node scripts/simEventDeck.mjs
+anchors: node scripts/simHarnessAnchors.mjs
