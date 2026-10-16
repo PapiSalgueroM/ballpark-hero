@@ -1,0 +1,12 @@
+headsha: git log --oneline -3 && git rev-parse HEAD~1
+simSoccerDeckFairness: node scripts/simSoccerDeckFairness.mjs
+simCareerLeagueSeasons: node scripts/simCareerLeagueSeasons.mjs
+simCareerAwardsNight: node scripts/simCareerAwardsNight.mjs
+simCareerLeagueFinish: node scripts/simCareerLeagueFinish.mjs
+simCareerSocialBrands: node scripts/simCareerSocialBrands.mjs
+simCareerStoryRole: node scripts/simCareerStoryRole.mjs
+simCareerTrophyRuns: node scripts/simCareerTrophyRuns.mjs
+simSoccerCareerDevelopment: node scripts/simSoccerCareerDevelopment.mjs
+simCareerPressMarket: node scripts/simCareerPressMarket.mjs
+simCareerTransferBrief: node scripts/simCareerTransferBrief.mjs
+simSoccerDerbyHistory: node scripts/simSoccerDerbyHistory.mjs
