@@ -2,8 +2,9 @@
  *
  * /nba-my-career and /nfl-my-career (the two most played US careers), at 390 by 844 (touch) and 1280 by 800:
  *   W1 a finished coaching career reloads on its done screen, and the retirement screen's card reviews it.
- *   W2 an active coach opens Retire from coaching, keeps coaching (nothing saved, focus back on the opener), then
- *      retires: the done screen is on screen, done is saved, and a reload lands on it again.
+ *   W2 an active coach leaves for the retirement screen and comes back (the action card is on screen), opens
+ *      Retire from coaching, keeps coaching (nothing saved, focus back on the opener), then retires: the done
+ *      screen is on screen, done is saved, and a reload lands on it again.
  *   W3 a prospect skips the showcase, undoes it (the saved road state is the one before the skip), skips again,
  *      presses Draft day, skips draft night and watches it again; the night's button row keeps its height.
  *   W4 the same night under reduced motion: it starts on its last frame and there is nothing to watch again.
@@ -176,6 +177,11 @@ async function walkW2(browser, sport, size) {
     const opener = page.getByRole('button', { name: 'Retire from coaching', exact: true });
     await opener.waitFor();
     await check('hub', '[data-coach-retire]', '[data-coach-retire] button');
+    /* The way back in from the bottom of the retirement screen lands on the action card, not above the screen. */
+    await tap(page.getByRole('button', { name: /Back to the playing career/ }));
+    await tap(page.getByRole('button', { name: 'Back to the sideline', exact: true }));
+    await opener.waitFor();
+    await check('back-in', '[data-coach-retire]');
     const before = await bytes();
     await knock('W2', '[data-coach-retire]');
     await tap(opener);

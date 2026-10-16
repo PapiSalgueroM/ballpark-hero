@@ -65,8 +65,13 @@ export default function CoachCareerPanel({ state, playerName, onChange, onBack, 
     : totals.yearsOut === 0 ? 'Looking for a job'
     : `${totals.yearsOut} season${totals.yearsOut === 1 ? '' : 's'} without one`;
 
+  /* Round 1346: the panel also reveals its action card when it first mounts. The board opens it from the bottom of
+     the long retirement screen ("Back to the sideline", "Review coaching career"), and the walk measured the card
+     500 to 970 px above the screen after that press. On a load at the top the card is already readable, so the
+     hook leaves the page alone. */
   const revealRef = useRevealScroll<HTMLDivElement>(
     `${state.results.length}:${state.unemployed}:${state.offers.length}:${panel}:${state.done}`,
+    { skipFirst: false },
   );
 
   /* Round 530: the notes the last coached season produced, kept only for
