@@ -1,0 +1,47 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [31m❯[39m src/lib/clubManagerBoardVerdict.test.ts [2m([22m[2m12 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[32m 25[2mms[22m[39m
+   [32m✓[39m Round 1335: the board reads the season you had[2m > [22mkeeps the old openings named and opens a new job inside Safe[32m 2[2mms[22m[39m
+   [32m✓[39m Round 1335: the board reads the season you had[2m > [22mweighs the main demand three times a side ask and a board ask half of one[32m 1[2mms[22m[39m
+   [32m✓[39m Round 1335: the board reads the season you had[2m > [22mM6: Liverpool win the league with three side asks missed and open next season Safe[32m 1[2mms[22m[39m
+   [32m✓[39m Round 1335: the board reads the season you had[2m > [22mthe help example: 59 raw, an A season, so it opens at BOARD_FRESH[32m 0[2mms[22m[39m
+   [32m✓[39m Round 1335: the board reads the season you had[2m > [22mM7: Brighton lose their opener and the board is still Safe after a help sized defeat[32m 0[2mms[22m[39m
+   [32m✓[39m Round 1335: the board reads the season you had[2m > [22mM8: West Ham go up in 2nd in the Championship and the grade knows it[32m 1[2mms[22m[39m
+   [32m✓[39m Round 1335: the board reads the season you had[2m > [22mM13: OB, tier 4, are never offered a tier 1 club, and a title lets a club reach two tiers[32m 1[2mms[22m[39m
+   [32m✓[39m Round 1335: the board reads the season you had[2m > [22mM14: OB beat their expectation by eight and their cheque stays inside the band[32m 0[2mms[22m[39m
+   [32m✓[39m Round 1335: the board reads the season you had[2m > [22mp8: a sixth place season above expectation is an A without the statues[32m 1[2mms[22m[39m
+   [32m✓[39m Round 1335: the board reads the season you had[2m > [22mcaps a relegation at C, at B with a trophy, and keeps an escape grade[32m 1[2mms[22m[39m
+[31m   [31m×[31m Round 1335: the board reads the season you had[2m > [22mbands the opening by grade and clamps it to 35 and 82[39m[32m 8[2mms[22m[39m
+[31m     → expected 76.5 to be 82 // Object.is equality[39m
+   [32m✓[39m Round 1335: the board reads the season you had[2m > [22mwrites every line with no dash and in the board or the fans voice[32m 1[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/lib/clubManagerBoardVerdict.test.ts[2m > [22mRound 1335: the board reads the season you had[2m > [22mbands the opening by grade and clamps it to 35 and 82
+[31m[1mAssertionError[22m: expected 76.5 to be 82 // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- 82[39m
+[31m+ 76.5[39m
+
+[36m [2m❯[22m src/lib/clubManagerBoardVerdict.test.ts:[2m93:136[22m[39m
+    [90m 91| [39m    expect(openingConfidence({ ...base, finish: 1, grade: 'A', objecti…
+    [90m 92| [39m    expect(openingConfidence({ ...base, finish: 24, grade: 'F', object…
+    [90m 93| [39m    expect(openingConfidence({ ...base, finish: 1, grade: 'A', objecti…
+    [90m   | [39m                                                                                                                                       [31m^[39m
+    [90m 94| [39m  })[33m;[39m
+    [90m 95| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m11 passed[39m[22m[90m (12)[39m
+[2m   Start at [22m 14:23:29
+[2m   Duration [22m 1.38s[2m (transform 85ms, setup 60ms, collect 84ms, tests 25ms, environment 513ms, prepare 221ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/clubManagerBoardVerdict.test.ts,title=src/lib/clubManagerBoardVerdict.test.ts > Round 1335%3A the board reads the season you had > bands the opening by grade and clamps it to 35 and 82,line=93,column=136::AssertionError: expected 76.5 to be 82 // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- 82%0A+ 76.5%0A%0A ❯ src/lib/clubManagerBoardVerdict.test.ts:93:136%0A%0A

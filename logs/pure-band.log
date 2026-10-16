@@ -1,0 +1,16 @@
+ok   [pure] 4032 grid seasons with no fate grade exactly as the base ladder (0 differ)
+ok   [pure] a season with no fate names why: title, silver or over for an A, its grade otherwise (0 wrong)
+ok   [pure] fate 'up' grades A or B (an A stays an A) with the 'up' kind (0 wrong)
+ok   [pure] fate 'down' grades C or worse (B or worse with a trophy), worse grades kept (0 wrong)
+ok   [pure] fate 'escape' keeps the ladder grade with the 'escape' kind (0 wrong)
+FAIL [pure] 86400 openings: an A or a B opens at BOARD_FRESH (69) or more (28050 under)
+ok   [pure] a D or an F opens at 59 or less (0 over)
+ok   [pure] every opening is 35 to 82 (0 outside)
+ok   [pure] objectiveWeight: league 3, each board ask 0.5, any other id and no id 1
+ok   [pure] 573696 allocations never above max(10, 1.7 x budget) (0 above)
+ok   [pure] and equal to the flat formula wherever it is inside the band (0 differ; the band binds on 66189)
+ok   [pure] offerStepOk: one tier up, two after a title, any tier at or below
+ok   [pure] BOARD_SAFE_LINE (60) equals clubManagerMeters' BOARD_SAFE (60)
+ok   [pure] the statues and the murals live only under a title or two trophies (none in VERDICT_LINES)
+ok   [pure] LEGACY_BOARD_START 60 and LEGACY_NEW_JOB_BOARD 62
+control band FIRED: 1 of 15 checks red

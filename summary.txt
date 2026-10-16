@@ -1,0 +1,7 @@
+pure exit=0 2s | simCmBoardVerdict GREEN: 15 of 15 checks green (parts pure, 0 s)
+vitest exit=1 2s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/clubManagerBoardVerdict.test.ts,title=src/lib/clubManagerBoardVerdict.test.ts > Round 1335%3A the board
+pure-safeline exit=1 4s | control safeline FIRED: 2 of 15 checks red
+pure-upgrade exit=1 8s | control upgrade FIRED: 1 of 15 checks red
+pure-band exit=1 11s | control band FIRED: 1 of 15 checks red
+norival exit=0 15s | No rival product names found. 0 findings.
+tsc exit=0 65s | 
