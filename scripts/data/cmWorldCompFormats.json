@@ -1,0 +1,227 @@
+{
+  "what": "Round 1347. The Champions League group stage format of the four seasons Club Manager's eras start in (2005-06, 2010-11, 2015-16, 2020-21), held as DATA with the pages it was read from, plus the real 2026-27 nights the league phase is played on. src/lib/worldCompetition.ts states these numbers and scripts/simWorldUcl.mjs section 0 fails if the two disagree. The league phase itself is Round 1228's ledger (scripts/data/cmUclFormat.json), read and never edited here.",
+  "ledgerKey": "cm-world-comp-formats-v1",
+  "readOn": "2026-10-16",
+  "rules": [
+    "verified needs two sources from two publishers on two hosts, none a wiki. A club's own site counts as a publisher apart from UEFA.",
+    "onePublisher and toVerify rows are marked, never filled, and no constant may stand on them: their usedBy list is empty and section 0 holds that.",
+    "A literal is a line the page reader quoted from the page on the read day. A figure a row states is printed, in digits or in words, by two of its publishers, each in a line about that figure.",
+    "A row names the seasons it speaks for, by starting year. A page about one season speaks for that season only; a page about the whole group stage era (2003-04 to 2023-24) speaks for every season in it, and its row says so in periodNote.",
+    "What the game plays in place of a real rule it does not model is written under standIns, never as a row."
+  ],
+  "eraSeasons": [2005, 2010, 2015, 2020],
+  "g8": { "clubs": 32, "groups": 8, "groupSize": 4, "games": 6, "advance": 2, "pots": 4 },
+  "standIns": [
+    "Pots: the game seeds all four pots by its own strength, the holder first when the save knows one. No club coefficient is kept, so the real pot rule of each season (G2) is recorded and not played.",
+    "2005-06: the game applies the association rule to every club. UEFA's draw page of that season says holders Liverpool were without country protection; that exception rests on one recorded publisher (see G3-2005's periodNote), so it is no row's fact and the game does not model it.",
+    "The quarter-finals and semi-finals follow the bracket order the participant's engine already uses, not the open draw the real ones had.",
+    "The nights sit on the game's own calendar. The real 2026-27 months (N1) are recorded for their order, and the screen prints the game's dates, never these."
+  ],
+  "rows": [
+    { "id": "G1", "seasons": [2005, 2010, 2015, 2020], "fact": "The group stage: 32 clubs drawn into eight groups of four; each club plays the other three home and away, six matches; the top two of each group go through to the round of 16.", "figures": { "clubs": 32, "groups": 8, "groupSize": 4, "games": 6, "advance": 2 }, "status": "verified", "usedBy": ["G8_SHAPE.clubs", "G8_SHAPE.groups", "G8_SHAPE.groupSize", "G8_SHAPE.games", "G8_SHAPE.advance"],
+      "periodNote": "ESPN, Al Jazeera and goal.com describe the format the league phase replaced, which both ESPN and Al Jazeera date from 2003 (ESPN: the previous 21 seasons, 2003-04 to 2023-24). UEFA's page is the 2015-16 draw.",
+      "sources": [
+        { "publisher": "ESPN, Dale Johnson", "url": "https://www.espn.com/soccer/story/_/id/41040476/champions-league-draw-how-new-format-works", "published": "2024-09-17", "literal": [
+          "For the previous 21 seasons, 32 teams qualified and were drawn into eight groups of four.",
+          "The top two teams went through to the round of 16, with third dropping into the UEFA Cup/Europa League"
+        ] },
+        { "publisher": "Al Jazeera", "url": "https://www.aljazeera.com/sports/2024/8/29/format-teams-dates-the-uefa-champions-league-2024-25-season-explained", "published": "2024-08-29", "literal": [
+          "Since 2003, the Champions League featured 32 clubs split into eight groups of four,",
+          "with the top two from each section advancing to the last 16.",
+          "Earlier, participating teams played six games in the group stage, facing each opponent home and away."
+        ] },
+        { "publisher": "goal.com, Ryan Kelly", "url": "https://www.goal.com/en/lists/new-champions-league-format-explained/blt1b8b510a103313c2", "published": "2024-09-16", "literal": [
+          "32-team group stage",
+          "Eight groups of four teams",
+          "Six games vs three teams (three home, three away)",
+          "Top two in each group qualifies"
+        ] },
+        { "publisher": "UEFA, 2015/16 group stage draw", "url": "https://www.uefa.com/uefachampionsleague/news/0253-0d043866fe5a-3749f11d1b59-1000--uefa-champions-league-group-stage-draw", "published": "2015-06-01", "literal": [
+          "32 teams entered the draw and were split into eight groups of four"
+        ] }
+      ] },
+    { "id": "G2-2005", "seasons": [2005], "fact": "The 2005-06 pots: all four filled by club coefficient, holders Liverpool placed in pot 1 on their coefficient.", "status": "onePublisher", "usedBy": [], "sources": [
+        { "publisher": "UEFA, Old and new meet in Monaco", "url": "https://www.uefa.com/uefachampionsleague/news/01ac-0ea80475ea9e-604a23d0ab93-1000--old-and-new-meet-in-monaco", "published": "2005-08-25", "literal": [
+          "32 teams who have been divided into four pots for today's group stage draw.",
+          "For the purposes of the draw, the clubs will be placed into four pots according to their coefficients (see below)."
+        ] }
+      ] },
+    { "id": "G2-2010", "seasons": [2010], "fact": "The 2010-11 pots: all four filled by club coefficient, holders Internazionale in pot 1.", "status": "onePublisher", "usedBy": [], "sources": [
+        { "publisher": "UEFA, Lineup complete for group-stage draw", "url": "https://www.uefa.com/uefachampionsleague/news/0250-0c50f7a550a9-de7358fc51d1-1000--lineup-complete-for-group-stage-draw/", "published": "2010-08-25", "literal": [
+          "For the draw, the 32 teams are split into four seeding pots depending on each club's coefficient.",
+          "Every group will contain one team from each of the seeding pots"
+        ] }
+      ] },
+    { "id": "G2-2015", "seasons": [2015], "fact": "The 2015-16 pots: pot 1 the holders and the champions of the top seven associations (Barcelona were holders and Spanish champions, so the eighth ranked Netherlands' champions took the place); pots 2 to 4 by club coefficient.", "status": "verified", "usedBy": [], "sources": [
+        { "publisher": "UEFA, 2015/16 group stage draw", "url": "https://www.uefa.com/uefachampionsleague/news/0253-0d043866fe5a-3749f11d1b59-1000--uefa-champions-league-group-stage-draw", "published": "2015-06-01", "literal": [
+          "Unlike in previous years, following a change in the regulations, pot 1 for the draw was formed by the holders and the champions of the top seven associations",
+          "As Barcelona are also Spanish champions, the eighth-ranked Netherlands received the vacant seeding place.",
+          "The remaing three pots, as usual, were decided by each team's UEFA club coefficient."
+        ] },
+        { "publisher": "Sports Illustrated, Jonathan Wilson", "url": "https://www.si.com/soccer/2015/08/26/uefa-champions-league-draw-group-stage", "published": "2015-08-26", "literal": [
+          "The decision that Pot 1 this year would feature the reigning European champion",
+          "plus the champions of the seven highest-ranked domestic leagues in Europe",
+          "the champion of the eighth-ranked league, PSV Eindhoven, is seeded as well this year"
+        ] },
+        { "publisher": "FOX Sports (AP)", "url": "https://www.foxnews.com/sports/barcelona-tops-32-team-draw-for-champions-league-groups.amp", "published": "2015-08-26", "literal": [
+          "Top-seeded status now goes to the title holder and national champions of top-ranked leagues."
+        ] }
+      ] },
+    { "id": "G2-2020", "seasons": [2020], "fact": "The 2020-21 pots: pot 1 the Champions League holders, the Europa League holders and the champions of the six highest ranked associations; pots 2 to 4 by club coefficient.", "status": "verified", "usedBy": [], "sources": [
+        { "publisher": "UEFA, Champions League group stage draw: all you need to know", "url": "https://www.uefa.com/uefachampionsleague/news/0261-106335962c10-b277239a781a-1000", "published": "2020-10-01", "literal": [
+          "Pot 1 consists of the holders, the UEFA Europa League winners and the champions of the six highest-ranked nations",
+          "Pots 2 to 4 are determined by the club coefficient rankings."
+        ] },
+        { "publisher": "Sky Sports", "url": "https://www.skysports.com/football/news/11095/12085166", "published": "2020-10-01", "literal": [
+          "last season's Champions League winners Bayern Munich and Europa League winners Sevilla",
+          "Liverpool and the rest of the domestic champions from the top-six performing leagues across Europe.",
+          "Club coefficient rankings determine Pots 2 to 4"
+        ] }
+      ] },
+    { "id": "G3-2005", "seasons": [2005], "fact": "The 2005-06 group draw: no club drawn with a club of its own association.", "status": "verified", "usedBy": ["G8_ASSOC_APART.2005"],
+      "periodNote": "ESPN's line speaks of the group stage era as a whole (the same article dates it to the previous 21 seasons); UEFA's page is the 2005-06 draw. UEFA's page also says holders Liverpool were without country protection that season. Among the recorded sources only UEFA says so (ESPN states the general rule), so the exception is not part of this row's fact. LFChistory.net's 'Liverpool in Europe: Super Cup win and Athens' (Chris Wood, read 2026-10-16) says Liverpool went through the qualifying rounds and were drawn in a group with Chelsea, but the page shows no date, so it is not recorded as a source.",
+      "sources": [
+        { "publisher": "UEFA, Old and new meet in Monaco", "url": "https://www.uefa.com/uefachampionsleague/news/01ac-0ea80475ea9e-604a23d0ab93-1000--old-and-new-meet-in-monaco", "published": "2005-08-25", "literal": [
+          "No side can draw opponents from their own nation",
+          "holders Liverpool",
+          "without country protection after UEFA granted them special dispensation to defend the trophy."
+        ] },
+        { "publisher": "ESPN, Dale Johnson", "url": "https://www.espn.com/soccer/story/_/id/41040476/champions-league-draw-how-new-format-works", "published": "2024-09-17", "literal": [
+          "In past seasons, country protection remained in place until the quarterfinals."
+        ] }
+      ] },
+    { "id": "G3-2010", "seasons": [2010], "fact": "The 2010-11 group draw: no club drawn with a club of its own association.", "status": "verified", "usedBy": ["G8_ASSOC_APART.2010"],
+      "periodNote": "ESPN's line speaks of the group stage era as a whole; UEFA's page is the 2010-11 draw.",
+      "sources": [
+        { "publisher": "UEFA, Lineup complete for group-stage draw", "url": "https://www.uefa.com/uefachampionsleague/news/0250-0c50f7a550a9-de7358fc51d1-1000--lineup-complete-for-group-stage-draw/", "published": "2010-08-25", "literal": [
+          "though no club can play a side from their own association"
+        ] },
+        { "publisher": "ESPN, Dale Johnson", "url": "https://www.espn.com/soccer/story/_/id/41040476/champions-league-draw-how-new-format-works", "published": "2024-09-17", "literal": [
+          "In past seasons, country protection remained in place until the quarterfinals."
+        ] }
+      ] },
+    { "id": "G3-2015", "seasons": [2015], "fact": "The 2015-16 group draw: no club drawn with a club of its own association.", "status": "verified", "usedBy": ["G8_ASSOC_APART.2015"], "sources": [
+        { "publisher": "UEFA, 2015/16 group stage draw", "url": "https://www.uefa.com/uefachampionsleague/news/0253-0d043866fe5a-3749f11d1b59-1000--uefa-champions-league-group-stage-draw", "published": "2015-06-01", "literal": [
+          "No team can play a club from their own association and Russian and Ukrainian teams cannot meet."
+        ] },
+        { "publisher": "FOX Sports (AP)", "url": "https://www.foxnews.com/sports/barcelona-tops-32-team-draw-for-champions-league-groups.amp", "published": "2015-08-26", "literal": [
+          "Madrid cannot be in Barcelona's group because teams from the same country are kept apart until the quarterfinals."
+        ] },
+        { "publisher": "Sports Illustrated, Jonathan Wilson", "url": "https://www.si.com/soccer/2015/08/26/uefa-champions-league-draw-group-stage", "published": "2015-08-26", "literal": [
+          "even with teams from the same nation being kept apart"
+        ] }
+      ] },
+    { "id": "G3-2020", "seasons": [2020], "fact": "The 2020-21 group draw: no club drawn with a club of its own association.", "status": "verified", "usedBy": ["G8_ASSOC_APART.2020"], "sources": [
+        { "publisher": "UEFA, Champions League group stage draw: all you need to know", "url": "https://www.uefa.com/uefachampionsleague/news/0261-106335962c10-b277239a781a-1000", "published": "2020-10-01", "literal": [
+          "No team can play a club from their own association."
+        ] },
+        { "publisher": "Sky Sports", "url": "https://www.skysports.com/football/news/11095/12085166", "published": "2020-10-01", "literal": [
+          "no team can play a club from their own association"
+        ] }
+      ] },
+    { "id": "G4-late", "seasons": [2015, 2020], "fact": "The round of 16 draw: a group winner against a runner-up, never of the same group or the same association; the group winner plays the first leg away and the second at home.", "status": "verified", "usedBy": [],
+      "periodNote": "Bleacher Report's explainer is of 2018-19, inside the same format; UEFA's two pages are the 2015-16 and 2020-21 draws. UEFA's 2020-21 page is dated Saturday 1 August 2020 and reports the draw made on Monday 14 December 2020 (read again 2026-10-16).",
+      "sources": [
+        { "publisher": "UEFA, 2015/16 round of 16 draw", "url": "https://www.uefa.com/uefachampionsleague/news/0253-0d04520b39d2-1933f7d2ac6e-1000--champions-league-round-of-16-draw", "published": "2015-12-10", "literal": [
+          "Two seeding pots have been formed: one consisting of group winners and the other of runners-up.",
+          "No team can play a club from their group or any side from their own association.",
+          "Seeded group winners will be away in the round of 16 first legs on 16/17 and 23/24 February"
+        ] },
+        { "publisher": "UEFA, 2020/21 round of 16 draw", "url": "https://www.uefa.com/uefachampionsleague/news/0261-1044d9f198f9-3298a49c06d7-1000--uefa-champions-league-round-of-16-draw/", "published": "2020-08-01", "literal": [
+          "Two seeding pots were formed: one consisting of the eight group winners and the other of the eight runners-up.",
+          "No team could play a club from their own association or a club from the same group they were in.",
+          "Seeded group winners are away in the round of 16 first legs and at home in the return matches."
+        ] },
+        { "publisher": "Bleacher Report, Haris Kruskic", "url": "https://bleacherreport.com/articles/2819840-uefa-champions-league-explained-how-the-tournament-works", "published": "2019-02-12", "literal": [
+          "with one containing the winners of each respective group from the group stage and the other holding the runners-up",
+          "a winner and runner-up who played in the same group in the previous round cannot be drawn together again",
+          "clubs from the same domestic league cannot play one another",
+          "The group winners host the second leg in the round of 16."
+        ] }
+      ] },
+    { "id": "G4-early", "seasons": [2005, 2010], "fact": "The round of 16 draw of 2005-06 and 2010-11, the same rule as G4-late by the engine's own comment: no page of either season was read for this round.", "status": "toVerify", "usedBy": [], "sources": [] },
+    { "id": "G5-ruling", "seasons": [2005, 2010], "fact": "Russian and Ukrainian clubs kept apart in the draws: UEFA's ruling of 17 July 2014, until further notice. 2005-06 and 2010-11 predate it, so those two seasons draw no such ban.", "status": "verified", "usedBy": ["G8_BANNED_PAIRS.2005", "G8_BANNED_PAIRS.2010"], "sources": [
+        { "publisher": "Al Jazeera", "url": "https://www.aljazeera.com/sports/2014/7/17/uefa-to-keep-russia-ukraine-clubs-apart", "published": "2014-07-17", "literal": [
+          "Ukrainian and Russian teams cannot be drawn against each other until further notice",
+          "Zenit Saint-Petersburg and Dnipro Dnipropetrovsk will be prevented from being pitted together"
+        ] },
+        { "publisher": "FOX Sports (AP)", "url": "https://www.foxnews.com/sports/barcelona-tops-32-team-draw-for-champions-league-groups.amp", "published": "2015-08-26", "literal": [
+          "UEFA made the ruling in July 2014 to avoid fueling tension between the countries"
+        ] }
+      ] },
+    { "id": "G5-2015-groups", "seasons": [2015], "fact": "The 2015-16 group draw kept Russian and Ukrainian clubs apart.", "status": "verified", "usedBy": ["G8_BANNED_PAIRS.2015"], "sources": [
+        { "publisher": "UEFA, 2015/16 group stage draw", "url": "https://www.uefa.com/uefachampionsleague/news/0253-0d043866fe5a-3749f11d1b59-1000--uefa-champions-league-group-stage-draw", "published": "2015-06-01", "literal": [
+          "No team can play a club from their own association and Russian and Ukrainian teams cannot meet."
+        ] },
+        { "publisher": "FOX Sports (AP)", "url": "https://www.foxnews.com/sports/barcelona-tops-32-team-draw-for-champions-league-groups.amp", "published": "2015-08-26", "literal": [
+          "For a second season, UEFA keeps teams from Russia and Ukraine apart.",
+          "Russian champion Zenit St. Petersburg is top-seeded and needs to be separated from Shakhtar Donetsk and Dynamo Kiev."
+        ] }
+      ] },
+    { "id": "G5-2015-ko", "seasons": [2015], "fact": "The 2015-16 round of 16 draw kept Russian and Ukrainian clubs apart too.", "status": "onePublisher", "usedBy": [], "sources": [
+        { "publisher": "UEFA, 2015/16 round of 16 draw", "url": "https://www.uefa.com/uefachampionsleague/news/0253-0d04520b39d2-1933f7d2ac6e-1000--champions-league-round-of-16-draw", "published": "2015-12-10", "literal": [
+          "Due to a decision by the UEFA Executive Committee, teams from Russia and Ukraine cannot meet"
+        ] }
+      ] },
+    { "id": "G5-2020-groups", "seasons": [2020], "fact": "The 2020-21 group draw kept Russian and Ukrainian clubs apart.", "status": "verified", "usedBy": ["G8_BANNED_PAIRS.2020"], "sources": [
+        { "publisher": "UEFA, Champions League group stage draw pots confirmed", "url": "https://uefa.com/uefachampionsleague/news/0261-107f4be39487-08e07077c976-1000--champions-league-group-stage-draw-pots-confirmed", "published": "2020-10-01", "literal": [
+          "clubs from Russia and Ukraine must not be drawn in the same group."
+        ] },
+        { "publisher": "FC Shakhtar Donetsk, Before the draw", "url": "https://shakhtar.com/en/news/2020/september/30_news/30_ucl-draw/", "published": "2020-09-30", "literal": [
+          "In the group stage, the Miners will not face Dynamo Kyiv, as well as Zenit, Krasnodar and Lokomotiv."
+        ] }
+      ] },
+    { "id": "G5-2020-ko", "seasons": [2020], "fact": "The 2020-21 round of 16 draw: not read. No page was read for the Russia and Ukraine rule in that draw, nor for which clubs reached it.", "status": "toVerify", "usedBy": [], "sources": [] },
+    { "id": "G6", "seasons": [2005, 2010, 2015, 2020], "fact": "Away goals: a tie level on aggregate went to the side with more away goals, until the rule was abolished in every UEFA club competition from 2021-22; since then extra time and penalties.", "figures": { "abolishedFrom": 2021 }, "status": "verified", "usedBy": [],
+      "periodNote": "The engine already reads this through uclAwayGoalsApply (UCL_AWAY_GOALS_LAST_YEAR 2020); the row records it for the watched ties, whose rules the binding passes from that function. Bleacher Report also says the rule applied again after extra time; it is the only recorded source that says so (UEFA's page does not state it), so that clause is not part of this row's fact.",
+      "sources": [
+        { "publisher": "UEFA, Do away goals count double", "url": "https://www.uefa.com/uefachampionsleague/news/027d-17172d2190e2-03070c1a3001-1000--do-away-goals-count-double-in-the-champions-league-europa/", "published": "2024-01-14", "literal": [
+          "Since the start of the 2021/22 campaign, there has been no away goals rule in UEFA's club competitions.",
+          "Instead, two 15-minute periods of extra time are played at the end of the second leg."
+        ] },
+        { "publisher": "ESPN", "url": "https://africa.espn.com/football/uefa-champions-league/story/4419188/away-goals-rule-abolished-uefa-announces-major-shake-up-of-club-competitions", "published": "2021-06-24", "literal": [
+          "the away goals rule will be abolished in European tournament knockout ties from the 2021-22 season.",
+          "But from now, this will be replaced by extra time and penalties."
+        ] },
+        { "publisher": "Bleacher Report, Haris Kruskic", "url": "https://bleacherreport.com/articles/2819840-uefa-champions-league-explained-how-the-tournament-works", "published": "2019-02-12", "literal": [
+          "If the aggregate score is level, the away-goals rule is applied.",
+          "The away-goals rule is again applied after extra time."
+        ] }
+      ] },
+    { "id": "G7", "seasons": [2015], "fact": "The knockout rounds before the final are two legged, one match at each club's home.", "figures": { "legs": 2 }, "status": "verified", "usedBy": [],
+      "periodNote": "FOX Sports is of 2015-16; Bleacher Report of 2018-19, inside the same format. The binding passes the legs from uclLegsFor, which the engine already sources.",
+      "sources": [
+        { "publisher": "FOX Sports (AP)", "url": "https://www.foxnews.com/sports/barcelona-tops-32-team-draw-for-champions-league-groups.amp", "published": "2015-08-26", "literal": [
+          "The top two in each group advance to the two-legged knockout rounds which start Feb. 16."
+        ] },
+        { "publisher": "Bleacher Report, Haris Kruskic", "url": "https://bleacherreport.com/articles/2819840-uefa-champions-league-explained-how-the-tournament-works", "published": "2019-02-12", "literal": [
+          "The teams play two matches, with each squad playing one match at home."
+        ] }
+      ] },
+    { "id": "G8", "seasons": [2005, 2010, 2015, 2020], "fact": "The final is one match at a neutral venue.", "status": "onePublisher", "usedBy": [], "sources": [
+        { "publisher": "Bleacher Report, Haris Kruskic", "url": "https://bleacherreport.com/articles/2819840-uefa-champions-league-explained-how-the-tournament-works", "published": "2019-02-12", "literal": [
+          "In the final (which is played as a single match in a neutral venue)"
+        ] }
+      ] },
+    { "id": "N1", "seasons": [2026], "fact": "The 2026-27 nights by month: matchday 1 in September, 2 and 3 in October, 4 and 5 in November, 6 in December, 7 and 8 in January; the play-offs in February, the round of 16 in March, the quarter-finals in April, the semi-finals from late April into May, the final in June. Recorded for their ORDER only: the game's nights sit on its own calendar.", "status": "verified", "usedBy": ["LEAGUE_PHASE_NIGHT_ORDER"],
+      "months": { "MD1": 9, "MD2": 10, "MD3": 10, "MD4": 11, "MD5": 11, "MD6": 12, "MD7": 13, "MD8": 13, "PO1": 14, "PO2": 14, "R16_1": 15, "R16_2": 15, "QF1": 16, "QF2": 16, "SF1": 16, "SF2": 17, "F": 18 },
+      "sources": [
+        { "publisher": "UEFA, 2026/27 Champions League: Teams, dates, draws, format, final", "url": "https://www.uefa.com/uefachampionsleague/news/02a6-20d57cfcd03e-407c22a7f465-1000--2026-27-champions-league-teams-dates-draws-format-final/", "published": "2026-10-12", "literal": [
+          "Matchday 1: 8-10 September 2026", "Matchday 2: 13/14 October 2026", "Matchday 3: 20/21 October 2026", "Matchday 4: 3/4 November 2026",
+          "Matchday 5: 24/25 November 2026", "Matchday 6: 8/9 December 2026", "Matchday 7: 19/20 January 2027", "Matchday 8: 27 January 2027",
+          "Knockout phase play-offs: 16/17 & 23/24 February 2027", "Round of 16: 9/10 & 16/17 March 2027", "Quarter-finals: 6/7 & 13/14 April 2027",
+          "Semi-finals: 27/28 April & 4/5 May 2027", "Final: 5 June 2027"
+        ] },
+        { "publisher": "Sky Sports", "url": "https://www.skysports.com/football/news/11667/13578265/champions-league-2026-27-fixtures-dates-schedule-format-and-who-has-qualified-from-premier-league-and-around-europe", "published": "2026-08-29", "literal": [
+          "Matchday 1: September 8-10", "Matchday 2: October 13-14", "Matchday 3: October 20-21", "Matchday 4: November 3-4",
+          "Matchday 5: November 24-25", "Matchday 6: December 8-9", "Matchday 7: January 19-20", "Matchday 8: January 27",
+          "Knockout-phase play-offs: February 16/17 and 23/24", "Round of 16: March 9/10 and 16/17 March 2027", "Quarter-finals: April 6/7 and 13/14",
+          "Semi-finals: April 27/28 and May 4/5", "Final: 5 June 2027"
+        ] },
+        { "publisher": "NBC Sports, Nicholas Mendola", "url": "https://www.nbcsports.com/soccer/news/uefa-champions-league-2026-27-league-phase-schedule-scores-how-to-watch-live", "published": "2026-10-14", "literal": [
+          "Tuesday 8 September 2026", "Tuesday 13 October 2026", "Tuesday 20 October 2026", "Tuesday 3 November 2026",
+          "Tuesday 24 November 2026", "Tuesday 8 December 2026", "Tuesday 19 January 2027", "Wednesday 27 January 2027"
+        ] }
+      ] }
+  ]
+}
