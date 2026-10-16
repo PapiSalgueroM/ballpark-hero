@@ -1,0 +1,22 @@
+fair-2 exit=0 70s | simSoccerDeckFairness: all sections green
+fair-1 exit=0 78s | simSoccerDeckFairness: all sections green
+fair-3 exit=0 82s | simSoccerDeckFairness: all sections green
+fair-4 exit=0 76s | simSoccerDeckFairness: all sections green
+fair-outside exit=1 76s | CONTROL outside FIRED: section 8 failed (67 failures in all)
+truth-outside exit=1 81s | FIRED: WORLD_TRUTH_CONTROL=outside failed section 6 (3 failures; section 2: 30, section 6: 3)
+promises exit=0 25s | simSoccerEventPromises: all sections green
+cooldowns exit=0 59s | simCareerLifeCooldowns: green. No event repeats inside its cooldown, every new event fires, the rate held, and the catalog has two real choices everywhere.
+cool-nocooldown exit=0 60s | CONTROL FIRED: section 2 failed with the defect back in, as it should, and nothing else did.
+cool-oneoption exit=0 67s | CONTROL FIRED: section 5 failed with the defect back in, as it should, and nothing else did.
+coldcontext exit=1 0s | Node.js v24.21.0
+documentary exit=1 0s | Node.js v24.21.0
+pendingmorale exit=1 0s | Node.js v24.21.0
+pendingpop exit=1 0s | Node.js v24.21.0
+routines exit=0 8s | simSoccerCareerRoutineEvents normal: green. All exact outcome and source guards passed.
+savedloan exit=1 0s | Node.js v24.21.0
+statrewards exit=1 0s | Node.js v24.21.0
+cool-sharedbatch exit=0 66s | CONTROL FIRED: section 2 failed with the defect back in, as it should, and nothing else did.
+derbies exit=0 65s | simCareerDerbies: all 8 sections green
+veterantalks exit=0 84s | ok   five production browser fixtures including USD, all raw amounts remain EUR
+eventdeck-16 exit=0 59s | simEventDeck: green. Sections 14, 15, 16 only.
+anchors exit=0 57s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
