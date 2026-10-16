@@ -1,0 +1,5 @@
+#!build
+#!playwright
+#!serial
+taps: DIST=dist WALK_ONLY=taps WALK_TAG=taps node .rc/x/walk.mjs
+taps-base: git worktree add /tmp/base 1027b08cac8ef5cfc52c6b2e738e5c0a8d703402 >/dev/null 2>&1 && ln -s "$PWD/node_modules" /tmp/base/node_modules && (cd /tmp/base && node_modules/.bin/vite build --outDir /tmp/distbase >/dev/null 2>&1) && DIST=/tmp/distbase WALK_ONLY=taps WALK_TAG=base node .rc/x/walk.mjs
