@@ -1,0 +1,8 @@
+rivals exit=0 31s | No rival product names found. 0 findings.
+vitest-lib exit=0 38s |    Duration  37.50s (transform 4.63s, setup 1.55s, collect 11.36s, tests 67.98s, environment 9.91s, prepare 2.69s)
+daily exit=0 8s | simDailyDeals: green. 12 Hot Seat dates (5 Premier League) and 6 Deadline Day dates (3 Premier League) deal what Release AS dealt, no daily carries the real fixture key, 
+anchors exit=0 58s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+tsc exit=0 123s | 
+continuity exit=1 40s |     at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simManagerWorldContinuity.mjs:499:24
+savesize exit=0 73s | simClubManagerSaveSize: all sections green
+wm6 exit=0 339s | simCmWorldMoves: green, sections 6 held
