@@ -1,0 +1,11 @@
+files: career /assets/SoccerCareer-BBOVAkyi.js, about /assets/HomeAbout-BKmzh6NY.js, part /assets/seoMetaPart12-BJfl671y.js, guide /assets/clubManagement-Dyl1I2gf.js
+fired A /soccer-career 390: broke=true/true/true pageErrors=0 | SoccerCareer-BBOVAkyi.js:404@141 SoccerCareer-BBOVAkyi.js:served@2760
+fired A /soccer-career 1280: broke=true/true/true pageErrors=0 | SoccerCareer-BBOVAkyi.js:404@155 SoccerCareer-BBOVAkyi.js:served@2778
+fired B / 390: broke=true/true/true pageErrors=0 | HomeAbout-BKmzh6NY.js:404@232 HomeAbout-BKmzh6NY.js:served@2961
+fired B / 1280: broke=true/true/true pageErrors=0 | HomeAbout-BKmzh6NY.js:404@237 HomeAbout-BKmzh6NY.js:served@2978
+fired C /club-manager 390: broke=false/false/false pageErrors=1 | seoMetaPart12-BJfl671y.js:404@268 clubManagement-Dyl1I2gf.js:404@269 seoMetaPart12-BJfl671y.js:served@2983 clubManagement-Dyl1I2gf.js:served@2985
+fired C /club-manager 1280: broke=false/false/false pageErrors=1 | seoMetaPart12-BJfl671y.js:404@202 clubManagement-Dyl1I2gf.js:404@203 seoMetaPart12-BJfl671y.js:served@2910 clubManagement-Dyl1I2gf.js:served@2910
+fired D / tap /soccer-career 390: broke=true/true/true pageErrors=0 | SoccerCareer-BBOVAkyi.js:404@814 SoccerCareer-BBOVAkyi.js:served@3425
+fired D / tap /soccer-career 1280: broke=true/true/true pageErrors=0 | SoccerCareer-BBOVAkyi.js:404@844 SoccerCareer-BBOVAkyi.js:served@3438
+
+playChunkReloadWait: control stock fired on all 8 rows: the stock wrapper flashes the bug, so the walk can see it.

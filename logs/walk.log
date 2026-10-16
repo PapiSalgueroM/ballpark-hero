@@ -1,0 +1,11 @@
+files: career /assets/SoccerCareer-DUfY9XBw.js, about /assets/HomeAbout-CEAeu_Uj.js, part /assets/seoMetaPart12-BJfl671y.js, guide /assets/clubManagement-Dyl1I2gf.js
+ok   A /soccer-career 390: waited 2525 ms, hold 2500 ms, docs /soccer-career /soccer-career, scrollY 0/0/0 | SoccerCareer-DUfY9XBw.js:404@147 SoccerCareer-DUfY9XBw.js:served@2760 | shot-A-390-fault-hold.jpg, shot-A-390-fault-after.jpg
+ok   A /soccer-career 1280: waited 2530 ms, hold 2500 ms, docs /soccer-career /soccer-career, scrollY 0/0/0 | SoccerCareer-DUfY9XBw.js:404@123 SoccerCareer-DUfY9XBw.js:served@2747 | shot-A-1280-fault-hold.jpg, shot-A-1280-fault-after.jpg
+ok   B / 390: waited 2564 ms, hold 2500 ms, docs / /, scrollY 0/0/0 | HomeAbout-CEAeu_Uj.js:404@238 HomeAbout-CEAeu_Uj.js:served@3011 | shot-B-390-fault-hold.jpg, shot-B-390-fault-after.jpg
+ok   B / 1280: waited 2574 ms, hold 2499 ms, docs / /, scrollY 0/0/0 | HomeAbout-CEAeu_Uj.js:404@239 HomeAbout-CEAeu_Uj.js:served@2977 | shot-B-1280-fault-hold.jpg, shot-B-1280-fault-after.jpg
+ok   C /club-manager 390: waited 2504 ms, hold 2500 ms, docs /club-manager /club-manager, scrollY 0/0/0 | seoMetaPart12-BJfl671y.js:404@247 clubManagement-Dyl1I2gf.js:404@248 seoMetaPart12-BJfl671y.js:served@2928 clubManagement-Dyl1I2gf.js:served@2928 | shot-C-390-fault-hold.jpg, shot-C-390-fault-after.jpg
+ok   C /club-manager 1280: waited 2507 ms, hold 2500 ms, docs /club-manager /club-manager, scrollY 0/0/0 | seoMetaPart12-BJfl671y.js:404@252 clubManagement-Dyl1I2gf.js:404@252 seoMetaPart12-BJfl671y.js:served@2936 clubManagement-Dyl1I2gf.js:served@2937 | shot-C-1280-fault-hold.jpg, shot-C-1280-fault-after.jpg
+ok   D / tap /soccer-career 390: waited 2520 ms, hold 2500 ms, docs / /soccer-career, scrollY 6639/6639/6639 | SoccerCareer-DUfY9XBw.js:404@823 SoccerCareer-DUfY9XBw.js:served@3486 | shot-D-390-fault-hold.jpg, shot-D-390-fault-after.jpg
+ok   D / tap /soccer-career 1280: waited 2522 ms, hold 2500 ms, docs / /soccer-career, scrollY 2849/2849/2849 | SoccerCareer-DUfY9XBw.js:404@830 SoccerCareer-DUfY9XBw.js:served@3441 | shot-D-1280-fault-hold.jpg, shot-D-1280-fault-after.jpg
+
+playChunkReloadWait: green on 8 rows. A page that loses a file waits for its one reload, no broken page, no error, nothing moved.

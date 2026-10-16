@@ -1,0 +1,4 @@
+build exit=0 30s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+stockbuild exit=0 30s | stock control dist written to /home/runner/work/ballpark-hero/ballpark-hero/dist-stock: one chunk dispatches vite:preloadError and it does not wait (vite 5.4.21)
+walk exit=0 47s | playChunkReloadWait: green on 8 rows. A page that loses a file waits for its one reload, no broken page, no error, nothing moved.
+walkstock exit=1 46s | playChunkReloadWait: control stock fired on all 8 rows: the stock wrapper flashes the bug, so the walk can see it.
