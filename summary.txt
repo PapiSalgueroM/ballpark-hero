@@ -1,0 +1,6 @@
+golden-check-head exit=0 1s | recordWorldTieGolden1347: SAME: 44 cases recorded from HEAD equal the 44 of scripts/data/worldTieGolden1347.json
+vitest-world exit=0 6s |    Duration  4.88s (transform 2.19s, setup 61ms, collect 2.65s, tests 1.01s, environment 423ms, prepare 291ms)
+simNoRivalNames exit=0 26s | No rival product names found. 0 findings.
+simStorageWrites exit=0 4s | simStorageWrites: all green (owed: 12)
+simHarnessAnchors exit=0 50s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+tsc exit=0 80s | 
