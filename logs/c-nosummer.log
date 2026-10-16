@@ -1,0 +1,29 @@
+0) anchors: every edit this harness can make stands exactly once in the source it is made to
+   control seedless: 1
+   control norecord: 1
+   control norecord: 1
+   control noflush: 1
+   control nojanuary: 1
+   control nosummer: 1
+   control nohijack: 1
+   control nowalk: 1
+   control slow: 1
+   control edit made 1 time(s): nosummer: state.intl = freshIntl(state);
+  generateHeadlines(state);
+1) ownership: seeded careers, 6 seasons, seeds 1,2, the head engine
+  FAIL section 1: Real Madrid (now, seed 1) the summer before season 2: Juventus signed Nico O'Reilly from Manchester City, but the ledger holds no record of him at Juventus
+  FAIL section 1: Real Madrid (now, seed 1) the summer before season 2: Brighton signed João Pedro from Chelsea, but the ledger holds no record of him at Brighton
+  FAIL section 1: Real Madrid (now, seed 1) the summer before season 2: Inter Milan signed Alexis Mac Allister from Liverpool, but the ledger holds no record of him at Inter Milan
+  FAIL section 1: Real Madrid (now, seed 1) the summer before season 2: Stuttgart signed James Garner from Everton, but the ledger holds no record of him at Stuttgart
+  FAIL section 1: Real Madrid (now, seed 1) the summer before season 2: Barcelona signed Khvicha Kvaratskhelia from PSG, but the ledger holds no record of him at Barcelona
+  FAIL section 1: Real Madrid (now, seed 1) the summer before season 2: Barcelona signed Amadou Onana from Aston Villa, but the ledger holds no record of him at Barcelona
+  FAIL section 1: Real Madrid (now, seed 1) the rollover to season 3: Nico O'Reilly, moved to Juventus at the summer before season 2,has no owned record there
+  FAIL section 1: Real Madrid (now, seed 1) the rollover to season 3: João Pedro, moved to Brighton at the summer before season 2,has no owned record there
+   opening  6 windows, 28 AI deal lines, 0 not placed at the buyer, ledger 4.7 records and 2457 units a window on average
+   january  36 windows, 165 AI deal lines, 0 not placed at the buyer, ledger 27.3 records and 4028 units a window on average
+   summer   30 windows, 139 AI deal lines, 139 not placed at the buyer, ledger 26.8 records and 3261 units a window on average
+   6 careers (0 sacked early), 306359 listings checked by the one club rule, 604 moved men followed over 30 rollovers
+   failures by check: (i) 139, (ii) 0, (iii) 105; the first at summer
+   the opening window's refusals (deal lines it closed before the seed that the flush could not place): 0 of 28 (expected 0)
+  section 1: 236 more failures not shown
+simCmWorldMoves: control nosummer FIRED: section 1 red (244), first at summer

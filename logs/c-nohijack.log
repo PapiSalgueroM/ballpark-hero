@@ -1,0 +1,23 @@
+0) anchors: every edit this harness can make stands exactly once in the source it is made to
+   control seedless: 1
+   control norecord: 1
+   control norecord: 1
+   control noflush: 1
+   control nojanuary: 1
+   control nosummer: 1
+   control nohijack: 1
+   control nowalk: 1
+   control slow: 1
+   control edit made 1 time(s): nohijack: return recordAiDeals(state, [{ mp: next.player, to: next.riv
+2) negotiation: a hijack and a walk away on PR269's vectors at each seeded career's opening window, seeds 1,2,3,4,5
+  FAIL section 2: Real Madrid (now, seed 1) hijack: Nürnberg took Michael Olise from Bayern Munich, but the ledger holds no record of him at Nürnberg
+  FAIL section 2: Real Madrid (now, seed 2) hijack: Nürnberg took Michael Olise from Bayern Munich, but the ledger holds no record of him at Nürnberg
+  FAIL section 2: Real Madrid (now, seed 3) hijack: Nürnberg took Michael Olise from Bayern Munich, but the ledger holds no record of him at Nürnberg
+  FAIL section 2: Real Madrid (now, seed 4) hijack: Nürnberg took Michael Olise from Bayern Munich, but the ledger holds no record of him at Nürnberg
+  FAIL section 2: Real Madrid (now, seed 5) hijack: Nürnberg took Michael Olise from Bayern Munich, but the ledger holds no record of him at Nürnberg
+  FAIL section 2: Everton (now, seed 1) hijack: Nürnberg took Álex Baena from Atlético Madrid, but the ledger holds no record of him at Nürnberg
+  FAIL section 2: Everton (now, seed 2) hijack: Nürnberg took Álex Baena from Atlético Madrid, but the ledger holds no record of him at Nürnberg
+  FAIL section 2: Everton (now, seed 3) hijack: Nürnberg took Álex Baena from Atlético Madrid, but the ledger holds no record of him at Nürnberg
+   hijack: 0 of 45 at the rival; walk away: 45 of 45; 0 careers where no bidding war could be set up on the vectors
+  section 2: 37 more failures not shown
+simCmWorldMoves: control nohijack FIRED: section 2 red (45)

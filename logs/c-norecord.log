@@ -1,0 +1,29 @@
+0) anchors: every edit this harness can make stands exactly once in the source it is made to
+   control seedless: 1
+   control norecord: 1
+   control norecord: 1
+   control noflush: 1
+   control nojanuary: 1
+   control nosummer: 1
+   control nohijack: 1
+   control nowalk: 1
+   control slow: 1
+   control edit made 1 time(s): norecord: if (working && seen) { const moved = recordAiDeal(working, {
+   control edit made 1 time(s): norecord: for (const deal of deals) next = recordAiDeal(next, deal, st
+1) ownership: seeded careers, 6 seasons, seeds 1,2, the head engine
+  FAIL section 1: Real Madrid (now, seed 1) the opening window: Atlético Madrid signed Mohammed Kudus from Tottenham, but the ledger holds no record of him at Atlético Madrid
+  FAIL section 1: Real Madrid (now, seed 1) the opening window: Barcelona signed Morgan Rogers from Chelsea, but the ledger holds no record of him at Barcelona
+  FAIL section 1: Real Madrid (now, seed 1) the opening window: Atalanta signed Eberechi Eze from Arsenal, but the ledger holds no record of him at Atalanta
+  FAIL section 1: Real Madrid (now, seed 1) the opening window: Atlético Madrid signed Cody Gakpo from Liverpool, but the ledger holds no record of him at Atlético Madrid
+  FAIL section 1: Real Madrid (now, seed 1) the opening window: Barcelona signed Tijjani Reijnders from Al-Qadsiah, but the ledger holds no record of him at Barcelona
+  FAIL section 1: Real Madrid (now, seed 1) January of season 1: Manchester City signed João Neves from PSG, but the ledger holds no record of him at Manchester City
+  FAIL section 1: Real Madrid (now, seed 1) January of season 1: Atlético Madrid signed Martín Zubimendi from Arsenal, but the ledger holds no record of him at Atlético Madrid
+  FAIL section 1: Real Madrid (now, seed 1) January of season 1: Barcelona signed Ousmane Dembélé from PSG, but the ledger holds no record of him at Barcelona
+   opening  6 windows, 28 AI deal lines, 28 not placed at the buyer, ledger 0.0 records and 0 units a window on average
+   january  36 windows, 159 AI deal lines, 159 not placed at the buyer, ledger 7.6 records and 891 units a window on average
+   summer   30 windows, 143 AI deal lines, 143 not placed at the buyer, ledger 9.1 records and 1070 units a window on average
+   6 careers (0 sacked early), 306214 listings checked by the one club rule, 262 moved men followed over 30 rollovers
+   failures by check: (i) 330, (ii) 0, (iii) 262; the first at opening
+   the opening window's refusals (deal lines it closed before the seed that the flush could not place): 28 of 28 (expected 0)
+  section 1: 584 more failures not shown
+simCmWorldMoves: control norecord FIRED: section 1 red (592), first at opening

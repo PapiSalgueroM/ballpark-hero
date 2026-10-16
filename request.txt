@@ -1,0 +1,20 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/lib/clubManagerWorldRoster.test.ts src/lib/clubManagerOwnClubLevel.test.ts src/lib/clubManagerWorldMoves.test.ts --testTimeout=300000 --hookTimeout=120000
+pr269-head: git show 1923d291:src/test/managerAiOwnership.test.ts > src/test/managerAiOwnership.test.ts && echo "blob 1923d291 $(sha256sum < src/test/managerAiOwnership.test.ts)" && node_modules/.bin/vitest run src/test/managerAiOwnership.test.ts --reporter=verbose --testTimeout=300000 --hookTimeout=120000
+s0: CM_WORLD_MOVES_SECTIONS=0 node scripts/simCmWorldMoves.mjs
+s1-now: CM_WORLD_MOVES_SECTIONS=1 CM_WORLD_MOVES_ERAS=now node scripts/simCmWorldMoves.mjs
+s1-2015: CM_WORLD_MOVES_SECTIONS=1 CM_WORLD_MOVES_ERAS=era2015 node scripts/simCmWorldMoves.mjs
+s1-2005: CM_WORLD_MOVES_SECTIONS=1 CM_WORLD_MOVES_ERAS=era2005 node scripts/simCmWorldMoves.mjs
+s2: CM_WORLD_MOVES_SECTIONS=2 node scripts/simCmWorldMoves.mjs
+s6-now: CM_WORLD_MOVES_SECTIONS=6 CM_WORLD_MOVES_ERAS=now node scripts/simCmWorldMoves.mjs
+s6-2015: CM_WORLD_MOVES_SECTIONS=6 CM_WORLD_MOVES_ERAS=era2015 node scripts/simCmWorldMoves.mjs
+s6-2005: CM_WORLD_MOVES_SECTIONS=6 CM_WORLD_MOVES_ERAS=era2005 node scripts/simCmWorldMoves.mjs
+c-norecord: CM_WORLD_MOVES_CONTROL=norecord CM_WORLD_MOVES_ERAS=now CM_WORLD_MOVES_SEEDS=1-2 node scripts/simCmWorldMoves.mjs
+c-noflush: CM_WORLD_MOVES_CONTROL=noflush CM_WORLD_MOVES_ERAS=now CM_WORLD_MOVES_SEEDS=1-2 node scripts/simCmWorldMoves.mjs
+c-nojanuary: CM_WORLD_MOVES_CONTROL=nojanuary CM_WORLD_MOVES_ERAS=now CM_WORLD_MOVES_SEEDS=1-2 node scripts/simCmWorldMoves.mjs
+c-nosummer: CM_WORLD_MOVES_CONTROL=nosummer CM_WORLD_MOVES_ERAS=now CM_WORLD_MOVES_SEEDS=1-2 node scripts/simCmWorldMoves.mjs
+c-nohijack: CM_WORLD_MOVES_CONTROL=nohijack node scripts/simCmWorldMoves.mjs
+c-nowalk: CM_WORLD_MOVES_CONTROL=nowalk node scripts/simCmWorldMoves.mjs
+c-seedless: CM_WORLD_MOVES_CONTROL=seedless CM_WORLD_MOVES_ERAS=now CM_WORLD_MOVES_SEEDS=0-1 node scripts/simCmWorldMoves.mjs
+unseeded: B=$(node scripts/lib/treeWithoutMerge.mjs 5ec5a724 36cc9ffe d4f2c6f688d656205722ba52bbdb33f03490966a) && echo "base $B" && CM_UNSEEDED_BASE=$B node scripts/simCmUnseededWorld.mjs
+unseeded-guard: B=$(node scripts/lib/treeWithoutMerge.mjs 5ec5a724 36cc9ffe d4f2c6f688d656205722ba52bbdb33f03490966a) && CM_UNSEEDED_BASE=$B CM_UNSEEDED_CONTROL=guard node scripts/simCmUnseededWorld.mjs

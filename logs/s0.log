@@ -1,0 +1,11 @@
+0) anchors: every edit this harness can make stands exactly once in the source it is made to
+   control seedless: 1
+   control norecord: 1
+   control norecord: 1
+   control noflush: 1
+   control nojanuary: 1
+   control nosummer: 1
+   control nohijack: 1
+   control nowalk: 1
+   control slow: 1
+simCmWorldMoves: green, sections 0 held

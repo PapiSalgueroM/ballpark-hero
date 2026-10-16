@@ -1,0 +1,8 @@
+1) ownership: seeded careers, 6 seasons, seeds 1,2,3,4,5, the head engine
+   opening  15 windows, 63 AI deal lines, 0 not placed at the buyer, ledger 4.2 records and 2217 units a window on average
+   january  90 windows, 381 AI deal lines, 0 not placed at the buyer, ledger 32.4 records and 3120 units a window on average
+   summer   75 windows, 328 AI deal lines, 0 not placed at the buyer, ledger 33.5 records and 2630 units a window on average
+   15 careers (0 sacked early), 258515 listings checked by the one club rule, 1707 moved men followed over 75 rollovers
+   failures by check: (i) 0, (ii) 0, (iii) 0; the first at none
+   the opening window's refusals (deal lines it closed before the seed that the flush could not place): 0 of 63 (expected 0)
+simCmWorldMoves: green, sections 1 held
