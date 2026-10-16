@@ -1,0 +1,20 @@
+headsha exit=0 0s | dcd4d126bebe04ea4e61e2d11bd778e2a79c0b8a
+worldtruth exit=0 125s | simSoccerWorldTruth: OK, every section green
+tsc exit=0 148s | 
+vitest-sc exit=0 178s |    Duration  177.50s (transform 14.77s, setup 9.29s, collect 79.19s, tests 333.39s, environment 62.03s, prepare 13.52s)
+ctl-goalsonly exit=1 98s | FIRED: WORLD_TRUTH_CONTROL=goalsonly failed section 1 (7 failures; section 1: 7, section 2: 201, section 6: 3)
+ctl-seasonyear exit=1 91s | FIRED: WORLD_TRUTH_CONTROL=seasonyear failed section 1 (1 failures; section 1: 1, section 6: 3)
+ctl-nolegacy exit=1 76s | FIRED: WORLD_TRUTH_CONTROL=nolegacy failed section 2 (201 failures; section 2: 201, section 6: 3)
+ctl-realmoves exit=1 87s | FIRED: WORLD_TRUTH_CONTROL=realmoves failed section 3 (2 failures; section 3: 2, section 4: 1, section 6: 3)
+ctl-pastchampions exit=1 81s | FIRED: WORLD_TRUTH_CONTROL=pastchampions failed section 3 (1 failures; section 3: 1, section 6: 3)
+ctl-summer exit=1 86s | FIRED: WORLD_TRUTH_CONTROL=summer failed section 3 (1 failures; section 3: 1, section 6: 3)
+ctl-quizyear exit=1 85s | FIRED: WORLD_TRUTH_CONTROL=quizyear failed section 4 (1 failures; section 4: 1, section 6: 3)
+ctl-arcade exit=1 82s | FIRED: WORLD_TRUTH_CONTROL=arcade failed section 4 (2 failures; section 4: 2, section 6: 3)
+ctl-outside exit=1 82s | FIRED: WORLD_TRUTH_CONTROL=outside failed section 6 (3 failures; section 2: 30, section 6: 3)
+ctl-log exit=1 83s | FIRED: WORLD_TRUTH_CONTROL=log failed section 5 (1 failures; section 5: 1, section 6: 3)
+ctl-panel exit=1 85s | FIRED: WORLD_TRUTH_CONTROL=panel failed section 5 (6 failures; section 5: 6, section 6: 5)
+ctl-boundary exit=1 83s | FIRED: WORLD_TRUTH_CONTROL=boundary failed section 0 (2 failures; section 0: 2, section 3: 2, section 4: 1)
+ctl-floor exit=1 81s | FIRED: WORLD_TRUTH_CONTROL=floor failed section 0 (1 failures; section 0: 1)
+ctl-legacy30 exit=1 88s | FIRED: WORLD_TRUTH_CONTROL=legacy30 failed section 2 (2 failures; section 2: 2, section 6: 3)
+ctl-legacy35 exit=1 80s | FIRED: WORLD_TRUTH_CONTROL=legacy35 failed section 2 (1 failures; section 2: 1, section 6: 3)
+ctl-extradraw exit=1 57s | FIRED: WORLD_TRUTH_CONTROL=extradraw failed section 2 (201 failures; section 2: 201, section 6: 2)
