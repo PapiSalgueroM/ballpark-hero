@@ -15786,3 +15786,7 @@ Standing claims after Round 400:
   the desktop lane above.
 - Manager arc four, promotion style world editing: Round 310 (cloud lane, 2026-08-28).
   Tweaks item 11 is complete across rounds 303, 308, 309 and 310.
+
+## Codex Round1383 CLAIM: UCL shared body TESTONLY measurement, 2026-10-16 18:47:33 UTC
+
+RootownsnewremoteA/B/Cdiagnostic only at exact27de596241d8b32fc62cc99552a47cbb43a44410. Threehunk E2candidate629bfd8a/patchfc5cdf1a/inverseb5f88de4 outsidepacket reviewed byroot+independent, no gameplay/JSON/RNGcounterexample atsource. Actualtypes/golden/weights pending. Aexact27de,B27de+actualweigh2five-export291charsink,C27de+candidate+same sink. Preserve source, existingcaps, historicalgolden,originalproofs andno actualappwriteinrootbranch. TemporaryCIcopies only;strictrequestedassetexistence+200response/RAW+GZIPnumbers,originalmetersretained/all15distreadersaftereachbuild,sequentialnohalfwrittendist. Existinggroup-copy unitguard andsimExtraTimesourceadaptersowedbeforeproductadoption. Lead'sRAW-vs-GZIP6Krulingopen evenifcandidateisunder6Kgzip. No qualificationornewpublicationgate, no competitionbinding/screenimplementation or product ownershipchange. IownsE2and1502/1503.
