@@ -1,0 +1,7 @@
+vitest-units exit=1 12s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/clubManagerWorldRoster.test.ts,title=src/lib/clubManagerWorldRoster.test.ts > actual world roster conti
+bridge-check exit=0 0s | cmNoAiMoves1344: all 5 anchors stand once and can be taken out
+edge exit=1 13s |    Duration  12.87s (transform 2.80s, setup 104ms, collect 130ms, tests 10.99s, environment 712ms, prepare 361ms)
+s023 exit=1 25s | simCmWorldMoves: RED, sections 3 (8)
+s8-now exit=0 59s | simCmWorldMoves: green, sections 8 held
+tsc exit=0 91s | 
+s14-now exit=0 146s | simCmWorldMoves: green, sections 1, 4 held

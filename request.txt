@@ -1,0 +1,7 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+edge: cp .rc/x/managerTransferEdgeCases.test.ts src/test/managerTransferEdgeCases.test.ts && node_modules/.bin/vitest run src/test/managerTransferEdgeCases.test.ts --reporter=verbose --testTimeout=900000 --hookTimeout=900000
+vitest-units: node_modules/.bin/vitest run src/lib/clubManagerWorldMoves.test.ts src/lib/clubManagerWorldRoster.test.ts src/lib/clubManagerOwnClubLevel.test.ts src/lib/clubManagerCustomPromotion.test.ts --testTimeout=300000 --hookTimeout=120000
+bridge-check: node scripts/lib/cmNoAiMoves1344.mjs --check
+s023: CM_WORLD_MOVES_SECTIONS=0,2,3 node scripts/simCmWorldMoves.mjs
+s8-now: CM_WORLD_MOVES_SECTIONS=8 CM_WORLD_MOVES_ERAS=now node scripts/simCmWorldMoves.mjs
+s14-now: CM_WORLD_MOVES_SECTIONS=1,4 CM_WORLD_MOVES_ERAS=now node scripts/simCmWorldMoves.mjs
