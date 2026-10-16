@@ -1,0 +1,5 @@
+kit-c exit=0 41s | simEventDeck: green. Sections 14, 15, 16 only.
+kit-a exit=0 62s | simEventDeck: green. Sections 1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 12 only.
+measure-10 exit=1 31s | simEventDeck: 1 failure, red sections 10
+kit-b exit=0 88s | simEventDeck: green. Sections 13 only.
+measure-15 exit=0 300s | simEventDeck: green. Sections 15 only.
