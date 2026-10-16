@@ -1,0 +1,6 @@
+#!serial
+mkbase: git worktree add -q /tmp/p 1027b08c && ln -s "$PWD/node_modules" /tmp/p/node_modules && git -C /tmp/p log --oneline -1
+simCreateClub-base: cd /tmp/p && node scripts/simCreateClub.mjs
+simGmStaff-base: cd /tmp/p && node scripts/simGmStaff.mjs
+simGmDealTableFixture-base: cd /tmp/p && node scripts/simGmDealTableFixture.mjs
+simCreateClub-head2: node scripts/simCreateClub.mjs
