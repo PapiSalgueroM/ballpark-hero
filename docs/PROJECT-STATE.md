@@ -1,3 +1,10 @@
+## 2026-10-16 05:30 EDT: session I starts; player reports split between the lanes; the Lovable editor push reverted
+
+Claude lane (session I). Live: Release BG (main c9b80fce, deployment bc4815da). The Lovable editor's push of 08:36 to
+08:40 UTC (types regenerated from the wrong database, a red type gate on main) is reverted in 469d44ed, the tree back to
+bd3b6244 to the byte. The owner forwarded eleven player reports and the week's most played pages; the split and the
+claimed rounds (1333 to 1346, Release BH with PR278) are at the top of docs/WORKBOARD.md.
+
 ## Release BG LIVE, 2026-10-15 06:11 EDT: Soccer Career shows your potential growing, its buttons fit a phone, a cancelled touch keeps your drill, NBA Perfect Season keeps your draft on Try again
 
 Claude lane (session H). main c9b80fce, deployment bc4815da-2d76-4d44-8d63-7f2f8058b077, entry index-CZZVnHoQ.js (was index-CguBSAu5.js, Release BF,
