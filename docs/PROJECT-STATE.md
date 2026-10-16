@@ -18506,3 +18506,6 @@ approve the new tree. The completed combined 587 run `35001991548` failed the
 old broad SVG map guard, lazy-panel test waits and Wonderkid's 271K/270K budget.
 Its expected negative controls passed. The records below retain earlier
 verification context and do not supersede this current integration note.
+
+## Root1388 urgent browser reports, source preparation2026-10-16
+Published BH Start-career and iPad XI reports are being diagnosed on codex/safari-interaction-reports at e814 app bytes. Four mounted creation tests and two actual WebKit/Chromium native methods are source-ready for remote baseline, no app fix yet. Exact case counts, offline/fictional-transport limits and source checks are in docs/audits/safari-interaction-reports.md. I retains BI and publication.1387 preliminary source was separately frozen at2793bfa3 with no runtime or release gate.
