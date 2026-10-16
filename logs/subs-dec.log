@@ -1,0 +1,8 @@
+FAIL [legacy] 40 careers, every save byte and every draw equal to SUBS_BASE (35 differ; first Everton era2005 seed 0 coach: head d0cb35778daea62b 46622 draws, base d4b3b9200f6fb0e5 46622 draws (season 2 week 56))
+FAIL [three] 20 careers, every save byte and every draw equal to SUBS_BASE (20 differ; first Everton era2005 seed 0 coach: head 9b6cab4c3d70f7c5 46622 draws, base d4b3b9200f6fb0e5 46622 draws (season 2 week 56))
+ok   [hotseat] the cutover 2026-10-24 falls after the 30 dates (2026-09-24 to 2026-10-23)
+ok   [hotseat] every daily before the cutover plays the base rules (0 of 30 unmarked)
+FAIL [hotseat] every daily before the cutover replays exactly as on SUBS_BASE (28 differ, first 2026-09-24 Pumas UNAM)
+FAIL [hotseat] a free run saved without the stamp replays exactly as on SUBS_BASE
+ok   [hotseat] the career carried on to Club Manager carries no matchRules
+simCmSubs RED: 3 of 7 checks green (parts legacy, three, hotseat)

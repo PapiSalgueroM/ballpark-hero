@@ -1,0 +1,4 @@
+subs-dec exit=1 106s | simCmSubs RED: 3 of 7 checks green (parts legacy, three, hotseat)
+subs-dec-norec exit=1 40s | simCmSubs RED: 3 of 6 checks green (parts three, hotseat)
+base-unseeded exit=1 125s | simCmUnseededWorld: 112 FAILURE(S)
+base-continuity exit=1 26s |     at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simManagerWorldContinuity.mjs:489:24
