@@ -19,6 +19,7 @@
 import { useState } from 'react';
 import { Briefcase, ClipboardList, Flame, RotateCcw, TrendingUp } from 'lucide-react';
 import { useRevealScroll } from '@/hooks/useRevealScroll';
+import { useTapSettle } from '@/hooks/useTapSettle';
 /* Round 530: the season result is a moment. Same kit as the season curtain. */
 import { ConfettiBurst, CelebrationStyles, revealDelay } from '@/components/club-manager/Celebration';
 import {
@@ -81,6 +82,12 @@ export default function CoachCareerPanel({ state, playerName, onChange, onBack, 
   const [seasonNotes, setSeasonNotes] = useState<{ n: number; notes: string[] } | null>(null);
   const lastNotes = seasonNotes && seasonNotes.n === state.results.length ? seasonNotes.notes : [];
 
+  /* Round 1346: confirming the retirement shortens the hub under the pointer, so the second click of a double click
+     opened whichever tile slid under it (the review saw the Coaching Log open at 1280). For a second after the
+     retirement the tiles and the way back ignore a click (useTapSettle). */
+  const retireSettle = useTapSettle();
+  const open = (next: Panel) => { if (retireSettle.settled()) setPanel(next); };
+
   const coachSeason = () => {
     const r = playCoachSeason(state);
     setSeasonNotes({ n: r.state.results.length, notes: r.notes });
@@ -95,7 +102,7 @@ export default function CoachCareerPanel({ state, playerName, onChange, onBack, 
     onChange(acceptCoachOffer(state, i), [`You took the ${o.team} job as their ${o.role}.`]);
   };
   /* Round 1346: the player ends it himself, behind the shared confirm. Only `done` changes. */
-  const retire = () => onChange(retireCoachCareer(state), ['You stepped away from coaching. The record and the log stay.']);
+  const retire = () => { retireSettle.mark(); onChange(retireCoachCareer(state), ['You stepped away from coaching. The record and the log stay.']); };
 
   /* ------------------------------ drill in screens ------------------------------ */
   if (panel !== 'none') {
@@ -410,23 +417,23 @@ export default function CoachCareerPanel({ state, playerName, onChange, onBack, 
       </div>
 
       <div className="grid grid-cols-2 gap-2">
-        <button onClick={() => setPanel('job')} className="rounded-2xl border border-border bg-card p-3 text-left transition-colors hover:border-primary/50">
+        <button onClick={() => open('job')} className="rounded-2xl border border-border bg-card p-3 text-left transition-colors hover:border-primary/50">
           <span className="text-xl">{state.job ? '🪑' : '📪'}</span>
           <span className="mt-0.5 block text-sm font-black text-foreground">{state.job ? 'The Job' : 'Out Of Work'}</span>
           <span className="block truncate text-[10px] text-muted-foreground">{state.job ? `${state.job.role} · ${seat.label}` : 'Nobody has hired you'}</span>
         </button>
-        <button onClick={() => setPanel('market')} className="relative rounded-2xl border border-border bg-card p-3 text-left transition-colors hover:border-primary/50">
+        <button onClick={() => open('market')} className="relative rounded-2xl border border-border bg-card p-3 text-left transition-colors hover:border-primary/50">
           <span className="text-xl">🗞️</span>
           <span className="mt-0.5 block text-sm font-black text-foreground">The Market</span>
           <span className="block truncate text-[10px] text-muted-foreground">{state.openings} jobs open · {state.offers.length} for you</span>
           {state.offers.length > 0 && <span className="absolute right-2 top-2 rounded-full bg-primary px-1.5 text-[9px] font-black text-primary-foreground">{state.offers.length}</span>}
         </button>
-        <button onClick={() => setPanel('standing')} className="rounded-2xl border border-border bg-card p-3 text-left transition-colors hover:border-primary/50">
+        <button onClick={() => open('standing')} className="rounded-2xl border border-border bg-card p-3 text-left transition-colors hover:border-primary/50">
           <span className="text-xl"><TrendingUp className="inline h-5 w-5 text-primary" /></span>
           <span className="mt-0.5 block text-sm font-black text-foreground">Where You Stand</span>
           <span className="block truncate text-[10px] text-muted-foreground">{out.standing} · can reach {out.ceilingLabel}</span>
         </button>
-        <button onClick={() => setPanel('log')} className="rounded-2xl border border-border bg-card p-3 text-left transition-colors hover:border-primary/50">
+        <button onClick={() => open('log')} className="rounded-2xl border border-border bg-card p-3 text-left transition-colors hover:border-primary/50">
           <span className="text-xl">📜</span>
           <span className="mt-0.5 block text-sm font-black text-foreground">Coaching Log</span>
           <span className="block truncate text-[10px] text-muted-foreground">{totals.seasons} season{totals.seasons === 1 ? '' : 's'} · {totals.wins}-{totals.losses}{totals.otl ? `-${totals.otl}` : ''}</span>
@@ -448,7 +455,7 @@ export default function CoachCareerPanel({ state, playerName, onChange, onBack, 
             which is a strange thing to tell somebody who retired ten seconds
             ago and has not been given a chance to try yet. */}
         <p className="text-[11px] text-muted-foreground">{totals.seasons > 0 ? coachVerdict(state) : state.done ? 'The book is closed.' : out.blurb}</p>
-        <button onClick={onBack} className="mt-2 inline-flex items-center gap-2 rounded-full border border-border px-5 py-2 text-xs font-semibold text-foreground hover:border-primary/60">
+        <button onClick={() => { if (retireSettle.settled()) onBack(); }} className="mt-2 inline-flex items-center gap-2 rounded-full border border-border px-5 py-2 text-xs font-semibold text-foreground hover:border-primary/60">
           <Briefcase className="h-3.5 w-3.5" /> Back to the playing career
         </button>
       </div>

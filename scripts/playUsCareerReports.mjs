@@ -3,7 +3,8 @@
  * /nba-my-career and /nfl-my-career (the two most played US careers), at 390 by 844 (touch) and 1280 by 800:
  *   W1 a finished coaching career reloads on its done screen, and the retirement screen's card reviews it.
  *   W2 an active coach leaves for the retirement screen and comes back (the action card is on screen), opens
- *      Retire from coaching, keeps coaching (nothing saved, focus back on the opener), then retires: the done
+ *      Retire from coaching, keeps coaching (nothing saved, focus back on the opener), then retires with a double
+ *      press on the confirm (the second one must open no tile, review F3): the done
  *      screen is on screen, done is saved, and a reload lands on it again.
  *   W3 a prospect skips the showcase, undoes it (the saved road state is the one before the skip), skips again,
  *      presses Draft day, skips draft night and watches it again; the night's button row keeps its height.
@@ -202,8 +203,14 @@ async function walkW2(browser, sport, size) {
     await check('kept', '[data-coach-retire]');
     await tap(opener);
     await dialog.waitFor();
-    await tap(dialog.getByRole('button', { name: 'Retire from coaching', exact: true }));
-    await page.getByRole('heading', { name: 'Coaching career complete' }).waitFor();
+    /* Review F3: the second click of a double click on the confirm opened the tile that slid under the pointer. */
+    const [cx, cy] = await centreOf(dialog.getByRole('button', { name: 'Retire from coaching', exact: true }));
+    await tapTwice(page, size, cx, cy, 150);
+    const doneHeading = page.getByRole('heading', { name: 'Coaching career complete' });
+    await doneHeading.waitFor();
+    await page.waitForTimeout(300);
+    if (!(await doneHeading.isVisible())) fail(id, 'the second click of a double click on the confirm opened a tile');
+    notes.push(`${id}: a double ${size.touch ? 'tap' : 'click'} on the confirm leaves the done hub open; under that spot now: ${await buttonAt(page, cx, cy)}`);
     notes.push(`${id}: after Keep coaching focus is on ${focusKept}; after the retirement it is on ${await describeFocus(page)}`);
     await check('retired', '[data-coach-done]');
     if (JSON.parse(await bytes()).coach?.done !== true) fail(id, 'the retirement was not saved');

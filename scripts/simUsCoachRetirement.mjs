@@ -18,7 +18,8 @@
  *      retired careers that were employed and retired careers holding offers, or the guards were never bitten.
  *   4. The vitest files that hold the coach (PR281's src/test/usCoachRetirement.test.tsx and the board test
  *      src/test/usCareerReports1346.test.tsx) pass as they are, and with retireCoachCareer swapped for one that
- *      returns its input they fail exactly the named cases.
+ *      returns its input they fail exactly the named cases; with the panel's settle (useTapSettle, review F3) always
+ *      settled exactly the four "second click right after the retirement" cases fail.
  * (Sections 1 and 5 of the brief were the age rule and its spread; the lead cut the rule, so they are not here.)
  *
  * Controls (US_COACH_RETIRE_CONTROL), each a one anchor edit of an isolated copy of the head engine, asserted present
@@ -222,20 +223,32 @@ const NORETIRE_FAILS = [
   'retiring changes only done and is pure and idempotent',
   'retirement requires confirmation and accepts once after cancel and escape',
   ...SPORTS.map(s => `${s}: Keep coaching and Escape save nothing, Retire saves only done, and a reload stays retired`),
+  ...SPORTS.map(s => `${s}: a second click right after the retirement opens nothing on the done hub`),
 ];
-/* PR281's 14, and the board file's six cases per sport (two for the coach, two for the showcase undo, two for the
-   draft night replay). */
-const CASES = 14 + 6 * SPORTS.length;
+/* The review's double click on the confirm (finding F3): with the panel's settle always settled, exactly these fail. */
+const SETTLE_FAILS = SPORTS.map(s => `${s}: a second click right after the retirement opens nothing on the done hub`);
+const PANEL = 'src/components/us-career/CoachCareerPanel.tsx';
+const panelSource = (await readFile(path.join(ROOT, PANEL), 'utf8')).replaceAll('\r\n', '\n');
+const settleLine = '  const retireSettle = useTapSettle();\n';
+assert.equal(panelSource.split(settleLine).length - 1, 1, 'The panel settle anchor is held once');
+/* PR281's 14, and the board file's ten cases per sport (three for the coach, three for the showcase undo, four for
+   the draft night replay). */
+const CASES = 14 + 10 * SPORTS.length;
 async function vitest(swap) {
   await mkdir(path.join(ROOT, '.sim-control'), { recursive: true });
   const dir = await mkdtemp(path.join(ROOT, '.sim-control/us-coach1346-vitest-'));
   try {
     const env = { ...process.env, VITEST_MAX_FORKS: '1', VITEST_MIN_FORKS: '1' };
     delete env.NO_DOUBLE_SWAP;
-    if (swap) {
+    if (swap === 'noretire') {
       const copy = path.join(dir, 'usCoachCareer.ts');
       await writeFile(copy, resolveCopies(source.replace(retireLine, () => '  return prev;')));
       env.NO_DOUBLE_SWAP = JSON.stringify({ '@/lib/usCoachCareer': copy });
+    } else if (swap === 'tilesettle') {
+      const copy = path.join(dir, 'CoachCareerPanel.tsx'), changed = panelSource.replace(settleLine, () => '  const retireSettle = { mark: () => undefined, settled: () => true };\n');
+      assert.notEqual(changed, panelSource, 'The tilesettle swap changes the panel');
+      await writeFile(copy, changed);
+      env.NO_DOUBLE_SWAP = JSON.stringify({ '@/components/us-career/CoachCareerPanel': copy });
     }
     const report = path.join(dir, 'report.json');
     const run = spawnSync(process.execPath, ['--require', path.join(ROOT, 'scripts/lib/offlineTransport.cjs'),
@@ -251,16 +264,22 @@ async function vitest(swap) {
 if (control) {
   console.log('4) skipped under a control (the controls aim at sections 2 and 3)');
 } else {
-  const plain = await vitest(false);
+  const plain = await vitest(null);
   if (plain.status !== 0 || plain.unhandled || plain.rows.length !== CASES || plain.rows.some(r => r.status !== 'passed')) {
     fail(4, 'plain', `${plain.rows.filter(r => r.status === 'passed').length} of ${plain.rows.length} passed (want ${CASES} of ${CASES}), exit ${plain.status}`);
   }
-  const swapped = await vitest(true);
+  const swapped = await vitest('noretire');
   const failed = swapped.rows.filter(r => r.status === 'failed').map(r => r.title).sort();
   if (swapped.status !== 1 || swapped.rows.length !== CASES || J(failed) !== J([...NORETIRE_FAILS].sort())) {
     fail(4, 'noretire', `failed ${J(failed)}, want ${J([...NORETIRE_FAILS].sort())}`);
   }
   console.log(`4) ${PR281} and ${BOARD}: ${plain.rows.filter(r => r.status === 'passed').length}/${CASES} pass as they are; with retireCoachCareer returning its input ${failed.length} fail, exactly the ${NORETIRE_FAILS.length} named`);
+  const settled = await vitest('tilesettle');
+  const settleFailed = settled.rows.filter(r => r.status === 'failed').map(r => r.title).sort();
+  if (settled.status !== 1 || settled.rows.length !== CASES || J(settleFailed) !== J([...SETTLE_FAILS].sort())) {
+    fail(4, 'tilesettle', `failed ${J(settleFailed)}, want ${J([...SETTLE_FAILS].sort())}`);
+  }
+  console.log(`4) with the panel's settle always settled ${settleFailed.length} fail, ${J(settleFailed) === J([...SETTLE_FAILS].sort()) ? `exactly the ${SETTLE_FAILS.length} named` : 'NOT the named cases'}`);
 }
 
 if (control) {
