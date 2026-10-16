@@ -18463,3 +18463,11 @@ approve the new tree. The completed combined 587 run `35001991548` failed the
 old broad SVG map guard, lazy-panel test waits and Wonderkid's 271K/270K budget.
 Its expected negative controls passed. The records below retain earlier
 verification context and do not supersede this current integration note.
+
+## Codex: Career Life previews qualified for review, 2026-10-16
+
+Draft PR280 (codex/career-life-choice-previews) corrects four existing choices: esports success includes followers, both cursed-boots options show their actual costs/rewards, and the statue vote names integrity and both morale outcomes. Fresh and older saved cards share the existing consequence map. Every callback, chance, random draw and save field is held.
+
+Tested source ec6fa0ac7d6585ec7f5626d1fa39b5cd437072b4, remote run38875783172/job116890383303 SUCCESS: real app types,18 focused cases, original-product control with exactly8 preview failures and10 preserved outcomes,81 restored/related cases, production npm run build and all15 rebuilt readers. Original baseline33ca5cad/run38875293758 independently reproduced8fail/10pass. Fixed artifact12034994770 SHA256c74c1d59127305c352d42fb2b44558b6aaa9732c37fdfac6ab72c0d1970f8541 is retained at C:/Users/antho/dukb-handoff/2026-10-16/choice-previews. No SEO regeneration, browser walkthrough, full-suite, integration or live claim. Main5b630266 source changes since basebd3 do not touch these product files; native merge preview is clean. H retains integration/publication.
+
+Anthony's new reports and popularity priorities are recorded in docs/REPORTS-2026-10-16.md and the shared root workboard. Codex is implementing NBA/shared coaching retirement, investigating verified Rodri Bingo honours and preparing World XI OVR/club-link display. Claude receives Club Manager core/world/difficulty/competition requests through the board. Assignments do not mean those packets are shipped or started by the other session.
