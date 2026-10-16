@@ -1,0 +1,3 @@
+hist-head exit=1 0s | FAIL Luton display component proof
+hist-base exit=0 22s | PASS Luton display component proof
+hist-introback exit=1 22s | FAIL Luton display component proof
