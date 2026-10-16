@@ -1,0 +1,30 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+ns: node scripts/simCmNoSack.mjs
+c-sack: NO_SACK_CONTROL=sack node scripts/simCmNoSack.mjs
+c-refuse: NO_SACK_CONTROL=refuse node scripts/simCmNoSack.mjs
+c-ranked: NO_SACK_CONTROL=ranked node scripts/simCmNoSack.mjs
+c-unguarded: NO_SACK_CONTROL=unguarded node scripts/simCmNoSack.mjs
+c-thirdsack: NO_SACK_CONTROL=thirdsack node scripts/simCmNoSack.mjs
+c-leak: NO_SACK_CONTROL=leak node scripts/simCmNoSack.mjs
+c-draw: NO_SACK_CONTROL=draw node scripts/simCmNoSack.mjs
+c-ddreach: NO_SACK_CONTROL=ddreach node scripts/simCmNoSack.mjs
+vitest: node_modules/.bin/vitest run src/test/clubManagerNoSack.test.tsx src/hooks/useClubManager.test.ts src/lib/clubManagerSlots.test.ts --testTimeout=300000 --hookTimeout=120000
+appeal: node scripts/simManagerAppealIsolation.mjs
+meters: node scripts/simClubManagerMeters.mjs
+meters-promise: CM_METERS_CONTROL=promise node scripts/simClubManagerMeters.mjs
+marks: node scripts/simSessionMarks.mjs
+activity: node scripts/simActivityNotCompletion.mjs
+activity-match: SIM_ACTIVITY_CONTROL=match node scripts/simActivityNotCompletion.mjs
+score: node scripts/simClubManagerScore.mjs
+dailies: node scripts/simDailyDeals.mjs
+scoring: node scripts/simScoringCoverage.mjs
+once: node scripts/simCompletionOnce.mjs
+double: node scripts/simNoDoubleRecord.mjs
+quotes: node scripts/simNoInventedQuotes.mjs
+conduct: node scripts/simNoInventedConduct.mjs
+moment: node scripts/simResultMoment.mjs
+writes: node scripts/simWritesAreSent.mjs
+anchors: node scripts/simHarnessAnchors.mjs
+rival: node scripts/simNoRivalNames.mjs
+slots: node scripts/simClubManagerSlots.mjs
+savefence: node scripts/simSaveFence.mjs

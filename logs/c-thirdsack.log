@@ -1,0 +1,6 @@
+simCmNoSack: sections 5, control thirdsack
+   clubs: Arsenal, Brentford, Hull City, Real Madrid, Espanyol, Málaga, Inter Milan, Torino, Frosinone
+5) 3 sacked writes and 2 No sacking floors in clubManager.ts, read as code
+  FAIL (section 5): sacked write 3 has no No sacking floor in front of its check
+  FAIL (section 5): 2 floors for 3 sacked writes
+simCmNoSack: CONTROL thirdsack FIRED: section 5 red (2 failures)
