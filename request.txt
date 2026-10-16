@@ -1,0 +1,3 @@
+#!playwright
+w-norecord: D=/tmp/wmr-$$ && mkdir -p $D && git archive HEAD | tar -x -C $D && node .rc/x/applyCtl1344.mjs $D bridge && ln -s $PWD/node_modules $D/node_modules && (cd $D && node_modules/.bin/vite build > /dev/null 2>&1) && DIST=$D/dist PLAY_WORLD_MOVES_CONTROL=norecord node scripts/playCmWorldMoves.mjs
+w-norepair: D=/tmp/wmn-$$ && mkdir -p $D && git archive HEAD | tar -x -C $D && node .rc/x/applyCtl1344.mjs $D norepair && ln -s $PWD/node_modules $D/node_modules && (cd $D && node_modules/.bin/vite build > /dev/null 2>&1) && DIST=$D/dist PLAY_WORLD_MOVES_CONTROL=norepair node scripts/playCmWorldMoves.mjs

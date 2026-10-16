@@ -1,0 +1,2 @@
+w-norepair exit=1 37s | playCmWorldMoves: control norepair FIRED: (d) red
+w-norecord exit=1 43s | playCmWorldMoves: control norecord FIRED: (b) red
