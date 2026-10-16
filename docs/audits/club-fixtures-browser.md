@@ -82,3 +82,35 @@ identical across each capture. It does not restore or alter that position. Every
 existing Back/row/scroll/geometry detector and fault remains unchanged, as do the
 fixture, canonicalization, application, old proofs, workflow and packages. A fresh
 complete run is required before any browser or pixel qualification.
+
+Final method fd20c5d6e095f23ce64bf3ca6c5b96cb9e3539d2 passed remote run
+38904067228/job116983137228. It produced 492 checks, zero failures and zero setup
+issues: eight prepared saved-page journeys, sixteen full reads covering 608 fixture
+rows, eight literal reloads, four effective and exactly restored DOM faults, twenty
+viewport PNGs and sixteen zero-RNG reads. All 32 external requests were aborted;
+there were no non-read requests. The default-block preflight and both stable loads
+held. Missing legacy scores remained explicitly unrecorded.
+
+Artifact12048030953 is 47,537,873 bytes, SHA256
+72f8c0ad89ad2bfbdb929a7a2fdd98a5a40828eee2875a3ca6a2a096eb11ffe8,
+retained at dukb-handoff/2026-10-16/club-fixtures-browser-fixed. Root and an
+independent reviewer reopened its physical files and source bindings. The reviewer
+independently recomputed every one of the 608 rows from the frozen raw schedule,
+including eleven saved scores or eleven honest missing results and 27 upcoming
+fixtures. Squad metrics, saved bytes, positions, clipping ancestors, inner scrolling,
+all four faults and their exact restoration held. Types, unchanged component and
+roster controls, build:seo, all fifteen readers, source, packages, 521 installed
+versions, installed files, compiled files and all 782 distribution files passed.
+Unchanged download limits passed: Soccer Career832.4K/834K and Manager604.4K/606K.
+
+Root inspected all twenty original viewport PNGs. At320,390,430 and1440 widths,
+the normal fixtures, scores, missing-result notices, last row and Back controls were
+clear, with no overlap or horizontal cut. The four fault images matched their
+declared mutations. Flags were blocked and fallback fonts were used, so this does
+not qualify custom font or live external asset appearance.
+
+This proof is ready as an optional addition to PR285. APP_REF pins its exact
+application to0fd9cbba. A later joined application, including I1342 or I1343 core
+changes, needs an explicit new source binding and fresh proof before receiving
+this browser qualification. Existing PR285 readiness is unchanged. No application
+change, natural-play, spectator UCL, full-suite or live-site claim is made.

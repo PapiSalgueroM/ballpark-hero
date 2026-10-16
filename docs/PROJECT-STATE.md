@@ -1,4 +1,4 @@
-## 2026-10-16: optional club fixtures browser setup correction, runtime pending
+## 2026-10-16: optional club fixtures browser proof ready
 
 Codex branch `codex/manager-fixtures-browser` starts at frozen PR285 docs0fd9cbba, application
 equal to tested71b4e158. No app or old-proof change. The exact retained Round1375 reference
@@ -10,10 +10,16 @@ the existing loader adds only a missing default managerXp block. New method now 
 that exact first-load canonicalization and requires two stable actual reloads of its
 persisted output. Second4fdb/run38901553910 reached8journeys/15correct zero-RNG reads,
 but tall full-page screenshots displaced Back on320/390; uncaptured reloads held.
-Method now uses actual viewport PNGs with strict dimension and position holds, keeping
-every UI detector/control unchanged. Fixture/app/oldproofs/packages held, no UI bug or pixel acceptance.
-All runtime is remote/offline, fresh browser/build/readers/weight pending. This add-on
-does not block ready PR285 or Claude I's current release. Details: docs/audits/club-fixtures-browser.md.
+Final method fd20c5d6/run38904067228 passed492checks:8journeys,16full38row reads,
+8reloads,4effective/restored controls,20viewportPNGs and16zero-RNG reads. Root viewed
+all20 originals; independent artifact review recomputed all608rows and closed all
+state/source/compiled/package/dependency/dist holds. Types, unchanged component and
+roster controls, build:seo,15readers and unchanged full weights passed (SC832.4/834K,
+CM604.4/606K). Artifact12048030953 retained locally. Prepared saved-page proof only,
+fallback fonts/blocked flags; no natural-play/full-suite/live claim. APP_REF remains
+frozen0fd9cbba, so a joined app needs explicit rebinding and fresh runtime. No app change.
+PR290 ready as optional proof, still draft; PR285 can ship independently.
+Details: docs/audits/club-fixtures-browser.md.
 
 ## 2026-10-16: club detail league fixtures ready for integration
 
