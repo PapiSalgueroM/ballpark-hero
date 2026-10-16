@@ -17,7 +17,9 @@
  *      first defeat (at most ten matches, none is a failed run): still in the job above zero, the line in the
  *      report, and loadCareer of the saved string opens it at the same confidence, not sacked, still No sacking.
  *   4. THE SWITCH AND THE SCORE. turnOnNoSack refuses a sacked career, one in the wilderness and a second call,
- *      and returns a copy (the original untouched); the key reads as off for every odd value; ensureStartOptions
+ *      and returns a copy (the original untouched); switched on in season 3 it stores 3; the Managers screen's
+ *      card (summarize) carries the mark on a No sacking save and not on any other; the key reads as off for
+ *      every odd value; ensureStartOptions
  *      keeps it when it repairs a broken block and changes nothing on a good one; postsScore is false on a No
  *      sacking career and true on every other; every scored ping in useClubManager.ts sits behind postsScore with
  *      an unscored else (three match pings, four completions), and the literals simClubManagerScore,
@@ -33,6 +35,8 @@
  *   sack       boardMaySack answers true for every save                 sections 2 and 3
  *   refuse     turnOnNoSack stops refusing a sacked or wilderness career section 4
  *   ranked     postsScore answers true for every save                   section 4
+ *   stale      turnOnNoSack stores season 1 whatever the season          section 4
+ *   noslot     summarize forgets the No sacking mark                     section 4
  *   unguarded  one scored ping loses its postsScore guard               section 4
  *   thirdsack  a third, unguarded sacked write                          section 5
  *   leak       defaultStartOptions writes the key into every new block  sections 1 and 6 (every Hot Seat date)
@@ -74,6 +78,8 @@ const PATCHES = {
   refuse: { file: 'clubManagerStart.ts', from: '  if (state.sacked || state.wilderness || noSackFrom(state) !== null) return null;', to: '  if (noSackFrom(state) !== null) return null;' },
   ranked: { file: 'clubManagerStart.ts', from: 'export function postsScore(state: CareerState): boolean {\n  return noSackFrom(state) === null;', to: 'export function postsScore(state: CareerState): boolean {\n  return true;' },
   leak: { file: 'clubManagerStart.ts', from: '    strictness: STRICTNESS_DEFAULT,\n  };', to: '    strictness: STRICTNESS_DEFAULT,\n    noSack: 1,\n  };' },
+  stale: { file: 'clubManagerStart.ts', from: '  const season = Number.isInteger(state.season) && state.season > 0 ? state.season : 1;', to: '  const season = 1;' },
+  noslot: { file: 'clubManagerSlots.ts', from: '      ...(noSackFrom(c as CareerState) !== null ? { noSack: true as const } : {}),\n', to: '' },
   draw: { file: 'clubManager.ts', from: '  if (!boardMaySack(state) && state.boardConfidence <= 0) {\n    state.boardConfidence = 1;\n    noSackLine = true;', to: '  if (Math.random() < 2 && !boardMaySack(state) && state.boardConfidence <= 0) {\n    state.boardConfidence = 1;\n    noSackLine = true;' },
 };
 /* Without BASE_ROOT (the suite), sections 1 and 6 compare with THIS tree with both floors taken out: the same
@@ -82,7 +88,7 @@ const PLAIN = [
   { file: 'clubManager.ts', from: '  let noSackLine = false;\n  if (!boardMaySack(state) && state.boardConfidence <= 0) {\n    state.boardConfidence = 1;\n    noSackLine = true;\n    events.push(NO_SACK_LINE);\n  }\n', to: '' },
   { file: 'clubManager.ts', from: '  if (!boardMaySack(state) && state.boardConfidence <= 0) {\n    state.boardConfidence = 1;\n    if (!noSackLine) events.push(NO_SACK_LINE);\n  }\n', to: '' },
 ];
-const CONTROL_SECTIONS = { sack: [2, 3], refuse: [4], ranked: [4], unguarded: [4], thirdsack: [5], leak: [1, 6], draw: [1], ddreach: [6] };
+const CONTROL_SECTIONS = { sack: [2, 3], refuse: [4], ranked: [4], stale: [4], noslot: [4], unguarded: [4], thirdsack: [5], leak: [1, 6], draw: [1], ddreach: [6] };
 if (CONTROL && !CONTROL_SECTIONS[CONTROL]) cannot(`unknown control ${CONTROL}`);
 const SECTIONS = CONTROL ? CONTROL_SECTIONS[CONTROL]
   : (process.env.SECTION || '1,2,3,4,5,6').split(',').map(Number);
@@ -111,8 +117,8 @@ const P = (root, f) => JSON.stringify(path.join(root, f).split(path.sep).join('/
 async function bundleOf(root, name, edits) {
   const work = fs.mkdtempSync(path.join(os.tmpdir(), `nosack-${name}-`));
   const entry = path.join(work, 'entry.ts');
-  fs.writeFileSync(entry, ['clubManager', 'clubManagerStart', 'managerHotSeat', 'deadlineDay']
-    .map((f, i) => `export * as ${['cm', 'st', 'hs', 'dd'][i]} from ${P(root, `src/lib/${f}.ts`)};`).join('\n') + '\n');
+  fs.writeFileSync(entry, ['clubManager', 'clubManagerStart', 'managerHotSeat', 'deadlineDay', 'clubManagerSlots']
+    .map((f, i) => `export * as ${['cm', 'st', 'hs', 'dd', 'sl'][i]} from ${P(root, `src/lib/${f}.ts`)};`).join('\n') + '\n');
   const out = path.join(work, 'bundle.cjs');
   const hits = { n: 0 };
   await build({ entryPoints: [entry], bundle: true, platform: 'node', format: 'cjs', outfile: out, logLevel: 'silent',
@@ -334,7 +340,7 @@ if (SECTIONS.includes(4)) {
   console.log('4) turnOnNoSack is one way and refuses a sacked or out of work manager; the key reads strictly; only a career without it posts a score');
   if (!hasNoSack) fail('the engine has no turnOnNoSack or postsScore');
   else {
-    const { cm, st } = fresh(HEAD);
+    const { cm, st, sl } = fresh(HEAD);
     const s = onStream(9001, () => cm.startCareer('Arsenal')).value;
     const before = JSON.stringify(s);
     const on = st.turnOnNoSack(s);
@@ -344,6 +350,13 @@ if (SECTIONS.includes(4)) {
       if (JSON.stringify(s) !== before) fail('turnOnNoSack changed the career it was given');
       if (st.turnOnNoSack(on) !== null) fail('a second turnOnNoSack was not refused');
       if (st.postsScore(on)) fail('a No sacking career still posts a score');
+      /* Review of 2026-10-16: the season it went on, read off a career past season 1 (in season 1 a stale
+         constant reads the same), and the Managers screen's card, which only the walk had read. */
+      const on3 = st.turnOnNoSack({ ...s, season: 3 });
+      if (!on3 || st.noSackFrom(on3) !== 3) fail(`switched on in season 3, the key reads ${on3 && st.noSackFrom(on3)}`);
+      const card = sl.summarize(JSON.stringify(on)), plainCard = sl.summarize(JSON.stringify(s));
+      if (!card || card.noSack !== true) fail(`the Managers card of a No sacking save has no No sacking mark (${card && JSON.stringify(card.noSack)})`);
+      if (!plainCard || 'noSack' in plainCard) fail('the Managers card of a save without the key carries a No sacking mark, or no card was made');
       const good = JSON.parse(JSON.stringify(on));
       st.ensureStartOptions(good);
       if (JSON.stringify(good) !== JSON.stringify(on)) fail('ensureStartOptions changed a good block that carries the key');
