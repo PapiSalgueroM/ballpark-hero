@@ -1,0 +1,42 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-world: node_modules/.bin/vitest run src/lib/worldCompetition.test.ts --testTimeout=300000 --hookTimeout=120000
+vitest-cm-units: node_modules/.bin/vitest run src/lib/clubManager src/test/clubManager src/lib/soccerCareerContinental.test.ts --testTimeout=300000 --hookTimeout=120000
+simWorldUcl: node scripts/simWorldUcl.mjs
+ctl-onesource: WORLD_UCL_CONTROL=onesource node scripts/simWorldUcl.mjs
+ctl-wiki: WORLD_UCL_CONTROL=wiki node scripts/simWorldUcl.mjs
+ctl-thinused: WORLD_UCL_CONTROL=thinused node scripts/simWorldUcl.mjs
+ctl-figure: WORLD_UCL_CONTROL=figure node scripts/simWorldUcl.mjs
+ctl-receipt: WORLD_UCL_CONTROL=receipt node scripts/simWorldUcl.mjs
+ctl-cover: WORLD_UCL_CONTROL=cover node scripts/simWorldUcl.mjs
+ctl-const: WORLD_UCL_CONTROL=const node scripts/simWorldUcl.mjs
+ctl-partial: WORLD_UCL_CONTROL=partial node scripts/simWorldUcl.mjs
+ctl-ban: WORLD_UCL_CONTROL=ban node scripts/simWorldUcl.mjs
+ctl-order: WORLD_UCL_CONTROL=order node scripts/simWorldUcl.mjs
+simClubManagerEraUcl: node scripts/simClubManagerEraUcl.mjs
+simEraWorldTables: node scripts/simEraWorldTables.mjs
+simCareerContinental: node scripts/simCareerContinental.mjs
+simCmLeaguePhase: node scripts/simCmLeaguePhase.mjs
+simLiveScores: node scripts/simLiveScores.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simInventedNames: node scripts/simInventedNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
+simNoInventedConduct: node scripts/simNoInventedConduct.mjs
+simLegalPages: node scripts/simLegalPages.mjs
+simSingleFooter: node scripts/simSingleFooter.mjs
+simCompletionSlugs: node scripts/simCompletionSlugs.mjs
+simCompletionOnce: node scripts/simCompletionOnce.mjs
+simNoDoubleRecord: node scripts/simNoDoubleRecord.mjs
+simDailyPuzzleContract: node scripts/simDailyPuzzleContract.mjs
+simDailySaveHardening: node scripts/simDailySaveHardening.mjs
+simWritesAreSent: node scripts/simWritesAreSent.mjs
+simSchemaNames: node scripts/simSchemaNames.mjs
+simFetchRetry: node scripts/simFetchRetry.mjs
+simGoogleOnlyReturn: node scripts/simGoogleOnlyReturn.mjs
+simReportRelay: node scripts/simReportRelay.mjs
+simNavbarStatsReads: node scripts/simNavbarStatsReads.mjs
+simLeaderboardCaps: node scripts/simLeaderboardCaps.mjs
+simScoringCoverage: node scripts/simScoringCoverage.mjs
+simSiteSearch: node scripts/simSiteSearch.mjs
+simResultMoment: node scripts/simResultMoment.mjs
+simGuideHeadings: node scripts/simGuideHeadings.mjs
