@@ -57,6 +57,9 @@ describe('the club screen reads my own club from my squad', () => {
     const seeded = withRoll(0.6, () => startCareer('Real Madrid'));
     const old: CareerState = { ...seeded };
     delete old.worldSeed;
+    /* Round 1344: a new career now carries its opening window's deals between other clubs in a ledger (the post
+       seed flush); a career from before the release had none, so it comes off with the seed. */
+    delete old.worldRoster;
     expect(old.worldRoster).toBeUndefined();
     const projected = oppRosterFor(old, 'Real Madrid');
     expect(projected.length).toBeGreaterThan(0);
