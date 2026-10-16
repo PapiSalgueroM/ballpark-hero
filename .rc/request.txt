@@ -1,0 +1,22 @@
+#!build
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest1346: node_modules/.bin/vitest run src/test/usCoachRetirement.test.tsx src/test/usCareerReports1346.test.tsx src/test/usCareerActionConfirm.test.tsx src/test/careerDraftNight.test.tsx src/test/usCareerHelpRules1104.test.tsx src/test/usCareerReveals.test.tsx src/test/usCareerProgrammeUi.test.tsx --testTimeout=300000 --hookTimeout=120000
+coachret: node scripts/simUsCoachRetirement.mjs
+coachret-ctl: ok=0; r=""; for k in drift early noretire noguard nosit noaccept norefresh; do US_COACH_RETIRE_CONTROL=$k node scripts/simUsCoachRetirement.mjs > /tmp/cr-$k.log 2>&1; e=$?; f=$(tail -3 /tmp/cr-$k.log | grep -c FIRED); r="$r $k=$e/$f"; if [ $e != 1 ] || [ $f = 0 ]; then ok=1; tail -3 /tmp/cr-$k.log; fi; done; echo "controls (exit/FIRED):$r"; exit $ok
+skips: node scripts/simUsCareerSkips.mjs
+skips-ctl: ok=0; r=""; for k in noundo leak graded clamp; do US_CAREER_SKIPS_CONTROL=$k node scripts/simUsCareerSkips.mjs > /tmp/sk-$k.log 2>&1; e=$?; f=$(tail -3 /tmp/sk-$k.log | grep -c FIRED); r="$r $k=$e/$f"; if [ $e != 1 ] || [ $f = 0 ]; then ok=1; tail -3 /tmp/sk-$k.log; fi; done; echo "controls (exit/FIRED):$r"; exit $ok
+parity: node scripts/simUsBoardParity.mjs
+confirm: node scripts/simUsCareerActionConfirm.mjs
+poach: node scripts/simUsCoachPoaching.mjs
+coachcareer: node scripts/simUsCoachCareer.mjs
+coaching: node scripts/simUsCoaching.mjs
+predraft: node scripts/simCareerPreDraft.mjs
+draftnight: node scripts/simDraftNight.mjs
+prospect: node scripts/simUsCareerProspect.mjs
+stale1338: node scripts/simStaleChunk.mjs
+usweight: node scripts/simUsCareerWeight.mjs
+trust: node scripts/simTrustCopy.mjs
+access: node scripts/simAccessibility.mjs
+anchors: node scripts/simHarnessAnchors.mjs
+rival: node scripts/simNoRivalNames.mjs
+storage: node scripts/simStorageWrites.mjs
