@@ -1,0 +1,11 @@
+files: career /assets/SoccerCareer-C4vPJqnl.js, about /assets/HomeAbout-D1HttTlT.js, part /assets/seoMetaPart12-BJfl671y.js, guide /assets/clubManagement-Dyl1I2gf.js
+fired A /soccer-career 390: broke=true/true/true pageErrors=0 | SoccerCareer-C4vPJqnl.js:404@109 SoccerCareer-C4vPJqnl.js:served@2685
+fired A /soccer-career 1280: broke=true/true/true pageErrors=0 | SoccerCareer-C4vPJqnl.js:404@110 SoccerCareer-C4vPJqnl.js:served@2697
+fired B / 390: broke=true/true/true pageErrors=0 | HomeAbout-D1HttTlT.js:404@159 HomeAbout-D1HttTlT.js:served@2815
+fired B / 1280: broke=true/true/true pageErrors=0 | HomeAbout-D1HttTlT.js:404@155 HomeAbout-D1HttTlT.js:served@2822
+fired C /club-manager 390: broke=false/false/false pageErrors=1 | seoMetaPart12-BJfl671y.js:404@161 clubManagement-Dyl1I2gf.js:404@162 seoMetaPart12-BJfl671y.js:served@2791 clubManagement-Dyl1I2gf.js:served@2792
+fired C /club-manager 1280: broke=false/false/false pageErrors=1 | seoMetaPart12-BJfl671y.js:404@175 clubManagement-Dyl1I2gf.js:404@176 seoMetaPart12-BJfl671y.js:served@2803 clubManagement-Dyl1I2gf.js:served@2804
+fired D / tap /soccer-career 390: broke=true/true/true pageErrors=0 | SoccerCareer-C4vPJqnl.js:404@664 SoccerCareer-C4vPJqnl.js:served@3241
+fired D / tap /soccer-career 1280: broke=true/true/true pageErrors=0 | SoccerCareer-C4vPJqnl.js:404@692 SoccerCareer-C4vPJqnl.js:served@3278
+
+playChunkReloadWait: control stock fired on all 8 rows: the stock wrapper flashes the bug, so the walk can see it.
