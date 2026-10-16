@@ -62,9 +62,11 @@ import {
   fixtureFor,
   isPartialClub,
   leaguePosition,
+  legacySeason,
   matchEdge,
   nextFixture,
   objectiveStatuses,
+  openObjectives,
   playNextEntry,
   playableClubs,
   registerCustomClub,
@@ -565,6 +567,11 @@ function startOnStaticWorld(setup: HotSeatSetup): HotSeatRun {
     boardConfidence: HOT_SEAT_BOARD_START,
     sacked: false,
     teamTalk: null,
+    /* Round 1335 (advice 17): and the card a Club Manager takeover gets, less what the previous manager had
+       already failed (openObjectives); a day on the old rules (legacySeason) keeps the whole card. Nothing a
+       hot seat day plays reads a failed line, so no deal moves; a career carried on starts clean.
+       scripts/simCmBoardVerdict.mjs section dailies holds it (control hscard). */
+    boardObjectives: legacySeason(chosen.state) ? chosen.state.boardObjectives : openObjectives(chosen.state),
     /* Round 956 review fix: this is a takeover, so it wears Club Manager's
        takeover stamp (Round 633) from the day you walk in. Nothing in a match
        reads either field; Club Manager's season score and its "took over mid

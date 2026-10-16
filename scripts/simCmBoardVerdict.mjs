@@ -51,7 +51,11 @@
                Control nostep.
      dailies   60 Hot Seat days from 2026-09-24 and every seventh day back (DAILY_BACK), head against base,
                whole runs equal with the suitor's name masked (correction 9); 30 Deadline Day days, the deal,
-               the grade and the state's keys equal. Control hotstart (the Hot Seat line taken out).
+               the grade and the state's keys equal. Control hotstart (the Hot Seat line taken out). Also
+               (review fix, advice 17) every date's takeover, dated and as a free run on the current rules:
+               the card less what the previous manager had already failed on the current rules, the whole
+               card on the old rules, nothing else moved but a suitor's name; the whole runs are compared
+               with those lines off the base's card. Control hscard (the takeover keeps them again).
      fresh     fleet B (disjoint seeds, three seed bases): every fresh career opens at BOARD_FRESH, and the
                share of lost openers that leave the board Safe stays at FRESH_FLOOR or more. Control start60.
      title     the title fleet with the rollover handed to both trees: every A or B stay opens Safe or more,
@@ -665,6 +669,46 @@ function maskRun(run) {
   for (const m of c.log ?? []) m.events = (m.events ?? []).map(e => (typeof e === 'string' && e.startsWith(PHONE) ? PHONE : e));
   return c;
 }
+/** Review fix (advice 17): Hot Seat's own takeover takes the card less what the previous manager had already
+ *  failed on a run on the current rules, and the whole card on the old rules (legacySeason), the way Club
+ *  Manager's takeovers do. Read on the takeover itself (startHotSeat returns the run as you walk in), for every
+ *  date of the window as dated and again as a free run on the current rules (the same club and seed), against
+ *  the base's card at the same moment; everything else at the takeover equal but a suitor's name. Returns
+ *  the lines each dated takeover dropped, for the whole run comparison. Control hscard. */
+async function hsCardChecks(head, base, dates, store) {
+  const P = 'dailies';
+  const h = await freshArm(head), b = await freshArm(base);
+  const out = { cases: 0, current: 0, failedOnBase: 0, bad: [], droppedByDate: new Map() };
+  const maskState = s => {
+    const c = canon(s);
+    delete c.boardObjectives;
+    if (c.approach) for (const k of ['club', 'blurb', 'leagueName', 'tierLabel']) c.approach[k] = 'X';
+    c.aiHeadlines = (c.aiHeadlines ?? []).map(l => (typeof l === 'string' && l.startsWith(PHONE) ? PHONE : l));
+    return c;
+  };
+  for (const date of dates) {
+    const d = h.hs.dailyHotSeat(date);
+    for (const setup of [{ club: d.club, seed: d.seed, daily: date }, { club: d.club, seed: d.seed, rules: 1331 }]) {
+      store.clear();
+      const hState = h.hs.startHotSeat(setup).state;
+      store.clear();
+      const bState = b.hs.startHotSeat(setup).state;
+      const current = h.hs.rulesOf(setup) === undefined;
+      const statuses = b.cm.objectiveStatuses(bState);
+      const failed = statuses.filter(x => x.status === 'failed').map(x => x.objective.id);
+      const want = current ? statuses.filter(x => x.status !== 'failed').map(x => x.objective) : (bState.boardObjectives ?? []);
+      out.cases += 1;
+      if (current) { out.current += 1; if (failed.length) out.failedOnBase += 1; }
+      if (setup.daily) out.droppedByDate.set(date, current ? failed : []);
+      const tag = `${date}${setup.daily ? '' : ' (free run)'} ${d.club}`;
+      if (JSON.stringify(hState.boardObjectives ?? []) !== JSON.stringify(want)) out.bad.push(`${tag}: ${(hState.boardObjectives ?? []).map(o => o.id).join(',')} against ${want.map(o => o.id).join(',')}`);
+      else if (JSON.stringify(maskState(hState)) !== JSON.stringify(maskState(bState))) out.bad.push(`${tag}: the takeover moved beyond its card: ${firstDiff(maskState(hState), maskState(bState))}`);
+    }
+  }
+  console.log(`[dailies] Hot Seat takeovers: ${out.cases} (${dates.length} dated, ${dates.length} free); on CM_BOARD_BASE ${out.failedOnBase} of the ${out.current} on the current rules took over with a failed line on the card`);
+  check(P, `${out.cases} Hot Seat takeovers: the card less its failed lines on the current rules, the whole card on the old rules, nothing else moved but a suitor's name`, out.current > 0 && out.bad.length === 0, out.bad.length ? `${out.bad.length}; first ${out.bad[0]}` : '');
+  return out;
+}
 function ddPlay(arm, date) {
   const { dd } = arm;
   const setup = dd.dailyDeadlineDay(date);
@@ -679,20 +723,25 @@ async function dailiesSection(head, base) {
   const realNow = Date.now;
   Date.now = () => 1791547200000;
   const hsDates = [...dayList('2026-09-24', num('DAILY_HS', 60)), ...dayList('2026-09-24', num('DAILY_BACK', 20) + 1, -7).slice(1)];
+  const card = await hsCardChecks(head, base, hsDates, store);
   let same = 0, suitorOnly = 0, approached = 0;
   const moved = [];
   for (const date of hsDates) {
     store.clear();
     const h = hsPlay(await freshArm(head), date);
     store.clear();
-    const b = hsPlay(await freshArm(base), date);
+    const b0 = hsPlay(await freshArm(base), date);
+    /* The lines this date's takeover dropped (hsCardChecks) come off the base's card too, so what is left to
+       compare is everything else the day did. */
+    const dropped = card.droppedByDate.get(date) ?? [];
+    const b = dropped.length ? { ...b0, state: { ...b0.state, boardObjectives: (b0.state.boardObjectives ?? []).filter(o => !dropped.includes(o.id)) } } : b0;
     const whole = r => JSON.stringify({ state: r.state, log: r.log, verdict: r.verdict ?? null, takeover: r.takeover, target: r.target });
     if (whole(h) === whole(b)) same += 1;
     else if (JSON.stringify(maskRun(h)) === JSON.stringify(maskRun(b))) suitorOnly += 1;
     else moved.push(`${date}: ${firstDiff(maskRun(h), maskRun(b))}`);
     if (h.state.approach || (h.log ?? []).some(m => (m.events ?? []).some(e => String(e).startsWith(PHONE)))) approached += 1;
   }
-  console.log(`[dailies] Hot Seat: ${hsDates.length} dates (60 from 2026-09-24 and every seventh day back); ${same} identical, ${suitorOnly} differ only in a suitor's name, ${moved.length} moved; ${approached} raised an approach`);
+  console.log(`[dailies] Hot Seat: ${hsDates.length} dates (60 from 2026-09-24 and every seventh day back); ${same} identical, ${suitorOnly} differ only in a suitor's name, ${moved.length} moved; ${approached} raised an approach; ${[...card.droppedByDate.values()].filter(d => d.length).length} dates compared with the base's card less the failed lines their takeover dropped`);
   check(P, `${hsDates.length} Hot Seat days: every run equal to CM_BOARD_BASE but for a suitor's name`, moved.length === 0, moved.length ? `${moved.length}; first ${moved[0]}` : '');
   const ddDates = dayList('2026-09-24', num('DAILY_DD', 30));
   const ddMoved = [];
@@ -1121,6 +1170,8 @@ const ENGINE_CONTROLS = {
   noband: { file: MODULE, patches: [["  if (i.grade === 'A' || i.grade === 'B') v = Math.max(v, BOARD_FRESH);", '  if (false) v = Math.max(v, BOARD_FRESH);'],
     ["  else if (i.grade === 'D' || i.grade === 'F') v = Math.min(v, BOARD_SAFE_LINE - 1);", '  else if (false) v = Math.min(v, BOARD_SAFE_LINE - 1);']] },
   hotstart: { file: HS_FILE, patches: [['  s.boardConfidence = LEGACY_BOARD_START;\n', '']] },
+  /* Review fix (advice 17): Hot Seat's takeover keeps the previous manager's failed lines again. */
+  hscard: { file: HS_FILE, patches: [['    boardObjectives: legacySeason(chosen.state) ? chosen.state.boardObjectives : openObjectives(chosen.state),\n', '']] },
   prefilter: { file: ENGINE, patches: [['    const classic = shuffle(everyClub.filter(c => !vacancyNames.has(c.name) && c.tier < club.tier',
     "    const big0 = (position === 1 && !PYRAMIDS.some(p => p.second === careerLeagueOf(state).id)) || seasonTrophies.includes('Champions League');\n    const classic = shuffle(everyClub.filter(c => (legacy || offerStepOk(club.tier, c.tier, big0)) && !vacancyNames.has(c.name) && c.tier < club.tier"]] },
 };
