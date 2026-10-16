@@ -187,6 +187,7 @@ try {
     if (row) {
       const button = page.locator('[data-ow-talk="1"]').first();
       await button.scrollIntoViewIfNeeded().catch(() => {});
+      await shot(page, 'a-row');
       await button.click();
       await page.getByTestId('cm-desk-note').first().waitFor({ timeout: 4000 }).catch(() => {});
       const note = await page.evaluate(() => (document.querySelector('[data-testid="cm-desk-note"]')?.textContent || '').replace(/\s+/g, ' ').trim());
@@ -200,6 +201,7 @@ try {
   {
     const { context, page } = await pageWith(pick.save);
     const text = (await resume(page)) ? await clubPage(page, BUYER) : null;
+    await page.getByText(X, { exact: true }).first().scrollIntoViewIfNeeded().catch(() => {});
     await shot(page, 'b-buyer');
     check('b', `${BUYER}'s club page lists ${X}`, !!text && text.includes(X));
     errors.push(...page.errors);
