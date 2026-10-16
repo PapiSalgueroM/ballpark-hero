@@ -25,7 +25,7 @@ Method-only repair places the positive control above the actual fixed banner's c
 
 Failed artifact12061638211 is45880675bytes, SHA472e15f6735413f197e80ead84a0333bf99504b721a35a287e84a40b60b782b5, retained outside in manager-desk-feedback-first-fixed. No fixed/live claim. Prior valid baseline remains retained; only positive calibration placement changed, so the measured original fault and product acceptance conditions remain intact.
 
-## Qualified fixed result, 2026-10-16 17:37 UTC
+## Qualified fixed result, 2026-10-16 17:33:07 UTC
 
 Tested 55237412159466f35ee1f2cea38e305caeca4a03, run 38938792371, job 117100940314, completed SUCCESS at 17:25:18 UTC. The application is unchanged from e74deacf; the only intervening proof repair moves the positive calibration above the actual fixed cookie banner. All five served journeys at 320/390/430/1440 and cookie-pending 390 complete, with visible and stationary first/repeated notes, stationary dismissal, unchanged modes/navigation and a successful stock-squad Talk opening the real negotiation. There are zero setup, preservation, presentation or page errors. All 45 retained local/session comparisons preserve initial bytes. All five positive/hidden calibration pairs work; cookie calibration ends at y687 above the banner at y695.
 
