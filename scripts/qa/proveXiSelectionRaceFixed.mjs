@@ -15,10 +15,10 @@ const BASELINE_RAW = process.env.XI_RACE_BASELINE_RAW_SHA256;
 assert(/^[a-f0-9]{64}$/.test(BASELINE_RAW || ''), 'Supply the physically qualified original baseline raw SHA');
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 const OUT = path.join(process.env.XI_RACE_OUT, 'fixed-proof');
-const BASE = 'b1520a9e9d21148b74487079a5847cd907dbedf0';
+const BASE = 'cb7509907ca84af9bf85f99f10e67990805edb4c';
 const HOOK = 'src/hooks/useLineupBuilder.ts', TEST = 'src/test/xiSelectionHistoryRace.test.tsx';
 const SELF = 'scripts/qa/proveXiSelectionRaceFixed.mjs', PLAY = 'scripts/qa/playXiPendingHistory.mjs';
-const TEST_SHA = 'f4695edf40dbd2017015219cab791156c133bb679f7e330de40aabf970a9549d';
+const TEST_SHA = '8e72ee3379cf3bda0c966520f1b02aa7d9ec2567cd9f40470a9988b0a843158b';
 const sha = bytes => createHash('sha256').update(bytes).digest('hex');
 const read = file => fs.readFileSync(path.join(ROOT, file));
 function git(args) {

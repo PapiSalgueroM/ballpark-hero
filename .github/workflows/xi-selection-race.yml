@@ -1,4 +1,4 @@
-name: XI measured history selection baseline
+name: XI pending history selection proof
 
 on:
   push:
@@ -8,19 +8,25 @@ permissions:
   contents: read
 
 jobs:
-  baseline:
+  qualify:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 40
     defaults:
       run:
         shell: bash
     env:
       CI: '1'
       SIM_NETWORK: offline
-      XI_SELECTION_RACE_PHASE: baseline
+      XI_SELECTION_RACE_PHASE: fixed
+      XI_RACE_BASELINE_RAW_SHA256: 7c65d7f1a66eb9a2f29fb5c24fce53bb91aec76abb59e4131c5de923fb7d65bf
+      XI_PENDING_BASE: http://127.0.0.1:4173
+      XI_PENDING_HOOK_SOURCE_REF: ${{ github.sha }}
     steps:
-      - name: Allocate physical evidence directory
-        run: echo "XI_RACE_OUT=$RUNNER_TEMP/xi-selection-race" >> "$GITHUB_ENV"
+      - name: Allocate physical evidence directories
+        run: |
+          echo "XI_RACE_OUT=$RUNNER_TEMP/xi-selection-race" >> "$GITHUB_ENV"
+          echo "XI_PENDING_OUT=$RUNNER_TEMP/xi-selection-race/native" >> "$GITHUB_ENV"
+          echo "SAFARI_REPORT_FONT_CACHE=$RUNNER_TEMP/xi-selection-fonts" >> "$GITHUB_ENV"
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
@@ -29,15 +35,17 @@ jobs:
         with:
           node-version: 24
           cache: npm
-      - name: Bind unchanged published application and locked dependencies
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Bind exact source locked packages and isolated browser tools
         run: |
           set -euo pipefail
           mkdir -p "$XI_RACE_OUT"
           git rev-parse HEAD > "$XI_RACE_OUT/head.txt"
           git archive --format=zip HEAD > "$XI_RACE_OUT/source.zip"
-          git merge-base --is-ancestor 8220144a8c7c31a3bc5f9afe84c925faccf905c0 HEAD
-          git diff --exit-code b1520a9e9d21148b74487079a5847cd907dbedf0 HEAD -- src/hooks/useLineupBuilder.ts
-          git diff --exit-code 8220144a8c7c31a3bc5f9afe84c925faccf905c0 HEAD -- src scripts public package.json package-lock.json bun.lock bun.lockb ':!src/test/xiSelectionHistoryRace.test.tsx' ':!scripts/qa/proveXiSelectionRace.mjs' ':!src/hooks/useLineupBuilder.ts'
+          git merge-base --is-ancestor cb7509907ca84af9bf85f99f10e67990805edb4c HEAD
+          git diff --exit-code cb7509907ca84af9bf85f99f10e67990805edb4c HEAD -- src scripts public package.json package-lock.json bun.lock bun.lockb ':!src/hooks/useLineupBuilder.ts' ':!scripts/qa/proveXiSelectionRaceFixed.mjs' ':!scripts/qa/playXiPendingHistory.mjs'
           git status --porcelain --untracked-files=no > "$XI_RACE_OUT/source-before.txt"
           test ! -s "$XI_RACE_OUT/source-before.txt"
           git ls-files -z | sort -z | xargs -0 sha256sum > "$XI_RACE_OUT/source-files.sha256"
@@ -55,16 +63,27 @@ jobs:
           fs.writeFileSync(process.env.XI_RACE_OUT+'/node-versions.json',JSON.stringify(process.versions,null,2)+'\n');
           console.log('Bound all521 installed locked package manifests.');
           NODE
+          npm install --prefix "$RUNNER_TEMP/xi-selection-tools" --no-save --package-lock=false playwright@1.64.0
+          ln -s "$RUNNER_TEMP/xi-selection-tools/node_modules/playwright" node_modules/playwright
+          ln -s "$RUNNER_TEMP/xi-selection-tools/node_modules/playwright-core" node_modules/playwright-core
+          node "$RUNNER_TEMP/xi-selection-tools/node_modules/playwright/cli.js" install --with-deps chromium webkit
+          python -m pip install fonttools pillow
+          python -m pip freeze > "$XI_RACE_OUT/python-packages.txt"
+          node -p "require('playwright/package.json').version" > "$XI_RACE_OUT/playwright-version.txt"
+          SOCCER_CAREER_SAVE_RETRY_FONT_CACHE="$SAFARI_REPORT_FONT_CACHE" node scripts/qa/soccerCareerSaveRetry1078.mjs --prefetch-fonts-only > "$XI_RACE_OUT/fonts.log" 2>&1
+          cp -R "$SAFARI_REPORT_FONT_CACHE" "$XI_RACE_OUT/fonts"
           find node_modules -type f -print0 | sort -z | xargs -0 sha256sum > "$XI_RACE_OUT/installed-files.sha256"
-      - name: Actual app types and new remote method syntax
+          find "$RUNNER_TEMP/xi-selection-tools/node_modules" -type f -print0 | sort -z | xargs -0 sha256sum > "$XI_RACE_OUT/browser-tool-files.sha256"
+      - name: Actual app types and new method syntax
         run: |
           set -euo pipefail
-          node --check scripts/qa/proveXiSelectionRace.mjs
+          node --check scripts/qa/proveXiSelectionRaceFixed.mjs
+          node --check scripts/qa/playXiPendingHistory.mjs
           node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee "$XI_RACE_OUT/types.log"
-      - name: Exact overwrite fault and seven completed preserves
+      - name: Eight fixed original and restored actual hook cases
         run: |
           set -euo pipefail
-          SIM_OFFLINE_RECEIPT="$XI_RACE_OUT/new.transport" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/proveXiSelectionRace.mjs 2>&1 | tee "$XI_RACE_OUT/baseline.log"
+          SIM_OFFLINE_RECEIPT="$XI_RACE_OUT/new.transport" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/proveXiSelectionRaceFixed.mjs 2>&1 | tee "$XI_RACE_OUT/fixed-proof.log"
       - name: Existing actual history validator and picker regressions
         run: |
           set -euo pipefail
@@ -90,22 +109,51 @@ jobs:
           assert.deepEqual(actual,expected);
           console.log('All101 existing history/validator/autocomplete cases completed and passed.');
           NODE
-      - name: Full tracked source and installed dependency holds
+      - name: Actual production build and retained emitted bytes
+        run: |
+          set -euo pipefail
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" npm run build 2>&1 | tee "$XI_RACE_OUT/build.log"
+          find dist -type f -print0 | sort -z | xargs -0 sha256sum > "$XI_RACE_OUT/dist-files.sha256"
+          python -c "import os,zipfile; z=zipfile.ZipFile(os.environ['XI_RACE_OUT']+'/dist.zip','w',zipfile.ZIP_DEFLATED); [(z.write(os.path.join(r,f),os.path.join(r,f))) for r,ds,fs in os.walk('dist') for f in fs]; z.close()"
+      - name: Every built site reader
+        run: |
+          set -euo pipefail
+          failed=0
+          for sim in simAdsense simBrand simHeadTags simHiddenPages simHubs simIndexNow simIndexing simInternalLinks simNoRivalNames simPrerender simPrerenderBoot simRetiredRoutes simSchema simSitemap simSnapshotAssets; do
+            NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node "scripts/$sim.mjs" > "$XI_RACE_OUT/$sim.log" 2>&1 || failed=1
+            tail -n 3 "$XI_RACE_OUT/$sim.log"
+          done
+          exit "$failed"
+      - name: Native WebKit Chromium pending checks and unchanged weights
+        run: |
+          set -euo pipefail
+          node scripts/lib/hostLikeServer.mjs dist 4173 > "$XI_RACE_OUT/server.log" 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+          for attempt in 1 2 3 4 5; do curl --fail --silent http://127.0.0.1:4173/ > /dev/null && break || sleep 1; done
+          failed=0
+          SIM_OFFLINE_RECEIPT="$XI_RACE_OUT/native.transport" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/playXiPendingHistory.mjs > "$XI_RACE_OUT/native.log" 2>&1 || failed=1
+          cat "$XI_RACE_OUT/native.log"
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" SWEEP_OFFLINE=1 BASE=http://127.0.0.1:4173 SWEEP_BASE=http://127.0.0.1:4173 node scripts/sweepWeight.mjs > "$XI_RACE_OUT/weights.log" 2>&1 || failed=1
+          cat "$XI_RACE_OUT/weights.log"
+          exit "$failed"
+      - name: Full source packages browser tools and built bytes held
         if: always()
         run: |
           set -euo pipefail
           sha256sum --check "$XI_RACE_OUT/source-files.sha256" > "$XI_RACE_OUT/source-holds.log" 2>&1
           sha256sum --check "$XI_RACE_OUT/installed-files.sha256" > "$XI_RACE_OUT/installed-holds.log" 2>&1
+          sha256sum --check "$XI_RACE_OUT/browser-tool-files.sha256" > "$XI_RACE_OUT/browser-tool-holds.log" 2>&1
+          if test -f "$XI_RACE_OUT/dist-files.sha256"; then sha256sum --check "$XI_RACE_OUT/dist-files.sha256" > "$XI_RACE_OUT/dist-holds.log" 2>&1; fi
           test ! -s "$XI_RACE_OUT/new.transport"
           test ! -s "$XI_RACE_OUT/related.transport"
+          test ! -s "$XI_RACE_OUT/native.transport"
           git status --porcelain --untracked-files=no > "$XI_RACE_OUT/source-after.txt"
           test ! -s "$XI_RACE_OUT/source-after.txt"
-          tail -n 2 "$XI_RACE_OUT/source-holds.log"
-          tail -n 2 "$XI_RACE_OUT/installed-holds.log"
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: xi-selection-race-baseline-${{ github.sha }}
+          name: xi-selection-race-fixed-${{ github.sha }}
           path: ${{ env.XI_RACE_OUT }}
           if-no-files-found: error
           retention-days: 14

@@ -1,3 +1,6 @@
+## Root1389 warm baseline measured and fixed qualification rebound, 2026-10-16
+
+Original-app cb750990/run38976074878 SUCCESS:1precise overwrite fault+7preserves/28snapshots,101old/types/521/full holds. Artifact12079411345 physically retained, actual warm raw7c65d7f1. The identical two-line busy fix is restored with only fixed-method baseline/test/raw ref rebinding. All assertions and native method remain held; fresh fixed qualification still required. First fixed822 failure remains unqualified. Root305 Career start fix staysREADY; Claude I owns main and live publication. Details docs/audits/xi-selection-race.md.
 ## Root1389 fixture correction and fresh original-app baseline, 2026-10-16
 
 First fixed822/run38974894448 failed on one framework scheduler RNG draw, with no later-arm/build/browser credit. Exact React source matches the CI installed-body receipt and measured draw timing. One async-act warmup before measurement preserves all eight test bodies and assertions, with a whole-test inverse proof. Application hook is restored to original b152 for a fresh baseline. Fixed helper/native remain held. No product or live qualification is claimed. See docs/audits/xi-selection-race.md.
