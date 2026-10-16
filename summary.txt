@@ -1,0 +1,3 @@
+simWorldUcl exit=0 0s | simWorldUcl: green, 369 checks, 0 failures
+vitest-world exit=1 2s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/worldCompetition.test.ts,title=src/lib/worldCompetition.test.ts > drawG8%2C the eras group draw > sixte
+tsc exit=0 39s | 
