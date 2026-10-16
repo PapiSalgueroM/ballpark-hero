@@ -157,9 +157,20 @@ async function walk(browser, base, row, size, arm) {
   });
   page.on('pageerror', e => rec.pageErrors.push(String(e).slice(0, 300)));
   page.on('console', m => { if (m.type() === 'error') rec.consoleErrors.push({ url: m.location().url ?? '', text: m.text().slice(0, 300), at: Date.now() - t0 }); });
+  rec.navigated = [];
+  page.on('framenavigated', f => { if (f === page.mainFrame()) rec.navigated.push({ at: Date.now() - t0, path: new URL(f.url()).pathname }); });
+  /* The page reports what it shows every 100 ms through a binding, so the hold is read from the page itself:
+     an evaluate from outside is refused while a navigation is pending (measured on the runner). */
+  const live = [];
+  await context.exposeBinding('__dukbSample', (source, s) => { if (source.frame === page.mainFrame()) live.push({ ...s, now: Date.now() }); });
+  await context.addInitScript({ content: `setInterval(() => { try { if (document.body) window.__dukbSample((${SNAP.toString()})()); } catch (e) {} }, 100);` });
+  const cdp = await context.newCDPSession(page);
   const shot = async tag => {
     const file = `shot-${row.id}-${size.width}-${arm}-${tag}.jpg`;
-    try { await page.screenshot({ path: path.join(OUT, file), type: 'jpeg', quality: 60 }); rec[tag + 'Shot'] = file; } catch (e) { rec.issues.push(`picture ${tag} failed: ${String(e).slice(0, 120)}`); }
+    try {
+      const { data } = await cdp.send('Page.captureScreenshot', { format: 'jpeg', quality: 60 });
+      fs.writeFileSync(path.join(OUT, file), Buffer.from(data, 'base64')); rec[tag + 'Shot'] = file;
+    } catch (e) { rec.issues.push(`picture ${tag} failed: ${String(e).slice(0, 120)}`); }
   };
   try {
     rec.stage = 'goto';
@@ -192,10 +203,16 @@ async function walk(browser, base, row, size, arm) {
           const wait = held.start + ms - Date.now();
           if (wait > 0) await sleep(wait);
           if (held.end) { rec.issues.push(`the hold ended before the ${ms} ms sample`); break; }
-          const s = await page.evaluate(SNAP); s.t = Date.now() - held.start; rec.samples.push(s);
           if (ms === 1500) await shot('hold');
         }
         await loaded;
+        /* the page's own reports, the latest at or before each sample time, from inside the hold */
+        for (const ms of SAMPLES) {
+          const s = live.filter(x => x.now >= held.start && x.now <= held.start + ms + 50).pop();
+          if (s) rec.samples.push({ ...s, t: s.now - held.start });
+        }
+        const lastOld = live.filter(x => x.now <= held.end).pop();
+        rec.oldPageLastReportMs = lastOld ? lastOld.now - held.start : null;
       }
     }
     rec.stage = 'settle';
@@ -215,7 +232,8 @@ async function walk(browser, base, row, size, arm) {
 }
 
 const SHAPES = /This page broke|reading 'default'|reading 'HomeAbout'|Cannot convert undefined or null to object/;
-const keyOf = e => e.url.replace(/^https?:\/\/[^/]+/, '') + ' ' + e.text.replace(/https?:\/\/127\.0\.0\.1:\d+/g, '');
+/* a console error's identity: its path and text with hosts and query strings dropped (a live score read carries the clock) */
+const keyOf = e => e.url.replace(/^https?:\/\/[^/]+/, '').replace(/\?.*$/, '') + ' ' + e.text.replace(/https?:\/\/[^\s'"]+/g, u => u.replace(/^https?:\/\/[^/]+/, '').replace(/\?.*$/, ''));
 function judge(nul, rec, row) {
   const issues = [...rec.issues];
   const base = new Set(nul.consoleErrors.map(keyOf));
@@ -238,6 +256,7 @@ function judge(nul, rec, row) {
     if (rec.docs[1] && rec.docs[1].path !== row.tap) issues.push(`the reload loaded ${rec.docs[1]?.path}, expected ${row.tap}`);
   }
   if (rec.samples.length !== SAMPLES.length) issues.push(`${rec.samples.length} samples during the hold, expected ${SAMPLES.length}`);
+  if (!(rec.oldPageLastReportMs >= SAMPLES[SAMPLES.length - 1])) issues.push(`the old page last reported ${rec.oldPageLastReportMs} ms into the hold: the hold did not keep it alive`);
   const ref = row.tap ? rec.before?.scrollY : rec.samples[0]?.scrollY;
   rec.samples.forEach(s => {
     if (s.broke) issues.push(`"This page broke" at ${s.t} ms into the hold`);
@@ -276,6 +295,7 @@ try {
         red++;
         console.log(`FAIL ${label}: ${issues.length} issue(s) | ${reqs}`);
         issues.slice(0, 6).forEach(i => console.log('   ' + i.slice(0, 300)));
+        console.log('   trace ' + JSON.stringify({ docs: rec.docs, navigated: rec.navigated, lastReport: rec.oldPageLastReportMs, samples: rec.samples.map(s => ({ t: s.t, broke: s.broke, loading: s.loading, tiles: s.tiles, about: s.about, seo: s.seo, flag: s.flag, scrollY: s.scrollY })) }).slice(0, 900));
       } else {
         console.log(`ok   ${label}: waited ${rec.waitMs} ms, hold ${rec.held?.ms} ms, docs ${rec.docs.map(d => d.path).join(' ')}, scrollY ${rec.samples.map(s => s.scrollY).join('/')} | ${reqs} | ${rec.holdShot}, ${rec.afterShot}`);
       }
