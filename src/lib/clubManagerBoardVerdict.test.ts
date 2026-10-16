@@ -90,7 +90,7 @@ describe('Round 1335: the board reads the season you had', () => {
     expect(openingConfidence({ ...base, grade: 'D', objectives: [{ id: 'league', hit: true }] })).toBe(BOARD_SAFE_LINE - 1);
     expect(openingConfidence({ ...base, finish: 1, grade: 'A', objectives: [] })).toBe(Math.max(BOARD_FRESH, 68.5));
     expect(openingConfidence({ ...base, finish: 24, grade: 'F', objectives: [{ id: 'league', hit: false }] })).toBe(35);
-    expect(openingConfidence({ ...base, finish: 1, grade: 'A', objectives: [{ id: 'league', hit: true }, { id: 'cup', hit: true }] })).toBe(82);
+    expect(openingConfidence({ ...base, playedExpectation: 24, finish: 1, grade: 'A', objectives: [{ id: 'league', hit: true }, { id: 'cup', hit: true }] })).toBe(82);
   });
 
   it('writes every line with no dash and in the board or the fans voice', () => {
