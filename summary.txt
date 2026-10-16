@@ -1,0 +1,7 @@
+build exit=0 24s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+pr-strip exit=1 22s | control strip FIRED: 6 of 18 checks red
+walk exit=0 48s | walk: done, 6 notes. Pictures in /home/runner/work/_temp/rc-out/files
+playCmRetire exit=0 81s | playCmRetire: all 48 checks passed. Pictures in /home/runner/work/_temp/rc-out/files/head
+twotabs15 exit=0 38s | playTwoTabs: green at 320x640, 390x844, 1280x900
+pr-norecord exit=1 74s | control norecord FIRED: 6 of 40 checks red
+twotabs15-nofence exit=2 306s | CONTROL DID NOT TURN ITS CASES RED: TWO_TABS_CONTROL=nofence dropped 24 writes, red 15 of 1, 2, 3, 6, 9, 10, 11, 12, 14, 15

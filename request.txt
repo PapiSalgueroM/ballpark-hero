@@ -1,0 +1,8 @@
+#!serve
+#!playwright
+walk: node .rc/x/review-run-walk.mjs
+playCmRetire: node scripts/playCmRetire.mjs
+pr-strip: PLAY_RETIRE_CONTROL=strip node scripts/playCmRetire.mjs
+pr-norecord: PLAY_RETIRE_CONTROL=norecord node scripts/playCmRetire.mjs
+twotabs15: CASES=15 ENGINES=chromium node scripts/playTwoTabs.mjs
+twotabs15-nofence: CASES=15 TWO_TABS_CONTROL=nofence ENGINES=chromium node scripts/playTwoTabs.mjs
