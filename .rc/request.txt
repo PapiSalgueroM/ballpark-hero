@@ -1,0 +1,47 @@
+# Release BI, Round 1335 (the board judges the season you had, and the job market), merged as ea937568 (first parent
+# 420902cd). Send with x/mkbase.sh and x/ctlPatch2.mjs. Every simCmBoardVerdict line binds its base: BASE_SHA is this
+# tree WITHOUT Round 1335 (scripts/lib/treeWithoutMerge.mjs ea937568 420902cd), which x/mkbase.sh checks out as
+# CM_BOARD_BASE (mkbase.sh's own default, 1027b08c, is the round's original base). Controls (take-nopin,
+# take-keepfailed, dailies-hscard, dailies-hotstart, title-played, title-weights) must exit 1 with FIRED; the walk's
+# controls (walk-noconfirm, walk-nofate, walk-rise) must exit 1 with FIRED. The digest and the Round 1081 pin are
+# retaken once on the release's final tree (part two); their plain lines live in rcg-C.
+#!build
+#!playwright
+small: export BASE_SHA=$(node scripts/lib/treeWithoutMerge.mjs ea937568 420902cd) && echo "base $BASE_SHA" && CM_BOARD_BASE=$(bash .rc/x/mkbase.sh b1) node scripts/simCmBoardVerdict.mjs --part=pure,fresh,saves,dailies
+takeover: export BASE_SHA=$(node scripts/lib/treeWithoutMerge.mjs ea937568 420902cd) && echo "base $BASE_SHA" && CM_BOARD_BASE=$(bash .rc/x/mkbase.sh b2) node scripts/simCmBoardVerdict.mjs --part=takeover
+take-nopin: export BASE_SHA=$(node scripts/lib/treeWithoutMerge.mjs ea937568 420902cd) && echo "base $BASE_SHA" && CM_BOARD_BASE=$(bash .rc/x/mkbase.sh b3) SIM_CM_BOARD_CONTROL=nopin node scripts/simCmBoardVerdict.mjs --part=takeover
+take-keepfailed: export BASE_SHA=$(node scripts/lib/treeWithoutMerge.mjs ea937568 420902cd) && echo "base $BASE_SHA" && CM_BOARD_BASE=$(bash .rc/x/mkbase.sh b4) SIM_CM_BOARD_CONTROL=keepfailed node scripts/simCmBoardVerdict.mjs --part=takeover
+dailies-hscard: export BASE_SHA=$(node scripts/lib/treeWithoutMerge.mjs ea937568 420902cd) && echo "base $BASE_SHA" && CM_BOARD_BASE=$(bash .rc/x/mkbase.sh b5) SIM_CM_BOARD_CONTROL=hscard node scripts/simCmBoardVerdict.mjs --part=dailies
+dailies-hotstart: export BASE_SHA=$(node scripts/lib/treeWithoutMerge.mjs ea937568 420902cd) && echo "base $BASE_SHA" && CM_BOARD_BASE=$(bash .rc/x/mkbase.sh b6) SIM_CM_BOARD_CONTROL=hotstart node scripts/simCmBoardVerdict.mjs --part=dailies
+fleet0: export BASE_SHA=$(node scripts/lib/treeWithoutMerge.mjs ea937568 420902cd) && echo "base $BASE_SHA" && CM_BOARD_BASE=$(bash .rc/x/mkbase.sh b7) SHARD=0/3 node scripts/simCmBoardVerdict.mjs --part=grade,fate,stream,offers
+fleet1: export BASE_SHA=$(node scripts/lib/treeWithoutMerge.mjs ea937568 420902cd) && echo "base $BASE_SHA" && CM_BOARD_BASE=$(bash .rc/x/mkbase.sh b8) SHARD=1/3 node scripts/simCmBoardVerdict.mjs --part=grade,fate,stream,offers
+fleet2: export BASE_SHA=$(node scripts/lib/treeWithoutMerge.mjs ea937568 420902cd) && echo "base $BASE_SHA" && CM_BOARD_BASE=$(bash .rc/x/mkbase.sh b9) SHARD=2/3 node scripts/simCmBoardVerdict.mjs --part=grade,fate,stream,offers
+title0: export BASE_SHA=$(node scripts/lib/treeWithoutMerge.mjs ea937568 420902cd) && echo "base $BASE_SHA" && CM_BOARD_BASE=$(bash .rc/x/mkbase.sh c1) SHARD=0/2 node scripts/simCmBoardVerdict.mjs --part=title,kitty
+title1: export BASE_SHA=$(node scripts/lib/treeWithoutMerge.mjs ea937568 420902cd) && echo "base $BASE_SHA" && CM_BOARD_BASE=$(bash .rc/x/mkbase.sh c2) SHARD=1/2 node scripts/simCmBoardVerdict.mjs --part=title,kitty
+title-played: export BASE_SHA=$(node scripts/lib/treeWithoutMerge.mjs ea937568 420902cd) && echo "base $BASE_SHA" && CM_BOARD_BASE=$(bash .rc/x/mkbase.sh c3) SHARD=0/2 SIM_CM_BOARD_CONTROL=played node scripts/simCmBoardVerdict.mjs --part=title
+title-weights: export BASE_SHA=$(node scripts/lib/treeWithoutMerge.mjs ea937568 420902cd) && echo "base $BASE_SHA" && CM_BOARD_BASE=$(bash .rc/x/mkbase.sh c4) SHARD=0/2 SIM_CM_BOARD_CONTROL=weights node scripts/simCmBoardVerdict.mjs --part=title
+legacy0: export BASE_SHA=$(node scripts/lib/treeWithoutMerge.mjs ea937568 420902cd) && echo "base $BASE_SHA" && CM_BOARD_BASE=$(bash .rc/x/mkbase.sh c5) SHARD=0/2 node scripts/simCmBoardVerdict.mjs --part=legacy
+legacy1: export BASE_SHA=$(node scripts/lib/treeWithoutMerge.mjs ea937568 420902cd) && echo "base $BASE_SHA" && CM_BOARD_BASE=$(bash .rc/x/mkbase.sh c6) SHARD=1/2 node scripts/simCmBoardVerdict.mjs --part=legacy
+simGuideHeadings: node scripts/simGuideHeadings.mjs
+simAcademy: node scripts/simAcademy.mjs
+simEras: node scripts/simEras.mjs
+simPress: node scripts/simPress.mjs
+simRoles: node scripts/simRoles.mjs
+simWilderness: node scripts/simWilderness.mjs
+simClubManagerALeague: node scripts/simClubManagerALeague.mjs
+simClubManagerBudget: node scripts/simClubManagerBudget.mjs
+simClubManagerMeters: node scripts/simClubManagerMeters.mjs
+simClubManagerScore: node scripts/simClubManagerScore.mjs
+simCmLeagueFixtures: node scripts/simCmLeagueFixtures.mjs
+simCmVarLedger: node scripts/simCmVarLedger.mjs
+simTrustCopy: node scripts/simTrustCopy.mjs
+simAccessibility: node scripts/simAccessibility.mjs
+unitset: node_modules/.bin/vitest run src/lib/clubManagerBoardVerdict.test.ts src/test/clubManagerOfferConfirm.test.tsx src/test/cmLeagueLeadersCard.test.tsx src/test/managerHotSeatCarryOnCard.test.tsx src/test/dailyMenuResume.test.tsx --testTimeout=300000 --hookTimeout=120000
+walk: node scripts/playCmBoardVerdict.mjs
+walk-noconfirm: git worktree add -q .claude/worktrees/ctl1 HEAD && node .rc/x/ctlPatch2.mjs .claude/worktrees/ctl1 noconfirm && (cd .claude/worktrees/ctl1 && ../../../node_modules/.bin/vite build --outDir "$OLDPWD/dist-noconfirm" --emptyOutDir --logLevel error) && DIST=dist-noconfirm PLAY_BOARD_CONTROL=noconfirm node scripts/playCmBoardVerdict.mjs
+walk-nofate: sleep 4 && git worktree add -q .claude/worktrees/ctl2 HEAD && node .rc/x/ctlPatch2.mjs .claude/worktrees/ctl2 nofate && (cd .claude/worktrees/ctl2 && ../../../node_modules/.bin/vite build --outDir "$OLDPWD/dist-nofate" --emptyOutDir --logLevel error) && DIST=dist-nofate PLAY_BOARD_CONTROL=nofate node scripts/playCmBoardVerdict.mjs
+walk-rise: sleep 8 && git worktree add -q .claude/worktrees/ctl3 HEAD && node .rc/x/ctlPatch2.mjs .claude/worktrees/ctl3 rise && (cd .claude/worktrees/ctl3 && ../../../node_modules/.bin/vite build --outDir "$OLDPWD/dist-rise" --emptyOutDir --logLevel error) && DIST=dist-rise PLAY_BOARD_CONTROL=rise node scripts/playCmBoardVerdict.mjs
+simDailyClubPool: node scripts/simDailyClubPool.mjs
+simMidSeasonStart: node scripts/simMidSeasonStart.mjs
+simCmApplications: node scripts/simCmApplications.mjs
+worldbrowser-head: MANAGER_WORLD_BROWSER_CONTROL=all node scripts/simManagerWorldBrowser.mjs
