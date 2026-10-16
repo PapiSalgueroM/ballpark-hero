@@ -1,0 +1,8 @@
+mut m10: applied to src/pages/ClubManager.tsx
+  FAIL  390: Take the job made the created club a No sacking career (club Test Rovers, save noSack null)
+  FAIL  390: the created club's hub wears the pill
+  PASS  no page errors
+
+playCmNoSack: 2 failures
+GLUE m10: playCmNoSack exit=1 on the build with the mutation
+GLUE m10 CAUGHT

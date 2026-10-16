@@ -1,0 +1,4 @@
+#!playwright
+#!serial
+glue-m1: bash .rc/x/glue2.sh m1 4181
+glue-m10: bash .rc/x/glue2.sh m10 4182
