@@ -30,6 +30,7 @@ await build({
     export { keyedRng } from '@/lib/keyedRng';
     export { defaultAppearance } from '@/lib/soccerCareerAppearance';
     export { pushHeadlines } from '@/lib/careerSocial';
+    export { summerOn, newSummerSalt } from '@/lib/usCareerSummer';
   `, resolveDir: ROOT, sourcefile: 'career993-expected.ts', loader: 'ts' },
   outfile: bundle, bundle: true, platform: 'node', format: 'cjs', logLevel: 'silent', alias: { '@': path.join(ROOT, 'src') },
 });
@@ -84,6 +85,9 @@ function expectedArrival(sport, prospect) {
     { ...out, pot: state.pot, health: out.devSeasons.length ? 100 : state.health, prospect: state });
   const teamQuality = sport.rollTeamQuality(null, rng);
   sport.assignRole(c, teamQuality, rng);
+  /* Round 1038: the board's joinCareer draws the summer's salt next off the same stream, as
+     src/test/usCareerProspect.test.tsx mirrors it. Without it all six journeys differed by that one field. */
+  if (M.summerOn(sport.summer)) c.summerSalt = M.newSummerSalt(rng);
   if (c.draftPick > 0 && out.devSeasons.length === 0) sport.draftNightInbox(c);
   return { c, phase: 'season', teamQuality, coach: null };
 }
