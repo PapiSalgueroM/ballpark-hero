@@ -22,6 +22,9 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const ARTIFACTS = process.env.CAREER_LOAN_OUT, OUT = path.join(ARTIFACTS, 'browser');
 const FIXTURE = path.join(ARTIFACTS, 'browser-fixtures.json'), REPORT = path.join(OUT, 'report.json'), KEY = 'soccerCareerSave';
 const PARENT = '1b383132351440d16753d67af94550608a85ba87';
+/* Release BH join (Round BHH): the sim reads Life at SC_SAVED_LOAN_LIFE_REF (default PARENT), so the walk checks
+   the fixture's parent Life against the same ref. */
+const LIFE_REF = process.env.SC_SAVED_LOAN_LIFE_REF || PARENT;
 const PROFILES = [{ width: 320, height: 568 }, { width: 390, height: 844 }, { width: 1280, height: 800 }];
 const IDS = ['220-voucher-236-lend', '220-voucher-236-bank-help'];
 const CARDS = {
@@ -344,7 +347,7 @@ try {
   now = Date.parse(fixtures.clock); report.clock = fixtures.clock;
   setup(fixtures.source.head === report.sourceHead && fixtures.source.parentAppRef === PARENT, 'Model checkout or held parent differs.');
   for (const [field, file] of Object.entries(BINDINGS)) setup(fixtures.source[field] === fileHash(path.join(ROOT, file)), field + ': model source differs.');
-  setup(fixtures.source.parentLifeSourcePath === 'fixed/soccerCareerLife.parent.ts' && fixtures.source.parentLifeSha256 === sha(execFileSync('git', ['show', PARENT + ':src/lib/soccerCareerLife.ts'], { cwd: ROOT })), 'Actual parent Life source differs.');
+  setup(fixtures.source.parentLifeSourcePath === 'fixed/soccerCareerLife.parent.ts' && fixtures.source.parentLifeSha256 === sha(execFileSync('git', ['show', LIFE_REF + ':src/lib/soccerCareerLife.ts'], { cwd: ROOT })), 'Actual parent Life source differs.');
   physical(fixtures.source.parentLifeSourcePath, fixtures.source.parentLifeSha256, parentFiles); report.parentReceipts = parentFiles.map(({ filename, ...value }) => value);
   const observer = fixtures.source.pickerObserver, normalPath = 'fixed/source.json', normal = JSON.parse(fs.readFileSync(path.join(ARTIFACTS, normalPath), 'utf8'));
   /* Release BF join: a fixture dealt on Round 1327's keyed deck carries a keyed receipt (scripts/lib/keyedPicker1327.mjs). */
