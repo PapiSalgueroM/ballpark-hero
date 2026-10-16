@@ -1,0 +1,5 @@
+#!serve
+#!playwright
+opponentLabels: ONLY=simSoccerOpponentLabels node scripts/runAllSims.mjs --browser > /tmp/ol.log 2>&1; s=$?; tail -3 /tmp/ol.log; node .rc/x/olReport.mjs | head -6; exit $s
+anchors: ONLY=simHarnessAnchors,simNoRivalNames node scripts/runAllSims.mjs 2>&1 | tail -6; exit ${PIPESTATUS[0]}
+truths: git worktree add -q /tmp/bd e814c2de && ln -s "$PWD/node_modules" /tmp/bd/node_modules && (cd /tmp/bd && node_modules/.bin/vite build > /tmp/bd-build.log 2>&1) && SHOTS=$RC_OUT/shots SCREEN_TRUTHS_BASE_DIST=/tmp/bd/dist ENGINES=chromium node scripts/playSoccerScreenTruths.mjs > /tmp/tr.log 2>&1; s=$?; grep -E "^(FAIL|NOTE) \[head\]" /tmp/tr.log | head -10; sed -n "/verdicts, section by section/,\$p" /tmp/tr.log; exit $s
