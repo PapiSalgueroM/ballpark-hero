@@ -1,0 +1,8 @@
+#!build
+#!playwright
+#!serial
+hubgrid: node scripts/playSoccerHubGrid1089.mjs --prepare-assets-only 2>&1 | tail -3 && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" timeout --signal=TERM --kill-after=15s 12m node scripts/playSoccerHubGrid1089.mjs
+race: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playAutocompleteRace.mjs
+practice: node scripts/qa/careerPractice1076.mjs --prefetch-fonts-only 2>&1 | tail -3 && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" xvfb-run -a node scripts/qa/careerPractice1076.mjs
+matchplans: node scripts/qa/managerMatchPlans1079.mjs --prefetch-fonts-only 2>&1 | tail -3 && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" xvfb-run -a node scripts/qa/managerMatchPlans1079.mjs
+worldbrowser: node scripts/qa/managerWorldBrowser1077.mjs --prefetch-fonts-only 2>&1 | tail -3 && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" xvfb-run -a node scripts/qa/managerWorldBrowser1077.mjs
