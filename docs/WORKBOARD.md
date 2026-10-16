@@ -15790,3 +15790,16 @@ Standing claims after Round 400:
 ## Codex Round1387 claim: additive ready-report source integration, 2026-10-16
 
 Isolated codex/report-followup-integration starts at exact I402fa4562fec28c38c42130036c65e884a25a5fb. Assemble ready root products284/285/286/287/288/289/296/297/302/303 in that order with real no-ff merges and skip-ci preparation commits. Keep I's existing shared board/state text, individual packet audits and all Manager/competition/main/publication ownership. No new feature, manager-book correction, cap or oracle allowance. First return actual merge parents, application overlaps and incoming-reference plan for root review before qualification CI. Later qualification measures exact baseline402 and joined source under identical unchanged caps, with honest inherited failures. No local app/test/build execution, competing release or requirement for BI to wait.
+
+## Codex Round1387 source composition prepared, 2026-10-16
+
+Prepared source head204f97ce467f427e8b4c4f1e56bcc6a2da85d36a contains ten real two-parent product merges and the attributed five-path PR301 method patch. Root independently source-passed the seven app paths: Transfer284+296, ClubDetail285, Life286+302+303, Calendar287, PhonePanel288 and Phone289+297. I402 core/Slots/world roster/Engine/Save/public/packages/weight rules remain exact. All ten packet heads remain ancestors; older301/I1344 ancestry is deliberately absent so I's eventual BIH can merge normally.
+
+| Prepared packet group | Incoming qualification binding |
+| --- | --- |
+|284/285/287/288/296 Manager and phone UI | Actual incoming Engine and matching built dist, declared feature-only component/Calendar controls, old semantic assertions held. |
+|286/302/303 Life | Final-tree inverse removes only its own11/4/2 guards, keeping the other guards and four existing captions. Historical Life refs retain their own inverses. |
+|289/297 phone state | Budget inverse keeps container copies; copy inverse keeps four budget fields. Actual Engine/Save and whole outputs/draws bound. |
+|301 owned method | HARNESS pin only. I's existing core/Slots pin mismatches remain explicitly unqualified until its legitimate retake. |
+
+No combined runtime or CI has run. Full build/browser/weight qualification waits for actual BIH/build-output rebinding, since402's public/whats-new omits two existing source entries and a Soccer-Career-only prerender would remain red. Optional402 preliminary types/unit/ref proof is separate. Any explicitly chosen earlier build must approve and retain each derived snapshot/ledger/sitemap path, run all15 readers and unchanged caps, then prove exact per-path cleanup and complete holds. No sitemap-only or blanket public restoration. Detailed refs, controls and ancestry repair are in docs/audits/report-followup-integration.md. Root approved the source-preparation push and draft PR; the qualification method and CI request still await review. I owns main, publication and its existing product lanes; BI does not wait.
