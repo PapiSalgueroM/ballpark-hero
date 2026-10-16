@@ -1,0 +1,4 @@
+KIT rep=1 side=base line=a exit=0 seconds=48 | simEventDeck: green. Sections 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 only.
+KIT rep=1 side=base line=b exit=0 seconds=103 | simEventDeck: green. Sections 13, 14, 15, 16 only.
+KIT rep=1 side=head line=a exit=0 seconds=48 | simEventDeck: green. Sections 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 only.
+KIT rep=1 side=head line=b exit=0 seconds=104 | simEventDeck: green. Sections 13, 14, 15, 16 only.

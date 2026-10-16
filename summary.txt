@@ -1,0 +1,4 @@
+seam-old exit=0 3s | the old gate under the new test: vitest=1 (1 expected)
+reach5x exit=0 108s | reach5x done, any red: 0
+kit-time-1 exit=0 304s | KIT rep=1 side=head line=b exit=0 seconds=104 | simEventDeck: green. Sections 13, 14, 15, 16 only.
+kit-time-2 exit=0 302s | KIT rep=2 side=base line=b exit=0 seconds=102 | simEventDeck: green. Sections 13, 14, 15, 16 only.

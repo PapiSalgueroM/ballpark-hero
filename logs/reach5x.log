@@ -1,0 +1,33 @@
+REACH5X applied
+SEED=1 exit=0 REACH soccer 719:15 705:42 721:42 total 4999
+SEED=2 exit=0 REACH soccer 719:11 705:30 721:43 total 4999
+SEED=3 exit=0 REACH soccer 719:19 721:28 727:42 total 4999
+SEED=4 exit=0 REACH soccer 719:8 721:28 705:39 total 4999
+SEED=5 exit=0 REACH soccer 719:16 721:28 705:38 total 4999
+SEED=6 exit=0 REACH soccer 719:16 721:32 705:45 total 4999
+SEED=7 exit=0 REACH soccer 719:13 721:35 705:40 total 4999
+SEED=8 exit=0 REACH soccer 719:11 721:33 705:38 total 4998
+SEED=9 exit=0 REACH soccer 719:14 721:35 705:47 total 4998
+SEED=10 exit=0 REACH soccer 719:5 721:32 705:47 total 5000
+SEED=11 exit=0 REACH soccer 719:9 705:35 727:38 total 4999
+SEED=12 exit=0 REACH soccer 719:12 721:25 705:43 total 5000
+SEED=13 exit=0 REACH soccer 719:10 721:32 705:44 total 4995
+SEED=14 exit=0 REACH soccer 719:10 727:40 705:41 total 5000
+SEED=15 exit=0 REACH soccer 719:8 705:28 721:37 total 5000
+SEED=16 exit=0 REACH soccer 719:5 705:34 721:39 total 5000
+SEED=17 exit=0 REACH soccer 719:12 727:30 705:46 total 4999
+SEED=18 exit=0 REACH soccer 719:11 727:39 721:45 total 5000
+SEED=19 exit=0 REACH soccer 719:12 721:37 727:38 total 4996
+SEED=20 exit=0 REACH soccer 719:7 727:40 721:41 total 4998
+SEED=21 exit=0 REACH soccer 719:10 721:36 727:45 total 4999
+SEED=22 exit=0 REACH soccer 719:7 705:34 721:40 total 5000
+SEED=23 exit=0 REACH soccer 719:15 721:34 705:42 total 4997
+SEED=24 exit=0 REACH soccer 719:13 721:28 705:50 total 5000
+SEED=25 exit=0 REACH soccer 719:12 705:33 721:37 total 5000
+SEED=26 exit=0 REACH soccer 719:10 721:26 727:41 total 4998
+SEED=27 exit=0 REACH soccer 719:10 721:33 705:42 total 4998
+SEED=28 exit=0 REACH soccer 719:9 721:37 705:42 total 4997
+SEED=29 exit=0 REACH soccer 719:12 705:35 721:39 total 4998
+SEED=30 exit=0 REACH soccer 719:9 721:27 705:28 total 5000
+   measure: soccer top card share at seeds 1 to 10: 726 9.82, 726 10.78, 726 10.02, 726 10.22, 726 10.56, 726 10.80, 726 10.82, 726 11.04, 726 10.56, 726 10.28
+reach5x done, any red: 0
