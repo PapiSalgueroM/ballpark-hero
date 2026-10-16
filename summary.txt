@@ -1,0 +1,32 @@
+build exit=0 34s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+subs-minus1331 exit=1 1s | treeWithoutMerge: taking the piece out conflicts in src/components/club-manager/ClubManagerHelp.tsx, src/lib/clubManager.ts, src/lib/managerHotSeat.ts: no honest base
+ctl-subs-base-3 exit=1 1s | simCmSubs: 0 of 3 Round 1331 base controls fired
+ctl-subs-13 exit=0 109s | simCmSubs: 13 of 13 Round 1331 controls fired
+ctl-motion-whistle exit=0 9s | simLiveSimMotion: control whistle turned "the ninetieth minute asks the latest save" red on an assertion (2 failed), as it must.
+ctl-motion-banner exit=0 8s | simLiveSimMotion: control banner turned "the extra time banner says what is true" red on an assertion (1 failed), as it must.
+ctl-dailydeals-rulesall exit=0 3s | simDailyDeals: CONTROL rulesall FIRED: red on [2026-10-10, 2026-10-11, 2026-10-12, 2026-10-13, 2026-10-14, 2026-10-15, 2026-10-16] and nowhere else
+ctl-quicksubs-all exit=0 18s | simCmQuickSubs: 10 actual outcomes and 13 effective controls passed.
+ctl-worldtruth-16 exit=0 908s | simSoccerWorldTruth: 16 of 16 Round 1329 controls fired on their own sections
+ctl-deck-kctl1 exit=0 51s | kctl: every control exited 1 and fired
+ctl-deck-kctl2 exit=0 5s | kctl: every control exited 1 and fired
+ctl-deck-kctl3 exit=0 11s | kctl: every control exited 1 and fired
+ctl-deck-kctl4 exit=0 261s | kctl: every control exited 1 and fired
+ctl-deck-kctl5 exit=0 68s | kctl: every control exited 1 and fired
+ctl-gminbox-2 exit=0 1s | simGmInbox: 2 of 2 Round 1324 review controls fired
+gmdiff-minus1332 exit=0 5s | gmdiff: all three seeds identical to the base and green
+saveFence-minus1330 exit=0 85s | simSaveFence: all green (tabs, source, fleet)
+ctl-fence-rawwrite exit=0 1s | CONTROL FIRED: SAVE_FENCE_CONTROL=rawwrite fired 1 times and section source went red with 1 findings
+ctl-fence-rawsoccer exit=0 1s | CONTROL FIRED: SAVE_FENCE_CONTROL=rawsoccer fired 1 times and section source went red with 1 findings
+ctl-fence-adoptlate exit=0 1s | CONTROL FIRED: SAVE_FENCE_CONTROL=adoptlate fired 1 times and section source went red with 1 findings
+ctl-mutfence exit=0 5s | CONTROL FIRED: the raw write turned the fence test red (vitest exit 1)
+ctl-saveretry-all exit=0 79s | simSoccerCareerSaveRetry all: 8 actual outcomes and 16 effective faults passed.
+ctl-m5-nofix exit=0 3s | vitest exit 1
+ctl-cmvar-all exit=0 594s | simCmVar: 13 actual outcomes and 27 effective controls passed.
+unseeded-minusAZ exit=0 127s | simCmUnseededWorld: green. 49 old saves with no deal and 49 with every deal play byte equal to 6626eade (state, draws and saved bytes at every step), and 15 new careers w
+continuity-minusAZ exit=0 39s | Private world variation is measured, no historical fixture was re-recorded
+ctl-continuity-all exit=0 525s | Private world variation is measured, no historical fixture was re-recorded
+playCmLeagueLeaders-KNOWN-RED exit=1 101s | playCmLeagueLeaders: 1 FAILURE(S)
+ctl-noetline exit=0 8s | vitest exit 1, src files still changed after the restore: 0
+ctl-fencewatch-nostorage exit=0 1s | vitest exit 1, src files still changed after the restore: 0
+ctl-fencewatch-nounmount exit=0 1s | vitest exit 1, src files still changed after the restore: 0
+ctl-fencewatch-novisible exit=0 1s | vitest exit 1, src files still changed after the restore: 0

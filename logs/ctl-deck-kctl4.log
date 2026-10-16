@@ -1,0 +1,4 @@
+pruneearly (sections 13) exit=1 | simEventDeck: 1 failure, red sections 13 (CONTROL=pruneearly fired)
+codecword (sections 13) exit=1 | simEventDeck: 1 failure, red sections 13 (CONTROL=codecword fired)
+codecslot (sections 13) exit=1 | simEventDeck: 1 failure, red sections 13 (CONTROL=codecslot fired)
+kctl: every control exited 1 and fired
