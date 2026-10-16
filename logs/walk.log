@@ -1,0 +1,209 @@
+Preparing worktree (detached HEAD 44ce47078)
+HEAD is now at 44ce47078 rc request r1334-run-walk for 737f5b4bec9d6917555b77aaef6704d62d3e342c
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+.. variant built in 32 s
+FAIL head dist: no built file carries a starter title (assets/SoccerCareer-BiHRBvkt.js)
+FAIL variant dist: exactly one built file carries the starter titles (assets/SoccerCareer-TWWBfFto.js, assets/soccerDeck-QcKHolxN.js)
+.. summary saves: summary-GK-0 age 19 at Aston Villa; summary-ST-9 age 19 at Aston Villa
+ok a keeper and a striker summary save were made
+ok node: the deck loaded for the pending saves
+.. pending saves: pending-GK-702 "Playing it out from the back" (5 cards, 2 options); pending-ST-718 "Pressing from the front" (4 cards, 2 options); pending-CB-707 "Playing out under a press" (6 cards, 2 options); pending-CM-715 "Covering the space" (6 cards, 2 options)
+ok at least three deck pending saves were made
+.. A-head-GK-390-rm: no button to press at social_media_action
+.. A-head-GK-390-rm: phases season_summary > ballon_dor > social_media_action > social_media_action; never reached random_events (batch empty or a button not found)
+ok A-head-GK-390-rm: the shipped page fetched no deck chunk (49 scripts)
+ok A-head-GK-390-rm: no page error 
+.. A-head-GK-390-mo: no button to press at ballon_dor
+.. A-head-GK-390-mo: phases season_summary > ballon_dor > ballon_dor; never reached random_events (batch empty or a button not found)
+ok A-head-GK-390-mo: the shipped page fetched no deck chunk (49 scripts)
+ok A-head-GK-390-mo: no page error 
+.. A-head-GK-1280-rm: no button to press at social_media_action
+.. A-head-GK-1280-rm: phases season_summary > ballon_dor > social_media_action > social_media_action; never reached random_events (batch empty or a button not found)
+ok A-head-GK-1280-rm: the shipped page fetched no deck chunk (49 scripts)
+ok A-head-GK-1280-rm: no page error 
+.. A-head-GK-1280-mo: no button to press at ballon_dor
+.. A-head-GK-1280-mo: phases season_summary > ballon_dor > ballon_dor; never reached random_events (batch empty or a button not found)
+ok A-head-GK-1280-mo: the shipped page fetched no deck chunk (49 scripts)
+ok A-head-GK-1280-mo: no page error 
+.. A-head-ST-390-rm: no button to press at social_media_action
+.. A-head-ST-390-rm: phases season_summary > ballon_dor > international_debut > world_cup > social_media_action > social_media_action; never reached random_events (batch empty or a button not found)
+ok A-head-ST-390-rm: the shipped page fetched no deck chunk (49 scripts)
+ok A-head-ST-390-rm: no page error 
+.. A-head-ST-390-mo: no button to press at ballon_dor
+.. A-head-ST-390-mo: phases season_summary > ballon_dor > ballon_dor; never reached random_events (batch empty or a button not found)
+ok A-head-ST-390-mo: the shipped page fetched no deck chunk (49 scripts)
+ok A-head-ST-390-mo: no page error 
+.. A-head-ST-1280-rm: no button to press at social_media_action
+.. A-head-ST-1280-rm: phases season_summary > ballon_dor > international_debut > world_cup > social_media_action > social_media_action; never reached random_events (batch empty or a button not found)
+ok A-head-ST-1280-rm: the shipped page fetched no deck chunk (49 scripts)
+ok A-head-ST-1280-rm: no page error 
+.. A-head-ST-1280-mo: no button to press at ballon_dor
+.. A-head-ST-1280-mo: phases season_summary > ballon_dor > ballon_dor; never reached random_events (batch empty or a button not found)
+ok A-head-ST-1280-mo: the shipped page fetched no deck chunk (49 scripts)
+ok A-head-ST-1280-mo: no page error 
+.. A-var-GK-390-rm: no button to press at social_media_action
+.. A-var-GK-390-rm: phases season_summary > ballon_dor > social_media_action > social_media_action; never reached random_events (batch empty or a button not found)
+.. A-var-GK-390-rm: deck chunk fetched: SoccerCareer-TWWBfFto.js, soccerDeck-QcKHolxN.js
+ok A-var-GK-390-rm: no page error 
+.. A-var-GK-390-mo: no button to press at ballon_dor
+.. A-var-GK-390-mo: phases season_summary > ballon_dor > ballon_dor; never reached random_events (batch empty or a button not found)
+.. A-var-GK-390-mo: deck chunk fetched: SoccerCareer-TWWBfFto.js, soccerDeck-QcKHolxN.js
+ok A-var-GK-390-mo: no page error 
+.. A-var-GK-1280-rm: no button to press at social_media_action
+.. A-var-GK-1280-rm: phases season_summary > ballon_dor > social_media_action > social_media_action; never reached random_events (batch empty or a button not found)
+.. A-var-GK-1280-rm: deck chunk fetched: SoccerCareer-TWWBfFto.js, soccerDeck-QcKHolxN.js
+ok A-var-GK-1280-rm: no page error 
+.. A-var-GK-1280-mo: no button to press at ballon_dor
+.. A-var-GK-1280-mo: phases season_summary > ballon_dor > ballon_dor; never reached random_events (batch empty or a button not found)
+.. A-var-GK-1280-mo: deck chunk fetched: SoccerCareer-TWWBfFto.js, soccerDeck-QcKHolxN.js
+ok A-var-GK-1280-mo: no page error 
+.. A-var-ST-390-rm: no button to press at social_media_action
+.. A-var-ST-390-rm: phases season_summary > ballon_dor > international_debut > world_cup > social_media_action > social_media_action; never reached random_events (batch empty or a button not found)
+.. A-var-ST-390-rm: deck chunk fetched: SoccerCareer-TWWBfFto.js, soccerDeck-QcKHolxN.js
+ok A-var-ST-390-rm: no page error 
+.. A-var-ST-390-mo: no button to press at ballon_dor
+.. A-var-ST-390-mo: phases season_summary > ballon_dor > ballon_dor; never reached random_events (batch empty or a button not found)
+.. A-var-ST-390-mo: deck chunk fetched: SoccerCareer-TWWBfFto.js, soccerDeck-QcKHolxN.js
+ok A-var-ST-390-mo: no page error 
+.. A-var-ST-1280-rm: no button to press at social_media_action
+.. A-var-ST-1280-rm: phases season_summary > ballon_dor > international_debut > world_cup > social_media_action > social_media_action; never reached random_events (batch empty or a button not found)
+.. A-var-ST-1280-rm: deck chunk fetched: SoccerCareer-TWWBfFto.js, soccerDeck-QcKHolxN.js
+ok A-var-ST-1280-rm: no page error 
+.. A-var-ST-1280-mo: no button to press at ballon_dor
+.. A-var-ST-1280-mo: phases season_summary > ballon_dor > ballon_dor; never reached random_events (batch empty or a button not found)
+.. A-var-ST-1280-mo: deck chunk fetched: SoccerCareer-TWWBfFto.js, soccerDeck-QcKHolxN.js
+ok A-var-ST-1280-mo: no page error 
+ok B-GK-702-390-rm: the pending deck card is on screen ("Playing it out from the back")
+ok B-GK-702-390-rm: 2 buttons, heights 75/75 px (>= 44)
+ok B-GK-702-390-rm: nothing sideways or cut ()
+.. B-GK-702-390-rm: buttons ["📋 Work on short passing Distribution next season +1","✋ Keep it simple Nothing changes"]
+ok B-GK-702-390-rm: the card left the batch after the answer
+ok B-GK-702-390-rm: the season log's last line names the card: "🎯 Playing it out from the back: You spend the summer sessions passing out under pressure. Distribution next season +1."
+.. B-GK-702-390-rm: answered "Work on short passing" (Distribution next season +1); toast ["Distribution next season +1"]; boost {} -> {"passing":1}; morale 72 -> 72; scrollY 178 -> 178, docH 13523 -> 13927; next "Who Are You, Really?"
+ok B-GK-702-390-rm: no page error 
+ok B-GK-702-390-mo: the pending deck card is on screen ("Playing it out from the back")
+ok B-GK-702-390-mo: 2 buttons, heights 75/75 px (>= 44)
+ok B-GK-702-390-mo: nothing sideways or cut ()
+.. B-GK-702-390-mo: buttons ["📋 Work on short passing Distribution next season +1","✋ Keep it simple Nothing changes"]
+ok B-GK-702-390-mo: the card left the batch after the answer
+ok B-GK-702-390-mo: the season log's last line names the card: "🎯 Playing it out from the back: You spend the summer sessions passing out under pressure. Distribution next season +1."
+.. B-GK-702-390-mo: answered "Work on short passing" (Distribution next season +1); toast ["Distribution next season +1"]; boost {} -> {"passing":1}; morale 72 -> 72; scrollY 178 -> 178, docH 13523 -> 13927; next "Who Are You, Really?"
+ok B-GK-702-390-mo: no page error 
+ok B-GK-702-1280-rm: the pending deck card is on screen ("Playing it out from the back")
+ok B-GK-702-1280-rm: 2 buttons, heights 75/75 px (>= 44)
+ok B-GK-702-1280-rm: nothing sideways or cut ()
+.. B-GK-702-1280-rm: buttons ["📋 Work on short passing Distribution next season +1","✋ Keep it simple Nothing changes"]
+ok B-GK-702-1280-rm: the card left the batch after the answer
+ok B-GK-702-1280-rm: the season log's last line names the card: "🎯 Playing it out from the back: You spend the summer sessions passing out under pressure. Distribution next season +1."
+.. B-GK-702-1280-rm: answered "Work on short passing" (Distribution next season +1); toast ["Distribution next season +1"]; boost {} -> {"passing":1}; morale 72 -> 72; scrollY 2 -> 2, docH 9186 -> 9453; next "Who Are You, Really?"
+ok B-GK-702-1280-rm: no page error 
+ok B-GK-702-1280-mo: the pending deck card is on screen ("Playing it out from the back")
+ok B-GK-702-1280-mo: 2 buttons, heights 75/75 px (>= 44)
+ok B-GK-702-1280-mo: nothing sideways or cut ()
+.. B-GK-702-1280-mo: buttons ["📋 Work on short passing Distribution next season +1","✋ Keep it simple Nothing changes"]
+ok B-GK-702-1280-mo: the card left the batch after the answer
+ok B-GK-702-1280-mo: the season log's last line names the card: "🎯 Playing it out from the back: You spend the summer sessions passing out under pressure. Distribution next season +1."
+.. B-GK-702-1280-mo: answered "Work on short passing" (Distribution next season +1); toast ["Distribution next season +1"]; boost {} -> {"passing":1}; morale 72 -> 72; scrollY 2 -> 2, docH 9186 -> 9453; next "Who Are You, Really?"
+ok B-GK-702-1280-mo: no page error 
+ok B-ST-718-390-rm: the pending deck card is on screen ("Pressing from the front")
+ok B-ST-718-390-rm: 2 buttons, heights 75/75 px (>= 44)
+ok B-ST-718-390-rm: nothing sideways or cut ()
+.. B-ST-718-390-rm: buttons ["📋 Do the sprint work Morale -1, Pace next season +1","✋ Keep your usual routine Nothing changes"]
+ok B-ST-718-390-rm: the card left the batch after the answer
+ok B-ST-718-390-rm: the season log's last line names the card: "🔋 Pressing from the front: You push through the sprint work. Morale -1, Pace next season +1."
+.. B-ST-718-390-rm: answered "Do the sprint work" (Morale -1, Pace next season +1); toast ["Morale -1, Pace next season +1"]; boost {} -> {"pace":1}; morale 72 -> 71; scrollY 178 -> 178, docH 13539 -> 13928; next "Who Are You, Really?"
+ok B-ST-718-390-rm: no page error 
+ok B-ST-718-390-mo: the pending deck card is on screen ("Pressing from the front")
+ok B-ST-718-390-mo: 2 buttons, heights 75/75 px (>= 44)
+ok B-ST-718-390-mo: nothing sideways or cut ()
+.. B-ST-718-390-mo: buttons ["📋 Do the sprint work Morale -1, Pace next season +1","✋ Keep your usual routine Nothing changes"]
+ok B-ST-718-390-mo: the card left the batch after the answer
+ok B-ST-718-390-mo: the season log's last line names the card: "🔋 Pressing from the front: You push through the sprint work. Morale -1, Pace next season +1."
+.. B-ST-718-390-mo: answered "Do the sprint work" (Morale -1, Pace next season +1); toast ["Morale -1, Pace next season +1"]; boost {} -> {"pace":1}; morale 72 -> 71; scrollY 178 -> 178, docH 13539 -> 13928; next "Who Are You, Really?"
+ok B-ST-718-390-mo: no page error 
+ok B-ST-718-1280-rm: the pending deck card is on screen ("Pressing from the front")
+ok B-ST-718-1280-rm: 2 buttons, heights 75/75 px (>= 44)
+ok B-ST-718-1280-rm: nothing sideways or cut ()
+.. B-ST-718-1280-rm: buttons ["📋 Do the sprint work Morale -1, Pace next season +1","✋ Keep your usual routine Nothing changes"]
+ok B-ST-718-1280-rm: the card left the batch after the answer
+ok B-ST-718-1280-rm: the season log's last line names the card: "🔋 Pressing from the front: You push through the sprint work. Morale -1, Pace next season +1."
+.. B-ST-718-1280-rm: answered "Do the sprint work" (Morale -1, Pace next season +1); toast ["Morale -1, Pace next season +1"]; boost {} -> {"pace":1}; morale 72 -> 71; scrollY 2 -> 2, docH 9146 -> 9414; next "Who Are You, Really?"
+ok B-ST-718-1280-rm: no page error 
+ok B-ST-718-1280-mo: the pending deck card is on screen ("Pressing from the front")
+ok B-ST-718-1280-mo: 2 buttons, heights 75/75 px (>= 44)
+ok B-ST-718-1280-mo: nothing sideways or cut ()
+.. B-ST-718-1280-mo: buttons ["📋 Do the sprint work Morale -1, Pace next season +1","✋ Keep your usual routine Nothing changes"]
+ok B-ST-718-1280-mo: the card left the batch after the answer
+ok B-ST-718-1280-mo: the season log's last line names the card: "🔋 Pressing from the front: You push through the sprint work. Morale -1, Pace next season +1."
+.. B-ST-718-1280-mo: answered "Do the sprint work" (Morale -1, Pace next season +1); toast ["Morale -1, Pace next season +1"]; boost {} -> {"pace":1}; morale 72 -> 71; scrollY 2 -> 2, docH 9146 -> 9414; next "Who Are You, Really?"
+ok B-ST-718-1280-mo: no page error 
+ok B-CB-707-390-rm: the pending deck card is on screen ("Playing out under a press")
+ok B-CB-707-390-rm: 2 buttons, heights 75/75 px (>= 44)
+ok B-CB-707-390-rm: nothing sideways or cut ()
+.. B-CB-707-390-rm: buttons ["📋 Do the passing work Passing next season +1","✋ Play it safe Nothing changes"]
+ok B-CB-707-390-rm: the card left the batch after the answer
+ok B-CB-707-390-rm: the season log's last line names the card: "🔁 Playing out under a press: You spend the summer playing out of tight spaces. Passing next season +1."
+.. B-CB-707-390-rm: answered "Do the passing work" (Passing next season +1); toast ["Passing next season +1"]; boost {} -> {"passing":1}; morale 72 -> 72; scrollY 178 -> 178, docH 13575 -> 13964; next "Who Are You, Really?"
+ok B-CB-707-390-rm: no page error 
+ok B-CB-707-390-mo: the pending deck card is on screen ("Playing out under a press")
+ok B-CB-707-390-mo: 2 buttons, heights 75/75 px (>= 44)
+ok B-CB-707-390-mo: nothing sideways or cut ()
+.. B-CB-707-390-mo: buttons ["📋 Do the passing work Passing next season +1","✋ Play it safe Nothing changes"]
+ok B-CB-707-390-mo: the card left the batch after the answer
+ok B-CB-707-390-mo: the season log's last line names the card: "🔁 Playing out under a press: You spend the summer playing out of tight spaces. Passing next season +1."
+.. B-CB-707-390-mo: answered "Do the passing work" (Passing next season +1); toast ["Passing next season +1"]; boost {} -> {"passing":1}; morale 72 -> 72; scrollY 178 -> 178, docH 13575 -> 13964; next "Who Are You, Really?"
+ok B-CB-707-390-mo: no page error 
+ok B-CB-707-1280-rm: the pending deck card is on screen ("Playing out under a press")
+ok B-CB-707-1280-rm: 2 buttons, heights 75/75 px (>= 44)
+ok B-CB-707-1280-rm: nothing sideways or cut ()
+.. B-CB-707-1280-rm: buttons ["📋 Do the passing work Passing next season +1","✋ Play it safe Nothing changes"]
+ok B-CB-707-1280-rm: the card left the batch after the answer
+ok B-CB-707-1280-rm: the season log's last line names the card: "🔁 Playing out under a press: You spend the summer playing out of tight spaces. Passing next season +1."
+.. B-CB-707-1280-rm: answered "Do the passing work" (Passing next season +1); toast ["Passing next season +1"]; boost {} -> {"passing":1}; morale 72 -> 72; scrollY 2 -> 2, docH 9166 -> 9434; next "Who Are You, Really?"
+ok B-CB-707-1280-rm: no page error 
+ok B-CB-707-1280-mo: the pending deck card is on screen ("Playing out under a press")
+ok B-CB-707-1280-mo: 2 buttons, heights 75/75 px (>= 44)
+ok B-CB-707-1280-mo: nothing sideways or cut ()
+.. B-CB-707-1280-mo: buttons ["📋 Do the passing work Passing next season +1","✋ Play it safe Nothing changes"]
+ok B-CB-707-1280-mo: the card left the batch after the answer
+ok B-CB-707-1280-mo: the season log's last line names the card: "🔁 Playing out under a press: You spend the summer playing out of tight spaces. Passing next season +1."
+.. B-CB-707-1280-mo: answered "Do the passing work" (Passing next season +1); toast ["Passing next season +1"]; boost {} -> {"passing":1}; morale 72 -> 72; scrollY 2 -> 2, docH 9166 -> 9434; next "Who Are You, Really?"
+ok B-CB-707-1280-mo: no page error 
+ok B-CM-715-390-rm: the pending deck card is on screen ("Covering the space")
+ok B-CM-715-390-rm: 2 buttons, heights 75/75 px (>= 44)
+ok B-CM-715-390-rm: nothing sideways or cut ()
+.. B-CM-715-390-rm: buttons ["📋 Do the shape work Defending next season +1","✋ Focus on going forward Nothing changes"]
+ok B-CM-715-390-rm: the card left the batch after the answer
+ok B-CM-715-390-rm: the season log's last line names the card: "🧭 Covering the space: You put the hours into your defensive shape. Defending next season +1."
+.. B-CM-715-390-rm: answered "Do the shape work" (Defending next season +1); toast ["Defending next season +1"]; boost {} -> {"defending":1}; morale 72 -> 72; scrollY 178 -> 178, docH 13539 -> 13928; next "Who Are You, Really?"
+ok B-CM-715-390-rm: no page error 
+ok B-CM-715-390-mo: the pending deck card is on screen ("Covering the space")
+ok B-CM-715-390-mo: 2 buttons, heights 75/75 px (>= 44)
+ok B-CM-715-390-mo: nothing sideways or cut ()
+.. B-CM-715-390-mo: buttons ["📋 Do the shape work Defending next season +1","✋ Focus on going forward Nothing changes"]
+ok B-CM-715-390-mo: the card left the batch after the answer
+ok B-CM-715-390-mo: the season log's last line names the card: "🧭 Covering the space: You put the hours into your defensive shape. Defending next season +1."
+.. B-CM-715-390-mo: answered "Do the shape work" (Defending next season +1); toast ["Defending next season +1"]; boost {} -> {"defending":1}; morale 72 -> 72; scrollY 178 -> 178, docH 13539 -> 13928; next "Who Are You, Really?"
+ok B-CM-715-390-mo: no page error 
+ok B-CM-715-1280-rm: the pending deck card is on screen ("Covering the space")
+ok B-CM-715-1280-rm: 2 buttons, heights 75/75 px (>= 44)
+ok B-CM-715-1280-rm: nothing sideways or cut ()
+.. B-CM-715-1280-rm: buttons ["📋 Do the shape work Defending next season +1","✋ Focus on going forward Nothing changes"]
+ok B-CM-715-1280-rm: the card left the batch after the answer
+ok B-CM-715-1280-rm: the season log's last line names the card: "🧭 Covering the space: You put the hours into your defensive shape. Defending next season +1."
+.. B-CM-715-1280-rm: answered "Do the shape work" (Defending next season +1); toast ["Defending next season +1"]; boost {} -> {"defending":1}; morale 72 -> 72; scrollY 2 -> 2, docH 9146 -> 9414; next "Who Are You, Really?"
+ok B-CM-715-1280-rm: no page error 
+ok B-CM-715-1280-mo: the pending deck card is on screen ("Covering the space")
+ok B-CM-715-1280-mo: 2 buttons, heights 75/75 px (>= 44)
+ok B-CM-715-1280-mo: nothing sideways or cut ()
+.. B-CM-715-1280-mo: buttons ["📋 Do the shape work Defending next season +1","✋ Focus on going forward Nothing changes"]
+ok B-CM-715-1280-mo: the card left the batch after the answer
+ok B-CM-715-1280-mo: the season log's last line names the card: "🧭 Covering the space: You put the hours into your defensive shape. Defending next season +1."
+.. B-CM-715-1280-mo: answered "Do the shape work" (Defending next season +1); toast ["Defending next season +1"]; boost {} -> {"defending":1}; morale 72 -> 72; scrollY 2 -> 2, docH 9146 -> 9414; next "Who Are You, Really?"
+ok B-CM-715-1280-mo: no page error 
+.. C-head-702-390: after the tap phase random_events, batch 200,240,608,428, boost {}, last log "🚑 Injury: Tight calf, out 2 weeks, missed matches", toast ["Distribution next season +1"]
+ok C-head-702-390: no page error 
+walk1334: 126 checks, 2 failed; 76 notes; pictures in /home/runner/work/_temp/rc-out/files
