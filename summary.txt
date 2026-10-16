@@ -1,0 +1,7 @@
+dry exit=0 0s | fxorder: 1
+mut-tieleg1 exit=1 2s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/worldCompetition.test.ts,title=src/lib/worldCompetition.test.ts > evaluateWorldComp > is deterministic 
+mut-tieagg exit=1 2s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/worldCompetition.test.ts,title=src/lib/worldCompetition.test.ts > evaluateWorldComp > is deterministic 
+mut-finalone exit=1 2s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/worldCompetition.ts,title=src/lib/worldCompetition.test.ts > evaluateWorldComp > a binding that makes t
+mut-finalnights exit=1 2s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/worldCompetition.ts,title=src/lib/worldCompetition.test.ts > evaluateWorldComp > a binding that makes t
+mut-fxorder exit=1 2s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/worldCompetition.test.ts,title=src/lib/worldCompetition.test.ts > evaluateWorldComp > the module groupF
+clean-after exit=0 2s |    Duration  1.79s (transform 807ms, setup 29ms, collect 979ms, tests 371ms, environment 166ms, prepare 63ms)
