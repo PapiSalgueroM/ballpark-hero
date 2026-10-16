@@ -1,0 +1,33 @@
+#!build
+#!playwright
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+small: CM_BOARD_BASE=$(bash .rc/x/mkbr.sh s0) node scripts/simCmBoardVerdict.mjs --part=pure,fresh,saves,dailies
+takeover: CM_BOARD_BASE=$(bash .rc/x/mkbr.sh k0) node scripts/simCmBoardVerdict.mjs --part=takeover
+legacy0: CM_BOARD_BASE=$(bash .rc/x/mkbr.sh l0) SHARD=0/2 node scripts/simCmBoardVerdict.mjs --part=legacy
+legacy1: CM_BOARD_BASE=$(bash .rc/x/mkbr.sh l1) SHARD=1/2 node scripts/simCmBoardVerdict.mjs --part=legacy
+fleet0: CM_BOARD_BASE=$(bash .rc/x/mkbr.sh f0) SHARD=0/3 node scripts/simCmBoardVerdict.mjs --part=grade,fate,stream,offers
+fleet1: CM_BOARD_BASE=$(bash .rc/x/mkbr.sh f1) SHARD=1/3 node scripts/simCmBoardVerdict.mjs --part=grade,fate,stream,offers
+fleet2: CM_BOARD_BASE=$(bash .rc/x/mkbr.sh f2) SHARD=2/3 node scripts/simCmBoardVerdict.mjs --part=grade,fate,stream,offers
+titlekitty0: CM_BOARD_BASE=$(bash .rc/x/mkbr.sh t0) SHARD=0/2 node scripts/simCmBoardVerdict.mjs --part=title,kitty
+titlekitty1: CM_BOARD_BASE=$(bash .rc/x/mkbr.sh t1) SHARD=1/2 node scripts/simCmBoardVerdict.mjs --part=title,kitty
+unit: node_modules/.bin/vitest run src/lib/clubManagerBoardVerdict.test.ts src/test/clubManagerOfferConfirm.test.tsx --testTimeout=300000 --hookTimeout=120000
+walk: node scripts/playCmBoardVerdict.mjs
+c-safeline: CM_BOARD_BASE=$(bash .rc/x/mkbr.sh p1) SIM_CM_BOARD_CONTROL=safeline node scripts/simCmBoardVerdict.mjs --part=pure
+c-upgrade: CM_BOARD_BASE=$(bash .rc/x/mkbr.sh p2) SIM_CM_BOARD_CONTROL=upgrade node scripts/simCmBoardVerdict.mjs --part=pure
+c-band: CM_BOARD_BASE=$(bash .rc/x/mkbr.sh p3) SIM_CM_BOARD_CONTROL=band node scripts/simCmBoardVerdict.mjs --part=pure
+c-example: CM_BOARD_BASE=$(bash .rc/x/mkbr.sh p4) SIM_CM_BOARD_CONTROL=example node scripts/simCmBoardVerdict.mjs --part=pure
+c-nofate: CM_BOARD_BASE=$(bash .rc/x/mkbr.sh c1) GRADE_SEEDS=3 SIM_CM_BOARD_CONTROL=nofate node scripts/simCmBoardVerdict.mjs --part=grade
+c-statues: CM_BOARD_BASE=$(bash .rc/x/mkbr.sh c2) GRADE_SEEDS=4 SIM_CM_BOARD_CONTROL=statues node scripts/simCmBoardVerdict.mjs --part=grade
+c-fateflip: CM_BOARD_BASE=$(bash .rc/x/mkbr.sh c3) GRADE_SEEDS=2 SIM_CM_BOARD_CONTROL=fateflip node scripts/simCmBoardVerdict.mjs --part=fate
+c-fatecount: CM_BOARD_BASE=$(bash .rc/x/mkbr.sh c4) GRADE_SEEDS=4 SIM_CM_BOARD_CONTROL=fatecount node scripts/simCmBoardVerdict.mjs --part=fate
+c-legacyleak: CM_BOARD_BASE=$(bash .rc/x/mkbr.sh c5) LEGACY_SEEDS=2 SIM_CM_BOARD_CONTROL=legacyleak node scripts/simCmBoardVerdict.mjs --part=legacy
+c-nostep: CM_BOARD_BASE=$(bash .rc/x/mkbr.sh c6) GRADE_SEEDS=1 OFFER_SEEDS=3 SIM_CM_BOARD_CONTROL=nostep node scripts/simCmBoardVerdict.mjs --part=offers
+c-prefilter: CM_BOARD_BASE=$(bash .rc/x/mkbr.sh c7) GRADE_SEEDS=2 SIM_CM_BOARD_CONTROL=prefilter node scripts/simCmBoardVerdict.mjs --part=stream
+c-start60: SIM_CM_BOARD_CONTROL=start60 FRESH_BASES=1 node scripts/simCmBoardVerdict.mjs --part=fresh
+c-noband: CM_BOARD_BASE=$(bash .rc/x/mkbr.sh c8) TITLE_SEEDS=2 SIM_CM_BOARD_CONTROL=noband node scripts/simCmBoardVerdict.mjs --part=title
+c-hotstart: CM_BOARD_BASE=$(bash .rc/x/mkbr.sh c9) DAILY_BACK=0 DAILY_DD=1 SIM_CM_BOARD_CONTROL=hotstart node scripts/simCmBoardVerdict.mjs --part=dailies
+c-nokitty: CM_BOARD_BASE=$(bash .rc/x/mkbr.sh ca) OFFER_SEEDS=3 SIM_CM_BOARD_CONTROL=nokitty node scripts/simCmBoardVerdict.mjs --part=kitty
+c-keepfailed: CM_BOARD_BASE=$(bash .rc/x/mkbr.sh cb) TAKEOVER_SEEDS=2 SIM_CM_BOARD_CONTROL=keepfailed node scripts/simCmBoardVerdict.mjs --part=takeover
+c-scoredone: CM_BOARD_BASE=$(bash .rc/x/mkbr.sh cc) TAKEOVER_SEEDS=2 SIM_CM_BOARD_CONTROL=scoredone node scripts/simCmBoardVerdict.mjs --part=takeover
+walk-noconfirm: git worktree add -q .claude/worktrees/rvctl1 HEAD && node .rc/x/ctlP.mjs .claude/worktrees/rvctl1 noconfirm && (cd .claude/worktrees/rvctl1 && ../../../node_modules/.bin/vite build --outDir "$OLDPWD/dist-noconfirm" --emptyOutDir --logLevel error) && DIST=dist-noconfirm PLAY_BOARD_CONTROL=noconfirm node scripts/playCmBoardVerdict.mjs
+walk-nofate: sleep 5 && git worktree add -q .claude/worktrees/rvctl2 HEAD && node .rc/x/ctlP.mjs .claude/worktrees/rvctl2 nofate && (cd .claude/worktrees/rvctl2 && ../../../node_modules/.bin/vite build --outDir "$OLDPWD/dist-nofate" --emptyOutDir --logLevel error) && DIST=dist-nofate PLAY_BOARD_CONTROL=nofate node scripts/playCmBoardVerdict.mjs
