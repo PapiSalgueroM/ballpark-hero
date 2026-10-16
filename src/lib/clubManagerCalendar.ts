@@ -859,8 +859,9 @@ function playRunIn(career: CareerState, target: number): CareerState {
    decision 3). The gone names alone hid him from buildMarket, but the screen lists him at his buyer and every door
    reads this season's deal line to that club (joinedHisClubThisSeason), and that line lived only in the departed
    career's log, so the doors opened. Carried: the departed career's gone names of this season's deals between two
-   other clubs and those deal lines, first, then the run in's own lines, which the fresh save wrote as its season one,
-   with this season's number. The log keeps its cap. scripts/simCmWorldMoves.mjs section 3 holds it (control nocarry). */
+   other clubs and those deal lines, first, then the run in's own lines (a seeded run in already plays this season's
+   number: startCareer takes it from the departed career). The log keeps its cap. scripts/simCmWorldMoves.mjs
+   section 3 holds it (control nocarry). */
 function seededJoinCarry(career: CareerState, s: CareerState, moved: ReadonlySet<string>): Pick<CareerState, 'goneNames' | 'transferLog'> {
   const gone = career.goneNames.filter(name => moved.has(name));
   const carried = new Set(gone);
@@ -868,7 +869,7 @@ function seededJoinCarry(career: CareerState, s: CareerState, moved: ReadonlySet
     && t.from !== career.clubName && t.to !== career.clubName);
   return {
     goneNames: [...new Set([...s.goneNames, ...gone])],
-    transferLog: [...lines, ...(s.transferLog ?? []).map(t => ({ ...t, season: career.season }))].slice(-SAVE_CAPS.transferLog),
+    transferLog: [...lines, ...(s.transferLog ?? [])].slice(-SAVE_CAPS.transferLog),
   };
 }
 
