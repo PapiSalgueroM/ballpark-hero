@@ -1,0 +1,3 @@
+oldworld: node scripts/simCmOldCareersWorld.mjs
+ow-never: CM_OLD_WORLD_CONTROL=never node scripts/simCmOldCareersWorld.mjs
+ow-early: CM_OLD_WORLD_CONTROL=early node scripts/simCmOldCareersWorld.mjs
