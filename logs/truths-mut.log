@@ -1,0 +1,17 @@
+MUTATION m4 applied to src/components/soccer-career/SquadSheet.tsx
+MUTATION m8 applied to src/pages/SoccerCareer.tsx
+MUTATION m9 applied to src/pages/SoccerCareer.tsx
+FAIL [base] W6 390: one second later it is still home with the pointer ({"screen":"home","hintY":null,"tileY":464,"panelY":187,"panelH":470})
+FAIL [base] W6 390: the pointer and the first tile have not moved (first {"screen":"home","hintY":441,"tileY":486,"panelY":165,"panelH":515}, a second later {"screen":"home","hintY":null,"tileY":464,"panelY":187,"panelH":470})
+FAIL [base] W6 320: one second later it is still home with the pointer ({"screen":"home","hintY":null,"tileY":372,"panelY":75,"panelH":490})
+FAIL [base] W6 320: the pointer and the first tile have not moved (first {"screen":"home","hintY":349,"tileY":394,"panelY":53,"panelH":535}, a second later {"screen":"home","hintY":null,"tileY":372,"panelY":75,"panelH":490})
+FAIL [base] W6 1280: one second later it is still home with the pointer ({"screen":"home","hintY":null,"tileY":473,"panelY":235,"panelH":431})
+FAIL [base] W6 1280: the pointer and the first tile have not moved (first {"screen":"home","hintY":449,"tileY":494,"panelY":212,"panelH":476}, a second later {"screen":"home","hintY":null,"tileY":473,"panelY":235,"panelH":431})
+FAIL [base] W8 320: the title holds the whole name ({"text":"Bartholomew Fixture-Longname, full attributes","cut":true})
+FAIL [base] W8 320: every keeper label holds its whole text (14 labels; text wider than its box: Reading The Penalty; set to cut with an ellipsis: 14)
+FAIL [base] W8 1280: the title holds the whole name ({"text":"Bartholomew Fixture-Longname, full attributes","cut":true})
+FAIL [base] W8 1280: every keeper label holds its whole text (14 labels; text wider than its box: Reading The Penalty; set to cut with an ellipsis: 14)
+verdicts, section by section:
+  W6: head 21/21, base 15/21 (red wanted: as it must)
+  W8: head 8/8, base 4/8 (red wanted: as it must)
+playSoccerScreenTruths: green, W6 W8 pass on the head and every control section is red on the base

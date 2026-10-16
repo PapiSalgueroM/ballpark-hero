@@ -1,0 +1,4 @@
+build exit=0 34s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+walk exit=0 41s | walk1337run: 84 checks, 0 failed
+truths-mut exit=0 72s | playSoccerScreenTruths: green, W6 W8 pass on the head and every control section is red on the base
+truths-base exit=0 122s | playSoccerScreenTruths: green, W4 W4r W5 W6 W7 W8 pass on the head and every control section is red on the base

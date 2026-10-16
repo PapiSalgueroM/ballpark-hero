@@ -1,0 +1,42 @@
+head ok lines: 72
+FAIL [base] W4 during the countdown Full attributes is disabled
+FAIL [base] W4 during the countdown its second line reads "Opens once the Ballon d'Or night is over"
+FAIL [base] W4 a press during the countdown does not open Full attributes
+FAIL [base] W4 the nominee rows only rise, to all ten (0 -1 0 1 2 3 4 5 6 7 8 9 10 10)
+FAIL [base] W4 the result arrives once and the card never leaves (waiting > gone > waiting > revealed)
+FAIL [base] W5 390: the 📺 button says watch, not live ("Week by week: live the season match by match")
+FAIL [base] W5 390: the help's first open has no Spanish pool sentence
+FAIL [base] W5 390: the help's first open does not say "nothing here can change"
+FAIL [base] W5 1280: the 📺 button says watch, not live ("Week by week: live the season match by match")
+FAIL [base] W5 1280: the help's first open has no Spanish pool sentence
+FAIL [base] W5 1280: the help's first open does not say "nothing here can change"
+FAIL [base] W6 390: the first frame of the first open is home with the pointer ({"screen":"home","hintY":null,"tileY":463,"panelY":187,"panelH":470})
+FAIL [base] W6 390: one second later it is still home with the pointer ({"screen":"help","hintY":null,"tileY":null,"panelY":52,"panelH":740})
+FAIL [base] W6 390: the pointer and the first tile have not moved (first {"screen":"home","hintY":null,"tileY":463,"panelY":187,"panelH":470}, a second later {"screen":"help","hintY":null,"tileY":null,"panelY":52,"panelH":740})
+FAIL [base] W6 320: the first frame of the first open is home with the pointer ({"screen":"home","hintY":null,"tileY":371,"panelY":75,"panelH":490})
+FAIL [base] W6 320: one second later it is still home with the pointer ({"screen":"help","hintY":null,"tileY":null,"panelY":12,"panelH":616})
+FAIL [base] W6 320: the pointer and the first tile have not moved (first {"screen":"home","hintY":null,"tileY":371,"panelY":75,"panelH":490}, a second later {"screen":"help","hintY":null,"tileY":null,"panelY":12,"panelH":616})
+FAIL [base] W6 1280: the first frame of the first open is home with the pointer ({"screen":"home","hintY":null,"tileY":472,"panelY":235,"panelH":431})
+FAIL [base] W6 1280: one second later it is still home with the pointer ({"screen":"help","hintY":null,"tileY":null,"panelY":121,"panelH":658})
+FAIL [base] W6 1280: the pointer and the first tile have not moved (first {"screen":"home","hintY":null,"tileY":472,"panelY":235,"panelH":431}, a second later {"screen":"help","hintY":null,"tileY":null,"panelY":121,"panelH":658})
+FAIL [base] W7 390: the menu's rules block is one paragraph with its worked example (3 paragraphs)
+FAIL [base] W7 390: the bank rule is said once on the menu
+FAIL [base] W7 390: ? shows all three paragraphs, the bank rule last (3)
+FAIL [base] W7 1280: the menu's rules block is one paragraph with its worked example (3 paragraphs)
+FAIL [base] W7 1280: the bank rule is said once on the menu
+FAIL [base] W7 1280: ? shows all three paragraphs, the bank rule last (3)
+FAIL [base] W8 320: the title holds the whole name ({"text":"Bartholomew Fixture-Longname, full attributes","cut":true})
+FAIL [base] W8 320: every keeper label holds its whole text (14 labels; text wider than its box: Reading The Penalty; set to cut with an ellipsis: 14)
+FAIL [base] W8 1280: the title holds the whole name ({"text":"Bartholomew Fixture-Longname, full attributes","cut":true})
+FAIL [base] W8 1280: every keeper label holds its whole text (14 labels; text wider than its box: Reading The Penalty; set to cut with an ellipsis: 14)
+verdicts, section by section:
+  W4: head 13/13, base 8/13 (red wanted: as it must)
+  W4r: head 6/6, base 6/6 (green wanted: as it must)
+  W5: head 12/12, base 6/12 (red wanted: as it must)
+  W6: head 21/21, base 12/21 (red wanted: as it must)
+  W7: head 12/12, base 6/12 (red wanted: as it must)
+  W8: head 8/8, base 4/8 (red wanted: as it must)
+  report: [head] W4 pressing "Go back" during the countdown unmounts the night's card (it would count down again)
+  report: [head] W4 pressing "Cookie choices" during the countdown unmounts the night's card (it would count down again)
+  report: [head] W4 25 other hub controls pressed during the countdown, 2 of them unmount the card
+playSoccerScreenTruths: green, W4 W4r W5 W6 W7 W8 pass on the head and every control section is red on the base
