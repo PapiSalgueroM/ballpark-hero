@@ -1,0 +1,12 @@
+continuity-minusAZ-nobridge exit=1 41s |     at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simManagerWorldContinuity.mjs:489:24
+tsc exit=0 113s | 
+unseeded-minusAZ-nobridge exit=1 215s | simCmUnseededWorld: 10 FAILURE(S)
+vitest exit=0 174s |    Duration  173.57s (transform 7.31s, setup 2.88s, collect 30.17s, tests 299.64s, environment 26.58s, prepare 5.95s)
+freeagents exit=0 103s | simFreeAgents: all sections passed
+fa-ownclub exit=1 105s | simFreeAgents: 1 failure(s)
+appeal exit=0 47s | Equivalent appeal outcomes must agree: passed for 24 original pairs and 3 separate generated-position pairs.
+savesize exit=0 71s | simClubManagerSaveSize: all sections green
+anchors exit=0 63s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+ownclub exit=0 364s | simCmOwnClubMarket: green (mode rule, sections 1, 2, 3, 4, 5): the market lists nobody at my own club in every old save and moves nothing else
+ownclub-legacy exit=1 262s | simCmOwnClubMarket: CONTROL legacy FIRED: with main's line on the head, section 1 went red (126) and section 2 (41), and the rest stayed green
+diag exit=0 470s | DIAGNOSTIC complete: original/current unchanged historical budgets, full raw states, storage and unfiltered action vectors retained

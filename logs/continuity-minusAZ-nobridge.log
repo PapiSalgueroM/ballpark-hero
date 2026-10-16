@@ -1,0 +1,104 @@
+treeWithoutMerge: c605046158d9898be4e760f5374169ae1ea08561, 082fc277 without 5ec5a724; conflicts kept from 082fc277: scripts/qa/managerWorldContinuityKit.mjs, scripts/qa/managerWorldSizeDiagnostic.mjs, scripts/simCmLeagueRules.mjs, scripts/simCmUnseededWorld.mjs, src/pages/WhatsNew.tsx
+base 9721bde69fcf27af58f925435f34b67d71aadf9d
+FAIL [healthy] inactive: Entire inactive AR result and saved bytes match
++ actual - expected
+... Skipped lines
+
+  {
+    loaded: {
+      academy: {
+        candidates: [
+          {
+...
+        '⬇ Villarreal are relegated to the Segunda División.',
++       'Chelsea sign Antoine Semenyo from Manchester City for £66m.',
++       'Real Madrid sign Geovany Quenda from Chelsea for £70m.'
+-       'Liverpool sign Adam Wharton from Crystal Palace for £63m.',
+-       'Real Madrid sign Ferran Torres from PSG for £51m.'
+      ],
+      approach: null,
+      balancedFixtures: true,
+      boardAsksVersion: 1,
+      boardConfidence: 52,
+...
+        {
++         feeMin: 100,
+-         feeMin: 110,
+          id: 'marquee',
++         label: 'Spend £100m or more on one signing',
+-         label: 'Spend £110m or more on one signing',
+          target: 1
+        },
+        {
+          country: 'Spain',
+          id: 'natQuota',
+...
+      goneNames: [
++       'Antoine Semenyo',
++       'Geovany Quenda',
++       'Kenan Yıldız'
+-       'Adam Wharton',
+-       'Ferran Torres',
+-       'Julián Alvarez'
+      ],
+      handover: null,
+      history: [],
+      inbox: [],
+      incomingBids: [
+...
+        {
++         fee: 66,
++         from: 'Manchester City',
++         name: 'Antoine Semenyo',
+-         fee: 63,
+-         from: 'Crystal Palace',
+-         name: 'Adam Wharton',
+          season: 2,
++         to: 'Chelsea',
+-         to: 'Liverpool',
+          week: 0
+        },
+        {
++         fee: 70,
++         from: 'Chelsea',
++         name: 'Geovany Quenda',
+-         fee: 51,
+-         from: 'PSG',
+-         name: 'Ferran Torres',
+          season: 2,
+          to: 'Real Madrid',
+          week: 0
+        },
+        {
++         fee: 67,
++         from: 'Juventus',
++         name: 'Kenan Yıldız',
+-         fee: 56,
+-         from: 'Atlético Madrid',
+-         name: 'Julián Alvarez',
+          season: 2,
++         to: 'Bayern Munich',
+-         to: 'RB Leipzig',
+          week: 0
+        }
+      ],
+      transferWindow: 'summer',
+      trophies: [],
+
+PASS [healthy] constructors
+PASS [healthy] identity
+PASS [healthy] buy-job
+PASS [healthy] year-away
+PASS [healthy] sale
+PASS [healthy] option
+PASS [healthy] release
+PASS [healthy] refresh
+PASS [healthy] seeded-world
+PASS [healthy] storage
+AssertionError [ERR_ASSERTION]: Healthy complete outcome groups all pass
+
+1 !== 0
+
+    at arm (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simManagerWorldContinuity.mjs:481:19)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simManagerWorldContinuity.mjs:489:24
