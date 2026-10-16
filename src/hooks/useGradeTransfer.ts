@@ -1,5 +1,5 @@
 import { useState, useCallback, useMemo, useEffect } from 'react';
-import { supabase } from '@/integrations/supabase/client';
+import { gameQueryClient as supabase } from '@/lib/gameQueryClient';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { markRestoredFinish } from '@/lib/restoredFinish';
 import { getTodayET, shuffledRange } from '@/lib/dateUtils';
