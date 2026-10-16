@@ -1,0 +1,7 @@
+appeal-head: node scripts/simManagerAppealIsolation.mjs
+wm-seedless: CM_WORLD_MOVES_CONTROL=seedless node scripts/simCmWorldMoves.mjs
+wm-noguard: CM_WORLD_MOVES_CONTROL=noguard node scripts/simCmWorldMoves.mjs
+oldworld: node scripts/simCmOldCareersWorld.mjs
+ow-never: CM_OLD_WORLD_CONTROL=never node scripts/simCmOldCareersWorld.mjs
+ow-early: CM_OLD_WORLD_CONTROL=early node scripts/simCmOldCareersWorld.mjs
+ow-bridge: CM_OLD_WORLD_CONTROL=bridge node scripts/simCmOldCareersWorld.mjs

@@ -1,0 +1,7 @@
+wm-noguard exit=1 24s | simCmWorldMoves: control noguard FIRED: section 2 red (168)
+appeal-head exit=0 36s | Equivalent appeal outcomes must agree: passed for 24 original pairs and 3 separate generated-position pairs.
+ow-never exit=1 5s | simCmOldCareersWorld: control never FIRED: section 1's moved check red 60 times, the comparison before the summer green (4s)
+ow-early exit=1 5s | simCmOldCareersWorld: control early FIRED: section 1's comparison before the summer red 2 times (5s)
+oldworld exit=0 48s | simCmOldCareersWorld: green, sections 1, 2 held (48s)
+ow-bridge exit=1 37s | simCmOldCareersWorld: control bridge FIRED: section 2 red on 18 of 18 seeded careers (37s)
+wm-seedless exit=1 222s | simCmWorldMoves: control seedless FIRED: section 6 red (135)
