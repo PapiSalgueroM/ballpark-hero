@@ -1,7 +1,7 @@
 /* Round 1343: retiring. The engine's side is scripts/simCmRetire.mjs section retire. */
 import { describe, expect, it } from 'vitest';
 import { startCareer, worldSeasonLabel, type CareerState, type H2HEntry } from '@/lib/clubManager';
-import { canRetire, careerLegacy, farewellShareText, printedWeek, retireCareer, retirementMoment, seasonPlayedOut } from '@/lib/clubManagerRetire';
+import { canRetire, careerLegacy, farewellShareText, printedWeek, retireCareer, retireDoorCopy, retirementMoment, seasonPlayedOut } from '@/lib/clubManagerRetire';
 
 const deepFreeze = <T,>(o: T): T => {
   if (o && typeof o === 'object') { Object.values(o as object).forEach(deepFreeze); Object.freeze(o); }
@@ -60,7 +60,8 @@ describe('retiring', { timeout: 60000 }, () => {
       expect(retireCareer(r)).toBeNull();
       if (when === 'midSeason') {
         expect(r.retired?.week).toBe(c.week);
-        expect(r.retired?.position).toBeGreaterThanOrEqual(1);
+        /* No league game yet: no position is kept (a table of zeros has an order, not a place). */
+        expect(r.retired).not.toHaveProperty('position');
         expect(r.retired?.played).toBe(0);
         expect(r.retired?.points).toBe(0);
       } else expect(r.retired).not.toHaveProperty('week');
@@ -72,6 +73,17 @@ describe('retiring', { timeout: 60000 }, () => {
     expect(retireCareer(c)!.careerStats.highestScoring).toEqual({ opp: 'B', score: '3-3', res: 'D', season: 1, missed: 3 });
     const stored = { opp: 'S', score: '1-1', res: 'D' as const, season: 1 };
     expect(retireCareer({ ...c, careerStats: { ...c.careerStats, highestScoring: stored } })!.careerStats.highestScoring).toEqual(stored);
+  });
+
+  it('names a league position only once the club has played a league game, in the confirm and on the save', () => {
+    expect(retireDoorCopy(fresh).lines[0]).toBe(`Your season at Everton stops here, in week ${printedWeek(fresh, fresh.week)}. Nothing more gets played.`);
+    const table = fresh.table.map(r => (r.club === 'Everton' ? { ...r, w: 1, pts: 3 } : r));
+    const after = { ...fresh, table } as CareerState;
+    expect(retireDoorCopy(after).lines[0]).toMatch(/, with the club \d+(st|nd|rd|th) in the league\. Nothing more gets played\.$/);
+    const r = retireCareer(after)!;
+    expect(r.retired?.position).toBeGreaterThanOrEqual(1);
+    expect(r.retired?.played).toBe(1);
+    expect(r.retired?.points).toBe(3);
   });
 
   it('prints the week the managers screen printed, capped at the calendar', () => {

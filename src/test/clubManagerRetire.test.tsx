@@ -271,6 +271,11 @@ describe('the farewell', { timeout: 120000 }, () => {
     const out = { ...skip, retired: { season: 8, worldSeason: '2033-34', when: 'outOfWork', club: 'Everton' } } as unknown as CareerState;
     const b = render(<ClubManagerFarewell c={out} g={g as any} />);
     expect(b.container.querySelector('[data-cm-farewell-moment]')?.textContent).toBe('Retired while out of work, last in charge of Everton');
+    b.unmount();
+    /* Before the club's first league game no position is quoted, even from a save that kept one. */
+    const early = { ...skip, retired: { season: 1, worldSeason: '2026-27', when: 'midSeason', club: 'Everton', week: 0, position: 9, played: 0, points: 0 } } as unknown as CareerState;
+    const e = render(<ClubManagerFarewell c={early} g={g as any} />);
+    expect(e.container.querySelector('[data-cm-farewell-moment]')?.textContent).toBe('Left Everton in week 1 of Season 1');
   });
 
   it('the managers screen says retired and offers the farewell on that tile only', () => {

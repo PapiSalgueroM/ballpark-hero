@@ -63,9 +63,11 @@ export function retireCareer(c: CareerState): CareerState | null {
   const retired: Retirement = { season: c.season, worldSeason: worldSeasonLabel(c), when, club: c.clubName };
   if (when === 'midSeason') {
     const row = (c.table ?? []).find(r => r.club === c.clubName);
+    const played = leagueGames(c);
     retired.week = c.week;
-    retired.position = leaguePosition(c);
-    retired.played = row ? row.w + row.d + row.l : 0;
+    /* A table with no league game in it has an order but no position, so none is kept (review fix). */
+    if (played > 0) retired.position = leaguePosition(c);
+    retired.played = played;
     retired.points = row ? row.pts : 0;
   }
   next.retired = retired;
@@ -74,6 +76,12 @@ export function retireCareer(c: CareerState): CareerState | null {
     if (high) next.careerStats.highestScoring = high;
   }
   return next;
+}
+
+/** The league games the club has played this season, off its own table row. */
+export function leagueGames(c: CareerState): number {
+  const row = (c.table ?? []).find(r => r.club === c.clubName);
+  return row ? row.w + row.d + row.l : 0;
 }
 
 /** The week the managers screen printed for this save: the next entry, counted from one, capped at the calendar. */
@@ -179,7 +187,7 @@ export function retireDoorCopy(c: CareerState): RetireDoorCopy {
   let title: string;
   if (when === 'midSeason') {
     title = 'Retire now?';
-    const pos = leaguePosition(c);
+    const pos = leagueGames(c) > 0 ? leaguePosition(c) : 0;
     lines.push(`Your season at ${c.clubName} stops here, in week ${formatNumber(printedWeek(c, c.week))}${pos > 0 ? `, with the club ${ordinal(pos)} in the league` : ''}. Nothing more gets played.`);
   } else if (when === 'seasonEnd') {
     title = `Retire after Season ${formatNumber(c.season)}?`;

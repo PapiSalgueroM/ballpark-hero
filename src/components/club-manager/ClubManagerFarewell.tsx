@@ -18,7 +18,8 @@ function momentLine(c: CareerState, l: CareerLegacy): string {
   const r = l.retired;
   if (!r) return `Season ${formatNumber(l.lastSeason)} at ${c.clubName}`;
   if (r.when === 'midSeason') {
-    const where = r.position ? `, ${ordinal(r.position)} after ${count(r.played ?? 0, 'league game', 'league games')}` : '';
+    /* No position before the club's first league game: a table of zeros has an order, not a place. */
+    const where = r.position && (r.played ?? 0) > 0 ? `, ${ordinal(r.position)} after ${count(r.played ?? 0, 'league game', 'league games')}` : '';
     return `Left ${r.club} in week ${formatNumber(printedWeek(c, r.week ?? 0))} of Season ${formatNumber(r.season)}${where}`;
   }
   if (r.when === 'outOfWork') return `Retired while out of work, last in charge of ${r.club}`;
