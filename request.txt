@@ -1,0 +1,6 @@
+s11: CM_WORLD_MOVES_SECTIONS=11 node scripts/simCmWorldMoves.mjs
+c-drawshift: CM_WORLD_MOVES_CONTROL=drawshift node scripts/simCmWorldMoves.mjs
+leaguerules-head: node scripts/simCmLeagueRules.mjs
+leaguerules-bridged-maindigest: D=/tmp/lrb-$$ && mkdir -p $D && git archive HEAD | tar -x -C $D && node .rc/x/applyCtl1344.mjs $D bridge && git show origin/main:scripts/data/cmLeagueRulesDigest.json > $D/scripts/data/cmLeagueRulesDigest.json && ln -s $PWD/node_modules $D/node_modules && cd $D && node scripts/simCmLeagueRules.mjs
+appeal-head: node scripts/simManagerAppealIsolation.mjs
+appeal-pinned-engine: D=/tmp/api-$$ && mkdir -p $D && git archive HEAD | tar -x -C $D && git show e2063dbea06e037fa2e14f8434101ffd7817f728:src/lib/clubManager.ts > $D/src/lib/clubManager.ts && ln -s $PWD/node_modules $D/node_modules && cd $D && node scripts/simManagerAppealIsolation.mjs
