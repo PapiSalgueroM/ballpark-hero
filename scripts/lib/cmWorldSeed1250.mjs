@@ -28,7 +28,11 @@ import { fileURLToPath } from 'node:url';
 export const FILE = 'src/lib/clubManager.ts';
 export const ANCHOR = '  if (!world) {\n    const entropy = JSON.stringify([state.eraId, state.startYear, state.clubName,\n';
 const CLOSE = '    state.worldSeed = world.worldSeed;\n  }\n';
-const AFTER = '  return state;\n}\n';
+/* Round 1344: startCareer's last line records the opening window's deals once the seed is drawn (the post seed
+   flush). With the seed block cut there is no seed and that line hands back the same state, so the inverse still
+   makes every new save a save from before Release AZ. Either last line is accepted, so the legs that apply this
+   in throwaway checkouts of older commits still run. */
+const AFTERS = ['  return state;\n}\n', '  return recordAiDeals(state, unrecorded);\n}\n'];
 
 /** The source of clubManager.ts with the seed block of startCareer taken out. Line endings are read as LF. */
 export function withoutWorldSeed(source) {
@@ -39,7 +43,7 @@ export function withoutWorldSeed(source) {
   const close = text.indexOf(CLOSE, start);
   if (close < 0) throw new Error(`cmWorldSeed1250: the seed block in ${FILE} does not end with its else branch`);
   const end = close + CLOSE.length;
-  if (!text.startsWith(AFTER, end)) throw new Error(`cmWorldSeed1250: the seed block in ${FILE} is not the last thing startCareer does`);
+  if (!AFTERS.some(after => text.startsWith(after, end))) throw new Error(`cmWorldSeed1250: the seed block in ${FILE} is not the last thing startCareer does`);
   const block = text.slice(start, end);
   if (block.split('\n').length > 14 || !block.includes('state.worldSeed = Math.floor(')) throw new Error(`cmWorldSeed1250: the cut in ${FILE} is not the seed block`);
   const out = text.slice(0, start) + text.slice(end);

@@ -241,7 +241,10 @@ export function worldRosterKey(career: CareerState, originClub: string, player: 
 }
 
 /** This records a real completed transaction; it does not charge money or decide a deal. */
-export function recordWorldRosterTransfer(career: CareerState, transfer: WorldRosterTransfer): WorldRosterCareer {
+/* Round 1344, the lead's ruling 4: `pack` false hands the ledger back unpacked, so a window that records several
+   deals between other clubs packs it once at the end (recordAiDeals in clubManager.ts) instead of once a deal. The
+   rules are the same either way; only the last step is left to the caller. */
+export function recordWorldRosterTransfer(career: CareerState, transfer: WorldRosterTransfer, pack = true): WorldRosterCareer {
   const year = yearOf(career);
   const held = worldRosterView(career);
   /* Release AZ, the lead's ruling Y2 (ruling C3 of Release AW): a ledger the reader cannot verify reads as
@@ -280,7 +283,8 @@ export function recordWorldRosterTransfer(career: CareerState, transfer: WorldRo
     ? career.squad.map(player => player.id === transfer.player.id && samePlayer(player, origin, year)
       ? { ...plainCopy(player), worldRosterKey: key } : player)
     : career.squad;
-  return { ...career, squad, worldRoster: compactWorldRoster({ version: 1, eraId: career.eraId ?? 'now', records }) };
+  const ledger: WorldRosterState = { version: 1, eraId: career.eraId ?? 'now', records };
+  return { ...career, squad, worldRoster: pack ? compactWorldRoster(ledger) : ledger };
 }
 
 /** Update established permanent identities from the actual departing squad, without backfilling unknown origins. */

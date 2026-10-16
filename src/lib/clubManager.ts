@@ -443,7 +443,7 @@ function worldMarket(career: CareerState): MarketPlayer[] {
 }
 
 /** Only a projected source or an already certified ownership record supplies deal provenance. */
-function recordActualRosterTransfer(state: CareerState, player: CMPlayer, from: string, to: string | null, kind: 'permanent' | 'release' | 'retire'): CareerState {
+function recordActualRosterTransfer(state: CareerState, player: CMPlayer, from: string, to: string | null, kind: 'permanent' | 'release' | 'retire', pack = true): CareerState {
   /* Release AZ, the lead's ruling Y1: a career with no world seed (every save from before this release, and a
      Hot Seat day handed over) never writes a ledger, so it plays on exactly as it did. A readable ledger alone
      turns on the same branches the seed does, so this is the one place both are kept off together.
@@ -458,7 +458,55 @@ function recordActualRosterTransfer(state: CareerState, player: CMPlayer, from: 
   return recordWorldRosterTransfer(state, { player, from, to, kind,
     since: carried?.origin.since ?? source?.since ?? player.worldRosterSince,
     originPosition: carried?.origin.position ?? source?.p,
-    ...(carried ? { key: carried.key } : {}) });
+    ...(carried ? { key: carried.key } : {}) }, pack);
+}
+
+/** Round 1344: one deal closed between two clubs that are not mine. `mp.club` is the seller. */
+interface AiDeal { mp: MarketPlayer; to: string; fee: number }
+
+/* Round 1344 (the player report of 2026-10-16: a man another club bought vanished from the market and turned up at
+   his old club the next season; PR269, the other lane's Round 1367, proved the four writers that never told the
+   ledger). The man an AI deal moves, as the ledger records him: his own record's payload when the ledger already
+   holds him at the seller, else the seller's projected man (by his key, else by name, age and position) through
+   bakedToCMPlayer, never a payload made up from the market card. Null when the seller does not hold exactly one such
+   man, and (the lead's ruling 3, Release AZ's promise) when the ledger holds him there from a deal of MINE: a man I
+   sold, or one I signed and left behind when I changed jobs. His payload is then the one my squad gave him, the only
+   kind that carries a wage (agePlayer never adds one), and the club that holds him signs him again whenever his
+   deal runs down (refreshWorldRosterOnce), so no AI club takes him while he is there. Pure, no draw.
+   scripts/simCmWorldMoves.mjs and scripts/simCmLedgerBound.mjs (section 4) hold it. */
+export function aiDealPlayer(state: CareerState, mp: MarketPlayer): CMPlayer | null {
+  const current = refreshWorldRoster(state);
+  const found = worldRosterFor(current, mp.club).filter(p => mp.worldRosterKey ? p.worldRosterKey === mp.worldRosterKey
+    : p.n === mp.name && p.a === mp.age && p.p === mp.position);
+  if (found.length !== 1) return null;
+  const key = found[0].worldRosterKey;
+  const record = key ? worldRosterView(current)?.records.find(r => r.key === key && r.owner === mp.club && r.status === 'owned') : undefined;
+  if (!record) return bakedToCMPlayer(found[0]);
+  return record.player.wage === undefined ? plainCopy(record.player) : null;
+}
+
+/* Round 1344: one AI deal written to the ledger, through recordActualRosterTransfer's rules, with the ledger left
+   unpacked (`seen` is the state the window read its market from, so every lookup of a window shares one refreshed
+   read). The same state comes back when the deal is refused. */
+function recordAiDeal(state: CareerState, deal: AiDeal, seen: CareerState): CareerState {
+  const player = aiDealPlayer(seen, deal.mp);
+  return player ? recordActualRosterTransfer(state, player, deal.mp.club, deal.to, 'permanent', false) : state;
+}
+
+/** Round 1344: an unpacked ledger is packed once, at the end of the window that wrote it (the lead's ruling 4). */
+function packedLedger(state: CareerState): CareerState {
+  return state.worldRoster === undefined ? state : { ...state, worldRoster: compactWorldRoster(state.worldRoster) };
+}
+
+/* Round 1344: deals closed while the career had no seed yet (the opening window of a fresh career, whose seed is drawn
+   after its news) or outside a window (the hijack, the walk away), recorded in order and packed once. A career with
+   no seed comes back as the same object (the guard of recordActualRosterTransfer, ruling Y1), so it gains no key.
+   Pure, no draw. Its loop is one line, so scripts/lib/cmNoAiMoves1344.mjs can take it out. */
+function recordAiDeals(state: CareerState, deals: readonly AiDeal[]): CareerState {
+  if (worldSeedOf(state) === undefined || !deals.length) return state;
+  let next = state;
+  for (const deal of deals) next = recordAiDeal(next, deal, state);
+  return next === state ? state : packedLedger(next);
 }
 /** A rival club's projected roster minus every man who is in my squad. */
 export function oppRosterFor(state: CareerState, club: string, mine: ReadonlySet<string> = mySquadNames(state)): ProjectedPlayer[] {
@@ -11284,7 +11332,15 @@ export function generateWeeklyNews(state: CareerState): void {
   }
 }
 
-function generateHeadlines(state: CareerState): void {
+/* Round 1344: in a seeded career every deal of the window is written to the ledger as it closes (onto a working copy,
+   packed once at the end, the lead's ruling 4), so the man is at his buyer at once: his squad, the line ups, the club
+   page, the market. A deal the ledger would refuse is not made at all (no news, no goneNames): the skip comes after
+   the candidate's three draws, so no draw moves. A career with no seed records nothing here and hands its deals back,
+   so startCareer can record a fresh career's opening window once its seed is drawn. scripts/simCmWorldMoves.mjs. */
+function generateHeadlines(state: CareerState): AiDeal[] {
+  const unrecorded: AiDeal[] = [];
+  const seen = worldSeedOf(state) === undefined ? null : state;
+  let working = seen;
   const market = buildMarket(state);
   const count = Math.min(ri(3, 6), market.length);
   const candidates = shuffle(market.slice(0, 120)).slice(0, count);
@@ -11316,11 +11372,14 @@ function generateHeadlines(state: CareerState): void {
     const pool = (local.length && Math.random() < 0.5) ? local : affordable;
     if (pool.length === 0) continue;   // nobody in the world can afford him
     const buyer = pick(pool).name;
+    if (working && seen) { const moved = recordAiDeal(working, { mp, to: buyer, fee }, seen); if (moved === working) continue; working = moved; }
+    else unrecorded.push({ mp, to: buyer, fee });
     heads.push(`${buyer} sign ${mp.name} from ${mp.club} for ${money(fee)}.`);
     state.goneNames.push(mp.name);
     // Round 71: every AI deal lands in the Latest Transfers feed too.
     pushNews(state, { name: mp.name, from: mp.club, to: buyer, fee });
   }
+  if (working && working !== seen) state.worldRoster = packedLedger(working).worldRoster;
   /* Round 141: the window's own record deal gets a line, read off the same
      transferLog the Latest Transfers card shows, so the two never disagree. */
   const seasonDeals = (state.transferLog ?? []).filter(t => t.season === state.season && !t.loan);
@@ -11333,6 +11392,7 @@ function generateHeadlines(state: CareerState): void {
   state.aiHeadlines = heads;
   // Round 71: a fresh window also means AI clubs come sniffing at my squad.
   generateIncomingBids(state);
+  return unrecorded;
 }
 
 /* ================================================================== */
@@ -18240,7 +18300,10 @@ export function startCareer(clubName: string, eraId: string = DEFAULT_ERA_ID, cu
     state.windowWeeksLeft = lateWeeks;
     state.summerWindow = { season: state.season, matchWeeks: lateWeeks };
   }
-  generateHeadlines(state);
+  /* Round 1344: a fresh career has no seed yet, so its opening window's deals come back and are recorded by the
+     last line, once the seed block below has drawn one (the post seed flush; the year 0 projection ignores the
+     seed, so the keys are the ones the seeded world gives these men). A job move is seeded already: nothing comes back. */
+  const unrecorded = generateHeadlines(state);
   /* Round 1021 review: a late season can meet its first international window
      before a ball is kicked (2020-21's September window opened five days
      before the Premier League did). Its note goes out with the save, so it
@@ -18259,7 +18322,7 @@ export function startCareer(clubName: string, eraId: string = DEFAULT_ERA_ID, cu
   } else if (world.worldSeed !== undefined && state.worldSeed === undefined) {
     state.worldSeed = world.worldSeed;
   }
-  return state;
+  return recordAiDeals(state, unrecorded);
 }
 
 /**

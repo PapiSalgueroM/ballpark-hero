@@ -355,6 +355,10 @@ export function startDeadlineDay(setup: DeadlineSetup): DeadlineRun {
        engine leave its state the shape it was, and every market and roster read of the day stays on the
        projected world. scripts/simDailyDeals.mjs holds it: its seeddeadline control puts this line back out. */
     delete state0.worldSeed;
+    /* Round 1344: nor a ledger. startCareer records its opening window's deals into one once the seed is drawn
+       (the post seed flush), and a daily holds none (Y3), so it comes off with the seed. scripts/simDailyDeals.mjs
+       holds it: its ledgerdeadline control puts this line back out. */
+    delete state0.worldRoster;
     const rng = mulberry32(mixSeed(setup.seed, SEED_BRIEF));
     const count = rng() < 0.5 ? 3 : 4;
     const market = buildMarket(state0);

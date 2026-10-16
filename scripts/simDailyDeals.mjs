@@ -39,6 +39,12 @@
  *                                     date goes red on "the state carries a world seed or a ledger"
  *   DAILY_DEALS_CONTROL=seeddeadline  takes Deadline Day's strip of the world seed back out: every Deadline
  *                                     Day date, plain and scripted, goes red the same way
+ *   DAILY_DEALS_CONTROL=ledger        Round 1344: takes the Hot Seat's strip of the ledger back out (startCareer
+ *                                     records its opening window's deals into one once the seed is drawn): a
+ *                                     Hot Seat date whose opening window recorded a deal goes red on "the state
+ *                                     carries a world seed or a ledger". It must fire on at least one date of its
+ *                                     own game and on no date of the other game, and prints how many.
+ *   DAILY_DEALS_CONTROL=ledgerdeadline  the same for Deadline Day's strip of the ledger (plain and scripted days)
  *   DAILY_DEALS_CONTROL=rulesall      Round 1331: every Hot Seat date plays the current match rules: every date
  *                                     before HOT_SEAT_RULES_FROM goes red, and no date from it on, nor any
  *                                     Deadline Day date
@@ -71,7 +77,7 @@ const ROOT = path.resolve(arg('--root') || HERE);
 const PRINT = process.argv.includes('--print');
 const CONTROL = process.env.DAILY_DEALS_CONTROL || '';
 const cannot = why => { console.error(`simDailyDeals: cannot run: ${why}`); process.exit(2); };
-if (CONTROL && !['bind', 'binddeadline', 'seed', 'seeddeadline', 'rulesall', 'rulesstale'].includes(CONTROL)) cannot(`unknown control ${CONTROL}`);
+if (CONTROL && !['bind', 'binddeadline', 'seed', 'seeddeadline', 'ledger', 'ledgerdeadline', 'rulesall', 'rulesstale'].includes(CONTROL)) cannot(`unknown control ${CONTROL}`);
 /* Round 1331: the day the round's base commit (dec9075b, the Release BC record) was made. */
 const BASE_COMMIT_DATE = '2026-10-13';
 
@@ -135,6 +141,8 @@ const STRIPS = {
   binddeadline: { file: 'deadlineDay.ts', line: '    delete state0.realLeagueFixtures;' },
   seed: { file: 'managerHotSeat.ts', line: '  delete s.worldSeed;' },
   seeddeadline: { file: 'deadlineDay.ts', line: '    delete state0.worldSeed;' },
+  ledger: { file: 'managerHotSeat.ts', line: '  delete s.worldRoster;' },
+  ledgerdeadline: { file: 'deadlineDay.ts', line: '    delete state0.worldRoster;' },
   rulesall: { file: 'managerHotSeat.ts', line: "  if (setup.daily) return setup.daily < HOT_SEAT_RULES_FROM ? 'base' : undefined;", to: '  if (setup.daily) return undefined;' },
   rulesstale: { file: 'managerHotSeat.ts', line: "export const HOT_SEAT_RULES_FROM = '", to: "export const HOT_SEAT_RULES_FROM = '2026-10-01'; const HOT_SEAT_RULES_WAS = '" },
 };
@@ -326,6 +334,19 @@ if (CONTROL === 'seed' || CONTROL === 'seeddeadline') {
   console.log(fired
     ? `simDailyDeals: CONTROL ${CONTROL} FIRED: all ${want.length} of its dates went red on "${SEEDED}" and no date of the other game moved`
     : `simDailyDeals: CONTROL ${CONTROL} DID NOT FIRE as it must: ${mine.length} of ${want.length} of its dates carried the seed, the other game red on [${other.join(', ')}]`);
+  process.exit(fired ? 1 : 3);
+}
+if (CONTROL === 'ledger' || CONTROL === 'ledgerdeadline') {
+  /* Round 1344: a day carries a ledger only when its opening window recorded a deal, so not every date need go red
+     (the critic's correction 14): at least one date of its own game, and no date of the other game. */
+  const hot = CONTROL === 'ledger';
+  const want = hot ? HOT.map(r => `hot ${r[0]}`) : [...DEADLINE.map(r => `deadline ${r[0]}`), ...DEADLINE.map(r => `scripted ${r[0]}`)];
+  const mine = want.filter(k => reasons[k]?.includes(SEEDED));
+  const other = hot ? fails.deadline : fails.hot;
+  const fired = mine.length > 0 && other.length === 0;
+  console.log(fired
+    ? `simDailyDeals: CONTROL ${CONTROL} FIRED: ${mine.length} of its ${want.length} dates went red on "${SEEDED}" and no date of the other game moved`
+    : `simDailyDeals: CONTROL ${CONTROL} DID NOT FIRE as it must: ${mine.length} of ${want.length} of its dates carried a ledger, the other game red on [${other.join(', ')}]`);
   process.exit(fired ? 1 : 3);
 }
 if (CONTROL) {
