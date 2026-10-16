@@ -1,0 +1,5 @@
+vitest exit=0 6s |    Duration  4.70s (transform 2.29s, setup 130ms, collect 5.45s, tests 635ms, environment 975ms, prepare 391ms)
+retire exit=0 11s | simCmRetire: all 5 checks passed (retire)
+c-seasonover exit=1 10s | control seasonover FIRED: 1 of 5 checks red
+c-liveok exit=1 9s | control liveok FIRED: 1 of 5 checks red
+tsc exit=0 58s | 
