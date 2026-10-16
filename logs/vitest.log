@@ -1,0 +1,34 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [2m[90m↓[39m[22m src/test/homeSearchRecovery.test.tsx [2m([22m[2m10 tests[22m[2m | [22m[33m10 skipped[39m[2m)[22m
+ [32m✓[39m src/test/freshBuildBlockedStorage.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 194[2mms[22m[39m
+ [32m✓[39m src/test/routeErrorRecovery.test.tsx [2m([22m[2m65 tests[22m[2m)[22m[33m 1078[2mms[22m[39m
+[90mstdout[2m | src/test/clubManagerEraLoad.test.tsx[2m > [22m[2mClub Manager: an era save waits for its era[2m > [22m[2ma 2010-11 save resumes once its squads arrive, exactly as saved
+[22m[39m  2010-11 Barcelona resumed with 27 players
+
+[90mstdout[2m | src/test/clubManagerEraLoad.test.tsx[2m > [22m[2mClub Manager: an era save waits for its era[2m > [22m[2mwith the 2005-06 squads unreachable the boot holds, keeps the save, and the retry resumes it
+[22m[39m  offline: the boot holds on the retry notice and the save is untouched
+
+[90mstdout[2m | src/test/clubManagerEraLoad.test.tsx[2m > [22m[2mClub Manager: an era save waits for its era[2m > [22m[2mwith the 2005-06 squads unreachable the boot holds, keeps the save, and the retry resumes it
+[22m[39m  back online: the retry fetched the squads and the career resumed
+
+ [32m✓[39m src/test/soccerCareerSaveFence.test.tsx [2m([22m[2m8 tests[22m[2m)[22m[33m 1416[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career save fence[2m > [22man old save with no fence key opens, plays, and is fenced from its first write [33m 316[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerEraLoad.test.tsx [2m([22m[2m5 tests[22m[2m)[22m[33m 3036[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: an era save waits for its era[2m > [22ma 2010-11 save resumes once its squads arrive, exactly as saved [33m 2008[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: an era save waits for its era[2m > [22mwith the 2005-06 squads unreachable the boot holds, keeps the save, and the retry resumes it [33m 423[2mms[22m[39m
+ [32m✓[39m src/test/soccerCareerPackedFence.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[33m 1659[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career packed save and fence seam[2m > [22mrestores a complete packed synthetic edge and persists one actual academy action under the cap [33m 677[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career packed save and fence seam[2m > [22ma refused packed action rolls the fence back and retries the exact earned state without replay [33m 564[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career packed save and fence seam[2m > [22ma stale Retry cannot replace another complete packed save or consume any RNG [33m 414[2mms[22m[39m
+ [32m✓[39m src/test/freshBuildReloadWait.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 37[2mms[22m[39m
+ [32m✓[39m src/test/freshBuildOptionalChunk.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 26[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerStartWait.test.tsx [2m([22m[2m5 tests[22m[2m)[22m[33m 445[2mms[22m[39m
+ [32m✓[39m src/test/routeErrorHeldSave.test.tsx [2m([22m[2m3 tests[22m[2m)[22m[32m 73[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m9 passed[39m[22m[2m | [22m[33m1 skipped[39m[90m (10)[39m
+[2m      Tests [22m [1m[32m115 passed[39m[22m[2m | [22m[33m10 skipped[39m[90m (125)[39m
+[2m   Start at [22m 21:03:33
+[2m   Duration [22m 8.07s[2m (transform 4.22s, setup 614ms, collect 7.29s, tests 7.96s, environment 4.21s, prepare 1.00s)[22m
+

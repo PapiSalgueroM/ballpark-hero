@@ -1,0 +1,36 @@
+stock control dist written to /home/runner/work/ballpark-hero/ballpark-hero/dist-stock: one chunk dispatches vite:preloadError and it does not wait (vite 5.4.21)
+treeWithoutMerge: 531387c3d7b87e7ddf99890ea82333faa725638b, a8e36f6a without a7094670; conflicts kept from a8e36f6a: none
+base builds=0
+1) Vite's real wrapper (vite 5.4.21), stock and patched
+   ok   (a) a cancelled failure: stock resolves undefined (the bug), patched still waiting after 50 ms
+   ok   (d) two cancelled failures: both still waiting
+   ok   (b) a failure nobody cancels: both reject with the same error object
+   ok   (c) a healthy import: both give the same module object
+2) the patch is exact, and the plugin fails the build closed
+   ok   the patch is the stock text plus the wait at one place, and refuses 0 or 2 copies of the branch (vite 5.4.21 named)
+   ok   a build fed a mutated helper fails with the plugin message
+   ok   a build whose emitted wrapper lost the wait fails at the bundle check
+   ok   a build with minify off passes the bundle check (the scripts/qa side builds)
+   ok   a build with no dynamic import passes and says it has no preload wrapper
+3) the built dist: the one wrapper waits after its rethrow
+   info 524 js files; the literal vite:preloadError is in index-BN9hujk7.js
+   ok   index-BN9hujk7.js: ...i.payload=a,window.dispatchEvent(i),!i.defaultPrevented)throw a;return new Promise(()=>{})
+4) head against the stock control: one chunk differs, by exactly the wait
+   info 564 names on head, 564 on the stock control
+   info index-#.js: head adds ";return new Promise(()=>{})" and drops "" at character 175557
+   ok   index-#.js is the only chunk that differs, by 27 characters: the wait
+5) the stock control against a build of the base: only the entry and the Soccer Career page chunk differ
+   ok   null arm: the base built twice gives the same chunks, byte for byte once hashes are normalised
+   info SoccerCareer-#.js: 1375328 characters on the stock control, 1375335 on base
+   info index-#.js: 792532 characters on the stock control, 792510 on base
+   ok   only the entry (freshBuild.ts) and the Soccer Career page chunk (its CareerStory loader) differ from the base build
+6) the vite.config.ts entry, and every runtime import( has a plain string specifier
+   ok   vite.config.ts imports preloadWait and lists preloadWait() ungated (6 entries in the array)
+   info 338 runtime import( calls in 38 files, 239 lazy( calls, across 1541 source files (tests left out)
+   ok   every runtime import( in src has a plain string specifier, so the build wraps every one
+
+simPreloadWait: green. A chunk that fails to download waits for the one reload instead of handing React an empty module.
+simPreloadWait: control stockdist turned section(s) 3 red and nothing else. The check works.
+simPreloadWait: control extra turned section(s) 4 red and nothing else. The check works.
+simPreloadWait: control extrabase turned section(s) 5 red and nothing else. The check works.
+head=0 controls: stockdist=1 extra=1 extrabase=1
