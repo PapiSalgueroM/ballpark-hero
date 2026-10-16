@@ -278,6 +278,28 @@ export function worldSeedOf(career: CareerState): number | undefined {
   return Number.isInteger(seed) && seed! >= 0 && seed! <= 0xffffffff ? seed : undefined;
 }
 
+/* Round 1508: a career that plays the living world. One with a world seed (every career started since the 13
+   October update), or one with no seed that holds a readable ledger: a career from before that update (or a Hot
+   Seat day carried on here) adopted at its first summer on this engine (adoptLivingWorld). The ledger's writers ask
+   this; its readers already turn on a readable ledger alone. Hot Seat and Deadline Day hold neither, so they never
+   write one. scripts/simCmUnseededWorld.mjs holds it. */
+export function livingWorldOf(career: CareerState): boolean {
+  return worldSeedOf(career) !== undefined || worldRosterView(career) !== null;
+}
+
+/* Round 1508 (the lead's ruling 5 of Round 1344, the player report of 2026-10-16: a man another club bought vanished
+   and turned up at his old club the next season, most likely in a career older than the 13 October update). A
+   career with no seed joins the living world at its next summer: it gains an empty ledger and still no seed, so it
+   keeps the projected world it always had (a seed would change every club's future squads), and from that summer
+   every deal, mine and the other clubs', is recorded the way a seeded career records it. startNextSeason calls this
+   first thing, so nothing changes before that summer. A career already in the living world comes back as it is;
+   an unreadable ledger in a career with no seed is replaced by a fresh one, the next honest write of Release AZ's
+   ruling Y2. scripts/simCmUnseededWorld.mjs holds it (controls early and never). */
+export function adoptLivingWorld(career: CareerState): CareerState {
+  if (livingWorldOf(career)) return career;
+  return { ...career, worldRoster: { version: 1, eraId: career.eraId ?? 'now', records: [] } };
+}
+
 /* Release AZ fix (reviewer 1, MAJOR 1): a ledger a year behind was aged and packed again on EVERY roster read,
    once a club. The answer is kept per ledger object, world year, club, era and seed, unless a record the
    refresh copies from my own squad is due (the one branch that reads the squad), so it is the same answer the
@@ -447,8 +469,10 @@ function recordActualRosterTransfer(state: CareerState, player: CMPlayer, from: 
   /* Release AZ, the lead's ruling Y1: a career with no world seed (every save from before this release, and a
      Hot Seat day handed over) never writes a ledger, so it plays on exactly as it did. A readable ledger alone
      turns on the same branches the seed does, so this is the one place both are kept off together.
-     scripts/simCmUnseededWorld.mjs holds it (CM_UNSEEDED_CONTROL=guard takes this line out). */
-  if (worldSeedOf(state) === undefined) return state;
+     scripts/simCmUnseededWorld.mjs holds it (CM_UNSEEDED_CONTROL=guard takes this line out).
+     Round 1508: such a career writes once it holds a readable ledger with no seed, which only its first summer on
+     this engine gives it (adoptLivingWorld); before that summer it still writes nothing. */
+  if (!livingWorldOf(state)) return state;
   const held = worldRosterView(state);
   const carried = player.worldRosterKey && held?.records.find(record => record.key === player.worldRosterKey);
   const sources = projectedRoster(from, yearsOn(state), state.eraId ?? 'now', worldSeedOf(state))
@@ -502,9 +526,9 @@ function packedLedger(state: CareerState): CareerState {
    after its news) or outside a window (the hijack, the walk away), recorded in order and packed once. A career with
    no seed comes back as the same object (the guard of recordActualRosterTransfer, ruling Y1), so it gains no key.
    Pure, no draw. Its loop is one line, so scripts/lib/cmNoAiMoves1344.mjs can take it out. Exported for
-   src/lib/clubManagerWorldMoves.test.ts. */
+   src/lib/clubManagerWorldMoves.test.ts. Round 1508: a career with no seed records here once it is adopted. */
 export function recordAiDeals(state: CareerState, deals: readonly AiDeal[]): CareerState {
-  if (worldSeedOf(state) === undefined || !deals.length) return state;
+  if (!livingWorldOf(state) || !deals.length) return state;
   let next = state;
   for (const deal of deals) next = recordAiDeal(next, deal, state);
   return next === state ? state : packedLedger(next);
@@ -516,9 +540,9 @@ export function recordAiDeals(state: CareerState, deals: readonly AiDeal[]): Car
    him: the draw that brought the close is spent as before, but no news line, no gone name and no "closed the deal"
    note say he moved while the ledger keeps him where he was. An unseeded career never refuses (today's rule). Pure,
    no draw. Its body is one line so scripts/lib/cmNoAiMoves1344.mjs can take it out; scripts/simCmWorldMoves.mjs
-   section 2 (the protected arms) holds it. */
+   section 2 (the protected arms) holds it. Round 1508: and an adopted career (no seed, a readable ledger) the same. */
 function rivalCloseRefused(career: CareerState, deal: AiDeal): boolean {
-  return worldSeedOf(career) !== undefined && recordAiDeal(career, deal, career) === career;
+  return livingWorldOf(career) && recordAiDeal(career, deal, career) === career;
 }
 /** A rival club's projected roster minus every man who is in my squad. */
 export function oppRosterFor(state: CareerState, club: string, mine: ReadonlySet<string> = mySquadNames(state)): ProjectedPlayer[] {
@@ -7826,8 +7850,9 @@ export function signFreeAgent(career: CareerState, name: string): CareerState | 
   };
   /* Release AZ fix (reviewer 1, minor 6): the one ledger writer that does not pass recordActualRosterTransfer, so
      ruling Y1's guard did not stand in front of it. Inert before this line too (it needs a readable ledger, which a
-     career with no seed never gets), now said where it is done. */
-  if (worldSeedOf(career) === undefined) return state;
+     career with no seed never gets), now said where it is done. Round 1508: until its first summer here, when it is
+     adopted with a readable ledger (adoptLivingWorld). */
+  if (!livingWorldOf(career)) return state;
   const released = worldRosterView(career)?.records.filter(record => record.status === 'released'
     && record.player.name === player.name && record.origin.birthYear === worldYear(career) - player.age);
   return released?.length === 1 ? recordWorldRosterTransfer(state, { player, from: null, to: state.clubName,
@@ -11400,10 +11425,11 @@ export function generateWeeklyNews(state: CareerState): void {
    packed once at the end, the lead's ruling 4), so the man is at his buyer at once: his squad, the line ups, the club
    page, the market. A deal the ledger would refuse is not made at all (no news, no goneNames): the skip comes after
    the candidate's three draws, so no draw moves. A career with no seed records nothing here and hands its deals back,
-   so startCareer can record a fresh career's opening window once its seed is drawn. scripts/simCmWorldMoves.mjs. */
+   so startCareer can record a fresh career's opening window once its seed is drawn. scripts/simCmWorldMoves.mjs.
+   Round 1508: a career with no seed records here too from its first summer on this engine (adoptLivingWorld). */
 function generateHeadlines(state: CareerState): AiDeal[] {
   const unrecorded: AiDeal[] = [];
-  const seen = worldSeedOf(state) === undefined ? null : state;
+  const seen = livingWorldOf(state) ? state : null;
   let working = seen;
   const market = buildMarket(state);
   const count = Math.min(ri(3, 6), market.length);
@@ -20333,6 +20359,9 @@ export function toLeague(name: string): string {
  * competitions and reopens the summer window.
  */
 export function startNextSeason(career: CareerState, acceptOfferClub?: string): CareerState {
+  /* Round 1508: a career with no world seed joins the living world here, at its first summer on this engine, before
+     the summer's first deal is made (adoptLivingWorld, above worldSeedOf's neighbours). Its own hunk, one line. */
+  career = adoptLivingWorld(career);
   career = snapshotWorldRosterClub(career, career.clubName);
   const summary = career.pendingSummary;
   const prevPos = summary ? summary.position : Math.max(1, leaguePosition(career));

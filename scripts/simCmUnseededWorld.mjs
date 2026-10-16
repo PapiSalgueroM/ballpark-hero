@@ -51,7 +51,7 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
    (5ec5a724 is the merge that brought AZ onto Release BB, 36cc9ffe its first parent). Unset, the base is b6eb78e7. */
 const BASE = process.env.CM_UNSEEDED_BASE || 'b6eb78e799b12c851e4e8e583e9e926aed117f1c';
 const ENGINE = 'src/lib/clubManager.ts';
-const GUARD = '  if (worldSeedOf(state) === undefined) return state;\n';
+const GUARD = '  if (!livingWorldOf(state)) return state;\n';
 const CONTROL = process.env.CM_UNSEEDED_CONTROL || '';
 const QUICK = process.env.CM_UNSEEDED_FLEET === 'quick';
 const cannot = why => { console.log(`simCmUnseededWorld: cannot run: ${why}`); process.exit(2); };

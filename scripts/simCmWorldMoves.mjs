@@ -64,7 +64,9 @@
  *      the ledger and the squad's ledger keys stripped the way simClubManagerSaveSize strips them, and the legacy
  *      career with three deals of mine at its start: a release, a buy and a sale through acceptBid), the same nine
  *      clubs, seeds 0 to 4, two seasons with their January windows, a save and a reload after every window,
- *      deal and rollover, against BASE: every state, saved byte and Math.random draw equal.
+ *      deal and rollover, against BASE: every state, saved byte and Math.random draw equal. Since Round 1508 only up
+ *      to the first summer, where the head adopts the career (a readable ledger and no seed, asserted); what it does
+ *      after that is scripts/simCmUnseededWorld.mjs's.
  *   7. my deals with the recording on (the critic's correction 10): seeded careers of the three worlds (seeds 1 to 3)
  *      release, buy and sell (acceptBid), and since the review of 2026-10-16 also make a swap (an offer with a man of
  *      mine in it, his terms met) and take a loan with its option exercised, at the start and again a season later,
@@ -196,7 +198,7 @@ const keepLedger = indent => `${indent}{ const held1344 = state.worldRoster; gen
 /* Each control: the section it must turn red, the window its first red must be at (section 1), and its edits of
    this tree's engine, [anchor, replacement]. */
 const CONTROLS = {
-  seedless: { section: 6, edits: [['  if (worldSeedOf(state) === undefined) return state;\n', '']] },
+  seedless: { section: 6, edits: [['  if (!livingWorldOf(state)) return state;\n', '']] },
   norecord: { section: 1, first: 'opening', edits: [[RECORD_LINE, '    unrecorded.push({ mp, to: buyer, fee });\n'],
     ['  for (const deal of deals) next = recordAiDeal(next, deal, state);\n', '']] },
   noflush: { section: 1, first: 'opening', edits: [['  return recordAiDeals(state, unrecorded);\n}\n', '  return state;\n}\n']] },
@@ -210,7 +212,7 @@ const CONTROLS = {
   repairthrows: { section: 5, loads: true, edits: [["  try {\n    if (worldSeedOf(state) === undefined || !eraRostersLoaded(state.eraId)", "  try {\n    if (Math.abs(1) === 1) throw new Error('the repairthrows control');\n    if (worldSeedOf(state) === undefined || !eraRostersLoaded(state.eraId)"]] },
   nohijack: { section: 2, arm: 'hijack', edits: [['      return recordAiDeals(state, [{ mp: next.player, to: next.rivalBidder, fee: next.rivalOffer }]);\n', '      return state;\n']] },
   nowalk: { section: 2, arm: 'walk', edits: [['    return recordAiDeals(state, [{ mp: neg.player, to: neg.rivalBidder, fee: neg.rivalOffer }]);\n', '    return state;\n']] },
-  noguard: { section: 2, edits: [['  return worldSeedOf(career) !== undefined && recordAiDeal(career, deal, career) === career;\n', '  return false;\n']] },
+  noguard: { section: 2, edits: [['  return livingWorldOf(career) && recordAiDeal(career, deal, career) === career;\n', '  return false;\n']] },
   nocarry: { section: 3, file: 'src/lib/clubManagerCalendar.ts', edits: [[CARRY_LINE, '    transferLog: s.transferLog,\n']] },
   seasonone: { section: 3, edits: [['    state.season = world.rosterCareer.season;\n', '']] },
   dropbase: { section: 4, edits: [['  return world.filter(p => listed.has(at(p)) || joined.has(at(p))).map(', '  return world.filter(p => joined.has(at(p))).map(']] },
@@ -299,8 +301,10 @@ function stream(seed) {
 }
 const mix = (...parts) => parseInt(sha(parts.join('|')).slice(0, 8), 16) >>> 0;
 /** fn under Math.random on its own stream, every draw kept (section 6 compares their number and values). */
+let tapeNow = [];   // Round 1508: the draws of the tape running now, so section 6 can mark the first summer
 function tape(seed, fn) {
   const next = stream(seed), draws = [], keep = Math.random;
+  tapeNow = draws;
   Math.random = () => { const d = next(); draws.push(d); return d; };
   try { return { value: fn(), draws }; } finally { Math.random = keep; }
 }
@@ -857,6 +861,10 @@ async function legacyCareer(E, era, club, seed, kind) {
       const sold = bid && M.cm.acceptBid({ ...s, incomingBids: [...(s.incomingBids ?? []), bid] }, man.id);
       if (sold) { s = keepSaved(sold); dealt += 1; }
     }
+    /* Round 1508: the first summer on this engine adopts a career with no seed (an empty ledger, still no seed), so
+       BASE and the head are compared up to it (`before`), and after it the head must have adopted the career. */
+    let before = null, adopted = null;
+    const mark = () => ({ saved: saved.length, draws: tapeNow.length, drawHash: sha(tapeNow.join(',')), state: sha(s), ledger: s.worldRoster !== undefined });
     for (let season = 1; season <= LEGACY_SEASONS; season += 1) {
       for (let guard = 0; guard < 400; guard += 1) {
         if (s.boardConfidence < 35) s = { ...s, boardConfidence: 55 };
@@ -868,9 +876,13 @@ async function legacyCareer(E, era, club, seed, kind) {
       if (s.sacked) break;
       s = M.cm.finishSeason(s).state;
       if (season === LEGACY_SEASONS) break;
-      s = keepSaved(M.cm.startNextSeason(s));
+      before ??= mark();
+      s = M.cm.startNextSeason(s);
+      adopted ??= M.cm.worldSeedOf(s) === undefined && M.ledger.readWorldRoster(s) !== null;
+      s = keepSaved(s);
     }
-    return { state: sha(s), ledger: s.worldRoster !== undefined, dealt };
+    before ??= mark();
+    return { state: sha(s), ledger: s.worldRoster !== undefined, dealt, before, adopted };
   });
   return { saved, draws: run.draws.length, drawHash: sha(run.draws.join(',')), ...run.value };
 }
@@ -884,14 +896,20 @@ async function legacySection(B, H) {
     /* A career that cannot be set up measures nothing, so it stops the run (exit 2) rather than turning the section
        red: otherwise the seedless control could "fire" on a broken fleet (it did once, remote check r1344-wm2). */
     if (b.error || h.error) cannot(`section 6, ${tag}: ${b.error ?? h.error}`);
-    if (h.ledger) fail(6, `${tag}: the head's career wrote a world ledger with no seed`);
-    if (b.saved.length !== h.saved.length) fail(6, `${tag}: BASE saved ${b.saved.length} times, the head ${h.saved.length}`);
-    const first = b.saved.findIndex((x, i) => x !== h.saved[i]);
-    if (first >= 0) fail(6, `${tag}: saved string ${first + 1} of ${b.saved.length} differs from BASE's`);
-    if (b.draws !== h.draws || b.drawHash !== h.drawHash) fail(6, `${tag}: Math.random draws ${h.draws} against BASE's ${b.draws} (values ${h.drawHash === b.drawHash ? 'equal' : 'differ'})`);
-    if (b.state !== h.state) fail(6, `${tag}: the last state differs from BASE's`);
+    /* Round 1508: equal to BASE up to the first summer (saved strings, draws, the state at the end of season one),
+       and adopted at it; what an adopted career then does is scripts/simCmUnseededWorld.mjs's to hold. */
+    const [b0, h0] = [b.before, h.before];
+    if (h0.ledger) fail(6, `${tag}: the head's career wrote a world ledger with no seed before its first summer`);
+    if (b0.saved !== h0.saved) fail(6, `${tag}: before the first summer BASE saved ${b0.saved} times, the head ${h0.saved}`);
+    const first = b.saved.slice(0, b0.saved).findIndex((x, i) => x !== h.saved[i]);
+    if (first >= 0) fail(6, `${tag}: saved string ${first + 1} of ${b0.saved} (before the first summer) differs from BASE's`);
+    if (b0.draws !== h0.draws || b0.drawHash !== h0.drawHash) fail(6, `${tag}: before the first summer Math.random draws ${h0.draws} against BASE's ${b0.draws} (values ${h0.drawHash === b0.drawHash ? 'equal' : 'differ'})`);
+    if (b0.state !== h0.state) fail(6, `${tag}: the state before the first summer differs from BASE's`);
+    if (h.adopted === false) fail(6, `${tag}: the head did not adopt the career at its first summer (a readable ledger and no seed)`);
+    if (h.adopted) s6Adopted += 1;
   }
 }
+let s6Adopted = 0;
 
 /* ---------- section 7, my deals with the recording on ---------- */
 const s7 = { base: { deals: 0, refused: 0, swaps: 0, options: 0, unreached: 0 }, head: { deals: 0, refused: 0, swaps: 0, options: 0, unreached: 0 } };
@@ -1416,8 +1434,9 @@ if (SECTIONS.has(5)) {
 if (SECTIONS.has(6)) {
   console.log('6) legacy: unseeded careers, BASE against the head, every saved string and Math.random draw');
   await legacySection(B, H);
-  console.log(`   ${s6Careers} careers, ${s6Saves} saves, ${s6Draws} draws and ${s6Deals} deals of mine on the head`);
+  console.log(`   ${s6Careers} careers, ${s6Saves} saves, ${s6Draws} draws and ${s6Deals} deals of mine on the head; ${s6Adopted} adopted at their first summer (Round 1508)`);
   if (!s6Careers || !s6Saves) cannot('section 6: no career was played');
+  if (!s6Adopted) cannot('section 6: no career reached its first summer, so the adoption was never seen');
   if (!s6Deals) cannot('section 6: no deal of mine was made, so no ledger writer was called');
 }
 if (SECTIONS.has(12)) {
