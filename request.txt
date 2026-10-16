@@ -1,0 +1,9 @@
+#!serial
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+simPreloadWait: node scripts/simPreloadWait.mjs
+simPreloadWait-noplugin: PRELOAD_WAIT_CONTROL=noplugin node scripts/simPreloadWait.mjs
+simPreloadWait-gated: PRELOAD_WAIT_CONTROL=gated node scripts/simPreloadWait.mjs
+mutApply: node .rc/x/mutApply.mjs && node scripts/simPreloadWait.mjs; s=$?; git checkout -- scripts src; git diff --quiet && echo "restored clean, harness exit $s"; exit $s

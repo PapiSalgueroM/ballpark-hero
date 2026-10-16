@@ -1,0 +1,10 @@
+mutApply: apply set to serve in scripts/lib/vitePreloadWait.mjs
+1) Vite's real wrapper (vite 5.4.21), stock and patched
+   FAIL the tiny build did not print the plugin line, so the plugin did not run
+   FAIL the patched text does not hold the wait exactly once, or the stock text already holds it
+2) the patch is exact, and the plugin fails the build closed
+   FAIL patchPreloadHelper(stock) differs from what the plugin emitted
+   ok   the patch is the stock text plus the wait at one place, and refuses 0 or 2 copies of the branch (vite 5.4.21 named)
+   FAIL a build fed a mutated helper passed: the plugin does not fail closed
+strip-wait: anchor appears 0 times, refusing to run a dead control
+restored clean, harness exit 2
