@@ -162,8 +162,10 @@ async function walk(browser, base, row, size, arm) {
     try { await page.screenshot({ path: path.join(OUT, file), type: 'jpeg', quality: 60 }); rec[tag + 'Shot'] = file; } catch (e) { rec.issues.push(`picture ${tag} failed: ${String(e).slice(0, 120)}`); }
   };
   try {
-    await page.goto(base + row.route, { waitUntil: 'load' });
+    rec.stage = 'goto';
+    await page.goto(base + row.route, { waitUntil: fault && !row.tap ? 'commit' : 'load' });
     if (row.tap) {
+      rec.stage = 'tap';
       const tile = page.locator(`section[data-sport] a[href="${row.tap}"]:visible`).first();
       await tile.waitFor({ state: 'visible' });
       await tile.scrollIntoViewIfNeeded();
@@ -184,7 +186,8 @@ async function walk(browser, base, row, size, arm) {
       while (!held && Date.now() < until) await sleep(50);
       if (!held) rec.issues.push('no reload document request within 15 s of the fault');
       else {
-        const loaded = page.waitForEvent('load', { timeout: 30000 });
+        rec.stage = 'hold';
+        const loaded = page.waitForEvent('load', { timeout: 30000 }).then(() => true, e => { rec.issues.push('no load after the hold: ' + String(e).slice(0, 120)); return false; });
         for (const ms of SAMPLES) {
           const wait = held.start + ms - Date.now();
           if (wait > 0) await sleep(wait);
@@ -195,6 +198,7 @@ async function walk(browser, base, row, size, arm) {
         await loaded;
       }
     }
+    rec.stage = 'settle';
     rec.final = await settle(row.whole, 20000);
     await sleep(800);
     rec.final = await page.evaluate(SNAP);
@@ -203,7 +207,7 @@ async function walk(browser, base, row, size, arm) {
     const first = rec.files.find(f => f.action === '404');
     if (first && held?.end) rec.waitMs = held.end - t0 - first.at;
   } catch (e) {
-    rec.issues.push('walk stopped: ' + String(e).slice(0, 200));
+    rec.issues.push('walk stopped at ' + rec.stage + ': ' + String(e).slice(0, 200));
   } finally {
     await context.close();
   }
