@@ -1,0 +1,7 @@
+  pre: Arsenal (now), season 1 week 37 of 54, window null, 143652 bytes, by 36cc9ffe
+  mid: Bayern Munich (era2015), season 1 week 36 of 52, window null, 88771 bytes, by c28b078b
+genCmOldCareersWorldFixture: wrote ../../../../../tmp/fx-regen2.json (270317 bytes, sha256 90a733d1faad5230770602a6ac34bdd0088616d6299fdddb0e53cf53980c1298) in 2s
+made: regenerated "by hand (not for committing)" vs committed "remote check r1508-fx1 on a GitHub runner, 2026-10-16"
+pre: save equal true (143652 vs 143652)
+mid: save equal true (88771 vs 88771)
+fxcmp: EQUAL apart from the made line

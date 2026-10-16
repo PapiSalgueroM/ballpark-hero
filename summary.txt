@@ -1,0 +1,1 @@
+fxcmp exit=0 2s | fxcmp: EQUAL apart from the made line

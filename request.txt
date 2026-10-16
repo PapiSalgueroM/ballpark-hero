@@ -1,0 +1,1 @@
+fxcmp: node .rc/x/fxcmp.mjs
