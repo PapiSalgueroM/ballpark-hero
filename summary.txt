@@ -1,0 +1,10 @@
+vitest exit=0 6s |    Duration  4.80s (transform 3.37s, setup 316ms, collect 4.24s, tests 329ms, environment 1.25s, prepare 603ms)
+deck-b exit=0 71s | simSoccerDeck: green. Sections 6, 7, 9, 10 only.
+deck-a exit=0 91s | simSoccerDeck: green. Sections 1, 2, 3, 4, 5 only.
+tsc exit=0 95s | 
+norival exit=0 17s | No rival product names found. 0 findings.
+kit-c exit=0 50s | simEventDeck: green. Sections 14, 15, 16 only.
+deck-c exit=0 114s | simSoccerDeck: green. Sections 8 only.
+static exit=0 0s | 33
+worldtruth exit=0 82s | simSoccerWorldTruth: OK, every section green
+fairness exit=0 71s | simSoccerDeckFairness: all sections green
