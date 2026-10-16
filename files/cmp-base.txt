@@ -1,0 +1,17 @@
+runEach: 15 harnesses
+simBrand exit=1 1s | simBrand: 1 failure || FAIL: the generator could not be run: Error: Command failed: python3 /home/runner/work/ballpark-hero/ballpark-hero/scripts/logo/gen_logo.py /home/runner/work/_t
+simCareerFallback exit=1 0s | Supabase unreachable, the live sections were not checked: career_players read failed: Error: Offline harness blocked fetch to https://flawuiqbvjobmkfkauhw.supabase.co
+simCbbGrid exit=1 2s | simCbbGrid: the player data did not load, which is itself worth investigating
+simAcademyFilters exit=1 4s | Node.js v24.21.0
+simLeaderboardCache exit=1 0s | Node.js v24.21.0
+simMostPlayed exit=1 0s | Node.js v24.21.0
+simAussieRulesManagerBoard exit=0 8s | simAussieRulesManagerBoard: saved replay, refused storage, quiet restores, finite cue binding and native focus targets execute.
+simRecordBooks exit=1 8s | simRecordBooks: 1 failure || FAIL: no section could be compared, so this section is not really testing anything
+simSoccerCareerPendingMorale exit=1 0s | Node.js v24.21.0
+simManagerWorldContinuity exit=1 26s |     at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simManagerWorldContinuity.mjs:489:24 || FAIL [healthy] inactive: Entire inactive AR result and saved bytes match / FAIL [healthy] constructors: Fresh constructor changes only the declared held seed
+simTransferOverlay exit=1 5s | SUPABASE unreachable (Error: Offline harness blocked fetch to https://flawuiqbvjobmkfkauhw.supabase.co) for player_market_values?select=player_name,club,market_value_usd&year=eq.2026&player_name=in.(%
+simWindow2026Bundesliga exit=1 5s | SUPABASE unreachable (Error: Offline harness blocked fetch to https://flawuiqbvjobmkfkauhw.supabase.co) for player_market_values?select=club&year=eq.2026&club=eq.RB%20Leipzig&limit=1 after 3 attempts.
+simGuessFinish exit=1 50s | simGuessFinish: 9 failure(s). || FAIL: control unkeyed did not turn red: keeps a different game that arrives already finished settled / FAIL: control noclear did not turn red: forgets the game at the menu
+simValidatorCache exit=1 13s | simValidatorCache: 4 failures || FAIL: 3 cell(s) had no reusable attribute facts. Either the function stopped consulting the cache, or these probe cells are stale because the boards changed. / FAIL: the same cell asked twice did not come back from cache the second time, so answers are being paid for repeatedly
+simPhone2 exit=1 111s | 1 FAILURES || FAIL: biggest save is 98.8 KB / 1 FAILURES
+runEach: done, 14 of 15 exited non zero

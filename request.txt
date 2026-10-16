@@ -1,0 +1,4 @@
+#!build
+#!playwright
+cmp3: FENCE_BASE=e814c2def671e07bd6163462dff8ab1230be2000 bash .rc/x/cmp.sh simAcademyFilters simBrand simAussieRulesManagerBoard simCareerFallback simCbbGrid simGuessFinish simLeaderboardCache simMostPlayed simManagerWorldContinuity simRecordBooks simSoccerCareerPendingMorale simPhone2 simTransferOverlay simWindow2026Bundesliga simValidatorCache 
+summer8: SIM_SECTIONS=8 node scripts/simUsCareerSummer.mjs
