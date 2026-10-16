@@ -1,0 +1,9 @@
+1) The engine: 8 descriptors, 2000 roads each (seed set a) plus five edge stocks, control graded
+  FAIL [section 1] nfl:now #0: an undo is offered after allout
+  FAIL [section 1] nfl:now #1: an undo is offered after allout
+  FAIL [section 1] nfl:now #2: an undo is offered after allout
+  FAIL [section 1] nfl:now #3: an undo is offered after allout
+  FAIL [section 1] nfl:now #4: an undo is offered after allout
+   16040 showcase states, 1099 of them clamped skips: 16040 states red
+2) and 3) skipped under a control (the controls aim at section 1)
+CONTROL graded FIRED: section 1 red on 16040 states
