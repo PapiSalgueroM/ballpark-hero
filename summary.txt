@@ -1,0 +1,5 @@
+s6-2005 exit=1 85s | simCmWorldMoves: RED, sections 6 (16)
+s6-2015 exit=1 87s | simCmWorldMoves: RED, sections 6 (16)
+s0 exit=0 0s | simCmWorldMoves: green, sections 0 held
+s6-now exit=1 105s | simCmWorldMoves: RED, sections 6 (16)
+s6-seedless exit=1 33s | simCmWorldMoves: control seedless FIRED: section 6 red (7)

@@ -1,0 +1,12 @@
+6) legacy: unseeded careers, BASE against the head, every saved string and Math.random draw
+  FAIL section 6: Chelsea (era2005, seed 0, deals): the career still carries a seed or a ledger
+  FAIL section 6: Chelsea (era2005, seed 1, deals): the career still carries a seed or a ledger
+  FAIL section 6: Chelsea (era2005, seed 2, deals): the career still carries a seed or a ledger
+  FAIL section 6: Chelsea (era2005, seed 3, deals): the career still carries a seed or a ledger
+  FAIL section 6: Chelsea (era2005, seed 4, deals): the career still carries a seed or a ledger
+  FAIL section 6: Bolton Wanderers (era2005, seed 0, deals): the career still carries a seed or a ledger
+  FAIL section 6: Bolton Wanderers (era2005, seed 1, deals): the career still carries a seed or a ledger
+  FAIL section 6: Bolton Wanderers (era2005, seed 2, deals): the career still carries a seed or a ledger
+   45 careers, 120 saves, 1297598 draws and 0 deals of mine on the head
+  section 6: 8 more failures not shown
+simCmWorldMoves: RED, sections 6 (16)
