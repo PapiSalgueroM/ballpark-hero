@@ -301,11 +301,13 @@ export function livingWorldOf(career: CareerState): boolean {
    ledger would put him at his buyer and the projection would keep him at his old club, one man at two clubs. So a
    man the projection lists at exactly one club, and that club not mine, is recorded as signed by me from it, the
    way a buy records him in a seeded career. A man of my own club's bake, my academy's boys and a name the
-   projection lists at two clubs are left alone. Nothing else from before is rebuilt. Pure, no draw. */
+   projection lists at two clubs are left alone. Nothing else from before is rebuilt. Pure, no draw.
+   An era whose squads have not arrived is not adopted at all (the review of 2026-10-16): without them it could not
+   find my men, and adoption happens once, so they would never be recorded. It joins at the next summer that has
+   them. The page loads them before the hub (useClubManager), so only a headless caller meets this. */
 export function adoptLivingWorld(career: CareerState): CareerState {
-  if (livingWorldOf(career)) return career;
+  if (livingWorldOf(career) || !eraRostersLoaded(career.eraId)) return career;
   let adopted: CareerState = { ...career, worldRoster: { version: 1, eraId: career.eraId ?? 'now', records: [] } };
-  if (!eraRostersLoaded(career.eraId)) return adopted;
   const listedAt = new Map<string, string[]>();
   for (const [club, roster] of Object.entries(projectedWorldFor(career.eraId ?? 'now', yearsOn(career)))) {
     for (const p of roster) { const key = `${p.n}|${p.a}`; const clubs = listedAt.get(key); if (clubs) clubs.push(club); else listedAt.set(key, [club]); }
