@@ -1,0 +1,6 @@
+slots exit=0 79s | simClubManagerSlots: all sections green
+tsc exit=0 94s | 
+vitest-slots exit=0 7s |    Duration  6.50s (transform 3.48s, setup 336ms, collect 9.51s, tests 3.59s, environment 1.82s, prepare 938ms)
+anchors exit=0 53s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+ctl-slots-dupe exit=0 85s | CONTROL FIRED: SLOTS_CONTROL=dupe turned section 2 red through its budget check (red sections: 2, 3), as it must
+slots-ctl exit=0 369s | controls: nopark=1/1 dupe=1/1 norollback=1/1 oldversion=1/1 leanmore=1/1 decisioncontent=1/1
