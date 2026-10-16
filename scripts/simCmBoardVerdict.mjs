@@ -851,6 +851,7 @@ async function takeoverSection(head, base) {
   const P = 'takeover';
   const { bv } = head;
   let n = 0, joins = 0, notFresh = 0, baseFailed = 0, headFailed = 0, approached = 0;
+  const card = { dropped: 0, cases: 0, bad: [], moved: [] };
   const diff = [];
   const cases = takeoverCases(head.cm);
   const joinCases = cases.filter(c => c.entry === 'join').length;
@@ -864,6 +865,7 @@ async function takeoverSection(head, base) {
     if (h.boardConfidence !== bv.BOARD_FRESH) notFresh += 1;
     if (base.cm.objectiveStatuses(b).some(x => x.status === 'failed')) baseFailed += 1;
     if (head.cm.objectiveStatuses(h).some(x => x.status === 'failed')) headFailed += 1;
+    if (TAKEOVER_OBJECTIVES) cardCheck(head, base, c, h, b, card);
     /* The run in is the previous manager's and plays maybeApproach: since step 3 its suitor is stepped, so a
        headline naming him is masked the way section dailies masks one (only the name can move). */
     const mask = o => { const k = canon(o); delete k.boardConfidence; if (TAKEOVER_OBJECTIVES) delete k.boardObjectives;
@@ -873,11 +875,40 @@ async function takeoverSection(head, base) {
   }
   console.log(`[takeover] ${n} handovers (${joins} by joinClubNow, ${approached} joins skipped: approached before applying); on CM_BOARD_BASE ${baseFailed} carried a failed objective, on the head ${headFailed}`);
   check(P, `${n} takeovers open at BOARD_FRESH (${bv.BOARD_FRESH})`, n > 0 && (joins > 0 || joinCases === 0) && notFresh === 0, `${notFresh} do not; ${joins} joins of ${joinCases} join cases`);
+  if (TAKEOVER_OBJECTIVES) {
+    console.log(`  the card: ${card.dropped} takeovers dropped a failed objective; the season score compared on ${card.cases} of them (the rest were sacked first) at the handover and at the final whistle`);
+    check(P, 'on the day of the handover no objective on the card reads failed', headFailed === 0, `${headFailed} do`);
+    check(P, 'the card is the base card less exactly its failed objectives, in order', card.bad.length === 0, card.bad.length ? `${card.bad.length}; first ${card.bad[0]}` : '');
+    check(P, 'the season score is the same with and without the dropped objectives, at the handover and the final whistle', card.cases > 0 && card.moved.length === 0, card.moved.length ? `${card.moved.length}; first ${card.moved[0]}` : `${card.cases} cases`);
+  }
   check(P, 'every takeover equal to CM_BOARD_BASE but for the opening (and the card), its handover stamp included', diff.length === 0, diff.length ? `${diff.length}; first ${diff[0]}` : '');
   return { headFailed };
 }
+/** The takeover's card against the base's: the base card less exactly what had failed, and the season score
+ *  read with and without the dropped lines (the score reads done objectives only, so it must not move; the
+ *  control scoredone turns each dropped line into a done one and the score must move). */
+function cardCheck(head, base, c, h, b, card) {
+  const statuses = base.cm.objectiveStatuses(b);
+  const failedIds = statuses.filter(x => x.status === 'failed').map(x => x.objective.id);
+  const want = statuses.filter(x => x.status !== 'failed').map(x => x.objective);
+  const tag = `${c.club} ${eraLabel(c.era)} ${c.entry} seed ${c.seed}`;
+  if (JSON.stringify(h.boardObjectives) !== JSON.stringify(want)) card.bad.push(`${tag}: ${(h.boardObjectives ?? []).map(o => o.id).join(',')} against ${want.map(o => o.id).join(',')}`);
+  if (!failedIds.length) return;
+  card.dropped += 1;
+  let full = clone(b.boardObjectives);
+  if (CONTROL === 'scoredone') full = full.map(o => (failedIds.includes(o.id) ? { ...o, target: -1 } : o));
+  /* The objectives term counts only once the season is done, so the comparison that can bite is at the final
+     whistle: the season played out on the head's card, then scored with each card. */
+  const end = playSeason(head.cm, clone(h), c.seed * 7919 + 77);
+  if (end.sacked || end.stuck) return;
+  card.cases += 1;
+  for (const [when, s] of [['the handover', h], ['the final whistle', end.s]]) {
+    const a = head.cm.currentSeasonScore(s), z = head.cm.currentSeasonScore({ ...clone(s), boardObjectives: full });
+    if (a !== z) card.moved.push(`${tag} at ${when}: ${a} without, ${z} with`);
+  }
+}
 /* Set true at step 6, when the takeover card drops what is already failed. */
-const TAKEOVER_OBJECTIVES = false;
+const TAKEOVER_OBJECTIVES = true;
 
 /* ---------------- section legacy (step 2 on) ---------------- */
 const LEGACY_WORLDS = [['era2005', ['Everton']], ['era2015', ['Barcelona']], [null, ['Liverpool', 'West Ham', 'OB']]];
@@ -1026,6 +1057,8 @@ const ENGINE_CONTROLS = {
     ['      if (down.includes(mySlot)) return', '      if (topRows.slice(-(pyr.count + 1)).map(r => r.club).includes(mySlot)) return']] },
   legacyleak: { file: ENGINE, patches: [["  return c.matchRules === 'base';", '  return false;']] },
   nostep: { file: MODULE, patches: [['  return theirTier >= myTier - (bigSeason ? 2 : 1);', '  return true;']] },
+  keepfailed: { file: ENGINE, patches: [["  return objectiveStatuses(s).filter(x => x.status !== 'failed').map(x => x.objective);", '  return s.boardObjectives ?? [];']] },
+  scoredone: { file: MODULE, patches: [['export const LEGACY_BOARD_START = 60;', 'export const LEGACY_BOARD_START = 60; /* control scoredone: the harness marks the dropped lines done */']] },
   nokitty: { file: MODULE, patches: [['  return Math.min(flat, Math.max(10, Math.floor(KITTY_TOP_SHARE * i.budget)));', '  return flat;']] },
   start60: { file: MODULE, patches: [['export const BOARD_FRESH = 69;', 'export const BOARD_FRESH = 60;']] },
   noband: { file: MODULE, patches: [["  if (i.grade === 'A' || i.grade === 'B') v = Math.max(v, BOARD_FRESH);", '  if (false) v = Math.max(v, BOARD_FRESH);'],

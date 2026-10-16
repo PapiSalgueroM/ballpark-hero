@@ -27,7 +27,7 @@
  */
 import {
   playNextEntry, fixtureFor, entryInvolvesMe, careerLeagueOf, leagueRulesOf, CUP_LABELS, UCL_LABELS,
-  cupProgressRank, uclProgressRank, objectiveStatuses,
+  cupProgressRank, uclProgressRank, objectiveStatuses, openObjectives,
   /* Round 783: the mid season takeover an accepted application walks into. */
   startCareer, interimManagerName, refreshWorldRoster, worldSeedOf, customExitUclField,
   /* Round 1335: the old season rules' switch, read by both handovers. */
@@ -824,6 +824,8 @@ export function startMidSeason(career: CareerState, entry: MidSeasonEntry): Care
        break, so the break and any rest stay behind with it. */
     ...(s.intl ? { intl: { season: s.season, fired: [...s.intl.fired] } } : {}),
     midSeasonStart: entry,
+    /* Round 1335: the card without what the last manager had already failed. */
+    boardObjectives: legacySeason(career) ? s.boardObjectives : openObjectives(s),
     /* Round 633: what he had already banked, frozen here so the season score
        can subtract it. It is stamped rather than estimated later because an
        estimate computed from the player's own running totals rises as he
@@ -987,6 +989,8 @@ export function joinClubNow(career: CareerState): CareerState | null {
       ...s.aiHeadlines,
     ].slice(0, 8),
     jobHunt: closeOnJoiningNow(hunt, from, interim, career.season, s.week),
+    /* Round 1335: the card without what the last manager had already failed. */
+    boardObjectives: legacySeason(career) ? s.boardObjectives : openObjectives(s),
     /* Round 633's rule: what the manager before you had banked, frozen here
        so the season score reads only the games you pick a team for. */
     handover: handoverFrom(s),

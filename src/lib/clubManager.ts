@@ -13716,6 +13716,13 @@ export function objectiveStatuses(career: CareerState): { objective: BoardObject
   });
 }
 
+/** Round 1335: the card a new manager takes over in mid season: every objective but the ones already failed
+ *  before he arrived, in order. A done one stays (it can come back off, and the season score already leaves
+ *  an inherited tick out, Round 633's stamp). Pure, no draw. */
+export function openObjectives(s: CareerState): BoardObjective[] {
+  return objectiveStatuses(s).filter(x => x.status !== 'failed').map(x => x.objective);
+}
+
 /* ================================================================== */
 /* Match engine                                                       */
 /* ================================================================== */
