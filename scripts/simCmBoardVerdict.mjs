@@ -109,6 +109,7 @@ async function bundleArm(name, folder, srcRoot, texts = {}) {
   const output = path.join(folder, `${name}.cjs`);
   const withModule = existsSync(path.join(srcRoot, 'lib/clubManagerBoardVerdict.ts'));
   await writeFile(entry, "export * as cm from '@/lib/clubManager';\nexport * as cal from '@/lib/clubManagerCalendar';\nexport * as hs from '@/lib/managerHotSeat';\n"
+    + "export * as dd from '@/lib/deadlineDay';\n"
     + (withModule ? "export * as bv from '@/lib/clubManagerBoardVerdict';\n" : ''));
   await build({ entryPoints: [entry], bundle: true, platform: 'node', format: 'cjs', outfile: output, logLevel: 'silent', alias, nodePaths: [path.join(root, 'node_modules')] });
   const mod = require(output);
@@ -200,7 +201,8 @@ function playCareer(cm, { club, era, seed, seasons, policy }, onRoll, hooks = {}
     const take = policy === 'first' ? fin.summary.offers[0]?.club : undefined;
     const table = cm.sortedLeagueTable(fin.state).map(r => r.club);
     const ctx = { club: fin.state.clubName, era, seed, season, policy, finState: fin.state, summary: fin.summary,
-      leagueBefore: cm.careerLeagueOf(fin.state).id, def: defOf(cm, era, fin.state.clubName), size: table.length, last: table[table.length - 1] };
+      leagueBefore: cm.careerLeagueOf(fin.state).id, def: defOf(cm, era, fin.state.clubName), size: table.length, last: table[table.length - 1],
+      offerTiers: fin.summary.offers.map(o => defOf(cm, era, o.club)?.tier ?? 0) };
     const rollSeed = seed * 31 + season + 5;
     hooks.beforeRoll?.(fin.state, take, rollSeed);
     const next = withSeed(rollSeed, () => cm.startNextSeason(fin.state, take));
@@ -556,6 +558,128 @@ function gradeChecks(arm, rolls, ctx) {
   check(P, 'every B to F season with no fate grades as the base ladder with a line of the old VERDICTS', bad.plain.length === 0, say(bad.plain) || `${n.plain} cases`);
 }
 
+/* ---------------- sections offers and dailies (step 3 on) ---------------- */
+function approachTracker(cm, list) {
+  let last = null;
+  return s => {
+    const a = s?.approach;
+    if (a && a.club !== last) {
+      const era = s.eraId && s.eraId !== 'now' ? s.eraId : null;
+      list.push({ club: s.clubName, myTier: defOf(cm, era, s.clubName)?.tier ?? 0, suitor: a.club, tier: defOf(cm, era, a.club)?.tier ?? 0 });
+    }
+    last = a ? a.club : null;
+  };
+}
+const stepOk = (my, their, big) => their >= my - (big ? 2 : 1);
+function offersChecks(arm, rolls, approaches, tier4, acc4) {
+  const P = 'offers';
+  const { cm } = arm;
+  let offers = 0, far = 0;
+  const bad = [];
+  for (const r of [...rolls, ...tier4]) {
+    const big = bigSeason(cm, r);
+    r.summary.offers.forEach((o, i) => {
+      if (PRE_YES.test(o.blurb)) return;
+      offers += 1;
+      const t = r.offerTiers[i];
+      if (r.def.tier - t >= 2) far += 1;
+      if (!stepOk(r.def.tier, t, big)) bad.push(`${r.club} (tier ${r.def.tier}, ${r.summary.position} of ${r.size}${big ? ', big' : ''}) offered ${o.club} (tier ${t})`);
+    });
+  }
+  check(P, `${offers} summer offers of the fleets: every one within the step (one tier up, two after a top flight title or the Champions League)`, offers > 0 && bad.length === 0, bad.length ? `${bad.length}; first ${bad[0]}` : `${far} of them two tiers up after a big season`);
+  const badA = approaches.filter(a => !stepOk(a.myTier, a.tier, false));
+  check(P, `${approaches.length} mid season approaches: every one from at most one tier above`, badA.length === 0, badA.length ? `${badA.length}; first ${badA[0].club} (tier ${badA[0].myTier}) approached by ${badA[0].suitor} (tier ${badA[0].tier})` : '');
+  /* Exhaustive, no sampling: every world's tier 2 to 4 club has a club exactly one tier up in its pool, so
+     the approach's filter never empties a list the old code drew from. */
+  let clubs = 0;
+  const empty = [];
+  for (const era of ERAS) {
+    const all = worldClubs(cm, era);
+    for (const c of all.filter(d => d.tier >= 2)) {
+      clubs += 1;
+      if (!all.some(d => d.name !== c.name && d.tier === c.tier - 1)) empty.push(`${c.name} ${eraLabel(era)} (tier ${c.tier})`);
+    }
+  }
+  check(P, `${clubs} tier 2 to 4 clubs of every world: each has a club exactly one tier up to be approached by`, clubs > 0 && empty.length === 0, empty.length ? `${empty.length}; first ${empty[0]}` : '');
+  console.log(`[offers] the tier 4 fleet: ${tier4.length} season ends; on CM_BOARD_BASE the same season ends were dealt ${acc4.far} offers two or more tiers up in ${acc4.farSeasons} seasons (the cases nostep needs)`);
+}
+/** The tier 4 fleet's base count: the same season end handed to the base, its offers two or more tiers up. */
+function farHook(base, acc) {
+  return (s, finSeed) => {
+    const S = clone(s);
+    base.cm.registerLeagueOverrides(S.leagueOverrides ?? null);
+    base.cm.registerCustomClub(null);
+    const b = withSeed(finSeed, () => base.cm.finishSeason(S));
+    const my = base.cm.clubDefFor(S.clubName)?.tier ?? 0;
+    const n = b.summary.offers.filter(o => !PRE_YES.test(o.blurb) && my - (base.cm.clubDefFor(o.club)?.tier ?? 9) >= 2).length;
+    acc.far += n;
+    if (n) acc.farSeasons += 1;
+  };
+}
+const PHONE = '\u{1F4DE}';
+function dayList(from, n, step = 1) {
+  const t0 = Date.parse(`${from}T12:00:00Z`);
+  return Array.from({ length: n }, (_, i) => new Date(t0 + i * step * 86400000).toISOString().slice(0, 10));
+}
+function hsPlay(arm, date) {
+  const { hs } = arm;
+  const setup = hs.dailyHotSeat(date);
+  let run = hs.startHotSeat({ club: setup.club, seed: setup.seed, daily: date });
+  let guard = 0;
+  while (!run.verdict && guard++ < 40) run = hs.pendingPress(run) ? hs.answerHotSeatPress(run, 0) : hs.playHotSeatMatch(run, 'balanced', null);
+  return run;
+}
+/** A day's whole run with the three suitor fields masked (correction 9): the approach's club and its words,
+ *  the headlines that name a suitor, and the log's event lines that open with the phone. */
+function maskRun(run) {
+  const c = clone({ state: run.state, log: run.log, verdict: run.verdict ?? null, takeover: run.takeover, target: run.target });
+  if (c.state.approach) for (const k of ['club', 'blurb', 'leagueName', 'tierLabel']) c.state.approach[k] = 'X';
+  c.state.aiHeadlines = (c.state.aiHeadlines ?? []).map(l => (typeof l === 'string' && l.startsWith(PHONE) ? PHONE : l));
+  for (const m of c.log ?? []) m.events = (m.events ?? []).map(e => (typeof e === 'string' && e.startsWith(PHONE) ? PHONE : e));
+  return c;
+}
+function ddPlay(arm, date) {
+  const { dd } = arm;
+  const setup = dd.dailyDeadlineDay(date);
+  const run = dd.startDeadlineDay(setup);
+  const grade = dd.gradeWindow(dd.endDay(run));
+  return hashOf([setup.club, setup.seed, run.needs, run.targets, run.sales, run.startBudget, run.ticker, grade, Object.keys(run.state).sort()]);
+}
+async function dailiesSection(head, base) {
+  const P = 'dailies';
+  const store = new Map();
+  globalThis.localStorage = { getItem: k => store.get(k) ?? null, setItem: (k, v) => store.set(k, String(v)), removeItem: k => store.delete(k), clear: () => store.clear() };
+  const realNow = Date.now;
+  Date.now = () => 1791547200000;
+  const hsDates = [...dayList('2026-09-24', num('DAILY_HS', 60)), ...dayList('2026-09-24', num('DAILY_BACK', 20) + 1, -7).slice(1)];
+  let same = 0, suitorOnly = 0, approached = 0;
+  const moved = [];
+  for (const date of hsDates) {
+    store.clear();
+    const h = hsPlay(await freshArm(head), date);
+    store.clear();
+    const b = hsPlay(await freshArm(base), date);
+    const whole = r => JSON.stringify({ state: r.state, log: r.log, verdict: r.verdict ?? null, takeover: r.takeover, target: r.target });
+    if (whole(h) === whole(b)) same += 1;
+    else if (JSON.stringify(maskRun(h)) === JSON.stringify(maskRun(b))) suitorOnly += 1;
+    else moved.push(`${date}: ${firstDiff(maskRun(h), maskRun(b))}`);
+    if (h.state.approach || (h.log ?? []).some(m => (m.events ?? []).some(e => String(e).startsWith(PHONE)))) approached += 1;
+  }
+  console.log(`[dailies] Hot Seat: ${hsDates.length} dates (60 from 2026-09-24 and every seventh day back); ${same} identical, ${suitorOnly} differ only in a suitor's name, ${moved.length} moved; ${approached} raised an approach`);
+  check(P, `${hsDates.length} Hot Seat days: every run equal to CM_BOARD_BASE but for a suitor's name`, moved.length === 0, moved.length ? `${moved.length}; first ${moved[0]}` : '');
+  const ddDates = dayList('2026-09-24', num('DAILY_DD', 30));
+  const ddMoved = [];
+  for (const date of ddDates) {
+    store.clear();
+    const h = ddPlay(await freshArm(head), date);
+    store.clear();
+    if (h !== ddPlay(await freshArm(base), date)) ddMoved.push(date);
+  }
+  check(P, `${ddDates.length} Deadline Day days: the deal, the grade and the state's keys equal to CM_BOARD_BASE`, ddMoved.length === 0, ddMoved.length ? `${ddMoved.length}; first ${ddMoved[0]}` : '');
+  Date.now = realNow;
+  return { moved: moved.length + ddMoved.length };
+}
+
 /* ---------------- section legacy (step 2 on) ---------------- */
 const LEGACY_WORLDS = [['era2005', ['Everton']], ['era2015', ['Barcelona']], [null, ['Liverpool', 'West Ham', 'OB']]];
 function legacyRuns(cm) {
@@ -694,6 +818,9 @@ const ENGINE_CONTROLS = {
   fatecount: { file: ENGINE, patches: [['if (myLeagueId === pyr.second) return up.includes(mySlot) ?', 'if (myLeagueId === pyr.second) return secondTable.filter(r => secondSet.has(r.club)).slice(0, pyr.count + 1).map(r => r.club).includes(mySlot) ?'],
     ['      if (down.includes(mySlot)) return', '      if (topRows.slice(-(pyr.count + 1)).map(r => r.club).includes(mySlot)) return']] },
   legacyleak: { file: ENGINE, patches: [["  return c.matchRules === 'base';", '  return false;']] },
+  nostep: { file: MODULE, patches: [['  return theirTier >= myTier - (bigSeason ? 2 : 1);', '  return true;']] },
+  prefilter: { file: ENGINE, patches: [['    const classic = shuffle(everyClub.filter(c => !vacancyNames.has(c.name) && c.tier < club.tier',
+    "    const big0 = (position === 1 && !PYRAMIDS.some(p => p.second === careerLeagueOf(state).id)) || seasonTrophies.includes('Champions League');\n    const classic = shuffle(everyClub.filter(c => (legacy || offerStepOk(club.tier, c.tier, big0)) && !vacancyNames.has(c.name) && c.tier < club.tier"]] },
 };
 let fleetDone = false;
 const ARMS = {};
@@ -720,7 +847,7 @@ function slimRoll(r) {
   const row = (r.finState.history ?? []).find(h => h.season === r.summary.season);
   return { club: r.club, era: r.era, seed: r.seed, season: r.season, policy: r.policy, summary: r.summary, leagueBefore: r.leagueBefore,
     def: { tier: r.def?.tier, expectation: r.def?.expectation, budget: r.def?.budget }, size: r.size, last: r.last, oldClubAfter: r.oldClubAfter,
-    lastAfter: r.lastAfter, moving: r.moving, leagueAfter: r.leagueAfter, finState: { history: row ? [row] : [] },
+    lastAfter: r.lastAfter, moving: r.moving, leagueAfter: r.leagueAfter, finState: { history: row ? [row] : [] }, offerTiers: r.offerTiers,
     next: { boardConfidence: r.next.boardConfidence, budget: r.next.budget, clubName: r.next.clubName } };
 }
 
@@ -745,20 +872,33 @@ async function main() {
       if (MODULE_CONTROLS[CONTROL]) text = patchOnce(text, ...MODULE_CONTROLS[CONTROL], `control ${CONTROL}`);
       const bv = await bundleModule(text, folder, CONTROL || 'head');
       pureSection(bv, { baseText: await readSource(BASE, ENGINE), metersText: await readSource(root, METERS) });
-    } else if (['grade', 'fate', 'stream'].includes(part)) {
-      /* One fleet serves the three sections. */
+    } else if (['grade', 'fate', 'stream', 'offers'].includes(part)) {
+      /* One fleet serves the four sections. */
       if (fleetDone) continue;
       fleetDone = true;
       const head = await headArm(folder);
       const base = await baseArm(folder);
       const acc = { n: 0, draws: [], diff: [], offers: [], outside: 0 };
-      const rolls = [];
+      const rolls = [], approaches = [];
       const hooks = PARTS.includes('stream') ? { beforeFinish: streamHook(head, base, acc) } : {};
+      if (PARTS.includes('offers')) hooks.step = approachTracker(head.cm, approaches);
       for (const r of gradeFleet(head.cm)) playCareer(head.cm, r, roll => rolls.push(slimRoll(roll)), hooks);
       const ctx = { baseText: await readSource(BASE, ENGINE) };
       if (PARTS.includes('grade')) gradeChecks(head, rolls, ctx);
       if (PARTS.includes('fate')) fateChecks(head, rolls);
       if (PARTS.includes('stream')) streamChecks(acc);
+      if (PARTS.includes('offers')) {
+        const tier4 = [], acc4 = { far: 0, farSeasons: 0 };
+        const hooks4 = { beforeFinish: farHook(base, acc4), step: approachTracker(head.cm, approaches) };
+        const fleet4 = tier4Fleet(head.cm);
+        for (let seed = 0; seed < num('OFFER_SEEDS', 8); seed++) {
+          for (const c of shard(fleet4)) playCareer(head.cm, { club: c.name, era: null, seed: 700 + seed, seasons: 2, policy: 'stay' }, roll => tier4.push(slimRoll(roll)), hooks4);
+        }
+        offersChecks(head, rolls, approaches, tier4, acc4);
+      }
+    } else if (part === 'dailies') {
+      const r = await dailiesSection(await headArm(folder), await baseArm(folder));
+      if (CONTROL === 'hotstart') console.log(`control hotstart: ${r.moved} dates moved without the line`);
     } else if (part === 'legacy') {
       const head = await headArm(folder);
       await legacySection(head, await baseArm(folder), legacyRuns(head.cm));

@@ -125,7 +125,7 @@ export { subsRuleFor, CM_SUBS_PARTIAL } from '@/lib/clubManagerSubsRule';
    same reason the facilities and the books live in their own files. */
 import { BOARD_ASKS_VERSION, askStatus, buildBoardAsks, ensureBoardAsks, isBoardAsk } from '@/lib/clubManagerBoardAsks';
 /* Round 1335: the board's verdict, its openings, the kitty band and the offer step, a pure module. */
-import { VERDICT_LINES, fillLeague, seasonGrade, type SeasonFate } from '@/lib/clubManagerBoardVerdict';
+import { VERDICT_LINES, fillLeague, offerStepOk, seasonGrade, type SeasonFate } from '@/lib/clubManagerBoardVerdict';
 /* Round 978: international duty. Called only inside functions, never at module
    scope, so the cycle back into this file stays evaluation safe. */
 import { answerBreak, backFromDuty, endRest, ensureIntl, fireDueBreaks, freshIntl, restingIds } from '@/lib/clubManagerInternationals';
@@ -19389,7 +19389,8 @@ function maybeApproach(state: CareerState): string | null {
   const hotForm = state.form.slice(-5).filter(r => r === 'W').length >= 4;
   if (overshoot < 3 && !hotForm) return null;
   if (Math.random() > 0.06) return null;
-  const suitor = pick(shuffle(approachSuitors(state)).slice(0, 6));
+  /* Round 1335: one tier above mine at most, filtered after the shuffle so the one pick draws as before. */
+  const suitor = pick(shuffle(approachSuitors(state)).filter(c => legacySeason(state) || offerStepOk(club.tier, c.tier, false)).slice(0, 6));
   if (!suitor) return null;
   const sLeague = (eraHist && eraLeagueOf(suitor.name, state.eraId)) || leagueOf(suitor.name);
   const ask = leagueDemand(suitor.expectation, suitor.tier, sLeague.clubs.length, sLeague, titleGapFor(suitor.name, sLeague, state.eraId), state.eraId, suitor.name);
@@ -19824,7 +19825,12 @@ export function finishSeason(career: CareerState): { state: CareerState; summary
       && (c.tier < club.tier || (c.tier === club.tier && !myLeagueClubs.has(c.name)))
       && c.name !== state.clubName && c.name !== droppedClub && c.name !== offers[0]?.club));
     const classic = shuffle(everyClub.filter(c => !vacancyNames.has(c.name) && c.tier < club.tier && c.name !== state.clubName && c.name !== droppedClub && c.name !== offers[0]?.club));
-    const suitors = [...vacancySuitors, ...classic];
+    /* Round 1335: a club calls from at most one tier above yours, two after a top flight title or the
+       Champions League (a second tier title is not one: the promotion already pays it). Filtered after the
+       two shuffles, so the season's draws are what they were and the first callers keep their order. The
+       handshake and an application's yes above are never filtered; the old rules keep every caller. */
+    const big = (position === 1 && !PYRAMIDS.some(p => p.second === careerLeagueOf(state).id)) || seasonTrophies.includes('Champions League');
+    const suitors = [...vacancySuitors, ...classic].filter(c => legacy || offerStepOk(club.tier, c.tier, big));
     for (const s of suitors.slice(0, ri(1, 2))) {
       const myLeague = careerLeagueOf(state);
       const abroad = !myLeague.clubs.includes(s.name);
