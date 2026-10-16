@@ -1,0 +1,30 @@
+chainBase: src/lib/clubManager.ts
+chainBase: src/lib/clubManagerBoardVerdict.ts
+chainBase: src/lib/clubManagerCalendar.ts
+chainBase: src/lib/clubManagerRecords.ts
+chainBase: src/lib/clubManagerRetire.ts
+chainBase: src/lib/clubManagerSlots.ts
+chainBase: src/lib/clubManagerStart.ts
+chainBase: src/lib/clubManagerUclGroups.ts
+chainBase: src/lib/freshBuild.ts
+chainBase: src/lib/managerHotSeat.ts
+chainBase: src/lib/playerBingo.ts
+chainBase: src/lib/season/historicalOpponentLabels.ts
+chainBase: src/lib/soccerCareerContracts.ts
+chainBase: src/lib/soccerCareerEngine.ts
+chainBase: src/lib/soccerCareerLife.ts
+chainBase: src/lib/soccerCareerLifeConsequences.ts
+chainBase: src/lib/soccerCareerRealismA.ts
+chainBase: src/lib/soccerCareerRoutineEvents.ts
+chainBase: src/lib/worldCompetition.ts
+chainBase: src/lib/worldXi.ts
+chainBase: 20 file(s) from HEAD into /tmp/f2
+fleet: 4 careers x seeds 0,1,2,3,4 x 2 seasons, a save, a load and a save after every entry, against FENCE_BASE /tmp/f2
+NEGATIVE CONTROL ON: SAVE_FENCE_CONTROL=squadline rewrote clubManager.ts in the fleet-head bundle
+  1913 saves on head, 0 of them in a state a load repair fires on; 1448 faces equal to the base commit's (both saves' bytes and the draw count)
+  FAIL [fleet]: head and base part: Everton (today, squeezed to 12 at every window) seed 0: head "s0 w0 squeezed|596a61129e4f1b3c|fd8d8b5b520925da|742" base "s0 w0 squeezed|596a61129e4f1b3c|6f6c0e269ad0ff2c|722"
+  squeezed career: 455 saves the engine wrote with fewer than 14 men (seed:saves 0:92 1:92 2:93 3:84 4:94)
+  negative budget: saved at -2.5, opened on head at -2.5 with 0 draws, the same JSON as the base's
+  old saves: 4 of 4 Club Manager saves the base engine wrote open to the same JSON on head and base
+  section fleet: 1920 checks, 1 red
+CONTROL FIRED: SAVE_FENCE_CONTROL=squadline fired 1 times and section fleet went red with 1 findings

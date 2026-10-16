@@ -1,0 +1,49 @@
+build exit=0 32s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+ctl-uspost-gmclubs exit=0 14s | simUsPostseason: 33 checks, 2 failed, 0 findings for the lead (control gmclubs)
+ctl-fohub-nopost exit=0 0s | control nopost: RED AT THE NAMED CHECK (section 8: 7 failures, none elsewhere)
+ctl-usrival-31 exit=0 737s | simUsRivalSense: 31 of 31 Round 1313 controls fired
+ctl-az-cachecontrol exit=0 15s | PASS Manager cache control: 96 healthy named cases, exactly one decode-count failure, complete undo and all served source held
+ctl-fa-ownclub exit=0 74s | simFreeAgents: 1 failure(s)
+ctl-fa-marketreleased exit=0 70s | simFreeAgents: 1 failure(s)
+ctl-fa-buyreleased exit=0 72s | simFreeAgents: 1 failure(s)
+ctl-fa-noreleasedlist exit=0 71s | simFreeAgents: 2 failure(s)
+ctl-ledgerjourney-futureyear exit=0 3s | simCmLedgerJourney: CONTROL futureyear FIRED: 45 failure(s) of the kind "a ledger its reader refuses"
+ctl-ledgerjourney-nokey exit=0 95s | simCmLedgerJourney: CONTROL nokey FIRED: 4 failure(s) of the kind "no man of my squad carries his key"
+ctl-dailydeals-seed exit=0 3s | simDailyDeals: CONTROL seed FIRED: all 12 of its dates went red on "the state carries a world seed or a ledger" and no date of the other game moved
+ctl-dailydeals-seeddeadline exit=0 2s | simDailyDeals: CONTROL seeddeadline FIRED: all 12 of its dates went red on "the state carries a world seed or a ledger" and no date of the other game moved
+ctl-size-norepair exit=0 49s | simClubManagerSaveSize: CONTROL FIRED as it should, SAVE_SIZE_CONTROL=norepair turned section 6 red (5 failures) and nothing else
+ctl-size-deaddoor exit=0 50s | simClubManagerSaveSize: CONTROL FIRED as it should, SAVE_SIZE_CONTROL=deaddoor turned section 8 red (10 failures) and nothing else
+ctl-unseeded-noinverse exit=0 27s | simCmUnseededWorld: CONTROL noinverse FIRED: without the inverse the fresh careers differ from the base (15 of 15)
+ctl-truth-nomark exit=0 13s | CONTROL nomark FIRED: 30 cases red (section 1: 10, section 2: 10, section 3: 10), none elsewhere
+ctl-truth-markall exit=0 15s | CONTROL markall FIRED: 21 cases red (section 1: 7, section 2: 7, section 3: 7), none elsewhere
+ctl-truth-defeatraw exit=0 15s | CONTROL defeatraw FIRED: 7 cases red (section 4: 7), none elsewhere
+ctl-truth-drawinrender exit=0 15s | CONTROL drawinrender FIRED: 10 cases red (section 5: 10), none elsewhere
+ctl-copy-article exit=0 3s | simCmCopy: CONTROL article FIRED (107 failures, as it must)
+ctl-copy-drama exit=0 0s | simCmCopy: CONTROL drama FIRED (57 failures, as it must)
+ctl-copy-intl exit=0 0s | simCmCopy: CONTROL intl FIRED (4 failures, as it must)
+ctl-copy-staff exit=0 29s | simCmCopy: CONTROL staff FIRED (10 failures, as it must)
+ctl-copy-finance exit=0 1s | simCmCopy: CONTROL finance FIRED (6 failures, as it must)
+ctl-shootout-unsetpath exit=0 23s | simCmShootoutOrder: 3 FAILURE(S)
+ctl-fence-nofence exit=0 1s | CONTROL FIRED: SAVE_FENCE_CONTROL=nofence fired 1 times and section tabs went red with 11 findings
+ctl-fence-squadline exit=0 82s | CONTROL FIRED: SAVE_FENCE_CONTROL=squadline fired 1 times and section fleet went red with 1 findings
+ctl-keeper-extrafence exit=1 0s | no build at /tmp/base-dist; run vite build first
+ctl-keeper-extrakey exit=1 0s | no build at /tmp/base-dist; run vite build first
+ctl-deck-16 exit=0 2978s | simEventDeck: 16 of 16 Round 1324 controls fired
+ctl-gminbox-14 exit=0 11s | simGmInbox: 14 of 14 Round 1324 controls fired
+ctl-inbox-privatecap exit=0 2s | simCareerInbox: 1 failure
+ctl-promises-breakapply exit=0 17s | CONTROL breakapply FIRED: section 1 failed (1 failures in all)
+ctl-promises-unannounced exit=0 16s | CONTROL unannounced FIRED: section 1 failed (1 failures in all)
+ctl-promises-reorder exit=0 16s | CONTROL reorder FIRED: section 3 failed (3 failures in all)
+ctl-promises-firstyear exit=0 16s | CONTROL firstyear FIRED: section 1 failed (1 failures in all)
+ctl-fairness-16 exit=0 851s | simSoccerDeckFairness: 16 of 16 Round 1327 controls fired
+ctl-cooldowns-nocooldown exit=0 45s | CONTROL FIRED: section 2 failed with the defect back in, as it should, and nothing else did.
+ctl-cooldowns-sharedbatch exit=0 45s | CONTROL FIRED: section 2 failed with the defect back in, as it should, and nothing else did.
+ctl-cooldowns-flood exit=0 46s | CONTROL FIRED: section 4 failed with the defect back in, as it should, and nothing else did.
+ctl-board-cfbword exit=0 4s | control "cfbword": 1 failure(s) fired as expected, the check works
+ctl-board-cbbword exit=0 4s | control "cbbword": 1 failure(s) fired as expected, the check works
+ctl-board-board exit=0 3s | control "board": 1 failure(s) fired as expected, the check works
+ctl-board-seatleak exit=0 4s | control "seatleak": 1 failure(s) fired as expected, the check works
+ctl-board-seatdraw exit=0 4s | control "seatdraw": 1 failure(s) fired as expected, the check works
+ctl-board-seatunmarked exit=0 4s | control "seatunmarked": 1 failure(s) fired as expected, the check works
+ctl-board-seatoff exit=0 4s | control "seatoff": 1 failure(s) fired as expected, the check works
+ctl-deskhost-closedquiet exit=0 44s | simGmDeskHost CONTROL closedquiet FIRED: check 5 went red with 2076 failures (red checks 4:2 5:2076 10:1)
