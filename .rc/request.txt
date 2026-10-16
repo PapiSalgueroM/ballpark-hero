@@ -1,0 +1,10 @@
+s0: CM_WORLD_MOVES_SECTIONS=0 node scripts/simCmWorldMoves.mjs
+s1-now: CM_WORLD_MOVES_SECTIONS=1 CM_WORLD_MOVES_ERAS=now node scripts/simCmWorldMoves.mjs
+s1-2015: CM_WORLD_MOVES_SECTIONS=1 CM_WORLD_MOVES_ERAS=era2015 node scripts/simCmWorldMoves.mjs
+s1-2005: CM_WORLD_MOVES_SECTIONS=1 CM_WORLD_MOVES_ERAS=era2005 node scripts/simCmWorldMoves.mjs
+s1-probe-now: CM_WORLD_MOVES_SECTIONS=1 CM_WORLD_MOVES_HEAD=probe CM_WORLD_MOVES_ERAS=now node scripts/simCmWorldMoves.mjs
+s6-now: CM_WORLD_MOVES_SECTIONS=6 CM_WORLD_MOVES_ERAS=now node scripts/simCmWorldMoves.mjs
+s6-2015: CM_WORLD_MOVES_SECTIONS=6 CM_WORLD_MOVES_ERAS=era2015 node scripts/simCmWorldMoves.mjs
+s6-2005: CM_WORLD_MOVES_SECTIONS=6 CM_WORLD_MOVES_ERAS=era2005 node scripts/simCmWorldMoves.mjs
+s6-seedless: CM_WORLD_MOVES_CONTROL=seedless CM_WORLD_MOVES_ERAS=now CM_WORLD_MOVES_SEEDS=0-1 node scripts/simCmWorldMoves.mjs
+pr269-probe: mkdir -p .p-pr && git archive HEAD | tar -x -C .p-pr && node scripts/lib/cmAiRecordProbe1344.mjs --into .p-pr && node .rc/x/pr269bundle.mjs .p-pr .p-prb && git show 1923d291:src/test/managerAiOwnership.test.ts > src/test/managerAiOwnership.test.ts && CM_AI_E=$PWD/.p-prb/engine.mjs CM_AI_W=$PWD/.p-prb/world.mjs node_modules/.bin/vitest run src/test/managerAiOwnership.test.ts --reporter=verbose --testTimeout=300000 --hookTimeout=120000 2>&1 | grep -av CM_AI_OWN_RECEIPT; exit ${PIPESTATUS[0]}
