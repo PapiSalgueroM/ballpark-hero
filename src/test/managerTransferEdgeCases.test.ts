@@ -64,7 +64,7 @@ function sameLine(a: TransferNews, b: TransferNews) {
   return a.name === b.name && a.from === b.from && a.to === b.to && a.season === b.season && !a.loan && !b.loan;
 }
 function reload(context: Context, owner: any, state: CareerState, label: string) {
-  const input = jsonCopy(state), before = jsonCopy(input);
+  const input = structuredClone(state), before = structuredClone(input);
   context.saveFence.release(context.model.SAVE_KEY); localStorage.clear(); sessionStorage.clear();
   const call = roll(owner, label, () => { throw new Error('MTE_SETUP: save/load drew RNG'); }, () => {
     const saved = context.model.saveCareer(input);
@@ -72,10 +72,10 @@ function reload(context: Context, owner: any, state: CareerState, label: string)
     const loaded = context.model.loadCareer();
     return { saved, raw, loaded, rawAfterRead: localStorage.getItem(context.model.SAVE_KEY) };
   });
-  const observation = { inputBefore: before, inputAfter: jsonCopy(input), ...call.value, draws: call.draws };
+  const observation = { inputBefore: before, inputAfter: structuredClone(input), ...call.value, draws: call.draws };
   owner[label] = observation; retain();
   setup(observation.saved && observation.raw && observation.loaded, label + ' actual save/load must succeed');
-  setup(isDeepStrictEqual(before, input), label + ' save must not mutate input');
+  setup(isDeepStrictEqual(before, structuredClone(input)), label + ' save must not mutate input');
   setup(observation.raw === observation.rawAfterRead && call.draws.length === 0, label + ' load must not write or draw');
   return observation.loaded;
 }
@@ -181,8 +181,15 @@ async function jobJourney() {
   const attempts: any[] = []; evidence.fixtures.job = { attempts };
   for (let seed = 1; seed <= 6; seed += 1) {
     const context = await fresh(), next = stream(1344100 + seed), row: any = { seed, preparation: 'none' }; attempts.push(row);
-    const opening = roll(row, 'startCareer', next, () => context.model.startCareer('Everton')).value;
-    row.initializer = opening;
+    const initialized = roll(row, 'startCareer', next, () => context.model.startCareer('Everton')).value;
+    row.initializer = initialized;
+    row.initializerUndefinedPlayerFields = records(context, initialized).map(r => ({ key: r.key,
+      fields: Object.entries(r.player).filter(([, value]) => value === undefined).map(([key]) => key) }));
+    // Actual persistence removes own undefined fields just as actual play does.
+    // Compare complete loaded payloads, without ignoring any retained player field.
+    const opening = reload(context, row, initialized, 'openingReload');
+    row.openingUndefinedPlayerFields = records(context, opening).map(r => ({ key: r.key,
+      fields: Object.entries(r.player).filter(([, value]) => value === undefined).map(([key]) => key) }));
     const lines = aiLines(opening); setup(lines.length > 0, 'actual opening AI transfers'); row.originalLines = lines;
     const targets = context.model.applyTargets(opening).filter(t => context.model.jobApplyRefusal(opening, t.club) === null)
       .sort((a, b) => b.budget - a.budget || a.club.localeCompare(b.club));
@@ -239,11 +246,13 @@ async function ordinaryJourney() {
   return { context, state, key: card.worldRosterKey, war };
 }
 
-beforeAll(async () => {
+beforeAll(() => {
   vi.spyOn(Date, 'now').mockReturnValue(Date.parse('2026-10-16T12:00:00Z'));
-  try { sale = await saleJourney(); job = await jobJourney(); ordinary = await ordinaryJourney(); }
-  catch (error) { evidence.fixtures.setupError = { error: String(error) }; retain(); throw error; }
-}, 840000);
+});
+async function prepareFixture<T>(label: string, action: () => Promise<T>) {
+  try { return await action(); }
+  catch (error) { evidence.fixtures.setupError = { fixture: label, error: String(error) }; retain(); throw error; }
+}
 afterAll(() => { retain(); vi.restoreAllMocks(); localStorage.clear(); sessionStorage.clear(); });
 
 function observe(id: string, action: (row: any) => boolean, cause: string) {
@@ -268,7 +277,9 @@ function announces(state: CareerState, prior: CareerState) {
     && t.to === neg.rivalBidder && t.season === state.season && !t.loan);
 }
 
-describe('I1344 actual transfer edge journeys', () => {
+describe('I1344 prior human sale journey', () => {
+  beforeAll(async () => { sale = await prepareFixture('sale', saleJourney); }, 840000);
+
   it('prior human sale hijack cannot announce an ownership-refused transfer', () => observe('sale-hijack', row => {
     const after = close(sale.context, row, sale.war, 'hijack');
     row.beforeRecord = record(sale.context, sale.war.state, sale.key); row.afterRecord = record(sale.context, after, sale.key);
@@ -285,6 +296,45 @@ describe('I1344 actual transfer edge journeys', () => {
     setup(isDeepStrictEqual(row.beforeRecord, row.afterRecord), 'rule 3 must still refuse taking the human-sold man');
     return !row.published && !row.falseHeadline;
   }, 'MTE_SALE_WALK'));
+
+  it('human-sale rule 3 keeps the full owned payload and takes no RNG', () => observe('preserve-sale-rule', row => {
+    const input = jsonCopy(sale.state), before = jsonCopy(input);
+    const call = roll(row, 'aiDealPlayer', () => { throw new Error('MTE_SETUP: rule 3 drew RNG'); },
+      () => sale.context.model.aiDealPlayer(input, sale.card));
+    const rival = sale.war.state.negotiation!.rivalBidder!;
+    const refused = roll(row, 'recordAiDeals', () => { throw new Error('MTE_SETUP: recording drew RNG'); },
+      () => sale.context.model.recordAiDeals(input, [{ mp: sale.card, to: rival, fee: sale.war.state.negotiation!.rivalOffer! }]));
+    row.inputBefore = before; row.inputAfter = jsonCopy(input); row.payload = record(sale.context, input, sale.key);
+    row.resolver = call.value; row.actual = refused.value;
+    return call.value === null && call.draws.length === 0 && refused.draws.length === 0
+      && isDeepStrictEqual(before, jsonCopy(input)) && isDeepStrictEqual(before, jsonCopy(refused.value))
+      && (row.payload.player.contractYears ?? 0) >= 2 && row.payload.player.wage !== undefined;
+  }, 'MTE_PRESERVATION'));
+});
+
+describe('I1344 ordinary AI transfers', () => {
+  beforeAll(async () => { ordinary = await prepareFixture('ordinary', ordinaryJourney); }, 840000);
+
+  it('ordinary AI rival closes still record both actual purchases', () => observe('preserve-ai-closes', row => {
+    const neg = ordinary.war.state.negotiation!;
+    const outcomes: any[] = [];
+    for (const kind of ['hijack', 'walk'] as const) {
+      const arm: any = { kind }; outcomes.push(arm);
+      const after = close(ordinary.context, arm, ordinary.war, kind);
+      const owned = records(ordinary.context, after).filter(r => r.status === 'owned' && r.owner === neg.rivalBidder
+        && r.player.name === neg.player.name);
+      arm.owned = owned; arm.published = announces(after, ordinary.war.state);
+      arm.placed = owned.length === 1 && ordinary.context.model.worldRosterFor(after, neg.rivalBidder!)
+        .some(p => p.worldRosterKey === owned[0].key)
+        && !ordinary.context.model.worldRosterFor(after, neg.player.club).some(p => p.worldRosterKey === owned[0].key);
+    }
+    row.outcomes = outcomes;
+    return outcomes.every(arm => arm.placed && arm.published);
+  }, 'MTE_PRESERVATION'));
+});
+
+describe('I1344 actual job handover journey', () => {
+  beforeAll(async () => { job = await prepareFixture('job', jobJourney); }, 840000);
 
   it('carried current-season AI signing keeps its Talk lock after job move and reload', () => observe('job-talk', row => {
     const input = jsonCopy(job.state), before = jsonCopy(input);
@@ -306,37 +356,6 @@ describe('I1344 actual transfer edge journeys', () => {
     if (call.value) row.actionReload = reload(job.context, row, call.value, 'buyResultReload');
     return typeof why === 'string' && why.includes('only joined') && call.value === null && call.draws.length === 0;
   }, 'MTE_JOB_BUY'));
-
-  it('human-sale rule 3 keeps the full owned payload and takes no RNG', () => observe('preserve-sale-rule', row => {
-    const input = jsonCopy(sale.state), before = jsonCopy(input);
-    const call = roll(row, 'aiDealPlayer', () => { throw new Error('MTE_SETUP: rule 3 drew RNG'); },
-      () => sale.context.model.aiDealPlayer(input, sale.card));
-    const rival = sale.war.state.negotiation!.rivalBidder!;
-    const refused = roll(row, 'recordAiDeals', () => { throw new Error('MTE_SETUP: recording drew RNG'); },
-      () => sale.context.model.recordAiDeals(input, [{ mp: sale.card, to: rival, fee: sale.war.state.negotiation!.rivalOffer! }]));
-    row.inputBefore = before; row.inputAfter = jsonCopy(input); row.payload = record(sale.context, input, sale.key);
-    row.resolver = call.value; row.actual = refused.value;
-    return call.value === null && call.draws.length === 0 && refused.draws.length === 0
-      && isDeepStrictEqual(before, jsonCopy(input)) && isDeepStrictEqual(before, jsonCopy(refused.value))
-      && (row.payload.player.contractYears ?? 0) >= 2 && row.payload.player.wage !== undefined;
-  }, 'MTE_PRESERVATION'));
-
-  it('ordinary AI rival closes still record both actual purchases', () => observe('preserve-ai-closes', row => {
-    const neg = ordinary.war.state.negotiation!;
-    const outcomes: any[] = [];
-    for (const kind of ['hijack', 'walk'] as const) {
-      const arm: any = { kind }; outcomes.push(arm);
-      const after = close(ordinary.context, arm, ordinary.war, kind);
-      const owned = records(ordinary.context, after).filter(r => r.status === 'owned' && r.owner === neg.rivalBidder
-        && r.player.name === neg.player.name);
-      arm.owned = owned; arm.published = announces(after, ordinary.war.state);
-      arm.placed = owned.length === 1 && ordinary.context.model.worldRosterFor(after, neg.rivalBidder!)
-        .some(p => p.worldRosterKey === owned[0].key)
-        && !ordinary.context.model.worldRosterFor(after, neg.player.club).some(p => p.worldRosterKey === owned[0].key);
-    }
-    row.outcomes = outcomes;
-    return outcomes.every(arm => arm.placed && arm.published);
-  }, 'MTE_PRESERVATION'));
 
   it('original current-season AI signing refuses actual Talk and buy before the job move', () => observe('preserve-original-lock', row => {
     const input = jsonCopy(job.opening), before = jsonCopy(input);

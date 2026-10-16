@@ -90,7 +90,7 @@ try {
   assert.equal(sold.seasonEnded.week, sold.seasonEnded.calendar.length);
   assert.equal(sold.rollover.season, sold.initializer.season + 1);
   assert(sold.originalPlayer.contractYears >= 3 && sold.actualBid.playerId === sold.originalPlayer.id && !sold.actualBid.loan);
-  assert(joined.initializer && joined.applied && joined.accepted && joined.joined && joined.january
+  assert(joined.initializer && joined.openingReload?.loaded && joined.applied && joined.accepted && joined.joined && joined.january
     && joined.januaryReload?.loaded && joined.selected?.line, 'Complete real application and job journey');
   assert.equal(joined.accepted.jobHunt.open.status, 'accepted'); assert.equal(joined.applied.jobHunt.open.roll, 0);
   assert.equal(joined.january.transferWindow, 'january'); assert.equal(joined.january.windowWeeksLeft, 3);
