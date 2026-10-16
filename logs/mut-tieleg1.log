@@ -1,0 +1,14 @@
+mut1347: tieleg1 applied to src/lib/worldCompetition.ts
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/lib/worldCompetition.test.ts [2m([22m[2m61 tests[22m[2m)[22m[33m 576[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m61 passed[39m[22m[90m (61)[39m
+[2m   Start at [22m 15:50:20
+[2m   Duration [22m 1.50s[2m (transform 112ms, setup 56ms, collect 117ms, tests 576ms, environment 330ms, prepare 182ms)[22m
+
+  0 ledger: verified G1 G2-2015 G2-2020 G3-2005 G3-2010 G3-2015 G3-2020 G4-late G5-ruling G5-2015-groups G5-2020-groups G6 G7 N1 | one publisher G2-2005 G2-2010 G5-2015-ko G8 | to verify G4-early G5-2020-ko
+  0 engine: G8_SHAPE {"clubs":32,"groups":8,"groupSize":4,"games":6,"advance":2}; association rule 2005 true, 2010 true, 2015 true, 2020 true; bans 2005 0, 2010 0, 2015 1, 2020 1; partial G2-2005 G2-2010 G4-early G5-2015-ko G5-2020-ko G8
+simWorldUcl: green, 369 checks, 0 failures

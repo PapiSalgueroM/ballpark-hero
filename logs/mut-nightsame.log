@@ -1,0 +1,119 @@
+mut1347: nightsame applied to src/lib/worldCompetition.ts
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [31m❯[39m src/lib/worldCompetition.test.ts [2m([22m[2m61 tests[22m[2m | [22m[31m2 failed[39m[2m)[22m[33m 556[2mms[22m[39m
+   [32m✓[39m settleTie, held to the base engine (golden)[2m > [22mthe golden table comes from the base commit and holds every kind of ending[32m 2[2mms[22m[39m
+   [32m✓[39m settleTie, held to the base engine (golden)[2m > [22mmodern QF 70-70 plain[32m 1[2mms[22m[39m
+   [32m✓[39m settleTie, held to the base engine (golden)[2m > [22mmodern QF 70-70 et[32m 1[2mms[22m[39m
+   [32m✓[39m settleTie, held to the base engine (golden)[2m > [22mmodern QF 70-70 pens[32m 1[2mms[22m[39m
+   [32m✓[39m settleTie, held to the base engine (golden)[2m > [22mmodern QF 82-64 plain[32m 0[2mms[22m[39m
+   [32m✓[39m settleTie, held to the base engine (golden)[2m > [22mmodern QF 82-64 et[32m 0[2mms[22m[39m
+   [32m✓[39m settleTie, held to the base engine (golden)[2m > [22mmodern QF 82-64 pens[32m 0[2mms[22m[39m
+   [32m✓[39m settleTie, held to the base engine (golden)[2m > [22mmodern F 70-70 plain[32m 0[2mms[22m[39m
+   [32m✓[39m settleTie, held to the base engine (golden)[2m > [22mmodern F 70-70 et[32m 0[2mms[22m[39m
+   [32m✓[39m settleTie, held to the base engine (golden)[2m > [22mmodern F 70-70 pens[32m 0[2mms[22m[39m
+   [32m✓[39m settleTie, held to the base engine (golden)[2m > [22mmodern F 82-64 plain[32m 0[2mms[22m[39m
+   [32m✓[39m settleTie, held to the base engine (golden)[2m > [22mmodern F 82-64 et[32m 0[2mms[22m[39m
+   [32m✓[39m settleTie, held to the base engine (golden)[2m > [22mmodern F 82-64 pens[32m 0[2mms[22m[39m
+   [32m✓[39m settleTie, held to the base engine (golden)[2m > [22mera2005 QF 70-70 plain[32m 0[2mms[22m[39m
+   [32m✓[39m settleTie, held to the base engine (golden)[2m > [22mera2005 QF 70-70 away[32m 0[2mms[22m[39m
+   [32m✓[39m settleTie, held to the base engine (golden)[2m > [22mera2005 QF 70-70 et[32m 0[2mms[22m[39m
+   [32m✓[39m settleTie, held to the base engine (golden)[2m > [22mera2005 QF 70-70 etAway[32m 0[2mms[22m[39m
+   [32m✓[39m settleTie, held to the base engine (golden)[2m > [22mera2005 QF 70-70 pens[32m 0[2mms[22m[39m
+   [32m✓[39m settleTie, held to the base engine (golden)[2m > [22mera2005 QF 82-64 plain[32m 0[2mms[22m[39m
+   [32m✓[39m settleTie, held to the base engine (golden)[2m > [22mera2005 QF 82-64 away[32m 0[2mms[22m[39m
+   [32m✓[39m settleTie, held to the base engine (golden)[2m > [22mera2005 QF 82-64 et[32m 0[2mms[22m[39m
+   [32m✓[39m settleTie, held to the base engine (golden)[2m > [22mera2005 QF 82-64 pens[32m 0[2mms[22m[39m
+   [32m✓[39m settleTie, held to the base engine (golden)[2m > [22mera2005 QF 82-64 etAway[32m 0[2mms[22m[39m
+   [32m✓[39m settleTie, held to the base engine (golden)[2m > [22mera2005 F 70-70 plain[32m 0[2mms[22m[39m
+   [32m✓[39m settleTie, held to the base engine (golden)[2m > [22mera2005 F 70-70 et[32m 0[2mms[22m[39m
+   [32m✓[39m settleTie, held to the base engine (golden)[2m > [22mera2005 F 70-70 pens[32m 0[2mms[22m[39m
+   [32m✓[39m settleTie, held to the base engine (golden)[2m > [22mera2005 F 82-64 plain[32m 0[2mms[22m[39m
+   [32m✓[39m settleTie, held to the base engine (golden)[2m > [22mera2005 F 82-64 et[32m 0[2mms[22m[39m
+   [32m✓[39m settleTie, held to the base engine (golden)[2m > [22mera2005 F 82-64 pens[32m 0[2mms[22m[39m
+   [32m✓[39m settleTie, held to the base engine (golden)[2m > [22mera2020 QF 70-70 plain[32m 0[2mms[22m[39m
+   [32m✓[39m settleTie, held to the base engine (golden)[2m > [22mera2020 QF 70-70 away[32m 0[2mms[22m[39m
+   [32m✓[39m settleTie, held to the base engine (golden)[2m > [22mera2020 QF 70-70 et[32m 0[2mms[22m[39m
+   [32m✓[39m settleTie, held to the base engine (golden)[2m > [22mera2020 QF 70-70 etAway[32m 0[2mms[22m[39m
+   [32m✓[39m settleTie, held to the base engine (golden)[2m > [22mera2020 QF 70-70 pens[32m 0[2mms[22m[39m
+   [32m✓[39m settleTie, held to the base engine (golden)[2m > [22mera2020 QF 82-64 plain[32m 0[2mms[22m[39m
+   [32m✓[39m settleTie, held to the base engine (golden)[2m > [22mera2020 QF 82-64 away[32m 0[2mms[22m[39m
+   [32m✓[39m settleTie, held to the base engine (golden)[2m > [22mera2020 QF 82-64 et[32m 0[2mms[22m[39m
+   [32m✓[39m settleTie, held to the base engine (golden)[2m > [22mera2020 QF 82-64 pens[32m 0[2mms[22m[39m
+   [32m✓[39m settleTie, held to the base engine (golden)[2m > [22mera2020 QF 82-64 etAway[32m 0[2mms[22m[39m
+   [32m✓[39m settleTie, held to the base engine (golden)[2m > [22mera2020 F 70-70 plain[32m 0[2mms[22m[39m
+   [32m✓[39m settleTie, held to the base engine (golden)[2m > [22mera2020 F 70-70 et[32m 0[2mms[22m[39m
+   [32m✓[39m settleTie, held to the base engine (golden)[2m > [22mera2020 F 70-70 pens[32m 0[2mms[22m[39m
+   [32m✓[39m settleTie, held to the base engine (golden)[2m > [22mera2020 F 82-64 plain[32m 0[2mms[22m[39m
+   [32m✓[39m settleTie, held to the base engine (golden)[2m > [22mera2020 F 82-64 et[32m 0[2mms[22m[39m
+   [32m✓[39m settleTie, held to the base engine (golden)[2m > [22mera2020 F 82-64 pens[32m 0[2mms[22m[39m
+   [32m✓[39m settleTie, held to the base engine (golden)[2m > [22mcontrol: the same tie with its fields in another order is not the golden bytes[32m 1[2mms[22m[39m
+   [32m✓[39m drawG8, the eras group draw[2m > [22mdraws 32 clubs into eight groups, one from each pot, inside both rules, the same every time[32m 54[2mms[22m[39m
+   [32m✓[39m drawG8, the eras group draw[2m > [22ma season before the 2014 ruling may put Russia and Ukraine together, and a plain draw keeps neither rule[32m 0[2mms[22m[39m
+   [32m✓[39m drawG8, the eras group draw[2m > [22ma field with nine clubs of one association is drawn with exactly one clash, and quickly[32m 2[2mms[22m[39m
+   [32m✓[39m drawG8, the eras group draw[2m > [22msixteen of one association: eight clashes, the fewest any draw can make, and it never hangs[32m 1[2mms[22m[39m
+   [32m✓[39m drawG8, the eras group draw[2m > [22mrefuses a field that is not 32 different clubs[32m 0[2mms[22m[39m
+   [32m✓[39m the nights[2m > [22m13 nights in the eras and 17 in the league phase, in order[32m 0[2mms[22m[39m
+[31m   [31m×[31m the nights[2m > [22mevery league phase night after matchday 6 is its own league round, at every league size[39m[32m 8[2mms[22m[39m
+[31m     → 4 clubs: 3,3,4,4,4,4,5,5,5,5,5: expected false to be true // Object.is equality[39m
+[31m   [31m×[31m the nights[2m > [22mcontrol: a mark table with two equal entries, placed by the fraction alone, puts two nights on one round[39m[32m 1[2mms[22m[39m
+[31m     → expected false to be true // Object.is equality[39m
+   [32m✓[39m evaluateWorldComp[2m > [22man era season played to the end is complete and legal[32m 112[2mms[22m[39m
+   [32m✓[39m evaluateWorldComp[2m > [22ma league phase season played to the end is complete and legal[32m 104[2mms[22m[39m
+   [32m✓[39m evaluateWorldComp[2m > [22mis deterministic and a prefix at every night, and shows no score before its night[32m 32[2mms[22m[39m
+   [32m✓[39m evaluateWorldComp[2m > [22mcrowns exactly one winner every finished season, over a few hundred seeds[32m 213[2mms[22m[39m
+   [32m✓[39m evaluateWorldComp[2m > [22mthe moved groupFixtures is the double round robin it always was[32m 0[2mms[22m[39m
+   [32m✓[39m the same tables on every device (correction 1)[2m > [22ma reversed device order does not move the watched groups[32m 2[2mms[22m[39m
+   [32m✓[39m the same tables on every device (correction 1)[2m > [22mcontrol: the participant default order does move under it, so the reversal bites[32m 8[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 2 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/lib/worldCompetition.test.ts[2m > [22mthe nights[2m > [22mevery league phase night after matchday 6 is its own league round, at every league size
+[31m[1mAssertionError[22m: 4 clubs: 3,3,4,4,4,4,5,5,5,5,5: expected false to be true // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- true[39m
+[31m+ false[39m
+
+[36m [2m❯[22m src/lib/worldCompetition.test.ts:[2m151:69[22m[39m
+    [90m149| [39m      [34mexpect[39m(placed[33m.[39mlength)[33m.[39m[34mtoBe[39m([33mLEAGUE_PHASE_NIGHT_MARKS[39m[33m.[39mlength)[33m;[39m
+    [90m150| [39m      [34mexpect[39m(placed[[34m0[39m])[33m.[39m[34mtoBeGreaterThan[39m(md6)[33m;[39m
+    [90m151| [39m      expect(rising(placed), `${clubs} clubs: ${placed.join(',')}`).to…
+    [90m   | [39m                                                                    [31m^[39m
+    [90m152| [39m      sizes[33m.[39m[34mpush[39m(clubs)[33m;[39m
+    [90m153| [39m    }
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/lib/worldCompetition.test.ts[2m > [22mthe nights[2m > [22mcontrol: a mark table with two equal entries, placed by the fraction alone, puts two nights on one round
+[31m[1mAssertionError[22m: expected false to be true // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- true[39m
+[31m+ false[39m
+
+[36m [2m❯[22m src/lib/worldCompetition.test.ts:[2m160:69[22m[39m
+    [90m158| [39m    [35mconst[39m naive [33m=[39m marks[33m.[39m[34mmap[39m(f [33m=>[39m [34mat[39m([34m38[39m[33m,[39m f))[33m;[39m
+    [90m159| [39m    [34mexpect[39m([34mrising[39m(naive))[33m.[39m[34mtoBe[39m([35mfalse[39m)[33m;[39m
+    [90m160| [39m    expect(rising(leaguePhaseNightRounds(38, at(38, 0.39), marks))).to…
+    [90m   | [39m                                                                    [31m^[39m
+    [90m161| [39m  })[33m;[39m
+    [90m162| [39m})[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m2 failed[39m[22m[2m | [22m[1m[32m59 passed[39m[22m[90m (61)[39m
+[2m   Start at [22m 15:50:27
+[2m   Duration [22m 1.40s[2m (transform 106ms, setup 51ms, collect 117ms, tests 556ms, environment 291ms, prepare 143ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/worldCompetition.test.ts,title=src/lib/worldCompetition.test.ts > the nights > every league phase night after matchday 6 is its own league round%2C at every league size,line=151,column=69::AssertionError: 4 clubs: 3,3,4,4,4,4,5,5,5,5,5: expected false to be true // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- true%0A+ false%0A%0A ❯ src/lib/worldCompetition.test.ts:151:69%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/worldCompetition.test.ts,title=src/lib/worldCompetition.test.ts > the nights > control%3A a mark table with two equal entries%2C placed by the fraction alone%2C puts two nights on one round,line=160,column=69::AssertionError: expected false to be true // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- true%0A+ false%0A%0A ❯ src/lib/worldCompetition.test.ts:160:69%0A%0A

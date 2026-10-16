@@ -1,0 +1,13 @@
+mut-tieleg1 exit=0 2s | simWorldUcl: green, 369 checks, 0 failures
+mut-tieagg exit=0 2s | simWorldUcl: green, 369 checks, 0 failures
+mut-r16same exit=0 2s | simWorldUcl: green, 369 checks, 0 failures
+mut-nightsame exit=1 1s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/worldCompetition.test.ts,title=src/lib/worldCompetition.test.ts > the nights > control%3A a mark table 
+mut-noban exit=1 1s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/worldCompetition.test.ts,title=src/lib/worldCompetition.test.ts > drawG8%2C the eras group draw > draws
+mut-noclash exit=1 2s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/worldCompetition.test.ts,title=src/lib/worldCompetition.test.ts > drawG8%2C the eras group draw > sixte
+mut-fxearly exit=1 2s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/worldCompetition.test.ts,title=src/lib/worldCompetition.test.ts > evaluateWorldComp > is deterministic 
+mut-locale exit=1 2s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/worldCompetition.test.ts,title=src/lib/worldCompetition.test.ts > the same tables on every device (corr
+mut-etswap exit=1 2s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/worldCompetition.test.ts,title=src/lib/worldCompetition.test.ts > settleTie%2C held to the base engine 
+mut-ban2020 exit=1 2s | simWorldUcl: RED, 369 checks, 1 failures
+mut-marks exit=1 2s | simWorldUcl: RED, 369 checks, 1 failures
+mut-defaultorder exit=1 2s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/worldCompetition.test.ts,title=src/lib/worldCompetition.test.ts > the same tables on every device (corr
+clean-after exit=0 2s |    Duration  1.41s (transform 108ms, setup 52ms, collect 119ms, tests 554ms, environment 296ms, prepare 132ms)

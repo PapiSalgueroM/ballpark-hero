@@ -1,0 +1,114 @@
+mut1347: etswap applied to src/lib/worldCompetition.ts
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [31m❯[39m src/lib/worldCompetition.test.ts [2m([22m[2m61 tests[22m[2m | [22m[31m6 failed[39m[2m)[22m[33m 566[2mms[22m[39m
+   [32m✓[39m settleTie, held to the base engine (golden)[2m > [22mthe golden table comes from the base commit and holds every kind of ending[32m 2[2mms[22m[39m
+   [32m✓[39m settleTie, held to the base engine (golden)[2m > [22mmodern QF 70-70 plain[32m 1[2mms[22m[39m
+[31m   [31m×[31m settleTie, held to the base engine (golden)[2m > [22mmodern QF 70-70 et[39m[32m 9[2mms[22m[39m
+[31m     → expected '{"round":"QF","slot":0,"home":"Alpha …' to be '{"round":"QF","slot":0,"home":"Alpha …' // Object.is equality[39m
+   [32m✓[39m settleTie, held to the base engine (golden)[2m > [22mmodern QF 70-70 pens[32m 1[2mms[22m[39m
+   [32m✓[39m settleTie, held to the base engine (golden)[2m > [22mmodern QF 82-64 plain[32m 1[2mms[22m[39m
+[31m   [31m×[31m settleTie, held to the base engine (golden)[2m > [22mmodern QF 82-64 et[39m[32m 1[2mms[22m[39m
+[31m     → expected '{"round":"QF","slot":0,"home":"Alpha …' to be '{"round":"QF","slot":0,"home":"Alpha …' // Object.is equality[39m
+   [32m✓[39m settleTie, held to the base engine (golden)[2m > [22mmodern QF 82-64 pens[32m 0[2mms[22m[39m
+   [32m✓[39m settleTie, held to the base engine (golden)[2m > [22mmodern F 70-70 plain[32m 0[2mms[22m[39m
+   [32m✓[39m settleTie, held to the base engine (golden)[2m > [22mmodern F 70-70 et[32m 0[2mms[22m[39m
+   [32m✓[39m settleTie, held to the base engine (golden)[2m > [22mmodern F 70-70 pens[32m 0[2mms[22m[39m
+   [32m✓[39m settleTie, held to the base engine (golden)[2m > [22mmodern F 82-64 plain[32m 0[2mms[22m[39m
+   [32m✓[39m settleTie, held to the base engine (golden)[2m > [22mmodern F 82-64 et[32m 0[2mms[22m[39m
+   [32m✓[39m settleTie, held to the base engine (golden)[2m > [22mmodern F 82-64 pens[32m 0[2mms[22m[39m
+   [32m✓[39m settleTie, held to the base engine (golden)[2m > [22mera2005 QF 70-70 plain[32m 0[2mms[22m[39m
+   [32m✓[39m settleTie, held to the base engine (golden)[2m > [22mera2005 QF 70-70 away[32m 0[2mms[22m[39m
+[31m   [31m×[31m settleTie, held to the base engine (golden)[2m > [22mera2005 QF 70-70 et[39m[32m 1[2mms[22m[39m
+[31m     → expected '{"round":"QF","slot":0,"home":"Alpha …' to be '{"round":"QF","slot":0,"home":"Alpha …' // Object.is equality[39m
+   [32m✓[39m settleTie, held to the base engine (golden)[2m > [22mera2005 QF 70-70 etAway[32m 1[2mms[22m[39m
+   [32m✓[39m settleTie, held to the base engine (golden)[2m > [22mera2005 QF 70-70 pens[32m 0[2mms[22m[39m
+   [32m✓[39m settleTie, held to the base engine (golden)[2m > [22mera2005 QF 82-64 plain[32m 0[2mms[22m[39m
+   [32m✓[39m settleTie, held to the base engine (golden)[2m > [22mera2005 QF 82-64 away[32m 0[2mms[22m[39m
+[31m   [31m×[31m settleTie, held to the base engine (golden)[2m > [22mera2005 QF 82-64 et[39m[32m 1[2mms[22m[39m
+[31m     → expected '{"round":"QF","slot":0,"home":"Alpha …' to be '{"round":"QF","slot":0,"home":"Alpha …' // Object.is equality[39m
+   [32m✓[39m settleTie, held to the base engine (golden)[2m > [22mera2005 QF 82-64 pens[32m 0[2mms[22m[39m
+   [32m✓[39m settleTie, held to the base engine (golden)[2m > [22mera2005 QF 82-64 etAway[32m 0[2mms[22m[39m
+   [32m✓[39m settleTie, held to the base engine (golden)[2m > [22mera2005 F 70-70 plain[32m 0[2mms[22m[39m
+   [32m✓[39m settleTie, held to the base engine (golden)[2m > [22mera2005 F 70-70 et[32m 0[2mms[22m[39m
+   [32m✓[39m settleTie, held to the base engine (golden)[2m > [22mera2005 F 70-70 pens[32m 0[2mms[22m[39m
+   [32m✓[39m settleTie, held to the base engine (golden)[2m > [22mera2005 F 82-64 plain[32m 0[2mms[22m[39m
+   [32m✓[39m settleTie, held to the base engine (golden)[2m > [22mera2005 F 82-64 et[32m 0[2mms[22m[39m
+   [32m✓[39m settleTie, held to the base engine (golden)[2m > [22mera2005 F 82-64 pens[32m 0[2mms[22m[39m
+   [32m✓[39m settleTie, held to the base engine (golden)[2m > [22mera2020 QF 70-70 plain[32m 0[2mms[22m[39m
+   [32m✓[39m settleTie, held to the base engine (golden)[2m > [22mera2020 QF 70-70 away[32m 0[2mms[22m[39m
+[31m   [31m×[31m settleTie, held to the base engine (golden)[2m > [22mera2020 QF 70-70 et[39m[32m 1[2mms[22m[39m
+[31m     → expected '{"round":"QF","slot":0,"home":"Alpha …' to be '{"round":"QF","slot":0,"home":"Alpha …' // Object.is equality[39m
+   [32m✓[39m settleTie, held to the base engine (golden)[2m > [22mera2020 QF 70-70 etAway[32m 0[2mms[22m[39m
+   [32m✓[39m settleTie, held to the base engine (golden)[2m > [22mera2020 QF 70-70 pens[32m 0[2mms[22m[39m
+   [32m✓[39m settleTie, held to the base engine (golden)[2m > [22mera2020 QF 82-64 plain[32m 0[2mms[22m[39m
+   [32m✓[39m settleTie, held to the base engine (golden)[2m > [22mera2020 QF 82-64 away[32m 0[2mms[22m[39m
+[31m   [31m×[31m settleTie, held to the base engine (golden)[2m > [22mera2020 QF 82-64 et[39m[32m 1[2mms[22m[39m
+[31m     → expected '{"round":"QF","slot":0,"home":"Alpha …' to be '{"round":"QF","slot":0,"home":"Alpha …' // Object.is equality[39m
+   [32m✓[39m settleTie, held to the base engine (golden)[2m > [22mera2020 QF 82-64 pens[32m 0[2mms[22m[39m
+   [32m✓[39m settleTie, held to the base engine (golden)[2m > [22mera2020 QF 82-64 etAway[32m 0[2mms[22m[39m
+   [32m✓[39m settleTie, held to the base engine (golden)[2m > [22mera2020 F 70-70 plain[32m 0[2mms[22m[39m
+   [32m✓[39m settleTie, held to the base engine (golden)[2m > [22mera2020 F 70-70 et[32m 0[2mms[22m[39m
+   [32m✓[39m settleTie, held to the base engine (golden)[2m > [22mera2020 F 70-70 pens[32m 0[2mms[22m[39m
+   [32m✓[39m settleTie, held to the base engine (golden)[2m > [22mera2020 F 82-64 plain[32m 0[2mms[22m[39m
+   [32m✓[39m settleTie, held to the base engine (golden)[2m > [22mera2020 F 82-64 et[32m 0[2mms[22m[39m
+   [32m✓[39m settleTie, held to the base engine (golden)[2m > [22mera2020 F 82-64 pens[32m 0[2mms[22m[39m
+   [32m✓[39m settleTie, held to the base engine (golden)[2m > [22mcontrol: the same tie with its fields in another order is not the golden bytes[32m 0[2mms[22m[39m
+   [32m✓[39m drawG8, the eras group draw[2m > [22mdraws 32 clubs into eight groups, one from each pot, inside both rules, the same every time[32m 53[2mms[22m[39m
+   [32m✓[39m drawG8, the eras group draw[2m > [22ma season before the 2014 ruling may put Russia and Ukraine together, and a plain draw keeps neither rule[32m 0[2mms[22m[39m
+   [32m✓[39m drawG8, the eras group draw[2m > [22ma field with nine clubs of one association is drawn with exactly one clash, and quickly[32m 2[2mms[22m[39m
+   [32m✓[39m drawG8, the eras group draw[2m > [22msixteen of one association: eight clashes, the fewest any draw can make, and it never hangs[32m 1[2mms[22m[39m
+   [32m✓[39m drawG8, the eras group draw[2m > [22mrefuses a field that is not 32 different clubs[32m 0[2mms[22m[39m
+   [32m✓[39m the nights[2m > [22m13 nights in the eras and 17 in the league phase, in order[32m 0[2mms[22m[39m
+   [32m✓[39m the nights[2m > [22mevery league phase night after matchday 6 is its own league round, at every league size[32m 2[2mms[22m[39m
+   [32m✓[39m the nights[2m > [22mcontrol: a mark table with two equal entries, placed by the fraction alone, puts two nights on one round[32m 0[2mms[22m[39m
+   [32m✓[39m evaluateWorldComp[2m > [22man era season played to the end is complete and legal[32m 115[2mms[22m[39m
+   [32m✓[39m evaluateWorldComp[2m > [22ma league phase season played to the end is complete and legal[32m 111[2mms[22m[39m
+   [32m✓[39m evaluateWorldComp[2m > [22mis deterministic and a prefix at every night, and shows no score before its night[32m 31[2mms[22m[39m
+   [32m✓[39m evaluateWorldComp[2m > [22mcrowns exactly one winner every finished season, over a few hundred seeds[32m 208[2mms[22m[39m
+   [32m✓[39m evaluateWorldComp[2m > [22mthe moved groupFixtures is the double round robin it always was[32m 0[2mms[22m[39m
+   [32m✓[39m the same tables on every device (correction 1)[2m > [22ma reversed device order does not move the watched groups[32m 2[2mms[22m[39m
+   [32m✓[39m the same tables on every device (correction 1)[2m > [22mcontrol: the participant default order does move under it, so the reversal bites[32m 8[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 6 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/lib/worldCompetition.test.ts[2m > [22msettleTie, held to the base engine (golden)[2m > [22mmodern QF 70-70 et
+[41m[1m FAIL [22m[49m src/lib/worldCompetition.test.ts[2m > [22msettleTie, held to the base engine (golden)[2m > [22mmodern QF 82-64 et
+[41m[1m FAIL [22m[49m src/lib/worldCompetition.test.ts[2m > [22msettleTie, held to the base engine (golden)[2m > [22mera2005 QF 70-70 et
+[41m[1m FAIL [22m[49m src/lib/worldCompetition.test.ts[2m > [22msettleTie, held to the base engine (golden)[2m > [22mera2005 QF 82-64 et
+[41m[1m FAIL [22m[49m src/lib/worldCompetition.test.ts[2m > [22msettleTie, held to the base engine (golden)[2m > [22mera2020 QF 70-70 et
+[41m[1m FAIL [22m[49m src/lib/worldCompetition.test.ts[2m > [22msettleTie, held to the base engine (golden)[2m > [22mera2020 QF 82-64 et
+[31m[1mAssertionError[22m: expected '{"round":"QF","slot":0,"home":"Alpha …' to be '{"round":"QF","slot":0,"home":"Alpha …' // Object.is equality[39m
+
+Expected: [32m"{"round":"QF","slot":0,"home":"Alpha FC","away":"Beta FC","homeGoals":[7m3[27m,"awayGoals":[7m4[27m,"winner":"[7mBet[27ma FC","mine":false,"legs":2,"leg1":{"homeGoals":2,"awayGoals":2},"leg2":{"homeGoals":[7m1[27m,"awayGoals":[7m2[27m},"aet":true}"[39m
+Received: [31m"{"round":"QF","slot":0,"home":"Alpha FC","away":"Beta FC","homeGoals":[7m4[27m,"awayGoals":[7m3[27m,"winner":"[7mAlph[27ma FC","mine":false,"legs":2,"leg1":{"homeGoals":2,"awayGoals":2},"leg2":{"homeGoals":[7m2[27m,"awayGoals":[7m1[27m},"aet":true}"[39m
+
+[36m [2m❯[22m src/lib/worldCompetition.test.ts:[2m56:35[22m[39m
+    [90m 54| [39m      [34mexpect[39m(callsUsed)[33m.[39m[34mtoBe[39m(c[33m.[39mcalls[33m.[39mlength)[33m;[39m
+    [90m 55| [39m      [34mexpect[39m(coinsUsed)[33m.[39m[34mtoBe[39m(c[33m.[39mcoins[33m.[39mlength)[33m;[39m
+    [90m 56| [39m      [34mexpect[39m([33mJSON[39m[33m.[39m[34mstringify[39m(tie))[33m.[39m[34mtoBe[39m(c[33m.[39mtieOut)[33m;[39m
+    [90m   | [39m                                  [31m^[39m
+    [90m 57| [39m      [34mexpect[39m([33mObject[39m[33m.[39m[34mkeys[39m(tie))[33m.[39m[34mtoEqual[39m(c[33m.[39mkeys)[33m;[39m
+    [90m 58| [39m    })[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/6]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m6 failed[39m[22m[2m | [22m[1m[32m55 passed[39m[22m[90m (61)[39m
+[2m   Start at [22m 15:50:37
+[2m   Duration [22m 1.46s[2m (transform 106ms, setup 52ms, collect 119ms, tests 566ms, environment 295ms, prepare 68ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/worldCompetition.test.ts,title=src/lib/worldCompetition.test.ts > settleTie%2C held to the base engine (golden) > modern QF 70-70 et,line=56,column=35::AssertionError: expected '{"round":"QF","slot":0,"home":"Alpha …' to be '{"round":"QF","slot":0,"home":"Alpha …' // Object.is equality%0A%0AExpected: "{"round":"QF","slot":0,"home":"Alpha FC","away":"Beta FC","homeGoals":3,"awayGoals":4,"winner":"Beta FC","mine":false,"legs":2,"leg1":{"homeGoals":2,"awayGoals":2},"leg2":{"homeGoals":1,"awayGoals":2},"aet":true}"%0AReceived: "{"round":"QF","slot":0,"home":"Alpha FC","away":"Beta FC","homeGoals":4,"awayGoals":3,"winner":"Alpha FC","mine":false,"legs":2,"leg1":{"homeGoals":2,"awayGoals":2},"leg2":{"homeGoals":2,"awayGoals":1},"aet":true}"%0A%0A ❯ src/lib/worldCompetition.test.ts:56:35%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/worldCompetition.test.ts,title=src/lib/worldCompetition.test.ts > settleTie%2C held to the base engine (golden) > modern QF 82-64 et,line=56,column=35::AssertionError: expected '{"round":"QF","slot":0,"home":"Alpha …' to be '{"round":"QF","slot":0,"home":"Alpha …' // Object.is equality%0A%0AExpected: "{"round":"QF","slot":0,"home":"Alpha FC","away":"Beta FC","homeGoals":3,"awayGoals":2,"winner":"Alpha FC","mine":false,"legs":2,"leg1":{"homeGoals":0,"awayGoals":0},"leg2":{"homeGoals":3,"awayGoals":2},"aet":true}"%0AReceived: "{"round":"QF","slot":0,"home":"Alpha FC","away":"Beta FC","homeGoals":2,"awayGoals":3,"winner":"Beta FC","mine":false,"legs":2,"leg1":{"homeGoals":0,"awayGoals":0},"leg2":{"homeGoals":2,"awayGoals":3},"aet":true}"%0A%0A ❯ src/lib/worldCompetition.test.ts:56:35%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/worldCompetition.test.ts,title=src/lib/worldCompetition.test.ts > settleTie%2C held to the base engine (golden) > era2005 QF 70-70 et,line=56,column=35::AssertionError: expected '{"round":"QF","slot":0,"home":"Alpha …' to be '{"round":"QF","slot":0,"home":"Alpha …' // Object.is equality%0A%0AExpected: "{"round":"QF","slot":0,"home":"Alpha FC","away":"Beta FC","homeGoals":3,"awayGoals":4,"winner":"Beta FC","mine":false,"legs":2,"leg1":{"homeGoals":2,"awayGoals":1},"leg2":{"homeGoals":1,"awayGoals":3},"aet":true}"%0AReceived: "{"round":"QF","slot":0,"home":"Alpha FC","away":"Beta FC","homeGoals":4,"awayGoals":3,"winner":"Alpha FC","mine":false,"legs":2,"leg1":{"homeGoals":2,"awayGoals":1},"leg2":{"homeGoals":2,"awayGoals":2},"aet":true}"%0A%0A ❯ src/lib/worldCompetition.test.ts:56:35%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/worldCompetition.test.ts,title=src/lib/worldCompetition.test.ts > settleTie%2C held to the base engine (golden) > era2005 QF 82-64 et,line=56,column=35::AssertionError: expected '{"round":"QF","slot":0,"home":"Alpha …' to be '{"round":"QF","slot":0,"home":"Alpha …' // Object.is equality%0A%0AExpected: "{"round":"QF","slot":0,"home":"Alpha FC","away":"Beta FC","homeGoals":2,"awayGoals":1,"winner":"Alpha FC","mine":false,"legs":2,"leg1":{"homeGoals":1,"awayGoals":0},"leg2":{"homeGoals":1,"awayGoals":1},"aet":true}"%0AReceived: "{"round":"QF","slot":0,"home":"Alpha FC","away":"Beta FC","homeGoals":1,"awayGoals":2,"winner":"Beta FC","mine":false,"legs":2,"leg1":{"homeGoals":1,"awayGoals":0},"leg2":{"homeGoals":0,"awayGoals":2},"aet":true}"%0A%0A ❯ src/lib/worldCompetition.test.ts:56:35%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/worldCompetition.test.ts,title=src/lib/worldCompetition.test.ts > settleTie%2C held to the base engine (golden) > era2020 QF 70-70 et,line=56,column=35::AssertionError: expected '{"round":"QF","slot":0,"home":"Alpha …' to be '{"round":"QF","slot":0,"home":"Alpha …' // Object.is equality%0A%0AExpected: "{"round":"QF","slot":0,"home":"Alpha FC","away":"Beta FC","homeGoals":3,"awayGoals":4,"winner":"Beta FC","mine":false,"legs":2,"leg1":{"homeGoals":2,"awayGoals":1},"leg2":{"homeGoals":1,"awayGoals":3},"aet":true}"%0AReceived: "{"round":"QF","slot":0,"home":"Alpha FC","away":"Beta FC","homeGoals":4,"awayGoals":3,"winner":"Alpha FC","mine":false,"legs":2,"leg1":{"homeGoals":2,"awayGoals":1},"leg2":{"homeGoals":2,"awayGoals":2},"aet":true}"%0A%0A ❯ src/lib/worldCompetition.test.ts:56:35%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/worldCompetition.test.ts,title=src/lib/worldCompetition.test.ts > settleTie%2C held to the base engine (golden) > era2020 QF 82-64 et,line=56,column=35::AssertionError: expected '{"round":"QF","slot":0,"home":"Alpha …' to be '{"round":"QF","slot":0,"home":"Alpha …' // Object.is equality%0A%0AExpected: "{"round":"QF","slot":0,"home":"Alpha FC","away":"Beta FC","homeGoals":2,"awayGoals":1,"winner":"Alpha FC","mine":false,"legs":2,"leg1":{"homeGoals":1,"awayGoals":0},"leg2":{"homeGoals":1,"awayGoals":1},"aet":true}"%0AReceived: "{"round":"QF","slot":0,"home":"Alpha FC","away":"Beta FC","homeGoals":1,"awayGoals":2,"winner":"Beta FC","mine":false,"legs":2,"leg1":{"homeGoals":1,"awayGoals":0},"leg2":{"homeGoals":0,"awayGoals":2},"aet":true}"%0A%0A ❯ src/lib/worldCompetition.test.ts:56:35%0A%0A
