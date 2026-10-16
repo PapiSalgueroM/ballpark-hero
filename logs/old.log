@@ -1,0 +1,9 @@
+base fleet: 120 careers, 1952 saves snapshotted: ballon_dor 276, transfer_window 208, social_media_action 170, random_events 623, playing 166, newspaper 148, season_summary 178, rivalry_event 83, moral_dilemma 38, international_debut 16, world_cup 42, rehab_choice 4
+FAIL save 8: statBoostNextSeason.pace = -1
+FAIL save 8: statBoostNextSeason.pace = -1
+FAIL save 8: statBoostNextSeason.pace = -1
+FAIL save 365: the head's own save fails its validator at newspaper
+FAIL save 365: the head's own save fails its validator at season_summary
+FAIL save 366: the head's own save fails its validator at newspaper
+head with the deck loaded: 1952 base saves played 53482 steps; parsed JSON differs from the base's in 0; batches holding a deck card 4520; deck cards dealt 4520, answered 4520; 27 different cards seen
+oldsaves1334: 1599 failures (boost 1227, valid 372)
