@@ -1,0 +1,8 @@
+#!build
+#!playwright
+#!serial
+c993: SIM_NETWORK=offline ENGINES=chromium CAREER993_ARTIFACTS="$RC_OUT/c993-head" node scripts/qa/career993.mjs
+c993-reveal: SIM_NETWORK=offline ENGINES=chromium CAREER993_CONTROL=reveal CAREER993_ARTIFACTS="$RC_OUT/c993-rev" node scripts/qa/career993.mjs
+walk: ENGINES=chromium node scripts/playUsCareerReports.mjs
+walk-ctl: ok=0; r=""; for k in noretire noundo noreplay nosettle; do PLAY_US_REPORTS_CONTROL=$k ENGINES=chromium node scripts/playUsCareerReports.mjs > /tmp/wk-$k.log 2>&1; e=$?; f=$(tail -3 /tmp/wk-$k.log | grep -c FIRED); r="$r $k=$e/$f"; if [ $e != 1 ] || [ $f = 0 ]; then ok=1; tail -3 /tmp/wk-$k.log; fi; done; echo "controls (exit/FIRED):$r"; exit $ok
+draftnight-walk: ENGINES=chromium node scripts/playDraftNight.mjs
