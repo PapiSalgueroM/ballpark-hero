@@ -1,0 +1,21 @@
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+appealIsolation: node scripts/simManagerAppealIsolation.mjs
+leagueRules: node scripts/simCmLeagueRules.mjs
+simDailyDeals: node scripts/simDailyDeals.mjs
+saveSize: node scripts/simClubManagerSaveSize.mjs
+slots: node scripts/simClubManagerSlots.mjs
+ledgerBound: node scripts/simCmLedgerBound.mjs
+worldContinuity: node scripts/simManagerWorldContinuity.mjs
+calendar: node scripts/simClubManagerCalendar.mjs
+applications: node scripts/simCmApplications.mjs
+leagueBook: node scripts/simCmLeagueBook.mjs
+leagueFixtures: node scripts/simCmLeagueFixtures.mjs
+ledgerJourney: node scripts/simCmLedgerJourney.mjs
+transfers: node scripts/simTransfers.mjs
+headlines: node scripts/simHeadlines.mjs
+freeAgents: node scripts/simFreeAgents.mjs
+clubDetailRoster: CM_OWN_ROSTER_CORE_REF=HEAD node scripts/simClubDetailCurrentRoster.mjs
+decisions: node scripts/simClubManagerDecisions.mjs
+vitest-cm: node_modules/.bin/vitest run src/lib/clubManager src/test/clubDetail src/test/clubManager src/test/manager --testTimeout=300000 --hookTimeout=120000
