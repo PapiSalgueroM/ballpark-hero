@@ -1,3 +1,15 @@
+## 2026-10-16: controlled stale import rejection baseline preparation
+
+Codex branch codex/stale-import-rejection starts at frozen release e7f111b7. No
+app/package/oldproof change. New actual emitted-Vite/React browser method deliberately
+holds the reload document response to expose pre-unload import settlement. Require
+one exact original-rejection Boolean fault and three preserved guard outcomes,
+physical raw payload/React/marker/save observations, unchanged lazy1602 UI walk,
+types/guardedreload tests/build15/fullweights and complete source/dependency holds.
+This controlled method does not claim natural-race reproduction or ReactDOM output.
+Runtime pending; product correction waits on causal baseline. I keeps publication.
+Details: docs/audits/stale-import-rejection.md.
+
 ## 2026-10-16 05:30 EDT: session I starts; player reports split between the lanes; the Lovable editor push reverted
 
 Claude lane (session I). Live: Release BG (main c9b80fce, deployment bc4815da). The Lovable editor's push of 08:36 to
