@@ -1,0 +1,5 @@
+# Release BH rerun: the lazy creator walk alone with its extras (prepInstalled, lazyCheck, coreBE)
+#!serve
+#!playwright
+#!serial
+playSoccerCareerBuildLazy: export CI=1 SIM_NETWORK=offline SOCCER_ROUTINE_OUT="$PWD/sclz" SOCCER_BUILD_PHASE=fixed FREE_KICK_FONT_CACHE="$PWD/sclz/font-cache"; node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only | tail -1 && node .rc/x/prepInstalled.mjs "$PWD/sclz" && { NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playSoccerCareerBuildLazy.mjs > /tmp/lz.log 2>&1; s=$?; tail -3 /tmp/lz.log | cut -c1-240; mkdir -p /tmp/lzb && gh run download 38336065963 -n soccer-routine-38336065963 -D /tmp/lzb && B=$(find /tmp/lzb -path '*build-lazy/baseline/report.json' | head -1) && BUILD_METHOD_EXIT=$s SOCCER_BUILD_BASELINE_REPORT="$B" node .rc/x/lazyCheck.mjs; }
