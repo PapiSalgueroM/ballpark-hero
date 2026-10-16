@@ -12,8 +12,8 @@
  * only when it reloaded), and jsdom's own "not implemented: navigation"
  * report, counted.
  */
-import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
-import { isOptionalChunkError, watchForNewBuild } from '@/lib/freshBuild';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { isOptionalChunkError } from '@/lib/freshBuild';
 
 const STALE_KEY = 'dukb-reloaded-stale-chunk';
 const KIT_CHROMIUM = 'Failed to fetch dynamically imported module: https://douknowball.com/assets/soundKit-D1G9IZR4.js';
@@ -41,15 +41,32 @@ describe('Round 1132: which preload errors name the optional chunk', () => {
 
 describe('Round 1132: the stale chunk listener and the optional chunk', () => {
   let navigations = 0;
-  beforeAll(() => { watchForNewBuild(); });
-  beforeEach(() => {
+  /* Round 1338: each test is a fresh page (a fresh copy of the module, the way
+     a real reload gives one), because a page that has asked for its reload now
+     cancels every later chunk failure in it, and the last test needs a page
+     that has not asked yet. A page's listeners are taken off after its test,
+     as a real reload drops them. */
+  let added: Array<[string, EventListenerOrEventListenerObject]> = [];
+  beforeEach(async () => {
     window.sessionStorage.clear();
     navigations = 0;
     vi.spyOn(console, 'error').mockImplementation((...args: unknown[]) => {
       if (args.some(a => String(a).includes('Not implemented: navigation'))) navigations += 1;
     });
+    const real = window.addEventListener.bind(window);
+    vi.spyOn(window, 'addEventListener').mockImplementation((type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions) => {
+      added.push([type, listener]);
+      real(type, listener, options);
+    });
+    vi.resetModules();
+    await import('@/lib/safeStorage');
+    (await import('@/lib/freshBuild')).watchForNewBuild();
   });
-  afterEach(() => { vi.restoreAllMocks(); });
+  afterEach(() => {
+    for (const [type, listener] of added) window.removeEventListener(type, listener);
+    added = [];
+    vi.restoreAllMocks();
+  });
 
   const preloadError = (message: string): Event => {
     const event = new Event('vite:preloadError', { cancelable: true });
@@ -71,7 +88,8 @@ describe('Round 1132: the stale chunk listener and the optional chunk', () => {
     expect(window.sessionStorage.getItem(STALE_KEY)).toBe('1');
     expect(navigations).toBe(1);
     const second = preloadError(OTHER);
-    expect(second.defaultPrevented).toBe(false);
+    /* Round 1338: the same page now waits with its first failure, its one reload already on the way (this was false) */
+    expect(second.defaultPrevented).toBe(true);
     expect(navigations).toBe(1);
     const kit = preloadError(KIT_FIREFOX);
     expect(kit.defaultPrevented).toBe(false);

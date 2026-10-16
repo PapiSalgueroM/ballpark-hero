@@ -5,6 +5,7 @@ import fs from "fs";
 import { componentTagger } from "lovable-tagger";
 import dyadComponentTagger from '@dyad-sh/react-vite-component-tagger';
 import { writeSeoMetaParts } from "./scripts/genSeoMetaParts.mjs";
+import { preloadWait } from "./scripts/lib/vitePreloadWait.mjs";
 
 /**
  * Round 275: put the real asset tags into every prerendered snapshot at build
@@ -172,7 +173,13 @@ export default defineConfig(({ mode }) => ({
      version of it which does tag cannot quietly start rewriting every element
      and every snapshot. Anthony's Dyad session runs in development and still
      sees its tags. */
-  plugins: [seoMetaParts(__dirname), mode === "development" && dyadComponentTagger(), react(), mode === "development" && componentTagger(), inlineSnapshotAssets(__dirname)].filter(Boolean),
+  /* Round 1338: preloadWait() makes a chunk that fails to download wait for
+     the site's one reload (src/lib/freshBuild.ts) instead of handing React an
+     empty module, which flashed "This page broke" first. It runs in every
+     build, never gated by mode, and fails the build closed if Vite's wrapper
+     ever stops matching. Proved by scripts/simPreloadWait.mjs, whose section
+     6 also fails if this entry goes missing. */
+  plugins: [seoMetaParts(__dirname), mode === "development" && dyadComponentTagger(), react(), mode === "development" && componentTagger(), inlineSnapshotAssets(__dirname), preloadWait()].filter(Boolean),
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
