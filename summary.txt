@@ -1,0 +1,4 @@
+retire exit=0 59s | simCmRetire: all 18 checks passed (record, oldsave, pens, base, retire, dashes)
+c-seasonover exit=1 21s | control seasonover FIRED: 1 of 5 checks red
+tsc exit=0 137s | 
+vitest-cm exit=0 171s |    Duration  170.70s (transform 11.16s, setup 4.10s, collect 41.01s, tests 326.27s, environment 33.27s, prepare 6.66s)
