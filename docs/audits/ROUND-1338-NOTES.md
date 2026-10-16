@@ -70,9 +70,14 @@ characters `;return new Promise(()=>{})`.
   page arrives" holds, but it does not say the page stays live; left as it is this round.
 - The build fails closed only while the plugin runs (the run review's minor 2, mutation m6). If the plugin stops
   applying (its `apply` changed, or a later config wrapper filters it out), `vite build` goes green and ships Vite's
-  stock wrapper. simPreloadWait sections 1 and 2 and the section 6 config fence catch that on a runner, but the host
-  runs neither, so the lead's publish proof (the live entry chunk grepped with WAIT_RE after deploy_project, critic
-  item 3) is the only net on the host and must not be skipped.
+  stock wrapper. On a runner simPreloadWait catches a changed `apply` in sections 1 and 2 (their tiny builds call
+  preloadWait() directly, so the plugin does not run and section 1 says so), and section 3 sees the stock wrapper in a
+  dist built first, which is the only place a later config wrapper that filters the plugin out shows (sections 1 and 2
+  build with no config file). The section 6 config fence catches neither: it reads the text of vite.config.ts, so it
+  catches only a preloadWait() call removed from the plugins array or gated behind a mode test. (An earlier version of
+  this line credited section 6 with the apply case; the closing check corrected it.) The host runs none of these, so
+  the lead's publish proof (the live entry chunk grepped with WAIT_RE after deploy_project, critic item 3) is the only
+  net on the host and must not be skipped.
 
 ## Measured on the final source (56b049cf, merged with main ae14cf97)
 
