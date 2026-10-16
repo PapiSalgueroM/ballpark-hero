@@ -1,0 +1,6 @@
+oldsaves exit=1 9s | oldsaves: RED, 32 failure(s)
+s6-2015 exit=0 95s | simCmWorldMoves: green, sections 6 held
+s6-2005 exit=0 95s | simCmWorldMoves: green, sections 6 held
+s8-2015 exit=0 36s | simCmWorldMoves: green, sections 8 held
+unseeded exit=0 146s | simCmUnseededWorld: green. 49 old saves with no deal and 49 with every deal play byte equal to 7a85f7f8 (state, draws and saved bytes at every step), and 15 new careers w
+s1-2005 exit=0 83s | simCmWorldMoves: green, sections 1, 4 held
