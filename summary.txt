@@ -1,0 +1,9 @@
+continuity exit=1 38s |     at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simManagerWorldContinuity.mjs:499:24
+continuity-base exit=1 39s |     at async file:///tmp/base1/scripts/simManagerWorldContinuity.mjs:496:24
+bridges exit=0 0s | cmNoAiMoves1344: all 5 anchors stand once and can be taken out
+continuity-all exit=1 42s |     at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simManagerWorldContinuity.mjs:499:24
+rivals exit=0 24s | No rival product names found. 0 findings.
+shootout exit=0 40s | simCmShootoutOrder: all sections passed
+anchors exit=0 61s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+leaguerules exit=0 64s | simCmLeagueRules: all checks passed (modern, eras, pure, drop4, cupless, shapes, chunks)
+var exit=0 156s | simCmVar normal: actual review outcomes and full prior baseline passed.

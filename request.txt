@@ -1,0 +1,9 @@
+continuity: node scripts/simManagerWorldContinuity.mjs
+continuity-all: MANAGER_WORLD_CONTINUITY_CONTROL=all node scripts/simManagerWorldContinuity.mjs
+continuity-base: git worktree add -q /tmp/base1 3a147a7cb4a13e5a931f32eac8b8a7bd65ed10cb && ln -s $PWD/node_modules /tmp/base1/node_modules && cd /tmp/base1 && MANAGER_WORLD_CONTINUITY_CONTROL=all node scripts/simManagerWorldContinuity.mjs
+bridges: node scripts/lib/cmNoAdoption1508.mjs --check && node scripts/lib/cmWorldSeed1250.mjs --check && node scripts/lib/cmNoAiMoves1344.mjs --check
+anchors: node scripts/simHarnessAnchors.mjs
+rivals: node scripts/simNoRivalNames.mjs
+shootout: node scripts/simCmShootoutOrder.mjs
+var: node scripts/simCmVar.mjs
+leaguerules: node scripts/simCmLeagueRules.mjs
