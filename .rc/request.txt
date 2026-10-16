@@ -1,0 +1,5 @@
+#!serial
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/lib/soccerDeck.test.ts src/lib/gmInbox.test.ts --testTimeout=300000 --hookTimeout=120000
+m-injgate: node .rc/x/mut1334.mjs injgate || exit 2; node_modules/.bin/vitest run src/lib/soccerDeck.test.ts --testTimeout=300000 --hookTimeout=120000 > /tmp/vi.log 2>&1; a=$?; grep -E "FAIL|Tests |failed" /tmp/vi.log | head -12; git checkout -- src scripts; echo "MUTANT injgate vitest=$a"; [ $a -ne 0 ]
+m-capgate: node .rc/x/mut1334.mjs capgate || exit 2; node_modules/.bin/vitest run src/lib/soccerDeck.test.ts --testTimeout=300000 --hookTimeout=120000 > /tmp/vc.log 2>&1; a=$?; grep -E "FAIL|Tests |failed" /tmp/vc.log | head -12; git checkout -- src scripts; echo "MUTANT capgate vitest=$a"; [ $a -ne 0 ]
