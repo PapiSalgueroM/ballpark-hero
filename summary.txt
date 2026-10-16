@@ -1,0 +1,7 @@
+vitest-s3 exit=0 5s |    Duration  4.64s (transform 2.04s, setup 264ms, collect 6.65s, tests 2.02s, environment 2.04s, prepare 539ms)
+retire-liveok exit=1 7s | control liveok FIRED: 1 of 4 checks red
+retire-drawone exit=1 7s | control drawone FIRED: 1 of 4 checks red
+retire exit=0 24s | simCmRetire: all 16 checks passed (record, oldsave, pens, base, retire)
+tsc exit=0 60s | 
+simHarnessAnchors exit=0 36s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simClubManagerSlots exit=0 49s | simClubManagerSlots: all sections green
