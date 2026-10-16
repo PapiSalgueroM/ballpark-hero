@@ -1,0 +1,2 @@
+#!build
+ol: ONLY=simSoccerOpponentLabels node scripts/runAllSims.mjs --browser > /tmp/ol.log 2>&1; s=$?; tail -3 /tmp/ol.log; node .rc/x/olReport.mjs; exit $s
