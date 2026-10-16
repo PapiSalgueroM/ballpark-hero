@@ -1,0 +1,8 @@
+MUTATION m12 applied to src/components/soccer-career/SoccerSeasonCentre.tsx
+  FAIL  simSoccerOpponentLabels.mjs     0.9s
+----- simSoccerOpponentLabels.mjs (FAIL) -----
+Error: Build failed with 1 error:
+    at failureErrorWithLog (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:1472:15)
+    at failureErrorWithLog (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:1472:15)
+
+1 harness not green.

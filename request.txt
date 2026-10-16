@@ -1,0 +1,5 @@
+#!serve
+#!playwright
+#!serial
+ol-plain: ONLY=simSoccerOpponentLabels node scripts/runAllSims.mjs --browser > /tmp/ol.log 2>&1; s=$?; tail -4 /tmp/ol.log; exit $s
+ol-m12: node .rc/x/mut1337run.mjs m12 || exit 3; ONLY=simSoccerOpponentLabels node scripts/runAllSims.mjs --browser > /tmp/ol.log 2>&1; s=$?; git checkout -- src scripts; grep -iE "fail|refus|build|mismatch|sha" /tmp/ol.log | cut -c1-240 | head -8; tail -3 /tmp/ol.log; exit $s
