@@ -1,0 +1,6 @@
+vitest exit=0 5s |    Duration  4.41s (transform 3.66s, setup 312ms, collect 4.86s, tests 606ms, environment 2.52s, prepare 506ms)
+tsc exit=0 80s | 
+kit-a exit=0 100s | simEventDeck: green. Sections 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 only.
+kit-c exit=0 55s | simEventDeck: green. Sections 14, 15, 16 only.
+kit-b exit=0 144s | simEventDeck: green. Sections 13 only.
+anchors exit=0 53s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
