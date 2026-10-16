@@ -8,12 +8,13 @@
  * news line and put the man on goneNames, and nothing else: he leaves the market, the world roster keeps him at the
  * seller, and goneNames is emptied every summer, so next season he is on sale at his old club again.
  *
- * STEP 1 OF THE ROUND (this file as committed at step 1). No product code yet. Sections 0, 1 and 6, plus the shape
- * measurement (section 9) the lead rules on before any product step:
- *   0. anchors: every edit this harness can make stands exactly once in the source it is made to. At step 1 that is
- *      the seedless control's guard and, with CM_WORLD_MOVES_HEAD=probe, the nine edits of
- *      scripts/lib/cmAiRecordProbe1344.mjs. The anchors of code that does not exist yet (the bridge, the record,
- *      flush, January, summer, lock and list controls) are added with that code.
+ * THE FIX (step 2 on). In a seeded career generateHeadlines writes every deal to the ledger as it closes (a working
+ * copy packed once a window, the lead's ruling 4), and skips a deal the ledger would refuse after its three draws;
+ * a fresh career's opening window, which closes before the seed is drawn, is recorded by startCareer's last line
+ * (the post seed flush); an AI club never takes a man the ledger holds from a deal of mine (ruling 3).
+ *
+ * SECTIONS:
+ *   0. anchors: every edit this harness can make stands exactly once in the engine it is made to.
  *   1. ownership: seeded careers (2026-27, 2015-16 and 2005-06 worlds, a big club, a mid table club and a thin
  *      squad's club each, seeds 1 to 5, six seasons), saved and loaded after every window and every rollover. At
  *      every window: (i) every deal line between two other clubs is placed by the ledger at its buyer, who lists
@@ -21,45 +22,55 @@
  *      once, an owned record's man is listed at his owner and nowhere else, no other club lists a man matching his
  *      origin, and no man of my squad is listed at any club; (iii) every man moved in the run is at his buyer at
  *      every later rollover, or the ledger says he retired; (iv) printed per window type: deals, refusals,
- *      records, the ledger's stored length. EXPECTED RED ON THIS TREE AT STEP 1: it measures the bug.
+ *      records, the ledger's stored length, and the opening window's refusals on a line of their own (the critic's
+ *      correction 4: that window cannot skip, so its refusals are measured, expected 0).
  *   6. legacy: careers with no world seed (startCareer with PR269's legacy world, and fresh careers with the seed,
  *      the ledger and the squad's ledger keys stripped the way simClubManagerSaveSize strips them, and the legacy
  *      career with three deals of mine at its start: a release, a buy and a sale through acceptBid), the same nine
  *      clubs, seeds 0 to 4, two seasons with their January windows, a save and a reload after every window,
- *      deal and rollover, against BASE: every state, saved byte and Math.random draw equal. At step 1 the head IS
- *      the base, so this is green by construction and is not evidence; it proves the machinery and its control.
- *      The deals are what let the control fire: a quiet unseeded career calls no ledger writer at all (the first
- *      run, remote check r1344-wm, had no deals and the seedless control did not fire).
+ *      deal and rollover, against BASE: every state, saved byte and Math.random draw equal.
  *   9. shape (only when asked): the world's shape over fifteen seasons at the 2026-27 trio, BASE against the head,
- *      per tier (each league's top five and bottom five by XI average, the clubs that sold and the clubs that
- *      bought in an AI deal line): the XI average, the roster length minus the projection's slot count and the
+ *      per tier (each league's top five and bottom five by the bake's year 0 XI, the clubs that sold and the clubs
+ *      that bought in an AI deal line): the XI average, the roster length minus the projection's slot count and the
  *      mean age at seasons 1, 5, 10 and 15; plus AI deals a window, the ledger's records and stored length, the
- *      market's size and the January entry's time. Each run writes its per career numbers as JSON; --combine
- *      reads the files of every run and prints the paired statistic (head minus BASE on the same seeds, the mean
- *      of the per seed differences and its standard error) beside BASE against BASE on a second seed set.
+ *      market's size and the January entry's time. Each run writes its per career numbers as JSON; --combine reads
+ *      the files of every run, prints the paired statistic (head minus BASE on the same seeds, the mean of the per
+ *      seed differences and its standard error, beside BASE against BASE on a second seed set) and ASSERTS the
+ *      lead's ruling 2: the top and bottom tiers' XI and age at seasons 5, 10 and 15 move by no more than SHAPE_MARGIN
+ *      once BASE against BASE is taken off, and the buyers' surplus stays at the level step 1 measured and flat.
+ *  12. the window entry's time (the lead's ruling 4, the critic's correction 20): the 2026-27 trio, seeds 1 to 3,
+ *      played on BASE and on the head to the January of season 6; the playNextEntry call that opens it is timed
+ *      WINDOW_TRIALS times on each engine, alternating, each from a fresh load of the same save, and the head's median
+ *      may be at most 3 times BASE's plus 5 ms. A timing red is rerun alone once before it is called red.
  *
- * MEASURED AT STEP 1 (GitHub runners, 2026-10-16; the head is the base plus scripts only):
- *   section 0: every probe anchor and the seedless anchor stand once (r1344-wm3 and earlier).
- *   section 1 on this tree, seeds 1 to 5, six seasons: RED in all three worlds (r1344-wm, r1344-wm3: 1,461, 1,398
- *     and 1,405 failures; in 2026-27 (i) 812, (ii) 0, (iii) 649). Every AI deal line of every window is unplaced:
- *     opening 75, January 402, summer 335 in 2026-27. With CM_WORLD_MOVES_HEAD=probe: GREEN in all three worlds,
- *     0 unplaced, so the section measures the recording and nothing else.
- *   section 6: green in all three worlds (45 careers each, 220 saves, 40 deals of mine); CONTROL=seedless on 2026-27
- *     seeds 0 to 1: FIRED, 18 failures (the head wrote a ledger with no seed, saved strings differ).
- *   section 9: seeds 1 to 10 against BASE, BASE against BASE on seeds 11 to 20 (r1344-shape); the table is in the
- *     round's notes, docs/audits/ROUND-1344-NOTES.md. Nothing in section 9 is asserted at step 1: the lead rules.
+ * MEASURED AT STEP 1 (GitHub runners, 2026-10-16; the head was the base plus scripts and a throwaway probe,
+ * scripts/lib/cmAiRecordProbe1344.mjs, removed at step 2 and kept in the history at ee949025 and 21b3fa70):
+ *   section 1 on the base: RED in all three worlds (r1344-wm3: in 2026-27 (i) 812, (ii) 0, (iii) 649); with the
+ *     probe GREEN, 0 unplaced, so the section measures the recording and nothing else.
+ *   section 6: green; CONTROL=seedless FIRED, 18 failures.
+ *   section 9: the table is in the round's notes, docs/audits/ROUND-1344-NOTES.md; the January entry took 37.8 ms on
+ *     the base and about 255 ms with the probe (recorded deal by deal), which is why ruling 4 packs once a window.
  *
- * ENV. CM_WORLD_MOVES_SECTIONS (default 0,1,6), CM_WORLD_MOVES_SEEDS (a list or a range, 1-10; default per section),
- * CM_WORLD_MOVES_ERAS (default now,era2015,era2005), CM_WORLD_MOVES_HEAD=probe (the measurement probe composed into
- * this tree's engine; never product code), CM_WORLD_MOVES_BASE (default the commit the branch started from),
- * CM_WORLD_MOVES_SHAPE_ARMS (default base,head), CM_WORLD_MOVES_SEASONS (section 9, default 15), CM_WORLD_MOVES_OUT
- * (section 9's JSON folder, default $RC_OUT or the temp folder).
- * CONTROLS, each must go red on its own section (exit 1, the last line says FIRED):
+ * ENV. CM_WORLD_MOVES_SECTIONS (default 0,1,6,12), CM_WORLD_MOVES_SEEDS (a list or a range, 1-10; default per
+ * section), CM_WORLD_MOVES_ERAS (default now,era2015,era2005), CM_WORLD_MOVES_BASE (default the commit the branch
+ * started from), CM_WORLD_MOVES_SHAPE_ARMS (default base,head), CM_WORLD_MOVES_SEASONS (section 9, default 15),
+ * CM_WORLD_MOVES_OUT (section 9's JSON folder, default $RC_OUT or the temp folder).
+ * CONTROLS, each must go red on its own section (exit 1, the last line says FIRED); a control with a window must
+ * also have its FIRST red at that window (the critic's correction 13: every later rollover goes red too):
  *   CM_WORLD_MOVES_CONTROL=seedless   the guard of recordActualRosterTransfer out of the head: section 6 red
+ *   CM_WORLD_MOVES_CONTROL=norecord   no AI deal is recorded anywhere (the window's record line and recordAiDeals'
+ *                                     loop out): section 1 red, first at the opening window
+ *   CM_WORLD_MOVES_CONTROL=noflush    startCareer's last line back to `return state;`: section 1 red, first at the
+ *                                     opening window
+ *   CM_WORLD_MOVES_CONTROL=nojanuary  January's window keeps the ledger it had: section 1 red, first in January
+ *   CM_WORLD_MOVES_CONTROL=nosummer   the summer's window keeps the ledger it had: section 1 red, first in the summer
+ *   CM_WORLD_MOVES_CONTROL=slow       the window packs the ledger after every deal again (the step 1 probe's way):
+ *                                     section 12 red
+ *   CM_WORLD_MOVES_COMBINE_CONTROL=shift  --combine adds 0.2 to the head's top five XI at season 10: red
  * Exit 0 green, 1 red or a control that fired, 2 could not run, 3 a control that did not fire.
  *
  *   node scripts/simCmWorldMoves.mjs
- *   CM_WORLD_MOVES_SECTIONS=9 CM_WORLD_MOVES_HEAD=probe CM_WORLD_MOVES_SEEDS=1-5 node scripts/simCmWorldMoves.mjs
+ *   CM_WORLD_MOVES_SECTIONS=9 CM_WORLD_MOVES_SEEDS=1-5 node scripts/simCmWorldMoves.mjs
  *   node scripts/simCmWorldMoves.mjs --combine a.json b.json ...
  */
 import fs from 'node:fs';
@@ -91,14 +102,25 @@ const COMBINE = process.argv[2] === '--combine';   // handled at the end of the 
 
 /* The commit this branch started from (origin/main at the claim, Release BG live; src equal to bd3b6244). */
 const BASE = process.env.CM_WORLD_MOVES_BASE || 'd4f2c6f688d656205722ba52bbdb33f03490966a';
-const SECTIONS = new Set(range(process.env.CM_WORLD_MOVES_SECTIONS, [0, 1, 6]));
+const SECTIONS = new Set(range(process.env.CM_WORLD_MOVES_SECTIONS, [0, 1, 6, 12]));
 const ERAS = (process.env.CM_WORLD_MOVES_ERAS || 'now,era2015,era2005').split(',');
-const HEAD_PROBE = process.env.CM_WORLD_MOVES_HEAD === 'probe';
-if (process.env.CM_WORLD_MOVES_HEAD && !HEAD_PROBE) cannot(`CM_WORLD_MOVES_HEAD=${process.env.CM_WORLD_MOVES_HEAD} is not known (probe)`);
+if (process.env.CM_WORLD_MOVES_HEAD) cannot('CM_WORLD_MOVES_HEAD is gone: the step 1 probe was removed at step 2 (the head records the deals itself)');
 const CONTROL = process.env.CM_WORLD_MOVES_CONTROL || '';
-/* Each control: the section it must turn red, and its edits of this tree's engine, [anchor, replacement]. */
+/* The window's record line in generateHeadlines and the summer and January calls, as they stand in the engine. */
+const RECORD_LINE = '    if (working && seen) { const moved = recordAiDeal(working, { mp, to: buyer, fee }, seen); if (moved === working) continue; working = moved; }\n    else unrecorded.push({ mp, to: buyer, fee });\n';
+const JANUARY_CALL = '      generateHeadlines(state);\n      // Round 135:';
+const SUMMER_CALL = '  state.intl = freshIntl(state);\n  generateHeadlines(state);\n';
+const keepLedger = indent => `${indent}{ const held1344 = state.worldRoster; generateHeadlines(state); if (held1344 === undefined) delete state.worldRoster; else state.worldRoster = held1344; }\n`;
+/* Each control: the section it must turn red, the window its first red must be at (section 1), and its edits of
+   this tree's engine, [anchor, replacement]. */
 const CONTROLS = {
   seedless: { section: 6, edits: [['  if (worldSeedOf(state) === undefined) return state;\n', '']] },
+  norecord: { section: 1, first: 'opening', edits: [[RECORD_LINE, '    unrecorded.push({ mp, to: buyer, fee });\n'],
+    ['  for (const deal of deals) next = recordAiDeal(next, deal, state);\n', '']] },
+  noflush: { section: 1, first: 'opening', edits: [['  return recordAiDeals(state, unrecorded);\n}\n', '  return state;\n}\n']] },
+  nojanuary: { section: 1, first: 'january', edits: [[JANUARY_CALL, `${keepLedger('      ')}      // Round 135:`]] },
+  nosummer: { section: 1, first: 'summer', edits: [[SUMMER_CALL, `  state.intl = freshIntl(state);\n${keepLedger('  ')}`]] },
+  slow: { section: 12, edits: [[RECORD_LINE, '    if (working && seen) { const moved = recordAiDeal(working, { mp, to: buyer, fee }, working); if (moved === working) continue; working = packedLedger(moved); }\n    else unrecorded.push({ mp, to: buyer, fee });\n']] },
 };
 if (CONTROL && !CONTROLS[CONTROL]) cannot(`unknown control ${CONTROL} (${Object.keys(CONTROLS).join(', ')})`);
 /* A control runs its own section and the anchors only, unless the sections are named. */
@@ -118,7 +140,6 @@ try { execFileSync('git', ['cat-file', '-e', `${BASE}^{commit}`], { cwd: ROOT, s
 /* ---------- the engines ---------- */
 let esbuild;
 try { esbuild = await import('esbuild'); } catch { cannot('esbuild is not installed'); }
-const { withAiRecording, probeAnchorCounts } = await import('./lib/cmAiRecordProbe1344.mjs');
 /* Section 0's ledger: every edit made, by name, and how often it was made. */
 const made = new Map();
 function editOf(edits, name) {
@@ -192,7 +213,9 @@ const fail = (section, line) => {
 };
 /** Section 1's failures counted by check: (i) placed at the buyer, (ii) the one club rule, (iii) still there later. */
 const checks = {};
-const fail1 = (check, line) => { checks[check] = (checks[check] ?? 0) + 1; fail(1, line); };
+/* Which window or rollover section 1 is checking, and the first one that went red (a control's must be its own). */
+let phase1 = null, firstRed1 = null;
+const fail1 = (check, line) => { checks[check] = (checks[check] ?? 0) + 1; firstRed1 ??= phase1; fail(1, line); };
 /** The lines one step added to the transfer log. The log keeps its last 80, so the oldest may have gone. */
 function addedLines(before, after) {
   const b = (before ?? []).map(x => JSON.stringify(x)), a = (after ?? []).map(x => JSON.stringify(x));
@@ -274,6 +297,7 @@ async function ownershipCareer(E, era, club, seed) {
     return back;
   };
   const atWindow = (kind, label, s, before) => {
+    phase1 = kind;
     const lines = addedLines(before, s.transferLog).filter(aiLine(s.clubName));
     const held = M.ledger.readWorldRoster(s);
     const row = tally[kind] ??= { windows: 0, deals: 0, refused: 0, records: 0, stored: 0 };
@@ -287,6 +311,7 @@ async function ownershipCareer(E, era, club, seed) {
     s1Checked += oneClubRule(M, s, `${tag} ${label}`);
   };
   const atRollover = (s, label, before) => {
+    phase1 = 'rollover';
     const resold = new Set(addedLines(before, s.transferLog).filter(aiLine(s.clubName)).map(line => line.name));
     s1Rollovers += 1;
     const records = M.ledger.readWorldRoster(s)?.records ?? [];
@@ -482,15 +507,102 @@ async function shapeSection(engines) {
     if (!engines[arm]) cannot(`no engine for the shape arm ${arm}`);
     const rows = [];
     for (const seed of seeds) for (const club of CLUBS.now) {
-      const row = await shapeCareer(engines[arm], arm === 'head' && HEAD_PROBE ? 'probe' : arm, 'now', club, seed);
+      const row = await shapeCareer(engines[arm], arm, 'now', club, seed);
       rows.push(row);
       const w = row.windows, deals = w.reduce((a, x) => a + x.deals, 0), last = w[w.length - 1];
       const t10 = row.at[10]?.top;
       console.log(`  shape ${row.arm} ${club} seed ${seed}: ${deals} AI deals in ${w.length} windows, ledger ${last.records} records ${last.stored} units, market ${last.market}${row.sacked ? `, sacked in season ${row.sacked}` : ''}${t10 ? `; season 10 top five XI ${t10.xi.toFixed(2)}, surplus ${t10.surplus.toFixed(2)}` : ''}`);
     }
-    const file = path.join(dir, `shape-${arm === 'head' && HEAD_PROBE ? 'probe' : arm}-${seeds[0]}-${seeds[seeds.length - 1]}.json`);
+    const file = path.join(dir, `shape-${arm}-${seeds[0]}-${seeds[seeds.length - 1]}.json`);
     fs.writeFileSync(file, JSON.stringify(rows));
     console.log(`  shape: ${rows.length} careers written to ${file}`);
+  }
+}
+
+/* ---------- section 9's verdict (the lead's ruling 2), read by --combine ---------- */
+/* The bound on a tier's move, once BASE against BASE is taken off: fixed numbers set from measured headroom, never a
+   significance test (that gets easier the less data it is fed). Step 1 (r1344-shape, seeds 1 to 10, BASE against
+   BASE on 11 to 20): the probe moved the top and bottom tiers' XI by at most 0.057 and their mean age by at most
+   0.065 after BASE against BASE (whose own per seed spread reached 0.13 XI and 0.14 years), so 0.15 is more than
+   twice the healthy move and about one per seed spread of BASE against itself. The buyers' surplus: +0.686, +0.665
+   and +0.675 men a club at seasons 5, 10 and 15 (se 0.03 to 0.05), so at most 1.0 at each, and season 15 at most
+   0.25 above season 5 (flat, not growing). */
+const SHAPE_MARGIN = { xi: 0.15, age: 0.15 };
+const SURPLUS_MAX = 1.0, SURPLUS_GROWTH_MAX = 0.25;
+function shapeVerdict(seen, shifted) {
+  const red = [];
+  for (const t of [5, 10, 15]) for (const tier of ['top', 'bottom']) for (const m of ['xi', 'age']) {
+    const row = seen[`${tier} ${m} season ${t}`];
+    if (!row || !row.d.n || !row.nul.n) { console.log(`simCmWorldMoves --combine: cannot judge ${tier} ${m} season ${t}: the head or BASE against BASE is missing`); return 2; }
+    const move = row.d.mean - row.nul.mean;
+    if (Math.abs(move) > SHAPE_MARGIN[m]) red.push(`${tier} ${m} season ${t} moved ${sgn(move)} after BASE against BASE, over ${SHAPE_MARGIN[m]}`);
+  }
+  const surplus = t => seen[`bought surplus season ${t}`]?.d;
+  for (const t of [5, 10, 15]) if (!surplus(t)?.n) { console.log(`simCmWorldMoves --combine: cannot judge the buyers' surplus at season ${t}`); return 2; }
+  for (const t of [5, 10, 15]) if (surplus(t).mean > SURPLUS_MAX) red.push(`the buyers carry ${sgn(surplus(t).mean)} men over their slots at season ${t}, over ${SURPLUS_MAX}`);
+  if (surplus(15).mean - surplus(5).mean > SURPLUS_GROWTH_MAX) red.push(`the buyers' surplus grew ${sgn(surplus(15).mean - surplus(5).mean)} from season 5 to 15, over ${SURPLUS_GROWTH_MAX}`);
+  for (const line of red) console.log(`  FAIL section 9: ${line}`);
+  if (shifted) {
+    const fired = red.some(line => line.startsWith('top xi season 10'));
+    console.log(fired ? `simCmWorldMoves --combine: control shift FIRED: ${red.length} red` : 'simCmWorldMoves --combine: control shift DID NOT FIRE: the top five XI at season 10 stayed inside its margin');
+    return fired ? 1 : 3;
+  }
+  console.log(red.length ? `simCmWorldMoves --combine: RED, section 9 (${red.length})` : 'simCmWorldMoves --combine: green, section 9 held (every tier inside its margin, the buyers\' surplus flat)');
+  return red.length ? 1 : 0;
+}
+
+/* ---------- section 12, the window entry's time ---------- */
+const WINDOW_TRIALS = 5, WINDOW_SEASON = 6;
+const median = xs => [...xs].sort((a, b) => a - b)[Math.floor(xs.length / 2)];
+/** A career on one engine played to the call that opens January of WINDOW_SEASON: the saved string before it. */
+async function beforeJanuary(E, club, seed) {
+  const M = await E.fresh(), keep = Math.random;
+  Math.random = stream(mix('time', club, seed));
+  try {
+    let s = M.cm.startCareer(club, 'now');
+    for (let season = 1; season <= WINDOW_SEASON; season += 1) {
+      for (let guard = 0; guard < 400; guard += 1) {
+        if (s.boardConfidence < 35) s = { ...s, boardConfidence: 55 };
+        const r = M.cm.playNextEntry(s, OPT);
+        if (r.kind === 'window' && season === WINDOW_SEASON) {
+          M.store.clear();
+          if (!M.cm.saveCareer(s)) return { error: 'the save before January was refused' };
+          return { M, saved: M.store.get(M.cm.SAVE_KEY), records: M.ledger.readWorldRoster(s)?.records.length ?? 0 };
+        }
+        s = r.state;
+        if (r.kind === 'seasonOver' || s.sacked) break;
+      }
+      if (s.sacked) return { error: `sacked in season ${season}` };
+      s = M.cm.startNextSeason(M.cm.finishSeason(s).state);
+    }
+    return { error: 'no January window was reached' };
+  } finally { Math.random = keep; }
+}
+/** One trial: a fresh load of the saved string (cold memos, as after a page load), then the timed window entry. */
+function timeWindow(at, trial) {
+  const keep = Math.random;
+  at.M.store.set(at.M.cm.SAVE_KEY, at.saved);
+  const st = at.M.cm.loadCareer();
+  Math.random = stream(mix('trial', trial));
+  try {
+    const t0 = performance.now(), r = at.M.cm.playNextEntry(st, OPT), ms = performance.now() - t0;
+    return r.kind === 'window' ? ms : NaN;
+  } finally { Math.random = keep; }
+}
+let s12Careers = 0;
+async function timeSection(B, H) {
+  const seeds = range(process.env.CM_WORLD_MOVES_SEEDS, [1, 2, 3]);
+  for (const club of CLUBS.now) for (const seed of seeds) {
+    const tag = `${club} (now, seed ${seed})`;
+    const b = await beforeJanuary(B, club, seed), h = await beforeJanuary(H, club, seed);
+    if (b.error || h.error) cannot(`section 12, ${tag}: ${b.error ?? h.error}`);
+    const bt = [], ht = [];
+    for (let trial = 0; trial < WINDOW_TRIALS; trial += 1) { bt.push(timeWindow(b, trial)); ht.push(timeWindow(h, trial)); }
+    if ([...bt, ...ht].some(x => !Number.isFinite(x))) cannot(`section 12, ${tag}: a trial did not open the January window`);
+    const mb = median(bt), mh = median(ht), limit = 3 * mb + 5;
+    s12Careers += 1;
+    console.log(`   ${tag}: ledger ${b.records} records on BASE, ${h.records} on the head; the window entry's median BASE ${mb.toFixed(1)} ms, head ${mh.toFixed(1)} ms (limit ${limit.toFixed(1)})`);
+    if (mh > limit) fail(12, `${tag}: the head's window entry took ${mh.toFixed(1)} ms against BASE's ${mb.toFixed(1)} ms, over 3 x + 5 ms`);
   }
 }
 
@@ -503,6 +615,10 @@ const stat = xs => {
 const sgn = v => `${v >= 0 ? '+' : ''}${v.toFixed(3)}`;
 function combine(files) {
   const rows = files.flatMap(f => JSON.parse(fs.readFileSync(f, 'utf8')));
+  const shift = process.env.CM_WORLD_MOVES_COMBINE_CONTROL;
+  if (shift && shift !== 'shift') { console.log(`simCmWorldMoves --combine: unknown control ${shift}`); return 2; }
+  if (shift) for (const r of rows) if (r.arm !== 'base' && r.at?.[10]?.top?.xi != null) r.at[10].top.xi += 0.2;
+  const seen = {};
   const head = rows.filter(r => r.arm !== 'base'), base = rows.filter(r => r.arm === 'base');
   const armName = head[0]?.arm ?? 'head';
   const setA = [...new Set(head.map(r => r.seed))].sort((a, b) => a - b);
@@ -520,6 +636,7 @@ function combine(files) {
     const d = stat(diffs(h, a)), nul = stat(diffs(b.slice(0, setA.length), a.slice(0, setB.length)));
     const z = (d.mean - (nul.n ? nul.mean : 0)) / Math.sqrt(d.se ** 2 + (nul.n > 1 ? nul.se ** 2 : 0));
     const baseMean = stat(a.filter(v => v !== null)).mean;
+    seen[label] = { d, nul };
     console.log(`  ${label.padEnd(26)} BASE ${baseMean.toFixed(3)} | ${armName} minus BASE ${sgn(d.mean)} (se ${d.se.toFixed(3)}, n ${d.n}) | BASE minus BASE ${nul.n ? `${sgn(nul.mean)} (se ${nul.se.toFixed(3)}, n ${nul.n})` : 'not run'} | z ${Number.isFinite(z) ? z.toFixed(1) : 'n/a'}`);
   };
   for (const t of [5, 10, 15]) for (const tier of ['top', 'bottom', 'sold', 'bought']) for (const m of ['xi', 'surplus', 'age']) {
@@ -534,26 +651,23 @@ function combine(files) {
     report(`market size season ${t}`, atSummer('market'));
   }
   report('January entry ms', win('january', 'ms'));
+  return shapeVerdict(seen, !!shift);
 }
 
 /* ---------- the run ---------- */
-if (COMBINE) { combine(process.argv.slice(3)); process.exit(0); }
+if (COMBINE) process.exit(combine(process.argv.slice(3)));
 const treeSource = lf(fs.readFileSync(path.join(ROOT, ENGINE), 'utf8'));
 if (SECTIONS.has(0)) {
   console.log('0) anchors: every edit this harness can make stands exactly once in the source it is made to');
-  for (const [label, n] of probeAnchorCounts(treeSource)) {
-    console.log(`   probe "${label}": ${n}`);
-    if (n !== 1) fail(0, `the probe's anchor "${label}" stands ${n} times in ${ENGINE}`);
-  }
   for (const [name, c] of Object.entries(CONTROLS)) for (const [from] of c.edits) {
     const n = treeSource.split(from).length - 1;
     console.log(`   control ${name}: ${n}`);
     if (n !== 1) fail(0, `the anchor of the control ${name} stands ${n} times in ${ENGINE}`);
   }
 }
-const headEdits = [HEAD_PROBE ? withAiRecording : null, CONTROL ? editOf(CONTROLS[CONTROL].edits, CONTROL) : null].filter(Boolean);
-const needBase = SECTIONS.has(6) || SECTIONS.has(9) && (process.env.CM_WORLD_MOVES_SHAPE_ARMS || 'base,head').split(',').includes('base');
-const H = await engine(HEAD_PROBE ? 'probe' : 'head', { edit: headEdits.length ? text => headEdits.reduce((t, f) => f(t), text) : null });
+const headEdits = [CONTROL ? editOf(CONTROLS[CONTROL].edits, CONTROL) : null].filter(Boolean);
+const needBase = SECTIONS.has(6) || SECTIONS.has(12) || SECTIONS.has(9) && (process.env.CM_WORLD_MOVES_SHAPE_ARMS || 'base,head').split(',').includes('base');
+const H = await engine('head', { edit: headEdits.length ? text => headEdits.reduce((t, f) => f(t), text) : null });
 const B = needBase ? await engine('base', { base: true }) : null;
 if (made.size) for (const [what, n] of made) console.log(`   control edit made ${n} time(s): ${what}`);
 
@@ -565,7 +679,8 @@ if (SECTIONS.has(1)) {
     console.log(`   ${kind.padEnd(8)} ${row.windows} windows, ${row.deals} AI deal lines, ${row.refused} not placed at the buyer, ledger ${(row.records / row.windows).toFixed(1)} records and ${Math.round(row.stored / row.windows)} units a window on average`);
   }
   console.log(`   ${s1Careers} careers (${s1Sacked} sacked early), ${s1Checked} listings checked by the one club rule, ${s1Tracked} moved men followed over ${s1Rollovers} rollovers`);
-  console.log(`   failures by check: (i) ${checks.i ?? 0}, (ii) ${checks.ii ?? 0}, (iii) ${checks.iii ?? 0}`);
+  console.log(`   failures by check: (i) ${checks.i ?? 0}, (ii) ${checks.ii ?? 0}, (iii) ${checks.iii ?? 0}; the first at ${firstRed1 ?? 'none'}`);
+  console.log(`   the opening window's refusals (deal lines it closed before the seed that the flush could not place): ${tally.opening?.refused ?? 0} of ${tally.opening?.deals ?? 0} (expected 0)`);
   if (!s1Careers || !Object.values(tally).some(r => r.deals)) fail(1,'no AI deal line was seen, so nothing was measured');
 }
 if (SECTIONS.has(6)) {
@@ -574,6 +689,11 @@ if (SECTIONS.has(6)) {
   console.log(`   ${s6Careers} careers, ${s6Saves} saves, ${s6Draws} draws and ${s6Deals} deals of mine on the head`);
   if (!s6Careers || !s6Saves) cannot('section 6: no career was played');
   if (!s6Deals) cannot('section 6: no deal of mine was made, so no ledger writer was called');
+}
+if (SECTIONS.has(12)) {
+  console.log(`12) the window entry: ${CLUBS.now.join(', ')} to the January of season ${WINDOW_SEASON}, ${WINDOW_TRIALS} trials an engine, the head's median at most 3 x BASE's + 5 ms`);
+  await timeSection(B, H);
+  if (!s12Careers) cannot('section 12: no career was timed');
 }
 if (SECTIONS.has(9)) {
   console.log(`9) shape: ${SHAPE_SEASONS} seasons at ${CLUBS.now.join(', ')} (the JSON goes to --combine)`);
@@ -584,7 +704,9 @@ const red = Object.keys(failures).map(Number).sort((a, b) => a - b);
 for (const section of red) if (failures[section].length > 8) console.log(`  section ${section}: ${failures[section].length - 8} more failures not shown`);
 if (CONTROL) {
   const target = CONTROLS[CONTROL].section;
-  if (failures[target]?.length) { console.log(`simCmWorldMoves: control ${CONTROL} FIRED: section ${target} red (${failures[target].length})`); process.exit(1); }
+  const first = CONTROLS[CONTROL].first;
+  if (failures[target]?.length && (!first || firstRed1 === first)) { console.log(`simCmWorldMoves: control ${CONTROL} FIRED: section ${target} red (${failures[target].length})${first ? `, first at ${first}` : ''}`); process.exit(1); }
+  if (failures[target]?.length) { console.log(`simCmWorldMoves: control ${CONTROL} DID NOT FIRE as it must: section ${target} red, but first at ${firstRed1}, not ${first}`); process.exit(3); }
   console.log(`simCmWorldMoves: control ${CONTROL} DID NOT FIRE: section ${target} stayed green`);
   process.exit(3);
 }

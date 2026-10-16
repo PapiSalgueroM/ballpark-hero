@@ -462,7 +462,7 @@ function recordActualRosterTransfer(state: CareerState, player: CMPlayer, from: 
 }
 
 /** Round 1344: one deal closed between two clubs that are not mine. `mp.club` is the seller. */
-interface AiDeal { mp: MarketPlayer; to: string; fee: number }
+export interface AiDeal { mp: MarketPlayer; to: string; fee: number }
 
 /* Round 1344 (the player report of 2026-10-16: a man another club bought vanished from the market and turned up at
    his old club the next season; PR269, the other lane's Round 1367, proved the four writers that never told the
@@ -501,8 +501,9 @@ function packedLedger(state: CareerState): CareerState {
 /* Round 1344: deals closed while the career had no seed yet (the opening window of a fresh career, whose seed is drawn
    after its news) or outside a window (the hijack, the walk away), recorded in order and packed once. A career with
    no seed comes back as the same object (the guard of recordActualRosterTransfer, ruling Y1), so it gains no key.
-   Pure, no draw. Its loop is one line, so scripts/lib/cmNoAiMoves1344.mjs can take it out. */
-function recordAiDeals(state: CareerState, deals: readonly AiDeal[]): CareerState {
+   Pure, no draw. Its loop is one line, so scripts/lib/cmNoAiMoves1344.mjs can take it out. Exported for
+   src/lib/clubManagerWorldMoves.test.ts. */
+export function recordAiDeals(state: CareerState, deals: readonly AiDeal[]): CareerState {
   if (worldSeedOf(state) === undefined || !deals.length) return state;
   let next = state;
   for (const deal of deals) next = recordAiDeal(next, deal, state);
