@@ -1,0 +1,7 @@
+#!build
+#!playwright
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+appeal: node scripts/simManagerAppealIsolation.mjs
+rules: node scripts/simCmLeagueRules.mjs --part=modern,eras,pure
+simWritesAreSent: node scripts/simWritesAreSent.mjs
+unitset: node_modules/.bin/vitest run src/lib/clubManagerBoardVerdict.test.ts src/test/clubManagerOfferConfirm.test.tsx --testTimeout=300000
