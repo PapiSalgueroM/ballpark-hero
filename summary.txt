@@ -1,0 +1,11 @@
+build exit=0 31s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+vitest exit=0 17s |    Duration  15.77s (transform 4.12s, setup 666ms, collect 13.24s, tests 21.20s, environment 4.25s, prepare 1.39s)
+coachCareer exit=0 4s | PASS: ALL US COACHING CAREER CHECKS PASSED
+retire exit=0 28s | PASS: ALL US COACHING RETIREMENT CHECKS PASSED
+confirm exit=0 9s | Career confirmation: CRLF controls bind, raw bytes held and owned copies cleaned. Simulated states/explicit events do not prove full-season gameplay or native Enter, view
+parity exit=0 79s | simUsBoardParity: green. Four sports replayed click for click, save for save and screen for screen.
+tsc exit=0 96s | 
+walk exit=0 66s | playUsCareerReports: ALL GREEN, 14 walks
+walk-noundo exit=1 51s | CONTROL noundo FIRED: W3 red
+walk-noretire exit=1 69s | CONTROL noretire FIRED: W2 red
+walk-noreplay exit=1 58s | CONTROL noreplay FIRED: W3 red

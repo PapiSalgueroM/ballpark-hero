@@ -1,0 +1,10 @@
+  FAIL W2:nba-390: locator.tap: Timeout 4000ms exceeded.
+  FAIL W2:nba-1280: locator.click: Timeout 4000ms exceeded.
+  FAIL W2:nfl-390: locator.tap: Timeout 4000ms exceeded.
+  FAIL W2:nfl-1280: locator.click: Timeout 4000ms exceeded.
+  W3:nba-390: the night's button row is 46 px live, 46 skipped, 46 on the replay, 46 landed
+  W3:nba-1280: the night's button row is 46 px live, 46 skipped, 46 on the replay, 46 landed
+  W3:nfl-390: the night's button row is 46 px live, 46 skipped, 46 on the replay, 46 landed
+  W3:nfl-1280: the night's button row is 46 px live, 46 skipped, 46 on the replay, 46 landed
+  screenshots: 66 in /home/runner/work/_temp/rc-out/files
+CONTROL noretire FIRED: W2 red
