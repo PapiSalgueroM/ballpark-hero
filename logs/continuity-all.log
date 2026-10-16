@@ -1,0 +1,322 @@
+treeWithoutMerge: 76e9efaea5daee5dab01d54b30860801386f8b5e, 082fc277 without 5ec5a724; conflicts kept from 082fc277: scripts/qa/managerWorldContinuityKit.mjs, scripts/qa/managerWorldSizeDiagnostic.mjs, scripts/simCmLeagueRules.mjs, scripts/simCmUnseededWorld.mjs, src/pages/WhatsNew.tsx
+PASS [healthy] inactive
+PASS [healthy] constructors
+PASS [healthy] identity
+PASS [healthy] buy-job
+PASS [healthy] year-away
+PASS [healthy] sale
+PASS [healthy] option
+PASS [healthy] release
+PASS [healthy] refresh
+PASS [healthy] seeded-world
+PASS [healthy] storage
+PASS [purchase] inactive
+PASS [purchase] constructors
+PASS [purchase] identity
+FAIL [purchase] buy-job: Actual buy assigns permanent identity
+FAIL [purchase] year-away: The expression evaluated to a falsy value:
+
+  assert.ok(p.worldRosterKey)
+
+FAIL [purchase] sale: The expression evaluated to a falsy value:
+
+  assert.ok(p.worldRosterKey)
+
+PASS [purchase] option
+FAIL [purchase] release: The expression evaluated to a falsy value:
+
+  assert.ok(p.worldRosterKey)
+
+PASS [purchase] refresh
+PASS [purchase] seeded-world
+PASS [purchase] storage
+PASS [ownership] inactive
+PASS [ownership] constructors
+FAIL [ownership] identity: Original club excludes retrained identity
+
+1 !== 0
+
+FAIL [ownership] buy-job: Seller never regains the player
+
+true !== false
+
+FAIL [ownership] year-away: Expected values to be strictly equal:
+
+true !== false
+
+FAIL [ownership] sale: Expected values to be strictly equal:
+
+true !== false
+
+FAIL [ownership] option: Expected values to be strictly equal:
+
+true !== false
+
+FAIL [ownership] release: Expected values to be strictly equal:
+
+true !== false
+
+PASS [ownership] refresh
+PASS [ownership] seeded-world
+PASS [ownership] storage
+PASS [snapshot] inactive
+PASS [snapshot] constructors
+PASS [snapshot] identity
+FAIL [snapshot] buy-job: Actual departure stores the complete played player
++ actual - expected
+
+  {
+    age: 24,
+    contractYears: 4,
++   fitness: 90,
+-   fitness: 100,
+    id: 'sign-william-saliba-s1',
+    injuryWeeks: 0,
+    isYouth: false,
++   morale: 78,
+-   lastTen: [
+-     0,
+-     0
+-   ],
+-   morale: 77.19999999999999,
+    name: 'William Saliba',
+    position: 'CB',
+-   potential: 93,
+    rating: 90,
+-   role: 'rotation',
+    seasonAssists: 0,
+    seasonGoals: 0,
+    suspendedMatches: 0,
+    value: 72.8,
+    wage: 79,
+
+FAIL [snapshot] year-away: Complete recorded player is snapshotted before departure
++ actual - expected
+
+  {
+    age: 24,
+-   apps: 10,
+-   cleanSheets: 2,
+-   comp: {
+-     cup: {
+-       apps: 1,
+-       assists: 0,
+-       goals: 0,
+-       ratingSum: 6,
+-       reds: 0,
+-       yellows: 0
+-     },
+-     league: {
+-       apps: 9,
+-       assists: 0,
+-       goals: 0,
+-       ratingSum: 54.9,
+-       reds: 0,
+-       yellows: 1
+-     }
+-   },
+    contractYears: 4,
++   fitness: 90,
+-   fitness: 100,
+    id: 'sign-william-saliba-s1',
+    injuryWeeks: 0,
+    isYouth: false,
++   morale: 78,
+-   lastTen: [
+-     0,
+-     0,
+-     0,
+-     0,
+-     0,
+-     0,
+-     0,
+-     0,
+-     0,
+-     0
+-   ],
+-   morale: 5.4,
+    name: 'William Saliba',
+    position: 'CB',
+-   potential: 94,
+    rating: 90,
+-   ratingSum: 60.9,
+-   role: 'rotation',
+    seasonAssists: 0,
+    seasonGoals: 0,
+-   seasonYellows: 1,
+    suspendedMatches: 0,
+    value: 72.8,
+    wage: 79,
+-   wantsOut: true,
+    worldRosterKey: '["now","Arsenal","William Saliba","CB",2002,0]'
+  }
+
+PASS [snapshot] sale
+PASS [snapshot] option
+PASS [snapshot] release
+PASS [snapshot] refresh
+PASS [snapshot] seeded-world
+PASS [snapshot] storage
+PASS [stale] inactive
+PASS [stale] constructors
+PASS [stale] identity
+PASS [stale] buy-job
+FAIL [stale] year-away: Expected values to be strictly equal:
+
+2026 !== 2027
+
+FAIL [stale] sale: Actual buyer exposes the same permanent player next year
+FAIL [stale] option: Expected values to be strictly equal:
+
+undefined !== 23
+
+PASS [stale] release
+FAIL [stale] refresh: Expected values to be strictly equal:
+
+24 !== 25
+
+PASS [stale] seeded-world
+FAIL [stale] storage: Expected values to be strictly equal:
++ actual - expected
+
++ 'released'
+- 'retired'
+     ^
+
+PASS [sale] inactive
+PASS [sale] constructors
+PASS [sale] identity
+PASS [sale] buy-job
+PASS [sale] year-away
+FAIL [sale] sale: Expected values to be strictly equal:
++ actual - expected
+
++ 'Everton'
+- 'Chelsea'
+
+PASS [sale] option
+PASS [sale] release
+PASS [sale] refresh
+PASS [sale] seeded-world
+PASS [sale] storage
+PASS [option] inactive
+PASS [option] constructors
+PASS [option] identity
+PASS [option] buy-job
+PASS [option] year-away
+PASS [option] sale
+FAIL [option] option: The expression evaluated to a falsy value:
+
+  assert.ok(held.worldRosterKey)
+
+PASS [option] release
+PASS [option] refresh
+PASS [option] seeded-world
+PASS [option] storage
+PASS [release] inactive
+PASS [release] constructors
+PASS [release] identity
+PASS [release] buy-job
+PASS [release] year-away
+PASS [release] sale
+PASS [release] option
+FAIL [release] release: Expected values to be strictly equal:
++ actual - expected
+
++ 'owned'
+- 'released'
+
+PASS [release] refresh
+PASS [release] seeded-world
+PASS [release] storage
+PASS [identity] inactive
+PASS [identity] constructors
+FAIL [identity] identity: Expected values to be strictly equal:
++ actual - expected
+
++ 'Buyer Club'
+- 'Second Buyer'
+
+PASS [identity] buy-job
+PASS [identity] year-away
+PASS [identity] sale
+PASS [identity] option
+PASS [identity] release
+PASS [identity] refresh
+PASS [identity] seeded-world
+PASS [identity] storage
+PASS [seed] inactive
+PASS [seed] constructors
+PASS [seed] identity
+PASS [seed] buy-job
+PASS [seed] year-away
+PASS [seed] sale
+PASS [seed] option
+PASS [seed] release
+PASS [seed] refresh
+FAIL [seed] seeded-world: Different valid seeds produce substantive actual world variation
+PASS [seed] storage
+PASS [draw] inactive
+PASS [draw] constructors
+PASS [draw] identity
+PASS [draw] buy-job
+PASS [draw] year-away
+PASS [draw] sale
+PASS [draw] option
+PASS [draw] release
+FAIL [draw] refresh: All active world reads use no global draw
+
+2 !== 0
+
+PASS [draw] seeded-world
+FAIL [draw] storage: Released aging stays on its original private stream
+
+36 !== 0
+
+PASS [entropy] inactive
+FAIL [entropy] constructors: Same-module careers and clocks do not change the saved world seed
++ actual - expected
+
++ 2407223005
+- 2510526754
+
+PASS [entropy] identity
+PASS [entropy] buy-job
+PASS [entropy] year-away
+PASS [entropy] sale
+PASS [entropy] option
+PASS [entropy] release
+PASS [entropy] refresh
+PASS [entropy] seeded-world
+PASS [entropy] storage
+PASS [newborn] inactive
+PASS [newborn] constructors
+PASS [newborn] identity
+PASS [newborn] buy-job
+PASS [newborn] year-away
+PASS [newborn] sale
+PASS [newborn] option
+PASS [newborn] release
+PASS [newborn] refresh
+FAIL [newborn] seeded-world: First later aging gives every surviving birth a bounded potential
+PASS [newborn] storage
+PASS [storage] inactive
+PASS [storage] constructors
+PASS [storage] identity
+PASS [storage] buy-job
+PASS [storage] year-away
+PASS [storage] sale
+PASS [storage] option
+PASS [storage] release
+PASS [storage] refresh
+PASS [storage] seeded-world
+FAIL [storage] storage: Inactive complete records have a saved packed representation
++ actual - expected
+
++ 'undefined'
+- 'string'
+
+Manager world continuity: 14 arms, eleven complete groups per arm
+Independent original engine (b6eb78e7) inactive saves and full draw vectors held in every arm
+Completed transactions, original source identity and actual callback receipts retained
+Private world variation is measured, no historical fixture was re-recorded
