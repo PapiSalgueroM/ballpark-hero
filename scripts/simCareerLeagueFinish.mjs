@@ -80,6 +80,8 @@ import { inverseDeckFair, deckFairPatches, DECK_FAIR_ADDITIONS } from './lib/car
 /* Round 1329: the world truth round (the month award, the phone's world, the quiz, the International panel) comes
    off first, in front of Round 1327, in both historical bundles: scripts/lib/careerWorldTruth1329.mjs. */
 import { inverseWorldTruth, worldTruthPatches, worldTruthOutPlugin, worldTruthReceiptProblem } from './lib/careerWorldTruth1329.mjs';
+/* Round 1334: the soccer deck's three engine lines come out first, in front of Round 1329 (scripts/lib/careerSoccerDeck1334.mjs), every row once, in order. */
+import { inverseSoccerDeck, soccerDeckPatches, soccerDeckReceiptProblem } from './lib/careerSoccerDeck1334.mjs';
 /* Release BF (Round BFH): the Soccer Career life chain (Rounds 1350 to 1363) deals more Life cards and holds some
    choices over a reload, so every historical career parts from its recording (the join's rBFg-gA: 16 careers moved,
    16 draw vectors differ). Its three changed engine inputs are read as at Release BE's head 4ae7a534 in the attributed
@@ -208,10 +210,16 @@ function wheelOutPlugin() {
    the both out bundle's own loader. */
 const WORLD_TRUTH_REST = ['src/lib/soccerArcade.ts', 'src/components/soccer-career/InternationalPanel.tsx'];
 const bothWorldTruth = [];
+const bothSoccerDeck = [];
 function deckFairOut(text) {
   const copied = enginePath !== `${ROOT}/src/lib/soccerCareerEngine.ts`;
   const keep = CONTROL === 'stream' || CONTROL === 'notitle' ? 'soccerCareerLeague' : '';
   let out = text;
+  for (const row of soccerDeckPatches()) {
+    const from = copied ? relocate(row.from, keep) : row.from, to = copied ? relocate(row.to, keep) : row.to;
+    assert.equal(out.split(from).length, 2, `${row.id} of Round 1334's inverse is in the engine exactly once at its turn`);
+    out = out.replace(from, () => to);
+  }
   for (const row of worldTruthPatches().filter(r => r.file === ENGINE_REL)) {
     const from = copied ? relocate(row.from, keep) : row.from, to = copied ? relocate(row.to, keep) : row.to;
     assert.equal(out.split(from).length, 2, `${row.id} of Round 1329's inverse is in the engine exactly once at its turn`);
@@ -269,7 +277,7 @@ function bothOutPlugin() {
       if (!full.toLowerCase().startsWith(`${base}/`)) return undefined;
       const rel = full.slice(base.length + 1);
       if (rel !== ENGINE_REL && !SOCCER_TRAIN_FILES.includes(rel)) return undefined;
-      let text = inverseWorldTruth(rel, fs.readFileSync(args.path, 'utf8').split('\r\n').join('\n'), bothWorldTruth);
+      let text = inverseWorldTruth(rel, inverseSoccerDeck(rel, fs.readFileSync(args.path, 'utf8').split('\r\n').join('\n'), bothSoccerDeck), bothWorldTruth);
       if (rel === ENGINE_REL) {
         const receipt = [];
         text = inverseDeckFair(ENGINE_REL, text, receipt);
@@ -288,11 +296,13 @@ async function bothOutEngine() {
   fs.writeFileSync(entry, `globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };\nexport * from '${lib}soccerCareerEngine.ts';\n`);
   const both = bothOutPlugin(), veteranOut = [], chain = lifeChain(ROOT, CHAIN_REF);
   bothWorldTruth.length = 0;
+  bothSoccerDeck.length = 0;
   await build({ entryPoints: [entry], bundle: true, format: 'esm', platform: 'node', outfile: out,
     logLevel: 'error', alias: { '@': './src' }, absWorkingDir: ROOT, plugins: [wheelOutPlugin(), veteranPayOutPlugin(ROOT, path, chain.fs, veteranOut), both.plugin, worldTruthOutPlugin(ROOT, path, fs, bothWorldTruth, WORLD_TRUTH_REST), chain.plugin] });
   assert.equal(chain.problem(), '', 'The historical bundle loaded the life chain\'s three engine inputs at its ref');
   proof.lifeChainAttribution.push({ bundle: 'both-out', ref: CHAIN_REF, served: chain.served });
   assert.equal(worldTruthReceiptProblem(bothWorldTruth), '', 'The historical bundle took Round 1329 out of every file it loaded, once, in order');
+  assert.equal(soccerDeckReceiptProblem(bothSoccerDeck), '', 'The historical bundle took Round 1334 out of the engine, once, in order');
   proof.worldTruthAttribution.push(...bothWorldTruth.map(row => ({ ...row, bundle: 'both-out' })));
   assert.equal(veteranOut.length, VETERAN_PAY_ADDITIONS.length, 'The historical bundle loaded the contracts file with the veteran pay of Release AW taken out, once');
   proof.veteranPayAttribution.push(...veteranOut);

@@ -51,3 +51,29 @@ season/soccer.ts's soccerSeasonKey). Nothing writes it in this round.
 
 Training bg-blue-600, other moves bg-emerald-600, the option that moves nothing bg-gray-800 (all compiled on
 SC_BASE; counts to be pasted at step 5).
+
+## Step 2: the engine's three lines, the ninth inverse, simSoccerDeck 1, 2, 3 and 10
+
+- src/lib/soccerCareerEngine.ts, three lines and their comments: the gate's import after the milestone import, the
+  spread `...soccerDeckPending(state),` after the getBootEvents spread at the end of getAllEvents, and
+  `picked.unshift(...soccerDeckSlot(state, season, `${soccerDeckIdentity(state)}|${season}|deckslot`, picked));` after
+  the boot's block and before the stamp. Nothing else in the engine.
+- scripts/lib/careerSoccerDeck1334.mjs, the ninth inverse: three rows, head sha256 0b3d35bc (the engine of this
+  branch, LF), base sha256 e37b73f2 (SC_BASE's engine, which is the eighth inverse's head pin). The chain was checked
+  by hand: the ninth gives e37b73f2, the eighth then gives d21d2f55 (the seventh's head pin), the seventh then gives
+  201f0361 (its base pin).
+  Recipe (regenerate after ANY engine change, yours or a merge's, never hand edit): from the worktree root,
+  `node .tmp-fx/gen-inverse-1334.mjs <SC_BASE sha>` then `node .tmp-fx/write-inverse-1334.mjs`. Both are Round 1329's
+  tools (results-g/r1329-tools) with the file list cut to the engine and the names changed; copies live in
+  C:/Users/antho/dukb-handoff/2026-10-10/results-g/r1334-tools/.
+- The ninth is wired in front of the eighth in all seventeen importers of careerWorldTruth1329.mjs (the seven
+  scripts/qa kits, simCareerAwardsNight, simCareerLeagueFinish, simCareerLeagueSeasons, simCareerProgramme,
+  simCareerSocialBrands, simCareerStoryRole, simCareerTrophyRuns, simSoccerCareerDevelopment, simSoccerDeckFairness
+  section 8, simSoccerWorldTruth section 6), each with a receipt check that every row came off once, in order, where
+  the file already checks the eighth's. simSoccerDeckFairness takes the ninth off only in section 8 (its other
+  bundles compare behaviour, which three inert lines cannot move), as ruling 1(g) says.
+- scripts/simSoccerDeck.mjs sections 1, 2, 3 and the static half of 10 with controls bindopen, leak, last, pool, eager
+  and caller. While the shipped pack is empty, sections 1 and 3 deal from a one card fixture pack made in memory.
+- The engine workflows' substance lines (18 workflows name the engine on this base, two more than the draft's 16:
+  career-historical-opponent-labels and career-rival-veteran-pay) are run once, at step 5, on the final head and
+  SC_BASE, rather than at every step.

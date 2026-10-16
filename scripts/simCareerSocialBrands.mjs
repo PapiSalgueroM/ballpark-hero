@@ -167,6 +167,8 @@ import { inverseDeckFair, DECK_FAIR_ADDITIONS } from './lib/careerDeckFair1327.m
 /* Round 1329: the world truth round (the month award, the phone's world, the quiz, the International panel) comes
    out first, in front of Round 1327: scripts/lib/careerWorldTruth1329.mjs. */
 import { inverseWorldTruth, worldTruthReceiptProblem } from './lib/careerWorldTruth1329.mjs';
+/* Round 1334: the soccer deck's three engine lines come out first, in front of Round 1329 (scripts/lib/careerSoccerDeck1334.mjs), every row once, in order. */
+import { inverseSoccerDeck, soccerDeckReceiptProblem } from './lib/careerSoccerDeck1334.mjs';
 /* Release BB: Release BA's closing fix a7c6befe says "have told you to find a loan" to a career with no agent, on
    purpose, and that one line moves this recording (rBBg-sb: green on its parent, red on it). The historical bundle
    puts the old line back in its copy of the engine: scripts/lib/careerNoAgentLoanLineBA.mjs. */
@@ -387,13 +389,14 @@ if (SECTIONS.includes('1')) {
   if (gotText !== want) {
     const beforeControlCount = controlFired;
     const chain = lifeChain(ROOT, CHAIN_REF);
+    const soccerDeckInverses = [];
     const historical = await loadSoccerBrand(ROOT, (relative, authored) => {
       /* Release BF: a chain file is its text at the chain's ref before any inverse below reads it. */
       const source = chain.swap(relative, authored);
       /* Release AT: under SOCIAL_BRANDS_ATTRIBUTION=train1178 this bundle keeps the train out too, so the
          fixture from before the train is asked of a tree with both taken out. */
       /* The wheel alone moves this recording (remote check rAU-G2), so the wheel alone is taken out. */
-      const first = inverseDeckFair(relative, inverseWorldTruth(relative, source, report.worldTruthInverses), report.deckFairInverses);
+      const first = inverseDeckFair(relative, inverseWorldTruth(relative, inverseSoccerDeck(relative, source, soccerDeckInverses), report.worldTruthInverses), report.deckFairInverses);
       const controlled = inverseVeteranPay(relative, inverseCareerNextTen(relative, trainOut ? trainOut.rewrite(relative, first) : inverseAwardGenerations(relative, rewrite(relative, first), report.awardGenerationsInverses), report.nextTenInverses, ['wheel']), report.veteranPayInverses);
       return relative === 'src/lib/soccerCareerEngine.ts' ? inverseNoAgentLoanLine(relative, inverseCareerStoryRole(inverseCareerDevelopment(controlled, report.inverses), report.storyRoleInverses), report.noAgentLoanInverses) : controlled;
     });
@@ -409,6 +412,7 @@ if (SECTIONS.includes('1')) {
     assert.equal(report.noAgentLoanInverses.length, 1, 'The copied engine receives the No Agent loan line inverse of Release BA once');
     assert.deepEqual(report.deckFairInverses.map(row => row.addition), DECK_FAIR_ADDITIONS, 'The copied engine receives Round 1327\'s inverse once, every row in order');
     assert.equal(worldTruthReceiptProblem(report.worldTruthInverses), '', 'Every copied file of Round 1329 receives its inverse once, every row in order');
+    assert.equal(soccerDeckReceiptProblem(soccerDeckInverses), '', 'The copied engine receives Round 1334\'s inverse once, every row in order');
     compared = probeSoccerBrand(historical);
     const inverseText = JSON.stringify(compared);
     retain('inverse.json', compared);

@@ -226,6 +226,8 @@ import { inverseDeckFair, DECK_FAIR_ADDITIONS } from './lib/careerDeckFair1327.m
 /* Round 1329: the world truth round (the month award, the phone's world, the quiz, the International panel the
    cards render) is taken out first, in front of Round 1327: scripts/lib/careerWorldTruth1329.mjs. */
 import { inverseWorldTruth, worldTruthReceiptProblem, WORLD_TRUTH_FILES } from './lib/careerWorldTruth1329.mjs';
+/* Round 1334: the soccer deck's three engine lines come out first, in front of Round 1329 (scripts/lib/careerSoccerDeck1334.mjs), every row once, in order. */
+import { inverseSoccerDeck, soccerDeckReceiptProblem } from './lib/careerSoccerDeck1334.mjs';
 /* Release BF (Round BFH): the Soccer Career life chain (Rounds 1350 to 1363) deals more Life cards and holds some
    choices over a reload, so the attributed replay parts from the fixture and from the independent original (the join's
    rBFg-gA: the draw stream, the per-step saves, 104 tournament cards for 103, career 0 at step 13 of 229). The
@@ -459,7 +461,8 @@ export const cards = {
 async function attributedAwardsBundle() {
   const file = 'src/lib/soccerCareerEngine.ts';
   const authored = fs.readFileSync(path.join(ROOT, file), 'utf8').replaceAll('\r\n', '\n');
-  let controlled = trainOutOf(file, inverseDeckFair(file, inverseWorldTruth(file, authored, proof.worldTruthAttribution), proof.deckFairAttribution));
+  const soccerDeckOut = [];
+  let controlled = trainOutOf(file, inverseDeckFair(file, inverseWorldTruth(file, inverseSoccerDeck(file, authored, soccerDeckOut), proof.worldTruthAttribution), proof.deckFairAttribution));
   assert.deepEqual(proof.deckFairAttribution.map(row => row.addition), DECK_FAIR_ADDITIONS, 'The copied engine receives Round 1327\'s inverse once, every row in order');
   /* Round 1329: the phone, the quiz and the International panel go back to the base whole, before any copied fault. */
   const worldTruthWhole = WORLD_TRUTH_FILES.filter(f => f !== file).map(f => {
@@ -467,6 +470,7 @@ async function attributedAwardsBundle() {
     return { file: f, from: authoredF, to: inverseWorldTruth(f, authoredF, proof.worldTruthAttribution) };
   });
   assert.equal(worldTruthReceiptProblem(proof.worldTruthAttribution, WORLD_TRUTH_FILES), '', 'The copied engine, phone, quiz and panel receive Round 1329\'s inverse once, every row in order');
+  assert.equal(soccerDeckReceiptProblem(soccerDeckOut), '', 'The copied engine receives Round 1334\'s inverse once, every row in order');
   for (const patch of patches.filter(p => p.file === file)) {
     assert.equal(controlled.split(patch.from).length, 2, 'The awards engine fault has one effective anchor');
     const before = controlled;

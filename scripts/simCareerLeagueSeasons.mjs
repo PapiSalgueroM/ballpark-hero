@@ -117,6 +117,8 @@ import { build } from 'esbuild';
 import { inverseCareerDevelopment } from './lib/careerDevelopmentAttribution1185.mjs';
 import { inverseDeckFair, DECK_FAIR_ADDITIONS } from './lib/careerDeckFair1327.mjs';
 import { inverseWorldTruth, worldTruthReceiptProblem } from './lib/careerWorldTruth1329.mjs';
+/* Round 1334: the soccer deck's three engine lines come out first, in front of Round 1329 (scripts/lib/careerSoccerDeck1334.mjs), every row once, in order. */
+import { inverseSoccerDeck, soccerDeckReceiptProblem } from './lib/careerSoccerDeck1334.mjs';
 import { AWARD_GENERATIONS_FILE, inverseAwardGenerations } from './lib/careerAwardGenerations1318.mjs';
 import { readLedgers, buildSeasons, render, identityKey as genIdentity, OUT as GEN_OUT } from './genCareerLeagueSeasons.mjs';
 import { soccerTrainOutPlugin, withoutTrainFields } from './lib/soccerTrain1178.mjs';
@@ -844,12 +846,13 @@ const futurePlugins = CONTROL === 'future' ? [controlPlugin] : [];
    and the panel read through readSrc the same way, every row of every file the bundle loads once, in order. */
 const R1329_REST = ['src/lib/soccerPhone.ts', 'src/lib/soccerArcade.ts', 'src/components/soccer-career/InternationalPanel.tsx'];
 const r1329Seen = [];
+const r1334Seen = [];
 const r1327Out = { name: 'r1327out', setup(b) {
   b.onLoad({ filter: /soccerCareerEngine\.ts$/ }, args => {
     if (!path.resolve(args.path).toLowerCase().startsWith(path.resolve(ROOT, 'src').toLowerCase())) return undefined;
     const receipts = [];
     const truth = [];
-    const src = inverseDeckFair('src/lib/soccerCareerEngine.ts', inverseWorldTruth('src/lib/soccerCareerEngine.ts', readSrc('src/lib/soccerCareerEngine.ts'), truth), receipts);
+    const src = inverseDeckFair('src/lib/soccerCareerEngine.ts', inverseWorldTruth('src/lib/soccerCareerEngine.ts', inverseSoccerDeck('src/lib/soccerCareerEngine.ts', readSrc('src/lib/soccerCareerEngine.ts'), r1334Seen), truth), receipts);
     r1329Seen.push(...truth);
     if (receipts.map(row => row.addition).join() !== DECK_FAIR_ADDITIONS.join()) { console.error('Round 1327 arm: the inverse did not apply every row once, in order'); process.exit(2); }
     for (const receipt of [...truth, ...receipts]) replayReceipt.inverses.push({ ...receipt, arm: '1327' });
@@ -869,8 +872,9 @@ const r1329RestFor = arm => ({ name: `r1329rest${arm}`, setup(b) {
 } });
 async function tree1327Out() {
   r1329Seen.length = 0;
+  r1334Seen.length = 0;
   const bundled = await bundle(ROOT, 'tree1327out', [r1327Out, r1329RestFor('1327'), controlPlugin]);
-  const problem = worldTruthReceiptProblem(r1329Seen);
+  const problem = soccerDeckReceiptProblem(r1334Seen) || worldTruthReceiptProblem(r1329Seen);
   if (problem) { console.error(`Round 1327 arm: ${problem}`); process.exit(2); }
   return bundled;
 }
@@ -883,7 +887,7 @@ const r1329Engine = { name: 'r1329engine', setup(b) {
   b.onLoad({ filter: /soccerCareerEngine\.ts$/ }, args => {
     if (!path.resolve(args.path).toLowerCase().startsWith(path.resolve(ROOT, 'src').toLowerCase())) return undefined;
     const truth = [];
-    const src = inverseWorldTruth('src/lib/soccerCareerEngine.ts', readSrc('src/lib/soccerCareerEngine.ts'), truth);
+    const src = inverseWorldTruth('src/lib/soccerCareerEngine.ts', inverseSoccerDeck('src/lib/soccerCareerEngine.ts', readSrc('src/lib/soccerCareerEngine.ts'), r1334Seen), truth);
     r1329Seen.push(...truth);
     for (const receipt of truth) replayReceipt.inverses.push({ ...receipt, arm: '1329' });
     return { contents: src, loader: 'ts' };
@@ -891,8 +895,9 @@ const r1329Engine = { name: 'r1329engine', setup(b) {
 } };
 async function tree1329Out() {
   r1329Seen.length = 0;
+  r1334Seen.length = 0;
   const bundled = await bundle(ROOT, 'tree1329out', [r1329Engine, r1329RestFor('1329'), controlPlugin]);
-  const problem = worldTruthReceiptProblem(r1329Seen);
+  const problem = soccerDeckReceiptProblem(r1334Seen) || worldTruthReceiptProblem(r1329Seen);
   if (problem) { console.error(`Round 1329 arm: ${problem}`); process.exit(2); }
   return bundled;
 }

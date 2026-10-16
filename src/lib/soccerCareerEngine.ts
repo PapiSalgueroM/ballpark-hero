@@ -182,6 +182,8 @@ import { takeFresh } from "./careerEventDeck";
 import { keyedRng } from "./keyedRng";
 import { monthAwards, monthYear, tournamentWinnerShown } from "./soccerWorldTruth";
 import { personalGoalMilestone } from "./soccerCareerMilestone";
+/* Round 1334: the lazy soccer deck, reached only through its gate (src/lib/soccerDeckGate.ts says why); inert until loaded. */
+import { soccerDeckPending, soccerDeckSlot } from "./soccerDeckGate";
 
 export interface ClubData {
   id: string;
@@ -6652,6 +6654,8 @@ export function getAllEvents(state: CareerState): RandomEvent[] {
        SPONSORSHIP_TIERS rather than being repeated at it, so moving that
        table moves the boot with it. */
     ...getBootEvents(state, (SPONSORSHIP_TIERS.find(t => t.tier === "global_ambassador")?.minFollowers ?? 15_000_000) / 1_000_000),
+    /* Round 1334: a soccer deck card waiting in the batch, so its answer finds its apply ([] unless the deck is loaded). */
+    ...soccerDeckPending(state),
   ];
 }
 
@@ -6855,6 +6859,9 @@ export function generateRandomEvents(state: CareerState): RandomEvent[] {
     const boot = all.find(e => e.id === 501);
     if (boot && !isEventOnCooldown(state, boot, season)) picked.unshift(boot);
   }
+  /* Round 1334: at most one soccer deck card a summer, from its own keyed stream, FIRST: the old batch keeps its
+     order behind it and the last card answered stays the old batch's last ([] unless the deck is loaded). */
+  picked.unshift(...soccerDeckSlot(state, season, `${soccerDeckIdentity(state)}|${season}|deckslot`, picked));
   /* Round 725: stamp the season on everything that is about to be shown.
      Every caller hands in its own shallow copy of the career, and the map is
      replaced rather than written into, so the previous state is untouched. */

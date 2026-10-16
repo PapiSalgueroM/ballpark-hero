@@ -23,9 +23,11 @@ import { deckFairPatches } from './lib/careerDeckFair1327.mjs';
    engine rows before 1327's, and its phone rows when the engine's import of the phone loads (the quiz and the
    International panel are not in this bundle). */
 import { worldTruthPatches } from './lib/careerWorldTruth1329.mjs';
+/* Round 1334: the soccer deck's three engine lines come out first, in front of Round 1329 (scripts/lib/careerSoccerDeck1334.mjs), every row once, in order. */
+import { soccerDeckPatches } from './lib/careerSoccerDeck1334.mjs';
 const deckFair1327 = () => {
   const truth = worldTruthPatches().map(row => ({ id: row.id, file: row.file, from: row.from, to: row.to }));
-  return [...truth.filter(row => row.file === 'src/lib/soccerCareerEngine.ts'), ...deckFairPatches().map(row => ({ id: row.id, file: row.file, from: row.from, to: row.to })), ...truth.filter(row => row.file === 'src/lib/soccerPhone.ts')];
+  return [...soccerDeckPatches().map(row => ({ id: row.id, file: row.file, from: row.from, to: row.to })), ...truth.filter(row => row.file === 'src/lib/soccerCareerEngine.ts'), ...deckFairPatches().map(row => ({ id: row.id, file: row.file, from: row.from, to: row.to })), ...truth.filter(row => row.file === 'src/lib/soccerPhone.ts')];
 };
 import { awardGenerationsPatches } from './lib/careerAwardGenerations1318.mjs';
 

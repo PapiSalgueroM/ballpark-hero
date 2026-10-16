@@ -15,6 +15,8 @@ import { inverseAwardGenerations, AWARD_GENERATIONS_ADDITIONS } from '../lib/car
 import { inverseDeckFair, DECK_FAIR_ADDITIONS } from '../lib/careerDeckFair1327.mjs';
 /* Round 1329: the world truth round (the month award, the phone's world, the quiz, the International panel) is taken out first, in front of Round 1327 (scripts/lib/careerWorldTruth1329.mjs), every row once, in order. */
 import { inverseWorldTruth, worldTruthReceiptProblem } from '../lib/careerWorldTruth1329.mjs';
+/* Round 1334: the soccer deck's three engine lines come out first, in front of Round 1329 (scripts/lib/careerSoccerDeck1334.mjs), every row once, in order. */
+import { inverseSoccerDeck, soccerDeckReceiptProblem } from '../lib/careerSoccerDeck1334.mjs';
 
 export const ROOT = process.cwd();
 export const BASE = '9d73ce5f261d93b73bf0993469c4fb330afa202b';
@@ -54,7 +56,7 @@ export function evidence(name, value) {
   return name;
 }
 export async function bundleInternationalReturn({ original = false, patches = [], browser = false } = {}) {
-  const deckFair = [], worldTruth = [], loaded = [], faults = [], temp = fs.mkdtempSync(path.join(os.tmpdir(), 'soccer-international-return-'));
+  const soccerDeck = [], deckFair = [], worldTruth = [], loaded = [], faults = [], temp = fs.mkdtempSync(path.join(os.tmpdir(), 'soccer-international-return-'));
   const file = path.join(temp, 'oracle.cjs');
   const entry = "export * as engine from './src/lib/soccerCareerEngine';export * as international from './src/lib/soccerInternational';export * as selection from './src/lib/soccerInternationalSquads';" + (original ? '' : "export * as comeback from './src/lib/soccerInternationalReturn';export * as moments from './src/components/soccer-career/careerMoments';");
   try {
@@ -71,7 +73,7 @@ export async function bundleInternationalReturn({ original = false, patches = []
           if (!relative.startsWith('src/')) return;
           const raw = original ? execFileSync('git', ['show', BASE + ':' + relative], { maxBuffer: 30 * 1024 * 1024 }) : fs.readFileSync(args.path);
           let contents = raw.toString('utf8').replaceAll('\r\n', '\n');
-          if (!original && !browser) contents = inverseDeckFair(relative, inverseWorldTruth(relative, contents, worldTruth), deckFair);
+          if (!original && !browser) contents = inverseDeckFair(relative, inverseWorldTruth(relative, inverseSoccerDeck(relative, contents, soccerDeck), worldTruth), deckFair);
           if (!original && !browser && relative === 'src/lib/soccerCareerEngine.ts') {
             const rows = [];
             contents = inverseAwardGenerations(relative, contents, rows);
@@ -92,6 +94,7 @@ export async function bundleInternationalReturn({ original = false, patches = []
     assert.equal(faults.length, patches.length, 'Every fault reaches its compiled product source');
     assert.deepEqual(deckFair.map(row => row.addition), original || browser ? [] : DECK_FAIR_ADDITIONS, 'Round 1327 came out of every node bundle of the tree once, in order');
     if (!original && !browser) assert.equal(worldTruthReceiptProblem(worldTruth), '', 'Round 1329 came out of every node bundle of the tree once, in order');
+    if (!original && !browser) assert.equal(soccerDeckReceiptProblem(soccerDeck), '', 'Round 1334 came out of every node bundle of the tree once, in order');
     return { value: browser ? result.outputFiles[0].text : createRequire(path.join(ROOT, 'package.json'))(file), loaded, faults };
   } finally { fs.rmSync(temp, { recursive: true, force: true }); }
 }

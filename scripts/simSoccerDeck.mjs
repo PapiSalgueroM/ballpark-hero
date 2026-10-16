@@ -1,0 +1,501 @@
+/* ─── Round 1334: Soccer Career's binding of the shared deck, proven in node ──
+
+   src/lib/soccerDeck.ts binds the shared deck (src/lib/gmInbox.ts) to Soccer
+   Career's between seasons batch: at most one card a summer, first, from its
+   own keyed stream, added and never replacing. It is lazy: the engine reaches
+   it only through src/lib/soccerDeckGate.ts, which answers [] until something
+   calls loadSoccerDeck(), and nothing in the game calls it in this round. This
+   harness bundles the head and SC_BASE (the tree the round was cut from) and
+   holds the binding to what it claims, exactly: at a deal, from the same
+   state, the old batch is the base's and the deck card is first; a neutral
+   answer changes nothing else. Nobody may report more than that.
+
+     1) BIND. The shipped pack has no problem (soccerDeckProblems, which runs
+        gmPackProblems over the soccer words first); every soccer rule is
+        refused by one breakage made in memory, each with its own message
+        (cash, popularity, karma, a desk effect, a keeper word on an outfield
+        card, an outfield word on a keeper card, a training key on a situation
+        card, a training value that is not a whole number above 0, id 650, a
+        duplicate id, a missing title, a missing kind, no neutral option,
+        wordings, a tag, a one shot, a story, a card's own chance, a pack
+        chance other than 1, an undeclared fact); and a pack with a problem
+        deals nothing where the clean pack deals.
+     2) INERT. The deck not loaded: a fleet of 200 careers (the page's ten
+        position codes and its eight eras round robin, Math.random seeded 0 to
+        199, twelve seasons, every card answered on its first option) on the
+        head and on SC_BASE: the save after every step byte equal (sha1 of its
+        JSON) and the Math.random call count equal.
+     3) ADDS, NEVER REPLACES. The deck loaded. Per deal, from one identical
+        state (each deal state of the base fleet, handed to both bundles with
+        Math.random reseeded identically just before generateRandomEvents and
+        before getAllEvents): the head's batch minus a first deck card equals
+        the base's batch (ids, order, titles, words, the choices' labels and
+        consequences), at most one deck card and only at index 0, the same
+        Math.random count, getAllEvents equal, and the stamps the base's plus
+        the deck card's own key. Then a head fleet with the deck loaded: no
+        deck card is pending at any deal, and the deck dealt cards (counted).
+     10) LAZY, the static half. The static closure (scripts/lib/
+        staticClosure.mjs) of src/pages/SoccerCareer.tsx and of the engine
+        holds soccerDeckGate.ts and none of soccerDeck.ts, src/data/
+        soccerDeck/* or gmInbox.ts; and no src file but the gate and tests
+        calls loadSoccerDeck, read as code with its comments gone.
+
+   While the shipped pack is empty, sections 1 and 3 run over a one card
+   fixture pack made in memory (FIXTURE below).
+
+   Negative controls (SIM_SOCCER_DECK_CONTROL), each asserting the text it
+   changes is in its file exactly once and refusing to run otherwise:
+     bindopen  soccerDeckProblems returns [] (soccerDeck.ts, in memory): every
+               breakage passes; section 1 fails.
+     leak      the gate's two answers read a deck the harness hands in through
+               a global, as if the ready test were forced true, over the one
+               card fixture (soccerDeckGate.ts, in memory); section 2 fails.
+     last      the engine's slot line pushes the deck card instead of putting
+               it first (in memory); section 3 fails.
+     pool      the pending reader loses its phase guard and returns every
+               card of the pack (soccerDeck.ts, in memory); section 3 fails.
+     eager     the gate gains a static import of './soccerDeck' (in memory);
+               section 10 fails.
+     caller    the page gains a call of loadSoccerDeck (in memory); section 10
+               fails.
+   Exit 0 green, 1 red (or a control that fired), 2 could not run, 3 a control
+   that did not fire.
+
+   SIM_SOCCER_DECK_SECTIONS=2,3 runs only those sections. SIM_SOCCER_DECK_BASE
+   moves SC_BASE (default e814c2de, origin/main when the round started).
+   Runtime: measured on a runner, written here at the step that adds it. */
+import './lib/offlineTransport.cjs';
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import os from 'node:os';
+import path from 'node:path';
+import { execFileSync } from 'node:child_process';
+import { createHash } from 'node:crypto';
+import { fileURLToPath, pathToFileURL } from 'node:url';
+import * as esbuild from 'esbuild';
+import { staticClosure, codeOf } from './lib/staticClosure.mjs';
+
+const T0 = Date.now();
+const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+const BASE = process.env.SIM_SOCCER_DECK_BASE || 'e814c2def671e07bd6163462dff8ab1230be2000';
+const ENGINE = 'src/lib/soccerCareerEngine.ts';
+const GATE = 'src/lib/soccerDeckGate.ts';
+const DECK = 'src/lib/soccerDeck.ts';
+const PAGE = 'src/pages/SoccerCareer.tsx';
+const CONTROL = process.env.SIM_SOCCER_DECK_CONTROL || '';
+const SECTIONS = (process.env.SIM_SOCCER_DECK_SECTIONS || '').split(',').filter(Boolean);
+/* A control runs only the section it breaks, unless SIM_SOCCER_DECK_SECTIONS names others. */
+const runs = n => (SECTIONS.length ? SECTIONS.includes(String(n)) : !CONTROL || CONTROLS[CONTROL]?.breaks === String(n));
+const TMP = fs.mkdtempSync(path.join(os.tmpdir(), 'soccer-deck-'));
+process.on('exit', () => { try { fs.rmSync(TMP, { recursive: true, force: true }); } catch { /* best effort */ } });
+const secs = () => ((Date.now() - T0) / 1000).toFixed(1);
+const lf = t => t.split('\r\n').join('\n');
+const readSrc = rel => lf(fs.readFileSync(path.join(ROOT, rel), 'utf8'));
+const copy = v => JSON.parse(JSON.stringify(v));
+const sha1 = t => createHash('sha1').update(t).digest('hex');
+
+let SECTION = '';
+const red = new Set();
+let failures = 0;
+const fail = msg => { failures += 1; red.add(SECTION); console.error(`   FAIL ${msg}`); };
+const ok = msg => console.log(`   ok ${msg}`);
+
+/* ─── the controls: one in memory edit each ───────────────────────────── */
+
+const CONTROLS = {
+  bindopen: { breaks: '1', file: DECK, edits: [['export function soccerDeckProblems(pack: SoccerDeckPack): string[] {\n', 'export function soccerDeckProblems(pack: SoccerDeckPack): string[] {\n  if (pack) return []; /* bindopen control */\n']] },
+  leak: { breaks: '2', file: GATE, edits: [
+    ['  return DECK ? DECK.pendingSoccerDeck(state) : [];', '  const d = DECK ?? (globalThis as { __sdLeak?: SoccerDeckModule }).__sdLeak; return d ? d.pendingSoccerDeck(state) : []; /* leak control */'],
+    ['  return DECK ? DECK.dealSoccerDeck(state, season, key, taken) : [];', '  const d = DECK ?? (globalThis as { __sdLeak?: SoccerDeckModule }).__sdLeak; return d ? d.dealSoccerDeck(state, season, key, taken) : []; /* leak control */']] },
+  last: { breaks: '3', file: ENGINE, edits: [['  picked.unshift(...soccerDeckSlot(state, season, `${soccerDeckIdentity(state)}|${season}|deckslot`, picked));', '  picked.push(...soccerDeckSlot(state, season, `${soccerDeckIdentity(state)}|${season}|deckslot`, picked)); /* last control */']] },
+  pool: { breaks: '3', file: DECK, edits: [["  if (state.phase !== 'random_events' || problemsOf(pack).length > 0) return [];\n", '  return deckToRandomEvents(pack, pack.events); /* pool control */\n']] },
+  eager: { breaks: '10', file: GATE, edits: null },
+  caller: { breaks: '10', file: PAGE, edits: null },
+};
+if (CONTROL && !CONTROLS[CONTROL]) { console.error(`SIM_SOCCER_DECK_CONTROL=${CONTROL} is not a control this harness knows`); process.exit(2); }
+const swapped = new Map();
+if (CONTROL && CONTROLS[CONTROL].edits) {
+  const { file, edits } = CONTROLS[CONTROL];
+  let src = readSrc(file);
+  for (const [from, to] of edits) {
+    const hits = src.split(from).length - 1;
+    if (hits !== 1) { console.error(`${CONTROL} control: its text is in ${file} ${hits} times, not once, refusing to run`); process.exit(2); }
+    src = src.replace(from, () => to);
+  }
+  swapped.set(file, src);
+}
+if (CONTROL) console.log(`NEGATIVE CONTROL ON: ${CONTROL} (section ${CONTROLS[CONTROL].breaks} must fail)`);
+
+/* ─── bundle ───────────────────────────────────────────────────────────── */
+
+/* One mark in every copy of the engine, base and head alike, which draws
+   nothing: generateRandomEvents hands its state to a hook, so a drive knows
+   the exact state each deal starts from. It must find its line once. */
+const MARK = ['export function generateRandomEvents(state: CareerState): RandomEvent[] {\n',
+  'export function generateRandomEvents(state: CareerState): RandomEvent[] {\n  (globalThis as { __sdDeal?: (s: CareerState) => void }).__sdDeal?.(state);\n'];
+async function bundle(tag, { ref = null } = {}) {
+  let marked = 0;
+  const plugin = { name: 'soccer-deck-source', setup(b) {
+    b.onLoad({ filter: /\.(ts|tsx)$/ }, args => {
+      const rel = path.relative(ROOT, args.path).split(path.sep).join('/');
+      if (!rel.startsWith('src/')) return undefined;
+      let source = ref
+        ? lf(execFileSync('git', ['show', `${ref}:${rel}`], { cwd: ROOT, encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 }))
+        : (swapped.get(rel) ?? readSrc(rel));
+      if (rel === ENGINE) {
+        assert.equal(source.split(MARK[0]).length - 1, 1, 'the harness mark finds generateRandomEvents exactly once');
+        source = source.replace(MARK[0], () => MARK[1]);
+        marked += 1;
+      }
+      return { contents: source, loader: rel.endsWith('.tsx') ? 'tsx' : 'ts', resolveDir: path.dirname(args.path) };
+    });
+  } };
+  const out = path.join(TMP, `${tag}.mjs`);
+  const entry = ref ? "export * as engine from './src/lib/soccerCareerEngine';"
+    : ["export * as engine from './src/lib/soccerCareerEngine';", "export * as gate from './src/lib/soccerDeckGate';",
+      "export * as deck from './src/lib/soccerDeck';", "export { SOCCER_DECK_PACKS } from './src/data/soccerDeck';",
+      "export * as words from './src/data/soccerDeck/words';"].join('\n');
+  await esbuild.build({
+    stdin: { contents: entry, resolveDir: ROOT, loader: 'ts' },
+    bundle: true, format: 'esm', platform: 'node', outfile: out, logLevel: 'error',
+    alias: { '@': path.join(ROOT, 'src') }, plugins: [plugin],
+    define: { 'import.meta.env': '{"DEV":false,"PROD":true,"MODE":"production"}' },
+  });
+  assert.equal(marked, 1, `the ${tag} bundle loaded the engine exactly once`);
+  return import(pathToFileURL(out).href);
+}
+
+const store = new Map();
+globalThis.localStorage = {
+  getItem: k => (store.has(k) ? store.get(k) : null), setItem: (k, v) => { store.set(k, String(v)); },
+  removeItem: k => { store.delete(k); }, key: i => [...store.keys()][i] ?? null, get length() { return store.size; }, clear: () => store.clear(),
+};
+const H = await bundle('head');
+const B = await bundle('base', { ref: BASE });
+const SHIPPED = H.SOCCER_DECK_PACKS.soccer;
+console.log(`simSoccerDeck: head and base ${BASE.slice(0, 8)} bundled (${secs()} s); the shipped pack holds ${SHIPPED.events.length} cards${CONTROL ? `, CONTROL=${CONTROL}` : ''}`);
+
+/* A one card pack for the sections that need a card while the shipped pack is
+   empty: a situation card every group can be dealt, one option that moves
+   morale and integrity and one that moves nothing. Never shipped. */
+const FIXTURE_CARD = {
+  id: '799', beat: 'summer', from: 'The coaching staff', emoji: '🧪', cooldown: 1,
+  text: 'The coaching staff want a word about preseason.',
+  choices: [
+    { label: 'Come in early', reply: 'You come in early.', karma: 0, morale: -1, fx: { integrity: 1 } },
+    { label: 'Come in on the usual day', reply: 'You come in with everyone else.', karma: 0 },
+  ],
+};
+const FIXTURE = (() => {
+  const p = { ...SHIPPED, events: [FIXTURE_CARD], titles: { 799: 'A word about preseason' }, kinds: { 799: 'positive' } };
+  delete p.pressure;
+  return p;
+})();
+/* The pack the deal sections use: the shipped one once it has cards. */
+const PACK = SHIPPED.events.length > 0 ? SHIPPED : FIXTURE;
+const moduleFor = pack => ({ ...H.deck,
+  dealSoccerDeck: (s, season, key, taken) => H.deck.dealFromPack(pack, s, season, key, taken),
+  pendingSoccerDeck: s => H.deck.pendingFromPack(pack, s) });
+
+/* ─── seeded streams and the fleet ─────────────────────────────────────── */
+
+const seeded = seed => {
+  let a = seed >>> 0;
+  return () => {
+    a = (a + 0x6D2B79F5) >>> 0;
+    let t = a;
+    t = Math.imul(t ^ (t >>> 15), t | 1);
+    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+};
+const hashInt = key => parseInt(sha1(key).slice(0, 8), 16);
+/** fn under a counted Math.random drawn from `stream`. */
+function withStream(fn, stream) {
+  const real = Math.random;
+  let calls = 0;
+  Math.random = () => { calls += 1; return stream(); };
+  try { return { value: fn(), calls }; } finally { Math.random = real; }
+}
+
+/* The page's ten position codes and eight eras (src/pages/SoccerCareer.tsx POSITIONS and ERAS). */
+const CODES = ['GK', 'CB', 'LB', 'RB', 'CDM', 'CM', 'CAM', 'LW', 'RW', 'ST'];
+const ERAS = [['1990-94', 1990], ['1995-99', 1995], ['2000-04', 2000], ['2005-09', 2005], ['2010-14', 2010], ['2015-19', 2015], ['2020-24', 2020], ['2025', 2025]];
+const NATIONS = ['England', 'Brazil', 'France', 'Spain', 'Nigeria', 'Argentina', 'Japan', 'Norway', 'Morocco'];
+const FLEET = 200;
+const SEASONS = 12;
+const stats = o => ({ pace: o, shooting: o, passing: o, dribbling: o, defending: o, physical: o, reflexes: o });
+const startOf = (M, seed) => {
+  const [era, year] = ERAS[seed % ERAS.length];
+  const ovr = 45 + (seed % 25);
+  return M.initCareer(`Deck ${seed}`, NATIONS[seed % NATIONS.length], CODES[seed % CODES.length], era, stats(ovr), ovr, year, M.FALLBACK_CLUBS, null);
+};
+
+/** One move of the drive's policy, the same for every bundle: every card on its first option. */
+function step(M, s, seed, clubs) {
+  switch (s.phase) {
+    case 'youth': return M.advanceYouthYear(s, clubs);
+    case 'contract_offer': { const o = (s.pendingOffers || []).find(x => x.isHomegrown) || (s.pendingOffers || [])[0]; return o ? M.acceptOffer(s, o) : { ...s, phase: 'playing' }; }
+    case 'playing': return M.advanceProSeason(s, clubs);
+    case 'newspaper': return M.dismissNewspaper(s);
+    case 'season_summary': return M.dismissSummary(s, clubs);
+    case 'rehab_choice': return M.applyRehabChoice(s, seed % 3);
+    case 'random_events': return s.pendingEvents && s.pendingEvents[0] ? M.applyEventChoice(s, 0, clubs) : { ...s, pendingEvents: [], phase: 'playing' };
+    case 'moral_dilemma': return M.dismissMoralDilemma(s, clubs);
+    case 'social_media_action': {
+      let t = M.dismissSocialMediaPhase(s, clubs);
+      if (t.phase === 'social_media_action') t = M.dismissSocialMediaPhase(t, clubs);
+      return t;
+    }
+    case 'red_card_appeal_result': return M.dismissAppealResult(s, clubs);
+    case 'international_debut': return M.dismissDebut(s, clubs);
+    case 'world_cup': return M.dismissWorldCup(s, clubs);
+    case 'rivalry_event': return M.dismissRivalryEvent(s, clubs);
+    case 'ballon_dor': return M.dismissBallonDor(s, clubs);
+    case 'transfer_window': {
+      const sit = s.transferSituation;
+      if (!sit || sit.type === 'no_interest') return M.stayAtClub(s);
+      if (sit.type === 'one_offer') return seed % 2 === 0 ? M.acceptOffer(s, sit.offer) : M.stayAtClub(s);
+      if (sit.type === 'bidding_war') return M.acceptOffer(s, sit.offerA);
+      if (sit.type === 'dream_club') return M.acceptOffer(s, sit.offer);
+      if (sit.type === 'contract_expiry') { const o = (sit.offers || []).find(x => x.isHomegrown) || (sit.offers || [])[0]; return o ? M.acceptOffer(s, o) : M.stayAtClub(s); }
+      if (sit.type === 'request_result') return sit.offer ? M.acceptOffer(s, sit.offer) : M.stayAtClub(s);
+      return M.stayAtClub(s);
+    }
+    case 'retirement_suggestion': return M.acceptRetirementSuggestion(s);
+    default: return null;
+  }
+}
+
+/**
+ * One career of the fleet on one bundle, Math.random seeded from its seed, twelve seasons (or retirement).
+ * `onStep(s)` sees the save after every step; `onDeal(state)` sees the exact state each deal starts from.
+ */
+function drive(M, seed, { onStep = null, onDeal = null } = {}) {
+  const real = Math.random;
+  let calls = 0;
+  const stream = seeded(seed + 1);
+  Math.random = () => { calls += 1; return stream(); };
+  globalThis.__sdDeal = onDeal ? st => onDeal(copy(st)) : undefined;
+  let steps = 0;
+  try {
+    const clubs = M.FALLBACK_CLUBS;
+    let s = startOf(M, seed);
+    onStep?.(s);
+    for (let guard = 0; guard < 600 && !s.retired; guard += 1) {
+      if (s.phase === 'playing' && s.seasons.length >= SEASONS) break;
+      const next = step(M, s, seed, clubs);
+      if (!next) break;
+      s = next;
+      steps += 1;
+      onStep?.(s);
+    }
+    return { s, calls, steps };
+  } finally { Math.random = real; globalThis.__sdDeal = undefined; }
+}
+const isDeck = id => typeof id === 'number' && id >= 700 && id <= 999;
+
+/* ─── 1. the bind check ────────────────────────────────────────────────── */
+
+SECTION = '1';
+console.log('1) Bind: the shipped pack has no problem, every soccer rule is refused with its own message, and a pack with a problem deals nothing');
+if (runs(1)) {
+  const D = H.deck;
+  const shipped = D.soccerDeckProblems(SHIPPED);
+  if (shipped.length) fail(`the shipped pack has ${shipped.length} problems: ${shipped.slice(0, 3).join('; ')}`);
+  else ok(`the shipped pack (${SHIPPED.events.length} cards) has no problem`);
+  /* the breakages' base: the deal sections' pack plus a keeper and a forward training card made here */
+  const KEEPER = { id: '798', beat: 'summer', from: 'Your keeper coach', emoji: '🧤', cooldown: 3, when: [{ fact: 'pos', op: '<', value: 1 }], text: 'Crosses.',
+    choices: [{ label: 'Work on it', reply: 'You work on it.', karma: 0, fx: { gk_aerial_command: 1 } }, { label: 'Leave it', reply: 'You leave it.', karma: 0 }] };
+  const FORWARD = { id: '797', beat: 'summer', from: 'The coaching staff', emoji: '⚽', cooldown: 3, when: [{ fact: 'pos', op: '>=', value: 3 }], text: 'Penalties.',
+    choices: [{ label: 'Put your name down', reply: 'You put your name down.', karma: 0, fx: { t_shooting: 1 } }, { label: 'Leave it', reply: 'You leave it.', karma: 0 }] };
+  const BB = { ...PACK, events: [...PACK.events, KEEPER, FORWARD], titles: { ...PACK.titles, 797: 'Penalties', 798: 'Crosses' }, kinds: { ...PACK.kinds, 797: 'positive', 798: 'positive' } };
+  delete BB.pressure;
+  const situation = BB.events.find(e => !(e.when ?? []).some(c => c.fact === 'pos'));
+  const at = (id, patch) => ({ ...BB, events: BB.events.map(e => (e.id === id ? { ...e, ...patch } : e)) });
+  const opt = (id, patch) => at(id, { choices: BB.events.find(e => e.id === id).choices.map((c, i) => (i === 0 ? { ...c, ...patch } : c)) });
+  const without = (book, id) => { const o = { ...book }; delete o[id]; return o; };
+  const BREAKAGES = {
+    cash: opt('797', { cash: 1 }), popularity: opt('797', { popularity: 1 }), karma: opt('797', { karma: 1 }), desk: opt('797', { recruit: 1 }),
+    'a keeper word on an outfield card': opt('797', { fx: { gk_reflexes: 1 } }),
+    'an outfield word on a keeper card': opt('798', { fx: { t_shooting: 1 } }),
+    'a training key on a situation card': opt(situation.id, { fx: { t_pace: 1 } }),
+    'a training value of 0.5': opt('797', { fx: { t_shooting: 0.5 } }),
+    'id 650': { ...BB, events: BB.events.map(e => (e.id === '797' ? { ...e, id: '650' } : e)), titles: { ...BB.titles, 650: 'x' }, kinds: { ...BB.kinds, 650: 'positive' } },
+    'a duplicate id': { ...BB, events: [...BB.events, FORWARD] },
+    'a missing title': { ...BB, titles: without(BB.titles, '797') },
+    'a missing kind': { ...BB, kinds: without(BB.kinds, '797') },
+    'no neutral option': at('797', { choices: [FORWARD.choices[0]] }),
+    wordings: at('797', { texts: ['Another wording.'] }), tag: at('797', { tag: 'conduct', subject: 'x' }), 'a one shot': at('797', { oneShot: true }),
+    story: at('797', { story: 'penalties' }), "a card's own chance": at('797', { chance: 0.3 }), 'a pack chance of 0.5': { ...BB, chance: 0.5 },
+    'an undeclared fact': at('797', { when: [{ fact: 'mood', op: '>', value: 1 }] }),
+  };
+  const clean = D.soccerDeckProblems(BB);
+  if (clean.length) fail(`the breakages' base has problems of its own: ${clean.slice(0, 3).join('; ')}`);
+  const cleanSet = new Set(clean);
+  const seen = new Map();
+  for (const [name, pack] of Object.entries(BREAKAGES)) {
+    const fresh = D.soccerDeckProblems(pack).filter(p => !cleanSet.has(p));
+    if (fresh.length === 0) { fail(`${name}: the bind check passes it`); continue; }
+    const words = fresh.join(' | ');
+    if (seen.has(words)) fail(`${name} is refused with the same words as ${seen.get(words)}`);
+    seen.set(words, name);
+  }
+  if (!red.has('1')) ok(`${Object.keys(BREAKAGES).length} breakages, each refused with its own message`);
+  /* a pack with a problem deals nothing where the clean pack deals */
+  const st = withStream(() => startOf(H.engine, 3), seeded(3)).value;
+  const row = { ...(st.seasons[0] ?? {}), year: 2010, age: 24, club: 'Deck Albion', clubCountry: 'England', clubTier: 2, type: 'playing', apps: 30, goals: 5, assists: 2, cleanSheets: 0, yellowCards: 1, redCards: 0, rating: 7, intApps: 0 };
+  const career = { ...st, position: 'ST', age: 24, currentClub: 'Deck Albion', currentClubTier: 2, seasons: [row], overall: 70, potential: 85, statBoostNextSeason: {}, eventLastFired: {}, lastEventId: null, pendingEvents: [], retired: false };
+  const dealtClean = Array.from({ length: 20 }, (_, i) => D.dealFromPack(BB, copy(career), 2010, `bind|${i}`, []).length).reduce((a, b) => a + b, 0);
+  const dealtBroken = Array.from({ length: 20 }, (_, i) => D.dealFromPack(BREAKAGES['a pack chance of 0.5'], copy(career), 2010, `bind|${i}`, []).length).reduce((a, b) => a + b, 0);
+  if (dealtClean === 0) fail('the clean pack dealt nothing to the probe career, so the fail closed check proves nothing');
+  else if (dealtBroken !== 0) fail(`a pack with a problem dealt ${dealtBroken} cards`);
+  else ok(`the clean pack dealt ${dealtClean} of 20 keys, the same pack with a problem none`);
+}
+
+/* ─── 2. inert until loaded ────────────────────────────────────────────── */
+
+SECTION = '2';
+console.log(`2) Inert: the deck not loaded, ${FLEET} careers of ${SEASONS} seasons, every save byte equal to the base's after every step and the Math.random count equal`);
+if (runs(2)) {
+  if (H.gate.soccerDeckReady()) fail('the deck is loaded before section 2 runs');
+  if (CONTROL === 'leak') globalThis.__sdLeak = moduleFor(FIXTURE);
+  let steps = 0, differ = 0, callsDiffer = 0, calls = 0;
+  const firsts = [];
+  for (let seed = 0; seed < FLEET; seed += 1) {
+    const hs = [], bs = [];
+    const h = drive(H.engine, seed, { onStep: s => hs.push(sha1(JSON.stringify(s))) });
+    const b = drive(B.engine, seed, { onStep: s => bs.push(sha1(JSON.stringify(s))) });
+    steps += bs.length;
+    calls += b.calls;
+    let i = 0;
+    while (i < Math.max(hs.length, bs.length) && hs[i] === bs[i]) i += 1;
+    if (i < Math.max(hs.length, bs.length)) { differ += 1; if (firsts.length < 3) firsts.push(`career ${seed} (${CODES[seed % CODES.length]}, ${ERAS[seed % ERAS.length][0]}) from step ${i}`); }
+    if (h.calls !== b.calls) callsDiffer += 1;
+  }
+  delete globalThis.__sdLeak;
+  console.log(`   ${FLEET} careers, ${steps} saves compared, ${calls} Math.random calls on the base`);
+  if (steps < FLEET * 20) fail(`only ${steps} saves compared: the fleet drove almost nothing`);
+  if (differ) fail(`${differ} careers part from the base: ${firsts.join('; ')}`);
+  if (callsDiffer) fail(`${callsDiffer} careers draw Math.random a different number of times`);
+  if (!differ && !callsDiffer) ok('every save after every step byte equal to the base, and every career\'s Math.random count equal');
+}
+
+/* ─── 3. adds, never replaces ──────────────────────────────────────────── */
+
+SECTION = '3';
+console.log('3) Adds, never replaces: at each deal, from one identical state, the old batch is the base\'s and a deck card is first');
+const view = batch => batch.map(e => ({ id: e.id, title: e.title, description: e.description, category: e.category, cooldown: e.cooldown, story: e.story,
+  choices: (e.choices || []).map(c => ({ label: c.label, consequence: c.consequence, emoji: c.emoji, color: c.color })) }));
+if (runs(3)) {
+  H.gate.setSoccerDeckLoader(async () => moduleFor(PACK));
+  await H.gate.loadSoccerDeck();
+  if (!H.gate.soccerDeckReady()) fail('the deck did not load');
+  let deals = 0, dealt = 0, apart = 0, notFirst = 0, many = 0, callsApart = 0, poolApart = 0, stampsApart = 0;
+  const firsts = [];
+  const note = m => { if (firsts.length < 4) firsts.push(m); };
+  for (let seed = 0; seed < FLEET; seed += 1) {
+    const states = [];
+    drive(B.engine, seed, { onDeal: st => states.push(st) });
+    states.forEach((st, k) => {
+      if (st.age < 17) return;
+      deals += 1;
+      const key = `${seed}|${k}`;
+      const run = M => withStream(() => { const s2 = copy(st); const batch = view(M.engine.generateRandomEvents(s2)); return { batch, stamps: s2.eventLastFired ?? {} }; }, seeded(hashInt(key)));
+      const h = run(H), b = run(B);
+      const deckAt = h.value.batch.map((e, i) => (isDeck(e.id) ? i : -1)).filter(i => i >= 0);
+      if (deckAt.length > 1) { many += 1; note(`career ${seed} deal ${k}: ${deckAt.length} deck cards`); }
+      if (deckAt.some(i => i !== 0)) { notFirst += 1; note(`career ${seed} deal ${k}: a deck card at index ${deckAt.find(i => i !== 0)}`); }
+      const rest = deckAt[0] === 0 ? h.value.batch.slice(1) : h.value.batch;
+      if (deckAt[0] === 0) dealt += 1;
+      if (JSON.stringify(rest.filter(e => !isDeck(e.id))) !== JSON.stringify(b.value.batch) || rest.some(e => isDeck(e.id))) { apart += 1; note(`career ${seed} deal ${k}: the old batch ${b.value.batch.map(e => e.id).join(',')} became ${h.value.batch.map(e => e.id).join(',')}`); }
+      if (h.calls !== b.calls) { callsApart += 1; note(`career ${seed} deal ${k}: ${h.calls} Math.random calls against ${b.calls}`); }
+      const want = deckAt[0] === 0 ? { ...b.value.stamps, [String(h.value.batch[0].id)]: st.seasons[st.seasons.length - 1]?.year ?? 0 } : b.value.stamps;
+      const sorted = o => JSON.stringify(Object.keys(o).sort().map(x => [x, o[x]]));
+      if (sorted(h.value.stamps) !== sorted(want)) { stampsApart += 1; note(`career ${seed} deal ${k}: the stamps are not the base's plus the deck card's`); }
+      const all = M => withStream(() => view(M.engine.getAllEvents(copy(st))), seeded(hashInt(`${key}|all`)));
+      const ha = all(H), ba = all(B);
+      if (JSON.stringify(ha.value) !== JSON.stringify(ba.value) || ha.calls !== ba.calls) { poolApart += 1; note(`career ${seed} deal ${k}: getAllEvents differs (${ha.value.length} cards against ${ba.value.length})`); }
+    });
+  }
+  console.log(`   ${deals} deals compared from the base fleet's own states; a deck card dealt at ${dealt} (${(100 * dealt / Math.max(1, deals)).toFixed(1)}%)`);
+  for (const m of firsts) console.error(`     ${m}`);
+  if (deals < FLEET * 5) fail(`only ${deals} deals compared`);
+  if (dealt === 0) fail('the deck dealt no card at any deal, so nothing here was proven');
+  if (many) fail(`${many} deals hold more than one deck card`);
+  if (notFirst) fail(`${notFirst} deals hold a deck card that is not first`);
+  if (apart) fail(`${apart} deals change the old batch`);
+  if (callsApart) fail(`${callsApart} deals draw Math.random a different number of times`);
+  if (stampsApart) fail(`${stampsApart} deals stamp something other than the base's stamps plus the deck card's`);
+  if (poolApart) fail(`${poolApart} deals read a different catalog (getAllEvents)`);
+  if (!many && !notFirst && !apart && !callsApart && !stampsApart && !poolApart && dealt) ok('at every deal the old batch is the base\'s (ids, order, words), the deck card is first, the draws and the catalog are the base\'s, the stamps the base\'s plus the deck card\'s');
+  /* and a head fleet with the deck loaded: no deck card is ever pending at a deal */
+  let pendingAtDeal = 0, headDeals = 0, headDealt = 0;
+  for (let seed = 0; seed < FLEET; seed += 1) {
+    let prev = '';
+    drive(H.engine, seed, {
+      onDeal: st => { headDeals += 1; if ((st.pendingEvents || []).some(e => isDeck(e.id))) pendingAtDeal += 1; },
+      onStep: s => { if (s.phase === 'random_events' && prev !== 'random_events' && isDeck(s.pendingEvents?.[0]?.id)) headDealt += 1; prev = s.phase; },
+    });
+  }
+  console.log(`   a head fleet with the deck loaded: ${headDeals} deals, ${headDealt} batches opening on a deck card`);
+  if (headDealt === 0) fail('the loaded head fleet was dealt no deck card');
+  if (pendingAtDeal) fail(`${pendingAtDeal} deals start with a deck card still pending`);
+  else ok('no deck card is pending at any deal of the loaded head fleet');
+  H.gate.setSoccerDeckLoader();
+}
+
+/* ─── 10. lazy, the static half ────────────────────────────────────────── */
+
+SECTION = '10';
+console.log('10) Lazy: the page and the engine reach the gate and nothing of the deck, and nothing but the gate and tests loads it');
+if (runs(10)) {
+  const gateAbs = path.join(ROOT, GATE);
+  const override = {};
+  if (CONTROL === 'eager') {
+    const text = readSrc(GATE);
+    if (text.includes("import './soccerDeck';")) { console.error('eager control: the gate already imports the deck statically, refusing to run'); process.exit(2); }
+    override[gateAbs] = `import './soccerDeck';\n${text}`;
+  }
+  for (const entry of [PAGE, ENGINE]) {
+    const closure = staticClosure(ROOT, entry, override);
+    const leaked = [...closure].filter(f => f === DECK || f.startsWith('src/data/soccerDeck/') || f === 'src/lib/gmInbox.ts');
+    if (!closure.has(GATE)) fail(`${entry}'s static closure (${closure.size} files) does not hold the gate`);
+    if (leaked.length) fail(`${entry}'s static closure holds ${leaked.join(', ')}`);
+    else ok(`${entry}: ${closure.size} files load with it, the gate among them, and none of the deck`);
+  }
+  const walk = dir => fs.readdirSync(path.join(ROOT, dir), { withFileTypes: true }).flatMap(d => (d.isDirectory() ? walk(`${dir}/${d.name}`)
+    : /\.(ts|tsx)$/.test(d.name) ? [`${dir}/${d.name}`] : []));
+  const files = walk('src');
+  const isTest = f => /\.test\.tsx?$/.test(f) || f.startsWith('src/test/');
+  if (CONTROL === 'caller' && !files.includes(PAGE)) { console.error('caller control: the page is gone, refusing to run'); process.exit(2); }
+  const callers = [];
+  let read = 0;
+  for (const f of files) {
+    if (f === GATE || isTest(f)) continue;
+    read += 1;
+    let text = readSrc(f);
+    if (CONTROL === 'caller' && f === PAGE) text = `${text}\nvoid loadSoccerDeck();\n`;
+    if (!text.includes('loadSoccerDeck')) continue;
+    if (/\bloadSoccerDeck\s*\(/.test(codeOf(path.join(ROOT, f), text))) callers.push(f);
+  }
+  if (read < 500) fail(`only ${read} src files read: the caller check saw nothing`);
+  if (callers.length) fail(`${callers.length} src files call loadSoccerDeck: ${callers.join(', ')}`);
+  else ok(`${read} src files read as code: nothing but the gate and tests calls loadSoccerDeck`);
+}
+
+/* ─── the verdict ──────────────────────────────────────────────────────── */
+
+console.log('');
+console.log(`runtime ${secs()} s`);
+if (CONTROL) {
+  const breaks = CONTROLS[CONTROL].breaks;
+  if (red.has(breaks)) { console.error(`simSoccerDeck: CONTROL=${CONTROL} FIRED: section ${breaks} failed (${failures} failures, red sections ${[...red].join(', ')})`); process.exit(1); }
+  console.error(`simSoccerDeck: CONTROL=${CONTROL} did NOT fire: section ${breaks} stayed green, which is itself a failure of the control`);
+  process.exit(3);
+}
+if (failures > 0) {
+  console.error(`simSoccerDeck: ${failures} failure${failures === 1 ? '' : 's'}, red sections ${[...red].join(', ')}`);
+  process.exit(1);
+}
+console.log(`simSoccerDeck: green.${SECTIONS.length ? ` Sections ${SECTIONS.join(', ')} only.` : ' Every section.'}`);
