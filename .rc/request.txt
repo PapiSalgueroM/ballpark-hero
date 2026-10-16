@@ -1,0 +1,10 @@
+#!serve
+#!playwright
+playSeasonMoments: PORT=4604 ENGINES=chromium node scripts/playSeasonMoments.mjs 2>&1 | tail -40; exit ${PIPESTATUS[0]}
+playCareerLeagueWorld: PORT=4605 ENGINES=chromium node scripts/playCareerLeagueWorld.mjs 2>&1 | tail -40; exit ${PIPESTATUS[0]}
+offerReview1082: node scripts/playSoccerOfferReview1082.mjs 2>&1 | tail -40; exit ${PIPESTATUS[0]}
+playCareerMoments: PORT=4606 ENGINES=chromium node scripts/playCareerMoments.mjs 2>&1 | tail -40; exit ${PIPESTATUS[0]}
+playSoccerCareer: PORT=4607 ENGINES=chromium node scripts/playSoccerCareer.mjs 2>&1 | tail -40; exit ${PIPESTATUS[0]}
+playSoccerLanding: SOCCER_LANDING_HEAD_ONLY=1 RC_OUT=$RC_OUT/land ENGINES=chromium node scripts/playSoccerLanding.mjs 2>&1 | tail -40; exit ${PIPESTATUS[0]}
+playStartingXi: ENGINES=chromium node scripts/playStartingXi.mjs 2>&1 | tail -40; exit ${PIPESTATUS[0]}
+playCareerProgramme: mkdir -p career-programme-artifacts && git rev-parse HEAD > career-programme-artifacts/source-head.txt && git rev-parse HEAD^{tree} > career-programme-artifacts/source-tree.txt && node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only > /dev/null 2>&1; NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerProgramme.mjs > /tmp/simprog.log 2>&1; echo "simCareerProgramme exit $?: $(tail -1 /tmp/simprog.log)"; NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" ENGINES=chromium node scripts/playCareerProgramme.mjs 2>&1 | tail -30; exit ${PIPESTATUS[0]}
