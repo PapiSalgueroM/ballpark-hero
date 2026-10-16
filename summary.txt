@@ -1,0 +1,128 @@
+build exit=0 24s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+playCmQuickSubs exit=0 11s | playCmQuickSubs: 3 viewports, 2 actual saved fixtures, 6 settled reports, 3 effective controls, zero external forwarding; source held.
+simDailyDeals-bind-EXPECT-RED exit=1 2s | simDailyDeals: CONTROL bind FIRED: its 5 Premier League dates went red (2026-10-27, 2026-11-14, 2027-01-19, 2027-01-30, 2027-02-06) and no other date moved
+simDailyDeals-binddeadline-EXPECT-RED exit=1 2s | simDailyDeals: CONTROL binddeadline FIRED: its 3 Premier League dates went red (2026-10-18, 2026-11-01, 2026-11-09) and no other date moved
+playSaveKeeper exit=0 817s | playSaveKeeper: green. A save put back with a game in memory survives the load, and an ordinary visit stores nothing new beyond the 2 key(s) named in KEYS_ADDED_ON_PURPOS
+controlFrontOfficeBoard exit=0 480s | blank exit 1 (1 means the control fired)
+ctl-facts-onesource exit=0 1s | simCmLeagueBookFacts control onesource: FIRED (Premier League 2015-16 topScorerGoals is THIN (premierleague), length USED (premierleague, rsssf), and the cell is not name
+ctl-facts-disagree exit=0 1s | simCmLeagueBookFacts control disagree: FIRED (Premier League 2015-16 topScorerGoals is DISPUTED (premierleague, mykhel), length USED (premierleague, rsssf), and the cell 
+ctl-slots-dupe exit=0 37s | CONTROL FIRED: SLOTS_CONTROL=dupe turned section 2 red through its budget check (red sections: 2, 3), as it must
+ctl-safari-lookbehind exit=0 1s | simSafari: control lookbehind FIRED: section 2 failed on src/__control__/lookbehind.ts (0 other failures in the run)
+ctl-safari-testimport exit=0 1s | simSafari: control testimport FIRED: section 0 failed on src/__control__/testimport.ts (0 other failures in the run)
+ctl-safari-barevh exit=0 1s | simSafari: control barevh FIRED: section 4 failed on src/__control__/barevh.css (0 other failures in the run)
+ctl-safari-vhafter exit=0 1s | simSafari: control vhafter FIRED: section 4 failed on src/__control__/vhafter.css (0 other failures in the run)
+ctl-safari-dvhcomment exit=0 1s | simSafari: control dvhcomment FIRED: section 4 failed on src/__control__/dvhcomment.css (0 other failures in the run)
+ctl-safari-customprop exit=0 1s | simSafari: control customprop FIRED: section 4 failed on src/__control__/customprop.css (0 other failures in the run)
+ctl-safari-lvhafter exit=0 1s | simSafari: control lvhafter FIRED: section 4 failed on src/__control__/lvhafter.css (0 other failures in the run)
+ctl-activity-career exit=0 4s | control "career": 2 failure(s) fired in section 2 as expected, the check works
+ctl-activity-heavy exit=0 3s | control "heavy": 1 failure(s) fired in section 3 as expected, the check works
+ctl-activity-match exit=0 3s | control "match": 2 failure(s) fired in section 1 as expected, the check works
+ctl-activity-noping exit=0 3s | control "noping": 1 failure(s) fired in section 2 as expected, the check works
+ctl-activity-twocalls exit=0 3s | control "twocalls": 1 failure(s) fired in section 2 as expected, the check works
+ctl-activity-twodotted exit=0 3s | control "twodotted": 1 failure(s) fired in section 2 as expected, the check works
+ctl-gmxp-claim exit=0 1s | simGmXp: 1 failure(s) under GMXP_CONTROL=claim
+ctl-gmxp-curvestep exit=0 1s | simGmXp: 6 failure(s) under GMXP_CONTROL=curvestep
+ctl-gmxp-cushiongain exit=0 1s | simGmXp: 1 failure(s) under GMXP_CONTROL=cushiongain
+ctl-gmxp-fractional exit=0 1s | simGmXp: 50 failure(s) under GMXP_CONTROL=fractional
+ctl-gmxp-gmcap exit=0 1s | simGmXp: 137 failure(s) under GMXP_CONTROL=gmcap
+ctl-gmxp-growthshape exit=0 1s | simGmXp: 2 failure(s) under GMXP_CONTROL=growthshape
+ctl-gmxp-nocap exit=0 1s | simGmXp: 114 failure(s) under GMXP_CONTROL=nocap
+ctl-gmxp-notneutral exit=0 1s | simGmXp: 11 failure(s) under GMXP_CONTROL=notneutral
+ctl-gmxp-pastceiling exit=0 1s | simGmXp: 2 failure(s) under GMXP_CONTROL=pastceiling
+ctl-gmxp-saturate exit=0 1s | simGmXp: 7 failure(s) under GMXP_CONTROL=saturate
+ctl-report-footle exit=0 1s | control "footle": 3 failure(s) fired in section 2 as expected, the check works
+ctl-report-nopath exit=0 1s | control "nopath": 1 failure(s) fired in section 1 as expected, the check works
+ctl-report-privacy exit=0 0s | control "privacy": 3 failure(s) fired in section 4 as expected, the check works
+ctl-report-diagnostics exit=0 0s | control "diagnostics": 13 failure(s) fired in section 4 as expected, the check works
+ctl-boundary-rename exit=0 0s |    CONTROL FIRED: the rename mutation was caught
+ctl-relay-oldkinds exit=0 0s | control "oldkinds": 1 failure(s) fired in section 1 and nowhere else, the check works
+ctl-saverecovery-all exit=0 14s | Soccer Career save recovery cleanup: temporary copies and reports removed; production page and reader bytes stayed identical.
+ctl-loanbite-strict26 exit=0 40s | control "strict26" fired: checks 3, 5 failed as expected
+ctl-loanbite-nofilter exit=0 42s | control "nofilter" fired: checks 2, 4, 5 failed as expected
+ctl-story-poolcopy exit=0 15s | simCareerStory control poolcopy: fired, check parts failed as it must (failed: parts)
+ctl-keeper-partballon exit=0 2s | simSaveKeeper control partballon: FIRED. Section 1 is red.
+ctl-keeper-partplayoffs exit=0 2s | simSaveKeeper control partplayoffs: FIRED. Section 1 is red.
+ctl-gameday-undo exit=0 37s | simGmGameDay: 462 checks, 15 failed (control undo)
+ctl-gameday-keydrift exit=0 37s | simGmGameDay: 462 checks, 35 failed (control keydrift)
+ctl-gameday-trust exit=0 37s | simGmGameDay: 462 checks, 10 failed (control trust)
+ctl-gameday-keyrebuilt exit=0 38s | simGmGameDay: 462 checks, 20 failed (control keyrebuilt)
+ctl-gameday-logplayoff exit=0 38s | simGmGameDay: 462 checks, 30 failed (control logplayoff)
+ctl-uspost-gmclubs exit=0 9s | simUsPostseason: 33 checks, 2 failed, 0 findings for the lead (control gmclubs)
+ctl-fohub-nopost exit=0 1s | control nopost: RED AT THE NAMED CHECK (section 8: 7 failures, none elsewhere)
+ctl-usrival-31 exit=0 342s | simUsRivalSense: 31 of 31 Round 1313 controls fired
+ctl-az-cachecontrol exit=0 9s | PASS Manager cache control: 96 healthy named cases, exactly one decode-count failure, complete undo and all served source held
+ctl-fa-ownclub exit=0 51s | simFreeAgents: 1 failure(s)
+ctl-fa-marketreleased exit=0 49s | simFreeAgents: 1 failure(s)
+ctl-fa-buyreleased exit=0 47s | simFreeAgents: 1 failure(s)
+ctl-fa-noreleasedlist exit=0 50s | simFreeAgents: 2 failure(s)
+ctl-ledgerjourney-futureyear exit=0 2s | simCmLedgerJourney: CONTROL futureyear FIRED: 45 failure(s) of the kind "a ledger its reader refuses"
+ctl-ledgerjourney-nokey exit=0 56s | simCmLedgerJourney: CONTROL nokey FIRED: 4 failure(s) of the kind "no man of my squad carries his key"
+ctl-dailydeals-seed exit=0 2s | simDailyDeals: CONTROL seed FIRED: all 12 of its dates went red on "the state carries a world seed or a ledger" and no date of the other game moved
+ctl-dailydeals-seeddeadline exit=0 2s | simDailyDeals: CONTROL seeddeadline FIRED: all 12 of its dates went red on "the state carries a world seed or a ledger" and no date of the other game moved
+ctl-size-norepair exit=0 32s | simClubManagerSaveSize: CONTROL FIRED as it should, SAVE_SIZE_CONTROL=norepair turned section 6 red (5 failures) and nothing else
+ctl-size-deaddoor exit=0 33s | simClubManagerSaveSize: CONTROL FIRED as it should, SAVE_SIZE_CONTROL=deaddoor turned section 8 red (10 failures) and nothing else
+ctl-unseeded-noinverse exit=0 17s | simCmUnseededWorld: CONTROL noinverse FIRED: without the inverse the fresh careers differ from the base (15 of 15)
+ctl-truth-nomark exit=0 8s | CONTROL nomark FIRED: 30 cases red (section 1: 10, section 2: 10, section 3: 10), none elsewhere
+ctl-truth-markall exit=0 9s | CONTROL markall FIRED: 21 cases red (section 1: 7, section 2: 7, section 3: 7), none elsewhere
+ctl-truth-defeatraw exit=0 8s | CONTROL defeatraw FIRED: 7 cases red (section 4: 7), none elsewhere
+ctl-truth-drawinrender exit=0 8s | CONTROL drawinrender FIRED: 10 cases red (section 5: 10), none elsewhere
+ctl-copy-article exit=0 1s | simCmCopy: CONTROL article FIRED (107 failures, as it must)
+ctl-copy-drama exit=0 0s | simCmCopy: CONTROL drama FIRED (57 failures, as it must)
+ctl-copy-intl exit=0 0s | simCmCopy: CONTROL intl FIRED (4 failures, as it must)
+ctl-copy-staff exit=0 16s | simCmCopy: CONTROL staff FIRED (10 failures, as it must)
+ctl-copy-finance exit=0 0s | simCmCopy: CONTROL finance FIRED (6 failures, as it must)
+ctl-shootout-unsetpath exit=0 14s | simCmShootoutOrder: 3 FAILURE(S)
+ctl-fence-nofence exit=0 0s | CONTROL FIRED: SAVE_FENCE_CONTROL=nofence fired 1 times and section tabs went red with 11 findings
+ctl-fence-squadline exit=0 51s | CONTROL FIRED: SAVE_FENCE_CONTROL=squadline fired 1 times and section fleet went red with 1 findings
+ctl-keeper-extrafence exit=0 72s | playSaveKeeper control extrafence: FIRED. Journey K failed on the key the branch arm added (dukb-fence:dukb-control-extra-key).
+ctl-keeper-extrakey exit=0 72s | playSaveKeeper control extrakey: FIRED. Journey K failed on the key the branch arm added (dukb-control-extra-key).
+ctl-deck-16 exit=0 1614s | simEventDeck: 16 of 16 Round 1324 controls fired
+ctl-gminbox-14 exit=0 6s | simGmInbox: 14 of 14 Round 1324 controls fired
+ctl-inbox-privatecap exit=0 1s | simCareerInbox: 1 failure
+ctl-promises-breakapply exit=0 8s | CONTROL breakapply FIRED: section 1 failed (1 failures in all)
+ctl-promises-unannounced exit=0 8s | CONTROL unannounced FIRED: section 1 failed (1 failures in all)
+ctl-promises-reorder exit=0 8s | CONTROL reorder FIRED: section 3 failed (3 failures in all)
+ctl-promises-firstyear exit=0 8s | CONTROL firstyear FIRED: section 1 failed (1 failures in all)
+ctl-fairness-16 exit=0 473s | simSoccerDeckFairness: 16 of 16 Round 1327 controls fired
+ctl-cooldowns-nocooldown exit=0 24s | CONTROL FIRED: section 2 failed with the defect back in, as it should, and nothing else did.
+ctl-cooldowns-sharedbatch exit=0 24s | CONTROL FIRED: section 2 failed with the defect back in, as it should, and nothing else did.
+ctl-cooldowns-flood exit=0 27s | CONTROL FIRED: section 4 failed with the defect back in, as it should, and nothing else did.
+ctl-board-cfbword exit=0 3s | control "cfbword": 1 failure(s) fired as expected, the check works
+ctl-board-cbbword exit=0 3s | control "cbbword": 1 failure(s) fired as expected, the check works
+ctl-board-board exit=0 2s | control "board": 1 failure(s) fired as expected, the check works
+ctl-board-seatleak exit=0 3s | control "seatleak": 1 failure(s) fired as expected, the check works
+ctl-board-seatdraw exit=0 3s | control "seatdraw": 1 failure(s) fired as expected, the check works
+ctl-board-seatunmarked exit=0 3s | control "seatunmarked": 1 failure(s) fired as expected, the check works
+ctl-board-seatoff exit=0 3s | control "seatoff": 1 failure(s) fired as expected, the check works
+ctl-deskhost-closedquiet exit=0 27s | simGmDeskHost CONTROL closedquiet FIRED: check 5 went red with 2076 failures (red checks 4:2 5:2076 10:1)
+subs-minus1331 exit=0 107s | simCmSubs GREEN: 66 of 66 checks green (parts ledger, rule, extratime, cutover, oppextratime, opponent, coach, press, legacy, three, hotseat)
+ctl-subs-base-3 exit=0 87s | simCmSubs: 3 of 3 Round 1331 base controls fired
+ctl-subs-13 exit=0 60s | simCmSubs: 13 of 13 Round 1331 controls fired
+ctl-motion-whistle exit=0 5s | simLiveSimMotion: control whistle turned "the ninetieth minute asks the latest save" red on an assertion (2 failed), as it must.
+ctl-motion-banner exit=0 5s | simLiveSimMotion: control banner turned "the extra time banner says what is true" red on an assertion (1 failed), as it must.
+ctl-dailydeals-rulesall exit=0 2s | simDailyDeals: CONTROL rulesall FIRED: red on [2026-10-10, 2026-10-11, 2026-10-12, 2026-10-13, 2026-10-14, 2026-10-15, 2026-10-16] and nowhere else
+ctl-quicksubs-all exit=0 10s | simCmQuickSubs: 10 actual outcomes and 13 effective controls passed.
+ctl-worldtruth-16 exit=0 548s | simSoccerWorldTruth: 16 of 16 Round 1329 controls fired on their own sections
+ctl-deck-kctl1 exit=0 29s | kctl: every control exited 1 and fired
+ctl-deck-kctl2 exit=0 3s | kctl: every control exited 1 and fired
+ctl-deck-kctl3 exit=0 7s | kctl: every control exited 1 and fired
+ctl-deck-kctl4 exit=0 147s | kctl: every control exited 1 and fired
+ctl-deck-kctl5 exit=0 38s | kctl: every control exited 1 and fired
+ctl-gminbox-2 exit=0 0s | simGmInbox: 2 of 2 Round 1324 review controls fired
+gmdiff-minus1332 exit=0 3s | gmdiff: all three seeds identical to the base and green
+saveFence-minus1330 exit=0 51s | simSaveFence: all green (tabs, source, fleet)
+ctl-fence-rawwrite exit=0 0s | CONTROL FIRED: SAVE_FENCE_CONTROL=rawwrite fired 1 times and section source went red with 1 findings
+ctl-fence-rawsoccer exit=0 1s | CONTROL FIRED: SAVE_FENCE_CONTROL=rawsoccer fired 1 times and section source went red with 1 findings
+ctl-fence-adoptlate exit=0 1s | CONTROL FIRED: SAVE_FENCE_CONTROL=adoptlate fired 1 times and section source went red with 1 findings
+ctl-mutfence exit=0 4s | CONTROL FIRED: the raw write turned the fence test red (vitest exit 1)
+ctl-saveretry-all exit=0 50s | simSoccerCareerSaveRetry all: 8 actual outcomes and 16 effective faults passed.
+ctl-m5-nofix exit=0 2s | vitest exit 1
+ctl-cmvar-all exit=0 364s | simCmVar: 13 actual outcomes and 27 effective controls passed.
+unseeded-minusAZ exit=0 81s | simCmUnseededWorld: green. 49 old saves with no deal and 49 with every deal play byte equal to b4c89570 (state, draws and saved bytes at every step), and 15 new careers w
+continuity-minusAZ exit=0 23s | Private world variation is measured, no historical fixture was re-recorded
+ctl-continuity-all exit=0 315s | Private world variation is measured, no historical fixture was re-recorded
+playCmLeagueLeaders-KNOWN-RED exit=1 94s | playCmLeagueLeaders: 1 FAILURE(S)
+ctl-noetline exit=0 6s | vitest exit 1, src files still changed after the restore: 0
+ctl-fencewatch-nostorage exit=0 1s | vitest exit 1, src files still changed after the restore: 0
+ctl-fencewatch-nounmount exit=0 1s | vitest exit 1, src files still changed after the restore: 0
+ctl-fencewatch-novisible exit=0 1s | vitest exit 1, src files still changed after the restore: 0
