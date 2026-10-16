@@ -1,0 +1,5 @@
+#!serial
+subs-dec: git worktree add -f .sb2 dec9075b >/dev/null 2>&1; SUBS_BASE=$PWD/.sb2 node scripts/simCmSubs.mjs --part=legacy,three,hotseat
+subs-dec-norec: git worktree add -f .sb3 dec9075b >/dev/null 2>&1; sed -i "s/  if (state.matchRules !== 'base') {/  if (false) {/" src/lib/clubManager.ts && grep -c "  if (false) {" src/lib/clubManager.ts && SUBS_BASE=$PWD/.sb3 node scripts/simCmSubs.mjs --part=three,hotseat; s=$?; git checkout HEAD -- src scripts; exit $s
+base-unseeded: git checkout d4f2c6f6 -- src scripts && node scripts/simCmUnseededWorld.mjs; s=$?; git checkout HEAD -- src scripts; exit $s
+base-continuity: git checkout d4f2c6f6 -- src scripts && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simManagerWorldContinuity.mjs; s=$?; git checkout HEAD -- src scripts; exit $s
