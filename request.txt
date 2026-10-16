@@ -1,0 +1,11 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+takeover0: CM_BOARD_BASE=$(bash .rc/x/mkbase.sh k0) SHARD=0/2 node scripts/simCmBoardVerdict.mjs --part=takeover
+takeover1: CM_BOARD_BASE=$(bash .rc/x/mkbase.sh k1) SHARD=1/2 node scripts/simCmBoardVerdict.mjs --part=takeover
+c-keepfailed: CM_BOARD_BASE=$(bash .rc/x/mkbase.sh c1) TAKEOVER_SEEDS=2 SIM_CM_BOARD_CONTROL=keepfailed node scripts/simCmBoardVerdict.mjs --part=takeover
+c-scoredone: CM_BOARD_BASE=$(bash .rc/x/mkbase.sh c2) TAKEOVER_SEEDS=2 SIM_CM_BOARD_CONTROL=scoredone node scripts/simCmBoardVerdict.mjs --part=takeover
+legacy0: CM_BOARD_BASE=$(bash .rc/x/mkbase.sh l0) SHARD=0/2 node scripts/simCmBoardVerdict.mjs --part=legacy
+legacy1: CM_BOARD_BASE=$(bash .rc/x/mkbase.sh l1) SHARD=1/2 node scripts/simCmBoardVerdict.mjs --part=legacy
+simMidSeasonStart: node scripts/simMidSeasonStart.mjs
+simCmApplications: node scripts/simCmApplications.mjs
+simClubManagerScore: node scripts/simClubManagerScore.mjs
+rulesforced: git worktree add -q .claude/worktrees/forced HEAD && node .rc/x/forceLegacy.mjs .claude/worktrees/forced && CM_RULES_ROOT=$PWD/.claude/worktrees/forced node scripts/simCmLeagueRules.mjs --part=modern,eras,pure

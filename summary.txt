@@ -1,0 +1,11 @@
+takeover1 exit=0 100s | simCmBoardVerdict GREEN: 5 of 5 checks green (parts takeover, 98 s)
+takeover0 exit=0 105s | simCmBoardVerdict GREEN: 5 of 5 checks green (parts takeover, 103 s)
+tsc exit=0 108s | 
+c-keepfailed exit=1 83s | control keepfailed FIRED: 2 of 5 checks red
+c-scoredone exit=1 83s | control scoredone FIRED: 1 of 5 checks red
+simMidSeasonStart exit=0 5s | simMidSeasonStart: all green
+simCmApplications exit=0 117s | simCmApplications: green. The answer is earned, the limits hold, a summer move fires once, joining now moves the manager that week, and old saves load.
+legacy0 exit=0 222s | simCmBoardVerdict GREEN: 2 of 2 checks green (parts legacy, 221 s)
+rulesforced exit=0 43s | simCmLeagueRules: all checks passed (modern, eras, pure)
+legacy1 exit=0 228s | simCmBoardVerdict GREEN: 2 of 2 checks green (parts legacy, 226 s)
+simClubManagerScore exit=0 112s | ALL SEASON SCORE CHECKS PASSED
