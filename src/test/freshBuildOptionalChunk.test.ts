@@ -8,9 +8,9 @@
  * and no cancel, and every other chunk still reloads once per tab.
  *
  * jsdom cannot navigate, so a reload here is read two ways: the guard's own
- * once flag in sessionStorage plus the cancelled event (the listener cancels
- * only when it reloaded), and jsdom's own "not implemented: navigation"
- * report, counted.
+ * once flag in sessionStorage and jsdom's own "not implemented: navigation"
+ * report, counted. The event stays uncancelled so Vite keeps the original
+ * import rejection while the old page waits for its replacement.
  */
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
 import { isOptionalChunkError, watchForNewBuild } from '@/lib/freshBuild';
@@ -67,7 +67,7 @@ describe('Round 1132: the stale chunk listener and the optional chunk', () => {
 
   it('any other chunk still reloads once per tab, and a kit error after it changes nothing', () => {
     const first = preloadError(OTHER);
-    expect(first.defaultPrevented).toBe(true);
+    expect(first.defaultPrevented).toBe(false);
     expect(window.sessionStorage.getItem(STALE_KEY)).toBe('1');
     expect(navigations).toBe(1);
     const second = preloadError(OTHER);
@@ -81,7 +81,7 @@ describe('Round 1132: the stale chunk listener and the optional chunk', () => {
   it('a kit error first does not use up the one reload a real stale chunk gets', () => {
     preloadError(KIT_CHROMIUM);
     const real = preloadError(OTHER);
-    expect(real.defaultPrevented).toBe(true);
+    expect(real.defaultPrevented).toBe(false);
     expect(navigations).toBe(1);
   });
 });

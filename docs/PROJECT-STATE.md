@@ -1,3 +1,25 @@
+## 2026-10-16: original failed import reproduced, paired correction prepared
+
+PR293 owns only the global freshBuild preload listener correction and its narrow
+proofs. The original reload guard still runs, but the event remains uncancelled so
+Vite rejects its actual native import error instead of fulfilling undefined before
+navigation. Optional sound, offline, once marker, refused saves and storage rules
+are unchanged. Two prior test expectations and the source guard change explicitly.
+
+Second baseline f8ccda9e/run38912393217 physically reproduced cancelled event,
+fulfilled undefined and the actual React initializer's exact reading-default
+TypeError. Its later separate store read timed out, so it is an incomplete baseline,
+not a qualification. All three preservation cases passed. The new method captures
+stores inside the same settled probe, before a separate 500ms network observation.
+
+Prepared paired remote proof builds the exact e7f111b7 application first, requires
+one precise fault plus three preserves, restores exact candidate source even on a
+failure, then builds the fix and requires four passes with identical method bytes.
+Both builds include /soccer-career and /whats-new and all fifteen readers. The old
+1602-check UI method,17 existing tests, nine effective source controls, unchanged
+full budgets and physical/source/dependency holds remain strict. Runtime pending.
+Claude I retains integration/publication. Nothing from PR293 is claimed live.
+
 ## 2026-10-16: controlled stale import rejection baseline preparation
 
 Codex branch codex/stale-import-rejection starts at frozen release e7f111b7. No

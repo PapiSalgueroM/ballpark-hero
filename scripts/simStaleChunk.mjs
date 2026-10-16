@@ -15,7 +15,8 @@
    guaranteed to appear), and holds four things:
 
    1. src/lib/freshBuild.ts registers a window listener for vite:preloadError
-      that cancels the event, and watchForNewBuild wires it;
+      that calls the shared reload guard without cancelling the original import
+      rejection, and watchForNewBuild wires it;
    2. the reload is guarded by a sessionStorage once flag, so a host that is
       genuinely down shows the boundary on the second failure instead of
       reloading forever, and it stands down under the prerenderer
@@ -41,7 +42,9 @@
       protected nothing and left the player on the broken page.
 
    Negative controls (SIM_STALE_CHUNK_CONTROL): nolistener deletes the
-   addEventListener call from an in memory copy (section 1 red), noguard
+   addEventListener call from an in memory copy (section 1 red), cancel restores
+   the cancelled import and noreload removes the listener's shared guard call
+   (each section 1 red), noguard
    removes the sessionStorage set so the once flag never lands (section 2
    red), noprerender deletes the prerender stand down (section 2 red),
    nooffline (Release AM) deletes the offline stand down (section 2 red),
@@ -57,7 +60,7 @@ import { fileURLToPath } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.SIM_STALE_CHUNK_CONTROL || '';
-const EXPECT = { nolistener: [1], noguard: [2], noprerender: [2], nooffline: [2], nosave: [2, 5], norelease: [3], barenudge: [6] };
+const EXPECT = { nolistener: [1], cancel: [1], noreload: [1], noguard: [2], noprerender: [2], nooffline: [2], nosave: [2, 5], norelease: [3], barenudge: [6] };
 /* Exit 2, never 1: 1 is a control that fired, and a mistyped name must not read as one. */
 if (CONTROL && !(CONTROL in EXPECT)) { console.error('unknown control ' + CONTROL); process.exit(2); }
 
@@ -75,6 +78,8 @@ let nudgeRaw = fs.readFileSync(path.join(ROOT, 'src/components/layout/UpdateNudg
 const footer = code(fs.readFileSync(path.join(ROOT, 'src/components/game/Footer.tsx'), 'utf8').replaceAll('\r\n', '\n'));
 const main = code(fs.readFileSync(path.join(ROOT, 'src/main.tsx'), 'utf8').replaceAll('\r\n', '\n'));
 if (CONTROL === 'nolistener') fresh = rewrite(fresh, "window.addEventListener('vite:preloadError', (event: Event) => {", "((event: Event) => {", 'nolistener');
+if (CONTROL === 'cancel') fresh = rewrite(fresh, '    reloadOnceForStaleChunk();', '    if (reloadOnceForStaleChunk()) event.preventDefault();', 'cancel');
+if (CONTROL === 'noreload') fresh = rewrite(fresh, '    reloadOnceForStaleChunk();', '    void 0;', 'noreload');
 if (CONTROL === 'noguard') fresh = rewrite(fresh, "sessionStorage.setItem(STALE_KEY, '1');", '', 'noguard');
 /* Release AM: this control had been dead since Round 832 gave reloadToRetryChunk
    the same stand down line (two matches, so it refused to run). It now takes
@@ -112,15 +117,18 @@ const fail = m => { failures++; red.add(section); console.log('   FAIL ' + m); }
 const ok = m => console.log('   ok   ' + m);
 
 section = 1;
-console.log('1) freshBuild listens for vite:preloadError and cancels it');
+console.log('1) freshBuild listens for vite:preloadError, reloads and preserves the rejection');
 {
-  const listens = /window\.addEventListener\(\s*['"]vite:preloadError['"]/.test(freshCode);
-  const cancels = /preventDefault\(\)/.test(freshCode);
+  const listener = (freshCode.match(/function reloadOnStaleChunk\(\): void \{[\s\S]*?\n\}/) ?? [''])[0];
+  const listens = /window\.addEventListener\(\s*['"]vite:preloadError['"]/.test(listener);
+  const reloads = /reloadOnceForStaleChunk\(\)/.test(listener);
+  const cancels = /\.preventDefault\s*\(/.test(listener);
   const wired = /function watchForNewBuild[\s\S]*?reloadOnStaleChunk\(\)/.test(freshCode);
   if (!listens) fail('no window.addEventListener for vite:preloadError in the code');
-  if (!cancels) fail('the listener never calls preventDefault, so the import still throws');
+  if (!reloads) fail('the listener never calls the shared reload guard');
+  if (cancels) fail('the listener cancels the original rejection, so Vite can fulfill without a module before the reload finishes');
   if (!wired) fail('watchForNewBuild does not wire reloadOnStaleChunk, so nothing registers it');
-  if (listens && cancels && wired) ok('listener registered from watchForNewBuild, event cancelled');
+  if (listens && reloads && !cancels && wired) ok('listener registered from watchForNewBuild, shared reload guarded, original import rejection preserved');
 }
 
 section = 2;

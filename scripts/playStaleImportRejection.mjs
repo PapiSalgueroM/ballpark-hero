@@ -32,14 +32,20 @@ const relative = file => path.relative(ROOT, file).replaceAll('\\', '/');
 const receipt = file => ({ file: relative(file), bytes: fs.statSync(file).size, sha256: hash(fs.readFileSync(file)) });
 const sources = ['src/main.tsx', 'src/lib/freshBuild.ts', 'scripts/lib/hostLikeServer.mjs', 'scripts/lib/playwrightLoader.mjs',
   'scripts/playStaleImportRejection.mjs', 'package.json', 'package-lock.json', 'bun.lock'].map(file => ({ file, bytes: fs.readFileSync(path.join(ROOT, file)) }));
+const sourceHead = execFileSync('git', ['rev-parse', 'HEAD'], { cwd: ROOT, encoding: 'utf8' }).trim();
+const appCommit = PHASE === 'baseline' ? 'e7f111b7de73153efdc7e343282d65eeae9289fc' : sourceHead;
+const expectedApp = execFileSync('git', ['show', appCommit + ':src/lib/freshBuild.ts'], { cwd: ROOT });
+const appReference = { file: 'src/lib/freshBuild.ts', ref: PHASE === 'baseline' ? appCommit : 'HEAD', commit: appCommit,
+  bytes: expectedApp.length, sha256: hash(expectedApp), held: false };
 const distBefore = list(DIST).map(receipt);
-const report = { phase: PHASE, status: 'running', sourceHead: execFileSync('git', ['rev-parse', 'HEAD'], { cwd: ROOT, encoding: 'utf8' }).trim(),
+const report = { phase: PHASE, status: 'running', sourceHead, appReference,
   completed: 0, passed: 0, failed: 0, expectedBooleanFaults: PHASE === 'baseline' ? 1 : 0, setupFailures: 0, cases: [],
   limits: ['Only the additional automatic reload DOCUMENT response is held before headers are committed.',
     'Controlled old-document microtask settlement, not the frequency or timing of a natural production race.',
     'Actual React 18.3.1 private lazy initializer, not a ReactDOM render or boundary/Close/Retry journey.',
     'Fresh signed-out Soccer Career creator; no career begins, saved fixture, external response or database credit.',
     'All external requests and WebSockets are blocked; no clock, RNG, app listener or error implementation is changed.',
+    'Stores, timeOrigin and URL are captured synchronously at helper/React settlement, before the separate 500ms network observation.',
     'No absence-of-reload claim beyond the settled import and 500ms observation window.'], sources: [], dist: distBefore };
 const write = () => fs.writeFileSync(REPORT, JSON.stringify(report, null, 2) + '\n');
 for (const row of sources) {
@@ -122,7 +128,7 @@ async function serve() {
 async function runCase(base, owner, id) {
   const row = { id, stage: 'boot', transport: [], requests: [], responses: [], documents: [], console: [], pageErrors: [], lifecycle: [],
     progress: [], budget: { workMs: 90000, cleanupMs: 15000 }, setupFault: null, outcome: null,
-    provenance: { sourceHead: report.sourceHead, entryPath: owner.entryPath, entrySha256: owner.sha256,
+    provenance: { sourceHead: report.sourceHead, appReference: report.appReference, entryPath: owner.entryPath, entrySha256: owner.sha256,
       preloadExportAlias: owner.alias, preloadOwnerSha256: owner.ownerSha256, reactPackageSha256: owner.reactPackage.sha256,
       sourceReceipts: report.sources, mode: 'Actual emitted helper, native import and React private initializer; controlled document hold only' } };
   report.cases.push(row); let context, page, runtime;
@@ -233,9 +239,10 @@ async function runCase(base, owner, id) {
           error => { settlement = { kind: 'rejected', error: describeError(error), sameNativeError: error === nativeError }; });
         let secondReturned = false, secondThrown;
         try { lazy._init(lazy._payload); secondReturned = true; } catch (error) { secondThrown = error; }
+        const storesAfterSettlement = runtime.readStores();
         const event = events[0];
         return { callbackCalls, firstReturned, firstThrownIsActualThenable: firstThrown === helperPromise,
-          nativeFulfilled, nativeError: describeError(nativeError), nativeErrorIsError: nativeError instanceof Error,
+          nativeFulfilled, nativeError: describeError(nativeError), nativeErrorIsError: nativeError instanceof Error, storesAfterSettlement,
           settlement, second: { returned: secondReturned, error: describeError(secondThrown), sameNativeError: secondThrown === nativeError,
             sameEventPayload: !!event && secondThrown === event.payload }, online: navigator.onLine,
           events: events.map(item => ({ cancelable: item.cancelable, defaultPreventedAtListener: item.atListener,
@@ -243,10 +250,10 @@ async function runCase(base, owner, id) {
             payloadIsError: item.payload instanceof Error, sameNativeError: item.payload === nativeError })) };
       } finally { window.removeEventListener('vite:preloadError', observe); }
     }, row.missingUrl));
+    row.after = row.observation.storesAfterSettlement;
     checkpoint('probe-settlement-retained');
     if (id === 'automatic-held-document') await step('observe-held-document', () => heldDocument, 5000);
     await step('post-settlement-window', () => new Promise(resolve => setTimeout(resolve, 500)), 1000);
-    row.after = await stores('read-after-store'); checkpoint('after-store-retained');
     row.heldAtObservation = held.map(item => ({ ...item.lifecycle }));
     row.outcome = { passed: row.observation.settlement.kind === 'rejected' && row.observation.settlement.sameNativeError === true
       && row.observation.second.sameNativeError === true && row.observation.second.sameEventPayload === true,
@@ -325,6 +332,8 @@ function qualify(row, owner, base) {
   }
 }
 try {
+  assert.deepEqual(sources.find(row => row.file === appReference.file).bytes, expectedApp, 'Actual phase freshBuild source must match its exact Git reference');
+  appReference.held = true; write();
   const owner = emittedOwner(); report.emitted = owner; write();
   const base = await serve(); report.ownedOrigin = base;
   browser = await within(pw.chromium.launch({ headless: true }), 30000, 'Actual browser launch timed out'); report.browserVersion = browser.version();

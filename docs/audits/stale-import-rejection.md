@@ -67,8 +67,44 @@ readers passed. simPrerender found exactly the three existing BHH What's New
 entries absent from its stale snapshot. The one-route scope had omitted /whats-new.
 This is a build-scope setup defect, not an application regression or waived reader.
 
-Corrected bounded baselinef8ccda9e/run38912393217 is in progress. A subsequent
+Corrected bounded baselinef8ccda9e/run38912393217 finished with a setup failure. A subsequent
 workflow-only correction includes /whats-new alongside /soccer-career and tightens
 the existing related-test count to exactly two files/seventeen passes. It is saved
 with skip-ci while that baseline runs; the next actual fixed or corrected baseline
 run must qualify that exact scope and all fifteen readers before readiness.
+
+Its retained artifact12051631002 is45,922,599bytes, SHA256
+062757753e19655b490a03fd3d2230f5518d7117fd2a7a221fbb8f7b7871324d.
+The automatic raw probe captured the exact causal chain: real native import error,
+cancelled event, helper fulfilled undefined, actual React initializer threw Cannot
+read properties of undefined (reading 'default'). A later separate old-document
+store-read protocol call timed out after20 seconds. That missing after-state means
+the packet is not a qualified whole baseline, despite reproducing the mechanism.
+The three preservation arms completed and passed. The old UI, related17, full
+weights and holds passed; the same three What's New omissions failed the reader.
+
+The correction removes only the listener's preventDefault call. It still invokes
+the existing reloadOnceForStaleChunk guard. Vite retains its original rejected
+payload for React and the existing boundary while the reload is pending. Two
+existing optional-chunk test assertions now require the event to remain uncancelled.
+The code-reading source guard requires both reload and no cancellation; two new
+in-memory controls restore cancellation or remove reload, each requiring exactly
+section1 to fail. All seven old source controls remain.
+
+The repaired browser method captures full stores, timeOrigin and URL synchronously
+inside the same evaluation immediately after helper/React settlement. The500ms
+held-document window separately observes network behavior. There is no store-byte
+claim for that later window. Its entire qualification block remains unchanged.
+Explicit source bindings require baseline freshBuild to equal the exact e7 blob,
+and fixed freshBuild to equal the actual candidate HEAD blob, before any browser.
+
+The paired runner builds the actual old-source application first, retains its full
+distribution/source and requires exactly one fault plus three preserves. Every
+other candidate source file stays held. It restores exact fixed freshBuild even
+after failure, builds again and requires four passes using the identical method.
+All fifteen rebuilt-site readers run after each build, with /whats-new included.
+The unchanged1602-check lazy editor UI method,17 guarded reload tests, all nine
+effective controls, full download caps, installed521 versions and source/tool/font
+and distribution holds still apply. No full-suite, natural race frequency, ReactDOM
+output, blanket visual review or live release claim follows from the controlled
+initializer method. Remote paired runtime is still pending.

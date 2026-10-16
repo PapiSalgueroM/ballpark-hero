@@ -101,8 +101,10 @@ export function watchForNewBuild(): void {
    either game navigates home; the boundary does.
 
    Vite fires vite:preloadError on the window when a dynamic import fails.
-   Cancelling the event stops the throw, and one reload picks up the new
-   index.html and its chunks. The same loop guard as check(): at most one
+   One reload picks up the new index.html and its chunks. Keep the original
+   import rejection: cancelling makes Vite fulfill without a module while the
+   old page is still running, so React can fail reading its default export.
+   The same loop guard as check(): at most one
    reload per tab for this reason, ever, so a host that is genuinely down
    shows the boundary on the second failure rather than spinning. */
 const STALE_KEY = 'dukb-reloaded-stale-chunk';
@@ -191,6 +193,6 @@ export function isOptionalChunkError(payload: unknown): boolean {
 function reloadOnStaleChunk(): void {
   window.addEventListener('vite:preloadError', (event: Event) => {
     if (isOptionalChunkError((event as Event & { payload?: unknown }).payload)) return;
-    if (reloadOnceForStaleChunk()) event.preventDefault();
+    reloadOnceForStaleChunk();
   });
 }

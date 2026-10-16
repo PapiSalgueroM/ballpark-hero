@@ -17,7 +17,7 @@ jobs:
       ENGINES: chromium
       CAREER_SEASON_LOCAL_ONLY: '1'
       SOCCER_BUILD_PHASE: fixed
-      STALE_IMPORT_PHASE: baseline
+      STALE_IMPORT_PHASE: fixed
       STALE_IMPORT_OUT: ${{ github.workspace }}/stale-import-rejection-artifacts/causal
       PRERENDER_ONLY: /soccer-career,/whats-new
       SIR_BASE: e7f111b7de73153efdc7e343282d65eeae9289fc
@@ -42,9 +42,10 @@ jobs:
           mkdir -p "$SIR_OUT/original"
           git rev-parse HEAD > "$SIR_OUT/head.txt"
           git archive --format=zip HEAD > "$SIR_OUT/source.zip"
+          git show HEAD:src/lib/freshBuild.ts > "$SIR_OUT/fixed-freshBuild.ts"
           git status --porcelain --untracked-files=no > "$SIR_OUT/source-before.txt"
           test ! -s "$SIR_OUT/source-before.txt"
-          git diff --exit-code "$SIR_BASE" -- . ':!.github/workflows/stale-import-rejection.yml' ':!scripts/playStaleImportRejection.mjs' ':!docs/PROJECT-STATE.md' ':!docs/audits/stale-import-rejection.md'
+          git diff --exit-code "$SIR_BASE" -- . ':!.github/workflows/stale-import-rejection.yml' ':!scripts/playStaleImportRejection.mjs' ':!src/lib/freshBuild.ts' ':!src/test/freshBuildOptionalChunk.test.ts' ':!scripts/simStaleChunk.mjs' ':!docs/PROJECT-STATE.md' ':!docs/audits/stale-import-rejection.md'
           find src scripts .github/workflows -type f ! -path scripts/data/lastmod.json -print0 | sort -z | xargs -0 sha256sum > "$SIR_OUT/source-files.sha256"
           sha256sum package.json package-lock.json bun.lock > "$SIR_OUT/packages.sha256"
           node --version > "$SIR_OUT/node-version.txt"
@@ -96,8 +97,41 @@ jobs:
           const executable = pw.chromium.executablePath(); assert(fs.existsSync(executable));
           fs.writeFileSync(process.env.SIR_OUT + '/tools.json', JSON.stringify({ tools, executable, executableBytes: fs.statSync(executable).size, executableSha256: digest(executable) }, null, 2) + '\n');
           NODE
+      - name: Exact original application control production build
+        id: baseline_build
+        run: |
+          mkdir -p "$SIR_OUT/baseline"
+          cmp src/lib/freshBuild.ts "$SIR_OUT/fixed-freshBuild.ts"
+          git show "$SIR_BASE:src/lib/freshBuild.ts" > src/lib/freshBuild.ts
+          cp src/lib/freshBuild.ts "$SIR_OUT/baseline/freshBuild.ts"
+          grep -v '  src/lib/freshBuild.ts$' "$SIR_OUT/source-files.sha256" | sha256sum --check > "$SIR_OUT/baseline/source-holds.log"
+          git diff --exit-code "$SIR_BASE" -- src ':!src/test/freshBuildOptionalChunk.test.ts'
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" npm run build:seo 2>&1 | tee "$SIR_OUT/baseline/build.log"
+          cp scripts/data/lastmod.json "$SIR_OUT/baseline/build-lastmod.json"
+          git diff -- public scripts/data/lastmod.json index.html > "$SIR_OUT/baseline/build.diff"
+          find dist -type f -print0 | sort -z | xargs -0 sha256sum > "$SIR_OUT/baseline/dist-files.sha256"
+          tar -czf "$SIR_OUT/baseline/dist.tgz" dist
+      - name: Original source must reproduce one exact import rejection fault
+        id: baseline_causal
+        timeout-minutes: 5
+        run: |
+          STALE_IMPORT_PHASE=baseline STALE_IMPORT_OUT="$SIR_OUT/baseline/causal" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playStaleImportRejection.mjs 2>&1 | tee "$SIR_OUT/baseline/causal.log"
+          sha256sum --check "$SIR_OUT/baseline/dist-files.sha256" > "$SIR_OUT/baseline/dist-holds.log"
+      - name: All fifteen original-control rebuilt-site readers
+        if: always() && steps.baseline_build.outcome == 'success'
+        run: |
+          ONLY=simAdsense,simBrand,simHeadTags,simHiddenPages,simHubs,simIndexNow,simIndexing,simInternalLinks,simNoRivalNames,simPrerender,simPrerenderBoot,simRetiredRoutes,simSchema,simSitemap,simSnapshotAssets NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/runAllSims.mjs --browser 2>&1 | tee "$SIR_OUT/baseline/readers.log"
+          test "$(grep -c '^All 15 harnesses green\.$' "$SIR_OUT/baseline/readers.log")" = 1
+      - name: Restore exact fixed source even after an original-control failure
+        id: restore
+        if: always() && steps.bind.outcome == 'success'
+        run: |
+          git show HEAD:src/lib/freshBuild.ts > src/lib/freshBuild.ts
+          cmp src/lib/freshBuild.ts "$SIR_OUT/fixed-freshBuild.ts"
+          sha256sum --check "$SIR_OUT/source-files.sha256" > "$SIR_OUT/restored-source-holds.log"
       - name: Exact candidate production build and physical distribution
         id: build
+        if: always() && steps.restore.outcome == 'success' && steps.types.outcome == 'success' && steps.tools.outcome == 'success'
         run: |
           NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" npm run build:seo 2>&1 | tee "$SIR_OUT/build.log"
           cp scripts/data/lastmod.json "$SIR_OUT/build-lastmod.json"
@@ -133,6 +167,7 @@ jobs:
           NODE
       - name: Controlled actual Vite and React import settlement
         id: causal
+        if: always() && steps.build.outcome == 'success' && steps.tools.outcome == 'success'
         timeout-minutes: 5
         run: |
           NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playStaleImportRejection.mjs 2>&1 | tee "$SIR_OUT/causal.log"
@@ -145,6 +180,22 @@ jobs:
         run: |
           NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node node_modules/vitest/vitest.mjs run src/test/freshBuild*.test.ts --maxWorkers=1 --minWorkers=1 --reporter=default --reporter=json --outputFile.json="$SIR_OUT/related.json" 2>&1 | tee "$SIR_OUT/related.log"
           NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simStaleChunk.mjs 2>&1 | tee "$SIR_OUT/stale.log"
+          for control in nolistener cancel noreload noguard noprerender nooffline nosave norelease barenudge; do
+            set +e
+            SIM_STALE_CHUNK_CONTROL="$control" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simStaleChunk.mjs > "$SIR_OUT/stale-control-$control.log" 2>&1
+            control_status=$?
+            set -e
+            cat "$SIR_OUT/stale-control-$control.log"
+            test "$control_status" = 1
+            case "$control" in
+              nolistener|cancel|noreload) sections=1 ;;
+              noguard|noprerender|nooffline) sections=2 ;;
+              nosave) sections='2, 5' ;;
+              norelease) sections=3 ;;
+              barenudge) sections=6 ;;
+            esac
+            test "$(grep -Fxc "simStaleChunk: control $control turned section(s) $sections red and nothing else. The check works." "$SIR_OUT/stale-control-$control.log")" = 1
+          done
       - name: All fifteen rebuilt-site readers
         if: always() && steps.build.outcome == 'success'
         run: |
@@ -207,13 +258,18 @@ jobs:
           assert.equal(related.numPendingTests, 0); assert.equal(related.numTodoTests, 0);
           assert.equal(related.testResults.length, 2); assert.equal(related.numPassedTests, 17);
           assert(related.testResults.flatMap(file => file.assertionResults).every(row => row.status === 'passed'));
-          const causalRoot = process.env.STALE_IMPORT_OUT, causal = JSON.parse(fs.readFileSync(causalRoot + '/report.json'));
-          const baseline = process.env.STALE_IMPORT_PHASE === 'baseline';
-          assert.equal(causal.phase, process.env.STALE_IMPORT_PHASE);
+          for (const phase of ['baseline', 'fixed']) {
+          const causalRoot = phase === 'baseline' ? out + '/baseline/causal' : process.env.STALE_IMPORT_OUT;
+          const causal = JSON.parse(fs.readFileSync(causalRoot + '/report.json')), baseline = phase === 'baseline';
+          assert.equal(causal.phase, phase);
           assert.equal(causal.status, baseline ? 'qualified-baseline' : 'qualified-fixed');
           assert.equal(causal.completed, 4); assert.equal(causal.passed, baseline ? 3 : 4);
           assert.equal(causal.failed, baseline ? 1 : 0); assert.equal(causal.expectedBooleanFaults, baseline ? 1 : 0);
           assert.equal(causal.setupFailures, 0);
+          assert.equal(causal.appReference.held, true);
+          assert.equal(causal.appReference.commit, baseline ? process.env.SIR_BASE : fs.readFileSync(out + '/head.txt', 'utf8').trim());
+          const appFile = baseline ? out + '/baseline/freshBuild.ts' : out + '/fixed-freshBuild.ts';
+          assert.equal(causal.appReference.bytes, fs.statSync(appFile).size); assert.equal(causal.appReference.sha256, digest(appFile));
           assert.deepEqual(causal.cases.map(row => row.id), ['automatic-held-document', 'marker-already-spent', 'optional-sound-kit', 'offline-after-boot']);
           assert.deepEqual(causal.cases.map(row => row.outcome.passed), baseline ? [false, true, true, true] : [true, true, true, true]);
           assert.equal(causal.raw.length, 4);
@@ -222,6 +278,7 @@ jobs:
             assert.equal(file, path.resolve(causalRoot, causal.cases[i].id + '.raw.json'));
             assert.equal(fs.statSync(file).size, raw.bytes); assert.equal(digest(file), raw.sha256);
             assert.deepEqual(JSON.parse(fs.readFileSync(file)), causal.cases[i]);
+          }
           }
           console.log('Original strict lazy editor method, guarded reload tests and physical captures passed. Causal method has its own strict phase verdict.');
           NODE
