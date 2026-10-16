@@ -1,0 +1,3 @@
+nfl-390-touch: AssertionError [ERR_ASSERTION]: New choice must appear without driver scrolling: {"top":770,"bottom":986,"height":216,"viewportHeight":844,"scrollY":0}
+Native choice control: disabling scrollIntoView fails its own visibility assertion
+Native prospect evidence: /home/runner/work/_temp/rc-out/files/c993-choice
