@@ -1040,7 +1040,7 @@ const s11 = { careers: 0, compared: 0, cutLeague: 0, cutOpponent: 0, whole: 0 };
 /* CM_WORLD_MOVES_TRACE=1: every draw of section 11 keeps the engine frames that took it, and a draw count that
    parts prints where the two arms first drew differently (slow; for one career at a time). */
 const TRACE11 = process.env.CM_WORLD_MOVES_TRACE === '1';
-const siteOf = stack => stack.split('\n').slice(2, 7).map(l => l.trim().replace(/^at /, '').replace(/ \(.*$/, '')).join(' < ');
+const siteOf = stack => stack.split('\n').slice(2, 7).map(l => l.trim().replace(/^at /, '').replace(/ \(.*$/, '').replace(/^\S*\.cjs:\d+:\d+$/, '<anon>')).join(' < ');
 function firstParting(b, h) {
   if (!b.sites || !h.sites) return '';
   let k = 0;
