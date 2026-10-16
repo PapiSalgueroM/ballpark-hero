@@ -1,0 +1,9 @@
+# Manager refusal feedback
+
+This additive UI follow-up starts from qualified PR284 at7c483867. Claude I owns the transfer engine, competition work and publication. Its1344 browser review records the existing refusal note offscreen above the market's player row on phones. This packet owns only that feedback presentation and dismissal.
+
+The component candidate remains outside and unapplied. First run the actual served application at320/390/430/1440 plus a cookie-pending390 case, with a clearly declared prepared30-player squad. Use the real doorRefusal/startNegotiation result and public Talk action; hold saved bytes, existing note lifecycle and action semantics. The node boundary measures0refusal draws. Browser clock/RNG are untouched and unmeasured. Fixture preparation is explicitly seeded and Date.now fixed, including persistence, then restored before browser work.
+
+The finite proof has baseline/fixed phases. Baseline must reproduce a real mobile presentation fault; setup errors, missing controls or changed saves cannot qualify. Fixed must keep the note visible with no page/list/card movement, preserve dismissal/repeat/navigation and a successful Talk sibling. Positive/hide/exact-style-restoration calibrates the geometry oracle. Original-placement phase is supported manually, but no automatic rebuilt original control has run or been claimed. This new proof does not gate already qualified PR284.
+
+Native root and independent source reviews passed the two new method leaves before first execution. Actual syntax, types, build,15readers and browser results are pending. No local application execution, product fix, full-suite or live claim. The proposed component change reuses the existing zero-height sticky desk pattern and existing canonical note; no new refusal calculation, state, timer, focus or engine action.
