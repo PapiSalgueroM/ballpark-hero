@@ -305,6 +305,8 @@ const count = (hay, needle) => hay.split(needle).length - 1;
    PACK_BINDS entry when their cards move fx keys). */
 const PACK_INDEXES = [
   ['src/data/gmInbox/index.ts', 'GM_INBOX_PACKS', 'src/components/front-office-shared/GmInboxPanel.tsx'],
+  /* Round 1334 (W2): Soccer Career's starter pack. */
+  ['src/data/soccerDeck/index.ts', 'SOCCER_DECK_PACKS', 'src/pages/SoccerCareer.tsx'],
 ];
 /* The third field is the component that shows that index's cards: section 7
    refuses an expiring card in an index whose component never calls
@@ -365,6 +367,9 @@ fs.writeFileSync(ENTRY, [
   `export { keyedRng } from '${R}/src/lib/keyedRng.ts';`,
   `export { onCooldown } from '${R}/src/lib/careerEventDeck.ts';`,
   ...PACK_INDEXES.map(([rel, name], i) => `export { ${name} as packs${i} } from '${R}/${rel}';`),
+  /* Round 1334: the soccer words come from their data module, never from src/lib/soccerDeck.ts, which reaches the
+     whole Soccer Career engine at runtime and would bundle it into this kit. */
+  `export { SOCCER_FX_WORDS as soccerFxWords } from '${R}/src/data/soccerDeck/words.ts';`,
 ].join('\n'));
 /* A control swaps the engine's source in memory, never on disk. */
 const redirect = {
@@ -583,6 +588,10 @@ if (CONTROL === 'newpack') {
    and 15, which could not bind it; a pack with a tag or a person slot and
    no entry is bound with a resolver that makes everyone generated. */
 const PACK_BINDS = {};
+/* Round 1334 (W2): Soccer Career's keys (integrity and the training keys) over the kit's desk, each a number in a bag
+   made on the desk at its first write, with the soccer words. */
+PACK_BINDS.soccer = { fx: Object.fromEntries(Object.entries(B.soccerFxWords).map(([k, w]) => [k, { ...w,
+  apply: (s, v) => { s.soccer = { ...(s.soccer ?? {}), [k]: ((s.soccer ?? {})[k] ?? 0) + v }; }, read: s => (s.soccer ?? {})[k] ?? 0 }])) };
 const needsFx = p => p.events.some(e => e.choices.some(c => Object.keys(c.fx ?? {}).length > 0));
 const aboutPeople = p => p.events.some(e => e.tag !== undefined) || Object.values(p.slots ?? {}).some(sl => sl.person);
 const everyoneGenerated = (s, ref) => ('role' in ref ? { name: `Your ${ref.role}`, real: false } : { name: `Player ${Math.round(Number(ref.id))}`, real: false });
@@ -1102,7 +1111,7 @@ if (runs(8)) {
     const lacking = p.events.filter(e => E.gmNeutralIndex(e.choices) < 0).map(e => e.id);
     if (NEUTRAL_BASELINE.includes(k)) { if (lacking.length === 0) bad.push(`${k} has a neutral option on every card now: take it off NEUTRAL_BASELINE`); }
     else if (lacking.length) bad.push(`${k}: ${lacking[0]} has no option that moves nothing`);
-    for (const pr of E.gmPackProblems(p)) bad.push(`${k}: ${pr}`);
+    for (const pr of E.gmPackProblems(p, PACK_BINDS[k]?.fx)) bad.push(`${k}: ${pr}`); /* Round 1334: an index pack's own registry */
   }
   const missing = NEUTRAL_BASELINE.filter(k => !known[k]);
   if (missing.length) bad.push(`NEUTRAL_BASELINE names packs the kit does not know: ${missing.join(', ')}`);
@@ -1191,7 +1200,7 @@ if (runs(10)) {
         if (pack.reachBy) (byValue[String(w.facts[pack.reachBy])] ??= new Set()).add(m.defId);
       }
     };
-    for (let d = 0; d < DRIVES.FLEET.desks; d++) runDesk(pack, tag, seed, 'FLEET', d, { observe });
+    for (let d = 0; d < DRIVES.FLEET.desks; d++) runDesk(pack, tag, seed, 'FLEET', d, { observe, bind: PACK_BINDS[tag] }); /* Round 1334: an index pack's own registry */
     const ranked = pack.events.map(e => ({ id: e.id, share: (n[e.id] ?? 0) / Math.max(1, total) })).sort((a, b) => b.share - a.share);
     return { n, total, ranked, byValue };
   };

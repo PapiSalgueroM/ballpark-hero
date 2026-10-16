@@ -245,6 +245,15 @@ export const STARTER: SoccerDeckPack = {
   chance: 1,
   clock: 'season',
   store: 'compact',
+  /* The most the pack may push each meter it moves in a season. At most one card is dealt a summer, so a season's
+     push can never pass the largest single option on that meter: morale +2 (and -1 the other way), integrity +1, a
+     training key +1. These are those bounds; scripts/simSoccerDeck.mjs section 8 measures what the real engine's
+     fleet does under them, and the event deck kit's section 15 holds BEST and WORST to them. */
+  pressure: {
+    morale: 2, integrity: 1,
+    t_pace: 1, t_shooting: 1, t_passing: 1, t_dribbling: 1, t_defending: 1, t_physical: 1,
+    gk_shot_stopping: 1, gk_aerial_command: 1, gk_distribution: 1, gk_penalty_saving: 1, gk_sweeping_speed: 1,
+  },
   events: CARDS.map(([e]) => e),
   titles: Object.fromEntries(CARDS.map(([e, title]) => [e.id, title])),
   kinds: Object.fromEntries(CARDS.map(([e, , kind]) => [e.id, kind])),
