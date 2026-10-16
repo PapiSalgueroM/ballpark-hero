@@ -1,0 +1,4 @@
+#!build
+#!playwright
+#!serial
+c993-head: SIM_NETWORK=offline ENGINES=chromium CAREER993_ARTIFACTS="$RC_OUT/c993-head" node scripts/qa/career993.mjs > /tmp/c993h.log 2>&1; s=$?; grep -E "passed|AssertionError|journeys" /tmp/c993h.log | head -12 | cut -c1-200; exit $s

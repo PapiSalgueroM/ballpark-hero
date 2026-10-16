@@ -1,0 +1,52 @@
+{
+  "width": 1440,
+  "scrollWidth": 1440,
+  "scrollY": 0,
+  "headings": [
+    {
+      "text": "Scouts are watching.",
+      "top": 317,
+      "bottom": 401.25,
+      "height": 84.25
+    },
+    {
+      "text": "The offseasonTime off between seasons. Your coach has a plan, your friends have ",
+      "top": 744.25,
+      "bottom": 940.25,
+      "height": 196
+    }
+  ],
+  "overflow": [
+    {
+      "tag": "DIV",
+      "className": "_stadium_irvo8_17",
+      "text": "",
+      "width": 638,
+      "scrollWidth": 750
+    },
+    {
+      "tag": "H3",
+      "className": "sr-only",
+      "text": "Scouts are watching.",
+      "width": 1,
+      "scrollWidth": 167
+    }
+  ],
+  "controls": [
+    {
+      "text": "Road to the draft help",
+      "width": 44,
+      "height": 44
+    },
+    {
+      "text": "Train all summerDraft stock +1, Rating +2",
+      "width": 606,
+      "height": 66
+    },
+    {
+      "text": "Rest upNo change",
+      "width": 606,
+      "height": 66
+    }
+  ]
+}
