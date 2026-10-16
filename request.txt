@@ -1,0 +1,10 @@
+#!serve
+#!playwright
+weight-head: SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs
+weight-base: B=$(bash .rc/x/mkbase.sh wb) && (cd "$B" && "$OLDPWD/node_modules/.bin/vite" build --outDir "$OLDPWD/dist-base" --emptyOutDir --logLevel error) && (node scripts/lib/hostLikeServer.mjs dist-base 4180 > /dev/null 2>&1 &) && sleep 4 && BASE=http://localhost:4180 SWEEP_BASE=http://localhost:4180 SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs
+playClubManager: node scripts/playClubManager.mjs
+playWilderness: node scripts/playWilderness.mjs
+playManagerCustomPromotion: node scripts/playManagerCustomPromotion.mjs
+playCmHubLanding: node scripts/playCmHubLanding.mjs
+playTwoTabs: node scripts/playTwoTabs.mjs
+playHomeFold: node scripts/playHomeFold.mjs
