@@ -185,7 +185,7 @@ export default function ClubManagerCareerPanel({ c, g, nationOffer, onRetireOpen
 
 /* Round 1343: the record lines, one list for the Manager panel and the farewell. Text unchanged from the panel,
    plus the highest scoring game after the worst defeat. */
-export function ManagerRecordLines({ c }: { c: CareerState }) {
+export function ManagerRecordLines({ c, ended = false }: { c: CareerState; /** On the farewell: no first match is coming. */ ended?: boolean }) {
   const high = highestScoringOf(c);
   const counted = high?.missed ? Math.max(0, c.careerStats.played - high.missed) : 0;
   return (
@@ -211,7 +211,7 @@ export function ManagerRecordLines({ c }: { c: CareerState }) {
                     {(c.careerStats.clubsManaged?.length ?? 0) > 1 && (
                       <p>🧳 Clubs managed: <span className="text-foreground">{c.careerStats.clubsManaged!.join(', ')}</span></p>
                     )}
-                    {c.careerStats.played === 0 && <p>Take charge of your first match and the numbers start here.</p>}
+                    {c.careerStats.played === 0 && <p>{ended ? 'You retired before your first match, so there are no numbers to keep.' : 'Take charge of your first match and the numbers start here.'}</p>}
                   </div>
   );
 }

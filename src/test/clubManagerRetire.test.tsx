@@ -326,6 +326,17 @@ describe('the farewell', { timeout: 120000 }, () => {
     expect(text).not.toContain('1203W');
   });
 
+  it('a career retired before its first match is not told to take charge of one (review fix)', () => {
+    const g = { startNew: vi.fn(), showSlots: vi.fn() };
+    const none = { ...retiredCareer(), h2h: [], careerStats: { played: 0, wins: 0, draws: 0, losses: 0, clubsManaged: ['Everton'] } } as unknown as CareerState;
+    const { container } = render(<ClubManagerFarewell c={none} g={g as any} />);
+    fireEvent.click(container.querySelector('[data-cm-farewell-tile="records"]')!);
+    const records = container.querySelector('[data-cm-farewell-open="records"]')?.textContent ?? '';
+    expect(records).toContain('You retired before your first match, so there are no numbers to keep.');
+    expect(records).not.toContain('Take charge');
+    expect(lines(none).high).toBeNull();
+  });
+
   it('the managers screen says retired and offers the farewell on that tile only', () => {
     const summary = (club: string, retired: boolean) => ({
       managerName: null, clubName: club, season: 7, worldSeason: '2032-33', trophies: 2, eraId: null, eraLabel: '2026-27', historic: false, sacked: false,

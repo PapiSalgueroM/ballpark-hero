@@ -108,7 +108,7 @@ export default function ClubManagerFarewell({ c, g }: {
           : tile('cabinet', '🏆', 'Trophy cabinet', count(l.trophies, 'trophy', 'trophies'))}
         {open === 'records' ? panel('records', '📋 Records', (
           <>
-            <ManagerRecordLines c={c} />
+            <ManagerRecordLines c={c} ended />
             {l.nation && (
               <p data-cm-farewell-nation className="text-xs text-muted-foreground">🌐 Managed {l.nation.nation} from Season {formatNumber(l.nation.since)}: {count(l.nation.played, 'tournament', 'tournaments')}, {formatNumber(l.nation.won)} won.</p>
             )}
