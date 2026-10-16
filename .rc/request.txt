@@ -1,0 +1,17 @@
+#!serial
+s12: CM_WORLD_MOVES_SECTIONS=12 node scripts/simCmWorldMoves.mjs
+c-slow: CM_WORLD_MOVES_CONTROL=slow node scripts/simCmWorldMoves.mjs
+mA-s14: node .rc/x/mut.mjs A && CM_WORLD_MOVES_SECTIONS=1,4 CM_WORLD_MOVES_ERAS=now node scripts/simCmWorldMoves.mjs; s=$?; git checkout -- src scripts; exit $s
+mA-unit: node .rc/x/mut.mjs A && node_modules/.bin/vitest run src/lib/clubManagerWorldMoves.test.ts --testTimeout=300000; s=$?; git checkout -- src scripts; exit $s
+mA-bound: node .rc/x/mut.mjs A && node scripts/simCmLedgerBound.mjs; s=$?; git checkout -- src scripts; exit $s
+mB-bound: node .rc/x/mut.mjs B && node scripts/simCmLedgerBound.mjs; s=$?; git checkout -- src scripts; exit $s
+mB-unit: node .rc/x/mut.mjs B && node_modules/.bin/vitest run src/lib/clubManagerWorldMoves.test.ts --testTimeout=300000; s=$?; git checkout -- src scripts; exit $s
+mB-s7: node .rc/x/mut.mjs B && CM_WORLD_MOVES_SECTIONS=1,7 CM_WORLD_MOVES_ERAS=now node scripts/simCmWorldMoves.mjs; s=$?; git checkout -- src scripts; exit $s
+mC-s14: node .rc/x/mut.mjs C && CM_WORLD_MOVES_SECTIONS=1,4 CM_WORLD_MOVES_ERAS=now node scripts/simCmWorldMoves.mjs; s=$?; git checkout -- src scripts; exit $s
+mD-s5: node .rc/x/mut.mjs D && CM_WORLD_MOVES_SECTIONS=5 node scripts/simCmWorldMoves.mjs; s=$?; git checkout -- src scripts; exit $s
+mD-unit: node .rc/x/mut.mjs D && node_modules/.bin/vitest run src/lib/clubManagerWorldMoves.test.ts --testTimeout=300000; s=$?; git checkout -- src scripts; exit $s
+mE-unit: node .rc/x/mut.mjs E && node_modules/.bin/vitest run src/lib/clubManagerWorldMoves.test.ts --testTimeout=300000; s=$?; git checkout -- src scripts; exit $s
+mE-s14: node .rc/x/mut.mjs E && CM_WORLD_MOVES_SECTIONS=1,4 CM_WORLD_MOVES_ERAS=now node scripts/simCmWorldMoves.mjs; s=$?; git checkout -- src scripts; exit $s
+mF-s3: node .rc/x/mut.mjs F && CM_WORLD_MOVES_SECTIONS=3 node scripts/simCmWorldMoves.mjs; s=$?; git checkout -- src scripts; exit $s
+mF-unit: node .rc/x/mut.mjs F && node_modules/.bin/vitest run src/lib/clubManagerWorldMoves.test.ts src/lib/clubManagerWorldRoster.test.ts --testTimeout=300000; s=$?; git checkout -- src scripts; exit $s
+clean: git status --short src scripts | head -5; git diff --quiet -- src scripts && echo "tree clean"
