@@ -1,0 +1,5 @@
+#!build
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/test/usCareerReports1346.test.tsx src/test/usCoachRetirement.test.tsx src/test/usCareerReveals.test.tsx src/test/usCareerProgrammeUi.test.tsx --testTimeout=300000 --hookTimeout=120000
+mine: ONLY=simUsCoachRetirement,simUsCareerSkips,simUsCoachCareer,simUsCoaching,simHarnessAnchors,simNoRivalNames,simStorageWrites node scripts/runAllSims.mjs
+parity: node scripts/simUsBoardParity.mjs
