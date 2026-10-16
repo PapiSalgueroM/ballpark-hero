@@ -1,0 +1,6 @@
+vitest-lib exit=0 50s |    Duration  48.77s (transform 6.19s, setup 2.02s, collect 13.19s, tests 87.97s, environment 12.52s, prepare 3.35s)
+vitest-mgr exit=0 29s |    Duration  27.22s (transform 12.94s, setup 1.43s, collect 33.67s, tests 25.96s, environment 10.03s, prepare 2.27s)
+tsc exit=0 137s | 
+saveSize-d exit=0 94s | simClubManagerSaveSize: all sections green
+vitest-cm1 exit=0 192s |    Duration  191.09s (transform 9.45s, setup 2.71s, collect 35.41s, tests 258.54s, environment 20.57s, prepare 4.52s)
+saveSize-uncapped exit=1 79s | simClubManagerSaveSize: CONTROL FIRED as it should, SAVE_SIZE_CONTROL=uncapped turned section 1 red (33 failures) and nothing else
