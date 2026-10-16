@@ -15786,3 +15786,7 @@ Standing claims after Round 400:
   the desktop lane above.
 - Manager arc four, promotion style world editing: Round 310 (cloud lane, 2026-08-28).
   Tweaks item 11 is complete across rounds 303, 308, 309 and 310.
+
+## Root Round1388 claimed, 2026-10-16 21:26 UTC
+
+Urgent fresh reports on published BH index-BQUxuJaU.js: Soccer Career Start does nothing on macOS Safari26.6.1 at1080x751/DPR2; Build Your XI cannot choose players with Real Madrid and4-4-2 on iPad CriOS156/WebKit at1180x768/DPR2. Base e814c2def671e07bd6163462dff8ab1230be2000 is app-equivalent to published ae14cf97. Root claims narrowly the creation path in src/pages/SoccerCareer.tsx, the reported picker path in src/pages/LineupBuilder.tsx and directly needed helpers only after diagnosis, plus new1388 tests/browser proof/workflow/audit. Existing I1340/1337 screens and I1502/1503 competitions remain owned by I; no core, data, engine, save policy or shared platform patch is inferred. Reproduce normal and failure paths on remote Chromium and WebKit before choosing a product fix. All heavy execution is remote GitHub Actions. I retains main/release/publication.1387 preliminary source is preserved separately and must not hold this urgent work.
