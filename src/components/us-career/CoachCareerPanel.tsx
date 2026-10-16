@@ -284,7 +284,7 @@ export default function CoachCareerPanel({ state, playerName, onChange, onBack, 
           /* Round 1346: a finished coaching career. The action card becomes the
              legacy: no season, no offer and no retire button, while the four
              tiles below still open the job, the market, the standing and the log. */
-          <div className="cm-rise text-center">
+          <div className="cm-rise text-center" data-coach-done>
             <p className="text-2xl">🧢</p>
             <h2 className="text-sm font-black text-foreground">Coaching career complete</h2>
             <p className="mt-1 text-xs font-bold text-foreground">

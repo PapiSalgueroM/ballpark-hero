@@ -208,11 +208,11 @@ export function DraftNightSequence({
         </div>
       </div>
       <div ref={actionsRef} data-night-actions className={cn('grid scroll-mb-3 gap-2', (!over || onReplay) && 'grid-cols-2')}>
-        {!over && <Button variant="outline" className="w-full whitespace-normal" onClick={onSkip}>Skip to the end</Button>}
-        {over && onReplay && <Button variant="outline" className="w-full whitespace-normal" onClick={onReplay} data-night-replay>Watch it again</Button>}
+        {!over && <Button variant="outline" className="min-h-11 w-full whitespace-normal" onClick={onSkip}>Skip to the end</Button>}
+        {over && onReplay && <Button variant="outline" className="min-h-11 w-full whitespace-normal" onClick={onReplay} data-night-replay>Watch it again</Button>}
         {/* The same border box as the outlined skip beside it, so the row keeps its
             height when the skip goes (the walk measured 2 px without this). */}
-        {onContinue && <Button className="w-full whitespace-normal border border-transparent" onClick={onContinue}>Start your career</Button>}
+        {onContinue && <Button className="min-h-11 w-full whitespace-normal border border-transparent" onClick={onContinue}>Start your career</Button>}
       </div>
     </div>
   );

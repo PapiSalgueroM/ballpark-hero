@@ -49,7 +49,7 @@ const N = 2000;
 const SEEDSET = 'a';
 const control = process.env.US_CAREER_SKIPS_CONTROL || '';
 const NIGHT = 'src/components/career/DraftNightSequence.tsx', JOURNEY = 'src/components/us-career/ProspectJourney.tsx';
-const replayButton = '        {over && onReplay && <Button variant="outline" className="w-full whitespace-normal" onClick={onReplay} data-night-replay>Watch it again</Button>}\n';
+const replayButton = '        {over && onReplay && <Button variant="outline" className="min-h-11 w-full whitespace-normal" onClick={onReplay} data-night-replay>Watch it again</Button>}\n';
 const motionGuard = 'onReplay={lessMotion() ? undefined : () => {';
 const CONTROLS = {
   noundo: ['  if (!preDraftCanUndoSkip(prev) || !prev.showcase) return prev;', '  if (prev) return prev;'],
