@@ -1,0 +1,4 @@
+#!serial
+subs-head: git worktree add -f .sb1 dec9075b >/dev/null 2>&1; SUBS_BASE=$PWD/.sb1 node scripts/simCmSubs.mjs --part=three
+subs-norec: git worktree add -f .sb2 dec9075b >/dev/null 2>&1; node .rc/x/review-run-gateoff.mjs && SUBS_BASE=$PWD/.sb2 node scripts/simCmSubs.mjs --part=three; s=$?; git checkout HEAD -- src scripts; exit $s
+subs-main: git worktree add -f .sb3 dec9075b >/dev/null 2>&1; git checkout d4f2c6f6 -- src scripts && SUBS_BASE=$PWD/.sb3 node scripts/simCmSubs.mjs --part=three; s=$?; git checkout HEAD -- src scripts; exit $s
