@@ -1,0 +1,1 @@
+summer-mlb: SIM_SPORTS=mlb node scripts/simUsCareerSummer.mjs
