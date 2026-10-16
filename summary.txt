@@ -1,0 +1,4 @@
+wm-12 exit=0 98s | simCmWorldMoves: green, sections 12 held
+ledgerbound exit=0 248s | simCmLedgerBound: green, all four sections held
+appeal-head exit=1 5s | Node.js v24.21.0
+appeal-oldengine exit=1 1s | Node.js v24.21.0
