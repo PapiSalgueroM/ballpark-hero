@@ -10,6 +10,7 @@ import ManagerAvatar from '@/components/club-manager/ManagerAvatar';
 import EditManagerSheet from '@/components/club-manager/EditManagerSheet';
 import { huntBusy } from '@/lib/clubManagerJobHunt';
 import { BACKGROUND_TREE, TREE_INFO } from '@/lib/clubManagerXp';
+import { highestScoringOf, scoringOutcome } from '@/lib/clubManagerRecords';
 
 /* Round 1325: a score printed low number first. The save has kept the worst
    defeat as the other side's goals first since Round 71, so "3-0 vs Manchester
@@ -169,12 +170,30 @@ export default function ClubManagerCareerPanel({ c, g, nationOffer }: {
                       <div className="text-[9px] text-muted-foreground">Trophies</div>
                     </div>
                   </div>
+                  <ManagerRecordLines c={c} />
+                </div>
+                </>
+  );
+}
+
+/* Round 1343: the record lines, one list for the Manager panel and the farewell. Text unchanged from the panel,
+   plus the highest scoring game after the worst defeat. */
+export function ManagerRecordLines({ c }: { c: CareerState }) {
+  const high = highestScoringOf(c);
+  const counted = high?.missed ? Math.max(0, c.careerStats.played - high.missed) : 0;
+  return (
                   <div data-cm-career-lines className="space-y-0.5 text-xs text-muted-foreground">
                     {c.careerStats.biggestWin && (
                       <p>🎉 Biggest win: <span className="text-foreground font-semibold">{c.careerStats.biggestWin.score}</span> vs {c.careerStats.biggestWin.opp}</p>
                     )}
                     {c.careerStats.biggestDefeat && (
                       <p data-cm-worst-defeat>💀 Worst defeat: <span className="text-foreground font-semibold">{lowFirst(c.careerStats.biggestDefeat.score)}</span> vs {c.careerStats.biggestDefeat.opp}</p>
+                    )}
+                    {high && (
+                      <p data-cm-highest-scoring>⚽ Highest scoring game: <span className="text-foreground font-semibold">{high.score}</span>{SCORING_WORD[scoringOutcome(high)]} vs {high.opp}{SCORING_AFTER[scoringOutcome(high)]}, Season {formatNumber(high.season)}</p>
+                    )}
+                    {high && (high.missed ?? 0) >= 1 && (
+                      <p data-cm-highest-scoring-missed>Counted from {formatNumber(counted)} of your {formatNumber(c.careerStats.played)} matches. Your save no longer keeps the scores of the other {formatNumber(high.missed!)}.</p>
                     )}
                     {c.careerStats.mostExpensiveBuy && (
                       <p>💸 Priciest buy: <span className="text-foreground font-semibold">{c.careerStats.mostExpensiveBuy.name}</span> ({money(c.careerStats.mostExpensiveBuy.fee, c)})</p>
@@ -187,7 +206,10 @@ export default function ClubManagerCareerPanel({ c, g, nationOffer }: {
                     )}
                     {c.careerStats.played === 0 && <p>Take charge of your first match and the numbers start here.</p>}
                   </div>
-                </div>
-                </>
   );
 }
+
+/* The word after the score comes from the score (a res that contradicts it gets none); res only says who won a
+   level shootout. Never "2-5 win". */
+const SCORING_WORD: Record<ReturnType<typeof scoringOutcome>, string> = { win: ' win', loss: ' loss', draw: ' draw', pensWon: '', pensLost: '', plain: '' };
+const SCORING_AFTER: Record<ReturnType<typeof scoringOutcome>, string> = { win: '', loss: '', draw: '', pensWon: ', won on penalties', pensLost: ', lost on penalties', plain: '' };
