@@ -1,0 +1,7 @@
+preA exit=0 44s | preA seed=4 exit=0 | 1. appeals: 256 matches, 13 straight reds, 3 second yellows, 13 appeals offered |  | simClubManagerDecisions: 0 findings
+r1351 exit=1 50s | r1351 seed=4 exit=1 | 1. appeals: 254 matches, 15 straight reds, 3 second yellows, 15 appeals offered | FAIL [4] only 33 of 36 card answers were walked; missing pressPres
+r1357 exit=0 59s | r1357 seed=4 exit=0 | 1. appeals: 254 matches, 15 straight reds, 3 second yellows, 15 appeals offered |  | simClubManagerDecisions: 0 findings
+notes exit=0 60s | notes seed=4 exit=0 | 1. appeals: 254 matches, 15 straight reds, 3 second yellows, 15 appeals offered |  | simClubManagerDecisions: 0 findings
+main exit=1 63s | main seed=4 exit=1 | 1. appeals: 197 matches, 5 straight reds, 2 second yellows, 5 appeals offered | FAIL [1] only 5 straight reds in the play seasons, under the floor of
+mainfrozen exit=0 50s | mainfrozen seed=4 exit=0 | 1. appeals: 246 matches, 9 straight reds, 2 second yellows, 9 appeals offered |  | simClubManagerDecisions: 0 findings
+head exit=1 63s | head seed=4 exit=1 | 1. appeals: 197 matches, 5 straight reds, 2 second yellows, 5 appeals offered | FAIL [1] only 5 straight reds in the play seasons, under the floor of

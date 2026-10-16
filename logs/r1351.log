@@ -1,0 +1,6 @@
+r1351 at f40dd50db mode=tree desk=b97ae890
+r1351 seed=default exit=1 | 1. appeals: 221 matches, 12 straight reds, 3 second yellows, 12 appeals offered | FAIL [4] only 33 of 36 card answers were walked; missing pressPressure#0, pressPressure#1, pressPressure#2; | simClubManagerDecisions: 1 findings
+r1351 seed=1 exit=1 | 1. appeals: 253 matches, 11 straight reds, 9 second yellows, 11 appeals offered | FAIL [4] only 33 of 36 card answers were walked; missing pressPressure#0, pressPressure#1, pressPressure#2; | simClubManagerDecisions: 1 findings
+r1351 seed=2 exit=1 | 1. appeals: 249 matches, 15 straight reds, 1 second yellows, 15 appeals offered | FAIL [4] only 33 of 36 card answers were walked; missing pressPressure#0, pressPressure#1, pressPressure#2; | simClubManagerDecisions: 1 findings
+r1351 seed=3 exit=1 | 1. appeals: 257 matches, 12 straight reds, 5 second yellows, 12 appeals offered | FAIL [4] only 33 of 36 card answers were walked; missing pressPressure#0, pressPressure#1, pressPressure#2; | simClubManagerDecisions: 1 findings
+r1351 seed=4 exit=1 | 1. appeals: 254 matches, 15 straight reds, 3 second yellows, 15 appeals offered | FAIL [4] only 33 of 36 card answers were walked; missing pressPressure#0, pressPressure#1, pressPressure#2; | simClubManagerDecisions: 1 findings

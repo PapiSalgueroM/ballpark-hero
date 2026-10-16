@@ -1,0 +1,6 @@
+head at b275c0a24 mode=tree desk=04a2a47e
+head seed=default exit=0 | 1. appeals: 193 matches, 12 straight reds, 3 second yellows, 12 appeals offered |  | simClubManagerDecisions: 0 findings
+head seed=1 exit=0 | 1. appeals: 184 matches, 10 straight reds, 1 second yellows, 10 appeals offered |  | simClubManagerDecisions: 0 findings
+head seed=2 exit=0 | 1. appeals: 230 matches, 14 straight reds, 3 second yellows, 14 appeals offered |  | simClubManagerDecisions: 0 findings
+head seed=3 exit=0 | 1. appeals: 178 matches, 6 straight reds, 3 second yellows, 6 appeals offered |  | simClubManagerDecisions: 0 findings
+head seed=4 exit=1 | 1. appeals: 197 matches, 5 straight reds, 2 second yellows, 5 appeals offered | FAIL [1] only 5 straight reds in the play seasons, under the floor of 6; | simClubManagerDecisions: 1 findings
