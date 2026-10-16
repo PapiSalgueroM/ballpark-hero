@@ -1,0 +1,5 @@
+mkbase exit=0 0s | 1027b08ca Record Release BH: live at 10:42 EDT on 2026-10-16 (main ae14cf97, deployment 9056c804), with the board note for the other lane
+simCreateClub-base exit=1 6s | simCreateClub: 1 failure
+simGmStaff-base exit=1 2s | GM STAFF: 40 failure(s)
+simGmDealTableFixture-base exit=1 0s | simGmDealTableFixture: FAIL, 2 section(s) differ from the recording
+simCreateClub-head2 exit=1 6s | simCreateClub: 1 failure
