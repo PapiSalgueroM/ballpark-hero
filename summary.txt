@@ -1,0 +1,7 @@
+build exit=0 27s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+controls exit=0 3s | controls: stock=1 noplugin=1 gated=1 dynamicspec=1
+simSnapshotAssets exit=0 0s | simSnapshotAssets: green. Every page knows where its own code is, and finding out costs nobody a round trip.
+simSeoTitles exit=0 1s | simSeoTitles: green. 133 games carry a keyword title and description, PageSeo renders them lazily, every saved page matches, and the entry chunk is clean, and every saved
+simNoRivalNames exit=0 15s | No rival product names found. 0 findings.
+preload exit=0 52s | stockbuild=0 head=0 stockdist=1 extra=1
+tsc exit=0 63s | 

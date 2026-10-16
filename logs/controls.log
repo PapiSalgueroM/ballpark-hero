@@ -1,0 +1,5 @@
+simPreloadWait: control stock turned section(s) 1 red and nothing else. The check works.
+simPreloadWait: control noplugin turned section(s) 6 red and nothing else. The check works.
+simPreloadWait: control gated turned section(s) 6 red and nothing else. The check works.
+simPreloadWait: control dynamicspec turned section(s) 6 red and nothing else. The check works.
+controls: stock=1 noplugin=1 gated=1 dynamicspec=1
