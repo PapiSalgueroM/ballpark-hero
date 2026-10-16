@@ -1,0 +1,10 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/test/historicalOpponentLabels.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 141[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m8 passed[39m[22m[90m (8)[39m
+[2m   Start at [22m 09:24:27
+[2m   Duration [22m 4.46s[2m (transform 2.55s, setup 106ms, collect 3.16s, tests 141ms, environment 504ms, prepare 175ms)[22m
+

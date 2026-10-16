@@ -1,0 +1,9 @@
+headsha: git log --oneline -3
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-unit: node_modules/.bin/vitest run src/test/historicalOpponentLabels.test.ts --testTimeout=300000 --hookTimeout=120000
+vitest-centre: node_modules/.bin/vitest run src/test/seasonCentreOwnGoals.test.tsx src/test/seasonCentreSlots.test.tsx src/test/seasonCentreWords.test.tsx src/test/seasonReplays.test.tsx src/test/soccerSeasonCompetitions.test.tsx --testTimeout=300000 --hookTimeout=120000
+genCheck: node scripts/genCareerLeagueSeasons.mjs --check
+simCareerLeagueSeasons: node scripts/simCareerLeagueSeasons.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simSeasonCentreMotion: node scripts/simSeasonCentreMotion.mjs
