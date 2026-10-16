@@ -1,0 +1,2 @@
+glue-m1 exit=0 119s | GLUE m1 CAUGHT
+glue-m10 exit=0 115s | GLUE m10 CAUGHT

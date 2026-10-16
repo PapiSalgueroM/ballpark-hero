@@ -1,0 +1,10 @@
+mut m1: applied to src/pages/ClubManager.tsx
+  FAIL  390: the switch left on, Skip made a No sacking career (save noSack null)
+  FAIL  390: the Dugout-made career wears the pill
+  FAIL  390: Options reads "🛡️ No sacking Off Turn on No sacking The board can moan but it can never fire y" with no way off
+  FAIL  390: the Managers card reads "SLOT 1 · LAST PLAYED You Brentford 2026-27 · Season 1 Week 1 of 54 · Board 60/100 🏆 0 tro"
+  PASS  no page errors
+
+playCmNoSack: 4 failures
+GLUE m1: playCmNoSack exit=1 on the build with the mutation
+GLUE m1 CAUGHT
