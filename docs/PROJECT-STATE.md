@@ -18476,3 +18476,8 @@ approve the new tree. The completed combined 587 run `35001991548` failed the
 old broad SVG map guard, lazy-panel test waits and Wonderkid's 271K/270K budget.
 Its expected negative controls passed. The records below retain earlier
 verification context and do not supersede this current integration note.
+
+## Codex Round1385 claimed: queued Life money choices, 2026-10-16
+
+Isolated codex/career-pending-money-gates starts at qualified PR286 final75abee825b73c34b4a7a6d6852de1417a20cc8aa. Scope only four catalog availability gates226/251/258/259 in soccerCareerLife.ts, preserving all callback amounts, esports guard, fresh eligibility, Engine/Save and eleven popularity guards. Actual234 lawyer reply spends0.3 before an already offered target; all thirteen target outcomes remain affordable in the declared fixture. Method first, actual remote four precise faults/four preserves before product; current/original/restored states/RNG, types/build15readers/weights required. No general overdraft/natural-frequency claim, local runtime or release ownership. Details in docs/audits/career-pending-money-gates.md.
+
