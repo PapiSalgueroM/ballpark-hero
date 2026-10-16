@@ -1,0 +1,9 @@
+1) The engine: 8 descriptors, 2000 roads each (seed set a) plus five edge stocks, control clamp
+  FAIL [section 1] nfl:now #3: the undo is not the state before the skip, to the byte
+  FAIL [section 1] nfl:now #21: the undo is not the state before the skip, to the byte
+  FAIL [section 1] nfl:now #35: the undo is not the state before the skip, to the byte
+  FAIL [section 1] nfl:now #57: the undo is not the state before the skip, to the byte
+  FAIL [section 1] nfl:now #58: the undo is not the state before the skip, to the byte
+   16040 showcase states, 1099 of them clamped skips: 1099 states red
+2) skipped under a control (the controls aim at section 1)
+CONTROL clamp FIRED: section 1 red on 1099 states
