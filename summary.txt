@@ -1,0 +1,13 @@
+quickSubs-all exit=0 21s | All 1 harnesses green.
+simCmShootoutOrder exit=0 39s | simCmShootoutOrder: all sections passed
+simCmQuickLegs exit=0 82s | simCmQuickLegs: PASS, 10 sections green
+continuity exit=1 40s |     at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simManagerWorldContinuity.mjs:489:24
+simCmVar exit=0 197s | simCmVar normal: actual review outcomes and full prior baseline passed.
+simCmUnseededWorld exit=1 196s | simCmUnseededWorld: 112 FAILURE(S)
+worldBrowser exit=0 99s | All 1 harnesses green.
+subs-dec exit=1 253s | simCmSubs RED: 62 of 66 checks green (parts ledger, rule, extratime, cutover, oppextratime, opponent, coach, press, legacy, three, hotseat)
+matchPlans exit=1 182s | 1 harness not green.
+continuity-preflight exit=0 25s |    Duration  23.62s (transform 2.72s, setup 225ms, collect 3.76s, tests 23.60s, environment 1.04s, prepare 285ms)
+simClubManagerDecisions exit=0 23s | simClubManagerDecisions: 0 findings
+numberFormatting exit=1 160s | Node.js v24.21.0
+worldSizeDiagnostic exit=0 464s | DIAGNOSTIC complete: original/current unchanged historical budgets, full raw states, storage and unfiltered action vectors retained

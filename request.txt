@@ -1,0 +1,13 @@
+simCmShootoutOrder: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCmShootoutOrder.mjs
+quickSubs-all: CM_QUICK_SUBS_CONTROL=all ONLY=simCmQuickSubs node scripts/runAllSims.mjs
+simCmQuickLegs: node scripts/simCmQuickLegs.mjs
+simCmVar: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCmVar.mjs
+simCmUnseededWorld: node scripts/simCmUnseededWorld.mjs
+continuity: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simManagerWorldContinuity.mjs
+subs-dec: git worktree add -f .sb2 dec9075b >/dev/null 2>&1; SUBS_BASE=$PWD/.sb2 node scripts/simCmSubs.mjs
+matchPlans: MANAGER_MATCH_PLANS_CONTROL=all ONLY=simManagerMatchPlans node scripts/runAllSims.mjs
+worldBrowser: MANAGER_WORLD_BROWSER_CONTROL=all ONLY=simManagerWorldBrowser node scripts/runAllSims.mjs
+worldSizeDiagnostic: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/managerWorldSizeDiagnostic.mjs
+numberFormatting: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" NUMBER_FORMATTING_CONTROL=all node scripts/simNumberFormatting.mjs
+continuity-preflight: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node node_modules/vitest/vitest.mjs run src/lib/clubManagerWorldRoster.test.ts src/lib/clubManagerTrajectory.test.ts
+simClubManagerDecisions: node scripts/simClubManagerDecisions.mjs
