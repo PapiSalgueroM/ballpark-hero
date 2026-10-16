@@ -30,7 +30,8 @@ await build({
     export { keyedRng } from '@/lib/keyedRng';
     export { defaultAppearance } from '@/lib/soccerCareerAppearance';
     export { pushHeadlines } from '@/lib/careerSocial';
-    export { summerOn, newSummerSalt } from '@/lib/usCareerSummer';
+    export { summerOn, newSummerSalt, startSummer } from '@/lib/usCareerSummer';
+    export { talkDeckFilter } from '@/lib/usCareerRetirementFlow';
   `, resolveDir: ROOT, sourcefile: 'career993-expected.ts', loader: 'ts' },
   outfile: bundle, bundle: true, platform: 'node', format: 'cjs', logLevel: 'silent', alias: { '@': path.join(ROOT, 'src') },
 });
@@ -248,7 +249,9 @@ try {
       sport.progress(advanced, () => .4);
       advanced.headlines = M.pushHeadlines(advanced.headlines, sport.headlinesFor(advanced, line));
       assert(!sport.shouldRetire(advanced), 'Fresh native prospect unexpectedly retired');
-      sport.drawEvent(advanced, () => .4);
+      /* Round 1038 and 1039: the offseason is the board's startSummer (on the one card knob exactly the old
+         sport.drawEvent), with the retirement talk's deck filter the board passes. */
+      M.startSummer(advanced, sport, () => .4, M.talkDeckFilter(advanced, sport.hall));
       expected = { ...expected, c: advanced, phase: 'event' };
       await activate(play, touch); await expectSave(); await inspect('first-pro-season');
       assert.equal(expected.c.seasons.length, 1); assert.equal(expected.c.seasons[0].year, firstYear);
