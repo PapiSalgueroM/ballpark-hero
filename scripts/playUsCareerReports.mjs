@@ -243,15 +243,19 @@ async function walkW3(browser, sport, size) {
     await knock('W3', '[data-showcase-undo]');
     const undoButton = page.getByRole('button', { name: 'Undo skip', exact: true });
     await undoButton.scrollIntoViewIfNeeded();
-    const scrollBeforeUndo = await page.evaluate(() => scrollY);
+    const where = () => page.evaluate(() => ({ y: Math.round(scrollY), top: Math.round(document.querySelector('[data-testid="draft-showcase"]').getBoundingClientRect().top) }));
+    const beforeUndo = await where();
     await tap(undoButton);
     await page.locator('[data-prospect-phase="showcase"]').waitFor();
     if (JSON.stringify(JSON.parse(await bytes()).prospect.state) !== stateBefore) fail(id, 'the undo did not put back the road state from before the skip');
     await check('undone', '[data-testid="draft-showcase"]');
-    /* Brief 3.4.3: the undo must not jump the page. The review's 507 to 0 was read across a reload. */
-    const scrollAfterUndo = await page.evaluate(() => scrollY);
-    notes.push(`${id}: scrollY ${scrollBeforeUndo} before Undo skip, ${scrollAfterUndo} after`);
-    if (Math.abs(scrollAfterUndo - scrollBeforeUndo) > 2) fail(id, `Undo skip moved the page from scrollY ${scrollBeforeUndo} to ${scrollAfterUndo}`);
+    /* Brief 3.4.3: the undo must not jump the page, read where the eye is: the card's top on the screen. The review's
+       scrollY 507 to 0 was read across a reload. scrollY alone is the wrong measure: on a runner (r1346-fx1w) it went
+       507 to 500 at 390 and 496 to 493 at 1280 around the undo, so the line reads the card's top, which is what a
+       jump would move. */
+    const afterUndo = await where();
+    notes.push(`${id}: around Undo skip the card's top is at ${beforeUndo.top} then ${afterUndo.top} px on screen (scrollY ${beforeUndo.y} then ${afterUndo.y})`);
+    if (Math.abs(afterUndo.top - beforeUndo.top) > 2) fail(id, `Undo skip moved the card's top on screen from ${beforeUndo.top} to ${afterUndo.top} px`);
     await tap(skip);
     await page.locator('[data-prospect-phase="draft"]').waitFor();
     await nightChunk(page);
