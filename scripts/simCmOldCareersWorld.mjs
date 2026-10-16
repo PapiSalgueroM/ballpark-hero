@@ -173,7 +173,7 @@ function oldJourney(M, raw, seed) {
   for (let i = 0; i < 260; i += 1) {
     const got = step(`next-${i + 1}`, cur => { const r = M.cm.playNextEntry(cur, PLAY); return { state: r.state, kind: r.kind }; });
     if (got.kind === 'window') { reload('after January'); break; }
-    if (got.kind === 'seasonOver' || s.sacked) throw new Error('the next season ended (or the manager was sacked) before its January window');
+    if (got.kind === 'seasonOver' || s.sacked) throw new Error(`the next season ended (or the manager was sacked) before its January window (season ${s.season} week ${s.week} of ${s.calendar?.length}, ${got.kind}, sacked ${!!s.sacked}, wilderness ${!!s.wilderness}, board ${s.boardConfidence})`);
     if (i === 259) throw new Error('no January window in 260 entries');
   }
   return steps;
@@ -228,9 +228,16 @@ async function fixtureSection(B, H) {
   for (const [n, name] of names.entries()) {
     const raw = file.saves[name], parsed = JSON.parse(raw);
     if ('worldSeed' in parsed || 'worldRoster' in parsed) cannot(`fixture ${name} carries a seed or a ledger: it is not an old career's`);
-    const seed = (0x1508f0 + n * 977) >>> 0;
-    let a, b;
-    try { a = oldJourney(await B(), raw, seed); } catch (e) { cannot(`fixture ${name} on BASE: ${e.message}`); }
+    /* A tape on which BASE keeps its manager through the next January (the board can sack him at a season's end, and
+       a sacked career meets no January): the first of six, each tried in order and printed when passed over. */
+    let a, b, seed = 0;
+    const passed = [];
+    for (let t = 0; t < 6 && !a; t += 1) {
+      seed = (0x1508f0 + n * 977 + t * 101) >>> 0;
+      try { a = oldJourney(await B(), raw, seed); } catch (e) { passed.push(`tape ${t}: ${e.message}`); }
+    }
+    if (!a) cannot(`fixture ${name} on BASE, six tapes: ${passed.join('; ')}`);
+    if (passed.length) console.log(`  fixture ${name}: ${passed.length} tape(s) passed over (${passed.join('; ')})`);
     const HM = await H();
     try { b = oldJourney(HM, raw, seed); } catch (e) { fail(1, `fixture ${name}: this tree threw: ${e.message}`); continue; }
     s1.saves += 1;
