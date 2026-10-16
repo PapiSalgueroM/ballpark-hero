@@ -1,0 +1,27 @@
+#!build
+#!playwright
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+unitset: node_modules/.bin/vitest run src/lib/clubManagerBoardVerdict.test.ts src/test/clubManagerOfferConfirm.test.tsx src/test/cmLeagueLeadersCard.test.tsx src/test/managerHotSeatCarryOnCard.test.tsx src/test/dailyMenuResume.test.tsx --testTimeout=300000 --hookTimeout=120000
+walk: node scripts/playCmBoardVerdict.mjs
+walk-noconfirm: git worktree add -q .claude/worktrees/ctl1 HEAD && node .rc/x/ctlPatch2.mjs .claude/worktrees/ctl1 noconfirm && (cd .claude/worktrees/ctl1 && ../../../node_modules/.bin/vite build --outDir "$OLDPWD/dist-noconfirm" --emptyOutDir --logLevel error) && DIST=dist-noconfirm PLAY_BOARD_CONTROL=noconfirm node scripts/playCmBoardVerdict.mjs
+walk-nofate: sleep 4 && git worktree add -q .claude/worktrees/ctl2 HEAD && node .rc/x/ctlPatch2.mjs .claude/worktrees/ctl2 nofate && (cd .claude/worktrees/ctl2 && ../../../node_modules/.bin/vite build --outDir "$OLDPWD/dist-nofate" --emptyOutDir --logLevel error) && DIST=dist-nofate PLAY_BOARD_CONTROL=nofate node scripts/playCmBoardVerdict.mjs
+walk-rise: sleep 8 && git worktree add -q .claude/worktrees/ctl3 HEAD && node .rc/x/ctlPatch2.mjs .claude/worktrees/ctl3 rise && (cd .claude/worktrees/ctl3 && ../../../node_modules/.bin/vite build --outDir "$OLDPWD/dist-rise" --emptyOutDir --logLevel error) && DIST=dist-rise PLAY_BOARD_CONTROL=rise node scripts/playCmBoardVerdict.mjs
+weight-head: (node scripts/lib/hostLikeServer.mjs dist 4182 > /dev/null 2>&1 &) && sleep 5 && BASE=http://localhost:4182 SWEEP_BASE=http://localhost:4182 SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+simDailyDeals: node scripts/simDailyDeals.mjs
+simManagerHotSeat: node scripts/simManagerHotSeat.mjs
+simDeadlineDay: node scripts/simDeadlineDay.mjs
+simDailyClubPool: node scripts/simDailyClubPool.mjs
+simMidSeasonStart: node scripts/simMidSeasonStart.mjs
+simCmApplications: node scripts/simCmApplications.mjs
+worldbrowser-head: MANAGER_WORLD_BROWSER_CONTROL=all node scripts/simManagerWorldBrowser.mjs
+vitest-cm: node_modules/.bin/vitest run clubManager cmTables cmWorld cmValue cmMinute cmLeague clubDetail staffScreen managerHotSeat --testTimeout=300000 --hookTimeout=120000
+ownclub: node scripts/simCmOwnClubMarket.mjs
+savesize: node scripts/simClubManagerSaveSize.mjs
+slots: node scripts/simClubManagerSlots.mjs
+ctl-unseeded-noinverse: CM_UNSEEDED_BASE=$(bash .rc/x/baseDeck.sh) && export CM_UNSEEDED_BASE && CM_UNSEEDED_CONTROL=noinverse node scripts/simCmUnseededWorld.mjs 2>&1 | tee "$TMPDIR/ctl.log"; s=${PIPESTATUS[0]}; [ $s -eq 1 ] && grep -qF 'simCmUnseededWorld: CONTROL noinverse FIRED: without the inverse the fresh careers differ from the base' "$TMPDIR/ctl.log"
+unseeded-minusAZ: CM_UNSEEDED_BASE=$(bash .rc/x/baseDeck.sh) && export CM_UNSEEDED_BASE && echo "base $CM_UNSEEDED_BASE (Release BC as published without Release AZ)" && node scripts/simCmUnseededWorld.mjs 2>&1 | tee "$TMPDIR/ctl.log"; s=${PIPESTATUS[0]}; [ $s -eq 0 ] && grep -qF 'simCmUnseededWorld: green. ' "$TMPDIR/ctl.log"
+continuity-minusAZ: MANAGER_WORLD_CONTINUITY_BASE=$(bash .rc/x/baseDeck.sh) && export MANAGER_WORLD_CONTINUITY_BASE && echo "base $MANAGER_WORLD_CONTINUITY_BASE (Release BC as published without Release AZ)" && MANAGER_WORLD_CONTINUITY_ARTIFACTS="$TMPDIR/mwc" node scripts/simManagerWorldContinuity.mjs 2>&1 | tee "$TMPDIR/ctl.log"; s=${PIPESTATUS[0]}; [ $s -eq 0 ] && grep -qF 'Manager world continuity: 1 arms, eleven complete groups per arm' "$TMPDIR/ctl.log" && grep -qF 'Private world variation is measured, no historical fixture was re-recorded' "$TMPDIR/ctl.log"
+ctl-continuity-all: MANAGER_WORLD_CONTINUITY_BASE=$(bash .rc/x/baseDeck.sh) && export MANAGER_WORLD_CONTINUITY_BASE && echo "base $MANAGER_WORLD_CONTINUITY_BASE (Release BC as published without Release AZ)" && MANAGER_WORLD_CONTINUITY_ARTIFACTS="$TMPDIR/mwc" MANAGER_WORLD_CONTINUITY_CONTROL=all node scripts/simManagerWorldContinuity.mjs 2>&1 | tee "$TMPDIR/ctl.log"; s=${PIPESTATUS[0]}; [ $s -eq 0 ] && grep -qE 'Manager world continuity: ([2-9]|[1-9][0-9]+) arms, eleven complete groups per arm' "$TMPDIR/ctl.log" && grep -qF 'Private world variation is measured, no historical fixture was re-recorded' "$TMPDIR/ctl.log"
