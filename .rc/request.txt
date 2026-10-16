@@ -1,0 +1,16 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+noSack: node scripts/simCmNoSack.mjs
+guideHeadings: node scripts/simGuideHeadings.mjs
+academy: node scripts/simAcademy.mjs
+aLeague: node scripts/simClubManagerALeague.mjs
+varLedger: node scripts/simCmVarLedger.mjs
+eras: node scripts/simEras.mjs
+press: node scripts/simPress.mjs
+roles: node scripts/simRoles.mjs
+wilderness: node scripts/simWilderness.mjs
+trustCopy: node scripts/simTrustCopy.mjs
+missingEleven: node scripts/simMissingElevenSources.mjs
+anchors: node scripts/simHarnessAnchors.mjs
+noRival: node scripts/simNoRivalNames.mjs
+budget: node scripts/simClubManagerBudget.mjs
+score: node scripts/simClubManagerScore.mjs
