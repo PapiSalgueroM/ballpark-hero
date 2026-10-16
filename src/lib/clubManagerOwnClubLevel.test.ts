@@ -114,7 +114,7 @@ describe("the manager's own club is read from his club, never the world roster",
     expect(worldRosterXIAvg(fresh, 'Liverpool')).toBe(base);
   });
 
-  it("in a seeded career the market lists nobody at his own club, ledger or none, and the club he leaves is listed at once", () => {
+  it("in every career the market lists nobody at his own club, ledger or none, and the club he leaves is listed at once", () => {
     /* Release AZ fix pass 4: his club is his squad, and the market drops every man of his squad, so what the world
        roster put at his club were men who are not his. Real Madrid's bake holds more men than the 26 a squad starts with. */
     const s: CareerState = withRoll(0.6, () => ({ ...startCareer('Real Madrid'), budget: 9999, wageCap: 9999, transferWindow: 'summer' as const }));
@@ -122,10 +122,15 @@ describe("the manager's own club is read from his club, never the world roster",
     expect(s.worldRoster).toBeUndefined();
     const old: CareerState = { ...s };
     delete old.worldSeed;
-    /* A career from before the release lists them, on sale from his own club, exactly as it always did (ruling Y1). */
-    const oldMine = buildMarket(old).filter(m => m.club === 'Real Madrid');
-    expect(oldMine.length).toBeGreaterThan(0);
-    expect(oldMine.some(m => s.squad.some(p => p.name === m.name))).toBe(false);
+    /* Round 1339: a career from before Release AZ lists nobody at his own club either, the same as his club's page.
+       The men it drops are the old line's Real Madrid rows, read here off the same save seen from another club. */
+    const seenFromBarcelona = buildMarket({ ...old, clubName: 'Barcelona' });
+    const dropped = seenFromBarcelona.filter(m => m.club === 'Real Madrid');
+    expect(dropped.length).toBeGreaterThan(0);
+    expect(dropped.some(m => s.squad.some(p => p.name === m.name))).toBe(false);
+    expect(buildMarket(old).some(m => m.club === 'Real Madrid')).toBe(false);
+    expect(buildMarket(old).some(m => m.club === 'Barcelona')).toBe(true);
+    expect(buildMarket(old).filter(m => m.club !== 'Barcelona')).toEqual(seenFromBarcelona.filter(m => m.club !== 'Real Madrid'));
     expect(buildMarket(s).some(m => m.club === 'Real Madrid')).toBe(false);
     expect(buildMarket(s).some(m => m.club === 'Barcelona')).toBe(true);
     const man = [...s.squad].filter(p => p.position !== 'GK' && !p.isYouth).find(p => releaseBlock(s, p) === null)!;

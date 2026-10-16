@@ -388,9 +388,10 @@ if (CONTROL === 'nosev') {
     '  if (releasedByYouNames(career).has(mp.name)) return `You released ${mp.name}. He will not sign for you again.`;\n  /* Round 634: nor a man you have out on loan',
     '  /* Round 634: nor a man you have out on loan');
 } else if (CONTROL === 'ownclub') {
-  /* Release AZ fix pass 4: the market lists my own club's world roster again, ledger or none. */
+  /* Release AZ fix pass 4: the market lists my own club's world roster again, ledger or none (Round 1339: the
+     rule now holds in every career, so the anchor is the one line that drops my club). */
   rewrite('ownclub', 'engine',
-    '  if (!held) return worldSeedOf(career) === undefined ? fallback : fallback.filter(p => p.club !== career.clubName);\n',
+    '  if (!held) return fallback.filter(p => p.club !== career.clubName);\n',
     '  if (!held) return fallback;\n');
   rewrite('ownclub', 'engine',
     '    if (club === current.clubName) continue;\n',
