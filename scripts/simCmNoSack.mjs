@@ -31,9 +31,15 @@
  *      fixed script on this tree and on the base (as in section 1): the whole state equal, no state carries the key. Deadline
  *      Day plays no match, so the gate cannot reach it whatever its state holds; that is proved from its code
  *      (deadlineDay.ts, comments stripped, calls none of the match or No sacking entry points).
+ *   7. THE BROKEN PROMISE. Round 465's recheck: a promise to win broken by a defeat costs 4 AFTER the first sack
+ *      check. Every match planted with a promise and the board on 2, 3.5, 5 or 6.5, played with No sacking and by
+ *      its Normal twin from the same state and stream: a twin that keeps the job is the same career to the byte; a
+ *      twin sacked at the recheck is matched by a No sacking career in the job with the second floor's one line
+ *      after the broken promise (at least PROMISE_FLOOR of them); a match that fires both floors shows one line
+ *      (at least BOTH_FLOOR of them).
  *
  * CONTROLS (NO_SACK_CONTROL), each patches the bundle or the text read, never src, and must turn its sections red:
- *   sack       boardMaySack answers true for every save                 sections 2 and 3
+ *   sack       boardMaySack answers true for every save                 sections 2, 3 and 7
  *   refuse     turnOnNoSack stops refusing a sacked or wilderness career section 4
  *   ranked     postsScore answers true for every save                   section 4
  *   stale      turnOnNoSack stores season 1 whatever the season          section 4
@@ -44,6 +50,8 @@
  *   leak       defaultStartOptions writes the key into every new block  sections 1 and 6 (every Hot Seat date)
  *   draw       the first floor draws from Math.random on every match    section 1
  *   ddreach    deadlineDay.ts gains a playNextEntry call                 section 6
+ *   nofloor2   the second floor (after the broken promise) is taken out  section 7
+ *   twoline    the second floor pushes its line even after the first    section 7
  * Exit 0 green, 1 red or a control that fired (last line says FIRED), 2 could not run, 3 a control that did not fire.
  *
  *   git worktree add .tmp-base <base sha> && BASE_ROOT=.tmp-base node scripts/simCmNoSack.mjs
@@ -82,6 +90,8 @@ const PATCHES = {
   leak: { file: 'clubManagerStart.ts', from: '    strictness: STRICTNESS_DEFAULT,\n  };', to: '    strictness: STRICTNESS_DEFAULT,\n    noSack: 1,\n  };' },
   stale: { file: 'clubManagerStart.ts', from: '  const season = Number.isInteger(state.season) && state.season > 0 ? state.season : 1;', to: '  const season = 1;' },
   noslot: { file: 'clubManagerSlots.ts', from: '      ...(noSackFrom(c as CareerState) !== null ? { noSack: true as const } : {}),\n', to: '' },
+  nofloor2: { file: 'clubManager.ts', from: '  if (!boardMaySack(state) && state.boardConfidence <= 0) {\n    state.boardConfidence = 1;\n    if (!noSackLine) events.push(NO_SACK_LINE);\n  }\n', to: '' },
+  twoline: { file: 'clubManager.ts', from: '    if (!noSackLine) events.push(NO_SACK_LINE);\n', to: '    events.push(NO_SACK_LINE);\n' },
   draw: { file: 'clubManager.ts', from: '  if (!boardMaySack(state) && state.boardConfidence <= 0) {\n    state.boardConfidence = 1;\n    noSackLine = true;', to: '  if (Math.random() < 2 && !boardMaySack(state) && state.boardConfidence <= 0) {\n    state.boardConfidence = 1;\n    noSackLine = true;' },
 };
 /* Without BASE_ROOT (the suite), sections 1 and 6 compare with THIS tree with both floors taken out: the same
@@ -90,10 +100,10 @@ const PLAIN = [
   { file: 'clubManager.ts', from: '  let noSackLine = false;\n  if (!boardMaySack(state) && state.boardConfidence <= 0) {\n    state.boardConfidence = 1;\n    noSackLine = true;\n    events.push(NO_SACK_LINE);\n  }\n', to: '' },
   { file: 'clubManager.ts', from: '  if (!boardMaySack(state) && state.boardConfidence <= 0) {\n    state.boardConfidence = 1;\n    if (!noSackLine) events.push(NO_SACK_LINE);\n  }\n', to: '' },
 ];
-const CONTROL_SECTIONS = { sack: [2, 3], refuse: [4], ranked: [4], stale: [4], noslot: [4], unguarded: [4], thirdsack: [5], farfloor: [5], leak: [1, 6], draw: [1], ddreach: [6] };
+const CONTROL_SECTIONS = { sack: [2, 3, 7], refuse: [4], ranked: [4], stale: [4], noslot: [4], unguarded: [4], thirdsack: [5], farfloor: [5], leak: [1, 6], draw: [1], ddreach: [6], nofloor2: [7], twoline: [7] };
 if (CONTROL && !CONTROL_SECTIONS[CONTROL]) cannot(`unknown control ${CONTROL}`);
 const SECTIONS = CONTROL ? CONTROL_SECTIONS[CONTROL]
-  : (process.env.SECTION || '1,2,3,4,5,6').split(',').map(Number);
+  : (process.env.SECTION || '1,2,3,4,5,6,7').split(',').map(Number);
 if (BASE_ROOT && !fs.existsSync(path.join(BASE_ROOT, 'src/lib/clubManager.ts'))) cannot(`BASE_ROOT ${BASE_ROOT} holds no src/lib/clubManager.ts`);
 
 /* Edits to the bundle: each `from` must be in its file exactly once (LF), or the run cannot go on. */
@@ -489,6 +499,87 @@ if (SECTIONS.includes(6)) {
   const reached = ENTRY_POINTS.filter(n => new RegExp('(^|[^A-Za-z0-9_$])' + n + '[(]').test(ddCode));
   if (reached.length) fail(`deadlineDay.ts calls ${reached.join(', ')}, so a match or the No sacking key can reach Deadline Day`);
   console.log(`   red per daily: Hot Seat ${hotRed} of ${HOT.length}, Deadline Day ${deadRed} of ${DEAD.length}; deadlineDay.ts calls ${reached.length ? reached.join(', ') : 'none of the match or No sacking entry points'}; ${((clock() - t) / 1000).toFixed(0)} s`);
+}
+
+/* ---------- 7. a broken promise on the last points (the Round 465 recheck) ---------- */
+/* Review of 2026-10-16: the second floor guards the one cost that lands AFTER the first sack check, a promise to
+   win broken by a defeat (-4). Section 2's fleet never promises anything, so only section 5's text check held it.
+   Here every match is played twice from one planted state, a promise made and the board on one of its last points:
+   once with No sacking (module A) and once with the key taken off (module B, the Normal twin, its own module so
+   the two take the same calls in the same order). Where the twin keeps the job the two must be the same career
+   to the byte; where it is sacked, the No sacking career is in the job above zero with exactly one line, after the
+   broken promise when the recheck was the one that fired (the second floor's line), before it when both fired.
+   Measured on the PC at c935bd46 plus this section, FLEET_SEED 0 to 7 at the defaults (2 seeds, 36 matches, three
+   clubs, 216 matches a run, about 14 s): twins sacked at the recheck 83, 75, 90, 83, 80, 72, 86, 82; both floors
+   in one match 63, 82, 70, 82, 57, 92, 82, 69; twins that kept the job and matched to the byte 48 to 79. The
+   floors sit at half the lowest (72 and 57). 36 matches, because one of these clubs' seasons can end at 39. */
+const PROMISE_BROKEN = 'You told the country you would win this one';
+const SACK_WORDS = 'The board has seen enough';
+const PROMISE_SEEDS = Number(process.env.PROMISE_SEEDS || 2);
+const PROMISE_MATCHES = Number(process.env.PROMISE_MATCHES || 36);
+const PROMISE_FLOOR = Number(process.env.PROMISE_FLOOR || 36);
+const BOTH_FLOOR = Number(process.env.BOTH_FLOOR || 28);
+if (SECTIONS.includes(7)) {
+  section = 7;
+  const t = clock();
+  const clubs = [CLUBS[2], CLUBS[5], CLUBS[8]];
+  const LEVELS = [2, 3.5, 5, 6.5];
+  console.log(`7) A promise to win before every match, the board planted on ${LEVELS.join(', ')} in turn, at ${clubs.join(', ')}: ${PROMISE_SEEDS} seeds, ${PROMISE_MATCHES} matches each, the Normal twin played beside it (fleet seed ${FLEET_SEED})`);
+  if (!hasNoSack) fail('the engine has no turnOnNoSack or postsScore, so No sacking cannot be switched on');
+  else {
+    let recheck = 0, both = 0, firstOnly = 0, kept = 0;
+    for (const club of clubs) for (let seed = 0; seed < PROMISE_SEEDS; seed += 1) {
+      const A = fresh(HEAD), B = fresh(HEAD);
+      const base = 8000 + FLEET_SEED * 101 + seed * 31 + CLUBS.indexOf(club);
+      let s = onStream(base, () => A.st.turnOnNoSack(A.cm.startCareer(club))).value;
+      onStream(base, () => B.cm.startCareer(club));
+      let matches = 0;
+      for (let guard = 0; guard < 400 && matches < PROMISE_MATCHES; guard += 1) {
+        const pre = JSON.parse(JSON.stringify(s));
+        pre.boardConfidence = LEVELS[matches % LEVELS.length];
+        pre.press = { ...pre.press, promised: true };
+        const twin = JSON.parse(JSON.stringify(pre));
+        delete twin.startOptions.noSack;
+        const ms = base * 1000 + guard;
+        const a = onStream(ms, () => A.cm.playNextEntry(pre, { skipHalftime: true })).value;
+        const b = onStream(ms, () => B.cm.playNextEntry(twin, { skipHalftime: true })).value;
+        const tag = `${club} seed ${seed} entry ${guard + 1}`;
+        if (a.kind !== b.kind) { fail(`${tag}: the No sacking career played a ${a.kind}, its twin a ${b.kind}`); break; }
+        if (a.kind === 'seasonOver') break;
+        s = a.state;
+        if (a.kind !== 'match' || !a.report || !b.report) continue;
+        matches += 1;
+        const evA = a.report.events, evB = b.report.events;
+        const lines = evA.filter(e => e === A.st.NO_SACK_LINE).length;
+        if (!b.state.sacked) {
+          const x = JSON.parse(JSON.stringify(a.state));
+          delete x.startOptions.noSack;
+          if (lines) fail(`${tag}: a No sacking line on a match its twin survived`);
+          else if (JSON.stringify(x) !== JSON.stringify(b.state)) fail(`${tag}: the twin kept the job and the two careers differ, first at key ${firstDiff(JSON.stringify(x), JSON.stringify(b.state))}`);
+          else kept += 1;
+          continue;
+        }
+        const pb = evB.findIndex(e => e.includes(PROMISE_BROKEN)), sb = evB.findIndex(e => e.includes(SACK_WORDS));
+        const byRecheck = pb >= 0 && sb > pb;
+        if (a.state.sacked) fail(`${tag}: sacked with No sacking on (the twin went ${byRecheck ? 'at the recheck, after the broken promise' : 'at the first check'})`);
+        else if (!(a.state.boardConfidence > 0)) fail(`${tag}: the board ended on ${a.state.boardConfidence}`);
+        if (lines !== 1) fail(`${tag}: ${lines} No sacking lines in one report, one a match`);
+        const pa = evA.findIndex(e => e.includes(PROMISE_BROKEN)), la = evA.indexOf(A.st.NO_SACK_LINE);
+        if (byRecheck) {
+          recheck += 1;
+          if (!(pa >= 0 && la > pa)) fail(`${tag}: the twin went at the recheck, and the No sacking line is not after the broken promise (line ${la}, promise ${pa})`);
+        } else if (pa >= 0) {
+          both += 1;
+          if (!(la >= 0 && la < pa)) fail(`${tag}: both floors fired, and the one line is not the first floor's (line ${la}, promise ${pa})`);
+        } else firstOnly += 1;
+        if (a.state.sacked) break; /* a sacked career has nothing more to say here */
+      }
+      if (matches < PROMISE_MATCHES) fail(`${club} seed ${seed}: only ${matches} of ${PROMISE_MATCHES} matches played`);
+    }
+    console.log(`   twins kept the job and matched to the byte: ${kept}; twins sacked at the recheck after a broken promise: ${recheck} (floor ${PROMISE_FLOOR}); both floors in one match: ${both} (floor ${BOTH_FLOOR}); at the first check with no promise broken: ${firstOnly}; ${((clock() - t) / 1000).toFixed(0)} s`);
+    if (recheck < PROMISE_FLOOR) fail(`only ${recheck} twins went at the recheck (floor ${PROMISE_FLOOR}), so the second floor was not tested`);
+    if (both < BOTH_FLOOR) fail(`only ${both} matches fired both floors (floor ${BOTH_FLOOR}), so one line a match was not tested`);
+  }
 }
 
 /* ---------- the verdict ---------- */
