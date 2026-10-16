@@ -1,3 +1,71 @@
+## 2026-10-16: controlled original and alternative import fix both qualified
+
+PR293 tested02af4aaf8bfc514df5534416682eabe8c3ef1ceb, remote run38915150473,
+job117020590854 passed every step. Exact original e7 application gave one precise
+native-import/actual-React failure and three preserves. Exact restored candidate
+gave four passes with identical f09d9b8a method bytes. Both actual production
+builds and both complete15-reader sets passed. Unchanged lazy UI1602checks and
+12original images,17guarded reload cases, normal source guard/all9effective
+controls, unchanged full budgets and source/dependency/dist holds passed.
+
+Product HOLD: I1338 independently owns the complete waiting-state plugin design.
+It deliberately cancels, while PR293 leaves rejection intact. Their listener,
+tests and sourceguard contracts conflict. Keep I's plugin/config/tests/fences
+together; do not merge both by taking the last writer or weakening an oracle.
+PR293 remains an explicit alternative and independent causal evidence, not an
+incoming release requirement. I owns integration and publication.
+
+Artifact12052204151 is53,025,358bytes, SHA256
+b2fb44ea7733b4e995a51951d9b019408da714a31d61b39c81837cec705ef53a,
+retained outside repo under dukb-handoff/2026-10-16/stale-import-paired. Root
+recomputed all8physicalraw/report pairs and identical method hash. Selected4UI
+images were viewed, not a blanket visual qualification. Controlled method uses
+fresh signed-out creators and actual React's private initializer; store/URL/time
+origin measured at settlement, before a separate500ms network window. No natural
+race frequency, fullsuite, joined release or live claim. Details in the audit.
+Independent artifact review also closed all115physical files,3730source/package
+entries, both782file distributions and all8raw/report pairs without mismatch;
+separate actual execution review found no hidden allowance. Keep product HOLD.
+
+## 2026-10-16: original failed import reproduced, paired correction prepared
+
+PR293 owns only the global freshBuild preload listener correction and its narrow
+proofs. The original reload guard still runs, but the event remains uncancelled so
+Vite rejects its actual native import error instead of fulfilling undefined before
+navigation. Optional sound, offline, once marker, refused saves and storage rules
+are unchanged. Two prior test expectations and the source guard change explicitly.
+
+Second baseline f8ccda9e/run38912393217 physically reproduced cancelled event,
+fulfilled undefined and the actual React initializer's exact reading-default
+TypeError. Its later separate store read timed out, so it is an incomplete baseline,
+not a qualification. All three preservation cases passed. The new method captures
+stores inside the same settled probe, before a separate 500ms network observation.
+
+Prepared paired remote proof builds the exact e7f111b7 application first, requires
+one precise fault plus three preserves, restores exact candidate source even on a
+failure, then builds the fix and requires four passes with identical method bytes.
+Both builds include /soccer-career and /whats-new and all fifteen readers. The old
+1602-check UI method,17 existing tests, nine effective source controls, unchanged
+full budgets and physical/source/dependency holds remain strict. Runtime pending.
+Claude I retains integration/publication. Nothing from PR293 is claimed live.
+
+## 2026-10-16: controlled stale import rejection baseline preparation
+
+Codex branch codex/stale-import-rejection starts at frozen release e7f111b7. No
+app/package/oldproof change. New actual emitted-Vite/React browser method deliberately
+holds the reload document response to expose pre-unload import settlement. Require
+one exact original-rejection Boolean fault and three preserved guard outcomes,
+physical raw payload/React/marker/save observations, unchanged lazy1602 UI walk,
+types/guardedreload tests/build15/fullweights and complete source/dependency holds.
+This controlled method does not claim natural-race reproduction or ReactDOM output.
+First407/run38909778949 passedtypes/build thenhung innewcontrolledmethod, no causal
+credit; exactawaitunproved. Remoteadministrativeff2/run38911607873 requestedonly
+thatownrun cancellation, diagnoseSKIPPED so notaproofpass. Methodnowboundsall
+operations/cleanup, checkpointsphysicalprogress andusesretainedoldruntimehandle
+forprobe/store reads; everyoriginaldetectorheld. Freshbaselinepending, temporary
+canceljob/writepermissionremoved. App/oldproofs/packagesheld; productwaits. I keepspublication.
+Details: docs/audits/stale-import-rejection.md.
+
 ## 2026-10-16 05:30 EDT: session I starts; player reports split between the lanes; the Lovable editor push reverted
 
 Claude lane (session I). Live: Release BG (main c9b80fce, deployment bc4815da). The Lovable editor's push of 08:36 to
