@@ -1,0 +1,106 @@
+name: Ready report preliminary source and unit proof
+
+on:
+  push:
+    branches: [codex/report-followup-integration]
+
+permissions:
+  contents: read
+
+jobs:
+  preliminary:
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    defaults:
+      run:
+        shell: bash
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      CAREER_SEASON_LOCAL_ONLY: '1'
+      REPORT_PRELIM_OUT: ${{ runner.temp }}/report-followup-preliminary
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Bind source and locked dependencies
+        run: |
+          set -euo pipefail
+          mkdir -p "$REPORT_PRELIM_OUT"
+          git rev-parse HEAD > "$REPORT_PRELIM_OUT/head.txt"
+          git status --porcelain --untracked-files=no > "$REPORT_PRELIM_OUT/source-before.txt"
+          test ! -s "$REPORT_PRELIM_OUT/source-before.txt"
+          git archive --format=zip HEAD > "$REPORT_PRELIM_OUT/source.zip"
+          git archive --format=zip 402fa4562fec28c38c42130036c65e884a25a5fb > "$REPORT_PRELIM_OUT/baseline402-source.zip"
+          git diff --exit-code cd7207786ff1fb55e3bf1598c45760962dd81de8 -- . ':!scripts/qa/qualifyReportFollowupPreliminary.mjs' ':!.github/workflows/report-followup-preliminary.yml' ':!docs/audits/report-followup-integration.md' ':!docs/PROJECT-STATE.md' ':!docs/WORKBOARD.md'
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$REPORT_PRELIM_OUT/tracked-files.sha256"
+          npm ci > "$REPORT_PRELIM_OUT/install.log" 2>&1
+          cat "$REPORT_PRELIM_OUT/install.log"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          const lock=JSON.parse(fs.readFileSync('package-lock.json'));
+          const installed=Object.entries(lock.packages).filter(([p])=>p.startsWith('node_modules/') && fs.existsSync(p+'/package.json')).map(([p,entry])=>{
+            const version=JSON.parse(fs.readFileSync(p+'/package.json')).version;
+            assert.equal(version,entry.version,p); return {path:p,version};
+          });
+          assert.equal(installed.length,521);
+          fs.writeFileSync(process.env.REPORT_PRELIM_OUT+'/installed.json',JSON.stringify(installed,null,2)+'\n');
+          console.log('Bound all521 installed locked versions.');
+          NODE
+          find node_modules -type f -print0 | sort -z | xargs -0 sha256sum > "$REPORT_PRELIM_OUT/installed-files.sha256"
+      - name: Parse new method on runner
+        run: node --check scripts/qa/qualifyReportFollowupPreliminary.mjs
+      - name: Actual isolated references types and serial unit controls
+        run: |
+          set -euo pipefail
+          SIM_OFFLINE_RECEIPT="$REPORT_PRELIM_OUT/offline.transport" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/qualifyReportFollowupPreliminary.mjs 2>&1 | tee "$REPORT_PRELIM_OUT/preliminary.log"
+      - name: Complete tracked and installed preservation
+        if: always()
+        run: |
+          set -euo pipefail
+          if test -f "$REPORT_PRELIM_OUT/tracked-files.sha256"; then
+            sha256sum --check "$REPORT_PRELIM_OUT/tracked-files.sha256" > "$REPORT_PRELIM_OUT/tracked-holds.log"
+          else
+            echo 'No complete initial source receipt'; exit 1
+          fi
+          if test -f "$REPORT_PRELIM_OUT/installed-files.sha256"; then
+            sha256sum --check "$REPORT_PRELIM_OUT/installed-files.sha256" > "$REPORT_PRELIM_OUT/installed-holds.log"
+          else
+            echo 'No complete installed receipt'; exit 1
+          fi
+          test ! -s "$REPORT_PRELIM_OUT/offline.transport"
+          git status --porcelain --untracked-files=no > "$REPORT_PRELIM_OUT/source-after.txt"
+          test ! -s "$REPORT_PRELIM_OUT/source-after.txt"
+      - name: Strict physical preliminary closing receipt
+        run: |
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs'; import assert from 'node:assert/strict';
+          const out=process.env.REPORT_PRELIM_OUT, r=JSON.parse(fs.readFileSync(out+'/report.json'));
+          assert(r.qualified && r.sourceHeld && r.sharedFileCompositionPassed && r.baselineTypes?.passed && !r.error);
+          assert.equal(r.baseline,'402fa4562fec28c38c42130036c65e884a25a5fb');
+          assert.equal(r.head,fs.readFileSync(out+'/head.txt','utf8').trim());
+          assert.equal(r.refs.length,7); assert.equal(r.runs.length,21);
+          assert.deepEqual(r.refs.map(x=>x.id).sort(),['284','286','289','296','297','302','303']);
+          assert(r.refs.every(x=>x.currentSha256!==x.inverseSha256 && /^[0-9a-f]{40}$/.test(x.ref)));
+          assert.equal(r.refs.filter(x=>x.sourceOnly).length,1); assert(r.refs.find(x=>x.id==='296').sourceOnly);
+          assert(r.runs.every(x=>x.error===null && x.signal===null && x.exit===(x.id==='transfer-original'?1:0)));
+          const units=r.runs.filter(x=>x.completed);
+          assert.equal(units.length,18); assert.equal(units.reduce((sum,x)=>sum+x.completed,0),179);
+          assert.equal(units.reduce((sum,x)=>sum+x.exactFaults,0),35);
+          assert.equal(r.runs.filter(x=>x.rawByteRestoration).length,4);
+          console.log('Preliminary physical contract:7 references,21 completed commands,179 packet cases/35 exact control faults,62 related passes,2 real type gates.');
+          console.log('No build/browser/weights/historical-Life/actual-BIH qualification.');
+          NODE
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: report-followup-preliminary-${{ github.sha }}
+          path: ${{ env.REPORT_PRELIM_OUT }}
+          if-no-files-found: error
+          retention-days: 14
