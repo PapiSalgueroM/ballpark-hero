@@ -1,0 +1,75 @@
+playCmNoSack: seed 969109896 (replay with NOSACK_SEED=969109896), widths 320, 390, 1280
+
+== 320 by 640
+  PASS  320: the Dugout step shows the Career options card
+  PASS  320: No sacking starts off
+  PASS  320: the switch turns it on
+  PASS  320: pressing it moves nothing (scrollY 2023 then 2023, height 29011 then 29011)
+  PASS  320: the switch is 44.0 px tall and the card's smallest text is 12 px
+  PASS  320: the Dugout step is no wider than the screen
+  PASS  320: the career is running
+  PASS  320: a Normal career wears no pill and carries no key
+  PASS  320: Options offers to turn No sacking on
+  PASS  320: the first tap only asks
+  PASS  320: the Options button is 44.0 px tall and its smallest text is 12 px
+  PASS  320: the second tap switches it on, for good
+  PASS  320: the hub's pill appears once it is on
+  PASS  320: the pill sits clear of the club name (pill -516 to -494, text 12 px)
+  PASS  320: the hub with the pill is no wider than the screen
+  PASS  320: the save was planted on its last point with No sacking and a weak squad
+  17 steps: the No sacking line showed on a match report
+  PASS  320: a defeat on the last point put the No sacking line on the match report
+  PASS  320: still in the job (board 1, saved sacked flag false)
+  PASS  320: the Board meter reads "Board Lost the board · No sacking"
+  PASS  320: at board 5 the strip is 52 px with No sacking and 52 px without
+  PASS  320: at board 15 the strip is 44 px with No sacking and 44 px without
+
+== 390 by 844
+  PASS  390: the Dugout step shows the Career options card
+  PASS  390: No sacking starts off
+  PASS  390: the switch turns it on
+  PASS  390: pressing it moves nothing (scrollY 1724 then 1724, height 23334 then 23334)
+  PASS  390: the switch is 44.0 px tall and the card's smallest text is 12 px
+  PASS  390: the Dugout step is no wider than the screen
+  PASS  390: the career is running
+  PASS  390: a Normal career wears no pill and carries no key
+  PASS  390: Options offers to turn No sacking on
+  PASS  390: the first tap only asks
+  PASS  390: the Options button is 44.0 px tall and its smallest text is 12 px
+  PASS  390: the second tap switches it on, for good
+  PASS  390: the hub's pill appears once it is on
+  PASS  390: the pill sits clear of the club name (pill -468 to -446, text 12 px)
+  PASS  390: the hub with the pill is no wider than the screen
+  PASS  390: the save was planted on its last point with No sacking and a weak squad
+  17 steps: the No sacking line showed on a match report
+  PASS  390: a defeat on the last point put the No sacking line on the match report
+  PASS  390: still in the job (board 1, saved sacked flag false)
+  PASS  390: the Board meter reads "Board Lost the board · No sacking"
+  PASS  390: at board 5 the strip is 52 px with No sacking and 52 px without
+  PASS  390: at board 15 the strip is 44 px with No sacking and 44 px without
+
+== 1280 by 900
+  PASS  1280: the Dugout step shows the Career options card
+  PASS  1280: No sacking starts off
+  PASS  1280: the switch turns it on
+  PASS  1280: pressing it moves nothing (scrollY 1290 then 1290, height 14126 then 14126)
+  PASS  1280: the switch is 44.0 px tall and the card's smallest text is 12 px
+  PASS  1280: the Dugout step is no wider than the screen
+  PASS  1280: the career is running
+  PASS  1280: a Normal career wears no pill and carries no key
+  PASS  1280: Options offers to turn No sacking on
+  PASS  1280: the first tap only asks
+  PASS  1280: the Options button is 44.0 px tall and its smallest text is 12 px
+  PASS  1280: the second tap switches it on, for good
+  PASS  1280: the hub's pill appears once it is on
+  PASS  1280: the pill sits clear of the club name (pill 7 to 29, text 12 px)
+  PASS  1280: the hub with the pill is no wider than the screen
+  PASS  1280: the save was planted on its last point with No sacking and a weak squad
+  17 steps: the No sacking line showed on a match report
+  PASS  1280: a defeat on the last point put the No sacking line on the match report
+  PASS  1280: still in the job (board 1, saved sacked flag false)
+  PASS  1280: the Board meter reads "Board Lost the board · No sacking"
+  PASS  1280: at board 5 the strip is 52 px with No sacking and 52 px without
+  PASS  1280: at board 15 the strip is 44 px with No sacking and 44 px without
+  PASS  no page errors
+

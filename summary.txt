@@ -1,0 +1,7 @@
+build exit=0 32s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+walk-nopill exit=0 29s | playCmNoSack control nopill: all 1 guarded checks fired (mutations landed: {"pill":2})
+playWilderness exit=0 19s | playWilderness: green. Getting sacked is a chapter now, not the last page.
+walk-sack exit=0 56s | playCmNoSack control sack: all 3 guarded checks fired (mutations landed: {"readNoSack":2})
+playSlots exit=0 10s | playClubManagerSlots: green
+walk exit=0 129s |   PASS  no page errors
+playClubManager exit=0 285s | Played Club Manager through its own screens. 0 findings.
