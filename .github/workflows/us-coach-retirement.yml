@@ -1,0 +1,196 @@
+name: US coaching retirement
+
+on:
+  push:
+    branches: [codex/us-coach-retirement]
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    defaults:
+      run:
+        shell: bash
+    env:
+      COACH_PHASE: baseline
+      SIM_NETWORK: offline
+      ENGINES: chromium
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Preserve source and install locked dependencies
+        run: |
+          set -euo pipefail
+          mkdir coach-artifacts
+          git archive --format=zip HEAD > coach-artifacts/source.zip
+          git rev-parse HEAD > coach-artifacts/head.txt
+          cp package.json coach-artifacts/package.before.json
+          cp package-lock.json coach-artifacts/package-lock.before.json
+          npm ci > coach-artifacts/install.log 2>&1
+      - name: Actual application types
+        run: |
+          set -euo pipefail
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node_modules/.bin/tsc --noEmit -p tsconfig.app.json > coach-artifacts/types.log 2>&1
+      - name: Actual coaching retirement regressions
+        run: |
+          set -euo pipefail
+          set +e
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node node_modules/vitest/vitest.mjs run src/test/usCoachRetirement.test.tsx --maxWorkers=1 --minWorkers=1 --reporter=default --reporter=json --outputFile=coach-artifacts/current.json > coach-artifacts/current.log 2>&1
+          status=$?
+          set -e
+          printf '%s\n' "$status" > coach-artifacts/current.exit
+          cat coach-artifacts/current.log
+          node --input-type=module <<'JS'
+          import fs from 'node:fs'; import assert from 'node:assert/strict';
+          const report=JSON.parse(fs.readFileSync('coach-artifacts/current.json','utf8'));
+          const rows=report.testResults.flatMap(file=>file.assertionResults);
+          const expected=['completed coach cannot play another season','completed coach cannot sit out another season','completed coach cannot accept an old offer','completed coach cannot refresh the market','retiring changes only done and is pure and idempotent','retirement requires confirmation and accepts once after cancel and escape','completed employed coach keeps the record and log without season actions','completed unemployed coach cannot take offers or advance the calendar','completed start card opens a review instead of offering a coaching return'];
+          assert.equal(report.testResults.length,1); assert.equal(rows.length,14);
+          assert.equal(report.numPendingTests,0); assert.equal(report.numTodoTests,0);
+          assert(rows.every(row=>['passed','failed'].includes(row.status)));
+          assert(!/Unhandled Errors|Unhandled Rejection|Uncaught Exception|\[SIM_OFFLINE_BLOCK\]/.test(fs.readFileSync('coach-artifacts/current.log','utf8')));
+          const failed=rows.filter(row=>row.status==='failed');
+          if(process.env.COACH_PHASE==='baseline') {
+            assert.equal(report.success,false); assert.equal(report.numFailedTests,9); assert.equal(report.numPassedTests,5);
+            assert.deepEqual(failed.map(row=>row.title).sort(),expected.sort());
+            assert(failed.every(row=>row.failureMessages.length===1 && row.failureMessages[0].includes('AssertionError')));
+            assert.equal(fs.readFileSync('coach-artifacts/current.exit','utf8').trim(),'1');
+          } else {
+            assert.equal(report.success,true); assert.equal(report.numFailedTests,0); assert.equal(report.numPassedTests,14);
+            assert.equal(fs.readFileSync('coach-artifacts/current.exit','utf8').trim(),'0');
+          }
+          console.log('PASS coaching contract: '+report.numPassedTests+' passed, '+report.numFailedTests+' declared failures');
+          JS
+      - name: Original product negative control and full restoration
+        if: env.COACH_PHASE == 'fixed'
+        run: |
+          set -euo pipefail
+          for file in src/lib/usCoachCareer.ts src/components/us-career/CoachCareerPanel.tsx; do
+            name=$(basename "$file")
+            cp "$file" "coach-artifacts/$name.fixed"
+            git show "bd3b62443d992b92c22bd303437cb3aa1c5eae5c:$file" > "$file"
+            cp "$file" "coach-artifacts/$name.original"
+          done
+          restore() { for file in src/lib/usCoachCareer.ts src/components/us-career/CoachCareerPanel.tsx; do cp "coach-artifacts/$(basename "$file").fixed" "$file"; done; }
+          trap restore EXIT
+          set +e
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node node_modules/vitest/vitest.mjs run src/test/usCoachRetirement.test.tsx --maxWorkers=1 --minWorkers=1 --reporter=default --reporter=json --outputFile=coach-artifacts/original.json > coach-artifacts/original.log 2>&1
+          status=$?
+          set -e
+          test "$status" -eq 1
+          node --input-type=module <<'JS'
+          import fs from 'node:fs'; import assert from 'node:assert/strict';
+          const report=JSON.parse(fs.readFileSync('coach-artifacts/original.json','utf8'));
+          const rows=report.testResults.flatMap(file=>file.assertionResults), failed=rows.filter(row=>row.status==='failed');
+          const expected=['completed coach cannot play another season','completed coach cannot sit out another season','completed coach cannot accept an old offer','completed coach cannot refresh the market','retiring changes only done and is pure and idempotent','retirement requires confirmation and accepts once after cancel and escape','completed employed coach keeps the record and log without season actions','completed unemployed coach cannot take offers or advance the calendar','completed start card opens a review instead of offering a coaching return'];
+          assert.equal(report.testResults.length,1); assert.equal(rows.length,14); assert.equal(report.success,false);
+          assert.equal(report.numFailedTests,9); assert.equal(report.numPassedTests,5); assert.equal(report.numPendingTests,0); assert.equal(report.numTodoTests,0);
+          assert(rows.every(row=>['passed','failed'].includes(row.status)));
+          assert.deepEqual(failed.map(row=>row.title).sort(),expected.sort());
+          assert(failed.every(row=>row.failureMessages.length===1 && row.failureMessages[0].includes('AssertionError')));
+          assert(!/Unhandled Errors|Unhandled Rejection|Uncaught Exception|\[SIM_OFFLINE_BLOCK\]/.test(fs.readFileSync('coach-artifacts/original.log','utf8')));
+          for(const name of ['usCoachCareer.ts','CoachCareerPanel.tsx']) assert(!fs.readFileSync('coach-artifacts/'+name+'.fixed').equals(fs.readFileSync('coach-artifacts/'+name+'.original')),'Original control must change both product files');
+          console.log('PASS original product: exactly nine retirement failures and five preservation passes');
+          JS
+          restore
+          trap - EXIT
+          git diff --exit-code -- src/lib/usCoachCareer.ts src/components/us-career/CoachCareerPanel.tsx
+      - name: Full ordinary unit suite
+        if: env.COACH_PHASE == 'fixed'
+        run: |
+          set -euo pipefail
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" npm test -- --maxWorkers=2 --minWorkers=1 --reporter=default --reporter=json --outputFile=coach-artifacts/full-suite.json > coach-artifacts/full-suite.log 2>&1
+          tail -n 12 coach-artifacts/full-suite.log
+          node --input-type=module <<'JS'
+          import fs from 'node:fs'; import assert from 'node:assert/strict';
+          const report=JSON.parse(fs.readFileSync('coach-artifacts/full-suite.json','utf8'));
+          assert.equal(report.success,true); assert.equal(report.numFailedTests,0);
+          assert(report.numPassedTests>0); assert.equal(report.numTodoTests,0);
+          assert(!/Unhandled Errors|Unhandled Rejection|Uncaught Exception|\[SIM_OFFLINE_BLOCK\]/.test(fs.readFileSync('coach-artifacts/full-suite.log','utf8')));
+          console.log('PASS ordinary suite: '+report.numPassedTests+' passed, '+report.numPendingTests+' existing pending');
+          JS
+      - name: Production build
+        if: env.COACH_PHASE == 'fixed'
+        run: |
+          set -euo pipefail
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" npm run build > coach-artifacts/build.log 2>&1
+          tail -n 6 coach-artifacts/build.log
+      - name: Existing coaching outcome harnesses
+        if: env.COACH_PHASE == 'fixed'
+        run: |
+          set -euo pipefail
+          failed=0
+          for harness in simUsCoachCareer simUsCoachPoaching simUsCoaching simCoachCalls; do
+            set +e
+            SIM_OFFLINE_RECEIPT="$PWD/coach-artifacts/$harness.transport" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node "scripts/$harness.mjs" > "coach-artifacts/$harness.log" 2>&1
+            status=$?
+            set -e
+            cat "coach-artifacts/$harness.log"
+            printf '%s\t%s\n' "$harness" "$status" >> coach-artifacts/coaching.tsv
+            if test "$status" -ne 0 || test -s "coach-artifacts/$harness.transport"; then failed=1; fi
+            if grep -E '(^|[[:space:]])(FAIL|SKIP|EMPTY)([[:space:]]|$)' "coach-artifacts/$harness.log"; then failed=1; fi
+          done
+          test "$(wc -l < coach-artifacts/coaching.tsv)" -eq 4
+          exit "$failed"
+      - name: Install isolated reader tools
+        if: env.COACH_PHASE == 'fixed'
+        run: |
+          set -euo pipefail
+          tools="$RUNNER_TEMP/coach-reader-tools"
+          mkdir "$tools"
+          printf '{"private":true,"dependencies":{"playwright":"1.64.0"}}\n' > "$tools/package.json"
+          npm install --prefix "$tools" --ignore-scripts --no-audit --no-fund > coach-artifacts/browser-install.log 2>&1
+          test ! -e node_modules/playwright
+          ln -s "$tools/node_modules/playwright" node_modules/playwright
+          ln -s "$tools/node_modules/playwright-core" node_modules/playwright-core
+          node "$tools/node_modules/playwright/cli.js" install --with-deps chromium > coach-artifacts/chromium-install.log 2>&1
+          python -m pip install fonttools pillow > coach-artifacts/python-install.log 2>&1
+      - name: Every rebuilt-site reader
+        if: env.COACH_PHASE == 'fixed'
+        run: |
+          set -euo pipefail
+          node scripts/lib/hostLikeServer.mjs dist 4173 > coach-artifacts/server.log 2>&1 &
+          server=$!
+          trap 'kill "$server" 2>/dev/null || true' EXIT
+          ready=0
+          for attempt in $(seq 1 60); do if curl --fail --silent http://127.0.0.1:4173/ > /dev/null; then ready=1; break; fi; sleep 1; done
+          test "$ready" -eq 1
+          failed=0
+          for harness in simAdsense simBrand simHeadTags simHiddenPages simHubs simIndexNow simIndexing simInternalLinks simNoRivalNames simPrerender simPrerenderBoot simRetiredRoutes simSchema simSitemap simSnapshotAssets; do
+            set +e
+            SIM_OFFLINE_RECEIPT="$PWD/coach-artifacts/$harness.transport" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" BASE=http://127.0.0.1:4173 SWEEP_BASE=http://127.0.0.1:4173 node "scripts/$harness.mjs" > "coach-artifacts/$harness.log" 2>&1
+            status=$?
+            set -e
+            cat "coach-artifacts/$harness.log"
+            printf '%s\t%s\n' "$harness" "$status" >> coach-artifacts/readers.tsv
+            if test "$status" -ne 0 || test -s "coach-artifacts/$harness.transport"; then failed=1; fi
+            if grep -E '(^|[[:space:]])(FAIL|SKIP|EMPTY)([[:space:]]|$)' "coach-artifacts/$harness.log"; then failed=1; fi
+          done
+          test "$(wc -l < coach-artifacts/readers.tsv)" -eq 15
+          exit "$failed"
+      - name: Source and package preservation
+        if: always()
+        run: |
+          set -euo pipefail
+          git diff --exit-code -- src public scripts package.json package-lock.json
+          cmp package.json coach-artifacts/package.before.json
+          cmp package-lock.json coach-artifacts/package-lock.before.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: us-coach-retirement-${{ github.run_id }}
+          retention-days: 7
+          if-no-files-found: error
+          path: coach-artifacts/
