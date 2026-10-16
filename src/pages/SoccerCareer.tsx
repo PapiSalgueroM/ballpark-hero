@@ -1645,7 +1645,7 @@ function AttributesScreen({ career, onBack }: { career: CareerState; onBack: () 
     <div ref={revealRef} className="max-w-xl mx-auto space-y-3 animate-fade-in pb-20">
       <div className="flex items-center gap-2">
         <Button variant="ghost" size="sm" onClick={onBack} className="h-8 px-2 text-muted-foreground">← Back</Button>
-        <h1 className="text-base font-black truncate">{career.playerName}, full attributes</h1>
+        <h1 className="min-w-0 text-base font-black [overflow-wrap:anywhere]">{career.playerName}, full attributes</h1>
       </div>
 
       <div className="bg-card border border-border rounded-xl p-3 grid grid-cols-3 gap-2 text-center">
@@ -1686,7 +1686,7 @@ function AttributesScreen({ career, onBack }: { career: CareerState; onBack: () 
             const rc = v >= 80 ? "text-green-400" : v >= 65 ? "text-emerald-400" : v >= 50 ? "text-yellow-400" : "text-red-400";
             return (
               <div key={c.id} className="flex items-center gap-2">
-                <span className="w-[6.5rem] shrink-0 text-[11px] text-muted-foreground truncate">{c.label}</span>
+                <span className="w-[6.5rem] shrink-0 text-[11px] leading-tight text-muted-foreground [overflow-wrap:anywhere]">{c.label}</span>
                 <div className="flex-1 h-2 rounded-full bg-muted/40 overflow-hidden">
                   <div className={`h-full rounded-full ${FAMILY_COLORS[fam.key] || "bg-emerald-500"}`} style={{ width: `${v}%` }} />
                 </div>

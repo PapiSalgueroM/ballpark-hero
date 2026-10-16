@@ -375,6 +375,39 @@ async function w7(width, height) {
   } finally { await ctx.close(); }
 }
 
+/* ---------- W8: the attributes screen cuts nothing: a long name, every keeper skill ---------- */
+const LONG_NAME = 'Bartholomew Fixture-Longname';
+function keeperSave() {
+  const save = recordedSave('ere');
+  Object.assign(save, { playerName: LONG_NAME, position: 'GK' });
+  return save;
+}
+async function w8(width, height) {
+  section = 'W8';
+  const { ctx, page, errors } = await open(keeperSave(), { width, height });
+  try {
+    const button = attributesButton(page);
+    await button.waitFor({ timeout: 45000 });
+    const before = await saveBytes(page);
+    await button.click();
+    await page.waitForFunction(() => [...document.querySelectorAll('h1')].some(h => /full attributes$/.test(h.textContent || '')), null, { timeout: 15000 });
+    await page.waitForTimeout(400);
+    const seen = await page.evaluate(() => {
+      const cut = el => el.scrollWidth > el.clientWidth || getComputedStyle(el).textOverflow === 'ellipsis';
+      const title = [...document.querySelectorAll('h1')].find(h => /full attributes$/.test(h.textContent || ''));
+      const labels = [...document.querySelectorAll('span')].filter(s => (s.className || '').includes('w-[6.5rem]'));
+      return { title: title ? { text: title.textContent, cut: cut(title) } : null,
+        labels: labels.length, cutLabels: labels.filter(cut).map(s => s.textContent) };
+    });
+    check(!!seen.title && seen.title.text.includes(LONG_NAME) && !seen.title.cut, `${width}: the title holds the whole name (${JSON.stringify(seen.title)})`);
+    check(seen.labels >= 6 && seen.cutLabels.length === 0, `${width}: every keeper label holds its whole text (${seen.labels} labels, cut: ${seen.cutLabels.join(', ') || 'none'})`);
+    await shot(page, `W8-attributes-${width}`);
+    await page.getByRole('button', { name: '← Back', exact: true }).first().click();
+    check(await saveBytes(page) === before, `${width}: the save is byte for byte the same`);
+    check(errors.length === 0, `${width}: no page error (${errors[0] || 'none'})`);
+  } finally { await ctx.close(); }
+}
+
 /* ---------- the run ---------- */
 async function runArm(which) {
   arm = which;
