@@ -224,9 +224,12 @@ function livingCheck(M, s, label, note, deal, lv) {
     if (atSeller.has(`${p.name}|${p.club}`)) bad('market', `the screen lists ${p.name} at ${p.club}, the club that sold him this season`);
     if (p.joinedThisSeason) lv.joined += 1;
   }
-  /* mine: no man of my squad is listed at any club of the world (the adoption records the men I signed before it) */
+  /* mine: no man of my squad is listed at any club of the world (the adoption records the men I signed before it),
+     and a man of my squad who carries a ledger key is owned by me there */
   for (const p of s.squad) {
     if (p.onLoan || p.academyGrad || p.isYouth) continue;
+    const keyed = p.worldRosterKey ? records.find(r => r.key === p.worldRosterKey) : null;
+    if (keyed && (keyed.owner !== mine || keyed.status !== 'owned')) bad('mine', `${p.name} of my squad carries the key of a record ${keyed.status} by ${keyed.owner ?? 'nobody'} (from ${keyed.origin.club})`);
     const clubs = origin.get(`${p.name}|${year - p.age}|${p.position}`) ?? [];
     if (clubs.length) bad('mine', `${p.name} of my squad is also listed at ${clubs.join(' and ')}`);
   }
@@ -364,7 +367,9 @@ async function journey(E, input, plan, seed, bridge = false, living = null) {
     const buyer = M.cm.buildMarket(cur).find(p => p.club !== cur.clubName)?.club;
     if (!man || !buyer) return { note: 'refused' };
     const bid = { playerId: man.id, playerName: man.name, club: buyer, offer: 30, status: 'open' };
-    const next = M.cm.acceptBid({ ...cur, incomingBids: [...(cur.incomingBids ?? []), bid] }, man.id);
+    /* The summer's own bids for him come off first: acceptBid takes the first bid for the man, and the sale is to
+       be to `buyer` (r1508-s3 read eight of them as deals of mine with no record: they had gone to the earlier bid). */
+    const next = M.cm.acceptBid({ ...cur, incomingBids: [...(cur.incomingBids ?? []).filter(b => b.playerId !== man.id), bid] }, man.id);
     return next ? { state: next, note: 'done', deal: { kind: 'sale', name: man.name, owner: buyer, status: 'owned', why: `key ${man.worldRosterKey ? 'yes' : 'no'}, age ${man.age}, ${man.position}` } } : { note: 'refused' };
   });
   reload();
