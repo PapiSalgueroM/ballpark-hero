@@ -1,5 +1,5 @@
 import { normalizeName, WhoAmIPlayer } from '@/lib/whoAmI';
-import { supabase } from '@/integrations/supabase/client';
+import { gameQueryClient as supabase } from '@/lib/gameQueryClient';
 import { fetchAllRows } from '@/lib/fetchAllRows';
 
 /**

@@ -1,3 +1,7 @@
+## Preview typing repair, 2026-10-16
+
+Added local typed contracts for four live game relations absent from generated database types. Grade Transfer, Alphabet Sprint, Deal players, Pack Pool and Quiz Board now reuse the existing client through that narrow contract. No runtime query, gameplay, endpoint or generated integration file changed. Preview validation pending; this is not a production release.
+
 ## Release BG LIVE, 2026-10-15 06:11 EDT: Soccer Career shows your potential growing, its buttons fit a phone, a cancelled touch keeps your drill, NBA Perfect Season keeps your draft on Try again
 
 Claude lane (session H). main c9b80fce, deployment bc4815da-2d76-4d44-8d63-7f2f8058b077, entry index-CZZVnHoQ.js (was index-CguBSAu5.js, Release BF,
