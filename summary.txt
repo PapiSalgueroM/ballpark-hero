@@ -1,0 +1,4 @@
+vitestB exit=0 34s |    Duration  32.85s (transform 5.61s, setup 969ms, collect 22.48s, tests 59.98s, environment 7.00s, prepare 1.66s)
+vitestA exit=0 34s |    Duration  33.11s (transform 4.76s, setup 1.15s, collect 18.59s, tests 63.90s, environment 7.80s, prepare 2.01s)
+parity exit=0 41s | simUsBoardParity: green. Four sports replayed click for click, save for save and screen for screen.
+tsc exit=0 78s | 
