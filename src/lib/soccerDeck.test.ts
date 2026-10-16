@@ -307,3 +307,75 @@ describe('the gate', () => {
     expect(tries).toBe(2);
   });
 });
+
+describe('the starter pack', () => {
+  const PACK = SOCCER_DECK_PACKS.soccer;
+  const group = (e: GmEventDef) => {
+    const pos = (e.when ?? []).filter(c => c.fact === 'pos');
+    if (pos.length === 0) return 'situation';
+    const lo = pos.find(c => c.op === '>=')?.value ?? 0;
+    return ['keeper', 'defender', 'midfielder', 'forward'][lo as number];
+  };
+  const dealtIds = (s: CareerState, n = 80) => {
+    const seen = new Set<number>();
+    for (let i = 0; i < n; i++) for (const e of dealFromPack(PACK, { ...s }, season(s), `pack|${i}`, [])) seen.add(e.id);
+    return seen;
+  };
+  it('holds 28 cards: five a position group and eight about where a career stands', () => {
+    expect(PACK.events.map(e => e.id)).toEqual(Array.from({ length: 28 }, (_, i) => String(701 + i)));
+    const by: Record<string, string[]> = {};
+    for (const e of PACK.events) (by[group(e)] ??= []).push(e.id);
+    expect(Object.fromEntries(Object.entries(by).map(([k, v]) => [k, v.length]))).toEqual({ keeper: 5, defender: 5, midfielder: 5, forward: 5, situation: 8 });
+    expect(soccerDeckProblems(PACK)).toEqual([]);
+  });
+  it('deals each code only its own group\'s position cards', () => {
+    const want: Record<string, string> = { GK: 'keeper', CB: 'defender', LB: 'defender', RB: 'defender', CDM: 'defender', CM: 'midfielder', CAM: 'midfielder', LW: 'forward', RW: 'forward', ST: 'forward' };
+    for (const [code, g] of Object.entries(want)) {
+      const ids = dealtIds(career({ position: code, age: 27 }, { yellowCards: 9, goals: 5, apps: 12 }));
+      const groups = new Set(PACK.events.filter(e => ids.has(Number(e.id))).map(group).filter(x => x !== 'situation'));
+      expect([...groups], code).toEqual([g]);
+    }
+  });
+  it('gates the cards whose words state a fact on that fact', () => {
+    const keeper = career({ position: 'GK' }, { apps: 8 });
+    expect(dealtIds(keeper).has(705)).toBe(true);
+    expect(dealtIds({ ...keeper, currentClub: 'Fixture Parent' }).has(705)).toBe(false);
+    expect(dealtIds(career({ contractYearsLeft: 1 })).has(723)).toBe(true);
+    expect(dealtIds(career({ contractYearsLeft: 0 })).has(723)).toBe(false);
+    const r = career().seasons[0];
+    expect(dealtIds(career({ age: 19, seasons: [{ ...r, year: 2024, age: 19 }] })).has(721)).toBe(true);
+    expect(dealtIds(career({ age: 19, seasons: [{ ...r, year: 2022, age: 17 }, { ...r, year: 2023, age: 18 }, { ...r, year: 2024, age: 19 }] })).has(721)).toBe(false);
+    expect(dealtIds(career()).has(728)).toBe(false);
+    const derbies = [{ rival: 'Fixture Rovers', name: 'The Fixture Derby', kind: 'derby', meetings: [{ home: true, gf: 1, ga: 1, played: true, goals: 0 }] }];
+    expect(dealtIds(career({}, { derbies } as Partial<SeasonRecord>)).has(728)).toBe(true);
+    expect(dealtIds(career({ isClubCaptain: true, captainClub: 'Somewhere Else' })).has(725)).toBe(false);
+    expect(dealtIds(career({ isClubCaptain: true, captainClub: 'Fixture Albion' })).has(725)).toBe(true);
+  });
+  it('never deals a training card at room 0, and every option moves exactly what it prints', () => {
+    for (const code of ['GK', 'CB', 'CM', 'ST']) {
+      const full = career({ position: code, overall: 85 }, { yellowCards: 9, goals: 5, apps: 12, intApps: 2 });
+      for (const id of dealtIds(full)) {
+        const e = PACK.events.find(x => Number(x.id) === id)!;
+        expect(e.choices.some(c => Object.keys(c.fx ?? {}).some(k => k in SOCCER_TRAINING_KEYS)), `${code} ${id}`).toBe(false);
+      }
+    }
+    for (const card of deckToRandomEvents(PACK, PACK.events)) {
+      card.choices.forEach(c => {
+        const s = career({ morale: 50 });
+        const after = c.apply({ ...s });
+        if (c.consequence === 'Nothing changes') { expect(after).toBe(s); return; }
+        const moved: string[] = [];
+        if (after.morale !== s.morale) moved.push(`Morale ${after.morale - s.morale > 0 ? '+' : ''}${after.morale - s.morale}`);
+        if (after.integrityBonus !== s.integrityBonus) moved.push(`Integrity +${after.integrityBonus - s.integrityBonus}`);
+        for (const stat of ['pace', 'shooting', 'passing', 'dribbling', 'defending', 'physical', 'reflexes'] as const) {
+          const d = (after.statBoostNextSeason[stat] ?? 0) - (s.statBoostNextSeason[stat] ?? 0);
+          if (!d) continue;
+          const key = Object.keys(SOCCER_TRAINING_KEYS).find(k => SOCCER_TRAINING_KEYS[k].stat === stat && c.consequence.includes(SOCCER_FX_WORDS[k].label));
+          moved.push(key ? `${SOCCER_FX_WORDS[key].label} +${d}` : `${stat} +${d}, printed nowhere`);
+        }
+        expect(moved.sort(), `${card.id} ${c.label}`).toEqual(c.consequence.split(', ').sort());
+        expect(after.events.length, `${card.id} ${c.label}`).toBe(s.events.length + 1);
+      });
+    }
+  });
+});

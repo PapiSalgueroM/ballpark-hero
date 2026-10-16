@@ -34,6 +34,29 @@
         Math.random count, getAllEvents equal, and the stamps the base's plus
         the deck card's own key. Then a head fleet with the deck loaded: no
         deck card is pending at any deal, and the deck dealt cards (counted).
+     5) PROMISES. Every option of every card on fixture careers of each group
+        (GK, CB, CM, ST) at room 0, 1 and 5 under the ceiling and morale 0, 1,
+        50, 99 and 100, fresh for each answer: the whole save after the answer
+        equals the save before with exactly the printed effects applied, each
+        by the printed amount or to its bound (training at momentsRoom, morale
+        at 0 and 100), and one season log line saying what landed; netWorth,
+        totalEarnings, socialMediaFollowers, popularity and karma never move;
+        the option that moves nothing moves nothing and logs nothing. At room
+        0 and 1 no card is dealt whose training would not fit (the hold). A
+        drill banked between the deal and the answer: the answer lands what
+        fits and its line says it is at the ceiling. Over a loaded fleet: how
+        many deck answers clamp (0 expected: the card is answered first), and
+        how often a deck boost and a full drill in one summer would pass the
+        ceiling only because of the deck (printed: the drills' room does not
+        count queued boosts, a rule owed to the drills).
+     6) REACH BY POSITION. 400 careers (the ten codes, 40 each) of 15 seasons
+        with the deck loaded: every position card is dealt to its own group
+        (the drills' grouping: a CDM defends, LW and RW are forwards) and never
+        to another, every situation card to at least one group, no keeper is
+        printed an outfield training word nor an outfielder a keeper one; per
+        code the cards reached, deck cards a summer and the top card's share,
+        and per group the share of summers that dealt a deck card (printed,
+        not asserted: Round 1504's words read it).
      10) LAZY, the static half. The static closure (scripts/lib/
         staticClosure.mjs) of src/pages/SoccerCareer.tsx and of the engine
         holds soccerDeckGate.ts and none of soccerDeck.ts, src/data/
@@ -54,6 +77,16 @@
                it first (in memory); section 3 fails.
      pool      the pending reader loses its phase guard and returns every
                card of the pack (soccerDeck.ts, in memory); section 3 fails.
+     silent    the button's words drop Integrity (soccerDeck.ts, in memory);
+               section 5 fails.
+     drop      the answer skips the integrity apply (soccerDeck.ts, in
+               memory); section 5 fails.
+     ceiling   a training key ignores momentsRoom (soccerDeck.ts, in memory):
+               a boost lands at room 0; section 5 fails.
+     posleak   card 706 (a defender's) is widened to pos < 3 in the pack the
+               fleet deals from; the widened pack passes the bind check, so the
+               red is a midfielder dealt 706, not a pack that deals nothing;
+               section 6 fails.
      eager     the gate gains a static import of './soccerDeck' (in memory);
                section 10 fails.
      caller    the page gains a call of loadSoccerDeck (in memory); section 10
@@ -109,6 +142,11 @@ const CONTROLS = {
     ['  return DECK ? DECK.dealSoccerDeck(state, season, key, taken) : [];', '  const d = DECK ?? (globalThis as { __sdLeak?: SoccerDeckModule }).__sdLeak; return d ? d.dealSoccerDeck(state, season, key, taken) : []; /* leak control */']] },
   last: { breaks: '3', file: ENGINE, edits: [['  picked.unshift(...soccerDeckSlot(state, season, `${soccerDeckIdentity(state)}|${season}|deckslot`, picked));', '  picked.push(...soccerDeckSlot(state, season, `${soccerDeckIdentity(state)}|${season}|deckslot`, picked)); /* last control */']] },
   pool: { breaks: '3', file: DECK, edits: [["  if (state.phase !== 'random_events' || problemsOf(pack).length > 0) return [];\n", '  return deckToRandomEvents(pack, pack.events); /* pool control */\n']] },
+  silent: { breaks: '5', file: DECK, edits: [["        consequence: choiceEffects(c, pack, SOCCER_FX_WORDS).join(', ') || 'Nothing changes',",
+    "        consequence: choiceEffects(c, pack, SOCCER_FX_WORDS).filter(w => !w.startsWith('Integrity')).join(', ') || 'Nothing changes', /* silent control */"]] },
+  drop: { breaks: '5', file: DECK, edits: [['    def.apply(s, raw);\n', "    if (k !== 'integrity') def.apply(s, raw); /* drop control */\n"]] },
+  ceiling: { breaks: '5', file: DECK, edits: [['      const add = Math.max(0, Math.min(v, momentsRoom(s)));', '      const add = Math.max(0, v); /* ceiling control */']] },
+  posleak: { breaks: '6', file: null, edits: null },
   eager: { breaks: '10', file: GATE, edits: null },
   caller: { breaks: '10', file: PAGE, edits: null },
 };
@@ -154,7 +192,8 @@ async function bundle(tag, { ref = null } = {}) {
   const entry = ref ? "export * as engine from './src/lib/soccerCareerEngine';"
     : ["export * as engine from './src/lib/soccerCareerEngine';", "export * as gate from './src/lib/soccerDeckGate';",
       "export * as deck from './src/lib/soccerDeck';", "export { SOCCER_DECK_PACKS } from './src/data/soccerDeck';",
-      "export * as words from './src/data/soccerDeck/words';"].join('\n');
+      "export * as words from './src/data/soccerDeck/words';", "export * as drills from './src/lib/careerDrills';",
+      "export { momentsRoom } from './src/lib/season/soccerMoments';"].join('\n');
   await esbuild.build({
     stdin: { contents: entry, resolveDir: ROOT, loader: 'ts' },
     bundle: true, format: 'esm', platform: 'node', outfile: out, logLevel: 'error',
@@ -271,7 +310,7 @@ function step(M, s, seed, clubs) {
  * One career of the fleet on one bundle, Math.random seeded from its seed, twelve seasons (or retirement).
  * `onStep(s)` sees the save after every step; `onDeal(state)` sees the exact state each deal starts from.
  */
-function drive(M, seed, { onStep = null, onDeal = null } = {}) {
+function drive(M, seed, { onStep = null, onDeal = null, seasons = SEASONS } = {}) {
   const real = Math.random;
   let calls = 0;
   const stream = seeded(seed + 1);
@@ -283,7 +322,7 @@ function drive(M, seed, { onStep = null, onDeal = null } = {}) {
     let s = startOf(M, seed);
     onStep?.(s);
     for (let guard = 0; guard < 600 && !s.retired; guard += 1) {
-      if (s.phase === 'playing' && s.seasons.length >= SEASONS) break;
+      if (s.phase === 'playing' && s.seasons.length >= seasons) break;
       const next = step(M, s, seed, clubs);
       if (!next) break;
       s = next;
@@ -304,6 +343,34 @@ if (runs(1)) {
   const shipped = D.soccerDeckProblems(SHIPPED);
   if (shipped.length) fail(`the shipped pack has ${shipped.length} problems: ${shipped.slice(0, 3).join('; ')}`);
   else ok(`the shipped pack (${SHIPPED.events.length} cards) has no problem`);
+  /* The titles live outside the kit's frozen words and its legal scan, so they are scanned here with the kit's own
+     rules (scripts/simEventDeck.mjs section 12): no quote mark, no dash, no first person, no conduct or private life
+     word, and no real name off the thirteen roster files the kit harvests. */
+  const deaccent = s => s.normalize('NFD').replace(/[̀-ͯ]/g, '');
+  const REAL = new Set();
+  for (const rel of ['src/data/frontOfficePlayers.ts', 'src/data/conquestDataNba.ts', 'src/data/mlbFoPlayers.ts', 'src/data/mlbFoRosters2026.ts',
+    'src/data/nhlFoPlayers.ts', 'src/data/cfbHLPlayers.ts', 'src/data/ufcFighters.ts', 'src/data/aflGoalKickers.ts']) {
+    for (const m of readSrc(rel).matchAll(/name:\s*(?:"([A-Z][^"]{1,40} [^"]{2,40})"|'([A-Z][^']{1,40} [^']{2,40})')/g)) REAL.add(deaccent(m[1] ?? m[2]));
+  }
+  for (const rel of ['src/data/clubManagerRosters.ts', 'src/data/clubManagerEra2005.ts', 'src/data/clubManagerEra2010.ts', 'src/data/clubManagerEra2015.ts', 'src/data/clubManagerEra2020.ts']) {
+    for (const m of readSrc(rel).matchAll(/\bn:\s*(?:"([^"]{2,40} [^"]{2,40})"|'([^']{2,40} [^']{2,40})')/g)) REAL.add(deaccent(m[1] ?? m[2]));
+  }
+  const TITLE_BAD = [
+    [/["“”]/, 'a quote mark'], [new RegExp(`[${String.fromCharCode(0x2013)}${String.fromCharCode(0x2014)}]`), 'a dash'],
+    [/\b(I|I'm|I am|I've|I'll|my|me|mine|we|we're|us|our|boss|gaffer)\b/, 'the first person'],
+    [/\b(casino|gambling debts?|drunk|drink driv\w*|arrested|having an affair|cheating on|missed training|hungover|assaulted|fined|suspended|disciplin\w*|curfew|police|court|arrest\w*)\b/i, 'a conduct word'],
+    [/transfer request|bust-up|bust up|leaked|refus(ed|es)|demand(ed|s)|fell out|falling out|walked out|sulk|tantrum|handed in/i, 'a conduct word'],
+    [/\b(family|homesick|faith|pray\w*|fasting|religio\w*|illness|mental health|grief|funeral|bereave\w*|wedding|divorce|pregnan\w*)\b/i, 'a private life word'],
+  ];
+  const titleBad = [];
+  for (const [id, title] of Object.entries(SHIPPED.titles)) {
+    for (const [re, what] of TITLE_BAD) if (re.test(title)) titleBad.push(`${id} "${title}": ${what}`);
+    const name = [...REAL].find(n => deaccent(title).includes(n));
+    if (name) titleBad.push(`${id} "${title}": a real name (${name})`);
+  }
+  if (REAL.size < 8000) fail(`only ${REAL.size} real names harvested, so the title scan means nothing`);
+  if (titleBad.length) fail(`${titleBad.length} titles break the words rules: ${titleBad.slice(0, 3).join('; ')}`);
+  else ok(`${Object.keys(SHIPPED.titles).length} titles: no quote mark, dash, first person, conduct or private word, or any of ${REAL.size} real names`);
   /* the breakages' base: the deal sections' pack plus a keeper and a forward training card made here */
   const KEEPER = { id: '798', beat: 'summer', from: 'Your keeper coach', emoji: '🧤', cooldown: 3, when: [{ fact: 'pos', op: '<', value: 1 }], text: 'Crosses.',
     choices: [{ label: 'Work on it', reply: 'You work on it.', karma: 0, fx: { gk_aerial_command: 1 } }, { label: 'Leave it', reply: 'You leave it.', karma: 0 }] };
@@ -443,6 +510,198 @@ if (runs(3)) {
   if (pendingAtDeal) fail(`${pendingAtDeal} deals start with a deck card still pending`);
   else ok('no deck card is pending at any deal of the loaded head fleet');
   H.gate.setSoccerDeckLoader();
+}
+
+/* ─── 5. promises ──────────────────────────────────────────────────────── */
+
+SECTION = '5';
+console.log('5) Promises: every option moves what its button prints, to the bound and no further, says what landed, and never moves money or fame');
+const sgn = v => (v >= 0 ? `+${v}` : `${v}`);
+if (runs(5)) {
+  const D = H.deck, W = H.words;
+  const LABEL = Object.fromEntries(Object.entries(W.SOCCER_FX_WORDS).map(([k, w]) => [w.label, k]));
+  const KEEP = ['netWorth', 'totalEarnings', 'socialMediaFollowers', 'popularity', 'karma'];
+  const base5 = withStream(() => startOf(H.engine, 5), seeded(5)).value;
+  const row5 = { ...(base5.seasons[0] ?? {}), year: 2012, age: 25, club: 'Deck Albion', clubCountry: 'England', clubTier: 2, type: 'playing', apps: 30, goals: 6,
+    assists: 3, cleanSheets: 4, yellowCards: 8, redCards: 0, rating: 7, intApps: 2, injury: null, injuryWeeks: 9 };
+  const fixture = (code, room, morale) => ({ ...copy(base5), position: code, age: 25, morale, overall: 70, potential: 70 + room, potentialEarned: 0,
+    statBoostNextSeason: {}, currentClub: 'Deck Albion', currentClubTier: 1, seasons: [{ ...row5 }], retired: false, contractYearsLeft: 1,
+    isClubCaptain: true, captainClub: 'Deck Albion', eventLastFired: {}, lastEventId: null, pendingEvents: [] });
+  const defOf = id => PACK.events.find(e => Number(e.id) === id);
+  let answers = 0, neutral = 0, atBound = 0;
+  const wrong = [];
+  for (const code of ['GK', 'CB', 'CM', 'ST']) for (const room of [0, 1, 5]) for (const morale of [0, 1, 50, 99, 100]) {
+    const s0 = fixture(code, room, morale);
+    for (const card of D.deckToRandomEvents(PACK, PACK.events)) {
+      card.choices.forEach((c, i) => {
+        const before = copy(s0);
+        const after = c.apply(copy(s0));
+        answers += 1;
+        for (const k of KEEP) if (JSON.stringify(after[k]) !== JSON.stringify(before[k])) wrong.push(`${card.id} "${c.label}" moved ${k}`);
+        if (c.consequence === 'Nothing changes') {
+          neutral += 1;
+          if (JSON.stringify(after) !== JSON.stringify(before)) wrong.push(`${card.id} "${c.label}" prints Nothing changes and moves something`);
+          return;
+        }
+        const want = copy(before);
+        const said = [];
+        for (const w of c.consequence.split(', ')) {
+          const m = /^(.*) ([+-]\d+)$/.exec(w);
+          if (!m) { wrong.push(`${card.id} "${c.label}" prints ${w}, which names no amount`); continue; }
+          const [label, v] = [m[1], Number(m[2])];
+          if (label === 'Morale') {
+            const to = Math.max(0, Math.min(100, want.morale + v)), d = to - want.morale;
+            if (d !== v) atBound += 1;
+            want.morale = to;
+            said.push(d === 0 ? `Morale stays at ${to}` : d === v ? `Morale ${sgn(d)}` : `Morale ${sgn(d)}, now at ${to}`);
+            continue;
+          }
+          const key = LABEL[label];
+          if (!key) { wrong.push(`${card.id} "${c.label}" prints ${label}, which no registered key carries`); continue; }
+          if (key === 'integrity') { want.integrityBonus += v; said.push(`Integrity ${sgn(v)}`); continue; }
+          const stat = W.SOCCER_TRAINING_KEYS[key].stat;
+          const fit = Math.max(0, Math.min(v, H.momentsRoom(want)));
+          if (fit !== v) atBound += 1;
+          if (fit > 0) want.statBoostNextSeason = { ...want.statBoostNextSeason, [stat]: (want.statBoostNextSeason[stat] ?? 0) + fit };
+          said.push(fit === v ? `${label} ${sgn(fit)}` : `${label} ${sgn(fit)}, you are at your ceiling`);
+        }
+        want.events = [...want.events, `${card.emoji} ${card.title}: ${defOf(card.id).choices[i].reply} ${said.join(', ')}.`];
+        if (JSON.stringify(after) !== JSON.stringify(want)) {
+          const keys = Object.keys({ ...after, ...want }).filter(k => JSON.stringify(after[k]) !== JSON.stringify(want[k]));
+          wrong.push(`${card.id} "${c.label}" at room ${room}, morale ${morale}: ${keys.join(', ')} not as printed (${keys.map(k => `${JSON.stringify(after[k])?.slice(-60)} against ${JSON.stringify(want[k])?.slice(-60)}`).join('; ')})`);
+        }
+      });
+    }
+  }
+  for (const w of wrong.slice(0, 4)) console.error(`     ${w}`);
+  console.log(`   ${answers} answers (${neutral} on the option that moves nothing), ${atBound} effects at a bound`);
+  if (answers < 1000) fail(`only ${answers} answers checked`);
+  if (atBound === 0) fail('no effect met a bound, so the clamp was never checked');
+  if (wrong.length) fail(`${wrong.length} answers move something other than what they print, or say it wrong`);
+  else ok('every option moves exactly what it prints (to the bound and no further), the season log says what landed, nothing moves money, fame or karma, and the option that moves nothing moves nothing');
+  /* the hold: at room 0 and 1 no card is dealt whose training would not fit */
+  let held = 0, dealtAtRoom = 0;
+  for (const code of ['GK', 'CB', 'CM', 'ST']) for (const room of [0, 1]) {
+    const s = fixture(code, room, 50);
+    for (let k = 0; k < 40; k += 1) for (const e of D.dealFromPack(PACK, copy(s), 2012, `hold|${k}`, [])) {
+      dealtAtRoom += 1;
+      const most = Math.max(...defOf(e.id).choices.map(c => Object.entries(c.fx ?? {}).reduce((n, [key, v]) => n + (key in W.SOCCER_TRAINING_KEYS ? v : 0), 0)));
+      if (most > room) held += 1;
+    }
+  }
+  if (dealtAtRoom === 0) fail('nothing was dealt at room 0 or 1, so the hold was never asked');
+  else if (held) fail(`${held} cards dealt whose training passes the room`);
+  else ok(`${dealtAtRoom} deals at room 0 and 1, none with training that would not fit`);
+  /* a drill banked between the deal and the answer: the answer lands what fits and says so */
+  const st = fixture('ST', 1, 50);
+  const dealt = [...Array(60).keys()].map(k => D.dealFromPack(PACK, copy(st), 2012, `drill|${k}`, [])[0]).find(e => e && e.choices.some(c => / next season \+1/.test(c.consequence)));
+  if (!dealt) fail('no training card dealt to the drill probe');
+  else {
+    const drilled = H.drills.applyDrillResult(copy(st), H.drills.drillForPosition('ST'), H.drills.ROUNDS_PER_RUN);
+    const opt = dealt.choices.find(c => / next season \+1/.test(c.consequence));
+    const after = opt.apply(copy(drilled));
+    const line = after.events[after.events.length - 1];
+    const same = JSON.stringify(after.statBoostNextSeason) === JSON.stringify(drilled.statBoostNextSeason);
+    console.log(`   the banked drill: room ${H.momentsRoom(st)} at the deal, ${H.momentsRoom(drilled)} after the drill; the answer logs "${line}"`);
+    if (!same || !/, you are at your ceiling\.$/.test(line)) fail('a drill banked before the answer: the answer still landed training, or its line does not say it is at the ceiling');
+    else ok('a drill banked between the deal and the answer: the answer lands nothing past the ceiling and its line says so');
+  }
+  /* the fleet: how often a deck answer clamps (answered first, so 0 is expected) and how often a deck boost and a
+     drill in one summer would pass the ceiling together (the drills' room does not count queued boosts; owed) */
+  H.gate.setSoccerDeckLoader(async () => moduleFor(PACK));
+  await H.gate.loadSoccerDeck();
+  let trainAnswers = 0, clampedAnswers = 0, passTogether = 0;
+  const queued = s => Object.values(s.statBoostNextSeason ?? {}).reduce((n, v) => n + (v > 0 ? v : 0), 0);
+  for (let seed = 0; seed < FLEET; seed += 1) {
+    let prev = null;
+    drive(H.engine, 5000 + seed, { onStep: s => {
+      const card = prev?.phase === 'random_events' ? prev.pendingEvents?.[0] : null;
+      if (card && isDeck(card.id)) {
+        const printed = card.choices[0].consequence.split(', ').map(w => /^(.*) next season \+(\d+)$/.exec(w)).filter(Boolean).reduce((n, m) => n + Number(m[2]), 0);
+        if (printed > 0) {
+          trainAnswers += 1;
+          if (queued(s) - queued(prev) < printed) clampedAnswers += 1;
+          const kind = H.drills.drillForPosition(s.position);
+          const withDeck = H.drills.applyDrillResult(copy(s), kind, H.drills.ROUNDS_PER_RUN);
+          const without = H.drills.applyDrillResult(copy(prev), kind, H.drills.ROUNDS_PER_RUN);
+          if (queued(withDeck) > H.drills.drillHeadroom(withDeck) && queued(without) <= H.drills.drillHeadroom(without)) passTogether += 1;
+        }
+      }
+      prev = s;
+    } });
+  }
+  H.gate.setSoccerDeckLoader();
+  console.log(`   the fleet: ${trainAnswers} deck training answers, ${clampedAnswers} clamped (expected 0: the deck card is answered first); with a full drill banked after each, ${passTogether} (${(100 * passTogether / Math.max(1, trainAnswers)).toFixed(1)}%) would pass the ceiling only because of the deck's boost (the drills' rule, owed)`);
+  if (trainAnswers === 0) fail('the fleet answered no deck training card');
+  if (clampedAnswers) fail(`${clampedAnswers} deck answers in the fleet landed less than they printed`);
+}
+
+/* ─── 6. reach by position ─────────────────────────────────────────────── */
+
+SECTION = '6';
+console.log('6) Reach by position: every position card reaches its own group and never another, every situation card someone, no keeper word for an outfielder');
+if (runs(6)) {
+  const W = H.words;
+  let P6 = SHIPPED;
+  if (CONTROL === 'posleak') {
+    const e = SHIPPED.events.find(x => x.id === '706');
+    const at = e ? e.when.findIndex(c => c.fact === 'pos' && c.op === '<' && c.value === 2) : -1;
+    if (at < 0) { console.error('posleak control: 706 does not hold pos < 2, refusing to run'); process.exit(2); }
+    P6 = { ...SHIPPED, events: SHIPPED.events.map(x => (x.id === '706' ? { ...x, when: x.when.map((c, i) => (i === at ? { ...c, value: 3 } : c)) } : x)) };
+    const problems = H.deck.soccerDeckProblems(P6);
+    if (problems.length) { console.error(`posleak control: the widened pack has problems (${problems[0]}), so it would prove the fail closed path, refusing`); process.exit(2); }
+    console.log('   posleak: 706 widened to pos < 3, and the widened pack passes the bind check');
+  }
+  const GROUP = { GK: 'keeper', CB: 'defender', LB: 'defender', RB: 'defender', CDM: 'defender', CM: 'midfielder', CAM: 'midfielder', LW: 'forward', RW: 'forward', ST: 'forward' };
+  const LOW = ['keeper', 'defender', 'midfielder', 'forward'];
+  /* a card's own group is read off the SHIPPED pack, so a widened card still counts as its group's */
+  const own = Object.fromEntries(SHIPPED.events.map(e => {
+    const lo = (e.when ?? []).filter(c => c.fact === 'pos').map(c => (c.op === '>=' ? c.value : 0));
+    return [Number(e.id), lo.length ? LOW[Math.max(...lo)] : 'situation'];
+  }));
+  const keeperWords = Object.entries(W.SOCCER_TRAINING_KEYS).filter(([, t]) => t.keeper).map(([k]) => W.SOCCER_FX_WORDS[k].label);
+  const outfieldWords = Object.entries(W.SOCCER_TRAINING_KEYS).filter(([, t]) => !t.keeper).map(([k]) => W.SOCCER_FX_WORDS[k].label);
+  H.gate.setSoccerDeckLoader(async () => moduleFor(P6));
+  await H.gate.loadSoccerDeck();
+  const per = {};
+  const strays = [], wordsWrong = [];
+  for (let n = 0; n < 400; n += 1) {
+    const seed = 1000 + n;
+    const code = CODES[seed % CODES.length];
+    const p = (per[code] ??= { summers: 0, dealt: 0, ids: {} });
+    let prev = '';
+    drive(H.engine, seed, { seasons: 15,
+      onDeal: st => { if (st.age >= 17) p.summers += 1; },
+      onStep: s => {
+        const first = s.pendingEvents?.[0];
+        if (s.phase === 'random_events' && prev !== 'random_events' && isDeck(first?.id)) {
+          p.dealt += 1;
+          p.ids[first.id] = (p.ids[first.id] ?? 0) + 1;
+          if (own[first.id] !== 'situation' && own[first.id] !== GROUP[code]) strays.push(`a ${GROUP[code]} (${code}) was dealt ${first.id}, a ${own[first.id]} card`);
+          const words = first.choices.map(c => c.consequence).join(' | ');
+          const foreign = (code === 'GK' ? outfieldWords : keeperWords).find(w => words.includes(w));
+          if (foreign) wordsWrong.push(`${code} was dealt ${first.id} printing ${foreign}`);
+        }
+        prev = s.phase;
+      } });
+  }
+  H.gate.setSoccerDeckLoader();
+  const byGroup = {};
+  for (const [code, p] of Object.entries(per)) {
+    const g = (byGroup[GROUP[code]] ??= { summers: 0, dealt: 0, ids: new Set() });
+    g.summers += p.summers; g.dealt += p.dealt;
+    for (const id of Object.keys(p.ids)) g.ids.add(Number(id));
+    const top = Object.entries(p.ids).sort((a, b) => b[1] - a[1])[0];
+    console.log(`   ${code}: ${Object.keys(p.ids).length} cards reached, ${p.dealt} deck cards in ${p.summers} summers (${(p.dealt / Math.max(1, p.summers)).toFixed(2)} a summer), the top card ${top ? `${top[0]} at ${(100 * top[1] / p.dealt).toFixed(1)}%` : 'none'}`);
+  }
+  for (const [g, x] of Object.entries(byGroup)) console.log(`   ${g}s: a deck card in ${(100 * x.dealt / Math.max(1, x.summers)).toFixed(1)}% of summers (${x.dealt} of ${x.summers})`);
+  for (const s of strays.slice(0, 4)) console.error(`     ${s}`);
+  if (strays.length) fail(`${strays.length} position cards dealt to another group: ${strays[0]}`);
+  for (const w of wordsWrong.slice(0, 3)) console.error(`     ${w}`);
+  if (wordsWrong.length) fail(`${wordsWrong.length} deals print another group's training word`);
+  const unreached = SHIPPED.events.map(e => Number(e.id)).filter(id => own[id] === 'situation' ? ![...Object.values(byGroup)].some(g => g.ids.has(id)) : !byGroup[own[id]]?.ids.has(id));
+  if (unreached.length) fail(`${unreached.length} cards never reached their group (a situation card: no group): ${unreached.join(', ')}`);
+  if (!strays.length && !wordsWrong.length && !unreached.length) ok(`all ${SHIPPED.events.length} cards reached: every position card its own group and no other, every situation card at least one, and no group printed another's training words`);
 }
 
 /* ─── 10. lazy, the static half ────────────────────────────────────────── */

@@ -77,3 +77,58 @@ SC_BASE; counts to be pasted at step 5).
 - The engine workflows' substance lines (18 workflows name the engine on this base, two more than the draft's 16:
   career-historical-opponent-labels and career-rival-veteran-pay) are run once, at step 5, on the final head and
   SC_BASE, rather than at every step.
+
+## Step 3: the starter pack, 28 cards
+
+The board's between seasons rule is on main (docs/WORKBOARD.md, the 2026-10-16 12:45 claims block): ids 700 to 999,
+at most one deck card a summer, dealt first, about the pitch and the training ground only.
+
+| id | group, gate (besides a playing row at a club) | title | voice | options (effects) | cd | nearest routine, and why this is not it |
+|---|---|---|---|---|---|---|
+| 701 | keeper | Crosses into a crowded box | Your keeper coach | extra hour (Morale -1, Aerial Command +1); N | 3 | 604 keeper catching (reflexes): ours is claiming crosses |
+| 702 | keeper | Playing it out from the back | The analyst | short passing (Distribution +1); N | 3 | none for keepers; 600 is outfield passing reps |
+| 703 | keeper | The penalty file | Your keeper coach | study it (Penalty Saving +1); N | 4 | 604: ours is penalties |
+| 704 | keeper | Sweeping behind a high line | The coaching staff | sprint work (Morale -1, Sweeping Speed +1); N | 4 | 603 sprint workshop (any position, pace): ours is a keeper's sweeping |
+| 705 | keeper, apps < 15, sameClub | Fighting for the shirt | Your keeper coach | one on ones (Shot Stopping +1); rest up (Morale +2); N | 3 | 615 a frustrating year (low morale, physical): ours is a keeper's fight for the shirt |
+| 706 | defender | A new way to defend corners | Your set piece coach | learn it (Morale -1, Defending +1); teach it (Integrity +1); N | 3 | 610 defensive details: ours is a zonal set piece setup |
+| 707 | defender | Playing out under a press | The coaching staff | passing work (Passing +1); N | 3 | 600 passing reps: ours is a defender on the ball under a press |
+| 708 | defender | Recovery runs | Your fitness coach | sprint work (Morale -1, Pace +1); N | 4 | 603 sprint workshop: ours is a defender's recovery pace |
+| 709 | defender, yellows >= 7 | Timing your tackles | The analyst | the clips (Defending +1); N | 4 | 601 and 610 defensive clips: ours is his own bookings |
+| 710 | defender, age >= 26 | Organising the defence | The coaching staff | walkthroughs (Morale -1, Integrity +1); N | 3 | 617 helping a training partner: ours leads the defensive walkthroughs |
+| 711 | midfielder | When to press | The analyst | triggers (Morale -1, Physical +1); N | 3 | 613 receiving between the lines (passing): ours is pressing |
+| 712 | midfielder | Set piece delivery | Your set piece coach | delivery (Passing +1); N | 3 | 613: ours is dead ball delivery |
+| 713 | midfielder | First touch under pressure | The coaching staff | rondos (Dribbling +1); N | 3 | 602 first touch homework (any position): ours is a midfielder in the rondos |
+| 714 | midfielder, goals >= 4 | Shooting from distance | The coaching staff | stay late (Shooting +1); N | 4 | 616 finishing homework (forwards): ours is a scoring midfielder's range |
+| 715 | midfielder | Covering the space | The analyst | shape work (Defending +1); N | 4 | 601 video notebook (defending, any position): ours is a midfielder's shape |
+| 716 | forward | Penalty duty | The coaching staff | name down (Shooting +1); N | 4 | 616 finishing homework: ours is penalty duty |
+| 717 | forward | Your weaker foot | Your finishing coach | weaker foot (Shooting +1); N | 3 | 616: ours is the weaker foot |
+| 718 | forward | Pressing from the front | Your fitness coach | sprint work (Morale -1, Pace +1); N | 4 | 603 sprint workshop: ours is a forward's press |
+| 719 | forward, goals <= 3, apps >= 15 | A quiet season in front of goal | Your finishing coach | extra finishing (Morale -1, Shooting +1); clear your head (Morale +2); N | 3 | 615 (few apps, low morale) and 616: ours is plenty of games and few goals |
+| 720 | forward | Beating your man | The coaching staff | one on ones (Dribbling +1); N | 3 | 627 reviewing your touch (dribbling, any): ours is taking defenders on |
+| 721 | seniorSeasons < 2 | Learning from the senior players | The first team coach | go in early (Morale -1, Integrity +1); N | 99 | none: a once a career card |
+| 722 | age >= 31 | Managing the miles | The sports science staff | load plan (Morale +2); N | 3 | 626 a veteran's warm up (physical work): ours is the load plan, rest |
+| 723 | contractYear (exactly one year left) | The last year of your deal | Your fitness coach | cut the summer short (Morale -1, Integrity +1); full break (Morale +2); N | 2 | none: words about the summer's training only, never talks, offers, wages or a renewal |
+| 724 | capped (last row's intApps > 0) | Back from international duty | The medical staff | whole break (Morale +2); come back early (Morale -1, Integrity +1); N | 2 | none |
+| 725 | captain at his present club | Setting the standard | The coaching staff | set the tone (Morale +1, Integrity +1); N | 3 | 614 and 619 captain's afternoon and media duty: ours is preseason's first week |
+| 726 | injuryWeeks >= 8 | The return plan | The physio | strength block (Morale -1, Integrity +1); ease back in (Morale +2); N | 2 | 625 looking back at an injury year (passing work): ours is the physio's plan |
+| 727 | tier < 2, age <= 22 | Training with the best | The first team coach | go in early (Morale -1, Integrity +1); N | 3 | none |
+| 728 | derbies >= 1 (derby meetings he played last season) | Derby clips | The analyst | watch them all (Morale +1); N | 3 | none: only the derbies he played last season, never next season's |
+
+Training labels print "<Word> next season +1"; N is the option that moves nothing ("Nothing changes"). Kinds: 705,
+709, 719 and 726 are 'negative' (the card reads Challenge), 724 'international', the rest 'positive'.
+
+sameClub (ruling 2(e)): only 705 puts last season at his present club ("You did not get many games here last
+season"), so only 705 gates on it. 725 says "You wear the armband here", which the captain fact itself holds (the
+armband at the present club). No other card names a club.
+
+### Card by code (advice 19): every card's words true for every code of its group
+
+The groups are the drills' (careerDrills.ts drillForPosition): GK keeper; CB, LB, RB, CDM defender; CM, CAM
+midfielder; LW, RW, ST forward. The doubtful pairs, one line each:
+- 706 for LB, RB, CDM: worded "wants every defender to know it inside out" (not "at the heart of it"), true for all four.
+- 707 for CDM: a holding midfielder on the ball under a press is the card; true.
+- 708 for CDM: "a quick winger cannot get away from you once he is goal side", a holding midfielder tracks runners too; true enough, no position named.
+- 710 for LB, RB, CDM: "the defensive walkthroughs", not "the back line"; true for all four.
+- 712 for CAM and CM: set piece delivery; true.
+- 715 for CAM: defensive shape work for an attacking midfielder is the point of the card; true.
+- 716 to 720 for LW and RW: penalty duty, weaker foot, pressing from the front ("the press starts with the forwards"), a quiet season in front of goal and beating your man (worded "taking defenders on", not "your full back") are all true of a winger.
