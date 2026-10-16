@@ -7,6 +7,7 @@ import os from 'node:os';
 import { createHash } from 'node:crypto';
 import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
+import { withoutClubDetailFixtures } from './lib/clubDetailFixturesSourceJoin.mjs';
 assert(process.env.CI && process.env.SIM_NETWORK === 'offline', 'Current-roster proof requires remote offline CI');
 const readLf = file => fs.readFileSync(file, 'utf8').replaceAll('\r\n', '\n'); /* Release BE: simHarnessAnchors, a CRLF checkout */
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..'), SELF = fileURLToPath(import.meta.url);
@@ -30,7 +31,8 @@ const NAMES = [
 ];
 const OLD_TEST = 'src/test/clubDetailOwnClub.test.tsx', BROWSER = 'scripts/playClubDetailCurrentRoster.mjs';
 const files = [COMPONENT, CORE, 'src/lib/clubManagerWorldRoster.ts', 'src/lib/clubManagerEras.ts', OLD_TEST,
-  TEST, 'scripts/simClubDetailCurrentRoster.mjs', '.github/workflows/club-detail-current-roster.yml', BROWSER];
+  TEST, 'scripts/simClubDetailCurrentRoster.mjs', '.github/workflows/club-detail-current-roster.yml', BROWSER,
+  'src/lib/clubDetailFixtures.ts', 'scripts/lib/clubDetailFixturesSourceJoin.mjs'];
 const sha = value => createHash('sha256').update(value).digest('hex');
 const sources = new Map(files.map(file => [file, readLf(path.join(ROOT, file))]));
 const OUT = process.env.CM_OWN_ROSTER_OUT ? path.resolve(process.env.CM_OWN_ROSTER_OUT)
@@ -44,10 +46,12 @@ function git(args) { const run = spawnSync('git', args, { cwd: ROOT, encoding: '
 const head = git(['rev-parse', 'HEAD']).trim(), parent = git(['show', `${PARENT}:${COMPONENT}`]);
 fs.writeFileSync(path.join(retained, 'ClubDetailScreen.parent.tsx'), parent);
 const bindings = files.slice(0, 5).map(file => ({ file, parentSha256: sha(git(['show', `${PARENT}:${file}`])), candidateSha256: sha(sources.get(file)) }));
+const fixtureBindings = files.slice(9).map(file => ({ file, headSha256: sha(git(['show', `${head}:${file}`])), candidateSha256: sha(sources.get(file)) }));
+for (const row of fixtureBindings) assert.equal(row.candidateSha256, row.headSha256, 'Current fixture inputs must equal committed HEAD');
 fs.mkdirSync(path.join(ROOT, 'tmp'), { recursive: true }); const tmp = fs.mkdtempSync(path.join(ROOT, 'tmp/current-roster-'));
 let outcome = {};
 function receipt(extra = {}) { outcome = { ...outcome, ...extra }; fs.writeFileSync(path.join(retained, 'source.json'), JSON.stringify({
-  head, parentRef: PARENT, phase: PHASE, control: CONTROL, bindings, ...outcome,
+  head, parentRef: PARENT, phase: PHASE, control: CONTROL, bindings, fixtureBindings, ...outcome,
   sourceReceipts: [...sources].map(([file, source]) => ({ file, beforeSha256: sha(source), afterSha256: sha(readLf(path.join(ROOT, file))) })),
 }, null, 2) + '\n'); }
 try {
@@ -93,7 +97,8 @@ try {
     }
     assert.equal(inverse, before); const name = path.basename(file);
     fs.writeFileSync(path.join(retained, name + '.fixed-plan'), after); fs.writeFileSync(path.join(retained, name + '.inverse'), inverse);
-    assert.equal(sources.get(file), RED ? before : after, file + ': actual whole source must equal the exact phase plan');
+    const actual = file === COMPONENT ? withoutClubDetailFixtures(sources.get(file)) : sources.get(file);
+    assert.equal(actual, RED ? before : after, file + ': actual whole source must equal the exact phase plan after the explicit fixtures inverse');
     return { file, spans: rows, parentSha256: sha(before), plannedSha256: sha(after), inverseSha256: sha(inverse) };
   }
   const componentBinding = planned(COMPONENT, parent, componentSpans), oldTestBinding = planned(OLD_TEST, git(['show', `${PARENT}:${OLD_TEST}`]), testSpans);

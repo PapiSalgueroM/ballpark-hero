@@ -1,0 +1,126 @@
+name: Club detail league fixtures
+
+on:
+  push:
+    branches: [codex/manager-club-fixtures]
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    defaults:
+      run:
+        shell: bash
+    env:
+      CLUB_FIXTURES_PHASE: fixed
+      SIM_NETWORK: offline
+      ENGINES: chromium
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Retain source and install locked dependencies
+        run: |
+          set -euo pipefail
+          mkdir club-fixtures-artifacts
+          git archive --format=zip HEAD > club-fixtures-artifacts/source.zip
+          git rev-parse HEAD > club-fixtures-artifacts/head.txt
+          cp package.json club-fixtures-artifacts/package.before.json
+          cp package-lock.json club-fixtures-artifacts/package-lock.before.json
+          npm ci > club-fixtures-artifacts/install.log 2>&1
+          npm ls --all --json > club-fixtures-artifacts/installed-versions.json
+      - name: Actual application types
+        run: |
+          set -euo pipefail
+          set +e
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node_modules/.bin/tsc --noEmit -p tsconfig.app.json > club-fixtures-artifacts/types.log 2>&1
+          status=$?
+          set -e
+          cat club-fixtures-artifacts/types.log
+          exit "$status"
+      - name: Actual fixture outcomes and original control
+        run: |
+          set -euo pipefail
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simClubDetailFixtures.mjs
+      - name: Existing roster outcomes
+        if: env.CLUB_FIXTURES_PHASE == 'baseline'
+        run: |
+          set -euo pipefail
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node node_modules/vitest/vitest.mjs run src/test/clubDetailCurrentRoster.test.tsx src/test/clubDetailOwnClub.test.tsx --maxWorkers=1 --minWorkers=1 --reporter=default --reporter=json --outputFile.json=club-fixtures-artifacts/roster.json > club-fixtures-artifacts/roster.log 2>&1
+          cat club-fixtures-artifacts/roster.log
+      - name: Existing exact roster source proof and original control
+        if: env.CLUB_FIXTURES_PHASE == 'fixed'
+        run: |
+          set -euo pipefail
+          node --check scripts/playClubDetailCurrentRoster.mjs
+          CM_OWN_ROSTER_PHASE=fixed CM_OWN_ROSTER_CORE_REF=HEAD CM_OWN_ROSTER_OUT="$PWD/club-fixtures-artifacts/old-roster" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simClubDetailCurrentRoster.mjs > club-fixtures-artifacts/old-roster-normal.log 2>&1
+          tail -n 6 club-fixtures-artifacts/old-roster-normal.log
+          CM_OWN_ROSTER_PHASE=fixed CM_OWN_ROSTER_CONTROL=original CM_OWN_ROSTER_CORE_REF=HEAD CM_OWN_ROSTER_OUT="$PWD/club-fixtures-artifacts/old-roster" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simClubDetailCurrentRoster.mjs > club-fixtures-artifacts/old-roster-original.log 2>&1
+          tail -n 6 club-fixtures-artifacts/old-roster-original.log
+      - name: Production build
+        if: env.CLUB_FIXTURES_PHASE == 'fixed'
+        run: |
+          set -euo pipefail
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" npm run build > club-fixtures-artifacts/build.log 2>&1
+          tail -n 6 club-fixtures-artifacts/build.log
+      - name: Install isolated reader tools
+        if: env.CLUB_FIXTURES_PHASE == 'fixed'
+        run: |
+          set -euo pipefail
+          tools="$RUNNER_TEMP/club-fixtures-reader-tools"
+          mkdir "$tools"
+          printf '{"private":true,"dependencies":{"playwright":"1.64.0"}}\n' > "$tools/package.json"
+          npm install --prefix "$tools" --ignore-scripts --no-audit --no-fund > club-fixtures-artifacts/browser-install.log 2>&1
+          test ! -e node_modules/playwright
+          ln -s "$tools/node_modules/playwright" node_modules/playwright
+          ln -s "$tools/node_modules/playwright-core" node_modules/playwright-core
+          node "$tools/node_modules/playwright/cli.js" install --with-deps chromium > club-fixtures-artifacts/chromium-install.log 2>&1
+          python -m pip install fonttools pillow > club-fixtures-artifacts/python-install.log 2>&1
+      - name: Every rebuilt-site reader
+        if: env.CLUB_FIXTURES_PHASE == 'fixed'
+        run: |
+          set -euo pipefail
+          node scripts/lib/hostLikeServer.mjs dist 4173 > club-fixtures-artifacts/server.log 2>&1 &
+          server=$!
+          trap 'kill "$server" 2>/dev/null || true' EXIT
+          ready=0
+          for attempt in $(seq 1 60); do if curl --fail --silent http://127.0.0.1:4173/ > /dev/null; then ready=1; break; fi; sleep 1; done
+          test "$ready" -eq 1
+          failed=0
+          for harness in simAdsense simBrand simHeadTags simHiddenPages simHubs simIndexNow simIndexing simInternalLinks simNoRivalNames simPrerender simPrerenderBoot simRetiredRoutes simSchema simSitemap simSnapshotAssets; do
+            set +e
+            SIM_OFFLINE_RECEIPT="$PWD/club-fixtures-artifacts/$harness.transport" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" BASE=http://127.0.0.1:4173 SWEEP_BASE=http://127.0.0.1:4173 node "scripts/$harness.mjs" > "club-fixtures-artifacts/$harness.log" 2>&1
+            status=$?
+            set -e
+            cat "club-fixtures-artifacts/$harness.log"
+            printf '%s\t%s\n' "$harness" "$status" >> club-fixtures-artifacts/readers.tsv
+            if test "$status" -ne 0 || test -s "club-fixtures-artifacts/$harness.transport"; then failed=1; fi
+            if grep -E '(^|[[:space:]])(FAIL|SKIP|EMPTY)([[:space:]]|$)' "club-fixtures-artifacts/$harness.log"; then failed=1; fi
+          done
+          test "$(wc -l < club-fixtures-artifacts/readers.tsv)" -eq 15
+          exit "$failed"
+      - name: Source and package preservation
+        if: always()
+        run: |
+          set -euo pipefail
+          git diff --exit-code -- src public scripts package.json package-lock.json
+          cmp package.json club-fixtures-artifacts/package.before.json
+          cmp package-lock.json club-fixtures-artifacts/package-lock.before.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: club-detail-fixtures-${{ github.run_id }}
+          retention-days: 7
+          if-no-files-found: error
+          path: club-fixtures-artifacts/

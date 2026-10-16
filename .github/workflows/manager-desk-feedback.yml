@@ -1,0 +1,121 @@
+name: Manager desk feedback served proof
+
+on:
+  push:
+    branches: [codex/manager-desk-feedback]
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 50
+    env:
+      CI: 'true'
+      SIM_NETWORK: offline
+      ENGINES: chromium
+      CAREER_SEASON_LOCAL_ONLY: '1'
+      CM_DESK_FEEDBACK_BASE: 7c4838670253f2ca95af2adf14c2397d66b4f7c9
+      MDF_PHASE: fixed
+      MDF_OUT: ${{ github.workspace }}/manager-desk-feedback-artifacts/browser
+      MDF_EVIDENCE: ${{ github.workspace }}/manager-desk-feedback-artifacts
+      FREE_KICK_FONT_CACHE: ${{ github.workspace }}/manager-desk-feedback-artifacts/font-cache
+      PRERENDER_ONLY: /club-manager,/whats-new
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Bind actual source and locked packages
+        run: |
+          echo '127.0.0.1 flawuiqbvjobmkfkauhw.supabase.co' | sudo tee -a /etc/hosts
+          mkdir -p "$MDF_EVIDENCE"
+          git rev-parse HEAD > "$MDF_EVIDENCE/head.txt"
+          git archive --format=zip HEAD > "$MDF_EVIDENCE/source.zip"
+          git status --porcelain --untracked-files=no > "$MDF_EVIDENCE/source-before.txt"
+          test ! -s "$MDF_EVIDENCE/source-before.txt"
+          if test "$MDF_PHASE" = baseline; then
+            git diff --exit-code "$CM_DESK_FEEDBACK_BASE" -- src package.json package-lock.json bun.lock
+          else
+            git diff --exit-code "$CM_DESK_FEEDBACK_BASE" -- src ':!src/components/club-manager/TransferScreen.tsx' package.json package-lock.json bun.lock
+          fi
+          find src scripts .github/workflows -type f ! -path scripts/data/lastmod.json -print0 | sort -z | xargs -0 sha256sum > "$MDF_EVIDENCE/source-hashes.txt"
+          sha256sum package.json package-lock.json bun.lock > "$MDF_EVIDENCE/package-hashes.txt"
+          npm ci
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          const lock = JSON.parse(fs.readFileSync('package-lock.json'));
+          const installed = Object.entries(lock.packages).filter(([p]) => p.startsWith('node_modules/') && fs.existsSync(p + '/package.json')).map(([p, entry]) => {
+            const version = JSON.parse(fs.readFileSync(p + '/package.json')).version;
+            assert.equal(version, entry.version, p); return { path: p, version };
+          });
+          assert.equal(installed.length, 521);
+          fs.writeFileSync(process.env.MDF_EVIDENCE + '/installed.json', JSON.stringify(installed, null, 2));
+          console.log(`Bound ${installed.length} locked installed versions.`);
+          NODE
+          find node_modules -type f -print0 | sort -z | xargs -0 sha256sum > "$MDF_EVIDENCE/installed-files.sha256"
+      - name: Actual app types and proof syntax
+        run: |
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee "$MDF_EVIDENCE/types.log"
+          node --check scripts/qa/playManagerDeskFeedback.mjs
+          if test "$MDF_PHASE" = fixed; then
+            NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node_modules/.bin/vitest run src/test/managerOwnTransferLog.test.tsx src/test/clubManagerDealMoment.test.tsx --testTimeout=120000 2>&1 | tee "$MDF_EVIDENCE/related-tests.log"
+          fi
+      - name: Isolated pinned browser and declared fonts
+        run: |
+          npm install --prefix "$RUNNER_TEMP/manager-desk-browser" --no-save --package-lock=false playwright@1.64.0
+          ln -s "$RUNNER_TEMP/manager-desk-browser/node_modules/playwright" node_modules/playwright
+          ln -s "$RUNNER_TEMP/manager-desk-browser/node_modules/playwright-core" node_modules/playwright-core
+          node "$RUNNER_TEMP/manager-desk-browser/node_modules/playwright/cli.js" install --with-deps chromium
+          python -m pip install fonttools pillow
+          node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only 2>&1 | tee "$MDF_EVIDENCE/fonts.log"
+      - name: Build then all fifteen rebuilt-site readers
+        run: |
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" npm run build:seo 2>&1 | tee "$MDF_EVIDENCE/build.log"
+          cp scripts/data/lastmod.json "$MDF_EVIDENCE/build-lastmod.json"
+          git diff -- scripts/data/lastmod.json > "$MDF_EVIDENCE/build-lastmod.diff"
+          find dist -type f -print0 | sort -z | xargs -0 sha256sum > "$MDF_EVIDENCE/dist-hashes.txt"
+          tar -czf "$MDF_EVIDENCE/dist.tar.gz" dist
+          ONLY=simAdsense,simBrand,simHeadTags,simHiddenPages,simHubs,simIndexNow,simIndexing,simInternalLinks,simNoRivalNames,simPrerender,simPrerenderBoot,simRetiredRoutes,simSchema,simSitemap,simSnapshotAssets node scripts/runAllSims.mjs --browser 2>&1 | tee "$MDF_EVIDENCE/readers.log"
+          test "$(grep -c '^All 15 harnesses green\.$' "$MDF_EVIDENCE/readers.log")" = 1
+      - name: Real served refusal and sibling-action journeys
+        timeout-minutes: 10
+        run: |
+          node scripts/lib/hostLikeServer.mjs dist 4173 > "$MDF_EVIDENCE/server.log" 2>&1 &
+          task_server_pid=$!
+          trap 'kill "$task_server_pid" 2>/dev/null || true' EXIT
+          for attempt in 1 2 3 4 5; do
+            if curl --fail --silent http://127.0.0.1:4173/ > /dev/null; then break; fi
+            sleep 1
+          done
+          curl --fail --silent http://127.0.0.1:4173/ > /dev/null
+          export BASE=http://127.0.0.1:4173 SWEEP_BASE=http://127.0.0.1:4173
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/playManagerDeskFeedback.mjs 2>&1 | tee "$MDF_EVIDENCE/browser.log"
+          if test "$MDF_PHASE" = fixed; then
+            SWEEP_OFFLINE=1 NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/sweepWeight.mjs 2>&1 | tee "$MDF_EVIDENCE/weight.log"
+          fi
+      - name: Exact source package dependency and dist holds
+        if: always()
+        run: |
+          sha256sum --check "$MDF_EVIDENCE/source-hashes.txt" > "$MDF_EVIDENCE/source-holds.log"
+          sha256sum --check "$MDF_EVIDENCE/package-hashes.txt" > "$MDF_EVIDENCE/package-holds.log"
+          if test -f "$MDF_EVIDENCE/installed-files.sha256"; then sha256sum --check "$MDF_EVIDENCE/installed-files.sha256" > "$MDF_EVIDENCE/installed-holds.log"; fi
+          if test -f "$MDF_EVIDENCE/dist-hashes.txt"; then sha256sum --check "$MDF_EVIDENCE/dist-hashes.txt" > "$MDF_EVIDENCE/dist-holds.log"; fi
+          git diff --exit-code -- src scripts ':!scripts/data/lastmod.json' package.json package-lock.json bun.lock .github/workflows
+      - name: Retain complete proof
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: manager-desk-feedback-${{ github.run_id }}
+          path: manager-desk-feedback-artifacts/
+          retention-days: 14
+          if-no-files-found: error

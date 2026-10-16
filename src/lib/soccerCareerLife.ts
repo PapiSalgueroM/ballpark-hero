@@ -427,7 +427,7 @@ export function getLifeEvents(state: CareerState): RandomEvent[] {
         apply: s => { s.events = [...s.events, "🙄 Refused the mascot race. It did a victory lap anyway"]; return s; } },
     ] });
 
-  if (state.age >= 26 && state.popularity >= 55) {
+  if (state.age >= 26 && (state.pendingEvents.some(event => event.id === 225) || state.popularity >= 55)) {
     push({ id: 225, cooldown: COOLDOWN.once, emoji: "📖", title: "The Tell-All Book Offer",
       description: "A publisher offers €1.5M for a tell-all autobiography. NOW, mid-career, with names named.",
       category: "life", choices: [
@@ -438,7 +438,7 @@ export function getLifeEvents(state: CareerState): RandomEvent[] {
       ] });
   }
 
-  if (state.netWorth >= 1.5 && !flag(state, "esports")) {
+  if ((state.pendingEvents.some(event => event.id === 226) || state.netWorth >= 1.5) && !flag(state, "esports")) {
     push({ id: 226, cooldown: COOLDOWN.once, emoji: "🎮", title: "Buy an Esports Team?",
       description: "A struggling esports org is for sale for €800k. Your gamer teammates swear it is about to blow up.",
       category: "life", choices: [
@@ -498,7 +498,7 @@ export function getLifeEvents(state: CareerState): RandomEvent[] {
       ] });
   }
 
-  if (state.overall >= 84 && state.age >= 27) {
+  if ((state.pendingEvents.some(event => event.id === 232) || state.overall >= 84) && state.age >= 27) {
     push({ id: 232, story: STORY.statueVote, cooldown: COOLDOWN.once, emoji: "🗿", title: "The Statue Vote",
       description: "Your hometown council is voting on a statue of you outside the stadium where you played as a kid.",
       category: "life", choices: [
@@ -520,7 +520,7 @@ export function getLifeEvents(state: CareerState): RandomEvent[] {
       ] });
   }
 
-  if (state.popularity >= 40 && !flag(state, "lookalike")) {
+  if ((state.pendingEvents.some(event => event.id === 234) || state.popularity >= 40) && !flag(state, "lookalike")) {
     push({ id: 234, cooldown: COOLDOWN.once, emoji: "🥸", title: "The Lookalike",
       description: "A man who looks 70% like you has been opening supermarkets and charging for autographs two towns over.",
       category: "negative", choices: [
@@ -589,7 +589,7 @@ export function getLifeEvents(state: CareerState): RandomEvent[] {
         apply: s => { s.morale = clamp(s.morale - 3, 0, 100); s.events = [...s.events, "🧢 Wore a beanie until the haircut grew out. Everyone knew"]; return s; } },
     ] });
 
-  if (state.popularity >= 50) {
+  if (state.pendingEvents.some(event => event.id === 241) || state.popularity >= 50) {
     push({ id: 241, cooldown: COOLDOWN.once, emoji: "🐐", title: "A Village Named a Goat After You",
       description: "A small village in the mountains has named its prize goat after you. They have invited you to the naming festival. The goat has won awards.",
       category: "life", choices: [
@@ -611,7 +611,7 @@ export function getLifeEvents(state: CareerState): RandomEvent[] {
       ] });
   }
 
-  if (!state.hasRelationship && !state.family?.isMarried && state.popularity >= 45) {
+  if (!state.hasRelationship && !state.family?.isMarried && (state.pendingEvents.some(event => event.id === 243) || state.popularity >= 45)) {
     push({ id: 243, cooldown: COOLDOWN.once, emoji: "🌹", title: "Reality Dating Show Invite",
       description: "A massive reality dating show wants you as the celebrity single next season. Filming is during the offseason. Your agent has opinions. Everyone has opinions.",
       category: "life", choices: [
@@ -622,7 +622,7 @@ export function getLifeEvents(state: CareerState): RandomEvent[] {
       ] });
   }
 
-  if (state.popularity >= 45 && !flag(state, "podcast")) {
+  if ((state.pendingEvents.some(event => event.id === 244) || state.popularity >= 45) && !flag(state, "podcast")) {
     push({ id: 244, story: STORY.podcastLaunch, cooldown: COOLDOWN.once, emoji: "🎙️", title: "Start a Podcast?",
       description: "Every player has a podcast now. Yours would be called whatever you want, and sponsors are already lining up.",
       category: "life", choices: [
@@ -661,7 +661,7 @@ export function getLifeEvents(state: CareerState): RandomEvent[] {
         apply: s => { s.events = [...s.events, "🧤 Gaffer Two was relocated to a lovely forest. The squad still salutes"]; return s; } },
     ] });
 
-  if (state.popularity >= 35) {
+  if (state.pendingEvents.some(event => event.id === 248) || state.popularity >= 35) {
     push({ id: 248, cooldown: COOLDOWN.fans, emoji: "💍", title: "Pitch Invasion Proposal",
       description: "A fan proposes to their partner in front of you after the match and asks you to hand over the ring. Forty thousand people are watching. No pressure.",
       category: "life", choices: [
@@ -672,7 +672,7 @@ export function getLifeEvents(state: CareerState): RandomEvent[] {
       ] });
   }
 
-  if (state.overall >= 86 && state.age >= 29) {
+  if ((state.pendingEvents.some(event => event.id === 249) || state.overall >= 86) && state.age >= 29) {
     push({ id: 249, cooldown: COOLDOWN.once, emoji: "🎞️", title: "The Biopic Offer",
       description: "A major studio wants the film rights to your life story. They mention an A-list actor for the lead. He is 5 foot 6. You are not.",
       category: "life", choices: [
@@ -683,7 +683,7 @@ export function getLifeEvents(state: CareerState): RandomEvent[] {
       ] });
   }
 
-  if (state.netWorth >= 1) {
+  if (state.pendingEvents.some(event => event.id === 251) || state.netWorth >= 1) {
     push({ id: 251, cooldown: COOLDOWN.money, emoji: "🪙", title: "The Teammate Coin",
       description: "A teammate launches his own cryptocurrency and corners you at lunch about getting in early. His pitch deck is a napkin.",
       category: "life", choices: [
@@ -709,7 +709,7 @@ export function getLifeEvents(state: CareerState): RandomEvent[] {
      that until now had nothing to say. */
 
   /* ── family ── */
-  if (state.popularity >= 30) {
+  if (state.pendingEvents.some(event => event.id === 253) || state.popularity >= 30) {
     push({ id: 253, cooldown: COOLDOWN.family, emoji: "📱", title: "Your Mum Is In The Comments",
       description: "Your mum has started replying to every critic under your posts. In full sentences. With childhood photos as evidence. A man who said you were slow has now seen your nursery sports day medal.",
       category: "life", choices: [
@@ -749,7 +749,7 @@ export function getLifeEvents(state: CareerState): RandomEvent[] {
   }
 
   /* ── media ── */
-  if (state.popularity >= 35) {
+  if (state.pendingEvents.some(event => event.id === 256) || state.popularity >= 35) {
     push({ id: 256, cooldown: COOLDOWN.media, emoji: "🎬", title: "The Documentary Edit",
       description: "The club's behind the scenes series has cut your forty minute press conference down to one eye roll and a sigh. The episode is called Tension.",
       category: "life", choices: [
@@ -763,7 +763,7 @@ export function getLifeEvents(state: CareerState): RandomEvent[] {
   }
 
   /* ── money and brands ── */
-  if (state.popularity >= 30 && !flag(state, "energyDrink")) {
+  if ((state.pendingEvents.some(event => event.id === 257) || state.popularity >= 30) && !flag(state, "energyDrink")) {
     push({ id: 257, cooldown: COOLDOWN.money, emoji: "🥤", title: "The Energy Drink Pitch",
       description: "A drinks brand wants your face on a can. The flavour is called Blue. Not blueberry. Blue. The money is very real.",
       category: "life", choices: [
@@ -776,7 +776,7 @@ export function getLifeEvents(state: CareerState): RandomEvent[] {
       ] });
   }
 
-  if (state.netWorth >= 1) {
+  if (state.pendingEvents.some(event => event.id === 258) || state.netWorth >= 1) {
     push({ id: 258, cooldown: COOLDOWN.once, emoji: "🪴", title: "The Garden Centre Charge",
       description: "Your bank has frozen your card over €80k spent at a garden centre at three on a Tuesday afternoon. You were at training. Your dad has gone very quiet in the family chat.",
       category: "life", choices: [
@@ -789,7 +789,7 @@ export function getLifeEvents(state: CareerState): RandomEvent[] {
       ] });
   }
 
-  if (state.netWorth >= 1) {
+  if (state.pendingEvents.some(event => event.id === 259) || state.netWorth >= 1) {
     push({ id: 259, cooldown: COOLDOWN.money, emoji: "🧮", title: "The Accountant's Spreadsheet",
       description: "A teammate shows you his accountant's fees over lunch. Yours has been charging four times that for the same job, for three years, plus a 'strategy retainer' nobody can explain.",
       category: "negative", choices: [
@@ -911,7 +911,7 @@ export function getLifeEvents(state: CareerState): RandomEvent[] {
   }
 
   /* ── fans and community ── */
-  if (state.popularity >= 25) {
+  if (state.pendingEvents.some(event => event.id === 268) || state.popularity >= 25) {
     push({ id: 268, cooldown: COOLDOWN.fans, emoji: "🏅", title: "The Under Nines' Medal Night",
       description: "A local under nines team has written, in crayon, asking you to hand out their end of season medals. It is the same evening as a sponsor dinner you already said yes to.",
       category: "life", choices: [
@@ -924,7 +924,7 @@ export function getLifeEvents(state: CareerState): RandomEvent[] {
       ] });
   }
 
-  if (state.popularity >= 40) {
+  if (state.pendingEvents.some(event => event.id === 269) || state.popularity >= 40) {
     push({ id: 269, cooldown: COOLDOWN.fans, emoji: "🪧", title: "Forty Feet, One Typo",
       description: "The fans have unveiled a forty foot banner of your face behind the goal. It is magnificent. Your name is spelt wrong on it.",
       category: "life", choices: [

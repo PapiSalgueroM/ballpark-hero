@@ -1,4 +1,5 @@
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
+import { clubLeagueFixtures } from '@/lib/clubDetailFixtures';
 import { cn } from '@/lib/utils';
 import { ChevronLeft, Eye } from 'lucide-react';
 import {
@@ -22,6 +23,7 @@ interface ClubDetailScreenProps {
  * rivals just by clicking on their team."
  */
 export function ClubDetailScreen({ clubName, career, onBack }: ClubDetailScreenProps) {
+  const [fixturesClub, setFixturesClub] = useState<string | null>(null);
   /* Round 514: the money symbol follows the start option. Shadowing the
      import here is one line instead of a career argument on every call. */
   const money = moneyIn(career);
@@ -77,6 +79,25 @@ export function ClubDetailScreen({ clubName, career, onBack }: ClubDetailScreenP
   const rowIdx = table.findIndex(r => r.club === clubName);
   const row = rowIdx >= 0 ? table[rowIdx] : null;
   const inMyLeague = careerLeagueOf(career).clubs.includes(clubName);
+
+  if (fixturesClub === clubName) {
+    const fixtures = clubLeagueFixtures(career, clubName);
+    return <section aria-label="Club league fixtures" className="space-y-3">
+      <button type="button" onClick={() => setFixturesClub(null)} className="inline-flex min-h-11 items-center gap-1 text-sm text-muted-foreground hover:text-foreground">
+        <ChevronLeft className="h-4 w-4" /> Back
+      </button>
+      <div><h2 className="text-lg font-bold">{clubName} fixtures</h2>
+        {fixtures && <p className="text-xs text-muted-foreground">{fixtures.leagueName} · {worldSeasonLabel(career)}</p>}
+      </div>
+      {fixtures ? <ul className="max-h-[48vh] overflow-y-auto overscroll-contain space-y-2 pr-1">
+        {fixtures.rows.map(row => <li key={`${row.round}-${row.home}-${row.away}`} data-club-fixture={row.round} className="rounded-xl border border-border p-3">
+          <p className="text-[10px] text-muted-foreground">Matchday {row.round + 1}</p>
+          <p className="break-words text-sm font-semibold">{row.home} vs {row.away}</p>
+          <p className="text-sm">{row.status === 'recorded' ? `${row.homeGoals} - ${row.awayGoals}` : row.status === 'upcoming' ? 'Upcoming' : 'Result not recorded'}</p>
+        </li>)}
+      </ul> : <p className="text-sm text-muted-foreground">League fixtures are not available for this club in this save.</p>}
+    </section>;
+  }
 
   return (
     <div>
@@ -149,6 +170,7 @@ export function ClubDetailScreen({ clubName, career, onBack }: ClubDetailScreenP
         <div className="text-[9px] text-muted-foreground mt-2">
           Board wants: <span className="text-foreground font-semibold">{boardWant}</span> · transfer budget around {money(def.budget)}
         </div>
+        <button type="button" onClick={() => setFixturesClub(clubName)} className="mt-2 min-h-11 rounded-lg border border-border px-3 text-sm font-semibold">Fixtures</button>
       </div>
 
       {/* Full squad */}
