@@ -1,0 +1,16 @@
+mut adoptYear: applied to src/lib/clubManager.ts
+ src/lib/clubManager.ts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+treeWithoutMerge: 2b2da4312ca770e15e93e6c2f7b01519d920d49d, 082fc277 without 5ec5a724; conflicts kept from 082fc277: scripts/qa/managerWorldContinuityKit.mjs, scripts/qa/managerWorldSizeDiagnostic.mjs, scripts/simCmLeagueRules.mjs, scripts/simCmUnseededWorld.mjs, src/pages/WhatsNew.tsx
+  ... and 29 more
+fresh: 15 saves, 1034 steps compared, 0 red, 18s
+  deals on the base engine: buy done 15, buy-2 done 15, loan-option done 15, release done 9, release refused 6, release-2 done 9, release-2 refused 6, sale done 15, sale-2 done 15, swap done 15
+simCmUnseededWorld: 49 FAILURE(S)
+  mid: 1534 bytes of ledger after January (17 records)
+  mid: the adoption adds 59 bytes to the state (an empty ledger)
+section 2: 18 seeded careers, 108 saves, 876355 draws, 28 January windows and 48 deals of mine on the head, 0 red
+simCmOldCareersWorld: green, sections 1, 2 held (48s)
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+[41m[1m FAIL [22m[49m src/lib/clubManagerWorldRoster.test.ts[2m > [22mactual world roster continuity through manager callbacks[2m > [22mwrites no ledger for a career with no world seed before its next summer, through every deal the recorder sees
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m101 passed[39m[22m[90m (102)[39m
+MUT adoptYear: CAUGHT (unseeded=1 oldworld=0 vitest=1)

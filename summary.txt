@@ -1,0 +1,3 @@
+adoptYear exit=1 200s | MUT adoptYear: CAUGHT (unseeded=1 oldworld=0 vitest=1)
+adoptLoans exit=0 199s | MUT adoptLoans: SURVIVED, every harness green (unseeded=0 oldworld=0 vitest=0)
+adoptTwoClubs exit=0 198s | MUT adoptTwoClubs: SURVIVED, every harness green (unseeded=0 oldworld=0 vitest=0)
