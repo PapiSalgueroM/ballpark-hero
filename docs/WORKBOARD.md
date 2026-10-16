@@ -15753,3 +15753,7 @@ Standing claims after Round 400:
   the desktop lane above.
 - Manager arc four, promotion style world editing: Round 310 (cloud lane, 2026-08-28).
   Tweaks item 11 is complete across rounds 303, 308, 309 and 310.
+
+## Codex Round1384 CLAIM: measured decision method correction, 2026-10-16 19:16:42 UTC
+
+RootownsONLYsimClubManagerDecisions,managerDecisionRegression1081,newscopedworkflow/audit andmanifestunchangedSource[HARNESS]. Adopt1382measured9careerprefix+press15; keeporiginalfirst3/publicpolicy2seasons/floor6/allsemanticassertions/S5. Requireall10normalcurrent/frozenactuallygreen; replaceaccidentalredpremisewithphysicalhealthyseed1stdoutintegritycontrol+restoration; actualfreelossheld. All12originalcontrolsareowedfreshremoteexecution. Exact6fapp/public/packages andimmutablehistoricaldesk/acceptedreceipt/other3pinsheld. Existingcorepin266954differsactualfe368beforethisround; Iownsfinaljoinedcorepinretake. Newscopedhelpercannotclaimfullappealworkflowgreen. No localruntime/main/product/competitionownershipchange. Root+independentnativecandidate3383d016/helper1a2bcc13reviewpassedbeforetrackedadoption.
