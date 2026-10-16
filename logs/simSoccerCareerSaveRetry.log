@@ -1,0 +1,23 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/test/soccerCareerSaveRetry.test.tsx[2m > [22mSoccer Career failed write recovery[2m > [22mkeeps the restored career and old bytes while showing a persistent save warning and one toast[32m 288[2mms[22m[39m
+ [32m✓[39m src/test/soccerCareerSaveRetry.test.tsx[2m > [22mSoccer Career failed write recovery[2m > [22mkeeps repeated refused retries visible without replaying progress or repeating the toast[32m 193[2mms[22m[39m
+ [32m✓[39m src/test/soccerCareerSaveRetry.test.tsx[2m > [22mSoccer Career failed write recovery[2m > [22mretries the actually earned training result exactly once and restores it on the next mount[33m 1678[2mms[22m[39m
+ [32m✓[39m src/test/soccerCareerSaveRetry.test.tsx[2m > [22mSoccer Career failed write recovery[2m > [22mretries the latest earned season after more than one failed career change without rerunning its engine[33m 1147[2mms[22m[39m
+ [32m✓[39m src/test/soccerCareerSaveRetry.test.tsx[2m > [22mSoccer Career failed write recovery[2m > [22mclears a failed save on the next successful automatic save and alerts again on a later refusal[33m 1392[2mms[22m[39m
+ [32m✓[39m src/test/soccerCareerSaveRetry.test.tsx[2m > [22mSoccer Career failed write recovery[2m > [22mclears the old failure after explicit reset and saves the replacement career without old progress[33m 324[2mms[22m[39m
+ [32m✓[39m src/test/soccerCareerSaveRetry.test.tsx[2m > [22mSoccer Career failed write recovery[2m > [22mpersists the finished retirement on retry without recording its completion a second time[32m 121[2mms[22m[39m
+ [32m✓[39m src/test/soccerCareerSaveRetry.test.tsx[2m > [22mSoccer Career failed write recovery[2m > [22mretains an independent valid restore and earned engine baseline without mounting the page[32m 6[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m8 passed[39m[22m[90m (8)[39m
+[2m   Start at [22m 12:25:26
+[2m   Duration [22m 8.79s[2m (transform 2.14s, setup 51ms, collect 2.92s, tests 5.15s, environment 307ms, prepare 104ms)[22m
+
+JSON report written to /home/runner/work/ballpark-hero/ballpark-hero/soccer-career-save-retry-artifacts/mounted/normal-report.json
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+simSoccerCareerSaveRetry: 8 actual outcomes passed.
