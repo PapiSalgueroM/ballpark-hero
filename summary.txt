@@ -1,0 +1,3 @@
+subs-head exit=1 32s | simCmSubs RED: 0 of 1 checks green (parts three)
+subs-norec exit=1 33s | simCmSubs RED: 0 of 1 checks green (parts three)
+subs-main exit=1 32s | simCmSubs RED: 0 of 1 checks green (parts three)
