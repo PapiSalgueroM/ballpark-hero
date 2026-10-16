@@ -38,6 +38,17 @@
  *      reads the files of every run and prints the paired statistic (head minus BASE on the same seeds, the mean
  *      of the per seed differences and its standard error) beside BASE against BASE on a second seed set.
  *
+ * MEASURED AT STEP 1 (GitHub runners, 2026-10-16; the head is the base plus scripts only):
+ *   section 0: every probe anchor and the seedless anchor stand once (r1344-wm3 and earlier).
+ *   section 1 on this tree, seeds 1 to 5, six seasons: RED in all three worlds (r1344-wm, r1344-wm3: 1,461, 1,398
+ *     and 1,405 failures; in 2026-27 (i) 812, (ii) 0, (iii) 649). Every AI deal line of every window is unplaced:
+ *     opening 75, January 402, summer 335 in 2026-27. With CM_WORLD_MOVES_HEAD=probe: GREEN in all three worlds,
+ *     0 unplaced, so the section measures the recording and nothing else.
+ *   section 6: green in all three worlds (45 careers each, 220 saves, 40 deals of mine); CONTROL=seedless on 2026-27
+ *     seeds 0 to 1: FIRED, 18 failures (the head wrote a ledger with no seed, saved strings differ).
+ *   section 9: seeds 1 to 10 against BASE, BASE against BASE on seeds 11 to 20 (r1344-shape); the table is in the
+ *     round's notes, docs/audits/ROUND-1344-NOTES.md. Nothing in section 9 is asserted at step 1: the lead rules.
+ *
  * ENV. CM_WORLD_MOVES_SECTIONS (default 0,1,6), CM_WORLD_MOVES_SEEDS (a list or a range, 1-10; default per section),
  * CM_WORLD_MOVES_ERAS (default now,era2015,era2005), CM_WORLD_MOVES_HEAD=probe (the measurement probe composed into
  * this tree's engine; never product code), CM_WORLD_MOVES_BASE (default the commit the branch started from),
