@@ -1,0 +1,4 @@
+build exit=0 33s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+vitest exit=0 20s |    Duration  19.60s (transform 11.75s, setup 1.20s, collect 21.24s, tests 18.58s, environment 8.30s, prepare 2.54s)
+tsc exit=0 84s | 
+fences exit=0 159s | fences: simHarnessAnchors=0 simNoRivalNames=0 simStorageWrites=0 simSnapshotAssets=0 simSeoTitles=0 simFlagshipWeight=0 simSound=0 simHomeSearchRecovery=0 simCareerStory=

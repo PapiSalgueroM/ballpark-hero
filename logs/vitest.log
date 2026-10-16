@@ -1,0 +1,40 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/test/freshBuildBlockedStorage.test.ts [2m([22m[2m11 tests[22m[2m)[22m[33m 578[2mms[22m[39m
+   [33m[2m✓[22m[39m the stale chunk reload[2m > [22ma browser that stores normally: reloads once, and the marker stops the second one [33m 323[2mms[22m[39m
+ [32m✓[39m src/test/routeErrorRecovery.test.tsx [2m([22m[2m65 tests[22m[2m)[22m[33m 2501[2mms[22m[39m
+   [33m[2m✓[22m[39m RouteErrorBoundary fresh start (Round 958)[2m > [22mkeeps the existing screen text [33m 381[2mms[22m[39m
+[90mstdout[2m | src/test/clubManagerEraLoad.test.tsx[2m > [22m[2mClub Manager: an era save waits for its era[2m > [22m[2ma 2010-11 save resumes once its squads arrive, exactly as saved
+[22m[39m  2010-11 Barcelona resumed with 27 players
+
+[90mstdout[2m | src/test/clubManagerEraLoad.test.tsx[2m > [22m[2mClub Manager: an era save waits for its era[2m > [22m[2mwith the 2005-06 squads unreachable the boot holds, keeps the save, and the retry resumes it
+[22m[39m  offline: the boot holds on the retry notice and the save is untouched
+
+[90mstdout[2m | src/test/clubManagerEraLoad.test.tsx[2m > [22m[2mClub Manager: an era save waits for its era[2m > [22m[2mwith the 2005-06 squads unreachable the boot holds, keeps the save, and the retry resumes it
+[22m[39m  back online: the retry fetched the squads and the career resumed
+
+ [32m✓[39m src/test/soccerCareerSaveFence.test.tsx [2m([22m[2m8 tests[22m[2m)[22m[33m 2715[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career save fence[2m > [22man old save with no fence key opens, plays, and is fenced from its first write [33m 556[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career save fence[2m > [22mNew Career in a stale tab clears nothing [33m 592[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career save fence[2m > [22mDelete unusable save in a stale tab deletes nothing [33m 491[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career save fence[2m > [22mNew Career whose removal the browser refuses resets nothing and says so [33m 307[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerEraLoad.test.tsx [2m([22m[2m5 tests[22m[2m)[22m[33m 7848[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: an era save waits for its era[2m > [22ma 2010-11 save resumes once its squads arrive, exactly as saved [33m 5642[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: an era save waits for its era[2m > [22mwith the 2005-06 squads unreachable the boot holds, keeps the save, and the retry resumes it [33m 812[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: an era save waits for its era[2m > [22ma retry that fails again reloads the page, the first failure does not [33m 549[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: an era save waits for its era[2m > [22ma modern save opens on the same pass and fetches no era [33m 584[2mms[22m[39m
+ [32m✓[39m src/test/soccerCareerPackedFence.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[33m 3880[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career packed save and fence seam[2m > [22mrestores a complete packed synthetic edge and persists one actual academy action under the cap [33m 1463[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career packed save and fence seam[2m > [22ma refused packed action rolls the fence back and retries the exact earned state without replay [33m 1319[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career packed save and fence seam[2m > [22ma stale Retry cannot replace another complete packed save or consume any RNG [33m 1090[2mms[22m[39m
+ [32m✓[39m src/test/freshBuildReloadWait.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 125[2mms[22m[39m
+ [32m✓[39m src/test/freshBuildOptionalChunk.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 62[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerStartWait.test.tsx [2m([22m[2m5 tests[22m[2m)[22m[33m 789[2mms[22m[39m
+ [32m✓[39m src/test/routeErrorHeldSave.test.tsx [2m([22m[2m3 tests[22m[2m)[22m[32m 83[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m9 passed[39m[22m[90m (9)[39m
+[2m      Tests [22m [1m[32m115 passed[39m[22m[90m (115)[39m
+[2m   Start at [22m 15:27:49
+[2m   Duration [22m 19.60s[2m (transform 11.75s, setup 1.20s, collect 21.24s, tests 18.58s, environment 8.30s, prepare 2.54s)[22m
+
