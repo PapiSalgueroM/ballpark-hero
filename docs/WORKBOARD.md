@@ -15717,3 +15717,7 @@ Standing claims after Round 400:
   the desktop lane above.
 - Manager arc four, promotion style world editing: Round 310 (cloud lane, 2026-08-28).
   Tweaks item 11 is complete across rounds 303, 308, 309 and 310.
+
+## Codex Round1386 claim: queued Life overall gates, 2026-10-16
+
+Owned isolated codex/career-pending-overall-gates from qualified PR302 final63573c16abf61b31bbdb9c0117631e99e4538c01. Scope only Life232/249 overall catalog availability, retaining original age27/29 and fresh84/86 thresholds. Actual260 head-knock failure lowers Passing1, and the public reply recomputes overall below a previously offered target threshold. JSON reload loses callbacks and skips even free integrity choices. Six frozen cases must first qualify exactly2 callback faults4 preserves remotely; full states/draws, actual predecessor, both statue chance branches, original/restored, old62/286/302 controls, types/build15readers/unchangedweights/source/package/installed holds. No product before causal baseline and root approval, no Engine/Save/UI/I1334/I1337 edits, local runtime, natural-frequency or release claim.
