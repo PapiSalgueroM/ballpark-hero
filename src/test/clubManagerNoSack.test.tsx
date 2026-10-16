@@ -75,8 +75,18 @@ describe('the Options panel', () => {
     const on = turnOnNoSack(startCareer('Arsenal'));
     expect(on).not.toBeNull();
     render(<StartOptionsScreen career={on!} onCurrency={noop} onNationJobs={noop} onStrictness={noop} onNoSack={vi.fn()} />);
-    expect(screen.getByText(/On for this whole career/)).toBeTruthy();
+    expect(screen.getByText(/On for this career/)).toBeTruthy();
     expect(screen.queryByText('Turn on No sacking')).toBeNull();
+  });
+
+  /* Review of 2026-10-16: every other check switched on in season 1, where a stale constant reads the same. */
+  it('switched on in a later season, says which one', () => {
+    const on = turnOnNoSack({ ...startCareer('Arsenal'), season: 3 });
+    expect(on).not.toBeNull();
+    expect(noSackFrom(on!)).toBe(3);
+    render(<StartOptionsScreen career={on!} onCurrency={noop} onNationJobs={noop} onStrictness={noop} onNoSack={vi.fn()} />);
+    expect(screen.getByText(/On since season 3/)).toBeTruthy();
+    expect(screen.queryByText(/On for this career/)).toBeNull();
   });
 
   it('is not offered to a sacked manager', () => {

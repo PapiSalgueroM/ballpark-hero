@@ -46,7 +46,7 @@ export function StartOptionsScreen({ career, onCurrency, onNationJobs, onStrictn
         </div>
         {noSackSince !== null ? (
           <p className="text-xs text-muted-foreground">
-            {noSackSince > 1 ? `On since season ${noSackSince}. ` : 'On for this whole career. '}
+            {noSackSince > 1 ? `On since season ${noSackSince}. ` : 'On for this career. '}
             The board can moan but it cannot fire you, and this career posts no leaderboard scores.
           </p>
         ) : outOfWork ? (
