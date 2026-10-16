@@ -1,0 +1,14 @@
+#!build
+#!playwright
+#!serial
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json; s=$?; echo "tsc exit=$s"; exit $s
+srclib: echo "src/lib changed vs e814c2de: $(git diff --name-only e814c2de HEAD -- src/lib | tr '\n' ' ')"; git diff --quiet e814c2de HEAD -- src/lib/soccerCareerEngine.ts src/lib/soccerCareerSave.ts src/components/season-centre src/components/career/AwardsNightCard.tsx src/components/career/TrainingGround.tsx src/hooks/useSoundPlan.ts src/lib/soccerAwardReveal.ts src/data/gameContent && echo "engine, save, shared files and guides byte equal to e814c2de"
+vitest: node_modules/.bin/vitest run src/test/soccerScreenTruths.test.tsx src/test/soccerPotentialProgress.test.tsx src/test/careerAwardsNightCard.test.tsx src/test/soccerAwardReveal.test.tsx src/test/soccerFarewellPage.test.tsx --testTimeout=300000 --hookTimeout=120000 2>&1 | tail -12; exit ${PIPESTATUS[0]}
+storage: node scripts/simStorageWrites.mjs 2>&1 | tail -3; exit ${PIPESTATUS[0]}
+storage-gone: SIM_STORAGE_WRITES_CONTROL=gone node scripts/simStorageWrites.mjs 2>&1 | tail -3; exit ${PIPESTATUS[0]}
+fences: ONLY=simHarnessAnchors,simNoRivalNames node scripts/runAllSims.mjs 2>&1 | tail -6; exit ${PIPESTATUS[0]}
+hist-head: SOCCER_LUTON_DISPLAY_OUT=/tmp/hh-out SIM_NETWORK=offline NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/soccerHistoricalOpponentDisplayProof.mjs > /tmp/hh.log 2>&1; s=$?; node .rc/x/fixErrs.mjs /tmp/hh-out/report.json; tail -4 /tmp/hh.log; exit $s
+ol-m12: node .rc/x/mut1337run.mjs m12 || exit 3; ONLY=simSoccerOpponentLabels node scripts/runAllSims.mjs --browser > /tmp/ol.log 2>&1; s=$?; git checkout -- src scripts; grep -E "FAIL|stale" /tmp/ol.log | cut -c1-400 | head -6; tail -2 /tmp/ol.log; exit $s
+dashes: node .rc/x/dashrun.mjs 2>&1 | tail -3; exit ${PIPESTATUS[0]}
+pins: node .rc/x/pinsCheck.mjs; exit $?
+pins-ctl: git worktree add -q /tmp/pc b712a7ad && cd /tmp/pc && node $OLDPWD/.rc/x/pinsCheck.mjs; exit $?

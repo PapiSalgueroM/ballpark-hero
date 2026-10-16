@@ -1,0 +1,12 @@
+build exit=0 31s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+tsc exit=0 63s | tsc exit=0
+srclib exit=0 0s | engine, save, shared files and guides byte equal to e814c2de
+vitest exit=0 9s |    Duration  8.12s (transform 3.38s, setup 359ms, collect 9.27s, tests 8.49s, environment 2.05s, prepare 681ms)
+storage exit=0 3s | simStorageWrites: all green (owed: 12)
+storage-gone exit=1 3s | simStorageWrites (control gone): 1 failed, the control FIRED on src/lib/safeStorage.ts write:plantedNeverWritten gone (owed: 12)
+fences exit=0 187s | All 2 harnesses green.
+hist-head exit=0 21s | PASS Luton display component proof
+ol-m12 exit=1 3s | 1 harness not green.
+dashes exit=0 1s | 1039 added lines scanned; with a dash: 0
+pins exit=0 0s | pinsCheck: 19 pins read, 0 differ from the tree
+pins-ctl exit=1 0s | pinsCheck: 19 pins read, 3 differ from the tree
