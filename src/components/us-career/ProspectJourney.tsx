@@ -3,7 +3,7 @@ import { ArrowLeft, ArrowRight, Check, HelpCircle } from 'lucide-react';
 import PlayerAvatar from '@/components/soccer-career/PlayerAvatar';
 import { PreDraftSeasonCard } from '@/components/career/PreDraftSeasonCard';
 import { DraftShowcaseCard } from '@/components/career/DraftShowcaseCard';
-import { preDraftChoose, preDraftPlaySeason, preDraftProjection, preDraftProjectionLine, preDraftRunDraft, preDraftShowcase, preDraftStart, type PreDraftState } from '@/lib/careerPreDraft';
+import { preDraftChoose, preDraftPlaySeason, preDraftProjection, preDraftProjectionLine, preDraftRunDraft, preDraftShowcase, preDraftStart, preDraftUndoSkip, type PreDraftState } from '@/lib/careerPreDraft';
 import type { UsCareerProspect } from '@/lib/usCareerProspect';
 import type { UsCareerSport } from '@/lib/usCareerSport';
 import { useRevealScroll } from '@/hooks/useRevealScroll';
@@ -103,6 +103,7 @@ export default function ProspectJourney({ sport, prospect, onChange, onJoin, onB
         <h3>Make the league on your terms</h3>
         <p>Pick a route, play its seasons, then decide how to handle scouts, training and health. Your rating and health shape your performances. Draft stock shapes how early a team takes you.</p>
         <p><strong>For example:</strong> playing through a knock can raise your stock but cost health. The button shows the exact change before you choose. The showcase lets you push hard, play safe or skip; each option lists its possible stock changes. Its grade is simulated from your rating, health and saved career seed.</p>
+        <p>Pressed Skip it by mistake? Undo it any time before you press Draft day. For example: skip at a draft stock of 50 and you drop to 48; Undo skip puts you back at 50 with all three options open again.</p>
         <p><strong>Draft night:</strong> before the draft the scouts quote a range for you, and the night always ends inside it. At a draft stock of 60, for example: {preDraftProjectionLine(preDraftProjection(desc, { stock: 60, pos: prospect.pos }), 'have')} Then you watch the picks ahead of yours come off the board in the order the game already set, until your name is called or the last pick goes by without it. Nothing is drawn while you watch, no other prospect is ever named, and you can skip to the end at any time.{desc.lottery ? ' The lottery tile shows which club won each drawn pick. Seed 1 is the worst record.' : ''}</p>
         <p>All prospects and results are fictional. The era sets the available teams and routes. The draft uses a simplified order without traded or extra picks; baseball and hockey lotteries are not modeled. Money in your career is a simulation, not a real contract quote. Going undrafted still leads to a camp signing.</p>
         <button className={styles.helpClose} onClick={() => setHelp(false)}>Got it</button>
@@ -118,7 +119,7 @@ export default function ProspectJourney({ sport, prospect, onChange, onJoin, onB
         </div> : act === 1 ? <PreDraftSeasonCard desc={desc} state={state} choiceRef={actionRef} onPlaySeason={() => onChange(preDraftPlaySeason(desc, state))} onChoose={i => onChange(preDraftChoose(desc, state, i))} />
           : <DraftShowcaseCard desc={{ ...desc, bonusLine: undefined }} state={state} onShowcase={approach => onChange(preDraftShowcase(desc, state, approach))}
               onRunDraft={() => { setNightStage(!nightKit ? 'off' : lessMotion() ? 'skipped' : 'live'); onChange(preDraftRunDraft(desc, state)); }} onContinue={onJoin}
-              showRange nightHold={nightHold} nightHeld={held}
+              showRange nightHold={nightHold} nightHeld={held} onUndoSkip={() => onChange(preDraftUndoSkip(state))}
               night={night && nightKit && out ? <nightKit.DraftNightSequence night={night} desc={desc} draftYear={out.draftYear} stage={nightStage === 'live' ? 'live' : nightStage === 'landed' ? 'landed' : 'skipped'}
                 onLanded={() => setNightStage(s => (s === 'live' ? 'landed' : s))} onSkip={() => setNightStage('skipped')} onContinue={onJoin} /> : undefined} />}
       </div>

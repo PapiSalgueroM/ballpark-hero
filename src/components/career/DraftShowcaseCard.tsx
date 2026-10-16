@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import { Button } from "@/components/ui/button";
 import {
-  PRE_DRAFT_APPROACHES, SHOWCASE_DELTAS, SKIP_DELTA, preDraftProjection, preDraftProjectionLine, preDraftShowcaseMove,
+  PRE_DRAFT_APPROACHES, SHOWCASE_DELTAS, SKIP_DELTA, preDraftCanUndoSkip, preDraftProjection, preDraftProjectionLine, preDraftShowcaseMove,
   type PreDraftApproach, type PreDraftDescriptor, type PreDraftState,
 } from "@/lib/careerPreDraft";
 
@@ -30,9 +30,11 @@ export function approachPromise(id: PreDraftApproach["id"], stock: number): stri
    its own "Start your career" beside its skip button, and `nightHold` is the
    delay the result block waits so it cannot give the pick away early.
    `nightHeld` is true while the rows are still arriving: the result block is
-   then out of a screen reader's tree as well as out of sight. */
+   then out of a screen reader's tree as well as out of sight.
+   Round 1346, optional too: `onUndoSkip` puts an "Undo skip" button under a
+   skipped showcase until "Draft day" is pressed. */
 export function DraftShowcaseCard({
-  desc, state, onShowcase, onRunDraft, onContinue, showRange, night, nightHold, nightHeld,
+  desc, state, onShowcase, onRunDraft, onContinue, showRange, night, nightHold, nightHeld, onUndoSkip,
 }: {
   desc: PreDraftDescriptor;
   state: PreDraftState;
@@ -43,6 +45,7 @@ export function DraftShowcaseCard({
   night?: ReactNode;
   nightHold?: string;
   nightHeld?: boolean;
+  onUndoSkip?: () => void;
 }) {
   const sc = state.showcase;
   const out = state.draft;
@@ -71,6 +74,10 @@ export function DraftShowcaseCard({
             ? <>{sc.drill}: grade {sc.grade}. Draft stock {sign(sc.stockDelta)}, now {state.stock}.</>
             : <>You skipped it. Draft stock {sign(sc.stockDelta)}, now {state.stock}.</>}
         </div>
+      )}
+
+      {onUndoSkip && preDraftCanUndoSkip(state) && (
+        <Button variant="outline" className="min-h-11 w-full" onClick={onUndoSkip} data-showcase-undo>Undo skip</Button>
       )}
 
       {state.phase === "draft" && showRange && (

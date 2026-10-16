@@ -4,6 +4,8 @@
  *     the same save with only coach.done set, the done screen shows, a remount lands on it without a write, and the
  *     retirement screen's card reviews the finished career instead of offering the sideline back.
  * (3) An old coach save written before `done` existed mounts as an active career and is not rewritten on load.
+ * (Undo) The showcase Skip can be undone until Draft day, back to the byte, on the real board; never after a graded
+ *     approach. (The cases (1), (4) and (5) of the brief were the age rule and the dirty money desk, both cut.)
  *
  * The saves are the board's own bytes from scripts/data/usBoardFixture.json (its `coach` save per sport), mounted on
  * the shared board with no Hall bound, the way that fixture was recorded, so every byte compared is one this board
@@ -11,7 +13,7 @@
  */
 import fs from 'node:fs';
 import path from 'node:path';
-import type { ComponentType } from 'react';
+import { StrictMode, type ComponentType } from 'react';
 import { MemoryRouter } from 'react-router-dom';
 import { act, cleanup, fireEvent, render, waitFor, within } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
@@ -27,6 +29,13 @@ import { NBA_CAREER_SPORT } from '@/lib/nbaCareerSport';
 import { MLB_CAREER_SPORT } from '@/lib/mlbCareerSport';
 import { NHL_CAREER_SPORT } from '@/lib/nhlCareerSport';
 import type { UsCareerSport } from '@/lib/usCareerSport';
+import NflMyCareerBoard from '@/components/nfl-my-career/NflMyCareerBoard';
+import NbaMyCareerBoard from '@/components/nba-my-career/NbaMyCareerBoard';
+import MlbMyCareerBoard from '@/components/mlb-my-career/MlbMyCareerBoard';
+import NhlMyCareerBoard from '@/components/nhl-my-career/NhlMyCareerBoard';
+import { createUsCareerProspect, type UsCareerProspect } from '@/lib/usCareerProspect';
+import { preDraftChoose, preDraftPlaySeason, preDraftStart } from '@/lib/careerPreDraft';
+import { defaultAppearance } from '@/lib/soccerCareerAppearance';
 
 interface Saved { c: Record<string, unknown>; phase: string; coach: Record<string, unknown> | null; [k: string]: unknown }
 const FIXTURE = path.resolve(process.cwd(), 'scripts/data/usBoardFixture.json');
@@ -108,5 +117,79 @@ describe('Round 1346: retire from coaching on the real board', () => {
     expect(view.getByRole('button', { name: 'Retire from coaching' })).toBeInTheDocument();
     expect(view.queryByRole('heading', { name: 'Coaching career complete' })).toBeNull();
     expect(view.getAllByRole('button', { name: /^(Coach|Sit out) the \d+ season$/ }).length).toBe(1);
+  });
+});
+
+/* The second report ("i accidentl ckilicke3d skipp"): the showcase Skip, the one Skip on these pages that costs the
+   career something, can be taken back until Draft day. The save before the showcase is the board's own write (the
+   last season or card is pressed on the board), so "back to the byte" compares two writes of the same board. */
+const PROSPECTS: [string, ComponentType, UsCareerSport][] = [
+  ['nfl', NflMyCareerBoard, NFL_CAREER_SPORT], ['nba', NbaMyCareerBoard, NBA_CAREER_SPORT],
+  ['mlb', MlbMyCareerBoard, MLB_CAREER_SPORT], ['nhl', NhlMyCareerBoard, NHL_CAREER_SPORT],
+];
+function beforeShowcase(sport: UsCareerSport): UsCareerProspect {
+  const pos = sport.create.defaultPos;
+  const p = createUsCareerProspect(sport, { name: 'Simulated Prospect', pos, archetypeId: sport.create.archetypes[pos][0].id, eraId: 'now', appearance: defaultAppearance(), seed: `${sport.slug}:r1346` });
+  const desc = sport.preDraft(p.eraId);
+  let state = preDraftStart(desc, { ...p, routeId: desc.routes[0].id });
+  for (let n = 0; n < 12; n++) {
+    const next = state.phase === 'season' ? preDraftPlaySeason(desc, state) : preDraftChoose(desc, state, 0);
+    if (next.phase === 'showcase') break;
+    state = next;
+  }
+  expect(state.phase === 'season' || state.phase === 'choice').toBe(true);
+  return { ...p, state };
+}
+const journeyOf = (view: ReturnType<typeof render>) => view.container.querySelector<HTMLElement>('[data-prospect-journey]')!;
+const phaseOf = (view: ReturnType<typeof render>) => journeyOf(view).getAttribute('data-prospect-phase');
+const mountProspect = (Board: ComponentType) => render(<StrictMode><Board /></StrictMode>);
+async function atShowcase(Board: ComponentType, sport: UsCareerSport) {
+  const p = beforeShowcase(sport);
+  localStorage.setItem(sport.saveKey, JSON.stringify({ c: null, phase: 'prospect', teamQuality: null, coach: null, prospect: p }));
+  const view = mountProspect(Board), j = within(journeyOf(view));
+  fireEvent.click(p.state!.phase === 'season'
+    ? j.getByRole('button', { name: /Play (your first|the next) season/ })
+    : within(j.getByTestId('pre-draft-choice')).getAllByRole('button')[0]);
+  await flush();
+  expect(phaseOf(view)).toBe('showcase');
+  return { view, bytes: localStorage.getItem(sport.saveKey)! };
+}
+
+describe('Round 1346: the showcase Skip can be undone until Draft day', () => {
+  it.each(PROSPECTS)('%s: Undo skip puts the save back to the byte, survives a reload, and is gone after Draft day', async (_, Board, sport) => {
+    const first = await atShowcase(Board, sport), bytes = first.bytes;
+    let view = first.view;
+    const j = () => within(journeyOf(view));
+    expect(j().queryByRole('button', { name: 'Undo skip' })).toBeNull();
+    fireEvent.click(j().getByRole('button', { name: /^Skip it/ })); await flush();
+    expect(phaseOf(view)).toBe('draft');
+    const skipped = localStorage.getItem(sport.saveKey);
+    expect(skipped).not.toBe(bytes);
+    view.unmount(); view = mountProspect(Board); await flush();
+    expect(localStorage.getItem(sport.saveKey)).toBe(skipped);
+    fireEvent.click(j().getByRole('button', { name: 'Undo skip' })); await flush();
+    expect(phaseOf(view)).toBe('showcase');
+    expect(localStorage.getItem(sport.saveKey)).toBe(bytes);
+    expect(j().queryByRole('button', { name: 'Undo skip' })).toBeNull();
+    fireEvent.click(j().getByRole('button', { name: /^Skip it/ })); await flush();
+    expect(localStorage.getItem(sport.saveKey)).toBe(skipped);
+    fireEvent.click(j().getByRole('button', { name: 'Draft day' })); await flush();
+    expect(phaseOf(view)).toBe('done');
+    expect(j().queryByRole('button', { name: 'Undo skip' })).toBeNull();
+    const drafted = localStorage.getItem(sport.saveKey);
+    view.unmount(); view = mountProspect(Board); await flush();
+    expect(phaseOf(view)).toBe('done');
+    expect(j().queryByRole('button', { name: 'Undo skip' })).toBeNull();
+    expect(localStorage.getItem(sport.saveKey)).toBe(drafted);
+  });
+
+  it.each(PROSPECTS)('%s: a graded showcase is never offered an undo', async (_, Board, sport) => {
+    for (const approach of [/^Go all out/, /^Play it safe/]) {
+      const { view } = await atShowcase(Board, sport);
+      fireEvent.click(within(journeyOf(view)).getByRole('button', { name: approach })); await flush();
+      expect(phaseOf(view)).toBe('draft');
+      expect(within(journeyOf(view)).queryByRole('button', { name: 'Undo skip' })).toBeNull();
+      view.unmount(); localStorage.clear();
+    }
   });
 });

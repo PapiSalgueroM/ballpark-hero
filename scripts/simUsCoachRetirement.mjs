@@ -31,7 +31,11 @@
  *   noaccept  acceptCoachOffer's guard removed                 -> section 3 (retired careers holding offers)
  *   norefresh refreshCoachOffers's guard removed               -> section 3
  *
- * Measured (filled in from the runner, see the notes of Round 1346).
+ * Measured on a GitHub runner (rc r1346-s4, head 7448fefd, 300 careers a sport): 5,989, 5,940, 5,784 and 6,056
+ * coaching steps before the retirement (NFL, NBA, MLB, NHL); 902 careers retired while employed and 298 out of
+ * work, 146 of those holding offers, 54 before a first season; 12 seconds. Every control fired: early 940 careers
+ * red, drift, noretire, noguard, nosit and norefresh all 1,200, noaccept 146 (exactly the retired careers that held
+ * an offer). Exact rules, not statistics: no band here can move with the seed.
  * Nothing here reaches the network. Run: node scripts/simUsCoachRetirement.mjs
  */
 /* Round 299: seeded stream, see scripts/lib/seedRandom.mjs. First import on purpose. */
@@ -219,7 +223,8 @@ const NORETIRE_FAILS = [
   'retirement requires confirmation and accepts once after cancel and escape',
   ...SPORTS.map(s => `${s}: Keep coaching and Escape save nothing, Retire saves only done, and a reload stays retired`),
 ];
-const CASES = 14 + 2 * SPORTS.length;
+/* PR281's 14, and the board file's four cases per sport (two for the coach, two for the showcase undo). */
+const CASES = 14 + 4 * SPORTS.length;
 async function vitest(swap) {
   await mkdir(path.join(ROOT, '.sim-control'), { recursive: true });
   const dir = await mkdtemp(path.join(ROOT, '.sim-control/us-coach1346-vitest-'));
