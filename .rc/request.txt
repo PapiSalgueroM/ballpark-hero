@@ -1,0 +1,3 @@
+#!serial
+s12: CM_WORLD_MOVES_SECTIONS=12 node scripts/simCmWorldMoves.mjs
+c-slow: CM_WORLD_MOVES_CONTROL=slow node scripts/simCmWorldMoves.mjs
