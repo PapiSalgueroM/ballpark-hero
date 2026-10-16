@@ -1,0 +1,15 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/test/usCareerReports1346.test.tsx src/test/careerPreDraft.test.tsx src/test/careerDraftNight.test.tsx src/test/usCareerDraftNightBoard.test.tsx src/test/usCareerProspect.test.tsx src/test/usCareerSaveRetry.test.tsx src/test/usCoachRetirement.test.tsx --reporter=verbose --testTimeout=300000 --hookTimeout=120000
+undo: node scripts/simUsShowcaseUndo.mjs
+undo-noundo: US_SHOWCASE_UNDO_CONTROL=noundo node scripts/simUsShowcaseUndo.mjs
+undo-leak: US_SHOWCASE_UNDO_CONTROL=leak node scripts/simUsShowcaseUndo.mjs
+undo-graded: US_SHOWCASE_UNDO_CONTROL=graded node scripts/simUsShowcaseUndo.mjs
+undo-clamp: US_SHOWCASE_UNDO_CONTROL=clamp node scripts/simUsShowcaseUndo.mjs
+retire: node scripts/simUsCoachRetirement.mjs
+predraft: node scripts/simCareerPreDraft.mjs
+prospect: node scripts/simUsCareerProspect.mjs
+prospect-rules: US_CAREER_PROSPECT_CONTROL=rules node scripts/simUsCareerProspect.mjs
+prospect-showcase: US_CAREER_PROSPECT_CONTROL=showcase node scripts/simUsCareerProspect.mjs
+draftNight: node scripts/simDraftNight.mjs
+nflTruth: node scripts/simNflTruth.mjs
+parity: node scripts/simUsBoardParity.mjs
