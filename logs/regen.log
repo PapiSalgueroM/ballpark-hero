@@ -1,0 +1,6 @@
+  pre: Arsenal (now), season 1 week 37 of 54, window null, 143652 bytes, by 36cc9ffe
+  mid: Bayern Munich (era2015), season 1 week 36 of 52, window null, 88771 bytes, by c28b078b
+genCmOldCareersWorldFixture: wrote ../../../../../tmp/fx-regen.json (270317 bytes, sha256 90a733d1faad5230770602a6ac34bdd0088616d6299fdddb0e53cf53980c1298) in 3s
+90a733d1faad5230770602a6ac34bdd0088616d6299fdddb0e53cf53980c1298  /tmp/fx-regen.json
+172c278f9f665a94a4b3f0b08b814fcbf9b029ce9645ffdd0e0383ee12464676  scripts/data/cmOldCareersWorldFixture.json
+/tmp/fx-regen.json scripts/data/cmOldCareersWorldFixture.json differ: byte 29, line 3

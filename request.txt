@@ -1,0 +1,3 @@
+regen: node scripts/genCmOldCareersWorldFixture.mjs /tmp/fx-regen.json && sha256sum /tmp/fx-regen.json scripts/data/cmOldCareersWorldFixture.json && cmp /tmp/fx-regen.json scripts/data/cmOldCareersWorldFixture.json && echo REGEN_BYTE_EQUAL
+appeal: node scripts/simManagerAppealIsolation.mjs
+shootout: node scripts/simCmShootoutOrder.mjs
