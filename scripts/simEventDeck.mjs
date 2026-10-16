@@ -249,6 +249,10 @@
                    section 14 fails.
      effectedit    k_plain's second option moves trust by one more (in
                    memory); section 14 fails.
+     Round 1334 (W2):
+     unreach       soccer's card 719 is gated on goals below 0, a value no
+                   desk draws (in memory); section 10 fails, and prints no
+                   "all cards reached" line for the soccer pack after it.
 
    Runtime about 85 to 100 s on a runner, three requests at a time (section 2
    reloads all 84 rows since the review's fix pass; it was 40 s with seed 1
@@ -288,6 +292,7 @@ const CONTROLS = ['replay', 'weightoff', 'weightkeep', 'story', 'rest', 'failope
   'fxsilent', 'fxdrop', 'fxunbound', 'fxneutral', 'conductreal', 'slotopen', 'quoteslot', 'untagged', 'rosterword',
   'pruneearly', 'codecword', 'codecslot', 'wordedit', 'wordorder', 'storymove', 'pressure', 'eager',
   'conductlate', 'conductstale', 'conducttarget', 'nullpass', 'newpack', 'speechpast', 'voiceedit', 'effectedit'];
+CONTROLS.push('unreach'); /* Round 1334: section 10's reach check over the soccer pack */
 if (CONTROL && !CONTROLS.includes(CONTROL)) { console.error(`EVENT_DECK_CONTROL=${CONTROL} is not a control this kit knows`); process.exit(2); }
 if (RECORD && (CONTROL || SHARD)) { console.error('a recording runs the whole replay with no control, refusing'); process.exit(2); }
 const red = new Set();
@@ -1175,7 +1180,7 @@ if (runs(9)) {
 
 /* ═══ 10. SHARE AND REACH over the FLEET drive ═══ */
 
-console.log('10) Share and reach: every card of every pack reached over 1,000 seasons, no card above its pack\'s measured ceiling');
+console.log('10) Share and reach: every card of every pack reached over at least 1,000 seasons, no card above its pack\'s measured ceiling');
 if (runs(10)) {
   const packs = { ...ALL_PACKS };
   /* The brief's form of this control (one NFL card at weight 50) changed
@@ -1189,6 +1194,18 @@ if (runs(10)) {
     if (hits.length !== 1 || hits[0].cooldown !== undefined) { console.error('heavy control: nfl_fan_night is not there once with the pack cooldown, refusing to run'); process.exit(2); }
     packs.nfl = { ...packs.nfl, events: packs.nfl.events.map(x => (x === hits[0] ? { ...x, cooldown: 0, weight: 50 } : x)) };
   }
+  /* Round 1334: a pack whose situational cards are rare is driven longer here, so the reach check reads the cards and
+     not the seed. Soccer's four (705, 719, 721, 727) were dealt 1 to 12 times in 1,000 seasons and 719 not once at
+     SEED 4 and SEED 28 of seeds 1 to 30 (rc r1334-fx1b); over 5,000 seasons 719 was dealt 5 to 19 times at every one
+     of the 30 (rc r1334-fx2a). A pack off this table keeps the FLEET drive's 100 desks, so the GM packs read as before. */
+  const REACH_DESKS = { soccer: 500 };
+  /* Round 1334: CONTROL=unreach gates soccer's 719 on a fact no desk draws (goals below 0), so the reach check must
+     fail for that pack and print no "all cards reached" line after the FAIL. */
+  if (CONTROL === 'unreach') {
+    const hits = packs.soccer?.events.filter(x => x.id === '719') ?? [];
+    if (hits.length !== 1) { console.error('unreach control: soccer card 719 is not there once, refusing to run'); process.exit(2); }
+    packs.soccer = { ...packs.soccer, events: packs.soccer.events.map(x => (x === hits[0] ? { ...x, when: [{ fact: 'goals', op: '<', value: 0 }] } : x)) };
+  }
   const shares = (pack, tag, seed) => {
     const n = {};
     const byValue = {};
@@ -1200,7 +1217,7 @@ if (runs(10)) {
         if (pack.reachBy) (byValue[String(w.facts[pack.reachBy])] ??= new Set()).add(m.defId);
       }
     };
-    for (let d = 0; d < DRIVES.FLEET.desks; d++) runDesk(pack, tag, seed, 'FLEET', d, { observe, bind: PACK_BINDS[tag] }); /* Round 1334: an index pack's own registry */
+    for (let d = 0; d < (REACH_DESKS[tag] ?? DRIVES.FLEET.desks); d++) runDesk(pack, tag, seed, 'FLEET', d, { observe, bind: PACK_BINDS[tag] }); /* Round 1334: an index pack's own registry and drive */
     const ranked = pack.events.map(e => ({ id: e.id, share: (n[e.id] ?? 0) / Math.max(1, total) })).sort((a, b) => b.share - a.share);
     return { n, total, ranked, byValue };
   };
@@ -1214,18 +1231,19 @@ if (runs(10)) {
      standard deviations (about 0.4 points). A pack the kit knows with no
      ceiling here fails until a pack round measures and writes one. */
   const CEILING = { nfl: 0.224, nba: 0.298, mlb: 0.288, nhl: 0.278, college: 0.305, gym: 0.367, afl: 0.374 };
-  /* Round 1334 (W2): Soccer Career's starter pack, measured 2026-10-16 on a runner (rc r1334-s4a, measure-10) at
-     seeds 1 to 10: the top card is 726 every time, 9.00 to 11.70 percent; the highest plus 2 points. */
-  CEILING.soccer = 0.137;
+  /* Round 1334 (W2): Soccer Career's starter pack over its REACH_DESKS drive (5,000 seasons), measured 2026-10-16 on a
+     runner (rc r1334-fx2a, reach5x) at seeds 1 to 10: the top card is 726 every time, 9.82 to 11.04 percent; the
+     highest plus 2 points. (Over 1,000 seasons it read 9.00 to 11.70, rc r1334-s4a, and the ceiling was 0.137.) */
+  CEILING.soccer = 0.131;
   const reach = [];
   for (const [k, p] of Object.entries(packs)) {
     const r = shares(p, k, SEED);
     const unreached = p.events.filter(e => !r.n[e.id]).map(e => e.id);
     const top = r.ranked[0];
-    if (unreached.length) fail(10, `${k}: ${unreached.length} cards never dealt over 1,000 seasons (${unreached.slice(0, 3).join(', ')})`);
+    if (unreached.length) fail(10, `${k}: ${unreached.length} cards never dealt over ${((REACH_DESKS[k] ?? DRIVES.FLEET.desks) * SEASONS).toLocaleString('en-US')} seasons (${unreached.slice(0, 3).join(', ')})`);
     if (CEILING[k] === undefined) fail(10, `${k} has no measured share ceiling: run SIM_EVENT_DECK_MEASURE=1 and write one in`);
     else if (top.share > CEILING[k]) fail(10, `${k}: ${top.id} took ${(top.share * 100).toFixed(1)}% of ${r.total} deals, ceiling ${(CEILING[k] * 100).toFixed(1)}%`);
-    else ok(`${k}: all ${p.events.length} cards reached in ${r.total} deals, the top card ${top.id} at ${(top.share * 100).toFixed(1)}% (ceiling ${(CEILING[k] * 100).toFixed(1)}%)`);
+    else if (!unreached.length) ok(`${k}: all ${p.events.length} cards reached in ${r.total} deals, the top card ${top.id} at ${(top.share * 100).toFixed(1)}% (ceiling ${(CEILING[k] * 100).toFixed(1)}%)`); /* Round 1334: never after the reach FAIL */
     if (p.reachBy) reach.push(`${k} by ${p.reachBy}: ${Object.entries(r.byValue).slice(0, 8).map(([v, s]) => `${v} ${s.size}`).join(', ')}`);
     if (MEASURE) {
       const tops = TEN.map(sd => shares(p, k, sd).ranked[0]);
