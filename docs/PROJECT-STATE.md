@@ -1,3 +1,19 @@
+## 2026-10-16: test-only legacy highest-score boundary reproduction qualified
+
+Codex branch codex/manager-record-boundary starts at exact I1343 source5053712f.
+Source review found a legacy absent-record path seeds highestScoring only after
+the300-entry h2h slice, potentially losing an available oldest winner. New isolated
+test/helper/workflow will exercise actual match/save APIs and retain causal state/RNG
+evidence. Actual4932e191/run38907874597 passed strictbaseline2precisefaults/4preserve,
+51related and types/source/dependency holds. Seed1 real match5-1 loses old5-4, writes
+missed1instead0 or51instead50; wrongrecord persists aftersave/load. Artifact12049106802
+retained, root+independent physical/raw review closed. Seven fullpairs held,16holds
+independently recomputed and2immutabilityholds assertedinprocess with noafterinputs
+retained. PR292 ready TESTONLY, nevermergealone. No app/oldproof/package change or
+productfix/build/liveclaim; I owns actualseed-before-evictionfix and runsunitdirectly.
+Details: docs/audits/manager-record-boundary.md. Separate takeover stats contamination
+remains open; PR287's decision clear does not fix it.
+
 ## 2026-10-16 05:30 EDT: session I starts; player reports split between the lanes; the Lovable editor push reverted
 
 Claude lane (session I). Live: Release BG (main c9b80fce, deployment bc4815da). The Lovable editor's push of 08:36 to

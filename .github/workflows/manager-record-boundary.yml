@@ -1,0 +1,98 @@
+name: Manager legacy record boundary baseline
+
+on:
+  push:
+    branches: [codex/manager-record-boundary]
+
+permissions:
+  contents: read
+
+jobs:
+  baseline:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      CI: 'true'
+      SIM_NETWORK: offline
+      CAREER_SEASON_LOCAL_ONLY: '1'
+      CM_RECORD_BOUNDARY_OUT: ${{ github.workspace }}/manager-record-boundary-artifacts
+      CM_RECORD_BOUNDARY_BASE: 5053712fdf440201bc61a9f5dcf953e2d35ac120
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Bind actual I1343 application and locked dependencies
+        run: |
+          echo '127.0.0.1 flawuiqbvjobmkfkauhw.supabase.co' | sudo tee -a /etc/hosts
+          mkdir -p "$CM_RECORD_BOUNDARY_OUT"
+          git rev-parse HEAD > "$CM_RECORD_BOUNDARY_OUT/head.txt"
+          git archive --format=zip HEAD > "$CM_RECORD_BOUNDARY_OUT/source.zip"
+          git diff --exit-code "$CM_RECORD_BOUNDARY_BASE" -- . ':!.github/workflows/manager-record-boundary.yml' ':!scripts/simClubManagerRecordBoundary.mjs' ':!src/test/clubManagerRecordBoundary.test.ts' ':!docs/PROJECT-STATE.md' ':!docs/audits/manager-record-boundary.md'
+          find src scripts .github/workflows -type f -print0 | sort -z | xargs -0 sha256sum > "$CM_RECORD_BOUNDARY_OUT/source-files.sha256"
+          sha256sum package.json package-lock.json bun.lock > "$CM_RECORD_BOUNDARY_OUT/packages.sha256"
+          npm ci
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          const lock = JSON.parse(fs.readFileSync('package-lock.json'));
+          const installed = Object.entries(lock.packages).filter(([p]) => p.startsWith('node_modules/') && fs.existsSync(p + '/package.json')).map(([p, entry]) => {
+            const version = JSON.parse(fs.readFileSync(p + '/package.json')).version;
+            assert.equal(version, entry.version, p); return { path: p, version };
+          });
+          assert.equal(installed.length, 521);
+          fs.writeFileSync(process.env.CM_RECORD_BOUNDARY_OUT + '/installed.json', JSON.stringify(installed, null, 2));
+          console.log('Bound all 521 actual installed locked versions.');
+          NODE
+          find node_modules -type f -print0 | sort -z | xargs -0 sha256sum > "$CM_RECORD_BOUNDARY_OUT/installed-files.sha256"
+      - name: Actual application types and new helper syntax
+        run: |
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee "$CM_RECORD_BOUNDARY_OUT/types.log"
+          node --check scripts/simClubManagerRecordBoundary.mjs
+      - name: Actual retained-book boundary outcomes and precise baseline faults
+        run: |
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simClubManagerRecordBoundary.mjs 2>&1 | tee "$CM_RECORD_BOUNDARY_OUT/baseline.log"
+      - name: Existing I1343 record and retirement tests remain green
+        run: |
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node node_modules/vitest/vitest.mjs run src/lib/clubManagerRecords.test.ts src/lib/clubManagerRetire.test.ts src/test/clubManagerRetire.test.tsx --maxWorkers=1 --minWorkers=1 --reporter=default --reporter=json --outputFile.json="$CM_RECORD_BOUNDARY_OUT/related.json" 2>&1 | tee "$CM_RECORD_BOUNDARY_OUT/related.log"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          const report = JSON.parse(fs.readFileSync(process.env.CM_RECORD_BOUNDARY_OUT + '/related.json'));
+          const rows = report.testResults.flatMap(file => file.assertionResults);
+          assert.equal(report.testResults.length, 3); assert(rows.length > 0);
+          assert.equal(report.success, true); assert.equal(report.numFailedTests, 0);
+          assert.equal(report.numPendingTests, 0); assert.equal(report.numTodoTests, 0);
+          assert(rows.every(row => row.status === 'passed'));
+          console.log('All ' + rows.length + ' unchanged I1343 related cases passed.');
+          NODE
+      - name: Complete source and dependency holds
+        if: always()
+        run: |
+          sha256sum --check "$CM_RECORD_BOUNDARY_OUT/source-files.sha256" > "$CM_RECORD_BOUNDARY_OUT/source-holds.log"
+          sha256sum --check "$CM_RECORD_BOUNDARY_OUT/packages.sha256"
+          sha256sum --check "$CM_RECORD_BOUNDARY_OUT/installed-files.sha256" > "$CM_RECORD_BOUNDARY_OUT/installed-holds.log"
+          git diff --exit-code -- src scripts .github/workflows package.json package-lock.json bun.lock
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          const installed = JSON.parse(fs.readFileSync(process.env.CM_RECORD_BOUNDARY_OUT + '/installed.json'));
+          assert.equal(installed.length, 521);
+          for (const row of installed) assert.equal(JSON.parse(fs.readFileSync(row.path + '/package.json')).version, row.version, row.path);
+          console.log('Held all 521 installed locked versions.');
+          NODE
+      - name: Retain full causal baseline evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: manager-record-boundary-${{ github.run_id }}
+          path: manager-record-boundary-artifacts/
+          retention-days: 14
+          if-no-files-found: error
