@@ -1,0 +1,6 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/lib/soccerDeck.test.ts src/lib/gmInbox.test.ts src/components/front-office-shared/GmInboxPanel.test.tsx --testTimeout=300000 --hookTimeout=120000
+kit-a: SIM_EVENT_DECK_SECTIONS=1,2,3,4,5,6,7,8,9,10,11,12 node scripts/simEventDeck.mjs
+kit-b: SIM_EVENT_DECK_SECTIONS=13 node scripts/simEventDeck.mjs
+kit-c: SIM_EVENT_DECK_SECTIONS=14,15,16 node scripts/simEventDeck.mjs
+anchors: node scripts/simHarnessAnchors.mjs
