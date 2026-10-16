@@ -1,0 +1,6 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-new: node_modules/.bin/vitest run src/lib/clubManagerAdoption.test.ts --testTimeout=300000 --hookTimeout=120000
+vitest-old: node_modules/.bin/vitest run src/lib/clubManagerWorldMoves.test.ts src/lib/clubManagerWorldRoster.test.ts --testTimeout=300000 --hookTimeout=120000
+rivals: node scripts/simNoRivalNames.mjs
+anchors: node scripts/simHarnessAnchors.mjs
+storage: node scripts/simStorageWrites.mjs
