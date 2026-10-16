@@ -1,0 +1,7 @@
+#!serve
+#!playwright
+#!serial
+headsha: git log --oneline -3
+luton-walk: SHOTS="$RC_OUT/walk" node .rc/x/lutonWalk.mjs
+basesrv: git worktree add -q --detach /tmp/wt-4174 a758fcec && ln -s "$PWD/node_modules" /tmp/wt-4174/node_modules && (cd /tmp/wt-4174 && npm run build > /tmp/build-4174.log 2>&1) || { tail -20 /tmp/build-4174.log; exit 2; }; (nohup node scripts/lib/hostLikeServer.mjs /tmp/wt-4174/dist 4174 > /tmp/server-4174.log 2>&1 &); for i in $(seq 1 30); do curl -s -o /dev/null http://localhost:4174/soccer-career && break; sleep 1; done; curl -s -o /dev/null -w "base a758fcec served on 4174: %{http_code}\n" http://localhost:4174/soccer-career
+luton-walk-ctl-main: BASE=http://localhost:4174 LUTON_WALK_CONTROL=main SHOTS="$RC_OUT/walk-main" node .rc/x/lutonWalk.mjs > /tmp/lw.log 2>&1; s=$?; grep -E "FAIL|fixture:" /tmp/lw.log | head -14 | cut -c1-160; tail -2 /tmp/lw.log | cut -c1-200; [ $s -eq 1 ] && grep -q "lutonWalk: CONTROL FIRED" /tmp/lw.log && echo FIRED-OK
