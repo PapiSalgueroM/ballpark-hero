@@ -1,0 +1,4 @@
+#!serial
+buildA: node_modules/.bin/vite build --outDir /tmp/dA --emptyOutDir > /tmp/bA.log 2>&1; s=$?; tail -3 /tmp/bA.log; exit $s
+buildB: node .rc/x/caller1347.mjs && node_modules/.bin/vite build --outDir /tmp/dB --emptyOutDir > /tmp/bB.log 2>&1; s=$?; tail -3 /tmp/bB.log; git checkout -- src; exit $s
+weigh: node .rc/x/weigh1347.mjs /tmp/dA /tmp/dB
