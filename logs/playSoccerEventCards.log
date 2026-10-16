@@ -1,0 +1,40 @@
+saves: cards Late Winner!, Puskas Nominee!, International Debut Goal! (base engine); paper "Walk 50001 Booed By Own Fans After Another Disappointing Display" (this engine)
+[SIM_OFFLINE_BLOCK] external browser route continue https://fonts.googleapis.com
+[SIM_OFFLINE_BLOCK] external browser route continue https://flagcdn.com
+[SIM_OFFLINE_BLOCK] external browser route continue https://flagcdn.com
+[SIM_OFFLINE_BLOCK] external browser route continue https://flagcdn.com
+[SIM_OFFLINE_BLOCK] external browser route continue https://flagcdn.com
+[SIM_OFFLINE_BLOCK] external browser route continue https://fonts.googleapis.com
+[SIM_OFFLINE_BLOCK] external browser route continue https://flagcdn.com
+[SIM_OFFLINE_BLOCK] external browser route continue https://fonts.googleapis.com
+[SIM_OFFLINE_BLOCK] external browser route continue https://flagcdn.com
+[SIM_OFFLINE_BLOCK] external browser route continue https://flagcdn.com
+[SIM_OFFLINE_BLOCK] external browser route continue https://flagcdn.com
+[SIM_OFFLINE_BLOCK] external browser route continue https://fonts.googleapis.com
+[SIM_OFFLINE_BLOCK] external browser route continue https://flagcdn.com
+[SIM_OFFLINE_BLOCK] external browser route continue https://fonts.googleapis.com
+[SIM_OFFLINE_BLOCK] external browser route continue https://flagcdn.com
+[SIM_OFFLINE_BLOCK] external browser route continue https://flagcdn.com
+[SIM_OFFLINE_BLOCK] external browser route continue https://flagcdn.com
+[SIM_OFFLINE_BLOCK] external browser route continue https://fonts.googleapis.com
+[SIM_OFFLINE_BLOCK] external browser route continue https://flagcdn.com
+[SIM_OFFLINE_BLOCK] external browser route continue https://fonts.googleapis.com
+[SIM_OFFLINE_BLOCK] external browser route continue https://flagcdn.com
+[SIM_OFFLINE_BLOCK] external browser route continue https://flagcdn.com
+[SIM_OFFLINE_BLOCK] external browser route continue https://fonts.googleapis.com
+[SIM_OFFLINE_BLOCK] external browser route continue https://flagcdn.com
+[SIM_OFFLINE_BLOCK] external browser route continue https://fonts.googleapis.com
+[SIM_OFFLINE_BLOCK] external browser route continue https://flagcdn.com
+[SIM_OFFLINE_BLOCK] external browser route continue https://fonts.googleapis.com
+[SIM_OFFLINE_BLOCK] external browser route continue https://flagcdn.com
+[SIM_OFFLINE_BLOCK] external browser route continue https://fonts.googleapis.com
+[SIM_OFFLINE_BLOCK] external browser route continue https://flagcdn.com
+[SIM_OFFLINE_BLOCK] external browser route continue https://fonts.googleapis.com
+[SIM_OFFLINE_BLOCK] external browser route continue https://flagcdn.com
+320-still: Late Winner! [75/75px, scroll 0->0, small: 8]; Puskas Nominee! [91px, scroll 0->0, small: 7]; International Debut Goal! [75px, scroll 0->0, small: 6]; paper ok
+320-motion: Late Winner! [75/75px, scroll 0->0, small: 8]; Puskas Nominee! [91px, scroll 0->0, small: 7]; International Debut Goal! [75px, scroll 0->0, small: 6]; paper ok
+390-still: Late Winner! [75/75px, scroll 0->0, small: 8]; Puskas Nominee! [75px, scroll 0->0, small: 7]; International Debut Goal! [75px, scroll 0->0, small: 6]; paper ok
+390-motion: Late Winner! [75/75px, scroll 0->0, small: 8]; Puskas Nominee! [75px, scroll 0->0, small: 7]; International Debut Goal! [75px, scroll 0->0, small: 6]; paper ok
+1280-still: Late Winner! [75/75px, scroll 0->0, small: 8]; Puskas Nominee! [75px, scroll 0->0, small: 7]; International Debut Goal! [75px, scroll 0->0, small: 6]; paper ok
+1280-motion: Late Winner! [75/75px, scroll 0->0, small: 8]; Puskas Nominee! [75px, scroll 0->0, small: 7]; International Debut Goal! [75px, scroll 0->0, small: 6]; paper ok
+playSoccerEventCards: green over 6 runs (known small lines: text-[10px], text-[11px])
