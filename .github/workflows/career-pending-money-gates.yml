@@ -113,6 +113,16 @@ jobs:
       - name: Full current and restored observations match
         if: env.SC_PENDING_MONEY_PHASE == 'fixed'
         run: cmp "$SC_PENDING_MONEY_OUT/units/normal/raw.json" "$SC_PENDING_MONEY_OUT/units/restored/raw.json"
+      - name: Retain generated sitemap and restore its source
+        if: always() && env.SC_PENDING_MONEY_PHASE == 'fixed'
+        run: |
+          git show HEAD:public/sitemap.xml > "$SC_PENDING_MONEY_OUT/source-sitemap.xml"
+          cp public/sitemap.xml "$SC_PENDING_MONEY_OUT/build-sitemap.xml"
+          git diff -- public/sitemap.xml > "$SC_PENDING_MONEY_OUT/build-sitemap.diff"
+          sha256sum "$SC_PENDING_MONEY_OUT/source-sitemap.xml" "$SC_PENDING_MONEY_OUT/build-sitemap.xml" > "$SC_PENDING_MONEY_OUT/sitemap-receipts.sha256"
+          test "$(grep -c '  public/sitemap.xml$' "$SC_PENDING_MONEY_OUT/source-hashes.txt")" = 1
+          grep -v '  public/sitemap.xml$' "$SC_PENDING_MONEY_OUT/source-hashes.txt" | sha256sum --check > "$SC_PENDING_MONEY_OUT/source-before-sitemap-restore-holds.log"
+          git restore --source=HEAD --worktree -- public/sitemap.xml
       - name: Final source and dependency holds
         if: always()
         run: |
