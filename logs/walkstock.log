@@ -1,0 +1,19 @@
+files: career /assets/SoccerCareer-C4vPJqnl.js, about /assets/HomeAbout-D1HttTlT.js, part /assets/seoMetaPart12-BJfl671y.js, guide /assets/clubManagement-Dyl1I2gf.js
+fired A /soccer-career 390 404: broke=true/true/true pageErrors=0 | SoccerCareer-C4vPJqnl.js:404@156 SoccerCareer-C4vPJqnl.js:served@2788
+fired A /soccer-career 390 host: broke=true/true/true pageErrors=0 | SoccerCareer-C4vPJqnl.js:host@131 SoccerCareer-C4vPJqnl.js:served@2739
+fired A /soccer-career 1280 404: broke=true/true/true pageErrors=0 | SoccerCareer-C4vPJqnl.js:404@146 SoccerCareer-C4vPJqnl.js:served@2773
+fired A /soccer-career 1280 host: broke=true/true/true pageErrors=0 | SoccerCareer-C4vPJqnl.js:host@132 SoccerCareer-C4vPJqnl.js:served@2731
+fired B / 390 404: broke=true/true/true pageErrors=0 | HomeAbout-D1HttTlT.js:404@262 HomeAbout-D1HttTlT.js:served@3013
+fired B / 390 host: broke=true/true/true pageErrors=0 | HomeAbout-D1HttTlT.js:host@254 HomeAbout-D1HttTlT.js:served@2999
+fired B / 1280 404: broke=true/true/true pageErrors=0 | HomeAbout-D1HttTlT.js:404@269 HomeAbout-D1HttTlT.js:served@3036
+fired B / 1280 host: broke=true/true/true pageErrors=0 | HomeAbout-D1HttTlT.js:host@243 HomeAbout-D1HttTlT.js:served@2994
+fired C /club-manager 390 404: broke=false/false/false pageErrors=1 | seoMetaPart12-BJfl671y.js:404@250 clubManagement-Dyl1I2gf.js:404@251 seoMetaPart12-BJfl671y.js:served@2942 clubManagement-Dyl1I2gf.js:served@2943
+fired C /club-manager 390 host: broke=false/false/false pageErrors=1 | seoMetaPart12-BJfl671y.js:host@227 clubManagement-Dyl1I2gf.js:host@229 seoMetaPart12-BJfl671y.js:served@2900 clubManagement-Dyl1I2gf.js:served@2900
+fired C /club-manager 1280 404: broke=false/false/false pageErrors=1 | seoMetaPart12-BJfl671y.js:404@257 clubManagement-Dyl1I2gf.js:404@258 seoMetaPart12-BJfl671y.js:served@2975 clubManagement-Dyl1I2gf.js:served@2976
+fired C /club-manager 1280 host: broke=false/false/false pageErrors=1 | seoMetaPart12-BJfl671y.js:host@241 clubManagement-Dyl1I2gf.js:host@242 seoMetaPart12-BJfl671y.js:served@2920 clubManagement-Dyl1I2gf.js:served@2920
+fired D / tap /soccer-career 390 404: broke=true/true/true pageErrors=0 | SoccerCareer-C4vPJqnl.js:404@817 SoccerCareer-C4vPJqnl.js:served@3431
+fired D / tap /soccer-career 390 host: broke=true/true/true pageErrors=0 | SoccerCareer-C4vPJqnl.js:host@1197 SoccerCareer-C4vPJqnl.js:served@3805
+fired D / tap /soccer-career 1280 404: broke=true/true/true pageErrors=0 | SoccerCareer-C4vPJqnl.js:404@854 SoccerCareer-C4vPJqnl.js:served@3479
+fired D / tap /soccer-career 1280 host: broke=true/true/true pageErrors=0 | SoccerCareer-C4vPJqnl.js:host@1244 SoccerCareer-C4vPJqnl.js:served@3855
+
+playChunkReloadWait: control stock fired on all 16 rows: the stock wrapper flashes the bug, so the walk can see it.

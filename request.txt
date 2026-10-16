@@ -1,0 +1,6 @@
+#!build
+#!playwright
+#!serial
+stockbuild: node scripts/simPreloadWait.mjs --build-stock dist-stock 2>&1 | tail -2
+walk: node scripts/playChunkReloadWait.mjs
+walkstock: PLAY_RELOAD_WAIT_CONTROL=stock PRELOAD_WAIT_STOCK_DIST=dist-stock node scripts/playChunkReloadWait.mjs
