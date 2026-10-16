@@ -1,3 +1,6 @@
+## Codex Round1383 size diagnostic CLOSED, 2026-10-16 19:13:27 UTC
+
+TESTONLY PR300 actual38950950162/job117141873082 SUCCESS ona4f912d6. Exact27deA/B/C, actualcandidate-ref594a272844tiecasesSAME,3types/builds/45readers/9strictasset-sinkjourneys/holds pass. Candidate onlysaves181..202gzipB, Cgrowth6.2822/6.2803/5.8467KiBgzip and13.6836/13.5811/12.8936KiBraw. UnchangedfullcapsA0/B1/C1(all3managerbudgetsred), soleadE2unit/cap/debtrulingstillopen. Root+independentphysicalclosed101365595B artifact12068773607/SHA29bb2ffcc777bfc403fdc1c51fdf487460c46f9d8300f2a241760a30b5fc70c6,61logs/45readers/44golden/9journeys/403responses/186gzip/sourcepublicdistmaps. Detailsdocs/audits/ucl-shared-weight-measurement.md. Actualapp/public/originalproofsheld, noE2/fullcareer/UI/merge/liveclaim. BHlastknownlive.
 ## Release BH LIVE, 2026-10-16 10:42 EDT: Player Bingo counts Rodri's Champions League, World XI shows overalls and club links, Soccer Career names Luton Town in 2023 and its choices say what they do
 
 Claude lane (session I). main ae14cf97, deployment 9056c804-07ef-4e34-96c9-1f0efdaf0425, entry index-BQUxuJaU.js (was index-CZZVnHoQ.js, Release BG,
