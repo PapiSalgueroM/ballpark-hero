@@ -1,0 +1,10 @@
+[fall] 530 new jobs (0 could not start), 113 s
+[fall] autumn: 168 jobs, opening(s) 69; first match by competition {"league":168}; lost 61; lost and UNDER 60 after it: 0 (0 percent) by competition {}; fall p50 4.3 max 7.5
+[fall] newYear: 168 jobs, opening(s) 69; first match by competition {"league":168}; lost 58; lost and UNDER 60 after it: 0 (0 percent) by competition {}; fall p50 4.5 max 7.3
+[fall] runIn: 168 jobs, opening(s) 69; first match by competition {"league":140,"cup":28}; lost 71; lost and UNDER 60 after it: 7 (10 percent) by competition {"cup":7}; fall p50 4.9 max 11.8
+  e.g. Real Betis (era2005, tier 3) runIn: opened 69, lost a cup match, board 69 to 59.9, press mood 46.2
+  e.g. Real Betis (era2005, tier 3) runIn: opened 69, lost a cup match, board 69 to 59.9, press mood 46.2
+  e.g. Sunderland (era2005, tier 4) runIn: opened 69, lost a cup match, board 69 to 59.9, press mood 47.3
+  e.g. AC Milan (era2015, tier 2) runIn: opened 69, lost a cup match, board 69 to 59.9, press mood 46.6
+[fall] move: 26 jobs, opening(s) 69; first match by competition {"league":26}; lost 4; lost and UNDER 60 after it: 0 (0 percent) by competition {}; fall p50 5.1 max 6.5
+[fall] DONE

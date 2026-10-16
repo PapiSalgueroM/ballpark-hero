@@ -1,0 +1,48 @@
+[saves] premier bottom four Hull City, Coventry City, Ipswich Town, Leeds United; found down: Hull City #19 "Relegated to the EFL Championship. The board wants to come straight back up." grade C, 0 offers; escape: Hull City #13 "Survival nobody predicted. The fans sang your name all the way home." grade A, 2 offers; up: West Ham #1 "Promoted to the Premier League. That is the season the board asked for." grade A, 2 offers
+[offers 390-rm] confirm true; y 1377 to 1377; panel top 342 to 342; focus BUTTON Take the job; buttons 44,44; small 0; cut 0; sideways 0; text "Take the Everton job?🥇 Contenders club · Premier League (abroad) · £54m budget · the board wants: Stay up. Avoid relegationYour players and the money you did not spend stay at West Ham. You start Sea"
+[offers 390-rm] after Back: 2 cards (opacity 1,1), focus on the tapped card true
+[up 390-rm] West Ham #1: fate line "⬆️
+You went up." (opacity at 300 ms 1); verdict on screen true "Promoted to the Premier League. That is the season the board asked for."; grade A; sideways 0
+[down 390-rm] Hull City #19: fate line "⬇️
+You went down." (opacity at 300 ms 1); verdict on screen true "Relegated to the EFL Championship. The board wants to come straight back up."; grade C; sideways 0
+[escape 390-rm] Hull City #13: fate line "🛟
+You stayed up when everyone had you going down." (opacity at 300 ms 1); verdict on screen true "Survival nobody predicted. The fans sang your name all the way home."; grade A; sideways 0
+[record 390-rm] season row "none"
+FAIL 390-rm record: the season row has no fate word
+[help 390-rm] block width 340, right 365 of 390, small paragraphs 0: "🧾 The board's verdict and your next job. The grade reads your season against what the club expected. Going up is at lea"
+[news 390-rm] entry found, sideways 0
+[offers 390-mo] confirm true; y 1377 to 1377; panel top 342 to 342; focus BUTTON Take the job; buttons 44,44; small 0; cut 0; sideways 0; text "Take the Everton job?🥇 Contenders club · Premier League (abroad) · £54m budget · the board wants: Stay up. Avoid relegationYour players and the money you did not spend stay at West Ham. You start Sea"
+[offers 390-mo] after Back: 2 cards (opacity 1,1), focus on the tapped card true
+[up 390-mo] West Ham #1: fate line "⬆️
+You went up." (opacity at 300 ms 0.476146); verdict on screen true "Promoted to the Premier League. That is the season the board asked for."; grade A; sideways 0
+[down 390-mo] Hull City #19: fate line "⬇️
+You went down." (opacity at 300 ms 0.593339); verdict on screen true "Relegated to the EFL Championship. The board wants to come straight back up."; grade C; sideways 0
+[escape 390-mo] Hull City #13: fate line "🛟
+You stayed up when everyone had you going down." (opacity at 300 ms 0.59344); verdict on screen true "Survival nobody predicted. The fans sang your name all the way home."; grade A; sideways 0
+[record 390-mo] season row "none"
+FAIL 390-mo record: the season row has no fate word
+[help 390-mo] block width 340, right 365 of 390, small paragraphs 0: "🧾 The board's verdict and your next job. The grade reads your season against what the club expected. Going up is at lea"
+[offers 1280-rm] confirm true; y 1236 to 1236; panel top 378 to 378; focus BUTTON Take the job; buttons 44,44; small 0; cut 0; sideways 0; text "Take the Everton job?🥇 Contenders club · Premier League (abroad) · £54m budget · the board wants: Stay up. Avoid relegationYour players and the money you did not spend stay at West Ham. You start Sea"
+[offers 1280-rm] after Back: 2 cards (opacity 1,1), focus on the tapped card true
+[up 1280-rm] West Ham #1: fate line "⬆️
+You went up." (opacity at 300 ms 1); verdict on screen true "Promoted to the Premier League. That is the season the board asked for."; grade A; sideways 0
+[down 1280-rm] Hull City #19: fate line "⬇️
+You went down." (opacity at 300 ms 1); verdict on screen true "Relegated to the EFL Championship. The board wants to come straight back up."; grade C; sideways 0
+[escape 1280-rm] Hull City #13: fate line "🛟
+You stayed up when everyone had you going down." (opacity at 300 ms 1); verdict on screen true "Survival nobody predicted. The fans sang your name all the way home."; grade A; sideways 0
+[record 1280-rm] season row "none"
+FAIL 1280-rm record: the season row has no fate word
+[help 1280-rm] block width 398, right 839 of 1280, small paragraphs 0: "🧾 The board's verdict and your next job. The grade reads your season against what the club expected. Going up is at lea"
+[news 1280-rm] entry found, sideways 0
+[offers 1280-mo] confirm true; y 1236 to 1236; panel top 378 to 378; focus BUTTON Take the job; buttons 44,44; small 0; cut 0; sideways 0; text "Take the Everton job?🥇 Contenders club · Premier League (abroad) · £54m budget · the board wants: Stay up. Avoid relegationYour players and the money you did not spend stay at West Ham. You start Sea"
+[offers 1280-mo] after Back: 2 cards (opacity 1,1), focus on the tapped card true
+[up 1280-mo] West Ham #1: fate line "⬆️
+You went up." (opacity at 300 ms 0.475992); verdict on screen true "Promoted to the Premier League. That is the season the board asked for."; grade A; sideways 0
+[down 1280-mo] Hull City #19: fate line "⬇️
+You went down." (opacity at 300 ms 0.536115); verdict on screen true "Relegated to the EFL Championship. The board wants to come straight back up."; grade C; sideways 0
+[escape 1280-mo] Hull City #13: fate line "🛟
+You stayed up when everyone had you going down." (opacity at 300 ms 0.535988); verdict on screen true "Survival nobody predicted. The fans sang your name all the way home."; grade A; sideways 0
+[record 1280-mo] season row "none"
+FAIL 1280-mo record: the season row has no fate word
+[help 1280-mo] block width 398, right 839 of 1280, small paragraphs 0: "🧾 The board's verdict and your next job. The grade reads your season against what the club expected. Going up is at lea"
+rvWalk: 4 FAIL lines

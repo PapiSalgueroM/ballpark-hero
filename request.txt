@@ -1,0 +1,11 @@
+#!serve
+#!playwright
+walk: node .rc/x/rvWalk.mjs
+fall: node .rc/x/takeoverFall.mjs
+oldsaves: CM_BOARD_BASE=$(bash .rc/x/mkbr.sh o1) node .rc/x/oldSaveCarry.mjs
+rules: node scripts/simCmLeagueRules.mjs --part=modern,eras,pure
+appeal: node scripts/simManagerAppealIsolation.mjs
+anchors: node scripts/simHarnessAnchors.mjs
+rivals: node scripts/simNoRivalNames.mjs
+dailydeals: node scripts/simDailyDeals.mjs
+meters: node scripts/simClubManagerMeters.mjs

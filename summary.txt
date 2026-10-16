@@ -1,0 +1,10 @@
+build exit=0 31s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+oldsaves exit=0 43s | oldSaveCarry GREEN
+rules exit=0 33s | simCmLeagueRules: all checks passed (modern, eras, pure)
+fall exit=0 114s | [fall] DONE
+appeal exit=0 40s | Equivalent appeal outcomes must agree: passed for 24 original pairs and 3 separate generated-position pairs.
+rivals exit=0 19s | No rival product names found. 0 findings.
+dailydeals exit=0 4s | simDailyDeals: green. 12 Hot Seat dates (5 Premier League) and 6 Deadline Day dates (3 Premier League) deal what Release AS dealt, no daily carries the real fixture key, 
+anchors exit=0 46s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+walk exit=1 167s | rvWalk: 4 FAIL lines
+meters exit=0 30s | simClubManagerMeters: PASS. The board meter is the sack race, the fans move with results, and every table prints its goals pair.
