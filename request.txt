@@ -1,0 +1,4 @@
+#!build
+#!playwright
+pin: node .rc/x/pinProbe.mjs
+walk-keepfailed: git worktree add -q .claude/worktrees/rvctl3 HEAD && node .rc/x/ctlD.mjs .claude/worktrees/rvctl3 && (cd .claude/worktrees/rvctl3 && ../../../node_modules/.bin/vite build --outDir "$OLDPWD/dist-keepfailed" --emptyOutDir --logLevel error) && DIST=dist-keepfailed node scripts/playCmBoardVerdict.mjs

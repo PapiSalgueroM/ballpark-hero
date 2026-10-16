@@ -1,0 +1,3 @@
+build exit=0 30s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+walk-keepfailed exit=0 114s | playCmBoardVerdict GREEN: 42 of 42 checks green
+pin exit=134 322s | timeout: the monitored command dumped core
