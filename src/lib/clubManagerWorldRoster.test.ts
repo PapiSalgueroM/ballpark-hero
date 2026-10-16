@@ -40,14 +40,17 @@ function mutate(c: WorldRosterCareer, edit: (state: WorldRosterState) => void): 
   edit(copy.worldRoster!);
   return copy;
 }
-function realCareer(): CareerState {
+function realCareer(keepLedger = false): CareerState {
   const rng = vi.spyOn(Math, 'random').mockReturnValue(0.6);
   try {
     const c = startCareer('Everton');
     /* Round 1344: a new career now carries its opening window's deals between other clubs in its ledger (the post
        seed flush). These cases are about the manager's own deals from a career's first day, so the fixture starts
-       from the ledger a new career had before: none. src/lib/clubManagerWorldMoves.test.ts holds the flush. */
-    delete c.worldRoster;
+       from the ledger a new career had before: none. src/lib/clubManagerWorldMoves.test.ts holds the flush.
+       `keepLedger` keeps it, for a case that saves and loads after a job move: the job move now carries this
+       season's deal lines between other clubs (the review of 2026-10-16), and a save whose ledger misses their
+       records is mended when it opens (the repair on load), which that case is not about. */
+    if (!keepLedger) delete c.worldRoster;
     return { ...c, budget: 9999, wageCap: 9999, transferWindow: 'summer' };
   } finally { rng.mockRestore(); }
 }
@@ -416,7 +419,7 @@ describe('actual world roster continuity through manager callbacks', () => {
   });
 
   it('buys, joins another job, saves, reloads and rejoins the buyer without seller resurrection', () => {
-    const c = realCareer();
+    const c = realCareer(true);
     const offer = buildMarket(c).find(p => p.club === 'Arsenal' && p.age < 29 && p.position !== 'GK')!;
     const signed = buyPlayer(c, offer)!;
     const acquired = signed.squad.find(p => p.name === offer.name)!;
