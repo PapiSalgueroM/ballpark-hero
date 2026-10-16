@@ -1,0 +1,5 @@
+#!serial
+appeal-fixhead: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simManagerAppealIsolation.mjs
+appeal-revert: git show 7f715234:src/lib/clubManager.ts > src/lib/clubManager.ts && git diff --stat && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simManagerAppealIsolation.mjs; s=$?; git checkout -- src scripts; exit $s
+boundary-fixhead: CM_RECORD_BOUNDARY_OUT=$RC_OUT/fixhead node_modules/.bin/vitest run src/test/clubManagerRecordBoundary.test.ts --testTimeout=300000 --hookTimeout=120000
+boundary-oldsource: git show 7f715234:src/lib/clubManager.ts > src/lib/clubManager.ts && git diff --stat && CM_RECORD_BOUNDARY_OUT=$RC_OUT/oldsource node_modules/.bin/vitest run src/test/clubManagerRecordBoundary.test.ts --testTimeout=300000 --hookTimeout=120000; s=$?; git checkout -- src scripts; exit $s
