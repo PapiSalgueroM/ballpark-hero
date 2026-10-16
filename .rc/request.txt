@@ -1,0 +1,4 @@
+#!serial
+m2-capgate-kit: node .rc/x/mut1334.mjs capgate || exit 2; SIM_EVENT_DECK_SECTIONS=10 node scripts/simEventDeck.mjs > /tmp/k10.log 2>&1; c=$?; grep -nE "FAIL|soccer|simEventDeck" /tmp/k10.log | head -20; git checkout -- src scripts; echo "MUTANT capgate kit10=$c"; [ $c -ne 0 ]
+m2-injgate-full: node .rc/x/mut1334.mjs injgate || exit 2; node_modules/.bin/vitest run src/lib/soccerDeck.test.ts --testTimeout=300000 --hookTimeout=120000 > /tmp/v.log 2>&1; a=$?; grep -E "Tests " /tmp/v.log; node scripts/simSoccerDeck.mjs > /tmp/s.log 2>&1; b=$?; grep -E "FAIL|simSoccerDeck:" /tmp/s.log | head; SIM_EVENT_DECK_SECTIONS=1,2,3,4,5,6,7,8,9,10,11,12 node scripts/simEventDeck.mjs > /tmp/k.log 2>&1; c=$?; grep -E "FAIL|simEventDeck:|ok soccer" /tmp/k.log | head; git checkout -- src scripts; echo "MUTANT injgate vitest=$a simWhole=$b kit1to12=$c"; [ $a -ne 0 ] || [ $b -ne 0 ] || [ $c -ne 0 ]
+old: node .rc/x/oldsaves1334.mjs
