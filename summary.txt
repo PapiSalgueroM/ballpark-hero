@@ -1,0 +1,2 @@
+gen1 exit=0 3s | genCmPreAzMarketFixture: wrote ../../_temp/rc-out/files/fx1.json (274466 bytes, sha256 49b784530d4381060a477347dea5a835b4764a2aa4e22d31c734dfc8f3cfe6da) from 36cc9ffe in 
+gen2 exit=0 3s | genCmPreAzMarketFixture: wrote ../../_temp/rc-out/files/fx2.json (274466 bytes, sha256 49b784530d4381060a477347dea5a835b4764a2aa4e22d31c734dfc8f3cfe6da) from 36cc9ffe in 

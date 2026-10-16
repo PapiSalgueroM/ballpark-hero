@@ -1,0 +1,2 @@
+gen1: FIXTURE_MADE="a GitHub runner, request r1339-fx1" node scripts/genCmPreAzMarketFixture.mjs "$RC_OUT/fx1.json"
+gen2: FIXTURE_MADE="a GitHub runner, request r1339-fx1" node scripts/genCmPreAzMarketFixture.mjs "$RC_OUT/fx2.json"

@@ -1,0 +1,5 @@
+  B: seed 0x1339b1 sold Kylian Mbappé and Vinicius Junior; 1 seeds passed over
+  A: Real Madrid, season 1 week 1, 4 own club rows (0 in the first 120, best at 1871), 73034 bytes
+  B: Real Madrid, season 3 week 0, 17 own club rows (6 in the first 120, best at 2), 92734 bytes
+  C: Real Madrid, season 1 week 0, 4 own club rows (0 in the first 120, best at 1870), 58985 bytes
+genCmPreAzMarketFixture: wrote ../../_temp/rc-out/files/fx1.json (274466 bytes, sha256 49b784530d4381060a477347dea5a835b4764a2aa4e22d31c734dfc8f3cfe6da) from 36cc9ffe in 2s
