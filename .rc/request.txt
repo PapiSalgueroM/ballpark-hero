@@ -1,0 +1,13 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+fleet0: CM_BOARD_BASE=$(bash .rc/x/mkbase.sh f0) SHARD=0/3 node scripts/simCmBoardVerdict.mjs --part=grade,fate,stream,offers
+fleet1: CM_BOARD_BASE=$(bash .rc/x/mkbase.sh f1) SHARD=1/3 node scripts/simCmBoardVerdict.mjs --part=grade,fate,stream,offers
+fleet2: CM_BOARD_BASE=$(bash .rc/x/mkbase.sh f2) SHARD=2/3 node scripts/simCmBoardVerdict.mjs --part=grade,fate,stream,offers
+dailies: CM_BOARD_BASE=$(bash .rc/x/mkbase.sh d0) node scripts/simCmBoardVerdict.mjs --part=dailies
+simDailyDeals: node scripts/simDailyDeals.mjs
+c-nostep: CM_BOARD_BASE=$(bash .rc/x/mkbase.sh c1) GRADE_SEEDS=1 OFFER_SEEDS=3 SIM_CM_BOARD_CONTROL=nostep node scripts/simCmBoardVerdict.mjs --part=offers
+c-prefilter: CM_BOARD_BASE=$(bash .rc/x/mkbase.sh c2) GRADE_SEEDS=2 SIM_CM_BOARD_CONTROL=prefilter node scripts/simCmBoardVerdict.mjs --part=stream
+simApproaches: node scripts/simApproaches.mjs
+simCmApplications: node scripts/simCmApplications.mjs
+simClubManagerMeters: node scripts/simClubManagerMeters.mjs
+pressProof: node scripts/qa/managerPressCoverageProof.mjs
+rulesforced: git worktree add -q .claude/worktrees/forced HEAD && node .rc/x/forceLegacy.mjs .claude/worktrees/forced && CM_RULES_ROOT=$PWD/.claude/worktrees/forced node scripts/simCmLeagueRules.mjs --part=modern,eras,pure
