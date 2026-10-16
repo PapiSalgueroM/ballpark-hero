@@ -1,0 +1,8 @@
+tsc exit=0 107s | 
+dailies exit=0 90s | simCmBoardVerdict GREEN: 3 of 3 checks green (parts dailies, 89 s)
+take exit=0 206s | simCmBoardVerdict GREEN: 5 of 5 checks green (parts takeover, 204 s)
+take-nopin exit=1 207s | control nopin FIRED: 1 of 5 checks red
+simDailyDeals exit=0 5s | simDailyDeals: green. 12 Hot Seat dates (5 Premier League) and 6 Deadline Day dates (3 Premier League) deal what Release AS dealt, no daily carries the real fixture key, 
+hsunit exit=0 7s |    Duration  6.37s (transform 2.64s, setup 182ms, collect 6.40s, tests 3.35s, environment 1.09s, prepare 448ms)
+dailies-hscard exit=1 69s | control hscard FIRED: 2 of 3 checks red
+simManagerHotSeat exit=0 68s | simManagerHotSeat: green. The target is the club's, reading the room pays, outcomes replay, a Club Manager save keeps its registrations and a survivor carries on in Club 
