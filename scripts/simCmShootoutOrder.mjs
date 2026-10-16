@@ -558,6 +558,10 @@ const oldRules = engine => !WRITE_FIXTURE && (engine === historical || (!!league
 const reachCup = (engine, baseSeed = BASE_SEED) => withSeed(baseSeed, () => {
   const start = engine.startCareer(CLUB);
   if (oldRules(engine)) start.matchRules = 'base';
+  /* Release BI's join, Round 1335's bridge carried here (as that round wrote it into simCmUnseededWorld and
+     simManagerWorldContinuity): a new career now opens at BOARD_FRESH, which startCareer cannot be told about,
+     and the pinned engine opened at 60, so the old rules arms open at the old 60. */
+  if (oldRules(engine)) start.boardConfidence = 60;
   const cupIdx = start.calendar.findIndex(e => e.type === 'cup');
   if (cupIdx < 0) abort(`${CLUB} has no cup entry in its calendar`);
   /* playNextEntry hands back after every match, so the walk to the cup week is a loop. */
