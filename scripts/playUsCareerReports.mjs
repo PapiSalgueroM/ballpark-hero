@@ -8,6 +8,9 @@
  *   W3 a prospect skips the showcase, undoes it (the saved road state is the one before the skip), skips again,
  *      presses Draft day, skips draft night and watches it again; the night's button row keeps its height.
  *   W4 the same night under reduced motion: it starts on its last frame and there is nothing to watch again.
+ *   W5 the double taps of the review (r1346-run-d), at 150 and 700 ms between taps: a double tap on Undo skip ends on
+ *      the road from before the skip (the second tap lands on a graded approach, which waits out the settle second of
+ *      useTapSettle), and Go all out works once that second has passed.
  * After every press: no sideways scroll, every new button at least 44 px tall, the card the press was about inside
  * the viewport, no page error, and a screenshot in $RC_OUT (or .tmp-fx/play-us-reports) to LOOK at.
  * (The brief's W1 was a coach ending at an age; the lead cut the age rule, so W1 is the done screen's reload.)
@@ -18,7 +21,9 @@
  *
  * Controls (PLAY_US_REPORTS_CONTROL) remove one tagged element right before the press that needs it, after
  * asserting it was there: noretire ([data-coach-retire], W2), noundo ([data-showcase-undo], W3), noreplay
- * ([data-night-replay], W3). A control that turns its walk red exits 1 with "CONTROL <name> FIRED"; else 2.
+ * ([data-night-replay], W3). nosettle (W5) instead swaps the page's performance.now for a clock that jumps two seconds
+ * a reading right before the double tap, so the settle second never lasts. A control that turns its walk red exits 1
+ * with "CONTROL <name> FIRED"; else 2.
  *
  * Needs dist/ (a plain vite build is enough). Run: ENGINES=chromium node scripts/playUsCareerReports.mjs
  */
@@ -34,7 +39,7 @@ import { chromium } from './lib/playwrightLoader.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.PLAY_US_REPORTS_CONTROL || '';
-const CONTROLS = { noretire: ['W2', '[data-coach-retire]'], noundo: ['W3', '[data-showcase-undo]'], noreplay: ['W3', '[data-night-replay]'] };
+const CONTROLS = { noretire: ['W2', '[data-coach-retire]'], noundo: ['W3', '[data-showcase-undo]'], noreplay: ['W3', '[data-night-replay]'], nosettle: ['W5', 'the page clock'] };
 if (CONTROL && !CONTROLS[CONTROL]) { console.error(`Unknown control ${CONTROL}`); process.exit(2); }
 const OUT = path.resolve(process.env.RC_OUT || path.join(ROOT, '.tmp-fx/play-us-reports'));
 fs.mkdirSync(OUT, { recursive: true });
@@ -224,10 +229,17 @@ async function walkW3(browser, sport, size) {
     await page.locator('[data-prospect-phase="draft"]').waitFor();
     await check('skipped', '[data-testid="draft-showcase"]', '[data-showcase-undo]');
     await knock('W3', '[data-showcase-undo]');
-    await tap(page.getByRole('button', { name: 'Undo skip', exact: true }));
+    const undoButton = page.getByRole('button', { name: 'Undo skip', exact: true });
+    await undoButton.scrollIntoViewIfNeeded();
+    const scrollBeforeUndo = await page.evaluate(() => scrollY);
+    await tap(undoButton);
     await page.locator('[data-prospect-phase="showcase"]').waitFor();
     if (JSON.stringify(JSON.parse(await bytes()).prospect.state) !== stateBefore) fail(id, 'the undo did not put back the road state from before the skip');
     await check('undone', '[data-testid="draft-showcase"]');
+    /* Brief 3.4.3: the undo must not jump the page. The review's 507 to 0 was read across a reload. */
+    const scrollAfterUndo = await page.evaluate(() => scrollY);
+    notes.push(`${id}: scrollY ${scrollBeforeUndo} before Undo skip, ${scrollAfterUndo} after`);
+    if (Math.abs(scrollAfterUndo - scrollBeforeUndo) > 2) fail(id, `Undo skip moved the page from scrollY ${scrollBeforeUndo} to ${scrollAfterUndo}`);
     await tap(skip);
     await page.locator('[data-prospect-phase="draft"]').waitFor();
     await nightChunk(page);
@@ -256,6 +268,56 @@ async function walkW3(browser, sport, size) {
   } catch (error) { fail(id, String(error.message || error).split('\n')[0]); } finally { await context.close(); }
 }
 
+/* W5, the double taps the review found (r1346-run-d): a second tap on the spot where Undo skip was lands on Go all
+   out, which takes its place. Taps go to the button's centre by coordinate (no scroll into view), the second one
+   `gap` ms after the first; the line refuses to count unless a graded approach really sits under that spot. */
+const buttonAt = (page, x, y) => page.evaluate(([px, py]) => {
+  const el = document.elementFromPoint(px, py)?.closest('button');
+  return el ? (el.textContent ?? '').trim().slice(0, 40) : 'no button';
+}, [x, y]);
+async function tapTwice(page, size, x, y, gap) {
+  if (size.touch) { await page.touchscreen.tap(x, y); await page.waitForTimeout(gap); await page.touchscreen.tap(x, y); }
+  else { await page.mouse.click(x, y); await page.waitForTimeout(gap); await page.mouse.click(x, y); }
+}
+const centreOf = async locator => { const b = await locator.boundingBox(); return [b.x + b.width / 2, b.y + b.height / 2]; };
+/** The nosettle control: a page clock that jumps two seconds a reading, so useTapSettle's second never lasts. */
+const defeatSettle = page => page.evaluate(() => {
+  const real = performance.now.bind(performance);
+  let skew = 0;
+  performance.now = () => real() + (skew += 2000);
+});
+
+async function walkW5(browser, sport, size, gap) {
+  const id = `W5:${sport.slug}-${size.width}-${gap}ms`;
+  const value = prospectSave(sport);
+  const { context, page, errors } = await open(browser, sport, size, value);
+  const { tap, bytes, check } = kit(id, size, sport, page, errors);
+  try {
+    await page.locator('[data-prospect-phase="showcase"]').waitFor();
+    const stateBefore = JSON.stringify(JSON.parse(value).prospect.state);
+    await tap(page.getByRole('button', { name: /^Skip it/ }));
+    await page.locator('[data-prospect-phase="draft"]').waitFor();
+    await page.waitForTimeout(500);
+    const undo = page.getByRole('button', { name: 'Undo skip', exact: true });
+    await undo.scrollIntoViewIfNeeded();
+    const [x, y] = await centreOf(undo);
+    const y0 = await page.evaluate(() => scrollY);
+    if (CONTROL === 'nosettle') await defeatSettle(page);
+    await tapTwice(page, size, x, y, gap);
+    await page.waitForTimeout(800);
+    const s = JSON.parse(await bytes()).prospect.state;
+    const under = await buttonAt(page, x, y);
+    notes.push(`${id}: a double tap on Undo skip ${gap} ms apart ends at phase ${s.phase} (showcase ${s.showcase?.approach ?? 'none'}); under that spot now: ${under}; scrollY ${y0} before, ${await page.evaluate(() => scrollY)} after`);
+    if (s.phase !== 'showcase' || JSON.stringify(s) !== stateBefore) fail(id, `a double tap on Undo skip ${gap} ms apart ended at phase ${s.phase}, showcase ${s.showcase?.approach ?? 'none'}, not the road before the skip`);
+    else if (!/^(Go all out|Play it safe)/.test(under)) fail(id, `no graded approach sits where Undo skip was (${under}), so this double tap proves nothing`);
+    await check('undo-double-tap', '[data-testid="draft-showcase"]');
+    await page.waitForTimeout(1100);
+    await tap(page.getByRole('button', { name: /^Go all out/ }));
+    await page.locator('[data-prospect-phase="draft"]').waitFor();
+    if (JSON.parse(await bytes()).prospect.state.showcase?.approach !== 'allout') fail(id, 'Go all out did not work once the second had passed');
+  } catch (error) { fail(id, String(error.message || error).split('\n')[0]); } finally { await context.close(); }
+}
+
 async function walkW4(browser, sport, size) {
   const id = `W4:${sport.slug}-${size.width}-reduced`;
   const { context, page, errors } = await open(browser, sport, size, prospectSave(sport), true);
@@ -279,6 +341,7 @@ try {
   for (const sport of M.sports) {
     for (const size of SIZES) {
       for (const walk of [walkW1, walkW2, walkW3]) { await walk(browser, sport, size); walks += 1; }
+      for (const gap of [150, 700]) { await walkW5(browser, sport, size, gap); walks += 1; }
     }
     await walkW4(browser, sport, SIZES[0]); walks += 1;
   }

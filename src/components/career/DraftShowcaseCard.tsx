@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import { Button } from "@/components/ui/button";
+import { useTapSettle } from "@/hooks/useTapSettle";
 import {
   PRE_DRAFT_APPROACHES, SHOWCASE_DELTAS, SKIP_DELTA, preDraftCanUndoSkip, preDraftProjection, preDraftProjectionLine, preDraftShowcaseMove,
   type PreDraftApproach, type PreDraftDescriptor, type PreDraftState,
@@ -32,7 +33,11 @@ export function approachPromise(id: PreDraftApproach["id"], stock: number): stri
    `nightHeld` is true while the rows are still arriving: the result block is
    then out of a screen reader's tree as well as out of sight.
    Round 1346, optional too: `onUndoSkip` puts an "Undo skip" button under a
-   skipped showcase until "Draft day" is pressed. */
+   skipped showcase until "Draft day" is pressed. The undo brings the three
+   approaches back where it stood, so for a second (useTapSettle) "Go all out"
+   and "Play it safe" ignore a tap: the second tap of a double tap on the undo
+   must never be a graded showcase, which has no undo. "Skip it" stays live, as
+   a skip can be undone again. */
 export function DraftShowcaseCard({
   desc, state, onShowcase, onRunDraft, onContinue, showRange, night, nightHold, nightHeld, onUndoSkip,
 }: {
@@ -49,6 +54,7 @@ export function DraftShowcaseCard({
 }) {
   const sc = state.showcase;
   const out = state.draft;
+  const undoSettle = useTapSettle();
 
   return (
     <div className="rounded-xl border border-border bg-card p-4 space-y-3" data-testid="draft-showcase">
@@ -58,7 +64,7 @@ export function DraftShowcaseCard({
           <p className="text-sm text-muted-foreground">Draft stock {state.stock}. How hard do you go?</p>
           <div className="grid gap-2">
             {PRE_DRAFT_APPROACHES.map(a => (
-              <Button key={a.id} variant="outline" className="h-auto flex-col items-start whitespace-normal text-left" onClick={() => onShowcase(a.id)}>
+              <Button key={a.id} variant="outline" className="h-auto flex-col items-start whitespace-normal text-left" onClick={() => { if (a.id !== "skip" && !undoSettle.settled()) return; onShowcase(a.id); }}>
                 <span className="font-semibold">{a.label}</span>
                 <span className="text-xs text-muted-foreground">{a.blurb}</span>
                 <span className="text-xs" data-testid="approach-promise">{approachPromise(a.id, state.stock)}</span>
@@ -77,7 +83,7 @@ export function DraftShowcaseCard({
       )}
 
       {onUndoSkip && preDraftCanUndoSkip(state) && (
-        <Button variant="outline" className="min-h-11 w-full" onClick={onUndoSkip} data-showcase-undo>Undo skip</Button>
+        <Button variant="outline" className="min-h-11 w-full" onClick={() => { undoSettle.mark(); onUndoSkip(); }} data-showcase-undo>Undo skip</Button>
       )}
 
       {state.phase === "draft" && showRange && (

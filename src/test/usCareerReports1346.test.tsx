@@ -5,7 +5,7 @@
  *     retirement screen's card reviews the finished career instead of offering the sideline back.
  * (3) An old coach save written before `done` existed mounts as an active career and is not rewritten on load.
  * (Undo) The showcase Skip can be undone until Draft day, back to the byte, on the real board; never after a graded
- *     approach. (The cases (1), (4) and (5) of the brief were the age rule and the dirty money desk, both cut.)
+ *     approach; and a second tap right after the undo is never taken as a graded approach. (The cases (1), (4) and (5) of the brief were the age rule and the dirty money desk, both cut.)
  *
  * The saves are the board's own bytes from scripts/data/usBoardFixture.json (its `coach` save per sport), mounted on
  * the shared board with no Hall bound, the way that fixture was recorded, so every byte compared is one this board
@@ -36,6 +36,7 @@ import NhlMyCareerBoard from '@/components/nhl-my-career/NhlMyCareerBoard';
 import { createUsCareerProspect, type UsCareerProspect } from '@/lib/usCareerProspect';
 import { preDraftChoose, preDraftPlaySeason, preDraftShowcase, preDraftStart } from '@/lib/careerPreDraft';
 import { defaultAppearance } from '@/lib/soccerCareerAppearance';
+import { SETTLE_MS } from '@/hooks/useTapSettle';
 
 interface Saved { c: Record<string, unknown>; phase: string; coach: Record<string, unknown> | null; [k: string]: unknown }
 const FIXTURE = path.resolve(process.cwd(), 'scripts/data/usBoardFixture.json');
@@ -63,6 +64,13 @@ const coachSave = (slug: string) => fixture.sports[slug].saves.coach;
 const read = (key: string) => JSON.parse(localStorage.getItem(key) ?? 'null') as Saved;
 const flush = () => act(async () => { await Promise.resolve(); });
 const noDialog = () => waitFor(() => expect(within(document.body).queryByRole('alertdialog')).toBeNull());
+/** useTapSettle's window on a clock the test moves: the real performance.now plus a skew that `pass` adds to. */
+function settleClock() {
+  const real = performance.now.bind(performance);
+  let skew = 0;
+  vi.spyOn(performance, 'now').mockImplementation(() => real() + skew);
+  return { pass: () => { skew += SETTLE_MS; } };
+}
 
 beforeEach(() => {
   localStorage.clear();
@@ -191,6 +199,26 @@ describe('Round 1346: the showcase Skip can be undone until Draft day', () => {
       expect(within(journeyOf(view)).queryByRole('button', { name: 'Undo skip' })).toBeNull();
       view.unmount(); localStorage.clear();
     }
+  });
+
+  /* The review found a double tap on Undo skip pressing Go all out, which took the undo's place: a graded showcase
+     with no way back. For a second after the undo the two graded approaches ignore a tap; then they work. */
+  it.each(PROSPECTS)('%s: a second tap right after Undo skip is never taken as a graded showcase', async (_, Board, sport) => {
+    const clock = settleClock();
+    const { view, bytes } = await atShowcase(Board, sport);
+    const j = () => within(journeyOf(view));
+    fireEvent.click(j().getByRole('button', { name: /^Skip it/ })); await flush();
+    fireEvent.click(j().getByRole('button', { name: 'Undo skip' })); await flush();
+    expect(phaseOf(view)).toBe('showcase');
+    for (const approach of [/^Go all out/, /^Play it safe/]) {
+      fireEvent.click(j().getByRole('button', { name: approach })); await flush();
+      expect(phaseOf(view)).toBe('showcase');
+      expect(localStorage.getItem(sport.saveKey)).toBe(bytes);
+    }
+    clock.pass();
+    fireEvent.click(j().getByRole('button', { name: /^Go all out/ })); await flush();
+    expect(phaseOf(view)).toBe('draft');
+    expect(j().queryByRole('button', { name: 'Undo skip' })).toBeNull();
   });
 });
 

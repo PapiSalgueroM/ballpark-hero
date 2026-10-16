@@ -15,7 +15,10 @@
  *      the byte; nothing is offered before the skip, after a graded approach or after Draft day, and the undo hands
  *      those states back untouched; Math.random throws the whole time. The clamped skips are counted and must exist.
  *   2. Board, src/test/usCareerReports1346.test.tsx: all of it passes as it is, and with preDraftUndoSkip swapped for
- *      one that returns its input exactly the four "Undo skip puts the save back" cases fail (one per sport).
+ *      one that returns its input exactly the four "Undo skip puts the save back" cases and the four "second tap
+ *      right after Undo skip" cases fail (one each per sport). With DraftShowcaseCard's settle guard taken out (the
+ *      graded approaches take a tap right after the undo, the double tap the review found) exactly those four second
+ *      tap cases fail.
  *   3. The night, the same file: with DraftNightSequence swapped for one without "Watch it again" exactly the four
  *      replay cases fail; with ProspectJourney swapped for one that offers it under reduced motion exactly the four
  *      reduced motion cases fail.
@@ -49,6 +52,8 @@ const N = 2000;
 const SEEDSET = 'a';
 const control = process.env.US_CAREER_SKIPS_CONTROL || '';
 const NIGHT = 'src/components/career/DraftNightSequence.tsx', JOURNEY = 'src/components/us-career/ProspectJourney.tsx';
+const CARD = 'src/components/career/DraftShowcaseCard.tsx';
+const settleGuard = 'if (a.id !== "skip" && !undoSettle.settled()) return; ';
 const replayButton = '        {over && onReplay && <Button variant="outline" className="min-h-11 w-full whitespace-normal" onClick={onReplay} data-night-replay>Watch it again</Button>}\n';
 const motionGuard = 'onReplay={lessMotion() ? undefined : () => {';
 const CONTROLS = {
@@ -164,6 +169,7 @@ const section1Line = `   ${states} showcase states, ${clamped} of them clamped s
 /* ---------- sections 2 and 3: the board file, as it is and with one piece taken out ---------- */
 const SPORT_IDS = ['nfl', 'nba', 'mlb', 'nhl'];
 const UNDO_FAILS = SPORT_IDS.map(s => `${s}: Undo skip puts the save back to the byte, survives a reload, and is gone after Draft day`);
+const SETTLE_FAILS = SPORT_IDS.map(s => `${s}: a second tap right after Undo skip is never taken as a graded showcase`);
 const REPLAY_FAILS = SPORT_IDS.map(s => `${s}: Skip to the end, then Watch it again plays the night again and saves nothing`);
 const MOTION_FAILS = SPORT_IDS.map(s => `${s}: under reduced motion the night ends on its last frame with nothing to watch again`);
 const sourceOf = file => fs.readFileSync(path.join(ROOT, file), 'utf8').replaceAll('\r\n', '\n');
@@ -172,6 +178,7 @@ const SWAPS = {
   noundo: ['@/lib/careerPreDraft', ENGINE, CONTROLS.noundo[0], CONTROLS.noundo[1]],
   noreplay: ['@/components/career/DraftNightSequence', NIGHT, replayButton, ''],
   motion: ['@/components/us-career/ProspectJourney', JOURNEY, motionGuard, 'onReplay={false ? undefined : () => {'],
+  settle: ['@/components/career/DraftShowcaseCard', CARD, settleGuard, ''],
 };
 for (const [, file, anchor] of Object.values(SWAPS)) assert.equal(sourceOf(file).split(anchor).length - 1, 1, `Swap anchor held once in ${file}`);
 function boardRun(swapName) {
@@ -209,7 +216,8 @@ if (control) {
   if (plain.status !== 0 || plain.unhandled || plain.rows.length === 0 || passed !== plain.rows.length) fail(2, 'plain', `${passed} of ${plain.rows.length} passed, exit ${plain.status}`);
   console.log(`   ${BOARD_TEST}: ${passed}/${plain.rows.length} pass as it is`);
   for (const [name, section, want, what] of [
-    ['noundo', 2, UNDO_FAILS, 'the undo handing back its input'],
+    ['noundo', 2, [...UNDO_FAILS, ...SETTLE_FAILS], 'the undo handing back its input'],
+    ['settle', 2, SETTLE_FAILS, 'the graded approaches taking a tap right after the undo'],
     ['noreplay', 3, REPLAY_FAILS, 'no Watch it again on the night'],
     ['motion', 3, MOTION_FAILS, 'Watch it again offered under reduced motion'],
   ]) {
