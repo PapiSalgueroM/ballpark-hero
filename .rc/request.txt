@@ -1,0 +1,15 @@
+# Release BI, Round 1339 (an old career stops listing your own men on the market), merged as 420902cd.
+# Send with x/legacy1339.mjs (walk1339-ctl writes main's old line into src, builds, and restores src: #!serial).
+# simCmOwnClubMarket builds both arms from the tree's own text, so it needs no base. Its controls (legacy, slice,
+# shallow) must each exit 1 with FIRED; FA_CONTROL=ownclub must exit 1. Never run it with OWNCLUB_MARKET_FLEET=quick.
+# The two world kits it bridges (rc-R ctl-unseeded-noinverse, unseeded-minusAZ, continuity-minusAZ,
+# ctl-continuity-all) stay in rc-R unchanged.
+#!serve
+#!playwright
+#!serial
+ownclub: node scripts/simCmOwnClubMarket.mjs
+ctl-own: r=""; for k in legacy slice shallow; do OWNCLUB_MARKET_CONTROL=$k node scripts/simCmOwnClubMarket.mjs > /tmp/o-$k.log 2>&1; r="$r $k=$?"; tail -1 /tmp/o-$k.log | cut -c1-200; done; echo "controls:$r"; [ "$r" = " legacy=1 slice=1 shallow=1" ] && [ $(grep -l "FIRED" /tmp/o-legacy.log /tmp/o-slice.log /tmp/o-shallow.log | wc -l) = 3 ]
+freeagents: node scripts/simFreeAgents.mjs; a=$?; FA_CONTROL=ownclub node scripts/simFreeAgents.mjs > /tmp/fa.log 2>&1; b=$?; tail -1 /tmp/fa.log; echo "head=$a ownclub=$b"; [ $a = 0 ] && [ $b = 1 ]
+sizediag: node scripts/qa/managerWorldSizeDiagnostic.mjs
+walk1339: node scripts/playCmOwnClubMarket.mjs
+walk1339-ctl: node .rc/x/legacy1339.mjs && node_modules/.bin/vite build --outDir /tmp/dist-legacy --emptyOutDir > "$TMPDIR/b.log" 2>&1; s=$?; git checkout -- src; [ $s -eq 0 ] || { tail -20 "$TMPDIR/b.log"; exit 2; }; (node scripts/lib/hostLikeServer.mjs /tmp/dist-legacy 4174 > /dev/null 2>&1 &); sleep 4; PLAY_OWNCLUB_CONTROL=base CONTROL_URL=http://localhost:4174 node scripts/playCmOwnClubMarket.mjs
