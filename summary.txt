@@ -1,0 +1,5 @@
+saveSize-head exit=0 48s | simClubManagerSaveSize: all sections green
+slots-head exit=0 54s | simClubManagerSlots: all sections green
+saveSize-base exit=0 49s | simClubManagerSaveSize: all sections green
+slots-base exit=0 55s | simClubManagerSlots: all sections green
+subs-base exit=1 108s | simCmSubs RED: 3 of 7 checks green (parts legacy, three, hotseat)
