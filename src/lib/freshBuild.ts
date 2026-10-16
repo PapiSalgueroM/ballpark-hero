@@ -114,7 +114,10 @@ export function watchForNewBuild(): void {
    keeps its loading state until the fresh document replaces the page. And
    once this page has asked for its reload, every later chunk failure in it
    is cancelled too (reloadAsked): it would otherwise reach a boundary while
-   the reload is already on its way. */
+   the reload is already on its way. A loader's own catch never reloads on
+   its own: it loops on a file that stays missing, and reloadToRetryChunk has
+   no once flag. The two SaveMovedNotice loaders are the named exceptions,
+   since their reload ends itself (simStaleChunk section 8). */
 const STALE_KEY = 'dukb-reloaded-stale-chunk';
 /* True only in a page that has already asked for its stale chunk reload, so
    it lives exactly as long as that page. */

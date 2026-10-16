@@ -47,6 +47,14 @@
       once, inside reloadOnceForStaleChunk, after the once flag is written
       and after window.location.reload() returns, so it is true only once
       the browser took the navigation.
+   8. (Round 1338) a loader's own catch never reloads on its own. Across src
+      (comments stripped, tests left out) no import() chain has a .catch that
+      calls reloadToRetryChunk or location.reload, except the two
+      SaveMovedNotice loaders (SoccerCareer.tsx and ClubManager.tsx), whose
+      reload ends itself: each must be there exactly once. A catch that
+      reloads by itself loops on a file that stays missing (CareerStory on
+      the retired screen did) and, under blocked storage, throws away a
+      career held in memory.
 
    Negative controls (SIM_STALE_CHUNK_CONTROL): nolistener deletes the
    addEventListener call from an in memory copy (section 1 red), noguard
@@ -59,7 +67,9 @@
    the reload (section 3 red), barenudge (Round 1144 review) puts the bare
    reload back on the update toast's Refresh (section 6 red), nowait (Round
    1338) takes the page flag out of the listener (section 7 red), flagfirst
-   (Round 1338) sets the page flag above the once flag read (section 7 red).
+   (Round 1338) sets the page flag above the once flag read (section 7 red),
+   catchreload (Round 1338) puts CareerStory's old reloading catch back
+   (section 8 red).
    Each asserts its anchor exists exactly once first. */
 import fs from 'node:fs';
 import path from 'node:path';
@@ -67,7 +77,7 @@ import { fileURLToPath } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.SIM_STALE_CHUNK_CONTROL || '';
-const EXPECT = { nolistener: [1], noguard: [2], noprerender: [2], nooffline: [2], nosave: [2, 5], norelease: [3], barenudge: [6], nowait: [7], flagfirst: [7] };
+const EXPECT = { nolistener: [1], noguard: [2], noprerender: [2], nooffline: [2], nosave: [2, 5], norelease: [3], barenudge: [6], nowait: [7], flagfirst: [7], catchreload: [8] };
 /* Exit 2, never 1: 1 is a control that fired, and a mistyped name must not read as one. */
 if (CONTROL && !(CONTROL in EXPECT)) { console.error('unknown control ' + CONTROL); process.exit(2); }
 
@@ -260,6 +270,44 @@ console.log('7) a page that asked for its reload waits with it (the page flag)')
   if (!waits) fail('the listener does not cancel on reloadAsked before it asks reloadOnceForStaleChunk, so the second failure in a reloading page reaches a boundary');
   else if (!kitFirst) fail('the page flag is read before the optional kit line, so a sound kit error in a reloading page would be cancelled');
   if (declared === 1 && sets === 1 && writes === 2 && at >= 0 && afterOnce && afterReload && beforeReturn && waits && kitFirst) ok('declared false, set once after the once flag and after the reload call, read by the listener after the kit line');
+}
+
+section = 8;
+console.log('8) a loader\'s own catch never reloads, the two SaveMovedNotice loaders excepted');
+{
+  const files = [];
+  const walk = d => { for (const e of fs.readdirSync(d, { withFileTypes: true })) { const p = path.join(d, e.name); if (e.isDirectory()) { if (e.name !== 'test') walk(p); } else if (/\.(ts|tsx)$/.test(e.name) && !/\.test\.tsx?$/.test(e.name)) files.push(p); } };
+  walk(path.join(ROOT, 'src'));
+  const ALLOWED = { 'src/pages/SoccerCareer.tsx': 0, 'src/pages/ClubManager.tsx': 0 };
+  const bad = []; let chains = 0;
+  for (const f of files) {
+    const rel = path.relative(ROOT, f).replaceAll('\\', '/');
+    let raw = fs.readFileSync(f, 'utf8').replaceAll('\r\n', '\n');
+    if (CONTROL === 'catchreload' && rel === 'src/pages/SoccerCareer.tsx') raw = rewrite(raw, 'import("@/components/soccer-career/CareerStory").catch(() => new Promise<never>(() => undefined))', 'import("@/components/soccer-career/CareerStory").catch(() => { reloadToRetryChunk(); return new Promise<never>(() => undefined); })', 'catchreload');
+    /* comments stripped with their line breaks kept, so a finding names its real line */
+    const t = raw.replace(/\/\*[\s\S]*?\*\//g, s => s.replace(/[^\n]/g, '')).replace(/(^|[^:])\/\/.*$/gm, '$1');
+    for (const m of t.matchAll(/(?<![\w$.])import\s*\(/g)) {
+      /* the chain: from import( to the end of its expression (a ; , or closing bracket at depth 0) */
+      let depth = 0; let i = m.index;
+      for (; i < t.length; i++) {
+        const ch = t[i];
+        if ('([{'.includes(ch)) depth++;
+        else if (')]}'.includes(ch)) { depth--; if (depth < 0) break; }
+        else if (depth === 0 && (ch === ';' || ch === ',')) break;
+      }
+      const chain = t.slice(m.index, i);
+      chains++;
+      const c = chain.search(/\.catch\s*\(/);
+      if (c < 0 || !/reloadToRetryChunk\s*\(|location\.reload\s*\(/.test(chain.slice(c))) continue;
+      if (rel in ALLOWED && /^import\(\s*['"]@\/components\/SaveMovedNotice['"]\s*\)/.test(chain)) { ALLOWED[rel]++; continue; }
+      bad.push(`${rel}:${t.slice(0, m.index).split('\n').length}`);
+    }
+  }
+  const off = Object.entries(ALLOWED).filter(([, n]) => n !== 1);
+  if (chains < 100) fail(`only ${chains} import( chains read: this check is not reading src`);
+  if (bad.length) fail(`an import() chain reloads from its own .catch: ${bad.join(', ')}. A loader's catch never reloads on its own (it loops on a file that stays missing, and under blocked storage drops a career held in memory)`);
+  if (off.length) fail(`the SaveMovedNotice loader with its reload is not there exactly once in ${off.map(([k, n]) => `${k} (${n})`).join(', ')}: update this allowlist only with a reason`);
+  if (chains >= 100 && !bad.length && !off.length) ok(`${chains} import( chains in src, none reloads from its own catch but the two SaveMovedNotice loaders`);
 }
 
 console.log('');
