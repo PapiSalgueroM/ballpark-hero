@@ -937,6 +937,9 @@ export function joinClubNow(career: CareerState): CareerState | null {
   if (s.leagueClubs.includes(from)) managers[from] = { name: interim, since: career.season };
   const managed = new Set(career.careerStats.clubsManaged ?? [from]);
   managed.add(club);
+  /* Round 1344: this season's deals between two other clubs in the departed career (the gone names below). */
+  const movedElsewhere = new Set((career.transferLog ?? []).filter(t => t.season === career.season && !t.loan
+    && t.from !== from && t.to !== from).map(t => t.name));
   const joined: CareerState = {
     ...s,
     sacked: false,
@@ -974,9 +977,10 @@ export function joinClubNow(career: CareerState): CareerState | null {
     ...(s.worldRoster !== undefined ? { worldRoster: plainCopy(s.worldRoster) }
       : departed.worldRoster === undefined ? {} : { worldRoster: plainCopy(departed.worldRoster) }),
     ...(departed.worldSeed === undefined ? {} : { worldSeed: departed.worldSeed }),
-    /* And in a seeded career a man another club bought earlier this season stays off the market after the move:
-       the names of both seasons' windows, the departed one's first. */
-    ...(worldSeedOf(departed) === undefined ? {} : { goneNames: [...new Set([...career.goneNames, ...s.goneNames])] }),
+    /* And in a seeded career a man another club bought earlier this season stays off the market after the move: the
+       run in's gone names plus the departed career's names of this season's deals between two other clubs (the men
+       I bought, sold or let go keep today's rule after a move). */
+    ...(worldSeedOf(departed) === undefined ? {} : { goneNames: [...new Set([...s.goneNames, ...career.goneNames.filter(name => movedElsewhere.has(name))])] }),
     retiredLastSummer: career.retiredLastSummer,
     leagueOverrides: career.leagueOverrides,
     managers,

@@ -37,7 +37,7 @@ export const BRIDGE_EDITS = [
     '    ...(s.worldRoster !== undefined ? { worldRoster: plainCopy(s.worldRoster) }\n      : departed.worldRoster === undefined ? {} : { worldRoster: plainCopy(departed.worldRoster) }),\n',
     '    ...(departed.worldRoster === undefined ? {} : { worldRoster: plainCopy(departed.worldRoster) }),\n'],
   [CALENDAR, 'the join keeps the run in\'s gone names',
-    '    ...(worldSeedOf(departed) === undefined ? {} : { goneNames: [...new Set([...career.goneNames, ...s.goneNames])] }),\n', ''],
+    '    ...(worldSeedOf(departed) === undefined ? {} : { goneNames: [...new Set([...s.goneNames, ...career.goneNames.filter(name => movedElsewhere.has(name))])] }),\n', ''],
 ];
 
 /** How many times each anchor stands in its file's source (LF). */

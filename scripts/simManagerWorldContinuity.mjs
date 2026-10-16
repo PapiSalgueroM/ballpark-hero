@@ -5,6 +5,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
 import { BASE, BASE_TREE, HEAD, TREE, ROOT, clone, sha, sourceHashes, writeEvidence, uniquePatch, tape, loadEngine } from './qa/managerWorldContinuityKit.mjs';
+import { withoutAiMoves } from './lib/cmNoAiMoves1344.mjs';
 
 const OUT = path.resolve(process.env.MANAGER_WORLD_CONTINUITY_ARTIFACTS || '.tmp-fx/manager-world-continuity');
 const CONTROL = process.env.MANAGER_WORLD_CONTINUITY_CONTROL || '';
@@ -118,8 +119,14 @@ async function arm(control) {
   const directory = path.join(OUT, control || 'healthy'); fs.mkdirSync(directory, { recursive: true });
   const A = await loadEngine({ original: true, label: `${control || 'healthy'}-original` });
   const defect = CONTROLS[control];
-  const B = await loadEngine({ label: control || 'healthy', patch: defect
-    ? (file, source, receipts) => file === defect.file ? uniquePatch(source, defect.from, defect.to, file, receipts) : source : undefined });
+  /* Round 1344, the bridge for this kit pinned to an old engine: since that round a seeded career records every deal
+     between two other clubs, from its opening window on, which the pinned engine never did. The current arm carries
+     scripts/lib/cmNoAiMoves1344.mjs (fail closed: it throws unless its four anchors stand once), so what this kit
+     compares is everything else; simCmWorldMoves section 8 proves the bridge leaves the head equal to the round's base. */
+  const B = await loadEngine({ label: control || 'healthy', patch: (file, source, receipts) => {
+    const bridged = withoutAiMoves(source, file);
+    return defect && file === defect.file ? uniquePatch(bridged, defect.from, defect.to, file, receipts) : bridged;
+  } });
   const originalEngine = A; const currentEngine = B;
   const report = { head: HEAD, tree: TREE, base: BASE, baseTree: BASE_TREE, control, groups: [], failures: [],
     originalLoaded: A.loaded, currentLoaded: B.loaded, originalBundle: A.bundleSha256, currentBundle: B.bundleSha256,

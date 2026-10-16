@@ -333,13 +333,14 @@ function oneClubRule(M, s, label) {
 }
 
 /* ---------- section 4, the market (run inside section 1's careers) ---------- */
-const s4 = { listed: 0, namesake: 0, doors: 0, buyLocked: 0, nextSummer: 0, bought: 0, gone: 0, screenMs: 0, baseMs: 0, calls: 0 };
+const s4 = { lines: 0, listed: 0, namesake: 0, doors: 0, buyLocked: 0, nextSummer: 0, bought: 0, gone: 0, screenMs: 0, baseMs: 0, calls: 0 };
 const joinedLine = (name, club, s) => `${name} only joined ${club} this season. They will not sell him on until ${s.transferWindow === 'summer' ? 'next summer' : 'the summer'}.`;
 /** At a window: every man of its deal lines is listed at his buyer, marked, and every door refuses him in today's order. */
 function marketAt(M, s, lines, label, pending) {
   M.cm.buildMarket(s);   // warm the shared world list, so the two timings below compare the filters
   let t0 = performance.now(); const screen = M.cm.marketForScreen(s); s4.screenMs += performance.now() - t0;
   t0 = performance.now(); M.cm.buildMarket(s); s4.baseMs += performance.now() - t0; s4.calls += 1;
+  s4.lines += lines.length;
   for (const line of lines) {
     const row = screen.find(p => p.name === line.name && p.club === line.to);
     if (!row) {
@@ -499,7 +500,7 @@ async function negotiationCareer(E, era, club, seed) {
 
 /* ---------- section 3, join ---------- */
 const JOIN_TO = { 'Real Madrid': 'Arsenal', Everton: 'Napoli', Aberdeen: 'Fulham' };
-const s3 = { joins: 0, refused: 0, departed: 0, runIn: 0, gone: 0 };
+const s3 = { joins: 0, refused: 0, departed: 0, lines: 0, runIn: 0, gone: 0 };
 /** A seeded 2026-27 career that takes a job mid season, before or after its January window, through joinClubNow. */
 async function joinCareer(E, club, seed, when) {
   const M = await E.fresh(), keep = Math.random;
@@ -535,11 +536,15 @@ async function joinCareer(E, club, seed, when) {
     }
     for (const r of joined) if (!departed.some(d => d.key === r.key) && !runNames.has(r.player.name)) fail(3, `${tag}: the joined ledger holds ${r.player.name}, in no deal line of the run in nor the departed ledger`);
     for (const line of runLines.filter(aiLine(to))) {
+      s3.lines += 1;
       const why = placement(M, j, line);
       if (why) fail(3, `${tag}: in the run in ${line.to} signed ${line.name} from ${line.from}, but ${why}`);
       else s3.runIn += 1;
     }
-    for (const name of s.goneNames) { s3.gone += 1; if (!j.goneNames.includes(name)) fail(3, `${tag}: ${name}, gone this season before the move, is buyable again after it`); }
+    /* The men other clubs bought this season before the move stay gone after it (the men I bought, sold or let go
+       keep today's rule). */
+    const movedBefore = new Set((s.transferLog ?? []).filter(aiLine(s.clubName)).filter(l => l.season === s.season).map(l => l.name));
+    for (const name of s.goneNames.filter(n => movedBefore.has(n))) { s3.gone += 1; if (!j.goneNames.includes(name)) fail(3, `${tag}: ${name}, bought by another club this season before the move, is buyable again after it`); }
   } finally { Math.random = keep; }
 }
 
@@ -999,7 +1004,8 @@ if (SECTIONS.has(1) || SECTIONS.has(4)) {
     const screen = s4.screenMs / (s4.calls || 1), base = s4.baseMs / (s4.calls || 1);
     console.log(`   marketForScreen ${screen.toFixed(2)} ms a call against buildMarket's ${base.toFixed(2)} ms on the same states (limit 3 x + 5 ms)`);
     if (screen > 3 * base + 5) fail(4, `marketForScreen took ${screen.toFixed(2)} ms a call against buildMarket's ${base.toFixed(2)} ms, over 3 x + 5 ms`);
-    if (!s4.listed || !s4.nextSummer) cannot(`section 4: ${s4.listed} men listed and ${s4.nextSummer} checked a season later, so the market measured nothing`);
+    if (!s4.lines) cannot('section 4: no deal line was seen, so the market measured nothing');
+    if (s4.listed && !s4.nextSummer) cannot('section 4: no man listed at a window was checked a season later');
   }
 }
 if (SECTIONS.has(2)) {
@@ -1015,7 +1021,7 @@ if (SECTIONS.has(3)) {
   for (const club of CLUBS.now) for (const seed of seeds) for (const when of ['before', 'after']) await joinCareer(H, club, seed, when);
   console.log(`   ${s3.joins} moves (${s3.refused} could not be set up), ${s3.departed} departed records kept, ${s3.runIn} deal lines of the run in placed, ${s3.gone} gone names carried over`);
   if (s3.joins < 6) cannot(`section 3: only ${s3.joins} moves could be made, under 6`);
-  if (!s3.runIn) cannot('section 3: no deal line of a run in was seen, so the join measured nothing');
+  if (!s3.lines) cannot('section 3: no deal line of a run in was seen, so the join measured nothing');
 }
 if (SECTIONS.has(5)) {
   const seeds = range(process.env.CM_WORLD_MOVES_SEEDS, [1, 2, 3]);
