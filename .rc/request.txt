@@ -1,0 +1,8 @@
+simWorldUcl: node scripts/simWorldUcl.mjs
+ctl-onesource: WORLD_UCL_CONTROL=onesource node scripts/simWorldUcl.mjs
+ctl-wiki: WORLD_UCL_CONTROL=wiki node scripts/simWorldUcl.mjs
+ctl-thinused: WORLD_UCL_CONTROL=thinused node scripts/simWorldUcl.mjs
+ctl-figure: WORLD_UCL_CONTROL=figure node scripts/simWorldUcl.mjs
+ctl-receipt: WORLD_UCL_CONTROL=receipt node scripts/simWorldUcl.mjs
+ctl-cover: WORLD_UCL_CONTROL=cover node scripts/simWorldUcl.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
