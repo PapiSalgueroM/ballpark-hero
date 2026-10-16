@@ -91,8 +91,10 @@
         soccerDeck/* or gmInbox.ts; and no src file but the gate and tests
         calls loadSoccerDeck, read as code with its comments gone.
 
-   While the shipped pack is empty, sections 1 and 3 run over a one card
-   fixture pack made in memory (FIXTURE below).
+   Every section deals the shipped pack (28 cards). The one card fixture pack
+   made in memory (FIXTURE below) is what the leak control hands the gate, and
+   what the deal sections would fall back on if the shipped pack were ever
+   empty.
 
    Negative controls (SIM_SOCCER_DECK_CONTROL), each asserting the text it
    changes is in its file exactly once and refusing to run otherwise:
@@ -534,7 +536,7 @@ if (runs(3)) {
       if (deckAt.length > 1) { many += 1; note(`career ${seed} deal ${k}: ${deckAt.length} deck cards`); }
       if (deckAt.some(i => i !== 0)) { notFirst += 1; note(`career ${seed} deal ${k}: a deck card at index ${deckAt.find(i => i !== 0)}`); }
       const rest = deckAt[0] === 0 ? h.value.batch.slice(1) : h.value.batch;
-      if (deckAt[0] === 0) dealt += 1;
+      if (deckAt.length) dealt += 1; /* any deal holding a deck card, wherever it sits: the checks below say where */
       if (JSON.stringify(rest.filter(e => !isDeck(e.id))) !== JSON.stringify(b.value.batch) || rest.some(e => isDeck(e.id))) { apart += 1; note(`career ${seed} deal ${k}: the old batch ${b.value.batch.map(e => e.id).join(',')} became ${h.value.batch.map(e => e.id).join(',')}`); }
       if (h.calls !== b.calls) { callsApart += 1; note(`career ${seed} deal ${k}: ${h.calls} Math.random calls against ${b.calls}`); }
       const want = deckAt[0] === 0 ? { ...b.value.stamps, [String(h.value.batch[0].id)]: st.seasons[st.seasons.length - 1]?.year ?? 0 } : b.value.stamps;
@@ -946,7 +948,8 @@ const ECON_N = Number(process.env.SIM_SOCCER_DECK_ECONOMY_N || 100);
      overall30 0.12 (sd 0.36)  peak 0.44 (sd 0.12)       legacy 1.66 (sd 1.21)        clean40 0.04 (sd 0.05)
      pastCeiling 0 (sd 0)
    Each band is that reading plus two of OFF's seed to seed sd, rounded up (pastCeiling: no season start was ever past
-   the ceiling in any arm, so any share at all is red). The fleet is seeded, so a reading repeats exactly on the same
+   the ceiling in any arm and its spread is 0, so its band is the smallest step, 0.01: a mean share of season starts
+   past the ceiling above one percent is red). The fleet is seeded, so a reading repeats exactly on the same
    code; the margin is for a later change to the engine under the deck. The pressure control (every deck move times
    ten) reads morale25 +9.33 and morale30 +5.76. Before the pack dropped its integrity effects (r1334-s4b) the BEST arm
    moved legacy +2.26 against a spread of 1.21 and clean40 +0.09: ruling 2(j), so the pack dropped them. What still
