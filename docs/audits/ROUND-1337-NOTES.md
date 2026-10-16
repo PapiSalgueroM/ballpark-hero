@@ -44,5 +44,62 @@ origin/rc-results/<name>.
 - scripts/simSoccerOpponentLabels.mjs: two REVERSE pairs put the help's old intro words back before the legacy page is
   hashed against ORIGINAL_COMPONENT_SHA (b553b627), the way Release BH reversed PR278's hunks.
 
-## Proof (filled in as runner results come back)
-- Base measurements on e814c2de: r1337-b0a, r1337-b0c (and r1337-b0b, r1337-b0d from the base worktree).
+## Proof (GitHub runners; result names are origin/rc-results/<name>)
+- Type gate 0 on every step (r1337-s1, r1337-s2, r1337-s3; 178 to 203 s). `git diff --name-only e814c2de...HEAD --
+  src/lib` prints only src/lib/soccerClubSquadSheet.ts and the engine is byte equal to the base (r1337-s3 srclib).
+- src/test/soccerScreenTruths.test.tsx: 11 of 11 on the head (r1337-s3, with the practice and squad unit files: 10
+  files, 181 tests). Base control (the five edited files checked out from e814c2de in a scratch worktree, r1337-f1
+  unit-base): 7 failed, 4 passed; the 4 that pass are the guards that today's behaviour stays (S1 revealed night
+  opens, S1 season_summary with the night pending opens, S2 the partial world note still names the Spanish pool, S4
+  the ? during a drill), and they must pass on both.
+- scripts/playSoccerScreenTruths.mjs on the head with the base build as its control (r1337-v1 on b21f1c4a): "green,
+  W4 W4r W5 W6 W7 W8 pass on the head and every control section is red on the base". Head W4 13/13, W4r 6/6, W5
+  12/12, W6 21/21, W7 12/12, W8 8/8; base W4 8/13, W4r 6/6 (a no regression half: reduced motion completes the card
+  at mount on the base too), W5 6/12, W6 12/21, W7 6/12, W8 4/8. Base W4 measured the bug: nominee rows
+  "0 -1 0 1 2 ... 10 10" and the result "waiting > gone > waiting > revealed" after a press of Full attributes.
+  Pictures: C:/Users/antho/dukb-handoff/2026-10-10/review-shots/r1337 (head-* and base-*, 34 files).
+- Reported, not fixed (the lead rules): during the night's countdown, 25 other hub controls were pressed on fresh
+  loads; two unmount the card so it would count down again: "Go back" (the navbar's back, which leaves the page) and
+  "Cookie choices" (the footer's cookie settings).
+- Weight: /soccer-career 832.4K on the head (r1337-s3) and on the base (r1337-b0a), against the 834K row: +0.0K to the
+  tenth (budget +0.2K). simFlagshipWeight green on both.
+- The rule fences (r1337-f5 head, r1337-b0f base, the same 24): 19 PASS on both; simCompletionSlugs,
+  simDailySaveHardening, simLeaderboardCaps and simReportRelay FAIL and simSchemaNames SKIPs on BOTH, each for the
+  live database the runner blocks. simPrerender section 16: "2125 source files scanned, 23 raw random initialiser(s),
+  22 file(s) on the frozen baseline, 0 new". simPrerender as a whole is red on the head only for "/whats-new drops the
+  entry Soccer Career: screens that say what they are.": the saved /whats-new page is the lead's build:seo at the
+  release (builders never write public/); green on the base.
+- Page readers on the head: every src/test file that renders the page (28 files) green (r1337-f1); the 41 sims that
+  read SoccerCareer.tsx green but simSoccerCareerDocumentaryReview, simSoccerCareerSavedLoan (both "Only ... may differ
+  from the whole held parent app") and simTransferBriefPageControl (EMPTY), which are the same on the base (r1337-b0d);
+  walks green: playCareerSquad (190), playCareerProgramme (1154), playSeasonCentre (41), playSeasonMoments (117),
+  playCareerLeagueWorld (39), playCareerMoments (34), playSoccerCareerAwardReveal (26), soccerPotentialProgressBrowser,
+  careerPractice1076, playSoccerLanding (head only), playSoccerCareerCompetitions (52), playSoccerCareerContracts
+  (201), playTranslatedPage (447), playTwoTabs, career992, playSoccerOfferReview1082, playSoccerFarewell (1343),
+  playSoccerAgentReview (1904), playSoccerInternationalReturn (854, green on a lone rerun after one ECONNRESET),
+  playSoccerEventCards, playReducedMotion. playSoccerCareer (check 6, the database) and playStartingXi (2 failures:
+  "an international tournament arrived while playing on") are red with the same first lines on the base (r1337-b0b).
+- Expected at the release's build:seo: /soccer-career's saved page does not change (every screen here is drawn in
+  the browser); /whats-new's moves (the entry).
+
+## Owed, for the lead's board note
+- To the other lane: this round edited ONE line of their walk scripts/playCareerProgramme.mjs (line 120): it waits
+  for home, presses "How the squad works", then waits for the help (the Squad sheet no longer opens on the help).
+  Proven green on r1337-s3 (1154 checks, 21/21 journeys).
+- To the other lane, POLISH 24's other half on their screens, words offered only: the Programme's "Choices for your
+  simulated career. Check the context before choosing." (src/components/soccer-career/SoccerCareerProgramme.tsx:83)
+  could read "Big calls for your season. Read what each one does before you pick."; the Press room's "This is your
+  simulation's media reputation." (src/components/soccer-career/PressRoom.tsx:63) could read "This is how the press
+  sees you right now."
+- To the other lane: scripts/qa/soccerHistoricalOpponentDisplayProof.mjs line 31 and
+  .github/workflows/career-historical-opponent-labels.yml (lines 45 to 59) pin SoccerSeasonCentre.tsx at 31506 bytes,
+  sha f65e0f08. This round's two help strings change the file, so that proof is red on the head at its pin and green
+  on the base (r1337-s2b hist-head 1, hist-base 0). With only the two old strings put back in a scratch copy
+  (.rc/x/introBack.mjs, the file then equals the base byte for byte) the proof passes, 3/3 arms and 2/2 controls
+  (r1337-s2b hist-introback 0): the pin is its only red. Re-pin, or reverse the two strings first the way
+  simSoccerOpponentLabels now does.
+- No guide sentence moves: soccer2.ts:1788 ("The 📺 Week by week button plays the same season match by match ...")
+  stays true.
+- To S15: the shared Season Centre help still opens by itself before the season (POLISH 24 is PART for that screen).
+- To S18: the night card replays its taps and sting on any remount (AwardsNightCard.tsx 74 to 80, useSoundPlan's per
+  mount memory); after this round Full attributes no longer causes one, the two controls above still do.
