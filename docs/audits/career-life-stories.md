@@ -8,7 +8,10 @@ SHA256 `9b8aca9aff18235626fd687a2ea9b7fb3162a1a56ac7779ad672e19bdc6b8596`.
 No local JavaScript, TypeScript, test, build, browser or database execution. Round 1377 is
 reserved in the primary workboard. Branch `codex/career-life-stories`, product parent
 `d4f2c6f688d656205722ba52bbdb33f03490966a`. The minimal PhonePanel product is now authored
-after that causal baseline, with fixed-phase qualification still pending.
+after that causal baseline. Fixed qualification passed on `02a7cfc3fa80c1f60c77787bf6fd651438a98be6`,
+Actions run `38891909185`, job `116943177441`. Retained artifact `12042328873`, SHA256
+`b175f2c731fc591202cd3a23e8ba795fa815fca2c5d5430ebeb42d83b7f046b8`, was reopened by root
+and an independent reviewer under `C:/Users/antho/dukb-handoff/2026-10-16/life-stories-fixed`.
 
 ## Accepted product scope
 
@@ -57,7 +60,9 @@ the specific Boolean assertion `Life must show its active stories: expected fals
 The four preservation cases must pass. A resolver, type, module, syntax, process, unrelated
 assertion or transport failure earns no expected-red credit. The baseline also holds the
 entire original PhonePanel against the parent Git source. Those exact baseline counts are
-qualified by the remote run above. Fixed outcomes remain unverified until their own run.
+qualified by the remote run above. The fixed run completed all twelve current passes,
+the same eight exact original-source faults and four preserves, and twelve restored passes.
+No focused unit case was skipped, pending or todo.
 
 The fixed method requires all twelve cases green. Its original-source control aliases only
 the actual PhonePanel import to the retained parent component, must change that source and
@@ -99,7 +104,7 @@ the last story must be fully reachable inside every clipping ancestor. The origi
 component remains the separate unit causal control. External fonts are blocked, so captures
 qualify the declared fallback-font presentation. The original full `SWEEP_OFFLINE=1`
 `sweepWeight.mjs` runs against the same build with every existing budget unchanged. No scoped
-weight claim is made. Browser and pixel acceptance are not credited by this baseline.
+weight claim is made. Browser and pixel acceptance were not credited by the baseline.
 
 After build completion all fifteen existing rebuilt-site readers run: Adsense, Brand,
 HeadTags, HiddenPages, Hubs, IndexNow, Indexing, InternalLinks, NoRivalNames, Prerender,
@@ -107,3 +112,29 @@ PrerenderBoot, RetiredRoutes, Schema, Sitemap and SnapshotAssets. The runner mus
 report all 15 green. Source, installed dependencies and dist are held afterwards, and the
 complete evidence directory uploads even when a check fails. There is no publish, database
 probe or budget increase in this method.
+
+## Qualified fixed results and limits
+
+All fifteen served cases completed across the five declared sizes, with zero unowned
+browser errors. The five actual acquired rows fit the handset, the last story is reachable
+within every clipping ancestor, internal scrolling keeps parent scroll fixed, and Back,
+keyboard entry, Escape, reopen, saved bytes and literal reload checks passed. All three
+changed DOM controls fired and restored. Dist and fixture inventories stayed held. Twenty
+PNGs are retained; root inspected the 320, 390, 430 and 1440 views for readable wrapped
+copy and overlap. These qualify the blocked-external-font fallback presentation only.
+
+Existing phone focus checks passed twelve ordinary cases plus all four effective controls.
+The related suites passed 51 cases. Actual types, build:seo, all fifteen rebuilt-site
+readers, the unchanged full weight sweep (Soccer Career 832.6K of 834K), 521 package records
+and all source, installed dependency, browser-tool and dist holds passed. This is an
+isolated feature packet, with no full-site playthrough, natural picker delivery, complete
+career journey or live/publication claim. Claude I owns integration and publication.
+
+The first fixed run on `5c236548`, run `38890808108`, passed types, all unit arms, old focus
+and related cases and the build, then stopped in the browser method: its role locator
+could not re-resolve a region deliberately hidden by the DOM control. Artifact
+`12042480875`, SHA256 `0af5438c6a3f686f54fed2048a9e288cc65fb986e4e8d5fcc09b50cca46f8c15`,
+is retained as a failed method run. The tested final commit only retains the element handle
+through that control's restoration. Its nineteen product lines, tests and workflow stayed
+held. The first pass earns no completed browser, weight or reader credit. The final
+qualification edits are documentation only and require no unchanged-source rerun.

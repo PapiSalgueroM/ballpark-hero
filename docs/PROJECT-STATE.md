@@ -1,13 +1,22 @@
-## 2026-10-16: Round 1377 phone Life stories candidate, fixed gates pending
+## 2026-10-16: Round 1377 phone Life stories qualified for integration
 
 Codex lane, branch `codex/career-life-stories`, parent `d4f2c6f6`. Root reserved 1377 in the
 primary workboard. Baseline `fce36ab1`, run `38889971492`, job `116936806033` qualified:
 eight exact missing-section failures, four preservation passes, types, the original twelve
 phone focus cases and four controls, and 51 related passes. Full artifact `12041775730` is
 retained and reopened in `dukb-handoff/2026-10-16/life-stories-baseline`.
-The nineteen-line PhonePanel addition now shows five existing unfinished stories, with no
-new saved state, choices or draws. Fixed current/original/restored checks, five-width served
-phone checks, unchanged full download budgets and fifteen build readers are pending.
+The nineteen-line PhonePanel addition shows five existing unfinished stories, with no
+new saved state, choices or draws. Tested `02a7cfc3fa80c1f60c77787bf6fd651438a98be6`, run
+`38891909185`, job `116943177441` passed: twelve current passes, original eight precise
+faults/four preserves, twelve restored passes, original focus checks and four controls,
+51 related cases, actual types, build:seo, unchanged full weight sweep (832.6K of 834K),
+all fifteen readers and source/dependency/tool/dist holds. Fifteen served phone cases at
+five widths passed, including last-row reachability, focus, parent scroll and literal saved
+reload, plus three effective DOM controls. Root inspected 320/390/430/1440 PNGs. Artifact
+`12042328873`, SHA256 `b175f2c731fc591202cd3a23e8ba795fa815fca2c5d5430ebeb42d83b7f046b8`,
+is retained and independently reopened. Prepared-state and fallback-font limits remain.
+The first fixed browser method failure is retained separately, with no false pass credit.
+Final qualification edits are documentation only.
 Nothing has run locally. Claude I owns integration and publication; this is not live.
 Method and precise limits: `docs/audits/career-life-stories.md`.
 
