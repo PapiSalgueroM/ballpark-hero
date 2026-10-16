@@ -1,0 +1,4 @@
+build exit=0 22s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+otherReaders exit=0 33s | All 5 harnesses green.
+fences exit=1 115s | 4 harnesses not green.
+usReaders exit=1 2503s | 1 harness not green.
