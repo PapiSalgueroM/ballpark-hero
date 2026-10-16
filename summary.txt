@@ -1,0 +1,2 @@
+take exit=0 147s | simCmBoardVerdict GREEN: 5 of 5 checks green (parts takeover, 146 s)
+take-nopin exit=1 149s | control nopin FIRED: 1 of 5 checks red
