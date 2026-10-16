@@ -96,6 +96,7 @@ jobs:
             status: result.status, signal: result.signal, error: result.error?.message ?? null,
             failures, green, knownSizeOnly, limits: 'Original 52KB whole-save cap is unchanged. A retained known size failure is not a green sim or full-suite claim.',
           }, null, 2));
+          assert(!/SIM_OFFLINE_BLOCK|TypeError:|ReferenceError:|SyntaxError:|ERR_MODULE_NOT_FOUND|Unhandled (?:Errors?|Rejection)|Uncaught Exception|Failed to load|Failed to resolve import/i.test(log), 'Setup, transport and unhandled errors cannot qualify as a known size red');
           assert(green || knownSizeOnly, 'No new phone-simulation failure may be classified as the existing save-size red');
           console.log(green ? 'Original phone simulation green.' : 'Original phone simulation remains RED only on its unchanged whole-save cap; not credited as green.');
           NODE
@@ -114,14 +115,28 @@ jobs:
           NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" npm run build:seo 2>&1 | tee "$PHONE_BUDGET_OUT/build.log"
           cp scripts/data/lastmod.json "$PHONE_BUDGET_OUT/build-lastmod.json"
           git diff -- scripts/data/lastmod.json > "$PHONE_BUDGET_OUT/build-lastmod.diff"
+          find dist -type f -print0 | sort -z | xargs -0 sha256sum > "$PHONE_BUDGET_OUT/dist-hashes.txt"
           ONLY=simAdsense,simBrand,simHeadTags,simHiddenPages,simHubs,simIndexNow,simIndexing,simInternalLinks,simNoRivalNames,simPrerender,simPrerenderBoot,simRetiredRoutes,simSchema,simSitemap,simSnapshotAssets node scripts/runAllSims.mjs --browser 2>&1 | tee "$PHONE_BUDGET_OUT/readers.log"
           test "$(grep -c '^All 15 harnesses green\.$' "$PHONE_BUDGET_OUT/readers.log")" = 1
+      - name: Unchanged full download budgets
+        if: env.PHONE_BUDGET_PHASE == 'fixed'
+        run: |
+          node scripts/lib/hostLikeServer.mjs dist 4173 > "$PHONE_BUDGET_OUT/weight-server.log" 2>&1 &
+          task_server_pid=$!
+          trap 'kill "$task_server_pid" 2>/dev/null || true' EXIT
+          for attempt in 1 2 3 4 5; do
+            if curl --fail --silent http://127.0.0.1:4173/ > /dev/null; then break; fi
+            sleep 1
+          done
+          curl --fail --silent http://127.0.0.1:4173/ > /dev/null
+          BASE=http://127.0.0.1:4173 SWEEP_BASE=http://127.0.0.1:4173 SWEEP_OFFLINE=1 NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/sweepWeight.mjs 2>&1 | tee "$PHONE_BUDGET_OUT/weight.log"
       - name: Final source and dependency holds
         if: always()
         run: |
           sha256sum --check "$PHONE_BUDGET_OUT/source-hashes.txt" > "$PHONE_BUDGET_OUT/source-holds.log"
           sha256sum --check "$PHONE_BUDGET_OUT/package-hashes.txt"
           sha256sum --check "$PHONE_BUDGET_OUT/installed-files.sha256" > "$PHONE_BUDGET_OUT/installed-holds.log"
+          if test -f "$PHONE_BUDGET_OUT/dist-hashes.txt"; then sha256sum --check "$PHONE_BUDGET_OUT/dist-hashes.txt" > "$PHONE_BUDGET_OUT/dist-holds.log"; fi
           git diff --exit-code -- src scripts ':!scripts/data/lastmod.json' package.json package-lock.json bun.lock .github/workflows
           node --input-type=module <<'NODE'
           import fs from 'node:fs';

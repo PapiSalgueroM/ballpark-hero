@@ -23,7 +23,7 @@ mock, artificial conversation or rewritten saved dialogue is permitted.
 
 The workflow requires actual application types, the unchanged phone focus proof, original
 full phone simulations, build:seo after fixed qualification and all fifteen rebuilt-site
-readers. The old `simPhone2` 52KB whole-save ceiling is known red on main. Its complete
+readers, followed by the unchanged full download-budget sweep. The old `simPhone2` 52KB whole-save ceiling is known red on main. Its complete
 output and exit are retained; only that exact single known failure may be classified as
 preexisting. It is never credited as a green simulation or full-suite pass, and the cap
 stays unchanged. Installed package versions, installed file bytes, app/proof sources and
