@@ -1,3 +1,26 @@
+## 2026-10-16: optional club fixtures browser proof ready
+
+Codex branch `codex/manager-fixtures-browser` starts at frozen PR285 docs0fd9cbba, application
+equal to tested71b4e158. No app or old-proof change. The exact retained Round1375 reference
+state supplies actual simulated league results; eight saved-page journeys and effective
+DOM controls will check Fixtures navigation, scores, legacy absence, scrolling and saved
+state at four widths. First remote run38900124066 at858ae1b4 passed types, all existing
+component/roster controls, build and15readers, then failed before any browser journey:
+the existing loader adds only a missing default managerXp block. New method now binds
+that exact first-load canonicalization and requires two stable actual reloads of its
+persisted output. Second4fdb/run38901553910 reached8journeys/15correct zero-RNG reads,
+but tall full-page screenshots displaced Back on320/390; uncaptured reloads held.
+Final method fd20c5d6/run38904067228 passed492checks:8journeys,16full38row reads,
+8reloads,4effective/restored controls,20viewportPNGs and16zero-RNG reads. Root viewed
+all20 originals; independent artifact review recomputed all608rows and closed all
+state/source/compiled/package/dependency/dist holds. Types, unchanged component and
+roster controls, build:seo,15readers and unchanged full weights passed (SC832.4/834K,
+CM604.4/606K). Artifact12048030953 retained locally. Prepared saved-page proof only,
+fallback fonts/blocked flags; no natural-play/full-suite/live claim. APP_REF remains
+frozen0fd9cbba, so a joined app needs explicit rebinding and fresh runtime. No app change.
+PR290 ready as optional proof, still draft; PR285 can ship independently.
+Details: docs/audits/club-fixtures-browser.md.
+
 ## 2026-10-16: club detail league fixtures ready for integration
 
 Codex branch `codex/manager-club-fixtures`, base `a758fcec`. Corrected baseline `ce8b644b`, run `38881328433`, passed actual app types, exactly seven missing Fixtures-action failures plus three preservation passes, and all eleven existing roster cases. The earlier run `38880595650` stopped on four unsupported test role options; no regression credit from that run. Fixed source `71b4e158`, run `38882205996`, passed types, ten new cases, original seven-fault/three-preserve control, twenty-one restored/related cases, old exact roster source proof and its original control, production build and all fifteen rebuilt-site readers. The separate view reads saved league schedules and recorded directed scores; it marks missing results and returns to the same squad. No core, schema, calendar, real data or roster change. PR285 is ready for Claude I's integration review, still draft and not live. No executed Manager browser or pixel claim. Details: `docs/audits/club-detail-fixtures-2026-10-16.md`.
