@@ -199,3 +199,22 @@ Over the loaded fleet (section 5): 1,163 deck training answers, 0 landed less th
 first), and with a full drill banked after each, 172 (14.8 percent) would pass the ceiling only because of the deck's
 boost: careerDrills.ts applyDrillResult counts its room as drillHeadroom minus momentsPaid and never counts queued
 boosts. Owed to the drills, not this round's (careerDrills.ts is read only here).
+
+## Step 5: the final proof (code 82088d35, then ca88eaef for two retargeted controls)
+
+- tsc 0; vitest 0 (34 files, 620 tests); simSoccerDeck in its three gate lines 0 (112 s, 69 s, 98 s; whole 188 s);
+  sixteen controls each exit 1 FIRED on its own section (silent and drop retargeted at the outfield training keys in
+  ca88eaef: their first form aimed at integrity, which the pack stopped moving, and changed nothing); the kit whole 0 and
+  its 41 controls fired; simGmInbox seeds 1 to 3 byte equal to SC_BASE; the seventeen importers 0; the release gate's
+  rc-BFa lines 0; the 24 rule fences 0 but the two that read the live database and simWritesAreSent (the same on base).
+  Full list with result branch names: C:/Users/antho/dukb-handoff/2026-10-10/results-g/finish-1334.md.
+- runAllSims on runners, six shards, 768 harnesses: 99 not green on the head, 7 of them killed at the 25 minute cap
+  (simEras, simOpposition, simFootleKitNumbers, simCareerHall, simUsCareerSummer, simPress, simRoles; none reads this
+  round's files but simUsCareerSummer, whose section 8 on the engine's deck ran alone green: 10,000 cases, 0 disagree).
+  Every other one was rerun on the head and on SC_BASE on one runner (cmp.sh): the same exit and the same last line.
+- The weight (r1334-w): no route of sweepWeight's table moves over 0.1K; /soccer-career +61 B at 832.4K. No built chunk
+  holds the deck: nothing calls loadSoccerDeck, so Rollup drops the loader and its import; Round 1504 measures the chunk.
+- `git diff --quiet e814c2de -- src/pages src/components src/hooks` exits 0; `git diff --name-only e814c2de` is exactly
+  the files this round owns; the dailies grep lists only Soccer Career's own files.
+- Colours (`git grep -c`, summed): bg-blue-600 131 to 133, bg-emerald-600 265 to 267, bg-gray-800 8 to 10, bg-slate-600 0;
+  the built CSS 56,553 B gzipped on both sides.
