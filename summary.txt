@@ -1,0 +1,2 @@
+vitest exit=0 2s |    Duration  2.41s (transform 1.31s, setup 112ms, collect 1.94s, tests 222ms, environment 686ms, prepare 316ms)
+muts exit=0 30s | mutants done, any survived: 0

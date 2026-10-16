@@ -1,0 +1,45 @@
+MUT injgate: applied
+MUTANT injgate vitest=1 [2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m27 passed[39m[22m[90m (28)[39m
+[31m   [31m×[31m the starter pack[2m > [22mdeals every other gated card on its side of each bound and never one step past it[39m[32m 21[2mms[22m[39m
+[41m[1m FAIL [22m[49m src/lib/soccerDeck.test.ts[2m > [22mthe starter pack[2m > [22mdeals every other gated card on its side of each bound and never one step past it
+MUT capgate: applied
+MUTANT capgate vitest=1 [2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m27 passed[39m[22m[90m (28)[39m
+[31m   [31m×[31m the starter pack[2m > [22mdeals every other gated card on its side of each bound and never one step past it[39m[32m 20[2mms[22m[39m
+[41m[1m FAIL [22m[49m src/lib/soccerDeck.test.ts[2m > [22mthe starter pack[2m > [22mdeals every other gated card on its side of each bound and never one step past it
+MUT y709: applied
+MUTANT y709 vitest=1 [2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m27 passed[39m[22m[90m (28)[39m
+[31m   [31m×[31m the starter pack[2m > [22mdeals every other gated card on its side of each bound and never one step past it[39m[32m 11[2mms[22m[39m
+[41m[1m FAIL [22m[49m src/lib/soccerDeck.test.ts[2m > [22mthe starter pack[2m > [22mdeals every other gated card on its side of each bound and never one step past it
+MUT a710: applied
+MUTANT a710 vitest=1 [2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m27 passed[39m[22m[90m (28)[39m
+[31m   [31m×[31m the starter pack[2m > [22mdeals every other gated card on its side of each bound and never one step past it[39m[32m 13[2mms[22m[39m
+[41m[1m FAIL [22m[49m src/lib/soccerDeck.test.ts[2m > [22mthe starter pack[2m > [22mdeals every other gated card on its side of each bound and never one step past it
+MUT g714: applied
+MUTANT g714 vitest=1 [2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m27 passed[39m[22m[90m (28)[39m
+[31m   [31m×[31m the starter pack[2m > [22mdeals every other gated card on its side of each bound and never one step past it[39m[32m 13[2mms[22m[39m
+[41m[1m FAIL [22m[49m src/lib/soccerDeck.test.ts[2m > [22mthe starter pack[2m > [22mdeals every other gated card on its side of each bound and never one step past it
+MUT g719: applied
+MUTANT g719 vitest=1 [2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m27 passed[39m[22m[90m (28)[39m
+[31m   [31m×[31m the starter pack[2m > [22mdeals every other gated card on its side of each bound and never one step past it[39m[32m 14[2mms[22m[39m
+[41m[1m FAIL [22m[49m src/lib/soccerDeck.test.ts[2m > [22mthe starter pack[2m > [22mdeals every other gated card on its side of each bound and never one step past it
+MUT a719: applied
+MUTANT a719 vitest=1 [2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m27 passed[39m[22m[90m (28)[39m
+[31m   [31m×[31m the starter pack[2m > [22mdeals every other gated card on its side of each bound and never one step past it[39m[32m 19[2mms[22m[39m
+[41m[1m FAIL [22m[49m src/lib/soccerDeck.test.ts[2m > [22mthe starter pack[2m > [22mdeals every other gated card on its side of each bound and never one step past it
+MUT a722: applied
+MUTANT a722 vitest=1 [2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m27 passed[39m[22m[90m (28)[39m
+[31m   [31m×[31m the starter pack[2m > [22mdeals every other gated card on its side of each bound and never one step past it[39m[32m 20[2mms[22m[39m
+[41m[1m FAIL [22m[49m src/lib/soccerDeck.test.ts[2m > [22mthe starter pack[2m > [22mdeals every other gated card on its side of each bound and never one step past it
+MUT i726up: applied
+MUTANT i726up vitest=1 [2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m27 passed[39m[22m[90m (28)[39m
+[31m   [31m×[31m the starter pack[2m > [22mdeals every other gated card on its side of each bound and never one step past it[39m[32m 20[2mms[22m[39m
+[41m[1m FAIL [22m[49m src/lib/soccerDeck.test.ts[2m > [22mthe starter pack[2m > [22mdeals every other gated card on its side of each bound and never one step past it
+MUT t727: applied
+MUTANT t727 vitest=1 [2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m27 passed[39m[22m[90m (28)[39m
+[31m   [31m×[31m the starter pack[2m > [22mdeals every other gated card on its side of each bound and never one step past it[39m[32m 23[2mms[22m[39m
+[41m[1m FAIL [22m[49m src/lib/soccerDeck.test.ts[2m > [22mthe starter pack[2m > [22mdeals every other gated card on its side of each bound and never one step past it
+MUT a727: applied
+MUTANT a727 vitest=1 [2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m27 passed[39m[22m[90m (28)[39m
+[31m   [31m×[31m the starter pack[2m > [22mdeals every other gated card on its side of each bound and never one step past it[39m[32m 24[2mms[22m[39m
+[41m[1m FAIL [22m[49m src/lib/soccerDeck.test.ts[2m > [22mthe starter pack[2m > [22mdeals every other gated card on its side of each bound and never one step past it
+mutants done, any survived: 0
