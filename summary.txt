@@ -1,0 +1,14 @@
+headsha exit=0 0s | e627ce2ed Round BHH: merge main (the lane's board claims for Rounds 1347 to 1349, docs only)
+vitest-bh exit=0 6s |    Duration  5.62s (transform 1.84s, setup 742ms, collect 4.68s, tests 3.98s, environment 3.00s, prepare 668ms)
+rodri-proof exit=0 7s | simPlayerBingoRodriHonour: fixed proof passed; complete raw reports and changed-copy receipts retained. Offline only.
+simSportsBingo exit=0 0s | simSportsBingo: green. Every card can be finished, and the packs play fair.
+simBingoSeats exit=0 0s | simBingoSeats: all checks passed
+simMarketYearScope exit=0 0s | simMarketYearScope: all green
+wx-original-ctl exit=0 2s | wxOriginal: CONTROL FIRED-OK on base 5b630266: 3 display tests failed on their markers, the season test passed, both files restored
+simWorldXiSeasonReport exit=0 1s | simWorldXiSeasonReport: green. The report says a great deal more, every number adds up and comes off who played, and nobody real says a word.
+simWorldXiReport exit=0 0s | simWorldXiReport: green. The report says more and the season it describes did not move.
+life-original-ctl exit=0 2s | lifeOriginal: CONTROL FIRED-OK on base bd3b6244: exactly the 8 preview cases failed, 10 preserved, both files restored
+simCareerLife exit=0 14s | simCareerLife: green. Every peak is reachable, the critic has an opinion and it is about the football, and nothing about either of them is on the save.
+rival-proof exit=0 5s | soccerRivalWagesProof PASS arms3 tests69 originalWageFailures10 traceRows39
+simCareerDilemmaTruth exit=0 3s | simCareerDilemmaTruth: all green
+held-after exit=0 0s | src and scripts held after every line
