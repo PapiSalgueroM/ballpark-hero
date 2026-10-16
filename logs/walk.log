@@ -1,0 +1,88 @@
+walk1508: fixture pre (Arsenal) at SEASON 1 COMPLETE, seed 1, 167695 characters
+walk1508: fixture mid (Bayern Munich) at SEASON 1 COMPLETE, seed 1, 107498 characters
+ok   [pre-390-rm] reduced motion as asked
+ok   [pre-390-rm] the old save resumes at SEASON 1 COMPLETE
+ok   [pre-390-rm] no sideways scroll on the hub (0 px)
+ok   [pre-390-rm] the page saved season 2 (season 2)
+ok   [pre-390-rm] adopted through the page: no seed, a version 1 ledger (0 records)
+ok   [pre-390-rm] the page's save opens in the engine
+ok   [pre-390-rm] every summer deal between two other clubs is at its buyer (4 deals) (4 of 4)
+ok   [pre-390-rm] and no seller still lists the man it sold (0)
+ok   [pre-390-rm] the market lists nobody at my club (0)
+ok   [pre-390-rm] the market lists no moved man at his seller
+[pre-390-rm] walking Alejandro Garnacho: Aston Villa to Leeds United
+ok   [pre-390-rm] Leeds United's club page lists Alejandro Garnacho
+ok   [pre-390-rm] no sideways scroll on the club page (0 px)
+FAIL [pre-390-rm] Aston Villa's club page does not list Alejandro Garnacho
+ok   [pre-390-rm] no page error
+ok   [pre-390-anim] reduced motion as asked
+ok   [pre-390-anim] the old save resumes at SEASON 1 COMPLETE
+ok   [pre-390-anim] no sideways scroll on the hub (0 px)
+ok   [pre-390-anim] the page saved season 2 (season 2)
+ok   [pre-390-anim] adopted through the page: no seed, a version 1 ledger (0 records)
+ok   [pre-390-anim] the page's save opens in the engine
+ok   [pre-390-anim] every summer deal between two other clubs is at its buyer (5 deals) (5 of 5)
+ok   [pre-390-anim] and no seller still lists the man it sold (0)
+ok   [pre-390-anim] the market lists nobody at my club (0)
+ok   [pre-390-anim] the market lists no moved man at his seller
+[pre-390-anim] walking Ibrahima Konaté: Real Madrid to Aston Villa
+ok   [pre-390-anim] Aston Villa's club page lists Ibrahima Konaté
+ok   [pre-390-anim] no sideways scroll on the club page (0 px)
+ok   [pre-390-anim] no page error
+ok   [pre-1280-rm] reduced motion as asked
+ok   [pre-1280-rm] the old save resumes at SEASON 1 COMPLETE
+ok   [pre-1280-rm] no sideways scroll on the hub (0 px)
+ok   [pre-1280-rm] the page saved season 2 (season 2)
+ok   [pre-1280-rm] adopted through the page: no seed, a version 1 ledger (0 records)
+ok   [pre-1280-rm] the page's save opens in the engine
+ok   [pre-1280-rm] every summer deal between two other clubs is at its buyer (6 deals) (6 of 6)
+ok   [pre-1280-rm] and no seller still lists the man it sold (0)
+ok   [pre-1280-rm] the market lists nobody at my club (0)
+ok   [pre-1280-rm] the market lists no moved man at his seller
+[pre-1280-rm] walking Nuno Mendes: PSG to Liverpool
+ok   [pre-1280-rm] Liverpool's club page lists Nuno Mendes
+ok   [pre-1280-rm] no sideways scroll on the club page (0 px)
+ok   [pre-1280-rm] no page error
+ok   [pre-1280-anim] reduced motion as asked
+ok   [pre-1280-anim] the old save resumes at SEASON 1 COMPLETE
+ok   [pre-1280-anim] no sideways scroll on the hub (0 px)
+ok   [pre-1280-anim] the page saved season 2 (season 2)
+ok   [pre-1280-anim] adopted through the page: no seed, a version 1 ledger (0 records)
+ok   [pre-1280-anim] the page's save opens in the engine
+ok   [pre-1280-anim] every summer deal between two other clubs is at its buyer (6 deals) (6 of 6)
+ok   [pre-1280-anim] and no seller still lists the man it sold (0)
+ok   [pre-1280-anim] the market lists nobody at my club (0)
+ok   [pre-1280-anim] the market lists no moved man at his seller
+[pre-1280-anim] walking Álvaro Carreras: Real Madrid to Crystal Palace
+ok   [pre-1280-anim] Crystal Palace's club page lists Álvaro Carreras
+ok   [pre-1280-anim] no sideways scroll on the club page (0 px)
+ok   [pre-1280-anim] no page error
+ok   [mid-390-rm] reduced motion as asked
+ok   [mid-390-rm] the old save resumes at SEASON 1 COMPLETE
+ok   [mid-390-rm] no sideways scroll on the hub (0 px)
+ok   [mid-390-rm] the page saved season 2 (season 2)
+ok   [mid-390-rm] adopted through the page: no seed, a version 1 ledger (0 records)
+ok   [mid-390-rm] the page's save opens in the engine
+ok   [mid-390-rm] every summer deal between two other clubs is at its buyer (5 deals) (5 of 5)
+ok   [mid-390-rm] and no seller still lists the man it sold (0)
+ok   [mid-390-rm] the market lists nobody at my club (0)
+ok   [mid-390-rm] the market lists no moved man at his seller
+[mid-390-rm] walking Eliaquim Mangala: Manchester City to Borussia Dortmund
+ok   [mid-390-rm] Borussia Dortmund's club page lists Eliaquim Mangala
+ok   [mid-390-rm] no sideways scroll on the club page (0 px)
+ok   [mid-390-rm] no page error
+ok   [mid-1280-anim] reduced motion as asked
+ok   [mid-1280-anim] the old save resumes at SEASON 1 COMPLETE
+ok   [mid-1280-anim] no sideways scroll on the hub (0 px)
+ok   [mid-1280-anim] the page saved season 2 (season 2)
+ok   [mid-1280-anim] adopted through the page: no seed, a version 1 ledger (0 records)
+ok   [mid-1280-anim] the page's save opens in the engine
+ok   [mid-1280-anim] every summer deal between two other clubs is at its buyer (3 deals) (3 of 3)
+ok   [mid-1280-anim] and no seller still lists the man it sold (0)
+ok   [mid-1280-anim] the market lists nobody at my club (0)
+ok   [mid-1280-anim] the market lists no moved man at his seller
+[mid-1280-anim] walking Miralem Pjanić: Roma to Borussia Dortmund
+ok   [mid-1280-anim] Borussia Dortmund's club page lists Miralem Pjanić
+ok   [mid-1280-anim] no sideways scroll on the club page (0 px)
+ok   [mid-1280-anim] no page error
+walk1508: RED, 1 of 79 checks failed: [pre-390-rm] Aston Villa's club page does not list Alejandro Garnacho
