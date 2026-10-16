@@ -1,0 +1,464 @@
+NEGATIVE CONTROL ON: the pre-465 engine, a broken promise or a press answer can leave the board on zero with the manager in a job; sections 1 and 2 must go red
+1) The board meter is the sacking rule, after every entry of every career
+  FAIL: Inter Miami (hot seat, life 2) s1 e1 after the press: sacked=false while the board meter reads 0 (Sacked)
+  FAIL: Inter Miami (hot seat, life 2) s1 e1 after the press: sacked=false while the header prints 0/100
+  FAIL: Inter Miami (hot seat, life 2) s1 e1 after the press: an employed manager's board band is "Sacked"
+   1290 calendar entries across 48 seasons, 443 press answers, 24 sackings, every one exactly when the meter read zero
+   single week falls in board confidence: median 4.7, p99 12.5, largest 15.8 (the bottom band starts under 10)
+2) A broken promise, a press answer or a handshake can never leave the meter on zero with the manager in a job
+   9 mid season base(s) and 10 promise base(s) kept from managers still in a job, 0 keep point(s) skipped for a sacking
+  FAIL: promise probe Real Madrid from 8: sacked=false while the board meter reads 0 (Sacked)
+  FAIL: promise probe Real Madrid from 8: sacked=false while the header prints 0/100
+  FAIL: promise probe Real Madrid from 8: an employed manager's board band is "Sacked"
+  FAIL: promise probe Real Madrid from 11.5: sacked=false while the board meter reads 0 (Sacked)
+  FAIL: promise probe Real Madrid from 11.5: sacked=false while the header prints 0/100
+  FAIL: promise probe Real Madrid from 11.5: an employed manager's board band is "Sacked"
+  FAIL: promise probe Arsenal from 6.5: sacked=false while the board meter reads 0 (Sacked)
+  FAIL: promise probe Arsenal from 6.5: sacked=false while the header prints 0/100
+  FAIL: promise probe Arsenal from 6.5: an employed manager's board band is "Sacked"
+  FAIL: promise probe Arsenal from 8.5: sacked=false while the board meter reads 0 (Sacked)
+  FAIL: promise probe Arsenal from 8.5: sacked=false while the header prints 0/100
+  FAIL: promise probe Arsenal from 8.5: an employed manager's board band is "Sacked"
+  FAIL: promise probe Napoli from 4.5: sacked=false while the board meter reads 0 (Sacked)
+  FAIL: promise probe Napoli from 4.5: sacked=false while the header prints 0/100
+  FAIL: promise probe Napoli from 4.5: an employed manager's board band is "Sacked"
+  FAIL: promise probe Napoli from 5: sacked=false while the board meter reads 0 (Sacked)
+  FAIL: promise probe Napoli from 5: sacked=false while the header prints 0/100
+  FAIL: promise probe Napoli from 5: an employed manager's board band is "Sacked"
+  FAIL: promise probe Napoli from 6: sacked=false while the board meter reads 0 (Sacked)
+  FAIL: promise probe Napoli from 6: sacked=false while the header prints 0/100
+  FAIL: promise probe Napoli from 6: an employed manager's board band is "Sacked"
+  FAIL: promise probe Napoli from 7: sacked=false while the board meter reads 0 (Sacked)
+  FAIL: promise probe Napoli from 7: sacked=false while the header prints 0/100
+  FAIL: promise probe Napoli from 7: an employed manager's board band is "Sacked"
+  FAIL: promise probe Napoli from 7.5: sacked=false while the board meter reads 0 (Sacked)
+  FAIL: promise probe Napoli from 7.5: sacked=false while the header prints 0/100
+  FAIL: promise probe Napoli from 7.5: an employed manager's board band is "Sacked"
+  FAIL: promise probe Wolves from 9: sacked=false while the board meter reads 0 (Sacked)
+  FAIL: promise probe Wolves from 9: sacked=false while the header prints 0/100
+  FAIL: promise probe Wolves from 9: an employed manager's board band is "Sacked"
+  FAIL: promise probe Wolves from 10.5: sacked=false while the board meter reads 0 (Sacked)
+  FAIL: promise probe Wolves from 10.5: sacked=false while the header prints 0/100
+  FAIL: promise probe Wolves from 10.5: an employed manager's board band is "Sacked"
+  FAIL: promise probe Wolves from 11: sacked=false while the board meter reads 0 (Sacked)
+  FAIL: promise probe Wolves from 11: sacked=false while the header prints 0/100
+  FAIL: promise probe Wolves from 11: an employed manager's board band is "Sacked"
+  FAIL: promise probe Wolves from 7: sacked=false while the board meter reads 0 (Sacked)
+  FAIL: promise probe Wolves from 7: sacked=false while the header prints 0/100
+  FAIL: promise probe Wolves from 7: an employed manager's board band is "Sacked"
+  FAIL: promise probe Ajax from 5.5: sacked=false while the board meter reads 0 (Sacked)
+  FAIL: promise probe Ajax from 5.5: sacked=false while the header prints 0/100
+  FAIL: promise probe Ajax from 5.5: an employed manager's board band is "Sacked"
+  FAIL: promise probe Ajax from 6.5: sacked=false while the board meter reads 0 (Sacked)
+  FAIL: promise probe Ajax from 6.5: sacked=false while the header prints 0/100
+  FAIL: promise probe Ajax from 6.5: an employed manager's board band is "Sacked"
+  FAIL: promise probe Ajax from 9: sacked=false while the board meter reads 0 (Sacked)
+  FAIL: promise probe Ajax from 9: sacked=false while the header prints 0/100
+  FAIL: promise probe Ajax from 9: an employed manager's board band is "Sacked"
+  FAIL: promise probe Newcastle from 7.5: sacked=false while the board meter reads 0 (Sacked)
+  FAIL: promise probe Newcastle from 7.5: sacked=false while the header prints 0/100
+  FAIL: promise probe Newcastle from 7.5: an employed manager's board band is "Sacked"
+  FAIL: promise probe Newcastle from 8.5: sacked=false while the board meter reads 0 (Sacked)
+  FAIL: promise probe Newcastle from 8.5: sacked=false while the header prints 0/100
+  FAIL: promise probe Newcastle from 8.5: an employed manager's board band is "Sacked"
+  FAIL: promise probe Newcastle from 10: sacked=false while the board meter reads 0 (Sacked)
+  FAIL: promise probe Newcastle from 10: sacked=false while the header prints 0/100
+  FAIL: promise probe Newcastle from 10: an employed manager's board band is "Sacked"
+  FAIL: promise probe Newcastle from 10.5: sacked=false while the board meter reads 0 (Sacked)
+  FAIL: promise probe Newcastle from 10.5: sacked=false while the header prints 0/100
+  FAIL: promise probe Newcastle from 10.5: an employed manager's board band is "Sacked"
+  FAIL: promise probe Inter Miami from 5: sacked=false while the board meter reads 0 (Sacked)
+  FAIL: promise probe Inter Miami from 5: sacked=false while the header prints 0/100
+  FAIL: promise probe Inter Miami from 5: an employed manager's board band is "Sacked"
+  FAIL: promise probe Inter Miami from 5.5: sacked=false while the board meter reads 0 (Sacked)
+  FAIL: promise probe Inter Miami from 5.5: sacked=false while the header prints 0/100
+  FAIL: promise probe Inter Miami from 5.5: an employed manager's board band is "Sacked"
+  FAIL: promise probe Inter Miami from 8: sacked=false while the board meter reads 0 (Sacked)
+  FAIL: promise probe Inter Miami from 8: sacked=false while the header prints 0/100
+  FAIL: promise probe Inter Miami from 8: an employed manager's board band is "Sacked"
+  FAIL: promise probe Leicester City from 7: sacked=false while the board meter reads 0 (Sacked)
+  FAIL: promise probe Leicester City from 7: sacked=false while the header prints 0/100
+  FAIL: promise probe Leicester City from 7: an employed manager's board band is "Sacked"
+  FAIL: promise probe Leicester City from 8: sacked=false while the board meter reads 0 (Sacked)
+  FAIL: promise probe Leicester City from 8: sacked=false while the header prints 0/100
+  FAIL: promise probe Leicester City from 8: an employed manager's board band is "Sacked"
+   170 one match probes with a promise on record: the promise broke in 94, 37 of those landed on zero and every landing was a sacking
+  FAIL: a summer handshake from 3 left the board on 0 (sacked=false)
+  FAIL: handshake probe Real Madrid: sacked=false while the board meter reads 0 (Sacked)
+  FAIL: handshake probe Real Madrid: sacked=false while the header prints 0/100
+  FAIL: handshake probe Real Madrid: an employed manager's board band is "Sacked"
+  FAIL: a summer handshake from 3 left the board on 0 (sacked=false)
+  FAIL: handshake probe Arsenal: sacked=false while the board meter reads 0 (Sacked)
+  FAIL: handshake probe Arsenal: sacked=false while the header prints 0/100
+  FAIL: handshake probe Arsenal: an employed manager's board band is "Sacked"
+  FAIL: a summer handshake from 3 left the board on 0 (sacked=false)
+  FAIL: handshake probe Napoli: sacked=false while the board meter reads 0 (Sacked)
+  FAIL: handshake probe Napoli: sacked=false while the header prints 0/100
+  FAIL: handshake probe Napoli: an employed manager's board band is "Sacked"
+  FAIL: a summer handshake from 3 left the board on 0 (sacked=false)
+  FAIL: handshake probe Wolves: sacked=false while the board meter reads 0 (Sacked)
+  FAIL: handshake probe Wolves: sacked=false while the header prints 0/100
+  FAIL: handshake probe Wolves: an employed manager's board band is "Sacked"
+  FAIL: a summer handshake from 3 left the board on 0 (sacked=false)
+  FAIL: handshake probe Ajax: sacked=false while the board meter reads 0 (Sacked)
+  FAIL: handshake probe Ajax: sacked=false while the header prints 0/100
+  FAIL: handshake probe Ajax: an employed manager's board band is "Sacked"
+  FAIL: a summer handshake from 3 left the board on 0 (sacked=false)
+  FAIL: handshake probe Newcastle: sacked=false while the board meter reads 0 (Sacked)
+  FAIL: handshake probe Newcastle: sacked=false while the header prints 0/100
+  FAIL: handshake probe Newcastle: an employed manager's board band is "Sacked"
+  FAIL: a summer handshake from 3 left the board on 0 (sacked=false)
+  FAIL: handshake probe Roma: sacked=false while the board meter reads 0 (Sacked)
+  FAIL: handshake probe Roma: sacked=false while the header prints 0/100
+  FAIL: handshake probe Roma: an employed manager's board band is "Sacked"
+  FAIL: a summer handshake from 3 left the board on 0 (sacked=false)
+  FAIL: handshake probe Inter Miami: sacked=false while the board meter reads 0 (Sacked)
+  FAIL: handshake probe Inter Miami: sacked=false while the header prints 0/100
+  FAIL: handshake probe Inter Miami: an employed manager's board band is "Sacked"
+  FAIL: a summer handshake from 3 left the board on 0 (sacked=false)
+  FAIL: handshake probe Leicester City: sacked=false while the board meter reads 0 (Sacked)
+  FAIL: handshake probe Leicester City: sacked=false while the header prints 0/100
+  FAIL: handshake probe Leicester City: an employed manager's board band is "Sacked"
+  FAIL: a summer handshake from 3 left the board on 0 (sacked=false)
+  FAIL: handshake probe Real Madrid: sacked=false while the board meter reads 0 (Sacked)
+  FAIL: handshake probe Real Madrid: sacked=false while the header prints 0/100
+  FAIL: handshake probe Real Madrid: an employed manager's board band is "Sacked"
+  FAIL: a summer handshake from 3 left the board on 0 (sacked=false)
+  FAIL: handshake probe Arsenal: sacked=false while the board meter reads 0 (Sacked)
+  FAIL: handshake probe Arsenal: sacked=false while the header prints 0/100
+  FAIL: handshake probe Arsenal: an employed manager's board band is "Sacked"
+  FAIL: a summer handshake from 3 left the board on 0 (sacked=false)
+  FAIL: handshake probe Napoli: sacked=false while the board meter reads 0 (Sacked)
+  FAIL: handshake probe Napoli: sacked=false while the header prints 0/100
+  FAIL: handshake probe Napoli: an employed manager's board band is "Sacked"
+  FAIL: a summer handshake from 3 left the board on 0 (sacked=false)
+  FAIL: handshake probe Wolves: sacked=false while the board meter reads 0 (Sacked)
+  FAIL: handshake probe Wolves: sacked=false while the header prints 0/100
+  FAIL: handshake probe Wolves: an employed manager's board band is "Sacked"
+  FAIL: a summer handshake from 3 left the board on 0 (sacked=false)
+  FAIL: handshake probe Wolves: sacked=false while the board meter reads 0 (Sacked)
+  FAIL: handshake probe Wolves: sacked=false while the header prints 0/100
+  FAIL: handshake probe Wolves: an employed manager's board band is "Sacked"
+  FAIL: a summer handshake from 3 left the board on 0 (sacked=false)
+  FAIL: handshake probe Ajax: sacked=false while the board meter reads 0 (Sacked)
+  FAIL: handshake probe Ajax: sacked=false while the header prints 0/100
+  FAIL: handshake probe Ajax: an employed manager's board band is "Sacked"
+  FAIL: a summer handshake from 3 left the board on 0 (sacked=false)
+  FAIL: handshake probe Newcastle: sacked=false while the board meter reads 0 (Sacked)
+  FAIL: handshake probe Newcastle: sacked=false while the header prints 0/100
+  FAIL: handshake probe Newcastle: an employed manager's board band is "Sacked"
+  FAIL: a summer handshake from 3 left the board on 0 (sacked=false)
+  FAIL: handshake probe Roma: sacked=false while the board meter reads 0 (Sacked)
+  FAIL: handshake probe Roma: sacked=false while the header prints 0/100
+  FAIL: handshake probe Roma: an employed manager's board band is "Sacked"
+  FAIL: a summer handshake from 3 left the board on 0 (sacked=false)
+  FAIL: handshake probe Inter Miami: sacked=false while the board meter reads 0 (Sacked)
+  FAIL: handshake probe Inter Miami: sacked=false while the header prints 0/100
+  FAIL: handshake probe Inter Miami: an employed manager's board band is "Sacked"
+  FAIL: a summer handshake from 3 left the board on 0 (sacked=false)
+  FAIL: handshake probe Leicester City: sacked=false while the board meter reads 0 (Sacked)
+  FAIL: handshake probe Leicester City: sacked=false while the header prints 0/100
+  FAIL: handshake probe Leicester City: an employed manager's board band is "Sacked"
+  FAIL: a genuine press answer ("He is still my player", board -0.3) from 0.5 left the board on 0.2, not 1
+  FAIL: a genuine press answer ("You would have to ask him", board 0) from 0.5 left the board on 0.5, not 1
+  FAIL: a genuine press answer ("He is still my player", board -0.3) from 0.5 left the board on 0.2, not 1
+  FAIL: a genuine press answer ("You would have to ask him", board 0) from 0.5 left the board on 0.5, not 1
+  FAIL: a genuine press answer ("They are a good side and we respect them", board 0.1) from 0.5 left the board on 0.6, not 1
+  FAIL: a genuine press answer ("It is three points, same as any other", board 0.15) from 0.5 left the board on 0.65, not 1
+  FAIL: a genuine press answer ("Nobody gives us a prayer, and that suits us", board 0.1) from 0.5 left the board on 0.6, not 1
+  FAIL: a genuine press answer ("We will do our jobs and see", board 0.35) from 0.5 left the board on 0.85, not 1
+  FAIL: a genuine press answer ("He is still my player", board -0.3) from 0.5 left the board on 0.2, not 1
+  FAIL: a genuine press answer ("You would have to ask him", board 0) from 0.5 left the board on 0.5, not 1
+  FAIL: a genuine press answer ("He is still my player", board -0.3) from 0.5 left the board on 0.2, not 1
+  FAIL: a genuine press answer ("You would have to ask him", board 0) from 0.5 left the board on 0.5, not 1
+  FAIL: a genuine press answer ("Not for sale at any price", board -0.8) from 0.5 left the board on 0, not 1
+  FAIL: genuine press probe Real Madrid option 0: sacked=false while the board meter reads 0 (Sacked)
+  FAIL: genuine press probe Real Madrid option 0: sacked=false while the header prints 0/100
+  FAIL: genuine press probe Real Madrid option 0: an employed manager's board band is "Sacked"
+  FAIL: a genuine press answer ("That is between the two clubs", board 0.15) from 0.5 left the board on 0.65, not 1
+  FAIL: a genuine press answer ("They are a good side and we respect them", board 0.1) from 0.5 left the board on 0.6, not 1
+  FAIL: a genuine press answer ("It is three points, same as any other", board 0.15) from 0.5 left the board on 0.65, not 1
+  FAIL: a genuine press answer ("One game at a time", board 0.2) from 0.5 left the board on 0.7, not 1
+  FAIL: a genuine press answer ("One game at a time", board 0.2) from 0.5 left the board on 0.7, not 1
+  FAIL: a genuine press answer ("One game at a time", board 0.2) from 0.5 left the board on 0.7, not 1
+  FAIL: a genuine press answer ("He is still my player", board -0.3) from 0.5 left the board on 0.2, not 1
+  FAIL: a genuine press answer ("You would have to ask him", board 0) from 0.5 left the board on 0.5, not 1
+  FAIL: a genuine press answer ("Not for sale at any price", board -0.8) from 0.5 left the board on 0, not 1
+  FAIL: genuine press probe Arsenal option 0: sacked=false while the board meter reads 0 (Sacked)
+  FAIL: genuine press probe Arsenal option 0: sacked=false while the header prints 0/100
+  FAIL: genuine press probe Arsenal option 0: an employed manager's board band is "Sacked"
+  FAIL: a genuine press answer ("That is between the two clubs", board 0.15) from 0.5 left the board on 0.65, not 1
+  FAIL: a genuine press answer ("One game at a time", board 0.2) from 0.5 left the board on 0.7, not 1
+  FAIL: a genuine press answer ("He is still my player", board -0.3) from 0.5 left the board on 0.2, not 1
+  FAIL: a genuine press answer ("You would have to ask him", board 0) from 0.5 left the board on 0.5, not 1
+  FAIL: a genuine press answer ("He is still my player", board -0.3) from 0.5 left the board on 0.2, not 1
+  FAIL: a genuine press answer ("You would have to ask him", board 0) from 0.5 left the board on 0.5, not 1
+  FAIL: a genuine press answer ("He is still my player", board -0.3) from 0.5 left the board on 0.2, not 1
+  FAIL: a genuine press answer ("You would have to ask him", board 0) from 0.5 left the board on 0.5, not 1
+  FAIL: a genuine press answer ("He is still my player", board -0.3) from 0.5 left the board on 0.2, not 1
+  FAIL: a genuine press answer ("You would have to ask him", board 0) from 0.5 left the board on 0.5, not 1
+  FAIL: a genuine press answer ("He is still my player", board -0.3) from 0.5 left the board on 0.2, not 1
+  FAIL: a genuine press answer ("You would have to ask him", board 0) from 0.5 left the board on 0.5, not 1
+  FAIL: a genuine press answer ("He is still my player", board -0.3) from 0.5 left the board on 0.2, not 1
+  FAIL: a genuine press answer ("You would have to ask him", board 0) from 0.5 left the board on 0.5, not 1
+  FAIL: a genuine press answer ("He is still my player", board -0.3) from 0.5 left the board on 0.2, not 1
+  FAIL: a genuine press answer ("You would have to ask him", board 0) from 0.5 left the board on 0.5, not 1
+  FAIL: a genuine press answer ("Not for sale at any price", board -0.8) from 0.5 left the board on 0, not 1
+  FAIL: genuine press probe Arsenal option 0: sacked=false while the board meter reads 0 (Sacked)
+  FAIL: genuine press probe Arsenal option 0: sacked=false while the header prints 0/100
+  FAIL: genuine press probe Arsenal option 0: an employed manager's board band is "Sacked"
+  FAIL: a genuine press answer ("That is between the two clubs", board 0.15) from 0.5 left the board on 0.65, not 1
+  FAIL: a genuine press answer ("He is still my player", board -0.3) from 0.5 left the board on 0.2, not 1
+  FAIL: a genuine press answer ("You would have to ask him", board 0) from 0.5 left the board on 0.5, not 1
+  FAIL: a genuine press answer ("He is still my player", board -0.3) from 0.5 left the board on 0.2, not 1
+  FAIL: a genuine press answer ("You would have to ask him", board 0) from 0.5 left the board on 0.5, not 1
+  FAIL: a genuine press answer ("One game at a time", board 0.2) from 0.5 left the board on 0.7, not 1
+  FAIL: a genuine press answer ("He is still my player", board -0.3) from 0.5 left the board on 0.2, not 1
+  FAIL: a genuine press answer ("You would have to ask him", board 0) from 0.5 left the board on 0.5, not 1
+  FAIL: a genuine press answer ("He is still my player", board -0.3) from 0.5 left the board on 0.2, not 1
+  FAIL: a genuine press answer ("You would have to ask him", board 0) from 0.5 left the board on 0.5, not 1
+  FAIL: a genuine press answer ("Not for sale at any price", board -0.8) from 0.5 left the board on 0, not 1
+  FAIL: genuine press probe Napoli option 0: sacked=false while the board meter reads 0 (Sacked)
+  FAIL: genuine press probe Napoli option 0: sacked=false while the header prints 0/100
+  FAIL: genuine press probe Napoli option 0: an employed manager's board band is "Sacked"
+  FAIL: a genuine press answer ("That is between the two clubs", board 0.15) from 0.5 left the board on 0.65, not 1
+  FAIL: a genuine press answer ("He is still my player", board -0.3) from 0.5 left the board on 0.2, not 1
+  FAIL: a genuine press answer ("You would have to ask him", board 0) from 0.5 left the board on 0.5, not 1
+  FAIL: a genuine press answer ("He is still my player", board -0.3) from 0.5 left the board on 0.2, not 1
+  FAIL: a genuine press answer ("You would have to ask him", board 0) from 0.5 left the board on 0.5, not 1
+  FAIL: a genuine press answer ("They are a good side and we respect them", board 0.1) from 0.5 left the board on 0.6, not 1
+  FAIL: a genuine press answer ("It is three points, same as any other", board 0.15) from 0.5 left the board on 0.65, not 1
+  FAIL: a genuine press answer ("One game at a time", board 0.2) from 0.5 left the board on 0.7, not 1
+  FAIL: a genuine press answer ("He is still my player", board -0.3) from 0.5 left the board on 0.2, not 1
+  FAIL: a genuine press answer ("You would have to ask him", board 0) from 0.5 left the board on 0.5, not 1
+  FAIL: a genuine press answer ("He is still my player", board -0.3) from 0.5 left the board on 0.2, not 1
+  FAIL: a genuine press answer ("You would have to ask him", board 0) from 0.5 left the board on 0.5, not 1
+  FAIL: a genuine press answer ("These players are with me", board -1) from 0.5 left the board on 0, not 1
+  FAIL: genuine press probe Napoli option 0: sacked=false while the board meter reads 0 (Sacked)
+  FAIL: genuine press probe Napoli option 0: sacked=false while the header prints 0/100
+  FAIL: genuine press probe Napoli option 0: an employed manager's board band is "Sacked"
+  FAIL: a genuine press answer ("We go again Saturday", board 0) from 0.5 left the board on 0.5, not 1
+  FAIL: a genuine press answer ("These players are with me", board -1) from 0.5 left the board on 0, not 1
+  FAIL: genuine press probe Napoli option 0: sacked=false while the board meter reads 0 (Sacked)
+  FAIL: genuine press probe Napoli option 0: sacked=false while the header prints 0/100
+  FAIL: genuine press probe Napoli option 0: an employed manager's board band is "Sacked"
+  FAIL: a genuine press answer ("We go again Saturday", board 0) from 0.5 left the board on 0.5, not 1
+  FAIL: a genuine press answer ("These players are with me", board -1) from 0.5 left the board on 0, not 1
+  FAIL: genuine press probe Napoli option 0: sacked=false while the board meter reads 0 (Sacked)
+  FAIL: genuine press probe Napoli option 0: sacked=false while the header prints 0/100
+  FAIL: genuine press probe Napoli option 0: an employed manager's board band is "Sacked"
+  FAIL: a genuine press answer ("We go again Saturday", board 0) from 0.5 left the board on 0.5, not 1
+  FAIL: a genuine press answer ("He is still my player", board -0.3) from 0.5 left the board on 0.2, not 1
+  FAIL: a genuine press answer ("You would have to ask him", board 0) from 0.5 left the board on 0.5, not 1
+  FAIL: a genuine press answer ("He is still my player", board -0.3) from 0.5 left the board on 0.2, not 1
+  FAIL: a genuine press answer ("You would have to ask him", board 0) from 0.5 left the board on 0.5, not 1
+  FAIL: a genuine press answer ("He is still my player", board -0.3) from 0.5 left the board on 0.2, not 1
+  FAIL: a genuine press answer ("You would have to ask him", board 0) from 0.5 left the board on 0.5, not 1
+  FAIL: a genuine press answer ("He is still my player", board -0.3) from 0.5 left the board on 0.2, not 1
+  FAIL: a genuine press answer ("You would have to ask him", board 0) from 0.5 left the board on 0.5, not 1
+  FAIL: a genuine press answer ("He is still my player", board -0.3) from 0.5 left the board on 0.2, not 1
+  FAIL: a genuine press answer ("You would have to ask him", board 0) from 0.5 left the board on 0.5, not 1
+  FAIL: a genuine press answer ("He is still my player", board -0.3) from 0.5 left the board on 0.2, not 1
+  FAIL: a genuine press answer ("You would have to ask him", board 0) from 0.5 left the board on 0.5, not 1
+  FAIL: a genuine press answer ("He is still my player", board -0.3) from 0.5 left the board on 0.2, not 1
+  FAIL: a genuine press answer ("You would have to ask him", board 0) from 0.5 left the board on 0.5, not 1
+  FAIL: a genuine press answer ("Not for sale at any price", board -0.8) from 0.5 left the board on 0, not 1
+  FAIL: genuine press probe Wolves option 0: sacked=false while the board meter reads 0 (Sacked)
+  FAIL: genuine press probe Wolves option 0: sacked=false while the header prints 0/100
+  FAIL: genuine press probe Wolves option 0: an employed manager's board band is "Sacked"
+  FAIL: a genuine press answer ("That is between the two clubs", board 0.15) from 0.5 left the board on 0.65, not 1
+  FAIL: a genuine press answer ("One game at a time", board 0.2) from 0.5 left the board on 0.7, not 1
+  FAIL: a genuine press answer ("He is still my player", board -0.3) from 0.5 left the board on 0.2, not 1
+  FAIL: a genuine press answer ("You would have to ask him", board 0) from 0.5 left the board on 0.5, not 1
+  FAIL: a genuine press answer ("He is still my player", board -0.3) from 0.5 left the board on 0.2, not 1
+  FAIL: a genuine press answer ("You would have to ask him", board 0) from 0.5 left the board on 0.5, not 1
+  FAIL: a genuine press answer ("One game at a time", board 0.2) from 0.5 left the board on 0.7, not 1
+  FAIL: a genuine press answer ("He is still my player", board -0.3) from 0.5 left the board on 0.2, not 1
+  FAIL: a genuine press answer ("You would have to ask him", board 0) from 0.5 left the board on 0.5, not 1
+  FAIL: a genuine press answer ("One game at a time", board 0.2) from 0.5 left the board on 0.7, not 1
+  FAIL: a genuine press answer ("One game at a time", board 0.2) from 0.5 left the board on 0.7, not 1
+  FAIL: a genuine press answer ("He is still my player", board -0.3) from 0.5 left the board on 0.2, not 1
+  FAIL: a genuine press answer ("You would have to ask him", board 0) from 0.5 left the board on 0.5, not 1
+  FAIL: a genuine press answer ("He is still my player", board -0.3) from 0.5 left the board on 0.2, not 1
+  FAIL: a genuine press answer ("You would have to ask him", board 0) from 0.5 left the board on 0.5, not 1
+  FAIL: a genuine press answer ("Not for sale at any price", board -0.8) from 0.5 left the board on 0, not 1
+  FAIL: genuine press probe Wolves option 0: sacked=false while the board meter reads 0 (Sacked)
+  FAIL: genuine press probe Wolves option 0: sacked=false while the header prints 0/100
+  FAIL: genuine press probe Wolves option 0: an employed manager's board band is "Sacked"
+  FAIL: a genuine press answer ("That is between the two clubs", board 0.15) from 0.5 left the board on 0.65, not 1
+  FAIL: a genuine press answer ("He is still my player", board -0.3) from 0.5 left the board on 0.2, not 1
+  FAIL: a genuine press answer ("You would have to ask him", board 0) from 0.5 left the board on 0.5, not 1
+  FAIL: a genuine press answer ("He is still my player", board -0.3) from 0.5 left the board on 0.2, not 1
+  FAIL: a genuine press answer ("You would have to ask him", board 0) from 0.5 left the board on 0.5, not 1
+  FAIL: a genuine press answer ("He is still my player", board -0.3) from 0.5 left the board on 0.2, not 1
+  FAIL: a genuine press answer ("You would have to ask him", board 0) from 0.5 left the board on 0.5, not 1
+  FAIL: a genuine press answer ("He is still my player", board -0.3) from 0.5 left the board on 0.2, not 1
+  FAIL: a genuine press answer ("You would have to ask him", board 0) from 0.5 left the board on 0.5, not 1
+  FAIL: a genuine press answer ("He is still my player", board -0.3) from 0.5 left the board on 0.2, not 1
+  FAIL: a genuine press answer ("You would have to ask him", board 0) from 0.5 left the board on 0.5, not 1
+  FAIL: a genuine press answer ("He is still my player", board -0.3) from 0.5 left the board on 0.2, not 1
+  FAIL: a genuine press answer ("You would have to ask him", board 0) from 0.5 left the board on 0.5, not 1
+  FAIL: a genuine press answer ("He is still my player", board -0.3) from 0.5 left the board on 0.2, not 1
+  FAIL: a genuine press answer ("You would have to ask him", board 0) from 0.5 left the board on 0.5, not 1
+  FAIL: a genuine press answer ("Not for sale at any price", board -0.8) from 0.5 left the board on 0, not 1
+  FAIL: genuine press probe Ajax option 0: sacked=false while the board meter reads 0 (Sacked)
+  FAIL: genuine press probe Ajax option 0: sacked=false while the header prints 0/100
+  FAIL: genuine press probe Ajax option 0: an employed manager's board band is "Sacked"
+  FAIL: a genuine press answer ("That is between the two clubs", board 0.15) from 0.5 left the board on 0.65, not 1
+  FAIL: a genuine press answer ("He is still my player", board -0.3) from 0.5 left the board on 0.2, not 1
+  FAIL: a genuine press answer ("You would have to ask him", board 0) from 0.5 left the board on 0.5, not 1
+  FAIL: a genuine press answer ("He is still my player", board -0.3) from 0.5 left the board on 0.2, not 1
+  FAIL: a genuine press answer ("You would have to ask him", board 0) from 0.5 left the board on 0.5, not 1
+  FAIL: a genuine press answer ("He is still my player", board -0.3) from 0.5 left the board on 0.2, not 1
+  FAIL: a genuine press answer ("You would have to ask him", board 0) from 0.5 left the board on 0.5, not 1
+  FAIL: a genuine press answer ("He is still my player", board -0.3) from 0.5 left the board on 0.2, not 1
+  FAIL: a genuine press answer ("You would have to ask him", board 0) from 0.5 left the board on 0.5, not 1
+  FAIL: a genuine press answer ("He is still my player", board -0.3) from 0.5 left the board on 0.2, not 1
+  FAIL: a genuine press answer ("You would have to ask him", board 0) from 0.5 left the board on 0.5, not 1
+  FAIL: a genuine press answer ("He is still my player", board -0.3) from 0.5 left the board on 0.2, not 1
+  FAIL: a genuine press answer ("You would have to ask him", board 0) from 0.5 left the board on 0.5, not 1
+  FAIL: a genuine press answer ("He is still my player", board -0.3) from 0.5 left the board on 0.2, not 1
+  FAIL: a genuine press answer ("You would have to ask him", board 0) from 0.5 left the board on 0.5, not 1
+  FAIL: a genuine press answer ("Not for sale at any price", board -0.8) from 0.5 left the board on 0, not 1
+  FAIL: genuine press probe Ajax option 0: sacked=false while the board meter reads 0 (Sacked)
+  FAIL: genuine press probe Ajax option 0: sacked=false while the header prints 0/100
+  FAIL: genuine press probe Ajax option 0: an employed manager's board band is "Sacked"
+  FAIL: a genuine press answer ("That is between the two clubs", board 0.15) from 0.5 left the board on 0.65, not 1
+  FAIL: a genuine press answer ("He is still my player", board -0.3) from 0.5 left the board on 0.2, not 1
+  FAIL: a genuine press answer ("You would have to ask him", board 0) from 0.5 left the board on 0.5, not 1
+  FAIL: a genuine press answer ("He is still my player", board -0.3) from 0.5 left the board on 0.2, not 1
+  FAIL: a genuine press answer ("You would have to ask him", board 0) from 0.5 left the board on 0.5, not 1
+  FAIL: a genuine press answer ("He is still my player", board -0.3) from 0.5 left the board on 0.2, not 1
+  FAIL: a genuine press answer ("You would have to ask him", board 0) from 0.5 left the board on 0.5, not 1
+  FAIL: a genuine press answer ("He is still my player", board -0.3) from 0.5 left the board on 0.2, not 1
+  FAIL: a genuine press answer ("You would have to ask him", board 0) from 0.5 left the board on 0.5, not 1
+  FAIL: a genuine press answer ("He is still my player", board -0.3) from 0.5 left the board on 0.2, not 1
+  FAIL: a genuine press answer ("You would have to ask him", board 0) from 0.5 left the board on 0.5, not 1
+  FAIL: a genuine press answer ("He is still my player", board -0.3) from 0.5 left the board on 0.2, not 1
+  FAIL: a genuine press answer ("You would have to ask him", board 0) from 0.5 left the board on 0.5, not 1
+  FAIL: a genuine press answer ("Nobody gives us a prayer, and that suits us", board 0.1) from 0.5 left the board on 0.6, not 1
+  FAIL: a genuine press answer ("We will do our jobs and see", board 0.35) from 0.5 left the board on 0.85, not 1
+  FAIL: a genuine press answer ("Nobody gives us a prayer, and that suits us", board 0.1) from 0.5 left the board on 0.6, not 1
+  FAIL: a genuine press answer ("We will do our jobs and see", board 0.35) from 0.5 left the board on 0.85, not 1
+  FAIL: a genuine press answer ("I am going nowhere", board -0.7) from 0.5 left the board on 0, not 1
+  FAIL: genuine press probe Newcastle option 0: sacked=false while the board meter reads 0 (Sacked)
+  FAIL: genuine press probe Newcastle option 0: sacked=false while the header prints 0/100
+  FAIL: genuine press probe Newcastle option 0: an employed manager's board band is "Sacked"
+  FAIL: a genuine press answer ("I am going nowhere", board -0.7) from 0.5 left the board on 0, not 1
+  FAIL: genuine press probe Newcastle option 0: sacked=false while the board meter reads 0 (Sacked)
+  FAIL: genuine press probe Newcastle option 0: sacked=false while the header prints 0/100
+  FAIL: genuine press probe Newcastle option 0: an employed manager's board band is "Sacked"
+  FAIL: a genuine press answer ("He is still my player", board -0.3) from 0.5 left the board on 0.2, not 1
+  FAIL: a genuine press answer ("You would have to ask him", board 0) from 0.5 left the board on 0.5, not 1
+  FAIL: a genuine press answer ("I am going nowhere", board -0.7) from 0.5 left the board on 0, not 1
+  FAIL: genuine press probe Newcastle option 0: sacked=false while the board meter reads 0 (Sacked)
+  FAIL: genuine press probe Newcastle option 0: sacked=false while the header prints 0/100
+  FAIL: genuine press probe Newcastle option 0: an employed manager's board band is "Sacked"
+  FAIL: a genuine press answer ("He is still my player", board -0.3) from 0.5 left the board on 0.2, not 1
+  FAIL: a genuine press answer ("You would have to ask him", board 0) from 0.5 left the board on 0.5, not 1
+  FAIL: a genuine press answer ("Not for sale at any price", board -0.8) from 0.5 left the board on 0, not 1
+  FAIL: genuine press probe Newcastle option 0: sacked=false while the board meter reads 0 (Sacked)
+  FAIL: genuine press probe Newcastle option 0: sacked=false while the header prints 0/100
+  FAIL: genuine press probe Newcastle option 0: an employed manager's board band is "Sacked"
+  FAIL: a genuine press answer ("That is between the two clubs", board 0.15) from 0.5 left the board on 0.65, not 1
+  FAIL: a genuine press answer ("These players are with me", board -1) from 0.5 left the board on 0, not 1
+  FAIL: genuine press probe Newcastle option 0: sacked=false while the board meter reads 0 (Sacked)
+  FAIL: genuine press probe Newcastle option 0: sacked=false while the header prints 0/100
+  FAIL: genuine press probe Newcastle option 0: an employed manager's board band is "Sacked"
+  FAIL: a genuine press answer ("We go again Saturday", board 0) from 0.5 left the board on 0.5, not 1
+  FAIL: a genuine press answer ("I am going nowhere", board -0.7) from 0.5 left the board on 0, not 1
+  FAIL: genuine press probe Newcastle option 0: sacked=false while the board meter reads 0 (Sacked)
+  FAIL: genuine press probe Newcastle option 0: sacked=false while the header prints 0/100
+  FAIL: genuine press probe Newcastle option 0: an employed manager's board band is "Sacked"
+  FAIL: a genuine press answer ("I am going nowhere", board -0.7) from 0.5 left the board on 0, not 1
+  FAIL: genuine press probe Newcastle option 0: sacked=false while the board meter reads 0 (Sacked)
+  FAIL: genuine press probe Newcastle option 0: sacked=false while the header prints 0/100
+  FAIL: genuine press probe Newcastle option 0: an employed manager's board band is "Sacked"
+  FAIL: a genuine press answer ("Not for sale at any price", board -0.8) from 0.5 left the board on 0, not 1
+  FAIL: genuine press probe Roma option 0: sacked=false while the board meter reads 0 (Sacked)
+  FAIL: genuine press probe Roma option 0: sacked=false while the header prints 0/100
+  FAIL: genuine press probe Roma option 0: an employed manager's board band is "Sacked"
+  FAIL: a genuine press answer ("That is between the two clubs", board 0.15) from 0.5 left the board on 0.65, not 1
+  FAIL: a genuine press answer ("He is still my player", board -0.3) from 0.5 left the board on 0.2, not 1
+  FAIL: a genuine press answer ("You would have to ask him", board 0) from 0.5 left the board on 0.5, not 1
+  FAIL: a genuine press answer ("He is still my player", board -0.3) from 0.5 left the board on 0.2, not 1
+  FAIL: a genuine press answer ("You would have to ask him", board 0) from 0.5 left the board on 0.5, not 1
+  FAIL: a genuine press answer ("He is still my player", board -0.3) from 0.5 left the board on 0.2, not 1
+  FAIL: a genuine press answer ("You would have to ask him", board 0) from 0.5 left the board on 0.5, not 1
+  FAIL: a genuine press answer ("One game at a time", board 0.2) from 0.5 left the board on 0.7, not 1
+  FAIL: a genuine press answer ("He is still my player", board -0.3) from 0.5 left the board on 0.2, not 1
+  FAIL: a genuine press answer ("You would have to ask him", board 0) from 0.5 left the board on 0.5, not 1
+  FAIL: a genuine press answer ("He is still my player", board -0.3) from 0.5 left the board on 0.2, not 1
+  FAIL: a genuine press answer ("You would have to ask him", board 0) from 0.5 left the board on 0.5, not 1
+  FAIL: a genuine press answer ("He is still my player", board -0.3) from 0.5 left the board on 0.2, not 1
+  FAIL: a genuine press answer ("You would have to ask him", board 0) from 0.5 left the board on 0.5, not 1
+  FAIL: a genuine press answer ("He is still my player", board -0.3) from 0.5 left the board on 0.2, not 1
+  FAIL: a genuine press answer ("You would have to ask him", board 0) from 0.5 left the board on 0.5, not 1
+  FAIL: a genuine press answer ("Not for sale at any price", board -0.8) from 0.5 left the board on 0, not 1
+  FAIL: genuine press probe Roma option 0: sacked=false while the board meter reads 0 (Sacked)
+  FAIL: genuine press probe Roma option 0: sacked=false while the header prints 0/100
+  FAIL: genuine press probe Roma option 0: an employed manager's board band is "Sacked"
+  FAIL: a genuine press answer ("That is between the two clubs", board 0.15) from 0.5 left the board on 0.65, not 1
+  FAIL: a genuine press answer ("He is still my player", board -0.3) from 0.5 left the board on 0.2, not 1
+  FAIL: a genuine press answer ("You would have to ask him", board 0) from 0.5 left the board on 0.5, not 1
+  FAIL: a genuine press answer ("He is still my player", board -0.3) from 0.5 left the board on 0.2, not 1
+  FAIL: a genuine press answer ("You would have to ask him", board 0) from 0.5 left the board on 0.5, not 1
+  FAIL: a genuine press answer ("These players are with me", board -1) from 0.5 left the board on 0, not 1
+  FAIL: genuine press probe Roma option 0: sacked=false while the board meter reads 0 (Sacked)
+  FAIL: genuine press probe Roma option 0: sacked=false while the header prints 0/100
+  FAIL: genuine press probe Roma option 0: an employed manager's board band is "Sacked"
+  FAIL: a genuine press answer ("We go again Saturday", board 0) from 0.5 left the board on 0.5, not 1
+  FAIL: a genuine press answer ("He is still my player", board -0.3) from 0.5 left the board on 0.2, not 1
+  FAIL: a genuine press answer ("You would have to ask him", board 0) from 0.5 left the board on 0.5, not 1
+  FAIL: a genuine press answer ("He is still my player", board -0.3) from 0.5 left the board on 0.2, not 1
+  FAIL: a genuine press answer ("You would have to ask him", board 0) from 0.5 left the board on 0.5, not 1
+  FAIL: a genuine press answer ("He is still my player", board -0.3) from 0.5 left the board on 0.2, not 1
+  FAIL: a genuine press answer ("You would have to ask him", board 0) from 0.5 left the board on 0.5, not 1
+  FAIL: a genuine press answer ("He is still my player", board -0.3) from 0.5 left the board on 0.2, not 1
+  FAIL: a genuine press answer ("You would have to ask him", board 0) from 0.5 left the board on 0.5, not 1
+  FAIL: a genuine press answer ("He is still my player", board -0.3) from 0.5 left the board on 0.2, not 1
+  FAIL: a genuine press answer ("You would have to ask him", board 0) from 0.5 left the board on 0.5, not 1
+  FAIL: a genuine press answer ("Not for sale at any price", board -0.8) from 0.5 left the board on 0, not 1
+  FAIL: genuine press probe Inter Miami option 0: sacked=false while the board meter reads 0 (Sacked)
+  FAIL: genuine press probe Inter Miami option 0: sacked=false while the header prints 0/100
+  FAIL: genuine press probe Inter Miami option 0: an employed manager's board band is "Sacked"
+  FAIL: a genuine press answer ("That is between the two clubs", board 0.15) from 0.5 left the board on 0.65, not 1
+  FAIL: a genuine press answer ("Not for sale at any price", board -0.8) from 0.5 left the board on 0, not 1
+  FAIL: genuine press probe Inter Miami option 0: sacked=false while the board meter reads 0 (Sacked)
+  FAIL: genuine press probe Inter Miami option 0: sacked=false while the header prints 0/100
+  FAIL: genuine press probe Inter Miami option 0: an employed manager's board band is "Sacked"
+  FAIL: a genuine press answer ("That is between the two clubs", board 0.15) from 0.5 left the board on 0.65, not 1
+  FAIL: a genuine press answer ("He is still my player", board -0.3) from 0.5 left the board on 0.2, not 1
+  FAIL: a genuine press answer ("You would have to ask him", board 0) from 0.5 left the board on 0.5, not 1
+  FAIL: a genuine press answer ("He is still my player", board -0.3) from 0.5 left the board on 0.2, not 1
+  FAIL: a genuine press answer ("You would have to ask him", board 0) from 0.5 left the board on 0.5, not 1
+  FAIL: a genuine press answer ("He is still my player", board -0.3) from 0.5 left the board on 0.2, not 1
+  FAIL: a genuine press answer ("You would have to ask him", board 0) from 0.5 left the board on 0.5, not 1
+  FAIL: a genuine press answer ("He is still my player", board -0.3) from 0.5 left the board on 0.2, not 1
+  FAIL: a genuine press answer ("You would have to ask him", board 0) from 0.5 left the board on 0.5, not 1
+  FAIL: a genuine press answer ("He is still my player", board -0.3) from 0.5 left the board on 0.2, not 1
+  FAIL: a genuine press answer ("You would have to ask him", board 0) from 0.5 left the board on 0.5, not 1
+  FAIL: a genuine press answer ("He is still my player", board -0.3) from 0.5 left the board on 0.2, not 1
+  FAIL: a genuine press answer ("You would have to ask him", board 0) from 0.5 left the board on 0.5, not 1
+  FAIL: a genuine press answer ("He is still my player", board -0.3) from 0.5 left the board on 0.2, not 1
+  FAIL: a genuine press answer ("You would have to ask him", board 0) from 0.5 left the board on 0.5, not 1
+  FAIL: a genuine press answer ("He is still my player", board -0.3) from 0.5 left the board on 0.2, not 1
+  FAIL: a genuine press answer ("You would have to ask him", board 0) from 0.5 left the board on 0.5, not 1
+  FAIL: a genuine press answer ("He is still my player", board -0.3) from 0.5 left the board on 0.2, not 1
+  FAIL: a genuine press answer ("You would have to ask him", board 0) from 0.5 left the board on 0.5, not 1
+  FAIL: a genuine press answer ("He is still my player", board -0.3) from 0.5 left the board on 0.2, not 1
+  FAIL: a genuine press answer ("You would have to ask him", board 0) from 0.5 left the board on 0.5, not 1
+  FAIL: a genuine press answer ("One game at a time", board 0.2) from 0.5 left the board on 0.7, not 1
+  FAIL: a genuine press answer ("He is still my player", board -0.3) from 0.5 left the board on 0.2, not 1
+  FAIL: a genuine press answer ("You would have to ask him", board 0) from 0.5 left the board on 0.5, not 1
+   383 press answers from half a point (106 of them the board disliked) and 19 handshakes from three: none reached zero
+   144 finance desk switches from a last point or less (6 of them docked the board): none reached zero
+3) The fan meter moves with results the way a fan would
+   639 match weeks sampled: fan meter vs last ten PPG r = 0.917
+   mean fan move after a win +5.92 (351), after a draw -2.88 (136), after a defeat -10.16 (152)
+4) Every league table row prints goals for and against beside the difference they make
+   84 rows across 5 tables rendered through react-dom/server, every pair its row's own goals and every GD the pair's difference
+5) The How to Play copy and the game content say what the meters do
+   15 claims read off the meters module and found in the copy
+
+simClubManagerMeters: 446 failure(s)

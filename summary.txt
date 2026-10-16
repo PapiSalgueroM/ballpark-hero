@@ -1,0 +1,12 @@
+dailyDeals exit=0 5s | simDailyDeals: green. 12 Hot Seat dates (5 Premier League) and 6 Deadline Day dates (3 Premier League) deal what Release AS dealt, no daily carries the real fixture key, 
+meters exit=0 35s | simClubManagerMeters: PASS. The board meter is the sack race, the fans move with results, and every table prints its goals pair.
+meters-promise exit=1 36s | simClubManagerMeters: 446 failure(s)
+sessionMarks exit=0 0s | simSessionMarks: green. Nine games count the day you play them, none of them invented a score or a streak day to do it.
+activity exit=0 6s | simActivityNotCompletion: all green
+appeal1081 exit=0 50s | Equivalent appeal outcomes must agree: passed for 24 original pairs and 3 separate generated-position pairs.
+activity-match exit=0 6s | control "match": 2 failure(s) fired in section 1 as expected, the check works
+vitest-hook exit=0 5s |    Duration  5.22s (transform 2.29s, setup 77ms, collect 2.86s, tests 1.22s, environment 445ms, prepare 286ms)
+start exit=0 3s | simClubManagerStart: green. The defaults are the shipped game, the currency never reaches the engine, and no setting can switch off the haggle.
+saveSize exit=0 73s | simClubManagerSaveSize: all sections green
+score exit=0 111s | ALL SEASON SCORE CHECKS PASSED
+budget exit=0 179s | simClubManagerBudget: PASS
