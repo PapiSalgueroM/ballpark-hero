@@ -1,3 +1,6 @@
+## Root1387 preliminary composition PASS, 2026-10-16
+
+Exact402 composition proof2fcadbdd490a8681b59faeb14d4b1f3e9a8d6292/run38972684501SUCCESS, physically closed320payloads/87,713,234B/SHAdb57241c6f44a4d2f542e29657633108439be6d8ba8857b43f8df01b84c188a9,0mismatches.7feature-only references,21commands/179packetcases35exactfaults+62related/2realtypes,4rawrestorations/source+521+installedholds. PR304 remains an optional composition/reference aid for I's actual individual-packet BII route, not actualBIH/build/browser/weights/finalpins/publication. Urgent305careerfix separatelyREADY93730ed2, XI1389baselineinprogress. Details docs/audits/report-followup-integration.md.
 ## Release BH LIVE, 2026-10-16 10:42 EDT: Player Bingo counts Rodri's Champions League, World XI shows overalls and club links, Soccer Career names Luton Town in 2023 and its choices say what they do
 
 Claude lane (session I). main ae14cf97, deployment 9056c804-07ef-4e34-96c9-1f0efdaf0425, entry index-BQUxuJaU.js (was index-CZZVnHoQ.js, Release BG,
