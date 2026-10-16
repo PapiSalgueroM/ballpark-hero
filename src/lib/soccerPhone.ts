@@ -1041,6 +1041,10 @@ export function ensurePhone(s: CareerState): PhoneState {
     seed: typeof p.seed === "number" && p.seed > 0 ? p.seed : 1,
     offers: typeof p.offers === "number" ? p.offers : 0,
     perksTaken: typeof p.perksTaken === "number" ? p.perksTaken : 0,
+    bYear: typeof p.bYear === "number" && Number.isFinite(p.bYear) ? p.bYear : undefined,
+    bK: typeof p.bK === "number" && Number.isFinite(p.bK) && p.bK >= 0 ? p.bK : undefined,
+    bP: typeof p.bP === "number" && Number.isFinite(p.bP) && p.bP >= 0 ? p.bP : undefined,
+    bM: typeof p.bM === "number" && Number.isFinite(p.bM) && p.bM >= 0 ? p.bM : undefined,
   };
   for (const t of out.threads) {
     if (typeof t.rel !== "number" || !Number.isFinite(t.rel)) t.rel = 50;

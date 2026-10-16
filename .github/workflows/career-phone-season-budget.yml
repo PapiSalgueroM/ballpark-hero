@@ -1,0 +1,157 @@
+name: Soccer Career phone season budget
+
+on:
+  push:
+    branches: [codex/career-phone-season-budget]
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 75
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      ENGINES: chromium
+      CAREER_SEASON_LOCAL_ONLY: '1'
+      PHONE_BUDGET_PHASE: fixed
+      PHONE_BUDGET_BASE: d4f2c6f688d656205722ba52bbdb33f03490966a
+      PHONE_BUDGET_OUT: ${{ github.workspace }}/phone-budget-artifacts
+      FREE_KICK_FONT_CACHE: ${{ github.workspace }}/phone-budget-artifacts/font-cache
+      PRERENDER_ONLY: /soccer-career
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Bind source and locked dependencies
+        run: |
+          echo '127.0.0.1 flawuiqbvjobmkfkauhw.supabase.co' | sudo tee -a /etc/hosts
+          mkdir -p "$PHONE_BUDGET_OUT"
+          git rev-parse HEAD > "$PHONE_BUDGET_OUT/source-head.txt"
+          git archive --format=zip HEAD > "$PHONE_BUDGET_OUT/source.zip"
+          git status --porcelain --untracked-files=no > "$PHONE_BUDGET_OUT/source-before.txt"
+          test ! -s "$PHONE_BUDGET_OUT/source-before.txt"
+          git diff --exit-code "$PHONE_BUDGET_BASE" -- src scripts package.json package-lock.json bun.lock ':!src/lib/soccerPhone.ts' ':!src/test/soccerPhoneSeasonBudget.test.ts' ':!scripts/simPhoneSeasonBudget.mjs'
+          if test "$PHONE_BUDGET_PHASE" = baseline; then
+            git diff --exit-code "$PHONE_BUDGET_BASE" -- src/lib/soccerPhone.ts
+          fi
+          find src scripts .github/workflows -type f ! -path scripts/data/lastmod.json -print0 | sort -z | xargs -0 sha256sum > "$PHONE_BUDGET_OUT/source-hashes.txt"
+          sha256sum package.json package-lock.json bun.lock > "$PHONE_BUDGET_OUT/package-hashes.txt"
+          npm ci
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          const lock = JSON.parse(fs.readFileSync('package-lock.json'));
+          const installed = Object.entries(lock.packages).filter(([p]) => p.startsWith('node_modules/') && fs.existsSync(p + '/package.json')).map(([p, entry]) => {
+            const version = JSON.parse(fs.readFileSync(p + '/package.json')).version;
+            assert.equal(version, entry.version, p); return { path: p, version };
+          });
+          assert.equal(installed.length, 521);
+          fs.writeFileSync(process.env.PHONE_BUDGET_OUT + '/installed.json', JSON.stringify(installed, null, 2));
+          console.log(`Bound ${installed.length} installed locked versions.`);
+          NODE
+          find node_modules -type f -print0 | sort -z | xargs -0 sha256sum > "$PHONE_BUDGET_OUT/installed-files.sha256"
+      - name: Actual application type gate
+        run: node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee "$PHONE_BUDGET_OUT/types.log"
+      - name: Exact phone budget baseline or fixed outcomes
+        run: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simPhoneSeasonBudget.mjs 2>&1 | tee "$PHONE_BUDGET_OUT/$PHONE_BUDGET_PHASE.log"
+      - name: Original source control and full restoration
+        if: env.PHONE_BUDGET_PHASE == 'fixed'
+        run: |
+          PHONE_BUDGET_CONTROL=original NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simPhoneSeasonBudget.mjs 2>&1 | tee "$PHONE_BUDGET_OUT/original.log"
+          PHONE_BUDGET_RESTORED=1 NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simPhoneSeasonBudget.mjs 2>&1 | tee "$PHONE_BUDGET_OUT/restored.log"
+      - name: Existing phone focus outcomes
+        run: |
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simPhonePanelFocus.mjs 2>&1 | tee "$PHONE_BUDGET_OUT/phone-focus.log"
+      - name: Original full phone simulations, with the known save-size red recorded
+        run: |
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simPhone.mjs 2>&1 | tee "$PHONE_BUDGET_OUT/simPhone.log"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          import { spawnSync } from 'node:child_process';
+          const result = spawnSync(process.execPath, ['scripts/simPhone2.mjs'], {
+            env: { ...process.env, NODE_OPTIONS: `--require=${process.cwd()}/scripts/lib/offlineTransport.cjs` },
+            encoding: 'utf8', maxBuffer: 32 * 1024 * 1024, timeout: 600000,
+          });
+          const log = result.stdout + result.stderr;
+          fs.writeFileSync(process.env.PHONE_BUDGET_OUT + '/simPhone2.log', log);
+          fs.writeFileSync(process.env.PHONE_BUDGET_OUT + '/simPhone2.stdout.log', result.stdout);
+          fs.writeFileSync(process.env.PHONE_BUDGET_OUT + '/simPhone2.stderr.log', result.stderr);
+          process.stdout.write(log);
+          const failures = log.split(/\r?\n/).filter(line => /^  FAIL:/.test(line));
+          const knownSizeOnly = result.status === 1 && !result.error && !result.signal && failures.length === 1
+            && /^  FAIL: biggest save is \d+(?:\.\d+)? KB$/.test(failures[0]) && /\n1 FAILURES\s*$/.test(result.stdout);
+          const green = result.status === 0 && !result.error && !result.signal && failures.length === 0
+            && /ALL PHONE ROUND 130 CHECKS PASSED\s*$/.test(result.stdout);
+          fs.writeFileSync(process.env.PHONE_BUDGET_OUT + '/simPhone2.process.json', JSON.stringify({
+            status: result.status, signal: result.signal, error: result.error?.message ?? null,
+            failures, green, knownSizeOnly, limits: 'Original 52KB whole-save cap is unchanged. A retained known size failure is not a green sim or full-suite claim.',
+          }, null, 2));
+          assert(!/SIM_OFFLINE_BLOCK|TypeError:|ReferenceError:|SyntaxError:|ERR_MODULE_NOT_FOUND|Unhandled (?:Errors?|Rejection)|Uncaught Exception|Failed to load|Failed to resolve import/i.test(log), 'Setup, transport and unhandled errors cannot qualify as a known size red');
+          assert(green || knownSizeOnly, 'No new phone-simulation failure may be classified as the existing save-size red');
+          console.log(green ? 'Original phone simulation green.' : 'Original phone simulation remains RED only on its unchanged whole-save cap; not credited as green.');
+          NODE
+      - name: Build tools
+        if: env.PHONE_BUDGET_PHASE == 'fixed'
+        run: |
+          npm install --prefix "$RUNNER_TEMP/phone-budget-build" --no-save --package-lock=false playwright@1.64.0
+          ln -s "$RUNNER_TEMP/phone-budget-build/node_modules/playwright" node_modules/playwright
+          ln -s "$RUNNER_TEMP/phone-budget-build/node_modules/playwright-core" node_modules/playwright-core
+          node "$RUNNER_TEMP/phone-budget-build/node_modules/playwright/cli.js" install --with-deps chromium
+          python -m pip install fonttools pillow
+          node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only 2>&1 | tee "$PHONE_BUDGET_OUT/fonts.log"
+      - name: Complete build and all rebuilt-site readers
+        if: env.PHONE_BUDGET_PHASE == 'fixed'
+        run: |
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" npm run build:seo 2>&1 | tee "$PHONE_BUDGET_OUT/build.log"
+          cp scripts/data/lastmod.json "$PHONE_BUDGET_OUT/build-lastmod.json"
+          git diff -- scripts/data/lastmod.json > "$PHONE_BUDGET_OUT/build-lastmod.diff"
+          find dist -type f -print0 | sort -z | xargs -0 sha256sum > "$PHONE_BUDGET_OUT/dist-hashes.txt"
+          ONLY=simAdsense,simBrand,simHeadTags,simHiddenPages,simHubs,simIndexNow,simIndexing,simInternalLinks,simNoRivalNames,simPrerender,simPrerenderBoot,simRetiredRoutes,simSchema,simSitemap,simSnapshotAssets node scripts/runAllSims.mjs --browser 2>&1 | tee "$PHONE_BUDGET_OUT/readers.log"
+          test "$(grep -c '^All 15 harnesses green\.$' "$PHONE_BUDGET_OUT/readers.log")" = 1
+      - name: Unchanged full download budgets
+        if: env.PHONE_BUDGET_PHASE == 'fixed'
+        run: |
+          node scripts/lib/hostLikeServer.mjs dist 4173 > "$PHONE_BUDGET_OUT/weight-server.log" 2>&1 &
+          task_server_pid=$!
+          trap 'kill "$task_server_pid" 2>/dev/null || true' EXIT
+          for attempt in 1 2 3 4 5; do
+            if curl --fail --silent http://127.0.0.1:4173/ > /dev/null; then break; fi
+            sleep 1
+          done
+          curl --fail --silent http://127.0.0.1:4173/ > /dev/null
+          BASE=http://127.0.0.1:4173 SWEEP_BASE=http://127.0.0.1:4173 SWEEP_OFFLINE=1 NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/sweepWeight.mjs 2>&1 | tee "$PHONE_BUDGET_OUT/weight.log"
+      - name: Final source and dependency holds
+        if: always()
+        run: |
+          sha256sum --check "$PHONE_BUDGET_OUT/source-hashes.txt" > "$PHONE_BUDGET_OUT/source-holds.log"
+          sha256sum --check "$PHONE_BUDGET_OUT/package-hashes.txt"
+          sha256sum --check "$PHONE_BUDGET_OUT/installed-files.sha256" > "$PHONE_BUDGET_OUT/installed-holds.log"
+          if test -f "$PHONE_BUDGET_OUT/dist-hashes.txt"; then sha256sum --check "$PHONE_BUDGET_OUT/dist-hashes.txt" > "$PHONE_BUDGET_OUT/dist-holds.log"; fi
+          git diff --exit-code -- src scripts ':!scripts/data/lastmod.json' package.json package-lock.json bun.lock .github/workflows
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          const installed = JSON.parse(fs.readFileSync(process.env.PHONE_BUDGET_OUT + '/installed.json'));
+          for (const row of installed) assert.equal(JSON.parse(fs.readFileSync(row.path + '/package.json')).version, row.version, row.path);
+          console.log(`Held ${installed.length} installed locked versions.`);
+          NODE
+      - name: Retain complete evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: phone-budget-${{ github.run_id }}
+          path: phone-budget-artifacts/
+          retention-days: 14
+          if-no-files-found: error
