@@ -1,0 +1,2 @@
+new exit=0 4s |    Duration  3.68s (transform 1.55s, setup 55ms, collect 2.18s, tests 685ms, environment 308ms, prepare 70ms)
+mut exit=1 5s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usCareerReports1346.test.tsx,title=src/test/usCareerReports1346.test.tsx > Round 1346%3A retire from c
