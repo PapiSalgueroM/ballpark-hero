@@ -47,8 +47,11 @@ characters `;return new Promise(()=>{})`.
 - scripts/playChunkReloadWait.mjs: rows A (/soccer-career cold), B (/ About chunk), C (/club-manager search part then
   guide 500 ms later), D (/ then a TAPPED Soccer Career tile) at 390 and 1280, each with a null arm as its console
   baseline; the reload's document request is held 2.5 s and the page reports itself every 100 ms through a binding
-  (an evaluate from outside is refused while a navigation is pending). Control PLAY_RELOAD_WAIT_CONTROL=stock walks the
-  stock control dist and must fire on every row.
+  (an evaluate from outside is refused while a navigation is pending). Each row and size runs two ways: the failed
+  file answers 404 with reduced motion "reduce", and the way the real host answers a file gone after a deploy
+  (index.html with a 200 and text/html, as scripts/lib/hostLikeServer.mjs does) with motion on, so 16 rows in all
+  (added by the fixer after the run review's minor 3). Control PLAY_RELOAD_WAIT_CONTROL=stock walks the stock control
+  dist and must fire on every row.
 
 ## Known residuals
 

@@ -18,7 +18,15 @@
    Each fault row has a null arm first (same route, nothing failed): its
    console errors and page errors are the environment's baseline, and the
    fault arm is compared with it by message and URL.
-   The failed file answers 404 to every request until the reload's document
+   Every row runs two ways at each size. "404": the failed file answers 404,
+   with reduced motion "reduce". "host": the failed file answers the way the
+   real host answers a file that is gone after a deploy, index.html with a
+   200 and text/html (scripts/lib/hostLikeServer.mjs does the same), with
+   motion on ("no-preference"), the way most visitors run. The browser's own
+   line for a failed file is "Failed to load resource" the first way and
+   "Failed to load module script" the second; either is allowed only at the
+   failed file's URL.
+   The failed file fails to every request until the reload's document
    request arrives; that request is HELD 2.5 s, so the old page stays alive
    and both arms are deterministic. During the hold, sampled at about 0.8, 1.5
    and 2.2 s: no "This page broke", no page error, no console error past the
@@ -50,9 +58,12 @@ const OUT = path.resolve(ROOT, process.env.RC_OUT || '.tmp-fx/reload-wait', STOC
 const HOLD_MS = 2500;
 const SAMPLES = [800, 1500, 2200];
 const SIZES = [{ width: 390, height: 844 }, { width: 1280, height: 900 }];
+const WAYS = [{ id: '404', motion: 'reduce' }, { id: 'host', motion: 'no-preference' }];
 const KEY = 'dukb-reloaded-stale-chunk';
 const sleep = ms => new Promise(r => setTimeout(r, ms));
-if (!fs.existsSync(path.join(DIST, 'assets'))) { console.error(`no ${DIST}/assets: build first`); process.exit(2); }
+if (!fs.existsSync(path.join(DIST, 'assets')) || !fs.existsSync(path.join(DIST, 'index.html'))) { console.error(`no ${DIST}/assets or ${DIST}/index.html: build first`); process.exit(2); }
+/* what the host sends for a file that is gone: the site's index.html */
+const INDEX_HTML = fs.readFileSync(path.join(DIST, 'index.html'), 'utf8');
 fs.mkdirSync(OUT, { recursive: true });
 
 const assets = fs.readdirSync(path.join(DIST, 'assets'));
@@ -122,10 +133,10 @@ const SNAP = () => {
 };
 
 const rows = [];
-async function walk(browser, base, row, size, arm) {
+async function walk(browser, base, row, size, arm, way) {
   const fault = arm === 'fault';
-  const rec = { row: row.id, route: row.route, size: `${size.width}x${size.height}`, arm, docs: [], files: [], consoleErrors: [], pageErrors: [], samples: [], issues: [] };
-  const context = await browser.newContext({ viewport: size, isMobile: size.width < 1000, hasTouch: size.width < 1000, reducedMotion: 'reduce', serviceWorkers: 'block',
+  const rec = { row: row.id, route: row.route, size: `${size.width}x${size.height}`, way: way.id, motion: way.motion, arm, docs: [], files: [], consoleErrors: [], pageErrors: [], samples: [], issues: [] };
+  const context = await browser.newContext({ viewport: size, isMobile: size.width < 1000, hasTouch: size.width < 1000, reducedMotion: way.motion, serviceWorkers: 'block',
     storageState: { cookies: [], origins: [{ origin: base, localStorage: [{ name: 'cookie-consent', value: 'essential' }] }] } });
   const page = await context.newPage();
   page.setDefaultTimeout(25000);
@@ -149,9 +160,12 @@ async function walk(browser, base, row, size, arm) {
     }
     const spec = failSpec.get(url.pathname);
     if (fault && spec) {
-      const entry = { file: url.pathname, at: Date.now() - t0, action: failing ? '404' : 'served' };
+      const entry = { file: url.pathname, at: Date.now() - t0, action: failing ? way.id : 'served' };
       rec.files.push(entry);
-      if (failing) { if (spec.delay) await sleep(spec.delay); return route.fulfill({ status: 404, contentType: 'text/plain', body: 'Not found' }); }
+      if (failing) {
+        if (spec.delay) await sleep(spec.delay);
+        return route.fulfill(way.id === 'host' ? { status: 200, contentType: 'text/html', body: INDEX_HTML } : { status: 404, contentType: 'text/plain', body: 'Not found' });
+      }
     }
     return route.continue();
   });
@@ -166,7 +180,7 @@ async function walk(browser, base, row, size, arm) {
   await context.addInitScript({ content: `setInterval(() => { try { if (document.body) window.__dukbSample((${SNAP.toString()})()); } catch (e) {} }, 100);` });
   const cdp = await context.newCDPSession(page);
   const shot = async tag => {
-    const file = `shot-${row.id}-${size.width}-${arm}-${tag}.jpg`;
+    const file = `shot-${row.id}-${size.width}-${way.id}-${arm}-${tag}.jpg`;
     try {
       const { data } = await cdp.send('Page.captureScreenshot', { format: 'jpeg', quality: 60 });
       fs.writeFileSync(path.join(OUT, file), Buffer.from(data, 'base64')); rec[tag + 'Shot'] = file;
@@ -221,7 +235,7 @@ async function walk(browser, base, row, size, arm) {
     rec.final = await page.evaluate(SNAP);
     await shot('after');
     rec.held = held ? { ms: held.end - held.start } : null;
-    const first = rec.files.find(f => f.action === '404');
+    const first = rec.files.find(f => f.action !== 'served');
     if (first && held?.end) rec.waitMs = held.end - t0 - first.at;
   } catch (e) {
     rec.issues.push('walk stopped at ' + rec.stage + ': ' + String(e).slice(0, 200));
@@ -238,7 +252,7 @@ function judge(nul, rec, row) {
   const issues = [...rec.issues];
   const base = new Set(nul.consoleErrors.map(keyOf));
   const failed = new Set(row.fail.map(f => f.file));
-  const extra = rec.consoleErrors.filter(e => !base.has(keyOf(e)) && !(/Failed to load resource/.test(e.text) && failed.has(e.url.replace(/^https?:\/\/[^/]+/, ''))));
+  const extra = rec.consoleErrors.filter(e => !base.has(keyOf(e)) && !(/^Failed to load (resource|module script)/.test(e.text) && failed.has(e.url.replace(/^https?:\/\/[^/]+/, '').replace(/\?.*$/, ''))));
   rec.extraConsole = extra;
   if (STOCK) {
     const all = [...rec.consoleErrors.map(e => e.text), ...rec.pageErrors];
@@ -248,9 +262,9 @@ function judge(nul, rec, row) {
     return [];
   }
   if (rec.docs.length !== 2) issues.push(`${rec.docs.length} document loads, expected 2 (${rec.docs.map(d => d.path).join(', ')})`);
-  for (const f of row.fail) if (!rec.files.some(x => x.file === f.file && x.action === '404')) issues.push(`${f.file} was never asked for while failing`);
+  for (const f of row.fail) if (!rec.files.some(x => x.file === f.file && x.action !== 'served')) issues.push(`${f.file} was never asked for while failing`);
   if (row.tap) {
-    const first = rec.files.find(f => f.action === '404');
+    const first = rec.files.find(f => f.action !== 'served');
     if (rec.tapDocs !== 0) issues.push(`the tap made ${rec.tapDocs} document request(s): not a client side link`);
     if (!first || !rec.docs[1] || first.at > rec.docs[1].at) issues.push('the reload document came before the failed file: not the tapped link path');
     if (rec.docs[1] && rec.docs[1].path !== row.tap) issues.push(`the reload loaded ${rec.docs[1]?.path}, expected ${row.tap}`);
@@ -276,16 +290,16 @@ let red = 0; let fired = 0; let rowsRun = 0;
 try {
   for (const row of ROWS) {
     if (ONLY.length && !ONLY.includes(row.id)) continue;
-    for (const size of SIZES) {
-      const nul = await walk(browser, base, row, size, 'null');
+    for (const size of SIZES) for (const way of WAYS) {
+      const nul = await walk(browser, base, row, size, 'null', way);
       const nulIssues = [...nul.issues];
       if (!nul.final || !row.whole(nul.final) || nul.final.broke) nulIssues.push('the null arm is not whole: ' + JSON.stringify(nul.final));
       if ([...nul.consoleErrors.map(e => e.text), ...nul.pageErrors].some(t => SHAPES.test(t))) nulIssues.push('the null arm already shows a shape of the bug');
-      const rec = await walk(browser, base, row, size, 'fault');
+      const rec = await walk(browser, base, row, size, 'fault', way);
       const issues = [...nulIssues.map(i => 'null arm: ' + i), ...judge(nul, rec, row)];
       rowsRun++;
       rows.push({ null: nul, fault: rec, issues });
-      const label = `${row.id} ${row.route}${row.tap ? ' tap ' + row.tap : ''} ${size.width}`;
+      const label = `${row.id} ${row.route}${row.tap ? ' tap ' + row.tap : ''} ${size.width} ${way.id}`;
       const reqs = rec.files.map(f => `${f.file.split('/').pop()}:${f.action}@${f.at}`).join(' ');
       if (STOCK) {
         if (rec.fired) fired++;
