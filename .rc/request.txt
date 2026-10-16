@@ -1,0 +1,2 @@
+summer9: SIM_SECTIONS=9 node scripts/simUsCareerSummer.mjs
+summer9-noresume: SIM_SECTIONS=9 SIM_CONTROL=noresume node scripts/simUsCareerSummer.mjs
