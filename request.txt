@@ -1,0 +1,20 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+retire: node scripts/simCmRetire.mjs
+vitest-cm: node_modules/.bin/vitest run src/test/clubManager src/test/cm src/test/manager src/test/dailyMenuResume src/lib/clubManager src/test/numberFormatting.test.tsx --testTimeout=300000 --hookTimeout=120000
+simAccessibility: node scripts/simAccessibility.mjs
+simTrustCopy: node scripts/simTrustCopy.mjs
+simAcademy: node scripts/simAcademy.mjs
+simClubManagerBudget: node scripts/simClubManagerBudget.mjs
+simClubManagerMeters: node scripts/simClubManagerMeters.mjs
+simClubManagerScore: node scripts/simClubManagerScore.mjs
+simCmVarLedger: node scripts/simCmVarLedger.mjs
+simWilderness: node scripts/simWilderness.mjs
+simNationJob: node scripts/simNationJob.mjs
+simHomeFront: node scripts/simHomeFront.mjs
+simMidSeasonStart: node scripts/simMidSeasonStart.mjs
+simClubManager: node scripts/simClubManager.mjs
+simSaveFence: node scripts/simSaveFence.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+simEarlyReturnScope: node scripts/simEarlyReturnScope.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
