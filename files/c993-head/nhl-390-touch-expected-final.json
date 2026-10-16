@@ -1,0 +1,356 @@
+{
+  "c": {
+    "name": "Native Prospect",
+    "pos": "C",
+    "archetype": {
+      "id": "generational",
+      "label": "Generational Talent",
+      "desc": "The hype since you were 14",
+      "ovrBoost": 4,
+      "potBoost": 5,
+      "durability": 0.9,
+      "scoringMult": 1.25
+    },
+    "team": "NSH",
+    "year": 2028,
+    "age": 20,
+    "ovr": 84,
+    "pot": 96,
+    "morale": 80,
+    "fanbase": 47,
+    "health": 100,
+    "salary": 0.9,
+    "contractYears": 2,
+    "seasons": [
+      {
+        "year": 2027,
+        "team": "NSH",
+        "age": 19,
+        "ovr": 83,
+        "games": 82,
+        "awards": [],
+        "teamResult": "WON THE STANLEY CUP",
+        "salary": 0.9,
+        "slate": 84,
+        "goals": 38,
+        "assists": 35,
+        "points": 73,
+        "poGames": 27,
+        "poGoals": 9,
+        "poAssists": 9,
+        "poPoints": 18
+      }
+    ],
+    "cups": 1,
+    "harts": 0,
+    "allStars": 0,
+    "connSmythes": 0,
+    "retired": false,
+    "draftPick": 15,
+    "earnings": 0.9,
+    "netWorth": 0.9,
+    "dirtyMoney": 0,
+    "heat": 0,
+    "suspendedSeasons": 0,
+    "purchased": [],
+    "lifeFlags": {},
+    "appearance": {
+      "skinTone": "olive",
+      "hairstyle": "fade",
+      "hairColor": "black",
+      "facialHair": "none",
+      "celebration": "knee_slide",
+      "boots": "vortex_strike",
+      "accessory": "none"
+    },
+    "yearlyCosts": 0,
+    "rival": {
+      "name": "Cruz Kowalski",
+      "pos": "C",
+      "team": "NSH",
+      "ovr": 85,
+      "pot": 98,
+      "age": 20,
+      "rings": 0,
+      "hisYears": 0,
+      "myYears": 1,
+      "retired": false,
+      "lastLine": "28 G, 40 A, 68 P",
+      "lastScore": 68,
+      "lastYear": 2027,
+      "lastAllStar": false
+    },
+    "prospect": {
+      "v": 1,
+      "sport": "nhl",
+      "eraId": "now",
+      "seed": "nhl:seuf6u",
+      "routeId": "junior",
+      "pos": "C",
+      "rating": 81,
+      "pot": 96,
+      "stock": 84,
+      "health": 100,
+      "age": 18,
+      "seasonsDone": 2,
+      "lines": [
+        {
+          "age": 16,
+          "level": "Major junior",
+          "perf": 84,
+          "stockDelta": 7,
+          "stats": [
+            {
+              "label": "G/GP",
+              "value": "0.53"
+            },
+            {
+              "label": "A/GP",
+              "value": "0.65"
+            },
+            {
+              "label": "PTS/GP",
+              "value": "1.18"
+            }
+          ]
+        },
+        {
+          "age": 17,
+          "level": "Major junior",
+          "perf": 87,
+          "stockDelta": 7,
+          "stats": [
+            {
+              "label": "G/GP",
+              "value": "0.39"
+            },
+            {
+              "label": "A/GP",
+              "value": "0.66"
+            },
+            {
+              "label": "PTS/GP",
+              "value": "1.05"
+            }
+          ]
+        }
+      ],
+      "pendingChoice": null,
+      "choicesSeen": [
+        "nhl_tournament",
+        "nhl_billet"
+      ],
+      "showcase": {
+        "approach": "steady",
+        "drill": "Bike test",
+        "grade": "A",
+        "stockDelta": 5
+      },
+      "draft": {
+        "pick": 15,
+        "round": 1,
+        "pickInRound": 15,
+        "team": "NSH",
+        "ageAtDraft": 18,
+        "draftYear": 2026,
+        "slotValue": null,
+        "devSeasons": [
+          {
+            "age": 18,
+            "level": "Major junior",
+            "perf": 84,
+            "stockDelta": 0,
+            "stats": [
+              {
+                "label": "G/GP",
+                "value": "0.41"
+              },
+              {
+                "label": "A/GP",
+                "value": "0.71"
+              },
+              {
+                "label": "PTS/GP",
+                "value": "1.12"
+              }
+            ]
+          }
+        ],
+        "ratingAfter": 83,
+        "ageAfter": 19
+      },
+      "phase": "done"
+    },
+    "role": "starter",
+    "summerSalt": "57fk60",
+    "pendingRivalryEvent": {
+      "id": 309,
+      "emoji": "😬",
+      "title": "Rival Becomes Teammate",
+      "description": "Cruz Kowalski just signed with your team. The room just got a lot more interesting.",
+      "consequence": "The feud cools, Morale +3, Fanbase +5"
+    },
+    "money": {
+      "seed": 2947111344,
+      "vault": 0,
+      "hold": {
+        "ladder": 0,
+        "bricks": 0,
+        "cleats": 0,
+        "screens": 0,
+        "spark": 0
+      },
+      "cost": {
+        "ladder": 0,
+        "bricks": 0,
+        "cleats": 0,
+        "screens": 0,
+        "spark": 0
+      },
+      "price": {
+        "ladder": 102.24,
+        "bricks": 94.25,
+        "cleats": 108.46,
+        "screens": 118.88,
+        "spark": 109.1
+      },
+      "hist": {
+        "ladder": [
+          100,
+          102.24
+        ],
+        "bricks": [
+          100,
+          94.25
+        ],
+        "cleats": [
+          100,
+          108.46
+        ],
+        "screens": [
+          100,
+          118.88
+        ],
+        "spark": [
+          100,
+          109.1
+        ]
+      },
+      "log": [],
+      "year": 2027,
+      "age": 1,
+      "won": 0,
+      "lost": 0,
+      "cPlays": 0,
+      "cNet": 0,
+      "cYear": 0,
+      "cShut": false,
+      "aYear": 0,
+      "aBest": 0,
+      "aPlays": 0
+    },
+    "karma": 50,
+    "phoneInbox": [
+      {
+        "id": "juniors_equipment-2027",
+        "defId": "juniors_equipment",
+        "from": "Equipment manager",
+        "emoji": "🧺",
+        "text": "The national team sent over your gear list and spelled your name wrong on the nameplate. Want me to call them, or keep it for the trophy case?",
+        "year": 2027,
+        "choices": [
+          {
+            "label": "Keep it, it's funny",
+            "reply": "Keep it. That's going on the wall",
+            "karma": 4,
+            "morale": 2,
+            "popularity": 1
+          },
+          {
+            "label": "Get it fixed",
+            "reply": "Call them please. My grandma will be watching",
+            "karma": 1
+          }
+        ],
+        "beat": "juniors"
+      },
+      {
+        "id": "kid_dm-2027",
+        "defId": "kid_dm",
+        "from": "Fan DM",
+        "emoji": "🧒",
+        "text": "youre my favorite player ever. im in the hospital and all i want is a signed stick. no worries if youre busy",
+        "year": 2027,
+        "choices": [
+          {
+            "label": "Send a signed stick and visit",
+            "reply": "Stick is on the way and I'm coming to see you next week. Stay strong",
+            "karma": 12,
+            "popularity": 6,
+            "cash": -0.1
+          },
+          {
+            "label": "Send the stick",
+            "reply": "On its way little legend",
+            "karma": 6,
+            "popularity": 3
+          },
+          {
+            "label": "Ignore it",
+            "reply": "",
+            "karma": -8
+          }
+        ],
+        "beat": "allstar"
+      },
+      {
+        "id": "beard_shave-2027",
+        "defId": "beard_shave",
+        "from": "Local barber",
+        "emoji": "🧔",
+        "text": "That playoff beard is a whole personality at this point. Shave it live on stream for the children's charity?",
+        "year": 2027,
+        "choices": [
+          {
+            "label": "Shave it for charity",
+            "reply": "Chair. Tomorrow. Do your worst, it's for a good cause",
+            "karma": 8,
+            "popularity": 5,
+            "cash": -0.3
+          },
+          {
+            "label": "Keep the beard",
+            "reply": "Sorry, this thing is staying until we're eliminated or we win it all",
+            "karma": 1
+          }
+        ],
+        "beat": "playoffs"
+      }
+    ],
+    "phoneUsedIds": [
+      "juniors_equipment",
+      "kid_dm",
+      "beard_shave"
+    ],
+    "headlines": [
+      "Nashville Predators lift the Cup. Native Prospect gets his day with it",
+      "Native Prospect goes 38G 35A 73P"
+    ],
+    "eventLastFired": {
+      "nhlC_rule_coach_challenge": 2027,
+      "story:entryLevel": 2027
+    },
+    "summer": {
+      "year": 2027,
+      "ids": [
+        "pressTitle",
+        "nhlC_rule_coach_challenge",
+        "nhlC_rule_entry_level_bonuses"
+      ],
+      "at": 0
+    }
+  },
+  "phase": "event",
+  "teamQuality": 82,
+  "coach": null
+}
