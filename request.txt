@@ -1,0 +1,7 @@
+#!serial
+mG-unit: node .rc/x/mut.mjs G && node_modules/.bin/vitest run src/lib/clubManagerWorldMoves.test.ts --testTimeout=300000; s=$?; git checkout -- src scripts; exit $s
+mGR-s1: node .rc/x/mut.mjs G R && CM_WORLD_MOVES_SECTIONS=1 CM_WORLD_MOVES_ERAS=now CM_WORLD_MOVES_SEEDS=1-2 node scripts/simCmWorldMoves.mjs; s=$?; git checkout -- src scripts; exit $s
+mG-s1-3eras: node .rc/x/mut.mjs G && CM_WORLD_MOVES_SECTIONS=1 node scripts/simCmWorldMoves.mjs; s=$?; git checkout -- src scripts; exit $s
+mG-pr269: node .rc/x/mut.mjs G && git show 1923d291:src/test/managerAiOwnership.test.ts > src/test/managerAiOwnership.test.ts && node_modules/.bin/vitest run src/test/managerAiOwnership.test.ts --testTimeout=300000 --hookTimeout=300000; s=$?; rm -f src/test/managerAiOwnership.test.ts; git checkout -- src scripts; exit $s
+pr269-head: git show 1923d291:src/test/managerAiOwnership.test.ts > src/test/managerAiOwnership.test.ts && node_modules/.bin/vitest run src/test/managerAiOwnership.test.ts --testTimeout=300000 --hookTimeout=300000; s=$?; rm -f src/test/managerAiOwnership.test.ts; exit $s
+clean: git status --short src scripts | head -5; git diff --quiet -- src scripts && echo "tree clean"

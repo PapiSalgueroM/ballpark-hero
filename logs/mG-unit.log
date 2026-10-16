@@ -1,0 +1,82 @@
+mut G: applied to src/lib/clubManager.ts
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [31m❯[39m src/lib/clubManagerWorldMoves.test.ts [2m([22m[2m6 tests[22m[2m | [22m[31m3 failed[39m[2m)[22m[32m 135[2mms[22m[39m
+[31m   [31m×[31m Round 1344: deals between two other clubs reach the world ledger[2m > [22ma new career records its opening window: every man is at his buyer and gone from his seller[39m[32m 47[2mms[22m[39m
+[31m     → Erling Haaland to Real Madrid: expected [] to have a length of 1 but got +0[39m
+[31m   [31m×[31m Round 1344: deals between two other clubs reach the world ledger[2m > [22maiDealPlayer hands back the ledger payload of a man the ledger holds, and the projection's man otherwise[39m[32m 14[2mms[22m[39m
+[31m     → Real Madrid does not list Erling Haaland[39m
+   [32m✓[39m Round 1344: deals between two other clubs reach the world ledger[2m > [22ma man I sold is never taken by an AI club while my buyer holds him (the lead's ruling 3)[32m 23[2mms[22m[39m
+[31m   [31m×[31m Round 1344: deals between two other clubs reach the world ledger[2m > [22mthe screen's market lists a man another club bought this season at his new club, and every door says why not yet[39m[32m 13[2mms[22m[39m
+[31m     → expected undefined to be true // Object.is equality[39m
+   [32m✓[39m Round 1344: deals between two other clubs reach the world ledger[2m > [22ma seeded save missing this season's moves is mended when it opens, once, and a damaged line never costs the save[32m 21[2mms[22m[39m
+   [32m✓[39m Round 1344: deals between two other clubs reach the world ledger[2m > [22mrecordAiDeals takes no draw, and hands an unseeded career back as the same object[32m 17[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 3 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/lib/clubManagerWorldMoves.test.ts[2m > [22mRound 1344: deals between two other clubs reach the world ledger[2m > [22ma new career records its opening window: every man is at his buyer and gone from his seller
+[31m[1mAssertionError[22m: Erling Haaland to Real Madrid: expected [] to have a length of 1 but got +0[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- 1[39m
+[31m+ 0[39m
+
+[36m [2m❯[22m src/lib/clubManagerWorldMoves.test.ts:[2m40:51[22m[39m
+    [90m 38| [39m    [35mfor[39m ([35mconst[39m line [35mof[39m lines) {
+    [90m 39| [39m      const owned = records.filter(r => r.status === 'owned' && r.owne…
+    [90m 40| [39m      [34mexpect[39m(owned[33m,[39m [32m`[39m[36m${[39mline[33m.[39mname[36m}[39m[32m to [39m[36m${[39mline[33m.[39mto[36m}[39m[32m`[39m)[33m.[39m[34mtoHaveLength[39m([34m1[39m)[33m;[39m
+    [90m   | [39m                                                  [31m^[39m
+    [90m 41| [39m      [34mexpect[39m(owned[[34m0[39m][33m.[39morigin[33m.[39mclub)[33m.[39m[34mtoBe[39m(line[33m.[39m[35mfrom[39m)[33m;[39m
+    [90m 42| [39m      expect(worldRosterFor(s, line.to).some(p => p.worldRosterKey ===…
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/3]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/lib/clubManagerWorldMoves.test.ts[2m > [22mRound 1344: deals between two other clubs reach the world ledger[2m > [22maiDealPlayer hands back the ledger payload of a man the ledger holds, and the projection's man otherwise
+[31m[1mError[22m: Real Madrid does not list Erling Haaland[39m
+[36m [2m❯[22m cardAt src/lib/clubManagerWorldMoves.test.ts:[2m26:17[22m[39m
+    [90m 24| [39mfunction cardAt(s: CareerState, club: string, name: string): MarketPla…
+    [90m 25| [39m  [35mconst[39m p [33m=[39m [34mworldRosterFor[39m(s[33m,[39m club)[33m.[39m[34mfind[39m(x [33m=>[39m x[33m.[39mn [33m===[39m name)[33m;[39m
+    [90m 26| [39m  [35mif[39m ([33m![39mp) [35mthrow[39m [35mnew[39m [33mError[39m([32m`[39m[36m${[39mclub[36m}[39m[32m does not list [39m[36m${[39mname[36m}[39m[32m`[39m)[33m;[39m
+    [90m   | [39m                [31m^[39m
+    [90m 27| [39m  return { name: p.n, club, position: p.p, age: p.a, rating: p.r, pric…
+    [90m 28| [39m    ...(p.worldRosterKey ? { worldRosterKey: p.worldRosterKey, worldRo…
+[90m [2m❯[22m action src/lib/clubManagerWorldMoves.test.ts:[2m52:57[22m[39m
+[90m [2m❯[22m withRoll src/lib/clubManagerWorldMoves.test.ts:[2m16:16[22m[39m
+[90m [2m❯[22m src/lib/clubManagerWorldMoves.test.ts:[2m52:21[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/3]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/lib/clubManagerWorldMoves.test.ts[2m > [22mRound 1344: deals between two other clubs reach the world ledger[2m > [22mthe screen's market lists a man another club bought this season at his new club, and every door says why not yet
+[31m[1mAssertionError[22m: expected undefined to be true // Object.is equality[39m
+
+[32m- Expected:[39m 
+true
+
+[31m+ Received:[39m 
+undefined
+
+[36m [2m❯[22m src/lib/clubManagerWorldMoves.test.ts:[2m78:35[22m[39m
+    [90m 76| [39m    [35mconst[39m line [33m=[39m [34maiLines[39m(s)[[34m0[39m][33m;[39m
+    [90m 77| [39m    const row = marketForScreen(s).find(p => p.name === line.name && p…
+    [90m 78| [39m    [34mexpect[39m(row[33m?.[39mjoinedThisSeason)[33m.[39m[34mtoBe[39m([35mtrue[39m)[33m;[39m
+    [90m   | [39m                                  [31m^[39m
+    [90m 79| [39m    [34mexpect[39m([34mbuildMarket[39m(s)[33m.[39m[34msome[39m(p [33m=>[39m p[33m.[39mname [33m===[39m line[33m.[39mname))[33m.[39m[34mtoBe[39m([35mfalse[39m)[33m;[39m
+    [90m 80| [39m    const sentence = `${line.name} only joined ${line.to} this season.…
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/3]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m3 failed[39m[22m[2m | [22m[1m[32m3 passed[39m[22m[90m (6)[39m
+[2m   Start at [22m 17:22:16
+[2m   Duration [22m 2.21s[2m (transform 1.20s, setup 39ms, collect 1.46s, tests 135ms, environment 231ms, prepare 145ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/clubManagerWorldMoves.test.ts,title=src/lib/clubManagerWorldMoves.test.ts > Round 1344%3A deals between two other clubs reach the world ledger > a new career records its opening window%3A every man is at his buyer and gone from his seller,line=40,column=51::AssertionError: Erling Haaland to Real Madrid: expected [] to have a length of 1 but got +0%0A%0A- Expected%0A+ Received%0A%0A- 1%0A+ 0%0A%0A ❯ src/lib/clubManagerWorldMoves.test.ts:40:51%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/clubManagerWorldMoves.test.ts,title=src/lib/clubManagerWorldMoves.test.ts > Round 1344%3A deals between two other clubs reach the world ledger > aiDealPlayer hands back the ledger payload of a man the ledger holds%2C and the projection's man otherwise,line=26,column=17::Error: Real Madrid does not list Erling Haaland%0A ❯ cardAt src/lib/clubManagerWorldMoves.test.ts:26:17%0A ❯ action src/lib/clubManagerWorldMoves.test.ts:52:57%0A ❯ withRoll src/lib/clubManagerWorldMoves.test.ts:16:16%0A ❯ src/lib/clubManagerWorldMoves.test.ts:52:21%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/clubManagerWorldMoves.test.ts,title=src/lib/clubManagerWorldMoves.test.ts > Round 1344%3A deals between two other clubs reach the world ledger > the screen's market lists a man another club bought this season at his new club%2C and every door says why not yet,line=78,column=35::AssertionError: expected undefined to be true // Object.is equality%0A%0A- Expected: %0Atrue%0A%0A+ Received: %0Aundefined%0A%0A ❯ src/lib/clubManagerWorldMoves.test.ts:78:35%0A%0A

@@ -1,0 +1,9 @@
+mut G: applied to src/lib/clubManager.ts
+1) ownership: seeded careers, 6 seasons, seeds 1,2,3,4,5, the head engine
+   opening  45 windows, 198 AI deal lines, 0 not placed at the buyer, ledger 4.4 records and 2321 units a window on average
+   january  270 windows, 1182 AI deal lines, 0 not placed at the buyer, ledger 35.0 records and 3930 units a window on average
+   summer   225 windows, 1000 AI deal lines, 0 not placed at the buyer, ledger 36.6 records and 3467 units a window on average
+   45 careers (0 sacked early), 1272374 listings checked by the one club rule, 5362 moved men followed over 225 rollovers
+   failures by check: (i) 0, (ii) 0, (iii) 0; the first at none
+   the opening window's refusals (deal lines it closed before the seed that the flush could not place): 0 of 198 (expected 0)
+simCmWorldMoves: green, sections 1 held

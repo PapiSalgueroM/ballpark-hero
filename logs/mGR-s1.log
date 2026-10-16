@@ -1,0 +1,19 @@
+mut G: applied to src/lib/clubManager.ts
+mut R: applied to src/lib/clubManager.ts
+1) ownership: seeded careers, 6 seasons, seeds 1,2, the head engine
+  FAIL section 1: Real Madrid (now, seed 1) the opening window: Atlético Madrid signed Mohammed Kudus from Tottenham, but the ledger holds no record of him at Atlético Madrid
+  FAIL section 1: Real Madrid (now, seed 1) the opening window: Barcelona signed Morgan Rogers from Chelsea, but the ledger holds no record of him at Barcelona
+  FAIL section 1: Real Madrid (now, seed 1) the opening window: Atalanta signed Eberechi Eze from Arsenal, but the ledger holds no record of him at Atalanta
+  FAIL section 1: Real Madrid (now, seed 1) the opening window: Atlético Madrid signed Cody Gakpo from Liverpool, but the ledger holds no record of him at Atlético Madrid
+  FAIL section 1: Real Madrid (now, seed 1) the opening window: Barcelona signed Tijjani Reijnders from Al-Qadsiah, but the ledger holds no record of him at Barcelona
+  FAIL section 1: Real Madrid (now, seed 1) the rollover to season 2: Mohammed Kudus, moved to Atlético Madrid at the opening window,has no owned record there
+  FAIL section 1: Real Madrid (now, seed 1) the rollover to season 2: Morgan Rogers, moved to Barcelona at the opening window,has no owned record there
+  FAIL section 1: Real Madrid (now, seed 1) the rollover to season 2: Eberechi Eze, moved to Atalanta at the opening window,has no owned record there
+   opening  6 windows, 28 AI deal lines, 28 not placed at the buyer, ledger 0.0 records and 0 units a window on average
+   january  36 windows, 157 AI deal lines, 0 not placed at the buyer, ledger 32.5 records and 4309 units a window on average
+   summer   30 windows, 133 AI deal lines, 0 not placed at the buyer, ledger 34.3 records and 4175 units a window on average
+   6 careers (0 sacked early), 306269 listings checked by the one club rule, 626 moved men followed over 30 rollovers
+   failures by check: (i) 28, (ii) 0, (iii) 28; the first at opening
+   the opening window's refusals (deal lines it closed before the seed that the flush could not place): 28 of 28 (expected 0)
+  section 1: 48 more failures not shown
+simCmWorldMoves: RED, sections 1 (56)

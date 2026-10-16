@@ -1,0 +1,6 @@
+mG-unit exit=1 3s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/clubManagerWorldMoves.test.ts,title=src/lib/clubManagerWorldMoves.test.ts > Round 1344%3A deals between
+mGR-s1 exit=1 38s | simCmWorldMoves: RED, sections 1 (56)
+mG-s1-3eras exit=0 237s | simCmWorldMoves: green, sections 1 held
+mG-pr269 exit=1 7s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/managerAiOwnership.test.ts,title=src/test/managerAiOwnership.test.ts > Manager AI completed-deal owner
+pr269-head exit=0 10s |    Duration  8.33s (transform 1.22s, setup 38ms, collect 34ms, tests 6.14s, environment 230ms, prepare 53ms)
+clean exit=0 0s | tree clean
