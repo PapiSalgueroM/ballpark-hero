@@ -326,7 +326,7 @@ async function legacyCareer(E, era, club, seed, kind) {
       saved.push(sha(M.store.get(M.cm.SAVE_KEY) ?? ''));
       return M.cm.loadCareer() ?? s;
     };
-    let s = kind === 'legacy' ? M.cm.startCareer(club, era, undefined, undefined, LEGACY_WORLD) : M.cm.startCareer(club, era);
+    let s = kind !== 'stripped' ? M.cm.startCareer(club, era, undefined, undefined, LEGACY_WORLD) : M.cm.startCareer(club, era);
     if (kind === 'stripped') {
       s = JSON.parse(JSON.stringify(s));
       delete s.worldSeed; delete s.worldRoster;
@@ -378,7 +378,9 @@ async function legacySection(B, H) {
     const tag = `${club} (${era}, seed ${seed}, ${kind})`;
     const [b, h] = [await legacyCareer(B, era, club, seed, kind), await legacyCareer(H, era, club, seed, kind)];
     s6Careers += 1; s6Saves += h.saved.length; s6Draws += h.draws; s6Deals += h.dealt ?? 0;
-    if (b.error || h.error) { fail(6, `${tag}: ${b.error ?? h.error}`); continue; }
+    /* A career that cannot be set up measures nothing, so it stops the run (exit 2) rather than turning the section
+       red: otherwise the seedless control could "fire" on a broken fleet (it did once, remote check r1344-wm2). */
+    if (b.error || h.error) cannot(`section 6, ${tag}: ${b.error ?? h.error}`);
     if (h.ledger) fail(6, `${tag}: the head's career wrote a world ledger with no seed`);
     if (b.saved.length !== h.saved.length) fail(6, `${tag}: BASE saved ${b.saved.length} times, the head ${h.saved.length}`);
     const first = b.saved.findIndex((x, i) => x !== h.saved[i]);
@@ -559,8 +561,8 @@ if (SECTIONS.has(6)) {
   console.log('6) legacy: unseeded careers, BASE against the head, every saved string and Math.random draw');
   await legacySection(B, H);
   console.log(`   ${s6Careers} careers, ${s6Saves} saves, ${s6Draws} draws and ${s6Deals} deals of mine on the head`);
-  if (!s6Careers || !s6Saves) fail(6, 'no career was played');
-  if (!s6Deals) fail(6, 'no deal of mine was made, so no ledger writer was called');
+  if (!s6Careers || !s6Saves) cannot('section 6: no career was played');
+  if (!s6Deals) cannot('section 6: no deal of mine was made, so no ledger writer was called');
 }
 if (SECTIONS.has(9)) {
   console.log(`9) shape: ${SHAPE_SEASONS} seasons at ${CLUBS.now.join(', ')} (the JSON goes to --combine)`);
