@@ -12,9 +12,11 @@
          market row no longer says he only joined;
      (d) at 390: the same career's save written by the round's BASE engine (d4f2c6f6, which never told the ledger):
          after Resume Career, B's club page lists X (the repair on load);
-     (e) at every width, around the refused press: scrollY and the document height do not move, the desk note's
-         text is at least 12 px and inside the viewport. The Talk button's height is printed (it is today's button,
-         not this round's).
+     (e) at every width, around the refused press: the desk note that shows the refusal is today's (Round 634), so
+         the press is held to a refusal that already exists, the same row with the window shut: the card under the
+         finger moves no more than it does there (within 2 px), and the note's text is at least 12 px and inside the
+         screen's width. scrollY, the document height and where the note lands are printed for both. The Talk
+         button's height is printed too (it is today's button, not this round's).
    Pictures go to $RC_OUT (or .tmp-fx/playCmWorldMoves) as world-moves-<case>-<width>.png.
 
    Controls (PLAY_WORLD_MOVES_CONTROL):
@@ -180,17 +182,17 @@ async function pressTalk(page) {
   const button = page.locator('[data-wm-talk="1"]').first();
   await button.scrollIntoViewIfNeeded().catch(() => {});
   await page.waitForTimeout(150);
-  const before = await page.evaluate(() => ({ y: window.scrollY, h: document.documentElement.scrollHeight }));
+  const before = await page.evaluate(() => { const b = document.querySelector('[data-wm-talk="1"]'); return { y: window.scrollY, h: document.documentElement.scrollHeight, top: b ? b.getBoundingClientRect().top : null }; });
   await button.click();
   const noteEl = page.getByTestId('cm-desk-note').first();
   await noteEl.waitFor({ timeout: 4000 }).catch(() => {});
   await page.waitForTimeout(200);
-  const after = await page.evaluate(() => ({ y: window.scrollY, h: document.documentElement.scrollHeight }));
+  const after = await page.evaluate(() => { const b = document.querySelector('[data-wm-talk="1"]'); return { y: window.scrollY, h: document.documentElement.scrollHeight, top: b ? b.getBoundingClientRect().top : null }; });
   const note = await page.evaluate(() => {
     const el = document.querySelector('[data-testid="cm-desk-note"]');
     if (!el) return null;
     const span = el.querySelector('span') || el, r = el.getBoundingClientRect();
-    return { text: (el.textContent || '').replace(/\s+/g, ' ').trim(), size: parseFloat(getComputedStyle(span).fontSize), left: r.left, right: r.right, width: window.innerWidth };
+    return { text: (el.textContent || '').replace(/\s+/g, ' ').trim(), size: parseFloat(getComputedStyle(span).fontSize), left: r.left, right: r.right, width: window.innerWidth, top: r.top, bottom: r.bottom, height: window.innerHeight };
   });
   return { before, after, note };
 }
@@ -210,26 +212,38 @@ const joined = club => `${X} only joined ${club} this season`;
 const errors = [];
 try {
   if (CONTROL !== 'norepair') {
-    /* (a) and (e): the market finds him at his new club and the door says why, at every width. */
+    /* (a) and (e): the market finds him at his new club and the door says why, at every width. The desk note is
+       today's (Round 634: every refused door shows the engine's sentence in it), so (e) holds the new refusal to the
+       note's behaviour on a refusal that already exists, the same row with the window shut: the card under the finger
+       moves no more than it does there, and the note's text is at least 12 px and inside the screen's width. */
+    const shut = (() => { const c = JSON.parse(pick.save1); c.transferWindow = null; c.windowWeeksLeft = 0; return JSON.stringify(c); })();
     for (const profile of PROFILES) {
-      const { context, page } = await pageWith(profile, pick.save1);
-      const w = profile.width;
-      if (!(await resume(page))) { check('a', `${w}: the planted career resumes to the hub`, false); await context.close(); continue; }
-      const row = await marketRow(page, X, BUYER);
-      check('a', `${w}: the market's search for ${X} finds him at ${BUYER}`, !!row, row ? row.text.slice(0, 90) : 'no row');
-      await shot(page, `a-market-${w}`);
-      if (row) {
-        const press = await pressTalk(page);
-        await shot(page, `a-refused-${w}`);
-        check('a', `${w}: Talk says he only joined ${BUYER} this season`, press.note?.text.includes(joined(BUYER)), press.note?.text ?? 'no note');
-        check('e', `${w}: the refused press moves nothing (scrollY ${press.before.y} to ${press.after.y}, height ${press.before.h} to ${press.after.h})`,
-          press.before.y === press.after.y && press.before.h === press.after.h);
-        check('e', `${w}: the desk note is at least 12 px and inside the screen`, press.note && press.note.size >= 12 && press.note.left >= 0 && press.note.right <= press.note.width,
-          press.note ? `${press.note.size} px, ${Math.round(press.note.left)} to ${Math.round(press.note.right)} of ${press.note.width}` : 'no note');
-        console.log(`     the Talk button is ${Math.round(row.height)} px tall at ${w} (today's button, not this round's)`);
+      const w = profile.width, presses = {};
+      for (const [kind, save] of [['joined', pick.save1], ['shut', shut]]) {
+        const { context, page } = await pageWith(profile, save);
+        if (!(await resume(page))) { check('a', `${w} ${kind}: the planted career resumes to the hub`, false); await context.close(); continue; }
+        const row = await marketRow(page, X, BUYER);
+        if (kind === 'joined') check('a', `${w}: the market's search for ${X} finds him at ${BUYER}`, !!row, row ? row.text.slice(0, 90) : 'no row');
+        await shot(page, `a-market-${kind}-${w}`);
+        if (row) {
+          presses[kind] = await pressTalk(page);
+          presses[kind].button = row.height;
+          await shot(page, `a-refused-${kind}-${w}`);
+        }
+        errors.push(...page.errors);
+        await context.close();
       }
-      errors.push(...page.errors);
-      await context.close();
+      const j = presses.joined, s = presses.shut;
+      if (!j) continue;
+      check('a', `${w}: Talk says he only joined ${BUYER} this season`, j.note?.text.includes(joined(BUYER)), j.note?.text ?? 'no note');
+      check('a', `${w}: with the window shut the same Talk says so first`, s?.note?.text.includes('The transfer window is shut.'), s?.note?.text ?? 'no note');
+      const moved = p => (p.after.top ?? 0) - (p.before.top ?? 0);
+      const line = p => `card ${Math.round(moved(p))} px, scrollY ${p.before.y} to ${p.after.y}, height ${p.before.h} to ${p.after.h}, note ${p.note ? `${Math.round(p.note.top)} to ${Math.round(p.note.bottom)} of ${p.note.height}` : 'none'}`;
+      check('e', `${w}: the refused press moves the card no more than today's refusal does (joined: ${line(j)}; shut: ${s ? line(s) : 'not measured'})`,
+        !!s && Math.abs(moved(j) - moved(s)) <= 2);
+      check('e', `${w}: the desk note is at least 12 px and inside the screen's width`, j.note && j.note.size >= 12 && j.note.left >= 0 && j.note.right <= j.note.width,
+        j.note ? `${j.note.size} px, ${Math.round(j.note.left)} to ${Math.round(j.note.right)} of ${j.note.width}` : 'no note');
+      console.log(`     the Talk button is ${Math.round(j.button)} px tall at ${w} (today's button, not this round's)`);
     }
     /* (b): his new club's page lists him, his old one's does not. */
     {
@@ -248,14 +262,16 @@ try {
         await second.context.close();
       }
     }
-    /* (c): a season later he is still there, and for sale. */
+    /* (c): a season later he is still there, and for sale (the club page and the market each from a fresh load). */
     if (CONTROL !== 'norecord') {
-      const { context, page } = await pageWith(PHONE, pick.save2);
-      const ok = await resume(page);
-      const text = ok ? await clubPage(page, BUYER) : null;
-      await shot(page, 'c-buyer-390');
+      const first = await pageWith(PHONE, pick.save2);
+      const text = (await resume(first.page)) ? await clubPage(first.page, BUYER) : null;
+      await shot(first.page, 'c-buyer-390');
       check('c', `a season later ${BUYER}'s club page still lists ${X}`, !!text && text.includes(X));
-      const row = ok ? await marketRow(page, X, BUYER) : null;
+      errors.push(...first.page.errors);
+      await first.context.close();
+      const { context, page } = await pageWith(PHONE, pick.save2);
+      const row = (await resume(page)) ? await marketRow(page, X, BUYER) : null;
       check('c', `a season later the market lists ${X} at ${BUYER}`, !!row);
       if (row) {
         const press = await pressTalk(page);
