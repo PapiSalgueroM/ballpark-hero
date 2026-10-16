@@ -1,0 +1,3 @@
+oldsaves: node .rc/x/oldsaves.mjs
+oldsaves-basebase: OLD_ARM=basebase node .rc/x/oldsaves.mjs
+oldsaves-mainbase: OLD_BASE=1027b08cac8ef5cfc52c6b2e738e5c0a8d703402 node .rc/x/oldsaves.mjs

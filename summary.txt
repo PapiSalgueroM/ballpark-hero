@@ -1,0 +1,3 @@
+oldsaves-mainbase exit=1 9s | oldsaves: RED, 32 failure(s)
+oldsaves-basebase exit=1 9s | oldsaves: RED, 32 failure(s)
+oldsaves exit=1 9s | oldsaves: RED, 32 failure(s)
