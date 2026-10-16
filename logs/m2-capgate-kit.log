@@ -1,0 +1,6 @@
+MUT capgate: applied to src/data/soccerDeck/starter.ts
+1:simEventDeck: 8 packs (nfl, nba, mlb, nhl, college, gym, afl)
+19:   FAIL soccer: 1 cards never dealt over 1,000 seasons (719)
+20:   ok soccer: all 28 cards reached in 1000 deals, the top card 724 at 11.7% (ceiling 13.7%)
+26:simEventDeck: 1 failure, red sections 10
+MUTANT capgate kit10=1

@@ -1,0 +1,8 @@
+MUT injgate: applied to src/data/soccerDeck/starter.ts
+[2m      Tests [22m [1m[32m26 passed[39m[22m[90m (26)[39m
+simSoccerDeck: head and base e814c2de bundled (1.1 s); the shipped pack holds 28 cards
+simSoccerDeck: green. Every section.
+simEventDeck: 8 packs (nfl, nba, mlb, nhl, college, gym, afl)
+   ok soccer: all 28 cards reached in 1000 deals, the top card 726 at 11.2% (ceiling 13.7%)
+simEventDeck: green. Sections 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 only.
+MUTANT injgate vitest=0 simWhole=0 kit1to12=0
