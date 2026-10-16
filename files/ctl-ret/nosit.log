@@ -1,0 +1,15 @@
+Fleet: 300 careers per sport, head engine with control nosit against BASE (hunks stripped)
+  FAIL [section 3] nfl #0: sitOutCoachSeason moved a retired career
+  FAIL [section 3] nfl #1: sitOutCoachSeason moved a retired career
+  FAIL [section 3] nfl #2: sitOutCoachSeason moved a retired career
+  FAIL [section 3] nfl #3: sitOutCoachSeason moved a retired career
+  FAIL [section 3] nfl #4: sitOutCoachSeason moved a retired career
+  nfl: 300 careers, 5989 coaching steps before the retirement
+  nba: 300 careers, 5940 coaching steps before the retirement
+  mlb: 300 careers, 5784 coaching steps before the retirement
+  nhl: 300 careers, 6056 coaching steps before the retirement
+  retired: 902 while employed, 298 out of work (146 holding offers), 54 before a first season
+2) Byte identity with BASE: held
+3) Retired careers hand their input back: 1200 careers red
+4) skipped under a control (the controls aim at sections 2 and 3)
+CONTROL nosit FIRED: section 3 red on 1200 careers

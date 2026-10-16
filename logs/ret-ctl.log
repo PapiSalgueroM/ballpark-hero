@@ -1,0 +1,8 @@
+drift exit=1 | CONTROL drift FIRED: section 2 red on 1200 careers
+early exit=1 | CONTROL early FIRED: section 2 red on 940 careers
+noretire exit=1 | CONTROL noretire FIRED: section 2 red on 1200 careers
+noguard exit=1 | CONTROL noguard FIRED: section 3 red on 1200 careers
+nosit exit=1 | CONTROL nosit FIRED: section 3 red on 1200 careers
+noaccept exit=1 | CONTROL noaccept FIRED: section 3 red on 146 careers
+norefresh exit=1 | CONTROL norefresh FIRED: section 3 red on 1200 careers
+family ret: every control fired as documented

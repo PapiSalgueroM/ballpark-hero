@@ -1,0 +1,5 @@
+noundo exit=1 | CONTROL noundo FIRED: section 1 red on 16040 states
+leak exit=1 | CONTROL leak FIRED: section 1 red on 15233 states
+graded exit=1 | CONTROL graded FIRED: section 1 red on 16040 states
+clamp exit=1 | CONTROL clamp FIRED: section 1 red on 1099 states
+family skips: every control fired as documented

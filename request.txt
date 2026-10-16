@@ -1,0 +1,5 @@
+ret-ctl: bash .rc/x/ctl.sh ret
+skips-ctl: bash .rc/x/ctl.sh skips
+poach-ctl: bash .rc/x/ctl.sh poach
+prospect-ctl: bash .rc/x/ctl.sh prospect
+predraft-ctl: bash .rc/x/ctl.sh predraft
