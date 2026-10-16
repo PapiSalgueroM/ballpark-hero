@@ -1,0 +1,3 @@
+sd-silent exit=1 10s | simSoccerDeck: CONTROL=silent FIRED: section 5 failed (2 failures, red sections 5)
+sd-drop exit=1 11s | simSoccerDeck: CONTROL=drop FIRED: section 5 failed (2 failures, red sections 5)
+sd-a exit=0 56s | simSoccerDeck: green. Sections 1, 2, 3, 4, 5 only.

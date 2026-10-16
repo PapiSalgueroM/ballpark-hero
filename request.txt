@@ -1,0 +1,3 @@
+sd-silent: SIM_SOCCER_DECK_CONTROL=silent node scripts/simSoccerDeck.mjs
+sd-drop: SIM_SOCCER_DECK_CONTROL=drop node scripts/simSoccerDeck.mjs
+sd-a: SIM_SOCCER_DECK_SECTIONS=1,2,3,4,5 node scripts/simSoccerDeck.mjs
