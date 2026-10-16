@@ -1,0 +1,31 @@
+0) anchors: every edit this harness can make stands exactly once in the source it is made to
+   control seedless: 1
+   control norecord: 1
+   control norecord: 1
+   control noflush: 1
+   control nojanuary: 1
+   control nosummer: 1
+   control nohijack: 1
+   control nowalk: 1
+   control slow: 1
+   control edit made 1 time(s): slow: if (working && seen) { const moved = recordAiDeal(working, {
+12) the window entry: Real Madrid, Everton, Aberdeen to the January of season 6, 5 trials an engine, the head's median at most 3 x BASE's + 5 ms
+   Real Madrid (now, seed 1): ledger 22 records on BASE, 63 on the head; the window entry's median BASE 31.1 ms, head 140.2 ms (limit 98.4)
+  FAIL section 12: Real Madrid (now, seed 1): the head's window entry took 140.2 ms against BASE's 31.1 ms, over 3 x + 5 ms
+   Real Madrid (now, seed 2): ledger 23 records on BASE, 66 on the head; the window entry's median BASE 35.9 ms, head 146.1 ms (limit 112.6)
+  FAIL section 12: Real Madrid (now, seed 2): the head's window entry took 146.1 ms against BASE's 35.9 ms, over 3 x + 5 ms
+   Real Madrid (now, seed 3): ledger 22 records on BASE, 70 on the head; the window entry's median BASE 29.2 ms, head 146.3 ms (limit 92.7)
+  FAIL section 12: Real Madrid (now, seed 3): the head's window entry took 146.3 ms against BASE's 29.2 ms, over 3 x + 5 ms
+   Everton (now, seed 1): ledger 12 records on BASE, 56 on the head; the window entry's median BASE 29.9 ms, head 131.5 ms (limit 94.8)
+  FAIL section 12: Everton (now, seed 1): the head's window entry took 131.5 ms against BASE's 29.9 ms, over 3 x + 5 ms
+   Everton (now, seed 2): ledger 12 records on BASE, 51 on the head; the window entry's median BASE 27.6 ms, head 119.1 ms (limit 87.8)
+  FAIL section 12: Everton (now, seed 2): the head's window entry took 119.1 ms against BASE's 27.6 ms, over 3 x + 5 ms
+   Everton (now, seed 3): ledger 15 records on BASE, 63 on the head; the window entry's median BASE 28.0 ms, head 140.4 ms (limit 88.9)
+  FAIL section 12: Everton (now, seed 3): the head's window entry took 140.4 ms against BASE's 28.0 ms, over 3 x + 5 ms
+   Aberdeen (now, seed 1): ledger 4 records on BASE, 53 on the head; the window entry's median BASE 32.3 ms, head 120.6 ms (limit 101.9)
+  FAIL section 12: Aberdeen (now, seed 1): the head's window entry took 120.6 ms against BASE's 32.3 ms, over 3 x + 5 ms
+   Aberdeen (now, seed 2): ledger 5 records on BASE, 53 on the head; the window entry's median BASE 30.8 ms, head 121.2 ms (limit 97.4)
+  FAIL section 12: Aberdeen (now, seed 2): the head's window entry took 121.2 ms against BASE's 30.8 ms, over 3 x + 5 ms
+   Aberdeen (now, seed 3): ledger 5 records on BASE, 42 on the head; the window entry's median BASE 26.9 ms, head 106.3 ms (limit 85.7)
+  section 12: 1 more failures not shown
+simCmWorldMoves: control slow FIRED: section 12 red (9)

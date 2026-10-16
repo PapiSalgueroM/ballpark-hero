@@ -1,0 +1,11 @@
+12) the window entry: Real Madrid, Everton, Aberdeen to the January of season 6, 5 trials an engine, the head's median at most 3 x BASE's + 5 ms
+   Real Madrid (now, seed 1): ledger 22 records on BASE, 63 on the head; the window entry's median BASE 30.8 ms, head 61.7 ms (limit 97.4)
+   Real Madrid (now, seed 2): ledger 23 records on BASE, 66 on the head; the window entry's median BASE 28.2 ms, head 57.1 ms (limit 89.7)
+   Real Madrid (now, seed 3): ledger 22 records on BASE, 70 on the head; the window entry's median BASE 27.7 ms, head 58.9 ms (limit 88.1)
+   Everton (now, seed 1): ledger 12 records on BASE, 56 on the head; the window entry's median BASE 29.0 ms, head 60.5 ms (limit 92.0)
+   Everton (now, seed 2): ledger 12 records on BASE, 51 on the head; the window entry's median BASE 27.7 ms, head 51.1 ms (limit 88.2)
+   Everton (now, seed 3): ledger 15 records on BASE, 63 on the head; the window entry's median BASE 28.4 ms, head 60.0 ms (limit 90.2)
+   Aberdeen (now, seed 1): ledger 4 records on BASE, 53 on the head; the window entry's median BASE 27.5 ms, head 53.9 ms (limit 87.5)
+   Aberdeen (now, seed 2): ledger 5 records on BASE, 53 on the head; the window entry's median BASE 28.0 ms, head 56.5 ms (limit 89.1)
+   Aberdeen (now, seed 3): ledger 5 records on BASE, 42 on the head; the window entry's median BASE 27.7 ms, head 50.9 ms (limit 88.0)
+simCmWorldMoves: green, sections 12 held

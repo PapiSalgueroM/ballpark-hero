@@ -1,0 +1,2 @@
+s12 exit=0 131s | simCmWorldMoves: green, sections 12 held
+c-slow exit=1 140s | simCmWorldMoves: control slow FIRED: section 12 red (9)
