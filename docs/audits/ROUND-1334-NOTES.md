@@ -145,14 +145,16 @@ midfielder; LW, RW, ST forward. The doubtful pairs, one line each:
 - scripts/simEventDeck.mjs: PACK_INDEXES gains `['src/data/soccerDeck/index.ts', 'SOCCER_DECK_PACKS',
   'src/pages/SoccerCareer.tsx']`; the entry exports SOCCER_FX_WORDS from src/data/soccerDeck/words.ts (never from
   soccerDeck.ts, ruling 2(h)); PACK_BINDS.soccer binds every soccer key over the kit's desk (a number in a bag made on
-  first write, the real words); CEILING.soccer 0.137 (measured at seeds 1 to 10 on rc r1334-s4a and again on r1334-s4e:
-  the top card is 726 every time, 9.00 to 11.70 percent, plus 2 points).
+  first write, the real words); CEILING.soccer 0.131 over section 10's soccer drive of 5,000 seasons (REACH_DESKS, the
+  closing check's fix below: the top card is 726 at every seed 1 to 10, 9.82 to 11.04 percent, plus 2 points, rc
+  r1334-fx2a and again r1334-fx3a; over the old 1,000 seasons it read 9.00 to 11.70 and the ceiling was 0.137).
 - TWO ONE LINE EDITS that are not appends, both needed the moment an index pack moves fx keys, which no index pack did
   before: section 8 called `gmPackProblems(p)` with no registry (every soccer key would read as unregistered), now
   `gmPackProblems(p, PACK_BINDS[k]?.fx)`; section 10 drove every index pack through runDesk with no bind (bindGmInbox
   throws on an unregistered key), now `{ observe, bind: PACK_BINDS[tag] }`. For the seven GM packs PACK_BINDS[k] is
   undefined, so both lines do exactly what they did (section 1's 84 replay rows, section 8 and section 10 are green with
-  the GM numbers unchanged). Round 1333 rewrites sections 8 and 10: keep both arguments when it lands.
+  the GM numbers unchanged). Round 1333 rewrites sections 8 and 10: keep both arguments when it lands. The closing
+  check's fix adds three more changed lines in section 10 (listed under "The kit lines Round 1333 must keep" below).
 - The pack's `pressure`: morale 2 and each of the eleven training keys it moves 1. At most one card is dealt a summer,
   so a season's push can never pass the largest single option; the kit's section 15 reads BEST and WORST far under them
   (rc r1334-s4a measure-15: morale +0.57 to +0.62 and -0.43 to -0.47 a season, every training key 0.13 or less).
@@ -292,17 +294,56 @@ src/components/soccer-career/ AgentBrief.tsx AgentReviewCard.tsx CareerMentorTil
   control no longer prints "dealt no card" lines that are untrue under it; the header and section 8's pastCeiling comment
   now say what the code does.
 
+### What the closing check changed (commit 627af305)
+
+The kit's reach check over the soccer pack (section 10) was a coin toss: over its 1,000 seasons it was red at SEED 4 and
+28 of seeds 1 to 30 (719 never dealt), green at the gate's default SEED 1, and its "all 28 cards reached" line printed
+right after the FAIL (the ok branch ignored the unreached list, Round 1332's code). The pack has four rare cards (705,
+719, 721, 727). Narrowing the goals spec did not cure it (goals 0 to 12 still red at SEED 16), and the specs are the
+brief's list, so none moved. The fix drives the pack longer instead:
+
+- `REACH_DESKS = { soccer: 500 }` in section 10: the soccer pack runs 500 desks of ten seasons (5,000), every other pack
+  keeps the FLEET drive's 100. Over 5,000 seasons 719 was dealt 5 to 19 times at every seed 1 to 30 (rc r1334-fx2a), and
+  section 10 is green at all 30 seeds on the commit (rc r1334-fx3a, line reach30).
+- The reach FAIL prints the pack's real seasons ("over 5,000 seasons" for soccer, "over 1,000 seasons" for a GM pack as
+  before), and the "all cards reached" line prints only when nothing is unreached.
+- CEILING.soccer 0.131 from the 5,000 season measurement (above).
+- A new control, `EVENT_DECK_CONTROL=unreach`: soccer's 719 is gated on goals below 0 in memory; section 10 exits 1 with
+  "FAIL soccer: 1 cards never dealt over 5,000 seasons (719)" and no "soccer: all" line (rc r1334-fx3a, line ctl, with
+  heavy and neutral firing as before).
+- The GM packs read as before: sections 8 and 10 on SC_BASE and on the commit print the same lines but the two pack
+  counts that include the soccer pack (rc r1334-fx3a, line gmequal: 23 lines each side, the only differences
+  "7 packs" to "8 packs" in the banner and "ok 9 packs" to "ok 10 packs" in section 8). The kit's NFL measurement at
+  seeds 1 to 10 is unchanged (19.38 to 20.39).
+
+### The kit lines Round 1333 must keep
+
+Decision 1(f) allowed appended lines only. These lines of Round 1332's kit are changed, not appended, each needed by the
+soccer pack and each a no op for the GM packs (PACK_BINDS[k] and REACH_DESKS[k] are undefined for them):
+
+1. Section 8: `E.gmPackProblems(p, PACK_BINDS[k]?.fx)` (was `E.gmPackProblems(p)`): without it every soccer key reads
+   as unregistered.
+2. Section 10's drive loop: `d < (REACH_DESKS[tag] ?? DRIVES.FLEET.desks)` and `{ observe, bind: PACK_BINDS[tag] }`
+   (was `d < DRIVES.FLEET.desks` and `{ observe }`): without the bind, bindGmInbox throws on the soccer keys; without
+   the desks, the reach check is the coin toss above.
+3. Section 10's title line: "reached over at least 1,000 seasons".
+4. Section 10's reach FAIL: the pack's own seasons in place of the fixed "1,000".
+5. Section 10's ok line: `else if (!unreached.length) ok(...)` (was `else ok(...)`).
+
+Appended, not changed: `CONTROLS.push('unreach')`, the control's header lines, REACH_DESKS and the control's block in
+section 10, CEILING.soccer, PACK_BINDS.soccer, the PACK_INDEXES line, the words export and LAZY_IMPORTERS' push. If
+Round 1333 drops 1 or the bind of 2, the kit goes red on the soccer pack by itself; if it drops the desks of 2, 4 or 5
+nothing goes red at SEED 1, so its rewrite must carry them by hand and rerun section 10 at SEED 1 to 30. The kit's banner
+line (Round 1332's) counts every pack but names only the GM seats ("8 packs (nfl, ..., afl)"); left as it is.
+
 ### Not changed, for the lead
 
-- The kit's reach check over the soccer pack (section 10) is a coin toss: at the shipped specs it is red at SEED 4 and 28
-  of seeds 1 to 30 (719 never dealt), green at the gate's default SEED 1. The pack has four rare cards (705, 719, 721,
-  727, each about 2 to 8 deals over the kit's 1,000 seasons). Narrowing the goals spec does not cure it (goals 0 to 12:
-  still red at SEED 16; 0 to 15 and 0 to 20 green at 30 seeds but with a least dealt card at 1 or 2 deals), and the specs
-  are the brief's list, so none moved. The cure is a section 10 change (more seasons for a pack with rare cards), which
-  decision 1(f) does not allow here and which Round 1333, rewriting section 10 and the drives, is the place for.
-- The two one line kit edits that are not appends (sections 8 and 10, above) stay: the soccer index line of 1(f) cannot
-  pass the kit without them.
+- The non append kit lines above: the lead accepts them (they are the minimum the soccer index line of 1(f) and an
+  honest reach check need) or rejects them.
 - Ruling 2(j)'s residue: training still moves legacy +1.66 (BEST) and +1.56 (WORST) against an OFF spread of 1.21.
+- Round 1504 and the rollback plan: a save holding a pending deck card on a build where the deck is not loaded loses the
+  card through Round 667's skip while the page's toast still promises its effect. The toast is the page's (Round
+  1504's file); on this round's build no deck card can be dealt, since nothing calls loadSoccerDeck.
 
 ### The kit's two gate lines, seconds before and after (ruling 2(h))
 
@@ -317,10 +358,15 @@ e814c2de checked out beside the head at .rcbase, the head 8cbca428 (the pack as 
 Every run exit 0 and green. The soccer pack adds about a second to the kit; both lines stay under 150 s, so no third
 line is owed by time (the finish's three way split, 13 alone and 14,15,16, also stands: 75 s and 25 s on rc r1334-fx2b).
 
-### The reach check, measured for the lead (not changed here)
+After the closing check's 5,000 season soccer drive (627af305), line a again, one #!serial request (rc r1334-fx3b, base
+first then head first, a slower runner than fx2a's): SC_BASE 57 s and 57 s, head 59 s and 59 s; section 10 alone 2.9 s
+on SC_BASE (no soccer pack) and 3.2 s on the head. Line b is untouched by that commit (sections 13 to 16).
+
+### The reach check, measured (the evidence behind commit 627af305)
 
 rc r1334-fx1b and r1334-fx2a, a runner-only patch printing the least dealt cards of section 10, SEED 1 to 30 each:
-the shipped kit red at SEED 4 and 28 (719 at 0); with the soccer pack driven over five times the seasons (5,000) green at
-all 30 seeds, the least dealt card 719 at 5 to 19 deals, the top card 726 at 9.82 to 11.04 percent over seeds 1 to 10
-(under the 13.7 ceiling). The patch is one line of section 10's drive:
-`for (let d = 0; d < DRIVES.FLEET.desks * (tag === 'soccer' ? 5 : 1); d++) runDesk(...)`.
+the kit as the builder left it red at SEED 4 and 28 (719 at 0); with the soccer pack driven over five times the seasons
+(5,000) green at all 30 seeds, the least dealt card 719 at 5 to 19 deals, the top card 726 at 9.82 to 11.04 percent over
+seeds 1 to 10. The patch was `DRIVES.FLEET.desks * (tag === 'soccer' ? 5 : 1)`, the same 500 desks REACH_DESKS gives
+(each desk keyed by its index, so the same deals); rc r1334-fx3a on 627af305 read the same ten top card shares to two
+decimals and section 10 green at every seed 1 to 30.
