@@ -511,6 +511,19 @@
       Europe, trophies, objectives and promotions held in all 47, and pure
       held 48/0. Written with --part=modern,eras,pure --write on the tree
       itself (37 lines changed), then run green whole on the same runner.
+      Round 1343 (2026-10-16) re-took modern, eras and pure for one new
+      save field and nothing else: careerStats.highestScoring, the highest
+      scoring game on the manager record, written at every whistle on the
+      current rules (never on Hot Seat's 'base'), drawing nothing.
+      Attribution on a GitHub runner at 5053712f (remote check r1343-s6b),
+      three legs. Leg A, the base d4f2c6f6's src: green whole against the
+      committed file. Leg B, the tree with the record's one gated call made
+      a no-op: green whole, so the record is the whole cause and no result,
+      table or draw of any save moved. Leg C, the tree itself: 47 failures,
+      every entry in whole and wholeNext and the ten pyramid saves in
+      s2_whole as well, 104 hashes, each a hash of a whole state; every
+      other view held, and pure held. Written with --part=modern,eras,pure
+      --write on the tree itself (104 lines changed), then run green whole.
    2. DIGEST, ERAS (hard). The same for every league of every historic era,
       one career each.
    3. DIGEST, PURE (hard). For every modern and era league: the drop count,
