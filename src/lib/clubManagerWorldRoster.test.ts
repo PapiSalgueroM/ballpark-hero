@@ -535,12 +535,13 @@ describe('actual world roster continuity through manager callbacks', () => {
     const exercised = exerciseLoanOption(loaned, loaned.squad.find(x => x.name === loanOffer.name)!.id)!;
     expect(exercised).not.toBeNull(); expect(exercised.worldRoster).toBeUndefined();
     /* Round 1508: at its next summer such a career joins the living world (a readable ledger, still no seed). Nothing
-       from before that summer is rebuilt: none of the deals above left a record of mine. */
-    const before = [offer.name, second.name, loanOffer.name];
+       from before that summer is rebuilt but where my own men are: the men I sold or released before it have no
+       record, and the man I signed then and still have is recorded as signed by me from the club he came from. */
     for (const next of [withRoll(0.6, () => startNextSeason(exercised)), withRoll(0.6, () => startNextSeason(exercised, 'Liverpool'))]) {
       expect(next.worldSeed).toBeUndefined();
       const held = readWorldRoster(next); expect(held).not.toBeNull();
-      expect(held!.records.some(r => before.includes(r.player.name) && (r.owner === c.clubName || r.status === 'released'))).toBe(false);
+      expect(held!.records.some(r => [offer.name, second.name].includes(r.player.name) && (r.owner === c.clubName || r.status === 'released'))).toBe(false);
+      expect(held!.records.filter(r => r.player.name === loanOffer.name && r.owner === c.clubName && r.origin.club === loanOffer.club)).toHaveLength(1);
     }
   });
 

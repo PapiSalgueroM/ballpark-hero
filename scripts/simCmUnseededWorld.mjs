@@ -224,11 +224,18 @@ function livingCheck(M, s, label, note, deal, lv) {
     if (atSeller.has(`${p.name}|${p.club}`)) bad('market', `the screen lists ${p.name} at ${p.club}, the club that sold him this season`);
     if (p.joinedThisSeason) lv.joined += 1;
   }
+  /* mine: no man of my squad is listed at any club of the world (the adoption records the men I signed before it) */
+  for (const p of s.squad) {
+    if (p.onLoan || p.academyGrad || p.isYouth) continue;
+    const clubs = origin.get(`${p.name}|${year - p.age}|${p.position}`) ?? [];
+    if (clubs.length) bad('mine', `${p.name} of my squad is also listed at ${clubs.join(' and ')}`);
+  }
   /* mine: the deal this step made left exactly one record, and a man I sold is one no AI club can take */
   if (deal) {
     lv.mine[deal.kind] += 1;
     const recs = records.filter(r => r.player.name === deal.name && r.status === deal.status && r.owner === deal.owner);
-    if (recs.length !== 1) bad('mine', `my ${deal.kind} of ${deal.name} left ${recs.length} ledger records (${deal.status}, owner ${deal.owner})`);
+    const named = records.filter(r => r.player.name === deal.name || r.origin.name === deal.name).map(r => `${r.status} ${r.owner ?? 'nobody'} from ${r.origin.club}`);
+    if (recs.length !== 1) bad('mine', `my ${deal.kind} of ${deal.name} (${deal.why ?? ''}) left ${recs.length} ledger records (${deal.status}, owner ${deal.owner}); records naming him: ${named.join(', ') || 'none'}`);
     if (deal.kind === 'sale' && recs.length === 1) {
       const listed = M.cm.worldRosterFor(s, deal.owner).find(p => p.worldRosterKey === recs[0].key);
       if (!listed) bad('mine', `${deal.name}, sold to ${deal.owner}, is not listed there`);
@@ -342,14 +349,14 @@ async function journey(E, input, plan, seed, bridge = false, living = null) {
   step('release-2', cur => {
     const man = [...outfield(cur)].sort((a, b) => a.rating - b.rating || a.id.localeCompare(b.id))[0];
     const next = man && M.cm.releasePlayer(cur, man.id);
-    return next ? { state: next, note: 'done', deal: { kind: 'release', name: man.name, owner: null, status: 'released' } } : { note: 'refused' };
+    return next ? { state: next, note: 'done', deal: { kind: 'release', name: man.name, owner: null, status: 'released', why: `key ${man.worldRosterKey ? 'yes' : 'no'}, age ${man.age}, ${man.position}` } } : { note: 'refused' };
   });
   reload();
   step('buy-2', cur => {
     const mine = names(cur);
     const mp = M.cm.buildMarket(cur).find(p => p.position !== 'GK' && p.age < 29 && p.rating < 80 && !mine.has(p.name));
     const next = mp && M.cm.buyPlayer(cur, mp);
-    return next ? { state: next, note: 'done', deal: { kind: 'buy', name: mp.name, owner: cur.clubName, status: 'owned' } } : { note: 'refused' };
+    return next ? { state: next, note: 'done', deal: { kind: 'buy', name: mp.name, owner: cur.clubName, status: 'owned', why: `from ${mp.club}, age ${mp.age}, ${mp.position}` } } : { note: 'refused' };
   });
   reload();
   step('sale-2', cur => {
@@ -358,7 +365,7 @@ async function journey(E, input, plan, seed, bridge = false, living = null) {
     if (!man || !buyer) return { note: 'refused' };
     const bid = { playerId: man.id, playerName: man.name, club: buyer, offer: 30, status: 'open' };
     const next = M.cm.acceptBid({ ...cur, incomingBids: [...(cur.incomingBids ?? []), bid] }, man.id);
-    return next ? { state: next, note: 'done', deal: { kind: 'sale', name: man.name, owner: buyer, status: 'owned' } } : { note: 'refused' };
+    return next ? { state: next, note: 'done', deal: { kind: 'sale', name: man.name, owner: buyer, status: 'owned', why: `key ${man.worldRosterKey ? 'yes' : 'no'}, age ${man.age}, ${man.position}` } } : { note: 'refused' };
   });
   reload();
   play(4, 'next-season'); reload();
@@ -467,8 +474,8 @@ for (const section of sections) {
   const L = acc.living;
   if (L.journeys) {
     console.log(`  after the rollover (Round 1508, this tree only): ${L.journeys} adopted careers, ${L.states} states checked, ${L.lines} deal lines between two other clubs placed, ${L.records} owned records held at one club, ${L.joined} joined rows on the screen; deals of mine: ${L.mine.release} releases, ${L.mine.buy} buys, ${L.mine.sale} sales; red by check: ${JSON.stringify(L.counts)}`);
-    for (const f of L.fails.slice(0, 8)) console.log(`  FAIL after the rollover: ${f}`);
-    if (L.fails.length > 8) console.log(`  ... and ${L.fails.length - 8} more`);
+    for (const f of L.fails.slice(0, 20)) console.log(`  FAIL after the rollover: ${f}`);
+    if (L.fails.length > 20) console.log(`  ... and ${L.fails.length - 20} more`);
   }
 }
 

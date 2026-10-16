@@ -294,10 +294,29 @@ export function livingWorldOf(career: CareerState): boolean {
    every deal, mine and the other clubs', is recorded the way a seeded career records it. startNextSeason calls this
    first thing, so nothing changes before that summer. A career already in the living world comes back as it is;
    an unreadable ledger in a career with no seed is replaced by a fresh one, the next honest write of Release AZ's
-   ruling Y2. scripts/simCmUnseededWorld.mjs holds it (controls early and never). */
+   ruling Y2. scripts/simCmUnseededWorld.mjs holds it (controls early and never).
+   The one thing the ledger learns about the time before: where my own men are. A man I signed before this summer
+   (in my squad, or out on loan from me) is still on the projected roster of the club he came from, because nothing
+   recorded the deal; the market and the line ups hide him by name while he is mine, but the day I sell him the
+   ledger would put him at his buyer and the projection would keep him at his old club, one man at two clubs. So a
+   man the projection lists at exactly one club, and that club not mine, is recorded as signed by me from it, the
+   way a buy records him in a seeded career. A man of my own club's bake, my academy's boys and a name the
+   projection lists at two clubs are left alone. Nothing else from before is rebuilt. Pure, no draw. */
 export function adoptLivingWorld(career: CareerState): CareerState {
   if (livingWorldOf(career)) return career;
-  return { ...career, worldRoster: { version: 1, eraId: career.eraId ?? 'now', records: [] } };
+  let adopted: CareerState = { ...career, worldRoster: { version: 1, eraId: career.eraId ?? 'now', records: [] } };
+  if (!eraRostersLoaded(career.eraId)) return adopted;
+  const listedAt = new Map<string, string[]>();
+  for (const [club, roster] of Object.entries(projectedWorldFor(career.eraId ?? 'now', yearsOn(career)))) {
+    for (const p of roster) { const key = `${p.n}|${p.a}`; const clubs = listedAt.get(key); if (clubs) clubs.push(club); else listedAt.set(key, [club]); }
+  }
+  for (const p of [...career.squad.filter(x => !x.onLoan), ...(career.loanedOut ?? []).map(l => l.player)]) {
+    if (p.academyGrad || p.isYouth) continue;
+    const clubs = listedAt.get(`${p.name}|${p.age}`) ?? [];
+    if (clubs.length !== 1 || clubs[0] === career.clubName) continue;
+    adopted = recordActualRosterTransfer(adopted, p, clubs[0], career.clubName, 'permanent', false);
+  }
+  return adopted;
 }
 
 /* Release AZ fix (reviewer 1, MAJOR 1): a ledger a year behind was aged and packed again on EVERY roster read,
