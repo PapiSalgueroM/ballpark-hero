@@ -1,0 +1,5 @@
+ctl-deck-kctl2 exit=0 6s | kctl: every control exited 1 and fired
+ctl-deck-kctl3 exit=0 14s | kctl: every control exited 1 and fired
+ctl-deck-kctl1 exit=0 63s | kctl: every control exited 1 and fired
+ctl-deck-kctl5 exit=0 72s | kctl: every control exited 1 and fired
+ctl-deck-kctl4 exit=0 220s | kctl: every control exited 1 and fired
