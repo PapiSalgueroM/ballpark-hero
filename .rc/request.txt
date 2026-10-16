@@ -1,0 +1,14 @@
+#!serial
+mut-tieleg1: node .rc/x/mut1347.mjs tieleg1 && node_modules/.bin/vitest run src/lib/worldCompetition.test.ts --testTimeout=300000 --hookTimeout=120000 && node scripts/simWorldUcl.mjs; s=$?; git checkout -- src scripts; exit $s
+mut-tieagg: node .rc/x/mut1347.mjs tieagg && node_modules/.bin/vitest run src/lib/worldCompetition.test.ts --testTimeout=300000 --hookTimeout=120000 && node scripts/simWorldUcl.mjs; s=$?; git checkout -- src scripts; exit $s
+mut-r16same: node .rc/x/mut1347.mjs r16same && node_modules/.bin/vitest run src/lib/worldCompetition.test.ts --testTimeout=300000 --hookTimeout=120000 && node scripts/simWorldUcl.mjs; s=$?; git checkout -- src scripts; exit $s
+mut-nightsame: node .rc/x/mut1347.mjs nightsame && node_modules/.bin/vitest run src/lib/worldCompetition.test.ts --testTimeout=300000 --hookTimeout=120000 && node scripts/simWorldUcl.mjs; s=$?; git checkout -- src scripts; exit $s
+mut-noban: node .rc/x/mut1347.mjs noban && node_modules/.bin/vitest run src/lib/worldCompetition.test.ts --testTimeout=300000 --hookTimeout=120000 && node scripts/simWorldUcl.mjs; s=$?; git checkout -- src scripts; exit $s
+mut-noclash: node .rc/x/mut1347.mjs noclash && node_modules/.bin/vitest run src/lib/worldCompetition.test.ts --testTimeout=300000 --hookTimeout=120000 && node scripts/simWorldUcl.mjs; s=$?; git checkout -- src scripts; exit $s
+mut-fxearly: node .rc/x/mut1347.mjs fxearly && node_modules/.bin/vitest run src/lib/worldCompetition.test.ts --testTimeout=300000 --hookTimeout=120000 && node scripts/simWorldUcl.mjs; s=$?; git checkout -- src scripts; exit $s
+mut-locale: node .rc/x/mut1347.mjs locale && node_modules/.bin/vitest run src/lib/worldCompetition.test.ts --testTimeout=300000 --hookTimeout=120000 && node scripts/simWorldUcl.mjs; s=$?; git checkout -- src scripts; exit $s
+mut-etswap: node .rc/x/mut1347.mjs etswap && node_modules/.bin/vitest run src/lib/worldCompetition.test.ts --testTimeout=300000 --hookTimeout=120000 && node scripts/simWorldUcl.mjs; s=$?; git checkout -- src scripts; exit $s
+mut-ban2020: node .rc/x/mut1347.mjs ban2020 && node_modules/.bin/vitest run src/lib/worldCompetition.test.ts --testTimeout=300000 --hookTimeout=120000 && node scripts/simWorldUcl.mjs; s=$?; git checkout -- src scripts; exit $s
+mut-marks: node .rc/x/mut1347.mjs marks && node_modules/.bin/vitest run src/lib/worldCompetition.test.ts --testTimeout=300000 --hookTimeout=120000 && node scripts/simWorldUcl.mjs; s=$?; git checkout -- src scripts; exit $s
+mut-defaultorder: node .rc/x/mut1347.mjs defaultorder && node_modules/.bin/vitest run src/lib/worldCompetition.test.ts --testTimeout=300000 --hookTimeout=120000 && node scripts/simWorldUcl.mjs; s=$?; git checkout -- src scripts; exit $s
+clean-after: git status --short src scripts | head -5; node_modules/.bin/vitest run src/lib/worldCompetition.test.ts --testTimeout=300000 --hookTimeout=120000
