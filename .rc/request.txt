@@ -1,0 +1,18 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-cm: node_modules/.bin/vitest run src/lib/clubManagerWorldMoves.test.ts src/lib/clubManagerWorldRoster.test.ts src/lib/clubManagerOwnClubLevel.test.ts src/test/clubDetailCurrentRoster.test.tsx src/test/clubManagerDealMoment.test.tsx --testTimeout=300000 --hookTimeout=120000
+vitest-hook: node_modules/.bin/vitest run src/test/clubManagerDeskCues.test.tsx src/test/clubManagerEraLoad.test.tsx src/test/clubManagerSave.test.tsx src/test/clubManagerSaveSize.test.tsx src/test/clubManagerSlots.test.tsx src/test/clubManagerStartWait.test.tsx src/test/clubManagerVarLive.test.tsx src/test/clubManagerWorldEditor.test.tsx src/test/managerMatchPlans.test.tsx --testTimeout=300000 --hookTimeout=120000
+s0: CM_WORLD_MOVES_SECTIONS=0 node scripts/simCmWorldMoves.mjs
+s3: CM_WORLD_MOVES_SECTIONS=3 node scripts/simCmWorldMoves.mjs
+c-joinledger: CM_WORLD_MOVES_CONTROL=joinledger node scripts/simCmWorldMoves.mjs
+s14-now: CM_WORLD_MOVES_SECTIONS=1,4 CM_WORLD_MOVES_ERAS=now node scripts/simCmWorldMoves.mjs
+s14-2015: CM_WORLD_MOVES_SECTIONS=1,4 CM_WORLD_MOVES_ERAS=era2015 node scripts/simCmWorldMoves.mjs
+s14-2005: CM_WORLD_MOVES_SECTIONS=1,4 CM_WORLD_MOVES_ERAS=era2005 node scripts/simCmWorldMoves.mjs
+c-nolock: CM_WORLD_MOVES_CONTROL=nolock CM_WORLD_MOVES_ERAS=now CM_WORLD_MOVES_SEEDS=1-2 node scripts/simCmWorldMoves.mjs
+c-nolist: CM_WORLD_MOVES_CONTROL=nolist CM_WORLD_MOVES_ERAS=now CM_WORLD_MOVES_SEEDS=1-2 node scripts/simCmWorldMoves.mjs
+unseeded: B=$(bash .rc/x/baseDeck.sh) && echo "base $B" && CM_UNSEEDED_BASE=$B node scripts/simCmUnseededWorld.mjs
+unseeded-onbase: B=$(bash .rc/x/baseDeck.sh) && git worktree add -q --detach /tmp/r1344base d4f2c6f688d656205722ba52bbdb33f03490966a && ln -s $PWD/node_modules /tmp/r1344base/node_modules && cd /tmp/r1344base && CM_UNSEEDED_BASE=$B node scripts/simCmUnseededWorld.mjs
+unseeded-guard: B=$(bash .rc/x/baseDeck.sh) && CM_UNSEEDED_BASE=$B CM_UNSEEDED_CONTROL=guard node scripts/simCmUnseededWorld.mjs
+simCmLedgerJourney: node scripts/simCmLedgerJourney.mjs
+simManagerWorldContinuity: node scripts/simManagerWorldContinuity.mjs
+simBooks: node scripts/simBooks.mjs
+simFreeAgents: node scripts/simFreeAgents.mjs
