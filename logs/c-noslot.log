@@ -1,0 +1,6 @@
+simCmNoSack: sections 4, control noslot
+   clubs: Arsenal, Brentford, Hull City, Real Madrid, Espanyol, Málaga, Inter Milan, Torino, Frosinone
+4) turnOnNoSack is one way and refuses a sacked or out of work manager; the key reads strictly; only a career without it posts a score
+  FAIL (section 4): the Managers card of a No sacking save has no No sacking mark (undefined)
+   3 scored match pings and 4 scored completions, each behind postsScore; literals for the three ping harnesses: 3 and 3
+simCmNoSack: CONTROL noslot FIRED: section 4 red (1 failures)

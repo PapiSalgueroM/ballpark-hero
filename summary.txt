@@ -1,0 +1,16 @@
+vitest exit=0 7s |    Duration  6.24s (transform 3.29s, setup 265ms, collect 8.78s, tests 3.96s, environment 1.91s, prepare 711ms)
+c-stale exit=1 1s | simCmNoSack: CONTROL stale FIRED: section 4 red (1 failures)
+c-noslot exit=1 1s | simCmNoSack: CONTROL noslot FIRED: section 4 red (1 failures)
+c-farfloor exit=1 0s | simCmNoSack: CONTROL farfloor FIRED: section 5 red (1 failures)
+c-nofloor2 exit=1 2s | simCmNoSack: CONTROL nofloor2 FIRED: section 7 red (20 failures)
+c-twoline exit=1 12s | simCmNoSack: CONTROL twoline FIRED: section 7 red (63 failures)
+c-sack exit=1 35s | simCmNoSack: CONTROL sack FIRED: section 2 red (17 failures), section 3 red (9 failures), section 7 red (26 failures)
+rival exit=0 19s | No rival product names found. 0 findings.
+tsc exit=0 91s | 
+storage exit=0 3s | simStorageWrites: all green (owed: 12)
+anchors exit=0 57s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+appeal exit=0 42s | Equivalent appeal outcomes must agree: passed for 24 original pairs and 3 separate generated-position pairs.
+guide exit=0 1s | simGuideHeadings: green. 131 guides carry keyword h2s over h3 and h4 sections with every original sentence intact, and all 133 blocks render a clean outline.
+ns exit=0 147s | simCmNoSack: PASS (sections 1, 2, 3, 4, 5, 6, 7)
+slots exit=0 54s | simClubManagerSlots: all sections green
+score exit=0 79s | ALL SEASON SCORE CHECKS PASSED

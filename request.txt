@@ -1,0 +1,16 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/test/clubManagerNoSack.test.tsx src/hooks/useClubManager.test.ts src/lib/clubManagerSlots.test.ts --testTimeout=300000 --hookTimeout=120000
+ns: node scripts/simCmNoSack.mjs
+c-stale: NO_SACK_CONTROL=stale node scripts/simCmNoSack.mjs
+c-noslot: NO_SACK_CONTROL=noslot node scripts/simCmNoSack.mjs
+c-farfloor: NO_SACK_CONTROL=farfloor node scripts/simCmNoSack.mjs
+c-nofloor2: NO_SACK_CONTROL=nofloor2 node scripts/simCmNoSack.mjs
+c-twoline: NO_SACK_CONTROL=twoline node scripts/simCmNoSack.mjs
+c-sack: NO_SACK_CONTROL=sack node scripts/simCmNoSack.mjs
+rival: node scripts/simNoRivalNames.mjs
+anchors: node scripts/simHarnessAnchors.mjs
+storage: node scripts/simStorageWrites.mjs
+appeal: node scripts/simManagerAppealIsolation.mjs
+score: node scripts/simClubManagerScore.mjs
+guide: node scripts/simGuideHeadings.mjs
+slots: node scripts/simClubManagerSlots.mjs
