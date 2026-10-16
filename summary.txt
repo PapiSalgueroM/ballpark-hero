@@ -1,0 +1,9 @@
+build exit=0 32s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+playHomeFold exit=0 32s | playHomeFold: green. The first thing on the page is something to play.
+playCmLeagueFixtures exit=0 96s | playCmLeagueFixtures: green. 6 journeys (EFL Championship, La Liga, Bundesliga at 390 and 1280), one with its list three seconds late and 7 of the review's (two takeovers
+playClubManager exit=0 294s | Played Club Manager through its own screens. 0 findings.
+playCmRealFixtures exit=1 1s | Node.js v24.21.0
+playDealDesk exit=0 15s | playDealDesk: green. The desk opens, the meter reads the typed number, the fee table hands off to the terms table without signing anybody, and meeting his terms closes it
+playTwoTabs exit=0 440s | playTwoTabs: green at 320x640, 390x844, 1280x900
+playCmTablesFit exit=1 164s | Shots and part1.json: /home/runner/work/_temp/rc-out/files/shots
+playCmVar exit=0 607s | playCmVar: green. Every review a player can meet was shown whole, at its minute, over nothing else, and every match settled as the engine settles it.
