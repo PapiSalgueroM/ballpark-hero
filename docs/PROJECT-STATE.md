@@ -1,3 +1,8 @@
+## Codex1384: measured Manager decision proof,2026-10-16
+
+PR301 passes the dedicated remote run38954295964/job117153142891 on9eeb099ef7e8370e747a07ec8850be11566d4f5b. Ten independent current/frozen normals and all twelve original executable controls qualify. Product/public/packages remain exact6f. Harness3383d016 restores measured coverage without changing floor6 or assertions; helper1a2bcc13 tests healthy retained-output integrity instead of requiring an accidental red. Historical desk/receipt and other pins stay held. Artifact12071030352 is physically retained and checked, SHA256602c5bfdf21dedefb2329c4c7dfd018ff91377e2d3c48e4ef3e7793f7c37c20d. See docs/audits/manager-decision-method.md.
+
+READY as an owned method patch, not live or an all-suite pass. Compose I's retaken fe368fef core pin with harness3383, then I retakes the final joined manifest. The broader automatic run's earlier core-pin failure predates this method; its decision step passes. I retains integration and publication. No new gate is added to closed1343 or other ready reports.
 ## Release BH LIVE, 2026-10-16 10:42 EDT: Player Bingo counts Rodri's Champions League, World XI shows overalls and club links, Soccer Career names Luton Town in 2023 and its choices say what they do
 
 Claude lane (session I). main ae14cf97, deployment 9056c804-07ef-4e34-96c9-1f0efdaf0425, entry index-BQUxuJaU.js (was index-CZZVnHoQ.js, Release BG,
