@@ -5,11 +5,12 @@
  */
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { render, act, waitFor, fireEvent } from '@testing-library/react';
-import { SAVE_KEY } from '@/lib/clubManager';
+import { SAVE_KEY, startCareer } from '@/lib/clubManager';
 import { fenceKeyOf } from '@/lib/saveFence';
 import { markLandOnHub } from '@/lib/clubManagerLanding';
 import { activeSlot } from '@/lib/clubManagerSlots';
 import RetireDoor, { ARM_MS } from '@/components/club-manager/RetireDoor';
+import CmRetireDoor from '@/components/club-manager/CmRetireDoor';
 import ManagerSlotsScreen from '@/components/club-manager/ManagerSlotsScreen';
 import ClubManagerFarewell from '@/components/club-manager/ClubManagerFarewell';
 import { useClubManager } from '@/hooks/useClubManager';
@@ -207,6 +208,22 @@ describe('the retire door', () => {
     fireEvent.click(q(container, '[data-cm-retire-door]')!);
     fireEvent.keyDown(q(container, '[data-cm-retire-confirm]')!, { key: 'Escape' });
     expect(q(container, '[data-cm-retire-door]')).not.toBeNull();
+  });
+});
+
+/* ---------------- the door on a played out season ---------------- */
+describe('the Club Manager door', { timeout: 60000 }, () => {
+  it('waits for See Season Review once every match is played, and is a door before that', () => {
+    const fresh = startCareer('Everton');
+    const retire = vi.fn(() => true);
+    const a = render(<CmRetireDoor c={fresh} retire={retire} />);
+    expect(a.container.querySelector('[data-cm-retire-door]')).not.toBeNull();
+    expect(a.container.querySelector('[data-cm-retire-waits]')).toBeNull();
+    a.unmount();
+    const b = render(<CmRetireDoor c={{ ...fresh, week: fresh.calendar.length }} retire={retire} />);
+    expect(b.container.querySelector('[data-cm-retire-door]')).toBeNull();
+    expect(b.container.querySelector('[data-cm-retire-waits]')?.textContent).toContain('See Season Review');
+    for (const d of DASHES) expect(b.container.textContent).not.toContain(d);
   });
 });
 

@@ -13,7 +13,7 @@
 
    Only /club-manager loads this file. The engine never imports it (its one
    reference is a type), so there is no cycle. */
-import { LEAGUE_TITLE_NAME, leaguePosition, worldSeasonLabel } from '@/lib/clubManager';
+import { LEAGUE_TITLE_NAME, leaguePosition, nextFixture, worldSeasonLabel } from '@/lib/clubManager';
 import type { CareerState } from '@/lib/clubManager';
 import { highestScoringOf } from '@/lib/clubManagerRecords';
 import { formatNumber } from '@/lib/formatNumber';
@@ -35,9 +35,17 @@ export interface Retirement {
   points?: number;
 }
 
-/** A retired career is finished, and a match in progress is never walked out of. */
+/** Every match of the season is played but the season is not closed yet: the hub's "Season complete!" card, before
+ *  See Season Review. The league title and the season's row are written by that review, so a retirement here would
+ *  lose them; the door waits for the review instead. */
+export function seasonPlayedOut(c: CareerState): boolean {
+  return !c.sacked && !c.pendingSummary && nextFixture(c).kind === 'seasonOver';
+}
+
+/** A retired career is finished, a match in progress is never walked out of, and a played out season is reviewed
+ *  first. */
 export function canRetire(c: CareerState | null | undefined): boolean {
-  return !!c && !c.retired && !c.live;
+  return !!c && !c.retired && !c.live && !seasonPlayedOut(c);
 }
 
 export function retirementMoment(c: CareerState): RetirementMoment {

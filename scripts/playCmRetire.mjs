@@ -15,7 +15,10 @@
      E  the page, at 320 by 640, 390 by 844 and 1280 by 900 (and with reduced motion): scrollY and the door's
         top do not move when the confirm opens or after Keep managing; every new control is at least 44 px;
         no new text under 12 px; nothing new is cut or wider than the page.
-   A and B run at 390 by 844 and 1280 by 900. Pictures go to $RC_OUT (or .tmp-fx/playCmRetire) as retire-*.png.
+     F  played out (review fix): the A career a step earlier, every match played and See Season Review not yet
+        opened. The Manager panel draws no door and points at the review; after the review the season end door
+        retires with that season in the history and the league title (when node's review gives one) in the cabinet.
+   A to D and F run at 390 by 844 and 1280 by 900. Pictures go to $RC_OUT (or .tmp-fx/playCmRetire) as retire-*.png.
 
    Controls (PLAY_RETIRE_CONTROL):
      strip     an init script deletes `retired` from the save on every load: A's reload red.
@@ -77,8 +80,13 @@ function stored(s) {
   if (!withSeed(1, () => cm.saveCareer(s))) cannot('saveCareer refused a fixture');
   return Object.fromEntries(memory);
 }
-const atEnd = withSeed(9, () => cm.finishSeason(seasons('Everton', 1343, 3)).state);
+const spent = seasons('Everton', 1343, 3);
+/* F: the same career a step earlier, every match played and the review not yet seen (taken before finishSeason). */
+const playedOut = JSON.parse(JSON.stringify(spent));
+const atEnd = withSeed(9, () => cm.finishSeason(spent).state);
 if (!atEnd.pendingSummary || atEnd.sacked) cannot('the season end fixture is not at a season end');
+if (playedOut.pendingSummary || playedOut.sacked || cm.nextFixture(playedOut).kind !== 'seasonOver') cannot('the played out fixture is not played out');
+const titleWon = atEnd.trophies.some(t => t.name === 'League Title' && t.season === playedOut.season);
 let mid = withSeed(10, () => cm.startNextSeason(cm.finishSeason(seasons('Liverpool', 1344, 1)).state));
 for (let i = 0; i < 12; i++) mid = withSeed(200 + i, () => cm.playNextEntry(mid, { skipHalftime: true })).state;
 if (mid.sacked || mid.pendingSummary) cannot('the mid season fixture is not mid season');
@@ -97,7 +105,7 @@ if (!expectA || !expectB) cannot('a fixture has no highest scoring game');
 console.log(`fixtures: A ${atEnd.clubName} S${atEnd.season} ${atEnd.careerStats.played} played, record ${expectA.score} vs ${expectA.opp}; B ${mid.clubName} S${mid.season} week ${mid.week}; D ${oldWhole.careerStats.played} played, book ${oldWhole.h2h.length}, leaned ${oldLean.h2h.length}`);
 /* The control empties the planted copies only, after the expected lines were worked out. */
 const plant = s => (CONTROL === 'norecord' ? { ...JSON.parse(JSON.stringify(s)), h2h: [] } : s);
-const SAVES = { A: stored(atEnd), B: stored(mid), C: stored(sacked), D: stored(plant(oldWhole)), Dlean: stored(plant(oldLean)) };
+const SAVES = { A: stored(atEnd), B: stored(mid), C: stored(sacked), D: stored(plant(oldWhole)), Dlean: stored(plant(oldLean)), F: stored(playedOut) };
 
 /* ---- the served page ---- */
 const port = await new Promise((resolve, reject) => {
@@ -284,6 +292,38 @@ async function walkD(profile) {
   }
 }
 
+/* ---- F: a season played to its last match, the review not yet seen (review fix) ---- */
+async function walkF(profile) {
+  const P = `F ${profile.width}`;
+  const { context, page } = await pageWith(profile, SAVES.F);
+  try {
+    if (!(await land(page))) { check(P, 'the page lands on the managers screen', false); return; }
+    await openSlotButton(page);
+    check(P, 'Resume Career lands on the hub card with See Season Review', (await page.getByRole('button', { name: /See Season Review/i }).count()) === 1);
+    await openManagerPanel(page);
+    const waits = (await page.locator('[data-cm-retire-waits]').first().textContent({ timeout: 6000 }).catch(() => '')) ?? '';
+    check(P, 'the Manager panel draws no door and points at See Season Review', (await page.locator('[data-cm-retire-door]').count()) === 0 && waits.includes('See Season Review'), waits);
+    await shot(page, `F-panel-${profile.width}`);
+    await page.reload({ waitUntil: 'domcontentloaded' });
+    await page.locator('[data-testid="cm-slots"]').waitFor({ timeout: 15000 }).catch(() => {});
+    await openSlotButton(page);
+    await page.getByRole('button', { name: /See Season Review/i }).first().click();
+    const door = page.locator('[data-cm-retire-door]').first();
+    await door.waitFor({ timeout: 10000 }).catch(() => {});
+    await door.scrollIntoViewIfNeeded().catch(() => {});
+    await door.click();
+    await page.waitForTimeout(800);
+    await page.locator('[data-cm-retire-yes]').click();
+    await page.locator('[data-cm-farewell]').waitFor({ timeout: 10000 }).catch(() => {});
+    const saved = JSON.parse((await disk(page)) ?? '{}');
+    const title = (saved.trophies ?? []).some(t => t.name === 'League Title' && t.season === playedOut.season);
+    check(P, 'after the review the season end door retires with that season counted, title and all',
+      saved.retired?.when === 'seasonEnd' && (saved.history ?? []).length === playedOut.history.length + 1 && title === titleWon,
+      `${saved.retired?.when}, ${(saved.history ?? []).length} seasons kept of ${playedOut.history.length + 1}, title ${title} (node ${titleWon})`);
+    check(P, 'no page error', page.errors.length === 0, page.errors[0] ?? '');
+  } finally { await context.close(); }
+}
+
 /* ---- E: the page ---- */
 const NEW = ['[data-cm-retire-door]', '[data-cm-retire-keep]', '[data-cm-retire-yes]', '[data-cm-farewell-tile]', '[data-cm-farewell-back]', '[data-testid="cm-show-slots-retired"]', '[data-cm-slot-open]'];
 const TEXT = ['[data-cm-retire-confirm] p', '[data-cm-farewell] p', '[data-cm-farewell] button', '[data-cm-farewell-moment]', '[data-cm-highest-scoring]', '[data-cm-retired]'];
@@ -346,6 +386,7 @@ try {
     await walkB(profile);
     await walkC(profile);
     await walkD(profile);
+    await walkF(profile);
   }
   if (!CONTROL) {
     for (const profile of [{ width: 320, height: 640, touch: true }, { width: 390, height: 844, touch: true }, { width: 1280, height: 900, touch: false }]) await walkE(profile, false);

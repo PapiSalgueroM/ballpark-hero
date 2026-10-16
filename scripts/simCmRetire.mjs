@@ -13,7 +13,8 @@
      base     a career with matchRules 'base' plays a season and never writes the field.
      retire   retireCareer at the three moments (the season's end, the middle of one, out of work) on real careers,
               against a deep copy taken before: only `retired` (and the record when absent) differ, the input never
-              moves, zero draws; null with a match in progress and when already retired; careerLegacy's clubs cover
+              moves, zero draws; null with a match in progress, when already retired, and on a season played to its
+              last match but not yet reviewed (the review writes the title and the row); careerLegacy's clubs cover
               every name in clubsManaged, its cabinet sums to the trophies, its record equals the save's.
      dashes   no dash of any kind (U+2010 to U+2015, U+2212) in the five new files, comments included.
      fleet   (needs RETIRE_BASE) Everton 2005-06, Barcelona 2015-16, Liverpool now, seeds 0 to 4, three
@@ -34,6 +35,7 @@
      nomissed    missed is never stored: oldsave red
      basewrites  the 'base' gate off: base red (and hotseat red before the cutover)
      liveok      canRetire forgets the match in progress: retire red
+     seasonover  canRetire forgets the played out season (the review not yet seen): retire red
      drawone     a Math.random call inside retireCareer: retire red on the draw count
      dash        an em dash planted in a copy of clubManagerRetire.ts: dashes red
      stripnone   the fleet compares with the new key left on: fleet red (proves the key is written)
@@ -73,7 +75,8 @@ const CONTROLS = {
   basewrites: { part: 'base', file: ENGINE, from: "  if (state.matchRules !== 'base') {", to: '  if (true) {' },
   stripnone: { part: 'fleet' },
   dash: { part: 'dashes' },
-  liveok: { part: 'retire', file: RETIRE, from: '  return !!c && !c.retired && !c.live;', to: '  return !!c && !c.retired;' },
+  liveok: { part: 'retire', file: RETIRE, from: '  return !!c && !c.retired && !c.live && !seasonPlayedOut(c);', to: '  return !!c && !c.retired && !seasonPlayedOut(c);' },
+  seasonover: { part: 'retire', file: RETIRE, from: '  return !!c && !c.retired && !c.live && !seasonPlayedOut(c);', to: '  return !!c && !c.retired && !c.live;' },
   drawone: { part: 'retire', file: RETIRE, from: '  const next = JSON.parse(JSON.stringify(c)) as CareerState;', to: '  const next = JSON.parse(JSON.stringify(c)) as CareerState; Math.random();' },
   drawleak: { part: 'fleet', file: RECORDS, from: '  const stats = state.careerStats;', to: '  const stats = state.careerStats; Math.random();' },
 };
@@ -325,9 +328,16 @@ async function retireSection(cm) {
   /* Real careers at their three moments: a season played and finished (the summary pending), the next season 20
      entries in, and the same out of work. */
   const careers = [];
+  /* Review fix: the season played to its last match and not yet reviewed (the hub's "Season complete!" card) waits for
+     the review, which writes the league title and the season's row. */
+  let playedOut = 0, playedOutRefused = 0;
   for (const [club, era] of CLUBS) {
     for (let seed = 0; seed < 2; seed++) {
       const played = playCareer(cm, { club, era, seed, seasons: 2 }).state;
+      if (!played.sacked && !played.pendingSummary) {
+        playedOut += 1;
+        if (ret.seasonPlayedOut(played) && ret.retireCareer(clone(played)) === null) playedOutRefused += 1;
+      }
       const ended = withSeed(seed + 40, () => cm.finishSeason(played).state);
       let mid = withSeed(seed + 41, () => cm.startNextSeason(clone(ended)));
       for (let i = 0; i < 20; i++) mid = withSeed(seed * 100 + i + 42, () => cm.playNextEntry(mid, QUICK.coach)).state;
@@ -365,6 +375,7 @@ async function retireSection(cm) {
   check(P, 'retiring changes only `retired` (and writes the record down when absent), never its input, at the right moment', bad === 0 && moments.size === 3, bad ? `${bad} wrong; first ${first}` : `moments ${[...moments].join(', ')}`);
   check(P, 'retiring draws nothing', draws === 0, `${draws} draws`);
   check(P, 'a match in progress and a retired career are refused', refused === careers.length, `${refused} of ${careers.length}`);
+  check(P, 'a season played to its last match and not yet reviewed is refused, so the review writes its title and its row first', playedOut > 0 && playedOutRefused === playedOut, `${playedOutRefused} of ${playedOut}`);
   check(P, 'the farewell\'s clubs, cabinet and record are the save\'s', legacyBad === 0 && trophies > 0, legacyBad ? `${legacyBad} wrong; first ${legacyFirst}` : `${trophies} trophies`);
 }
 

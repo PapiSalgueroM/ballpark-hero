@@ -1,7 +1,7 @@
 /* Round 1343: retiring. The engine's side is scripts/simCmRetire.mjs section retire. */
 import { describe, expect, it } from 'vitest';
 import { startCareer, worldSeasonLabel, type CareerState, type H2HEntry } from '@/lib/clubManager';
-import { canRetire, careerLegacy, farewellShareText, printedWeek, retireCareer, retirementMoment } from '@/lib/clubManagerRetire';
+import { canRetire, careerLegacy, farewellShareText, printedWeek, retireCareer, retirementMoment, seasonPlayedOut } from '@/lib/clubManagerRetire';
 
 const deepFreeze = <T,>(o: T): T => {
   if (o && typeof o === 'object') { Object.values(o as object).forEach(deepFreeze); Object.freeze(o); }
@@ -25,6 +25,17 @@ describe('retiring', { timeout: 60000 }, () => {
     expect(canRetire({ ...fresh, retired: { season: 1, worldSeason: '2026-27', when: 'seasonEnd', club: 'Everton' } })).toBe(false);
     expect(canRetire({ ...fresh, live: {} as CareerState['live'] })).toBe(false);
     expect(retireCareer({ ...fresh, live: {} as CareerState['live'] })).toBeNull();
+  });
+
+  it('waits for the season review once every match is played, so the title and the season are written first', () => {
+    const summary = { season: 1 } as unknown as NonNullable<CareerState['pendingSummary']>;
+    const spent = deepFreeze(JSON.parse(JSON.stringify({ ...fresh, week: fresh.calendar.length })) as CareerState);
+    expect(seasonPlayedOut(fresh)).toBe(false);
+    expect(seasonPlayedOut(spent)).toBe(true);
+    expect(canRetire(spent)).toBe(false);
+    expect(retireCareer(spent)).toBeNull();
+    expect(retireCareer({ ...spent, pendingSummary: summary })?.retired?.when).toBe('seasonEnd');
+    expect(retireCareer({ ...spent, sacked: true })?.retired?.when).toBe('outOfWork');
   });
 
   it('reads the moment: out of work over a season end, a season end over the middle of one', () => {
