@@ -1,0 +1,13 @@
+build exit=0 25s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+headsha exit=0 1s | fe5811aff rc request rBHh-fb for e627ce2ed145b74fea355fc280e3c43e0eaf2d69
+budget-sweepWeight exit=0 25s | sweepWeight: green. Every page is inside its budget, and the budgets came down this round.
+budget-simCreation exit=0 261s | ALL CREATION CHECKS PASSED
+simFlagshipWeight exit=0 1s | simFlagshipWeight: green. The flagship carries its own game and nobody else's.
+saveFixtures exit=0 9s | Prepared 9 declared font dependencies for local fulfillment.
+playSaveReaders exit=0 4s | playSoccerSaveReaders: green, 18 checks at 390 and 1280 on career 713-CB-playing (119700 characters raw, 45562 stored), 0 failures.
+playSaveReaders-ctl-envelope exit=0 4s | FIRED-OK
+land-main exit=0 323s | playSoccerLanding: green at 320x640, 390x844, 1280x900 (also bar 360x780, bar 375x667, name 480x800, name 768x1024; landing, name, bar, retire), every marked section red 
+land-toasts exit=0 395s | playSoccerLanding: green at 320x640, 390x844, 1280x900 (also no extra sizes; toasts, bytes), every marked section red on the base
+ctl-land-seed exit=0 157s | CONTROL FIRED: SOCCER_LANDING_CONTROL=seed played head on seed 1987332286 and the byte check went red, and the old save comparison went red on 8 save(s) given the next se
+weigh-head exit=0 6s | weigh /world-xi 312.3K gz over 33 files at http://localhost:4173
+weigh-partone exit=0 36s | weigh /world-xi 311.8K gz over 33 files at http://localhost:4179
