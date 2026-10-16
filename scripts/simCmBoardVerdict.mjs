@@ -64,7 +64,9 @@
      takeover  startMidSeason at autumn, new year and the run in for twelve clubs of three worlds and
                joinClubNow on a yes (TAKEOVER_SEEDS seeds): every takeover opens at BOARD_FRESH and equals the
                base but for the opening and the card (the run in's suitor masked: since step 3 the previous
-               manager's approaches are stepped too), handover stamp included. Control keepfailed.
+               manager's approaches are stepped too), handover stamp included. startMidSeason is handed the
+               state startCareer built (BOARD_FRESH on the head), as in play, so the base comparison holds
+               playRunIn's pin. Controls keepfailed, nopin (the pin taken out).
 
    Engine controls: SIM_CM_BOARD_CONTROL=<name> with --part=<its section>; each patches this tree's copy in
    memory, its anchor asserted present exactly once first, and must end FIRED with exit 1.
@@ -820,12 +822,15 @@ function kittyChecks(arm, rows, acc) {
   check(P, 'and equals the old cheque wherever the old one was inside the band', moved.length === 0, `${moved.length} differ`);
 }
 /** A takeover on one arm: startMidSeason at an entry, or joinClubNow on a yes built the way simCmApplications
- *  builds one. The fresh state opens at the old 60 on both arms (decision 5), so every week before the
- *  handover is the same game. */
+ *  builds one. startMidSeason is handed the state startCareer built, as useClubManager hands it in play
+ *  (BOARD_FRESH on the head, 60 on the base), so it is playRunIn's pin to LEGACY_BOARD_START (correction 2)
+ *  that makes every week before the handover the same game; control nopin takes the pin out. The legacy leg
+ *  and a join (the player's own weeks before he applies, which are his, not the run in) open at the old 60
+ *  on both arms (decision 5). */
 function takeoverOn(arm, c, legacy = false) {
   const { cm, cal } = arm;
   const s = startOf(cm, c.club, c.era, c.seed);
-  s.boardConfidence = 60;
+  if (legacy || c.entry === 'join') s.boardConfidence = 60;
   if (legacy) s.matchRules = 'base';
   if (c.entry !== 'join') return withSeed(c.seed * 7 + 1, () => cal.startMidSeason(s, c.entry));
   let t = s;
@@ -1106,6 +1111,10 @@ const ENGINE_CONTROLS = {
   legacyleak: { file: ENGINE, patches: [["  return c.matchRules === 'base';", '  return false;']] },
   nostep: { file: MODULE, patches: [['  return theirTier >= myTier - (bigSeason ? 2 : 1);', '  return true;']] },
   keepfailed: { file: ENGINE, patches: [["  return objectiveStatuses(s).filter(x => x.status !== 'failed').map(x => x.objective);", '  return s.boardObjectives ?? [];']] },
+  /* Review fix: correction 2's pin taken out of playRunIn, so the previous manager's run in opens at the
+     state's own BOARD_FRESH: section takeover's base comparison must go red. */
+  nopin: { file: CAL_FILE, patches: [['? { ...career, manager: undefined, managerXp: undefined, boardConfidence: LEGACY_BOARD_START }\n    : { ...career, boardConfidence: LEGACY_BOARD_START };',
+    '? { ...career, manager: undefined, managerXp: undefined }\n    : career;']] },
   scoredone: { file: MODULE, patches: [['export const LEGACY_BOARD_START = 60;', 'export const LEGACY_BOARD_START = 60; /* control scoredone: the harness marks the dropped lines done */']] },
   nokitty: { file: MODULE, patches: [['  return Math.min(flat, Math.max(10, Math.floor(KITTY_TOP_SHARE * i.budget)));', '  return flat;']] },
   start60: { file: MODULE, patches: [['export const BOARD_FRESH = 69;', 'export const BOARD_FRESH = 60;']] },
