@@ -1,0 +1,18 @@
+1) both report buttons offer the same kinds, and a way to send an idea
+   shared kinds: Wrong answer, Wrong info, Bug, Idea
+2) the relay stores the report first, then records whether it reached him
+   the durable row is written before the mail is attempted, and the delivery answer is written back onto it
+3) the admin screen prints the delivery answer, unknown included
+   the screen shows emailed, not emailed and delivery unknown
+4) the live table carries the column
+   question_reports carries the emailed column (0 row read)
+5) the triage workflow, run: the spec statuses, every status move, the counts on every chip
+   7 statuses and 4 priorities, the same as spec section 123
+   all 49 status moves keep resolved and resolved_at true, with and without the new columns
+   every status offered reads back as itself after a save (7 with the columns, 2 before the migration)
+   36 chip counts (9 filters by 4 game choices) match the cards and the hand count
+6) the migration and the module agree, and the public insert path can only take the defaults
+   the insert policy keeps all 4 committed clauses and pins 6 admin columns to their defaults; no other policy is touched
+   7 statuses, 4 priorities and both length caps match the module; the backfill is there; no grant, trigger or function
+
+simReportRelay: green. Both buttons ask the same questions, every report records whether it reached him, and the queue has a real workflow.
