@@ -18,13 +18,15 @@ jobs:
       CI: '1'
       SIM_NETWORK: offline
       SAFARI_REPORT_PHASE: baseline
-      SAFARI_REPORT_OUT: ${{ runner.temp }}/safari-reports
-      SAFARI_REPORT_FONT_CACHE: ${{ runner.temp }}/safari-report-fonts
       SOCCER_CREATION_BASE: http://127.0.0.1:4173
-      SOCCER_CREATION_OUT: ${{ runner.temp }}/safari-reports/creation
       XI_SELECTION_BASE: http://127.0.0.1:4173
-      XI_SELECTION_OUT: ${{ runner.temp }}/safari-reports/xi
     steps:
+      - name: Initialize evidence paths on the allocated runner
+        run: |
+          echo "SAFARI_REPORT_OUT=$RUNNER_TEMP/safari-reports" >> "$GITHUB_ENV"
+          echo "SAFARI_REPORT_FONT_CACHE=$RUNNER_TEMP/safari-report-fonts" >> "$GITHUB_ENV"
+          echo "SOCCER_CREATION_OUT=$RUNNER_TEMP/safari-reports/creation" >> "$GITHUB_ENV"
+          echo "XI_SELECTION_OUT=$RUNNER_TEMP/safari-reports/xi" >> "$GITHUB_ENV"
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
