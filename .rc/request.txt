@@ -1,0 +1,2 @@
+#!build
+runAllSims: pip3 install --quiet fonttools pillow && node scripts/runAllSims.mjs
