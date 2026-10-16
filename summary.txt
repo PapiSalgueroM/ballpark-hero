@@ -1,0 +1,6 @@
+build exit=0 34s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+hubgrid exit=0 54s | Evidence: soccer-hub-grid-artifacts/native
+race exit=0 147s | playAutocompleteRace: 204 taps on 3 pages at 390 and 1280, 0 stale names offered, 0 stale picks, 6 of 6 current picks landed, target leg 0 of 20.
+practice exit=0 83s | PASS career practice native: 9 actual panel journeys, 27 effective DOM controls, trusted focus/input, earned banking and unchanged sources.
+matchplans exit=0 73s | PASS manager match plans native: 3 actual hook journeys, 12 effective restored DOM faults, independent engine previews and kickoff, reload and club isolation.
+worldbrowser exit=0 28s | PASS manager world native:3 profiles,9 effective DOM faults,actual modern/edited/historical worlds,unchanged saved tables and sources.
