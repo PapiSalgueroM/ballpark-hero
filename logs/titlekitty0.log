@@ -1,0 +1,22 @@
+[title] 243 rollovers, 243 stays: on CM_BOARD_BASE 131 of 186 A or B seasons opened under Safe (62 of 79 titles); on the head 0
+  by fate, none n 232: base mean 52.19 (p10 40 to p90 65.5), head mean 63.09 (p10 40 to p90 72)
+  by fate, up n 8: base mean 80.31 (p10 77.5 to p90 82), head mean 69 (p10 69 to p90 69)
+  by fate, down n 1: base mean 35 (p10 35 to p90 35), head mean 42 (p10 42 to p90 42)
+  by fate, escape n 2: base mean 56.5 (p10 55 to p90 58), head mean 69 (p10 69 to p90 69)
+  by grade, A n 128: base mean 59.02 (p10 49 to p90 72.5), head mean 70.62 (p10 69 to p90 77)
+  by grade, B n 58: base mean 50.51 (p10 42 to p90 58), head mean 69 (p10 69 to p90 69)
+  by grade, C n 44: base mean 43.35 (p10 36.5 to p90 48), head mean 41.65 (p10 36 to p90 46)
+  by grade, D n 13: base mean 39.04 (p10 35 to p90 49), head mean 38.12 (p10 35 to p90 47)
+ok   [title] every A or B season opens the next at Safe or more (0 of 186 under)
+ok   [title] every D or F season opens the next under Safe (0 of 13 at Safe or more)
+ok   [title] every move at the summer opens at BOARD_FRESH (0 of 0 do not)
+ok   [title] startNextSeason draws the same number of times on head and base wherever the kitty band did not bind
+FAIL [title] and writes the same save but for the opening (7; first Brighton season 1: .managerXp.xp: head 459 base 434)
+[kitty] tier 1: the band bound 0 of 137 staying rollovers (0 with a trophy); next budget over the club's: base median 2.14 p90 2.46, head median 2.14 p90 2.46
+[kitty] tier 2: the band bound 0 of 16 staying rollovers (0 with a trophy); next budget over the club's: base median 2.22 p90 2.55, head median 2.22 p90 2.55
+[kitty] tier 3: the band bound 16 of 39 staying rollovers (5 with a trophy); next budget over the club's: base median 2.4 p90 3.88, head median 2.4 p90 3.29
+[kitty] tier 4: the band bound 153 of 223 staying rollovers (28 with a trophy); next budget over the club's: base median 4 p90 7, head median 3.25 p90 3.25
+  116 rollovers of the tier 4 fleet where the band bound: their draws and the lines after the pot are counted, never held equal
+ok   [kitty] 415 staying rollovers: the cheque never passes max(10, 1.7 x the club's budget)
+ok   [kitty] and equals the old cheque wherever the old one was inside the band (0 differ)
+simCmBoardVerdict RED: 6 of 7 checks green (parts title, kitty, 426 s)

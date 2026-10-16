@@ -1,0 +1,9 @@
+tsc exit=0 99s | 
+c-nokitty exit=1 111s | control nokitty FIRED: 1 of 2 checks red
+titlekitty0 exit=1 428s | simCmBoardVerdict RED: 6 of 7 checks green (parts title, kitty, 426 s)
+simClubManagerBudget exit=0 221s | simClubManagerBudget: PASS
+titlekitty1 exit=1 434s | simCmBoardVerdict RED: 6 of 7 checks green (parts title, kitty, 433 s)
+simBoard exit=0 6s | ALL BOARD CHECKS PASSED
+simBoardAsks exit=0 43s | simBoardAsks: green. Every ask a board makes can be met, and nobody real is quoted.
+rulesforced exit=0 39s | simCmLeagueRules: all checks passed (modern, eras, pure)
+simClubManagerFinances exit=0 65s | simClubManagerFinances: PASS. The books add up, the projection lands, prices move the fans and the board, and the sponsor desk pays what it says.

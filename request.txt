@@ -1,0 +1,9 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+titlekitty0: CM_BOARD_BASE=$(bash .rc/x/mkbase.sh a0) SHARD=0/2 node scripts/simCmBoardVerdict.mjs --part=title,kitty
+titlekitty1: CM_BOARD_BASE=$(bash .rc/x/mkbase.sh a1) SHARD=1/2 node scripts/simCmBoardVerdict.mjs --part=title,kitty
+c-nokitty: CM_BOARD_BASE=$(bash .rc/x/mkbase.sh c1) OFFER_SEEDS=3 SIM_CM_BOARD_CONTROL=nokitty node scripts/simCmBoardVerdict.mjs --part=kitty
+simClubManagerBudget: node scripts/simClubManagerBudget.mjs
+simClubManagerFinances: node scripts/simClubManagerFinances.mjs
+simBoardAsks: node scripts/simBoardAsks.mjs
+simBoard: node scripts/simBoard.mjs
+rulesforced: git worktree add -q .claude/worktrees/forced HEAD && node .rc/x/forceLegacy.mjs .claude/worktrees/forced && CM_RULES_ROOT=$PWD/.claude/worktrees/forced node scripts/simCmLeagueRules.mjs --part=modern,eras,pure
