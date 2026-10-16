@@ -1,0 +1,5 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+s0: CM_WORLD_MOVES_SECTIONS=0 node scripts/simCmWorldMoves.mjs
+probe-check: node scripts/lib/cmAiRecordProbe1344.mjs --check
