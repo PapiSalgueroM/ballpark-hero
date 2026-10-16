@@ -1,0 +1,14 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/lib/soccerDeck.test.ts src/lib/gmInbox.test.ts --testTimeout=300000 --hookTimeout=120000
+sd-a: SIM_SOCCER_DECK_SECTIONS=1,2,3,4,5 node scripts/simSoccerDeck.mjs
+sd-b: SIM_SOCCER_DECK_SECTIONS=6,7,9,10 node scripts/simSoccerDeck.mjs
+sd-8: SIM_SOCCER_DECK_SECTIONS=8 node scripts/simSoccerDeck.mjs
+sd-ctl: n=0; bad=""; for c in bindopen leak last pool silent drop ceiling posleak neutralmoves noreseed mathrandom keyseason pressure noresolve eager caller; do SIM_SOCCER_DECK_CONTROL=$c node scripts/simSoccerDeck.mjs > /tmp/sdc-$c.log 2>&1; s=$?; l=$(tail -1 /tmp/sdc-$c.log); echo "$c exit=$s | $(echo "$l" | cut -c1-110) | first: $(grep -m1 FAIL /tmp/sdc-$c.log | cut -c1-110)"; if [ $s -eq 1 ] && echo "$l" | grep -q "CONTROL=$c FIRED"; then n=$((n+1)); else bad="$bad $c"; fi; done; echo "simSoccerDeck: $n of 16 controls fired${bad:+, NOT FIRED:$bad}"; [ $n -eq 16 ]
+kit-a: SIM_EVENT_DECK_SECTIONS=1,2,3,4,5,6,7,8,9,10,11,12 node scripts/simEventDeck.mjs
+kit-b: SIM_EVENT_DECK_SECTIONS=13 node scripts/simEventDeck.mjs
+kit-c: SIM_EVENT_DECK_SECTIONS=14,15,16 node scripts/simEventDeck.mjs
+kit-ctl: bash .rc/x/kctl.sh neutral:8 heavy:10 wordedit:14 wordorder:14 storymove:14 voiceedit:14 effectedit:14 newpack:14,15 pressure:15 eager:16 2>&1 | tee /tmp/kc.log; s=${PIPESTATUS[0]}; [ $s -eq 0 ] && grep -qF "kctl: every control exited 1 and fired" /tmp/kc.log
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+static: git diff --quiet e814c2de HEAD -- src/pages src/components src/hooks; a=$?; echo "pages untouched exit=$a"; echo "owned files: $(git diff --name-only e814c2de HEAD | grep -v '^\.rc/' | grep -v '^\.github/' | wc -l)"; [ $a -eq 0 ]
