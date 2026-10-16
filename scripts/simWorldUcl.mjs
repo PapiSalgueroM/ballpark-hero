@@ -18,13 +18,16 @@
  * Exit 0 green, 1 red or a control that fired, 2 could not run, 3 a control that did not fire.
  * A control is WORLD_UCL_CONTROL=<name>; it runs its own section only and must turn its own check red and nothing
  * that is not its own (the last line says FIRED, DID NOT FIRE CLEANLY or ABORTED).
- *   section 0, the data twisted in memory: onesource wiki thinused figure receipt cover
+ *   section 0, the data twisted in memory: onesource wiki thinused figure receipt cover order (two of N1's
+ *              months swapped); the engine edited in the bundle: const (the top two become three) partial
+ *              (WORLD_COMP_PARTIAL forgets G8) ban (2015-16 draws Russian and Ukrainian clubs together)
  */
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { createHash } from 'node:crypto';
 import { fileURLToPath, pathToFileURL } from 'node:url';
+import { build } from 'esbuild';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const text = file => fs.readFileSync(path.join(ROOT, file), 'utf8').replaceAll('\r\n', '\n');
@@ -40,6 +43,17 @@ const CONTROLS = {
   figure: [0, /^G1: groups 8 is not printed by two publishers/],
   receipt: [0, /does not carry the hash/],
   cover: [0, /^season 2010 has no verified G1 row/, /^season 2010 has no verified G1 row|^G1: /],
+  /* The engine edited in the bundle (EDITS below), or the ledger twisted where the engine is compared. */
+  const: [0, /^G8_SHAPE\.advance is 3 in worldCompetition\.ts and 2 in the ledger/],
+  partial: [0, /^WORLD_COMP_PARTIAL does not name G8/],
+  ban: [0, /^G8_BANNED_PAIRS\.2015 keeps nobody apart and G5-2015-groups/],
+  order: [0, /^the league phase nights are not in the real months' order at MD3/],
+};
+const MODULE_FILE = 'src/lib/worldCompetition.ts';
+const EDITS = {
+  const: [MODULE_FILE, 'export const G8_SHAPE = { clubs: 32, groups: 8, groupSize: 4, games: 6, advance: 2 } as const;', 'export const G8_SHAPE = { clubs: 32, groups: 8, groupSize: 4, games: 6, advance: 3 } as const;'],
+  partial: [MODULE_FILE, "'G5-2020-ko', 'G8'];", "'G5-2020-ko'];"],
+  ban: [MODULE_FILE, "2005: [], 2010: [], 2015: [['Russia', 'Ukraine']], 2020: [['Russia', 'Ukraine']],", "2005: [], 2010: [], 2015: [], 2020: [['Russia', 'Ukraine']],"],
 };
 if (CONTROL && !Object.hasOwn(CONTROLS, CONTROL)) cannot(`unknown control ${CONTROL}`);
 const runs = n => (CONTROL ? CONTROLS[CONTROL][0] === n : ONLY.length === 0 || ONLY.includes(n));
@@ -75,7 +89,7 @@ function section0() {
   /* The controls of this section change the data in memory, the way a wrong edit of the file would. */
   if (CONTROL === 'onesource') { const r = row('G3-2020'); changed = r.sources.length > 1; r.sources.length = 1; }
   if (CONTROL === 'wiki') { const s = row('G1').sources[1]; changed = !isWiki(s.url); s.url = 'https://en.wikipedia.org/wiki/UEFA_Champions_League'; }
-  if (CONTROL === 'thinused') { const r = row('G2-2005'); changed = r.status !== 'verified' && r.usedBy.length === 0; r.usedBy = ['G8_SHAPE.pots']; }
+  if (CONTROL === 'thinused') { const r = row('G2-2005'); changed = r.status !== 'verified' && r.usedBy.length === 0; r.usedBy = ['G8_SHAPE.clubs']; }
   if (CONTROL === 'figure') { for (const s of row('G1').sources.slice(1)) { const was = s.literal.join('|'); s.literal = s.literal.map(l => l.replace(/\beight\b/gi, 'some')); changed ||= was !== s.literal.join('|'); } }
   if (CONTROL === 'cover') { const r = row('G1'); changed = r.seasons.includes(2010); r.seasons = r.seasons.filter(y => y !== 2010); }
 
@@ -123,9 +137,75 @@ function section0() {
   console.log(`  0 ledger: verified ${count('verified')} | one publisher ${count('onePublisher')} | to verify ${count('toVerify')}`);
 }
 
+/* ── Section 0, second half: the engine states what the ledger states ──────────────────────────────── */
+const editPlugin = {
+  name: 'world-ucl-control',
+  setup(b) {
+    const edit = EDITS[CONTROL];
+    if (!edit) return;
+    const [file, from, to] = edit;
+    b.onLoad({ filter: new RegExp(`${file.split('/').pop().replace('.', '[.]')}$`) }, async args => {
+      const source = (await fs.promises.readFile(args.path, 'utf8')).replaceAll('\r\n', '\n');
+      const count = source.split(from).length - 1;
+      if (count !== 1) cannot(`control ${CONTROL}: its line is in ${file} ${count} times, it must be exactly once`);
+      changed = true;
+      return { contents: source.replace(from, to), loader: 'ts' };
+    });
+  },
+};
+/** Bundle the given entry files (repo paths) into one module and import it. */
+async function bundle(name, entries) {
+  const work = fs.mkdtempSync(path.join(os.tmpdir(), `world-ucl-${name}-`));
+  const entry = path.join(work, 'entry.ts');
+  const P = f => JSON.stringify(path.join(ROOT, f).split(path.sep).join('/'));
+  fs.writeFileSync(entry, Object.entries(entries).map(([as, f]) => `export * as ${as} from ${P(f)};`).join('\n'));
+  const out = path.join(work, 'bundle.mjs');
+  await build({ entryPoints: [entry], bundle: true, platform: 'node', format: 'esm', outfile: out, logLevel: 'error', alias: { '@': path.join(ROOT, 'src') }, plugins: [editPlugin] });
+  return import(pathToFileURL(out).href);
+}
+const same = (a, b) => JSON.stringify(a) === JSON.stringify(b);
+
+async function section0Engine() {
+  const w = (await bundle('engine', { w: MODULE_FILE })).w;
+  const row = id => ledger.rows.find(r => r.id === id);
+  if (CONTROL === 'order') { const m = row('N1').months; changed = m.MD2 <= m.MD3; m.MD2 = 11; }
+  /* 0.4 Every constant equals its row. */
+  const g1 = row('G1');
+  for (const [key, n] of Object.entries(g1.figures)) ok(w.G8_SHAPE[key] === n, `G8_SHAPE.${key} is ${w.G8_SHAPE[key]} in worldCompetition.ts and ${n} in the ledger`);
+  ok(Object.keys(w.G8_SHAPE).every(k => Object.hasOwn(g1.figures, k)), 'G8_SHAPE holds a number no G1 figure prints');
+  for (const y of ledger.eraSeasons) {
+    const g3 = ledger.rows.find(r => r.id.startsWith('G3') && r.seasons.includes(y));
+    ok(w.G8_ASSOC_APART[y] === (g3?.status === 'verified'), `G8_ASSOC_APART.${y} is ${w.G8_ASSOC_APART[y]} and its row ${g3?.id} is ${g3?.status}`);
+    const g5 = ledger.rows.find(r => r.id.startsWith('G5') && !/-ko$/.test(r.id) && r.seasons.includes(y));
+    const bans = w.G8_BANNED_PAIRS[y] ?? [];
+    const said = bans.length ? bans.map(p => p.join(' and ')).join(', ') : 'nobody';
+    if (g5?.id === 'G5-ruling') ok(bans.length === 0, `G8_BANNED_PAIRS.${y} keeps ${said} apart before the July 2014 ruling (G5-ruling)`);
+    else ok(g5?.status === 'verified' ? bans.length === 1 && same(bans[0], ['Russia', 'Ukraine']) : bans.length === 0, `G8_BANNED_PAIRS.${y} keeps ${said} apart and ${g5?.id} is ${g5?.status}`);
+  }
+  /* 0.5 WORLD_COMP_PARTIAL names exactly the rows that are not verified, and every usedBy is a real constant. */
+  const notVerified = ledger.rows.filter(r => r.status !== 'verified').map(r => r.id);
+  const partial = [...w.WORLD_COMP_PARTIAL];
+  for (const id of notVerified) ok(partial.includes(id), `WORLD_COMP_PARTIAL does not name ${id}, which is ${row(id).status}`);
+  for (const id of partial) ok(notVerified.includes(id), `WORLD_COMP_PARTIAL names ${id}, which is verified or not in the ledger`);
+  for (const r of ledger.rows) for (const u of r.usedBy) {
+    const [name, key] = u.split('.');
+    ok(Object.hasOwn(w, name) && (key === undefined || Object.hasOwn(w[name], key)), `${r.id}: usedBy ${u} is not in worldCompetition.ts`);
+  }
+  /* 0.6 The nights: 13 and 17, the league phase's in the real months' order, its marks eleven rising fractions. */
+  const order = w.nightsOf('l36').map(n => n.id);
+  ok(w.nightsOf('g8').length === 13 && order.length === 17, `the nights are ${w.nightsOf('g8').length} (g8) and ${order.length} (l36), 13 and 17 expected`);
+  ok(same(order, [...w.LEAGUE_PHASE_NIGHT_ORDER]), 'LEAGUE_PHASE_NIGHT_ORDER is not the order nightsOf gives');
+  const months = row('N1').months;
+  ok(same(Object.keys(months), order), 'N1 does not give a month for each night in order');
+  for (let i = 1; i < order.length; i += 1) if (months[order[i]] < months[order[i - 1]]) { ok(false, `the league phase nights are not in the real months' order at ${order[i]}`); break; }
+  const marks = w.LEAGUE_PHASE_NIGHT_MARKS;
+  ok(marks.length === order.length - 6 && marks.every((m, i) => m > 0 && m <= 1 && (i === 0 || m > marks[i - 1])), 'LEAGUE_PHASE_NIGHT_MARKS are not eleven rising fractions of the season');
+  console.log(`  0 engine: G8_SHAPE ${JSON.stringify(w.G8_SHAPE)}; association rule ${ledger.eraSeasons.map(y => `${y} ${w.G8_ASSOC_APART[y]}`).join(', ')}; bans ${ledger.eraSeasons.map(y => `${y} ${(w.G8_BANNED_PAIRS[y] ?? []).length}`).join(', ')}; partial ${partial.join(' ')}`);
+}
+
 /* ── Run ───────────────────────────────────────────────────────────────────────────────────────────── */
 try {
-  if (runs(0)) section0();
+  if (runs(0)) { section0(); await section0Engine(); }
 } catch (e) {
   console.log(`simWorldUcl: cannot run: ${e && e.stack ? e.stack.split('\n').slice(0, 3).join(' | ') : e}`);
   process.exit(2);
