@@ -839,7 +839,8 @@ SECTION = '7';
 console.log('7) Keyed: the slot and the deck\'s answers draw no Math.random, the same save deals the same card in a fresh bundle, and the season moves the pick');
 /* Measured on a runner (r1334-s4b, 2026-10-16) over five samples of 100 careers (seed offsets 0 to 4), each the same
    save dealt eight summers with only the last row's year moved and no stamp carried: the share of careers dealt at
-   least two different deck cards, of those dealt one in at least two of the eight. FLOOR is written from it. */
+   least two different deck cards, of those dealt one in at least two of the eight. Read: 100.0 percent in all five
+   samples, and 0.0 in all five under the keyseason control (r1334-s4b); the floor sits between, far from both. */
 const KEYED_FLOOR = 0.8;
 const spiedModule = (pack, tally) => {
   const counted = fn => (...args) => {
@@ -929,7 +930,19 @@ console.log('8) Economy: four answer arms against the deck off, over five seeds 
    five seeds) are set from the measured seed to seed spread, written with the reading. Exact, the strongest signal:
    at every deck answer the boost it queued is at most momentsRoom just before it. */
 const ECON_N = Number(process.env.SIM_SOCCER_DECK_ECONOMY_N || 100);
-const BANDS = { morale25: 6, morale30: 6, integrity25: 4, integrity30: 6, overall30: 1, peak: 1, legacy: 3, clean40: 0.05, pastCeiling: 0.02 };
+/* Read 2026-10-16 on a runner (rc r1334-s4e, the pack without integrity effects, 100 careers a seed, seeds 0 to 4),
+   each arm's mean minus OFF's (the largest of BEST, WORST and NEUTRAL) and OFF's seed to seed sd:
+     morale25 1.62 (sd 1.77)   morale30 1.33 (sd 1.13)   integrity25 0.44 (sd 1.44)   integrity30 1.10 (sd 3.49)
+     overall30 0.12 (sd 0.36)  peak 0.44 (sd 0.12)       legacy 1.66 (sd 1.21)        clean40 0.04 (sd 0.05)
+     pastCeiling 0 (sd 0)
+   Each band is that reading plus two of OFF's seed to seed sd, rounded up (pastCeiling: no season start was ever past
+   the ceiling in any arm, so any share at all is red). The fleet is seeded, so a reading repeats exactly on the same
+   code; the margin is for a later change to the engine under the deck. The pressure control (every deck move times
+   ten) reads morale25 +9.33 and morale30 +5.76. Before the pack dropped its integrity effects (r1334-s4b) the BEST arm
+   moved legacy +2.26 against a spread of 1.21 and clean40 +0.09: ruling 2(j), so the pack dropped them. What still
+   moves legacy (+1.66 BEST, +1.56 WORST, -0.09 NEUTRAL) is the training the cards offer: it lands under the ceiling
+   (pastCeiling stays 0) and lifts the peak overall by 0.4. */
+const BANDS = { morale25: 5.5, morale30: 4, integrity25: 3.5, integrity30: 8.5, overall30: 1, peak: 0.75, legacy: 4.5, clean40: 0.15, pastCeiling: 0.01 };
 if (runs(8)) {
   let P8 = PACK;
   if (CONTROL === 'pressure') {

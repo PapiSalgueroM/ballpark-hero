@@ -307,7 +307,7 @@ export function dealFromPack(pack: SoccerDeckPack, state: CareerState, season: n
  */
 export function pendingFromPack(pack: SoccerDeckPack, state: CareerState): RandomEvent[] {
   if (state.phase !== 'random_events' || problemsOf(pack).length > 0) return [];
-  const ids = new Set((state.pendingEvents ?? []).map(e => e.id).filter(id => id >= SOCCER_DECK_MIN_ID && id <= SOCCER_DECK_MAX_ID));
+  const ids = new Set((state.pendingEvents ?? []).map(e => e?.id).filter((id): id is number => typeof id === 'number' && id >= SOCCER_DECK_MIN_ID && id <= SOCCER_DECK_MAX_ID));
   if (ids.size === 0) return [];
   return deckToRandomEvents(pack, pack.events.filter(e => ids.has(Number(e.id))));
 }

@@ -47,6 +47,8 @@ const FIXTURE: SoccerDeckPack = {
   events: [FORWARD, CALLUP],
   titles: { 716: 'Penalty duty', 724: 'Back from international duty' },
   kinds: { 716: 'positive', 724: 'international' },
+  /* the fixture's own ceilings: the shipped pack's name keys these two cards never move */
+  pressure: { morale: 2, integrity: 1, t_shooting: 1 },
 };
 
 function career(patch: Partial<CareerState> = {}, row: Partial<SeasonRecord> = {}): CareerState {

@@ -37,7 +37,7 @@ const CARDS: Card[] = [
       { label: 'Stick to the normal plan', reply: 'You keep to the normal preseason plan.', karma: 0 },
     ] }, 'Crosses into a crowded box', 'positive'],
   [{ id: '702', beat: 'summer', from: 'The analyst', emoji: '🎯', cooldown: 3, when: [KEEPER],
-    text: 'The analyst has clips of every goal kick and back pass you played last season. The coaches want the build up to start with you next season.',
+    text: 'The coaches want the build up to start with you next season, and the analyst has put together a reel on playing out from the back.',
     choices: [
       { label: 'Work on short passing', reply: 'You spend the summer sessions passing out under pressure.', karma: 0, fx: { gk_distribution: 1 } },
       { label: 'Keep it simple', reply: 'You stick to clearing your lines.', karma: 0 },
@@ -76,7 +76,7 @@ const CARDS: Card[] = [
       { label: 'Play it safe', reply: 'You stick with going long when it gets tight.', karma: 0 },
     ] }, 'Playing out under a press', 'positive'],
   [{ id: '708', beat: 'summer', from: 'Your fitness coach', emoji: '💨', cooldown: 4, when: [...DEFENDER],
-    text: 'Your fitness coach wants more pace in your recovery runs, so a quick winger cannot get away from you once he is goal side.',
+    text: 'Your fitness coach wants more pace in your recovery runs, so a quick winger who gets in behind you does not stay there.',
     choices: [
       { label: 'Do the sprint work', reply: 'You grind through the sprint sessions.', karma: 0, morale: -1, fx: { t_pace: 1 } },
       { label: 'Keep your usual routine', reply: 'You keep your usual summer routine.', karma: 0 },
@@ -119,7 +119,7 @@ const CARDS: Card[] = [
       { label: 'Keep it as it is', reply: 'You keep your game as it is.', karma: 0 },
     ] }, 'Shooting from distance', 'positive'],
   [{ id: '715', beat: 'summer', from: 'The analyst', emoji: '🧭', cooldown: 4, when: [...MIDFIELDER],
-    text: 'The analyst has marked every time the space behind you opened up last season and wants you working on your defensive shape this summer.',
+    text: 'The analyst wants you working on your defensive shape this summer, so the space behind you does not open up next season.',
     choices: [
       { label: 'Do the shape work', reply: 'You put the hours into your defensive shape.', karma: 0, fx: { t_defending: 1 } },
       { label: 'Focus on going forward', reply: 'You keep your focus on going forward.', karma: 0 },
@@ -132,7 +132,7 @@ const CARDS: Card[] = [
       { label: 'Let someone else take them', reply: 'You leave the penalties to someone else.', karma: 0 },
     ] }, 'Penalty duty', 'positive'],
   [{ id: '717', beat: 'summer', from: 'Your finishing coach', emoji: '🦶', cooldown: 3, when: [FORWARD],
-    text: 'Your finishing coach reckons defenders have started showing you onto your weaker foot. A summer of finishing with it would change that.',
+    text: 'Your finishing coach wants your weaker foot as good as your stronger one before next season, and that means a summer of finishing with it.',
     choices: [
       { label: 'Do the weaker foot work', reply: 'You finish with your weaker foot every session.', karma: 0, fx: { t_shooting: 1 } },
       { label: 'Back your stronger foot', reply: 'You stick with your stronger foot.', karma: 0 },
