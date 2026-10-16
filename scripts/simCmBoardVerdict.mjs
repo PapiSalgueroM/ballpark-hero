@@ -164,6 +164,16 @@ const TITLE_FLEET = [
   ['Chelsea', 'era2005'], ['Everton', 'era2005'],
 ];
 const SECOND_TIERS = ['championship', 'bundesliga2', 'serieb', 'ligue2', 'segunda'];
+/* The fleets read the static memberships: a career played before leaves its summer registered, and a
+   club it relegated would otherwise be picked as a second tier club. */
+export function promoFleet(cm) {
+  cm.registerLeagueOverrides(null);
+  return SECOND_TIERS.flatMap(lg => cm.playableClubs(lg).filter(d => d.expectation <= 4));
+}
+export function tier4Fleet(cm) {
+  cm.registerLeagueOverrides(null);
+  return cm.REAL_LEAGUES.map(lg => [...cm.playableClubs(lg.id)].sort((a, b) => b.expectation - a.expectation || a.name.localeCompare(b.name))[0]).filter(Boolean);
+}
 /** The fate a rolled season had, read from the leagues on both sides of the summer (measure only). */
 function observedFate(cm, roll) {
   if (roll.moving) return null;
@@ -270,8 +280,8 @@ function measureRollover(arm) {
   /* The promotion sub fleet: every 2026-27 second tier club expected in its top four, one season. */
   const promoRolls = [];
   const promoSeeds = num('PROMO_SEEDS', 5);
-  for (const lg of SECOND_TIERS) {
-    for (const c of cm.playableClubs(lg).filter(d => d.expectation <= 4)) {
+  for (const c of promoFleet(cm)) {
+    {
       for (let seed = 0; seed < promoSeeds; seed++) {
         playCareer(cm, { club: c.name, era: null, seed: 300 + seed, seasons: 1, policy: 'stay' }, roll => {
           const k = globalThis.__cmKitty.pop();
@@ -303,10 +313,7 @@ function measureTier4(arm) {
   const { cm } = arm;
   const seeds = num('OFFER_SEEDS', 8);
   const rolls = [];
-  for (const lg of cm.REAL_LEAGUES) {
-    const clubs = cm.playableClubs(lg.id);
-    if (!clubs.length) continue;
-    const weakest = [...clubs].sort((a, b) => b.expectation - a.expectation || a.name.localeCompare(b.name))[0];
+  for (const weakest of tier4Fleet(cm)) {
     for (let seed = 0; seed < seeds; seed++) playCareer(cm, { club: weakest.name, era: null, seed: 700 + seed, seasons: 2, policy: 'stay' }, roll => rolls.push(roll));
   }
   console.log(`[measure offers] tier 4 fleet: ${rolls.length} season ends over ${cm.REAL_LEAGUES.length} leagues`);
@@ -342,6 +349,99 @@ function measureTakeover(arm) {
   console.log(`[measure takeover] ${n} handovers (startMidSeason), ${failed} carry a failed objective${examples.length ? `; e.g. ${examples.join(' | ')}` : ''}`);
 }
 
+/* ---------------- section pure (step 1) ---------------- */
+const MODULE = 'src/lib/clubManagerBoardVerdict.ts';
+const METERS = 'src/lib/clubManagerMeters.ts';
+const LADDER_FROM = "  let verdictGrade: 'A' | 'B' | 'C' | 'D' | 'F';\n";
+const LADDER_TO = "    verdictGrade = 'F';\n  }\n";
+/** The base's finishSeason ladder, cut from its own source and evaluated: the oracle is never retyped. */
+function ladderOracle(baseText) {
+  const a = baseText.indexOf(LADDER_FROM);
+  const b = baseText.indexOf(LADDER_TO, a);
+  if (a < 0 || b < 0) { console.log('section pure: the base ladder is not in CM_BOARD_BASE\'s engine; could not run'); process.exit(2); }
+  const body = baseText.slice(a, b + LADDER_TO.length).replace(": 'A' | 'B' | 'C' | 'D' | 'F'", '');
+  return new Function('seasonTrophies', 'position', 'overshoot', `${body}\nreturn verdictGrade;`);
+}
+async function bundleModule(text, folder, name) {
+  const file = path.join(folder, `${name}-verdict.ts`);
+  const output = path.join(folder, `${name}-verdict.cjs`);
+  await writeFile(file, text);
+  await build({ entryPoints: [file], bundle: true, platform: 'node', format: 'cjs', outfile: output, logLevel: 'silent' });
+  return require(output);
+}
+const ORDER = ['A', 'B', 'C', 'D', 'F'];
+const worse = (g, h) => ORDER.indexOf(g) >= ORDER.indexOf(h);
+function trophyList(n, euro) {
+  return Array.from({ length: n }, (_, i) => (euro && i === 0 ? 'Champions League' : `Cup ${i}`));
+}
+function pureSection(bv, ctx) {
+  const P = 'pure';
+  const ladder = ladderOracle(ctx.baseText);
+  let grid = 0, ladderBad = 0, upBad = 0, downBad = 0, escBad = 0, kindBad = 0;
+  for (let position = 1; position <= 24; position++) for (let expectation = 1; expectation <= 24; expectation++) {
+    for (let trophies = 0; trophies <= 3; trophies++) for (const europeWon of trophies ? [false, true] : [false]) {
+      grid += 1;
+      const want = ladder(trophyList(trophies, europeWon), position, expectation - position);
+      const i = { position, expectation, trophies, europeWon };
+      const none = bv.seasonGrade({ ...i, fate: null });
+      if (none.grade !== want) ladderBad += 1;
+      if (want === 'A' && !['title', 'silver', 'over'].includes(none.kind)) kindBad += 1;
+      if (want !== 'A' && none.kind !== want) kindBad += 1;
+      const up = bv.seasonGrade({ ...i, fate: 'up' });
+      if (!['A', 'B'].includes(up.grade) || up.kind !== 'up' || (want === 'A' && up.grade !== 'A')) upBad += 1;
+      const down = bv.seasonGrade({ ...i, fate: 'down' });
+      const cap = trophies ? 'B' : 'C';
+      if (!worse(down.grade, cap) || down.kind !== 'down' || (worse(want, cap) && down.grade !== want)) downBad += 1;
+      const esc = bv.seasonGrade({ ...i, fate: 'escape' });
+      if (esc.grade !== want || esc.kind !== 'escape') escBad += 1;
+    }
+  }
+  check(P, `${grid} grid seasons with no fate grade exactly as the base ladder`, ladderBad === 0, `${ladderBad} differ`);
+  check(P, 'a season with no fate names why: title, silver or over for an A, its grade otherwise', kindBad === 0, `${kindBad} wrong`);
+  check(P, "fate 'up' grades A or B (an A stays an A) with the 'up' kind", upBad === 0, `${upBad} wrong`);
+  check(P, "fate 'down' grades C or worse (B or worse with a trophy), worse grades kept", downBad === 0, `${downBad} wrong`);
+  check(P, "fate 'escape' keeps the ladder grade with the 'escape' kind", escBad === 0, `${escBad} wrong`);
+  /* The opening over a grid of finishes, objective lists and promises. */
+  const lists = [[], [{ id: 'league', hit: true }], [{ id: 'league', hit: false }], [{ id: 'league', hit: true }, { id: 'cup', hit: false }, { id: 'natQuota', hit: false }],
+    [{ id: 'league', hit: false }, { id: 'cup', hit: true }, { id: 'ucl', hit: true }, { id: 'marquee', hit: true }], [{ hit: false }, { hit: false }, { hit: false }]];
+  let openings = 0, abBad = 0, dfBad = 0, rangeBad = 0;
+  for (const grade of ORDER) for (let pe = 1; pe <= 24; pe++) for (let finish = 1; finish <= 24; finish++) for (const objectives of lists) for (let promiseNet = -2; promiseNet <= 2; promiseNet++) {
+    openings += 1;
+    const v = bv.openingConfidence({ grade, playedExpectation: pe, finish, objectives, promiseNet });
+    if ((grade === 'A' || grade === 'B') && v < bv.BOARD_FRESH) abBad += 1;
+    if ((grade === 'D' || grade === 'F') && v > 59) dfBad += 1;
+    if (!(v >= 35 && v <= 82)) rangeBad += 1;
+  }
+  check(P, `${openings} openings: an A or a B opens at BOARD_FRESH (${bv.BOARD_FRESH}) or more`, abBad === 0, `${abBad} under`);
+  check(P, 'a D or an F opens at 59 or less', dfBad === 0, `${dfBad} over`);
+  check(P, 'every opening is 35 to 82', rangeBad === 0, `${rangeBad} outside`);
+  const weights = [['league', 3], ['natQuota', 0.5], ['veterans', 0.5], ['posGap', 0.5], ['youngStar', 0.5], ['marquee', 0.5], ['cup', 1], ['ucl', 1], [undefined, 1]];
+  check(P, 'objectiveWeight: league 3, each board ask 0.5, any other id and no id 1', weights.every(([id, w]) => bv.objectiveWeight(id) === w));
+  let kitty = 0, overBand = 0, notFlat = 0, bound = 0;
+  for (let budget = 2; budget <= 250; budget += 1) for (let e = 1; e <= 24; e += 1) for (let f = 1; f <= 24; f += 1) for (let t = 0; t <= 3; t++) {
+    kitty += 1;
+    const flat = Math.max(10, Math.round(budget + (e - f) * 2 + t * 12));
+    const band = Math.max(10, bv.KITTY_TOP_SHARE * budget);
+    const got = bv.kittyAllocation({ budget, expectation: e, finish: f, trophies: t });
+    if (got > band) overBand += 1;
+    if (flat <= band && got !== flat) notFlat += 1;
+    if (flat > band) bound += 1;
+  }
+  check(P, `${kitty} allocations never above max(10, ${bv.KITTY_TOP_SHARE} x budget)`, overBand === 0, `${overBand} above`);
+  check(P, 'and equal to the flat formula wherever it is inside the band', notFlat === 0, `${notFlat} differ; the band binds on ${bound}`);
+  const table = [[1, 1, false, true], [2, 1, false, true], [3, 1, false, false], [3, 2, false, true], [4, 2, false, false], [4, 3, false, true], [4, 2, true, true], [4, 1, true, false], [3, 1, true, true], [2, 4, false, true]];
+  check(P, 'offerStepOk: one tier up, two after a title, any tier at or below', table.every(([m, t, big, ok]) => bv.offerStepOk(m, t, big) === ok));
+  const safe = Number((ctx.metersText.match(/export const BOARD_SAFE = (\d+)/) ?? [])[1]);
+  check(P, `BOARD_SAFE_LINE (${bv.BOARD_SAFE_LINE}) equals clubManagerMeters' BOARD_SAFE (${safe})`, bv.BOARD_SAFE_LINE === safe);
+  check(P, 'the statues and the murals live only under a title or two trophies (none in VERDICT_LINES)', !/statue|mural/i.test(JSON.stringify(bv.VERDICT_LINES)));
+  check(P, 'LEGACY_BOARD_START 60 and LEGACY_NEW_JOB_BOARD 62', bv.LEGACY_BOARD_START === 60 && bv.LEGACY_NEW_JOB_BOARD === 62);
+}
+const MODULE_CONTROLS = {
+  safeline: ['export const BOARD_SAFE_LINE = 60;', 'export const BOARD_SAFE_LINE = 61;'],
+  upgrade: ["  if (i.fate === 'up') return { grade: atLeast(grade, 'B'), kind: 'up' };", "  if (i.fate === 'up') return { grade, kind: 'up' };"],
+  band: ["  if (i.grade === 'A' || i.grade === 'B') v = Math.max(v, BOARD_FRESH);", '  if (false) v = Math.max(v, BOARD_FRESH);'],
+};
+
 /* ---------------- main ---------------- */
 async function main() {
   const folder = await mkdtemp(path.join(os.tmpdir(), 'simCmBoardVerdict-'));
@@ -357,6 +457,12 @@ async function main() {
       if (MEASURE.includes('rollover')) measureRollover(arm);
       if (MEASURE.includes('offers')) measureTier4(arm);
       if (MEASURE.includes('takeover')) measureTakeover(arm);
+    } else if (part === 'pure') {
+      if (!BASE) { console.log('section pure needs CM_BOARD_BASE (its ladder oracle is the base engine); could not run'); process.exit(2); }
+      let text = await readSource(root, MODULE);
+      if (MODULE_CONTROLS[CONTROL]) text = patchOnce(text, ...MODULE_CONTROLS[CONTROL], `control ${CONTROL}`);
+      const bv = await bundleModule(text, folder, CONTROL || 'head');
+      pureSection(bv, { baseText: await readSource(BASE, ENGINE), metersText: await readSource(root, METERS) });
     } else { console.log(`unknown part ${part}`); process.exit(2); }
   }
   const red = results.filter(r => !r.ok);
