@@ -16,7 +16,7 @@ jobs:
       SIM_NETWORK: offline
       ENGINES: chromium
       CAREER_SEASON_LOCAL_ONLY: '1'
-      SC_PENDING_MONEY_PHASE: baseline
+      SC_PENDING_MONEY_PHASE: fixed
       SC_PENDING_MONEY_BASE: 75abee825b73c34b4a7a6d6852de1417a20cc8aa
       SC_PENDING_MONEY_OUT: ${{ github.workspace }}/pending-money-artifacts
       FREE_KICK_FONT_CACHE: ${{ github.workspace }}/pending-money-artifacts/font-cache
