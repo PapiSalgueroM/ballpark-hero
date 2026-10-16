@@ -1,0 +1,11 @@
+Actual live reader normal: 12 passes, 0 exact owned faults; raw child/source/inverse retained.
+Actual live reader future-goals: 5 passes, 7 exact owned faults; raw child/source/inverse retained.
+Actual live reader own-goals: 11 passes, 1 exact owned faults; raw child/source/inverse retained.
+Actual live reader ovr-grade: 7 passes, 5 exact owned faults; raw child/source/inverse retained.
+Actual live reader future-identity: 10 passes, 2 exact owned faults; raw child/source/inverse retained.
+Actual live reader unknown-grade: 11 passes, 1 exact owned faults; raw child/source/inverse retained.
+Actual live reader reader-draw: 0 passes, 12 exact owned faults; raw child/source/inverse retained.
+Actual live reader reader-clock: 0 passes, 12 exact owned faults; raw child/source/inverse retained.
+Actual live reader reader-write: 0 passes, 12 exact owned faults; raw child/source/inverse retained.
+simManagerLiveLineups:12 normal semantic outcomes and eight effective copied-source controls qualified.
+Three byte-identical actual engines retain complete final-state/id/input equality; pure reader graph imports no game engine.
