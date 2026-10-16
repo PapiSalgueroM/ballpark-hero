@@ -1,0 +1,4 @@
+headsha: git log --oneline -3
+simSoccerDeckFairness: node scripts/simSoccerDeckFairness.mjs
+ctl-fairness-16: n=0; bad=""; for c in shuffle ranking globalpick keyseason newsyear nogate puskas loanclub unit poscode uncapped prefix olddebut injblow injlog outside; do SIM_SOCCER_DECK_FAIRNESS_CONTROL=$c node scripts/simSoccerDeckFairness.mjs > "$TMPDIR/fair-$c.log" 2>&1; s=$?; grep -h "CONTROL $c " "$TMPDIR/fair-$c.log"; if [ $s -eq 1 ] && grep -qE "CONTROL $c FIRED: section [0-9]+ failed \([0-9]+ failures in all\)" "$TMPDIR/fair-$c.log"; then n=$((n+1)); else bad="$bad $c(exit $s)"; tail -5 "$TMPDIR/fair-$c.log"; fi; done; echo "simSoccerDeckFairness: $n of 16 Round 1327 controls fired${bad:+, NOT FIRED:$bad}"; [ $n -eq 16 ]
+simSoccerEventPromises: node scripts/simSoccerEventPromises.mjs
