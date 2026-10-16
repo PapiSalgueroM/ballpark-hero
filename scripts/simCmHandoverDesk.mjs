@@ -11,6 +11,7 @@ import { createHash } from 'node:crypto';
 import { execFileSync, spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 
+assert(process.env.CI === 'true' && process.env.SIM_NETWORK === 'offline', 'Appointment proof runs only in CI with offline transport');
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const OUT = path.resolve(process.env.CM_HANDOVER_OUT || path.join(ROOT, 'manager-handover-artifacts/proof'));
 const BASE = process.env.CM_HANDOVER_BASE || 'd4f2c6f688d656205722ba52bbdb33f03490966a';

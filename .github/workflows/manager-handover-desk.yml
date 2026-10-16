@@ -78,14 +78,21 @@ jobs:
           JS
       - name: Remote build reader tools
         run: |
-          npm install --no-save playwright
-          node_modules/.bin/playwright install --with-deps chromium
+          reader_prefix="$RUNNER_TEMP/manager-handover-browser"
+          npm install --prefix "$reader_prefix" --no-save --package-lock=false playwright@1.64.0
+          test ! -e node_modules/playwright && test ! -L node_modules/playwright
+          test ! -e node_modules/playwright-core && test ! -L node_modules/playwright-core
+          ln -s "$reader_prefix/node_modules/playwright" node_modules/playwright
+          ln -s "$reader_prefix/node_modules/playwright-core" node_modules/playwright-core
+          node "$reader_prefix/node_modules/playwright/cli.js" install --with-deps chromium
           python -m pip install fonttools pillow
           node --input-type=module <<'JS'
           import fs from 'node:fs';
           import { createHash } from 'node:crypto';
+          import assert from 'node:assert/strict';
           const rows = ['node_modules/playwright/package.json', 'node_modules/playwright-core/package.json'].map(file => {
-            const bytes = fs.readFileSync(file); return { file, version: JSON.parse(bytes).version, sha256: createHash('sha256').update(bytes).digest('hex') };
+            const bytes = fs.readFileSync(file); assert.equal(JSON.parse(bytes).version, '1.64.0', file);
+            return { file, version: JSON.parse(bytes).version, sha256: createHash('sha256').update(bytes).digest('hex') };
           });
           fs.writeFileSync(process.env.HANDOVER_OUT + '/reader-tools.json', JSON.stringify(rows, null, 2));
           JS
@@ -120,6 +127,17 @@ jobs:
       - name: All fifteen build and snapshot readers
         run: |
           export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          node scripts/lib/hostLikeServer.mjs dist 4173 > "$HANDOVER_OUT/reader-server.log" 2>&1 &
+          reader_server_pid=$!
+          trap 'kill "$reader_server_pid" 2>/dev/null || true' EXIT
+          reader_ready=0
+          for attempt in $(seq 1 60); do
+            if curl --fail --silent http://127.0.0.1:4173/ > /dev/null; then reader_ready=1; break; fi
+            sleep 1
+          done
+          test "$reader_ready" = 1
+          export BASE=http://127.0.0.1:4173
+          export SWEEP_BASE="$BASE"
           failed=0
           for reader in simAdsense simBrand simHeadTags simHiddenPages simHubs simIndexNow simIndexing simInternalLinks simNoRivalNames simPrerender simPrerenderBoot simRetiredRoutes simSchema simSitemap simSnapshotAssets; do
             node "scripts/$reader.mjs" 2>&1 | tee "$HANDOVER_OUT/$reader.log" || failed=1
