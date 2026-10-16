@@ -1,0 +1,4 @@
+so-head: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCmShootoutOrder.mjs
+so-plain: node scripts/simCmShootoutOrder.mjs
+so-r1335: git worktree add -q /tmp/s35 94508b40 && ln -s "$PWD/node_modules" /tmp/s35/node_modules && cd /tmp/s35 && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCmShootoutOrder.mjs > /tmp/s35.log 2>&1; s=$?; grep -E 'FAIL' /tmp/s35.log | head -4 | cut -c1-200; tail -1 /tmp/s35.log; exit $s
+so-ctl: r=""; for k in ignoreorder noskip nocap unsetpath ownkeeper wrongkeeper nooppkeeper oppworst thinside nomakeup; do CM_SHOOTOUT_CONTROL=$k node scripts/simCmShootoutOrder.mjs > /tmp/c-$k.log 2>&1; e=$?; f=$(grep -cE 'simCmShootoutOrder: [1-9][0-9]* FAILURE' /tmp/c-$k.log); r="$r $k=$e/$f"; done; echo "controls:$r"; [ -z "$(echo "$r" | tr ' ' '\n' | grep -v '^$' | grep -v '=1/1')" ]

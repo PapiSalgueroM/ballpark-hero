@@ -1,0 +1,5 @@
+  FAIL: 150 rows differ from the actual pre-1072 engine with no order set
+  FAIL: 300 rows on section 1's base differ from the actual pre-1072 engine with no order set
+  FAIL: the loaded old save differs from actual pre-1072 main at seed 782113: {"seed":782113,"decidedBy":"pens","shootoutWon":false,"homeGoals":1,"awayGoals":1,"next":0.7369232308119535,"hash":"715614
+simCmShootoutOrder: 3 FAILURE(S)
+simCmShootoutOrder: 3 FAILURE(S)
