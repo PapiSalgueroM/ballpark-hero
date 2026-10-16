@@ -1,0 +1,5 @@
+wm-13-14: CM_WORLD_MOVES_SECTIONS=0,2,3,13,14 node scripts/simCmWorldMoves.mjs
+wm-seedclose: CM_WORLD_MOVES_CONTROL=seedclose CM_WORLD_MOVES_SECTIONS=0,2,13 node scripts/simCmWorldMoves.mjs
+wm-seedcarry: CM_WORLD_MOVES_CONTROL=seedcarry CM_WORLD_MOVES_SECTIONS=0,3,14 node scripts/simCmWorldMoves.mjs
+wm-noguard: CM_WORLD_MOVES_CONTROL=noguard node scripts/simCmWorldMoves.mjs
+wm-nocarry: CM_WORLD_MOVES_CONTROL=nocarry node scripts/simCmWorldMoves.mjs
