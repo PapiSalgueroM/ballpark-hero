@@ -1,0 +1,16 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+ns1: git worktree add -f .tmp-base1 d4f2c6f6 >/dev/null 2>&1; BASE_ROOT=.tmp-base1 SECTION=1 SEEDS=5 SEASONS=3 node scripts/simCmNoSack.mjs
+ns2: SECTION=2 node scripts/simCmNoSack.mjs
+ns3456: git worktree add -f .tmp-base6 d4f2c6f6 >/dev/null 2>&1; BASE_ROOT=.tmp-base6 SECTION=3,4,5,6 node scripts/simCmNoSack.mjs
+ns2-f1: SECTION=2 FLEET_SEED=1 node scripts/simCmNoSack.mjs
+ns2-f2: SECTION=2 FLEET_SEED=2 node scripts/simCmNoSack.mjs
+ns2-f3: SECTION=2 FLEET_SEED=3 node scripts/simCmNoSack.mjs
+nsplain: SECTION=1,6 SEEDS=1 SEASONS=1 node scripts/simCmNoSack.mjs
+c-sack: NO_SACK_CONTROL=sack node scripts/simCmNoSack.mjs
+c-refuse: NO_SACK_CONTROL=refuse node scripts/simCmNoSack.mjs
+c-ranked: NO_SACK_CONTROL=ranked node scripts/simCmNoSack.mjs
+c-unguarded: NO_SACK_CONTROL=unguarded node scripts/simCmNoSack.mjs
+c-thirdsack: NO_SACK_CONTROL=thirdsack node scripts/simCmNoSack.mjs
+c-leak: NO_SACK_CONTROL=leak SEEDS=1 SEASONS=1 node scripts/simCmNoSack.mjs
+c-draw: NO_SACK_CONTROL=draw SEEDS=1 SEASONS=1 node scripts/simCmNoSack.mjs
+c-ddreach: NO_SACK_CONTROL=ddreach node scripts/simCmNoSack.mjs

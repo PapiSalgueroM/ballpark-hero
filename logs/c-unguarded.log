@@ -1,0 +1,6 @@
+simCmNoSack: sections 4, control unguarded
+   clubs: Arsenal, Brentford, Hull City, Real Madrid, Espanyol, Málaga, Inter Milan, Torino, Frosinone
+4) turnOnNoSack is one way and refuses a sacked or out of work manager; the key reads strictly; only a career without it posts a score
+  FAIL (section 4): a scored ping without the postsScore guard and its unscored else: recordActivity('/club-manager', currentSeasonScore(res.state));
+   3 scored match pings and 4 scored completions, each behind postsScore; literals for the three ping harnesses: 3 and 3
+simCmNoSack: CONTROL unguarded FIRED: section 4 red (1 failures)

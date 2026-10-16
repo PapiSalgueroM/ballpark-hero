@@ -1,0 +1,12 @@
+simCmNoSack: sections 6, control ddreach, compared with this tree with both floors taken out
+   clubs: Arsenal, Brentford, Hull City, Real Madrid, Espanyol, Málaga, Inter Milan, Torino, Frosinone
+6) Manager Hot Seat (2026-10-10, 2026-10-11, 2026-10-27) and Deadline Day (2026-10-10, 2026-10-11, 2026-10-18) play as on the base tree
+   Hot Seat 2026-10-10 Athletic Club: identical, no key
+   Hot Seat 2026-10-11 Young Boys: identical, no key
+   Hot Seat 2026-10-27 Nottingham Forest: identical, no key
+   Deadline Day 2026-10-10 Rangers: identical, no key
+   Deadline Day 2026-10-11 Borussia Dortmund: identical, no key
+   Deadline Day 2026-10-18 Nottingham Forest: identical, no key
+  FAIL (section 6): deadlineDay.ts calls playNextEntry, so a match or the No sacking key can reach Deadline Day
+   red per daily: Hot Seat 0 of 3, Deadline Day 0 of 3; deadlineDay.ts calls playNextEntry; 1 s
+simCmNoSack: CONTROL ddreach FIRED: section 6 red (1 failures)

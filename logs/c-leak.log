@@ -1,0 +1,37 @@
+simCmNoSack: sections 1, 6, control leak, compared with this tree with both floors taken out
+   clubs: Arsenal, Brentford, Hull City, Real Madrid, Espanyol, Málaga, Inter Milan, Torino, Frosinone
+1) A career without the key plays as the base tree: 9 clubs, 1 seeds, 1 seasons, coach and noCoach
+  FAIL (section 1): Arsenal seed 0 coach: season 1 differs from the base tree, first at key startOptions
+  FAIL (section 1): Arsenal seed 0 noCoach: season 1 differs from the base tree, first at key startOptions
+  FAIL (section 1): Brentford seed 0 coach: season 1 differs from the base tree, first at key startOptions
+  FAIL (section 1): Brentford seed 0 noCoach: season 1 differs from the base tree, first at key startOptions
+  FAIL (section 1): Hull City seed 0 coach: season 1 differs from the base tree, first at key startOptions
+  FAIL (section 1): Hull City seed 0 noCoach: 47700 draws here, 36865 on the base tree
+  FAIL (section 1): Hull City seed 0 noCoach: season 1 differs from the base tree, first at key week
+  FAIL (section 1): Real Madrid seed 0 coach: season 1 differs from the base tree, first at key startOptions
+  FAIL (section 1): Real Madrid seed 0 noCoach: season 1 differs from the base tree, first at key startOptions
+  FAIL (section 1): Espanyol seed 0 coach: 49149 draws here, 20037 on the base tree
+  FAIL (section 1): Espanyol seed 0 coach: season 1 differs from the base tree, first at key week
+  FAIL (section 1): Espanyol seed 0 noCoach: 47067 draws here, 18958 on the base tree
+  FAIL (section 1): Espanyol seed 0 noCoach: season 1 differs from the base tree, first at key week
+  FAIL (section 1): Málaga seed 0 coach: 48416 draws here, 33469 on the base tree
+  FAIL (section 1): Málaga seed 0 coach: season 1 differs from the base tree, first at key week
+  FAIL (section 1): Málaga seed 0 noCoach: 46855 draws here, 28935 on the base tree
+  FAIL (section 1): Málaga seed 0 noCoach: season 1 differs from the base tree, first at key week
+  FAIL (section 1): Inter Milan seed 0 coach: season 1 differs from the base tree, first at key startOptions
+  FAIL (section 1): Inter Milan seed 0 noCoach: season 1 differs from the base tree, first at key startOptions
+  FAIL (section 1): Torino seed 0 coach: season 1 differs from the base tree, first at key startOptions
+  FAIL (section 1): Torino seed 0 noCoach: season 1 differs from the base tree, first at key startOptions
+  FAIL (section 1): Frosinone seed 0 coach: season 1 differs from the base tree, first at key startOptions
+  FAIL (section 1): Frosinone seed 0 noCoach: season 1 differs from the base tree, first at key startOptions
+  FAIL (section 1): 18 careers that never asked for it carry the No sacking key
+   18 careers compared, 924368 draws here, in 21 s
+6) Manager Hot Seat (2026-10-10, 2026-10-11, 2026-10-27) and Deadline Day (2026-10-10, 2026-10-11, 2026-10-18) play as on the base tree
+  FAIL (section 6): Hot Seat 2026-10-10 (Athletic Club): the day differs from the base tree; its state carries the No sacking key
+  FAIL (section 6): Hot Seat 2026-10-11 (Young Boys): the day differs from the base tree; its state carries the No sacking key
+  FAIL (section 6): Hot Seat 2026-10-27 (Nottingham Forest): the day differs from the base tree; its state carries the No sacking key
+   Deadline Day 2026-10-10 Rangers: identical, no key
+   Deadline Day 2026-10-11 Borussia Dortmund: identical, no key
+   Deadline Day 2026-10-18 Nottingham Forest: identical, no key
+   red per daily: Hot Seat 3 of 3, Deadline Day 0 of 3; deadlineDay.ts calls none of the match or No sacking entry points; 1 s
+simCmNoSack: CONTROL leak FIRED: section 1 red (24 failures), section 6 red (3 failures)
