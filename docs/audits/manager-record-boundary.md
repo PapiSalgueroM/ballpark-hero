@@ -38,3 +38,27 @@ the product; the helper intentionally accepts only this frozen defective baselin
 This defect is separate from the known startMidSeason manager-record contamination.
 Our PR287 clears decisions only and does not reset careerStats or h2h. No named
 stats-reset follow-on was verified, so that separate obligation remains open.
+
+Remote baseline4932e1912bf34b013507ed22499b22b5176aedaf passed its strict defect
+contract in run38907874597/job116995946152: six completed cases, exactly two
+record Boolean faults, four preservation passes, zero setup faults,51 unchanged
+related passes and empty type output. In both fault arms, an actual public seed1
+Everton match ended5-1 with1350 draws. The old available5-4 was lost, producing
+missed1 instead of0 or51 instead of50. Save/load preserved the wrong record,
+without another draw. The other299 historical rows stayed exact.
+
+Artifact12049106802 is38,746,751bytes, SHA256
+c01283965e1fa2eb096ef8e7ea28c3dd212bf895afb22df1070980c43fe2e068,
+retained under dukb-handoff/2026-10-16/manager-record-boundary. Root reopened raw
+states and classifications; independent review verified all25 physical files,
+3727source/package entries, eight exact Git bindings,521versions and24466 installed
+file hold receipts. All seven actual/reference reports, whole non-record states,
+JSON saves, loaded states and RNG streams agree. Sixteen holds per pair were
+independently recomputed from raw. The two input-immutability holds are passing
+in-process deep-equality assertions; post-call input snapshots were not retained,
+so those two are not independently reconstructible from the raw artifact.
+
+PR292 is ready as a TEST-ONLY defect handoff, never merge alone. I owns the
+seed-before-eviction product correction. Run the new unit directly after fixing;
+the baseline helper intentionally refuses a corrected application. No product fix,
+build, full-suite or live claim. No fresh runtime is needed for docs-only closure.
