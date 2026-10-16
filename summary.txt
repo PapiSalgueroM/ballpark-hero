@@ -1,0 +1,2 @@
+nolazy exit=1 1s | simEventDeck: 1 failure, red sections 16
+gmcompare exit=0 5s | simGmInbox: green.

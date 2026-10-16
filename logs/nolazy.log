@@ -1,0 +1,23 @@
+push lines left: 0
+simEventDeck: 7 packs (nfl, nba, mlb, nhl, college, gym, afl)
+1) Replay: 7 GM packs, seeds 1, 2, 3, drives FLEET, SILENT, STUBBORN, FALLEN, 10 seasons a desk
+2) Same seed, same deck; a JSON round trip and repairGmInbox between every two weeks change nothing
+3) Weights: equal weights deal the recording, and a weight is a share of the draw, never a rank
+4) Story: never two of one story inside its cooldown or in one week, a one shot story once
+5) Subject rest: no subject inside its rest or twice in a week, the rest book born pruned
+6) Texts: wordings move no deal and no draw, every wording comes up at its share, a key reads the same words
+7) Expiry: an open card is settled at exactly w plus expires on its neutral option, nothing moves, the deck never freezes
+8) Neutral: every card of every pack off the baseline has an option that moves nothing, and every pack check holds
+9) Season clock: a card is held out exactly as careerEventDeck holds it; the week clock is back after exactly N
+10) Share and reach: every card of every pack reached over 1,000 seasons, no card above its pack's measured ceiling
+11) Registry: every option prints exactly the keys it moves, by exactly the amounts, and bind refuses each breakage
+12) Legal: every pack narrated in roles, slots only in words, and a tagged card never lands on a real man
+16) Bytes and lazy: bytes per event, and nothing that is not the deck imports it eagerly
+   packs: nfl 10 events 5368 B min 2004 B gz (200 B gz an event); nba 8 events 4438 B min 1738 B gz (217 B gz an event); mlb 8 events 4546 B min 1787 B gz (223 B gz an event); nhl 8 events 4213 B min 1723 B gz (215 B gz an event); college 8 events 4287 B min 1689 B gz (211 B gz an event); gym 6 events 3130 B min 1282 B gz (214 B gz an event); afl 6 events 3271 B min 1357 B gz (226 B gz an event)
+   54 events: 542 B minified, 214 B gzipped an event (each module alone); 420 events about 222 K min 88 K gz, 690 about 365 K min 144 K gz
+   the engine: 57382 B LF, 17100 B minified alone (6357 B gzipped), 17755 B minified with what it pulls in (6635 B gzipped)
+     src/lib/soccerDeck.ts imports ./gmInbox
+   FAIL 1 eager imports of the deck outside it
+
+runtime 0.3 s
+simEventDeck: 1 failure, red sections 16
