@@ -1,0 +1,3 @@
+headsha exit=0 0s | 2fdbcaac4 rc request rBHh-m1b for 17709739a95b6f14bdc3506184eca47be3671f2a
+simPlayerBingoWorldCupAlias exit=0 2s | Source bytes held; raw unit/output/control receipts retained when OUT is set. Offline proof only.
+rodri-proof exit=0 11s | simPlayerBingoRodriHonour: fixed proof passed; complete raw reports and changed-copy receipts retained. Offline only.
