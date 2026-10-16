@@ -1,0 +1,3 @@
+ledgerBound-probe-again exit=1 361s | simCmLedgerBound: RED, sections 4 (5)
+uncapped-base exit=1 52s | simClubManagerSaveSize: CONTROL FIRED as it should, SAVE_SIZE_CONTROL=uncapped turned section 1 red (33 failures) and nothing else
+uncapped-probe exit=1 66s | ⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯

@@ -1,0 +1,4 @@
+#!serial
+ledgerBound-probe-again: mkdir -p .p-lb2 && git archive HEAD | tar -x -C .p-lb2 && node scripts/lib/cmAiRecordProbe1344.mjs --into .p-lb2 && mkdir -p .t-lb2 && TMPDIR=$PWD/.t-lb2 node .p-lb2/scripts/simCmLedgerBound.mjs
+uncapped-base: mkdir -p .t-ub && TMPDIR=$PWD/.t-ub SAVE_SIZE_CONTROL=uncapped node scripts/simClubManagerSaveSize.mjs
+uncapped-probe: mkdir -p .p-u && git archive HEAD | tar -x -C .p-u && node scripts/lib/cmAiRecordProbe1344.mjs --into .p-u && mkdir -p .t-up && TMPDIR=$PWD/.t-up SAVE_SIZE_CONTROL=uncapped node .p-u/scripts/simClubManagerSaveSize.mjs

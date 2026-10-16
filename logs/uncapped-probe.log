@@ -1,0 +1,75 @@
+cmAiRecordProbe1344: the AI deals are recorded in /home/runner/work/ballpark-hero/ballpark-hero/.p-u/src/lib/clubManager.ts
+NEGATIVE CONTROL ON: SAVE_SIZE_CONTROL=uncapped, the engine is a rewritten copy
+1) Fifteen seasons at three clubs: under 203000 bytes, slope under 2000 bytes a season, every ledger inside its cap
+  FAIL: Real Madrid season 7: h2h holds 308 entries, over its cap of 300
+  FAIL: Real Madrid season 8: h2h holds 348 entries, over its cap of 300
+  FAIL: Real Madrid season 9: h2h holds 387 entries, over its cap of 300
+  FAIL: Real Madrid season 10: h2h holds 426 entries, over its cap of 300
+  FAIL: Real Madrid season 11: h2h holds 466 entries, over its cap of 300
+  FAIL: Real Madrid season 12: h2h holds 505 entries, over its cap of 300
+  FAIL: Real Madrid season 13: h2h holds 545 entries, over its cap of 300
+  FAIL: Real Madrid season 14: h2h holds 587 entries, over its cap of 300
+  FAIL: Real Madrid season 15: h2h holds 626 entries, over its cap of 300
+   Real Madrid   seasons 15, day one 61335, season 1 174170, season 15 227507, slope after season 3 3965 bytes a season
+                 sizes: 61335 174170 180330 185917 182195 186477 185697 196551 195267 206391 204820 215021 208478 221168 216476 227507
+  FAIL: Real Madrid: the save is 227507 bytes after 15 seasons, over the 203000 budget
+  FAIL: Real Madrid: the save grows 3965 bytes a season over seasons 4 to 15, over the 2000 cap
+  FAIL: Everton season 7: h2h holds 307 entries, over its cap of 300
+  FAIL: Everton season 8: h2h holds 355 entries, over its cap of 300
+  FAIL: Everton season 9: h2h holds 402 entries, over its cap of 300
+  FAIL: Everton season 10: h2h holds 449 entries, over its cap of 300
+  FAIL: Everton season 11: h2h holds 496 entries, over its cap of 300
+  FAIL: Everton season 12: h2h holds 544 entries, over its cap of 300
+  FAIL: Everton season 13: h2h holds 592 entries, over its cap of 300
+  FAIL: Everton season 14: h2h holds 639 entries, over its cap of 300
+  FAIL: Everton season 15: h2h holds 686 entries, over its cap of 300
+   Everton       seasons 15, day one 56156, season 1 160402, season 15 236740, slope after season 3 4802 bytes a season
+                 sizes: 56156 160402 168487 174795 184797 187086 195182 199371 205356 210375 213148 218397 223775 227825 232591 236740
+  FAIL: Everton: the save is 236740 bytes after 15 seasons, over the 203000 budget
+  FAIL: Everton: the save grows 4802 bytes a season over seasons 4 to 15, over the 2000 cap
+  FAIL: Lincoln City season 7: h2h holds 330 entries, over its cap of 300
+  FAIL: Lincoln City season 8: h2h holds 377 entries, over its cap of 300
+  FAIL: Lincoln City season 9: h2h holds 424 entries, over its cap of 300
+  FAIL: Lincoln City season 10: h2h holds 471 entries, over its cap of 300
+  FAIL: Lincoln City season 11: h2h holds 518 entries, over its cap of 300
+  FAIL: Lincoln City season 12: h2h holds 565 entries, over its cap of 300
+  FAIL: Lincoln City season 13: h2h holds 612 entries, over its cap of 300
+  FAIL: Lincoln City season 14: h2h holds 659 entries, over its cap of 300
+  FAIL: Lincoln City season 15: h2h holds 706 entries, over its cap of 300
+   Lincoln City  seasons 15, day one 55483, season 1 159336, season 15 239176, slope after season 3 4740 bytes a season
+                 sizes: 55483 159336 167696 176316 185301 192282 199815 203280 208049 212816 216976 220667 227351 229879 235629 239176
+  FAIL: Lincoln City: the save is 239176 bytes after 15 seasons, over the 203000 budget
+  FAIL: Lincoln City: the save grows 4740 bytes a season over seasons 4 to 15, over the 2000 cap
+   board nudges over the whole run: 257
+2) An oversized pre 634 save shrinks on load, the trim is a fixed point, and the next season plays the same
+   season 2 save 168487 bytes, inflated to 471806, loaded back as 192298
+   ledgers after load: h2h 300, transferLog 80, inbox 8, aiHeadlines 8
+   a season from the trimmed save and from the oversized one, same seed: identical (table, results, squad, budget, board, trophies, career stats)
+3) saveCareer says whether it wrote: false when refused twice, lean and true when refused once, same bytes twice
+   the season 15 save: 203735 bytes, h2h 686 rows, at most 25 per opponent
+   store throws on every write: saveCareer returned false after 2 attempts (203735, 192032 bytes)
+   store throws once: saveCareer returned true, wrote 192032 bytes (11703 fewer), h2h 165 rows, at most 6 per opponent
+   working store: true then true, 203735 bytes then 203735, identical true, equal to the trimmed career true
+4) The hook, rendered: the pagehide write, the hidden tab write, the same bytes, and saveFailed
+   Test Files  1 failed (1)
+the test file (or the hook it imports) did not load:
+
+ RUN  v3.2.7 /home/runner/work/ballpark-hero/ballpark-hero/.p-u
+
+
+ Test Files  1 failed (1)
+      Tests  no tests
+   Start at  12:21:47
+   Duration  710ms (transform 15ms, setup 0ms, collect 0ms, tests 0ms, environment 301ms, prepare 147ms)
+
+
+⎯⎯⎯⎯⎯⎯ Failed Suites 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/test/clubManagerSaveSize.test.tsx [ src/test/clubManagerSaveSize.test.tsx ]
+Error: Cannot find module '/home/runner/work/ballpark-hero/ballpark-hero/src/test/setup.ts'
+Caused by: Error: Failed to load url /home/runner/work/ballpark-hero/ballpark-hero/src/test/setup.ts (resolved id: /home/runner/work/ballpark-hero/ballpark-hero/src/test/setup.ts). Does the file exist?
+ ❯ loadAndTransform ../node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:51969:17
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
