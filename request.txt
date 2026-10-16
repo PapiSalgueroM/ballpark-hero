@@ -1,0 +1,1 @@
+vitestC: node_modules/.bin/vitest run src/test/careerHallV1Replay.test.ts src/test/nbaOldSaveLines.test.ts --testTimeout=300000 --hookTimeout=120000

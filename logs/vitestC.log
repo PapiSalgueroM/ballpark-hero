@@ -1,0 +1,18 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/test/nbaOldSaveLines.test.ts [2m([22m[2m37 tests[22m[2m)[22m[32m 69[2mms[22m[39m
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ [32m✓[39m src/test/careerHallV1Replay.test.ts [2m([22m[2m13 tests[22m[2m)[22m[33m 1870[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1051: the recorded saves through the real board[2m > [22mnfl: the board shows each save the verdict, the legacy and the ballot it was told, and writes nothing [33m 601[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1051: the recorded saves through the real board[2m > [22mnba: the board shows each save the verdict, the legacy and the ballot it was told, and writes nothing [33m 373[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1051: the recorded saves through the real board[2m > [22mmlb: the board shows each save the verdict, the legacy and the ballot it was told, and writes nothing [33m 454[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1051: the recorded saves through the real board[2m > [22mnhl: the board shows each save the verdict, the legacy and the ballot it was told, and writes nothing [33m 337[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m2 passed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[32m50 passed[39m[22m[90m (50)[39m
+[2m   Start at [22m 12:36:17
+[2m   Duration [22m 4.73s[2m (transform 1.73s, setup 104ms, collect 2.70s, tests 1.94s, environment 705ms, prepare 316ms)[22m
+
