@@ -1,0 +1,56 @@
+{
+ "cases": [],
+ "engine": {
+  "seed": 25,
+  "rows": [
+   {
+    "name": "Jamal Musiala",
+    "from": "Bayern Munich",
+    "to": "Manchester City",
+    "week": 0,
+    "goneJ": true,
+    "markedJ": true,
+    "linesInJ": 0,
+    "talkS": "The transfer window is shut.",
+    "talkJ": "The transfer window is shut.",
+    "buyJ": "The transfer window is shut."
+   },
+   {
+    "name": "Benjamin Sesko",
+    "from": "Manchester United",
+    "to": "Arsenal",
+    "week": 0,
+    "goneJ": true,
+    "markedJ": true,
+    "linesInJ": 0,
+    "talkS": "The transfer window is shut.",
+    "talkJ": "The transfer window is shut.",
+    "buyJ": "The transfer window is shut."
+   },
+   {
+    "name": "Alessandro Bastoni",
+    "from": "Inter Milan",
+    "to": "Nottingham Forest",
+    "week": 28,
+    "goneJ": true,
+    "markedJ": true,
+    "linesInJ": 0,
+    "talkS": "The transfer window is shut.",
+    "talkJ": "The transfer window is shut.",
+    "buyJ": "The transfer window is shut."
+   },
+   {
+    "name": "Trent Alexander-Arnold",
+    "from": "Real Madrid",
+    "to": "Brentford",
+    "week": 28,
+    "goneJ": true,
+    "markedJ": true,
+    "linesInJ": 0,
+    "talkS": "The transfer window is shut.",
+    "talkJ": "The transfer window is shut.",
+    "buyJ": "The transfer window is shut."
+   }
+  ]
+ }
+}

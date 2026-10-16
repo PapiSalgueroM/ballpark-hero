@@ -1,0 +1,2 @@
+build exit=0 31s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+walk exit=2 16s | walk: no career found with a refused man before the move
