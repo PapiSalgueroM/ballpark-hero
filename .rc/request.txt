@@ -1,0 +1,7 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-s3: node_modules/.bin/vitest run src/lib/clubManagerRetire.test.ts src/lib/clubManagerSlots.test.ts src/lib/clubManagerRecords.test.ts src/test/clubManagerSlots.test.tsx src/test/clubManagerRetire.test.tsx --testTimeout=300000 --hookTimeout=120000
+retire: node scripts/simCmRetire.mjs
+retire-liveok: RETIRE_CONTROL=liveok node scripts/simCmRetire.mjs
+retire-drawone: RETIRE_CONTROL=drawone node scripts/simCmRetire.mjs
+simClubManagerSlots: node scripts/simClubManagerSlots.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
