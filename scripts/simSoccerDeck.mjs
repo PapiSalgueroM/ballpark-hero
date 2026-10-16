@@ -559,15 +559,22 @@ if (runs(3)) {
   if (poolApart) fail(`${poolApart} deals read a different catalog (getAllEvents)`);
   if (!many && !notFirst && !apart && !callsApart && !stampsApart && !poolApart && dealt) ok('at every deal the old batch is the base\'s (ids, order, words), the deck card is first, the draws and the catalog are the base\'s, the stamps the base\'s plus the deck card\'s');
   /* and a head fleet with the deck loaded: no deck card is ever pending at a deal */
-  let pendingAtDeal = 0, headDeals = 0, headDealt = 0;
+  let pendingAtDeal = 0, headDeals = 0, headDealt = 0, headOpen = 0;
   for (let seed = 0; seed < FLEET; seed += 1) {
     let prev = '';
     drive(H.engine, seed, {
       onDeal: st => { headDeals += 1; if ((st.pendingEvents || []).some(e => isDeck(e.id))) pendingAtDeal += 1; },
-      onStep: s => { if (s.phase === 'random_events' && prev !== 'random_events' && isDeck(s.pendingEvents?.[0]?.id)) headDealt += 1; prev = s.phase; },
+      /* any batch holding a deck card counts as dealt, wherever it sits (the per deal checks above say where) */
+      onStep: s => {
+        if (s.phase === 'random_events' && prev !== 'random_events') {
+          if ((s.pendingEvents || []).some(e => isDeck(e.id))) headDealt += 1;
+          if (isDeck(s.pendingEvents?.[0]?.id)) headOpen += 1;
+        }
+        prev = s.phase;
+      },
     });
   }
-  console.log(`   a head fleet with the deck loaded: ${headDeals} deals, ${headDealt} batches opening on a deck card`);
+  console.log(`   a head fleet with the deck loaded: ${headDeals} deals, ${headDealt} batches holding a deck card, ${headOpen} batches opening on a deck card`);
   if (headDealt === 0) fail('the loaded head fleet was dealt no deck card');
   if (pendingAtDeal) fail(`${pendingAtDeal} deals start with a deck card still pending`);
   else ok('no deck card is pending at any deal of the loaded head fleet');
