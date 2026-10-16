@@ -9,7 +9,7 @@
               book; one more match on head stores the seed or that match and carries `missed`.
      pens     every single leg tie of the record fleet settled on penalties, fed through noteHighestScoring
               with a prev of fewer goals: the level score with res W or L, onPenalties true, goals equal to the
-              report's goals with no kick. Exit 2 only when the fleet held no shootout at all.
+              report's goals with no kick. Exit 2 when the fleet held no shootout, or none in a single leg tie.
      base     a career with matchRules 'base' plays a season and never writes the field.
      retire   retireCareer at the three moments (the season's end, the middle of one, out of work) on real careers,
               against a deep copy taken before: only `retired` (and the record when absent) differ, the input never
@@ -33,7 +33,12 @@
      tielast     the update takes >= : record red (exit 2 if the fleet held no tie, never green)
      skipgame    the update ignores the match just played: record red
      nomissed    missed is never stored: oldsave red
-     basewrites  the 'base' gate off: base red (and hotseat red before the cutover)
+     basewrites  the 'base' gate off: base red
+     hotseatwrites  the same gate off, run on hotseat (needs RETIRE_BASE): the dailies before the cutover red
+     pensdrawn   the engine leaves a single leg shootout drawn (res D): pens red
+     retiretouch retireCareer also moves the week: retire's "changes only retired" red
+     legacydrop  careerLegacy counts one season too many: retire's farewell data check red
+     loadtouch   loadCareer writes the record field on load (needs RETIRE_BASE): loads red
      liveok      canRetire forgets the match in progress: retire red
      seasonover  canRetire forgets the played out season (the review not yet seen): retire red
      drawone     a Math.random call inside retireCareer: retire red on the draw count
@@ -73,6 +78,12 @@ const CONTROLS = {
   skipgame: { part: 'record', file: RECORDS, from: '  const best = !prev || goalsIn(game.score) > goalsIn(prev.score) ? game : prev;', to: '  const best = prev ?? game;' },
   nomissed: { part: 'oldsave', file: RECORDS, from: '  return missed > 0 ? { ...rest, missed } : rest;', to: '  return rest;' },
   basewrites: { part: 'base', file: ENGINE, from: "  if (state.matchRules !== 'base') {", to: '  if (true) {' },
+  /* Review fix: the checks below had no control of their own. */
+  hotseatwrites: { part: 'hotseat', file: ENGINE, from: "  if (state.matchRules !== 'base') {", to: '  if (true) {' },
+  pensdrawn: { part: 'pens', file: ENGINE, from: '    drawn = false;\n    advanced = penWin;\n    shootoutWon = penWin;', to: '    drawn = true;\n    advanced = penWin;\n    shootoutWon = penWin;\n    won = false;' },
+  retiretouch: { part: 'retire', file: RETIRE, from: '  next.retired = retired;', to: '  next.retired = retired;\n  next.week += 1;' },
+  legacydrop: { part: 'retire', file: RETIRE, from: '    finishedSeasons: history.length,', to: '    finishedSeasons: history.length + 1,' },
+  loadtouch: { part: 'loads', file: ENGINE, from: "    if (parsed && 'matchRules' in parsed) delete parsed.matchRules;", to: "    if (parsed && 'matchRules' in parsed) delete parsed.matchRules;\n    if (parsed && parsed.careerStats) parsed.careerStats.highestScoring = null;" },
   stripnone: { part: 'fleet' },
   dash: { part: 'dashes' },
   liveok: { part: 'retire', file: RETIRE, from: '  return !!c && !c.retired && !c.live && !seasonPlayedOut(c);', to: '  return !!c && !c.retired && !seasonPlayedOut(c);' },
@@ -249,6 +260,8 @@ async function pensSection(cm, ctx) {
   const pens = ctx.pens ?? recordFleet(cm, false);
   console.log(`   the record fleet held ${counts.record.shootouts} shootouts, ${pens.length} of them single leg ties`);
   if (counts.record.shootouts === 0) { console.log('pens: the fleet held no shootout at all; could not run'); process.exit(2); }
+  /* Review fix: shootouts that were all second legs would leave the check below with nothing to judge, green. */
+  if (pens.length === 0) { console.log('pens: every shootout of the fleet was a second leg, so no single leg tie was there to judge; could not run'); process.exit(2); }
   let bad = 0, first = '';
   for (const p of pens) {
     const goals = p.report.homeGoals + p.report.awayGoals;
