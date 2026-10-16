@@ -32,6 +32,9 @@ const fetchDeck = (): Promise<unknown> => import('./soccerDeck');
 let loader: () => Promise<unknown> = fetchDeck;
 let DECK: SoccerDeckModule | null = null;
 let DECK_INFLIGHT: Promise<void> | null = null;
+/* Bumped by the tests' seam, so a load still in flight when the seam resets
+   can never write the deck or clear a newer load afterwards. */
+let LOAD_GEN = 0;
 
 /** True once the deck is in memory and its cards can be dealt and answered. */
 export function soccerDeckReady(): boolean { return DECK !== null; }
@@ -44,13 +47,15 @@ export function soccerDeckReady(): boolean { return DECK !== null; }
 export function loadSoccerDeck(): Promise<void> {
   if (DECK) return Promise.resolve();
   if (!DECK_INFLIGHT) {
-    DECK_INFLIGHT = loader().then(m => {
+    const gen = LOAD_GEN;
+    const inflight: Promise<void> = loader().then(m => {
       const mod = m as Partial<SoccerDeckModule> | null | undefined;
       if (!mod || typeof mod.dealSoccerDeck !== 'function' || typeof mod.pendingSoccerDeck !== 'function') {
         throw new Error('soccer deck: the chunk loaded without the deck in it');
       }
-      DECK = mod as SoccerDeckModule;
-    }).catch(e => { DECK_INFLIGHT = null; throw e; });
+      if (gen === LOAD_GEN) DECK = mod as SoccerDeckModule;
+    }).catch(e => { if (DECK_INFLIGHT === inflight) DECK_INFLIGHT = null; throw e; });
+    DECK_INFLIGHT = inflight;
   }
   return DECK_INFLIGHT;
 }
@@ -70,6 +75,7 @@ export function soccerDeckSlot(state: CareerState, season: number, key: string, 
  *  and forget any deck already loaded. */
 export function setSoccerDeckLoader(next?: () => Promise<unknown>): void {
   loader = next ?? fetchDeck;
+  LOAD_GEN += 1;
   DECK = null;
   DECK_INFLIGHT = null;
 }

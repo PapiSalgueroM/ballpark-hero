@@ -311,6 +311,32 @@ describe('the gate', () => {
     expect(soccerDeckReady()).toBe(true);
     expect(tries).toBe(2);
   });
+  it('never lets a load still in flight when the seam resets write the deck or clear a newer load', async () => {
+    const real = await import('@/lib/soccerDeck');
+    /* a stale load that lands after the reset writes nothing */
+    let landOld: (m: unknown) => void = () => {};
+    setSoccerDeckLoader(() => new Promise(r => { landOld = r; }));
+    const old = loadSoccerDeck();
+    setSoccerDeckLoader(() => new Promise(() => {}));
+    landOld(real);
+    await old;
+    expect(soccerDeckReady()).toBe(false);
+    /* a stale load that fails after the reset leaves the newer load in flight */
+    let failOld: (e: Error) => void = () => {};
+    setSoccerDeckLoader(() => new Promise((_, r) => { failOld = r; }));
+    const old2 = loadSoccerDeck();
+    let calls = 0;
+    let landNew: (m: unknown) => void = () => {};
+    setSoccerDeckLoader(() => { calls += 1; return new Promise(r => { landNew = r; }); });
+    const fresh = loadSoccerDeck();
+    failOld(new Error('offline'));
+    await expect(old2).rejects.toThrow('offline');
+    expect(loadSoccerDeck()).toBe(fresh);
+    expect(calls).toBe(1);
+    landNew(real);
+    await fresh;
+    expect(soccerDeckReady()).toBe(true);
+  });
 });
 
 describe('the starter pack', () => {
