@@ -1,0 +1,185 @@
+name: World XI ratings and club links
+
+on:
+  push:
+    branches: [codex/world-xi-ratings-chemistry]
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    defaults:
+      run:
+        shell: bash
+    env:
+      WORLD_XI_PHASE: fixed
+      SIM_NETWORK: offline
+      ENGINES: chromium
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Preserve source and capture full child output
+        run: |
+          set -euo pipefail
+          test "$GITHUB_REF_NAME" = codex/world-xi-ratings-chemistry
+          mkdir world-xi-artifacts
+          git archive --format=zip HEAD > world-xi-artifacts/source.zip
+          git rev-parse HEAD HEAD^{tree} > world-xi-artifacts/head-tree.txt
+          git diff --binary 5b630266d261b39128e4fb4544783d8e22214ce3 HEAD > world-xi-artifacts/source.patch
+          cp package.json world-xi-artifacts/package.before.json
+          cp package-lock.json world-xi-artifacts/package-lock.before.json
+          sha256sum src/pages/WorldXi.tsx src/lib/worldXi.ts src/test/worldXiSummary.test.tsx .github/workflows/world-xi-ratings-chemistry.yml > world-xi-artifacts/source.sha256
+          cat > world-xi-artifacts/capture.sh <<'CAPTURE'
+          capture() {
+            local label="$1"; shift
+            printf '%s\0' "$@" > "world-xi-artifacts/$label.argv"
+            set +e
+            "$@" > "world-xi-artifacts/$label.stdout" 2> "world-xi-artifacts/$label.stderr"
+            local code=$?
+            set -e
+            printf '%s\n' "$code" > "world-xi-artifacts/$label.exit"
+            cat "world-xi-artifacts/$label.stdout"
+            cat "world-xi-artifacts/$label.stderr" >&2
+            return "$code"
+          }
+          CAPTURE
+      - name: Install locked dependencies
+        run: |
+          set -euo pipefail
+          source world-xi-artifacts/capture.sh
+          capture npm-ci npm ci
+      - name: Actual application type gate
+        run: |
+          set -euo pipefail
+          source world-xi-artifacts/capture.sh
+          capture types env NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+      - name: Actual page regressions and strict expected baseline
+        run: |
+          set -euo pipefail
+          source world-xi-artifacts/capture.sh
+          capture current env SIM_OFFLINE_RECEIPT="$PWD/world-xi-artifacts/current.transport" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node node_modules/vitest/vitest.mjs run src/test/worldXiSummary.test.tsx --no-cache --maxWorkers=1 --no-file-parallelism --reporter=default --reporter=json --outputFile=world-xi-artifacts/current.json || true
+          node --input-type=module <<'CHECK'
+          import fs from 'node:fs'; import assert from 'node:assert/strict'; import {stripVTControlCharacters} from 'node:util';
+          const baseline=process.env.WORLD_XI_PHASE==='baseline', prefix='world-xi-artifacts/current';
+          const report=JSON.parse(fs.readFileSync(prefix+'.json','utf8')), rows=report.testResults.flatMap(file=>file.assertionResults);
+          const titles=['shows the exact card overall for every player after simulation','shows the actual shared-club pairs behind the chemistry count','shows zero shared clubs and clears the old detail on replay','keeps the real season inputs and match average distinct from card overall'];
+          const markers=['WORLD_XI_OVR','WORLD_XI_CLUB_LINKS','WORLD_XI_ZERO_LINKS'];
+          assert.equal(report.testResults.length,1); assert.deepEqual(rows.map(row=>row.title).sort(),[...titles].sort()); assert.equal(rows.length,4);
+          assert.equal(report.numTotalTests,4); assert.equal(report.numPendingTests,0); assert.equal(report.numTodoTests,0); assert(rows.every(row=>['passed','failed'].includes(row.status)));
+          assert.equal(report.numPassedTests,baseline?1:4); assert.equal(report.numFailedTests,baseline?3:0); assert.equal(report.success,!baseline);
+          assert.equal(fs.readFileSync(prefix+'.exit','utf8').trim(),baseline?'1':'0');
+          assert.deepEqual(rows.filter(row=>row.status==='failed').map(row=>row.title).sort(),baseline?titles.slice(0,3).sort():[]);
+          for(let i=0;i<3;i++){const row=rows.find(row=>row.title===titles[i]);if(baseline){assert(row.failureMessages.length>0);assert(row.failureMessages.every(message=>message.includes('AssertionError')&&message.includes(markers[i])));}else assert.deepEqual(row.failureMessages,[]);}
+          const logs=stripVTControlCharacters(fs.readFileSync(prefix+'.stdout','utf8')+'\n'+fs.readFileSync(prefix+'.stderr','utf8'));
+          assert(!/\b(?:Unhandled Errors?|Unhandled Rejection|Unhandled Exception|Failed Suites|Source Errors)\b|\[SIM_OFFLINE_BLOCK\]/.test(logs));
+          assert(!fs.existsSync(prefix+'.transport')||fs.statSync(prefix+'.transport').size===0);
+          console.log(`PASS real World XI page: ${report.numPassedTests} passed, ${report.numFailedTests} declared baseline failures.`);
+          CHECK
+      - name: Original product control and exact full restoration
+        if: env.WORLD_XI_PHASE == 'fixed'
+        run: |
+          set -euo pipefail
+          source world-xi-artifacts/capture.sh
+          files=(src/pages/WorldXi.tsx src/lib/worldXi.ts)
+          for file in "${files[@]}"; do
+            mkdir -p "world-xi-artifacts/fixed/$(dirname "$file")" "world-xi-artifacts/original/$(dirname "$file")"
+            cp "$file" "world-xi-artifacts/fixed/$file"
+            git show "5b630266d261b39128e4fb4544783d8e22214ce3:$file" > "world-xi-artifacts/original/$file"
+            cp "world-xi-artifacts/original/$file" "$file"
+          done
+          restore() { for file in "${files[@]}"; do cp "world-xi-artifacts/fixed/$file" "$file"; done; }
+          trap restore EXIT
+          capture original env SIM_OFFLINE_RECEIPT="$PWD/world-xi-artifacts/original.transport" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node node_modules/vitest/vitest.mjs run src/test/worldXiSummary.test.tsx --no-cache --maxWorkers=1 --no-file-parallelism --reporter=default --reporter=json --outputFile=world-xi-artifacts/original.json || true
+          node --input-type=module <<'CONTROL'
+          import fs from 'node:fs'; import assert from 'node:assert/strict'; import {stripVTControlCharacters} from 'node:util';
+          const prefix='world-xi-artifacts/original', r=JSON.parse(fs.readFileSync(prefix+'.json','utf8')), rows=r.testResults.flatMap(file=>file.assertionResults);
+          const expected=[['shows the exact card overall for every player after simulation','WORLD_XI_OVR'],['shows the actual shared-club pairs behind the chemistry count','WORLD_XI_CLUB_LINKS'],['shows zero shared clubs and clears the old detail on replay','WORLD_XI_ZERO_LINKS']];
+          assert.equal(r.testResults.length,1); assert.equal(rows.length,4); assert.equal(r.numTotalTests,4); assert.equal(r.numPassedTests,1); assert.equal(r.numFailedTests,3); assert.equal(r.numPendingTests,0); assert.equal(r.numTodoTests,0); assert.equal(r.success,false); assert.equal(fs.readFileSync(prefix+'.exit','utf8').trim(),'1');
+          assert(rows.every(row=>['passed','failed'].includes(row.status))); assert.deepEqual(rows.filter(row=>row.status==='failed').map(row=>row.title).sort(),expected.map(row=>row[0]).sort());
+          for(const [title,marker] of expected){const row=rows.find(row=>row.title===title);assert(row.failureMessages.length>0);assert(row.failureMessages.every(message=>message.includes('AssertionError')&&message.includes(marker)));}
+          for(const file of ['src/pages/WorldXi.tsx','src/lib/worldXi.ts'])assert(!fs.readFileSync('world-xi-artifacts/fixed/'+file).equals(fs.readFileSync('world-xi-artifacts/original/'+file)),'Original control changes both complete product files');
+          const logs=stripVTControlCharacters(fs.readFileSync(prefix+'.stdout','utf8')+'\n'+fs.readFileSync(prefix+'.stderr','utf8'));assert(!/\b(?:Unhandled Errors?|Unhandled Rejection|Unhandled Exception|Failed Suites|Source Errors)\b|\[SIM_OFFLINE_BLOCK\]/.test(logs));assert(!fs.existsSync(prefix+'.transport')||fs.statSync(prefix+'.transport').size===0);
+          console.log('PASS original product: three exact missing-display assertion failures and one preserved real season.');
+          CONTROL
+          restore
+          trap - EXIT
+          for file in "${files[@]}"; do cmp "$file" "world-xi-artifacts/fixed/$file"; done
+          git diff --exit-code -- src/pages/WorldXi.tsx src/lib/worldXi.ts
+          capture restored env NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node node_modules/vitest/vitest.mjs run src/test/worldXiSummary.test.tsx src/test/worldXiRespins.test.tsx --no-cache --maxWorkers=1 --no-file-parallelism --reporter=default --reporter=json --outputFile=world-xi-artifacts/restored.json
+      - name: Actual production build
+        if: env.WORLD_XI_PHASE == 'fixed'
+        run: |
+          set -euo pipefail
+          source world-xi-artifacts/capture.sh
+          capture build env NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" npm run build
+      - name: Install isolated reader tools
+        if: env.WORLD_XI_PHASE == 'fixed'
+        run: |
+          set -euo pipefail
+          source world-xi-artifacts/capture.sh
+          browser_tools="$RUNNER_TEMP/world-xi-tools"
+          mkdir "$browser_tools"
+          printf '{"private":true,"dependencies":{"playwright":"1.64.0"}}\n' > "$browser_tools/package.json"
+          capture browser-package npm install --prefix "$browser_tools" --ignore-scripts --no-audit --no-fund
+          test ! -e node_modules/playwright
+          test ! -e node_modules/playwright-core
+          ln -s "$browser_tools/node_modules/playwright" node_modules/playwright
+          ln -s "$browser_tools/node_modules/playwright-core" node_modules/playwright-core
+          cp "$browser_tools/package.json" world-xi-artifacts/browser-package.json
+          cp "$browser_tools/package-lock.json" world-xi-artifacts/browser-package-lock.json
+          capture chromium node "$browser_tools/node_modules/playwright/cli.js" install --with-deps chromium
+          capture python python -m pip install fonttools pillow
+      - name: Every rebuilt reader and unchanged World XI season digest
+        if: env.WORLD_XI_PHASE == 'fixed'
+        run: |
+          set -euo pipefail
+          source world-xi-artifacts/capture.sh
+          node scripts/lib/hostLikeServer.mjs dist 4173 > world-xi-artifacts/server.stdout 2> world-xi-artifacts/server.stderr &
+          server=$!
+          trap 'kill "$server" 2>/dev/null || true' EXIT
+          ready=0
+          for attempt in $(seq 1 60); do if curl --fail --silent http://127.0.0.1:4173/ > /dev/null; then ready=1; break; fi; sleep 1; done
+          test "$ready" -eq 1
+          failed=0
+          printf 'harness\texit\tlines\tverdict\n' > world-xi-artifacts/readers.tsv
+          for harness in simAdsense simBrand simHeadTags simHiddenPages simHubs simIndexNow simIndexing simInternalLinks simNoRivalNames simPrerender simPrerenderBoot simRetiredRoutes simSchema simSitemap simSnapshotAssets simBuildYourXiFit; do
+            capture "$harness" env SIM_OFFLINE_RECEIPT="$PWD/world-xi-artifacts/$harness.transport" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" BASE=http://127.0.0.1:4173 SWEEP_BASE=http://127.0.0.1:4173 node "scripts/$harness.mjs" || failed=1
+            status="$(cat "world-xi-artifacts/$harness.exit")"
+            lines="$(cat "world-xi-artifacts/$harness.stdout" "world-xi-artifacts/$harness.stderr" | awk 'NF {n++} END {print n+0}')"
+            verdict=PASS
+            if test "$status" -ne 0 || test "$lines" -lt 4 || test -s "world-xi-artifacts/$harness.transport"; then verdict=FAIL; failed=1; fi
+            if grep -E '(^|[[:space:]])(FAIL|SKIP|EMPTY)([[:space:]]|$)|^\[SIM_OFFLINE_BLOCK\]' "world-xi-artifacts/$harness.stdout" "world-xi-artifacts/$harness.stderr"; then verdict=FAIL; failed=1; fi
+            printf '%s\t%s\t%s\t%s\n' "$harness" "$status" "$lines" "$verdict" >> world-xi-artifacts/readers.tsv
+          done
+          test "$(tail -n +2 world-xi-artifacts/readers.tsv | wc -l)" -eq 16
+          exit "$failed"
+      - name: Whole source and package holds
+        if: always()
+        run: |
+          set -euo pipefail
+          source world-xi-artifacts/capture.sh
+          capture source-hold sha256sum -c world-xi-artifacts/source.sha256
+          capture source-whole git diff --exit-code -- src scripts .github package.json package-lock.json
+          capture source-extra git ls-files --others --exclude-standard -- src scripts .github
+          test ! -s world-xi-artifacts/source-extra.stdout
+          capture package-hold cmp package.json world-xi-artifacts/package.before.json
+          capture lock-hold cmp package-lock.json world-xi-artifacts/package-lock.before.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: world-xi-ratings-chemistry-${{ github.run_id }}
+          retention-days: 7
+          if-no-files-found: error
+          path: world-xi-artifacts/
