@@ -18470,3 +18470,7 @@ approve the new tree. The completed combined 587 run `35001991548` failed the
 old broad SVG map guard, lazy-panel test waits and Wonderkid's 271K/270K budget.
 Its expected negative controls passed. The records below retain earlier
 verification context and do not supersede this current integration note.
+
+## Codex Manager transfer edge baseline, 2026-10-16
+
+Isolated test-only work based on exact I1344 6341f29b. Existing application sources remain unchanged. Preparing actual public-action reproductions for two source-reviewed transfer seams, with setup failures excluded and full raw/source/RNG evidence retained remotely. Claude owns product fixes and release. No runtime qualification or live claim yet. This proof carrier must not merge wholesale.
