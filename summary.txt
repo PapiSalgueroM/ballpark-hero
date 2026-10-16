@@ -1,0 +1,3 @@
+g8real exit=0 1s | g8real1347: every draw legal
+byte-control exit=1 33s | byte1347: DIFFERENT: 13 journeys (8 participant, 5 watcher), 211 steps and 169 old save states compared, 9 differing
+byte exit=0 59s | byte1347: EQUAL: 26 journeys (15 participant, 11 watcher), 1583 steps and 338 old save states compared, 0 differing

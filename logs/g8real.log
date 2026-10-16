@@ -1,0 +1,5 @@
+  era2005: 32 clubs (Spain 4, England 4, Italy 4, Germany 3); bans []; clashes {"0":400}; null 0; mean 0.23 ms, slowest 5.2 ms
+  era2010: 32 clubs (Spain 3, England 4, Germany 3, Italy 3, France 3); bans []; clashes {"0":400}; null 0; mean 0.12 ms, slowest 3.1 ms
+  era2015: 32 clubs (Spain 5, England 4, Germany 4); bans [["Russia","Ukraine"]]; clashes {"0":400}; null 0; mean 0.21 ms, slowest 10.3 ms
+  era2020: 32 clubs (England 4, Spain 4, France 3, Germany 4, Italy 4, Russia 3); bans [["Russia","Ukraine"]]; clashes {"0":400}; null 0; mean 0.08 ms, slowest 0.4 ms
+g8real1347: every draw legal

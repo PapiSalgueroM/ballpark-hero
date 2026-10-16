@@ -1,0 +1,29 @@
+  engine main: 72 files from 1027b08c, bundle 89ed29e06b049394 (2310885 bytes)
+  engine branch: this tree, bundle e771f4da41627ecf (2311017 bytes)
+  today Real Madrid seed 1 (participant, 66 steps, save 98241 bytes, 3358 ms): equal
+  today Real Madrid seed 2 (participant, 65 steps, save 96962 bytes, 3064 ms): equal
+  today Arsenal seed 1 (participant, 64 steps, save 97054 bytes, 3068 ms): equal
+  today Arsenal seed 2 (participant, 65 steps, save 97067 bytes, 3039 ms): equal
+  today Chelsea seed 1 (participant, 54 steps, save 98895 bytes, 2840 ms): equal
+  today Chelsea seed 2 (participant, 54 steps, save 98981 bytes, 2779 ms): equal
+  today Everton seed 1 (participant, 53 steps, save 96037 bytes, 2691 ms): equal
+  today Everton seed 2 (watcher, 53 steps, save 96811 bytes, 2660 ms): equal
+  today Hoffenheim seed 1 (watcher, 50 steps, save 98559 bytes, 2565 ms): equal
+  today Hoffenheim seed 2 (watcher, 52 steps, save 98278 bytes, 2554 ms): equal
+  era2005 Arsenal seed 1 (participant, 66 steps, save 55544 bytes, 2084 ms): equal
+  era2005 Arsenal seed 2 (participant, 66 steps, save 53973 bytes, 1945 ms): equal
+  era2005 Everton seed 1 (watcher, 54 steps, save 51479 bytes, 1557 ms): equal
+  era2005 Everton seed 2 (watcher, 54 steps, save 50981 bytes, 1565 ms): equal
+  era2010 Arsenal seed 1 (watcher, 63 steps, save 56208 bytes, 1873 ms): equal
+  era2010 Arsenal seed 2 (participant, 68 steps, save 56560 bytes, 1876 ms): equal
+  era2010 Everton seed 1 (watcher, 63 steps, save 57620 bytes, 1847 ms): equal
+  era2010 Everton seed 2 (watcher, 60 steps, save 57150 bytes, 1769 ms): equal
+  era2015 Arsenal seed 1 (participant, 62 steps, save 56380 bytes, 1861 ms): equal
+  era2015 Arsenal seed 2 (participant, 67 steps, save 56584 bytes, 1884 ms): equal
+  era2015 Everton seed 1 (participant, 63 steps, save 55879 bytes, 1751 ms): equal
+  era2015 Everton seed 2 (watcher, 62 steps, save 56054 bytes, 1758 ms): equal
+  era2020 Chelsea seed 1 (participant, 62 steps, save 56819 bytes, 1805 ms): equal
+  era2020 Chelsea seed 2 (participant, 69 steps, save 56218 bytes, 1974 ms): equal
+  era2020 Everton seed 1 (watcher, 63 steps, save 56626 bytes, 1885 ms): equal
+  era2020 Everton seed 2 (watcher, 65 steps, save 56046 bytes, 1902 ms): equal
+byte1347: EQUAL: 26 journeys (15 participant, 11 watcher), 1583 steps and 338 old save states compared, 0 differing

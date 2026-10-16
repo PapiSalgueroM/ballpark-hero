@@ -1,0 +1,17 @@
+  engine main: 72 files from 1027b08c, bundle 89ed29e06b049394 (2310885 bytes)
+  engine branch: this tree, bundle 34e10bc02519d912 (2311017 bytes)
+  control pts: the branch engine's group tables sort points upside down
+  today Real Madrid seed 1 (participant, 66 steps, save 98241 bytes, 3353 ms): steps 66 vs 62
+  today Arsenal seed 1 (participant, 64 steps, save 97054 bytes, 3065 ms): steps 64 vs 59
+  today Chelsea seed 1 (participant, 54 steps, save 98895 bytes, 2846 ms): equal
+  today Everton seed 1 (participant, 53 steps, save 96037 bytes, 2694 ms): equal
+  today Hoffenheim seed 1 (watcher, 50 steps, save 98559 bytes, 2751 ms): equal
+  era2005 Arsenal seed 1 (participant, 66 steps, save 55544 bytes, 2084 ms): steps 66 vs 62
+  era2005 Everton seed 1 (watcher, 54 steps, save 51479 bytes, 1836 ms): equal
+  era2010 Arsenal seed 1 (watcher, 63 steps, save 56208 bytes, 2150 ms): steps 63 vs 59
+  era2010 Everton seed 1 (watcher, 63 steps, save 57620 bytes, 2105 ms): steps 63 vs 59
+  era2015 Arsenal seed 1 (participant, 62 steps, save 56380 bytes, 2136 ms): steps 62 vs 60
+  era2015 Everton seed 1 (participant, 63 steps, save 55879 bytes, 2065 ms): steps 63 vs 59
+  era2020 Chelsea seed 1 (participant, 62 steps, save 56819 bytes, 2127 ms): steps 62 vs 60
+  era2020 Everton seed 1 (watcher, 63 steps, save 56626 bytes, 2206 ms): steps 63 vs 59
+byte1347: DIFFERENT: 13 journeys (8 participant, 5 watcher), 211 steps and 169 old save states compared, 9 differing
