@@ -14,6 +14,7 @@ import {
   G8_SHAPE, LEAGUE_PHASE_NIGHT_MARKS, drawG8, evaluateWorldComp, g8DrawRules, groupFixtures, leaguePhaseNightRounds,
   nightsOf, settleTie, worldCompWinner,
   type G8Entrant, type SettleableTie, type TieRules, type WorldCompBind, type WorldCompResult, type WorldCompSlice,
+  type WorldTieView,
 } from './worldCompetition';
 import { drawUclLeaguePhase } from './uclLeaguePhase';
 import { sortedUclGroupTable } from './clubManagerUclGroups';
@@ -222,6 +223,20 @@ function checkSeason(res: WorldCompResult, slice: WorldCompSlice, awayGoals: boo
       if (a.club !== b.club) expect(met.get(`${a.club}|${b.club}`), `${a.club} at home to ${b.club}`).toBe(1);
     }
   }
+  if (slice.f === 'g8') {
+    /* The eras' round of 16 (row G4-late): a group winner against a runner-up of ANOTHER group, the winner away in
+       the first leg, every one of the sixteen once. The run review's mutation r16same (each winner against its own
+       group's runner-up) stayed green before this. */
+    const groupOf = new Map((res.groups ?? []).flatMap(g => g.rows.map(r => [r.club, g.letter] as [string, string])));
+    const winners = new Set((res.groups ?? []).map(g => g.rows[0].club));
+    const runnersUp = new Set((res.groups ?? []).map(g => g.rows[1].club));
+    const r16 = res.ties.filter(t => t.round === 'R16');
+    expect(new Set(r16.flatMap(t => [t.home, t.away])).size).toBe(16);
+    for (const t of r16) {
+      expect(winners.has(t.away) && runnersUp.has(t.home), `R16 ${t.home} v ${t.away} is not a runner-up at home to a winner`).toBe(true);
+      expect(groupOf.get(t.home), `R16 ${t.home} v ${t.away} joins two clubs of one group`).not.toBe(groupOf.get(t.away));
+    }
+  }
   const counts: Record<string, number> = slice.f === 'g8' ? { R16: 8, QF: 4, SF: 2, F: 1 } : { PO: 8, R16: 8, QF: 4, SF: 2, F: 1 };
   for (const [round, n] of Object.entries(counts)) expect(res.ties.filter(t => t.round === round).length, round).toBe(n);
   for (const t of res.ties) {
@@ -259,9 +274,19 @@ describe('evaluateWorldComp', () => {
     }
     expect(drawn).toBe(12);
   });
+  /* The first and the last night of a knockout round, by index: a tie shows its first leg only once the first is
+     played (k > first) and its second leg, aggregate, winner, extra time, penalties and away goals only once the
+     last is (k > last). The run review's two surviving mutations showed each a night early, so the ties are
+     checked here as well as the nights. */
+  const roundNights = (nights: WorldCompResult['nights'], round: string): [number, number] => {
+    const at = nights.map((x, i) => (x.stage === round ? i : -1)).filter(i => i >= 0);
+    return [at[0], at[at.length - 1]];
+  };
   it('is deterministic and a prefix at every night, and shows no score before its night', () => {
+    let tiesSeen = 0;
     for (const [slice, bind] of [[eraSlice(7), eraBind], [phaseSlice(3) as WorldCompSlice, phaseBind]] as const) {
-      const n = nightsOf(slice.f).length;
+      const n = nightsOf(slice.f, r => bind.tie(r).legs).length;
+      const whole = new Map(evaluateWorldComp(slice, n, bind).ties.map(t => [`${t.round}|${t.slot}`, t]));
       for (let k = 0; k < n; k += 1) {
         const a = evaluateWorldComp(slice, k, bind);
         const b = evaluateWorldComp(slice, k + 1, bind);
@@ -269,8 +294,28 @@ describe('evaluateWorldComp', () => {
         expect(JSON.stringify(b.nights.slice(0, k))).toBe(JSON.stringify(a.nights.slice(0, k)));
         expect(a.nights.slice(k).every(night => night.fixtures.every(x => x.hg === undefined))).toBe(true);
         expect(worldCompWinner(a)).toBeNull();
+        expect(a.winner).toBeUndefined();
+        const later = new Map(b.ties.map(t => [`${t.round}|${t.slot}`, t]));
+        for (const t of a.ties) {
+          const key = `${t.round}|${t.slot}`;
+          const next = later.get(key) as WorldTieView;
+          expect(next, `${key} at ${k} is gone at ${k + 1}`).toBeDefined();
+          for (const [field, v] of Object.entries(t)) expect((next as unknown as Record<string, unknown>)[field], `${key}.${field} at ${k}`).toEqual(v);
+          const end = whole.get(key) as WorldTieView;
+          const [first, last] = roundNights(a.nights, t.round);
+          const shown: WorldTieView = { round: end.round, slot: end.slot, home: end.home, away: end.away };
+          if (k > first && end.leg1) shown.leg1 = end.leg1;
+          if (k > last) {
+            for (const field of ['leg2', 'agg', 'winner', 'aet', 'pens', 'byAwayGoals'] as const) {
+              if (end[field] !== undefined) (shown as unknown as Record<string, unknown>)[field] = end[field];
+            }
+          }
+          expect(t, `${key} at ${k} nights (first leg night ${first}, last ${last})`).toEqual(shown);
+          tiesSeen += 1;
+        }
       }
     }
+    expect(tiesSeen).toBeGreaterThan(40);
   });
   it('crowns exactly one winner every finished season, over a few hundred seeds', () => {
     let crowned = 0;
