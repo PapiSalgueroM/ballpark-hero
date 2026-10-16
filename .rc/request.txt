@@ -1,0 +1,5 @@
+#!build
+#!playwright
+#!serial
+walk: ENGINES=chromium node scripts/playUsCareerReports.mjs
+walk-nosettle: PLAY_US_REPORTS_CONTROL=nosettle ENGINES=chromium node scripts/playUsCareerReports.mjs
