@@ -19,7 +19,7 @@ jobs:
       SIM_NETWORK: offline
       ENGINES: chromium
       CAREER_SEASON_LOCAL_ONLY: '1'
-      LIFE_STORIES_PHASE: baseline
+      LIFE_STORIES_PHASE: fixed
       LIFE_STORIES_OUT: ${{ github.workspace }}/career-life-stories-artifacts
       FREE_KICK_FONT_CACHE: ${{ github.workspace }}/career-life-stories-artifacts/font-cache
       PRERENDER_ONLY: /soccer-career

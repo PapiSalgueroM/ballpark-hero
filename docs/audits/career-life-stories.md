@@ -1,9 +1,14 @@
 # Round 1377: phone Life stories
 
-Status: method authored from native source inspection only. No local JavaScript, TypeScript,
-test, build, browser or database execution. Root reserved Round 1377 in the primary workboard.
-Branch `codex/career-life-stories`, product parent `d4f2c6f688d656205722ba52bbdb33f03490966a`.
-The first branch Actions run must qualify the unchanged PhonePanel before product is authored.
+Status: remote baseline qualified at `fce36ab1`, Actions run `38889971492`, job `116936806033`.
+Root read the actual log: eight exact missing-section failures and four preservation passes,
+twelve normal phone focus passes plus four effective original controls, 51 related passes,
+the real application type gate and 521 installed dependency holds. Artifact `12041775730`,
+SHA256 `9b8aca9aff18235626fd687a2ea9b7fb3162a1a56ac7779ad672e19bdc6b8596`.
+No local JavaScript, TypeScript, test, build, browser or database execution. Round 1377 is
+reserved in the primary workboard. Branch `codex/career-life-stories`, product parent
+`d4f2c6f688d656205722ba52bbdb33f03490966a`. The minimal PhonePanel product is now authored
+after that causal baseline, with fixed-phase qualification still pending.
 
 ## Accepted product scope
 
@@ -51,8 +56,8 @@ The baseline must have exactly eight failures, all from the named missing cases 
 the specific Boolean assertion `Life must show its active stories: expected false to be true`.
 The four preservation cases must pass. A resolver, type, module, syntax, process, unrelated
 assertion or transport failure earns no expected-red credit. The baseline also holds the
-entire original PhonePanel against the parent Git source. These counts are intended outcomes,
-not observations, until the remote JSON reports qualify them.
+entire original PhonePanel against the parent Git source. Those exact baseline counts are
+qualified by the remote run above. Fixed outcomes remain unverified until their own run.
 
 The fixed method requires all twelve cases green. Its original-source control aliases only
 the actual PhonePanel import to the retained parent component, must change that source and
@@ -69,7 +74,8 @@ provenance limits, for the separate fixed-phase served proof.
 
 ## Branch Actions method
 
-`.github/workflows/career-life-stories.yml` starts in `LIFE_STORIES_PHASE=baseline`.
+`.github/workflows/career-life-stories.yml` qualified `LIFE_STORIES_PHASE=baseline` first and
+now sets `LIFE_STORIES_PHASE=fixed` for the product candidate.
 `scripts/simPhonePanelLifeStories.mjs` retains raw verbose logs, complete Vitest JSON, real
 child exits and exact failed names in `career-life-stories-artifacts/proof.json`. The fixture
 receipt is `browser-fixtures.json`, joined to the current Git head and a retained SHA256.

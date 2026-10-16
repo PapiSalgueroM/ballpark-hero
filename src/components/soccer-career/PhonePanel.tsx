@@ -152,6 +152,13 @@ export default function PhonePanel({ career, onAnswer, onMoney, onBuyItem, onClo
   const waiting = unreadThreads(career);
   const standing = phoneStanding(career);
   const st = standingLabel(standing);
+  const ongoingStories = career.retired ? [] : [
+    ["esports", "Esports team", "Results not checked"],
+    ["cursedBoots", "Cursed boots", "Still wearing them"],
+    ["teammateLoan", "Teammate loan", "Repayment unresolved"],
+    ["coachingBadges", "Coaching course", "Coursework not reviewed"],
+    ["rDocCrew", "Documentary", "Footage not reviewed"],
+  ].filter(([flag]) => career.lifeFlags?.[flag] === 1);
   const feed = useMemo(() => phoneFeed(career), [career]);
   const year = career.seasons[career.seasons.length - 1]?.year ?? 2020;
   const season = career.seasons[career.seasons.length - 1];
@@ -534,6 +541,18 @@ export default function PhonePanel({ career, onAnswer, onMoney, onBuyItem, onClo
                   <Meter value={karma} color={karma >= 50 ? "bg-sky-500" : "bg-amber-500"} />
                   <div className="text-[10px] text-white/50">karma {karma} / 100, how the public sees you</div>
                 </div>
+                {ongoingStories.length > 0 && (
+                  <section aria-label="Ongoing stories" className="rounded-2xl bg-white/5 border border-white/10 p-3 space-y-2">
+                    <h3 className="text-[11px] font-black">Ongoing stories</h3>
+                    <ul className="space-y-2">
+                      {ongoingStories.map(([flag, label, status]) => (
+                        <li key={flag} className="flex items-start justify-between gap-3 text-[10px]">
+                          <span className="font-bold">{label}</span><span className="text-right text-white/60">{status}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </section>
+                )}
               </div>
             </>
           )}
