@@ -1,0 +1,3 @@
+#!serve
+#!playwright
+w4: SECTIONS=W4 SHOTS=$RC_OUT/shots ENGINES=chromium node scripts/playSoccerScreenTruths.mjs > /tmp/w4.log 2>&1; s=$?; grep -E "chevron|result is in|disabled" /tmp/w4.log | cut -c1-200 | head -10; sed -n "/verdicts, section by section/,\$p" /tmp/w4.log; exit $s
