@@ -1,0 +1,12 @@
+headsha exit=0 0s | 17709739a Round BHH: merge PR282, Player Bingo counts Rodri's verified 2023 Champions League title
+tsc exit=0 63s | 
+vitest-wx exit=0 5s |    Duration  4.34s (transform 613ms, setup 115ms, collect 1.41s, tests 2.83s, environment 636ms, prepare 155ms)
+wx-original-ctl exit=0 4s | wxOriginal: CONTROL FIRED-OK on base 5b630266: 3 display tests failed on their markers, the season test passed, both files restored
+simBuildYourXiFit exit=0 2s | simBuildYourXiFit: all checks green
+simWorldXiSeasonReport exit=0 2s | simWorldXiSeasonReport: green. The report says a great deal more, every number adds up and comes off who played, and nobody real says a word.
+simWorldXiReport exit=0 1s | simWorldXiReport: green. The report says more and the season it describes did not move.
+simWorldXiPositions exit=1 0s | simWorldXiPositions: the pool did not load, which is itself worth investigating
+simWorldXiDefensiveMids exit=1 0s | SUPABASE UNREACHABLE OR POOL TOO SMALL. NOTHING WAS CHECKED.
+simNoInventedConduct exit=0 0s | simNoInventedConduct: green. A real player can score in your sim and get hurt in it. He cannot fall out with the board in it.
+playWorldXiReportFit exit=0 4s | playWorldXiReportFit: green. 16 cases, the narrowest name column 87px, nothing cut, nothing sideways, nothing jumps.
+simNoRivalNames exit=0 13s | No rival product names found. 0 findings.

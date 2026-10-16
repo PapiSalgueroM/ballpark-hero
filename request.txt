@@ -1,0 +1,14 @@
+#!playwright
+#!serial
+headsha: git log --oneline -3
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-wx: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node_modules/.bin/vitest run src/test/worldXiSummary.test.tsx src/test/worldXiRespins.test.tsx --testTimeout=300000 --hookTimeout=120000
+wx-original-ctl: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node .rc/x/wxOriginal.mjs; s=$?; git checkout -- src; exit $s
+simBuildYourXiFit: node scripts/simBuildYourXiFit.mjs
+simWorldXiSeasonReport: node scripts/simWorldXiSeasonReport.mjs
+simWorldXiReport: node scripts/simWorldXiReport.mjs
+simWorldXiPositions: node scripts/simWorldXiPositions.mjs
+simWorldXiDefensiveMids: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simWorldXiDefensiveMids.mjs
+simNoInventedConduct: node scripts/simNoInventedConduct.mjs
+playWorldXiReportFit: node scripts/playWorldXiReportFit.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
