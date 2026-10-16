@@ -1,0 +1,11 @@
+pr269-base: git show 1923d291:src/test/managerAiOwnership.test.ts > src/test/managerAiOwnership.test.ts && echo "blob 1923d291 $(sha256sum < src/test/managerAiOwnership.test.ts)" && echo "blob 2fa832ff $(git show 2fa832ff:src/test/managerAiOwnership.test.ts | sha256sum)" && node_modules/.bin/vitest run src/test/managerAiOwnership.test.ts --reporter=verbose --testTimeout=300000 --hookTimeout=120000
+ledgerBound-base: node scripts/simCmLedgerBound.mjs
+slots-base-d: node scripts/simClubManagerSlots.mjs
+saveSize-base-d: node scripts/simClubManagerSaveSize.mjs
+saveSize-base-1: SIM_SEED=1 node scripts/simClubManagerSaveSize.mjs
+saveSize-base-2: SIM_SEED=2 node scripts/simClubManagerSaveSize.mjs
+saveSize-base-3: SIM_SEED=3 node scripts/simClubManagerSaveSize.mjs
+saveSize-base-4: SIM_SEED=4 node scripts/simClubManagerSaveSize.mjs
+saveSize-base-5: SIM_SEED=5 node scripts/simClubManagerSaveSize.mjs
+slots-base-1: SIM_SEED=1 node scripts/simClubManagerSlots.mjs
+slots-base-2: SIM_SEED=2 node scripts/simClubManagerSlots.mjs
