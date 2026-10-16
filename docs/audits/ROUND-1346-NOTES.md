@@ -46,7 +46,8 @@ journey and the draft night, so each fix lands once for all four sports.
 ## Bridges (existing harnesses that count or hash what this round touches)
 
 - scripts/simUsCoachPoaching.mjs strips this round's five anchored hunks (scripts/lib/usCoachRetireHunks.mjs,
-  each asserted present once, LF and CRLF) before hashing the rebuilt engine; the pinned hash is unchanged.
+  each asserted present once in the LF text, a CRLF checkout being turned to LF first) before hashing the rebuilt
+  engine; the pinned hash is unchanged.
 - scripts/simUsCareerActionConfirm.mjs: CASE_COUNT 19 (was 18 in five places), `cancelBlock` anchors
   `{copy.cancel}`, the coach case joins the eight component controls' lists, and vitest's ANSI colour codes
   are stripped before the failure message regex (the `initial` control aborted on Linux on base d4f2c6f6 too).

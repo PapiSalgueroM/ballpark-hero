@@ -47,7 +47,8 @@ for (const anchor of [departure, credit]) {
   assert.equal(holdSource(Buffer.from(source.replaceAll('\n', '\r\n'))).source.split(anchor).length - 1, 1, 'CRLF binding held');
 }
 /* Round 1346 bridge: the coaching retirement added five hunks to the engine (retireCoachCareer and one done guard
-   at the top of four functions). Each is an exact anchor held once, LF and CRLF, and stripped before the hash, so
+   at the top of four functions). Each is an exact anchor held once in the LF text (the strip turns a CRLF
+   checkout to LF first), and stripped before the hash, so
    the pinned pre-888 hash is unchanged and still proves no other line of the engine moved. The anchors live in
    scripts/lib/usCoachRetireHunks.mjs, shared with simUsCoachRetirement. */
 const preRetire = stripRetireHunks(source);

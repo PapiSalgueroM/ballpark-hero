@@ -77,6 +77,8 @@ for (const [anchor, replacement] of Object.values(CONTROLS)) {
   assert.notEqual(source.replace(anchor, () => replacement), source, 'Control changes the engine');
 }
 const base = stripRetireHunks(source);
+/* The strip turns the text to LF itself, so a Windows (CRLF) checkout of the engine gives the same base. */
+assert.equal(stripRetireHunks(source.replaceAll('\n', '\r\n')), base, 'The strip reads a CRLF engine the same as an LF one');
 const head = control ? source.replace(CONTROLS[control][0], () => CONTROLS[control][1]) : source;
 
 let failures = 0;
