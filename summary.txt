@@ -1,0 +1,2 @@
+unseeded-default-base exit=1 105s | simCmUnseededWorld: 112 FAILURE(S)
+continuity-default-base exit=1 21s |     at async file:///tmp/b2/scripts/simManagerWorldContinuity.mjs:489:24
