@@ -1,0 +1,3 @@
+vitest exit=0 15s |    Duration  13.77s (transform 3.71s, setup 237ms, collect 6.41s, tests 9.15s, environment 1.12s, prepare 593ms)
+tsc exit=0 82s | 
+skips exit=0 85s | PASS: ALL US CAREER SKIP CHECKS PASSED
