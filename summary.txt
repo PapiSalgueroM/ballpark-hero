@@ -1,0 +1,7 @@
+so-a7094670 exit=0 35s | simCmShootoutOrder: all sections passed
+so-420902cd exit=0 37s | simCmShootoutOrder: all sections passed
+so-e814c2de exit=0 38s | simCmShootoutOrder: all sections passed
+so-819d9d16 exit=1 32s | simCmShootoutOrder: 3 FAILURE(S)
+so-dd44adff exit=1 35s | simCmShootoutOrder: 3 FAILURE(S)
+so-ea937568 exit=1 37s | simCmShootoutOrder: 3 FAILURE(S)
+so-head exit=1 24s | simCmShootoutOrder: 3 FAILURE(S)

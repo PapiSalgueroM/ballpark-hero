@@ -1,0 +1,7 @@
+  differs from actual pre-1072 main, seed 782100: got {"seed":782100,"decidedBy":"regular","shootoutWon":null,"homeGoals":5,"awayGoals":0,"next":0.21052624308504164,"hash":"b57f8d66"}, baseline {"seed":782100,"decidedBy":"regular","shootoutWon":null,"homeGoals":4,"awayGoals":0,"next":0.9895445879083
+  differs from actual pre-1072 main, seed 782101: got {"seed":782101,"decidedBy":"regular","shootoutWon":null,"homeGoals":3,"awayGoals":1,"next":0.4338531761895865,"hash":"48ad2504"}, baseline {"seed":782101,"decidedBy":"regular","shootoutWon":null,"homeGoals":5,"awayGoals":0,"next":0.80667648348025
+  differs from actual pre-1072 main, seed 782102: got {"seed":782102,"decidedBy":"regular","shootoutWon":null,"homeGoals":1,"awayGoals":0,"next":0.721040999982506,"hash":"9f4f9935"}, baseline {"seed":782102,"decidedBy":"regular","shootoutWon":null,"homeGoals":1,"awayGoals":0,"next":0.647435440914705
+  FAIL: 150 rows differ from the actual pre-1072 engine with no order set
+  FAIL: 300 rows on section 1's base differ from the actual pre-1072 engine with no order set
+  FAIL: the loaded old save differs from actual pre-1072 main at seed 782113: {"seed":782113,"decidedBy":"pens","shootoutWon":false,"homeGoals":1,"awayGoals":1,"next":0.7369232308119535,"hash":"71561414"} vs {"seed":782113,"decidedBy":"pens","shootoutWon":true,"homeGoals":0,"awayGoals":0,"next":0.43
+simCmShootoutOrder: 3 FAILURE(S)
