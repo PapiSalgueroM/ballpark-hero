@@ -91,7 +91,7 @@ export default function ClubManagerHelp() {
               <div data-cm-help="no-sacking" className="space-y-2">
                 <p>🛡️ <span className="font-semibold text-foreground">No sacking.</span> Everything above about the sack is for a normal career. Switch on No sacking and zero is no longer the sack for you: the board still moves after every match and still tells you what it thinks, but where it would fire you it keeps you on its last point instead. Pick it on the Dugout step when you start, or turn it on later from Options (it asks twice). It cannot be turned off, it cannot be turned on while you are out of work, and from then on the career posts no score to the leaderboards, though your days played still count. Manager Hot Seat and Deadline Day never use it.</p>
                 <p>It also takes some of the bite out of the wage ceiling. Going over the ceiling still costs board confidence after every match and still stops free agents signing, but with No sacking on the lost confidence can no longer cost you the job.</p>
-                <p><span className="font-semibold text-foreground">Example:</span> the board is on 2 and you lose 3-0. On a normal career that is the sack. With No sacking the board stays on 1, the match report says they would have sacked you, and you play the next match.</p>
+                <p><span className="font-semibold text-foreground">Example:</span> the board is on 2 and you lose 3-0 in the league. On a normal career that is almost always the sack. With No sacking the board stays on 1, the match report says they would have sacked you, and you play the next match.</p>
               </div>
             </div>
   );
