@@ -28,10 +28,11 @@ import {
   shuffle,
   respinSlotCountry,
   simulateWorldXiSeason,
+  ratingsFor,
   SeasonReport,
   ordinal,
 } from '@/lib/worldXi';
-import { computeChemistry, formatChemistry } from '@/lib/chemistry';
+import { computeChemistry } from '@/lib/chemistry';
 import { recordCompletion, getCurrentPlayerName } from '@/lib/completions';
 import { SlotReel } from '@/components/world-xi/SlotReel';
 import { SeasonReportTabs } from '@/components/world-xi/SeasonReportTabs';
@@ -65,6 +66,7 @@ const WorldXi = () => {
   const [spinKey, setSpinKey] = useState(0); // bumping this starts a SlotReel spin
   const [reelGlimpse, setReelGlimpse] = useState<string>(''); // country under the payline mid-spin
   const [seasonReport, setSeasonReport] = useState<SeasonReport | null>(null);
+  const [showClubChemistry, setShowClubChemistry] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const prevStepRef = useRef<number>(-1);
   const reducedMotionRef = useRef<boolean>(
@@ -213,6 +215,7 @@ const WorldXi = () => {
     setQuery('');
     setFeedback(null);
     setSeasonReport(null);
+    setShowClubChemistry(false);
     setPhase('setup');
   };
 
@@ -251,6 +254,12 @@ const WorldXi = () => {
       ),
     [filled],
   );
+  const clubLinks = chemistry.links.filter(link => link.type === 'club');
+  const playerOveralls = useMemo(() => {
+    const players = filled.filter((p): p is WxPlayer => p !== null);
+    const ratings = ratingsFor(players);
+    return new Map(players.map((p, i) => [p.name, ratings[i]]));
+  }, [filled]);
   const flagRow = countries.map(c => flagFor(c)).join('');
   const emojiGrid = [
     `🌍 World XI ${formation.name}${timerMode.seconds > 0 ? ' ⏱️ ' + timerMode.label : ''}`,
@@ -541,13 +550,43 @@ const WorldXi = () => {
 
             {pitchView}
 
-            {chemistry.totalBonus > 0 && (
-              <div className="mt-4 text-center">
-                <span className="inline-flex items-center px-3 py-1.5 rounded-full bg-surface-2 text-gold text-sm font-semibold">
-                  {formatChemistry(chemistry)}
-                </span>
-              </div>
-            )}
+            <div className="mt-4 rounded-xl border border-border/50 bg-background/60 p-3">
+              {showClubChemistry ? (
+                <section aria-label="Club chemistry details">
+                  <button
+                    type="button"
+                    onClick={() => setShowClubChemistry(false)}
+                    className="mb-2 text-xs font-semibold text-muted-foreground hover:text-foreground"
+                  >
+                    Back
+                  </button>
+                  {clubLinks.length > 0 ? (
+                    <ul className="grid gap-1.5 max-h-60 overflow-y-auto">
+                      {clubLinks.map((link, i) => (
+                        <li key={i} className="rounded-lg border border-border/50 px-3 py-2 text-xs">
+                          <span className="block font-semibold text-foreground break-words">{link.a} + {link.b}</span>
+                          <span className="block text-muted-foreground break-words">{filled.find(p => p?.name === link.a)?.club}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <p className="text-sm text-muted-foreground">No shared clubs in this XI.</p>
+                  )}
+                  <p className="mt-2 text-[11px] text-muted-foreground">
+                    Players at the same club on our list. These links do not change the season sim.
+                  </p>
+                </section>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => setShowClubChemistry(true)}
+                  className="w-full text-center text-gold text-sm font-semibold hover:text-foreground"
+                >
+                  Club chemistry: {clubLinks.length} link{clubLinks.length === 1 ? '' : 's'}
+                  <span className="block text-[11px] font-normal text-muted-foreground">See which players share a club</span>
+                </button>
+              )}
+            </div>
 
             <div className="mt-4 grid gap-1.5">
               {formation.slots.map((s, i) => {
@@ -558,8 +597,15 @@ const WorldXi = () => {
                     <span className="shrink-0">{countries[i] ? <FlagImg name={countries[i]} size={16} /> : '🌍'}</span>
                     {p ? (
                       <>
-                        <span className="font-semibold text-foreground truncate min-w-0 flex-1">{p.name}</span>
-                        <span className="text-xs text-muted-foreground truncate shrink-0 max-w-[35%] ml-auto">{p.club}</span>
+                        <span className="min-w-0 flex-1">
+                          <span className="block font-semibold text-foreground break-words">{p.name}</span>
+                          <span className="block text-xs text-muted-foreground break-words">{p.club}</span>
+                        </span>
+                        {seasonReport && (
+                          <span aria-label={`Overall for ${p.name}`} className="text-[11px] font-bold text-gold shrink-0 tabular-nums whitespace-nowrap">
+                            {playerOveralls.get(p.name)} OVR
+                          </span>
+                        )}
                       </>
                     ) : (
                       <span className="text-muted-foreground italic truncate min-w-0">Unfilled ({displayCountry(countries[i] ?? '')})</span>
@@ -568,6 +614,12 @@ const WorldXi = () => {
                 );
               })}
             </div>
+
+            {seasonReport && (
+              <p className="mt-2 text-[11px] text-muted-foreground text-center">
+                OVR is the card rating used for this simulation, out of 100. Player stats shows the season's average match rating out of 10.
+              </p>
+            )}
 
             {phase === 'won' && !seasonReport && (
               <div className="text-center mt-4">
