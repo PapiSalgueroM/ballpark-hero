@@ -1,0 +1,163 @@
+name: Soccer Career phone Life stories
+
+on:
+  push:
+    branches: [codex/career-life-stories]
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 100
+    defaults:
+      run:
+        shell: bash
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      ENGINES: chromium
+      CAREER_SEASON_LOCAL_ONLY: '1'
+      LIFE_STORIES_PHASE: baseline
+      LIFE_STORIES_OUT: ${{ github.workspace }}/career-life-stories-artifacts
+      FREE_KICK_FONT_CACHE: ${{ github.workspace }}/career-life-stories-artifacts/font-cache
+      PRERENDER_ONLY: /soccer-career
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Retain exact source and install locked packages
+        run: |
+          set -euo pipefail
+          test "$GITHUB_REF_NAME" = codex/career-life-stories
+          mkdir -p "$LIFE_STORIES_OUT"
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          git rev-parse HEAD HEAD^{tree} > "$LIFE_STORIES_OUT/head-tree.txt"
+          git archive --format=zip HEAD > "$LIFE_STORIES_OUT/source.zip"
+          git archive --format=zip d4f2c6f688d656205722ba52bbdb33f03490966a > "$LIFE_STORIES_OUT/base.zip"
+          git ls-tree -r HEAD > "$LIFE_STORIES_OUT/source-inventory.txt"
+          git diff --name-status d4f2c6f688d656205722ba52bbdb33f03490966a HEAD > "$LIFE_STORIES_OUT/changed-files.txt"
+          git status --porcelain --untracked-files=no > "$LIFE_STORIES_OUT/source-before.txt"
+          test ! -s "$LIFE_STORIES_OUT/source-before.txt"
+          git ls-files -z -- src scripts .github/workflows docs package.json package-lock.json bun.lock index.html ':(exclude)scripts/data/lastmod.json' | xargs -0 sha256sum > "$LIFE_STORIES_OUT/source-hashes.txt"
+          sha256sum package.json package-lock.json bun.lock > "$LIFE_STORIES_OUT/package-hashes.txt"
+          sha256sum "$LIFE_STORIES_OUT/source.zip" "$LIFE_STORIES_OUT/base.zip" > "$LIFE_STORIES_OUT/archive-hashes.txt"
+          if test "$LIFE_STORIES_PHASE" = baseline; then
+            git diff --exit-code d4f2c6f688d656205722ba52bbdb33f03490966a -- src/components/soccer-career/PhonePanel.tsx
+          fi
+          echo '127.0.0.1 flawuiqbvjobmkfkauhw.supabase.co' | sudo tee -a /etc/hosts
+          npm ci 2>&1 | tee "$LIFE_STORIES_OUT/npm-ci.log"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs'; import assert from 'node:assert/strict';
+          const lock = JSON.parse(fs.readFileSync('package-lock.json'));
+          const packages = Object.entries(lock.packages).filter(([dir]) => dir.startsWith('node_modules/') && fs.existsSync(dir + '/package.json')).map(([dir, entry]) => {
+            const actual = JSON.parse(fs.readFileSync(dir + '/package.json')); assert.equal(actual.version, entry.version, dir);
+            return { directory: dir, name: actual.name, version: actual.version };
+          });
+          assert.equal(packages.length, 521);
+          fs.writeFileSync(process.env.LIFE_STORIES_OUT + '/installed.json', JSON.stringify(packages, null, 2));
+          console.log('PASS 521 actual installed packages match their locked versions');
+          NODE
+          find node_modules -type f -print0 | sort -z | xargs -0 sha256sum > "$LIFE_STORIES_OUT/installed-files.sha256"
+      - name: Actual application type gate
+        run: |
+          set -euo pipefail
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee "$LIFE_STORIES_OUT/types.log"
+      - name: Exact real-component causal baseline or fixed original and restored arms
+        run: |
+          set -euo pipefail
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simPhonePanelLifeStories.mjs 2>&1 | tee "$LIFE_STORIES_OUT/method.log"
+      - name: Preserve original phone focus outcomes and four effective controls
+        run: |
+          set -euo pipefail
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simPhonePanelFocus.mjs 2>&1 | tee "$LIFE_STORIES_OUT/phone-focus.log"
+          for control in tab return navigation visibility; do
+            PHONE_PANEL_CONTROL="$control" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simPhonePanelFocus.mjs 2>&1 | tee "$LIFE_STORIES_OUT/phone-focus-$control.log"
+          done
+      - name: Ordinary actual followup review and documentary outcomes
+        run: |
+          set -euo pipefail
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node_modules/.bin/vitest run src/test/soccerCareerLifeFollowups.test.ts src/test/soccerCareerLifeReviews.test.ts src/test/soccerCareerDocumentaryReview.test.ts --maxWorkers=1 --minWorkers=1 --reporter=verbose --reporter=json --outputFile.json="$LIFE_STORIES_OUT/related-unit.json" 2>&1 | tee "$LIFE_STORIES_OUT/related-unit.log"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs'; import assert from 'node:assert/strict';
+          const report = JSON.parse(fs.readFileSync(process.env.LIFE_STORIES_OUT + '/related-unit.json'));
+          const names = ['soccerCareerLifeFollowups.test.ts', 'soccerCareerLifeReviews.test.ts', 'soccerCareerDocumentaryReview.test.ts'];
+          assert.deepEqual(report.testResults.map(file => file.name.replaceAll('\\', '/').split('/').at(-1)).sort(), names.sort());
+          assert(report.success); assert.equal(report.numTotalTests, 51); assert.equal(report.numPassedTests, 51); assert.equal(report.numFailedTests, 0);
+          assert(report.testResults.every(file => !file.message && file.assertionResults.every(test => test.status === 'passed')));
+          console.log('PASS 51 actual related outcomes, no skipped or pending cases');
+          NODE
+      - name: Fixed phase browser and build dependencies
+        if: env.LIFE_STORIES_PHASE == 'fixed'
+        run: |
+          set -euo pipefail
+          browser_tools="$RUNNER_TEMP/life-stories-browser-$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT"
+          mkdir -p "$browser_tools"
+          printf '{"private":true,"dependencies":{"playwright":"1.64.0"}}\n' > "$browser_tools/package.json"
+          npm install --prefix "$browser_tools" --ignore-scripts --no-audit --no-fund 2>&1 | tee "$LIFE_STORIES_OUT/browser-install.log"
+          test ! -e node_modules/playwright
+          test ! -e node_modules/playwright-core
+          ln -s "$browser_tools/node_modules/playwright" node_modules/playwright
+          ln -s "$browser_tools/node_modules/playwright-core" node_modules/playwright-core
+          cp "$browser_tools/package.json" "$LIFE_STORIES_OUT/browser-package.json"
+          cp "$browser_tools/package-lock.json" "$LIFE_STORIES_OUT/browser-package-lock.json"
+          node "$browser_tools/node_modules/playwright/cli.js" install --with-deps chromium 2>&1 | tee "$LIFE_STORIES_OUT/chromium.log"
+          python -m pip install fonttools pillow 2>&1 | tee "$LIFE_STORIES_OUT/python-tools.log"
+          python -m pip freeze > "$LIFE_STORIES_OUT/python-installed.txt"
+          node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only 2>&1 | tee "$LIFE_STORIES_OUT/fonts.log"
+          find "$browser_tools/node_modules" -type f -print0 | sort -z | xargs -0 sha256sum > "$LIFE_STORIES_OUT/browser-tools.sha256"
+      - name: Fixed phase complete SEO build
+        if: env.LIFE_STORIES_PHASE == 'fixed'
+        run: |
+          set -euo pipefail
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" npm run build:seo 2>&1 | tee "$LIFE_STORIES_OUT/build.log"
+          find dist -type f -print0 | sort -z | xargs -0 sha256sum > "$LIFE_STORIES_OUT/dist-hashes.txt"
+          git diff -- public scripts/data/lastmod.json > "$LIFE_STORIES_OUT/generated.diff"
+          cp scripts/data/lastmod.json "$LIFE_STORIES_OUT/build-lastmod.json"
+      - name: Fixed phase served phone Life and unchanged full download budgets
+        if: env.LIFE_STORIES_PHASE == 'fixed'
+        run: |
+          set -euo pipefail
+          node scripts/lib/hostLikeServer.mjs dist 4173 > "$LIFE_STORIES_OUT/weight-server.log" 2>&1 &
+          weight_server_pid=$!
+          trap 'kill "$weight_server_pid" 2>/dev/null || true' EXIT
+          for attempt in 1 2 3 4 5; do
+            if curl --fail --silent http://127.0.0.1:4173/ > /dev/null; then break; fi
+            sleep 1
+          done
+          export BASE=http://127.0.0.1:4173 SWEEP_BASE=http://127.0.0.1:4173
+          test -f scripts/playPhonePanelLifeStories.mjs
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playPhonePanelLifeStories.mjs 2>&1 | tee "$LIFE_STORIES_OUT/browser.log"
+          SWEEP_OFFLINE=1 NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/sweepWeight.mjs 2>&1 | tee "$LIFE_STORIES_OUT/weight.log"
+      - name: Fixed phase all fifteen rebuilt-site readers
+        if: env.LIFE_STORIES_PHASE == 'fixed'
+        run: |
+          set -euo pipefail
+          ONLY=simAdsense,simBrand,simHeadTags,simHiddenPages,simHubs,simIndexNow,simIndexing,simInternalLinks,simNoRivalNames,simPrerender,simPrerenderBoot,simRetiredRoutes,simSchema,simSitemap,simSnapshotAssets node scripts/runAllSims.mjs --browser 2>&1 | tee "$LIFE_STORIES_OUT/readers.log"
+          test "$(grep -c '^All 15 harnesses green\.$' "$LIFE_STORIES_OUT/readers.log")" = 1
+      - name: Final exact source installed dependency and build holds
+        if: always()
+        run: |
+          set -euo pipefail
+          sha256sum --check "$LIFE_STORIES_OUT/source-hashes.txt" > "$LIFE_STORIES_OUT/source-holds.log"
+          sha256sum --check "$LIFE_STORIES_OUT/package-hashes.txt"
+          sha256sum --check "$LIFE_STORIES_OUT/installed-files.sha256" > "$LIFE_STORIES_OUT/installed-holds.log"
+          if test "$LIFE_STORIES_PHASE" = fixed; then
+            sha256sum --check "$LIFE_STORIES_OUT/browser-tools.sha256" > "$LIFE_STORIES_OUT/browser-tools-holds.log"
+            sha256sum --check "$LIFE_STORIES_OUT/dist-hashes.txt" > "$LIFE_STORIES_OUT/dist-holds.log"
+          fi
+          git diff --exit-code -- src scripts package.json package-lock.json bun.lock .github/workflows docs index.html ':!scripts/data/lastmod.json'
+      - name: Retain complete evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: career-life-stories-${{ github.run_id }}-${{ github.run_attempt }}
+          path: career-life-stories-artifacts/
+          retention-days: 14
+          if-no-files-found: error
