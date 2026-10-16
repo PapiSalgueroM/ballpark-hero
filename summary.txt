@@ -1,0 +1,3 @@
+mut-arm0 exit=1 4s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/clubManagerRetire.test.tsx,title=src/test/clubManagerRetire.test.tsx > the retire door > two clicks 50
+mut-early exit=1 3s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/clubManagerRetire.test.tsx,title=src/test/clubManagerRetire.test.tsx > the retire door > ignores a cli
+mut-phasefor exit=1 5s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/clubManagerRetire.test.tsx,title=src/test/clubManagerRetire.test.tsx > retiring through the hook > lan

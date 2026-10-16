@@ -1,0 +1,68 @@
+1
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [31m❯[39m src/test/clubManagerRetire.test.tsx [2m([22m[2m19 tests[22m[2m | [22m[31m1 failed[39m[2m | [22m[33m18 skipped[39m[2m)[22m[32m 32[2mms[22m[39m
+   [2m[90m↓[39m[22m the record line[2m > [22mprints a stored record with its word and season
+   [2m[90m↓[39m[22m the record line[2m > [22mreads a level score won or lost on penalties, and a plain draw
+   [2m[90m↓[39m[22m the record line[2m > [22mgives no word when an old row contradicts its score (never "0-3 win")
+   [2m[90m↓[39m[22m the record line[2m > [22mworks an old save out from a whole book with no second line
+   [2m[90m↓[39m[22m the record line[2m > [22msays how many matches a trimmed book could not see, through formatNumber
+   [2m[90m↓[39m[22m the record line[2m > [22mprints nothing with no game: a new career, an empty book, a stored null
+   [2m[90m↓[39m[22m the record line[2m > [22muses no dash of any kind
+   [2m[90m↓[39m[22m retiring through the hook[2m > [22mwrites first, then opens the farewell, and the disk holds the retirement
+   [2m[90m↓[39m[22m retiring through the hook[2m > [22ma reload lands on the managers screen, never on hub, seasonEnd or sacked, and opening it shows the farewell
+   [2m[90m↓[39m[22m retiring through the hook[2m > [22mopens a retired career parked in another slot on its farewell, through the boot
+   [2m[90m↓[39m[22m retiring through the hook[2m > [22mlands a Hot Seat mark on the farewell, never on the hub
+   [2m[90m↓[39m[22m retiring through the hook[2m > [22ma write the fence refuses shows the notice and no farewell, and the disk is not retired
+[31m   [31m×[31m the retire door[2m > [22mtwo clicks 50 ms apart on the door do not retire[39m[32m 31[2mms[22m[39m
+[31m     → expected "spy" to not be called at all, but actually been called 1 times[90m
+
+Received: 
+
+[1m  1st spy call:
+
+[22m    Array []
+[31m[90m
+
+Number of calls: [1m1[22m
+[31m[39m
+   [2m[90m↓[39m[22m the retire door[2m > [22mYes does nothing before it arms and retires after
+   [2m[90m↓[39m[22m the retire door[2m > [22mignores a click whose pointer went down before it armed
+   [2m[90m↓[39m[22m the retire door[2m > [22mKeep managing and Escape put the door back, with the focus on Keep while it is open
+   [2m[90m↓[39m[22m the farewell[2m > [22msays the moment with the week the managers screen printed, and opens each tile in place with a Back
+   [2m[90m↓[39m[22m the farewell[2m > [22mreads a Skip career and the other two moments
+   [2m[90m↓[39m[22m the farewell[2m > [22mthe managers screen says retired and offers the farewell on that tile only
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/clubManagerRetire.test.tsx[2m > [22mthe retire door[2m > [22mtwo clicks 50 ms apart on the door do not retire
+[31m[1mAssertionError[22m: expected "spy" to not be called at all, but actually been called 1 times[90m
+
+Received: 
+
+[1m  1st spy call:
+
+[22m    Array []
+[31m[90m
+
+Number of calls: [1m1[22m
+[31m[39m
+[36m [2m❯[22m src/test/clubManagerRetire.test.tsx:[2m171:26[22m[39m
+    [90m169| [39m    fireEvent[33m.[39m[34mpointerDown[39m(yes)[33m;[39m
+    [90m170| [39m    fireEvent[33m.[39m[34mclick[39m(yes)[33m;[39m
+    [90m171| [39m    [34mexpect[39m(onRetire)[33m.[39mnot[33m.[39m[34mtoHaveBeenCalled[39m()[33m;[39m
+    [90m   | [39m                         [31m^[39m
+    [90m172| [39m    [34mexpect[39m(yes[33m.[39m[34mgetAttribute[39m([32m'aria-disabled'[39m))[33m.[39m[34mtoBe[39m([32m'true'[39m)[33m;[39m
+    [90m173| [39m  })[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[33m18 skipped[39m[90m (19)[39m
+[2m   Start at [22m 12:07:42
+[2m   Duration [22m 2.49s[2m (transform 1.29s, setup 45ms, collect 1.76s, tests 32ms, environment 290ms, prepare 134ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/clubManagerRetire.test.tsx,title=src/test/clubManagerRetire.test.tsx > the retire door > two clicks 50 ms apart on the door do not retire,line=171,column=26::AssertionError: expected "spy" to not be called at all, but actually been called 1 times%0A%0AReceived: %0A%0A  1st spy call:%0A%0A    Array []%0A%0A%0ANumber of calls: 1%0A%0A ❯ src/test/clubManagerRetire.test.tsx:171:26%0A%0A

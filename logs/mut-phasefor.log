@@ -1,0 +1,130 @@
+1
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [31m❯[39m src/test/clubManagerRetire.test.tsx [2m([22m[2m19 tests[22m[2m | [22m[31m3 failed[39m[2m | [22m[33m14 skipped[39m[2m)[22m[33m 2217[2mms[22m[39m
+   [2m[90m↓[39m[22m the record line[2m > [22mprints a stored record with its word and season
+   [2m[90m↓[39m[22m the record line[2m > [22mreads a level score won or lost on penalties, and a plain draw
+   [2m[90m↓[39m[22m the record line[2m > [22mgives no word when an old row contradicts its score (never "0-3 win")
+   [2m[90m↓[39m[22m the record line[2m > [22mworks an old save out from a whole book with no second line
+   [2m[90m↓[39m[22m the record line[2m > [22msays how many matches a trimmed book could not see, through formatNumber
+   [2m[90m↓[39m[22m the record line[2m > [22mprints nothing with no game: a new career, an empty book, a stored null
+   [2m[90m↓[39m[22m the record line[2m > [22muses no dash of any kind
+   [32m✓[39m retiring through the hook[2m > [22mwrites first, then opens the farewell, and the disk holds the retirement[32m 70[2mms[22m[39m
+[31m   [31m×[31m retiring through the hook[2m > [22ma reload lands on the managers screen, never on hub, seasonEnd or sacked, and opening it shows the farewell[39m[32m 47[2mms[22m[39m
+[31m     → expected 'hub' to be 'retired' // Object.is equality[39m
+[31m   [31m×[31m retiring through the hook[2m > [22mopens a retired career parked in another slot on its farewell, through the boot[39m[33m 1046[2mms[22m[39m
+[31m     → expected 'hub' to be 'retired' // Object.is equality
+
+Ignored nodes: comments, script, style
+[36m<html>[31m
+  [36m<head />[31m
+  [36m<body>[31m
+    [36m<div />[31m
+  [36m</body>[31m
+[36m</html>[31m...[39m
+[31m   [31m×[31m retiring through the hook[2m > [22mlands a Hot Seat mark on the farewell, never on the hub[39m[33m 1031[2mms[22m[39m
+[31m     → expected 'hub' to be 'retired' // Object.is equality
+
+Ignored nodes: comments, script, style
+[36m<html>[31m
+  [36m<head />[31m
+  [36m<body>[31m
+    [36m<div />[31m
+    [36m<div />[31m
+  [36m</body>[31m
+[36m</html>[31m...[39m
+   [32m✓[39m retiring through the hook[2m > [22ma write the fence refuses shows the notice and no farewell, and the disk is not retired[32m 21[2mms[22m[39m
+   [2m[90m↓[39m[22m the retire door[2m > [22mtwo clicks 50 ms apart on the door do not retire
+   [2m[90m↓[39m[22m the retire door[2m > [22mYes does nothing before it arms and retires after
+   [2m[90m↓[39m[22m the retire door[2m > [22mignores a click whose pointer went down before it armed
+   [2m[90m↓[39m[22m the retire door[2m > [22mKeep managing and Escape put the door back, with the focus on Keep while it is open
+   [2m[90m↓[39m[22m the farewell[2m > [22msays the moment with the week the managers screen printed, and opens each tile in place with a Back
+   [2m[90m↓[39m[22m the farewell[2m > [22mreads a Skip career and the other two moments
+   [2m[90m↓[39m[22m the farewell[2m > [22mthe managers screen says retired and offers the farewell on that tile only
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 3 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/clubManagerRetire.test.tsx[2m > [22mretiring through the hook[2m > [22ma reload lands on the managers screen, never on hub, seasonEnd or sacked, and opening it shows the farewell
+[31m[1mAssertionError[22m: expected 'hub' to be 'retired' // Object.is equality[39m
+
+Expected: [32m"retired"[39m
+Received: [31m"hub"[39m
+
+[36m [2m❯[22m src/test/clubManagerRetire.test.tsx:[2m111:23[22m[39m
+    [90m109| [39m    [34mexpect[39m(api[33m.[39mslots[[34m0[39m][33m.[39msummary[33m?.[39mretired)[33m.[39m[34mtoBe[39m([35mtrue[39m)[33m;[39m
+    [90m110| [39m    [34mact[39m(() [33m=>[39m api[33m.[39m[34mopenSlot[39m([34m1[39m))[33m;[39m
+    [90m111| [39m    [34mexpect[39m(api[33m.[39mphase)[33m.[39m[34mtoBe[39m([32m'retired'[39m)[33m;[39m
+    [90m   | [39m                      [31m^[39m
+    [90m112| [39m    [34mact[39m(() [33m=>[39m api[33m.[39m[34mshowSlots[39m())[33m;[39m
+    [90m113| [39m    [34mact[39m(() [33m=>[39m api[33m.[39m[34mresume[39m())[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/3]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/clubManagerRetire.test.tsx[2m > [22mretiring through the hook[2m > [22mopens a retired career parked in another slot on its farewell, through the boot
+[31m[1mAssertionError[22m: expected 'hub' to be 'retired' // Object.is equality
+
+Ignored nodes: comments, script, style
+[36m<html>[31m
+  [36m<head />[31m
+  [36m<body>[31m
+    [36m<div />[31m
+  [36m</body>[31m
+[36m</html>[31m...[39m
+
+Expected: [32m"retired"[39m
+Received: [31m"hub"[39m
+
+[36m [2m❯[22m src/test/clubManagerRetire.test.tsx:[2m126:43[22m[39m
+    [90m124| [39m    [34mact[39m(() [33m=>[39m api[33m.[39m[34mshowSlots[39m())[33m;[39m
+    [90m125| [39m    [34mact[39m(() [33m=>[39m api[33m.[39m[34mopenSlot[39m([34m1[39m))[33m;[39m
+    [90m126| [39m    [35mawait[39m [34mwaitFor[39m(() [33m=>[39m [34mexpect[39m(api[33m.[39mphase)[33m.[39m[34mtoBe[39m([32m'retired'[39m))[33m;[39m
+    [90m   | [39m                                          [31m^[39m
+    [90m127| [39m    [34mexpect[39m(api[33m.[39mcareer[33m.[39mclubName)[33m.[39m[34mtoBe[39m([32m'Everton'[39m)[33m;[39m
+    [90m128| [39m  })[33m;[39m
+[90m [2m❯[22m runWithExpensiveErrorDiagnosticsDisabled node_modules/@testing-library/dom/dist/config.js:[2m47:12[22m[39m
+[90m [2m❯[22m checkCallback node_modules/@testing-library/dom/dist/wait-for.js:[2m124:77[22m[39m
+[90m [2m❯[22m Timeout.checkRealTimersCallback node_modules/@testing-library/dom/dist/wait-for.js:[2m118:16[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/3]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/clubManagerRetire.test.tsx[2m > [22mretiring through the hook[2m > [22mlands a Hot Seat mark on the farewell, never on the hub
+[31m[1mAssertionError[22m: expected 'hub' to be 'retired' // Object.is equality
+
+Ignored nodes: comments, script, style
+[36m<html>[31m
+  [36m<head />[31m
+  [36m<body>[31m
+    [36m<div />[31m
+    [36m<div />[31m
+  [36m</body>[31m
+[36m</html>[31m...[39m
+
+Expected: [32m"retired"[39m
+Received: [31m"hub"[39m
+
+[36m [2m❯[22m src/test/clubManagerRetire.test.tsx:[2m137:43[22m[39m
+    [90m135| [39m    [34mmarkLandOnHub[39m()[33m;[39m
+    [90m136| [39m    [34mrender[39m([33m<[39m[33mHarness[39m [33m/[39m[33m>[39m)[33m;[39m
+    [90m137| [39m    [35mawait[39m [34mwaitFor[39m(() [33m=>[39m [34mexpect[39m(api[33m.[39mphase)[33m.[39m[34mtoBe[39m([32m'retired'[39m))[33m;[39m
+    [90m   | [39m                                          [31m^[39m
+    [90m138| [39m  })[33m;[39m
+    [90m139| [39m
+[90m [2m❯[22m runWithExpensiveErrorDiagnosticsDisabled node_modules/@testing-library/dom/dist/config.js:[2m47:12[22m[39m
+[90m [2m❯[22m checkCallback node_modules/@testing-library/dom/dist/wait-for.js:[2m124:77[22m[39m
+[90m [2m❯[22m Timeout.checkRealTimersCallback node_modules/@testing-library/dom/dist/wait-for.js:[2m118:16[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/3]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m3 failed[39m[22m[2m | [22m[1m[32m2 passed[39m[22m[2m | [22m[33m14 skipped[39m[90m (19)[39m
+[2m   Start at [22m 12:07:49
+[2m   Duration [22m 4.55s[2m (transform 1.25s, setup 39ms, collect 1.69s, tests 2.22s, environment 238ms, prepare 56ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/clubManagerRetire.test.tsx,title=src/test/clubManagerRetire.test.tsx > retiring through the hook > a reload lands on the managers screen%2C never on hub%2C seasonEnd or sacked%2C and opening it shows the farewell,line=111,column=23::AssertionError: expected 'hub' to be 'retired' // Object.is equality%0A%0AExpected: "retired"%0AReceived: "hub"%0A%0A ❯ src/test/clubManagerRetire.test.tsx:111:23%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/clubManagerRetire.test.tsx,title=src/test/clubManagerRetire.test.tsx > retiring through the hook > opens a retired career parked in another slot on its farewell%2C through the boot,line=126,column=43::AssertionError: expected 'hub' to be 'retired' // Object.is equality%0A%0AIgnored nodes: comments, script, style%0A<html>%0A  <head />%0A  <body>%0A    <div />%0A  </body>%0A</html>...%0A%0AExpected: "retired"%0AReceived: "hub"%0A%0A ❯ src/test/clubManagerRetire.test.tsx:126:43%0A ❯ runWithExpensiveErrorDiagnosticsDisabled node_modules/@testing-library/dom/dist/config.js:47:12%0A ❯ checkCallback node_modules/@testing-library/dom/dist/wait-for.js:124:77%0A ❯ Timeout.checkRealTimersCallback node_modules/@testing-library/dom/dist/wait-for.js:118:16%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/clubManagerRetire.test.tsx,title=src/test/clubManagerRetire.test.tsx > retiring through the hook > lands a Hot Seat mark on the farewell%2C never on the hub,line=137,column=43::AssertionError: expected 'hub' to be 'retired' // Object.is equality%0A%0AIgnored nodes: comments, script, style%0A<html>%0A  <head />%0A  <body>%0A    <div />%0A    <div />%0A  </body>%0A</html>...%0A%0AExpected: "retired"%0AReceived: "hub"%0A%0A ❯ src/test/clubManagerRetire.test.tsx:137:43%0A ❯ runWithExpensiveErrorDiagnosticsDisabled node_modules/@testing-library/dom/dist/config.js:47:12%0A ❯ checkCallback node_modules/@testing-library/dom/dist/wait-for.js:124:77%0A ❯ Timeout.checkRealTimersCallback node_modules/@testing-library/dom/dist/wait-for.js:118:16%0A%0A
