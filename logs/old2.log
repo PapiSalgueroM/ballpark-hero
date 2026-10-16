@@ -1,0 +1,5 @@
+base fleet: 120 careers, 1952 saves snapshotted: ballon_dor 276, transfer_window 208, social_media_action 170, random_events 623, playing 166, newspaper 148, season_summary 178, rivalry_event 83, moral_dilemma 38, international_debut 16, world_cup 42, rehab_choice 4
+problem counts, deck loaded: {}; deck not loaded: {}
+validator reasons: {}
+head: 1952 base saves, 53482 steps with the deck; parsed JSON differs from the base's in 0; deck cards dealt 4520, answered 4520, not first 0; cards seen 27: never 722
+oldsaves1334b: green

@@ -1,0 +1,2 @@
+old2 exit=0 59s | oldsaves1334b: green
+old2-control exit=1 72s | oldsaves1334b: 1942 saves with a problem only when the deck is loaded
